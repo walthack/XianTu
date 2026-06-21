@@ -100,6 +100,10 @@
           <History :size="18" />
           <span>{{ $t('续前世因缘') }}</span>
         </button>
+        <button class="btn-ghost" @click="openScenarioMods">
+          <Library :size="18" />
+          <span>剧本模组</span>
+        </button>
       </div>
     </div>
   </div>
@@ -109,7 +113,8 @@
 import { ref, computed, onMounted } from 'vue';
 import { useI18n } from '@/i18n';
 import VideoBackground from '@/components/common/VideoBackground.vue';
-import { Sparkles, History, User, Users, Check, Lock } from 'lucide-vue-next';
+import { Sparkles, History, User, Users, Check, Lock, Library } from 'lucide-vue-next';
+import { useRouter } from 'vue-router';
 import { useUIStore } from '@/stores/uiStore';
 import { isBackendConfigured, fetchBackendVersion } from '@/services/backendConfig';
 import { verifyStoredToken } from '@/services/request';
@@ -142,6 +147,7 @@ const emit = defineEmits<{
 }>();
 
 const uiStore = useUIStore();
+const router = useRouter();
 
 // 检查是否已登录
 const _isLoggedIn = () => {
@@ -209,6 +215,10 @@ const startNewGame = async () => {
 
 const enterCharacterSelection = async () => {
   emit('show-character-list');
+};
+
+const openScenarioMods = () => {
+  router.push('/scenario-mods');
 };
 </script>
 
