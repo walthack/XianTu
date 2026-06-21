@@ -22,6 +22,7 @@ import { migrateSaveDataToLatest } from '@/utils/saveMigration';
 // import { WorldGenerationConfig } from '@/utils/worldGeneration/gameWorldConfig';
 import { EnhancedWorldGenerator } from '@/utils/worldGeneration/enhancedWorldGenerator';
 import { applyStrictScenarioInitializationToSave, resolveInitialWorldInfo } from '@/modules/scenarioMods/strictInitializer';
+import { applyExpandScenarioInitializationToSave } from '@/modules/scenarioMods/expandInitializer';
 // 导入本地数据库用于随机生成
 import { LOCAL_SPIRIT_ROOTS, LOCAL_ORIGINS } from '@/data/creationData';
 
@@ -1110,12 +1111,15 @@ export async function initializeCharacter(
       creationStore.selectedScenarioMod,
       () => generateWorld(processedBaseInfo, world),
     );
-    const { worldInfo, strictInitialization } = resolvedWorld;
+    const { worldInfo, strictInitialization, expandInitialization } = resolvedWorld;
     if (!(initialSaveData as any).世界) (initialSaveData as any).世界 = { 信息: {}, 状态: {} };
     (initialSaveData as any).世界.信息 = worldInfo;
     if (strictInitialization) {
       initialSaveData = applyStrictScenarioInitializationToSave(initialSaveData, strictInitialization);
       console.log(`[初始化流程] Strict Mod 已载入，跳过 AI 世界生成: ${strictInitialization.runtimeState.modId}`);
+    } else if (expandInitialization) {
+      initialSaveData = applyExpandScenarioInitializationToSave(initialSaveData, expandInitialization);
+      console.log(`[初始化流程] Expand Mod 已载入，AI 世界生成后补齐正典: ${expandInitialization.runtimeState.modId}`);
     }
 
     // 🔥 [彩蛋] 合欢宗圣女 - 灰夫人

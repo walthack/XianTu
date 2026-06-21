@@ -1,6 +1,7 @@
 import type { PlayerLocation, SaveData, WorldInfo } from '@/types/game';
 
 import type { ScenarioMod } from './schema';
+import { buildExpandScenarioInitialization, type ExpandScenarioInitialization } from './expandInitializer';
 
 export interface ScenarioModRuntimeState {
   schema: ScenarioMod['schema'];
@@ -146,10 +147,19 @@ export function applyStrictScenarioInitializationToSave(
 export async function resolveInitialWorldInfo(
   scenarioMod: ScenarioMod | null,
   generateWorld: () => Promise<WorldInfo>,
-): Promise<{ worldInfo: WorldInfo; strictInitialization?: StrictScenarioInitialization }> {
+): Promise<{
+  worldInfo: WorldInfo;
+  strictInitialization?: StrictScenarioInitialization;
+  expandInitialization?: ExpandScenarioInitialization;
+}> {
   if (scenarioMod?.rules.mode === 'strict') {
     const strictInitialization = buildStrictScenarioInitialization(scenarioMod);
     return { worldInfo: strictInitialization.worldInfo, strictInitialization };
   }
-  return { worldInfo: await generateWorld() };
+  const generatedWorld = await generateWorld();
+  if (scenarioMod?.rules.mode === 'expand') {
+    const expandInitialization = buildExpandScenarioInitialization(scenarioMod, generatedWorld);
+    return { worldInfo: expandInitialization.worldInfo, expandInitialization };
+  }
+  return { worldInfo: generatedWorld };
 }

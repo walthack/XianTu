@@ -64,14 +64,12 @@ test('strict Mod identity and canon survive a save serialization round trip', as
   assert.equal(baseSave.角色.位置.描述, '旧地点', 'base save must not be mutated');
 });
 
-test('non-strict resolution preserves the original world generation path', async () => {
+test('resolution without a Mod preserves the original world generation path', async () => {
   const { resolveInitialWorldInfo } = await loadTs('../src/modules/scenarioMods/strictInitializer.ts');
-  const mod = await loadMod();
-  mod.rules.mode = 'expand';
   let generatorCalls = 0;
   const generated = { 世界名称: 'generated' };
 
-  const result = await resolveInitialWorldInfo(mod, async () => {
+  const result = await resolveInitialWorldInfo(null, async () => {
     generatorCalls += 1;
     return generated;
   });
@@ -79,4 +77,5 @@ test('non-strict resolution preserves the original world generation path', async
   assert.equal(generatorCalls, 1);
   assert.equal(result.worldInfo, generated);
   assert.equal(result.strictInitialization, undefined);
+  assert.equal(result.expandInitialization, undefined);
 });

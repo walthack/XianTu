@@ -20,10 +20,10 @@
           </button>
         </div>
 
-        <div v-if="store.isLocalCreation && strictMods.length" class="scenario-mods">
+        <div v-if="store.isLocalCreation && enabledMods.length" class="scenario-mods">
           <div class="scenario-mods-label">剧本模组</div>
           <button
-            v-for="entry in strictMods"
+            v-for="entry in enabledMods"
             :key="entry.mod.manifest.id"
             class="scenario-mod-item"
             :class="{ selected: store.selectedScenarioMod?.manifest.id === entry.mod.manifest.id }"
@@ -32,7 +32,7 @@
           >
             <BookMarked :size="15" />
             <span>{{ entry.mod.manifest.name }}</span>
-            <span class="scenario-mode">Strict</span>
+            <span class="scenario-mode">{{ entry.mod.rules.mode === 'strict' ? 'Strict' : 'Expand' }}</span>
           </button>
         </div>
 
@@ -254,7 +254,7 @@ const isAIPromptModalVisible = ref(false);
 const editingWorld = ref<World | null>(null);
 const scenarioMods = ref<StoredScenarioMod[]>([]);
 
-const strictMods = computed(() => scenarioMods.value.filter(entry => entry.enabled && entry.mod.rules.mode === 'strict'));
+const enabledMods = computed(() => scenarioMods.value.filter(entry => entry.enabled));
 
 onMounted(async () => {
   try {
