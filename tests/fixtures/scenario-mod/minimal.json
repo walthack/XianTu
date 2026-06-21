@@ -1,0 +1,120 @@
+{
+  "schema": "xiantu.scenario-mod",
+  "version": 1,
+  "manifest": {
+    "id": "liuchao.jiankang",
+    "name": "六朝·建康风云",
+    "version": "1.0.0",
+    "author": "XianTu Scenario Team"
+  },
+  "world": {
+    "name": "六朝世界",
+    "era": "太康年间",
+    "background": "建康内外暗流涌动，各方势力围绕朝局与秘宝展开角力。",
+    "specialRules": [
+      "固定人物姓名与所属势力不得被改写"
+    ],
+    "continents": [
+      {
+        "id": "continent.jiangnan",
+        "name": "江南",
+        "description": "王朝腹地与故事主要舞台。"
+      }
+    ]
+  },
+  "canon": {
+    "factions": [
+      {
+        "id": "faction.taiyi",
+        "name": "太乙真宗",
+        "description": "传承久远的修行宗派。",
+        "headquartersLocationId": "location.taiyi"
+      }
+    ],
+    "locations": [
+      {
+        "id": "location.jiankang",
+        "name": "建康",
+        "continentId": "continent.jiangnan"
+      },
+      {
+        "id": "location.taiyi",
+        "name": "太乙真宗山门",
+        "continentId": "continent.jiangnan",
+        "factionId": "faction.taiyi"
+      }
+    ],
+    "characters": [
+      {
+        "id": "character.chengzongyang",
+        "name": "程宗扬",
+        "role": "关键人物",
+        "locationId": "location.jiankang",
+        "skillIds": ["skill.thunderblade"],
+        "itemIds": ["item.thunderblade"]
+      }
+    ]
+  },
+  "content": {
+    "skills": [
+      {
+        "id": "skill.thunderblade",
+        "name": "雷刀诀",
+        "type": "刀法"
+      }
+    ],
+    "techniques": [],
+    "items": [
+      {
+        "id": "item.thunderblade",
+        "name": "雷刀",
+        "type": "weapon",
+        "skillIds": ["skill.thunderblade"]
+      }
+    ]
+  },
+  "scenario": {
+    "opening": {
+      "text": "故事从建康城外开始。",
+      "playerRole": "初入建康的修行者",
+      "locationId": "location.jiankang",
+      "featuredCharacterIds": ["character.chengzongyang"]
+    },
+    "initialFlags": {
+      "chapter.started": false
+    },
+    "events": [
+      {
+        "id": "event.firstmeeting",
+        "name": "初会",
+        "description": "玩家第一次遇见程宗扬。",
+        "conditions": [
+          {
+            "path": "flags.chapter.started",
+            "operator": "eq",
+            "value": false
+          }
+        ],
+        "relatedCharacterIds": ["character.chengzongyang"],
+        "locationId": "location.jiankang"
+      }
+    ],
+    "chapters": [
+      {
+        "id": "chapter.arrival",
+        "title": "入城",
+        "summary": "玩家进入建康并接触主要人物。",
+        "eventIds": ["event.firstmeeting"]
+      }
+    ]
+  },
+  "rules": {
+    "mode": "strict",
+    "lockedFields": [
+      "canon.characters.*.name",
+      "canon.factions.*.name",
+      "content.skills.*.name",
+      "content.items.*.name"
+    ]
+  }
+}
