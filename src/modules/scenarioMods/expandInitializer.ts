@@ -8,9 +8,12 @@ export interface ExpandScenarioRuntimeState {
   modId: string;
   modVersion: string;
   mode: 'expand';
+  lockedFields: string[];
   currentChapterId: string | null;
   flags: Record<string, string | number | boolean | null>;
   canon: {
+    factions: NonNullable<ScenarioMod['canon']>['factions'];
+    locations: NonNullable<ScenarioMod['canon']>['locations'];
     characters: NonNullable<ScenarioMod['canon']>['characters'];
     skills: NonNullable<ScenarioMod['content']>['skills'];
     techniques: NonNullable<ScenarioMod['content']>['techniques'];
@@ -131,9 +134,12 @@ export function buildExpandScenarioInitialization(
       modId: mod.manifest.id,
       modVersion: mod.manifest.version,
       mode: 'expand',
+      lockedFields: [...(mod.rules.lockedFields || [])],
       currentChapterId: mod.scenario.chapters?.[0]?.id || null,
       flags: { ...(mod.scenario.initialFlags || {}) },
       canon: {
+        factions: structuredClone(mod.canon?.factions || []),
+        locations: structuredClone(mod.canon?.locations || []),
         characters: structuredClone(mod.canon?.characters || []),
         skills: structuredClone(mod.content?.skills || []),
         techniques: structuredClone(mod.content?.techniques || []),

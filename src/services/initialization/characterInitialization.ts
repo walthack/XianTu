@@ -23,6 +23,7 @@ import { migrateSaveDataToLatest } from '@/utils/saveMigration';
 import { EnhancedWorldGenerator } from '@/utils/worldGeneration/enhancedWorldGenerator';
 import { applyStrictScenarioInitializationToSave, resolveInitialWorldInfo } from '@/modules/scenarioMods/strictInitializer';
 import { applyExpandScenarioInitializationToSave } from '@/modules/scenarioMods/expandInitializer';
+import { buildScenarioCanonPrompt } from '@/modules/scenarioMods/canonGuard';
 // 导入本地数据库用于随机生成
 import { LOCAL_SPIRIT_ROOTS, LOCAL_ORIGINS } from '@/data/creationData';
 
@@ -467,10 +468,11 @@ async function generateOpeningScene(saveData: SaveData, baseInfo: CharacterBaseI
   const scenarioOpening = scenarioRuntime?.opening
     ? `\n\n# 剧本模组开场（必须遵守）\n${scenarioRuntime.opening.text}\n玩家身份：${scenarioRuntime.opening.playerRole || '按角色选择决定'}\n开场地点：${(saveData as any).角色?.位置?.描述 || '按剧本设定决定'}`
     : '';
+  const scenarioCanonPrompt = buildScenarioCanonPrompt(saveData);
 
   const userPrompt = `我创建了角色"${baseInfo.名字}"，请根据我的选择生成开局故事和初始数据。
 
-${selectionsSummary}${scenarioOpening}
+${selectionsSummary}${scenarioOpening}${scenarioCanonPrompt ? `\n\n${scenarioCanonPrompt}` : ''}
 
 **重要提示**：
 - 严格按照我的角色设定来生成内容

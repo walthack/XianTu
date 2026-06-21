@@ -24,6 +24,7 @@ import { stripNsfwContent } from '@/utils/prompts/definitions/dataDefinitions';
 import { isSaveDataV3, migrateSaveDataToLatest } from './saveMigration';
 import { parseJsonSmart } from '@/utils/jsonExtract';
 import type { APIUsageType } from '@/stores/apiManagementStore';
+import { buildScenarioCanonPrompt, guardScenarioModCommands } from '@/modules/scenarioMods/canonGuard';
 
 type PlainObject = Record<string, unknown>;
 
@@ -704,6 +705,7 @@ class AIBidirectionalSystemClass {
       await this.maybeTriggerScheduledWorldEvent({ v3, stateForAI, shortTermMemoryForPrompt });
 
       const assembledPrompt = await assembleSystemPrompt(activePrompts, uiStore.actionOptionsPrompt, stateForAI);
+      const scenarioCanonPrompt = buildScenarioCanonPrompt(stateForAI as SaveData);
 
       // 🌐 构建穿越状态提示（直接写入主提示词，确保AI一定能看到）
       const onlineState = stateForAI?.系统?.联机;
@@ -777,8 +779,10 @@ ${offlinePrompt ? `\n### 世界主人性格/行为提示词\n${offlinePrompt}` :
 
       const systemPrompt = `
 ${assembledPrompt}
+${scenarioCanonPrompt ? `\n${scenarioCanonPrompt}\n` : ''}
 ${travelStatusPrompt}
 ${coreStatusSummary}
+${scenarioCanonPrompt ? `\n${scenarioCanonPrompt}\n` : ''}
 ${vectorMemorySection ? `\n${vectorMemorySection}\n` : ''}
 ${narrativeRagSection ? `\n${narrativeRagSection}\n` : ''}
 # 游戏状态
@@ -1014,6 +1018,7 @@ ${assembled}
 
 ${coreStatusSummary}
 ${focusedNpcPrompt ? `\n${focusedNpcPrompt}\n` : ''}
+${scenarioCanonPrompt ? `\n${scenarioCanonPrompt}\n` : ''}
 
 # 游戏状态（JSON）
 ${stateJsonString}
@@ -1938,12 +1943,17 @@ ${step1Text}
     const protectionMode = this.getCommandProtectionMode(uiStore);
 
     // 🔥 新增：预处理指令以修复常见的AI错误
-    const preprocessedCommands = this._preprocessCommands(response.tavern_commands);
+    const preprocessingResult = this._preprocessCommands(response.tavern_commands);
+    const scenarioGuardResult = guardScenarioModCommands(saveData, preprocessingResult);
+    const preprocessedCommands = scenarioGuardResult.accepted;
 
     // 🔥 步骤1：指令格式校验（路径/字段/只读保护） + 指令值校验（结构完整性）
     // 重要：两者都通过的指令才允许执行，避免“只校验但仍执行”的漏网风险
     const validCommands: TavernCommand[] = [];
-    const rejectedCommands: Array<{ command: any; errors: string[] }> = [];
+    const rejectedCommands: Array<{ command: any; errors: string[] }> = scenarioGuardResult.rejected.map(item => ({
+      command: item.command,
+      errors: [item.reason],
+    }));
     const validationWarnings: string[] = [];
 
     if (protectionMode === 'skeleton') {

@@ -21,8 +21,10 @@ test('converts strict canon into native WorldInfo without renaming entities', as
   assert.deepEqual(result.worldInfo.势力信息.map(item => item.名称), ['太乙真宗']);
   assert.deepEqual(result.worldInfo.地点信息.map(item => item.名称), ['建康', '太乙真宗山门']);
   assert.equal(result.runtimeState.canon.characters[0].name, '程宗扬');
+  assert.equal(result.runtimeState.canon.factions[0].name, '太乙真宗');
   assert.equal(result.runtimeState.canon.skills[0].name, '雷刀诀');
   assert.equal(result.runtimeState.canon.items[0].name, '雷刀');
+  assert.ok(result.runtimeState.lockedFields.includes('canon.characters.*.name'));
   assert.equal(result.initialLocation.描述, '江南·建康');
   assert.equal(result.worldInfo.版本, 'scenario-mod:liuchao.jiankang@1.0.0');
 });
