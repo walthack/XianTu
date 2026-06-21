@@ -9,6 +9,7 @@ import type {
   DADCustomData,
 } from '../types';
 import { aiService } from '@/services/aiService';
+import type { ScenarioMod } from '@/modules/scenarioMods/schema';
 // Import the Tavern helper to interact with Tavern's variable system
 import { getTavernHelper, getCurrentCharacterName } from '../utils/tavern';
 import { fetchWorlds, fetchTalentTiers, fetchOrigins, fetchSpiritRoots, fetchTalents } from '../services/request';
@@ -115,6 +116,7 @@ export const useCharacterCreationStore = defineStore('characterCreation', () => 
   const currentStep = ref(1);
   const isLocalCreation = ref(true);
   const initialGameMessage = ref<string | null>(null);
+  const selectedScenarioMod = ref<ScenarioMod | null>(null);
   const useStreamingStart = ref(true); // 开局是否使用流式传输（默认启用）
 
   // ========== 角色创建流程状态管理 ==========
@@ -300,7 +302,18 @@ export const useCharacterCreationStore = defineStore('characterCreation', () => 
     charm: characterPayload.value.charm,
     temperament: characterPayload.value.temperament,
   }));
-  const selectedWorld = computed(() => creationData.value.worlds.find(w => w.id === characterPayload.value.world_id) || null);
+  const selectedWorld = computed<WorldWithSource | null>(() => {
+    if (selectedScenarioMod.value) {
+      return {
+        id: -1,
+        name: selectedScenarioMod.value.world.name,
+        era: selectedScenarioMod.value.world.era,
+        description: selectedScenarioMod.value.world.background,
+        source: 'local',
+      };
+    }
+    return creationData.value.worlds.find(w => w.id === characterPayload.value.world_id) || null;
+  });
   const selectedTalentTier = computed(() => creationData.value.talentTiers.find(t => t.id === characterPayload.value.talent_tier_id) || null);
   const selectedOrigin = computed(() => creationData.value.origins.find(o => o.id === characterPayload.value.origin_id) || null);
   const selectedSpiritRoot = computed(() => creationData.value.spiritRoots.find(s => s.id === characterPayload.value.spirit_root_id) || null);
@@ -870,7 +883,14 @@ export const useCharacterCreationStore = defineStore('characterCreation', () => 
     return creationData.value[type].find(item => item.id === id) as T || null;
   };
   
-  function selectWorld(worldId: number | '') { characterPayload.value.world_id = worldId; }
+  function selectWorld(worldId: number | '') {
+    selectedScenarioMod.value = null;
+    characterPayload.value.world_id = worldId;
+  }
+  function selectScenarioMod(mod: ScenarioMod | null) {
+    selectedScenarioMod.value = mod;
+    characterPayload.value.world_id = mod ? -1 : '';
+  }
   function selectTalentTier(tierId: number | '') {
     characterPayload.value.talent_tier_id = tierId;
     characterPayload.value.origin_id = null;
@@ -927,6 +947,7 @@ export const useCharacterCreationStore = defineStore('characterCreation', () => 
   async function resetCharacter() {
     const newPayload = await createEmptyPayload();
     characterPayload.value = newPayload;
+    selectedScenarioMod.value = null;
     currentStep.value = 1;
     // 重置世界生成配置为默认值
     worldGenerationConfig.value = {
@@ -987,7 +1008,7 @@ export const useCharacterCreationStore = defineStore('characterCreation', () => 
   }
 
   return {
-    mode, isLoading, error, creationData, characterPayload, currentStep, isLocalCreation, initialGameMessage, worldGenerationConfig, useStreamingStart, generateMode, splitResponseGeneration,
+    mode, isLoading, error, creationData, characterPayload, currentStep, isLocalCreation, initialGameMessage, selectedScenarioMod, worldGenerationConfig, useStreamingStart, generateMode, splitResponseGeneration,
     // 创建流程状态
     isCreating, creationPhase, creationError,
     gameDifficulty, currentDifficultyPrompt, // 难度配置
@@ -995,7 +1016,7 @@ export const useCharacterCreationStore = defineStore('characterCreation', () => 
     initializeStore, fetchCloudWorlds, fetchAllCloudData, addWorld, addTalentTier, addOrigin, addSpiritRoot, addTalent, addGeneratedData,
     removeWorld, removeTalentTier, removeOrigin, removeSpiritRoot, removeTalent, // 导出删除函数
     updateWorld, updateTalentTier, updateOrigin, updateSpiritRoot, updateTalent, getItemById, // 导出编辑函数
-    selectWorld, selectTalentTier, selectOrigin, selectSpiritRoot, toggleTalent, setAttribute,
+    selectWorld, selectScenarioMod, selectTalentTier, selectOrigin, selectSpiritRoot, toggleTalent, setAttribute,
     resetCharacter, nextStep, prevStep, goToStep, setMode, toggleLocalCreation, setInitialGameMessage, setWorldGenerationConfig,
     resetOnExit, startLocalCreation, startCloudCreation, persistCustomData,
     setAIGeneratedSpiritRoot,

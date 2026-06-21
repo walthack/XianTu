@@ -21,6 +21,7 @@ import { migrateSaveDataToLatest } from '@/utils/saveMigration';
 // 移除未使用的旧生成器导入,改用增强版生成器
 // import { WorldGenerationConfig } from '@/utils/worldGeneration/gameWorldConfig';
 import { EnhancedWorldGenerator } from '@/utils/worldGeneration/enhancedWorldGenerator';
+import { applyStrictScenarioInitializationToSave, resolveInitialWorldInfo } from '@/modules/scenarioMods/strictInitializer';
 // 导入本地数据库用于随机生成
 import { LOCAL_SPIRIT_ROOTS, LOCAL_ORIGINS } from '@/data/creationData';
 
@@ -461,10 +462,14 @@ async function generateOpeningScene(saveData: SaveData, baseInfo: CharacterBaseI
 
   const systemPrompt = await buildCharacterInitializationPrompt();
   const selectionsSummary = buildCharacterSelectionsSummary(userSelections, worldContext);
+  const scenarioRuntime = (saveData as any).世界?.状态?.剧本模组;
+  const scenarioOpening = scenarioRuntime?.opening
+    ? `\n\n# 剧本模组开场（必须遵守）\n${scenarioRuntime.opening.text}\n玩家身份：${scenarioRuntime.opening.playerRole || '按角色选择决定'}\n开场地点：${(saveData as any).角色?.位置?.描述 || '按剧本设定决定'}`
+    : '';
 
   const userPrompt = `我创建了角色"${baseInfo.名字}"，请根据我的选择生成开局故事和初始数据。
 
-${selectionsSummary}
+${selectionsSummary}${scenarioOpening}
 
 **重要提示**：
 - 严格按照我的角色设定来生成内容
@@ -1096,12 +1101,22 @@ export async function initializeCharacter(
   console.log('[初始化流程] 接收到的 baseInfo.先天六司:', baseInfo.先天六司);
   try {
     // 步骤 1: 准备初始数据
-    const { saveData: initialSaveData, processedBaseInfo } = prepareInitialData(baseInfo, age);
+    const preparedData = prepareInitialData(baseInfo, age);
+    let { saveData: initialSaveData } = preparedData;
+    const { processedBaseInfo } = preparedData;
 
-    // 步骤 2: 生成世界
-    const worldInfo = await generateWorld(processedBaseInfo, world);
+    // 步骤 2: Strict Mod 直接构建世界；普通世界仍走 AI 世界生成。
+    const resolvedWorld = await resolveInitialWorldInfo(
+      creationStore.selectedScenarioMod,
+      () => generateWorld(processedBaseInfo, world),
+    );
+    const { worldInfo, strictInitialization } = resolvedWorld;
     if (!(initialSaveData as any).世界) (initialSaveData as any).世界 = { 信息: {}, 状态: {} };
     (initialSaveData as any).世界.信息 = worldInfo;
+    if (strictInitialization) {
+      initialSaveData = applyStrictScenarioInitializationToSave(initialSaveData, strictInitialization);
+      console.log(`[初始化流程] Strict Mod 已载入，跳过 AI 世界生成: ${strictInitialization.runtimeState.modId}`);
+    }
 
     // 🔥 [彩蛋] 合欢宗圣女 - 灰夫人
     // - 无论是否酒馆环境：补齐合欢宗“圣女”字段，保证宗门信息完整

@@ -20,6 +20,22 @@
           </button>
         </div>
 
+        <div v-if="store.isLocalCreation && strictMods.length" class="scenario-mods">
+          <div class="scenario-mods-label">剧本模组</div>
+          <button
+            v-for="entry in strictMods"
+            :key="entry.mod.manifest.id"
+            class="scenario-mod-item"
+            :class="{ selected: store.selectedScenarioMod?.manifest.id === entry.mod.manifest.id }"
+            @click="handleSelectScenarioMod(entry)"
+            @mouseover="previewScenarioMod(entry)"
+          >
+            <BookMarked :size="15" />
+            <span>{{ entry.mod.manifest.name }}</span>
+            <span class="scenario-mode">Strict</span>
+          </button>
+        </div>
+
         <div class="list-container">
           <div v-if="worldsList.length === 0" class="no-worlds-message">
             <div class="no-worlds-icon">🌌</div>
@@ -216,8 +232,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue';
-import { Settings, Trash2, Edit } from 'lucide-vue-next';
+import { ref, computed, onMounted, watch } from 'vue';
+import { BookMarked, Settings, Trash2, Edit } from 'lucide-vue-next';
 import { useCharacterCreationStore } from '../../stores/characterCreationStore';
 import type { World } from '../../types';
 import CustomCreationModal from './CustomCreationModal.vue';
@@ -226,6 +242,7 @@ import { toast } from '../../utils/toast';
 import { generateWithRawPrompt } from '../../utils/tavernCore';
 import { WORLD_ITEM_GENERATION_PROMPT } from '../../utils/prompts/tasks/gameElementPrompts';
 import { parseJsonFromText } from '@/utils/jsonExtract';
+import { scenarioModManager, type StoredScenarioMod } from '@/modules/scenarioMods/manager';
 
 const emit = defineEmits(['ai-generate']);
 const store = useCharacterCreationStore();
@@ -235,6 +252,18 @@ const showMapOptions = ref(false);
 const isEditModalVisible = ref(false);
 const isAIPromptModalVisible = ref(false);
 const editingWorld = ref<World | null>(null);
+const scenarioMods = ref<StoredScenarioMod[]>([]);
+
+const strictMods = computed(() => scenarioMods.value.filter(entry => entry.enabled && entry.mod.rules.mode === 'strict'));
+
+onMounted(async () => {
+  try {
+    scenarioMods.value = await scenarioModManager.list();
+    if (store.selectedScenarioMod) activeWorld.value = store.selectedWorld;
+  } catch (error) {
+    console.error('[世界选择] 加载剧本模组失败:', error);
+  }
+});
 
 // 难度选项配置
 const difficultyOptions = [
@@ -416,6 +445,21 @@ function handleSelectWorld(world: World) {
   store.selectWorld(world.id);
   // 保存世界生成配置到store，供后续使用
   store.setWorldGenerationConfig(worldConfig.value);
+}
+
+function previewScenarioMod(entry: StoredScenarioMod) {
+  activeWorld.value = {
+    id: -1,
+    name: entry.mod.world.name,
+    era: entry.mod.world.era,
+    description: entry.mod.world.background,
+    source: 'local',
+  };
+}
+
+function handleSelectScenarioMod(entry: StoredScenarioMod) {
+  store.selectScenarioMod(entry.mod);
+  previewScenarioMod(entry);
 }
 
 // 随机配置功能
@@ -1184,6 +1228,49 @@ const editInitialData = computed(() => {
 
 .action-name {
   font-weight: 500;
+}
+
+.scenario-mods {
+  padding: 0.45rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.scenario-mods-label {
+  padding: 0.25rem 0.45rem 0.5rem;
+  color: var(--color-text-secondary);
+  font-size: 0.78rem;
+}
+
+.scenario-mod-item {
+  width: 100%;
+  min-height: 38px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  padding: 0 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  background: var(--color-surface-light);
+  color: var(--color-text);
+  cursor: pointer;
+  text-align: left;
+}
+
+.scenario-mod-item span:nth-child(2) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.scenario-mod-item.selected {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.scenario-mode {
+  color: var(--color-text-secondary);
+  font-size: 0.7rem;
 }
 
 /* ========== 响应式适配 ========== */
