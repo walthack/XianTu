@@ -88,6 +88,8 @@
 
 需要让其他 Agent 制作 Mod 时，可直接提供 [Mod Kit](./mod-kit/README.md)；其中包含 Agent 指令、JSON Schema、Strict/Expand 模板和本地校验命令。
 
+首个完整示例：[六朝清羽记·草原鹰帜](./mods/liuchao-qingyu-prologue/README.md)，包含可直接导入的 Strict Mod 和来源/设计说明。
+
 ---
 
 ## 🛠️ 技术栈
