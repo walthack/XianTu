@@ -152,6 +152,7 @@ export default (env, argv) => {
       compress: true,
       port: 8080,
       hot: true,
+      historyApiFallback: true,
       // 配置代理，解决CORS问题（webpack-dev-server v5 格式）
       proxy: [
         {
