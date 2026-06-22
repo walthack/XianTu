@@ -18,6 +18,7 @@
 <p align="center">
   <a href="https://qm.qq.com/q/mKtqgX0FSo">💬 QQ群：1079437686</a> •
   <a href="#功能概览">功能</a> •
+  <a href="#scenario-mod">Scenario Mod</a> •
   <a href="#技术栈">技术栈</a> •
   <a href="#快速开始">快速开始</a> •
   <a href="#许可证">许可证</a>
@@ -63,9 +64,27 @@
 
 🗺️ **开放世界** — 自由探索朝天大陆，触发奇遇事件，建立人物关系网络
 
+📜 **Scenario Mod** — 导入自定义世界、宗派、人物、技能、装备和分章节剧情，并在运行时保护正典设定
+
 📱 **全平台适配** — 完美支持桌面端与移动端，亮/暗双主题
 
 🍺 **酒馆兼容** — 支持 SillyTavern 嵌入式环境与独立网页版
+
+---
+
+## Scenario Mod
+
+本分支加入了可导入的剧情模组系统。Mod 使用 `xiantu.scenario-mod/v1` JSON 格式，可定义世界框架、正典实体、开场、章节、事件、剧情标记和锁定字段。
+
+- **Strict**：直接使用 Mod 世界，不调用 AI 世界生成。
+- **Expand**：保留 AI 生成结果，只补入缺失的 Mod 内容。
+- **剧情运行时**：根据 conditions、flags 和存档字段激活或完成章节与事件。
+- **正典保护**：拦截 AI 对锁定名称和 Mod 运行时元数据的越权修改。
+- **防剧透上下文**：每回合只向模型提供当前章节与已触发事件。
+
+使用方法：在首页进入“剧本模组”，导入并启用 JSON；随后在本地创角的世界选择页选择该 Mod。
+
+作者指南、字段说明和最小示例见 [Scenario Mod 文档](./docs/scenario-mod.md)。可运行 fixture 见 [minimal.json](./tests/fixtures/scenario-mod/minimal.json)。
 
 ---
 
@@ -101,6 +120,12 @@ npm install
 # 开发模式
 npm run serve
 
+# 局域网开发模式
+npm run serve -- --host 0.0.0.0 --port 8091
+
+# 自动化测试
+npm test
+
 # 生产构建
 npm run build
 ```
@@ -119,7 +144,7 @@ git push origin v3.7.0
 
 其他工作流：
 
-- CI：`.github/workflows/ci.yml`（push/PR 自动 `type-check` + `build`）
+- CI：`.github/workflows/ci.yml`（push/PR 自动执行测试、类型检查、lint 和生产构建）
 - Pages：`.github/workflows/pages.yml`（push 到 `master` 自动部署到 GitHub Pages）
 
 ### 后端（可选）
