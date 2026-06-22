@@ -91,7 +91,10 @@
     "lockedFields": [
       "canon.factions.*.name",
       "canon.locations.*.name",
-      "canon.characters.*.name"
+      "canon.characters.*.name",
+      "content.skills.*.name",
+      "content.techniques.*.name",
+      "content.items.*.name"
     ]
   }
 }

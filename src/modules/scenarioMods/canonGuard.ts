@@ -193,5 +193,6 @@ export function buildScenarioCanonPrompt(saveData: SaveData): string {
 - 功法：${formatNames(canon.techniques)}
 - 物品：${formatNames(canon.items)}
 - 锁定字段：${(runtime.lockedFields || []).join('、') || '无'}
+Mod 已声明的实体与字段是权威正典。可以补充未定义内容，但不得生成同 ID 或同名替代品，不得用自动生成内容覆盖 Mod 已有值。
 不得重命名、删除或覆盖锁定正典；除使用 set 更新“世界.状态.剧本模组.flags.*”外，不得生成修改“世界.状态.剧本模组”或“系统.扩展.剧本模组”的 tavern_commands。`;
 }

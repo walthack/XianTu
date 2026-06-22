@@ -69,5 +69,6 @@ test('canon prompt exposes the active Mod identity, names, and locks', async () 
   assert.match(prompt, /程宗扬/);
   assert.match(prompt, /雷刀诀/);
   assert.match(prompt, /canon\.characters\.\*\.name/);
+  assert.match(prompt, /不得生成同 ID 或同名替代品/);
   assert.match(prompt, /不得重命名、删除或覆盖锁定正典/);
 });

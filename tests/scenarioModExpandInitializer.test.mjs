@@ -22,24 +22,34 @@ function generatedWorld() {
     生成时间: '2026-06-22T00:00:00.000Z',
     版本: 'generated-v1',
     大陆信息: [{ 名称: '江南', 描述: 'AI生成的江南', 主要势力: [] }],
-    势力信息: [{ id: 'faction.generated', 名称: '云海宗', 描述: 'AI势力' }],
+    势力信息: [
+      { id: 'faction.generated', 名称: '云海宗', 描述: 'AI势力' },
+      { 名称: '太乙真宗', 描述: 'AI错误描述', 类型: 'AI宗门类型', 等级: '一流' },
+    ],
     地点信息: [{ 名称: '建康', 描述: 'AI生成的建康', 类型: '城池' }],
   };
 }
 
-test('expand mode preserves generated values and only fills missing Mod content', async () => {
+test('expand mode keeps Mod fields authoritative and uses generated values only for gaps', async () => {
   const { buildExpandScenarioInitialization } = await loadTs('../src/modules/scenarioMods/expandInitializer.ts');
   const mod = await loadExpandMod();
   const generated = generatedWorld();
 
   const result = buildExpandScenarioInitialization(mod, generated);
 
-  assert.equal(result.worldInfo.世界名称, 'AI生成世界');
-  assert.equal(result.worldInfo.大陆信息.find(item => item.名称 === '江南').描述, 'AI生成的江南');
+  assert.equal(result.worldInfo.世界名称, '六朝世界');
+  assert.equal(result.worldInfo.世界背景, '建康内外暗流涌动，各方势力围绕朝局与秘宝展开角力。');
+  assert.equal(result.worldInfo.世界纪元, '太康年间');
+  assert.equal(result.worldInfo.大陆信息.find(item => item.名称 === '江南').描述, '王朝腹地与故事主要舞台。');
   assert.equal(result.worldInfo.地点信息.filter(item => item.名称 === '建康').length, 1);
   assert.equal(result.worldInfo.地点信息.find(item => item.名称 === '建康').类型, '城池');
+  assert.equal(result.worldInfo.地点信息.find(item => item.名称 === '建康').描述, 'AI生成的建康');
   assert.ok(result.worldInfo.地点信息.some(item => item.名称 === '太乙真宗山门'));
-  assert.ok(result.worldInfo.势力信息.some(item => item.名称 === '太乙真宗'));
+  assert.equal(result.worldInfo.势力信息.filter(item => item.名称 === '太乙真宗').length, 1);
+  assert.equal(result.worldInfo.势力信息.find(item => item.名称 === '太乙真宗').描述, '传承久远的修行宗派。');
+  assert.equal(result.worldInfo.势力信息.find(item => item.名称 === '太乙真宗').类型, 'AI宗门类型');
+  assert.equal(result.worldInfo.势力信息.find(item => item.名称 === '太乙真宗').等级, '一流');
+  assert.ok(result.worldInfo.势力信息.some(item => item.名称 === '云海宗'));
   assert.deepEqual(result.worldInfo.特殊设定, ['AI规则', '固定人物姓名与所属势力不得被改写']);
   assert.equal(result.runtimeState.mode, 'expand');
   assert.equal(generated.地点信息.length, 1, 'generated world must not be mutated');

@@ -35,10 +35,10 @@ function hasValue(value: unknown): boolean {
   return value !== undefined && value !== null && value !== '';
 }
 
-function fillMissing(existing: NamedRecord, fallback: NamedRecord): NamedRecord {
-  const result: NamedRecord = { ...existing };
-  for (const [key, value] of Object.entries(fallback)) {
-    if (!hasValue(result[key]) && hasValue(value)) result[key] = structuredClone(value);
+function mergeAuthoritative(authoritative: NamedRecord, fallback: NamedRecord): NamedRecord {
+  const result: NamedRecord = structuredClone(fallback);
+  for (const [key, value] of Object.entries(authoritative)) {
+    if (hasValue(value)) result[key] = structuredClone(value);
   }
   return result;
 }
@@ -51,7 +51,7 @@ function mergeNamedRecords(generated: unknown[] | undefined, additions: NamedRec
       (addition.id && item.id === addition.id) ||
       (additionName && (item.名称 === additionName || item.name === additionName)),
     );
-    if (index >= 0) result[index] = fillMissing(result[index], addition);
+    if (index >= 0) result[index] = mergeAuthoritative(addition, result[index]);
     else result.push(structuredClone(addition));
   }
   return result;
@@ -70,18 +70,21 @@ export function buildExpandScenarioInitialization(
   const locations = mod.canon?.locations || [];
   const firstContinentName = continents[0]?.name || generatedWorld.大陆信息?.[0]?.名称 || '未定大陆';
 
-  const continentAdditions: NamedRecord[] = continents.map(continent => ({
-    id: continent.id,
-    名称: continent.name,
-    name: continent.name,
-    描述: continent.description || '',
-    主要势力: factions
+  const continentAdditions: NamedRecord[] = continents.map(continent => {
+    const relatedFactions = factions
       .filter(faction => {
         const headquarters = locations.find(location => location.id === faction.headquartersLocationId);
         return !headquarters?.continentId || headquarters.continentId === continent.id;
       })
-      .map(faction => faction.name),
-  }));
+      .map(faction => faction.name);
+    return {
+      id: continent.id,
+      名称: continent.name,
+      name: continent.name,
+      ...(continent.description ? { 描述: continent.description } : {}),
+      ...(relatedFactions.length > 0 ? { 主要势力: relatedFactions } : {}),
+    };
+  });
 
   const factionAdditions: NamedRecord[] = factions.map(faction => {
     const headquarters = locations.find(location => location.id === faction.headquartersLocationId);
@@ -89,12 +92,10 @@ export function buildExpandScenarioInitialization(
     return {
       id: faction.id,
       名称: faction.name,
-      类型: faction.type || '中立宗门',
-      等级: '三流',
-      所在大洲: continent?.name || firstContinentName,
-      位置: headquarters?.name || '位置未定',
-      描述: faction.description || '',
-      特色: [],
+      ...(faction.type ? { 类型: faction.type } : {}),
+      ...(continent ? { 所在大洲: continent.name } : {}),
+      ...(headquarters ? { 位置: headquarters.name } : {}),
+      ...(faction.description ? { 描述: faction.description } : {}),
     };
   });
 
@@ -104,20 +105,17 @@ export function buildExpandScenarioInitialization(
     return {
       id: location.id,
       名称: location.name,
-      类型: location.type || '地点',
-      位置: continent?.name || firstContinentName,
-      描述: location.description || '',
-      特色: '',
-      安全等级: '较安全',
-      开放状态: '开放',
-      相关势力: faction ? [faction.name] : [],
+      ...(location.type ? { 类型: location.type } : {}),
+      ...(continent ? { 位置: continent.name } : {}),
+      ...(location.description ? { 描述: location.description } : {}),
+      ...(faction ? { 相关势力: [faction.name] } : {}),
     };
   });
 
   const worldInfo = structuredClone(generatedWorld);
-  if (!hasValue(worldInfo.世界名称)) worldInfo.世界名称 = mod.world.name;
-  if (!hasValue(worldInfo.世界背景)) worldInfo.世界背景 = mod.world.background;
-  if (!hasValue(worldInfo.世界纪元)) worldInfo.世界纪元 = mod.world.era;
+  worldInfo.世界名称 = mod.world.name;
+  worldInfo.世界背景 = mod.world.background;
+  worldInfo.世界纪元 = mod.world.era;
   worldInfo.特殊设定 = Array.from(new Set([...(worldInfo.特殊设定 || []), ...(mod.world.specialRules || [])]));
   worldInfo.大陆信息 = mergeNamedRecords(worldInfo.大陆信息, continentAdditions) as unknown as WorldInfo['大陆信息'];
   worldInfo.势力信息 = mergeNamedRecords(worldInfo.势力信息, factionAdditions) as unknown as WorldInfo['势力信息'];
