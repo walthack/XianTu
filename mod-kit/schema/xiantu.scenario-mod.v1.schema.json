@@ -129,12 +129,39 @@
       },
       "additionalProperties": false
     },
+    "playerRelationship": {
+      "type": "object",
+      "required": ["characterId", "relation", "favorability"],
+      "properties": {
+        "characterId": { "$ref": "#/$defs/id" },
+        "relation": { "$ref": "#/$defs/nonEmptyString" },
+        "favorability": { "type": "number", "minimum": -100, "maximum": 100 },
+        "memories": { "$ref": "#/$defs/stringArray" }
+      },
+      "additionalProperties": false
+    },
+    "characterRelationship": {
+      "type": "object",
+      "required": ["fromCharacterId", "toCharacterId", "relation", "score"],
+      "properties": {
+        "fromCharacterId": { "$ref": "#/$defs/id" },
+        "toCharacterId": { "$ref": "#/$defs/id" },
+        "relation": { "$ref": "#/$defs/nonEmptyString" },
+        "score": { "type": "number", "minimum": -100, "maximum": 100 },
+        "direction": { "enum": ["directed", "bidirectional"] },
+        "tags": { "$ref": "#/$defs/stringArray" },
+        "events": { "$ref": "#/$defs/stringArray" }
+      },
+      "additionalProperties": false
+    },
     "canon": {
       "type": "object",
       "properties": {
         "factions": { "type": "array", "items": { "$ref": "#/$defs/faction" } },
         "locations": { "type": "array", "items": { "$ref": "#/$defs/location" } },
-        "characters": { "type": "array", "items": { "$ref": "#/$defs/character" } }
+        "characters": { "type": "array", "items": { "$ref": "#/$defs/character" } },
+        "playerRelationships": { "type": "array", "items": { "$ref": "#/$defs/playerRelationship" } },
+        "relationships": { "type": "array", "items": { "$ref": "#/$defs/characterRelationship" } }
       },
       "additionalProperties": false
     },

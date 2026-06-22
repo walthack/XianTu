@@ -21,6 +21,19 @@ test('accepts the minimum complete Scenario Mod fixture', async () => {
   assert.equal(JSON.stringify(fixture), before, 'validation must not mutate imported data');
 });
 
+test('validates native player and NPC relationship declarations', async () => {
+  const { validateScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
+  const raw = await loadFixture();
+  const valid = validateScenarioMod(raw);
+  assert.equal(valid.valid, true);
+
+  raw.canon.playerRelationships[0].favorability = 101;
+  raw.canon.relationships[0].toCharacterId = 'character.missing';
+  const invalid = validateScenarioMod(raw);
+  assert.ok(invalid.issues.some(issue => issue.code === 'invalid_score'));
+  assert.ok(invalid.issues.some(issue => issue.path.endsWith('.toCharacterId') && issue.code === 'missing_reference'));
+});
+
 test('rejects unsupported schemas and versions', async () => {
   const { validateScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
   const fixture = await loadFixture();

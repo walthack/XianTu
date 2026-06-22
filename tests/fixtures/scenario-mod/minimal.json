@@ -55,6 +55,35 @@
         "locationId": "location.jiankang",
         "skillIds": ["skill.thunderblade"],
         "itemIds": ["item.thunderblade"]
+      },
+      {
+        "id": "character.wangzhe",
+        "name": "王哲",
+        "role": "太乙真宗掌教",
+        "gender": "男",
+        "affiliations": [
+          { "factionId": "faction.taiyi", "category": "sect", "role": "掌教" }
+        ],
+        "locationId": "location.taiyi"
+      }
+    ],
+    "playerRelationships": [
+      {
+        "characterId": "character.chengzongyang",
+        "relation": "盟友",
+        "favorability": 25,
+        "memories": ["在建康城外初次相遇"]
+      }
+    ],
+    "relationships": [
+      {
+        "fromCharacterId": "character.wangzhe",
+        "toCharacterId": "character.chengzongyang",
+        "relation": "师徒",
+        "score": 80,
+        "direction": "directed",
+        "tags": ["太乙真宗"],
+        "events": ["传授功法"]
       }
     ]
   },

@@ -4,7 +4,7 @@
   "manifest": {
     "id": "liuchao.qingyu.grassland",
     "name": "六朝清羽记·草原鹰帜",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "author": "XianTu Scenario Team",
     "description": "以《六朝清羽记》第一集草原战局为蓝本的短篇 Strict 剧本。玩家作为独立角色进入左武军、兽蛮人与西方联军交锋的时间点。"
   },
@@ -106,8 +106,12 @@
         "role": "正典异界来客",
         "gender": "男",
         "locationId": "liuchao.location.grass_ridge",
-        "skillIds": ["liuchao.skill.death_root"],
-        "techniqueIds": ["liuchao.technique.nine_yang"]
+        "skillIds": [
+          "liuchao.skill.death_root"
+        ],
+        "techniqueIds": [
+          "liuchao.technique.nine_yang"
+        ]
       },
       {
         "id": "liuchao.character.duan_qiang",
@@ -137,9 +141,16 @@
           }
         ],
         "locationId": "liuchao.location.left_camp",
-        "skillIds": ["liuchao.skill.left_guard_formation", "liuchao.skill.true_yang_guidance"],
-        "techniqueIds": ["liuchao.technique.nine_yang"],
-        "itemIds": ["liuchao.item.sealed_brocade"]
+        "skillIds": [
+          "liuchao.skill.left_guard_formation",
+          "liuchao.skill.true_yang_guidance"
+        ],
+        "techniqueIds": [
+          "liuchao.technique.nine_yang"
+        ],
+        "itemIds": [
+          "liuchao.item.sealed_brocade"
+        ]
       },
       {
         "id": "liuchao.character.yue_shuang",
@@ -148,7 +159,11 @@
         "role": "军中武者",
         "gender": "女",
         "affiliations": [
-          { "factionId": "liuchao.faction.left_guard", "category": "military", "role": "军中武者" }
+          {
+            "factionId": "liuchao.faction.left_guard",
+            "category": "military",
+            "role": "军中武者"
+          }
         ],
         "locationId": "liuchao.location.left_camp"
       },
@@ -159,7 +174,11 @@
         "role": "军中文士",
         "gender": "男",
         "affiliations": [
-          { "factionId": "liuchao.faction.left_guard", "category": "military", "role": "军中文士" }
+          {
+            "factionId": "liuchao.faction.left_guard",
+            "category": "military",
+            "role": "军中文士"
+          }
         ],
         "locationId": "liuchao.location.left_camp"
       },
@@ -170,10 +189,43 @@
         "role": "天武营主将",
         "gender": "男",
         "affiliations": [
-          { "factionId": "liuchao.faction.left_guard", "category": "military", "role": "天武营主将" }
+          {
+            "factionId": "liuchao.faction.left_guard",
+            "category": "military",
+            "role": "天武营主将"
+          }
         ],
         "locationId": "liuchao.location.grass_battlefield",
-        "skillIds": ["liuchao.skill.left_guard_formation"]
+        "skillIds": [
+          "liuchao.skill.left_guard_formation"
+        ]
+      }
+    ],
+    "playerRelationships": [
+      {
+        "characterId": "liuchao.character.cheng_zongyang",
+        "relation": "陌生人",
+        "favorability": 0
+      },
+      {
+        "characterId": "liuchao.character.duan_qiang",
+        "relation": "陌生人",
+        "favorability": 0
+      }
+    ],
+    "relationships": [
+      {
+        "fromCharacterId": "liuchao.character.cheng_zongyang",
+        "toCharacterId": "liuchao.character.duan_qiang",
+        "relation": "挚友",
+        "score": 95,
+        "tags": [
+          "现代旧识"
+        ],
+        "events": [
+          "共同穿越"
+        ],
+        "direction": "bidirectional"
       }
     ]
   },
@@ -184,21 +236,32 @@
         "name": "生死根",
         "description": "与死亡气息产生感应并将部分死气转化为真阳的罕见异能。",
         "type": "唯一异能",
-        "effects": ["感应附近死亡", "吸收死气", "死气过量时可能污染气轮"]
+        "effects": [
+          "感应附近死亡",
+          "吸收死气",
+          "死气过量时可能污染气轮"
+        ]
       },
       {
         "id": "liuchao.skill.true_yang_guidance",
         "name": "真阳引导",
         "description": "运转和引导真阳、帮助他人筑下修炼基础的高阶手段。",
         "type": "内功运用",
-        "effects": ["引导真气", "筑基疗伤"]
+        "effects": [
+          "引导真气",
+          "筑基疗伤"
+        ]
       },
       {
         "id": "liuchao.skill.left_guard_formation",
         "name": "左武军阵",
         "description": "结合弩手、长兵方阵与骑兵机动的军团战法。",
         "type": "军阵",
-        "effects": ["严密协同", "正面压制", "骑兵追击"]
+        "effects": [
+          "严密协同",
+          "正面压制",
+          "骑兵追击"
+        ]
       }
     ],
     "techniques": [
@@ -207,7 +270,9 @@
         "name": "九阳神功",
         "description": "太乙真宗镇教功法，以一阳至九阳逐步精炼真气。",
         "grade": "镇教绝学",
-        "skillIds": ["liuchao.skill.true_yang_guidance"]
+        "skillIds": [
+          "liuchao.skill.true_yang_guidance"
+        ]
       }
     ],
     "items": [
@@ -232,7 +297,10 @@
       "text": "一道紫色电光或无法解释的空间异变之后，玩家在月牙平原旁的山丘醒来。山丘下，秦制黑甲军阵正与高大的兽蛮武士交战；不远处还有两名衣着与此世格格不入的年轻人。玩家必须先判断形势并设法活过这场遭遇。",
       "playerRole": "被卷入草原战局的异界来客或身份不明的流落者",
       "locationId": "liuchao.location.grass_ridge",
-      "featuredCharacterIds": ["liuchao.character.cheng_zongyang", "liuchao.character.duan_qiang"]
+      "featuredCharacterIds": [
+        "liuchao.character.cheng_zongyang",
+        "liuchao.character.duan_qiang"
+      ]
     },
     "initialFlags": {
       "event.first_contact.done": false,
@@ -257,9 +325,16 @@
         "name": "山丘上的异乡人",
         "description": "玩家与程宗扬、段强确认彼此处境，分享有限信息，并决定是否结伴观察战场。",
         "completion": [
-          { "path": "flags.event.first_contact.done", "operator": "eq", "value": true }
+          {
+            "path": "flags.event.first_contact.done",
+            "operator": "eq",
+            "value": true
+          }
         ],
-        "relatedCharacterIds": ["liuchao.character.cheng_zongyang", "liuchao.character.duan_qiang"],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.duan_qiang"
+        ],
         "locationId": "liuchao.location.grass_ridge"
       },
       {
@@ -267,10 +342,20 @@
         "name": "山丘遇袭",
         "description": "战场扩散后，远程攻击威胁山丘上的异乡人。玩家可以尝试预警、救援或寻找掩护，局部人物命运允许因此改变。",
         "completion": [
-          { "path": "flags.event.ridge_attack.done", "operator": "eq", "value": true }
+          {
+            "path": "flags.event.ridge_attack.done",
+            "operator": "eq",
+            "value": true
+          }
         ],
-        "relatedCharacterIds": ["liuchao.character.cheng_zongyang", "liuchao.character.duan_qiang"],
-        "relatedFactionIds": ["liuchao.faction.left_guard", "liuchao.faction.beast_clans"],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.duan_qiang"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.left_guard",
+          "liuchao.faction.beast_clans"
+        ],
         "locationId": "liuchao.location.grass_ridge"
       },
       {
@@ -278,10 +363,18 @@
         "name": "卷入军阵",
         "description": "玩家在混乱中与左武军接触，需要证明自己不是兽蛮探子或西方奸细。",
         "completion": [
-          { "path": "flags.event.left_guard_contact.done", "operator": "eq", "value": true }
+          {
+            "path": "flags.event.left_guard_contact.done",
+            "operator": "eq",
+            "value": true
+          }
         ],
-        "relatedCharacterIds": ["liuchao.character.han_geng"],
-        "relatedFactionIds": ["liuchao.faction.left_guard"],
+        "relatedCharacterIds": [
+          "liuchao.character.han_geng"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.left_guard"
+        ],
         "locationId": "liuchao.location.grass_battlefield"
       },
       {
@@ -289,12 +382,22 @@
         "name": "死亡气息",
         "description": "玩家注意到程宗扬在大量伤亡附近出现异常反应，但不得擅自把生死根能力转移给玩家。",
         "conditions": [
-          { "path": "flags.event.left_guard_contact.done", "operator": "eq", "value": true }
+          {
+            "path": "flags.event.left_guard_contact.done",
+            "operator": "eq",
+            "value": true
+          }
         ],
         "completion": [
-          { "path": "flags.event.death_root_observed.done", "operator": "eq", "value": true }
+          {
+            "path": "flags.event.death_root_observed.done",
+            "operator": "eq",
+            "value": true
+          }
         ],
-        "relatedCharacterIds": ["liuchao.character.cheng_zongyang"],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
         "locationId": "liuchao.location.grass_battlefield"
       },
       {
@@ -302,10 +405,20 @@
         "name": "师帅问话",
         "description": "王哲或文泽询问玩家来历。玩家可以隐瞒穿越事实、有限坦白，或以其他身份争取在军中立足。",
         "completion": [
-          { "path": "flags.event.meet_wang_zhe.done", "operator": "eq", "value": true }
+          {
+            "path": "flags.event.meet_wang_zhe.done",
+            "operator": "eq",
+            "value": true
+          }
         ],
-        "relatedCharacterIds": ["liuchao.character.wang_zhe", "liuchao.character.wen_ze"],
-        "relatedFactionIds": ["liuchao.faction.left_guard", "liuchao.faction.taiyi"],
+        "relatedCharacterIds": [
+          "liuchao.character.wang_zhe",
+          "liuchao.character.wen_ze"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.left_guard",
+          "liuchao.faction.taiyi"
+        ],
         "locationId": "liuchao.location.left_camp"
       },
       {
@@ -313,9 +426,16 @@
         "name": "六朝异世",
         "description": "通过军中见闻与文泽的解释，让玩家理解此地并非现实秦代，而是汉军、宗门、异族和西方诸国并置的世界。",
         "completion": [
-          { "path": "flags.event.learn_world.done", "operator": "eq", "value": true }
+          {
+            "path": "flags.event.learn_world.done",
+            "operator": "eq",
+            "value": true
+          }
         ],
-        "relatedCharacterIds": ["liuchao.character.wen_ze", "liuchao.character.cheng_zongyang"],
+        "relatedCharacterIds": [
+          "liuchao.character.wen_ze",
+          "liuchao.character.cheng_zongyang"
+        ],
         "locationId": "liuchao.location.left_camp"
       },
       {
@@ -323,10 +443,20 @@
         "name": "决战前的不祥",
         "description": "王哲判断军情和补给并无明显缺口，却仍感到局势异常。玩家可从地形、敌军动向或西方商路方向寻找迹象。",
         "completion": [
-          { "path": "flags.event.omen_investigated.done", "operator": "eq", "value": true }
+          {
+            "path": "flags.event.omen_investigated.done",
+            "operator": "eq",
+            "value": true
+          }
         ],
-        "relatedCharacterIds": ["liuchao.character.wang_zhe", "liuchao.character.wen_ze"],
-        "relatedFactionIds": ["liuchao.faction.left_guard", "liuchao.faction.beast_clans"],
+        "relatedCharacterIds": [
+          "liuchao.character.wang_zhe",
+          "liuchao.character.wen_ze"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.left_guard",
+          "liuchao.faction.beast_clans"
+        ],
         "locationId": "liuchao.location.left_camp"
       },
       {
@@ -334,10 +464,22 @@
         "name": "鹰帜越过山丘",
         "description": "兽蛮阵地后方升起西方鹰帜，大批罗马军团进入战场。玩家和军中人物确认这不是普通草原决战。",
         "completion": [
-          { "path": "flags.event.eagle_revealed.done", "operator": "eq", "value": true }
+          {
+            "path": "flags.event.eagle_revealed.done",
+            "operator": "eq",
+            "value": true
+          }
         ],
-        "relatedCharacterIds": ["liuchao.character.wang_zhe", "liuchao.character.han_geng", "liuchao.character.cheng_zongyang"],
-        "relatedFactionIds": ["liuchao.faction.left_guard", "liuchao.faction.beast_clans", "liuchao.faction.roman_army"],
+        "relatedCharacterIds": [
+          "liuchao.character.wang_zhe",
+          "liuchao.character.han_geng",
+          "liuchao.character.cheng_zongyang"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.left_guard",
+          "liuchao.faction.beast_clans",
+          "liuchao.faction.roman_army"
+        ],
         "locationId": "liuchao.location.beast_hill"
       },
       {
@@ -345,13 +487,28 @@
         "name": "东西军团交锋",
         "description": "左武军面对兵力远超预期的西方联军。玩家可承担侦察、传讯、救援或随军撤离等任务，但不得凭空单人消灭整支军团。",
         "conditions": [
-          { "path": "flags.event.eagle_revealed.done", "operator": "eq", "value": true }
+          {
+            "path": "flags.event.eagle_revealed.done",
+            "operator": "eq",
+            "value": true
+          }
         ],
         "completion": [
-          { "path": "flags.event.army_clash.done", "operator": "eq", "value": true }
+          {
+            "path": "flags.event.army_clash.done",
+            "operator": "eq",
+            "value": true
+          }
         ],
-        "relatedCharacterIds": ["liuchao.character.wang_zhe", "liuchao.character.han_geng", "liuchao.character.yue_shuang"],
-        "relatedFactionIds": ["liuchao.faction.left_guard", "liuchao.faction.roman_army"],
+        "relatedCharacterIds": [
+          "liuchao.character.wang_zhe",
+          "liuchao.character.han_geng",
+          "liuchao.character.yue_shuang"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.left_guard",
+          "liuchao.faction.roman_army"
+        ],
         "locationId": "liuchao.location.grass_battlefield"
       },
       {
@@ -359,9 +516,16 @@
         "name": "战后去向",
         "description": "草原战局告一段落后，玩家决定随幸存者前往五原城、继续追查西方军势，或在军旅与宗门之间选择自己的道路。",
         "completion": [
-          { "path": "flags.event.choose_road.done", "operator": "eq", "value": true }
+          {
+            "path": "flags.event.choose_road.done",
+            "operator": "eq",
+            "value": true
+          }
         ],
-        "relatedCharacterIds": ["liuchao.character.cheng_zongyang", "liuchao.character.wen_ze"],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.wen_ze"
+        ],
         "locationId": "liuchao.location.five_plains"
       }
     ],
@@ -371,66 +535,122 @@
         "title": "月牙平原",
         "summary": "玩家在陌生草原醒来，遇见两名同样突兀出现的异乡人，并在扩散的战斗中寻求生路。",
         "completion": [
-          { "path": "flags.chapter.grassland_arrival.done", "operator": "eq", "value": true }
+          {
+            "path": "flags.chapter.grassland_arrival.done",
+            "operator": "eq",
+            "value": true
+          }
         ],
-        "eventIds": ["liuchao.event.first_contact", "liuchao.event.ridge_attack"]
+        "eventIds": [
+          "liuchao.event.first_contact",
+          "liuchao.event.ridge_attack"
+        ]
       },
       {
         "id": "liuchao.chapter.battlefield_survival",
         "title": "黑甲与兽蛮",
         "summary": "玩家被卷入左武军和兽蛮武士的战场，在证明身份的同时观察程宗扬身上的死亡异变。",
         "activation": [
-          { "path": "flags.chapter.grassland_arrival.done", "operator": "eq", "value": true }
+          {
+            "path": "flags.chapter.grassland_arrival.done",
+            "operator": "eq",
+            "value": true
+          }
         ],
         "completion": [
-          { "path": "flags.chapter.battlefield_survival.done", "operator": "eq", "value": true }
+          {
+            "path": "flags.chapter.battlefield_survival.done",
+            "operator": "eq",
+            "value": true
+          }
         ],
-        "eventIds": ["liuchao.event.left_guard_contact", "liuchao.event.death_root_observed"]
+        "eventIds": [
+          "liuchao.event.left_guard_contact",
+          "liuchao.event.death_root_observed"
+        ]
       },
       {
         "id": "liuchao.chapter.left_camp",
         "title": "左武军大营",
         "summary": "玩家进入军营，面对王哲的审视，并逐步理解六朝并置世界和太乙真宗的存在。",
         "activation": [
-          { "path": "flags.chapter.battlefield_survival.done", "operator": "eq", "value": true }
+          {
+            "path": "flags.chapter.battlefield_survival.done",
+            "operator": "eq",
+            "value": true
+          }
         ],
         "completion": [
-          { "path": "flags.chapter.left_camp.done", "operator": "eq", "value": true }
+          {
+            "path": "flags.chapter.left_camp.done",
+            "operator": "eq",
+            "value": true
+          }
         ],
-        "eventIds": ["liuchao.event.meet_wang_zhe", "liuchao.event.learn_world"]
+        "eventIds": [
+          "liuchao.event.meet_wang_zhe",
+          "liuchao.event.learn_world"
+        ]
       },
       {
         "id": "liuchao.chapter.before_battle",
         "title": "决战前夜",
         "summary": "左武军准备对兽蛮诸部发动最后决战，王哲的不祥预感促使玩家调查战场之外的变量。",
         "activation": [
-          { "path": "flags.chapter.left_camp.done", "operator": "eq", "value": true }
+          {
+            "path": "flags.chapter.left_camp.done",
+            "operator": "eq",
+            "value": true
+          }
         ],
         "completion": [
-          { "path": "flags.chapter.before_battle.done", "operator": "eq", "value": true }
+          {
+            "path": "flags.chapter.before_battle.done",
+            "operator": "eq",
+            "value": true
+          }
         ],
-        "eventIds": ["liuchao.event.omen_investigated"]
+        "eventIds": [
+          "liuchao.event.omen_investigated"
+        ]
       },
       {
         "id": "liuchao.chapter.eagle_standard",
         "title": "鹰帜压境",
         "summary": "西方军团越过山丘，与兽蛮诸部共同压向左武军。玩家必须在远超个人力量的军团冲突中作出选择。",
         "activation": [
-          { "path": "flags.chapter.before_battle.done", "operator": "eq", "value": true }
+          {
+            "path": "flags.chapter.before_battle.done",
+            "operator": "eq",
+            "value": true
+          }
         ],
         "completion": [
-          { "path": "flags.chapter.eagle_standard.done", "operator": "eq", "value": true }
+          {
+            "path": "flags.chapter.eagle_standard.done",
+            "operator": "eq",
+            "value": true
+          }
         ],
-        "eventIds": ["liuchao.event.eagle_revealed", "liuchao.event.army_clash"]
+        "eventIds": [
+          "liuchao.event.eagle_revealed",
+          "liuchao.event.army_clash"
+        ]
       },
       {
         "id": "liuchao.chapter.after_battle",
         "title": "前路未定",
         "summary": "草原上的第一轮命运已经改变，玩家将带着所得信息和关系进入更广阔的六朝世界。",
         "activation": [
-          { "path": "flags.chapter.eagle_standard.done", "operator": "eq", "value": true }
+          {
+            "path": "flags.chapter.eagle_standard.done",
+            "operator": "eq",
+            "value": true
+          }
         ],
-        "eventIds": ["liuchao.event.choose_road"]
+        "eventIds": [
+          "liuchao.event.choose_road"
+        ]
       }
     ]
   },
@@ -448,7 +668,9 @@
       {
         "contentId": "liuchao.skill.death_root",
         "policy": "exclusive",
-        "allowedCharacterIds": ["liuchao.character.cheng_zongyang"],
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
         "playerAllowed": false
       }
     ]

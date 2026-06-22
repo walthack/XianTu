@@ -52,7 +52,9 @@ export interface RelationshipEdgeV3 {
   to: string;
   relation?: string;
   score?: number;
+  type?: '单向' | '双向' | string;
   tags?: string[];
+  events?: string[];
   updatedAt?: string;
 }
 

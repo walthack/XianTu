@@ -39,8 +39,27 @@ export interface ScenarioModCharacter {
   itemIds?: string[];
 }
 
+export interface ScenarioModPlayerRelationship {
+  characterId: string;
+  relation: string;
+  favorability: number;
+  memories?: string[];
+}
+
+export interface ScenarioModCharacterRelationship {
+  fromCharacterId: string;
+  toCharacterId: string;
+  relation: string;
+  score: number;
+  direction?: 'directed' | 'bidirectional';
+  tags?: string[];
+  events?: string[];
+}
+
 export interface ScenarioModCanon {
   factions?: ScenarioModFaction[];
   locations?: ScenarioModLocation[];
   characters?: ScenarioModCharacter[];
+  playerRelationships?: ScenarioModPlayerRelationship[];
+  relationships?: ScenarioModCharacterRelationship[];
 }

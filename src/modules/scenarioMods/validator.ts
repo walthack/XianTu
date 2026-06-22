@@ -116,6 +116,8 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
       validateIdArray(entity.techniqueIds, `${entity.__path}.techniqueIds`, add);
       validateIdArray(entity.itemIds, `${entity.__path}.itemIds`, add);
     });
+    validatePlayerRelationships(canon.playerRelationships, 'canon.playerRelationships', add);
+    validateCharacterRelationships(canon.relationships, 'canon.relationships', add);
   }
 
   const content = input.content;
@@ -266,6 +268,13 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
       checkRefs(entity.techniqueIds, techniqueIds, `${path}.techniqueIds`, 'technique', add);
       checkRefs(entity.itemIds, itemIds, `${path}.itemIds`, 'item', add);
     });
+    forEachRecord(canon.playerRelationships, 'canon.playerRelationships', (entry, path) => {
+      checkRef(entry.characterId, characterIds, `${path}.characterId`, 'character', add);
+    });
+    forEachRecord(canon.relationships, 'canon.relationships', (entry, path) => {
+      checkRef(entry.fromCharacterId, characterIds, `${path}.fromCharacterId`, 'character', add);
+      checkRef(entry.toCharacterId, characterIds, `${path}.toCharacterId`, 'character', add);
+    });
   }
   if (isRecord(content)) {
     forEachRecord(content.techniques, 'content.techniques', (entity, path) => {
@@ -377,6 +386,60 @@ function validateCharacterAffiliations(value: unknown, path: string, add: AddIss
     const identity = `${String(entry.category)}:${String(entry.factionId)}`;
     if (entries.has(identity)) add(itemPath, 'duplicate_affiliation', `Duplicate affiliation "${identity}".`);
     entries.add(identity);
+  });
+}
+
+function validateScore(value: unknown, path: string, add: AddIssue): void {
+  if (typeof value !== 'number' || !Number.isFinite(value) || value < -100 || value > 100) {
+    add(path, 'invalid_score', `${path} must be a number from -100 to 100.`);
+  }
+}
+
+function validatePlayerRelationships(value: unknown, path: string, add: AddIssue): void {
+  if (value === undefined) return;
+  if (!Array.isArray(value)) {
+    add(path, 'invalid_type', `${path} must be an array.`);
+    return;
+  }
+  const seen = new Set<string>();
+  value.forEach((entry, index) => {
+    const itemPath = `${path}[${index}]`;
+    if (!isRecord(entry)) return add(itemPath, 'invalid_type', `${itemPath} must be an object.`);
+    if (validateId(entry.characterId, `${itemPath}.characterId`, add)) {
+      if (seen.has(entry.characterId)) add(itemPath, 'duplicate_player_relationship', `Duplicate player relationship for "${entry.characterId}".`);
+      seen.add(entry.characterId);
+    }
+    requireString(entry.relation, `${itemPath}.relation`, add);
+    validateScore(entry.favorability, `${itemPath}.favorability`, add);
+    validateStringArray(entry.memories, `${itemPath}.memories`, add);
+  });
+}
+
+function validateCharacterRelationships(value: unknown, path: string, add: AddIssue): void {
+  if (value === undefined) return;
+  if (!Array.isArray(value)) {
+    add(path, 'invalid_type', `${path} must be an array.`);
+    return;
+  }
+  const seen = new Set<string>();
+  value.forEach((entry, index) => {
+    const itemPath = `${path}[${index}]`;
+    if (!isRecord(entry)) return add(itemPath, 'invalid_type', `${itemPath} must be an object.`);
+    const fromValid = validateId(entry.fromCharacterId, `${itemPath}.fromCharacterId`, add);
+    const toValid = validateId(entry.toCharacterId, `${itemPath}.toCharacterId`, add);
+    if (fromValid && toValid) {
+      if (entry.fromCharacterId === entry.toCharacterId) add(itemPath, 'self_relationship', 'A relationship cannot point to the same character.');
+      const identity = `${entry.fromCharacterId}::${entry.toCharacterId}`;
+      if (seen.has(identity)) add(itemPath, 'duplicate_relationship', `Duplicate relationship "${identity}".`);
+      seen.add(identity);
+    }
+    requireString(entry.relation, `${itemPath}.relation`, add);
+    validateScore(entry.score, `${itemPath}.score`, add);
+    if (entry.direction !== undefined && entry.direction !== 'directed' && entry.direction !== 'bidirectional') {
+      add(`${itemPath}.direction`, 'invalid_enum', 'direction must be directed or bidirectional.');
+    }
+    validateStringArray(entry.tags, `${itemPath}.tags`, add);
+    validateStringArray(entry.events, `${itemPath}.events`, add);
   });
 }
 

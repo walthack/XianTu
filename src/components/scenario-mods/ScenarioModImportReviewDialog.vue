@@ -58,7 +58,7 @@
             </div>
             <div>
               <h3><ShieldCheck :size="17" />正典约束</h3>
-              <p>{{ accessRules.length }} 条内容归属 · {{ affiliations.length }} 条人物归属</p>
+              <p>{{ accessRules.length }} 条内容归属 · {{ affiliations.length }} 条人物归属 · {{ playerRelationships.length + characterRelationships.length }} 条人物关系</p>
             </div>
           </section>
 
@@ -80,6 +80,22 @@
                 <span class="policy-badge">{{ entry.category }}</span>
                 <strong>{{ entry.characterName }}</strong>
                 <span>{{ entry.factionName }}{{ entry.role ? ` · ${entry.role}` : '' }}</span>
+              </div>
+            </div>
+          </section>
+
+          <section v-if="playerRelationships.length || characterRelationships.length" class="review-section">
+            <h3>初始人物关系与好感</h3>
+            <div class="rule-list">
+              <div v-for="entry in playerRelationships" :key="`player-${entry.characterId}`" class="rule-row">
+                <span class="policy-badge">玩家</span>
+                <strong>{{ entry.characterName }}</strong>
+                <span>{{ entry.relation }} · 好感 {{ entry.favorability }}</span>
+              </div>
+              <div v-for="entry in characterRelationships" :key="entry.key" class="rule-row">
+                <span class="policy-badge">{{ entry.direction }}</span>
+                <strong>{{ entry.fromName }} → {{ entry.toName }}</strong>
+                <span>{{ entry.relation }} · 强度 {{ entry.score }}</span>
               </div>
             </div>
           </section>
@@ -206,6 +222,28 @@ const affiliations = computed(() => {
       role: affiliation.role,
     }));
   });
+});
+
+const playerRelationships = computed(() => {
+  const mod = props.review.mod;
+  if (!mod) return [];
+  return (mod.canon?.playerRelationships || []).map(entry => ({
+    ...entry,
+    characterName: mod.canon?.characters?.find(character => character.id === entry.characterId)?.name || entry.characterId,
+  }));
+});
+
+const characterRelationships = computed(() => {
+  const mod = props.review.mod;
+  if (!mod) return [];
+  const characterName = (id: string) => mod.canon?.characters?.find(character => character.id === id)?.name || id;
+  return (mod.canon?.relationships || []).map((entry, index) => ({
+    ...entry,
+    key: `${entry.fromCharacterId}-${entry.toCharacterId}-${index}`,
+    fromName: characterName(entry.fromCharacterId),
+    toName: characterName(entry.toCharacterId),
+    direction: entry.direction === 'bidirectional' ? '双向' : '单向',
+  }));
 });
 
 function suggestionFor(code: string): string {

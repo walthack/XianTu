@@ -19,7 +19,16 @@
         "name": "中州",
         "description": "故事的主要区域。"
       }
-    ]
+    ],
+    "playerRelationships": [
+      {
+        "characterId": "example.character.guide",
+        "relation": "初识",
+        "favorability": 10,
+        "memories": ["在临川城初次相遇"]
+      }
+    ],
+    "relationships": []
   },
   "canon": {
     "factions": [

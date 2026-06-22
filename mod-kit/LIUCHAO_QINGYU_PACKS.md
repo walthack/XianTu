@@ -10,14 +10,13 @@
 
 ## 人物关系边界
 
-Scenario Mod v1 尚无独立的 `relationships` 字段：
+Scenario Mod v1 已映射原生关系系统：
 
 - 宗派、军队、国家、家族和组织归属使用 `canon.characters[].affiliations`。
-- 师徒、亲友、盟敌和感情关系目前写入人物 `description`、事件描述和剧情 flags。
-- `relatedCharacterIds` 只表示人物参与某事件，不代表两人之间的关系类型。
-- 导入人物不会自动在原生 `社交.关系` 中创建好感度、身份称谓或关系记录。
-
-因此，三个包当前保护人物身份、专属能力和组织归属，但不会把所有原作人际关系初始化成可计算的社交数据。若需要该能力，应单独扩展 Schema、Strict 初始化、存档映射和 runtime canon guard，不能只在 JSON 中自造字段。
+- `canon.playerRelationships` 写入 `社交.关系`，提供 NPC 对玩家的初始关系、好感度与记忆。
+- `canon.relationships` 写入 `社交.关系矩阵.edges`，表示 NPC 之间的师徒、亲友、盟敌和上下级关系。
+- `relatedCharacterIds` 仍只表示人物参与某事件，不代表关系类型。
+- 初始关系不永久锁死；好感度和关系强度会继续随玩家行为与剧情事件变化。
 
 ## 核心正典
 

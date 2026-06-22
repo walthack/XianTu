@@ -4,7 +4,7 @@
   "manifest": {
     "id": "liuchao.qingyu.southsea",
     "name": "六朝清羽记·南荒海王",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "author": "XianTu Scenario Team",
     "description": "以《六朝清羽记》南荒、海王神殿和碧鲮海湾阶段为蓝本的 Strict 探险剧本，覆盖约第25至58章的主要剧情骨架。"
   },
@@ -121,8 +121,13 @@
           }
         ],
         "locationId": "liuchao.southsea.location.jungle_pass",
-        "skillIds": ["liuchao.southsea.skill.death_root", "liuchao.southsea.skill.trade_judgment"],
-        "techniqueIds": ["liuchao.southsea.technique.nine_yang"]
+        "skillIds": [
+          "liuchao.southsea.skill.death_root",
+          "liuchao.southsea.skill.trade_judgment"
+        ],
+        "techniqueIds": [
+          "liuchao.southsea.technique.nine_yang"
+        ]
       },
       {
         "id": "liuchao.southsea.character.xiao_zi",
@@ -139,7 +144,9 @@
           }
         ],
         "locationId": "liuchao.southsea.location.flower_village",
-        "skillIds": ["liuchao.southsea.skill.poison_lore"]
+        "skillIds": [
+          "liuchao.southsea.skill.poison_lore"
+        ]
       },
       {
         "id": "liuchao.southsea.character.ning_yu",
@@ -155,7 +162,9 @@
           }
         ],
         "locationId": "liuchao.southsea.location.jungle_pass",
-        "skillIds": ["liuchao.southsea.skill.guard_blade"]
+        "skillIds": [
+          "liuchao.southsea.skill.guard_blade"
+        ]
       },
       {
         "id": "liuchao.southsea.character.ajiman_bana",
@@ -171,7 +180,9 @@
           }
         ],
         "locationId": "liuchao.southsea.location.biling_bay",
-        "skillIds": ["liuchao.southsea.skill.dance_and_customs"]
+        "skillIds": [
+          "liuchao.southsea.skill.dance_and_customs"
+        ]
       },
       {
         "id": "liuchao.southsea.character.miao_guide",
@@ -203,6 +214,60 @@
         ],
         "locationId": "liuchao.southsea.location.undersea_ruins"
       }
+    ],
+    "playerRelationships": [
+      {
+        "characterId": "liuchao.southsea.character.cheng_zongyang",
+        "relation": "同行",
+        "favorability": 20
+      },
+      {
+        "characterId": "liuchao.southsea.character.xiao_zi",
+        "relation": "观察对象",
+        "favorability": -5
+      },
+      {
+        "characterId": "liuchao.southsea.character.ning_yu",
+        "relation": "临时同伴",
+        "favorability": 15
+      },
+      {
+        "characterId": "liuchao.southsea.character.ajiman_bana",
+        "relation": "陌生人",
+        "favorability": 0
+      }
+    ],
+    "relationships": [
+      {
+        "fromCharacterId": "liuchao.southsea.character.cheng_zongyang",
+        "toCharacterId": "liuchao.southsea.character.xiao_zi",
+        "relation": "复杂盟友",
+        "score": 55,
+        "tags": [
+          "亦敌亦友"
+        ],
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.southsea.character.ning_yu",
+        "toCharacterId": "liuchao.southsea.character.cheng_zongyang",
+        "relation": "护卫与主事者",
+        "score": 70,
+        "tags": [
+          "盘江商队"
+        ],
+        "direction": "directed"
+      },
+      {
+        "fromCharacterId": "liuchao.southsea.character.ajiman_bana",
+        "toCharacterId": "liuchao.southsea.character.cheng_zongyang",
+        "relation": "新识盟友",
+        "score": 35,
+        "tags": [
+          "碧鲮海湾"
+        ],
+        "direction": "bidirectional"
+      }
     ]
   },
   "content": {
@@ -212,35 +277,52 @@
         "name": "生死根",
         "description": "感应死亡气息并将部分死气转化为真阳的唯一异能。",
         "type": "唯一异能",
-        "effects": ["感应死亡", "吸收死气", "杂质可能污染气轮"]
+        "effects": [
+          "感应死亡",
+          "吸收死气",
+          "杂质可能污染气轮"
+        ]
       },
       {
         "id": "liuchao.southsea.skill.trade_judgment",
         "name": "商情判断",
         "description": "分析供需、信用与文化差异以促成交易。",
         "type": "商业能力",
-        "effects": ["评估交易", "识别风险"]
+        "effects": [
+          "评估交易",
+          "识别风险"
+        ]
       },
       {
         "id": "liuchao.southsea.skill.poison_lore",
         "name": "毒术识辨",
         "description": "识别南荒毒物、药性和人为布置痕迹的隐秘知识。",
         "type": "毒术",
-        "effects": ["识毒", "辨药", "追踪毒术痕迹"]
+        "effects": [
+          "识毒",
+          "辨药",
+          "追踪毒术痕迹"
+        ]
       },
       {
         "id": "liuchao.southsea.skill.guard_blade",
         "name": "侍卫刀术",
         "description": "适合贴身护卫与狭窄地形作战的实战刀术。",
         "type": "刀法",
-        "effects": ["护卫", "近战压制"]
+        "effects": [
+          "护卫",
+          "近战压制"
+        ]
       },
       {
         "id": "liuchao.southsea.skill.dance_and_customs",
         "name": "天竺舞艺",
         "description": "融合节奏、身体控制与异域礼俗的表演技艺。",
         "type": "表演技艺",
-        "effects": ["舞蹈表演", "文化交涉"]
+        "effects": [
+          "舞蹈表演",
+          "文化交涉"
+        ]
       }
     ],
     "techniques": [
@@ -280,7 +362,11 @@
       "text": "玩家在南荒山口遇见受瘴气、失踪与错误路线困扰的盘江商队。凝羽正在重整护卫，小紫已先一步进入花苗山寨，而程宗扬必须在继续追查海王神殿与保护队伍之间作出安排。",
       "playerRole": "加入南荒远行的独立旅人、向导候选或临时护卫",
       "locationId": "liuchao.southsea.location.jungle_pass",
-      "featuredCharacterIds": ["liuchao.southsea.character.cheng_zongyang", "liuchao.southsea.character.ning_yu", "liuchao.southsea.character.xiao_zi"]
+      "featuredCharacterIds": [
+        "liuchao.southsea.character.cheng_zongyang",
+        "liuchao.southsea.character.ning_yu",
+        "liuchao.southsea.character.xiao_zi"
+      ]
     },
     "initialFlags": {
       "event.caravan_rescued.done": false,
@@ -302,79 +388,182 @@
         "id": "liuchao.southsea.event.caravan_rescued",
         "name": "山口危局",
         "description": "玩家协助商队处理瘴气、失踪人员或突发袭击，取得继续深入南荒的基本条件。",
-        "completion": [{ "path": "flags.event.caravan_rescued.done", "operator": "eq", "value": true }],
-        "relatedCharacterIds": ["liuchao.southsea.character.cheng_zongyang", "liuchao.southsea.character.ning_yu"],
-        "relatedFactionIds": ["liuchao.southsea.faction.panjiang_caravan"],
+        "completion": [
+          {
+            "path": "flags.event.caravan_rescued.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.southsea.character.cheng_zongyang",
+          "liuchao.southsea.character.ning_yu"
+        ],
+        "relatedFactionIds": [
+          "liuchao.southsea.faction.panjiang_caravan"
+        ],
         "locationId": "liuchao.southsea.location.jungle_pass"
       },
       {
         "id": "liuchao.southsea.event.village_trust",
         "name": "花苗寨约",
         "description": "玩家通过尊重寨规、交换药物或解决地方纠纷，争取花苗向导与安全道路。",
-        "completion": [{ "path": "flags.event.village_trust.done", "operator": "eq", "value": true }],
-        "relatedCharacterIds": ["liuchao.southsea.character.miao_guide"],
-        "relatedFactionIds": ["liuchao.southsea.faction.flower_miao"],
+        "completion": [
+          {
+            "path": "flags.event.village_trust.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.southsea.character.miao_guide"
+        ],
+        "relatedFactionIds": [
+          "liuchao.southsea.faction.flower_miao"
+        ],
         "locationId": "liuchao.southsea.location.flower_village"
       },
       {
         "id": "liuchao.southsea.event.xiaozi_clue",
         "name": "紫眸留下的线索",
         "description": "小紫留下的药粉、暗记或误导指向黑魔海相关活动，玩家需要判断哪些线索可信。",
-        "completion": [{ "path": "flags.event.xiaozi_clue.done", "operator": "eq", "value": true }],
-        "relatedCharacterIds": ["liuchao.southsea.character.xiao_zi"],
-        "relatedFactionIds": ["liuchao.southsea.faction.black_demon_sea"],
+        "completion": [
+          {
+            "path": "flags.event.xiaozi_clue.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.southsea.character.xiao_zi"
+        ],
+        "relatedFactionIds": [
+          "liuchao.southsea.faction.black_demon_sea"
+        ],
         "locationId": "liuchao.southsea.location.flower_village"
       },
       {
         "id": "liuchao.southsea.event.temple_route",
         "name": "神殿外环",
         "description": "队伍依据地形、潮图和地方记忆找到海王神殿外环，避开不能以蛮力解决的旧机关。",
-        "conditions": [{ "path": "flags.event.xiaozi_clue.done", "operator": "eq", "value": true }],
-        "completion": [{ "path": "flags.event.temple_route.done", "operator": "eq", "value": true }],
-        "relatedCharacterIds": ["liuchao.southsea.character.cheng_zongyang", "liuchao.southsea.character.ning_yu", "liuchao.southsea.character.xiao_zi"],
+        "conditions": [
+          {
+            "path": "flags.event.xiaozi_clue.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.temple_route.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.southsea.character.cheng_zongyang",
+          "liuchao.southsea.character.ning_yu",
+          "liuchao.southsea.character.xiao_zi"
+        ],
         "locationId": "liuchao.southsea.location.temple_approach"
       },
       {
         "id": "liuchao.southsea.event.harbor_arrival",
         "name": "抵达碧鲮海湾",
         "description": "玩家随队进入碧鲮海湾，在海商、舞乐和鲛人传闻中重建补给与情报网络。",
-        "completion": [{ "path": "flags.event.harbor_arrival.done", "operator": "eq", "value": true }],
-        "relatedCharacterIds": ["liuchao.southsea.character.cheng_zongyang", "liuchao.southsea.character.ajiman_bana"],
-        "relatedFactionIds": ["liuchao.southsea.faction.biling_harbor"],
+        "completion": [
+          {
+            "path": "flags.event.harbor_arrival.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.southsea.character.cheng_zongyang",
+          "liuchao.southsea.character.ajiman_bana"
+        ],
+        "relatedFactionIds": [
+          "liuchao.southsea.faction.biling_harbor"
+        ],
         "locationId": "liuchao.southsea.location.biling_bay"
       },
       {
         "id": "liuchao.southsea.event.ajiman_contact",
         "name": "天竺来客",
         "description": "阿姬曼·芭娜以表演和异域见闻提供海湾线索，玩家应以平等交涉争取合作。",
-        "completion": [{ "path": "flags.event.ajiman_contact.done", "operator": "eq", "value": true }],
-        "relatedCharacterIds": ["liuchao.southsea.character.ajiman_bana"],
+        "completion": [
+          {
+            "path": "flags.event.ajiman_contact.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.southsea.character.ajiman_bana"
+        ],
         "locationId": "liuchao.southsea.location.biling_bay"
       },
       {
         "id": "liuchao.southsea.event.merfolk_pact",
         "name": "鲛人旧约",
         "description": "玩家与鲛人守路者交涉，确认进入水下遗址的代价，以及哪些遗物不得带走。",
-        "completion": [{ "path": "flags.event.merfolk_pact.done", "operator": "eq", "value": true }],
-        "relatedCharacterIds": ["liuchao.southsea.character.merfolk_keeper", "liuchao.southsea.character.xiao_zi"],
-        "relatedFactionIds": ["liuchao.southsea.faction.merfolk"],
+        "completion": [
+          {
+            "path": "flags.event.merfolk_pact.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.southsea.character.merfolk_keeper",
+          "liuchao.southsea.character.xiao_zi"
+        ],
+        "relatedFactionIds": [
+          "liuchao.southsea.faction.merfolk"
+        ],
         "locationId": "liuchao.southsea.location.undersea_ruins"
       },
       {
         "id": "liuchao.southsea.event.ruins_explored",
         "name": "水下遗址",
         "description": "在旧机关、缺氧与争夺者之间完成一次有限探索，取得信息或宝物而非洗劫整座遗址。",
-        "conditions": [{ "path": "flags.event.merfolk_pact.done", "operator": "eq", "value": true }],
-        "completion": [{ "path": "flags.event.ruins_explored.done", "operator": "eq", "value": true }],
-        "relatedCharacterIds": ["liuchao.southsea.character.cheng_zongyang", "liuchao.southsea.character.ning_yu", "liuchao.southsea.character.merfolk_keeper"],
+        "conditions": [
+          {
+            "path": "flags.event.merfolk_pact.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.ruins_explored.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.southsea.character.cheng_zongyang",
+          "liuchao.southsea.character.ning_yu",
+          "liuchao.southsea.character.merfolk_keeper"
+        ],
         "locationId": "liuchao.southsea.location.undersea_ruins"
       },
       {
         "id": "liuchao.southsea.event.expedition_choice",
         "name": "海湾前路",
         "description": "探险告一段落后，玩家决定随盘江商队扩大网络、追查黑魔海线索，或留在海湾经营新的关系。",
-        "completion": [{ "path": "flags.event.expedition_choice.done", "operator": "eq", "value": true }],
-        "relatedCharacterIds": ["liuchao.southsea.character.cheng_zongyang", "liuchao.southsea.character.xiao_zi", "liuchao.southsea.character.ajiman_bana"],
+        "completion": [
+          {
+            "path": "flags.event.expedition_choice.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.southsea.character.cheng_zongyang",
+          "liuchao.southsea.character.xiao_zi",
+          "liuchao.southsea.character.ajiman_bana"
+        ],
         "locationId": "liuchao.southsea.location.biling_bay"
       }
     ],
@@ -383,39 +572,101 @@
         "id": "liuchao.southsea.chapter.southern_gate",
         "title": "南荒山口",
         "summary": "玩家帮助商队度过入荒危局，并与花苗山寨建立最初信任。",
-        "completion": [{ "path": "flags.chapter.southern_gate.done", "operator": "eq", "value": true }],
-        "eventIds": ["liuchao.southsea.event.caravan_rescued", "liuchao.southsea.event.village_trust"]
+        "completion": [
+          {
+            "path": "flags.chapter.southern_gate.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "eventIds": [
+          "liuchao.southsea.event.caravan_rescued",
+          "liuchao.southsea.event.village_trust"
+        ]
       },
       {
         "id": "liuchao.southsea.chapter.temple_trail",
         "title": "海王遗踪",
         "summary": "小紫的线索将队伍引向海王神殿外环，真相与误导同时出现。",
-        "activation": [{ "path": "flags.chapter.southern_gate.done", "operator": "eq", "value": true }],
-        "completion": [{ "path": "flags.chapter.temple_trail.done", "operator": "eq", "value": true }],
-        "eventIds": ["liuchao.southsea.event.xiaozi_clue", "liuchao.southsea.event.temple_route"]
+        "activation": [
+          {
+            "path": "flags.chapter.southern_gate.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.chapter.temple_trail.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "eventIds": [
+          "liuchao.southsea.event.xiaozi_clue",
+          "liuchao.southsea.event.temple_route"
+        ]
       },
       {
         "id": "liuchao.southsea.chapter.biling_harbor",
         "title": "碧鲮海湾",
         "summary": "队伍抵达海湾，与阿姬曼·芭娜及当地商港建立联系。",
-        "activation": [{ "path": "flags.chapter.temple_trail.done", "operator": "eq", "value": true }],
-        "completion": [{ "path": "flags.chapter.biling_harbor.done", "operator": "eq", "value": true }],
-        "eventIds": ["liuchao.southsea.event.harbor_arrival", "liuchao.southsea.event.ajiman_contact"]
+        "activation": [
+          {
+            "path": "flags.chapter.temple_trail.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.chapter.biling_harbor.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "eventIds": [
+          "liuchao.southsea.event.harbor_arrival",
+          "liuchao.southsea.event.ajiman_contact"
+        ]
       },
       {
         "id": "liuchao.southsea.chapter.undersea_ruins",
         "title": "鲛人旧路",
         "summary": "玩家通过鲛人旧约进入水下遗址，完成一次受约束的探索。",
-        "activation": [{ "path": "flags.chapter.biling_harbor.done", "operator": "eq", "value": true }],
-        "completion": [{ "path": "flags.chapter.undersea_ruins.done", "operator": "eq", "value": true }],
-        "eventIds": ["liuchao.southsea.event.merfolk_pact", "liuchao.southsea.event.ruins_explored"]
+        "activation": [
+          {
+            "path": "flags.chapter.biling_harbor.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.chapter.undersea_ruins.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "eventIds": [
+          "liuchao.southsea.event.merfolk_pact",
+          "liuchao.southsea.event.ruins_explored"
+        ]
       },
       {
         "id": "liuchao.southsea.chapter.seaward_road",
         "title": "海湾前路",
         "summary": "南荒远行形成新的关系与线索，玩家选择下一段道路。",
-        "activation": [{ "path": "flags.chapter.undersea_ruins.done", "operator": "eq", "value": true }],
-        "eventIds": ["liuchao.southsea.event.expedition_choice"]
+        "activation": [
+          {
+            "path": "flags.chapter.undersea_ruins.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "eventIds": [
+          "liuchao.southsea.event.expedition_choice"
+        ]
       }
     ]
   },
@@ -433,19 +684,25 @@
       {
         "contentId": "liuchao.southsea.skill.death_root",
         "policy": "exclusive",
-        "allowedCharacterIds": ["liuchao.southsea.character.cheng_zongyang"],
+        "allowedCharacterIds": [
+          "liuchao.southsea.character.cheng_zongyang"
+        ],
         "playerAllowed": false
       },
       {
         "contentId": "liuchao.southsea.skill.poison_lore",
         "policy": "restricted",
-        "allowedCharacterIds": ["liuchao.southsea.character.xiao_zi"],
+        "allowedCharacterIds": [
+          "liuchao.southsea.character.xiao_zi"
+        ],
         "playerAllowed": false
       },
       {
         "contentId": "liuchao.southsea.technique.nine_yang",
         "policy": "restricted",
-        "allowedCharacterIds": ["liuchao.southsea.character.cheng_zongyang"],
+        "allowedCharacterIds": [
+          "liuchao.southsea.character.cheng_zongyang"
+        ],
         "playerAllowed": false
       }
     ]

@@ -49,7 +49,15 @@
         ],
         "locationId": "example.expand.location.market"
       }
-    ]
+    ],
+    "playerRelationships": [
+      {
+        "characterId": "example.expand.character.merchant",
+        "relation": "初识",
+        "favorability": 5
+      }
+    ],
+    "relationships": []
   },
   "content": {
     "skills": [],

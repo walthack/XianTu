@@ -211,7 +211,9 @@ export function repairSaveData(saveData: SaveData | null | undefined): SaveData 
         to: string;
         relation?: string;
         score?: number;
+        type?: string;
         tags?: string[];
+        events?: string[];
         updatedAt?: string;
       }> = [];
 
@@ -229,6 +231,8 @@ export function repairSaveData(saveData: SaveData | null | undefined): SaveData 
         const relation = normalizeString((item as any).relation) || undefined;
         const score = typeof (item as any).score === 'number' && Number.isFinite((item as any).score) ? (item as any).score : undefined;
         const tags = normalizeStringArray((item as any).tags);
+        const type = normalizeString((item as any).type) || undefined;
+        const events = normalizeStringArray((item as any).events);
         const updatedAt = normalizeString((item as any).updatedAt) || undefined;
 
         edges.push({
@@ -236,7 +240,9 @@ export function repairSaveData(saveData: SaveData | null | undefined): SaveData 
           to,
           relation,
           score,
+          type,
           tags: tags.length ? tags : undefined,
+          events: events.length ? events : undefined,
           updatedAt,
         });
         if (edges.length >= 2000) break;

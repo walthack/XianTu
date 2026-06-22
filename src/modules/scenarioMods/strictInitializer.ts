@@ -3,6 +3,7 @@ import type { PlayerLocation, SaveData, WorldInfo } from '@/types/game';
 import type { ScenarioMod } from './schema';
 import { buildExpandScenarioInitialization, type ExpandScenarioInitialization } from './expandInitializer';
 import { createScenarioProgress, getInitialScenarioChapterId, type ScenarioProgressState } from './runtime';
+import { applyScenarioRelationshipsToSave } from './relationships';
 
 export interface ScenarioModRuntimeState extends ScenarioProgressState {
   schema: ScenarioMod['schema'];
@@ -18,6 +19,8 @@ export interface ScenarioModRuntimeState extends ScenarioProgressState {
     factions: NonNullable<ScenarioMod['canon']>['factions'];
     locations: NonNullable<ScenarioMod['canon']>['locations'];
     characters: NonNullable<ScenarioMod['canon']>['characters'];
+    playerRelationships: NonNullable<ScenarioMod['canon']>['playerRelationships'];
+    relationships: NonNullable<ScenarioMod['canon']>['relationships'];
     skills: NonNullable<ScenarioMod['content']>['skills'];
     techniques: NonNullable<ScenarioMod['content']>['techniques'];
     items: NonNullable<ScenarioMod['content']>['items'];
@@ -107,6 +110,8 @@ export function buildStrictScenarioInitialization(
       factions: structuredClone(mod.canon?.factions || []),
       locations: structuredClone(mod.canon?.locations || []),
       characters: structuredClone(mod.canon?.characters || []),
+      playerRelationships: structuredClone(mod.canon?.playerRelationships || []),
+      relationships: structuredClone(mod.canon?.relationships || []),
       skills: structuredClone(mod.content?.skills || []),
       techniques: structuredClone(mod.content?.techniques || []),
       items: structuredClone(mod.content?.items || []),
@@ -151,7 +156,10 @@ export function applyStrictScenarioInitializationToSave(
       mode: initialization.runtimeState.mode,
     },
   };
-  return next;
+  return applyScenarioRelationshipsToSave(next, {
+    ...initialization.runtimeState.canon,
+    opening: initialization.runtimeState.opening,
+  }, initialization.worldInfo.生成时间);
 }
 
 export async function resolveInitialWorldInfo(
