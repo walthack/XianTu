@@ -24,6 +24,8 @@ test('accepts the minimum complete Scenario Mod fixture', async () => {
 test('validates native player and NPC relationship declarations', async () => {
   const { validateScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
   const raw = await loadFixture();
+  raw.canon.playerRelationships[0].favorability = -100;
+  raw.canon.relationships[0].score = 100;
   const valid = validateScenarioMod(raw);
   assert.equal(valid.valid, true);
 

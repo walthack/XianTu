@@ -83,6 +83,8 @@ test('strict Mod identity and canon survive a save serialization round trip', as
     events: ['传授功法'],
     updatedAt: '2026-06-22T00:00:00.000Z',
   });
+  assert.equal(reloaded.角色.技能, undefined, 'independent player must not inherit canonical NPC skills');
+  assert.equal(reloaded.社交.宗门, undefined, 'independent player must not inherit a canonical NPC sect');
   assert.equal(baseSave.角色.位置.描述, '旧地点', 'base save must not be mutated');
 });
 
