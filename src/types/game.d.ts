@@ -1019,6 +1019,10 @@ export interface NpcProfile {
     buildingId?: string; // 【区域地图】所在建筑ID
   };
   势力归属?: string;
+  势力归属列表?: string[];
+  宗门?: string;
+  技能?: { 掌握技能: MasteredSkill[] };
+  功法?: { 修炼功法: CultivationTechniqueReference | null };
 
   // === 人格系统 ===
   人格底线: string[] | string; // 如：['背叛信任', '伤害亲友', '公开侮辱', '强迫违背意愿']，触犯后好感度断崖式下跌

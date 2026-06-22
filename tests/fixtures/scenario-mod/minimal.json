@@ -54,6 +54,7 @@
         ],
         "locationId": "location.jiankang",
         "skillIds": ["skill.thunderblade"],
+        "techniqueIds": ["technique.nineyang"],
         "itemIds": ["item.thunderblade"]
       },
       {
@@ -95,7 +96,14 @@
         "type": "刀法"
       }
     ],
-    "techniques": [],
+    "techniques": [
+      {
+        "id": "technique.nineyang",
+        "name": "九阳神功",
+        "grade": "镇教绝学",
+        "skillIds": ["skill.thunderblade"]
+      }
+    ],
     "items": [
       {
         "id": "item.thunderblade",

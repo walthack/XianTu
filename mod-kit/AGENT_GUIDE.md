@@ -58,6 +58,8 @@ flags 是剧情事实，不是叙事文本。推荐命名：
 - `characterId`、`fromCharacterId`、`toCharacterId` 必须引用本 Mod 的正典人物 ID。
 - 玩家映射为正典人物时，不会把玩家本人重复写入 NPC 列表；NPC-NPC 边也不应把映射玩家作为端点，玩家关系请改用 `playerRelationships`。
 - 组织归属仍使用 `affiliations`，不要用关系边代替宗派、军队、国家或家族身份。
+- 被初始关系引用的 NPC 会把 `skillIds`、`techniqueIds`、`itemIds` 映射进原生技能、功法和背包。
+- 玩家仅在 `playerCharacterId` 映射为正典人物时继承该人物内容和 `sect` 宗门身份；独立玩家不继承。
 
 ### 5. 设计章节状态机
 

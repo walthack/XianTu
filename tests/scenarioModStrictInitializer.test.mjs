@@ -69,6 +69,10 @@ test('strict Mod identity and canon survive a save serialization round trip', as
   assert.equal(reloaded.社交.关系.程宗扬.与玩家关系, '盟友');
   assert.equal(reloaded.社交.关系.程宗扬.好感度, 25);
   assert.deepEqual(reloaded.社交.关系.程宗扬.记忆, ['在建康城外初次相遇']);
+  assert.equal(reloaded.社交.关系.程宗扬.宗门, '太乙真宗');
+  assert.equal(reloaded.社交.关系.程宗扬.技能.掌握技能[0].技能名称, '雷刀诀');
+  assert.equal(reloaded.社交.关系.程宗扬.功法.修炼功法.名称, '九阳神功');
+  assert.equal(reloaded.社交.关系.程宗扬.背包.物品['item.thunderblade'].名称, '雷刀');
   assert.deepEqual(reloaded.社交.关系矩阵.edges[0], {
     from: '王哲',
     to: '程宗扬',
@@ -100,6 +104,11 @@ test('mapped player identity is not duplicated in native NPC relationships', asy
   assert.equal(saved.社交.关系.程宗扬, undefined);
   assert.equal(saved.社交.关系.王哲.名字, '王哲');
   assert.deepEqual(saved.社交.关系矩阵.edges, []);
+  assert.equal(saved.角色.技能.掌握技能[0].技能名称, '雷刀诀');
+  assert.equal(saved.角色.背包.物品['item.thunderblade'].名称, '雷刀');
+  assert.equal(saved.角色.修炼.修炼功法.名称, '九阳神功');
+  assert.equal(saved.社交.宗门.当前宗门, '太乙真宗');
+  assert.equal(saved.社交.宗门.成员信息.职位, '弟子');
 });
 
 test('resolution without a Mod preserves the original world generation path', async () => {
