@@ -19,6 +19,7 @@
     "watch": "webpack --mode development --watch",
     "serve": "webpack-dev-server --mode development",
     "test": "node --test tests/*.test.mjs",
+    "mod:validate": "node scripts/validate-scenario-mod.mjs",
     "lint": "eslint . --ext .ts,.vue --fix",
     "lint:check": "eslint . --ext .ts,.vue",
     "type-check": "tsc --noEmit"

@@ -1,0 +1,255 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/walthack/XianTu/mod-kit/schema/xiantu.scenario-mod.v1.schema.json",
+  "title": "XianTu Scenario Mod v1",
+  "type": "object",
+  "required": ["schema", "version", "manifest", "world", "scenario", "rules"],
+  "properties": {
+    "schema": { "const": "xiantu.scenario-mod" },
+    "version": { "const": 1 },
+    "manifest": { "$ref": "#/$defs/manifest" },
+    "world": { "$ref": "#/$defs/world" },
+    "canon": { "$ref": "#/$defs/canon" },
+    "content": { "$ref": "#/$defs/content" },
+    "scenario": { "$ref": "#/$defs/scenario" },
+    "rules": { "$ref": "#/$defs/rules" }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]*$"
+    },
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "idArray": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/id" },
+      "uniqueItems": true
+    },
+    "stringArray": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/nonEmptyString" }
+    },
+    "manifest": {
+      "type": "object",
+      "required": ["id", "name", "version"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "name": { "$ref": "#/$defs/nonEmptyString" },
+        "version": { "$ref": "#/$defs/nonEmptyString" },
+        "author": { "$ref": "#/$defs/nonEmptyString" },
+        "description": { "$ref": "#/$defs/nonEmptyString" }
+      },
+      "additionalProperties": false
+    },
+    "continent": {
+      "type": "object",
+      "required": ["id", "name"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "name": { "$ref": "#/$defs/nonEmptyString" },
+        "description": { "$ref": "#/$defs/nonEmptyString" }
+      },
+      "additionalProperties": false
+    },
+    "world": {
+      "type": "object",
+      "required": ["name", "era", "background"],
+      "properties": {
+        "name": { "$ref": "#/$defs/nonEmptyString" },
+        "era": { "$ref": "#/$defs/nonEmptyString" },
+        "background": { "$ref": "#/$defs/nonEmptyString" },
+        "specialRules": { "$ref": "#/$defs/stringArray" },
+        "continents": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/continent" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "faction": {
+      "type": "object",
+      "required": ["id", "name"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "name": { "$ref": "#/$defs/nonEmptyString" },
+        "description": { "$ref": "#/$defs/nonEmptyString" },
+        "type": { "$ref": "#/$defs/nonEmptyString" },
+        "headquartersLocationId": { "$ref": "#/$defs/id" }
+      },
+      "additionalProperties": false
+    },
+    "location": {
+      "type": "object",
+      "required": ["id", "name"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "name": { "$ref": "#/$defs/nonEmptyString" },
+        "description": { "$ref": "#/$defs/nonEmptyString" },
+        "type": { "$ref": "#/$defs/nonEmptyString" },
+        "continentId": { "$ref": "#/$defs/id" },
+        "factionId": { "$ref": "#/$defs/id" }
+      },
+      "additionalProperties": false
+    },
+    "character": {
+      "type": "object",
+      "required": ["id", "name"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "name": { "$ref": "#/$defs/nonEmptyString" },
+        "description": { "$ref": "#/$defs/nonEmptyString" },
+        "role": { "$ref": "#/$defs/nonEmptyString" },
+        "gender": { "$ref": "#/$defs/nonEmptyString" },
+        "realm": { "$ref": "#/$defs/nonEmptyString" },
+        "factionId": { "$ref": "#/$defs/id" },
+        "locationId": { "$ref": "#/$defs/id" },
+        "skillIds": { "$ref": "#/$defs/idArray" },
+        "techniqueIds": { "$ref": "#/$defs/idArray" },
+        "itemIds": { "$ref": "#/$defs/idArray" }
+      },
+      "additionalProperties": false
+    },
+    "canon": {
+      "type": "object",
+      "properties": {
+        "factions": { "type": "array", "items": { "$ref": "#/$defs/faction" } },
+        "locations": { "type": "array", "items": { "$ref": "#/$defs/location" } },
+        "characters": { "type": "array", "items": { "$ref": "#/$defs/character" } }
+      },
+      "additionalProperties": false
+    },
+    "skill": {
+      "type": "object",
+      "required": ["id", "name"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "name": { "$ref": "#/$defs/nonEmptyString" },
+        "description": { "$ref": "#/$defs/nonEmptyString" },
+        "type": { "$ref": "#/$defs/nonEmptyString" },
+        "effects": { "$ref": "#/$defs/stringArray" }
+      },
+      "additionalProperties": false
+    },
+    "technique": {
+      "type": "object",
+      "required": ["id", "name"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "name": { "$ref": "#/$defs/nonEmptyString" },
+        "description": { "$ref": "#/$defs/nonEmptyString" },
+        "grade": { "$ref": "#/$defs/nonEmptyString" },
+        "skillIds": { "$ref": "#/$defs/idArray" }
+      },
+      "additionalProperties": false
+    },
+    "item": {
+      "type": "object",
+      "required": ["id", "name", "type"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "name": { "$ref": "#/$defs/nonEmptyString" },
+        "description": { "$ref": "#/$defs/nonEmptyString" },
+        "type": { "enum": ["weapon", "armor", "consumable", "material", "other"] },
+        "grade": { "$ref": "#/$defs/nonEmptyString" },
+        "skillIds": { "$ref": "#/$defs/idArray" },
+        "techniqueId": { "$ref": "#/$defs/id" }
+      },
+      "additionalProperties": false
+    },
+    "content": {
+      "type": "object",
+      "properties": {
+        "skills": { "type": "array", "items": { "$ref": "#/$defs/skill" } },
+        "techniques": { "type": "array", "items": { "$ref": "#/$defs/technique" } },
+        "items": { "type": "array", "items": { "$ref": "#/$defs/item" } }
+      },
+      "additionalProperties": false
+    },
+    "flagValue": {
+      "type": ["string", "number", "boolean", "null"]
+    },
+    "condition": {
+      "type": "object",
+      "required": ["path", "operator"],
+      "properties": {
+        "path": { "$ref": "#/$defs/nonEmptyString" },
+        "operator": { "enum": ["eq", "neq", "gt", "gte", "lt", "lte", "includes", "exists"] },
+        "value": { "$ref": "#/$defs/flagValue" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "operator": { "not": { "const": "exists" } } } },
+          "then": { "required": ["value"] }
+        }
+      ],
+      "additionalProperties": false
+    },
+    "opening": {
+      "type": "object",
+      "required": ["text"],
+      "properties": {
+        "text": { "$ref": "#/$defs/nonEmptyString" },
+        "playerRole": { "$ref": "#/$defs/nonEmptyString" },
+        "locationId": { "$ref": "#/$defs/id" },
+        "featuredCharacterIds": { "$ref": "#/$defs/idArray" }
+      },
+      "additionalProperties": false
+    },
+    "event": {
+      "type": "object",
+      "required": ["id", "name", "description"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "name": { "$ref": "#/$defs/nonEmptyString" },
+        "description": { "$ref": "#/$defs/nonEmptyString" },
+        "conditions": { "type": "array", "items": { "$ref": "#/$defs/condition" } },
+        "completion": { "type": "array", "items": { "$ref": "#/$defs/condition" } },
+        "relatedCharacterIds": { "$ref": "#/$defs/idArray" },
+        "relatedFactionIds": { "$ref": "#/$defs/idArray" },
+        "locationId": { "$ref": "#/$defs/id" }
+      },
+      "additionalProperties": false
+    },
+    "chapter": {
+      "type": "object",
+      "required": ["id", "title", "summary"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "title": { "$ref": "#/$defs/nonEmptyString" },
+        "summary": { "$ref": "#/$defs/nonEmptyString" },
+        "activation": { "type": "array", "items": { "$ref": "#/$defs/condition" } },
+        "completion": { "type": "array", "items": { "$ref": "#/$defs/condition" } },
+        "eventIds": { "$ref": "#/$defs/idArray" }
+      },
+      "additionalProperties": false
+    },
+    "scenario": {
+      "type": "object",
+      "required": ["opening"],
+      "properties": {
+        "opening": { "$ref": "#/$defs/opening" },
+        "initialFlags": {
+          "type": "object",
+          "propertyNames": { "$ref": "#/$defs/id" },
+          "additionalProperties": { "$ref": "#/$defs/flagValue" }
+        },
+        "chapters": { "type": "array", "items": { "$ref": "#/$defs/chapter" } },
+        "events": { "type": "array", "items": { "$ref": "#/$defs/event" } }
+      },
+      "additionalProperties": false
+    },
+    "rules": {
+      "type": "object",
+      "required": ["mode"],
+      "properties": {
+        "mode": { "enum": ["strict", "expand"] },
+        "lockedFields": { "$ref": "#/$defs/stringArray" }
+      },
+      "additionalProperties": false
+    }
+  }
+}

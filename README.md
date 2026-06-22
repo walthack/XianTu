@@ -86,6 +86,8 @@
 
 作者指南、字段说明和最小示例见 [Scenario Mod 文档](./docs/scenario-mod.md)。可运行 fixture 见 [minimal.json](./tests/fixtures/scenario-mod/minimal.json)。
 
+需要让其他 Agent 制作 Mod 时，可直接提供 [Mod Kit](./mod-kit/README.md)；其中包含 Agent 指令、JSON Schema、Strict/Expand 模板和本地校验命令。
+
 ---
 
 ## 🛠️ 技术栈

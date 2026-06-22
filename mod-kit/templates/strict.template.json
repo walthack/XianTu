@@ -1,0 +1,163 @@
+{
+  "schema": "xiantu.scenario-mod",
+  "version": 1,
+  "manifest": {
+    "id": "example.strict_story",
+    "name": "Strict 剧本模板",
+    "version": "1.0.0",
+    "author": "Your Name",
+    "description": "复制此文件并替换示例内容。"
+  },
+  "world": {
+    "name": "示例世界",
+    "era": "故事开端",
+    "background": "核心矛盾正在浮现，玩家将从边城进入故事。",
+    "specialRules": ["核心专名不得改写"],
+    "continents": [
+      {
+        "id": "example.continent.central",
+        "name": "中州",
+        "description": "故事的主要区域。"
+      }
+    ]
+  },
+  "canon": {
+    "factions": [
+      {
+        "id": "example.faction.sect",
+        "name": "青云宗",
+        "description": "当地主要修行势力。",
+        "type": "宗门",
+        "headquartersLocationId": "example.location.sect"
+      }
+    ],
+    "locations": [
+      {
+        "id": "example.location.border_city",
+        "name": "临川城",
+        "description": "玩家进入故事的边城。",
+        "type": "城池",
+        "continentId": "example.continent.central"
+      },
+      {
+        "id": "example.location.sect",
+        "name": "青云山门",
+        "description": "青云宗驻地。",
+        "type": "宗门驻地",
+        "continentId": "example.continent.central",
+        "factionId": "example.faction.sect"
+      }
+    ],
+    "characters": [
+      {
+        "id": "example.character.guide",
+        "name": "顾清河",
+        "description": "知道当地局势的关键引路人。",
+        "role": "关键人物",
+        "factionId": "example.faction.sect",
+        "locationId": "example.location.border_city",
+        "skillIds": ["example.skill.cloud_sword"],
+        "techniqueIds": ["example.technique.cloud_manual"],
+        "itemIds": ["example.item.cloud_token"]
+      }
+    ]
+  },
+  "content": {
+    "skills": [
+      {
+        "id": "example.skill.cloud_sword",
+        "name": "流云剑式",
+        "description": "青云宗基础剑式。",
+        "type": "剑法",
+        "effects": ["身法灵动", "适合连续进攻"]
+      }
+    ],
+    "techniques": [
+      {
+        "id": "example.technique.cloud_manual",
+        "name": "青云心法",
+        "description": "青云宗入门功法。",
+        "grade": "凡品",
+        "skillIds": ["example.skill.cloud_sword"]
+      }
+    ],
+    "items": [
+      {
+        "id": "example.item.cloud_token",
+        "name": "青云令",
+        "description": "可证明青云宗身份的令牌。",
+        "type": "other",
+        "grade": "凡品",
+        "techniqueId": "example.technique.cloud_manual"
+      }
+    ]
+  },
+  "scenario": {
+    "opening": {
+      "text": "玩家抵达临川城，城中正在搜寻一名失踪的青云宗弟子。",
+      "playerRole": "初到临川城的自由修行者",
+      "locationId": "example.location.border_city",
+      "featuredCharacterIds": ["example.character.guide"]
+    },
+    "initialFlags": {
+      "event.first_meeting.done": false,
+      "chapter.arrival.done": false
+    },
+    "events": [
+      {
+        "id": "example.event.first_meeting",
+        "name": "初遇引路人",
+        "description": "让玩家在临川城与顾清河相遇，并得知失踪事件。",
+        "completion": [
+          {
+            "path": "flags.event.first_meeting.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": ["example.character.guide"],
+        "relatedFactionIds": ["example.faction.sect"],
+        "locationId": "example.location.border_city"
+      }
+    ],
+    "chapters": [
+      {
+        "id": "example.chapter.arrival",
+        "title": "初到临川",
+        "summary": "玩家认识顾清河，并决定是否调查失踪事件。",
+        "completion": [
+          {
+            "path": "flags.chapter.arrival.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "eventIds": ["example.event.first_meeting"]
+      },
+      {
+        "id": "example.chapter.investigation",
+        "title": "追查线索",
+        "summary": "玩家沿失踪弟子留下的线索展开调查。",
+        "activation": [
+          {
+            "path": "flags.chapter.arrival.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "eventIds": []
+      }
+    ]
+  },
+  "rules": {
+    "mode": "strict",
+    "lockedFields": [
+      "canon.factions.*.name",
+      "canon.locations.*.name",
+      "canon.characters.*.name",
+      "content.skills.*.name",
+      "content.techniques.*.name",
+      "content.items.*.name"
+    ]
+  }
+}

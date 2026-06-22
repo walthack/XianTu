@@ -1,0 +1,97 @@
+{
+  "schema": "xiantu.scenario-mod",
+  "version": 1,
+  "manifest": {
+    "id": "example.expand_story",
+    "name": "Expand 剧本模板",
+    "version": "1.0.0",
+    "author": "Your Name",
+    "description": "在 AI 世界中补入一个势力、地点和短剧情。"
+  },
+  "world": {
+    "name": "AI 世界扩展",
+    "era": "由 AI 世界决定",
+    "background": "保留 AI 世界背景，只补入本 Mod 的关键内容。",
+    "specialRules": ["允许 AI 扩展非正典内容"],
+    "continents": []
+  },
+  "canon": {
+    "factions": [
+      {
+        "id": "example.expand.faction.caravan",
+        "name": "万里商盟",
+        "description": "跨越多个地域活动的中立商盟。",
+        "type": "商会",
+        "headquartersLocationId": "example.expand.location.market"
+      }
+    ],
+    "locations": [
+      {
+        "id": "example.expand.location.market",
+        "name": "万里集",
+        "description": "商盟定期举行交易的流动集市。",
+        "type": "集市",
+        "factionId": "example.expand.faction.caravan"
+      }
+    ],
+    "characters": [
+      {
+        "id": "example.expand.character.merchant",
+        "name": "闻九州",
+        "description": "掌握各地消息的商盟执事。",
+        "role": "情报人物",
+        "factionId": "example.expand.faction.caravan",
+        "locationId": "example.expand.location.market"
+      }
+    ]
+  },
+  "content": {
+    "skills": [],
+    "techniques": [],
+    "items": []
+  },
+  "scenario": {
+    "opening": {
+      "text": "玩家听闻附近出现万里集，并可能在那里获得一条重要消息。",
+      "playerRole": "对万里集感兴趣的修行者",
+      "locationId": "example.expand.location.market",
+      "featuredCharacterIds": ["example.expand.character.merchant"]
+    },
+    "initialFlags": {
+      "event.market_visit.done": false
+    },
+    "events": [
+      {
+        "id": "example.expand.event.market_visit",
+        "name": "初访万里集",
+        "description": "玩家抵达万里集并与闻九州建立联系。",
+        "completion": [
+          {
+            "path": "flags.event.market_visit.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": ["example.expand.character.merchant"],
+        "relatedFactionIds": ["example.expand.faction.caravan"],
+        "locationId": "example.expand.location.market"
+      }
+    ],
+    "chapters": [
+      {
+        "id": "example.expand.chapter.market",
+        "title": "万里集",
+        "summary": "玩家探索商盟集市并接触情报人物。",
+        "eventIds": ["example.expand.event.market_visit"]
+      }
+    ]
+  },
+  "rules": {
+    "mode": "expand",
+    "lockedFields": [
+      "canon.factions.*.name",
+      "canon.locations.*.name",
+      "canon.characters.*.name"
+    ]
+  }
+}
