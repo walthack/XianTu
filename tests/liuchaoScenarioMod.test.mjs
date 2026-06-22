@@ -30,6 +30,12 @@ test('PR8 package imports through the real Mod manager', async () => {
   assert.equal(imported.mod.rules.mode, 'strict');
   assert.equal(imported.mod.scenario.chapters.length, 6);
   assert.equal(imported.mod.scenario.events.length, 10);
+  assert.deepEqual(imported.mod.rules.contentAccess, [{
+    contentId: 'liuchao.skill.death_root',
+    policy: 'exclusive',
+    allowedCharacterIds: ['liuchao.character.cheng_zongyang'],
+    playerAllowed: false,
+  }]);
 });
 
 test('PR8 Strict initialization keeps canon and never calls AI world generation', async () => {
@@ -49,6 +55,7 @@ test('PR8 Strict initialization keeps canon and never calls AI world generation'
   assert.ok(result.worldInfo.势力信息.some(item => item.名称 === '罗马联军'));
   assert.ok(result.strictInitialization.runtimeState.canon.characters.some(item => item.name === '程宗扬'));
   assert.ok(result.strictInitialization.runtimeState.canon.techniques.some(item => item.name === '九阳神功'));
+  assert.equal(result.strictInitialization.runtimeState.contentAccess[0].contentId, 'liuchao.skill.death_root');
 });
 
 test('PR8 activates its opening events while hiding future chapters from story context', async () => {

@@ -152,6 +152,7 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
     } else {
       requireString(opening.text, 'scenario.opening.text', add);
       optionalString(opening.playerRole, 'scenario.opening.playerRole', add);
+      optionalId(opening.playerCharacterId, 'scenario.opening.playerCharacterId', add);
       optionalId(opening.locationId, 'scenario.opening.locationId', add);
       validateIdArray(opening.featuredCharacterIds, 'scenario.opening.featuredCharacterIds', add);
     }
@@ -187,6 +188,50 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
         rules.lockedFields.forEach((path, index) => {
           if (!validateScenarioPath(path)) {
             add(`rules.lockedFields[${index}]`, 'invalid_path', 'locked field path is invalid or unsafe.');
+          }
+        });
+      }
+    }
+    if (rules.contentAccess !== undefined) {
+      if (!Array.isArray(rules.contentAccess)) {
+        add('rules.contentAccess', 'invalid_type', 'contentAccess must be an array.');
+      } else {
+        const configuredContentIds = new Set<string>();
+        rules.contentAccess.forEach((entry, index) => {
+          const path = `rules.contentAccess[${index}]`;
+          if (!isRecord(entry)) {
+            add(path, 'invalid_type', `${path} must be an object.`);
+            return;
+          }
+          if (validateId(entry.contentId, `${path}.contentId`, add)) {
+            if (configuredContentIds.has(entry.contentId)) {
+              add(`${path}.contentId`, 'duplicate_content_access', `Duplicate content access rule for "${entry.contentId}".`);
+            }
+            configuredContentIds.add(entry.contentId);
+          }
+          if (entry.policy !== 'restricted' && entry.policy !== 'exclusive') {
+            add(`${path}.policy`, 'invalid_enum', 'policy must be restricted or exclusive.');
+          }
+          validateIdArray(entry.allowedCharacterIds, `${path}.allowedCharacterIds`, add);
+          if (entry.playerAllowed !== undefined && typeof entry.playerAllowed !== 'boolean') {
+            add(`${path}.playerAllowed`, 'invalid_type', 'playerAllowed must be a boolean.');
+          }
+
+          const allowedIds = Array.isArray(entry.allowedCharacterIds)
+            ? entry.allowedCharacterIds.filter((id): id is string => typeof id === 'string')
+            : [];
+          const playerCharacterId = isRecord(scenario) && isRecord(scenario.opening)
+            ? scenario.opening.playerCharacterId
+            : undefined;
+          const identities = new Set(allowedIds);
+          if (entry.playerAllowed === true && !(typeof playerCharacterId === 'string' && identities.has(playerCharacterId))) {
+            identities.add('$independent_player');
+          }
+          if (identities.size === 0) {
+            add(path, 'missing_content_holder', 'A content access rule must allow at least one character or the player.');
+          }
+          if (entry.policy === 'exclusive' && identities.size > 1) {
+            add(path, 'invalid_exclusive_holders', 'An exclusive content rule must resolve to exactly one allowed identity.');
           }
         });
       }
@@ -230,6 +275,7 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
   if (isRecord(scenario)) {
     if (isRecord(scenario.opening)) {
       checkRef(scenario.opening.locationId, locationIds, 'scenario.opening.locationId', 'location', add);
+      checkRef(scenario.opening.playerCharacterId, characterIds, 'scenario.opening.playerCharacterId', 'character', add);
       checkRefs(scenario.opening.featuredCharacterIds, characterIds, 'scenario.opening.featuredCharacterIds', 'character', add);
     }
     forEachRecord(scenario.events, 'scenario.events', (entity, path) => {
@@ -239,6 +285,14 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
     });
     forEachRecord(scenario.chapters, 'scenario.chapters', (entity, path) => {
       checkRefs(entity.eventIds, eventIds, `${path}.eventIds`, 'event', add);
+    });
+  }
+  if (isRecord(rules) && Array.isArray(rules.contentAccess)) {
+    const contentIds = new Set([...skillIds, ...techniqueIds, ...itemIds]);
+    rules.contentAccess.forEach((entry, index) => {
+      if (!isRecord(entry)) return;
+      checkRef(entry.contentId, contentIds, `rules.contentAccess[${index}].contentId`, 'content', add);
+      checkRefs(entry.allowedCharacterIds, characterIds, `rules.contentAccess[${index}].allowedCharacterIds`, 'character', add);
     });
   }
 

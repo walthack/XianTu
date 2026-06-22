@@ -10,6 +10,7 @@ export interface ScenarioCondition {
 export interface ScenarioModOpening {
   text: string;
   playerRole?: string;
+  playerCharacterId?: string;
   locationId?: string;
   featuredCharacterIds?: string[];
 }

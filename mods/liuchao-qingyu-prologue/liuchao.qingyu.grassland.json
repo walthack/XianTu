@@ -426,6 +426,14 @@
       "content.skills.*.name",
       "content.techniques.*.name",
       "content.items.*.name"
+    ],
+    "contentAccess": [
+      {
+        "contentId": "liuchao.skill.death_root",
+        "policy": "exclusive",
+        "allowedCharacterIds": ["liuchao.character.cheng_zongyang"],
+        "playerAllowed": false
+      }
     ]
   }
 }

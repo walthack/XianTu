@@ -1,11 +1,23 @@
 import type { SaveData } from '@/types/game';
 
-import type { ScenarioModCharacter, ScenarioModFaction, ScenarioModItem, ScenarioModLocation, ScenarioModSkill, ScenarioModTechnique } from './schema';
+import type {
+  ScenarioContentAccessRule,
+  ScenarioModCharacter,
+  ScenarioModFaction,
+  ScenarioModItem,
+  ScenarioModLocation,
+  ScenarioModSkill,
+  ScenarioModTechnique,
+} from './schema';
 
 interface ScenarioRuntimeState {
   modId: string;
   mode: 'strict' | 'expand';
   lockedFields?: string[];
+  contentAccess?: ScenarioContentAccessRule[];
+  opening?: {
+    playerCharacterId?: string;
+  };
   canon?: {
     factions?: ScenarioModFaction[];
     locations?: ScenarioModLocation[];
@@ -99,6 +111,73 @@ function collectNamedEntityPaths(
   }
 }
 
+type ScenarioContentEntity = ScenarioModSkill | ScenarioModTechnique | ScenarioModItem;
+
+function getContentEntity(runtime: ScenarioRuntimeState, contentId: string): ScenarioContentEntity | undefined {
+  const canon = runtime.canon || {};
+  return [...(canon.skills || []), ...(canon.techniques || []), ...(canon.items || [])]
+    .find(entity => entity.id === contentId);
+}
+
+function getCommandTargetIdentity(
+  runtime: ScenarioRuntimeState,
+  key: string,
+): { characterId: string; isPlayer: boolean } | null {
+  if (key === '角色' || key.startsWith('角色.')) {
+    return {
+      characterId: runtime.opening?.playerCharacterId || '$independent_player',
+      isPlayer: true,
+    };
+  }
+  const prefix = '社交.关系.';
+  if (!key.startsWith(prefix)) return null;
+  const characterName = key.slice(prefix.length).split('.')[0];
+  const character = (runtime.canon?.characters || []).find(entity =>
+    entity.id === characterName || entity.name === characterName,
+  );
+  return character ? { characterId: character.id, isPlayer: false } : { characterId: `$npc:${characterName}`, isPlayer: false };
+}
+
+function isContentAssignmentPath(key: string): boolean {
+  const parts = key.split('.');
+  if (key === '角色') return true;
+  if (parts[0] === '社交' && parts[1] === '关系' && parts.length === 3) return true;
+  const contentSegments = new Set(['技能', '功法', '背包', '装备', '灵根', '天赋', '特殊体质', '能力']);
+  return parts.some(part => contentSegments.has(part));
+}
+
+function commandReferencesContent(command: CommandLike, entity: ScenarioContentEntity): boolean {
+  let serializedValue = '';
+  try {
+    serializedValue = JSON.stringify(command.value) || '';
+  } catch {
+    serializedValue = String(command.value ?? '');
+  }
+  const key = typeof command.key === 'string' ? command.key : '';
+  return key.includes(entity.id) || key.includes(entity.name) || serializedValue.includes(entity.id) || serializedValue.includes(entity.name);
+}
+
+function findContentAccessViolation(
+  runtime: ScenarioRuntimeState,
+  command: CommandLike,
+  key: string,
+): string | null {
+  const target = getCommandTargetIdentity(runtime, key);
+  if (!target || !isContentAssignmentPath(key)) return null;
+
+  for (const rule of runtime.contentAccess || []) {
+    const entity = getContentEntity(runtime, rule.contentId);
+    if (!entity || !commandReferencesContent(command, entity)) continue;
+    const isIndependentPlayer = target.isPlayer && target.characterId === '$independent_player';
+    const allowed = (rule.allowedCharacterIds || []).includes(target.characterId) || (isIndependentPlayer && rule.playerAllowed === true);
+    if (!allowed) {
+      const label = rule.policy === 'exclusive' ? '专属' : '受限';
+      return `${label}正典内容“${entity.name}”不得授予当前角色`;
+    }
+  }
+  return null;
+}
+
 export function compileScenarioProtectedPaths(saveData: SaveData): string[] {
   const runtime = getRuntimeState(saveData);
   if (!runtime) return [];
@@ -152,8 +231,9 @@ export function compileScenarioProtectedPaths(saveData: SaveData): string[] {
 }
 
 export function guardScenarioModCommands(saveData: SaveData, commands: unknown[]): ScenarioCommandGuardResult {
+  const runtime = getRuntimeState(saveData);
   const protectedPaths = compileScenarioProtectedPaths(saveData);
-  if (protectedPaths.length === 0) return { accepted: [...commands], rejected: [] };
+  if (!runtime || protectedPaths.length === 0) return { accepted: [...commands], rejected: [] };
 
   const accepted: unknown[] = [];
   const rejected: RejectedScenarioCommand[] = [];
@@ -166,7 +246,10 @@ export function guardScenarioModCommands(saveData: SaveData, commands: unknown[]
       : '';
     const isAllowedFlagUpdate = action === 'set' && key.startsWith('世界.状态.剧本模组.flags.');
     const protectedPath = key && protectedPaths.find(path => pathsIntersect(key, path));
-    if (protectedPath && !isAllowedFlagUpdate) {
+    const accessViolation = key ? findContentAccessViolation(runtime, command as CommandLike, key) : null;
+    if (accessViolation) {
+      rejected.push({ command, reason: accessViolation });
+    } else if (protectedPath && !isAllowedFlagUpdate) {
       rejected.push({
         command,
         reason: `剧本模组正典字段受保护：${protectedPath}`,
@@ -183,9 +266,19 @@ export function buildScenarioCanonPrompt(saveData: SaveData): string {
   if (!runtime) return '';
   const canon = runtime.canon || {};
   const formatNames = (items: Array<{ name: string }> | undefined) => (items || []).map(item => item.name).join('、') || '无';
+  const playerCharacter = (canon.characters || []).find(character => character.id === runtime.opening?.playerCharacterId);
+  const accessRules = (runtime.contentAccess || []).map(rule => {
+    const entity = getContentEntity(runtime, rule.contentId);
+    const holders = (rule.allowedCharacterIds || []).map(id =>
+      (canon.characters || []).find(character => character.id === id)?.name || id,
+    );
+    if (rule.playerAllowed && !runtime.opening?.playerCharacterId) holders.push('独立玩家');
+    return `  - ${entity?.name || rule.contentId}：${rule.policy}；允许持有者：${holders.join('、') || '无'}`;
+  });
 
   return `# 剧本模组正典（必须遵守）
 - 模组：${runtime.modId}（${runtime.mode}）
+- 玩家正典身份：${playerCharacter?.name || '独立玩家'}
 - 势力：${formatNames(canon.factions)}
 - 地点：${formatNames(canon.locations)}
 - 重要人物：${formatNames(canon.characters)}
@@ -193,6 +286,8 @@ export function buildScenarioCanonPrompt(saveData: SaveData): string {
 - 功法：${formatNames(canon.techniques)}
 - 物品：${formatNames(canon.items)}
 - 锁定字段：${(runtime.lockedFields || []).join('、') || '无'}
+${accessRules.length ? `- 内容归属规则：\n${accessRules.join('\n')}` : '- 内容归属规则：无（未声明内容默认开放）'}
 Mod 已声明的实体与字段是权威正典。可以补充未定义内容，但不得生成同 ID 或同名替代品，不得用自动生成内容覆盖 Mod 已有值。
+restricted 或 exclusive 内容只能由列出的正典身份持有；不得让其他 NPC 或独立玩家学习、复制、继承或获得等价变体。
 不得重命名、删除或覆盖锁定正典；除使用 set 更新“世界.状态.剧本模组.flags.*”外，不得生成修改“世界.状态.剧本模组”或“系统.扩展.剧本模组”的 tavern_commands。`;
 }

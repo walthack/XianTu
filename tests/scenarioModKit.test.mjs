@@ -26,5 +26,8 @@ test('Mod Kit JSON Schema matches the current contract identity', async () => {
   assert.equal(schema.properties.schema.const, 'xiantu.scenario-mod');
   assert.equal(schema.properties.version.const, 1);
   assert.deepEqual(schema.$defs.rules.properties.mode.enum, ['strict', 'expand']);
+  assert.ok(schema.$defs.rules.properties.contentAccess);
+  assert.deepEqual(schema.$defs.contentAccessRule.properties.policy.enum, ['restricted', 'exclusive']);
+  assert.ok(schema.$defs.opening.properties.playerCharacterId);
   assert.ok(schema.$defs.event.properties.completion);
 });

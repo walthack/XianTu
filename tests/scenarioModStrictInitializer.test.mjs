@@ -25,6 +25,7 @@ test('converts strict canon into native WorldInfo without renaming entities', as
   assert.equal(result.runtimeState.canon.skills[0].name, '雷刀诀');
   assert.equal(result.runtimeState.canon.items[0].name, '雷刀');
   assert.ok(result.runtimeState.lockedFields.includes('canon.characters.*.name'));
+  assert.equal(result.runtimeState.contentAccess[0].contentId, 'skill.thunderblade');
   assert.equal(result.initialLocation.描述, '江南·建康');
   assert.equal(result.worldInfo.版本, 'scenario-mod:liuchao.jiankang@1.0.0');
 });
@@ -62,6 +63,7 @@ test('strict Mod identity and canon survive a save serialization round trip', as
   assert.equal(reloaded.系统.扩展.剧本模组.modId, 'liuchao.jiankang');
   assert.equal(reloaded.世界.状态.剧本模组.modVersion, '1.0.0');
   assert.equal(reloaded.世界.状态.剧本模组.canon.characters[0].name, '程宗扬');
+  assert.equal(reloaded.世界.状态.剧本模组.contentAccess[0].policy, 'exclusive');
   assert.equal(reloaded.角色.位置.描述, '江南·建康');
   assert.equal(baseSave.角色.位置.描述, '旧地点', 'base save must not be mutated');
 });

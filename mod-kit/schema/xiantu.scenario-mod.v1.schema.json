@@ -194,6 +194,7 @@
       "properties": {
         "text": { "$ref": "#/$defs/nonEmptyString" },
         "playerRole": { "$ref": "#/$defs/nonEmptyString" },
+        "playerCharacterId": { "$ref": "#/$defs/id" },
         "locationId": { "$ref": "#/$defs/id" },
         "featuredCharacterIds": { "$ref": "#/$defs/idArray" }
       },
@@ -247,7 +248,22 @@
       "required": ["mode"],
       "properties": {
         "mode": { "enum": ["strict", "expand"] },
-        "lockedFields": { "$ref": "#/$defs/stringArray" }
+        "lockedFields": { "$ref": "#/$defs/stringArray" },
+        "contentAccess": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/contentAccessRule" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "contentAccessRule": {
+      "type": "object",
+      "required": ["contentId", "policy"],
+      "properties": {
+        "contentId": { "$ref": "#/$defs/id" },
+        "policy": { "enum": ["restricted", "exclusive"] },
+        "allowedCharacterIds": { "$ref": "#/$defs/idArray" },
+        "playerAllowed": { "type": "boolean" }
       },
       "additionalProperties": false
     }

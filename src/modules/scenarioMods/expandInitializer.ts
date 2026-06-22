@@ -10,6 +10,7 @@ export interface ExpandScenarioRuntimeState extends ScenarioProgressState {
   modVersion: string;
   mode: 'expand';
   lockedFields: string[];
+  contentAccess: NonNullable<ScenarioMod['rules']['contentAccess']>;
   currentChapterId: string | null;
   flags: Record<string, string | number | boolean | null>;
   canon: {
@@ -134,6 +135,7 @@ export function buildExpandScenarioInitialization(
       modVersion: mod.manifest.version,
       mode: 'expand',
       lockedFields: [...(mod.rules.lockedFields || [])],
+      contentAccess: structuredClone(mod.rules.contentAccess || []),
       currentChapterId: getInitialScenarioChapterId(mod),
       flags: { ...(mod.scenario.initialFlags || {}) },
       canon: {

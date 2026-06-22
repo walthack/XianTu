@@ -115,6 +115,14 @@
       "canon.factions.*.name",
       "content.skills.*.name",
       "content.items.*.name"
+    ],
+    "contentAccess": [
+      {
+        "contentId": "skill.thunderblade",
+        "policy": "exclusive",
+        "allowedCharacterIds": ["character.chengzongyang"],
+        "playerAllowed": false
+      }
     ]
   }
 }

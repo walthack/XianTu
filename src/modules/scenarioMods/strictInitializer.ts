@@ -11,6 +11,7 @@ export interface ScenarioModRuntimeState extends ScenarioProgressState {
   modVersion: string;
   mode: 'strict';
   lockedFields: string[];
+  contentAccess: NonNullable<ScenarioMod['rules']['contentAccess']>;
   currentChapterId: string | null;
   flags: Record<string, string | number | boolean | null>;
   canon: {
@@ -99,6 +100,7 @@ export function buildStrictScenarioInitialization(
     modVersion: mod.manifest.version,
     mode: 'strict',
     lockedFields: [...(mod.rules.lockedFields || [])],
+    contentAccess: structuredClone(mod.rules.contentAccess || []),
     currentChapterId: getInitialScenarioChapterId(mod),
     flags: { ...(mod.scenario.initialFlags || {}) },
     canon: {

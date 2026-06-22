@@ -52,6 +52,7 @@ test('expand mode keeps Mod fields authoritative and uses generated values only 
   assert.ok(result.worldInfo.势力信息.some(item => item.名称 === '云海宗'));
   assert.deepEqual(result.worldInfo.特殊设定, ['AI规则', '固定人物姓名与所属势力不得被改写']);
   assert.equal(result.runtimeState.mode, 'expand');
+  assert.equal(result.runtimeState.contentAccess[0].policy, 'exclusive');
   assert.equal(generated.地点信息.length, 1, 'generated world must not be mutated');
 });
 

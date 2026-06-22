@@ -158,6 +158,14 @@
       "content.skills.*.name",
       "content.techniques.*.name",
       "content.items.*.name"
+    ],
+    "contentAccess": [
+      {
+        "contentId": "example.technique.cloud_manual",
+        "policy": "restricted",
+        "allowedCharacterIds": ["example.character.guide"],
+        "playerAllowed": true
+      }
     ]
   }
 }

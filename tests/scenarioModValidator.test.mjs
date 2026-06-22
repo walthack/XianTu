@@ -54,6 +54,41 @@ test('reports dangling entity references with their full path', async () => {
   ));
 });
 
+test('validates content access identities and content references', async () => {
+  const { validateScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
+  const fixture = await loadFixture();
+  fixture.rules.contentAccess[0].contentId = 'skill.missing';
+  fixture.rules.contentAccess[0].allowedCharacterIds = ['character.missing'];
+
+  const result = validateScenarioMod(fixture);
+
+  assert.equal(result.valid, false);
+  assert.ok(result.issues.some(issue => issue.path === 'rules.contentAccess[0].contentId' && issue.code === 'missing_reference'));
+  assert.ok(result.issues.some(issue => issue.path === 'rules.contentAccess[0].allowedCharacterIds[0]' && issue.code === 'missing_reference'));
+});
+
+test('exclusive content resolves to one canonical identity including mapped players', async () => {
+  const { validateScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
+  const fixture = await loadFixture();
+  fixture.scenario.opening.playerCharacterId = 'character.chengzongyang';
+  fixture.rules.contentAccess[0].playerAllowed = true;
+
+  const result = validateScenarioMod(fixture);
+
+  assert.equal(result.valid, true, JSON.stringify(result.issues, null, 2));
+});
+
+test('rejects exclusive content with multiple allowed identities', async () => {
+  const { validateScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
+  const fixture = await loadFixture();
+  fixture.rules.contentAccess[0].playerAllowed = true;
+
+  const result = validateScenarioMod(fixture);
+
+  assert.equal(result.valid, false);
+  assert.ok(result.issues.some(issue => issue.code === 'invalid_exclusive_holders'));
+});
+
 test('rejects unsafe locked paths and condition paths', async () => {
   const { validateScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
   const fixture = await loadFixture();
