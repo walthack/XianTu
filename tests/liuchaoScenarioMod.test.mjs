@@ -38,6 +38,14 @@ test('PR8 package imports through the real Mod manager', async () => {
   }]);
 });
 
+test('PR12 static analyzer reports no playability issues for the PR8 package', async () => {
+  const { analyzeScenarioMod } = await loadTs('../src/modules/scenarioMods/analyzer.ts');
+  const result = analyzeScenarioMod(await loadLiuchaoMod());
+
+  assert.equal(result.valid, true);
+  assert.deepEqual(result.issues, []);
+});
+
 test('PR8 Strict initialization keeps canon and never calls AI world generation', async () => {
   const { resolveInitialWorldInfo } = await loadTs('../src/modules/scenarioMods/strictInitializer.ts');
   const mod = await loadLiuchaoMod();

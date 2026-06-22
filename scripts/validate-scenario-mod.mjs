@@ -9,7 +9,9 @@ if (files.length === 0) {
 } else {
   const jiti = createJiti(import.meta.url, { interopDefault: true });
   const validatorPath = new URL('../src/modules/scenarioMods/validator.ts', import.meta.url).pathname;
+  const analyzerPath = new URL('../src/modules/scenarioMods/analyzer.ts', import.meta.url).pathname;
   const { validateScenarioMod } = await jiti.import(validatorPath);
+  const { analyzeScenarioMod } = await jiti.import(analyzerPath);
   let failed = false;
 
   for (const file of files) {
@@ -18,6 +20,7 @@ if (files.length === 0) {
       const input = JSON.parse(await readFile(absolutePath, 'utf8'));
       const result = validateScenarioMod(input);
       if (result.valid) {
+        const analysis = analyzeScenarioMod(result.value);
         const entityCount = [
           ...(result.value.world.continents || []),
           ...(result.value.canon?.factions || []),
@@ -29,7 +32,18 @@ if (files.length === 0) {
           ...(result.value.scenario.chapters || []),
           ...(result.value.scenario.events || []),
         ].length;
-        console.log(`PASS ${file} (${result.value.manifest.id}, ${entityCount} entities)`);
+        const warningCount = analysis.issues.filter(issue => issue.severity === 'warning').length;
+        if (analysis.valid) {
+          console.log(`PASS ${file} (${result.value.manifest.id}, ${entityCount} entities${warningCount ? `, ${warningCount} warnings` : ''})`);
+        } else {
+          failed = true;
+          console.error(`FAIL ${file}`);
+        }
+        analysis.issues.forEach(issue => {
+          const message = `  ${issue.severity.toUpperCase()} ${issue.path} [${issue.code}]: ${issue.message}`;
+          if (issue.severity === 'error') console.error(message);
+          else console.warn(message);
+        });
       } else {
         failed = true;
         console.error(`FAIL ${file}`);

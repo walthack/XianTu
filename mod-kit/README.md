@@ -22,7 +22,7 @@ npm run mod:validate -- path/to/mod.json
 4. 在仙途首页进入“剧本模组”，导入并启用 JSON。
 5. 新建角色，从世界选择页选择 Mod，完成开场与存档重载测试。
 
-JSON Schema 负责字段形状；CLI 使用仙途自身 validator，额外检查全局重复 ID、悬空引用和不安全路径。交付前必须通过 CLI。
+JSON Schema 负责字段形状；CLI 使用仙途自身 validator 检查全局重复 ID、悬空引用和不安全路径，并运行静态可玩性分析，发现未初始化 flag、阻塞章节、依赖环、孤立事件和不可达章节。`ERROR` 会使校验失败，`WARNING` 需要作者复核；正式交付建议零警告。
 
 宗派、地点、人物、技能、功法和武器等物品均可导入。Strict 以 Mod 为完整权威来源；Expand 也以 Mod 已声明字段为准，AI 只补未声明字段和非冲突内容。技能、功法和物品是世界正典定义，不会自动发放给玩家，完整边界见 [`AGENT_GUIDE.md`](./AGENT_GUIDE.md#内容边界与所有权)。
 
