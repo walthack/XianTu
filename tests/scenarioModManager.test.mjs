@@ -60,6 +60,42 @@ test('re-import replaces the same Mod while preserving enabled state', async () 
   assert.equal(listed[0].mod.manifest.version, '1.1.0');
 });
 
+test('reviews warnings before import and identifies replacements', async () => {
+  const { ScenarioModManager } = await loadTs('../src/modules/scenarioMods/manager.ts');
+  const storage = memoryStorage();
+  const manager = new ScenarioModManager(storage.adapter);
+  await manager.importText(await fixtureText());
+  const raw = JSON.parse(await fixtureText());
+  raw.manifest.version = '1.1.0';
+  raw.scenario.events.push({ id: 'event.orphan', name: '孤立事件', description: '未归属章节。' });
+
+  const review = await manager.reviewText(JSON.stringify(raw));
+
+  assert.equal(review.canImport, true);
+  assert.equal(review.existing.mod.manifest.version, '1.0.0');
+  assert.equal(review.mod.manifest.version, '1.1.0');
+  assert.ok(review.diagnostics.some(issue => issue.code === 'orphan_event' && issue.severity === 'warning'));
+
+  const imported = await manager.importReviewed(review);
+  assert.equal(imported.mod.manifest.version, '1.1.0');
+  assert.equal(imported.enabled, true);
+});
+
+test('review blocks static playability errors without persistence', async () => {
+  const { ScenarioModManager } = await loadTs('../src/modules/scenarioMods/manager.ts');
+  const storage = memoryStorage();
+  const manager = new ScenarioModManager(storage.adapter);
+  const raw = JSON.parse(await fixtureText());
+  raw.scenario.events[0].conditions.push({ path: 'flags.missing', operator: 'eq', value: true });
+
+  const review = await manager.reviewText(JSON.stringify(raw));
+
+  assert.equal(review.canImport, false);
+  assert.ok(review.diagnostics.some(issue => issue.code === 'uninitialized_flag'));
+  await assert.rejects(() => manager.importReviewed(review), /Invalid Scenario Mod/);
+  assert.equal(storage.read(), null);
+});
+
 test('invalid JSON and invalid Mod contracts are rejected without persistence', async () => {
   const { ScenarioModManager } = await loadTs('../src/modules/scenarioMods/manager.ts');
   const storage = memoryStorage();

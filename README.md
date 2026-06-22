@@ -82,7 +82,7 @@
 - **正典保护**：拦截 AI 对锁定名称和 Mod 运行时元数据的越权修改。
 - **防剧透上下文**：每回合只向模型提供当前章节与已触发事件。
 
-使用方法：在首页进入“剧本模组”，导入并启用 JSON；随后在本地创角的世界选择页选择该 Mod。
+使用方法：在首页进入“剧本模组”，导入 JSON 并查看内容预览与可玩性诊断；确认后可直接进入本地创角并选择该 Mod。管理器支持 Strict/Expand 模板下载、诊断报告导出和同 ID 版本替换。
 
 作者指南、字段说明和最小示例见 [Scenario Mod 文档](./docs/scenario-mod.md)。可运行 fixture 见 [minimal.json](./tests/fixtures/scenario-mod/minimal.json)。
 

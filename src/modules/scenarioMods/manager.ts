@@ -1,5 +1,20 @@
 import type { ScenarioMod } from './schema';
-import { parseScenarioMod } from './validator';
+import { analyzeScenarioMod, type ScenarioAnalysisSeverity } from './analyzer';
+import { validateScenarioMod } from './validator';
+
+export interface ScenarioModImportDiagnostic {
+  severity: ScenarioAnalysisSeverity;
+  path: string;
+  code: string;
+  message: string;
+}
+
+export interface ScenarioModImportReview {
+  mod: ScenarioMod | null;
+  diagnostics: ScenarioModImportDiagnostic[];
+  existing: StoredScenarioMod | null;
+  canImport: boolean;
+}
 
 export interface StoredScenarioMod {
   mod: ScenarioMod;
@@ -49,14 +64,59 @@ export class ScenarioModManager {
   }
 
   async importText(jsonText: string): Promise<StoredScenarioMod> {
+    const review = await this.reviewText(jsonText);
+    return this.importReviewed(review);
+  }
+
+  async reviewText(jsonText: string): Promise<ScenarioModImportReview> {
     let raw: unknown;
     try {
       raw = JSON.parse(jsonText);
     } catch (error) {
-      throw new Error(`Mod 文件不是有效 JSON：${error instanceof Error ? error.message : '解析失败'}`);
+      return {
+        mod: null,
+        diagnostics: [{
+          severity: 'error',
+          path: '$',
+          code: 'invalid_json',
+          message: `Mod 文件不是有效 JSON：${error instanceof Error ? error.message : '解析失败'}`,
+        }],
+        existing: null,
+        canImport: false,
+      };
     }
 
-    const mod = parseScenarioMod(raw);
+    const validation = validateScenarioMod(raw);
+    if (!validation.valid || !validation.value) {
+      return {
+        mod: null,
+        diagnostics: validation.issues.map(issue => ({ ...issue, severity: 'error' as const })),
+        existing: null,
+        canImport: false,
+      };
+    }
+
+    const mod = validation.value;
+    const analysis = analyzeScenarioMod(mod);
+    const library = await this.loadLibrary();
+    const existingIndex = library.mods.findIndex(entry => entry.mod.manifest.id === mod.manifest.id);
+    return {
+      mod: structuredClone(mod),
+      diagnostics: structuredClone(analysis.issues),
+      existing: existingIndex >= 0 ? structuredClone(library.mods[existingIndex]) : null,
+      canImport: analysis.valid,
+    };
+  }
+
+  async importReviewed(review: ScenarioModImportReview): Promise<StoredScenarioMod> {
+    if (!review.mod || !review.canImport || review.diagnostics.some(issue => issue.severity === 'error')) {
+      const invalidJson = review.diagnostics.find(issue => issue.code === 'invalid_json');
+      if (invalidJson) throw new Error(invalidJson.message);
+      const detail = review.diagnostics.map(issue => `${issue.path}: ${issue.message}`).join('\n');
+      throw new Error(`Invalid Scenario Mod:\n${detail || 'Import review did not contain a valid Mod.'}`);
+    }
+
+    const mod = review.mod;
     const library = await this.loadLibrary();
     const existingIndex = library.mods.findIndex(entry => entry.mod.manifest.id === mod.manifest.id);
     const entry: StoredScenarioMod = {

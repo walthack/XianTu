@@ -8,10 +8,20 @@
         <h1>剧本模组</h1>
         <p>{{ mods.length }} 个本地 Mod</p>
       </div>
-      <button class="primary-button" :disabled="busy" @click="fileInput?.click()">
-        <Upload :size="18" />
-        <span>导入 JSON</span>
-      </button>
+      <div class="header-actions">
+        <button class="secondary-button" title="下载 Strict 模板" :disabled="busy" @click="downloadTemplate('strict')">
+          <FileDown :size="17" />
+          <span>Strict 模板</span>
+        </button>
+        <button class="secondary-button" title="下载 Expand 模板" :disabled="busy" @click="downloadTemplate('expand')">
+          <FileDown :size="17" />
+          <span>Expand 模板</span>
+        </button>
+        <button class="primary-button" :disabled="busy" @click="fileInput?.click()">
+          <Upload :size="18" />
+          <span>导入 JSON</span>
+        </button>
+      </div>
       <input ref="fileInput" class="file-input" type="file" accept="application/json,.json" @change="handleImport" />
     </header>
 
@@ -19,6 +29,21 @@
       <AlertTriangle :size="18" />
       <pre>{{ errorMessage }}</pre>
       <button class="icon-button small" title="关闭错误" aria-label="关闭错误" @click="errorMessage = ''">
+        <X :size="16" />
+      </button>
+    </section>
+
+    <section v-if="lastImported" class="success-band" role="status">
+      <CheckCircle2 :size="18" />
+      <div>
+        <strong>「{{ lastImported.mod.manifest.name }}」已导入</strong>
+        <span>v{{ lastImported.mod.manifest.version }} · {{ lastImported.mod.rules.mode === 'strict' ? 'Strict' : 'Expand' }}</span>
+      </div>
+      <button class="secondary-button" @click="enterCreation">
+        <UserPlus :size="17" />
+        <span>进入创角</span>
+      </button>
+      <button class="icon-button small" title="关闭" aria-label="关闭导入结果" @click="lastImported = null">
         <X :size="16" />
       </button>
     </section>
@@ -49,7 +74,9 @@
             <span>人物 {{ count(entry, 'characters') }}</span>
             <span>地点 {{ count(entry, 'locations') }}</span>
             <span>技能 {{ entry.mod.content?.skills?.length || 0 }}</span>
+            <span>功法 {{ entry.mod.content?.techniques?.length || 0 }}</span>
             <span>物品 {{ entry.mod.content?.items?.length || 0 }}</span>
+            <span>章节 {{ entry.mod.scenario.chapters?.length || 0 }}</span>
           </div>
         </div>
 
@@ -72,24 +99,42 @@
         </div>
       </article>
     </section>
+
+    <ScenarioModImportReviewDialog
+      v-if="pendingReview"
+      :review="pendingReview"
+      :file-name="pendingFileName"
+      :busy="busy"
+      @close="closeReview"
+      @confirm="confirmImport"
+      @export-report="exportReviewReport"
+    />
   </main>
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import { AlertTriangle, ArrowLeft, Download, FileJson, Trash2, Upload, X } from 'lucide-vue-next';
+import { AlertTriangle, ArrowLeft, CheckCircle2, Download, FileDown, FileJson, Trash2, Upload, UserPlus, X } from 'lucide-vue-next';
 import { useRouter } from 'vue-router';
 
-import { scenarioModManager, type StoredScenarioMod } from '@/modules/scenarioMods/manager';
+import ScenarioModImportReviewDialog from '@/components/scenario-mods/ScenarioModImportReviewDialog.vue';
+import { scenarioModManager, type ScenarioModImportReview, type StoredScenarioMod } from '@/modules/scenarioMods/manager';
+import { useCharacterCreationStore } from '@/stores/characterCreationStore';
 import { toast } from '@/utils/toast';
+import expandTemplate from '../../mod-kit/templates/expand.template.json';
+import strictTemplate from '../../mod-kit/templates/strict.template.json';
 
 const MAX_FILE_BYTES = 5 * 1024 * 1024;
 const router = useRouter();
+const creationStore = useCharacterCreationStore();
 const mods = ref<StoredScenarioMod[]>([]);
 const loading = ref(true);
 const busy = ref(false);
 const errorMessage = ref('');
 const fileInput = ref<HTMLInputElement | null>(null);
+const pendingReview = ref<ScenarioModImportReview | null>(null);
+const pendingFileName = ref('');
+const lastImported = ref<StoredScenarioMod | null>(null);
 
 onMounted(loadMods);
 
@@ -117,7 +162,23 @@ async function handleImport(event: Event) {
   busy.value = true;
   errorMessage.value = '';
   try {
-    const entry = await scenarioModManager.importText(await file.text());
+    pendingReview.value = await scenarioModManager.reviewText(await file.text());
+    pendingFileName.value = file.name;
+  } catch (error) {
+    showError(error);
+  } finally {
+    busy.value = false;
+  }
+}
+
+async function confirmImport() {
+  if (!pendingReview.value) return;
+  busy.value = true;
+  try {
+    const entry = await scenarioModManager.importReviewed(pendingReview.value);
+    lastImported.value = entry;
+    pendingReview.value = null;
+    pendingFileName.value = '';
     await loadMods();
     toast.success(`已导入「${entry.mod.manifest.name}」`);
   } catch (error) {
@@ -125,6 +186,49 @@ async function handleImport(event: Event) {
   } finally {
     busy.value = false;
   }
+}
+
+function closeReview() {
+  if (busy.value) return;
+  pendingReview.value = null;
+  pendingFileName.value = '';
+}
+
+function exportReviewReport() {
+  if (!pendingReview.value) return;
+  const review = pendingReview.value;
+  downloadJson({
+    fileName: pendingFileName.value,
+    generatedAt: new Date().toISOString(),
+    canImport: review.canImport,
+    mod: review.mod ? {
+      id: review.mod.manifest.id,
+      name: review.mod.manifest.name,
+      version: review.mod.manifest.version,
+      mode: review.mod.rules.mode,
+    } : null,
+    replacingVersion: review.existing?.mod.manifest.version || null,
+    diagnostics: review.diagnostics,
+  }, `${review.mod?.manifest.id || 'scenario-mod'}-diagnostics.json`);
+}
+
+function downloadTemplate(mode: 'strict' | 'expand') {
+  const template = mode === 'strict' ? strictTemplate : expandTemplate;
+  downloadJson(template, `xiantu-${mode}.template.json`);
+}
+
+function downloadJson(value: unknown, fileName: string) {
+  const url = URL.createObjectURL(new Blob([JSON.stringify(value, null, 2)], { type: 'application/json' }));
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = fileName;
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
+async function enterCreation() {
+  await creationStore.startLocalCreation();
+  await router.push('/creation');
 }
 
 async function toggleEnabled(entry: StoredScenarioMod, event: Event) {
@@ -192,7 +296,7 @@ function showError(error: unknown) {
   max-width: 1100px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 44px 1fr auto;
+  grid-template-columns: 44px minmax(0, 1fr) auto;
   gap: 14px;
   align-items: center;
   padding-bottom: 18px;
@@ -210,6 +314,7 @@ function showError(error: unknown) {
 .heading p { margin: 4px 0 0; color: var(--color-text-secondary); font-size: 0.9rem; }
 
 .primary-button,
+.secondary-button,
 .icon-button {
   border: 1px solid var(--color-border);
   background: var(--color-surface);
@@ -229,6 +334,15 @@ function showError(error: unknown) {
   color: white;
 }
 
+.secondary-button {
+  min-height: 40px;
+  gap: 7px;
+  padding: 0 12px;
+  border-radius: 6px;
+}
+
+.header-actions { display: flex; align-items: center; gap: 8px; }
+
 .icon-button { width: 40px; height: 40px; border-radius: 6px; }
 .icon-button.small { width: 30px; height: 30px; }
 .icon-button.danger { color: var(--color-error); }
@@ -236,6 +350,7 @@ button:disabled { opacity: 0.55; cursor: not-allowed; }
 .file-input { display: none; }
 
 .error-band,
+.success-band,
 .empty-state,
 .mod-list {
   max-width: 1100px;
@@ -253,6 +368,21 @@ button:disabled { opacity: 0.55; cursor: not-allowed; }
   border-bottom: 1px solid var(--color-error);
   padding: 12px 0;
 }
+
+.success-band {
+  margin-top: 16px;
+  min-height: 48px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 12px;
+  color: var(--color-success);
+  border-bottom: 1px solid var(--color-success);
+  padding: 8px 0 12px;
+}
+
+.success-band div { display: flex; align-items: baseline; gap: 9px; flex-wrap: wrap; }
+.success-band span { color: var(--color-text-secondary); font-size: 0.82rem; }
 
 .error-band pre { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; font-family: inherit; }
 
@@ -310,7 +440,10 @@ button:disabled { opacity: 0.55; cursor: not-allowed; }
 @media (max-width: 700px) {
   .mod-page { padding: 16px; }
   .mod-header { grid-template-columns: 40px 1fr; }
-  .primary-button { grid-column: 1 / -1; width: 100%; }
+  .header-actions { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; }
+  .header-actions .primary-button { grid-column: 1 / -1; width: 100%; }
+  .success-band { grid-template-columns: auto minmax(0, 1fr) auto; }
+  .success-band .secondary-button { grid-column: 1 / -1; width: 100%; }
   .mod-row { grid-template-columns: 1fr; }
   .mod-actions { justify-content: flex-end; }
 }
