@@ -294,14 +294,28 @@ export const useCharacterCreationStore = defineStore('characterCreation', () => 
 
   // --- GETTERS ---
   const totalSteps = computed(() => TOTAL_STEPS);
-  const attributes = computed(() => ({
-    root_bone: characterPayload.value.root_bone,
-    spirituality: characterPayload.value.spirituality,
-    comprehension: characterPayload.value.comprehension,
-    fortune: characterPayload.value.fortune,
-    charm: characterPayload.value.charm,
-    temperament: characterPayload.value.temperament,
-  }));
+  const scenarioCreationPreset = computed(() => selectedScenarioMod.value?.scenario.opening.creationPreset || null);
+  const attributes = computed(() => {
+    const preset = scenarioCreationPreset.value?.attributes;
+    if (preset) {
+      return {
+        root_bone: preset.rootBone,
+        spirituality: preset.spirituality,
+        comprehension: preset.comprehension,
+        fortune: preset.fortune,
+        charm: preset.charm,
+        temperament: preset.temperament,
+      };
+    }
+    return {
+      root_bone: characterPayload.value.root_bone,
+      spirituality: characterPayload.value.spirituality,
+      comprehension: characterPayload.value.comprehension,
+      fortune: characterPayload.value.fortune,
+      charm: characterPayload.value.charm,
+      temperament: characterPayload.value.temperament,
+    };
+  });
   const selectedWorld = computed<WorldWithSource | null>(() => {
     if (selectedScenarioMod.value) {
       return {
@@ -314,10 +328,26 @@ export const useCharacterCreationStore = defineStore('characterCreation', () => 
     }
     return creationData.value.worlds.find(w => w.id === characterPayload.value.world_id) || null;
   });
-  const selectedTalentTier = computed(() => creationData.value.talentTiers.find(t => t.id === characterPayload.value.talent_tier_id) || null);
-  const selectedOrigin = computed(() => creationData.value.origins.find(o => o.id === characterPayload.value.origin_id) || null);
-  const selectedSpiritRoot = computed(() => creationData.value.spiritRoots.find(s => s.id === characterPayload.value.spirit_root_id) || null);
-  const selectedTalents = computed(() => creationData.value.talents.filter(t => characterPayload.value.selected_talent_ids.includes(t.id)));
+  const selectedTalentTier = computed<TalentTierWithSource | null>(() => {
+    const preset = scenarioCreationPreset.value?.talentTier;
+    if (preset) return { id: -1, name: preset.name, description: preset.description, total_points: 0, rarity: 1, color: '#f0c36a', source: 'local' };
+    return creationData.value.talentTiers.find(t => t.id === characterPayload.value.talent_tier_id) || null;
+  });
+  const selectedOrigin = computed<OriginWithSource | null>(() => {
+    const preset = scenarioCreationPreset.value?.origin;
+    if (preset) return { id: -1, name: preset.name, description: preset.description, talent_cost: 0, rarity: 1, source: 'local' };
+    return creationData.value.origins.find(o => o.id === characterPayload.value.origin_id) || null;
+  });
+  const selectedSpiritRoot = computed<SpiritRootWithSource | null>(() => {
+    const preset = scenarioCreationPreset.value?.spiritRoot;
+    if (preset) return { id: -1, name: preset.name, tier: preset.tier, description: preset.description, special_effects: preset.specialEffects || [], cultivation_speed: '依剧本推进', base_multiplier: 1, talent_cost: 0, rarity: 1, source: 'local' };
+    return creationData.value.spiritRoots.find(s => s.id === characterPayload.value.spirit_root_id) || null;
+  });
+  const selectedTalents = computed<TalentWithSource[]>(() => {
+    const preset = scenarioCreationPreset.value;
+    if (preset) return preset.talents.map((talent, index) => ({ id: -(index + 1), name: talent.name, description: talent.description, talent_cost: 0, rarity: 1, source: 'local' }));
+    return creationData.value.talents.filter(t => characterPayload.value.selected_talent_ids.includes(t.id));
+  });
 
   const bonusTalentPoints = computed(() => {
     let points = 0;
@@ -329,6 +359,7 @@ export const useCharacterCreationStore = defineStore('characterCreation', () => 
   });
 
   const remainingTalentPoints = computed(() => {
+    if (scenarioCreationPreset.value) return 0;
     if (!selectedTalentTier.value) return 0;
 
     let points = selectedTalentTier.value.total_points;
@@ -890,6 +921,23 @@ export const useCharacterCreationStore = defineStore('characterCreation', () => 
   function selectScenarioMod(mod: ScenarioMod | null) {
     selectedScenarioMod.value = mod;
     characterPayload.value.world_id = mod ? -1 : '';
+    const preset = mod?.scenario.opening.creationPreset;
+    if (preset) {
+      characterPayload.value.character_name = preset.characterName;
+      characterPayload.value.gender = preset.gender;
+      characterPayload.value.race = preset.race;
+      characterPayload.value.current_age = preset.age;
+      characterPayload.value.talent_tier_id = -1;
+      characterPayload.value.origin_id = -1;
+      characterPayload.value.spirit_root_id = -1;
+      characterPayload.value.selected_talent_ids = preset.talents.map((_, index) => -(index + 1));
+      characterPayload.value.root_bone = preset.attributes.rootBone;
+      characterPayload.value.spirituality = preset.attributes.spirituality;
+      characterPayload.value.comprehension = preset.attributes.comprehension;
+      characterPayload.value.fortune = preset.attributes.fortune;
+      characterPayload.value.charm = preset.attributes.charm;
+      characterPayload.value.temperament = preset.attributes.temperament;
+    }
   }
   function selectTalentTier(tierId: number | '') {
     characterPayload.value.talent_tier_id = tierId;
@@ -910,7 +958,10 @@ export const useCharacterCreationStore = defineStore('characterCreation', () => 
     if (index > -1) characterPayload.value.selected_talent_ids.splice(index, 1);
     else characterPayload.value.selected_talent_ids.push(talentId);
   }
-  function setAttribute(key: AttributeKey, value: number) { if (key in characterPayload.value) characterPayload.value[key] = value; }
+  function setAttribute(key: AttributeKey, value: number) {
+    if (scenarioCreationPreset.value && scenarioCreationPreset.value.locked !== false) return;
+    if (key in characterPayload.value) characterPayload.value[key] = value;
+  }
 
   function setAIGeneratedSpiritRoot(spiritRoot: SpiritRoot) {
     if (!spiritRoot || typeof spiritRoot !== 'object' || !spiritRoot.name) return;
@@ -1008,7 +1059,7 @@ export const useCharacterCreationStore = defineStore('characterCreation', () => 
   }
 
   return {
-    mode, isLoading, error, creationData, characterPayload, currentStep, isLocalCreation, initialGameMessage, selectedScenarioMod, worldGenerationConfig, useStreamingStart, generateMode, splitResponseGeneration,
+    mode, isLoading, error, creationData, characterPayload, currentStep, isLocalCreation, initialGameMessage, selectedScenarioMod, scenarioCreationPreset, worldGenerationConfig, useStreamingStart, generateMode, splitResponseGeneration,
     // 创建流程状态
     isCreating, creationPhase, creationError,
     gameDifficulty, currentDifficultyPrompt, // 难度配置

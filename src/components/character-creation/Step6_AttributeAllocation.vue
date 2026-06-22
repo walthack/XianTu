@@ -1,5 +1,13 @@
 <template>
   <div class="attribute-allocation-container">
+    <ScenarioCreationPresetPanel
+      v-if="store.scenarioCreationPreset"
+      eyebrow="命格天成 · 剧本预制"
+      title="先天六司"
+      description="该组数值对应正典人物在本剧本阶段的初始状态。"
+      :entries="presetAttributeEntries"
+    />
+    <template v-else>
     <div class="header">
       <h2>{{ $t('先天六命分配') }}</h2>
       <div class="points-display">
@@ -35,12 +43,14 @@
       <button @click="randomizePoints" class="btn btn-warning">{{ $t('🎲 随机') }}</button>
       <button @click="balancePoints" class="btn btn-success">{{ $t('⚖️ 均衡') }}</button>
     </div>
+    </template>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useCharacterCreationStore } from '../../stores/characterCreationStore'
+import ScenarioCreationPresetPanel from './ScenarioCreationPresetPanel.vue'
 
 const store = useCharacterCreationStore()
 
@@ -64,6 +74,11 @@ const attributeDescriptions = {
   charm: '决定初始好感度、社交加成。影响NPC互动、门派声望获取。',
   temperament: '决定心魔抗性、意志力。影响走火入魔抵抗、关键抉择。',
 }
+
+const presetAttributeEntries = computed(() => Object.entries(store.attributes).map(([key, value]) => ({
+  name: attributeNames[key as AttributeKey],
+  description: String(value),
+})))
 
 type AttributeKey = keyof typeof attributeNames
 

@@ -156,6 +156,7 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
       requireString(opening.text, 'scenario.opening.text', add);
       optionalString(opening.playerRole, 'scenario.opening.playerRole', add);
       optionalId(opening.playerCharacterId, 'scenario.opening.playerCharacterId', add);
+      validateCreationPreset(opening.creationPreset, 'scenario.opening.creationPreset', add);
       optionalId(opening.locationId, 'scenario.opening.locationId', add);
       validateIdArray(opening.featuredCharacterIds, 'scenario.opening.featuredCharacterIds', add);
     }
@@ -392,6 +393,56 @@ function validateCharacterAffiliations(value: unknown, path: string, add: AddIss
 function validateScore(value: unknown, path: string, add: AddIssue): void {
   if (typeof value !== 'number' || !Number.isFinite(value) || value < -100 || value > 100) {
     add(path, 'invalid_score', `${path} must be a number from -100 to 100.`);
+  }
+}
+
+function validateCreationPreset(value: unknown, path: string, add: AddIssue): void {
+  if (value === undefined) return;
+  if (!isRecord(value)) {
+    add(path, 'invalid_type', `${path} must be an object.`);
+    return;
+  }
+  requireString(value.characterName, `${path}.characterName`, add);
+  requireString(value.gender, `${path}.gender`, add);
+  requireString(value.race, `${path}.race`, add);
+  validateInteger(value.age, `${path}.age`, 1, 3000, add);
+  validatePresetNamedEntry(value.talentTier, `${path}.talentTier`, add);
+  validatePresetNamedEntry(value.origin, `${path}.origin`, add);
+  validatePresetNamedEntry(value.spiritRoot, `${path}.spiritRoot`, add, true);
+  if (!Array.isArray(value.talents) || value.talents.length === 0) {
+    add(`${path}.talents`, 'required_array', `${path}.talents must contain at least one talent.`);
+  } else {
+    value.talents.forEach((entry, index) => validatePresetNamedEntry(entry, `${path}.talents[${index}]`, add));
+  }
+  if (!isRecord(value.attributes)) {
+    add(`${path}.attributes`, 'required_object', `${path}.attributes must be an object.`);
+  } else {
+    const attributes = value.attributes as Record<string, unknown>;
+    ['rootBone', 'spirituality', 'comprehension', 'fortune', 'charm', 'temperament'].forEach(key => {
+      validateInteger(attributes[key], `${path}.attributes.${key}`, 0, 10, add);
+    });
+  }
+  if (value.locked !== undefined && typeof value.locked !== 'boolean') {
+    add(`${path}.locked`, 'invalid_type', `${path}.locked must be a boolean.`);
+  }
+}
+
+function validatePresetNamedEntry(value: unknown, path: string, add: AddIssue, spiritRoot = false): void {
+  if (!isRecord(value)) {
+    add(path, 'required_object', `${path} must be an object.`);
+    return;
+  }
+  requireString(value.name, `${path}.name`, add);
+  requireString(value.description, `${path}.description`, add);
+  if (spiritRoot) {
+    requireString(value.tier, `${path}.tier`, add);
+    validateStringArray(value.specialEffects, `${path}.specialEffects`, add);
+  }
+}
+
+function validateInteger(value: unknown, path: string, min: number, max: number, add: AddIssue): void {
+  if (typeof value !== 'number' || !Number.isInteger(value) || value < min || value > max) {
+    add(path, 'invalid_number', `${path} must be an integer from ${min} to ${max}.`);
   }
 }
 

@@ -2,6 +2,7 @@
   <div class="preview-container">
     <h2 class="title">{{ $t('最终预览') }}</h2>
     <p class="subtitle">{{ $t('请确认你的选择，此为踏入仙途的最后一步。') }}</p>
+    <p v-if="store.scenarioCreationPreset" class="preset-notice">窥天算命 · 剧本正典身份</p>
 
     <div class="preview-grid">
       <!-- Character Name -->
@@ -13,8 +14,9 @@
           class="named"
           v-model="store.characterPayload.character_name"
           :placeholder="$t('请输入道号')"
+          :disabled="presetLocked"
         />
-        <span class="name-hint">{{ $t('可自定义修改') }}</span>
+        <span class="name-hint">{{ presetLocked ? '剧本锁定' : $t('可自定义修改') }}</span>
       </div>
 
       <!-- Character Race -->
@@ -26,6 +28,7 @@
           class="named"
           v-model="store.characterPayload.race"
           :placeholder="$t('人族')"
+          :disabled="presetLocked"
           @mousedown.stop
           @click.stop
           @select.stop
@@ -37,15 +40,15 @@
         <h3>{{ $t('性别') }}</h3>
         <div class="gender-control">
           <label class="gender-label">
-            <input type="radio" name="gender" value="男" v-model="store.characterPayload.gender">
+            <input type="radio" name="gender" value="男" v-model="store.characterPayload.gender" :disabled="presetLocked">
             <span>{{ $t('男') }}</span>
           </label>
           <label class="gender-label">
-            <input type="radio" name="gender" value="女" v-model="store.characterPayload.gender">
+            <input type="radio" name="gender" value="女" v-model="store.characterPayload.gender" :disabled="presetLocked">
             <span>{{ $t('女') }}</span>
           </label>
           <label class="gender-label">
-            <input type="radio" name="gender" value="双性" v-model="store.characterPayload.gender">
+            <input type="radio" name="gender" value="双性" v-model="store.characterPayload.gender" :disabled="presetLocked">
             <span>{{ $t('双性') }}</span>
           </label>
         </div>
@@ -55,16 +58,17 @@
       <div class="preview-item age-item">
         <h3>{{ $t('初始年龄') }}</h3>
         <div class="age-control">
-          <button type="button" @click="decrementAge" :disabled="store.characterPayload.current_age <= 0" class="age-btn">-</button>
+          <button type="button" @click="decrementAge" :disabled="presetLocked || store.characterPayload.current_age <= 0" class="age-btn">-</button>
           <input
             type="number"
             v-model.number="store.characterPayload.current_age"
             class="age-input"
             min="0"
+            :disabled="presetLocked"
             @input="validateAge"
           />
           <span class="age-unit">{{ $t('岁') }}</span>
-          <button type="button" @click="incrementAge" class="age-btn">+</button>
+          <button type="button" @click="incrementAge" :disabled="presetLocked" class="age-btn">+</button>
         </div>
       </div>
 
@@ -171,10 +175,11 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useCharacterCreationStore } from '../../stores/characterCreationStore'
 
 const store = useCharacterCreationStore()
+const presetLocked = computed(() => Boolean(store.scenarioCreationPreset && store.scenarioCreationPreset.locked !== false))
 
 const props = defineProps<{
   isLocalCreation: boolean

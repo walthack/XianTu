@@ -203,14 +203,10 @@
     ],
     "playerRelationships": [
       {
-        "characterId": "liuchao.character.cheng_zongyang",
-        "relation": "陌生人",
-        "favorability": 0
-      },
-      {
         "characterId": "liuchao.character.duan_qiang",
-        "relation": "陌生人",
-        "favorability": 0
+        "relation": "挚友",
+        "favorability": 95,
+        "memories": ["共同来自现代世界并经历空间异变"]
       }
     ],
     "relationships": [
@@ -294,11 +290,26 @@
   },
   "scenario": {
     "opening": {
-      "text": "一道紫色电光或无法解释的空间异变之后，玩家在月牙平原旁的山丘醒来。山丘下，秦制黑甲军阵正与高大的兽蛮武士交战；不远处还有两名衣着与此世格格不入的年轻人。玩家必须先判断形势并设法活过这场遭遇。",
-      "playerRole": "被卷入草原战局的异界来客或身份不明的流落者",
+      "text": "一道紫色电光和无法解释的空间异变之后，程宗扬与段强在月牙平原旁的山丘醒来。山丘下，秦制黑甲军阵正与高大的兽蛮武士交战。程宗扬必须先判断形势，保护同伴并设法活过这场遭遇。",
+      "playerRole": "程宗扬，刚被卷入六朝世界的现代来客",
+      "playerCharacterId": "liuchao.character.cheng_zongyang",
+      "creationPreset": {
+        "characterName": "程宗扬",
+        "gender": "男",
+        "race": "人族",
+        "age": 20,
+        "talentTier": { "name": "异世来客", "description": "来自现代世界，缺少此世常识，却拥有不同于六朝众人的判断方式。" },
+        "origin": { "name": "现代来客", "description": "与段强一同遭遇空间异变，在月牙平原战场醒来。" },
+        "spiritRoot": { "name": "生死根", "tier": "唯一异能", "description": "并非六朝世界的传统灵根，而是能感应死亡气息并将部分死气转化为真阳的独有异变。", "specialEffects": ["感应死亡气息", "吸收死气", "死气过量可能污染气轮"] },
+        "talents": [
+          { "name": "务实机敏", "description": "善于观察局势、快速判断风险与可利用条件。" },
+          { "name": "现代思维", "description": "具备现代商业与组织经验，不受六朝固有观念束缚。" }
+        ],
+        "attributes": { "rootBone": 5, "spirituality": 4, "comprehension": 6, "fortune": 6, "charm": 5, "temperament": 6 },
+        "locked": true
+      },
       "locationId": "liuchao.location.grass_ridge",
       "featuredCharacterIds": [
-        "liuchao.character.cheng_zongyang",
         "liuchao.character.duan_qiang"
       ]
     },

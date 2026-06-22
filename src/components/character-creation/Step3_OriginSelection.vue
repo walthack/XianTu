@@ -1,5 +1,12 @@
 <template>
   <div class="origin-selection-container">
+    <ScenarioCreationPresetPanel
+      v-if="store.scenarioCreationPreset"
+      eyebrow="转世因果 · 剧本预制"
+      :title="store.scenarioCreationPreset.origin.name"
+      :description="store.scenarioCreationPreset.origin.description"
+    />
+    <template v-else>
     <div v-if="store.isLoading" class="loading-state">{{ $t('追溯过往，探寻出身...') }}</div>
     <div v-else-if="store.error" class="error-state">{{ $t('因果不明') }}：{{ store.error }}</div>
 
@@ -96,6 +103,7 @@
       @close="isAIPromptModalVisible = false"
       @submit="handleAIPromptSubmit"
     />
+    </template>
   </div>
 </template>
 
@@ -110,6 +118,7 @@ import { toast } from '../../utils/toast'
 import { generateWithRawPrompt } from '../../utils/tavernCore'
 import { ORIGIN_ITEM_GENERATION_PROMPT } from '../../utils/prompts/tasks/gameElementPrompts'
 import { parseJsonFromText } from '@/utils/jsonExtract'
+import ScenarioCreationPresetPanel from './ScenarioCreationPresetPanel.vue'
 
 const emit = defineEmits(['ai-generate'])
 const store = useCharacterCreationStore()

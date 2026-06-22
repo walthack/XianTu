@@ -149,3 +149,26 @@ test('validates event completion conditions', async () => {
   assert.equal(result.valid, false);
   assert.ok(result.issues.some(issue => issue.path === 'scenario.events[0].completion[0].operator'));
 });
+
+test('rejects invalid canonical creation preset boundaries', async () => {
+  const { validateScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
+  const fixture = await loadFixture();
+  fixture.scenario.opening.creationPreset = {
+    characterName: '程宗扬',
+    gender: '男',
+    race: '人族',
+    age: 0,
+    talentTier: { name: '异世来客', description: '现代来客。' },
+    origin: { name: '现代来客', description: '来自另一个世界。' },
+    spiritRoot: { name: '生死根', description: '唯一异能。', tier: '唯一异能' },
+    talents: [],
+    attributes: { rootBone: 11, spirituality: 5, comprehension: 5, fortune: 5, charm: 5, temperament: 5 },
+  };
+
+  const result = validateScenarioMod(fixture);
+
+  assert.equal(result.valid, false);
+  assert.ok(result.issues.some(issue => issue.path === 'scenario.opening.creationPreset.age'));
+  assert.ok(result.issues.some(issue => issue.path === 'scenario.opening.creationPreset.talents'));
+  assert.ok(result.issues.some(issue => issue.path === 'scenario.opening.creationPreset.attributes.rootBone'));
+});

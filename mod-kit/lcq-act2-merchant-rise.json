@@ -177,14 +177,16 @@
     ],
     "playerRelationships": [
       {
-        "characterId": "liuchao.rise.character.cheng_zongyang",
-        "relation": "潜在盟友",
-        "favorability": 10
+        "characterId": "liuchao.rise.character.le_mingzhu",
+        "relation": "盟友",
+        "favorability": 45,
+        "memories": ["在伤病与身份危机中彼此相助"]
       },
       {
-        "characterId": "liuchao.rise.character.le_mingzhu",
-        "relation": "陌生人",
-        "favorability": 5
+        "characterId": "liuchao.rise.character.wang_zhe",
+        "relation": "授业者",
+        "favorability": 85,
+        "memories": ["受其传授九阳神功与太乙传承"]
       }
     ],
     "relationships": [
@@ -275,11 +277,26 @@
   },
   "scenario": {
     "opening": {
-      "text": "玩家在商队货栈醒来或抵达此地，发现一批人员与货物正在重新登记。程宗扬身负太乙传承，却被奴籍和契券束缚；乐明珠正设法为伤者诊治。玩家必须决定先保全自己，还是介入这场身份与交易的角力。",
-      "playerRole": "进入州城商路的自由旅人、受制者或临时护卫",
+      "text": "程宗扬身处商队货栈，一批人员与货物正在重新登记。他身负太乙传承，却被奴籍和契券束缚；乐明珠正设法为伤者诊治。程宗扬必须先保全自己，再从身份与交易的角力中找到破局机会。",
+      "playerRole": "程宗扬，身负太乙传承并试图在商路立足",
+      "playerCharacterId": "liuchao.rise.character.cheng_zongyang",
+      "creationPreset": {
+        "characterName": "程宗扬",
+        "gender": "男",
+        "race": "人族",
+        "age": 21,
+        "talentTier": { "name": "商路新锐", "description": "已经度过草原初战，开始将现代判断力转化为六朝世界中的生存资本。" },
+        "origin": { "name": "太乙传承者", "description": "承接王哲留下的功法与责任，却仍受身份、契券和现实处境牵制。" },
+        "spiritRoot": { "name": "生死根·初醒", "tier": "唯一异能", "description": "生死根已能稳定感应死气，并与九阳神功的真阳运行产生联系。", "specialEffects": ["死气感应", "真阳转化", "气轮污染风险"] },
+        "talents": [
+          { "name": "商机判断", "description": "能够快速估算货物、契约与人情背后的真实价值。" },
+          { "name": "临机应变", "description": "在身份受制和资源不足时寻找可执行的破局办法。" }
+        ],
+        "attributes": { "rootBone": 5, "spirituality": 5, "comprehension": 7, "fortune": 7, "charm": 6, "temperament": 6 },
+        "locked": true
+      },
       "locationId": "liuchao.rise.location.caravan_yard",
       "featuredCharacterIds": [
-        "liuchao.rise.character.cheng_zongyang",
         "liuchao.rise.character.le_mingzhu"
       ]
     },

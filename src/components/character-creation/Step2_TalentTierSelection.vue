@@ -1,5 +1,12 @@
 <template>
   <div class="talent-tier-selection">
+    <ScenarioCreationPresetPanel
+      v-if="store.scenarioCreationPreset"
+      eyebrow="仙缘初定 · 剧本预制"
+      :title="store.scenarioCreationPreset.talentTier.name"
+      :description="store.scenarioCreationPreset.talentTier.description"
+    />
+    <template v-else>
     <div v-if="store.isLoading" class="loading-state">{{ $t('感应天道，测算天资...') }}</div>
     <div v-else-if="store.error" class="error-state">{{ $t('天机混沌') }}：{{ store.error }}</div>
 
@@ -87,6 +94,7 @@
       @close="isAIPromptModalVisible = false"
       @submit="handleAIPromptSubmit"
     />
+    </template>
   </div>
 </template>
 
@@ -101,6 +109,7 @@ import { toast } from '../../utils/toast'
 import { generateWithRawPrompt } from '../../utils/tavernCore'
 import { TALENT_TIER_ITEM_GENERATION_PROMPT } from '../../utils/prompts/tasks/gameElementPrompts'
 import { parseJsonFromText } from '@/utils/jsonExtract'
+import ScenarioCreationPresetPanel from './ScenarioCreationPresetPanel.vue'
 
 interface CustomTierData {
   name: string

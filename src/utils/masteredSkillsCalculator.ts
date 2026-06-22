@@ -120,6 +120,17 @@ export function updateMasteredSkills(saveData: SaveData): MasteredSkill[] {
     }
   }
 
+  const techniqueSources = new Set(
+    Object.values(((saveData as any).角色?.背包?.物品 || {}) as Record<string, any>)
+      .filter(item => item?.类型 === '功法' && typeof item?.名称 === 'string')
+      .map(item => item.名称 as string),
+  );
+  const standaloneSkills = existingSkills.filter(existingSkill =>
+    !techniqueSources.has(existingSkill.来源) &&
+    !calculatedSkills.some(skill => skill.技能名称 === existingSkill.技能名称 && skill.来源 === existingSkill.来源),
+  );
+  const mergedSkills = [...calculatedSkills, ...standaloneSkills];
+
   // 更新存档数据（V3：角色.技能.掌握技能 为主；系统.缓存.* 为兼容旧逻辑的镜像）
   if (!(saveData as any).角色) (saveData as any).角色 = {};
   if (!(saveData as any).角色.技能 || typeof (saveData as any).角色.技能 !== 'object') {
@@ -131,12 +142,12 @@ export function updateMasteredSkills(saveData: SaveData): MasteredSkill[] {
       (saveData as any).角色.技能.冷却 = {};
     }
   }
-  (saveData as any).角色.技能.掌握技能 = calculatedSkills;
+  (saveData as any).角色.技能.掌握技能 = mergedSkills;
 
   if (!(saveData as any).系统) (saveData as any).系统 = {};
   if (!(saveData as any).系统.缓存) (saveData as any).系统.缓存 = {};
-  (saveData as any).系统.缓存.掌握技能 = calculatedSkills;
+  (saveData as any).系统.缓存.掌握技能 = mergedSkills;
 
   debug.log('掌握技能计算', '已更新存档数据中的掌握技能数组');
-  return calculatedSkills;
+  return mergedSkills;
 }

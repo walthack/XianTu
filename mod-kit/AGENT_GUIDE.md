@@ -125,6 +125,9 @@ flags 是剧情事实，不是叙事文本。推荐命名：
 ### 正典身份与专属内容
 
 - 玩家扮演某个正典人物时，在 `scenario.opening.playerCharacterId` 填写该人物 ID；不填写表示独立玩家。
+- 正典人物路线应同时提供 `scenario.opening.creationPreset`。它会替换仙途通用的天资、出身、灵根、天赋、先天六司以及最终身份。
+- `creationPreset.locked` 默认为锁定语义；锁定后姓名、性别、种族、年龄和六司不可在创角页修改，并跳过通用天道点预算。
+- 原作不存在传统灵根时，不要硬套五行灵根。可在 `spiritRoot` 中写“无传统灵根”或作品自己的特殊体质，并在 `tier` 明确其性质。
 - 使用 `rules.contentAccess` 限制技能、功法或物品归属。未配置的内容默认开放。
 - `restricted` 用于门派秘传、血脉限定或少数人可学内容，可列出多个 `allowedCharacterIds`。
 - `exclusive` 用于生死根一类唯一能力，最终只能解析为一个允许身份。
@@ -141,6 +144,28 @@ flags 是剧情事实，不是叙事文本。推荐命名：
 ```
 
 Guard 会硬拦截把受限内容 ID 或名称写给未授权玩家/NPC 的命令；“相似但改名”的等价能力只能通过正典提示约束模型，因此 Agent 还应在能力描述和 `world.specialRules` 中明确其唯一性。
+
+`creationPreset` 最小结构：
+
+```json
+{
+  "characterName": "程宗扬",
+  "gender": "男",
+  "race": "人族",
+  "age": 20,
+  "talentTier": { "name": "异世来客", "description": "来自现代世界。" },
+  "origin": { "name": "现代来客", "description": "因空间异变进入六朝。" },
+  "spiritRoot": {
+    "name": "生死根",
+    "tier": "唯一异能",
+    "description": "并非传统灵根。",
+    "specialEffects": ["感应死亡气息"]
+  },
+  "talents": [{ "name": "务实机敏", "description": "善于判断风险。" }],
+  "attributes": { "rootBone": 5, "spirituality": 4, "comprehension": 6, "fortune": 6, "charm": 5, "temperament": 6 },
+  "locked": true
+}
+```
 
 ### 人物宗派与势力归属
 

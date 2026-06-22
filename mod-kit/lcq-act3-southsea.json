@@ -217,24 +217,19 @@
     ],
     "playerRelationships": [
       {
-        "characterId": "liuchao.southsea.character.cheng_zongyang",
-        "relation": "同行",
-        "favorability": 20
-      },
-      {
         "characterId": "liuchao.southsea.character.xiao_zi",
-        "relation": "观察对象",
-        "favorability": -5
+        "relation": "复杂盟友",
+        "favorability": 55
       },
       {
         "characterId": "liuchao.southsea.character.ning_yu",
-        "relation": "临时同伴",
-        "favorability": 15
+        "relation": "护卫与伙伴",
+        "favorability": 70
       },
       {
         "characterId": "liuchao.southsea.character.ajiman_bana",
-        "relation": "陌生人",
-        "favorability": 0
+        "relation": "新识盟友",
+        "favorability": 35
       }
     ],
     "relationships": [
@@ -359,11 +354,26 @@
   },
   "scenario": {
     "opening": {
-      "text": "玩家在南荒山口遇见受瘴气、失踪与错误路线困扰的盘江商队。凝羽正在重整护卫，小紫已先一步进入花苗山寨，而程宗扬必须在继续追查海王神殿与保护队伍之间作出安排。",
-      "playerRole": "加入南荒远行的独立旅人、向导候选或临时护卫",
+      "text": "程宗扬带领的盘江商队在南荒山口遭遇瘴气、失踪与错误路线。凝羽正在重整护卫，小紫已先一步进入花苗山寨；程宗扬必须在继续追查海王神殿与保护队伍之间作出安排。",
+      "playerRole": "程宗扬，盘江商队核心与南荒远行的主事者",
+      "playerCharacterId": "liuchao.southsea.character.cheng_zongyang",
+      "creationPreset": {
+        "characterName": "程宗扬",
+        "gender": "男",
+        "race": "人族",
+        "age": 22,
+        "talentTier": { "name": "商队主事", "description": "已能统筹商队、人情与风险，在南荒复杂局势中承担决策责任。" },
+        "origin": { "name": "盘江商队核心", "description": "从现代来客成长为商队主事者，带着既有盟友与未解线索进入南荒。" },
+        "spiritRoot": { "name": "生死根·真阳相济", "tier": "唯一异能", "description": "生死根与九阳真气的联系更加成熟，但吸收死气仍伴随不可忽视的反噬风险。", "specialEffects": ["远距死气感应", "死气转化真阳", "压制气轮污染"] },
+        "talents": [
+          { "name": "商队统筹", "description": "能够协调护卫、货物、路线和盟友之间的冲突。" },
+          { "name": "复杂交涉", "description": "擅长在敌友难辨的关系中寻找暂时可行的共同利益。" }
+        ],
+        "attributes": { "rootBone": 6, "spirituality": 6, "comprehension": 7, "fortune": 8, "charm": 7, "temperament": 7 },
+        "locked": true
+      },
       "locationId": "liuchao.southsea.location.jungle_pass",
       "featuredCharacterIds": [
-        "liuchao.southsea.character.cheng_zongyang",
         "liuchao.southsea.character.ning_yu",
         "liuchao.southsea.character.xiao_zi"
       ]

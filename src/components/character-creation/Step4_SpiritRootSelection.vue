@@ -1,5 +1,13 @@
 <template>
   <div class="spirit-root-selection-container">
+    <ScenarioCreationPresetPanel
+      v-if="store.scenarioCreationPreset"
+      eyebrow="测灵问道 · 剧本预制"
+      :title="`${store.scenarioCreationPreset.spiritRoot.name} · ${store.scenarioCreationPreset.spiritRoot.tier}`"
+      :description="store.scenarioCreationPreset.spiritRoot.description"
+      :entries="(store.scenarioCreationPreset.spiritRoot.specialEffects || []).map(effect => ({ name: effect, description: '正典能力表现' }))"
+    />
+    <template v-else>
     <div v-if="store.isLoading" class="loading-state">{{ $t('天地玄黄，探查灵根...') }}</div>
     <div v-else-if="store.error" class="error-state">{{ $t('天机混沌：') }}{{ store.error }}</div>
 
@@ -204,6 +212,7 @@
       @close="isAIPromptModalVisible = false"
       @submit="handleAIPromptSubmit"
     />
+    </template>
   </div>
 </template>
 
@@ -218,6 +227,7 @@ import { toast } from '../../utils/toast'
 import { generateWithRawPrompt } from '../../utils/tavernCore'
 import { SPIRIT_ROOT_ITEM_GENERATION_PROMPT } from '../../utils/prompts/tasks/gameElementPrompts'
 import { parseJsonFromText } from '@/utils/jsonExtract'
+import ScenarioCreationPresetPanel from './ScenarioCreationPresetPanel.vue'
 
 const emit = defineEmits(['ai-generate'])
 const store = useCharacterCreationStore()

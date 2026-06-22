@@ -1,5 +1,13 @@
 <template>
   <div class="talent-selection-container">
+    <ScenarioCreationPresetPanel
+      v-if="store.scenarioCreationPreset"
+      eyebrow="神通择定 · 剧本预制"
+      title="正典天赋"
+      description="这些天赋由当前玩家身份确定，不进入通用随机池。"
+      :entries="store.scenarioCreationPreset.talents"
+    />
+    <template v-else>
     <div v-if="store.isLoading" class="loading-state">{{ $t('于时光长河中搜寻天赋...') }}</div>
     <div v-else-if="store.error" class="error-state">{{ $t('天机紊乱') }}：{{ store.error }}</div>
 
@@ -84,6 +92,7 @@
       @close="isAIPromptModalVisible = false"
       @submit="handleAIPromptSubmit"
     />
+    </template>
   </div>
 </template>
 
@@ -98,6 +107,7 @@ import { toast } from '../../utils/toast'
 import { generateWithRawPrompt } from '../../utils/tavernCore'
 import { TALENT_ITEM_GENERATION_PROMPT } from '../../utils/prompts/tasks/gameElementPrompts'
 import { parseJsonFromText } from '@/utils/jsonExtract'
+import ScenarioCreationPresetPanel from './ScenarioCreationPresetPanel.vue'
 
 const emit = defineEmits(['ai-generate'])
 const store = useCharacterCreationStore()
