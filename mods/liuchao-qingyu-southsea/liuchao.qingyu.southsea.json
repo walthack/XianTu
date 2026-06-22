@@ -1,0 +1,453 @@
+{
+  "schema": "xiantu.scenario-mod",
+  "version": 1,
+  "manifest": {
+    "id": "liuchao.qingyu.southsea",
+    "name": "六朝清羽记·南荒海王",
+    "version": "1.0.0",
+    "author": "XianTu Scenario Team",
+    "description": "以《六朝清羽记》南荒、海王神殿和碧鲮海湾阶段为蓝本的 Strict 探险剧本，覆盖约第25至58章的主要剧情骨架。"
+  },
+  "world": {
+    "name": "六朝并置世界",
+    "era": "程宗扬商路初成后的南荒远行",
+    "background": "程宗扬的立足点初步稳定后，一支队伍沿商路深入南荒。花苗等异族、黑魔海相关势力与海王神殿传闻在湿热山林中交错；更远处的碧鲮海湾连接鲛人、天竺来客和海上遗迹。",
+    "specialRules": [
+      "南荒各族、宗门、商队与海湾聚落保持不同组织属性，不统一改写为宗派",
+      "小紫与巫宗、毒宗有关但立场复杂，不自动归属任何新宗派",
+      "凝羽保持侍卫身份，阿姬曼·芭娜保持天竺舞姬与异域来客身份",
+      "海王神殿的秘密随章节推进揭露，不在开场一次性说明",
+      "玩家可改变局部救援、交易与探险结果，但不得凭空获得小紫的毒术秘传",
+      "成人议题只作非露骨的人物关系和社会结构处理"
+    ],
+    "continents": [
+      {
+        "id": "liuchao.southsea.region.southern_wilds",
+        "name": "南荒",
+        "description": "山林、河谷、部族与古老遗迹交错的南方荒野。"
+      },
+      {
+        "id": "liuchao.southsea.region.biling_coast",
+        "name": "碧鲮海域",
+        "description": "连接海湾聚落、鲛人水域和异域航线的南方海岸。"
+      }
+    ]
+  },
+  "canon": {
+    "factions": [
+      {
+        "id": "liuchao.southsea.faction.panjiang_caravan",
+        "name": "盘江商队",
+        "description": "以贸易、护卫和情报交换维持远行的程宗扬一行。",
+        "type": "商旅组织"
+      },
+      {
+        "id": "liuchao.southsea.faction.flower_miao",
+        "name": "花苗诸寨",
+        "description": "分布在南荒山林中的地方族群与寨落，对外来者保持谨慎。",
+        "type": "南荒部族"
+      },
+      {
+        "id": "liuchao.southsea.faction.black_demon_sea",
+        "name": "黑魔海",
+        "description": "与巫宗、毒宗相关的隐秘势力网络，擅长毒术、巫术与长期布局。",
+        "type": "隐秘宗脉"
+      },
+      {
+        "id": "liuchao.southsea.faction.biling_harbor",
+        "name": "碧鲮海湾商港",
+        "description": "由海商、舞姬、渔民和异域来客组成的松散海湾共同体。",
+        "type": "海港组织"
+      },
+      {
+        "id": "liuchao.southsea.faction.merfolk",
+        "name": "鲛人部族",
+        "description": "活动于碧鲮海域的水生族群，对海王神殿与海底道路保有自己的记忆。",
+        "type": "海族部落"
+      }
+    ],
+    "locations": [
+      {
+        "id": "liuchao.southsea.location.jungle_pass",
+        "name": "南荒山口",
+        "description": "商路进入湿热山林的边界，失踪、瘴气与陌生习俗从此开始。",
+        "type": "山口",
+        "continentId": "liuchao.southsea.region.southern_wilds"
+      },
+      {
+        "id": "liuchao.southsea.location.flower_village",
+        "name": "花苗山寨",
+        "description": "依山而建的寨落，掌握南荒道路、药草和地方恩怨。",
+        "type": "部族寨落",
+        "continentId": "liuchao.southsea.region.southern_wilds",
+        "factionId": "liuchao.southsea.faction.flower_miao"
+      },
+      {
+        "id": "liuchao.southsea.location.temple_approach",
+        "name": "海王神殿外环",
+        "description": "被山水与旧机关隔绝的遗迹外环，入口随潮汐和路径变化。",
+        "type": "古代遗迹",
+        "continentId": "liuchao.southsea.region.southern_wilds"
+      },
+      {
+        "id": "liuchao.southsea.location.biling_bay",
+        "name": "碧鲮海湾",
+        "description": "异域船只、舞乐、货物与海族传闻汇聚的海湾。",
+        "type": "海湾商港",
+        "continentId": "liuchao.southsea.region.biling_coast",
+        "factionId": "liuchao.southsea.faction.biling_harbor"
+      },
+      {
+        "id": "liuchao.southsea.location.undersea_ruins",
+        "name": "神殿水下遗址",
+        "description": "与海王神殿相连的水下空间，宝物、旧机关和鲛人道路彼此交错。",
+        "type": "水下遗址",
+        "continentId": "liuchao.southsea.region.biling_coast",
+        "factionId": "liuchao.southsea.faction.merfolk"
+      }
+    ],
+    "characters": [
+      {
+        "id": "liuchao.southsea.character.cheng_zongyang",
+        "name": "程宗扬",
+        "description": "已从受制者走向商人的异界来客，依靠现代判断、九阳传承和人际网络深入南荒。",
+        "role": "正典异界来客与商队核心",
+        "gender": "男",
+        "affiliations": [
+          {
+            "factionId": "liuchao.southsea.faction.panjiang_caravan",
+            "category": "organization",
+            "role": "商队核心"
+          }
+        ],
+        "locationId": "liuchao.southsea.location.jungle_pass",
+        "skillIds": ["liuchao.southsea.skill.death_root", "liuchao.southsea.skill.trade_judgment"],
+        "techniqueIds": ["liuchao.southsea.technique.nine_yang"]
+      },
+      {
+        "id": "liuchao.southsea.character.xiao_zi",
+        "name": "小紫",
+        "description": "紫发紫眸的神秘少女，聪慧狡黠，与巫宗、毒宗线索关系复杂。",
+        "role": "亦敌亦友的谋划者",
+        "gender": "女",
+        "affiliations": [
+          {
+            "factionId": "liuchao.southsea.faction.black_demon_sea",
+            "category": "sect",
+            "role": "背景关联者",
+            "exclusive": false
+          }
+        ],
+        "locationId": "liuchao.southsea.location.flower_village",
+        "skillIds": ["liuchao.southsea.skill.poison_lore"]
+      },
+      {
+        "id": "liuchao.southsea.character.ning_yu",
+        "name": "凝羽",
+        "description": "冷静而武艺高强的侍卫长，负责在南荒复杂地形中保护队伍。",
+        "role": "侍卫长与战斗伙伴",
+        "gender": "女",
+        "affiliations": [
+          {
+            "factionId": "liuchao.southsea.faction.panjiang_caravan",
+            "category": "organization",
+            "role": "侍卫长"
+          }
+        ],
+        "locationId": "liuchao.southsea.location.jungle_pass",
+        "skillIds": ["liuchao.southsea.skill.guard_blade"]
+      },
+      {
+        "id": "liuchao.southsea.character.ajiman_bana",
+        "name": "阿姬曼·芭娜",
+        "description": "红褐色头发、碧蓝眼睛的天竺少女，以舞姬身份出现在碧鲮海湾。",
+        "role": "异域来客与海湾引路人",
+        "gender": "女",
+        "affiliations": [
+          {
+            "factionId": "liuchao.southsea.faction.biling_harbor",
+            "category": "organization",
+            "role": "舞姬"
+          }
+        ],
+        "locationId": "liuchao.southsea.location.biling_bay",
+        "skillIds": ["liuchao.southsea.skill.dance_and_customs"]
+      },
+      {
+        "id": "liuchao.southsea.character.miao_guide",
+        "name": "阿兰",
+        "description": "熟悉山路、药草和寨规的花苗向导，对外来商队的目的保持戒心。",
+        "role": "南荒向导",
+        "gender": "女",
+        "affiliations": [
+          {
+            "factionId": "liuchao.southsea.faction.flower_miao",
+            "category": "clan",
+            "role": "向导"
+          }
+        ],
+        "locationId": "liuchao.southsea.location.flower_village"
+      },
+      {
+        "id": "liuchao.southsea.character.merfolk_keeper",
+        "name": "澜生",
+        "description": "守护海底旧路的鲛人，愿意交换信息，却反对外来者掠夺神殿遗物。",
+        "role": "鲛人守路者",
+        "gender": "男",
+        "affiliations": [
+          {
+            "factionId": "liuchao.southsea.faction.merfolk",
+            "category": "clan",
+            "role": "守路者"
+          }
+        ],
+        "locationId": "liuchao.southsea.location.undersea_ruins"
+      }
+    ]
+  },
+  "content": {
+    "skills": [
+      {
+        "id": "liuchao.southsea.skill.death_root",
+        "name": "生死根",
+        "description": "感应死亡气息并将部分死气转化为真阳的唯一异能。",
+        "type": "唯一异能",
+        "effects": ["感应死亡", "吸收死气", "杂质可能污染气轮"]
+      },
+      {
+        "id": "liuchao.southsea.skill.trade_judgment",
+        "name": "商情判断",
+        "description": "分析供需、信用与文化差异以促成交易。",
+        "type": "商业能力",
+        "effects": ["评估交易", "识别风险"]
+      },
+      {
+        "id": "liuchao.southsea.skill.poison_lore",
+        "name": "毒术识辨",
+        "description": "识别南荒毒物、药性和人为布置痕迹的隐秘知识。",
+        "type": "毒术",
+        "effects": ["识毒", "辨药", "追踪毒术痕迹"]
+      },
+      {
+        "id": "liuchao.southsea.skill.guard_blade",
+        "name": "侍卫刀术",
+        "description": "适合贴身护卫与狭窄地形作战的实战刀术。",
+        "type": "刀法",
+        "effects": ["护卫", "近战压制"]
+      },
+      {
+        "id": "liuchao.southsea.skill.dance_and_customs",
+        "name": "天竺舞艺",
+        "description": "融合节奏、身体控制与异域礼俗的表演技艺。",
+        "type": "表演技艺",
+        "effects": ["舞蹈表演", "文化交涉"]
+      }
+    ],
+    "techniques": [
+      {
+        "id": "liuchao.southsea.technique.nine_yang",
+        "name": "九阳神功",
+        "description": "太乙真宗镇教功法，以一阳至九阳逐步精炼真气。",
+        "grade": "镇教绝学"
+      }
+    ],
+    "items": [
+      {
+        "id": "liuchao.southsea.item.dragon_eye_jade",
+        "name": "龙睛玉佩",
+        "description": "可放出防护法阵并进行远距感应的稀有法器。",
+        "type": "other",
+        "grade": "稀有法器"
+      },
+      {
+        "id": "liuchao.southsea.item.temple_tide_chart",
+        "name": "神殿潮图",
+        "description": "记录海王神殿外环与潮汐路径的残缺图册。",
+        "type": "other",
+        "grade": "剧情关键物"
+      },
+      {
+        "id": "liuchao.southsea.item.silver_anklet",
+        "name": "踝间银铃",
+        "description": "天竺舞艺的标志性饰物，本 Mod 仅作为文化与表演物件呈现。",
+        "type": "other",
+        "grade": "异域饰物"
+      }
+    ]
+  },
+  "scenario": {
+    "opening": {
+      "text": "玩家在南荒山口遇见受瘴气、失踪与错误路线困扰的盘江商队。凝羽正在重整护卫，小紫已先一步进入花苗山寨，而程宗扬必须在继续追查海王神殿与保护队伍之间作出安排。",
+      "playerRole": "加入南荒远行的独立旅人、向导候选或临时护卫",
+      "locationId": "liuchao.southsea.location.jungle_pass",
+      "featuredCharacterIds": ["liuchao.southsea.character.cheng_zongyang", "liuchao.southsea.character.ning_yu", "liuchao.southsea.character.xiao_zi"]
+    },
+    "initialFlags": {
+      "event.caravan_rescued.done": false,
+      "event.village_trust.done": false,
+      "chapter.southern_gate.done": false,
+      "event.xiaozi_clue.done": false,
+      "event.temple_route.done": false,
+      "chapter.temple_trail.done": false,
+      "event.harbor_arrival.done": false,
+      "event.ajiman_contact.done": false,
+      "chapter.biling_harbor.done": false,
+      "event.merfolk_pact.done": false,
+      "event.ruins_explored.done": false,
+      "chapter.undersea_ruins.done": false,
+      "event.expedition_choice.done": false
+    },
+    "events": [
+      {
+        "id": "liuchao.southsea.event.caravan_rescued",
+        "name": "山口危局",
+        "description": "玩家协助商队处理瘴气、失踪人员或突发袭击，取得继续深入南荒的基本条件。",
+        "completion": [{ "path": "flags.event.caravan_rescued.done", "operator": "eq", "value": true }],
+        "relatedCharacterIds": ["liuchao.southsea.character.cheng_zongyang", "liuchao.southsea.character.ning_yu"],
+        "relatedFactionIds": ["liuchao.southsea.faction.panjiang_caravan"],
+        "locationId": "liuchao.southsea.location.jungle_pass"
+      },
+      {
+        "id": "liuchao.southsea.event.village_trust",
+        "name": "花苗寨约",
+        "description": "玩家通过尊重寨规、交换药物或解决地方纠纷，争取花苗向导与安全道路。",
+        "completion": [{ "path": "flags.event.village_trust.done", "operator": "eq", "value": true }],
+        "relatedCharacterIds": ["liuchao.southsea.character.miao_guide"],
+        "relatedFactionIds": ["liuchao.southsea.faction.flower_miao"],
+        "locationId": "liuchao.southsea.location.flower_village"
+      },
+      {
+        "id": "liuchao.southsea.event.xiaozi_clue",
+        "name": "紫眸留下的线索",
+        "description": "小紫留下的药粉、暗记或误导指向黑魔海相关活动，玩家需要判断哪些线索可信。",
+        "completion": [{ "path": "flags.event.xiaozi_clue.done", "operator": "eq", "value": true }],
+        "relatedCharacterIds": ["liuchao.southsea.character.xiao_zi"],
+        "relatedFactionIds": ["liuchao.southsea.faction.black_demon_sea"],
+        "locationId": "liuchao.southsea.location.flower_village"
+      },
+      {
+        "id": "liuchao.southsea.event.temple_route",
+        "name": "神殿外环",
+        "description": "队伍依据地形、潮图和地方记忆找到海王神殿外环，避开不能以蛮力解决的旧机关。",
+        "conditions": [{ "path": "flags.event.xiaozi_clue.done", "operator": "eq", "value": true }],
+        "completion": [{ "path": "flags.event.temple_route.done", "operator": "eq", "value": true }],
+        "relatedCharacterIds": ["liuchao.southsea.character.cheng_zongyang", "liuchao.southsea.character.ning_yu", "liuchao.southsea.character.xiao_zi"],
+        "locationId": "liuchao.southsea.location.temple_approach"
+      },
+      {
+        "id": "liuchao.southsea.event.harbor_arrival",
+        "name": "抵达碧鲮海湾",
+        "description": "玩家随队进入碧鲮海湾，在海商、舞乐和鲛人传闻中重建补给与情报网络。",
+        "completion": [{ "path": "flags.event.harbor_arrival.done", "operator": "eq", "value": true }],
+        "relatedCharacterIds": ["liuchao.southsea.character.cheng_zongyang", "liuchao.southsea.character.ajiman_bana"],
+        "relatedFactionIds": ["liuchao.southsea.faction.biling_harbor"],
+        "locationId": "liuchao.southsea.location.biling_bay"
+      },
+      {
+        "id": "liuchao.southsea.event.ajiman_contact",
+        "name": "天竺来客",
+        "description": "阿姬曼·芭娜以表演和异域见闻提供海湾线索，玩家应以平等交涉争取合作。",
+        "completion": [{ "path": "flags.event.ajiman_contact.done", "operator": "eq", "value": true }],
+        "relatedCharacterIds": ["liuchao.southsea.character.ajiman_bana"],
+        "locationId": "liuchao.southsea.location.biling_bay"
+      },
+      {
+        "id": "liuchao.southsea.event.merfolk_pact",
+        "name": "鲛人旧约",
+        "description": "玩家与鲛人守路者交涉，确认进入水下遗址的代价，以及哪些遗物不得带走。",
+        "completion": [{ "path": "flags.event.merfolk_pact.done", "operator": "eq", "value": true }],
+        "relatedCharacterIds": ["liuchao.southsea.character.merfolk_keeper", "liuchao.southsea.character.xiao_zi"],
+        "relatedFactionIds": ["liuchao.southsea.faction.merfolk"],
+        "locationId": "liuchao.southsea.location.undersea_ruins"
+      },
+      {
+        "id": "liuchao.southsea.event.ruins_explored",
+        "name": "水下遗址",
+        "description": "在旧机关、缺氧与争夺者之间完成一次有限探索，取得信息或宝物而非洗劫整座遗址。",
+        "conditions": [{ "path": "flags.event.merfolk_pact.done", "operator": "eq", "value": true }],
+        "completion": [{ "path": "flags.event.ruins_explored.done", "operator": "eq", "value": true }],
+        "relatedCharacterIds": ["liuchao.southsea.character.cheng_zongyang", "liuchao.southsea.character.ning_yu", "liuchao.southsea.character.merfolk_keeper"],
+        "locationId": "liuchao.southsea.location.undersea_ruins"
+      },
+      {
+        "id": "liuchao.southsea.event.expedition_choice",
+        "name": "海湾前路",
+        "description": "探险告一段落后，玩家决定随盘江商队扩大网络、追查黑魔海线索，或留在海湾经营新的关系。",
+        "completion": [{ "path": "flags.event.expedition_choice.done", "operator": "eq", "value": true }],
+        "relatedCharacterIds": ["liuchao.southsea.character.cheng_zongyang", "liuchao.southsea.character.xiao_zi", "liuchao.southsea.character.ajiman_bana"],
+        "locationId": "liuchao.southsea.location.biling_bay"
+      }
+    ],
+    "chapters": [
+      {
+        "id": "liuchao.southsea.chapter.southern_gate",
+        "title": "南荒山口",
+        "summary": "玩家帮助商队度过入荒危局，并与花苗山寨建立最初信任。",
+        "completion": [{ "path": "flags.chapter.southern_gate.done", "operator": "eq", "value": true }],
+        "eventIds": ["liuchao.southsea.event.caravan_rescued", "liuchao.southsea.event.village_trust"]
+      },
+      {
+        "id": "liuchao.southsea.chapter.temple_trail",
+        "title": "海王遗踪",
+        "summary": "小紫的线索将队伍引向海王神殿外环，真相与误导同时出现。",
+        "activation": [{ "path": "flags.chapter.southern_gate.done", "operator": "eq", "value": true }],
+        "completion": [{ "path": "flags.chapter.temple_trail.done", "operator": "eq", "value": true }],
+        "eventIds": ["liuchao.southsea.event.xiaozi_clue", "liuchao.southsea.event.temple_route"]
+      },
+      {
+        "id": "liuchao.southsea.chapter.biling_harbor",
+        "title": "碧鲮海湾",
+        "summary": "队伍抵达海湾，与阿姬曼·芭娜及当地商港建立联系。",
+        "activation": [{ "path": "flags.chapter.temple_trail.done", "operator": "eq", "value": true }],
+        "completion": [{ "path": "flags.chapter.biling_harbor.done", "operator": "eq", "value": true }],
+        "eventIds": ["liuchao.southsea.event.harbor_arrival", "liuchao.southsea.event.ajiman_contact"]
+      },
+      {
+        "id": "liuchao.southsea.chapter.undersea_ruins",
+        "title": "鲛人旧路",
+        "summary": "玩家通过鲛人旧约进入水下遗址，完成一次受约束的探索。",
+        "activation": [{ "path": "flags.chapter.biling_harbor.done", "operator": "eq", "value": true }],
+        "completion": [{ "path": "flags.chapter.undersea_ruins.done", "operator": "eq", "value": true }],
+        "eventIds": ["liuchao.southsea.event.merfolk_pact", "liuchao.southsea.event.ruins_explored"]
+      },
+      {
+        "id": "liuchao.southsea.chapter.seaward_road",
+        "title": "海湾前路",
+        "summary": "南荒远行形成新的关系与线索，玩家选择下一段道路。",
+        "activation": [{ "path": "flags.chapter.undersea_ruins.done", "operator": "eq", "value": true }],
+        "eventIds": ["liuchao.southsea.event.expedition_choice"]
+      }
+    ]
+  },
+  "rules": {
+    "mode": "strict",
+    "lockedFields": [
+      "canon.factions.*.name",
+      "canon.locations.*.name",
+      "canon.characters.*.name",
+      "content.skills.*.name",
+      "content.techniques.*.name",
+      "content.items.*.name"
+    ],
+    "contentAccess": [
+      {
+        "contentId": "liuchao.southsea.skill.death_root",
+        "policy": "exclusive",
+        "allowedCharacterIds": ["liuchao.southsea.character.cheng_zongyang"],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "liuchao.southsea.skill.poison_lore",
+        "policy": "restricted",
+        "allowedCharacterIds": ["liuchao.southsea.character.xiao_zi"],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "liuchao.southsea.technique.nine_yang",
+        "policy": "restricted",
+        "allowedCharacterIds": ["liuchao.southsea.character.cheng_zongyang"],
+        "playerAllowed": false
+      }
+    ]
+  }
+}

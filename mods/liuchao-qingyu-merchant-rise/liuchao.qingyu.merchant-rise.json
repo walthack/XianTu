@@ -1,0 +1,358 @@
+{
+  "schema": "xiantu.scenario-mod",
+  "version": 1,
+  "manifest": {
+    "id": "liuchao.qingyu.merchant-rise",
+    "name": "六朝清羽记·九阳商路",
+    "version": "1.0.0",
+    "author": "XianTu Scenario Team",
+    "description": "以《六朝清羽记》第12至24章的身份翻转阶段为蓝本：玩家在程宗扬沦为奴隶、结识乐明珠并谋求商人立足的时期进入故事。"
+  },
+  "world": {
+    "name": "六朝并置世界",
+    "era": "程宗扬由奴隶转向商人时期",
+    "background": "草原战事之后，异乡人在六朝社会的身份并未因此安稳。奴籍、商路、赌局与地方势力交织，程宗扬必须在受制于人的处境中保存性命，借助修炼传承和商业判断争取自由。",
+    "specialRules": [
+      "军队、官署、商旅、宗门与奴籍制度并存，不把所有组织改写为修仙宗门",
+      "修炼使用九阳神功和六朝九境语汇，不自动改写为练气、金丹、元婴体系",
+      "程宗扬的生死根为唯一异能，不得转移给玩家或其他人物",
+      "玩家可以帮助或阻碍局部计划，但程宗扬从受制身份走向商人立足是本阶段主轴",
+      "感情与成人议题只作为人物关系和社会结构处理，不生成露骨描写"
+    ],
+    "continents": [
+      {
+        "id": "liuchao.rise.region.six_dynasties",
+        "name": "六朝诸国",
+        "description": "诸国、宗门、商会与军镇并立的东方世界。"
+      }
+    ]
+  },
+  "canon": {
+    "factions": [
+      {
+        "id": "liuchao.rise.faction.taiyi",
+        "name": "太乙真宗",
+        "description": "以九阳神功为镇教绝学的道门大宗，王哲留下的传承持续影响程宗扬。",
+        "type": "道门宗派"
+      },
+      {
+        "id": "liuchao.rise.faction.guangming",
+        "name": "光明观堂",
+        "description": "以医术与辅助法门传世的宗门，乐明珠为其弟子。",
+        "type": "医门宗派"
+      },
+      {
+        "id": "liuchao.rise.faction.merchant_network",
+        "name": "六朝商旅网络",
+        "description": "由行商、牙人、货栈和地方关系组成的松散商业网络。",
+        "type": "商业组织"
+      },
+      {
+        "id": "liuchao.rise.faction.local_brokers",
+        "name": "地方牙行",
+        "description": "掌握奴籍、赎身、货物流转和消息渠道的地方中介势力。",
+        "type": "地方组织"
+      }
+    ],
+    "locations": [
+      {
+        "id": "liuchao.rise.location.caravan_yard",
+        "name": "商队货栈",
+        "description": "人员与货物一并登记的封闭货栈，也是受制者被看管的起点。",
+        "type": "货栈",
+        "continentId": "liuchao.rise.region.six_dynasties",
+        "factionId": "liuchao.rise.faction.local_brokers"
+      },
+      {
+        "id": "liuchao.rise.location.market",
+        "name": "州城西市",
+        "description": "货品、消息、契券和赌局混杂的市集，身份与信用都可以成为筹码。",
+        "type": "市集",
+        "continentId": "liuchao.rise.region.six_dynasties",
+        "factionId": "liuchao.rise.faction.merchant_network"
+      },
+      {
+        "id": "liuchao.rise.location.clinic",
+        "name": "光明观堂药庐",
+        "description": "乐明珠暂驻的诊治处，可疗伤，也会引来对异乡人修炼根基的关注。",
+        "type": "药庐",
+        "continentId": "liuchao.rise.region.six_dynasties",
+        "factionId": "liuchao.rise.faction.guangming"
+      },
+      {
+        "id": "liuchao.rise.location.first_shop",
+        "name": "盘江小铺",
+        "description": "一处不起眼的临街铺面，可成为程宗扬建立独立商业身份的第一块落脚地。",
+        "type": "商铺",
+        "continentId": "liuchao.rise.region.six_dynasties",
+        "factionId": "liuchao.rise.faction.merchant_network"
+      }
+    ],
+    "characters": [
+      {
+        "id": "liuchao.rise.character.cheng_zongyang",
+        "name": "程宗扬",
+        "description": "来自现代的异界来客，务实精明，正从受制身份中寻找恢复自由并进入商路的机会。",
+        "role": "正典异界来客与新晋商人",
+        "gender": "男",
+        "locationId": "liuchao.rise.location.caravan_yard",
+        "skillIds": ["liuchao.rise.skill.death_root", "liuchao.rise.skill.trade_judgment"],
+        "techniqueIds": ["liuchao.rise.technique.nine_yang"]
+      },
+      {
+        "id": "liuchao.rise.character.le_mingzhu",
+        "name": "乐明珠",
+        "description": "光明观堂弟子，善良而有医疗能力，在程宗扬受伤和身份低微时提供帮助。",
+        "role": "医者与关键盟友",
+        "gender": "女",
+        "affiliations": [
+          {
+            "factionId": "liuchao.rise.faction.guangming",
+            "category": "sect",
+            "role": "弟子"
+          }
+        ],
+        "locationId": "liuchao.rise.location.clinic",
+        "skillIds": ["liuchao.rise.skill.healing"]
+      },
+      {
+        "id": "liuchao.rise.character.wang_zhe",
+        "name": "王哲",
+        "description": "太乙真宗掌教，其传功与嘱托以记忆和传承形式影响本阶段。",
+        "role": "传承源头",
+        "gender": "男",
+        "realm": "第八级至臻境",
+        "affiliations": [
+          {
+            "factionId": "liuchao.rise.faction.taiyi",
+            "category": "sect",
+            "role": "掌教"
+          }
+        ],
+        "locationId": "liuchao.rise.location.caravan_yard",
+        "techniqueIds": ["liuchao.rise.technique.nine_yang"]
+      },
+      {
+        "id": "liuchao.rise.character.broker_hu",
+        "name": "胡牙人",
+        "description": "掌握契券与货栈规矩的地方中介，代表本阶段的身份束缚与交易门槛。",
+        "role": "地方牙人",
+        "gender": "男",
+        "affiliations": [
+          {
+            "factionId": "liuchao.rise.faction.local_brokers",
+            "category": "organization",
+            "role": "牙人"
+          }
+        ],
+        "locationId": "liuchao.rise.location.caravan_yard"
+      },
+      {
+        "id": "liuchao.rise.character.shopkeeper_qi",
+        "name": "祁掌柜",
+        "description": "熟悉州城市价与商队信用的行商，可成为合作人，也会谨慎评估异乡人的价值。",
+        "role": "商路引路人",
+        "gender": "男",
+        "affiliations": [
+          {
+            "factionId": "liuchao.rise.faction.merchant_network",
+            "category": "organization",
+            "role": "行商掌柜"
+          }
+        ],
+        "locationId": "liuchao.rise.location.market",
+        "skillIds": ["liuchao.rise.skill.trade_judgment"]
+      }
+    ]
+  },
+  "content": {
+    "skills": [
+      {
+        "id": "liuchao.rise.skill.death_root",
+        "name": "生死根",
+        "description": "感应死亡气息并将部分死气转化为真阳的唯一异能。",
+        "type": "唯一异能",
+        "effects": ["感应附近死亡", "吸收死气", "死气杂质可能污染气轮"]
+      },
+      {
+        "id": "liuchao.rise.skill.healing",
+        "name": "光明医术",
+        "description": "光明观堂传承的诊治与疗伤手段。",
+        "type": "医术",
+        "effects": ["诊治伤势", "稳定经络"]
+      },
+      {
+        "id": "liuchao.rise.skill.trade_judgment",
+        "name": "商情判断",
+        "description": "通过价格、供需、信用与谈判判断交易机会的能力。",
+        "type": "商业能力",
+        "effects": ["识别价差", "评估信用", "提高谈判筹码"]
+      }
+    ],
+    "techniques": [
+      {
+        "id": "liuchao.rise.technique.nine_yang",
+        "name": "九阳神功",
+        "description": "太乙真宗镇教功法，以一阳至九阳逐步精炼真气。",
+        "grade": "镇教绝学"
+      }
+    ],
+    "items": [
+      {
+        "id": "liuchao.rise.item.bond_contract",
+        "name": "奴籍契券",
+        "description": "决定受制者法律与交易身份的契券，是本阶段必须解除或翻转的结构性障碍。",
+        "type": "other",
+        "grade": "剧情关键物"
+      },
+      {
+        "id": "liuchao.rise.item.trade_ledger",
+        "name": "商路账册",
+        "description": "记录货价、债务和合作人的账册，象征独立商业身份的建立。",
+        "type": "other",
+        "grade": "商用器物"
+      }
+    ]
+  },
+  "scenario": {
+    "opening": {
+      "text": "玩家在商队货栈醒来或抵达此地，发现一批人员与货物正在重新登记。程宗扬身负太乙传承，却被奴籍和契券束缚；乐明珠正设法为伤者诊治。玩家必须决定先保全自己，还是介入这场身份与交易的角力。",
+      "playerRole": "进入州城商路的自由旅人、受制者或临时护卫",
+      "locationId": "liuchao.rise.location.caravan_yard",
+      "featuredCharacterIds": ["liuchao.rise.character.cheng_zongyang", "liuchao.rise.character.le_mingzhu"]
+    },
+    "initialFlags": {
+      "event.assess_bonds.done": false,
+      "event.clinic_contact.done": false,
+      "chapter.bound_status.done": false,
+      "event.market_test.done": false,
+      "event.scheme_exposed.done": false,
+      "chapter.market_games.done": false,
+      "event.contract_reversed.done": false,
+      "event.first_partnership.done": false,
+      "chapter.freedom_bargain.done": false,
+      "event.shop_opened.done": false
+    },
+    "events": [
+      {
+        "id": "liuchao.rise.event.assess_bonds",
+        "name": "契券与身份",
+        "description": "玩家查明货栈中的奴籍、债务和看管规则，确认程宗扬当前受制的具体方式。",
+        "completion": [{ "path": "flags.event.assess_bonds.done", "operator": "eq", "value": true }],
+        "relatedCharacterIds": ["liuchao.rise.character.cheng_zongyang", "liuchao.rise.character.broker_hu"],
+        "relatedFactionIds": ["liuchao.rise.faction.local_brokers"],
+        "locationId": "liuchao.rise.location.caravan_yard"
+      },
+      {
+        "id": "liuchao.rise.event.clinic_contact",
+        "name": "药庐相助",
+        "description": "乐明珠为伤者诊治，玩家由此接触光明观堂，并察觉程宗扬修炼根基中的异常。",
+        "completion": [{ "path": "flags.event.clinic_contact.done", "operator": "eq", "value": true }],
+        "relatedCharacterIds": ["liuchao.rise.character.le_mingzhu", "liuchao.rise.character.cheng_zongyang"],
+        "relatedFactionIds": ["liuchao.rise.faction.guangming"],
+        "locationId": "liuchao.rise.location.clinic"
+      },
+      {
+        "id": "liuchao.rise.event.market_test",
+        "name": "西市试价",
+        "description": "玩家和程宗扬用有限筹码判断货价与信用，寻找摆脱单纯被支配地位的第一笔交易。",
+        "completion": [{ "path": "flags.event.market_test.done", "operator": "eq", "value": true }],
+        "relatedCharacterIds": ["liuchao.rise.character.cheng_zongyang", "liuchao.rise.character.shopkeeper_qi"],
+        "relatedFactionIds": ["liuchao.rise.faction.merchant_network"],
+        "locationId": "liuchao.rise.location.market"
+      },
+      {
+        "id": "liuchao.rise.event.scheme_exposed",
+        "name": "赌局与圈套",
+        "description": "一场看似有利的赌局或交易暗藏圈套，玩家需要识别账目、规则或人情中的破绽。",
+        "conditions": [{ "path": "flags.event.market_test.done", "operator": "eq", "value": true }],
+        "completion": [{ "path": "flags.event.scheme_exposed.done", "operator": "eq", "value": true }],
+        "relatedCharacterIds": ["liuchao.rise.character.broker_hu", "liuchao.rise.character.shopkeeper_qi"],
+        "locationId": "liuchao.rise.location.market"
+      },
+      {
+        "id": "liuchao.rise.event.contract_reversed",
+        "name": "赎身与翻契",
+        "description": "玩家参与谈判、取证或筹资，使决定程宗扬身份的契券被赎回、废止或依法翻转。",
+        "completion": [{ "path": "flags.event.contract_reversed.done", "operator": "eq", "value": true }],
+        "relatedCharacterIds": ["liuchao.rise.character.cheng_zongyang", "liuchao.rise.character.broker_hu", "liuchao.rise.character.le_mingzhu"],
+        "locationId": "liuchao.rise.location.caravan_yard"
+      },
+      {
+        "id": "liuchao.rise.event.first_partnership",
+        "name": "第一份合伙",
+        "description": "程宗扬以商业判断争取一名合作人；玩家可以促成条件、保留退路或选择另一条立足方式。",
+        "conditions": [{ "path": "flags.event.contract_reversed.done", "operator": "eq", "value": true }],
+        "completion": [{ "path": "flags.event.first_partnership.done", "operator": "eq", "value": true }],
+        "relatedCharacterIds": ["liuchao.rise.character.cheng_zongyang", "liuchao.rise.character.shopkeeper_qi"],
+        "relatedFactionIds": ["liuchao.rise.faction.merchant_network"],
+        "locationId": "liuchao.rise.location.market"
+      },
+      {
+        "id": "liuchao.rise.event.shop_opened",
+        "name": "盘江初业",
+        "description": "一处小铺或稳定商路开始运作，程宗扬由受制者转为能够承担信用与风险的商人。玩家决定是否继续同行。",
+        "completion": [{ "path": "flags.event.shop_opened.done", "operator": "eq", "value": true }],
+        "relatedCharacterIds": ["liuchao.rise.character.cheng_zongyang", "liuchao.rise.character.le_mingzhu", "liuchao.rise.character.shopkeeper_qi"],
+        "locationId": "liuchao.rise.location.first_shop"
+      }
+    ],
+    "chapters": [
+      {
+        "id": "liuchao.rise.chapter.bound_status",
+        "title": "受制之身",
+        "summary": "玩家进入货栈，理解奴籍和伤势带来的双重困境。",
+        "completion": [{ "path": "flags.chapter.bound_status.done", "operator": "eq", "value": true }],
+        "eventIds": ["liuchao.rise.event.assess_bonds", "liuchao.rise.event.clinic_contact"]
+      },
+      {
+        "id": "liuchao.rise.chapter.market_games",
+        "title": "西市局中局",
+        "summary": "程宗扬尝试用商情判断获取筹码，却必须先穿过交易与赌局中的圈套。",
+        "activation": [{ "path": "flags.chapter.bound_status.done", "operator": "eq", "value": true }],
+        "completion": [{ "path": "flags.chapter.market_games.done", "operator": "eq", "value": true }],
+        "eventIds": ["liuchao.rise.event.market_test", "liuchao.rise.event.scheme_exposed"]
+      },
+      {
+        "id": "liuchao.rise.chapter.freedom_bargain",
+        "title": "自由的价码",
+        "summary": "玩家帮助处理契券并建立第一份可信的商业合作。",
+        "activation": [{ "path": "flags.chapter.market_games.done", "operator": "eq", "value": true }],
+        "completion": [{ "path": "flags.chapter.freedom_bargain.done", "operator": "eq", "value": true }],
+        "eventIds": ["liuchao.rise.event.contract_reversed", "liuchao.rise.event.first_partnership"]
+      },
+      {
+        "id": "liuchao.rise.chapter.first_business",
+        "title": "商路初成",
+        "summary": "程宗扬获得独立立足点，玩家选择加入盘江事业或另寻道路。",
+        "activation": [{ "path": "flags.chapter.freedom_bargain.done", "operator": "eq", "value": true }],
+        "eventIds": ["liuchao.rise.event.shop_opened"]
+      }
+    ]
+  },
+  "rules": {
+    "mode": "strict",
+    "lockedFields": [
+      "canon.factions.*.name",
+      "canon.locations.*.name",
+      "canon.characters.*.name",
+      "content.skills.*.name",
+      "content.techniques.*.name",
+      "content.items.*.name"
+    ],
+    "contentAccess": [
+      {
+        "contentId": "liuchao.rise.skill.death_root",
+        "policy": "exclusive",
+        "allowedCharacterIds": ["liuchao.rise.character.cheng_zongyang"],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "liuchao.rise.technique.nine_yang",
+        "policy": "restricted",
+        "allowedCharacterIds": ["liuchao.rise.character.cheng_zongyang", "liuchao.rise.character.wang_zhe"],
+        "playerAllowed": false
+      }
+    ]
+  }
+}

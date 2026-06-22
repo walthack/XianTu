@@ -5,6 +5,11 @@ import test from 'node:test';
 import { loadTs } from './loadTs.mjs';
 
 const modUrl = new URL('../mods/liuchao-qingyu-prologue/liuchao.qingyu.grassland.json', import.meta.url);
+const stageModUrls = [
+  modUrl,
+  new URL('../mods/liuchao-qingyu-merchant-rise/liuchao.qingyu.merchant-rise.json', import.meta.url),
+  new URL('../mods/liuchao-qingyu-southsea/liuchao.qingyu.southsea.json', import.meta.url),
+];
 
 async function loadLiuchaoMod() {
   const { parseScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
@@ -18,6 +23,27 @@ function createMemoryStorage() {
     async save(next) { library = structuredClone(next); },
   };
 }
+
+test('all three Qingyu stage packages are importable and statically playable', async () => {
+  const { parseScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
+  const { analyzeScenarioMod } = await loadTs('../src/modules/scenarioMods/analyzer.ts');
+  const ids = [];
+
+  for (const url of stageModUrls) {
+    const mod = parseScenarioMod(JSON.parse(await readFile(url, 'utf8')));
+    const analysis = analyzeScenarioMod(mod);
+    ids.push(mod.manifest.id);
+    assert.equal(mod.rules.mode, 'strict');
+    assert.equal(analysis.valid, true);
+    assert.deepEqual(analysis.issues, []);
+  }
+
+  assert.deepEqual(ids, [
+    'liuchao.qingyu.grassland',
+    'liuchao.qingyu.merchant-rise',
+    'liuchao.qingyu.southsea',
+  ]);
+});
 
 test('PR8 package imports through the real Mod manager', async () => {
   const { ScenarioModManager } = await loadTs('../src/modules/scenarioMods/manager.ts');
