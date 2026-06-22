@@ -49,6 +49,9 @@
         "id": "character.chengzongyang",
         "name": "程宗扬",
         "role": "关键人物",
+        "affiliations": [
+          { "factionId": "faction.taiyi", "category": "sect", "role": "弟子" }
+        ],
         "locationId": "location.jiankang",
         "skillIds": ["skill.thunderblade"],
         "itemIds": ["item.thunderblade"]

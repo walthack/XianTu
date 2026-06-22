@@ -107,6 +107,39 @@ test('playerAllowed does not bypass a different mapped canonical identity', asyn
   assert.match(result.rejected[0].reason, /受限正典内容/);
 });
 
+test('character affiliation guard permits canonical membership and rejects another sect', async () => {
+  const { guardScenarioModCommands } = await loadTs('../src/modules/scenarioMods/canonGuard.ts');
+  const save = await buildScenarioSave();
+  const commands = [
+    { action: 'set', key: '社交.关系.程宗扬.宗门', value: '太乙真宗' },
+    { action: 'set', key: '社交.关系.程宗扬.宗门', value: '青云宗' },
+    { action: 'push', key: '社交.宗门.宗门成员.青云宗', value: '程宗扬' },
+    { action: 'set', key: '社交.宗门.宗门成员', value: { 青云宗: ['程宗扬'] } },
+    { action: 'push', key: '社交.关系.程宗扬.记忆', value: '曾与青云宗弟子交手' },
+  ];
+
+  const result = guardScenarioModCommands(save, commands);
+
+  assert.deepEqual(result.accepted, [commands[0], commands[4]]);
+  assert.deepEqual(result.rejected.map(item => item.command), commands.slice(1, 4));
+  assert.ok(result.rejected.every(item => item.reason.includes('程宗扬')));
+});
+
+test('legacy factionId infers its affiliation category from faction type', async () => {
+  const { guardScenarioModCommands } = await loadTs('../src/modules/scenarioMods/canonGuard.ts');
+  const save = await buildScenarioSave(mod => {
+    mod.canon.factions[0].type = '道门宗派';
+    mod.canon.characters[0].factionId = 'faction.taiyi';
+    delete mod.canon.characters[0].affiliations;
+  });
+  const command = { action: 'set', key: '社交.关系.程宗扬.宗门', value: '青云宗' };
+
+  const result = guardScenarioModCommands(save, [command]);
+
+  assert.deepEqual(result.accepted, []);
+  assert.match(result.rejected[0].reason, /太乙真宗/);
+});
+
 test('canon prompt exposes the active Mod identity, names, and locks', async () => {
   const { buildScenarioCanonPrompt } = await loadTs('../src/modules/scenarioMods/canonGuard.ts');
   const save = await buildScenarioSave();
@@ -119,6 +152,7 @@ test('canon prompt exposes the active Mod identity, names, and locks', async () 
   assert.match(prompt, /雷刀诀/);
   assert.match(prompt, /雷刀诀：exclusive；允许持有者：程宗扬/);
   assert.match(prompt, /玩家正典身份：独立玩家/);
+  assert.match(prompt, /程宗扬：sect → 太乙真宗/);
   assert.match(prompt, /canon\.characters\.\*\.name/);
   assert.match(prompt, /不得生成同 ID 或同名替代品/);
   assert.match(prompt, /不得重命名、删除或覆盖锁定正典/);

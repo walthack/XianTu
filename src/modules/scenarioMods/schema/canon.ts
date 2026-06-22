@@ -15,6 +15,15 @@ export interface ScenarioModLocation {
   factionId?: string;
 }
 
+export type ScenarioModAffiliationCategory = 'sect' | 'military' | 'state' | 'clan' | 'organization';
+
+export interface ScenarioModCharacterAffiliation {
+  factionId: string;
+  category: ScenarioModAffiliationCategory;
+  role?: string;
+  exclusive?: boolean;
+}
+
 export interface ScenarioModCharacter {
   id: string;
   name: string;
@@ -23,6 +32,7 @@ export interface ScenarioModCharacter {
   gender?: string;
   realm?: string;
   factionId?: string;
+  affiliations?: ScenarioModCharacterAffiliation[];
   locationId?: string;
   skillIds?: string[];
   techniqueIds?: string[];

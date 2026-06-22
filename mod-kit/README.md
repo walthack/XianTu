@@ -27,3 +27,5 @@ JSON Schema 负责字段形状；CLI 使用仙途自身 validator，额外检查
 宗派、地点、人物、技能、功法和武器等物品均可导入。Strict 以 Mod 为完整权威来源；Expand 也以 Mod 已声明字段为准，AI 只补未声明字段和非冲突内容。技能、功法和物品是世界正典定义，不会自动发放给玩家，完整边界见 [`AGENT_GUIDE.md`](./AGENT_GUIDE.md#内容边界与所有权)。
 
 原作唯一能力或限定传承使用 `rules.contentAccess` 声明 `exclusive` / `restricted` 持有者；玩家扮演正典人物时使用 `scenario.opening.playerCharacterId`。完整规则见 [`AGENT_GUIDE.md`](./AGENT_GUIDE.md#正典身份与专属内容)。
+
+人物宗派、军队、国家和家族身份使用 `canon.characters[].affiliations` 分类声明，同类别默认排他，详见 [`AGENT_GUIDE.md`](./AGENT_GUIDE.md#人物宗派与势力归属)。

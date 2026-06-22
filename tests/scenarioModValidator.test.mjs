@@ -67,6 +67,21 @@ test('validates content access identities and content references', async () => {
   assert.ok(result.issues.some(issue => issue.path === 'rules.contentAccess[0].allowedCharacterIds[0]' && issue.code === 'missing_reference'));
 });
 
+test('validates categorized character affiliations and faction references', async () => {
+  const { validateScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
+  const fixture = await loadFixture();
+  fixture.canon.characters[0].affiliations.push({
+    factionId: 'faction.missing',
+    category: 'unknown_category',
+  });
+
+  const result = validateScenarioMod(fixture);
+
+  assert.equal(result.valid, false);
+  assert.ok(result.issues.some(issue => issue.path === 'canon.characters[0].affiliations[1].category' && issue.code === 'invalid_enum'));
+  assert.ok(result.issues.some(issue => issue.path === 'canon.characters[0].affiliations[1].factionId' && issue.code === 'missing_reference'));
+});
+
 test('exclusive content resolves to one canonical identity including mapped players', async () => {
   const { validateScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
   const fixture = await loadFixture();

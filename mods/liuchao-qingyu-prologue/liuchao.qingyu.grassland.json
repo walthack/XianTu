@@ -124,7 +124,18 @@
         "role": "师帅与宗门掌教",
         "gender": "男",
         "realm": "第八级至臻境",
-        "factionId": "liuchao.faction.left_guard",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.taiyi",
+            "category": "sect",
+            "role": "掌教"
+          },
+          {
+            "factionId": "liuchao.faction.left_guard",
+            "category": "military",
+            "role": "师帅"
+          }
+        ],
         "locationId": "liuchao.location.left_camp",
         "skillIds": ["liuchao.skill.left_guard_formation", "liuchao.skill.true_yang_guidance"],
         "techniqueIds": ["liuchao.technique.nine_yang"],
@@ -136,7 +147,9 @@
         "description": "左武军中的年轻武者，与岳武穆旧部关系密切，性情坚毅，身负寒毒旧伤。",
         "role": "军中武者",
         "gender": "女",
-        "factionId": "liuchao.faction.left_guard",
+        "affiliations": [
+          { "factionId": "liuchao.faction.left_guard", "category": "military", "role": "军中武者" }
+        ],
         "locationId": "liuchao.location.left_camp"
       },
       {
@@ -145,7 +158,9 @@
         "description": "随王哲出征的文士，熟悉军情、地理与六朝世界格局。",
         "role": "军中文士",
         "gender": "男",
-        "factionId": "liuchao.faction.left_guard",
+        "affiliations": [
+          { "factionId": "liuchao.faction.left_guard", "category": "military", "role": "军中文士" }
+        ],
         "locationId": "liuchao.location.left_camp"
       },
       {
@@ -154,7 +169,9 @@
         "description": "左武军第一军团天武营主将，负责在正面战场统率军阵。",
         "role": "天武营主将",
         "gender": "男",
-        "factionId": "liuchao.faction.left_guard",
+        "affiliations": [
+          { "factionId": "liuchao.faction.left_guard", "category": "military", "role": "天武营主将" }
+        ],
         "locationId": "liuchao.location.grass_battlefield",
         "skillIds": ["liuchao.skill.left_guard_formation"]
       }

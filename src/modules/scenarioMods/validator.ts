@@ -110,6 +110,7 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
       optionalString(entity.gender, `${entity.__path}.gender`, add);
       optionalString(entity.realm, `${entity.__path}.realm`, add);
       optionalId(entity.factionId, `${entity.__path}.factionId`, add);
+      validateCharacterAffiliations(entity.affiliations, `${entity.__path}.affiliations`, add);
       optionalId(entity.locationId, `${entity.__path}.locationId`, add);
       validateIdArray(entity.skillIds, `${entity.__path}.skillIds`, add);
       validateIdArray(entity.techniqueIds, `${entity.__path}.techniqueIds`, add);
@@ -257,6 +258,9 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
     });
     forEachRecord(canon.characters, 'canon.characters', (entity, path) => {
       checkRef(entity.factionId, factionIds, `${path}.factionId`, 'faction', add);
+      forEachRecord(entity.affiliations, `${path}.affiliations`, (affiliation, affiliationPath) => {
+        checkRef(affiliation.factionId, factionIds, `${affiliationPath}.factionId`, 'faction', add);
+      });
       checkRef(entity.locationId, locationIds, `${path}.locationId`, 'location', add);
       checkRefs(entity.skillIds, skillIds, `${path}.skillIds`, 'skill', add);
       checkRefs(entity.techniqueIds, techniqueIds, `${path}.techniqueIds`, 'technique', add);
@@ -347,6 +351,33 @@ function validateIdArray(value: unknown, path: string, add: AddIssue): void {
     return;
   }
   value.forEach((entry, index) => validateId(entry, `${path}[${index}]`, add));
+}
+
+function validateCharacterAffiliations(value: unknown, path: string, add: AddIssue): void {
+  if (value === undefined) return;
+  if (!Array.isArray(value)) {
+    add(path, 'invalid_type', `${path} must be an array.`);
+    return;
+  }
+  const entries = new Set<string>();
+  value.forEach((entry, index) => {
+    const itemPath = `${path}[${index}]`;
+    if (!isRecord(entry)) {
+      add(itemPath, 'invalid_type', `${itemPath} must be an object.`);
+      return;
+    }
+    validateId(entry.factionId, `${itemPath}.factionId`, add);
+    if (!['sect', 'military', 'state', 'clan', 'organization'].includes(String(entry.category))) {
+      add(`${itemPath}.category`, 'invalid_enum', 'Affiliation category is invalid.');
+    }
+    optionalString(entry.role, `${itemPath}.role`, add);
+    if (entry.exclusive !== undefined && typeof entry.exclusive !== 'boolean') {
+      add(`${itemPath}.exclusive`, 'invalid_type', 'exclusive must be a boolean.');
+    }
+    const identity = `${String(entry.category)}:${String(entry.factionId)}`;
+    if (entries.has(identity)) add(itemPath, 'duplicate_affiliation', `Duplicate affiliation "${identity}".`);
+    entries.add(identity);
+  });
 }
 
 function validateEntityArray(

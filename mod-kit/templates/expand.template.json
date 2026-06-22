@@ -40,7 +40,13 @@
         "name": "闻九州",
         "description": "掌握各地消息的商盟执事。",
         "role": "情报人物",
-        "factionId": "example.expand.faction.caravan",
+        "affiliations": [
+          {
+            "factionId": "example.expand.faction.caravan",
+            "category": "organization",
+            "role": "执事"
+          }
+        ],
         "locationId": "example.expand.location.market"
       }
     ]

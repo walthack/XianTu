@@ -3,6 +3,7 @@ import type { SaveData } from '@/types/game';
 import type {
   ScenarioContentAccessRule,
   ScenarioModCharacter,
+  ScenarioModCharacterAffiliation,
   ScenarioModFaction,
   ScenarioModItem,
   ScenarioModLocation,
@@ -178,6 +179,112 @@ function findContentAccessViolation(
   return null;
 }
 
+function getCharacterAffiliations(
+  character: ScenarioModCharacter,
+  factions: ScenarioModFaction[] = [],
+): ScenarioModCharacterAffiliation[] {
+  const affiliations = [...(character.affiliations || [])];
+  if (character.factionId && !affiliations.some(item => item.factionId === character.factionId)) {
+    const faction = factions.find(item => item.id === character.factionId);
+    affiliations.push({
+      factionId: character.factionId,
+      category: faction ? affiliationCategoryForFaction(faction) : 'organization',
+      exclusive: true,
+    });
+  }
+  return affiliations;
+}
+
+function affiliationCategoryForPath(key: string): ScenarioModCharacterAffiliation['category'] | null {
+  if (key.includes('宗门') || key.includes('宗派')) return 'sect';
+  if (key.includes('军团') || key.includes('军籍')) return 'military';
+  if (key.includes('国家') || key.includes('朝廷')) return 'state';
+  if (key.includes('家族') || key.includes('氏族')) return 'clan';
+  if (key.includes('势力归属') || key.includes('所属势力') || key.includes('阵营')) return 'organization';
+  return null;
+}
+
+function affiliationCategoryForFaction(faction: ScenarioModFaction): ScenarioModCharacterAffiliation['category'] {
+  const type = faction.type || '';
+  if (/[宗门派教]/.test(type)) return 'sect';
+  if (/[军兵营]/.test(type)) return 'military';
+  if (/[国朝廷]/.test(type)) return 'state';
+  if (/[族家]/.test(type)) return 'clan';
+  return 'organization';
+}
+
+function findCharacterAffiliationViolation(
+  runtime: ScenarioRuntimeState,
+  command: CommandLike,
+  key: string,
+): string | null {
+  const target = getCommandTargetIdentity(runtime, key);
+  if (!target) return null;
+  const character = (runtime.canon?.characters || []).find(item => item.id === target.characterId);
+  if (!character) return null;
+  const factions = runtime.canon?.factions || [];
+  const affiliations = getCharacterAffiliations(character, factions);
+  if (affiliations.length === 0) return null;
+
+  const targetCategory = affiliationCategoryForPath(key);
+  const isWholeNpcWrite = key === `社交.关系.${character.name}` || key === '角色';
+  if (!targetCategory && !isWholeNpcWrite) return null;
+
+  let value = command.value;
+  if (isWholeNpcWrite && value && typeof value === 'object' && !Array.isArray(value)) {
+    const record = value as Record<string, unknown>;
+    value = record.势力归属 ?? record.所属势力 ?? record.宗门 ?? record.宗派;
+  }
+  if (typeof value !== 'string' || value.trim() === '') return null;
+
+  const assignedFaction = factions.find(faction => faction.id === value || faction.name === value);
+  const category = targetCategory && targetCategory !== 'organization'
+    ? targetCategory
+    : assignedFaction ? affiliationCategoryForFaction(assignedFaction) : null;
+  const exclusiveAffiliations = affiliations.filter(item => item.exclusive !== false && (!category || item.category === category));
+  if (exclusiveAffiliations.length === 0) return null;
+  if (assignedFaction && exclusiveAffiliations.some(item => item.factionId === assignedFaction.id)) return null;
+
+  const allowedNames = exclusiveAffiliations.map(item =>
+    factions.find(faction => faction.id === item.factionId)?.name || item.factionId,
+  ).join('、');
+  return `正典人物“${character.name}”的${category || '势力'}归属已固定为：${allowedNames}`;
+}
+
+function findSectMembershipViolation(runtime: ScenarioRuntimeState, command: CommandLike, key: string): string | null {
+  const root = '社交.宗门.宗门成员';
+  const factions = runtime.canon?.factions || [];
+  const assignments: Array<{ faction: ScenarioModFaction | undefined; members: unknown }> = [];
+  if (key === root && command.value && typeof command.value === 'object' && !Array.isArray(command.value)) {
+    for (const [factionKey, members] of Object.entries(command.value as Record<string, unknown>)) {
+      assignments.push({ faction: factions.find(item => item.id === factionKey || item.name === factionKey), members });
+    }
+  } else if (key.startsWith(`${root}.`)) {
+    const remainder = key.slice(root.length + 1);
+    const faction = factions.find(item =>
+      remainder === item.id || remainder === item.name || remainder.startsWith(`${item.id}.`) || remainder.startsWith(`${item.name}.`),
+    );
+    assignments.push({ faction, members: command.value });
+  } else {
+    return null;
+  }
+
+  for (const assignment of assignments) {
+    const serialized = JSON.stringify(assignment.members) || '';
+    for (const character of runtime.canon?.characters || []) {
+      if (!serialized.includes(character.id) && !serialized.includes(character.name)) continue;
+      const sects = getCharacterAffiliations(character, factions)
+        .filter(item => item.category === 'sect' && item.exclusive !== false);
+      if (sects.length === 0 || (assignment.faction && sects.some(item => item.factionId === assignment.faction?.id))) continue;
+      const allowedNames = sects.map(item =>
+        factions.find(candidate => candidate.id === item.factionId)?.name || item.factionId,
+      ).join('、');
+      return `正典人物“${character.name}”不得加入其他宗派；固定宗派：${allowedNames}`;
+    }
+  }
+  return null;
+}
+
 export function compileScenarioProtectedPaths(saveData: SaveData): string[] {
   const runtime = getRuntimeState(saveData);
   if (!runtime) return [];
@@ -247,8 +354,11 @@ export function guardScenarioModCommands(saveData: SaveData, commands: unknown[]
     const isAllowedFlagUpdate = action === 'set' && key.startsWith('世界.状态.剧本模组.flags.');
     const protectedPath = key && protectedPaths.find(path => pathsIntersect(key, path));
     const accessViolation = key ? findContentAccessViolation(runtime, command as CommandLike, key) : null;
-    if (accessViolation) {
-      rejected.push({ command, reason: accessViolation });
+    const affiliationViolation = key
+      ? findCharacterAffiliationViolation(runtime, command as CommandLike, key) || findSectMembershipViolation(runtime, command as CommandLike, key)
+      : null;
+    if (accessViolation || affiliationViolation) {
+      rejected.push({ command, reason: accessViolation || affiliationViolation || '' });
     } else if (protectedPath && !isAllowedFlagUpdate) {
       rejected.push({
         command,
@@ -275,6 +385,12 @@ export function buildScenarioCanonPrompt(saveData: SaveData): string {
     if (rule.playerAllowed && !runtime.opening?.playerCharacterId) holders.push('独立玩家');
     return `  - ${entity?.name || rule.contentId}：${rule.policy}；允许持有者：${holders.join('、') || '无'}`;
   });
+  const affiliationRules = (canon.characters || []).flatMap(character =>
+    getCharacterAffiliations(character, canon.factions || []).map(affiliation => {
+      const faction = (canon.factions || []).find(item => item.id === affiliation.factionId);
+      return `  - ${character.name}：${affiliation.category} → ${faction?.name || affiliation.factionId}${affiliation.role ? `（${affiliation.role}）` : ''}${affiliation.exclusive === false ? '（可兼任）' : '（同类排他）'}`;
+    }),
+  );
 
   return `# 剧本模组正典（必须遵守）
 - 模组：${runtime.modId}（${runtime.mode}）
@@ -287,7 +403,9 @@ export function buildScenarioCanonPrompt(saveData: SaveData): string {
 - 物品：${formatNames(canon.items)}
 - 锁定字段：${(runtime.lockedFields || []).join('、') || '无'}
 ${accessRules.length ? `- 内容归属规则：\n${accessRules.join('\n')}` : '- 内容归属规则：无（未声明内容默认开放）'}
+${affiliationRules.length ? `- 人物势力归属：\n${affiliationRules.join('\n')}` : '- 人物势力归属：无'}
 Mod 已声明的实体与字段是权威正典。可以补充未定义内容，但不得生成同 ID 或同名替代品，不得用自动生成内容覆盖 Mod 已有值。
 restricted 或 exclusive 内容只能由列出的正典身份持有；不得让其他 NPC 或独立玩家学习、复制、继承或获得等价变体。
+人物 affiliation 默认在同类别内排他：可以同时拥有宗派、军队、国家等不同类别身份，但不得被写入另一个同类势力。
 不得重命名、删除或覆盖锁定正典；除使用 set 更新“世界.状态.剧本模组.flags.*”外，不得生成修改“世界.状态.剧本模组”或“系统.扩展.剧本模组”的 tavern_commands。`;
 }

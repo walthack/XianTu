@@ -56,6 +56,8 @@ test('PR8 Strict initialization keeps canon and never calls AI world generation'
   assert.ok(result.strictInitialization.runtimeState.canon.characters.some(item => item.name === '程宗扬'));
   assert.ok(result.strictInitialization.runtimeState.canon.techniques.some(item => item.name === '九阳神功'));
   assert.equal(result.strictInitialization.runtimeState.contentAccess[0].contentId, 'liuchao.skill.death_root');
+  const wangZhe = result.strictInitialization.runtimeState.canon.characters.find(item => item.name === '王哲');
+  assert.deepEqual(wangZhe.affiliations.map(item => item.category), ['sect', 'military']);
 });
 
 test('PR8 activates its opening events while hiding future chapters from story context', async () => {

@@ -106,10 +106,26 @@
         "gender": { "$ref": "#/$defs/nonEmptyString" },
         "realm": { "$ref": "#/$defs/nonEmptyString" },
         "factionId": { "$ref": "#/$defs/id" },
+        "affiliations": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/characterAffiliation" },
+          "uniqueItems": true
+        },
         "locationId": { "$ref": "#/$defs/id" },
         "skillIds": { "$ref": "#/$defs/idArray" },
         "techniqueIds": { "$ref": "#/$defs/idArray" },
         "itemIds": { "$ref": "#/$defs/idArray" }
+      },
+      "additionalProperties": false
+    },
+    "characterAffiliation": {
+      "type": "object",
+      "required": ["factionId", "category"],
+      "properties": {
+        "factionId": { "$ref": "#/$defs/id" },
+        "category": { "enum": ["sect", "military", "state", "clan", "organization"] },
+        "role": { "$ref": "#/$defs/nonEmptyString" },
+        "exclusive": { "type": "boolean" }
       },
       "additionalProperties": false
     },

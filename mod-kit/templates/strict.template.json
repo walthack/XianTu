@@ -54,7 +54,13 @@
         "name": "顾清河",
         "description": "知道当地局势的关键引路人。",
         "role": "关键人物",
-        "factionId": "example.faction.sect",
+        "affiliations": [
+          {
+            "factionId": "example.faction.sect",
+            "category": "sect",
+            "role": "内门弟子"
+          }
+        ],
         "locationId": "example.location.border_city",
         "skillIds": ["example.skill.cloud_sword"],
         "techniqueIds": ["example.technique.cloud_manual"],
