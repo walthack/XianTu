@@ -33,6 +33,10 @@ export interface ScenarioModStorageAdapter {
 
 export const SCENARIO_MOD_LIBRARY_KEY = 'scenario_mod_library_v1';
 
+function cloneJson<T>(value: T): T {
+  return JSON.parse(JSON.stringify(value)) as T;
+}
+
 export function createIndexedDbScenarioModStorage(): ScenarioModStorageAdapter {
   return {
     async load() {
@@ -116,7 +120,9 @@ export class ScenarioModManager {
       throw new Error(`Invalid Scenario Mod:\n${detail || 'Import review did not contain a valid Mod.'}`);
     }
 
-    const mod = review.mod;
+    // Reviews can come from Vue reactive state. Normalize the JSON contract first,
+    // because structuredClone cannot clone reactive Proxy objects.
+    const mod = cloneJson(review.mod);
     const library = await this.loadLibrary();
     const existingIndex = library.mods.findIndex(entry => entry.mod.manifest.id === mod.manifest.id);
     const entry: StoredScenarioMod = {

@@ -81,6 +81,20 @@ test('reviews warnings before import and identifies replacements', async () => {
   assert.equal(imported.enabled, true);
 });
 
+test('imports a reviewed Mod passed through reactive proxy state', async () => {
+  const { ScenarioModManager } = await loadTs('../src/modules/scenarioMods/manager.ts');
+  const storage = memoryStorage();
+  const manager = new ScenarioModManager(storage.adapter);
+  const review = await manager.reviewText(await fixtureText());
+  const reactiveReview = new Proxy(review, {});
+  reactiveReview.mod = new Proxy(review.mod, {});
+
+  const imported = await manager.importReviewed(reactiveReview);
+
+  assert.equal(imported.mod.manifest.id, 'liuchao.jiankang');
+  assert.equal((await manager.list()).length, 1);
+});
+
 test('review blocks static playability errors without persistence', async () => {
   const { ScenarioModManager } = await loadTs('../src/modules/scenarioMods/manager.ts');
   const storage = memoryStorage();
