@@ -44,6 +44,20 @@ test('strict resolution never calls the AI world generator', async () => {
   assert.equal(result.strictInitialization.runtimeState.modId, 'liuchao.jiankang');
 });
 
+test('strict initialization accepts a reactive-style Mod proxy from character creation', async () => {
+  const { buildStrictScenarioInitialization } = await loadTs('../src/modules/scenarioMods/strictInitializer.ts');
+  const mod = await loadMod();
+  const reactiveLikeMod = new Proxy(mod, {});
+  reactiveLikeMod.canon.characters = new Proxy(reactiveLikeMod.canon.characters, {});
+
+  assert.throws(() => structuredClone(reactiveLikeMod.canon.characters), /could not be cloned/);
+
+  const result = buildStrictScenarioInitialization(reactiveLikeMod, '2026-06-22T00:00:00.000Z');
+
+  assert.equal(result.runtimeState.modId, 'liuchao.jiankang');
+  assert.equal(result.runtimeState.canon.characters[0].name, '程宗扬');
+});
+
 test('strict Mod identity and canon survive a save serialization round trip', async () => {
   const {
     applyStrictScenarioInitializationToSave,

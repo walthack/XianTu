@@ -65,6 +65,9 @@ export function buildExpandScenarioInitialization(
   mod: ScenarioMod,
   generatedWorld: WorldInfo,
 ): ExpandScenarioInitialization {
+  // Character creation stores the selected Mod in reactive state.
+  mod = JSON.parse(JSON.stringify(mod)) as ScenarioMod;
+
   if (mod.rules.mode !== 'expand') {
     throw new Error(`Scenario Mod "${mod.manifest.id}" is not configured for expand initialization.`);
   }

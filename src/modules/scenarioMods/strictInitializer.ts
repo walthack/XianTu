@@ -38,6 +38,10 @@ export function buildStrictScenarioInitialization(
   mod: ScenarioMod,
   generatedAt = new Date().toISOString(),
 ): StrictScenarioInitialization {
+  // Pinia exposes the selected Mod as a reactive Proxy. Normalize the JSON
+  // contract before cloning nested values into the save runtime.
+  mod = JSON.parse(JSON.stringify(mod)) as ScenarioMod;
+
   if (mod.rules.mode !== 'strict') {
     throw new Error(`Scenario Mod "${mod.manifest.id}" is not configured for strict initialization.`);
   }

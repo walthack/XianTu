@@ -126,6 +126,8 @@ interface GameState {
    */
   relationshipMatrix: any | null;
   worldInfo: WorldInfo | null;
+  worldState: Record<string, any> | null;
+  systemExtensions: Record<string, any> | null;
   /** 【境界地图集】开关开启时使用， key 为境界名称，如 "练气期" */
   realmMapCollection: Record<string, WorldInfo> | null;
   sectSystem: SectSystemV2 | null;
@@ -181,6 +183,8 @@ export const useGameStateStore = defineStore('gameState', {
     relationships: null,
     relationshipMatrix: null,
     worldInfo: null,
+    worldState: null,
+    systemExtensions: null,
     realmMapCollection: null,
     sectSystem: null,
     sectMemberInfo: null,
@@ -312,6 +316,8 @@ export const useGameStateStore = defineStore('gameState', {
       const relationships: Record<string, NpcProfile> | null = v3?.社交?.关系 ? deepCopy(v3.社交.关系) : null;
       const relationshipMatrix = normalizeRelationshipMatrixV3(v3?.社交?.关系矩阵, Object.keys(relationships || {}));
       const worldInfo: WorldInfo | null = v3?.世界?.信息 ? deepCopy(v3.世界.信息) : null;
+      const worldState = v3?.世界?.状态 ? deepCopy(v3.世界.状态) : null;
+      const systemExtensions = v3?.系统?.扩展 ? deepCopy(v3.系统.扩展) : null;
       const realmMapCollection: Record<string, WorldInfo> | null =
         v3?.世界?.地图集 && typeof v3.世界.地图集 === 'object' && !Array.isArray(v3.世界.地图集)
           ? deepCopy(v3.世界.地图集)
@@ -395,6 +401,8 @@ export const useGameStateStore = defineStore('gameState', {
       this.relationships = relationships;
       this.relationshipMatrix = relationshipMatrix;
       this.worldInfo = worldInfo;
+      this.worldState = worldState;
+      this.systemExtensions = systemExtensions;
       this.realmMapCollection = realmMapCollection;
       this.sectSystem = sectSystem;
       this.sectMemberInfo = sectMemberInfo;
@@ -589,14 +597,14 @@ export const useGameStateStore = defineStore('gameState', {
         世界: {
           信息: this.worldInfo ?? {},
           ...(this.realmMapCollection ? { 地图集: this.realmMapCollection } : {}),
-          状态: {},
+          状态: this.worldState ?? {},
         },
         系统: {
           配置: this.systemConfig ?? {},
           设置: settings,
           缓存: { 掌握技能: this.masteredSkills ?? (skillState as any)?.掌握技能 ?? [] },
           历史: { 叙事: this.narrativeHistory || [] },
-          扩展: {},
+          扩展: this.systemExtensions ?? {},
           联机: online,
         },
       };

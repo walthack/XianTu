@@ -71,6 +71,20 @@ test('expand resolution calls the AI generator exactly once before merging', asy
   assert.equal(result.strictInitialization, undefined);
 });
 
+test('expand initialization accepts a reactive-style Mod proxy from character creation', async () => {
+  const { buildExpandScenarioInitialization } = await loadTs('../src/modules/scenarioMods/expandInitializer.ts');
+  const mod = await loadExpandMod();
+  const reactiveLikeMod = new Proxy(mod, {});
+  reactiveLikeMod.content.skills = new Proxy(reactiveLikeMod.content.skills, {});
+
+  assert.throws(() => structuredClone(reactiveLikeMod.content.skills), /could not be cloned/);
+
+  const result = buildExpandScenarioInitialization(reactiveLikeMod, generatedWorld());
+
+  assert.equal(result.runtimeState.modId, 'liuchao.jiankang');
+  assert.equal(result.runtimeState.canon.skills[0].name, '雷刀诀');
+});
+
 test('expand Mod identity and additions survive a save serialization round trip', async () => {
   const {
     applyExpandScenarioInitializationToSave,
