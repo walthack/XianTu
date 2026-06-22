@@ -19,6 +19,7 @@ export interface ScenarioModEvent {
   name: string;
   description: string;
   conditions?: ScenarioCondition[];
+  completion?: ScenarioCondition[];
   relatedCharacterIds?: string[];
   relatedFactionIds?: string[];
   locationId?: string;

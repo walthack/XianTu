@@ -25,6 +25,7 @@ import { isSaveDataV3, migrateSaveDataToLatest } from './saveMigration';
 import { parseJsonSmart } from '@/utils/jsonExtract';
 import type { APIUsageType } from '@/stores/apiManagementStore';
 import { buildScenarioCanonPrompt, guardScenarioModCommands } from '@/modules/scenarioMods/canonGuard';
+import { advanceScenarioRuntime } from '@/modules/scenarioMods/runtime';
 
 type PlainObject = Record<string, unknown>;
 
@@ -1935,15 +1936,11 @@ ${step1Text}
     }
 
 
-    if (!response.tavern_commands?.length) {
-      return { saveData, stateChanges: { changes, timestamp: new Date().toISOString() }, onlineLogPosted: false };
-    }
-
     const uiStore = useUIStore();
     const protectionMode = this.getCommandProtectionMode(uiStore);
 
     // 🔥 新增：预处理指令以修复常见的AI错误
-    const preprocessingResult = this._preprocessCommands(response.tavern_commands);
+    const preprocessingResult = this._preprocessCommands(response.tavern_commands || []);
     const scenarioGuardResult = guardScenarioModCommands(saveData, preprocessingResult);
     const preprocessedCommands = scenarioGuardResult.accepted;
 
@@ -2207,6 +2204,17 @@ ${step1Text}
     if (removedEffects.length > 0) {
       console.log(`[AI双向系统] Pinia状态更新前: 移除了 ${removedEffects.length} 个过期效果: ${removedEffects.join(', ')}`);
     }
+
+    const scenarioResult = advanceScenarioRuntime(saveData);
+    saveData = scenarioResult.saveData;
+    scenarioResult.transitions.forEach(transition => {
+      changes.push({
+        key: '世界.状态.剧本模组',
+        action: transition.type,
+        oldValue: undefined,
+        newValue: transition.id,
+      });
+    });
 
     // 🔥 将状态变更添加到最新的叙事记录中
     const stateChangesLog: StateChangeLog = { changes, timestamp: new Date().toISOString() };

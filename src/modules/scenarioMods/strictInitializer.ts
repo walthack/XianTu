@@ -2,8 +2,9 @@ import type { PlayerLocation, SaveData, WorldInfo } from '@/types/game';
 
 import type { ScenarioMod } from './schema';
 import { buildExpandScenarioInitialization, type ExpandScenarioInitialization } from './expandInitializer';
+import { createScenarioProgress, getInitialScenarioChapterId, type ScenarioProgressState } from './runtime';
 
-export interface ScenarioModRuntimeState {
+export interface ScenarioModRuntimeState extends ScenarioProgressState {
   schema: ScenarioMod['schema'];
   version: ScenarioMod['version'];
   modId: string;
@@ -98,7 +99,7 @@ export function buildStrictScenarioInitialization(
     modVersion: mod.manifest.version,
     mode: 'strict',
     lockedFields: [...(mod.rules.lockedFields || [])],
-    currentChapterId: mod.scenario.chapters?.[0]?.id || null,
+    currentChapterId: getInitialScenarioChapterId(mod),
     flags: { ...(mod.scenario.initialFlags || {}) },
     canon: {
       factions: structuredClone(mod.canon?.factions || []),
@@ -109,6 +110,7 @@ export function buildStrictScenarioInitialization(
       items: structuredClone(mod.content?.items || []),
     },
     opening: structuredClone(mod.scenario.opening),
+    ...createScenarioProgress(mod),
   };
 
   const locationName = openingLocation?.name || '开场地点';

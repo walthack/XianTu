@@ -159,6 +159,7 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
     validateEntityArray(scenario.events, 'scenario.events', eventIds, add, entity => {
       requireString(entity.description, `${entity.__path}.description`, add);
       validateConditions(entity.conditions, `${entity.__path}.conditions`, add);
+      validateConditions(entity.completion, `${entity.__path}.completion`, add);
       validateIdArray(entity.relatedCharacterIds, `${entity.__path}.relatedCharacterIds`, add);
       validateIdArray(entity.relatedFactionIds, `${entity.__path}.relatedFactionIds`, add);
       optionalId(entity.locationId, `${entity.__path}.locationId`, add);

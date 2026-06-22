@@ -1,8 +1,9 @@
 import type { PlayerLocation, SaveData, WorldInfo } from '@/types/game';
 
 import type { ScenarioMod } from './schema';
+import { createScenarioProgress, getInitialScenarioChapterId, type ScenarioProgressState } from './runtime';
 
-export interface ExpandScenarioRuntimeState {
+export interface ExpandScenarioRuntimeState extends ScenarioProgressState {
   schema: ScenarioMod['schema'];
   version: ScenarioMod['version'];
   modId: string;
@@ -135,7 +136,7 @@ export function buildExpandScenarioInitialization(
       modVersion: mod.manifest.version,
       mode: 'expand',
       lockedFields: [...(mod.rules.lockedFields || [])],
-      currentChapterId: mod.scenario.chapters?.[0]?.id || null,
+      currentChapterId: getInitialScenarioChapterId(mod),
       flags: { ...(mod.scenario.initialFlags || {}) },
       canon: {
         factions: structuredClone(mod.canon?.factions || []),
@@ -146,6 +147,7 @@ export function buildExpandScenarioInitialization(
         items: structuredClone(mod.content?.items || []),
       },
       opening: structuredClone(mod.scenario.opening),
+      ...createScenarioProgress(mod),
     },
     initialLocation: {
       描述: `${continentName}·${locationName}`,

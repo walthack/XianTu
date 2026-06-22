@@ -73,3 +73,14 @@ test('parseScenarioMod throws a useful aggregate error', async () => {
     error => error instanceof Error && error.message.includes('manifest') && error.message.includes('scenario'),
   );
 });
+
+test('validates event completion conditions', async () => {
+  const { validateScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
+  const fixture = await loadFixture();
+  fixture.scenario.events[0].completion = [{ path: 'flags.done', operator: 'unsupported' }];
+
+  const result = validateScenarioMod(fixture);
+
+  assert.equal(result.valid, false);
+  assert.ok(result.issues.some(issue => issue.path === 'scenario.events[0].completion[0].operator'));
+});

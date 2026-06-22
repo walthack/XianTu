@@ -158,11 +158,15 @@ export function guardScenarioModCommands(saveData: SaveData, commands: unknown[]
   const accepted: unknown[] = [];
   const rejected: RejectedScenarioCommand[] = [];
   for (const command of commands) {
+    const action = typeof (command as CommandLike)?.action === 'string'
+      ? (command as CommandLike).action
+      : '';
     const key = typeof (command as CommandLike)?.key === 'string'
       ? normalizePath((command as CommandLike).key as string)
       : '';
+    const isAllowedFlagUpdate = action === 'set' && key.startsWith('世界.状态.剧本模组.flags.');
     const protectedPath = key && protectedPaths.find(path => pathsIntersect(key, path));
-    if (protectedPath) {
+    if (protectedPath && !isAllowedFlagUpdate) {
       rejected.push({
         command,
         reason: `剧本模组正典字段受保护：${protectedPath}`,
@@ -189,5 +193,5 @@ export function buildScenarioCanonPrompt(saveData: SaveData): string {
 - 功法：${formatNames(canon.techniques)}
 - 物品：${formatNames(canon.items)}
 - 锁定字段：${(runtime.lockedFields || []).join('、') || '无'}
-不得重命名、删除或覆盖锁定正典；不得生成修改“世界.状态.剧本模组”或“系统.扩展.剧本模组”的 tavern_commands。`;
+不得重命名、删除或覆盖锁定正典；除使用 set 更新“世界.状态.剧本模组.flags.*”外，不得生成修改“世界.状态.剧本模组”或“系统.扩展.剧本模组”的 tavern_commands。`;
 }
