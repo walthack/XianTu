@@ -26,6 +26,7 @@ import { parseJsonSmart } from '@/utils/jsonExtract';
 import type { APIUsageType } from '@/stores/apiManagementStore';
 import { buildScenarioCanonPrompt, guardScenarioModCommands } from '@/modules/scenarioMods/canonGuard';
 import { advanceScenarioRuntime } from '@/modules/scenarioMods/runtime';
+import { buildScenarioStoryPrompt, createScenarioPromptState } from '@/modules/scenarioMods/storyContext';
 
 type PlainObject = Record<string, unknown>;
 
@@ -497,7 +498,7 @@ class AIBidirectionalSystemClass {
       const v3 = isSaveDataV3(saveData) ? (saveData as any) : migrateSaveDataToLatest(saveData).migrated;
 
       // 发送给 AI 的状态：严格使用 V3 五域结构（命令 key 也必须按此结构输出）
-      const stateForAI = cloneDeep(v3);
+      const stateForAI = createScenarioPromptState(v3 as SaveData);
       if (stateForAI.社交?.记忆) {
         // 移除短期和隐式中期记忆，以优化AI上下文（短期记忆单独发送）
         delete stateForAI.社交.记忆.短期记忆;
@@ -707,6 +708,7 @@ class AIBidirectionalSystemClass {
 
       const assembledPrompt = await assembleSystemPrompt(activePrompts, uiStore.actionOptionsPrompt, stateForAI);
       const scenarioCanonPrompt = buildScenarioCanonPrompt(stateForAI as SaveData);
+      const scenarioStoryPrompt = buildScenarioStoryPrompt(stateForAI as SaveData);
 
       // 🌐 构建穿越状态提示（直接写入主提示词，确保AI一定能看到）
       const onlineState = stateForAI?.系统?.联机;
@@ -781,9 +783,11 @@ ${offlinePrompt ? `\n### 世界主人性格/行为提示词\n${offlinePrompt}` :
       const systemPrompt = `
 ${assembledPrompt}
 ${scenarioCanonPrompt ? `\n${scenarioCanonPrompt}\n` : ''}
+${scenarioStoryPrompt ? `\n${scenarioStoryPrompt}\n` : ''}
 ${travelStatusPrompt}
 ${coreStatusSummary}
 ${scenarioCanonPrompt ? `\n${scenarioCanonPrompt}\n` : ''}
+${scenarioStoryPrompt ? `\n${scenarioStoryPrompt}\n` : ''}
 ${vectorMemorySection ? `\n${vectorMemorySection}\n` : ''}
 ${narrativeRagSection ? `\n${narrativeRagSection}\n` : ''}
 # 游戏状态
@@ -1020,6 +1024,7 @@ ${assembled}
 ${coreStatusSummary}
 ${focusedNpcPrompt ? `\n${focusedNpcPrompt}\n` : ''}
 ${scenarioCanonPrompt ? `\n${scenarioCanonPrompt}\n` : ''}
+${scenarioStoryPrompt ? `\n${scenarioStoryPrompt}\n` : ''}
 
 # 游戏状态（JSON）
 ${stateJsonString}
