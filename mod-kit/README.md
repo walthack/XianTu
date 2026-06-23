@@ -8,6 +8,9 @@
 - [`schema/xiantu.scenario-mod.v1.schema.json`](./schema/xiantu.scenario-mod.v1.schema.json)：编辑器可使用的 JSON Schema。
 - [`templates/strict.template.json`](./templates/strict.template.json)：固定世界剧本模板。
 - [`templates/expand.template.json`](./templates/expand.template.json)：AI 世界补充模板。
+- [`NOVEL_SCENARIO_EXTRACTION_REQUIREMENTS.md`](./NOVEL_SCENARIO_EXTRACTION_REQUIREMENTS.md)：从小说提取分阶段剧情 Mod 的完整要求。
+- [`templates/novel.sources.template.md`](./templates/novel.sources.template.md)：素材和正典依据记录模板。
+- [`templates/relationship-audit.template.md`](./templates/relationship-audit.template.md)：人物存亡、玩家好感和 NPC 关系审计模板。
 
 ## 推荐流程
 
