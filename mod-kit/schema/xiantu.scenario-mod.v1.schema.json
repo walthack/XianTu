@@ -33,6 +33,28 @@
       "type": "array",
       "items": { "$ref": "#/$defs/nonEmptyString" }
     },
+    "mapPoint": {
+      "type": "object",
+      "required": ["x", "y"],
+      "properties": {
+        "x": { "type": "number", "minimum": 0, "maximum": 10000 },
+        "y": { "type": "number", "minimum": 0, "maximum": 10000 }
+      },
+      "additionalProperties": false
+    },
+    "mapConfig": {
+      "type": "object",
+      "required": ["width", "height"],
+      "properties": {
+        "width": { "type": "number", "minimum": 1 },
+        "height": { "type": "number", "minimum": 1 },
+        "minLng": { "type": "number" },
+        "maxLng": { "type": "number" },
+        "minLat": { "type": "number" },
+        "maxLat": { "type": "number" }
+      },
+      "additionalProperties": false
+    },
     "manifest": {
       "type": "object",
       "required": ["id", "name", "version"],
@@ -51,7 +73,12 @@
       "properties": {
         "id": { "$ref": "#/$defs/id" },
         "name": { "$ref": "#/$defs/nonEmptyString" },
-        "description": { "$ref": "#/$defs/nonEmptyString" }
+        "description": { "$ref": "#/$defs/nonEmptyString" },
+        "bounds": {
+          "type": "array",
+          "minItems": 3,
+          "items": { "$ref": "#/$defs/mapPoint" }
+        }
       },
       "additionalProperties": false
     },
@@ -66,7 +93,18 @@
         "continents": {
           "type": "array",
           "items": { "$ref": "#/$defs/continent" }
-        }
+        },
+        "map": { "$ref": "#/$defs/worldMap" }
+      },
+      "additionalProperties": false
+    },
+    "worldMap": {
+      "type": "object",
+      "properties": {
+        "atlasId": { "$ref": "#/$defs/id" },
+        "mapConfig": { "$ref": "#/$defs/mapConfig" },
+        "locked": { "type": "boolean" },
+        "backgroundImage": { "$ref": "#/$defs/nonEmptyString" }
       },
       "additionalProperties": false
     },
@@ -78,7 +116,14 @@
         "name": { "$ref": "#/$defs/nonEmptyString" },
         "description": { "$ref": "#/$defs/nonEmptyString" },
         "type": { "$ref": "#/$defs/nonEmptyString" },
-        "headquartersLocationId": { "$ref": "#/$defs/id" }
+        "headquartersLocationId": { "$ref": "#/$defs/id" },
+        "level": { "$ref": "#/$defs/nonEmptyString" },
+        "territory": {
+          "type": "array",
+          "minItems": 3,
+          "items": { "$ref": "#/$defs/mapPoint" }
+        },
+        "features": { "$ref": "#/$defs/stringArray" }
       },
       "additionalProperties": false
     },
@@ -91,7 +136,11 @@
         "description": { "$ref": "#/$defs/nonEmptyString" },
         "type": { "$ref": "#/$defs/nonEmptyString" },
         "continentId": { "$ref": "#/$defs/id" },
-        "factionId": { "$ref": "#/$defs/id" }
+        "factionId": { "$ref": "#/$defs/id" },
+        "coordinates": { "$ref": "#/$defs/mapPoint" },
+        "features": { "$ref": "#/$defs/stringArray" },
+        "safety": { "$ref": "#/$defs/nonEmptyString" },
+        "status": { "$ref": "#/$defs/nonEmptyString" }
       },
       "additionalProperties": false
     },
@@ -114,7 +163,56 @@
         "locationId": { "$ref": "#/$defs/id" },
         "skillIds": { "$ref": "#/$defs/idArray" },
         "techniqueIds": { "$ref": "#/$defs/idArray" },
-        "itemIds": { "$ref": "#/$defs/idArray" }
+        "itemIds": { "$ref": "#/$defs/idArray" },
+        "profile": { "$ref": "#/$defs/characterProfile" }
+      },
+      "additionalProperties": false
+    },
+    "characterProfile": {
+      "type": "object",
+      "properties": {
+        "appearance": { "$ref": "#/$defs/nonEmptyString" },
+        "personality": { "$ref": "#/$defs/stringArray" },
+        "currentAppearance": { "$ref": "#/$defs/nonEmptyString" },
+        "currentThought": { "$ref": "#/$defs/nonEmptyString" },
+        "memories": { "$ref": "#/$defs/stringArray" },
+        "race": { "$ref": "#/$defs/nonEmptyString" },
+        "origin": { "$ref": "#/$defs/nonEmptyString" },
+        "spiritRoot": {
+          "type": "object",
+          "required": ["name"],
+          "properties": {
+            "name": { "$ref": "#/$defs/nonEmptyString" },
+            "tier": { "$ref": "#/$defs/nonEmptyString" },
+            "description": { "$ref": "#/$defs/nonEmptyString" }
+          },
+          "additionalProperties": false
+        },
+        "talents": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name"],
+            "properties": {
+              "name": { "$ref": "#/$defs/nonEmptyString" },
+              "description": { "$ref": "#/$defs/nonEmptyString" }
+            },
+            "additionalProperties": false
+          }
+        },
+        "attributes": {
+          "type": "object",
+          "properties": {
+            "rootBone": { "type": "integer", "minimum": 0, "maximum": 10 },
+            "spirituality": { "type": "integer", "minimum": 0, "maximum": 10 },
+            "comprehension": { "type": "integer", "minimum": 0, "maximum": 10 },
+            "fortune": { "type": "integer", "minimum": 0, "maximum": 10 },
+            "charm": { "type": "integer", "minimum": 0, "maximum": 10 },
+            "temperament": { "type": "integer", "minimum": 0, "maximum": 10 }
+          },
+          "additionalProperties": false
+        },
+        "notes": { "$ref": "#/$defs/stringArray" }
       },
       "additionalProperties": false
     },
@@ -154,6 +252,19 @@
       },
       "additionalProperties": false
     },
+    "factionRelationship": {
+      "type": "object",
+      "required": ["fromFactionId", "toFactionId", "relation", "score"],
+      "properties": {
+        "fromFactionId": { "$ref": "#/$defs/id" },
+        "toFactionId": { "$ref": "#/$defs/id" },
+        "relation": { "$ref": "#/$defs/nonEmptyString" },
+        "score": { "type": "number", "minimum": -100, "maximum": 100 },
+        "direction": { "enum": ["directed", "bidirectional"] },
+        "tags": { "$ref": "#/$defs/stringArray" }
+      },
+      "additionalProperties": false
+    },
     "canon": {
       "type": "object",
       "properties": {
@@ -161,7 +272,8 @@
         "locations": { "type": "array", "items": { "$ref": "#/$defs/location" } },
         "characters": { "type": "array", "items": { "$ref": "#/$defs/character" } },
         "playerRelationships": { "type": "array", "items": { "$ref": "#/$defs/playerRelationship" } },
-        "relationships": { "type": "array", "items": { "$ref": "#/$defs/characterRelationship" } }
+        "relationships": { "type": "array", "items": { "$ref": "#/$defs/characterRelationship" } },
+        "factionRelationships": { "type": "array", "items": { "$ref": "#/$defs/factionRelationship" } }
       },
       "additionalProperties": false
     },

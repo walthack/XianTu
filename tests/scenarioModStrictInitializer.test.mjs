@@ -27,7 +27,18 @@ test('converts strict canon into native WorldInfo without renaming entities', as
   assert.ok(result.runtimeState.lockedFields.includes('canon.characters.*.name'));
   assert.equal(result.runtimeState.contentAccess[0].contentId, 'skill.thunderblade');
   assert.equal(result.initialLocation.描述, '江南·建康');
+  assert.equal(result.initialLocation.x, 7100);
+  assert.equal(result.initialLocation.y, 4960);
   assert.equal(result.worldInfo.版本, 'scenario-mod:liuchao.jiankang@1.0.0');
+  assert.equal(result.worldInfo.地图配置.width, 10000);
+  assert.equal(result.worldInfo.剧本地图.locked, true);
+  assert.deepEqual(result.worldInfo.大陆信息[0].大洲边界[0], { x: 6000, y: 4200 });
+  assert.deepEqual(result.worldInfo.势力信息[0].势力范围[0], { x: 6500, y: 4300 });
+  assert.deepEqual(result.worldInfo.地点信息[0].coordinates, { x: 7100, y: 4960 });
+  assert.equal(result.worldInfo.地点信息[0].类型, '城池');
+  assert.equal(result.worldInfo.地点信息[0].原始类型, 'capital');
+  assert.equal(result.worldInfo.地点信息[1].类型, '宗门');
+  assert.equal(result.worldInfo.地点信息[1].原始类型, '宗门驻地');
 });
 
 test('strict resolution never calls the AI world generator', async () => {
@@ -82,8 +93,17 @@ test('strict Mod identity and canon survive a save serialization round trip', as
   assert.equal(reloaded.角色.位置.描述, '江南·建康');
   assert.equal(reloaded.社交.关系.程宗扬.与玩家关系, '盟友');
   assert.equal(reloaded.社交.关系.程宗扬.好感度, 25);
-  assert.deepEqual(reloaded.社交.关系.程宗扬.记忆, ['在建康城外初次相遇']);
+  assert.deepEqual(reloaded.社交.关系.程宗扬.记忆, [
+    '穿越后卷入六朝风云。',
+    '生死根不得被其他 NPC 自动获得。',
+    '在建康城外初次相遇',
+  ]);
   assert.equal(reloaded.社交.关系.程宗扬.宗门, '太乙真宗');
+  assert.equal(reloaded.社交.关系.程宗扬.外貌描述, '年轻男子，眉目清朗，带着异世来客的警觉与机变。');
+  assert.deepEqual(reloaded.社交.关系.程宗扬.性格特征, ['机变', '谨慎', '重情义']);
+  assert.equal(reloaded.社交.关系.程宗扬.灵根.name, '生死根');
+  assert.equal(reloaded.社交.关系.程宗扬.先天六司.悟性, 7);
+  assert.equal(reloaded.社交.关系.程宗扬.当前位置.x, 7100);
   assert.equal(reloaded.社交.关系.程宗扬.技能.掌握技能[0].技能名称, '雷刀诀');
   assert.equal(reloaded.社交.关系.程宗扬.功法.修炼功法.名称, '九阳神功');
   assert.equal(reloaded.社交.关系.程宗扬.背包.物品['item.thunderblade'].名称, '雷刀');

@@ -72,8 +72,10 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
     requireString(world.era, 'world.era', add);
     requireString(world.background, 'world.background', add);
     validateStringArray(world.specialRules, 'world.specialRules', add);
+    validateWorldMap(world.map, 'world.map', add);
     validateEntityArray(world.continents, 'world.continents', continentIds, add, entity => {
       optionalString(entity.description, `${entity.__path}.description`, add);
+      validatePointArray(entity.bounds, `${entity.__path}.bounds`, add, 3);
     });
   }
 
@@ -97,12 +99,19 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
       optionalString(entity.description, `${entity.__path}.description`, add);
       optionalString(entity.type, `${entity.__path}.type`, add);
       optionalId(entity.headquartersLocationId, `${entity.__path}.headquartersLocationId`, add);
+      optionalString(entity.level, `${entity.__path}.level`, add);
+      validatePointArray(entity.territory, `${entity.__path}.territory`, add, 3);
+      validateStringArray(entity.features, `${entity.__path}.features`, add);
     });
     validateEntityArray(canon.locations, 'canon.locations', locationIds, add, entity => {
       optionalString(entity.description, `${entity.__path}.description`, add);
       optionalString(entity.type, `${entity.__path}.type`, add);
       optionalId(entity.continentId, `${entity.__path}.continentId`, add);
       optionalId(entity.factionId, `${entity.__path}.factionId`, add);
+      validatePoint(entity.coordinates, `${entity.__path}.coordinates`, add);
+      validateStringArray(entity.features, `${entity.__path}.features`, add);
+      optionalString(entity.safety, `${entity.__path}.safety`, add);
+      optionalString(entity.status, `${entity.__path}.status`, add);
     });
     validateEntityArray(canon.characters, 'canon.characters', characterIds, add, entity => {
       optionalString(entity.description, `${entity.__path}.description`, add);
@@ -115,9 +124,11 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
       validateIdArray(entity.skillIds, `${entity.__path}.skillIds`, add);
       validateIdArray(entity.techniqueIds, `${entity.__path}.techniqueIds`, add);
       validateIdArray(entity.itemIds, `${entity.__path}.itemIds`, add);
+      validateCharacterProfile(entity.profile, `${entity.__path}.profile`, add);
     });
     validatePlayerRelationships(canon.playerRelationships, 'canon.playerRelationships', add);
     validateCharacterRelationships(canon.relationships, 'canon.relationships', add);
+    validateFactionRelationships(canon.factionRelationships, 'canon.factionRelationships', add);
   }
 
   const content = input.content;
@@ -276,6 +287,10 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
       checkRef(entry.fromCharacterId, characterIds, `${path}.fromCharacterId`, 'character', add);
       checkRef(entry.toCharacterId, characterIds, `${path}.toCharacterId`, 'character', add);
     });
+    forEachRecord(canon.factionRelationships, 'canon.factionRelationships', (entry, path) => {
+      checkRef(entry.fromFactionId, factionIds, `${path}.fromFactionId`, 'faction', add);
+      checkRef(entry.toFactionId, factionIds, `${path}.toFactionId`, 'faction', add);
+    });
   }
   if (isRecord(content)) {
     forEachRecord(content.techniques, 'content.techniques', (entity, path) => {
@@ -361,6 +376,110 @@ function validateIdArray(value: unknown, path: string, add: AddIssue): void {
     return;
   }
   value.forEach((entry, index) => validateId(entry, `${path}[${index}]`, add));
+}
+
+function validateNumber(value: unknown, path: string, min: number, max: number, add: AddIssue): void {
+  if (typeof value !== 'number' || !Number.isFinite(value) || value < min || value > max) {
+    add(path, 'invalid_number', `${path} must be a number from ${min} to ${max}.`);
+  }
+}
+
+function validatePoint(value: unknown, path: string, add: AddIssue): void {
+  if (value === undefined) return;
+  if (!isRecord(value)) {
+    add(path, 'invalid_type', `${path} must be an object.`);
+    return;
+  }
+  validateNumber(value.x, `${path}.x`, 0, 10000, add);
+  validateNumber(value.y, `${path}.y`, 0, 10000, add);
+}
+
+function validatePointArray(value: unknown, path: string, add: AddIssue, minItems: number): void {
+  if (value === undefined) return;
+  if (!Array.isArray(value)) {
+    add(path, 'invalid_type', `${path} must be an array.`);
+    return;
+  }
+  if (value.length < minItems) {
+    add(path, 'too_few_points', `${path} must contain at least ${minItems} points.`);
+  }
+  value.forEach((entry, index) => validatePoint(entry, `${path}[${index}]`, add));
+}
+
+function validateWorldMap(value: unknown, path: string, add: AddIssue): void {
+  if (value === undefined) return;
+  if (!isRecord(value)) {
+    add(path, 'invalid_type', `${path} must be an object.`);
+    return;
+  }
+  optionalId(value.atlasId, `${path}.atlasId`, add);
+  if (value.locked !== undefined && typeof value.locked !== 'boolean') {
+    add(`${path}.locked`, 'invalid_type', `${path}.locked must be a boolean.`);
+  }
+  optionalString(value.backgroundImage, `${path}.backgroundImage`, add);
+  if (value.mapConfig !== undefined) {
+    if (!isRecord(value.mapConfig)) {
+      add(`${path}.mapConfig`, 'invalid_type', `${path}.mapConfig must be an object.`);
+    } else {
+      validateNumber(value.mapConfig.width, `${path}.mapConfig.width`, 1, Number.MAX_SAFE_INTEGER, add);
+      validateNumber(value.mapConfig.height, `${path}.mapConfig.height`, 1, Number.MAX_SAFE_INTEGER, add);
+      ['minLng', 'maxLng', 'minLat', 'maxLat'].forEach(key => {
+        if ((value.mapConfig as Record<string, unknown>)[key] !== undefined) {
+          validateNumber((value.mapConfig as Record<string, unknown>)[key], `${path}.mapConfig.${key}`, -Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER, add);
+        }
+      });
+    }
+  }
+}
+
+function validateCharacterProfile(value: unknown, path: string, add: AddIssue): void {
+  if (value === undefined) return;
+  if (!isRecord(value)) {
+    add(path, 'invalid_type', `${path} must be an object.`);
+    return;
+  }
+  optionalString(value.appearance, `${path}.appearance`, add);
+  validateStringArray(value.personality, `${path}.personality`, add);
+  optionalString(value.currentAppearance, `${path}.currentAppearance`, add);
+  optionalString(value.currentThought, `${path}.currentThought`, add);
+  validateStringArray(value.memories, `${path}.memories`, add);
+  optionalString(value.race, `${path}.race`, add);
+  optionalString(value.origin, `${path}.origin`, add);
+  validateStringArray(value.notes, `${path}.notes`, add);
+  if (value.spiritRoot !== undefined) {
+    if (!isRecord(value.spiritRoot)) {
+      add(`${path}.spiritRoot`, 'invalid_type', `${path}.spiritRoot must be an object.`);
+    } else {
+      requireString(value.spiritRoot.name, `${path}.spiritRoot.name`, add);
+      optionalString(value.spiritRoot.tier, `${path}.spiritRoot.tier`, add);
+      optionalString(value.spiritRoot.description, `${path}.spiritRoot.description`, add);
+    }
+  }
+  if (value.talents !== undefined) {
+    if (!Array.isArray(value.talents)) {
+      add(`${path}.talents`, 'invalid_type', `${path}.talents must be an array.`);
+    } else {
+      value.talents.forEach((entry, index) => {
+        const talentPath = `${path}.talents[${index}]`;
+        if (!isRecord(entry)) {
+          add(talentPath, 'invalid_type', `${talentPath} must be an object.`);
+          return;
+        }
+        requireString(entry.name, `${talentPath}.name`, add);
+        optionalString(entry.description, `${talentPath}.description`, add);
+      });
+    }
+  }
+  if (value.attributes !== undefined) {
+    if (!isRecord(value.attributes)) {
+      add(`${path}.attributes`, 'invalid_type', `${path}.attributes must be an object.`);
+    } else {
+      const attributes = value.attributes as Record<string, unknown>;
+      ['rootBone', 'spirituality', 'comprehension', 'fortune', 'charm', 'temperament'].forEach(key => {
+        if (attributes[key] !== undefined) validateInteger(attributes[key], `${path}.attributes.${key}`, 0, 10, add);
+      });
+    }
+  }
 }
 
 function validateCharacterAffiliations(value: unknown, path: string, add: AddIssue): void {
@@ -491,6 +610,33 @@ function validateCharacterRelationships(value: unknown, path: string, add: AddIs
     }
     validateStringArray(entry.tags, `${itemPath}.tags`, add);
     validateStringArray(entry.events, `${itemPath}.events`, add);
+  });
+}
+
+function validateFactionRelationships(value: unknown, path: string, add: AddIssue): void {
+  if (value === undefined) return;
+  if (!Array.isArray(value)) {
+    add(path, 'invalid_type', `${path} must be an array.`);
+    return;
+  }
+  const seen = new Set<string>();
+  value.forEach((entry, index) => {
+    const itemPath = `${path}[${index}]`;
+    if (!isRecord(entry)) return add(itemPath, 'invalid_type', `${itemPath} must be an object.`);
+    const fromValid = validateId(entry.fromFactionId, `${itemPath}.fromFactionId`, add);
+    const toValid = validateId(entry.toFactionId, `${itemPath}.toFactionId`, add);
+    if (fromValid && toValid) {
+      if (entry.fromFactionId === entry.toFactionId) add(itemPath, 'self_relationship', 'A faction relationship cannot point to the same faction.');
+      const identity = `${entry.fromFactionId}::${entry.toFactionId}`;
+      if (seen.has(identity)) add(itemPath, 'duplicate_relationship', `Duplicate faction relationship "${identity}".`);
+      seen.add(identity);
+    }
+    requireString(entry.relation, `${itemPath}.relation`, add);
+    validateScore(entry.score, `${itemPath}.score`, add);
+    if (entry.direction !== undefined && entry.direction !== 'directed' && entry.direction !== 'bidirectional') {
+      add(`${itemPath}.direction`, 'invalid_enum', 'direction must be directed or bidirectional.');
+    }
+    validateStringArray(entry.tags, `${itemPath}.tags`, add);
   });
 }
 

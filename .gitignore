@@ -46,3 +46,6 @@ NUL
 
 # Server (private repository)
 server/
+
+# Generated scenario mod data (synced to NAS, not versioned in main repo)
+mod-kit/generated/

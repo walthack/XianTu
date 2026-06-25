@@ -14,11 +14,29 @@
     "specialRules": [
       "固定人物姓名与所属势力不得被改写"
     ],
+    "map": {
+      "atlasId": "liuchao.atlas",
+      "locked": true,
+      "mapConfig": {
+        "width": 10000,
+        "height": 10000,
+        "minLng": 0,
+        "maxLng": 10000,
+        "minLat": 0,
+        "maxLat": 10000
+      }
+    },
     "continents": [
       {
         "id": "continent.jiangnan",
         "name": "江南",
-        "description": "王朝腹地与故事主要舞台。"
+        "description": "王朝腹地与故事主要舞台。",
+        "bounds": [
+          { "x": 6000, "y": 4200 },
+          { "x": 7600, "y": 4200 },
+          { "x": 7600, "y": 5600 },
+          { "x": 6000, "y": 5600 }
+        ]
       }
     ]
   },
@@ -28,20 +46,35 @@
         "id": "faction.taiyi",
         "name": "太乙真宗",
         "description": "传承久远的修行宗派。",
-        "headquartersLocationId": "location.taiyi"
+        "headquartersLocationId": "location.taiyi",
+        "level": "一流",
+        "territory": [
+          { "x": 6500, "y": 4300 },
+          { "x": 6900, "y": 4300 },
+          { "x": 6900, "y": 4700 },
+          { "x": 6500, "y": 4700 }
+        ],
+        "features": ["传承久远"]
       }
     ],
     "locations": [
       {
         "id": "location.jiankang",
         "name": "建康",
-        "continentId": "continent.jiangnan"
+        "type": "capital",
+        "continentId": "continent.jiangnan",
+        "coordinates": { "x": 7100, "y": 4960 },
+        "features": ["晋国都城"],
+        "safety": "较安全",
+        "status": "开放"
       },
       {
         "id": "location.taiyi",
         "name": "太乙真宗山门",
+        "type": "宗门驻地",
         "continentId": "continent.jiangnan",
-        "factionId": "faction.taiyi"
+        "factionId": "faction.taiyi",
+        "coordinates": { "x": 6700, "y": 4500 }
       }
     ],
     "characters": [
@@ -55,7 +88,20 @@
         "locationId": "location.jiankang",
         "skillIds": ["skill.thunderblade"],
         "techniqueIds": ["technique.nineyang"],
-        "itemIds": ["item.thunderblade"]
+        "itemIds": ["item.thunderblade"],
+        "profile": {
+          "appearance": "年轻男子，眉目清朗，带着异世来客的警觉与机变。",
+          "personality": ["机变", "谨慎", "重情义"],
+          "currentAppearance": "行旅装束，神色警惕。",
+          "currentThought": "先在建康站稳脚跟。",
+          "memories": ["穿越后卷入六朝风云。"],
+          "race": "人族",
+          "origin": "异世来客",
+          "spiritRoot": { "name": "生死根", "tier": "唯一异能", "description": "只由程宗扬持有的生死感应。" },
+          "talents": [{ "name": "生死根", "description": "感知生死气息。" }],
+          "attributes": { "rootBone": 6, "spirituality": 5, "comprehension": 7, "fortune": 8, "charm": 6, "temperament": 7 },
+          "notes": ["生死根不得被其他 NPC 自动获得。"]
+        }
       },
       {
         "id": "character.wangzhe",

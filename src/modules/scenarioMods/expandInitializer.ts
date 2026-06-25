@@ -1,6 +1,7 @@
 import type { PlayerLocation, SaveData, WorldInfo } from '@/types/game';
 
 import type { ScenarioMod } from './schema';
+import { withNativeScenarioLocationType } from './locationTypes';
 import { createScenarioProgress, getInitialScenarioChapterId, type ScenarioProgressState } from './runtime';
 import { applyScenarioRelationshipsToSave } from './relationships';
 
@@ -109,14 +110,13 @@ export function buildExpandScenarioInitialization(
   const locationAdditions: NamedRecord[] = locations.map(location => {
     const continent = continents.find(item => item.id === location.continentId);
     const faction = factions.find(item => item.id === location.factionId);
-    return {
+    return withNativeScenarioLocationType({
       id: location.id,
       名称: location.name,
-      ...(location.type ? { 类型: location.type } : {}),
       ...(continent ? { 位置: continent.name } : {}),
       ...(location.description ? { 描述: location.description } : {}),
       ...(faction ? { 相关势力: [faction.name] } : {}),
-    };
+    }, location.type);
   });
 
   const worldInfo = structuredClone(generatedWorld);

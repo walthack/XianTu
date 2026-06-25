@@ -45,6 +45,8 @@ test('expand mode keeps Mod fields authoritative and uses generated values only 
   assert.equal(result.worldInfo.地点信息.find(item => item.名称 === '建康').类型, '城池');
   assert.equal(result.worldInfo.地点信息.find(item => item.名称 === '建康').描述, 'AI生成的建康');
   assert.ok(result.worldInfo.地点信息.some(item => item.名称 === '太乙真宗山门'));
+  assert.equal(result.worldInfo.地点信息.find(item => item.名称 === '太乙真宗山门').类型, '宗门');
+  assert.equal(result.worldInfo.地点信息.find(item => item.名称 === '太乙真宗山门').原始类型, '宗门驻地');
   assert.equal(result.worldInfo.势力信息.filter(item => item.名称 === '太乙真宗').length, 1);
   assert.equal(result.worldInfo.势力信息.find(item => item.名称 === '太乙真宗').描述, '传承久远的修行宗派。');
   assert.equal(result.worldInfo.势力信息.find(item => item.名称 === '太乙真宗').类型, 'AI宗门类型');

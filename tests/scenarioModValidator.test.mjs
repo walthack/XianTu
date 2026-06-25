@@ -36,6 +36,27 @@ test('validates native player and NPC relationship declarations', async () => {
   assert.ok(invalid.issues.some(issue => issue.path.endsWith('.toCharacterId') && issue.code === 'missing_reference'));
 });
 
+test('validates faction relationship declarations', async () => {
+  const { validateScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
+  const raw = await loadFixture();
+
+  raw.canon.factionRelationships = [
+    { fromFactionId: 'faction.taiyi', toFactionId: 'faction.missing', relation: '敌对', score: -40, direction: 'bidirectional' },
+  ];
+  const missingRef = validateScenarioMod(raw);
+  assert.ok(missingRef.issues.some(issue => issue.path.endsWith('.toFactionId') && issue.code === 'missing_reference'));
+
+  raw.canon.factionRelationships = [
+    { fromFactionId: 'faction.taiyi', toFactionId: 'faction.taiyi', relation: '中立', score: 0 },
+  ];
+  assert.ok(validateScenarioMod(raw).issues.some(issue => issue.code === 'self_relationship'));
+
+  raw.canon.factionRelationships = [
+    { fromFactionId: 'faction.taiyi', toFactionId: 'faction.taiyi', relation: '中立', score: 200 },
+  ];
+  assert.ok(validateScenarioMod(raw).issues.some(issue => issue.code === 'invalid_score'));
+});
+
 test('rejects unsupported schemas and versions', async () => {
   const { validateScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
   const fixture = await loadFixture();
@@ -171,4 +192,19 @@ test('rejects invalid canonical creation preset boundaries', async () => {
   assert.ok(result.issues.some(issue => issue.path === 'scenario.opening.creationPreset.age'));
   assert.ok(result.issues.some(issue => issue.path === 'scenario.opening.creationPreset.talents'));
   assert.ok(result.issues.some(issue => issue.path === 'scenario.opening.creationPreset.attributes.rootBone'));
+});
+
+test('rejects scenario map and character profile values outside native boundaries', async () => {
+  const { validateScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
+  const fixture = await loadFixture();
+  fixture.world.continents[0].bounds = [{ x: 1, y: 1 }, { x: 2, y: 2 }];
+  fixture.canon.locations[0].coordinates = { x: 10001, y: 4960 };
+  fixture.canon.characters[0].profile.attributes.charm = 11;
+
+  const result = validateScenarioMod(fixture);
+
+  assert.equal(result.valid, false);
+  assert.ok(result.issues.some(issue => issue.path === 'world.continents[0].bounds' && issue.code === 'too_few_points'));
+  assert.ok(result.issues.some(issue => issue.path === 'canon.locations[0].coordinates.x' && issue.code === 'invalid_number'));
+  assert.ok(result.issues.some(issue => issue.path === 'canon.characters[0].profile.attributes.charm' && issue.code === 'invalid_number'));
 });

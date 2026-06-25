@@ -103,18 +103,32 @@ function createNpcProfile(source: ScenarioRelationshipSource, character: Scenari
     .filter((name): name is string => Boolean(name));
   const sect = (character.affiliations || []).find(item => item.category === 'sect');
   const nativeContent = buildNativeCharacterContent(source, character);
+  const profile = character.profile || {};
+  const attributes = profile.attributes || {};
+  const locationCoordinates = location?.coordinates;
   return {
     名字: character.name,
     性别: gender(character.gender),
     出生日期: { 年: 0, 月: 1, 日: 1 },
-    种族: '人族',
-    出生: character.role || '原作人物',
-    外貌描述: character.description || character.role || character.name,
-    性格特征: [],
+    种族: profile.race || '人族',
+    出生: profile.origin || character.role || '原作人物',
+    外貌描述: profile.appearance || character.description || character.role || character.name,
+    性格特征: profile.personality || [],
     境界: { 名称: character.realm || '凡人', 阶段: '初期', 当前进度: 0, 下一级所需: 100, 突破描述: '依剧情发展' },
-    灵根: { name: '原作未载', tier: '凡品', 描述: '由剧本正典保留，原作未载。' },
-    天赋: [],
-    先天六司: { 根骨: 5, 灵性: 5, 悟性: 5, 气运: 5, 魅力: 5, 心性: 5 },
+    灵根: {
+      name: profile.spiritRoot?.name || '原作未载',
+      tier: profile.spiritRoot?.tier || '凡品',
+      描述: profile.spiritRoot?.description || '由剧本正典保留，原作未载。',
+    },
+    天赋: (profile.talents || []).map(talent => ({ name: talent.name, description: talent.description || '' })),
+    先天六司: {
+      根骨: attributes.rootBone ?? 5,
+      灵性: attributes.spirituality ?? 5,
+      悟性: attributes.comprehension ?? 5,
+      气运: attributes.fortune ?? 5,
+      魅力: attributes.charm ?? 5,
+      心性: attributes.temperament ?? 5,
+    },
     属性: {
       气血: { 当前: 100, 上限: 100 },
       灵气: { 当前: 100, 上限: 100 },
@@ -123,16 +137,16 @@ function createNpcProfile(source: ScenarioRelationshipSource, character: Scenari
     },
     与玩家关系: relation,
     好感度: favorability,
-    当前位置: { 描述: location?.name || '位置未定' },
+    当前位置: { 描述: location?.name || '位置未定', ...(locationCoordinates ? structuredClone(locationCoordinates) : {}) },
     势力归属: faction?.name,
     势力归属列表: affiliationNames,
     宗门: factions.find(item => item.id === sect?.factionId)?.name,
     技能: { 掌握技能: nativeContent.skills },
     功法: { 修炼功法: nativeContent.primaryTechnique },
     人格底线: [],
-    记忆: [],
-    当前外貌状态: '状态正常',
-    当前内心想法: '依照剧本关系与当前事件行动。',
+    记忆: [...(profile.memories || []), ...(profile.notes || [])],
+    当前外貌状态: profile.currentAppearance || '状态正常',
+    当前内心想法: profile.currentThought || '依照剧本关系与当前事件行动。',
     背包: { 灵石: { 下品: 0, 中品: 0, 上品: 0, 极品: 0 }, 物品: nativeContent.items },
     实时关注: true,
   };
