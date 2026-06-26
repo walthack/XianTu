@@ -120,6 +120,46 @@ test('invalid JSON and invalid Mod contracts are rejected without persistence', 
   assert.equal(storage.read(), null);
 });
 
+test('seeds built-in templates disabled, idempotently, and blocks their removal', async () => {
+  const { ScenarioModManager } = await loadTs('../src/modules/scenarioMods/manager.ts');
+  const storage = memoryStorage();
+  const builtin = JSON.parse(await fixtureText());
+  const manager = new ScenarioModManager(storage.adapter, () => 'seed-time');
+  manager.registerBuiltins([builtin], 'v1');
+
+  const listed = await manager.list();
+  assert.equal(listed.length, 1);
+  assert.equal(listed[0].builtin, true);
+  assert.equal(listed[0].enabled, false, 'built-ins seed disabled');
+
+  // 用户启用后再次加载不重复、不重置
+  await manager.setEnabled('liuchao.jiankang', true);
+  const again = await manager.list();
+  assert.equal(again.length, 1);
+  assert.equal(again[0].enabled, true);
+
+  await assert.rejects(() => manager.remove('liuchao.jiankang'), /内置/);
+});
+
+test('built-in version bump refreshes content but preserves enabled state', async () => {
+  const { ScenarioModManager } = await loadTs('../src/modules/scenarioMods/manager.ts');
+  const storage = memoryStorage();
+  const builtin = JSON.parse(await fixtureText());
+  const m1 = new ScenarioModManager(storage.adapter, () => 't');
+  m1.registerBuiltins([builtin], 'v1');
+  await m1.setEnabled('liuchao.jiankang', true);
+
+  const updated = JSON.parse(await fixtureText());
+  updated.manifest.version = '2.0.0';
+  const m2 = new ScenarioModManager(storage.adapter, () => 't');
+  m2.registerBuiltins([updated], 'v2');
+
+  const listed = await m2.list();
+  assert.equal(listed.length, 1);
+  assert.equal(listed[0].enabled, true, 'enabled state preserved across refresh');
+  assert.equal(listed[0].mod.manifest.version, '2.0.0', 'content refreshed on version bump');
+});
+
 test('exports canonical JSON and removes stored Mods', async () => {
   const { ScenarioModManager } = await loadTs('../src/modules/scenarioMods/manager.ts');
   const storage = memoryStorage();

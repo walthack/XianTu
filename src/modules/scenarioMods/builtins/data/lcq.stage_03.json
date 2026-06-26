@@ -1,0 +1,1167 @@
+{
+  "schema": "xiantu.scenario-mod",
+  "version": 1,
+  "manifest": {
+    "id": "lcq.stage_03",
+    "name": "第19章·赌局",
+    "version": "1.0.0",
+    "author": "DeepSeek V4 Flash + XianTu Mod Kit",
+    "description": "程宗扬与苏妲己在赌局中因性玩具演示引发冲突，凝羽被药物控制，程宗扬被迫签下卖身契。"
+  },
+  "world": {
+    "name": "六朝",
+    "era": "白湖商馆时期",
+    "background": "程宗扬穿越至六朝，经历左武军覆灭后流落五原城，被白湖商馆主人苏妲己控制。本阶段核心矛盾为程宗扬与苏妲己在赌局中的冲突，以及凝羽被药物控制后的后续影响。",
+    "specialRules": [
+      "核心专名不得改写",
+      "生死根为程宗扬唯一异能",
+      "冰蛊为苏妲己控制手段",
+      "使用六朝共享正典地图，禁止随机生成势力或地点覆盖已导入内容"
+    ],
+    "continents": [
+      {
+        "id": "liuchao.continent.zhongzhou",
+        "name": "中州",
+        "description": "六朝主要区域，包含五原城、白湖商馆等核心地点。",
+        "bounds": [
+          {
+            "x": 100,
+            "y": 50
+          },
+          {
+            "x": 9600,
+            "y": 50
+          },
+          {
+            "x": 9600,
+            "y": 6500
+          },
+          {
+            "x": 100,
+            "y": 6500
+          },
+          {
+            "x": 100,
+            "y": 50
+          }
+        ]
+      }
+    ],
+    "map": {
+      "atlasId": "liuchao.shared.atlas",
+      "locked": true,
+      "mapConfig": {
+        "width": 10000,
+        "height": 10000,
+        "minLng": 0,
+        "maxLng": 10000,
+        "minLat": 0,
+        "maxLat": 10000
+      },
+      "backgroundImage": "shared-atlas/source-maps/liuchao-world.jpg"
+    }
+  },
+  "canon": {
+    "factions": [
+      {
+        "id": "liuchao.faction.baihu_shang_guan",
+        "name": "白湖商馆",
+        "description": "五原城最大的商馆，主营奴隶贸易和青楼产业，主人苏妲己。",
+        "type": "商馆",
+        "headquartersLocationId": "liuchao.location.mingzhou",
+        "territory": [
+          {
+            "x": 8800,
+            "y": 6300
+          },
+          {
+            "x": 9000,
+            "y": 6300
+          },
+          {
+            "x": 9000,
+            "y": 6500
+          },
+          {
+            "x": 8800,
+            "y": 6500
+          },
+          {
+            "x": 8800,
+            "y": 6300
+          }
+        ],
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.taiyi_zhen_zong",
+        "name": "太乙真宗",
+        "description": "六朝第一教派，掌教王哲已死，教内教御争夺掌教之位。",
+        "type": "宗门",
+        "headquartersLocationId": "liuchao.location.baihu_shang_guan",
+        "territory": [
+          {
+            "x": 4900,
+            "y": 4900
+          },
+          {
+            "x": 5100,
+            "y": 4900
+          },
+          {
+            "x": 5100,
+            "y": 5100
+          },
+          {
+            "x": 4900,
+            "y": 5100
+          },
+          {
+            "x": 4900,
+            "y": 4900
+          }
+        ],
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.guangming_guantang",
+        "name": "光明观堂",
+        "headquartersLocationId": "liuchao.location.mingzhou",
+        "type": "sect",
+        "description": "道门观堂，在南荒和唐国长安均有据点。",
+        "territory": [
+          {
+            "x": 8800,
+            "y": 6300
+          },
+          {
+            "x": 9000,
+            "y": 6300
+          },
+          {
+            "x": 9000,
+            "y": 6500
+          },
+          {
+            "x": 8800,
+            "y": 6500
+          },
+          {
+            "x": 8800,
+            "y": 6300
+          }
+        ],
+        "features": []
+      }
+    ],
+    "locations": [
+      {
+        "id": "liuchao.location.baihu_shang_guan",
+        "name": "白湖商馆",
+        "description": "五原城白湖商馆主楼，苏妲己的住所。",
+        "type": "城池",
+        "continentId": "liuchao.continent.zhongzhou",
+        "factionId": "liuchao.faction.baihu_shang_guan",
+        "coordinates": {
+          "x": 881,
+          "y": 4366
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.chai_fang",
+        "name": "柴房",
+        "description": "白湖商馆偏院柴房，程宗扬被安排在此居住。",
+        "type": "城池",
+        "continentId": "liuchao.continent.zhongzhou",
+        "factionId": "liuchao.faction.baihu_shang_guan",
+        "coordinates": {
+          "x": 881,
+          "y": 4366
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.jia_shan_yan_dong",
+        "name": "假山岩洞",
+        "description": "白湖商馆废弃假山下的岩洞，凝羽药物后遗时在此自慰。",
+        "type": "城池",
+        "continentId": "liuchao.continent.zhongzhou",
+        "factionId": "liuchao.faction.baihu_shang_guan",
+        "coordinates": {
+          "x": 881,
+          "y": 4366
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.long_chi",
+        "name": "龙池",
+        "description": "太乙真宗宗门所在地，位于中州龙脉之上。",
+        "type": "城池",
+        "continentId": "liuchao.continent.zhongzhou",
+        "factionId": "liuchao.faction.taiyi_zhen_zong",
+        "coordinates": {
+          "x": 881,
+          "y": 4366
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.wuyuan",
+        "name": "五原城",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "中州北部边境城池，程宗扬初次逃亡地。",
+        "coordinates": {
+          "x": 881,
+          "y": 4366
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.mingzhou",
+        "name": "明州",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "宋国沿海州城，光明观堂据点所在。",
+        "coordinates": {
+          "x": 8925,
+          "y": 6374
+        },
+        "features": []
+      }
+    ],
+    "characters": [
+      {
+        "id": "liuchao.character.cheng_zongyang",
+        "name": "程宗扬",
+        "description": "从现代世界穿越至六朝的年轻人，被白湖商馆烙上奴隶印记，拥有生死根异能。",
+        "role": "主角",
+        "gender": "男",
+        "realm": "凡人",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.baihu_shang_guan",
+            "category": "organization",
+            "role": "奴隶"
+          }
+        ],
+        "locationId": "liuchao.location.chai_fang",
+        "skillIds": [
+          "liuchao.skill.death_root",
+          "lcq.skill.np001",
+          "lcq.skill.np003",
+          "lcq.skill.np004"
+        ],
+        "techniqueIds": [
+          "liuchao.technique.jiuyang_shen_gong"
+        ],
+        "itemIds": [
+          "liuchao.item.massage_stick",
+          "liuchao.item.drug_bottle",
+          "lcq.item.np002",
+          "lcq.item.np005"
+        ],
+        "profile": {
+          "appearance": "身材匀称的现代青年",
+          "personality": [
+            "机敏狡猾",
+            "行事果断",
+            "善于应变",
+            "轻浮",
+            "善用现代物品谋利"
+          ],
+          "race": "人类",
+          "origin": "现代穿越者",
+          "talents": [
+            {
+              "name": "天命主角",
+              "description": "由角色定位推定的天赋。"
+            },
+            {
+              "name": "生死根",
+              "description": "程宗扬的专属异能。"
+            }
+          ],
+          "attributes": {
+            "rootBone": 8,
+            "spirituality": 9,
+            "comprehension": 10,
+            "fortune": 9,
+            "charm": 8,
+            "temperament": 10
+          },
+          "memories": [
+            "在蛇彝人村寨",
+            "与阿姬曼交易"
+          ],
+          "spiritRoot": {
+            "name": "变异灵根",
+            "tier": "天品",
+            "description": "身怀生死根，由剧本正典认定。"
+          }
+        }
+      },
+      {
+        "id": "liuchao.character.su_daji",
+        "name": "苏妲己",
+        "description": "白湖商馆主人，妖媚残忍，以冰蛊控制程宗扬。",
+        "role": "关键反派",
+        "gender": "女",
+        "realm": "练气",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.baihu_shang_guan",
+            "category": "organization",
+            "role": "主人"
+          }
+        ],
+        "locationId": "liuchao.location.baihu_shang_guan",
+        "skillIds": [
+          "lcq.skill.np006"
+        ],
+        "techniqueIds": [],
+        "itemIds": [
+          "liuchao.item.massage_stick"
+        ],
+        "profile": {
+          "appearance": "瓜子脸，白滑如玉，体态妖媚，眉眼间有种蛊惑人心的魅艳。身材高挑丰满，腰肢纤软，双乳丰挺饱满，臀部肥滑圆翘，与纤细腰身形成强烈反差。肌肤羊脂般晶莹白腻，通体无瑕。长发四散飞舞。常着红裙，艳态妖媚，气质蛊惑。",
+          "personality": [
+            "心机深沉",
+            "手段毒辣",
+            "善于控制他人",
+            "冷酷果断"
+          ],
+          "race": "人类（疑似有妖异背景）",
+          "origin": "白湖商馆主人",
+          "attributes": {
+            "rootBone": 6,
+            "spirituality": 5,
+            "comprehension": 6,
+            "fortune": 8,
+            "charm": 8,
+            "temperament": 7
+          },
+          "spiritRoot": {
+            "name": "冰灵根",
+            "tier": "玄品",
+            "description": "身怀冰蛊，由剧本正典认定。"
+          },
+          "talents": [
+            {
+              "name": "多宝童子",
+              "description": "由角色定位推定的天赋。"
+            },
+            {
+              "name": "冰蛊",
+              "description": "苏妲己的专属异能。"
+            }
+          ]
+        }
+      },
+      {
+        "id": "liuchao.character.ning_yu",
+        "name": "凝羽",
+        "description": "白湖商馆侍卫长，穹羽族人，被苏妲己控制，因药物成瘾。",
+        "role": "侍卫长",
+        "gender": "女",
+        "realm": "练气",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.baihu_shang_guan",
+            "category": "organization",
+            "role": "侍卫长"
+          }
+        ],
+        "locationId": "liuchao.location.jia_shan_yan_dong",
+        "skillIds": [
+          "liuchao.skill.moon_manipulation",
+          "lcq.skill.np004"
+        ],
+        "techniqueIds": [
+          "liuchao.technique.dual_cultivation"
+        ],
+        "itemIds": [
+          "liuchao.item.curved_sword"
+        ],
+        "profile": {
+          "appearance": "雪白肌肤，脸颊常泛异样红晕；高挑丰满身材，双腿修长光洁；圆润坚挺的双乳，乳头与乳晕小巧红润；乌亮发丝；肩头有淡红月牙状痕迹",
+          "personality": [
+            "忠诚但内心矛盾",
+            "经历创伤后依赖程宗扬"
+          ],
+          "race": "穹羽族",
+          "origin": "穹羽族后裔",
+          "talents": [
+            {
+              "name": "剑骨天成",
+              "description": "由角色定位推定的天赋。"
+            },
+            {
+              "name": "月光盾",
+              "description": "凝羽的专属异能。"
+            }
+          ],
+          "attributes": {
+            "rootBone": 9,
+            "spirituality": 7,
+            "comprehension": 6,
+            "fortune": 7,
+            "charm": 6,
+            "temperament": 6
+          },
+          "spiritRoot": {
+            "name": "暗灵根",
+            "tier": "玄品",
+            "description": "身怀月光盾，由剧本正典认定。"
+          },
+          "notes": [
+            "【功法约束】凝羽所习的太一经末技可能与双修功法相关，性行为须符合双修功法要求"
+          ]
+        }
+      },
+      {
+        "id": "liuchao.character.a_jiman_bana",
+        "name": "阿姬曼·芭娜",
+        "description": "天竺舞姬，被程宗扬赎买后释放，已离开五原城。",
+        "role": "前女奴",
+        "gender": "女",
+        "realm": "凡人",
+        "affiliations": [],
+        "locationId": "liuchao.location.baihu_shang_guan",
+        "skillIds": [
+          "liuchao.skill.dance"
+        ],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {
+          "attributes": {
+            "rootBone": 5,
+            "spirituality": 5,
+            "comprehension": 5,
+            "fortune": 4,
+            "charm": 8,
+            "temperament": 5
+          },
+          "spiritRoot": {
+            "name": "水灵根",
+            "tier": "黄品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "顶级魅力",
+              "description": "由角色定位推定的天赋。"
+            }
+          ],
+          "appearance": "阿姬曼身材娇小如幼女，头顶只到程宗扬下颏，肩膀窄窄的，背脊像一枚打磨光滑的玉坠，纤美的腰身曲线细滑动人，臀部又圆又白嫩，臀形精致，肤色晶莹。她乳房丰满异常、浑圆坚挺，与年龄不相衬的圆硕。她有一双美丽的眼睛，眼角有泪痕时也带着笑意，唇角弯弯翘起，碧蓝的眼眸中浮出一层水雾。她穿着红裙、鲜红胸衣，有时用斗篷裹住全身，白皙的颈子、雪滑的玉体。"
+        }
+      },
+      {
+        "id": "liuchao.character.yun_cang_feng",
+        "name": "云苍峰",
+        "role": "商人/盟友",
+        "description": "商人/盟友",
+        "profile": {
+          "attributes": {
+            "rootBone": 6,
+            "spirituality": 8,
+            "comprehension": 10,
+            "fortune": 9,
+            "charm": 7,
+            "temperament": 6
+          },
+          "spiritRoot": {
+            "name": "火灵根",
+            "tier": "地品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "神识过人",
+              "description": "由角色定位推定的天赋。"
+            }
+          ],
+          "appearance": "文士打扮，气度儒雅",
+          "personality": [
+            "谨慎沉着，善于交涉"
+          ]
+        },
+        "realm": "练气",
+        "gender": "男"
+      },
+      {
+        "id": "liuchao.character.wu_er_lang",
+        "name": "武二郎",
+        "role": "商队成员",
+        "description": "商队成员",
+        "profile": {
+          "appearance": "高大威猛，虎背熊腰；面带凶悍之气",
+          "personality": [
+            "勇猛暴躁",
+            "重情重义",
+            "豪爽直率",
+            "崇尚武力",
+            "性情急躁",
+            "恩怨分明"
+          ],
+          "race": "人类",
+          "origin": "白武族族人",
+          "talents": [
+            {
+              "name": "剑骨天成",
+              "description": "由角色定位推定的天赋。"
+            }
+          ],
+          "attributes": {
+            "rootBone": 9,
+            "spirituality": 6,
+            "comprehension": 5,
+            "fortune": 9,
+            "charm": 6,
+            "temperament": 5
+          },
+          "spiritRoot": {
+            "name": "火灵根",
+            "tier": "玄品",
+            "description": "依角色定位由剧本正典赋予。"
+          }
+        },
+        "skillIds": [
+          "lcq.skill.np001",
+          "lcq.skill.np003"
+        ],
+        "realm": "练气",
+        "gender": "男"
+      },
+      {
+        "id": "liuchao.character.xie_yi",
+        "name": "谢艺",
+        "role": "星月湖卫士",
+        "description": "星月湖卫士",
+        "profile": {
+          "attributes": {
+            "rootBone": 8,
+            "spirituality": 6,
+            "comprehension": 8,
+            "fortune": 7,
+            "charm": 7,
+            "temperament": 6
+          },
+          "spiritRoot": {
+            "name": "火灵根",
+            "tier": "地品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "天生神力",
+              "description": "由角色定位推定的天赋。"
+            }
+          ],
+          "appearance": "风尘仆仆，朴素装扮",
+          "personality": [
+            "沉默寡言，但关键时刻可靠"
+          ]
+        },
+        "realm": "筑基",
+        "gender": "男"
+      }
+    ],
+    "playerRelationships": [
+      {
+        "characterId": "liuchao.character.su_daji",
+        "relation": "主人与奴隶",
+        "favorability": -30,
+        "memories": [
+          "被下冰蛊控制",
+          "被迫签卖身契"
+        ]
+      },
+      {
+        "characterId": "liuchao.character.ning_yu",
+        "relation": "性伴侣/合作",
+        "favorability": 20,
+        "memories": [
+          "在赌局中被迫演示性玩具",
+          "在假山岩洞中发生关系"
+        ]
+      },
+      {
+        "characterId": "liuchao.character.a_jiman_bana",
+        "relation": "前主人与女奴",
+        "favorability": 10,
+        "memories": [
+          "赎买并释放"
+        ]
+      },
+      {
+        "characterId": "liuchao.character.wu_er_lang",
+        "relation": "雇主与雇员",
+        "favorability": 25
+      },
+      {
+        "characterId": "liuchao.character.yun_cang_feng",
+        "relation": "合作",
+        "favorability": 35
+      },
+      {
+        "characterId": "liuchao.character.xie_yi",
+        "relation": "朋友",
+        "favorability": 42
+      }
+    ],
+    "relationships": [
+      {
+        "fromCharacterId": "liuchao.character.su_daji",
+        "toCharacterId": "liuchao.character.ning_yu",
+        "relation": "主人与侍卫",
+        "score": -20,
+        "direction": "directed",
+        "tags": [
+          "控制",
+          "监视"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.a_jiman_bana",
+        "toCharacterId": "liuchao.character.su_daji",
+        "relation": "主人",
+        "score": 25,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.xie_yi",
+        "toCharacterId": "liuchao.character.yun_cang_feng",
+        "relation": "同行",
+        "score": 5,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.ning_yu",
+        "toCharacterId": "liuchao.character.wu_er_lang",
+        "relation": "同事",
+        "score": 5,
+        "direction": "bidirectional"
+      }
+    ]
+  },
+  "content": {
+    "skills": [
+      {
+        "id": "liuchao.skill.death_root",
+        "name": "生死根",
+        "description": "程宗扬将死气化为生机的异能，能加速植物生长和伤口愈合。",
+        "type": "异能",
+        "effects": [
+          "感应死亡气息",
+          "转化死气为生机"
+        ]
+      },
+      {
+        "id": "liuchao.skill.moon_manipulation",
+        "name": "月光操纵",
+        "description": "穹羽族天生能力，可操纵月光。",
+        "type": "种族天赋",
+        "effects": [
+          "月光凝形",
+          "冰霜附着"
+        ]
+      },
+      {
+        "id": "liuchao.skill.dance",
+        "name": "舞技",
+        "description": "天竺舞姬的舞蹈技能。",
+        "type": "技艺",
+        "effects": [
+          "魅惑",
+          "柔韧"
+        ]
+      },
+      {
+        "id": "lcq.skill.np001",
+        "name": "九阳神功",
+        "description": "太乙真宗核心功法，王哲传程宗扬口诀。"
+      },
+      {
+        "id": "lcq.skill.np003",
+        "name": "五虎断门刀",
+        "description": "武二郎的刀法，未传授给程宗扬"
+      },
+      {
+        "id": "lcq.skill.np004",
+        "name": "双修功法",
+        "description": "凝羽与程宗扬通过性交交换真气"
+      },
+      {
+        "id": "lcq.skill.np006",
+        "name": "冰蛊",
+        "description": "苏妲己对程宗扬下的蛊毒，用于控制"
+      }
+    ],
+    "techniques": [
+      {
+        "id": "liuchao.technique.jiuyang_shen_gong",
+        "name": "九阳神功",
+        "description": "太乙真宗核心功法，王哲传程宗扬口诀。",
+        "grade": "神品",
+        "skillIds": [
+          "liuchao.skill.death_root"
+        ]
+      },
+      {
+        "id": "liuchao.technique.dual_cultivation",
+        "name": "双修功法",
+        "description": "凝羽与程宗扬通过性交交换真气的功法。",
+        "grade": "凡品",
+        "skillIds": [
+          "liuchao.skill.moon_manipulation"
+        ]
+      }
+    ],
+    "items": [
+      {
+        "id": "liuchao.item.massage_stick",
+        "name": "按摩棒",
+        "description": "程宗扬从现代带来的性玩具，后被苏妲己占有。",
+        "type": "other",
+        "grade": "中品"
+      },
+      {
+        "id": "liuchao.item.drug_bottle",
+        "name": "药瓶",
+        "description": "装有摇头丸和麻古的药瓶，用于控制凝羽。",
+        "type": "consumable",
+        "grade": "凡品"
+      },
+      {
+        "id": "liuchao.item.curved_sword",
+        "name": "弯刀",
+        "description": "凝羽的武器。",
+        "type": "weapon",
+        "grade": "凡品"
+      },
+      {
+        "id": "lcq.item.np002",
+        "name": "拉链",
+        "type": "other",
+        "description": "程宗扬从现代世界带来的拉链，被文泽视为珍贵物品。",
+        "grade": "仙品"
+      },
+      {
+        "id": "lcq.item.np005",
+        "name": "麻古",
+        "type": "consumable",
+        "description": "段强留下的催情药，被程宗扬用于凝羽",
+        "grade": "中品"
+      }
+    ]
+  },
+  "scenario": {
+    "opening": {
+      "text": "程宗扬被苏妲己下冰蛊控制，被迫签下卖身契成为白湖商馆奴隶。凝羽因药物后遗在假山岩洞中自慰，程宗扬发现后再次与其发生关系。玩家需在赌局后应对苏妲己的控制，并处理与凝羽的关系。",
+      "playerRole": "白湖商馆奴隶",
+      "playerCharacterId": "liuchao.character.cheng_zongyang",
+      "creationPreset": {
+        "characterName": "程宗扬",
+        "gender": "男",
+        "race": "人族",
+        "age": 20,
+        "talentTier": {
+          "name": "异世来客",
+          "description": "来自现代世界。"
+        },
+        "origin": {
+          "name": "现代来客",
+          "description": "因空间异变进入六朝。"
+        },
+        "spiritRoot": {
+          "name": "生死根",
+          "tier": "唯一异能",
+          "description": "并非传统灵根。",
+          "specialEffects": [
+            "感应死亡气息"
+          ]
+        },
+        "talents": [
+          {
+            "name": "务实机敏",
+            "description": "善于判断风险。"
+          }
+        ],
+        "attributes": {
+          "rootBone": 5,
+          "spirituality": 4,
+          "comprehension": 6,
+          "fortune": 6,
+          "charm": 5,
+          "temperament": 6
+        },
+        "locked": true
+      },
+      "locationId": "liuchao.location.chai_fang",
+      "featuredCharacterIds": [
+        "liuchao.character.cheng_zongyang",
+        "liuchao.character.su_daji",
+        "liuchao.character.ning_yu"
+      ]
+    },
+    "initialFlags": {
+      "chapter.lcq.stage_03.started": true,
+      "chapter.lcq.stage_03.done": false,
+      "event.s03_01.done": false,
+      "event.s03_02.done": false,
+      "event.s03_03.done": false,
+      "event.s03_04.done": false,
+      "event.s03_05.done": false,
+      "event.s03_06.done": false,
+      "event.s03_07.done": false,
+      "event.s03_08.done": false,
+      "event.s03_09.done": false
+    },
+    "chapters": [
+      {
+        "id": "lcq.chapter.stage_03",
+        "title": "第19章·赌局",
+        "summary": "第19章·赌局：程宗扬见苏妲己 … 程宗扬与凝羽双修",
+        "activation": [
+          {
+            "path": "flags.chapter.lcq.stage_03.started",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.s03_09.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "eventIds": [
+          "lcq.event.s03_01",
+          "lcq.event.s03_02",
+          "lcq.event.s03_03",
+          "lcq.event.s03_04",
+          "lcq.event.s03_05",
+          "lcq.event.s03_06",
+          "lcq.event.s03_07",
+          "lcq.event.s03_08",
+          "lcq.event.s03_09"
+        ]
+      }
+    ],
+    "events": [
+      {
+        "id": "lcq.event.s03_01",
+        "name": "程宗扬见苏妲己",
+        "description": "程宗扬被带到白湖商馆主人苏妲己面前，通过观察识破其伪装，并达成交易。",
+        "conditions": [
+          {
+            "path": "flags.chapter.lcq.stage_03.started",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.s03_01.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.su_daji",
+          "liuchao.character.ning_yu"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.baihu_shang_guan"
+        ],
+        "locationId": "liuchao.location.baihu_shang_guan"
+      },
+      {
+        "id": "lcq.event.s03_02",
+        "name": "程宗扬与凝羽赌约及性玩具演示",
+        "description": "程宗扬在苏妲己面前用按摩棒和药物（摇头丸、麻古）对凝羽进行性玩具演示，导致凝羽失控并高潮，最终程宗扬输掉赌约，被迫签下卖身契成为奴隶。",
+        "conditions": [
+          {
+            "path": "flags.event.s03_01.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.s03_02.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.su_daji",
+          "liuchao.character.ning_yu"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.baihu_shang_guan"
+        ],
+        "locationId": "liuchao.location.baihu_shang_guan"
+      },
+      {
+        "id": "lcq.event.s03_03",
+        "name": "苏妲己求助程宗扬破解按摩棒",
+        "description": "苏妲己因按摩棒卡在体内无法取出，求助程宗扬，程宗扬以60金铢为条件，通过射精方法解除按摩棒。",
+        "conditions": [
+          {
+            "path": "flags.event.s03_02.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.s03_03.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.su_daji",
+          "liuchao.character.ning_yu"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.baihu_shang_guan"
+        ],
+        "locationId": "liuchao.location.baihu_shang_guan"
+      },
+      {
+        "id": "lcq.event.s03_04",
+        "name": "程宗扬赎买阿姬曼并释放",
+        "description": "程宗扬用苏妲己的60金铢赎买阿姬曼，撕毁身契，但阿姬曼拒绝离开，最终被苏妲己发现并下冰蛊。",
+        "conditions": [
+          {
+            "path": "flags.event.s03_03.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.s03_04.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.a_jiman_bana",
+          "liuchao.character.ning_yu"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.baihu_shang_guan"
+        ],
+        "locationId": "liuchao.location.wuyuan"
+      },
+      {
+        "id": "lcq.event.s03_05",
+        "name": "苏妲己对程宗扬下冰蛊",
+        "description": "苏妲己以冰蛊控制程宗扬，迫使其前往南荒寻找霓龙丝。",
+        "conditions": [
+          {
+            "path": "flags.event.s03_04.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.s03_05.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.su_daji",
+          "liuchao.character.ning_yu"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.baihu_shang_guan"
+        ],
+        "locationId": "liuchao.location.baihu_shang_guan"
+      },
+      {
+        "id": "lcq.event.s03_06",
+        "name": "武二郎加入商队及遇袭",
+        "description": "武二郎加入程宗扬的南荒队伍，但途中遭泊陵鱼氏刺客袭击，武二郎中毒，被神秘女子（潘金莲）所救。",
+        "conditions": [
+          {
+            "path": "flags.event.s03_05.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.s03_06.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.ning_yu",
+          "liuchao.character.wu_er_lang"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.baihu_shang_guan"
+        ],
+        "locationId": "liuchao.location.wuyuan"
+      },
+      {
+        "id": "lcq.event.s03_07",
+        "name": "程宗扬与西门庆相识",
+        "description": "程宗扬在醉月楼与西门庆相识，并得知其与潘金莲、武二郎的恩怨。",
+        "conditions": [
+          {
+            "path": "flags.event.s03_06.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.s03_07.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.ning_yu"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.baihu_shang_guan"
+        ]
+      },
+      {
+        "id": "lcq.event.s03_08",
+        "name": "商队启程南荒",
+        "description": "程宗扬、武二郎、凝羽、祁远等人启程前往南荒。",
+        "conditions": [
+          {
+            "path": "flags.event.s03_07.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.s03_08.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.ning_yu",
+          "liuchao.character.wu_er_lang"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.baihu_shang_guan"
+        ],
+        "locationId": "liuchao.location.wuyuan"
+      },
+      {
+        "id": "lcq.event.s03_09",
+        "name": "程宗扬与凝羽双修",
+        "description": "程宗扬与凝羽在蛇彝人空屋中双修，并得知凝羽与西门庆的过往。",
+        "conditions": [
+          {
+            "path": "flags.event.s03_08.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.s03_09.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.ning_yu"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.baihu_shang_guan"
+        ]
+      }
+    ]
+  },
+  "rules": {
+    "mode": "strict",
+    "lockedFields": [
+      "canon.factions.*.name",
+      "canon.locations.*.name",
+      "canon.characters.*.name",
+      "content.skills.*.name",
+      "content.techniques.*.name",
+      "content.items.*.name"
+    ],
+    "contentAccess": [
+      {
+        "contentId": "liuchao.skill.death_root",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "liuchao.technique.jiuyang_shen_gong",
+        "policy": "restricted",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lcq.skill.np001",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lcq.skill.np003",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.wu_er_lang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lcq.skill.np006",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.su_daji"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lcq.item.np002",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      }
+    ]
+  }
+}

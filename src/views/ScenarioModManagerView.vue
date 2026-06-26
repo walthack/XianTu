@@ -61,6 +61,7 @@
           <div class="title-line">
             <h2>{{ entry.mod.manifest.name }}</h2>
             <span class="mode-badge">{{ entry.mod.rules.mode === 'strict' ? 'Strict' : 'Expand' }}</span>
+            <span v-if="entry.builtin" class="builtin-badge">内置</span>
             <span v-if="!entry.enabled" class="disabled-badge">已停用</span>
           </div>
           <p class="description">{{ entry.mod.manifest.description || entry.mod.world.background }}</p>
@@ -93,7 +94,7 @@
           <button class="icon-button" title="导出" aria-label="导出" :disabled="busy" @click="exportMod(entry)">
             <Download :size="18" />
           </button>
-          <button class="icon-button danger" title="删除" aria-label="删除" :disabled="busy" @click="removeMod(entry)">
+          <button v-if="!entry.builtin" class="icon-button danger" title="删除" aria-label="删除" :disabled="busy" @click="removeMod(entry)">
             <Trash2 :size="18" />
           </button>
         </div>
@@ -426,6 +427,7 @@ button:disabled { opacity: 0.55; cursor: not-allowed; }
 .counts { margin-top: 8px; }
 
 .mode-badge,
+.builtin-badge,
 .disabled-badge {
   padding: 2px 7px;
   border-radius: 4px;
@@ -434,6 +436,7 @@ button:disabled { opacity: 0.55; cursor: not-allowed; }
 }
 
 .disabled-badge { color: var(--color-warning); }
+.builtin-badge { color: var(--color-accent, var(--color-primary)); border-color: currentColor; }
 .mod-actions { align-self: center; flex-wrap: nowrap; }
 .enable-toggle { display: flex; align-items: center; gap: 7px; color: var(--color-text-secondary); }
 

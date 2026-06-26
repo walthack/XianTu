@@ -1,0 +1,1295 @@
+{
+  "schema": "xiantu.scenario-mod",
+  "version": 1,
+  "manifest": {
+    "id": "lyl.jiangzhou_retreat",
+    "name": "江州退军与程宗扬启程",
+    "version": "1.0.0",
+    "author": "DeepSeek V4 Flash + XianTu Mod Kit",
+    "description": "Strict 模式，基于《六朝云龙吟》第1-7章正文。玩家扮演程宗扬，从宋军主力溃退、星月湖撤离、选锋营断后、程宗扬即将离开江州切入；同时王团练手下即将屠杀荆溪村寨，少女相雅面临灭族危机。"
+  },
+  "world": {
+    "name": "六朝",
+    "era": "宋国江州至临安初期",
+    "background": "宋军大溃，粮草已尽，士气全无，夏用和与秦翰主持退军，由选锋营断后。星月湖大营与宋军激战后，程宗扬乘船离开江州赴临安。同时王团练手下乡兵正在荆溪村寨屠杀，少女相雅面临灭族危机。",
+    "specialRules": [
+      "核心专名不得改写",
+      "生死根为程宗扬唯一异能",
+      "九阳神功为太乙真宗秘传",
+      "使用六朝共享正典地图，禁止随机生成势力或地点覆盖已导入内容"
+    ],
+    "continents": [
+      {
+        "id": "liuchao.continent.zhongzhou",
+        "name": "中州",
+        "description": "故事主要区域，包括宋国江州、临安等地。",
+        "bounds": [
+          {
+            "x": 100,
+            "y": 50
+          },
+          {
+            "x": 9600,
+            "y": 50
+          },
+          {
+            "x": 9600,
+            "y": 6500
+          },
+          {
+            "x": 100,
+            "y": 6500
+          },
+          {
+            "x": 100,
+            "y": 50
+          }
+        ]
+      },
+      {
+        "id": "liuchao.continent.nanhuang",
+        "name": "南荒",
+        "description": "中州以南的蛮荒地带，多部族势力。",
+        "bounds": [
+          {
+            "x": 1200,
+            "y": 5200
+          },
+          {
+            "x": 7000,
+            "y": 5200
+          },
+          {
+            "x": 7000,
+            "y": 10000
+          },
+          {
+            "x": 1200,
+            "y": 10000
+          },
+          {
+            "x": 1200,
+            "y": 5200
+          }
+        ]
+      }
+    ],
+    "map": {
+      "atlasId": "liuchao.shared.atlas",
+      "locked": true,
+      "mapConfig": {
+        "width": 10000,
+        "height": 10000,
+        "minLng": 0,
+        "maxLng": 10000,
+        "minLat": 0,
+        "maxLat": 10000
+      },
+      "backgroundImage": "shared-atlas/source-maps/liuchao-world.jpg"
+    }
+  },
+  "canon": {
+    "factions": [
+      {
+        "id": "liuchao.faction.song_army",
+        "name": "宋军",
+        "description": "宋国正规军，包括捧日、龙卫等上四军及选锋营。",
+        "type": "military",
+        "headquartersLocationId": "liuchao.location.linan",
+        "territory": [
+          {
+            "x": 7000,
+            "y": 6300
+          },
+          {
+            "x": 8000,
+            "y": 6300
+          },
+          {
+            "x": 8000,
+            "y": 7000
+          },
+          {
+            "x": 7000,
+            "y": 7000
+          },
+          {
+            "x": 7000,
+            "y": 6300
+          }
+        ],
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.xingyue_lake",
+        "name": "星月湖",
+        "headquartersLocationId": "liuchao.location.jiangzhou",
+        "type": "army",
+        "description": "岳帅旧部组成的军事势力，原为晋国左武军一部分，后独立为程宗扬掌控的势力。",
+        "territory": [
+          {
+            "x": 4800,
+            "y": 6600
+          },
+          {
+            "x": 5100,
+            "y": 6600
+          },
+          {
+            "x": 5100,
+            "y": 6800
+          },
+          {
+            "x": 4800,
+            "y": 6800
+          },
+          {
+            "x": 4800,
+            "y": 6600
+          }
+        ],
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.wang_tuanlian",
+        "name": "王团练",
+        "description": "筠州地方乡兵，即将屠杀荆溪村寨。",
+        "type": "military",
+        "headquartersLocationId": "liuchao.location.linan",
+        "territory": [
+          {
+            "x": 7000,
+            "y": 6300
+          },
+          {
+            "x": 8000,
+            "y": 6300
+          },
+          {
+            "x": 8000,
+            "y": 7000
+          },
+          {
+            "x": 7000,
+            "y": 7000
+          },
+          {
+            "x": 7000,
+            "y": 6300
+          }
+        ],
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.jingxi_people",
+        "name": "荆溪人",
+        "description": "山中蛮族，驯养猛玛，即将被灭族。",
+        "type": "clan",
+        "headquartersLocationId": "liuchao.location.guiwangdong",
+        "territory": [
+          {
+            "x": 1500,
+            "y": 8600
+          },
+          {
+            "x": 1700,
+            "y": 8600
+          },
+          {
+            "x": 1700,
+            "y": 8800
+          },
+          {
+            "x": 1500,
+            "y": 8800
+          },
+          {
+            "x": 1500,
+            "y": 8600
+          }
+        ],
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.song_court",
+        "name": "宋国朝廷",
+        "headquartersLocationId": "liuchao.location.linan",
+        "type": "government",
+        "description": "六朝之一宋国的朝廷，都城在临安。",
+        "territory": [
+          {
+            "x": 7000,
+            "y": 6300
+          },
+          {
+            "x": 8000,
+            "y": 6300
+          },
+          {
+            "x": 8000,
+            "y": 7000
+          },
+          {
+            "x": 7000,
+            "y": 7000
+          },
+          {
+            "x": 7000,
+            "y": 6300
+          }
+        ],
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.guiwang_dong",
+        "name": "鬼王峒",
+        "headquartersLocationId": "liuchao.location.guiwangdong",
+        "type": "tribe",
+        "description": "南荒部族联盟，由鬼巫王统领。",
+        "territory": [
+          {
+            "x": 1500,
+            "y": 8600
+          },
+          {
+            "x": 1700,
+            "y": 8600
+          },
+          {
+            "x": 1700,
+            "y": 8800
+          },
+          {
+            "x": 1500,
+            "y": 8800
+          },
+          {
+            "x": 1500,
+            "y": 8600
+          }
+        ],
+        "features": []
+      }
+    ],
+    "locations": [
+      {
+        "id": "liuchao.location.jinming_zhai",
+        "name": "金明寨",
+        "description": "江州城外宋军大营。",
+        "type": "城池",
+        "continentId": "liuchao.continent.zhongzhou",
+        "factionId": "liuchao.faction.song_army",
+        "coordinates": {
+          "x": 5050,
+          "y": 6550
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.jiangzhou",
+        "name": "江州",
+        "description": "宋国前线重镇，星月湖大营与宋军激战。",
+        "type": "城池",
+        "continentId": "liuchao.continent.zhongzhou",
+        "factionId": "liuchao.faction.xingyue_lake",
+        "coordinates": {
+          "x": 4956,
+          "y": 6735
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.junzhou",
+        "name": "筠州",
+        "description": "王团练驻地，即将发生屠杀。",
+        "type": "城池",
+        "continentId": "liuchao.continent.zhongzhou",
+        "factionId": "liuchao.faction.wang_tuanlian",
+        "coordinates": {
+          "x": 5656,
+          "y": 6822
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.jingxi_village",
+        "name": "荆溪村寨",
+        "description": "荆溪人聚居地，即将被王团练手下屠杀。",
+        "type": "城池",
+        "continentId": "liuchao.continent.zhongzhou",
+        "factionId": "liuchao.faction.jingxi_people",
+        "coordinates": {
+          "x": 5600,
+          "y": 6900
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.linan",
+        "name": "临安",
+        "description": "宋国都城，程宗扬即将前往。",
+        "type": "城池",
+        "continentId": "liuchao.continent.zhongzhou",
+        "factionId": "liuchao.faction.song_army",
+        "coordinates": {
+          "x": 7466,
+          "y": 6532
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.guiwangdong",
+        "name": "鬼王峒",
+        "continentId": "liuchao.continent.nanhuang",
+        "type": "洞府",
+        "description": "南荒鬼王峒势力的核心洞窟。",
+        "coordinates": {
+          "x": 1641,
+          "y": 8690
+        },
+        "features": []
+      }
+    ],
+    "characters": [
+      {
+        "id": "liuchao.character.cheng_zongyang",
+        "name": "程宗扬",
+        "description": "主角，来自现代世界的商人，拥有生死根异能。",
+        "role": "主角",
+        "gender": "男",
+        "realm": "筑基",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.xingyue_lake",
+            "category": "military",
+            "role": "客卿"
+          }
+        ],
+        "locationId": "liuchao.location.jiangzhou",
+        "skillIds": [
+          "liuchao.skill.death_root",
+          "lyl.skill.np002"
+        ],
+        "techniqueIds": [
+          "liuchao.technique.taiji_manual"
+        ],
+        "itemIds": [
+          "liuchao.item.coral_dagger",
+          "lyl.item.np001",
+          "lyl.item.np003"
+        ],
+        "profile": {
+          "attributes": {
+            "rootBone": 10,
+            "spirituality": 10,
+            "comprehension": 10,
+            "fortune": 9,
+            "charm": 9,
+            "temperament": 10
+          },
+          "spiritRoot": {
+            "name": "变异灵根",
+            "tier": "天品",
+            "description": "身怀纸币发行权，由剧本正典认定。"
+          },
+          "talents": [
+            {
+              "name": "天命主角",
+              "description": "由角色定位推定的天赋。"
+            },
+            {
+              "name": "纸币发行权",
+              "description": "程宗扬的专属异能。"
+            }
+          ],
+          "appearance": "身材魁梧，身穿黑衣，赤阳藤拖入魔墟时衣衫破损，被雪雪咬伤后曾不举，颈后有狐族印记，被襄城君认出，青年男子",
+          "personality": [
+            "机敏果断",
+            "善于谋划",
+            "在多方势力间周旋，善于谈判和算计",
+            "对下属和女人有控制欲，但也时有宽容",
+            "为人机敏，善于伪装和谈判",
+            "对商业和权力有野心，善于利用各方势力"
+          ]
+        }
+      },
+      {
+        "id": "liuchao.character.xiao_zi",
+        "name": "小紫",
+        "description": "程宗扬的伴侣，星月湖大营成员。（后宫尊称\"紫妈妈\"，正宫，最有手腕、能管束众人；宠物为犬\"雪雪\"）",
+        "role": "伴侣",
+        "gender": "女",
+        "realm": "筑基",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.xingyue_lake",
+            "category": "military",
+            "role": "成员"
+          }
+        ],
+        "locationId": "liuchao.location.jiangzhou",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [
+          "lyl.item.np001"
+        ],
+        "profile": {
+          "attributes": {
+            "rootBone": 6,
+            "spirituality": 6,
+            "comprehension": 8,
+            "fortune": 7,
+            "charm": 8,
+            "temperament": 9
+          },
+          "spiritRoot": {
+            "name": "暗灵根",
+            "tier": "地品",
+            "description": "身怀毒蝶翅粉，由剧本正典认定。"
+          },
+          "talents": [
+            {
+              "name": "剑骨天成",
+              "description": "由角色定位推定的天赋。"
+            },
+            {
+              "name": "毒蝶翅粉",
+              "description": "小紫的专属异能。"
+            }
+          ],
+          "appearance": "身材娇小，带有诡异气质，外表娇小，容貌迷人，常穿紫色衣物，神秘气质",
+          "personality": [
+            "聪明而冷酷，善于用毒和控制",
+            "对程宗扬有占有欲但也宠爱",
+            "机灵聪慧，善于幻术和操控",
+            "对程宗扬忠诚，有占有欲"
+          ]
+        }
+      },
+      {
+        "id": "liuchao.character.xie_youdu",
+        "name": "谢幼度",
+        "description": "皇图天策府高手，守护月霜。",
+        "role": "高手",
+        "gender": "男",
+        "realm": "练气",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.xingyue_lake",
+            "category": "military",
+            "role": "客卿"
+          }
+        ],
+        "locationId": "liuchao.location.jiangzhou",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {
+          "attributes": {
+            "rootBone": 4,
+            "spirituality": 5,
+            "comprehension": 6,
+            "fortune": 4,
+            "charm": 6,
+            "temperament": 5
+          },
+          "spiritRoot": {
+            "name": "风灵根",
+            "tier": "黄品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "农夫之子",
+              "description": "由角色定位推定的天赋。"
+            }
+          ]
+        }
+      },
+      {
+        "id": "liuchao.character.qin_hui",
+        "name": "秦桧",
+        "description": "程宗扬的谋士，擅长权术。",
+        "role": "谋士",
+        "gender": "男",
+        "realm": "凡人",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.xingyue_lake",
+            "category": "military",
+            "role": "幕僚"
+          }
+        ],
+        "locationId": "liuchao.location.jiangzhou",
+        "skillIds": [
+          "lyl.skill.np004"
+        ],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {
+          "attributes": {
+            "rootBone": 7,
+            "spirituality": 8,
+            "comprehension": 7,
+            "fortune": 7,
+            "charm": 7,
+            "temperament": 9
+          },
+          "spiritRoot": {
+            "name": "火灵根",
+            "tier": "地品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "过目不忘",
+              "description": "由角色定位推定的天赋。"
+            }
+          ],
+          "appearance": "文士打扮，相貌清秀，文士模样",
+          "personality": [
+            "精明狡猾",
+            "善于权术",
+            "精于算计和情报分析",
+            "善于自保，使用假死秘术",
+            "计谋多端",
+            "忠心于程宗扬"
+          ]
+        }
+      },
+      {
+        "id": "liuchao.character.wang_tuanlian",
+        "name": "王团练",
+        "description": "筠州地方团练，即将屠杀荆溪村寨。",
+        "role": "反派",
+        "gender": "男",
+        "realm": "凡人",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.wang_tuanlian",
+            "category": "military",
+            "role": "团练"
+          }
+        ],
+        "locationId": "liuchao.location.junzhou",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {
+          "attributes": {
+            "rootBone": 5,
+            "spirituality": 6,
+            "comprehension": 6,
+            "fortune": 6,
+            "charm": 6,
+            "temperament": 4
+          },
+          "spiritRoot": {
+            "name": "木灵根",
+            "tier": "黄品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "农夫之子",
+              "description": "由角色定位推定的天赋。"
+            }
+          ]
+        }
+      },
+      {
+        "id": "liuchao.character.xiang_ya",
+        "name": "相雅",
+        "description": "荆溪女族长，即将面临灭族。",
+        "role": "女族长",
+        "gender": "女",
+        "realm": "凡人",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.jingxi_people",
+            "category": "clan",
+            "role": "女族长"
+          }
+        ],
+        "locationId": "liuchao.location.jingxi_village",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {
+          "attributes": {
+            "rootBone": 6,
+            "spirituality": 4,
+            "comprehension": 6,
+            "fortune": 4,
+            "charm": 4,
+            "temperament": 6
+          },
+          "spiritRoot": {
+            "name": "冰灵根",
+            "tier": "黄品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "老实人",
+              "description": "由角色定位推定的天赋。"
+            }
+          ],
+          "appearance": "她是荆溪女子，有着娇小的身体、白皙的肌肤、雪白滑嫩的胴体，外貌温柔，眉宇间常带一抹哀痛或忧愁，但也表露过坚毅、厌恶、希冀等神情。"
+        }
+      },
+      {
+        "id": "liuchao.character.li_shi_shi",
+        "name": "李师师",
+        "role": "医者、未来公关经理培养对象",
+        "description": "医者、未来公关经理培养对象",
+        "profile": {
+          "attributes": {
+            "rootBone": 6,
+            "spirituality": 8,
+            "comprehension": 9,
+            "fortune": 8,
+            "charm": 6,
+            "temperament": 8
+          },
+          "spiritRoot": {
+            "name": "雷灵根",
+            "tier": "地品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "丹道圣手",
+              "description": "由角色定位推定的天赋。"
+            }
+          ],
+          "appearance": "眉目秀美，修眉如画，目如秋水；肌肤白腻如玉，犹如凝脂；身材娇小玲珑，纤柔轻盈，腰身盈盈一握，柳腰圆臀，玉腿笔直；常穿白衣素裙，双鬟垂肩，气质秀美无俦。",
+          "personality": [
+            "温柔善良",
+            "坚毅果断"
+          ]
+        },
+        "realm": "筑基",
+        "gender": "女"
+      },
+      {
+        "id": "liuchao.character.qing_mian_shou",
+        "name": "青面兽",
+        "role": "兽蛮仆从",
+        "description": "兽蛮仆从",
+        "profile": {
+          "attributes": {
+            "rootBone": 9,
+            "spirituality": 6,
+            "comprehension": 7,
+            "fortune": 6,
+            "charm": 5,
+            "temperament": 5
+          },
+          "spiritRoot": {
+            "name": "火灵根",
+            "tier": "玄品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "体修奇才",
+              "description": "由角色定位推定的天赋。"
+            }
+          ]
+        },
+        "realm": "筑基"
+      },
+      {
+        "id": "liuchao.character.ao_run",
+        "name": "敖润",
+        "role": "程宗扬下属",
+        "description": "程宗扬下属",
+        "profile": {
+          "attributes": {
+            "rootBone": 7,
+            "spirituality": 7,
+            "comprehension": 7,
+            "fortune": 9,
+            "charm": 8,
+            "temperament": 7
+          },
+          "spiritRoot": {
+            "name": "土灵根",
+            "tier": "玄品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "多宝童子",
+              "description": "由角色定位推定的天赋。"
+            }
+          ]
+        },
+        "realm": "筑基"
+      },
+      {
+        "id": "liuchao.character.lin_chong",
+        "name": "林冲",
+        "role": "禁军教头、阮香凝（林娘子）名义上的丈夫",
+        "description": "禁军教头、阮香凝（林娘子）名义上的丈夫",
+        "skillIds": [
+          "lyl.skill.np005"
+        ],
+        "profile": {
+          "attributes": {
+            "rootBone": 7,
+            "spirituality": 7,
+            "comprehension": 5,
+            "fortune": 5,
+            "charm": 5,
+            "temperament": 6
+          },
+          "spiritRoot": {
+            "name": "金灵根",
+            "tier": "玄品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "农夫之子",
+              "description": "由角色定位推定的天赋。"
+            }
+          ],
+          "appearance": "身材高大，武人装扮",
+          "personality": [
+            "忍辱负重",
+            "武艺高强"
+          ]
+        },
+        "realm": "筑基",
+        "gender": "男"
+      },
+      {
+        "id": "liuchao.character.jin_wu_zhu",
+        "name": "金兀术",
+        "role": "兽蛮战士、原兽蛮营首领",
+        "description": "兽蛮战士、原兽蛮营首领",
+        "profile": {
+          "attributes": {
+            "rootBone": 10,
+            "spirituality": 8,
+            "comprehension": 8,
+            "fortune": 6,
+            "charm": 8,
+            "temperament": 8
+          },
+          "spiritRoot": {
+            "name": "火灵根",
+            "tier": "地品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "剑骨天成",
+              "description": "由角色定位推定的天赋。"
+            }
+          ]
+        },
+        "realm": "筑基"
+      },
+      {
+        "id": "liuchao.character.lu_zhi_shen",
+        "name": "鲁智深",
+        "role": "花和尚",
+        "description": "花和尚",
+        "skillIds": [
+          "lyl.skill.np005"
+        ],
+        "profile": {
+          "attributes": {
+            "rootBone": 5,
+            "spirituality": 6,
+            "comprehension": 5,
+            "fortune": 7,
+            "charm": 6,
+            "temperament": 7
+          },
+          "spiritRoot": {
+            "name": "木灵根",
+            "tier": "玄品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "老实人",
+              "description": "由角色定位推定的天赋。"
+            }
+          ],
+          "appearance": "体型魁梧，僧衣",
+          "personality": [
+            "豪爽",
+            "仗义"
+          ],
+          "notes": [
+            "【门规约束】作为和尚，应遵守佛门戒律，保持清净之身。"
+          ]
+        },
+        "realm": "筑基",
+        "gender": "男"
+      },
+      {
+        "id": "liuchao.character.bao_zi_tou",
+        "name": "豹子头",
+        "role": "兽蛮武士",
+        "description": "兽蛮武士",
+        "profile": {
+          "attributes": {
+            "rootBone": 7,
+            "spirituality": 6,
+            "comprehension": 5,
+            "fortune": 7,
+            "charm": 7,
+            "temperament": 7
+          },
+          "spiritRoot": {
+            "name": "火灵根",
+            "tier": "玄品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "体修奇才",
+              "description": "由角色定位推定的天赋。"
+            }
+          ]
+        },
+        "realm": "筑基"
+      }
+    ],
+    "playerRelationships": [
+      {
+        "characterId": "liuchao.character.xiao_zi",
+        "relation": "伴侣",
+        "favorability": 80,
+        "memories": [
+          "在江州客栈嬉戏"
+        ]
+      },
+      {
+        "characterId": "liuchao.character.xie_youdu",
+        "relation": "相识",
+        "favorability": 30,
+        "memories": [
+          "在江畔相遇"
+        ]
+      },
+      {
+        "characterId": "liuchao.character.qin_hui",
+        "relation": "主从",
+        "favorability": 60,
+        "memories": [
+          "在筠州合作"
+        ]
+      },
+      {
+        "characterId": "liuchao.character.wang_tuanlian",
+        "relation": "仇敌",
+        "favorability": -80,
+        "memories": [
+          "在荆溪村寨冲突"
+        ]
+      },
+      {
+        "characterId": "liuchao.character.xiang_ya",
+        "relation": "庇护者",
+        "favorability": 50,
+        "memories": [
+          "在荆溪村寨救援"
+        ]
+      },
+      {
+        "characterId": "liuchao.character.li_shi_shi",
+        "relation": "相识",
+        "favorability": 10
+      },
+      {
+        "characterId": "liuchao.character.ao_run",
+        "relation": "从属",
+        "favorability": 5
+      },
+      {
+        "characterId": "liuchao.character.jin_wu_zhu",
+        "relation": "主从",
+        "favorability": 5
+      },
+      {
+        "characterId": "liuchao.character.bao_zi_tou",
+        "relation": "主从",
+        "favorability": 5
+      },
+      {
+        "characterId": "liuchao.character.qing_mian_shou",
+        "relation": "主从",
+        "favorability": 5
+      },
+      {
+        "characterId": "liuchao.character.lin_chong",
+        "relation": "怀疑",
+        "favorability": 5
+      },
+      {
+        "characterId": "liuchao.character.lu_zhi_shen",
+        "relation": "朋友",
+        "favorability": 42
+      }
+    ],
+    "relationships": [
+      {
+        "fromCharacterId": "liuchao.character.lu_zhi_shen",
+        "toCharacterId": "liuchao.character.lin_chong",
+        "relation": "相识",
+        "score": 10,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.li_shi_shi",
+        "toCharacterId": "liuchao.character.bao_zi_tou",
+        "relation": "坐骑",
+        "score": 5,
+        "direction": "bidirectional"
+      }
+    ],
+    "factionRelationships": [
+      {
+        "fromFactionId": "liuchao.faction.jingxi_people",
+        "toFactionId": "liuchao.faction.xingyue_lake",
+        "relation": "友好",
+        "score": 25,
+        "direction": "bidirectional",
+        "tags": [
+          "主人/庇护者"
+        ]
+      }
+    ]
+  },
+  "content": {
+    "skills": [
+      {
+        "id": "liuchao.skill.death_root",
+        "name": "生死根",
+        "description": "程宗扬的独特异能，能感应死亡气息并吸收死气。",
+        "type": "异能",
+        "effects": [
+          "感应死亡气息",
+          "吸收死气"
+        ]
+      },
+      {
+        "id": "lyl.skill.np002",
+        "name": "房中术",
+        "description": "程宗扬习太乙真宗房中术"
+      },
+      {
+        "id": "lyl.skill.np004",
+        "name": "惊魔指",
+        "description": "秦桧有惊魔指"
+      },
+      {
+        "id": "lyl.skill.np005",
+        "name": "金钟罩",
+        "description": "鲁智深有金钟罩"
+      }
+    ],
+    "techniques": [
+      {
+        "id": "liuchao.technique.taiji_manual",
+        "name": "太一经",
+        "description": "程宗扬从太乙真宗学得的功法。",
+        "grade": "中品",
+        "skillIds": [
+          "liuchao.skill.death_root"
+        ]
+      }
+    ],
+    "items": [
+      {
+        "id": "liuchao.item.coral_dagger",
+        "name": "珊瑚匕首",
+        "description": "程宗扬从萧遥逸处获得的武器。",
+        "type": "weapon",
+        "grade": "仙品",
+        "techniqueId": "liuchao.technique.taiji_manual"
+      },
+      {
+        "id": "lyl.item.np001",
+        "name": "鬼牙",
+        "type": "other",
+        "description": "程宗扬从萧遥逸处获得鬼牙",
+        "grade": "中品"
+      },
+      {
+        "id": "lyl.item.np003",
+        "name": "钓鱼竿（白龙鱼竿）",
+        "type": "other",
+        "description": "可伸缩，最长两丈，鱼线透明坚韧，长度四丈，可切割敌人。",
+        "grade": "仙品"
+      }
+    ]
+  },
+  "scenario": {
+    "opening": {
+      "text": "宋军主力溃退，星月湖撤离，选锋营断后。程宗扬即将离开江州，前往临安。同时王团练手下正在荆溪村寨屠杀，少女相雅面临灭族危机。",
+      "playerRole": "程宗扬",
+      "playerCharacterId": "liuchao.character.cheng_zongyang",
+      "creationPreset": {
+        "characterName": "程宗扬",
+        "gender": "男",
+        "race": "人族",
+        "age": 20,
+        "talentTier": {
+          "name": "异世来客",
+          "description": "来自现代世界。"
+        },
+        "origin": {
+          "name": "现代来客",
+          "description": "因空间异变进入六朝。"
+        },
+        "spiritRoot": {
+          "name": "生死根",
+          "tier": "唯一异能",
+          "description": "并非传统灵根。",
+          "specialEffects": [
+            "感应死亡气息"
+          ]
+        },
+        "talents": [
+          {
+            "name": "务实机敏",
+            "description": "善于判断风险。"
+          }
+        ],
+        "attributes": {
+          "rootBone": 5,
+          "spirituality": 4,
+          "comprehension": 6,
+          "fortune": 6,
+          "charm": 5,
+          "temperament": 6
+        },
+        "locked": true
+      },
+      "locationId": "liuchao.location.jiangzhou",
+      "featuredCharacterIds": [
+        "liuchao.character.cheng_zongyang",
+        "liuchao.character.xiao_zi",
+        "liuchao.character.xie_youdu",
+        "liuchao.character.qin_hui",
+        "liuchao.character.wang_tuanlian",
+        "liuchao.character.xiang_ya"
+      ]
+    },
+    "initialFlags": {
+      "chapter.lyl.jiangzhou_retreat.started": true,
+      "chapter.lyl.jiangzhou_retreat.done": false,
+      "event.s01_01.done": false,
+      "event.s01_02.done": false,
+      "event.s01_03.done": false,
+      "event.s01_04.done": false,
+      "event.s01_05.done": false
+    },
+    "events": [
+      {
+        "id": "lyl.event.s01_01",
+        "name": "江州宋军大溃与退军",
+        "description": "夏用和与秦翰主持决战，宋军大溃，粮草已尽，士气全无，决定退军，由秦翰选锋营断后。",
+        "conditions": [
+          {
+            "path": "flags.chapter.lyl.jiangzhou_retreat.started",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.s01_01.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.song_army"
+        ],
+        "locationId": "liuchao.location.jinming_zhai"
+      },
+      {
+        "id": "lyl.event.s01_02",
+        "name": "程宗扬离开江州赴临安",
+        "description": "程宗扬乘船离开江州，前往临安，途中遇谢幼度与鱼长老对峙，谢幼度退敌。",
+        "conditions": [
+          {
+            "path": "flags.event.s01_01.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.s01_02.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.xie_youdu"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.xingyue_lake"
+        ],
+        "locationId": "liuchao.location.jiangzhou"
+      },
+      {
+        "id": "lyl.event.s01_03",
+        "name": "荆溪村寨被屠",
+        "description": "王团练手下乡兵屠杀荆溪村寨，奸淫妇女，程宗扬等人赶到救援，斩杀乡兵。",
+        "conditions": [
+          {
+            "path": "flags.event.s01_02.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.s01_03.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.qin_hui",
+          "liuchao.character.xiang_ya",
+          "liuchao.character.wang_tuanlian",
+          "liuchao.character.jin_wu_zhu",
+          "liuchao.character.bao_zi_tou",
+          "liuchao.character.qing_mian_shou"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.song_army",
+          "liuchao.faction.jingxi_people"
+        ],
+        "locationId": "liuchao.location.jingxi_village"
+      },
+      {
+        "id": "lyl.event.s01_04",
+        "name": "程宗扬与滕甫交易三十万石粮食",
+        "description": "程宗扬以昭南人名义与滕甫交易三十万石粮食，每石九百铜铢，滕甫挪用军费支付。",
+        "conditions": [
+          {
+            "path": "flags.event.s01_03.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.s01_04.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.qin_hui"
+        ],
+        "locationId": "liuchao.location.junzhou"
+      },
+      {
+        "id": "lyl.event.s01_05",
+        "name": "王团练上钩与常平仓失火",
+        "description": "程宗扬以五千石粮食诱王团练换粮，王团练劣米换新粮，导致常平仓失火，王团练被查。",
+        "conditions": [
+          {
+            "path": "flags.event.s01_04.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.s01_05.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.wang_tuanlian"
+        ],
+        "locationId": "liuchao.location.junzhou"
+      }
+    ],
+    "chapters": [
+      {
+        "id": "lyl.chapter.jiangzhou_retreat",
+        "title": "江州退军与程宗扬启程",
+        "summary": "江州退军与程宗扬启程：江州宋军大溃与退军 … 王团练上钩与常平仓失火",
+        "activation": [
+          {
+            "path": "flags.chapter.lyl.jiangzhou_retreat.started",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.s01_05.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "eventIds": [
+          "lyl.event.s01_01",
+          "lyl.event.s01_02",
+          "lyl.event.s01_03",
+          "lyl.event.s01_04",
+          "lyl.event.s01_05"
+        ]
+      }
+    ]
+  },
+  "rules": {
+    "mode": "strict",
+    "lockedFields": [
+      "canon.factions.*.name",
+      "canon.locations.*.name",
+      "canon.characters.*.name",
+      "content.skills.*.name",
+      "content.techniques.*.name",
+      "content.items.*.name"
+    ],
+    "contentAccess": [
+      {
+        "contentId": "liuchao.skill.death_root",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "liuchao.item.coral_dagger",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyl.item.np003",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      }
+    ]
+  }
+}

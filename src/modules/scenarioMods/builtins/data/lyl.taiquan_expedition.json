@@ -1,0 +1,2456 @@
+{
+  "schema": "xiantu.scenario-mod",
+  "version": 1,
+  "manifest": {
+    "id": "lyl.taiquan_expedition",
+    "name": "太泉古阵探险",
+    "version": "1.0.0",
+    "author": "DeepSeek V4 Flash + XianTu Mod Kit",
+    "description": "程宗扬一行在临安处理完黑魔海余波后，计划前往太泉古阵寻找赤阳圣果。古阵汇聚龙宸、瑶池宗、光明观堂、毒宗等多派势力，冲突一触即发。玩家将扮演程宗扬，在进入古阵前决定结盟或对抗策略，影响圣果归属。"
+  },
+  "world": {
+    "name": "六朝世界",
+    "era": "宋国临安中后期（江州之战期间）",
+    "background": "程宗扬在临安挫败黑魔海阴谋，与高俅府、太皇太后建立联系，并收服秦桧、李师师等。此刻他准备前往太泉古阵寻找赤阳圣果——一种能大幅提升修为的灵果。古阵位于宋国边境苍澜镇附近，内部地形复杂，且已有龙宸、瑶池宗、光明观堂、毒宗等多派势力先期抵达，各方觊觎圣果，冲突一触即发。程宗扬必须谨慎行动，选择盟友或敌人。",
+    "specialRules": [
+      "核心专名不得改写",
+      "玩家固定扮演程宗扬（正典主角）",
+      "生死根为程宗扬独有能力，其他角色无法获得",
+      "未曾在正文中登场的角色不得作为普通NPC初始化",
+      "使用六朝共享正典地图，禁止随机生成势力或地点覆盖已导入内容"
+    ],
+    "continents": [
+      {
+        "id": "liuchao.continent.zhongzhou",
+        "name": "中州",
+        "description": "六朝世界主要大陆，包含宋、晋等国。",
+        "bounds": [
+          {
+            "x": 100,
+            "y": 50
+          },
+          {
+            "x": 9600,
+            "y": 50
+          },
+          {
+            "x": 9600,
+            "y": 6500
+          },
+          {
+            "x": 100,
+            "y": 6500
+          },
+          {
+            "x": 100,
+            "y": 50
+          }
+        ]
+      },
+      {
+        "id": "liuchao.continent.taiquan",
+        "name": "太泉古阵",
+        "description": "宋国以南的神秘古遗迹，传说中的太泉古阵所在。",
+        "bounds": [
+          {
+            "x": 6400,
+            "y": 6600
+          },
+          {
+            "x": 9800,
+            "y": 6600
+          },
+          {
+            "x": 9800,
+            "y": 9600
+          },
+          {
+            "x": 6400,
+            "y": 9600
+          },
+          {
+            "x": 6400,
+            "y": 6600
+          }
+        ]
+      },
+      {
+        "id": "liuchao.continent.nanhuang",
+        "name": "南荒",
+        "description": "中州以南的蛮荒地带，多部族势力。",
+        "bounds": [
+          {
+            "x": 1200,
+            "y": 5200
+          },
+          {
+            "x": 7000,
+            "y": 5200
+          },
+          {
+            "x": 7000,
+            "y": 10000
+          },
+          {
+            "x": 1200,
+            "y": 10000
+          },
+          {
+            "x": 1200,
+            "y": 5200
+          }
+        ]
+      }
+    ],
+    "map": {
+      "atlasId": "liuchao.shared.atlas",
+      "locked": true,
+      "mapConfig": {
+        "width": 10000,
+        "height": 10000,
+        "minLng": 0,
+        "maxLng": 10000,
+        "minLat": 0,
+        "maxLat": 10000
+      },
+      "backgroundImage": "shared-atlas/source-maps/liuchao-world.jpg"
+    }
+  },
+  "canon": {
+    "factions": [
+      {
+        "id": "liuchao.faction.xingyue_lake",
+        "name": "星月湖",
+        "headquartersLocationId": "liuchao.location.jiangzhou",
+        "type": "army",
+        "description": "岳帅旧部组成的军事势力，原为晋国左武军一部分，后独立为程宗扬掌控的势力。",
+        "territory": [
+          {
+            "x": 4800,
+            "y": 6600
+          },
+          {
+            "x": 5100,
+            "y": 6600
+          },
+          {
+            "x": 5100,
+            "y": 6800
+          },
+          {
+            "x": 4800,
+            "y": 6800
+          },
+          {
+            "x": 4800,
+            "y": 6600
+          }
+        ],
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.wei_yuan_escort",
+        "name": "威远镖局",
+        "description": "临安镖局，总镖头李寅臣，女儿李师师。因太尉府货物被劫而负债。",
+        "type": "镖局",
+        "headquartersLocationId": "liuchao.location.mingzhou",
+        "territory": [
+          {
+            "x": 8800,
+            "y": 6300
+          },
+          {
+            "x": 9000,
+            "y": 6300
+          },
+          {
+            "x": 9000,
+            "y": 6500
+          },
+          {
+            "x": 8800,
+            "y": 6500
+          },
+          {
+            "x": 8800,
+            "y": 6300
+          }
+        ],
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.taifu_fu",
+        "name": "太尉府",
+        "description": "高俅府邸，核心人物高衙内（高世德），横行临安。",
+        "type": "官府",
+        "headquartersLocationId": "liuchao.location.linan",
+        "territory": [
+          {
+            "x": 7000,
+            "y": 6300
+          },
+          {
+            "x": 8000,
+            "y": 6300
+          },
+          {
+            "x": 8000,
+            "y": 7000
+          },
+          {
+            "x": 7000,
+            "y": 7000
+          },
+          {
+            "x": 7000,
+            "y": 6300
+          }
+        ],
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.imperial_city_si",
+        "name": "皇城司",
+        "description": "宋国情报机构，林冲为其外围人员。",
+        "type": "情报机构",
+        "headquartersLocationId": "liuchao.location.linan",
+        "territory": [
+          {
+            "x": 7000,
+            "y": 6300
+          },
+          {
+            "x": 8000,
+            "y": 6300
+          },
+          {
+            "x": 8000,
+            "y": 7000
+          },
+          {
+            "x": 7000,
+            "y": 7000
+          },
+          {
+            "x": 7000,
+            "y": 6300
+          }
+        ],
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.guangming_guan_tang",
+        "name": "光明观堂",
+        "description": "修行势力，李师师曾为其弟子。不介入江湖恩怨。",
+        "type": "修行宗门",
+        "headquartersLocationId": "liuchao.location.mingzhou",
+        "territory": [
+          {
+            "x": 8800,
+            "y": 6300
+          },
+          {
+            "x": 9000,
+            "y": 6300
+          },
+          {
+            "x": 9000,
+            "y": 6500
+          },
+          {
+            "x": 8800,
+            "y": 6500
+          },
+          {
+            "x": 8800,
+            "y": 6300
+          }
+        ],
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.dragon_chen",
+        "name": "龙宸",
+        "description": "晋国势力，派人参与太泉古阵探险。",
+        "type": "组织",
+        "headquartersLocationId": "liuchao.location.nanzhao",
+        "territory": [
+          {
+            "x": 4800,
+            "y": 7700
+          },
+          {
+            "x": 5200,
+            "y": 7700
+          },
+          {
+            "x": 5200,
+            "y": 7900
+          },
+          {
+            "x": 4800,
+            "y": 7900
+          },
+          {
+            "x": 4800,
+            "y": 7700
+          }
+        ],
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.yaochi_zong",
+        "name": "瑶池宗",
+        "description": "修行宗门，女修为主，虞白樱和虞紫薇所属。",
+        "type": "修行宗门",
+        "headquartersLocationId": "liuchao.location.mingzhou",
+        "territory": [
+          {
+            "x": 8800,
+            "y": 6300
+          },
+          {
+            "x": 9000,
+            "y": 6300
+          },
+          {
+            "x": 9000,
+            "y": 6500
+          },
+          {
+            "x": 8800,
+            "y": 6500
+          },
+          {
+            "x": 8800,
+            "y": 6300
+          }
+        ],
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.du_zong",
+        "name": "毒宗",
+        "description": "以毒术闻名的宗门，也参与古阵争夺。",
+        "type": "修行宗门",
+        "headquartersLocationId": "liuchao.location.nanzhao",
+        "territory": [
+          {
+            "x": 4800,
+            "y": 7700
+          },
+          {
+            "x": 5200,
+            "y": 7700
+          },
+          {
+            "x": 5200,
+            "y": 7900
+          },
+          {
+            "x": 4800,
+            "y": 7900
+          },
+          {
+            "x": 4800,
+            "y": 7700
+          }
+        ],
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.jin_jun",
+        "name": "禁军",
+        "description": "宋国中央军，林冲为教头。",
+        "type": "军队",
+        "headquartersLocationId": "liuchao.location.linan",
+        "territory": [
+          {
+            "x": 7000,
+            "y": 6300
+          },
+          {
+            "x": 8000,
+            "y": 6300
+          },
+          {
+            "x": 8000,
+            "y": 7000
+          },
+          {
+            "x": 7000,
+            "y": 7000
+          },
+          {
+            "x": 7000,
+            "y": 6300
+          }
+        ],
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.black_demon_sea",
+        "name": "黑魔海",
+        "description": "与巫宗、毒宗相关的隐秘势力。",
+        "type": "隐秘宗派",
+        "headquartersLocationId": "liuchao.location.nanzhao",
+        "territory": [
+          {
+            "x": 4800,
+            "y": 7700
+          },
+          {
+            "x": 5200,
+            "y": 7700
+          },
+          {
+            "x": 5200,
+            "y": 7900
+          },
+          {
+            "x": 4800,
+            "y": 7900
+          },
+          {
+            "x": 4800,
+            "y": 7700
+          }
+        ],
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.song_court",
+        "name": "宋国朝廷",
+        "headquartersLocationId": "liuchao.location.linan",
+        "type": "government",
+        "description": "六朝之一宋国的朝廷，都城在临安。",
+        "territory": [
+          {
+            "x": 7000,
+            "y": 6300
+          },
+          {
+            "x": 8000,
+            "y": 6300
+          },
+          {
+            "x": 8000,
+            "y": 7000
+          },
+          {
+            "x": 7000,
+            "y": 7000
+          },
+          {
+            "x": 7000,
+            "y": 6300
+          }
+        ],
+        "features": []
+      }
+    ],
+    "locations": [
+      {
+        "id": "liuchao.location.linan_city",
+        "name": "临安城",
+        "description": "宋国都城，程宗扬当前所在。",
+        "type": "城池",
+        "continentId": "liuchao.continent.zhongzhou",
+        "coordinates": {
+          "x": 7466,
+          "y": 6532
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.canglan_town",
+        "name": "苍澜镇",
+        "description": "宋国边境小镇，太泉古阵入口附近。",
+        "type": "城池",
+        "continentId": "liuchao.continent.taiquan",
+        "coordinates": {
+          "x": 7500,
+          "y": 9000
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.taiquan_ancient_array",
+        "name": "太泉古阵",
+        "description": "远古遗迹，内部错综复杂，盛产灵药，赤阳圣果树位于深处。",
+        "type": "秘境",
+        "continentId": "liuchao.continent.taiquan",
+        "coordinates": {
+          "x": 7573,
+          "y": 9083
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.jiangzhou",
+        "name": "江州",
+        "description": "星月湖大营所在地，目前被宋军围攻。",
+        "type": "城池",
+        "continentId": "liuchao.continent.zhongzhou",
+        "coordinates": {
+          "x": 4956,
+          "y": 6735
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.linan",
+        "name": "临安",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "宋国都城，江南繁华之地。",
+        "coordinates": {
+          "x": 7466,
+          "y": 6532
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.mingzhou",
+        "name": "明州",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "宋国沿海州城，光明观堂据点所在。",
+        "coordinates": {
+          "x": 8925,
+          "y": 6374
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.nanzhao",
+        "name": "昭南",
+        "continentId": "liuchao.continent.nanhuang",
+        "type": "城池",
+        "description": "南荒区域的重要城市，六朝清羽记结尾与云龙吟中多次出现。",
+        "coordinates": {
+          "x": 4916,
+          "y": 7778
+        },
+        "features": []
+      }
+    ],
+    "characters": [
+      {
+        "id": "liuchao.character.cheng_zongyang",
+        "name": "程宗扬",
+        "description": "来自现代的穿越者，表面为晴州商人，实为星月湖大营盟友。拥有特殊能力'生死根'，能感应死亡气息。修为第五级。持有珊瑚匕首、雷射战刀。",
+        "role": "主角",
+        "gender": "男",
+        "realm": "金丹",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.xingyue_lake",
+            "category": "organization",
+            "role": "顾问/盟友"
+          }
+        ],
+        "locationId": "liuchao.location.linan_city",
+        "skillIds": [
+          "liuchao.skill.death_root",
+          "liuchao.skill.resourceful",
+          "lyl.skill.np002"
+        ],
+        "techniqueIds": [
+          "liuchao.technique.none"
+        ],
+        "itemIds": [
+          "liuchao.item.coral_dagger",
+          "liuchao.item.laser_sword",
+          "lyl.item.np001",
+          "lyl.item.np003",
+          "lyl.item.np004",
+          "lyl.item.np005",
+          "lyl.item.np006"
+        ],
+        "profile": {
+          "attributes": {
+            "rootBone": 10,
+            "spirituality": 10,
+            "comprehension": 10,
+            "fortune": 9,
+            "charm": 9,
+            "temperament": 10
+          },
+          "spiritRoot": {
+            "name": "变异灵根",
+            "tier": "天品",
+            "description": "身怀纸币发行权，由剧本正典认定。"
+          },
+          "talents": [
+            {
+              "name": "天命主角",
+              "description": "由角色定位推定的天赋。"
+            },
+            {
+              "name": "纸币发行权",
+              "description": "程宗扬的专属异能。"
+            }
+          ],
+          "appearance": "身材魁梧，身穿黑衣，赤阳藤拖入魔墟时衣衫破损，被雪雪咬伤后曾不举，颈后有狐族印记，被襄城君认出，青年男子",
+          "personality": [
+            "机敏果断",
+            "善于谋划",
+            "在多方势力间周旋，善于谈判和算计",
+            "对下属和女人有控制欲，但也时有宽容",
+            "为人机敏，善于伪装和谈判",
+            "对商业和权力有野心，善于利用各方势力"
+          ]
+        }
+      },
+      {
+        "id": "liuchao.character.li_shi_shi",
+        "name": "李师师",
+        "description": "威远镖局小姐，光明观堂弟子，精通医术，容貌绝世。对程宗扬有好感，正在被高衙内逼婚。",
+        "role": "关键人物",
+        "gender": "女",
+        "realm": "凡人",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.wei_yuan_escort",
+            "category": "clan",
+            "role": "小姐"
+          },
+          {
+            "factionId": "liuchao.faction.guangming_guan_tang",
+            "category": "sect",
+            "role": "弟子"
+          }
+        ],
+        "locationId": "liuchao.location.linan_city",
+        "skillIds": [
+          "liuchao.skill.medical_skill"
+        ],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {
+          "attributes": {
+            "rootBone": 6,
+            "spirituality": 8,
+            "comprehension": 9,
+            "fortune": 8,
+            "charm": 6,
+            "temperament": 8
+          },
+          "spiritRoot": {
+            "name": "雷灵根",
+            "tier": "地品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "丹道圣手",
+              "description": "由角色定位推定的天赋。"
+            }
+          ],
+          "appearance": "眉目秀美，修眉如画，目如秋水；肌肤白腻如玉，犹如凝脂；身材娇小玲珑，纤柔轻盈，腰身盈盈一握，柳腰圆臀，玉腿笔直；常穿白衣素裙，双鬟垂肩，气质秀美无俦。",
+          "personality": [
+            "温柔善良",
+            "坚毅果断"
+          ]
+        }
+      },
+      {
+        "id": "liuchao.character.qin_hui",
+        "name": "秦桧",
+        "description": "程宗扬的谋士，城府极深，曾为南荒人物，现在临安辅助程宗扬。",
+        "role": "谋士",
+        "gender": "男",
+        "realm": "金丹",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.xingyue_lake",
+            "category": "organization",
+            "role": "军师"
+          }
+        ],
+        "locationId": "liuchao.location.linan_city",
+        "skillIds": [
+          "lyl.skill.np007"
+        ],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {
+          "attributes": {
+            "rootBone": 7,
+            "spirituality": 8,
+            "comprehension": 7,
+            "fortune": 7,
+            "charm": 7,
+            "temperament": 9
+          },
+          "spiritRoot": {
+            "name": "火灵根",
+            "tier": "地品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "过目不忘",
+              "description": "由角色定位推定的天赋。"
+            }
+          ],
+          "appearance": "文士打扮，相貌清秀，文士模样",
+          "personality": [
+            "精明狡猾",
+            "善于权术",
+            "精于算计和情报分析",
+            "善于自保，使用假死秘术",
+            "计谋多端",
+            "忠心于程宗扬"
+          ]
+        }
+      },
+      {
+        "id": "liuchao.character.lin_chong",
+        "name": "林冲",
+        "description": "禁军教头，武艺高强。妻子林娘子疑似黑魔海御姬，但尚未证实。刚购得屠龙刀。",
+        "role": "禁军教头",
+        "gender": "男",
+        "realm": "凡人",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.jin_jun",
+            "category": "military",
+            "role": "教头"
+          },
+          {
+            "factionId": "liuchao.faction.imperial_city_si",
+            "category": "organization",
+            "role": "外围"
+          }
+        ],
+        "locationId": "liuchao.location.linan_city",
+        "skillIds": [
+          "liuchao.skill.peak_martial",
+          "liuchao.skill.golden_bell_cover"
+        ],
+        "techniqueIds": [],
+        "itemIds": [
+          "liuchao.item.dragon_slaying_sword_fake",
+          "lyl.item.np003"
+        ],
+        "profile": {
+          "attributes": {
+            "rootBone": 7,
+            "spirituality": 7,
+            "comprehension": 5,
+            "fortune": 5,
+            "charm": 5,
+            "temperament": 6
+          },
+          "spiritRoot": {
+            "name": "金灵根",
+            "tier": "玄品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "农夫之子",
+              "description": "由角色定位推定的天赋。"
+            }
+          ],
+          "appearance": "身材高大，武人装扮",
+          "personality": [
+            "忍辱负重",
+            "武艺高强"
+          ]
+        }
+      },
+      {
+        "id": "liuchao.character.lu_zhi_shen",
+        "name": "鲁智深",
+        "description": "花和尚，林冲好友，精通金钟罩。目前暂居临安明庆寺。",
+        "role": "花和尚",
+        "gender": "男",
+        "realm": "凡人",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.jin_jun",
+            "category": "organization",
+            "role": "退伍军官"
+          }
+        ],
+        "locationId": "liuchao.location.linan_city",
+        "skillIds": [
+          "liuchao.skill.golden_bell_cover"
+        ],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {
+          "attributes": {
+            "rootBone": 5,
+            "spirituality": 6,
+            "comprehension": 5,
+            "fortune": 7,
+            "charm": 6,
+            "temperament": 7
+          },
+          "spiritRoot": {
+            "name": "木灵根",
+            "tier": "玄品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "老实人",
+              "description": "由角色定位推定的天赋。"
+            }
+          ],
+          "appearance": "体型魁梧，僧衣",
+          "personality": [
+            "豪爽",
+            "仗义"
+          ],
+          "notes": [
+            "【门规约束】作为和尚，应遵守佛门戒律，保持清净之身。"
+          ]
+        }
+      },
+      {
+        "id": "liuchao.character.ruan_xiang_lin",
+        "name": "阮香琳",
+        "description": "李师师母亲，威远镖局总镖头之妻。被高衙内设计勾引，正积极促成女儿嫁入太尉府。",
+        "role": "李师师之母",
+        "gender": "女",
+        "realm": "凡人",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.wei_yuan_escort",
+            "category": "clan",
+            "role": "夫人"
+          }
+        ],
+        "locationId": "liuchao.location.linan_city",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {
+          "attributes": {
+            "rootBone": 7,
+            "spirituality": 7,
+            "comprehension": 6,
+            "fortune": 7,
+            "charm": 8,
+            "temperament": 6
+          },
+          "spiritRoot": {
+            "name": "木灵根",
+            "tier": "地品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "顶级魅力",
+              "description": "由角色定位推定的天赋。"
+            }
+          ],
+          "appearance": "阮香琳是成熟丰腴的美妇，容貌与李师师有八分相似，修眉如画，目如秋水，玉颊敷粉，唇涂胭脂，肌肤白腻如雪。身量比李师师略高，身材丰润纤柔，腰肢纤细不盈一握，臀部丰满浑圆肥翘如肥桃，胸部丰腴（肥耸圆硕的雪乳），玉腿丰满圆润。常着淡红云裳或碧丝长裙，打扮艳丽，气质风韵妖冶。"
+        }
+      },
+      {
+        "id": "liuchao.character.ruan_xiang_ning",
+        "name": "阮香凝",
+        "description": "林冲之妻，阮香琳之妹。外表风韵少妇，实为处女（疑似黑魔海御姬'凝玉姬'），不能习武。",
+        "role": "林娘子",
+        "gender": "女",
+        "realm": "凡人",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.black_demon_sea",
+            "category": "organization",
+            "role": "疑似御姬"
+          }
+        ],
+        "locationId": "liuchao.location.linan_city",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {
+          "attributes": {
+            "rootBone": 8,
+            "spirituality": 8,
+            "comprehension": 6,
+            "fortune": 8,
+            "charm": 8,
+            "temperament": 7
+          },
+          "spiritRoot": {
+            "name": "木灵根",
+            "tier": "地品",
+            "description": "身怀瞑寂术，由剧本正典认定。"
+          },
+          "talents": [
+            {
+              "name": "顶级魅力",
+              "description": "由角色定位推定的天赋。"
+            },
+            {
+              "name": "瞑寂术",
+              "description": "阮香凝的专属异能。"
+            }
+          ],
+          "appearance": "身材娇小玲珑但比例匀称，丰腴柔润，肤色白腻如雪，宛如羊脂白玉。面容姣丽美艳，常带娴淑优雅或羞怯柔顺神情。发髻盘起，系有鲜红绫带，耳饰不详，脚穿高跟鞋。气质典雅柔艳，兼具成熟妇人的丰腴与处子般的娇羞。"
+        }
+      },
+      {
+        "id": "liuchao.character.gao_ya_nei",
+        "name": "高衙内",
+        "description": "高俅养子，花花太岁，正五品武职。对李师师、阮香琳、阮香凝都有觊觎之心。",
+        "role": "花花太岁",
+        "gender": "男",
+        "realm": "凡人",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.taifu_fu",
+            "category": "state",
+            "role": "衙内"
+          }
+        ],
+        "locationId": "liuchao.location.linan_city",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [
+          "lyl.item.np004"
+        ],
+        "profile": {
+          "attributes": {
+            "rootBone": 7,
+            "spirituality": 5,
+            "comprehension": 6,
+            "fortune": 6,
+            "charm": 7,
+            "temperament": 5
+          },
+          "spiritRoot": {
+            "name": "雷灵根",
+            "tier": "玄品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "过目不忘",
+              "description": "由角色定位推定的天赋。"
+            }
+          ]
+        }
+      },
+      {
+        "id": "liuchao.character.lu_qian",
+        "name": "陆谦",
+        "description": "高衙内心腹，阴险毒辣，策划陷害林冲和威远镖局。",
+        "role": "狗腿子",
+        "gender": "男",
+        "realm": "凡人",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.taifu_fu",
+            "category": "organization",
+            "role": "管事"
+          }
+        ],
+        "locationId": "liuchao.location.linan_city",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {
+          "attributes": {
+            "rootBone": 8,
+            "spirituality": 8,
+            "comprehension": 8,
+            "fortune": 7,
+            "charm": 8,
+            "temperament": 8
+          },
+          "spiritRoot": {
+            "name": "雷灵根",
+            "tier": "地品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "道心坚固",
+              "description": "由角色定位推定的天赋。"
+            }
+          ]
+        }
+      },
+      {
+        "id": "liuchao.character.tao_hong_min",
+        "name": "陶弘敏",
+        "description": "陶氏钱庄少东家，程宗扬的债主。城府深，来临安有秘密生意。",
+        "role": "债主",
+        "gender": "男",
+        "realm": "凡人",
+        "affiliations": [],
+        "locationId": "liuchao.location.linan_city",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {
+          "attributes": {
+            "rootBone": 5,
+            "spirituality": 6,
+            "comprehension": 6,
+            "fortune": 9,
+            "charm": 6,
+            "temperament": 5
+          },
+          "spiritRoot": {
+            "name": "土灵根",
+            "tier": "玄品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "多宝童子",
+              "description": "由角色定位推定的天赋。"
+            }
+          ]
+        }
+      },
+      {
+        "id": "liuchao.character.liao_qun_yu",
+        "name": "廖群玉",
+        "description": "悦生堂老板，与程宗扬有交情，曾赠《金瓶梅》。",
+        "role": "书商",
+        "gender": "男",
+        "realm": "凡人",
+        "affiliations": [],
+        "locationId": "liuchao.location.linan_city",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {
+          "attributes": {
+            "rootBone": 5,
+            "spirituality": 5,
+            "comprehension": 5,
+            "fortune": 6,
+            "charm": 6,
+            "temperament": 4
+          },
+          "spiritRoot": {
+            "name": "水灵根",
+            "tier": "黄品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "一诺千金",
+              "description": "由角色定位推定的天赋。"
+            }
+          ]
+        }
+      },
+      {
+        "id": "liuchao.character.yu_zi_yuan",
+        "name": "俞子元",
+        "description": "星月湖大营的精锐成员，随程宗扬行动，擅长追踪和驾船。",
+        "role": "护卫",
+        "gender": "男",
+        "realm": "凡人",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.xingyue_lake",
+            "category": "organization",
+            "role": "精锐"
+          }
+        ],
+        "locationId": "liuchao.location.linan_city",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {
+          "attributes": {
+            "rootBone": 6,
+            "spirituality": 5,
+            "comprehension": 5,
+            "fortune": 6,
+            "charm": 6,
+            "temperament": 7
+          },
+          "spiritRoot": {
+            "name": "金灵根",
+            "tier": "玄品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "老实人",
+              "description": "由角色定位推定的天赋。"
+            }
+          ]
+        }
+      },
+      {
+        "id": "liuchao.character.ao_run",
+        "name": "敖润",
+        "description": "星月湖大营成员，护卫程宗扬。",
+        "role": "护卫",
+        "gender": "男",
+        "realm": "凡人",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.xingyue_lake",
+            "category": "organization",
+            "role": "成员"
+          }
+        ],
+        "locationId": "liuchao.location.linan_city",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {
+          "attributes": {
+            "rootBone": 7,
+            "spirituality": 7,
+            "comprehension": 7,
+            "fortune": 9,
+            "charm": 8,
+            "temperament": 7
+          },
+          "spiritRoot": {
+            "name": "土灵根",
+            "tier": "玄品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "多宝童子",
+              "description": "由角色定位推定的天赋。"
+            }
+          ]
+        }
+      },
+      {
+        "id": "liuchao.character.xiao_zi",
+        "name": "小紫",
+        "description": "黑魔海少女，曾操控铁傀儡袭击虎翼军。目前下落不明。（后宫尊称\"紫妈妈\"，正宫，最有手腕、能管束众人；宠物为犬\"雪雪\"）",
+        "role": "黑魔海成员",
+        "gender": "女",
+        "realm": "凡人",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.black_demon_sea",
+            "category": "organization",
+            "role": "成员"
+          }
+        ],
+        "locationId": "liuchao.location.linan_city",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [
+          "lyl.item.np001",
+          "lyl.item.np004",
+          "lyl.item.np008"
+        ],
+        "profile": {
+          "attributes": {
+            "rootBone": 6,
+            "spirituality": 6,
+            "comprehension": 8,
+            "fortune": 7,
+            "charm": 8,
+            "temperament": 9
+          },
+          "spiritRoot": {
+            "name": "暗灵根",
+            "tier": "地品",
+            "description": "身怀毒蝶翅粉，由剧本正典认定。"
+          },
+          "talents": [
+            {
+              "name": "剑骨天成",
+              "description": "由角色定位推定的天赋。"
+            },
+            {
+              "name": "毒蝶翅粉",
+              "description": "小紫的专属异能。"
+            }
+          ],
+          "appearance": "身材娇小，带有诡异气质，外表娇小，容貌迷人，常穿紫色衣物，神秘气质",
+          "personality": [
+            "聪明而冷酷，善于用毒和控制",
+            "对程宗扬有占有欲但也宠爱",
+            "机灵聪慧，善于幻术和操控",
+            "对程宗扬忠诚，有占有欲"
+          ]
+        }
+      },
+      {
+        "id": "liuchao.character.xiao_yao_yi",
+        "name": "萧遥逸",
+        "description": "龙宸势力的重要人物，修为高深，目标是赤阳圣果。",
+        "role": "龙宸核心人物",
+        "gender": "男",
+        "realm": "金丹",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.dragon_chen",
+            "category": "organization",
+            "role": "执事"
+          }
+        ],
+        "locationId": "liuchao.location.canglan_town",
+        "skillIds": [],
+        "techniqueIds": [
+          "liuchao.technique.dragon_art"
+        ],
+        "itemIds": [],
+        "profile": {
+          "attributes": {
+            "rootBone": 7,
+            "spirituality": 6,
+            "comprehension": 7,
+            "fortune": 8,
+            "charm": 6,
+            "temperament": 7
+          },
+          "spiritRoot": {
+            "name": "火灵根",
+            "tier": "地品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "道心坚固",
+              "description": "由角色定位推定的天赋。"
+            }
+          ],
+          "appearance": "风度翩翩，但受伤后虚弱",
+          "personality": [
+            "温和有礼，善于交际",
+            "对朋友讲义气"
+          ]
+        }
+      },
+      {
+        "id": "liuchao.character.wu_er_lang",
+        "name": "武二郎",
+        "description": "瑶池宗女修，虞白樱和虞紫薇的师从。修为精深。",
+        "role": "瑶池宗弟子",
+        "gender": "女",
+        "realm": "金丹",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.yaochi_zong",
+            "category": "sect",
+            "role": "核心弟子"
+          }
+        ],
+        "locationId": "liuchao.location.canglan_town",
+        "skillIds": [],
+        "techniqueIds": [
+          "liuchao.technique.yaochi_gong"
+        ],
+        "itemIds": [],
+        "profile": {
+          "attributes": {
+            "rootBone": 7,
+            "spirituality": 6,
+            "comprehension": 5,
+            "fortune": 7,
+            "charm": 5,
+            "temperament": 5
+          },
+          "spiritRoot": {
+            "name": "火灵根",
+            "tier": "玄品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "夜猫子",
+              "description": "由角色定位推定的天赋。"
+            }
+          ],
+          "appearance": "武二郎身材不高，肩背肌肉虬结，皮肤泛着古铜色光泽，脖颈有黑黄虎斑，生满胸毛，左眼有大黑眼圈，横眉竖眼，一脸蛮横。",
+          "personality": [
+            "粗豪好色",
+            "对程宗扬较为忠诚",
+            "直率鲁莽，重情义"
+          ]
+        }
+      },
+      {
+        "id": "liuchao.character.yu_bai_ying",
+        "name": "虞白樱",
+        "description": "瑶池宗弟子，虞紫薇的姐姐，容颜绝丽，性情清冷。",
+        "role": "瑶池宗弟子",
+        "gender": "女",
+        "realm": "筑基",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.yaochi_zong",
+            "category": "sect",
+            "role": "弟子"
+          }
+        ],
+        "locationId": "liuchao.location.canglan_town",
+        "skillIds": [],
+        "techniqueIds": [
+          "liuchao.technique.yaochi_gong"
+        ],
+        "itemIds": [],
+        "profile": {
+          "attributes": {
+            "rootBone": 6,
+            "spirituality": 4,
+            "comprehension": 5,
+            "fortune": 5,
+            "charm": 5,
+            "temperament": 6
+          },
+          "spiritRoot": {
+            "name": "暗灵根",
+            "tier": "黄品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "过目不忘",
+              "description": "由角色定位推定的天赋。"
+            }
+          ],
+          "personality": [
+            "高傲，为妹妹冒险",
+            "被小紫设计后受制于人"
+          ],
+          "appearance": "银发如丝，容貌艳丽，玉脸艳光照人，雪肤花貌，身材曲线饱满丰满，雪臀肥翘，双乳丰挺雪白，腰肢柔润纤滑，玉腿修长白美，整体肌肤白腻如玉，常散发淡淡肤光。"
+        }
+      },
+      {
+        "id": "liuchao.character.yu_zi_wei",
+        "name": "虞紫薇",
+        "description": "瑶池宗弟子，虞白樱的妹妹，性情活泼。",
+        "role": "瑶池宗弟子",
+        "gender": "女",
+        "realm": "筑基",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.yaochi_zong",
+            "category": "sect",
+            "role": "弟子"
+          }
+        ],
+        "locationId": "liuchao.location.canglan_town",
+        "skillIds": [],
+        "techniqueIds": [
+          "liuchao.technique.yaochi_gong"
+        ],
+        "itemIds": [],
+        "profile": {
+          "attributes": {
+            "rootBone": 6,
+            "spirituality": 5,
+            "comprehension": 4,
+            "fortune": 4,
+            "charm": 5,
+            "temperament": 5
+          },
+          "spiritRoot": {
+            "name": "火灵根",
+            "tier": "黄品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "过目不忘",
+              "description": "由角色定位推定的天赋。"
+            }
+          ],
+          "notes": [
+            "【功法约束】双修对象必须是特定人选"
+          ],
+          "appearance": "银白长发，雪白皮肤，容貌艳丽，身材曲线饱满，前凸后翘，常戴玉冠，气质冷漠如冰雕。"
+        }
+      },
+      {
+        "id": "liuchao.character.qing_mian_shou",
+        "name": "青面兽",
+        "description": "兽蛮仆从，忠心跟随程宗扬。",
+        "role": "仆从",
+        "gender": "男",
+        "realm": "凡人",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.xingyue_lake",
+            "category": "organization",
+            "role": "仆从"
+          }
+        ],
+        "locationId": "liuchao.location.linan_city",
+        "skillIds": [
+          "liuchao.skill.spear_technique"
+        ],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {
+          "attributes": {
+            "rootBone": 9,
+            "spirituality": 6,
+            "comprehension": 7,
+            "fortune": 6,
+            "charm": 5,
+            "temperament": 5
+          },
+          "spiritRoot": {
+            "name": "火灵根",
+            "tier": "玄品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "体修奇才",
+              "description": "由角色定位推定的天赋。"
+            }
+          ]
+        }
+      },
+      {
+        "id": "liuchao.character.lin_niang_zi",
+        "name": "林娘子",
+        "gender": "女",
+        "role": "林冲之妻",
+        "description": "林冲之妻，二十七八岁少妇，容貌与阮香琳、李师师母女相似。",
+        "profile": {
+          "appearance": "二十七八岁少妇，容貌与阮香琳、李师师母女有七八分相似，眉眼盈盈如画，肌肤犹如凝脂，双眉修长眉梢微收。身穿宝石蓝织锦小袄，衣缘绣缠枝牡丹花边，髻戴白玉簪，耳戴镶金耳环，有时穿织锦小袄戴澄金凤钗。气质在雅致秀婉与熟艳间变化，常有羞涩低首之态，但眼底偶有讥讽。",
+          "notes": [
+            "【血脉约束】因与黑魔海相关，需保持处子之身。"
+          ]
+        }
+      }
+    ],
+    "playerRelationships": [
+      {
+        "characterId": "liuchao.character.li_shi_shi",
+        "relation": "追求对象",
+        "favorability": 35,
+        "memories": [
+          "在雷峰塔初遇并威慑高衙内",
+          "小瀛洲教训梁公子"
+        ]
+      },
+      {
+        "characterId": "liuchao.character.qin_hui",
+        "relation": "下属",
+        "favorability": 60,
+        "memories": [
+          "收服秦桧为谋士"
+        ]
+      },
+      {
+        "characterId": "liuchao.character.lin_chong",
+        "relation": "朋友",
+        "favorability": 30,
+        "memories": [
+          "明庆寺饮酒",
+          "登门拜访"
+        ]
+      },
+      {
+        "characterId": "liuchao.character.lu_zhi_shen",
+        "relation": "朋友",
+        "favorability": 30,
+        "memories": [
+          "明庆寺饮酒"
+        ]
+      },
+      {
+        "characterId": "liuchao.character.gao_ya_nei",
+        "relation": "敌对",
+        "favorability": -60,
+        "memories": [
+          "雷峰塔冲突"
+        ]
+      },
+      {
+        "characterId": "liuchao.character.ruan_xiang_ning",
+        "relation": "初识",
+        "favorability": 5,
+        "memories": [
+          "在林家发现其是处女"
+        ]
+      },
+      {
+        "characterId": "liuchao.character.ruan_xiang_lin",
+        "relation": "初识",
+        "favorability": 0,
+        "memories": [
+          "在威远镖局谈押镖"
+        ]
+      },
+      {
+        "characterId": "liuchao.character.tao_hong_min",
+        "relation": "债主",
+        "favorability": 10,
+        "memories": [
+          "晴州相识"
+        ]
+      },
+      {
+        "characterId": "liuchao.character.liao_qun_yu",
+        "relation": "朋友",
+        "favorability": 20,
+        "memories": [
+          "晴州相识"
+        ]
+      },
+      {
+        "characterId": "liuchao.character.yu_zi_yuan",
+        "relation": "下属",
+        "favorability": 40,
+        "memories": [
+          "一起行动"
+        ]
+      },
+      {
+        "characterId": "liuchao.character.ao_run",
+        "relation": "下属",
+        "favorability": 35,
+        "memories": [
+          "一起行动"
+        ]
+      },
+      {
+        "characterId": "liuchao.character.qing_mian_shou",
+        "relation": "仆从",
+        "favorability": 30,
+        "memories": [
+          "跟随多时"
+        ]
+      },
+      {
+        "characterId": "liuchao.character.xiao_zi",
+        "relation": "敌对",
+        "favorability": -20,
+        "memories": [
+          "江州城外铁傀儡事件"
+        ]
+      },
+      {
+        "characterId": "liuchao.character.wu_er_lang",
+        "relation": "雇佣/朋友",
+        "favorability": 42
+      },
+      {
+        "characterId": "liuchao.character.xiao_yao_yi",
+        "relation": "朋友/合伙人",
+        "favorability": 42
+      },
+      {
+        "characterId": "liuchao.character.yu_bai_ying",
+        "relation": "发生性关系",
+        "favorability": 5
+      },
+      {
+        "characterId": "liuchao.character.yu_zi_wei",
+        "relation": "敌对",
+        "favorability": 5
+      }
+    ],
+    "relationships": [
+      {
+        "fromCharacterId": "liuchao.character.lin_chong",
+        "toCharacterId": "liuchao.character.lu_zhi_shen",
+        "relation": "好友",
+        "score": 75,
+        "direction": "bidirectional",
+        "tags": [
+          "结义兄弟"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.lin_chong",
+        "toCharacterId": "liuchao.character.ruan_xiang_ning",
+        "relation": "夫妻",
+        "score": 50,
+        "direction": "bidirectional",
+        "tags": [
+          "夫妻十余年",
+          "未同房"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.ruan_xiang_lin",
+        "toCharacterId": "liuchao.character.ruan_xiang_ning",
+        "relation": "姐妹",
+        "score": 60,
+        "direction": "bidirectional",
+        "tags": [
+          "亲姐妹"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.ruan_xiang_lin",
+        "toCharacterId": "liuchao.character.li_shi_shi",
+        "relation": "母女",
+        "score": 40,
+        "direction": "bidirectional",
+        "tags": [
+          "母亲"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.gao_ya_nei",
+        "toCharacterId": "liuchao.character.lu_qian",
+        "relation": "主仆",
+        "score": 70,
+        "direction": "directed",
+        "tags": [
+          "心腹"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.gao_ya_nei",
+        "toCharacterId": "liuchao.character.ruan_xiang_lin",
+        "relation": "情夫",
+        "score": 30,
+        "direction": "directed",
+        "tags": [
+          "勾搭成奸"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.gao_ya_nei",
+        "toCharacterId": "liuchao.character.lin_chong",
+        "relation": "敌对",
+        "score": -70,
+        "direction": "directed",
+        "tags": [
+          "设计陷害"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.yu_bai_ying",
+        "toCharacterId": "liuchao.character.yu_zi_wei",
+        "relation": "姐妹",
+        "score": 80,
+        "direction": "bidirectional",
+        "tags": [
+          "亲姐妹"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.li_shi_shi",
+        "toCharacterId": "liuchao.character.gao_ya_nei",
+        "relation": "敌对",
+        "score": 5,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.ruan_xiang_ning",
+        "toCharacterId": "liuchao.character.gao_ya_nei",
+        "relation": "被催眠",
+        "score": 5,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.lin_chong",
+        "toCharacterId": "liuchao.character.lu_qian",
+        "relation": "敌对",
+        "score": 5,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.ruan_xiang_lin",
+        "toCharacterId": "liuchao.character.lin_chong",
+        "relation": "妻姐",
+        "score": 75,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.wu_er_lang",
+        "toCharacterId": "liuchao.character.xiao_yao_yi",
+        "relation": "朋友",
+        "score": 42,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.xiao_zi",
+        "toCharacterId": "liuchao.character.xiao_yao_yi",
+        "relation": "同伴",
+        "score": 35,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.xiao_zi",
+        "toCharacterId": "liuchao.character.yu_bai_ying",
+        "relation": "敌对",
+        "score": 5,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.xiao_zi",
+        "toCharacterId": "liuchao.character.yu_zi_wei",
+        "relation": "敌对",
+        "score": 5,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.lin_niang_zi",
+        "toCharacterId": "liuchao.character.lin_chong",
+        "relation": "夫妻",
+        "score": 60,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.lin_niang_zi",
+        "toCharacterId": "liuchao.character.gao_ya_nei",
+        "relation": "被调戏",
+        "score": -40,
+        "direction": "bidirectional"
+      }
+    ],
+    "factionRelationships": [
+      {
+        "fromFactionId": "liuchao.faction.black_demon_sea",
+        "toFactionId": "liuchao.faction.xingyue_lake",
+        "relation": "友好",
+        "score": 42,
+        "direction": "bidirectional",
+        "tags": [
+          "伴侣",
+          "控制/利用",
+          "被控制/被开苞"
+        ]
+      },
+      {
+        "fromFactionId": "liuchao.faction.wei_yuan_escort",
+        "toFactionId": "liuchao.faction.xingyue_lake",
+        "relation": "中立",
+        "score": 19,
+        "direction": "bidirectional",
+        "tags": [
+          "相识",
+          "追求对象",
+          "求助对象"
+        ]
+      },
+      {
+        "fromFactionId": "liuchao.faction.guangming_guan_tang",
+        "toFactionId": "liuchao.faction.xingyue_lake",
+        "relation": "中立",
+        "score": 13,
+        "direction": "bidirectional",
+        "tags": [
+          "相识",
+          "追求对象",
+          "求助对象"
+        ]
+      },
+      {
+        "fromFactionId": "liuchao.faction.jin_jun",
+        "toFactionId": "liuchao.faction.xingyue_lake",
+        "relation": "友好",
+        "score": 39,
+        "direction": "bidirectional",
+        "tags": [
+          "怀疑",
+          "朋友",
+          "盟友"
+        ]
+      },
+      {
+        "fromFactionId": "liuchao.faction.imperial_city_si",
+        "toFactionId": "liuchao.faction.xingyue_lake",
+        "relation": "友好",
+        "score": 37,
+        "direction": "bidirectional",
+        "tags": [
+          "怀疑",
+          "朋友",
+          "盟友"
+        ]
+      },
+      {
+        "fromFactionId": "liuchao.faction.imperial_city_si",
+        "toFactionId": "liuchao.faction.jin_jun",
+        "relation": "友好",
+        "score": 48,
+        "direction": "bidirectional",
+        "tags": [
+          "相识",
+          "朋友",
+          "师兄弟"
+        ]
+      },
+      {
+        "fromFactionId": "liuchao.faction.taifu_fu",
+        "toFactionId": "liuchao.faction.xingyue_lake",
+        "relation": "友好",
+        "score": 40,
+        "direction": "bidirectional",
+        "tags": [
+          "敌对",
+          "师父",
+          "师徒"
+        ]
+      },
+      {
+        "fromFactionId": "liuchao.faction.taifu_fu",
+        "toFactionId": "liuchao.faction.wei_yuan_escort",
+        "relation": "友好",
+        "score": 33,
+        "direction": "bidirectional",
+        "tags": [
+          "敌对",
+          "欲纳为妾",
+          "情人"
+        ]
+      },
+      {
+        "fromFactionId": "liuchao.faction.guangming_guan_tang",
+        "toFactionId": "liuchao.faction.taifu_fu",
+        "relation": "中立",
+        "score": 5,
+        "direction": "bidirectional",
+        "tags": [
+          "敌对",
+          "欲纳为妾"
+        ]
+      },
+      {
+        "fromFactionId": "liuchao.faction.guangming_guan_tang",
+        "toFactionId": "liuchao.faction.wei_yuan_escort",
+        "relation": "盟友",
+        "score": 60,
+        "direction": "bidirectional",
+        "tags": [
+          "母亲",
+          "母女"
+        ]
+      },
+      {
+        "fromFactionId": "liuchao.faction.jin_jun",
+        "toFactionId": "liuchao.faction.taifu_fu",
+        "relation": "中立",
+        "score": 5,
+        "direction": "bidirectional",
+        "tags": [
+          "敌对"
+        ]
+      },
+      {
+        "fromFactionId": "liuchao.faction.imperial_city_si",
+        "toFactionId": "liuchao.faction.taifu_fu",
+        "relation": "中立",
+        "score": 5,
+        "direction": "bidirectional",
+        "tags": [
+          "敌对"
+        ]
+      },
+      {
+        "fromFactionId": "liuchao.faction.black_demon_sea",
+        "toFactionId": "liuchao.faction.jin_jun",
+        "relation": "盟友",
+        "score": 75,
+        "direction": "bidirectional",
+        "tags": [
+          "夫妻",
+          "名义夫妻"
+        ]
+      },
+      {
+        "fromFactionId": "liuchao.faction.black_demon_sea",
+        "toFactionId": "liuchao.faction.imperial_city_si",
+        "relation": "盟友",
+        "score": 75,
+        "direction": "bidirectional",
+        "tags": [
+          "夫妻",
+          "名义夫妻"
+        ]
+      },
+      {
+        "fromFactionId": "liuchao.faction.black_demon_sea",
+        "toFactionId": "liuchao.faction.taifu_fu",
+        "relation": "中立",
+        "score": 5,
+        "direction": "bidirectional",
+        "tags": [
+          "被催眠"
+        ]
+      },
+      {
+        "fromFactionId": "liuchao.faction.jin_jun",
+        "toFactionId": "liuchao.faction.wei_yuan_escort",
+        "relation": "盟友",
+        "score": 75,
+        "direction": "bidirectional",
+        "tags": [
+          "妻姐"
+        ]
+      },
+      {
+        "fromFactionId": "liuchao.faction.imperial_city_si",
+        "toFactionId": "liuchao.faction.wei_yuan_escort",
+        "relation": "盟友",
+        "score": 75,
+        "direction": "bidirectional",
+        "tags": [
+          "妻姐"
+        ]
+      },
+      {
+        "fromFactionId": "liuchao.faction.black_demon_sea",
+        "toFactionId": "liuchao.faction.wei_yuan_escort",
+        "relation": "盟友",
+        "score": 60,
+        "direction": "bidirectional",
+        "tags": [
+          "姐妹",
+          "姐妹/仇敌"
+        ]
+      },
+      {
+        "fromFactionId": "liuchao.faction.xingyue_lake",
+        "toFactionId": "liuchao.faction.yaochi_zong",
+        "relation": "中立",
+        "score": 23,
+        "direction": "bidirectional",
+        "tags": [
+          "雇佣/朋友",
+          "同伴",
+          "发生性关系"
+        ]
+      },
+      {
+        "fromFactionId": "liuchao.faction.dragon_chen",
+        "toFactionId": "liuchao.faction.xingyue_lake",
+        "relation": "友好",
+        "score": 36,
+        "direction": "bidirectional",
+        "tags": [
+          "朋友/合伙人",
+          "同伴",
+          "合作"
+        ]
+      },
+      {
+        "fromFactionId": "liuchao.faction.dragon_chen",
+        "toFactionId": "liuchao.faction.yaochi_zong",
+        "relation": "友好",
+        "score": 39,
+        "direction": "bidirectional",
+        "tags": [
+          "朋友",
+          "同伴",
+          "牌友"
+        ]
+      },
+      {
+        "fromFactionId": "liuchao.faction.black_demon_sea",
+        "toFactionId": "liuchao.faction.dragon_chen",
+        "relation": "友好",
+        "score": 35,
+        "direction": "bidirectional",
+        "tags": [
+          "同伴"
+        ]
+      },
+      {
+        "fromFactionId": "liuchao.faction.black_demon_sea",
+        "toFactionId": "liuchao.faction.yaochi_zong",
+        "relation": "中立",
+        "score": 5,
+        "direction": "bidirectional",
+        "tags": [
+          "敌对"
+        ]
+      }
+    ]
+  },
+  "content": {
+    "skills": [
+      {
+        "id": "liuchao.skill.death_root",
+        "name": "生死根",
+        "description": "程宗扬专属异能力，非传统灵根。能感应死亡气息、与阴魂短暂交互。",
+        "type": "异能",
+        "effects": [
+          "感应死亡气息",
+          "短暂与阴魂交互"
+        ]
+      },
+      {
+        "id": "liuchao.skill.resourceful",
+        "name": "务实机敏",
+        "description": "程宗扬来自现代世界，善于判断风险和商业机会。",
+        "type": "天赋",
+        "effects": [
+          "洞察力增强",
+          "社交应变"
+        ]
+      },
+      {
+        "id": "liuchao.skill.medical_skill",
+        "name": "医术",
+        "description": "光明观堂传授的基础医术，能诊脉、配药。",
+        "type": "辅助",
+        "effects": [
+          "诊脉",
+          "调制药剂"
+        ]
+      },
+      {
+        "id": "liuchao.skill.peak_martial",
+        "name": "武艺高强",
+        "description": "林冲的巅峰武艺，八十万禁军教头水准。",
+        "type": "格斗",
+        "effects": [
+          "刀法",
+          "枪法"
+        ]
+      },
+      {
+        "id": "liuchao.skill.golden_bell_cover",
+        "name": "金钟罩",
+        "description": "鲁智深的护体硬功，刀剑难伤。",
+        "type": "防御",
+        "effects": [
+          "物理防御增强"
+        ]
+      },
+      {
+        "id": "liuchao.skill.spear_technique",
+        "name": "枪法",
+        "description": "青面兽的枪术，来自兽蛮传承。",
+        "type": "格斗",
+        "effects": [
+          "长柄武器精通"
+        ]
+      },
+      {
+        "id": "lyl.skill.np002",
+        "name": "房中术",
+        "description": "程宗扬习太乙真宗房中术"
+      },
+      {
+        "id": "lyl.skill.np007",
+        "name": "惊魔指",
+        "description": "秦桧有惊魔指"
+      }
+    ],
+    "techniques": [
+      {
+        "id": "liuchao.technique.dragon_art",
+        "name": "龙宸功法",
+        "description": "龙宸势力的修炼功法，萧遥逸主修。",
+        "grade": "高阶",
+        "skillIds": []
+      },
+      {
+        "id": "liuchao.technique.yaochi_gong",
+        "name": "瑶池心法",
+        "description": "瑶池宗基础功法，女修专用。",
+        "grade": "中品",
+        "skillIds": []
+      },
+      {
+        "id": "liuchao.technique.none",
+        "name": "无固定主修",
+        "description": "程宗扬尚未获得正式修炼功法，依靠生死根异能和实战经验。",
+        "grade": "特殊",
+        "skillIds": [
+          "liuchao.skill.death_root"
+        ]
+      }
+    ],
+    "items": [
+      {
+        "id": "liuchao.item.coral_dagger",
+        "name": "珊瑚匕首",
+        "description": "由珊瑚铁打造，锋利异常，程宗扬贴身携带。",
+        "type": "weapon",
+        "grade": "仙品"
+      },
+      {
+        "id": "liuchao.item.laser_sword",
+        "name": "雷射战刀",
+        "description": "程宗扬从现代带来的高科技武器，能量型刀锋，威力强大。",
+        "type": "weapon",
+        "grade": "中品"
+      },
+      {
+        "id": "liuchao.item.dragon_slaying_sword_fake",
+        "name": "屠龙刀（赝品）",
+        "description": "林冲花一千贯买到的刀，实为高衙内设下的陷阱。由珊瑚铁等贵金属打造，价值万金。",
+        "type": "weapon",
+        "grade": "中品"
+      },
+      {
+        "id": "lyl.item.np001",
+        "name": "鬼牙",
+        "type": "other",
+        "description": "程宗扬从萧遥逸处获得鬼牙",
+        "grade": "中品"
+      },
+      {
+        "id": "lyl.item.np003",
+        "name": "屠龙刀",
+        "type": "weapon",
+        "description": "林冲以一千贯买下屠龙刀，刀由珊瑚铁打造，价值万金。",
+        "grade": "极品"
+      },
+      {
+        "id": "lyl.item.np004",
+        "name": "龙睛玉",
+        "type": "material",
+        "description": "龙睛玉用于铁傀儡，一块支撑不到二十分钟。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyl.item.np005",
+        "name": "金瓶梅",
+        "type": "other",
+        "description": "程宗扬从悦生堂得到《金瓶梅》插图版。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyl.item.np006",
+        "name": "钓鱼竿（白龙鱼竿）",
+        "type": "other",
+        "description": "可伸缩，最长两丈，鱼线透明坚韧，长度四丈，可切割敌人。",
+        "grade": "仙品"
+      },
+      {
+        "id": "lyl.item.np008",
+        "name": "都卢难旦妖铃",
+        "type": "material",
+        "description": "小紫用玉瓶装阴魂。",
+        "grade": "极品"
+      }
+    ]
+  },
+  "scenario": {
+    "opening": {
+      "text": "你（程宗扬）在临安处理完黑魔海余波后，决心前往太泉古阵寻找赤阳圣果，以应对江州战局和自身修为瓶颈。秦桧建议你立刻动身，以免被临安暗流缠住。你带着秦桧、俞子元、敖润和青面兽，向苍澜镇进发。据情报，龙宸的萧遥逸、瑶池宗的虞白樱姐妹、光明观堂和毒宗的人马都已抵达古阵区域，冲突一触即发。你必须在进入古阵前决定：是独自潜入、结盟某方，还是趁乱渔利？",
+      "playerRole": "程宗扬（现代穿越者、星月湖大营盟友）",
+      "playerCharacterId": "liuchao.character.cheng_zongyang",
+      "creationPreset": {
+        "characterName": "程宗扬",
+        "gender": "男",
+        "race": "人族",
+        "age": 20,
+        "talentTier": {
+          "name": "异世来客",
+          "description": "来自现代世界，拥有截然不同的知识体系。"
+        },
+        "origin": {
+          "name": "现代来客",
+          "description": "因空间异变进入六朝世界，已适应并开始积累势力和财富。"
+        },
+        "spiritRoot": {
+          "name": "生死根",
+          "tier": "唯一异能",
+          "description": "并非传统灵根，而是与死亡和阴魂相关的特殊能力。",
+          "specialEffects": [
+            "感应死亡气息",
+            "与阴魂短暂交互"
+          ]
+        },
+        "talents": [
+          {
+            "name": "务实机敏",
+            "description": "善于判断风险、商业机会和人际关系。"
+          }
+        ],
+        "attributes": {
+          "rootBone": 5,
+          "spirituality": 4,
+          "comprehension": 6,
+          "fortune": 6,
+          "charm": 5,
+          "temperament": 6
+        },
+        "locked": true
+      },
+      "locationId": "liuchao.location.canglan_town",
+      "featuredCharacterIds": [
+        "liuchao.character.cheng_zongyang",
+        "liuchao.character.qin_hui",
+        "liuchao.character.xiao_yao_yi",
+        "liuchao.character.yu_bai_ying",
+        "liuchao.character.yu_zi_wei"
+      ]
+    },
+    "initialFlags": {
+      "chapter.arrival_in_canglan.done": false,
+      "event.enter_taiquan.done": false,
+      "chapter.taiquan_exploration.started": false,
+      "chapter.taiquan_exploration.done": false,
+      "event.reconnoiter.done": false,
+      "chapter.alliance_and_conflict.done": false,
+      "event.du_zong_raid.done": false,
+      "chapter.hunt_for_fruit.done": false,
+      "event.fruit_conflict.done": false,
+      "chapter.final_showdown.done": false,
+      "event.escape_taiquan.done": false,
+      "flag.temp.fruit_seized_by_player": false,
+      "flag.temp.ally_with_yaochi": false,
+      "flag.temp.ally_with_dragon": false
+    },
+    "events": [
+      {
+        "id": "liuchao.event.enter_taiquan",
+        "name": "进入太泉古阵",
+        "description": "程宗扬一行抵达苍澜镇，打听到古阵入口已被多派势力把持。你必须选择强行进入、交涉、或寻找秘密通道。",
+        "completion": [
+          {
+            "path": "flags.event.enter_taiquan.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.qin_hui"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.dragon_chen",
+          "liuchao.faction.yaochi_zong",
+          "liuchao.faction.guangming_guan_tang",
+          "liuchao.faction.du_zong"
+        ],
+        "locationId": "liuchao.location.taiquan_ancient_array"
+      },
+      {
+        "id": "liuchao.event.reconnoiter",
+        "name": "阵中侦察",
+        "description": "入阵后，程宗扬需要探查地形，确认赤阳圣果树位置和各派扎营点。途中可能遭遇毒宗暗哨或瑶池宗的巡逻队。",
+        "completion": [
+          {
+            "path": "flags.event.reconnoiter.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.yu_zi_yuan"
+        ],
+        "locationId": "liuchao.location.taiquan_ancient_array"
+      },
+      {
+        "id": "liuchao.event.du_zong_raid",
+        "name": "毒宗伏击",
+        "description": "毒宗弟子发现程宗扬一行的踪迹，设下毒阵伏击。战斗或交涉后，可能获得关于圣果树位置的关键情报。",
+        "completion": [
+          {
+            "path": "flags.event.du_zong_raid.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.ao_run"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.du_zong"
+        ],
+        "locationId": "liuchao.location.taiquan_ancient_array"
+      },
+      {
+        "id": "liuchao.event.fruit_conflict",
+        "name": "圣果归属冲突",
+        "description": "多派势力在赤阳圣果树前对峙。龙宸的萧遥逸、瑶池宗的虞白樱姐妹、毒宗头目和光明观堂使者均在场。程宗扬必须选择介入时机和手段。",
+        "completion": [
+          {
+            "path": "flags.event.fruit_conflict.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.xiao_yao_yi",
+          "liuchao.character.yu_bai_ying",
+          "liuchao.character.yu_zi_wei"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.dragon_chen",
+          "liuchao.faction.yaochi_zong",
+          "liuchao.faction.guangming_guan_tang",
+          "liuchao.faction.du_zong"
+        ],
+        "locationId": "liuchao.location.taiquan_ancient_array"
+      },
+      {
+        "id": "liuchao.event.escape_taiquan",
+        "name": "撤离古阵",
+        "description": "圣果归属已定（或失败），古阵内的派系追杀程宗扬一行。必须利用地形和雷射战刀等装备冲出生天，并应对可能的追击。",
+        "completion": [
+          {
+            "path": "flags.event.escape_taiquan.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.qin_hui"
+        ],
+        "locationId": "liuchao.location.taiquan_ancient_array"
+      }
+    ],
+    "chapters": [
+      {
+        "id": "liuchao.chapter.arrival_in_canglan",
+        "title": "抵达苍澜",
+        "summary": "程宗扬一行抵达苍澜镇，收集情报，制定进入古阵的策略。必须决定是从正面进入、寻找密道、还是趁夜潜入。",
+        "completion": [
+          {
+            "path": "flags.chapter.arrival_in_canglan.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "eventIds": [
+          "liuchao.event.enter_taiquan"
+        ]
+      },
+      {
+        "id": "liuchao.chapter.taiquan_exploration",
+        "title": "阵中探索",
+        "summary": "进入古阵后，程宗扬一行人探查地形，寻找赤阳圣果树位置，同时规避或接触其他势力。可能遭遇毒宗伏击或瑶池宗巡逻。",
+        "activation": [
+          {
+            "path": "flags.chapter.arrival_in_canglan.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.chapter.taiquan_exploration.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "eventIds": [
+          "liuchao.event.reconnoiter"
+        ]
+      },
+      {
+        "id": "liuchao.chapter.alliance_and_conflict",
+        "title": "联盟与冲突",
+        "summary": "程宗扬在阵中遇到瑶池宗或龙宸势力，可选择结盟或对抗。同时，毒宗的骚扰加剧。本阶段影响最终圣果归属的势力平衡。",
+        "activation": [
+          {
+            "path": "flags.chapter.taiquan_exploration.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.du_zong_raid.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "eventIds": [
+          "liuchao.event.du_zong_raid"
+        ]
+      },
+      {
+        "id": "liuchao.chapter.hunt_for_fruit",
+        "title": "争夺圣果",
+        "summary": "所有势力在赤阳圣果树前汇聚。程宗扬必须决定何时出手、对谁出手，以夺取圣果。本阶段决定圣果最终归属。",
+        "activation": [
+          {
+            "path": "flags.event.du_zong_raid.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.chapter.hunt_for_fruit.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "eventIds": [
+          "liuchao.event.fruit_conflict"
+        ]
+      },
+      {
+        "id": "liuchao.chapter.final_showdown",
+        "title": "终极对决",
+        "summary": "争夺圣果后，程宗扬队伍可能被围攻。必须利用一切手段击退追兵，成功撤离古阵。本阶段是剧情高潮。",
+        "activation": [
+          {
+            "path": "flags.chapter.hunt_for_fruit.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.chapter.final_showdown.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "eventIds": [
+          "liuchao.event.escape_taiquan"
+        ]
+      }
+    ]
+  },
+  "rules": {
+    "mode": "strict",
+    "lockedFields": [
+      "canon.factions.*.name",
+      "canon.locations.*.name",
+      "canon.characters.*.name",
+      "content.skills.*.name",
+      "content.techniques.*.name",
+      "content.items.*.name"
+    ],
+    "contentAccess": [
+      {
+        "contentId": "liuchao.skill.death_root",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "liuchao.item.coral_dagger",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyl.item.np006",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyl.item.np008",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.xiao_zi"
+        ],
+        "playerAllowed": false
+      }
+    ]
+  }
+}

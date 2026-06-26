@@ -20,6 +20,10 @@ export interface StoredScenarioMod {
   mod: ScenarioMod;
   enabled: boolean;
   importedAt: string;
+  /** 内置剧情模板（随应用打包，启动时播种；不可删除，更新时自动刷新内容、保留启用状态）。 */
+  builtin?: boolean;
+  /** 播种时的内置版本，用于检测是否需要刷新。 */
+  builtinVersion?: string;
 }
 
 export interface ScenarioModLibrary {
@@ -51,10 +55,46 @@ export function createIndexedDbScenarioModStorage(): ScenarioModStorageAdapter {
 }
 
 export class ScenarioModManager {
+  private seededPromise?: Promise<void>;
+
   constructor(
     private readonly storage: ScenarioModStorageAdapter,
     private readonly now: () => string = () => new Date().toISOString(),
+    private builtins: ScenarioMod[] = [],
+    private builtinVersion = '',
   ) {}
+
+  /** 由应用入口(Vite 环境)注入内置剧情模板，避免在 manager.ts 顶层引入 import.meta.glob（jiti 测试无法解析）。 */
+  registerBuiltins(builtins: ScenarioMod[], version: string): void {
+    this.builtins = builtins;
+    this.builtinVersion = version;
+    this.seededPromise = undefined;
+  }
+
+  /** 幂等播种内置剧情模板：库里没有则加入(enabled:false)；版本变化则刷新内容并保留启用状态；用户改过的(builtin=false)不动。 */
+  private async ensureSeeded(): Promise<void> {
+    if (!this.builtins.length) return;
+    if (!this.seededPromise) this.seededPromise = this.seedBuiltins();
+    return this.seededPromise;
+  }
+
+  private async seedBuiltins(): Promise<void> {
+    const stored = await this.storage.load();
+    const mods = stored && Array.isArray(stored.mods) ? stored.mods : [];
+    let changed = false;
+    for (const mod of this.builtins) {
+      const id = mod.manifest.id;
+      const idx = mods.findIndex(entry => entry.mod.manifest.id === id);
+      if (idx < 0) {
+        mods.push({ mod: structuredClone(mod), enabled: false, importedAt: this.now(), builtin: true, builtinVersion: this.builtinVersion });
+        changed = true;
+      } else if (mods[idx].builtin && mods[idx].builtinVersion !== this.builtinVersion) {
+        mods[idx] = { ...mods[idx], mod: structuredClone(mod), builtinVersion: this.builtinVersion };
+        changed = true;
+      }
+    }
+    if (changed) await this.storage.save({ mods });
+  }
 
   async list(): Promise<StoredScenarioMod[]> {
     const library = await this.loadLibrary();
@@ -140,6 +180,8 @@ export class ScenarioModManager {
 
   async remove(modId: string): Promise<boolean> {
     const library = await this.loadLibrary();
+    const target = library.mods.find(entry => entry.mod.manifest.id === modId);
+    if (target?.builtin) throw new Error('内置剧情模板不可删除，可关闭其启用开关。');
     const next = library.mods.filter(entry => entry.mod.manifest.id !== modId);
     if (next.length === library.mods.length) return false;
     await this.storage.save({ mods: next });
@@ -162,6 +204,7 @@ export class ScenarioModManager {
   }
 
   private async loadLibrary(): Promise<ScenarioModLibrary> {
+    await this.ensureSeeded();
     const stored = await this.storage.load();
     if (!stored || !Array.isArray(stored.mods)) return { mods: [] };
     return { mods: stored.mods };

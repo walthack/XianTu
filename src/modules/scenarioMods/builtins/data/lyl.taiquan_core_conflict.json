@@ -1,0 +1,1796 @@
+{
+  "schema": "xiantu.scenario-mod",
+  "version": 1,
+  "manifest": {
+    "id": "lyl.taiquan_core_conflict",
+    "name": "太泉古阵核心区冲突与收服",
+    "version": "1.0.0",
+    "author": "DeepSeek V4 Flash + XianTu Mod Kit",
+    "description": "程宗扬在核心区遭遇潘金莲追杀，对方怀疑他是黑魔海毒宗传人，同时他重伤后被尹馥兰等人帮助，准备利用阴阳鱼反制。"
+  },
+  "world": {
+    "name": "六朝",
+    "era": "太泉古阵终末时期",
+    "background": "程宗扬在古阵中获得阴阳鱼并融入丹田，与虞白樱、虞紫薇等人发生关系。此时太泉古阵核心区冲突升级，潘金莲怀疑程宗扬是黑魔海毒宗传人并追杀他。程宗扬重伤后被尹馥兰、何漪莲等人帮助，准备利用阴阳鱼反制。",
+    "specialRules": [
+      "生死根为程宗扬唯一专属能力，他人不可获得",
+      "阴阳鱼已融入程宗扬丹田，但尚未完全掌握",
+      "使用六朝共享正典地图，禁止随机生成势力或地点覆盖已导入内容"
+    ],
+    "continents": [
+      {
+        "id": "liuchao.continent.taiquan",
+        "name": "太泉古阵",
+        "description": "六朝时代的古阵秘境，由十八层空间和隐秘地域组成。",
+        "bounds": [
+          {
+            "x": 6400,
+            "y": 6600
+          },
+          {
+            "x": 9800,
+            "y": 6600
+          },
+          {
+            "x": 9800,
+            "y": 9600
+          },
+          {
+            "x": 6400,
+            "y": 9600
+          },
+          {
+            "x": 6400,
+            "y": 6600
+          }
+        ]
+      },
+      {
+        "id": "liuchao.continent.nanhuang",
+        "name": "南荒",
+        "description": "中州以南的蛮荒地带，多部族势力。",
+        "bounds": [
+          {
+            "x": 1200,
+            "y": 5200
+          },
+          {
+            "x": 7000,
+            "y": 5200
+          },
+          {
+            "x": 7000,
+            "y": 10000
+          },
+          {
+            "x": 1200,
+            "y": 10000
+          },
+          {
+            "x": 1200,
+            "y": 5200
+          }
+        ]
+      },
+      {
+        "id": "liuchao.continent.zhongzhou",
+        "name": "中州",
+        "description": "六朝世界的主要大陆，包含六国都城及主要战场。",
+        "bounds": [
+          {
+            "x": 100,
+            "y": 50
+          },
+          {
+            "x": 9600,
+            "y": 50
+          },
+          {
+            "x": 9600,
+            "y": 6500
+          },
+          {
+            "x": 100,
+            "y": 6500
+          },
+          {
+            "x": 100,
+            "y": 50
+          }
+        ]
+      }
+    ],
+    "map": {
+      "atlasId": "liuchao.shared.atlas",
+      "locked": true,
+      "mapConfig": {
+        "width": 10000,
+        "height": 10000,
+        "minLng": 0,
+        "maxLng": 10000,
+        "minLat": 0,
+        "maxLat": 10000
+      },
+      "backgroundImage": "shared-atlas/source-maps/liuchao-world.jpg"
+    }
+  },
+  "canon": {
+    "factions": [
+      {
+        "id": "lyl.faction.heimo_hai",
+        "name": "黑魔海毒宗",
+        "description": "黑魔海中的用毒宗门，潘金莲怀疑程宗扬是其传人。",
+        "type": "宗门",
+        "headquartersLocationId": "liuchao.location.nanzhao",
+        "territory": [
+          {
+            "x": 4800,
+            "y": 7700
+          },
+          {
+            "x": 5200,
+            "y": 7700
+          },
+          {
+            "x": 5200,
+            "y": 7900
+          },
+          {
+            "x": 4800,
+            "y": 7900
+          },
+          {
+            "x": 4800,
+            "y": 7700
+          }
+        ],
+        "features": []
+      },
+      {
+        "id": "lyl.faction.liangzhou_meng",
+        "name": "凉州盟",
+        "description": "西北的修行者联盟，左彤芝为重要成员。",
+        "type": "组织",
+        "headquartersLocationId": "liuchao.location.changan",
+        "territory": [
+          {
+            "x": 1000,
+            "y": 2000
+          },
+          {
+            "x": 4800,
+            "y": 2000
+          },
+          {
+            "x": 4800,
+            "y": 4500
+          },
+          {
+            "x": 1000,
+            "y": 4500
+          },
+          {
+            "x": 1000,
+            "y": 2000
+          }
+        ],
+        "features": []
+      },
+      {
+        "id": "lyl.faction.shipo_si",
+        "name": "娑梵寺",
+        "description": "十方丛林中的强大佛寺，多位高僧进入太泉古阵争夺赤阳圣果。",
+        "type": "宗门",
+        "headquartersLocationId": "liuchao.location.mingzhou",
+        "territory": [
+          {
+            "x": 8800,
+            "y": 6300
+          },
+          {
+            "x": 9000,
+            "y": 6300
+          },
+          {
+            "x": 9000,
+            "y": 6500
+          },
+          {
+            "x": 8800,
+            "y": 6500
+          },
+          {
+            "x": 8800,
+            "y": 6300
+          }
+        ],
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.heimo_hai",
+        "name": "黑魔海",
+        "headquartersLocationId": "liuchao.location.nanzhao",
+        "type": "secret_organization",
+        "description": "跨国的秘密魔道组织，实力强大。",
+        "territory": [
+          {
+            "x": 4800,
+            "y": 7700
+          },
+          {
+            "x": 5200,
+            "y": 7700
+          },
+          {
+            "x": 5200,
+            "y": 7900
+          },
+          {
+            "x": 4800,
+            "y": 7900
+          },
+          {
+            "x": 4800,
+            "y": 7700
+          }
+        ],
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.tang_court",
+        "name": "唐国朝廷",
+        "headquartersLocationId": "liuchao.location.changan",
+        "type": "government",
+        "description": "六朝之一唐国的朝廷，都城在长安。",
+        "territory": [
+          {
+            "x": 1000,
+            "y": 2000
+          },
+          {
+            "x": 4800,
+            "y": 2000
+          },
+          {
+            "x": 4800,
+            "y": 4500
+          },
+          {
+            "x": 1000,
+            "y": 4500
+          },
+          {
+            "x": 1000,
+            "y": 2000
+          }
+        ],
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.guangming_guantang",
+        "name": "光明观堂",
+        "headquartersLocationId": "liuchao.location.mingzhou",
+        "type": "sect",
+        "description": "道门观堂，在南荒和唐国长安均有据点。",
+        "territory": [
+          {
+            "x": 8800,
+            "y": 6300
+          },
+          {
+            "x": 9000,
+            "y": 6300
+          },
+          {
+            "x": 9000,
+            "y": 6500
+          },
+          {
+            "x": 8800,
+            "y": 6500
+          },
+          {
+            "x": 8800,
+            "y": 6300
+          }
+        ],
+        "features": []
+      }
+    ],
+    "locations": [
+      {
+        "id": "lyl.location.taiquan_core",
+        "name": "太泉古阵核心区",
+        "description": "太泉古阵最深层区域，空间混乱且隐藏魔墟等秘境。",
+        "type": "秘境",
+        "continentId": "liuchao.continent.taiquan",
+        "coordinates": {
+          "x": 7573,
+          "y": 9083
+        },
+        "features": []
+      },
+      {
+        "id": "lyl.location.ant_hill",
+        "name": "蚁丘迷窟",
+        "description": "魔墟地下由巨大蚁塔形成的复杂洞穴系统。",
+        "type": "秘境",
+        "continentId": "liuchao.continent.taiquan",
+        "coordinates": {
+          "x": 7573,
+          "y": 9083
+        },
+        "features": []
+      },
+      {
+        "id": "lyl.location.moxu_building",
+        "name": "魔墟大楼",
+        "description": "魔墟中的高层建筑，内有赤阳藤和行淫兽。",
+        "type": "秘境",
+        "continentId": "liuchao.continent.taiquan",
+        "coordinates": {
+          "x": 7573,
+          "y": 9083
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.taiquan",
+        "name": "太泉古阵",
+        "continentId": "liuchao.continent.taiquan",
+        "type": "秘境",
+        "description": "远古遗迹，太泉古阵入口。",
+        "coordinates": {
+          "x": 7573,
+          "y": 9083
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.nanzhao",
+        "name": "昭南",
+        "continentId": "liuchao.continent.nanhuang",
+        "type": "城池",
+        "description": "南荒区域的重要城市，六朝清羽记结尾与云龙吟中多次出现。",
+        "coordinates": {
+          "x": 4916,
+          "y": 7778
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.changan",
+        "name": "长安",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "唐国都城，六朝最大城市。",
+        "coordinates": {
+          "x": 2830,
+          "y": 3049
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.mingzhou",
+        "name": "明州",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "宋国沿海州城，光明观堂据点所在。",
+        "coordinates": {
+          "x": 8925,
+          "y": 6374
+        },
+        "features": []
+      }
+    ],
+    "characters": [
+      {
+        "id": "liuchao.character.cheng_zongyang",
+        "name": "程宗扬",
+        "description": "来自现代世界的穿越者，拥有生死根，丹田融入阴阳鱼，实力介于筑基与金丹之间。",
+        "role": "主角",
+        "gender": "男",
+        "realm": "筑基",
+        "locationId": "lyl.location.ant_hill",
+        "skillIds": [
+          "lyl.skill.death_root_sense",
+          "lyl.skill.coral_dagger_art",
+          "lyl.skill.np002",
+          "lyl.skill.np006",
+          "lyl.skill.np008",
+          "lyl.skill.np009",
+          "lyl.skill.np019"
+        ],
+        "techniqueIds": [
+          "lyl.technique.taiji_bridge",
+          "lyl.technique.yin_yang_fish_reaction",
+          "lyl.technique.np012",
+          "lyl.technique.np020",
+          "lyl.technique.np021",
+          "lyl.technique.np027",
+          "lyl.technique.np028",
+          "lyl.technique.np029"
+        ],
+        "itemIds": [
+          "lyl.item.coral_dagger",
+          "lyl.item.yin_yang_fish",
+          "lyl.item.np001",
+          "lyl.item.np003",
+          "lyl.item.np004",
+          "lyl.item.np005",
+          "lyl.item.np007",
+          "lyl.item.np010",
+          "lyl.item.np011",
+          "lyl.item.np013",
+          "lyl.item.np014",
+          "lyl.item.np015",
+          "lyl.item.np016",
+          "lyl.item.np017",
+          "lyl.item.np018",
+          "lyl.item.np022",
+          "lyl.item.np023",
+          "lyl.item.np024",
+          "lyl.item.np025",
+          "lyl.item.np026",
+          "lyl.item.np030"
+        ],
+        "profile": {
+          "attributes": {
+            "rootBone": 10,
+            "spirituality": 10,
+            "comprehension": 10,
+            "fortune": 9,
+            "charm": 9,
+            "temperament": 10
+          },
+          "spiritRoot": {
+            "name": "变异灵根",
+            "tier": "天品",
+            "description": "身怀纸币发行权，由剧本正典认定。"
+          },
+          "talents": [
+            {
+              "name": "天命主角",
+              "description": "由角色定位推定的天赋。"
+            },
+            {
+              "name": "纸币发行权",
+              "description": "程宗扬的专属异能。"
+            }
+          ],
+          "appearance": "身材魁梧，身穿黑衣，赤阳藤拖入魔墟时衣衫破损，被雪雪咬伤后曾不举，颈后有狐族印记，被襄城君认出，青年男子",
+          "personality": [
+            "机敏果断",
+            "善于谋划",
+            "在多方势力间周旋，善于谈判和算计",
+            "对下属和女人有控制欲，但也时有宽容",
+            "为人机敏，善于伪装和谈判",
+            "对商业和权力有野心，善于利用各方势力"
+          ]
+        }
+      },
+      {
+        "id": "liuchao.character.pan_jinlian",
+        "name": "潘金莲",
+        "description": "貌美毒辣的女子，怀疑程宗扬是黑魔海毒宗传人，正在追杀他。",
+        "role": "反派",
+        "gender": "女",
+        "realm": "金丹",
+        "locationId": "lyl.location.taiquan_core",
+        "skillIds": [
+          "lyl.skill.poison_techniques"
+        ],
+        "techniqueIds": [],
+        "itemIds": [
+          "lyl.item.np022"
+        ],
+        "profile": {
+          "attributes": {
+            "rootBone": 6,
+            "spirituality": 4,
+            "comprehension": 6,
+            "fortune": 5,
+            "charm": 7,
+            "temperament": 4
+          },
+          "spiritRoot": {
+            "name": "火灵根",
+            "tier": "黄品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "体修奇才",
+              "description": "由角色定位推定的天赋。"
+            }
+          ],
+          "appearance": "潘金莲一袭白衣，面戴薄纱，娇艳的面孔如冰雕般没有表情，但美目盈盈如水，微微上挑的眼角带着天生的风流媚态，化解了冰霜气质。她肌肤白美如腻脂，双乳丰挺雪乳，身材婀娜，娇媚的五官即使不笑也带几分媚艳，唇边有两只小巧的酒窝。",
+          "personality": [
+            "高傲自持，手段强硬",
+            "对程宗扬怀有敌意和复杂情感"
+          ]
+        }
+      },
+      {
+        "id": "liuchao.character.yin_fulan",
+        "name": "尹馥兰",
+        "description": "与程宗扬有交集的女子，在核心区帮助程宗扬对抗潘金莲。",
+        "role": "盟友",
+        "gender": "女",
+        "realm": "筑基",
+        "locationId": "lyl.location.taiquan_core",
+        "affiliations": [
+          {
+            "factionId": "lyl.faction.liangzhou_meng",
+            "category": "organization",
+            "role": "成员"
+          }
+        ],
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {
+          "attributes": {
+            "rootBone": 7,
+            "spirituality": 6,
+            "comprehension": 8,
+            "fortune": 7,
+            "charm": 9,
+            "temperament": 6
+          },
+          "spiritRoot": {
+            "name": "木灵根",
+            "tier": "地品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "顶级魅力",
+              "description": "由角色定位推定的天赋。"
+            }
+          ],
+          "notes": [
+            "【誓约约束】被都卢难旦妖铃收服后献出一魂一魄，需以鼎炉侍奉主人，保持雌伏之礼。"
+          ],
+          "appearance": "娇艳含嗔的玉脸，眉眼间带着浓浓风情与骚媚入骨之态；皮肤白腻，身材丰腴，丰乳耸翘、纤腰柔软、雪臀丰满圆硕；常穿薄纱或短旗袍等裸露装束，有时赤裸或仅着肚兜，气质妖艳邪魅。"
+        }
+      },
+      {
+        "id": "lyl.character.he_yilian",
+        "name": "何漪莲",
+        "description": "尹馥兰的同伴，协助程宗扬。",
+        "role": "盟友",
+        "gender": "女",
+        "realm": "筑基",
+        "locationId": "lyl.location.taiquan_core",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {
+          "attributes": {
+            "rootBone": 7,
+            "spirituality": 5,
+            "comprehension": 7,
+            "fortune": 7,
+            "charm": 6,
+            "temperament": 6
+          },
+          "spiritRoot": {
+            "name": "火灵根",
+            "tier": "玄品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "体修奇才",
+              "description": "由角色定位推定的天赋。"
+            }
+          ],
+          "appearance": "娇艳面孔，长发，身材丰满柔美，常穿时尚裙装或黑色套装，气质成熟美貌如明星，带风尘媚态。"
+        }
+      },
+      {
+        "id": "liuchao.character.yu_bai_ying",
+        "name": "虞白樱",
+        "description": "玉冠银发的美女杀手，与程宗扬既有冲突又有合作，刚刚被程宗扬从行淫兽手中救出。",
+        "role": "复杂关系",
+        "gender": "女",
+        "realm": "筑基",
+        "locationId": "lyl.location.ant_hill",
+        "skillIds": [
+          "lyl.skill.duanyue_xian"
+        ],
+        "techniqueIds": [
+          "lyl.technique.np031"
+        ],
+        "itemIds": [
+          "lyl.item.np022"
+        ],
+        "profile": {
+          "attributes": {
+            "rootBone": 6,
+            "spirituality": 4,
+            "comprehension": 5,
+            "fortune": 5,
+            "charm": 5,
+            "temperament": 6
+          },
+          "spiritRoot": {
+            "name": "暗灵根",
+            "tier": "黄品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "过目不忘",
+              "description": "由角色定位推定的天赋。"
+            }
+          ],
+          "personality": [
+            "高傲，为妹妹冒险",
+            "被小紫设计后受制于人"
+          ],
+          "appearance": "银发如丝，容貌艳丽，玉脸艳光照人，雪肤花貌，身材曲线饱满丰满，雪臀肥翘，双乳丰挺雪白，腰肢柔润纤滑，玉腿修长白美，整体肌肤白腻如玉，常散发淡淡肤光。"
+        }
+      },
+      {
+        "id": "liuchao.character.xu_junfang",
+        "name": "徐君房",
+        "description": "鬼谷先生的弟子，学识广博但实战能力弱，随程宗扬行动。",
+        "role": "向导",
+        "gender": "男",
+        "realm": "练气",
+        "locationId": "lyl.location.ant_hill",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {
+          "attributes": {
+            "rootBone": 5,
+            "spirituality": 5,
+            "comprehension": 6,
+            "fortune": 5,
+            "charm": 7,
+            "temperament": 7
+          },
+          "spiritRoot": {
+            "name": "木灵根",
+            "tier": "玄品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "一诺千金",
+              "description": "由角色定位推定的天赋。"
+            }
+          ]
+        }
+      },
+      {
+        "id": "liuchao.character.xiao_yao_yi",
+        "name": "萧遥逸",
+        "description": "重伤后吞下赤阳圣果恢复实力，正在寻找程宗扬。",
+        "role": "伙伴",
+        "gender": "男",
+        "realm": "筑基",
+        "locationId": "lyl.location.taiquan_core",
+        "skillIds": [
+          "lyl.skill.folding_fan_art"
+        ],
+        "techniqueIds": [],
+        "itemIds": [
+          "lyl.item.np022",
+          "lyl.item.np023"
+        ],
+        "profile": {
+          "attributes": {
+            "rootBone": 7,
+            "spirituality": 6,
+            "comprehension": 7,
+            "fortune": 8,
+            "charm": 6,
+            "temperament": 7
+          },
+          "spiritRoot": {
+            "name": "火灵根",
+            "tier": "地品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "道心坚固",
+              "description": "由角色定位推定的天赋。"
+            }
+          ],
+          "appearance": "风度翩翩，但受伤后虚弱",
+          "personality": [
+            "温和有礼，善于交际",
+            "对朋友讲义气"
+          ]
+        }
+      },
+      {
+        "id": "lyl.character.wu_er",
+        "name": "武二",
+        "description": "程宗扬的伙伴，粗犷豪爽，正与萧遥逸一起寻找程宗扬。",
+        "role": "伙伴",
+        "gender": "男",
+        "realm": "筑基",
+        "locationId": "lyl.location.taiquan_core",
+        "skillIds": [
+          "lyl.skill.strong_fists",
+          "lyl.skill.np006"
+        ],
+        "techniqueIds": [],
+        "itemIds": [
+          "lyl.item.np023",
+          "lyl.item.np032"
+        ],
+        "profile": {
+          "attributes": {
+            "rootBone": 4,
+            "spirituality": 6,
+            "comprehension": 6,
+            "fortune": 5,
+            "charm": 5,
+            "temperament": 7
+          },
+          "spiritRoot": {
+            "name": "风灵根",
+            "tier": "黄品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "一诺千金",
+              "description": "由角色定位推定的天赋。"
+            }
+          ],
+          "appearance": "魁梧壮实，力大无穷，魁梧强壮，勇武过人",
+          "personality": [
+            "粗豪好色",
+            "对程宗扬较为忠诚",
+            "直率鲁莽，重情义"
+          ]
+        }
+      },
+      {
+        "id": "liuchao.character.xiao_zi",
+        "name": "小紫",
+        "description": "神秘的妖族女子，抱着雪雪，与程宗扬等人同行。（后宫尊称\"紫妈妈\"，正宫，最有手腕、能管束众人；宠物为犬\"雪雪\"）",
+        "role": "伙伴",
+        "gender": "女",
+        "realm": "金丹",
+        "locationId": "lyl.location.taiquan_core",
+        "skillIds": [
+          "lyl.skill.yaksha_claw"
+        ],
+        "techniqueIds": [
+          "lyl.technique.np037"
+        ],
+        "itemIds": [
+          "lyl.item.np001",
+          "lyl.item.np004",
+          "lyl.item.np033",
+          "lyl.item.np034",
+          "lyl.item.np035",
+          "lyl.item.np036"
+        ],
+        "profile": {
+          "attributes": {
+            "rootBone": 6,
+            "spirituality": 6,
+            "comprehension": 8,
+            "fortune": 7,
+            "charm": 8,
+            "temperament": 9
+          },
+          "spiritRoot": {
+            "name": "暗灵根",
+            "tier": "地品",
+            "description": "身怀毒蝶翅粉，由剧本正典认定。"
+          },
+          "talents": [
+            {
+              "name": "剑骨天成",
+              "description": "由角色定位推定的天赋。"
+            },
+            {
+              "name": "毒蝶翅粉",
+              "description": "小紫的专属异能。"
+            }
+          ],
+          "appearance": "身材娇小，带有诡异气质，外表娇小，容貌迷人，常穿紫色衣物，神秘气质",
+          "personality": [
+            "聪明而冷酷，善于用毒和控制",
+            "对程宗扬有占有欲但也宠爱",
+            "机灵聪慧，善于幻术和操控",
+            "对程宗扬忠诚，有占有欲"
+          ]
+        }
+      },
+      {
+        "id": "liuchao.character.shang_zhen_yu",
+        "name": "朱老头",
+        "role": "小紫的同伴/程宗扬朋友",
+        "description": "小紫的同伴/程宗扬朋友（真身殇振羽，殇侯一系；化名朱老头/刘询）",
+        "itemIds": [
+          "lyl.item.np004"
+        ],
+        "profile": {
+          "attributes": {
+            "rootBone": 7,
+            "spirituality": 7,
+            "comprehension": 8,
+            "fortune": 10,
+            "charm": 8,
+            "temperament": 6
+          },
+          "spiritRoot": {
+            "name": "雷灵根",
+            "tier": "地品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "多宝童子",
+              "description": "由角色定位推定的天赋。"
+            }
+          ],
+          "appearance": "干瘦老头，貌不惊人",
+          "personality": [
+            "阴沉神秘，毒术高超",
+            "对程宗扬有利用也有合作"
+          ]
+        },
+        "realm": "筑基",
+        "gender": "男"
+      },
+      {
+        "id": "liuchao.character.wang_hui",
+        "name": "王蕙",
+        "gender": "女",
+        "role": "秦桧之妻",
+        "description": "秦桧之妻，常带笑容、眼神灵动；与程宗扬合作。"
+      }
+    ],
+    "playerRelationships": [
+      {
+        "characterId": "liuchao.character.pan_jinlian",
+        "relation": "追杀者与被追杀者",
+        "favorability": -80,
+        "memeries": [
+          "潘金莲在核心区发现程宗扬，怀疑他是黑魔海毒宗传人，立即展开追杀"
+        ]
+      },
+      {
+        "characterId": "liuchao.character.yin_fulan",
+        "relation": "施救者",
+        "favorability": 50,
+        "memeries": [
+          "尹馥兰在程宗扬重伤时出手相助"
+        ]
+      },
+      {
+        "characterId": "lyl.character.he_yilian",
+        "relation": "施救者",
+        "favorability": 40,
+        "memeries": [
+          "何漪莲随尹馥兰一起帮助程宗扬"
+        ]
+      },
+      {
+        "characterId": "liuchao.character.yu_bai_ying",
+        "relation": "救与被救",
+        "favorability": -20,
+        "memeries": [
+          "程宗扬从行淫兽口中救出虞白樱，但虞白樱仍对程宗扬保持警惕"
+        ]
+      },
+      {
+        "characterId": "liuchao.character.xu_junfang",
+        "relation": "向导与求助者",
+        "favorability": 60,
+        "memeries": [
+          "程宗扬救下徐君房，两人共同在魔墟探索"
+        ]
+      },
+      {
+        "characterId": "liuchao.character.xiao_yao_yi",
+        "relation": "伙伴",
+        "favorability": 70,
+        "memeries": [
+          "萧遥逸吞下赤阳圣果后实力恢复，正在寻找程宗扬"
+        ]
+      },
+      {
+        "characterId": "lyl.character.wu_er",
+        "relation": "伙伴",
+        "favorability": 75,
+        "memeries": [
+          "武二曾与程宗扬一起行动，被打晕后醒来"
+        ]
+      },
+      {
+        "characterId": "liuchao.character.xiao_zi",
+        "relation": "伙伴",
+        "favorability": 60,
+        "memeries": [
+          "小紫与程宗扬合作夺赤阳圣果"
+        ]
+      },
+      {
+        "characterId": "liuchao.character.shang_zhen_yu",
+        "relation": "合作",
+        "favorability": 35
+      },
+      {
+        "characterId": "liuchao.character.wang_hui",
+        "relation": "盟友",
+        "favorability": 30
+      }
+    ],
+    "relationships": [
+      {
+        "fromCharacterId": "liuchao.character.yin_fulan",
+        "toCharacterId": "lyl.character.he_yilian",
+        "relation": "同伴",
+        "score": 70,
+        "direction": "bidirectional",
+        "tags": [
+          "组队"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.xiao_yao_yi",
+        "toCharacterId": "lyl.character.wu_er",
+        "relation": "伙伴",
+        "score": 60,
+        "direction": "bidirectional",
+        "tags": [
+          "组队"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.xiao_zi",
+        "toCharacterId": "liuchao.character.xiao_yao_yi",
+        "relation": "同伴",
+        "score": 35,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.xiao_zi",
+        "toCharacterId": "liuchao.character.yu_bai_ying",
+        "relation": "敌对",
+        "score": 5,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.xiao_yao_yi",
+        "toCharacterId": "liuchao.character.xu_junfang",
+        "relation": "同伴",
+        "score": 35,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.pan_jinlian",
+        "toCharacterId": "liuchao.character.yu_bai_ying",
+        "relation": "敌对",
+        "score": 5,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.xiao_zi",
+        "toCharacterId": "lyl.character.he_yilian",
+        "relation": "控制",
+        "score": 5,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.shang_zhen_yu",
+        "toCharacterId": "liuchao.character.xiao_zi",
+        "relation": "师徒",
+        "score": 48,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.xiao_zi",
+        "toCharacterId": "liuchao.character.yin_fulan",
+        "relation": "主人",
+        "score": 25,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.yin_fulan",
+        "toCharacterId": "liuchao.character.yu_bai_ying",
+        "relation": "主仆",
+        "score": 25,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.yu_bai_ying",
+        "toCharacterId": "lyl.character.he_yilian",
+        "relation": "主仆",
+        "score": 25,
+        "direction": "bidirectional"
+      }
+    ]
+  },
+  "content": {
+    "skills": [
+      {
+        "id": "lyl.skill.death_root_sense",
+        "name": "生死根感应",
+        "description": "感应死亡气息，增强对死气的操纵。",
+        "type": "异能",
+        "effects": [
+          "提升对死亡威胁的感知",
+          "可操纵少量死气"
+        ]
+      },
+      {
+        "id": "lyl.skill.coral_dagger_art",
+        "name": "珊瑚匕首术",
+        "description": "使用珊瑚匕首的技巧，锋利无匹，可斩断赤阳藤。",
+        "type": "刀法",
+        "effects": [
+          "切割坚韧物品",
+          "提升近战攻击力"
+        ]
+      },
+      {
+        "id": "lyl.skill.duanyue_xian",
+        "name": "断月弦",
+        "description": "虞白樱的独门暗器丝弦，锋利如刀。",
+        "type": "暗器",
+        "effects": [
+          "远程攻击",
+          "切割"
+        ]
+      },
+      {
+        "id": "lyl.skill.poison_techniques",
+        "name": "毒术",
+        "description": "潘金莲的用毒技巧。",
+        "type": "毒法",
+        "effects": [
+          "施毒",
+          "解毒"
+        ]
+      },
+      {
+        "id": "lyl.skill.folding_fan_art",
+        "name": "折扇术",
+        "description": "萧遥逸的折扇战斗技巧。",
+        "type": "武器技法",
+        "effects": [
+          "近战攻击",
+          "远程投掷"
+        ]
+      },
+      {
+        "id": "lyl.skill.strong_fists",
+        "name": "铁拳",
+        "description": "武二的蛮力拳法。",
+        "type": "拳法",
+        "effects": [
+          "高额物理伤害"
+        ]
+      },
+      {
+        "id": "lyl.skill.yaksha_claw",
+        "name": "夜叉爪",
+        "description": "小紫的妖族爪技，可召唤妖爪。",
+        "type": "妖术",
+        "effects": [
+          "远程攻击",
+          "夺取物品"
+        ]
+      },
+      {
+        "id": "lyl.skill.np002",
+        "name": "房中术",
+        "description": "程宗扬习太乙真宗房中术"
+      },
+      {
+        "id": "lyl.skill.np006",
+        "name": "九阳神功",
+        "description": "程宗扬在江州城外使用九阳神功，被蔺采泉知晓"
+      },
+      {
+        "id": "lyl.skill.np008",
+        "name": "纸币发行权",
+        "description": "程宗扬通过两条章程获得宋国纸币发行权，即纸币必须用于支付赋税，且发行数量需经程氏钱庄认可。"
+      },
+      {
+        "id": "lyl.skill.np009",
+        "name": "太一经",
+        "description": "程宗扬通过阮香凝发现太一经的淬炼法门。"
+      },
+      {
+        "id": "lyl.skill.np019",
+        "name": "生死根",
+        "description": "程宗扬将生死根反向引导，吸收剑玉姬的外来剑气，引发丹田异变。气轮破碎后重凝，真元大幅提升但变得浑沌。"
+      }
+    ],
+    "techniques": [
+      {
+        "id": "lyl.technique.taiji_bridge",
+        "name": "太极桥",
+        "description": "程宗扬主修的功法，以阴阳鱼为基础。",
+        "grade": "地级",
+        "skillIds": [
+          "lyl.skill.death_root_sense",
+          "lyl.skill.coral_dagger_art"
+        ]
+      },
+      {
+        "id": "lyl.technique.yin_yang_fish_reaction",
+        "name": "阴阳鱼反制",
+        "description": "利用丹田中阴阳鱼的力量进行防御和反击，尚未完全熟练。",
+        "grade": "玄级",
+        "skillIds": []
+      },
+      {
+        "id": "lyl.technique.np012",
+        "name": "纸币（程氏钱庄）",
+        "description": "程氏钱庄发行三批纸币，总计二百四十三万金铢流通。",
+        "grade": "极品"
+      },
+      {
+        "id": "lyl.technique.np020",
+        "name": "五虎断门刀",
+        "description": "武二郎传授，程宗扬用屠龙刀施展，但为剑玉姬所破。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyl.technique.np021",
+        "name": "水泥技术",
+        "description": "水泥技术由程宗扬掌握，星月湖大营负责安全",
+        "grade": "仙品"
+      },
+      {
+        "id": "lyl.technique.np027",
+        "name": "生死根",
+        "description": "生死根能吞噬死气",
+        "grade": "中品"
+      },
+      {
+        "id": "lyl.technique.np028",
+        "name": "九阳神功",
+        "description": "九阳神功是程宗扬的内功",
+        "grade": "中品"
+      },
+      {
+        "id": "lyl.technique.np029",
+        "name": "太一经",
+        "description": "太一经是程宗扬的内功",
+        "grade": "中品"
+      },
+      {
+        "id": "lyl.technique.np031",
+        "name": "断月弦",
+        "description": "断月弦是虞白樱的武器",
+        "grade": "下品"
+      },
+      {
+        "id": "lyl.technique.np037",
+        "name": "守阵力士",
+        "description": "小紫改造守阵力士，使其能活动",
+        "grade": "中品"
+      }
+    ],
+    "items": [
+      {
+        "id": "lyl.item.coral_dagger",
+        "name": "珊瑚匕首",
+        "description": "一柄锋利无比的匕首，可斩断赤阳藤等坚韧物体。",
+        "type": "weapon",
+        "grade": "仙品",
+        "skillIds": [
+          "lyl.skill.coral_dagger_art"
+        ],
+        "techniqueId": "lyl.technique.taiji_bridge"
+      },
+      {
+        "id": "lyl.item.yin_yang_fish",
+        "name": "阴阳鱼",
+        "description": "程宗扬在太泉古阵中获得的宝物，已融入丹田，可勾动阴阳气机。",
+        "type": "other",
+        "grade": "仙品",
+        "techniqueId": "lyl.technique.yin_yang_fish_reaction"
+      },
+      {
+        "id": "lyl.item.np001",
+        "name": "鬼牙",
+        "type": "other",
+        "description": "程宗扬从萧遥逸处获得鬼牙",
+        "grade": "中品"
+      },
+      {
+        "id": "lyl.item.np003",
+        "name": "屠龙刀",
+        "type": "weapon",
+        "description": "林冲以一千贯买下屠龙刀，刀由珊瑚铁打造，价值万金。",
+        "grade": "极品"
+      },
+      {
+        "id": "lyl.item.np004",
+        "name": "龙睛玉",
+        "type": "material",
+        "description": "龙睛玉用于铁傀儡，一块支撑不到二十分钟。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyl.item.np005",
+        "name": "金瓶梅",
+        "type": "other",
+        "description": "程宗扬从悦生堂得到《金瓶梅》插图版。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyl.item.np007",
+        "name": "雷霆刀",
+        "type": "weapon",
+        "description": "程宗扬从飞鸟熊藏处获得刀柄，可凝成刀刃",
+        "grade": "仙品"
+      },
+      {
+        "id": "lyl.item.np010",
+        "name": "纸币",
+        "type": "other",
+        "description": "程宗扬发行纸币，用于经济战。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyl.item.np011",
+        "name": "手雷",
+        "type": "material",
+        "description": "龙睛玉手雷，由冯源使用",
+        "grade": "中品"
+      },
+      {
+        "id": "lyl.item.np013",
+        "name": "通源行",
+        "type": "other",
+        "description": "程宗扬接手通源行，成为盘江程氏产业。",
+        "grade": "仙品"
+      },
+      {
+        "id": "lyl.item.np014",
+        "name": "武穆王府",
+        "type": "other",
+        "description": "程宗扬购得武穆王府，计划拆除改建。",
+        "grade": "仙品"
+      },
+      {
+        "id": "lyl.item.np015",
+        "name": "药丸（殇侯制）",
+        "type": "consumable",
+        "description": "程宗扬用其控制黄氏，疑似摇头丸与麻古混合。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyl.item.np016",
+        "name": "袈裟符文",
+        "type": "consumable",
+        "description": "程宗扬从静善处誊录，记载叵密与十方丛林冲突内幕。",
+        "grade": "仙品"
+      },
+      {
+        "id": "lyl.item.np017",
+        "name": "雷射战刀",
+        "type": "weapon",
+        "description": "程宗扬从高俅处获得雷射战刀，可随修为变化",
+        "grade": "中品"
+      },
+      {
+        "id": "lyl.item.np018",
+        "name": "雷射宝刀",
+        "type": "weapon",
+        "description": "程宗扬藏于怀中，电光闪烁，突然刺穿剑玉姬手掌。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyl.item.np022",
+        "name": "赤阳圣果",
+        "type": "other",
+        "description": "赤阳圣果为假货（老萝卜），由徐君房制作。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyl.item.np023",
+        "name": "盘江程氏股票",
+        "type": "other",
+        "description": "盘江程氏股票每股价值五万金铢，可兑换资产。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyl.item.np024",
+        "name": "龙鳞盾",
+        "type": "armor",
+        "description": "龙鳞盾为程宗扬携带的防具。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyl.item.np025",
+        "name": "汽车",
+        "type": "other",
+        "description": "程宗扬在太泉古阵第一层发现并驾驶一辆汽车，使用电能驱动，可日行千里。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyl.item.np026",
+        "name": "岳鹏举钥匙",
+        "type": "other",
+        "description": "程宗扬持有岳鹏举留下的钥匙，指向太泉熊谷一四七五。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyl.item.np030",
+        "name": "钓鱼竿（白龙鱼竿）",
+        "type": "other",
+        "description": "可伸缩，最长两丈，鱼线透明坚韧，长度四丈，可切割敌人。",
+        "grade": "仙品"
+      },
+      {
+        "id": "lyl.item.np032",
+        "name": "铁轨",
+        "type": "material",
+        "description": "武二郎在熊谷地铁站拆下两根铁轨作为武器，重约二三百斤。",
+        "grade": "下品"
+      },
+      {
+        "id": "lyl.item.np033",
+        "name": "都卢难旦妖铃",
+        "type": "material",
+        "description": "小紫用玉瓶装阴魂。",
+        "grade": "极品"
+      },
+      {
+        "id": "lyl.item.np034",
+        "name": "珊瑚紫蛇",
+        "type": "material",
+        "description": "小紫用龙睛玉和阴魂制成可操控的机械",
+        "grade": "极品"
+      },
+      {
+        "id": "lyl.item.np035",
+        "name": "春药",
+        "type": "consumable",
+        "description": "小紫用春药破解阮香凝脑中禁制",
+        "grade": "中品"
+      },
+      {
+        "id": "lyl.item.np036",
+        "name": "青冥琥珀",
+        "type": "material",
+        "description": "青冥琥珀为天青色，传说是天龙的碧血所化，比龙睛玉还少见。",
+        "grade": "下品"
+      }
+    ]
+  },
+  "scenario": {
+    "opening": {
+      "text": "你程宗扬正在太泉古阵核心区的蚁丘迷窟中，刚从魔墟大楼和赤阳藤的追杀中逃脱。虞白樱崴伤脚踝，徐君房被打晕。此时潘金莲仍在核心区内追杀你，怀疑你是黑魔海毒宗传人。但尹馥兰和何漪莲在附近活动，愿意帮助你。你丹田内的阴阳鱼正在积蓄力量，你需要找到出路并应对潘金莲的威胁。",
+      "playerCharacterId": "liuchao.character.cheng_zongyang",
+      "creationPreset": {
+        "characterName": "程宗扬",
+        "gender": "男",
+        "race": "人族",
+        "age": 20,
+        "talentTier": {
+          "name": "异世来客",
+          "description": "来自现代世界的穿越者，拥有独特思维方式。"
+        },
+        "origin": {
+          "name": "现代来客",
+          "description": "因空间异变进入六朝，已在太泉古阵中生存多时。"
+        },
+        "spiritRoot": {
+          "name": "生死根",
+          "tier": "唯一异能",
+          "description": "并非传统灵根，而是原身死亡后与灵魂融合的异能。",
+          "specialEffects": [
+            "感应死亡气息",
+            "操纵死气"
+          ]
+        },
+        "talents": [
+          {
+            "name": "务实机敏",
+            "description": "善于判断风险和机会。"
+          },
+          {
+            "name": "求生本能",
+            "description": "在危险环境中能迅速找到逃生途径。"
+          }
+        ],
+        "attributes": {
+          "rootBone": 5,
+          "spirituality": 4,
+          "comprehension": 6,
+          "fortune": 6,
+          "charm": 5,
+          "temperament": 6
+        },
+        "locked": true
+      },
+      "locationId": "lyl.location.ant_hill",
+      "featuredCharacterIds": [
+        "liuchao.character.pan_jinlian",
+        "liuchao.character.yin_fulan",
+        "liuchao.character.yu_bai_ying",
+        "liuchao.character.xu_junfang"
+      ]
+    },
+    "initialFlags": {
+      "chapter.escape_ant_hill.done": false,
+      "chapter.meet_yin_fulan.done": false,
+      "chapter.confront_pan_jinlian.done": false,
+      "event.pan_jinlian_ambush.triggered": false,
+      "event.yin_fulan_aid.done": false,
+      "chapter.aftermath.done": false
+    },
+    "chapters": [
+      {
+        "id": "lyl.chapter.escape_ant_hill",
+        "title": "蚁丘迷窟",
+        "summary": "在迷宫中寻找出口，同时应对虞白樱的戒备和潜在的赤阳藤威胁。",
+        "completion": [
+          {
+            "path": "flags.chapter.escape_ant_hill.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "eventIds": [
+          "lyl.event.find_exit",
+          "lyl.event.yu_baiying_truce"
+        ]
+      },
+      {
+        "id": "lyl.chapter.meet_yin_fulan",
+        "title": "援手与布局",
+        "summary": "在核心区与尹馥兰、何漪莲会合，获得帮助并计划反制潘金莲。",
+        "activation": [
+          {
+            "path": "flags.chapter.escape_ant_hill.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.chapter.meet_yin_fulan.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "eventIds": [
+          "lyl.event.yin_fulan_aid",
+          "lyl.event.plan_counterattack"
+        ]
+      },
+      {
+        "id": "lyl.chapter.confront_pan_jinlian",
+        "title": "反制潘金莲",
+        "summary": "利用阴阳鱼和尹馥兰的配合，反击潘金莲的追杀，决定她的命运。",
+        "activation": [
+          {
+            "path": "flags.chapter.meet_yin_fulan.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.chapter.confront_pan_jinlian.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "eventIds": [
+          "lyl.event.pan_jinlian_ambush",
+          "lyl.event.yin_yang_counter"
+        ]
+      },
+      {
+        "id": "lyl.chapter.aftermath",
+        "title": "余波",
+        "summary": "处理潘金莲后的局面，决定是否收服尹馥兰等人。",
+        "activation": [
+          {
+            "path": "flags.chapter.confront_pan_jinlian.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.chapter.aftermath.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "eventIds": [
+          "lyl.event.decide_yin_fulan_fate"
+        ]
+      }
+    ],
+    "events": [
+      {
+        "id": "lyl.event.find_exit",
+        "name": "寻找出口",
+        "description": "在蚁丘迷窟中找到通往核心区的出口，可能需要处理虞白樱的态度。",
+        "completion": [
+          {
+            "path": "flags.chapter.escape_ant_hill.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.yu_bai_ying",
+          "liuchao.character.xu_junfang"
+        ],
+        "locationId": "lyl.location.ant_hill"
+      },
+      {
+        "id": "lyl.event.yu_baiying_truce",
+        "name": "虞白樱的临时合作",
+        "description": "虞白樱脚踝受伤，暂时需要程宗扬帮助。她可能提出合作条件。",
+        "completion": [
+          {
+            "path": "flags.chapter.escape_ant_hill.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.yu_bai_ying"
+        ],
+        "locationId": "lyl.location.ant_hill"
+      },
+      {
+        "id": "lyl.event.yin_fulan_aid",
+        "name": "尹馥兰出手相助",
+        "description": "程宗扬带着虞白樱和徐君房离开蚁丘后，遇到尹馥兰和何漪莲。尹馥兰告知潘金莲在核心区布下埋伏，愿意帮助程宗扬。",
+        "completion": [
+          {
+            "path": "flags.event.yin_fulan_aid.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.yin_fulan",
+          "lyl.character.he_yilian"
+        ],
+        "locationId": "lyl.location.taiquan_core"
+      },
+      {
+        "id": "lyl.event.plan_counterattack",
+        "name": "制定反制计划",
+        "description": "程宗扬与尹馥兰商议如何利用阴阳鱼和核心区地形反制潘金莲，可决定是正面冲突还是设伏。",
+        "completion": [
+          {
+            "path": "flags.chapter.meet_yin_fulan.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.yin_fulan",
+          "lyl.character.he_yilian"
+        ],
+        "locationId": "lyl.location.taiquan_core"
+      },
+      {
+        "id": "lyl.event.pan_jinlian_ambush",
+        "name": "潘金莲的伏击",
+        "description": "潘金莲在核心区关键要道设伏，程宗扬一行人进入其陷阱。",
+        "conditions": [
+          {
+            "path": "flags.event.pan_jinlian_ambush.triggered",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.chapter.confront_pan_jinlian.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.pan_jinlian"
+        ],
+        "locationId": "lyl.location.taiquan_core"
+      },
+      {
+        "id": "lyl.event.yin_yang_counter",
+        "name": "阴阳鱼反击",
+        "description": "程宗扬利用阴阳鱼的力量反击潘金莲，配合尹馥兰的协助，扭转局势。",
+        "conditions": [
+          {
+            "path": "flags.event.pan_jinlian_ambush.triggered",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.chapter.confront_pan_jinlian.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.pan_jinlian",
+          "liuchao.character.yin_fulan"
+        ],
+        "locationId": "lyl.location.taiquan_core"
+      },
+      {
+        "id": "lyl.event.decide_yin_fulan_fate",
+        "name": "局势收尾",
+        "description": "在潘金莲被击败或逃走后，决定尹馥兰、何漪莲的去留，是否收服她们。",
+        "completion": [
+          {
+            "path": "flags.chapter.aftermath.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.yin_fulan",
+          "lyl.character.he_yilian"
+        ],
+        "locationId": "lyl.location.taiquan_core"
+      }
+    ]
+  },
+  "rules": {
+    "mode": "strict",
+    "lockedFields": [
+      "canon.characters.*.name",
+      "canon.locations.*.name",
+      "canon.factions.*.name",
+      "content.skills.*.name",
+      "content.techniques.*.name",
+      "content.items.*.name"
+    ],
+    "contentAccess": [
+      {
+        "contentId": "lyl.skill.death_root_sense",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyl.item.yin_yang_fish",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyl.technique.yin_yang_fish_reaction",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyl.skill.np006",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyl.skill.np008",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyl.skill.np019",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyl.technique.np012",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyl.technique.np021",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyl.item.coral_dagger",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyl.item.np007",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyl.item.np013",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyl.item.np014",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyl.item.np016",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyl.item.np030",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyl.item.np033",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.xiao_zi"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyl.item.np034",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.xiao_zi"
+        ],
+        "playerAllowed": false
+      }
+    ]
+  }
+}

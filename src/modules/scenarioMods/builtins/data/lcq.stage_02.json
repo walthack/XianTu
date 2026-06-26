@@ -1,0 +1,1392 @@
+{
+  "schema": "xiantu.scenario-mod",
+  "version": 1,
+  "manifest": {
+    "id": "lcq.stage_02",
+    "name": "第10章·军团",
+    "version": "1.0.0",
+    "author": "DeepSeek V4 Flash + XianTu Mod Kit",
+    "description": "左武军与罗马军团、马其顿军团及兽蛮人联军激战，王哲即将自爆，全军覆没。玩家可介入王哲自爆前的决策，改变月霜命运或尝试救援韩庚。"
+  },
+  "world": {
+    "name": "六朝",
+    "era": "左武军覆灭前夕",
+    "background": "左武军第一军团与罗马军团、马其顿军团及兽蛮人联军激战，王哲即将自爆，全军覆没。",
+    "specialRules": [
+      "核心专名不得改写",
+      "使用六朝共享正典地图，禁止随机生成势力或地点覆盖已导入内容"
+    ],
+    "continents": [
+      {
+        "id": "liuchao.continent.zhongzhou",
+        "name": "中州",
+        "description": "故事的主要区域。",
+        "bounds": [
+          {
+            "x": 100,
+            "y": 50
+          },
+          {
+            "x": 9600,
+            "y": 50
+          },
+          {
+            "x": 9600,
+            "y": 6500
+          },
+          {
+            "x": 100,
+            "y": 6500
+          },
+          {
+            "x": 100,
+            "y": 50
+          }
+        ]
+      },
+      {
+        "id": "liuchao.continent.nanhuang",
+        "name": "南荒",
+        "description": "中州以南的蛮荒地带，多部族势力。",
+        "bounds": [
+          {
+            "x": 1200,
+            "y": 5200
+          },
+          {
+            "x": 7000,
+            "y": 5200
+          },
+          {
+            "x": 7000,
+            "y": 10000
+          },
+          {
+            "x": 1200,
+            "y": 10000
+          },
+          {
+            "x": 1200,
+            "y": 5200
+          }
+        ]
+      }
+    ],
+    "map": {
+      "atlasId": "liuchao.shared.atlas",
+      "locked": true,
+      "mapConfig": {
+        "width": 10000,
+        "height": 10000,
+        "minLng": 0,
+        "maxLng": 10000,
+        "minLat": 0,
+        "maxLat": 10000
+      },
+      "backgroundImage": "shared-atlas/source-maps/liuchao-world.jpg"
+    }
+  },
+  "canon": {
+    "factions": [
+      {
+        "id": "lcq.faction.left_guard",
+        "name": "左武军",
+        "description": "大汉左武卫第一军团，由王哲统领。",
+        "type": "military",
+        "headquartersLocationId": "liuchao.location.jiangzhou",
+        "territory": [
+          {
+            "x": 4800,
+            "y": 6600
+          },
+          {
+            "x": 5100,
+            "y": 6600
+          },
+          {
+            "x": 5100,
+            "y": 6800
+          },
+          {
+            "x": 4800,
+            "y": 6800
+          },
+          {
+            "x": 4800,
+            "y": 6600
+          }
+        ],
+        "features": []
+      },
+      {
+        "id": "lcq.faction.roman",
+        "name": "罗马军团",
+        "description": "罗马帝国五个主力军团，由阿伽门侬统领。",
+        "type": "military",
+        "headquartersLocationId": "liuchao.location.nanzhao",
+        "territory": [
+          {
+            "x": 4800,
+            "y": 7700
+          },
+          {
+            "x": 5200,
+            "y": 7700
+          },
+          {
+            "x": 5200,
+            "y": 7900
+          },
+          {
+            "x": 4800,
+            "y": 7900
+          },
+          {
+            "x": 4800,
+            "y": 7700
+          }
+        ],
+        "features": []
+      },
+      {
+        "id": "lcq.faction.macedon",
+        "name": "马其顿军团",
+        "description": "马其顿方阵，由亚历山大提供。",
+        "type": "military",
+        "headquartersLocationId": "liuchao.location.nanzhao",
+        "territory": [
+          {
+            "x": 4800,
+            "y": 7700
+          },
+          {
+            "x": 5200,
+            "y": 7700
+          },
+          {
+            "x": 5200,
+            "y": 7900
+          },
+          {
+            "x": 4800,
+            "y": 7900
+          },
+          {
+            "x": 4800,
+            "y": 7700
+          }
+        ],
+        "features": []
+      },
+      {
+        "id": "lcq.faction.beast",
+        "name": "兽蛮人",
+        "description": "兽蛮人联军，由古格尔统领。",
+        "type": "military",
+        "headquartersLocationId": "liuchao.location.guiwangdong",
+        "territory": [
+          {
+            "x": 1500,
+            "y": 8600
+          },
+          {
+            "x": 1700,
+            "y": 8600
+          },
+          {
+            "x": 1700,
+            "y": 8800
+          },
+          {
+            "x": 1500,
+            "y": 8800
+          },
+          {
+            "x": 1500,
+            "y": 8600
+          }
+        ],
+        "features": []
+      },
+      {
+        "id": "lcq.faction.taiyi",
+        "name": "太乙真宗",
+        "description": "修道门派，王哲为掌教。",
+        "type": "sect",
+        "headquartersLocationId": "liuchao.location.longchi",
+        "territory": [
+          {
+            "x": 4900,
+            "y": 4900
+          },
+          {
+            "x": 5100,
+            "y": 4900
+          },
+          {
+            "x": 5100,
+            "y": 5100
+          },
+          {
+            "x": 4900,
+            "y": 5100
+          },
+          {
+            "x": 4900,
+            "y": 4900
+          }
+        ],
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.xingyue_lake",
+        "name": "星月湖",
+        "headquartersLocationId": "liuchao.location.jiangzhou",
+        "type": "army",
+        "description": "岳帅旧部组成的军事势力，原为晋国左武军一部分，后独立为程宗扬掌控的势力。",
+        "territory": [
+          {
+            "x": 4800,
+            "y": 6600
+          },
+          {
+            "x": 5100,
+            "y": 6600
+          },
+          {
+            "x": 5100,
+            "y": 6800
+          },
+          {
+            "x": 4800,
+            "y": 6800
+          },
+          {
+            "x": 4800,
+            "y": 6600
+          }
+        ],
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.heimo_hai",
+        "name": "黑魔海",
+        "headquartersLocationId": "liuchao.location.nanzhao",
+        "type": "secret_organization",
+        "description": "跨国的秘密魔道组织，实力强大。",
+        "territory": [
+          {
+            "x": 4800,
+            "y": 7700
+          },
+          {
+            "x": 5200,
+            "y": 7700
+          },
+          {
+            "x": 5200,
+            "y": 7900
+          },
+          {
+            "x": 4800,
+            "y": 7900
+          },
+          {
+            "x": 4800,
+            "y": 7700
+          }
+        ],
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.guiwang_dong",
+        "name": "鬼王峒",
+        "headquartersLocationId": "liuchao.location.guiwangdong",
+        "type": "tribe",
+        "description": "南荒部族联盟，由鬼巫王统领。",
+        "territory": [
+          {
+            "x": 1500,
+            "y": 8600
+          },
+          {
+            "x": 1700,
+            "y": 8600
+          },
+          {
+            "x": 1700,
+            "y": 8800
+          },
+          {
+            "x": 1500,
+            "y": 8800
+          },
+          {
+            "x": 1500,
+            "y": 8600
+          }
+        ],
+        "features": []
+      }
+    ],
+    "locations": [
+      {
+        "id": "lcq.location.shuai_zhang",
+        "name": "帅帐",
+        "description": "王哲的帅帐，位于山丘之上。",
+        "type": "城池",
+        "continentId": "liuchao.continent.zhongzhou",
+        "factionId": "lcq.faction.left_guard",
+        "coordinates": {
+          "x": 881,
+          "y": 4366
+        },
+        "features": []
+      },
+      {
+        "id": "lcq.location.roman_camp",
+        "name": "罗马军营",
+        "description": "罗马军团的营地。",
+        "type": "城池",
+        "continentId": "liuchao.continent.zhongzhou",
+        "factionId": "lcq.faction.roman",
+        "coordinates": {
+          "x": 881,
+          "y": 4366
+        },
+        "features": []
+      },
+      {
+        "id": "lcq.location.macedon_camp",
+        "name": "马其顿军营",
+        "description": "马其顿军团的营地。",
+        "type": "城池",
+        "continentId": "liuchao.continent.zhongzhou",
+        "factionId": "lcq.faction.macedon",
+        "coordinates": {
+          "x": 881,
+          "y": 4366
+        },
+        "features": []
+      },
+      {
+        "id": "lcq.location.beast_camp",
+        "name": "兽蛮人营地",
+        "description": "兽蛮人的营地。",
+        "type": "城池",
+        "continentId": "liuchao.continent.zhongzhou",
+        "factionId": "lcq.faction.beast",
+        "coordinates": {
+          "x": 881,
+          "y": 4366
+        },
+        "features": []
+      },
+      {
+        "id": "lcq.location.taiyi_temple",
+        "name": "太乙真宗道观",
+        "description": "太乙真宗的山门所在。",
+        "type": "城池",
+        "continentId": "liuchao.continent.zhongzhou",
+        "factionId": "lcq.faction.taiyi",
+        "coordinates": {
+          "x": 881,
+          "y": 4366
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.wuyuan",
+        "name": "五原城",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "中州北部边境城池，程宗扬初次逃亡地。",
+        "coordinates": {
+          "x": 881,
+          "y": 4366
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.jiangzhou",
+        "name": "江州",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "星月湖大营所在地，宋国边境重要城市。",
+        "coordinates": {
+          "x": 4956,
+          "y": 6735
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.nanzhao",
+        "name": "昭南",
+        "continentId": "liuchao.continent.nanhuang",
+        "type": "城池",
+        "description": "南荒区域的重要城市，六朝清羽记结尾与云龙吟中多次出现。",
+        "coordinates": {
+          "x": 4916,
+          "y": 7778
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.longchi",
+        "name": "龙池",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "宗门",
+        "description": "太乙真宗总部所在地，位于中州区域。",
+        "coordinates": {
+          "x": 5000,
+          "y": 5000
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.guiwangdong",
+        "name": "鬼王峒",
+        "continentId": "liuchao.continent.nanhuang",
+        "type": "洞府",
+        "description": "南荒鬼王峒势力的核心洞窟。",
+        "coordinates": {
+          "x": 1641,
+          "y": 8690
+        },
+        "features": []
+      }
+    ],
+    "characters": [
+      {
+        "id": "liuchao.character.cheng_zongyang",
+        "name": "程宗扬",
+        "description": "穿越者，被王哲筑基并传九阳神功口诀。",
+        "role": "主角",
+        "gender": "男",
+        "realm": "筑基",
+        "affiliations": [
+          {
+            "factionId": "lcq.faction.left_guard",
+            "category": "military",
+            "role": "临时成员"
+          }
+        ],
+        "locationId": "lcq.location.shuai_zhang",
+        "skillIds": [
+          "lcq.skill.death_root",
+          "lcq.skill.nine_sun"
+        ],
+        "techniqueIds": [
+          "lcq.technique.nine_sun_manual"
+        ],
+        "itemIds": [
+          "lcq.item.backpack",
+          "lcq.item.lingerie",
+          "lcq.item.condom",
+          "lcq.item.vibrator",
+          "lcq.item.drug",
+          "lcq.item.np001"
+        ],
+        "profile": {
+          "appearance": "身材匀称的现代青年",
+          "personality": [
+            "机敏狡猾",
+            "行事果断",
+            "善于应变",
+            "轻浮",
+            "善用现代物品谋利"
+          ],
+          "race": "人类",
+          "origin": "现代穿越者",
+          "talents": [
+            {
+              "name": "天命主角",
+              "description": "由角色定位推定的天赋。"
+            },
+            {
+              "name": "生死根",
+              "description": "程宗扬的专属异能。"
+            }
+          ],
+          "attributes": {
+            "rootBone": 8,
+            "spirituality": 9,
+            "comprehension": 10,
+            "fortune": 9,
+            "charm": 8,
+            "temperament": 10
+          },
+          "memories": [
+            "被苏妲己下冰蛊",
+            "结识凝羽",
+            "前往南荒"
+          ],
+          "spiritRoot": {
+            "name": "变异灵根",
+            "tier": "天品",
+            "description": "身怀生死根，由剧本正典认定。"
+          }
+        }
+      },
+      {
+        "id": "lcq.character.wang_zhe",
+        "name": "王哲",
+        "description": "左武卫大将军、太乙真宗掌教，即将自爆。",
+        "role": "关键人物",
+        "gender": "男",
+        "realm": "金丹",
+        "affiliations": [
+          {
+            "factionId": "lcq.faction.left_guard",
+            "category": "military",
+            "role": "师帅"
+          },
+          {
+            "factionId": "lcq.faction.taiyi",
+            "category": "sect",
+            "role": "掌教"
+          }
+        ],
+        "locationId": "lcq.location.shuai_zhang",
+        "skillIds": [
+          "lcq.skill.nine_sun"
+        ],
+        "techniqueIds": [
+          "lcq.technique.nine_sun_manual"
+        ],
+        "itemIds": [
+          "lcq.item.jin_nang"
+        ],
+        "profile": {
+          "appearance": "气度不凡的老将",
+          "personality": [
+            "豪迈仗义",
+            "深谋远虑"
+          ],
+          "race": "人类",
+          "origin": "太乙真宗掌教",
+          "attributes": {
+            "rootBone": 9,
+            "spirituality": 7,
+            "comprehension": 9,
+            "fortune": 6,
+            "charm": 6,
+            "temperament": 8
+          },
+          "currentAppearance": "已死亡",
+          "spiritRoot": {
+            "name": "火灵根",
+            "tier": "地品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "剑骨天成",
+              "description": "由角色定位推定的天赋。"
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.character.yue_shuang",
+        "name": "月霜",
+        "description": "岳帅之女，王哲弟子，体内有寒毒。",
+        "role": "关键人物",
+        "gender": "女",
+        "realm": "筑基",
+        "affiliations": [
+          {
+            "factionId": "lcq.faction.left_guard",
+            "category": "military",
+            "role": "弟子"
+          }
+        ],
+        "locationId": "lcq.location.shuai_zhang",
+        "skillIds": [
+          "lcq.skill.nine_sun"
+        ],
+        "techniqueIds": [
+          "lcq.technique.nine_sun_manual"
+        ],
+        "itemIds": [
+          "lcq.item.horse"
+        ],
+        "profile": {
+          "appearance": "雪肤花貌，玉脸通红，眉眼清晰如画，身材高挑，身体曲线饱满。乳房圆润饱满但不如小香瓜硕大，乳头小巧红润，肌肤洁白如玉，臀肉圆润有曲线，肌理细腻。常戴墨镜或面罩。",
+          "personality": [
+            "性格刚烈",
+            "自尊心强"
+          ],
+          "race": "人类",
+          "origin": "岳鹏举之女",
+          "attributes": {
+            "rootBone": 8,
+            "spirituality": 7,
+            "comprehension": 6,
+            "fortune": 7,
+            "charm": 6,
+            "temperament": 6
+          },
+          "spiritRoot": {
+            "name": "火灵根",
+            "tier": "地品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "剑骨天成",
+              "description": "由角色定位推定的天赋。"
+            }
+          ],
+          "notes": [
+            "【体质约束】月霜身具寒毒，需阳性能量调和（破坏后果：不调和则寒毒持续危害身体）"
+          ]
+        }
+      },
+      {
+        "id": "lcq.character.han_geng",
+        "name": "韩庚",
+        "description": "天武营主将，王哲最出色的弟子，即将战死。",
+        "role": "关键人物",
+        "gender": "男",
+        "realm": "金丹",
+        "affiliations": [
+          {
+            "factionId": "lcq.faction.left_guard",
+            "category": "military",
+            "role": "主将"
+          }
+        ],
+        "locationId": "lcq.location.shuai_zhang",
+        "skillIds": [
+          "lcq.skill.nine_sun"
+        ],
+        "techniqueIds": [
+          "lcq.technique.nine_sun_manual"
+        ],
+        "itemIds": [],
+        "profile": {
+          "attributes": {
+            "rootBone": 10,
+            "spirituality": 7,
+            "comprehension": 7,
+            "fortune": 6,
+            "charm": 6,
+            "temperament": 6
+          },
+          "spiritRoot": {
+            "name": "火灵根",
+            "tier": "地品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "体修奇才",
+              "description": "由角色定位推定的天赋。"
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.character.agamenon",
+        "name": "阿伽门侬",
+        "description": "罗马联军统帅，凯撒长子。",
+        "role": "关键人物",
+        "gender": "男",
+        "realm": "凡人",
+        "affiliations": [
+          {
+            "factionId": "lcq.faction.roman",
+            "category": "military",
+            "role": "统帅"
+          }
+        ],
+        "locationId": "lcq.location.roman_camp",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {
+          "attributes": {
+            "rootBone": 5,
+            "spirituality": 4,
+            "comprehension": 4,
+            "fortune": 6,
+            "charm": 5,
+            "temperament": 4
+          },
+          "spiritRoot": {
+            "name": "雷灵根",
+            "tier": "黄品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "夜猫子",
+              "description": "由角色定位推定的天赋。"
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.character.dai_jixue",
+        "name": "黛姬雪娜",
+        "description": "拜火教祭司，金发女子，被王哲一箭重创。",
+        "role": "关键人物",
+        "gender": "女",
+        "realm": "凡人",
+        "affiliations": [
+          {
+            "factionId": "lcq.faction.roman",
+            "category": "military",
+            "role": "祭司"
+          }
+        ],
+        "locationId": "lcq.location.roman_camp",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {
+          "attributes": {
+            "rootBone": 5,
+            "spirituality": 4,
+            "comprehension": 4,
+            "fortune": 6,
+            "charm": 6,
+            "temperament": 4
+          },
+          "spiritRoot": {
+            "name": "土灵根",
+            "tier": "黄品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "老实人",
+              "description": "由角色定位推定的天赋。"
+            }
+          ],
+          "appearance": "金发碧眼的女祭司，容貌冷漠而美丽。"
+        }
+      },
+      {
+        "id": "liuchao.character.ning_yu",
+        "name": "凝羽",
+        "role": "商队成员",
+        "description": "商队成员",
+        "profile": {
+          "appearance": "雪白肌肤，脸颊常泛异样红晕；高挑丰满身材，双腿修长光洁；圆润坚挺的双乳，乳头与乳晕小巧红润；乌亮发丝；肩头有淡红月牙状痕迹",
+          "personality": [
+            "忠诚但内心矛盾",
+            "经历创伤后依赖程宗扬"
+          ],
+          "race": "穹羽族",
+          "origin": "穹羽族后裔",
+          "talents": [
+            {
+              "name": "剑骨天成",
+              "description": "由角色定位推定的天赋。"
+            },
+            {
+              "name": "月光盾",
+              "description": "凝羽的专属异能。"
+            }
+          ],
+          "attributes": {
+            "rootBone": 9,
+            "spirituality": 7,
+            "comprehension": 6,
+            "fortune": 7,
+            "charm": 6,
+            "temperament": 6
+          },
+          "currentAppearance": "身段匀称，动作矫健，眼中常含一丝忧郁",
+          "memories": [
+            "被程宗扬用麻古迷奸",
+            "与程宗扬通过双修交换真气"
+          ],
+          "spiritRoot": {
+            "name": "暗灵根",
+            "tier": "玄品",
+            "description": "身怀月光盾，由剧本正典认定。"
+          },
+          "notes": [
+            "【功法约束】凝羽所习的太一经末技可能与双修功法相关，性行为须符合双修功法要求"
+          ]
+        },
+        "realm": "练气",
+        "gender": "女"
+      },
+      {
+        "id": "liuchao.character.su_daji",
+        "name": "苏妲己",
+        "role": "敌对方/妖族",
+        "description": "敌对方/妖族",
+        "profile": {
+          "appearance": "瓜子脸，白滑如玉，体态妖媚，眉眼间有种蛊惑人心的魅艳。身材高挑丰满，腰肢纤软，双乳丰挺饱满，臀部肥滑圆翘，与纤细腰身形成强烈反差。肌肤羊脂般晶莹白腻，通体无瑕。长发四散飞舞。常着红裙，艳态妖媚，气质蛊惑。",
+          "personality": [
+            "心机深沉",
+            "手段毒辣",
+            "善于控制他人",
+            "冷酷果断"
+          ],
+          "race": "人类（疑似有妖异背景）",
+          "origin": "白湖商馆主人",
+          "attributes": {
+            "rootBone": 6,
+            "spirituality": 5,
+            "comprehension": 6,
+            "fortune": 8,
+            "charm": 8,
+            "temperament": 7
+          },
+          "currentAppearance": "美艳动人，衣着华丽",
+          "spiritRoot": {
+            "name": "冰灵根",
+            "tier": "玄品",
+            "description": "身怀冰蛊，由剧本正典认定。"
+          },
+          "talents": [
+            {
+              "name": "多宝童子",
+              "description": "由角色定位推定的天赋。"
+            },
+            {
+              "name": "冰蛊",
+              "description": "苏妲己的专属异能。"
+            }
+          ]
+        },
+        "realm": "练气",
+        "gender": "女"
+      },
+      {
+        "id": "liuchao.character.lin_cai_quan",
+        "name": "蔺采泉",
+        "role": "教御",
+        "description": "教御",
+        "profile": {
+          "attributes": {
+            "rootBone": 7,
+            "spirituality": 8,
+            "comprehension": 6,
+            "fortune": 8,
+            "charm": 6,
+            "temperament": 6
+          },
+          "spiritRoot": {
+            "name": "雷灵根",
+            "tier": "地品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "剑骨天成",
+              "description": "由角色定位推定的天赋。"
+            }
+          ]
+        },
+        "realm": "筑基"
+      },
+      {
+        "id": "lcq.character.np001",
+        "name": "商乐轩",
+        "role": "教御",
+        "description": "教御",
+        "profile": {
+          "attributes": {
+            "rootBone": 6,
+            "spirituality": 8,
+            "comprehension": 8,
+            "fortune": 6,
+            "charm": 8,
+            "temperament": 8
+          },
+          "spiritRoot": {
+            "name": "冰灵根",
+            "tier": "地品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "剑骨天成",
+              "description": "由角色定位推定的天赋。"
+            }
+          ]
+        },
+        "realm": "筑基"
+      }
+    ],
+    "playerRelationships": [
+      {
+        "characterId": "lcq.character.wang_zhe",
+        "relation": "恩人",
+        "favorability": 80,
+        "memories": [
+          "王哲为程宗扬筑基并传九阳神功口诀"
+        ]
+      },
+      {
+        "characterId": "lcq.character.yue_shuang",
+        "relation": "仇人",
+        "favorability": -50,
+        "memories": [
+          "程宗扬与月霜发生关系并治愈其寒毒"
+        ]
+      },
+      {
+        "characterId": "lcq.character.han_geng",
+        "relation": "同袍",
+        "favorability": 30,
+        "memories": [
+          "韩庚是王哲最出色的弟子"
+        ]
+      },
+      {
+        "characterId": "liuchao.character.su_daji",
+        "relation": "主人",
+        "favorability": 25
+      },
+      {
+        "characterId": "liuchao.character.ning_yu",
+        "relation": "被施救者",
+        "favorability": 5
+      },
+      {
+        "characterId": "liuchao.character.lin_cai_quan",
+        "relation": "欣赏",
+        "favorability": 5
+      }
+    ],
+    "relationships": [
+      {
+        "fromCharacterId": "lcq.character.wang_zhe",
+        "toCharacterId": "lcq.character.han_geng",
+        "relation": "师徒",
+        "score": 90,
+        "direction": "bidirectional",
+        "tags": [
+          "师徒"
+        ]
+      },
+      {
+        "fromCharacterId": "lcq.character.wang_zhe",
+        "toCharacterId": "lcq.character.yue_shuang",
+        "relation": "师徒",
+        "score": 70,
+        "direction": "bidirectional",
+        "tags": [
+          "师徒"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.su_daji",
+        "toCharacterId": "liuchao.character.ning_yu",
+        "relation": "侍卫长",
+        "score": 25,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "lcq.character.np001",
+        "toCharacterId": "lcq.character.wang_zhe",
+        "relation": "师兄弟",
+        "score": 60,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.su_daji",
+        "toCharacterId": "lcq.character.wang_zhe",
+        "relation": "仇敌",
+        "score": -55,
+        "direction": "bidirectional"
+      }
+    ],
+    "factionRelationships": [
+      {
+        "fromFactionId": "lcq.faction.left_guard",
+        "toFactionId": "lcq.faction.taiyi",
+        "relation": "友好",
+        "score": 40,
+        "direction": "bidirectional",
+        "tags": [
+          "恩人/受托者",
+          "师帅",
+          "恩人"
+        ]
+      }
+    ]
+  },
+  "content": {
+    "skills": [
+      {
+        "id": "lcq.skill.death_root",
+        "name": "生死根",
+        "description": "将死气化为生机的异能，能加速植物生长和伤口愈合。",
+        "type": "异能",
+        "effects": [
+          "感应死亡气息"
+        ]
+      },
+      {
+        "id": "lcq.skill.nine_sun",
+        "name": "九阳神功",
+        "description": "太乙真宗核心功法，王哲传程宗扬口诀。",
+        "type": "功法",
+        "effects": [
+          "修炼真气"
+        ]
+      }
+    ],
+    "techniques": [
+      {
+        "id": "lcq.technique.nine_sun_manual",
+        "name": "九阳神功口诀",
+        "description": "王哲传程宗扬的口诀，用于修炼九阳神功。",
+        "grade": "凡品",
+        "skillIds": [
+          "lcq.skill.nine_sun"
+        ]
+      }
+    ],
+    "items": [
+      {
+        "id": "lcq.item.backpack",
+        "name": "背包",
+        "description": "程宗扬从现代世界带来的背包。",
+        "type": "other",
+        "grade": "凡品"
+      },
+      {
+        "id": "lcq.item.lingerie",
+        "name": "情趣内衣",
+        "description": "程宗扬从现代世界带来的情趣内衣。",
+        "type": "other",
+        "grade": "凡品"
+      },
+      {
+        "id": "lcq.item.condom",
+        "name": "安全套",
+        "description": "程宗扬从现代世界带来的安全套。",
+        "type": "other",
+        "grade": "中品"
+      },
+      {
+        "id": "lcq.item.vibrator",
+        "name": "按摩棒",
+        "description": "程宗扬从现代世界带来的按摩棒。",
+        "type": "other",
+        "grade": "中品"
+      },
+      {
+        "id": "lcq.item.drug",
+        "name": "摇头丸",
+        "description": "程宗扬从现代世界带来的摇头丸。",
+        "type": "other",
+        "grade": "凡品"
+      },
+      {
+        "id": "lcq.item.jin_nang",
+        "name": "锦囊",
+        "description": "王哲给程宗扬的锦囊，火漆密封。",
+        "type": "other",
+        "grade": "凡品"
+      },
+      {
+        "id": "lcq.item.horse",
+        "name": "马匹",
+        "description": "月霜骑乘的马匹。",
+        "type": "other",
+        "grade": "凡品"
+      },
+      {
+        "id": "lcq.item.np001",
+        "name": "拉链",
+        "type": "other",
+        "description": "程宗扬从现代世界带来的拉链，被文泽视为珍贵物品。",
+        "grade": "仙品"
+      }
+    ]
+  },
+  "scenario": {
+    "opening": {
+      "text": "左武军与罗马军团、马其顿军团及兽蛮人联军激战，王哲即将自爆，全军覆没。玩家可介入王哲自爆前的决策，改变月霜命运或尝试救援韩庚。",
+      "playerRole": "穿越者",
+      "playerCharacterId": "liuchao.character.cheng_zongyang",
+      "creationPreset": {
+        "characterName": "程宗扬",
+        "gender": "男",
+        "race": "人族",
+        "age": 20,
+        "talentTier": {
+          "name": "异世来客",
+          "description": "来自现代世界。"
+        },
+        "origin": {
+          "name": "现代来客",
+          "description": "因空间异变进入六朝。"
+        },
+        "spiritRoot": {
+          "name": "生死根",
+          "tier": "唯一异能",
+          "description": "并非传统灵根。",
+          "specialEffects": [
+            "感应死亡气息"
+          ]
+        },
+        "talents": [
+          {
+            "name": "务实机敏",
+            "description": "善于判断风险。"
+          }
+        ],
+        "attributes": {
+          "rootBone": 5,
+          "spirituality": 4,
+          "comprehension": 6,
+          "fortune": 6,
+          "charm": 5,
+          "temperament": 6
+        },
+        "locked": true
+      },
+      "locationId": "lcq.location.shuai_zhang",
+      "featuredCharacterIds": [
+        "liuchao.character.cheng_zongyang",
+        "lcq.character.wang_zhe",
+        "lcq.character.yue_shuang",
+        "lcq.character.han_geng"
+      ]
+    },
+    "initialFlags": {
+      "chapter.lcq.stage_02.started": true,
+      "chapter.lcq.stage_02.done": false,
+      "event.s02_01.done": false,
+      "event.s02_02.done": false,
+      "event.s02_03.done": false,
+      "event.s02_04.done": false,
+      "event.s02_05.done": false,
+      "event.s02_06.done": false
+    },
+    "events": [
+      {
+        "id": "lcq.event.s02_01",
+        "name": "王哲传功与托付",
+        "description": "王哲为程宗扬筑基并传九阳神功口诀，托付三件事：拆锦囊、去太泉古阵、守护月霜。",
+        "conditions": [
+          {
+            "path": "flags.chapter.lcq.stage_02.started",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.s02_01.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "lcq.character.wang_zhe"
+        ],
+        "relatedFactionIds": [
+          "lcq.faction.left_guard",
+          "lcq.faction.taiyi"
+        ],
+        "locationId": "lcq.location.shuai_zhang"
+      },
+      {
+        "id": "lcq.event.s02_02",
+        "name": "左武军与罗马军团大战",
+        "description": "左武军第一军团与罗马五个军团及马其顿军团激战，韩庚战死，王哲最终以九阳神功自爆，全军覆没。",
+        "conditions": [
+          {
+            "path": "flags.event.s02_01.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.s02_02.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "lcq.character.wang_zhe",
+          "lcq.character.han_geng",
+          "lcq.character.agamenon",
+          "lcq.character.yue_shuang",
+          "liuchao.character.cheng_zongyang"
+        ],
+        "relatedFactionIds": [
+          "lcq.faction.left_guard",
+          "lcq.faction.roman",
+          "lcq.faction.macedon",
+          "lcq.faction.beast"
+        ]
+      },
+      {
+        "id": "lcq.event.s02_03",
+        "name": "程宗扬与月霜逃亡",
+        "description": "程宗扬与月霜在战后逃离战场，月霜独自离去，程宗扬独自前往五原城。",
+        "conditions": [
+          {
+            "path": "flags.event.s02_02.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.s02_03.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "lcq.character.yue_shuang"
+        ]
+      },
+      {
+        "id": "lcq.event.s02_04",
+        "name": "程宗扬在五原城被误抓为奴隶",
+        "description": "程宗扬在五原城被白湖商馆的人误认为逃奴，遭毒打并烙上奴隶印记。",
+        "conditions": [
+          {
+            "path": "flags.event.s02_03.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.s02_04.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "locationId": "liuchao.location.wuyuan"
+      },
+      {
+        "id": "lcq.event.s02_05",
+        "name": "程宗扬与阿姬曼·芭娜相遇",
+        "description": "程宗扬在地牢中遇到天竺舞姬阿姬曼，她帮助程宗扬逃跑但实为圈套，程宗扬杀死孙疤脸。",
+        "conditions": [
+          {
+            "path": "flags.event.s02_04.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.s02_05.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ]
+      },
+      {
+        "id": "lcq.event.s02_06",
+        "name": "程宗扬见苏妲己",
+        "description": "程宗扬被带到白湖商馆主人苏妲己面前，通过观察识破其伪装，并达成交易。",
+        "conditions": [
+          {
+            "path": "flags.event.s02_05.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.s02_06.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.su_daji",
+          "liuchao.character.ning_yu"
+        ]
+      }
+    ],
+    "chapters": [
+      {
+        "id": "lcq.chapter.stage_02",
+        "title": "第10章·军团",
+        "summary": "第10章·军团：王哲传功与托付 … 程宗扬见苏妲己",
+        "activation": [
+          {
+            "path": "flags.chapter.lcq.stage_02.started",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.s02_06.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "eventIds": [
+          "lcq.event.s02_01",
+          "lcq.event.s02_02",
+          "lcq.event.s02_03",
+          "lcq.event.s02_04",
+          "lcq.event.s02_05",
+          "lcq.event.s02_06"
+        ]
+      }
+    ]
+  },
+  "rules": {
+    "mode": "strict",
+    "lockedFields": [
+      "canon.factions.*.name",
+      "canon.locations.*.name",
+      "canon.characters.*.name",
+      "content.skills.*.name",
+      "content.techniques.*.name",
+      "content.items.*.name"
+    ],
+    "contentAccess": [
+      {
+        "contentId": "lcq.skill.death_root",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lcq.skill.nine_sun",
+        "policy": "restricted",
+        "allowedCharacterIds": [
+          "lcq.character.wang_zhe",
+          "lcq.character.han_geng",
+          "lcq.character.yue_shuang"
+        ],
+        "playerAllowed": true
+      },
+      {
+        "contentId": "lcq.item.np001",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      }
+    ]
+  }
+}

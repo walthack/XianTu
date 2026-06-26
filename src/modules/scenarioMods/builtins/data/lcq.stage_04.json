@@ -1,0 +1,1498 @@
+{
+  "schema": "xiantu.scenario-mod",
+  "version": 1,
+  "manifest": {
+    "id": "lcq.stage_04",
+    "name": "六朝清羽记·第45章·袭击",
+    "version": "1.0.0",
+    "author": "DeepSeek V4 Flash + XianTu Mod Kit",
+    "description": "鬼王峒武士袭击商队，凝羽受伤，武二郎与苏荔联手击杀九名武士。玩家可介入战斗，改变商队与花苗命运。"
+  },
+  "world": {
+    "name": "六朝南荒",
+    "era": "南荒探险中期",
+    "background": "鬼王峒势力笼罩南荒，花苗与红苗密谋刺杀鬼巫王。商队与花苗送亲队伍同行，面临鬼王峒武士袭击。",
+    "specialRules": [
+      "核心专名不得改写",
+      "生死根为程宗扬唯一异能",
+      "使用六朝共享正典地图，禁止随机生成势力或地点覆盖已导入内容"
+    ],
+    "continents": [
+      {
+        "id": "liuchao.continent.zhongzhou",
+        "name": "中州",
+        "description": "六朝世界的主要大陆，包含六国都城及主要战场。",
+        "bounds": [
+          {
+            "x": 100,
+            "y": 50
+          },
+          {
+            "x": 9600,
+            "y": 50
+          },
+          {
+            "x": 9600,
+            "y": 6500
+          },
+          {
+            "x": 100,
+            "y": 6500
+          },
+          {
+            "x": 100,
+            "y": 50
+          }
+        ]
+      },
+      {
+        "id": "liuchao.continent.nanhuang",
+        "name": "南荒",
+        "description": "六朝以南的蛮荒之地，多山多雾，鬼王峒势力扩张中。",
+        "bounds": [
+          {
+            "x": 1200,
+            "y": 5200
+          },
+          {
+            "x": 7000,
+            "y": 5200
+          },
+          {
+            "x": 7000,
+            "y": 10000
+          },
+          {
+            "x": 1200,
+            "y": 10000
+          },
+          {
+            "x": 1200,
+            "y": 5200
+          }
+        ]
+      }
+    ],
+    "map": {
+      "atlasId": "liuchao.shared.atlas",
+      "locked": true,
+      "mapConfig": {
+        "width": 10000,
+        "height": 10000,
+        "minLng": 0,
+        "maxLng": 10000,
+        "minLat": 0,
+        "maxLat": 10000
+      },
+      "backgroundImage": "shared-atlas/source-maps/liuchao-world.jpg"
+    }
+  },
+  "canon": {
+    "factions": [
+      {
+        "id": "liuchao.faction.gui_wang_dong",
+        "name": "鬼王峒",
+        "description": "南荒最凶恶的部族，以巫术和屠杀统治大片地域。",
+        "type": "部族",
+        "headquartersLocationId": "liuchao.location.guiwangdong",
+        "territory": [
+          {
+            "x": 1500,
+            "y": 8600
+          },
+          {
+            "x": 1700,
+            "y": 8600
+          },
+          {
+            "x": 1700,
+            "y": 8800
+          },
+          {
+            "x": 1500,
+            "y": 8800
+          },
+          {
+            "x": 1500,
+            "y": 8600
+          }
+        ],
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.hua_miao",
+        "name": "花苗",
+        "description": "南荒花苗部族，以送亲为名密谋刺杀鬼巫王。",
+        "type": "部族",
+        "headquartersLocationId": "liuchao.location.guiwangdong",
+        "territory": [
+          {
+            "x": 1500,
+            "y": 8600
+          },
+          {
+            "x": 1700,
+            "y": 8600
+          },
+          {
+            "x": 1700,
+            "y": 8800
+          },
+          {
+            "x": 1500,
+            "y": 8800
+          },
+          {
+            "x": 1500,
+            "y": 8600
+          }
+        ],
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.bai_yi",
+        "name": "白夷",
+        "description": "南荒富饶部族，出产珍珠与美玉。",
+        "type": "部族",
+        "headquartersLocationId": "liuchao.location.guiwangdong",
+        "territory": [
+          {
+            "x": 1500,
+            "y": 8600
+          },
+          {
+            "x": 1700,
+            "y": 8600
+          },
+          {
+            "x": 1700,
+            "y": 8800
+          },
+          {
+            "x": 1500,
+            "y": 8800
+          },
+          {
+            "x": 1500,
+            "y": 8600
+          }
+        ],
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.bai_hu_shang_guan",
+        "name": "白湖商馆",
+        "description": "五原城商馆，程宗扬所属。",
+        "type": "商馆",
+        "headquartersLocationId": "liuchao.location.mingzhou",
+        "territory": [
+          {
+            "x": 8800,
+            "y": 6300
+          },
+          {
+            "x": 9000,
+            "y": 6300
+          },
+          {
+            "x": 9000,
+            "y": 6500
+          },
+          {
+            "x": 8800,
+            "y": 6500
+          },
+          {
+            "x": 8800,
+            "y": 6300
+          }
+        ],
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.yun_shi_shang_hui",
+        "name": "云氏商会",
+        "description": "云苍峰所属商会，与白夷有长期贸易。",
+        "type": "商会",
+        "headquartersLocationId": "liuchao.location.changan",
+        "territory": [
+          {
+            "x": 1000,
+            "y": 2000
+          },
+          {
+            "x": 4800,
+            "y": 2000
+          },
+          {
+            "x": 4800,
+            "y": 4500
+          },
+          {
+            "x": 1000,
+            "y": 4500
+          },
+          {
+            "x": 1000,
+            "y": 2000
+          }
+        ],
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.guang_ming_guan_tang",
+        "name": "光明观堂",
+        "description": "医者宗门，乐明珠所属。",
+        "type": "宗门",
+        "headquartersLocationId": "liuchao.location.mingzhou",
+        "territory": [
+          {
+            "x": 8800,
+            "y": 6300
+          },
+          {
+            "x": 9000,
+            "y": 6300
+          },
+          {
+            "x": 9000,
+            "y": 6500
+          },
+          {
+            "x": 8800,
+            "y": 6500
+          },
+          {
+            "x": 8800,
+            "y": 6300
+          }
+        ],
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.tang_court",
+        "name": "唐国朝廷",
+        "headquartersLocationId": "liuchao.location.changan",
+        "type": "government",
+        "description": "六朝之一唐国的朝廷，都城在长安。",
+        "territory": [
+          {
+            "x": 1000,
+            "y": 2000
+          },
+          {
+            "x": 4800,
+            "y": 2000
+          },
+          {
+            "x": 4800,
+            "y": 4500
+          },
+          {
+            "x": 1000,
+            "y": 4500
+          },
+          {
+            "x": 1000,
+            "y": 2000
+          }
+        ],
+        "features": []
+      }
+    ],
+    "locations": [
+      {
+        "id": "liuchao.location.xiong_er_pu",
+        "name": "熊耳铺",
+        "description": "南荒隘口村寨，商队在此寻向导。",
+        "type": "城池",
+        "continentId": "liuchao.continent.nanhuang",
+        "coordinates": {
+          "x": 1623,
+          "y": 7612
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.shan_jian",
+        "name": "南荒山涧",
+        "description": "鬼王峒武士袭击发生地。",
+        "type": "洞府",
+        "continentId": "liuchao.continent.nanhuang",
+        "coordinates": {
+          "x": 1641,
+          "y": 8690
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.bai_yi_valley",
+        "name": "白夷谷",
+        "description": "白夷族聚居地，月牙湖与美人峰。",
+        "type": "城池",
+        "continentId": "liuchao.continent.nanhuang",
+        "factionId": "liuchao.faction.bai_yi",
+        "coordinates": {
+          "x": 1818,
+          "y": 8118
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.gui_wang_dong_palace",
+        "name": "鬼王峒宫殿",
+        "description": "鬼巫王居所，花苗刺杀目标。",
+        "type": "洞府",
+        "continentId": "liuchao.continent.nanhuang",
+        "factionId": "liuchao.faction.gui_wang_dong",
+        "coordinates": {
+          "x": 1641,
+          "y": 8690
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.hua_miao_village",
+        "name": "花苗寨",
+        "description": "南荒花苗部族聚居的村寨。",
+        "type": "城池",
+        "continentId": "liuchao.continent.nanhuang",
+        "factionId": "liuchao.faction.hua_miao",
+        "coordinates": {
+          "x": 1818,
+          "y": 8118
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.wu_yuan_cheng",
+        "name": "五原城",
+        "description": "南荒边境商贸重镇，白湖商馆所在地。",
+        "type": "城池",
+        "continentId": "liuchao.continent.zhongzhou",
+        "factionId": "liuchao.faction.bai_hu_shang_guan",
+        "coordinates": {
+          "x": 881,
+          "y": 4366
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.yun_shi_shop",
+        "name": "云氏商铺",
+        "description": "云苍峰在南荒经营的商铺。",
+        "type": "城池",
+        "continentId": "liuchao.continent.zhongzhou",
+        "factionId": "liuchao.faction.yun_shi_shang_hui",
+        "coordinates": {
+          "x": 881,
+          "y": 4366
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.guang_ming_guan",
+        "name": "光明观",
+        "description": "光明观堂的山门所在。",
+        "type": "城池",
+        "continentId": "liuchao.continent.zhongzhou",
+        "factionId": "liuchao.faction.guang_ming_guan_tang",
+        "coordinates": {
+          "x": 8925,
+          "y": 6374
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.baiyi",
+        "name": "白夷族",
+        "continentId": "liuchao.continent.nanhuang",
+        "type": "城池",
+        "description": "南荒白夷族聚居地。",
+        "coordinates": {
+          "x": 1818,
+          "y": 8118
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.guiwangdong",
+        "name": "鬼王峒",
+        "continentId": "liuchao.continent.nanhuang",
+        "type": "洞府",
+        "description": "南荒鬼王峒势力的核心洞窟。",
+        "coordinates": {
+          "x": 1641,
+          "y": 8690
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.mingzhou",
+        "name": "明州",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "宋国沿海州城，光明观堂据点所在。",
+        "coordinates": {
+          "x": 8925,
+          "y": 6374
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.changan",
+        "name": "长安",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "唐国都城，六朝最大城市。",
+        "coordinates": {
+          "x": 2830,
+          "y": 3049
+        },
+        "features": []
+      }
+    ],
+    "characters": [
+      {
+        "id": "liuchao.character.cheng_zongyang",
+        "name": "程宗扬",
+        "description": "五原城商人，现代穿越者，身怀生死根。",
+        "role": "主角",
+        "gender": "男",
+        "realm": "筑基",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.bai_hu_shang_guan",
+            "category": "organization",
+            "role": "商馆主"
+          }
+        ],
+        "locationId": "liuchao.location.shan_jian",
+        "skillIds": [
+          "liuchao.skill.wu_hu_duan_men_dao",
+          "lcq.skill.np001",
+          "lcq.skill.np002",
+          "lcq.skill.np005"
+        ],
+        "techniqueIds": [
+          "liuchao.technique.sheng_si_gen"
+        ],
+        "itemIds": [
+          "liuchao.item.remote_control",
+          "liuchao.item.long_jing_yu",
+          "lcq.item.np003",
+          "lcq.item.np004",
+          "lcq.item.np006"
+        ],
+        "profile": {
+          "appearance": "身材匀称的现代青年",
+          "personality": [
+            "机敏狡猾",
+            "行事果断",
+            "善于应变",
+            "轻浮",
+            "善用现代物品谋利"
+          ],
+          "race": "人类",
+          "origin": "现代穿越者",
+          "talents": [
+            {
+              "name": "天命主角",
+              "description": "由角色定位推定的天赋。"
+            },
+            {
+              "name": "生死根",
+              "description": "程宗扬的专属异能。"
+            }
+          ],
+          "attributes": {
+            "rootBone": 8,
+            "spirituality": 9,
+            "comprehension": 10,
+            "fortune": 9,
+            "charm": 8,
+            "temperament": 10
+          },
+          "memories": [
+            "带领商队",
+            "与鬼王峒冲突"
+          ],
+          "spiritRoot": {
+            "name": "变异灵根",
+            "tier": "天品",
+            "description": "身怀生死根，由剧本正典认定。"
+          }
+        }
+      },
+      {
+        "id": "liuchao.character.ning_yu",
+        "name": "凝羽",
+        "description": "白湖商馆护卫，冷艳女战士，毒瘾与内伤并发。",
+        "role": "护卫",
+        "gender": "女",
+        "realm": "筑基",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.bai_hu_shang_guan",
+            "category": "organization",
+            "role": "护卫"
+          }
+        ],
+        "locationId": "liuchao.location.shan_jian",
+        "skillIds": [
+          "liuchao.skill.dagger_art",
+          "lcq.skill.np005"
+        ],
+        "techniqueIds": [
+          "liuchao.technique.inner_qi"
+        ],
+        "itemIds": [],
+        "profile": {
+          "appearance": "雪白肌肤，脸颊常泛异样红晕；高挑丰满身材，双腿修长光洁；圆润坚挺的双乳，乳头与乳晕小巧红润；乌亮发丝；肩头有淡红月牙状痕迹",
+          "personality": [
+            "忠诚但内心矛盾",
+            "经历创伤后依赖程宗扬"
+          ],
+          "race": "穹羽族",
+          "origin": "穹羽族后裔",
+          "talents": [
+            {
+              "name": "剑骨天成",
+              "description": "由角色定位推定的天赋。"
+            },
+            {
+              "name": "月光盾",
+              "description": "凝羽的专属异能。"
+            }
+          ],
+          "attributes": {
+            "rootBone": 9,
+            "spirituality": 7,
+            "comprehension": 6,
+            "fortune": 7,
+            "charm": 6,
+            "temperament": 6
+          },
+          "spiritRoot": {
+            "name": "暗灵根",
+            "tier": "玄品",
+            "description": "身怀月光盾，由剧本正典认定。"
+          },
+          "notes": [
+            "【功法约束】凝羽所习的太一经末技可能与双修功法相关，性行为须符合双修功法要求"
+          ]
+        }
+      },
+      {
+        "id": "liuchao.character.wu_er_lang",
+        "name": "武二郎",
+        "description": "白湖商馆雇佣的猛士，五虎断门刀传人。",
+        "role": "护卫",
+        "gender": "男",
+        "realm": "金丹",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.bai_hu_shang_guan",
+            "category": "organization",
+            "role": "雇佣护卫"
+          }
+        ],
+        "locationId": "liuchao.location.shan_jian",
+        "skillIds": [
+          "liuchao.skill.wu_hu_duan_men_dao",
+          "lcq.skill.np002"
+        ],
+        "techniqueIds": [
+          "liuchao.technique.tiger_style"
+        ],
+        "itemIds": [],
+        "profile": {
+          "appearance": "高大威猛，虎背熊腰；面带凶悍之气",
+          "personality": [
+            "勇猛暴躁",
+            "重情重义",
+            "豪爽直率",
+            "崇尚武力",
+            "性情急躁",
+            "恩怨分明"
+          ],
+          "race": "人类",
+          "origin": "白武族族人",
+          "talents": [
+            {
+              "name": "剑骨天成",
+              "description": "由角色定位推定的天赋。"
+            }
+          ],
+          "attributes": {
+            "rootBone": 9,
+            "spirituality": 6,
+            "comprehension": 5,
+            "fortune": 9,
+            "charm": 6,
+            "temperament": 5
+          },
+          "spiritRoot": {
+            "name": "火灵根",
+            "tier": "玄品",
+            "description": "依角色定位由剧本正典赋予。"
+          }
+        }
+      },
+      {
+        "id": "liuchao.character.su_li",
+        "name": "苏荔",
+        "description": "花苗族长，美艳女战士，与武二郎有私情。",
+        "role": "族长",
+        "gender": "女",
+        "realm": "筑基",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.hua_miao",
+            "category": "sect",
+            "role": "族长"
+          }
+        ],
+        "locationId": "liuchao.location.shan_jian",
+        "skillIds": [
+          "liuchao.skill.bow_art"
+        ],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {
+          "attributes": {
+            "rootBone": 6,
+            "spirituality": 7,
+            "comprehension": 6,
+            "fortune": 7,
+            "charm": 6,
+            "temperament": 6
+          },
+          "spiritRoot": {
+            "name": "冰灵根",
+            "tier": "玄品",
+            "description": "身怀蝎尾变身，由剧本正典认定。"
+          },
+          "talents": [
+            {
+              "name": "老实人",
+              "description": "由角色定位推定的天赋。"
+            },
+            {
+              "name": "蝎尾变身",
+              "description": "苏荔的专属异能。"
+            }
+          ],
+          "appearance": "娇艳少妇，明艳凤目，美艳玉脸，唇角嫣红；身材高挑，肩宽腿长，腰身细圆，肌肤白腻丰腴，光滑胜雪；丰挺双乳又白又大，饱满耸翘；臀部丰满浑圆，雪臀肥翘；修长玉腿，秀美玉足；腰臀相接处有银亮甲壳呈V形伸入臀沟，大腿根部有黑色刺青；常着红裙如火，气质成熟艳丽，矫健英武。"
+        }
+      },
+      {
+        "id": "liuchao.character.yun_cang_feng",
+        "name": "云苍峰",
+        "description": "云氏商会执事，老练商人。",
+        "role": "执事",
+        "gender": "男",
+        "realm": "凡人",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.yun_shi_shang_hui",
+            "category": "organization",
+            "role": "执事"
+          }
+        ],
+        "locationId": "liuchao.location.shan_jian",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [
+          "lcq.item.np007"
+        ],
+        "profile": {
+          "attributes": {
+            "rootBone": 6,
+            "spirituality": 8,
+            "comprehension": 10,
+            "fortune": 9,
+            "charm": 7,
+            "temperament": 6
+          },
+          "spiritRoot": {
+            "name": "火灵根",
+            "tier": "地品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "神识过人",
+              "description": "由角色定位推定的天赋。"
+            }
+          ],
+          "appearance": "文士打扮，气度儒雅",
+          "personality": [
+            "谨慎沉着，善于交涉"
+          ]
+        }
+      },
+      {
+        "id": "liuchao.character.xie_yi",
+        "name": "谢艺",
+        "description": "神秘行者，精通刀法与卜筮。",
+        "role": "行者",
+        "gender": "男",
+        "realm": "金丹",
+        "affiliations": [],
+        "locationId": "liuchao.location.shan_jian",
+        "skillIds": [
+          "liuchao.skill.sword_art"
+        ],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {
+          "attributes": {
+            "rootBone": 8,
+            "spirituality": 6,
+            "comprehension": 8,
+            "fortune": 7,
+            "charm": 7,
+            "temperament": 6
+          },
+          "spiritRoot": {
+            "name": "火灵根",
+            "tier": "地品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "天生神力",
+              "description": "由角色定位推定的天赋。"
+            }
+          ],
+          "appearance": "风尘仆仆，朴素装扮",
+          "personality": [
+            "沉默寡言，但关键时刻可靠"
+          ]
+        }
+      },
+      {
+        "id": "liuchao.character.le_mingzhu",
+        "name": "乐明珠",
+        "description": "光明观堂医者，假扮花苗新娘。",
+        "role": "医者",
+        "gender": "女",
+        "realm": "筑基",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.guang_ming_guan_tang",
+            "category": "sect",
+            "role": "弟子"
+          }
+        ],
+        "locationId": "liuchao.location.shan_jian",
+        "skillIds": [
+          "liuchao.skill.healing_art"
+        ],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {
+          "attributes": {
+            "rootBone": 7,
+            "spirituality": 7,
+            "comprehension": 8,
+            "fortune": 9,
+            "charm": 8,
+            "temperament": 9
+          },
+          "spiritRoot": {
+            "name": "火灵根",
+            "tier": "地品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "丹道圣手",
+              "description": "由角色定位推定的天赋。"
+            }
+          ],
+          "notes": [
+            "【功法约束】修炼凤凰宝典，非处子之身无法修炼至最高重（第八层）；破身后功法上限受损，而非完全不能修炼。（破坏后果：破处子之身后凤凰宝典无法练至最高第八重，修为上限封顶。）"
+          ],
+          "appearance": "身材娇小，容貌俏美，圆圆的脸颊带未褪的婴儿肥，圆圆的大眼睛一派天真烂漫；肌肤洁白如牛乳；尤其突出的是与娇小身材不成比例的硕大乳房，两团浑圆雪乳，乳尖娇红翘起；腰肢纤细，臀部圆翘曲线优美；常穿花苗族粉红筒裙或鲜红鲛绡，气质既纯美又带强烈反差。"
+        }
+      },
+      {
+        "id": "liuchao.character.zhu_ba_ba",
+        "name": "朱八八",
+        "description": "南荒老向导，滑头但识路。",
+        "role": "向导",
+        "gender": "男",
+        "realm": "凡人",
+        "affiliations": [],
+        "locationId": "liuchao.location.shan_jian",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {
+          "attributes": {
+            "rootBone": 5,
+            "spirituality": 5,
+            "comprehension": 5,
+            "fortune": 4,
+            "charm": 4,
+            "temperament": 5
+          },
+          "spiritRoot": {
+            "name": "水灵根",
+            "tier": "黄品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "一诺千金",
+              "description": "由角色定位推定的天赋。"
+            }
+          ]
+        }
+      },
+      {
+        "id": "liuchao.character.yi_hu",
+        "name": "易虎",
+        "description": "云氏商会护卫，已死于山洪。",
+        "role": "护卫",
+        "gender": "男",
+        "realm": "凡人",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.yun_shi_shang_hui",
+            "category": "organization",
+            "role": "护卫"
+          }
+        ],
+        "locationId": "liuchao.location.shan_jian",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {
+          "attributes": {
+            "rootBone": 7,
+            "spirituality": 6,
+            "comprehension": 7,
+            "fortune": 5,
+            "charm": 5,
+            "temperament": 6
+          },
+          "spiritRoot": {
+            "name": "火灵根",
+            "tier": "玄品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "天生神力",
+              "description": "由角色定位推定的天赋。"
+            }
+          ]
+        }
+      }
+    ],
+    "playerRelationships": [
+      {
+        "characterId": "liuchao.character.ning_yu",
+        "relation": "性伴侣",
+        "favorability": 60,
+        "memories": [
+          "多次交合",
+          "凝羽毒瘾发作时程宗扬照料"
+        ]
+      },
+      {
+        "characterId": "liuchao.character.wu_er_lang",
+        "relation": "雇主与雇员",
+        "favorability": 30,
+        "memories": [
+          "武二郎传授五虎断门刀"
+        ]
+      },
+      {
+        "characterId": "liuchao.character.su_li",
+        "relation": "盟友",
+        "favorability": 20,
+        "memories": [
+          "苏荔与武二郎幽会"
+        ]
+      },
+      {
+        "characterId": "liuchao.character.yun_cang_feng",
+        "relation": "合作伙伴",
+        "favorability": 40,
+        "memories": [
+          "云苍峰让出龙睛玉"
+        ]
+      },
+      {
+        "characterId": "liuchao.character.xie_yi",
+        "relation": "朋友",
+        "favorability": 30,
+        "memories": [
+          "谢艺传授刀法"
+        ]
+      },
+      {
+        "characterId": "liuchao.character.le_mingzhu",
+        "relation": "朋友",
+        "favorability": 40,
+        "memories": [
+          "乐明珠为凝羽治伤"
+        ]
+      },
+      {
+        "characterId": "liuchao.character.zhu_ba_ba",
+        "relation": "向导",
+        "favorability": 10,
+        "memories": [
+          "朱八八领路"
+        ]
+      }
+    ],
+    "relationships": [
+      {
+        "fromCharacterId": "liuchao.character.wu_er_lang",
+        "toCharacterId": "liuchao.character.su_li",
+        "relation": "性伴侣",
+        "score": 60,
+        "direction": "bidirectional",
+        "tags": [
+          "幽会"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.xie_yi",
+        "toCharacterId": "liuchao.character.yun_cang_feng",
+        "relation": "同行",
+        "score": 5,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.ning_yu",
+        "toCharacterId": "liuchao.character.wu_er_lang",
+        "relation": "同事",
+        "score": 5,
+        "direction": "bidirectional"
+      }
+    ],
+    "factionRelationships": [
+      {
+        "fromFactionId": "liuchao.faction.bai_hu_shang_guan",
+        "toFactionId": "liuchao.faction.yun_shi_shang_hui",
+        "relation": "友好",
+        "score": 38,
+        "direction": "bidirectional",
+        "tags": [
+          "合作",
+          "合作伙伴",
+          "盟友"
+        ]
+      },
+      {
+        "fromFactionId": "liuchao.faction.bai_hu_shang_guan",
+        "toFactionId": "liuchao.faction.guang_ming_guan_tang",
+        "relation": "友好",
+        "score": 56,
+        "direction": "bidirectional",
+        "tags": [
+          "朋友",
+          "同伴",
+          "暧昧"
+        ]
+      },
+      {
+        "fromFactionId": "liuchao.faction.bai_hu_shang_guan",
+        "toFactionId": "liuchao.faction.hua_miao",
+        "relation": "友好",
+        "score": 43,
+        "direction": "bidirectional",
+        "tags": [
+          "性伴侣",
+          "情侣",
+          "暧昧"
+        ]
+      }
+    ]
+  },
+  "content": {
+    "skills": [
+      {
+        "id": "liuchao.skill.wu_hu_duan_men_dao",
+        "name": "五虎断门刀",
+        "description": "武二郎传授的刀法，以疾劲为主。",
+        "type": "刀法",
+        "effects": [
+          "拔刀即出手",
+          "省略起手式"
+        ]
+      },
+      {
+        "id": "liuchao.skill.dagger_art",
+        "name": "凝羽刀法",
+        "description": "凝羽自修刀法。",
+        "type": "刀法",
+        "effects": [
+          "冷冽"
+        ]
+      },
+      {
+        "id": "liuchao.skill.bow_art",
+        "name": "苏荔弓术",
+        "description": "苏荔以弯弓射杀鬼王峒武士。",
+        "type": "弓术",
+        "effects": [
+          "精准"
+        ]
+      },
+      {
+        "id": "liuchao.skill.healing_art",
+        "name": "光明观堂医术",
+        "description": "乐明珠的医术，以法术与科学混合。",
+        "type": "医术",
+        "effects": [
+          "驱虫",
+          "疗伤"
+        ]
+      },
+      {
+        "id": "liuchao.skill.sword_art",
+        "name": "谢艺刀法",
+        "description": "谢艺自修刀法，可击碎卵石。",
+        "type": "刀法",
+        "effects": [
+          "取巧"
+        ]
+      },
+      {
+        "id": "lcq.skill.np001",
+        "name": "生死根",
+        "description": "程宗扬身上有将死气化为生机的异能，能加速植物生长和伤口愈合。"
+      },
+      {
+        "id": "lcq.skill.np002",
+        "name": "九阳神功",
+        "description": "太乙真宗核心功法，王哲传程宗扬口诀。"
+      },
+      {
+        "id": "lcq.skill.np005",
+        "name": "双修功法",
+        "description": "凝羽与程宗扬通过性交交换真气"
+      }
+    ],
+    "techniques": [
+      {
+        "id": "liuchao.technique.sheng_si_gen",
+        "name": "生死根",
+        "description": "程宗扬的异能灵根，可感应死亡气息。",
+        "grade": "唯一",
+        "skillIds": [
+          "liuchao.skill.wu_hu_duan_men_dao"
+        ]
+      },
+      {
+        "id": "liuchao.technique.inner_qi",
+        "name": "内功",
+        "description": "凝羽修炼的内功。",
+        "grade": "凡品",
+        "skillIds": [
+          "liuchao.skill.dagger_art"
+        ]
+      },
+      {
+        "id": "liuchao.technique.tiger_style",
+        "name": "虎式",
+        "description": "武二郎的虎形功法。",
+        "grade": "凡品",
+        "skillIds": [
+          "liuchao.skill.wu_hu_duan_men_dao"
+        ]
+      }
+    ],
+    "items": [
+      {
+        "id": "liuchao.item.remote_control",
+        "name": "遥控器",
+        "description": "程宗扬从山民处购得的仿制遥控器。",
+        "type": "other",
+        "grade": "中品"
+      },
+      {
+        "id": "liuchao.item.long_jing_yu",
+        "name": "龙睛玉",
+        "description": "程宗扬从山民处购得的璞玉。",
+        "type": "material",
+        "grade": "中品"
+      },
+      {
+        "id": "lcq.item.np003",
+        "name": "拉链",
+        "type": "other",
+        "description": "程宗扬从现代世界带来的拉链，被文泽视为珍贵物品。",
+        "grade": "仙品"
+      },
+      {
+        "id": "lcq.item.np004",
+        "name": "按摩棒",
+        "type": "other",
+        "description": "程宗扬从现代带来的性玩具，后被苏妲己占有",
+        "grade": "中品"
+      },
+      {
+        "id": "lcq.item.np006",
+        "name": "麻古",
+        "type": "consumable",
+        "description": "段强留下的催情药，被程宗扬用于凝羽",
+        "grade": "中品"
+      },
+      {
+        "id": "lcq.item.np007",
+        "name": "朱箓蛇丹",
+        "type": "consumable",
+        "description": "云苍峰用于治疗蛇毒",
+        "grade": "中品"
+      }
+    ]
+  },
+  "scenario": {
+    "opening": {
+      "text": "商队与花苗送亲队伍在浓雾中遭遇鬼王峒武士袭击。凝羽受伤，武二郎与苏荔联手击杀九名武士。玩家可介入战斗，改变商队与花苗命运。",
+      "playerRole": "五原城商人",
+      "playerCharacterId": "liuchao.character.cheng_zongyang",
+      "creationPreset": {
+        "characterName": "程宗扬",
+        "gender": "男",
+        "race": "人族",
+        "age": 20,
+        "talentTier": {
+          "name": "异世来客",
+          "description": "来自现代世界。"
+        },
+        "origin": {
+          "name": "现代来客",
+          "description": "因空间异变进入六朝。"
+        },
+        "spiritRoot": {
+          "name": "生死根",
+          "tier": "唯一异能",
+          "description": "并非传统灵根。",
+          "specialEffects": [
+            "感应死亡气息"
+          ]
+        },
+        "talents": [
+          {
+            "name": "务实机敏",
+            "description": "善于判断风险。"
+          }
+        ],
+        "attributes": {
+          "rootBone": 5,
+          "spirituality": 4,
+          "comprehension": 6,
+          "fortune": 6,
+          "charm": 5,
+          "temperament": 6
+        },
+        "locked": true
+      },
+      "locationId": "liuchao.location.shan_jian",
+      "featuredCharacterIds": [
+        "liuchao.character.cheng_zongyang",
+        "liuchao.character.ning_yu",
+        "liuchao.character.wu_er_lang",
+        "liuchao.character.su_li",
+        "liuchao.character.yun_cang_feng",
+        "liuchao.character.xie_yi",
+        "liuchao.character.le_mingzhu",
+        "liuchao.character.zhu_ba_ba"
+      ]
+    },
+    "initialFlags": {
+      "chapter.lcq.stage_04.started": true,
+      "chapter.lcq.stage_04.done": false,
+      "event.s04_01.done": false,
+      "event.s04_02.done": false,
+      "event.s04_03.done": false,
+      "event.s04_04.done": false,
+      "event.s04_05.done": false,
+      "event.s04_06.done": false,
+      "event.s04_07.done": false
+    },
+    "chapters": [
+      {
+        "id": "lcq.chapter.stage_04",
+        "title": "第45章·袭击",
+        "summary": "第45章·袭击：向导朱八八与鬼王峒计划 … 白夷族到达",
+        "activation": [
+          {
+            "path": "flags.chapter.lcq.stage_04.started",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.s04_07.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "eventIds": [
+          "lcq.event.s04_01",
+          "lcq.event.s04_02",
+          "lcq.event.s04_03",
+          "lcq.event.s04_04",
+          "lcq.event.s04_05",
+          "lcq.event.s04_06",
+          "lcq.event.s04_07"
+        ]
+      }
+    ],
+    "events": [
+      {
+        "id": "lcq.event.s04_01",
+        "name": "向导朱八八与鬼王峒计划",
+        "description": "程宗扬选朱八八为向导，拒绝秦桧、吴三桂。花苗人计划刺杀鬼巫王。",
+        "conditions": [
+          {
+            "path": "flags.chapter.lcq.stage_04.started",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.s04_01.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.yun_cang_feng",
+          "liuchao.character.zhu_ba_ba",
+          "liuchao.character.su_li"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.gui_wang_dong"
+        ],
+        "locationId": "liuchao.location.xiong_er_pu"
+      },
+      {
+        "id": "lcq.event.s04_02",
+        "name": "鬼王峒武士袭击",
+        "description": "商队遇鬼王峒武士袭击，凝羽受伤，武二郎与苏荔联手击杀九名武士。",
+        "conditions": [
+          {
+            "path": "flags.event.s04_01.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.s04_02.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.ning_yu",
+          "liuchao.character.wu_er_lang",
+          "liuchao.character.su_li",
+          "liuchao.character.yi_hu"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.gui_wang_dong"
+        ],
+        "locationId": "liuchao.location.shan_jian"
+      },
+      {
+        "id": "lcq.event.s04_03",
+        "name": "乐明珠身份揭露",
+        "description": "乐明珠自称光明观堂弟子，为刺杀鬼巫王而假扮花苗新娘。",
+        "conditions": [
+          {
+            "path": "flags.event.s04_02.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.s04_03.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.le_mingzhu"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.guang_ming_guan_tang"
+        ],
+        "locationId": "liuchao.location.shan_jian"
+      },
+      {
+        "id": "lcq.event.s04_04",
+        "name": "发蛊事件",
+        "description": "程宗扬等人发现叶媪养发蛊，朱八八被发丝攻击，谢艺破门。",
+        "conditions": [
+          {
+            "path": "flags.event.s04_03.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.s04_04.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.yun_cang_feng",
+          "liuchao.character.xie_yi",
+          "liuchao.character.zhu_ba_ba"
+        ]
+      },
+      {
+        "id": "lcq.event.s04_05",
+        "name": "旱洪与易虎之死",
+        "description": "山洪袭击商队，易虎为救同伴被岩石砸死。",
+        "conditions": [
+          {
+            "path": "flags.event.s04_04.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.s04_05.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.yi_hu",
+          "liuchao.character.yun_cang_feng"
+        ],
+        "locationId": "liuchao.location.shan_jian"
+      },
+      {
+        "id": "lcq.event.s04_06",
+        "name": "凝羽毒瘾发作",
+        "description": "凝羽毒瘾发作，乐明珠施针治疗。",
+        "conditions": [
+          {
+            "path": "flags.event.s04_05.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.s04_06.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.ning_yu",
+          "liuchao.character.le_mingzhu"
+        ],
+        "locationId": "liuchao.location.shan_jian"
+      },
+      {
+        "id": "lcq.event.s04_07",
+        "name": "白夷族到达",
+        "description": "商队到达白夷族，受到欢迎。云苍峰与白夷族长商议交易。",
+        "conditions": [
+          {
+            "path": "flags.event.s04_06.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.s04_07.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.yun_cang_feng"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.bai_yi"
+        ],
+        "locationId": "liuchao.location.baiyi"
+      }
+    ]
+  },
+  "rules": {
+    "mode": "strict",
+    "lockedFields": [
+      "canon.factions.*.name",
+      "canon.locations.*.name",
+      "canon.characters.*.name",
+      "content.skills.*.name",
+      "content.techniques.*.name",
+      "content.items.*.name"
+    ],
+    "contentAccess": [
+      {
+        "contentId": "liuchao.technique.sheng_si_gen",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "liuchao.skill.wu_hu_duan_men_dao",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.wu_er_lang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lcq.skill.np001",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lcq.skill.np002",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lcq.item.np003",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      }
+    ]
+  }
+}
