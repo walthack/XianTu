@@ -590,8 +590,8 @@
       },
       {
         "characterId": "liuchao.character.a_jiman_bana",
-        "relation": "前主人与女奴",
-        "favorability": 10,
+        "relation": "仇人/设局者",
+        "favorability": -60,
         "memories": [
           "赎买并释放"
         ]

@@ -1484,7 +1484,7 @@
       },
       {
         "characterId": "liuchao.character.ruan_xiang_lin",
-        "relation": "初识",
+        "relation": "无直接关系",
         "favorability": 0,
         "memories": [
           "在威远镖局谈押镖"
@@ -1492,8 +1492,8 @@
       },
       {
         "characterId": "liuchao.character.tao_hong_min",
-        "relation": "债主",
-        "favorability": 10,
+        "relation": "合作债权人",
+        "favorability": 60,
         "memories": [
           "晴州相识"
         ]
@@ -1551,7 +1551,7 @@
       {
         "characterId": "liuchao.character.yu_bai_ying",
         "relation": "发生性关系",
-        "favorability": 5
+        "favorability": 60
       },
       {
         "characterId": "liuchao.character.yu_zi_wei",
@@ -1563,8 +1563,8 @@
       {
         "fromCharacterId": "liuchao.character.lin_chong",
         "toCharacterId": "liuchao.character.lu_zhi_shen",
-        "relation": "好友",
-        "score": 75,
+        "relation": "战友",
+        "score": 85,
         "direction": "bidirectional",
         "tags": [
           "结义兄弟"
@@ -1687,7 +1687,7 @@
         "fromCharacterId": "liuchao.character.xiao_zi",
         "toCharacterId": "liuchao.character.yu_bai_ying",
         "relation": "敌对",
-        "score": 5,
+        "score": -50,
         "direction": "bidirectional"
       },
       {

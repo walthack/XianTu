@@ -1314,16 +1314,16 @@
       },
       {
         "characterId": "liuchao.character.huo_zi_meng",
-        "relation": "互相利用的盟友",
-        "favorability": 30,
+        "relation": "合作者/潜在博弈者",
+        "favorability": 15,
         "memories": [
           "霍子孟在长秋宫与吕雉会面后，与自己达成默契。"
         ]
       },
       {
         "characterId": "liuchao.character.jian_yu_ji",
-        "relation": "敌对",
-        "favorability": -80,
+        "relation": "敌对/威胁加剧",
+        "favorability": -50,
         "memories": [
           "剑玉姬在昭阳殿刺杀定陶王，致郭解重伤。"
         ]
@@ -1385,8 +1385,8 @@
       },
       {
         "characterId": "liuchao.character.np069",
-        "relation": "臣属",
-        "favorability": 5
+        "relation": "主/臣",
+        "favorability": 65
       },
       {
         "characterId": "liuchao.character.zhong_hangyue",
@@ -1405,13 +1405,13 @@
       },
       {
         "characterId": "liuchao.character.qi_yu_xian",
-        "relation": "主人/女奴",
-        "favorability": 25
+        "relation": "合作/戒备",
+        "favorability": 30
       },
       {
         "characterId": "liuchao.character.sun_shou",
-        "relation": "主人/女奴",
-        "favorability": 25
+        "relation": "主仆",
+        "favorability": 40
       },
       {
         "characterId": "liuchao.character.yun_ru_yao",
@@ -1555,8 +1555,8 @@
       {
         "fromCharacterId": "liuchao.character.xiao_zi",
         "toCharacterId": "liuchao.character.sun_shou",
-        "relation": "审讯者",
-        "score": 5,
+        "relation": "审讯者/供认者",
+        "score": -5,
         "direction": "bidirectional"
       },
       {
@@ -1613,6 +1613,41 @@
         "toCharacterId": "liuchao.character.yun_ru_yao",
         "relation": "兄长",
         "score": 20,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.xiao_zi",
+        "toCharacterId": "liuchao.character.yi_xin",
+        "relation": "审讯者/供认者",
+        "score": -10,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "lyg.character.np011",
+        "toCharacterId": "liuchao.character.lv_ji",
+        "relation": "证人/死者",
+        "score": -10,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.yun_dan_liu",
+        "toCharacterId": "liuchao.character.lv_zhi",
+        "relation": "无直接关系",
+        "score": 0,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.sun_shou",
+        "toCharacterId": "liuchao.character.lv_zhi",
+        "relation": "无",
+        "score": 0,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.gao_zhishang",
+        "toCharacterId": "liuchao.character.jia_wenhe",
+        "relation": "同僚（程宗扬属下）",
+        "score": 30,
         "direction": "bidirectional"
       }
     ],

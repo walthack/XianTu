@@ -1768,8 +1768,8 @@
     "playerRelationships": [
       {
         "characterId": "liuchao.character.yang_yuhuan",
-        "relation": "暧昧盟友/生意合伙人",
-        "favorability": 60,
+        "relation": "暧昧接触",
+        "favorability": 30,
         "memories": [
           "共同释放净念和纳觉容部",
           "在清思殿外偷听诛宦密谋",
@@ -1873,8 +1873,8 @@
       },
       {
         "characterId": "liuchao.character.yuan_tiangang",
-        "relation": "新结识的穿越者同伴",
-        "favorability": 35
+        "relation": "揭露身份的疑犯",
+        "favorability": 20
       },
       {
         "characterId": "liuchao.character.ao_run",
@@ -1883,8 +1883,8 @@
       },
       {
         "characterId": "liuchao.character.xu_junfang",
-        "relation": "故交",
-        "favorability": 5
+        "relation": "密友/重要情报源",
+        "favorability": 80
       },
       {
         "characterId": "lyg.character.dugu_wei",
@@ -1924,7 +1924,7 @@
       {
         "characterId": "liuchao.character.li_ang",
         "relation": "仇敌",
-        "favorability": -55
+        "favorability": -90
       },
       {
         "characterId": "lyg.character.chou_shiliang",
@@ -1943,8 +1943,8 @@
       },
       {
         "characterId": "liuchao.character.li_fuguo",
-        "relation": "试探/不明",
-        "favorability": 5
+        "relation": "敌对",
+        "favorability": -90
       },
       {
         "characterId": "liuchao.character.sun_nuan",
@@ -1953,8 +1953,8 @@
       },
       {
         "characterId": "liuchao.character.quan_yu_ji",
-        "relation": "侍姬",
-        "favorability": 20
+        "relation": "主从与性伴侣",
+        "favorability": 60
       }
     ],
     "relationships": [
@@ -1989,8 +1989,8 @@
       {
         "fromCharacterId": "liuchao.character.li_fuguo",
         "toCharacterId": "lyg.character.chou_shiliang",
-        "relation": "上级/下属",
-        "score": 20,
+        "relation": "下属",
+        "score": 40,
         "direction": "directed"
       },
       {
@@ -2045,8 +2045,8 @@
       {
         "fromCharacterId": "liuchao.character.zhou_fei",
         "toCharacterId": "lyg.character.li_jinxiang",
-        "relation": "妻子",
-        "score": 75,
+        "relation": "仇敌",
+        "score": -80,
         "direction": "bidirectional"
       },
       {
@@ -2103,6 +2103,48 @@
         "toCharacterId": "liuchao.character.zhao_feiyan",
         "relation": "仇敌",
         "score": -55,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.gao_zhishang",
+        "toCharacterId": "liuchao.character.jia_wenhe",
+        "relation": "同僚（程宗扬属下）",
+        "score": 30,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.pan_jinlian",
+        "toCharacterId": "liuchao.character.bai_nichang",
+        "relation": "互不相识",
+        "score": 0,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.pan_jinlian",
+        "toCharacterId": "liuchao.character.li_fuguo",
+        "relation": "无关",
+        "score": 0,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.lv_zhi",
+        "toCharacterId": "liuchao.character.li_fuguo",
+        "relation": "无关",
+        "score": 0,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.bai_nichang",
+        "toCharacterId": "liuchao.character.li_fuguo",
+        "relation": "无直接关系",
+        "score": 0,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.jia_wenhe",
+        "toCharacterId": "liuchao.character.li_fuguo",
+        "relation": "敌对/智斗",
+        "score": -70,
         "direction": "bidirectional"
       }
     ],

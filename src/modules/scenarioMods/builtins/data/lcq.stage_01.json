@@ -735,8 +735,8 @@
       {
         "fromCharacterId": "lcq.character.wang_zhe",
         "toCharacterId": "lcq.character.han_geng",
-        "relation": "弟子",
-        "score": 60,
+        "relation": "已故师徒",
+        "score": 0,
         "direction": "bidirectional"
       },
       {

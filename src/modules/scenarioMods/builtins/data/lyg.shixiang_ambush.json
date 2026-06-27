@@ -2293,16 +2293,16 @@
       },
       {
         "characterId": "lyg.character.kuiji",
-        "relation": "死敌",
-        "favorability": -90,
+        "relation": "无直接关系（根据证据，窥基与程宗扬无直接关系记载）",
+        "favorability": 0,
         "memories": [
           "窥基奉法旨将程宗扬列为佛门公敌"
         ]
       },
       {
         "characterId": "lyg.character.shi_temeipu",
-        "relation": "敌对",
-        "favorability": -70,
+        "relation": "被监视对象",
+        "favorability": -30,
         "memories": [
           "亲眼目睹特大师强行吞并摩尼寺",
           "特大师自称菩萨转世"
@@ -2310,8 +2310,8 @@
       },
       {
         "characterId": "liuchao.character.yang_yuhuan",
-        "relation": "暧昧盟友",
-        "favorability": 40,
+        "relation": "暧昧接触",
+        "favorability": 30,
         "memories": [
           "程宗扬代为遮掩射伤抚王事件",
           "获准在兴庆宫竖杆施工"
@@ -2319,7 +2319,7 @@
       },
       {
         "characterId": "liuchao.character.xin_yong",
-        "relation": "盟友",
+        "relation": "有分歧的盟友",
         "favorability": 50,
         "memories": [
           "信永主动告知蕃密邪法真相",
@@ -2364,7 +2364,7 @@
       {
         "characterId": "lyg.character.guan_hai",
         "relation": "敌对",
-        "favorability": -50,
+        "favorability": -60,
         "memories": [
           "目睹观海用灌顶法控制女摩尼师"
         ]
@@ -2413,8 +2413,8 @@
       },
       {
         "characterId": "liuchao.character.yuan_tiangang",
-        "relation": "合作伙伴",
-        "favorability": 40,
+        "relation": "揭露身份的疑犯",
+        "favorability": 20,
         "memories": []
       },
       {
@@ -2444,8 +2444,8 @@
       },
       {
         "characterId": "liuchao.character.xu_junfang",
-        "relation": "故交",
-        "favorability": 30,
+        "relation": "旧友/信息通报",
+        "favorability": 60,
         "memories": [
           "朝会相遇互通消息",
           "程认为徐成了秦国使者是被自己害的"
@@ -2467,16 +2467,16 @@
       },
       {
         "characterId": "liuchao.character.li_yan",
-        "relation": "相识/盟友",
-        "favorability": 30,
+        "relation": "交好相识",
+        "favorability": 60,
         "memories": [
           "一起夜游大慈恩寺"
         ]
       },
       {
         "characterId": "liuchao.character.li_ang",
-        "relation": "君臣关系",
-        "favorability": 10,
+        "relation": "仇敌",
+        "favorability": -90,
         "memories": [
           "元正大朝会接受程宗扬贺礼"
         ]
@@ -2488,13 +2488,13 @@
       },
       {
         "characterId": "liuchao.character.qi_yu_xian",
-        "relation": "主人/女奴",
-        "favorability": 25
+        "relation": "合作/戒备",
+        "favorability": 30
       },
       {
         "characterId": "liuchao.character.sun_shou",
-        "relation": "主人/女奴",
-        "favorability": 25
+        "relation": "救命恩人与被救者",
+        "favorability": 70
       },
       {
         "characterId": "liuchao.character.gao_zhishang",
@@ -2543,16 +2543,16 @@
       },
       {
         "characterId": "liuchao.character.quan_yu_ji",
-        "relation": "侍姬",
-        "favorability": 20
+        "relation": "主从与性伴侣",
+        "favorability": 60
       }
     ],
     "relationships": [
       {
         "fromCharacterId": "lyg.character.kuiji",
         "toCharacterId": "lyg.character.shi_temeipu",
-        "relation": "同门/合作关系",
-        "score": 30,
+        "relation": "同谋",
+        "score": 70,
         "direction": "bidirectional",
         "tags": [
           "十方丛林高层",
@@ -2689,8 +2689,8 @@
       {
         "fromCharacterId": "liuchao.character.xiao_zi",
         "toCharacterId": "liuchao.character.sun_shou",
-        "relation": "审讯者",
-        "score": 5,
+        "relation": "审讯者/供认者",
+        "score": -5,
         "direction": "bidirectional"
       },
       {
@@ -2740,6 +2740,34 @@
         "toCharacterId": "liuchao.character.sun_shou",
         "relation": "亲属",
         "score": 30,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.xiao_zi",
+        "toCharacterId": "liuchao.character.yi_xin",
+        "relation": "审讯者/供认者",
+        "score": -10,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.sun_shou",
+        "toCharacterId": "liuchao.character.lv_zhi",
+        "relation": "无",
+        "score": 0,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.gao_zhishang",
+        "toCharacterId": "liuchao.character.jia_wenhe",
+        "relation": "同僚（程宗扬属下）",
+        "score": 30,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "lyg.character.kuiji",
+        "toCharacterId": "lyg.character.np041",
+        "relation": "访客/挂名师父",
+        "score": 20,
         "direction": "bidirectional"
       }
     ],

@@ -1161,7 +1161,7 @@
       {
         "characterId": "liuchao.character.xiao_yao_yi",
         "relation": "朋友",
-        "favorability": 42
+        "favorability": 60
       },
       {
         "characterId": "liuchao.character.qin_hui",
@@ -1287,8 +1287,8 @@
       {
         "fromCharacterId": "liuchao.character.xiao_zi",
         "toCharacterId": "liuchao.character.bi_ji",
-        "relation": "生母（被小紫亲手弑杀）",
-        "score": -90,
+        "relation": "弑母仇人",
+        "score": -100,
         "direction": "bidirectional"
       }
     ],

@@ -1832,8 +1832,8 @@
       },
       {
         "characterId": "liuchao.character.jian_yu_ji",
-        "relation": "潜在敌对",
-        "favorability": -30,
+        "relation": "短暂盟友/互相利用",
+        "favorability": 10,
         "memories": []
       },
       {
@@ -1872,13 +1872,13 @@
       },
       {
         "characterId": "liuchao.character.tao_hong_min",
-        "relation": "朋友",
-        "favorability": 42
+        "relation": "合作债权人",
+        "favorability": 60
       },
       {
         "characterId": "liuchao.character.gao_qiu",
-        "relation": "盟友",
-        "favorability": 42
+        "relation": "秘密盟友",
+        "favorability": 60
       },
       {
         "characterId": "liuchao.character.feng_yuan",
@@ -1887,8 +1887,8 @@
       },
       {
         "characterId": "liuchao.character.ruan_xiang_lin",
-        "relation": "纳为妾",
-        "favorability": 5
+        "relation": "无直接关系",
+        "favorability": 0
       },
       {
         "characterId": "liuchao.character.qi_yu_xian",
@@ -1905,8 +1905,8 @@
       {
         "fromCharacterId": "liuchao.character.lin_chong",
         "toCharacterId": "liuchao.character.lu_zhi_shen",
-        "relation": "结识",
-        "score": 40,
+        "relation": "师兄弟",
+        "score": 70,
         "direction": "bidirectional",
         "tags": [
           "武友"
@@ -2053,6 +2053,13 @@
         "toCharacterId": "liuchao.character.gao_ya_nei",
         "relation": "被调戏",
         "score": -40,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.li_shi_shi",
+        "toCharacterId": "liuchao.character.you_chan",
+        "relation": "无直接关系",
+        "score": 0,
         "direction": "bidirectional"
       }
     ],

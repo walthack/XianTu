@@ -1352,8 +1352,8 @@
       },
       {
         "characterId": "liuchao.character.yang_yuhuan",
-        "relation": "初识",
-        "favorability": 10,
+        "relation": "暧昧接触",
+        "favorability": 30,
         "memories": [
           "在长安横街目睹杨玉环飙车斗殴",
           "程宗扬吹口哨戏弄潘金莲，杨玉环翻白眼"
@@ -1370,8 +1370,8 @@
       },
       {
         "characterId": "liuchao.character.yuan_tiangang",
-        "relation": "同乡兼同伴",
-        "favorability": 30,
+        "relation": "揭露身份的疑犯",
+        "favorability": 20,
         "memories": [
           "在留仙客栈共同破解白员外谜题",
           "程宗扬向其展示手电筒，证实穿越者身份"
@@ -1435,8 +1435,8 @@
       },
       {
         "characterId": "liuchao.character.sun_shou",
-        "relation": "主人/女奴",
-        "favorability": 25
+        "relation": "救命恩人与被救者",
+        "favorability": 70
       },
       {
         "characterId": "liuchao.character.zhao_he_de",
@@ -1465,8 +1465,8 @@
       },
       {
         "characterId": "liuchao.character.li_yan",
-        "relation": "相识",
-        "favorability": 10
+        "relation": "交好相识",
+        "favorability": 60
       },
       {
         "characterId": "lyg.character.np033",
@@ -1475,8 +1475,8 @@
       },
       {
         "characterId": "lyg.character.kuiji",
-        "relation": "敌对",
-        "favorability": 5
+        "relation": "无直接关系（根据证据，窥基与程宗扬无直接关系记载）",
+        "favorability": 0
       },
       {
         "characterId": "lyg.character.li_jinxiang",
@@ -1486,7 +1486,7 @@
       {
         "characterId": "liuchao.character.li_ang",
         "relation": "仇敌",
-        "favorability": -55
+        "favorability": -90
       },
       {
         "characterId": "liuchao.character.sun_nuan",
@@ -1495,8 +1495,8 @@
       },
       {
         "characterId": "liuchao.character.quan_yu_ji",
-        "relation": "侍姬",
-        "favorability": 20
+        "relation": "主从与性伴侣",
+        "favorability": 60
       },
       {
         "characterId": "liuchao.character.zhao_gui_zhen",
@@ -1515,8 +1515,8 @@
       {
         "fromCharacterId": "liuchao.character.xiao_zi",
         "toCharacterId": "liuchao.character.sun_shou",
-        "relation": "审讯者",
-        "score": 5,
+        "relation": "审讯者/供认者",
+        "score": -5,
         "direction": "bidirectional"
       },
       {
@@ -1564,8 +1564,8 @@
       {
         "fromCharacterId": "liuchao.character.xiao_zi",
         "toCharacterId": "liuchao.character.yi_xin",
-        "relation": "教导者",
-        "score": 5,
+        "relation": "审讯者/供认者",
+        "score": -10,
         "direction": "bidirectional"
       },
       {
@@ -1671,6 +1671,20 @@
         "toCharacterId": "liuchao.character.jia_wenhe",
         "relation": "被说动",
         "score": 20,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.sun_shou",
+        "toCharacterId": "liuchao.character.lv_zhi",
+        "relation": "无",
+        "score": 0,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.gao_zhishang",
+        "toCharacterId": "liuchao.character.jia_wenhe",
+        "relation": "同僚（程宗扬属下）",
+        "score": 30,
         "direction": "bidirectional"
       }
     ],

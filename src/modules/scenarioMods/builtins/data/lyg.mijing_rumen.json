@@ -1616,8 +1616,8 @@
       },
       {
         "characterId": "liuchao.character.jian_yu_ji",
-        "relation": "敌对",
-        "favorability": -80,
+        "relation": "敌对/威胁加剧",
+        "favorability": -50,
         "memories": [
           "争抢秘境控制权"
         ]
@@ -1633,8 +1633,8 @@
       },
       {
         "characterId": "liuchao.character.huo_zi_meng",
-        "relation": "盟友",
-        "favorability": 40,
+        "relation": "合作者/潜在博弈者",
+        "favorability": 15,
         "memories": [
           "霍同意做媒"
         ]
@@ -1646,13 +1646,13 @@
       },
       {
         "characterId": "liuchao.character.qi_yu_xian",
-        "relation": "主人/女奴",
-        "favorability": 25
+        "relation": "合作/戒备",
+        "favorability": 30
       },
       {
         "characterId": "liuchao.character.sun_shou",
-        "relation": "主人/女奴",
-        "favorability": 25
+        "relation": "主仆",
+        "favorability": 40
       },
       {
         "characterId": "liuchao.character.zhao_ying",
@@ -1767,8 +1767,8 @@
       {
         "fromCharacterId": "liuchao.character.xiao_zi",
         "toCharacterId": "liuchao.character.sun_shou",
-        "relation": "审讯者",
-        "score": 5,
+        "relation": "审讯者/供认者",
+        "score": -5,
         "direction": "bidirectional"
       },
       {
@@ -1860,6 +1860,34 @@
         "toCharacterId": "liuchao.character.ha_mi_chi",
         "relation": "安答",
         "score": 20,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.xiao_zi",
+        "toCharacterId": "liuchao.character.yi_xin",
+        "relation": "审讯者/供认者",
+        "score": -10,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "lyg.character.np011",
+        "toCharacterId": "liuchao.character.lv_ji",
+        "relation": "证人/死者",
+        "score": -10,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.yun_dan_liu",
+        "toCharacterId": "liuchao.character.lv_zhi",
+        "relation": "无直接关系",
+        "score": 0,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.sun_shou",
+        "toCharacterId": "liuchao.character.lv_zhi",
+        "relation": "无",
+        "score": 0,
         "direction": "bidirectional"
       }
     ],

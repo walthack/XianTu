@@ -1594,16 +1594,16 @@
     "playerRelationships": [
       {
         "characterId": "liuchao.character.zhao_feiyan",
-        "relation": "主从",
-        "favorability": 50,
+        "relation": "坚定盟友",
+        "favorability": 75,
         "memories": [
           "程宗扬多次为赵飞燕出谋划策，深得信任"
         ]
       },
       {
         "characterId": "liuchao.character.zhao_he_de",
-        "relation": "保护者",
-        "favorability": 40,
+        "relation": "保护者/同盟",
+        "favorability": 80,
         "memories": [
           "程宗扬曾救赵合德脱离险境"
         ]
@@ -1618,8 +1618,8 @@
       },
       {
         "characterId": "liuchao.character.cai_jingzhong",
-        "relation": "盟友",
-        "favorability": 70,
+        "relation": "合作/盟友",
+        "favorability": 35,
         "memories": [
           "蔡敬仲是程宗扬在宫中的秘密内应"
         ]
@@ -1650,8 +1650,8 @@
       },
       {
         "characterId": "liuchao.character.jian_yu_ji",
-        "relation": "暂时盟友",
-        "favorability": 10,
+        "relation": "敌对/决裂",
+        "favorability": -40,
         "memories": [
           "剑玉姬曾提出合作诛吕"
         ]
@@ -1663,8 +1663,8 @@
       },
       {
         "characterId": "lyl.character.np001",
-        "relation": "合作伙伴",
-        "favorability": 35
+        "relation": "敌对",
+        "favorability": -80
       },
       {
         "characterId": "lyl.character.he_yilian",
@@ -1713,8 +1713,8 @@
       },
       {
         "characterId": "liuchao.character.np069",
-        "relation": "被访",
-        "favorability": 5
+        "relation": "主从（下属）",
+        "favorability": 70
       },
       {
         "characterId": "lyl.character.np016",
@@ -1733,15 +1733,15 @@
       },
       {
         "characterId": "liuchao.character.jing_li",
-        "relation": "侍奴",
-        "favorability": 15
+        "relation": "敌对/背叛",
+        "favorability": -80
       }
     ],
     "relationships": [
       {
         "fromCharacterId": "liuchao.character.zhao_feiyan",
         "toCharacterId": "liuchao.character.zhao_he_de",
-        "relation": "姐妹",
+        "relation": "团聚的姐妹",
         "score": 90,
         "direction": "bidirectional",
         "tags": [
@@ -1823,8 +1823,8 @@
       {
         "fromCharacterId": "liuchao.character.lv_zhi",
         "toCharacterId": "liuchao.character.liu_ao",
-        "relation": "母子",
-        "score": 60,
+        "relation": "母子（关系紧张）",
+        "score": 30,
         "direction": "bidirectional"
       },
       {
@@ -1851,8 +1851,8 @@
       {
         "fromCharacterId": "liuchao.character.cai_jingzhong",
         "toCharacterId": "liuchao.character.lv_zhi",
-        "relation": "君臣/欺骗",
-        "score": 5,
+        "relation": "合作交易",
+        "score": 50,
         "direction": "bidirectional"
       },
       {
@@ -1895,6 +1895,20 @@
         "toCharacterId": "liuchao.character.lv_ji",
         "relation": "下属",
         "score": 20,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.cai_jingzhong",
+        "toCharacterId": "liuchao.character.hu_fu_ren",
+        "relation": "债权债务",
+        "score": 40,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.jian_yu_ji",
+        "toCharacterId": "liuchao.character.cai_jingzhong",
+        "relation": "揭发者/被揭发者",
+        "score": -20,
         "direction": "bidirectional"
       }
     ],

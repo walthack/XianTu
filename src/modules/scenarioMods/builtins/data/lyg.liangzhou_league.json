@@ -1448,8 +1448,8 @@
       },
       {
         "characterId": "liuchao.character.yang_yuhuan",
-        "relation": "暧昧盟友",
-        "favorability": 70,
+        "relation": "暧昧接触",
+        "favorability": 30,
         "memories": [
           "杨玉环是唐国公主，与程宗扬合作经营水香楼"
         ]
@@ -1474,8 +1474,8 @@
       },
       {
         "characterId": "liuchao.character.yuan_tiangang",
-        "relation": "新结识的穿越者同伴",
-        "favorability": 35
+        "relation": "揭露身份的疑犯",
+        "favorability": 20
       },
       {
         "characterId": "liuchao.character.yi_xin",
@@ -1489,8 +1489,8 @@
       },
       {
         "characterId": "liuchao.character.xu_junfang",
-        "relation": "故交",
-        "favorability": 5
+        "relation": "密友/重要情报源",
+        "favorability": 80
       },
       {
         "characterId": "lyg.character.np034",
@@ -1499,8 +1499,8 @@
       },
       {
         "characterId": "lyg.character.np060",
-        "relation": "拯救者与被救者，疑似主奴",
-        "favorability": 5
+        "relation": "主人/忠诚仆从",
+        "favorability": 90
       },
       {
         "characterId": "lyg.character.np066",
@@ -1524,16 +1524,16 @@
       },
       {
         "characterId": "liuchao.character.quan_yu_ji",
-        "relation": "侍姬",
-        "favorability": 20
+        "relation": "主从与性伴侣",
+        "favorability": 60
       }
     ],
     "relationships": [
       {
         "fromCharacterId": "liuchao.character.zhou_fei",
         "toCharacterId": "lyg.character.li_jinxiang",
-        "relation": "名义夫妻（黎锦香厌憎周飞）",
-        "score": -30,
+        "relation": "仇敌",
+        "score": -80,
         "direction": "bidirectional",
         "tags": [
           "政治联姻"
@@ -1573,8 +1573,8 @@
       {
         "fromCharacterId": "liuchao.character.jia_wenhe",
         "toCharacterId": "liuchao.character.gao_zhishang",
-        "relation": "谋士与后辈",
-        "score": 40,
+        "relation": "同僚（程宗扬属下）",
+        "score": 30,
         "direction": "directed",
         "tags": [
           "出谋划策"
@@ -1600,8 +1600,8 @@
       {
         "fromCharacterId": "liuchao.character.xiao_zi",
         "toCharacterId": "liuchao.character.yi_xin",
-        "relation": "教导者",
-        "score": 5,
+        "relation": "审讯者/供认者",
+        "score": -10,
         "direction": "bidirectional"
       },
       {
@@ -1679,6 +1679,13 @@
         "toCharacterId": "liuchao.character.zhou_fei",
         "relation": "竞争关系",
         "score": -20,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.pan_jinlian",
+        "toCharacterId": "liuchao.character.bai_nichang",
+        "relation": "互不相识",
+        "score": 0,
         "direction": "bidirectional"
       }
     ],

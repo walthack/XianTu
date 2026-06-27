@@ -881,8 +881,8 @@
       },
       {
         "characterId": "liuchao.character.yu_bai_ying",
-        "relation": "救与被救",
-        "favorability": -20,
+        "relation": "敌对",
+        "favorability": -50,
         "memeries": [
           "程宗扬从行淫兽口中救出虞白樱，但虞白樱仍对程宗扬保持警惕"
         ]
@@ -962,7 +962,7 @@
         "fromCharacterId": "liuchao.character.xiao_zi",
         "toCharacterId": "liuchao.character.yu_bai_ying",
         "relation": "敌对",
-        "score": 5,
+        "score": -50,
         "direction": "bidirectional"
       },
       {

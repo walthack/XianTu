@@ -971,8 +971,8 @@
       {
         "fromCharacterId": "liuchao.character.lu_zhi_shen",
         "toCharacterId": "liuchao.character.lin_chong",
-        "relation": "相识",
-        "score": 10,
+        "relation": "师兄弟",
+        "score": 70,
         "direction": "bidirectional"
       },
       {

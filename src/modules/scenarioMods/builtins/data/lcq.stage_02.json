@@ -963,8 +963,8 @@
       {
         "fromCharacterId": "lcq.character.wang_zhe",
         "toCharacterId": "lcq.character.han_geng",
-        "relation": "师徒",
-        "score": 90,
+        "relation": "已故师徒",
+        "score": 0,
         "direction": "bidirectional",
         "tags": [
           "师徒"
