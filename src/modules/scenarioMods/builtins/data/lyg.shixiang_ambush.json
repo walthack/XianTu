@@ -3441,74 +3441,158 @@
         "grade": "秘法",
         "skillIds": [
           "lyg.skill.qilun_refining"
-        ]
+        ],
+        "techniqueEffects": {
+          "修炼速度加成": 0.32,
+          "属性加成": {
+            "悟性": 4,
+            "灵性": 2
+          }
+        }
       },
       {
         "id": "lyg.technique.lian_zi_gu",
         "name": "炼子蛊",
         "description": "小紫用于控制内宅侍奴的蛊术。",
         "grade": "秘术",
-        "skillIds": []
+        "skillIds": [],
+        "techniqueEffects": {
+          "修炼速度加成": 0.24,
+          "属性加成": {
+            "悟性": 3,
+            "灵性": 2
+          }
+        }
       },
       {
         "id": "lyg.technique.np016",
         "name": "超级管理员权限（系统内）",
         "description": "程宗扬通过系统验证，成为超级管理员，拥有最高等级权限。",
-        "grade": "中品"
+        "grade": "中品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
       },
       {
         "id": "lyg.technique.np049",
         "name": "气轮炼化杂气",
         "description": "以处子破体为鼎炉可高效炼化杂气，提升真元质量，气轮中出现星辰及阴阳鱼现象。",
-        "grade": "中品"
+        "grade": "中品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
       },
       {
         "id": "lyg.technique.np050",
         "name": "搜神诀",
         "description": "小紫从仇傻瓜处敲来《搜神诀》，对吕雉施展，读取其神魂片段。",
-        "grade": "中品"
+        "grade": "中品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
       },
       {
         "id": "lyg.technique.np053",
         "name": "超级用户权限（系统内）",
         "description": "小紫、朱老头、小玲儿均被系统认定为超级用户，拥有高权限。小紫通过染色体验证，朱老头是武皇后裔，小玲儿身份不明。",
-        "grade": "中品"
+        "grade": "中品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
       },
       {
         "id": "lyg.technique.np069",
         "name": "双身法（蕃密）",
         "description": "释特昧普宣称未证果位者也可修双身法，用于性仪式，受义操批评后仍推行。",
-        "grade": "中品"
+        "grade": "中品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
       },
       {
         "id": "lyg.technique.np070",
         "name": "杀度法（蕃密）",
         "description": "信永揭露蕃密有杀度法：不信佛者被杀可度化往生极乐。",
-        "grade": "中品"
+        "grade": "中品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
       },
       {
         "id": "lyg.technique.np071",
         "name": "颇瓦法（蕃密）",
         "description": "信永提及蕃密专讲神通法术的颇瓦法。",
-        "grade": "中品"
+        "grade": "中品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
       },
       {
         "id": "lyg.technique.np072",
         "name": "镇国大长公主开府权",
         "description": "杨玉环九岁被封公主并开府，拥有干预政事资格，食邑最后达到五千户。",
-        "grade": "极品"
+        "grade": "极品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.48,
+          "属性加成": {
+            "悟性": 6,
+            "灵性": 3
+          }
+        }
       },
       {
         "id": "lyg.technique.np082",
         "name": "红莲秘法（密宗）",
         "description": "密宗秘法使女性呈莲花状，可制成肉莲法器。",
-        "grade": "上品"
+        "grade": "上品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.4,
+          "属性加成": {
+            "悟性": 5,
+            "灵性": 3
+          }
+        }
       },
       {
         "id": "lyg.technique.np083",
         "name": "灌顶法（蕃密）",
         "description": "观海通过梵唱灌顶使女摩尼师失去自我意志，自愿献出五甘露，被变相催眠控制。",
-        "grade": "下品"
+        "grade": "下品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.08,
+          "属性加成": {
+            "悟性": 1,
+            "灵性": 1
+          }
+        }
       }
     ],
     "items": [
@@ -3552,14 +3636,26 @@
         "name": "特制明光铠",
         "description": "杨玉环的特殊明光铠，胸甲特别坚固。",
         "type": "armor",
-        "grade": "精良"
+        "grade": "精良",
+        "attributeBonus": {
+          "气血上限": 80,
+          "后天六司": {
+            "根骨": 2
+          }
+        }
       },
       {
         "id": "lyg.item.carved_bow",
         "name": "雕弓",
         "description": "杨玉环使用的雕花弓。",
         "type": "weapon",
-        "grade": "精良"
+        "grade": "精良",
+        "attributeBonus": {
+          "气血上限": 30,
+          "后天六司": {
+            "根骨": 4
+          }
+        }
       },
       {
         "id": "lyg.item.jiuhua_dan",
@@ -3573,7 +3669,13 @@
         "name": "鹤侣剑",
         "description": "潘金莲使用的长剑。",
         "type": "weapon",
-        "grade": "极品"
+        "grade": "极品",
+        "attributeBonus": {
+          "气血上限": 90,
+          "后天六司": {
+            "根骨": 12
+          }
+        }
       },
       {
         "id": "lyg.item.miao_fa_tian_qiu",
@@ -3587,14 +3689,26 @@
         "name": "金丝袈裟",
         "description": "释特昧普的金丝织成袈裟。",
         "type": "armor",
-        "grade": "凡品"
+        "grade": "凡品",
+        "attributeBonus": {
+          "气血上限": 40,
+          "后天六司": {
+            "根骨": 1
+          }
+        }
       },
       {
         "id": "lyg.item.golden_staff",
         "name": "黄金法杖",
         "description": "释特昧普使用的黄金法杖。",
         "type": "weapon",
-        "grade": "精良"
+        "grade": "精良",
+        "attributeBonus": {
+          "气血上限": 30,
+          "后天六司": {
+            "根骨": 4
+          }
+        }
       },
       {
         "id": "lyg.item.mala_beads",
@@ -3608,56 +3722,104 @@
         "name": "蹶张弩收藏",
         "description": "窥基大师的私人收藏，被官方定性为祖传文物。",
         "type": "weapon",
-        "grade": "精良"
+        "grade": "精良",
+        "attributeBonus": {
+          "气血上限": 30,
+          "后天六司": {
+            "根骨": 4
+          }
+        }
       },
       {
         "id": "lyg.item.ninja_short_sword",
         "name": "忍者直刃短刀",
         "description": "飞鸟萤子使用的短刀。",
         "type": "weapon",
-        "grade": "凡品"
+        "grade": "凡品",
+        "attributeBonus": {
+          "气血上限": 15,
+          "后天六司": {
+            "根骨": 2
+          }
+        }
       },
       {
         "id": "lyg.item.circular_shield",
         "name": "忍者圆盾",
         "description": "飞鸟萤子使用的圆盾，可伸出钢爪。",
         "type": "armor",
-        "grade": "凡品"
+        "grade": "凡品",
+        "attributeBonus": {
+          "气血上限": 40,
+          "后天六司": {
+            "根骨": 1
+          }
+        }
       },
       {
         "id": "lyg.item.claw_hook",
         "name": "忍者爪钩",
         "description": "飞鸟萤子使用的钢爪，淬有剧毒。",
         "type": "weapon",
-        "grade": "凡品"
+        "grade": "凡品",
+        "attributeBonus": {
+          "气血上限": 15,
+          "后天六司": {
+            "根骨": 2
+          }
+        }
       },
       {
         "id": "lyg.item.whip",
         "name": "长鞭",
         "description": "蛇夫人使用的长鞭。",
         "type": "weapon",
-        "grade": "凡品"
+        "grade": "凡品",
+        "attributeBonus": {
+          "气血上限": 15,
+          "后天六司": {
+            "根骨": 2
+          }
+        }
       },
       {
         "id": "lyg.item.emei_prick",
         "name": "蛾眉刺",
         "description": "惊理使用的武器。",
         "type": "weapon",
-        "grade": "凡品"
+        "grade": "凡品",
+        "attributeBonus": {
+          "气血上限": 15,
+          "后天六司": {
+            "根骨": 2
+          }
+        }
       },
       {
         "id": "lyg.item.np002",
         "name": "皇后印玺",
         "type": "weapon",
         "description": "剑玉姬在会面后留下皇后印玺作为让步象征。",
-        "grade": "仙品"
+        "grade": "仙品",
+        "attributeBonus": {
+          "气血上限": 90,
+          "后天六司": {
+            "根骨": 12
+          }
+        }
       },
       {
         "id": "lyg.item.np003",
         "name": "成光魂丹",
         "type": "weapon",
         "description": "闻清语代表剑玉姬送来成光魂丹，控制其生死。",
-        "grade": "仙品"
+        "grade": "仙品",
+        "attributeBonus": {
+          "气血上限": 90,
+          "后天六司": {
+            "根骨": 12
+          }
+        }
       },
       {
         "id": "lyg.item.np007",
@@ -3832,7 +3994,13 @@
         "name": "霓龙丝衣",
         "type": "armor",
         "description": "出自建康盛银织坊，原料款式由程宗扬一手打理，包括乳罩、内裤、丝袜、高跟鞋等多种款式。",
-        "grade": "中品"
+        "grade": "中品",
+        "attributeBonus": {
+          "气血上限": 80,
+          "后天六司": {
+            "根骨": 2
+          }
+        }
       },
       {
         "id": "lyg.item.np041",
@@ -3916,14 +4084,26 @@
         "name": "珊瑚铁",
         "type": "weapon",
         "description": "一种复合金属，六朝无法冶炼，密码箱由整块珊瑚铁制成。小紫带走断剑可能含珊瑚铁。",
-        "grade": "中品"
+        "grade": "中品",
+        "attributeBonus": {
+          "气血上限": 30,
+          "后天六司": {
+            "根骨": 4
+          }
+        }
       },
       {
         "id": "lyg.item.np058",
         "name": "断剑",
         "type": "weapon",
         "description": "吕雉提及的断剑，用于威胁吕巨君，现被小紫带走。",
-        "grade": "极品"
+        "grade": "极品",
+        "attributeBonus": {
+          "气血上限": 90,
+          "后天六司": {
+            "根骨": 12
+          }
+        }
       },
       {
         "id": "lyg.item.np059",
@@ -3972,14 +4152,26 @@
         "name": "蹶张弩（大慈恩寺收藏）",
         "type": "weapon",
         "description": "大慈恩寺僧众持蹶张弩追击小紫，后被官方定性为祖传文物。",
-        "grade": "中品"
+        "grade": "中品",
+        "attributeBonus": {
+          "气血上限": 30,
+          "后天六司": {
+            "根骨": 4
+          }
+        }
       },
       {
         "id": "lyg.item.np067",
         "name": "摩尼教善母日月冠",
         "type": "armor",
         "description": "释特昧普从已降服的善母处取得日月冠，以此欺骗阿罗莎等信徒，宣称善母已皈依佛门。",
-        "grade": "极品"
+        "grade": "极品",
+        "attributeBonus": {
+          "气血上限": 240,
+          "后天六司": {
+            "根骨": 6
+          }
+        }
       },
       {
         "id": "lyg.item.np073",
@@ -3993,7 +4185,13 @@
         "name": "手枪",
         "type": "weapon",
         "description": "现代大口径手枪，无子弹，枪管曾被弯通条。",
-        "grade": "极品"
+        "grade": "极品",
+        "attributeBonus": {
+          "气血上限": 90,
+          "后天六司": {
+            "根骨": 12
+          }
+        }
       },
       {
         "id": "lyg.item.np075",
@@ -4014,7 +4212,13 @@
         "name": "明光铠（特制）",
         "type": "armor",
         "description": "杨玉环的明光铠胸前护甲特别大且坚固，程宗扬七成力道一击未能击碎。",
-        "grade": "中品"
+        "grade": "中品",
+        "attributeBonus": {
+          "气血上限": 80,
+          "后天六司": {
+            "根骨": 2
+          }
+        }
       },
       {
         "id": "lyg.item.np078",
@@ -4028,7 +4232,13 @@
         "name": "空心针",
         "type": "weapon",
         "description": "光明观堂有空心针，用于输血",
-        "grade": "下品"
+        "grade": "下品",
+        "attributeBonus": {
+          "气血上限": 15,
+          "后天六司": {
+            "根骨": 2
+          }
+        }
       },
       {
         "id": "lyg.item.np080",

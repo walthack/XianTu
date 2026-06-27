@@ -1032,7 +1032,14 @@
         "grade": "中品",
         "skillIds": [
           "liuchao.skill.death_root"
-        ]
+        ],
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
       }
     ],
     "items": [
@@ -1042,7 +1049,13 @@
         "description": "程宗扬从萧遥逸处获得的武器。",
         "type": "weapon",
         "grade": "仙品",
-        "techniqueId": "liuchao.technique.taiji_manual"
+        "techniqueId": "liuchao.technique.taiji_manual",
+        "attributeBonus": {
+          "气血上限": 90,
+          "后天六司": {
+            "根骨": 12
+          }
+        }
       },
       {
         "id": "lyl.item.np001",

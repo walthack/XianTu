@@ -2368,13 +2368,27 @@
         "grade": "中品",
         "skillIds": [
           "liuchao.skill.bedroom_arts"
-        ]
+        ],
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
       },
       {
         "id": "lyl.technique.np003",
         "name": "寒毒",
         "description": "薛延山身中寒毒，与云如瑶、月霜相似",
-        "grade": "下品"
+        "grade": "下品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.08,
+          "属性加成": {
+            "悟性": 1,
+            "灵性": 1
+          }
+        }
       }
     ],
     "items": [
@@ -2390,7 +2404,13 @@
         "name": "珊瑚匕首",
         "description": "锋利异常的匕首，程宗扬随身武器。",
         "type": "weapon",
-        "grade": "仙品"
+        "grade": "仙品",
+        "attributeBonus": {
+          "气血上限": 90,
+          "后天六司": {
+            "根骨": 12
+          }
+        }
       },
       {
         "id": "liuchao.item.spirit_flying_mirror",

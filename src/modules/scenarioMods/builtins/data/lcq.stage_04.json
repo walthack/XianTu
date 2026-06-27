@@ -1091,7 +1091,14 @@
         "grade": "唯一",
         "skillIds": [
           "liuchao.skill.wu_hu_duan_men_dao"
-        ]
+        ],
+        "techniqueEffects": {
+          "修炼速度加成": 0.48,
+          "属性加成": {
+            "悟性": 6,
+            "灵性": 3
+          }
+        }
       },
       {
         "id": "liuchao.technique.inner_qi",
@@ -1100,7 +1107,14 @@
         "grade": "凡品",
         "skillIds": [
           "liuchao.skill.dagger_art"
-        ]
+        ],
+        "techniqueEffects": {
+          "修炼速度加成": 0.08,
+          "属性加成": {
+            "悟性": 1,
+            "灵性": 1
+          }
+        }
       },
       {
         "id": "liuchao.technique.tiger_style",
@@ -1109,7 +1123,14 @@
         "grade": "凡品",
         "skillIds": [
           "liuchao.skill.wu_hu_duan_men_dao"
-        ]
+        ],
+        "techniqueEffects": {
+          "修炼速度加成": 0.08,
+          "属性加成": {
+            "悟性": 1,
+            "灵性": 1
+          }
+        }
       }
     ],
     "items": [

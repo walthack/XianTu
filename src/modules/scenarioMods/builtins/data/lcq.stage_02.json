@@ -1046,7 +1046,14 @@
         "grade": "凡品",
         "skillIds": [
           "lcq.skill.nine_sun"
-        ]
+        ],
+        "techniqueEffects": {
+          "修炼速度加成": 0.08,
+          "属性加成": {
+            "悟性": 1,
+            "灵性": 1
+          }
+        }
       }
     ],
     "items": [

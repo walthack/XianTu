@@ -1488,7 +1488,14 @@
         "grade": "神级",
         "skillIds": [
           "liuchao.skill.five_tiger_broken_gate_knife"
-        ]
+        ],
+        "techniqueEffects": {
+          "修炼速度加成": 0.56,
+          "属性加成": {
+            "悟性": 7,
+            "灵性": 4
+          }
+        }
       },
       {
         "id": "liuchao.technique.tai_yi_jing",
@@ -1497,7 +1504,14 @@
         "grade": "神级",
         "skillIds": [
           "liuchao.skill.moon_light_shield"
-        ]
+        ],
+        "techniqueEffects": {
+          "修炼速度加成": 0.56,
+          "属性加成": {
+            "悟性": 7,
+            "灵性": 4
+          }
+        }
       }
     ],
     "items": [
@@ -1509,7 +1523,13 @@
         "grade": "仙品",
         "skillIds": [
           "liuchao.skill.death_root"
-        ]
+        ],
+        "attributeBonus": {
+          "气血上限": 90,
+          "后天六司": {
+            "根骨": 12
+          }
+        }
       },
       {
         "id": "liuchao.item.zhu_hu_guan",
@@ -1519,7 +1539,13 @@
         "grade": "极品",
         "skillIds": [
           "liuchao.skill.phoenix_treasure_book"
-        ]
+        ],
+        "attributeBonus": {
+          "气血上限": 240,
+          "后天六司": {
+            "根骨": 6
+          }
+        }
       },
       {
         "id": "liuchao.item.moon_crescent_knife",
@@ -1529,7 +1555,13 @@
         "grade": "凡品",
         "skillIds": [
           "liuchao.skill.moon_light_shield"
-        ]
+        ],
+        "attributeBonus": {
+          "气血上限": 15,
+          "后天六司": {
+            "根骨": 2
+          }
+        }
       },
       {
         "id": "liuchao.item.purple_scale_whip",
@@ -1539,7 +1571,13 @@
         "grade": "极品",
         "skillIds": [
           "liuchao.skill.witchcraft"
-        ]
+        ],
+        "attributeBonus": {
+          "气血上限": 90,
+          "后天六司": {
+            "根骨": 12
+          }
+        }
       },
       {
         "id": "liuchao.item.gui_yu_sword",
@@ -1549,7 +1587,13 @@
         "grade": "极品",
         "skillIds": [
           "liuchao.skill.gui_yu_sword"
-        ]
+        ],
+        "attributeBonus": {
+          "气血上限": 90,
+          "后天六司": {
+            "根骨": 12
+          }
+        }
       },
       {
         "id": "lcq.item.np002",
@@ -1605,7 +1649,13 @@
         "name": "珊瑚铁",
         "type": "weapon",
         "description": "程宗扬获得珊瑚铁匕首",
-        "grade": "仙品"
+        "grade": "仙品",
+        "attributeBonus": {
+          "气血上限": 90,
+          "后天六司": {
+            "根骨": 12
+          }
+        }
       },
       {
         "id": "lcq.item.np011",
@@ -1626,7 +1676,13 @@
         "name": "鲛绡",
         "type": "armor",
         "description": "乐明珠用鲛绡束胸",
-        "grade": "中品"
+        "grade": "中品",
+        "attributeBonus": {
+          "气血上限": 80,
+          "后天六司": {
+            "根骨": 2
+          }
+        }
       },
       {
         "id": "lcq.item.np015",

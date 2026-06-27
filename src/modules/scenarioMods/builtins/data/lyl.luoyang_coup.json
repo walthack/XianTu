@@ -2103,91 +2103,196 @@
         "id": "lyl.technique.np012",
         "name": "纸币（程氏钱庄）",
         "description": "程氏钱庄发行三批纸币，总计二百四十三万金铢流通。",
-        "grade": "极品"
+        "grade": "极品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.48,
+          "属性加成": {
+            "悟性": 6,
+            "灵性": 3
+          }
+        }
       },
       {
         "id": "lyl.technique.np020",
         "name": "五虎断门刀",
         "description": "武二郎传授，程宗扬用屠龙刀施展，但为剑玉姬所破。",
-        "grade": "中品"
+        "grade": "中品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
       },
       {
         "id": "lyl.technique.np021",
         "name": "水泥技术",
         "description": "水泥技术由程宗扬掌握，星月湖大营负责安全",
-        "grade": "仙品"
+        "grade": "仙品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.48,
+          "属性加成": {
+            "悟性": 6,
+            "灵性": 3
+          }
+        }
       },
       {
         "id": "lyl.technique.np028",
         "name": "生死根",
         "description": "生死根能吞噬死气",
-        "grade": "中品"
+        "grade": "中品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
       },
       {
         "id": "lyl.technique.np029",
         "name": "九阳神功",
         "description": "九阳神功是程宗扬的内功",
-        "grade": "中品"
+        "grade": "中品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
       },
       {
         "id": "lyl.technique.np030",
         "name": "太一经",
         "description": "太一经是程宗扬的内功",
-        "grade": "中品"
+        "grade": "中品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
       },
       {
         "id": "lyl.technique.np055",
         "name": "合籍",
         "description": "程宗扬与程郑合籍为盘江程氏",
-        "grade": "中品"
+        "grade": "中品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
       },
       {
         "id": "lyl.technique.np060",
         "name": "太一经仙火鼎炉双修法",
         "description": "程宗扬在破云丹琉处子时发现其是罕见仙品火质鼎炉，可将太一经积留的阴寒杂气渡入云丹琉体内化去，有益无害并增进快感，二人以此法往复导引真气使双修效果显著。",
-        "grade": "仙品"
+        "grade": "仙品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.48,
+          "属性加成": {
+            "悟性": 6,
+            "灵性": 3
+          }
+        }
       },
       {
         "id": "lyl.technique.np063",
         "name": "双修功法",
         "description": "程宗扬与云丹琉在温泉中双修，云丹琉服用的仙草叶片效力尚在。",
-        "grade": "中品"
+        "grade": "中品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
       },
       {
         "id": "lyl.technique.np077",
         "name": "玄元仙剑",
         "description": "华妙宗剑法，剑玉姬用此剑法施展出。",
-        "grade": "极品"
+        "grade": "极品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.48,
+          "属性加成": {
+            "悟性": 6,
+            "灵性": 3
+          }
+        }
       },
       {
         "id": "lyl.technique.np087",
         "name": "守阵力士",
         "description": "小紫改造守阵力士，使其能活动",
-        "grade": "中品"
+        "grade": "中品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
       },
       {
         "id": "lyl.technique.np096",
         "name": "琥珀控魂",
         "description": "小紫用琥珀控制孙寿魂魄",
-        "grade": "中品"
+        "grade": "中品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
       },
       {
         "id": "lyl.technique.np097",
         "name": "毒品与法术结合药剂",
         "description": "小紫将毒品致幻性与小法术结合，可产生操控幻境效果。",
-        "grade": "中品"
+        "grade": "中品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
       },
       {
         "id": "lyl.technique.np100",
         "name": "算缗令",
         "description": "秦桧在算缗令中添入限田限奴条款，使其走向极端。",
-        "grade": "中品"
+        "grade": "中品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
       },
       {
         "id": "lyl.technique.np103",
         "name": "六识禁绝丹",
         "description": "义姁用六识禁绝丹封禁友通期六识，使其目不视物、耳不闻声、口不能言。",
-        "grade": "下品"
+        "grade": "下品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.08,
+          "属性加成": {
+            "悟性": 1,
+            "灵性": 1
+          }
+        }
       }
     ],
     "items": [
@@ -2196,7 +2301,13 @@
         "name": "青龙偃月刀",
         "description": "云丹琉使用的长刀，由珊瑚铁强化过。",
         "type": "weapon",
-        "grade": "极品"
+        "grade": "极品",
+        "attributeBonus": {
+          "气血上限": 90,
+          "后天六司": {
+            "根骨": 12
+          }
+        }
       },
       {
         "id": "lyl.item.np001",
@@ -2210,7 +2321,13 @@
         "name": "屠龙刀",
         "type": "weapon",
         "description": "林冲以一千贯买下屠龙刀，刀由珊瑚铁打造，价值万金。",
-        "grade": "极品"
+        "grade": "极品",
+        "attributeBonus": {
+          "气血上限": 90,
+          "后天六司": {
+            "根骨": 12
+          }
+        }
       },
       {
         "id": "lyl.item.np004",
@@ -2231,7 +2348,13 @@
         "name": "雷霆刀",
         "type": "weapon",
         "description": "程宗扬从飞鸟熊藏处获得刀柄，可凝成刀刃",
-        "grade": "仙品"
+        "grade": "仙品",
+        "attributeBonus": {
+          "气血上限": 90,
+          "后天六司": {
+            "根骨": 12
+          }
+        }
       },
       {
         "id": "lyl.item.np010",
@@ -2280,14 +2403,26 @@
         "name": "雷射战刀",
         "type": "weapon",
         "description": "程宗扬从高俅处获得雷射战刀，可随修为变化",
-        "grade": "中品"
+        "grade": "中品",
+        "attributeBonus": {
+          "气血上限": 30,
+          "后天六司": {
+            "根骨": 4
+          }
+        }
       },
       {
         "id": "lyl.item.np018",
         "name": "雷射宝刀",
         "type": "weapon",
         "description": "程宗扬藏于怀中，电光闪烁，突然刺穿剑玉姬手掌。",
-        "grade": "中品"
+        "grade": "中品",
+        "attributeBonus": {
+          "气血上限": 30,
+          "后天六司": {
+            "根骨": 4
+          }
+        }
       },
       {
         "id": "lyl.item.np022",
@@ -2308,7 +2443,13 @@
         "name": "龙鳞盾",
         "type": "armor",
         "description": "龙鳞盾为程宗扬携带的防具。",
-        "grade": "中品"
+        "grade": "中品",
+        "attributeBonus": {
+          "气血上限": 80,
+          "后天六司": {
+            "根骨": 2
+          }
+        }
       },
       {
         "id": "lyl.item.np025",
@@ -2329,14 +2470,26 @@
         "name": "珊瑚匕首",
         "type": "weapon",
         "description": "珊瑚匕首锋利无比，能斩断赤阳藤",
-        "grade": "仙品"
+        "grade": "仙品",
+        "attributeBonus": {
+          "气血上限": 90,
+          "后天六司": {
+            "根骨": 12
+          }
+        }
       },
       {
         "id": "lyl.item.np031",
         "name": "雷射刀（已损毁）",
         "type": "weapon",
         "description": "程宗扬的武器，在此集与丁志雄交战后刀身承受重岩符后化为电光，仅剩刀柄，但仍可发射电光斩击。",
-        "grade": "中品"
+        "grade": "中品",
+        "attributeBonus": {
+          "气血上限": 30,
+          "后天六司": {
+            "根骨": 4
+          }
+        }
       },
       {
         "id": "lyl.item.np032",
@@ -2350,7 +2503,13 @@
         "name": "雷射刀",
         "type": "weapon",
         "description": "程宗扬使用雷射刀，电光状态消耗真气巨大",
-        "grade": "仙品"
+        "grade": "仙品",
+        "attributeBonus": {
+          "气血上限": 90,
+          "后天六司": {
+            "根骨": 12
+          }
+        }
       },
       {
         "id": "lyl.item.np035",
@@ -2420,7 +2579,13 @@
         "name": "鲛绡",
         "type": "armor",
         "description": "鲛绡上绣有‘玉堂前殿’字样，与天子寝宫有关",
-        "grade": "中品"
+        "grade": "中品",
+        "attributeBonus": {
+          "气血上限": 80,
+          "后天六司": {
+            "根骨": 2
+          }
+        }
       },
       {
         "id": "lyl.item.np047",
@@ -2553,7 +2718,13 @@
         "name": "珊瑚铁刀",
         "type": "weapon",
         "description": "程宗扬购得珊瑚铁刀，并赠予云丹琉。",
-        "grade": "中品"
+        "grade": "中品",
+        "attributeBonus": {
+          "气血上限": 30,
+          "后天六司": {
+            "根骨": 4
+          }
+        }
       },
       {
         "id": "lyl.item.np074",
@@ -2630,7 +2801,13 @@
         "name": "紫鳞鞭",
         "type": "weapon",
         "description": "小紫的武器，鞭身覆紫鳞，可用于勒杀和收魂。",
-        "grade": "中品"
+        "grade": "中品",
+        "attributeBonus": {
+          "气血上限": 30,
+          "后天六司": {
+            "根骨": 4
+          }
+        }
       },
       {
         "id": "lyl.item.np090",
@@ -2658,7 +2835,13 @@
         "name": "太泉古阵物品",
         "type": "armor",
         "description": "小紫从太泉古阵获得衣物等物品",
-        "grade": "中品"
+        "grade": "中品",
+        "attributeBonus": {
+          "气血上限": 80,
+          "后天六司": {
+            "根骨": 2
+          }
+        }
       },
       {
         "id": "lyl.item.np099",

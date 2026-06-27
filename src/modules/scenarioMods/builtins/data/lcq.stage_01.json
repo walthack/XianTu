@@ -787,7 +787,14 @@
         "grade": "神品",
         "skillIds": [
           "lcq.skill.death_root"
-        ]
+        ],
+        "techniqueEffects": {
+          "修炼速度加成": 0.56,
+          "属性加成": {
+            "悟性": 7,
+            "灵性": 4
+          }
+        }
       }
     ],
     "items": [

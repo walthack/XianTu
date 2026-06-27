@@ -1092,14 +1092,28 @@
         "grade": "凡品",
         "skillIds": [
           "liuchao.skill.death_root"
-        ]
+        ],
+        "techniqueEffects": {
+          "修炼速度加成": 0.08,
+          "属性加成": {
+            "悟性": 1,
+            "灵性": 1
+          }
+        }
       },
       {
         "id": "liuchao.technique.phoenix",
         "name": "凤凰宝典",
         "description": "光明观堂的驻颜功法，乐明珠修炼。",
         "grade": "凡品",
-        "skillIds": []
+        "skillIds": [],
+        "techniqueEffects": {
+          "修炼速度加成": 0.08,
+          "属性加成": {
+            "悟性": 1,
+            "灵性": 1
+          }
+        }
       }
     ],
     "items": [
@@ -1109,7 +1123,13 @@
         "description": "从鲛人身上获得的珊瑚铁匕首，锋锐异常。",
         "type": "weapon",
         "grade": "仙品",
-        "skillIds": []
+        "skillIds": [],
+        "attributeBonus": {
+          "气血上限": 90,
+          "后天六司": {
+            "根骨": 12
+          }
+        }
       },
       {
         "id": "liuchao.item.zhu_hu_guan",
@@ -1180,7 +1200,13 @@
         "name": "珊瑚铁",
         "type": "weapon",
         "description": "程宗扬获得珊瑚铁匕首",
-        "grade": "仙品"
+        "grade": "仙品",
+        "attributeBonus": {
+          "气血上限": 90,
+          "后天六司": {
+            "根骨": 12
+          }
+        }
       },
       {
         "id": "lcq.item.np012",

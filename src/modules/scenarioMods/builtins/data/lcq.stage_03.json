@@ -708,7 +708,14 @@
         "grade": "神品",
         "skillIds": [
           "liuchao.skill.death_root"
-        ]
+        ],
+        "techniqueEffects": {
+          "修炼速度加成": 0.56,
+          "属性加成": {
+            "悟性": 7,
+            "灵性": 4
+          }
+        }
       },
       {
         "id": "liuchao.technique.dual_cultivation",
@@ -717,7 +724,14 @@
         "grade": "凡品",
         "skillIds": [
           "liuchao.skill.moon_manipulation"
-        ]
+        ],
+        "techniqueEffects": {
+          "修炼速度加成": 0.08,
+          "属性加成": {
+            "悟性": 1,
+            "灵性": 1
+          }
+        }
       }
     ],
     "items": [
@@ -740,7 +754,13 @@
         "name": "弯刀",
         "description": "凝羽的武器。",
         "type": "weapon",
-        "grade": "凡品"
+        "grade": "凡品",
+        "attributeBonus": {
+          "气血上限": 15,
+          "后天六司": {
+            "根骨": 2
+          }
+        }
       },
       {
         "id": "lcq.item.np002",

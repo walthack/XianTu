@@ -2049,14 +2049,28 @@
         "name": "龙宸功法",
         "description": "龙宸势力的修炼功法，萧遥逸主修。",
         "grade": "高阶",
-        "skillIds": []
+        "skillIds": [],
+        "techniqueEffects": {
+          "修炼速度加成": 0.4,
+          "属性加成": {
+            "悟性": 5,
+            "灵性": 3
+          }
+        }
       },
       {
         "id": "liuchao.technique.yaochi_gong",
         "name": "瑶池心法",
         "description": "瑶池宗基础功法，女修专用。",
         "grade": "中品",
-        "skillIds": []
+        "skillIds": [],
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
       },
       {
         "id": "liuchao.technique.none",
@@ -2065,7 +2079,14 @@
         "grade": "特殊",
         "skillIds": [
           "liuchao.skill.death_root"
-        ]
+        ],
+        "techniqueEffects": {
+          "修炼速度加成": 0.24,
+          "属性加成": {
+            "悟性": 3,
+            "灵性": 2
+          }
+        }
       }
     ],
     "items": [
@@ -2074,21 +2095,39 @@
         "name": "珊瑚匕首",
         "description": "由珊瑚铁打造，锋利异常，程宗扬贴身携带。",
         "type": "weapon",
-        "grade": "仙品"
+        "grade": "仙品",
+        "attributeBonus": {
+          "气血上限": 90,
+          "后天六司": {
+            "根骨": 12
+          }
+        }
       },
       {
         "id": "liuchao.item.laser_sword",
         "name": "雷射战刀",
         "description": "程宗扬从现代带来的高科技武器，能量型刀锋，威力强大。",
         "type": "weapon",
-        "grade": "中品"
+        "grade": "中品",
+        "attributeBonus": {
+          "气血上限": 30,
+          "后天六司": {
+            "根骨": 4
+          }
+        }
       },
       {
         "id": "liuchao.item.dragon_slaying_sword_fake",
         "name": "屠龙刀（赝品）",
         "description": "林冲花一千贯买到的刀，实为高衙内设下的陷阱。由珊瑚铁等贵金属打造，价值万金。",
         "type": "weapon",
-        "grade": "中品"
+        "grade": "中品",
+        "attributeBonus": {
+          "气血上限": 30,
+          "后天六司": {
+            "根骨": 4
+          }
+        }
       },
       {
         "id": "lyl.item.np001",
@@ -2102,7 +2141,13 @@
         "name": "屠龙刀",
         "type": "weapon",
         "description": "林冲以一千贯买下屠龙刀，刀由珊瑚铁打造，价值万金。",
-        "grade": "极品"
+        "grade": "极品",
+        "attributeBonus": {
+          "气血上限": 90,
+          "后天六司": {
+            "根骨": 12
+          }
+        }
       },
       {
         "id": "lyl.item.np004",

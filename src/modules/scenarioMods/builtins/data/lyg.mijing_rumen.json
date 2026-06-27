@@ -2080,7 +2080,14 @@
         "grade": "中品",
         "skillIds": [
           "liuchao.skill.death_root"
-        ]
+        ],
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
       },
       {
         "id": "liuchao.technique.wuzong_di_method",
@@ -2089,31 +2096,66 @@
         "grade": "中品",
         "skillIds": [
           "liuchao.skill.poison_art"
-        ]
+        ],
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
       },
       {
         "id": "lyg.technique.np015",
         "name": "超级管理员权限（系统内）",
         "description": "程宗扬通过系统验证，成为超级管理员，拥有最高等级权限。",
-        "grade": "中品"
+        "grade": "中品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
       },
       {
         "id": "lyg.technique.np016",
         "name": "搜神诀",
         "description": "小紫从仇傻瓜处敲来《搜神诀》，对吕雉施展，读取其神魂片段。",
-        "grade": "中品"
+        "grade": "中品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
       },
       {
         "id": "lyg.technique.np018",
         "name": "超级用户权限（系统内）",
         "description": "小紫、朱老头、小玲儿均被系统认定为超级用户，拥有高权限。小紫通过染色体验证，朱老头是武皇后裔，小玲儿身份不明。",
-        "grade": "中品"
+        "grade": "中品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
       },
       {
         "id": "lyg.technique.np020",
         "name": "食人花（催生）",
         "description": "朱老头以毒药促使地下食人花提前开放，用于消灭林中入侵者；食人花巨大且有腐蚀性，藤蔓坚韧。",
-        "grade": "上品"
+        "grade": "上品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.4,
+          "属性加成": {
+            "悟性": 5,
+            "灵性": 3
+          }
+        }
       }
     ],
     "items": [
@@ -2122,14 +2164,26 @@
         "name": "电击棒（岳帅遗物）",
         "description": "岳鹏举留在胶西邸井中的电击棒，可用于引雷和解锁部分机关。",
         "type": "weapon",
-        "grade": "仙品"
+        "grade": "仙品",
+        "attributeBonus": {
+          "气血上限": 90,
+          "后天六司": {
+            "根骨": 12
+          }
+        }
       },
       {
         "id": "liuchao.item.plate_armor_sword",
         "name": "剧孟借予的长刀",
         "description": "剧孟借给程宗扬使用的一柄锋利长刀，非永久拥有。",
         "type": "weapon",
-        "grade": "凡品"
+        "grade": "凡品",
+        "attributeBonus": {
+          "气血上限": 15,
+          "后天六司": {
+            "根骨": 2
+          }
+        }
       },
       {
         "id": "liuchao.item.snow_snow",
@@ -2150,7 +2204,13 @@
         "name": "青龙偃月刀",
         "description": "云丹琉的家传兵器，锋利沉重。",
         "type": "weapon",
-        "grade": "中品"
+        "grade": "中品",
+        "attributeBonus": {
+          "气血上限": 30,
+          "后天六司": {
+            "根骨": 4
+          }
+        }
       },
       {
         "id": "liuchao.item.red_fan",
@@ -2164,14 +2224,26 @@
         "name": "皇后印玺",
         "type": "weapon",
         "description": "剑玉姬在会面后留下皇后印玺作为让步象征。",
-        "grade": "仙品"
+        "grade": "仙品",
+        "attributeBonus": {
+          "气血上限": 90,
+          "后天六司": {
+            "根骨": 12
+          }
+        }
       },
       {
         "id": "lyg.item.np003",
         "name": "成光魂丹",
         "type": "weapon",
         "description": "闻清语代表剑玉姬送来成光魂丹，控制其生死。",
-        "grade": "仙品"
+        "grade": "仙品",
+        "attributeBonus": {
+          "气血上限": 90,
+          "后天六司": {
+            "根骨": 12
+          }
+        }
       },
       {
         "id": "lyg.item.np007",
@@ -2234,14 +2306,26 @@
         "name": "银龙鳞甲",
         "type": "armor",
         "description": "云丹琉用血符将银龙鳞甲解开，显露出胸前肌肤。",
-        "grade": "极品"
+        "grade": "极品",
+        "attributeBonus": {
+          "气血上限": 240,
+          "后天六司": {
+            "根骨": 6
+          }
+        }
       },
       {
         "id": "lyg.item.np022",
         "name": "残缺玉佩",
         "type": "weapon",
         "description": "云传峰（云丹琉之父）的随身玉佩，被锯齿刀切过，发现于秘境林中，证明云传峰死于此地。",
-        "grade": "极品"
+        "grade": "极品",
+        "attributeBonus": {
+          "气血上限": 90,
+          "后天六司": {
+            "根骨": 12
+          }
+        }
       },
       {
         "id": "lyg.item.np023",
@@ -2262,7 +2346,13 @@
         "name": "空心针",
         "type": "weapon",
         "description": "光明观堂有空心针，用于输血",
-        "grade": "下品"
+        "grade": "下品",
+        "attributeBonus": {
+          "气血上限": 15,
+          "后天六司": {
+            "根骨": 2
+          }
+        }
       },
       {
         "id": "lyg.item.np027",

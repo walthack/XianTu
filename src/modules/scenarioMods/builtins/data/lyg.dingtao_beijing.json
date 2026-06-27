@@ -1877,19 +1877,40 @@
         "grade": "玄品",
         "skillIds": [
           "liuchao.skill.death_root"
-        ]
+        ],
+        "techniqueEffects": {
+          "修炼速度加成": 0.24,
+          "属性加成": {
+            "悟性": 3,
+            "灵性": 2
+          }
+        }
       },
       {
         "id": "liuchao.technique.jiuyang_shengong",
         "name": "九阳神功",
         "description": "程宗扬另一门功法，阳气通神，但导致阳亢之症。",
-        "grade": "玄品"
+        "grade": "玄品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.24,
+          "属性加成": {
+            "悟性": 3,
+            "灵性": 2
+          }
+        }
       },
       {
         "id": "lyg.technique.np011",
         "name": "搜神诀",
         "description": "小紫从仇傻瓜处敲来《搜神诀》，对吕雉施展，读取其神魂片段。",
-        "grade": "中品"
+        "grade": "中品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
       }
     ],
     "items": [
@@ -1898,49 +1919,91 @@
         "name": "双刀",
         "description": "程宗扬的佩刀，在昭阳殿战斗中曾使用。",
         "type": "weapon",
-        "grade": "凡品"
+        "grade": "凡品",
+        "attributeBonus": {
+          "气血上限": 15,
+          "后天六司": {
+            "根骨": 2
+          }
+        }
       },
       {
         "id": "liuchao.item.tie_tai_diao_gong",
         "name": "铁胎雕弓",
         "description": "董卓使用的强弓。",
         "type": "weapon",
-        "grade": "玄品"
+        "grade": "玄品",
+        "attributeBonus": {
+          "气血上限": 45,
+          "后天六司": {
+            "根骨": 6
+          }
+        }
       },
       {
         "id": "liuchao.item.yue_ya_duan_ji",
         "name": "月牙短戟",
         "description": "董卓惯用的近战兵刃。",
         "type": "weapon",
-        "grade": "凡品"
+        "grade": "凡品",
+        "attributeBonus": {
+          "气血上限": 15,
+          "后天六司": {
+            "根骨": 2
+          }
+        }
       },
       {
         "id": "liuchao.item.zhong_axe",
         "name": "重斧",
         "description": "董卓的双斧之一。",
         "type": "weapon",
-        "grade": "凡品"
+        "grade": "凡品",
+        "attributeBonus": {
+          "气血上限": 15,
+          "后天六司": {
+            "根骨": 2
+          }
+        }
       },
       {
         "id": "liuchao.item.rusty_cuo_dao",
         "name": "生锈错刀",
         "description": "贾文和劫持定陶王时所持的锈刀。",
         "type": "weapon",
-        "grade": "凡品"
+        "grade": "凡品",
+        "attributeBonus": {
+          "气血上限": 15,
+          "后天六司": {
+            "根骨": 2
+          }
+        }
       },
       {
         "id": "lyg.item.np001",
         "name": "皇后印玺",
         "type": "weapon",
         "description": "剑玉姬在会面后留下皇后印玺作为让步象征。",
-        "grade": "仙品"
+        "grade": "仙品",
+        "attributeBonus": {
+          "气血上限": 90,
+          "后天六司": {
+            "根骨": 12
+          }
+        }
       },
       {
         "id": "lyg.item.np002",
         "name": "成光魂丹",
         "type": "weapon",
         "description": "闻清语代表剑玉姬送来成光魂丹，控制其生死。",
-        "grade": "仙品"
+        "grade": "仙品",
+        "attributeBonus": {
+          "气血上限": 90,
+          "后天六司": {
+            "根骨": 12
+          }
+        }
       },
       {
         "id": "lyg.item.np006",
@@ -1996,14 +2059,26 @@
         "name": "青龙偃月刀",
         "type": "weapon",
         "description": "云丹琉使用的长刀，斩杀华雄。",
-        "grade": "中品"
+        "grade": "中品",
+        "attributeBonus": {
+          "气血上限": 30,
+          "后天六司": {
+            "根骨": 4
+          }
+        }
       },
       {
         "id": "lyg.item.np015",
         "name": "银龙鳞甲",
         "type": "armor",
         "description": "云丹琉用血符将银龙鳞甲解开，显露出胸前肌肤。",
-        "grade": "极品"
+        "grade": "极品",
+        "attributeBonus": {
+          "气血上限": 240,
+          "后天六司": {
+            "根骨": 6
+          }
+        }
       },
       {
         "id": "lyg.item.np016",
@@ -2017,7 +2092,13 @@
         "name": "空心针",
         "type": "weapon",
         "description": "光明观堂有空心针，用于输血",
-        "grade": "下品"
+        "grade": "下品",
+        "attributeBonus": {
+          "气血上限": 15,
+          "后天六司": {
+            "根骨": 2
+          }
+        }
       }
     ]
   },

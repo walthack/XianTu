@@ -85,6 +85,7 @@ function buildNativeCharacterContent(source: ScenarioRelationshipSource, charact
         const skill = skills.find(item => item.id === id);
         return skill ? [{ 技能名称: skill.name, 技能描述: skill.description || '', 熟练度要求: 0 }] : [];
       }),
+      ...(technique.techniqueEffects ? { 功法效果: technique.techniqueEffects } : {}),
     };
   }
   for (const id of character.itemIds || []) {
@@ -98,6 +99,7 @@ function buildNativeCharacterContent(source: ScenarioRelationshipSource, charact
       数量: 1,
       描述: item.description || '',
       已装备: false,
+      ...(item.attributeBonus ? { 装备增幅: item.attributeBonus } : {}),
     };
   }
   return {
