@@ -287,6 +287,11 @@ function showError(error: unknown) {
 
 <style scoped>
 .mod-page {
+  /* #app-container 用 flex+align-items:center 垂直居中，内容超过视口时顶部会被裁、滚不到。
+     本页顶对齐 + 占满宽度，保证 18 个内置 mod 能完整向下滚动。 */
+  align-self: flex-start;
+  width: 100%;
+  box-sizing: border-box;
   min-height: 100vh;
   background: var(--color-background);
   color: var(--color-text);
