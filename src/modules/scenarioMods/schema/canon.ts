@@ -64,6 +64,10 @@ export interface ScenarioModCharacterProfile {
   }[];
   attributes?: ScenarioModCharacterAttributes;
   notes?: string[];
+  /** 头像图：URL 或 IndexedDB 图片键(img:<key>)。空则 UI 回退到名字首字。 */
+  avatar?: string;
+  /** 立绘(全身像)图：URL 或 IndexedDB 图片键(img:<key>)。 */
+  portrait?: string;
 }
 
 export interface ScenarioModCharacter {

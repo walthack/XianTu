@@ -30,7 +30,8 @@
             <div class="profile-section">
               <div class="avatar-container">
                 <div class="avatar-circle" :data-realm="extractRealmName(playerStatus?.境界?.名称)">
-                  <span class="avatar-text">{{ nameInitial }}</span>
+                  <img v-if="avatarUrl" :src="avatarUrl" class="avatar-img" :alt="baseInfo?.名字" @error="avatarError = true" />
+                  <span v-else class="avatar-text">{{ nameInitial }}</span>
                 </div>
                 <!-- 境界光环特效 -->
                 <div class="realm-aura"></div>
@@ -609,6 +610,13 @@ const tabs = computed(() => {
 
 // Basic character info
 const nameInitial = computed(() => (baseInfo.value?.名字 || '').slice(0, 1) || '?');
+// 头像：有图(URL/data)显图，否则回退首字。img:<key> 形式留待 M2 接 IndexedDB。
+const avatarError = ref(false);
+const avatarUrl = computed(() => {
+  if (avatarError.value) return '';
+  const a = (baseInfo.value as any)?.头像 || (baseInfo.value as any)?.立绘;
+  return a && /^(https?:|data:)/.test(a) ? a : '';
+});
 const currentAge = computed(() => {
   const birth = baseInfo.value?.出生日期;
   const now = gameTime.value;
@@ -1336,6 +1344,15 @@ const closeModals = () => {
   background: rgba(var(--color-primary-rgb), 0.1);
   border: 1px solid rgba(var(--color-primary-rgb), 0.3);
   transition: all 0.2s ease;
+  overflow: hidden;
+}
+
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+  display: block;
 }
 
 @media (min-width: 640px) {

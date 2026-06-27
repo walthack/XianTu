@@ -89,7 +89,7 @@
   "canon": {
     "factions": [
       {
-        "id": "liuchao.faction.baihu",
+        "id": "liuchao.faction.bai_hu_shang_guan",
         "name": "白湖商馆",
         "description": "五原城商馆，程宗扬所属。",
         "type": "商馆",
@@ -119,7 +119,7 @@
         "features": []
       },
       {
-        "id": "liuchao.faction.guangming",
+        "id": "liuchao.faction.guang_ming_guan_tang",
         "name": "光明观堂",
         "description": "乐明珠所属的医道门派。",
         "type": "宗门",
@@ -179,7 +179,7 @@
         "features": []
       },
       {
-        "id": "liuchao.faction.guiwang",
+        "id": "liuchao.faction.gui_wang_dong",
         "name": "鬼王峒",
         "description": "南荒征服者，控制碧鲮族。",
         "type": "部族",
@@ -209,7 +209,7 @@
         "features": []
       },
       {
-        "id": "liuchao.faction.xingyue",
+        "id": "liuchao.faction.xing_yue_hu",
         "name": "星月湖",
         "description": "星月湖，岳帅旧部所在。",
         "type": "组织",
@@ -296,7 +296,7 @@
         "description": "南荒地下洞窟，鬼王峒核心。",
         "type": "洞府",
         "continentId": "liuchao.continent.nanhuang",
-        "factionId": "liuchao.faction.guiwang",
+        "factionId": "liuchao.faction.gui_wang_dong",
         "coordinates": {
           "x": 1641,
           "y": 8690
@@ -332,13 +332,13 @@
       {
         "id": "liuchao.character.cheng_zongyang",
         "name": "程宗扬",
-        "description": "来自现代世界的穿越者，白湖商馆执事。",
+        "description": "晴州商贾的外衣下，藏着一个来自现代的魂灵——程宗扬策马踏过星月湖的营地，指尖抚过腰间珊瑚匕首，丹田中‘生死根’如暗潮涌动，嗅到死亡的气息便舔舔嘴唇。赤兔马颠簸，他抛出苹果贿马，被杨玉环踢下楼仍嬉笑爬起，左武军第一军团的战袍上沾满尘土与谜团。",
         "role": "主角",
         "gender": "男",
         "realm": "练气",
         "affiliations": [
           {
-            "factionId": "liuchao.faction.baihu",
+            "factionId": "liuchao.faction.bai_hu_shang_guan",
             "category": "organization",
             "role": "执事"
           }
@@ -379,7 +379,7 @@
           "talents": [
             {
               "name": "天命主角",
-              "description": "由角色定位推定的天赋。"
+              "description": "灾难收束为踏脚石，机缘如雨点砸来，他站在风暴眼笑看命运齿轮碾碎所有敌人。"
             },
             {
               "name": "生死根",
@@ -408,13 +408,13 @@
       {
         "id": "liuchao.character.le_mingzhu",
         "name": "乐明珠",
-        "description": "光明观堂弟子，随商队南行。",
+        "description": "光明观堂的小医者披上花苗嫁衣时，婴儿肥的圆脸还带着烂漫笑意，但那身洁白如牛乳的肌肤下，指尖已捏住三根淬毒银针。",
         "role": "女主角",
         "gender": "女",
         "realm": "凡人",
         "affiliations": [
           {
-            "factionId": "liuchao.faction.guangming",
+            "factionId": "liuchao.faction.guang_ming_guan_tang",
             "category": "sect",
             "role": "弟子"
           }
@@ -441,12 +441,12 @@
           "spiritRoot": {
             "name": "火灵根",
             "tier": "地品",
-            "description": "依角色定位由剧本正典赋予。"
+            "description": "赤焰翻涌如龙，焚尽八荒，修炼者若烈阳骄阳，主狂暴与毁灭之道。"
           },
           "talents": [
             {
               "name": "丹道圣手",
-              "description": "由角色定位推定的天赋。"
+              "description": "指尖缠绕着五行规则，他随便抓把杂草都能炼成仙丹，丹炉里的火焰比太阳还刺眼。"
             }
           ],
           "notes": [
@@ -458,7 +458,7 @@
       {
         "id": "liuchao.character.xiao_zi",
         "name": "小紫",
-        "description": "碧鲮族少女，智力低下，天真无邪。（后宫尊称\"紫妈妈\"，正宫，最有手腕、能管束众人；宠物为犬\"雪雪\"）",
+        "description": "碧鲮族最美的女子盘坐在渭水幽暗的河底，穿透乳峰的银铃随水波轻响，她正以紫气内功鲸吞墨枫林的死气，而上方的程家后院里，雪雪正替她的正宫之位吠退所有窥探者。",
         "role": "关键人物",
         "gender": "女",
         "realm": "凡人",
@@ -485,7 +485,7 @@
           "talents": [
             {
               "name": "神识过人",
-              "description": "由角色定位推定的天赋。"
+              "description": "意识铺开如蛛网，方圆千里每粒尘埃的震颤都逃不过，敌人抬脚就被预判三百年。"
             }
           ],
           "attributes": {
@@ -499,20 +499,20 @@
           "spiritRoot": {
             "name": "暗灵根",
             "tier": "地品",
-            "description": "依角色定位由剧本正典赋予。"
+            "description": "幽暗如渊噬光明，诡谲难测，修炼者似永夜降临，专精隐匿与吞噬之术。"
           }
         }
       },
       {
         "id": "liuchao.character.xie_yi",
         "name": "谢艺",
-        "description": "星月湖卫士，岳帅旧部。",
+        "description": "风尘仆仆的朴素身影挡在小紫身前时，六级修为的星月湖高手周身腾起灼热真气，那救下少女的代价是肋骨尽碎、丹田濒裂。",
         "role": "关键人物",
         "gender": "男",
         "realm": "筑基",
         "affiliations": [
           {
-            "factionId": "liuchao.faction.xingyue",
+            "factionId": "liuchao.faction.xing_yue_hu",
             "category": "organization",
             "role": "卫士"
           }
@@ -537,12 +537,12 @@
           "spiritRoot": {
             "name": "火灵根",
             "tier": "地品",
-            "description": "依角色定位由剧本正典赋予。"
+            "description": "赤焰翻涌如龙，焚尽八荒，修炼者若烈阳骄阳，主狂暴与毁灭之道。"
           },
           "talents": [
             {
               "name": "天生神力",
-              "description": "由角色定位推定的天赋。"
+              "description": "骨骼是精铁浇筑，肌肉藏龙象之力，他捏碎空间如捏鸡蛋，真仙看了都缩脖子。"
             }
           ],
           "appearance": "风尘仆仆，朴素装扮",
@@ -555,7 +555,7 @@
         "id": "liuchao.character.yun_cang_feng",
         "name": "云苍峰",
         "role": "商人/盟友",
-        "description": "商人/盟友",
+        "description": "云家三爷的腰间玉佩在阴晴不定的面容下轻轻晃动，他掌握着足以掀翻整个云氏商会的秘密，却在笑与怒之间让人猜不透真正的筹码。",
         "itemIds": [
           "lcq.item.np013"
         ],
@@ -571,12 +571,12 @@
           "spiritRoot": {
             "name": "火灵根",
             "tier": "地品",
-            "description": "依角色定位由剧本正典赋予。"
+            "description": "赤焰翻涌如龙，焚尽八荒，修炼者若烈阳骄阳，主狂暴与毁灭之道。"
           },
           "talents": [
             {
               "name": "神识过人",
-              "description": "由角色定位推定的天赋。"
+              "description": "意识铺开如蛛网，方圆千里每粒尘埃的震颤都逃不过，敌人抬脚就被预判三百年。"
             }
           ],
           "appearance": "文士打扮，气度儒雅",
@@ -591,7 +591,7 @@
         "id": "liuchao.character.ning_yu",
         "name": "凝羽",
         "role": "商队成员",
-        "description": "商队成员",
+        "description": "凝羽立于白湖商馆檐下，雪肤映月，高挑身影裹着侍卫长的冷峻，偏偏颊上异样红晕出卖了药物的控制；穹羽族的血统让她双腿修长如白鹤，苏妲己的冰蛊却如毒藤缠绕，乳尖惨淡地挺在乌亮发丝间。",
         "profile": {
           "appearance": "雪白肌肤，脸颊常泛异样红晕；高挑丰满身材，双腿修长光洁；圆润坚挺的双乳，乳头与乳晕小巧红润；乌亮发丝；肩头有淡红月牙状痕迹",
           "personality": [
@@ -603,7 +603,7 @@
           "talents": [
             {
               "name": "剑骨天成",
-              "description": "由角色定位推定的天赋。"
+              "description": "脊梁是剑胚，血管淌剑意，他呼吸间骨骼铮鸣，随手一挥便切开空间如斩蚯蚓。"
             },
             {
               "name": "月光盾",
@@ -637,7 +637,7 @@
         "id": "liuchao.character.wu_er_lang",
         "name": "武二郎",
         "role": "商队成员",
-        "description": "商队成员",
+        "description": "白湖商馆最不像商人的护卫——古铜色的虬结肌肉上印着黑黄虎斑，一只大黑眼圈里的横眼扫过货物时，连瑶池宗的女修都得低头唤一声师兄。",
         "profile": {
           "appearance": "高大威猛，虎背熊腰；面带凶悍之气",
           "personality": [
@@ -653,7 +653,7 @@
           "talents": [
             {
               "name": "剑骨天成",
-              "description": "由角色定位推定的天赋。"
+              "description": "脊梁是剑胚，血管淌剑意，他呼吸间骨骼铮鸣，随手一挥便切开空间如斩蚯蚓。"
             }
           ],
           "attributes": {
@@ -667,7 +667,7 @@
           "spiritRoot": {
             "name": "火灵根",
             "tier": "玄品",
-            "description": "依角色定位由剧本正典赋予。"
+            "description": "赤焰翻涌如龙，焚尽八荒，修炼者若烈阳骄阳，主狂暴与毁灭之道。"
           }
         },
         "skillIds": [
@@ -681,7 +681,7 @@
         "id": "lcq.character.np003",
         "name": "吴战威",
         "role": "新任直属营执事",
-        "description": "新任直属营执事",
+        "description": "新任直属营执事的脚步声刚踏进营帐，甲胄上的灰尘和血渍便让所有老兵眯起了眼——这人的刀鞘比他们的更旧。",
         "profile": {
           "attributes": {
             "rootBone": 7,
@@ -694,12 +694,12 @@
           "spiritRoot": {
             "name": "水灵根",
             "tier": "玄品",
-            "description": "依角色定位由剧本正典赋予。"
+            "description": "碧波流转似镜，化柔为刚，修炼者如深海暗流，善于滋养与封锁万物。"
           },
           "talents": [
             {
               "name": "过目不忘",
-              "description": "由角色定位推定的天赋。"
+              "description": "瞳孔是刻录镜，每次眨眼就烙印宇宙法则，他看书如吃饭，记忆在脑海筑起书山。"
             }
           ]
         },
@@ -709,7 +709,7 @@
         "id": "liuchao.character.su_li",
         "name": "苏荔",
         "role": "花苗族长",
-        "description": "花苗族长",
+        "description": "花苗女族长踩过南荒毒瘴时，高挑丰腴的身姿像一柄裹着蜜糖的弯刀，她唇角的嫣红与武二郎颈间的虎斑在夜风里纠缠成一段不必明说的私情。",
         "profile": {
           "attributes": {
             "rootBone": 6,
@@ -727,7 +727,7 @@
           "talents": [
             {
               "name": "老实人",
-              "description": "由角色定位推定的天赋。"
+              "description": "木讷面孔下藏着万年算计，他的拳头总在敌人以为得逞时，从最朴素角度砸穿所有阴谋。"
             },
             {
               "name": "蝎尾变身",
@@ -742,7 +742,7 @@
         "id": "liuchao.character.qi_yuan",
         "name": "祁远",
         "role": "商业伙伴/属下",
-        "description": "商业伙伴/属下",
+        "description": "程氏商会在江州的锦衣掌柜缩在榻边，腊黄的脸埋进账册，弓成虾米的脊背里藏着南荒九死一生的旧伤——他替程宗扬管着的，岂止是长安的银钱。",
         "profile": {
           "attributes": {
             "rootBone": 5,
@@ -755,12 +755,12 @@
           "spiritRoot": {
             "name": "水灵根",
             "tier": "玄品",
-            "description": "依角色定位由剧本正典赋予。"
+            "description": "碧波流转似镜，化柔为刚，修炼者如深海暗流，善于滋养与封锁万物。"
           },
           "talents": [
             {
               "name": "多宝童子",
-              "description": "由角色定位推定的天赋。"
+              "description": "袖口是秘境，指尖藏乾坤，他咧嘴一笑便从七窍飞出法宝雨，砸得敌人抱头鼠窜。"
             }
           ]
         },
@@ -770,7 +770,7 @@
         "id": "lcq.character.np004",
         "name": "易彪",
         "role": "护卫",
-        "description": "护卫",
+        "description": "易彪握着刀沉默地站在商队阴影里，他不需要开口，那道从北境战场带回来的疤痕便替他说完了所有威慑。",
         "profile": {
           "attributes": {
             "rootBone": 8,
@@ -783,12 +783,12 @@
           "spiritRoot": {
             "name": "时间灵根",
             "tier": "地品",
-            "description": "依角色定位由剧本正典赋予。"
+            "description": "时光流转逆因果，玄奥难言，修炼者若岁月长河，擅定格与回溯之能。"
           },
           "talents": [
             {
               "name": "体修奇才",
-              "description": "由角色定位推定的天赋。"
+              "description": "肉身是法器，筋骨刻阵纹，他怒吼时肌肉隆起如山脉隆起，一拳轰碎天穹的锁链。"
             }
           ]
         },
@@ -798,7 +798,7 @@
         "id": "lcq.character.np006",
         "name": "阁罗",
         "role": "鬼王峒首领",
-        "description": "鬼王峒首领",
+        "description": "鬼王峒的首领从骷髅王座上俯视峒众时，脸上的青铜面具与皮肉早已长成一体，没人分得清那声闷笑是来自喉间还是脚下的亡魂。",
         "profile": {
           "attributes": {
             "rootBone": 7,
@@ -811,12 +811,12 @@
           "spiritRoot": {
             "name": "木灵根",
             "tier": "地品",
-            "description": "依角色定位由剧本正典赋予。"
+            "description": "苍藤缠天而生，生机盎然，修炼者似古树盘根，专精复苏与束缚之术。"
           },
           "talents": [
             {
               "name": "道心坚固",
-              "description": "由角色定位推定的天赋。"
+              "description": "心脏是磐石，道念如钢印，他面对幻境连眼皮都不眨，心如古井不波却暗藏火山。"
             }
           ]
         },
@@ -827,7 +827,7 @@
         "name": "碧奴",
         "gender": "女",
         "role": "舞姬",
-        "description": "本名碧姬，被鬼巫王掳入鬼王峒后改称碧奴；小紫生母，自幼将小紫弃养，妖艳放浪，母女积怨甚深。",
+        "description": "媚骨天然，妖娆入骨，她曾是碧姬，被掳入鬼王峒后改称碧奴，跳一支艳舞便能让男人甘愿献出魂魄，连亲女小紫也被她自幼弃养，母女间的积怨如她眉梢那抹不散的春意般深沉。",
         "profile": {
           "appearance": "碧奴是一位妩媚妖艳的成熟女性，面容娇媚，眉眼精致妖惑，常带浓浓春意与笑意。身材丰腴成熟，肌肤雪白晶莹，臀肉丰满白润，腰肢纤细柔软至极，双乳丰挺硕大，色泽白美。衣着常为碧绿透明轻纱，仅遮乳头，或裸露玉体。气质妖艳淫媚，动作柔美舞动。",
           "notes": [
@@ -840,7 +840,7 @@
         "name": "阿夕",
         "gender": "女",
         "role": "花苗少女",
-        "description": "花苗少女，献给鬼巫王的祭品之一。",
+        "description": "花苗少女阿夕，眉眼盈盈如画，唇瓣细嫩似初绽的花苞，娇小的身躯含苞待放，注定要成为献给鬼巫王的祭品。",
         "profile": {
           "appearance": "阿夕面容娇俏、眉眼盈盈如画，红嫩的唇瓣又细又嫩，精致如瓷器，虽未成年却含苞待放；身材娇柔纤巧，乳房与臀部未完全发育，两团小巧鸽乳胸前，臀肉小巧玲珑、雪白光滑，肌肤白嫩如雪，阳具挺动时雪臀摇动，白嫩可爱。"
         }
@@ -850,7 +850,7 @@
         "name": "丹宸",
         "gender": "女",
         "role": "女奴",
-        "description": "红苗美妇，娄蒙之妻，受鬼巫王驱使。",
+        "description": "红苗美妇丹宸，雪白丰腴的身躯掩不住乌黑长发下的绝望，她是娄蒙的妻子，却被鬼巫王的缰绳驱使，如一件精美的玩物，连双眼也常被蒙上。",
         "profile": {
           "appearance": "丹宸是一位红苗美妇，美丽的面孔，皮肤白皙，身材丰满，尤其臀部圆翘雪白，双乳丰挺，长发乌黑，常被蒙住双眼或佩戴丝带，气质中带有妖艳与谦卑交织的复杂特征。"
         }
@@ -981,8 +981,8 @@
     ],
     "factionRelationships": [
       {
-        "fromFactionId": "liuchao.faction.baihu",
-        "toFactionId": "liuchao.faction.xingyue",
+        "fromFactionId": "liuchao.faction.bai_hu_shang_guan",
+        "toFactionId": "liuchao.faction.xing_yue_hu",
         "relation": "友好",
         "score": 41,
         "direction": "bidirectional",
@@ -993,8 +993,8 @@
         ]
       },
       {
-        "fromFactionId": "liuchao.faction.baihu",
-        "toFactionId": "liuchao.faction.guangming",
+        "fromFactionId": "liuchao.faction.bai_hu_shang_guan",
+        "toFactionId": "liuchao.faction.guang_ming_guan_tang",
         "relation": "友好",
         "score": 56,
         "direction": "bidirectional",
@@ -1006,7 +1006,7 @@
       },
       {
         "fromFactionId": "liuchao.faction.biyu",
-        "toFactionId": "liuchao.faction.guangming",
+        "toFactionId": "liuchao.faction.guang_ming_guan_tang",
         "relation": "友好",
         "score": 37,
         "direction": "bidirectional",
@@ -1017,7 +1017,7 @@
         ]
       },
       {
-        "fromFactionId": "liuchao.faction.baihu",
+        "fromFactionId": "liuchao.faction.bai_hu_shang_guan",
         "toFactionId": "liuchao.faction.biyu",
         "relation": "友好",
         "score": 30,
@@ -1030,7 +1030,7 @@
       },
       {
         "fromFactionId": "liuchao.faction.biyu",
-        "toFactionId": "liuchao.faction.xingyue",
+        "toFactionId": "liuchao.faction.xing_yue_hu",
         "relation": "中立",
         "score": 5,
         "direction": "bidirectional",
@@ -1315,7 +1315,7 @@
           "liuchao.character.le_mingzhu"
         ],
         "relatedFactionIds": [
-          "liuchao.faction.baihu"
+          "liuchao.faction.bai_hu_shang_guan"
         ],
         "locationId": "liuchao.location.biyu_village"
       },
@@ -1370,7 +1370,7 @@
           "liuchao.character.le_mingzhu"
         ],
         "relatedFactionIds": [
-          "liuchao.faction.xingyue"
+          "liuchao.faction.xing_yue_hu"
         ],
         "locationId": "liuchao.location.biyu_village"
       },
@@ -1398,8 +1398,8 @@
           "liuchao.character.qi_yuan"
         ],
         "relatedFactionIds": [
-          "liuchao.faction.guiwang",
-          "liuchao.faction.baihu"
+          "liuchao.faction.gui_wang_dong",
+          "liuchao.faction.bai_hu_shang_guan"
         ],
         "locationId": "liuchao.location.biyu_village"
       },
@@ -1428,8 +1428,8 @@
           "liuchao.character.su_li"
         ],
         "relatedFactionIds": [
-          "liuchao.faction.guiwang",
-          "liuchao.faction.baihu"
+          "liuchao.faction.gui_wang_dong",
+          "liuchao.faction.bai_hu_shang_guan"
         ]
       },
       {
@@ -1455,7 +1455,7 @@
           "liuchao.character.su_li"
         ],
         "relatedFactionIds": [
-          "liuchao.faction.guiwang"
+          "liuchao.faction.gui_wang_dong"
         ]
       },
       {
@@ -1485,7 +1485,7 @@
           "liuchao.character.wu_er_lang"
         ],
         "relatedFactionIds": [
-          "liuchao.faction.baihu"
+          "liuchao.faction.bai_hu_shang_guan"
         ],
         "locationId": "liuchao.location.biyu_village"
       },
@@ -1514,8 +1514,8 @@
           "liuchao.character.su_li"
         ],
         "relatedFactionIds": [
-          "liuchao.faction.guiwang",
-          "liuchao.faction.baihu"
+          "liuchao.faction.gui_wang_dong",
+          "liuchao.faction.bai_hu_shang_guan"
         ]
       },
       {
@@ -1541,7 +1541,7 @@
           "liuchao.character.su_li"
         ],
         "relatedFactionIds": [
-          "liuchao.faction.guiwang"
+          "liuchao.faction.gui_wang_dong"
         ]
       }
     ]

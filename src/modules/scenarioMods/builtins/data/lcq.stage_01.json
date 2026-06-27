@@ -149,7 +149,7 @@
         "features": []
       },
       {
-        "id": "lcq.faction.taiyi",
+        "id": "liuchao.faction.tai_yi_zhen_zong",
         "name": "太乙真宗",
         "description": "道门一脉，掌教王哲。",
         "type": "宗门",
@@ -179,10 +179,10 @@
         "features": []
       },
       {
-        "id": "liuchao.faction.xingyue_lake",
+        "id": "liuchao.faction.xing_yue_hu",
         "name": "星月湖",
         "headquartersLocationId": "liuchao.location.jiangzhou",
-        "type": "army",
+        "type": "军队",
         "description": "岳帅旧部组成的军事势力，原为晋国左武军一部分，后独立为程宗扬掌控的势力。",
         "territory": [
           {
@@ -209,10 +209,10 @@
         "features": []
       },
       {
-        "id": "liuchao.faction.heimo_hai",
+        "id": "liuchao.faction.hei_mo_hai",
         "name": "黑魔海",
         "headquartersLocationId": "liuchao.location.nanzhao",
-        "type": "secret_organization",
+        "type": "秘盟",
         "description": "跨国的秘密魔道组织，实力强大。",
         "territory": [
           {
@@ -258,7 +258,7 @@
         "description": "太乙真宗驻地。",
         "type": "城池",
         "continentId": "liuchao.continent.zhongzhou",
-        "factionId": "lcq.faction.taiyi",
+        "factionId": "liuchao.faction.tai_yi_zhen_zong",
         "coordinates": {
           "x": 881,
           "y": 4366
@@ -306,7 +306,7 @@
       {
         "id": "liuchao.character.cheng_zongyang",
         "name": "程宗扬",
-        "description": "穿越者，身怀生死根。",
+        "description": "晴州商贾的外衣下，藏着一个来自现代的魂灵——程宗扬策马踏过星月湖的营地，指尖抚过腰间珊瑚匕首，丹田中‘生死根’如暗潮涌动，嗅到死亡的气息便舔舔嘴唇。赤兔马颠簸，他抛出苹果贿马，被杨玉环踢下楼仍嬉笑爬起，左武军第一军团的战袍上沾满尘土与谜团。",
         "role": "主角",
         "gender": "男",
         "realm": "凡人",
@@ -343,7 +343,7 @@
           "talents": [
             {
               "name": "天命主角",
-              "description": "由角色定位推定的天赋。"
+              "description": "灾难收束为踏脚石，机缘如雨点砸来，他站在风暴眼笑看命运齿轮碾碎所有敌人。"
             },
             {
               "name": "生死根",
@@ -373,7 +373,7 @@
       {
         "id": "lcq.character.duan_qiang",
         "name": "段强",
-        "description": "程宗扬的好友，穿越爱好者，被半兽人射杀。",
+        "description": "段强，那个痴迷穿越的魁梧汉子，粗壮手臂胜过常人腰身，虬屈长发披散如兽鬃，颈挂野兽下颌骨，额隆面狞——却在半兽人的箭雨里轰然倒下，成为程宗扬记忆里一道永不愈合的伤疤。",
         "role": "已故",
         "gender": "男",
         "realm": "凡人",
@@ -403,21 +403,22 @@
           "spiritRoot": {
             "name": "冰灵根",
             "tier": "黄品",
-            "description": "依角色定位由剧本正典赋予。"
+            "description": "寒冰凝霜封天地，冷冽彻骨，修炼者若雪域冰峰，主冻结与净化之能。"
           },
           "talents": [
             {
               "name": "老实人",
-              "description": "由角色定位推定的天赋。"
+              "description": "木讷面孔下藏着万年算计，他的拳头总在敌人以为得逞时，从最朴素角度砸穿所有阴谋。"
             }
-          ]
+          ],
+          "appearance": "高大武士，粗壮手臂比正常人腰身还粗，虬屈长发从脑后披散，颈戴野兽下颌骨，额头高高隆起，凶狞面孔如嗜血雄狮。"
         }
       },
       {
         "id": "liuchao.character.ning_yu",
         "name": "凝羽",
         "role": "商队成员",
-        "description": "商队成员",
+        "description": "凝羽立于白湖商馆檐下，雪肤映月，高挑身影裹着侍卫长的冷峻，偏偏颊上异样红晕出卖了药物的控制；穹羽族的血统让她双腿修长如白鹤，苏妲己的冰蛊却如毒藤缠绕，乳尖惨淡地挺在乌亮发丝间。",
         "profile": {
           "appearance": "雪白肌肤，脸颊常泛异样红晕；高挑丰满身材，双腿修长光洁；圆润坚挺的双乳，乳头与乳晕小巧红润；乌亮发丝；肩头有淡红月牙状痕迹",
           "personality": [
@@ -429,7 +430,7 @@
           "talents": [
             {
               "name": "剑骨天成",
-              "description": "由角色定位推定的天赋。"
+              "description": "脊梁是剑胚，血管淌剑意，他呼吸间骨骼铮鸣，随手一挥便切开空间如斩蚯蚓。"
             },
             {
               "name": "月光盾",
@@ -465,7 +466,7 @@
         "id": "lcq.character.yue_shuang",
         "name": "月霜",
         "role": "雪隼佣兵团副队长、岳帅遗女",
-        "description": "雪隼佣兵团副队长、岳帅遗女",
+        "description": "月霜，雪隼佣兵团副队长，岳帅遗孤——她雪肤花貌立于寒风中，眉眼清晰如画，高挑身段曲线饱满，却难掩体内寒毒肆虐；王哲的弟子，左武军的利刃，乳尖小巧红润如未绽的梅。",
         "profile": {
           "appearance": "雪肤花貌，玉脸通红，眉眼清晰如画，身材高挑，身体曲线饱满。乳房圆润饱满但不如小香瓜硕大，乳头小巧红润，肌肤洁白如玉，臀肉圆润有曲线，肌理细腻。常戴墨镜或面罩。",
           "personality": [
@@ -490,12 +491,12 @@
           "spiritRoot": {
             "name": "火灵根",
             "tier": "地品",
-            "description": "依角色定位由剧本正典赋予。"
+            "description": "赤焰翻涌如龙，焚尽八荒，修炼者若烈阳骄阳，主狂暴与毁灭之道。"
           },
           "talents": [
             {
               "name": "剑骨天成",
-              "description": "由角色定位推定的天赋。"
+              "description": "脊梁是剑胚，血管淌剑意，他呼吸间骨骼铮鸣，随手一挥便切开空间如斩蚯蚓。"
             }
           ],
           "notes": [
@@ -512,7 +513,7 @@
         "id": "liuchao.character.su_daji",
         "name": "苏妲己",
         "role": "敌对方/妖族",
-        "description": "敌对方/妖族",
+        "description": "苏妲己斜倚白湖商馆的锦绣榻，瓜子脸白滑如玉，妖媚眼波流转，纤软腰肢扭动间，丰挺双乳与肥滑臀部勾勒出致命弧度——她以冰蛊织网，笼住程宗扬的咽喉，笑声如碎玉穿心。",
         "profile": {
           "appearance": "瓜子脸，白滑如玉，体态妖媚，眉眼间有种蛊惑人心的魅艳。身材高挑丰满，腰肢纤软，双乳丰挺饱满，臀部肥滑圆翘，与纤细腰身形成强烈反差。肌肤羊脂般晶莹白腻，通体无瑕。长发四散飞舞。常着红裙，艳态妖媚，气质蛊惑。",
           "personality": [
@@ -544,7 +545,7 @@
           "talents": [
             {
               "name": "多宝童子",
-              "description": "由角色定位推定的天赋。"
+              "description": "袖口是秘境，指尖藏乾坤，他咧嘴一笑便从七窍飞出法宝雨，砸得敌人抱头鼠窜。"
             },
             {
               "name": "冰蛊",
@@ -559,7 +560,7 @@
         "id": "liuchao.character.lin_cai_quan",
         "name": "蔺采泉",
         "role": "教御",
-        "description": "教御",
+        "description": "蔺采泉——教御之职如暗影中的戒尺，无人知晓他的真容与来历，只道他目光落处，必有血光。",
         "profile": {
           "attributes": {
             "rootBone": 7,
@@ -572,12 +573,12 @@
           "spiritRoot": {
             "name": "雷灵根",
             "tier": "地品",
-            "description": "依角色定位由剧本正典赋予。"
+            "description": "天雷炸响破云霄，速度无双，修炼者似电光火石，主攻杀与雷霆之势。"
           },
           "talents": [
             {
               "name": "剑骨天成",
-              "description": "由角色定位推定的天赋。"
+              "description": "脊梁是剑胚，血管淌剑意，他呼吸间骨骼铮鸣，随手一挥便切开空间如斩蚯蚓。"
             }
           ]
         },
@@ -587,7 +588,7 @@
         "id": "lcq.character.wang_zhe",
         "name": "王哲",
         "role": "左武卫大将军/太乙真宗掌教",
-        "description": "左武卫大将军/太乙真宗掌教",
+        "description": "王哲，左武卫大将军，太乙真宗掌教——他气度不凡的苍老身影立在城头，衣袂鼓荡，丹田中灵气如沸水翻腾，即将自爆的刹那，眼眸里映着千军万马的灰烬。",
         "profile": {
           "appearance": "气度不凡的老将",
           "personality": [
@@ -612,12 +613,12 @@
           "spiritRoot": {
             "name": "火灵根",
             "tier": "地品",
-            "description": "依角色定位由剧本正典赋予。"
+            "description": "赤焰翻涌如龙，焚尽八荒，修炼者若烈阳骄阳，主狂暴与毁灭之道。"
           },
           "talents": [
             {
               "name": "剑骨天成",
-              "description": "由角色定位推定的天赋。"
+              "description": "脊梁是剑胚，血管淌剑意，他呼吸间骨骼铮鸣，随手一挥便切开空间如斩蚯蚓。"
             }
           ]
         },
@@ -631,7 +632,7 @@
         "id": "lcq.character.han_geng",
         "name": "韩庚",
         "role": "天武营主将",
-        "description": "天武营主将",
+        "description": "韩庚，天武营主将，王哲最锐的剑——他面容冷峻，剑眉压眸，魁梧身材裹在布衣或黑色皮甲里，军伍气质如刀锋淬冰，却注定倒在下一场战役的血泊中。",
         "skillIds": [
           "lcq.skill.np001"
         ],
@@ -647,14 +648,15 @@
           "spiritRoot": {
             "name": "火灵根",
             "tier": "地品",
-            "description": "依角色定位由剧本正典赋予。"
+            "description": "赤焰翻涌如龙，焚尽八荒，修炼者若烈阳骄阳，主狂暴与毁灭之道。"
           },
           "talents": [
             {
               "name": "体修奇才",
-              "description": "由角色定位推定的天赋。"
+              "description": "肉身是法器，筋骨刻阵纹，他怒吼时肌肉隆起如山脉隆起，一拳轰碎天穹的锁链。"
             }
-          ]
+          ],
+          "appearance": "面容冷峻，剑眉，身材高大魁梧，身着布衣或黑色皮甲，具有军伍气质。"
         },
         "realm": "练气"
       },
@@ -662,7 +664,7 @@
         "id": "lcq.character.np001",
         "name": "商乐轩",
         "role": "教御",
-        "description": "教御",
+        "description": "商乐轩——教御袍下藏着沉默的法则，姓名如浮尘，只在生死簿上留一抹淡痕。",
         "profile": {
           "attributes": {
             "rootBone": 6,
@@ -675,12 +677,12 @@
           "spiritRoot": {
             "name": "冰灵根",
             "tier": "地品",
-            "description": "依角色定位由剧本正典赋予。"
+            "description": "寒冰凝霜封天地，冷冽彻骨，修炼者若雪域冰峰，主冻结与净化之能。"
           },
           "talents": [
             {
               "name": "剑骨天成",
-              "description": "由角色定位推定的天赋。"
+              "description": "脊梁是剑胚，血管淌剑意，他呼吸间骨骼铮鸣，随手一挥便切开空间如斩蚯蚓。"
             }
           ]
         },
@@ -965,7 +967,7 @@
           "lcq.character.yue_shuang"
         ],
         "relatedFactionIds": [
-          "lcq.faction.taiyi"
+          "liuchao.faction.tai_yi_zhen_zong"
         ],
         "locationId": "lcq.location.grassland"
       },
@@ -993,7 +995,7 @@
         ],
         "relatedFactionIds": [
           "lcq.faction.left_army",
-          "lcq.faction.taiyi"
+          "liuchao.faction.tai_yi_zhen_zong"
         ]
       },
       {

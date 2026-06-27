@@ -64,7 +64,7 @@
   "canon": {
     "factions": [
       {
-        "id": "liuchao.faction.baihu_shang_guan",
+        "id": "liuchao.faction.bai_hu_shang_guan",
         "name": "白湖商馆",
         "description": "五原城最大的商馆，主营奴隶贸易和青楼产业，主人苏妲己。",
         "type": "商馆",
@@ -94,7 +94,7 @@
         "features": []
       },
       {
-        "id": "liuchao.faction.taiyi_zhen_zong",
+        "id": "liuchao.faction.tai_yi_zhen_zong",
         "name": "太乙真宗",
         "description": "六朝第一教派，掌教王哲已死，教内教御争夺掌教之位。",
         "type": "宗门",
@@ -124,10 +124,10 @@
         "features": []
       },
       {
-        "id": "liuchao.faction.guangming_guantang",
+        "id": "liuchao.faction.guang_ming_guan_tang",
         "name": "光明观堂",
         "headquartersLocationId": "liuchao.location.mingzhou",
-        "type": "sect",
+        "type": "宗门",
         "description": "道门观堂，在南荒和唐国长安均有据点。",
         "territory": [
           {
@@ -161,7 +161,7 @@
         "description": "五原城白湖商馆主楼，苏妲己的住所。",
         "type": "城池",
         "continentId": "liuchao.continent.zhongzhou",
-        "factionId": "liuchao.faction.baihu_shang_guan",
+        "factionId": "liuchao.faction.bai_hu_shang_guan",
         "coordinates": {
           "x": 881,
           "y": 4366
@@ -174,7 +174,7 @@
         "description": "白湖商馆偏院柴房，程宗扬被安排在此居住。",
         "type": "城池",
         "continentId": "liuchao.continent.zhongzhou",
-        "factionId": "liuchao.faction.baihu_shang_guan",
+        "factionId": "liuchao.faction.bai_hu_shang_guan",
         "coordinates": {
           "x": 881,
           "y": 4366
@@ -187,7 +187,7 @@
         "description": "白湖商馆废弃假山下的岩洞，凝羽药物后遗时在此自慰。",
         "type": "城池",
         "continentId": "liuchao.continent.zhongzhou",
-        "factionId": "liuchao.faction.baihu_shang_guan",
+        "factionId": "liuchao.faction.bai_hu_shang_guan",
         "coordinates": {
           "x": 881,
           "y": 4366
@@ -200,7 +200,7 @@
         "description": "太乙真宗宗门所在地，位于中州龙脉之上。",
         "type": "城池",
         "continentId": "liuchao.continent.zhongzhou",
-        "factionId": "liuchao.faction.taiyi_zhen_zong",
+        "factionId": "liuchao.faction.tai_yi_zhen_zong",
         "coordinates": {
           "x": 881,
           "y": 4366
@@ -236,13 +236,13 @@
       {
         "id": "liuchao.character.cheng_zongyang",
         "name": "程宗扬",
-        "description": "从现代世界穿越至六朝的年轻人，被白湖商馆烙上奴隶印记，拥有生死根异能。",
+        "description": "晴州商贾的外衣下，藏着一个来自现代的魂灵——程宗扬策马踏过星月湖的营地，指尖抚过腰间珊瑚匕首，丹田中‘生死根’如暗潮涌动，嗅到死亡的气息便舔舔嘴唇。赤兔马颠簸，他抛出苹果贿马，被杨玉环踢下楼仍嬉笑爬起，左武军第一军团的战袍上沾满尘土与谜团。",
         "role": "主角",
         "gender": "男",
         "realm": "凡人",
         "affiliations": [
           {
-            "factionId": "liuchao.faction.baihu_shang_guan",
+            "factionId": "liuchao.faction.bai_hu_shang_guan",
             "category": "organization",
             "role": "奴隶"
           }
@@ -277,7 +277,7 @@
           "talents": [
             {
               "name": "天命主角",
-              "description": "由角色定位推定的天赋。"
+              "description": "灾难收束为踏脚石，机缘如雨点砸来，他站在风暴眼笑看命运齿轮碾碎所有敌人。"
             },
             {
               "name": "生死根",
@@ -306,13 +306,13 @@
       {
         "id": "liuchao.character.su_daji",
         "name": "苏妲己",
-        "description": "白湖商馆主人，妖媚残忍，以冰蛊控制程宗扬。",
+        "description": "苏妲己斜倚白湖商馆的锦绣榻，瓜子脸白滑如玉，妖媚眼波流转，纤软腰肢扭动间，丰挺双乳与肥滑臀部勾勒出致命弧度——她以冰蛊织网，笼住程宗扬的咽喉，笑声如碎玉穿心。",
         "role": "关键反派",
         "gender": "女",
         "realm": "练气",
         "affiliations": [
           {
-            "factionId": "liuchao.faction.baihu_shang_guan",
+            "factionId": "liuchao.faction.bai_hu_shang_guan",
             "category": "organization",
             "role": "主人"
           }
@@ -351,7 +351,7 @@
           "talents": [
             {
               "name": "多宝童子",
-              "description": "由角色定位推定的天赋。"
+              "description": "袖口是秘境，指尖藏乾坤，他咧嘴一笑便从七窍飞出法宝雨，砸得敌人抱头鼠窜。"
             },
             {
               "name": "冰蛊",
@@ -363,13 +363,13 @@
       {
         "id": "liuchao.character.ning_yu",
         "name": "凝羽",
-        "description": "白湖商馆侍卫长，穹羽族人，被苏妲己控制，因药物成瘾。",
+        "description": "凝羽立于白湖商馆檐下，雪肤映月，高挑身影裹着侍卫长的冷峻，偏偏颊上异样红晕出卖了药物的控制；穹羽族的血统让她双腿修长如白鹤，苏妲己的冰蛊却如毒藤缠绕，乳尖惨淡地挺在乌亮发丝间。",
         "role": "侍卫长",
         "gender": "女",
         "realm": "练气",
         "affiliations": [
           {
-            "factionId": "liuchao.faction.baihu_shang_guan",
+            "factionId": "liuchao.faction.bai_hu_shang_guan",
             "category": "organization",
             "role": "侍卫长"
           }
@@ -396,7 +396,7 @@
           "talents": [
             {
               "name": "剑骨天成",
-              "description": "由角色定位推定的天赋。"
+              "description": "脊梁是剑胚，血管淌剑意，他呼吸间骨骼铮鸣，随手一挥便切开空间如斩蚯蚓。"
             },
             {
               "name": "月光盾",
@@ -424,7 +424,7 @@
       {
         "id": "liuchao.character.a_jiman_bana",
         "name": "阿姬曼·芭娜",
-        "description": "天竺舞姬，被程宗扬赎买后释放，已离开五原城。",
+        "description": "阿姬曼·芭娜，天竺舞姬，娇小如幼女，头顶只及程宗扬下颏，窄肩玉坠般光滑，纤美腰肢如蛇滑动——被赎买释放后，她如一片落叶飘离五原城，只留空气中一丝异域香痕。",
         "role": "前女奴",
         "gender": "女",
         "realm": "凡人",
@@ -447,12 +447,12 @@
           "spiritRoot": {
             "name": "水灵根",
             "tier": "黄品",
-            "description": "依角色定位由剧本正典赋予。"
+            "description": "碧波流转似镜，化柔为刚，修炼者如深海暗流，善于滋养与封锁万物。"
           },
           "talents": [
             {
               "name": "顶级魅力",
-              "description": "由角色定位推定的天赋。"
+              "description": "气息如蜜糖诱捕心神，他走过的地方，连石头都想献上膝盖，跪求成为脚下砖。"
             }
           ],
           "appearance": "阿姬曼身材娇小如幼女，头顶只到程宗扬下颏，肩膀窄窄的，背脊像一枚打磨光滑的玉坠，纤美的腰身曲线细滑动人，臀部又圆又白嫩，臀形精致，肤色晶莹。她乳房丰满异常、浑圆坚挺，与年龄不相衬的圆硕。她有一双美丽的眼睛，眼角有泪痕时也带着笑意，唇角弯弯翘起，碧蓝的眼眸中浮出一层水雾。她穿着红裙、鲜红胸衣，有时用斗篷裹住全身，白皙的颈子、雪滑的玉体。"
@@ -462,7 +462,7 @@
         "id": "liuchao.character.yun_cang_feng",
         "name": "云苍峰",
         "role": "商人/盟友",
-        "description": "商人/盟友",
+        "description": "云家三爷的腰间玉佩在阴晴不定的面容下轻轻晃动，他掌握着足以掀翻整个云氏商会的秘密，却在笑与怒之间让人猜不透真正的筹码。",
         "profile": {
           "attributes": {
             "rootBone": 6,
@@ -475,12 +475,12 @@
           "spiritRoot": {
             "name": "火灵根",
             "tier": "地品",
-            "description": "依角色定位由剧本正典赋予。"
+            "description": "赤焰翻涌如龙，焚尽八荒，修炼者若烈阳骄阳，主狂暴与毁灭之道。"
           },
           "talents": [
             {
               "name": "神识过人",
-              "description": "由角色定位推定的天赋。"
+              "description": "意识铺开如蛛网，方圆千里每粒尘埃的震颤都逃不过，敌人抬脚就被预判三百年。"
             }
           ],
           "appearance": "文士打扮，气度儒雅",
@@ -495,7 +495,7 @@
         "id": "liuchao.character.wu_er_lang",
         "name": "武二郎",
         "role": "商队成员",
-        "description": "商队成员",
+        "description": "白湖商馆最不像商人的护卫——古铜色的虬结肌肉上印着黑黄虎斑，一只大黑眼圈里的横眼扫过货物时，连瑶池宗的女修都得低头唤一声师兄。",
         "profile": {
           "appearance": "高大威猛，虎背熊腰；面带凶悍之气",
           "personality": [
@@ -511,7 +511,7 @@
           "talents": [
             {
               "name": "剑骨天成",
-              "description": "由角色定位推定的天赋。"
+              "description": "脊梁是剑胚，血管淌剑意，他呼吸间骨骼铮鸣，随手一挥便切开空间如斩蚯蚓。"
             }
           ],
           "attributes": {
@@ -525,7 +525,7 @@
           "spiritRoot": {
             "name": "火灵根",
             "tier": "玄品",
-            "description": "依角色定位由剧本正典赋予。"
+            "description": "赤焰翻涌如龙，焚尽八荒，修炼者若烈阳骄阳，主狂暴与毁灭之道。"
           }
         },
         "skillIds": [
@@ -539,7 +539,7 @@
         "id": "liuchao.character.xie_yi",
         "name": "谢艺",
         "role": "星月湖卫士",
-        "description": "星月湖卫士",
+        "description": "风尘仆仆的朴素身影挡在小紫身前时，六级修为的星月湖高手周身腾起灼热真气，那救下少女的代价是肋骨尽碎、丹田濒裂。",
         "profile": {
           "attributes": {
             "rootBone": 8,
@@ -552,12 +552,12 @@
           "spiritRoot": {
             "name": "火灵根",
             "tier": "地品",
-            "description": "依角色定位由剧本正典赋予。"
+            "description": "赤焰翻涌如龙，焚尽八荒，修炼者若烈阳骄阳，主狂暴与毁灭之道。"
           },
           "talents": [
             {
               "name": "天生神力",
-              "description": "由角色定位推定的天赋。"
+              "description": "骨骼是精铁浇筑，肌肉藏龙象之力，他捏碎空间如捏鸡蛋，真仙看了都缩脖子。"
             }
           ],
           "appearance": "风尘仆仆，朴素装扮",
@@ -877,7 +877,7 @@
           "liuchao.character.ning_yu"
         ],
         "relatedFactionIds": [
-          "liuchao.faction.baihu_shang_guan"
+          "liuchao.faction.bai_hu_shang_guan"
         ],
         "locationId": "liuchao.location.baihu_shang_guan"
       },
@@ -905,7 +905,7 @@
           "liuchao.character.ning_yu"
         ],
         "relatedFactionIds": [
-          "liuchao.faction.baihu_shang_guan"
+          "liuchao.faction.bai_hu_shang_guan"
         ],
         "locationId": "liuchao.location.baihu_shang_guan"
       },
@@ -933,7 +933,7 @@
           "liuchao.character.ning_yu"
         ],
         "relatedFactionIds": [
-          "liuchao.faction.baihu_shang_guan"
+          "liuchao.faction.bai_hu_shang_guan"
         ],
         "locationId": "liuchao.location.baihu_shang_guan"
       },
@@ -961,7 +961,7 @@
           "liuchao.character.ning_yu"
         ],
         "relatedFactionIds": [
-          "liuchao.faction.baihu_shang_guan"
+          "liuchao.faction.bai_hu_shang_guan"
         ],
         "locationId": "liuchao.location.wuyuan"
       },
@@ -989,7 +989,7 @@
           "liuchao.character.ning_yu"
         ],
         "relatedFactionIds": [
-          "liuchao.faction.baihu_shang_guan"
+          "liuchao.faction.bai_hu_shang_guan"
         ],
         "locationId": "liuchao.location.baihu_shang_guan"
       },
@@ -1017,7 +1017,7 @@
           "liuchao.character.wu_er_lang"
         ],
         "relatedFactionIds": [
-          "liuchao.faction.baihu_shang_guan"
+          "liuchao.faction.bai_hu_shang_guan"
         ],
         "locationId": "liuchao.location.wuyuan"
       },
@@ -1044,7 +1044,7 @@
           "liuchao.character.ning_yu"
         ],
         "relatedFactionIds": [
-          "liuchao.faction.baihu_shang_guan"
+          "liuchao.faction.bai_hu_shang_guan"
         ]
       },
       {
@@ -1071,7 +1071,7 @@
           "liuchao.character.wu_er_lang"
         ],
         "relatedFactionIds": [
-          "liuchao.faction.baihu_shang_guan"
+          "liuchao.faction.bai_hu_shang_guan"
         ],
         "locationId": "liuchao.location.wuyuan"
       },
@@ -1098,7 +1098,7 @@
           "liuchao.character.ning_yu"
         ],
         "relatedFactionIds": [
-          "liuchao.faction.baihu_shang_guan"
+          "liuchao.faction.bai_hu_shang_guan"
         ]
       }
     ]

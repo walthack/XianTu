@@ -5,7 +5,8 @@ import manifest from './manifest.json';
 
 const context = require.context('./data', false, /\.json$/);
 
-export const BUILTIN_VERSION: string = manifest.version;
+// 版本 = 内容哈希 + 播种逻辑版本(seed schema)。改播种逻辑/需强制全库对账时 bump 后缀。
+export const BUILTIN_VERSION: string = `${manifest.version}.s2`;
 
 export const BUILTIN_SCENARIO_MODS: ScenarioMod[] = context
   .keys()

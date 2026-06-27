@@ -446,6 +446,8 @@ function validateCharacterProfile(value: unknown, path: string, add: AddIssue): 
   optionalString(value.race, `${path}.race`, add);
   optionalString(value.origin, `${path}.origin`, add);
   validateStringArray(value.notes, `${path}.notes`, add);
+  optionalString(value.avatar, `${path}.avatar`, add);
+  optionalString(value.portrait, `${path}.portrait`, add);
   if (value.spiritRoot !== undefined) {
     if (!isRecord(value.spiritRoot)) {
       add(`${path}.spiritRoot`, 'invalid_type', `${path}.spiritRoot must be an object.`);

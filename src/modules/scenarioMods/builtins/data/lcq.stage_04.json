@@ -270,10 +270,10 @@
         "features": []
       },
       {
-        "id": "liuchao.faction.tang_court",
+        "id": "liuchao.faction.tang_guo_chao_ting",
         "name": "唐国朝廷",
         "headquartersLocationId": "liuchao.location.changan",
-        "type": "government",
+        "type": "官府",
         "description": "六朝之一唐国的朝廷，都城在长安。",
         "territory": [
           {
@@ -456,7 +456,7 @@
       {
         "id": "liuchao.character.cheng_zongyang",
         "name": "程宗扬",
-        "description": "五原城商人，现代穿越者，身怀生死根。",
+        "description": "晴州商贾的外衣下，藏着一个来自现代的魂灵——程宗扬策马踏过星月湖的营地，指尖抚过腰间珊瑚匕首，丹田中‘生死根’如暗潮涌动，嗅到死亡的气息便舔舔嘴唇。赤兔马颠簸，他抛出苹果贿马，被杨玉环踢下楼仍嬉笑爬起，左武军第一军团的战袍上沾满尘土与谜团。",
         "role": "主角",
         "gender": "男",
         "realm": "筑基",
@@ -498,7 +498,7 @@
           "talents": [
             {
               "name": "天命主角",
-              "description": "由角色定位推定的天赋。"
+              "description": "灾难收束为踏脚石，机缘如雨点砸来，他站在风暴眼笑看命运齿轮碾碎所有敌人。"
             },
             {
               "name": "生死根",
@@ -527,7 +527,7 @@
       {
         "id": "liuchao.character.ning_yu",
         "name": "凝羽",
-        "description": "白湖商馆护卫，冷艳女战士，毒瘾与内伤并发。",
+        "description": "凝羽立于白湖商馆檐下，雪肤映月，高挑身影裹着侍卫长的冷峻，偏偏颊上异样红晕出卖了药物的控制；穹羽族的血统让她双腿修长如白鹤，苏妲己的冰蛊却如毒藤缠绕，乳尖惨淡地挺在乌亮发丝间。",
         "role": "护卫",
         "gender": "女",
         "realm": "筑基",
@@ -558,7 +558,7 @@
           "talents": [
             {
               "name": "剑骨天成",
-              "description": "由角色定位推定的天赋。"
+              "description": "脊梁是剑胚，血管淌剑意，他呼吸间骨骼铮鸣，随手一挥便切开空间如斩蚯蚓。"
             },
             {
               "name": "月光盾",
@@ -586,7 +586,7 @@
       {
         "id": "liuchao.character.wu_er_lang",
         "name": "武二郎",
-        "description": "白湖商馆雇佣的猛士，五虎断门刀传人。",
+        "description": "白湖商馆最不像商人的护卫——古铜色的虬结肌肉上印着黑黄虎斑，一只大黑眼圈里的横眼扫过货物时，连瑶池宗的女修都得低头唤一声师兄。",
         "role": "护卫",
         "gender": "男",
         "realm": "金丹",
@@ -621,7 +621,7 @@
           "talents": [
             {
               "name": "剑骨天成",
-              "description": "由角色定位推定的天赋。"
+              "description": "脊梁是剑胚，血管淌剑意，他呼吸间骨骼铮鸣，随手一挥便切开空间如斩蚯蚓。"
             }
           ],
           "attributes": {
@@ -635,14 +635,14 @@
           "spiritRoot": {
             "name": "火灵根",
             "tier": "玄品",
-            "description": "依角色定位由剧本正典赋予。"
+            "description": "赤焰翻涌如龙，焚尽八荒，修炼者若烈阳骄阳，主狂暴与毁灭之道。"
           }
         }
       },
       {
         "id": "liuchao.character.su_li",
         "name": "苏荔",
-        "description": "花苗族长，美艳女战士，与武二郎有私情。",
+        "description": "花苗女族长踩过南荒毒瘴时，高挑丰腴的身姿像一柄裹着蜜糖的弯刀，她唇角的嫣红与武二郎颈间的虎斑在夜风里纠缠成一段不必明说的私情。",
         "role": "族长",
         "gender": "女",
         "realm": "筑基",
@@ -676,7 +676,7 @@
           "talents": [
             {
               "name": "老实人",
-              "description": "由角色定位推定的天赋。"
+              "description": "木讷面孔下藏着万年算计，他的拳头总在敌人以为得逞时，从最朴素角度砸穿所有阴谋。"
             },
             {
               "name": "蝎尾变身",
@@ -689,7 +689,7 @@
       {
         "id": "liuchao.character.yun_cang_feng",
         "name": "云苍峰",
-        "description": "云氏商会执事，老练商人。",
+        "description": "云家三爷的腰间玉佩在阴晴不定的面容下轻轻晃动，他掌握着足以掀翻整个云氏商会的秘密，却在笑与怒之间让人猜不透真正的筹码。",
         "role": "执事",
         "gender": "男",
         "realm": "凡人",
@@ -718,12 +718,12 @@
           "spiritRoot": {
             "name": "火灵根",
             "tier": "地品",
-            "description": "依角色定位由剧本正典赋予。"
+            "description": "赤焰翻涌如龙，焚尽八荒，修炼者若烈阳骄阳，主狂暴与毁灭之道。"
           },
           "talents": [
             {
               "name": "神识过人",
-              "description": "由角色定位推定的天赋。"
+              "description": "意识铺开如蛛网，方圆千里每粒尘埃的震颤都逃不过，敌人抬脚就被预判三百年。"
             }
           ],
           "appearance": "文士打扮，气度儒雅",
@@ -735,7 +735,7 @@
       {
         "id": "liuchao.character.xie_yi",
         "name": "谢艺",
-        "description": "神秘行者，精通刀法与卜筮。",
+        "description": "风尘仆仆的朴素身影挡在小紫身前时，六级修为的星月湖高手周身腾起灼热真气，那救下少女的代价是肋骨尽碎、丹田濒裂。",
         "role": "行者",
         "gender": "男",
         "realm": "金丹",
@@ -758,12 +758,12 @@
           "spiritRoot": {
             "name": "火灵根",
             "tier": "地品",
-            "description": "依角色定位由剧本正典赋予。"
+            "description": "赤焰翻涌如龙，焚尽八荒，修炼者若烈阳骄阳，主狂暴与毁灭之道。"
           },
           "talents": [
             {
               "name": "天生神力",
-              "description": "由角色定位推定的天赋。"
+              "description": "骨骼是精铁浇筑，肌肉藏龙象之力，他捏碎空间如捏鸡蛋，真仙看了都缩脖子。"
             }
           ],
           "appearance": "风尘仆仆，朴素装扮",
@@ -775,7 +775,7 @@
       {
         "id": "liuchao.character.le_mingzhu",
         "name": "乐明珠",
-        "description": "光明观堂医者，假扮花苗新娘。",
+        "description": "光明观堂的小医者披上花苗嫁衣时，婴儿肥的圆脸还带着烂漫笑意，但那身洁白如牛乳的肌肤下，指尖已捏住三根淬毒银针。",
         "role": "医者",
         "gender": "女",
         "realm": "筑基",
@@ -804,12 +804,12 @@
           "spiritRoot": {
             "name": "火灵根",
             "tier": "地品",
-            "description": "依角色定位由剧本正典赋予。"
+            "description": "赤焰翻涌如龙，焚尽八荒，修炼者若烈阳骄阳，主狂暴与毁灭之道。"
           },
           "talents": [
             {
               "name": "丹道圣手",
-              "description": "由角色定位推定的天赋。"
+              "description": "指尖缠绕着五行规则，他随便抓把杂草都能炼成仙丹，丹炉里的火焰比太阳还刺眼。"
             }
           ],
           "notes": [
@@ -821,7 +821,7 @@
       {
         "id": "liuchao.character.zhu_ba_ba",
         "name": "朱八八",
-        "description": "南荒老向导，滑头但识路。",
+        "description": "南荒的老向导蹲在岔路口，眯眼望向三条几乎相同的瘴气小道，嘴角的狡黠笑意比地图上的标记更值得信赖。",
         "role": "向导",
         "gender": "男",
         "realm": "凡人",
@@ -842,12 +842,12 @@
           "spiritRoot": {
             "name": "水灵根",
             "tier": "黄品",
-            "description": "依角色定位由剧本正典赋予。"
+            "description": "碧波流转似镜，化柔为刚，修炼者如深海暗流，善于滋养与封锁万物。"
           },
           "talents": [
             {
               "name": "一诺千金",
-              "description": "由角色定位推定的天赋。"
+              "description": "话语落地便生根发芽，违背者会被规则反噬，他的承诺比天道契约还沉重百倍。"
             }
           ]
         }
@@ -855,7 +855,7 @@
       {
         "id": "liuchao.character.yi_hu",
         "name": "易虎",
-        "description": "云氏商会护卫，已死于山洪。",
+        "description": "云氏商会的护卫队长在北府兵时便以虬髯铁脊闻名，直到山洪吞没他最后一口气——鬼王峒的秘法却将残骸拧成头臂扭曲的怪物，胸膛里还闷着生前那句‘护镖’。",
         "role": "护卫",
         "gender": "男",
         "realm": "凡人",
@@ -882,14 +882,15 @@
           "spiritRoot": {
             "name": "火灵根",
             "tier": "玄品",
-            "description": "依角色定位由剧本正典赋予。"
+            "description": "赤焰翻涌如龙，焚尽八荒，修炼者若烈阳骄阳，主狂暴与毁灭之道。"
           },
           "talents": [
             {
               "name": "天生神力",
-              "description": "由角色定位推定的天赋。"
+              "description": "骨骼是精铁浇筑，肌肉藏龙象之力，他捏碎空间如捏鸡蛋，真仙看了都缩脖子。"
             }
-          ]
+          ],
+          "appearance": "满脸虬髯的北府兵军官，体格强健，腰身有力；后来在鬼王峒秘法下变成身体畸形的怪物，头颅和四肢变形，胸膛凹陷。"
         }
       }
     ],

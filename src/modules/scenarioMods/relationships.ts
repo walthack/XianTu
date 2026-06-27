@@ -37,6 +37,23 @@ function itemType(type: ScenarioModItem['type']): '装备' | '丹药' | '材料'
   return '其他';
 }
 
+// 把剧本里五花八门的品级字符串映射到原版品质系统 { quality:神仙天地玄黄凡, grade:0-10 }，
+// 兼容原生物品/功法 UI（按 quality 取颜色稀有度、按 grade 排序）。
+const QUALITY_MAP: Record<string, { quality: string; grade: number }> = {
+  神器: { quality: '神', grade: 10 }, 神级: { quality: '神', grade: 10 }, 神品: { quality: '神', grade: 9 }, 神器碎片: { quality: '神', grade: 7 },
+  仙品: { quality: '仙', grade: 9 }, 唯一: { quality: '仙', grade: 9 }, 极品: { quality: '仙', grade: 8 }, 法宝: { quality: '仙', grade: 8 }, 灵宝: { quality: '仙', grade: 8 },
+  天品: { quality: '天', grade: 7 }, 天级: { quality: '天', grade: 7 }, 上品: { quality: '天', grade: 6 }, 高阶: { quality: '天', grade: 6 },
+  地品: { quality: '地', grade: 5 }, 地级: { quality: '地', grade: 5 }, 秘法: { quality: '地', grade: 5 },
+  玄品: { quality: '玄', grade: 4 }, 玄级: { quality: '玄', grade: 4 }, 灵品: { quality: '玄', grade: 4 }, 秘术: { quality: '玄', grade: 4 }, 特殊: { quality: '玄', grade: 3 },
+  中品: { quality: '黄', grade: 3 }, 黄品: { quality: '黄', grade: 3 }, 黄级: { quality: '黄', grade: 3 }, 非凡: { quality: '黄', grade: 3 }, 法器: { quality: '黄', grade: 2 }, 精良: { quality: '黄', grade: 2 },
+  下品: { quality: '凡', grade: 1 }, 凡品: { quality: '凡', grade: 0 }, 凡: { quality: '凡', grade: 0 },
+};
+function parseQuality(grade?: string): { quality: string; grade: number } {
+  if (grade && QUALITY_MAP[grade]) return { ...QUALITY_MAP[grade] };
+  for (const q of ['神', '仙', '天', '地', '玄', '黄', '凡']) if (grade?.includes(q)) return { quality: q, grade: 3 };
+  return { quality: '凡', grade: 0 };
+}
+
 function buildNativeCharacterContent(source: ScenarioRelationshipSource, character: ScenarioModCharacter) {
   const skills = source.skills || [];
   const techniques = source.techniques || [];
@@ -60,7 +77,7 @@ function buildNativeCharacterContent(source: ScenarioRelationshipSource, charact
       物品ID: technique.id,
       名称: technique.name,
       类型: '功法',
-      品质: technique.grade || '凡品',
+      品质: parseQuality(technique.grade),
       数量: 1,
       描述: technique.description || '',
       已装备: false,
@@ -77,7 +94,7 @@ function buildNativeCharacterContent(source: ScenarioRelationshipSource, charact
       物品ID: item.id,
       名称: item.name,
       类型: itemType(item.type),
-      品质: item.grade || '凡品',
+      品质: parseQuality(item.grade),
       数量: 1,
       描述: item.description || '',
       已装备: false,
@@ -147,6 +164,8 @@ function createNpcProfile(source: ScenarioRelationshipSource, character: Scenari
     记忆: [...(profile.memories || []), ...(profile.notes || [])],
     当前外貌状态: profile.currentAppearance || '状态正常',
     当前内心想法: profile.currentThought || '依照剧本关系与当前事件行动。',
+    头像: profile.avatar || '',
+    立绘: profile.portrait || '',
     背包: { 灵石: { 下品: 0, 中品: 0, 上品: 0, 极品: 0 }, 物品: nativeContent.items },
     实时关注: true,
   };

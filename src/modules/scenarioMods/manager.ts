@@ -71,7 +71,7 @@ export class ScenarioModManager {
     this.seededPromise = undefined;
   }
 
-  /** 幂等播种内置剧情模板：库里没有则加入(enabled:false)；版本变化则刷新内容并保留启用状态；用户改过的(builtin=false)不动。 */
+  /** 幂等播种内置剧情模板：库里没有则加入(enabled:false)；任何内置版本不是当前版本时，强制用打包内容重建该条(缺则补、旧/损坏则覆盖)，仅保留 enabled 开关。这样旧库加载新 JS 即自愈，无需手动清 IndexedDB。 */
   private async ensureSeeded(): Promise<void> {
     if (!this.builtins.length) return;
     if (!this.seededPromise) this.seededPromise = this.seedBuiltins();
@@ -88,8 +88,9 @@ export class ScenarioModManager {
       if (idx < 0) {
         mods.push({ mod: structuredClone(mod), enabled: false, importedAt: this.now(), builtin: true, builtinVersion: this.builtinVersion });
         changed = true;
-      } else if (mods[idx].builtin && mods[idx].builtinVersion !== this.builtinVersion) {
-        mods[idx] = { ...mods[idx], mod: structuredClone(mod), builtinVersion: this.builtinVersion };
+      } else if (mods[idx].builtinVersion !== this.builtinVersion) {
+        // 版本不一致(含旧版/损坏/曾被非内置占用)→ 强制以打包内容重建，保留启用状态。
+        mods[idx] = { mod: structuredClone(mod), enabled: mods[idx].enabled ?? false, importedAt: mods[idx].importedAt || this.now(), builtin: true, builtinVersion: this.builtinVersion };
         changed = true;
       }
     }

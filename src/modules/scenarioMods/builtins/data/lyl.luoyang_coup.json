@@ -89,7 +89,7 @@
   "canon": {
     "factions": [
       {
-        "id": "lyl.faction.lv_shi",
+        "id": "liuchao.faction.lv_shi_ji_tuan",
         "name": "吕氏集团",
         "description": "以太后吕雉为首的外戚势力，掌控部分禁军。",
         "type": "政治集团",
@@ -179,7 +179,7 @@
         "features": []
       },
       {
-        "id": "lyl.faction.hei_mo_hai",
+        "id": "liuchao.faction.hei_mo_hai",
         "name": "黑魔海",
         "description": "以剑玉姬、西门庆为首的隐秘势力，暗中操纵局势。",
         "type": "教派",
@@ -239,10 +239,10 @@
         "features": []
       },
       {
-        "id": "liuchao.faction.han_court",
+        "id": "liuchao.faction.han_guo_chao_ting",
         "name": "汉国朝廷",
         "headquartersLocationId": "liuchao.location.luoyang",
-        "type": "government",
+        "type": "官府",
         "description": "六朝之一汉国的朝廷，都城在洛都。",
         "territory": [
           {
@@ -289,7 +289,7 @@
         "description": "太后吕雉的居所，政变指挥中心。",
         "type": "城池",
         "continentId": "liuchao.continent.zhongzhou",
-        "factionId": "lyl.faction.lv_shi",
+        "factionId": "liuchao.faction.lv_shi_ji_tuan",
         "coordinates": {
           "x": 6838,
           "y": 3577
@@ -327,7 +327,7 @@
         "description": "黑魔海在洛都的据点，位于城西。",
         "type": "城池",
         "continentId": "liuchao.continent.zhongzhou",
-        "factionId": "lyl.faction.hei_mo_hai",
+        "factionId": "liuchao.faction.hei_mo_hai",
         "coordinates": {
           "x": 6838,
           "y": 3577
@@ -376,7 +376,7 @@
       {
         "id": "liuchao.character.cheng_zongyang",
         "name": "程宗扬",
-        "description": "玩家扮演的正典主角。",
+        "description": "晴州商贾的外衣下，藏着一个来自现代的魂灵——程宗扬策马踏过星月湖的营地，指尖抚过腰间珊瑚匕首，丹田中‘生死根’如暗潮涌动，嗅到死亡的气息便舔舔嘴唇。赤兔马颠簸，他抛出苹果贿马，被杨玉环踢下楼仍嬉笑爬起，左武军第一军团的战袍上沾满尘土与谜团。",
         "role": "主角",
         "gender": "男",
         "locationId": "lyl.location.changqiu_palace",
@@ -476,7 +476,7 @@
           "talents": [
             {
               "name": "天命主角",
-              "description": "由角色定位推定的天赋。"
+              "description": "灾难收束为踏脚石，机缘如雨点砸来，他站在风暴眼笑看命运齿轮碾碎所有敌人。"
             },
             {
               "name": "纸币发行权",
@@ -498,7 +498,7 @@
       {
         "id": "liuchao.character.zhao_feiyan",
         "name": "赵飞燕",
-        "description": "汉国皇后，长秋宫之主，性格柔中带刚。",
+        "description": "前汉皇后赵飞燕，已作程宗扬妾室，胴体成熟美艳、风韵十足，却仍纤柔如少女，眉眼盈盈间盼着与妹妹合德一同被明媒正娶过门。",
         "role": "皇后",
         "gender": "女",
         "realm": "凡人",
@@ -527,12 +527,12 @@
           "spiritRoot": {
             "name": "火灵根",
             "tier": "地品",
-            "description": "依角色定位由剧本正典赋予。"
+            "description": "赤焰翻涌如龙，焚尽八荒，修炼者若烈阳骄阳，主狂暴与毁灭之道。"
           },
           "talents": [
             {
               "name": "剑骨天成",
-              "description": "由角色定位推定的天赋。"
+              "description": "脊梁是剑胚，血管淌剑意，他呼吸间骨骼铮鸣，随手一挥便切开空间如斩蚯蚓。"
             }
           ],
           "appearance": "赵飞燕双十年华，长发挽髻，丝带扎束，明眸皓齿，玉颊雪白，眼波含情，身形纤美婀娜，娇柔轻盈，气质倾国倾城。",
@@ -547,7 +547,7 @@
       {
         "id": "liuchao.character.zhao_he_de",
         "name": "赵合德",
-        "description": "赵飞燕之妹，暂居长秋宫，被程宗扬保护。",
+        "description": "赵合德，赵飞燕之妹，肌肤白腻透红、柔润如玉，丰姿弱骨仿若娇莲初绽，却因吕氏追杀仓皇遁入上清观，殿檐下失了昔日华彩。",
         "role": "皇后之妹",
         "gender": "女",
         "realm": "凡人",
@@ -576,12 +576,12 @@
           "spiritRoot": {
             "name": "雷灵根",
             "tier": "地品",
-            "description": "依角色定位由剧本正典赋予。"
+            "description": "天雷炸响破云霄，速度无双，修炼者似电光火石，主攻杀与雷霆之势。"
           },
           "talents": [
             {
               "name": "顶级魅力",
-              "description": "由角色定位推定的天赋。"
+              "description": "气息如蜜糖诱捕心神，他走过的地方，连石头都想献上膝盖，跪求成为脚下砖。"
             }
           ],
           "appearance": "赵合德是一位绝色丽人，肌肤白腻透红、柔润如玉，丰姿弱骨，犹如一朵娇嫩的莲花。她身材略显丰腴，但充满弹性，洋溢着青春的气息。五官精致，红唇柔润，玉脸常因情绪变化而涨得通红或失去血色。衣着华美，曾见宫装凤钗、印绶，也可穿着水红衫子、翠绿外裙等。气质娇美温婉，有时显得羞赧或惊惧。",
@@ -600,7 +600,7 @@
         "realm": "金丹",
         "affiliations": [
           {
-            "factionId": "lyl.faction.lv_shi",
+            "factionId": "liuchao.faction.lv_shi_ji_tuan",
             "category": "organization",
             "role": "太后"
           }
@@ -628,7 +628,7 @@
           "talents": [
             {
               "name": "顶级魅力",
-              "description": "由角色定位推定的天赋。"
+              "description": "气息如蜜糖诱捕心神，他走过的地方，连石头都想献上膝盖，跪求成为脚下砖。"
             },
             {
               "name": "吕雉的羽翼",
@@ -645,13 +645,13 @@
       {
         "id": "liuchao.character.lv_ji",
         "name": "吕冀",
-        "description": "襄邑侯，吕雉之弟，掌管部分吕氏军队。",
+        "description": "襄邑侯吕冀，肥肉堆满脸庞，一双铜铃般的大眼时常布满血丝、眼珠几乎突出眶来，吕氏旗下军马在他粗鄙狰狞的怒吼中如潮涌出。",
         "role": "襄邑侯",
         "gender": "男",
         "realm": "筑基",
         "affiliations": [
           {
-            "factionId": "lyl.faction.lv_shi",
+            "factionId": "liuchao.faction.lv_shi_ji_tuan",
             "category": "military",
             "role": "将领"
           }
@@ -674,19 +674,20 @@
           "spiritRoot": {
             "name": "虚空灵根",
             "tier": "地品",
-            "description": "依角色定位由剧本正典赋予。"
+            "description": "虚空裂痕吞次元，无踪无影，修炼者如黑洞凝望，主穿梭与湮灭之道。"
           },
           "talents": [
             {
               "name": "顶级魅力",
-              "description": "由角色定位推定的天赋。"
+              "description": "气息如蜜糖诱捕心神，他走过的地方，连石头都想献上膝盖，跪求成为脚下砖。"
             }
           ],
           "personality": [
             "惧内",
             "残暴",
             "野心极大"
-          ]
+          ],
+          "appearance": "脸上有横肉，颈中有肥肉，身材肥胖，眼神凶狞。"
         }
       },
       {
@@ -698,7 +699,7 @@
         "realm": "金丹",
         "affiliations": [
           {
-            "factionId": "lyl.faction.lv_shi",
+            "factionId": "liuchao.faction.lv_shi_ji_tuan",
             "category": "military",
             "role": "校尉"
           }
@@ -719,14 +720,15 @@
           "spiritRoot": {
             "name": "水灵根",
             "tier": "地品",
-            "description": "依角色定位由剧本正典赋予。"
+            "description": "碧波流转似镜，化柔为刚，修炼者如深海暗流，善于滋养与封锁万物。"
           },
           "talents": [
             {
               "name": "神识过人",
-              "description": "由角色定位推定的天赋。"
+              "description": "意识铺开如蛛网，方圆千里每粒尘埃的震颤都逃不过，敌人抬脚就被预判三百年。"
             }
-          ]
+          ],
+          "appearance": "其貌不扬，相貌平常，但笑容温和，目光锋利，给人文弱少年的印象。"
         }
       },
       {
@@ -762,12 +764,12 @@
           "spiritRoot": {
             "name": "风灵根",
             "tier": "地品",
-            "description": "依角色定位由剧本正典赋予。"
+            "description": "清风无影掠千里，飘逸莫测，修炼者如云烟过隙，擅长疾速与无形之袭。"
           },
           "talents": [
             {
               "name": "道心坚固",
-              "description": "由角色定位推定的天赋。"
+              "description": "心脏是磐石，道念如钢印，他面对幻境连眼皮都不眨，心如古井不波却暗藏火山。"
             }
           ],
           "appearance": "少年天子装扮",
@@ -807,12 +809,12 @@
           "spiritRoot": {
             "name": "火灵根",
             "tier": "地品",
-            "description": "依角色定位由剧本正典赋予。"
+            "description": "赤焰翻涌如龙，焚尽八荒，修炼者若烈阳骄阳，主狂暴与毁灭之道。"
           },
           "talents": [
             {
               "name": "体修奇才",
-              "description": "由角色定位推定的天赋。"
+              "description": "肉身是法器，筋骨刻阵纹，他怒吼时肌肉隆起如山脉隆起，一拳轰碎天穹的锁链。"
             }
           ],
           "appearance": "中年男子",
@@ -825,13 +827,13 @@
       {
         "id": "liuchao.character.jian_yu_ji",
         "name": "剑玉姬",
-        "description": "黑魔海外堂总执事，精通幻术，亲自潜入长秋宫与程宗扬谈判。",
+        "description": "她容颜绝美、肌肤明玉，纤腰一握便能颠倒众生，而幻术之下那张脸不过是一层精致的纱——黑魔海外堂总执事，踏入长秋宫便是为了以梦为刃，猎取程宗扬的魂魄。",
         "role": "仙姬",
         "gender": "女",
         "realm": "化神",
         "affiliations": [
           {
-            "factionId": "lyl.faction.hei_mo_hai",
+            "factionId": "liuchao.faction.hei_mo_hai",
             "category": "organization",
             "role": "外堂总执事"
           }
@@ -858,12 +860,12 @@
           "spiritRoot": {
             "name": "水灵根",
             "tier": "地品",
-            "description": "依角色定位由剧本正典赋予。"
+            "description": "碧波流转似镜，化柔为刚，修炼者如深海暗流，善于滋养与封锁万物。"
           },
           "talents": [
             {
               "name": "神识过人",
-              "description": "由角色定位推定的天赋。"
+              "description": "意识铺开如蛛网，方圆千里每粒尘埃的震颤都逃不过，敌人抬脚就被预判三百年。"
             }
           ],
           "appearance": "绝美的容颜，肌肤犹如明玉，五官精致绝伦，身姿曲线玲珑，丰润如玉，纤腰盈盈一握，气质高雅脱俗，常以幻术隐匿真身，时而多一层轻纱或丝履，更有空灵之感，目光深潭般静若止水，却灵动之极。",
@@ -910,24 +912,25 @@
           "spiritRoot": {
             "name": "火灵根",
             "tier": "地品",
-            "description": "依角色定位由剧本正典赋予。"
+            "description": "赤焰翻涌如龙，焚尽八荒，修炼者若烈阳骄阳，主狂暴与毁灭之道。"
           },
           "talents": [
             {
               "name": "神识过人",
-              "description": "由角色定位推定的天赋。"
+              "description": "意识铺开如蛛网，方圆千里每粒尘埃的震颤都逃不过，敌人抬脚就被预判三百年。"
             }
           ],
           "personality": [
             "老谋深算",
             "善于算计"
-          ]
+          ],
+          "appearance": "头戴貂蝉冠的中常侍，面容苍白如死人，肤色死白，嘴唇上留有两撇小胡子，平时表情深沉，冷着脸或板着死人脸，偶尔眼底流露柔情。"
         }
       },
       {
         "id": "liuchao.character.lu_jing",
         "name": "卢景",
-        "description": "星月湖五哥，擅长伪装与刺杀，随程宗扬在长秋宫。",
+        "description": "星月湖五哥卢景，脸色蜡黄、白眼珠翻得煞是醒目，一袭伪装无声无形，长秋宫中随程宗扬出入时，刺杀便如影随形。",
         "role": "杀手",
         "gender": "男",
         "realm": "金丹",
@@ -956,12 +959,12 @@
           "spiritRoot": {
             "name": "火灵根",
             "tier": "地品",
-            "description": "依角色定位由剧本正典赋予。"
+            "description": "赤焰翻涌如龙，焚尽八荒，修炼者若烈阳骄阳，主狂暴与毁灭之道。"
           },
           "talents": [
             {
               "name": "天生神力",
-              "description": "由角色定位推定的天赋。"
+              "description": "骨骼是精铁浇筑，肌肉藏龙象之力，他捏碎空间如捏鸡蛋，真仙看了都缩脖子。"
             }
           ],
           "appearance": "干练老成，一副游徼装扮",
@@ -1009,12 +1012,12 @@
           "spiritRoot": {
             "name": "暗灵根",
             "tier": "地品",
-            "description": "依角色定位由剧本正典赋予。"
+            "description": "幽暗如渊噬光明，诡谲难测，修炼者似永夜降临，专精隐匿与吞噬之术。"
           },
           "talents": [
             {
               "name": "体修奇才",
-              "description": "由角色定位推定的天赋。"
+              "description": "肉身是法器，筋骨刻阵纹，他怒吼时肌肉隆起如山脉隆起，一拳轰碎天穹的锁链。"
             }
           ],
           "personality": [
@@ -1030,7 +1033,7 @@
       {
         "id": "liuchao.character.xiao_zi",
         "name": "小紫",
-        "description": "程宗扬的伴侣，毒宗传人，随殇侯在洛都附近。（后宫尊称\"紫妈妈\"，正宫，最有手腕、能管束众人；宠物为犬\"雪雪\"）",
+        "description": "碧鲮族最美的女子盘坐在渭水幽暗的河底，穿透乳峰的银铃随水波轻响，她正以紫气内功鲸吞墨枫林的死气，而上方的程家后院里，雪雪正替她的正宫之位吠退所有窥探者。",
         "role": "毒宗传人",
         "gender": "女",
         "realm": "金丹",
@@ -1079,7 +1082,7 @@
           "talents": [
             {
               "name": "剑骨天成",
-              "description": "由角色定位推定的天赋。"
+              "description": "脊梁是剑胚，血管淌剑意，他呼吸间骨骼铮鸣，随手一挥便切开空间如斩蚯蚓。"
             },
             {
               "name": "毒蝶翅粉",
@@ -1099,7 +1102,7 @@
         "id": "liuchao.character.qin_hui",
         "name": "秦桧",
         "role": "幕僚、毒术高手（殇侯一系）",
-        "description": "幕僚、毒术高手（殇侯一系）",
+        "description": "秦桧相貌清秀，一副文士打扮，眼底却藏着深不可测的算计，他既是程宗扬的谋士与管家，也曾是殇侯门客，智计百出，是暗处最危险的刀。",
         "skillIds": [
           "lyl.skill.np098"
         ],
@@ -1123,12 +1126,12 @@
           "spiritRoot": {
             "name": "火灵根",
             "tier": "地品",
-            "description": "依角色定位由剧本正典赋予。"
+            "description": "赤焰翻涌如龙，焚尽八荒，修炼者若烈阳骄阳，主狂暴与毁灭之道。"
           },
           "talents": [
             {
               "name": "过目不忘",
-              "description": "由角色定位推定的天赋。"
+              "description": "瞳孔是刻录镜，每次眨眼就烙印宇宙法则，他看书如吃饭，记忆在脑海筑起书山。"
             }
           ],
           "appearance": "文士打扮，相貌清秀，文士模样",
@@ -1164,18 +1167,19 @@
           "spiritRoot": {
             "name": "木灵根",
             "tier": "地品",
-            "description": "依角色定位由剧本正典赋予。"
+            "description": "苍藤缠天而生，生机盎然，修炼者似古树盘根，专精复苏与束缚之术。"
           },
           "talents": [
             {
               "name": "神识过人",
-              "description": "由角色定位推定的天赋。"
+              "description": "意识铺开如蛛网，方圆千里每粒尘埃的震颤都逃不过，敌人抬脚就被预判三百年。"
             }
           ],
           "personality": [
             "好色",
             "对程宗扬有猜忌"
-          ]
+          ],
+          "appearance": "眉目俊朗，容貌英俊，有胡须，身材笔直，常有冷脸或带有戾气的表情，衣着常为劲装、头戴弁冠、腰佩天子剑。"
         },
         "realm": "筑基",
         "gender": "男"
@@ -1197,18 +1201,19 @@
           "spiritRoot": {
             "name": "木灵根",
             "tier": "地品",
-            "description": "依角色定位由剧本正典赋予。"
+            "description": "苍藤缠天而生，生机盎然，修炼者似古树盘根，专精复苏与束缚之术。"
           },
           "talents": [
             {
               "name": "神识过人",
-              "description": "由角色定位推定的天赋。"
+              "description": "意识铺开如蛛网，方圆千里每粒尘埃的震颤都逃不过，敌人抬脚就被预判三百年。"
             }
           ],
           "personality": [
             "讲义气",
             "有影响力"
-          ]
+          ],
+          "appearance": "相貌平平，貌不惊人，身材矮小，穿着灰扑扑的粗布衣裳，头结半旧的青布裹头，腰间插短刀，脚穿草鞋，言不出众。"
         },
         "realm": "筑基",
         "gender": "男"
@@ -1230,12 +1235,12 @@
           "spiritRoot": {
             "name": "水灵根",
             "tier": "地品",
-            "description": "依角色定位由剧本正典赋予。"
+            "description": "碧波流转似镜，化柔为刚，修炼者如深海暗流，善于滋养与封锁万物。"
           },
           "talents": [
             {
               "name": "神识过人",
-              "description": "由角色定位推定的天赋。"
+              "description": "意识铺开如蛛网，方圆千里每粒尘埃的震颤都逃不过，敌人抬脚就被预判三百年。"
             }
           ]
         },
@@ -1261,12 +1266,12 @@
           "spiritRoot": {
             "name": "水灵根",
             "tier": "地品",
-            "description": "依角色定位由剧本正典赋予。"
+            "description": "碧波流转似镜，化柔为刚，修炼者如深海暗流，善于滋养与封锁万物。"
           },
           "talents": [
             {
               "name": "过目不忘",
-              "description": "由角色定位推定的天赋。"
+              "description": "瞳孔是刻录镜，每次眨眼就烙印宇宙法则，他看书如吃饭，记忆在脑海筑起书山。"
             }
           ]
         },
@@ -1289,12 +1294,12 @@
           "spiritRoot": {
             "name": "土灵根",
             "tier": "玄品",
-            "description": "依角色定位由剧本正典赋予。"
+            "description": "厚土沉凝如山，承载万物，修炼者如地脉巍峨，擅长防御与镇压之法。"
           },
           "talents": [
             {
               "name": "多宝童子",
-              "description": "由角色定位推定的天赋。"
+              "description": "袖口是秘境，指尖藏乾坤，他咧嘴一笑便从七窍飞出法宝雨，砸得敌人抱头鼠窜。"
             }
           ]
         },
@@ -1317,12 +1322,12 @@
           "spiritRoot": {
             "name": "水灵根",
             "tier": "玄品",
-            "description": "依角色定位由剧本正典赋予。"
+            "description": "碧波流转似镜，化柔为刚，修炼者如深海暗流，善于滋养与封锁万物。"
           },
           "talents": [
             {
               "name": "神识过人",
-              "description": "由角色定位推定的天赋。"
+              "description": "意识铺开如蛛网，方圆千里每粒尘埃的震颤都逃不过，敌人抬脚就被预判三百年。"
             }
           ]
         },
@@ -1345,12 +1350,12 @@
           "spiritRoot": {
             "name": "火灵根",
             "tier": "玄品",
-            "description": "依角色定位由剧本正典赋予。"
+            "description": "赤焰翻涌如龙，焚尽八荒，修炼者若烈阳骄阳，主狂暴与毁灭之道。"
           },
           "talents": [
             {
               "name": "体修奇才",
-              "description": "由角色定位推定的天赋。"
+              "description": "肉身是法器，筋骨刻阵纹，他怒吼时肌肉隆起如山脉隆起，一拳轰碎天穹的锁链。"
             }
           ],
           "appearance": "娇艳面孔，长发，身材丰满柔美，常穿时尚裙装或黑色套装，气质成熟美貌如明星，带风尘媚态。"
@@ -1380,12 +1385,12 @@
           "spiritRoot": {
             "name": "土灵根",
             "tier": "玄品",
-            "description": "依角色定位由剧本正典赋予。"
+            "description": "厚土沉凝如山，承载万物，修炼者如地脉巍峨，擅长防御与镇压之法。"
           },
           "talents": [
             {
               "name": "多宝童子",
-              "description": "由角色定位推定的天赋。"
+              "description": "袖口是秘境，指尖藏乾坤，他咧嘴一笑便从七窍飞出法宝雨，砸得敌人抱头鼠窜。"
             }
           ]
         },
@@ -1408,12 +1413,12 @@
           "spiritRoot": {
             "name": "土灵根",
             "tier": "玄品",
-            "description": "依角色定位由剧本正典赋予。"
+            "description": "厚土沉凝如山，承载万物，修炼者如地脉巍峨，擅长防御与镇压之法。"
           },
           "talents": [
             {
               "name": "顶级魅力",
-              "description": "由角色定位推定的天赋。"
+              "description": "气息如蜜糖诱捕心神，他走过的地方，连石头都想献上膝盖，跪求成为脚下砖。"
             }
           ]
         },
@@ -1436,12 +1441,12 @@
           "spiritRoot": {
             "name": "火灵根",
             "tier": "地品",
-            "description": "依角色定位由剧本正典赋予。"
+            "description": "赤焰翻涌如龙，焚尽八荒，修炼者若烈阳骄阳，主狂暴与毁灭之道。"
           },
           "talents": [
             {
               "name": "灵觉敏锐",
-              "description": "由角色定位推定的天赋。"
+              "description": "汗毛竖起如雷达天线，他皮肤能捕捉万米外的空气波动，连蚊子放屁都逃不过。"
             }
           ]
         },
@@ -1451,7 +1456,7 @@
         "id": "liuchao.character.lv_fengxian",
         "name": "吕奉先",
         "role": "吕家子弟",
-        "description": "吕家子弟",
+        "description": "舞阳侯府小将吕奉先，年未弱冠却身长近九尺，蜂腰猿臂，面如冠玉。常着白衣箭袖，在程宗扬的精心布局下，冒充王忠嗣侄儿上擂台，一招险胜左彤芝，少年英姿引来满堂侧目。",
         "profile": {
           "attributes": {
             "rootBone": 10,
@@ -1464,12 +1469,12 @@
           "spiritRoot": {
             "name": "火灵根",
             "tier": "地品",
-            "description": "依角色定位由剧本正典赋予。"
+            "description": "赤焰翻涌如龙，焚尽八荒，修炼者若烈阳骄阳，主狂暴与毁灭之道。"
           },
           "talents": [
             {
               "name": "剑骨天成",
-              "description": "由角色定位推定的天赋。"
+              "description": "脊梁是剑胚，血管淌剑意，他呼吸间骨骼铮鸣，随手一挥便切开空间如斩蚯蚓。"
             }
           ]
         },
@@ -1479,7 +1484,7 @@
         "id": "liuchao.character.hu_fu_ren",
         "name": "胡夫人",
         "role": "太后心腹",
-        "description": "太后心腹",
+        "description": "胡夫人是太后身边最沉默的影子，她总在宫闱深处垂手而立，目光低垂如古井无波，却掌握着深宫最隐秘的脉搏。",
         "profile": {
           "attributes": {
             "rootBone": 7,
@@ -1492,12 +1497,12 @@
           "spiritRoot": {
             "name": "雷灵根",
             "tier": "地品",
-            "description": "依角色定位由剧本正典赋予。"
+            "description": "天雷炸响破云霄，速度无双，修炼者似电光火石，主攻杀与雷霆之势。"
           },
           "talents": [
             {
               "name": "顶级魅力",
-              "description": "由角色定位推定的天赋。"
+              "description": "气息如蜜糖诱捕心神，他走过的地方，连石头都想献上膝盖，跪求成为脚下砖。"
             }
           ]
         },
@@ -1507,7 +1512,7 @@
         "id": "lyl.character.np060",
         "name": "友通期",
         "role": "冒充赵合德入宫者",
-        "description": "冒充赵合德入宫者",
+        "description": "友通期以柔弱之姿冒充赵合德入宫，那张极美的面容总带着怯怯笑意，宛如风中白莲，却无人知晓她骨子里藏着怎样的算计。",
         "profile": {
           "attributes": {
             "rootBone": 6,
@@ -1520,12 +1525,12 @@
           "spiritRoot": {
             "name": "雷灵根",
             "tier": "黄品",
-            "description": "依角色定位由剧本正典赋予。"
+            "description": "天雷炸响破云霄，速度无双，修炼者似电光火石，主攻杀与雷霆之势。"
           },
           "talents": [
             {
               "name": "过目不忘",
-              "description": "由角色定位推定的天赋。"
+              "description": "瞳孔是刻录镜，每次眨眼就烙印宇宙法则，他看书如吃饭，记忆在脑海筑起书山。"
             }
           ],
           "appearance": "容貌极美，气质柔弱",
@@ -1541,7 +1546,7 @@
         "id": "liuchao.character.yi_xin",
         "name": "义姁",
         "role": "医者，被俘",
-        "description": "医者，被俘",
+        "description": "汉国太医、光明观堂外门弟子义姁，本是容色绝艳的大美人，却日日板着一张脸老气横秋。曾被迫委身程宗扬，后被杨玉环藏匿公主府，唯有时不意间玉颊泛红，才泄出几分娇艳本相。",
         "techniqueIds": [
           "lyl.technique.np103"
         ],
@@ -1557,12 +1562,12 @@
           "spiritRoot": {
             "name": "火灵根",
             "tier": "玄品",
-            "description": "依角色定位由剧本正典赋予。"
+            "description": "赤焰翻涌如龙，焚尽八荒，修炼者若烈阳骄阳，主狂暴与毁灭之道。"
           },
           "talents": [
             {
               "name": "丹道圣手",
-              "description": "由角色定位推定的天赋。"
+              "description": "指尖缠绕着五行规则，他随便抓把杂草都能炼成仙丹，丹炉里的火焰比太阳还刺眼。"
             }
           ]
         },
@@ -1577,6 +1582,13 @@
         "profile": {
           "appearance": "外貌妖艳，身材丰腴凸凹，肤色雪白，发丝柔顺，常带柔媚风情，但眼神可转冷厉。"
         }
+      },
+      {
+        "id": "liuchao.character.zhang_yun",
+        "name": "张恽",
+        "gender": "男",
+        "role": "内侍",
+        "description": "内侍张恽弓着脊背站在廊柱阴影里，袍角垂地不扬一丝尘埃，仿佛只是宫中一件会行走的摆设。"
       }
     ],
     "playerRelationships": [
@@ -1877,12 +1889,19 @@
         "relation": "被奸杀",
         "score": -55,
         "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.zhang_yun",
+        "toCharacterId": "liuchao.character.lv_ji",
+        "relation": "下属",
+        "score": 20,
+        "direction": "bidirectional"
       }
     ],
     "factionRelationships": [
       {
         "fromFactionId": "lyl.faction.changqiu",
-        "toFactionId": "lyl.faction.lv_shi",
+        "toFactionId": "liuchao.faction.lv_shi_ji_tuan",
         "relation": "中立",
         "score": 5,
         "direction": "bidirectional",
@@ -1892,7 +1911,7 @@
         ]
       },
       {
-        "fromFactionId": "lyl.faction.hei_mo_hai",
+        "fromFactionId": "liuchao.faction.hei_mo_hai",
         "toFactionId": "lyl.faction.liu_jian",
         "relation": "中立",
         "score": 18,
@@ -1905,7 +1924,7 @@
       },
       {
         "fromFactionId": "lyl.faction.changqiu",
-        "toFactionId": "lyl.faction.hei_mo_hai",
+        "toFactionId": "liuchao.faction.hei_mo_hai",
         "relation": "中立",
         "score": 5,
         "direction": "bidirectional",
@@ -2734,8 +2753,8 @@
           "lyl.character.liu_jian"
         ],
         "relatedFactionIds": [
-          "lyl.faction.lv_shi",
-          "lyl.faction.hei_mo_hai"
+          "liuchao.faction.lv_shi_ji_tuan",
+          "liuchao.faction.hei_mo_hai"
         ],
         "locationId": "liuchao.location.luoyang"
       },
@@ -2792,7 +2811,7 @@
           "liuchao.character.lv_ji"
         ],
         "relatedFactionIds": [
-          "lyl.faction.lv_shi"
+          "liuchao.faction.lv_shi_ji_tuan"
         ],
         "locationId": "lyl.location.zhaoyang_palace"
       },
@@ -2846,7 +2865,7 @@
           "liuchao.character.cai_jingzhong"
         ],
         "relatedFactionIds": [
-          "lyl.faction.hei_mo_hai"
+          "liuchao.faction.hei_mo_hai"
         ],
         "locationId": "lyl.location.changqiu_palace"
       },
@@ -2874,7 +2893,7 @@
           "liuchao.character.lv_fengxian"
         ],
         "relatedFactionIds": [
-          "lyl.faction.lv_shi"
+          "liuchao.faction.lv_shi_ji_tuan"
         ]
       }
     ],
