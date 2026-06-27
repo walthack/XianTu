@@ -270,7 +270,7 @@
           "spiritRoot": {
             "name": "变异灵根",
             "tier": "天品",
-            "description": "身怀太一经，由剧本正典认定。"
+            "description": "灵根异变破常理，潜力无穷，修炼者似逆命而行，主颠覆与意外之变。"
           },
           "talents": [
             {
@@ -381,7 +381,7 @@
           "spiritRoot": {
             "name": "水灵根",
             "tier": "地品",
-            "description": "身怀长安坊图，由剧本正典认定。"
+            "description": "碧波流转似镜，化柔为刚，修炼者如深海暗流，善于滋养与封锁万物。"
           },
           "talents": [
             {
@@ -431,7 +431,7 @@
           "spiritRoot": {
             "name": "血灵根",
             "tier": "地品",
-            "description": "身怀羽翼飞行，由剧本正典认定。"
+            "description": "血海翻涌吸精魄，邪异嗜杀，修炼者似修罗魔煞，主掠夺与重生之法。"
           },
           "talents": [
             {
@@ -761,7 +761,7 @@
           "spiritRoot": {
             "name": "暗灵根",
             "tier": "地品",
-            "description": "身怀小紫的紫气内功，由剧本正典认定。"
+            "description": "幽暗如渊噬光明，诡谲难测，修炼者似永夜降临，专精隐匿与吞噬之术。"
           },
           "talents": [
             {
@@ -806,7 +806,7 @@
           "spiritRoot": {
             "name": "雷灵根",
             "tier": "地品",
-            "description": "身怀鸣鸾仙体，由剧本正典认定。"
+            "description": "天雷炸响破云霄，速度无双，修炼者似电光火石，主攻杀与雷霆之势。"
           },
           "talents": [
             {
