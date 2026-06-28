@@ -561,7 +561,6 @@
         ],
         "itemIds": [
           "liuchao.item.coral_dagger",
-          "liuchao.item.laser_sword",
           "lyl.item.np001",
           "lyl.item.np003",
           "lyl.item.np004",
@@ -1187,194 +1186,6 @@
         }
       },
       {
-        "id": "liuchao.character.xiao_yao_yi",
-        "name": "萧遥逸",
-        "description": "萧遥逸风度翩翩，身居江州刺史之职，修为高深，但此刻受伤虚弱，他的眼里仍燃着对赤阳圣果的执着——那是他唯一的救赎。",
-        "role": "龙宸核心人物",
-        "gender": "男",
-        "realm": "金丹",
-        "affiliations": [
-          {
-            "factionId": "liuchao.faction.dragon_chen",
-            "category": "organization",
-            "role": "执事"
-          }
-        ],
-        "locationId": "liuchao.location.canglan_town",
-        "skillIds": [],
-        "techniqueIds": [
-          "liuchao.technique.dragon_art"
-        ],
-        "itemIds": [],
-        "profile": {
-          "attributes": {
-            "rootBone": 7,
-            "spirituality": 6,
-            "comprehension": 7,
-            "fortune": 8,
-            "charm": 6,
-            "temperament": 7
-          },
-          "spiritRoot": {
-            "name": "火灵根",
-            "tier": "地品",
-            "description": "赤焰翻涌如龙，焚尽八荒，修炼者若烈阳骄阳，主狂暴与毁灭之道。"
-          },
-          "talents": [
-            {
-              "name": "道心坚固",
-              "description": "心脏是磐石，道念如钢印，他面对幻境连眼皮都不眨，心如古井不波却暗藏火山。"
-            }
-          ],
-          "appearance": "风度翩翩，但受伤后虚弱",
-          "personality": [
-            "温和有礼，善于交际",
-            "对朋友讲义气"
-          ]
-        }
-      },
-      {
-        "id": "liuchao.character.wu_er_lang",
-        "name": "武二郎",
-        "description": "白湖商馆最不像商人的护卫——古铜色的虬结肌肉上印着黑黄虎斑，一只大黑眼圈里的横眼扫过货物时，连瑶池宗的女修都得低头唤一声师兄。",
-        "role": "瑶池宗弟子",
-        "gender": "女",
-        "realm": "金丹",
-        "affiliations": [
-          {
-            "factionId": "liuchao.faction.yao_chi_zong",
-            "category": "sect",
-            "role": "核心弟子"
-          }
-        ],
-        "locationId": "liuchao.location.canglan_town",
-        "skillIds": [],
-        "techniqueIds": [
-          "liuchao.technique.yaochi_gong"
-        ],
-        "itemIds": [],
-        "profile": {
-          "attributes": {
-            "rootBone": 7,
-            "spirituality": 6,
-            "comprehension": 5,
-            "fortune": 7,
-            "charm": 5,
-            "temperament": 5
-          },
-          "spiritRoot": {
-            "name": "火灵根",
-            "tier": "玄品",
-            "description": "赤焰翻涌如龙，焚尽八荒，修炼者若烈阳骄阳，主狂暴与毁灭之道。"
-          },
-          "talents": [
-            {
-              "name": "夜猫子",
-              "description": "瞳孔在暗夜灼烧如鬼火，每缕月光都化作他的眼睛，黑暗成了最忠实的猎场。"
-            }
-          ],
-          "appearance": "武二郎身材不高，肩背肌肉虬结，皮肤泛着古铜色光泽，脖颈有黑黄虎斑，生满胸毛，左眼有大黑眼圈，横眉竖眼，一脸蛮横。",
-          "personality": [
-            "粗豪好色",
-            "对程宗扬较为忠诚",
-            "直率鲁莽，重情义"
-          ]
-        }
-      },
-      {
-        "id": "liuchao.character.yu_bai_ying",
-        "name": "虞白樱",
-        "description": "瑶池宗美女杀手虞白樱，银发如丝垂落玉冠，雪肤花貌艳光逼人。刚被程宗扬从行淫兽爪下救出，身段曼妙曲线毕露，与他之间是敌是友尚难分明。",
-        "role": "瑶池宗弟子",
-        "gender": "女",
-        "realm": "筑基",
-        "affiliations": [
-          {
-            "factionId": "liuchao.faction.yao_chi_zong",
-            "category": "sect",
-            "role": "弟子"
-          }
-        ],
-        "locationId": "liuchao.location.canglan_town",
-        "skillIds": [],
-        "techniqueIds": [
-          "liuchao.technique.yaochi_gong"
-        ],
-        "itemIds": [],
-        "profile": {
-          "attributes": {
-            "rootBone": 6,
-            "spirituality": 4,
-            "comprehension": 5,
-            "fortune": 5,
-            "charm": 5,
-            "temperament": 6
-          },
-          "spiritRoot": {
-            "name": "暗灵根",
-            "tier": "黄品",
-            "description": "幽暗如渊噬光明，诡谲难测，修炼者似永夜降临，专精隐匿与吞噬之术。"
-          },
-          "talents": [
-            {
-              "name": "过目不忘",
-              "description": "瞳孔是刻录镜，每次眨眼就烙印宇宙法则，他看书如吃饭，记忆在脑海筑起书山。"
-            }
-          ],
-          "personality": [
-            "高傲，为妹妹冒险",
-            "被小紫设计后受制于人"
-          ],
-          "appearance": "银发如丝，容貌艳丽，玉脸艳光照人，雪肤花貌，身材曲线饱满丰满，雪臀肥翘，双乳丰挺雪白，腰肢柔润纤滑，玉腿修长白美，整体肌肤白腻如玉，常散发淡淡肤光。"
-        }
-      },
-      {
-        "id": "liuchao.character.yu_zi_wei",
-        "name": "虞紫薇",
-        "description": "虞紫薇是虞白樱的妹妹，同是瑶池宗弟子，银白长发雪肤花貌，身材曲线同样饱满诱人。她惯常戴玉冠，气质冷若冰雕，却比姐姐多几分活泼神气。",
-        "role": "瑶池宗弟子",
-        "gender": "女",
-        "realm": "筑基",
-        "affiliations": [
-          {
-            "factionId": "liuchao.faction.yao_chi_zong",
-            "category": "sect",
-            "role": "弟子"
-          }
-        ],
-        "locationId": "liuchao.location.canglan_town",
-        "skillIds": [],
-        "techniqueIds": [
-          "liuchao.technique.yaochi_gong"
-        ],
-        "itemIds": [],
-        "profile": {
-          "attributes": {
-            "rootBone": 6,
-            "spirituality": 5,
-            "comprehension": 4,
-            "fortune": 4,
-            "charm": 5,
-            "temperament": 5
-          },
-          "spiritRoot": {
-            "name": "火灵根",
-            "tier": "黄品",
-            "description": "赤焰翻涌如龙，焚尽八荒，修炼者若烈阳骄阳，主狂暴与毁灭之道。"
-          },
-          "talents": [
-            {
-              "name": "过目不忘",
-              "description": "瞳孔是刻录镜，每次眨眼就烙印宇宙法则，他看书如吃饭，记忆在脑海筑起书山。"
-            }
-          ],
-          "notes": [
-            "【功法约束】双修对象必须是特定人选"
-          ],
-          "appearance": "银白长发，雪白皮肤，容貌艳丽，身材曲线饱满，前凸后翘，常戴玉冠，气质冷漠如冰雕。"
-        }
-      },
-      {
         "id": "liuchao.character.qing_mian_shou",
         "name": "青面兽",
         "description": "青面兽，这张又青又暗的兽斑脸上，眼睛能咆哮，手臂粗如牛腿，正忠心耿耿地跟在程宗扬身后。",
@@ -1537,26 +1348,6 @@
         "memories": [
           "江州城外铁傀儡事件"
         ]
-      },
-      {
-        "characterId": "liuchao.character.wu_er_lang",
-        "relation": "雇佣/朋友",
-        "favorability": 42
-      },
-      {
-        "characterId": "liuchao.character.xiao_yao_yi",
-        "relation": "朋友/合伙人",
-        "favorability": 42
-      },
-      {
-        "characterId": "liuchao.character.yu_bai_ying",
-        "relation": "发生性关系",
-        "favorability": 60
-      },
-      {
-        "characterId": "liuchao.character.yu_zi_wei",
-        "relation": "敌对",
-        "favorability": 5
       }
     ],
     "relationships": [
@@ -1632,16 +1423,6 @@
         ]
       },
       {
-        "fromCharacterId": "liuchao.character.yu_bai_ying",
-        "toCharacterId": "liuchao.character.yu_zi_wei",
-        "relation": "姐妹",
-        "score": 80,
-        "direction": "bidirectional",
-        "tags": [
-          "亲姐妹"
-        ]
-      },
-      {
         "fromCharacterId": "liuchao.character.li_shi_shi",
         "toCharacterId": "liuchao.character.gao_ya_nei",
         "relation": "敌对",
@@ -1667,34 +1448,6 @@
         "toCharacterId": "liuchao.character.lin_chong",
         "relation": "妻姐",
         "score": 75,
-        "direction": "bidirectional"
-      },
-      {
-        "fromCharacterId": "liuchao.character.wu_er_lang",
-        "toCharacterId": "liuchao.character.xiao_yao_yi",
-        "relation": "朋友",
-        "score": 42,
-        "direction": "bidirectional"
-      },
-      {
-        "fromCharacterId": "liuchao.character.xiao_zi",
-        "toCharacterId": "liuchao.character.xiao_yao_yi",
-        "relation": "同伴",
-        "score": 35,
-        "direction": "bidirectional"
-      },
-      {
-        "fromCharacterId": "liuchao.character.xiao_zi",
-        "toCharacterId": "liuchao.character.yu_bai_ying",
-        "relation": "敌对",
-        "score": -50,
-        "direction": "bidirectional"
-      },
-      {
-        "fromCharacterId": "liuchao.character.xiao_zi",
-        "toCharacterId": "liuchao.character.yu_zi_wei",
-        "relation": "敌对",
-        "score": 5,
         "direction": "bidirectional"
       },
       {
@@ -2104,19 +1857,6 @@
         }
       },
       {
-        "id": "liuchao.item.laser_sword",
-        "name": "雷射战刀",
-        "description": "程宗扬从现代带来的高科技武器，能量型刀锋，威力强大。",
-        "type": "weapon",
-        "grade": "中品",
-        "attributeBonus": {
-          "气血上限": 30,
-          "后天六司": {
-            "根骨": 4
-          }
-        }
-      },
-      {
         "id": "liuchao.item.dragon_slaying_sword_fake",
         "name": "屠龙刀（赝品）",
         "description": "林冲花一千贯买到的刀，实为高衙内设下的陷阱。由珊瑚铁等贵金属打造，价值万金。",
@@ -2225,10 +1965,7 @@
       "locationId": "liuchao.location.canglan_town",
       "featuredCharacterIds": [
         "liuchao.character.cheng_zongyang",
-        "liuchao.character.qin_hui",
-        "liuchao.character.xiao_yao_yi",
-        "liuchao.character.yu_bai_ying",
-        "liuchao.character.yu_zi_wei"
+        "liuchao.character.qin_hui"
       ]
     },
     "initialFlags": {
@@ -2320,10 +2057,7 @@
           }
         ],
         "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang",
-          "liuchao.character.xiao_yao_yi",
-          "liuchao.character.yu_bai_ying",
-          "liuchao.character.yu_zi_wei"
+          "liuchao.character.cheng_zongyang"
         ],
         "relatedFactionIds": [
           "liuchao.faction.dragon_chen",

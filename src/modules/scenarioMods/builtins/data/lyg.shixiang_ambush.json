@@ -880,7 +880,6 @@
           "lyg.skill.flower_bud_technique"
         ],
         "itemIds": [
-          "lyg.item.he_lu_sword",
           "lyg.item.jiuhua_dan"
         ],
         "profile": {
@@ -1905,47 +1904,6 @@
         }
       },
       {
-        "id": "lyg.character.jing_kong",
-        "name": "净空",
-        "description": "大慈恩寺知客院香主，一副中年僧人的寻常面目，却曾在暗处与星月湖老兵对饮，把佛门清规和潜伏任务一并喝进肚里。",
-        "role": "卧底",
-        "gender": "男",
-        "realm": "筑基",
-        "affiliations": [
-          {
-            "factionId": "lyg.faction.daciensi",
-            "category": "sect",
-            "role": "知客院香主"
-          }
-        ],
-        "locationId": "lyg.location.daciensi",
-        "skillIds": [],
-        "techniqueIds": [],
-        "itemIds": [],
-        "profile": {
-          "attributes": {
-            "rootBone": 6,
-            "spirituality": 4,
-            "comprehension": 6,
-            "fortune": 5,
-            "charm": 6,
-            "temperament": 5
-          },
-          "spiritRoot": {
-            "name": "风灵根",
-            "tier": "黄品",
-            "description": "清风无影掠千里，飘逸莫测，修炼者如云烟过隙，擅长疾速与无形之袭。"
-          },
-          "talents": [
-            {
-              "name": "夜猫子",
-              "description": "瞳孔在暗夜灼烧如鬼火，每缕月光都化作他的眼睛，黑暗成了最忠实的猎场。"
-            }
-          ],
-          "appearance": "中年僧人"
-        }
-      },
-      {
         "id": "liuchao.character.gao_zhishang",
         "name": "高智商",
         "role": "程宗扬徒弟，宋国太尉之子",
@@ -2532,11 +2490,6 @@
         "favorability": 5
       },
       {
-        "characterId": "lyg.character.jing_kong",
-        "relation": "盟友（佛教徒）",
-        "favorability": 42
-      },
-      {
         "characterId": "liuchao.character.sun_nuan",
         "relation": "主仆",
         "favorability": 10
@@ -2667,16 +2620,6 @@
         "direction": "bidirectional",
         "tags": [
           "蛇夫人嘲讽吕雉"
-        ]
-      },
-      {
-        "fromCharacterId": "lyg.character.jing_kong",
-        "toCharacterId": "lyg.character.kuiji",
-        "relation": "僧侣上下级",
-        "score": 10,
-        "direction": "directed",
-        "tags": [
-          "净空作为卧底，表面服从"
         ]
       },
       {
@@ -3665,19 +3608,6 @@
         "grade": "中品"
       },
       {
-        "id": "lyg.item.he_lu_sword",
-        "name": "鹤侣剑",
-        "description": "潘金莲使用的长剑。",
-        "type": "weapon",
-        "grade": "极品",
-        "attributeBonus": {
-          "气血上限": 90,
-          "后天六司": {
-            "根骨": 12
-          }
-        }
-      },
-      {
         "id": "lyg.item.miao_fa_tian_qiu",
         "name": "妙法天球",
         "description": "徐君房的水晶球，可投射影像。",
@@ -4477,7 +4407,6 @@
         "relatedCharacterIds": [
           "lyg.character.shi_temeipu",
           "lyg.character.guan_hai",
-          "lyg.character.jing_kong",
           "liuchao.character.xiao_zi"
         ],
         "relatedFactionIds": [
@@ -4968,14 +4897,6 @@
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.xiao_zi"
-        ],
-        "playerAllowed": false
-      },
-      {
-        "contentId": "lyg.item.he_lu_sword",
-        "policy": "exclusive",
-        "allowedCharacterIds": [
-          "liuchao.character.pan_jinlian"
         ],
         "playerAllowed": false
       },

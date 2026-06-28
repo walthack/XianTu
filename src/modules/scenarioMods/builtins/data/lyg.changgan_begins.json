@@ -489,9 +489,7 @@
           "lyg.skill.he_lv_sword"
         ],
         "techniqueIds": [],
-        "itemIds": [
-          "lyg.item.he_lv_sword_weapon"
-        ],
+        "itemIds": [],
         "profile": {
           "attributes": {
             "rootBone": 8,
@@ -2022,19 +2020,6 @@
         }
       },
       {
-        "id": "lyg.item.he_lv_sword_weapon",
-        "name": "鹤侣剑",
-        "description": "潘金莲的佩剑，轻灵锋锐。",
-        "type": "weapon",
-        "grade": "极品",
-        "attributeBonus": {
-          "气血上限": 90,
-          "后天六司": {
-            "根骨": 12
-          }
-        }
-      },
-      {
         "id": "lyg.item.np001",
         "name": "皇后印玺",
         "type": "weapon",
@@ -2901,14 +2886,6 @@
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.yang_yuhuan"
-        ],
-        "playerAllowed": false
-      },
-      {
-        "contentId": "lyg.item.he_lv_sword_weapon",
-        "policy": "exclusive",
-        "allowedCharacterIds": [
-          "liuchao.character.pan_jinlian"
         ],
         "playerAllowed": false
       },

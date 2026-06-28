@@ -482,7 +482,6 @@
         "itemIds": [
           "lcq.item.backpack",
           "lcq.item.lingerie",
-          "lcq.item.condom",
           "lcq.item.vibrator",
           "lcq.item.drug",
           "lcq.item.np001"
@@ -1070,13 +1069,6 @@
         "description": "程宗扬从现代世界带来的情趣内衣。",
         "type": "other",
         "grade": "凡品"
-      },
-      {
-        "id": "lcq.item.condom",
-        "name": "安全套",
-        "description": "程宗扬从现代世界带来的安全套。",
-        "type": "other",
-        "grade": "中品"
       },
       {
         "id": "lcq.item.vibrator",

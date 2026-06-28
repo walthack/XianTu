@@ -499,88 +499,6 @@
         "realm": "金丹"
       },
       {
-        "id": "lyg.character.zheng_zhu",
-        "name": "郑注",
-        "description": "郑注面色惨白，下巴尖尖，举止干练，身为宰相却被李训排挤出京，前往凤翔募兵，心中暗藏不甘。",
-        "role": "宰相/凤翔节度使",
-        "gender": "男",
-        "affiliations": [
-          {
-            "factionId": "liuchao.faction.tang_guo_chao_ting",
-            "category": "state",
-            "role": "宰相"
-          }
-        ],
-        "locationId": "lyg.location.daming_palace",
-        "skillIds": [
-          "lyg.skill.np069"
-        ],
-        "profile": {
-          "attributes": {
-            "rootBone": 5,
-            "spirituality": 8,
-            "comprehension": 8,
-            "fortune": 6,
-            "charm": 5,
-            "temperament": 5
-          },
-          "spiritRoot": {
-            "name": "水灵根",
-            "tier": "玄品",
-            "description": "碧波流转似镜，化柔为刚，修炼者如深海暗流，善于滋养与封锁万物。"
-          },
-          "talents": [
-            {
-              "name": "过目不忘",
-              "description": "瞳孔是刻录镜，每次眨眼就烙印宇宙法则，他看书如吃饭，记忆在脑海筑起书山。"
-            }
-          ],
-          "appearance": "脸色惨白，下巴尖尖，其貌不扬，举止干练。"
-        },
-        "realm": "金丹"
-      },
-      {
-        "id": "lyg.character.li_xun",
-        "name": "李训",
-        "description": "李训身着绿袍，面容因激动而紫涨，曾狂喷鲜血，此刻他正独揽诛宦之功，将郑注远调，手指因算计而微微哆嗦。",
-        "role": "宰相",
-        "gender": "男",
-        "affiliations": [
-          {
-            "factionId": "liuchao.faction.tang_guo_chao_ting",
-            "category": "state",
-            "role": "宰相"
-          }
-        ],
-        "locationId": "lyg.location.daming_palace",
-        "skillIds": [
-          "lyg.skill.np069"
-        ],
-        "profile": {
-          "attributes": {
-            "rootBone": 4,
-            "spirituality": 5,
-            "comprehension": 8,
-            "fortune": 5,
-            "charm": 5,
-            "temperament": 4
-          },
-          "spiritRoot": {
-            "name": "水灵根",
-            "tier": "黄品",
-            "description": "碧波流转似镜，化柔为刚，修炼者如深海暗流，善于滋养与封锁万物。"
-          },
-          "talents": [
-            {
-              "name": "过目不忘",
-              "description": "瞳孔是刻录镜，每次眨眼就烙印宇宙法则，他看书如吃饭，记忆在脑海筑起书山。"
-            }
-          ],
-          "appearance": "身着绿袍，面容相熟，脸色紫涨、又青又白，曾狂喷鲜血，手指哆嗦，身材未明确，但曾仆地不起。"
-        },
-        "realm": "筑基"
-      },
-      {
         "id": "liuchao.character.yang_yuhuan",
         "name": "杨玉环",
         "description": "镇国大长公主杨玉环丰腴高挑，肤如凝脂，一颦一笑艳光可惊满城。她是李昂的姑姑，与程宗扬暧昧合作兼为生意盟友，眼下正受托拖住鱼朝恩，风姿绰约间暗藏锋芒。",
@@ -893,44 +811,6 @@
           "appearance": "半闭眼睛，似睡非睡；盘腿坐于蒲团，满脸疲惫中带着苦涩。"
         },
         "realm": "元婴"
-      },
-      {
-        "id": "lyg.character.tian_lingzhi",
-        "name": "田令孜",
-        "description": "田令孜八字眉紧锁，面容瘦削，脸色铁青苍白，因与绛王亲近而被李辅国警告，又被仇士良怀疑为弑杀王守澄的真凶。",
-        "role": "内侍省枢密使",
-        "gender": "男",
-        "affiliations": [
-          {
-            "factionId": "lyg.faction.eunuch_group",
-            "category": "organization",
-            "role": "枢密使"
-          }
-        ],
-        "locationId": "lyg.location.daming_palace",
-        "profile": {
-          "attributes": {
-            "rootBone": 4,
-            "spirituality": 5,
-            "comprehension": 6,
-            "fortune": 6,
-            "charm": 5,
-            "temperament": 6
-          },
-          "spiritRoot": {
-            "name": "风灵根",
-            "tier": "黄品",
-            "description": "清风无影掠千里，飘逸莫测，修炼者如云烟过隙，擅长疾速与无形之袭。"
-          },
-          "talents": [
-            {
-              "name": "一诺千金",
-              "description": "话语落地便生根发芽，违背者会被规则反噬，他的承诺比天道契约还沉重百倍。"
-            }
-          ],
-          "appearance": "八字眉、面容瘦削，脸色常显铁青或苍白，身形未明确但符合宦官特征。"
-        },
-        "realm": "筑基"
       },
       {
         "id": "liuchao.character.jia_wenhe",
@@ -1937,11 +1817,6 @@
         "favorability": 5
       },
       {
-        "characterId": "lyg.character.li_xun",
-        "relation": "敌对",
-        "favorability": 5
-      },
-      {
         "characterId": "liuchao.character.li_fuguo",
         "relation": "敌对",
         "favorability": -90
@@ -1959,27 +1834,6 @@
     ],
     "relationships": [
       {
-        "fromCharacterId": "liuchao.character.li_ang",
-        "toCharacterId": "lyg.character.zheng_zhu",
-        "relation": "君臣/同谋",
-        "score": 50,
-        "direction": "bidirectional"
-      },
-      {
-        "fromCharacterId": "liuchao.character.li_ang",
-        "toCharacterId": "lyg.character.li_xun",
-        "relation": "君臣/同谋",
-        "score": 50,
-        "direction": "bidirectional"
-      },
-      {
-        "fromCharacterId": "lyg.character.zheng_zhu",
-        "toCharacterId": "lyg.character.li_xun",
-        "relation": "同僚/争功",
-        "score": -30,
-        "direction": "bidirectional"
-      },
-      {
         "fromCharacterId": "liuchao.character.li_fuguo",
         "toCharacterId": "lyg.character.yu_chaoen",
         "relation": "上级/下属",
@@ -1991,20 +1845,6 @@
         "toCharacterId": "lyg.character.chou_shiliang",
         "relation": "下属",
         "score": 40,
-        "direction": "directed"
-      },
-      {
-        "fromCharacterId": "liuchao.character.li_fuguo",
-        "toCharacterId": "lyg.character.tian_lingzhi",
-        "relation": "上级/警告对象",
-        "score": 0,
-        "direction": "directed"
-      },
-      {
-        "fromCharacterId": "lyg.character.chou_shiliang",
-        "toCharacterId": "lyg.character.tian_lingzhi",
-        "relation": "政敌/怀疑对象",
-        "score": -50,
         "direction": "directed"
       },
       {

@@ -413,7 +413,6 @@
         ],
         "itemIds": [
           "lyl.item.coral_dagger",
-          "lyl.item.yin_yang_fish",
           "lyl.item.np001",
           "lyl.item.np003",
           "lyl.item.np004",
@@ -1269,14 +1268,6 @@
         }
       },
       {
-        "id": "lyl.item.yin_yang_fish",
-        "name": "阴阳鱼",
-        "description": "程宗扬在太泉古阵中获得的宝物，已融入丹田，可勾动阴阳气机。",
-        "type": "other",
-        "grade": "仙品",
-        "techniqueId": "lyl.technique.yin_yang_fish_reaction"
-      },
-      {
         "id": "lyl.item.np001",
         "name": "鬼牙",
         "type": "other",
@@ -1771,14 +1762,6 @@
     "contentAccess": [
       {
         "contentId": "lyl.skill.death_root_sense",
-        "policy": "exclusive",
-        "allowedCharacterIds": [
-          "liuchao.character.cheng_zongyang"
-        ],
-        "playerAllowed": false
-      },
-      {
-        "contentId": "lyl.item.yin_yang_fish",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.cheng_zongyang"

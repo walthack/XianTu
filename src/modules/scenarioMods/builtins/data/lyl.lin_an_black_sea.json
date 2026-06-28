@@ -1068,46 +1068,6 @@
         }
       },
       {
-        "id": "liuchao.character.feng_yuan",
-        "name": "冯源",
-        "description": "雪隼团的利爪已敛入程家宗扬的袖中，他的身影如暗夜里的鹰，等待下一声号令便撕裂长空。",
-        "role": "下属",
-        "gender": "男",
-        "realm": "筑基",
-        "affiliations": [
-          {
-            "factionId": "liuchao.faction.pan_jiang_cheng",
-            "category": "organization",
-            "role": "护卫"
-          }
-        ],
-        "locationId": "liuchao.location.lin_an",
-        "skillIds": [],
-        "techniqueIds": [],
-        "itemIds": [],
-        "profile": {
-          "attributes": {
-            "rootBone": 6,
-            "spirituality": 6,
-            "comprehension": 6,
-            "fortune": 7,
-            "charm": 7,
-            "temperament": 5
-          },
-          "spiritRoot": {
-            "name": "雷灵根",
-            "tier": "玄品",
-            "description": "天雷炸响破云霄，速度无双，修炼者似电光火石，主攻杀与雷霆之势。"
-          },
-          "talents": [
-            {
-              "name": "多宝童子",
-              "description": "袖口是秘境，指尖藏乾坤，他咧嘴一笑便从七窍飞出法宝雨，砸得敌人抱头鼠窜。"
-            }
-          ]
-        }
-      },
-      {
         "id": "liuchao.character.yu_zi_yuan",
         "name": "俞子元",
         "description": "商人面孔、苍白如纸，华丽的丝袍下掩着一条齐膝而断的左腿，可他驾船追踪的本事比健全人更狠——星月湖大营的精锐，从不是靠双腿走出来的。",
@@ -1222,140 +1182,6 @@
             }
           ],
           "appearance": "游婵身材纤柔，腰肢纤细，臀部丰满浑圆，肤色雪白（玉臂、玉股），长发，常穿薄衫、白色丝绸长裙。面容常带媚态，生气时脸色苍白或潮红，眼角挂泪痕。气质娇媚、放浪。"
-        }
-      },
-      {
-        "id": "liuchao.character.jian_yu_ji",
-        "name": "剑玉姬",
-        "description": "她容颜绝美、肌肤明玉，纤腰一握便能颠倒众生，而幻术之下那张脸不过是一层精致的纱——黑魔海外堂总执事，踏入长秋宫便是为了以梦为刃，猎取程宗扬的魂魄。",
-        "role": "敌对首领",
-        "gender": "女",
-        "realm": "筑基",
-        "affiliations": [
-          {
-            "factionId": "liuchao.faction.hei_mo_hai",
-            "category": "organization",
-            "role": "外堂总执事"
-          }
-        ],
-        "locationId": "liuchao.location.lin_an",
-        "skillIds": [],
-        "techniqueIds": [],
-        "itemIds": [],
-        "profile": {
-          "attributes": {
-            "rootBone": 10,
-            "spirituality": 7,
-            "comprehension": 10,
-            "fortune": 7,
-            "charm": 9,
-            "temperament": 7
-          },
-          "spiritRoot": {
-            "name": "水灵根",
-            "tier": "地品",
-            "description": "碧波流转似镜，化柔为刚，修炼者如深海暗流，善于滋养与封锁万物。"
-          },
-          "talents": [
-            {
-              "name": "神识过人",
-              "description": "意识铺开如蛛网，方圆千里每粒尘埃的震颤都逃不过，敌人抬脚就被预判三百年。"
-            }
-          ],
-          "appearance": "绝美的容颜，肌肤犹如明玉，五官精致绝伦，身姿曲线玲珑，丰润如玉，纤腰盈盈一握，气质高雅脱俗，常以幻术隐匿真身，时而多一层轻纱或丝履，更有空灵之感，目光深潭般静若止水，却灵动之极。",
-          "personality": [
-            "城府深",
-            "善于操纵人心",
-            "狡猾多变",
-            "善于操控他人"
-          ]
-        }
-      },
-      {
-        "id": "liuchao.character.xi_men_qing",
-        "name": "西门庆",
-        "description": "锦衣华服的俊美男子，西门世家的家主，却甘心跪在蔡京膝下当干儿子、在黑魔海的网中做一枚棋子——他与程宗扬之间的血雨，已在杭城上空积压成雷。",
-        "role": "敌对人物",
-        "gender": "男",
-        "realm": "筑基",
-        "affiliations": [
-          {
-            "factionId": "liuchao.faction.hei_mo_hai",
-            "category": "organization",
-            "role": "成员"
-          }
-        ],
-        "locationId": "liuchao.location.lin_an",
-        "skillIds": [],
-        "techniqueIds": [],
-        "itemIds": [
-          "lyl.item.np001"
-        ],
-        "profile": {
-          "attributes": {
-            "rootBone": 6,
-            "spirituality": 6,
-            "comprehension": 5,
-            "fortune": 5,
-            "charm": 5,
-            "temperament": 7
-          },
-          "spiritRoot": {
-            "name": "土灵根",
-            "tier": "玄品",
-            "description": "厚土沉凝如山，承载万物，修炼者如地脉巍峨，擅长防御与镇压之法。"
-          },
-          "talents": [
-            {
-              "name": "过目不忘",
-              "description": "瞳孔是刻录镜，每次眨眼就烙印宇宙法则，他看书如吃饭，记忆在脑海筑起书山。"
-            }
-          ],
-          "appearance": "锦衣华服，相貌英俊",
-          "personality": [
-            "风流好色",
-            "善于钻营"
-          ]
-        }
-      },
-      {
-        "id": "liuchao.character.qi_yu_xian",
-        "name": "齐羽仙",
-        "description": "她细腰长腿、雪肤玉体，宛如从画中走出的冰美人，可一头干枯的秀发泄露了她的底色：黑魔海主事人，用幻术翻云覆雨，却终究遮不住眼底的青灰与苍白的骨。",
-        "role": "黑魔海主事",
-        "gender": "女",
-        "realm": "筑基",
-        "affiliations": [
-          {
-            "factionId": "liuchao.faction.hei_mo_hai",
-            "category": "organization",
-            "role": "主事"
-          }
-        ],
-        "locationId": "liuchao.location.lin_an",
-        "skillIds": [],
-        "techniqueIds": [],
-        "itemIds": [],
-        "profile": {
-          "attributes": {
-            "rootBone": 9,
-            "spirituality": 6,
-            "comprehension": 6,
-            "fortune": 5,
-            "charm": 8,
-            "temperament": 6
-          },
-          "spiritRoot": {
-            "name": "火灵根",
-            "tier": "玄品",
-            "description": "赤焰翻涌如龙，焚尽八荒，修炼者若烈阳骄阳，主狂暴与毁灭之道。"
-          },
-          "talents": [
-            {
-              "name": "剑骨天成",
-              "description": "脊梁是剑胚，血管淌剑意，他呼吸间骨骼铮鸣，随手一挥便切开空间如斩蚯蚓。"
-            }
-          ]
         }
       },
       {
@@ -1831,18 +1657,6 @@
         ]
       },
       {
-        "characterId": "liuchao.character.jian_yu_ji",
-        "relation": "短暂盟友/互相利用",
-        "favorability": 10,
-        "memories": []
-      },
-      {
-        "characterId": "liuchao.character.xi_men_qing",
-        "relation": "潜在敌对",
-        "favorability": -30,
-        "memories": []
-      },
-      {
         "characterId": "liuchao.character.lin_qing_pu",
         "relation": "主从",
         "favorability": 50,
@@ -1881,19 +1695,9 @@
         "favorability": 60
       },
       {
-        "characterId": "liuchao.character.feng_yuan",
-        "relation": "主从",
-        "favorability": 5
-      },
-      {
         "characterId": "liuchao.character.ruan_xiang_lin",
         "relation": "无直接关系",
         "favorability": 0
-      },
-      {
-        "characterId": "liuchao.character.qi_yu_xian",
-        "relation": "敌对",
-        "favorability": 5
       },
       {
         "characterId": "liuchao.character.teng_fu",
@@ -1923,26 +1727,6 @@
         ]
       },
       {
-        "fromCharacterId": "liuchao.character.jian_yu_ji",
-        "toCharacterId": "liuchao.character.xi_men_qing",
-        "relation": "合作",
-        "score": 70,
-        "direction": "bidirectional",
-        "tags": [
-          "黑魔海高层"
-        ]
-      },
-      {
-        "fromCharacterId": "liuchao.character.qi_yu_xian",
-        "toCharacterId": "liuchao.character.jian_yu_ji",
-        "relation": "上下级",
-        "score": 80,
-        "direction": "directed",
-        "tags": [
-          "黑魔海主事"
-        ]
-      },
-      {
         "fromCharacterId": "liuchao.character.li_yin_chen",
         "toCharacterId": "liuchao.character.ruan_xiang_lin",
         "relation": "夫妻",
@@ -1950,16 +1734,6 @@
         "direction": "bidirectional",
         "tags": [
           "夫妻"
-        ]
-      },
-      {
-        "fromCharacterId": "liuchao.character.xue_yan_shan",
-        "toCharacterId": "liuchao.character.feng_yuan",
-        "relation": "团长与团员",
-        "score": 80,
-        "direction": "directed",
-        "tags": [
-          "雪隼团"
         ]
       },
       {
@@ -2011,13 +1785,6 @@
         "toCharacterId": "liuchao.character.ruan_xiang_lin",
         "relation": "情人",
         "score": 75,
-        "direction": "bidirectional"
-      },
-      {
-        "fromCharacterId": "liuchao.character.qin_hui",
-        "toCharacterId": "liuchao.character.xi_men_qing",
-        "relation": "敌对",
-        "score": 5,
         "direction": "bidirectional"
       },
       {
@@ -2735,9 +2502,7 @@
           }
         ],
         "relatedCharacterIds": [
-          "liuchao.character.you_chan",
-          "liuchao.character.jian_yu_ji",
-          "liuchao.character.xi_men_qing"
+          "liuchao.character.you_chan"
         ],
         "relatedFactionIds": [
           "liuchao.faction.hei_mo_hai"
@@ -2841,9 +2606,6 @@
           }
         ],
         "relatedCharacterIds": [
-          "liuchao.character.jian_yu_ji",
-          "liuchao.character.xi_men_qing",
-          "liuchao.character.qi_yu_xian",
           "liuchao.character.you_chan"
         ],
         "relatedFactionIds": [
@@ -2865,8 +2627,7 @@
         "relatedCharacterIds": [
           "liuchao.character.qin_hui",
           "liuchao.character.ao_run",
-          "liuchao.character.yu_zi_yuan",
-          "liuchao.character.feng_yuan"
+          "liuchao.character.yu_zi_yuan"
         ],
         "relatedFactionIds": [
           "liuchao.faction.xing_yue_hu",
