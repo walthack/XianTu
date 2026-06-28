@@ -30,6 +30,24 @@ function gender(value?: string): '男' | '女' | '其他' {
   return '其他';
 }
 
+// mod canon 不含年龄字段，按境界估龄（修士长寿）：境界给年龄区间，name-hash 抖动避免同档雷同，
+// role 关键词（老祖/弟子等）再微调。出生年由调用方用「当前游戏年 - 估龄」反推（见 createNpcProfile）。
+const REALM_AGE_RANGE: Record<string, [number, number]> = {
+  凡人: [16, 35], 练气: [18, 45], 筑基: [35, 90], 金丹: [70, 180],
+  元婴: [150, 350], 化神: [300, 600], 炼虚: [500, 900], 合体: [800, 1500], 渡劫: [1500, 3000],
+};
+function estimateNpcAge(character: ScenarioModCharacter): number {
+  const [lo, hi] = REALM_AGE_RANGE[character.realm || ''] || [18, 50];
+  const key = character.id || character.name || '';
+  let h = 0;
+  for (let i = 0; i < key.length; i++) h = (h * 31 + key.charCodeAt(i)) >>> 0;
+  let age = lo + (h % (hi - lo + 1));
+  const role = `${character.role || ''}${character.profile?.origin || ''}`;
+  if (/老祖|祖师|太上|前辈|老者|老妪|老怪|宿老/.test(role)) age = Math.round((age + hi) / 2);
+  if (/弟子|少年|少女|童|幼|婴|孩|侍女|丫鬟|学徒/.test(role)) age = Math.max(lo, Math.round(age * 0.6));
+  return age;
+}
+
 function itemType(type: ScenarioModItem['type']): '装备' | '丹药' | '材料' | '其他' {
   if (type === 'weapon' || type === 'armor') return '装备';
   if (type === 'consumable') return '丹药';
@@ -111,7 +129,7 @@ function buildNativeCharacterContent(source: ScenarioRelationshipSource, charact
   };
 }
 
-function createNpcProfile(source: ScenarioRelationshipSource, character: ScenarioModCharacter, relation: string, favorability: number) {
+function createNpcProfile(source: ScenarioRelationshipSource, character: ScenarioModCharacter, relation: string, favorability: number, currentYear: number) {
   const locations = source.locations || [];
   const factions = source.factions || [];
   const location = locations.find(item => item.id === character.locationId);
@@ -128,7 +146,7 @@ function createNpcProfile(source: ScenarioRelationshipSource, character: Scenari
   return {
     名字: character.name,
     性别: gender(character.gender),
-    出生日期: { 年: 0, 月: 1, 日: 1 },
+    出生日期: { 年: currentYear - estimateNpcAge(character), 月: 1, 日: 1 },
     种族: profile.race || '人族',
     出生: profile.origin || character.role || '原作人物',
     外貌描述: profile.appearance || character.description || character.role || character.name,
@@ -174,7 +192,8 @@ function createNpcProfile(source: ScenarioRelationshipSource, character: Scenari
 }
 
 export function applyScenarioRelationshipsToSave(saveData: SaveData, source: ScenarioRelationshipSource, generatedAt: string): SaveData {
-  const next = saveData as SaveData & { 社交?: Record<string, any> };
+  const next = saveData as SaveData & { 社交?: Record<string, any>; 元数据?: { 时间?: { 年?: number } } };
+  const currentYear = next.元数据?.时间?.年 ?? 1000;
   const characters = source.characters || [];
   const byId = new Map(characters.map(character => [character.id, character]));
   const playerRelations = source.playerRelationships || [];
@@ -192,7 +211,7 @@ export function applyScenarioRelationshipsToSave(saveData: SaveData, source: Sce
     if (!character) continue;
     const declared = playerRelations.find(item => item.characterId === characterId);
     const existing = next.社交.关系[character.name] || {};
-    const profile = createNpcProfile(source, character, declared?.relation || '陌生人', declared?.favorability || 0);
+    const profile = createNpcProfile(source, character, declared?.relation || '陌生人', declared?.favorability || 0, currentYear);
     next.社交.关系[character.name] = { ...profile, ...existing, 名字: character.name };
     if (declared) {
       next.社交.关系[character.name].与玩家关系 = declared.relation;
