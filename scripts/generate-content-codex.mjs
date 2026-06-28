@@ -22,11 +22,13 @@ async function run() {
       for (const c of m.canon?.characters || []) charName.set(c.id, c.name);
       for (const k of Object.keys(kinds)) for (const e of m.content?.[k] || []) {
         if (!e.id) continue;
-        const cur = kinds[k].get(e.id) || { name: e.name, grade: '', type: '', desc: '' };
+        const cur = kinds[k].get(e.id) || { name: e.name, grade: '', type: '', desc: '', mech: '' };
         if (e.name) cur.name = e.name;
         if (e.grade) cur.grade = e.grade;
         if (e.type) cur.type = e.type;
         if (e.description && e.description.length > cur.desc.length) cur.desc = e.description;
+        if (e.attributeBonus) cur.mech = JSON.stringify(e.attributeBonus).replace(/[{}"]/g, '').replace(/后天六司:/, '六司:');
+        if (e.techniqueEffects) cur.mech = JSON.stringify(e.techniqueEffects).replace(/[{}"]/g, '').replace(/属性加成:/, '属性:');
         kinds[k].set(e.id, cur);
       }
       for (const c of m.canon?.characters || []) for (const k of Object.keys(holdField)) for (const cid of c[holdField[k]] || []) {
@@ -47,6 +49,7 @@ async function run() {
       const acStr = ac ? `　[${ac.policy === 'exclusive' ? '独占' : ac.policy === 'restricted' ? '限制' : ac.policy}：${ac.allowed.map(i => charName.get(i) || i).join('/') || '—'}]` : '';
       lines.push(`- **${e.name}**${e.grade ? `（${e.grade}）` : ''}${e.type ? `〔${e.type}〕` : ''}${acStr}`);
       if (e.desc) lines.push(`  - ${e.desc}`);
+      if (e.mech) lines.push(`  - 机制：${e.mech}`);
       if (hold.length) lines.push(`  - 持有：${hold.join('、')}`);
     }
     lines.push('');
