@@ -1055,7 +1055,16 @@ const resolvePlayerCoordinates = (locationData: any): GameCoordinates | null => 
       }
     }
 
-    // ── 优先级 2：按描述匹配大陆，使用大陆边界重心兜底 ─────────────────────
+    // ── 优先级 2：玩家自身记录的精确坐标（优于大陆重心兜底，确保铺满后主角标对） ──
+    {
+      const px = resolveNumber(raw.x ?? raw['坐标']?.x ?? raw.coordinates?.x) ?? NaN;
+      const py = resolveNumber(raw.y ?? raw['坐标']?.y ?? raw.coordinates?.y) ?? NaN;
+      if (Number.isFinite(px) && Number.isFinite(py)) {
+        return { x: px!, y: py! };
+      }
+    }
+
+    // ── 优先级 3：按描述匹配大陆，使用大陆边界重心兜底 ─────────────────────
     for (const wi of worldCandidates) {
       const continents: any[] = wi?.大陆信息 ?? [];
       const partsForward = parseLocationPath(desc);
@@ -1076,7 +1085,7 @@ const resolvePlayerCoordinates = (locationData: any): GameCoordinates | null => 
     }
   }
 
-  // ── 优先级 3：回退玩家自身 x/y（若有效） ────────────────────────────────
+  // ── 优先级 4：无描述时回退玩家自身 x/y（若有效） ──────────────────────────
   const x = resolveNumber(raw.x ?? raw['坐标']?.x ?? raw.coordinates?.x) ?? NaN;
   const y = resolveNumber(raw.y ?? raw['坐标']?.y ?? raw.coordinates?.y) ?? NaN;
   if (Number.isFinite(x) && Number.isFinite(y)) {
@@ -1496,6 +1505,10 @@ const initializeMap = async () => {
     toast.error('未找到世界信息');
     return;
   }
+  if (isScenarioModMapLocked(worldInfo)) {
+    toast.warning('当前为剧本模组正典地图，已禁止随机初始化覆盖。');
+    return;
+  }
 
   isInitializing.value = true;
   mapStatus.value = '开始生成地图内容...';
@@ -1668,6 +1681,10 @@ const generateAdditionalContent = async () => {
     toast.error('未找到世界信息');
     return;
   }
+  if (isScenarioModMapLocked(worldInfo)) {
+    toast.warning('当前为剧本模组正典地图，已禁止追加随机势力或地点。');
+    return;
+  }
 
   const { locations, locationCount, factions, factionCount } = generateOptions.value;
   if (!locations && !factions) {
@@ -1826,6 +1843,13 @@ const generateAdditionalContent = async () => {
     isGenerating.value = false;
   }
 };
+
+function isScenarioModMapLocked(worldInfo: any): boolean {
+  const runtimeMode = (gameStateStore.saveData as any)?.世界?.状态?.剧本模组?.mode;
+  const extensionMode = (gameStateStore.saveData as any)?.系统?.扩展?.剧本模组?.mode;
+  const mapLock = worldInfo?.剧本地图?.locked;
+  return runtimeMode === 'strict' || extensionMode === 'strict' || mapLock === true;
+}
 
 /**
  * 加载地图数据
