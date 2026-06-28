@@ -6,7 +6,12 @@
     "name": "六朝云龙吟·镖局",
     "version": "1.0.0",
     "author": "DeepSeek V4 Flash + XianTu Mod Kit",
-    "description": "程宗扬一行在临安处理完黑魔海余波后，计划前往太泉古阵寻找赤阳圣果。古阵汇聚龙宸、瑶池宗、光明观堂、毒宗等多派势力，冲突一触即发。玩家将扮演程宗扬，在进入古阵前决定结盟或对抗策略，影响圣果归属。"
+    "description": "程宗扬一行在临安处理完黑魔海余波后，计划前往太泉古阵寻找赤阳圣果。古阵汇聚龙宸、瑶池宗、光明观堂、毒宗等多派势力，冲突一触即发。玩家将扮演程宗扬，在进入古阵前决定结盟或对抗策略，影响圣果归属。",
+    "axisVersion": "rebuild-2026-06-28",
+    "axisOrder": 2,
+    "axisSeqLo": 563,
+    "axisSeqHi": 566,
+    "eventIdContract": "append-only-frozen"
   },
   "world": {
     "name": "六朝世界",
@@ -533,13 +538,433 @@
           "y": 7778
         },
         "features": []
+      },
+      {
+        "id": "liuchao.location.wuyuan",
+        "name": "五原城",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "中州北部边境城池，程宗扬初次逃亡地。",
+        "coordinates": {
+          "x": 881,
+          "y": 4366
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.jiankang",
+        "name": "建康",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "晋国都城，六朝世界的政治中心之一。",
+        "coordinates": {
+          "x": 7100,
+          "y": 4960
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.luoyang",
+        "name": "洛都",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "汉国都城，位于中州腹地。",
+        "coordinates": {
+          "x": 6838,
+          "y": 3577
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.changan",
+        "name": "长安",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "唐国都城，六朝最大城市。",
+        "coordinates": {
+          "x": 2830,
+          "y": 3049
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.junzhou",
+        "name": "筠州",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "宋国州城，王团练驻地，程宗扬运粮之处。",
+        "coordinates": {
+          "x": 5656,
+          "y": 6822
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.diqiu",
+        "name": "帝丘",
+        "continentId": "liuchao.continent.nanhuang",
+        "type": "城池",
+        "description": "南荒-中州交界处的重要城镇。",
+        "coordinates": {
+          "x": 6096,
+          "y": 7831
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.kunwu",
+        "name": "昆吾",
+        "continentId": "liuchao.continent.nanhuang",
+        "type": "城池",
+        "description": "南荒区域的重要城镇。",
+        "coordinates": {
+          "x": 4840,
+          "y": 7546
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.xiongerpu",
+        "name": "熊耳铺",
+        "continentId": "liuchao.continent.nanhuang",
+        "type": "城池",
+        "description": "南荒入口处的村寨，程宗扬在此选向导。",
+        "coordinates": {
+          "x": 1623,
+          "y": 7612
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.guiwangdong",
+        "name": "鬼王峒",
+        "continentId": "liuchao.continent.nanhuang",
+        "type": "洞府",
+        "description": "南荒鬼王峒势力的核心洞窟。",
+        "coordinates": {
+          "x": 1641,
+          "y": 8690
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.baiyi",
+        "name": "白夷族",
+        "continentId": "liuchao.continent.nanhuang",
+        "type": "城池",
+        "description": "南荒白夷族聚居地。",
+        "coordinates": {
+          "x": 1818,
+          "y": 8118
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.biyu",
+        "name": "碧鲮族",
+        "continentId": "liuchao.continent.nanhuang",
+        "type": "城池",
+        "description": "南荒沿海碧鲮族聚居地。",
+        "coordinates": {
+          "x": 1824,
+          "y": 8592
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.liuligu",
+        "name": "琉璃谷",
+        "continentId": "liuchao.continent.nanhuang",
+        "type": "城池",
+        "description": "南荒区域山谷。",
+        "coordinates": {
+          "x": 1165,
+          "y": 8791
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.shenmu",
+        "name": "神木",
+        "continentId": "liuchao.continent.nanhuang",
+        "type": "城池",
+        "description": "南荒区域重要地标。",
+        "coordinates": {
+          "x": 1341,
+          "y": 9521
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.haishanghuahuan",
+        "name": "海棠花環",
+        "continentId": "liuchao.continent.nanhuang",
+        "type": "险地",
+        "description": "南荒极南端的环状区域。",
+        "coordinates": {
+          "x": 3241,
+          "y": 9915
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.guangyang",
+        "name": "广阳",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "晋国-汉国边境重镇。",
+        "coordinates": {
+          "x": 4456,
+          "y": 5668
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.qingzhou",
+        "name": "晴州",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "星月湖据点之一。",
+        "coordinates": {
+          "x": 5400,
+          "y": 6000
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.ningzhou",
+        "name": "宁州",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "北府兵驻地。",
+        "coordinates": {
+          "x": 5100,
+          "y": 5800
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.jinmingzhai",
+        "name": "金明寨",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "宋军大营，位于烈山附近。",
+        "coordinates": {
+          "x": 5050,
+          "y": 6550
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.haoshuichuan",
+        "name": "好水川",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "烈山附近峡谷，大型战场。",
+        "coordinates": {
+          "x": 5104,
+          "y": 6476
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.jingxi",
+        "name": "荆溪村寨",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "荆溪人聚居地，位于筠州附近山区。",
+        "coordinates": {
+          "x": 5600,
+          "y": 6900
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.wudu",
+        "name": "舞都",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "程宗扬封地，舞阳侯府所在。",
+        "coordinates": {
+          "x": 6114,
+          "y": 3929
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.yong",
+        "name": "庸",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "唐国与汉国之间的城池。",
+        "coordinates": {
+          "x": 5176,
+          "y": 3978
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.yongzhou",
+        "name": "永州",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "汉国-唐国交界附近的城市。",
+        "coordinates": {
+          "x": 4220,
+          "y": 4242
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.baijun",
+        "name": "巴郡",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "汉国、唐国交界处的郡城。",
+        "coordinates": {
+          "x": 4763,
+          "y": 3063
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.dantu",
+        "name": "丹徒",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "晋国-宋国水路交通要地。",
+        "coordinates": {
+          "x": 8875,
+          "y": 4854
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.longchuan",
+        "name": "龙川",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "宋国城市。",
+        "coordinates": {
+          "x": 7908,
+          "y": 6819
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.nanjun",
+        "name": "南郡",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "汉国南部郡城。",
+        "coordinates": {
+          "x": 6876,
+          "y": 5276
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.chenzhou",
+        "name": "辰州",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "汉国-唐国边境城市。",
+        "coordinates": {
+          "x": 4704,
+          "y": 5011
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.liangzhou",
+        "name": "凉州",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "唐国西北边境州城，凉州盟据点。",
+        "coordinates": {
+          "x": 750,
+          "y": 3600
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.boling",
+        "name": "泊陵",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "宋国沿海城市，鱼氏势力据点。",
+        "coordinates": {
+          "x": 9592,
+          "y": 6706
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.yiyang",
+        "name": "夷陵",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "宋国城市，长江沿岸。",
+        "coordinates": {
+          "x": 7068,
+          "y": 7423
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.cuizhi",
+        "name": "翠枝港",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "宋国沿海港口。",
+        "coordinates": {
+          "x": 9515,
+          "y": 5001
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.lie",
+        "name": "烈",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "宋国-晋国交界的山脉区域。",
+        "coordinates": {
+          "x": 5390,
+          "y": 6472
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.bailuojiang",
+        "name": "白龍江",
+        "continentId": "liuchao.continent.nanhuang",
+        "type": "城池",
+        "description": "南荒-中州交界的重要河流。",
+        "coordinates": {
+          "x": 1905,
+          "y": 7162
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.longchi",
+        "name": "龙池",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "宗门",
+        "description": "太乙真宗总部所在地，位于中州区域。",
+        "coordinates": {
+          "x": 5000,
+          "y": 5000
+        },
+        "features": []
       }
     ],
     "characters": [
       {
         "id": "liuchao.character.cheng_zongyang",
         "name": "程宗扬",
-        "description": "黑魔海门徒程宗扬，身为汉国舞阳侯，随和洒脱间透着机敏狡黠，虽身负丹田杂气危机，却总以温柔笑容化险为夷，重情重义之下暗藏城府，骑赤兔马时还不忘用苹果贿赂——这般不拘小节，倒真应了他那嬉皮笑脸的性子。",
+        "description": "程宗扬，汉国舞阳侯，以务实精明在权贵间游刃有余。他骑着赤兔马，用一颗苹果贿赂牲畜，被杨玉环踢下高楼仍嬉皮笑脸爬起，仿佛丹田杂气与双修鼎炉的功法约束不过是棋盘上一枚可操纵的棋子。",
         "role": "主角",
         "gender": "男",
         "realm": "金丹",
@@ -593,12 +1018,12 @@
           ],
           "appearance": "身材魁梧，身穿黑衣，赤阳藤拖入魔墟时衣衫破损，被雪雪咬伤后曾不举，颈后有狐族印记，被襄城君认出，青年男子",
           "personality": [
-            "随和洒脱",
-            "待人温柔体贴",
-            "机敏狡黠",
-            "颇有城府",
-            "善随机应变",
-            "重情重义"
+            "务实",
+            "精明",
+            "有野心",
+            "擅长社交与商业谈判",
+            "懂得审时度势",
+            "擅长政治博弈"
           ]
         }
       },
@@ -660,7 +1085,7 @@
       {
         "id": "liuchao.character.qin_hui",
         "name": "秦桧",
-        "description": "清秀文士打扮的幕僚，看似谦恭有礼，实则城府深沉、狡诈多端，既是殇侯座下最得力的毒术高手，也是那位对主上忠贞不二的阴鸷谋臣。",
+        "description": "一袭青衫的文士轻摇折扇，清秀面容上带着谦和笑意，唯有熟知其为人方才知晓这位被誉为‘殇侯智囊’的毒术高手，如何以温言软语布下杀机重重的罗网。",
         "role": "谋士",
         "gender": "男",
         "realm": "金丹",
@@ -699,10 +1124,9 @@
           ],
           "appearance": "文士打扮，相貌清秀，文士模样",
           "personality": [
+            "阴险狡诈",
+            "城府极深",
             "才智高绝",
-            "狡诈多端",
-            "城府深沉",
-            "谨慎多疑",
             "狠辣果断",
             "对主忠贞不二"
           ]
@@ -2044,7 +2468,8 @@
           "liuchao.faction.guang_ming_guan_tang",
           "liuchao.faction.du_zong"
         ],
-        "locationId": "liuchao.location.taiquan_ancient_array"
+        "locationId": "liuchao.location.taiquan_ancient_array",
+        "axisId": null
       },
       {
         "id": "liuchao.event.reconnoiter",
@@ -2061,7 +2486,8 @@
           "liuchao.character.cheng_zongyang",
           "liuchao.character.yu_zi_yuan"
         ],
-        "locationId": "liuchao.location.taiquan_ancient_array"
+        "locationId": "liuchao.location.taiquan_ancient_array",
+        "axisId": null
       },
       {
         "id": "liuchao.event.du_zong_raid",
@@ -2081,7 +2507,8 @@
         "relatedFactionIds": [
           "liuchao.faction.du_zong"
         ],
-        "locationId": "liuchao.location.taiquan_ancient_array"
+        "locationId": "liuchao.location.taiquan_ancient_array",
+        "axisId": null
       },
       {
         "id": "liuchao.event.fruit_conflict",
@@ -2103,7 +2530,8 @@
           "liuchao.faction.guang_ming_guan_tang",
           "liuchao.faction.du_zong"
         ],
-        "locationId": "liuchao.location.taiquan_ancient_array"
+        "locationId": "liuchao.location.taiquan_ancient_array",
+        "axisId": null
       },
       {
         "id": "liuchao.event.escape_taiquan",
@@ -2120,7 +2548,8 @@
           "liuchao.character.cheng_zongyang",
           "liuchao.character.qin_hui"
         ],
-        "locationId": "liuchao.location.taiquan_ancient_array"
+        "locationId": "liuchao.location.taiquan_ancient_array",
+        "axisId": null
       }
     ],
     "chapters": [

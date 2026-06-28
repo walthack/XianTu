@@ -106,6 +106,14 @@ function applyAtlas(mod) {
     }),
   ]);
 
+  // 全大陆铺满：把该 stage 所属大陆的全部 atlas 地点(各自真实坐标)注入世界地图，
+  // 而不止 visibleLocationIds，否则世界地图只剩一两个点、其余共坐标，看起来像空的。
+  for (const atlasLocation of atlasByLocationId.values()) {
+    if (atlasLocation.continentId && continentIds.has(atlasLocation.continentId)) {
+      requiredAtlasLocations.set(atlasLocation.id, atlasLocation);
+    }
+  }
+
   mod.world.map = {
     atlasId: atlas.atlas.id,
     locked: true,
