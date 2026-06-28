@@ -561,7 +561,7 @@
       {
         "id": "liuchao.character.wang_tuanlian",
         "name": "王团练",
-        "description": "筠州地方团练，即将屠杀荆溪村寨。",
+        "description": "筠州团练头目王团练，正磨刀霍霍，准备血洗荆溪村寨，他的人马已在山路间若隐若现。",
         "role": "反派",
         "gender": "男",
         "realm": "凡人",
@@ -601,7 +601,7 @@
       {
         "id": "liuchao.character.xiang_ya",
         "name": "相雅",
-        "description": "荆溪女族长，即将面临灭族。",
+        "description": "荆溪女族长相雅，娇小身躯裹着素衣，眉间锁着哀愁——那是村寨覆灭前最后的宁静。",
         "role": "女族长",
         "gender": "女",
         "realm": "凡人",
@@ -643,7 +643,7 @@
         "id": "liuchao.character.li_shi_shi",
         "name": "李师师",
         "role": "医者、未来公关经理培养对象",
-        "description": "医者、未来公关经理培养对象",
+        "description": "光明观堂的女弟子李师师，修眉如画、肤白胜雪，一面悬壶济世，一面被高衙内的婚事逼得无处可逃。",
         "profile": {
           "attributes": {
             "rootBone": 6,
@@ -677,7 +677,7 @@
         "id": "liuchao.character.qing_mian_shou",
         "name": "青面兽",
         "role": "兽蛮仆从",
-        "description": "兽蛮仆从",
+        "description": "青面兽，这张又青又暗的兽斑脸上，眼睛能咆哮，手臂粗如牛腿，正忠心耿耿地跟在程宗扬身后。",
         "profile": {
           "attributes": {
             "rootBone": 9,
@@ -706,7 +706,7 @@
         "id": "liuchao.character.ao_run",
         "name": "敖润",
         "role": "程宗扬下属",
-        "description": "程宗扬下属",
+        "description": "程宗扬的心腹敖润，貌不惊人的小个子，此刻正臊眉搭眼地蹲在地道里，和韩玉一起挥汗挖土。",
         "profile": {
           "attributes": {
             "rootBone": 7,
@@ -735,7 +735,7 @@
         "id": "liuchao.character.lin_chong",
         "name": "林冲",
         "role": "禁军教头、阮香凝（林娘子）名义上的丈夫",
-        "description": "禁军教头、阮香凝（林娘子）名义上的丈夫",
+        "description": "禁军教头林冲，高大武人刚购得屠龙刀，妻子林娘子的身世却笼罩着黑魔海的暗影。",
         "skillIds": [
           "lyl.skill.np005"
         ],
@@ -772,7 +772,7 @@
         "id": "liuchao.character.jin_wu_zhu",
         "name": "金兀术",
         "role": "兽蛮战士、原兽蛮营首领",
-        "description": "兽蛮战士、原兽蛮营首领",
+        "description": "独眼兽蛮金兀术，低垂的眼皮里透出苍狼般的寒光，兽齿如匕首，正与武二郎杀得难解难分。",
         "profile": {
           "attributes": {
             "rootBone": 10,
@@ -801,7 +801,7 @@
         "id": "liuchao.character.lu_zhi_shen",
         "name": "鲁智深",
         "role": "花和尚",
-        "description": "花和尚",
+        "description": "明庆寺挂单的花和尚鲁智深，魁梧僧衣下藏着金钟罩般的钢筋铁骨，与林冲一见便拍肩大笑。",
         "skillIds": [
           "lyl.skill.np005"
         ],
@@ -841,7 +841,7 @@
         "id": "liuchao.character.bao_zi_tou",
         "name": "豹子头",
         "role": "兽蛮武士",
-        "description": "兽蛮武士",
+        "description": "豹子头，这名兽蛮武士沉默地站在程宗扬身旁，目光如豹，伺机而动。",
         "profile": {
           "attributes": {
             "rootBone": 7,
@@ -870,14 +870,14 @@
         "name": "王天德",
         "gender": "男",
         "role": "团练",
-        "description": "团练"
+        "description": "团练王天德，一身粗布武服，正领着乡勇在镇口来回巡视。"
       },
       {
         "id": "liuchao.character.teng_fu",
         "name": "滕甫",
         "gender": "男",
         "role": "知州",
-        "description": "知州"
+        "description": "知州滕甫，端坐公堂之上，案牍文书堆成小山，眉间拧着州府的千头万绪。"
       }
     ],
     "playerRelationships": [

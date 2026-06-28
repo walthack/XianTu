@@ -606,7 +606,7 @@
       {
         "id": "liuchao.character.li_shi_shi",
         "name": "李师师",
-        "description": "威远镖局小姐，光明观堂弟子，精通医术，容貌绝世。对程宗扬有好感，正在被高衙内逼婚。",
+        "description": "光明观堂的女弟子李师师，修眉如画、肤白胜雪，一面悬壶济世，一面被高衙内的婚事逼得无处可逃。",
         "role": "关键人物",
         "gender": "女",
         "realm": "凡人",
@@ -709,7 +709,7 @@
       {
         "id": "liuchao.character.lin_chong",
         "name": "林冲",
-        "description": "禁军教头，武艺高强。妻子林娘子疑似黑魔海御姬，但尚未证实。刚购得屠龙刀。",
+        "description": "禁军教头林冲，高大武人刚购得屠龙刀，妻子林娘子的身世却笼罩着黑魔海的暗影。",
         "role": "禁军教头",
         "gender": "男",
         "realm": "凡人",
@@ -765,7 +765,7 @@
       {
         "id": "liuchao.character.lu_zhi_shen",
         "name": "鲁智深",
-        "description": "花和尚，林冲好友，精通金钟罩。目前暂居临安明庆寺。",
+        "description": "明庆寺挂单的花和尚鲁智深，魁梧僧衣下藏着金钟罩般的钢筋铁骨，与林冲一见便拍肩大笑。",
         "role": "花和尚",
         "gender": "男",
         "realm": "凡人",
@@ -1093,7 +1093,7 @@
       {
         "id": "liuchao.character.ao_run",
         "name": "敖润",
-        "description": "星月湖大营成员，护卫程宗扬。",
+        "description": "程宗扬的心腹敖润，貌不惊人的小个子，此刻正臊眉搭眼地蹲在地道里，和韩玉一起挥汗挖土。",
         "role": "护卫",
         "gender": "男",
         "realm": "凡人",
@@ -1377,7 +1377,7 @@
       {
         "id": "liuchao.character.qing_mian_shou",
         "name": "青面兽",
-        "description": "兽蛮仆从，忠心跟随程宗扬。",
+        "description": "青面兽，这张又青又暗的兽斑脸上，眼睛能咆哮，手臂粗如牛腿，正忠心耿耿地跟在程宗扬身后。",
         "role": "仆从",
         "gender": "男",
         "realm": "凡人",

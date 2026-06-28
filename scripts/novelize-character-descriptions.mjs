@@ -21,9 +21,11 @@ async function run() {
   // 聚合唯一角色(by id)
   const byId = new Map();
   for (const b of books) { const d = join(gen, b, 'stages'); for (const f of (await readdir(d)).filter(n => n.endsWith('.json') && !n.endsWith('.uncertainties.json'))) { const m = await readJson(join(d, f)); const facName = new Map((m.canon?.factions || []).map(x => [x.id, x.name])); for (const c of m.canon?.characters || []) { if (!c.id) continue; const e = byId.get(c.id) || { id: c.id, name: c.name, role: c.role || '', desc: '', appearance: '', faction: '' }; if (c.role && !e.role) e.role = c.role; if (c.description && c.description.length > e.desc.length) e.desc = c.description; const ap = c.profile?.appearance; if (ap && ap.length > e.appearance.length) e.appearance = ap; const fid = c.affiliations?.[0]?.factionId; if (fid && !e.faction) e.faction = facName.get(fid) || ''; byId.set(c.id, e); } } }
-  const all = [...byId.values()];
-  console.error(`唯一角色 ${all.length}，分 ${Math.ceil(all.length / BATCH)} 批改写…`);
-  const out = {};
+  // 增量:复用已有 character-descriptions.json，只补尚未改写的角色。
+  const descPath = join(canonDir, 'character-descriptions.json');
+  const out = existsSync(descPath) ? await readJson(descPath) : {};
+  const all = [...byId.values()].filter(c => !out[c.id]);
+  console.error(`唯一角色 ${byId.size}，已改写 ${Object.keys(out).length}，待补 ${all.length}，分 ${Math.ceil(all.length / BATCH)} 批…`);
   let bi = 0;
   for (const grp of chunk(all, BATCH)) {
     bi++;

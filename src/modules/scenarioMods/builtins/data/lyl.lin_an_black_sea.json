@@ -705,7 +705,7 @@
       {
         "id": "liuchao.character.li_shi_shi",
         "name": "李师师",
-        "description": "威远镖局总镖头之女，光明观堂外堂弟子，虎翼军随军医官。聪明美貌，擅医术。",
+        "description": "光明观堂的女弟子李师师，修眉如画、肤白胜雪，一面悬壶济世，一面被高衙内的婚事逼得无处可逃。",
         "role": "关键人物",
         "gender": "女",
         "realm": "筑基",
@@ -806,7 +806,7 @@
       {
         "id": "liuchao.character.lin_chong",
         "name": "林冲",
-        "description": "八十万禁军教头，皇城司借调。相貌堂堂，武艺高强。正在跟踪程宗扬。",
+        "description": "禁军教头林冲，高大武人刚购得屠龙刀，妻子林娘子的身世却笼罩着黑魔海的暗影。",
         "role": "关键人物",
         "gender": "男",
         "realm": "筑基",
@@ -853,7 +853,7 @@
       {
         "id": "liuchao.character.lu_zhi_shen",
         "name": "鲁智深",
-        "description": "明庆寺挂单和尚，花和尚。神力惊人，身具金钟罩。与林冲一见如故。",
+        "description": "明庆寺挂单的花和尚鲁智深，魁梧僧衣下藏着金钟罩般的钢筋铁骨，与林冲一见便拍肩大笑。",
         "role": "关键人物",
         "gender": "男",
         "realm": "筑基",
@@ -903,7 +903,7 @@
       {
         "id": "liuchao.character.xue_yan_shan",
         "name": "薛延山",
-        "description": "雪隼佣兵团团长。身中寒毒，油尽灯枯，托付团员给程宗扬。",
+        "description": "雪隼佣兵团团长薛延山，枯瘦如柴、眼结冰渣，躺在榻上口吐白气，奄奄一息中将团员托付给程宗扬。",
         "role": "关键人物",
         "gender": "男",
         "realm": "练气",
@@ -1029,7 +1029,7 @@
       {
         "id": "liuchao.character.ao_run",
         "name": "敖润",
-        "description": "程宗扬部下，星月湖战士。",
+        "description": "程宗扬的心腹敖润，貌不惊人的小个子，此刻正臊眉搭眼地蹲在地道里，和韩玉一起挥汗挖土。",
         "role": "下属",
         "gender": "男",
         "realm": "筑基",
@@ -1569,7 +1569,7 @@
       {
         "id": "liuchao.character.qing_mian_shou",
         "name": "青面兽",
-        "description": "程宗扬的兽蛮仆从之一。",
+        "description": "青面兽，这张又青又暗的兽斑脸上，眼睛能咆哮，手臂粗如牛腿，正忠心耿耿地跟在程宗扬身后。",
         "role": "仆从",
         "gender": "男",
         "realm": "筑基",
@@ -1610,7 +1610,7 @@
       {
         "id": "liuchao.character.jin_wu_zhu",
         "name": "金兀术",
-        "description": "程宗扬的兽蛮仆从之一。实力可与武二郎斗数百回合。",
+        "description": "独眼兽蛮金兀术，低垂的眼皮里透出苍狼般的寒光，兽齿如匕首，正与武二郎杀得难解难分。",
         "role": "仆从",
         "gender": "男",
         "realm": "筑基",
@@ -1651,7 +1651,7 @@
       {
         "id": "liuchao.character.bao_zi_tou",
         "name": "豹子头",
-        "description": "程宗扬的兽蛮仆从之一。",
+        "description": "豹子头，这名兽蛮武士沉默地站在程宗扬身旁，目光如豹，伺机而动。",
         "role": "仆从",
         "gender": "男",
         "realm": "筑基",
@@ -1751,7 +1751,7 @@
         "name": "滕甫",
         "gender": "男",
         "role": "知州",
-        "description": "知州"
+        "description": "知州滕甫，端坐公堂之上，案牍文书堆成小山，眉间拧着州府的千头万绪。"
       }
     ],
     "playerRelationships": [

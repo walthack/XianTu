@@ -693,7 +693,7 @@
       {
         "id": "lyl.character.lv_jujun",
         "name": "吕巨君",
-        "description": "射声校尉，吕氏核心将领，率左武第二军攻入南宫。",
+        "description": "射声校尉，吕氏麾下铁骨将领，相貌平平笑容温和，目光却如刀锋般锐利，曾率左武第二军攻入南宫。",
         "role": "射声校尉",
         "gender": "男",
         "realm": "金丹",
@@ -782,7 +782,7 @@
       {
         "id": "lyl.character.cang_lu",
         "name": "苍鹭",
-        "description": "刘建的首席谋士，擅长兵法与诈术。",
+        "description": "刘建的首席军师，面若中年寒士，擅长在兵法里埋下诈术的钉子，谈笑间算定敌手棋局。",
         "role": "军师",
         "gender": "男",
         "realm": "筑基",
@@ -1250,7 +1250,7 @@
         "id": "liuchao.character.np007",
         "name": "严君平",
         "role": "世外高人参政者/被黑魔海诓骗/拒绝合作",
-        "description": "世外高人参政者/被黑魔海诓骗/拒绝合作",
+        "description": "世外高人，本不愿染指尘世，却被黑魔海以巧言诓去，终识破骗局，拂袖而去。",
         "itemIds": [
           "lyl.item.np068"
         ],
@@ -1281,7 +1281,7 @@
         "id": "lyl.character.np001",
         "name": "云秀峰",
         "role": "云如瑶的六哥",
-        "description": "云如瑶的六哥",
+        "description": "云如瑶的六哥，不知其名姓深浅，只在云家兄妹间隐隐透出一缕影踪。",
         "profile": {
           "attributes": {
             "rootBone": 6,
@@ -1309,7 +1309,7 @@
         "id": "lyl.character.np016",
         "name": "王蕙",
         "role": "秦桧之妻",
-        "description": "秦桧之妻",
+        "description": "秦桧之妻，笑容里藏着玲珑心思，世人皆知她是丞相内助，却不知她另有盘算。",
         "profile": {
           "attributes": {
             "rootBone": 5,
@@ -1337,7 +1337,7 @@
         "id": "lyl.character.he_yilian",
         "name": "何漪莲",
         "role": "洛帮帮主、程宗扬奴婢",
-        "description": "洛帮帮主、程宗扬奴婢",
+        "description": "洛帮之主，容貌娇艳如明星，风尘中透着成熟媚态，本是尹馥兰的同路人，却转而效命程宗扬。",
         "profile": {
           "attributes": {
             "rootBone": 7,
@@ -1366,7 +1366,7 @@
         "id": "lyl.character.np067",
         "name": "程郑",
         "role": "程宗扬结义兄长/商人/效忠月霜",
-        "description": "程宗扬结义兄长/商人/效忠月霜",
+        "description": "程宗扬的结义兄长，行走商道翻云覆雨，暗地里忠心于月霜，兄弟义气之下另有归属。",
         "itemIds": [
           "lyl.item.np102"
         ],
@@ -1400,7 +1400,7 @@
         "id": "lyl.character.np043",
         "name": "宁成",
         "role": "舞都太守",
-        "description": "舞都太守",
+        "description": "舞都太守，端坐一方府衙，权柄在手，百姓不知其喜怒深浅。",
         "profile": {
           "attributes": {
             "rootBone": 6,
@@ -1428,7 +1428,7 @@
         "id": "lyl.character.np039",
         "name": "义纵",
         "role": "游侠首领",
-        "description": "游侠首领",
+        "description": "游侠之首，名号传于江湖，一人一剑便能搅动一方风云。",
         "profile": {
           "attributes": {
             "rootBone": 7,
@@ -1578,7 +1578,7 @@
         "name": "惊理",
         "gender": "女",
         "role": "侍奴",
-        "description": "妖艳侍奴，丰腴雪肤；受孙寿胁迫。",
+        "description": "程宗扬身边的侍奴，身段丰腴白艳，一双长腿勾魂摄魄，平日使蛾眉刺如蛇信，后习三清剑法，更添剑意风流。",
         "profile": {
           "appearance": "外貌妖艳，身材丰腴凸凹，肤色雪白，发丝柔顺，常带柔媚风情，但眼神可转冷厉。"
         }

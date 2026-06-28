@@ -301,7 +301,7 @@
       {
         "id": "liuchao.character.dong_zhuo",
         "name": "董卓",
-        "description": "破虏将军，凉州军首领，挟持定陶王欲以令诸侯。",
+        "description": "肥胖如肉球的凉州军首领，铁甲裹身，剑髯怒张，身负雕弓、短戟、重斧，挟持定陶王欲以令诸侯，每一步都如山岳震动。",
         "role": "军阀",
         "gender": "男",
         "realm": "练气",
@@ -461,7 +461,7 @@
       {
         "id": "liuchao.character.huo_zi_meng",
         "name": "霍子孟",
-        "description": "大司马大将军，汉国权臣，见风使舵的老狐狸。",
+        "description": "大司马大将军，有一张千锤百炼的老脸，胡须间藏着见风使舵的狡黠，睡眼惺忪时抚须打呵欠，却无人敢轻视这位汉国权臣。",
         "role": "权臣",
         "gender": "男",
         "affiliations": [
@@ -585,7 +585,7 @@
       {
         "id": "liuchao.character.liu_xin",
         "name": "定陶王",
-        "description": "定陶王刘欣，汉室宗亲，被各方拥立为继承人。",
+        "description": "定陶王刘欣，汉室宗亲的幼弱棋子，被各方势力拥立为继承人，稚嫩身影悬于皇权漩涡中央。",
         "role": "幼帝",
         "gender": "男",
         "age": 3,
@@ -664,7 +664,7 @@
       {
         "id": "liuchao.character.zhao_ying",
         "name": "赵充国",
-        "description": "车骑将军长史，董卓故友，居中调停。",
+        "description": "车骑将军长史，虎背熊腰的魁伟汉子，瞪着一双牛眼，身披武士氅、腰佩长短兵刃，豪迈粗犷中透着憨厚，是董卓故友也是居中调停的桥梁。",
         "role": "武将",
         "gender": "男",
         "locationId": "liuchao.location.zhaoyang_hall",
@@ -702,7 +702,7 @@
       {
         "id": "liuchao.character.jin_mi_di",
         "name": "金蜜镝",
-        "description": "车骑将军，忠于汉室，随程宗扬出城追定陶王。",
+        "description": "车骑将军，白发披麻，头戴白布，解下兵刃徒步踏入凉州军阵，向定陶王叩首——他是朝中重臣，也是程宗扬的盟友与试探对象，重伤未愈却威仪不减。",
         "role": "将领",
         "gender": "男",
         "realm": "练气",
@@ -1145,7 +1145,7 @@
         "id": "lyg.character.np011",
         "name": "张恽",
         "role": "程侯府内侍/跑腿者",
-        "description": "程侯府内侍/跑腿者",
+        "description": "程侯府的内侍跑腿者，穿梭于权贵之间，脚步匆匆，身份卑微却眼观六路。",
         "profile": {
           "attributes": {
             "rootBone": 7,
@@ -1173,7 +1173,7 @@
         "id": "lyg.character.np008",
         "name": "仇雍",
         "role": "巫宗尊者",
-        "description": "巫宗尊者",
+        "description": "巫宗尊者，神秘莫测，举手投足间似有咒力流转，无人知其深浅。",
         "profile": {
           "attributes": {
             "rootBone": 6,
@@ -1201,7 +1201,7 @@
         "id": "liuchao.character.np007",
         "name": "严君平",
         "role": "大臣",
-        "description": "大臣",
+        "description": "世外高人，本不愿染指尘世，却被黑魔海以巧言诓去，终识破骗局，拂袖而去。",
         "profile": {
           "attributes": {
             "rootBone": 6,
@@ -1240,7 +1240,7 @@
         "name": "桓郁",
         "gender": "男",
         "role": "胡骑校尉（新晋卫将军）",
-        "description": "胡骑校尉（新晋卫将军）"
+        "description": "新晋卫将军的胡骑校尉，铁甲未解便踏上权位阶梯，锋芒初露，眼神如鹰隼般锐利。"
       },
       {
         "id": "liuchao.character.ning_cheng",
