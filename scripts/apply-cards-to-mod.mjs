@@ -13,7 +13,7 @@ const dry = process.argv.includes('--dry-run');
 const raceClean = s => (s || '').replace(/（[^）]*）/g, '').trim();
 const score = c => Object.values(c).filter(v => v && (!Array.isArray(v) || v.length)).length;
 // 富字段 → 标签
-const TAGMAP = [['与主角关系', '关系'], ['称呼', '称呼'], ['说话风格', '谈吐'], ['人格底线', '底线'], ['目标动机', '目标'], ['弱点软肋', '软肋'], ['加入经过', '入伙'], ['结局下场', '结局'], ['性癖', '性癖'], ['身体性特征', '身体']];
+const TAGMAP = [['与主角关系', '关系'], ['备注', '备注'], ['称呼', '称呼'], ['说话风格', '谈吐'], ['人格底线', '底线'], ['目标动机', '目标'], ['弱点软肋', '软肋'], ['加入经过', '入伙'], ['结局下场', '结局'], ['性癖', '性癖'], ['身体性特征', '身体']];
 const TAGS = TAGMAP.map(t => `【${t[1]}】`);
 
 async function run() {
@@ -24,7 +24,8 @@ async function run() {
     if (!existsSync(join(canon, f))) continue;
     for (const c of JSON.parse(await readFile(join(canon, f), 'utf8')).characters) {
       const prev = byName.get(c.name);
-      if (!prev || (c._manual && !prev._manual) || (!!c._manual === !!prev._manual && score(c) > score(prev))) byName.set(c.name, c);
+      const auth = x => !!(x._manual || x._approved || x._reviewed);
+      if (!prev || (auth(c) && !auth(prev)) || (auth(c) === auth(prev) && score(c) > score(prev))) byName.set(c.name, c);
     }
   }
   let proj = 0; const touched = new Set();
@@ -39,10 +40,10 @@ async function run() {
         c.profile = c.profile || {};
         if (card.种族 && raceClean(card.种族)) { c.profile.race = raceClean(card.种族); }
         if (card.身份 && (!c.profile.origin || /原作人物|未知|^$/.test(c.profile.origin))) c.profile.origin = card.身份;
-        if (card._manual) {
-          if ((card.性格 || []).length) c.profile.personality = [...card.性格];
-          if (card.外貌) c.profile.appearance = card.外貌;
-        }
+        const auth2 = card._manual || card._approved || card._reviewed;
+        // 权威者覆盖；非权威者只填空(配角原本无 personality/appearance)
+        if ((card.性格 || []).length && (auth2 || !(c.profile.personality || []).length)) c.profile.personality = [...card.性格];
+        if (card.外貌 && (auth2 || !c.profile.appearance || /原文未|未载|未知|^$/.test(c.profile.appearance))) c.profile.appearance = card.外貌;
         // notes 富字段(幂等)
         const kept = (c.profile.notes || []).filter(n => !TAGS.some(t => String(n).startsWith(t)));
         const add = [];
