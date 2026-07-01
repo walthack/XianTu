@@ -22,11 +22,12 @@ import { sanitizeAITextForDisplay } from '@/utils/textSanitizer';
 import { validateAndRepairNpcProfile } from '@/utils/dataValidation';
 import { stripNsfwContent } from '@/utils/prompts/definitions/dataDefinitions';
 import { isSaveDataV3, migrateSaveDataToLatest } from './saveMigration';
-import { parseJsonSmart } from '@/utils/jsonExtract';
+import { parseJsonSmart, stripModelThinking } from '@/utils/jsonExtract';
 import type { APIUsageType } from '@/stores/apiManagementStore';
 import { buildScenarioCanonPrompt, guardScenarioModCommands } from '@/modules/scenarioMods/canonGuard';
 import { advanceScenarioRuntime } from '@/modules/scenarioMods/runtime';
 import { buildScenarioStoryPrompt, createScenarioPromptState } from '@/modules/scenarioMods/storyContext';
+import { buildActionGatePrompt, getNarrativeTurn, pruneExpiredActionGates } from '@/utils/actionGate';
 
 type PlainObject = Record<string, unknown>;
 
@@ -304,14 +305,7 @@ class AIBidirectionalSystemClass {
   private extractNarrativeText(raw: string): string {
     // 🔥 移除思维链标签（兜底保护）
     // 支持多种变体：<thinking>, <antThinking>, <ant-thinking>, <reasoning>, <thought> 等
-    const cleaned = String(raw || '')
-      .replace(/<(?:ant[-_]?)?thinking>[\s\S]*?<\/(?:ant[-_]?)?thinking>/gi, '')
-      .replace(/<\/?(?:ant[-_]?)?thinking>/gi, '')
-      .replace(/<reasoning>[\s\S]*?<\/reasoning>/gi, '')
-      .replace(/<\/?reasoning>/gi, '')
-      .replace(/<thought>[\s\S]*?<\/thought>/gi, '')
-      .replace(/<\/?thought>/gi, '')
-      .trim();
+    const cleaned = stripModelThinking(String(raw || ''));
 
     if (!cleaned) return '';
 
@@ -396,10 +390,17 @@ class AIBidirectionalSystemClass {
     try {
       const { aiService } = await import('@/services/aiService');
       const textOptPrompt = await getPrompt('textOptimization');
+      const lengthGuard = [
+        '# 长度约束（最高优先级）',
+        `原文长度约${text.length}字。`,
+        '- 只润色，不扩写；优化后不得长于原文。',
+        '- 不新增段落、场景、动作、对话、心理活动或背景铺陈。',
+        '- 如果原文已经顺畅，直接原样返回。'
+      ].join('\n');
 
       const optimizedText = await aiService.generateRaw({
         ordered_prompts: [
-          { role: 'system', content: textOptPrompt },
+          { role: 'system', content: `${textOptPrompt}\n\n---\n\n${lengthGuard}` },
           { role: 'user', content: `请优化以下文本：\n\n${text}` }
         ],
         should_stream: false,
@@ -561,6 +562,26 @@ class AIBidirectionalSystemClass {
         console.warn('[记忆增强/叙事检索] 检索失败，跳过叙事增强:', e);
       }
 
+      // 角色表向量检索（Character RAG）：按当前场景语义召回相关角色（含离场/历史角色）作正典参考
+      let characterRagSection = '';
+      try {
+        const { characterRagService } = await import('@/services/characterRagService');
+        await characterRagService.init();
+        if (characterRagService.isEnabled()) {
+          // 后台建/更新全局角色索引（不阻塞发送；键控命中时为 no-op，首次运行数回合内逐步补全）
+          void characterRagService.ensureIndexed().catch(() => {});
+          const recentShort = (v3?.社交?.记忆?.短期记忆 || []).slice(-2).join('\n');
+          const ragQuery = [userMessage || '', recentShort, stateForAI.角色?.位置?.描述 || ''].filter(Boolean).join('\n');
+          characterRagSection = await characterRagService.buildSectionForPrompt(ragQuery || '继续当前剧情', { topK: 6, minScore: 0.4 });
+          if (characterRagSection) {
+            const stats = await characterRagService.getStats();
+            console.log(`[角色检索] 已注入召回的相关角色（索引总数：${stats.total}）`);
+          }
+        }
+      } catch (e) {
+        console.warn('[角色检索] 检索失败，跳过角色增强:', e);
+      }
+
       // 保存短期记忆用于单独发送
       const shortTermMemory = v3?.社交?.记忆?.短期记忆 || [];
 
@@ -709,6 +730,7 @@ class AIBidirectionalSystemClass {
       const assembledPrompt = await assembleSystemPrompt(activePrompts, uiStore.actionOptionsPrompt, stateForAI);
       const scenarioCanonPrompt = buildScenarioCanonPrompt(stateForAI as SaveData);
       const scenarioStoryPrompt = buildScenarioStoryPrompt(stateForAI as SaveData);
+      const actionGatePrompt = buildActionGatePrompt(saveData, getNarrativeTurn(saveData));
 
       // 🌐 构建穿越状态提示（直接写入主提示词，确保AI一定能看到）
       const onlineState = stateForAI?.系统?.联机;
@@ -784,12 +806,12 @@ ${offlinePrompt ? `\n### 世界主人性格/行为提示词\n${offlinePrompt}` :
 ${assembledPrompt}
 ${scenarioCanonPrompt ? `\n${scenarioCanonPrompt}\n` : ''}
 ${scenarioStoryPrompt ? `\n${scenarioStoryPrompt}\n` : ''}
+${actionGatePrompt ? `\n${actionGatePrompt}\n` : ''}
 ${travelStatusPrompt}
 ${coreStatusSummary}
-${scenarioCanonPrompt ? `\n${scenarioCanonPrompt}\n` : ''}
-${scenarioStoryPrompt ? `\n${scenarioStoryPrompt}\n` : ''}
 ${vectorMemorySection ? `\n${vectorMemorySection}\n` : ''}
 ${narrativeRagSection ? `\n${narrativeRagSection}\n` : ''}
+${characterRagSection ? `\n${characterRagSection}\n` : ''}
 # 游戏状态
 你正在修仙世界《仙途》中扮演GM。以下是当前完整游戏存档(JSON格式):
 ${stateJsonString}
@@ -909,8 +931,6 @@ ${stateJsonString}
         });
       }
 
-      const finalUserInput = userActionForAI;
-
       // 🛡️ 添加assistant角色的占位消息（防止输入截断）
       // 原理：如果最后一条消息是assistant角色，某些模型不会审核输入
       injects.push({
@@ -945,6 +965,8 @@ ${stateJsonString}
       const instructionApiConfig = apiStore.getAPIForType('instruction_generation');
       // 判断是否有独立的指令生成 API 配置
       const hasInstructionApi = instructionApiConfig && instructionApiConfig.id !== 'default';
+
+      const finalUserInput = userActionForAI;
 
       // 🔥 分步生成：只根据开关按钮判断，同一个API也可以分步（减少单次输出压力）
       const shouldActuallySplit = isSplitEnabled;
@@ -1533,9 +1555,13 @@ ${step1Text}
         const initStep2ForceJson = aiService.isForceJsonEnabled(initStep2UsageType);
         options?.onProgressUpdate?.('分步生成：第2步（指令生成）…');
         let parsedStep2: GM_Response | null = null;
+        let lastStep2Error = '';
         for (let attempt = 1; attempt <= 2; attempt++) {
           try {
-            if (attempt > 1) options?.onProgressUpdate?.(`分步生成：第2步重试…`);
+            if (attempt > 1) {
+              const reason = lastStep2Error ? `（上次失败：${lastStep2Error.slice(0, 80)}）` : '';
+              options?.onProgressUpdate?.(`分步生成：第2步重试…${reason}`);
+            }
             const step2Response = await generateOnce({
               step: 2,
               system: await buildInitialSplitSystemPrompt(2),
@@ -1548,6 +1574,8 @@ ${step1Text}
             if (parsedStep2.tavern_commands && parsedStep2.tavern_commands.length > 0) break;
             parsedStep2 = null;
           } catch (e) {
+            lastStep2Error = e instanceof Error ? e.message : String(e);
+            options?.onProgressUpdate?.(`分步生成：第2步解析失败，准备重试（${lastStep2Error.slice(0, 100)}）`);
             console.warn(`[分步生成-开局] 第2步第${attempt}次失败:`, e);
           }
         }
@@ -2146,6 +2174,16 @@ ${step1Text}
           }
         });
       }
+    }
+
+    const actionGatePrune = pruneExpiredActionGates(saveData, getNarrativeTurn(saveData));
+    if (actionGatePrune.changed) {
+      commandAppliedChanges.push({
+        key: '系统.扩展.行动门控.recent',
+        action: 'set',
+        oldValue: this._summarizeValueForChangeLog('系统.扩展.行动门控.recent', actionGatePrune.before, 'set'),
+        newValue: this._summarizeValueForChangeLog('系统.扩展.行动门控.recent', actionGatePrune.after, 'set')
+      });
     }
 
     // 🔥 步骤5：执行后安全校验（仅在结构完全损坏时回滚，防止存档被破坏）
@@ -3472,11 +3510,8 @@ ${saveDataJson}`;
       throw new Error('AI响应为空或格式错误');
     }
 
-    // 🔥 先移除 <thinking> 标签内容（某些模型会输出思考过程）
-    let rawText = rawResponse.trim();
-    rawText = rawText.replace(/<thinking>[\s\S]*?<\/thinking>/gi, '');
-    rawText = rawText.replace(/<thinking>[\s\S]*/gi, ''); // 移除未闭合的标签
-    rawText = rawText.trim();
+    // 移除 MiniMax <think>、Claude/Gemini thinking 等推理块，只解析正式输出。
+    const rawText = stripModelThinking(rawResponse);
 
     console.log('[parseAIResponse] 原始响应长度:', rawText.length);
     console.log('[parseAIResponse] 原始响应前500字符:', rawText.substring(0, 500));

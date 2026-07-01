@@ -117,26 +117,22 @@ function chooseOrigin(card, currentPhase) {
   return currentPhase?.identity || card.staticProfile?.identitySummary || '';
 }
 
+// 全量 P4：投影为「精简」角色 —— 只保留动态字段（role/gender + 运行时 profile 状态），
+// 删除静态档案（appearance/personality/origin/派生 notes）。静态档案由 src/modules/scenarioMods/
+// characterResolver.ts 在内置 mod 加载/物化时从 character-registry.json 还原。
+// 还原逻辑与本文件的 buildNotes/chooseOrigin 一一对应（勿单方修改，需同步 resolver）。
 function applyCardToCharacter(character, card, stageId) {
   const profile = character.profile || {};
-  const staticProfile = card.staticProfile || {};
   const currentPhase = stagePhase(card, stageId);
-  const origin = chooseOrigin(card, currentPhase);
 
   if (card.gender && (!character.gender || character.gender === '未知')) character.gender = card.gender;
-  if (force && currentPhase?.role) character.role = currentPhase.role;
-  if (origin && (force || isUnset(profile.origin))) profile.origin = origin;
+  if (currentPhase?.role) character.role = currentPhase.role;
 
-  if (staticProfile.appearance && (force || isUnset(profile.appearance))) {
-    profile.appearance = staticProfile.appearance;
-  }
-  const personality = unique(staticProfile.personality).slice(0, 8);
-  if (personality.length && (force || !profile.personality?.length)) {
-    profile.personality = personality;
-  }
-
+  // 只删【派生 notes】——它 100% 可由 registry 无损还原（等价性验证 notes 0 不一致）。
+  // appearance/personality/origin 保留不动：它们是「提取/卡混合」，删了 resolver 还原会与旧值不符（会变/会丢）。
   const keptNotes = asArray(profile.notes).filter(note => !DERIVED_TAGS.some(tag => String(note).startsWith(tag)));
-  profile.notes = [...keptNotes, ...buildNotes(card, currentPhase)];
+  if (keptNotes.length) profile.notes = keptNotes; else delete profile.notes;
+
   character.profile = profile;
 }
 
