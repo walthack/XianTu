@@ -2,20 +2,20 @@
   "schema": "xiantu.scenario-mod",
   "version": 1,
   "manifest": {
-    "id": "lyl.luoyang_cloud_secret",
-    "name": "六朝云龙吟·天石",
+    "id": "lyl.han_palace_endgame",
+    "name": "六朝云龙吟·汉宫终局与刘建伏诛",
     "version": "1.0.0",
     "author": "DeepSeek V4 Flash + XianTu Mod Kit",
-    "description": "程宗扬发现云家白银与黑魔海威胁有关，决定北上洛都；途中涉及游侠冲突、吕氏宫闱秘辛、鬼市榷场等多线。玩家扮演程宗扬，在汉国洛都复杂的局势中周旋，揭开云家秘密，为星月湖大营和自身生存谋取利益。",
+    "description": "吕冀重伤、吕巨君入宫、含光殿救人、秘境入口、董卓入京与秦桧斩刘建，完成云龙到燕歌前的汉宫收束。",
     "axisVersion": "rebuild-2026-06-28",
-    "axisOrder": 4,
-    "axisSeqLo": 777,
-    "axisSeqHi": 884,
+    "axisOrder": 5.5,
+    "axisSeqLo": 900,
+    "axisSeqHi": 947,
     "eventIdContract": "append-only-frozen",
-    "prevStageId": "lyl.taiquan_afterfall",
-    "prevStageName": "六朝云龙吟·太泉余波与洛都入局",
-    "nextStageId": "lyl.luoyang_coup",
-    "nextStageName": "六朝云龙吟·封侯"
+    "prevStageId": "lyl.luoyang_coup",
+    "prevStageName": "六朝云龙吟·封侯",
+    "nextStageId": "lyg.dingtao_beijing",
+    "nextStageName": "六朝燕歌行·退败"
   },
   "world": {
     "name": "六朝世界·汉国",
@@ -990,7 +990,7 @@
             "【阶段身份】lcq.stage_01-lcq.stage_02：序章：现代穿越者/左武军临时依附，不作为六朝社会身份链起点：status=allowed",
             "【阶段身份】lcq.stage_03：苏妲己名下奴隶（白湖商馆奴隶）：status=allowed",
             "【阶段身份】stage-specific：随国家、任务、出使名义变化；必须读取当前 stage 的 opening.playerRole / role / affiliations：status=rule",
-            "【阶段身份】当前关卡 lyl.luoyang_cloud_secret：主角",
+            "【阶段身份】当前关卡 lyl.han_palace_endgame：主角",
             "【人工正典】【双修法门·手段决定后果】程宗扬修太一经，双修增益取决于手段与鼎炉匹配（用对鼎炉——如阮香凝——炼化效率提升不下十倍）。三种手段后果递进：①采补（最凶狠）：采女子阴精，女方需滋养多日方可再采；狠者不顾女方生死一味采补，损人利己、可致死。②以女子为鼎炉（酷烈手段）：强行提升己方修为，鼎炉女子不至送命但身体大受损伤、缠绵病榻。③温养（温和）：同样以女子为鼎炉但手法温和，对女方伤害有限，善加运用甚至有益无损，接近双方得益的双修。叙事时按程宗扬所选手段产生相应后果。"
           ],
           "origin": "主角"
@@ -1083,7 +1083,7 @@
             "【情节】黑魔海巫宗正统传人，幕后操盘",
             "【阶段身份】转折前：原阵营/中立/敌对身份，禁止提前称为后宫、侍妾、情人或程宗扬阵营成员：status=forbid-final-state-before-turning-point",
             "【阶段身份】关系转折后：按原文转折事件后，才可写入程宗扬阵营/后宫/侍妾/情人等关系身份：status=allowed-after-turning-point",
-            "【阶段身份】当前关卡 lyl.luoyang_cloud_secret：黑魔海巫宗正统传人；全书女主角、智商天花板"
+            "【阶段身份】当前关卡 lyl.han_palace_endgame：黑魔海巫宗正统传人；全书女主角、智商天花板"
           ]
         }
       },
@@ -1143,7 +1143,7 @@
             "【目标】保全云氏家族声誉与财富",
             "【软肋】年事已高，体力不支",
             "【情节】第58章·银铃 拒绝鬼王峒索要五万银铢；第70章·碧湾 与程宗扬同行，因年迈中暑需乐明珠施针；第150章·绽浓 解下玉佩，命人调集四千贯铜铢；二十万银铢和八千金铢",
-            "【阶段身份】当前关卡 lyl.luoyang_cloud_secret：云氏家族（南荒势力）"
+            "【阶段身份】当前关卡 lyl.han_palace_endgame：云氏家族（南荒势力）"
           ]
         }
       },
@@ -1204,7 +1204,7 @@
             "【情节】发明愁眉/啼妆/堕马髻/折腰步引领洛阳贵妇审美；吕氏倒台沦死囚，交程宗扬+阮香琳审讯，成最下贱审讯禁脔/泄欲工具；狐女无法作鼎炉(采元红无助修行)，纯感官玩物",
             "【阶段身份】转折前：原阵营/中立/敌对身份，禁止提前称为后宫、侍妾、情人或程宗扬阵营成员：status=forbid-final-state-before-turning-point",
             "【阶段身份】关系转折后：按原文转折事件后，才可写入程宗扬阵营/后宫/侍妾/情人等关系身份：status=allowed-after-turning-point",
-            "【阶段身份】当前关卡 lyl.luoyang_cloud_secret：犯妇/原为世家女眷"
+            "【阶段身份】当前关卡 lyl.han_palace_endgame：犯妇/原为世家女眷"
           ]
         }
       },
@@ -1267,7 +1267,7 @@
             "【情节】与姐姐赵飞燕一同侍奉程宗扬；被程宗扬挑逗后羞怯地脱去衣物；在程宗扬面前张开芳唇舔舐肉棒；与姐姐并乳同臀供程宗扬淫乐",
             "【阶段身份】汉国篇第30集第7章弑君前：汉国昭仪/赵飞燕之妹，禁止提前写作程宗扬妾室或情人：status=forbid-final-state-before-turning-point",
             "【阶段身份】六朝云龙吟汉国篇第30集第7章弑君起：确认关系转折，之后可写作程宗扬内宅成员：status=allowed-after-turning-point",
-            "【阶段身份】当前关卡 lyl.luoyang_cloud_secret：汉国昭仪/赵飞燕之妹",
+            "【阶段身份】当前关卡 lyl.han_palace_endgame：汉国昭仪/赵飞燕之妹",
             "【人工正典】人工批注：六朝云龙吟汉国篇第30集第7章弑君明确关系转折；转折前为汉国昭仪。"
           ]
         }
@@ -1328,7 +1328,7 @@
             "【目标】与程宗扬交合，享受性爱",
             "【软肋】娇弱体质，曾生命垂危",
             "【情节】与妹赵合德同为\"挟天子以令诸侯\"幕后床上工具；早朝皇座上当众荒淫名场面（未被发现）",
-            "【阶段身份】当前关卡 lyl.luoyang_cloud_secret：大汉皇后（燕瘦天花板，骨感柔韧\"掌上舞\"）"
+            "【阶段身份】当前关卡 lyl.han_palace_endgame：大汉皇后（燕瘦天花板，骨感柔韧\"掌上舞\"）"
           ]
         }
       },
@@ -1388,7 +1388,7 @@
             "【软肋】旧伤累累，肺病发作时无法自控",
             "【绝技】-",
             "【情节】卢景翻着白眼，脸色十二分的不爽；卢景收起铜铃；竹杖，变成跑堂的小二；卢景抱过婴儿，放到剧孟胸口",
-            "【阶段身份】当前关卡 lyl.luoyang_cloud_secret：-"
+            "【阶段身份】当前关卡 lyl.han_palace_endgame：-"
           ]
         }
       },
@@ -1444,7 +1444,7 @@
             "【软肋】对岳帅相关的人事容易情绪波动（眼圈泛红）",
             "【绝技】翼钩；腹语术",
             "【情节】大开杀戒后神情冷漠；用牛耳尖刀精细切羊肉；与卢景商议岳帅青梅竹马之事；带路协助程宗扬离开秘境；被赵充国拉着拼酒；接过郭靖时面色柔和",
-            "【阶段身份】当前关卡 lyl.luoyang_cloud_secret：岳帅旧部/秘境探索者"
+            "【阶段身份】当前关卡 lyl.han_palace_endgame：岳帅旧部/秘境探索者"
           ]
         }
       },
@@ -1505,7 +1505,7 @@
             "【软肋】对金蜜镝畏惧三分；被中行说劫持时受制",
             "【情节】在治丧时骑赵昭仪；友通期奸弄并勒杀；在密室中与董昭仪等淫戏；被中行说劫持；被金蜜镝斥责后气焰顿熄",
             "【结局】面如死灰（见姬妾死伤狼藉）",
-            "【阶段身份】当前关卡 lyl.luoyang_cloud_secret：大司马/天子舅父"
+            "【阶段身份】当前关卡 lyl.han_palace_endgame：大司马/天子舅父"
           ]
         }
       },
@@ -1560,7 +1560,7 @@
             "【目标】维护吕氏利益，但不愿使用肮脏手段",
             "【软肋】生性谨慎，易被吕冀轻视、优柔寡断，行动迟缓",
             "【情节】派人灭口孙老头一家；与吕冀一同入宫拜见太后迟迟未出；被吕冀指责私心膨胀；负责找人消除隐患",
-            "【阶段身份】当前关卡 lyl.luoyang_cloud_secret：颍阳侯，吕氏族人，主持明阴阳灾异科"
+            "【阶段身份】当前关卡 lyl.han_palace_endgame：颍阳侯，吕氏族人，主持明阴阳灾异科"
           ],
           "appearance": "文质彬彬，有书生气质"
         }
@@ -1617,7 +1617,7 @@
             "【软肋】曾中紫姑娘的暗算，差点丧命，对情毒/暗算防备不足",
             "【绝技】指环挡刀；银簪破禁制",
             "【情节】第8章 与淖方成交接玉盒，打开澄心棠；第8章 被义姁突袭时用指环挡刀；第585章 现身擒获赵合德；第585章 与齐羽仙；西门狗贼等人一同出现在程宗扬面前",
-            "【阶段身份】当前关卡 lyl.luoyang_cloud_secret：反派"
+            "【阶段身份】当前关卡 lyl.han_palace_endgame：反派"
           ],
           "origin": "反派"
         }
@@ -1684,7 +1684,7 @@
             "【绝技】玄冰掌；用毒（鸩羽）；破甲散；鞋子（作为武器）；铜铢（占卜/赌博）；真功夫（隐藏修为）",
             "【入伙】非程宗扬队伍成员或后宫，故留空。",
             "【情节】阳武侯刘询本只要肯尚吕家女为妻即可继承帝位；因吕家逼死其爱人，愤而投身魔门黑魔海；艺成归来毒杀仇人、几乎屠尽吕家後族满门，从此浪迹天涯，成鸩羽殇侯；殇侯门初期曾援手程宗扬(解冰蛊、指点修炼)，后期转为博弈；以鞋为武器与吕奉先斗法，抽脸取胜；在温泉中被程宗扬从美女堆中拽出；身体一挺，长高尺许，显出帝王般的威严；揭示人皮制品真相时露出悲悯眼神",
-            "【阶段身份】当前关卡 lyl.luoyang_cloud_secret：鸩羽殇侯·殇振羽（黑魔海/殇侯门「毒宗」头目，令人闻名色变）。一生数重身份：北寺狱囚徒刘病已→挟书求学的太学生刘次卿→仗剑游侠儿刘谋→离帝位仅一步之遥的阳武侯刘询→隐居化名「朱老头」(诨名朱八八)",
+            "【阶段身份】当前关卡 lyl.han_palace_endgame：鸩羽殇侯·殇振羽（黑魔海/殇侯门「毒宗」头目，令人闻名色变）。一生数重身份：北寺狱囚徒刘病已→挟书求学的太学生刘次卿→仗剑游侠儿刘谋→离帝位仅一步之遥的阳武侯刘询→隐居化名「朱老头」(诨名朱八八)",
             "【人工正典】朱老头（刘谋） 已并入 殇侯；朱老头 已并入 殇侯"
           ],
           "origin": "鸩羽殇侯·殇振羽（黑魔海/殇侯门「毒宗」头目，令人闻名色变）。一生数重身份：北寺狱囚徒刘病已→挟书求学的太学生刘次卿→仗剑游侠儿刘谋→离帝位仅一步之遥的阳武侯刘询→隐居化名「朱老头」(诨名朱八八)"
@@ -1740,7 +1740,7 @@
             "【情节】【一部·#5】太乙真宗御教(王母)，以烈火法术救下被半兽人围攻的程宗扬与月霜；【一部·#133内斗】清远玄真观与死敌齐放鹤五行内斗；两败俱伤；齐放鹤被吴行德偷袭杀死，程宗扬斩吴行德救下她；【一部末·#134云落】小紫现身制服重伤的她；藏匿清远娼窠，小紫用玉笙残酷破处；种奴印，贬为私密女奴；程宗扬雇船带其顺江逃往建康",
             "【阶段身份】转折前：原阵营/中立/敌对身份，禁止提前称为后宫、侍妾、情人或程宗扬阵营成员：status=forbid-final-state-before-turning-point",
             "【阶段身份】关系转折后：按原文转折事件后，才可写入程宗扬阵营/后宫/侍妾/情人等关系身份：status=allowed-after-turning-point",
-            "【阶段身份】当前关卡 lyl.luoyang_cloud_secret：太乙真宗\"御教\"仙姑（地位极高）；名义夫为大汉太尉常炜（天狐族，常以药物邪术折磨她）",
+            "【阶段身份】当前关卡 lyl.han_palace_endgame：太乙真宗\"御教\"仙姑（地位极高）；名义夫为大汉太尉常炜（天狐族，常以药物邪术折磨她）",
             "【人工正典】【鼎炉·太一经双修】鼎炉=双修中作修炼载体的女性；男方真气经其阴脉行一周天返丹田而更纯粹、可大进修为。鼎炉分五行(金木水火土)与品级(仙品>珍品>…，得一即珍品)。代价：鼎炉积杂气致自身修为受限；男方修炼不当遭阴气反噬(非残即死)。"
           ],
           "appearance": "肌肤如雪，体态丰腻，容貌美艳，腰臀曲线柔美动人，足弓玲珑，通体如玉。",
@@ -1806,7 +1806,7 @@
             "【情节】程宗扬纯阳龙气一举洗净其极寒阴毒慢性病根，致两性性癖180度逆转",
             "【阶段身份】转折前：原阵营/中立/敌对身份，禁止提前称为后宫、侍妾、情人或程宗扬阵营成员：status=forbid-final-state-before-turning-point",
             "【阶段身份】关系转折后：按原文转折事件后，才可写入程宗扬阵营/后宫/侍妾/情人等关系身份：status=allowed-after-turning-point",
-            "【阶段身份】当前关卡 lyl.luoyang_cloud_secret：云世商会家主幼妹（\"姑姑\"，辈分高但年纪轻）"
+            "【阶段身份】当前关卡 lyl.han_palace_endgame：云世商会家主幼妹（\"姑姑\"，辈分高但年纪轻）"
           ]
         }
       },
@@ -1866,7 +1866,7 @@
             "【入伙】非程宗扬队伍或后宫成员",
             "【情节】刘骜暴死，被吕冀弑君，各方合谋隐瞒；刘骜死后程宗扬主持其风光大葬；刘骜的子嗣（友通期所怀）留在舞都",
             "【结局】被吕冀弑君（第1章 求媒）",
-            "【阶段身份】当前关卡 lyl.luoyang_cloud_secret：汉国天子"
+            "【阶段身份】当前关卡 lyl.han_palace_endgame：汉国天子"
           ]
         }
       },
@@ -1924,7 +1924,7 @@
             "【软肋】身为宦官，对外戚和豪强势力有所忌惮；对金钱和权力的贪婪有时会被人利用",
             "【绝技】无明确描写",
             "【情节】参与董宣上书事件的应对；催促程宗扬进献白雉；与唐衡伙同遮掩月旦评言论；协助程宗扬办理买官事宜；对游侠朱安世及豪强深恶痛绝；因江充巫蛊奏报而大惊失色",
-            "【阶段身份】当前关卡 lyl.luoyang_cloud_secret：内臣/宦官/天子家奴"
+            "【阶段身份】当前关卡 lyl.han_palace_endgame：内臣/宦官/天子家奴"
           ]
         }
       },
@@ -1987,7 +1987,7 @@
             "【软肋】怕死、易冲动、腿脚有伤",
             "【绝技】长枪",
             "【情节】崴脚脸擦伤；以钱粮换忠心的观点被纠正；参与凉州盟比武；被阿合马和哈迷蚩打断腿；用长枪刺自己大腿攻击护法金刚；称呼程宗扬配偶为小师娘",
-            "【阶段身份】当前关卡 lyl.luoyang_cloud_secret：弟子"
+            "【阶段身份】当前关卡 lyl.han_palace_endgame：弟子"
           ],
           "origin": "弟子"
         }
@@ -2054,7 +2054,7 @@
             "【本阶段禁用】<643：盘江程氏股东、朝廷官员",
             "【阶段身份】>=643：盘江程氏股东/商业谋主：status=allowed",
             "【阶段身份】封官后：朝廷官员（现任阶段身份，不写“曾”）：status=allowed",
-            "【阶段身份】当前关卡 lyl.luoyang_cloud_secret：盘江程氏股东/家主伴当/商业谋主；后期兼具朝廷官员身份"
+            "【阶段身份】当前关卡 lyl.han_palace_endgame：盘江程氏股东/家主伴当/商业谋主；后期兼具朝廷官员身份"
           ]
         },
         "realm": "金丹",
@@ -2109,7 +2109,7 @@
             "【绝技】青龙偃月刀法（刚猛霸道，刀经珊瑚铁强化）；双修功法；水性极佳（能长时间潜水，但不及小紫）；酒量极大（连喝几桶不醉）；仙品·火质之鼎（太一经双修鼎炉，品级高于珍品）",
             "【阶段身份】汉国篇第30集第三章欲醉前：云家大小姐/云世商会人物/中立盟友，禁止提前写作程宗扬内宅成员：status=forbid-final-state-before-turning-point",
             "【阶段身份】六朝云龙吟汉国篇第30集第三章欲醉起：确认关系转折，之后可写作程宗扬内宅成员：status=allowed-after-turning-point",
-            "【阶段身份】当前关卡 lyl.luoyang_cloud_secret：云如瑶亲侄女，云世商会家主侄女/女骑士",
+            "【阶段身份】当前关卡 lyl.han_palace_endgame：云如瑶亲侄女，云世商会家主侄女/女骑士",
             "【人工正典】人工批注：六朝云龙吟汉国篇第30集第三章欲醉明确关系转折。；【鼎炉·太一经双修】鼎炉=双修中作修炼载体的女性；男方真气经其阴脉行一周天返丹田而更纯粹、可大进修为。鼎炉分五行(金木水火土)与品级(仙品>珍品>…，得一即珍品)。代价：鼎炉积杂气致自身修为受限；男方修炼不当遭阴气反噬(非残即死)。"
           ],
           "appearance": "身材热辣，习武跳舞练就紧致弹性与肉欲的双腿",
@@ -2177,7 +2177,7 @@
             "【情节】黑魔海潜伏人员：嫁给林冲纯为利用其宋国安保机构/禁军身份刺探情报、掩护黑魔海行动；林冲对此毫无所觉，整天把她当弱不禁风的宝贝疙瘩呵护；真正使用阮香凝的鼎炉效果之后，程宗扬炼化效率提升不下十倍。",
             "【阶段身份】六朝云龙吟临安篇第3集第7章·正式破身入后宫前：黑魔海玉姬（凝玉姬），伪装成林冲之妻潜伏宋国，为敌对/潜伏身份；禁止提前称为后宫、侍妾、情人或程宗扬阵营成员：status=forbid-final-state-before-turning-point",
             "【阶段身份】六朝云龙吟临安篇第3集第7章·正式破身入后宫：正式破身收入程宗扬后宫；此后可按原文写入程宗扬阵营/后宫/侍妾/情人等关系身份：status=allowed-after-turning-point",
-            "【阶段身份】当前关卡 lyl.luoyang_cloud_secret：黑魔海玉姬之一（凝玉姬·绝世鼎炉），高阶妖女/潜伏人员；伪装成林冲之妻潜伏宋国，利用其安保机构/禁军身份刺探情报、掩护黑魔海行动",
+            "【阶段身份】当前关卡 lyl.han_palace_endgame：黑魔海玉姬之一（凝玉姬·绝世鼎炉），高阶妖女/潜伏人员；伪装成林冲之妻潜伏宋国，利用其安保机构/禁军身份刺探情报、掩护黑魔海行动",
             "【人工正典】人工批注：林娘子就是阮香凝，林冲之妻。；【魂丹】玉姬皆有魂丹；献出魂丹后永远不能背叛主人；主人窍阴穴中的魂影与其魂魄相连，可互相感应。；【鼎炉·太一经双修】鼎炉=双修中作修炼载体的女性；男方真气经其阴脉行一周天返丹田而更纯粹、可大进修为。鼎炉分五行(金木水火土)与品级(珍品/…，得一即珍品)。代价：鼎炉积杂气致自身修为受限；男方修炼不当遭阴气反噬(非残即死)。",
             "【人工正典】林娘子 已并入 阮香凝"
           ]
@@ -2236,7 +2236,7 @@
             "【软肋】好面子（但自己说脸皮要厚），可能极度自我中心",
             "【绝技】大红折扇",
             "【情节】借钱给程宗扬；被内侍打成血葫芦；献策并彻夜出谋划策；伪装戴假胡须和墨镜；对太后流露柔情",
-            "【阶段身份】当前关卡 lyl.luoyang_cloud_secret：商人/谋士"
+            "【阶段身份】当前关卡 lyl.han_palace_endgame：商人/谋士"
           ]
         },
         "realm": "筑基",
@@ -2285,7 +2285,7 @@
             "【情节】被陆谦；高衙内等人调教，沦为太尉府的淫乐工具；与妹妹阮香凝一同参与性游戏，姐妹共侍；被程宗扬多次肏弄；被罂粟女调教并提到其淫浪模样",
             "【阶段身份】转折前：原阵营/中立/敌对身份，禁止提前称为后宫、侍妾、情人或程宗扬阵营成员：status=forbid-final-state-before-turning-point",
             "【阶段身份】关系转折后：按原文转折事件后，才可写入程宗扬阵营/后宫/侍妾/情人等关系身份：status=allowed-after-turning-point",
-            "【阶段身份】当前关卡 lyl.luoyang_cloud_secret：阮香凝的妹妹"
+            "【阶段身份】当前关卡 lyl.han_palace_endgame：阮香凝的妹妹"
           ]
         },
         "realm": "筑基",
@@ -2340,7 +2340,7 @@
             "【软肋】「不能受伤体质」——身体受创（曾被程宗扬刺破手掌）会引发异动/应验预言",
             "【绝技】幻术匿形；分身之术；剑术（鞭影从剑中逼出）",
             "【情节】常年与程宗扬小紫暗中布局博弈；魔门远古职衔却卑微；「没资格拜祭魔尊」，被推测身体是某种高阶灵魂/力量的「容器」",
-            "【阶段身份】当前关卡 lyl.luoyang_cloud_secret：魔门黑魔海巫宗骨干智囊与行动主使，实权极高，可调动魔门资源",
+            "【阶段身份】当前关卡 lyl.han_palace_endgame：魔门黑魔海巫宗骨干智囊与行动主使，实权极高，可调动魔门资源",
             "【人工正典】【魂丹】玉姬皆有魂丹；献出魂丹后永远不能背叛主人；主人窍阴穴中的魂影与其魂魄相连，可互相感应。"
           ]
         },
@@ -2398,7 +2398,7 @@
             "【绝技】腿法；马鞭",
             "【入伙】无需加入，已是程宗扬的同伴",
             "【情节】用折扇教训石超；与芸娘调情；用马鞭抽打敌人；怂恿程宗扬看张贵妃；与小狐狸腿法对决",
-            "【阶段身份】当前关卡 lyl.luoyang_cloud_secret：萧家公子/星月湖大营萧少校"
+            "【阶段身份】当前关卡 lyl.han_palace_endgame：萧家公子/星月湖大营萧少校"
           ]
         },
         "realm": "金丹",
@@ -2450,7 +2450,7 @@
             "【情节】剧情：政治死敌→佛门(十方丛林)清洗飞羽族+黑魔海抛弃→绝境向程宗扬求庇→抗佛同盟→委身；暗修高阶处女功法(采补长生术)，保持处女之身作秘密武器/博弈筹码；贸然采补会被反噬吸干",
             "【阶段身份】转折前：原阵营/中立/敌对身份，禁止提前称为后宫、侍妾、情人或程宗扬阵营成员：status=forbid-final-state-before-turning-point",
             "【阶段身份】关系转折后：按原文转折事件后，才可写入程宗扬阵营/后宫/侍妾/情人等关系身份：status=allowed-after-turning-point",
-            "【阶段身份】当前关卡 lyl.luoyang_cloud_secret：吕太后；表面贪权妖后，实为给被佛道围剿的飞羽族谋生路"
+            "【阶段身份】当前关卡 lyl.han_palace_endgame：吕太后；表面贪权妖后，实为给被佛道围剿的飞羽族谋生路"
           ]
         },
         "realm": "筑基",
@@ -2499,7 +2499,7 @@
             "【绝技】短刀",
             "【情节】因门下豪士刺杀杨掾吏而被列入迁徙名册；与程宗扬；云秀峰合作买地；在洛都与剧孟等豪杰交往；卷入刘骜与董宣的冲突",
             "【结局】被剑玉姬刺死；（高手榜蓝:下落未确定）",
-            "【阶段身份】当前关卡 lyl.luoyang_cloud_secret：江湖大侠/布衣"
+            "【阶段身份】当前关卡 lyl.han_palace_endgame：江湖大侠/布衣"
           ]
         },
         "realm": "筑基",
@@ -2548,7 +2548,7 @@
             "【绝技】长枪",
             "【入伙】因想吃羊肉而跟随程宗扬，成为其队伍成员。",
             "【情节】在首阳山社内磨兵刃；参与杀局与西门庆战斗；被哈迷蚩撕羊腿喂食",
-            "【阶段身份】当前关卡 lyl.luoyang_cloud_secret：兽蛮武士"
+            "【阶段身份】当前关卡 lyl.han_palace_endgame：兽蛮武士"
           ]
         },
         "realm": "筑基",
@@ -2602,7 +2602,7 @@
             "【绝技】灵飞镜，长时间或者短时间多次使用及其消耗体力",
             "【入伙】第4章左右正式成为程宗扬情报负责人",
             "【情节】化名易勇与云苍峰同行；使用灵飞镜协助程宗扬探听宫中；从荆溪传讯；参与酒宴整治席面；有意弥合双方关系",
-            "【阶段身份】当前关卡 lyl.luoyang_cloud_secret：情报整理/水镜术使用者，盘江程氏情报负责人"
+            "【阶段身份】当前关卡 lyl.han_palace_endgame：情报整理/水镜术使用者，盘江程氏情报负责人"
           ]
         },
         "realm": "筑基",
@@ -2652,7 +2652,7 @@
             "【绝技】书刀；笔",
             "【入伙】第1章后，程宗扬主动招揽，班超被信重打动，称为属下",
             "【情节】程宗扬初次见面仔细打量班超；班超在秦桧经义辩论中大为佩服；程宗扬招揽班超，班超以豪情报答；班超准备钱铢；出谋划策，彻夜工作后下厨做早点给娘子；班超对秦桧的利即大义论感到兴致，追问程宗扬志向",
-            "【阶段身份】当前关卡 lyl.luoyang_cloud_secret：刀笔吏/文职"
+            "【阶段身份】当前关卡 lyl.han_palace_endgame：刀笔吏/文职"
           ]
         },
         "realm": "筑基",
@@ -2698,7 +2698,7 @@
             "【目标】夺取天子之位，坐实皇权",
             "【软肋】轻信他人，垂涎帝位，被剑玉姬利用",
             "【情节】与剑玉姬翻脸；纠集人马造反；攻占白虎门与玄武门；下诏百余道以坐实天子之位",
-            "【阶段身份】当前关卡 lyl.luoyang_cloud_secret：叛军首领/伪天子"
+            "【阶段身份】当前关卡 lyl.han_palace_endgame：叛军首领/伪天子"
           ]
         },
         "realm": "金丹",
@@ -2723,7 +2723,7 @@
             "【情节】被蛇夫人用假阳具调教并学习服侍；与成光一起被程宗扬轮流发泄；被程宗扬干至蜜穴落红，状若惨烈；乳头穿孔挂银铃，被主人玩弄；殷勤为主人洗沐擦脚，媚态讨好",
             "【阶段身份】转折前：原阵营/中立/敌对身份，禁止提前称为后宫、侍妾、情人或程宗扬阵营成员：status=forbid-final-state-before-turning-point",
             "【阶段身份】关系转折后：按原文转折事件后，才可写入程宗扬阵营/后宫/侍妾/情人等关系身份：status=allowed-after-turning-point",
-            "【阶段身份】当前关卡 lyl.luoyang_cloud_secret：掌教夫人（后沦为性奴）"
+            "【阶段身份】当前关卡 lyl.han_palace_endgame：掌教夫人（后沦为性奴）"
           ],
           "personality": [
             "顺从",
@@ -2755,7 +2755,7 @@
             "【目标】协助夫君秦桧及程宗扬的事业，维护自身与丈夫的地位与安全",
             "【软肋】对丈夫秦桧极为信任依赖，并担忧其安危与计划成败",
             "【情节】程宗扬委托王蕙处理临安通讯汇总；王蕙代程宗扬与蔡常侍交涉；参与欺骗吕雉等计划并出谋划策",
-            "【阶段身份】当前关卡 lyl.luoyang_cloud_secret：秦桧之妻"
+            "【阶段身份】当前关卡 lyl.han_palace_endgame：秦桧之妻"
           ],
           "appearance": "未明确描写外貌，仅以'斯斯文文、温柔可亲'等他人观感侧面提及"
         }
@@ -2786,7 +2786,7 @@
             "【情节】与尹馥兰；虞白樱一同侍奉程宗扬，参与群交与肛交；曾对尹馥兰落井下石，后雌伏于尹馥兰；多次主动或被动调教虞白樱；第5章洛帮中听话脱衣爬到榻上供程宗扬玩弄",
             "【阶段身份】霓开莲动前：洛帮帮主，禁止写作何进之女或程宗扬内宅成员：status=forbid-final-state-before-turning-point",
             "【阶段身份】六朝燕歌行·霓开莲动起：洛帮帮主/程宗扬内宅成员：status=allowed-after-turning-point",
-            "【阶段身份】当前关卡 lyl.luoyang_cloud_secret：洛帮帮主",
+            "【阶段身份】当前关卡 lyl.han_palace_endgame：洛帮帮主",
             "【人工正典】人工批注：不是何进之女，只是洛帮帮主；六朝燕歌行“霓开莲动”收入后宫。"
           ]
         }
@@ -2819,7 +2819,7 @@
             "【情节】与蛇夫人一同挑弄卓云君；回忆被主子插入后庭；赌骰时参与色情表演；战斗中使用娥眉刺",
             "【阶段身份】转折前：原阵营/中立/敌对身份，禁止提前称为后宫、侍妾、情人或程宗扬阵营成员：status=forbid-final-state-before-turning-point",
             "【阶段身份】关系转折后：按原文转折事件后，才可写入程宗扬阵营/后宫/侍妾/情人等关系身份：status=allowed-after-turning-point",
-            "【阶段身份】当前关卡 lyl.luoyang_cloud_secret：龙宸叛徒"
+            "【阶段身份】当前关卡 lyl.han_palace_endgame：龙宸叛徒"
           ]
         }
       },
@@ -2845,7 +2845,7 @@
             "【目标】复仇雪恨，恢复自由和名誉",
             "【软肋】身体残疾（失去双腿、独眼），重伤依赖照料",
             "【情节】被囚禁折磨，失去双腿，被挖一眼；程宗扬、卢景等人救出；养伤期间学习腹语、戴银面具；亲手斩杀仇人（平城君）后昏迷",
-            "【阶段身份】当前关卡 lyl.luoyang_cloud_secret：大侠"
+            "【阶段身份】当前关卡 lyl.han_palace_endgame：大侠"
           ]
         }
       },
@@ -2874,7 +2874,7 @@
             "【软肋】重情义，易冲动，感情外露",
             "【绝技】长剑，剑法刚猛",
             "【情节】保护郭解，与程宗扬一同护送定陶王；为郭解传话，得知剧孟失踪；照顾受伤的剧孟，伤心痛哭；拒绝扮太监，以死相抗",
-            "【阶段身份】当前关卡 lyl.luoyang_cloud_secret：游侠，郭解麾下豪士"
+            "【阶段身份】当前关卡 lyl.han_palace_endgame：游侠，郭解麾下豪士"
           ]
         }
       },
@@ -2900,7 +2900,7 @@
             "【目标】利用巫蛊案打击政敌，扩大自身权势",
             "【绝技】绣衣使者职权；巫蛊查案",
             "【情节】主导巫蛊案，掘出数百木偶；拷掠刘丹；针对云台书院及程宗扬",
-            "【阶段身份】当前关卡 lyl.luoyang_cloud_secret：绣衣使者"
+            "【阶段身份】当前关卡 lyl.han_palace_endgame：绣衣使者"
           ]
         }
       },
@@ -2922,7 +2922,7 @@
             "【关系】程宗扬认识张放，但与主角无直接密切关系",
             "【称呼】富平侯/张放",
             "【情节】与天子刘骜一同游猎、逛鬼市；在第6章中与刘骜在城门口被堵",
-            "【阶段身份】当前关卡 lyl.luoyang_cloud_secret：富平侯，洛都贵族少年"
+            "【阶段身份】当前关卡 lyl.han_palace_endgame：富平侯，洛都贵族少年"
           ]
         }
       },
@@ -2953,7 +2953,7 @@
             "【软肋】有勇无谋，易被激怒，政治算计不如刘建等人",
             "【绝技】双矛；方天画戟",
             "【情节】当众与刘建翻脸；率领轻骑突袭射声军；一矛刺穿吕淑；与金蜜镝等大臣一起应对宫廷政变",
-            "【阶段身份】当前关卡 lyl.luoyang_cloud_secret：少年将军，羽林天军将领"
+            "【阶段身份】当前关卡 lyl.han_palace_endgame：少年将军，羽林天军将领"
           ]
         }
       },
@@ -2971,7 +2971,7 @@
             "【软肋】年纪太小，易受惊吓",
             "【情节】失踪；继嗣的定陶王年纪太小，受到惊吓”，在宫门处拜送灵柩；帝位被永安、长秋二宫认可；由唐衡和徐璜扶着出来送灵",
             "【结局】失踪",
-            "【阶段身份】当前关卡 lyl.luoyang_cloud_secret：定陶王，后为天子"
+            "【阶段身份】当前关卡 lyl.han_palace_endgame：定陶王，后为天子"
           ]
         }
       },
@@ -2997,7 +2997,7 @@
             "【软肋】胆小，骨头软",
             "【绝技】丈许长槊",
             "【情节】被程宗扬买通；在死士中为朱老头卫队首领；与吕雉倒戈；被描述为“貌似英雄，却是个口是心非的无耻小人”",
-            "【阶段身份】当前关卡 lyl.luoyang_cloud_secret：朱老头手下的卫队首领"
+            "【阶段身份】当前关卡 lyl.han_palace_endgame：朱老头手下的卫队首领"
           ]
         }
       }
@@ -4371,361 +4371,273 @@
   },
   "scenario": {
     "opening": {
-      "text": "程宗扬从云苍峰口中得知云家白银来自石见国，云如瑶身世与黑魔海有关。他决定北上洛都，借助官场和商贸力量，在汉国复杂的政局中寻找生路。此刻他身处洛都步广里程宅，正为即将到来的朝会做准备。院外，游侠少年因高智商杀人而寻衅，黑魔海的人也在暗中窥视。程宗扬必须步步为营，在吕氏、天子、黑魔海等多方势力间周旋。",
-      "playerRole": "汉国大行令，星月湖大营少主",
-      "playerCharacterId": "liuchao.character.cheng_zongyang",
-      "creationPreset": {
-        "characterName": "程宗扬",
-        "gender": "男",
-        "race": "人族",
-        "age": 20,
-        "talentTier": {
-          "name": "异世来客",
-          "description": "来自现代世界，适应力强。"
-        },
-        "origin": {
-          "name": "现代来客",
-          "description": "因空间异变进入六朝，已融入此世界。"
-        },
-        "spiritRoot": {
-          "name": "生死根（融合阴阳鱼）",
-          "tier": "唯一异能",
-          "description": "并非传统灵根，而是与阴阳鱼融合形成的双旋涡丹田。",
-          "specialEffects": [
-            "感应死亡气息",
-            "修为重塑后根基更稳"
-          ]
-        },
-        "talents": [
-          {
-            "name": "务实机敏",
-            "description": "善于判断风险，随机应变。"
-          },
-          {
-            "name": "领袖气场",
-            "description": "能吸引人才为己所用。"
-          }
-        ],
-        "attributes": {
-          "rootBone": 6,
-          "spirituality": 5,
-          "comprehension": 7,
-          "fortune": 6,
-          "charm": 6,
-          "temperament": 7
-        },
-        "locked": true
-      },
-      "locationId": "lyl.location.luoyang",
-      "featuredCharacterIds": [
-        "liuchao.character.xiao_zi",
-        "liuchao.character.yun_cang_feng",
-        "liuchao.character.lu_jing"
+      "text": "洛都政变余波尚未平息，刘建、吕氏、左武军与宫中秘境同时牵动汉宫终局。程宗扬必须在内廷与军变之间抢回主动。",
+      "relatedCharacterIds": [
+        "liuchao.character.cheng_zongyang"
       ]
     },
     "initialFlags": {
-      "chapter.lyl.luoyang_cloud_secret.started": true,
-      "chapter.lyl.luoyang_cloud_secret.done": false,
-      "event.s05_01.done": false,
-      "event.s05_02.done": false,
-      "event.s05_03.done": false,
-      "event.s05_04.done": false,
-      "event.s05_05.done": false,
-      "event.s05_06.done": false,
-      "event.s05_07.done": false,
-      "event.s05_08.done": false,
-      "event.s05_09.done": false
+      "event.han_palace_endgame_01.done": false,
+      "event.han_palace_endgame_02.done": false,
+      "event.han_palace_endgame_03.done": false,
+      "event.han_palace_endgame_04.done": false,
+      "event.han_palace_endgame_05.done": false,
+      "event.han_palace_endgame_06.done": false,
+      "event.han_palace_endgame_07.done": false,
+      "event.han_palace_endgame_08.done": false,
+      "event.han_palace_endgame_09.done": false,
+      "event.han_palace_endgame_10.done": false,
+      "chapter.lyl.han_palace_endgame.palace.started": true,
+      "chapter.lyl.han_palace_endgame.palace.done": false,
+      "chapter.lyl.han_palace_endgame.endgame.started": false,
+      "chapter.lyl.han_palace_endgame.endgame.done": false
     },
+    "chapters": [
+      {
+        "id": "lyl.chapter.han_palace_endgame_palace",
+        "title": "汉宫突入",
+        "summary": "吕氏与刘建的宫廷斗争全面爆发，程宗扬在含光殿救人。",
+        "completion": [
+          {
+            "path": "flags.chapter.lyl.han_palace_endgame.palace.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "eventIds": [
+          "lyl.event.han_palace_endgame_01_beat",
+          "lyl.event.han_palace_endgame_02_beat",
+          "lyl.event.han_palace_endgame_03_beat",
+          "lyl.event.han_palace_endgame_04_beat",
+          "lyl.event.han_palace_endgame_05_beat"
+        ]
+      },
+      {
+        "id": "lyl.chapter.han_palace_endgame_endgame",
+        "title": "刘建伏诛",
+        "summary": "秘境、凉州军和阙楼斩逆完成汉宫终局。",
+        "completion": [
+          {
+            "path": "flags.chapter.lyl.han_palace_endgame.endgame.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "eventIds": [
+          "lyl.event.han_palace_endgame_06_beat",
+          "lyl.event.han_palace_endgame_07_beat",
+          "lyl.event.han_palace_endgame_08_beat",
+          "lyl.event.han_palace_endgame_09_beat",
+          "lyl.event.han_palace_endgame_10_beat"
+        ],
+        "activation": [
+          {
+            "path": "flags.chapter.lyl.han_palace_endgame.palace.done",
+            "operator": "eq",
+            "value": true
+          }
+        ]
+      }
+    ],
     "events": [
       {
-        "id": "lyl.event.s05_01",
-        "name": "云苍峰商议买官与铜矿",
-        "description": "程宗扬与云苍峰商议首阳山铜矿开采及买官事宜，计划通过西邸购买两个二千石官职及大量郡县小吏官职。",
-        "conditions": [
-          {
-            "path": "flags.chapter.lyl.luoyang_cloud_secret.started",
-            "operator": "eq",
-            "value": true
-          }
-        ],
+        "id": "lyl.event.han_palace_endgame_01_beat",
+        "name": "吕冀重伤",
+        "description": "吕冀遭刺重伤，吕雉追责晴州商会与刘建交易，汉宫内斗公开化。",
+        "axisId": "yunlong.289.1",
+        "axisAnchor": "六朝云龙吟·#289·斩使",
+        "axisSeq": 900,
+        "axisBeat": "吕冀被中行说刺了十七刀重伤卧床，太后吕雉入帐责备他与晴州商会密谋杀刘建，商会转头给了刘建二十万金铢。",
+        "critical": true,
         "completion": [
           {
-            "path": "flags.event.s05_01.done",
-            "operator": "eq",
-            "value": true
-          }
-        ],
-        "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang",
-          "liuchao.character.yun_cang_feng"
-        ],
-        "locationId": "lyl.location.luoyang",
-        "axisId": "yunlong.205.1",
-        "axisSeq": 777,
-        "axisAnchor": "六朝云龙吟·#205·买官",
-        "axisBeat": "程宗扬与云苍峰商议首阳山铜矿开采及买官事宜，计划通过西邸购买二千石官职及郡县小吏官职。"
-      },
-      {
-        "id": "lyl.event.s05_02",
-        "name": "徐璜同意买官名单",
-        "description": "程宗扬将公孙弘、朱买臣等名单交给徐璜，徐璜大喜，同意在八日内筹齐八万金铢。",
-        "conditions": [
-          {
-            "path": "flags.event.s05_01.done",
-            "operator": "eq",
-            "value": true
-          }
-        ],
-        "completion": [
-          {
-            "path": "flags.event.s05_02.done",
-            "operator": "eq",
-            "value": true
-          }
-        ],
-        "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang",
-          "liuchao.character.xu_huang"
-        ],
-        "axisId": "yunlong.205.2",
-        "axisSeq": 778,
-        "axisAnchor": "六朝云龙吟·#205·买官",
-        "axisBeat": "程宗扬将公孙弘、朱买臣等名单交给徐璜，徐璜大喜同意在八日内筹齐八万金铢。"
-      },
-      {
-        "id": "lyl.event.s05_03",
-        "name": "吕氏调动汉军围杀",
-        "description": "吕氏兄弟调动卫尉、屯骑、越骑、长水四支汉军精锐及死士，围杀程宗扬等人于山口镇。",
-        "conditions": [
-          {
-            "path": "flags.event.s05_02.done",
-            "operator": "eq",
-            "value": true
-          }
-        ],
-        "completion": [
-          {
-            "path": "flags.event.s05_03.done",
-            "operator": "eq",
-            "value": true
-          }
-        ],
-        "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang",
-          "lyl.character.lyu_buyi",
-          "liuchao.character.lv_ji"
-        ],
-        "relatedFactionIds": [
-          "lyl.faction.lyu_clan"
-        ],
-        "axisId": "yunlong.206.1",
-        "axisSeq": 779,
-        "axisAnchor": "六朝云龙吟·#206·围杀",
-        "axisBeat": "吕氏兄弟调动卫尉、屯骑等四支汉军精锐及死士，围杀程宗扬等人于山口镇。"
-      },
-      {
-        "id": "lyl.event.s05_04",
-        "name": "宅院被毁与哈迷蚩重伤",
-        "description": "吕氏死士攻入程宗扬宅院，哈迷蚩变身苍狼血战，重伤，宅院因地震陷落。",
-        "conditions": [
-          {
-            "path": "flags.event.s05_03.done",
-            "operator": "eq",
-            "value": true
-          }
-        ],
-        "completion": [
-          {
-            "path": "flags.event.s05_04.done",
-            "operator": "eq",
-            "value": true
-          }
-        ],
-        "relatedCharacterIds": [
-          "liuchao.character.gao_zhishang"
-        ],
-        "axisId": "yunlong.207.1",
-        "axisSeq": 780,
-        "axisAnchor": "六朝云龙吟·#207·奔命",
-        "axisBeat": "吕氏死士攻入程宗扬宅院，哈迷蚩变身苍狼血战重伤，宅院因地震陷落。"
-      },
-      {
-        "id": "lyl.event.s05_05",
-        "name": "黑鸦使者现身",
-        "description": "惊理发现黑魔海黑鸦使者从宅中地下飞出，程宗扬得知其卧底。",
-        "conditions": [
-          {
-            "path": "flags.event.s05_04.done",
-            "operator": "eq",
-            "value": true
-          }
-        ],
-        "completion": [
-          {
-            "path": "flags.event.s05_05.done",
-            "operator": "eq",
-            "value": true
-          }
-        ],
-        "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang",
-          "liuchao.character.jing_li"
-        ],
-        "relatedFactionIds": [
-          "liuchao.faction.hei_mo_hai"
-        ],
-        "axisId": "yunlong.209.1",
-        "axisSeq": 781,
-        "axisAnchor": "六朝云龙吟·#209·破绽",
-        "axisBeat": "惊理发现黑魔海黑鸦使者从宅中地下飞出，程宗扬得知其卧底身份。"
-      },
-      {
-        "id": "lyl.event.s05_06",
-        "name": "天子下诏送赵合德入宫",
-        "description": "徐璜传天子口谕，命程宗扬送赵合德入宫封昭仪，以应二鹅之象。",
-        "conditions": [
-          {
-            "path": "flags.event.s05_05.done",
-            "operator": "eq",
-            "value": true
-          }
-        ],
-        "completion": [
-          {
-            "path": "flags.event.s05_06.done",
-            "operator": "eq",
-            "value": true
-          }
-        ],
-        "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang",
-          "liuchao.character.xu_huang"
-        ],
-        "axisId": "yunlong.210.1",
-        "axisSeq": 782,
-        "axisAnchor": "六朝云龙吟·#210·入宫",
-        "axisBeat": "徐璜传天子口谕命程宗扬送赵合德入宫封昭仪以应二鹅之象。"
-      },
-      {
-        "id": "lyl.event.s05_07",
-        "name": "程宗扬寻访替代入宫者",
-        "description": "程宗扬为寻找替代赵合德入宫的女子，在乐津里人市遇到友通期，以昭仪身份相诱，说服其入宫。",
-        "conditions": [
-          {
-            "path": "flags.event.s05_06.done",
-            "operator": "eq",
-            "value": true
-          }
-        ],
-        "completion": [
-          {
-            "path": "flags.event.s05_07.done",
+            "path": "flags.event.han_palace_endgame_01.done",
             "operator": "eq",
             "value": true
           }
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ],
-        "relatedFactionIds": [
-          "liuchao.faction.han_guo_chao_ting"
-        ],
-        "locationId": "lyl.location.luoyang",
-        "axisId": "yunlong.211.1",
-        "axisSeq": 783,
-        "axisAnchor": "六朝云龙吟·#211·愁眉",
-        "axisBeat": "程宗扬在乐津里人市遇到友通期，以昭仪身份相诱说服其入宫替代赵合德。"
+        ]
       },
       {
-        "id": "lyl.event.s05_08",
-        "name": "程宗扬与赵合德商议替代入宫",
-        "description": "程宗扬向赵合德说明找友通期冒充其入宫的计划，赵合德同意并询问自身后续安排。",
-        "conditions": [
-          {
-            "path": "flags.event.s05_07.done",
-            "operator": "eq",
-            "value": true
-          }
-        ],
+        "id": "lyl.event.han_palace_endgame_02_beat",
+        "name": "左武军入宫",
+        "description": "吕巨君率左武军与兽蛮入宫，程宗扬认出古格尔。",
+        "axisId": "yunlong.290.2",
+        "axisAnchor": "六朝云龙吟·#290·冰封",
+        "axisSeq": 904,
+        "axisBeat": "吕巨君率左武军与兽蛮入宫，程宗扬认出古格尔。",
+        "critical": true,
         "completion": [
           {
-            "path": "flags.event.s05_08.done",
+            "path": "flags.event.han_palace_endgame_02.done",
             "operator": "eq",
             "value": true
           }
         ],
         "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang",
-          "liuchao.character.zhao_he_de"
-        ],
-        "relatedFactionIds": [
-          "liuchao.faction.han_guo_chao_ting"
-        ],
-        "locationId": "lyl.location.luoyang",
-        "axisId": "yunlong.211.2",
-        "axisSeq": 784,
-        "axisAnchor": "六朝云龙吟·#211·愁眉",
-        "axisBeat": "程宗扬向赵合德说明找友通期冒充入宫的计划，赵合德同意并询问自身后续安排。"
+          "liuchao.character.cheng_zongyang"
+        ]
       },
       {
-        "id": "lyl.event.s05_09",
-        "name": "云氏金铢押运遇劫",
-        "description": "云氏从舞都运往洛都的五万金铢在伊水附近被龙宸杀手劫走，云丹琉与程宗扬率众反击，损失惨重。",
-        "conditions": [
-          {
-            "path": "flags.event.s05_08.done",
-            "operator": "eq",
-            "value": true
-          }
-        ],
+        "id": "lyl.event.han_palace_endgame_03_beat",
+        "name": "含光殿救人",
+        "description": "程宗扬在含光殿击杀古格尔，救出昭仪。",
+        "axisId": "yunlong.294.1",
+        "axisAnchor": "六朝云龙吟·#294·锋芒",
+        "axisSeq": 910,
+        "axisBeat": "程宗扬在含光殿击杀古格尔，救出昭仪。",
+        "critical": true,
         "completion": [
           {
-            "path": "flags.event.s05_09.done",
+            "path": "flags.event.han_palace_endgame_03.done",
             "operator": "eq",
             "value": true
           }
         ],
         "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang",
-          "liuchao.character.yun_cang_feng",
-          "liuchao.character.yun_dan_liu"
-        ],
-        "locationId": "lyl.location.luoyang",
-        "axisId": "yunlong.212.1",
-        "axisSeq": 785,
-        "axisAnchor": "六朝云龙吟·#212·遇劫",
-        "axisBeat": "云氏五万金铢在伊水附近被龙宸杀手劫走，云丹琉与程宗扬率众反击损失惨重。"
-      }
-    ],
-    "chapters": [
+          "liuchao.character.cheng_zongyang"
+        ]
+      },
       {
-        "id": "lyl.chapter.luoyang_cloud_secret",
-        "title": "云家秘密与北上洛都",
-        "summary": "云家秘密与北上洛都：云苍峰商议买官与铜矿 … 云氏金铢押运遇劫",
-        "activation": [
-          {
-            "path": "flags.chapter.lyl.luoyang_cloud_secret.started",
-            "operator": "eq",
-            "value": true
-          }
-        ],
+        "id": "lyl.event.han_palace_endgame_04_beat",
+        "name": "复道遇伏",
+        "description": "程宗扬等人走复道遭伏击，秦桧用烟雾掩护其脱身。",
+        "axisId": "yunlong.297.1",
+        "axisAnchor": "六朝云龙吟·#297·暗渡",
+        "axisSeq": 916,
+        "axisBeat": "程宗扬等人走复道遇伏，秦桧用烟雾掩护，程宗扬脱身。",
+        "critical": true,
         "completion": [
           {
-            "path": "flags.event.s05_09.done",
+            "path": "flags.event.han_palace_endgame_04.done",
             "operator": "eq",
             "value": true
           }
         ],
-        "eventIds": [
-          "lyl.event.s05_01",
-          "lyl.event.s05_02",
-          "lyl.event.s05_03",
-          "lyl.event.s05_04",
-          "lyl.event.s05_05",
-          "lyl.event.s05_06",
-          "lyl.event.s05_07",
-          "lyl.event.s05_08",
-          "lyl.event.s05_09"
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ]
+      },
+      {
+        "id": "lyl.event.han_palace_endgame_05_beat",
+        "name": "吕巨君自焚",
+        "description": "吕巨君在平朔殿自焚，廖扶陪同，吕氏旧局急转。",
+        "axisId": "yunlong.304.1",
+        "axisAnchor": "六朝云龙吟·#304·天命",
+        "axisSeq": 925,
+        "axisBeat": "吕巨君在平朔殿自焚，廖扶陪同。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.han_palace_endgame_05.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ]
+      },
+      {
+        "id": "lyl.event.han_palace_endgame_06_beat",
+        "name": "定陶王得救",
+        "description": "闻清语掳走赵飞燕与赵合德，云丹琉救下定陶王。",
+        "axisId": "yunlong.307.1",
+        "axisAnchor": "六朝云龙吟·#307·公子",
+        "axisSeq": 929,
+        "axisBeat": "闻清语掳走赵飞燕与赵合德，云丹琉救下定陶王。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.han_palace_endgame_06.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ]
+      },
+      {
+        "id": "lyl.event.han_palace_endgame_07_beat",
+        "name": "秘境入口",
+        "description": "吕雉开启秘境入口，小紫将盛姬投入光柱，众人进入秘境。",
+        "axisId": "yunlong.313.1",
+        "axisAnchor": "六朝云龙吟·#313·玉牒",
+        "axisSeq": 936,
+        "axisBeat": "吕雉用比目鱼珠开启秘境入口，小紫将盛姬投入光柱，众人进入秘境。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.han_palace_endgame_07.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ]
+      },
+      {
+        "id": "lyl.event.han_palace_endgame_08_beat",
+        "name": "董卓入京",
+        "description": "董卓率凉州军入洛都津门，借大将军名义入京搅动军局。",
+        "axisId": "yunlong.317.2",
+        "axisAnchor": "六朝云龙吟·#317·第585章 第5章 董卓",
+        "axisSeq": 940,
+        "axisBeat": "董卓率三千凉州军入洛都津门，声称奉大将军令入京但无虎符，斩杀骑手。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.han_palace_endgame_08.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ]
+      },
+      {
+        "id": "lyl.event.han_palace_endgame_09_beat",
+        "name": "永安宫攻入",
+        "description": "金蜜镝率军攻入永安宫，刘建退守阙楼。",
+        "axisId": "yunlong.320.1",
+        "axisAnchor": "六朝云龙吟·#320·第585章 第8章 斩逆",
+        "axisSeq": 944,
+        "axisBeat": "金蜜镝率军攻入永安宫，刘建退守阙楼。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.han_palace_endgame_09.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ]
+      },
+      {
+        "id": "lyl.event.han_palace_endgame_10_beat",
+        "name": "秦桧斩逆",
+        "description": "秦桧在阙楼中斩杀刘建并取其头颅，汉宫终局收束。",
+        "axisId": "yunlong.320.4",
+        "axisAnchor": "六朝云龙吟·#320·第585章 第8章 斩逆",
+        "axisSeq": 947,
+        "axisBeat": "秦桧在阙楼中斩杀刘建，取其头颅。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.han_palace_endgame_10.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
         ]
       }
     ]
@@ -4747,7 +4659,7 @@
         "allowedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "playerAllowed": true
+        "playerAllowed": false
       },
       {
         "contentId": "lyl.skill.np006",

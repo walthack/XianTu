@@ -2,20 +2,20 @@
   "schema": "xiantu.scenario-mod",
   "version": 1,
   "manifest": {
-    "id": "lyg.liangzhou_league",
-    "name": "六朝燕歌行·程宅战榜",
+    "id": "lyg.shituolin_endgame",
+    "name": "六朝燕歌行·尸陀林主与李辅国断点",
     "version": "1.0.0",
     "author": "DeepSeek V4 Flash + XianTu Mod Kit",
-    "description": "铁马堂与丹霞宗对阵，周飞三家全胜，广源行操纵局势，比武胜负和盟主归属成为关键。",
+    "description": "宦官再分权、高阳疑冢、窥基尸陀林主化身、李辅国夺舍婆娑宝树与太皇太后之躯，收束至黑魔海旧怨追问；因原作连载主轴未完，本关作为当前开放断点，等待后续补关续接。",
     "axisVersion": "rebuild-2026-06-28",
-    "axisOrder": 5,
-    "axisSeqLo": 1203,
-    "axisSeqHi": 1216,
+    "axisOrder": 8,
+    "axisSeqLo": 1321,
+    "axisSeqHi": 1399,
     "eventIdContract": "append-only-frozen",
-    "prevStageId": "lyg.ganlu_bian",
-    "prevStageName": "六朝燕歌行·滴漏",
-    "nextStageId": "lyg.buddhist_conspiracy",
-    "nextStageName": "六朝燕歌行·佛门围杀与甘露变爆发"
+    "prevStageId": "lyg.ganlu_aftershock",
+    "prevStageName": "六朝燕歌行·甘露变余波与唐皇弑逆",
+    "nextStageId": null,
+    "nextStageName": null
   },
   "world": {
     "name": "六朝",
@@ -672,7 +672,7 @@
             "【阶段身份】lcq.stage_01-lcq.stage_02：序章：现代穿越者/左武军临时依附，不作为六朝社会身份链起点：status=allowed",
             "【阶段身份】lcq.stage_03：苏妲己名下奴隶（白湖商馆奴隶）：status=allowed",
             "【阶段身份】stage-specific：随国家、任务、出使名义变化；必须读取当前 stage 的 opening.playerRole / role / affiliations：status=rule",
-            "【阶段身份】当前关卡 lyg.liangzhou_league：主角",
+            "【阶段身份】当前关卡 lyg.shituolin_endgame：主角",
             "【人工正典】【双修法门·手段决定后果】程宗扬修太一经，双修增益取决于手段与鼎炉匹配（用对鼎炉——如阮香凝——炼化效率提升不下十倍）。三种手段后果递进：①采补（最凶狠）：采女子阴精，女方需滋养多日方可再采；狠者不顾女方生死一味采补，损人利己、可致死。②以女子为鼎炉（酷烈手段）：强行提升己方修为，鼎炉女子不至送命但身体大受损伤、缠绵病榻。③温养（温和）：同样以女子为鼎炉但手法温和，对女方伤害有限，善加运用甚至有益无损，接近双方得益的双修。叙事时按程宗扬所选手段产生相应后果。"
           ],
           "origin": "主角"
@@ -729,7 +729,7 @@
             "【目标】维护铁马堂利益，与王忠嗣、程宗扬等交好以壮声势",
             "【软肋】冲动，有时依赖他人撑腰",
             "【情节】与王忠嗣是生死兄弟，王忠嗣为其撑腰；与程宗扬结盟，共同对抗广源行等势力；在比武中曾考虑替换人选；战场冲杀，险被护法金刚所杀",
-            "【阶段身份】当前关卡 lyg.liangzhou_league：铁马堂堂主"
+            "【阶段身份】当前关卡 lyg.shituolin_endgame：铁马堂堂主"
           ]
         }
       },
@@ -774,7 +774,7 @@
             "【目标】追求功名利禄，讨好权贵",
             "【软肋】虚荣，好面子，易被奉承",
             "【情节】被黎锦香和杨玉环设计，将妻子献给程宗扬；在狐妖事件中被迷住，表现不堪；升官后得意忘形",
-            "【阶段身份】当前关卡 lyg.liangzhou_league：关键人物"
+            "【阶段身份】当前关卡 lyg.shituolin_endgame：关键人物"
           ],
           "personality": [
             "孤傲",
@@ -846,7 +846,7 @@
             "【目标】设法自救，摆脱周飞与广源行束缚。",
             "【软肋】对程宗扬可能产生真情、身体敏感，易受快感支配",
             "【情节】第一章被程宗扬破处；多次主动与程宗扬交合",
-            "【阶段身份】当前关卡 lyg.liangzhou_league：大唐太医署巨头/顶尖神医（医术在汉国义姁之上）；杨玉环姑母、杨氏外戚幕后核心智囊"
+            "【阶段身份】当前关卡 lyg.shituolin_endgame：大唐太医署巨头/顶尖神医（医术在汉国义姁之上）；杨玉环姑母、杨氏外戚幕后核心智囊"
           ]
         }
       },
@@ -902,7 +902,7 @@
             "【目标】执行凉州盟任务，维护丹霞宗利益，与程宗扬交好以应对周飞。",
             "【绝技】雁翎刀",
             "【情节】设局清理叛徒并结识程宗扬；与程宗扬商议对付周飞之事",
-            "【阶段身份】当前关卡 lyg.liangzhou_league：丹霞宗护法"
+            "【阶段身份】当前关卡 lyg.shituolin_endgame：丹霞宗护法"
           ]
         }
       },
@@ -953,7 +953,7 @@
             "【软肋】贪财贪吃（席上顺走金银餐具）、冲动易怒（被人踩脚就怪叫）、好面子（被戳中痛处会悻悻）",
             "【绝技】空",
             "【情节】被程宗扬初见面时认为面相老成；被吕奉先踩脚后怪叫；因铁中宝与程宗扬结识并撑腰；在天策府镇守长兴坊时卖面子给程宗扬助其扬名；席上顺走金银餐具；对计算股份极有兴趣",
-            "【阶段身份】当前关卡 lyg.liangzhou_league：天策府将领"
+            "【阶段身份】当前关卡 lyg.shituolin_endgame：天策府将领"
           ]
         }
       },
@@ -1009,7 +1009,7 @@
             "【软肋】怕死、易冲动、腿脚有伤",
             "【绝技】长枪",
             "【情节】崴脚脸擦伤；以钱粮换忠心的观点被纠正；参与凉州盟比武；被阿合马和哈迷蚩打断腿；用长枪刺自己大腿攻击护法金刚；称呼程宗扬配偶为小师娘",
-            "【阶段身份】当前关卡 lyg.liangzhou_league：关键人物"
+            "【阶段身份】当前关卡 lyg.shituolin_endgame：关键人物"
           ],
           "origin": "关键人物"
         }
@@ -1078,7 +1078,7 @@
             "【目标】辅助主上成事，维护主上利益",
             "【绝技】错刀",
             "【情节】劫持定陶王；用错刀威胁廖群玉；整理藩镇资料",
-            "【阶段身份】当前关卡 lyg.liangzhou_league：关键人物"
+            "【阶段身份】当前关卡 lyg.shituolin_endgame：关键人物"
           ],
           "origin": "关键人物"
         }
@@ -1179,7 +1179,7 @@
             "【情节】黑魔海巫宗正统传人，幕后操盘",
             "【阶段身份】转折前：原阵营/中立/敌对身份，禁止提前称为后宫、侍妾、情人或程宗扬阵营成员：status=forbid-final-state-before-turning-point",
             "【阶段身份】关系转折后：按原文转折事件后，才可写入程宗扬阵营/后宫/侍妾/情人等关系身份：status=allowed-after-turning-point",
-            "【阶段身份】当前关卡 lyg.liangzhou_league：黑魔海巫宗正统传人；全书女主角、智商天花板"
+            "【阶段身份】当前关卡 lyg.shituolin_endgame：黑魔海巫宗正统传人；全书女主角、智商天花板"
           ],
           "race": "碧鲮族",
           "origin": "黑魔海巫宗正统传人；全书女主角、智商天花板"
@@ -1235,7 +1235,7 @@
             "【入伙】程宗扬的徒弟",
             "【情节】被朱老头用鞋抽晕；被小玲儿割喉致死；与程宗扬冲突",
             "【结局】被小玲儿割喉重伤，仰面躺地，气息断绝（但未死）",
-            "【阶段身份】当前关卡 lyg.liangzhou_league：吕氏家族成员/洛都美男子/少年将军"
+            "【阶段身份】当前关卡 lyg.shituolin_endgame：吕氏家族成员/洛都美男子/少年将军"
           ],
           "appearance": "面如冠玉，俊脸如冠玉，颈间有白玉护颈，白衣如血洗，金冠白袍，发髻散开，脸上有巴掌印",
           "origin": "吕氏家族成员/洛都美男子/少年将军",
@@ -1312,7 +1312,7 @@
             "【软肋】身体敏感，尤其是乳头被穿针后痛楚显著；容易屈服于情欲和胁迫。",
             "【绝技】瑶池万莲开（剑招）；太极印；七处玄光（金钗；玉簪；明珠；宝镯；玉佩；香囊等七处法宝）",
             "【情节】被程宗扬开苞，失去处子元红（第1章）；被程宗扬教导乳交；展示身体（第2章）；被杨玉环等人在脸上画胡须；写‘手下败将’（第四章）；乳头被穿针固定（第5章）；被内侍踩脸羞辱（第7章）；目睹潘金莲肛交后震惊（第八章）",
-            "【阶段身份】当前关卡 lyg.liangzhou_league：次要人物"
+            "【阶段身份】当前关卡 lyg.shituolin_endgame：次要人物"
           ],
           "appearance": "身材极佳，腰细臀圆，一双大白腿修长白润，胸前乳球大到爆炸；肌肤如玉，玉颊娇美精致，香腮似雪，樱唇嫣红如脂，微湿长发披肩，宛如瑶池仙子，不染凡尘。",
           "origin": "次要人物"
@@ -1389,7 +1389,7 @@
             "【情节】升级究极尤物",
             "【阶段身份】转折前：原阵营/中立/敌对身份，禁止提前称为后宫、侍妾、情人或程宗扬阵营成员：status=forbid-final-state-before-turning-point",
             "【阶段身份】关系转折后：按原文转折事件后，才可写入程宗扬阵营/后宫/侍妾/情人等关系身份：status=allowed-after-turning-point",
-            "【阶段身份】当前关卡 lyg.liangzhou_league：太真公主/镇国大长公主；程宗扬的伴侣/后宫成员"
+            "【阶段身份】当前关卡 lyg.shituolin_endgame：太真公主/镇国大长公主；程宗扬的伴侣/后宫成员"
           ],
           "origin": "程宗扬的伴侣/后宫成员"
         }
@@ -1451,7 +1451,7 @@
             "【情节】被陆谦；高衙内等人调教，沦为太尉府的淫乐工具；与妹妹阮香凝一同参与性游戏，姐妹共侍；被程宗扬多次肏弄；被罂粟女调教并提到其淫浪模样",
             "【阶段身份】转折前：原阵营/中立/敌对身份，禁止提前称为后宫、侍妾、情人或程宗扬阵营成员：status=forbid-final-state-before-turning-point",
             "【阶段身份】关系转折后：按原文转折事件后，才可写入程宗扬阵营/后宫/侍妾/情人等关系身份：status=allowed-after-turning-point",
-            "【阶段身份】当前关卡 lyg.liangzhou_league：阮香凝的妹妹"
+            "【阶段身份】当前关卡 lyg.shituolin_endgame：阮香凝的妹妹"
           ]
         }
       },
@@ -1508,7 +1508,7 @@
             "【情节】剧情：政治死敌→佛门(十方丛林)清洗飞羽族+黑魔海抛弃→绝境向程宗扬求庇→抗佛同盟→委身；暗修高阶处女功法(采补长生术)，保持处女之身作秘密武器/博弈筹码；贸然采补会被反噬吸干",
             "【阶段身份】转折前：原阵营/中立/敌对身份，禁止提前称为后宫、侍妾、情人或程宗扬阵营成员：status=forbid-final-state-before-turning-point",
             "【阶段身份】关系转折后：按原文转折事件后，才可写入程宗扬阵营/后宫/侍妾/情人等关系身份：status=allowed-after-turning-point",
-            "【阶段身份】当前关卡 lyg.liangzhou_league：吕太后；表面贪权妖后，实为给被佛道围剿的飞羽族谋生路"
+            "【阶段身份】当前关卡 lyg.shituolin_endgame：吕太后；表面贪权妖后，实为给被佛道围剿的飞羽族谋生路"
           ],
           "race": "羽族",
           "origin": "吕太后；表面贪权妖后，实为给被佛道围剿的飞羽族谋生路"
@@ -1573,7 +1573,7 @@
             "【情节】与姐姐赵飞燕一同侍奉程宗扬；被程宗扬挑逗后羞怯地脱去衣物；在程宗扬面前张开芳唇舔舐肉棒；与姐姐并乳同臀供程宗扬淫乐",
             "【阶段身份】汉国篇第30集第7章弑君前：汉国昭仪/赵飞燕之妹，禁止提前写作程宗扬妾室或情人：status=forbid-final-state-before-turning-point",
             "【阶段身份】六朝云龙吟汉国篇第30集第7章弑君起：确认关系转折，之后可写作程宗扬内宅成员：status=allowed-after-turning-point",
-            "【阶段身份】当前关卡 lyg.liangzhou_league：汉国昭仪/赵飞燕之妹",
+            "【阶段身份】当前关卡 lyg.shituolin_endgame：汉国昭仪/赵飞燕之妹",
             "【人工正典】人工批注：六朝云龙吟汉国篇第30集第7章弑君明确关系转折；转折前为汉国昭仪。"
           ]
         },
@@ -1632,7 +1632,7 @@
             "【目标】猎奇/好色，追随程宗扬见识美女",
             "【软肋】身体虚弱，容易流鼻血，受惊吓",
             "【情节】被程宗扬揭穿穿越者身份，并谈及穿越者处境；目睹杨玉环暴力震惊；殿上遇险急蹲求生；易流鼻血被嘲笑；对佛祖化身冷笑；掩护程宗扬受伤",
-            "【阶段身份】当前关卡 lyg.liangzhou_league：程宗扬新交的穿越同乡/谋士"
+            "【阶段身份】当前关卡 lyg.shituolin_endgame：程宗扬新交的穿越同乡/谋士"
           ],
           "origin": "程宗扬新交的穿越同乡/谋士"
         },
@@ -1699,7 +1699,7 @@
             "【情节】因天生肉体极度敏感，被程宗扬逼问出隐藏的受虐性幻想并立下誓约；\"荡\"是私密关系中被主角粗暴开发出的被动反差，绝非世俗荡妇/市侩",
             "【阶段身份】转折前：光明观堂高阶医女/鹤羽剑姬，为保护乐明珠追索程宗扬；禁止提前写作后宫或内宅成员：status=forbid-final-state-before-turning-point",
             "【阶段身份】唐国篇第十四集·红芳吐蕊第一章：确认效忠和关系转折，之后可写作程宗扬阵营/内宅成员：status=allowed-after-turning-point",
-            "【阶段身份】当前关卡 lyg.liangzhou_league：光明观堂高阶医女，鹤羽剑姬，乐明珠的亲师姐",
+            "【阶段身份】当前关卡 lyg.shituolin_endgame：光明观堂高阶医女，鹤羽剑姬，乐明珠的亲师姐",
             "【人工正典】人工批注：身份是光明观堂高阶医女，鹤羽剑姬；唐国篇第十四集红芳吐蕊第一章确认其关系状态和效忠转折。"
           ],
           "origin": "光明观堂高阶医女，鹤羽剑姬，乐明珠的亲师姐"
@@ -1734,7 +1734,7 @@
           ],
           "appearance": "浓眉大眼，肤色苍黑（第5章朝会），曾长发花白、肌肤干瘪苍老（第一章遍地忠臣），也有瞪眼张口惊愕之态（第一章遍地忠臣）。常穿官服，腰束金丝玉带，佩戴蓝田玉腰带（第六章暗夜惊魂），神色多变：可低眉顺眼，亦可昂首挺胸、顾盼自雄（第二章子夜歌残；第三章一夫荷戟）。",
           "notes": [
-            "【阶段身份】当前关卡 lyg.liangzhou_league：左街功德使/枢密使（疑似被李辅国排挤）"
+            "【阶段身份】当前关卡 lyg.shituolin_endgame：左街功德使/枢密使（疑似被李辅国排挤）"
           ],
           "origin": "左街功德使/枢密使（疑似被李辅国排挤）"
         },
@@ -1799,7 +1799,7 @@
             "【阶段身份】太泉段：太泉古阵当地向导/方士，尚无官职：status=allowed",
             "【本阶段禁用】太泉段：秦国正使、唐皇占卜官",
             "【阶段身份】燕歌后期：秦国正使/唐皇私下召见的方士：status=allowed",
-            "【阶段身份】当前关卡 lyg.liangzhou_league：秦国正使"
+            "【阶段身份】当前关卡 lyg.shituolin_endgame：秦国正使"
           ]
         },
         "realm": "金丹",
@@ -1851,7 +1851,7 @@
             "【目标】求生存，夺舍重生，维护家族权势",
             "【软肋】义子鱼弘志惹祸累及自身、年老体衰，有求于程宗扬",
             "【情节】自扇耳光以博同情；与王守澄交好；为夺舍重生向程宗扬求助；踹打义子鱼弘志；大唐长安大貂珰(大太监)，殇侯的盟友",
-            "【阶段身份】当前关卡 lyg.liangzhou_league：唐朝宦官，权阉"
+            "【阶段身份】当前关卡 lyg.shituolin_endgame：唐朝宦官，权阉"
           ]
         },
         "realm": "元婴",
@@ -1893,7 +1893,7 @@
             "【关系】拜火教光明圣母，被唐国佛门邪僧洗脑；程宗扬将其解救后加入，成为西域本土重要情报源/合作者",
             "【阶段身份】六朝燕歌行唐国篇第14集第8章·善母·加入前：拜火教光明圣母；禁止提前称为程宗扬阵营成员/情报源等归属身份：status=forbid-final-state-before-turning-point",
             "【阶段身份】六朝燕歌行唐国篇第14集第8章·善母（加入）：加入程宗扬阵营，成为西域本地情报源/合作者（母亲身份，非后宫/侍妾）：status=allowed-after-turning-point",
-            "【阶段身份】当前关卡 lyg.liangzhou_league：拜火教高层长老"
+            "【阶段身份】当前关卡 lyg.shituolin_endgame：拜火教高层长老"
           ],
           "origin": "拜火教高层长老",
           "appearance": "西域性感火辣、波斯风情的异国熟女"
@@ -1949,7 +1949,7 @@
             "【软肋】修为被制时无力反抗；担心秘密泄露（如六识禁绝丹来历）；十指连心痛楚易显慌乱。",
             "【绝技】医术；金针疗法",
             "【情节】持燕姣然手书入宫成为太后心腹；因‘不老实’被阮香琳师爷下令打板子；被程宗扬手下用拶刑逼问六识禁绝丹解药，声称无解；救治赵飞燕；友通期等伤者；以赵昭仪有孕相胁保命",
-            "【阶段身份】当前关卡 lyg.liangzhou_league：女医，程宗扬控制下的线人"
+            "【阶段身份】当前关卡 lyg.shituolin_endgame：女医，程宗扬控制下的线人"
           ],
           "origin": "女医，程宗扬控制下的线人"
         },
@@ -1999,7 +1999,7 @@
             "【绝技】禅杖（杖上四只锡环能发梵唱佛光）；双掌金光（卐字符）",
             "【情节】净念与纳觉容部杀入水香楼，被杨玉环擒获；在血池与蛇夫人交手后，被程宗扬刀劈脖颈；最终盘膝合什，低头施礼",
             "【结局】僧袍被击碎、胸口骨骼凹陷血肉模糊，还剩一口气。",
-            "【阶段身份】当前关卡 lyg.liangzhou_league：大慈恩寺窥基大师座下沙门释子"
+            "【阶段身份】当前关卡 lyg.shituolin_endgame：大慈恩寺窥基大师座下沙门释子"
           ]
         },
         "realm": "金丹",
@@ -2044,7 +2044,7 @@
             "【目标】跟随东家程宗扬，求生、抱大腿",
             "【软肋】年纪小、胆小、缺乏自保能力",
             "【情节】第一次入宫迷路躲藏；被程宗扬暂时放置；目睹灵犬吐物；随程宗扬去蓬莱仙山",
-            "【阶段身份】当前关卡 lyg.liangzhou_league：乡村小厮/程宗扬的东家小厮"
+            "【阶段身份】当前关卡 lyg.shituolin_endgame：乡村小厮/程宗扬的东家小厮"
           ]
         },
         "realm": "金丹",
@@ -2074,7 +2074,7 @@
             "【情节】被柴永剑侵犯（第1章佛光普照）；展示身体供主人观赏（第5章日暖）；与孙寿一起服侍程宗扬（第3章失踪）；乳头穿刺挂银铃（第4章众浴）",
             "【阶段身份】转折前：原阵营/中立/敌对身份，禁止提前称为后宫、侍妾、情人或程宗扬阵营成员：status=forbid-final-state-before-turning-point",
             "【阶段身份】关系转折后：按原文转折事件后，才可写入程宗扬阵营/后宫/侍妾/情人等关系身份：status=allowed-after-turning-point",
-            "【阶段身份】当前关卡 lyg.liangzhou_league：湖阳君"
+            "【阶段身份】当前关卡 lyg.shituolin_endgame：湖阳君"
           ]
         }
       },
@@ -2107,7 +2107,7 @@
             "【情节】首次与程宗扬性交时略显生涩，蜜穴被开苞（“奴婢第一次就是这样被主人干的。”）；多次与程宗扬交合，包括后庭（被干屁眼儿）；遇袭后程宗扬感到心痛（“就像身体的一部分被生生割掉一样。”）",
             "【阶段身份】转折前：原阵营/中立/敌对身份，禁止提前称为后宫、侍妾、情人或程宗扬阵营成员：status=forbid-final-state-before-turning-point",
             "【阶段身份】关系转折后：按原文转折事件后，才可写入程宗扬阵营/后宫/侍妾/情人等关系身份：status=allowed-after-turning-point",
-            "【阶段身份】当前关卡 lyg.liangzhou_league：\"高级肉体容器\"；晴州黑魔海惨败后被作\"赔偿礼物\"处女白送程宗扬",
+            "【阶段身份】当前关卡 lyg.shituolin_endgame：\"高级肉体容器\"；晴州黑魔海惨败后被作\"赔偿礼物\"处女白送程宗扬",
             "【人工正典】【魂丹】玉姬皆有魂丹；献出魂丹后永远不能背叛主人；主人窍阴穴中的魂影与其魂魄相连，可互相感应。"
           ]
         }
@@ -2141,7 +2141,7 @@
             "【情节】【一部·#5】太乙真宗御教(王母)，以烈火法术救下被半兽人围攻的程宗扬与月霜；【一部·#133内斗】清远玄真观与死敌齐放鹤五行内斗；两败俱伤；齐放鹤被吴行德偷袭杀死，程宗扬斩吴行德救下她；【一部末·#134云落】小紫现身制服重伤的她；藏匿清远娼窠，小紫用玉笙残酷破处；种奴印，贬为私密女奴；程宗扬雇船带其顺江逃往建康",
             "【阶段身份】转折前：原阵营/中立/敌对身份，禁止提前称为后宫、侍妾、情人或程宗扬阵营成员：status=forbid-final-state-before-turning-point",
             "【阶段身份】关系转折后：按原文转折事件后，才可写入程宗扬阵营/后宫/侍妾/情人等关系身份：status=allowed-after-turning-point",
-            "【阶段身份】当前关卡 lyg.liangzhou_league：太乙真宗\"御教\"仙姑（地位极高）；名义夫为大汉太尉常炜（天狐族，常以药物邪术折磨她）",
+            "【阶段身份】当前关卡 lyg.shituolin_endgame：太乙真宗\"御教\"仙姑（地位极高）；名义夫为大汉太尉常炜（天狐族，常以药物邪术折磨她）",
             "【人工正典】【鼎炉·太一经双修】鼎炉=双修中作修炼载体的女性；男方真气经其阴脉行一周天返丹田而更纯粹、可大进修为。鼎炉分五行(金木水火土)与品级(仙品>珍品>…，得一即珍品)。代价：鼎炉积杂气致自身修为受限；男方修炼不当遭阴气反噬(非残即死)。"
           ]
         }
@@ -2171,7 +2171,7 @@
             "【软肋】在权力斗争中处于弱势，常被呵斥威胁（如被苏沙、匡佑等欺压），被迫做肮脏勾当",
             "【情节】被苏沙鞭笞逼供；向黎锦香建议出卖色相以升迁；参与田令孜等人密议；账目被提起",
             "【结局】被苏沙逼走，下落未明",
-            "【阶段身份】当前关卡 lyg.liangzhou_league：长安富商，广源行在唐国的执事（后被挤走）"
+            "【阶段身份】当前关卡 lyg.shituolin_endgame：长安富商，广源行在唐国的执事（后被挤走）"
           ]
         }
       },
@@ -2203,7 +2203,7 @@
             "【绝技】血红长刀（血刀）；血刀；铁尺",
             "【情节】第2章在洛水重伤；第5章拦河劫杀云丹琉一行；第6章在血蛭一战中重伤并断臂，且不顾同伴虚日鼠生死独自逃遁；第6章被云丹琉击入水中；在程宅内院被利刃切开腹部，不久死去",
             "【结局】第6章后重伤，第7章提及仍重伤未死，尾随程宗扬等人。；死亡，双目睁大眼睛",
-            "【阶段身份】当前关卡 lyg.liangzhou_league：白衣僧人"
+            "【阶段身份】当前关卡 lyg.shituolin_endgame：白衣僧人"
           ]
         }
       },
@@ -2229,7 +2229,7 @@
             "【绝技】长鞭",
             "【情节】在洛水与程宗扬等人首次交手；与斗木獬等人一起刺杀吕雉；在追杀云丹琉时被云丹琉的硬功惊愕；被程宗扬用缩宫丹破开宫颈，干穿子宫；真元被采补殆尽，根基崩溃；被成光等人喂服淫药并折磨；回忆曾与太子刘建交欢；六朝燕歌行唐国篇23集·宫阙万间第二章：被程宗扬双修采伐（采补）致死",
             "【结局】六朝燕歌行唐国篇23集·宫阙万间第二章：被程宗扬双修采伐（采补）致死",
-            "【阶段身份】当前关卡 lyg.liangzhou_league：龙宸北方玄武七宿之一"
+            "【阶段身份】当前关卡 lyg.shituolin_endgame：龙宸北方玄武七宿之一"
           ]
         }
       },
@@ -2260,7 +2260,7 @@
             "【软肋】容易被激怒，对女性偶尔轻敌（如第八章被艳女踢中腹下）",
             "【绝技】长刀；长鞭；掌法（封穴道）",
             "【情节】第一章残忍虐杀孙暖并抛尸井中；第一章用铁尺袭击时被长鞭阻挡；第三章封住危月燕穴道后逃脱；第八章被妖艳女子踢中要害后踹门追捕",
-            "【阶段身份】当前关卡 lyg.liangzhou_league：江湖中人，某组织‘行里’成员/宗主"
+            "【阶段身份】当前关卡 lyg.shituolin_endgame：江湖中人，某组织‘行里’成员/宗主"
           ]
         }
       },
@@ -2286,7 +2286,7 @@
             "【目标】渴望带兵立功，曾追捕乐从训",
             "【绝技】银枪；长剑",
             "【情节】将靴子赠予程宗扬，替其担下干系；托程宗扬向卫公问好",
-            "【阶段身份】当前关卡 lyg.liangzhou_league：魏博军银枪效节都军士"
+            "【阶段身份】当前关卡 lyg.shituolin_endgame：魏博军银枪效节都军士"
           ]
         }
       },
@@ -2313,7 +2313,7 @@
             "【目标】首倡诛宦，但实际想临阵脱身，待双方杀得不可开交，再登高一呼，号召各藩镇襄助义举，起兵尽诛阉宦，救君王于危难之际，拯苍生于水火之中。",
             "【软肋】与鱼朝恩勾结，计划被杨玉环识破；引为臂助的张忠志后来效忠博陆郡王程宗扬",
             "【情节】提出囚禁李昂的计划，欲说服杨玉环襄助；与鱼朝恩勾结，意图造反；剃须换内侍服色，混入内廷；引为臂助的张忠志叛变，暗助程宗扬",
-            "【阶段身份】当前关卡 lyg.liangzhou_league：宰相"
+            "【阶段身份】当前关卡 lyg.shituolin_endgame：宰相"
           ]
         }
       },
@@ -2340,7 +2340,7 @@
             "【软肋】内伤未愈，实力无法与窥基正面抗衡。",
             "【情节】在第3章作为知客香主迎接李炎与程宗扬，招待周旋。；在第4章因窥基发怒而焦头烂额，拒绝京兆府官员。；在第8章出手攻击入魔的窥基，被窥基用金刚杵击飞，受伤。；在第5章参与摧毁尸陀林主的莲台，用青石板扫除法器。；多次与程宗扬间接联络，传递情报。",
             "【结局】在与窥基的冲突中受伤，但存活下来，继续参与后续行动。",
-            "【阶段身份】当前关卡 lyg.liangzhou_league：大慈恩寺知客香主"
+            "【阶段身份】当前关卡 lyg.shituolin_endgame：大慈恩寺知客香主"
           ]
         }
       },
@@ -2364,7 +2364,7 @@
             "【目标】争权夺势，在朝堂斗争中压倒对手",
             "【软肋】义子义孙能力不足，关键时刻靠不住",
             "【情节】与窥基合谋刺杀程宗扬；坑害王守澄；指使手下刺杀仇从广；被鱼弘志背叛，遭亲信暴打",
-            "【阶段身份】当前关卡 lyg.liangzhou_league：宦官"
+            "【阶段身份】当前关卡 lyg.shituolin_endgame：宦官"
           ]
         }
       },
@@ -2387,7 +2387,7 @@
             "【目标】铲除宦官，掌握朝政",
             "【软肋】与同僚内斗；兵力不足",
             "【情节】与李昂密谋诛宦；甘露之变失败",
-            "【阶段身份】当前关卡 lyg.liangzhou_league：宰相"
+            "【阶段身份】当前关卡 lyg.shituolin_endgame：宰相"
           ]
         }
       },
@@ -2416,7 +2416,7 @@
             "【情节】被程宗扬与女儿安乐、杨妃一同奸淫；被孙寿、成光玩弄淫穴与后庭；与杨妃、安乐母女共淫；被内侍轮番凌辱，全息影像被儿子李昂目睹；被程宗扬带回，并被要求协助给安乐公主开苞；羞耻哭泣但无力反抗",
             "【阶段身份】六朝燕歌行第23集·宫阙万千三章百死莫赎：唐国太后，受唐国内部宦官迫害；禁止写作程宗扬义母或程宗扬所致前置受害：status=forbid-final-state-before-turning-point",
             "【阶段身份】六朝燕歌行第25集·迟迟钟鼓：与安阳公主一同被程宗扬阵营收编：status=allowed-after-turning-point",
-            "【阶段身份】当前关卡 lyg.liangzhou_league：唐国太后/杨妃之婆婆/安乐公主与安阳公主之母",
+            "【阶段身份】当前关卡 lyg.shituolin_endgame：唐国太后/杨妃之婆婆/安乐公主与安阳公主之母",
             "【人工正典】人工批注：不是被程宗扬直接导致前置受害；第23集宫阙万千三章百死莫赎中为唐国内部宦官迫害。唐国太后，后在第25集迟迟钟鼓与安阳公主一同被收编。另需补杨妃/杨艳卡，杨妃是李昂之妻，不是杨玉环。",
             "【人工正典】杨妃（杨艳）：唐国皇后/李昂之妻，非杨玉环；用户批注提示 v3 角色卡缺失，需单独补卡。"
           ]
@@ -2446,7 +2446,7 @@
             "【情节】被程宗扬发现并夺去元红；与杨氏、萧氏一同被裸裎观赏；在程宗扬面前哭泣求饶；被潘金莲扶起并露出后颈小符",
             "【阶段身份】六朝燕歌行唐国篇第23集·宫阙万间第三章前：唐国公主，李昂嫡亲胞妹；禁止提前称为后宫、侍妾、情人或程宗扬阵营成员：status=forbid-final-state-before-turning-point",
             "【阶段身份】六朝燕歌行唐国篇第23集·宫阙万间第三章：关系转折后，可按原文写入程宗扬阵营/被收编：status=allowed-after-turning-point",
-            "【阶段身份】当前关卡 lyg.liangzhou_league：唐国公主，李昂嫡亲胞妹"
+            "【阶段身份】当前关卡 lyg.shituolin_endgame：唐国公主，李昂嫡亲胞妹"
           ]
         }
       },
@@ -2472,7 +2472,7 @@
             "【软肋】没有阳根（性无能），渴望恢复阳根",
             "【情节】参与截杀程宗扬；提议用婴儿脑髓助鱼朝恩恢复阳根；被李辅国抓捕并身死；被程宗扬击杀（第六章）",
             "【结局】身死（被程宗扬斩杀）",
-            "【阶段身份】当前关卡 lyg.liangzhou_league：咸宜观之主（观主/教御）"
+            "【阶段身份】当前关卡 lyg.shituolin_endgame：咸宜观之主（观主/教御）"
           ]
         }
       },
@@ -2499,7 +2499,7 @@
             "【软肋】贪功冒进；易被蛊惑；手下无能",
             "【绝技】短剑；剥皮刀",
             "【情节】亲手杀死霍仙鸣；严刑拷打刘贞亮；赌咒发誓绝不背叛王爷；竞争枢密使职位",
-            "【阶段身份】当前关卡 lyg.liangzhou_league：宦官/内侍"
+            "【阶段身份】当前关卡 lyg.shituolin_endgame：宦官/内侍"
           ]
         }
       },
@@ -2536,7 +2536,7 @@
             "【情节】第5章：吞下主人精液后禁制解除，神情愈发娇媚；第5章：参与调教赛玉坠，手段狠辣；第5章：用柳叶眉刀战斗，露出嗜血笑意；第8章：与蛇夫人等群交，动作阴狠（扒开阮香琳屁眼儿啐口水）；与程宗扬一起沐浴并伺候；与惊理交换眼色，议论仇尊者来访（作嫁）；摘去孙寿发钗、剥服、剪发，将其降为奴婢（恶报）；反派计划废其修为、剜眼（危难）",
             "【阶段身份】六朝清羽记第31集第3章·审讯（被小紫抓获调教）前：婢女/紫夫人调教人员；禁止提前称为后宫、侍妾、情人或程宗扬阵营成员：status=forbid-final-state-before-turning-point",
             "【阶段身份】六朝清羽记第31集第3章·审讯前后（被小紫抓获调教）：被小紫抓获调教后，可按原文写入程宗扬后宫/侍妾：status=allowed-after-turning-point",
-            "【阶段身份】当前关卡 lyg.liangzhou_league：程宗扬后宫/侍妾；原为婢女？"
+            "【阶段身份】当前关卡 lyg.shituolin_endgame：程宗扬后宫/侍妾；原为婢女？"
           ]
         }
       },
@@ -2566,7 +2566,7 @@
             "【绝技】戈（长柄兵器）；精通多种武器并详知其优劣",
             "【入伙】星月湖旧部，大草原战后幸存，六营残部，后随程宗扬行动",
             "【情节】大草原一战后幸存；三川口之战中负责攻坚；被派去联络孟非卿；浑身浴血仍保持冷静；阻止拔刀冲突；六营双雄之一，与杜元胜并称；战绩彪炳；被程宗扬认为会成长为豪杰",
-            "【阶段身份】当前关卡 lyg.liangzhou_league：星月湖旧部，上尉连长，雇佣兵（左武第一军团化名）"
+            "【阶段身份】当前关卡 lyg.shituolin_endgame：星月湖旧部，上尉连长，雇佣兵（左武第一军团化名）"
           ]
         }
       }
@@ -4065,366 +4065,406 @@
   },
   "scenario": {
     "opening": {
-      "text": "凉州盟比武大赛正在紧张进行。铁马堂进入八强，下一场将对阵丹霞宗。铁中宝愁眉不展，实力悬殊。高智商从贾文和处得到妙计：先打瘸铁马堂的弱手，再以吕奉先冒充王忠嗣侄儿替换上场。然而广源行在暗中操纵签位——今日周飞三家全胜。更麻烦的是，贾文和铺席持刀守在门口，程宗扬被尸谏堵在宅内无法外出。小紫已前往渭水水下闭关晋级，阮香琳乘船返回舞都报信，义姁在留仙坪被广源行控制，蛇奴与罂奴下落不明。左彤芝即将来访，凉州盟暗流涌动。",
-      "playerRole": "舞阳侯、汉国特使",
-      "playerCharacterId": "liuchao.character.cheng_zongyang",
-      "creationPreset": {
-        "characterName": "程宗扬",
-        "gender": "男",
-        "race": "人族",
-        "age": 20,
-        "talentTier": {
-          "name": "异世来客",
-          "description": "来自现代世界的穿越者，拥有知识优势。"
-        },
-        "origin": {
-          "name": "现代来客",
-          "description": "因空间异变进入六朝的穿越者。"
-        },
-        "spiritRoot": {
-          "name": "生死根",
-          "tier": "唯一异能",
-          "description": "并非传统灵根，能感应死亡气息。",
-          "specialEffects": [
-            "感应死亡气息"
-          ]
-        },
-        "talents": [
-          {
-            "name": "务实机敏",
-            "description": "善于判断风险和利益，不拘泥于传统。"
-          },
-          {
-            "name": "知人善任",
-            "description": "能识别并利用人才为己所用。"
-          }
-        ],
-        "attributes": {
-          "rootBone": 5,
-          "spirituality": 4,
-          "comprehension": 6,
-          "fortune": 6,
-          "charm": 5,
-          "temperament": 6
-        },
-        "locked": true
-      },
-      "locationId": "lyg.location.wuyang_mansion",
-      "featuredCharacterIds": [
-        "liuchao.character.cheng_zongyang",
-        "liuchao.character.jia_wenhe",
-        "liuchao.character.gao_zhishang",
-        "lyg.character.tie_zhongbao",
-        "liuchao.character.zhou_fei",
-        "lyg.character.li_jinxiang",
-        "liuchao.character.zuo_tongzhi"
+      "text": "甘露变后的长安并未平静。窥基魔化、李辅国夺舍、婆娑宝树与太皇太后返老还童接连出现；此关收束到原作当前断点，后续主轴保留开放口等待续补。",
+      "relatedCharacterIds": [
+        "liuchao.character.cheng_zongyang"
       ]
     },
     "initialFlags": {
-      "chapter.lyg.liangzhou_league.started": true,
-      "chapter.lyg.liangzhou_league.done": false,
-      "event.s06_01.done": false,
-      "event.s06_02.done": false,
-      "event.s06_03.done": false,
-      "event.s06_04.done": false,
-      "event.s06_05.done": false,
-      "event.s06_06.done": false,
-      "event.s06_07.done": false,
-      "event.s06_08.done": false,
-      "event.s06_09.done": false
+      "event.shituolin_endgame_01.done": false,
+      "event.shituolin_endgame_02.done": false,
+      "event.shituolin_endgame_03.done": false,
+      "event.shituolin_endgame_04.done": false,
+      "event.shituolin_endgame_05.done": false,
+      "event.shituolin_endgame_06.done": false,
+      "event.shituolin_endgame_07.done": false,
+      "event.shituolin_endgame_08.done": false,
+      "event.shituolin_endgame_09.done": false,
+      "event.shituolin_endgame_10.done": false,
+      "event.shituolin_endgame_11.done": false,
+      "event.shituolin_endgame_12.done": false,
+      "event.shituolin_endgame_13.done": false,
+      "event.shituolin_endgame_14.done": false,
+      "event.shituolin_endgame_15.done": false,
+      "chapter.lyg.shituolin_endgame.kui_ji.started": true,
+      "chapter.lyg.shituolin_endgame.kui_ji.done": false,
+      "chapter.lyg.shituolin_endgame.li_fuguo.started": false,
+      "chapter.lyg.shituolin_endgame.li_fuguo.done": false,
+      "chapter.lyg.shituolin_endgame.old_grudge.started": false,
+      "chapter.lyg.shituolin_endgame.old_grudge.done": false
     },
+    "chapters": [
+      {
+        "id": "lyg.chapter.shituolin_endgame_kui_ji",
+        "title": "尸陀林主",
+        "summary": "高阳疑冢与窥基魔化把佛门线推向尸陀林主。",
+        "completion": [
+          {
+            "path": "flags.chapter.lyg.shituolin_endgame.kui_ji.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "eventIds": [
+          "lyg.event.shituolin_endgame_01_beat",
+          "lyg.event.shituolin_endgame_02_beat",
+          "lyg.event.shituolin_endgame_03_beat",
+          "lyg.event.shituolin_endgame_04_beat",
+          "lyg.event.shituolin_endgame_05_beat"
+        ]
+      },
+      {
+        "id": "lyg.chapter.shituolin_endgame_li_fuguo",
+        "title": "李辅国夺舍",
+        "summary": "李辅国以婆娑宝树和琉璃天珠布局夺舍，程宗扬等人正面破局。",
+        "completion": [
+          {
+            "path": "flags.chapter.lyg.shituolin_endgame.li_fuguo.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "eventIds": [
+          "lyg.event.shituolin_endgame_06_beat",
+          "lyg.event.shituolin_endgame_07_beat",
+          "lyg.event.shituolin_endgame_08_beat",
+          "lyg.event.shituolin_endgame_09_beat",
+          "lyg.event.shituolin_endgame_10_beat",
+          "lyg.event.shituolin_endgame_11_beat",
+          "lyg.event.shituolin_endgame_12_beat"
+        ],
+        "activation": [
+          {
+            "path": "flags.chapter.lyg.shituolin_endgame.kui_ji.done",
+            "operator": "eq",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": "lyg.chapter.shituolin_endgame_old_grudge",
+        "title": "旧怨追问",
+        "summary": "李辅国覆灭后，程宗扬追问黑魔海与鬼王峒旧怨，准备下一步清算。",
+        "completion": [
+          {
+            "path": "flags.chapter.lyg.shituolin_endgame.old_grudge.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "eventIds": [
+          "lyg.event.shituolin_endgame_13_beat",
+          "lyg.event.shituolin_endgame_14_beat",
+          "lyg.event.shituolin_endgame_15_beat"
+        ],
+        "activation": [
+          {
+            "path": "flags.chapter.lyg.shituolin_endgame.li_fuguo.done",
+            "operator": "eq",
+            "value": true
+          }
+        ]
+      }
+    ],
     "events": [
       {
-        "id": "lyg.event.s06_01",
-        "name": "程宗扬与杨玉环讨论离魂症和小紫的病情",
-        "description": "程宗扬与杨玉环私下交谈，询问关于离魂症的信息，并告知小紫可能患有此病。杨玉环回忆岳帅曾提及类似的病症，并警告不能让外人知道。",
-        "conditions": [
-          {
-            "path": "flags.chapter.lyg.liangzhou_league.started",
-            "operator": "eq",
-            "value": true
-          }
-        ],
+        "id": "lyg.event.shituolin_endgame_01_beat",
+        "name": "宦官再分权",
+        "description": "李辅国重新分配宦官职权并暗示继位人选，唐国权力进入新格局。",
+        "axisId": "yange.192.2",
+        "axisAnchor": "六朝燕歌行·#192·英雄豪气",
+        "axisSeq": 1321,
+        "axisBeat": "李辅国重新分配宦官职权，任命程元振为枢密使等，仇士良获留用，暗示继位人选讨论。",
+        "critical": true,
         "completion": [
           {
-            "path": "flags.event.s06_01.done",
-            "operator": "eq",
-            "value": true
-          }
-        ],
-        "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang",
-          "liuchao.character.yang_yuhuan"
-        ],
-        "axisId": "yange.133.1",
-        "axisSeq": 1203,
-        "axisAnchor": "六朝燕歌行·#133·第五章 以武争盟",
-        "axisBeat": "程宗扬向杨玉环询问离魂症信息，告知小紫可能患病，杨玉环回忆岳帅提及类似病症，警告勿外传。"
-      },
-      {
-        "id": "lyg.event.s06_02",
-        "name": "凉州盟比武大赛进展",
-        "description": "铁中宝提议通过擂台赛决定凉州盟盟主，铁马堂首轮三战两胜进入八强。周飞带来的三家全胜。高智商报告铁马堂下一场将对阵丹霞宗，实力悬殊。",
-        "conditions": [
-          {
-            "path": "flags.event.s06_01.done",
-            "operator": "eq",
-            "value": true
-          }
-        ],
-        "completion": [
-          {
-            "path": "flags.event.s06_02.done",
-            "operator": "eq",
-            "value": true
-          }
-        ],
-        "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang",
-          "lyg.character.wang_zhongsi",
-          "lyg.character.tie_zhongbao",
-          "liuchao.character.gao_zhishang",
-          "liuchao.character.zhou_fei",
-          "lyg.character.li_jinxiang",
-          "liuchao.character.lv_fengxian"
-        ],
-        "relatedFactionIds": [
-          "liuchao.faction.liang_zhou_meng",
-          "lyg.faction.iron_horse_hall",
-          "lyg.faction.danxia_sect",
-          "lyg.faction.zhou_clan",
-          "lyg.faction.sword_gate_sect"
-        ],
-        "locationId": "lyg.location.liangzhou_arena",
-        "axisId": "yange.133.2",
-        "axisSeq": 1204,
-        "axisAnchor": "六朝燕歌行·#133·第五章 以武争盟",
-        "axisBeat": "铁中宝提议擂台赛定凉州盟盟主，铁马堂首轮三战两胜进八强，周飞三家全胜，下一场对阵丹霞宗实力悬殊。"
-      },
-      {
-        "id": "lyg.event.s06_03",
-        "name": "阮香琳离开程宅返回舞都",
-        "description": "阮香琳受程宗扬之托，从渭水乘船返回舞都，为如瑶报信。程宗扬派两名星月湖大营兄弟护送，并让泉玉姬暗中护送。",
-        "conditions": [
-          {
-            "path": "flags.event.s06_02.done",
-            "operator": "eq",
-            "value": true
-          }
-        ],
-        "completion": [
-          {
-            "path": "flags.event.s06_03.done",
-            "operator": "eq",
-            "value": true
-          }
-        ],
-        "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang",
-          "liuchao.character.ruan_xiang_lin",
-          "liuchao.character.quan_yu_ji"
-        ],
-        "locationId": "lyg.location.weishui",
-        "axisId": "yange.134.1",
-        "axisSeq": 1205,
-        "axisAnchor": "六朝燕歌行·#134·第六章 暗夜惊魂",
-        "axisBeat": "阮香琳受程宗扬托从渭水乘船返舞都为如瑶报信，程宗扬派星月湖兄弟及泉玉姬暗中护送。"
-      },
-      {
-        "id": "lyg.event.s06_04",
-        "name": "仇士良夺取神策军兵权并怀疑田令孜",
-        "description": "仇士良派张承业接管右神策军、杨家兄弟接管左神策军，并怀疑田令孜与佛门、藩镇合谋杀害王守澄。",
-        "conditions": [
-          {
-            "path": "flags.event.s06_03.done",
-            "operator": "eq",
-            "value": true
-          }
-        ],
-        "completion": [
-          {
-            "path": "flags.event.s06_04.done",
-            "operator": "eq",
-            "value": true
-          }
-        ],
-        "relatedCharacterIds": [
-          "lyg.character.chou_shiliang",
-          "lyg.character.yu_chaoen"
-        ],
-        "axisId": "yange.134.2",
-        "axisSeq": 1206,
-        "axisAnchor": "六朝燕歌行·#134·第六章 暗夜惊魂",
-        "axisBeat": "仇士良派张承业接管右神策军、杨家兄弟接管左神策军，怀疑田令孜与佛门、藩镇合谋杀王守澄。"
-      },
-      {
-        "id": "lyg.event.s06_05",
-        "name": "袁天罡与徐君房实施招魂术，王守澄鬼魂显形",
-        "description": "在护国天王寺，徐君房与袁天罡配合施展招魂术，王守澄的鬼魂附体尸身，揭出杀他者可能是三首六臂、持刀矢者、执拂尘者、持木鱼者。招魂过程中鬼魂暴走，后被徐君房与袁天罡强行压制。",
-        "conditions": [
-          {
-            "path": "flags.event.s06_04.done",
-            "operator": "eq",
-            "value": true
-          }
-        ],
-        "completion": [
-          {
-            "path": "flags.event.s06_05.done",
-            "operator": "eq",
-            "value": true
-          }
-        ],
-        "relatedCharacterIds": [
-          "liuchao.character.xu_junfang",
-          "liuchao.character.yuan_tiangang",
-          "lyg.character.chou_shiliang"
-        ],
-        "axisId": "yange.134.3",
-        "axisSeq": 1207,
-        "axisAnchor": "六朝燕歌行·#134·第六章 暗夜惊魂",
-        "axisBeat": "徐君房与袁天罡在护国天王寺施展招魂术，王守澄鬼魂附体揭出凶手可能为三首六臂者、持刀矢者、持拂尘者、持木鱼者，鬼魂暴走后被压制。"
-      },
-      {
-        "id": "lyg.event.s06_06",
-        "name": "仇士良从王守澄鬼魂口中推断凶手指向田令孜",
-        "description": "王守澄鬼魂提到的凶器包括拂尘和木鱼，加上‘藩镇、内侍、佛门’三要素，仇士良推断田令孜是幕后主使，并准备反攻。",
-        "conditions": [
-          {
-            "path": "flags.event.s06_05.done",
-            "operator": "eq",
-            "value": true
-          }
-        ],
-        "completion": [
-          {
-            "path": "flags.event.s06_06.done",
-            "operator": "eq",
-            "value": true
-          }
-        ],
-        "relatedCharacterIds": [
-          "lyg.character.chou_shiliang"
-        ],
-        "axisId": "yange.135.1",
-        "axisSeq": 1208,
-        "axisAnchor": "六朝燕歌行·#135·第七章 紫气氤氲",
-        "axisBeat": "王守澄鬼魂提及拂尘、木鱼及藩镇、内侍、佛门三要素，仇士良推断田令孜是幕后主使并准备反攻。"
-      },
-      {
-        "id": "lyg.event.s06_07",
-        "name": "小紫准备晋级五级",
-        "description": "小紫吸收了墨枫林的死气和魂魄，压不住修为，必须尽快晋级五级。她计划去渭水水下闭关十二个时辰，程宗扬同意并让惊理同行。",
-        "conditions": [
-          {
-            "path": "flags.event.s06_06.done",
-            "operator": "eq",
-            "value": true
-          }
-        ],
-        "completion": [
-          {
-            "path": "flags.event.s06_07.done",
-            "operator": "eq",
-            "value": true
-          }
-        ],
-        "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang",
-          "liuchao.character.xiao_zi"
-        ],
-        "locationId": "lyg.location.wuyang_mansion",
-        "axisId": "yange.135.2",
-        "axisSeq": 1209,
-        "axisAnchor": "六朝燕歌行·#135·第七章 紫气氤氲",
-        "axisBeat": "小紫吸收墨枫林死气后压不住修为需晋级五级，计划去渭水水下闭关十二时辰，程宗扬同意并让惊理同行。"
-      },
-      {
-        "id": "lyg.event.s06_08",
-        "name": "程宗扬与白霓裳亲密并召吕雉侍寝",
-        "description": "程宗扬与白霓裳调情，召吕雉前来演示后庭侍奉，以安抚白霓裳对初次后庭的恐惧。吕雉顺从配合，程宗扬随后离开。",
-        "conditions": [
-          {
-            "path": "flags.event.s06_07.done",
-            "operator": "eq",
-            "value": true
-          }
-        ],
-        "completion": [
-          {
-            "path": "flags.event.s06_08.done",
-            "operator": "eq",
-            "value": true
-          }
-        ],
-        "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang",
-          "liuchao.character.bai_nichang",
-          "liuchao.character.lv_zhi"
-        ],
-        "locationId": "liuchao.location.changan",
-        "axisId": "yange.136.1",
-        "axisSeq": 1210,
-        "axisAnchor": "六朝燕歌行·#136·留仙来客",
-        "axisBeat": "程宗扬与白霓裳调情，召吕雉演示后庭侍奉以安抚白霓裳恐惧，吕雉顺从配合后程宗扬离开。"
-      },
-      {
-        "id": "lyg.event.s06_09",
-        "name": "程宗扬心焦小紫未归，内宅报警铃响",
-        "description": "程宗扬因小紫、蛇奴、罂奴皆无消息而焦躁，独自守在前院等待。内宅警报铃声骤然响起，引发紧张。",
-        "conditions": [
-          {
-            "path": "flags.event.s06_08.done",
-            "operator": "eq",
-            "value": true
-          }
-        ],
-        "completion": [
-          {
-            "path": "flags.event.s06_09.done",
+            "path": "flags.event.shituolin_endgame_01.done",
             "operator": "eq",
             "value": true
           }
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ],
-        "locationId": "liuchao.location.changan",
-        "axisId": "yange.138.5",
-        "axisSeq": 1216,
-        "axisAnchor": "六朝燕歌行·#138·比武夺亲",
-        "axisBeat": "程宗扬因小紫、蛇奴、罂奴无消息焦躁独守前院，内宅警报铃声骤然响起。"
-      }
-    ],
-    "chapters": [
+        ]
+      },
       {
-        "id": "lyg.chapter.liangzhou_league",
-        "title": "凉州盟比武大赛",
-        "summary": "凉州盟比武大赛：程宗扬与杨玉环讨论离魂症和小紫的病情 … 程宗扬心焦小紫未归，内宅报警铃响",
-        "activation": [
-          {
-            "path": "flags.chapter.lyg.liangzhou_league.started",
-            "operator": "eq",
-            "value": true
-          }
-        ],
+        "id": "lyg.event.shituolin_endgame_02_beat",
+        "name": "独柳树刑场",
+        "description": "甘露变后大批官员及家眷被处决，长安恐怖统治加深。",
+        "axisId": "yange.199.1",
+        "axisAnchor": "六朝燕歌行·#199·血染黄沙",
+        "axisSeq": 1335,
+        "axisBeat": "正月二十一午时，内侍押解王涯、舒元舆等宰执重臣及家眷于独柳树下腰斩、斩首，百姓围观，官员被迫观刑，死者数十人。",
+        "critical": true,
         "completion": [
           {
-            "path": "flags.event.s06_09.done",
+            "path": "flags.event.shituolin_endgame_02.done",
             "operator": "eq",
             "value": true
           }
         ],
-        "eventIds": [
-          "lyg.event.s06_01",
-          "lyg.event.s06_02",
-          "lyg.event.s06_03",
-          "lyg.event.s06_04",
-          "lyg.event.s06_05",
-          "lyg.event.s06_06",
-          "lyg.event.s06_07",
-          "lyg.event.s06_08",
-          "lyg.event.s06_09"
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ]
+      },
+      {
+        "id": "lyg.event.shituolin_endgame_03_beat",
+        "name": "高阳疑冢",
+        "description": "程宗扬得知高阳疑冢异常，与杨玉环前往善果寺追查旧案。",
+        "axisId": "yange.202.2",
+        "axisAnchor": "六朝燕歌行·#202·当年疑冢",
+        "axisSeq": 1342,
+        "axisBeat": "程宗扬得知高阳所修坟墓墓道超百丈、多处开口，怀疑其另有目的，与杨玉环前往善果寺询问老僧，获知坟墓方位细节及高阳突然失踪、宫内报身故衣冠葬。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.shituolin_endgame_03.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ]
+      },
+      {
+        "id": "lyg.event.shituolin_endgame_04_beat",
+        "name": "尸陀林主现身",
+        "description": "窥基彻底魔化，显露尸陀林主真身，佛门魔化线正面爆发。",
+        "axisId": "yange.204.1",
+        "axisAnchor": "六朝燕歌行·#204·尸陀林主",
+        "axisSeq": 1347,
+        "axisBeat": "窥基彻底魔化，显露尸陀林主真身，白骨莲华座、三眼、骷髅法冠，血浪吞噬多名蕃密僧人化为白骨，释特昧普施法对抗。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.shituolin_endgame_04.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ]
+      },
+      {
+        "id": "lyg.event.shituolin_endgame_05_beat",
+        "name": "斩妖除魔",
+        "description": "程宗扬等人与窥基魔身激战，摧毁莲华宝座，但窥基头颅逃脱。",
+        "axisId": "yange.205.1",
+        "axisAnchor": "六朝燕歌行·#205·斩妖除魔",
+        "axisSeq": 1348,
+        "axisBeat": "程宗扬等人与窥基的尸陀林主化身激战，程宗扬以镭射战刀斩断窥基颈椎，杨玉环击飞头颅，众人摧毁莲华宝座，窥基魔身消散，但头颅附身老太监逃跑，释特昧普逃走，净念重伤昏迷。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.shituolin_endgame_05.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ]
+      },
+      {
+        "id": "lyg.event.shituolin_endgame_06_beat",
+        "name": "江王入宫",
+        "description": "中行说通知程宗扬江王李炎已入宫，程宗扬匆忙回到宫廷主线。",
+        "axisId": "yange.210.2",
+        "axisAnchor": "六朝燕歌行·#210·透影仙灯",
+        "axisSeq": 1355,
+        "axisBeat": "中行说紧急通知程宗扬江王李炎已入宫，程宗扬匆忙告辞。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.shituolin_endgame_06.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ]
+      },
+      {
+        "id": "lyg.event.shituolin_endgame_07_beat",
+        "name": "太液池黑雾",
+        "description": "李辅国密谋夺舍并以尸陀林主护持之法笼罩太液池。",
+        "axisId": "yange.211.3",
+        "axisAnchor": "六朝燕歌行·#211·一夫荷戟",
+        "axisSeq": 1358,
+        "axisBeat": "李辅国与骷髅内侍密谋选定郑注为夺舍目标，并施展尸陀林主护持之法以黑雾笼罩太液池。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.shituolin_endgame_07.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ]
+      },
+      {
+        "id": "lyg.event.shituolin_endgame_08_beat",
+        "name": "婆娑宝树",
+        "description": "李辅国利用琉璃天珠吸取生命力培养婆娑宝树，夺舍目标逐渐明确。",
+        "axisId": "yange.214.3",
+        "axisAnchor": "六朝燕歌行·#214·一髻佛母",
+        "axisSeq": 1363,
+        "axisBeat": "李辅国通过琉璃天珠吸取齐羽仙和鱼玄机的生命力培养婆娑宝树，齐羽仙揭示李辅国目标为安乐公主的身体欲转为女身进行夺舍。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.shituolin_endgame_08.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ]
+      },
+      {
+        "id": "lyg.event.shituolin_endgame_09_beat",
+        "name": "奉诏讨逆",
+        "description": "杨玉环宣布李辅国假传圣旨，率家将前往大明宫讨逆。",
+        "axisId": "yange.217.3",
+        "axisAnchor": "六朝燕歌行·#217·烟尘四起",
+        "axisSeq": 1370,
+        "axisBeat": "太真公主府内，杨玉环命高智商和吕奉先打内侍，宣布李辅国假传圣旨，奉诏讨逆，率家将前往大明宫。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.shituolin_endgame_09.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ]
+      },
+      {
+        "id": "lyg.event.shituolin_endgame_10_beat",
+        "name": "莲座交锋",
+        "description": "程宗扬砍向莲花宝座，与李辅国正面交手并在同伴救援下脱险。",
+        "axisId": "yange.219.2",
+        "axisAnchor": "六朝燕歌行·#219·瓦砾齐鸣",
+        "axisSeq": 1374,
+        "axisBeat": "程宗扬砍向莲花宝座，李辅国现身交手，程宗扬受伤后被潘金莲和白霓裳救下，李辅国劝两女入佛门被拒。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.shituolin_endgame_10.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ]
+      },
+      {
+        "id": "lyg.event.shituolin_endgame_11_beat",
+        "name": "浮屠塔困局",
+        "description": "李辅国以琉璃净光化作巨掌和浮屠塔，将程宗扬等人收入塔内。",
+        "axisId": "yange.219.3",
+        "axisAnchor": "六朝燕歌行·#219·瓦砾齐鸣",
+        "axisSeq": 1375,
+        "axisBeat": "李辅国操控琉璃净光化作巨掌和浮屠塔，将程宗扬、杨玉环、吕雉、潘金莲、白霓裳五人收入塔内。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.shituolin_endgame_11.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ]
+      },
+      {
+        "id": "lyg.event.shituolin_endgame_12_beat",
+        "name": "李辅国肉身败亡",
+        "description": "李辅国真身朽坏后，被程宗扬吸尽死气并由众人联手斩断肉身。",
+        "axisId": "yange.221.2",
+        "axisAnchor": "六朝燕歌行·#221·佛有三身",
+        "axisSeq": 1378,
+        "axisBeat": "李辅国因潘金莲、白霓裳、吕雉三度失算，真身朽坏，最终被程宗扬以生死根吸尽死气，众人联手斩断其肉身。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.shituolin_endgame_12.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ]
+      },
+      {
+        "id": "lyg.event.shituolin_endgame_13_beat",
+        "name": "太皇太后返老",
+        "description": "子时结束时太皇太后郭氏返老还童，李辅国魂魄占据其躯体。",
+        "axisId": "yange.224.1",
+        "axisAnchor": "六朝燕歌行·#224·玄机献处",
+        "axisSeq": 1382,
+        "axisBeat": "子时结束时，太皇太后郭氏返老还童，李辅国魂魄占据其躯体，程宗扬试图阻止但被李炎等人打断。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.shituolin_endgame_13.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ]
+      },
+      {
+        "id": "lyg.event.shituolin_endgame_14_beat",
+        "name": "驱魂线索",
+        "description": "贾文和提出寻找李辅国供奉物以驱散其魂魄，太皇太后魂魄可能仍在。",
+        "axisId": "yange.231.3",
+        "axisAnchor": "六朝燕歌行·#231·恩同亲王",
+        "axisSeq": 1398,
+        "axisBeat": "贾文和告知可通过找到李辅国暗中供奉的五肉五甘露来驱散其魂魄，太皇太后的魂魄可能还在，杨玉环已带人在宫中搜查。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.shituolin_endgame_14.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ]
+      },
+      {
+        "id": "lyg.event.shituolin_endgame_15_beat",
+        "name": "黑魔海旧怨开放口",
+        "description": "程宗扬追问剑玉姬、泉玉姬下落，以及鬼王峒龙神之战中的黑魔海旧怨；该节点保留为连载断点后的开放续接口。",
+        "axisId": "yange.232.1",
+        "axisAnchor": "六朝燕歌行·#232·旧时宿怨",
+        "axisSeq": 1399,
+        "axisBeat": "程宗扬在庵堂中对鱼玄机进行性交以安抚，同时审讯齐羽仙，询问剑玉姬、泉玉姬下落，并质问鬼王峒龙神之战中黑魔海是否出手。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.shituolin_endgame_15.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
         ]
       }
     ]
