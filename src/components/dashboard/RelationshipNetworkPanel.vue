@@ -911,9 +911,23 @@
                 <!-- Tab 6: 原始数据 -->
                 <div v-show="activeTab === 'raw'" class="tab-panel">
                   <div class="detail-section">
-                    <h5 class="section-title">原始数据 (JSON)</h5>
+                    <div class="raw-header">
+                      <h5 class="section-title">原始数据 (JSON)</h5>
+                      <div class="raw-actions">
+                        <button v-if="!isEditingRaw" class="raw-act-btn" @click="startEditRaw">编辑</button>
+                        <template v-else>
+                          <button class="raw-act-btn reset" @click="resetEditRaw" title="恢复到进入编辑时的备份">重置</button>
+                          <button class="raw-act-btn" @click="cancelEditRaw">取消</button>
+                          <button class="raw-act-btn save" @click="saveEditRaw">保存</button>
+                        </template>
+                      </div>
+                    </div>
                     <div class="raw-data-container">
-                      <pre><code>{{ JSON.stringify(selectedPerson, null, 2) }}</code></pre>
+                      <pre v-if="!isEditingRaw"><code>{{ JSON.stringify(selectedPerson, null, 2) }}</code></pre>
+                      <template v-else>
+                        <textarea v-model="rawEditText" class="raw-edit-area" spellcheck="false"></textarea>
+                        <p v-if="rawErrorMsg" class="raw-err">{{ rawErrorMsg }}</p>
+                      </template>
                     </div>
                   </div>
                 </div>
@@ -2406,6 +2420,53 @@ const downloadMemories = () => {
  * 下载完整人物数据
  * 导出当前NPC的所有数据（包括基础信息、记忆、背包等）
  */
+// 🔥 单个NPC原始数据编辑：进编辑自动备份，重置恢复备份，保存写回 relationships
+const isEditingRaw = ref(false);
+const rawEditText = ref('');
+const rawBackupText = ref('');
+const rawErrorMsg = ref('');
+
+const startEditRaw = () => {
+  rawBackupText.value = JSON.stringify(selectedPerson.value ?? {}, null, 2);
+  rawEditText.value = rawBackupText.value;
+  rawErrorMsg.value = '';
+  isEditingRaw.value = true;
+};
+
+const resetEditRaw = () => {
+  rawEditText.value = rawBackupText.value;
+  rawErrorMsg.value = '';
+};
+
+const cancelEditRaw = () => {
+  isEditingRaw.value = false;
+  rawErrorMsg.value = '';
+};
+
+const saveEditRaw = async () => {
+  let parsed: any;
+  try {
+    parsed = JSON.parse(rawEditText.value);
+  } catch (e) {
+    rawErrorMsg.value = 'JSON 格式错误，未保存：' + (e instanceof Error ? e.message : String(e));
+    return;
+  }
+  const key = selectedPerson.value?.名字;
+  if (!key || !gameStateStore.relationships?.[key]) {
+    rawErrorMsg.value = '未找到该人物在存档中的位置（名字可能已变更）';
+    return;
+  }
+  try {
+    gameStateStore.relationships[key] = parsed;
+    selectedPerson.value = parsed as NpcProfile;
+    await gameStateStore.saveGame();
+    uiStore.showToast(`✅ 已保存 ${key} 的原始数据`, { type: 'success' });
+    isEditingRaw.value = false;
+  } catch (e) {
+    rawErrorMsg.value = '保存失败：' + (e instanceof Error ? e.message : String(e));
+  }
+};
+
 const downloadCharacterData = () => {
   if (!selectedPerson.value) {
     uiStore.showToast('未选择人物', { type: 'warning' });
@@ -2689,6 +2750,69 @@ const confirmDeleteNpc = (person: NpcProfile) => {
   white-space: pre-wrap;
   word-break: break-all;
   margin: 0;
+}
+
+.raw-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.raw-actions {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.raw-act-btn {
+  padding: 0.25rem 0.65rem;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  cursor: pointer;
+  font-size: 0.78rem;
+  transition: all 0.15s;
+}
+
+.raw-act-btn:hover {
+  border-color: var(--color-primary);
+}
+
+.raw-act-btn.save {
+  background: var(--color-primary);
+  color: #fff;
+  border-color: var(--color-primary);
+}
+
+.raw-act-btn.reset {
+  color: var(--color-warning, #d97706);
+}
+
+.raw-edit-area {
+  width: 100%;
+  min-height: 50vh;
+  resize: vertical;
+  padding: 0.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  background: var(--color-background);
+  color: var(--color-text);
+  font-family: 'Consolas', 'Monaco', monospace;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  outline: none;
+}
+
+.raw-edit-area:focus {
+  border-color: var(--color-primary);
+}
+
+.raw-err {
+  margin: 0.5rem 0 0;
+  color: var(--color-danger, #dc2626);
+  font-size: 0.8rem;
 }
 
 .spirit-stones-grid {
