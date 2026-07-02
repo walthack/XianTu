@@ -1353,7 +1353,7 @@
         "description": "身为程宗扬的女侍仙子，她瓜子脸桃花眼，面覆雪白口罩，虽冷艳风流却外冷心软，谨慎多疑中藏着一丝受虐的顺从。",
         "role": "光明观堂高阶医女，鹤羽剑姬，乐明珠的亲师姐",
         "gender": "女",
-        "realm": "金丹",
+        "realm": "化神",
         "affiliations": [
           {
             "factionId": "liuchao.faction.guang_ming_guan_tang",
@@ -1685,7 +1685,7 @@
         "description": "李药师，这位年过半百却仍黑须墨染的十六卫大将军统领，穿着半旧青衫或银甲儒袍时看似平平无奇，可那双沉静的眼睛里藏着百战沙场的锋芒；他说话爽快直率，常带着几分促狭笑意，仿佛天下事不过一杯酒，实则韬光养晦中暗蕴雷霆。坚毅如钢的脊梁扛得起江山社稷，豁达从容的谈笑间又把生死置之度外。",
         "role": "名将",
         "gender": "男",
-        "realm": "凡人",
+        "realm": "炼虚",
         "affiliations": [
           {
             "factionId": "liuchao.faction.tang_guo_chao_ting",
@@ -2989,7 +2989,8 @@
             "【性癖】绝世鼎炉之一，臣服（自称奴婢，称呼主人）；暴露（主动剥开阴唇让主人观看）；受虐（被粗暴干弄；干屁眼儿）",
             "【身体】蜜穴略显生涩后变得湿滑柔润；初次与程宗扬性交（“第一次就是这样被主人干的”）；敏感部位包括蜜穴；屁眼儿；乳房"
           ]
-        }
+        },
+        "realm": "元婴"
       },
       {
         "id": "liuchao.character.xue_xue",
@@ -3067,7 +3068,8 @@
           "notes": [
             "【身体】唇上小胡子"
           ]
-        }
+        },
+        "realm": "金丹"
       },
       {
         "id": "liuchao.character.qiu_shao_jun",
@@ -3088,7 +3090,8 @@
           "appearance": "两眼一边一个青眼窝，看起来颇有点仙风道骨的高人模样；留及胸长的胡须，常扮有道之士姿态",
           "race": "人族",
           "origin": "太乙真宗教御"
-        }
+        },
+        "realm": "元婴"
       },
       {
         "id": "liuchao.character.yu_hong_zhi",
@@ -3175,7 +3178,8 @@
           "appearance": "白衣如雪，乌亮的长发松松挽了个髻，用一支木簪束着，堪称绝美的五官艳光内蕴，有着令人心怡神宁的从容与恬淡；玉指修长，皎如明玉，柔若幽兰。",
           "race": "人族",
           "origin": "仙师/医师"
-        }
+        },
+        "realm": "化神"
       },
       {
         "id": "liuchao.character.su_ding_fang",
@@ -3228,7 +3232,8 @@
           "appearance": "宽大袍袖的道士装扮；身形模糊，贴地飞行时积雪凝结为寒冰，滑行如流矢",
           "race": "人族",
           "origin": "天策府选锋营成员（后背叛）、投靠阉党王守澄门下"
-        }
+        },
+        "realm": "化神"
       },
       {
         "id": "liuchao.character.wang_shou_cheng",
@@ -3269,7 +3274,8 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {},
+        "realm": "化神"
       },
       {
         "id": "liuchao.character.ruan_xiang_ning",
@@ -3319,7 +3325,8 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {},
+        "realm": "元婴"
       },
       {
         "id": "liuchao.character.jian_yu_ji",
@@ -3329,7 +3336,8 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {},
+        "realm": "炼虚"
       },
       {
         "id": "liuchao.character.le_mingzhu",
@@ -3349,7 +3357,8 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {},
+        "realm": "化神"
       },
       {
         "id": "liuchao.character.xiao_yao_yi",
@@ -3359,7 +3368,8 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {},
+        "realm": "化神"
       }
     ],
     "playerRelationships": [

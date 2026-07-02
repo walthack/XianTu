@@ -825,7 +825,7 @@
         "description": "剑玉姬，这个看似妙龄的女子，实则是不老不死的仙姬。她身负神秘势力首领之职，亦是刘建背后那双看不见的手。一颦一笑温柔如水，话语轻缓如春风拂面，但那藏于深潭般眼眸中的精明与算计，总让受她",
         "role": "巫宗领袖",
         "gender": "女",
-        "realm": "金丹",
+        "realm": "炼虚",
         "affiliations": [
           {
             "factionId": "liuchao.faction.wu_zong",
@@ -879,7 +879,7 @@
         "description": "天下第一侠客，因保护定陶王被剑玉姬刺中心脉，重伤濒死。",
         "role": "侠客",
         "gender": "男",
-        "realm": "金丹",
+        "realm": "炼虚",
         "locationId": "liuchao.location.zhaoyang_hall",
         "skillIds": [
           "liuchao.skill.tie_bu_shan",
@@ -1014,7 +1014,7 @@
             "【势力】殇侯旧部、黑魔海毒宗出身(其资源/功法传承后归程宗扬)（字会之）"
           ]
         },
-        "realm": "金丹"
+        "realm": "化神"
       },
       {
         "id": "liuchao.character.zhao_ying",
@@ -1060,7 +1060,7 @@
             "憨厚狡黠"
           ]
         },
-        "realm": "金丹"
+        "realm": "化神"
       },
       {
         "id": "liuchao.character.jin_mi_di",
@@ -1068,7 +1068,7 @@
         "description": "车骑将军，白发披麻，头戴白布，解下兵刃徒步踏入凉州军阵，向定陶王叩首——他是朝中重臣，也是程宗扬的盟友与试探对象，重伤未愈却威仪不减。",
         "role": "将领",
         "gender": "男",
-        "realm": "练气",
+        "realm": "炼虚",
         "locationId": "liuchao.location.yique",
         "affiliations": [
           {
@@ -1760,7 +1760,8 @@
             "【性癖】绝世鼎炉之一，被动彻底\"身心交械\"/母狗属性；极度敏感(一丝真气挑逗即颤栗)；被怜悯触发依恋",
             "【身体】道门内功养出细腻白皙；成熟浮凸肉体；常炜邪术开发出异于常人的极度敏感"
           ]
-        }
+        },
+        "realm": "化神"
       },
       {
         "id": "liuchao.character.huan_yu",
@@ -1922,7 +1923,8 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {},
+        "realm": "化神"
       },
       {
         "id": "liuchao.character.zhao_he_de",
@@ -1982,7 +1984,8 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {},
+        "realm": "元婴"
       },
       {
         "id": "liuchao.character.le_mingzhu",
@@ -2002,7 +2005,8 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {},
+        "realm": "化神"
       }
     ],
     "playerRelationships": [

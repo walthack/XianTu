@@ -911,7 +911,7 @@
         "description": "身为程宗扬的女侍仙子，她瓜子脸桃花眼，面覆雪白口罩，虽冷艳风流却外冷心软，谨慎多疑中藏着一丝受虐的顺从。",
         "role": "光明观堂高阶医女，鹤羽剑姬，乐明珠的亲师姐",
         "gender": "女",
-        "realm": "金丹",
+        "realm": "化神",
         "locationId": "lyl.location.taiquan_core",
         "skillIds": [
           "lyl.skill.poison_techniques"
@@ -1060,7 +1060,7 @@
         "description": "瑶池宗美女杀手虞白樱，银发如丝垂落玉冠，雪肤花貌艳光逼人。刚被程宗扬从行淫兽爪下救出，身段曼妙曲线毕露，与他之间是敌是友尚难分明。",
         "role": "女杀手，虞紫薇的双胞胎姐姐",
         "gender": "女",
-        "realm": "筑基",
+        "realm": "元婴",
         "locationId": "lyl.location.ant_hill",
         "skillIds": [
           "lyl.skill.duanyue_xian"
@@ -1155,7 +1155,7 @@
         "description": "萧遥逸风度翩翩，身居江州刺史之职，修为高深，但此刻受伤虚弱，他的眼里仍燃着对赤阳圣果的执着——那是他唯一的救赎。",
         "role": "伙伴",
         "gender": "男",
-        "realm": "筑基",
+        "realm": "化神",
         "locationId": "lyl.location.taiquan_core",
         "skillIds": [
           "lyl.skill.folding_fan_art"
@@ -1358,7 +1358,7 @@
           ],
           "origin": "鸩羽殇侯·殇振羽（黑魔海/殇侯门「毒宗」头目，令人闻名色变）。一生数重身份：北寺狱囚徒刘病已→挟书求学的太学生刘次卿→仗剑游侠儿刘谋→离帝位仅一步之遥的阳武侯刘询→隐居化名「朱老头」(诨名朱八八)"
         },
-        "realm": "筑基",
+        "realm": "合体",
         "gender": "男"
       },
       {
@@ -1398,7 +1398,8 @@
             "【性癖】支配与臣服（对武二郎表现出顺服依恋）",
             "【身体】初次/性经历在文本中有暗示（如‘含羞带痛的娇靥’，‘二爷刚进去一半她就要死要活’）；敏感部位等无直接描写"
           ]
-        }
+        },
+        "realm": "金丹"
       },
       {
         "id": "liuchao.character.ding_zhi_xiong",
@@ -1515,7 +1516,8 @@
           "appearance": "宽大袍袖的道士装扮；身形模糊，贴地飞行时积雪凝结为寒冰，滑行如流矢",
           "race": "人族",
           "origin": "天策府选锋营成员（后背叛）、投靠阉党王守澄门下"
-        }
+        },
+        "realm": "化神"
       },
       {
         "id": "liuchao.character.fu_an",
@@ -1552,7 +1554,8 @@
           "appearance": "虎背熊腰，神情阴郁，脸色发灰",
           "race": "人族",
           "origin": "鹏翼社成员"
-        }
+        },
+        "realm": "金丹"
       },
       {
         "id": "liuchao.character.ying_su_nv",
@@ -1577,7 +1580,8 @@
             "【性癖】服从/支配（受支配），施虐（对他人），暴露（常赤裸示人）",
             "【身体】蜜穴湿腻，阴蒂鼓起有指尖大小，色泽赤红；双乳丰挺，乳头系银铃或硬翘如葡萄；雪臀丰满，臀肉白滑；体表有罂粟花海纹身"
           ]
-        }
+        },
+        "realm": "元婴"
       },
       {
         "id": "liuchao.character.yu_feng_wen",
@@ -1625,7 +1629,8 @@
           ],
           "race": "人族",
           "origin": "配角"
-        }
+        },
+        "realm": "化神"
       },
       {
         "id": "liuchao.character.jiang_an_shi",
@@ -1645,7 +1650,8 @@
           "notes": [
             "【身体】胸腹中数刀，皮肤冰冷"
           ]
-        }
+        },
+        "realm": "元婴"
       },
       {
         "id": "liuchao.character.tang_ji_chen",
@@ -1761,7 +1767,8 @@
           "notes": [
             "【身体】唇上小胡子"
           ]
-        }
+        },
+        "realm": "金丹"
       },
       {
         "id": "liuchao.character.dan_chao",
@@ -1796,7 +1803,8 @@
           "appearance": "挽着高髻，双手平平握在胸前，两眼平视前方，衣裾长长拖在地上，举止端庄自持，行不露足，踱不过寸",
           "race": "人族",
           "origin": "程府女管事/女傅"
-        }
+        },
+        "realm": "元婴"
       },
       {
         "id": "liuchao.character.han_ding_guo",
@@ -1812,7 +1820,8 @@
           "appearance": "肩膀粗圆，看似无颈，衣内戴铁制护颈",
           "race": "人族",
           "origin": "军人/将领"
-        }
+        },
+        "realm": "元婴"
       },
       {
         "id": "liuchao.character.yun_dan_liu",
@@ -1842,7 +1851,8 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {},
+        "realm": "化神"
       },
       {
         "id": "liuchao.character.ruan_xiang_ning",
@@ -1922,7 +1932,8 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {},
+        "realm": "元婴"
       },
       {
         "id": "liuchao.character.jian_yu_ji",
@@ -1932,7 +1943,8 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {},
+        "realm": "炼虚"
       },
       {
         "id": "liuchao.character.le_mingzhu",
@@ -1952,7 +1964,8 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {},
+        "realm": "化神"
       }
     ],
     "playerRelationships": [

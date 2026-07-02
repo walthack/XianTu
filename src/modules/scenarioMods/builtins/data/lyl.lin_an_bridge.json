@@ -1248,7 +1248,7 @@
         "description": "星月湖五哥卢景，脸色蜡黄、白眼珠翻得煞是醒目，一袭伪装无声无形，长秋宫中随程宗扬出入时，刺杀便如影随形。",
         "role": "同伴",
         "gender": "男",
-        "realm": "金丹",
+        "realm": "化神",
         "affiliations": [
           {
             "factionId": "lyl.faction.pengyi",
@@ -1297,7 +1297,7 @@
         "description": "星月湖八骏之一，斯明信面孔冷漠僵硬、眼圈泛红，双刀在手时沉默如山，与卢景并肩立着一同透着令人寒战的怪异。",
         "role": "同伴",
         "gender": "男",
-        "realm": "金丹",
+        "realm": "化神",
         "affiliations": [
           {
             "factionId": "lyl.faction.pengyi",
@@ -1441,7 +1441,7 @@
         "description": "闻清语恭敬低眉，却暗藏狠戾，白裙下娇小身影如商人算盘般精密，出手时柳眉一挑便是血光。",
         "role": "反派",
         "gender": "女",
-        "realm": "金丹",
+        "realm": "化神",
         "affiliations": [
           {
             "factionId": "liuchao.faction.hei_mo_hai",
@@ -1489,7 +1489,7 @@
         "description": "这朱老头平日里扮作落魄老年秀才，佝偻着身子跛着脚，脏手帕包着黑发，总是一副死不要脸的懒散模样，遇事呆滞迟钝却又冲动幼稚，明明有自知之明却偏要凑上来讨好卖乖；可一旦恢复真身，便霍然挺立，眉宇间竟透出几分帝王般的威严。（真身殇振羽，即殇侯一系）",
         "role": "盟友",
         "gender": "男",
-        "realm": "元婴",
+        "realm": "合体",
         "affiliations": [
           {
             "factionId": "liuchao.faction.hei_mo_hai",
@@ -1546,7 +1546,7 @@
         "description": "教御卓云君生得一张美艳面孔，惯于察言观色，在宗门间左右逢源，处事老练圆滑，实则心思缜密，步步为营。",
         "role": "侍奴",
         "gender": "女",
-        "realm": "金丹",
+        "realm": "化神",
         "affiliations": [
           {
             "factionId": "lyl.faction.pengyi",
@@ -1844,7 +1844,7 @@
             "【势力】殇侯旧部、黑魔海毒宗出身(其资源/功法传承后归程宗扬)（字会之）"
           ]
         },
-        "realm": "金丹",
+        "realm": "化神",
         "gender": "男"
       },
       {
@@ -2079,7 +2079,7 @@
             "【身体】肌肤如冰雪白皙；容貌绝美，兼魔门妖娆与神圣冷冽；\"不能受伤\"易碎体质：见血受创即连锁反噬；被认为身体是西施等多重灵魂\"容器\"，眼神气场在不同人格间切换"
           ]
         },
-        "realm": "筑基",
+        "realm": "炼虚",
         "gender": "女"
       },
       {
@@ -2126,7 +2126,7 @@
             "【身体】被蒙眼调戏妓女"
           ]
         },
-        "realm": "金丹",
+        "realm": "化神",
         "gender": "男"
       },
       {
@@ -2207,7 +2207,7 @@
           "appearance": "身材不高甚至有些矮小，相貌平平，穿灰扑扑的粗布衣裳，头戴半旧青布裹头，腰间插着短刀，脚穿草鞋，但起身时如长刀出鞘，凛冽雄霸之气扑面而来。",
           "origin": "江湖大侠/布衣"
         },
-        "realm": "筑基",
+        "realm": "炼虚",
         "gender": "男"
       },
       {
@@ -2484,7 +2484,8 @@
           "appearance": "身材威猛，相貌堂堂，豪气逼人，穿着粗布衣裳，佩戴短刀",
           "race": "人族",
           "origin": "游侠，郭解麾下豪士"
-        }
+        },
+        "realm": "化神"
       },
       {
         "id": "liuchao.character.jiang_chong",
@@ -2537,7 +2538,8 @@
           "appearance": "手持双矛，肩宽腰窄，身型矫健，结实的肌肉犹如钢铸，浑身上下没有一丝赘肉",
           "race": "人族",
           "origin": "少年将军，羽林天军将领"
-        }
+        },
+        "realm": "金丹"
       },
       {
         "id": "liuchao.character.ding_tao_wang_liu_xin",
@@ -2565,7 +2567,8 @@
           "appearance": "相貌不凡，身材魁伟，浓发披肩，颇有胡风",
           "race": "人族",
           "origin": "朱老头手下的卫队首领"
-        }
+        },
+        "realm": "化神"
       },
       {
         "id": "liuchao.character.pan_jinlian",
@@ -2575,7 +2578,8 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {},
+        "realm": "化神"
       },
       {
         "id": "liuchao.character.ning_yu",
@@ -2595,7 +2599,8 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {},
+        "realm": "元婴"
       },
       {
         "id": "liuchao.character.le_mingzhu",

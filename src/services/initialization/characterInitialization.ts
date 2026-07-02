@@ -197,12 +197,14 @@ function prepareInitialData(baseInfo: CharacterBaseInfo, age: number): { saveDat
   }
 
 
-  // 🔥 修复：时间使用age作为初始年份，确保出生日期为0年
+  // 🔥 纪年基点200：起始年 = 200 + age，主角出生 = 200 年
+  // 正数基点，保证比主角年长的 NPC 出生年也为正数，避免负年份被 LLM 误读为年龄（曾出现 -14 被抓成 14 岁）
   // AI会在初始化响应中通过tavern_commands设置正确的时间（如果需要）
-  const 临时时间 = { 年: age, 月: 1, 日: 1, 小时: Math.floor(Math.random() * 12) + 6, 分钟: Math.floor(Math.random() * 60) };
+  const 纪元基点 = 200;
+  const 临时时间 = { 年: 纪元基点 + age, 月: 1, 日: 1, 小时: Math.floor(Math.random() * 12) + 6, 分钟: Math.floor(Math.random() * 60) };
 
-  // 计算出生日期：时间 - 开局年龄 = 出生年份
-  // 例如：开局年龄18岁，时间18年，则出生日期为0年
+  // 计算出生日期：时间 - 开局年龄 = 出生年份（= 纪元基点 200）
+  // 例如：开局年龄18岁，时间218年，则出生日期为200年
   if (!processedBaseInfo.出生日期) {
     processedBaseInfo.出生日期 = {
       年: 临时时间.年 - age,

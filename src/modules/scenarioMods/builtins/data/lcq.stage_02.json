@@ -963,7 +963,7 @@
         "description": "身为左武卫大将军与太乙真宗掌教，他气度不凡，既有高人风范又深谋远虑，坚毅如钢却可亲可敬，善于在纷争中平衡各方势力。",
         "role": "关键人物",
         "gender": "男",
-        "realm": "金丹",
+        "realm": "合体",
         "affiliations": [
           {
             "factionId": "lcq.faction.left_guard",
@@ -1024,7 +1024,7 @@
         "description": "岳帅遗孤之一、雪隼佣兵团副队长。冷艳绝色却傲娇自负、自以为是的\"圣母纸老虎\"，身负寒毒体质；王哲临终将其托付程宗扬。",
         "role": "关键人物",
         "gender": "女",
-        "realm": "筑基",
+        "realm": "元婴",
         "affiliations": [
           {
             "factionId": "lcq.faction.left_guard",
@@ -1085,7 +1085,7 @@
         "description": "韩庚，天武营主将，王哲最锐的剑——他面容冷峻，剑眉压眸，魁梧身材裹在布衣或黑色皮甲里，军伍气质如刀锋淬冰，却注定倒在下一场战役的血泊中。",
         "role": "关键人物",
         "gender": "男",
-        "realm": "金丹",
+        "realm": "化神",
         "affiliations": [
           {
             "factionId": "lcq.faction.left_guard",
@@ -1186,7 +1186,7 @@
         "description": "黛姬雪娜，拜火教金发女祭司——冷漠美貌如冰雪雕琢，她立于祭坛上念咒，却在王哲一箭之下，烈焰与血溅裂了圣袍。",
         "role": "关键人物",
         "gender": "女",
-        "realm": "凡人",
+        "realm": "化神",
         "affiliations": [
           {
             "factionId": "lcq.faction.roman",
@@ -1324,7 +1324,7 @@
             "【身体】擅在两性中占据主动；喜折磨玩弄男人自尊；被征服后转为臣服"
           ]
         },
-        "realm": "练气",
+        "realm": "炼虚",
         "gender": "女"
       },
       {
@@ -1360,7 +1360,7 @@
           ],
           "appearance": "身着布衣，面容沉静，身体挺得笔直，有鹰隼般犀利的眼睛。"
         },
-        "realm": "筑基",
+        "realm": "化神",
         "gender": "男"
       },
       {
@@ -1398,7 +1398,7 @@
           ],
           "appearance": "身材高大的中年道人，负双手，冷冰冰，肩后披黑色披风，紫金帅冠，金属战甲"
         },
-        "realm": "筑基",
+        "realm": "化神",
         "gender": "男"
       },
       {
@@ -1409,7 +1409,8 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {},
+        "realm": "化神"
       }
     ],
     "playerRelationships": [

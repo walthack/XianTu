@@ -1168,7 +1168,7 @@
         "description": "星月湖畔的沉默卫士，一身风尘仆仆的朴素衣衫下藏着不露锋芒的聪慧，言语虽少却总以温和态度让人如沐春风。他心中怀着对自己使命的骄傲，每一步都踏在湖光月影之间，守护着这片天地不为人知的秘密。",
         "role": "行者",
         "gender": "男",
-        "realm": "金丹",
+        "realm": "化神",
         "affiliations": [],
         "locationId": "liuchao.location.shan_jian",
         "skillIds": [
@@ -1268,7 +1268,7 @@
         "description": "南荒的老向导蹲在岔路口，眯眼望向三条几乎相同的瘴气小道，嘴角的狡黠笑意比地图上的标记更值得信赖。",
         "role": "向导",
         "gender": "男",
-        "realm": "凡人",
+        "realm": "合体",
         "affiliations": [],
         "locationId": "liuchao.location.shan_jian",
         "skillIds": [],
@@ -1375,7 +1375,8 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {},
+        "realm": "化神"
       },
       {
         "id": "liuchao.character.zhuo_yunjun",
@@ -1385,7 +1386,8 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {},
+        "realm": "化神"
       },
       {
         "id": "lcq.character.yue_shuang",
@@ -1395,7 +1397,8 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {},
+        "realm": "元婴"
       },
       {
         "id": "liuchao.character.qin_hui",
@@ -1405,7 +1408,8 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {},
+        "realm": "化神"
       },
       {
         "id": "liuchao.character.xiao_yao_yi",
@@ -1415,7 +1419,8 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {},
+        "realm": "化神"
       }
     ],
     "playerRelationships": [

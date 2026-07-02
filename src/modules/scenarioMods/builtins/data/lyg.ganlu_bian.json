@@ -1008,7 +1008,7 @@
         "description": "身为程宗扬的女侍仙子，她瓜子脸桃花眼，面覆雪白口罩，虽冷艳风流却外冷心软，谨慎多疑中藏着一丝受虐的顺从。",
         "role": "光明观堂高阶医女，鹤羽剑姬，乐明珠的亲师姐",
         "gender": "女",
-        "realm": "金丹",
+        "realm": "化神",
         "affiliations": [
           {
             "factionId": "lyg.faction.wuyang_houfu",
@@ -1868,7 +1868,8 @@
             "【性癖】绝世鼎炉之一，臣服（自称奴婢，称呼主人）；暴露（主动剥开阴唇让主人观看）；受虐（被粗暴干弄；干屁眼儿）",
             "【身体】蜜穴略显生涩后变得湿滑柔润；初次与程宗扬性交（“第一次就是这样被主人干的”）；敏感部位包括蜜穴；屁眼儿；乳房"
           ]
-        }
+        },
+        "realm": "元婴"
       },
       {
         "id": "liuchao.character.yun_dan_liu",
@@ -1898,7 +1899,8 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {},
+        "realm": "化神"
       },
       {
         "id": "liuchao.character.ruan_xiang_ning",
@@ -1998,7 +2000,8 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {},
+        "realm": "元婴"
       },
       {
         "id": "liuchao.character.jian_yu_ji",
@@ -2008,7 +2011,8 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {},
+        "realm": "炼虚"
       },
       {
         "id": "liuchao.character.le_mingzhu",
@@ -2028,7 +2032,8 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {},
+        "realm": "化神"
       },
       {
         "id": "liuchao.character.xiao_yao_yi",
@@ -2038,7 +2043,8 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {},
+        "realm": "化神"
       }
     ],
     "playerRelationships": [

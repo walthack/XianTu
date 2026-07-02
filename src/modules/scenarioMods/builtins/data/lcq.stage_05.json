@@ -947,7 +947,7 @@
         "description": "星月湖畔的沉默卫士，一身风尘仆仆的朴素衣衫下藏着不露锋芒的聪慧，言语虽少却总以温和态度让人如沐春风。他心中怀着对自己使命的骄傲，每一步都踏在湖光月影之间，守护着这片天地不为人知的秘密。",
         "role": "关键人物",
         "gender": "男",
-        "realm": "筑基",
+        "realm": "化神",
         "affiliations": [
           {
             "factionId": "liuchao.faction.xing_yue_hu",
@@ -1169,7 +1169,7 @@
             "【身体】背脊有多道伤痕"
           ]
         },
-        "realm": "练气",
+        "realm": "金丹",
         "gender": "男"
       },
       {
@@ -1287,7 +1287,7 @@
           ],
           "appearance": "铁铮铮的汉子，平日沉默寡言"
         },
-        "realm": "练气",
+        "realm": "金丹",
         "gender": "男"
       },
       {
@@ -1419,7 +1419,8 @@
             "【性癖】服从型",
             "【身体】首次性经验与程宗扬；高潮后阴精被采补"
           ]
-        }
+        },
+        "realm": "金丹"
       },
       {
         "id": "liuchao.character.pan_jinlian",
@@ -1429,7 +1430,8 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {},
+        "realm": "化神"
       },
       {
         "id": "liuchao.character.zhuo_yunjun",
@@ -1439,7 +1441,8 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {},
+        "realm": "化神"
       },
       {
         "id": "lcq.character.yue_shuang",
@@ -1449,7 +1452,8 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {},
+        "realm": "元婴"
       },
       {
         "id": "liuchao.character.qin_hui",
@@ -1459,7 +1463,8 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {},
+        "realm": "化神"
       },
       {
         "id": "liuchao.character.xiao_yao_yi",
@@ -1469,7 +1474,8 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {},
+        "realm": "化神"
       }
     ],
     "playerRelationships": [

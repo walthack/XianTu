@@ -859,7 +859,7 @@
         "description": "谢幼度俊美绝伦，脸上常带一抹红晕，气质飘逸洒然如谪仙，他是皇图天策府的高手，寸步不离地守护着月霜，剑已在鞘中低鸣。",
         "role": "高手",
         "gender": "男",
-        "realm": "练气",
+        "realm": "化神",
         "affiliations": [
           {
             "factionId": "liuchao.faction.xing_yue_hu",
@@ -906,7 +906,7 @@
         "description": "一袭青衫的文士轻摇折扇，清秀面容上带着谦和笑意，唯有熟知其为人方才知晓这位被誉为‘殇侯智囊’的毒术高手，如何以温言软语布下杀机重重的罗网。",
         "role": "谋士",
         "gender": "男",
-        "realm": "凡人",
+        "realm": "化神",
         "affiliations": [
           {
             "factionId": "liuchao.faction.xing_yue_hu",
@@ -1209,7 +1209,7 @@
           ],
           "origin": "皇城司教头"
         },
-        "realm": "筑基",
+        "realm": "元婴",
         "gender": "男"
       },
       {
@@ -1244,7 +1244,7 @@
           ],
           "origin": "兽蛮营首领出身，后加入盘江程氏"
         },
-        "realm": "筑基",
+        "realm": "元婴",
         "gender": "男"
       },
       {
@@ -1287,7 +1287,7 @@
           ],
           "origin": "僧人"
         },
-        "realm": "筑基",
+        "realm": "化神",
         "gender": "男"
       },
       {
@@ -1324,7 +1324,7 @@
           ],
           "appearance": "似豹的兽蛮武士，面目狰狞，体型如大猫"
         },
-        "realm": "筑基",
+        "realm": "元婴",
         "gender": "男"
       },
       {
@@ -1351,7 +1351,8 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {},
+        "realm": "化神"
       },
       {
         "id": "liuchao.character.zhuo_yunjun",
@@ -1361,7 +1362,8 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {},
+        "realm": "化神"
       },
       {
         "id": "liuchao.character.ning_yu",
@@ -1381,7 +1383,8 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {},
+        "realm": "元婴"
       },
       {
         "id": "liuchao.character.le_mingzhu",
@@ -1401,7 +1404,8 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {},
+        "realm": "化神"
       }
     ],
     "playerRelationships": [

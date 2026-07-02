@@ -1544,7 +1544,7 @@
           ],
           "origin": "光明观堂高阶医女，鹤羽剑姬，乐明珠的亲师姐"
         },
-        "realm": "金丹",
+        "realm": "化神",
         "gender": "女"
       },
       {
@@ -1872,7 +1872,8 @@
             "【性癖】绝世鼎炉之一，臣服（自称奴婢，称呼主人）；暴露（主动剥开阴唇让主人观看）；受虐（被粗暴干弄；干屁眼儿）",
             "【身体】蜜穴略显生涩后变得湿滑柔润；初次与程宗扬性交（“第一次就是这样被主人干的”）；敏感部位包括蜜穴；屁眼儿；乳房"
           ]
-        }
+        },
+        "realm": "元婴"
       },
       {
         "id": "liuchao.character.zhuo_yunjun",
@@ -1894,7 +1895,8 @@
             "【性癖】绝世鼎炉之一，被动彻底\"身心交械\"/母狗属性；极度敏感(一丝真气挑逗即颤栗)；被怜悯触发依恋",
             "【身体】道门内功养出细腻白皙；成熟浮凸肉体；常炜邪术开发出异于常人的极度敏感"
           ]
-        }
+        },
+        "realm": "化神"
       },
       {
         "id": "liuchao.character.li_hong",
@@ -1938,7 +1940,8 @@
             "【性癖】对女性美腿有兴趣，言语挑逗（如对云丹琉说“女施主可知欢喜妙谛”）",
             "【身体】曾断右臂；重伤多次，伤势未愈"
           ]
-        }
+        },
+        "realm": "元婴"
       },
       {
         "id": "liuchao.character.wei_yue_yan",
@@ -1953,7 +1956,8 @@
           "appearance": "使用长鞭的女子，身手矫健如燕子般飞掠水面；容貌娇艳，肤光如雪，双乳丰硕，臀部丰满，玉颊光洁，耳垂下两串圆润无瑕的明珠，珠辉肤光交映。",
           "race": "人族",
           "origin": "龙宸北方玄武七宿之一"
-        }
+        },
+        "realm": "元婴"
       },
       {
         "id": "liuchao.character.chai_yong_jian",
@@ -2155,7 +2159,8 @@
             "【性癖】服从/支配（受支配），施虐（对他人），暴露（常赤裸示人）",
             "【身体】蜜穴湿腻，阴蒂鼓起有指尖大小，色泽赤红；双乳丰挺，乳头系银铃或硬翘如葡萄；雪臀丰满，臀肉白滑；体表有罂粟花海纹身"
           ]
-        }
+        },
+        "realm": "元婴"
       },
       {
         "id": "liuchao.character.su_xiao",
@@ -2173,7 +2178,8 @@
           ],
           "race": "人族",
           "origin": "星月湖旧部，上尉连长，雇佣兵（左武第一军团化名）"
-        }
+        },
+        "realm": "元婴"
       },
       {
         "id": "liuchao.character.yun_dan_liu",
@@ -2273,7 +2279,8 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {},
+        "realm": "元婴"
       },
       {
         "id": "liuchao.character.jian_yu_ji",
@@ -2283,7 +2290,8 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {},
+        "realm": "炼虚"
       },
       {
         "id": "liuchao.character.le_mingzhu",
@@ -2303,7 +2311,8 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {},
+        "realm": "化神"
       },
       {
         "id": "liuchao.character.xiao_yao_yi",
@@ -2313,7 +2322,8 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {},
+        "realm": "化神"
       }
     ],
     "playerRelationships": [

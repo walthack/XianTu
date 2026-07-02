@@ -1188,7 +1188,7 @@
         "description": "一袭青衫的文士轻摇折扇，清秀面容上带着谦和笑意，唯有熟知其为人方才知晓这位被誉为‘殇侯智囊’的毒术高手，如何以温言软语布下杀机重重的罗网。",
         "role": "家臣",
         "gender": "男",
-        "realm": "金丹",
+        "realm": "化神",
         "affiliations": [
           {
             "factionId": "liuchao.faction.pan_jiang_cheng",
@@ -1245,7 +1245,7 @@
         "description": "身为禁军教头，林冲身材魁梧，性情沉稳内敛，喜怒不形于色，但忍让的底线一旦被突破，便会显露出狠辣与快意恩仇的一面。",
         "role": "关键人物",
         "gender": "男",
-        "realm": "筑基",
+        "realm": "元婴",
         "affiliations": [
           {
             "factionId": "liuchao.faction.huang_cheng_si",
@@ -1295,7 +1295,7 @@
         "description": "身披僧衣的魁梧壮汉，虽入空门却豪气冲天，性如烈火又粗中有细，路见不平一声吼，三拳下去便是天地清明。",
         "role": "关键人物",
         "gender": "男",
-        "realm": "筑基",
+        "realm": "化神",
         "affiliations": [
           {
             "factionId": "liuchao.faction.mingqing_temple",
@@ -1348,7 +1348,7 @@
         "description": "雪隼佣兵团团长薛延山，枯瘦如柴、眼结冰渣，躺在榻上口吐白气，奄奄一息中将团员托付给程宗扬。",
         "role": "关键人物",
         "gender": "男",
-        "realm": "练气",
+        "realm": "元婴",
         "affiliations": [
           {
             "factionId": "liuchao.faction.xue_sun",
@@ -1695,7 +1695,7 @@
         "description": "京城太尉高俅，体型肥胖却端着一副威严面孔，城府之深令人难以揣测，贪婪之手伸向每一寸可攫取的利益，喜怒不形于色，谨慎多疑的性子让他在朝堂之上步步为营。",
         "role": "太尉",
         "gender": "男",
-        "realm": "筑基",
+        "realm": "元婴",
         "affiliations": [
           {
             "factionId": "liuchao.faction.tai_wei_fu",
@@ -1786,7 +1786,7 @@
         "description": "四五十岁的总镖头，头上花白稀疏的发丝透着岁月的风霜，精明市侩的眼神里淌着商人的算计——可当李师师唤他爹时，那副身躯里也会涌出几分走南闯北的铁骨。",
         "role": "总镖头",
         "gender": "男",
-        "realm": "练气",
+        "realm": "金丹",
         "affiliations": [
           {
             "factionId": "liuchao.faction.wei_yuan_escort",
@@ -1992,7 +1992,7 @@
         "description": "这个面目可憎的独眼兽蛮武士，曾是兽蛮营的凶猛首领，如今虽只剩一只锋利如苍狼的眼睛，却依然暴躁易怒、好胜争强，常因激动而颈后血管怦怦直跳，身穿破损牛皮肩甲的他随时准备为主人撕碎所有敌人。",
         "role": "仆从",
         "gender": "男",
-        "realm": "筑基",
+        "realm": "元婴",
         "affiliations": [
           {
             "factionId": "liuchao.faction.pan_jiang_cheng",
@@ -2038,7 +2038,7 @@
         "description": "豹子头，这名兽蛮武士沉默地站在程宗扬身旁，目光如豹，伺机而动。",
         "role": "仆从",
         "gender": "男",
-        "realm": "筑基",
+        "realm": "元婴",
         "affiliations": [
           {
             "factionId": "liuchao.faction.pan_jiang_cheng",
@@ -2228,7 +2228,8 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {},
+        "realm": "化神"
       },
       {
         "id": "liuchao.character.zhuo_yunjun",
@@ -2238,7 +2239,8 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {},
+        "realm": "化神"
       },
       {
         "id": "liuchao.character.ning_yu",
@@ -2258,7 +2260,8 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {},
+        "realm": "元婴"
       },
       {
         "id": "liuchao.character.le_mingzhu",
@@ -2278,7 +2281,8 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {},
+        "realm": "化神"
       }
     ],
     "playerRelationships": [

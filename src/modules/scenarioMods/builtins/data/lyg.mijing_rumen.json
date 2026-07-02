@@ -878,7 +878,7 @@
         "description": "这朱老头平日里扮作落魄老年秀才，佝偻着身子跛着脚，脏手帕包着黑发，总是一副死不要脸的懒散模样，遇事呆滞迟钝却又冲动幼稚，明明有自知之明却偏要凑上来讨好卖乖；可一旦恢复真身，便霍然挺立，眉宇间竟透出几分帝王般的威严。（真身殇振羽，即殇侯一系）",
         "role": "关键人物",
         "gender": "男",
-        "realm": "化神",
+        "realm": "合体",
         "affiliations": [
           {
             "factionId": "liuchao.faction.han_guo_chao_ting",
@@ -1149,7 +1149,7 @@
         "description": "星月湖八骏之一，斯明信面孔冷漠僵硬、眼圈泛红，双刀在手时沉默如山，与卢景并肩立着一同透着令人寒战的怪异。",
         "role": "重要人物",
         "gender": "男",
-        "realm": "练气",
+        "realm": "化神",
         "affiliations": [
           {
             "factionId": "liuchao.faction.xing_yue_hu",
@@ -1194,7 +1194,7 @@
         "description": "星月湖五哥卢景，脸色蜡黄、白眼珠翻得煞是醒目，一袭伪装无声无形，长秋宫中随程宗扬出入时，刺杀便如影随形。",
         "role": "重要人物",
         "gender": "男",
-        "realm": "练气",
+        "realm": "化神",
         "affiliations": [
           {
             "factionId": "liuchao.faction.xing_yue_hu",
@@ -1288,7 +1288,7 @@
         "description": "剑玉姬，这个看似妙龄的女子，实则是不老不死的仙姬。她身负神秘势力首领之职，亦是刘建背后那双看不见的手。一颦一笑温柔如水，话语轻缓如春风拂面，但那藏于深潭般眼眸中的精明与算计，总让受她",
         "role": "关键反派",
         "gender": "女",
-        "realm": "练气",
+        "realm": "炼虚",
         "affiliations": [
           {
             "factionId": "liuchao.faction.wu_zong",
@@ -1389,7 +1389,7 @@
         "description": "车骑将军，白发披麻，头戴白布，解下兵刃徒步踏入凉州军阵，向定陶王叩首——他是朝中重臣，也是程宗扬的盟友与试探对象，重伤未愈却威仪不减。",
         "role": "重要人物",
         "gender": "男",
-        "realm": "练气",
+        "realm": "炼虚",
         "affiliations": [
           {
             "factionId": "liuchao.faction.han_guo_chao_ting",
@@ -1760,7 +1760,7 @@
             "憨厚狡黠"
           ]
         },
-        "realm": "金丹",
+        "realm": "化神",
         "gender": "男"
       },
       {
@@ -1922,7 +1922,7 @@
           ],
           "origin": "黑魔海杀手"
         },
-        "realm": "筑基",
+        "realm": "元婴",
         "gender": "女"
       },
       {
@@ -2019,7 +2019,8 @@
             "易羞恼",
             "直率"
           ]
-        }
+        },
+        "realm": "金丹"
       },
       {
         "id": "liuchao.character.lv_ji",
@@ -2151,7 +2152,8 @@
           "appearance": "须发，道貌岸然模样，常摆出高人风范；打扮得跟神仙一样，白鹤般挥舞双袖；排场相貌拿得出手；老家伙（被蛇夫人称为‘没溜儿的老家伙’）",
           "race": "人族",
           "origin": "星月湖大营的兄弟，以卜算为生，精通红白喜事，担任账房先生或主持婚庆"
-        }
+        },
+        "realm": "元婴"
       },
       {
         "id": "liuchao.character.mao_yan_shou",
@@ -2212,7 +2214,8 @@
           "appearance": "挽着高髻，双手平平握在胸前，两眼平视前方，衣裾长长拖在地上，举止端庄自持，行不露足，踱不过寸",
           "race": "人族",
           "origin": "程府女管事/女傅"
-        }
+        },
+        "realm": "元婴"
       },
       {
         "id": "liuchao.character.xi_ming_bo",
@@ -2259,7 +2262,8 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {},
+        "realm": "化神"
       },
       {
         "id": "liuchao.character.zhuo_yunjun",
@@ -2269,7 +2273,8 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {},
+        "realm": "化神"
       },
       {
         "id": "liuchao.character.ruan_xiang_ning",
@@ -2339,7 +2344,8 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {},
+        "realm": "元婴"
       },
       {
         "id": "liuchao.character.le_mingzhu",
@@ -2359,7 +2365,8 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {},
+        "realm": "化神"
       },
       {
         "id": "liuchao.character.jia_wenhe",
@@ -2379,7 +2386,8 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {},
+        "realm": "化神"
       }
     ],
     "playerRelationships": [

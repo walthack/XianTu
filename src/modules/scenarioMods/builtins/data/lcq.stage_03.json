@@ -621,7 +621,7 @@
         "description": "她是妖族中最为冶艳的祸水，慵懒一笑间便能让仙门覆灭，贪婪的舌尖舔过唇角，仿佛连天命都能吞噬。",
         "role": "关键反派",
         "gender": "女",
-        "realm": "练气",
+        "realm": "炼虚",
         "affiliations": [
           {
             "factionId": "liuchao.faction.bai_hu_shang_guan",
@@ -908,7 +908,7 @@
           ],
           "origin": "星月湖八骏之一，岳帅部属"
         },
-        "realm": "筑基",
+        "realm": "化神",
         "gender": "男"
       },
       {
@@ -933,7 +933,8 @@
             "【性癖】喜好从后入式开苞；偏好言语挑逗与抚摸"
           ],
           "origin": "配角"
-        }
+        },
+        "realm": "元婴"
       },
       {
         "id": "liuchao.character.zhuo_yunjun",
@@ -943,7 +944,8 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {},
+        "realm": "化神"
       },
       {
         "id": "lcq.character.yue_shuang",
@@ -953,7 +955,8 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {},
+        "realm": "元婴"
       }
     ],
     "playerRelationships": [

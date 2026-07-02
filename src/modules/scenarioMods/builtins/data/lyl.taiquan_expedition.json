@@ -1078,7 +1078,7 @@
         "description": "一袭青衫的文士轻摇折扇，清秀面容上带着谦和笑意，唯有熟知其为人方才知晓这位被誉为‘殇侯智囊’的毒术高手，如何以温言软语布下杀机重重的罗网。",
         "role": "谋士",
         "gender": "男",
-        "realm": "金丹",
+        "realm": "化神",
         "affiliations": [
           {
             "factionId": "liuchao.faction.xing_yue_hu",
@@ -1135,7 +1135,7 @@
         "description": "身为禁军教头，林冲身材魁梧，性情沉稳内敛，喜怒不形于色，但忍让的底线一旦被突破，便会显露出狠辣与快意恩仇的一面。",
         "role": "禁军教头",
         "gender": "男",
-        "realm": "凡人",
+        "realm": "元婴",
         "affiliations": [
           {
             "factionId": "liuchao.faction.jin_jun",
@@ -1194,7 +1194,7 @@
         "description": "身披僧衣的魁梧壮汉，虽入空门却豪气冲天，性如烈火又粗中有细，路见不平一声吼，三拳下去便是天地清明。",
         "role": "花和尚",
         "gender": "男",
-        "realm": "凡人",
+        "realm": "化神",
         "affiliations": [
           {
             "factionId": "liuchao.faction.jin_jun",
@@ -1809,7 +1809,8 @@
             "【性癖】喜好从后入式开苞；偏好言语挑逗与抚摸"
           ],
           "origin": "配角"
-        }
+        },
+        "realm": "元婴"
       },
       {
         "id": "liuchao.character.meng_fei_qing",
@@ -1833,7 +1834,8 @@
           "notes": [
             "【身体】身躯呈现出金属般的苍青色泽，皮肤与骨骼之间几乎看不到肌肉，只有无数外露的筋结，宛如一条条巨蟒盘绕在青铜色的皮肤下，又像一道道铁索在肩、臂、胸、肋上交错纵横；筋骨犹如镔铁"
           ]
-        }
+        },
+        "realm": "炼虚"
       },
       {
         "id": "liuchao.character.feng_yuan",
@@ -1853,7 +1855,8 @@
           "appearance": "瘦巴巴的身板，胸前无护胸毛（对比他人），常挤眉弄眼、流泪或晕厥，肢体语言丰富。；脸色发青或又青又白，容易受惊吓。人中曾因晕厥被扎银针，施法时脸上浮现朱砂色。",
           "race": "人族",
           "origin": "火法师/程宗扬属下"
-        }
+        },
+        "realm": "金丹"
       },
       {
         "id": "liuchao.character.sun_tian_yu",
@@ -1890,7 +1893,8 @@
           "appearance": "雨夜中握腰刀穿铁甲，模糊描写，无系统性外貌",
           "race": "人族",
           "origin": "龙卫左厢军新任命的军都指挥使"
-        }
+        },
+        "realm": "金丹"
       },
       {
         "id": "liuchao.character.zhang_kang",
@@ -1911,7 +1915,8 @@
           "appearance": "脸色冷峻，眉枝如画，雪嫩的肌肤宛如明玉，如水的美目露出怯生生的神情",
           "race": "人族",
           "origin": "宋军将领，进士出身，有都监资格"
-        }
+        },
+        "realm": "金丹"
       },
       {
         "id": "liuchao.character.huang_shi",
@@ -1982,7 +1987,8 @@
           "appearance": "须发，道貌岸然模样，常摆出高人风范；打扮得跟神仙一样，白鹤般挥舞双袖；排场相貌拿得出手；老家伙（被蛇夫人称为‘没溜儿的老家伙’）",
           "race": "人族",
           "origin": "星月湖大营的兄弟，以卜算为生，精通红白喜事，担任账房先生或主持婚庆"
-        }
+        },
+        "realm": "元婴"
       },
       {
         "id": "liuchao.character.wu_ma_ma",
@@ -2003,7 +2009,8 @@
           "appearance": "脸上有刀疤，丑陋狞恶，眼睛如毒蛇般黄浊；胖大身材，面带刀疤，手中常提粗重铡刀",
           "race": "人族",
           "origin": "仆妇（西门庆手下）"
-        }
+        },
+        "realm": "元婴"
       },
       {
         "id": "liuchao.character.liu_e",
@@ -2045,7 +2052,8 @@
           "appearance": "两眼一边一个青眼窝，看起来颇有点仙风道骨的高人模样；留及胸长的胡须，常扮有道之士姿态",
           "race": "人族",
           "origin": "太乙真宗教御"
-        }
+        },
+        "realm": "元婴"
       },
       {
         "id": "liuchao.character.liang_fu_ren",
@@ -2161,7 +2169,8 @@
           "notes": [
             "【身体】太监（阉人）；半显阳刚半显阴柔"
           ]
-        }
+        },
+        "realm": "炼虚"
       },
       {
         "id": "liuchao.character.zong_ze",
@@ -2181,7 +2190,8 @@
           "appearance": "束发，握长枪，身材挺拔，脸颊抽搐，眼底迸出血迹",
           "race": "人族",
           "origin": "选锋营勇将"
-        }
+        },
+        "realm": "金丹"
       },
       {
         "id": "liuchao.character.zhu_yin",
@@ -2219,7 +2229,8 @@
           "notes": [
             "【性癖】支配/施虐（调教女性，使其驯服）"
           ]
-        }
+        },
+        "realm": "金丹"
       },
       {
         "id": "liuchao.character.ning_su",
@@ -2277,7 +2288,8 @@
             "【身体】双乳雪滑丰腴；大腿外侧有蔷薇纹身；身体一丝不挂时曲线丰润"
           ],
           "origin": "配角"
-        }
+        },
+        "realm": "元婴"
       },
       {
         "id": "liuchao.character.pan_jinlian",
@@ -2287,7 +2299,8 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {},
+        "realm": "化神"
       },
       {
         "id": "liuchao.character.yun_dan_liu",
@@ -2317,7 +2330,8 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {},
+        "realm": "化神"
       },
       {
         "id": "liuchao.character.zhao_he_de",
@@ -2387,7 +2401,8 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {},
+        "realm": "元婴"
       },
       {
         "id": "liuchao.character.jian_yu_ji",
@@ -2397,7 +2412,8 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {},
+        "realm": "炼虚"
       },
       {
         "id": "liuchao.character.le_mingzhu",
@@ -2417,7 +2433,8 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {},
+        "realm": "化神"
       }
     ],
     "playerRelationships": [
