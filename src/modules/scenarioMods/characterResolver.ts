@@ -128,13 +128,14 @@ function resolveOne(character: any, stageId: string): boolean {
   const currentPhase = stagePhase(entry, stageId);
   const origin = currentPhase?.identity || staticProfile.identitySummary || '';
 
-  // appearance/personality/origin 精简 stage 已保留 → 仅缺失时才从正典填（镜像构建期 no-force 行为，保证等价）。
+  // appearance/origin：场景/提取特定 → 仅缺失时才从正典填（保持 no-force）。
+  // personality：稳定属性，卡为准 → 卡(registry)非空则覆盖，让改卡传导到确定性字段（不截断，卡已人工控长）。
   if (entry.gender && (!character.gender || character.gender === '未知')) character.gender = entry.gender;
   if (currentPhase?.role) character.role = currentPhase.role;
   if (origin && !profile.origin) profile.origin = origin;
   if (staticProfile.appearance && !profile.appearance) profile.appearance = staticProfile.appearance;
-  const personality = unique(asArray(staticProfile.personality)).slice(0, 8);
-  if (personality.length && !(profile.personality && profile.personality.length)) profile.personality = personality;
+  const personality = unique(asArray(staticProfile.personality));
+  if (personality.length) profile.personality = personality;
 
   const keptNotes = asArray<string>(profile.notes).filter(note => !DERIVED_TAGS.some(tag => String(note).startsWith(tag)));
   profile.notes = [...keptNotes, ...buildNotes(entry, currentPhase)];

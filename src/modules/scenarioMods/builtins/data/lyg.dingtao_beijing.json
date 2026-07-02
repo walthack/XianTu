@@ -1150,7 +1150,8 @@
             "表面天真烂漫娇憨黏人",
             "实则心狠手辣城府极深",
             "视人命如草芥",
-            "智商碾压全场"
+            "智商碾压全场",
+            "喜欢亲手调教、收服违抗程宗扬的女性敌人（种奴印/驯服）"
           ],
           "notes": [
             "【功法约束】本门功法仅限处子修习，破体后会导致反噬。（破坏后果：功法反噬）",
@@ -1923,7 +1924,15 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {},
+        "profile": {
+          "personality": [
+            "性格刚烈",
+            "极重同门情谊",
+            "外表狐媚易被误认浪女",
+            "实则冰清玉洁",
+            "被开发后藏于心底的受虐性幻想"
+          ]
+        },
         "realm": "化神"
       },
       {
@@ -1934,7 +1943,15 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {
+          "personality": [
+            "妖艳主动",
+            "冷静城府深",
+            "\"拉皮条\"天才",
+            "无道德包袱",
+            "深知姐妹一体不嫉妒"
+          ]
+        }
       },
       {
         "id": "liuchao.character.yin_fulan",
@@ -1944,7 +1961,14 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {
+          "personality": [
+            "顺从",
+            "讨好",
+            "淫荡",
+            "臣服"
+          ]
+        }
       },
       {
         "id": "liuchao.character.jing_li",
@@ -1954,7 +1978,14 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {
+          "personality": [
+            "柔媚",
+            "冷厉",
+            "危险",
+            "善于挑弄"
+          ]
+        }
       },
       {
         "id": "liuchao.character.ning_yu",
@@ -1964,7 +1995,15 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {
+          "personality": [
+            "高冷御姐",
+            "外冷内媚(冰火交融)",
+            "口是心非",
+            "不擅表温情",
+            "以冷酷伪装情感与欲望"
+          ]
+        }
       },
       {
         "id": "liuchao.character.ruan_xiang_lin",
@@ -1974,7 +2013,13 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {
+          "personality": [
+            "市侩（愿意献出女儿换取利益）",
+            "有着江湖儿女的大方与豪爽，前期对主角敌意戒备",
+            "\"咬牙隐忍却无法抗拒\"的傲娇熟女反差"
+          ]
+        }
       },
       {
         "id": "lcq.character.yue_shuang",
@@ -1984,7 +2029,17 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {},
+        "profile": {
+          "personality": [
+            "极度傲娇自以为是的\"圣母纸老虎\"",
+            "自私虚伪",
+            "行事双标（濒死要救命恩人心头血作药引）",
+            "智商与江湖经验匮乏",
+            "推卸责任的受害者心态",
+            "复杂亲缘认同（嘴拒认岳帅是父",
+            "却以\"八骏新主人\"自居）"
+          ]
+        },
         "realm": "元婴"
       },
       {
@@ -1995,7 +2050,17 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {
+          "personality": [
+            "娇憨可爱",
+            "小市侩小财迷",
+            "遇大风浪会怕会尖叫",
+            "大是大非有小女子的坚韧",
+            "邻家女孩",
+            "纯真无算计",
+            "对性事缺乏概念，容易被主角哄骗"
+          ]
+        }
       },
       {
         "id": "liuchao.character.xiao_yao_yi",
@@ -2005,7 +2070,15 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {},
+        "profile": {
+          "personality": [
+            "风流倜傥",
+            "幽默毒舌",
+            "好色",
+            "豪爽",
+            "武功高强"
+          ]
+        },
         "realm": "化神"
       }
     ],

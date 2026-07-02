@@ -1,9 +1,9 @@
 {
   "schema": "xiantu.character-registry.v1",
-  "version": "cr-2026-07-02-61b5ed563b185b74",
-  "sourceHash": "61b5ed563b185b74",
+  "version": "cr-2026-07-02-c6083e753a3089d9",
+  "sourceHash": "c6083e753a3089d9",
   "sourceGeneratedAt": "2026-06-30T12:50:33.965Z",
-  "generatedAt": "2026-07-02T03:01:50.673Z",
+  "generatedAt": "2026-07-02T05:40:06.016Z",
   "stats": {
     "total": 308,
     "stagePresent": 249,
@@ -36,7 +36,18 @@
         "keyEvents": [
           "太乙真宗教御"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "太乙真宗",
+            "role": "教御"
+          }
+        ],
+        "debutLocation": {
+          "location": "清远玄真观",
+          "locator": "第160章",
+          "scene": "齐放鹤在玄真观殿中调息，感应到卓云君来临后睁开眼睛说了声'来了'，随即质问卓云君为何叛教"
+        }
       },
       "phaseIdentities": [],
       "review": {
@@ -81,7 +92,22 @@
         "keyEvents": [
           "组合显示名已拆分：陈王李成美 -> 原名 李成美，alias 陈王。\n角色卡未找到明确同名/别名；需要判断是新角色还是并入现有角色。"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "唐国朝廷",
+            "role": "亲王/陈王"
+          }
+        ],
+        "debutLocation": {
+          "location": "承天门",
+          "locator": "六朝燕歌行/0105.html，元正大朝会",
+          "scene": "在元正大朝会上被监门校尉唱名'陈王李成美'，作为敬宗幼子、李昂等人的侄儿、辈分最小的亲王，踏入承天门参加大朝会"
+        },
+        "storyAge": {
+          "value": "约15",
+          "basis": "才十五岁就足足生了十九个儿子"
+        }
       },
       "phaseIdentities": [],
       "review": {
@@ -139,7 +165,13 @@
           "谢安石是谢幼度的叔父",
           "程宗扬评价其为'人中龙凤'"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "晋国",
+            "role": "太傅"
+          }
+        ]
       },
       "phaseIdentities": [],
       "review": {
@@ -189,7 +221,18 @@
         "ending": [
           "被武二郎斩杀分尸",
           "死亡"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "龙宸",
+            "role": "辰星七妖第四星（外围成员）"
+          }
+        ],
+        "debutLocation": {
+          "location": "某庭院",
+          "locator": "六朝清羽记第351章",
+          "scene": "小紫揭露其身份为辰星七妖第四星灭宝，擅长暗器，与吴战威交手时失去右臂，后被武二郎分尸"
+        }
       },
       "phaseIdentities": [],
       "review": {
@@ -235,7 +278,18 @@
         "keyEvents": [
           "李宏宠婢，被史叁许给程宗扬"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "广源行",
+            "role": "侍女/宠婢"
+          }
+        ],
+        "debutLocation": {
+          "location": "晴州货栈",
+          "locator": "0268章",
+          "scene": "史叁吩咐她去找得罪程侯的人，她应声扭着纤腰掀帘出去，随后托着朱漆木盘进来，木盘上放着一颗首级"
+        }
       },
       "phaseIdentities": [],
       "review": {
@@ -276,7 +330,22 @@
         "keyEvents": [
           "角色卡未找到明确同名/别名；需要判断是新角色还是并入现有角色。"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "宋国",
+            "role": "龙卫军左厢都指挥使"
+          }
+        ],
+        "debutLocation": {
+          "location": "江州",
+          "locator": "chapter304.html",
+          "scene": "星月湖军议上王韬汇报宋军信息，列举捧日军和龙卫军各军主将时首次提及龙卫军左厢指挥使任福"
+        },
+        "storyAge": {
+          "value": "逾四十",
+          "basis": "他年逾四十"
+        }
       },
       "phaseIdentities": [],
       "review": {
@@ -339,7 +408,22 @@
           "被确认是九御之一（第227章）",
           "玄武湖一战中作为黑魔海内堂人手参战"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "星月湖",
+            "role": "出身（真实身份）"
+          },
+          {
+            "faction": "王处仲势力",
+            "role": "暗藏杀手"
+          }
+        ],
+        "debutLocation": {
+          "location": "鹰愁峪",
+          "locator": "chapter195",
+          "scene": "在鹰愁峪之战中，以纨绔子弟面目示人的墨狼露出真实身手，与吴三桂交手稳居上风，后率众护卫冲杀州府兵"
+        }
       },
       "phaseIdentities": [],
       "review": {
@@ -377,7 +461,22 @@
         "keyEvents": [
           "角色卡未找到明确同名/别名；需要判断是新角色还是并入现有角色。\n用户裁定：批准。"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "唐国朝廷",
+            "role": "公主"
+          }
+        ],
+        "debutLocation": {
+          "location": "未知（疑似宫廷宴会场所）",
+          "locator": "0134.html",
+          "scene": "被杨玉环用白绫绑着手拽进殿内，带着哭腔说'我要回去'，被安排坐在安王李溶旁边"
+        },
+        "storyAge": {
+          "value": "约十四五岁",
+          "basis": "后面还有一个十四五岁的小姑娘，这会儿撅着小嘴，两只手被一条白绫绑着，跟只小羊羔一样，被杨玉环拉扯着拽进殿内"
+        }
       },
       "phaseIdentities": [],
       "review": {
@@ -418,7 +517,13 @@
         "keyEvents": [
           "太乙真宗教御"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "太乙真宗",
+            "role": "教御"
+          }
+        ]
       },
       "phaseIdentities": [],
       "review": {
@@ -463,7 +568,18 @@
         "keyEvents": [
           "组合显示名已拆分：抚王李纮 -> 原名 李纮，alias 抚王。\n用户裁定：批准。"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "唐国朝廷",
+            "role": "抚王（亲王）"
+          }
+        ],
+        "debutLocation": {
+          "location": "承天门",
+          "locator": "第0105章",
+          "scene": "大朝会上，监门校尉唱名'抚王李纮'，他应声'在'，由夹阶校尉象征性搜身后踏入门内"
+        }
       },
       "phaseIdentities": [],
       "review": {
@@ -509,7 +625,18 @@
         "keyEvents": [
           "角色卡未找到明确同名/别名；需要判断是新角色还是并入现有角色。"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "平亭侯府",
+            "role": "世子"
+          }
+        ],
+        "debutLocation": {
+          "location": "平亭侯府",
+          "locator": "六朝云龙吟/0198.html",
+          "scene": "邳寿因宁成调来郡兵搜查侯府，紧急找到世子邳忌商议对策，邳忌正在堂上左拥右抱逗弄鹦鹉"
+        }
       },
       "phaseIdentities": [],
       "review": {
@@ -555,7 +682,22 @@
         "keyEvents": [
           "角色卡未找到明确同名/别名；需要判断是新角色还是并入现有角色。"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "平卢",
+            "role": "喽啰"
+          },
+          {
+            "faction": "藩镇势力",
+            "role": "亡命徒"
+          }
+        ],
+        "debutLocation": {
+          "location": "长安城东，春明门附近废墟",
+          "locator": "六朝燕歌行/0121.html",
+          "scene": "与红鼻头同伴翻墙落地，躲避追兵，在兴庆宫废墟附近避风过夜"
+        }
       },
       "phaseIdentities": [],
       "review": {
@@ -602,7 +744,22 @@
         "keyEvents": [
           "角色卡未找到明确同名/别名；需要判断是新角色还是并入现有角色。"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "星月湖",
+            "role": "岳帅亲卫"
+          },
+          {
+            "faction": "少陵侯府",
+            "role": "随从/奴仆"
+          }
+        ],
+        "debutLocation": {
+          "location": "江上（两船相错处）",
+          "locator": "第159章",
+          "scene": "萧遥逸在对张侯喊话时提到让萧五明天把海东青送到张侯府上"
+        }
       },
       "phaseIdentities": [],
       "review": {
@@ -671,7 +828,18 @@
         ],
         "ending": [
           "新唐灭国后返回阳钧宗，与程宗扬保持联系，但未正式成为后宫。"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "阳钧宗",
+            "role": "女弟子"
+          }
+        ],
+        "debutLocation": {
+          "location": "太泉古阵·林中",
+          "locator": "第0153章",
+          "scene": "程宗扬追踪变形龙的痕迹，在剑齿兰下发现玄萝的尸体——眉眼依稀是昨日被周飞救下的阳钧宗女弟子。"
+        }
       },
       "phaseIdentities": [],
       "review": {
@@ -733,7 +901,22 @@
           "被黑魔海收入麾下，担任供奉",
           "身上藏有幽冥宗之秘，后被‘死丫头’尽得"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "黑魔海",
+            "role": "供奉"
+          },
+          {
+            "faction": "幽冥宗",
+            "role": "老太监"
+          }
+        ],
+        "debutLocation": {
+          "location": "神龙殿",
+          "locator": "六朝清羽记/chapter206.html",
+          "scene": "神龙殿殿门打开，青衣小帽的老太监古冥隐立在殿前，尖着嗓子自称是黑魔海供奉，前来迎接从东瀛来的飞鸟上忍"
+        }
       },
       "phaseIdentities": [],
       "review": {
@@ -771,7 +954,18 @@
         "keyEvents": [
           "角色卡未找到明确同名/别名；需要判断是新角色还是并入现有角色。"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "禁军",
+            "role": "龙卫军将门子弟"
+          }
+        ],
+        "debutLocation": {
+          "location": "牢房",
+          "locator": "chapter325",
+          "scene": "踏进牢房探望被囚禁的好友刘宜孙，自信满满地带来牛肉和酒，大骂黄德和诬告刘平，扬言要杀监军太监"
+        }
       },
       "phaseIdentities": [],
       "review": {
@@ -816,7 +1010,22 @@
         "keyEvents": [
           "唐国贤妃, 又称杨妃."
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "唐国朝廷",
+            "role": "杨贤妃/六宫之主"
+          },
+          {
+            "faction": "舞阳侯府",
+            "role": "奴婢/内宅成员"
+          }
+        ],
+        "debutLocation": {
+          "location": "蓬莱秘阁",
+          "locator": "0226.html",
+          "scene": "被唐皇李昂以一枚铜铢的价格卖给程宗扬作为奴婢，在交易文契上被迫按手印"
+        }
       },
       "phaseIdentities": [],
       "review": {
@@ -862,7 +1071,22 @@
         "keyEvents": [
           "角色卡未找到明确同名/别名；需要判断是新角色还是并入现有角色。\n用户裁定：批准。"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "北地兽蛮人",
+            "role": "兽蛮首领"
+          },
+          {
+            "faction": "吕氏外戚集团",
+            "role": "雇佣/勾结的武力"
+          }
+        ],
+        "debutLocation": {
+          "location": "长秋宫",
+          "locator": "六朝云龙吟/0375.html",
+          "scene": "中垒军被兽蛮武士屠戮殆尽后，最先破阵的兽蛮勇士举起青铜战斧高吼'古格尔'，众人随之狂呼，程宗扬认出此人正是大草原上左武军追剿的那支兽蛮部族首领"
+        }
       },
       "phaseIdentities": [],
       "review": {
@@ -907,7 +1131,22 @@
         "keyEvents": [
           "角色卡未找到明确同名/别名；需要判断是新角色还是并入现有角色。"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "刘氏宗亲",
+            "role": "帝室嫡脉/诸侯"
+          },
+          {
+            "faction": "黑魔海",
+            "role": "硕果仅存的大佬"
+          }
+        ],
+        "debutLocation": {
+          "location": "洛都",
+          "locator": "六朝燕歌行/0010.html",
+          "scene": "霍子孟夜访程宗扬时提及'阳武侯'，程宗扬内心回忆并分析霍子孟对阳武侯的态度及其政治立场"
+        }
       },
       "phaseIdentities": [],
       "review": {
@@ -996,7 +1235,18 @@
           "贾文和提及王茂弘与霍子孟已允诺三方盟誓",
           "叙述中将王茂弘与霍子孟并称为老狐狸"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "晋国",
+            "role": "丞相"
+          }
+        ],
+        "debutLocation": {
+          "location": "建康东府城",
+          "locator": "chapter205.html",
+          "scene": "萧遥逸带程宗扬前往丞相府拜见王茂弘，初见其人外貌：身材不高，胡须整齐雅致，目光锋芒不露"
+        }
       },
       "phaseIdentities": [],
       "review": {
@@ -1066,7 +1316,18 @@
         "ending": [
           "被殇侯拧断脖颈并击碎颅骨而死",
           "死在朱老头手里"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "瑶池宗",
+            "role": "长老"
+          }
+        ],
+        "debutLocation": {
+          "location": "太泉",
+          "locator": "六朝云龙吟/0122.html",
+          "scene": "程宗扬跟踪朱老头至屋后，一名须发皆白的老者立于破旧竹舍上，厉声质问殇侯和岳鸟人为何同至太泉，声称要取二人性命"
+        }
       },
       "phaseIdentities": [],
       "review": {
@@ -1113,7 +1374,22 @@
         "keyEvents": [
           "角色卡未找到明确同名/别名；需要判断是新角色还是并入现有角色。\n用户裁定：批准。"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "吕氏外戚集团",
+            "role": "护卫"
+          },
+          {
+            "faction": "汉国朝廷",
+            "role": "护卫（湖阳君门下）"
+          }
+        ],
+        "debutLocation": {
+          "location": "蓝田东市",
+          "locator": "六朝燕歌行/0073.html",
+          "scene": "在蓝田东市西北角的玉器行二楼，被谭仲招待饮酒时，与谭仲对话自称为虎落平阳、借地避风头的亡命之徒"
+        }
       },
       "phaseIdentities": [],
       "review": {
@@ -1161,6 +1437,16 @@
         ],
         "ending": [
           "被武二击杀，於五原城身亡"
+        ],
+        "affiliations": [
+          {
+            "faction": "泊陵鱼氏",
+            "role": "子弟"
+          },
+          {
+            "faction": "黑魔海",
+            "role": "合作者"
+          }
         ]
       },
       "phaseIdentities": [],
@@ -1199,7 +1485,22 @@
         "keyEvents": [
           "角色卡未找到明确同名/别名；需要判断是新角色还是并入现有角色。"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "宦官集团",
+            "role": "内侍/鱼朝恩义子"
+          },
+          {
+            "faction": "禁军",
+            "role": "右神策军统领"
+          }
+        ],
+        "debutLocation": {
+          "location": "西内苑（宫中某处）",
+          "locator": "0177.html",
+          "scene": "鱼朝恩点名吩咐张承业去西内苑掌管右神策军，张承业上前从鱼朝恩腰间金鱼袋中取出鱼符，受命执行任务"
+        }
       },
       "phaseIdentities": [],
       "review": {
@@ -1257,6 +1558,12 @@
         ],
         "ending": [
           "被程宗扬用手雷炸碎而死"
+        ],
+        "affiliations": [
+          {
+            "faction": "龙宸",
+            "role": "杀手（北方玄武七宿成员）"
+          }
         ]
       },
       "phaseIdentities": [],
@@ -1295,7 +1602,18 @@
         "keyEvents": [
           "角色卡未找到明确同名/别名；需要判断是新角色还是并入现有角色。"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "汉国朝廷",
+            "role": "赵王（诸侯王）"
+          }
+        ],
+        "debutLocation": {
+          "location": "光明观堂",
+          "locator": "0254.html",
+          "scene": "程宗扬向赵飞燕揭露平城君等人秘辛时，提及赵王刘彭祖被太子与后母用木偶诅咒一事"
+        }
       },
       "phaseIdentities": [],
       "review": {
@@ -1336,7 +1654,18 @@
         "keyEvents": [
           "角色卡未找到明确同名/别名；需要判断是新角色还是并入现有角色。"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "太乙真宗",
+            "role": "弟子（蔺采泉门下）"
+          }
+        ],
+        "debutLocation": {
+          "location": "清远玄真观",
+          "locator": "chapter160.html",
+          "scene": "程宗扬躲于道观内堂梁上，听到远处唿哨后两名道人掠入正殿，黄袍道人齐放鹤叫出吴行德名字，吴行德惨然回答师父蔺采泉被刺伤肺脏、性命垂危"
+        }
       },
       "phaseIdentities": [],
       "review": {
@@ -1401,7 +1730,18 @@
         "ending": [
           "被程宗扬从颈后刺入长刀钉死，尸体后被同门发现",
           "被程宗扬亲手杀死"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "乾贞道",
+            "role": ""
+          }
+        ],
+        "debutLocation": {
+          "location": "太泉",
+          "locator": "0135.html",
+          "scene": "在寻找赤阳圣果的人群中闻声而出，与沈黄经（阳钧宗）、玉魄子（长青宗）、朱殷（瑶池宗）四大宗门成员相遇。"
+        }
       },
       "phaseIdentities": [],
       "review": {
@@ -1511,7 +1851,18 @@
           "在太泉中了诅咒",
           "被困在苍澜无法脱身"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "阳钧宗",
+            "role": "道长"
+          }
+        ],
+        "debutLocation": {
+          "location": "太泉古阵某层库房",
+          "locator": "六朝云龙吟/0133.html",
+          "scene": "三宗（长青宗、阳钧宗、瑶池宗）联手对抗程宗扬等人时，以阳钧宗道长身份率十余名门人出现并参与围攻"
+        }
       },
       "phaseIdentities": [],
       "review": {
@@ -1564,7 +1915,18 @@
           "第1章从泊陵来到江州，质问鱼家小无夷被杀一事。",
           "与程宗扬对话后没入水中消失。"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "鱼家",
+            "role": "长老"
+          }
+        ],
+        "debutLocation": {
+          "location": "江州江畔",
+          "locator": "六朝云龙吟/0006.html",
+          "scene": "程宗扬等人乘船经过江州江畔时，鱼长老从芦苇荡中现身，拦截谢幼度，质问鱼家小无夷被杀一事并索取遗物。"
+        }
       },
       "phaseIdentities": [],
       "review": {
@@ -1602,7 +1964,13 @@
         "keyEvents": [
           "角色卡未找到明确同名/别名；需要判断是新角色还是并入现有角色。\n用户裁定：批准。"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "铁勒族",
+            "role": "公主"
+          }
+        ]
       },
       "phaseIdentities": [],
       "review": {
@@ -1735,7 +2103,18 @@
         ],
         "ending": [
           "被武二郎的九阳神功轰杀"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "龙宸",
+            "role": "辰星流变七妖之一、刺客"
+          }
+        ],
+        "debutLocation": {
+          "location": "庭院",
+          "locator": "六朝清羽记 chapter351",
+          "scene": "作为瘦刺客登场，小紫介绍其为辰星流变中七颗妖星的第三星，擅长玄冰指"
+        }
       },
       "phaseIdentities": [],
       "review": {
@@ -1773,7 +2152,22 @@
         "keyEvents": [
           "角色卡未找到明确同名/别名；需要判断是新角色还是并入现有角色。"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "晋国",
+            "role": "镇东将军徐度之子"
+          },
+          {
+            "faction": "石头城州府兵",
+            "role": "叛将（擅调军士）"
+          }
+        ],
+        "debutLocation": {
+          "location": "司空府",
+          "locator": "chapter190",
+          "scene": "在萧遥逸邀请程宗扬射猎东山时，徐敖尚未答话，其父徐度代为拒绝，说明日他要回湘州省亲"
+        }
       },
       "phaseIdentities": [],
       "review": {
@@ -1830,7 +2224,18 @@
         ],
         "ending": [
           "身死"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "神霄宗",
+            "role": "道人"
+          }
+        ],
+        "debutLocation": {
+          "location": "苍澜镇附近林中",
+          "locator": "六朝云龙吟/0150.html",
+          "scene": "太乙真宗门人被金火天丁大法烧死后，柳淳风从林中漫步而出，抚掌赞叹离火神符，与乾贞道尹思元联手对抗太乙真宗童行海等人"
+        }
       },
       "phaseIdentities": [],
       "review": {
@@ -1914,7 +2319,17 @@
         "keyEvents": [
           "角色卡未找到明确同名/别名；需要判断是新角色还是并入现有角色。\n用户裁定：批准。"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "星月湖",
+            "role": "老兵（退役）"
+          },
+          {
+            "faction": "程氏商会",
+            "role": "丹阳商号负责人/舞都生意打理者"
+          }
+        ]
       },
       "phaseIdentities": [],
       "review": {
@@ -1966,7 +2381,18 @@
         ],
         "ending": [
           "坠入电梯井身亡"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "云氏商会",
+            "role": "云家船队水手/护卫"
+          }
+        ],
+        "debutLocation": {
+          "location": "湖上（水战场）",
+          "locator": "六朝清羽记/chapter219.html",
+          "scene": "云家船队参战，海船上的光头大汉们转动秤锤状的冲杆，将敌船击碎"
+        }
       },
       "phaseIdentities": [],
       "review": {
@@ -2018,7 +2444,12 @@
           "被高衙内纠缠",
           "黑魔海的人从她家出来，接头人称其凝玉姬"
         ],
-        "ending": []
+        "ending": [],
+        "debutLocation": {
+          "location": "临安雷峰塔附近",
+          "locator": "六朝云龙吟/0012.html",
+          "scene": "李师师的马车内，凝姨以朱红锦袄美妇形象卷帘登场，被李师师介绍为姨母"
+        }
       },
       "phaseIdentities": [],
       "review": {
@@ -2054,7 +2485,18 @@
         "keyEvents": [
           "角色卡未找到明确同名/别名；需要判断是新角色还是并入现有角色。"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "洛都江湖势力",
+            "role": "大豪/游侠"
+          }
+        ],
+        "debutLocation": {
+          "location": "金市附近民宅赌场",
+          "locator": "第226章",
+          "scene": "程宗扬和卢景来到赌场内间，见到一个身材高大、颌下留须、眉角有刀疤的男子——朱安世，卢景与他以江湖切口交谈。"
+        }
       },
       "phaseIdentities": [],
       "review": {
@@ -2095,7 +2537,22 @@
         "keyEvents": [
           "角色卡未找到明确同名/别名；需要判断是新角色还是并入现有角色。\n用户裁定：批准。"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "宋国",
+            "role": "龙卫军右厢都指挥使"
+          },
+          {
+            "faction": "禁军",
+            "role": "禁军大将"
+          }
+        ],
+        "debutLocation": {
+          "location": "宋军大营",
+          "locator": "chapter304",
+          "scene": "王韬张挂江州地图、罗列宋军信息时，列出捧日军和龙卫军四厢四十个军的编制，提及葛怀敏为龙卫军右厢指挥使"
+        }
       },
       "phaseIdentities": [],
       "review": {
@@ -2136,7 +2593,18 @@
         "keyEvents": [
           "角色卡未找到明确同名/别名；需要判断是新角色还是并入现有角色。\n用户裁定：批准。"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "黑魔海",
+            "role": "九御"
+          }
+        ],
+        "debutLocation": {
+          "location": "山间",
+          "locator": "六朝云龙吟/0249.html",
+          "scene": "从树上出现，手持紫色水晶，口中念念有词，施展巫术辅助韩定国与程宗扬交战"
+        }
       },
       "phaseIdentities": [],
       "review": {
@@ -2177,7 +2645,18 @@
         "keyEvents": [
           "波斯王子的侍妾，被度化的祭品"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "释特昧普势力",
+            "role": "弟子/信徒"
+          }
+        ],
+        "debutLocation": {
+          "location": "佛堂",
+          "locator": "六朝燕歌行/0127.html",
+          "scene": "作为波斯贵妇在佛像前接受释特昧普赐名，被赐法号「善蕴」，自称弟子，展现虔诚的宗教仪式姿态"
+        }
       },
       "phaseIdentities": [],
       "review": {
@@ -2240,7 +2719,18 @@
         ],
         "ending": [
           "被程宗扬捏碎脑袋而亡"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "龙宸",
+            "role": "杀手（玄武七宿成员）"
+          }
+        ],
+        "debutLocation": {
+          "location": "河岸芦苇丛附近",
+          "locator": "第277章",
+          "scene": "程宗扬向云丹琉分析龙宸杀手身份时，指出岸上的胖子是室火猪，属于龙宸北方玄武七宿之一"
+        }
       },
       "phaseIdentities": [],
       "review": {
@@ -2293,7 +2783,12 @@
         ],
         "ending": [
           "被小紫勒死"
-        ]
+        ],
+        "debutLocation": {
+          "location": "楼道",
+          "locator": "六朝云龙吟/0143.html",
+          "scene": "程宗扬在楼道电梯附近遭遇三名持械汉子袭击，此人持枪参与围攻，后被程宗扬雷射刀齐腕斩断右手，仍以左手持枪继续战斗。"
+        }
       },
       "phaseIdentities": [],
       "review": {
@@ -2331,7 +2826,18 @@
         "keyEvents": [
           "角色卡未找到明确同名/别名；需要判断是新角色还是并入现有角色。\n用户裁定：批准。"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "龙宸",
+            "role": "朱雀七宿成员"
+          }
+        ],
+        "debutLocation": {
+          "location": "大宁坊某祭堂",
+          "locator": "0195.html",
+          "scene": "程宗扬在祭堂梁上潜伏，鬼金羊在堂内巡视，瞳孔变为方瞳，映出墙根的黑纱幞头（程宗扬藏身处）"
+        }
       },
       "phaseIdentities": [],
       "review": {
@@ -2372,7 +2878,13 @@
         "formsOfAddress": [],
         "joining": [],
         "keyEvents": [],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "华妙宗",
+            "role": "宗主"
+          }
+        ]
       },
       "phaseIdentities": [],
       "review": {
@@ -2414,7 +2926,22 @@
         "keyEvents": [
           "用户裁定：唐国篇郭氏称谓限定为太皇太后(唐)，避免与其他国家/阶段的太皇太后误合并。"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "唐国朝廷",
+            "role": "太皇太后"
+          }
+        ],
+        "debutLocation": {
+          "location": "曲江苑",
+          "locator": "0247章",
+          "scene": "太皇太后郭氏乘凤辇出行，神情凄苦，脸上犹带泪痕，与义女白霓裳同车，途称其为'好孩子'并致谢"
+        },
+        "storyAge": {
+          "value": "已过六旬",
+          "basis": "原文：'如今已过六旬，虽然能看出年轻时极美，但毕竟岁月不饶人，已显老态'"
+        }
       },
       "phaseIdentities": [],
       "review": {
@@ -2485,7 +3012,18 @@
         ],
         "ending": [
           "被小紫勒死，魂魄被收进都卢难旦妖铃。"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "苍澜外姓人",
+            "role": "首领"
+          }
+        ],
+        "debutLocation": {
+          "location": "太泉古阵",
+          "locator": "第143章/仇报 第5章",
+          "scene": "在漆黑楼道内挎刀而立，带领手下举火把围堵程宗扬"
+        }
       },
       "phaseIdentities": [],
       "review": {
@@ -2523,7 +3061,22 @@
         "keyEvents": [
           "角色卡未找到明确同名/别名；需要判断是新角色还是并入现有角色。"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "晋国",
+            "role": "舞都侯"
+          },
+          {
+            "faction": "吕氏外戚集团",
+            "role": "外戚（张丽华之弟）"
+          }
+        ],
+        "debutLocation": {
+          "location": "建康河上",
+          "locator": "chapter159",
+          "scene": "萧遥逸在河上与张之煌相遇，张之煌因被萧遥逸指责辱骂岳帅而道歉讨饶，后与萧遥逸商议借海东青一事"
+        }
       },
       "phaseIdentities": [],
       "review": {
@@ -2580,7 +3133,22 @@
           "以毒血雾袭击闻清语",
           "防备黑魔海暗藏手段"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "吕氏外戚集团",
+            "role": "太后乳母"
+          },
+          {
+            "faction": "汉国朝廷",
+            "role": "太后近侍"
+          }
+        ],
+        "debutLocation": {
+          "location": "山路",
+          "locator": "六朝云龙吟/0280.html",
+          "scene": "以白发老妪形象出现，面对龙宸众人威胁小玲儿时出面与闻清语交涉，提及澄心棠花蕊"
+        }
       },
       "phaseIdentities": [],
       "review": {
@@ -2622,6 +3190,12 @@
         ],
         "ending": [
           "死有余辜"
+        ],
+        "affiliations": [
+          {
+            "faction": "长青宗",
+            "role": "领队/师兄"
+          }
         ]
       },
       "phaseIdentities": [],
@@ -2721,7 +3295,18 @@
         ],
         "ending": [
           "被云丹琉斩杀，身体分成两段坠入河中"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "龙宸",
+            "role": "玄武七宿杀手"
+          }
+        ],
+        "debutLocation": {
+          "location": "芦苇间/河岸",
+          "locator": "六朝云龙吟 第277-278章",
+          "scene": "作为龙宸北方玄武七宿杀手之一，从芦苇丛中现身，与斗木獬、室火猪等人形成包围圈，截杀云丹琉一行。"
+        }
       },
       "phaseIdentities": [],
       "review": {
@@ -2787,7 +3372,22 @@
         "ending": [
           "已死亡（被程宗扬等人杀死）",
           "死在程宗扬手中（第2章敌聚：飞鸟兄弟中的哥哥飞鸟熊藏死在程侯手中）"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "黑魔海",
+            "role": "供奉"
+          },
+          {
+            "faction": "东瀛",
+            "role": "乱波上忍"
+          }
+        ],
+        "debutLocation": {
+          "location": "晋宫/建康宫中某处密室",
+          "locator": "chapter206",
+          "scene": "程宗扬与萧遥逸在晋宫中剥下被杀的忍者面具，发现其真名为飞鸟熊藏，并从其随身竹筒中的信笺得知其身份来历"
+        }
       },
       "phaseIdentities": [],
       "review": {
@@ -2833,7 +3433,18 @@
         "keyEvents": [
           "角色卡未找到明确同名/别名；需要判断是新角色还是并入现有角色。"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "盘江程氏",
+            "role": "护卫"
+          }
+        ],
+        "debutLocation": {
+          "location": "大宁坊街巷",
+          "locator": "第十九章（0191.html）",
+          "scene": "程宗扬一行被十方丛林追杀时，曲武与范斌主动表明身份，声称在鹰愁峪就认识程侯，表示愿意追随护卫"
+        }
       },
       "phaseIdentities": [],
       "review": {
@@ -2874,7 +3485,18 @@
         "keyEvents": [
           "太艺真宗教御、王珪师弟、蔺采泉师侄"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "太乙真宗",
+            "role": "道人"
+          }
+        ],
+        "debutLocation": {
+          "location": "小瀛洲寺庙",
+          "locator": "第88章",
+          "scene": "与剑玉姬交手后从矮墙后跃出，被剑玉姬认出是太乙真宗的道友"
+        }
       },
       "phaseIdentities": [],
       "review": {
@@ -2938,7 +3560,18 @@
         ],
         "ending": [
           "被王哲击败，退出战场"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "罗马军团",
+            "role": "联军统帅"
+          }
+        ],
+        "debutLocation": {
+          "location": "战场中央",
+          "locator": "chapter12.html",
+          "scene": "罗马将领从军团中驰出，近卫骑士上前用生涩语调喝道\"罗马联军统帅，阿伽门侬！\"，随后阿伽门侬与韩庚对峙并展开阵前对话"
+        }
       },
       "phaseIdentities": [
         {
@@ -3005,7 +3638,18 @@
           "被十方丛林秘术脑控、采伐功力",
           "十方丛林从诸多女性洗脑调教、榨干功力直至化为干尸鼎炉，用以炼制佛门至宝"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "罗马军团",
+            "role": "祭司/幕僚"
+          }
+        ],
+        "debutLocation": {
+          "location": "草原战场",
+          "locator": "chapter17.html",
+          "scene": "手提韩庚滴血的头颅出现在血腥战场，傲然挺起丰颀娇躯，如噬血魔女般现身"
+        }
       },
       "phaseIdentities": [
         {
@@ -3086,7 +3730,12 @@
         ],
         "ending": [
           "被长箭射穿颈部而死"
-        ]
+        ],
+        "debutLocation": {
+          "location": "飞往上海的班机上",
+          "locator": "第1集·太乙真宗 序幕篇/chapter2.html",
+          "scene": "程宗扬与段强在飞机上开着穿越的玩笑时，机身遭遇气流，一道紫色雷电闪过，两人凭空从飞机上消失。"
+        }
       },
       "phaseIdentities": [
         {
@@ -3155,7 +3804,22 @@
         ],
         "ending": [
           "被金发女子斩首（头颅被提起）"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "左武军",
+            "role": "第一军团天武营主将"
+          },
+          {
+            "faction": "太乙真宗",
+            "role": "王哲弟子/未来掌教人选"
+          }
+        ],
+        "debutLocation": {
+          "location": "草原战场",
+          "locator": "chapter12.html",
+          "scene": "左武军天武营战车疾驰至战场中央，韩庚立于车上，身边竖着赤红长戟，向罗马军团自报家门"
+        }
       },
       "phaseIdentities": [
         {
@@ -3240,7 +3904,18 @@
           "与蔺采泉私交易先任三年掌教再传己",
           "王哲死后与阐教御回龙池即爆发争吵"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "太乙真宗",
+            "role": "教御"
+          }
+        ],
+        "debutLocation": {
+          "location": "草原战场（山丘之上）",
+          "locator": "chapter12.html",
+          "scene": "王哲率军迎战罗马军团，商乐轩随太乙真宗四位教御在山丘上观战，程宗扬在王哲身旁看到商乐轩的面孔。"
+        }
       },
       "phaseIdentities": [
         {
@@ -3331,7 +4006,18 @@
           "在竹筏上晕船呕吐（第73章）",
           "与易彪一起调侃，对水镜检查柳翠烟怀孕很兴奋（第252章）"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "白湖商馆",
+            "role": "护卫"
+          }
+        ],
+        "debutLocation": {
+          "location": "南荒密林废墟",
+          "locator": "chapter103",
+          "scene": "作为白湖商馆护卫随商队遭遇鬼王峒战士袭击，被易彪安排与程宗扬等人埋伏在马匹后方作为预备队"
+        }
       },
       "phaseIdentities": [
         {
@@ -3542,7 +4228,18 @@
           "第62章·生变：当仁不让站出迎敌",
           "第63章·陷阱：被武二郎打后哭得像孩子"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "云氏商会",
+            "role": "护卫"
+          }
+        ],
+        "debutLocation": {
+          "location": "废墟",
+          "locator": "第103章",
+          "scene": "在废墟中生起篝火，配合祁远烧烤采来的蘑菇和碧鲮族带来的鱼干招待众人"
+        }
       },
       "phaseIdentities": [
         {
@@ -3746,7 +4443,13 @@
           "在程宗扬面前施虐炫耀",
           "与程宗扬交战，使用黑色长鞭"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "鬼王峒",
+            "role": "峒中主事者（代理鬼巫王处理峒务）"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -3967,7 +4670,22 @@
         ],
         "ending": [
           "死于战场，化为燃烧的光芒；（高手榜红:身死）"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "太乙真宗",
+            "role": "宗师"
+          },
+          {
+            "faction": "秦军军团",
+            "role": "师帅/主帅"
+          }
+        ],
+        "debutLocation": {
+          "location": "军营帐篷",
+          "locator": "chapter11.html",
+          "scene": "程宗扬被月霜制服并打断骨头时大声呼救，王哲听到禀报后迅速赶来，一手抓住程宗扬肩头制止月霜的致命攻击"
+        }
       },
       "phaseIdentities": [
         {
@@ -4040,7 +4758,22 @@
         "formsOfAddress": [],
         "joining": [],
         "keyEvents": [],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "左武军",
+            "role": "军人"
+          },
+          {
+            "faction": "太乙真宗",
+            "role": "弟子"
+          }
+        ],
+        "debutLocation": {
+          "location": "军营（帐篷区域）",
+          "locator": "第7章·真阳",
+          "scene": "月霜因程宗扬拒绝从军而愤怒，用皮鞭抽打程宗扬面部，斥责他是见利忘义的奸商"
+        }
       },
       "phaseIdentities": [
         {
@@ -4136,7 +4869,18 @@
           "用铁链锁住喝醉同族",
           "出主意让兽蛮人冒充舞阳侯府奴仆通关"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "兽蛮人",
+            "role": "兽蛮武士首领"
+          }
+        ],
+        "debutLocation": {
+          "location": "河滩",
+          "locator": "第28章",
+          "scene": "程宗扬在河滩遭遇兽蛮老者阿合马，阿合马认出程宗扬后怒而厮杀，被哈迷蚩呼唤制止，二兽以兽蛮人结义兄弟礼仪相认"
+        }
       },
       "phaseIdentities": [
         {
@@ -4201,7 +4945,18 @@
         "keyEvents": [],
         "ending": [
           "离开程宗扬，去寻找自己的家园和族人"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "白湖商馆",
+            "role": "奴隶（舞姬）"
+          }
+        ],
+        "debutLocation": {
+          "location": "地牢/岩洞",
+          "locator": "第21章",
+          "scene": "程宗扬被关在水牢后的岩洞囚室中，与一名红褐色头发的少女交谈时，她自我介绍名为阿姬曼·芭娜，说自己是被买来的奴隶。"
+        }
       },
       "phaseIdentities": [
         {
@@ -4277,7 +5032,17 @@
           "被程宗扬肛交",
           "用海螺自慰并描述与程宗扬的性爱"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "花苗",
+            "role": "族人/献给鬼巫王的新娘"
+          },
+          {
+            "faction": "鬼王峒",
+            "role": "待进献的新娘"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -4503,7 +5268,18 @@
           "在程宗扬面前哭泣求饶",
           "被潘金莲扶起并露出后颈小符"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "唐国朝廷",
+            "role": "公主（唐皇李昂胞妹）"
+          }
+        ],
+        "debutLocation": {
+          "location": "大明宫东内苑",
+          "locator": "0159.html",
+          "scene": "乘朱轮金饰翠羽马车入宫，下车时玉手搭在程宗扬掌心，急切询问母后病情，随即被宫人迎入长生殿"
+        }
       },
       "phaseIdentities": [
         {
@@ -4670,7 +5446,18 @@
           "高智商等会合，被程宗扬调来协助",
           "接到林先生玉牌传讯，半个时辰内可施术联络"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "雪隼佣兵团",
+            "role": "团员"
+          }
+        ],
+        "debutLocation": {
+          "location": "江州附近江畔",
+          "locator": "六朝云龙吟/0006.html",
+          "scene": "程宗扬在船上，敖润被提及为随行人员之一，在船上与程宗扬对话提及要去知会月姑娘"
+        }
       },
       "phaseIdentities": [
         {
@@ -4786,7 +5573,13 @@
           "对某人（乖徒儿）展现八臂神通并得意炫耀",
           "自称已死老僧"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "龙宸",
+            "role": ""
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -4863,7 +5656,18 @@
           "被内侍踩脸羞辱（第7章）",
           "目睹潘金莲肛交后震惊（第八章）"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "瑶池宗",
+            "role": "奉玦仙子"
+          }
+        ],
+        "debutLocation": {
+          "location": "静室",
+          "locator": "第0133章",
+          "scene": "赵归真请过程宗扬后，一个头戴玉叶花冠、白衣胜雪的女子轻烟般踏入室内，程宗扬认出她便是瑶池宗的奉玦仙子白霓裳"
+        }
       },
       "phaseIdentities": [
         {
@@ -5026,7 +5830,18 @@
           "在帐篷中与武二郎发生亲密关系（多次暗示）",
           "见证武二郎大展神威后，态度从恨意转为顺服、依恋"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "丹霞宗",
+            "role": "宗主之女/未来宗主继承人（持有宗主印信）"
+          }
+        ],
+        "debutLocation": {
+          "location": "太泉古阵某处（赤阳圣果附近林地）",
+          "locator": "第0135章",
+          "scene": "与丁师兄在赤阳圣果生长处等候果实成熟，铁马堂的人出现后被丁师兄拉着逃离"
+        }
       },
       "phaseIdentities": [
         {
@@ -5099,7 +5914,22 @@
           "被程宗扬放在内院大门当门神",
           "与青面兽一同吃羊腿"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "程氏商会",
+            "role": "家丁/随从"
+          },
+          {
+            "faction": "北地兽蛮人",
+            "role": "兽蛮战士"
+          }
+        ],
+        "debutLocation": {
+          "location": "浮凌江上",
+          "locator": "六朝云龙吟/0006.html",
+          "scene": "程宗扬威胁扣羊时，豹子头与青面兽一起捂住金兀术的嘴巴阻止其争辩"
+        }
       },
       "phaseIdentities": [
         {
@@ -5187,7 +6017,22 @@
         ],
         "ending": [
           "被女儿小紫亲手杀死，腹下淌满鲜血，死在血泊中。"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "碧鲮族",
+            "role": "族人"
+          },
+          {
+            "faction": "鬼王峒",
+            "role": ""
+          }
+        ],
+        "debutLocation": {
+          "location": "鬼王峒",
+          "locator": "chapter142（第9集·九幽阴煞）",
+          "scene": "从破碎的洞窟中爬出，身穿华丽珍珠舞衣，被龙神袭击后与小紫重逢"
+        }
       },
       "phaseIdentities": [
         {
@@ -5276,6 +6121,12 @@
         "ending": [
           "第6章后重伤，第7章提及仍重伤未死，尾随程宗扬等人。",
           "死亡，双目睁大眼睛"
+        ],
+        "affiliations": [
+          {
+            "faction": "龙宸",
+            "role": "二十八宿正星/核心杀手"
+          }
         ]
       },
       "phaseIdentities": [
@@ -5444,7 +6295,22 @@
           "伪装戴假胡须和墨镜",
           "对太后流露柔情"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "汉国朝廷",
+            "role": "中常侍（金珰右貂）"
+          },
+          {
+            "faction": "宦官集团",
+            "role": "太后亲信"
+          }
+        ],
+        "debutLocation": {
+          "location": "山间小溪边芦苇丛",
+          "locator": "六朝云龙吟/0247.html",
+          "scene": "程宗扬与朱老头在溪边芦苇丛中议论太监怪癖时，一个阴柔声音响起，蔡敬仲裸身无衣出现，自称\"奴才蔡敬仲，见过阳武侯\"，庄重地向朱老头行礼"
+        }
       },
       "phaseIdentities": [
         {
@@ -5626,7 +6492,26 @@
           "第三章封住危月燕穴道后逃脱",
           "第八章被妖艳女子踢中要害后踹门追捕"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "丹霞宗",
+            "role": "宗主"
+          },
+          {
+            "faction": "凉州盟",
+            "role": "盟中成员（丹霞宗宗主）"
+          },
+          {
+            "faction": "广源行",
+            "role": "被扶植的傀儡"
+          }
+        ],
+        "debutLocation": {
+          "location": "程宗扬住处",
+          "locator": "六朝燕歌行/0176.html",
+          "scene": "众人讨论凉州盟事务时提及，继任丹霞宗宗主柴永剑力挺周飞入盟，周飞又拉拢盟中一帮人鼓噪声势。"
+        }
       },
       "phaseIdentities": [
         {
@@ -5774,7 +6659,26 @@
           "给\"被称凝奴的凝羽\"送药的乖巧助手",
           "与孙寿一同被收，将尊严踩脚底极力迎合"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "黑魔海",
+            "role": "御姬奴"
+          },
+          {
+            "faction": "巫宗",
+            "role": "成员（已叛出）"
+          },
+          {
+            "faction": "刘建集团",
+            "role": "太子妃"
+          }
+        ],
+        "debutLocation": {
+          "location": "阙楼",
+          "locator": "0003.html",
+          "scene": "刘建兵败被围，阙楼内江充将其作为刘建家眷绑缚推出，成光口塞麻布、双手被缚、狼狈不堪地被擒获出场"
+        }
       },
       "phaseIdentities": [
         {
@@ -5905,7 +6809,22 @@
           "赌咒发誓绝不背叛王爷",
           "竞争枢密使职位"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "宦官集团",
+            "role": "近侍/心腹"
+          },
+          {
+            "faction": "唐国朝廷",
+            "role": "博陆郡王府内侍"
+          }
+        ],
+        "debutLocation": {
+          "location": "大明宫蓬莱秘阁",
+          "locator": "0238.html/第23集",
+          "scene": "李辅国的软舆到来，程元振以王爷亲信身份扯了仇士良一把，开口催促其过来扶舆"
+        }
       },
       "phaseIdentities": [
         {
@@ -6064,7 +6983,18 @@
           "杨玉环",
           "黛绮丝等多人发生关系"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "盘江程氏",
+            "role": "少主/大少爷"
+          }
+        ],
+        "debutLocation": {
+          "location": "军营",
+          "locator": "第7章·真阳",
+          "scene": "月霜因程宗扬拒绝从军、以商人身份趁机牟利而愤怒，挥鞭打伤其面部，程宗扬质问为何被打，二人发生冲突"
+        }
       },
       "phaseIdentities": [
         {
@@ -6727,7 +7657,22 @@
         ],
         "ending": [
           "（原文未交代最终结局，仅知受伤被静善制住）"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "香竹寺",
+            "role": "挂单比丘尼"
+          }
+        ],
+        "debutLocation": {
+          "location": "程宗扬住所（程记粮铺）",
+          "locator": "chapter320.html",
+          "scene": "一名四十多岁的尼姑立在门外，自称与程宗扬是旧识，实为香竹寺之事而来找程宗扬"
+        },
+        "storyAge": {
+          "value": "四十多岁",
+          "basis": "一名四十多岁的尼姑立在门外"
+        }
       },
       "phaseIdentities": [
         {
@@ -6936,7 +7881,22 @@
           "与王韬并肩作战，逐步撤退",
           "与其他兄弟在引虎之战中分路突进合击"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "星月湖",
+            "role": "八骏第六骏/青骓"
+          }
+        ],
+        "debutLocation": {
+          "location": "烈山",
+          "locator": "第25集·江州篇（1/7），chapter293",
+          "scene": "在烈山雪战中率星月湖大营二团四营军士背水列阵迎击宋国捧日军"
+        },
+        "storyAge": {
+          "value": "三四十岁",
+          "basis": "马上的骑手看上去三四十岁年纪"
+        }
       },
       "phaseIdentities": [
         {
@@ -7141,7 +8101,18 @@
           "被程宗扬行礼",
           "参与宫变，胸伤迸裂"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "汉国朝廷",
+            "role": "中常侍"
+          }
+        ],
+        "debutLocation": {
+          "location": "玉堂前殿",
+          "locator": "六朝云龙吟/0244.html",
+          "scene": "蔡常侍离开后，形如武夫的单超长身而起，一步跨出殿门"
+        }
       },
       "phaseIdentities": [
         {
@@ -7214,7 +8185,22 @@
           "在鬼巫王蛊惑演说中达到高潮",
           "与朱诺并肩如从坟墓走出"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "红苗族",
+            "role": "娄蒙之妻/红苗未来族长夫人"
+          },
+          {
+            "faction": "鬼王峒",
+            "role": "被驯服的媚奴"
+          }
+        ],
+        "debutLocation": {
+          "location": "鬼王峒·奴隶洞窟",
+          "locator": "chapter114",
+          "scene": "在红苗人聚居的洞窟深处，被苏荔发现正与狗头鬼仆进行巫术仪式，原是苏荔闺中密友、娄蒙之妻"
+        }
       },
       "phaseIdentities": [
         {
@@ -7436,7 +8422,13 @@
           "被潘金莲救下并罩上外衣",
           "与乐明珠关系亲密，常一起行动"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "光明观堂",
+            "role": "弟子"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -7500,7 +8492,18 @@
         ],
         "ending": [
           "失踪"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "汉国朝廷",
+            "role": "定陶王（宗室藩王）"
+          }
+        ],
+        "debutLocation": {
+          "location": "未明（宫殿议事场所）",
+          "locator": "六朝云龙吟·0365章",
+          "scene": "霍子孟在朝臣商议继嗣人选时提及'还有定陶王刘欣'，将其列为天子驾崩后的嗣君候选人之一"
+        }
       },
       "phaseIdentities": [
         {
@@ -7647,7 +8650,26 @@
         ],
         "ending": [
           "（高手榜红:身死）"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "凉州盟",
+            "role": "副盟主"
+          },
+          {
+            "faction": "丹霞宗",
+            "role": "弟子"
+          }
+        ],
+        "debutLocation": {
+          "location": "太泉古阵/火焰山",
+          "locator": "六朝云龙吟/0140.html",
+          "scene": "在太泉古阵的火焰山洞口处，与白仙儿一起寻找赤阳圣果，白仙儿称他为丁师哥"
+        },
+        "storyAge": {
+          "value": "约30",
+          "basis": "丁志雄三十来岁年纪"
+        }
       },
       "phaseIdentities": [
         {
@@ -7736,7 +8758,18 @@
         ],
         "ending": [
           "被夺官，充任看班外殿直，执戟"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "汉国朝廷",
+            "role": "执戟郎"
+          }
+        ],
+        "debutLocation": {
+          "location": "玉堂前殿",
+          "locator": "第0244章",
+          "scene": "执戟入殿，对纠缠程宗扬的侏儒谎称天子要杀尽侏儒，吓得侏儒大哭逃窜，为程宗扬解围。"
+        }
       },
       "phaseIdentities": [
         {
@@ -7830,7 +8863,18 @@
           "拦下中常侍询问",
           "处理吕氏府邸骚乱"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "汉国朝廷",
+            "role": "城门令"
+          }
+        ],
+        "debutLocation": {
+          "location": "洛都",
+          "locator": "六朝云龙吟/0217.html",
+          "scene": "董宣驾车拦在道路正中，跃下马车朝湖阳君车仗走去，自报家门求见湖阳君"
+        }
       },
       "phaseIdentities": [
         {
@@ -7907,7 +8951,18 @@
         ],
         "ending": [
           "原文仅提及‘横暴如董卓，最终都葬身黄泉’，具体死亡细节未给出。"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "凉州军",
+            "role": "统帅/边将"
+          }
+        ],
+        "debutLocation": {
+          "location": "南宫长秋宫外",
+          "locator": "第3集",
+          "scene": "凉州军士卒将贾文和与定陶王团团护住时，董卓手提短戟，立于前方"
+        }
       },
       "phaseIdentities": [
         {
@@ -7979,7 +9034,12 @@
         ],
         "ending": [
           "被击杀（第117章小紫提及‘帮程头儿杀了龙神’）"
-        ]
+        ],
+        "debutLocation": {
+          "location": "鬼王峒地下祭台",
+          "locator": "chapter126.html",
+          "scene": "乐明珠被绑在刻有鬼脸图案的祭台上，作为献给龙神的祭品，小紫解释祭链是龙神祭台所用之物"
+        }
       },
       "phaseIdentities": [
         {
@@ -8174,7 +9234,13 @@
           "调停白素贞与许仙决战",
           "白素贞与小青皈依金山寺门下"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "十方丛林",
+            "role": "金山寺大师"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -8244,7 +9310,26 @@
           "被程宗扬开苞",
           "透露消息给阮香琳"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "黑魔海",
+            "role": "自荐客卿（非正式聘请）"
+          },
+          {
+            "faction": "十方丛林",
+            "role": "黑魔海派出的接头忍者"
+          },
+          {
+            "faction": "飞鸟家族",
+            "role": "忍者"
+          }
+        ],
+        "debutLocation": {
+          "location": "靖恭坊",
+          "locator": "第0114章",
+          "scene": "作为女刺客潜入水香楼行刺程宗扬，失手被擒后被关押审讯"
+        }
       },
       "phaseIdentities": [
         {
@@ -8338,7 +9423,18 @@
         ],
         "ending": [
           "（高手榜红:身死）"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "龙宸",
+            "role": "长老"
+          }
+        ],
+        "debutLocation": {
+          "location": "太泉古阵（魔墟）",
+          "locator": "六朝云龙吟/0163.html",
+          "scene": "广源行为开启魔墟禁制，重金请来龙宸长老焚无尘协助。"
+        }
       },
       "phaseIdentities": [
         {
@@ -8427,7 +9523,22 @@
           "在洛都找宅所（第1章）",
           "被程宗扬按着肩膀坐下，无法辩解（第4章）"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "平山宗",
+            "role": "弟子/法师"
+          },
+          {
+            "faction": "雪隼佣兵团",
+            "role": "佣兵/法师"
+          }
+        ],
+        "debutLocation": {
+          "location": "江边营地",
+          "locator": "chapter248",
+          "scene": "冯源自称辟谷只喝清水，在灶前施法生火时却意外烧了帐篷，被队友戏称为\"冯大法\""
+        }
       },
       "phaseIdentities": [
         {
@@ -8650,7 +9761,22 @@
           "与义纵等人冲突",
           "卷入军中"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "羽林天军",
+            "role": "羽林郎/中郎将/将军"
+          },
+          {
+            "faction": "霍氏外戚集团",
+            "role": "霍大将军亲信家奴"
+          }
+        ],
+        "debutLocation": {
+          "location": "酒肆",
+          "locator": "六朝云龙吟/0225.html，第4章争姝",
+          "scene": "进入胡姬酒肆，自称姓冯名子都，是宫里的羽林中郎将，搭讪调戏胡姬"
+        }
       },
       "phaseIdentities": [
         {
@@ -8719,7 +9845,18 @@
           "第3章大捷：安置梁公子购来的奴婢",
           "第8章奔命：报信有贼，催促高智商起床"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "太尉府",
+            "role": "管家"
+          }
+        ],
+        "debutLocation": {
+          "location": "太尉府",
+          "locator": "六朝云龙吟/0029.html",
+          "scene": "太尉府的管家富安提着灯笼，领着林冲进了一间厢房，引林冲去见高太尉"
+        }
       },
       "phaseIdentities": [
         {
@@ -8791,7 +9928,17 @@
           "被杨玉环吩咐收好纸张",
           "被程宗扬反制时狼狈万分"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "宦官集团",
+            "role": "太监"
+          },
+          {
+            "faction": "舞阳侯府",
+            "role": "杨玉环门下太监/侍从"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -8869,7 +10016,22 @@
           "推荐禁军将领成为股东，换取金铢",
           "被御史参奏但札子无下文"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "宋国",
+            "role": "太尉"
+          },
+          {
+            "faction": "太尉府",
+            "role": "太尉"
+          }
+        ],
+        "debutLocation": {
+          "location": "临安雷峰塔",
+          "locator": "第8章 衙内",
+          "scene": "俞子元向程宗扬提及威远镖局失镖一事，透露货物属于太尉府，并介绍高俅膝下无子、过继侄儿高衙内的家庭情况。"
+        }
       },
       "phaseIdentities": [
         {
@@ -8941,7 +10103,26 @@
           "与阮香琳等女性淫乱",
           "被阮香凝催眠控制"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "太尉府",
+            "role": "螟蛉子/衙内"
+          },
+          {
+            "faction": "宋国",
+            "role": "太尉府衙内"
+          },
+          {
+            "faction": "禁军",
+            "role": "高俅螟蛉子"
+          }
+        ],
+        "debutLocation": {
+          "location": "五岳楼（寺庙附近）",
+          "locator": "第8章/0017.html",
+          "scene": "在五岳楼调戏林冲之妻（凝姨），被林冲发现后欲打却因对方身份而罢手"
+        }
       },
       "phaseIdentities": [
         {
@@ -9353,7 +10534,18 @@
         ],
         "ending": [
           "身死（被程宗扬斩杀）"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "黑魔海",
+            "role": "长安主事人"
+          }
+        ],
+        "debutLocation": {
+          "location": "咸宜观",
+          "locator": "六朝燕歌行/0179.html 第八章 留仙来客",
+          "scene": "情报提及神策军观军容使鱼朝恩傍晚进入咸宜观，与教御宫万古筹备上元节"
+        }
       },
       "phaseIdentities": [
         {
@@ -9506,7 +10698,18 @@
         ],
         "ending": [
           "被龙神吃掉（龙神嘴巴合拢，齿间发出碎响）；（高手榜红:身死）"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "鬼王峒",
+            "role": "峒主"
+          }
+        ],
+        "debutLocation": {
+          "location": "南荒鬼王峒区域",
+          "locator": "chapter102",
+          "scene": "小紫提及阁罗拿来的棉帕是给鬼巫王大人的礼物，透露其作为鬼王峒统治者接受各族献祭的身份"
+        }
       },
       "phaseIdentities": [
         {
@@ -9708,7 +10911,22 @@
         ],
         "ending": [
           "被太皇太后打发出去，生死未卜"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "汉国朝廷",
+            "role": "大貂珰（宦官）"
+          },
+          {
+            "faction": "宦官集团",
+            "role": "太皇太后刘娥身边最宠信的太监"
+          }
+        ],
+        "debutLocation": {
+          "location": "明庆寺（观音殿）",
+          "locator": "六朝云龙吟/第79章",
+          "scene": "太皇太后出行龙华盛会驾临明庆寺，郭槐作为大貂珰随行伺候，被太皇太后称为'小郭子'"
+        }
       },
       "phaseIdentities": [
         {
@@ -9784,7 +11002,18 @@
         ],
         "ending": [
           "被剑玉姬刺死；（高手榜蓝:下落未确定）"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "汉国游侠",
+            "role": "布衣大侠"
+          }
+        ],
+        "debutLocation": {
+          "location": "伊阙",
+          "locator": "六朝云龙吟/0212.html 第2章",
+          "scene": "程宗扬通过一群游侠少年的议论，了解到郭大侠被迁徙及其门客杀人的事件背景"
+        }
       },
       "phaseIdentities": [
         {
@@ -9955,7 +11184,26 @@
           "获赠侯爵之位",
           "与定陶王（改名郭靖前身）互为朋友"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "舞阳侯府",
+            "role": "继承人"
+          },
+          {
+            "faction": "汉国游侠",
+            "role": "郭解幼子"
+          }
+        ],
+        "debutLocation": {
+          "location": "洛都郊外（郭解墓地）",
+          "locator": "六朝燕歌行0019.html",
+          "scene": "延香抱着年幼的郭靖在父亲郭解的葬礼上，程宗扬在坟前立誓收其为义子，宣布他为舞阳侯继承人"
+        },
+        "storyAge": {
+          "value": "约2-3岁",
+          "basis": "郭靖在葬礼上被抱在怀中，口齿不清，尚为幼童；与定陶王年龄相近，定陶王被认为‘年龄尚幼，再大两岁就不好说了’"
+        }
       },
       "phaseIdentities": [
         {
@@ -10042,7 +11290,22 @@
           "协助看护赵合德",
           "保管剧孟交予的赤阳圣果"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "星月湖",
+            "role": "旧部/成员"
+          },
+          {
+            "faction": "北地兽蛮人",
+            "role": "兽蛮武士"
+          }
+        ],
+        "debutLocation": {
+          "location": "洛都",
+          "locator": "第19章",
+          "scene": "卓云君前往西邸取赤阳圣果时，得知剧孟将赤阳圣果交给哈迷蚩保管，哈迷蚩随后动身也要明天午时才能赶到"
+        }
       },
       "phaseIdentities": [
         {
@@ -10109,7 +11372,22 @@
         ],
         "ending": [
           "被刺杀身亡"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "黑魔海",
+            "role": "成员"
+          },
+          {
+            "faction": "汉国朝廷",
+            "role": "建威将军"
+          }
+        ],
+        "debutLocation": {
+          "location": "洛都",
+          "locator": "第7章 合德",
+          "scene": "卢景向程宗扬提起一桩七千金铢的刺杀生意，要买建威将军韩定国的人头，程宗扬追问是什么生意。"
+        }
       },
       "phaseIdentities": [
         {
@@ -10182,6 +11460,16 @@
         ],
         "ending": [
           "被胡人斩杀，头颅被程宗扬抢回（第8章 命悬一线）"
+        ],
+        "affiliations": [
+          {
+            "faction": "星月湖",
+            "role": "少尉"
+          },
+          {
+            "faction": "程氏商会",
+            "role": "随行护卫/联络员"
+          }
         ]
       },
       "phaseIdentities": [
@@ -10252,7 +11540,13 @@
           "多次主动或被动调教虞白樱",
           "第5章洛帮中听话脱衣爬到榻上供程宗扬玩弄"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "洛帮",
+            "role": "帮主"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -10447,7 +11741,26 @@
           "与孟非卿、斯明信等配合多年，分合自如作战",
           "与宋军将领交手，展现惊人槊法"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "星月湖",
+            "role": "第二骏天驷/中校团长/二团团长"
+          },
+          {
+            "faction": "鹏翼社",
+            "role": "成员"
+          },
+          {
+            "faction": "秦国",
+            "role": "客将"
+          }
+        ],
+        "debutLocation": {
+          "location": "宋军大营外",
+          "locator": "chapter301.html",
+          "scene": "侯玄骑铁黑马、持长槊率直属营夜袭宋军大营，与刘平交手，被刘宜孙认出"
+        }
       },
       "phaseIdentities": [
         {
@@ -10650,7 +11963,22 @@
           "在林中与黑魔海等人交手",
           "取玉盒交给淖方成"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "长秋宫",
+            "role": "北宫长使"
+          },
+          {
+            "faction": "汉国朝廷",
+            "role": "太后心腹女官"
+          }
+        ],
+        "debutLocation": {
+          "location": "洛都永和里",
+          "locator": "0240.html 第240章",
+          "scene": "胡夫人乘马车抵达赵王邸，义姁代为通报'北宫长使胡夫人，请见大王'，随后与平城君相遇寒暄"
+        }
       },
       "phaseIdentities": [
         {
@@ -10715,7 +12043,26 @@
           "被任命为卫尉，后晋卫将军",
           "参与洛都之变后庆功宴"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "胡骑军",
+            "role": "胡骑校尉"
+          },
+          {
+            "faction": "卫尉军",
+            "role": "卫将军/主掌卫尉"
+          },
+          {
+            "faction": "汉国朝廷",
+            "role": "将领"
+          }
+        ],
+        "debutLocation": {
+          "location": "洛都",
+          "locator": "0016.html",
+          "scene": "作为胡骑校尉，在朝臣入宫拜见皇后的场合，被程宗扬审视打量后接旨受封卫将军。"
+        }
       },
       "phaseIdentities": [
         {
@@ -10787,7 +12134,22 @@
           "服用程宗扬给的药物后产生强烈生理反应",
           "求程宗扬救自己，并献上粮行"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "通源行",
+            "role": "女眷/家眷"
+          }
+        ],
+        "debutLocation": {
+          "location": "翠微园",
+          "locator": "六朝云龙吟/0069.html",
+          "scene": "自称梁夫人，半夜来访，被程宗扬要求在门外脱光爬进来，出场时满脸泪痕哀求程宗扬救命。"
+        },
+        "storyAge": {
+          "value": "32",
+          "basis": "黄氏讪讪道：'奴婢三十有二。'"
+        }
       },
       "phaseIdentities": [
         {
@@ -10881,7 +12243,18 @@
         ],
         "ending": [
           "被交给佛光寺的人，后有无同门照料不明"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "十方丛林",
+            "role": "僧人"
+          }
+        ],
+        "debutLocation": {
+          "location": "太泉古阵",
+          "locator": "六朝云龙吟/0130.html",
+          "scene": "惠远与师兄被守阵力士攻击，师兄死亡后他抱着尸体痛哭，左彤芝询问其来历时，他自述是佛光寺弟子，五日前与师兄同至太泉古阵"
+        }
       },
       "phaseIdentities": [
         {
@@ -10959,7 +12332,22 @@
           "一矛刺穿吕淑",
           "与金蜜镝等大臣一起应对宫廷政变"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "皇图天策府",
+            "role": "学员/骑兵第一"
+          },
+          {
+            "faction": "羽林天军",
+            "role": "少将军"
+          }
+        ],
+        "debutLocation": {
+          "location": "马市",
+          "locator": "六朝云龙吟/0297.html",
+          "scene": "程宗扬向敖润打听\"那位霍少是谁\"，敖润尚未回答，此段为霍去病首次被提及，尚未正式出场。"
+        }
       },
       "phaseIdentities": [
         {
@@ -11103,7 +12491,18 @@
           "与金蜜镝联手迅速稳住局势",
           "认为程宗扬背后是帝室刘询"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "汉国朝廷",
+            "role": "大将军"
+          }
+        ],
+        "debutLocation": {
+          "location": "永安宫",
+          "locator": "第3章",
+          "scene": "随着一声断喝，一直不见踪影的大将军霍子孟闪亮登场，身披大氅、外罩赤袍、内穿锁子甲，跨白马徐徐驶来，厉声喝问董卓"
+        }
       },
       "phaseIdentities": [
         {
@@ -11195,7 +12594,13 @@
           "击垮王禹玉一党",
           "在朝会主战面临户部账目质询"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "宋国",
+            "role": "太师"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -11268,7 +12673,18 @@
           "用错刀威胁廖群玉",
           "整理藩镇资料"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "凉州军",
+            "role": "首席谋士"
+          }
+        ],
+        "debutLocation": {
+          "location": "南宫，长秋宫外",
+          "locator": "六朝燕歌行/0003.html",
+          "scene": "凉州军士卒护送下，贾文和将定陶王挟持在臂间，以生锈错刀抵住幼童脖颈，面对程宗扬等众人从容对峙，宣称「我有寸铁，亦可杀人」"
+        }
       },
       "phaseIdentities": [
         {
@@ -11485,7 +12901,22 @@
           "魔门远古职衔却卑微",
           "「没资格拜祭魔尊」，被推测身体是某种高阶灵魂/力量的「容器」"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "黑魔海",
+            "role": "巫宗核心人物/仙姬"
+          },
+          {
+            "faction": "巫宗",
+            "role": "巫宗教徒"
+          }
+        ],
+        "debutLocation": {
+          "location": "桃林（西子湖畔）",
+          "locator": "六朝云龙吟/0035.html 第4集·终铸大错",
+          "scene": "程宗扬循着琴声进入桃林，见一白衣女子抚琴，女子回头自报身份\"黑魔海剑玉姬\"，称要与他谈生意"
+        }
       },
       "phaseIdentities": [
         {
@@ -11684,7 +13115,26 @@
         ],
         "ending": [
           "战死于皇宫中，程宗扬为其合上双眼"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "星月湖",
+            "role": "老战士"
+          },
+          {
+            "faction": "鹏翼社",
+            "role": "洛都分社管事"
+          }
+        ],
+        "debutLocation": {
+          "location": "洛都通商里鹏翼社",
+          "locator": "第213章",
+          "scene": "程宗扬登门拜访鹏翼社，蒋安世行军礼问候"
+        },
+        "storyAge": {
+          "value": "年过四旬",
+          "basis": "分社的管事蒋安世是一个年过四旬的汉子"
+        }
       },
       "phaseIdentities": [
         {
@@ -11752,7 +13202,17 @@
           "拷掠刘丹",
           "针对云台书院及程宗扬"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "汉国朝廷",
+            "role": "绣衣使者"
+          },
+          {
+            "faction": "吕氏外戚集团",
+            "role": "听命于太后/大司马吕冀的特使"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -11905,7 +13365,18 @@
           "协助程宗扬偷窥赵合德沐浴",
           "在程宗扬练功失控时在场并协助吕雉封锁消息"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "长秋宫",
+            "role": "女傅"
+          }
+        ],
+        "debutLocation": {
+          "location": "合德的住处（邙山）",
+          "locator": "六朝云龙吟/0249.html",
+          "scene": "程宗扬来到合德住处，发现合德在喂榻上妇人喝药，榻上妇人自称\"老身江映秋，乃长秋宫女傅\"，随后解释自己奉天子之命护送赵合德入宫途中遭遇劫难"
+        }
       },
       "phaseIdentities": [
         {
@@ -11997,7 +13468,18 @@
         "keyEvents": [
           "洛都大乱、天子刘建被斩首的混乱中，全城唯一始终记得给天子披麻戴孝、两军阵前以大局为重者"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "汉国朝廷",
+            "role": "车骑将军（后兼管卫尉）"
+          }
+        ],
+        "debutLocation": {
+          "location": "洛都北宫永安宫外",
+          "locator": "第601章·退败（第1章）",
+          "scene": "刘建被斩首后，金蜜镝走马上前，接过首级，仔细看过后摘下天子冕旒，将刘建的头颅高高举起"
+        }
       },
       "phaseIdentities": [
         {
@@ -12086,7 +13568,18 @@
           "豹子头等兽蛮同僚关系融洽",
           "重伤后理解未能抢到小豹女，只是臊眉耷眼地回来，并理解地拍豹子头肩膀"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "北地兽蛮人",
+            "role": "程宗扬的家丁"
+          }
+        ],
+        "debutLocation": {
+          "location": "江上小船",
+          "locator": "六朝云龙吟0006.html",
+          "scene": "程宗扬威胁扣羊，金兀术不满地争辩说主人太苛刻，豹子头和青面兽立刻捂住他的嘴"
+        }
       },
       "phaseIdentities": [
         {
@@ -12172,7 +13665,22 @@
         ],
         "ending": [
           "在与窥基的冲突中受伤，但存活下来，继续参与后续行动。"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "大慈恩寺",
+            "role": "知客院香主"
+          },
+          {
+            "faction": "鹏翼社",
+            "role": "退役老兵"
+          }
+        ],
+        "debutLocation": {
+          "location": "大慈恩寺侧门",
+          "locator": "六朝燕歌行/0093.html",
+          "scene": "江王李炎深夜到访大慈恩寺，净空以中年僧人身份从侧门快步迎出，合什拜见"
+        }
       },
       "phaseIdentities": [
         {
@@ -12320,7 +13828,22 @@
           "赌骰时参与色情表演",
           "战斗中使用娥眉刺"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "龙宸",
+            "role": "女杀手"
+          },
+          {
+            "faction": "瑶池宗",
+            "role": "弃徒"
+          }
+        ],
+        "debutLocation": {
+          "location": "刘娥所在密室",
+          "locator": "第107章",
+          "scene": "程宗扬在密室中审视黑衣女卫时认出她是惊理，原来当日江州龙宸杀手被剿灭后，其中一名女杀手落入小紫手中，现在成为小紫的侍奴"
+        }
       },
       "phaseIdentities": [
         {
@@ -12513,7 +14036,12 @@
           "被兽蛮武士纠缠，师父解围",
           "受鲁智深之托送信给程宗扬"
         ],
-        "ending": []
+        "ending": [],
+        "debutLocation": {
+          "location": "林中",
+          "locator": "六朝燕歌行/0027.html",
+          "scene": "静善作为小尼姑在林中行走，被兽蛮武士山狮驼袭击时自我介绍法号"
+        }
       },
       "phaseIdentities": [
         {
@@ -12581,7 +14109,12 @@
           "养伤期间学习腹语、戴银面具",
           "亲手斩杀仇人（平城君）后昏迷"
         ],
-        "ending": []
+        "ending": [],
+        "debutLocation": {
+          "location": "洛都",
+          "locator": "六朝云龙吟/0110.html",
+          "scene": "卢景与程宗扬饮酒时首次提及剧孟此人，介绍其为洛都有名的大侠，以助人之急、慷慨重义、一诺千金闻名汉国，且在风波亭之变中曾绊住星月湖四哥。"
+        }
       },
       "phaseIdentities": [
         {
@@ -12715,7 +14248,22 @@
         "formsOfAddress": [],
         "joining": [],
         "keyEvents": [],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "十方丛林",
+            "role": "丛林领袖/共主"
+          },
+          {
+            "faction": "大孚灵鹫寺",
+            "role": "住持/摩法宗宗主"
+          }
+        ],
+        "debutLocation": {
+          "location": "汉国深宫（狱墙附近）",
+          "locator": "《六朝云龙吟》第390章",
+          "scene": "程宗扬在汉国深宫中听到卢景提及大孚灵鹫寺时，脑中闪过包括'沮渠二世'在内的一系列名字，得知其与十方丛林、不拾一世大师有关联"
+        }
       },
       "phaseIdentities": [
         {
@@ -12856,7 +14404,18 @@
           "第5章与郑宾、卢景打扑克贴纸条",
           "第7章为程宗扬与如瑶主持婚礼，唱颂合卺、结发等仪程"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "星月湖",
+            "role": "术士/幕僚"
+          }
+        ],
+        "debutLocation": {
+          "location": "江州",
+          "locator": "六朝云龙吟/0080.html",
+          "scene": "程宗扬在翠微园见到匡仲玉随易彪从江州赶来，他与易彪一同向程宗扬汇报江州战后的善后事宜、军务安排等情况"
+        }
       },
       "phaseIdentities": [
         {
@@ -12918,7 +14477,8 @@
           "遇大风浪会怕会尖叫",
           "大是大非有小女子的坚韧",
           "邻家女孩",
-          "纯真无算计"
+          "纯真无算计",
+          "对性事缺乏概念，容易被主角哄骗"
         ],
         "appearance": "娇小玲珑、娇憨稚气的童颜，却有一对与身材极不相称、宏伟肥美的大胸（常引调戏名场面）；皮肤细腻白皙",
         "speechStyle": "爱撒娇、言语直白、有时害羞但会主动表达性欲",
@@ -12948,7 +14508,18 @@
           "处女身，卡在临门一脚（元红未破）",
           "被师姐潘金莲拉皮条→\"同门师姐妹双飞\"名场面"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "光明观堂",
+            "role": "弟子"
+          }
+        ],
+        "debutLocation": {
+          "location": "南荒密林",
+          "locator": "chapter102",
+          "scene": "商队在南荒密林中行进时，乐明珠被金丝猴抢走头上的朱狐冠，惊叫出声。"
+        }
       },
       "phaseIdentities": [
         {
@@ -13138,7 +14709,7 @@
         "flags": [],
         "conflicts": []
       },
-      "embedText": "乐明珠 ｜ 光明观堂正统小师妹，潘金莲/义姁同门 ｜ 娇憨可爱、小市侩小财迷、遇大风浪会怕会尖叫、大是大非有小女子的坚韧、邻家女孩、纯真无算计 ｜ 程宗扬历经权谋博弈后唯一能彻底放松的避风港；小鸟依人、纯粹依赖与满足；为一点赏赐便欢天喜地 ｜ 对程宗扬称呼：平时“大笨瓜”，亲热时“老公”；被称呼：小香瓜、乐妹妹 ｜ 最没心机；最易被师姐潘金莲忽悠；程宗扬一直只开发其后庭；处女身，卡在临门一脚（元红未破）；被师姐潘金莲拉皮条→\"同门师姐妹双飞\"名场面"
+      "embedText": "乐明珠 ｜ 光明观堂正统小师妹，潘金莲/义姁同门 ｜ 娇憨可爱、小市侩小财迷、遇大风浪会怕会尖叫、大是大非有小女子的坚韧、邻家女孩、纯真无算计、对性事缺乏概念，容易被主角哄骗 ｜ 程宗扬历经权谋博弈后唯一能彻底放松的避风港；小鸟依人、纯粹依赖与满足；为一点赏赐便欢天喜地 ｜ 对程宗扬称呼：平时“大笨瓜”，亲热时“老公”；被称呼：小香瓜、乐妹妹 ｜ 最没心机；最易被师姐潘金莲忽悠；程宗扬一直只开发其后庭；处女身，卡在临门一脚（元红未破）；被师姐潘金莲拉皮条→\"同门师姐妹双飞\"名场面"
     },
     {
       "id": "liuchao.character.li_ang",
@@ -13182,7 +14753,22 @@
           "被程宗扬拖拽并威胁割首",
           "目睹生母萧太后被凌辱"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "唐国朝廷",
+            "role": "皇帝"
+          }
+        ],
+        "debutLocation": {
+          "location": "大明宫清思殿",
+          "locator": "六朝燕歌行/0094.html",
+          "scene": "李炎携竹篓入殿拜访，李昂正在窗前临帖，闻言放下笔，饶有兴致地走过来查看竹篓"
+        },
+        "storyAge": {
+          "value": "二十六",
+          "basis": "李昂比李炎大五岁，如今也不过二十六岁"
+        }
       },
       "phaseIdentities": [
         {
@@ -13287,7 +14873,22 @@
         ],
         "ending": [
           "死亡，被腰斩后殒命"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "宦官集团",
+            "role": "首领/权宦"
+          },
+          {
+            "faction": "唐国朝廷",
+            "role": "博陆郡王"
+          }
+        ],
+        "debutLocation": {
+          "location": "含元殿",
+          "locator": "六朝燕歌行/0105.html",
+          "scene": "唐国元正大朝会上，以御座右前方紫袍宦官身份，手持玉柄拂尘指挥朝仪，宣读'再拜''起''拜'等号令，主持朝会进行"
+        }
       },
       "phaseIdentities": [
         {
@@ -13364,7 +14965,22 @@
         ],
         "ending": [
           "被苏沙逼走，下落未明"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "广源行",
+            "role": "富商/执事苏沙下属"
+          },
+          {
+            "faction": "十方丛林",
+            "role": "资助者"
+          }
+        ],
+        "debutLocation": {
+          "location": "不明（议事地点）",
+          "locator": "0178.html 第七章 紫气氤氲",
+          "scene": "王守澄临死前在阴间账目中提及'李宏，两万贯'，但尚未正式出场"
+        }
       },
       "phaseIdentities": [
         {
@@ -13503,7 +15119,26 @@
           "江州发现殇侯尸毒异动后孤身奔波回临安寻解药",
           "程宗扬疲惫迷茫时提供最温柔的心理慰藉"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "光明观堂",
+            "role": "外堂弟子"
+          },
+          {
+            "faction": "宋国",
+            "role": "明州虎翼军随军医官"
+          },
+          {
+            "faction": "威远镖局",
+            "role": "总镖头李寅臣之女"
+          }
+        ],
+        "debutLocation": {
+          "location": "荒郊野外山崖边",
+          "locator": "第6章/0006.html",
+          "scene": "程宗扬在山崖边发现翻倒的马车，车厢内走出一位白衣美貌少女，她自称奴家姓李，李师师"
+        }
       },
       "phaseIdentities": [
         {
@@ -13600,7 +15235,18 @@
           "与李昂密谋诛宦",
           "甘露之变失败"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "唐国朝廷",
+            "role": "宰相（同平章事、翰林学士）"
+          }
+        ],
+        "debutLocation": {
+          "location": "紫云楼",
+          "locator": "第0091章",
+          "scene": "在元正大朝会的紫云楼议事大殿中，绿衣少年李植自报家门时提及父亲李训为翰林学士、同平章事宰相，李训正式进入众人视野"
+        }
       },
       "phaseIdentities": [
         {
@@ -13742,7 +15388,13 @@
           "紧张地握住姑姑的手，手心中冷汗湿漉漉",
           "原答应替程宗扬出面致歉"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "唐国朝廷",
+            "role": "江王（亲王）"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -13836,7 +15488,22 @@
           "得到程宗扬的帮助",
           "元正朝会上出丑"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "唐国朝廷",
+            "role": "亲王（光王）"
+          }
+        ],
+        "debutLocation": {
+          "location": "承天门",
+          "locator": "六朝燕歌行/0105.html",
+          "scene": "元正大朝会上，监门校尉唱名「光王李怡」后，闻声上前时不慎踩到袍角跌倒，金冠掉落，在众官员面前出丑"
+        },
+        "storyAge": {
+          "value": "二十多岁",
+          "basis": "原文描述为「一名二十多岁的年轻人」，且「比李炎也大不了多少」，而李炎「才二十出头」"
+        }
       },
       "phaseIdentities": [
         {
@@ -13917,7 +15584,18 @@
         ],
         "ending": [
           "空"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "威远镖局",
+            "role": "总镖头"
+          }
+        ],
+        "debutLocation": {
+          "location": "教钦坊威远镖局",
+          "locator": "0011.html",
+          "scene": "李师师从马车上下来进入威远镖局，门前镖师对她十分熟稔，纷纷起身叉手施礼，李师师略点头便匆匆进了镖局"
+        }
       },
       "phaseIdentities": [
         {
@@ -13988,7 +15666,22 @@
           "被侍奴公开调教淫弄",
           "与阮香凝等共侍一夫"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "通源行",
+            "role": "东家夫人"
+          },
+          {
+            "faction": "梁氏家族",
+            "role": "官眷"
+          }
+        ],
+        "debutLocation": {
+          "location": "翠微园水榭",
+          "locator": "第47章",
+          "scene": "程宗扬抬手唤道'梁夫人'，黄莺怜在场观其与阮香凝行房事"
+        }
       },
       "phaseIdentities": [
         {
@@ -14078,6 +15771,12 @@
         ],
         "ending": [
           "葬身火中"
+        ],
+        "affiliations": [
+          {
+            "faction": "吕氏外戚集团",
+            "role": "谋士/门客"
+          }
         ]
       },
       "phaseIdentities": [
@@ -14153,7 +15852,22 @@
           "被冤枉锁于马厩",
           "怀揣锦囊返回临安"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "悦生堂",
+            "role": "掌柜/主人"
+          },
+          {
+            "faction": "宋国",
+            "role": "贾师宪核心幕僚"
+          }
+        ],
+        "debutLocation": {
+          "location": "临安悦生堂",
+          "locator": "六朝云龙吟/0020.html",
+          "scene": "程宗扬在悦生堂买书被店员赶出，廖群玉从内堂走出接待旧识，主动招呼并邀其入内叙谈"
+        }
       },
       "phaseIdentities": [
         {
@@ -14238,7 +15952,18 @@
           "在掌教继承一事上暗中倾向商乐轩，因与齐放鹤交好",
           "被卓云君偷袭重伤"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "太乙真宗",
+            "role": "教御（首席教御）"
+          }
+        ],
+        "debutLocation": {
+          "location": "草原王哲大营",
+          "locator": "chapter10.html",
+          "scene": "天色将暮，蔺采泉在帐外温和询问\"程道友在否？\"，程宗扬拉开帐门请其进入，双方开始交谈真阳与功法之事。"
+        }
       },
       "phaseIdentities": [
         {
@@ -14320,7 +16045,17 @@
           "与程宗扬交谈",
           "剑玉姬下令在途中杀死林冲"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "禁军",
+            "role": "八十万禁军教头"
+          },
+          {
+            "faction": "皇城司",
+            "role": "皇城司人员"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -14430,7 +16165,22 @@
           "参与酒宴整治席面",
           "有意弥合双方关系"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "影月宗",
+            "role": "高徒/术士"
+          },
+          {
+            "faction": "临川王势力",
+            "role": "临川王麾下术士（化名易勇）"
+          }
+        ],
+        "debutLocation": {
+          "location": "建康程宗扬宅书房",
+          "locator": "chapter157",
+          "scene": "云苍峰带一名穿法衣的术士进入书房，那术士施礼自称\"清浦见过公子\"，程宗扬认出他就是之前在南荒化名\"易勇\"护送灵飞镜的林清浦"
+        }
       },
       "phaseIdentities": [
         {
@@ -14738,7 +16488,18 @@
         ],
         "ending": [
           "被吕冀弑君（第1章 求媒）"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "汉国朝廷",
+            "role": "天子"
+          }
+        ],
+        "debutLocation": {
+          "location": "昭阳殿",
+          "locator": "0004.html",
+          "scene": "停尸期间，灯树倾倒，灯油泼洒在覆盖其尸骸的锦被上，引发火光"
+        }
       },
       "phaseIdentities": [
         {
@@ -14909,7 +16670,18 @@
           "被展示桃花谷",
           "自称奴婢完成指令"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "汉国朝廷",
+            "role": "太皇太后"
+          }
+        ],
+        "debutLocation": {
+          "location": "宋宫",
+          "locator": "六朝云龙吟/0098.html",
+          "scene": "程宗扬入宫拜见太皇太后，刘娥笑着嗔怪他有了新人忘了老身，并开始教训他关于纳妾的规矩"
+        }
       },
       "phaseIdentities": [
         {
@@ -14997,7 +16769,26 @@
           "试图保护阮香凝(第5章)",
           "组合显示名已拆分：定陶王刘欣 -> 原名 刘欣，alias 定陶王。\n用户裁定：批准。"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "凉州军",
+            "role": "被拥立的傀儡皇帝"
+          },
+          {
+            "faction": "汉国朝廷",
+            "role": "天子/刘氏宗室"
+          }
+        ],
+        "debutLocation": {
+          "location": "昭阳宫",
+          "locator": "第4集·第602章·拥立",
+          "scene": "董卓率凉州军入宫，在天子灵位前拥立定陶王为帝，程宗扬等人闻讯大惊失色"
+        },
+        "storyAge": {
+          "value": "约3-5岁",
+          "basis": "原文称其为'一介稚子''小儿幼嫩的脖颈'，吕雉斥其为'三岁小儿'，啼哭叫'姆娘'，显系幼童"
+        }
       },
       "phaseIdentities": [
         {
@@ -15081,7 +16872,18 @@
           "发现张亢劫掠昭南并分享财富",
           "面对暴风雨质疑张亢计划"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "宋国",
+            "role": "捧日军左厢第六军军使（后降为副都头，又升为都头）"
+          }
+        ],
+        "debutLocation": {
+          "location": "烈山山岗",
+          "locator": "chapter289.html",
+          "scene": "作为捧日军军使在烈山山岗高处侦察，手持铜哨等待骑兵到来"
+        }
       },
       "phaseIdentities": [
         {
@@ -15300,7 +17102,18 @@
           "多处负伤养伤",
           "脸色发灰受打击"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "禁军",
+            "role": "左虞侯"
+          }
+        ],
+        "debutLocation": {
+          "location": "舞都",
+          "locator": "0193.html",
+          "scene": "从房顶跳下，抱拳向程宗扬行礼，自我介绍是禁军左虞侯"
+        }
       },
       "phaseIdentities": [
         {
@@ -15375,7 +17188,18 @@
           "竹杖，变成跑堂的小二",
           "卢景抱过婴儿，放到剧孟胸口"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "星月湖",
+            "role": "八骏/中校/三营营长"
+          }
+        ],
+        "debutLocation": {
+          "location": "金明寨（江畔战场附近）",
+          "locator": "六朝云龙吟/0006.html",
+          "scene": "在江州之战后，与斯明信联手火烧金明寨宋军粮草，展现星月湖八骏之一的行动。"
+        }
       },
       "phaseIdentities": [
         {
@@ -15551,7 +17375,22 @@
         ],
         "ending": [
           "被剑玉姬视为弃子，离开太尉府"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "太尉府",
+            "role": "虞侯"
+          }
+        ],
+        "debutLocation": {
+          "location": "雷峰塔",
+          "locator": "六朝云龙吟/0013.html",
+          "scene": "高衙内强抢李师师时被反制，陆谦横空掠过，从李师师手中拽出高衙内，将其救回人群中"
+        },
+        "storyAge": {
+          "value": "约30",
+          "basis": "三十来岁"
+        }
       },
       "phaseIdentities": [
         {
@@ -15648,7 +17487,13 @@
           "被小女孩调戏后暴跳如雷",
           "与程宗扬攀上交情"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "明庆寺",
+            "role": "菜园僧人/花和尚"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -15768,7 +17613,22 @@
         ],
         "ending": [
           "被小玲儿割喉重伤，仰面躺地，气息断绝（但未死）"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "吕氏外戚集团",
+            "role": "吕氏子弟"
+          }
+        ],
+        "debutLocation": {
+          "location": "林中",
+          "locator": "六朝云龙吟0269.html",
+          "scene": "一人一骑挡住众人去路，骑赤兔马、提方天画戟的白衣少年，自报姓名\"洛下吕奉先\""
+        },
+        "storyAge": {
+          "value": "十四五岁",
+          "basis": "原文：他只有十四五岁"
+        }
       },
       "phaseIdentities": [
         {
@@ -15939,7 +17799,22 @@
         ],
         "ending": [
           "面如死灰（见姬妾死伤狼藉）"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "汉国朝廷",
+            "role": "太后之弟，未来大司马大将军人选"
+          },
+          {
+            "faction": "吕氏外戚集团",
+            "role": "家主/襄邑侯"
+          }
+        ],
+        "debutLocation": {
+          "location": "洛都",
+          "locator": "第0217章",
+          "scene": "通过程宗扬与同伴对话首次被提及，得知湖阳君是吕冀的妻姐，吕家是刘家外戚，吕冀和吕不疑是太后的两个弟弟"
+        }
       },
       "phaseIdentities": [
         {
@@ -16134,7 +18009,22 @@
           "暗修高阶处女功法(采补长生术)，保持处女之身作秘密武器/博弈筹码",
           "贸然采补会被反噬吸干"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "汉国朝廷",
+            "role": "太后"
+          },
+          {
+            "faction": "吕氏外戚集团",
+            "role": "核心成员"
+          }
+        ],
+        "debutLocation": {
+          "location": "长秋宫",
+          "locator": "六朝燕歌行/0004.html",
+          "scene": "霍子孟擅闯长秋宫时，发现宫门内放着一驾凤辇，吕雉头戴凤冠、身着黑衣端坐辇中，正襟危坐、气势凛然地质问霍子孟擅闯宫禁之罪，霍子孟为之跪伏。"
+        }
       },
       "phaseIdentities": [
         {
@@ -16484,7 +18374,18 @@
           "向程宗扬展示其相人察物之才",
           "协助程宗扬查验玉镯来源"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "程氏商会",
+            "role": "画师/丹青师"
+          }
+        ],
+        "debutLocation": {
+          "location": "洛都",
+          "locator": "第22集·鬻爵得官（第0233章）",
+          "scene": "程宗扬在路上遇到被奴仆追打的文士，出面拦下询问，得知其是丹青师毛延寿，刚到洛都因求见襄邑侯误入襄城君门内被赶出，身无分文、走投无路。"
+        }
       },
       "phaseIdentities": [
         {
@@ -16589,7 +18490,22 @@
           "风波亭岳帅沉香阁火灾事件",
           "放权给月霜，栽培她"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "星月湖",
+            "role": "八骏之首"
+          },
+          {
+            "faction": "鹏翼社",
+            "role": "大东家"
+          }
+        ],
+        "debutLocation": {
+          "location": "建康",
+          "locator": "chapter170.html",
+          "scene": "萧遥逸喊出\"孟老大！你还不快出来！\"后，孟非卿从台阶上方现身，威武登场"
+        }
       },
       "phaseIdentities": [
         {
@@ -16783,7 +18699,7 @@
       "tier": "次要",
       "stagePresence": true,
       "staticProfile": {
-        "identitySummary": "宋国小皇帝奶娘，原名赵媛；曾被黑魔海囚禁并抹去记忆",
+        "identitySummary": "宋国小皇帝奶娘，原名赵媛；曾被黑魔海囚禁并抹去记忆；身负未解禁制，无法性交（仅能蹭蹭等非插入方式）",
         "personality": [
           "顺从",
           "羞怯",
@@ -16793,7 +18709,8 @@
           "有时空蒙",
           "温顺",
           "柔媚",
-          "羞涩"
+          "羞涩",
+          "记忆残缺（始终未恢复），偶尔忆起旧日习惯（会画画、辨麝香优劣）"
         ],
         "appearance": "容貌端庄秾艳，身姿宛如一株婀娜多姿的七宝花树，玉颊红晕，罗衫半褪，香肌胜雪，双乳圆硕丰腻，光滑的肌肤犹如凝脂，美目波光动人。；丰腴滑腻，肌如白玉，双乳丰挺如大白桃，乳晕淡红，容颜如花似玉，艳丽无匹，气质雅致秀婉",
         "speechStyle": "羞答答，爱撒娇，常称主人为‘老爷’或‘主人’。；娇声吟唱，言语温柔",
@@ -16809,24 +18726,35 @@
         "signatureAbilities": [],
         "relationToProtagonist": [
           "程宗扬的侍妾/奴仆（主人）。",
-          "主仆/性奴"
+          "主仆"
         ],
         "formsOfAddress": [
           "程宗扬称其为‘阿梦’；梦娘称程宗扬为‘老爷’或‘主人’。",
           "对程宗扬称主人"
         ],
         "joining": [
-          "被程宗扬从黑魔海解救，免于被抹去记忆作为奴妓淫玩终生的命运。"
+          "被程宗扬从黑魔海解救，免于沦为奴妓淫玩终生（记忆已被抹去，未恢复）。"
         ],
         "keyEvents": [
           "被程宗扬调教口交技巧",
           "被卓云君掌掴乳房、侮辱",
           "为程宗扬口交并吞咽精液",
-          "与程宗扬多次性交",
-          "被程宗扬视为性奴",
+          "与程宗扬多次亲密（受禁制所限，非插入）",
+          "成为小紫的专属婢女",
           "与雁儿一同侍奉"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "黑魔海",
+            "role": "被掳者（失忆）"
+          }
+        ],
+        "debutLocation": {
+          "location": "晴州",
+          "locator": "第232章·花火 (chapter284.html)",
+          "scene": "小紫唤上泉玉姬和梦娘一同前往兰汤馆，文中介绍她是从黑魔海捡来的失忆女子，阿梦是小紫给她起的名字"
+        }
       },
       "phaseIdentities": [
         {
@@ -17019,7 +18947,7 @@
         ],
         "conflicts": []
       },
-      "embedText": "梦娘 ｜ 赵媛 阿梦 ｜ 宋国小皇帝奶娘，原名赵媛；曾被黑魔海囚禁并抹去记忆 ｜ 顺从、羞怯、温柔、聪明、听话、有时空蒙、温顺、柔媚、羞涩 ｜ 程宗扬的侍妾/奴仆（主人）。；主仆/性奴 ｜ 程宗扬称其为‘阿梦’；梦娘称程宗扬为‘老爷’或‘主人’。 对程宗扬称主人 ｜ 宋国小皇帝奶娘赵媛，被黑魔海囚禁/抹忆的受害·敌方控制身份；禁止提前称为后宫、侍妾、情人或程宗扬阵营成员；被程宗扬解救后，可按原文写入程宗扬阵营/侍妾 ｜ 被程宗扬调教口交技巧；被卓云君掌掴乳房、侮辱；为程宗扬口交并吞咽精液；与程宗扬多次性交；被程宗扬视为性奴；与雁儿一同侍奉"
+      "embedText": "梦娘 ｜ 赵媛 阿梦 ｜ 宋国小皇帝奶娘，原名赵媛；曾被黑魔海囚禁并抹去记忆；身负未解禁制，无法性交（仅能蹭蹭等非插入方式） ｜ 顺从、羞怯、温柔、聪明、听话、有时空蒙、温顺、柔媚、羞涩、记忆残缺（始终未恢复），偶尔忆起旧日习惯（会画画、辨麝香优劣） ｜ 程宗扬的侍妾/奴仆（主人）。；主仆 ｜ 程宗扬称其为‘阿梦’；梦娘称程宗扬为‘老爷’或‘主人’。 对程宗扬称主人 ｜ 宋国小皇帝奶娘赵媛，被黑魔海囚禁/抹忆的受害·敌方控制身份；禁止提前称为后宫、侍妾、情人或程宗扬阵营成员；被程宗扬解救后，可按原文写入程宗扬阵营/侍妾 ｜ 被程宗扬调教口交技巧；被卓云君掌掴乳房、侮辱；为程宗扬口交并吞咽精液；与程宗扬多次亲密（受禁制所限，非插入）；成为小紫的专属婢女；与雁儿一同侍奉"
     },
     {
       "id": "liuchao.character.mo_feng_lin",
@@ -17084,7 +19012,22 @@
         "ending": [
           "潜入水底，生死未卜",
           "被程宗扬设计击杀，魂魄收于玉瓶，尸身被雪雪吞噬"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "瑶池宗",
+            "role": "道人/法师"
+          },
+          {
+            "faction": "选锋营",
+            "role": "法师"
+          }
+        ],
+        "debutLocation": {
+          "location": "太泉古阵",
+          "locator": "0164.html",
+          "scene": "在莫如霖与庞白鸿争夺琉璃天珠时出场，以寒冰阴诀冻住琉璃天珠，自称'墨枫林墨道长'，提出以助莫如霖夺取天珠换取赤阳圣果"
+        }
       },
       "phaseIdentities": [
         {
@@ -17176,7 +19119,18 @@
           "第7章：被焚无尘制住手腕后惨叫逃跑，随后昏迷不醒",
           "第8章：醒来后发现自己被吊在悬崖边，惊恐惨叫后假装睡着"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "星月湖",
+            "role": "门客（珠宝管事）"
+          }
+        ],
+        "debutLocation": {
+          "location": "太泉古阵密室",
+          "locator": "第0164章",
+          "scene": "以白胖男子形象缓步进入密室，用长鞭击杀两名周族汉子，拦截庞白鸿夺取琉璃天珠"
+        }
       },
       "phaseIdentities": [
         {
@@ -17244,7 +19198,26 @@
           "检查尹馥兰后打发去卖果子",
           "与宋三讨论新人"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "栖凤院",
+            "role": "东家"
+          },
+          {
+            "faction": "水果行",
+            "role": "会首"
+          }
+        ],
+        "debutLocation": {
+          "location": "苍澜镇温泉浴池",
+          "locator": "第0146章/第8章",
+          "scene": "宋三向他汇报太泉古阵收获，莫爷在温泉池中听取手下折损人手的报告后叹气说日子不好过"
+        },
+        "storyAge": {
+          "value": "四十多岁",
+          "basis": "那莫爷四十多岁年纪，留着长须，气度典雅"
+        }
       },
       "phaseIdentities": [
         {
@@ -17304,7 +19277,18 @@
         "keyEvents": [
           "与程宗扬相识，被其提及"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "光明观堂",
+            "role": "内堂弟子"
+          }
+        ],
+        "debutLocation": {
+          "location": "云水山谷间",
+          "locator": "六朝清羽记/chapter262",
+          "scene": "光明观堂楼船遭泊陵鱼氏袭击时，穆嫣琪从船舱中闪身而出，梳着双鬟，手握银剑，挑开敌人飞来的重斧"
+        }
       },
       "phaseIdentities": [
         {
@@ -17376,7 +19360,18 @@
           "第6章与窥基交手，被气势压制",
           "第8章宅邸被攻时率护卫声威大振"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "唐国朝廷",
+            "role": "末将/护卫"
+          }
+        ],
+        "debutLocation": {
+          "location": "宣平坊（程宗扬车队旁）",
+          "locator": "第115章",
+          "scene": "程宗扬询问贾文和后，对车边那名大汉说话，南霁云自我介绍说\"末将姓南，南霁云。族中排行第八，君侯叫我南八便是！\""
+        }
       },
       "phaseIdentities": [
         {
@@ -17443,7 +19438,12 @@
           "被虞紫薇碧玉杖打伤",
           "跟随萧遥逸和程宗扬离开"
         ],
-        "ending": []
+        "ending": [],
+        "debutLocation": {
+          "location": "太泉古阵内废墟大厦",
+          "locator": "六朝云龙吟/0130.html",
+          "scene": "程宗扬询问她身份时，宋三代为回答她叫宁素，是那位女侠（其师傅）的徒弟"
+        }
       },
       "phaseIdentities": [
         {
@@ -17517,7 +19517,13 @@
           "第69章与樨夫人双飞",
           "第123章与乐明珠一同侍奉程宗扬"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "白湖商馆",
+            "role": "商队护卫"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -17793,7 +19799,26 @@
           "与魏甘被关在一处",
           "提供最后一块玉牌，协助程宗扬找到线索"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "石室书院",
+            "role": "山长"
+          },
+          {
+            "faction": "星月湖",
+            "role": "外围联系人/秘密保管者"
+          }
+        ],
+        "debutLocation": {
+          "location": "洛都",
+          "locator": "六朝云龙吟0213.html",
+          "scene": "鹏翼社分社蒋安世与程宗扬交谈时首次提及'严先生'失踪消息，随后揭示其为岳鹏举委托保管物品的石室书院山长"
+        },
+        "storyAge": {
+          "value": "约五十余岁",
+          "basis": "原文程宗扬推测：'严君平十几年前就是书院的山长，现在起码也有五十多岁'"
+        }
       },
       "phaseIdentities": [
         {
@@ -17911,7 +19936,26 @@
           "出谋划策，彻夜工作后下厨做早点给娘子",
           "班超对秦桧的利即大义论感到兴致，追问程宗扬志向"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "汉国朝廷",
+            "role": "兰台抄书吏（无官身的书手）"
+          },
+          {
+            "faction": "兰台",
+            "role": "抄书吏"
+          }
+        ],
+        "debutLocation": {
+          "location": "汉宫兰台",
+          "locator": "第23集·天子之气（0243.html）",
+          "scene": "程宗扬在汉宫兰台看到一名穷酸书生正在抄书，谒者介绍他是太史令班固之弟班超，因家境贫寒在宫中做抄书差事，连灯油钱都舍不得花，夜间都待在兰台。"
+        },
+        "storyAge": {
+          "value": "约25-26",
+          "basis": "他二十五六岁年纪"
+        }
       },
       "phaseIdentities": [
         {
@@ -18103,7 +20147,13 @@
           "因天生肉体极度敏感，被程宗扬逼问出隐藏的受虐性幻想并立下誓约",
           "\"荡\"是私密关系中被主角粗暴开发出的被动反差，绝非世俗荡妇/市侩"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "光明观堂",
+            "role": "弟子/师姐"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -18485,7 +20535,22 @@
           "营救独孤谓并以此邀功",
           "与九爷等人密谋结交索推事"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "广源行",
+            "role": "商人/行商"
+          },
+          {
+            "faction": "昭南",
+            "role": "行商者"
+          }
+        ],
+        "debutLocation": {
+          "location": "天佛阁（娑梵寺下院）",
+          "locator": "六朝燕歌行 0142章",
+          "scene": "程宗扬在琉璃天珠展示时，蒲海云从阁外塔门处现身，主动上前自报家门，向程宗扬等人行礼问候"
+        }
       },
       "phaseIdentities": [
         {
@@ -18555,7 +20620,22 @@
         ],
         "ending": [
           "唐国篇被太监总管李辅国暗算强留（图其手中「安乐公主的红丸」），全身精血几被榨干，唇裂血枯之际拼死揭露李辅国阴谋——其真正欲夺舍的是一个并非完璧的女人以登权力巅峰"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "巫宗",
+            "role": "仙姬近侍"
+          }
+        ],
+        "debutLocation": {
+          "location": "昭阳殿",
+          "locator": "0004.html",
+          "scene": "在董卓射箭攻击时，双手握刀挡住羽箭，护住阮香凝和定陶王"
+        },
+        "storyAge": {
+          "value": "约十六七",
+          "basis": "原文描写\"她年岁不大，但身姿挺拔\""
+        }
       },
       "phaseIdentities": [
         {
@@ -18668,7 +20748,18 @@
           "参与纸钞与钱庄经营",
           "与昭南人谈判"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "白湖商馆",
+            "role": "护卫/伙计"
+          }
+        ],
+        "debutLocation": {
+          "location": "南荒密林",
+          "locator": "第102章",
+          "scene": "程宗扬追猴子时，祁远一把没拉住，急得直跳脚说'我的大少爷！南荒你也走了一个多月了，这林子哪儿是随便进的！'"
+        }
       },
       "phaseIdentities": [
         {
@@ -18909,7 +21000,26 @@
         ],
         "ending": [
           "携一颗赤阳圣果回临安缴旨。"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "宋国",
+            "role": "大貂珰"
+          },
+          {
+            "faction": "选锋营",
+            "role": "都指挥使"
+          },
+          {
+            "faction": "皇图天策府",
+            "role": "学员"
+          }
+        ],
+        "debutLocation": {
+          "location": "战场",
+          "locator": "chapter337.html",
+          "scene": "作为宫中大貂珰单骑杀出，挥动丈八蛇矛击杀石之隼，显露威猛武将气势"
+        }
       },
       "phaseIdentities": [
         {
@@ -19152,7 +21262,26 @@
           "第260章被贼尼绕晕",
           "殇侯旧部、黑魔海毒宗出身(其资源/功法传承后归程宗扬)"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "黑魔海",
+            "role": "毒宗成员/殇侯门下"
+          },
+          {
+            "faction": "殇侯势力",
+            "role": "追随殇侯二十余年的门客"
+          },
+          {
+            "faction": "程氏商会",
+            "role": "随程宗扬经商的随从"
+          }
+        ],
+        "debutLocation": {
+          "location": "殇侯所在的幽静山村",
+          "locator": "chapter152",
+          "scene": "秦桧戴着文士巾快步走来，向殇侯躬身禀报'君侯，北地有讯'，被殇侯介绍给程宗扬"
+        }
       },
       "phaseIdentities": [
         {
@@ -19560,7 +21689,18 @@
           "参与杀局与西门庆战斗",
           "被哈迷蚩撕羊腿喂食"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "北地兽蛮人",
+            "role": "族裔成员"
+          }
+        ],
+        "debutLocation": {
+          "location": "江畔山涧附近",
+          "locator": "六朝云龙吟/0006.html",
+          "scene": "程宗扬划船向北绕过宋军时，敖润吆喝三名兽蛮人一起用力撑船，青面兽与豹子头、金兀术一同划船执行任务。"
+        }
       },
       "phaseIdentities": [
         {
@@ -19777,7 +21917,22 @@
           "在龙池举行大典",
           "与程宗扬、王哲、蔺采泉、卓云君等高层来往"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "太乙真宗",
+            "role": "弟子（排行十七，尚未升任教御）"
+          },
+          {
+            "faction": "混元观",
+            "role": "观主"
+          }
+        ],
+        "debutLocation": {
+          "location": "混元观附近",
+          "locator": "第272章",
+          "scene": "程宗扬在混元观附近遇到一个年轻人在讲解七星瓢虫防治蚜虫的知识，年轻人自我介绍说他是混元观的观主秋少君"
+        }
       },
       "phaseIdentities": [
         {
@@ -20234,7 +22389,22 @@
           "被程宗扬多次肏弄",
           "被罂粟女调教并提到其淫浪模样"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "威远镖局",
+            "role": "镖头夫人"
+          },
+          {
+            "faction": "林州小碧潭",
+            "role": "弟子"
+          }
+        ],
+        "debutLocation": {
+          "location": "威远镖局（临安）",
+          "locator": "第19章",
+          "scene": "程宗扬到威远镖局委托押运象牙业务时，阮香琳以镖头夫人身份出面询问镖费，表现出精明爽快的一面。"
+        }
       },
       "phaseIdentities": [
         {
@@ -20569,7 +22739,26 @@
           "林冲对此毫无所觉，整天把她当弱不禁风的宝贝疙瘩呵护",
           "真正使用阮香凝的鼎炉效果之后，程宗扬炼化效率提升不下十倍。"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "黑魔海",
+            "role": "疑似御姬/成员"
+          },
+          {
+            "faction": "宋国",
+            "role": "禁军教头林冲之妻"
+          }
+        ],
+        "debutLocation": {
+          "location": "明庆寺五岳楼",
+          "locator": "第0017章",
+          "scene": "高衙内在明庆寺拦住阮香凝调戏，被林冲赶来化解"
+        },
+        "storyAge": {
+          "value": "约二十七八",
+          "basis": "按成亲时间推算，应该是二十七八岁年纪"
+        }
       },
       "phaseIdentities": [
         {
@@ -20842,7 +23031,18 @@
           "身体一挺，长高尺许，显出帝王般的威严",
           "揭示人皮制品真相时露出悲悯眼神"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "殇侯势力",
+            "role": "首领/侯爷"
+          }
+        ],
+        "debutLocation": {
+          "location": "五原城",
+          "locator": "第147章",
+          "scene": "程宗扬被叶媪引至一处宅院，竹帘后传来啜茶声，殇侯以冷峭威严的声音现身相见"
+        }
       },
       "phaseIdentities": [
         {
@@ -21211,7 +23411,22 @@
           "第4章为程宗扬打理沐羽城事务",
           "第5章主动献吻，表达敬慕"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "太乙真宗",
+            "role": "弟子"
+          },
+          {
+            "faction": "申服君封地",
+            "role": "申服君之女"
+          }
+        ],
+        "debutLocation": {
+          "location": "沐羽城",
+          "locator": "chapter315.html",
+          "scene": "在沐羽城施药分发丹药的活动中，一只玉手拨开肩舆白纱，露出卓云君的仙子面容，申婉盈随后让门人将肩舆抬回并闭门。"
+        }
       },
       "phaseIdentities": [
         {
@@ -21451,7 +23666,18 @@
           "与吕雉倒戈",
           "被描述为“貌似英雄，却是个口是心非的无耻小人”"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "殇侯势力",
+            "role": "近卫队成员/殇侯代理人"
+          }
+        ],
+        "debutLocation": {
+          "location": "江州",
+          "locator": "六朝云龙吟/0067.html",
+          "scene": "在战利品分配争执中，被月霜点名提及其作为殇侯近卫队成员应得的报酬份额，随后默许了月霜提出的分配方案。"
+        }
       },
       "phaseIdentities": [
         {
@@ -21597,7 +23823,18 @@
           "陪同程宗扬前往蓝田",
           "在庆宴中与众人同席"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "程氏商会",
+            "role": "管事"
+          }
+        ],
+        "debutLocation": {
+          "location": "留仙坪道旁",
+          "locator": "六朝燕歌行 第70章",
+          "scene": "石越在道旁伏身拜倒迎接少主（高智商），称受家主吩咐赶来接待"
+        }
       },
       "phaseIdentities": [
         {
@@ -21668,7 +23905,18 @@
         ],
         "ending": [
           "战死"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "雪隼佣兵团",
+            "role": "副团长"
+          }
+        ],
+        "debutLocation": {
+          "location": "晴州",
+          "locator": "chapter259",
+          "scene": "敖润向程宗扬介绍雪隼佣兵团时提及副团长石之隼与云六爷是过命的交情"
+        }
       },
       "phaseIdentities": [
         {
@@ -21880,7 +24128,18 @@
           "被赵充国拉着拼酒",
           "接过郭靖时面色柔和"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "星月湖",
+            "role": "中校/八骏之一"
+          }
+        ],
+        "debutLocation": {
+          "location": "江州",
+          "locator": "六朝云龙吟/0006.html",
+          "scene": "与卢景联手放火烧毁金明寨宋军粮草"
+        }
       },
       "phaseIdentities": [
         {
@@ -22035,7 +24294,12 @@
           "在青叶教主莫爷处调教尹馥兰",
           "被程宗扬认出"
         ],
-        "ending": []
+        "ending": [],
+        "debutLocation": {
+          "location": "太泉古阵内某大厦",
+          "locator": "第0130章/门牌",
+          "scene": "程宗扬劈开大床，宋三与一名少女从床下钻出，语无伦次地自报名姓求饶，称自己是苍澜人，被雇来当向导的。"
+        }
       },
       "phaseIdentities": [
         {
@@ -22106,7 +24370,18 @@
           "信任贾师宪却也能在博弈后接纳韩节夫等",
           "身世秘密被黑魔海掌握"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "宋国",
+            "role": "皇帝"
+          }
+        ],
+        "debutLocation": {
+          "location": "筠州",
+          "locator": "0008.html",
+          "scene": "滕甫因挪用军费购买粮食被有司论罪，宋主特旨下诏不问，后此札子被收入《六朝名臣奏议》"
+        }
       },
       "phaseIdentities": [
         {
@@ -22176,7 +24451,18 @@
           "大宋建康城财富垄断",
           "深护残存狐族孤儿（孙寿/胡情/淖嬷嬷）"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "白湖商馆",
+            "role": "掌柜"
+          }
+        ],
+        "debutLocation": {
+          "location": "建康（程宗扬私宅）",
+          "locator": "chapter188.html",
+          "scene": "灯下坐着一个艳丽女子，被程宗扬发现是白湖商馆掌柜玉面妖姬苏妲己突然现身建康私宅中"
+        }
       },
       "phaseIdentities": [
         {
@@ -22275,7 +24561,18 @@
           "获赠九花虬马，因此欠程宗扬人情",
           "与仇士良密谈"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "皇图天策府",
+            "role": "将领"
+          }
+        ],
+        "debutLocation": {
+          "location": "曲江苑至娑梵寺下院途中",
+          "locator": "0154",
+          "scene": "程宗扬一行前往娑梵寺途中，苏定方作为护卫与王彦章、高力士挤在马车车厢内随行"
+        }
       },
       "phaseIdentities": [
         {
@@ -22340,7 +24637,18 @@
           "被小紫用紫鳞鞭凌虐",
           "用蝎尾杀死巫师"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "花苗族",
+            "role": "族长"
+          }
+        ],
+        "debutLocation": {
+          "location": "废墟",
+          "locator": "chapter104.html",
+          "scene": "月光下，美艳的身影出现在巨石顶端，身裹鲜红丝绸，纤手挽弓，一箭射杀威胁程宗扬的鬼战士，展现出精湛的箭术"
+        }
       },
       "phaseIdentities": [
         {
@@ -22579,7 +24887,26 @@
           "战绩彪炳",
           "被程宗扬认为会成长为豪杰"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "星月湖",
+            "role": "六营上尉连长"
+          },
+          {
+            "faction": "鹏翼社",
+            "role": "社员/六营成员"
+          },
+          {
+            "faction": "秦国",
+            "role": "原右庶长（已弃爵位投奔岳帅）"
+          }
+        ],
+        "debutLocation": {
+          "location": "鹏翼社后院",
+          "locator": "chapter269.html",
+          "scene": "点名时被叫到\"六营三连，苏骁\"，一名戴着平顶皮冠的将军跨出一步应\"到\"，正式出场"
+        }
       },
       "phaseIdentities": [
         {
@@ -22724,7 +25051,26 @@
           "与孙寿一起服侍程宗扬（第3章失踪）",
           "乳头穿刺挂银铃（第4章众浴）"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "汉国朝廷",
+            "role": "封君（湖阳君）"
+          },
+          {
+            "faction": "程氏商会",
+            "role": "侍奴"
+          }
+        ],
+        "debutLocation": {
+          "location": "程宗扬居所",
+          "locator": "第0074章",
+          "scene": "孙寿带她前来拜见程宗扬，请求收留，她自称丧家之人，愿为奴为婢终身服侍程侯"
+        },
+        "storyAge": {
+          "value": "约25-26",
+          "basis": "年约二十五六"
+        }
       },
       "phaseIdentities": [
         {
@@ -22937,7 +25283,18 @@
           "吕氏倒台沦死囚，交程宗扬+阮香琳审讯，成最下贱审讯禁脔/泄欲工具",
           "狐女无法作鼎炉(采元红无助修行)，纯感官玩物"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "吕氏外戚集团",
+            "role": "襄邑侯正妻（襄城君）"
+          }
+        ],
+        "debutLocation": {
+          "location": "审案殿",
+          "locator": "第8章",
+          "scene": "孙寿被罂粟女用铁链牵着，趴在地上像母狗一样爬进殿内受审"
+        }
       },
       "phaseIdentities": [
         {
@@ -23166,7 +25523,18 @@
           "第4章乱战：被青面兽掐脖几乎毙命，亮腰牌求饶，后跪认程宗扬为父",
           "第5章王氏：登门向程宗扬请安，汇报情报"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "皇城司",
+            "role": "指挥"
+          }
+        ],
+        "debutLocation": {
+          "location": "野猪林",
+          "locator": "六朝云龙吟/0055.html 秘闻 第2章（林中场景出现）/0057.html 乱战 第4章（正式被挖出对话）",
+          "scene": "作为皇城司官差随队追杀林冲，利用野猪和钻入落叶下泥土中躲避追踪，后被程宗扬从地下挖出，亮出腰牌表明皇城司身份。"
+        }
       },
       "phaseIdentities": [
         {
@@ -23239,7 +25607,18 @@
           "净念献法帖，索元礼与高力士交换眼色",
           "程宗扬找索元礼要人，索元礼表示不敢私自放人"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "唐国朝廷",
+            "role": "推事院推事"
+          }
+        ],
+        "debutLocation": {
+          "location": "推事院大堂",
+          "locator": "0123.html",
+          "scene": "程宗扬和小紫来到推事院，看到一名朱衣官员正襟端坐审讯番僧，此人鹰目狼视，须发赤黄，自称索元礼"
+        }
       },
       "phaseIdentities": [
         {
@@ -23289,7 +25668,18 @@
         "formsOfAddress": [],
         "joining": [],
         "keyEvents": [],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "汉国朝廷",
+            "role": "太皇太后"
+          }
+        ],
+        "debutLocation": {
+          "location": "明庆寺",
+          "locator": "0073.html（背景提及）/ 0079.html（正式出场）",
+          "scene": "童贯向程宗扬透露宫中消息，提及贾师宪在面圣前先去见了太皇太后，太皇太后随后教训陛下，导致王宰相被贬。"
+        }
       },
       "phaseIdentities": [
         {
@@ -23360,7 +25750,22 @@
         ],
         "ending": [
           "原文未明确交代。"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "汉国朝廷",
+            "role": "中常侍（金珰右貂）"
+          },
+          {
+            "faction": "宦官集团",
+            "role": "天子心腹"
+          }
+        ],
+        "debutLocation": {
+          "location": "玉堂前殿",
+          "locator": "六朝云龙吟/0243.html",
+          "scene": "徐璜带程宗扬去见第三位中常侍，唐衡长身而起，主动迎上并称赞程宗扬'年轻有为'，展现出随和友善的态度。"
+        }
       },
       "phaseIdentities": [
         {
@@ -23412,7 +25817,18 @@
         "formsOfAddress": [],
         "joining": [],
         "keyEvents": [],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "舞阳侯府",
+            "role": "门客/心腹"
+          }
+        ],
+        "debutLocation": {
+          "location": "北邙·颍阳侯别业",
+          "locator": "六朝云龙吟/0215.html",
+          "scene": "在池畔夜色中拿着一张纸条匆匆走来，向垂钓的吕不疑汇报已找到一个目标（郁奉文）"
+        }
       },
       "phaseIdentities": [
         {
@@ -23480,7 +25896,22 @@
           "与程宗扬合作开办商号，获利丰厚",
           "在程宗扬封侯后表示巴结，同时注重安全（在宴会上戴兜帽）"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "陶氏钱庄",
+            "role": "少东家"
+          },
+          {
+            "faction": "晴州总商会",
+            "role": "代表人物"
+          }
+        ],
+        "debutLocation": {
+          "location": "临安",
+          "locator": "六朝云龙吟/0020.html",
+          "scene": "乘马车到书店门口，掀开车帘与程宗扬打招呼，将他从与廖群玉的会面中拉走去吃鱼羹"
+        }
       },
       "phaseIdentities": [
         {
@@ -23583,7 +26014,18 @@
           "被贾师宪提及举荐了程宗扬",
           "被宋主召回后与王禹玉等被免职"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "宋国",
+            "role": "筠州知州"
+          }
+        ],
+        "debutLocation": {
+          "location": "筠州知州衙门",
+          "locator": "六朝云龙吟/0008.html",
+          "scene": "滕甫在知州衙门内拍案而起，听取程宗扬禀报昭南人售粮事宜，得知需购三十万石粮食解筠州燃眉之急，当即表示款项由他来筹措。"
+        }
       },
       "phaseIdentities": [
         {
@@ -23666,7 +26108,22 @@
           "指使手下刺杀仇从广",
           "被鱼弘志背叛，遭亲信暴打"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "唐国朝廷",
+            "role": "枢密院右枢密使"
+          },
+          {
+            "faction": "宦官集团",
+            "role": "一王四公之一（晋国公）、主掌政事"
+          }
+        ],
+        "debutLocation": {
+          "location": "唐国朝廷（宫殿）",
+          "locator": "六朝燕歌行/0095.html、0105.html",
+          "scene": "先在杨玉环介绍唐国权宦时被提及；后在元旦朝贺大典上首次正式现身，以八字眉、面容瘦削之貌掌管政事的右枢密使身份上前跪拜接诏、宣读圣旨"
+        }
       },
       "phaseIdentities": [
         {
@@ -23810,7 +26267,22 @@
           "程宗扬交待其沉住气",
           "含元殿上率先为唐祝贺"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "宋国",
+            "role": "使团副使/代理正使"
+          },
+          {
+            "faction": "皇图天策府",
+            "role": "武事学员"
+          }
+        ],
+        "debutLocation": {
+          "location": "长安待漏院",
+          "locator": "第10集·有花堪折 第104章",
+          "scene": "戴着长翅纱冠的乌衣少年上前拜倒，自称\"小贯子\"，称程宗扬为\"程主事\"，表现出既担忧又惊喜的神情"
+        }
       },
       "phaseIdentities": [
         {
@@ -23878,7 +26350,22 @@
           "王蕙代程宗扬与蔡常侍交涉",
           "参与欺骗吕雉等计划并出谋划策"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "盘江程氏",
+            "role": "家眷"
+          }
+        ],
+        "debutLocation": {
+          "location": "某处室内（竹榻所在房间）",
+          "locator": "六朝云龙吟/0090.html",
+          "scene": "程宗扬推门进入，看到秦桧（死奸臣）躺在竹榻上，王蕙坐在榻侧，起身福礼自报姓名"
+        },
+        "storyAge": {
+          "value": "十七八岁",
+          "basis": "顶多十七八岁"
+        }
       },
       "phaseIdentities": [
         {
@@ -24059,7 +26546,18 @@
           "照顾受伤的剧孟，伤心痛哭",
           "拒绝扮太监，以死相抗"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "汉国游侠",
+            "role": "游侠/随从"
+          }
+        ],
+        "debutLocation": {
+          "location": "程宗扬宅邸厅堂",
+          "locator": "六朝云龙吟·0264.html",
+          "scene": "程宗扬快步入厅，见一名身高超过两米的壮汉与一名短小男子并肩而坐，敖润误认壮汉为郭大侠，程宗扬上前搭话时，壮汉自报姓名\"在下符离王孟\"。"
+        }
       },
       "phaseIdentities": [
         {
@@ -24184,7 +26682,22 @@
         "formsOfAddress": [],
         "joining": [],
         "keyEvents": [],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "唐国朝廷",
+            "role": "枢密院左枢密使，掌军事"
+          },
+          {
+            "faction": "宦官集团",
+            "role": "一王四贵之一（四贵：两枢密使、两神策军中尉）"
+          }
+        ],
+        "debutLocation": {
+          "location": "唐国皇宫御前",
+          "locator": "六朝燕歌行/0105.html",
+          "scene": "程宗扬在朝会御座前看到五名紫袍宦官之一，四方脸、卧蚕眉，被介绍为枢密院左枢密使王守澄"
+        }
       },
       "phaseIdentities": [
         {
@@ -24252,7 +26765,26 @@
           "第274章，王韬第一个出手救治，力竭调息",
           "第285章，王韬与其他五人分路突进合围敌军"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "星月湖",
+            "role": "八骏第七/朱骅/五营长（中校）"
+          },
+          {
+            "faction": "太原王家",
+            "role": "子弟"
+          }
+        ],
+        "debutLocation": {
+          "location": "烈山战场",
+          "locator": "chapter295.html或第293-295章附近",
+          "scene": "宋军对峙时，从林中骑马而出，手持绣金'嶽'字战旗，骑枣红马，掷旗刺敌，取斧冲阵，展现星月湖八骏实力"
+        },
+        "storyAge": {
+          "value": "约30-40岁",
+          "basis": "原文描述其外貌'看上去三四十岁年纪'，'相貌显得清雅脱俗，有一种很艺术家的气质'"
+        }
       },
       "phaseIdentities": [
         {
@@ -24468,7 +27000,22 @@
         "ending": [
           "押赴法场，明正典刑",
           "被程宗扬羞辱，木枷上沾有精液，未明确死亡"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "筠州乡兵",
+            "role": "团练（统领）"
+          },
+          {
+            "faction": "宋国",
+            "role": "筠州团练（被夺官前）"
+          }
+        ],
+        "debutLocation": {
+          "location": "筠州",
+          "locator": "第8章/0008.html",
+          "scene": "王团练派遣的管家和乡兵到荆溪村寨催粮劫掠时，被程宗扬截获审讯，供出王团练的罪行。"
+        }
       },
       "phaseIdentities": [
         {
@@ -24553,7 +27100,18 @@
         ],
         "ending": [
           "趁乱脱身，不知去向"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "皇图天策府",
+            "role": "卫士"
+          }
+        ],
+        "debutLocation": {
+          "location": "马车内",
+          "locator": "0154.html",
+          "scene": "程宗扬乘车前往娑梵寺途中，车上挤着苏定方、王彦章和高力士，王彦章是从皇图天策府被卫公指派来护送程宗扬的猛将之一"
+        }
       },
       "phaseIdentities": [
         {
@@ -24630,7 +27188,18 @@
         ],
         "ending": [
           "六朝燕歌行唐国篇23集·宫阙万间第二章：被程宗扬双修采伐（采补）致死"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "龙宸",
+            "role": "杀手/玄武七宿成员"
+          }
+        ],
+        "debutLocation": {
+          "location": "洛水",
+          "locator": "0277.html",
+          "scene": "作为龙宸玄武七宿之一，在洛水伏击云氏商队时，以轻功水上飞掠、挥鞭参战的方式首次出场。"
+        }
       },
       "phaseIdentities": [
         {
@@ -25085,7 +27654,18 @@
           "偷袭鱼无夷，打折其腰椎逼问阴阳鱼下落",
           "被齐姐携走"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "黑魔海",
+            "role": "调教师（专管调教豢奴）"
+          }
+        ],
+        "debutLocation": {
+          "location": "洞穴深处",
+          "locator": "第227章·内讧",
+          "scene": "程宗扬在幽暗洞穴深处遭遇星月湖军士，巫嬷嬷作为仙姬最得力的三个手下之一出现在众人面前，她负责管理黑魔海各地送来的豢奴"
+        }
       },
       "phaseIdentities": [
         {
@@ -25316,7 +27896,22 @@
           "第184章·行云：因有人找程宗扬麻烦而横眉瞪眼表示要出头",
           "殇侯旧部、黑魔海毒宗出身"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "殇侯势力",
+            "role": "部属"
+          },
+          {
+            "faction": "程氏商会",
+            "role": "随从（殇侯指派协助程宗扬）"
+          }
+        ],
+        "debutLocation": {
+          "location": "草原战场",
+          "locator": "chapter12.html",
+          "scene": "程宗扬与王哲谈论作战时，引用历史典故提到「当年一片石大战，稳操胜券的李自成击败吴三桂，却没想到辫子军会突然出现」，吴三桂以历史人物身份被提及。"
+        }
       },
       "phaseIdentities": [
         {
@@ -25569,7 +28164,18 @@
         ],
         "ending": [
           "（高手榜红:身死）"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "黑魔海",
+            "role": "弟子"
+          }
+        ],
+        "debutLocation": {
+          "location": "五原城醉月楼",
+          "locator": "第3集·醉月鸳鸯（chapter27/chapter35）",
+          "scene": "西门庆在醉月楼调戏女子后向程宗扬点头示意，被程宗扬认出是西门大官人"
+        }
       },
       "phaseIdentities": [
         {
@@ -25663,7 +28269,18 @@
           "提议假借太真公主名义诱骗程宗扬",
           "在精阁聚会中支持周飞"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "周族",
+            "role": "大主灶"
+          }
+        ],
+        "debutLocation": {
+          "location": "太泉古阵某处",
+          "locator": "六朝云龙吟/0144.html",
+          "scene": "周飞与人起冲突时，昔名博以周飞身边老仆身份出场，为斜视者辩护"
+        }
       },
       "phaseIdentities": [
         {
@@ -25733,7 +28350,13 @@
         "formsOfAddress": [],
         "joining": [],
         "keyEvents": [],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "宋国",
+            "role": "捧日军主将"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -25910,7 +28533,18 @@
           "通过后门方式反制程宗扬（性交换+威胁）",
           "多次与程宗扬发生关系并渐生依赖"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "吕氏外戚集团",
+            "role": "襄邑侯吕冀的正室夫人"
+          }
+        ],
+        "debutLocation": {
+          "location": "洛都长街（襄城君府邸门前）",
+          "locator": "第52集/第0230章",
+          "scene": "程宗扬行至长街，见襄城君府邸大门华奢，文士毛延寿被豪奴连踢带打赶出，声称是向襄邑侯献画却误入襄城君门内，被呵斥'这是襄城君的宅邸'，程宗扬上前拦下文士询问其身份"
+        }
       },
       "phaseIdentities": [
         {
@@ -25988,7 +28622,18 @@
           "第4章单膝跪地效忠",
           "第5章与程宗扬多次性交，血誓"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "荆溪人",
+            "role": ""
+          }
+        ],
+        "debutLocation": {
+          "location": "荆溪村寨",
+          "locator": "0007.html",
+          "scene": "被筠州乡兵从被俘的荆溪女子中拖出，绑在图腾柱上险遭凌辱时首次出场。"
+        }
       },
       "phaseIdentities": [
         {
@@ -26114,7 +28759,18 @@
           "在宴席上跳绿腰舞",
           "崇拜程宗扬"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "唐国朝廷",
+            "role": "教坊司舞伎"
+          }
+        ],
+        "debutLocation": {
+          "location": "长安街头",
+          "locator": "六朝燕歌行/0080.html",
+          "scene": "程宗扬等人在街上遇到被抢的歌伎，询问其姓名，歌伎怯生生答道\"奴家小环\"，称自己来自神通寺，是寺庙请来弘法的歌伎"
+        }
       },
       "phaseIdentities": [
         {
@@ -26182,7 +28838,18 @@
           "第3章偷袭郭解未果被拍飞",
           "第4章使用传送阵抢走信笺，被曹季兴阻止，后被剑玉姬救走并一同消失"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "黑魔海",
+            "role": "成员/刺客"
+          }
+        ],
+        "debutLocation": {
+          "location": "昭阳殿顶",
+          "locator": "六朝燕歌行/0005.html",
+          "scene": "郭解与仇雍交手时，小玲儿从黑暗中飞出，悄无声息地偷袭郭解后颈，被郭解以大摔碑手击退"
+        }
       },
       "phaseIdentities": [
         {
@@ -26256,7 +28923,18 @@
           "被程宗扬带回，并被要求协助给安乐公主开苞",
           "羞耻哭泣但无力反抗"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "唐国朝廷",
+            "role": "太后"
+          }
+        ],
+        "debutLocation": {
+          "location": "宫廷内殿",
+          "locator": "0231.html",
+          "scene": "萧太后被黄衫内侍等太监围困羞辱，强行为其沐浴更衣，遭到马鞭捅入下身等酷刑折磨"
+        }
       },
       "phaseIdentities": [
         {
@@ -26433,7 +29111,17 @@
           "怂恿程宗扬看张贵妃",
           "与小狐狸腿法对决"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "星月湖",
+            "role": "八骏之一"
+          },
+          {
+            "faction": "少陵侯府",
+            "role": "嫡子/小侯爷"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -26753,7 +29441,12 @@
           "师承殇侯（黑魔海/殇侯门毒宗头目），是殇侯的徒弟",
           "黑魔海巫宗正统传人，幕后操盘"
         ],
-        "ending": []
+        "ending": [],
+        "debutLocation": {
+          "location": "江州城西客栈",
+          "locator": "六朝云龙吟/0006.html",
+          "scene": "小紫斜身坐在程宗扬腹肌上，披着紫色缎子，调戏程宗扬和梦娘、雁儿两女，展现出调皮活泼的性格"
+        }
       },
       "phaseIdentities": [
         {
@@ -27338,7 +30031,12 @@
         ],
         "ending": [
           "在第116章中牺牲，神情平静；（高手榜红:身死）"
-        ]
+        ],
+        "debutLocation": {
+          "location": "废墟",
+          "locator": "第85章",
+          "scene": "谢艺抱着凝羽从树梢跃下"
+        }
       },
       "phaseIdentities": [
         {
@@ -27581,7 +30279,18 @@
           "询问小侯爷是否在",
           "取谢艺的刀"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "皇图天策府",
+            "role": "府众/将领"
+          }
+        ],
+        "debutLocation": {
+          "location": "江州江畔芦苇荡",
+          "locator": "六朝云龙吟/0006.html",
+          "scene": "程宗扬小船途经江畔时，谢幼度立于斩断的芦苇杆上，手握连鞘长剑，与来自泊陵的鱼长老对峙，拦截其伏袭月霜。"
+        }
       },
       "phaseIdentities": [
         {
@@ -27655,7 +30364,26 @@
           "被霍仙鸣一刀几乎刺穿腹腔",
           "向程侯挑衅单挑"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "娑梵寺",
+            "role": "首席方丈"
+          },
+          {
+            "faction": "十方丛林",
+            "role": "名誉主持"
+          },
+          {
+            "faction": "唐国佛门理事会",
+            "role": "总理事"
+          }
+        ],
+        "debutLocation": {
+          "location": "靖恭坊",
+          "locator": "第0113章",
+          "scene": "一名胖乎乎的光头和尚身披灰色袈裟，手持禅杖走进大门，把禅杖往腰后一别，一路小跑奔上前去，紧握程宗扬双手，激动地称呼其为'菩萨哥'"
+        }
       },
       "phaseIdentities": [
         {
@@ -27739,7 +30467,22 @@
           "对游侠朱安世及豪强深恶痛绝",
           "因江充巫蛊奏报而大惊失色"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "汉国朝廷",
+            "role": "中常侍"
+          },
+          {
+            "faction": "宦官集团",
+            "role": "阉党成员"
+          }
+        ],
+        "debutLocation": {
+          "location": "西邸",
+          "locator": "六朝云龙吟/0238.html",
+          "scene": "程宗扬前往西邸求官，徐璜接待并把玩其纯金名刺，态度亲切地询问来意"
+        }
       },
       "phaseIdentities": [
         {
@@ -27915,7 +30658,12 @@
         ],
         "ending": [
           "云龙太泉段后续仍活跃，燕歌后期发达为秦国正使"
-        ]
+        ],
+        "debutLocation": {
+          "location": "苍澜镇",
+          "locator": "第120章/0120.html",
+          "scene": "在苍澜镇河边洗完手和衣服后上岸，朗笑着向程宗扬与小紫搭讪，自称徐福，夸夸其谈太泉神鱼的功效"
+        }
       },
       "phaseIdentities": [
         {
@@ -28128,7 +30876,22 @@
           "将靴子赠予程宗扬，替其担下干系",
           "托程宗扬向卫公问好"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "皇图天策府",
+            "role": "骑兵科毕业生"
+          },
+          {
+            "faction": "银枪效节",
+            "role": "低级军官（禆将）"
+          }
+        ],
+        "debutLocation": {
+          "location": "大宁坊",
+          "locator": "0196.html",
+          "scene": "年轻军官用银枪掷向程宗扬，被令箭挡下后接住令箭询问身份，摘下凤翅盔自我介绍为皇图天策府骑兵科毕业生薛礼"
+        }
       },
       "phaseIdentities": [
         {
@@ -28290,7 +31053,12 @@
           "吞下鬼金羊尸身",
           "被杨玉环抱着带走"
         ],
-        "ending": []
+        "ending": [],
+        "debutLocation": {
+          "location": "阁内",
+          "locator": "六朝云龙吟/0107.html",
+          "scene": "程宗扬进入阁内查看警报声来源时，一只兔子大小的白毛小狗从阁内蹿出，认出入侵者后色厉内荏地后退，随后将一只损坏的铁怪物拖回阁中。"
+        }
       },
       "phaseIdentities": [
         {
@@ -28389,7 +31157,18 @@
         ],
         "ending": [
           "首级被人取走"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "雪隼佣兵团",
+            "role": "团长"
+          }
+        ],
+        "debutLocation": {
+          "location": "筠州",
+          "locator": "六朝云龙吟/0010.html",
+          "scene": "敖润和冯源提出想去临安与雪隼团分舵接头，打听团长薛延山的下落，首次提及其名"
+        }
       },
       "phaseIdentities": [
         {
@@ -28486,7 +31265,22 @@
           "程宗扬遇险时哭泣",
           "协助夫人管理家务"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "石家（金谷园）",
+            "role": "侍女"
+          }
+        ],
+        "debutLocation": {
+          "location": "宴会场所（酒楼）",
+          "locator": "chapter167",
+          "scene": "作为石超的奉酒侍女出场，为程宗扬奉酒，石超扬言若程宗扬不饮便杀雁儿，后雁儿被作为礼物送给程宗扬"
+        },
+        "storyAge": {
+          "value": "约十五六岁",
+          "basis": "原文：\"她不过十五六岁年纪\""
+        }
       },
       "phaseIdentities": [
         {
@@ -28748,7 +31542,18 @@
         ],
         "ending": [
           "（高手榜蓝:下落未确定）"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "光明观堂",
+            "role": "医女"
+          }
+        ],
+        "debutLocation": {
+          "location": "程宅",
+          "locator": "第166章",
+          "scene": "燕姣然应程宗扬之邀到程宅，为赵飞燕诊脉诊视良久后宣布其有孕。"
+        }
       },
       "phaseIdentities": [
         {
@@ -28834,7 +31639,46 @@
         "keyEvents": [
           "升级究极尤物"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "唐国朝廷",
+            "role": "镇国公主/太真妃子"
+          },
+          {
+            "faction": "太乙真宗",
+            "role": "弟子（受先皇钦命授箓传道）"
+          },
+          {
+            "faction": "阳钧宗",
+            "role": "弟子（受先皇钦命授箓传道）"
+          },
+          {
+            "faction": "乾贞道",
+            "role": "弟子（受先皇钦命授箓传道）"
+          },
+          {
+            "faction": "长青宗",
+            "role": "弟子（受先皇钦命授箓传道）"
+          },
+          {
+            "faction": "瑶池宗",
+            "role": "弟子（受先皇钦命授箓传道）"
+          },
+          {
+            "faction": "光明观堂",
+            "role": "弟子（卫采芝为授业恩师）"
+          }
+        ],
+        "debutLocation": {
+          "location": "长安城",
+          "locator": "第七集·完 / 0080章",
+          "scene": "杨玉环戴饕餮面具，驾马车当街与胡人恶少斗殴，从车上跃下踩住敌人脑袋，放声大笑，程宗扬亲眼目睹这位传说中的大唐第一美女街头施暴的全过程"
+        },
+        "storyAge": {
+          "value": "约二十四岁",
+          "basis": "程宗扬推算：岳帅失踪第二年，距今十七、十八年，杨玉环如今差不多是二十四岁"
+        }
       },
       "phaseIdentities": [
         {
@@ -29062,7 +31906,22 @@
         ],
         "ending": [
           "身体被鬼巫王施法畸形化为怪物（被认出是易虎）。"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "云氏商会",
+            "role": "护卫"
+          },
+          {
+            "faction": "北府军",
+            "role": "军士/头领"
+          }
+        ],
+        "debutLocation": {
+          "location": "黑石滩",
+          "locator": "chapter45.html",
+          "scene": "云苍峰命易彪、易虎下水探路，两名大汉应诺跳入水中"
+        }
       },
       "phaseIdentities": [
         {
@@ -29137,6 +31996,16 @@
         ],
         "ending": [
           "六十年前圆寂，法号悬置至十余年前由沮渠大师继承为二世大师"
+        ],
+        "affiliations": [
+          {
+            "faction": "大孚灵鹫寺",
+            "role": "前任方丈"
+          },
+          {
+            "faction": "十方丛林",
+            "role": "创始者/缔造者"
+          }
         ]
       },
       "phaseIdentities": [
@@ -29211,7 +32080,18 @@
           "友通期等伤者",
           "以赵昭仪有孕相胁保命"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "光明观堂",
+            "role": "女神医"
+          }
+        ],
+        "debutLocation": {
+          "location": "襄邑侯府密室",
+          "locator": "第8章/0008.html",
+          "scene": "小紫说\"请光明观堂的女神医上来吧\"，义姁冷着脸被带进殿内"
+        }
       },
       "phaseIdentities": [
         {
@@ -29438,7 +32318,12 @@
           "乳头穿孔挂银铃，被主人玩弄",
           "殷勤为主人洗沐擦脚，媚态讨好"
         ],
-        "ending": []
+        "ending": [],
+        "debutLocation": {
+          "location": "秘境",
+          "locator": "六朝燕歌行/0014.html",
+          "scene": "在秘境溪边，蛇夫人唤她「兰奴」让她去解说太泉秘境的来历，她自称「奴婢也弄不清楚」回应赵皇后关于秘境的询问。"
+        }
       },
       "phaseIdentities": [
         {
@@ -29654,7 +32539,12 @@
           "摘去孙寿发钗、剥服、剪发，将其降为奴婢（恶报）",
           "反派计划废其修为、剜眼（危难）"
         ],
-        "ending": []
+        "ending": [],
+        "debutLocation": {
+          "location": "（地点不明）",
+          "locator": "六朝云龙吟/0107.html",
+          "scene": "程宗扬在刘娥事件现场，认出小紫身边的两名黑衣女卫之一是罂粟女，小紫解释她们不肯留在水香楼，自愿献了魂魄给她当了侍奴。"
+        }
       },
       "phaseIdentities": [
         {
@@ -29829,7 +32719,26 @@
           "发现自己是剑玉姬的弃子",
           "与程宗扬多次交合"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "黑魔海",
+            "role": "边缘势力成员"
+          },
+          {
+            "faction": "广阳赌坊",
+            "role": "老板"
+          },
+          {
+            "faction": "翻江会",
+            "role": "临时指挥"
+          }
+        ],
+        "debutLocation": {
+          "location": "马车内",
+          "locator": "六朝云龙吟/0017.html",
+          "scene": "程宗扬在马车内与一女子交合时，女子包头布巾散开，粉面半露，正是广阳赌坊老板游婵"
+        }
       },
       "phaseIdentities": [
         {
@@ -29899,7 +32808,18 @@
           "被行淫兽咬伤后被母亲压制淫毒",
           "被何漪莲和尹馥兰调教奸淫"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "龙宸",
+            "role": "杀手"
+          }
+        ],
+        "debutLocation": {
+          "location": "太泉古阵附近",
+          "locator": "0123.html",
+          "scene": "与孪生姐妹虞紫薇一同出现在太泉古阵外的巨石附近，被程宗扬认出是龙宸杀手"
+        }
       },
       "phaseIdentities": [
         {
@@ -29985,7 +32905,18 @@
           "在脚店目击到赌局和肩刺虎头的汉子",
           "受鲁先生雇佣抄书赚取俸金"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "云台书院",
+            "role": "学子"
+          }
+        ],
+        "debutLocation": {
+          "location": "槐市",
+          "locator": "六朝云龙吟/0214.html（第214章）",
+          "scene": "在槐市被小贩误指为卖桂枝蜜之人，遭质问时太学学子出面为其作证，澄清其为云台书院学子上谷郁奉文"
+        }
       },
       "phaseIdentities": [
         {
@@ -30041,7 +32972,17 @@
         "formsOfAddress": [],
         "joining": [],
         "keyEvents": [],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "宦官集团",
+            "role": "皇帝心腹太监"
+          },
+          {
+            "faction": "唐国朝廷",
+            "role": "内侍省宦官"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -30108,7 +33049,22 @@
         ],
         "ending": [
           "被提及下场比奴妓更残忍，具体未交代"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "泊陵鱼氏",
+            "role": "未来家主/仅次于家主的顶尖高手"
+          },
+          {
+            "faction": "黑魔海",
+            "role": "合作者/听命于剑玉姬"
+          }
+        ],
+        "debutLocation": {
+          "location": "云水流域楼船边",
+          "locator": "chapter262",
+          "scene": "从山崖上飞掠而下，一招制住穆嫣琪，自报家门质问光明观堂"
+        }
       },
       "phaseIdentities": [
         {
@@ -30333,7 +33289,18 @@
           "与萧遥逸战斗并被抽脸",
           "被触肢缠绕后被程宗扬救起"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "龙宸",
+            "role": "杀手"
+          }
+        ],
+        "debutLocation": {
+          "location": "室内",
+          "locator": "六朝清羽记/chapter274.html",
+          "scene": "与姐姐虞白樱追杀岳贼之女月霜时，被小紫询问姓名，自报家门并召唤骷髅攻击月霜"
+        }
       },
       "phaseIdentities": [
         {
@@ -30549,7 +33516,22 @@
         ],
         "ending": [
           "失去一条腿，但存活"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "星月湖",
+            "role": "旧部"
+          },
+          {
+            "faction": "鹏翼社",
+            "role": "骨干"
+          }
+        ],
+        "debutLocation": {
+          "location": "筠州",
+          "locator": "第0010章",
+          "scene": "程宗扬出行临安，由俞子元领头，带领三名星月湖的老弟兄负责车马护送任务"
+        }
       },
       "phaseIdentities": [
         {
@@ -30632,7 +33614,12 @@
           "对佛祖化身冷笑",
           "掩护程宗扬受伤"
         ],
-        "ending": []
+        "ending": [],
+        "debutLocation": {
+          "location": "留仙坪",
+          "locator": "第7集·锦绣长安 第0066章",
+          "scene": "程宗扬在山中小镇留仙坪偶遇袁天罡，袁天罡自称来自地球，是因太阳爆炸而穿越的同乡，透露自己已在此世界漂泊五十年。"
+        }
       },
       "phaseIdentities": [
         {
@@ -30830,7 +33817,18 @@
           "第150章·绽浓 解下玉佩，命人调集四千贯铜铢",
           "二十万银铢和八千金铢"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "云氏商会",
+            "role": "执事"
+          }
+        ],
+        "debutLocation": {
+          "location": "南荒丛林",
+          "locator": "第102章·奇险",
+          "scene": "在商队行经南荒丛林时，主动落后一步与向导朱老头攀谈，客气地表示此间事了会亲自去拜见殇侯"
+        }
       },
       "phaseIdentities": [
         {
@@ -31210,7 +34208,22 @@
         "formsOfAddress": [],
         "joining": [],
         "keyEvents": [],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "云氏商会",
+            "role": "云氏庶女/遗腹女"
+          }
+        ],
+        "debutLocation": {
+          "location": "云氏坞堡（建康）",
+          "locator": "六朝云龙吟/0044章",
+          "scene": "云秀峰向程宗扬提及云丹琉身世，称其为先兄遗腹女，虽庶出但视同嫡女，并透露欲将云丹琉许配给程宗扬之意，程宗扬闻言心惊肉跳"
+        },
+        "storyAge": {
+          "value": "18",
+          "basis": "原文\"过完年便是二九年华，一十八岁年纪\""
+        }
       },
       "phaseIdentities": [
         {
@@ -31414,7 +34427,13 @@
         "keyEvents": [
           "程宗扬纯阳龙气一举洗净其极寒阴毒慢性病根，致两性性癖180度逆转"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "云氏商会",
+            "role": "云家小姐"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -31594,7 +34613,22 @@
           "第241章战场救援护卫",
           "第279章吸引美婢注意"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "星月湖",
+            "role": "大营一团一营上尉连长"
+          },
+          {
+            "faction": "鹏翼社",
+            "role": "成员"
+          }
+        ],
+        "debutLocation": {
+          "location": "夜市旁的酒楼雅间",
+          "locator": "chapter263.html",
+          "scene": "程宗扬下楼到雅间，一个铁塔般的壮汉踏前一步敬标准军礼，自报家门：'星月湖大营一团一营上尉连长，臧修！'"
+        }
       },
       "phaseIdentities": [
         {
@@ -31790,7 +34824,18 @@
           "与天子刘骜一同游猎、逛鬼市",
           "在第6章中与刘骜在城门口被堵"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "汉国朝廷",
+            "role": "富平侯"
+          }
+        ],
+        "debutLocation": {
+          "location": "洛都郊外",
+          "locator": "0264章",
+          "scene": "天子刘骜率众少年夜间游猎，张放与天子并骑而行，马鞍旁挂着锦鸡和野兔"
+        }
       },
       "phaseIdentities": [
         {
@@ -31940,7 +34985,18 @@
           "劝说刘宜孙放弃断后任务",
           "私吞劫掠钱财"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "禁军",
+            "role": "副军马使"
+          }
+        ],
+        "debutLocation": {
+          "location": "烈山",
+          "locator": "chapter289.html",
+          "scene": "短发汉子骑在山岗高处的健马上，鹰隼般双眼盯着山下大路，吹铜哨发出鸟鸣联络随后到来的捧日军骑兵，被郭遵指派为先锋"
+        }
       },
       "phaseIdentities": [
         {
@@ -32132,7 +35188,22 @@
           "第277章使用龙雕弓百发百中",
           "第281章参与股份分配"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "舞阳侯府",
+            "role": "侯爷/舞都侯"
+          },
+          {
+            "faction": "晋国",
+            "role": "皇室外戚（晋帝小舅子）"
+          }
+        ],
+        "debutLocation": {
+          "location": "海蜃楼",
+          "locator": "chapter166.html",
+          "scene": "从楼上探出身子招呼萧遥逸，提议过两日去西山射猎试海东青，被程宗扬认出是舞都侯张少煌"
+        }
       },
       "phaseIdentities": [
         {
@@ -32345,7 +35416,22 @@
         ],
         "ending": [
           "程宗扬犹豫着要不要把他处死；出殿门后即死路一条，实际未交代最终"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "汉国朝廷",
+            "role": "中黄门"
+          },
+          {
+            "faction": "吕氏外戚集团",
+            "role": "吕冀亲信"
+          }
+        ],
+        "debutLocation": {
+          "location": "含光殿寝宫",
+          "locator": "第360章",
+          "scene": "一群黑衣内侍涌 入紧闭的宫门，张恽以尖细的声音自报身份为\"中黄门张恽\"，向友通期昭仪禀报中行说等人图谋篡逆已被拿下"
+        }
       },
       "phaseIdentities": [
         {
@@ -32448,7 +35534,22 @@
           "与妹赵合德同为\"挟天子以令诸侯\"幕后床上工具",
           "早朝皇座上当众荒淫名场面（未被发现）"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "汉国朝廷",
+            "role": "皇后"
+          },
+          {
+            "faction": "长秋宫",
+            "role": "宫主/皇后"
+          }
+        ],
+        "debutLocation": {
+          "location": "洛都北宫",
+          "locator": "六朝燕歌行/0003.html",
+          "scene": "程宗扬与贾文和对峙期间提及赵飞燕陷身秘境，提及其为支撑病体而出面的皇后殿下"
+        }
       },
       "phaseIdentities": [
         {
@@ -32694,7 +35795,22 @@
           "代杨玉环请程宗扬帮忙，促成与瑶池宗白仙子的面谈",
           "被十方丛林僧人舍命自爆攻击，几至殒命"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "长青宗",
+            "role": "炼师"
+          }
+        ],
+        "debutLocation": {
+          "location": "紫云楼",
+          "locator": "第0091章",
+          "scene": "李炎带程宗扬登上紫云楼顶，介绍这是赵炼师，赵归真自称'长青宗，赵归真'"
+        },
+        "storyAge": {
+          "value": "约四十",
+          "basis": "年约四旬"
+        }
       },
       "phaseIdentities": [
         {
@@ -32765,7 +35881,18 @@
           "在程宗扬面前张开芳唇舔舐肉棒",
           "与姐姐并乳同臀供程宗扬淫乐"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "太乙真宗",
+            "role": "弟子/习术之人"
+          }
+        ],
+        "debutLocation": {
+          "location": "山谷崖壁处",
+          "locator": "第0025章（狭长山谷困于魏疾追杀）",
+          "scene": "赵合德被魏疾追杀至三面悬崖的绝谷，利用太乙真宗的遁形术攀附崖壁逃命，陷入进退两难的困境"
+        }
       },
       "phaseIdentities": [
         {
@@ -33087,7 +36214,22 @@
         ],
         "ending": [
           "（高手榜蓝:下落未确定）"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "凉州军",
+            "role": "部将/心腹"
+          },
+          {
+            "faction": "凉州盟",
+            "role": "成员"
+          }
+        ],
+        "debutLocation": {
+          "location": "北宫（昭阳宫附近）",
+          "locator": "第3章·英逝",
+          "scene": "浑身是血、提着刘建的头颅策马奔来，高喊\"逆贼刘建！已然伏诛！\""
+        }
       },
       "phaseIdentities": [
         {
@@ -33172,7 +36314,22 @@
           "剃须换内侍服色，混入内廷",
           "引为臂助的张忠志叛变，暗助程宗扬"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "唐国朝廷",
+            "role": "工部尚书"
+          },
+          {
+            "faction": "宦官集团",
+            "role": "与王守澄关系密切（受其举荐）"
+          }
+        ],
+        "debutLocation": {
+          "location": "大明宫",
+          "locator": "第0094章",
+          "scene": "李昂传郑注、李训觐见，郑注正式出场"
+        }
       },
       "phaseIdentities": [
         {
@@ -33314,7 +36471,18 @@
         ],
         "ending": [
           "被杀"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "云台书院",
+            "role": "学子"
+          }
+        ],
+        "debutLocation": {
+          "location": "关隘",
+          "locator": "六朝云龙吟/0213.html",
+          "scene": "当众与游侠少年辩论郭解侠义之道，自报家门为河间人，来京求学于云台书院"
+        }
       },
       "phaseIdentities": [
         {
@@ -33383,7 +36551,18 @@
           "与程宗扬一同勒吕雉",
           "护在义姁身前"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "汉国朝廷",
+            "role": "天子亲信（太监）"
+          }
+        ],
+        "debutLocation": {
+          "location": "长秋宫",
+          "locator": "第6章 遗腹",
+          "scene": "中行说在长秋宫大殿内扮作差役，拿着铜锣敲响，尖声宣布\"带人犯\"，参与对孙寿的审案场景。"
+        }
       },
       "phaseIdentities": [
         {
@@ -33493,7 +36672,18 @@
           "在狐妖事件中被迷住，表现不堪",
           "升官后得意忘形"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "周族",
+            "role": "少主"
+          }
+        ],
+        "debutLocation": {
+          "location": "客栈院中",
+          "locator": "六朝燕歌行/0071.html",
+          "scene": "周族少主周飞在客栈院中与刘诏对峙比武，程宗扬看到这位来自大弁韩的周族少主正在与高智商的随从刘诏刀来枪往"
+        }
       },
       "phaseIdentities": [
         {
@@ -33655,7 +36845,18 @@
           "为报恩侍奉程宗扬",
           "被程宗扬戏弄"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "瑶池宗",
+            "role": "奉琼仙子"
+          }
+        ],
+        "debutLocation": {
+          "location": "太泉（客栈/酒楼）",
+          "locator": "0122.html",
+          "scene": "萧遥逸向程宗扬打听楼上住客身份时提及：瑶池宗一行七人中有位身份特殊的奉琼仙子朱殷。"
+        }
       },
       "phaseIdentities": [
         {
@@ -33745,7 +36946,26 @@
           "屡试逃脱束缚",
           "【三部·燕歌行】早期仍不甘，后期才真正臣服(母狗侍奴)"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "太乙真宗",
+            "role": "教御"
+          },
+          {
+            "faction": "黑魔海",
+            "role": "奴婢"
+          },
+          {
+            "faction": "盘江程氏",
+            "role": "奴婢"
+          }
+        ],
+        "debutLocation": {
+          "location": "某寺院",
+          "locator": "0089.html 第3章 妖踪",
+          "scene": "程宗扬在寺院中处理完米远志事宜后，卓云君从花丛中现身，一剑斩杀米远志，然后跪拜称\"奴婢叩见主子\"。"
+        }
       },
       "phaseIdentities": [
         {
@@ -34209,7 +37429,22 @@
           "与巨狼战斗受伤",
           "被秦翰命令取赤阳圣果"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "宋国",
+            "role": "选锋营秉义郎"
+          }
+        ],
+        "debutLocation": {
+          "location": "江州城外",
+          "locator": "chapter343.html",
+          "scene": "宋军进攻江州时，宗泽骑马驰至城下，扬声自报\"选锋营秉义郎！宗泽！前来讨教！\"，然后飞身跃上城墙挑战"
+        },
+        "storyAge": {
+          "value": "约二十",
+          "basis": "这位宗泽看起来只有二十上下（chapter343.html）"
+        }
       },
       "phaseIdentities": [
         {
@@ -34430,7 +37665,22 @@
           "设局清理叛徒并结识程宗扬",
           "与程宗扬商议对付周飞之事"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "丹霞宗",
+            "role": "护法"
+          },
+          {
+            "faction": "凉州盟",
+            "role": "护法"
+          }
+        ],
+        "debutLocation": {
+          "location": "长安程府前院",
+          "locator": "第183章",
+          "scene": "吕奉先比武招亲获胜后，左彤芝作为丹霞宗代表前来，被高智商介绍出场，她盈盈而笑向程宗扬行礼问候"
+        }
       },
       "phaseIdentities": [
         {
@@ -34555,7 +37805,22 @@
         "formsOfAddress": [],
         "joining": [],
         "keyEvents": [],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "唐国朝廷",
+            "role": "南安郡公、知内侍省事、左神策军左护军中尉、左街功德使"
+          },
+          {
+            "faction": "宦官集团",
+            "role": "四贵之一"
+          }
+        ],
+        "debutLocation": {
+          "location": "未明确（宫中）",
+          "locator": "六朝燕歌行/0095.html",
+          "scene": "杨玉环向程宗扬介绍宫中有太监在查他底细时提及仇士良有五个儿子，还在皇帝面前替儿子讨封。"
+        }
       },
       "phaseIdentities": [
         {
@@ -34692,7 +37957,17 @@
           "与泉玉姬互换任务调查剐面案",
           "被抓住捆绑审问"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "京兆府",
+            "role": "法曹参军"
+          },
+          {
+            "faction": "刑部六扇门",
+            "role": "六扇门得力干将"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -34781,7 +38056,22 @@
           "炼制三眼尸傀，被程宗扬视为陷阱",
           "参与天竺佛门密宗活动"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "十方丛林",
+            "role": "密宗僧人/释特昧普师弟"
+          },
+          {
+            "faction": "青龙寺",
+            "role": "演法僧人"
+          }
+        ],
+        "debutLocation": {
+          "location": "大慈恩寺（晋昌坊）",
+          "locator": "六朝燕歌行/0102.html",
+          "scene": "窥基断喝'观海！你们密宗尽可去青龙、兴善二寺演法，何必来我大慈恩寺！'，观海笑着回应后起身告辞"
+        }
       },
       "phaseIdentities": [
         {
@@ -34854,7 +38144,18 @@
           "暗中操纵针对玄门仙子、西域圣女的渗透与脑控手段",
           "与释特昧普为争国师位/法会献祭利益狗咬狗"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "大慈恩寺",
+            "role": "大师兄"
+          }
+        ],
+        "debutLocation": {
+          "location": "长安街道",
+          "locator": "六朝燕歌行/0087.html",
+          "scene": "袁天罡等人骑马途中，窥基坐着三车法师的车队（载经卷、美人、婢女）出行，程宗扬目睹这位大慈恩寺高僧边看书边搂着娇娃的放诞举止"
+        }
       },
       "phaseIdentities": [
         {
@@ -34940,7 +38241,22 @@
           "第一章被程宗扬破处",
           "多次主动与程宗扬交合"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "剑霄门",
+            "role": "弟子"
+          },
+          {
+            "faction": "周族",
+            "role": "少夫人"
+          }
+        ],
+        "debutLocation": {
+          "location": "长安街道",
+          "locator": "0086.html",
+          "scene": "鱼玄机向泉玉姬介绍好友黎锦香，称其为周氏少夫人"
+        }
       },
       "phaseIdentities": [
         {
@@ -35136,7 +38452,22 @@
           "曾与程宗扬谈及窥基",
           "贾文和等人，对朝局有清晰判断。"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "皇图天策府",
+            "role": "府主/十六卫大将军"
+          },
+          {
+            "faction": "唐国朝廷",
+            "role": "卫国公/朝廷重臣"
+          }
+        ],
+        "debutLocation": {
+          "location": "长安皇城西北官署右千牛卫府",
+          "locator": "六朝燕歌行/0077.html 第664章 卫公",
+          "scene": "与段文楚、王忠嗣议论来访的程侯，在右千牛卫府内商议接待事宜，提及水泥生意与投资分红"
+        }
       },
       "phaseIdentities": [
         {
@@ -35229,7 +38560,18 @@
         ],
         "ending": [
           "被仇士良列入李训一党，在甘露之变中定为逆臣（由仇士良指控），最终命运未见此节选交代。"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "唐国朝廷",
+            "role": "京兆府少尹"
+          }
+        ],
+        "debutLocation": {
+          "location": "通善坊杏园",
+          "locator": "0166.html",
+          "scene": "刚刚接任京兆府少尹、权知府事的罗立言闻讯王守澄被杀，立即带着属下隶卒及长安、万年两县官员赶到凶案现场"
+        }
       },
       "phaseIdentities": [
         {
@@ -35298,7 +38640,18 @@
         ],
         "ending": [
           "被程宗扬踢开，生死未明确交代（但前受伤严重）"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "巫宗",
+            "role": "元老"
+          }
+        ],
+        "debutLocation": {
+          "location": "昭阳殿",
+          "locator": "第0005章",
+          "scene": "在木梯上方伸出手欲拉郭解一把，被郭解识破意图，两人瞬间交手数招后被郭解擒住手腕借势拔起"
+        }
       },
       "phaseIdentities": [
         {
@@ -35387,7 +38740,18 @@
         ],
         "ending": [
           "被程宗扬一脚踢开尸身，头颅撞崖而死"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "刘建集团",
+            "role": "将军"
+          }
+        ],
+        "debutLocation": {
+          "location": "群山间的狭长山谷",
+          "locator": "六朝燕歌行/0025.html",
+          "scene": "魏疾在山谷中追击赵合德，坐在大石头上用长弓瞄准崖壁上的赵合德，自称\"本将军\"戏弄她"
+        }
       },
       "phaseIdentities": [
         {
@@ -35459,7 +38823,18 @@
           "多次以遁术和虚张声势协助程宗扬脱险",
           "在巫宗冲突中表现狡诈"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "巫宗",
+            "role": "随侍/武士"
+          }
+        ],
+        "debutLocation": {
+          "location": "长秋宫",
+          "locator": "六朝燕歌行/0006.html",
+          "scene": "随赵氏姐妹、蛇夫人、尹馥兰、朱老头、蔡敬仲、斯明信等人进入秘境寻找皇后。"
+        }
       },
       "phaseIdentities": [
         {
@@ -35527,7 +38902,18 @@
           "被中行说当众辱骂",
           "查内贼发现姓程"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "唐国朝廷",
+            "role": "鸿胪寺少卿"
+          }
+        ],
+        "debutLocation": {
+          "location": "朱雀门内",
+          "locator": "六朝燕歌行/0077.html",
+          "scene": "敖润去鸿胪寺递交文书时被堵在朱雀门内，段文楚作为鸿胪寺少卿陪同接待汉国使团，向敖润介绍泼寒胡戏并引路。"
+        }
       },
       "phaseIdentities": [
         {
@@ -35610,7 +38996,22 @@
           "被迫掰开阴唇展示阴窍",
           "鱼朝恩族人，黑魔海毒宗"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "瑶池宗",
+            "role": "女冠/女道士"
+          },
+          {
+            "faction": "咸宜观",
+            "role": "女冠"
+          }
+        ],
+        "debutLocation": {
+          "location": "永宁坊外长安街头",
+          "locator": "第663章·故婢（第7章）/0086.html",
+          "scene": "鱼玄机与好友黎锦香夜游乐游原归来，戴纱笠、芙蓉冠出行，偶遇神策军巡逻和六扇门捕头泉玉姬，摘下兜帽自我介绍"
+        }
       },
       "phaseIdentities": [
         {
@@ -35713,7 +39114,22 @@
         ],
         "ending": [
           "僧袍被击碎、胸口骨骼凹陷血肉模糊，还剩一口气。"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "十方丛林",
+            "role": "僧人"
+          },
+          {
+            "faction": "大孚灵鹫寺",
+            "role": "僧人"
+          }
+        ],
+        "debutLocation": {
+          "location": "大慈恩寺",
+          "locator": "0087.html",
+          "scene": "窥基大师进入僧寮，净念起身合掌施礼，称呼对方为师兄，并汇报追踪智深叛徒的情况。"
+        }
       },
       "phaseIdentities": [
         {
@@ -35868,7 +39284,22 @@
           "参与推倒摩尼教神像，成为虔诚信徒",
           "将自身作为祭品供奉给金身法王"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "摩尼教",
+            "role": "女摩尼师"
+          },
+          {
+            "faction": "十方丛林",
+            "role": "智慧母（法号善吟）"
+          }
+        ],
+        "debutLocation": {
+          "location": "摩尼寺",
+          "locator": "六朝燕歌行/0097.html",
+          "scene": "作为女摩尼师，解开善母的日月头冠包裹，跪倒在地顶礼膜拜"
+        }
       },
       "phaseIdentities": [
         {
@@ -35937,7 +39368,18 @@
           "参与朝会起事",
           "指挥魏博牙兵"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "魏博",
+            "role": "六州都指挥使"
+          }
+        ],
+        "debutLocation": {
+          "location": "紫云楼",
+          "locator": "六朝燕歌行/0091章",
+          "scene": "宴会上首倡其议，自报家门：祖父工部尚书乐少寂，父魏博节度使乐彦祯，自己是六州都指挥使"
+        }
       },
       "phaseIdentities": [
         {
@@ -35989,7 +39431,18 @@
         "formsOfAddress": [],
         "joining": [],
         "keyEvents": [],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "摩尼教",
+            "role": "善母（光明使）"
+          }
+        ],
+        "debutLocation": {
+          "location": "小紫家庙（佛堂）",
+          "locator": "六朝燕歌行/0147.html",
+          "scene": "程宗扬在此佛堂中救出被十方丛林高僧用秘法禁锢、仅嘴巴能动的黛绮丝，黛绮丝恢复神智后自称波斯贵族、摩尼教善母，并向程宗扬宣誓效忠"
+        }
       },
       "phaseIdentities": [
         {
@@ -36127,7 +39580,18 @@
           "目睹灵犬吐物",
           "随程宗扬去蓬莱仙山"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "留仙客栈",
+            "role": "小厮"
+          }
+        ],
+        "debutLocation": {
+          "location": "留仙客栈",
+          "locator": "第0070章",
+          "scene": "越二爷问他叫什么名字，他自报姓名\"回二爷，小的姓罗，单名一个令字\"，随后被安排沏茶并伺候客人。"
+        }
       },
       "phaseIdentities": [
         {
@@ -36271,7 +39735,22 @@
           "审时度势带姁奴+秘药财富投奔崛起的程宗扬，名义做生意/当管家",
           "其麾下\"姁奴\"后来成为程宗扬的私人情报团队：平时作端茶倒水的漂亮丫鬟，暗中替主角刺探情报"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "巫宗",
+            "role": "门人/蛇姬"
+          },
+          {
+            "faction": "盘江程氏",
+            "role": "侍奴"
+          }
+        ],
+        "debutLocation": {
+          "location": "秘境",
+          "locator": "第14章/0014.html",
+          "scene": "在秘境溪涧畔，半跪着为赵飞燕试毒除鞋袜，扶皇后坐下休息并为其冷敷脚踝"
+        }
       },
       "phaseIdentities": [
         {
@@ -36371,7 +39850,18 @@
           "两眼放光盯着赤兔马",
           "夸程宗扬战役水平高"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "石家",
+            "role": "家主"
+          }
+        ],
+        "debutLocation": {
+          "location": "长安城外灞桥",
+          "locator": "六朝燕歌行/0075.html",
+          "scene": "在灞桥桥头身着轻裘被侍女簇拥迎接程宗扬，与程宗扬拥抱并称兄道弟。"
+        }
       },
       "phaseIdentities": [
         {
@@ -36441,7 +39931,30 @@
           "用源源不绝的梵音对程宗扬精神轰炸深度洗脑(痛到当场\"只想一刀了结自己\")",
           "一战后在程宗扬神识深处留下极隐蔽的精神烙印/引子：日后遇佛门特定法器或大慈恩寺梵音便蠢蠢欲动、令其恍惚头痛"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "十方丛林",
+            "role": "佛门代言人、金身法王"
+          },
+          {
+            "faction": "大孚灵鹫寺",
+            "role": "首座"
+          },
+          {
+            "faction": "密宗（蕃密）",
+            "role": "密宗之王"
+          },
+          {
+            "faction": "唐国朝廷",
+            "role": "左街僧录"
+          }
+        ],
+        "debutLocation": {
+          "location": "靖恭坊摩尼寺",
+          "locator": "0097.html",
+          "scene": "释特昧普在摩尼寺升座，掀帽露出金色螺髻发型，换上金色袈裟、法杖、钵盂、念珠、黄金鞋，以金光闪闪的人造金身形象登场，自称法号昧普，宣称继承不拾一世大师衣钵，为密宗之王、左街僧录。"
+        }
       },
       "phaseIdentities": [
         {
@@ -36510,7 +40023,22 @@
           "在比武中曾考虑替换人选",
           "战场冲杀，险被护法金刚所杀"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "铁马堂",
+            "role": "堂主"
+          },
+          {
+            "faction": "凉州盟",
+            "role": "成员"
+          }
+        ],
+        "debutLocation": {
+          "location": "太泉",
+          "locator": "",
+          "scene": ""
+        }
       },
       "phaseIdentities": [
         {
@@ -36676,7 +40204,17 @@
           "席上顺走金银餐具",
           "对计算股份极有兴趣"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "皇图天策府",
+            "role": "教官"
+          },
+          {
+            "faction": "右千牛卫府",
+            "role": "军官"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -36840,7 +40378,22 @@
           "与唐国群臣诗赋唱和",
           "参与联名揭发窥基"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "晋国",
+            "role": "使臣"
+          },
+          {
+            "faction": "谢家",
+            "role": "子弟"
+          }
+        ],
+        "debutLocation": {
+          "location": "大明宫待漏院",
+          "locator": "第10集·有花堪折 第104回",
+          "scene": "程宗扬进入大明宫待漏院，看见门牙掉了两颗、抱膝啸傲旁若无人的风流名士，正是谢家浪荡大爷谢无奕，双方互相认出，多日不见。"
+        }
       },
       "phaseIdentities": [
         {
@@ -36907,7 +40460,22 @@
           "踹打义子鱼弘志",
           "大唐长安大貂珰(大太监)，殇侯的盟友"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "宦官集团",
+            "role": "权阉/天下观军容宣慰处置使"
+          },
+          {
+            "faction": "唐国朝廷",
+            "role": "神策军观军容使（掌神策军十八万众）；兼领光禄、鸿胪、礼宾、内飞龙、闲厩等职"
+          }
+        ],
+        "debutLocation": {
+          "location": "长安",
+          "locator": "第0086章",
+          "scene": "鱼玄机向泉玉姬解释自己与黎锦香耽搁时辰，请叔父鱼朝恩派神策军护送，侧面提及这位权倾朝野的宦官叔父专领神策军、权势显赫。"
+        }
       },
       "phaseIdentities": [
         {
@@ -37069,7 +40637,18 @@
         ],
         "ending": [
           "兵败身死"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "刘建集团",
+            "role": "军师/指挥官"
+          }
+        ],
+        "debutLocation": {
+          "location": "南宫阿阁广场（长秋宫前）",
+          "locator": "六朝云龙吟·0368.html 第7章",
+          "scene": "刘建进攻长秋宫受阻，询问齐羽仙，齐羽仙称'军伍之事，当问苍鹭'，苍鹭以年轻谋士身份出场，手持铁如意，分析地形并提出火攻之策。"
+        }
       },
       "phaseIdentities": [
         {
@@ -37140,7 +40719,22 @@
           "攻占白虎门与玄武门",
           "下诏百余道以坐实天子之位"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "江都王国",
+            "role": "王太子"
+          },
+          {
+            "faction": "汉国朝廷",
+            "role": "入觐储君候选人"
+          }
+        ],
+        "debutLocation": {
+          "location": "洛都",
+          "locator": "0295.html/六朝云龙吟",
+          "scene": "蔡敬仲向程宗扬介绍江都王太子入觐想要当太子之事时首次提及"
+        }
       },
       "phaseIdentities": [
         {
@@ -37294,7 +40888,22 @@
         "formsOfAddress": [],
         "joining": [],
         "keyEvents": [],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "汉国朝廷",
+            "role": "射声校尉"
+          },
+          {
+            "faction": "吕氏外戚集团",
+            "role": "吕冀之侄/吕雉之侄"
+          }
+        ],
+        "debutLocation": {
+          "location": "戾太子墓",
+          "locator": "六朝云龙吟/0270.html",
+          "scene": "被戴着铁面具的死士背至戾太子墓，与程宗扬对峙，自报射声校尉身份"
+        }
       },
       "phaseIdentities": [
         {
@@ -37364,7 +40973,17 @@
           "被吕冀指责私心膨胀",
           "负责找人消除隐患"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "吕氏外戚集团",
+            "role": "外戚/颍阳侯"
+          },
+          {
+            "faction": "汉国朝廷",
+            "role": "侯爵/太后亲弟"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -37515,7 +41134,18 @@
           "因幼妹云如瑶之事向程宗扬发怒，宣布云氏与江州一刀两断",
           "在饼肆亲眼见妹妹成为少妇而心软"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "云氏商会",
+            "role": "当家/家主"
+          }
+        ],
+        "debutLocation": {
+          "location": "梵天寺（临安西南凤凰岭）",
+          "locator": "第31集/第4章",
+          "scene": "程宗扬在梵天寺禅院中与云秀峰首次正式会面，此前二人仅通过林清浦的水镜术联络"
+        }
       },
       "phaseIdentities": [
         {
@@ -37585,7 +41215,18 @@
           "在舞都收拢游侠儿，被宁成镇压后躲藏",
           "与程宗扬合谋，以鹰犬自荐给刘骜"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "舞阳侯国",
+            "role": "游侠儿首领"
+          }
+        ],
+        "debutLocation": {
+          "location": "伐木场堤坝附近某村庄",
+          "locator": "0192.html",
+          "scene": "伐木过程中发生事故导致两名匠人死亡后，义纵带领一群少年呼啸而出，抢夺死者和围观商人的财物，被小吏痛骂仍不以为意。"
+        }
       },
       "phaseIdentities": [
         {
@@ -37662,7 +41303,18 @@
         ],
         "ending": [
           "失踪，未明确交代结局"
-        ]
+        ],
+        "affiliations": [
+          {
+            "faction": "汉国朝廷",
+            "role": "舞都太守"
+          }
+        ],
+        "debutLocation": {
+          "location": "河边",
+          "locator": "六朝云龙吟/0198.html",
+          "scene": "被程宗扬从水中救出后自报家门，程宗扬称其为太守"
+        }
       },
       "phaseIdentities": [
         {
@@ -37746,7 +41398,12 @@
         ],
         "ending": [
           "身怀汉国天子刘骜的遗腹子(涉天家颜面与政争，消息被完全封锁)；后遭力量/药物摧残，沦为不言不笑、不能动的失魂/瘫痪状态，被秘密安置在程宗扬内院小楼，由神医义姁等照料。"
-        ]
+        ],
+        "debutLocation": {
+          "location": "乐津里",
+          "locator": "六朝云龙吟/0276.html",
+          "scene": "程宗扬通过人牙子介绍认识这位命硬克亲的贫家女子，并邀请其共餐，友通期接受了陌生人的邀约。"
+        }
       },
       "phaseIdentities": [
         {
@@ -37811,7 +41468,26 @@
           "与云家合作扩张产业",
           "替程宗扬处理债务"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "左武军",
+            "role": "粮秣辎重供应者/族中成员"
+          },
+          {
+            "faction": "吕氏外戚集团",
+            "role": "门客"
+          },
+          {
+            "faction": "程氏商会",
+            "role": "商人"
+          }
+        ],
+        "debutLocation": {
+          "location": "舞都七里坊游冶台",
+          "locator": "0204章节",
+          "scene": "在游冶台开业前的私人聚会上，程郑含笑起身拱手自报姓名，程宗扬与其交谈并赠送VIP贵宾卡"
+        }
       },
       "phaseIdentities": [
         {
@@ -37888,7 +41564,26 @@
           "第585章 与齐羽仙",
           "西门狗贼等人一同出现在程宗扬面前"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "黑魔海",
+            "role": "汉国主事"
+          },
+          {
+            "faction": "巫宗",
+            "role": ""
+          }
+        ],
+        "debutLocation": {
+          "location": "洛都下山途中山路",
+          "locator": "六朝云龙吟/0249.html",
+          "scene": "程宗扬下山途中被一名中年妇人拦路，该妇人自称姓闻，主动表明是黑魔海汉国主事"
+        },
+        "storyAge": {
+          "value": "约40",
+          "basis": "年约四十，皮肤仍然白皙光滑，但眼角已经有着细密的鱼尾纹"
+        }
       },
       "phaseIdentities": [
         {

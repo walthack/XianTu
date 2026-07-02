@@ -129,9 +129,13 @@ function applyCardToCharacter(character, card, stageId) {
   if (currentPhase?.role) character.role = currentPhase.role;
 
   // 只删【派生 notes】——它 100% 可由 registry 无损还原（等价性验证 notes 0 不一致）。
-  // appearance/personality/origin 保留不动：它们是「提取/卡混合」，删了 resolver 还原会与旧值不符（会变/会丢）。
+  // appearance/origin 保留不动：场景/提取特定，卡强制覆盖会抹掉场景差异。
   const keptNotes = asArray(profile.notes).filter(note => !DERIVED_TAGS.some(tag => String(note).startsWith(tag)));
   if (keptNotes.length) profile.notes = keptNotes; else delete profile.notes;
+
+  // personality：稳定属性，卡为准 → 卡非空则覆盖 stage（与 resolver.resolveOne 保持一致，勿单方改）。
+  const cardPersonality = [...new Set(asArray(card.staticProfile?.personality).filter(Boolean))];
+  if (cardPersonality.length) profile.personality = cardPersonality;
 
   character.profile = profile;
 }

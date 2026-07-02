@@ -1304,7 +1304,8 @@
             "表面天真烂漫娇憨黏人",
             "实则心狠手辣城府极深",
             "视人命如草芥",
-            "智商碾压全场"
+            "智商碾压全场",
+            "喜欢亲手调教、收服违抗程宗扬的女性敌人（种奴印/驯服）"
           ],
           "race": "碧鲮族",
           "origin": "黑魔海巫宗正统传人；全书女主角、智商天花板",
@@ -1344,11 +1345,18 @@
           ],
           "appearance": "拢着手，一瘸一拐，两条腿一条长一条短，短的那条脚掌内翻，几乎用脚背走路；浓黑长发如瀑布从肩头垂下，收起嘻笑时眉宇间有帝王般威严；通常穿着破旧衣物，冻得脸青唇白。",
           "personality": [
+            "冷傲",
+            "自负",
+            "威严",
+            "城府深",
+            "重情义（对旧部）",
             "死不要脸",
+            "嬉皮笑脸",
+            "谄媚",
+            "深藏不露",
             "没羞没臊",
             "爱耍宝",
             "贪财好色",
-            "深藏不露",
             "悲悯"
           ],
           "notes": [
@@ -1571,7 +1579,8 @@
             "大胆",
             "主动",
             "善于调情",
-            "对程宗扬忠诚"
+            "对程宗扬忠诚",
+            "有管理能力（摘去发钗等）"
           ],
           "appearance": "雪肤绛唇，姣艳无比，美貌比往日更胜一筹；身上纹有罂粟花海纹身，衬着雪滑的肌肤，充满艳丽而又邪恶的美感。；细皮嫩肉（据【第8章】危难提及），常参与沐浴场景，未给出更具体外貌描述。",
           "race": "人族",
@@ -1759,7 +1768,9 @@
             "能言善辩",
             "不固执己见",
             "诙谐有智",
-            "目无同侪"
+            "目无同侪",
+            "扰乱朝政（被批评）",
+            "挑衅当权者"
           ],
           "appearance": "抹了抹唇上的小胡子，露出一丝狡黠的笑意",
           "race": "人族",
@@ -1831,7 +1842,15 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {
+          "personality": [
+            "泼辣刁蛮",
+            "好胜心极强",
+            "风风火火",
+            "一言不合拔剑",
+            "张扬的世家小辣妹"
+          ]
+        }
       },
       {
         "id": "liuchao.character.yun_ru_yao",
@@ -1841,7 +1860,14 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {
+          "personality": [
+            "温婉内敛",
+            "极矜持知书达理",
+            "名门商豪大家闺秀",
+            "面对主角带豪门女子的羞赧不知所措"
+          ]
+        }
       },
       {
         "id": "liuchao.character.zhuo_yunjun",
@@ -1851,7 +1877,14 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {},
+        "profile": {
+          "personality": [
+            "白天高洁端庄仙姑",
+            "虚荣强撑尊严",
+            "黑夜自称\"奴婢\"的母狗双重人格",
+            "常年被太尉折磨出受虐底子"
+          ]
+        },
         "realm": "化神"
       },
       {
@@ -1862,7 +1895,14 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {
+          "personality": [
+            "表里两面",
+            "表面极温柔贤惠、细致入微(做汤会耐心剥净核桃仁苦皮，连程宗扬都叹林冲有福)",
+            "实为黑魔海高阶妖女、城府深沉",
+            "为组织利用丈夫毫无愧色"
+          ]
+        }
       },
       {
         "id": "liuchao.character.zhao_he_de",
@@ -1872,7 +1912,15 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {
+          "personality": [
+            "妖艳主动",
+            "冷静城府深",
+            "\"拉皮条\"天才",
+            "无道德包袱",
+            "深知姐妹一体不嫉妒"
+          ]
+        }
       },
       {
         "id": "liuchao.character.lv_zhi",
@@ -1882,7 +1930,12 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {
+          "personality": [
+            "平时冷静、威严、隐忍但不卑微",
+            "入主角后宫团后顺从、隐忍、羞耻感强"
+          ]
+        }
       },
       {
         "id": "liuchao.character.jing_li",
@@ -1892,7 +1945,14 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {
+          "personality": [
+            "柔媚",
+            "冷厉",
+            "危险",
+            "善于挑弄"
+          ]
+        }
       },
       {
         "id": "liuchao.character.ning_yu",
@@ -1902,7 +1962,15 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {
+          "personality": [
+            "高冷御姐",
+            "外冷内媚(冰火交融)",
+            "口是心非",
+            "不擅表温情",
+            "以冷酷伪装情感与欲望"
+          ]
+        }
       },
       {
         "id": "liuchao.character.ruan_xiang_lin",
@@ -1912,7 +1980,13 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {
+          "personality": [
+            "市侩（愿意献出女儿换取利益）",
+            "有着江湖儿女的大方与豪爽，前期对主角敌意戒备",
+            "\"咬牙隐忍却无法抗拒\"的傲娇熟女反差"
+          ]
+        }
       },
       {
         "id": "liuchao.character.zhao_feiyan",
@@ -1922,7 +1996,15 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {
+          "personality": [
+            "实则内心脆弱缺安全感",
+            "极爱面子",
+            "被宫廷死寂政斗压得焦虑",
+            "温柔忍让",
+            "内心脆弱缺安全感"
+          ]
+        }
       },
       {
         "id": "lcq.character.yue_shuang",
@@ -1932,7 +2014,17 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {},
+        "profile": {
+          "personality": [
+            "极度傲娇自以为是的\"圣母纸老虎\"",
+            "自私虚伪",
+            "行事双标（濒死要救命恩人心头血作药引）",
+            "智商与江湖经验匮乏",
+            "推卸责任的受害者心态",
+            "复杂亲缘认同（嘴拒认岳帅是父",
+            "却以\"八骏新主人\"自居）"
+          ]
+        },
         "realm": "元婴"
       },
       {
@@ -1943,7 +2035,15 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {},
+        "profile": {
+          "personality": [
+            "智商天花板级",
+            "幕后执棋",
+            "心机深沉",
+            "冷静精准",
+            "善隐藏"
+          ]
+        },
         "realm": "炼虚"
       },
       {
@@ -1954,7 +2054,17 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {}
+        "profile": {
+          "personality": [
+            "娇憨可爱",
+            "小市侩小财迷",
+            "遇大风浪会怕会尖叫",
+            "大是大非有小女子的坚韧",
+            "邻家女孩",
+            "纯真无算计",
+            "对性事缺乏概念，容易被主角哄骗"
+          ]
+        }
       },
       {
         "id": "liuchao.character.qin_hui",
@@ -1964,7 +2074,18 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {},
+        "profile": {
+          "personality": [
+            "胸有城府",
+            "精明狡黠",
+            "七窍玲珑",
+            "奸诈无比",
+            "能言善辩",
+            "虚伪",
+            "机敏灵动",
+            "遇明主忠义，遇昏主奸术自保"
+          ]
+        },
         "realm": "化神"
       }
     ],

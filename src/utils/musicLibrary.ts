@@ -5,6 +5,11 @@ import courtUrl from '@/assets/music/04-court-anyong.mp3';
 import dangerUrl from '@/assets/music/04b-court-anliu.mp3';
 import battleUrl from '@/assets/music/05-battle-aozhan.mp3';
 import battleMatouqinUrl from '@/assets/music/05-battle-matouqin.mp3';
+import arcTightUrl from '@/assets/music/05-battle-matouqin-arc-tight.mp3';
+import khoomeiUrl from '@/assets/music/05-battle-matouqin-khoomei.mp3';
+import battleWuxiaUrl from '@/assets/music/05-battle-wuxia.mp3';
+import nihonUrl from '@/assets/music/05-battle-nihon.mp3';
+import battlePipaUrl from '@/assets/music/05-battle-pipa.mp3';
 import climaxUrl from '@/assets/music/07-climax-juezhan-vocal.mp3';
 import horrorUrl from '@/assets/music/06-horror-moying.mp3';
 import emotionUrl from '@/assets/music/08-emotion-matouqin.mp3';
@@ -26,7 +31,8 @@ export type MusicMood =
   | 'aspire'
   | 'intrigue'
   | 'lament'
-  | 'sensual';
+  | 'sensual'
+  | 'blacksea';
 
 export interface MusicTrack {
   id: MusicMood;
@@ -48,18 +54,31 @@ export const MUSIC_TRACKS: Record<MusicMood, MusicTrack[]> = {
   daily: [{ id: 'daily', title: '江湖日常·市井', url: dailyUrl }],
   explore: [{ id: 'explore', title: '秘境探幽', url: exploreUrl }],
   court: [{ id: 'court', title: '朝堂公务/集会', url: courtUrl }],
-  danger: [{ id: 'danger', title: '暗流·危机', url: dangerUrl }],
+  danger: [
+    { id: 'danger', title: '暗流·危机', url: dangerUrl },
+    { id: 'danger', title: '暗流·马头琴弧', url: arcTightUrl },
+    { id: 'danger', title: '暗流·琵琶', url: battlePipaUrl },
+  ],
   battle: [
     { id: 'battle', title: '斗法·国风交响', url: battleUrl },
     { id: 'battle', title: '斗法·马头琴', url: battleMatouqinUrl },
+    { id: 'battle', title: '斗法·快节奏武侠', url: battleWuxiaUrl },
   ],
   horror: [{ id: 'horror', title: '魔影·尸氛', url: horrorUrl }],
-  climax: [{ id: 'climax', title: '决战·惊变', url: climaxUrl }],
+  climax: [
+    { id: 'climax', title: '决战·惊变', url: climaxUrl },
+    { id: 'climax', title: '决战·呼麦万马', url: khoomeiUrl },
+    { id: 'climax', title: '决战·马头琴弧', url: arcTightUrl },
+  ],
   emotion: [{ id: 'emotion', title: '情牵·别离', url: emotionUrl }],
   aspire: [{ id: 'aspire', title: '壮志·砺行', url: aspireUrl }],
-  intrigue: [{ id: 'intrigue', title: '诡谲·权谋智斗', url: intrigueUrl }],
+  intrigue: [
+    { id: 'intrigue', title: '诡谲·权谋智斗', url: intrigueUrl },
+    { id: 'intrigue', title: '诡谲·马头琴弧', url: arcTightUrl },
+  ],
   lament: [{ id: 'lament', title: '悲壮·牺牲挽歌', url: lamentUrl }],
   sensual: [{ id: 'sensual', title: '暧昧·欲望张力', url: sensualUrl }],
+  blacksea: [{ id: 'blacksea', title: '塞外·东瀛/黑魔海', url: nihonUrl }],
 };
 
 const CHAPTER_MOOD_MAP: Record<string, MusicMood> = {
@@ -102,6 +121,7 @@ const EVENT_MOOD_MAP: Record<string, MusicMood> = {
 
   'lcq.event.s04_01': 'danger',
   'lcq.event.s04_03': 'aspire',
+  'lcq.event.s04_06': 'emotion',
 
   'lcq.event.s03b_snake_flower_bridge_07': 'danger',
   'lcq.event.s04b_lingfei_baiyi_crisis_05': 'explore',
@@ -147,14 +167,15 @@ const EVENT_MOOD_MAP: Record<string, MusicMood> = {
   'lyl.event.xiaoyingzhou_blacksea_trap_06_beat': 'danger',
 };
 
-const EVENT_MOOD_PRIORITY: MusicMood[] = ['climax', 'horror', 'lament', 'battle', 'danger', 'intrigue', 'explore', 'court', 'sensual', 'emotion', 'aspire', 'daily', 'theme'];
+const EVENT_MOOD_PRIORITY: MusicMood[] = ['climax', 'horror', 'lament', 'blacksea', 'battle', 'danger', 'intrigue', 'explore', 'court', 'sensual', 'emotion', 'aspire', 'daily', 'theme'];
 
 const EVENT_TEXT_MOOD_RULES: Array<[RegExp, MusicMood]> = [
   [/决战|终局|终战|惊变|甘露|政变|宫变|弑君|弑母|夺舍|暴毙|驾崩|真身|八臂|龙吟|单骑破阵|长秋宫守卫战|吕巨君自焚|攻入/i, 'climax'],
   [/阴煞|魔影|血符|发蛊|血虎|魔化|尸氛|失序|屠村痕迹|惨案|女尸|枯骨|深井|招魂|疑冢|金身法王|返老/i, 'horror'],
   [/自爆|自尽殉|以身殉|殉国|殉道|阵亡|战殁|马革裹尸|忠烈|忠魂|挽歌|哀荣|壮烈殉|全军覆没/i, 'lament'],
+  [/东瀛|倭|忍者|塞外|鲛人|剑玉姬|小瀛洲/i, 'blacksea'],
   [/激战|鏖战|战斗|伏击|袭击|遇袭|围杀|围攻|攻占|守卫战|破阵|追击|追杀|刺杀|斩杀|击杀|救援|乱战|反击|突围|突袭|奇袭|夺宝|争夺|混战|杀局|下毒乱战|屠杀|被屠|斩乡兵|救下|救险|劫走|比武|之死|劫掠|暗战|火攻/i, 'battle'],
-  [/危机|暗流|疑云|阴谋|陷阱|设伏|毒|中毒|逼近|警告|威胁|暴露|败退|困|危|失火|火计|上钩|被查|对峙|劫持|挟持|压力|黑魔海逼近|落棋|夜袭|受制|压制|戒严|报警|失踪|刺配|生变|密约谈崩|众叛|审问|调动.*围|认出|杀.*议|夺取.*兵权|怀疑/i, 'danger'],
+  [/危机|暗流|疑云|阴谋|陷阱|设伏|下毒|中毒|剧毒|毒杀|毒计|逼近|警告|威胁|暴露|败退|被困|危局|失火|火计|上钩|被查|对峙|劫持|挟持|压力|黑魔海逼近|落棋|夜袭|受制|压制|戒严|报警|失踪|刺配|生变|密约谈崩|众叛|审问|调动.*围|认出|杀.*议|夺取.*兵权|怀疑/i, 'danger'],
   [/权谋|算计|布局|谋划|设局|挑拨|离间|栽赃|嫁祸|操控|操盘|周旋|收买|拉拢|勾结|密谋|智斗|城府|做局|下套|借刀|反间/i, 'intrigue'],
   [/秘境|古阵|神庙|海底|迷窟|探索|侦察|潜入|秘道|机关|地宫|洞穴|入口|寻找|线索|情报|太泉|魔墟|迷楼|钥匙|调查|追索|旧案|旧事|复盘/i, 'explore'],
   [/朝堂|宫廷|议事|商议|谈判|交易|买官|卖官|注册|情报收集|皇城司|诏|口谕|股东大会|渠道|名单|召见|密谈|公务|集会|高俅|西邸|吏部|工部|拜访|军资|粮战|粮仓|粮战令|供认|审判|分权|宗室|帝陵|拥立|赐死|兵器生意|见吕雉/i, 'court'],
@@ -170,7 +191,8 @@ const PATTERN_MOOD_RULES: Array<[RegExp, MusicMood]> = [
   [/stage_07_qingyuan_jiankang|lin_an|taiquan_afterfall|changgan_interlude|han_succession|ganlu_crisis|manipulation|power_gathering/i, 'court'],
   [/stage_08_jiankang_coup|stage_09_trade_and_escape|stage_10_jiangzhou_shadow_war|stage_11_lieshan_battle|stage_12_jiangzhou_counterwar/i, 'battle'],
   [/taiquan_core_conflict|escape_ant_hill|yin_fulan|pan_jinlian|arrival_in_canglan|taiquan_exploration|alliance_and_conflict/i, 'explore'],
-  [/hunt_for_fruit|taiquan_sacred_fruit|xiaoyingzhou_blacksea_trap|shixiang|ambush|multiple_enemies|final_move/i, 'battle'],
+  [/xiaoyingzhou_blacksea_trap/i, 'blacksea'],
+  [/hunt_for_fruit|taiquan_sacred_fruit|shixiang|ambush|multiple_enemies|final_move/i, 'battle'],
   [/buddhist_conspiracy|shituolin_endgame|han_palace_endgame|luoyang_coup|final_showdown/i, 'climax'],
   [/arrival|retreat|begins/i, 'daily'],
 ];

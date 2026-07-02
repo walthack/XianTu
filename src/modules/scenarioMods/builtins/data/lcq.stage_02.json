@@ -1409,7 +1409,14 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
-        "profile": {},
+        "profile": {
+          "personality": [
+            "白天高洁端庄仙姑",
+            "虚荣强撑尊严",
+            "黑夜自称\"奴婢\"的母狗双重人格",
+            "常年被太尉折磨出受虐底子"
+          ]
+        },
         "realm": "化神"
       }
     ],
