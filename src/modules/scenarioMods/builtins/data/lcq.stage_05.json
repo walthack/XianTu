@@ -1643,7 +1643,10 @@
         "toCharacterId": "liuchao.character.xiao_zi",
         "relation": "母女（积怨/被弃养）",
         "score": -25,
-        "direction": "bidirectional"
+        "direction": "bidirectional",
+        "tags": [
+          "母女"
+        ]
       }
     ],
     "factionRelationships": [

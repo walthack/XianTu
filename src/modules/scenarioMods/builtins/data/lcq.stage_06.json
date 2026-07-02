@@ -2405,7 +2405,10 @@
         "toCharacterId": "liuchao.character.bi_ji",
         "relation": "弑母仇人",
         "score": -100,
-        "direction": "bidirectional"
+        "direction": "bidirectional",
+        "tags": [
+          "母女"
+        ]
       },
       {
         "fromCharacterId": "liuchao.character.wu_er_lang",
@@ -2416,6 +2419,16 @@
         "tags": [
           "武二郎对嫂嫂潘金莲暗怀憧憬",
           "传闻二人有奸情（西门庆构陷，实为谣言）"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.xie_yi",
+        "toCharacterId": "liuchao.character.bi_ji",
+        "relation": "护卫者",
+        "score": 55,
+        "direction": "directed",
+        "tags": [
+          "奉命护佑岳帅遗孀"
         ]
       }
     ],
