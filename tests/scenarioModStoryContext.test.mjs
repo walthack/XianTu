@@ -80,7 +80,8 @@ test('story prompt includes current objectives and excludes future plot content'
   assert.match(prompt, /程宗扬/);
   assert.match(prompt, /性格：机变、谨慎、重情义/);
   assert.match(prompt, /生死根不得被其他 NPC 自动获得/);
-  assert.match(prompt, /上述身份、关系、性格、谈吐\/底线\/目标等正典备注是硬约束/);
+  assert.match(prompt, /【身世】【情节】等正典备注是硬约束/);
+  assert.match(prompt, /严禁凭空编造跨角色的血缘、师承、结拜、年代等起源设定/);
   assert.doesNotMatch(prompt, /暗潮决战/);
   assert.doesNotMatch(prompt, /未来势力冲突/);
   assert.match(prompt, /不要猜测、引用或泄露后续章节/);

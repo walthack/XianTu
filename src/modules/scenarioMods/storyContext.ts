@@ -89,9 +89,9 @@ function compactText(value: string | undefined, maxLength = 90): string {
   return compacted.length > maxLength ? `${compacted.slice(0, maxLength)}...` : compacted;
 }
 
-function formatList(values: string[] | undefined, maxItems = 4): string {
+function formatList(values: string[] | undefined, maxItems = 4, maxLen = 48): string {
   if (!values?.length) return '';
-  return values.map(value => compactText(value, 48)).filter(Boolean).slice(0, maxItems).join('、');
+  return values.map(value => compactText(value, maxLen)).filter(Boolean).slice(0, maxItems).join('、');
 }
 
 function formatCharacterRelationship(
@@ -131,7 +131,7 @@ function formatFocusedCharacter(character: ScenarioModCharacter, runtime: StoryR
   if (profile.currentThought) lines.push(`  当前心思：${compactText(profile.currentThought)}`);
   const memories = formatList(profile.memories, 3);
   if (memories) lines.push(`  记忆：${memories}`);
-  const notes = formatList(profile.notes, 6);
+  const notes = formatList(profile.notes, 8, 220);
   if (notes) lines.push(`  正典备注：${notes}`);
   const relation = formatCharacterRelationship(
     character,
@@ -161,9 +161,11 @@ function buildFocusedCharacterPrompt(runtime: StoryRuntime, activeEvents: Scenar
 ${focusedCharacters.map(character => formatFocusedCharacter(character, runtime)).join('\n')}
 
 【人物正典优先级】：
-1. 上述身份、关系、性格、谈吐/底线/目标等正典备注是硬约束；可以补充细节，但不得改写、否定或让角色无因突变。
-2. 用户要求角色违背正典时，以角色内方式拒绝、回避、误解或转移；不得承认“设定已被修改”。
-3. 角色成长必须由已发生剧情、关系变化或明确事件支撑；不得为了迎合单轮输入突然 OOC。`;
+1. 上述身份、关系、性格、谈吐/底线/目标、以及【身世】【情节】等正典备注是硬约束；不得改写、否定或让角色无因突变。
+2. 角色的**深层往事/身世/渊源以【身世】【情节】备注为准**：叙述其过往必须与备注一致；备注**未载**的过往，让角色含糊带过、回避、或按其性格搪塞试探，**严禁凭空编造跨角色的血缘、师承、结拜、年代等起源设定**（例：不得杜撰某角色是另一角色的兄弟/父女/师徒）。
+3. “补充细节”仅限无关紧要的当下场景描写（动作、神态、环境），**不含身世渊源与人物关系**。
+4. 用户要求角色违背正典时，以角色内方式拒绝、回避、误解或转移；不得承认“设定已被修改”。
+5. 角色成长必须由已发生剧情、关系变化或明确事件支撑；不得为了迎合单轮输入突然 OOC。`;
 }
 
 export function createScenarioPromptState<T extends SaveData>(saveData: T): T {
