@@ -406,8 +406,8 @@
         "features": []
       },
       {
-        "id": "liuchao.faction.song_court",
-        "name": "宋国朝廷",
+        "id": "lyg.faction.song_state",
+        "name": "宋国",
         "headquartersLocationId": "liuchao.location.lin_an",
         "type": "官府",
         "description": "六朝之一宋国的朝廷，都城在临安。",

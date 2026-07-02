@@ -131,7 +131,7 @@
       },
       {
         "id": "lyl.faction.lyu_clan",
-        "name": "吕氏",
+        "name": "吕氏外戚集团",
         "description": "以太后吕雉为首的后族，掌握汉国大量军权与政权。",
         "type": "外戚",
         "headquartersLocationId": "lyl.location.luoyang",
@@ -251,36 +251,6 @@
           {
             "x": 5200,
             "y": 3000
-          }
-        ],
-        "features": []
-      },
-      {
-        "id": "liuchao.faction.lv_shi_ji_tuan",
-        "name": "吕氏集团",
-        "headquartersLocationId": "lyl.location.luoyang",
-        "type": "家族",
-        "description": "汉国外戚集团，长期控制朝政。",
-        "territory": [
-          {
-            "x": 6700,
-            "y": 3600
-          },
-          {
-            "x": 6900,
-            "y": 3600
-          },
-          {
-            "x": 6900,
-            "y": 3800
-          },
-          {
-            "x": 6700,
-            "y": 3800
-          },
-          {
-            "x": 6700,
-            "y": 3600
           }
         ],
         "features": []

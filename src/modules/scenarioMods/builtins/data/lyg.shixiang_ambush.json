@@ -205,8 +205,8 @@
         "type": "商会"
       },
       {
-        "id": "lyg.faction.han_state",
-        "name": "汉国",
+        "id": "liuchao.faction.han_guo_chao_ting",
+        "name": "汉国朝廷",
         "description": "程宗扬受封舞阳侯的诸侯国。",
         "type": "帝国"
       },
@@ -895,7 +895,7 @@
         "realm": "金丹",
         "affiliations": [
           {
-            "factionId": "lyg.faction.han_state",
+            "factionId": "liuchao.faction.han_guo_chao_ting",
             "category": "state",
             "role": "舞阳侯"
           },
@@ -3940,7 +3940,7 @@
     ],
     "factionRelationships": [
       {
-        "fromFactionId": "lyg.faction.han_state",
+        "fromFactionId": "liuchao.faction.han_guo_chao_ting",
         "toFactionId": "lyg.faction.penglai_island",
         "relation": "友好",
         "score": 36,
@@ -3965,7 +3965,7 @@
       },
       {
         "fromFactionId": "liuchao.faction.guang_ming_guan_tang",
-        "toFactionId": "lyg.faction.han_state",
+        "toFactionId": "liuchao.faction.han_guo_chao_ting",
         "relation": "中立",
         "score": 16,
         "direction": "bidirectional",
@@ -3976,7 +3976,7 @@
         ]
       },
       {
-        "fromFactionId": "lyg.faction.han_state",
+        "fromFactionId": "liuchao.faction.han_guo_chao_ting",
         "toFactionId": "liuchao.faction.tang_guo_chao_ting",
         "relation": "友好",
         "score": 29,
@@ -4060,7 +4060,7 @@
         ]
       },
       {
-        "fromFactionId": "lyg.faction.han_state",
+        "fromFactionId": "liuchao.faction.han_guo_chao_ting",
         "toFactionId": "lyg.faction.qinglongsi",
         "relation": "中立",
         "score": 3,
@@ -4072,7 +4072,7 @@
         ]
       },
       {
-        "fromFactionId": "lyg.faction.han_state",
+        "fromFactionId": "liuchao.faction.han_guo_chao_ting",
         "toFactionId": "liuchao.faction.shi_fang_cong_lin",
         "relation": "冷淡",
         "score": -24,
@@ -4120,7 +4120,7 @@
         ]
       },
       {
-        "fromFactionId": "lyg.faction.han_state",
+        "fromFactionId": "liuchao.faction.han_guo_chao_ting",
         "toFactionId": "lyg.faction.jin_state",
         "relation": "友好",
         "score": 35,
@@ -4144,7 +4144,7 @@
         ]
       },
       {
-        "fromFactionId": "lyg.faction.han_state",
+        "fromFactionId": "liuchao.faction.han_guo_chao_ting",
         "toFactionId": "lyg.faction.song_state",
         "relation": "友好",
         "score": 25,
@@ -4168,7 +4168,7 @@
         ]
       },
       {
-        "fromFactionId": "lyg.faction.han_state",
+        "fromFactionId": "liuchao.faction.han_guo_chao_ting",
         "toFactionId": "lyg.faction.qin_state",
         "relation": "友好",
         "score": 31,
@@ -4192,7 +4192,7 @@
         ]
       },
       {
-        "fromFactionId": "lyg.faction.han_state",
+        "fromFactionId": "liuchao.faction.han_guo_chao_ting",
         "toFactionId": "liuchao.faction.hei_mo_hai",
         "relation": "冷淡",
         "score": -12,
@@ -4216,7 +4216,7 @@
         ]
       },
       {
-        "fromFactionId": "lyg.faction.han_state",
+        "fromFactionId": "liuchao.faction.han_guo_chao_ting",
         "toFactionId": "liuchao.faction.suo_fan_si",
         "relation": "友好",
         "score": 38,
@@ -4251,7 +4251,7 @@
       },
       {
         "fromFactionId": "lyg.faction.daciensi",
-        "toFactionId": "lyg.faction.han_state",
+        "toFactionId": "liuchao.faction.han_guo_chao_ting",
         "relation": "冷淡",
         "score": -27,
         "direction": "bidirectional",

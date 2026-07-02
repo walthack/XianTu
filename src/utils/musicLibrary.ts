@@ -4,6 +4,7 @@ import exploreUrl from '@/assets/music/03-explore-mijing.mp3';
 import courtUrl from '@/assets/music/04-court-anyong.mp3';
 import dangerUrl from '@/assets/music/04b-court-anliu.mp3';
 import battleUrl from '@/assets/music/05-battle-aozhan.mp3';
+import battleMatouqinUrl from '@/assets/music/05-battle-matouqin.mp3';
 import climaxUrl from '@/assets/music/07-climax-juezhan-vocal.mp3';
 import horrorUrl from '@/assets/music/06-horror-moying.mp3';
 import emotionUrl from '@/assets/music/08-emotion-matouqin.mp3';
@@ -41,20 +42,24 @@ export interface ScenarioMusicEvent {
   axisBeat?: string;
 }
 
-export const MUSIC_TRACKS: Record<MusicMood, MusicTrack> = {
-  theme: { id: 'theme', title: '苍茫·仙途主题', url: themeUrl },
-  daily: { id: 'daily', title: '江湖日常·市井', url: dailyUrl },
-  explore: { id: 'explore', title: '秘境探幽', url: exploreUrl },
-  court: { id: 'court', title: '朝堂公务/集会', url: courtUrl },
-  danger: { id: 'danger', title: '暗流·危机', url: dangerUrl },
-  battle: { id: 'battle', title: '斗法鏖战', url: battleUrl },
-  horror: { id: 'horror', title: '魔影·尸氛', url: horrorUrl },
-  climax: { id: 'climax', title: '决战·惊变', url: climaxUrl },
-  emotion: { id: 'emotion', title: '情牵·别离', url: emotionUrl },
-  aspire: { id: 'aspire', title: '壮志·砺行', url: aspireUrl },
-  intrigue: { id: 'intrigue', title: '诡谲·权谋智斗', url: intrigueUrl },
-  lament: { id: 'lament', title: '悲壮·牺牲挽歌', url: lamentUrl },
-  sensual: { id: 'sensual', title: '暧昧·欲望张力', url: sensualUrl },
+// 每个 mood 可挂多首变体；进入该 mood 时随机挑一首（mood 不变则不打断，见 App.vue）。
+export const MUSIC_TRACKS: Record<MusicMood, MusicTrack[]> = {
+  theme: [{ id: 'theme', title: '苍茫·仙途主题', url: themeUrl }],
+  daily: [{ id: 'daily', title: '江湖日常·市井', url: dailyUrl }],
+  explore: [{ id: 'explore', title: '秘境探幽', url: exploreUrl }],
+  court: [{ id: 'court', title: '朝堂公务/集会', url: courtUrl }],
+  danger: [{ id: 'danger', title: '暗流·危机', url: dangerUrl }],
+  battle: [
+    { id: 'battle', title: '斗法·国风交响', url: battleUrl },
+    { id: 'battle', title: '斗法·马头琴', url: battleMatouqinUrl },
+  ],
+  horror: [{ id: 'horror', title: '魔影·尸氛', url: horrorUrl }],
+  climax: [{ id: 'climax', title: '决战·惊变', url: climaxUrl }],
+  emotion: [{ id: 'emotion', title: '情牵·别离', url: emotionUrl }],
+  aspire: [{ id: 'aspire', title: '壮志·砺行', url: aspireUrl }],
+  intrigue: [{ id: 'intrigue', title: '诡谲·权谋智斗', url: intrigueUrl }],
+  lament: [{ id: 'lament', title: '悲壮·牺牲挽歌', url: lamentUrl }],
+  sensual: [{ id: 'sensual', title: '暧昧·欲望张力', url: sensualUrl }],
 };
 
 const CHAPTER_MOOD_MAP: Record<string, MusicMood> = {
@@ -185,27 +190,31 @@ function resolveMoodForEvent(event: ScenarioMusicEvent): MusicMood | null {
   return EVENT_TEXT_MOOD_RULES.find(([pattern]) => pattern.test(text))?.[1] || null;
 }
 
-export function resolveMusicTrackForChapter(chapterId: string | null | undefined): MusicTrack {
-  if (!chapterId) return MUSIC_TRACKS.theme;
+export function resolveMusicMoodForChapter(chapterId: string | null | undefined): MusicMood {
+  if (!chapterId) return 'theme';
   const exactMood = CHAPTER_MOOD_MAP[chapterId];
-  if (exactMood) return MUSIC_TRACKS[exactMood];
+  if (exactMood) return exactMood;
 
-  const patternMood = PATTERN_MOOD_RULES.find(([pattern]) => pattern.test(chapterId))?.[1];
-  return MUSIC_TRACKS[patternMood || 'daily'];
+  return PATTERN_MOOD_RULES.find(([pattern]) => pattern.test(chapterId))?.[1] || 'daily';
 }
 
-export function resolveMusicTrackForScenario(
+export function resolveMusicMoodForScenario(
   chapterId: string | null | undefined,
   activeEvents: ScenarioMusicEvent[] = [],
-): MusicTrack {
+): MusicMood {
   const eventMoods = activeEvents
     .map(resolveMoodForEvent)
     .filter((mood): mood is MusicMood => Boolean(mood));
 
   if (eventMoods.length > 0) {
-    const mood = EVENT_MOOD_PRIORITY.find(priority => eventMoods.includes(priority)) || eventMoods[0];
-    return MUSIC_TRACKS[mood];
+    return EVENT_MOOD_PRIORITY.find(priority => eventMoods.includes(priority)) || eventMoods[0];
   }
 
-  return resolveMusicTrackForChapter(chapterId);
+  return resolveMusicMoodForChapter(chapterId);
+}
+
+// 从该 mood 的曲库随机挑一首（多首变体时降低听觉疲劳）。
+export function pickTrackForMood(mood: MusicMood): MusicTrack {
+  const variants = MUSIC_TRACKS[mood];
+  return variants[Math.floor(Math.random() * variants.length)];
 }

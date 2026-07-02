@@ -98,8 +98,8 @@
   "canon": {
     "factions": [
       {
-        "id": "liuchao.faction.lv_shi_ji_tuan",
-        "name": "吕氏集团",
+        "id": "lyl.faction.lyu_clan",
+        "name": "吕氏外戚集团",
         "description": "以太后吕雉为首的外戚势力，掌控部分禁军。",
         "type": "政治集团",
         "headquartersLocationId": "liuchao.location.luoyang",
@@ -304,7 +304,7 @@
         "description": "太后吕雉的居所，政变指挥中心。",
         "type": "城池",
         "continentId": "liuchao.continent.zhongzhou",
-        "factionId": "liuchao.faction.lv_shi_ji_tuan",
+        "factionId": "lyl.faction.lyu_clan",
         "coordinates": {
           "x": 6838,
           "y": 3577
@@ -1076,7 +1076,7 @@
         "realm": "金丹",
         "affiliations": [
           {
-            "factionId": "liuchao.faction.lv_shi_ji_tuan",
+            "factionId": "lyl.faction.lyu_clan",
             "category": "organization",
             "role": "太后"
           }
@@ -1133,7 +1133,7 @@
         "realm": "筑基",
         "affiliations": [
           {
-            "factionId": "liuchao.faction.lv_shi_ji_tuan",
+            "factionId": "lyl.faction.lyu_clan",
             "category": "military",
             "role": "将领"
           }
@@ -1188,7 +1188,7 @@
         "realm": "金丹",
         "affiliations": [
           {
-            "factionId": "liuchao.faction.lv_shi_ji_tuan",
+            "factionId": "lyl.faction.lyu_clan",
             "category": "military",
             "role": "校尉"
           }
@@ -2767,7 +2767,7 @@
     "factionRelationships": [
       {
         "fromFactionId": "lyl.faction.changqiu",
-        "toFactionId": "liuchao.faction.lv_shi_ji_tuan",
+        "toFactionId": "lyl.faction.lyu_clan",
         "relation": "中立",
         "score": 5,
         "direction": "bidirectional",
@@ -3802,7 +3802,7 @@
           "lyl.character.liu_jian"
         ],
         "relatedFactionIds": [
-          "liuchao.faction.lv_shi_ji_tuan",
+          "lyl.faction.lyu_clan",
           "liuchao.faction.hei_mo_hai"
         ],
         "locationId": "liuchao.location.luoyang",
@@ -3868,7 +3868,7 @@
           "liuchao.character.lv_ji"
         ],
         "relatedFactionIds": [
-          "liuchao.faction.lv_shi_ji_tuan"
+          "lyl.faction.lyu_clan"
         ],
         "locationId": "lyl.location.zhaoyang_palace",
         "axisId": "yunlong.284.1",
@@ -3962,7 +3962,7 @@
           "liuchao.character.lv_fengxian"
         ],
         "relatedFactionIds": [
-          "liuchao.faction.lv_shi_ji_tuan"
+          "lyl.faction.lyu_clan"
         ],
         "axisId": "yunlong.288.1",
         "axisSeq": 899,

@@ -344,66 +344,6 @@
         "features": []
       },
       {
-        "id": "liuchao.faction.du_zong",
-        "name": "毒宗",
-        "description": "以毒术闻名的宗门，也参与古阵争夺。",
-        "type": "修行宗门",
-        "headquartersLocationId": "liuchao.location.nanzhao",
-        "territory": [
-          {
-            "x": 4800,
-            "y": 7700
-          },
-          {
-            "x": 5200,
-            "y": 7700
-          },
-          {
-            "x": 5200,
-            "y": 7900
-          },
-          {
-            "x": 4800,
-            "y": 7900
-          },
-          {
-            "x": 4800,
-            "y": 7700
-          }
-        ],
-        "features": []
-      },
-      {
-        "id": "liuchao.faction.jin_jun",
-        "name": "禁军",
-        "description": "宋国中央军，林冲为教头。",
-        "type": "军队",
-        "headquartersLocationId": "liuchao.location.linan",
-        "territory": [
-          {
-            "x": 7000,
-            "y": 6300
-          },
-          {
-            "x": 8000,
-            "y": 6300
-          },
-          {
-            "x": 8000,
-            "y": 7000
-          },
-          {
-            "x": 7000,
-            "y": 7000
-          },
-          {
-            "x": 7000,
-            "y": 6300
-          }
-        ],
-        "features": []
-      },
-      {
         "id": "liuchao.faction.hei_mo_hai",
         "name": "黑魔海",
         "description": "魔道宗派/黑魔海教众自称；总部/据点：未知；目标：大兴圣教，迎回魔尊，完成大祭；核心：魔尊（真身未明确）、剑玉姬（高层智囊/巫宗核心）、殇侯/殇君（毒宗元老）、泉玉姬（黑魔海玉姬之一）；人物：殇侯/殇君（毒宗元老）、小紫（毒宗唯一嫡脉）、齐羽仙（巫宗成员）、泉玉姬（玉姬之一）、游婵（黑魔海分部下级小头目，负责和飞鸟翔/飞鸟熊藏接头）、鱼朝恩（毒宗成员）、古冥隐（黑魔海供奉）；与程宗扬：敌对关系，程宗扬为圣教死敌，杀圣教供奉屈无伏，破坏圣教在晋国安插的人手，圣教下令血债血偿",
@@ -440,8 +380,38 @@
         ]
       },
       {
-        "id": "liuchao.faction.song_court",
-        "name": "宋国朝廷",
+        "id": "liuchao.faction.jin_jun",
+        "name": "禁军",
+        "description": "宋国中央军，林冲为教头。",
+        "type": "军队",
+        "headquartersLocationId": "liuchao.location.linan",
+        "territory": [
+          {
+            "x": 7000,
+            "y": 6300
+          },
+          {
+            "x": 8000,
+            "y": 6300
+          },
+          {
+            "x": 8000,
+            "y": 7000
+          },
+          {
+            "x": 7000,
+            "y": 7000
+          },
+          {
+            "x": 7000,
+            "y": 6300
+          }
+        ],
+        "features": []
+      },
+      {
+        "id": "lyg.faction.song_state",
+        "name": "宋国",
         "headquartersLocationId": "liuchao.location.linan",
         "type": "官府",
         "description": "六朝之一宋国的朝廷，都城在临安。",
@@ -3218,7 +3188,7 @@
           "liuchao.faction.dragon_chen",
           "liuchao.faction.yao_chi_zong",
           "liuchao.faction.guang_ming_guan_tang",
-          "liuchao.faction.du_zong"
+          "liuchao.faction.hei_mo_hai"
         ],
         "locationId": "liuchao.location.taiquan_ancient_array",
         "axisId": null,
@@ -3259,7 +3229,7 @@
           "liuchao.character.ao_run"
         ],
         "relatedFactionIds": [
-          "liuchao.faction.du_zong"
+          "liuchao.faction.hei_mo_hai"
         ],
         "locationId": "liuchao.location.taiquan_ancient_array",
         "axisId": null,
@@ -3283,7 +3253,7 @@
           "liuchao.faction.dragon_chen",
           "liuchao.faction.yao_chi_zong",
           "liuchao.faction.guang_ming_guan_tang",
-          "liuchao.faction.du_zong"
+          "liuchao.faction.hei_mo_hai"
         ],
         "locationId": "liuchao.location.taiquan_ancient_array",
         "axisId": null,

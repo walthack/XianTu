@@ -100,8 +100,8 @@
   "canon": {
     "factions": [
       {
-        "id": "liuchao.faction.song_army",
-        "name": "宋军",
+        "id": "lyg.faction.song_state",
+        "name": "宋国",
         "description": "宋国正规军，包括捧日、龙卫等上四军及选锋营。",
         "type": "军事机构",
         "headquartersLocationId": "liuchao.location.linan",
@@ -220,36 +220,6 @@
         "features": []
       },
       {
-        "id": "liuchao.faction.song_court",
-        "name": "宋国朝廷",
-        "headquartersLocationId": "liuchao.location.linan",
-        "type": "官府",
-        "description": "六朝之一宋国的朝廷，都城在临安。",
-        "territory": [
-          {
-            "x": 7000,
-            "y": 6300
-          },
-          {
-            "x": 8000,
-            "y": 6300
-          },
-          {
-            "x": 8000,
-            "y": 7000
-          },
-          {
-            "x": 7000,
-            "y": 7000
-          },
-          {
-            "x": 7000,
-            "y": 6300
-          }
-        ],
-        "features": []
-      },
-      {
         "id": "liuchao.faction.gui_wang_dong",
         "name": "鬼王峒",
         "headquartersLocationId": "liuchao.location.guiwangdong",
@@ -287,7 +257,7 @@
         "description": "江州城外宋军大营。",
         "type": "城池",
         "continentId": "liuchao.continent.zhongzhou",
-        "factionId": "liuchao.faction.song_army",
+        "factionId": "lyg.faction.song_state",
         "coordinates": {
           "x": 5050,
           "y": 6550
@@ -339,7 +309,7 @@
         "description": "宋国都城，程宗扬即将前往。",
         "type": "城池",
         "continentId": "liuchao.continent.zhongzhou",
-        "factionId": "liuchao.faction.song_army",
+        "factionId": "lyg.faction.song_state",
         "coordinates": {
           "x": 7466,
           "y": 6532
@@ -1716,7 +1686,7 @@
           }
         ],
         "relatedFactionIds": [
-          "liuchao.faction.song_army"
+          "lyg.faction.song_state"
         ],
         "locationId": "liuchao.location.jinming_zhai",
         "axisId": "yunlong.1.1",
@@ -1783,7 +1753,7 @@
           "liuchao.character.qing_mian_shou"
         ],
         "relatedFactionIds": [
-          "liuchao.faction.song_army",
+          "lyg.faction.song_state",
           "liuchao.faction.jing_xi_ren"
         ],
         "locationId": "liuchao.location.jingxi_village",

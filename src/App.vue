@@ -253,7 +253,7 @@ import { heartbeatPresenceSilent } from '@/services/presence';
 import { endTravelBeacon } from '@/services/onlineTravel';
 import { getFullscreenElement, requestFullscreen, exitFullscreen, explainFullscreenError } from './utils/fullscreen';
 import { MUSIC_SETTINGS_EVENT, musicEngine, readMusicSettings, type MusicSettings } from './utils/musicEngine';
-import { resolveMusicTrackForScenario } from './utils/musicLibrary';
+import { resolveMusicMoodForScenario, pickTrackForMood, type MusicMood } from './utils/musicLibrary';
 import type { CharacterBaseInfo } from '@/types/game';
 import type { CharacterCreationPayload, Talent } from '@/types';
 
@@ -333,8 +333,13 @@ const activeScenarioEvents = computed(() => {
   });
 });
 
+// mood 不变则不换曲（不打断当前变体）；mood 变化时才从该 mood 曲库随机挑一首。
+const currentMusicMood = ref<MusicMood | null>(null);
 watch([activeScenarioChapterId, activeScenarioEvents], ([chapterId, events]) => {
-  musicEngine.setTrack(resolveMusicTrackForScenario(chapterId, events));
+  const mood = resolveMusicMoodForScenario(chapterId, events);
+  if (mood === currentMusicMood.value) return;
+  currentMusicMood.value = mood;
+  musicEngine.setTrack(pickTrackForMood(mood));
 }, { immediate: true });
 
 // --- 联机在线心跳（进入联机存档即轮询，停掉=下线） ---

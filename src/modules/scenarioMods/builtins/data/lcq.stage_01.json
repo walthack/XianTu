@@ -98,8 +98,8 @@
   "canon": {
     "factions": [
       {
-        "id": "lcq.faction.left_army",
-        "name": "左武军第一军团",
+        "id": "lcq.faction.left_guard",
+        "name": "左武军",
         "description": "王哲麾下的精锐军团，由秦、唐、宋三朝军士组成。",
         "type": "军队",
         "headquartersLocationId": "liuchao.location.jiangzhou",
@@ -751,7 +751,7 @@
         "realm": "凡人",
         "affiliations": [
           {
-            "factionId": "lcq.faction.left_army",
+            "factionId": "lcq.faction.left_guard",
             "category": "military",
             "role": "客卿"
           }
@@ -1467,7 +1467,7 @@
           "lcq.character.yue_shuang"
         ],
         "relatedFactionIds": [
-          "lcq.faction.left_army"
+          "lcq.faction.left_guard"
         ],
         "locationId": "lcq.location.grassland",
         "axisId": "qingyu.5.1",
@@ -1533,7 +1533,7 @@
           "lcq.character.wang_zhe"
         ],
         "relatedFactionIds": [
-          "lcq.faction.left_army",
+          "lcq.faction.left_guard",
           "liuchao.faction.tai_yi_zhen_zong"
         ],
         "axisId": "qingyu.10.1",
@@ -1565,7 +1565,7 @@
           "lcq.character.yue_shuang"
         ],
         "relatedFactionIds": [
-          "lcq.faction.left_army"
+          "lcq.faction.left_guard"
         ],
         "axisId": "qingyu.9.2",
         "axisSeq": 18,
