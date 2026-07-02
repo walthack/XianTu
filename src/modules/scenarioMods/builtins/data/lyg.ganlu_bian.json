@@ -905,6 +905,16 @@
             "factionId": "lyg.faction.wuyang_houfu",
             "category": "clan",
             "role": "主母"
+          },
+          {
+            "factionId": "liuchao.faction.hei_mo_hai",
+            "category": "organization",
+            "role": "毒宗唯一嫡传"
+          },
+          {
+            "factionId": "liuchao.faction.xing_yue_hu",
+            "category": "organization",
+            "role": "岳帅遗孤"
           }
         ],
         "locationId": "lyg.location.wuyang_houfu",
@@ -2367,7 +2377,19 @@
             "【身体】蜜穴略显生涩后变得湿滑柔润；初次与程宗扬性交（“第一次就是这样被主人干的”）；敏感部位包括蜜穴；屁眼儿；乳房"
           ]
         },
-        "realm": "元婴"
+        "realm": "元婴",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.hei_mo_hai",
+            "category": "organization",
+            "role": "黑魔海玉姬（泉玉姬）"
+          },
+          {
+            "factionId": "liuchao.faction.x2d33e1eaf9",
+            "category": "organization",
+            "role": "后期被擒后归属（原黑魔海）"
+          }
+        ]
       },
       {
         "id": "liuchao.character.yun_dan_liu",

@@ -1807,7 +1807,18 @@
         "role": "毒宗传人",
         "gender": "女",
         "realm": "金丹",
-        "affiliations": [],
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.hei_mo_hai",
+            "category": "organization",
+            "role": "毒宗唯一嫡传"
+          },
+          {
+            "factionId": "liuchao.faction.xing_yue_hu",
+            "category": "organization",
+            "role": "岳帅遗孤"
+          }
+        ],
         "locationId": "lyl.location.changqiu_palace",
         "skillIds": [
           "liuchao.skill.poison",

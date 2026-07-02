@@ -1299,6 +1299,16 @@
             "factionId": "liuchao.faction.biyu",
             "category": "clan",
             "role": "族人"
+          },
+          {
+            "factionId": "liuchao.faction.hei_mo_hai",
+            "category": "organization",
+            "role": "毒宗唯一嫡传"
+          },
+          {
+            "factionId": "liuchao.faction.xing_yue_hu",
+            "category": "organization",
+            "role": "岳帅遗孤"
           }
         ],
         "locationId": "liuchao.location.biyu_village",
@@ -1544,7 +1554,14 @@
           "lcq.skill.np004"
         ],
         "realm": "练气",
-        "gender": "男"
+        "gender": "男",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.bai_hu_shang_guan",
+            "category": "organization",
+            "role": ""
+          }
+        ]
       },
       {
         "id": "lcq.character.np003",

@@ -196,6 +196,13 @@
         "description": "",
         "type": "军队",
         "features": []
+      },
+      {
+        "id": "liuchao.faction.xing_yue_hu",
+        "name": "星月湖",
+        "description": "",
+        "type": "组织",
+        "features": []
       }
     ],
     "locations": [
@@ -931,7 +938,14 @@
           "lcq.skill.np003"
         ],
         "realm": "练气",
-        "gender": "男"
+        "gender": "男",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.bai_hu_shang_guan",
+            "category": "organization",
+            "role": ""
+          }
+        ]
       },
       {
         "id": "liuchao.character.xie_yi",
@@ -967,7 +981,14 @@
           "origin": "星月湖八骏之一，岳帅部属"
         },
         "realm": "化神",
-        "gender": "男"
+        "gender": "男",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.xing_yue_hu",
+            "category": "organization",
+            "role": "八骏·龙骥/岳帅部属"
+          }
+        ]
       },
       {
         "id": "liuchao.character.xi_men_qing",

@@ -1412,7 +1412,19 @@
           "origin": "黑魔海巫宗正统传人；全书女主角、智商天花板"
         },
         "realm": "金丹",
-        "gender": "女"
+        "gender": "女",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.hei_mo_hai",
+            "category": "organization",
+            "role": "毒宗唯一嫡传"
+          },
+          {
+            "factionId": "liuchao.faction.xing_yue_hu",
+            "category": "organization",
+            "role": "岳帅遗孤"
+          }
+        ]
       },
       {
         "id": "liuchao.character.zhao_feiyan",

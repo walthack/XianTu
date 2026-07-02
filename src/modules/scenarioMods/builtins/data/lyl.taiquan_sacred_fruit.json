@@ -1166,6 +1166,16 @@
             "factionId": "lyl.faction.pengyi",
             "category": "organization",
             "role": "核心成员"
+          },
+          {
+            "factionId": "liuchao.faction.hei_mo_hai",
+            "category": "organization",
+            "role": "毒宗唯一嫡传"
+          },
+          {
+            "factionId": "liuchao.faction.xing_yue_hu",
+            "category": "organization",
+            "role": "岳帅遗孤"
           }
         ],
         "locationId": "lyl.location.luoyang",
@@ -3819,6 +3829,83 @@
         "direction": "bidirectional",
         "tags": [
           "同门",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.xiao_zi",
+        "toCharacterId": "lyl.character.wen_qingyu",
+        "relation": "同门",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同门",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.xiao_zi",
+        "toCharacterId": "liuchao.character.zhuo_yunjun",
+        "relation": "同门",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同门",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.xiao_zi",
+        "toCharacterId": "liuchao.character.qin_hui",
+        "relation": "同门",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同门",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.xiao_zi",
+        "toCharacterId": "liuchao.character.ruan_xiang_ning",
+        "relation": "同门",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同门",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.xiao_zi",
+        "toCharacterId": "liuchao.character.jian_yu_ji",
+        "relation": "同门",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同门",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.xiao_zi",
+        "toCharacterId": "liuchao.character.lu_jing",
+        "relation": "同袍",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同袍",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.xiao_zi",
+        "toCharacterId": "liuchao.character.si_ming_xin",
+        "relation": "同袍",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同袍",
           "同势力派生"
         ]
       }

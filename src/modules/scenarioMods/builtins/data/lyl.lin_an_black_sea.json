@@ -2397,7 +2397,19 @@
           ]
         },
         "realm": "筑基",
-        "gender": "女"
+        "gender": "女",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.hei_mo_hai",
+            "category": "organization",
+            "role": "毒宗唯一嫡传"
+          },
+          {
+            "factionId": "liuchao.faction.xing_yue_hu",
+            "category": "organization",
+            "role": "岳帅遗孤"
+          }
+        ]
       },
       {
         "id": "liuchao.character.teng_fu",
@@ -3058,6 +3070,39 @@
         "direction": "bidirectional",
         "tags": [
           "同门",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.cheng_zongyang",
+        "toCharacterId": "liuchao.character.xiao_zi",
+        "relation": "同袍",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同袍",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.yu_zi_yuan",
+        "toCharacterId": "liuchao.character.xiao_zi",
+        "relation": "同袍",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同袍",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.xiao_zi",
+        "toCharacterId": "liuchao.character.xiao_yao_yi",
+        "relation": "同袍",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同袍",
           "同势力派生"
         ]
       }

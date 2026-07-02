@@ -1145,6 +1145,11 @@
             "factionId": "liuchao.faction.bai_wu",
             "category": "sect",
             "role": "勇士"
+          },
+          {
+            "factionId": "liuchao.faction.bai_hu_shang_guan",
+            "category": "organization",
+            "role": ""
           }
         ],
         "locationId": "liuchao.location.gui_wang_dong",
@@ -1393,6 +1398,16 @@
             "factionId": "liuchao.faction.gui_wang_dong",
             "category": "sect",
             "role": "弟子"
+          },
+          {
+            "factionId": "liuchao.faction.hei_mo_hai",
+            "category": "organization",
+            "role": "毒宗唯一嫡传"
+          },
+          {
+            "factionId": "liuchao.faction.xing_yue_hu",
+            "category": "organization",
+            "role": "岳帅遗孤"
           }
         ],
         "locationId": "liuchao.location.gui_wang_dong",

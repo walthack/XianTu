@@ -935,6 +935,11 @@
             "factionId": "liuchao.faction.xing_yue_hu",
             "category": "military",
             "role": "成员"
+          },
+          {
+            "factionId": "liuchao.faction.hei_mo_hai",
+            "category": "organization",
+            "role": "毒宗唯一嫡传"
           }
         ],
         "locationId": "liuchao.location.jiangzhou",

@@ -1237,7 +1237,13 @@
         "role": "行者",
         "gender": "男",
         "realm": "化神",
-        "affiliations": [],
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.xing_yue_hu",
+            "category": "organization",
+            "role": "八骏·龙骥/岳帅部属"
+          }
+        ],
         "locationId": "liuchao.location.shan_jian",
         "skillIds": [
           "liuchao.skill.sword_art"
@@ -1464,7 +1470,19 @@
             "智商碾压全场",
             "喜欢亲手调教、收服违抗程宗扬的女性敌人（种奴印/驯服）"
           ]
-        }
+        },
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.hei_mo_hai",
+            "category": "organization",
+            "role": "毒宗唯一嫡传"
+          },
+          {
+            "factionId": "liuchao.faction.xing_yue_hu",
+            "category": "organization",
+            "role": "岳帅遗孤"
+          }
+        ]
       },
       {
         "id": "liuchao.character.pan_jinlian",
