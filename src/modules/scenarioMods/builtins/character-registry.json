@@ -1,9 +1,9 @@
 {
   "schema": "xiantu.character-registry.v1",
-  "version": "cr-2026-07-02-29a1d20e4a31a49c",
-  "sourceHash": "29a1d20e4a31a49c",
+  "version": "cr-2026-07-02-882049ff92ee7026",
+  "sourceHash": "882049ff92ee7026",
   "sourceGeneratedAt": "2026-06-30T12:50:33.965Z",
-  "generatedAt": "2026-07-02T05:51:22.194Z",
+  "generatedAt": "2026-07-02T15:04:06.724Z",
   "stats": {
     "total": 309,
     "stagePresent": 249,
@@ -5012,6 +5012,10 @@
           {
             "faction": "白湖商馆",
             "role": "奴隶（舞姬）"
+          },
+          {
+            "faction": "程宗扬势力",
+            "role": "侍妾/婢女"
           }
         ],
         "debutLocation": {
@@ -5513,6 +5517,10 @@
           {
             "faction": "雪隼佣兵团",
             "role": "团员"
+          },
+          {
+            "faction": "程宗扬势力",
+            "role": "队员"
           }
         ],
         "debutLocation": {
@@ -10285,7 +10293,13 @@
           "用长枪刺自己大腿攻击护法金刚",
           "称呼程宗扬配偶为小师娘"
         ],
-        "ending": []
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "程宗扬势力",
+            "role": "徒弟/随从"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -13905,6 +13919,10 @@
           {
             "faction": "龙宸",
             "role": "女杀手"
+          },
+          {
+            "faction": "小紫势力",
+            "role": "侍奴/护卫"
           },
           {
             "faction": "瑶池宗",
@@ -18826,6 +18844,10 @@
           {
             "faction": "黑魔海",
             "role": "被掳者（失忆）"
+          },
+          {
+            "faction": "小紫势力",
+            "role": "奴婢"
           }
         ],
         "debutLocation": {
@@ -21772,6 +21794,10 @@
           {
             "faction": "北地兽蛮人",
             "role": "族裔成员"
+          },
+          {
+            "faction": "程宗扬势力",
+            "role": "家丁/仆从"
           }
         ],
         "debutLocation": {
@@ -25369,6 +25395,10 @@
           {
             "faction": "吕氏外戚集团",
             "role": "襄邑侯正妻（襄城君）"
+          },
+          {
+            "faction": "程宗扬势力",
+            "role": "奴婢"
           }
         ],
         "debutLocation": {
@@ -31359,6 +31389,10 @@
           {
             "faction": "石家（金谷园）",
             "role": "侍女"
+          },
+          {
+            "faction": "程宗扬势力",
+            "role": "侍女（程宗扬未承认此主仆关系）"
           }
         ],
         "debutLocation": {
@@ -32412,7 +32446,13 @@
           "location": "秘境",
           "locator": "六朝燕歌行/0014.html",
           "scene": "在秘境溪边，蛇夫人唤她「兰奴」让她去解说太泉秘境的来历，她自称「奴婢也弄不清楚」回应赵皇后关于秘境的询问。"
-        }
+        },
+        "affiliations": [
+          {
+            "faction": "程宗扬势力",
+            "role": "大丫头"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -32633,7 +32673,13 @@
           "location": "（地点不明）",
           "locator": "六朝云龙吟/0107.html",
           "scene": "程宗扬在刘娥事件现场，认出小紫身边的两名黑衣女卫之一是罂粟女，小紫解释她们不肯留在水香楼，自愿献了魂魄给她当了侍奴。"
-        }
+        },
+        "affiliations": [
+          {
+            "faction": "小紫势力",
+            "role": "侍奴"
+          }
+        ]
       },
       "phaseIdentities": [
         {
