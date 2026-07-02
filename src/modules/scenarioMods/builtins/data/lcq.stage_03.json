@@ -161,6 +161,41 @@
           }
         ],
         "features": []
+      },
+      {
+        "id": "liuchao.faction.pan_jiang_cheng",
+        "name": "盘江程氏",
+        "description": "",
+        "type": "家族",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.x2d33e1eaf9",
+        "name": "程宗扬势力",
+        "description": "",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.yun_shi_shang_hui",
+        "name": "云氏商会",
+        "description": "",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.hei_mo_hai",
+        "name": "黑魔海",
+        "description": "",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "lcq.faction.left_guard",
+        "name": "左武军",
+        "description": "",
+        "type": "军队",
+        "features": []
       }
     ],
     "locations": [
@@ -554,6 +589,11 @@
             "factionId": "liuchao.faction.bai_hu_shang_guan",
             "category": "organization",
             "role": "奴隶"
+          },
+          {
+            "factionId": "liuchao.faction.pan_jiang_cheng",
+            "category": "clan",
+            "role": "少主/大少爷"
           }
         ],
         "locationId": "liuchao.location.chai_fang",
@@ -750,7 +790,18 @@
         "role": "前女奴",
         "gender": "女",
         "realm": "凡人",
-        "affiliations": [],
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.bai_hu_shang_guan",
+            "category": "organization",
+            "role": "奴隶（舞姬）"
+          },
+          {
+            "factionId": "liuchao.faction.x2d33e1eaf9",
+            "category": "organization",
+            "role": "侍妾/婢女"
+          }
+        ],
         "locationId": "liuchao.location.baihu_shang_guan",
         "skillIds": [
           "liuchao.skill.dance"
@@ -827,7 +878,14 @@
           "origin": "云氏家族（南荒势力）"
         },
         "realm": "练气",
-        "gender": "男"
+        "gender": "男",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.yun_shi_shang_hui",
+            "category": "organization",
+            "role": "执事"
+          }
+        ]
       },
       {
         "id": "liuchao.character.wu_er_lang",
@@ -935,7 +993,14 @@
           ],
           "origin": "配角"
         },
-        "realm": "元婴"
+        "realm": "元婴",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.hei_mo_hai",
+            "category": "organization",
+            "role": "弟子"
+          }
+        ]
       },
       {
         "id": "liuchao.character.zhuo_yunjun",
@@ -953,7 +1018,24 @@
             "常年被太尉折磨出受虐底子"
           ]
         },
-        "realm": "化神"
+        "realm": "化神",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.tai_yi_zhen_zong",
+            "category": "sect",
+            "role": "教御"
+          },
+          {
+            "factionId": "liuchao.faction.hei_mo_hai",
+            "category": "organization",
+            "role": "奴婢"
+          },
+          {
+            "factionId": "liuchao.faction.pan_jiang_cheng",
+            "category": "clan",
+            "role": "奴婢"
+          }
+        ]
       },
       {
         "id": "lcq.character.yue_shuang",
@@ -974,7 +1056,19 @@
             "却以\"八骏新主人\"自居）"
           ]
         },
-        "realm": "元婴"
+        "realm": "元婴",
+        "affiliations": [
+          {
+            "factionId": "lcq.faction.left_guard",
+            "category": "military",
+            "role": "军人"
+          },
+          {
+            "factionId": "liuchao.faction.tai_yi_zhen_zong",
+            "category": "sect",
+            "role": "弟子"
+          }
+        ]
       }
     ],
     "playerRelationships": [
@@ -1052,6 +1146,17 @@
         "relation": "同事",
         "score": 5,
         "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.zhuo_yunjun",
+        "toCharacterId": "lcq.character.yue_shuang",
+        "relation": "同门",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同门",
+          "同势力派生"
+        ]
       }
     ]
   },

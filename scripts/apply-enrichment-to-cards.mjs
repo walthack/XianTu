@@ -29,7 +29,7 @@ const NORMALIZE = {
   '程宗扬（个人）': '程宗扬势力', '程氏阵营': '程宗扬势力', '小紫': '小紫势力',
 };
 // 桶C pending:仍排除不写(泛外姓人,待复核)
-const PENDING = new Set(['外姓人']);
+const PENDING = new Set(['外姓人', '释特昧普势力']);
 
 // 读结果
 const results = fs.readdirSync(scanDir).filter(f => f.endsWith('.result.json'))

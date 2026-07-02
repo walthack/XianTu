@@ -256,6 +256,27 @@
           "秘制神药（教母亲自赐药，神效无比）",
           "巫毒双修（教主兼巫毒二宗之秘）"
         ]
+      },
+      {
+        "id": "liuchao.faction.pan_jiang_cheng",
+        "name": "盘江程氏",
+        "description": "",
+        "type": "家族",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.bai_hu_shang_guan",
+        "name": "白湖商馆",
+        "description": "",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.xb9033ecdb3",
+        "name": "秦军军团",
+        "description": "",
+        "type": "组织",
+        "features": []
       }
     ],
     "locations": [
@@ -754,6 +775,11 @@
             "factionId": "lcq.faction.left_guard",
             "category": "military",
             "role": "客卿"
+          },
+          {
+            "factionId": "liuchao.faction.pan_jiang_cheng",
+            "category": "clan",
+            "role": "少主/大少爷"
           }
         ],
         "locationId": "lcq.location.grassland",
@@ -908,7 +934,14 @@
           ]
         },
         "realm": "练气",
-        "gender": "女"
+        "gender": "女",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.bai_hu_shang_guan",
+            "category": "organization",
+            "role": "商队护卫"
+          }
+        ]
       },
       {
         "id": "lcq.character.yue_shuang",
@@ -960,7 +993,19 @@
           "lcq.skill.np001"
         ],
         "realm": "元婴",
-        "gender": "女"
+        "gender": "女",
+        "affiliations": [
+          {
+            "factionId": "lcq.faction.left_guard",
+            "category": "military",
+            "role": "军人"
+          },
+          {
+            "factionId": "liuchao.faction.tai_yi_zhen_zong",
+            "category": "sect",
+            "role": "弟子"
+          }
+        ]
       },
       {
         "id": "liuchao.character.su_daji",
@@ -1013,7 +1058,14 @@
           ]
         },
         "realm": "炼虚",
-        "gender": "女"
+        "gender": "女",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.bai_hu_shang_guan",
+            "category": "organization",
+            "role": "掌柜"
+          }
+        ]
       },
       {
         "id": "liuchao.character.lin_cai_quan",
@@ -1049,7 +1101,14 @@
           "appearance": "身着布衣，面容沉静，身体挺得笔直，有鹰隼般犀利的眼睛。"
         },
         "realm": "化神",
-        "gender": "男"
+        "gender": "男",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.tai_yi_zhen_zong",
+            "category": "sect",
+            "role": "教御（首席教御）"
+          }
+        ]
       },
       {
         "id": "lcq.character.wang_zhe",
@@ -1095,7 +1154,19 @@
           "lcq.skill.np001"
         ],
         "realm": "合体",
-        "gender": "男"
+        "gender": "男",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.tai_yi_zhen_zong",
+            "category": "sect",
+            "role": "宗师"
+          },
+          {
+            "factionId": "liuchao.faction.xb9033ecdb3",
+            "category": "organization",
+            "role": "师帅/主帅"
+          }
+        ]
       },
       {
         "id": "lcq.character.han_geng",
@@ -1135,7 +1206,19 @@
           ]
         },
         "realm": "化神",
-        "gender": "男"
+        "gender": "男",
+        "affiliations": [
+          {
+            "factionId": "lcq.faction.left_guard",
+            "category": "military",
+            "role": "第一军团天武营主将"
+          },
+          {
+            "factionId": "liuchao.faction.tai_yi_zhen_zong",
+            "category": "sect",
+            "role": "王哲弟子/未来掌教人选"
+          }
+        ]
       },
       {
         "id": "lcq.character.np001",
@@ -1173,7 +1256,14 @@
           "appearance": "身材高大的中年道人，负双手，冷冰冰，肩后披黑色披风，紫金帅冠，金属战甲"
         },
         "realm": "化神",
-        "gender": "男"
+        "gender": "男",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.tai_yi_zhen_zong",
+            "category": "sect",
+            "role": "教御"
+          }
+        ]
       },
       {
         "id": "liuchao.character.zhuo_yunjun",
@@ -1196,7 +1286,24 @@
             "【身体】道门内功养出细腻白皙；成熟浮凸肉体；常炜邪术开发出异于常人的极度敏感"
           ]
         },
-        "realm": "化神"
+        "realm": "化神",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.tai_yi_zhen_zong",
+            "category": "sect",
+            "role": "教御"
+          },
+          {
+            "factionId": "liuchao.faction.hei_mo_hai",
+            "category": "organization",
+            "role": "奴婢"
+          },
+          {
+            "factionId": "liuchao.faction.pan_jiang_cheng",
+            "category": "clan",
+            "role": "奴婢"
+          }
+        ]
       }
     ],
     "playerRelationships": [
@@ -1274,6 +1381,160 @@
         "relation": "仇敌",
         "score": -55,
         "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.cheng_zongyang",
+        "toCharacterId": "lcq.character.yue_shuang",
+        "relation": "同袍",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同袍",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.cheng_zongyang",
+        "toCharacterId": "lcq.character.han_geng",
+        "relation": "同袍",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同袍",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "lcq.character.yue_shuang",
+        "toCharacterId": "lcq.character.han_geng",
+        "relation": "同袍",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同袍",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "lcq.character.yue_shuang",
+        "toCharacterId": "liuchao.character.lin_cai_quan",
+        "relation": "同门",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同门",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "lcq.character.yue_shuang",
+        "toCharacterId": "lcq.character.np001",
+        "relation": "同门",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同门",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "lcq.character.yue_shuang",
+        "toCharacterId": "liuchao.character.zhuo_yunjun",
+        "relation": "同门",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同门",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.lin_cai_quan",
+        "toCharacterId": "lcq.character.wang_zhe",
+        "relation": "同门",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同门",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.lin_cai_quan",
+        "toCharacterId": "lcq.character.han_geng",
+        "relation": "同门",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同门",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.lin_cai_quan",
+        "toCharacterId": "lcq.character.np001",
+        "relation": "同门",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同门",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.lin_cai_quan",
+        "toCharacterId": "liuchao.character.zhuo_yunjun",
+        "relation": "同门",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同门",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "lcq.character.wang_zhe",
+        "toCharacterId": "liuchao.character.zhuo_yunjun",
+        "relation": "同门",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同门",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "lcq.character.han_geng",
+        "toCharacterId": "lcq.character.np001",
+        "relation": "同门",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同门",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "lcq.character.han_geng",
+        "toCharacterId": "liuchao.character.zhuo_yunjun",
+        "relation": "同门",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同门",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "lcq.character.np001",
+        "toCharacterId": "liuchao.character.zhuo_yunjun",
+        "relation": "同门",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同门",
+          "同势力派生"
+        ]
       }
     ]
   },

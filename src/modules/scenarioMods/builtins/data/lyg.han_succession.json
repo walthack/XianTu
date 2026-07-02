@@ -141,6 +141,272 @@
         "description": "唐国凉州一带的江湖联盟，由一宗四堂八会共十六家帮会组成，目前因盟主空缺而动荡。",
         "type": "江湖联盟",
         "headquartersLocationId": "lyg.location.liangzhou_arena"
+      },
+      {
+        "id": "liuchao.faction.pan_jiang_cheng",
+        "name": "盘江程氏",
+        "description": "",
+        "type": "家族",
+        "features": []
+      },
+      {
+        "id": "lyg.faction.tiance_fu",
+        "name": "皇图天策府",
+        "description": "",
+        "type": "军队",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.x9fc5fde11c",
+        "name": "右千牛卫府",
+        "description": "",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.x2d33e1eaf9",
+        "name": "程宗扬势力",
+        "description": "",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.liangzhou_army",
+        "name": "凉州军",
+        "description": "",
+        "type": "军队",
+        "features": []
+      },
+      {
+        "id": "lyl.faction.lyu_clan",
+        "name": "吕氏外戚集团",
+        "description": "",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.tang_guo_chao_ting",
+        "name": "唐国朝廷",
+        "description": "",
+        "type": "势力",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.tai_yi_zhen_zong",
+        "name": "太乙真宗",
+        "description": "",
+        "type": "宗门",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.x0d71c824e7",
+        "name": "阳钧宗",
+        "description": "",
+        "type": "宗门",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.xcd42487992",
+        "name": "乾贞道",
+        "description": "",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.x6c70e576ef",
+        "name": "长青宗",
+        "description": "",
+        "type": "宗门",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.guang_ming_guan_tang",
+        "name": "光明观堂",
+        "description": "",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.wei_yuan_escort",
+        "name": "威远镖局",
+        "description": "",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.xb829c70fb9",
+        "name": "林州小碧潭",
+        "description": "",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.han_guo_chao_ting",
+        "name": "汉国朝廷",
+        "description": "",
+        "type": "势力",
+        "features": []
+      },
+      {
+        "id": "lyg.faction.eunuch_group",
+        "name": "宦官集团",
+        "description": "",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.x3a190100e6",
+        "name": "摩尼教",
+        "description": "",
+        "type": "宗门",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.shi_fang_cong_lin",
+        "name": "十方丛林",
+        "description": "",
+        "type": "宗门",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.x78a6c9fdd3",
+        "name": "大孚灵鹫寺",
+        "description": "",
+        "type": "宗门",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.x400542aa34",
+        "name": "留仙客栈",
+        "description": "",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.cheng_shi_shang_hui",
+        "name": "程氏商会",
+        "description": "",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.hei_mo_hai",
+        "name": "黑魔海",
+        "description": "",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.dragon_chen",
+        "name": "龙宸",
+        "description": "",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.xb332eefadd",
+        "name": "银枪效节",
+        "description": "",
+        "type": "军队",
+        "features": []
+      },
+      {
+        "id": "lyg.faction.daciensi",
+        "name": "大慈恩寺",
+        "description": "",
+        "type": "宗门",
+        "features": []
+      },
+      {
+        "id": "lyl.faction.pengyi",
+        "name": "鹏翼社",
+        "description": "",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.xe6bd0066c9",
+        "name": "小紫势力",
+        "description": "",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.xing_yue_hu",
+        "name": "星月湖",
+        "description": "",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "lyg.faction.qin_state",
+        "name": "秦国",
+        "description": "",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.yun_shi_shang_hui",
+        "name": "云氏商会",
+        "description": "",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "lyg.faction.song_state",
+        "name": "宋国",
+        "description": "",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.wu_zong",
+        "name": "巫宗",
+        "description": "",
+        "type": "宗门",
+        "features": []
+      },
+      {
+        "id": "lyl.faction.liu_jian",
+        "name": "刘建集团",
+        "description": "",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.bai_hu_shang_guan",
+        "name": "白湖商馆",
+        "description": "",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "lyl.faction.changqiu",
+        "name": "长秋宫",
+        "description": "",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "lcq.faction.left_guard",
+        "name": "左武军",
+        "description": "",
+        "type": "军队",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.x8b538653d9",
+        "name": "殇侯势力",
+        "description": "",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.x898ded5bf1",
+        "name": "少陵侯府",
+        "description": "",
+        "type": "家族",
+        "features": []
       }
     ],
     "locations": [
@@ -543,6 +809,11 @@
             "factionId": "lyg.faction.wuyang_houfu",
             "category": "organization",
             "role": "家主"
+          },
+          {
+            "factionId": "liuchao.faction.pan_jiang_cheng",
+            "category": "clan",
+            "role": "少主/大少爷"
           }
         ],
         "locationId": "lyg.location.wuyang_mansion",
@@ -677,6 +948,11 @@
             "factionId": "lyg.faction.iron_horse_hall",
             "category": "sect",
             "role": "堂主"
+          },
+          {
+            "factionId": "liuchao.faction.liang_zhou_meng",
+            "category": "organization",
+            "role": "成员"
           }
         ],
         "locationId": "lyg.location.liangzhou_arena",
@@ -826,6 +1102,11 @@
             "factionId": "lyg.faction.danxia_sect",
             "category": "sect",
             "role": "左护法"
+          },
+          {
+            "factionId": "liuchao.faction.liang_zhou_meng",
+            "category": "organization",
+            "role": "护法"
           }
         ],
         "locationId": "lyg.location.liangzhou_arena",
@@ -869,7 +1150,18 @@
         "role": "关键人物",
         "gender": "男",
         "realm": "金丹",
-        "affiliations": [],
+        "affiliations": [
+          {
+            "factionId": "lyg.faction.tiance_fu",
+            "category": "military",
+            "role": "教官"
+          },
+          {
+            "factionId": "liuchao.faction.x9fc5fde11c",
+            "category": "organization",
+            "role": "军官"
+          }
+        ],
         "locationId": "lyg.location.wuyang_mansion",
         "profile": {
           "attributes": {
@@ -914,6 +1206,11 @@
             "factionId": "lyg.faction.wuyang_houfu",
             "category": "organization",
             "role": "弟子"
+          },
+          {
+            "factionId": "liuchao.faction.x2d33e1eaf9",
+            "category": "organization",
+            "role": "徒弟/随从"
           }
         ],
         "locationId": "lyg.location.wuyang_mansion",
@@ -961,6 +1258,11 @@
             "factionId": "lyg.faction.wuyang_houfu",
             "category": "organization",
             "role": "谋主"
+          },
+          {
+            "factionId": "liuchao.faction.liangzhou_army",
+            "category": "military",
+            "role": "首席谋士"
           }
         ],
         "locationId": "lyg.location.wuyang_mansion",
@@ -1114,6 +1416,11 @@
             "factionId": "lyg.faction.wuyang_houfu",
             "category": "organization",
             "role": "护卫"
+          },
+          {
+            "factionId": "lyl.faction.lyu_clan",
+            "category": "organization",
+            "role": "吕氏子弟"
           }
         ],
         "locationId": "lyg.location.wuyang_mansion",
@@ -1228,6 +1535,41 @@
             "factionId": "lyg.faction.wuyang_houfu",
             "category": "organization",
             "role": "盟友"
+          },
+          {
+            "factionId": "liuchao.faction.tang_guo_chao_ting",
+            "category": "polity",
+            "role": "镇国公主/太真妃子"
+          },
+          {
+            "factionId": "liuchao.faction.tai_yi_zhen_zong",
+            "category": "sect",
+            "role": "弟子（受先皇钦命授箓传道）"
+          },
+          {
+            "factionId": "liuchao.faction.x0d71c824e7",
+            "category": "sect",
+            "role": "弟子（受先皇钦命授箓传道）"
+          },
+          {
+            "factionId": "liuchao.faction.xcd42487992",
+            "category": "organization",
+            "role": "弟子（受先皇钦命授箓传道）"
+          },
+          {
+            "factionId": "liuchao.faction.x6c70e576ef",
+            "category": "sect",
+            "role": "弟子（受先皇钦命授箓传道）"
+          },
+          {
+            "factionId": "liuchao.faction.yao_chi_zong",
+            "category": "sect",
+            "role": "弟子（受先皇钦命授箓传道）"
+          },
+          {
+            "factionId": "liuchao.faction.guang_ming_guan_tang",
+            "category": "organization",
+            "role": "弟子（卫采芝为授业恩师）"
           }
         ],
         "locationId": "lyg.location.wuyang_mansion",
@@ -1293,6 +1635,16 @@
             "factionId": "lyg.faction.wuyang_houfu",
             "category": "organization",
             "role": "侍妾"
+          },
+          {
+            "factionId": "liuchao.faction.wei_yuan_escort",
+            "category": "organization",
+            "role": "镖头夫人"
+          },
+          {
+            "factionId": "liuchao.faction.xb829c70fb9",
+            "category": "organization",
+            "role": "弟子"
           }
         ],
         "locationId": "lyg.location.weishui",
@@ -1384,7 +1736,19 @@
           "origin": "吕太后；表面贪权妖后，实为给被佛道围剿的飞羽族谋生路"
         },
         "realm": "金丹",
-        "gender": "女"
+        "gender": "女",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.han_guo_chao_ting",
+            "category": "polity",
+            "role": "太后"
+          },
+          {
+            "factionId": "lyl.faction.lyu_clan",
+            "category": "organization",
+            "role": "核心成员"
+          }
+        ]
       },
       {
         "id": "liuchao.character.zhao_he_de",
@@ -1437,7 +1801,14 @@
           ]
         },
         "realm": "金丹",
-        "gender": "女"
+        "gender": "女",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.tai_yi_zhen_zong",
+            "category": "sect",
+            "role": "弟子/习术之人"
+          }
+        ]
       },
       {
         "id": "liuchao.character.yuan_tiangang",
@@ -1546,7 +1917,14 @@
           "origin": "光明观堂高阶医女，鹤羽剑姬，乐明珠的亲师姐"
         },
         "realm": "化神",
-        "gender": "女"
+        "gender": "女",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.guang_ming_guan_tang",
+            "category": "organization",
+            "role": "弟子/师姐"
+          }
+        ]
       },
       {
         "id": "lyg.character.chou_shiliang",
@@ -1577,7 +1955,19 @@
           "origin": "左街功德使/枢密使（疑似被李辅国排挤）"
         },
         "realm": "金丹",
-        "gender": "男"
+        "gender": "男",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.tang_guo_chao_ting",
+            "category": "polity",
+            "role": "南安郡公、知内侍省事、左神策军左护军中尉、左街功德使"
+          },
+          {
+            "factionId": "lyg.faction.eunuch_group",
+            "category": "organization",
+            "role": "四贵之一"
+          }
+        ]
       },
       {
         "id": "liuchao.character.xu_junfang",
@@ -1672,7 +2062,19 @@
           ]
         },
         "realm": "元婴",
-        "gender": "男"
+        "gender": "男",
+        "affiliations": [
+          {
+            "factionId": "lyg.faction.eunuch_group",
+            "category": "organization",
+            "role": "权阉/天下观军容宣慰处置使"
+          },
+          {
+            "factionId": "liuchao.faction.tang_guo_chao_ting",
+            "category": "polity",
+            "role": "神策军观军容使（掌神策军十八万众）；兼领光禄、鸿胪、礼宾、内飞龙、闲厩等职"
+          }
+        ]
       },
       {
         "id": "lyg.character.np060",
@@ -1712,7 +2114,14 @@
           "appearance": "西域性感火辣、波斯风情的异国熟女"
         },
         "realm": "金丹",
-        "gender": "女"
+        "gender": "女",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.x3a190100e6",
+            "category": "sect",
+            "role": "善母（光明使）"
+          }
+        ]
       },
       {
         "id": "liuchao.character.yi_xin",
@@ -1758,7 +2167,14 @@
           "origin": "女医，程宗扬控制下的线人"
         },
         "realm": "金丹",
-        "gender": "女"
+        "gender": "女",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.guang_ming_guan_tang",
+            "category": "organization",
+            "role": "女神医"
+          }
+        ]
       },
       {
         "id": "lyg.character.np034",
@@ -1795,7 +2211,19 @@
           "appearance": "光溜溜的头皮冒出一层暗青色的发根，清秀面孔，身穿僧袍，盘膝时双手合什。"
         },
         "realm": "金丹",
-        "gender": "男"
+        "gender": "男",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.shi_fang_cong_lin",
+            "category": "sect",
+            "role": "僧人"
+          },
+          {
+            "factionId": "liuchao.faction.x78a6c9fdd3",
+            "category": "sect",
+            "role": "僧人"
+          }
+        ]
       },
       {
         "id": "lyg.character.np066",
@@ -1831,7 +2259,14 @@
           "appearance": "小毛孩，个子不高，未提及具体长相。"
         },
         "realm": "金丹",
-        "gender": "男"
+        "gender": "男",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.x400542aa34",
+            "category": "organization",
+            "role": "小厮"
+          }
+        ]
       },
       {
         "id": "liuchao.character.sun_nuan",
@@ -1852,7 +2287,19 @@
             "【性癖】受支配；展示癖；肛交；乳头刺激",
             "【身体】乳头穿刺银铃；蜜穴湿滑；后庭被插入过"
           ]
-        }
+        },
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.han_guo_chao_ting",
+            "category": "polity",
+            "role": "封君（湖阳君）"
+          },
+          {
+            "factionId": "liuchao.faction.cheng_shi_shang_hui",
+            "category": "organization",
+            "role": "侍奴"
+          }
+        ]
       },
       {
         "id": "liuchao.character.quan_yu_ji",
@@ -1898,7 +2345,24 @@
             "【身体】道门内功养出细腻白皙；成熟浮凸肉体；常炜邪术开发出异于常人的极度敏感"
           ]
         },
-        "realm": "化神"
+        "realm": "化神",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.tai_yi_zhen_zong",
+            "category": "sect",
+            "role": "教御"
+          },
+          {
+            "factionId": "liuchao.faction.hei_mo_hai",
+            "category": "organization",
+            "role": "奴婢"
+          },
+          {
+            "factionId": "liuchao.faction.pan_jiang_cheng",
+            "category": "clan",
+            "role": "奴婢"
+          }
+        ]
       },
       {
         "id": "liuchao.character.li_hong",
@@ -1919,7 +2383,19 @@
           "notes": [
             "【身体】胡人（黄发蓝眼、凸鼻深目）"
           ]
-        }
+        },
+        "affiliations": [
+          {
+            "factionId": "lyg.faction.guangyuan_hang",
+            "category": "organization",
+            "role": "富商/执事苏沙下属"
+          },
+          {
+            "factionId": "liuchao.faction.shi_fang_cong_lin",
+            "category": "sect",
+            "role": "资助者"
+          }
+        ]
       },
       {
         "id": "liuchao.character.bi_shui_yu",
@@ -1943,7 +2419,14 @@
             "【身体】曾断右臂；重伤多次，伤势未愈"
           ]
         },
-        "realm": "元婴"
+        "realm": "元婴",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.dragon_chen",
+            "category": "organization",
+            "role": "二十八宿正星/核心杀手"
+          }
+        ]
       },
       {
         "id": "liuchao.character.wei_yue_yan",
@@ -1959,7 +2442,14 @@
           "race": "人族",
           "origin": "龙宸北方玄武七宿之一"
         },
-        "realm": "元婴"
+        "realm": "元婴",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.dragon_chen",
+            "category": "organization",
+            "role": "杀手/玄武七宿成员"
+          }
+        ]
       },
       {
         "id": "liuchao.character.chai_yong_jian",
@@ -1981,7 +2471,24 @@
             "【性癖】喜欢肢体残缺；在施虐中获得快感",
             "【身体】无"
           ]
-        }
+        },
+        "affiliations": [
+          {
+            "factionId": "lyg.faction.danxia_sect",
+            "category": "sect",
+            "role": "宗主"
+          },
+          {
+            "factionId": "liuchao.faction.liang_zhou_meng",
+            "category": "organization",
+            "role": "盟中成员（丹霞宗宗主）"
+          },
+          {
+            "factionId": "lyg.faction.guangyuan_hang",
+            "category": "organization",
+            "role": "被扶植的傀儡"
+          }
+        ]
       },
       {
         "id": "liuchao.character.xue_li",
@@ -1998,7 +2505,19 @@
           "appearance": "猿臂猿背，体格健壮，持银枪长剑",
           "race": "人族",
           "origin": "魏博军银枪效节都军士"
-        }
+        },
+        "affiliations": [
+          {
+            "factionId": "lyg.faction.tiance_fu",
+            "category": "military",
+            "role": "骑兵科毕业生"
+          },
+          {
+            "factionId": "liuchao.faction.xb332eefadd",
+            "category": "military",
+            "role": "低级军官（禆将）"
+          }
+        ]
       },
       {
         "id": "liuchao.character.zheng_zhu",
@@ -2016,7 +2535,19 @@
           "appearance": "刚剃了胡须，下巴多了几道伤痕，铁青的脸上扑了粉，就像蒙了层白霜一样，面色怪异。堂堂宰相，剃了胡子，换上内侍的服色，像个刚净身入宫的小太监一样，跟在李辅国的屁股后面打混。",
           "race": "人族",
           "origin": "宰相"
-        }
+        },
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.tang_guo_chao_ting",
+            "category": "polity",
+            "role": "工部尚书"
+          },
+          {
+            "factionId": "lyg.faction.eunuch_group",
+            "category": "organization",
+            "role": "与王守澄关系密切（受其举荐）"
+          }
+        ]
       },
       {
         "id": "liuchao.character.jing_kong",
@@ -2033,7 +2564,19 @@
           "appearance": "中年僧人形象，身着黄色僧衣，血迹斑斑。",
           "race": "人族",
           "origin": "大慈恩寺知客香主"
-        }
+        },
+        "affiliations": [
+          {
+            "factionId": "lyg.faction.daciensi",
+            "category": "sect",
+            "role": "知客院香主"
+          },
+          {
+            "factionId": "lyl.faction.pengyi",
+            "category": "organization",
+            "role": "退役老兵"
+          }
+        ]
       },
       {
         "id": "liuchao.character.tian_ling_zi",
@@ -2049,7 +2592,19 @@
           ],
           "race": "人族",
           "origin": "宦官"
-        }
+        },
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.tang_guo_chao_ting",
+            "category": "polity",
+            "role": "枢密院右枢密使"
+          },
+          {
+            "factionId": "lyg.faction.eunuch_group",
+            "category": "organization",
+            "role": "一王四公之一（晋国公）、主掌政事"
+          }
+        ]
       },
       {
         "id": "liuchao.character.li_xun",
@@ -2064,7 +2619,14 @@
           ],
           "race": "人族",
           "origin": "宰相"
-        }
+        },
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.tang_guo_chao_ting",
+            "category": "polity",
+            "role": "宰相（同平章事、翰林学士）"
+          }
+        ]
       },
       {
         "id": "liuchao.character.xiao_shi",
@@ -2083,7 +2645,14 @@
           "notes": [
             "【身体】四旬妇人，肌肤白馥，雪白大腿，下体曾被马鞭捅入。"
           ]
-        }
+        },
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.tang_guo_chao_ting",
+            "category": "polity",
+            "role": "太后"
+          }
+        ]
       },
       {
         "id": "liuchao.character.an_le_gong_zhu",
@@ -2102,7 +2671,14 @@
           "notes": [
             "【身体】处女；嫩穴小巧精致；穿白色丝袜"
           ]
-        }
+        },
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.tang_guo_chao_ting",
+            "category": "polity",
+            "role": "公主（唐皇李昂胞妹）"
+          }
+        ]
       },
       {
         "id": "liuchao.character.gong_wan_gu",
@@ -2120,7 +2696,14 @@
           "notes": [
             "【身体】没有阳根（第五章暗示‘长不出来’）"
           ]
-        }
+        },
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.hei_mo_hai",
+            "category": "organization",
+            "role": "长安主事人"
+          }
+        ]
       },
       {
         "id": "liuchao.character.cheng_yuan_zhen",
@@ -2136,7 +2719,19 @@
           ],
           "race": "人族",
           "origin": "宦官/内侍"
-        }
+        },
+        "affiliations": [
+          {
+            "factionId": "lyg.faction.eunuch_group",
+            "category": "organization",
+            "role": "近侍/心腹"
+          },
+          {
+            "factionId": "liuchao.faction.tang_guo_chao_ting",
+            "category": "polity",
+            "role": "博陆郡王府内侍"
+          }
+        ]
       },
       {
         "id": "liuchao.character.ying_su_nv",
@@ -2163,7 +2758,14 @@
             "【身体】蜜穴湿腻，阴蒂鼓起有指尖大小，色泽赤红；双乳丰挺，乳头系银铃或硬翘如葡萄；雪臀丰满，臀肉白滑；体表有罂粟花海纹身"
           ]
         },
-        "realm": "元婴"
+        "realm": "元婴",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.xe6bd0066c9",
+            "category": "organization",
+            "role": "侍奴"
+          }
+        ]
       },
       {
         "id": "liuchao.character.su_xiao",
@@ -2182,7 +2784,24 @@
           "race": "人族",
           "origin": "星月湖旧部，上尉连长，雇佣兵（左武第一军团化名）"
         },
-        "realm": "元婴"
+        "realm": "元婴",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.xing_yue_hu",
+            "category": "organization",
+            "role": "六营上尉连长"
+          },
+          {
+            "factionId": "lyl.faction.pengyi",
+            "category": "organization",
+            "role": "社员/六营成员"
+          },
+          {
+            "factionId": "lyg.faction.qin_state",
+            "category": "organization",
+            "role": "原右庶长（已弃爵位投奔岳帅）"
+          }
+        ]
       },
       {
         "id": "liuchao.character.yun_dan_liu",
@@ -2200,7 +2819,14 @@
             "一言不合拔剑",
             "张扬的世家小辣妹"
           ]
-        }
+        },
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.yun_shi_shang_hui",
+            "category": "organization",
+            "role": "云氏庶女/遗腹女"
+          }
+        ]
       },
       {
         "id": "liuchao.character.yun_ru_yao",
@@ -2217,7 +2843,14 @@
             "名门商豪大家闺秀",
             "面对主角带豪门女子的羞赧不知所措"
           ]
-        }
+        },
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.yun_shi_shang_hui",
+            "category": "organization",
+            "role": "云家小姐"
+          }
+        ]
       },
       {
         "id": "liuchao.character.ruan_xiang_ning",
@@ -2234,7 +2867,19 @@
             "实为黑魔海高阶妖女、城府深沉",
             "为组织利用丈夫毫无愧色"
           ]
-        }
+        },
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.hei_mo_hai",
+            "category": "organization",
+            "role": "疑似御姬/成员"
+          },
+          {
+            "factionId": "lyg.faction.song_state",
+            "category": "organization",
+            "role": "禁军教头林冲之妻"
+          }
+        ]
       },
       {
         "id": "liuchao.character.yin_fulan",
@@ -2251,7 +2896,14 @@
             "淫荡",
             "臣服"
           ]
-        }
+        },
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.x2d33e1eaf9",
+            "category": "organization",
+            "role": "大丫头"
+          }
+        ]
       },
       {
         "id": "liuchao.character.jing_li",
@@ -2268,7 +2920,24 @@
             "危险",
             "善于挑弄"
           ]
-        }
+        },
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.dragon_chen",
+            "category": "organization",
+            "role": "女杀手"
+          },
+          {
+            "factionId": "liuchao.faction.xe6bd0066c9",
+            "category": "organization",
+            "role": "侍奴/护卫"
+          },
+          {
+            "factionId": "liuchao.faction.yao_chi_zong",
+            "category": "sect",
+            "role": "弃徒"
+          }
+        ]
       },
       {
         "id": "liuchao.character.cheng_guang",
@@ -2285,7 +2954,24 @@
             "极惧程宗扬+小紫",
             "绝对听话乖巧"
           ]
-        }
+        },
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.hei_mo_hai",
+            "category": "organization",
+            "role": "御姬奴"
+          },
+          {
+            "factionId": "liuchao.faction.wu_zong",
+            "category": "sect",
+            "role": "成员（已叛出）"
+          },
+          {
+            "factionId": "lyl.faction.liu_jian",
+            "category": "organization",
+            "role": "太子妃"
+          }
+        ]
       },
       {
         "id": "liuchao.character.ning_yu",
@@ -2303,7 +2989,14 @@
             "不擅表温情",
             "以冷酷伪装情感与欲望"
           ]
-        }
+        },
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.bai_hu_shang_guan",
+            "category": "organization",
+            "role": "商队护卫"
+          }
+        ]
       },
       {
         "id": "liuchao.character.qi_yu_xian",
@@ -2320,7 +3013,14 @@
             "智计上乘",
             "武功上乘（约六级通幽境）"
           ]
-        }
+        },
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.wu_zong",
+            "category": "sect",
+            "role": "仙姬近侍"
+          }
+        ]
       },
       {
         "id": "liuchao.character.zhao_feiyan",
@@ -2338,7 +3038,19 @@
             "温柔忍让",
             "内心脆弱缺安全感"
           ]
-        }
+        },
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.han_guo_chao_ting",
+            "category": "polity",
+            "role": "皇后"
+          },
+          {
+            "factionId": "lyl.faction.changqiu",
+            "category": "organization",
+            "role": "宫主/皇后"
+          }
+        ]
       },
       {
         "id": "lcq.character.yue_shuang",
@@ -2359,7 +3071,19 @@
             "却以\"八骏新主人\"自居）"
           ]
         },
-        "realm": "元婴"
+        "realm": "元婴",
+        "affiliations": [
+          {
+            "factionId": "lcq.faction.left_guard",
+            "category": "military",
+            "role": "军人"
+          },
+          {
+            "factionId": "liuchao.faction.tai_yi_zhen_zong",
+            "category": "sect",
+            "role": "弟子"
+          }
+        ]
       },
       {
         "id": "liuchao.character.jian_yu_ji",
@@ -2378,7 +3102,19 @@
             "善隐藏"
           ]
         },
-        "realm": "炼虚"
+        "realm": "炼虚",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.hei_mo_hai",
+            "category": "organization",
+            "role": "巫宗核心人物/仙姬"
+          },
+          {
+            "factionId": "liuchao.faction.wu_zong",
+            "category": "sect",
+            "role": "巫宗教徒"
+          }
+        ]
       },
       {
         "id": "liuchao.character.le_mingzhu",
@@ -2398,7 +3134,14 @@
             "纯真无算计",
             "对性事缺乏概念，容易被主角哄骗"
           ]
-        }
+        },
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.guang_ming_guan_tang",
+            "category": "organization",
+            "role": "弟子"
+          }
+        ]
       },
       {
         "id": "liuchao.character.qin_hui",
@@ -2420,7 +3163,24 @@
             "遇明主忠义，遇昏主奸术自保"
           ]
         },
-        "realm": "化神"
+        "realm": "化神",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.hei_mo_hai",
+            "category": "organization",
+            "role": "毒宗成员/殇侯门下"
+          },
+          {
+            "factionId": "liuchao.faction.x8b538653d9",
+            "category": "organization",
+            "role": "追随殇侯二十余年的门客"
+          },
+          {
+            "factionId": "liuchao.faction.cheng_shi_shang_hui",
+            "category": "organization",
+            "role": "随程宗扬经商的随从"
+          }
+        ]
       },
       {
         "id": "liuchao.character.xiao_yao_yi",
@@ -2439,7 +3199,19 @@
             "武功高强"
           ]
         },
-        "realm": "化神"
+        "realm": "化神",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.xing_yue_hu",
+            "category": "organization",
+            "role": "八骏之一"
+          },
+          {
+            "factionId": "liuchao.faction.x898ded5bf1",
+            "category": "clan",
+            "role": "嫡子/小侯爷"
+          }
+        ]
       }
     ],
     "playerRelationships": [
@@ -2846,6 +3618,116 @@
         "relation": "手下",
         "score": 5,
         "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.zuo_tongzhi",
+        "toCharacterId": "liuchao.character.chai_yong_jian",
+        "relation": "同门",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同门",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "lyg.character.wang_zhongsi",
+        "toCharacterId": "liuchao.character.xue_li",
+        "relation": "同袍",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同袍",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.bai_nichang",
+        "toCharacterId": "liuchao.character.jing_li",
+        "relation": "同门",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同门",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.zhao_he_de",
+        "toCharacterId": "liuchao.character.zhuo_yunjun",
+        "relation": "同门",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同门",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.zhao_he_de",
+        "toCharacterId": "lcq.character.yue_shuang",
+        "relation": "同门",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同门",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.zhuo_yunjun",
+        "toCharacterId": "lcq.character.yue_shuang",
+        "relation": "同门",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同门",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "lyg.character.np034",
+        "toCharacterId": "liuchao.character.li_hong",
+        "relation": "同门",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同门",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.cheng_guang",
+        "toCharacterId": "liuchao.character.qi_yu_xian",
+        "relation": "同门",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同门",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.cheng_guang",
+        "toCharacterId": "liuchao.character.jian_yu_ji",
+        "relation": "同门",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同门",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.qi_yu_xian",
+        "toCharacterId": "liuchao.character.jian_yu_ji",
+        "relation": "同门",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同门",
+          "同势力派生"
+        ]
       }
     ],
     "factionRelationships": [
