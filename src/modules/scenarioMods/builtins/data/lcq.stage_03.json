@@ -934,6 +934,26 @@
           ],
           "origin": "配角"
         }
+      },
+      {
+        "id": "liuchao.character.zhuo_yunjun",
+        "name": "卓云君",
+        "role": "正典人物",
+        "gender": "女",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {}
+      },
+      {
+        "id": "lcq.character.yue_shuang",
+        "name": "月霜",
+        "role": "正典人物",
+        "gender": "女",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {}
       }
     ],
     "playerRelationships": [

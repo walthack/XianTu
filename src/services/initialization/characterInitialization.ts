@@ -109,9 +109,26 @@ async function robustAICall<T>(
 }
 
 /**
- * 计算角色的初始属性值
+ * 从存档中读取剧本模组主角的起点境界。
+ * 剧本（strict 模式）的主角境界写在 canon.characters（role==='主角'）的 realm 字段，
+ * 不同剧集起点不同（如第一集"凡人"、后期"金丹/元婴"），用于让男主开局实力随剧本变化。
+ * 普通（非剧本）世界返回 undefined，行为不变。
  */
-export function calculateInitialAttributes(baseInfo: CharacterBaseInfo, age: number): PlayerStatus {
+function getScenarioStartRealm(saveData: SaveData): string | undefined {
+  const characters = (saveData as any)?.世界?.状态?.剧本模组?.canon?.characters;
+  if (!Array.isArray(characters)) return undefined;
+  const protagonist =
+    characters.find((c: any) => c?.role === '主角') ||
+    characters.find((c: any) => typeof c?.id === 'string' && c.id.includes('cheng_zongyang'));
+  const realm = protagonist?.realm;
+  return typeof realm === 'string' && realm.trim() ? realm.trim() : undefined;
+}
+
+/**
+ * 计算角色的初始属性值
+ * @param startRealm - 剧本主角起点境界（如 "金丹"），缺省为 "凡人"
+ */
+export function calculateInitialAttributes(baseInfo: CharacterBaseInfo, age: number, startRealm?: string): PlayerStatus {
   const { 先天六司 } = baseInfo;
 
   // 确保先天六司都是有效的数值，避免NaN
@@ -133,10 +150,11 @@ export function calculateInitialAttributes(baseInfo: CharacterBaseInfo, age: num
   console.log(`[角色初始化] 属性计算: 气血=${初始气血}, 灵气=${初始灵气}, 神识=${初始神识}, 年龄=${age}/${最大寿命}`);
   console.log(`[角色初始化] 先天六司: 根骨=${根骨}, 灵性=${灵性}, 悟性=${悟性}`);
 
+  const 起点境界 = startRealm && startRealm.trim() ? startRealm.trim() : "凡人";
   return {
     境界: {
-      名称: "凡人",
-      阶段: "",
+      名称: 起点境界,
+      阶段: 起点境界 === "凡人" ? "" : "初期", // 凡人无子阶段，其余从初期起步
       当前进度: 0,
       下一级所需: 100,
       突破描述: "引气入体，感悟天地灵气，踏上修仙第一步"
@@ -893,7 +911,8 @@ async function finalizeAndSyncData(saveData: SaveData, baseInfo: CharacterBaseIn
   // 此处，我们基于原始的角色选择（baseInfo）重新计算整个玩家状态，
   // 以确保其权威性和完整性，然后只保留AI对剧情至关重要的"位置"信息。
   console.log('[数据最终化] 重新计算并校准核心玩家状态...');
-  const authoritativeStatus = calculateInitialAttributes(baseInfo, age);
+  const scenarioStartRealm = getScenarioStartRealm(saveData);
+  const authoritativeStatus = calculateInitialAttributes(baseInfo, age, scenarioStartRealm);
   const aiModifiedAttributes = (saveData as any).角色?.属性 ?? (saveData as any).属性 ?? {};
   // 🔥 V3格式：位置在 角色.位置 下
   const aiLocationCandidate = (saveData as any).角色?.位置 ?? (saveData as any).位置;
@@ -901,9 +920,10 @@ async function finalizeAndSyncData(saveData: SaveData, baseInfo: CharacterBaseIn
   // 🔥 关键修复：合并状态，而不是完全覆盖。
   // 以权威计算值为基础，然后应用AI的所有修改（包括境界、位置、属性上限等）。
   // 🔥 境界字段特殊处理：优先使用AI设置的境界，只在缺失字段时才用初始值补充
+  // 剧本模式下主角起点境界为权威锁定，覆盖AI（确保不同剧集开局实力不同）
   const mergedRealm = aiModifiedAttributes.境界 && typeof aiModifiedAttributes.境界 === 'object'
     ? {
-        名称: aiModifiedAttributes.境界.名称 || authoritativeStatus.境界.名称,
+        名称: scenarioStartRealm || aiModifiedAttributes.境界.名称 || authoritativeStatus.境界.名称,
         阶段: aiModifiedAttributes.境界.阶段 !== undefined ? aiModifiedAttributes.境界.阶段 : authoritativeStatus.境界.阶段,
         当前进度: aiModifiedAttributes.境界.当前进度 !== undefined ? aiModifiedAttributes.境界.当前进度 : authoritativeStatus.境界.当前进度,
         下一级所需: aiModifiedAttributes.境界.下一级所需 !== undefined ? aiModifiedAttributes.境界.下一级所需 : authoritativeStatus.境界.下一级所需,
@@ -1251,16 +1271,18 @@ export async function initializeCharacter(
     // 此处强制将我们计算的初始值重新应用到最终存档数据中，以确保数据一致性。
     // 这会保留AI对"位置"等字段的修改，同时保护"气血"、"寿命"等核心数据。
     console.log('[初始化流程] 核心属性校准：合并AI修改与初始属性...');
-    const authoritativeStatus = calculateInitialAttributes(baseInfo, age);
+    const scenarioStartRealmStep3 = getScenarioStartRealm(finalSaveData);
+    const authoritativeStatus = calculateInitialAttributes(baseInfo, age, scenarioStartRealmStep3);
     const aiModifiedStatus = finalSaveData.状态 || {};
 
     // 合并状态：以权威计算值为基础，然后应用AI的所有修改。
     // 这会保留AI对"境界"、"位置"等剧情相关字段的修改，
     // 同时确保"气血"、"寿命"等核心计算字段有一个有效的初始值。
     // 🔥 境界字段特殊处理：优先使用AI设置的境界，只在缺失字段时才用初始值补充
+    // 剧本模式下主角起点境界为权威锁定，覆盖AI
     const mergedRealmStep3 = aiModifiedStatus.境界 && typeof aiModifiedStatus.境界 === 'object'
       ? {
-          名称: aiModifiedStatus.境界.名称 || authoritativeStatus.境界.名称,
+          名称: scenarioStartRealmStep3 || aiModifiedStatus.境界.名称 || authoritativeStatus.境界.名称,
           阶段: aiModifiedStatus.境界.阶段 !== undefined ? aiModifiedStatus.境界.阶段 : authoritativeStatus.境界.阶段,
           当前进度: aiModifiedStatus.境界.当前进度 !== undefined ? aiModifiedStatus.境界.当前进度 : authoritativeStatus.境界.当前进度,
           下一级所需: aiModifiedStatus.境界.下一级所需 !== undefined ? aiModifiedStatus.境界.下一级所需 : authoritativeStatus.境界.下一级所需,

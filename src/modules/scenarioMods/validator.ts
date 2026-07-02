@@ -61,6 +61,15 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
     requireString(manifest.version, 'manifest.version', add);
     optionalString(manifest.author, 'manifest.author', add);
     optionalString(manifest.description, 'manifest.description', add);
+    optionalString(manifest.axisVersion, 'manifest.axisVersion', add);
+    optionalNumber(manifest.axisOrder, 'manifest.axisOrder', add);
+    optionalNumberOrNull(manifest.axisSeqLo, 'manifest.axisSeqLo', add);
+    optionalNumberOrNull(manifest.axisSeqHi, 'manifest.axisSeqHi', add);
+    optionalString(manifest.eventIdContract, 'manifest.eventIdContract', add);
+    optionalStringOrNull(manifest.prevStageId, 'manifest.prevStageId', add);
+    optionalStringOrNull(manifest.prevStageName, 'manifest.prevStageName', add);
+    optionalStringOrNull(manifest.nextStageId, 'manifest.nextStageId', add);
+    optionalStringOrNull(manifest.nextStageName, 'manifest.nextStageName', add);
   }
 
   const world = input.world;
@@ -174,6 +183,12 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
     validateFlags(scenario.initialFlags, 'scenario.initialFlags', add);
     validateEntityArray(scenario.events, 'scenario.events', eventIds, add, entity => {
       requireString(entity.description, `${entity.__path}.description`, add);
+      optionalStringOrNull(entity.axisId, `${entity.__path}.axisId`, add);
+      optionalString(entity.axisMethod, `${entity.__path}.axisMethod`, add);
+      optionalString(entity.axisBeat, `${entity.__path}.axisBeat`, add);
+      optionalString(entity.axisAnchor, `${entity.__path}.axisAnchor`, add);
+      optionalNumber(entity.axisSeq, `${entity.__path}.axisSeq`, add);
+      optionalBoolean(entity.critical, `${entity.__path}.critical`, add);
       validateConditions(entity.conditions, `${entity.__path}.conditions`, add);
       validateConditions(entity.completion, `${entity.__path}.completion`, add);
       validateIdArray(entity.relatedCharacterIds, `${entity.__path}.relatedCharacterIds`, add);
@@ -346,6 +361,28 @@ function requireString(value: unknown, path: string, add: AddIssue): void {
 
 function optionalString(value: unknown, path: string, add: AddIssue): void {
   if (value !== undefined && !isNonEmptyString(value)) add(path, 'invalid_string', `${path} must be a non-empty string.`);
+}
+
+function optionalStringOrNull(value: unknown, path: string, add: AddIssue): void {
+  if (value !== undefined && value !== null && !isNonEmptyString(value)) add(path, 'invalid_string', `${path} must be a non-empty string or null.`);
+}
+
+function optionalNumber(value: unknown, path: string, add: AddIssue): void {
+  if (value !== undefined && (typeof value !== 'number' || !Number.isFinite(value))) {
+    add(path, 'invalid_number', `${path} must be a finite number.`);
+  }
+}
+
+function optionalNumberOrNull(value: unknown, path: string, add: AddIssue): void {
+  if (value !== undefined && value !== null && (typeof value !== 'number' || !Number.isFinite(value))) {
+    add(path, 'invalid_number', `${path} must be a finite number or null.`);
+  }
+}
+
+function optionalBoolean(value: unknown, path: string, add: AddIssue): void {
+  if (value !== undefined && typeof value !== 'boolean') {
+    add(path, 'invalid_type', `${path} must be a boolean.`);
+  }
 }
 
 function validateId(value: unknown, path: string, add: AddIssue): value is string {

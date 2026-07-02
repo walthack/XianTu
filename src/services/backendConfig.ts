@@ -12,6 +12,9 @@ export function getBackendServerUrl(): string {
   const isDevelopment =
     window.location.hostname === 'localhost' ||
     window.location.hostname === '127.0.0.1' ||
+    window.location.hostname.startsWith('192.168.') ||
+    window.location.hostname.startsWith('10.') ||
+    /^172\.(1[6-9]|2\d|3[0-1])\./.test(window.location.hostname) ||
     window.location.hostname.includes('local');
 
   // 如果是开发模式且有webpack代理，使用空字符串（相对路径）
@@ -33,6 +36,9 @@ export function isBackendConfigured(): boolean {
   const isDevelopment =
     window.location.hostname === 'localhost' ||
     window.location.hostname === '127.0.0.1' ||
+    window.location.hostname.startsWith('192.168.') ||
+    window.location.hostname.startsWith('10.') ||
+    /^172\.(1[6-9]|2\d|3[0-1])\./.test(window.location.hostname) ||
     window.location.hostname.includes('local');
 
   if (isDevelopment) {

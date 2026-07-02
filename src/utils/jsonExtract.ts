@@ -1,3 +1,12 @@
+export function stripModelThinking(text: string): string {
+  return String(text || '')
+    .replace(/<(?:ant[-_]?)?(?:think|thinking)>[\s\S]*?<\/(?:ant[-_]?)?(?:think|thinking)>/gi, '')
+    .replace(/<(?:reasoning|thought)>[\s\S]*?<\/(?:reasoning|thought)>/gi, '')
+    .replace(/<(?:ant[-_]?)?(?:think|thinking)>[\s\S]*/gi, '')
+    .replace(/<(?:reasoning|thought)>[\s\S]*/gi, '')
+    .trim();
+}
+
 export function extractFirstJsonSnippet(text: string): string | null {
   if (!text) return null;
 
@@ -89,18 +98,19 @@ export function parseJsonFromText<T = unknown>(text: string): T {
  * - forceJsonMode=false: 从文本中提取JSON片段再解析(传统模式)
  */
 export function parseJsonSmart<T = unknown>(text: string, forceJsonMode: boolean = false): T {
-  if (!text || !text.trim()) {
+  const cleanedText = stripModelThinking(text);
+  if (!cleanedText) {
     throw new Error('AI返回内容为空');
   }
 
   // 强JSON模式: 直接解析整个文本
   if (forceJsonMode) {
     try {
-      return JSON.parse(text.trim()) as T;
+      return JSON.parse(cleanedText) as T;
     } catch (error) {
       // 如果直接解析失败,尝试提取JSON片段(容错处理)
       console.warn('[JSON解析] 强JSON模式解析失败,尝试提取JSON片段:', error);
-      const snippet = extractFirstJsonSnippet(text);
+      const snippet = extractFirstJsonSnippet(cleanedText);
       if (!snippet) {
         throw new Error('强JSON模式下解析失败,且未找到可提取的JSON片段');
       }
@@ -109,6 +119,5 @@ export function parseJsonSmart<T = unknown>(text: string, forceJsonMode: boolean
   }
 
   // 普通模式: 提取JSON片段
-  return parseJsonFromText<T>(text);
+  return parseJsonFromText<T>(cleanedText);
 }
-

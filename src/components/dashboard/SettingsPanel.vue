@@ -114,6 +114,48 @@
         </div>
       </div>
 
+      <!-- 声音设置 -->
+      <div class="settings-section">
+        <div class="section-header">
+          <h4 class="section-title">🎵 {{ t('声音设置') }}</h4>
+        </div>
+        <div class="settings-list">
+          <div class="setting-item">
+            <div class="setting-info">
+              <label class="setting-name">{{ t('背景音乐') }}</label>
+              <span class="setting-desc">{{ t('播放仙途氛围背景音乐') }}</span>
+            </div>
+            <div class="setting-control">
+              <label class="setting-switch">
+                <input type="checkbox" v-model="settings.enableBackgroundMusic" @change="onMusicSettingChange" />
+                <span class="switch-slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <label class="setting-name">{{ t('音乐音量') }}</label>
+              <span class="setting-desc">{{ t('调整背景音乐音量') }}</span>
+            </div>
+            <div class="setting-control">
+              <div class="range-container">
+                <input
+                  type="range"
+                  v-model.number="settings.backgroundMusicVolume"
+                  min="0"
+                  max="100"
+                  step="5"
+                  class="setting-range"
+                  @input="onMusicSettingChange"
+                />
+                <span class="range-value">{{ settings.backgroundMusicVolume }}%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- 游戏功能 -->
       <div class="settings-section">
         <div class="section-header">
@@ -347,6 +389,7 @@ import { Save, RotateCcw, Trash2, Download, Upload, FileText } from 'lucide-vue-
 import { toast } from '@/utils/toast';
 import { debug } from '@/utils/debug';
 import { useI18n } from '@/i18n';
+import { DEFAULT_MUSIC_SETTINGS, notifyMusicSettingsChanged } from '@/utils/musicEngine';
 import TextReplaceRulesModal from '@/components/common/TextReplaceRulesModal.vue';
 import PromptManagementPanel from '@/components/dashboard/PromptManagementPanel.vue';
 import type { TextReplaceRule } from '@/types/textRules';
@@ -407,6 +450,8 @@ const settings = reactive({
   fastAnimations: false,
   splitResponseGeneration: false,  // 默认关闭分步生成
   realmLayeredMap: false, // 境界分层地图开关
+  enableBackgroundMusic: DEFAULT_MUSIC_SETTINGS.enableBackgroundMusic,
+  backgroundMusicVolume: DEFAULT_MUSIC_SETTINGS.backgroundMusicVolume,
 
   // 🔞 成人内容（仅酒馆环境可用；非酒馆环境将被忽略/隐藏）
   enableNsfwMode: true,
@@ -483,6 +528,14 @@ const onSettingChange = () => {
   hasUnsavedChanges.value = true;
 };
 
+const onMusicSettingChange = () => {
+  onSettingChange();
+  notifyMusicSettingsChanged({
+    enableBackgroundMusic: settings.enableBackgroundMusic,
+    backgroundMusicVolume: settings.backgroundMusicVolume,
+  });
+};
+
 // 加载设置
 const loadSettings = async () => {
   debug.timeStart('加载设置');
@@ -492,6 +545,7 @@ const loadSettings = async () => {
     if (savedSettings) {
       const parsed = JSON.parse(savedSettings);
       Object.assign(settings, parsed);
+      validateSettings();
       debug.log('设置面板', '设置加载成功', parsed);
     } else {
       debug.log('设置面板', '使用默认设置');
@@ -546,6 +600,10 @@ const saveSettings = async () => {
 
     // 应用设置
     await applySettings();
+    notifyMusicSettingsChanged({
+      enableBackgroundMusic: settings.enableBackgroundMusic,
+      backgroundMusicVolume: settings.backgroundMusicVolume,
+    });
 
     hasUnsavedChanges.value = false;
     toast.success('设置已保存并应用');
@@ -573,6 +631,15 @@ const validateSettings = () => {
     if (typeof (settings as any).splitResponseGeneration !== 'boolean') {
       (settings as any).splitResponseGeneration = false;  // 默认关闭分步生成
     }
+
+    if (typeof (settings as any).enableBackgroundMusic !== 'boolean') {
+      (settings as any).enableBackgroundMusic = DEFAULT_MUSIC_SETTINGS.enableBackgroundMusic;
+    }
+
+    if (typeof (settings as any).backgroundMusicVolume !== 'number' || !Number.isFinite((settings as any).backgroundMusicVolume)) {
+      (settings as any).backgroundMusicVolume = DEFAULT_MUSIC_SETTINGS.backgroundMusicVolume;
+    }
+    (settings as any).backgroundMusicVolume = Math.max(0, Math.min(100, (settings as any).backgroundMusicVolume));
 
     // 正则替换规则：确保结构正确并限制大小，避免卡顿/存储膨胀
     const rawReplaceRules = (settings as any).replaceRules;
@@ -678,6 +745,9 @@ const resetSettings = () => {
         fontSize: 16,
         fastAnimations: false,
         splitResponseGeneration: false,  // 默认关闭分步生成
+        realmLayeredMap: false,
+        enableBackgroundMusic: DEFAULT_MUSIC_SETTINGS.enableBackgroundMusic,
+        backgroundMusicVolume: DEFAULT_MUSIC_SETTINGS.backgroundMusicVolume,
         debugMode: false,
         consoleDebug: false,
         performanceMonitor: false,

@@ -10,8 +10,11 @@ async function loadRuntimeMod() {
   const { parseScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
   const raw = JSON.parse(await readFile(fixtureUrl, 'utf8'));
   raw.scenario.initialFlags = { phase: 0, met: false, resolved: false };
+  raw.manifest.nextStageId = 'liuchao.next';
+  raw.manifest.nextStageName = '六朝·下一关';
   raw.scenario.events[0].conditions = [{ path: 'flags.met', operator: 'eq', value: true }];
   raw.scenario.events[0].completion = [{ path: 'flags.resolved', operator: 'eq', value: true }];
+  raw.scenario.events[0].axisBeat = '玩家与程宗扬完成初会。';
   raw.scenario.chapters[0].completion = [{ path: 'flags.phase', operator: 'gte', value: 1 }];
   raw.scenario.chapters.push({
     id: 'chapter.aftermath',
@@ -68,6 +71,25 @@ test('runtime activates, completes, and advances scenario content deterministica
 
   const reloaded = JSON.parse(JSON.stringify(advanced.saveData));
   assert.equal(reloaded.世界.状态.剧本模组.currentChapterId, 'chapter.aftermath');
+});
+
+test('runtime emits stage_ready once after all key plot events are complete', async () => {
+  const { advanceScenarioRuntime } = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  const save = await buildRuntimeSave();
+  const runtime = save.世界.状态.剧本模组;
+  runtime.completedChapterIds = ['chapter.arrival', 'chapter.aftermath'];
+  runtime.completedEventIds = ['event.firstmeeting'];
+  runtime.currentChapterId = null;
+  runtime.activeEventIds = [];
+  runtime.flags.phase = 99;
+
+  const ready = advanceScenarioRuntime(save);
+
+  assert.deepEqual(ready.transitions, [{ type: 'stage_ready', id: 'liuchao.next' }]);
+  assert.equal(ready.saveData.世界.状态.剧本模组.nextStageReadyId, 'liuchao.next');
+
+  const repeated = advanceScenarioRuntime(ready.saveData);
+  assert.deepEqual(repeated.transitions, []);
 });
 
 test('condition evaluator supports flat dotted flags and save paths', async () => {

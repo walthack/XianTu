@@ -1843,6 +1843,146 @@
           "race": "人族",
           "origin": "军人/将领"
         }
+      },
+      {
+        "id": "liuchao.character.yun_dan_liu",
+        "name": "云丹琉",
+        "role": "正典人物",
+        "gender": "女",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {}
+      },
+      {
+        "id": "liuchao.character.yun_ru_yao",
+        "name": "云如瑶",
+        "role": "正典人物",
+        "gender": "女",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {}
+      },
+      {
+        "id": "liuchao.character.zhuo_yunjun",
+        "name": "卓云君",
+        "role": "正典人物",
+        "gender": "女",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {}
+      },
+      {
+        "id": "liuchao.character.ruan_xiang_ning",
+        "name": "阮香凝",
+        "role": "正典人物",
+        "gender": "女",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {}
+      },
+      {
+        "id": "liuchao.character.zhao_he_de",
+        "name": "赵合德",
+        "role": "正典人物",
+        "gender": "女",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {}
+      },
+      {
+        "id": "liuchao.character.lv_zhi",
+        "name": "吕雉",
+        "role": "正典人物",
+        "gender": "女",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {}
+      },
+      {
+        "id": "liuchao.character.jing_li",
+        "name": "惊理",
+        "role": "正典人物",
+        "gender": "女",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {}
+      },
+      {
+        "id": "liuchao.character.ning_yu",
+        "name": "凝羽",
+        "role": "正典人物",
+        "gender": "女",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {}
+      },
+      {
+        "id": "liuchao.character.ruan_xiang_lin",
+        "name": "阮香琳",
+        "role": "正典人物",
+        "gender": "女",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {}
+      },
+      {
+        "id": "liuchao.character.zhao_feiyan",
+        "name": "赵飞燕",
+        "role": "正典人物",
+        "gender": "女",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {}
+      },
+      {
+        "id": "lcq.character.yue_shuang",
+        "name": "月霜",
+        "role": "正典人物",
+        "gender": "女",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {}
+      },
+      {
+        "id": "liuchao.character.jian_yu_ji",
+        "name": "剑玉姬",
+        "role": "正典人物",
+        "gender": "女",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {}
+      },
+      {
+        "id": "liuchao.character.le_mingzhu",
+        "name": "乐明珠",
+        "role": "正典人物",
+        "gender": "女",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {}
+      },
+      {
+        "id": "liuchao.character.qin_hui",
+        "name": "秦桧",
+        "role": "正典人物",
+        "gender": "男",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {}
       }
     ],
     "playerRelationships": [

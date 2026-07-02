@@ -508,6 +508,20 @@ export class GameMapManager {
     bg.endFill();
     bgLayer.addChild(bg);
 
+    // 真·世界地图背景（六朝小说原图，含真实国土/山川/地名）
+    try {
+      const mapSprite = PIXI.Sprite.from('/liuchao-world-map.jpg');
+      mapSprite.x = 0;
+      mapSprite.y = 0;
+      mapSprite.width = this.config.width;
+      mapSprite.height = this.config.height;
+      mapSprite.eventMode = 'none';
+      (this as any).hasMapBackground = true;
+      bgLayer.addChild(mapSprite);
+    } catch (e) {
+      console.warn('[地图] 世界地图背景加载失败', e);
+    }
+
     // 绘制网格
     const grid = new PIXI.Graphics();
     const gridSize = this.config.tileSize;
@@ -537,6 +551,7 @@ export class GameMapManager {
 
     const bounds = continent.continent_bounds || continent.大洲边界;
     if (!bounds || bounds.length < 3) return;
+    if ((this as any).hasMapBackground) return; // 真地图背景已含大陆轮廓，跳过占位方块
 
     // 绘制大陆边界多边形
     const polygon = new PIXI.Graphics();
@@ -752,6 +767,7 @@ export class GameMapManager {
         break;
 
       case 'sect_power':
+      case '宗门':
         // 建筑图标（放大2倍）- 仅兼容旧数据
         graphics.beginFill(color, 0.9);
         graphics.drawRect(-16, -16, 32, 32);
@@ -765,6 +781,7 @@ export class GameMapManager {
 
       case 'city_town':
       case '城镇坊市':
+      case '城池':
         // 城市图标（放大2倍）
         graphics.beginFill(color, 0.9);
         graphics.drawCircle(0, 0, 20);
@@ -779,6 +796,7 @@ export class GameMapManager {
 
       case 'blessed_land':
       case '洞天福地':
+      case '洞府':
         // 星形图标（放大2倍）
         graphics.beginFill(color, 0.8);
         graphics.drawCircle(0, 0, 20);
@@ -807,6 +825,7 @@ export class GameMapManager {
 
       case 'treasure_land':
       case '奇珍异地':
+      case '秘境':
         // 菱形图标（放大2倍）
         graphics.beginFill(color, 0.9);
         graphics.moveTo(0, -20);
@@ -825,6 +844,7 @@ export class GameMapManager {
 
       case 'dangerous_area':
       case '凶险之地':
+      case '险地':
         // 警告图标（放大2倍）
         graphics.beginFill(color, 0.9);
         graphics.drawCircle(0, 0, 20);
@@ -877,6 +897,7 @@ export class GameMapManager {
    */
   addTerritory(location: WorldLocation) {
     if (!location.territoryBounds || location.territoryBounds.length < 3) return;
+    if ((this as any).hasMapBackground) return; // 真地图背景已含国土，跳过占位方块领地
 
     const territoryLayer = this.layers.get(3); // MapLayer.TERRITORY
     if (!territoryLayer) return;

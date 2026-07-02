@@ -90,6 +90,8 @@
 
 首个完整示例：[六朝清羽记·草原鹰帜](./mods/liuchao-qingyu-prologue/README.md)，包含可直接导入的 Strict Mod 和来源/设计说明。
 
+局域网云存档、API 管理配置和提示词配置同步见 [局域网云存档与云配置同步](./docs/cloud-save-and-config-sync.md)。
+
 ---
 
 ## 🛠️ 技术栈

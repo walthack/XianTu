@@ -38,6 +38,10 @@ async function run() {
       for (const c of m.canon?.characters || []) {
         const card = byName.get(c.name); if (!card) continue;
         c.profile = c.profile || {};
+        if (card.gender && (!c.gender || c.gender === '未知')) c.gender = card.gender;
+        for (const key of ['appearance', 'currentAppearance', 'currentThought', 'race', 'origin']) {
+          if (c.profile[key] === '') delete c.profile[key];
+        }
         if (card.种族 && raceClean(card.种族)) { c.profile.race = raceClean(card.种族); }
         if (card.身份 && (!c.profile.origin || /原作人物|未知|^$/.test(c.profile.origin))) c.profile.origin = card.身份;
         const auth2 = card._manual || card._approved || card._reviewed;

@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://xiantu.local/schema/xiantu.scenario-atlas.v1.schema.json",
+  "title": "XianTu Shared Scenario Atlas v1",
+  "type": "object",
+  "required": ["schema", "version", "atlas", "stageBindings", "uncertainties"],
+  "properties": {
+    "schema": { "const": "xiantu.scenario-atlas" },
+    "version": { "const": 1 },
+    "atlas": {
+      "type": "object",
+      "required": ["id", "name", "mapConfig", "continents", "locations", "factions", "routes"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z][a-z0-9._-]*$" },
+        "name": { "type": "string", "minLength": 1 },
+        "description": { "type": "string" },
+        "mapConfig": {
+          "type": "object",
+          "required": ["width", "height", "minLng", "maxLng", "minLat", "maxLat"],
+          "properties": {
+            "width": { "const": 10000 }, "height": { "const": 10000 },
+            "minLng": { "const": 0 }, "maxLng": { "const": 10000 },
+            "minLat": { "const": 0 }, "maxLat": { "const": 10000 }
+          },
+          "additionalProperties": false
+        },
+        "continents": { "type": "array", "items": { "$ref": "#/$defs/continent" } },
+        "locations": { "type": "array", "items": { "$ref": "#/$defs/location" } },
+        "factions": { "type": "array", "items": { "$ref": "#/$defs/faction" } },
+        "routes": { "type": "array", "items": { "$ref": "#/$defs/route" } }
+      },
+      "additionalProperties": false
+    },
+    "stageBindings": { "type": "array", "items": { "$ref": "#/$defs/stageBinding" } },
+    "uncertainties": { "type": "array", "items": { "$ref": "#/$defs/uncertainty" } }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[a-z][a-z0-9._-]*$" },
+    "point": {
+      "type": "object", "required": ["x", "y"],
+      "properties": { "x": { "type": "number", "minimum": 0, "maximum": 10000 }, "y": { "type": "number", "minimum": 0, "maximum": 10000 } },
+      "additionalProperties": false
+    },
+    "sourceRef": {
+      "type": "object", "required": ["kind", "summary"],
+      "properties": { "kind": { "enum": ["appendix_map", "novel_text"] }, "book": { "enum": ["qingyu", "yunlong", "yange"] }, "sourceIndex": { "type": "integer", "minimum": 1 }, "heading": { "type": "string" }, "mapId": { "enum": ["liuchao-world", "jin-nanzhao", "song-taiquan", "han-qin", "tang"] }, "summary": { "type": "string", "minLength": 1 } },
+      "oneOf": [{ "required": ["mapId"] }, { "required": ["book", "sourceIndex"] }],
+      "additionalProperties": false
+    },
+    "baseEntity": {
+      "type": "object", "required": ["id", "name", "aliases", "description", "sourceRefs"],
+      "properties": { "id": { "$ref": "#/$defs/id" }, "name": { "type": "string", "minLength": 1 }, "aliases": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "description": { "type": "string" }, "sourceRefs": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/sourceRef" } } }
+    },
+    "continent": {
+      "allOf": [{ "$ref": "#/$defs/baseEntity" }, { "type": "object", "required": ["bounds"], "properties": { "bounds": { "type": "array", "minItems": 4, "items": { "$ref": "#/$defs/point" } } } }]
+    },
+    "location": {
+      "allOf": [{ "$ref": "#/$defs/baseEntity" }, { "type": "object", "required": ["type", "continentId", "coordinates", "placementBasis", "confidence"], "properties": { "type": { "type": "string" }, "continentId": { "$ref": "#/$defs/id" }, "coordinates": { "$ref": "#/$defs/point" }, "placementBasis": { "enum": ["map_explicit", "explicit", "relative_inference", "layout_only"] }, "confidence": { "type": "number", "minimum": 0, "maximum": 1 } } }]
+    },
+    "faction": {
+      "allOf": [{ "$ref": "#/$defs/baseEntity" }, { "type": "object", "required": ["type", "headquartersLocationId", "position", "territory", "placementBasis", "confidence"], "properties": { "type": { "type": "string" }, "headquartersLocationId": { "$ref": "#/$defs/id" }, "position": { "$ref": "#/$defs/point" }, "territory": { "type": "array", "minItems": 4, "items": { "$ref": "#/$defs/point" } }, "placementBasis": { "enum": ["map_explicit", "explicit", "relative_inference", "layout_only"] }, "confidence": { "type": "number", "minimum": 0, "maximum": 1 } } }]
+    },
+    "route": {
+      "type": "object", "required": ["id", "name", "fromLocationId", "toLocationId", "type", "waypoints", "placementBasis", "confidence", "sourceRefs"],
+      "properties": { "id": { "$ref": "#/$defs/id" }, "name": { "type": "string" }, "fromLocationId": { "$ref": "#/$defs/id" }, "toLocationId": { "$ref": "#/$defs/id" }, "type": { "type": "string" }, "waypoints": { "type": "array", "items": { "$ref": "#/$defs/point" } }, "placementBasis": { "enum": ["explicit", "relative_inference", "layout_only"] }, "confidence": { "type": "number", "minimum": 0, "maximum": 1 }, "sourceRefs": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/sourceRef" } }, "description": { "type": "string" } },
+      "additionalProperties": false
+    },
+    "bindingMap": { "type": "object", "additionalProperties": { "$ref": "#/$defs/id" } },
+    "stageBinding": {
+      "type": "object", "required": ["modId", "book", "locationBindings", "factionBindings", "visibleLocationIds", "activeFactionIds", "unmappedLocalEntities"],
+      "properties": { "modId": { "$ref": "#/$defs/id" }, "book": { "enum": ["qingyu", "yunlong", "yange"] }, "locationBindings": { "$ref": "#/$defs/bindingMap" }, "factionBindings": { "$ref": "#/$defs/bindingMap" }, "visibleLocationIds": { "type": "array", "items": { "$ref": "#/$defs/id" }, "uniqueItems": true }, "activeFactionIds": { "type": "array", "items": { "$ref": "#/$defs/id" }, "uniqueItems": true }, "unmappedLocalEntities": { "type": "array", "items": { "type": "object", "required": ["kind", "localId", "reason"], "properties": { "kind": { "enum": ["location", "faction"] }, "localId": { "$ref": "#/$defs/id" }, "reason": { "type": "string" } }, "additionalProperties": false } } },
+      "additionalProperties": false
+    },
+    "uncertainty": {
+      "type": "object", "required": ["subject", "issue", "recommendedReview"],
+      "properties": { "subject": { "type": "string" }, "issue": { "type": "string" }, "recommendedReview": { "type": "string" } },
+      "additionalProperties": false
+    }
+  }
+}

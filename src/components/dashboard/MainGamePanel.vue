@@ -1286,7 +1286,7 @@ const retryAIResponse = async (
 **重要：以下3个字段都是必需的，缺一不可！**
 
 {
-  "text": "Narrative text(中文简体，字数越多越好1000-3000，往用户趋向去尝试行动)",
+  "text": "Narrative text(中文简体，300-500字，关键场景最多700字，只写本次行动的即时过程和直接结果)",
   "mid_term_memory": "Brief summary",
   "tavern_commands": [{"action": "Action", "key": "key.path", "value": Value/List}]
 }

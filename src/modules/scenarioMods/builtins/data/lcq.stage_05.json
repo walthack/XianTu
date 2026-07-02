@@ -1420,6 +1420,56 @@
             "【身体】首次性经验与程宗扬；高潮后阴精被采补"
           ]
         }
+      },
+      {
+        "id": "liuchao.character.pan_jinlian",
+        "name": "潘金莲",
+        "role": "正典人物",
+        "gender": "女",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {}
+      },
+      {
+        "id": "liuchao.character.zhuo_yunjun",
+        "name": "卓云君",
+        "role": "正典人物",
+        "gender": "女",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {}
+      },
+      {
+        "id": "lcq.character.yue_shuang",
+        "name": "月霜",
+        "role": "正典人物",
+        "gender": "女",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {}
+      },
+      {
+        "id": "liuchao.character.qin_hui",
+        "name": "秦桧",
+        "role": "正典人物",
+        "gender": "男",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {}
+      },
+      {
+        "id": "liuchao.character.xiao_yao_yi",
+        "name": "萧遥逸",
+        "role": "正典人物",
+        "gender": "男",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {}
       }
     ],
     "playerRelationships": [

@@ -2341,6 +2341,106 @@
             "【身体】曾断右臂；重伤多次，伤势未愈"
           ]
         }
+      },
+      {
+        "id": "liuchao.character.pan_jinlian",
+        "name": "潘金莲",
+        "role": "正典人物",
+        "gender": "女",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {}
+      },
+      {
+        "id": "liuchao.character.yun_ru_yao",
+        "name": "云如瑶",
+        "role": "正典人物",
+        "gender": "女",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {}
+      },
+      {
+        "id": "liuchao.character.zhuo_yunjun",
+        "name": "卓云君",
+        "role": "正典人物",
+        "gender": "女",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {}
+      },
+      {
+        "id": "liuchao.character.ruan_xiang_ning",
+        "name": "阮香凝",
+        "role": "正典人物",
+        "gender": "女",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {}
+      },
+      {
+        "id": "liuchao.character.yin_fulan",
+        "name": "尹馥兰",
+        "role": "正典人物",
+        "gender": "女",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {}
+      },
+      {
+        "id": "liuchao.character.ning_yu",
+        "name": "凝羽",
+        "role": "正典人物",
+        "gender": "女",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {}
+      },
+      {
+        "id": "liuchao.character.ruan_xiang_lin",
+        "name": "阮香琳",
+        "role": "正典人物",
+        "gender": "女",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {}
+      },
+      {
+        "id": "lcq.character.yue_shuang",
+        "name": "月霜",
+        "role": "正典人物",
+        "gender": "女",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {}
+      },
+      {
+        "id": "liuchao.character.le_mingzhu",
+        "name": "乐明珠",
+        "role": "正典人物",
+        "gender": "女",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {}
+      },
+      {
+        "id": "liuchao.character.xiao_yao_yi",
+        "name": "萧遥逸",
+        "role": "正典人物",
+        "gender": "男",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {}
       }
     ],
     "playerRelationships": [

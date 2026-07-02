@@ -2465,6 +2465,16 @@
             "【主轴】作为追兵和集会压力出现，推动队伍突围与小紫倒戈前夜的紧迫感。"
           ]
         }
+      },
+      {
+        "id": "lcq.character.yue_shuang",
+        "name": "月霜",
+        "role": "正典人物",
+        "gender": "女",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {}
       }
     ],
     "playerRelationships": [],

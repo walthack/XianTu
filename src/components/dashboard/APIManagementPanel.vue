@@ -10,6 +10,14 @@
         </div>
       </div>
       <div class="header-actions">
+        <button class="action-btn" @click="handleCloudDownload">
+          <Download :size="16" />
+          <span class="btn-text">{{ t('下载云端') }}</span>
+        </button>
+        <button class="action-btn" @click="handleCloudUpload">
+          <Upload :size="16" />
+          <span class="btn-text">{{ t('上传云端') }}</span>
+        </button>
         <button class="action-btn" @click="handleImport">
           <Upload :size="16" />
           <span class="btn-text">{{ t('导入') }}</span>
@@ -93,7 +101,7 @@
                     {{ getAPIStatusText(api.id) }}
                   </span>
                 </div>
-                <div class="api-detail" v-if="['openai', 'deepseek', 'zhipu', 'custom', 'gemini', 'claude'].includes(api.provider)">
+                <div class="api-detail" v-if="['openai', 'deepseek', 'zhipu', 'ollama', 'custom', 'gemini', 'claude'].includes(api.provider)">
                   <label class="json-toggle">
                     <input
                       type="checkbox"
@@ -471,6 +479,9 @@
               <option value="gemini">Gemini</option>
               <option value="deepseek">DeepSeek</option>
               <option value="zhipu">智谱AI</option>
+              <option value="xai">xAI / Grok</option>
+              <option value="openrouter">OpenRouter</option>
+              <option value="ollama">{{ t('Ollama(本地)') }}</option>
               <option value="siliconflow-embedding">硅基流动(Embedding)</option>
               <option value="custom">{{ t('自定义(OpenAI兼容)') }}</option>
             </select>
@@ -491,8 +502,13 @@
               v-model="editingAPI.apiKey"
               type="password"
               class="form-input"
-              placeholder="sk-..."
+              :placeholder="editingAPI.provider === 'ollama' ? t('本地Ollama无需密钥，可留空') : 'sk-...'"
             />
+            <div class="form-hint" v-if="editingAPI.provider === 'ollama'">
+              <span class="hint-warning">
+                ℹ️ {{ t('Ollama本地服务无需API密钥。浏览器跨域访问需为Ollama设置 OLLAMA_ORIGINS=* 后重启服务。') }}
+              </span>
+            </div>
           </div>
 
           <div class="form-group">
@@ -551,7 +567,7 @@
           <!-- 强制JSON输出选项 -->
           <div
             class="form-group"
-            v-if="['openai', 'deepseek', 'zhipu', 'custom', 'gemini', 'claude'].includes(editingAPI.provider || 'openai')"
+            v-if="['openai', 'deepseek', 'zhipu', 'xai', 'openrouter', 'ollama', 'custom', 'gemini', 'claude'].includes(editingAPI.provider || 'openai')"
           >
             <label class="checkbox-label">
               <input
@@ -599,7 +615,7 @@
 import { ref, computed, onMounted, watch } from 'vue';
 import { Plus, Edit2, Trash2, Upload, Download, X, RefreshCw, FlaskConical } from 'lucide-vue-next';
 import { useAPIManagementStore, type APIConfig, type APIUsageType } from '@/stores/apiManagementStore';
-import { aiService, API_PROVIDER_PRESETS, type APIProvider } from '@/services/aiService';
+import { aiService, API_PROVIDER_PRESETS, providerRequiresApiKey, type APIProvider } from '@/services/aiService';
 import { useUIStore } from '@/stores/uiStore';
 import { vectorMemoryService } from '@/services/vectorMemoryService';
 import { getNsfwSettingsFromStorage, type NsfwGenderFilter } from '@/utils/nsfw';
@@ -612,8 +628,8 @@ const apiStore = useAPIManagementStore();
 const uiStore = useUIStore();
 
 // 初始化加载
-onMounted(() => {
-  apiStore.loadFromStorage();
+onMounted(async () => {
+  await apiStore.loadFromStorage();
   loadAIServiceConfig();
   loadLocalSettings();
   loadVectorMemoryConfig();
@@ -985,8 +1001,9 @@ const testAPI = async (api: APIConfig) => {
 // 获取模型列表
 const fetchModelsForEditing = async () => {
   if (isFetchingModels.value) return;
-  if (!editingAPI.value.url || !editingAPI.value.apiKey) {
-    toast.warning(t('请先填写API地址和密钥'));
+  const needsKey = providerRequiresApiKey(editingAPI.value.provider as APIProvider, editingAPI.value.url);
+  if (!editingAPI.value.url || (needsKey && !editingAPI.value.apiKey)) {
+    toast.warning(t(needsKey ? '请先填写API地址和密钥' : '请先填写API地址'));
     return;
   }
 
@@ -1118,6 +1135,39 @@ const handleExport = () => {
   link.click();
   URL.revokeObjectURL(url);
   toast.success(t('API配置已导出'));
+};
+
+const handleCloudUpload = async () => {
+  const ok = window.confirm('确定用当前 API 配置覆盖服务端云端配置吗？这会影响其它设备同步到的 API 管理配置。');
+  if (!ok) return;
+
+  const result = await apiStore.uploadConfigToCloud();
+  if (result.success) {
+    toast.success('API 配置已上传并覆盖云端');
+    return;
+  }
+
+  if (result.status === 401) {
+    toast.error('上传云端失败：后端仍要求登录，请调整服务端 /api/v1/save-storage 权限');
+  } else if (result.status === 404 || result.status === 405 || result.status === 501) {
+    toast.error('上传云端失败：后端尚未开放配置存储接口 /api/v1/save-storage');
+  } else {
+    toast.error(`上传云端失败：${result.message || '请检查后端服务'}`);
+  }
+};
+
+const handleCloudDownload = async () => {
+  const ok = window.confirm('确定用云端 API 配置覆盖当前浏览器本地配置吗？当前本地 API 配置、功能分配和生成设置会被替换。');
+  if (!ok) return;
+
+  const result = await apiStore.downloadConfigFromCloud();
+  if (result.success) {
+    syncDefaultAPIToService();
+    toast.success('已下载云端 API 配置并覆盖本地');
+    return;
+  }
+
+  toast.error(`下载云端失败：${result.message || '请检查后端服务或云端配置'}`);
 };
 
 // 导入配置

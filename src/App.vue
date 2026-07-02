@@ -252,6 +252,8 @@ import { fetchBackendVersion, isBackendConfigured } from '@/services/backendConf
 import { heartbeatPresenceSilent } from '@/services/presence';
 import { endTravelBeacon } from '@/services/onlineTravel';
 import { getFullscreenElement, requestFullscreen, exitFullscreen, explainFullscreenError } from './utils/fullscreen';
+import { MUSIC_SETTINGS_EVENT, musicEngine, readMusicSettings, type MusicSettings } from './utils/musicEngine';
+import { resolveMusicTrackForScenario } from './utils/musicLibrary';
 import type { CharacterBaseInfo } from '@/types/game';
 import type { CharacterCreationPayload, Talent } from '@/types';
 
@@ -312,6 +314,28 @@ const creationStore = useCharacterCreationStore();
 const characterStore = useCharacterStore();
 const uiStore = useUIStore();
 const gameStateStore = useGameStateStore();
+
+const activeScenarioChapterId = computed(() => {
+  if (!isInGameView.value || !gameStateStore.isGameLoaded) return null;
+  return ((gameStateStore.worldState as any)?.剧本模组?.currentChapterId || null) as string | null;
+});
+
+const activeScenarioEvents = computed(() => {
+  if (!isInGameView.value || !gameStateStore.isGameLoaded) return [];
+  const runtime = (gameStateStore.worldState as any)?.剧本模组;
+  const activeIds = Array.isArray(runtime?.activeEventIds)
+    ? runtime.activeEventIds.filter((id: unknown): id is string => typeof id === 'string')
+    : [];
+  const events = Array.isArray(runtime?.events) ? runtime.events : [];
+  return activeIds.map((id: string) => {
+    const event = events.find((item: any) => item?.id === id);
+    return event && typeof event === 'object' ? event : { id };
+  });
+});
+
+watch([activeScenarioChapterId, activeScenarioEvents], ([chapterId, events]) => {
+  musicEngine.setTrack(resolveMusicTrackForScenario(chapterId, events));
+}, { immediate: true });
 
 // --- 联机在线心跳（进入联机存档即轮询，停掉=下线） ---
 const onlineHeartbeatTimer = ref<number | null>(null);
@@ -638,6 +662,12 @@ const showHelp = () => {
 
 // --- 生命周期钩子 ---
 onMounted(async () => {
+  musicEngine.applySettings(readMusicSettings());
+  const handleMusicSettingsChanged = (event: Event) => {
+    musicEngine.applySettings((event as CustomEvent<MusicSettings>).detail || readMusicSettings());
+  };
+  window.addEventListener(MUSIC_SETTINGS_EVENT, handleMusicSettingsChanged);
+
   if (backendReady.value) {
     const fetchedVersion = await fetchBackendVersion();
     if (fetchedVersion) {
@@ -777,6 +807,8 @@ onMounted(async () => {
     document.removeEventListener('webkitfullscreenchange', syncFullscreenState);
     document.removeEventListener('mozfullscreenchange', syncFullscreenState);
     document.removeEventListener('MSFullscreenChange', syncFullscreenState);
+    window.removeEventListener(MUSIC_SETTINGS_EVENT, handleMusicSettingsChanged);
+    musicEngine.destroy();
   });
 });
 

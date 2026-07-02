@@ -7,8 +7,14 @@ declare module '*.vue' {
   export default component
 }
 
+declare module '*.mp3' {
+  const src: string
+  export default src
+}
+
 declare const APP_VERSION: string;
 declare const BACKEND_BASE_URL: string;
+declare const REMOTE_SAVE_STORAGE_ENABLED: boolean;
 
 // Augment Window with TavernHelper from tavernCore
 type TavernHelper = import('./utils/tavernCore').TavernHelper;

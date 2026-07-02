@@ -28,6 +28,7 @@ import './modules/scenarioMods/builtins/register'
 import { migrateData } from './utils/indexedDBManager'
 import { useI18n } from './i18n'
 import { flushPendingTravelNotes } from '@/services/onlineLogQueue'
+import { useAPIManagementStore } from '@/stores/apiManagementStore'
 
 async function initializeApp() {
   console.log('【应用启动】开始初始化流程...');
@@ -37,6 +38,7 @@ async function initializeApp() {
 
   console.log('【应用启动】数据迁移检查完成，开始挂载Vue应用');
   const app = createApp(App);
+  const pinia = createPinia();
 
   // 全局注册 i18n
   const { t } = useI18n();
@@ -51,9 +53,11 @@ async function initializeApp() {
     }
   });
 
-  app.use(createPinia());
+  app.use(pinia);
   app.use(router);
   app.mount('#app');
+
+  void useAPIManagementStore().loadFromStorage();
 
   // 尝试补发联机穿越日志（网络波动/短暂掉线时的兜底）
   void flushPendingTravelNotes();
@@ -62,5 +66,4 @@ async function initializeApp() {
 }
 
 initializeApp();
-
 

@@ -3,6 +3,9 @@
  */
 import { openDB, DBSchema, IDBPDatabase } from 'idb';
 import { getSystemPrompts, PROMPT_CATEGORIES, type PromptDefinition } from './defaultPrompts';
+import { loadUserCloudData, saveUserCloudData } from '@/services/userCloudStorage';
+
+const PROMPTS_CLOUD_KEY = 'user_config_prompts_v1';
 
 interface PromptsDB extends DBSchema {
   prompts: {
@@ -43,8 +46,17 @@ export interface PromptsByCategory {
   };
 }
 
+type StoredPromptRecord = PromptsDB['prompts']['value'];
+
+interface CloudPromptsPayload {
+  items: StoredPromptRecord[];
+  updatedAt: string;
+}
+
 class PromptStorage {
   private db: IDBPDatabase<PromptsDB> | null = null;
+  private remoteLoaded = false;
+  private bulkImporting = false;
 
   async init() {
     if (this.db) return;
@@ -57,11 +69,55 @@ class PromptStorage {
     });
   }
 
+  private async getLocalRecords(): Promise<StoredPromptRecord[]> {
+    await this.init();
+    return await this.db!.getAll('prompts');
+  }
+
+  private async syncLocalToCloud(): Promise<void> {
+    const items = await this.getLocalRecords();
+    await saveUserCloudData(PROMPTS_CLOUD_KEY, {
+      items,
+      updatedAt: new Date().toISOString(),
+    } satisfies CloudPromptsPayload);
+  }
+
+  private normalizeCloudRecords(data: unknown): StoredPromptRecord[] | null {
+    if (!data || typeof data !== 'object') return null;
+    const record = data as Partial<CloudPromptsPayload> | Record<string, StoredPromptRecord>;
+    if (Array.isArray((record as Partial<CloudPromptsPayload>).items)) {
+      return (record as Partial<CloudPromptsPayload>).items as StoredPromptRecord[];
+    }
+    return null;
+  }
+
+  private async loadRemoteOverrides(): Promise<void> {
+    if (this.remoteLoaded) return;
+    this.remoteLoaded = true;
+
+    const remoteData = await loadUserCloudData<CloudPromptsPayload>(PROMPTS_CLOUD_KEY);
+    const remoteRecords = this.normalizeCloudRecords(remoteData);
+    if (remoteRecords) {
+      await this.db!.clear('prompts');
+      for (const item of remoteRecords) {
+        if (!item?.key || typeof item.content !== 'string') continue;
+        await this.db!.put('prompts', item);
+      }
+      return;
+    }
+
+    const localRecords = await this.getLocalRecords();
+    if (localRecords.length > 0) {
+      await this.syncLocalToCloud();
+    }
+  }
+
   /**
    * 加载所有提示词（平铺结构）
    */
   async loadAll(): Promise<Record<string, PromptItem>> {
     await this.init();
+    await this.loadRemoteOverrides();
     const defaults = getSystemPrompts();
     const result: Record<string, PromptItem> = {};
 
@@ -158,6 +214,9 @@ class PromptStorage {
       weight,
       updatedAt: new Date().toISOString()
     });
+    if (!this.bulkImporting) {
+      await this.syncLocalToCloud();
+    }
   }
 
   /**
@@ -177,6 +236,7 @@ class PromptStorage {
       enabled,
       updatedAt: new Date().toISOString()
     });
+    await this.syncLocalToCloud();
   }
 
   /**
@@ -208,11 +268,13 @@ class PromptStorage {
   async reset(key: string) {
     await this.init();
     await this.db!.delete('prompts', key);
+    await this.syncLocalToCloud();
   }
 
   async resetAll() {
     await this.init();
     await this.db!.clear('prompts');
+    await this.syncLocalToCloud();
   }
 
   /**
@@ -235,6 +297,7 @@ class PromptStorage {
     const defaults = getSystemPrompts();
     let importCount = 0;
 
+    this.bulkImporting = true;
     for (const key in data) {
       // 只导入已知的提示词键
       if (defaults[key]) {
@@ -242,6 +305,8 @@ class PromptStorage {
         importCount++;
       }
     }
+    this.bulkImporting = false;
+    await this.syncLocalToCloud();
 
     return importCount;
   }

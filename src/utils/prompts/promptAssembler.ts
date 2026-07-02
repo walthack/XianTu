@@ -2,6 +2,7 @@ import { getPrompt } from '@/services/defaultPrompts';
 import { SAVE_DATA_STRUCTURE, stripNsfwContent } from './definitions/dataDefinitions';
 import { isTavernEnv } from '@/utils/tavern';
 import { getNsfwSettingsFromStorage } from '@/utils/nsfw';
+import { GAOSHOUBANG_NARRATION_RULE } from '@/utils/realmUtils';
 
 // 导出常用的规则常量
 export { SAVE_DATA_STRUCTURE as DATA_STRUCTURE_DEFINITIONS };
@@ -53,6 +54,8 @@ export async function assembleSystemPrompt(
     textFormatsPrompt,
     // 5. 世界设定参考
     worldStandardsPrompt,
+    // 5.1 修为称谓：叙事用高手榜名，数据字段仍用修仙名
+    GAOSHOUBANG_NARRATION_RULE,
   ];
 
   // 根据激活列表来添加可选模块

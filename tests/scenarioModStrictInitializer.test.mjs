@@ -75,6 +75,12 @@ test('strict Mod identity and canon survive a save serialization round trip', as
     buildStrictScenarioInitialization,
   } = await loadTs('../src/modules/scenarioMods/strictInitializer.ts');
   const mod = await loadMod();
+  mod.manifest.axisVersion = 'test-axis';
+  mod.manifest.axisOrder = 3;
+  mod.manifest.axisSeqLo = 10;
+  mod.manifest.axisSeqHi = 20;
+  mod.manifest.nextStageId = 'liuchao.next';
+  mod.manifest.nextStageName = '六朝·下一关';
   const initialization = buildStrictScenarioInitialization(mod, '2026-06-22T00:00:00.000Z');
   const baseSave = {
     角色: { 位置: { 描述: '旧地点', x: 0, y: 0 } },
@@ -87,7 +93,14 @@ test('strict Mod identity and canon survive a save serialization round trip', as
   const reloaded = JSON.parse(JSON.stringify(saved));
 
   assert.equal(reloaded.系统.扩展.剧本模组.modId, 'liuchao.jiankang');
+  assert.equal(reloaded.系统.扩展.剧本模组.modName, '六朝·建康风云');
   assert.equal(reloaded.世界.状态.剧本模组.modVersion, '1.0.0');
+  assert.equal(reloaded.世界.状态.剧本模组.axisVersion, 'test-axis');
+  assert.equal(reloaded.世界.状态.剧本模组.axisOrder, 3);
+  assert.equal(reloaded.世界.状态.剧本模组.axisSeqLo, 10);
+  assert.equal(reloaded.世界.状态.剧本模组.axisSeqHi, 20);
+  assert.equal(reloaded.世界.状态.剧本模组.nextStageId, 'liuchao.next');
+  assert.equal(reloaded.世界.状态.剧本模组.nextStageName, '六朝·下一关');
   assert.equal(reloaded.世界.状态.剧本模组.canon.characters[0].name, '程宗扬');
   assert.equal(reloaded.世界.状态.剧本模组.contentAccess[0].policy, 'exclusive');
   assert.equal(reloaded.角色.位置.描述, '江南·建康');

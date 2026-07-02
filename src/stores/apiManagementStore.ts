@@ -8,6 +8,7 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import { API_PROVIDER_PRESETS, type APIProvider } from '@/services/aiService';
+import { loadUserCloudData, saveUserCloudData, saveUserCloudDataDetailed, type UserCloudSaveResult } from '@/services/userCloudStorage';
 
 export interface APIConfig {
   id: string;
@@ -66,6 +67,8 @@ export interface APIAssignment {
  */
 export type RunMode = 'tavern' | 'web';
 
+const API_MANAGEMENT_CLOUD_KEY = 'user_config_api_management_v1';
+
 export const useAPIManagementStore = defineStore('apiManagement', () => {
   const normalizeDeepSeekConfig = (config: APIConfig): APIConfig => {
     const isDeepSeek = config.provider === 'deepseek' || (config.url || '').toLowerCase().includes('deepseek.com');
@@ -87,6 +90,56 @@ export const useAPIManagementStore = defineStore('apiManagement', () => {
     }
 
     return normalized;
+  };
+
+  const normalizeXAIConfig = (config: APIConfig): APIConfig => {
+    const url = (config.url || '').toLowerCase();
+    const model = (config.model || '').toLowerCase();
+    const isXAI = config.provider === 'xai' || url.includes('api.x.ai') || model.includes('grok') || model.includes('x-ai/');
+    if (!isXAI) return config;
+
+    const preset = API_PROVIDER_PRESETS.xai;
+    const normalized: APIConfig = { ...config };
+    if (!normalized.url) {
+      normalized.url = preset.url;
+    }
+    if (!normalized.model) {
+      normalized.model = preset.defaultModel;
+    }
+    if (!Number.isFinite(normalized.maxTokens) || normalized.maxTokens < preset.defaultMaxTokens!) {
+      normalized.maxTokens = preset.defaultMaxTokens || 16000;
+    } else if (preset.maxOutputTokens && normalized.maxTokens > preset.maxOutputTokens) {
+      normalized.maxTokens = preset.maxOutputTokens;
+    }
+
+    return normalized;
+  };
+
+  const normalizeOpenRouterConfig = (config: APIConfig): APIConfig => {
+    const url = (config.url || '').toLowerCase();
+    const model = (config.model || '').toLowerCase();
+    const isOpenRouter = config.provider === 'openrouter' || url.includes('openrouter.ai');
+    if (!isOpenRouter) return config;
+
+    const preset = API_PROVIDER_PRESETS.openrouter;
+    const normalized: APIConfig = { ...config };
+    if (!normalized.url) {
+      normalized.url = preset.url;
+    }
+    if (!normalized.model && config.provider === 'openrouter') {
+      normalized.model = preset.defaultModel;
+    }
+    if ((model.includes('grok') || model.includes('x-ai/')) && (!Number.isFinite(normalized.maxTokens) || normalized.maxTokens < preset.defaultMaxTokens!)) {
+      normalized.maxTokens = preset.defaultMaxTokens || 16000;
+    } else if (preset.maxOutputTokens && normalized.maxTokens > preset.maxOutputTokens) {
+      normalized.maxTokens = preset.maxOutputTokens;
+    }
+
+    return normalized;
+  };
+
+  const normalizeAPIConfig = (config: APIConfig): APIConfig => {
+    return normalizeXAIConfig(normalizeOpenRouterConfig(normalizeDeepSeekConfig(config)));
   };
 
   const DEFAULT_API_ASSIGNMENTS: APIAssignment[] = [
@@ -138,6 +191,8 @@ export const useAPIManagementStore = defineStore('apiManagement', () => {
     splitStep2Streaming: false, // 分步生成第2步是否使用流式传输（默认关闭）
   });
 
+  let isApplyingRemoteConfig = false;
+
   // 计算属性：获取所有已启用的API
   const enabledAPIs = computed(() => {
     return apiConfigs.value.filter(api => api.enabled);
@@ -152,69 +207,96 @@ export const useAPIManagementStore = defineStore('apiManagement', () => {
     return !!(instructionAssignment?.apiId && instructionAssignment.apiId !== 'default');
   });
 
-  // 初始化：从localStorage加载
-  const loadFromStorage = () => {
+  const applyStoredConfig = (data: any) => {
+    // 加载AI生成设置
+    if (data.aiGenerationSettings) {
+      aiGenerationSettings.value = {
+        ...aiGenerationSettings.value,
+        ...data.aiGenerationSettings
+      };
+    }
+    apiConfigs.value = (data.apiConfigs || []).map((config: APIConfig) => normalizeAPIConfig(config));
+
+    const knownTypes = new Set(DEFAULT_API_ASSIGNMENTS.map(a => a.type));
+    const mergedAssignments = new Map<APIUsageType, APIAssignment>();
+    DEFAULT_API_ASSIGNMENTS.forEach(a => mergedAssignments.set(a.type, { ...a }));
+
+    const savedAssignments = Array.isArray(data.apiAssignments) ? data.apiAssignments : [];
+    for (const a of savedAssignments) {
+      const type = a?.type as APIUsageType;
+      const apiId = typeof a?.apiId === 'string' ? a.apiId : 'default';
+      if (!type || !knownTypes.has(type)) continue;
+      mergedAssignments.set(type, { type, apiId });
+    }
+
+    // 如果保存的apiId不存在，回退default
+    const existingApiIds = new Set((apiConfigs.value || []).map((c: any) => c?.id).filter(Boolean));
+    const normalizedAssignments = DEFAULT_API_ASSIGNMENTS.map(a => {
+      const current = mergedAssignments.get(a.type) || a;
+      const apiId = existingApiIds.has(current.apiId) ? current.apiId : 'default';
+      return { type: a.type, apiId };
+    });
+    apiAssignments.value = normalizedAssignments;
+
+    const knownModeTypes = new Set(DEFAULT_FUNCTION_MODES.map(m => m.type));
+    const mergedModes = new Map<APIUsageType, FunctionModeConfig>();
+    DEFAULT_FUNCTION_MODES.forEach(m => mergedModes.set(m.type, { ...m }));
+
+    const savedModes = Array.isArray(data.functionModes) ? data.functionModes : [];
+    for (const m of savedModes) {
+      const type = m?.type as APIUsageType;
+      const mode = m?.mode === 'standard' ? 'standard' : 'raw';
+      if (!type || !knownModeTypes.has(type)) continue;
+      mergedModes.set(type, { type, mode });
+    }
+    functionModes.value = DEFAULT_FUNCTION_MODES.map(m => mergedModes.get(m.type) || m);
+
+    // 加载功能启用状态
+    const knownEnabledTypes = new Set(DEFAULT_FUNCTION_ENABLED.map(e => e.type));
+    const mergedEnabled = new Map<APIUsageType, FunctionEnabledConfig>();
+    DEFAULT_FUNCTION_ENABLED.forEach(e => mergedEnabled.set(e.type, { ...e }));
+
+    const savedEnabled = Array.isArray(data.functionEnabled) ? data.functionEnabled : [];
+    for (const e of savedEnabled) {
+      const type = e?.type as APIUsageType;
+      const enabled = e?.enabled === true;
+      if (!type || !knownEnabledTypes.has(type)) continue;
+      mergedEnabled.set(type, { type, enabled });
+    }
+    functionEnabled.value = DEFAULT_FUNCTION_ENABLED.map(e => mergedEnabled.get(e.type) || e);
+  };
+
+  const ensureDefaultConfig = () => {
+    if (apiConfigs.value.length === 0) {
+      apiConfigs.value.push({
+        id: 'default',
+        name: '默认API',
+        provider: 'openai',
+        url: 'https://api.openai.com',
+        apiKey: '',
+        model: 'gpt-4o',
+        temperature: 0.7,
+        maxTokens: 16000,
+        enabled: true
+      });
+    }
+  };
+
+  const buildStoragePayload = () => ({
+    apiConfigs: apiConfigs.value,
+    apiAssignments: apiAssignments.value,
+    functionModes: functionModes.value,
+    functionEnabled: functionEnabled.value,
+    aiGenerationSettings: aiGenerationSettings.value
+  });
+
+  // 初始化：先从 localStorage 加载，再尝试从云端覆盖
+  const loadFromStorage = async () => {
     try {
       const saved = localStorage.getItem('api_management_config');
       if (saved) {
         const data = JSON.parse(saved);
-
-        // 加载AI生成设置
-        if (data.aiGenerationSettings) {
-          aiGenerationSettings.value = {
-            ...aiGenerationSettings.value,
-            ...data.aiGenerationSettings
-          };
-        }
-        apiConfigs.value = (data.apiConfigs || []).map((config: APIConfig) => normalizeDeepSeekConfig(config));
-
-        const knownTypes = new Set(DEFAULT_API_ASSIGNMENTS.map(a => a.type));
-        const mergedAssignments = new Map<APIUsageType, APIAssignment>();
-        DEFAULT_API_ASSIGNMENTS.forEach(a => mergedAssignments.set(a.type, { ...a }));
-
-        const savedAssignments = Array.isArray(data.apiAssignments) ? data.apiAssignments : [];
-        for (const a of savedAssignments) {
-          const type = a?.type as APIUsageType;
-          const apiId = typeof a?.apiId === 'string' ? a.apiId : 'default';
-          if (!type || !knownTypes.has(type)) continue;
-          mergedAssignments.set(type, { type, apiId });
-        }
-
-        // 如果保存的apiId不存在，回退default
-        const existingApiIds = new Set((apiConfigs.value || []).map((c: any) => c?.id).filter(Boolean));
-        const normalizedAssignments = DEFAULT_API_ASSIGNMENTS.map(a => {
-          const current = mergedAssignments.get(a.type) || a;
-          const apiId = existingApiIds.has(current.apiId) ? current.apiId : 'default';
-          return { type: a.type, apiId };
-        });
-        apiAssignments.value = normalizedAssignments;
-
-        const knownModeTypes = new Set(DEFAULT_FUNCTION_MODES.map(m => m.type));
-        const mergedModes = new Map<APIUsageType, FunctionModeConfig>();
-        DEFAULT_FUNCTION_MODES.forEach(m => mergedModes.set(m.type, { ...m }));
-
-        const savedModes = Array.isArray(data.functionModes) ? data.functionModes : [];
-        for (const m of savedModes) {
-          const type = m?.type as APIUsageType;
-          const mode = m?.mode === 'standard' ? 'standard' : 'raw';
-          if (!type || !knownModeTypes.has(type)) continue;
-          mergedModes.set(type, { type, mode });
-        }
-        functionModes.value = DEFAULT_FUNCTION_MODES.map(m => mergedModes.get(m.type) || m);
-
-        // 加载功能启用状态
-        const knownEnabledTypes = new Set(DEFAULT_FUNCTION_ENABLED.map(e => e.type));
-        const mergedEnabled = new Map<APIUsageType, FunctionEnabledConfig>();
-        DEFAULT_FUNCTION_ENABLED.forEach(e => mergedEnabled.set(e.type, { ...e }));
-
-        const savedEnabled = Array.isArray(data.functionEnabled) ? data.functionEnabled : [];
-        for (const e of savedEnabled) {
-          const type = e?.type as APIUsageType;
-          const enabled = e?.enabled === true;
-          if (!type || !knownEnabledTypes.has(type)) continue;
-          mergedEnabled.set(type, { type, enabled });
-        }
-        functionEnabled.value = DEFAULT_FUNCTION_ENABLED.map(e => mergedEnabled.get(e.type) || e);
+        applyStoredConfig(data);
 
         // 清理旧版本/非法配置（如未知 type：npc_generation），并补齐新功能的默认项（如 embedding）
         // 这里直接回写一次，避免下次加载又出现脏数据
@@ -222,20 +304,20 @@ export const useAPIManagementStore = defineStore('apiManagement', () => {
       }
 
       // 如果没有配置，添加默认配置
-      if (apiConfigs.value.length === 0) {
-        apiConfigs.value.push({
-          id: 'default',
-          name: '默认API',
-          provider: 'openai',
-          url: 'https://api.openai.com',
-          apiKey: '',
-          model: 'gpt-4o',
-          temperature: 0.7,
-          maxTokens: 16000,
-          enabled: true
-        });
+      ensureDefaultConfig();
+
+      const remoteData = await loadUserCloudData<any>(API_MANAGEMENT_CLOUD_KEY);
+      if (remoteData) {
+        isApplyingRemoteConfig = true;
+        applyStoredConfig(remoteData);
+        ensureDefaultConfig();
+        localStorage.setItem('api_management_config', JSON.stringify(buildStoragePayload()));
+        isApplyingRemoteConfig = false;
+      } else if (saved) {
+        void saveUserCloudData(API_MANAGEMENT_CLOUD_KEY, buildStoragePayload());
       }
     } catch (error) {
+      isApplyingRemoteConfig = false;
       console.error('[API管理] 加载配置失败:', error);
     }
   };
@@ -243,14 +325,11 @@ export const useAPIManagementStore = defineStore('apiManagement', () => {
   // 保存到localStorage
   const saveToStorage = () => {
     try {
-      const data = {
-        apiConfigs: apiConfigs.value,
-        apiAssignments: apiAssignments.value,
-        functionModes: functionModes.value,
-        functionEnabled: functionEnabled.value,
-        aiGenerationSettings: aiGenerationSettings.value
-      };
+      const data = buildStoragePayload();
       localStorage.setItem('api_management_config', JSON.stringify(data));
+      if (!isApplyingRemoteConfig) {
+        void saveUserCloudData(API_MANAGEMENT_CLOUD_KEY, data);
+      }
     } catch (error) {
       console.error('[API管理] 保存配置失败:', error);
     }
@@ -380,11 +459,50 @@ export const useAPIManagementStore = defineStore('apiManagement', () => {
     };
   };
 
+  const uploadConfigToCloud = async (): Promise<UserCloudSaveResult> => {
+    try {
+      return await saveUserCloudDataDetailed(API_MANAGEMENT_CLOUD_KEY, buildStoragePayload());
+    } catch (error) {
+      console.error('[API管理] 上传云端配置失败:', error);
+      return {
+        success: false,
+        message: error instanceof Error ? error.message : '上传云端配置失败',
+      };
+    }
+  };
+
+  const downloadConfigFromCloud = async (): Promise<UserCloudSaveResult> => {
+    try {
+      const remoteData = await loadUserCloudData<any>(API_MANAGEMENT_CLOUD_KEY);
+      if (!remoteData) {
+        return {
+          success: false,
+          message: '云端没有可下载的 API 管理配置',
+        };
+      }
+
+      isApplyingRemoteConfig = true;
+      applyStoredConfig(remoteData);
+      ensureDefaultConfig();
+      localStorage.setItem('api_management_config', JSON.stringify(buildStoragePayload()));
+      isApplyingRemoteConfig = false;
+
+      return { success: true };
+    } catch (error) {
+      isApplyingRemoteConfig = false;
+      console.error('[API管理] 下载云端配置失败:', error);
+      return {
+        success: false,
+        message: error instanceof Error ? error.message : '下载云端配置失败',
+      };
+    }
+  };
+
   // 导入配置
   const importConfig = (data: any) => {
     try {
       if (data.apiConfigs && Array.isArray(data.apiConfigs)) {
-        apiConfigs.value = data.apiConfigs;
+        apiConfigs.value = data.apiConfigs.map((config: APIConfig) => normalizeAPIConfig(config));
       }
       if (data.apiAssignments && Array.isArray(data.apiAssignments)) {
         apiAssignments.value = data.apiAssignments;
@@ -430,6 +548,8 @@ export const useAPIManagementStore = defineStore('apiManagement', () => {
     isFunctionEnabled,
     updateAIGenerationSettings,
     exportConfig,
+    uploadConfigToCloud,
+    downloadConfigFromCloud,
     importConfig
   };
 });

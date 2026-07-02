@@ -1400,6 +1400,16 @@
         },
         "realm": "筑基",
         "gender": "男"
+      },
+      {
+        "id": "liuchao.character.zhuo_yunjun",
+        "name": "卓云君",
+        "role": "正典人物",
+        "gender": "女",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {}
       }
     ],
     "playerRelationships": [

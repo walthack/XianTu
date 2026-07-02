@@ -1,0 +1,3805 @@
+{
+  "schema": "xiantu.scenario-mod",
+  "version": 1,
+  "manifest": {
+    "id": "lyg.dingtao_beijing",
+    "name": "定陶王被劫持后",
+    "version": "1.0.0",
+    "author": "DeepSeek V4 Flash + XianTu Mod Kit",
+    "description": "董卓挟持定陶王出城，贾文和设谋，霍子孟见吕雉，双方角力即将开始。"
+  },
+  "world": {
+    "name": "六朝",
+    "era": "洛都政变初期",
+    "background": "洛都刚刚经历刘建叛乱与凉州军入京的动荡，刘建被斩杀，但董卓挟持定陶王出走伊阙，贾文和设谋定计，霍子孟在长秋宫与吕雉秘密会晤，朝廷权力格局面临重新洗牌。定陶王成为各方争夺的焦点。",
+    "specialRules": [
+      "核心专名不得改写",
+      "使用六朝共享正典地图，禁止随机生成势力或地点覆盖已导入内容"
+    ],
+    "continents": [
+      {
+        "id": "liuchao.continent.zhongzhou",
+        "name": "中州",
+        "description": "六朝核心区域，洛都所在。",
+        "bounds": [
+          {
+            "x": 100,
+            "y": 50
+          },
+          {
+            "x": 9600,
+            "y": 50
+          },
+          {
+            "x": 9600,
+            "y": 6500
+          },
+          {
+            "x": 100,
+            "y": 6500
+          },
+          {
+            "x": 100,
+            "y": 50
+          }
+        ]
+      }
+    ],
+    "map": {
+      "atlasId": "liuchao.shared.atlas",
+      "locked": true,
+      "mapConfig": {
+        "width": 10000,
+        "height": 10000,
+        "minLng": 0,
+        "maxLng": 10000,
+        "minLat": 0,
+        "maxLat": 10000
+      },
+      "backgroundImage": "shared-atlas/source-maps/liuchao-world.jpg"
+    }
+  },
+  "canon": {
+    "factions": [
+      {
+        "id": "liuchao.faction.han_tang",
+        "name": "汉廷",
+        "description": "汉国朝廷，目前由太后吕雉与大将军霍子孟主导。",
+        "type": "朝廷",
+        "headquartersLocationId": "liuchao.location.luoyang",
+        "territory": [
+          {
+            "x": 5200,
+            "y": 3000
+          },
+          {
+            "x": 7500,
+            "y": 3000
+          },
+          {
+            "x": 7500,
+            "y": 5500
+          },
+          {
+            "x": 5200,
+            "y": 5500
+          },
+          {
+            "x": 5200,
+            "y": 3000
+          }
+        ],
+        "features": [
+          "统御一方",
+          "律法治世"
+        ],
+        "level": "一流"
+      },
+      {
+        "id": "liuchao.faction.liangzhou_army",
+        "name": "凉州军",
+        "description": "董卓麾下军队，已挟持定陶王出走。",
+        "type": "军队",
+        "headquartersLocationId": "liuchao.location.yique",
+        "level": "小门派",
+        "features": [
+          "兵戈之利",
+          "令行禁止"
+        ]
+      },
+      {
+        "id": "liuchao.faction.wu_zong",
+        "name": "巫宗",
+        "description": "黑魔海下属宗门，涉及御姬奴与魔尊阴谋。",
+        "type": "宗门",
+        "level": "小门派",
+        "features": [
+          "修行传承",
+          "门规森严"
+        ]
+      },
+      {
+        "id": "liuchao.faction.cheng_shi",
+        "name": "程氏商会",
+        "description": "程宗扬领导的商业组织，在洛都拥有影响力。",
+        "type": "商会",
+        "level": "小门派",
+        "features": [
+          "货通四海",
+          "人脉广布"
+        ]
+      },
+      {
+        "id": "liuchao.faction.han_court",
+        "name": "汉国朝廷",
+        "headquartersLocationId": "liuchao.location.luoyang",
+        "type": "朝廷",
+        "description": "六朝之一汉国的朝廷，都城在洛都。",
+        "territory": [
+          {
+            "x": 5200,
+            "y": 3000
+          },
+          {
+            "x": 7500,
+            "y": 3000
+          },
+          {
+            "x": 7500,
+            "y": 5500
+          },
+          {
+            "x": 5200,
+            "y": 5500
+          },
+          {
+            "x": 5200,
+            "y": 3000
+          }
+        ],
+        "features": [
+          "统御一方",
+          "律法治世"
+        ],
+        "level": "一流"
+      }
+    ],
+    "locations": [
+      {
+        "id": "liuchao.location.changqiu_palace",
+        "name": "长秋宫",
+        "description": "皇后赵飞燕的宫殿，现为吕雉与霍子孟会晤地。",
+        "type": "城池",
+        "continentId": "liuchao.continent.zhongzhou",
+        "factionId": "liuchao.faction.han_tang",
+        "coordinates": {
+          "x": 6838,
+          "y": 3577
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.zhaoyang_hall",
+        "name": "昭阳宫",
+        "description": "先帝寝宫，董卓拥立定陶王之地。",
+        "type": "城池",
+        "continentId": "liuchao.continent.zhongzhou",
+        "factionId": "liuchao.faction.han_tang",
+        "coordinates": {
+          "x": 6838,
+          "y": 3577
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.yique",
+        "name": "伊阙",
+        "description": "洛都南面关隘，董卓军当前驻扎地。",
+        "type": "城池",
+        "continentId": "liuchao.continent.zhongzhou",
+        "coordinates": {
+          "x": 6838,
+          "y": 3577
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.nangong",
+        "name": "南宫",
+        "description": "汉宫南半部，包括永安宫等建筑。",
+        "type": "城池",
+        "continentId": "liuchao.continent.zhongzhou",
+        "coordinates": {
+          "x": 6838,
+          "y": 3577
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.beisi_yard",
+        "name": "北寺狱",
+        "description": "宫中监狱，关押刘建家眷及吕冀。",
+        "type": "城池",
+        "continentId": "liuchao.continent.zhongzhou",
+        "coordinates": {
+          "x": 6838,
+          "y": 3577
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.luoyang",
+        "name": "洛都",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "汉国都城，位于中州腹地。",
+        "coordinates": {
+          "x": 6838,
+          "y": 3577
+        },
+        "features": []
+      }
+    ],
+    "characters": [
+      {
+        "id": "liuchao.character.cheng_zongyang",
+        "name": "程宗扬",
+        "description": "鸿胪寺大行令，来自现代世界的穿越者，持生死根异能，在洛都之乱中多方斡旋。",
+        "role": "主角，谋士/武将",
+        "gender": "男",
+        "realm": "筑基",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.han_tang",
+            "category": "state",
+            "role": "鸿胪寺大行令"
+          },
+          {
+            "factionId": "liuchao.faction.cheng_shi",
+            "category": "organization",
+            "role": "当家"
+          }
+        ],
+        "locationId": "liuchao.location.changqiu_palace",
+        "skillIds": [
+          "liuchao.skill.wu_hu_duan_men_dao",
+          "liuchao.skill.death_root",
+          "lyg.skill.np003",
+          "lyg.skill.np004",
+          "lyg.skill.np005",
+          "lyg.skill.np011",
+          "lyg.skill.np023",
+          "lyg.skill.np027",
+          "lyg.skill.np028",
+          "lyg.skill.np029",
+          "lyg.skill.np032",
+          "lyg.skill.np034",
+          "lyg.skill.np039",
+          "lyg.skill.np054",
+          "lyg.skill.np056",
+          "lyg.skill.np057",
+          "lyg.skill.np058",
+          "lyg.skill.np059",
+          "lyg.skill.np060",
+          "lyg.skill.np063",
+          "lyg.skill.np066",
+          "lyg.skill.np068",
+          "lyg.skill.np069",
+          "lyg.skill.np070",
+          "lyg.skill.np072",
+          "lyg.skill.np077",
+          "lyg.skill.np078",
+          "lyg.skill.np082",
+          "lyg.skill.np083",
+          "lyg.skill.np089",
+          "lyg.skill.np091",
+          "lyg.skill.np094",
+          "lyg.skill.np096",
+          "lyg.skill.np099",
+          "lyg.skill.np100",
+          "lyg.skill.np105"
+        ],
+        "techniqueIds": [
+          "liuchao.technique.taiji_jing",
+          "lyg.technique.np015",
+          "lyg.technique.np049",
+          "lyg.technique.np055",
+          "lyg.technique.np061",
+          "lyg.technique.np075",
+          "lyg.technique.np079"
+        ],
+        "itemIds": [
+          "liuchao.item.shuang_dao",
+          "lyg.item.np001",
+          "lyg.item.np002",
+          "lyg.item.np006",
+          "lyg.item.np007",
+          "lyg.item.np008",
+          "lyg.item.np009",
+          "lyg.item.np010",
+          "lyg.item.np012",
+          "lyg.item.np013",
+          "lyg.item.np014",
+          "lyg.item.np016",
+          "lyg.item.np017",
+          "lyg.item.np018",
+          "lyg.item.np019",
+          "lyg.item.np020",
+          "lyg.item.np021",
+          "lyg.item.np022",
+          "lyg.item.np024",
+          "lyg.item.np025",
+          "lyg.item.np026",
+          "lyg.item.np030",
+          "lyg.item.np031",
+          "lyg.item.np033",
+          "lyg.item.np035",
+          "lyg.item.np036",
+          "lyg.item.np037",
+          "lyg.item.np038",
+          "lyg.item.np040",
+          "lyg.item.np041",
+          "lyg.item.np042",
+          "lyg.item.np043",
+          "lyg.item.np044",
+          "lyg.item.np045",
+          "lyg.item.np046",
+          "lyg.item.np047",
+          "lyg.item.np048",
+          "lyg.item.np050",
+          "lyg.item.np051",
+          "lyg.item.np052",
+          "lyg.item.np053",
+          "lyg.item.np062",
+          "lyg.item.np064",
+          "lyg.item.np065",
+          "lyg.item.np067",
+          "lyg.item.np071",
+          "lyg.item.np073",
+          "lyg.item.np074",
+          "lyg.item.np076",
+          "lyg.item.np080",
+          "lyg.item.np081",
+          "lyg.item.np084",
+          "lyg.item.np085",
+          "lyg.item.np086",
+          "lyg.item.np087",
+          "lyg.item.np088",
+          "lyg.item.np090",
+          "lyg.item.np092",
+          "lyg.item.np093",
+          "lyg.item.np095",
+          "lyg.item.np097",
+          "lyg.item.np098",
+          "lyg.item.np101",
+          "lyg.item.np102",
+          "lyg.item.np103",
+          "lyg.item.np104"
+        ],
+        "profile": {
+          "attributes": {
+            "rootBone": 10,
+            "spirituality": 10,
+            "comprehension": 10,
+            "fortune": 9,
+            "charm": 9,
+            "temperament": 10
+          },
+          "spiritRoot": {
+            "name": "变异灵根",
+            "tier": "天品",
+            "description": "身怀太一经，由剧本正典认定。"
+          },
+          "talents": [
+            {
+              "name": "天命主角",
+              "description": "由角色定位推定的天赋。"
+            },
+            {
+              "name": "太一经",
+              "description": "程宗扬的专属异能。"
+            }
+          ]
+        }
+      },
+      {
+        "id": "liuchao.character.dong_zhuo",
+        "name": "董卓",
+        "description": "破虏将军，凉州军首领，挟持定陶王欲以令诸侯。",
+        "role": "军阀",
+        "gender": "男",
+        "realm": "练气",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.liangzhou_army",
+            "category": "military",
+            "role": "首领"
+          }
+        ],
+        "locationId": "liuchao.location.yique",
+        "skillIds": [
+          "liuchao.skill.lian_zhu_arrow",
+          "liuchao.skill.zhong_axe",
+          "liuchao.skill.duan_ji"
+        ],
+        "itemIds": [
+          "liuchao.item.tie_tai_diao_gong",
+          "liuchao.item.yue_ya_duan_ji",
+          "liuchao.item.zhong_axe"
+        ],
+        "profile": {
+          "attributes": {
+            "rootBone": 6,
+            "spirituality": 4,
+            "comprehension": 4,
+            "fortune": 5,
+            "charm": 4,
+            "temperament": 6
+          },
+          "spiritRoot": {
+            "name": "火灵根",
+            "tier": "黄品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "一诺千金",
+              "description": "由角色定位推定的天赋。"
+            }
+          ]
+        }
+      },
+      {
+        "id": "liuchao.character.jia_wen_he",
+        "name": "贾文和",
+        "description": "董卓参军，智计百出的谋士，劫持定陶王出城。",
+        "role": "谋士",
+        "gender": "男",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.liangzhou_army",
+            "category": "military",
+            "role": "参军"
+          }
+        ],
+        "locationId": "liuchao.location.yique",
+        "skillIds": [
+          "liuchao.skill.strategy",
+          "lyg.skill.np106"
+        ],
+        "itemIds": [
+          "liuchao.item.rusty_cuo_dao",
+          "lyg.item.np107",
+          "lyg.item.np109",
+          "lyg.item.np110"
+        ],
+        "techniqueIds": [
+          "lyg.technique.np108"
+        ],
+        "profile": {
+          "attributes": {
+            "rootBone": 8,
+            "spirituality": 8,
+            "comprehension": 9,
+            "fortune": 7,
+            "charm": 6,
+            "temperament": 7
+          },
+          "spiritRoot": {
+            "name": "水灵根",
+            "tier": "地品",
+            "description": "身怀长安坊图，由剧本正典认定。"
+          },
+          "talents": [
+            {
+              "name": "过目不忘",
+              "description": "由角色定位推定的天赋。"
+            },
+            {
+              "name": "长安坊图",
+              "description": "贾文和的专属异能。"
+            }
+          ]
+        },
+        "realm": "金丹"
+      },
+      {
+        "id": "liuchao.character.lv_zhi",
+        "name": "吕雉",
+        "description": "汉太后，羽族血脉，为保族人与程宗扬合作，同意退位。",
+        "role": "太后",
+        "gender": "女",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.han_tang",
+            "category": "state",
+            "role": "皇太后"
+          }
+        ],
+        "locationId": "liuchao.location.changqiu_palace",
+        "skillIds": [
+          "liuchao.skill.royal_authority",
+          "lyg.skill.np111",
+          "lyg.skill.np115"
+        ],
+        "itemIds": [
+          "lyg.item.np012",
+          "lyg.item.np014",
+          "lyg.item.np112",
+          "lyg.item.np113",
+          "lyg.item.np114"
+        ],
+        "profile": {
+          "attributes": {
+            "rootBone": 8,
+            "spirituality": 8,
+            "comprehension": 8,
+            "fortune": 8,
+            "charm": 8,
+            "temperament": 7
+          },
+          "spiritRoot": {
+            "name": "血灵根",
+            "tier": "地品",
+            "description": "身怀羽翼飞行，由剧本正典认定。"
+          },
+          "talents": [
+            {
+              "name": "神识过人",
+              "description": "由角色定位推定的天赋。"
+            },
+            {
+              "name": "羽翼飞行",
+              "description": "吕雉的专属异能。"
+            }
+          ]
+        },
+        "realm": "金丹"
+      },
+      {
+        "id": "liuchao.character.huo_zi_meng",
+        "name": "霍子孟",
+        "description": "大司马大将军，汉国权臣，见风使舵的老狐狸。",
+        "role": "权臣",
+        "gender": "男",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.han_tang",
+            "category": "state",
+            "role": "大司马大将军"
+          }
+        ],
+        "locationId": "liuchao.location.changqiu_palace",
+        "skillIds": [
+          "liuchao.skill.political_maneuver"
+        ],
+        "profile": {
+          "attributes": {
+            "rootBone": 8,
+            "spirituality": 7,
+            "comprehension": 7,
+            "fortune": 7,
+            "charm": 8,
+            "temperament": 6
+          },
+          "spiritRoot": {
+            "name": "火灵根",
+            "tier": "地品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "体修奇才",
+              "description": "由角色定位推定的天赋。"
+            }
+          ]
+        },
+        "realm": "元婴"
+      },
+      {
+        "id": "liuchao.character.jian_yu_ji",
+        "name": "剑玉姬",
+        "description": "巫宗仙姬，黑魔海成员，谋取魔尊，设计暗杀郭解。",
+        "role": "巫宗领袖",
+        "gender": "女",
+        "realm": "金丹",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.wu_zong",
+            "category": "sect",
+            "role": "仙姬"
+          }
+        ],
+        "locationId": "liuchao.location.nangong",
+        "skillIds": [
+          "liuchao.skill.sword_art"
+        ],
+        "profile": {
+          "attributes": {
+            "rootBone": 8,
+            "spirituality": 6,
+            "comprehension": 8,
+            "fortune": 7,
+            "charm": 9,
+            "temperament": 7
+          },
+          "spiritRoot": {
+            "name": "木灵根",
+            "tier": "地品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "顶级魅力",
+              "description": "由角色定位推定的天赋。"
+            }
+          ]
+        }
+      },
+      {
+        "id": "liuchao.character.guo_jie",
+        "name": "郭解",
+        "description": "天下第一侠客，因保护定陶王被剑玉姬刺中心脉，重伤濒死。",
+        "role": "侠客",
+        "gender": "男",
+        "realm": "金丹",
+        "locationId": "liuchao.location.zhaoyang_hall",
+        "skillIds": [
+          "liuchao.skill.tie_bu_shan",
+          "liuchao.skill.qin_long_zhua",
+          "liuchao.skill.da_shuai_bei_shou"
+        ],
+        "profile": {
+          "attributes": {
+            "rootBone": 6,
+            "spirituality": 6,
+            "comprehension": 4,
+            "fortune": 6,
+            "charm": 5,
+            "temperament": 5
+          },
+          "spiritRoot": {
+            "name": "木灵根",
+            "tier": "黄品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "老实人",
+              "description": "由角色定位推定的天赋。"
+            }
+          ]
+        }
+      },
+      {
+        "id": "liuchao.character.liu_xin",
+        "name": "定陶王",
+        "description": "定陶王刘欣，汉室宗亲，被各方拥立为继承人。",
+        "role": "幼帝",
+        "gender": "男",
+        "age": 3,
+        "locationId": "liuchao.location.yique",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.han_tang",
+            "category": "state",
+            "role": "新君待立"
+          }
+        ],
+        "profile": {
+          "attributes": {
+            "rootBone": 8,
+            "spirituality": 8,
+            "comprehension": 8,
+            "fortune": 7,
+            "charm": 8,
+            "temperament": 6
+          },
+          "spiritRoot": {
+            "name": "冰灵根",
+            "tier": "地品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "道心坚固",
+              "description": "由角色定位推定的天赋。"
+            }
+          ]
+        },
+        "realm": "元婴"
+      },
+      {
+        "id": "liuchao.character.qin_hui",
+        "name": "秦桧",
+        "description": "兰台典校，殇侯门下，为程宗扬效力。",
+        "role": "谋士，剑客",
+        "gender": "男",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.cheng_shi",
+            "category": "organization",
+            "role": "谋士"
+          }
+        ],
+        "locationId": "liuchao.location.changqiu_palace",
+        "skillIds": [
+          "liuchao.skill.sword_art"
+        ],
+        "profile": {
+          "attributes": {
+            "rootBone": 8,
+            "spirituality": 7,
+            "comprehension": 7,
+            "fortune": 8,
+            "charm": 7,
+            "temperament": 7
+          },
+          "spiritRoot": {
+            "name": "水灵根",
+            "tier": "玄品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "过目不忘",
+              "description": "由角色定位推定的天赋。"
+            }
+          ]
+        },
+        "realm": "金丹"
+      },
+      {
+        "id": "liuchao.character.zhao_ying",
+        "name": "赵充国",
+        "description": "车骑将军长史，董卓故友，居中调停。",
+        "role": "武将",
+        "gender": "男",
+        "locationId": "liuchao.location.zhaoyang_hall",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.han_tang",
+            "category": "state",
+            "role": "车骑将军长史"
+          }
+        ],
+        "itemIds": [
+          "lyg.item.np116"
+        ],
+        "profile": {
+          "attributes": {
+            "rootBone": 9,
+            "spirituality": 7,
+            "comprehension": 8,
+            "fortune": 8,
+            "charm": 8,
+            "temperament": 6
+          },
+          "spiritRoot": {
+            "name": "火灵根",
+            "tier": "地品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "剑骨天成",
+              "description": "由角色定位推定的天赋。"
+            }
+          ]
+        },
+        "realm": "金丹"
+      },
+      {
+        "id": "liuchao.character.jin_mi_di",
+        "name": "金蜜镝",
+        "description": "车骑将军，忠于汉室，随程宗扬出城追定陶王。",
+        "role": "将领",
+        "gender": "男",
+        "realm": "练气",
+        "locationId": "liuchao.location.yique",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.han_tang",
+            "category": "state",
+            "role": "车骑将军"
+          }
+        ],
+        "profile": {
+          "attributes": {
+            "rootBone": 8,
+            "spirituality": 6,
+            "comprehension": 6,
+            "fortune": 6,
+            "charm": 7,
+            "temperament": 7
+          },
+          "spiritRoot": {
+            "name": "火灵根",
+            "tier": "地品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "剑骨天成",
+              "description": "由角色定位推定的天赋。"
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyg.character.xiao_zi",
+        "name": "小紫",
+        "role": "程宗扬的助手，善使毒和机关虫蚁",
+        "description": "程宗扬的助手，善使毒和机关虫蚁",
+        "techniqueIds": [
+          "lyg.technique.np117",
+          "lyg.technique.np120",
+          "lyg.technique.np142"
+        ],
+        "itemIds": [
+          "lyg.item.np118",
+          "lyg.item.np119",
+          "lyg.item.np016",
+          "lyg.item.np121",
+          "lyg.item.np025",
+          "lyg.item.np124",
+          "lyg.item.np125",
+          "lyg.item.np126",
+          "lyg.item.np127",
+          "lyg.item.np128",
+          "lyg.item.np129",
+          "lyg.item.np130",
+          "lyg.item.np131",
+          "lyg.item.np132",
+          "lyg.item.np050",
+          "lyg.item.np133",
+          "lyg.item.np134",
+          "lyg.item.np135",
+          "lyg.item.np137",
+          "lyg.item.np138",
+          "lyg.item.np140"
+        ],
+        "skillIds": [
+          "lyg.skill.np122",
+          "lyg.skill.np123",
+          "lyg.skill.np136",
+          "lyg.skill.np139",
+          "lyg.skill.np141"
+        ],
+        "profile": {
+          "attributes": {
+            "rootBone": 6,
+            "spirituality": 7,
+            "comprehension": 8,
+            "fortune": 7,
+            "charm": 10,
+            "temperament": 9
+          },
+          "spiritRoot": {
+            "name": "暗灵根",
+            "tier": "地品",
+            "description": "身怀小紫的紫气内功，由剧本正典认定。"
+          },
+          "talents": [
+            {
+              "name": "神识过人",
+              "description": "由角色定位推定的天赋。"
+            },
+            {
+              "name": "小紫的紫气内功",
+              "description": "小紫的专属异能。"
+            }
+          ]
+        },
+        "realm": "金丹"
+      },
+      {
+        "id": "lyg.character.zhao_feiyan",
+        "name": "赵飞燕",
+        "role": "程宗扬的侍妾，前汉宫皇后",
+        "description": "程宗扬的侍妾，前汉宫皇后",
+        "skillIds": [
+          "lyg.skill.np143",
+          "lyg.skill.np144",
+          "lyg.skill.np060",
+          "lyg.skill.np145"
+        ],
+        "itemIds": [
+          "lyg.item.np041"
+        ],
+        "profile": {
+          "attributes": {
+            "rootBone": 6,
+            "spirituality": 8,
+            "comprehension": 7,
+            "fortune": 7,
+            "charm": 10,
+            "temperament": 6
+          },
+          "spiritRoot": {
+            "name": "雷灵根",
+            "tier": "地品",
+            "description": "身怀鸣鸾仙体，由剧本正典认定。"
+          },
+          "talents": [
+            {
+              "name": "顶级魅力",
+              "description": "由角色定位推定的天赋。"
+            },
+            {
+              "name": "鸣鸾仙体",
+              "description": "赵飞燕的专属异能。"
+            }
+          ]
+        },
+        "realm": "金丹"
+      },
+      {
+        "id": "lyg.character.zhong_hangyue",
+        "name": "中行说",
+        "role": "程宗扬仆从、谈判代表",
+        "description": "程宗扬仆从、谈判代表",
+        "techniqueIds": [
+          "lyg.technique.np146"
+        ],
+        "skillIds": [
+          "lyg.skill.np147"
+        ],
+        "profile": {
+          "attributes": {
+            "rootBone": 8,
+            "spirituality": 7,
+            "comprehension": 9,
+            "fortune": 8,
+            "charm": 6,
+            "temperament": 6
+          },
+          "spiritRoot": {
+            "name": "虚空灵根",
+            "tier": "地品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "过目不忘",
+              "description": "由角色定位推定的天赋。"
+            }
+          ]
+        },
+        "realm": "金丹"
+      },
+      {
+        "id": "lyg.character.yi_xiao_zi",
+        "name": "高智商",
+        "role": "程宗扬徒弟，宋国太尉之子",
+        "description": "程宗扬徒弟，宋国太尉之子",
+        "profile": {
+          "attributes": {
+            "rootBone": 9,
+            "spirituality": 6,
+            "comprehension": 8,
+            "fortune": 7,
+            "charm": 8,
+            "temperament": 6
+          },
+          "spiritRoot": {
+            "name": "火灵根",
+            "tier": "地品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "体修奇才",
+              "description": "由角色定位推定的天赋。"
+            }
+          ]
+        },
+        "realm": "金丹"
+      },
+      {
+        "id": "liuchao.character.qi_yu_xian",
+        "name": "齐羽仙",
+        "role": "圣教成员/毒宗联络人",
+        "description": "圣教成员/毒宗联络人",
+        "itemIds": [
+          "lyg.item.np148",
+          "lyg.item.np149",
+          "lyg.item.np150"
+        ],
+        "profile": {
+          "attributes": {
+            "rootBone": 8,
+            "spirituality": 7,
+            "comprehension": 7,
+            "fortune": 6,
+            "charm": 9,
+            "temperament": 7
+          },
+          "spiritRoot": {
+            "name": "水灵根",
+            "tier": "地品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "顶级魅力",
+              "description": "由角色定位推定的天赋。"
+            }
+          ]
+        },
+        "realm": "金丹"
+      },
+      {
+        "id": "lyg.character.np004",
+        "name": "孙寿",
+        "role": "程宗扬内宅侍婢，战力平平",
+        "description": "程宗扬内宅侍婢，战力平平",
+        "profile": {
+          "attributes": {
+            "rootBone": 8,
+            "spirituality": 6,
+            "comprehension": 8,
+            "fortune": 6,
+            "charm": 8,
+            "temperament": 8
+          },
+          "spiritRoot": {
+            "name": "木灵根",
+            "tier": "地品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "顶级魅力",
+              "description": "由角色定位推定的天赋。"
+            }
+          ]
+        },
+        "realm": "金丹"
+      },
+      {
+        "id": "liuchao.character.yun_dan_liu",
+        "name": "云丹琉",
+        "role": "云如瑶侄女，程宗扬助力",
+        "description": "云如瑶侄女，程宗扬助力",
+        "itemIds": [
+          "lyg.item.np151",
+          "lyg.item.np152",
+          "lyg.item.np153"
+        ],
+        "skillIds": [
+          "lyg.skill.np154"
+        ],
+        "profile": {
+          "attributes": {
+            "rootBone": 8,
+            "spirituality": 8,
+            "comprehension": 8,
+            "fortune": 7,
+            "charm": 8,
+            "temperament": 7
+          },
+          "spiritRoot": {
+            "name": "暗灵根",
+            "tier": "地品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "体修奇才",
+              "description": "由角色定位推定的天赋。"
+            }
+          ]
+        },
+        "realm": "金丹"
+      },
+      {
+        "id": "lyg.character.np005",
+        "name": "成光",
+        "role": "太子妃、程宗扬的鼎炉、侍奴",
+        "description": "太子妃、程宗扬的鼎炉、侍奴",
+        "itemIds": [
+          "lyg.item.np155",
+          "lyg.item.np156",
+          "lyg.item.np157",
+          "lyg.item.np158"
+        ],
+        "profile": {
+          "attributes": {
+            "rootBone": 6,
+            "spirituality": 6,
+            "comprehension": 9,
+            "fortune": 7,
+            "charm": 8,
+            "temperament": 7
+          },
+          "spiritRoot": {
+            "name": "水灵根",
+            "tier": "地品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "顶级魅力",
+              "description": "由角色定位推定的天赋。"
+            }
+          ]
+        },
+        "realm": "元婴"
+      },
+      {
+        "id": "lyg.character.np001",
+        "name": "阮香凝",
+        "role": "程宗扬下属/伴侣（伤势初愈）",
+        "description": "程宗扬下属/伴侣（伤势初愈）",
+        "profile": {
+          "attributes": {
+            "rootBone": 8,
+            "spirituality": 8,
+            "comprehension": 7,
+            "fortune": 8,
+            "charm": 6,
+            "temperament": 8
+          },
+          "spiritRoot": {
+            "name": "风灵根",
+            "tier": "地品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "道心坚固",
+              "description": "由角色定位推定的天赋。"
+            }
+          ]
+        },
+        "realm": "元婴"
+      },
+      {
+        "id": "lyg.character.yi_xin",
+        "name": "义姁",
+        "role": "女医，程宗扬控制下的线人",
+        "description": "女医，程宗扬控制下的线人",
+        "itemIds": [
+          "lyg.item.np159",
+          "lyg.item.np160"
+        ],
+        "skillIds": [
+          "lyg.skill.np123"
+        ],
+        "profile": {
+          "attributes": {
+            "rootBone": 7,
+            "spirituality": 7,
+            "comprehension": 7,
+            "fortune": 7,
+            "charm": 5,
+            "temperament": 7
+          },
+          "spiritRoot": {
+            "name": "木灵根",
+            "tier": "玄品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "丹道圣手",
+              "description": "由角色定位推定的天赋。"
+            }
+          ]
+        },
+        "realm": "金丹"
+      },
+      {
+        "id": "liuchao.character.yun_ru_yao",
+        "name": "云如瑶",
+        "role": "程宗扬正妻，管理内务",
+        "description": "程宗扬正妻，管理内务",
+        "itemIds": [
+          "lyg.item.np161",
+          "lyg.item.np024",
+          "lyg.item.np162",
+          "lyg.item.np026",
+          "lyg.item.np163",
+          "lyg.item.np164"
+        ],
+        "profile": {
+          "attributes": {
+            "rootBone": 7,
+            "spirituality": 8,
+            "comprehension": 7,
+            "fortune": 8,
+            "charm": 9,
+            "temperament": 8
+          },
+          "spiritRoot": {
+            "name": "土灵根",
+            "tier": "地品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "顶级魅力",
+              "description": "由角色定位推定的天赋。"
+            }
+          ]
+        },
+        "realm": "元婴"
+      },
+      {
+        "id": "lyg.character.np003",
+        "name": "班超",
+        "role": "程宗扬的部下，胡骑军掌控者",
+        "description": "程宗扬的部下，胡骑军掌控者",
+        "profile": {
+          "attributes": {
+            "rootBone": 5,
+            "spirituality": 7,
+            "comprehension": 7,
+            "fortune": 7,
+            "charm": 7,
+            "temperament": 7
+          },
+          "spiritRoot": {
+            "name": "水灵根",
+            "tier": "玄品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "神识过人",
+              "description": "由角色定位推定的天赋。"
+            }
+          ]
+        },
+        "realm": "金丹"
+      },
+      {
+        "id": "lyg.character.np011",
+        "name": "张恽",
+        "role": "程侯府内侍/跑腿者",
+        "description": "程侯府内侍/跑腿者",
+        "profile": {
+          "attributes": {
+            "rootBone": 7,
+            "spirituality": 8,
+            "comprehension": 7,
+            "fortune": 6,
+            "charm": 6,
+            "temperament": 8
+          },
+          "spiritRoot": {
+            "name": "冰灵根",
+            "tier": "地品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "道心坚固",
+              "description": "由角色定位推定的天赋。"
+            }
+          ]
+        },
+        "realm": "元婴"
+      },
+      {
+        "id": "lyg.character.np008",
+        "name": "仇雍",
+        "role": "巫宗尊者",
+        "description": "巫宗尊者",
+        "profile": {
+          "attributes": {
+            "rootBone": 6,
+            "spirituality": 6,
+            "comprehension": 7,
+            "fortune": 6,
+            "charm": 6,
+            "temperament": 8
+          },
+          "spiritRoot": {
+            "name": "木灵根",
+            "tier": "地品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "道心坚固",
+              "description": "由角色定位推定的天赋。"
+            }
+          ]
+        },
+        "realm": "元婴"
+      },
+      {
+        "id": "lyg.character.np007",
+        "name": "严君平",
+        "role": "大臣",
+        "description": "大臣",
+        "profile": {
+          "attributes": {
+            "rootBone": 6,
+            "spirituality": 7,
+            "comprehension": 7,
+            "fortune": 6,
+            "charm": 5,
+            "temperament": 7
+          },
+          "spiritRoot": {
+            "name": "水灵根",
+            "tier": "玄品",
+            "description": "依角色定位由剧本正典赋予。"
+          },
+          "talents": [
+            {
+              "name": "过目不忘",
+              "description": "由角色定位推定的天赋。"
+            }
+          ]
+        },
+        "realm": "金丹"
+      }
+    ],
+    "playerRelationships": [
+      {
+        "characterId": "liuchao.character.dong_zhuo",
+        "relation": "敌对",
+        "favorability": -70,
+        "memories": [
+          "董卓在昭阳殿拥立定陶王，双方兵戎相见。"
+        ]
+      },
+      {
+        "characterId": "liuchao.character.jia_wen_he",
+        "relation": "敌手",
+        "favorability": -50,
+        "memories": [
+          "贾文和在长秋宫外挟持定陶王，面对其智计深感棘手。"
+        ]
+      },
+      {
+        "characterId": "liuchao.character.lv_zhi",
+        "relation": "胁迫与合作者",
+        "favorability": 10,
+        "memories": [
+          "吕雉在长秋宫首次会晤时流露出无奈的合作态度。"
+        ]
+      },
+      {
+        "characterId": "liuchao.character.huo_zi_meng",
+        "relation": "互相利用的盟友",
+        "favorability": 30,
+        "memories": [
+          "霍子孟在长秋宫与吕雉会面后，与自己达成默契。"
+        ]
+      },
+      {
+        "characterId": "liuchao.character.jian_yu_ji",
+        "relation": "敌对",
+        "favorability": -80,
+        "memories": [
+          "剑玉姬在昭阳殿刺杀定陶王，致郭解重伤。"
+        ]
+      },
+      {
+        "characterId": "liuchao.character.guo_jie",
+        "relation": "恩人与同道",
+        "favorability": 80,
+        "memories": [
+          "郭解为保护定陶王不惜性命，已托孤于己。"
+        ]
+      },
+      {
+        "characterId": "liuchao.character.qin_hui",
+        "relation": "得力谋士",
+        "favorability": 70,
+        "memories": [
+          "秦桧斩杀刘建，屡献奇策。"
+        ]
+      },
+      {
+        "characterId": "liuchao.character.zhao_ying",
+        "relation": "朋友与中介",
+        "favorability": 40,
+        "memories": [
+          "赵充国居中调停双方冲突。"
+        ]
+      },
+      {
+        "characterId": "liuchao.character.jin_mi_di",
+        "relation": "可敬重的盟友",
+        "favorability": 50,
+        "memories": [
+          "金蜜镝随程宗扬出城追定陶王。"
+        ]
+      },
+      {
+        "characterId": "liuchao.character.liu_xin",
+        "relation": "保护对象",
+        "favorability": 60,
+        "memories": [
+          "定陶王是各方争夺的焦点。"
+        ]
+      },
+      {
+        "characterId": "lyg.character.zhao_feiyan",
+        "relation": "皇后，辅助对象",
+        "favorability": 5
+      },
+      {
+        "characterId": "lyg.character.xiao_zi",
+        "relation": "盟友",
+        "favorability": 42
+      },
+      {
+        "characterId": "liuchao.character.yun_dan_liu",
+        "relation": "同伴",
+        "favorability": 35
+      },
+      {
+        "characterId": "lyg.character.np003",
+        "relation": "臣属",
+        "favorability": 5
+      },
+      {
+        "characterId": "lyg.character.zhong_hangyue",
+        "relation": "勉强服从",
+        "favorability": 5
+      },
+      {
+        "characterId": "lyg.character.np005",
+        "relation": "主人/女奴",
+        "favorability": 25
+      },
+      {
+        "characterId": "lyg.character.np001",
+        "relation": "下属/情报来源",
+        "favorability": 25
+      },
+      {
+        "characterId": "liuchao.character.qi_yu_xian",
+        "relation": "主人/女奴",
+        "favorability": 25
+      },
+      {
+        "characterId": "lyg.character.np004",
+        "relation": "主人/女奴",
+        "favorability": 25
+      },
+      {
+        "characterId": "liuchao.character.yun_ru_yao",
+        "relation": "未婚夫",
+        "favorability": 75
+      },
+      {
+        "characterId": "lyg.character.np007",
+        "relation": "政见分歧者",
+        "favorability": 5
+      },
+      {
+        "characterId": "lyg.character.yi_xiao_zi",
+        "relation": "师徒",
+        "favorability": 48
+      },
+      {
+        "characterId": "lyg.character.yi_xin",
+        "relation": "性关系",
+        "favorability": 5
+      },
+      {
+        "characterId": "lyg.character.np011",
+        "relation": "阉奴属下",
+        "favorability": 25
+      }
+    ],
+    "relationships": [
+      {
+        "fromCharacterId": "liuchao.character.dong_zhuo",
+        "toCharacterId": "liuchao.character.jia_wen_he",
+        "relation": "主君与谋主",
+        "score": 90,
+        "direction": "bidirectional",
+        "tags": [
+          "信任"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.lv_zhi",
+        "toCharacterId": "liuchao.character.huo_zi_meng",
+        "relation": "君臣",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "相互试探"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.dong_zhuo",
+        "toCharacterId": "liuchao.character.zhao_ying",
+        "relation": "故友",
+        "score": 70,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.jian_yu_ji",
+        "toCharacterId": "liuchao.character.guo_jie",
+        "relation": "刺杀/敌对",
+        "score": -90,
+        "direction": "directed"
+      },
+      {
+        "fromCharacterId": "liuchao.character.guo_jie",
+        "toCharacterId": "liuchao.character.liu_xin",
+        "relation": "保护对象",
+        "score": 5,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.liu_xin",
+        "toCharacterId": "lyg.character.np001",
+        "relation": "乳母",
+        "score": 60,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.liu_xin",
+        "toCharacterId": "liuchao.character.dong_zhuo",
+        "relation": "拥立者",
+        "score": 5,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.liu_xin",
+        "toCharacterId": "liuchao.character.jia_wen_he",
+        "relation": "劫持者",
+        "score": 5,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.qi_yu_xian",
+        "toCharacterId": "liuchao.character.jian_yu_ji",
+        "relation": "属下",
+        "score": 25,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.huo_zi_meng",
+        "toCharacterId": "lyg.character.np007",
+        "relation": "幕僚",
+        "score": 5,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.zhao_ying",
+        "toCharacterId": "liuchao.character.jin_mi_di",
+        "relation": "同僚",
+        "score": 5,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.jin_mi_di",
+        "toCharacterId": "liuchao.character.dong_zhuo",
+        "relation": "对手",
+        "score": -20,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "lyg.character.xiao_zi",
+        "toCharacterId": "liuchao.character.qi_yu_xian",
+        "relation": "命令与被命令",
+        "score": 5,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "lyg.character.xiao_zi",
+        "toCharacterId": "lyg.character.np004",
+        "relation": "审讯者",
+        "score": 5,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.lv_zhi",
+        "toCharacterId": "lyg.character.xiao_zi",
+        "relation": "被搜魂对象",
+        "score": 5,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "lyg.character.yi_xin",
+        "toCharacterId": "lyg.character.np004",
+        "relation": "共谋",
+        "score": 5,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "lyg.character.xiao_zi",
+        "toCharacterId": "liuchao.character.jian_yu_ji",
+        "relation": "试探/敌对",
+        "score": 5,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.yun_dan_liu",
+        "toCharacterId": "liuchao.character.yun_ru_yao",
+        "relation": "侄女",
+        "score": 5,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "lyg.character.xiao_zi",
+        "toCharacterId": "liuchao.character.yun_ru_yao",
+        "relation": "姐妹相称",
+        "score": 60,
+        "direction": "bidirectional"
+      },
+      {
+        "fromCharacterId": "liuchao.character.jia_wen_he",
+        "toCharacterId": "lyg.character.zhong_hangyue",
+        "relation": "合作者/对话者",
+        "score": 35,
+        "direction": "bidirectional"
+      }
+    ]
+  },
+  "content": {
+    "skills": [
+      {
+        "id": "liuchao.skill.wu_hu_duan_men_dao",
+        "name": "五虎断门刀",
+        "description": "程宗扬惯用的刚猛刀法，得自星月湖传承。",
+        "type": "刀法",
+        "effects": [
+          "刚猛无铸",
+          "大开大阖"
+        ]
+      },
+      {
+        "id": "liuchao.skill.death_root",
+        "name": "生死根",
+        "description": "程宗扬的独有异能，可吸收死气转化为自身真气，但积累过多反噬。",
+        "type": "异能",
+        "effects": [
+          "吸收死气",
+          "真元转化"
+        ]
+      },
+      {
+        "id": "liuchao.skill.lian_zhu_arrow",
+        "name": "连珠箭",
+        "description": "董卓一弓连射数箭的绝技，双手左右开弓。",
+        "type": "箭术",
+        "effects": [
+          "速射",
+          "双手并用"
+        ]
+      },
+      {
+        "id": "liuchao.skill.zhong_axe",
+        "name": "重斧术",
+        "description": "董卓双斧连击的招数，力道惊人。",
+        "type": "斧法",
+        "effects": [
+          "重击",
+          "破甲"
+        ]
+      },
+      {
+        "id": "liuchao.skill.duan_ji",
+        "name": "短戟术",
+        "description": "董卓以短戟近战搏杀的技艺。",
+        "type": "戟法",
+        "effects": [
+          "投掷",
+          "近战"
+        ]
+      },
+      {
+        "id": "liuchao.skill.tie_bu_shan",
+        "name": "铁布衫",
+        "description": "郭解修习的护体硬功，可挡利箭。",
+        "type": "内功",
+        "effects": [
+          "防御提升"
+        ]
+      },
+      {
+        "id": "liuchao.skill.qin_long_zhua",
+        "name": "擒龙爪",
+        "description": "郭解的擒拿功夫，可隔空取物。",
+        "type": "爪法",
+        "effects": [
+          "擒拿",
+          "制敌"
+        ]
+      },
+      {
+        "id": "liuchao.skill.da_shuai_bei_shou",
+        "name": "大摔碑手",
+        "description": "郭解的掌功，力大如碑。",
+        "type": "掌法",
+        "effects": [
+          "拍击"
+        ]
+      },
+      {
+        "id": "liuchao.skill.sword_art",
+        "name": "剑术",
+        "description": "通用剑法基础。",
+        "type": "剑法",
+        "effects": [
+          "基础剑招"
+        ]
+      },
+      {
+        "id": "liuchao.skill.qin_hui_sword",
+        "name": "秦桧剑术",
+        "description": "秦桧的剑击技巧，轻灵诡变。",
+        "type": "剑法",
+        "effects": [
+          "速攻",
+          "刺杀"
+        ]
+      },
+      {
+        "id": "liuchao.skill.yao_yi_sword",
+        "name": "云丹琉刀法",
+        "description": "云丹琉使用青龙偃月刀的刀法，已斩杀华雄。",
+        "type": "刀法",
+        "effects": [
+          "势大力沉",
+          "刀意贯通"
+        ]
+      },
+      {
+        "id": "liuchao.skill.strategy",
+        "name": "智谋",
+        "description": "贾文和的独有谋略。",
+        "type": "智略",
+        "effects": [
+          "设谋",
+          "看破"
+        ]
+      },
+      {
+        "id": "liuchao.skill.political_maneuver",
+        "name": "政治手腕",
+        "description": "霍子孟的政治斡旋能力。",
+        "type": "政略",
+        "effects": [
+          "平衡",
+          "制衡"
+        ]
+      },
+      {
+        "id": "liuchao.skill.royal_authority",
+        "name": "太后权威",
+        "description": "吕雉多年执政的威势。",
+        "type": "权术",
+        "effects": [
+          "令从",
+          "威慑"
+        ]
+      },
+      {
+        "id": "lyg.skill.np003",
+        "name": "太一经",
+        "description": "程宗扬修炼太一经炼化死气，但无法解决杂气问题。"
+      },
+      {
+        "id": "lyg.skill.np004",
+        "name": "九阳神功",
+        "description": "程宗扬改用九阳神功处理杂气，但导致杂气更深入真元。"
+      },
+      {
+        "id": "lyg.skill.np005",
+        "name": "双修鼎炉之术",
+        "description": "卓云君提出用双修法将杂气泄出鼎炉，程宗扬用来炼化部分死气。"
+      },
+      {
+        "id": "lyg.skill.np011",
+        "name": "程宗扬丹田隐患解除",
+        "description": "通过与赵合德交合，程宗扬借阴阳调和稳定了丹田气轮，缓解了先前的胀裂痛感。"
+      },
+      {
+        "id": "lyg.skill.np023",
+        "name": "妻媵制",
+        "description": "汉国贵族婚姻制度，正妻之妹或侄女可陪媵为妾，云丹琉即以此身份嫁入。"
+      },
+      {
+        "id": "lyg.skill.np027",
+        "name": "房产预售方案",
+        "description": "程宗扬提出房产预售方案，只收纸钞，利用纸钞流通性回收纸钞、稳定纸钞信用、增加拍卖吸引力，实现一举三得。"
+      },
+      {
+        "id": "lyg.skill.np028",
+        "name": "真龙降世传言",
+        "description": "蛇夫人向赵飞燕称程宗扬为阳武侯之子、帝室嫡脉，通过帝陵血脉验证，为真龙降世。"
+      },
+      {
+        "id": "lyg.skill.np029",
+        "name": "丹田杂气危机",
+        "description": "程宗扬丹田气旋因吸纳洛都之乱大量死气而膨胀不稳，炼化缓慢，需大量上品鼎炉加速炼化，否则有突破失控风险。"
+      },
+      {
+        "id": "lyg.skill.np032",
+        "name": "生死根（功法）",
+        "description": "程宗扬丹田中因生死根吸收死气，加剧真气失控。"
+      },
+      {
+        "id": "lyg.skill.np034",
+        "name": "通幽境",
+        "description": "程宗扬已突破第六级通幽境，但积累负面情绪。"
+      },
+      {
+        "id": "lyg.skill.np039",
+        "name": "纸钞联盟计划",
+        "description": "程宗扬提议用水泥定金换取纸钞凭证，建立纸钞联盟，包括程氏商会、云氏商会和石家，在各地设钱庄进行发行与兑换。"
+      },
+      {
+        "id": "lyg.skill.np054",
+        "name": "纸钞发行权",
+        "description": "程宗扬主持的宋国宝钞局有权发行纸钞，宋主及贾师宪均认可纸钞合法。"
+      },
+      {
+        "id": "lyg.skill.np056",
+        "name": "宋国礼部侍郎衔",
+        "description": "程宗扬被宋国授为礼部侍郎、通问计议使，从三品，但差事临时。"
+      },
+      {
+        "id": "lyg.skill.np057",
+        "name": "晴州向宋国借款提议",
+        "description": "宋国向晴州商会借款一百万金铢，两年期，年息三成。晴州首领称有利可图则可接受。"
+      },
+      {
+        "id": "lyg.skill.np058",
+        "name": "精忠报国（歌曲）",
+        "description": "程宗扬在宴会上清唱此曲，以真气充沛震撼全场。"
+      },
+      {
+        "id": "lyg.skill.np059",
+        "name": "滑步舞",
+        "description": "程宗扬展示倒滑步法，令诸王惊艳。"
+      },
+      {
+        "id": "lyg.skill.np060",
+        "name": "舞都会社",
+        "description": "程宗扬提议成立以舞蹈交流与传授为宗旨的会社，避免教坊名声影响，计划在封地舞都举办大赛。"
+      },
+      {
+        "id": "lyg.skill.np063",
+        "name": "生死根（通幽境）",
+        "description": "程宗扬踏入通幽境后，对死气感应清晰，吸收死气不再不适，并思考生死逆转可能。"
+      },
+      {
+        "id": "lyg.skill.np066",
+        "name": "吸收死气",
+        "description": "程宗扬与王守澄交战时吸收了五道死气，已全部消耗，但杂质残留导致经脉重创。"
+      },
+      {
+        "id": "lyg.skill.np068",
+        "name": "鹏翼社情报网络",
+        "description": "程宗扬在长安依赖鹏翼社三名成员（任宏、净空、杜泉）及贾文和传递情报，但人力不足，信息有延迟。"
+      },
+      {
+        "id": "lyg.skill.np069",
+        "name": "内宅性奴训练知识",
+        "description": "程宗扬教导白霓裳乳交、后庭等性技巧，并令吕雉示范。"
+      },
+      {
+        "id": "lyg.skill.np070",
+        "name": "坐照境破境速度",
+        "description": "一般需要三十六个时辰，杨玉环用了十五个时辰，紫丫头仅十二个时辰，程宗扬更短（不详）。"
+      },
+      {
+        "id": "lyg.skill.np072",
+        "name": "不拾一世大师真经咒语",
+        "description": "程宗扬念诵不拾一世大师在袈裟上留下的赞美诗，发音准确"
+      },
+      {
+        "id": "lyg.skill.np077",
+        "name": "阴阳鱼",
+        "description": "程宗扬丹田内阴阳鱼在真气耗尽后几乎离体，后沉入丹田稳定状态。"
+      },
+      {
+        "id": "lyg.skill.np078",
+        "name": "金龙附体",
+        "description": "程宗扬被认为有金龙附体，是气运所钟的天命之人。"
+      },
+      {
+        "id": "lyg.skill.np082",
+        "name": "采补术（导致死亡）",
+        "description": "程宗扬在163中以采补术榨取女体精元至其死亡，未反哺。"
+      },
+      {
+        "id": "lyg.skill.np083",
+        "name": "程宗扬生死根被封堵近九成",
+        "description": "因与窥基魔神化身交战，程宗扬丹田内的生死根转化效率从三分之一降至一成。"
+      },
+      {
+        "id": "lyg.skill.np089",
+        "name": "房中术",
+        "description": "程宗扬使用房中术采补杨妃的阴精。"
+      },
+      {
+        "id": "lyg.skill.np091",
+        "name": "九阳神功第七层",
+        "description": "程宗扬全力施展九阳神功第七层，一击斩碎窥基禅杖并击碎其骨傀，但真气耗尽。此功法至刚至阳，是太乙真宗镇教神功，为程宗扬独有（虽非独家但本批仅他施展）。"
+      },
+      {
+        "id": "lyg.skill.np094",
+        "name": "生死根(被尸傀封印)",
+        "description": "程宗扬的修行根基，但被观海用尸傀封印，目前无法正常发挥双修采补效果。"
+      },
+      {
+        "id": "lyg.skill.np096",
+        "name": "行气大周天",
+        "description": "程宗扬打坐修炼行气大周天，因生死根阻滞，进展缓慢。"
+      },
+      {
+        "id": "lyg.skill.np099",
+        "name": "电光凝刀",
+        "description": "程宗扬以九阳真气凝成电光缭绕的直刀，用于攻击窥基及尸傀。"
+      },
+      {
+        "id": "lyg.skill.np100",
+        "name": "死气操控（生死根）",
+        "description": "程宗扬利用生死根放出死气收敛气息，骗过金刚石像；吸取生机补充真气。"
+      },
+      {
+        "id": "lyg.skill.np105",
+        "name": "噬血藤元种",
+        "description": "程宗扬的噬血藤元种悬浮在气海中，可控制血藤汲取和返还精血，用于对鱼玄机和齐羽仙进行控制。"
+      },
+      {
+        "id": "lyg.skill.np106",
+        "name": "长安坊图",
+        "description": "贾文和绘制了长安城总图及各坊详图，标注了官署、寺观、居民分布，包括程宅所在的宣平坊。"
+      },
+      {
+        "id": "lyg.skill.np111",
+        "name": "羽翼飞行",
+        "description": "吕雉具有羽族身份，背后伸展黑色羽翼飞行。"
+      },
+      {
+        "id": "lyg.skill.np115",
+        "name": "童贞之血克制魔神",
+        "description": "吕雉的童贞之血克制了护法金刚的魔气"
+      },
+      {
+        "id": "lyg.skill.np122",
+        "name": "武穆秘籍（修改版）",
+        "description": "功法仅限女子修习，处子可练，破体反噬；岳鹏举修改后加入巫法，可避免反噬，但关键部分有禁制未解开。"
+      },
+      {
+        "id": "lyg.skill.np123",
+        "name": "武穆秘籍",
+        "description": "小紫以银针帮义姁打通经脉，促其修炼此秘籍第二层；程宗扬曾表示怕练死人不让其他姬妾练。"
+      },
+      {
+        "id": "lyg.skill.np136",
+        "name": "离魂症",
+        "description": "燕姣然指出小紫有离魂症先兆，症状包括易倦、精神不宁；其母西施因此症最终神智丧失。"
+      },
+      {
+        "id": "lyg.skill.np139",
+        "name": "操控虫蚁",
+        "description": "小紫操控虫蚁的能力在王守澄一战中损失六成，剩余虫蚁数量锐减。"
+      },
+      {
+        "id": "lyg.skill.np141",
+        "name": "小紫的紫气内功",
+        "description": "小紫因吸收了墨枫林的魂魄和死气，修为压不住，即将晋级五级。"
+      },
+      {
+        "id": "lyg.skill.np143",
+        "name": "鸣鸾仙体",
+        "description": "赵飞燕的蜜穴为鸣鸾仙体，内有鸾关，需修短合度阳根才能破开；交合时淫声连绵如鸾凤清鸣。"
+      },
+      {
+        "id": "lyg.skill.np144",
+        "name": "掌中舞",
+        "description": "赵飞燕在琉璃盏上表演掌中舞，身轻如燕，后空翻落点与起点一致。"
+      },
+      {
+        "id": "lyg.skill.np145",
+        "name": "赵飞燕怀孕",
+        "description": "燕姣然诊断赵飞燕怀孕约五十日，胎儿为程宗扬后代。赵飞燕体质虚弱（宫寒），正常难以受孕。"
+      },
+      {
+        "id": "lyg.skill.np147",
+        "name": "中行说的监管能力",
+        "description": "中行说被杨玉环安排盯住净念和纳觉容部。"
+      },
+      {
+        "id": "lyg.skill.np154",
+        "name": "青龙偃月刀",
+        "description": "云丹琉的兵器，威力强大。"
+      }
+    ],
+    "techniques": [
+      {
+        "id": "liuchao.technique.taiji_jing",
+        "name": "太一经",
+        "description": "程宗扬主修功法，可转化死气。",
+        "grade": "玄品",
+        "skillIds": [
+          "liuchao.skill.death_root"
+        ]
+      },
+      {
+        "id": "liuchao.technique.jiuyang_shengong",
+        "name": "九阳神功",
+        "description": "程宗扬另一门功法，阳气通神，但导致阳亢之症。",
+        "grade": "玄品"
+      },
+      {
+        "id": "lyg.technique.np015",
+        "name": "超级管理员权限（系统内）",
+        "description": "程宗扬通过系统验证，成为超级管理员，拥有最高等级权限。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.technique.np049",
+        "name": "气轮炼化杂气",
+        "description": "以处子破体为鼎炉可高效炼化杂气，提升真元质量，气轮中出现星辰及阴阳鱼现象。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.technique.np055",
+        "name": "纸钞对昭南优惠兑换额度",
+        "description": "程宗扬提出昭南可用九折钱铢兑换宋国纸钞，额度每年100万-300万金铢，上限5年，由程氏商会兜底。昭南反要求八折、500万、10年。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.technique.np061",
+        "name": "十六臂天王像钥匙",
+        "description": "兴庆宫花萼相辉楼第三层曾有一尊十六臂天王像，十四条手臂对应秘境入口。程宗扬发现遗迹并判断青龙寺的摩诃迦罗像可供开启秘境。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.technique.np075",
+        "name": "魂丹控制术",
+        "description": "程宗扬收取泉玉姬魂丹后，可通过窍阴穴感应其位置与生死。泉玉姬被杀或魂丹被毁可致程宗扬剧痛及修为影响。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.technique.np079",
+        "name": "双修",
+        "description": "程宗扬利用双修疗伤，采补危月燕。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.technique.np108",
+        "name": "三朝会盟（锦囊计）",
+        "description": "贾文和设锦囊计，以汉晋宋三方结盟为诱饵，稳住宋国并迫使廖群玉配合。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.technique.np117",
+        "name": "搜神诀",
+        "description": "小紫从仇傻瓜处敲来《搜神诀》，对吕雉施展，读取其神魂片段。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.technique.np120",
+        "name": "超级用户权限（系统内）",
+        "description": "小紫、朱老头、小玲儿均被系统认定为超级用户，拥有高权限。小紫通过染色体验证，朱老头是武皇后裔，小玲儿身份不明。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.technique.np142",
+        "name": "瑶池宗秘法",
+        "description": "小紫掌握一种瑶池宗秘法，可越级提升至六级，但被程宗扬拒绝。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.technique.np146",
+        "name": "黑无常伪装",
+        "description": "中行说扮黑无常吓退周飞。",
+        "grade": "中品"
+      }
+    ],
+    "items": [
+      {
+        "id": "liuchao.item.shuang_dao",
+        "name": "双刀",
+        "description": "程宗扬的佩刀，在昭阳殿战斗中曾使用。",
+        "type": "weapon",
+        "grade": "凡品"
+      },
+      {
+        "id": "liuchao.item.tie_tai_diao_gong",
+        "name": "铁胎雕弓",
+        "description": "董卓使用的强弓。",
+        "type": "weapon",
+        "grade": "玄品"
+      },
+      {
+        "id": "liuchao.item.yue_ya_duan_ji",
+        "name": "月牙短戟",
+        "description": "董卓惯用的近战兵刃。",
+        "type": "weapon",
+        "grade": "凡品"
+      },
+      {
+        "id": "liuchao.item.zhong_axe",
+        "name": "重斧",
+        "description": "董卓的双斧之一。",
+        "type": "weapon",
+        "grade": "凡品"
+      },
+      {
+        "id": "liuchao.item.rusty_cuo_dao",
+        "name": "生锈错刀",
+        "description": "贾文和劫持定陶王时所持的锈刀。",
+        "type": "weapon",
+        "grade": "凡品"
+      },
+      {
+        "id": "lyg.item.np001",
+        "name": "皇后印玺",
+        "type": "weapon",
+        "description": "剑玉姬在会面后留下皇后印玺作为让步象征。",
+        "grade": "仙品"
+      },
+      {
+        "id": "lyg.item.np002",
+        "name": "成光魂丹",
+        "type": "weapon",
+        "description": "闻清语代表剑玉姬送来成光魂丹，控制其生死。",
+        "grade": "仙品"
+      },
+      {
+        "id": "lyg.item.np006",
+        "name": "舞阳侯爵位",
+        "type": "other",
+        "description": "程宗扬获封舞阳侯，实封五千户，封地包括首阳山到舞都城七里坊一带。",
+        "grade": "仙品"
+      },
+      {
+        "id": "lyg.item.np007",
+        "name": "电击棒（岳帅遗物）",
+        "type": "consumable",
+        "description": "存放于胶西邸井中白石下瓷缸内，岳帅恶作剧道具，沾水导电以惩罚尝试者。",
+        "grade": "仙品"
+      },
+      {
+        "id": "lyg.item.np008",
+        "name": "鹿皮书写提示",
+        "type": "material",
+        "description": "鹿皮上写有'欲启秘境，执棒尿之'，实为误导。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.item.np009",
+        "name": "白石刻字",
+        "type": "material",
+        "description": "白石背部刻有'不许小便'及笑脸，程宗扬尿后挖开后发现白光，疑似秘境入口。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.item.np010",
+        "name": "八块羊脂玉牌（岳帅信物）",
+        "type": "material",
+        "description": "八块玉牌来自刘奭玉牒，指向武帝秘境。线索可连成'日出东方，唯我不败'，缺'不'字。",
+        "grade": "仙品"
+      },
+      {
+        "id": "lyg.item.np012",
+        "name": "白色长条石（传送石）",
+        "type": "consumable",
+        "description": "程宗扬持有的白色长条石背面有笑脸，能传送使用者，但会分散传送。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.item.np013",
+        "name": "电击棒",
+        "type": "other",
+        "description": "程宗扬使用电击棒作为引雷器，抵御魔尊周围的雷击，效果为一透明屏障吸收闪电。",
+        "grade": "仙品"
+      },
+      {
+        "id": "lyg.item.np014",
+        "name": "白石/岳鹏举画押石",
+        "type": "material",
+        "description": "刻有岳鹏举画押与‘不许小便’的白色条石，用于替代陵墓石锁填充空洞开启大门，画押处为笑脸。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.item.np016",
+        "name": "武穆秘籍",
+        "type": "other",
+        "description": "实为玄妙子所著灵魂功法，被岳鹏举撕去封面改名为武穆秘籍，内页有批注。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.item.np017",
+        "name": "岳鹏举遗信",
+        "type": "consumable",
+        "description": "六封借钱信，分别写给李药师、王真人、萧道凌、贾师宪及两位未具名者。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.item.np018",
+        "name": "天策令",
+        "type": "material",
+        "description": "黑铁令牌，凭此可入皇图天策府。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.item.np019",
+        "name": "沉香",
+        "type": "other",
+        "description": "萧侯赠予岳鹏举的礼物。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.item.np020",
+        "name": "纸符",
+        "type": "consumable",
+        "description": "王真人所赠符咒。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.item.np021",
+        "name": "美人名单",
+        "type": "material",
+        "description": "粉色纸笺，列有武则天、杨玉环等十六位美女名字及岳鹏举标记。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.item.np022",
+        "name": "舞阳侯封地",
+        "type": "other",
+        "description": "实封舞都，包括舞都城和首阳山等地。",
+        "grade": "仙品"
+      },
+      {
+        "id": "lyg.item.np024",
+        "name": "同心结（情趣用品）",
+        "type": "other",
+        "description": "以丝带将两女乳头扎结，用于洞房游戏。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.item.np025",
+        "name": "慎恤胶",
+        "type": "consumable",
+        "description": "南宫秘药，以炉炼百日，投于大瓮煮沸后换水十次才能使用，程宗扬因此药而性欲高涨。由蔡敬仲从宫中寻来，小紫用于程宗扬。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.item.np026",
+        "name": "舞都房地产开发计划",
+        "type": "other",
+        "description": "程宗扬计划在舞都以北开发商业区，首期一千五百亩土地，计划以每亩五百金铢售予商铺，预期回收十五万金铢。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.item.np030",
+        "name": "赤阳圣果",
+        "type": "other",
+        "description": "卢景拒绝服用以疗伤，称其可救命；程宗扬提及后卢景打断。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.item.np031",
+        "name": "摄像机",
+        "type": "other",
+        "description": "斯明信返回时将此物从袖内取出交还程宗扬。",
+        "grade": "极品"
+      },
+      {
+        "id": "lyg.item.np033",
+        "name": "手电筒",
+        "type": "other",
+        "description": "程宗扬持有手电筒，穿越带来。",
+        "grade": "仙品"
+      },
+      {
+        "id": "lyg.item.np035",
+        "name": "赤兔马",
+        "type": "other",
+        "description": "程宗扬骑乘赤兔马，用苹果贿赂，马匹神骏非凡",
+        "grade": "仙品"
+      },
+      {
+        "id": "lyg.item.np036",
+        "name": "可乐饮料",
+        "type": "other",
+        "description": "程宗扬保留了数瓶可乐，提供给祁远品尝，祁远觉得是辣且甜的饮料。",
+        "grade": "仙品"
+      },
+      {
+        "id": "lyg.item.np037",
+        "name": "鸦王座（钢轨模具相关？）",
+        "type": "other",
+        "description": "吕奉先收到皇图天策府功曹科录取通知书，要求正月初五报到。",
+        "grade": "仙品"
+      },
+      {
+        "id": "lyg.item.np038",
+        "name": "宣平坊程宅位置",
+        "type": "other",
+        "description": "程宅位于宣平坊中心十字街西北，面朝大路，对面是鼓吹署教坊。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.item.np040",
+        "name": "霓龙丝衣",
+        "type": "armor",
+        "description": "出自建康盛银织坊，原料款式由程宗扬一手打理，包括乳罩、内裤、丝袜、高跟鞋等多种款式。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.item.np041",
+        "name": "仙斛",
+        "type": "other",
+        "description": "陶家公子所赠贺礼，程宗扬大婚时陶家赠两株仙斛，赵飞燕收入行囊，用于引诱潘金莲。",
+        "grade": "仙品"
+      },
+      {
+        "id": "lyg.item.np042",
+        "name": "魂丹（泉玉姬）",
+        "type": "consumable",
+        "description": "泉玉姬的魂丹已被程宗扬掌控，她无法背叛。",
+        "grade": "仙品"
+      },
+      {
+        "id": "lyg.item.np043",
+        "name": "阴阳鱼",
+        "type": "consumable",
+        "description": "阴阳鱼已融入程宗扬丹田，来自泊陵鱼氏。",
+        "grade": "仙品"
+      },
+      {
+        "id": "lyg.item.np044",
+        "name": "禁音符",
+        "type": "consumable",
+        "description": "一种符箓，可禁绝声音内外传递。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.item.np045",
+        "name": "太阳能电池板（疑似）",
+        "type": "other",
+        "description": "程宗扬捡到一块黑板子，袁天罡鉴定为太阳能电池板。",
+        "grade": "仙品"
+      },
+      {
+        "id": "lyg.item.np046",
+        "name": "太阳能电池板（确认为可用）",
+        "type": "other",
+        "description": "袁天罡检查后称其可用。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.item.np047",
+        "name": "程宅特权",
+        "type": "other",
+        "description": "宣平坊程宅被列为使节驻地，不受唐律管辖；法云尼寺赠送为家庙；车驾享有特权。",
+        "grade": "仙品"
+      },
+      {
+        "id": "lyg.item.np048",
+        "name": "驱毒丸（改良版）",
+        "type": "consumable",
+        "description": "程宗扬服用小紫改良的驱毒丸，解除毒烟麻痹，但口感极辣。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.item.np050",
+        "name": "光影记录设备",
+        "type": "other",
+        "description": "小紫使用该设备记录程宗扬与潘金莲性场面，暴露摩尼寺僧侣酷刑过程。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.item.np051",
+        "name": "皇图天策府令箭",
+        "type": "consumable",
+        "description": "李药师赠予程宗扬，可凭此获得天策府协助。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.item.np052",
+        "name": "南霁云",
+        "type": "consumable",
+        "description": "李药师派南霁云跟随程宗扬，性命相付。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.item.np053",
+        "name": "水晶念珠",
+        "type": "consumable",
+        "description": "十八颗水晶球串成，由小紫用机械箱加工，吕雉处女血激活，具有特殊光学特性，可变化形态。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.item.np062",
+        "name": "琉璃天珠",
+        "type": "other",
+        "description": "原属娑梵寺，程宗扬亲手交给信永。",
+        "grade": "极品"
+      },
+      {
+        "id": "lyg.item.np064",
+        "name": "薄荷油伪称催情露",
+        "type": "other",
+        "description": "程宗扬用胡商薄荷油伪称催情露（合欢露含大麻），实则羞辱吕雉。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.item.np065",
+        "name": "珊瑚匕首",
+        "type": "weapon",
+        "description": "锋锐无比，从王守澄处夺回",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.item.np067",
+        "name": "布都御魂",
+        "type": "weapon",
+        "description": "飞鸟萤子称飞鸟家族保留的神器，实为程宗扬先前获得的剑柄，黑魔海曾追查其下落。",
+        "grade": "仙品"
+      },
+      {
+        "id": "lyg.item.np071",
+        "name": "镭射战刀",
+        "type": "weapon",
+        "description": "程宗扬以六级修为凝出幽黑刀身，可逆转化气",
+        "grade": "极品"
+      },
+      {
+        "id": "lyg.item.np073",
+        "name": "手电筒（佛光）",
+        "type": "consumable",
+        "description": "程宗扬使用手电筒模仿佛光，斩杀普宁并驱散僧众。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.item.np074",
+        "name": "战刀（光电刀）",
+        "type": "weapon",
+        "description": "程宗扬使用一把能发出电光的战刀，可隐入夜色。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.item.np076",
+        "name": "天策府令箭（卫公令）",
+        "type": "other",
+        "description": "程宗扬持有卫公赐予的天策府令箭，凭此获得薛礼信任及援助。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.item.np080",
+        "name": "太泉古阵电池板",
+        "type": "other",
+        "description": "袁天罡怀疑电池板实为引雷器，能自行捕捉空气中电荷，太阳能为其次要附件。程宗扬联想到岳鸟人可能用于引雷充电。",
+        "grade": "仙品"
+      },
+      {
+        "id": "lyg.item.np081",
+        "name": "纸钞",
+        "type": "other",
+        "description": "程宗扬主持推行纸钞，以信义为本，在商人间受欢迎。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.item.np084",
+        "name": "仇士良令牌",
+        "type": "other",
+        "description": "程宗扬持此令牌可通行十六王宅及大明宫银汉门",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.item.np085",
+        "name": "机械飞虫",
+        "type": "other",
+        "description": "紫妹妹所养，可追踪小贱狗；由金属块变形可飞行",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.item.np086",
+        "name": "避水符",
+        "type": "consumable",
+        "description": "杨玉环使用避水符入水，后给程宗扬使用",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.item.np087",
+        "name": "卖妃文契",
+        "type": "other",
+        "description": "李昂签契将杨艳以一文钱卖给程宗扬",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.item.np088",
+        "name": "全息摄像机",
+        "type": "other",
+        "description": "雪雪吐出一只全息摄像机，程宗扬捡起使用，可播放长生殿实时影像。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.item.np090",
+        "name": "宁心丸",
+        "type": "consumable",
+        "description": "燕姣然炼制的药丸，用于滋阴安神、养血补气。程宗扬预订了一千丸，每丸一金铢。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.item.np092",
+        "name": "魂丸",
+        "type": "weapon",
+        "description": "成光的魂丸由剑玉姬送来，程宗扬未使用；泉玉姬的魂丸已失效。",
+        "grade": "仙品"
+      },
+      {
+        "id": "lyg.item.np093",
+        "name": "献妻誓约(文契)",
+        "type": "other",
+        "description": "由黎锦香拟定的文契，内容规定周飞将妻子黎锦香献予程宗扬，包含十条严格条款，周飞与黎锦香均已签名画押。",
+        "grade": "极品"
+      },
+      {
+        "id": "lyg.item.np095",
+        "name": "养心丸",
+        "type": "consumable",
+        "description": "燕姣然炼制的养心丸，为程宗扬妻子薛惊理补养气血。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.item.np097",
+        "name": "翊府任职文告",
+        "type": "other",
+        "description": "程宗扬给出枢密院用印的翊府郎将委任文告，周飞接受。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.item.np098",
+        "name": "岳鸟人遗留田契和当票",
+        "type": "consumable",
+        "description": "岳鸟人留下的渭水田契和珠宝当票，程宗扬推测被小贱狗雪雪藏匿。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.item.np101",
+        "name": "荷包（含黑色小石子）",
+        "type": "material",
+        "description": "程宗扬拾取窥基尸骸掉落的小石子，收入荷包。",
+        "grade": "仙品"
+      },
+      {
+        "id": "lyg.item.np102",
+        "name": "磁铁圆球",
+        "type": "material",
+        "description": "李辅国遗物，可辅助真气运转，连接空间如曼荼罗坛城、仙居殿等。",
+        "grade": "仙品"
+      },
+      {
+        "id": "lyg.item.np103",
+        "name": "噬血藤元种",
+        "type": "material",
+        "description": "程宗扬在李辅国肉身崩碎后获得噬血藤元种，可操控血藤，范围约十丈，灵活如身体一部分。",
+        "grade": "仙品"
+      },
+      {
+        "id": "lyg.item.np104",
+        "name": "铁球",
+        "type": "material",
+        "description": "程宗扬从仙居殿获得一对铁球，内含特殊空间，暂时未细查。",
+        "grade": "仙品"
+      },
+      {
+        "id": "lyg.item.np107",
+        "name": "无线充电灯泡（水晶灯）",
+        "type": "consumable",
+        "description": "袁天罡利用小紫帮助实现的无线充电水晶灯，提供柔和白光，免于烛火烟熏。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.item.np109",
+        "name": "铜笛",
+        "type": "armor",
+        "description": "贾文和用铜笛指挥吕奉先及晋国护卫参战",
+        "grade": "极品"
+      },
+      {
+        "id": "lyg.item.np110",
+        "name": "电椅/电击短棒",
+        "type": "other",
+        "description": "贾文和使用的短棒可释放电弧，用于防御。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.item.np112",
+        "name": "比目鱼珠",
+        "type": "other",
+        "description": "吕雉用比目鱼珠探查到武穆秘籍位置，并用于追踪。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.item.np113",
+        "name": "血莲花种",
+        "type": "consumable",
+        "description": "血莲花种存于黛绮丝体内，与血肉相连，需通过性交驱散",
+        "grade": "极品"
+      },
+      {
+        "id": "lyg.item.np114",
+        "name": "符箓（吕雉藏）",
+        "type": "weapon",
+        "description": "吕雉藏有一道符箓，化为剑气逼退追兵救程宗扬。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.item.np116",
+        "name": "麋鹿（盗猎品）",
+        "type": "consumable",
+        "description": "赵充国盗猎上林苑麋鹿，切下鹿茸后把鹿尸送给斯明信等人作路上吃食。",
+        "grade": "下品"
+      },
+      {
+        "id": "lyg.item.np118",
+        "name": "金属虫蚁箱",
+        "type": "material",
+        "description": "小紫在永安宫精阁获得装有金属虫蚁的铁箱，箱内开启秘境机关的蜘蛛休眠。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.item.np119",
+        "name": "雪雪",
+        "type": "other",
+        "description": "小紫怀中的白狗名雪雪。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.item.np121",
+        "name": "机械螃蟹",
+        "type": "other",
+        "description": "小紫操控的机关蟹，曾擒获小玲儿，后被东瀛忍者破坏。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.item.np124",
+        "name": "珊瑚铁",
+        "type": "weapon",
+        "description": "一种复合金属，六朝无法冶炼，密码箱由整块珊瑚铁制成。小紫带走断剑可能含珊瑚铁。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.item.np125",
+        "name": "断剑",
+        "type": "weapon",
+        "description": "吕雉提及的断剑，用于威胁吕巨君，现被小紫带走。",
+        "grade": "极品"
+      },
+      {
+        "id": "lyg.item.np126",
+        "name": "铸铁炸弹",
+        "type": "material",
+        "description": "小紫持有的爆炸物，用于威胁僧人。",
+        "grade": "极品"
+      },
+      {
+        "id": "lyg.item.np127",
+        "name": "贝叶经",
+        "type": "other",
+        "description": "小紫从大慈恩寺窃取，古色斑斓，记录古佛经，与大慈恩寺当前经文不同。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.item.np128",
+        "name": "金塔（七层浮屠）",
+        "type": "other",
+        "description": "小紫从大慈恩寺窃取，拳头大小，铸工精细，刻有罗汉瓦纹。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.item.np129",
+        "name": "手雷",
+        "type": "other",
+        "description": "小紫用手雷炸开大雁塔禁制逃出。",
+        "grade": "极品"
+      },
+      {
+        "id": "lyg.item.np130",
+        "name": "卓云君头发",
+        "type": "other",
+        "description": "用于制作巫毒娃娃，寻找地宫入口。",
+        "grade": "极品"
+      },
+      {
+        "id": "lyg.item.np131",
+        "name": "都卢难旦妖铃",
+        "type": "other",
+        "description": "用于操控巫毒娃娃。",
+        "grade": "极品"
+      },
+      {
+        "id": "lyg.item.np132",
+        "name": "巫毒娃娃（卓云君形）",
+        "type": "material",
+        "description": "用卓云君头发编制的稻草娃娃，用于寻路。",
+        "grade": "极品"
+      },
+      {
+        "id": "lyg.item.np133",
+        "name": "龙精",
+        "type": "other",
+        "description": "齐羽仙从黑魔海处交出，转赠小紫，原为小紫之物。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.item.np134",
+        "name": "六拂化清散",
+        "type": "consumable",
+        "description": "毒烟毒药，对常人无效，可缓慢侵蚀修炼者气海。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.item.np135",
+        "name": "澄心棠花瓣（取自齐羽仙）",
+        "type": "other",
+        "description": "小紫从齐羽仙处勒索得来一片澄心棠花瓣，可助狐族幻形匿形。被用于雪雪身上（未吞下），但雪雪仅外形微变。",
+        "grade": "极品"
+      },
+      {
+        "id": "lyg.item.np137",
+        "name": "都卢难旦妖铃（实心玉瓶）",
+        "type": "material",
+        "description": "用于收取王守澄魂魄，开启时令墨枫林迷失",
+        "grade": "极品"
+      },
+      {
+        "id": "lyg.item.np138",
+        "name": "三头魔犬（雪雪）",
+        "type": "consumable",
+        "description": "可喷冰、火、毒雾，吞食尸体",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.item.np140",
+        "name": "王守澄尸体",
+        "type": "other",
+        "description": "程宗扬将王守澄尸体交给小紫处置，小紫可能用于制作人干、肉酱等。",
+        "grade": "极品"
+      },
+      {
+        "id": "lyg.item.np148",
+        "name": "蓝瞳水晶片",
+        "type": "consumable",
+        "description": "齐羽仙使用蓝色瞳纹水晶片伪装成蓝眼睛，实为黑瞳孔。",
+        "grade": "极品"
+      },
+      {
+        "id": "lyg.item.np149",
+        "name": "安乐公主元红",
+        "type": "other",
+        "description": "齐羽仙献出安乐公主元红，炼成摩尼珠",
+        "grade": "极品"
+      },
+      {
+        "id": "lyg.item.np150",
+        "name": "青玉簪银链",
+        "type": "material",
+        "description": "齐羽仙的武器，内含银链可绞杀敌人，带有腐体之毒。",
+        "grade": "极品"
+      },
+      {
+        "id": "lyg.item.np151",
+        "name": "青龙偃月刀",
+        "type": "weapon",
+        "description": "云丹琉使用的长刀，斩杀华雄。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.item.np152",
+        "name": "银龙鳞甲",
+        "type": "armor",
+        "description": "云丹琉用血符将银龙鳞甲解开，显露出胸前肌肤。",
+        "grade": "极品"
+      },
+      {
+        "id": "lyg.item.np153",
+        "name": "残缺玉佩",
+        "type": "weapon",
+        "description": "云传峰（云丹琉之父）的随身玉佩，被锯齿刀切过，发现于秘境林中，证明云传峰死于此地。",
+        "grade": "极品"
+      },
+      {
+        "id": "lyg.item.np155",
+        "name": "颤声娇",
+        "type": "consumable",
+        "description": "黑蜂制成的药粉，沾在阴蒂上引起剧烈奇痒，使阴蒂红肿。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.item.np156",
+        "name": "鬃刷（折磨工具）",
+        "type": "other",
+        "description": "与假阳具绑在一起，用于摩擦危月燕阴蒂。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.item.np157",
+        "name": "假阳具（橡皮制带束带）",
+        "type": "material",
+        "description": "用于插入危月燕子宫进行扩张。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.item.np158",
+        "name": "银制漏斗（浣肠工具）",
+        "type": "consumable",
+        "description": "用于向危月燕子宫内灌入淫药。",
+        "grade": "下品"
+      },
+      {
+        "id": "lyg.item.np159",
+        "name": "六识禁绝丹",
+        "type": "consumable",
+        "description": "广源行庞白鹄提供六识禁绝丹给吕冀，用以将赵昭仪做成活死人。义姁承认为其炼制。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.item.np160",
+        "name": "空心针",
+        "type": "weapon",
+        "description": "光明观堂有空心针，用于输血",
+        "grade": "下品"
+      },
+      {
+        "id": "lyg.item.np161",
+        "name": "舞都君封号",
+        "type": "other",
+        "description": "晋为实封的舞都君。",
+        "grade": "极品"
+      },
+      {
+        "id": "lyg.item.np162",
+        "name": "云如瑶的内宅管家权",
+        "type": "other",
+        "description": "云如瑶正式以主妇身份处理程府内宅事务，包括赏罚和职份任命。",
+        "grade": "中品"
+      },
+      {
+        "id": "lyg.item.np163",
+        "name": "石见之王印章",
+        "type": "material",
+        "description": "飞鸟萤子供称，东瀛藤原秀子（阳禄门院）所用印信可提取石见银山白银，云家持有此印。",
+        "grade": "极品"
+      },
+      {
+        "id": "lyg.item.np164",
+        "name": "三条秀子印章",
+        "type": "other",
+        "description": "云如瑶陪嫁中包括刻有“三条秀子”的印章，可能为东瀛皇族信物。",
+        "grade": "极品"
+      }
+    ]
+  },
+  "scenario": {
+    "opening": {
+      "text": "洛都之乱方息，董卓挟持定陶王出城，奔赴伊阙。贾文和设谋拥立，霍子孟在长秋宫与吕雉秘密会晤后勉强认可定陶王。凉州军割袍追随，士气凛然。你站在长秋宫外，望着南去的烟尘——定陶王安危未卜，汉室江山悬于一线。此刻，各方使者来往不断，角力刚刚开始。你是程宗扬，必须决定下一步棋：是追出城去夺回定陶王，还是坐镇宫中稳定大局？",
+      "playerRole": "鸿胪寺大行令、程氏商会当家",
+      "playerCharacterId": "liuchao.character.cheng_zongyang",
+      "creationPreset": {
+        "characterName": "程宗扬",
+        "gender": "男",
+        "race": "人族",
+        "age": 20,
+        "talentTier": {
+          "name": "异世来客",
+          "description": "来自现代世界，思维与六朝人格格不入。"
+        },
+        "origin": {
+          "name": "殇侯门下",
+          "description": "得殇侯与星月湖传承，在六朝砥砺前行。"
+        },
+        "spiritRoot": {
+          "name": "生死根",
+          "tier": "唯一异能",
+          "description": "并非传统灵根，能吸收死气转化真元，但反噬风险极大。",
+          "specialEffects": [
+            "感应死亡气息",
+            "吸收转化死气"
+          ]
+        },
+        "talents": [
+          {
+            "name": "务实机敏",
+            "description": "善于判断风险并采取行动。"
+          },
+          {
+            "name": "心胸开阔",
+            "description": "能容人任事，善用麾下才智。"
+          }
+        ],
+        "attributes": {
+          "rootBone": 5,
+          "spirituality": 4,
+          "comprehension": 6,
+          "fortune": 6,
+          "charm": 5,
+          "temperament": 6
+        },
+        "locked": true
+      },
+      "locationId": "liuchao.location.changqiu_palace",
+      "featuredCharacterIds": [
+        "liuchao.character.lv_zhi",
+        "liuchao.character.huo_zi_meng",
+        "liuchao.character.qin_hui",
+        "liuchao.character.guo_jie",
+        "liuchao.character.jian_yu_ji",
+        "liuchao.character.dong_zhuo",
+        "liuchao.character.jia_wen_he"
+      ]
+    },
+    "initialFlags": {
+      "chapter.lyg.dingtao_beijing.started": true,
+      "chapter.lyg.dingtao_beijing.done": false,
+      "event.s01_01.done": false,
+      "event.s01_02.done": false,
+      "event.s01_03.done": false,
+      "event.s01_04.done": false,
+      "event.s01_05.done": false,
+      "event.s01_06.done": false,
+      "event.s01_07.done": false,
+      "event.s01_08.done": false,
+      "event.s01_09.done": false
+    },
+    "events": [
+      {
+        "id": "lyg.event.s01_01",
+        "name": "秦桧斩刘建",
+        "description": "秦桧在永安宫斩刘建首级，吴三桂擒成光并卸其关节，平叛军士气大涨。",
+        "conditions": [
+          {
+            "path": "flags.chapter.lyg.dingtao_beijing.started",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.s01_01.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.qin_hui",
+          "lyg.character.np005"
+        ]
+      },
+      {
+        "id": "lyg.event.s01_02",
+        "name": "贾文和劫持定陶王",
+        "description": "贾文和挟持定陶王为人质，与程宗扬、董卓、霍子孟等对峙，最终以五名扈卫代价放行。",
+        "conditions": [
+          {
+            "path": "flags.event.s01_01.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.s01_02.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.jia_wen_he",
+          "liuchao.character.liu_xin",
+          "liuchao.character.dong_zhuo",
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.jin_mi_di",
+          "liuchao.character.zhao_ying",
+          "liuchao.character.guo_jie",
+          "liuchao.character.qin_hui",
+          "liuchao.character.huo_zi_meng"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.liangzhou_army"
+        ],
+        "locationId": "liuchao.location.changqiu_palace"
+      },
+      {
+        "id": "lyg.event.s01_03",
+        "name": "董卓挟持定陶王出洛都",
+        "description": "董卓率凉州军挟持定陶王，程宗扬等五人随行，凉州军士割袍追随。",
+        "conditions": [
+          {
+            "path": "flags.event.s01_02.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.s01_03.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.dong_zhuo",
+          "liuchao.character.liu_xin",
+          "liuchao.character.jia_wen_he",
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.jin_mi_di",
+          "liuchao.character.qin_hui",
+          "liuchao.character.zhao_ying",
+          "liuchao.character.guo_jie"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.liangzhou_army"
+        ],
+        "locationId": "liuchao.location.yique"
+      },
+      {
+        "id": "lyg.event.s01_04",
+        "name": "霍子孟见吕雉",
+        "description": "吕雉在长秋宫凤辇内与霍子孟对话，宣布退位、处置吕冀等，支持立定陶王。",
+        "conditions": [
+          {
+            "path": "flags.event.s01_03.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.s01_04.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.lv_zhi",
+          "liuchao.character.huo_zi_meng",
+          "lyg.character.np007",
+          "lyg.character.xiao_zi"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.han_tang"
+        ],
+        "locationId": "liuchao.location.changqiu_palace"
+      },
+      {
+        "id": "lyg.event.s01_05",
+        "name": "董卓拥立定陶王为帝",
+        "description": "董卓在昭阳宫先帝灵前拥立定陶王为帝，贾文和献计大赦、选材、迁都等。",
+        "conditions": [
+          {
+            "path": "flags.event.s01_04.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.s01_05.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.dong_zhuo",
+          "liuchao.character.liu_xin",
+          "liuchao.character.jia_wen_he"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.liangzhou_army"
+        ],
+        "locationId": "liuchao.location.zhaoyang_hall"
+      },
+      {
+        "id": "lyg.event.s01_06",
+        "name": "郭解之死",
+        "description": "郭解被剑玉姬一剑刺穿腋下，伤及心脉，临终将定陶王托付给程宗扬。",
+        "conditions": [
+          {
+            "path": "flags.event.s01_05.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.s01_06.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.guo_jie",
+          "liuchao.character.jian_yu_ji",
+          "liuchao.character.cheng_zongyang"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.wu_zong"
+        ]
+      },
+      {
+        "id": "lyg.event.s01_07",
+        "name": "董卓之死",
+        "description": "董卓被卢景、敖润暗箭射中肩头重伤，在贾文和怀中去世。",
+        "conditions": [
+          {
+            "path": "flags.event.s01_06.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.s01_07.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.dong_zhuo",
+          "liuchao.character.jia_wen_he",
+          "liuchao.character.zhao_ying"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.liangzhou_army"
+        ]
+      },
+      {
+        "id": "lyg.event.s01_08",
+        "name": "阮香凝透露定陶王与盛姬关联",
+        "description": "阮香凝告知程宗扬定陶王因盛姬而亲近她，程宗扬惊觉盛姬是黑魔海御姬奴。",
+        "conditions": [
+          {
+            "path": "flags.event.s01_07.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.s01_08.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "lyg.character.np001"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.cheng_shi"
+        ]
+      },
+      {
+        "id": "lyg.event.s01_09",
+        "name": "吕冀赐死",
+        "description": "程宗扬奉太后懿旨至永巷，当众凌辱并赐死吕冀，其妻孙寿被发配为奴。",
+        "conditions": [
+          {
+            "path": "flags.event.s01_08.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.s01_09.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.lv_zhi",
+          "lyg.character.np004",
+          "lyg.character.np011",
+          "lyg.character.zhong_hangyue"
+        ]
+      }
+    ],
+    "chapters": [
+      {
+        "id": "lyg.chapter.dingtao_beijing",
+        "title": "定陶王被劫持后",
+        "summary": "定陶王被劫持后：秦桧斩刘建 … 吕冀赐死",
+        "activation": [
+          {
+            "path": "flags.chapter.lyg.dingtao_beijing.started",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.s01_09.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "eventIds": [
+          "lyg.event.s01_01",
+          "lyg.event.s01_02",
+          "lyg.event.s01_03",
+          "lyg.event.s01_04",
+          "lyg.event.s01_05",
+          "lyg.event.s01_06",
+          "lyg.event.s01_07",
+          "lyg.event.s01_08",
+          "lyg.event.s01_09"
+        ]
+      }
+    ]
+  },
+  "rules": {
+    "mode": "strict",
+    "lockedFields": [
+      "canon.factions.*.name",
+      "canon.locations.*.name",
+      "canon.characters.*.name",
+      "content.skills.*.name",
+      "content.techniques.*.name",
+      "content.items.*.name"
+    ],
+    "contentAccess": [
+      {
+        "contentId": "liuchao.skill.death_root",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "liuchao.technique.taiji_jing",
+        "policy": "restricted",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.skill.np003",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.skill.np004",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.skill.np028",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.skill.np029",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.skill.np039",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.skill.np054",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.skill.np058",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.skill.np063",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.skill.np069",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.skill.np077",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.skill.np078",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.skill.np089",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.skill.np094",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.skill.np100",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.skill.np105",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.skill.np106",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.jia_wen_he"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.skill.np111",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.lv_zhi"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.skill.np115",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.lv_zhi"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.skill.np141",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "lyg.character.xiao_zi"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.skill.np143",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "lyg.character.zhao_feiyan"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.skill.np144",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "lyg.character.zhao_feiyan"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np001",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np002",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np006",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np007",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np010",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np013",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np022",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np031",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np033",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np035",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np036",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np037",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np041",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np042",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np043",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np045",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np047",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np062",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np067",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np071",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np080",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np092",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np093",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np101",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np102",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np103",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np104",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np109",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.jia_wen_he"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np113",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.lv_zhi"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np125",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "lyg.character.xiao_zi"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np126",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "lyg.character.xiao_zi"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np129",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "lyg.character.xiao_zi"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np130",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "lyg.character.xiao_zi"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np131",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "lyg.character.xiao_zi"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np132",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "lyg.character.xiao_zi"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np135",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "lyg.character.xiao_zi"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np137",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "lyg.character.xiao_zi"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np140",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "lyg.character.xiao_zi"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np148",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.qi_yu_xian"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np149",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.qi_yu_xian"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np150",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.qi_yu_xian"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np152",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.yun_dan_liu"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np153",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.yun_dan_liu"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np161",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.yun_ru_yao"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np163",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.yun_ru_yao"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np164",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.yun_ru_yao"
+        ],
+        "playerAllowed": false
+      }
+    ]
+  }
+}

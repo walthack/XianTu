@@ -52,6 +52,12 @@ export interface ScenarioModEvent {
   id: string;
   name: string;
   description: string;
+  axisId?: string | null;
+  axisMethod?: string;
+  axisBeat?: string;
+  axisAnchor?: string;
+  axisSeq?: number;
+  critical?: boolean;
   conditions?: ScenarioCondition[];
   completion?: ScenarioCondition[];
   relatedCharacterIds?: string[];

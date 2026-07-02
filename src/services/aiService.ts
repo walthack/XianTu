@@ -12,9 +12,10 @@
  */
 import axios from 'axios';
 import type { APIUsageType, APIConfig as StoreAPIConfig } from '@/stores/apiManagementStore';
+import { buildOpenAICompatibleEndpoint, normalizeOpenAIBaseUrl } from './openAIEndpoint';
 
 // ============ API提供商类型 ============
-export type APIProvider = 'openai' | 'claude' | 'gemini' | 'deepseek' | 'zhipu' | 'siliconflow-embedding' | 'custom';
+export type APIProvider = 'openai' | 'claude' | 'gemini' | 'deepseek' | 'zhipu' | 'xai' | 'openrouter' | 'ollama' | 'siliconflow-embedding' | 'custom';
 
 // ============ 配置接口 ============
 export interface AIConfig {
@@ -47,9 +48,23 @@ export const API_PROVIDER_PRESETS: Record<APIProvider, {
   gemini: { url: 'https://generativelanguage.googleapis.com', defaultModel: 'gemini-2.0-flash', name: 'Gemini', defaultMaxTokens: 16000, maxOutputTokens: 65536 },
   deepseek: { url: 'https://api.deepseek.com', defaultModel: 'deepseek-v4-flash', name: 'DeepSeek', defaultMaxTokens: 64000, maxOutputTokens: 384000 },
   zhipu: { url: 'https://open.bigmodel.cn', defaultModel: 'glm-4-flash', name: '智谱AI', defaultMaxTokens: 16000, maxOutputTokens: 128000 },
+  xai: { url: 'https://api.x.ai', defaultModel: 'grok-4', name: 'xAI / Grok', defaultMaxTokens: 16000, maxOutputTokens: 128000 },
+  openrouter: { url: 'https://openrouter.ai/api/v1', defaultModel: 'x-ai/grok-4', name: 'OpenRouter', defaultMaxTokens: 16000, maxOutputTokens: 128000 },
   'siliconflow-embedding': { url: 'https://api.siliconflow.cn', defaultModel: 'BAAI/bge-m3', name: '硅基流动(Embedding)' },
+  ollama: { url: 'http://localhost:11434', defaultModel: 'llama3.1', name: 'Ollama(本地)', defaultMaxTokens: 16000, maxOutputTokens: 128000 },
   custom: { url: '', defaultModel: '', name: '自定义(OpenAI兼容)', defaultMaxTokens: 16000, maxOutputTokens: 384000 }
 };
+
+/**
+ * 是否需要 API 密钥。Ollama 等纯本地 OpenAI 兼容服务不需要密钥；
+ * 指向本机地址（localhost/127.0.0.1 等）的自定义服务通常也不需要。
+ */
+export function providerRequiresApiKey(provider?: APIProvider, url?: string): boolean {
+  if (provider === 'ollama') return false;
+  const u = (url || '').toLowerCase();
+  if (/localhost|127\.0\.0\.1|0\.0\.0\.0|\[::1\]|::1/.test(u)) return false;
+  return true;
+}
 
 const DEEPSEEK_V4_CONTEXT_WINDOW = 1_000_000;
 const DEEPSEEK_V4_MAX_OUTPUT_TOKENS = 384_000;
@@ -246,6 +261,10 @@ class AIService {
   }, testPrompt: string): Promise<string> {
     console.log(`[AI服务] 直接测试API: ${apiConfig.url}, model: ${apiConfig.model}`);
 
+    if (apiConfig.provider === 'ollama') {
+      return this.testOllamaAPIDirectly(apiConfig, testPrompt);
+    }
+
     // 临时保存当前配置
     const originalConfig = this.config.customAPI ? { ...this.config.customAPI } : null;
     const originalMode = this.config.mode;
@@ -277,6 +296,125 @@ class AIService {
     }
   }
 
+  private getOllamaBaseUrl(url: string): string {
+    return (url || API_PROVIDER_PRESETS.ollama.url)
+      .replace(/\/v1\/?$/i, '')
+      .replace(/\/api\/chat\/?$/i, '')
+      .replace(/\/api\/generate\/?$/i, '')
+      .replace(/\/+$/, '');
+  }
+
+  private async resolveOllamaModel(baseUrl: string, model: string): Promise<string> {
+    const requested = (model || '').trim();
+    if (!requested) return requested;
+
+    try {
+      const response = await axios.get(`${baseUrl}/api/tags`, {
+        timeout: 10000,
+        signal: this.getAbortSignal()
+      });
+      const models: string[] = (response.data?.models || [])
+        .map((item: any) => item?.model || item?.name)
+        .filter((name: any): name is string => typeof name === 'string' && name.length > 0);
+
+      if (models.includes(requested)) return requested;
+
+      const shortName = requested.includes('/') ? requested.split('/').pop()! : requested;
+      const matched = models.find(name => name.endsWith(`/${shortName}`));
+      if (matched) {
+        console.log(`[AI服务-Ollama测试] 模型短名 ${requested} 已匹配为 ${matched}`);
+        return matched;
+      }
+    } catch (error) {
+      console.warn('[AI服务-Ollama测试] 获取模型列表失败，继续使用原模型名:', error);
+    }
+
+    return requested;
+  }
+
+  private async testOllamaAPIDirectly(apiConfig: {
+    url: string;
+    model: string;
+    temperature?: number;
+    maxTokens?: number;
+  }, testPrompt: string): Promise<string> {
+    const baseUrl = this.getOllamaBaseUrl(apiConfig.url);
+    const proxyBaseUrl = this.getOllamaProxyBaseUrl();
+
+    try {
+      return await this.testOllamaViaBaseUrl(baseUrl, apiConfig, testPrompt);
+    } catch (error) {
+      if (proxyBaseUrl && this.isNetworkError(error)) {
+        console.warn('[AI服务-Ollama测试] 浏览器直连失败，改用同源代理重试:', error);
+        return this.testOllamaViaBaseUrl(proxyBaseUrl, apiConfig, testPrompt);
+      }
+      throw error;
+    }
+  }
+
+  private getOllamaProxyBaseUrl(): string | null {
+    if (typeof window === 'undefined' || !window.location?.origin) return null;
+    return `${window.location.origin}/ollama-api`;
+  }
+
+  private isNetworkError(error: unknown): boolean {
+    return (axios.isAxiosError(error) && !error.response) ||
+      (error instanceof Error && /network error/i.test(error.message));
+  }
+
+  private async testOllamaViaBaseUrl(baseUrl: string, apiConfig: {
+    model: string;
+    temperature?: number;
+    maxTokens?: number;
+  }, testPrompt: string): Promise<string> {
+    const model = await this.resolveOllamaModel(baseUrl, apiConfig.model);
+
+    if (!model) {
+      throw new Error('请先配置Ollama模型名称');
+    }
+
+    const requestBody = {
+      model,
+      messages: [
+        {
+          role: 'user',
+          content: testPrompt
+        }
+      ],
+      stream: false,
+      think: false,
+      options: {
+        temperature: apiConfig.temperature ?? 0.7,
+        num_predict: Math.max(apiConfig.maxTokens ?? 1000, 256)
+      }
+    };
+
+    try {
+      const response = await axios.post(`${baseUrl}/api/chat`, requestBody, {
+        headers: { 'Content-Type': 'application/json' },
+        timeout: 120000,
+        signal: this.getAbortSignal()
+      });
+
+      const message = response.data?.message;
+      const content = message?.content || response.data?.response || message?.thinking || '';
+      console.log(`[AI服务-Ollama测试] 响应长度: ${content.length}`);
+      return content;
+    } catch (error) {
+      console.error('[AI服务-Ollama测试] 失败:', error);
+      if (axios.isAxiosError(error)) {
+        const detail = typeof error.response?.data === 'string'
+          ? error.response.data
+          : error.response?.data?.error || error.message;
+        if (error.response?.status === 404) {
+          throw new Error(`Ollama端点不存在，请检查地址: ${baseUrl}`);
+        }
+        throw new Error(`Ollama连接失败: ${detail}`);
+      }
+      throw error;
+    }
+  }
+
   getConfig(): AIConfig {
     return { ...this.config };
   }
@@ -285,12 +423,13 @@ class AIService {
    * 获取可用模型列表
    */
   async fetchModels(): Promise<string[]> {
-    if (!this.config.customAPI?.url || !this.config.customAPI?.apiKey) {
-      throw new Error('请先配置API地址和密钥');
+    const needsKey = providerRequiresApiKey(this.config.customAPI?.provider, this.config.customAPI?.url);
+    if (!this.config.customAPI?.url || (needsKey && !this.config.customAPI?.apiKey)) {
+      throw new Error(needsKey ? '请先配置API地址和密钥' : '请先配置API地址');
     }
 
     const { provider, url, apiKey } = this.config.customAPI;
-    const baseUrl = url.replace(/\/+$/, '');
+    const baseUrl = normalizeOpenAIBaseUrl(url);
 
     try {
       switch (provider) {
@@ -358,7 +497,7 @@ class AIService {
         case 'siliconflow-embedding': {
           // 硅基流动 Embedding 模型：使用 sub_type=embedding 过滤
           try {
-            const response = await axios.get(`${baseUrl}/v1/models?sub_type=embedding`, {
+            const response = await axios.get(`${buildOpenAICompatibleEndpoint(baseUrl, 'models')}?sub_type=embedding`, {
               headers: { 'Authorization': `Bearer ${apiKey}` },
               signal: this.getAbortSignal(),
               timeout: 10000
@@ -386,11 +525,12 @@ class AIService {
 
         case 'openai':
         case 'deepseek':
+        case 'ollama':
         case 'custom':
         default: {
           // OpenAI 兼容 API: GET /v1/models
           try {
-            const response = await axios.get(`${baseUrl}/v1/models`, {
+            const response = await axios.get(buildOpenAICompatibleEndpoint(baseUrl, 'models'), {
               headers: { 'Authorization': `Bearer ${apiKey}` },
               signal: this.getAbortSignal(),
               timeout: 10000
@@ -459,6 +599,26 @@ class AIService {
         'deepseek-v4-pro',
         'deepseek-chat',
         'deepseek-reasoner'
+      ];
+    }
+
+    if (provider === 'xai' || baseUrl.includes('api.x.ai')) {
+      return [
+        'grok-4',
+        'grok-3',
+        'grok-3-fast',
+        'grok-3-mini',
+        'grok-3-mini-fast'
+      ];
+    }
+
+    if (provider === 'openrouter' || baseUrl.includes('openrouter.ai')) {
+      return [
+        'x-ai/grok-4',
+        'x-ai/grok-3',
+        'x-ai/grok-3-mini',
+        'openai/gpt-4o',
+        'anthropic/claude-sonnet-4'
       ];
     }
 
@@ -1049,7 +1209,7 @@ class AIService {
     const usageType = options.usageType;
     const apiConfig = usageType ? this.getAPIConfigForUsageType(usageType) : null;
     const responseFormat = options.responseFormat || (apiConfig?.forceJsonOutput ? 'json_object' : undefined);
-    return this.callAPI(messages, shouldStream, options.onStreamChunk, responseFormat);
+    return this.callAPI(messages, shouldStream, options.onStreamChunk, responseFormat, options.usageType);
   }
 
   private async generateRawWithCustomAPI(options: GenerateOptions): Promise<string> {
@@ -1069,14 +1229,15 @@ class AIService {
     const apiConfig = usageType ? this.getAPIConfigForUsageType(usageType) : null;
     const responseFormat = options.responseFormat || (apiConfig?.forceJsonOutput ? 'json_object' : undefined);
     console.log(`[AI服务-自定义Raw] shouldStream=${shouldStream}, hasOnStreamChunk=${!!options.onStreamChunk}, options.should_stream=${options.should_stream}, config.streaming=${this.config.streaming}`);
-    return this.callAPI(messages, shouldStream, options.onStreamChunk, responseFormat);
+    return this.callAPI(messages, shouldStream, options.onStreamChunk, responseFormat, options.usageType);
   }
 
   private async callAPI(
     messages: AIMessage[],
     streaming: boolean,
     onStreamChunk?: (chunk: string) => void,
-    responseFormat?: 'json_object'
+    responseFormat?: 'json_object',
+    usageType?: APIUsageType
   ): Promise<string> {
     const { provider, url, apiKey, model, temperature, maxTokens } = this.config.customAPI!;
 
@@ -1107,7 +1268,7 @@ class AIService {
       }
     }
 
-    console.log(`[AI服务-API调用] Provider: ${provider}, URL: ${url}, Model: ${model}, 消息数: ${finalMessages.length}, 流式: ${streaming}`);
+    console.log(`[AI服务-API调用] Provider: ${provider}, URL: ${url}, Model: ${model}, 消息数: ${finalMessages.length}, 流式: ${streaming}, usageType=${usageType || 'main'}`);
 
     // 根据provider选择不同的调用方式
     switch (provider) {
@@ -1118,9 +1279,12 @@ class AIService {
       case 'openai':
       case 'deepseek':
       case 'zhipu':
+      case 'xai':
+      case 'openrouter':
+      case 'ollama':
       case 'custom':
       default:
-        return this.callOpenAICompatibleAPI(finalMessages, streaming, onStreamChunk, effectiveResponseFormat);
+        return this.callOpenAICompatibleAPI(finalMessages, streaming, onStreamChunk, effectiveResponseFormat, usageType);
     }
   }
 
@@ -1143,6 +1307,7 @@ class AIService {
 
   private getApproxContextWindow(provider: APIProvider, model: string): number | null {
     const m = (model || '').toLowerCase();
+    const isGrokModel = m.includes('grok') || m.includes('x-ai/');
 
     // Provider/model with known large context windows
     if (provider === 'claude' || m.includes('claude')) return 200_000;
@@ -1150,6 +1315,7 @@ class AIService {
 
     // Many OpenAI-compatible providers expose these model names; match by model string first.
     if (provider === 'deepseek' || m.includes('deepseek')) return DEEPSEEK_V4_CONTEXT_WINDOW;
+    if (provider === 'xai' || isGrokModel) return 256_000;
     if (m.includes('moonshot') || m.includes('kimi')) return 128_000;
     if (provider === 'zhipu' || m.includes('glm')) return 128_000;
 
@@ -1164,8 +1330,11 @@ class AIService {
 
   private getApproxMaxOutputTokens(provider: APIProvider, model: string): number | null {
     const m = (model || '').toLowerCase();
+    const isGrokModel = m.includes('grok') || m.includes('x-ai/');
 
     if (provider === 'deepseek' || m.includes('deepseek')) return DEEPSEEK_V4_MAX_OUTPUT_TOKENS;
+    if (provider === 'xai' || isGrokModel) return API_PROVIDER_PRESETS.xai.maxOutputTokens || null;
+    if (provider === 'openrouter') return API_PROVIDER_PRESETS.openrouter.maxOutputTokens || null;
     if (provider === 'gemini' || m.includes('gemini')) return API_PROVIDER_PRESETS.gemini.maxOutputTokens || null;
     if (provider === 'claude' || m.includes('claude')) return API_PROVIDER_PRESETS.claude.maxOutputTokens || null;
     if (provider === 'zhipu' || m.includes('glm')) return API_PROVIDER_PRESETS.zhipu.maxOutputTokens || null;
@@ -1174,6 +1343,10 @@ class AIService {
     }
 
     return null;
+  }
+
+  private getEffectiveRequestedMaxTokens(_provider: APIProvider, _model: string, requestedMaxTokens: number, _usageType?: APIUsageType): number {
+    return requestedMaxTokens;
   }
 
   private clampMaxTokensForOutputLimit(
@@ -1242,15 +1415,18 @@ class AIService {
     messages: AIMessage[],
     streaming: boolean,
     onStreamChunk?: (chunk: string) => void,
-    responseFormat?: 'json_object'
+    responseFormat?: 'json_object',
+    usageType?: APIUsageType
   ): Promise<string> {
     const { provider, url, apiKey, model, temperature, maxTokens } = this.config.customAPI!;
-    const safeMaxTokens = this.clampMaxTokensForContext(provider, model, messages, maxTokens || 16000);
+    const requestedMaxTokens = this.getEffectiveRequestedMaxTokens(provider, model, maxTokens || 16000, usageType);
+    const safeMaxTokens = this.clampMaxTokensForContext(provider, model, messages, requestedMaxTokens);
 
     // 智谱AI使用不同的API路径
+    const normalizedUrl = normalizeOpenAIBaseUrl(url);
     const chatEndpoint = provider === 'zhipu'
-      ? `${url}/api/paas/v4/chat/completions`
-      : `${url}/v1/chat/completions`;
+      ? `${normalizedUrl}/api/paas/v4/chat/completions`
+      : buildOpenAICompatibleEndpoint(normalizedUrl, 'chat/completions');
 
     console.log(`[AI服务-OpenAI兼容] streaming=${streaming}, hasOnStreamChunk=${!!onStreamChunk}`);
 
@@ -1294,8 +1470,13 @@ class AIService {
             }
           );
 
-          const content = response.data.choices[0].message.content;
-          console.log(`[AIæœåŠ¡-OpenAI] å“åº”é•¿åº¦: ${content.length}`);
+          const message = response.data.choices?.[0]?.message;
+          const content = message?.content || message?.reasoning_content || message?.reasoning || '';
+          const finishReason = response.data.choices?.[0]?.finish_reason;
+          if (finishReason === 'length') {
+            console.warn(`[AI服务-OpenAI] 响应因输出长度限制被截断，当前maxTokens=${safeMaxTokens}`);
+          }
+          console.log(`[AI服务-OpenAI] 响应长度: ${content.length}`);
           return content;
         }
       } else {
@@ -1330,7 +1511,12 @@ class AIService {
           }
         );
 
-        const content = response.data.choices[0].message.content;
+        const message = response.data.choices?.[0]?.message;
+        const content = message?.content || message?.reasoning_content || message?.reasoning || '';
+        const finishReason = response.data.choices?.[0]?.finish_reason;
+        if (finishReason === 'length') {
+          console.warn(`[AI服务-OpenAI] 响应因输出长度限制被截断，当前maxTokens=${safeMaxTokens}`);
+        }
         console.log(`[AI服务-OpenAI] 响应长度: ${content.length}`);
         return content;
       }
@@ -1653,9 +1839,10 @@ class AIService {
     }
 
     // 智谱AI使用不同的API路径
+    const normalizedUrl = normalizeOpenAIBaseUrl(url);
     const chatEndpoint = provider === 'zhipu'
-      ? `${url}/api/paas/v4/chat/completions`
-      : `${url}/v1/chat/completions`;
+      ? `${normalizedUrl}/api/paas/v4/chat/completions`
+      : buildOpenAICompatibleEndpoint(normalizedUrl, 'chat/completions');
 
     const response = await fetch(chatEndpoint, {
       method: 'POST',
@@ -1677,19 +1864,23 @@ class AIService {
       throw new Error(`Stream unsupported (content-type=${contentType || 'unknown'})`);
     }
 
+    // 思维链兜底：部分推理模型（DeepSeek 用 reasoning_content，Ollama 等用 reasoning）
+    // 把思考放在独立字段、content 为空。正式内容优先；若整段流没有任何 content，
+    // 则回退使用思维链文本，避免返回空结果导致“AI生成失败”。
+    let reasoningBuffer = '';
     const result = await this.processSSEStream(response, (data) => {
       const parsed = JSON.parse(data);
-      const delta = parsed.choices[0]?.delta;
-
-      // DeepSeek Reasoner / R1: 丢弃 reasoning_content（思维链），只保留正式内容。
-      const hasReasoningContent = delta?.reasoning_content !== undefined && delta?.reasoning_content !== null;
-      const hasActualContent = delta?.content !== undefined && delta?.content !== null && delta?.content !== '';
-
-      if (hasReasoningContent) {
-        return '';
+      const choice = parsed.choices[0];
+      const delta = choice?.delta;
+      if (choice?.finish_reason === 'length') {
+        console.warn(`[AI服务-OpenAI流式] 响应因输出长度限制被截断，当前maxTokens=${maxTokens}`);
       }
 
-      // 普通 content
+      const reasoningPiece = delta?.reasoning_content ?? delta?.reasoning;
+      if (typeof reasoningPiece === 'string') reasoningBuffer += reasoningPiece;
+
+      // 普通 content（优先）
+      const hasActualContent = delta?.content !== undefined && delta?.content !== null && delta?.content !== '';
       if (hasActualContent) {
         return delta.content;
       }
@@ -1697,7 +1888,7 @@ class AIService {
       return '';
     }, onStreamChunk);
 
-    return result;
+    return result.trim() ? result : reasoningBuffer;
   }
 
   // Claude格式流式请求
@@ -1939,10 +2130,11 @@ class AIService {
       }
       return { available: true, message: '酒馆模式已就绪' };
     } else {
-      if (!this.config.customAPI?.url || !this.config.customAPI?.apiKey) {
+      const needsKey = providerRequiresApiKey(this.config.customAPI?.provider, this.config.customAPI?.url);
+      if (!this.config.customAPI?.url || (needsKey && !this.config.customAPI?.apiKey)) {
         return {
           available: false,
-          message: '自定义API未配置。请在设置中配置API地址和密钥。'
+          message: needsKey ? '自定义API未配置。请在设置中配置API地址和密钥。' : '自定义API未配置。请在设置中配置API地址。'
         };
       }
       return { available: true, message: '自定义API模式已就绪' };

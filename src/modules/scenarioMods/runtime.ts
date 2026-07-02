@@ -11,13 +11,15 @@ export interface ScenarioProgressState {
 }
 
 export interface ScenarioRuntimeTransition {
-  type: 'chapter_activated' | 'chapter_completed' | 'event_activated' | 'event_completed';
+  type: 'chapter_activated' | 'chapter_completed' | 'event_activated' | 'event_completed' | 'stage_ready';
   id: string;
 }
 
 interface RuntimeState extends ScenarioProgressState {
   currentChapterId: string | null;
   flags: Record<string, ScenarioFlagValue>;
+  nextStageId?: string | null;
+  nextStageReadyId?: string | null;
 }
 
 function readPath(root: unknown, path: string[]): unknown {
@@ -78,6 +80,12 @@ function conditionsMatch(
 
 function hasCompletion(conditions: ScenarioCondition[] | undefined): conditions is ScenarioCondition[] {
   return Array.isArray(conditions) && conditions.length > 0;
+}
+
+function isCriticalStoryEvent(event: ScenarioModEvent): boolean {
+  if (event.critical !== undefined) return event.critical;
+  if (event.axisMethod === 'reviewed-no-anchor' || event.axisId === null) return false;
+  return Boolean(event.axisBeat || event.axisId || typeof event.axisSeq === 'number');
 }
 
 export function createScenarioProgress(mod: ScenarioMod): ScenarioProgressState {
@@ -157,6 +165,20 @@ export function advanceScenarioRuntime(saveData: SaveData): {
       runtime.activeEventIds.push(eventId);
       transitions.push({ type: 'event_activated', id: eventId });
     }
+  }
+
+  const hasPendingCriticalEvent = runtime.events.some(event =>
+    isCriticalStoryEvent(event) && !runtime.completedEventIds.includes(event.id),
+  );
+  if (
+    runtime.nextStageId &&
+    !runtime.currentChapterId &&
+    runtime.activeEventIds.length === 0 &&
+    !hasPendingCriticalEvent &&
+    runtime.nextStageReadyId !== runtime.nextStageId
+  ) {
+    runtime.nextStageReadyId = runtime.nextStageId;
+    transitions.push({ type: 'stage_ready', id: runtime.nextStageId });
   }
 
   return { saveData: next, transitions };

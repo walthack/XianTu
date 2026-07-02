@@ -2219,6 +2219,66 @@
           "race": "人族",
           "origin": "配角"
         }
+      },
+      {
+        "id": "liuchao.character.pan_jinlian",
+        "name": "潘金莲",
+        "role": "正典人物",
+        "gender": "女",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {}
+      },
+      {
+        "id": "liuchao.character.zhuo_yunjun",
+        "name": "卓云君",
+        "role": "正典人物",
+        "gender": "女",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {}
+      },
+      {
+        "id": "liuchao.character.ning_yu",
+        "name": "凝羽",
+        "role": "正典人物",
+        "gender": "女",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {}
+      },
+      {
+        "id": "lcq.character.yue_shuang",
+        "name": "月霜",
+        "role": "正典人物",
+        "gender": "女",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {}
+      },
+      {
+        "id": "liuchao.character.le_mingzhu",
+        "name": "乐明珠",
+        "role": "正典人物",
+        "gender": "女",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {}
+      },
+      {
+        "id": "liuchao.character.xiao_yao_yi",
+        "name": "萧遥逸",
+        "role": "正典人物",
+        "gender": "男",
+        "skillIds": [],
+        "techniqueIds": [],
+        "itemIds": [],
+        "profile": {}
       }
     ],
     "playerRelationships": [

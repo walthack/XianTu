@@ -7,7 +7,7 @@
 // Usage: node scripts/sync-builtin-mods.mjs
 
 import { createHash } from 'node:crypto';
-import { mkdir, readFile, readdir, writeFile, rm } from 'node:fs/promises';
+import { mkdir, readFile, readdir, writeFile, rm, copyFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 
@@ -37,5 +37,15 @@ async function run() {
   const version = hash.digest('hex').slice(0, 12);
   await writeFile(join(outDir, '..', 'manifest.json'), `${JSON.stringify({ version, ids }, null, 2)}\n`);
   console.log(`内置 ${ids.length} 个 mod → src/modules/scenarioMods/builtins/data/，version=${version}`);
+
+  // 持久化世界地图背景到 dist(devServer 静态目录;webpack output.clean 会清,故每次同步重建)
+  try {
+    const distDir = join(root, 'dist');
+    await mkdir(distDir, { recursive: true });
+    await copyFile(join(gen, 'shared-atlas', '六朝世界地图.jpg'), join(distDir, 'liuchao-world-map.jpg'));
+    console.log('世界地图背景 → dist/liuchao-world-map.jpg');
+  } catch (e) {
+    console.warn('世界地图背景拷贝失败:', e.message);
+  }
 }
 run().catch(e => { console.error(e); process.exit(1); });

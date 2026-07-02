@@ -97,6 +97,8 @@ const autoTranslateMap: Record<string, string> = {
   '明亮': 'Light', '暗黑': 'Dark', '跟随系统': 'Auto', '界面缩放': 'UI Scale', '调整UI界面大小': 'Adjust size',
   '文字大小': 'Font Size', '调整游戏文字显示大小': 'Adjust text', '小': 'Small', '中': 'Medium', '大': 'Large',
   '快速动画': 'Fast Animations', '加速界面动画和过渡效果': 'Speed up transitions', '显示提示': 'Show Hints',
+  '声音设置': 'Sound', '背景音乐': 'Background Music', '播放仙途氛围背景音乐': 'Play XianTu ambient music',
+  '音乐音量': 'Music Volume', '调整背景音乐音量': 'Adjust background music volume',
   '显示游戏操作提示': 'Display hints', '高级设置': 'Advanced', '调试模式': 'Debug Mode', '开启开发者调试功能': 'Dev tools',
   '数据管理': 'Data', '导出数据': 'Export', '导出游戏存档': 'Export save', '导入数据': 'Import',
   '导入游戏存档': 'Import save', '清空数据': 'Clear Data', '清空所有游戏数据': 'Clear all',

@@ -1,5 +1,7 @@
 // src/utils/indexedDBManager.ts
 import type { LocalStorageRoot, SaveData } from '@/types/game';
+import { buildBackendUrl, isBackendConfigured } from '@/services/backendConfig';
+import { toast } from '@/utils/toast';
 
 /**
  * @fileoverview
@@ -15,12 +17,136 @@ const STORE_NAME = 'saves';
 const ROOT_KEY = 'root_data'; // 兼容旧数据，但未来会被逐步取代
 const CHARACTERS_KEY = 'characters';
 const ACTIVE_SAVE_KEY = 'active_save';
+const SCENARIO_MOD_LIBRARY_KEY = 'scenario_mod_library_v1';
 
 // 新增：存储激活存档的 SaveData 的 key 前缀
 const SAVEDATA_KEY_PREFIX = 'savedata_'; // savedata_{characterId}_{slotId}
+const REMOTE_STORE_PREFIX = '/api/v1/save-storage';
 
 // IndexedDB 实例缓存
 let dbInstance: IDBDatabase | null = null;
+let remoteStorageDisabledForSession = false;
+
+function shouldUseRemoteStorage(): boolean {
+  const enabled =
+    typeof REMOTE_SAVE_STORAGE_ENABLED === 'undefined'
+      ? true
+      : REMOTE_SAVE_STORAGE_ENABLED;
+  return enabled && isBackendConfigured() && !remoteStorageDisabledForSession;
+}
+
+function isRemoteSaveStorageKey(key: string): boolean {
+  return (
+    key === CHARACTERS_KEY ||
+    key === ACTIVE_SAVE_KEY ||
+    key === SCENARIO_MOD_LIBRARY_KEY ||
+    key.startsWith(SAVEDATA_KEY_PREFIX)
+  );
+}
+
+function mergeScenarioModLibraries(localData: any | null, remoteData: any | null): any | null {
+  if (!localData) return remoteData;
+  if (!remoteData) return localData;
+  if (!Array.isArray(localData.mods) || !Array.isArray(remoteData.mods)) return localData;
+
+  const byId = new Map<string, any>();
+  for (const entry of remoteData.mods) {
+    const id = entry?.mod?.manifest?.id;
+    if (id) byId.set(id, entry);
+  }
+  for (const entry of localData.mods) {
+    const id = entry?.mod?.manifest?.id;
+    if (id) byId.set(id, entry);
+  }
+
+  return {
+    ...remoteData,
+    ...localData,
+    mods: Array.from(byId.values()),
+  };
+}
+
+function remoteStorageUrl(key?: string): string {
+  const suffix = key ? `/${encodeURIComponent(key)}` : '';
+  return buildBackendUrl(`${REMOTE_STORE_PREFIX}${suffix}`);
+}
+
+async function remoteStorageRequest<T>(url: string, options: RequestInit = {}): Promise<T | null | undefined> {
+  if (!shouldUseRemoteStorage()) return undefined;
+
+  const headers = new Headers(options.headers || {});
+  const token = localStorage.getItem('access_token');
+  if (token) {
+    headers.set('Authorization', `Bearer ${token}`);
+  }
+  if (options.body && !headers.has('Content-Type')) {
+    headers.set('Content-Type', 'application/json');
+  }
+
+  try {
+    const response = await fetch(url, { ...options, headers });
+    if (response.status === 404) {
+      return null;
+    }
+    if (response.status === 405 || response.status === 501) {
+      remoteStorageDisabledForSession = true;
+      console.warn('【乾坤宝库-远程】远程存档接口不可用，本次会话回退 IndexedDB');
+      return undefined;
+    }
+    if (!response.ok) {
+      console.warn(`【乾坤宝库-远程】请求失败(${response.status})，回退 IndexedDB`);
+      return undefined;
+    }
+    if (response.status === 204) return null;
+    const rawText = await response.text();
+    return rawText ? (JSON.parse(rawText) as T) : null;
+  } catch (error) {
+    console.warn('【乾坤宝库-远程】请求异常，回退 IndexedDB:', error);
+    return undefined;
+  }
+}
+
+async function loadRemoteRecord<T = unknown>(key: string): Promise<T | null> {
+  if (!isRemoteSaveStorageKey(key)) return null;
+
+  const result = await remoteStorageRequest<{ data?: T } | T>(remoteStorageUrl(key), {
+    method: 'GET',
+  });
+  if (result == null) return null;
+  if (typeof result === 'object' && 'data' in (result as Record<string, unknown>)) {
+    return (result as { data?: T }).data ?? null;
+  }
+  return result as T;
+}
+
+async function saveRemoteRecord(key: string, data: unknown): Promise<boolean> {
+  if (!isRemoteSaveStorageKey(key)) return false;
+
+  const result = await remoteStorageRequest<{ ok?: boolean }>(remoteStorageUrl(key), {
+    method: 'PUT',
+    body: JSON.stringify({
+      id: key,
+      data,
+      timestamp: new Date().toISOString(),
+    }),
+  });
+  return result !== undefined;
+}
+
+async function deleteRemoteRecord(key: string): Promise<boolean> {
+  if (!isRemoteSaveStorageKey(key)) return false;
+  if (!shouldUseRemoteStorage()) return false;
+  await remoteStorageRequest(remoteStorageUrl(key), { method: 'DELETE' });
+  return !remoteStorageDisabledForSession;
+}
+
+async function deleteRemoteRecordsByPrefix(prefix: string): Promise<boolean> {
+  if (!shouldUseRemoteStorage()) return false;
+  await remoteStorageRequest(`${remoteStorageUrl()}?prefix=${encodeURIComponent(prefix)}`, {
+    method: 'DELETE',
+  });
+  return !remoteStorageDisabledForSession;
+}
 
 /**
  * 打开/创建 IndexedDB 数据库
@@ -73,6 +199,18 @@ function getEmptyRoot(): LocalStorageRoot {
  */
 export async function loadRootData(): Promise<LocalStorageRoot> {
   try {
+    const [remoteCharacters, remoteActiveSave] = await Promise.all([
+      loadRemoteRecord<Record<string, any>>(CHARACTERS_KEY),
+      loadRemoteRecord<any>(ACTIVE_SAVE_KEY),
+    ]);
+    if (remoteCharacters || remoteActiveSave) {
+      console.log('【乾坤宝库-远程】根数据已从远程仙途服务器加载');
+      return {
+        角色列表: remoteCharacters || {},
+        当前激活存档: remoteActiveSave || null,
+      };
+    }
+
     const db = await openDatabase();
     const transaction = db.transaction([STORE_NAME], 'readonly');
     const objectStore = transaction.objectStore(STORE_NAME);
@@ -119,7 +257,12 @@ export async function loadRootData(): Promise<LocalStorageRoot> {
  * 将根数据保存到 IndexedDB
  */
 // 辅助函数：保存单个键值对
-export async function saveData(key: string, data: any): Promise<void> {
+export async function saveData(key: string, data: any): Promise<boolean> {
+  const remoteSaved = await saveRemoteRecord(key, data);
+  if (remoteSaved) {
+    console.log(`【乾坤宝库-远程】数据已保存 (${key})`);
+  }
+
   const db = await openDatabase();
   return new Promise((resolve, reject) => {
     const transaction = db.transaction([STORE_NAME], 'readwrite');
@@ -129,7 +272,7 @@ export async function saveData(key: string, data: any): Promise<void> {
       data: JSON.parse(JSON.stringify(data)), // 清理数据
       timestamp: new Date().toISOString(),
     });
-    request.onsuccess = () => resolve();
+    request.onsuccess = () => resolve(remoteSaved);
     request.onerror = () => reject(request.error);
   });
 }
@@ -178,6 +321,14 @@ export async function saveRootData(root: LocalStorageRoot): Promise<void> {
  */
 export async function clearAllLocalData(): Promise<void> {
   try {
+    if (shouldUseRemoteStorage()) {
+      await Promise.all([
+        deleteRemoteRecord(CHARACTERS_KEY),
+        deleteRemoteRecord(ACTIVE_SAVE_KEY),
+        deleteRemoteRecordsByPrefix(SAVEDATA_KEY_PREFIX),
+      ]);
+    }
+
     const db = await openDatabase();
 
     return new Promise((resolve, reject) => {
@@ -327,7 +478,12 @@ export async function saveSaveData(
 ): Promise<void> {
   try {
     const key = `${SAVEDATA_KEY_PREFIX}${characterId}_${slotId}`;
-    await saveData(key, saveDataContent);
+    const remoteSaved = await saveData(key, saveDataContent);
+    if (remoteSaved && slotId !== '上次对话') {
+      toast.success(`存档【${slotId}】已保存到远程仙途服务器`, {
+        id: `remote-save-${characterId}-${slotId}`,
+      });
+    }
     console.log(`【乾坤宝库-IDB】SaveData 已保存 (${characterId}/${slotId})`);
   } catch (error) {
     console.error('【乾坤宝库-IDB】保存 SaveData 失败:', error);
@@ -348,6 +504,12 @@ export async function loadSaveData(
 ): Promise<SaveData | null> {
   try {
     const key = `${SAVEDATA_KEY_PREFIX}${characterId}_${slotId}`;
+    const remoteData = await loadRemoteRecord<SaveData>(key);
+    if (remoteData) {
+      console.log(`【乾坤宝库-远程】SaveData 已加载 (${characterId}/${slotId})`);
+      return remoteData;
+    }
+
     const db = await openDatabase();
 
     return new Promise((resolve, reject) => {
@@ -416,6 +578,8 @@ export async function deleteSaveData(
 ): Promise<void> {
   try {
     const key = `${SAVEDATA_KEY_PREFIX}${characterId}_${slotId}`;
+    await deleteRemoteRecord(key);
+
     const db = await openDatabase();
 
     return new Promise((resolve, reject) => {
@@ -448,6 +612,7 @@ export async function deleteAllSaveDataForCharacter(characterId: string): Promis
   try {
     const db = await openDatabase();
     const prefix = `${SAVEDATA_KEY_PREFIX}${characterId}_`;
+    await deleteRemoteRecordsByPrefix(prefix);
     
     console.log(`【乾坤宝库-IDB】开始清理角色 ${characterId} 的所有存档...`);
     
@@ -520,6 +685,8 @@ export async function deleteAllSaveDataForCharacter(characterId: string): Promis
  */
 export async function loadFromIndexedDB(key: string): Promise<any | null> {
   try {
+    const remoteData = await loadRemoteRecord(key);
+
     const db = await openDatabase();
     return new Promise((resolve, reject) => {
       const transaction = db.transaction([STORE_NAME], 'readonly');
@@ -528,6 +695,15 @@ export async function loadFromIndexedDB(key: string): Promise<any | null> {
 
       request.onsuccess = () => {
         const result = request.result;
+        const localData = result?.data ?? null;
+        if (key === SCENARIO_MOD_LIBRARY_KEY) {
+          resolve(mergeScenarioModLibraries(localData, remoteData));
+          return;
+        }
+        if (remoteData !== null) {
+          resolve(remoteData);
+          return;
+        }
         if (result && result.data) {
           resolve(result.data);
         } else {

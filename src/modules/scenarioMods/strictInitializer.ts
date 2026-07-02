@@ -10,7 +10,16 @@ export interface ScenarioModRuntimeState extends ScenarioProgressState {
   schema: ScenarioMod['schema'];
   version: ScenarioMod['version'];
   modId: string;
+  modName: string;
   modVersion: string;
+  axisVersion?: string;
+  axisOrder?: number;
+  axisSeqLo?: number | null;
+  axisSeqHi?: number | null;
+  prevStageId?: string | null;
+  prevStageName?: string | null;
+  nextStageId?: string | null;
+  nextStageName?: string | null;
   mode: 'strict';
   lockedFields: string[];
   contentAccess: NonNullable<ScenarioMod['rules']['contentAccess']>;
@@ -129,7 +138,16 @@ export function buildStrictScenarioInitialization(
     schema: mod.schema,
     version: mod.version,
     modId: mod.manifest.id,
+    modName: mod.manifest.name,
     modVersion: mod.manifest.version,
+    axisVersion: mod.manifest.axisVersion,
+    axisOrder: mod.manifest.axisOrder,
+    axisSeqLo: mod.manifest.axisSeqLo,
+    axisSeqHi: mod.manifest.axisSeqHi,
+    prevStageId: mod.manifest.prevStageId,
+    prevStageName: mod.manifest.prevStageName,
+    nextStageId: mod.manifest.nextStageId,
+    nextStageName: mod.manifest.nextStageName,
     mode: 'strict',
     lockedFields: [...(mod.rules.lockedFields || [])],
     contentAccess: structuredClone(mod.rules.contentAccess || []),
@@ -182,6 +200,7 @@ export function applyStrictScenarioInitializationToSave(
     ...(next.系统.扩展 || {}),
     剧本模组: {
       modId: initialization.runtimeState.modId,
+      modName: initialization.runtimeState.modName,
       modVersion: initialization.runtimeState.modVersion,
       mode: initialization.runtimeState.mode,
     },
