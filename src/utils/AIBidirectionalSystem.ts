@@ -3179,7 +3179,7 @@ ${saveDataJson}`;
       物品ID: itemId,
       名称: name,
       类型: type,
-      品质: { quality, grade: quality === '凡' ? 0 : 10 },
+      品质: { quality, grade: quality === '凡' ? 3 : 10 },
       数量: 1,
       描述: `叙事中已明确由玩家随身持有的物品：${name}。`
     };
