@@ -4461,29 +4461,19 @@
         "realm": "元婴",
         "affiliations": [
           {
-            "factionId": "lcq.faction.left_guard",
-            "category": "military",
-            "role": "军人"
-          },
-          {
             "factionId": "liuchao.faction.tai_yi_zhen_zong",
-            "category": "sect",
-            "role": "弟子"
+            "category": "organization",
+            "role": "王哲门下（九阳神功传承）"
           },
           {
-            "factionId": "liuchao.faction.xue_sun",
+            "factionId": "lcq.faction.left_guard",
             "category": "organization",
-            "role": "副队长"
+            "role": "成员（王哲军中）"
           },
           {
             "factionId": "liuchao.faction.xing_yue_hu",
             "category": "organization",
-            "role": "成员"
-          },
-          {
-            "factionId": "liuchao.faction.x8b538653d9",
-            "category": "organization",
-            "role": "殇侯近卫队相关成员"
+            "role": "岳帅遗孤"
           }
         ]
       },
@@ -5207,6 +5197,17 @@
         "direction": "bidirectional"
       },
       {
+        "fromCharacterId": "liuchao.character.cheng_zongyang",
+        "toCharacterId": "lyg.character.xie_wu_yi",
+        "relation": "同族",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同族",
+          "同势力派生"
+        ]
+      },
+      {
         "fromCharacterId": "lyg.character.li_shi_ji",
         "toCharacterId": "liuchao.character.tong_guan",
         "relation": "同袍",
@@ -5445,17 +5446,6 @@
         "direction": "bidirectional",
         "tags": [
           "同门",
-          "同势力派生"
-        ]
-      },
-      {
-        "fromCharacterId": "liuchao.character.cheng_zongyang",
-        "toCharacterId": "lyg.character.xie_wu_yi",
-        "relation": "同族",
-        "score": 30,
-        "direction": "bidirectional",
-        "tags": [
-          "同族",
           "同势力派生"
         ]
       }
