@@ -144,6 +144,17 @@ function formatFocusedCharacter(character: ScenarioModCharacter, runtime: StoryR
   return lines.join('\n');
 }
 
+function reputationTier(value: number): string {
+  if (value < 0) return value <= -5000 ? '恶名昭彰' : value <= -1000 ? '臭名远扬' : value <= -500 ? '声名狼藉' : value <= -100 ? '恶名在外' : '小有恶名';
+  if (value >= 10000) return '传说人物';
+  if (value >= 5000) return '名满天下';
+  if (value >= 3000) return '威震四方';
+  if (value >= 1000) return '名动一方';
+  if (value >= 500) return '声名远播';
+  if (value >= 100) return '小有名气';
+  return '籍籍无名';
+}
+
 function buildFocusedCharacterPrompt(runtime: StoryRuntime, activeEvents: ScenarioModEvent[], contextText = ''): string {
   const characters = runtime.canon?.characters || [];
   if (!characters.length) return '';
@@ -263,6 +274,17 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
       : '- （当前事件完成后将进入新章节或迎来结局）';
   const focusedCharacterSection = buildFocusedCharacterPrompt(runtime, activeEvents, contextText);
 
+  // 声望与认知闭环：当前值+档位醒目注入（静态 REPUTATION_GUIDE 埋在 worldStandards 里 LLM 不消费——
+  // 实测籍籍无名的主角被唐使"底细尽在掌握"）
+  const repValue = Number(readPath(saveData, ['角色', '属性', '声望']) ?? 0) || 0;
+  const reputationLine = `【声望与认知】主角当前声望：${repValue}（${reputationTier(repValue)}）。NPC 对主角的认知必须匹配声望档位：籍籍无名＝陌生人不识其名、不知其过往事迹与底细；势力若声称"掌握其底细"，必须有情报来源并在剧情中交代（且这类调查本身就是值得叙述的事件）；亲历者与同行者除外。主角做出扬名（或败坏名声）之事时，必须用 set 更新 角色.属性.声望（参考：救人除害+30~300、斩强敌+100~1000、震动一方的大事件+200~2000；恶行记负值）。`;
+
+  // 即兴目标槽（跨轮追踪，读档不翻转的治本一环）
+  const improvGoals = readPath(saveData, ['系统', '扩展', '任务追踪', '即兴目标']);
+  const improvLine = Array.isArray(improvGoals) && improvGoals.length
+    ? `【即兴目标·跨轮追踪（读档续写以此为准，不得悄然翻转）】\n${improvGoals.slice(0, 3).map((g: any) => `- ${typeof g === 'string' ? g : g?.标题 || ''}`).filter(Boolean).join('\n')}\n维护规则：目标达成或失效时，必须用 set 更新 系统.扩展.任务追踪.即兴目标（整组重写，上限 3 条）；只记录跨轮仍需追踪的目标，场景内小动作不记。`
+    : `【即兴目标槽】当叙事确立了需跨轮追踪的临时目标（如"取回某物""赴某约"），用 set 写入 系统.扩展.任务追踪.即兴目标（数组，元素 {"标题":"..."}，上限 3 条）；达成/失效必须清除。`;
+
   // 承重角色保护：尚未完成的关键剧情事件所系人物，不得被即兴写死/永久失能（只报名字，不泄事件细节）
   const loadBearingIds = new Set<string>(
     runtime.events
@@ -315,7 +337,7 @@ ${nextSection}
 ## 剧情标记
 ${JSON.stringify(runtime.flags || {})}
 
-${focusedCharacterSection ? `${focusedCharacterSection}\n\n` : ''}${loadBearingLine ? `${loadBearingLine}\n\n` : ''}${steeringLine ? `${steeringLine}\n\n` : ''}【主动推进剧情，不要停在原地等玩家】：
+${focusedCharacterSection ? `${focusedCharacterSection}\n\n` : ''}${loadBearingLine ? `${loadBearingLine}\n\n` : ''}${steeringLine ? `${steeringLine}\n\n` : ''}${reputationLine}\n\n${improvLine}\n\n【主动推进剧情，不要停在原地等玩家】：
 
 1. 每一段叙事都要朝“当前事件”的完成条件前进——主动设置场景、引入相关人物、制造契机，引导玩家走向该事件的达成，而不是只描述当前一幕然后停下。
 2. 【每轮必做的收尾核对】逐个检查上方“当前事件”：凡本轮叙事已实际达成完成条件的，**必须**输出对应 set 指令（如 \`{"action":"set","key":"世界.状态.剧本模组.flags.event.s04_01.done","value":true}\`，value 用布尔 true 而非字符串"true"）；漏标会导致剧情推进卡死。剧情随即推进到上面“下一步”所列事件。

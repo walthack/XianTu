@@ -185,6 +185,31 @@
           </div>
         </div>
       </div>
+
+      <!-- 任务目标（剧情主线 + 即兴目标） -->
+      <div v-if="questMain || questGoals.length" class="collapsible-section quest-section">
+        <div class="section-header" @click="questCollapsed = !questCollapsed">
+          <h3 class="section-title">
+            <Clock :size="14" class="section-icon" />
+            <span>{{ t('任务目标') }}</span>
+          </h3>
+          <button class="collapse-toggle" :class="{ 'collapsed': questCollapsed }">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M8 10l4-4H4l4 4z"/>
+            </svg>
+          </button>
+        </div>
+        <div v-show="!questCollapsed" class="quest-body">
+          <div v-if="questMain" class="quest-main">
+            <div class="quest-chapter">{{ questMain.chapter }}</div>
+            <div v-for="ev in questMain.events" :key="ev" class="quest-event">◆ {{ ev }}</div>
+            <div v-if="questMain.next" class="quest-next">→ {{ questMain.next }}</div>
+          </div>
+          <div v-if="questGoals.length" class="quest-improv">
+            <div v-for="(g, i) in questGoals" :key="i" class="quest-goal">· {{ g }}</div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- 无角色数据 -->
@@ -228,6 +253,25 @@ const statusEffects = computed(() => {
   return effects.filter((effect): effect is StatusEffect =>
     effect != null && typeof effect === 'object' && '状态名称' in effect
   );
+});
+
+const questCollapsed = ref(false);
+// 剧情主线：章节/活跃事件/下一关（确定性，读 worldState.剧本模组）
+const questMain = computed(() => {
+  const rt: any = (gameStateStore.worldState as any)?.剧本模组;
+  if (!rt || typeof rt !== 'object') return null;
+  const chapter = (rt.chapters || []).find((c: any) => c.id === rt.currentChapterId);
+  const activeIds = new Set(rt.activeEventIds || []);
+  const events = (rt.events || []).filter((e: any) => activeIds.has(e.id)).map((e: any) => e.name).filter(Boolean).slice(0, 4);
+  const next = rt.nextStageReadyId ? `可前往下一关：${rt.nextStageName || rt.nextStageId || ''}` : '';
+  if (!chapter && !events.length && !next) return null;
+  return { chapter: chapter ? `章节：${chapter.title || chapter.id}` : '', events, next };
+});
+// 即兴目标（LLM 维护的跨轮任务槽，上限 3）
+const questGoals = computed(() => {
+  const goals: any = (gameStateStore.systemExtensions as any)?.任务追踪?.即兴目标;
+  if (!Array.isArray(goals)) return [] as string[];
+  return goals.slice(0, 3).map((g: any) => typeof g === 'string' ? g : g?.标题 || '').filter(Boolean);
 });
 
 // 自动计算当前年龄（基于出生日期）
@@ -1677,4 +1721,12 @@ const getReputationClass = (): string => {
 }
 
 /* 深色主题：使用CSS变量自动适配，无需额外覆盖 */
+
+.quest-section .quest-body { padding: 6px 10px 10px; display: flex; flex-direction: column; gap: 6px; }
+.quest-chapter { font-size: 12px; font-weight: 600; opacity: 0.9; }
+.quest-event { font-size: 12px; line-height: 1.5; opacity: 0.85; }
+.quest-next { font-size: 12px; color: var(--color-accent, #d4af37); }
+.quest-improv { border-top: 1px dashed rgba(255,255,255,0.12); padding-top: 6px; }
+.quest-goal { font-size: 12px; line-height: 1.5; opacity: 0.75; }
+
 </style>
