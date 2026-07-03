@@ -66,7 +66,8 @@ export default (env, argv) => {
     output: {
       path: path.resolve(__dirname, 'dist'),
       filename: (isWatch || isSingleFile) ? 'inline.js' : 'XianTu.js',
-      clean: true,
+      // clean 时保留世界地图背景：prebuild(sync-builtin-mods)先拷图 → 若全清会把图抹掉(地图底图丢失bug 2026-07-03)
+      clean: { keep: /liuchao-world-map\.jpg/ },
       publicPath: (isProduction || isWatch) ? './' : '/', // dev server 用 /，打包用 ./
     },
     devtool: isProduction ? false : (isWatch ? false : 'eval-source-map'),
