@@ -23,6 +23,7 @@ const dryRun = process.argv.includes('--dry-run');
 const force = process.argv.includes('--force');
 
 const DERIVED_TAGS = [
+  '【历程】',
   '【关系】',
   '【称呼】',
   '【谈吐】',
@@ -72,7 +73,14 @@ function relationshipPhases(card) {
   return asArray(card.phaseIdentities).filter(phase => phase.scope === 'relationship-chain' || phase.scope === 'identity-chain');
 }
 
-function buildNotes(card, currentPhase) {
+function stageBookRank(stageId) {
+  if (String(stageId).startsWith('lcq.')) return 0;
+  if (String(stageId).startsWith('lyl.')) return 1;
+  if (String(stageId).startsWith('lyg.')) return 2;
+  return 99;
+}
+
+function buildNotes(card, currentPhase, stageId = '') {
   const profile = card.staticProfile || {};
   const notes = [];
   const add = (tag, value, max = 360) => {
@@ -80,6 +88,13 @@ function buildNotes(card, currentPhase) {
     if (values.length) notes.push(`【${tag}】${values.join('；')}`);
   };
 
+  // 跨本历程：只注入早于当前关卡所属书的经历（与 characterResolver.buildNotes 同步，勿单方改）
+  const rank = stageBookRank(stageId);
+  for (const mem of asArray(profile.crossStageMemories)) {
+    if (mem && typeof mem.bookRank === 'number' && mem.bookRank < rank && mem.text) {
+      add('历程', `${mem.label || ''}${mem.text}`, 300);
+    }
+  }
   add('关系', profile.relationToProtagonist);
   add('称呼', profile.formsOfAddress);
   add('谈吐', profile.speechStyle);

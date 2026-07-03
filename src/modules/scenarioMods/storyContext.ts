@@ -247,6 +247,29 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
       ? `- 本关收束后，建议切换到下一关：${runtime.nextStageName || runtime.nextStageId}（${runtime.nextStageId}）。不要在当前关提前展开下一关正文。`
       : '- （当前事件完成后将进入新章节或迎来结局）';
   const focusedCharacterSection = buildFocusedCharacterPrompt(runtime, activeEvents, contextText);
+
+  // 承重角色保护：尚未完成的关键剧情事件所系人物，不得被即兴写死/永久失能（只报名字，不泄事件细节）
+  const loadBearingIds = new Set<string>(
+    runtime.events
+      .filter(event => isCriticalStoryEvent(event) && !completedIds.has(event.id))
+      .flatMap(event => event.relatedCharacterIds || []),
+  );
+  if (runtime.opening?.playerCharacterId) loadBearingIds.delete(runtime.opening.playerCharacterId);
+  const loadBearingNames = [...loadBearingIds]
+    .map(id => characters.find(character => character.id === id)?.name)
+    .filter((name): name is string => !!name)
+    .slice(0, 20);
+  const loadBearingLine = loadBearingNames.length
+    ? `【承重角色保护】以下人物承担本关尚未完成的关键剧情：${loadBearingNames.join('、')}。他们不得死亡、永久残疾、被永久囚禁或从此无法寻见；可以受挫、遇险、暂时离场，但必须保留后续登场能力。`
+    : '';
+
+  // 偏离收束：剧情停滞分档提示（≤3 轮自由发挥；4-6 软收束；≥7 硬收束）
+  const stallTurns = (runtime as { stallTurns?: number }).stallTurns || 0;
+  const steeringLine = stallTurns >= 7
+    ? '【硬收束】剧情已停滞多轮：本轮必须让“当前事件”的直接引子登场（相关人物现身、事态迫近），把叙事拉回主线，不得继续发散。'
+    : stallTurns >= 4
+      ? '【软收束】剧情已数轮未推进：请借在场人物、既有伏笔或事件余波，自然地把叙事引向“当前事件”的达成，避免开新的无关支线。'
+      : '';
   const stageLine = [
     runtime.modName || runtime.modId,
     typeof runtime.axisSeqLo === 'number' && typeof runtime.axisSeqHi === 'number' ? `主轴范围 #${runtime.axisSeqLo}~#${runtime.axisSeqHi}` : '',
@@ -265,7 +288,7 @@ ${nextSection}
 ## 剧情标记
 ${JSON.stringify(runtime.flags || {})}
 
-${focusedCharacterSection ? `${focusedCharacterSection}\n\n` : ''}【主动推进剧情，不要停在原地等玩家】：
+${focusedCharacterSection ? `${focusedCharacterSection}\n\n` : ''}${loadBearingLine ? `${loadBearingLine}\n\n` : ''}${steeringLine ? `${steeringLine}\n\n` : ''}【主动推进剧情，不要停在原地等玩家】：
 
 1. 每一段叙事都要朝“当前事件”的完成条件前进——主动设置场景、引入相关人物、制造契机，引导玩家走向该事件的达成，而不是只描述当前一幕然后停下。
 2. 【每轮必做的收尾核对】逐个检查上方“当前事件”：凡本轮叙事已实际达成完成条件的，**必须**输出对应 set 指令（如 \`{"action":"set","key":"世界.状态.剧本模组.flags.event.s04_01.done","value":true}\`，value 用布尔 true 而非字符串"true"）；漏标会导致剧情推进卡死。剧情随即推进到上面“下一步”所列事件。

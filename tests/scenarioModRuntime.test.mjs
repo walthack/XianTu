@@ -165,3 +165,15 @@ test('canon guard protects core identity fields (gender/race/灵根/出生日期
   assert.equal(result.rejected.length, 3, '灵根/性别/出生日期 应被拒');
   assert.deepEqual(result.accepted, [allowed], '好感度等可变字段放行');
 });
+
+test('canon guard rejects deleting a canon character from the roster', async () => {
+  const { guardScenarioModCommands } = await loadTs('../src/modules/scenarioMods/canonGuard.ts');
+  const save = await buildRuntimeSave();
+  const result = guardScenarioModCommands(save, [
+    { action: 'delete', key: '社交.关系.程宗扬' },
+    { action: 'delete', key: '社交.关系.程宗扬.记忆.0' }, // 删子字段(如一条记忆)不拦
+  ]);
+  assert.equal(result.rejected.length, 1);
+  assert.match(result.rejected[0].reason, /正典人物不可删除/);
+  assert.equal(result.accepted.length, 1);
+});

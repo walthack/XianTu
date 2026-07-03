@@ -1,9 +1,9 @@
 {
   "schema": "xiantu.character-registry.v1",
-  "version": "cr-2026-07-03-eabb2a6aa60f3d4c",
-  "sourceHash": "eabb2a6aa60f3d4c",
+  "version": "cr-2026-07-03-9f9aadfbbc3ed64a",
+  "sourceHash": "9f9aadfbbc3ed64a",
   "sourceGeneratedAt": "2026-06-30T12:50:33.965Z",
-  "generatedAt": "2026-07-03T01:03:47.402Z",
+  "generatedAt": "2026-07-03T03:18:38.403Z",
   "stats": {
     "total": 308,
     "stagePresent": 249,
@@ -4775,7 +4775,14 @@
           "location": "军营（帐篷区域）",
           "locator": "第7章·真阳",
           "scene": "月霜因程宗扬拒绝从军而愤怒，用皮鞭抽打程宗扬面部，斥责他是见利忘义的奸商"
-        }
+        },
+        "crossStageMemories": [
+          {
+            "bookRank": 0,
+            "label": "清羽篇",
+            "text": "亲历：程宗扬与月霜初遇（与程宗扬）；太乙真宗介入（与程宗扬、蔺采泉、商乐轩）；左武军与罗马军团大战（与王哲、韩庚、阿伽门侬）；程宗扬与月霜逃亡（与程宗扬）"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -6324,7 +6331,14 @@
           "location": "山间小溪边芦苇丛",
           "locator": "六朝云龙吟/0247.html",
           "scene": "程宗扬与朱老头在溪边芦苇丛中议论太监怪癖时，一个阴柔声音响起，蔡敬仲裸身无衣出现，自称\"奴才蔡敬仲，见过阳武侯\"，庄重地向朱老头行礼"
-        }
+        },
+        "crossStageMemories": [
+          {
+            "bookRank": 1,
+            "label": "云龙篇",
+            "text": "亲历：长秋宫守卫战（与程宗扬、刘建、苍鹭）；剑玉姬与程宗扬谈判（与剑玉姬、程宗扬）"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -7008,7 +7022,19 @@
           "location": "军营",
           "locator": "第7章·真阳",
           "scene": "月霜因程宗扬拒绝从军、以商人身份趁机牟利而愤怒，挥鞭打伤其面部，程宗扬质问为何被打，二人发生冲突"
-        }
+        },
+        "crossStageMemories": [
+          {
+            "bookRank": 0,
+            "label": "清羽篇",
+            "text": "亲历：程宗扬与段强穿越（与段强）；段强被射杀（与段强）；利聚留守；临安粮战令"
+          },
+          {
+            "bookRank": 1,
+            "label": "云龙篇",
+            "text": "亲历：吕冀重伤；左武军入宫；剑玉姬真身；八臂收束"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -10239,6 +10265,13 @@
             "faction": "程宗扬势力",
             "role": "徒弟/随从"
           }
+        ],
+        "crossStageMemories": [
+          {
+            "bookRank": 1,
+            "label": "云龙篇",
+            "text": "亲历：宅院被毁与哈迷蚩重伤"
+          }
         ]
       },
       "phaseIdentities": [
@@ -11036,7 +11069,14 @@
           "location": "伊阙",
           "locator": "六朝云龙吟/0212.html 第2章",
           "scene": "程宗扬通过一群游侠少年的议论，了解到郭大侠被迁徙及其门客杀人的事件背景"
-        }
+        },
+        "crossStageMemories": [
+          {
+            "bookRank": 1,
+            "label": "云龙篇",
+            "text": "亲历：程宗扬安排退路与联络（与程宗扬、云丹琉、秦桧）"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -12942,7 +12982,14 @@
           "location": "桃林（西子湖畔）",
           "locator": "六朝云龙吟/0035.html 第4集·终铸大错",
           "scene": "程宗扬循着琴声进入桃林，见一白衣女子抚琴，女子回头自报身份\"黑魔海剑玉姬\"，称要与他谈生意"
-        }
+        },
+        "crossStageMemories": [
+          {
+            "bookRank": 1,
+            "label": "云龙篇",
+            "text": "亲历：剑玉姬与程宗扬谈判（与程宗扬、蔡敬仲）"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -13873,7 +13920,14 @@
           "location": "刘娥所在密室",
           "locator": "第107章",
           "scene": "程宗扬在密室中审视黑衣女卫时认出她是惊理，原来当日江州龙宸杀手被剿灭后，其中一名女杀手落入小紫手中，现在成为小紫的侍奴"
-        }
+        },
+        "crossStageMemories": [
+          {
+            "bookRank": 1,
+            "label": "云龙篇",
+            "text": "亲历：黑鸦使者现身（与程宗扬）"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -14549,7 +14603,14 @@
           "location": "南荒密林",
           "locator": "chapter102",
           "scene": "商队在南荒密林中行进时，乐明珠被金丝猴抢走头上的朱狐冠，惊叫出声。"
-        }
+        },
+        "crossStageMemories": [
+          {
+            "bookRank": 0,
+            "label": "清羽篇",
+            "text": "亲历：乐明珠身份揭露（与程宗扬）；凝羽毒瘾发作（与程宗扬、凝羽）；商队与龙神激战（与程宗扬、谢艺、武二郎）；小紫弑母（与小紫、程宗扬、碧姬）"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -17661,7 +17722,14 @@
         "storyAge": {
           "value": "十四五岁",
           "basis": "原文：他只有十四五岁"
-        }
+        },
+        "crossStageMemories": [
+          {
+            "bookRank": 1,
+            "label": "云龙篇",
+            "text": "亲历：吕奉先单骑破阵（与刘建、苍鹭）"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -17847,7 +17915,14 @@
           "location": "洛都",
           "locator": "第0217章",
           "scene": "通过程宗扬与同伴对话首次被提及，得知湖阳君是吕冀的妻姐，吕家是刘家外戚，吕冀和吕不疑是太后的两个弟弟"
-        }
+        },
+        "crossStageMemories": [
+          {
+            "bookRank": 1,
+            "label": "云龙篇",
+            "text": "亲历：吕氏调动汉军围杀（与程宗扬、吕不疑）；天子暴毙消息传遍洛都（与刘建）；刘建攻占南宫与武库（与刘建）"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -18541,7 +18616,14 @@
           "location": "建康",
           "locator": "chapter170.html",
           "scene": "萧遥逸喊出\"孟老大！你还不快出来！\"后，孟非卿从台阶上方现身，威武登场"
-        }
+        },
+        "crossStageMemories": [
+          {
+            "bookRank": 0,
+            "label": "清羽篇",
+            "text": "亲历：八骏得讯（与程宗扬、小紫）；左武军复盘（与程宗扬、小紫）；葛怀敏伏诛（与程宗扬、小紫）；城门火攻（与程宗扬、小紫）"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -19563,6 +19645,13 @@
             "faction": "白湖商馆",
             "role": "商队护卫"
           }
+        ],
+        "crossStageMemories": [
+          {
+            "bookRank": 0,
+            "label": "清羽篇",
+            "text": "亲历：程宗扬见苏妲己（与程宗扬、苏妲己）；突围与重逢（与程宗扬、乐明珠、谢艺）；商队与龙神激战（与程宗扬、谢艺、武二郎）"
+          }
         ]
       },
       "phaseIdentities": [
@@ -19858,7 +19947,14 @@
         "storyAge": {
           "value": "约五十余岁",
           "basis": "原文程宗扬推测：'严君平十几年前就是书院的山长，现在起码也有五十多岁'"
-        }
+        },
+        "crossStageMemories": [
+          {
+            "bookRank": 1,
+            "label": "云龙篇",
+            "text": "亲历：程宗扬安排退路与联络（与程宗扬、云丹琉、秦桧）"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -19995,7 +20091,14 @@
         "storyAge": {
           "value": "约25-26",
           "basis": "他二十五六岁年纪"
-        }
+        },
+        "crossStageMemories": [
+          {
+            "bookRank": 1,
+            "label": "云龙篇",
+            "text": "亲历：程宗扬安排退路与联络（与程宗扬、云丹琉、秦桧）"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -20799,7 +20902,14 @@
           "location": "南荒密林",
           "locator": "第102章",
           "scene": "程宗扬追猴子时，祁远一把没拉住，急得直跳脚说'我的大少爷！南荒你也走了一个多月了，这林子哪儿是随便进的！'"
-        }
+        },
+        "crossStageMemories": [
+          {
+            "bookRank": 0,
+            "label": "清羽篇",
+            "text": "亲历：鬼王峒使者阁罗与程宗扬谈兵器生意（与程宗扬、阁罗）"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -21321,7 +21431,14 @@
           "location": "殇侯所在的幽静山村",
           "locator": "chapter152",
           "scene": "秦桧戴着文士巾快步走来，向殇侯躬身禀报'君侯，北地有讯'，被殇侯介绍给程宗扬"
-        }
+        },
+        "crossStageMemories": [
+          {
+            "bookRank": 1,
+            "label": "云龙篇",
+            "text": "亲历：荆溪村寨被屠（与程宗扬、相雅、王天德）；程宗扬与滕甫交易三十万石粮食（与程宗扬、滕甫）；临安情报收集（与俞子元、林清浦）；程宗扬安排退路与联络（与程宗扬、云丹琉、班超）"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -21744,7 +21861,14 @@
           "location": "江畔山涧附近",
           "locator": "六朝云龙吟/0006.html",
           "scene": "程宗扬划船向北绕过宋军时，敖润吆喝三名兽蛮人一起用力撑船，青面兽与豹子头、金兀术一同划船执行任务。"
-        }
+        },
+        "crossStageMemories": [
+          {
+            "bookRank": 1,
+            "label": "云龙篇",
+            "text": "亲历：荆溪村寨被屠（与程宗扬、秦桧、相雅）"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -22814,7 +22938,14 @@
         "storyAge": {
           "value": "约二十七八",
           "basis": "按成亲时间推算，应该是二十七八岁年纪"
-        }
+        },
+        "crossStageMemories": [
+          {
+            "bookRank": 1,
+            "label": "云龙篇",
+            "text": "亲历：威远危机加剧（与李师师、高衙内、陆谦）"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -27441,6 +27572,13 @@
             "faction": "白湖商馆",
             "role": ""
           }
+        ],
+        "crossStageMemories": [
+          {
+            "bookRank": 0,
+            "label": "清羽篇",
+            "text": "亲历：武二郎加入商队及遇袭（与程宗扬、凝羽）；商队启程南荒（与程宗扬、凝羽）；倒戈与凤凰异变（与程宗扬、小紫、乐明珠）；商队与龙神激战（与程宗扬、谢艺、凝羽）"
+          }
         ]
       },
       "phaseIdentities": [
@@ -28247,7 +28385,14 @@
           "location": "五原城醉月楼",
           "locator": "第3集·醉月鸳鸯（chapter27/chapter35）",
           "scene": "西门庆在醉月楼调戏女子后向程宗扬点头示意，被程宗扬认出是西门大官人"
-        }
+        },
+        "crossStageMemories": [
+          {
+            "bookRank": 0,
+            "label": "清羽篇",
+            "text": "亲历：程宗扬与西门庆相识（与程宗扬、凝羽）"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -29531,6 +29676,13 @@
             "faction": "星月湖",
             "role": "岳帅遗孤"
           }
+        ],
+        "crossStageMemories": [
+          {
+            "bookRank": 0,
+            "label": "清羽篇",
+            "text": "亲历：小紫疑云（与程宗扬、碧奴、谢艺）；小紫暴露（与程宗扬、阿夕、乐明珠）；辰星七妖现身（与程宗扬）；擒获惊理（与程宗扬）"
+          }
         ]
       },
       "phaseIdentities": [
@@ -30756,7 +30908,14 @@
           "location": "苍澜镇",
           "locator": "第120章/0120.html",
           "scene": "在苍澜镇河边洗完手和衣服后上岸，朗笑着向程宗扬与小紫搭讪，自称徐福，夸夸其谈太泉神鱼的功效"
-        }
+        },
+        "crossStageMemories": [
+          {
+            "bookRank": 1,
+            "label": "云龙篇",
+            "text": "亲历：寻找出口（与虞白樱）"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -33937,7 +34096,19 @@
           "location": "南荒丛林",
           "locator": "第102章·奇险",
           "scene": "在商队行经南荒丛林时，主动落后一步与向导朱老头攀谈，客气地表示此间事了会亲自去拜见殇侯"
-        }
+        },
+        "crossStageMemories": [
+          {
+            "bookRank": 0,
+            "label": "清羽篇",
+            "text": "亲历：向导朱八八与鬼王峒计划（与程宗扬、朱八八、苏荔）；发蛊事件（与程宗扬、谢艺、朱八八）；白夷族到达（与程宗扬）；祭台尸鬼与丹宸（与程宗扬、苏荔、鬼巫王）"
+          },
+          {
+            "bookRank": 1,
+            "label": "云龙篇",
+            "text": "亲历：云苍峰商议买官与铜矿（与程宗扬）；云氏金铢押运遇劫（与程宗扬、云丹琉）"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -34332,7 +34503,14 @@
         "storyAge": {
           "value": "18",
           "basis": "原文\"过完年便是二九年华，一十八岁年纪\""
-        }
+        },
+        "crossStageMemories": [
+          {
+            "bookRank": 1,
+            "label": "云龙篇",
+            "text": "亲历：云氏金铢押运遇劫（与程宗扬、云苍峰）；程宗扬安排退路与联络（与程宗扬、秦桧、班超）"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -36001,7 +36179,14 @@
           "location": "山谷崖壁处",
           "locator": "第0025章（狭长山谷困于魏疾追杀）",
           "scene": "赵合德被魏疾追杀至三面悬崖的绝谷，利用太乙真宗的遁形术攀附崖壁逃命，陷入进退两难的困境"
-        }
+        },
+        "crossStageMemories": [
+          {
+            "bookRank": 1,
+            "label": "云龙篇",
+            "text": "亲历：程宗扬与赵合德商议替代入宫（与程宗扬）"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -37074,7 +37259,14 @@
           "location": "某寺院",
           "locator": "0089.html 第3章 妖踪",
           "scene": "程宗扬在寺院中处理完米远志事宜后，卓云君从花丛中现身，一剑斩杀米远志，然后跪拜称\"奴婢叩见主子\"。"
-        }
+        },
+        "crossStageMemories": [
+          {
+            "bookRank": 0,
+            "label": "清羽篇",
+            "text": "亲历：太乙真宗介入（与程宗扬、蔺采泉、商乐轩）"
+          }
+        ]
       },
       "phaseIdentities": [
         {

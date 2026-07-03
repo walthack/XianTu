@@ -35,6 +35,7 @@ interface RegistryStaticProfile {
   joining?: string[] | string;
   keyEvents?: string[];
   ending?: string[] | string;
+  crossStageMemories?: Array<{ bookRank?: number; label?: string; text?: string }>;
 }
 interface RegistryEntry {
   id: string;
@@ -48,6 +49,7 @@ interface RegistryEntry {
 }
 
 const DERIVED_TAGS = [
+  '【历程】',
   '【关系】', '【称呼】', '【谈吐】', '【底线】', '【目标】', '【软肋】', '【绝技】',
   '【入伙】', '【情节】', '【结局】', '【阶段身份】', '【本阶段禁用】', '【人工正典】',
 ];
@@ -77,13 +79,28 @@ function stagePhase(entry: RegistryEntry, stageId: string): RegistryPhase | unde
 function relationshipPhases(entry: RegistryEntry): RegistryPhase[] {
   return asArray(entry.phaseIdentities).filter(p => p.scope === 'relationship-chain' || p.scope === 'identity-chain');
 }
-function buildNotes(entry: RegistryEntry, currentPhase: RegistryPhase | undefined): string[] {
+// 关卡所属书序：lcq(清羽)=0 / lyl(云龙)=1 / lyg(燕歌)=2；未知前缀视为最末（全量注入历程）
+function stageBookRank(stageId: string): number {
+  if (stageId.startsWith('lcq.')) return 0;
+  if (stageId.startsWith('lyl.')) return 1;
+  if (stageId.startsWith('lyg.')) return 2;
+  return 99;
+}
+
+function buildNotes(entry: RegistryEntry, currentPhase: RegistryPhase | undefined, stageId = ''): string[] {
   const profile = entry.staticProfile || {};
   const notes: string[] = [];
   const add = (tag: string, value: unknown, max = 360) => {
     const values = unique(asArray(value as unknown[])).map(item => compact(item, max));
     if (values.length) notes.push(`【${tag}】${values.join('；')}`);
   };
+  // 跨本历程：只注入早于当前关卡所属书的经历（跨本长期记忆·方案A；不含本书/后书防剧透）
+  const rank = stageBookRank(stageId);
+  for (const mem of asArray(profile.crossStageMemories)) {
+    if (mem && typeof mem.bookRank === 'number' && mem.bookRank < rank && mem.text) {
+      add('历程', `${mem.label || ''}${mem.text}`, 300);
+    }
+  }
   add('关系', profile.relationToProtagonist);
   add('称呼', profile.formsOfAddress);
   add('谈吐', profile.speechStyle);
@@ -138,7 +155,7 @@ function resolveOne(character: any, stageId: string): boolean {
   if (personality.length) profile.personality = personality;
 
   const keptNotes = asArray<string>(profile.notes).filter(note => !DERIVED_TAGS.some(tag => String(note).startsWith(tag)));
-  profile.notes = [...keptNotes, ...buildNotes(entry, currentPhase)];
+  profile.notes = [...keptNotes, ...buildNotes(entry, currentPhase, stageId)];
   character.profile = profile;
   return true;
 }

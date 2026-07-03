@@ -136,3 +136,22 @@ test('name-mentioned bystander characters join the focused canon block', async (
   const prompt = buildScenarioStoryPrompt(save, '我去营帐找王哲讨教剑法');
   assert.match(prompt, /- 王哲（/);
 });
+
+test('load-bearing character protection and stall steering appear in story prompt', async () => {
+  const { buildScenarioStoryPrompt } = await loadTs('../src/modules/scenarioMods/storyContext.ts');
+  const save = await buildStorySave();
+  const runtime = save.世界.状态.剧本模组;
+
+  // 承重角色保护：未完成 critical 事件的相关人物点名
+  const prompt = buildScenarioStoryPrompt(save);
+  assert.match(prompt, /【承重角色保护】/);
+  assert.match(prompt, /不得死亡、永久残疾/);
+
+  // 收束分档：停滞 5 轮 → 软收束；8 轮 → 硬收束
+  runtime.stallTurns = 5;
+  assert.match(buildScenarioStoryPrompt(save), /【软收束】/);
+  runtime.stallTurns = 8;
+  assert.match(buildScenarioStoryPrompt(save), /【硬收束】/);
+  runtime.stallTurns = 0;
+  assert.doesNotMatch(buildScenarioStoryPrompt(save), /收束】/);
+});

@@ -20,6 +20,8 @@ interface RuntimeState extends ScenarioProgressState {
   flags: Record<string, ScenarioFlagValue>;
   nextStageId?: string | null;
   nextStageReadyId?: string | null;
+  /** 剧情停滞轮数：连续多少轮无事件/章节推进（供收束提示分档），推进即清零 */
+  stallTurns?: number;
 }
 
 function readPath(root: unknown, path: string[]): unknown {
@@ -224,6 +226,13 @@ export function advanceScenarioRuntime(saveData: SaveData): {
     runtime.nextStageReadyId = runtime.nextStageId;
     transitions.push({ type: 'stage_ready', id: runtime.nextStageId });
   }
+
+  // 剧情停滞计数：有待推进内容却本轮无任何推进 → +1；推进/无内容 → 清零。供收束提示分档。
+  const progressed = transitions.some(t =>
+    t.type === 'event_completed' || t.type === 'chapter_completed' || t.type === 'stage_ready',
+  );
+  const hasPendingWork = Boolean(runtime.currentChapterId) || runtime.activeEventIds.length > 0 || hasPendingCriticalEvent;
+  runtime.stallTurns = progressed || !hasPendingWork ? 0 : (runtime.stallTurns || 0) + 1;
 
   return { saveData: next, transitions };
 }

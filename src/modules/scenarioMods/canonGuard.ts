@@ -357,6 +357,14 @@ export function guardScenarioModCommands(saveData: SaveData, commands: unknown[]
       ? normalizePath((command as CommandLike).key as string)
       : '';
     const isAllowedFlagUpdate = action === 'set' && key.startsWith('世界.状态.剧本模组.flags.');
+    // 承重保护：正典人物的花名册条目不可被整体删除（防即兴把关键角色从世界抹掉）
+    if (['delete', 'remove', 'del'].includes(String(action)) && key.startsWith('社交.关系.')) {
+      const targetName = key.slice('社交.关系.'.length).split('.')[0];
+      if (key === `社交.关系.${targetName}` && (runtime.canon?.characters || []).some(c => c.name === targetName)) {
+        rejected.push({ command, reason: `剧本正典人物不可删除：${targetName}` });
+        continue;
+      }
+    }
     const protectedPath = key && protectedPaths.find(path => pathsIntersect(key, path));
     const accessViolation = key ? findContentAccessViolation(runtime, command as CommandLike, key) : null;
     const affiliationViolation = key
