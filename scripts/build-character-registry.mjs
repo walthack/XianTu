@@ -46,6 +46,9 @@ function buildEmbedText(c) {
     c.canonicalName,
     (c.aliases || []).join(' '),
     sp.identitySummary,
+    // 归属/登场地点：宗门与地名是强检索键（场景提到地点/门派时可召回相关角色）
+    uniq((sp.affiliations || []).map(a => `${a.faction}${a.role ? `(${a.role})` : ''}`)).join('、'),
+    sp.debutLocation?.location ? `登场于${sp.debutLocation.location}` : '',
     uniq(sp.personality).join('、'),
     uniq(sp.relationToProtagonist).join('；'),
     uniq(sp.formsOfAddress).join(' '),
