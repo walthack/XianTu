@@ -2210,6 +2210,14 @@ ${step1Text}
     );
     commandAppliedChanges.push(...inspectedItemChanges);
 
+    const inspectedNpcChanges = this.reconcileInspectedNpcAppearance(
+      saveData,
+      options?.userAction || '',
+      textContent,
+      sortedCommands
+    );
+    commandAppliedChanges.push(...inspectedNpcChanges);
+
     const actionGatePrune = pruneExpiredActionGates(saveData, getNarrativeTurn(saveData));
     if (actionGatePrune.changed) {
       commandAppliedChanges.push({
@@ -3277,6 +3285,98 @@ ${saveDataJson}`;
       .trim();
     const clipped = compact.length > 500 ? `${compact.slice(0, 500)}…` : compact;
     return `【查看记录】${clipped || itemName}`;
+  }
+
+  private reconcileInspectedNpcAppearance(
+    saveData: SaveData,
+    userAction: string,
+    responseText: string,
+    commands: Array<{ action: string; key: string; value?: unknown }>
+  ): StateChange[] {
+    const actionText = (userAction || '').trim();
+    const text = (responseText || '').trim();
+    if (!actionText || !text || text === '（AI生成失败）') return [];
+    if (!/(查看|检查|调查|端详|端看|细看|仔细看|观察|打量|审视|凝视|辨认)/.test(actionText)) {
+      return [];
+    }
+
+    const relationsPath = '社交.关系';
+    const relations = get(saveData, relationsPath, {}) as Record<string, any>;
+    if (!relations || typeof relations !== 'object' || Array.isArray(relations)) return [];
+
+    const normalizedAction = this.normalizeInventoryMention(actionText);
+    const changes: StateChange[] = [];
+
+    for (const [npcKey, npc] of Object.entries(relations)) {
+      if (!npc || typeof npc !== 'object' || Array.isArray(npc)) continue;
+      const npcName = typeof npc.名字 === 'string' && npc.名字.trim() ? npc.名字.trim() : npcKey;
+      if (!this.userActionMentionsInventoryItem(normalizedAction, npcName)) continue;
+
+      const statusPath = `${relationsPath}.${npcKey}.当前外貌状态`;
+      const appearancePath = `${relationsPath}.${npcKey}.外貌描述`;
+      const alreadySetAppearance = commands.some((cmd) =>
+        cmd.action === 'set' &&
+        typeof cmd.key === 'string' &&
+        (cmd.key === statusPath || cmd.key === appearancePath || cmd.key === `${relationsPath}.${npcKey}`)
+      );
+      if (alreadySetAppearance) continue;
+
+      const newStatus = this.buildInspectedNpcAppearanceState(npcName, text);
+      const oldStatus = get(saveData, statusPath);
+      if (oldStatus !== newStatus) {
+        set(saveData, statusPath, newStatus);
+        changes.push({
+          key: statusPath,
+          action: 'set',
+          oldValue: this._summarizeValueForChangeLog(statusPath, oldStatus, 'set'),
+          newValue: this._summarizeValueForChangeLog(statusPath, newStatus, 'set')
+        });
+      }
+
+      const oldAppearance = get(saveData, appearancePath);
+      if (this.shouldBackfillNpcAppearanceDescription(oldAppearance)) {
+        const newAppearance = this.buildInspectedNpcAppearanceDescription(npcName, text);
+        set(saveData, appearancePath, newAppearance);
+        changes.push({
+          key: appearancePath,
+          action: 'set',
+          oldValue: this._summarizeValueForChangeLog(appearancePath, oldAppearance, 'set'),
+          newValue: this._summarizeValueForChangeLog(appearancePath, newAppearance, 'set')
+        });
+      }
+
+      if (changes.length > 0) {
+        console.warn(`[AI双向系统] 查看NPC后同步外貌状态: ${npcName}`);
+      }
+    }
+
+    return changes;
+  }
+
+  private buildInspectedNpcAppearanceState(npcName: string, responseText: string): string {
+    const compact = responseText
+      .replace(/\s+/g, ' ')
+      .replace(/^【[^】]+】/, '')
+      .trim();
+    const clipped = compact.length > 260 ? `${compact.slice(0, 260)}…` : compact;
+    return clipped || `${npcName}维持着当前可见的外貌状态。`;
+  }
+
+  private buildInspectedNpcAppearanceDescription(npcName: string, responseText: string): string {
+    const compact = responseText
+      .replace(/\s+/g, ' ')
+      .replace(/^【[^】]+】/, '')
+      .trim();
+    const clipped = compact.length > 500 ? `${compact.slice(0, 500)}…` : compact;
+    return `【观察记录】${clipped || npcName}`;
+  }
+
+  private shouldBackfillNpcAppearanceDescription(value: unknown): boolean {
+    if (typeof value !== 'string') return true;
+    const text = value.trim();
+    if (!text) return true;
+    if (text.length < 20) return true;
+    return /相貌普通|气质平和|未描述|暂无|神态自然/.test(text);
   }
 
   private executeCommand(
