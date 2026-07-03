@@ -29,7 +29,7 @@ import { advanceScenarioRuntime } from '@/modules/scenarioMods/runtime';
 import { applyMilestoneRewards } from '@/modules/scenarioMods/milestoneRewards';
 import { buildScenarioStoryPrompt, createScenarioPromptState } from '@/modules/scenarioMods/storyContext';
 import { buildActionGatePrompt, getNarrativeTurn, pruneExpiredActionGates } from '@/utils/actionGate';
-import { getMissingNarratedInventoryGains } from '@/utils/narratedInventory';
+import { detectNarratedInventoryPossessions, getMissingNarratedInventoryGains } from '@/utils/narratedInventory';
 
 type PlainObject = Record<string, unknown>;
 
@@ -2194,6 +2194,9 @@ ${step1Text}
       }
     }
 
+    const reconciledInventoryChanges = this.reconcileNarratedInventoryPossessions(saveData, textContent);
+    commandAppliedChanges.push(...reconciledInventoryChanges);
+
     const actionGatePrune = pruneExpiredActionGates(saveData, getNarrativeTurn(saveData));
     if (actionGatePrune.changed) {
       commandAppliedChanges.push({
@@ -3103,6 +3106,89 @@ ${saveDataJson}`;
     }
 
     return repaired;
+  }
+
+  private reconcileNarratedInventoryPossessions(saveData: SaveData, text: string): StateChange[] {
+    const itemNames = detectNarratedInventoryPossessions(text);
+    if (itemNames.length === 0) return [];
+
+    const inventoryPath = '角色.背包.物品';
+    const items = get(saveData, inventoryPath, {}) as Record<string, any>;
+    if (!items || typeof items !== 'object' || Array.isArray(items)) {
+      set(saveData, inventoryPath, {});
+    }
+
+    const currentItems = get(saveData, inventoryPath, {}) as Record<string, any>;
+    const existingNames = new Set(
+      Object.values(currentItems)
+        .map((item: any) => (typeof item?.名称 === 'string' ? item.名称.trim() : ''))
+        .filter(Boolean)
+    );
+    const changes: StateChange[] = [];
+
+    for (const rawName of itemNames) {
+      const name = rawName.trim();
+      if (!name || existingNames.has(name)) continue;
+
+      const itemId = this.createNarratedInventoryItemId(name, currentItems);
+      const item = this.createNarratedInventoryItem(itemId, name);
+      set(saveData, `${inventoryPath}.${itemId}`, item);
+      currentItems[itemId] = item;
+      existingNames.add(name);
+      changes.push({
+        key: `${inventoryPath}.${itemId}`,
+        action: 'set',
+        oldValue: undefined,
+        newValue: this._summarizeValueForChangeLog(`${inventoryPath}.${itemId}`, item, 'set')
+      });
+      console.warn(`[AI双向系统] 叙事物品补账: ${name} -> ${inventoryPath}.${itemId}`);
+    }
+
+    return changes;
+  }
+
+  private createNarratedInventoryItemId(name: string, existingItems: Record<string, any>): string {
+    const ascii = name
+      .replace(/仙品[·\-]?/g, '')
+      .replace(/[^\w\u4e00-\u9fff]+/g, '_')
+      .replace(/^_+|_+$/g, '')
+      .slice(0, 24);
+    const base = `item_narrative_${ascii || Date.now()}`;
+    let id = base;
+    let index = 2;
+    while (Object.prototype.hasOwnProperty.call(existingItems, id)) {
+      id = `${base}_${index}`;
+      index++;
+    }
+    return id;
+  }
+
+  private createNarratedInventoryItem(itemId: string, name: string): Record<string, any> {
+    const quality = name.includes('神品') ? '神'
+      : name.includes('仙品') ? '仙'
+        : name.includes('天品') ? '天'
+          : name.includes('地品') ? '地'
+            : name.includes('玄品') ? '玄'
+              : name.includes('黄品') ? '黄'
+                : '凡';
+    const type = /丹药|丹丸/.test(name) ? '丹药'
+      : /灵草|灵材|矿石/.test(name) ? '材料'
+        : /功法|秘籍/.test(name) ? '功法'
+          : '其他';
+    const item: Record<string, any> = {
+      物品ID: itemId,
+      名称: name,
+      类型: type,
+      品质: { quality, grade: quality === '凡' ? 0 : 10 },
+      数量: 1,
+      描述: `叙事中已明确由玩家随身持有的物品：${name}。`
+    };
+
+    if (type === '功法') {
+      return this._repairTechniqueItem(item);
+    }
+
+    return item;
   }
 
   private executeCommand(

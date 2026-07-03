@@ -1,5 +1,6 @@
 const INVENTORY_ITEM_NOUNS = [
   '玉简',
+  '玉',
   '令牌',
   '丹药',
   '丹丸',
@@ -45,6 +46,41 @@ export function detectNarratedInventoryGains(text: string): string[] {
   for (const pattern of patterns) {
     for (const match of text.matchAll(pattern)) {
       const itemName = normalizeNarratedItemName(match[1] || '');
+      if (itemName && itemName.length <= 24) found.add(itemName);
+    }
+  }
+
+  return [...found];
+}
+
+export function detectNarratedInventoryPossessions(text: string): string[] {
+  if (!text || typeof text !== 'string') return [];
+
+  const found = new Set<string>(detectNarratedInventoryGains(text));
+  const possessionContext = /怀中|袖中|囊中|背包|储物袋|行囊|随身|身上|安然无恙|还在|尚在|未失/.test(text);
+  if (!possessionContext) return [...found];
+
+  const bracketPattern = /【([^】]+)】/g;
+  for (const match of text.matchAll(bracketPattern)) {
+    const itemName = normalizeNarratedItemName(match[1] || '');
+    if (
+      itemName &&
+      itemName.length <= 24 &&
+      new RegExp(INVENTORY_ITEM_NOUN_PATTERN).test(itemName)
+    ) {
+      found.add(itemName);
+    }
+  }
+
+  const possessionPatterns = [
+    new RegExp(`(?:怀中|袖中|囊中|背包|储物袋|行囊|随身|身上)[^，。；\\n]{0,40}?([^，。；、\\n]{0,18}?(?:${INVENTORY_ITEM_NOUN_PATTERN}))`, 'g'),
+    new RegExp(`([^，。；、\\n]{0,18}?(?:${INVENTORY_ITEM_NOUN_PATTERN}))[^，。；\\n]{0,20}?(?:安然无恙|还在|尚在|未失)`, 'g'),
+  ];
+
+  for (const pattern of possessionPatterns) {
+    for (const match of text.matchAll(pattern)) {
+      const itemName = normalizeNarratedItemName(match[1] || '');
+      if (/[【】]/.test(itemName)) continue;
       if (itemName && itemName.length <= 24) found.add(itemName);
     }
   }

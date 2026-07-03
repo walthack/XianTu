@@ -33,3 +33,11 @@ test('does not flag narrated item gain when inventory mutation exists', async ()
 
   assert.deepEqual(getMissingNarratedInventoryGains(text, commands), []);
 });
+
+test('detects carried items confirmed in possession narration', async () => {
+  const { detectNarratedInventoryPossessions } = await loadTs('../src/utils/narratedInventory.ts');
+
+  const text = '程宗扬再次伸手探入怀中——确认那枚温润的【仙品·龙睛玉】与清凉的【云氏玉简】都安然无恙。';
+
+  assert.deepEqual(detectNarratedInventoryPossessions(text), ['仙品·龙睛玉', '云氏玉简']);
+});
