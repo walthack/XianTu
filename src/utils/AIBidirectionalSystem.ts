@@ -3279,12 +3279,8 @@ ${saveDataJson}`;
   }
 
   private buildInspectedItemDescription(itemName: string, responseText: string): string {
-    const compact = responseText
-      .replace(/\s+/g, ' ')
-      .replace(/^【[^】]+】/, '')
-      .trim();
-    const clipped = compact.length > 500 ? `${compact.slice(0, 500)}…` : compact;
-    return `【查看记录】${clipped || itemName}`;
+    const summary = this.extractRelevantInspectionSummary(responseText, itemName, 360);
+    return `【查看记录】${summary || itemName}`;
   }
 
   private reconcileInspectedNpcAppearance(
@@ -3354,21 +3350,52 @@ ${saveDataJson}`;
   }
 
   private buildInspectedNpcAppearanceState(npcName: string, responseText: string): string {
-    const compact = responseText
-      .replace(/\s+/g, ' ')
-      .replace(/^【[^】]+】/, '')
-      .trim();
-    const clipped = compact.length > 260 ? `${compact.slice(0, 260)}…` : compact;
-    return clipped || `${npcName}维持着当前可见的外貌状态。`;
+    const summary = this.extractRelevantInspectionSummary(responseText, npcName, 180, true);
+    return summary || `${npcName}维持着当前可见的外貌状态。`;
   }
 
   private buildInspectedNpcAppearanceDescription(npcName: string, responseText: string): string {
+    const summary = this.extractRelevantInspectionSummary(responseText, npcName, 360, true);
+    return `【观察记录】${summary || npcName}`;
+  }
+
+  private extractRelevantInspectionSummary(
+    responseText: string,
+    subjectName: string,
+    maxLength: number,
+    appearanceOnly = false
+  ): string {
     const compact = responseText
       .replace(/\s+/g, ' ')
       .replace(/^【[^】]+】/, '')
       .trim();
-    const clipped = compact.length > 500 ? `${compact.slice(0, 500)}…` : compact;
-    return `【观察记录】${clipped || npcName}`;
+    if (!compact) return '';
+
+    const subjectVariants = new Set<string>([
+      subjectName,
+      this.normalizeInventoryMention(subjectName),
+      subjectName.replace(/^(神品|仙品|天品|地品|玄品|黄品|凡品)[·\-]?/, ''),
+    ].filter(Boolean));
+    const detailPattern = appearanceOnly
+      ? /(外貌|容貌|面容|眉眼|眼神|神色|神态|衣|裙|袍|发|鬓|身形|身段|体态|气质|姿态|肤|唇|声音|气息|伤|血|疲惫|狼狈)/
+      : /(材质|纹路|颜色|光泽|气息|灵气|重量|触感|裂纹|铭文|符文|内容|记载|用途|来历|效果|机关|封印|波动|温润|清凉|灼热|残缺|完整|品质)/;
+
+    const sentences = compact
+      .split(/(?<=[。！？!?；;])|[\n\r]+/)
+      .map(s => s.trim())
+      .filter(Boolean);
+    const picked: string[] = [];
+    for (const sentence of sentences) {
+      const normalizedSentence = this.normalizeInventoryMention(sentence);
+      const mentionsSubject = [...subjectVariants].some(v => v && (sentence.includes(v) || normalizedSentence.includes(v)));
+      if (mentionsSubject || detailPattern.test(sentence)) {
+        picked.push(sentence);
+      }
+      if (picked.length >= 2) break;
+    }
+
+    const summary = (picked.length > 0 ? picked.join('') : compact).trim();
+    return summary.length > maxLength ? `${summary.slice(0, maxLength)}…` : summary;
   }
 
   private shouldBackfillNpcAppearanceDescription(value: unknown): boolean {
