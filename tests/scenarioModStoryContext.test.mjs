@@ -124,3 +124,15 @@ test('story context is inert for saves without a Scenario Mod', async () => {
   assert.notEqual(promptState, save);
   assert.equal(buildScenarioStoryPrompt(save), '');
 });
+
+test('name-mentioned bystander characters join the focused canon block', async () => {
+  const { buildScenarioStoryPrompt } = await loadTs('../src/modules/scenarioMods/storyContext.ts');
+  const save = await buildStorySave();
+
+  // 王哲不在活跃事件 relatedCharacterIds 里：默认不聚焦
+  const baseline = buildScenarioStoryPrompt(save);
+  assert.doesNotMatch(baseline, /- 王哲（/);
+  // 玩家点名后 → 确定性召回进聚焦块
+  const prompt = buildScenarioStoryPrompt(save, '我去营帐找王哲讨教剑法');
+  assert.match(prompt, /- 王哲（/);
+});

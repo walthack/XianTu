@@ -313,6 +313,11 @@ export function compileScenarioProtectedPaths(saveData: SaveData): string[] {
   if (hasLock(runtime, 'canon.characters.*.name')) {
     for (const character of canon.characters || []) {
       addNamePaths(paths, `社交.关系.${character.name}`);
+      // 核心身份字段随 name 锁一并保护（G1 根因②）：这些是"天生不变"正典，AI 改写会存进档
+      // （前例：凝羽灵根被改、NPC 性别被演反）。境界/性格等可成长字段不锁。
+      for (const field of ['性别', '种族', '灵根', '出生日期']) {
+        paths.add(`社交.关系.${character.name}.${field}`);
+      }
     }
   }
 

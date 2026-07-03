@@ -729,7 +729,10 @@ class AIBidirectionalSystemClass {
 
       const assembledPrompt = await assembleSystemPrompt(activePrompts, uiStore.actionOptionsPrompt, stateForAI);
       const scenarioCanonPrompt = buildScenarioCanonPrompt(stateForAI as SaveData);
-      const scenarioStoryPrompt = buildScenarioStoryPrompt(stateForAI as SaveData);
+      // 聚焦上下文：玩家输入+近期叙事，供剧本 prompt 做确定性名字召回（点名的在场角色档案也注入，防自由闲聊零档案）
+      const focusContextText = [userMessage || '', (v3?.社交?.记忆?.短期记忆 || []).slice(-2).join('\n')]
+        .filter(Boolean).join('\n');
+      const scenarioStoryPrompt = buildScenarioStoryPrompt(stateForAI as SaveData, focusContextText);
       const actionGatePrompt = buildActionGatePrompt(saveData, getNarrativeTurn(saveData));
 
       // 🌐 构建穿越状态提示（直接写入主提示词，确保AI一定能看到）
@@ -2258,6 +2261,22 @@ ${step1Text}
         newValue: transition.id,
       });
     });
+    // 剧情推进可见性：每轮输出推进状态，卡关时直接看 console 就知道差哪个事件/flag（此前要靠扒存档诊断）
+    {
+      const rt = (saveData as any)?.世界?.状态?.剧本模组;
+      if (rt?.currentChapterId !== undefined) {
+        const flags = rt.flags || {};
+        const pending = (rt.events || [])
+          .filter((e: any) => (e.critical !== false) && !(rt.completedEventIds || []).includes(e.id))
+          .map((e: any) => `${e.id}${(e.completion || []).map((c: any) => `(${c.path}=${JSON.stringify(flags[String(c.path).replace(/^flags\./, '')])})`).join('')}`);
+        console.info(
+          `[剧本推进] 章节=${rt.currentChapterId ?? '无'} 活跃=${JSON.stringify(rt.activeEventIds || [])} ` +
+          `已完成=${(rt.completedEventIds || []).length} 待完成关键事件=${pending.length ? pending.join(' ') : '无'} ` +
+          `${rt.nextStageReadyId ? `✅可切下一关:${rt.nextStageReadyId}` : ''}` +
+          (scenarioResult.transitions.length ? ` 本轮转移:${scenarioResult.transitions.map(t => `${t.type}:${t.id}`).join(',')}` : ''),
+        );
+      }
+    }
 
     // 🔥 将状态变更添加到最新的叙事记录中
     const stateChangesLog: StateChangeLog = { changes, timestamp: new Date().toISOString() };

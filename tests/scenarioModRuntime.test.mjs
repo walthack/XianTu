@@ -151,3 +151,17 @@ test('early-set done flags settle never-activated critical events; stage becomes
   assert.ok(rt.completedEventIds.includes('e2'), 'never-activated critical event settles via string-true flag');
   assert.equal(rt.nextStageReadyId, 'stage2', 'stage_ready fires');
 });
+
+test('canon guard protects core identity fields (gender/race/灵根/出生日期) of canon characters', async () => {
+  const { guardScenarioModCommands } = await loadTs('../src/modules/scenarioMods/canonGuard.ts');
+  const save = await buildRuntimeSave();
+  const rejected = [
+    { action: 'set', key: '社交.关系.程宗扬.灵根', value: '风灵根' },
+    { action: 'set', key: '社交.关系.程宗扬.性别', value: '女' },
+    { action: 'set', key: '社交.关系.程宗扬.出生日期.年', value: 180 },
+  ];
+  const allowed = { action: 'set', key: '社交.关系.程宗扬.好感度', value: 50 };
+  const result = guardScenarioModCommands(save, [...rejected, allowed]);
+  assert.equal(result.rejected.length, 3, '灵根/性别/出生日期 应被拒');
+  assert.deepEqual(result.accepted, [allowed], '好感度等可变字段放行');
+});

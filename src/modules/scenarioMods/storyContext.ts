@@ -143,7 +143,7 @@ function formatFocusedCharacter(character: ScenarioModCharacter, runtime: StoryR
   return lines.join('\n');
 }
 
-function buildFocusedCharacterPrompt(runtime: StoryRuntime, activeEvents: ScenarioModEvent[]): string {
+function buildFocusedCharacterPrompt(runtime: StoryRuntime, activeEvents: ScenarioModEvent[], contextText = ''): string {
   const characters = runtime.canon?.characters || [];
   if (!characters.length) return '';
   const focusedIds = new Set<string>();
@@ -156,6 +156,21 @@ function buildFocusedCharacterPrompt(runtime: StoryRuntime, activeEvents: Scenar
     .map(id => characters.find(character => character.id === id))
     .filter((character): character is ScenarioModCharacter => !!character)
     .slice(0, 8);
+  // 确定性名字召回：玩家输入/近期叙事按名字（或别名）点到的在场角色也纳入聚焦，
+  // 否则自由找不在活跃事件里的 NPC 闲聊时零档案注入 → LLM 只能靠猜（OOC 主源之一）。
+  if (contextText) {
+    const already = new Set(focusedCharacters.map(character => character.id));
+    for (const character of characters) {
+      if (focusedCharacters.length >= 12) break;
+      if (already.has(character.id)) continue;
+      const keys = [character.name, ...((character as { aliases?: string[] }).aliases || [])]
+        .filter(key => typeof key === 'string' && key.length >= 2);
+      if (keys.some(key => contextText.includes(key))) {
+        focusedCharacters.push(character);
+        already.add(character.id);
+      }
+    }
+  }
   if (!focusedCharacters.length) return '';
   return `## 当前相关人物正典约束（防 OOC）
 ${focusedCharacters.map(character => formatFocusedCharacter(character, runtime)).join('\n')}
@@ -179,7 +194,7 @@ export function createScenarioPromptState<T extends SaveData>(saveData: T): T {
   return promptState;
 }
 
-export function buildScenarioStoryPrompt(saveData: SaveData): string {
+export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): string {
   const runtime = getRuntime(saveData);
   if (!runtime) return '';
 
@@ -231,7 +246,7 @@ export function buildScenarioStoryPrompt(saveData: SaveData): string {
     : runtime.nextStageId
       ? `- 本关收束后，建议切换到下一关：${runtime.nextStageName || runtime.nextStageId}（${runtime.nextStageId}）。不要在当前关提前展开下一关正文。`
       : '- （当前事件完成后将进入新章节或迎来结局）';
-  const focusedCharacterSection = buildFocusedCharacterPrompt(runtime, activeEvents);
+  const focusedCharacterSection = buildFocusedCharacterPrompt(runtime, activeEvents, contextText);
   const stageLine = [
     runtime.modName || runtime.modId,
     typeof runtime.axisSeqLo === 'number' && typeof runtime.axisSeqHi === 'number' ? `主轴范围 #${runtime.axisSeqLo}~#${runtime.axisSeqHi}` : '',
@@ -253,7 +268,7 @@ ${JSON.stringify(runtime.flags || {})}
 ${focusedCharacterSection ? `${focusedCharacterSection}\n\n` : ''}【主动推进剧情，不要停在原地等玩家】：
 
 1. 每一段叙事都要朝“当前事件”的完成条件前进——主动设置场景、引入相关人物、制造契机，引导玩家走向该事件的达成，而不是只描述当前一幕然后停下。
-2. 当叙事中确实达成了完成条件，立即用 set 更新对应“世界.状态.剧本模组.flags.*”为 done；剧情随即推进到上面“下一步”所列事件。
+2. 【每轮必做的收尾核对】逐个检查上方“当前事件”：凡本轮叙事已实际达成完成条件的，**必须**输出对应 set 指令（如 \`{"action":"set","key":"世界.状态.剧本模组.flags.event.s04_01.done","value":true}\`，value 用布尔 true 而非字符串"true"）；漏标会导致剧情推进卡死。剧情随即推进到上面“下一步”所列事件。
 3. 关键剧情事件未完成时，不要建议切换下一关；先推动当前关内关键剧情触发。
 4. 避免反复描写同一幕或原地打转；玩家若无明确行动，由你主动顺着主轴往下带。
 5. 不要猜测、引用或泄露后续章节，以及“下一步”之后尚未触发的事件细节。`;
