@@ -13,10 +13,10 @@ const gen = join(root, 'mod-kit/generated/deepseek-v4-flash');
 const BOOKS = ['qingyu', 'yunlong', 'yange'];
 
 // category(en) → faction def type(zh)
-const TYPE_ZH = { sect: '宗门', clan: '家族', military: '军队', polity: '势力', organization: '组织' };
+const TYPE_ZH = { sect: '宗门', clan: '家族', military: '军队', state: '势力', organization: '组织' };
 const guessCat = (n) => {
   if (/军$|营$|卫$|骑$|兵$|效节|天策府|府兵/.test(n)) return 'military';
-  if (/朝廷|京兆府|州府|官府|刑部|大理寺|六扇门|兰台|王国|藩镇|平卢|魏博|昭南/.test(n)) return 'polity';
+  if (/朝廷|京兆府|州府|官府|刑部|大理寺|六扇门|兰台|王国|藩镇|平卢|魏博|昭南/.test(n)) return 'state';
   if (/侯府$|家$|氏$|族$/.test(n)) return 'clan';
   if (/宗$|观$|寺$|教$|门$|派$|阁$|殿$|丛林/.test(n)) return 'sect';
   return 'organization'; // 行/钱庄/商会/镖局/堂/院/会/社/盟/势力/集团/游侠/帮…
@@ -60,12 +60,12 @@ for (const { p, m } of stages) {
       if (!a.faction) continue;
       const { id, category } = facOf(a.faction);
       if (seen.has(id)) continue; seen.add(id);
-      existing.push({ factionId: id, category, role: a.role || '' });
+      existing.push({ factionId: id, category, role: a.role || '成员' });
       projWrites++; added = true;
       // 确保该 stage 有此 faction def
       if (!facById.has(id)) {
         facById.add(id);
-        if (APPLY) (m.canon.factions = m.canon.factions || []).push({ id, name: a.faction, description: '', type: TYPE_ZH[category] || '组织', features: [] });
+        if (APPLY) (m.canon.factions = m.canon.factions || []).push({ id, name: a.faction, description: `${a.faction}（${TYPE_ZH[category] || '组织'}）——简介待补，源自角色归属富化自动补录。`, type: TYPE_ZH[category] || '组织', features: [] });
         facDefsAdded++;
       }
     }

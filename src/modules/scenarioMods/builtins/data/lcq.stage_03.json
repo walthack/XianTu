@@ -165,42 +165,42 @@
       {
         "id": "liuchao.faction.pan_jiang_cheng",
         "name": "盘江程氏",
-        "description": "",
+        "description": "盘江程氏（家族）——简介待补，源自角色归属富化自动补录。",
         "type": "家族",
         "features": []
       },
       {
         "id": "liuchao.faction.x2d33e1eaf9",
         "name": "程宗扬势力",
-        "description": "",
+        "description": "程宗扬势力（组织）——简介待补，源自角色归属富化自动补录。",
         "type": "组织",
         "features": []
       },
       {
         "id": "liuchao.faction.yun_shi_shang_hui",
         "name": "云氏商会",
-        "description": "",
+        "description": "云氏商会（组织）——简介待补，源自角色归属富化自动补录。",
         "type": "组织",
         "features": []
       },
       {
         "id": "liuchao.faction.hei_mo_hai",
         "name": "黑魔海",
-        "description": "",
+        "description": "黑魔海（组织）——简介待补，源自角色归属富化自动补录。",
         "type": "组织",
         "features": []
       },
       {
         "id": "lcq.faction.left_guard",
         "name": "左武军",
-        "description": "",
+        "description": "左武军（军队）——简介待补，源自角色归属富化自动补录。",
         "type": "军队",
         "features": []
       },
       {
         "id": "liuchao.faction.xing_yue_hu",
         "name": "星月湖",
-        "description": "",
+        "description": "星月湖（组织）——简介待补，源自角色归属富化自动补录。",
         "type": "组织",
         "features": []
       }
@@ -943,7 +943,7 @@
           {
             "factionId": "liuchao.faction.bai_hu_shang_guan",
             "category": "organization",
-            "role": ""
+            "role": "成员"
           }
         ]
       },

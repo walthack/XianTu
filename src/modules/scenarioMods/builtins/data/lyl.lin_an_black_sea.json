@@ -468,133 +468,133 @@
       {
         "id": "liuchao.faction.x8b538653d9",
         "name": "殇侯势力",
-        "description": "",
+        "description": "殇侯势力（组织）——简介待补，源自角色归属富化自动补录。",
         "type": "组织",
         "features": []
       },
       {
         "id": "liuchao.faction.cheng_shi_shang_hui",
         "name": "程氏商会",
-        "description": "",
+        "description": "程氏商会（组织）——简介待补，源自角色归属富化自动补录。",
         "type": "组织",
         "features": []
       },
       {
         "id": "liuchao.faction.jin_jun",
         "name": "禁军",
-        "description": "",
+        "description": "禁军（军队）——简介待补，源自角色归属富化自动补录。",
         "type": "军队",
         "features": []
       },
       {
         "id": "liuchao.faction.x2d33e1eaf9",
         "name": "程宗扬势力",
-        "description": "",
+        "description": "程宗扬势力（组织）——简介待补，源自角色归属富化自动补录。",
         "type": "组织",
         "features": []
       },
       {
         "id": "lyl.faction.pengyi",
         "name": "鹏翼社",
-        "description": "",
+        "description": "鹏翼社（组织）——简介待补，源自角色归属富化自动补录。",
         "type": "组织",
         "features": []
       },
       {
         "id": "liuchao.faction.x93a4451da4",
         "name": "广阳赌坊",
-        "description": "",
+        "description": "广阳赌坊（组织）——简介待补，源自角色归属富化自动补录。",
         "type": "组织",
         "features": []
       },
       {
         "id": "liuchao.faction.xd432e999a6",
         "name": "翻江会",
-        "description": "",
+        "description": "翻江会（组织）——简介待补，源自角色归属富化自动补录。",
         "type": "组织",
         "features": []
       },
       {
         "id": "liuchao.faction.x760a502863",
         "name": "陶氏钱庄",
-        "description": "",
+        "description": "陶氏钱庄（组织）——简介待补，源自角色归属富化自动补录。",
         "type": "组织",
         "features": []
       },
       {
         "id": "liuchao.faction.x1d85dea006",
         "name": "晴州总商会",
-        "description": "",
+        "description": "晴州总商会（组织）——简介待补，源自角色归属富化自动补录。",
         "type": "组织",
         "features": []
       },
       {
         "id": "liuchao.faction.xb829c70fb9",
         "name": "林州小碧潭",
-        "description": "",
+        "description": "林州小碧潭（组织）——简介待补，源自角色归属富化自动补录。",
         "type": "组织",
         "features": []
       },
       {
         "id": "liuchao.faction.x7ef38c734e",
         "name": "影月宗",
-        "description": "",
+        "description": "影月宗（宗门）——简介待补，源自角色归属富化自动补录。",
         "type": "宗门",
         "features": []
       },
       {
         "id": "liuchao.faction.x4e30686b32",
         "name": "临川王势力",
-        "description": "",
+        "description": "临川王势力（组织）——简介待补，源自角色归属富化自动补录。",
         "type": "组织",
         "features": []
       },
       {
         "id": "liuchao.faction.beidi_shaman",
         "name": "北地兽蛮人",
-        "description": "",
+        "description": "北地兽蛮人（组织）——简介待补，源自角色归属富化自动补录。",
         "type": "组织",
         "features": []
       },
       {
         "id": "liuchao.faction.x78a6c9fdd3",
         "name": "大孚灵鹫寺",
-        "description": "",
+        "description": "大孚灵鹫寺（宗门）——简介待补，源自角色归属富化自动补录。",
         "type": "宗门",
         "features": []
       },
       {
         "id": "liuchao.faction.shi_fang_cong_lin",
         "name": "十方丛林",
-        "description": "",
+        "description": "十方丛林（宗门）——简介待补，源自角色归属富化自动补录。",
         "type": "宗门",
         "features": []
       },
       {
         "id": "liuchao.faction.tai_yi_zhen_zong",
         "name": "太乙真宗",
-        "description": "",
+        "description": "太乙真宗（宗门）——简介待补，源自角色归属富化自动补录。",
         "type": "宗门",
         "features": []
       },
       {
         "id": "liuchao.faction.bai_hu_shang_guan",
         "name": "白湖商馆",
-        "description": "",
+        "description": "白湖商馆（组织）——简介待补，源自角色归属富化自动补录。",
         "type": "组织",
         "features": []
       },
       {
         "id": "lcq.faction.left_guard",
         "name": "左武军",
-        "description": "",
+        "description": "左武军（军队）——简介待补，源自角色归属富化自动补录。",
         "type": "军队",
         "features": []
       },
       {
         "id": "liuchao.faction.x898ded5bf1",
         "name": "少陵侯府",
-        "description": "",
+        "description": "少陵侯府（家族）——简介待补，源自角色归属富化自动补录。",
         "type": "家族",
         "features": []
       }
@@ -3579,7 +3579,11 @@
       "event.wei_yuan_crisis_deepen.done": false,
       "event.gao_yanei_showdown.done": false,
       "event.cold_poison_mystery.done": false,
-      "event.final_preparations.done": false
+      "event.final_preparations.done": false,
+      "event.debut_ruan_sisters.done": false,
+      "event.ruan_xiangning_secret.done": false,
+      "event.ruan_xianglin_scheme.done": false,
+      "event.mingqingsi_encounter.done": false
     },
     "chapters": [
       {
@@ -3596,7 +3600,11 @@
         "eventIds": [
           "liuchao.event.factory_registration",
           "liuchao.event.gather_intel",
-          "liuchao.event.wei_yuan_first_contact"
+          "liuchao.event.wei_yuan_first_contact",
+          "lyl.event.debut_ruan_sisters",
+          "lyl.event.ruan_xiangning_secret",
+          "lyl.event.ruan_xianglin_scheme",
+          "lyl.event.mingqingsi_encounter"
         ]
       },
       {
@@ -3965,6 +3973,88 @@
         "locationId": "liuchao.location.baobeifang",
         "axisId": null,
         "axisMethod": "reviewed-no-anchor"
+      },
+      {
+        "id": "lyl.event.debut_ruan_sisters",
+        "name": "阮氏姐妹情报",
+        "description": "敖润打探临安消息回报：威远镖局总镖头李寅臣之妻为长姐阮香琳（林州小碧潭\"销魂玉带\"，李师师之母）；八十万禁军教头林冲之妻为小妹阮香凝（林娘子），未习武、成婚多年无子，常延尼姑道姑上门求子。程宗扬等由此怀疑阮香凝是黑魔海安插临安的暗桩，恐已渗透宋国禁军。",
+        "conditions": [],
+        "completion": [
+          {
+            "path": "flags.event.debut_ruan_sisters.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.ruan_xiang_ning",
+          "liuchao.character.ruan_xiang_lin",
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.ao_run",
+          "liuchao.character.lin_chong",
+          "liuchao.character.li_shi_shi"
+        ],
+        "critical": false
+      },
+      {
+        "id": "lyl.event.ruan_xiangning_secret",
+        "name": "处女之秘",
+        "description": "程宗扬在林家误入阮香凝房间，依西门庆相女之术近距离判断：成婚十余年的林娘子竟仍是处女——多年\"求子\"实为掩饰，其潜伏身份疑云更深。",
+        "conditions": [],
+        "completion": [
+          {
+            "path": "flags.event.ruan_xiangning_secret.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.ruan_xiang_ning",
+          "liuchao.character.cheng_zongyang"
+        ],
+        "critical": false
+      },
+      {
+        "id": "lyl.event.ruan_xianglin_scheme",
+        "name": "逼女就嫁",
+        "description": "阮香琳力主攀附高太尉府：与丈夫李寅臣争执时，以\"不允高衙内必遭官府发卖\"要挟其就范；又亲赴李师师住处劝女儿受纳为妾，以\"一步登天\"\"小衙内会爱护如珠如宝\"安抚。",
+        "conditions": [],
+        "completion": [
+          {
+            "path": "flags.event.ruan_xianglin_scheme.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.ruan_xiang_lin",
+          "liuchao.character.li_shi_shi",
+          "liuchao.character.li_yin_chen",
+          "liuchao.character.gao_ya_nei"
+        ],
+        "critical": false
+      },
+      {
+        "id": "lyl.event.mingqingsi_encounter",
+        "name": "明庆寺遇险",
+        "description": "阮香凝与李师师往明庆寺进香，五岳楼前遭高衙内拦截调戏；程宗扬出手干预化解，林冲随后赶到，全程被林清浦以水镜录下。",
+        "conditions": [],
+        "completion": [
+          {
+            "path": "flags.event.mingqingsi_encounter.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.ruan_xiang_ning",
+          "liuchao.character.li_shi_shi",
+          "liuchao.character.gao_ya_nei",
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.lin_chong",
+          "liuchao.character.lin_qing_pu"
+        ],
+        "critical": false
       }
     ]
   },

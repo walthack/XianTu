@@ -350,21 +350,21 @@
       {
         "id": "liuchao.faction.pan_jiang_cheng",
         "name": "盘江程氏",
-        "description": "",
+        "description": "盘江程氏（家族）——简介待补，源自角色归属富化自动补录。",
         "type": "家族",
         "features": []
       },
       {
         "id": "liuchao.faction.xb9033ecdb3",
         "name": "秦军军团",
-        "description": "",
+        "description": "秦军军团（组织）——简介待补，源自角色归属富化自动补录。",
         "type": "组织",
         "features": []
       },
       {
         "id": "liuchao.faction.bai_hu_shang_guan",
         "name": "白湖商馆",
-        "description": "",
+        "description": "白湖商馆（组织）——简介待补，源自角色归属富化自动补录。",
         "type": "组织",
         "features": []
       }

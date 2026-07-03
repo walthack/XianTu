@@ -250,77 +250,77 @@
       {
         "id": "liuchao.faction.pan_jiang_cheng",
         "name": "盘江程氏",
-        "description": "",
+        "description": "盘江程氏（家族）——简介待补，源自角色归属富化自动补录。",
         "type": "家族",
         "features": []
       },
       {
         "id": "liuchao.faction.yun_shi_shang_hui",
         "name": "云氏商会",
-        "description": "",
+        "description": "云氏商会（组织）——简介待补，源自角色归属富化自动补录。",
         "type": "组织",
         "features": []
       },
       {
         "id": "liuchao.faction.hua_miao",
         "name": "花苗族",
-        "description": "",
+        "description": "花苗族（家族）——简介待补，源自角色归属富化自动补录。",
         "type": "家族",
         "features": []
       },
       {
         "id": "liuchao.faction.hong_miao",
         "name": "红苗族",
-        "description": "",
+        "description": "红苗族（家族）——简介待补，源自角色归属富化自动补录。",
         "type": "家族",
         "features": []
       },
       {
         "id": "liuchao.faction.tai_yi_zhen_zong",
         "name": "太乙真宗",
-        "description": "",
+        "description": "太乙真宗（宗门）——简介待补，源自角色归属富化自动补录。",
         "type": "宗门",
         "features": []
       },
       {
         "id": "liuchao.faction.x12f7726f47",
         "name": "申服君封地",
-        "description": "",
+        "description": "申服君封地（组织）——简介待补，源自角色归属富化自动补录。",
         "type": "组织",
         "features": []
       },
       {
         "id": "liuchao.faction.hei_mo_hai",
         "name": "黑魔海",
-        "description": "",
+        "description": "黑魔海（组织）——简介待补，源自角色归属富化自动补录。",
         "type": "组织",
         "features": []
       },
       {
         "id": "lcq.faction.left_guard",
         "name": "左武军",
-        "description": "",
+        "description": "左武军（军队）——简介待补，源自角色归属富化自动补录。",
         "type": "军队",
         "features": []
       },
       {
         "id": "liuchao.faction.x8b538653d9",
         "name": "殇侯势力",
-        "description": "",
+        "description": "殇侯势力（组织）——简介待补，源自角色归属富化自动补录。",
         "type": "组织",
         "features": []
       },
       {
         "id": "liuchao.faction.cheng_shi_shang_hui",
         "name": "程氏商会",
-        "description": "",
+        "description": "程氏商会（组织）——简介待补，源自角色归属富化自动补录。",
         "type": "组织",
         "features": []
       },
       {
         "id": "liuchao.faction.x898ded5bf1",
         "name": "少陵侯府",
-        "description": "",
+        "description": "少陵侯府（家族）——简介待补，源自角色归属富化自动补录。",
         "type": "家族",
         "features": []
       }
@@ -1241,7 +1241,7 @@
           {
             "factionId": "liuchao.faction.bai_hu_shang_guan",
             "category": "organization",
-            "role": ""
+            "role": "成员"
           }
         ]
       },
@@ -1510,7 +1510,7 @@
           {
             "factionId": "liuchao.faction.gui_wang_dong",
             "category": "organization",
-            "role": ""
+            "role": "成员"
           }
         ]
       },
