@@ -1,9 +1,9 @@
 {
   "schema": "xiantu.character-registry.v1",
-  "version": "cr-2026-07-03-9f9aadfbbc3ed64a",
-  "sourceHash": "9f9aadfbbc3ed64a",
+  "version": "cr-2026-07-03-9ba3647fb1f8d040",
+  "sourceHash": "9ba3647fb1f8d040",
   "sourceGeneratedAt": "2026-06-30T12:50:33.965Z",
-  "generatedAt": "2026-07-03T03:18:38.403Z",
+  "generatedAt": "2026-07-03T04:06:51.077Z",
   "stats": {
     "total": 308,
     "stagePresent": 249,
@@ -17,7 +17,8 @@
       "aliases": [],
       "gender": "",
       "books": [
-        "qingyu"
+        "qingyu",
+        "yunlong"
       ],
       "tier": "主要",
       "stagePresence": false,
@@ -498,6 +499,7 @@
       "aliases": [],
       "gender": "",
       "books": [
+        "qingyu",
         "yange"
       ],
       "tier": "主要",
@@ -725,7 +727,8 @@
       "aliases": [],
       "gender": "",
       "books": [
-        "qingyu"
+        "qingyu",
+        "yunlong"
       ],
       "tier": "次要",
       "stagePresence": false,
@@ -1052,7 +1055,9 @@
       "aliases": [],
       "gender": "",
       "books": [
-        "yunlong"
+        "qingyu",
+        "yunlong",
+        "yange"
       ],
       "tier": "主要",
       "stagePresence": false,
@@ -1110,6 +1115,7 @@
       ],
       "gender": "",
       "books": [
+        "yunlong",
         "yange"
       ],
       "tier": "次要",
@@ -3606,7 +3612,8 @@
       "aliases": [],
       "gender": "女",
       "books": [
-        "qingyu"
+        "qingyu",
+        "yange"
       ],
       "tier": "次要",
       "stagePresence": true,
@@ -3698,7 +3705,8 @@
       "aliases": [],
       "gender": "男",
       "books": [
-        "qingyu"
+        "qingyu",
+        "yunlong"
       ],
       "tier": "主要",
       "stagePresence": true,
@@ -3869,7 +3877,8 @@
       "aliases": [],
       "gender": "男",
       "books": [
-        "qingyu"
+        "qingyu",
+        "yunlong"
       ],
       "tier": "主要",
       "stagePresence": true,
@@ -3965,7 +3974,8 @@
       "aliases": [],
       "gender": "男",
       "books": [
-        "qingyu"
+        "qingyu",
+        "yunlong"
       ],
       "tier": "主要",
       "stagePresence": true,
@@ -4187,7 +4197,8 @@
       "aliases": [],
       "gender": "男",
       "books": [
-        "qingyu"
+        "qingyu",
+        "yunlong"
       ],
       "tier": "主要",
       "stagePresence": true,
@@ -4634,7 +4645,9 @@
       "aliases": [],
       "gender": "男",
       "books": [
-        "qingyu"
+        "qingyu",
+        "yunlong",
+        "yange"
       ],
       "tier": "主要",
       "stagePresence": true,
@@ -4733,7 +4746,9 @@
       "aliases": [],
       "gender": "女",
       "books": [
-        "qingyu"
+        "qingyu",
+        "yunlong",
+        "yange"
       ],
       "tier": "主要",
       "stagePresence": true,
@@ -4925,7 +4940,9 @@
       ],
       "gender": "",
       "books": [
-        "qingyu"
+        "qingyu",
+        "yunlong",
+        "yange"
       ],
       "tier": "主要",
       "stagePresence": true,
@@ -5423,7 +5440,9 @@
       "aliases": [],
       "gender": "男",
       "books": [
-        "yunlong"
+        "qingyu",
+        "yunlong",
+        "yange"
       ],
       "tier": "主要",
       "stagePresence": true,
@@ -5562,6 +5581,7 @@
       "aliases": [],
       "gender": "男",
       "books": [
+        "yunlong",
         "yange"
       ],
       "tier": "主要",
@@ -5809,7 +5829,8 @@
       "aliases": [],
       "gender": "女",
       "books": [
-        "yunlong"
+        "yunlong",
+        "yange"
       ],
       "tier": "次要",
       "stagePresence": true,
@@ -5892,6 +5913,7 @@
       "aliases": [],
       "gender": "男",
       "books": [
+        "qingyu",
         "yunlong"
       ],
       "tier": "主要",
@@ -5996,7 +6018,9 @@
       ],
       "gender": "女",
       "books": [
-        "qingyu"
+        "qingyu",
+        "yunlong",
+        "yange"
       ],
       "tier": "主要",
       "stagePresence": true,
@@ -6650,6 +6674,8 @@
       ],
       "gender": "女",
       "books": [
+        "qingyu",
+        "yunlong",
         "yange"
       ],
       "tier": "主要",
@@ -7652,7 +7678,8 @@
       "aliases": [],
       "gender": "女",
       "books": [
-        "qingyu"
+        "qingyu",
+        "yunlong"
       ],
       "tier": "次要",
       "stagePresence": true,
@@ -7884,7 +7911,8 @@
       ],
       "gender": "男",
       "books": [
-        "qingyu"
+        "qingyu",
+        "yunlong"
       ],
       "tier": "次要",
       "stagePresence": true,
@@ -8107,7 +8135,8 @@
       "aliases": [],
       "gender": "男",
       "books": [
-        "yunlong"
+        "yunlong",
+        "yange"
       ],
       "tier": "次要",
       "stagePresence": true,
@@ -8870,7 +8899,8 @@
       "aliases": [],
       "gender": "男",
       "books": [
-        "yunlong"
+        "yunlong",
+        "yange"
       ],
       "tier": "次要",
       "stagePresence": true,
@@ -8950,6 +8980,7 @@
       "aliases": [],
       "gender": "男",
       "books": [
+        "yunlong",
         "yange"
       ],
       "tier": "次要",
@@ -9038,7 +9069,8 @@
       "aliases": [],
       "gender": "未知",
       "books": [
-        "qingyu"
+        "qingyu",
+        "yange"
       ],
       "tier": "主要",
       "stagePresence": true,
@@ -9511,7 +9543,8 @@
       "gender": "男",
       "books": [
         "qingyu",
-        "yunlong"
+        "yunlong",
+        "yange"
       ],
       "tier": "次要",
       "stagePresence": true,
@@ -9766,7 +9799,8 @@
       "aliases": [],
       "gender": "男",
       "books": [
-        "yunlong"
+        "yunlong",
+        "yange"
       ],
       "tier": "次要",
       "stagePresence": true,
@@ -9852,7 +9886,8 @@
       "aliases": [],
       "gender": "男",
       "books": [
-        "yunlong"
+        "yunlong",
+        "yange"
       ],
       "tier": "次要",
       "stagePresence": true,
@@ -10016,7 +10051,8 @@
       ],
       "gender": "男",
       "books": [
-        "yunlong"
+        "yunlong",
+        "yange"
       ],
       "tier": "主要",
       "stagePresence": true,
@@ -10113,7 +10149,8 @@
       "aliases": [],
       "gender": "男",
       "books": [
-        "yunlong"
+        "yunlong",
+        "yange"
       ],
       "tier": "主要",
       "stagePresence": true,
@@ -10216,6 +10253,7 @@
       ],
       "gender": "男",
       "books": [
+        "yunlong",
         "yange"
       ],
       "tier": "主要",
@@ -10709,7 +10747,8 @@
       "aliases": [],
       "gender": "男",
       "books": [
-        "qingyu"
+        "qingyu",
+        "yunlong"
       ],
       "tier": "主要",
       "stagePresence": true,
@@ -11312,6 +11351,7 @@
       "aliases": [],
       "gender": "男",
       "books": [
+        "yunlong",
         "yange"
       ],
       "tier": "主要",
@@ -11482,6 +11522,7 @@
       "aliases": [],
       "gender": "男",
       "books": [
+        "yunlong",
         "yange"
       ],
       "tier": "主要",
@@ -11568,7 +11609,8 @@
       ],
       "gender": "女",
       "books": [
-        "yunlong"
+        "yunlong",
+        "yange"
       ],
       "tier": "主要",
       "stagePresence": true,
@@ -11767,7 +11809,8 @@
       ],
       "gender": "男",
       "books": [
-        "qingyu"
+        "qingyu",
+        "yunlong"
       ],
       "tier": "次要",
       "stagePresence": true,
@@ -11994,7 +12037,8 @@
       "aliases": [],
       "gender": "女",
       "books": [
-        "yunlong"
+        "yunlong",
+        "yange"
       ],
       "tier": "主要",
       "stagePresence": true,
@@ -12078,6 +12122,7 @@
       "aliases": [],
       "gender": "男",
       "books": [
+        "yunlong",
         "yange"
       ],
       "tier": "主要",
@@ -12163,7 +12208,8 @@
       ],
       "gender": "女",
       "books": [
-        "yunlong"
+        "yunlong",
+        "yange"
       ],
       "tier": "次要",
       "stagePresence": true,
@@ -12353,7 +12399,9 @@
       "aliases": [],
       "gender": "男",
       "books": [
-        "yunlong"
+        "qingyu",
+        "yunlong",
+        "yange"
       ],
       "tier": "主要",
       "stagePresence": true,
@@ -12521,6 +12569,7 @@
       "aliases": [],
       "gender": "男",
       "books": [
+        "yunlong",
         "yange"
       ],
       "tier": "主要",
@@ -12616,7 +12665,9 @@
       "aliases": [],
       "gender": "男",
       "books": [
-        "yunlong"
+        "qingyu",
+        "yunlong",
+        "yange"
       ],
       "tier": "次要",
       "stagePresence": true,
@@ -12701,6 +12752,7 @@
       ],
       "gender": "男",
       "books": [
+        "yunlong",
         "yange"
       ],
       "tier": "主要",
@@ -12926,7 +12978,9 @@
       "aliases": [],
       "gender": "女",
       "books": [
-        "yunlong"
+        "qingyu",
+        "yunlong",
+        "yange"
       ],
       "tier": "主要",
       "stagePresence": true,
@@ -13240,7 +13294,8 @@
       "aliases": [],
       "gender": "男",
       "books": [
-        "yunlong"
+        "yunlong",
+        "yange"
       ],
       "tier": "次要",
       "stagePresence": true,
@@ -13515,6 +13570,8 @@
       "aliases": [],
       "gender": "",
       "books": [
+        "qingyu",
+        "yunlong",
         "yange"
       ],
       "tier": "主要",
@@ -13598,6 +13655,7 @@
       "aliases": [],
       "gender": "男",
       "books": [
+        "qingyu",
         "yunlong"
       ],
       "tier": "主要",
@@ -13861,6 +13919,7 @@
       "aliases": [],
       "gender": "女",
       "books": [
+        "qingyu",
         "yunlong",
         "yange"
       ],
@@ -14092,6 +14151,8 @@
       "aliases": [],
       "gender": "女",
       "books": [
+        "qingyu",
+        "yunlong",
         "yange"
       ],
       "tier": "主要",
@@ -14158,7 +14219,8 @@
       "aliases": [],
       "gender": "男",
       "books": [
-        "yunlong"
+        "yunlong",
+        "yange"
       ],
       "tier": "次要",
       "stagePresence": true,
@@ -14430,6 +14492,7 @@
       "aliases": [],
       "gender": "男",
       "books": [
+        "qingyu",
         "yunlong",
         "yange"
       ],
@@ -14549,7 +14612,9 @@
       "aliases": [],
       "gender": "女",
       "books": [
-        "qingyu"
+        "qingyu",
+        "yunlong",
+        "yange"
       ],
       "tier": "主要",
       "stagePresence": true,
@@ -15181,7 +15246,8 @@
       ],
       "gender": "女",
       "books": [
-        "yunlong"
+        "yunlong",
+        "yange"
       ],
       "tier": "主要",
       "stagePresence": true,
@@ -15901,6 +15967,7 @@
       "aliases": [],
       "gender": "男",
       "books": [
+        "qingyu",
         "yunlong",
         "yange"
       ],
@@ -16008,7 +16075,9 @@
       "aliases": [],
       "gender": "男",
       "books": [
-        "qingyu"
+        "qingyu",
+        "yunlong",
+        "yange"
       ],
       "tier": "主要",
       "stagePresence": true,
@@ -16104,7 +16173,8 @@
       ],
       "gender": "男",
       "books": [
-        "yunlong"
+        "yunlong",
+        "yange"
       ],
       "tier": "主要",
       "stagePresence": true,
@@ -16213,7 +16283,8 @@
       "gender": "男",
       "books": [
         "qingyu",
-        "yunlong"
+        "yunlong",
+        "yange"
       ],
       "tier": "主要",
       "stagePresence": true,
@@ -16546,6 +16617,7 @@
       "aliases": [],
       "gender": "男",
       "books": [
+        "yunlong",
         "yange"
       ],
       "tier": "主要",
@@ -16728,7 +16800,8 @@
       "aliases": [],
       "gender": "女",
       "books": [
-        "yunlong"
+        "yunlong",
+        "yange"
       ],
       "tier": "主要",
       "stagePresence": true,
@@ -16826,8 +16899,8 @@
       ],
       "gender": "男",
       "books": [
-        "yange",
-        "yunlong"
+        "yunlong",
+        "yange"
       ],
       "tier": "主要",
       "stagePresence": true,
@@ -17159,7 +17232,8 @@
       "aliases": [],
       "gender": "男",
       "books": [
-        "yunlong"
+        "yunlong",
+        "yange"
       ],
       "tier": "次要",
       "stagePresence": true,
@@ -17239,6 +17313,7 @@
       ],
       "gender": "男",
       "books": [
+        "qingyu",
         "yunlong",
         "yange"
       ],
@@ -17536,7 +17611,8 @@
       ],
       "gender": "男",
       "books": [
-        "yunlong"
+        "yunlong",
+        "yange"
       ],
       "tier": "主要",
       "stagePresence": true,
@@ -17858,7 +17934,8 @@
       ],
       "gender": "男",
       "books": [
-        "yunlong"
+        "yunlong",
+        "yange"
       ],
       "tier": "主要",
       "stagePresence": true,
@@ -18085,6 +18162,7 @@
       ],
       "gender": "女",
       "books": [
+        "yunlong",
         "yange"
       ],
       "tier": "主要",
@@ -18546,7 +18624,8 @@
       "gender": "男",
       "books": [
         "qingyu",
-        "yunlong"
+        "yunlong",
+        "yange"
       ],
       "tier": "次要",
       "stagePresence": true,
@@ -19077,6 +19156,7 @@
       "aliases": [],
       "gender": "男",
       "books": [
+        "qingyu",
         "yunlong",
         "yange"
       ],
@@ -19600,7 +19680,9 @@
       ],
       "gender": "女",
       "books": [
-        "qingyu"
+        "qingyu",
+        "yunlong",
+        "yange"
       ],
       "tier": "主要",
       "stagePresence": true,
@@ -20249,6 +20331,7 @@
       ],
       "gender": "女",
       "books": [
+        "qingyu",
         "yunlong",
         "yange"
       ],
@@ -20726,6 +20809,7 @@
       "aliases": [],
       "gender": "女",
       "books": [
+        "yunlong",
         "yange"
       ],
       "tier": "主要",
@@ -20856,6 +20940,7 @@
       "gender": "男",
       "books": [
         "qingyu",
+        "yunlong",
         "yange"
       ],
       "tier": "主要",
@@ -21095,7 +21180,8 @@
       "gender": "男",
       "books": [
         "qingyu",
-        "yunlong"
+        "yunlong",
+        "yange"
       ],
       "tier": "次要",
       "stagePresence": true,
@@ -21808,7 +21894,9 @@
       "aliases": [],
       "gender": "男",
       "books": [
-        "yunlong"
+        "qingyu",
+        "yunlong",
+        "yange"
       ],
       "tier": "主要",
       "stagePresence": true,
@@ -22302,6 +22390,8 @@
       ],
       "gender": "女",
       "books": [
+        "qingyu",
+        "yunlong",
         "yange"
       ],
       "tier": "主要",
@@ -23816,7 +23906,8 @@
       "aliases": [],
       "gender": "男",
       "books": [
-        "yunlong"
+        "yunlong",
+        "yange"
       ],
       "tier": "主要",
       "stagePresence": true,
@@ -24273,6 +24364,7 @@
       ],
       "gender": "男",
       "books": [
+        "qingyu",
         "yunlong",
         "yange"
       ],
@@ -24521,7 +24613,9 @@
       "aliases": [],
       "gender": "男",
       "books": [
-        "yunlong"
+        "qingyu",
+        "yunlong",
+        "yange"
       ],
       "tier": "主要",
       "stagePresence": true,
@@ -24604,7 +24698,9 @@
       "aliases": [],
       "gender": "女",
       "books": [
-        "qingyu"
+        "qingyu",
+        "yunlong",
+        "yange"
       ],
       "tier": "主要",
       "stagePresence": true,
@@ -24795,7 +24891,8 @@
       "aliases": [],
       "gender": "女",
       "books": [
-        "qingyu"
+        "qingyu",
+        "yunlong"
       ],
       "tier": "主要",
       "stagePresence": true,
@@ -25208,6 +25305,7 @@
       ],
       "gender": "女",
       "books": [
+        "yunlong",
         "yange"
       ],
       "tier": "主要",
@@ -25435,6 +25533,7 @@
       ],
       "gender": "女",
       "books": [
+        "yunlong",
         "yange"
       ],
       "tier": "主要",
@@ -25845,7 +25944,8 @@
       "aliases": [],
       "gender": "女",
       "books": [
-        "yunlong"
+        "yunlong",
+        "yange"
       ],
       "tier": "次要",
       "stagePresence": true,
@@ -25903,7 +26003,8 @@
       "aliases": [],
       "gender": "男",
       "books": [
-        "yunlong"
+        "yunlong",
+        "yange"
       ],
       "tier": "次要",
       "stagePresence": true,
@@ -26052,6 +26153,7 @@
       "aliases": [],
       "gender": "男",
       "books": [
+        "qingyu",
         "yunlong",
         "yange"
       ],
@@ -26170,6 +26272,7 @@
       "aliases": [],
       "gender": "男",
       "books": [
+        "qingyu",
         "yunlong"
       ],
       "tier": "主要",
@@ -26425,6 +26528,7 @@
       "aliases": [],
       "gender": "男",
       "books": [
+        "yunlong",
         "yange"
       ],
       "tier": "主要",
@@ -26510,7 +26614,8 @@
       "aliases": [],
       "gender": "女",
       "books": [
-        "yunlong"
+        "yunlong",
+        "yange"
       ],
       "tier": "主要",
       "stagePresence": true,
@@ -26699,7 +26804,8 @@
       "aliases": [],
       "gender": "男",
       "books": [
-        "yunlong"
+        "yunlong",
+        "yange"
       ],
       "tier": "次要",
       "stagePresence": true,
@@ -26923,7 +27029,8 @@
       ],
       "gender": "男",
       "books": [
-        "qingyu"
+        "qingyu",
+        "yunlong"
       ],
       "tier": "次要",
       "stagePresence": true,
@@ -27151,6 +27258,7 @@
       ],
       "gender": "男",
       "books": [
+        "qingyu",
         "yunlong"
       ],
       "tier": "主要",
@@ -27523,7 +27631,9 @@
       ],
       "gender": "男",
       "books": [
-        "qingyu"
+        "qingyu",
+        "yunlong",
+        "yange"
       ],
       "tier": "主要",
       "stagePresence": true,
@@ -28061,6 +28171,7 @@
       "gender": "男",
       "books": [
         "qingyu",
+        "yunlong",
         "yange"
       ],
       "tier": "主要",
@@ -28322,7 +28433,8 @@
       "gender": "男",
       "books": [
         "qingyu",
-        "yunlong"
+        "yunlong",
+        "yange"
       ],
       "tier": "次要",
       "stagePresence": true,
@@ -28545,7 +28657,8 @@
       "aliases": [],
       "gender": "男",
       "books": [
-        "qingyu"
+        "qingyu",
+        "yunlong"
       ],
       "tier": "次要",
       "stagePresence": true,
@@ -28711,7 +28824,8 @@
       "aliases": [],
       "gender": "女",
       "books": [
-        "yunlong"
+        "yunlong",
+        "yange"
       ],
       "tier": "次要",
       "stagePresence": true,
@@ -28795,6 +28909,7 @@
       "aliases": [],
       "gender": "女",
       "books": [
+        "qingyu",
         "yunlong"
       ],
       "tier": "主要",
@@ -29019,6 +29134,7 @@
       "aliases": [],
       "gender": "女",
       "books": [
+        "yunlong",
         "yange"
       ],
       "tier": "主要",
@@ -29101,6 +29217,7 @@
       ],
       "gender": "女",
       "books": [
+        "qingyu",
         "yange"
       ],
       "tier": "次要",
@@ -29285,7 +29402,8 @@
       "gender": "男",
       "books": [
         "qingyu",
-        "yunlong"
+        "yunlong",
+        "yange"
       ],
       "tier": "主要",
       "stagePresence": true,
@@ -29619,6 +29737,7 @@
       ],
       "gender": "女",
       "books": [
+        "qingyu",
         "yunlong",
         "yange"
       ],
@@ -30233,7 +30352,8 @@
       ],
       "gender": "男",
       "books": [
-        "qingyu"
+        "qingyu",
+        "yunlong"
       ],
       "tier": "主要",
       "stagePresence": true,
@@ -30487,6 +30607,7 @@
       "aliases": [],
       "gender": "男",
       "books": [
+        "qingyu",
         "yunlong"
       ],
       "tier": "主要",
@@ -30570,6 +30691,8 @@
       ],
       "gender": "男",
       "books": [
+        "qingyu",
+        "yunlong",
         "yange"
       ],
       "tier": "主要",
@@ -30669,7 +30792,8 @@
       ],
       "gender": "男",
       "books": [
-        "yunlong"
+        "yunlong",
+        "yange"
       ],
       "tier": "主要",
       "stagePresence": true,
@@ -31251,6 +31375,7 @@
       "aliases": [],
       "gender": "女",
       "books": [
+        "qingyu",
         "yunlong",
         "yange"
       ],
@@ -31373,6 +31498,7 @@
       "aliases": [],
       "gender": "男",
       "books": [
+        "qingyu",
         "yunlong"
       ],
       "tier": "主要",
@@ -31755,6 +31881,8 @@
       "aliases": [],
       "gender": "女",
       "books": [
+        "qingyu",
+        "yunlong",
         "yange"
       ],
       "tier": "次要",
@@ -31847,6 +31975,8 @@
       ],
       "gender": "女",
       "books": [
+        "qingyu",
+        "yunlong",
         "yange"
       ],
       "tier": "主要",
@@ -32296,6 +32426,7 @@
       "aliases": [],
       "gender": "女",
       "books": [
+        "yunlong",
         "yange"
       ],
       "tier": "主要",
@@ -32536,6 +32667,8 @@
       ],
       "gender": "女",
       "books": [
+        "qingyu",
+        "yunlong",
         "yange"
       ],
       "tier": "主要",
@@ -32745,6 +32878,7 @@
       "aliases": [],
       "gender": "女",
       "books": [
+        "qingyu",
         "yunlong",
         "yange"
       ],
@@ -32953,6 +33087,7 @@
       "aliases": [],
       "gender": "女",
       "books": [
+        "qingyu",
         "yunlong"
       ],
       "tier": "主要",
@@ -33039,7 +33174,9 @@
       "aliases": [],
       "gender": "女",
       "books": [
-        "yunlong"
+        "qingyu",
+        "yunlong",
+        "yange"
       ],
       "tier": "主要",
       "stagePresence": true,
@@ -33280,7 +33417,9 @@
       "aliases": [],
       "gender": "男",
       "books": [
-        "qingyu"
+        "qingyu",
+        "yunlong",
+        "yange"
       ],
       "tier": "次要",
       "stagePresence": true,
@@ -33753,6 +33892,7 @@
       "aliases": [],
       "gender": "男",
       "books": [
+        "qingyu",
         "yunlong"
       ],
       "tier": "主要",
@@ -34044,7 +34184,9 @@
       ],
       "gender": "男",
       "books": [
-        "qingyu"
+        "qingyu",
+        "yunlong",
+        "yange"
       ],
       "tier": "主要",
       "stagePresence": true,
@@ -34447,7 +34589,9 @@
       "aliases": [],
       "gender": "女",
       "books": [
-        "yunlong"
+        "qingyu",
+        "yunlong",
+        "yange"
       ],
       "tier": "主要",
       "stagePresence": true,
@@ -34675,7 +34819,9 @@
       "aliases": [],
       "gender": "女",
       "books": [
-        "yunlong"
+        "qingyu",
+        "yunlong",
+        "yange"
       ],
       "tier": "主要",
       "stagePresence": true,
@@ -34864,7 +35010,8 @@
       "aliases": [],
       "gender": "男",
       "books": [
-        "qingyu"
+        "qingyu",
+        "yunlong"
       ],
       "tier": "次要",
       "stagePresence": true,
@@ -35083,7 +35230,8 @@
       "aliases": [],
       "gender": "男",
       "books": [
-        "yunlong"
+        "yunlong",
+        "yange"
       ],
       "tier": "次要",
       "stagePresence": true,
@@ -35225,7 +35373,8 @@
       "gender": "男",
       "books": [
         "qingyu",
-        "yunlong"
+        "yunlong",
+        "yange"
       ],
       "tier": "次要",
       "stagePresence": true,
@@ -35435,7 +35584,9 @@
       "aliases": [],
       "gender": "男",
       "books": [
-        "qingyu"
+        "qingyu",
+        "yunlong",
+        "yange"
       ],
       "tier": "次要",
       "stagePresence": true,
@@ -35786,6 +35937,8 @@
       ],
       "gender": "女",
       "books": [
+        "qingyu",
+        "yunlong",
         "yange"
       ],
       "tier": "主要",
@@ -36130,6 +36283,7 @@
       "aliases": [],
       "gender": "女",
       "books": [
+        "yunlong",
         "yange"
       ],
       "tier": "主要",
@@ -36464,6 +36618,7 @@
       "aliases": [],
       "gender": "男",
       "books": [
+        "yunlong",
         "yange"
       ],
       "tier": "主要",
@@ -36808,6 +36963,7 @@
       "aliases": [],
       "gender": "男",
       "books": [
+        "yunlong",
         "yange"
       ],
       "tier": "主要",
@@ -36934,6 +37090,7 @@
       "aliases": [],
       "gender": "男",
       "books": [
+        "yunlong",
         "yange"
       ],
       "tier": "主要",
@@ -37102,7 +37259,8 @@
       "aliases": [],
       "gender": "女",
       "books": [
-        "yunlong"
+        "yunlong",
+        "yange"
       ],
       "tier": "次要",
       "stagePresence": true,
@@ -37185,6 +37343,7 @@
       ],
       "gender": "女",
       "books": [
+        "qingyu",
         "yunlong",
         "yange"
       ],
@@ -37930,6 +38089,7 @@
       "aliases": [],
       "gender": "女",
       "books": [
+        "yunlong",
         "yange"
       ],
       "tier": "主要",
@@ -38506,6 +38666,8 @@
       ],
       "gender": "女",
       "books": [
+        "qingyu",
+        "yunlong",
         "yange"
       ],
       "tier": "主要",
@@ -38703,6 +38865,8 @@
       ],
       "gender": "男",
       "books": [
+        "qingyu",
+        "yunlong",
         "yange"
       ],
       "tier": "主要",
@@ -38905,6 +39069,7 @@
       "aliases": [],
       "gender": "男",
       "books": [
+        "yunlong",
         "yange"
       ],
       "tier": "主要",
@@ -39002,6 +39167,7 @@
       "aliases": [],
       "gender": "男",
       "books": [
+        "yunlong",
         "yange"
       ],
       "tier": "主要",
@@ -39085,6 +39251,7 @@
       "aliases": [],
       "gender": "男",
       "books": [
+        "yunlong",
         "yange"
       ],
       "tier": "主要",
@@ -39374,6 +39541,7 @@
       "aliases": [],
       "gender": "男",
       "books": [
+        "yunlong",
         "yange"
       ],
       "tier": "主要",
@@ -40002,6 +40170,8 @@
       ],
       "gender": "女",
       "books": [
+        "qingyu",
+        "yunlong",
         "yange"
       ],
       "tier": "主要",
@@ -40117,6 +40287,8 @@
       "aliases": [],
       "gender": "男",
       "books": [
+        "qingyu",
+        "yunlong",
         "yange"
       ],
       "tier": "主要",
@@ -40287,6 +40459,7 @@
       "aliases": [],
       "gender": "男",
       "books": [
+        "yunlong",
         "yange"
       ],
       "tier": "主要",
@@ -40638,6 +40811,8 @@
       "aliases": [],
       "gender": "男",
       "books": [
+        "qingyu",
+        "yunlong",
         "yange"
       ],
       "tier": "主要",
@@ -40899,7 +41074,8 @@
       "aliases": [],
       "gender": "男",
       "books": [
-        "yunlong"
+        "yunlong",
+        "yange"
       ],
       "tier": "主要",
       "stagePresence": true,
@@ -40984,7 +41160,8 @@
       ],
       "gender": "男",
       "books": [
-        "yunlong"
+        "yunlong",
+        "yange"
       ],
       "tier": "主要",
       "stagePresence": true,
@@ -41164,7 +41341,8 @@
       "aliases": [],
       "gender": "男",
       "books": [
-        "yunlong"
+        "yunlong",
+        "yange"
       ],
       "tier": "主要",
       "stagePresence": true,
@@ -41236,7 +41414,8 @@
       ],
       "gender": "男",
       "books": [
-        "yunlong"
+        "yunlong",
+        "yange"
       ],
       "tier": "主要",
       "stagePresence": true,
@@ -41398,7 +41577,9 @@
       "aliases": [],
       "gender": "男",
       "books": [
-        "yunlong"
+        "qingyu",
+        "yunlong",
+        "yange"
       ],
       "tier": "主要",
       "stagePresence": true,
@@ -41479,7 +41660,8 @@
       "aliases": [],
       "gender": "男",
       "books": [
-        "yunlong"
+        "yunlong",
+        "yange"
       ],
       "tier": "主要",
       "stagePresence": true,
@@ -41666,7 +41848,8 @@
       "aliases": [],
       "gender": "女",
       "books": [
-        "yunlong"
+        "yunlong",
+        "yange"
       ],
       "tier": "主要",
       "stagePresence": true,
@@ -41737,7 +41920,8 @@
       "aliases": [],
       "gender": "男",
       "books": [
-        "yunlong"
+        "yunlong",
+        "yange"
       ],
       "tier": "主要",
       "stagePresence": true,
@@ -41823,7 +42007,8 @@
       ],
       "gender": "女",
       "books": [
-        "yunlong"
+        "yunlong",
+        "yange"
       ],
       "tier": "主要",
       "stagePresence": true,
