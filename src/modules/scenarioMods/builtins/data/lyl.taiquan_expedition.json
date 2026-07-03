@@ -655,6 +655,36 @@
         "description": "少陵侯府（家族）——简介待补，源自角色归属富化自动补录。",
         "type": "家族",
         "features": []
+      },
+      {
+        "id": "liuchao.faction.song_court",
+        "name": "宋国朝廷",
+        "headquartersLocationId": "liuchao.location.linan",
+        "type": "government",
+        "description": "六朝之一宋国的朝廷，都城在临安。",
+        "territory": [
+          {
+            "x": 7000,
+            "y": 6300
+          },
+          {
+            "x": 8000,
+            "y": 6300
+          },
+          {
+            "x": 8000,
+            "y": 7000
+          },
+          {
+            "x": 7000,
+            "y": 7000
+          },
+          {
+            "x": 7000,
+            "y": 6300
+          }
+        ],
+        "features": []
       }
     ],
     "locations": [

@@ -80,6 +80,33 @@
             "y": 50
           }
         ]
+      },
+      {
+        "id": "liuchao.continent.taiquan",
+        "name": "太泉古阵",
+        "description": "宋国以南的神秘古遗迹，传说中的太泉古阵所在。",
+        "bounds": [
+          {
+            "x": 6400,
+            "y": 6600
+          },
+          {
+            "x": 9800,
+            "y": 6600
+          },
+          {
+            "x": 9800,
+            "y": 9600
+          },
+          {
+            "x": 6400,
+            "y": 9600
+          },
+          {
+            "x": 6400,
+            "y": 6600
+          }
+        ]
       }
     ],
     "map": {
@@ -993,6 +1020,30 @@
         "coordinates": {
           "x": 5000,
           "y": 5000
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.canglan",
+        "name": "苍澜镇",
+        "continentId": "liuchao.continent.taiquan",
+        "type": "城池",
+        "description": "太泉古阵入口附近的镇子。",
+        "coordinates": {
+          "x": 7500,
+          "y": 9000
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.taiquan",
+        "name": "太泉古阵",
+        "continentId": "liuchao.continent.taiquan",
+        "type": "秘境",
+        "description": "远古遗迹，太泉古阵入口。",
+        "coordinates": {
+          "x": 7573,
+          "y": 9083
         },
         "features": []
       }

@@ -28,6 +28,33 @@
     ],
     "continents": [
       {
+        "id": "liuchao.continent.zhongzhou",
+        "name": "中州",
+        "description": "六朝世界的主要大陆，包含六国都城及主要战场。",
+        "bounds": [
+          {
+            "x": 100,
+            "y": 50
+          },
+          {
+            "x": 9600,
+            "y": 50
+          },
+          {
+            "x": 9600,
+            "y": 6500
+          },
+          {
+            "x": 100,
+            "y": 6500
+          },
+          {
+            "x": 100,
+            "y": 50
+          }
+        ]
+      },
+      {
         "id": "liuchao.continent.nanhuang",
         "name": "南荒",
         "description": "鬼王峒所在，龙神出没之地。",
@@ -55,29 +82,29 @@
         ]
       },
       {
-        "id": "liuchao.continent.zhongzhou",
-        "name": "中州",
-        "description": "六朝世界的主要大陆，包含六国都城及主要战场。",
+        "id": "liuchao.continent.taiquan",
+        "name": "太泉古阵",
+        "description": "宋国以南的神秘古遗迹，传说中的太泉古阵所在。",
         "bounds": [
           {
-            "x": 100,
-            "y": 50
+            "x": 6400,
+            "y": 6600
           },
           {
-            "x": 9600,
-            "y": 50
+            "x": 9800,
+            "y": 6600
           },
           {
-            "x": 9600,
-            "y": 6500
+            "x": 9800,
+            "y": 9600
           },
           {
-            "x": 100,
-            "y": 6500
+            "x": 6400,
+            "y": 9600
           },
           {
-            "x": 100,
-            "y": 50
+            "x": 6400,
+            "y": 6600
           }
         ]
       }
@@ -1102,7 +1129,7 @@
         "id": "liuchao.location.gui_wang_gong",
         "name": "鬼王宫",
         "description": "鬼王峒深处的巫王宫殿，潜入、交锋、深井救援与倒戈前夜的主要舞台。",
-        "type": "宫殿/巫术据点",
+        "type": "城池",
         "continentId": "liuchao.continent.nanhuang",
         "factionId": "liuchao.faction.gui_wang_dong",
         "coordinates": {
@@ -1122,7 +1149,7 @@
         "id": "liuchao.location.gui_wang_gong.jingshen_tai",
         "name": "鬼王宫深井祭台",
         "description": "鬼王宫内部深井与祭台区域，苏荔救援、朱诺尸鬼、丹宸之死与龙睛玉护罩等关键进程在此交汇。",
-        "type": "祭台/深井",
+        "type": "城池",
         "continentId": "liuchao.continent.nanhuang",
         "factionId": "liuchao.faction.gui_wang_dong",
         "coordinates": {
@@ -1137,6 +1164,30 @@
         ],
         "safety": "极度危险",
         "status": "敌对据点"
+      },
+      {
+        "id": "liuchao.location.canglan",
+        "name": "苍澜镇",
+        "continentId": "liuchao.continent.taiquan",
+        "type": "城池",
+        "description": "太泉古阵入口附近的镇子。",
+        "coordinates": {
+          "x": 7500,
+          "y": 9000
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.taiquan",
+        "name": "太泉古阵",
+        "continentId": "liuchao.continent.taiquan",
+        "type": "秘境",
+        "description": "远古遗迹，太泉古阵入口。",
+        "coordinates": {
+          "x": 7573,
+          "y": 9083
+        },
+        "features": []
       }
     ],
     "characters": [

@@ -84,8 +84,9 @@ function applyAtlas(mod) {
   if (mod?.schema !== 'xiantu.scenario-mod' || !mod?.manifest?.id) {
     return { mod, changed: false, reason: 'not a scenario mod' };
   }
-  const binding = bindingsByModId.get(mod.manifest.id);
-  if (!binding) return { mod, changed: false, reason: 'no binding' };
+  // 新增关卡（05b/扩展关）无 binding 文件——用空 binding 继续：
+  // 全量地点注入（下方"凡带坐标一律注入"）不依赖 binding，跳过会导致地图缺点位（太泉古阵bug）。
+  const binding = bindingsByModId.get(mod.manifest.id) || { visibleLocationIds: [], activeFactionIds: [], locationBindings: {}, factionBindings: {} };
 
   const visibleAtlasLocations = (binding.visibleLocationIds || [])
     .map(id => atlasByLocationId.get(id))
@@ -94,6 +95,11 @@ function applyAtlas(mod) {
     .map(id => atlasByFactionId.get(id))
     .filter(Boolean);
   const requiredAtlasLocations = new Map(visibleAtlasLocations.map(location => [location.id, location]));
+  // 世界地图铺满：凡带坐标的 atlas 地点一律注入（此前只按 binding.visibleLocationIds 白名单，
+  // 漏了不在任何白名单的 太泉古阵/苍澜镇 → 地图缺点位）。同名去重护栏在下方注入处已有。
+  for (const location of atlas.atlas?.locations || []) {
+    if (location.coordinates && !requiredAtlasLocations.has(location.id)) requiredAtlasLocations.set(location.id, location);
+  }
   for (const faction of activeAtlasFactions) {
     const headquarters = atlasByLocationId.get(faction.headquartersLocationId);
     if (headquarters) requiredAtlasLocations.set(headquarters.id, headquarters);

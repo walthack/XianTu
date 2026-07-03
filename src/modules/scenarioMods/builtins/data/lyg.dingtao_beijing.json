@@ -52,6 +52,60 @@
             "y": 50
           }
         ]
+      },
+      {
+        "id": "liuchao.continent.nanhuang",
+        "name": "南荒",
+        "description": "中州以南的蛮荒地带，多部族势力。",
+        "bounds": [
+          {
+            "x": 1200,
+            "y": 5200
+          },
+          {
+            "x": 7000,
+            "y": 5200
+          },
+          {
+            "x": 7000,
+            "y": 10000
+          },
+          {
+            "x": 1200,
+            "y": 10000
+          },
+          {
+            "x": 1200,
+            "y": 5200
+          }
+        ]
+      },
+      {
+        "id": "liuchao.continent.taiquan",
+        "name": "太泉古阵",
+        "description": "宋国以南的神秘古遗迹，传说中的太泉古阵所在。",
+        "bounds": [
+          {
+            "x": 6400,
+            "y": 6600
+          },
+          {
+            "x": 9800,
+            "y": 6600
+          },
+          {
+            "x": 9800,
+            "y": 9600
+          },
+          {
+            "x": 6400,
+            "y": 9600
+          },
+          {
+            "x": 6400,
+            "y": 6600
+          }
+        ]
       }
     ],
     "map": {
@@ -719,6 +773,162 @@
         "coordinates": {
           "x": 5000,
           "y": 5000
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.nanzhao",
+        "name": "昭南",
+        "continentId": "liuchao.continent.nanhuang",
+        "type": "城池",
+        "description": "南荒区域的重要城市，六朝清羽记结尾与云龙吟中多次出现。",
+        "coordinates": {
+          "x": 4916,
+          "y": 7778
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.diqiu",
+        "name": "帝丘",
+        "continentId": "liuchao.continent.nanhuang",
+        "type": "城池",
+        "description": "南荒-中州交界处的重要城镇。",
+        "coordinates": {
+          "x": 6096,
+          "y": 7831
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.kunwu",
+        "name": "昆吾",
+        "continentId": "liuchao.continent.nanhuang",
+        "type": "城池",
+        "description": "南荒区域的重要城镇。",
+        "coordinates": {
+          "x": 4840,
+          "y": 7546
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.xiongerpu",
+        "name": "熊耳铺",
+        "continentId": "liuchao.continent.nanhuang",
+        "type": "城池",
+        "description": "南荒入口处的村寨，程宗扬在此选向导。",
+        "coordinates": {
+          "x": 1623,
+          "y": 7612
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.guiwangdong",
+        "name": "鬼王峒",
+        "continentId": "liuchao.continent.nanhuang",
+        "type": "洞府",
+        "description": "南荒鬼王峒势力的核心洞窟。",
+        "coordinates": {
+          "x": 1641,
+          "y": 8690
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.baiyi",
+        "name": "白夷族",
+        "continentId": "liuchao.continent.nanhuang",
+        "type": "城池",
+        "description": "南荒白夷族聚居地。",
+        "coordinates": {
+          "x": 1818,
+          "y": 8118
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.biyu",
+        "name": "碧鲮族",
+        "continentId": "liuchao.continent.nanhuang",
+        "type": "城池",
+        "description": "南荒沿海碧鲮族聚居地。",
+        "coordinates": {
+          "x": 1824,
+          "y": 8592
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.liuligu",
+        "name": "琉璃谷",
+        "continentId": "liuchao.continent.nanhuang",
+        "type": "城池",
+        "description": "南荒区域山谷。",
+        "coordinates": {
+          "x": 1165,
+          "y": 8791
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.shenmu",
+        "name": "神木",
+        "continentId": "liuchao.continent.nanhuang",
+        "type": "城池",
+        "description": "南荒区域重要地标。",
+        "coordinates": {
+          "x": 1341,
+          "y": 9521
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.haishanghuahuan",
+        "name": "海棠花環",
+        "continentId": "liuchao.continent.nanhuang",
+        "type": "险地",
+        "description": "南荒极南端的环状区域。",
+        "coordinates": {
+          "x": 3241,
+          "y": 9915
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.canglan",
+        "name": "苍澜镇",
+        "continentId": "liuchao.continent.taiquan",
+        "type": "城池",
+        "description": "太泉古阵入口附近的镇子。",
+        "coordinates": {
+          "x": 7500,
+          "y": 9000
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.taiquan",
+        "name": "太泉古阵",
+        "continentId": "liuchao.continent.taiquan",
+        "type": "秘境",
+        "description": "远古遗迹，太泉古阵入口。",
+        "coordinates": {
+          "x": 7573,
+          "y": 9083
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.bailuojiang",
+        "name": "白龍江",
+        "continentId": "liuchao.continent.nanhuang",
+        "type": "城池",
+        "description": "南荒-中州交界的重要河流。",
+        "coordinates": {
+          "x": 1905,
+          "y": 7162
         },
         "features": []
       }
