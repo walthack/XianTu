@@ -41,19 +41,29 @@ function loadBook(id) {
 const chapterCache = {};
 function chapters(book) { return chapterCache[book] || (chapterCache[book] = loadBook(book)); }
 
-function windows(kws, books, span = 420, maxPer = 6) {
-  const out = []; const seen = new Set();
-  for (const b of books) for (const kw of kws) for (const ch of chapters(b)) {
-    let pos = 0, n = 0;
-    while (n < maxPer) {
-      const i = ch.text.indexOf(kw, pos); if (i < 0) break;
-      const key = `${b}:${ch.file}:${i}`;
-      if (!seen.has(key)) { seen.add(key); out.push(`【${ch.book}/${ch.file}/kw=${kw}】${ch.text.slice(Math.max(0, i - span), i + kw.length + span)}`); }
-      pos = i + kw.length; n++;
+function windows(kws, books, span = 420, maxPer = 6, budget = 14000) {
+  // 跨本角色：预算按书均分，保证每本都有代表证据（否则词频高的前书吃光预算，后书故事线全丢）
+  const perBook = Math.floor(budget / Math.max(1, books.length));
+  const sel = [];
+  for (const b of books) {
+    const out = []; const seen = new Set();
+    for (const kw of kws) for (const ch of chapters(b)) {
+      let pos = 0, n = 0;
+      while (n < maxPer) {
+        const i = ch.text.indexOf(kw, pos); if (i < 0) break;
+        const key = `${b}:${ch.file}:${i}`;
+        if (!seen.has(key)) { seen.add(key); out.push(`【${ch.book}/${ch.file}/kw=${kw}】${ch.text.slice(Math.max(0, i - span), i + kw.length + span)}`); }
+        pos = i + kw.length; n++;
+      }
     }
+    // 每本取 首段(登场) + 均匀抽样(全书弧线)，而非只取前面
+    let used = 0; const picked = [];
+    const step = Math.max(1, Math.ceil(out.length / Math.ceil(perBook / (span * 2 + 60))));
+    for (let i = 0; i < out.length; i += (picked.length === 0 ? 1 : step)) {
+      const w = out[i]; if (used + w.length > perBook) break; picked.push(w); used += w.length;
+    }
+    sel.push(...picked);
   }
-  let used = 0, sel = [];
-  for (const w of out) { if (used + w.length > 14000) break; sel.push(w); used += w.length; }
   return sel.join('\n\n');
 }
 
@@ -62,7 +72,7 @@ const SYS = '你是严谨的小说剧情整理员。只依据提供的全文检�
 async function askMiniMax(name, evidence) {
   const msgs = [
     { role: 'system', content: SYS },
-    { role: 'user', content: `抽取角色「${name}」的：\n1) 登场场景（首次怎么出场：场景/方式/初始身份/在哪本哪集章附近）。\n2) 关键/招牌剧情事件（转折、名场面），逐个给 title/description/locationHint/importance。\n只列原文明确支持的，证据不足写 needsHuman。\n\n全文检索片段：\n${evidence || '（未命中）'}` },
+    { role: 'user', content: `抽取角色「${name}」的：\n1) 登场场景（全三本中最早的首次出场：场景/方式/初始身份/在哪本哪集章附近）。\n2) 关键/招牌剧情事件（转折、名场面），逐个给 title/description/locationHint/importance。**若证据片段跨多本小说，keyEvents 必须覆盖每一本的关键节点（各本至少1-2件），按书序排列**——跨本角色的故事线不会只在一本里。\n只列原文明确支持的，证据不足写 needsHuman。\n\n全文检索片段：\n${evidence || '（未命中）'}` },
   ];
   const tmp = join(outDir, `${name}.messages.json`);
   writeFileSync(tmp, JSON.stringify(msgs, null, 2));

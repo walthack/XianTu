@@ -45,19 +45,28 @@ function loadBook(id) {
 const chapterCache = {};
 const chapters = (book) => chapterCache[book] || (chapterCache[book] = loadBook(book));
 
-function windows(kws, books, span = 400, maxPer = 6) {
-  const out = []; const seen = new Set();
-  for (const b of books) for (const kw of kws) for (const ch of chapters(b)) {
-    let pos = 0, n = 0;
-    while (n < maxPer) {
-      const i = ch.text.indexOf(kw, pos); if (i < 0) break;
-      const key = `${b}:${ch.file}:${i}`;
-      if (!seen.has(key)) { seen.add(key); out.push(`【${ch.book}/${ch.file}/kw=${kw}】${ch.text.slice(Math.max(0, i - span), i + kw.length + span)}`); }
-      pos = i + kw.length; n++;
+function windows(kws, books, span = 400, maxPer = 6, budget = 14000) {
+  // 跨本角色：预算按书均分 + 每本均匀抽样（否则词频高的书吃光预算，其余书证据全丢）
+  const perBook = Math.floor(budget / Math.max(1, books.length));
+  const sel = [];
+  for (const b of books) {
+    const out = []; const seen = new Set();
+    for (const kw of kws) for (const ch of chapters(b)) {
+      let pos = 0, n = 0;
+      while (n < maxPer) {
+        const i = ch.text.indexOf(kw, pos); if (i < 0) break;
+        const key = `${b}:${ch.file}:${i}`;
+        if (!seen.has(key)) { seen.add(key); out.push(`【${ch.book}/${ch.file}/kw=${kw}】${ch.text.slice(Math.max(0, i - span), i + kw.length + span)}`); }
+        pos = i + kw.length; n++;
+      }
     }
+    let used = 0; const picked = [];
+    const step = Math.max(1, Math.ceil(out.length / Math.ceil(perBook / (span * 2 + 60))));
+    for (let i = 0; i < out.length; i += (picked.length === 0 ? 1 : step)) {
+      const w = out[i]; if (used + w.length > perBook) break; picked.push(w); used += w.length;
+    }
+    sel.push(...picked);
   }
-  let used = 0, sel = [];
-  for (const w of out) { if (used + w.length > 14000) break; sel.push(w); used += w.length; }
   return sel.join('\n\n');
 }
 
