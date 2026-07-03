@@ -646,7 +646,7 @@
         "name": "舞都",
         "continentId": "liuchao.continent.zhongzhou",
         "type": "城池",
-        "description": "程宗扬封地，舞阳侯府所在。",
+        "description": "汉国境内的一座都邑。",
         "coordinates": {
           "x": 6114,
           "y": 3929
@@ -826,7 +826,7 @@
       {
         "id": "liuchao.character.cheng_zongyang",
         "name": "程宗扬",
-        "description": "程宗扬，汉国舞阳侯，以务实精明在权贵间游刃有余。他骑着赤兔马，用一颗苹果贿赂牲畜，被杨玉环踢下高楼仍嬉皮笑脸爬起，仿佛丹田杂气与双修鼎炉的功法约束不过是棋盘上一枚可操纵的棋子。",
+        "description": "现代穿越者",
         "role": "主角",
         "gender": "男",
         "realm": "练气",
@@ -1349,7 +1349,7 @@
         "id": "liuchao.character.qi_yuan",
         "name": "祁远",
         "role": "商业伙伴/属下",
-        "description": "程氏商会在江州的锦衣掌柜缩在榻边，腊黄的脸埋进账册，弓成虾米的脊背里藏着南荒九死一生的旧伤——他替程宗扬管着的，岂止是长安的银钱。",
+        "description": "程氏商会在江州的锦衣掌柜缩在榻边，腊黄的脸埋进账册，弓成虾米的脊背里藏着南荒九死一生的旧伤——他替程宗扬管着的，岂止是账面上的银钱。",
         "profile": {
           "attributes": {
             "rootBone": 5,
