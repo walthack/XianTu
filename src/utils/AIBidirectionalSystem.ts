@@ -29,6 +29,7 @@ import { advanceScenarioRuntime } from '@/modules/scenarioMods/runtime';
 import { applyMilestoneRewards } from '@/modules/scenarioMods/milestoneRewards';
 import { buildScenarioStoryPrompt, createScenarioPromptState } from '@/modules/scenarioMods/storyContext';
 import { buildActionGatePrompt, getNarrativeTurn, pruneExpiredActionGates } from '@/utils/actionGate';
+import { getMissingNarratedInventoryGains } from '@/utils/narratedInventory';
 
 type PlainObject = Record<string, unknown>;
 
@@ -1117,12 +1118,17 @@ ${stateJsonString}
         const systemPromptStep2 = await buildSplitSystemPrompt(2);
         const injectsStep2 = buildSplitInjects(systemPromptStep2, false);
 
-        const step2UserInput = `
+        const buildStep2UserInput = (missingItems: string[] = []) => `
 【用户本次操作】
 ${finalUserInput}
 
 【第1步正文】
 ${step1Text}
+
+${missingItems.length > 0 ? `【上次结构化输出缺失】
+第1步正文已经叙述玩家获得/收下了这些物品：${missingItems.join('、')}。
+本次 tavern_commands 必须补上背包写入：set 角色.背包.物品.<稳定物品ID>，value 必须包含 {物品ID,名称,类型,品质:{quality,grade},数量,描述}。
+` : ''}
 
 请按"分步生成（第2步）"规则输出 JSON。
 `.trim();
@@ -1133,9 +1139,11 @@ ${step1Text}
         const step2UsageType: APIUsageType = hasInstructionApi ? 'instruction_generation' : 'main';
         const step2ForceJson = aiService.isForceJsonEnabled(step2UsageType);
         let parsedStep2: GM_Response | null = null;
+        let missingInventoryItemsForRetry: string[] = [];
         for (let attempt = 1; attempt <= 2; attempt++) {
           try {
             if (attempt > 1) options?.onProgressUpdate?.(`分步生成：第2步重试…`);
+            const step2UserInput = buildStep2UserInput(missingInventoryItemsForRetry);
             const step2Response = await generateOnce({
               user_input: step2UserInput,
               should_stream: step2Streaming,
@@ -1145,6 +1153,12 @@ ${step1Text}
               onStreamChunk: undefined,
             });
             parsedStep2 = this.parseAIResponse(String(step2Response), step2ForceJson, actionOptionsEnabled);
+            missingInventoryItemsForRetry = getMissingNarratedInventoryGains(step1Text, parsedStep2.tavern_commands || []);
+            if (missingInventoryItemsForRetry.length > 0) {
+              console.warn(`[分步生成] 第2步遗漏背包物品指令，准备重试: ${missingInventoryItemsForRetry.join('、')}`);
+              parsedStep2 = null;
+              continue;
+            }
             if (parsedStep2.tavern_commands && parsedStep2.tavern_commands.length > 0) break;
             parsedStep2 = null;
           } catch (e) {
