@@ -1648,18 +1648,13 @@
         "affiliations": [
           {
             "factionId": "liuchao.faction.tai_wei_fu",
-            "category": "state",
-            "role": "衙内"
+            "category": "organization",
+            "role": "螟蛉子/衙内"
           },
           {
             "factionId": "lyg.faction.song_state",
             "category": "organization",
             "role": "太尉府衙内"
-          },
-          {
-            "factionId": "liuchao.faction.jin_jun",
-            "category": "military",
-            "role": "高俅螟蛉子"
           }
         ],
         "locationId": "liuchao.location.linan_city",
@@ -2705,13 +2700,13 @@
           },
           {
             "factionId": "liuchao.faction.x5a4fdd48cd",
-            "category": "military",
+            "category": "organization",
             "role": "都指挥使"
           },
           {
             "factionId": "lyg.faction.tiance_fu",
-            "category": "military",
-            "role": "学员"
+            "category": "organization",
+            "role": "出身（学员经历，现已离府）"
           }
         ]
       },
@@ -3068,16 +3063,16 @@
           {
             "factionId": "liuchao.faction.dragon_chen",
             "category": "organization",
-            "role": "女杀手"
+            "role": "原杀手（行刺小紫失败被擒后脱离）"
           },
           {
             "factionId": "liuchao.faction.xe6bd0066c9",
             "category": "organization",
-            "role": "侍奴/护卫"
+            "role": "被擒后收为侍奴"
           },
           {
             "factionId": "liuchao.faction.yao_chi_zong",
-            "category": "sect",
+            "category": "organization",
             "role": "弃徒"
           }
         ]
@@ -3510,6 +3505,17 @@
       },
       {
         "fromCharacterId": "liuchao.character.cheng_zongyang",
+        "toCharacterId": "liuchao.character.xiao_zi",
+        "relation": "同袍",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同袍",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.cheng_zongyang",
         "toCharacterId": "liuchao.character.qing_mian_shou",
         "relation": "同袍",
         "score": 30,
@@ -3576,6 +3582,17 @@
       },
       {
         "fromCharacterId": "liuchao.character.qin_hui",
+        "toCharacterId": "liuchao.character.xiao_zi",
+        "relation": "同袍",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同袍",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.qin_hui",
         "toCharacterId": "liuchao.character.qing_mian_shou",
         "relation": "同袍",
         "score": 30,
@@ -3631,6 +3648,17 @@
       },
       {
         "fromCharacterId": "liuchao.character.yu_zi_yuan",
+        "toCharacterId": "liuchao.character.xiao_zi",
+        "relation": "同袍",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同袍",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.yu_zi_yuan",
         "toCharacterId": "liuchao.character.qing_mian_shou",
         "relation": "同袍",
         "score": 30,
@@ -3675,6 +3703,17 @@
       },
       {
         "fromCharacterId": "liuchao.character.ao_run",
+        "toCharacterId": "liuchao.character.xiao_zi",
+        "relation": "同袍",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同袍",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.ao_run",
         "toCharacterId": "liuchao.character.qing_mian_shou",
         "relation": "同袍",
         "score": 30,
@@ -3708,6 +3747,50 @@
       },
       {
         "fromCharacterId": "liuchao.character.ao_run",
+        "toCharacterId": "liuchao.character.xiao_yao_yi",
+        "relation": "同袍",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同袍",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.xiao_zi",
+        "toCharacterId": "liuchao.character.qing_mian_shou",
+        "relation": "同袍",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同袍",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.xiao_zi",
+        "toCharacterId": "liuchao.character.meng_fei_qing",
+        "relation": "同袍",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同袍",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.xiao_zi",
+        "toCharacterId": "liuchao.character.kuang_zhong_yu",
+        "relation": "同袍",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同袍",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.xiao_zi",
         "toCharacterId": "liuchao.character.xiao_yao_yi",
         "relation": "同袍",
         "score": 30,
@@ -3796,28 +3879,6 @@
       },
       {
         "fromCharacterId": "liuchao.character.lu_zhi_shen",
-        "toCharacterId": "liuchao.character.gao_ya_nei",
-        "relation": "同袍",
-        "score": 30,
-        "direction": "bidirectional",
-        "tags": [
-          "同袍",
-          "同势力派生"
-        ]
-      },
-      {
-        "fromCharacterId": "liuchao.character.lu_zhi_shen",
-        "toCharacterId": "liuchao.character.zhang_kang",
-        "relation": "同袍",
-        "score": 30,
-        "direction": "bidirectional",
-        "tags": [
-          "同袍",
-          "同势力派生"
-        ]
-      },
-      {
-        "fromCharacterId": "liuchao.character.gao_ya_nei",
         "toCharacterId": "liuchao.character.zhang_kang",
         "relation": "同袍",
         "score": 30,
@@ -3890,94 +3951,6 @@
         "direction": "bidirectional",
         "tags": [
           "同门",
-          "同势力派生"
-        ]
-      },
-      {
-        "fromCharacterId": "liuchao.character.cheng_zongyang",
-        "toCharacterId": "liuchao.character.xiao_zi",
-        "relation": "同袍",
-        "score": 30,
-        "direction": "bidirectional",
-        "tags": [
-          "同袍",
-          "同势力派生"
-        ]
-      },
-      {
-        "fromCharacterId": "liuchao.character.qin_hui",
-        "toCharacterId": "liuchao.character.xiao_zi",
-        "relation": "同袍",
-        "score": 30,
-        "direction": "bidirectional",
-        "tags": [
-          "同袍",
-          "同势力派生"
-        ]
-      },
-      {
-        "fromCharacterId": "liuchao.character.yu_zi_yuan",
-        "toCharacterId": "liuchao.character.xiao_zi",
-        "relation": "同袍",
-        "score": 30,
-        "direction": "bidirectional",
-        "tags": [
-          "同袍",
-          "同势力派生"
-        ]
-      },
-      {
-        "fromCharacterId": "liuchao.character.ao_run",
-        "toCharacterId": "liuchao.character.xiao_zi",
-        "relation": "同袍",
-        "score": 30,
-        "direction": "bidirectional",
-        "tags": [
-          "同袍",
-          "同势力派生"
-        ]
-      },
-      {
-        "fromCharacterId": "liuchao.character.xiao_zi",
-        "toCharacterId": "liuchao.character.qing_mian_shou",
-        "relation": "同袍",
-        "score": 30,
-        "direction": "bidirectional",
-        "tags": [
-          "同袍",
-          "同势力派生"
-        ]
-      },
-      {
-        "fromCharacterId": "liuchao.character.xiao_zi",
-        "toCharacterId": "liuchao.character.meng_fei_qing",
-        "relation": "同袍",
-        "score": 30,
-        "direction": "bidirectional",
-        "tags": [
-          "同袍",
-          "同势力派生"
-        ]
-      },
-      {
-        "fromCharacterId": "liuchao.character.xiao_zi",
-        "toCharacterId": "liuchao.character.kuang_zhong_yu",
-        "relation": "同袍",
-        "score": 30,
-        "direction": "bidirectional",
-        "tags": [
-          "同袍",
-          "同势力派生"
-        ]
-      },
-      {
-        "fromCharacterId": "liuchao.character.xiao_zi",
-        "toCharacterId": "liuchao.character.xiao_yao_yi",
-        "relation": "同袍",
-        "score": 30,
-        "direction": "bidirectional",
-        "tags": [
-          "同袍",
           "同势力派生"
         ]
       }

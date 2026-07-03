@@ -1591,11 +1591,6 @@
             "factionId": "liuchao.faction.hua_miao",
             "category": "organization",
             "role": "族人/献给鬼巫王的新娘"
-          },
-          {
-            "factionId": "liuchao.faction.gui_wang_dong",
-            "category": "organization",
-            "role": "待进献的新娘"
           }
         ]
       },
@@ -2320,7 +2315,8 @@
       "event.s05_06.done": false,
       "event.s05_07.done": false,
       "event.s05_08.done": false,
-      "event.s05_09.done": false
+      "event.s05_09.done": false,
+      "event.debut_xiaozi.done": false
     },
     "chapters": [
       {
@@ -2350,7 +2346,8 @@
           "lcq.event.s05_06",
           "lcq.event.s05_07",
           "lcq.event.s05_08",
-          "lcq.event.s05_09"
+          "lcq.event.s05_09",
+          "lcq.event.debut_xiaozi"
         ]
       }
     ],
@@ -2644,6 +2641,23 @@
         "axisSeq": 146,
         "axisAnchor": "六朝清羽记·#86·第84章·阴煞",
         "axisBeat": "程宗扬与苏荔在营地遭遇阴煞，苏荔试图献身献祭，程宗扬意外激活一阳境界，阳气逼退阴煞，但阴煞转而攻击并奸淫了花苗女子。"
+      },
+      {
+        "id": "lcq.event.debut_xiaozi",
+        "name": "小紫·招牌登场",
+        "description": "海边竹楼·大潮退去后众人脱险（与乐明珠手拉手跑来海边，被程宗扬询问潮水之事） 初始身份：碧鲮人（人鱼族）少女，能变身，疑似受海神眷顾。随后：指引龟纹古道；噬魂术反噬·程宗扬救人。",
+        "conditions": [],
+        "completion": [
+          {
+            "path": "flags.event.debut_xiaozi.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.xiao_zi"
+        ],
+        "critical": false
       }
     ]
   },

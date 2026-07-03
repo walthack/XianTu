@@ -1470,14 +1470,14 @@
         "realm": "金丹",
         "affiliations": [
           {
-            "factionId": "lyl.faction.lyu_clan",
-            "category": "military",
-            "role": "校尉"
+            "factionId": "liuchao.faction.han_guo_chao_ting",
+            "category": "organization",
+            "role": "射声校尉（吕氏任命）"
           },
           {
-            "factionId": "liuchao.faction.han_guo_chao_ting",
-            "category": "state",
-            "role": "射声校尉"
+            "factionId": "lyl.faction.lyu_clan",
+            "category": "organization",
+            "role": "吕冀之侄/吕雉之侄"
           }
         ],
         "locationId": "lyl.location.weiyang_palace",
@@ -2418,19 +2418,9 @@
         "gender": "男",
         "affiliations": [
           {
-            "factionId": "lcq.faction.left_guard",
-            "category": "military",
-            "role": "粮秣辎重供应者/族中成员"
-          },
-          {
             "factionId": "lyl.faction.lyu_clan",
             "category": "organization",
             "role": "门客"
-          },
-          {
-            "factionId": "liuchao.faction.cheng_shi_shang_hui",
-            "category": "organization",
-            "role": "商人"
           }
         ]
       },
@@ -2731,16 +2721,16 @@
           {
             "factionId": "liuchao.faction.dragon_chen",
             "category": "organization",
-            "role": "女杀手"
+            "role": "原杀手（行刺小紫失败被擒后脱离）"
           },
           {
             "factionId": "liuchao.faction.xe6bd0066c9",
             "category": "organization",
-            "role": "侍奴/护卫"
+            "role": "被擒后收为侍奴"
           },
           {
             "factionId": "liuchao.faction.yao_chi_zong",
-            "category": "sect",
+            "category": "organization",
             "role": "弃徒"
           }
         ]
@@ -2769,8 +2759,8 @@
         "affiliations": [
           {
             "factionId": "liuchao.faction.han_guo_chao_ting",
-            "category": "state",
-            "role": "中黄门"
+            "category": "organization",
+            "role": "中黄门（后叛附吕氏）"
           },
           {
             "factionId": "lyl.faction.lyu_clan",
@@ -3505,17 +3495,6 @@
         "direction": "bidirectional",
         "tags": [
           "同门",
-          "同势力派生"
-        ]
-      },
-      {
-        "fromCharacterId": "lyl.character.np067",
-        "toCharacterId": "lcq.character.yue_shuang",
-        "relation": "同袍",
-        "score": 30,
-        "direction": "bidirectional",
-        "tags": [
-          "同袍",
           "同势力派生"
         ]
       }

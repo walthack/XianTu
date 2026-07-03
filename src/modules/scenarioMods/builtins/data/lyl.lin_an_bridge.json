@@ -2977,16 +2977,16 @@
           {
             "factionId": "liuchao.faction.dragon_chen",
             "category": "organization",
-            "role": "女杀手"
+            "role": "原杀手（行刺小紫失败被擒后脱离）"
           },
           {
             "factionId": "liuchao.faction.xe6bd0066c9",
             "category": "organization",
-            "role": "侍奴/护卫"
+            "role": "被擒后收为侍奴"
           },
           {
             "factionId": "liuchao.faction.yao_chi_zong",
-            "category": "sect",
+            "category": "organization",
             "role": "弃徒"
           }
         ]
@@ -3664,7 +3664,18 @@
         ]
       },
       {
-        "fromCharacterId": "liuchao.character.zhao_he_de",
+        "fromCharacterId": "liuchao.character.xiao_zi",
+        "toCharacterId": "lyl.character.wen_qingyu",
+        "relation": "同门",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同门",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.xiao_zi",
         "toCharacterId": "liuchao.character.zhuo_yunjun",
         "relation": "同门",
         "score": 30,
@@ -3675,8 +3686,8 @@
         ]
       },
       {
-        "fromCharacterId": "liuchao.character.zhao_he_de",
-        "toCharacterId": "lcq.character.yue_shuang",
+        "fromCharacterId": "liuchao.character.xiao_zi",
+        "toCharacterId": "liuchao.character.qin_hui",
         "relation": "同门",
         "score": 30,
         "direction": "bidirectional",
@@ -3686,8 +3697,8 @@
         ]
       },
       {
-        "fromCharacterId": "liuchao.character.zhuo_yunjun",
-        "toCharacterId": "lcq.character.yue_shuang",
+        "fromCharacterId": "liuchao.character.xiao_zi",
+        "toCharacterId": "liuchao.character.ruan_xiang_ning",
         "relation": "同门",
         "score": 30,
         "direction": "bidirectional",
@@ -3697,24 +3708,13 @@
         ]
       },
       {
-        "fromCharacterId": "liuchao.character.lu_jing",
-        "toCharacterId": "liuchao.character.xiao_yao_yi",
-        "relation": "同袍",
+        "fromCharacterId": "liuchao.character.xiao_zi",
+        "toCharacterId": "liuchao.character.jian_yu_ji",
+        "relation": "同门",
         "score": 30,
         "direction": "bidirectional",
         "tags": [
-          "同袍",
-          "同势力派生"
-        ]
-      },
-      {
-        "fromCharacterId": "liuchao.character.si_ming_xin",
-        "toCharacterId": "liuchao.character.xiao_yao_yi",
-        "relation": "同袍",
-        "score": 30,
-        "direction": "bidirectional",
-        "tags": [
-          "同袍",
+          "同门",
           "同势力派生"
         ]
       },
@@ -3885,61 +3885,6 @@
       },
       {
         "fromCharacterId": "liuchao.character.xiao_zi",
-        "toCharacterId": "lyl.character.wen_qingyu",
-        "relation": "同门",
-        "score": 30,
-        "direction": "bidirectional",
-        "tags": [
-          "同门",
-          "同势力派生"
-        ]
-      },
-      {
-        "fromCharacterId": "liuchao.character.xiao_zi",
-        "toCharacterId": "liuchao.character.zhuo_yunjun",
-        "relation": "同门",
-        "score": 30,
-        "direction": "bidirectional",
-        "tags": [
-          "同门",
-          "同势力派生"
-        ]
-      },
-      {
-        "fromCharacterId": "liuchao.character.xiao_zi",
-        "toCharacterId": "liuchao.character.qin_hui",
-        "relation": "同门",
-        "score": 30,
-        "direction": "bidirectional",
-        "tags": [
-          "同门",
-          "同势力派生"
-        ]
-      },
-      {
-        "fromCharacterId": "liuchao.character.xiao_zi",
-        "toCharacterId": "liuchao.character.ruan_xiang_ning",
-        "relation": "同门",
-        "score": 30,
-        "direction": "bidirectional",
-        "tags": [
-          "同门",
-          "同势力派生"
-        ]
-      },
-      {
-        "fromCharacterId": "liuchao.character.xiao_zi",
-        "toCharacterId": "liuchao.character.jian_yu_ji",
-        "relation": "同门",
-        "score": 30,
-        "direction": "bidirectional",
-        "tags": [
-          "同门",
-          "同势力派生"
-        ]
-      },
-      {
-        "fromCharacterId": "liuchao.character.xiao_zi",
         "toCharacterId": "liuchao.character.lu_jing",
         "relation": "同袍",
         "score": 30,
@@ -3957,6 +3902,61 @@
         "direction": "bidirectional",
         "tags": [
           "同袍",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.lu_jing",
+        "toCharacterId": "liuchao.character.xiao_yao_yi",
+        "relation": "同袍",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同袍",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.si_ming_xin",
+        "toCharacterId": "liuchao.character.xiao_yao_yi",
+        "relation": "同袍",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同袍",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.zhao_he_de",
+        "toCharacterId": "liuchao.character.zhuo_yunjun",
+        "relation": "同门",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同门",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.zhao_he_de",
+        "toCharacterId": "lcq.character.yue_shuang",
+        "relation": "同门",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同门",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.zhuo_yunjun",
+        "toCharacterId": "lcq.character.yue_shuang",
+        "relation": "同门",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同门",
           "同势力派生"
         ]
       }
@@ -4962,7 +4962,13 @@
       "event.lin_an_bridge_03.done": false,
       "event.lin_an_bridge_04.done": false,
       "chapter.lyl.lin_an_bridge.intel.started": true,
-      "chapter.lyl.lin_an_bridge.intel.done": false
+      "chapter.lyl.lin_an_bridge.intel.done": false,
+      "event.debut_yundanliu.done": false,
+      "event.debut_yunruyao.done": false,
+      "event.debut_zhaohede.done": false,
+      "event.debut_yinfulan.done": false,
+      "event.debut_jingli.done": false,
+      "event.debut_jianyuji.done": false
     },
     "chapters": [
       {
@@ -4980,7 +4986,13 @@
           "lyl.event.lin_an_bridge_01_beat",
           "lyl.event.lin_an_bridge_02_beat",
           "lyl.event.lin_an_bridge_03_beat",
-          "lyl.event.lin_an_bridge_04_beat"
+          "lyl.event.lin_an_bridge_04_beat",
+          "lyl.event.debut_yundanliu",
+          "lyl.event.debut_yunruyao",
+          "lyl.event.debut_zhaohede",
+          "lyl.event.debut_yinfulan",
+          "lyl.event.debut_jingli",
+          "lyl.event.debut_jianyuji"
         ]
       }
     ],
@@ -5064,6 +5076,108 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ]
+      },
+      {
+        "id": "lyl.event.debut_yundanliu",
+        "name": "云丹琉·招牌登场",
+        "description": "云家海蜃楼院中，程宗扬翻墙逃匿时被其喝问（程宗扬在海蜃楼攀墙逃跑，云丹琉从身后喝问\"谁！\"） 初始身份：云家大小姐（贵族世家出身的年轻女子）。随后：海蜃楼初逢遁逃；入宫任侍卫长并拦路对决。",
+        "conditions": [],
+        "completion": [
+          {
+            "path": "flags.event.debut_yundanliu.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.yun_dan_liu"
+        ],
+        "critical": false
+      },
+      {
+        "id": "lyl.event.debut_yunruyao",
+        "name": "云如瑶·招牌登场",
+        "description": "云宅小楼楼梯尽头（程宗扬翻墙入院，敲击门口瓷瓶后上楼，发现一名披狐裘的少女独坐。） 初始身份：云苍峰之庶出幼妹，病弱足不出户的闺阁少女。随后：以身相许挽留远行人。",
+        "conditions": [],
+        "completion": [
+          {
+            "path": "flags.event.debut_yunruyao.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.yun_ru_yao"
+        ],
+        "critical": false
+      },
+      {
+        "id": "lyl.event.debut_zhaohede",
+        "name": "赵合德·招牌登场",
+        "description": "程宗扬来到合德住处，发现她正侧身跪在榻旁，用银匙喂老妇喝药（程宗扬主动登门，以玉佩为证逼她承认身份） 初始身份：皇后赵飞燕的胞妹，被江映秋（长秋宫女傅）护送来洛都，暂居上清观避祸。随后：天子驾崩目击惨剧；从木桶中被劫持带走。",
+        "conditions": [],
+        "completion": [
+          {
+            "path": "flags.event.debut_zhaohede.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.zhao_he_de"
+        ],
+        "critical": false
+      },
+      {
+        "id": "lyl.event.debut_yinfulan",
+        "name": "尹馥兰·招牌登场",
+        "description": "建康，程宅（萧遥逸设宴款待，接收苏妲己留下的十二名舞姬）（程宗扬在宴席上认出她是五原城醉月楼的老鸨，询问其近况，她跪拜行礼并解释被苏妲己调到建康打理新店） 初始身份：醉月楼老鸨（青楼管事）。随后：重操旧业经营水香楼；推销霓龙丝袜打出名头。",
+        "conditions": [],
+        "completion": [
+          {
+            "path": "flags.event.debut_yinfulan.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.yin_fulan"
+        ],
+        "critical": false
+      },
+      {
+        "id": "lyl.event.debut_jingli",
+        "name": "惊理·招牌登场",
+        "description": "刺客突袭庭院（小紫点破其身份，自报为辰星七妖第六星） 初始身份：龙宸外围组织「辰星流变」第七妖·第六星刺客；原瑶池宗弟子。随后：庭中对决小紫；幽冥爪连击受创。",
+        "conditions": [],
+        "completion": [
+          {
+            "path": "flags.event.debut_jingli.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.jing_li"
+        ],
+        "critical": false
+      },
+      {
+        "id": "lyl.event.debut_jianyuji",
+        "name": "剑玉姬·招牌登场",
+        "description": "游婵与程宗扬密会时提及（游婵转述「仙姬」来信内容，程宗扬由此得知黑魔海仍在寻找其下落） 初始身份：黑魔海「仙姬」/ 上位供奉，通过游婵传讯。随后：池畔现形·水中无影；陆谦吐露其外堂主导身份。",
+        "conditions": [],
+        "completion": [
+          {
+            "path": "flags.event.debut_jianyuji.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.jian_yu_ji"
+        ],
+        "critical": false
       }
     ]
   },

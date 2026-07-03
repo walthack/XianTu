@@ -1752,44 +1752,39 @@
         "realm": "金丹",
         "affiliations": [
           {
-            "factionId": "lyg.faction.wuyang_houfu",
-            "category": "organization",
-            "role": "盟友"
-          },
-          {
             "factionId": "liuchao.faction.tang_guo_chao_ting",
-            "category": "state",
+            "category": "organization",
             "role": "镇国公主/太真妃子"
           },
           {
             "factionId": "liuchao.faction.tai_yi_zhen_zong",
-            "category": "sect",
-            "role": "弟子（受先皇钦命授箓传道）"
+            "category": "organization",
+            "role": "钦命授箓传道（名义）"
           },
           {
             "factionId": "liuchao.faction.x0d71c824e7",
-            "category": "sect",
-            "role": "弟子（受先皇钦命授箓传道）"
+            "category": "organization",
+            "role": "钦命授箓传道（名义）"
           },
           {
             "factionId": "liuchao.faction.xcd42487992",
             "category": "organization",
-            "role": "弟子（受先皇钦命授箓传道）"
+            "role": "钦命授箓传道（名义）"
           },
           {
             "factionId": "liuchao.faction.x6c70e576ef",
-            "category": "sect",
-            "role": "弟子（受先皇钦命授箓传道）"
+            "category": "organization",
+            "role": "钦命授箓传道（名义）"
           },
           {
             "factionId": "liuchao.faction.yao_chi_zong",
-            "category": "sect",
-            "role": "弟子（受先皇钦命授箓传道）"
+            "category": "organization",
+            "role": "钦命授箓传道（名义）"
           },
           {
             "factionId": "liuchao.faction.guang_ming_guan_tang",
             "category": "organization",
-            "role": "弟子（卫采芝为授业恩师）"
+            "role": "挂名弟子"
           }
         ],
         "locationId": "lyg.location.wuyang_mansion",
@@ -2434,13 +2429,8 @@
         "gender": "男",
         "affiliations": [
           {
-            "factionId": "liuchao.faction.shi_fang_cong_lin",
-            "category": "sect",
-            "role": "僧人"
-          },
-          {
             "factionId": "liuchao.faction.x78a6c9fdd3",
-            "category": "sect",
+            "category": "organization",
             "role": "僧人"
           }
         ]
@@ -3026,12 +3016,12 @@
           {
             "factionId": "lyl.faction.pengyi",
             "category": "organization",
-            "role": "社员/六营成员"
+            "role": "挂名（星月湖掩护组织）"
           },
           {
             "factionId": "lyg.faction.qin_state",
             "category": "organization",
-            "role": "原右庶长（已弃爵位投奔岳帅）"
+            "role": "原秦军右庶长（闻江州起兵弃将印来投，旧属）"
           }
         ]
       },
@@ -3157,16 +3147,16 @@
           {
             "factionId": "liuchao.faction.dragon_chen",
             "category": "organization",
-            "role": "女杀手"
+            "role": "原杀手（行刺小紫失败被擒后脱离）"
           },
           {
             "factionId": "liuchao.faction.xe6bd0066c9",
             "category": "organization",
-            "role": "侍奴/护卫"
+            "role": "被擒后收为侍奴"
           },
           {
             "factionId": "liuchao.faction.yao_chi_zong",
-            "category": "sect",
+            "category": "organization",
             "role": "弃徒"
           }
         ]
@@ -3909,17 +3899,6 @@
       {
         "fromCharacterId": "liuchao.character.zhuo_yunjun",
         "toCharacterId": "lcq.character.yue_shuang",
-        "relation": "同门",
-        "score": 30,
-        "direction": "bidirectional",
-        "tags": [
-          "同门",
-          "同势力派生"
-        ]
-      },
-      {
-        "fromCharacterId": "lyg.character.np034",
-        "toCharacterId": "liuchao.character.li_hong",
         "relation": "同门",
         "score": 30,
         "direction": "bidirectional",
@@ -5070,7 +5049,10 @@
       "chapter.lyg.han_succession.succession.done": false,
       "chapter.lyg.han_succession.breakthrough.started": false,
       "chapter.lyg.han_succession.breakthrough.done": false,
-      "event.dengji_yuzuo_yinhuan.done": false
+      "event.dengji_yuzuo_yinhuan.done": false,
+      "event.debut_yangyuhuan.done": false,
+      "event.debut_quanyuji.done": false,
+      "event.debut_bainichang.done": false
     },
     "chapters": [
       {
@@ -5090,7 +5072,10 @@
           "lyg.event.han_succession_03_beat",
           "lyg.event.han_succession_04_beat",
           "lyg.event.han_succession_05_beat",
-          "lyg.event.dengji_yuzuo_yinhuan"
+          "lyg.event.dengji_yuzuo_yinhuan",
+          "lyg.event.debut_yangyuhuan",
+          "lyg.event.debut_quanyuji",
+          "lyg.event.debut_bainichang"
         ]
       },
       {
@@ -5336,6 +5321,57 @@
         "relatedCharacterIds": [
           "liuchao.character.zhao_feiyan",
           "liuchao.character.cheng_zongyang"
+        ],
+        "critical": false
+      },
+      {
+        "id": "lyg.event.debut_yangyuhuan",
+        "name": "杨玉环·招牌登场",
+        "description": "第679章·美射 第7章（一身戎装，手挽雕弓，当庭施射） 初始身份：镇国大长公主/太真公主，兼兴庆宫使。随后：琉璃世界对峙李辅国；白绫之议。",
+        "conditions": [],
+        "completion": [
+          {
+            "path": "flags.event.debut_yangyuhuan.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.yang_yuhuan"
+        ],
+        "critical": false
+      },
+      {
+        "id": "lyg.event.debut_quanyuji",
+        "name": "泉玉姬·招牌登场",
+        "description": "建康徐府内院，刑案现场（以女捕头身份出现，勘查被吊女尸案，指出死者系生前被人以弧形锐物从阴门刺入致死，并当场斥责建康差吏褚衡断案粗疏） 初始身份：长安六扇门女捕头。随后：魂丹献主；六扇门身份曝光。",
+        "conditions": [],
+        "completion": [
+          {
+            "path": "flags.event.debut_quanyuji.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.quan_yu_ji"
+        ],
+        "critical": false
+      },
+      {
+        "id": "lyg.event.debut_bainichang",
+        "name": "白霓裳·招牌登场",
+        "description": "静室内，赵归真引荐（白衣女子轻烟般踏入室内，头戴玉叶花冠，白衣胜雪） 初始身份：瑶池宗奉玦仙子，瑶池宗未来宗主候选人。随后：落入王守澄圈套；被救归府。",
+        "conditions": [],
+        "completion": [
+          {
+            "path": "flags.event.debut_bainichang.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.bai_nichang"
         ],
         "critical": false
       }

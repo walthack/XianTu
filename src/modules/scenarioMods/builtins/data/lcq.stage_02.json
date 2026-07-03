@@ -1176,13 +1176,13 @@
         "affiliations": [
           {
             "factionId": "lcq.faction.left_guard",
-            "category": "military",
-            "role": "主将"
+            "category": "organization",
+            "role": "第一军团天武营主将"
           },
           {
             "factionId": "liuchao.faction.tai_yi_zhen_zong",
-            "category": "sect",
-            "role": "王哲弟子/未来掌教人选"
+            "category": "organization",
+            "role": "王哲爱徒（拟传掌教；后与王哲一同战死草原）"
           }
         ],
         "locationId": "lcq.location.shuai_zhang",
@@ -1282,8 +1282,8 @@
         "affiliations": [
           {
             "factionId": "lcq.faction.roman",
-            "category": "military",
-            "role": "祭司"
+            "category": "organization",
+            "role": "拜火教女祭司（随军协同，非编制）"
           }
         ],
         "locationId": "lcq.location.roman_camp",

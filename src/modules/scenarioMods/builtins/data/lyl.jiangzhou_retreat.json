@@ -2240,7 +2240,8 @@
       "event.s01_02.done": false,
       "event.s01_03.done": false,
       "event.s01_04.done": false,
-      "event.s01_05.done": false
+      "event.s01_05.done": false,
+      "event.debut_zhuoyunjun.done": false
     },
     "events": [
       {
@@ -2394,6 +2395,23 @@
         "axisSeq": 555,
         "axisAnchor": "六朝云龙吟·#3·上钩",
         "axisBeat": "程宗扬以五千石粮食诱王团练以劣米换新粮，导致常平仓失火，王团练被查。"
+      },
+      {
+        "id": "lyl.event.debut_zhuoyunjun",
+        "name": "卓云君·招牌登场",
+        "description": "程宗扬在临安某处（疑似沐羽城程氏住所或城外隐蔽处）（程宗扬骑在申婉盈臀上交合时，文中提及「卓云君亲传的房中术」，以背景人物方式首次被提及；随后在0090.html正式以奴婢身份向程宗扬回话） 初始身份：太乙真宗教御（蔺贼势力败落后被小紫收服的逃亡者，三魂七魄留有妈妈的印记，依附程宗扬门下）。随后：正式出场：托庇门下；身份升级：北邙教御。",
+        "conditions": [],
+        "completion": [
+          {
+            "path": "flags.event.debut_zhuoyunjun.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.zhuo_yunjun"
+        ],
+        "critical": false
       }
     ],
     "chapters": [
@@ -2420,7 +2438,8 @@
           "lyl.event.s01_02",
           "lyl.event.s01_03",
           "lyl.event.s01_04",
-          "lyl.event.s01_05"
+          "lyl.event.s01_05",
+          "lyl.event.debut_zhuoyunjun"
         ]
       }
     ]

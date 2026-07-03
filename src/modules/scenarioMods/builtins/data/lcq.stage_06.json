@@ -2467,7 +2467,7 @@
           {
             "factionId": "lyg.faction.qin_state",
             "category": "organization",
-            "role": "客将"
+            "role": "化名客卿边将（星月湖潜伏时期）"
           }
         ]
       },
@@ -2612,8 +2612,8 @@
         "affiliations": [
           {
             "factionId": "liuchao.faction.xe9675069af",
-            "category": "sect",
-            "role": "挂单比丘尼"
+            "category": "organization",
+            "role": "挂单比丘尼（暂居非常住）"
           }
         ]
       },
@@ -2649,13 +2649,13 @@
           },
           {
             "factionId": "liuchao.faction.x5a4fdd48cd",
-            "category": "military",
+            "category": "organization",
             "role": "都指挥使"
           },
           {
             "factionId": "lyg.faction.tiance_fu",
-            "category": "military",
-            "role": "学员"
+            "category": "organization",
+            "role": "出身（学员经历，现已离府）"
           }
         ]
       },

@@ -1643,18 +1643,13 @@
         "affiliations": [
           {
             "factionId": "liuchao.faction.tai_wei_fu",
-            "category": "clan",
-            "role": "衙内"
+            "category": "organization",
+            "role": "螟蛉子/衙内"
           },
           {
             "factionId": "lyg.faction.song_state",
             "category": "organization",
             "role": "太尉府衙内"
-          },
-          {
-            "factionId": "liuchao.faction.jin_jun",
-            "category": "military",
-            "role": "高俅螟蛉子"
           }
         ],
         "locationId": "liuchao.location.lin_an",
@@ -3057,6 +3052,17 @@
       },
       {
         "fromCharacterId": "liuchao.character.cheng_zongyang",
+        "toCharacterId": "liuchao.character.xiao_zi",
+        "relation": "同袍",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同袍",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.cheng_zongyang",
         "toCharacterId": "liuchao.character.xiao_yao_yi",
         "relation": "同袍",
         "score": 30,
@@ -3068,6 +3074,28 @@
       },
       {
         "fromCharacterId": "liuchao.character.yu_zi_yuan",
+        "toCharacterId": "liuchao.character.xiao_zi",
+        "relation": "同袍",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同袍",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.yu_zi_yuan",
+        "toCharacterId": "liuchao.character.xiao_yao_yi",
+        "relation": "同袍",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同袍",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.xiao_zi",
         "toCharacterId": "liuchao.character.xiao_yao_yi",
         "relation": "同袍",
         "score": 30,
@@ -3151,39 +3179,6 @@
         "direction": "bidirectional",
         "tags": [
           "同门",
-          "同势力派生"
-        ]
-      },
-      {
-        "fromCharacterId": "liuchao.character.cheng_zongyang",
-        "toCharacterId": "liuchao.character.xiao_zi",
-        "relation": "同袍",
-        "score": 30,
-        "direction": "bidirectional",
-        "tags": [
-          "同袍",
-          "同势力派生"
-        ]
-      },
-      {
-        "fromCharacterId": "liuchao.character.yu_zi_yuan",
-        "toCharacterId": "liuchao.character.xiao_zi",
-        "relation": "同袍",
-        "score": 30,
-        "direction": "bidirectional",
-        "tags": [
-          "同袍",
-          "同势力派生"
-        ]
-      },
-      {
-        "fromCharacterId": "liuchao.character.xiao_zi",
-        "toCharacterId": "liuchao.character.xiao_yao_yi",
-        "relation": "同袍",
-        "score": 30,
-        "direction": "bidirectional",
-        "tags": [
-          "同袍",
           "同势力派生"
         ]
       }

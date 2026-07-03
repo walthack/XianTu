@@ -1845,7 +1845,7 @@
           {
             "factionId": "liuchao.faction.xing_yue_hu",
             "category": "organization",
-            "role": "门客（珠宝管事）"
+            "role": "岳帅门下旧部（自称忠心耿耿）"
           }
         ]
       },
@@ -2106,13 +2106,7 @@
           "race": "人族",
           "origin": "吕氏门下管事/家臣"
         },
-        "affiliations": [
-          {
-            "factionId": "lyg.faction.wuyang_houfu",
-            "category": "clan",
-            "role": "门客/心腹"
-          }
-        ]
+        "affiliations": []
       },
       {
         "id": "liuchao.character.mao_yan_shou",
@@ -2531,16 +2525,16 @@
           {
             "factionId": "liuchao.faction.dragon_chen",
             "category": "organization",
-            "role": "女杀手"
+            "role": "原杀手（行刺小紫失败被擒后脱离）"
           },
           {
             "factionId": "liuchao.faction.xe6bd0066c9",
             "category": "organization",
-            "role": "侍奴/护卫"
+            "role": "被擒后收为侍奴"
           },
           {
             "factionId": "liuchao.faction.yao_chi_zong",
-            "category": "sect",
+            "category": "organization",
             "role": "弃徒"
           }
         ]

@@ -1909,11 +1909,6 @@
             "factionId": "liuchao.faction.hua_miao",
             "category": "organization",
             "role": "族人/献给鬼巫王的新娘"
-          },
-          {
-            "factionId": "liuchao.faction.gui_wang_dong",
-            "category": "organization",
-            "role": "待进献的新娘"
           }
         ]
       },
@@ -2780,7 +2775,7 @@
           {
             "factionId": "lyg.faction.qin_state",
             "category": "organization",
-            "role": "客将"
+            "role": "化名客卿边将（星月湖潜伏时期）"
           }
         ]
       },
@@ -2925,8 +2920,8 @@
         "affiliations": [
           {
             "factionId": "liuchao.faction.xe9675069af",
-            "category": "sect",
-            "role": "挂单比丘尼"
+            "category": "organization",
+            "role": "挂单比丘尼（暂居非常住）"
           }
         ]
       },
@@ -2962,13 +2957,13 @@
           },
           {
             "factionId": "liuchao.faction.x5a4fdd48cd",
-            "category": "military",
+            "category": "organization",
             "role": "都指挥使"
           },
           {
             "factionId": "lyg.faction.tiance_fu",
-            "category": "military",
-            "role": "学员"
+            "category": "organization",
+            "role": "出身（学员经历，现已离府）"
           }
         ]
       },
@@ -3692,7 +3687,8 @@
       "chapter.lcq.stage_08_jiankang_coup.sudaji.done": false,
       "chapter.lcq.stage_08_jiankang_coup.coup.started": false,
       "chapter.lcq.stage_08_jiankang_coup.coup.done": false,
-      "event.s08_debut_xiaoyaoyi.done": false
+      "event.s08_debut_xiaoyaoyi.done": false,
+      "event.debut_panjinlian.done": false
     },
     "chapters": [
       {
@@ -3710,7 +3706,8 @@
           "lcq.event.s08_01_eagle_valley",
           "lcq.event.s08_02_wood_fort",
           "lcq.event.s08_03_beifu_rescue",
-          "lcq.event.s08_debut_xiaoyaoyi"
+          "lcq.event.s08_debut_xiaoyaoyi",
+          "lcq.event.debut_panjinlian"
         ]
       },
       {
@@ -3981,6 +3978,23 @@
           "liuchao.character.xiao_yao_yi",
           "liuchao.character.cheng_zongyang",
           "liuchao.character.xiao_zi"
+        ],
+        "critical": false
+      },
+      {
+        "id": "lcq.event.debut_panjinlian",
+        "name": "潘金莲·招牌登场",
+        "description": "程宗扬居所/建康商馆房间（突然闯入房间寻找乐明珠） 初始身份：光明观堂弟子，乐明珠的师姐，武二郎的准嫂嫂。随后：闯入寻人验守宫砂；云水对峙鱼无夷。",
+        "conditions": [],
+        "completion": [
+          {
+            "path": "flags.event.debut_panjinlian.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.pan_jinlian"
         ],
         "critical": false
       }

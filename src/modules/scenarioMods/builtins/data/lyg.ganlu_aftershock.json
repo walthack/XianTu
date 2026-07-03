@@ -1752,44 +1752,39 @@
         "realm": "金丹",
         "affiliations": [
           {
-            "factionId": "lyg.faction.wuyang_houfu",
-            "category": "organization",
-            "role": "盟友"
-          },
-          {
             "factionId": "liuchao.faction.tang_guo_chao_ting",
-            "category": "state",
+            "category": "organization",
             "role": "镇国公主/太真妃子"
           },
           {
             "factionId": "liuchao.faction.tai_yi_zhen_zong",
-            "category": "sect",
-            "role": "弟子（受先皇钦命授箓传道）"
+            "category": "organization",
+            "role": "钦命授箓传道（名义）"
           },
           {
             "factionId": "liuchao.faction.x0d71c824e7",
-            "category": "sect",
-            "role": "弟子（受先皇钦命授箓传道）"
+            "category": "organization",
+            "role": "钦命授箓传道（名义）"
           },
           {
             "factionId": "liuchao.faction.xcd42487992",
             "category": "organization",
-            "role": "弟子（受先皇钦命授箓传道）"
+            "role": "钦命授箓传道（名义）"
           },
           {
             "factionId": "liuchao.faction.x6c70e576ef",
-            "category": "sect",
-            "role": "弟子（受先皇钦命授箓传道）"
+            "category": "organization",
+            "role": "钦命授箓传道（名义）"
           },
           {
             "factionId": "liuchao.faction.yao_chi_zong",
-            "category": "sect",
-            "role": "弟子（受先皇钦命授箓传道）"
+            "category": "organization",
+            "role": "钦命授箓传道（名义）"
           },
           {
             "factionId": "liuchao.faction.guang_ming_guan_tang",
             "category": "organization",
-            "role": "弟子（卫采芝为授业恩师）"
+            "role": "挂名弟子"
           }
         ],
         "locationId": "lyg.location.wuyang_mansion",
@@ -2434,13 +2429,8 @@
         "gender": "男",
         "affiliations": [
           {
-            "factionId": "liuchao.faction.shi_fang_cong_lin",
-            "category": "sect",
-            "role": "僧人"
-          },
-          {
             "factionId": "liuchao.faction.x78a6c9fdd3",
-            "category": "sect",
+            "category": "organization",
             "role": "僧人"
           }
         ]
@@ -3026,12 +3016,12 @@
           {
             "factionId": "lyl.faction.pengyi",
             "category": "organization",
-            "role": "社员/六营成员"
+            "role": "挂名（星月湖掩护组织）"
           },
           {
             "factionId": "lyg.faction.qin_state",
             "category": "organization",
-            "role": "原右庶长（已弃爵位投奔岳帅）"
+            "role": "原秦军右庶长（闻江州起兵弃将印来投，旧属）"
           }
         ]
       },
@@ -3187,16 +3177,16 @@
           {
             "factionId": "liuchao.faction.dragon_chen",
             "category": "organization",
-            "role": "女杀手"
+            "role": "原杀手（行刺小紫失败被擒后脱离）"
           },
           {
             "factionId": "liuchao.faction.xe6bd0066c9",
             "category": "organization",
-            "role": "侍奴/护卫"
+            "role": "被擒后收为侍奴"
           },
           {
             "factionId": "liuchao.faction.yao_chi_zong",
-            "category": "sect",
+            "category": "organization",
             "role": "弃徒"
           }
         ]
@@ -3939,17 +3929,6 @@
       {
         "fromCharacterId": "liuchao.character.zhuo_yunjun",
         "toCharacterId": "lcq.character.yue_shuang",
-        "relation": "同门",
-        "score": 30,
-        "direction": "bidirectional",
-        "tags": [
-          "同门",
-          "同势力派生"
-        ]
-      },
-      {
-        "fromCharacterId": "lyg.character.np034",
-        "toCharacterId": "liuchao.character.li_hong",
         "relation": "同门",
         "score": 30,
         "direction": "bidirectional",

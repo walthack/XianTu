@@ -1184,38 +1184,38 @@
         "affiliations": [
           {
             "factionId": "liuchao.faction.tang_guo_chao_ting",
-            "category": "state",
-            "role": "镇国大长公主"
+            "category": "organization",
+            "role": "镇国公主/太真妃子"
           },
           {
             "factionId": "liuchao.faction.tai_yi_zhen_zong",
-            "category": "sect",
-            "role": "弟子（受先皇钦命授箓传道）"
+            "category": "organization",
+            "role": "钦命授箓传道（名义）"
           },
           {
             "factionId": "liuchao.faction.x0d71c824e7",
-            "category": "sect",
-            "role": "弟子（受先皇钦命授箓传道）"
+            "category": "organization",
+            "role": "钦命授箓传道（名义）"
           },
           {
             "factionId": "liuchao.faction.xcd42487992",
             "category": "organization",
-            "role": "弟子（受先皇钦命授箓传道）"
+            "role": "钦命授箓传道（名义）"
           },
           {
             "factionId": "liuchao.faction.x6c70e576ef",
-            "category": "sect",
-            "role": "弟子（受先皇钦命授箓传道）"
+            "category": "organization",
+            "role": "钦命授箓传道（名义）"
           },
           {
             "factionId": "liuchao.faction.yao_chi_zong",
-            "category": "sect",
-            "role": "弟子（受先皇钦命授箓传道）"
+            "category": "organization",
+            "role": "钦命授箓传道（名义）"
           },
           {
             "factionId": "liuchao.faction.guang_ming_guan_tang",
             "category": "organization",
-            "role": "弟子（卫采芝为授业恩师）"
+            "role": "挂名弟子"
           }
         ],
         "locationId": "lyg.location.qujiang",
@@ -2720,16 +2720,16 @@
           {
             "factionId": "liuchao.faction.dragon_chen",
             "category": "organization",
-            "role": "女杀手"
+            "role": "原杀手（行刺小紫失败被擒后脱离）"
           },
           {
             "factionId": "liuchao.faction.xe6bd0066c9",
             "category": "organization",
-            "role": "侍奴/护卫"
+            "role": "被擒后收为侍奴"
           },
           {
             "factionId": "liuchao.faction.yao_chi_zong",
-            "category": "sect",
+            "category": "organization",
             "role": "弃徒"
           }
         ]
@@ -4393,7 +4393,8 @@
       "event.s03_06.done": false,
       "event.s03_07.done": false,
       "event.s03_08.done": false,
-      "event.s03_09.done": false
+      "event.s03_09.done": false,
+      "event.debut_shefuren.done": false
     },
     "events": [
       {
@@ -4680,6 +4681,23 @@
         "axisSeq": 1090,
         "axisAnchor": "六朝燕歌行·#67·第667章·题名",
         "axisBeat": "程宗扬夜访大慈恩寺，从碑刻中发现白行简等名字，怀疑其为穿越者；小紫炸开禁制逃出后，程宗扬以汉使身份救走她。"
+      },
+      {
+        "id": "lyg.event.debut_shefuren",
+        "name": "蛇夫人·招牌登场",
+        "description": "程宗扬通过窥视孔偷看卧室（镜中映出卧室，程宗扬听到声音后看到一名黑衣侍奴挽着长鞭出场） 初始身份：小紫的侍奴、江湖中人。随后：自报家门展凶威；执鞭逼供阮香凝。",
+        "conditions": [],
+        "completion": [
+          {
+            "path": "flags.event.debut_shefuren.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "lyg.character.she_fu_ren"
+        ],
+        "critical": false
       }
     ],
     "chapters": [
@@ -4710,7 +4728,8 @@
           "lyg.event.s03_06",
           "lyg.event.s03_07",
           "lyg.event.s03_08",
-          "lyg.event.s03_09"
+          "lyg.event.s03_09",
+          "lyg.event.debut_shefuren"
         ]
       }
     ]

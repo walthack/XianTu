@@ -1582,7 +1582,8 @@
       "event.s03_06.done": false,
       "event.s03_07.done": false,
       "event.s03_08.done": false,
-      "event.s03_09.done": false
+      "event.s03_09.done": false,
+      "event.debut_ningyu.done": false
     },
     "chapters": [
       {
@@ -1612,7 +1613,8 @@
           "lcq.event.s03_06",
           "lcq.event.s03_07",
           "lcq.event.s03_08",
-          "lcq.event.s03_09"
+          "lcq.event.s03_09",
+          "lcq.event.debut_ningyu"
         ]
       }
     ],
@@ -1902,6 +1904,23 @@
         "axisSeq": 53,
         "axisAnchor": "六朝清羽记·#35·第33章·武请",
         "axisBeat": "程宗扬与凝羽双修后，发现凝羽体内有西门庆留下的阴寒之气，并得知她曾被西门庆当作鼎炉调教，两人述说隐秘关系。"
+      },
+      {
+        "id": "lcq.event.debut_ningyu",
+        "name": "凝羽·招牌登场",
+        "description": "怡春院（苏妲己商馆）厅内（随主人苏妲己召唤，与数名女侍卫一同涌进厅内，执行处决男奴之令） 初始身份：苏妲己的女侍卫长（贴身护卫）。随后：教授·刀法与内功心法；双修·倾身传授功法。",
+        "conditions": [],
+        "completion": [
+          {
+            "path": "flags.event.debut_ningyu.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.ning_yu"
+        ],
+        "critical": false
       }
     ]
   },

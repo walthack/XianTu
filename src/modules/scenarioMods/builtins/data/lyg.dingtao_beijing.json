@@ -1361,14 +1361,14 @@
         "locationId": "liuchao.location.yique",
         "affiliations": [
           {
-            "factionId": "liuchao.faction.han_guo_chao_ting",
-            "category": "state",
-            "role": "新君待立"
+            "factionId": "liuchao.faction.liangzhou_army",
+            "category": "organization",
+            "role": "被拥立的傀儡皇帝"
           },
           {
-            "factionId": "liuchao.faction.liangzhou_army",
-            "category": "military",
-            "role": "被拥立的傀儡皇帝"
+            "factionId": "liuchao.faction.han_guo_chao_ting",
+            "category": "organization",
+            "role": "被拥立傀儡天子（凉州军挟持）"
           }
         ],
         "profile": {
@@ -2247,8 +2247,8 @@
         "affiliations": [
           {
             "factionId": "liuchao.faction.han_guo_chao_ting",
-            "category": "state",
-            "role": "中黄门"
+            "category": "organization",
+            "role": "中黄门（后叛附吕氏）"
           },
           {
             "factionId": "lyl.faction.lyu_clan",
@@ -2726,16 +2726,16 @@
           {
             "factionId": "liuchao.faction.dragon_chen",
             "category": "organization",
-            "role": "女杀手"
+            "role": "原杀手（行刺小紫失败被擒后脱离）"
           },
           {
             "factionId": "liuchao.faction.xe6bd0066c9",
             "category": "organization",
-            "role": "侍奴/护卫"
+            "role": "被擒后收为侍奴"
           },
           {
             "factionId": "liuchao.faction.yao_chi_zong",
-            "category": "sect",
+            "category": "organization",
             "role": "弃徒"
           }
         ]
@@ -3946,7 +3946,10 @@
       "event.s01_08.done": false,
       "event.s01_09.done": false,
       "event.debut_lvzhi.done": false,
-      "event.lvzhi_zhenjiu.done": false
+      "event.lvzhi_zhenjiu.done": false,
+      "event.debut_chengguang.done": false,
+      "event.debut_qiyuxian.done": false,
+      "event.debut_jiawenhe.done": false
     },
     "events": [
       {
@@ -4275,6 +4278,57 @@
           "liuchao.character.lv_ji"
         ],
         "critical": false
+      },
+      {
+        "id": "lyg.event.debut_chengguang",
+        "name": "成光·招牌登场",
+        "description": "一处宴席场所（银制餐具的食肆），程宗扬与李师师赴黑魔海请柬之宴（成光本人并未在此宴席现身，程宗扬在议论江都王刘建的历史记载时，脑中联想到刘建的疯狂事迹，并由此提及\"成光\"是江都王王后。） 初始身份：仅以\"江都王王后\"身份被提及，尚未正式登场。随后：永安宫探虚·为刘建贺帝；背离黑魔海·密谋反水。",
+        "conditions": [],
+        "completion": [
+          {
+            "path": "flags.event.debut_chengguang.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_guang"
+        ],
+        "critical": false
+      },
+      {
+        "id": "lyg.event.debut_qiyuxian",
+        "name": "齐羽仙·招牌登场",
+        "description": "翠微园门外，夜间阶下（一名黑衣丽人乘马车而至，立于阶下阴影中，与程宗扬对峙谈判，交换荡星鞭与被囚之人） 初始身份：黑魔海剑玉姬麾下得力干将，程宗扬旧识。随后：摹绘友通期画像；玄武门对峙谈判。",
+        "conditions": [],
+        "completion": [
+          {
+            "path": "flags.event.debut_qiyuxian.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.qi_yu_xian"
+        ],
+        "critical": false
+      },
+      {
+        "id": "lyg.event.debut_jiawenhe",
+        "name": "贾文和·招牌登场",
+        "description": "凉州军逼近洛都城门，战车之上（以董卓谋士身份就当前局势发表议论（评价刘建图谋大位）） 初始身份：破虏将军董卓麾下谋士。随后：城门献计·数侯论；宣德门对峙·计揭刘建。",
+        "conditions": [],
+        "completion": [
+          {
+            "path": "flags.event.debut_jiawenhe.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.jia_wenhe"
+        ],
+        "critical": false
       }
     ],
     "chapters": [
@@ -4307,7 +4361,10 @@
           "lyg.event.s01_08",
           "lyg.event.s01_09",
           "lyg.event.debut_lvzhi",
-          "lyg.event.lvzhi_zhenjiu"
+          "lyg.event.lvzhi_zhenjiu",
+          "lyg.event.debut_chengguang",
+          "lyg.event.debut_qiyuxian",
+          "lyg.event.debut_jiawenhe"
         ]
       }
     ]
