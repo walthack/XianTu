@@ -99,9 +99,9 @@
                   <span
                     v-if="selectedItem?.品质?.grade !== undefined"
                     class="grade-display"
-                    :class="getGradeClass(selectedItem.品质.grade)"
+                    :class="getItemGradeClass(selectedItem)"
                   >
-                    {{ t(getGradeText(selectedItem.品质.grade)) }}({{ selectedItem.品质.grade }})
+                    {{ t(getItemGradeText(selectedItem)) }}({{ selectedItem.品质.grade }})
                   </span>
                 </div>
                 <p class="modal-description">{{ selectedItem?.描述 }}</p>
@@ -211,9 +211,9 @@
               <div
                 v-if="item.品质?.grade !== undefined"
                 class="item-grade-info"
-                :class="getGradeClass(item.品质.grade)"
+                :class="getItemGradeClass(item)"
               >
-                {{ t(getGradeText(item.品质.grade)) }}({{ item.品质.grade }})
+                {{ t(getItemGradeText(item)) }}({{ item.品质.grade }})
               </div>
             </div>
           </div>
@@ -233,9 +233,9 @@
                   <span
                     v-if="selectedItem.品质?.grade !== undefined"
                     class="grade-display"
-                    :class="getGradeClass(selectedItem.品质.grade)"
+                    :class="getItemGradeClass(selectedItem)"
                   >
-                    {{ t(getGradeText(selectedItem.品质.grade)) }}({{ selectedItem.品质.grade }})
+                    {{ t(getItemGradeText(selectedItem)) }}({{ selectedItem.品质.grade }})
                   </span>
                 </div>
               </div>
@@ -412,9 +412,9 @@
                     <span
                       v-if="slot.item.品质?.grade !== undefined"
                       class="grade-badge"
-                      :class="getGradeClass(slot.item.品质.grade)"
+                      :class="getItemGradeClass(slot.item)"
                     >
-                      {{ t(getGradeText(slot.item.品质.grade)) }} ({{ slot.item.品质.grade }})
+                      {{ t(getItemGradeText(slot.item)) }} ({{ slot.item.品质.grade }})
                     </span>
                   </div>
                   <div v-if="slot.item.描述" class="equipped-desc">
@@ -933,6 +933,16 @@ const getGradeText = (grade: number | string): string => {
   return '未知'
 }
 
+const isPlainMundaneGradeZero = (item?: Item | null): boolean => {
+  return item?.品质?.quality === '凡' && item.品质.grade === 0
+}
+
+const getItemGradeText = (item?: Item | null): string => {
+  if (!item?.品质 || item.品质.grade === undefined) return '未知'
+  if (isPlainMundaneGradeZero(item)) return '凡品'
+  return getGradeText(item.品质.grade)
+}
+
 // 获取品级样式（支持数字和自定义字符串）
 const getGradeClass = (grade: number | string): string => {
   // 自定义字符串品级，使用特殊样式
@@ -944,6 +954,12 @@ const getGradeClass = (grade: number | string): string => {
   if (grade >= 7 && grade <= 9) return 'grade-high'
   if (grade === 10) return 'grade-perfect'
   return 'grade-unknown'
+}
+
+const getItemGradeClass = (item?: Item | null): string => {
+  if (!item?.品质 || item.品质.grade === undefined) return 'grade-unknown'
+  if (isPlainMundaneGradeZero(item)) return 'grade-low'
+  return getGradeClass(item.品质.grade)
 }
 
 // 从背包中移除物品的辅助函数
