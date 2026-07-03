@@ -120,3 +120,34 @@ test('canon guard permits only set commands below runtime flags', async () => {
   assert.deepEqual(result.accepted, [allowed]);
   assert.equal(result.rejected.length, 3);
 });
+
+test('nested LLM-written flags and string booleans satisfy conditions (regression: stuck stage_04 save)', async () => {
+  const { evaluateScenarioCondition } = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  const runtime = {
+    // initialFlags 扁平陈旧 false + LLM set 出的嵌套 true 并存 → 嵌套(较新)优先
+    flags: { 'event.s04_01.done': false, event: { s04_01: { done: true }, s04_07: { done: 'true' } } },
+    chapters: [], events: [], completedChapterIds: [], activeEventIds: [], completedEventIds: [], currentChapterId: null,
+  };
+  const save = {};
+  assert.equal(evaluateScenarioCondition({ path: 'flags.event.s04_01.done', operator: 'eq', value: true }, save, runtime), true);
+  // 字符串 "true" 也应满足 eq true
+  assert.equal(evaluateScenarioCondition({ path: 'flags.event.s04_07.done', operator: 'eq', value: true }, save, runtime), true);
+});
+
+test('early-set done flags settle never-activated critical events; stage becomes ready (dead-lock regression)', async () => {
+  const { advanceScenarioRuntime } = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  const mk = i => ({ id: `e${i}`, critical: true, completion: [{ path: `flags.event.e${i}.done`, operator: 'eq', value: true }] });
+  const save = { 世界: { 状态: { 剧本模组: {
+    currentChapterId: 'c1',
+    chapters: [{ id: 'c1', eventIds: ['e1', 'e2'], completion: [{ path: 'flags.event.e2.done', operator: 'eq', value: true }] }],
+    events: [mk(1), mk(2)],
+    activeEventIds: ['e1'], completedEventIds: [], completedChapterIds: [],
+    flags: { 'event.e1.done': false, event: { e1: { done: true }, e2: { done: 'true' } } },
+    nextStageId: 'stage2',
+  } } } };
+  const { saveData } = advanceScenarioRuntime(save);
+  const rt = saveData.世界.状态.剧本模组;
+  assert.ok(rt.completedEventIds.includes('e1'), 'active event completes via nested flag');
+  assert.ok(rt.completedEventIds.includes('e2'), 'never-activated critical event settles via string-true flag');
+  assert.equal(rt.nextStageReadyId, 'stage2', 'stage_ready fires');
+});

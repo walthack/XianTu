@@ -43,10 +43,21 @@ function resolveConditionValue(condition: ScenarioCondition, saveData: SaveData,
   if (condition.path === 'flags') return runtime.flags;
   if (condition.path.startsWith('flags.')) {
     const flagPath = condition.path.slice('flags.'.length);
+    // LLM 的 set 指令按嵌套路径写入（flags.event.x.done → {event:{x:{done}}}），
+    // 而 initialFlags 是扁平点号键。嵌套值是较新的写入 → 嵌套优先，扁平兜底。
+    const nested = readPath(runtime.flags, flagPath.split('.'));
+    if (nested !== undefined) return nested;
     if (Object.prototype.hasOwnProperty.call(runtime.flags, flagPath)) return runtime.flags[flagPath];
-    return readPath(runtime.flags, flagPath.split('.'));
+    return undefined;
   }
   return readPath(saveData, condition.path.split('.'));
+}
+
+// LLM 偶尔把布尔写成字符串（"true"/"false"）——eq/neq 比较前归一。
+function coerceScalar(value: unknown): unknown {
+  if (value === 'true') return true;
+  if (value === 'false') return false;
+  return value;
 }
 
 export function evaluateScenarioCondition(
@@ -56,8 +67,8 @@ export function evaluateScenarioCondition(
 ): boolean {
   const actual = resolveConditionValue(condition, saveData, runtime);
   switch (condition.operator) {
-    case 'eq': return actual === condition.value;
-    case 'neq': return actual !== condition.value;
+    case 'eq': return coerceScalar(actual) === condition.value;
+    case 'neq': return coerceScalar(actual) !== condition.value;
     case 'gt': return typeof actual === 'number' && typeof condition.value === 'number' && actual > condition.value;
     case 'gte': return typeof actual === 'number' && typeof condition.value === 'number' && actual >= condition.value;
     case 'lt': return typeof actual === 'number' && typeof condition.value === 'number' && actual < condition.value;
@@ -109,6 +120,27 @@ export function getInitialScenarioChapterId(mod: ScenarioMod): string | null {
   return runtime.chapters.find(chapter => conditionsMatch(chapter.activation, emptySave, runtime))?.id || null;
 }
 
+// 把 LLM 写成嵌套的 flags 摊平回扁平点号键（嵌套值较新、优先），并归一 "true"/"false" 字符串。
+// 避免 flags 里同键扁平/嵌套双写矛盾（扁平陈旧 false + 嵌套 true），也让 prompt 的「剧情标记」显示一致。
+function normalizeRuntimeFlags(runtime: RuntimeState): void {
+  const flags = runtime.flags as Record<string, unknown>;
+  const flatten = (obj: Record<string, unknown>, prefix: string) => {
+    for (const [key, value] of Object.entries(obj)) {
+      const path = prefix ? `${prefix}.${key}` : key;
+      if (value && typeof value === 'object' && !Array.isArray(value)) flatten(value as Record<string, unknown>, path);
+      else flags[path] = coerceScalar(value);
+    }
+  };
+  for (const [key, value] of Object.entries(flags)) {
+    if (value && typeof value === 'object' && !Array.isArray(value)) {
+      flatten(value as Record<string, unknown>, key);
+      delete flags[key];
+    } else {
+      flags[key] = coerceScalar(value);
+    }
+  }
+}
+
 export function advanceScenarioRuntime(saveData: SaveData): {
   saveData: SaveData;
   transitions: ScenarioRuntimeTransition[];
@@ -116,6 +148,7 @@ export function advanceScenarioRuntime(saveData: SaveData): {
   const next = structuredClone(saveData);
   const runtime = getRuntime(next);
   if (!runtime) return { saveData: next, transitions: [] };
+  normalizeRuntimeFlags(runtime);
 
   runtime.chapters = Array.isArray(runtime.chapters) ? runtime.chapters : [];
   runtime.events = Array.isArray(runtime.events) ? runtime.events : [];
@@ -136,6 +169,17 @@ export function advanceScenarioRuntime(saveData: SaveData): {
       runtime.activeEventIds = runtime.activeEventIds.filter(id => id !== activeId);
       if (!runtime.completedEventIds.includes(activeId)) runtime.completedEventIds.push(activeId);
       transitions.push({ type: 'event_completed', id: activeId });
+    }
+  }
+
+  // 清算未曾活跃但完成条件已满足的事件（LLM 可能提前/越序 set 了 done flag）。
+  // 否则章节一完成清空 activeEventIds 后，这些 critical 事件永远进不了 completedEventIds → stage_ready 死锁。
+  for (const event of runtime.events) {
+    if (runtime.completedEventIds.includes(event.id)) continue;
+    if (hasCompletion(event.completion) && conditionsMatch(event.completion, next, runtime)) {
+      runtime.activeEventIds = runtime.activeEventIds.filter(id => id !== event.id);
+      runtime.completedEventIds.push(event.id);
+      transitions.push({ type: 'event_completed', id: event.id });
     }
   }
 
