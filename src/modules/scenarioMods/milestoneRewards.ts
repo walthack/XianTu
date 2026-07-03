@@ -18,12 +18,23 @@ export interface MilestoneReward {
   note: string;
 }
 
-// 落点必须符合原文故事线。新增条目：补一行即可。
+// 落点必须符合原文故事线（来源：milestone-grants-scan 原文扫描 + 用户裁定 2026-07-03）。
+// 新增条目：补一行即可。跳过项：大行令(原文旋即被夺,引擎无撤销)/兰台典校(非正式官职)。
 export const MILESTONE_REWARDS: MilestoneReward[] = [
+  {
+    stageId: 'lcq.stage_12_jiangzhou_counterwar', // 六朝清羽记·江州反攻收束
+    titles: ['宋国工部屯田司员外郎'],
+    note: '粮战功成，筠州知州滕甫招揽为宋国客卿，举荐任工部屯田司员外郎（清羽 ch324）。',
+  },
   {
     stageId: 'lyl.luoyang_coup', // 六朝云龙吟·封侯
     titles: ['汉国舞阳侯'],
     note: '洛都事了，受封汉国舞阳侯（实封五千户，舞阳相程郑主政）。',
+  },
+  {
+    stageId: 'lyg.shituolin_endgame', // 六朝燕歌行·尸陀林主与李辅国断点
+    titles: ['唐国大都护', '上柱国'],
+    note: '诛杀李辅国，唐国朝廷重赏：官拜大都护（向由亲王遥领，暗示等同亲王）、勋授上柱国（燕歌 0292）。',
   },
 ];
 
