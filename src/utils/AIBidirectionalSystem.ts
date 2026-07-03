@@ -1326,7 +1326,8 @@ ${missingItems.length > 0 ? `【上次结构化输出缺失】
         gmResponse,
         dataForProcessing as SaveData,
         false,
-        options?.shouldAbort
+        options?.shouldAbort,
+        { userAction: (userMessage && String(userMessage).trim()) || '继续当前活动' }
       );
       if (options?.onStateChange) {
         options.onStateChange(updatedSaveData as unknown as PlainObject);
@@ -1854,6 +1855,10 @@ ${step1Text}
        * - 默认 80
        */
       implicitMidFallbackMaxLen?: number;
+      /**
+       * 本轮用户动作。用于窄触发的确定性补账，例如“查看/调查某物品”后同步物品描述。
+       */
+      userAction?: string;
     }
   ): Promise<{ saveData: SaveData; stateChanges: StateChangeLog; onlineLogPosted: boolean }> {
     const abortRequested = () => shouldAbort?.() ?? false;
@@ -2196,6 +2201,14 @@ ${step1Text}
 
     const reconciledInventoryChanges = this.reconcileNarratedInventoryPossessions(saveData, textContent);
     commandAppliedChanges.push(...reconciledInventoryChanges);
+
+    const inspectedItemChanges = this.reconcileInspectedItemDescriptions(
+      saveData,
+      options?.userAction || '',
+      textContent,
+      sortedCommands
+    );
+    commandAppliedChanges.push(...inspectedItemChanges);
 
     const actionGatePrune = pruneExpiredActionGates(saveData, getNarrativeTurn(saveData));
     if (actionGatePrune.changed) {
@@ -3189,6 +3202,81 @@ ${saveDataJson}`;
     }
 
     return item;
+  }
+
+  private reconcileInspectedItemDescriptions(
+    saveData: SaveData,
+    userAction: string,
+    responseText: string,
+    commands: Array<{ action: string; key: string; value?: unknown }>
+  ): StateChange[] {
+    const actionText = (userAction || '').trim();
+    const text = (responseText || '').trim();
+    if (!actionText || !text || text === '（AI生成失败）') return [];
+    if (!/(查看|检查|调查|端详|端看|细看|仔细看|研究|观察|辨认|鉴定|翻看|阅读|读取|探查)/.test(actionText)) {
+      return [];
+    }
+
+    const inventoryPath = '角色.背包.物品';
+    const items = get(saveData, inventoryPath, {}) as Record<string, any>;
+    if (!items || typeof items !== 'object' || Array.isArray(items)) return [];
+
+    const normalizedAction = this.normalizeInventoryMention(actionText);
+    const changes: StateChange[] = [];
+
+    for (const [itemId, item] of Object.entries(items)) {
+      const name = typeof item?.名称 === 'string' ? item.名称.trim() : '';
+      if (!name) continue;
+      if (!this.userActionMentionsInventoryItem(normalizedAction, name)) continue;
+
+      const descPath = `${inventoryPath}.${itemId}.描述`;
+      const alreadySetByCommand = commands.some((cmd) =>
+        cmd.action === 'set' &&
+        typeof cmd.key === 'string' &&
+        (cmd.key === descPath || cmd.key === `${inventoryPath}.${itemId}`)
+      );
+      if (alreadySetByCommand) continue;
+
+      const oldValue = get(saveData, descPath);
+      const newDescription = this.buildInspectedItemDescription(name, text);
+      if (oldValue === newDescription) continue;
+
+      set(saveData, descPath, newDescription);
+      changes.push({
+        key: descPath,
+        action: 'set',
+        oldValue: this._summarizeValueForChangeLog(descPath, oldValue, 'set'),
+        newValue: this._summarizeValueForChangeLog(descPath, newDescription, 'set')
+      });
+      console.warn(`[AI双向系统] 查看物品后同步描述: ${name} -> ${descPath}`);
+    }
+
+    return changes;
+  }
+
+  private normalizeInventoryMention(value: string): string {
+    return value
+      .replace(/[【】《》“”"「」『』\s]/g, '')
+      .replace(/[·\-—_]/g, '')
+      .trim();
+  }
+
+  private userActionMentionsInventoryItem(normalizedAction: string, itemName: string): boolean {
+    const normalizedName = this.normalizeInventoryMention(itemName);
+    if (!normalizedName) return false;
+    if (normalizedAction.includes(normalizedName)) return true;
+
+    const withoutQuality = normalizedName.replace(/^(神品|仙品|天品|地品|玄品|黄品|凡品)/, '');
+    return !!withoutQuality && withoutQuality.length >= 2 && normalizedAction.includes(withoutQuality);
+  }
+
+  private buildInspectedItemDescription(itemName: string, responseText: string): string {
+    const compact = responseText
+      .replace(/\s+/g, ' ')
+      .replace(/^【[^】]+】/, '')
+      .trim();
+    const clipped = compact.length > 500 ? `${compact.slice(0, 500)}…` : compact;
+    return `【查看记录】${clipped || itemName}`;
   }
 
   private executeCommand(
