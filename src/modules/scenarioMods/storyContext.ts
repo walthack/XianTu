@@ -279,6 +279,26 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
   const repValue = Number(readPath(saveData, ['角色', '属性', '声望']) ?? 0) || 0;
   const reputationLine = `【声望与认知】主角当前声望：${repValue}（${reputationTier(repValue)}）。NPC 对主角的认知必须匹配声望档位：籍籍无名＝陌生人不识其名、不知其过往事迹与底细；势力若声称"掌握其底细"，必须有情报来源并在剧情中交代（且这类调查本身就是值得叙述的事件）；亲历者与同行者除外。主角做出扬名（或败坏名声）之事时，必须用 set 更新 角色.属性.声望（参考：救人除害+30~300、斩强敌+100~1000、震动一方的大事件+200~2000；恶行记负值）。`;
 
+  // 关系-好感失配检测：与玩家关系 是静态标签(物化写一次),从不随好感演进——
+  // 实测 噬心 挂"敌对"却好感35且主动双修。确定性检出失配,交 LLM 剧情内收敛。
+  const relations = readPath(saveData, ['社交', '关系']) as Record<string, { 与玩家关系?: string; 好感度?: number }> | undefined;
+  const mismatches: string[] = [];
+  if (relations && typeof relations === 'object') {
+    for (const [key, npc] of Object.entries(relations)) {
+      if (!npc || typeof npc !== 'object') continue;
+      const label = String(npc.与玩家关系 || '');
+      const fav = Number(npc.好感度);
+      if (!label || !Number.isFinite(fav)) continue;
+      const hostile = /敌对|仇|死敌|敌人/.test(label);
+      const intimate = /亲密|爱慕|情人|道侣|挚友|伴侣/.test(label);
+      if ((hostile && fav >= 20) || (intimate && fav <= 0)) mismatches.push(`${(npc as { 名字?: string }).名字 || key}（${label}，好感 ${fav}）`);
+      if (mismatches.length >= 4) break;
+    }
+  }
+  const relationLine = mismatches.length
+    ? `【关系-好感失配修正】以下 NPC 的关系标签与好感度明显失配：${mismatches.join('、')}。本轮起以角色内方式收敛：要么让关系随剧情演进并用 set 更新 社交.关系.<名字>.与玩家关系（如"敌对"→"亦敌亦友/表面敌对暗生情愫"），要么在叙事中交代表里不一的原因并把标签改为体现这种复杂性的表述。此后好感度跨档变化时必须同步演进关系标签，不得让标签僵死。`
+    : '';
+
   // 即兴目标槽（跨轮追踪，读档不翻转的治本一环）
   const improvGoals = readPath(saveData, ['系统', '扩展', '任务追踪', '即兴目标']);
   const improvLine = Array.isArray(improvGoals) && improvGoals.length
@@ -337,7 +357,7 @@ ${nextSection}
 ## 剧情标记
 ${JSON.stringify(runtime.flags || {})}
 
-${focusedCharacterSection ? `${focusedCharacterSection}\n\n` : ''}${loadBearingLine ? `${loadBearingLine}\n\n` : ''}${steeringLine ? `${steeringLine}\n\n` : ''}${reputationLine}\n\n${improvLine}\n\n【主动推进剧情，不要停在原地等玩家】：
+${focusedCharacterSection ? `${focusedCharacterSection}\n\n` : ''}${loadBearingLine ? `${loadBearingLine}\n\n` : ''}${steeringLine ? `${steeringLine}\n\n` : ''}${reputationLine}\n\n${relationLine ? `${relationLine}\n\n` : ''}${improvLine}\n\n【主动推进剧情，不要停在原地等玩家】：
 
 1. 每一段叙事都要朝“当前事件”的完成条件前进——主动设置场景、引入相关人物、制造契机，引导玩家走向该事件的达成，而不是只描述当前一幕然后停下。
 2. 【每轮必做的收尾核对】逐个检查上方“当前事件”：凡本轮叙事已实际达成完成条件的，**必须**输出对应 set 指令（如 \`{"action":"set","key":"世界.状态.剧本模组.flags.event.s04_01.done","value":true}\`，value 用布尔 true 而非字符串"true"）；漏标会导致剧情推进卡死。剧情随即推进到上面“下一步”所列事件。
