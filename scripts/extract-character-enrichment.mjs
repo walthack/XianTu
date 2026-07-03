@@ -93,7 +93,20 @@ function askMiniMax(name, aliases, ev) {
 }
 const parse = (t) => { try { const j = String(t).match(/```(?:json)?\s*([\s\S]*?)```/)?.[1] || String(t).slice(String(t).indexOf('{'), String(t).lastIndexOf('}') + 1); return JSON.parse(j); } catch { return { parse_failed: true, raw: String(t).slice(0, 3000), needsHuman: true }; } };
 
-function run() {
+// ---- DeepSeek 兜底（OpenRouter）：M2.7 偶发空返回/坏JSON 时接手 ----
+const envText = existsSync(join(root, '.env')) ? readFileSync(join(root, '.env'), 'utf8') : '';
+const OR_KEY = Object.fromEntries(envText.split(/\r?\n/).flatMap(l => { const m = l.match(/^\s*([A-Za-z_]\w*)\s*=\s*(.*)\s*$/); if (!m) return []; let v = m[2]; if ((v.startsWith('"') && v.endsWith('"')) || (v.startsWith("'") && v.endsWith("'"))) v = v.slice(1, -1); return [[m[1], v]]; })).OPENROUTER_API_KEY;
+async function askDeepSeek(sys, user) {
+  const r = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+    method: 'POST', headers: { Authorization: `Bearer ${OR_KEY}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ model: 'deepseek/deepseek-v4-flash', temperature: 0.1, max_tokens: 3072, messages: [{ role: 'system', content: sys }, { role: 'user', content: user }] }),
+  });
+  if (!r.ok) throw new Error(`OpenRouter ${r.status}`);
+  return JSON.parse(await r.text()).choices?.[0]?.message?.content || '';
+}
+const looksRefusal = (t) => String(t).trim().length < 40 && /无法|抱歉|不能|拒绝/.test(String(t));
+
+async function run() {
   mkdirSync(evDir, { recursive: true });
   const chars = process.env.LIMIT ? reg.characters.slice(0, Number(process.env.LIMIT)) : reg.characters;
   let done = 0, skipped = 0;
@@ -108,7 +121,15 @@ function run() {
     const ev = windows(kws, books);
     writeFileSync(join(evDir, `${name}.md`), `# ${name}\nkw=${kws.join(',')} books=${books}\n\n${ev}\n`);
     console.error(`[${idx + 1}/${chars.length}] ${name}: 证据 ${ev.length} 字 → MiniMax...`);
-    let r; try { r = parse(askMiniMax(name, aliases, ev)); } catch (e) { r = { name, error: String(e.message).slice(0, 300), needsHuman: true }; }
+    let r; try { r = parse(askMiniMax(name, aliases, ev)); } catch (e) { r = { name, error: String(e.message).slice(0, 300), needsHuman: true, parse_failed: true }; }
+    if (r.parse_failed) {
+      console.error('  ↳ MiniMax 坏结果,重试一次...');
+      try { const r2 = parse(askMiniMax(name, aliases, ev)); if (!r2.parse_failed) r = { ...r2, _retry: 'minimax#2' }; } catch { /* keep */ }
+    }
+    if (r.parse_failed && OR_KEY) {
+      console.error('  ↳ 仍坏,DeepSeek 兜底...');
+      try { const out = await askDeepSeek(SYS, userPrompt(name, aliases, ev)); if (!looksRefusal(out)) { const r3 = parse(out); if (!r3.parse_failed) r = { ...r3, _fallback: 'deepseek' }; } } catch (e) { console.error('  ↳ DeepSeek 失败:', String(e.message).slice(0, 80)); }
+    }
     r.name = r.name || name;
     r._id = c.id; r._books = books;
     writeFileSync(resPath, JSON.stringify(r, null, 2) + '\n');
@@ -127,4 +148,4 @@ function run() {
   writeFileSync(join(outDir, 'REPORT.md'), md.join('\n'));
   console.error(`完成：本次扫 ${done}，跳过(已存在) ${skipped} → ${outDir}/REPORT.md`);
 }
-run();
+run().catch(e => { console.error(e); process.exit(1); });

@@ -81,6 +81,21 @@ async function askMiniMax(name, bookTitle, evidence) {
 }
 const parse = t => { try { const j = String(t).match(/```(?:json)?\s*([\s\S]*?)```/)?.[1] || String(t).slice(String(t).indexOf('{'), String(t).lastIndexOf('}') + 1); return JSON.parse(j); } catch { return { parse_failed: true, raw: String(t).slice(0, 3000), needsHuman: true }; } };
 
+// ---- DeepSeek 兜底（OpenRouter）----
+const envText = existsSync(join(root, '.env')) ? readFileSync(join(root, '.env'), 'utf8') : '';
+const OR_KEY = Object.fromEntries(envText.split(/\r?\n/).flatMap(l => { const m = l.match(/^\s*([A-Za-z_]\w*)\s*=\s*(.*)\s*$/); if (!m) return []; let v = m[2]; if ((v.startsWith('"') && v.endsWith('"')) || (v.startsWith("'") && v.endsWith("'"))) v = v.slice(1, -1); return [[m[1], v]]; })).OPENROUTER_API_KEY;
+async function askDeepSeek(sys, user) {
+  const r = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+    method: 'POST', headers: { Authorization: `Bearer ${OR_KEY}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ model: 'deepseek/deepseek-v4-flash', temperature: 0.1, max_tokens: 4096, messages: [{ role: 'system', content: sys }, { role: 'user', content: user }] }),
+  });
+  if (!r.ok) throw new Error(`OpenRouter ${r.status}`);
+  return JSON.parse(await r.text()).choices?.[0]?.message?.content || '';
+}
+// 坏结果判定：解析失败 / 内容全空 / 短拒答
+const isBad = (r) => r.parse_failed || (!(r.keyEvents || []).length && !(r.debut && (r.debut.scene || r.debut.locationHint)));
+const looksRefusal = (t) => String(t).trim().length < 40 && /无法|抱歉|不能|拒绝/.test(String(t));
+
 const BOOK_ORDER = ['qingyu', 'yunlong', 'yange'];
 
 async function run() {
@@ -99,7 +114,21 @@ async function run() {
       if (!ev) { perBook.push({ book: b, skipped: 'no_evidence' }); continue; }
       writeFileSync(join(evDir, `${name}.${b}.md`), `# ${name} @${b}\nkw=${kws.join(',')}\n\n${ev}\n`);
       console.error(`[${idx + 1}/${WATCH.length}] ${name} @${BOOKS[b].title}: 证据 ${ev.length} 字 → MiniMax...`);
+      // 三级兜底：M2.7 → M2.7 重试(空返回/坏JSON是随机抽风) → DeepSeek(最烈内容会软拒,但格式稳)
       let r; try { r = parse(await askMiniMax(name, BOOKS[b].title, ev)); } catch (e) { r = { parse_failed: true, error: String(e.message).slice(0, 200), needsHuman: true }; }
+      if (isBad(r)) {
+        console.error(`  ↳ MiniMax 坏结果,重试一次...`);
+        try { const r2 = parse(await askMiniMax(name, BOOKS[b].title, ev)); if (!isBad(r2)) r = { ...r2, _retry: 'minimax#2' }; } catch { /* keep r */ }
+      }
+      if (isBad(r) && OR_KEY) {
+        console.error(`  ↳ 仍坏,DeepSeek 兜底...`);
+        try {
+          const dsUser = `以下证据全部来自《${BOOKS[b].title}》单本。抽取角色「${name}」在这一本中的：1)首次出场(场景/方式/初始身份/位置) 2)关键剧情事件(title/description/locationHint/importance)。只列原文明确支持的。\n\n检索片段：\n${ev}`;
+          const dsOut = await askDeepSeek(SYS, dsUser);
+          if (!looksRefusal(dsOut)) { const r3 = parse(dsOut); if (!isBad(r3)) r = { ...r3, _fallback: 'deepseek' }; }
+          else console.error(`  ↳ DeepSeek 软拒答`);
+        } catch (e) { console.error(`  ↳ DeepSeek 失败: ${String(e.message).slice(0, 80)}`); }
+      }
       r.book = b;
       perBook.push(r);
       writeFileSync(join(outDir, `${name}.${b}.json`), JSON.stringify(r, null, 2) + '\n');
