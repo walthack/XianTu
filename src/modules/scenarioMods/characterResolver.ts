@@ -173,6 +173,9 @@ export function resolveScenarioCharacters(characters: any[] | undefined, stageId
   return n;
 }
 
+/** registry 版本号（供旧档 reconcile 判断是否需要按新正典对齐）。 */
+export const REGISTRY_VERSION: string = (registryJson as { version?: string }).version || 'unknown';
+
 /** 是否有该角色的正典条目（供其他模块按需查询）。 */
 export function hasRegistryEntry(name: string): boolean {
   return byName.has(name);

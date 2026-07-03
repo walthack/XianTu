@@ -2,6 +2,7 @@ import type { SaveData } from '@/types/game';
 
 import type { ScenarioCondition, ScenarioFlagValue, ScenarioMod, ScenarioModChapter, ScenarioModEvent } from './schema';
 
+
 export interface ScenarioProgressState {
   chapters: ScenarioModChapter[];
   events: ScenarioModEvent[];
@@ -22,6 +23,8 @@ interface RuntimeState extends ScenarioProgressState {
   nextStageReadyId?: string | null;
   /** 剧情停滞轮数：连续多少轮无事件/章节推进（供收束提示分档），推进即清零 */
   stallTurns?: number;
+  /** 旧档 reconcile 版本戳：与 registry 版本一致则跳过（正典更新后旧档第一回合自动对齐） */
+  reconciledRegistryVersion?: string;
 }
 
 function readPath(root: unknown, path: string[]): unknown {
@@ -143,6 +146,49 @@ function normalizeRuntimeFlags(runtime: RuntimeState): void {
   }
 }
 
+// 旧档 reconcile：registry 版本变更后，把烘焙在存档里的正典对齐到最新（保守，只动正典派生物）。
+// ① canon.characters 用 resolver 重投影（personality 卡为准 / 派生 notes 重建 / 历程等新字段带上）
+// ② 世界.信息.地点信息 补缺失的地图点位（此前太泉古阵类缺点只能手工修档）
+// 惰性加载：builtins 用 require.context(仅 webpack 可用)、resolver 引 registry JSON——
+// node 测试环境加载不了 → 安全降级为 no-op(不 stamp,真实环境仍会对齐)。
+function getReconcileDeps(): { version: string; resolve: (c: unknown[] | undefined, id: string) => number; mods: ScenarioMod[] } | null {
+  try {
+    /* eslint-disable @typescript-eslint/no-var-requires */
+    const resolver = require('./characterResolver') as { REGISTRY_VERSION: string; resolveScenarioCharacters: (c: unknown[] | undefined, id: string) => number };
+    const builtins = require('./builtins') as { BUILTIN_SCENARIO_MODS: ScenarioMod[] };
+    /* eslint-enable @typescript-eslint/no-var-requires */
+    return { version: resolver.REGISTRY_VERSION, resolve: resolver.resolveScenarioCharacters, mods: builtins.BUILTIN_SCENARIO_MODS || [] };
+  } catch { return null; }
+}
+
+function reconcileSaveWithRegistry(saveData: SaveData, runtime: RuntimeState & { modId?: string; reconciledRegistryVersion?: string; canon?: { characters?: unknown[] } }): void {
+  const deps = getReconcileDeps();
+  if (!deps) return;
+  if (runtime.reconciledRegistryVersion === deps.version) return;
+  try {
+    const modId = String((runtime as { modId?: string }).modId || '');
+    deps.resolve((runtime as { canon?: { characters?: any[] } }).canon?.characters, modId);
+    const mod = deps.mods.find(item => item.manifest?.id === modId);
+    const worldInfo = readPath(saveData, ['世界', '信息']) as Record<string, unknown> | undefined;
+    const saveLocations = worldInfo?.地点信息;
+    if (mod && Array.isArray(saveLocations)) {
+      const existing = new Set(saveLocations.map((item: any) => item?.名称).filter(Boolean));
+      for (const loc of (mod.canon?.locations || []) as Array<{ name?: string; description?: string; type?: string; coordinates?: { x: number; y: number } }>) {
+        if (!loc?.name || !loc.coordinates || existing.has(loc.name)) continue;
+        existing.add(loc.name);
+        saveLocations.push({
+          名称: loc.name, 位置: '', coordinates: { ...loc.coordinates }, 坐标: { ...loc.coordinates },
+          描述: loc.description || '', 特色: '', 安全等级: '较安全', 开放状态: '开放', 相关势力: [], 类型: loc.type || '城池',
+        });
+      }
+    }
+    console.info(`[剧本reconcile] 存档正典已对齐 registry ${deps.version}`);
+  } catch (error) {
+    console.warn('[剧本reconcile] 失败(不影响游戏):', error);
+  }
+  runtime.reconciledRegistryVersion = deps.version;
+}
+
 export function advanceScenarioRuntime(saveData: SaveData): {
   saveData: SaveData;
   transitions: ScenarioRuntimeTransition[];
@@ -150,6 +196,7 @@ export function advanceScenarioRuntime(saveData: SaveData): {
   const next = structuredClone(saveData);
   const runtime = getRuntime(next);
   if (!runtime) return { saveData: next, transitions: [] };
+  reconcileSaveWithRegistry(next, runtime as RuntimeState & { modId?: string });
   normalizeRuntimeFlags(runtime);
 
   runtime.chapters = Array.isArray(runtime.chapters) ? runtime.chapters : [];
