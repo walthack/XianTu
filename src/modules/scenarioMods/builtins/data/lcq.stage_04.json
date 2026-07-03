@@ -397,6 +397,41 @@
         "description": "少陵侯府（家族）——简介待补，源自角色归属富化自动补录。",
         "type": "家族",
         "features": []
+      },
+      {
+        "id": "liuchao.faction.x2d33e1eaf9",
+        "name": "程宗扬势力",
+        "description": "程宗扬势力（组织）——简介待补，源自角色归属富化自动补录。",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.xue_sun",
+        "name": "雪隼佣兵团",
+        "description": "雪隼佣兵团（组织）——简介待补，源自角色归属富化自动补录。",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.x56f82fa2b5",
+        "name": "羽林军",
+        "description": "羽林军（军队）——简介待补，源自角色归属富化自动补录。",
+        "type": "军队",
+        "features": []
+      },
+      {
+        "id": "lyg.faction.jin_state",
+        "name": "晋国",
+        "description": "晋国（组织）——简介待补，源自角色归属富化自动补录。",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.x89db5b6118",
+        "name": "兰陵萧氏",
+        "description": "兰陵萧氏（家族）——简介待补，源自角色归属富化自动补录。",
+        "type": "家族",
+        "features": []
       }
     ],
     "locations": [
@@ -1063,6 +1098,16 @@
             "factionId": "liuchao.faction.bai_hu_shang_guan",
             "category": "organization",
             "role": "护卫"
+          },
+          {
+            "factionId": "liuchao.faction.x2d33e1eaf9",
+            "category": "organization",
+            "role": "商队成员/护卫"
+          },
+          {
+            "factionId": "liuchao.faction.hei_mo_hai",
+            "category": "organization",
+            "role": "御姬奴（凝奴）"
           }
         ],
         "locationId": "liuchao.location.shan_jian",
@@ -1593,6 +1638,11 @@
             "factionId": "liuchao.faction.pan_jiang_cheng",
             "category": "clan",
             "role": "奴婢"
+          },
+          {
+            "factionId": "liuchao.faction.x2d33e1eaf9",
+            "category": "organization",
+            "role": "侍奴"
           }
         ]
       },
@@ -1626,6 +1676,21 @@
             "factionId": "liuchao.faction.tai_yi_zhen_zong",
             "category": "sect",
             "role": "弟子"
+          },
+          {
+            "factionId": "liuchao.faction.xue_sun",
+            "category": "organization",
+            "role": "副队长"
+          },
+          {
+            "factionId": "liuchao.faction.xing_yue_hu",
+            "category": "organization",
+            "role": "成员"
+          },
+          {
+            "factionId": "liuchao.faction.x8b538653d9",
+            "category": "organization",
+            "role": "殇侯近卫队相关成员"
           }
         ]
       },
@@ -1696,6 +1761,21 @@
             "factionId": "liuchao.faction.x898ded5bf1",
             "category": "clan",
             "role": "嫡子/小侯爷"
+          },
+          {
+            "factionId": "liuchao.faction.x56f82fa2b5",
+            "category": "military",
+            "role": "羽林郎"
+          },
+          {
+            "factionId": "lyg.faction.jin_state",
+            "category": "organization",
+            "role": "江州刺史"
+          },
+          {
+            "factionId": "liuchao.faction.x89db5b6118",
+            "category": "clan",
+            "role": "萧氏子弟"
           }
         ]
       }

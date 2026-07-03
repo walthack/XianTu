@@ -431,6 +431,76 @@
           }
         ],
         "features": []
+      },
+      {
+        "id": "liuchao.faction.x2a7011ff97",
+        "name": "北府兵",
+        "description": "北府兵（军队）——简介待补，源自角色归属富化自动补录。",
+        "type": "军队",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.xaca5a5a2ea",
+        "name": "谢家",
+        "description": "谢家（家族）——简介待补，源自角色归属富化自动补录。",
+        "type": "家族",
+        "features": []
+      },
+      {
+        "id": "lyg.faction.jin_state",
+        "name": "晋国",
+        "description": "晋国（组织）——简介待补，源自角色归属富化自动补录。",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.x67801fad90",
+        "name": "筠州官场",
+        "description": "筠州官场（组织）——简介待补，源自角色归属富化自动补录。",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.x5a4fdd48cd",
+        "name": "选锋营",
+        "description": "选锋营（军队）——简介待补，源自角色归属富化自动补录。",
+        "type": "军队",
+        "features": []
+      },
+      {
+        "id": "lcq.faction.beast",
+        "name": "兽蛮人",
+        "description": "兽蛮人（组织）——简介待补，源自角色归属富化自动补录。",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.x78a6c9fdd3",
+        "name": "大孚灵鹫寺",
+        "description": "大孚灵鹫寺（宗门）——简介待补，源自角色归属富化自动补录。",
+        "type": "宗门",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.xf955fdb21b",
+        "name": "筠州知州府",
+        "description": "筠州知州府（势力）——简介待补，源自角色归属富化自动补录。",
+        "type": "势力",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.x56f82fa2b5",
+        "name": "羽林军",
+        "description": "羽林军（军队）——简介待补，源自角色归属富化自动补录。",
+        "type": "军队",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.x89db5b6118",
+        "name": "兰陵萧氏",
+        "description": "兰陵萧氏（家族）——简介待补，源自角色归属富化自动补录。",
+        "type": "家族",
+        "features": []
       }
     ],
     "locations": [
@@ -1088,6 +1158,21 @@
             "factionId": "lyg.faction.tiance_fu",
             "category": "military",
             "role": "府众/将领"
+          },
+          {
+            "factionId": "liuchao.faction.x2a7011ff97",
+            "category": "military",
+            "role": "主帅/建武将军"
+          },
+          {
+            "factionId": "liuchao.faction.xaca5a5a2ea",
+            "category": "clan",
+            "role": "嫡子/继承人"
+          },
+          {
+            "factionId": "lyg.faction.jin_state",
+            "category": "organization",
+            "role": "世家子弟"
           }
         ],
         "locationId": "liuchao.location.jiangzhou",
@@ -1217,6 +1302,11 @@
             "factionId": "lyg.faction.song_state",
             "category": "organization",
             "role": "筠州团练（被夺官前）"
+          },
+          {
+            "factionId": "liuchao.faction.x67801fad90",
+            "category": "organization",
+            "role": "地方官员"
           }
         ],
         "locationId": "liuchao.location.junzhou",
@@ -1270,6 +1360,11 @@
             "factionId": "liuchao.faction.jing_xi_ren",
             "category": "clan",
             "role": "女族长"
+          },
+          {
+            "factionId": "liuchao.faction.x2d33e1eaf9",
+            "category": "organization",
+            "role": "护卫/成员"
           }
         ],
         "locationId": "liuchao.location.jingxi_village",
@@ -1361,6 +1456,11 @@
             "factionId": "liuchao.faction.wei_yuan_escort",
             "category": "organization",
             "role": "总镖头李寅臣之女"
+          },
+          {
+            "factionId": "liuchao.faction.x2d33e1eaf9",
+            "category": "organization",
+            "role": "秘书/高级管理人员"
           }
         ]
       },
@@ -1413,6 +1513,11 @@
             "factionId": "liuchao.faction.x2d33e1eaf9",
             "category": "organization",
             "role": "家丁/仆从"
+          },
+          {
+            "factionId": "liuchao.faction.x5a4fdd48cd",
+            "category": "military",
+            "role": "兽蛮军士兵"
           }
         ]
       },
@@ -1556,6 +1661,21 @@
             "factionId": "liuchao.faction.beidi_shaman",
             "category": "organization",
             "role": "程宗扬的家丁"
+          },
+          {
+            "factionId": "lcq.faction.beast",
+            "category": "organization",
+            "role": "首领/狼主"
+          },
+          {
+            "factionId": "liuchao.faction.x5a4fdd48cd",
+            "category": "military",
+            "role": "蛮军战士"
+          },
+          {
+            "factionId": "liuchao.faction.x2d33e1eaf9",
+            "category": "organization",
+            "role": "奴仆/兽蛮武士"
           }
         ]
       },
@@ -1606,6 +1726,11 @@
             "factionId": "liuchao.faction.mingqing_temple",
             "category": "sect",
             "role": "菜园僧人/花和尚"
+          },
+          {
+            "factionId": "liuchao.faction.x78a6c9fdd3",
+            "category": "sect",
+            "role": "半路出家的门人（已叛离/被追杀）"
           }
         ]
       },
@@ -1655,6 +1780,16 @@
             "factionId": "liuchao.faction.beidi_shaman",
             "category": "organization",
             "role": "兽蛮战士"
+          },
+          {
+            "factionId": "liuchao.faction.x5a4fdd48cd",
+            "category": "military",
+            "role": "兽蛮武士"
+          },
+          {
+            "factionId": "liuchao.faction.x2d33e1eaf9",
+            "category": "organization",
+            "role": "随从护卫"
           }
         ]
       },
@@ -1678,6 +1813,11 @@
             "factionId": "lyg.faction.song_state",
             "category": "organization",
             "role": "筠州知州"
+          },
+          {
+            "factionId": "liuchao.faction.xf955fdb21b",
+            "category": "state",
+            "role": "知州"
           }
         ]
       },
@@ -1739,6 +1879,11 @@
             "factionId": "liuchao.faction.pan_jiang_cheng",
             "category": "clan",
             "role": "奴婢"
+          },
+          {
+            "factionId": "liuchao.faction.x2d33e1eaf9",
+            "category": "organization",
+            "role": "侍奴"
           }
         ]
       },
@@ -1764,6 +1909,16 @@
             "factionId": "liuchao.faction.bai_hu_shang_guan",
             "category": "organization",
             "role": "商队护卫"
+          },
+          {
+            "factionId": "liuchao.faction.x2d33e1eaf9",
+            "category": "organization",
+            "role": "商队成员/护卫"
+          },
+          {
+            "factionId": "liuchao.faction.hei_mo_hai",
+            "category": "organization",
+            "role": "御姬奴（凝奴）"
           }
         ]
       },
@@ -1797,6 +1952,21 @@
             "factionId": "liuchao.faction.tai_yi_zhen_zong",
             "category": "sect",
             "role": "弟子"
+          },
+          {
+            "factionId": "liuchao.faction.xue_sun",
+            "category": "organization",
+            "role": "副队长"
+          },
+          {
+            "factionId": "liuchao.faction.xing_yue_hu",
+            "category": "organization",
+            "role": "成员"
+          },
+          {
+            "factionId": "liuchao.faction.x8b538653d9",
+            "category": "organization",
+            "role": "殇侯近卫队相关成员"
           }
         ]
       },
@@ -1855,6 +2025,21 @@
             "factionId": "liuchao.faction.x898ded5bf1",
             "category": "clan",
             "role": "嫡子/小侯爷"
+          },
+          {
+            "factionId": "liuchao.faction.x56f82fa2b5",
+            "category": "military",
+            "role": "羽林郎"
+          },
+          {
+            "factionId": "lyg.faction.jin_state",
+            "category": "organization",
+            "role": "江州刺史"
+          },
+          {
+            "factionId": "liuchao.faction.x89db5b6118",
+            "category": "clan",
+            "role": "萧氏子弟"
           }
         ]
       }
@@ -2074,6 +2259,94 @@
         "direction": "bidirectional",
         "tags": [
           "同门",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.cheng_zongyang",
+        "toCharacterId": "lcq.character.yue_shuang",
+        "relation": "同袍",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同袍",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.xiao_zi",
+        "toCharacterId": "lcq.character.yue_shuang",
+        "relation": "同袍",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同袍",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.xie_youdu",
+        "toCharacterId": "lcq.character.yue_shuang",
+        "relation": "同袍",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同袍",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.qin_hui",
+        "toCharacterId": "lcq.character.yue_shuang",
+        "relation": "同袍",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同袍",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "lcq.character.yue_shuang",
+        "toCharacterId": "liuchao.character.xiao_yao_yi",
+        "relation": "同袍",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同袍",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.qing_mian_shou",
+        "toCharacterId": "liuchao.character.jin_wu_zhu",
+        "relation": "同袍",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同袍",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.qing_mian_shou",
+        "toCharacterId": "liuchao.character.bao_zi_tou",
+        "relation": "同袍",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同袍",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.jin_wu_zhu",
+        "toCharacterId": "liuchao.character.bao_zi_tou",
+        "relation": "同袍",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同袍",
           "同势力派生"
         ]
       }

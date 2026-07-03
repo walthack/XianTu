@@ -257,6 +257,41 @@
         "description": "星月湖（组织）——简介待补，源自角色归属富化自动补录。",
         "type": "组织",
         "features": []
+      },
+      {
+        "id": "liuchao.faction.xbc4c7579e9",
+        "name": "耽摩",
+        "description": "耽摩（组织）——简介待补，源自角色归属富化自动补录。",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.xf699398f15",
+        "name": "五原城",
+        "description": "五原城（组织）——简介待补，源自角色归属富化自动补录。",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "lyg.faction.song_state",
+        "name": "宋国",
+        "description": "宋国（组织）——简介待补，源自角色归属富化自动补录。",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.xue_sun",
+        "name": "雪隼佣兵团",
+        "description": "雪隼佣兵团（组织）——简介待补，源自角色归属富化自动补录。",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.x8b538653d9",
+        "name": "殇侯势力",
+        "description": "殇侯势力（组织）——简介待补，源自角色归属富化自动补录。",
+        "type": "组织",
+        "features": []
       }
     ],
     "locations": [
@@ -947,6 +982,16 @@
             "factionId": "liuchao.faction.bai_hu_shang_guan",
             "category": "organization",
             "role": "侍卫长"
+          },
+          {
+            "factionId": "liuchao.faction.x2d33e1eaf9",
+            "category": "organization",
+            "role": "商队成员/护卫"
+          },
+          {
+            "factionId": "liuchao.faction.hei_mo_hai",
+            "category": "organization",
+            "role": "御姬奴（凝奴）"
           }
         ],
         "locationId": "liuchao.location.jia_shan_yan_dong",
@@ -1017,6 +1062,11 @@
             "factionId": "liuchao.faction.x2d33e1eaf9",
             "category": "organization",
             "role": "侍妾/婢女"
+          },
+          {
+            "factionId": "liuchao.faction.xbc4c7579e9",
+            "category": "organization",
+            "role": "公主（与哥哥实叉难陀重逢后居于耽摩）"
           }
         ],
         "locationId": "liuchao.location.baihu_shang_guan",
@@ -1230,6 +1280,16 @@
             "factionId": "liuchao.faction.hei_mo_hai",
             "category": "organization",
             "role": "弟子"
+          },
+          {
+            "factionId": "liuchao.faction.xf699398f15",
+            "category": "organization",
+            "role": "富商/生药铺东主"
+          },
+          {
+            "factionId": "lyg.faction.song_state",
+            "category": "organization",
+            "role": "提点刑狱司副提刑（纳捐得官，未实授，从六品）"
           }
         ]
       },
@@ -1265,6 +1325,11 @@
             "factionId": "liuchao.faction.pan_jiang_cheng",
             "category": "clan",
             "role": "奴婢"
+          },
+          {
+            "factionId": "liuchao.faction.x2d33e1eaf9",
+            "category": "organization",
+            "role": "侍奴"
           }
         ]
       },
@@ -1298,6 +1363,21 @@
             "factionId": "liuchao.faction.tai_yi_zhen_zong",
             "category": "sect",
             "role": "弟子"
+          },
+          {
+            "factionId": "liuchao.faction.xue_sun",
+            "category": "organization",
+            "role": "副队长"
+          },
+          {
+            "factionId": "liuchao.faction.xing_yue_hu",
+            "category": "organization",
+            "role": "成员"
+          },
+          {
+            "factionId": "liuchao.faction.x8b538653d9",
+            "category": "organization",
+            "role": "殇侯近卫队相关成员"
           }
         ]
       }

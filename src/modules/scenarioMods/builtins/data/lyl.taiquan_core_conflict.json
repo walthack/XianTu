@@ -523,6 +523,41 @@
         "description": "巫宗（宗门）——简介待补，源自角色归属富化自动补录。",
         "type": "宗门",
         "features": []
+      },
+      {
+        "id": "liuchao.faction.xfa787e54e6",
+        "name": "苏妲己势力",
+        "description": "苏妲己势力（组织）——简介待补，源自角色归属富化自动补录。",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.x56f82fa2b5",
+        "name": "羽林军",
+        "description": "羽林军（军队）——简介待补，源自角色归属富化自动补录。",
+        "type": "军队",
+        "features": []
+      },
+      {
+        "id": "lyg.faction.jin_state",
+        "name": "晋国",
+        "description": "晋国（组织）——简介待补，源自角色归属富化自动补录。",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.x89db5b6118",
+        "name": "兰陵萧氏",
+        "description": "兰陵萧氏（家族）——简介待补，源自角色归属富化自动补录。",
+        "type": "家族",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.xue_sun",
+        "name": "雪隼佣兵团",
+        "description": "雪隼佣兵团（组织）——简介待补，源自角色归属富化自动补录。",
+        "type": "组织",
+        "features": []
       }
     ],
     "locations": [
@@ -1225,6 +1260,11 @@
             "factionId": "liuchao.faction.x2d33e1eaf9",
             "category": "organization",
             "role": "大丫头"
+          },
+          {
+            "factionId": "liuchao.faction.xfa787e54e6",
+            "category": "organization",
+            "role": "教曲师娘（兰姑）"
           }
         ],
         "skillIds": [],
@@ -1315,6 +1355,11 @@
             "factionId": "liuchao.faction.x3521715ccf",
             "category": "organization",
             "role": "帮主"
+          },
+          {
+            "factionId": "liuchao.faction.x2d33e1eaf9",
+            "category": "organization",
+            "role": "侍奴/从侍奴"
           }
         ]
       },
@@ -1480,6 +1525,21 @@
             "factionId": "liuchao.faction.x898ded5bf1",
             "category": "clan",
             "role": "嫡子/小侯爷"
+          },
+          {
+            "factionId": "liuchao.faction.x56f82fa2b5",
+            "category": "military",
+            "role": "羽林郎"
+          },
+          {
+            "factionId": "lyg.faction.jin_state",
+            "category": "organization",
+            "role": "江州刺史"
+          },
+          {
+            "factionId": "liuchao.faction.x89db5b6118",
+            "category": "clan",
+            "role": "萧氏子弟"
           }
         ]
       },
@@ -1699,6 +1759,11 @@
             "factionId": "liuchao.faction.pan_jiang_cheng",
             "category": "clan",
             "role": "家眷"
+          },
+          {
+            "factionId": "liuchao.faction.x2d33e1eaf9",
+            "category": "organization",
+            "role": "内宅女眷/账房"
           }
         ]
       },
@@ -1729,6 +1794,11 @@
             "factionId": "lyg.faction.danxia_sect",
             "category": "sect",
             "role": "宗主之女/未来宗主继承人（持有宗主印信）"
+          },
+          {
+            "factionId": "liuchao.faction.liang_zhou_meng",
+            "category": "organization",
+            "role": "老盟主之女"
           }
         ]
       },
@@ -1956,6 +2026,11 @@
             "factionId": "liuchao.faction.jin_jun",
             "category": "military",
             "role": "左虞侯"
+          },
+          {
+            "factionId": "liuchao.faction.tai_wei_fu",
+            "category": "organization",
+            "role": "护卫（护卫高智商/高衙内）"
           }
         ]
       },
@@ -2060,6 +2135,11 @@
             "factionId": "liuchao.faction.han_guo_chao_ting",
             "category": "state",
             "role": "城门令"
+          },
+          {
+            "factionId": "lyl.faction.changqiu",
+            "category": "organization",
+            "role": "廷尉"
           }
         ]
       },
@@ -2164,6 +2244,11 @@
             "factionId": "liuchao.faction.xc941fa2e99",
             "category": "organization",
             "role": "霍大将军亲信家奴"
+          },
+          {
+            "factionId": "liuchao.faction.han_guo_chao_ting",
+            "category": "state",
+            "role": "羽林军将"
           }
         ]
       },
@@ -2192,6 +2277,11 @@
             "factionId": "lyl.faction.lyu_clan",
             "category": "organization",
             "role": "襄邑侯吕冀的正室夫人"
+          },
+          {
+            "factionId": "liuchao.faction.han_guo_chao_ting",
+            "category": "state",
+            "role": "襄城君（封号）"
           }
         ]
       },
@@ -2282,6 +2372,11 @@
             "factionId": "liuchao.faction.han_guo_chao_ting",
             "category": "state",
             "role": "中常侍"
+          },
+          {
+            "factionId": "lyl.faction.changqiu",
+            "category": "organization",
+            "role": "内侍/皇后近侍"
           }
         ]
       },
@@ -2362,6 +2457,11 @@
             "factionId": "liuchao.faction.yun_shi_shang_hui",
             "category": "organization",
             "role": "云氏庶女/遗腹女"
+          },
+          {
+            "factionId": "lyg.faction.jin_state",
+            "category": "organization",
+            "role": "女侍卫长"
           }
         ]
       },
@@ -2386,6 +2486,11 @@
             "factionId": "liuchao.faction.yun_shi_shang_hui",
             "category": "organization",
             "role": "云家小姐"
+          },
+          {
+            "factionId": "liuchao.faction.x2d33e1eaf9",
+            "category": "organization",
+            "role": "妻室"
           }
         ]
       },
@@ -2421,6 +2526,11 @@
             "factionId": "liuchao.faction.pan_jiang_cheng",
             "category": "clan",
             "role": "奴婢"
+          },
+          {
+            "factionId": "liuchao.faction.x2d33e1eaf9",
+            "category": "organization",
+            "role": "侍奴"
           }
         ]
       },
@@ -2475,6 +2585,21 @@
             "factionId": "liuchao.faction.tai_yi_zhen_zong",
             "category": "sect",
             "role": "弟子/习术之人"
+          },
+          {
+            "factionId": "lyl.faction.changqiu",
+            "category": "organization",
+            "role": "女傅江映秋照料的养女/昭仪待封"
+          },
+          {
+            "factionId": "liuchao.faction.han_guo_chao_ting",
+            "category": "state",
+            "role": "昭仪（天子刘骜下诏入宫）"
+          },
+          {
+            "factionId": "liuchao.faction.x2d33e1eaf9",
+            "category": "organization",
+            "role": "内眷/妾室"
           }
         ]
       },
@@ -2561,6 +2686,16 @@
             "factionId": "liuchao.faction.bai_hu_shang_guan",
             "category": "organization",
             "role": "商队护卫"
+          },
+          {
+            "factionId": "liuchao.faction.x2d33e1eaf9",
+            "category": "organization",
+            "role": "商队成员/护卫"
+          },
+          {
+            "factionId": "liuchao.faction.hei_mo_hai",
+            "category": "organization",
+            "role": "御姬奴（凝奴）"
           }
         ]
       },
@@ -2652,6 +2787,21 @@
             "factionId": "liuchao.faction.tai_yi_zhen_zong",
             "category": "sect",
             "role": "弟子"
+          },
+          {
+            "factionId": "liuchao.faction.xue_sun",
+            "category": "organization",
+            "role": "副队长"
+          },
+          {
+            "factionId": "liuchao.faction.xing_yue_hu",
+            "category": "organization",
+            "role": "成员"
+          },
+          {
+            "factionId": "liuchao.faction.x8b538653d9",
+            "category": "organization",
+            "role": "殇侯近卫队相关成员"
           }
         ]
       },

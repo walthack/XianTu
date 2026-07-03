@@ -578,6 +578,41 @@
         "description": "左武军（军队）——简介待补，源自角色归属富化自动补录。",
         "type": "军队",
         "features": []
+      },
+      {
+        "id": "liuchao.faction.x56f82fa2b5",
+        "name": "羽林军",
+        "description": "羽林军（军队）——简介待补，源自角色归属富化自动补录。",
+        "type": "军队",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.x89db5b6118",
+        "name": "兰陵萧氏",
+        "description": "兰陵萧氏（家族）——简介待补，源自角色归属富化自动补录。",
+        "type": "家族",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.x739323b7a6",
+        "name": "八骏",
+        "description": "八骏（组织）——简介待补，源自角色归属富化自动补录。",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.x96f008a7cb",
+        "name": "捧日军",
+        "description": "捧日军（军队）——简介待补，源自角色归属富化自动补录。",
+        "type": "军队",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.x14484c1b02",
+        "name": "龙卫军",
+        "description": "龙卫军（军队）——简介待补，源自角色归属富化自动补录。",
+        "type": "军队",
+        "features": []
       }
     ],
     "locations": [
@@ -1558,6 +1593,16 @@
             "factionId": "liuchao.faction.bai_hu_shang_guan",
             "category": "organization",
             "role": "商队护卫"
+          },
+          {
+            "factionId": "liuchao.faction.x2d33e1eaf9",
+            "category": "organization",
+            "role": "商队成员/护卫"
+          },
+          {
+            "factionId": "liuchao.faction.hei_mo_hai",
+            "category": "organization",
+            "role": "御姬奴（凝奴）"
           }
         ]
       },
@@ -1660,6 +1705,11 @@
             "factionId": "liuchao.faction.bai_hu_shang_guan",
             "category": "organization",
             "role": "护卫"
+          },
+          {
+            "factionId": "liuchao.faction.x2d33e1eaf9",
+            "category": "organization",
+            "role": "安保执事/护卫"
           }
         ]
       },
@@ -1755,6 +1805,16 @@
             "factionId": "liuchao.faction.bai_hu_shang_guan",
             "category": "organization",
             "role": "护卫/伙计"
+          },
+          {
+            "factionId": "liuchao.faction.x2d33e1eaf9",
+            "category": "organization",
+            "role": "大管家"
+          },
+          {
+            "factionId": "liuchao.faction.cheng_shi_shang_hui",
+            "category": "organization",
+            "role": "总管"
           }
         ]
       },
@@ -1799,6 +1859,16 @@
             "factionId": "liuchao.faction.yun_shi_shang_hui",
             "category": "organization",
             "role": "护卫"
+          },
+          {
+            "factionId": "liuchao.faction.xing_yue_hu",
+            "category": "organization",
+            "role": "中尉/直属营军士"
+          },
+          {
+            "factionId": "liuchao.faction.x2d33e1eaf9",
+            "category": "organization",
+            "role": "追随者"
           }
         ]
       },
@@ -1880,6 +1950,11 @@
             "factionId": "liuchao.faction.gui_wang_dong",
             "category": "organization",
             "role": "成员"
+          },
+          {
+            "factionId": "liuchao.faction.xing_yue_hu",
+            "category": "organization",
+            "role": "武穆王姬妾"
           }
         ]
       },
@@ -1995,6 +2070,16 @@
             "factionId": "liuchao.faction.gui_wang_dong",
             "category": "sect",
             "role": "首领"
+          },
+          {
+            "factionId": "liuchao.faction.x8b538653d9",
+            "category": "organization",
+            "role": "门人"
+          },
+          {
+            "factionId": "liuchao.faction.hei_mo_hai",
+            "category": "organization",
+            "role": "与巫宗关联者"
           }
         ],
         "locationId": "liuchao.location.gui_wang_dong",
@@ -2132,6 +2217,21 @@
             "factionId": "liuchao.faction.x898ded5bf1",
             "category": "clan",
             "role": "嫡子/小侯爷"
+          },
+          {
+            "factionId": "liuchao.faction.x56f82fa2b5",
+            "category": "military",
+            "role": "羽林郎"
+          },
+          {
+            "factionId": "lyg.faction.jin_state",
+            "category": "organization",
+            "role": "江州刺史"
+          },
+          {
+            "factionId": "liuchao.faction.x89db5b6118",
+            "category": "clan",
+            "role": "萧氏子弟"
           }
         ]
       },
@@ -2249,6 +2349,16 @@
             "factionId": "liuchao.faction.cheng_shi_shang_hui",
             "category": "organization",
             "role": "随从（殇侯指派协助程宗扬）"
+          },
+          {
+            "factionId": "liuchao.faction.x2d33e1eaf9",
+            "category": "organization",
+            "role": "护卫/随从"
+          },
+          {
+            "factionId": "liuchao.faction.xing_yue_hu",
+            "category": "organization",
+            "role": "中尉连长"
           }
         ]
       },
@@ -2366,6 +2476,16 @@
             "factionId": "liuchao.faction.x4e30686b32",
             "category": "organization",
             "role": "临川王麾下术士（化名易勇）"
+          },
+          {
+            "factionId": "liuchao.faction.yun_shi_shang_hui",
+            "category": "organization",
+            "role": "受聘术士"
+          },
+          {
+            "factionId": "liuchao.faction.x2d33e1eaf9",
+            "category": "organization",
+            "role": "传讯/情报人员"
           }
         ]
       },
@@ -2436,6 +2556,11 @@
             "factionId": "liuchao.faction.pan_jiang_cheng",
             "category": "clan",
             "role": "奴婢"
+          },
+          {
+            "factionId": "liuchao.faction.x2d33e1eaf9",
+            "category": "organization",
+            "role": "侍奴"
           }
         ]
       },
@@ -2579,6 +2704,11 @@
             "factionId": "liuchao.faction.xue_sun",
             "category": "organization",
             "role": "佣兵/法师"
+          },
+          {
+            "factionId": "liuchao.faction.x2d33e1eaf9",
+            "category": "organization",
+            "role": "法师/随从"
           }
         ]
       },
@@ -2803,6 +2933,11 @@
             "factionId": "liuchao.faction.xing_yue_hu",
             "category": "organization",
             "role": "八骏第六骏/青骓"
+          },
+          {
+            "factionId": "liuchao.faction.x2d33e1eaf9",
+            "category": "organization",
+            "role": "商业参谋"
           }
         ]
       },
@@ -2833,6 +2968,11 @@
             "factionId": "liuchao.faction.x0f21ed0f98",
             "category": "clan",
             "role": "子弟"
+          },
+          {
+            "factionId": "liuchao.faction.x739323b7a6",
+            "category": "organization",
+            "role": "成员（朱骅）"
           }
         ]
       },
@@ -3077,6 +3217,21 @@
             "factionId": "liuchao.faction.jin_jun",
             "category": "military",
             "role": "副军马使"
+          },
+          {
+            "factionId": "lyg.faction.song_state",
+            "category": "organization",
+            "role": "筠州都监"
+          },
+          {
+            "factionId": "liuchao.faction.x96f008a7cb",
+            "category": "military",
+            "role": "副军马使（后升任军都指挥使）"
+          },
+          {
+            "factionId": "liuchao.faction.x14484c1b02",
+            "category": "military",
+            "role": "军都指挥使（断后时指挥龙卫左厢一个军）"
           }
         ]
       },
@@ -3188,6 +3343,21 @@
             "factionId": "liuchao.faction.tai_yi_zhen_zong",
             "category": "sect",
             "role": "弟子"
+          },
+          {
+            "factionId": "liuchao.faction.xue_sun",
+            "category": "organization",
+            "role": "副队长"
+          },
+          {
+            "factionId": "liuchao.faction.xing_yue_hu",
+            "category": "organization",
+            "role": "成员"
+          },
+          {
+            "factionId": "liuchao.faction.x8b538653d9",
+            "category": "organization",
+            "role": "殇侯近卫队相关成员"
           }
         ]
       }
