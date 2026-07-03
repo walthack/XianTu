@@ -257,6 +257,19 @@ export const useGameStateStore = defineStore('gameState', {
     /**
      * 将当前 Pinia Store 中的游戏状态保存到 IndexedDB
      */
+    /** 进入下一关（消费 stage_ready）：切换剧本关卡并保留玩家/NPC 累积状态，随后落盘。 */
+    async transitionToNextStage(): Promise<{ ok: boolean; reason?: string; toName?: string }> {
+      const save = this.toSaveData();
+      if (!save) return { ok: false, reason: '存档数据不完整' };
+      const { transitionToNextScenarioStage } = await import('@/modules/scenarioMods/strictInitializer');
+      const result = transitionToNextScenarioStage(save);
+      if (!result.ok) return { ok: false, reason: result.reason };
+      this.loadFromSaveData(result.saveData);
+      await this.saveGame();
+      console.info(`[剧本切关] ${result.from} → ${result.to}（${result.toName || ''}）`);
+      return { ok: true, toName: result.toName };
+    },
+
     async saveGame() {
       if (!this.isGameLoaded) {
         console.warn('[GameState] Game not loaded, skipping save.');

@@ -175,3 +175,45 @@ test('resolution without a Mod preserves the original world generation path', as
   assert.equal(result.strictInitialization, undefined);
   assert.equal(result.expandInitialization, undefined);
 });
+
+test('stage transition preserves accumulated NPC relations and switches runtime', async () => {
+  const { parseScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
+  const {
+    applyStrictScenarioInitializationToSave,
+    buildStrictScenarioInitialization,
+    transitionToNextScenarioStage,
+  } = await loadTs('../src/modules/scenarioMods/strictInitializer.ts');
+  const { readFile } = await import('node:fs/promises');
+  const raw = JSON.parse(await readFile(new URL('./fixtures/scenario-mod/minimal.json', import.meta.url), 'utf8'));
+  raw.manifest.nextStageId = 'liuchao.next_stage';
+  raw.manifest.nextStageName = '六朝·下一关';
+  const mod = parseScenarioMod(raw);
+  // 下一关 mod：同 fixture 改 id
+  const rawNext = JSON.parse(JSON.stringify(raw));
+  rawNext.manifest.id = 'liuchao.next_stage';
+  rawNext.manifest.name = '六朝·下一关·测试';
+  rawNext.manifest.nextStageId = null;
+  const nextMod = parseScenarioMod(rawNext);
+
+  let save = applyStrictScenarioInitializationToSave(
+    { 角色: { 位置: { 描述: '旧' } }, 世界: { 信息: {}, 状态: {} }, 系统: { 扩展: {} } },
+    buildStrictScenarioInitialization(mod, '2026-06-22T00:00:00.000Z'),
+  );
+  // 玩家与程宗扬的累积状态
+  save.社交.关系['程宗扬'] = { ...(save.社交.关系['程宗扬'] || {}), 名字: '程宗扬', 与玩家关系: '挚友', 好感度: 77, 记忆: ['同闯建康的旧事'] };
+  const rt = save.世界.状态.剧本模组;
+  rt.nextStageReadyId = rt.nextStageId; // 模拟本关关键剧情已完成
+
+  // 未就绪时拒绝
+  const notReady = transitionToNextScenarioStage({ ...structuredClone(save), 世界: { ...save.世界, 状态: { 剧本模组: { ...rt, nextStageReadyId: null } } } }, [nextMod]);
+  assert.equal(notReady.ok, false);
+
+  const result = transitionToNextScenarioStage(save, [nextMod]);
+  assert.equal(result.ok, true, result.reason);
+  const newRt = result.saveData.世界.状态.剧本模组;
+  assert.equal(newRt.modId, 'liuchao.next_stage');
+  const npc = result.saveData.社交.关系['程宗扬'];
+  assert.equal(npc.好感度, 77, '好感度跨关保留');
+  assert.equal(npc.与玩家关系, '挚友', '关系标签跨关保留');
+  assert.ok((npc.记忆 || []).includes('同闯建康的旧事'), '记忆跨关保留');
+});

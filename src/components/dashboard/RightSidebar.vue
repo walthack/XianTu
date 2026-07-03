@@ -201,9 +201,16 @@
         </div>
         <div v-show="!questCollapsed" class="quest-body">
           <div v-if="questMain" class="quest-main">
-            <div class="quest-chapter">{{ questMain.chapter }}</div>
+            <div v-if="questMain.chapter" class="quest-chapter">{{ questMain.chapter }}</div>
             <div v-for="ev in questMain.events" :key="ev" class="quest-event">◆ {{ ev }}</div>
-            <div v-if="questMain.next" class="quest-next">→ {{ questMain.next }}</div>
+            <div v-if="questMain.cleared" class="quest-cleared">✅ {{ t('本关剧情已完成') }}</div>
+            <template v-if="questMain.next">
+              <div class="quest-next">{{ t('下一关') }}：{{ questMain.next }}</div>
+              <button class="quest-next-btn" :disabled="stageSwitching" @click="goNextStage">
+                {{ stageSwitching ? t('切换中…') : t('▶ 进入下一关') }}
+              </button>
+              <div v-if="stageSwitchError" class="quest-error">{{ stageSwitchError }}</div>
+            </template>
           </div>
           <div v-if="questGoals.length" class="quest-improv">
             <div v-for="(g, i) in questGoals" :key="i" class="quest-goal">· {{ g }}</div>
@@ -256,17 +263,39 @@ const statusEffects = computed(() => {
 });
 
 const questCollapsed = ref(false);
-// 剧情主线：章节/活跃事件/下一关（确定性，读 worldState.剧本模组）
+const stageSwitching = ref(false);
+const stageSwitchError = ref('');
+// 去掉关卡名的开发向前缀（「六朝清羽记·第56-72章·灵飞镜与白夷危局」→「灵飞镜与白夷危局」）
+const stageDisplayName = (name: string): string => {
+  const parts = String(name || '').split('·').filter(Boolean);
+  return parts.length ? parts[parts.length - 1] : String(name || '');
+};
+// 剧情主线：章节/活跃事件/清关状态/下一关（确定性，读 worldState.剧本模组）
 const questMain = computed(() => {
   const rt: any = (gameStateStore.worldState as any)?.剧本模组;
   if (!rt || typeof rt !== 'object') return null;
   const chapter = (rt.chapters || []).find((c: any) => c.id === rt.currentChapterId);
   const activeIds = new Set(rt.activeEventIds || []);
   const events = (rt.events || []).filter((e: any) => activeIds.has(e.id)).map((e: any) => e.name).filter(Boolean).slice(0, 4);
-  const next = rt.nextStageReadyId ? `可前往下一关：${rt.nextStageName || rt.nextStageId || ''}` : '';
+  const ready = rt.nextStageReadyId && rt.nextStageReadyId === rt.nextStageId;
+  const cleared = ready && !chapter && !events.length;
+  const next = ready ? stageDisplayName(rt.nextStageName || rt.nextStageId || '') : '';
   if (!chapter && !events.length && !next) return null;
-  return { chapter: chapter ? `章节：${chapter.title || chapter.id}` : '', events, next };
+  return { chapter: chapter ? `章节：${chapter.title || chapter.id}` : '', events, cleared, next };
 });
+const goNextStage = async () => {
+  if (stageSwitching.value) return;
+  stageSwitching.value = true;
+  stageSwitchError.value = '';
+  try {
+    const result = await gameStateStore.transitionToNextStage();
+    if (!result.ok) stageSwitchError.value = result.reason || '切换失败';
+  } catch (error) {
+    stageSwitchError.value = String((error as Error)?.message || error);
+  } finally {
+    stageSwitching.value = false;
+  }
+};
 // 即兴目标（LLM 维护的跨轮任务槽，上限 3）
 const questGoals = computed(() => {
   const goals: any = (gameStateStore.systemExtensions as any)?.任务追踪?.即兴目标;
@@ -1728,5 +1757,10 @@ const getReputationClass = (): string => {
 .quest-next { font-size: 12px; color: var(--color-accent, #d4af37); }
 .quest-improv { border-top: 1px dashed rgba(255,255,255,0.12); padding-top: 6px; }
 .quest-goal { font-size: 12px; line-height: 1.5; opacity: 0.75; }
+.quest-cleared { font-size: 12px; color: #7dc87d; }
+.quest-next-btn { margin-top: 4px; width: 100%; padding: 5px 8px; font-size: 12px; border: 1px solid var(--color-accent, #d4af37); background: transparent; color: var(--color-accent, #d4af37); border-radius: 4px; cursor: pointer; }
+.quest-next-btn:hover:not(:disabled) { background: rgba(212,175,55,0.15); }
+.quest-next-btn:disabled { opacity: 0.5; cursor: default; }
+.quest-error { font-size: 11px; color: #e07a7a; }
 
 </style>

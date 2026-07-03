@@ -3,7 +3,7 @@ import type { PlayerLocation, SaveData, WorldInfo } from '@/types/game';
 import type { ScenarioMod } from './schema';
 import { buildExpandScenarioInitialization, type ExpandScenarioInitialization } from './expandInitializer';
 import { withNativeScenarioLocationType } from './locationTypes';
-import { createScenarioProgress, getInitialScenarioChapterId, type ScenarioProgressState } from './runtime';
+import { advanceScenarioRuntime, createScenarioProgress, getInitialScenarioChapterId, type ScenarioProgressState } from './runtime';
 import { applyScenarioRelationshipsToSave } from './relationships';
 
 export interface ScenarioModRuntimeState extends ScenarioProgressState {
@@ -230,3 +230,56 @@ export async function resolveInitialWorldInfo(
   }
   return { worldInfo: generatedWorld };
 }
+
+// ===== 关卡切换（消费 stage_ready 信号；此前信号存在但无任何代码执行切关） =====
+export interface StageTransitionResult {
+  saveData: SaveData;
+  ok: boolean;
+  reason?: string;
+  from?: string;
+  to?: string;
+  toName?: string;
+}
+
+/**
+ * 把存档推进到下一关：换 世界.信息/剧本模组运行时/开场位置，
+ * 但**保留**玩家全部状态与 NPC 累积关系（好感度/与玩家关系/记忆），并携带不在新关花名册的旧 NPC。
+ * 仅当 nextStageReadyId 就绪（本关关键剧情已完成）才允许。
+ */
+export function transitionToNextScenarioStage(saveData: SaveData, modsOverride?: ScenarioMod[]): StageTransitionResult {
+  const rt = (saveData as any)?.世界?.状态?.剧本模组;
+  if (!rt?.modId) return { saveData, ok: false, reason: '当前存档无剧本运行时' };
+  const targetId = rt.nextStageId;
+  if (!targetId) return { saveData, ok: false, reason: '已是最终关，无下一关' };
+  if (rt.nextStageReadyId !== targetId) return { saveData, ok: false, reason: '本关关键剧情尚未完成' };
+  let mods = modsOverride;
+  if (!mods) {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      mods = (require('./builtins') as { BUILTIN_SCENARIO_MODS: ScenarioMod[] }).BUILTIN_SCENARIO_MODS;
+    } catch { return { saveData, ok: false, reason: '内置剧情模组不可用' }; }
+  }
+  const mod = (mods || []).find(item => item.manifest.id === targetId);
+  if (!mod) return { saveData, ok: false, reason: `未找到下一关模组 ${targetId}` };
+
+  const relationSnapshot = structuredClone((saveData as any)?.社交?.关系 || {});
+  const initialization = buildStrictScenarioInitialization(mod);
+  const next = applyStrictScenarioInitializationToSave(saveData, initialization);
+  // 回填累积关系：旧值(好感/关系/记忆等)优先，新关正典只补新增字段与新记忆
+  const relations = (next as any).社交.关系 as Record<string, any>;
+  for (const [name, old] of Object.entries<any>(relationSnapshot)) {
+    if (relations[name]) {
+      const fresh = relations[name];
+      const mergedMemories = [...new Set([...(old?.记忆 || []), ...(fresh?.记忆 || [])])];
+      relations[name] = { ...fresh, ...old, 记忆: mergedMemories };
+    } else {
+      relations[name] = old; // 跨关携带旧 NPC（后宫/同行者不因换关消失）
+    }
+  }
+  const newRuntime = (next as any).世界.状态.剧本模组;
+  newRuntime.reconciledRegistryVersion = rt.reconciledRegistryVersion;
+  // 立即推进一轮：激活新关首章/首批事件
+  const advanced = advanceScenarioRuntime(next);
+  return { saveData: advanced.saveData, ok: true, from: rt.modId, to: targetId, toName: mod.manifest.name };
+}
+
