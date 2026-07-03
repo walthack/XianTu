@@ -292,6 +292,8 @@ export function compileScenarioProtectedPaths(saveData: SaveData): string[] {
   const paths = new Set<string>([
     '世界.状态.剧本模组',
     '系统.扩展.剧本模组',
+    // 称号=里程碑奖励，只能由引擎(milestoneRewards)在故事线正确落点授予，AI 不得自封/篡改
+    '角色.身份.称号',
   ]);
   const canon = runtime.canon || {};
   const worldInfo = readPath(saveData, ['世界', '信息']) as Record<string, unknown> | undefined;

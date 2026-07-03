@@ -26,6 +26,7 @@ import { parseJsonSmart, stripModelThinking } from '@/utils/jsonExtract';
 import type { APIUsageType } from '@/stores/apiManagementStore';
 import { buildScenarioCanonPrompt, guardScenarioModCommands } from '@/modules/scenarioMods/canonGuard';
 import { advanceScenarioRuntime } from '@/modules/scenarioMods/runtime';
+import { applyMilestoneRewards } from '@/modules/scenarioMods/milestoneRewards';
 import { buildScenarioStoryPrompt, createScenarioPromptState } from '@/modules/scenarioMods/storyContext';
 import { buildActionGatePrompt, getNarrativeTurn, pruneExpiredActionGates } from '@/utils/actionGate';
 
@@ -2261,6 +2262,10 @@ ${step1Text}
         newValue: transition.id,
       });
     });
+    // 里程碑奖励：称号=故事线正确落点的关卡完成奖励（引擎独占授予，AI 不能自封）
+    for (const grantNote of applyMilestoneRewards(saveData, scenarioResult.transitions)) {
+      changes.push({ key: '角色.身份.称号', action: 'milestone_reward', oldValue: undefined, newValue: grantNote });
+    }
     // 剧情推进可见性：每轮输出推进状态，卡关时直接看 console 就知道差哪个事件/flag（此前要靠扒存档诊断）
     {
       const rt = (saveData as any)?.世界?.状态?.剧本模组;

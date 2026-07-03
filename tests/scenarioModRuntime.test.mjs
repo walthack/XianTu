@@ -177,3 +177,28 @@ test('canon guard rejects deleting a canon character from the roster', async () 
   assert.match(result.rejected[0].reason, /正典人物不可删除/);
   assert.equal(result.accepted.length, 1);
 });
+
+test('milestone rewards grant titles on stage_ready at story-correct stage; AI cannot self-grant', async () => {
+  const { applyMilestoneRewards, formatEarnedTitles } = await loadTs('../src/modules/scenarioMods/milestoneRewards.ts');
+  const { guardScenarioModCommands } = await loadTs('../src/modules/scenarioMods/canonGuard.ts');
+  const save = { 角色: { 身份: {} }, 世界: { 状态: { 剧本模组: { modId: 'lyl.luoyang_coup', flags: {} } } } };
+
+  // 非 stage_ready 不授
+  assert.equal(applyMilestoneRewards(save, [{ type: 'event_completed', id: 'x' }]).length, 0);
+  // stage_ready(封侯关) → 授予 舞阳侯，幂等
+  const granted = applyMilestoneRewards(save, [{ type: 'stage_ready', id: 'lyl.han_palace_endgame' }]);
+  assert.equal(granted.length, 1);
+  assert.deepEqual(save.角色.身份.称号, ['汉国舞阳侯']);
+  assert.equal(applyMilestoneRewards(save, [{ type: 'stage_ready', id: 'x' }]).length, 0, '幂等');
+  assert.match(formatEarnedTitles(save), /汉国舞阳侯/);
+  // 无称号时不渲染
+  assert.equal(formatEarnedTitles({ 角色: { 身份: {} } }), '');
+
+  // AI 不能自封：set 角色.身份.称号 被 canonGuard 拒
+  const guardSave = await buildRuntimeSave();
+  const result = guardScenarioModCommands(guardSave, [
+    { action: 'set', key: '角色.身份.称号', value: ['伪帝'] },
+    { action: 'add', key: '角色.身份.称号.0', value: '伪帝' },
+  ]);
+  assert.equal(result.rejected.length, 2, '称号路径受保护');
+});

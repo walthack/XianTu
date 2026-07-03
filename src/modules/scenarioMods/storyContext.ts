@@ -1,4 +1,5 @@
 import type { SaveData } from '@/types/game';
+import { formatEarnedTitles } from './milestoneRewards';
 
 import type {
   ScenarioCondition,
@@ -274,6 +275,8 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
     runtime.modName || runtime.modId,
     typeof runtime.axisSeqLo === 'number' && typeof runtime.axisSeqHi === 'number' ? `主轴范围 #${runtime.axisSeqLo}~#${runtime.axisSeqHi}` : '',
     runtime.nextStageId ? `下一关 ${runtime.nextStageName || runtime.nextStageId}` : '',
+    // 称号=里程碑奖励的运行时状态（引擎授予）：从存档读，未获得的头衔不进 prompt → 结构上防"未卜先知"
+    formatEarnedTitles(saveData),
   ].filter(Boolean).join('；');
 
   return `# 当前剧本进度（仅限可见内容）
