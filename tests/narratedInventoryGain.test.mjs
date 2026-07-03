@@ -41,3 +41,11 @@ test('detects carried items confirmed in possession narration', async () => {
 
   assert.deepEqual(detectNarratedInventoryPossessions(text), ['仙品·龙睛玉', '云氏玉简']);
 });
+
+test('prefers bracketed item names during inventory check narration', async () => {
+  const { detectNarratedInventoryPossessions } = await loadTs('../src/utils/narratedInventory.ts');
+
+  const text = '程宗扬将怀中的物品一一取出清点，将行囊里的物件摊开在掌心——【仙品·龙睛玉】温润的青芒中紫光流转，【云氏玉简】边缘云纹清晰。';
+
+  assert.deepEqual(detectNarratedInventoryPossessions(text), ['仙品·龙睛玉', '云氏玉简']);
+});

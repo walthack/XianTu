@@ -29,6 +29,7 @@ const INVENTORY_ITEM_NOUN_PATTERN = INVENTORY_ITEM_NOUNS.join('|');
 function normalizeNarratedItemName(value: string): string {
   return value
     .replace(/[“”"「」『』《》]/g, '')
+    .replace(/^(?:取出|拿出|清点|确认|查看|摸出|掏出|取来|拿起)/, '')
     .replace(/^(?:一枚|一块|一本|一卷|一件|一只|一个|这枚|这块|这本|这卷|这件|那枚|那块|那本|那卷|那件)/, '')
     .replace(/^(?:那|这|此|一)[个件枚块本卷只]?/, '')
     .trim();
@@ -71,6 +72,8 @@ export function detectNarratedInventoryPossessions(text: string): string[] {
       found.add(itemName);
     }
   }
+
+  if (found.size > 0) return [...found];
 
   const possessionPatterns = [
     new RegExp(`(?:怀中|袖中|囊中|背包|储物袋|行囊|随身|身上)[^，。；\\n]{0,40}?([^，。；、\\n]{0,18}?(?:${INVENTORY_ITEM_NOUN_PATTERN}))`, 'g'),
