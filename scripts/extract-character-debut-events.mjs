@@ -69,10 +69,10 @@ function windows(kws, books, span = 420, maxPer = 6, budget = 14000) {
 
 const SYS = '你是严谨的小说剧情整理员。只依据提供的全文检索片段判断，不脑补，不复述露骨细节。输出 JSON：{name, debut:{scene, howAppears, initialIdentity, locationHint, evidenceRefs}, keyEvents:[{title, description, locationHint, importance:high|mid, evidenceRefs}], needsHuman:boolean}。title 简短(如"毒发索心头血")；description 1-2句；locationHint 用书/集/章或事件名；evidenceRefs 用【书/file/kw】。';
 
-async function askMiniMax(name, evidence) {
+async function askMiniMax(name, bookTitle, evidence) {
   const msgs = [
     { role: 'system', content: SYS },
-    { role: 'user', content: `抽取角色「${name}」的：\n1) 登场场景（全三本中最早的首次出场：场景/方式/初始身份/在哪本哪集章附近）。\n2) 关键/招牌剧情事件（转折、名场面），逐个给 title/description/locationHint/importance。**若证据片段跨多本小说，keyEvents 必须覆盖每一本的关键节点（各本至少1-2件），按书序排列**——跨本角色的故事线不会只在一本里。\n只列原文明确支持的，证据不足写 needsHuman。\n\n全文检索片段：\n${evidence || '（未命中）'}` },
+    { role: 'user', content: `以下证据全部来自《${bookTitle}》单本。抽取角色「${name}」在**这一本**中的：\n1) 本书首次出场（场景/方式/初始身份/在哪集章附近；若本书中该角色只是被提及、无实际登场，debut 各字段留空并注明）。\n2) 本书内的关键/招牌剧情事件（转折、名场面），逐个给 title/description/locationHint/importance。\n只列原文明确支持的，证据不足写 needsHuman。\n\n检索片段：\n${evidence || '（未命中）'}` },
   ];
   const tmp = join(outDir, `${name}.messages.json`);
   writeFileSync(tmp, JSON.stringify(msgs, null, 2));
@@ -81,6 +81,8 @@ async function askMiniMax(name, evidence) {
 }
 const parse = t => { try { const j = String(t).match(/```(?:json)?\s*([\s\S]*?)```/)?.[1] || String(t).slice(String(t).indexOf('{'), String(t).lastIndexOf('}') + 1); return JSON.parse(j); } catch { return { parse_failed: true, raw: String(t).slice(0, 3000), needsHuman: true }; } };
 
+const BOOK_ORDER = ['qingyu', 'yunlong', 'yange'];
+
 async function run() {
   await mkdir(evDir, { recursive: true });
   const results = [];
@@ -88,20 +90,36 @@ async function run() {
     const name = WATCH[idx];
     const c = byName.get(name);
     const kws = [name, ...((c && c.aliases) || [])].filter(Boolean);
-    const books = (c && c.books && c.books.length) ? c.books : Object.keys(BOOKS);
-    const ev = windows(kws, books);
-    writeFileSync(join(evDir, `${name}.md`), `# ${name}\nkw=${kws.join(',')} books=${books}\n\n${ev}\n`);
-    console.error(`[${idx + 1}/${WATCH.length}] ${name}: 证据 ${ev.length} 字 → MiniMax...`);
-    let r; try { r = parse(await askMiniMax(name, ev)); } catch (e) { r = { name, error: String(e.message), needsHuman: true }; }
-    r.name = r.name || name;
-    writeFileSync(join(outDir, `${name}.result.json`), JSON.stringify(r, null, 2) + '\n');
-    results.push(r);
+    const books = ((c && c.books && c.books.length) ? c.books : Object.keys(BOOKS))
+      .slice().sort((a, b) => BOOK_ORDER.indexOf(a) - BOOK_ORDER.indexOf(b));
+    // 按本独立搜索+独立抽取（每本满额预算），再确定性合并
+    const perBook = [];
+    for (const b of books) {
+      const ev = windows(kws, [b]);
+      if (!ev) { perBook.push({ book: b, skipped: 'no_evidence' }); continue; }
+      writeFileSync(join(evDir, `${name}.${b}.md`), `# ${name} @${b}\nkw=${kws.join(',')}\n\n${ev}\n`);
+      console.error(`[${idx + 1}/${WATCH.length}] ${name} @${BOOKS[b].title}: 证据 ${ev.length} 字 → MiniMax...`);
+      let r; try { r = parse(await askMiniMax(name, BOOKS[b].title, ev)); } catch (e) { r = { parse_failed: true, error: String(e.message).slice(0, 200), needsHuman: true }; }
+      r.book = b;
+      perBook.push(r);
+      writeFileSync(join(outDir, `${name}.${b}.json`), JSON.stringify(r, null, 2) + '\n');
+    }
+    // 合并：登场=书序最早一本的 debut；事件=按书序拼接并打上书标签
+    const merged = { name, needsHuman: perBook.some(r => r.needsHuman || r.parse_failed), perBookScanned: books, debut: null, keyEvents: [] };
+    for (const r of perBook) {
+      if (r.skipped || r.parse_failed) continue;
+      const label = BOOKS[r.book]?.title || r.book;
+      if (!merged.debut && r.debut && (r.debut.scene || r.debut.locationHint)) merged.debut = { ...r.debut, book: label };
+      for (const e of r.keyEvents || []) merged.keyEvents.push({ ...e, book: label });
+    }
+    writeFileSync(join(outDir, `${name}.result.json`), JSON.stringify(merged, null, 2) + '\n');
+    results.push(merged);
   }
   const md = ['# 重要角色 登场/关键事件 抽取（人工裁定用，未写回正典）', '', `生成：${new Date().toISOString()}`, `模型：MiniMax-M2.7  角色：${WATCH.length}`, ''];
   for (const r of results) {
     md.push(`## ${r.name}${r.needsHuman ? '  ⚠needsHuman' : ''}`);
-    if (r.debut) md.push(`- 登场：${r.debut.scene || ''}（${r.debut.howAppears || ''}｜初始身份:${r.debut.initialIdentity || ''}｜${r.debut.locationHint || ''}）`);
-    for (const e of (r.keyEvents || [])) md.push(`- [${e.importance || '?'}] ${e.title}：${e.description}（${e.locationHint || ''}）`);
+    if (r.debut) md.push(`- 登场【${r.debut.book || '?'}】：${r.debut.scene || ''}（${r.debut.howAppears || ''}｜初始身份:${r.debut.initialIdentity || ''}｜${r.debut.locationHint || ''}）`);
+    for (const e of (r.keyEvents || [])) md.push(`- [${e.importance || '?'}]【${e.book || '?'}】${e.title}：${e.description}（${e.locationHint || ''}）`);
     if (r.parse_failed) md.push('- ⚠ 解析失败，见 result.json');
     md.push('');
   }
