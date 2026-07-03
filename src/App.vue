@@ -253,7 +253,7 @@ import { heartbeatPresenceSilent } from '@/services/presence';
 import { endTravelBeacon } from '@/services/onlineTravel';
 import { getFullscreenElement, requestFullscreen, exitFullscreen, explainFullscreenError } from './utils/fullscreen';
 import { MUSIC_SETTINGS_EVENT, musicEngine, readMusicSettings, type MusicSettings } from './utils/musicEngine';
-import { resolveMusicMoodForScenario, pickTrackForMood, type MusicMood } from './utils/musicLibrary';
+import { resolveMusicMoodForScenario, pickTrackForMood, musicMoodRank, type MusicMood } from './utils/musicLibrary';
 import type { CharacterBaseInfo } from '@/types/game';
 import type { CharacterCreationPayload, Talent } from '@/types';
 
@@ -334,10 +334,26 @@ const activeScenarioEvents = computed(() => {
 });
 
 // mood 不变则不换曲（不打断当前变体）；mood 变化时才从该 mood 曲库随机挑一首。
+// 防抖：升档（更高优先级，如 →climax/horror）立即切；降档需连续 2 次解析一致才切,
+// 避免决战中插一句对话就掉回低档曲。
 const currentMusicMood = ref<MusicMood | null>(null);
+let pendingMusicMood: MusicMood | null = null;
+let pendingMusicMoodCount = 0;
 watch([activeScenarioChapterId, activeScenarioEvents], ([chapterId, events]) => {
   const mood = resolveMusicMoodForScenario(chapterId, events);
-  if (mood === currentMusicMood.value) return;
+  if (mood === currentMusicMood.value) {
+    pendingMusicMood = null;
+    pendingMusicMoodCount = 0;
+    return;
+  }
+  const isUpgrade = currentMusicMood.value === null || musicMoodRank(mood) < musicMoodRank(currentMusicMood.value);
+  if (!isUpgrade) {
+    pendingMusicMoodCount = pendingMusicMood === mood ? pendingMusicMoodCount + 1 : 1;
+    pendingMusicMood = mood;
+    if (pendingMusicMoodCount < 2) return;
+  }
+  pendingMusicMood = null;
+  pendingMusicMoodCount = 0;
   currentMusicMood.value = mood;
   musicEngine.setTrack(pickTrackForMood(mood));
 }, { immediate: true });

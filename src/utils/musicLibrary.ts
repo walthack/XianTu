@@ -203,15 +203,6 @@ function normalizeEventText(event: ScenarioMusicEvent): string {
     .join(' ');
 }
 
-function resolveMoodForEvent(event: ScenarioMusicEvent): MusicMood | null {
-  if (event.id && EVENT_MOOD_MAP[event.id]) return EVENT_MOOD_MAP[event.id];
-
-  const text = normalizeEventText(event);
-  if (!text) return null;
-
-  return EVENT_TEXT_MOOD_RULES.find(([pattern]) => pattern.test(text))?.[1] || null;
-}
-
 export function resolveMusicMoodForChapter(chapterId: string | null | undefined): MusicMood {
   if (!chapterId) return 'theme';
   const exactMood = CHAPTER_MOOD_MAP[chapterId];
@@ -220,19 +211,40 @@ export function resolveMusicMoodForChapter(chapterId: string | null | undefined)
   return PATTERN_MOOD_RULES.find(([pattern]) => pattern.test(chapterId))?.[1] || 'daily';
 }
 
+// mood 的优先级序号（越小越高），供切换防抖判断升/降档。
+export function musicMoodRank(mood: MusicMood): number {
+  const rank = EVENT_MOOD_PRIORITY.indexOf(mood);
+  return rank === -1 ? EVENT_MOOD_PRIORITY.length : rank;
+}
+
+// 分层判定：
+// L1 人工锚点 override（EVENT_MOOD_MAP）无条件最高；
+// L2 正则推出的事件 mood 与章节 mood 一起按优先级竞争
+//    ——避免决战章节(climax)被普通战斗事件(battle)拉低（鬼巫王案例）。
 export function resolveMusicMoodForScenario(
   chapterId: string | null | undefined,
   activeEvents: ScenarioMusicEvent[] = [],
 ): MusicMood {
-  const eventMoods = activeEvents
-    .map(resolveMoodForEvent)
-    .filter((mood): mood is MusicMood => Boolean(mood));
+  const exactMoods: MusicMood[] = [];
+  const ruleMoods: MusicMood[] = [];
 
-  if (eventMoods.length > 0) {
-    return EVENT_MOOD_PRIORITY.find(priority => eventMoods.includes(priority)) || eventMoods[0];
+  for (const event of activeEvents) {
+    if (event.id && EVENT_MOOD_MAP[event.id]) {
+      exactMoods.push(EVENT_MOOD_MAP[event.id]);
+      continue;
+    }
+    const text = normalizeEventText(event);
+    const mood = text ? EVENT_TEXT_MOOD_RULES.find(([pattern]) => pattern.test(text))?.[1] : null;
+    if (mood) ruleMoods.push(mood);
   }
 
-  return resolveMusicMoodForChapter(chapterId);
+  if (exactMoods.length > 0) {
+    return EVENT_MOOD_PRIORITY.find(priority => exactMoods.includes(priority)) || exactMoods[0];
+  }
+
+  const chapterMood = resolveMusicMoodForChapter(chapterId);
+  const candidates = [...ruleMoods, chapterMood];
+  return EVENT_MOOD_PRIORITY.find(priority => candidates.includes(priority)) || chapterMood;
 }
 
 // 从该 mood 的曲库随机挑一首（多首变体时降低听觉疲劳）。
