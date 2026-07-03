@@ -4859,7 +4859,8 @@
       "chapter.lyg.han_succession.succession.started": true,
       "chapter.lyg.han_succession.succession.done": false,
       "chapter.lyg.han_succession.breakthrough.started": false,
-      "chapter.lyg.han_succession.breakthrough.done": false
+      "chapter.lyg.han_succession.breakthrough.done": false,
+      "event.dengji_yuzuo_yinhuan.done": false
     },
     "chapters": [
       {
@@ -4878,7 +4879,8 @@
           "lyg.event.han_succession_02_beat",
           "lyg.event.han_succession_03_beat",
           "lyg.event.han_succession_04_beat",
-          "lyg.event.han_succession_05_beat"
+          "lyg.event.han_succession_05_beat",
+          "lyg.event.dengji_yuzuo_yinhuan"
         ]
       },
       {
@@ -5108,6 +5110,24 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ]
+      },
+      {
+        "id": "lyg.event.dengji_yuzuo_yinhuan",
+        "name": "登基大典御座隐欢",
+        "description": "新帝登基大典，礼乐齐鸣、百官朝贺之中，皇后赵飞燕与程宗扬在御座帷幕之后隐秘交合——庄严大典与禁忌私情同场，成为两人关系的标志性一幕。",
+        "conditions": [],
+        "completion": [
+          {
+            "path": "flags.event.dengji_yuzuo_yinhuan.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.zhao_feiyan",
+          "liuchao.character.cheng_zongyang"
+        ],
+        "critical": false
       }
     ]
   },
