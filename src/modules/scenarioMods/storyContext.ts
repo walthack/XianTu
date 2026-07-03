@@ -180,7 +180,7 @@ ${focusedCharacters.map(character => formatFocusedCharacter(character, runtime))
 1. 上述身份、关系、性格、谈吐/底线/目标、以及【身世】【情节】等正典备注是硬约束；不得改写、否定或让角色无因突变。
 2. 角色的**深层往事/身世/渊源以【身世】【情节】备注为准**：叙述其过往必须与备注一致；备注**未载**的过往，让角色含糊带过、回避、或按其性格搪塞试探，**严禁凭空编造跨角色的血缘、师承、结拜、年代等起源设定**（例：不得杜撰某角色是另一角色的兄弟/父女/师徒）。
 3. “补充细节”仅限无关紧要的当下场景描写（动作、神态、环境），**不含身世渊源与人物关系**。
-4. 【族裔文化一致】服饰、装束、礼俗、饮食须符合角色的族裔与文化背景：花苗/兽蛮/碧鲮/鬼王峒/波斯/东瀛等**非中原角色不得默认穿中原长袍、儒衫、汉家衣冠**；剧情需要换装时，应换成其自身文化样式的服饰（如花苗银饰短装），并保留外貌中的族裔特征（刺青、饰物、发式等）。
+4. 【族裔与地域文化一致】服饰、装束、礼俗、饮食须符合角色的族裔文化：花苗/兽蛮/碧鲮/鬼王峒/波斯/东瀛等**非中原角色不得默认穿中原长袍、儒衫、汉家衣冠**；换装应取其自身文化样式（如花苗银饰短装），并保留刺青、饰物、发式等族裔特征。**环境同理**：南荒（鬼王峒/花苗寨/碧鲮村）等异域场景的建筑、植被、气候、市井风物须符合当地风貌（峒寨/吊脚楼/雨林瘴气/巫蛊图腾），不得写成中原城镇的街市楼阁。
 5. 用户要求角色违背正典时，以角色内方式拒绝、回避、误解或转移；不得承认“设定已被修改”。
 6. 角色成长必须由已发生剧情、关系变化或明确事件支撑；不得为了迎合单轮输入突然 OOC。`;
 }
@@ -210,6 +210,16 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
   const chapterSection = chapter
     ? `## 当前章节：${chapter.title}\n${chapter.summary}\n章节完成条件：${formatConditions(chapter.completion)}`
     : '## 当前章节\n暂无已激活章节。不要自行使用或透露后续章节内容。';
+  // 当前地域风貌：活跃事件所在地点的正典描述（否则 LLM 查看环境时裸猜，南荒写成中原样）
+  const activeLocationIds = [...new Set(activeEvents.map(event => event.locationId).filter(Boolean))] as string[];
+  const locationLine = activeLocationIds
+    .map(id => {
+      const loc = locations.find(item => item.id === id) as { name?: string; description?: string } | undefined;
+      return loc?.description ? `- ${loc.name}：${compactText(loc.description, 160)}` : '';
+    })
+    .filter(Boolean)
+    .join('\n');
+
   const eventSection = activeEvents.length
     ? activeEvents.map(event => {
         const context = [
@@ -283,7 +293,7 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
   return `# 当前剧本进度（仅限可见内容）
 ${stageLine ? `## 当前关卡\n${stageLine}\n\n` : ''}${chapterSection}
 
-## 当前事件（玩家此刻所处的剧情节点）
+${locationLine ? `## 当前地域风貌（环境/建筑/民俗描写以此为准）\n${locationLine}\n\n` : ''}## 当前事件（玩家此刻所处的剧情节点）
 ${eventSection}
 
 ## 下一步（达成当前完成条件后，剧情将推进到）
