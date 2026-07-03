@@ -4582,6 +4582,13 @@
         "type": "other",
         "description": "小玲儿在棺中抢走《武穆秘籍》（被掉包为空白本）。",
         "grade": "上品"
+      },
+      {
+        "id": "lyg.item.yangwuhou_xiaoshi",
+        "name": "《阳武侯小史》",
+        "description": "王蕙（秦桧之妻）手笔的稗官野史，洛都街巷争相传抄：书中\"考证\"程宗扬乃阳武侯嫡子、继承武皇帝光荣血统，此番激于义愤拨乱反正、驱除伪帝，使帝位还归正统——甚至辈分比吕太后还高一辈，伪太后都得尊称一声皇叔。通篇牵强附会却编得活灵活现，是炮制舆论的范本。程宗扬读罢黑脸：\"皇叔都出来了，死老头那该叫皇大爷了。\"（内容纯属谣言，阅读可知晓洛都舆论风向）",
+        "type": "other",
+        "grade": "凡品"
       }
     ]
   },
@@ -4647,7 +4654,8 @@
       "event.s02_06.done": false,
       "event.s02_07.done": false,
       "event.s02_08.done": false,
-      "event.s02_09.done": false
+      "event.s02_09.done": false,
+      "event.yangwuhou_rumor.done": false
     },
     "chapters": [
       {
@@ -4677,7 +4685,8 @@
           "lyg.event.s02_06",
           "lyg.event.s02_07",
           "lyg.event.s02_08",
-          "lyg.event.s02_09"
+          "lyg.event.s02_09",
+          "lyg.event.yangwuhou_rumor"
         ]
       }
     ],
@@ -4977,6 +4986,25 @@
         "axisSeq": 1006,
         "axisAnchor": "六朝燕歌行·#24·笑颜",
         "axisBeat": "程拜武帝像后星光化游龙绕身，众人震惊误认有帝王血脉。"
+      },
+      {
+        "id": "lyg.event.yangwuhou_rumor",
+        "name": "《阳武侯小史》流言四起",
+        "description": "洛都街巷疯传程宗扬乃阳武侯嫡子、继承武皇帝光荣血统，此番拨乱反正驱除伪帝使帝位还归正统，甚至有人考证其辈分比吕太后还高一辈、伪太后当尊称皇叔。程宗扬黑脸追问小紫，方知是王蕙（秦桧之妻）撰《阳武侯小史》被人牵强附会——舆论炮制正统化，程宗扬哭笑不得：皇叔都出来了，死老头那该叫皇大爷了。（汉国篇第2集第8章·血脉）",
+        "conditions": [],
+        "completion": [
+          {
+            "path": "flags.event.yangwuhou_rumor.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.xiao_zi",
+          "liuchao.character.qin_hui"
+        ],
+        "critical": false
       }
     ]
   },
