@@ -14,6 +14,8 @@ export interface MilestoneReward {
   stageId: string;
   /** 授予的称号（追加进 角色.身份.称号，去重） */
   titles: string[];
+  /** 剧情剥夺的称号（从 角色.身份.称号 移除；如买官爵位随政局翻覆作废） */
+  revokeTitles?: string[];
   /** 授予时写进变更记录/控制台的说明 */
   note: string;
 }
@@ -27,9 +29,15 @@ export const MILESTONE_REWARDS: MilestoneReward[] = [
     note: '粮战功成，筠州知州滕甫招揽为宋国客卿，举荐任工部屯田司员外郎（清羽 ch324）。',
   },
   {
+    stageId: 'lyl.luoyang_cloud_secret', // 六朝云龙吟·天石（洛都入局·买官洗白）
+    titles: ['汉国关内侯（买官）', '汉国大行令（领事·加常侍郎）'],
+    note: '经徐璜运作向天子买官洗白：诏拜关内侯、授大夫、领鸿胪寺大行令事、加常侍郎（可出入宫禁），全套一千四百万钱（云龙 0238-0239）。',
+  },
+  {
     stageId: 'lyl.luoyang_coup', // 六朝云龙吟·封侯
     titles: ['汉国舞阳侯'],
-    note: '洛都事了，受封汉国舞阳侯（实封五千户，舞阳相程郑主政）。',
+    revokeTitles: ['汉国关内侯（买官）', '汉国大行令（领事·加常侍郎）'],
+    note: '洛都政局翻覆，先前买来的官爵作废（"还没捂热呢，可就飞了"，云龙 0360）；以功受封汉国舞阳侯（实封五千户，舞阳相程郑主政）。',
   },
   {
     stageId: 'lyg.shituolin_endgame', // 六朝燕歌行·尸陀林主与李辅国断点
@@ -57,13 +65,24 @@ export function applyMilestoneRewards(saveData: AnySave, transitions: ScenarioRu
   if (!reward) return [];
 
   const identity = (saveData.角色 = saveData.角色 || {}).身份 = saveData.角色.身份 || {};
-  const titles: string[] = Array.isArray(identity.称号) ? identity.称号 : (identity.称号 = []);
+  let titles: string[] = Array.isArray(identity.称号) ? identity.称号 : (identity.称号 = []);
+  const notes: string[] = [];
+  // 剧情剥夺（如政局翻覆、买官作废）
+  const revoked = (reward.revokeTitles || []).filter(t => titles.includes(t));
+  if (revoked.length) {
+    titles = identity.称号 = titles.filter(t => !revoked.includes(t));
+    notes.push(`失去称号「${revoked.join('、')}」`);
+  }
   const granted: string[] = [];
   for (const title of reward.titles) {
     if (!titles.includes(title)) { titles.push(title); granted.push(title); }
   }
-  if (granted.length) console.info(`[里程碑奖励] ${currentStageId} 完成 → 授予称号：${granted.join('、')}（${reward.note}）`);
-  return granted.length ? [`获得称号「${granted.join('、')}」：${reward.note}`] : [];
+  if (granted.length) notes.push(`获得称号「${granted.join('、')}」`);
+  if (notes.length) {
+    console.info(`[里程碑奖励] ${currentStageId} 完成 → ${notes.join('；')}（${reward.note}）`);
+    return [`${notes.join('；')}：${reward.note}`];
+  }
+  return [];
 }
 
 /** prompt 用：当前已获称号行（无称号返回空串） */

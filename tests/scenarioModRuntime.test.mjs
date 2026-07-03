@@ -202,3 +202,16 @@ test('milestone rewards grant titles on stage_ready at story-correct stage; AI c
   ]);
   assert.equal(result.rejected.length, 2, '称号路径受保护');
 });
+
+test('milestone rewards revoke transient titles at story-correct point (买官→政变作废)', async () => {
+  const { applyMilestoneRewards } = await loadTs('../src/modules/scenarioMods/milestoneRewards.ts');
+  const save = { 角色: { 身份: {} }, 世界: { 状态: { 剧本模组: { modId: 'lyl.luoyang_cloud_secret', flags: {} } } } };
+  // 天石关完成 → 买官全套到手
+  applyMilestoneRewards(save, [{ type: 'stage_ready', id: 'next' }]);
+  assert.ok(save.角色.身份.称号.includes('汉国关内侯（买官）'));
+  assert.ok(save.角色.身份.称号.includes('汉国大行令（领事·加常侍郎）'));
+  // 封侯关完成 → 买官爵作废 + 舞阳侯到手
+  save.世界.状态.剧本模组.modId = 'lyl.luoyang_coup';
+  applyMilestoneRewards(save, [{ type: 'stage_ready', id: 'next' }]);
+  assert.deepEqual(save.角色.身份.称号, ['汉国舞阳侯'], '买官爵被剥夺,只剩舞阳侯');
+});
