@@ -40,12 +40,28 @@ function phaseSummaries(c) {
     .filter(p => p.scope === 'relationship-chain' || p.scope === 'identity-chain')
     .map(p => p.identity).filter(Boolean);
 }
+// 角色地理锚点：归属势力名含国名→该国；否则登场地点查 region 映射（地点风貌扫描产物）
+let LOC_REGION = {};
+try { LOC_REGION = JSON.parse(readFileSync(join(root, 'mod-kit/generated/deepseek-v4-flash/shared-atlas/location-fengmao/location-region-map.json'), 'utf8')); } catch { /* 无映射则跳过 */ }
+const NATIONS = ['唐国', '汉国', '宋国', '秦国', '晋国', '昭南', '南荒'];
+function deriveRegion(c) {
+  const sp = c.staticProfile || {};
+  for (const a of sp.affiliations || []) {
+    const hit = NATIONS.find(n => String(a.faction || '').includes(n.replace('国', '')) && String(a.faction || '').includes('国') || String(a.faction || '').startsWith(n));
+    if (hit) return hit;
+  }
+  const loc = sp.debutLocation && sp.debutLocation.location;
+  if (loc) { for (const [name, region] of Object.entries(LOC_REGION)) if (String(loc).includes(name)) return region; }
+  return '';
+}
+
 function buildEmbedText(c) {
   const sp = c.staticProfile || {};
   const parts = [
     c.canonicalName,
     (c.aliases || []).join(' '),
     sp.identitySummary,
+    deriveRegion(c) ? `【${deriveRegion(c)}人物】` : '',
     // 归属/登场地点：宗门与地名是强检索键（场景提到地点/门派时可召回相关角色）
     uniq((sp.affiliations || []).map(a => `${a.faction}${a.role ? `(${a.role})` : ''}`)).join('、'),
     sp.debutLocation?.location ? `登场于${sp.debutLocation.location}` : '',
@@ -79,6 +95,7 @@ for (const c of cards) {
     tier: c.tier,
     stagePresence,
     staticProfile: c.staticProfile || {},
+    region: deriveRegion(c) || undefined,
     phaseIdentities: c.phaseIdentities || [],
     review: c.review || undefined,
     embedText: buildEmbedText(c),

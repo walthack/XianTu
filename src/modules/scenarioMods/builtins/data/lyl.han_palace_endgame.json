@@ -604,14 +604,15 @@
       {
         "id": "lyl.location.luoyang",
         "name": "洛都",
-        "description": "汉国都城，宫阙巍峨，权贵云集。",
+        "description": "汉国都城，宫阙巍峨，权贵云集。 汉国京师，宫殿巍峨，琼玉阙楼耸立，国宾驿馆宏伟大气，宫廷戒备森严，天子仪仗威严（民俗：皇家仪仗森严，权贵云集，各方势力暗流涌动）",
         "type": "城池",
         "continentId": "liuchao.continent.zhongzhou",
         "coordinates": {
           "x": 6838,
           "y": 3577
         },
-        "features": []
+        "features": [],
+        "region": "汉国"
       },
       {
         "id": "lyl.location.qilifang",
@@ -678,96 +679,104 @@
         "name": "昭南",
         "continentId": "liuchao.continent.nanhuang",
         "type": "城池",
-        "description": "南荒区域的重要城市，六朝清羽记结尾与云龙吟中多次出现。",
+        "description": "南荒区域的重要城市，六朝清羽记结尾与云龙吟中多次出现。 南方国度，都城麟趾城，地产巨木用于建筑，水系连通大江云水，婚俗保留古风。（民俗：妻媵制盛行，诸侯可一聘九女；沐羽城等地有昭南人受雇充当佣兵；建筑用巨木由昭南输出。）",
         "coordinates": {
           "x": 4916,
           "y": 7778
         },
-        "features": []
+        "features": [],
+        "region": "昭南"
       },
       {
         "id": "liuchao.location.jiangzhou",
         "name": "江州",
         "continentId": "liuchao.continent.zhongzhou",
         "type": "城池",
-        "description": "星月湖大营所在地，宋国边境重要城市。",
+        "description": "星月湖大营所在地，宋国边境重要城市。 长江南岸的战略要冲，城墙坚固，营寨密布，城郊有金明寨等驻军设施，城内已开设书院，商贾初兴，战火余烬未散。（民俗：晋、宋势力交汇之地，兵家必争，世家子弟图谋变革，欲建平等新秩序；商业萌芽，商会经营渐起。）",
         "coordinates": {
           "x": 4956,
           "y": 6735
         },
-        "features": []
+        "features": [],
+        "region": "宋国"
       },
       {
         "id": "liuchao.location.wuyuan",
         "name": "五原城",
         "continentId": "liuchao.continent.zhongzhou",
         "type": "城池",
-        "description": "中州北部边境城池，程宗扬初次逃亡地。",
+        "description": "中州北部边境城池，程宗扬初次逃亡地。 边境贸易重镇，商贾云集，市集有马匹、皮毛、香料等货物，城墙高耸，客栈酒肆热闹。（民俗：马市兴盛，五原马匹为六朝各地商队所青睐，亦是南来北往商旅的歇脚之地。）",
         "coordinates": {
           "x": 881,
           "y": 4366
         },
-        "features": []
+        "features": [],
+        "region": "宋国"
       },
       {
         "id": "liuchao.location.jiankang",
         "name": "建康",
         "continentId": "liuchao.continent.zhongzhou",
         "type": "城池",
-        "description": "晋国都城，六朝世界的政治中心之一。",
+        "description": "晋国都城，六朝世界的政治中心之一。 六朝金粉地，金陵帝王州。繁华街市豪门宅邸，云氏等商贾世家汇聚，商业鼎盛，富甲一方。",
         "coordinates": {
           "x": 7100,
           "y": 4960
         },
-        "features": []
+        "features": [],
+        "region": "宋国"
       },
       {
         "id": "liuchao.location.changan",
         "name": "长安",
         "continentId": "liuchao.continent.zhongzhou",
         "type": "城池",
-        "description": "唐国都城，六朝最大城市。",
+        "description": "唐国都城，六朝最大城市。 六朝蹴鞠圣地，唐室大明宫巍峨，城门巍峨，常有鞠社云集，设皇图天策府邸，街市热闹。（民俗：蹴鞠之风极盛，山岳正赛年年在此举办，六朝三十二支鞠社竞逐，是唐国最热闘的体育盛事。）",
         "coordinates": {
           "x": 2830,
           "y": 3049
         },
-        "features": []
+        "features": [],
+        "region": "唐国"
       },
       {
         "id": "liuchao.location.linan",
         "name": "临安",
         "continentId": "liuchao.continent.zhongzhou",
         "type": "城池",
-        "description": "宋国都城，江南繁华之地。",
+        "description": "宋国都城，江南繁华之地。 江南水乡名城，西湖烟柳繁华，蹴鞠相扑盛行，权贵聚集，市井热闹非凡。（民俗：山岳正赛为六朝顶级蹴鞠盛会，女子相扑大赛热闹开擂，鞠社文化蔚然成风。）",
         "coordinates": {
           "x": 7466,
           "y": 6532
         },
-        "features": []
+        "features": [],
+        "region": "宋国"
       },
       {
         "id": "liuchao.location.junzhou",
         "name": "筠州",
         "continentId": "liuchao.continent.zhongzhou",
         "type": "城池",
-        "description": "宋国州城，王团练驻地，程宗扬运粮之处。",
+        "description": "宋国州城，王团练驻地，程宗扬运粮之处。 宋国西部商业重镇，浮凌江畔船来船往，粮铺商号林立，官府设常平仓储粮，军需供应繁忙。（民俗：商业气息浓厚，粮商与军政勾连，走私商路通达昭南。）",
         "coordinates": {
           "x": 5656,
           "y": 6822
         },
-        "features": []
+        "features": [],
+        "region": "宋国"
       },
       {
         "id": "liuchao.location.mingzhou",
         "name": "明州",
         "continentId": "liuchao.continent.zhongzhou",
         "type": "城池",
-        "description": "宋国沿海州城，光明观堂据点所在。",
+        "description": "宋国沿海州城，光明观堂据点所在。 东南沿海港城，光明观堂医宗所在，城中曾发瘟疫，街巷萧条，港口帆船往来，有大湖水域。（民俗：光明观堂以医术闻名，弟子多习医道，救死扶伤，受民众敬重。）",
         "coordinates": {
           "x": 8925,
           "y": 6374
         },
-        "features": []
+        "features": [],
+        "region": "宋国"
       },
       {
         "id": "liuchao.location.diqiu",
@@ -779,91 +788,99 @@
           "x": 6096,
           "y": 7831
         },
-        "features": []
+        "features": [],
+        "region": "昭南"
       },
       {
         "id": "liuchao.location.kunwu",
         "name": "昆吾",
         "continentId": "liuchao.continent.nanhuang",
         "type": "城池",
-        "description": "南荒区域的重要城镇。",
+        "description": "南荒区域的重要城镇。 昭南南方重镇，城中有制刀工匠，相传以昆吾刀裁取霓龙丝，气候湿热，多云霞幻象。（民俗：昆吾刀锋利著称，相传可裁取霞光化为霓丝，为当地神秘特产。）",
         "coordinates": {
           "x": 4840,
           "y": 7546
         },
-        "features": []
+        "features": [],
+        "region": "昭南"
       },
       {
         "id": "liuchao.location.xiongerpu",
         "name": "熊耳铺",
         "continentId": "liuchao.continent.nanhuang",
         "type": "城池",
-        "description": "南荒入口处的村寨，程宗扬在此选向导。",
+        "description": "南荒入口处的村寨，程宗扬在此选向导。 南荒湿热，商旅歇脚的驿站小镇，夜间赶路凭眼力辨途，店铺灯火昏暗。（民俗：南荒人夜行不点火把，全凭眼力走夜路，速度反比白天更快。）",
         "coordinates": {
           "x": 1623,
           "y": 7612
         },
-        "features": []
+        "features": [],
+        "region": "南荒"
       },
       {
         "id": "liuchao.location.guiwangdong",
         "name": "鬼王峒",
         "continentId": "liuchao.continent.nanhuang",
         "type": "洞府",
-        "description": "南荒鬼王峒势力的核心洞窟。",
+        "description": "南荒鬼王峒势力的核心洞窟。 深幽不见底的地堑，古老遗迹与荒圮乱石交织，闷热潮湿的密林中仅见奴隶，鲜有人马。（民俗：鬼巫王主导的隐秘势力，与碧鲮人有生意往来，设驿馆接待外来者。）",
         "coordinates": {
           "x": 1641,
           "y": 8690
         },
-        "features": []
+        "features": [],
+        "region": "南荒"
       },
       {
         "id": "liuchao.location.baiyi",
         "name": "白夷族",
         "continentId": "liuchao.continent.nanhuang",
         "type": "城池",
-        "description": "南荒白夷族聚居地。",
+        "description": "南荒白夷族聚居地。 南荒丛林深处的部族聚居地，设有隐秘地宫，当地出产湖珠手串等南荒特产，有自己的武装力量与鬼王峒抗衡。",
         "coordinates": {
           "x": 1818,
           "y": 8118
         },
-        "features": []
+        "features": [],
+        "region": "南荒"
       },
       {
         "id": "liuchao.location.biyu",
         "name": "碧鲮族",
         "continentId": "liuchao.continent.nanhuang",
         "type": "城池",
-        "description": "南荒沿海碧鲮族聚居地。",
+        "description": "南荒沿海碧鲮族聚居地。 濒海而居的部族村寨，以渔获腌制和珊瑚采集为生，夜间篝火烤肉，空气中弥漫海产腥鲜与草药气息。（民俗：擅长潜水捕捞，族中女子常以海产交换陆上物资，有将俘虏献予鬼巫王的传统。）",
         "coordinates": {
           "x": 1824,
           "y": 8592
         },
-        "features": []
+        "features": [],
+        "region": "南荒"
       },
       {
         "id": "liuchao.location.liuligu",
         "name": "琉璃谷",
         "continentId": "liuchao.continent.nanhuang",
         "type": "城池",
-        "description": "南荒区域山谷。",
+        "description": "南荒区域山谷。 琉璃化的山谷，阳光下七彩纷呈，景色瑰丽绝美，为南荒胜境。",
         "coordinates": {
           "x": 1165,
           "y": 8791
         },
-        "features": []
+        "features": [],
+        "region": "南荒"
       },
       {
         "id": "liuchao.location.shenmu",
         "name": "神木",
         "continentId": "liuchao.continent.nanhuang",
         "type": "城池",
-        "description": "南荒区域重要地标。",
+        "description": "南荒区域重要地标。 巍峨神木如万仞之峰，枝干广袤需五日方至半腰，根节如群山层叠，云霞缭绕触手可及，树巅隐于天际不可望",
         "coordinates": {
           "x": 1341,
           "y": 9521
         },
-        "features": []
+        "features": [],
+        "region": "南荒"
       },
       {
         "id": "liuchao.location.haishanghuahuan",
@@ -875,91 +892,99 @@
           "x": 3241,
           "y": 9915
         },
-        "features": []
+        "features": [],
+        "region": "唐国"
       },
       {
         "id": "liuchao.location.guangyang",
         "name": "广阳",
         "continentId": "liuchao.continent.zhongzhou",
         "type": "城池",
-        "description": "晋国-汉国边境重镇。",
+        "description": "晋国-汉国边境重镇。 江南水乡要冲，广阳渠连接大江云水，商船往来频繁，沿岸街市繁华，赌场酒楼错落其间。（民俗：商贾汇聚，江湖势力活跃，云氏等大商族在此经营水道贸易，黑魔海亦设赌坊为据点。）",
         "coordinates": {
           "x": 4456,
           "y": 5668
         },
-        "features": []
+        "features": [],
+        "region": "汉国"
       },
       {
         "id": "liuchao.location.qingzhou",
         "name": "晴州",
         "continentId": "liuchao.continent.zhongzhou",
         "type": "城池",
-        "description": "星月湖据点之一。",
+        "description": "星月湖据点之一。 商贾云集的运河港埠，粮铺船行林立，鞠社热闹，商会势力盘根错节，南北货物汇聚之地。（民俗：蹴鞠之风盛行，商人重利轻义，慈幼院济贫，光明观堂弟子曾在此施医布善。）",
         "coordinates": {
           "x": 5400,
           "y": 6000
         },
-        "features": []
+        "features": [],
+        "region": "跨国"
       },
       {
         "id": "liuchao.location.ningzhou",
         "name": "宁州",
         "continentId": "liuchao.continent.zhongzhou",
         "type": "城池",
-        "description": "北府兵驻地。",
+        "description": "北府兵驻地。 江畔山城，水师驻防，州城临江而建，西连大江山岭，与江州唇齿相依。（民俗：萧氏经营军镇，水师强盛，民风尚武，州城自治不问朝廷。）",
         "coordinates": {
           "x": 5100,
           "y": 5800
         },
-        "features": []
+        "features": [],
+        "region": "宋国"
       },
       {
         "id": "liuchao.location.jinmingzhai",
         "name": "金明寨",
         "continentId": "liuchao.continent.zhongzhou",
         "type": "城池",
-        "description": "宋军大营，位于烈山附近。",
+        "description": "宋军大营，位于烈山附近。 江州城东南十五里的村寨旧址，宋军掘土垒墙、设壕为营，成为进攻江州的军事基地，辎重营曾遭焚烧。",
         "coordinates": {
           "x": 5050,
           "y": 6550
         },
-        "features": []
+        "features": [],
+        "region": "宋国"
       },
       {
         "id": "liuchao.location.haoshuichuan",
         "name": "好水川",
         "continentId": "liuchao.continent.zhongzhou",
         "type": "城池",
-        "description": "烈山附近峡谷，大型战场。",
+        "description": "烈山附近峡谷，大型战场。 山谷丘陵地带，荒凉旷野，宋夏两军交战之地，有山岗可俯瞰战场。",
         "coordinates": {
           "x": 5104,
           "y": 6476
         },
-        "features": []
+        "features": [],
+        "region": "宋国"
       },
       {
         "id": "liuchao.location.jingxi",
         "name": "荆溪村寨",
         "continentId": "liuchao.continent.zhongzhou",
         "type": "城池",
-        "description": "荆溪人聚居地，位于筠州附近山区。",
+        "description": "荆溪人聚居地，位于筠州附近山区。 山间村寨，存粮充裕戒备森严，兼具仓储与防御功能，临江而近筠州，水路可通粮运。（民俗：作为临时粮仓重地，外人出入盘查严格，与官府关系密切。）",
         "coordinates": {
           "x": 5600,
           "y": 6900
         },
-        "features": []
+        "features": [],
+        "region": "宋国"
       },
       {
         "id": "liuchao.location.wudu",
         "name": "舞都",
         "continentId": "liuchao.continent.zhongzhou",
         "type": "城池",
-        "description": "程宗扬封地，舞阳侯府所在。",
+        "description": "程宗扬封地，舞阳侯府所在。 首阳山下的晋国封邑，侯府深院，画舫往来，世家公子云集，纨绔声色犬马之地。（民俗：权贵奢靡成风，侯门子弟以豢养风虎、海东青等珍禽异兽为风尚，社交宴饮无度。）",
         "coordinates": {
           "x": 6114,
           "y": 3929
         },
-        "features": []
+        "features": [],
+        "region": "晋国"
       },
       {
         "id": "liuchao.location.yong",
@@ -971,7 +996,8 @@
           "x": 5176,
           "y": 3978
         },
-        "features": []
+        "features": [],
+        "region": "秦国"
       },
       {
         "id": "liuchao.location.yongzhou",
@@ -983,7 +1009,8 @@
           "x": 4220,
           "y": 4242
         },
-        "features": []
+        "features": [],
+        "region": "唐国"
       },
       {
         "id": "liuchao.location.baijun",
@@ -995,7 +1022,8 @@
           "x": 4763,
           "y": 3063
         },
-        "features": []
+        "features": [],
+        "region": "汉国"
       },
       {
         "id": "liuchao.location.dantu",
@@ -1007,19 +1035,21 @@
           "x": 8875,
           "y": 4854
         },
-        "features": []
+        "features": [],
+        "region": "唐国"
       },
       {
         "id": "liuchao.location.longchuan",
         "name": "龙川",
         "continentId": "liuchao.continent.zhongzhou",
         "type": "城池",
-        "description": "宋国城市。",
+        "description": "宋国城市。 江湖术士聚集的边陲小镇，酒旗招展，街巷间多有占卜测字摊位，市井嘈杂而鱼龙混杂。（民俗：民间信奉铁口神算，术士在此地颇受欢迎，算命测字成为当地常见的营生。）",
         "coordinates": {
           "x": 7908,
           "y": 6819
         },
-        "features": []
+        "features": [],
+        "region": "唐国"
       },
       {
         "id": "liuchao.location.nanjun",
@@ -1031,7 +1061,8 @@
           "x": 6876,
           "y": 5276
         },
-        "features": []
+        "features": [],
+        "region": "昭南"
       },
       {
         "id": "liuchao.location.chenzhou",
@@ -1043,43 +1074,47 @@
           "x": 4704,
           "y": 5011
         },
-        "features": []
+        "features": [],
+        "region": "唐国"
       },
       {
         "id": "liuchao.location.liangzhou",
         "name": "凉州",
         "continentId": "liuchao.continent.zhongzhou",
         "type": "城池",
-        "description": "唐国西北边境州城，凉州盟据点。",
+        "description": "唐国西北边境州城，凉州盟据点。 边塞荒凉，帐篷散落，门派营地零星分布，沙尘漫天，武人往来频繁（民俗：边塞各派结盟自保，凉州盟统领四堂八会，丹霞宗为本地盟主，门派势力根深蒂固）",
         "coordinates": {
           "x": 750,
           "y": 3600
         },
-        "features": []
+        "features": [],
+        "region": "唐国"
       },
       {
         "id": "liuchao.location.boling",
         "name": "泊陵",
         "continentId": "liuchao.continent.zhongzhou",
         "type": "城池",
-        "description": "宋国沿海城市，鱼氏势力据点。",
+        "description": "宋国沿海城市，鱼氏势力据点。 海岸岛礁中的楼船停泊处，山崖上有鱼氏伏击要塞，湖泊与海路交汇的险峻水域（民俗：海上岛民世家，以毒术和阴险报复闻名江湖，族中高手擅长用毒伏击）",
         "coordinates": {
           "x": 9592,
           "y": 6706
         },
-        "features": []
+        "features": [],
+        "region": "海上/海外"
       },
       {
         "id": "liuchao.location.yiyang",
         "name": "夷陵",
         "continentId": "liuchao.continent.zhongzhou",
         "type": "城池",
-        "description": "宋国城市，长江沿岸。",
+        "description": "宋国城市，长江沿岸。 江南丘陵商业城镇，长江沿岸水陆要冲，白湖商馆据点所在，商旅繁忙，钱庄林立，客栈酒肆遍布街巷。（民俗：白湖商馆醉月楼分号遍布，商贾云集消息灵通，以商贸和情报网络闻名，黑白两道均有往来。）",
         "coordinates": {
           "x": 7068,
           "y": 7423
         },
-        "features": []
+        "features": [],
+        "region": "宋国"
       },
       {
         "id": "liuchao.location.cuizhi",
@@ -1091,19 +1126,21 @@
           "x": 9515,
           "y": 5001
         },
-        "features": []
+        "features": [],
+        "region": "唐国"
       },
       {
         "id": "liuchao.location.lie",
         "name": "烈",
         "continentId": "liuchao.continent.zhongzhou",
         "type": "城池",
-        "description": "宋国-晋国交界的山脉区域。",
+        "description": "宋国-晋国交界的山脉区域。 险峻山地间一条狭窄山道蜿蜒而过，两侧山势陡峭难行，冬季积雪封路，宋军步阵在此难以展开。",
         "coordinates": {
           "x": 5390,
           "y": 6472
         },
-        "features": []
+        "features": [],
+        "region": "宋国"
       },
       {
         "id": "liuchao.location.bailuojiang",
@@ -1115,43 +1152,47 @@
           "x": 1905,
           "y": 7162
         },
-        "features": []
+        "features": [],
+        "region": "唐国"
       },
       {
         "id": "liuchao.location.longchi",
         "name": "龙池",
         "continentId": "liuchao.continent.zhongzhou",
         "type": "宗门",
-        "description": "太乙真宗总部所在地，位于中州区域。",
+        "description": "太乙真宗总部所在地，位于中州区域。 太乙真宗道观所在，山门巍峨，云雾缭绕，为六朝道教第一大宗的主坛所在。（民俗：道教圣地，讲究清修炼丹，弟子遍布六朝各地，掌教就职典礼庄严肃穆。）",
         "coordinates": {
           "x": 5000,
           "y": 5000
         },
-        "features": []
+        "features": [],
+        "region": "宋国"
       },
       {
         "id": "liuchao.location.canglan",
         "name": "苍澜镇",
         "continentId": "liuchao.continent.taiquan",
         "type": "城池",
-        "description": "太泉古阵入口附近的镇子。",
+        "description": "太泉古阵入口附近的镇子。 浮玉山脚下的荒芜集镇，四野红土不毛，唯镇周有零星草木，镇外常年雾气弥漫（雾瘴），进出太泉古阵的旅客在此落脚。（民俗：无本地出产，粮价百倍于外；兵器极廉，窝头换刀非神话；镇上弱肉强食，外来者须管住嘴少打听。）",
         "coordinates": {
           "x": 7500,
           "y": 9000
         },
-        "features": []
+        "features": [],
+        "region": "宋国"
       },
       {
         "id": "liuchao.location.taiquan",
         "name": "太泉古阵",
         "continentId": "liuchao.continent.taiquan",
         "type": "秘境",
-        "description": "远古遗迹，太泉古阵入口。",
+        "description": "远古遗迹，太泉古阵入口。 古阵空间结构违背常识，头顶可见星空，西部有赤红巨石，残存焦黑树木与灰烬，黑暗无光处有魇狼出没（民俗：阵法设有灵性机关，需特定修为（六阳境）方可进入，藏有赤阳圣果等珍贵之物）",
         "coordinates": {
           "x": 7573,
           "y": 9083
         },
-        "features": []
+        "features": [],
+        "region": "宋国"
       }
     ],
     "characters": [
