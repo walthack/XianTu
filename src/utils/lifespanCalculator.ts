@@ -1,5 +1,17 @@
 
 
+/**
+ * 纪元基点：主角固定出生于第 200 年，开局当前年 = 纪元基点 + 开局年龄。
+ * 起始年是「年龄的纯函数」，不是创作内容——所有 init 路径共享此常量、由代码确定，
+ * 不交给 LLM 生成（曾因 LLM 自由发挥导致开局年份 485/384 乱飘）。
+ * 注册表内 38 个 NPC birthYear 亦锚定于此基点（170~218），改基点需同步迁移，勿轻动。
+ */
+export const 纪元基点 = 200;
+/** 起始游戏年 = 纪元基点 + 开局年龄（确定性） */
+export function 计算起始年(age: number): number {
+  return 纪元基点 + (Number.isFinite(age) ? Math.max(0, Math.floor(age)) : 0);
+}
+
 export interface GameTime {
   年: number;
   月: number;

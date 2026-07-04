@@ -2,6 +2,7 @@ import type { CharacterBaseInfo, SaveData, PlayerStatus } from '@/types/game';
 import type { World } from '@/types';
 import { createEmptyThousandDaoSystem } from '@/data/thousandDaoData';
 import { calculateInitialAttributes } from './characterInitialization';
+import { 计算起始年 } from '@/utils/lifespanCalculator';
 
 /**
  * 单机模式下的本地初始化（不依赖酒馆/AI）
@@ -34,7 +35,7 @@ export async function initializeCharacterOffline(
 
   // 3) 直接构建 V3（五域）存档（离线初始化不再生成旧key/不再走运行期迁移）
   const nowIso = new Date().toISOString();
-  const gameTime = { 年: 1000, 月: 1, 日: 1, 小时: 8, 分钟: 0 };
+  const gameTime = { 年: 计算起始年(age), 月: 1, 日: 1, 小时: 8, 分钟: 0 };
 
   const saveData: SaveData = {
     元数据: {
@@ -127,7 +128,7 @@ export async function initializeCharacterOffline(
       扩展: {
         离线初始化: {
           初始年龄: age,
-          开局时间: { 年: 1000 - age, 月: 1, 日: 1, 小时: 8, 分钟: 0 },
+          开局时间: { 年: 计算起始年(age), 月: 1, 日: 1, 小时: 8, 分钟: 0 },
         },
       },
       联机: { 模式: '单机', 房间ID: null, 玩家ID: null, 只读路径: ['世界'], 世界曝光: false, 冲突策略: '服务器' },

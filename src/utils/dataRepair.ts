@@ -16,6 +16,7 @@ import { cloneDeep } from 'lodash';
 import { isSaveDataV3, migrateSaveDataToLatest } from '@/utils/saveMigration';
 import { validateSaveDataV3 } from '@/utils/saveValidationV3';
 import { normalizeBackpackCurrencies } from '@/utils/currencySystem';
+import { 纪元基点 } from '@/utils/lifespanCalculator';
 
 /**
  * 修复并清洗存档数据，确保所有必需字段存在且格式正确
@@ -56,7 +57,7 @@ export function repairSaveData(saveData: SaveData | null | undefined): SaveData 
 
     repaired.角色.身份.名字 = repaired.角色.身份.名字 || '无名修士';
     repaired.角色.身份.性别 = repaired.角色.身份.性别 || '男';
-    if (!repaired.角色.身份.出生日期) repaired.角色.身份.出生日期 = { 年: 982, 月: 1, 日: 1 };
+    if (!repaired.角色.身份.出生日期) repaired.角色.身份.出生日期 = { 年: 纪元基点, 月: 1, 日: 1 };
     if (!repaired.角色.身份.先天六司 || typeof repaired.角色.身份.先天六司 !== 'object') {
       repaired.角色.身份.先天六司 = { 根骨: 5, 灵性: 5, 悟性: 5, 气运: 5, 魅力: 5, 心性: 5 };
     } else {
@@ -458,11 +459,11 @@ function repairValuePair(pair: any, defaultCurrent: number, defaultMax: number):
  */
 function repairGameTime(time: any): GameTime {
   if (!time || typeof time !== 'object') {
-    return { 年: 1000, 月: 1, 日: 1, 小时: 8, 分钟: 0 };
+    return { 年: 纪元基点, 月: 1, 日: 1, 小时: 8, 分钟: 0 };
   }
 
   return {
-    年: validateNumber(time.年, 1, 999999, 1000),
+    年: validateNumber(time.年, 1, 999999, 纪元基点),
     月: validateNumber(time.月, 1, 12, 1),
     日: validateNumber(time.日, 1, 30, 1),
     小时: validateNumber(time.小时, 0, 23, 8),
@@ -624,7 +625,7 @@ function createMinimalSaveData(): SaveData {
 
 function createMinimalSaveDataV3(): SaveData {
   const nowIso = new Date().toISOString();
-  const time = { 年: 1000, 月: 1, 日: 1, 小时: 8, 分钟: 0 } as GameTime;
+  const time = { 年: 纪元基点, 月: 1, 日: 1, 小时: 8, 分钟: 0 } as GameTime;
   return {
     元数据: {
       版本号: 3,
@@ -640,7 +641,7 @@ function createMinimalSaveDataV3(): SaveData {
       身份: {
         名字: '无名修士',
         性别: '男',
-        出生日期: { 年: 982, 月: 1, 日: 1 },
+        出生日期: { 年: 纪元基点, 月: 1, 日: 1 },
         种族: '人族',
         世界: '朝天大陆' as any,
         天资: '凡人' as any,

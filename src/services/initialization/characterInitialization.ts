@@ -12,6 +12,7 @@ import type { World, Origin, SpiritRoot } from '@/types';
 import type { GM_Response, TavernCommand } from '@/types/AIGameMaster';
 import { AIBidirectionalSystem } from '@/utils/AIBidirectionalSystem';
 import { isTavernEnv } from '@/utils/tavern';
+import { 纪元基点, 计算起始年 } from '@/utils/lifespanCalculator';
 import { getNsfwSettingsFromStorage, ensureSystemConfigHasNsfw } from '@/utils/nsfw';
 import { createEmptyThousandDaoSystem } from '@/data/thousandDaoData';
 import { buildCharacterInitializationPrompt, buildCharacterSelectionsSummary } from '@/utils/prompts/tasks/characterInitializationPrompts';
@@ -200,8 +201,7 @@ function prepareInitialData(baseInfo: CharacterBaseInfo, age: number): { saveDat
   // 🔥 纪年基点200：起始年 = 200 + age，主角出生 = 200 年
   // 正数基点，保证比主角年长的 NPC 出生年也为正数，避免负年份被 LLM 误读为年龄（曾出现 -14 被抓成 14 岁）
   // AI会在初始化响应中通过tavern_commands设置正确的时间（如果需要）
-  const 纪元基点 = 200;
-  const 临时时间 = { 年: 纪元基点 + age, 月: 1, 日: 1, 小时: Math.floor(Math.random() * 12) + 6, 分钟: Math.floor(Math.random() * 60) };
+  const 临时时间 = { 年: 计算起始年(age), 月: 1, 日: 1, 小时: Math.floor(Math.random() * 12) + 6, 分钟: Math.floor(Math.random() * 60) };
 
   // 计算出生日期：时间 - 开局年龄 = 出生年份（= 纪元基点 200）
   // 例如：开局年龄18岁，时间218年，则出生日期为200年
@@ -265,8 +265,8 @@ function prepareInitialData(baseInfo: CharacterBaseInfo, age: number): { saveDat
     属性: attributes as any,
     位置: location as any,
     效果: [],
-    // 🔥 时间：使用age作为初始年份，AI可以通过tavern_commands修改
-    时间: { 年: age, 月: 1, 日: 1, 小时: Math.floor(Math.random() * 12) + 6, 分钟: Math.floor(Math.random() * 60) },
+    // 🔥 时间：起始年 = 纪元基点 + age（确定性，由代码定；LLM 不得改，避免开局年份乱飘）
+    时间: { 年: 计算起始年(age), 月: 临时时间.月, 日: 临时时间.日, 小时: 临时时间.小时, 分钟: 临时时间.分钟 },
     背包: { 灵石: { 下品: 0, 中品: 0, 上品: 0, 极品: 0 }, 物品: {} },
     装备: { 装备1: null, 装备2: null, 装备3: null, 装备4: null, 装备5: null, 装备6: null },
     功法: {
