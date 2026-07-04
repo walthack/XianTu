@@ -148,11 +148,16 @@ test('load-bearing character protection and stall steering appear in story promp
   assert.match(prompt, /【承重角色保护】/);
   assert.match(prompt, /不得死亡、永久残疾/);
 
-  // 收束分档：停滞 5 轮 → 软收束；8 轮 → 硬收束
+  // 停滞分档：停滞 5 轮 → 轻引子；8 轮 → 强压力；都必须可忽略
   runtime.stallTurns = 5;
-  assert.match(buildScenarioStoryPrompt(save), /【软收束】/);
+  const softPrompt = buildScenarioStoryPrompt(save);
+  assert.match(softPrompt, /【轻主线引子（可忽略）】/);
+  assert.match(softPrompt, /玩家可以暂时不理/);
   runtime.stallTurns = 8;
-  assert.match(buildScenarioStoryPrompt(save), /【硬收束】/);
+  const hardPrompt = buildScenarioStoryPrompt(save);
+  assert.match(hardPrompt, /【强主线压力（可忽略）】/);
+  assert.match(hardPrompt, /玩家可以先不理/);
+  assert.match(hardPrompt, /不得直接完成事件/);
   runtime.stallTurns = 0;
-  assert.doesNotMatch(buildScenarioStoryPrompt(save), /收束】/);
+  assert.doesNotMatch(buildScenarioStoryPrompt(save), /主线.*（可忽略）/);
 });
