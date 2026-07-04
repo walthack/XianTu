@@ -125,6 +125,15 @@ function formatFocusedCharacter(character: ScenarioModCharacter, runtime: StoryR
   const lines: string[] = [`- ${character.name}（${[character.gender, character.role, character.realm].filter(Boolean).join('；') || '正典人物'}）`];
   const base = compactText(character.description || profile.origin || '');
   if (base) lines.push(`  身份/定位：${base}`);
+  // 归属(P3投影的 affiliations)——跨国称谓/同门认知的消费点
+  const affiliations = (character as { affiliations?: Array<{ factionId?: string; role?: string }> }).affiliations || [];
+  if (affiliations.length) {
+    const factionNames = new Map((runtime.canon?.factions || []).map(f => [f.id, f.name]));
+    const line = affiliations.slice(0, 4)
+      .map(a => `${factionNames.get(a.factionId || '') || ''}${a.role ? `(${compactText(a.role, 16)})` : ''}`)
+      .filter(t => t && !t.startsWith('(')).join('、');
+    if (line) lines.push(`  归属：${line}`);
+  }
   const personality = formatList(profile.personality);
   if (personality) lines.push(`  性格：${personality}`);
   if (profile.appearance) lines.push(`  外貌：${compactText(profile.appearance)}`);
@@ -346,7 +355,7 @@ ${stageLine ? `## 当前关卡\n${stageLine}\n\n` : ''}${chapterSection}
 - 晋国＝晋朝：门阀气象，园林清雅、乌衣巷第宅；宽衣博带、麈尾清谈；士庶天隔、重门第郡望；称谓如“郎/使君/明公”。
 - 昭南＝南洋/东南亚：热带海国，港埠番舶、香料象牙贸易；干栏式木楼、椰林水寨；筒裙纱笼、赤足佩花；驯象乘舟、信巫祀海。
 - 南荒＝百越苗疆：峒寨吊脚楼、雨林瘴气；银饰苗绣、文身跣足；巫蛊图腾、歌垣风俗。
-【硬约束】建筑、街市、服饰、礼节、官称随所在国切换，**不得跨国混用**（宋国街头不该满是唐式幞头胡乐，汉国不该出现宋式瓦舍勾栏）。
+【硬约束】建筑、街市、服饰、礼节、官称随所在国切换，**不得跨国混用**（宋国街头不该满是唐式幞头胡乐，汉国不该出现宋式瓦舍勾栏）。**君臣称谓按人物「归属」判断**：只对本国君主称陛下/太后/圣人，提及他国君主冠国号（唐国官员称宋国太后应为「宋国太后」而非「太后娘娘」）；跨国人物相见按各自国籍行礼致称。
 
 ${locationLine ? `## 当前地域风貌（环境/建筑/民俗描写以此为准）\n${locationLine}\n\n` : ''}## 当前事件（玩家此刻所处的剧情节点）
 ${eventSection}

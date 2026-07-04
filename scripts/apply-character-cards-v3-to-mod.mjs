@@ -23,7 +23,7 @@ const dryRun = process.argv.includes('--dry-run');
 const force = process.argv.includes('--force');
 
 const DERIVED_TAGS = [
-  '【历程】',
+  '【历程】', '【生辰】',
   '【关系】',
   '【称呼】',
   '【谈吐】',
@@ -95,6 +95,7 @@ function buildNotes(card, currentPhase, stageId = '') {
       add('历程', `${mem.label || ''}${mem.text}`, 300);
     }
   }
+  if (typeof profile.birthYear === 'number') add('生辰', `约纪元${profile.birthYear}年生（防误算：这是出生年，非年龄）`);
   add('关系', profile.relationToProtagonist);
   add('称呼', profile.formsOfAddress);
   add('谈吐', profile.speechStyle);

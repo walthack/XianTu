@@ -1,9 +1,9 @@
 {
   "schema": "xiantu.character-registry.v1",
-  "version": "cr-2026-07-03-38679082f97723a4",
-  "sourceHash": "38679082f97723a4",
+  "version": "cr-2026-07-04-95dda3fe2c1f158a",
+  "sourceHash": "95dda3fe2c1f158a",
   "sourceGeneratedAt": "2026-06-30T12:50:33.965Z",
-  "generatedAt": "2026-07-03T14:41:02.730Z",
+  "generatedAt": "2026-07-04T01:40:06.203Z",
   "stats": {
     "total": 308,
     "stagePresent": 249,
@@ -108,7 +108,8 @@
         "storyAge": {
           "value": "约15",
           "basis": "才十五岁就足足生了十九个儿子"
-        }
+        },
+        "birthYear": 205
       },
       "phaseIdentities": [],
       "review": {
@@ -8777,7 +8778,8 @@
         "storyAge": {
           "value": "约30",
           "basis": "丁志雄三十来岁年纪"
-        }
+        },
+        "birthYear": 190
       },
       "phaseIdentities": [
         {
@@ -11374,7 +11376,8 @@
         "storyAge": {
           "value": "约2-3岁",
           "basis": "郭靖在葬礼上被抱在怀中，口齿不清，尚为幼童；与定陶王年龄相近，定陶王被认为‘年龄尚幼，再大两岁就不好说了’"
-        }
+        },
+        "birthYear": 218
       },
       "phaseIdentities": [
         {
@@ -12344,7 +12347,8 @@
         "storyAge": {
           "value": "32",
           "basis": "黄氏讪讪道：'奴婢三十有二。'"
-        }
+        },
+        "birthYear": 188
       },
       "phaseIdentities": [
         {
@@ -12552,7 +12556,8 @@
         "storyAge": {
           "value": "约16-18岁",
           "basis": "十三岁入皇图天策府骑兵科，入学一两年后获骑兵第一、通过结业考试击败教官李牧"
-        }
+        },
+        "birthYear": 204
       },
       "phaseIdentities": [
         {
@@ -17096,7 +17101,8 @@
         "storyAge": {
           "value": "约3-5岁",
           "basis": "原文称其为'一介稚子''小儿幼嫩的脖颈'，吕雉斥其为'三岁小儿'，啼哭叫'姆娘'，显系幼童"
-        }
+        },
+        "birthYear": 217
       },
       "phaseIdentities": [
         {
@@ -17707,7 +17713,8 @@
         "storyAge": {
           "value": "约30",
           "basis": "三十来岁"
-        }
+        },
+        "birthYear": 190
       },
       "phaseIdentities": [
         {
@@ -20346,7 +20353,8 @@
             "label": "云龙篇",
             "text": "亲历：程宗扬安排退路与联络（与程宗扬、云丹琉、秦桧）"
           }
-        ]
+        ],
+        "birthYear": 195
       },
       "phaseIdentities": [
         {
@@ -27287,7 +27295,8 @@
         "storyAge": {
           "value": "约30-40岁",
           "basis": "原文描述其外貌'看上去三四十岁年纪'，'相貌显得清雅脱俗，有一种很艺术家的气质'"
-        }
+        },
+        "birthYear": 190
       },
       "phaseIdentities": [
         {
@@ -30929,7 +30938,8 @@
         "storyAge": {
           "value": "约23岁",
           "basis": "chapter189载其在府中十年零两个月；chapter225载十年前入皇图天策府时年仅十三岁，据此推算"
-        }
+        },
+        "birthYear": 197
       },
       "phaseIdentities": [
         {
@@ -34943,7 +34953,8 @@
             "label": "云龙篇",
             "text": "亲历：云氏金铢押运遇劫（与程宗扬、云苍峰）；程宗扬安排退路与联络（与程宗扬、秦桧、班超）"
           }
-        ]
+        ],
+        "birthYear": 202
       },
       "phaseIdentities": [
         {
@@ -39049,7 +39060,8 @@
         "storyAge": {
           "value": "约18",
           "basis": "\"你今年十八岁了吧？可怜见的，令尊被岳贼打伤时你才一岁多...\""
-        }
+        },
+        "birthYear": 202
       },
       "phaseIdentities": [
         {

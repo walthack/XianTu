@@ -36,6 +36,8 @@ interface RegistryStaticProfile {
   keyEvents?: string[];
   ending?: string[] | string;
   crossStageMemories?: Array<{ bookRank?: number; label?: string; text?: string }>;
+  birthYear?: number;
+  storyAge?: { value?: unknown; basis?: string };
 }
 interface RegistryEntry {
   id: string;
@@ -49,7 +51,7 @@ interface RegistryEntry {
 }
 
 const DERIVED_TAGS = [
-  '【历程】',
+  '【历程】', '【生辰】',
   '【关系】', '【称呼】', '【谈吐】', '【底线】', '【目标】', '【软肋】', '【绝技】',
   '【入伙】', '【情节】', '【结局】', '【阶段身份】', '【本阶段禁用】', '【人工正典】',
 ];
@@ -101,6 +103,7 @@ function buildNotes(entry: RegistryEntry, currentPhase: RegistryPhase | undefine
       add('历程', `${mem.label || ''}${mem.text}`, 300);
     }
   }
+  if (typeof profile.birthYear === 'number') add('生辰', `约纪元${profile.birthYear}年生（防误算：这是出生年，非年龄）`);
   add('关系', profile.relationToProtagonist);
   add('称呼', profile.formsOfAddress);
   add('谈吐', profile.speechStyle);
