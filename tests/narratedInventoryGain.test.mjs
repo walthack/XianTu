@@ -56,6 +56,28 @@ test('still flags one narrated gain when commands only cover another item', asyn
   assert.deepEqual(getMissingNarratedInventoryGains(text, commands), ['云氏玉简']);
 });
 
+test('does not let an ordinary item command cover a special narrated item gain', async () => {
+  const { getMissingNarratedInventoryGains } = await loadTs('../src/utils/narratedInventory.ts');
+
+  const text = '云六郑重递来一枚冰凉的【仙品·龙睛玉】，程宗扬将其收入怀中。';
+  const commands = [
+    {
+      action: 'set',
+      key: '角色.背包.物品.item_long_jing_yu',
+      value: {
+        物品ID: 'item_long_jing_yu',
+        名称: '龙睛玉',
+        类型: '材料',
+        品质: { quality: '黄', grade: 3 },
+        数量: 1,
+        描述: '一颗冰凉的龙睛玉。',
+      },
+    },
+  ];
+
+  assert.deepEqual(getMissingNarratedInventoryGains(text, commands), ['仙品·龙睛玉']);
+});
+
 test('detects carried items confirmed in possession narration', async () => {
   const { detectNarratedInventoryPossessions } = await loadTs('../src/utils/narratedInventory.ts');
 
@@ -85,6 +107,21 @@ test('normalizes action phrases before inventory identity comparison', async () 
   assert.equal(getInventoryItemIdentityKey('三颗龙睛玉'), getInventoryItemIdentityKey('龙睛玉'));
   assert.equal(getInventoryItemIdentityKey('2颗龙晴玉'), getInventoryItemIdentityKey('龙睛玉'));
   assert.notEqual(getInventoryItemIdentityKey('仙品·龙睛玉'), getInventoryItemIdentityKey('龙睛玉'));
+});
+
+test('normalizes descriptive counted item names while keeping special items separate', async () => {
+  const {
+    getInventoryItemIdentityKey,
+    normalizeNarratedItemName,
+  } = await loadTs('../src/utils/narratedInventory.ts');
+
+  assert.equal(normalizeNarratedItemName('三枚闪着幽光的龙睛玉'), '龙睛玉');
+  assert.equal(getInventoryItemIdentityKey('三枚闪着幽光的龙睛玉'), getInventoryItemIdentityKey('龙睛玉'));
+  assert.notEqual(getInventoryItemIdentityKey('一枚泛着淡金色光芒的仙品·龙睛玉'), getInventoryItemIdentityKey('龙睛玉'));
+});
+
+test('TODO parses narrated item counts such as 三枚龙睛玉 into quantity 3', {
+  todo: 'narrated gains currently return item names only, not quantities',
 });
 
 test('rejects sentence fragments during carried item reconciliation', async () => {
