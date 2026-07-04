@@ -1,9 +1,9 @@
 {
   "schema": "xiantu.character-registry.v1",
-  "version": "cr-2026-07-04-43bc0c0e83768c9d",
-  "sourceHash": "43bc0c0e83768c9d",
+  "version": "cr-2026-07-04-231d1490798b91f3",
+  "sourceHash": "231d1490798b91f3",
   "sourceGeneratedAt": "2026-06-30T12:50:33.965Z",
-  "generatedAt": "2026-07-04T14:12:10.265Z",
+  "generatedAt": "2026-07-04T14:15:45.752Z",
   "stats": {
     "total": 304,
     "stagePresent": 248,
@@ -25430,7 +25430,8 @@
           "location": "南荒某地",
           "locator": "chapter51.html",
           "scene": "花苗女子苏荔与商队相遇，自我介绍说自己是花苗的族长阿依苏荔，并引导众人攀绳上崖顶。"
-        }
+        },
+        "birthYear": 192
       },
       "phaseIdentities": [
         {
@@ -34845,7 +34846,8 @@
             "label": "云龙篇",
             "text": "亲历：云苍峰商议买官与铜矿（与程宗扬）；云氏金铢押运遇劫（与程宗扬、云丹琉）"
           }
-        ]
+        ],
+        "birthYear": 168
       },
       "phaseIdentities": [
         {
