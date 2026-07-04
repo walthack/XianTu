@@ -1,9 +1,9 @@
 {
   "schema": "xiantu.character-registry.v1",
-  "version": "cr-2026-07-04-d347365f57cad285",
-  "sourceHash": "d347365f57cad285",
+  "version": "cr-2026-07-04-e6b6389b8a3642de",
+  "sourceHash": "e6b6389b8a3642de",
   "sourceGeneratedAt": "2026-06-30T12:50:33.965Z",
-  "generatedAt": "2026-07-04T01:50:18.534Z",
+  "generatedAt": "2026-07-04T01:52:15.705Z",
   "stats": {
     "total": 308,
     "stagePresent": 249,
@@ -81,9 +81,6 @@
         "personality": [],
         "appearance": "",
         "speechStyle": "",
-        "principles": [
-          "未成年角色红线：不得卷入任何成人/性内容描写"
-        ],
         "goals": [],
         "weaknesses": [],
         "signatureAbilities": [],
@@ -11395,9 +11392,6 @@
         ],
         "appearance": "小脸红扑扑的，年纪尚小，还是孩子模样。",
         "speechStyle": "口齿不清，如叫程宗扬“父父”",
-        "principles": [
-          "未成年角色红线：不得卷入任何成人/性内容描写"
-        ],
         "goals": [],
         "weaknesses": [
           "年幼，无自保能力"
@@ -17153,9 +17147,6 @@
         ],
         "appearance": "原文未描述",
         "speechStyle": "",
-        "principles": [
-          "未成年角色红线：不得卷入任何成人/性内容描写"
-        ],
         "goals": [],
         "weaknesses": [
           "年幼无自保能力、易被挟持/控制"
