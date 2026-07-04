@@ -25,8 +25,9 @@ const INVENTORY_ITEM_NOUNS = [
 ];
 
 const INVENTORY_ITEM_NOUN_PATTERN = INVENTORY_ITEM_NOUNS.join('|');
+const INVENTORY_ITEM_COUNT_PREFIX = '(?:[0-9]+|[一二两三四五六七八九十百千万]+|数|几)?';
 const INVENTORY_ITEM_UNIT_PREFIX =
-  '(?:一|这|那|此)?(?:枚|块|本|卷|件|只|个|颗|粒|瓶|支|张|份|把|柄|条)';
+  `(?:这|那|此)?${INVENTORY_ITEM_COUNT_PREFIX}(?:枚|块|本|卷|件|只|个|颗|粒|瓶|支|张|份|把|柄|条)`;
 
 export function normalizeNarratedItemName(value: string): string {
   let normalized = value
@@ -36,6 +37,7 @@ export function normalizeNarratedItemName(value: string): string {
     .replace(new RegExp(`^${INVENTORY_ITEM_UNIT_PREFIX}`), '')
     .replace(/^(?:那|这|此|一)[个件枚块本卷只]?/, '')
     .replace(/^的+/, '')
+    .replace(/龙晴玉/g, '龙睛玉')
     .trim();
 
   const descriptivePrefixMatch = normalized.match(new RegExp(`^[\\u4e00-\\u9fff]{1,8}的(.+(?:${INVENTORY_ITEM_NOUN_PATTERN}))$`));

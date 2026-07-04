@@ -60,6 +60,8 @@ test('normalizes action phrases before inventory identity comparison', async () 
   assert.equal(getInventoryItemIdentityKey('取出云氏玉简'), getInventoryItemIdentityKey('云氏玉简'));
   assert.equal(getInventoryItemIdentityKey('颗冰凉的龙睛玉'), getInventoryItemIdentityKey('龙睛玉'));
   assert.equal(getInventoryItemIdentityKey('的龙睛玉'), getInventoryItemIdentityKey('龙睛玉'));
+  assert.equal(getInventoryItemIdentityKey('三颗龙睛玉'), getInventoryItemIdentityKey('龙睛玉'));
+  assert.equal(getInventoryItemIdentityKey('2颗龙晴玉'), getInventoryItemIdentityKey('龙睛玉'));
   assert.notEqual(getInventoryItemIdentityKey('仙品·龙睛玉'), getInventoryItemIdentityKey('龙睛玉'));
 });
 
