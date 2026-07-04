@@ -29,7 +29,12 @@ import { advanceScenarioRuntime } from '@/modules/scenarioMods/runtime';
 import { applyMilestoneRewards } from '@/modules/scenarioMods/milestoneRewards';
 import { buildScenarioStoryPrompt, createScenarioPromptState } from '@/modules/scenarioMods/storyContext';
 import { buildActionGatePrompt, getNarrativeTurn, pruneExpiredActionGates } from '@/utils/actionGate';
-import { detectNarratedInventoryPossessions, getMissingNarratedInventoryGains } from '@/utils/narratedInventory';
+import {
+  detectNarratedInventoryPossessions,
+  getInventoryItemIdentityKey,
+  getMissingNarratedInventoryGains,
+  normalizeNarratedItemName,
+} from '@/utils/narratedInventory';
 
 type PlainObject = Record<string, unknown>;
 
@@ -1998,7 +2003,7 @@ ${step1Text}
     const protectionMode = this.getCommandProtectionMode(uiStore);
 
     // 🔥 新增：预处理指令以修复常见的AI错误
-    const preprocessingResult = this._preprocessCommands(response.tavern_commands || []);
+    const preprocessingResult = this._preprocessCommands(response.tavern_commands || [], saveData);
     const scenarioGuardResult = guardScenarioModCommands(saveData, preprocessingResult);
     const preprocessedCommands = scenarioGuardResult.accepted;
 
@@ -2663,7 +2668,7 @@ ${saveDataJson}`;
     }
   }
 
-  private _preprocessCommands(commands: any[]): any[] {
+  private _preprocessCommands(commands: any[], saveData?: SaveData): any[] {
     if (!Array.isArray(commands)) return [];
 
     const inventoryRootKeys = new Set(['角色.背包.物品', '背包.物品', '物品栏.物品']);
@@ -2888,6 +2893,75 @@ ${saveDataJson}`;
     };
 
     const out: any[] = [];
+    const inventoryPath = '角色.背包.物品';
+
+    const isInventoryRootSet = (cmd: any): boolean => (
+      cmd?.action === 'set' &&
+      cmd?.key === inventoryPath &&
+      cmd.value &&
+      typeof cmd.value === 'object' &&
+      !Array.isArray(cmd.value) &&
+      (((cmd.value as any).物品ID && typeof (cmd.value as any).物品ID === 'string') ||
+        (typeof (cmd.value as any).名称 === 'string' && (cmd.value as any).名称) ||
+        (typeof (cmd.value as any).类型 === 'string' && (cmd.value as any).类型))
+    );
+
+    const isInventoryItemSet = (cmd: any): boolean => (
+      cmd?.action === 'set' &&
+      typeof cmd.key === 'string' &&
+      cmd.key.startsWith(`${inventoryPath}.`) &&
+      (cmd.key.match(/\./g) || []).length === 3 &&
+      cmd.value &&
+      typeof cmd.value === 'object' &&
+      !Array.isArray(cmd.value)
+    );
+
+    const normalizeInventoryItemPayload = (itemValue: any): any => {
+      if (!itemValue || typeof itemValue !== 'object' || Array.isArray(itemValue)) return itemValue;
+      const normalized = { ...itemValue };
+      if (typeof normalized.名称 === 'string') {
+        const normalizedName = normalizeNarratedItemName(normalized.名称);
+        if (normalizedName) normalized.名称 = normalizedName;
+      }
+      if (!normalized.品质 || typeof normalized.品质 !== 'object') {
+        normalized.品质 = { quality: '凡', grade: 1 };
+      } else {
+        if (normalized.品质.quality === '凡品') normalized.品质.quality = '凡';
+        if (normalized.品质.grade === 0 && !/残|破|碎|缺/.test(String(normalized.名称 || normalized.描述 || ''))) {
+          normalized.品质.grade = 1;
+        }
+      }
+      return normalized;
+    };
+
+    const findExistingInventoryItemId = (itemName: unknown): string | null => {
+      if (!saveData || typeof itemName !== 'string') return null;
+      const identity = getInventoryItemIdentityKey(itemName);
+      if (!identity) return null;
+      const items = get(saveData, inventoryPath, {}) as Record<string, any>;
+      if (!items || typeof items !== 'object' || Array.isArray(items)) return null;
+      for (const [itemId, item] of Object.entries(items)) {
+        const existingName = typeof item?.名称 === 'string' ? item.名称 : '';
+        if (existingName && getInventoryItemIdentityKey(existingName) === identity) return itemId;
+      }
+      return null;
+    };
+
+    const shouldStackInventoryItem = (itemValue: any): boolean => {
+      if (!itemValue || typeof itemValue !== 'object') return false;
+      if (itemValue.可叠加 === true) return true;
+      return /丹药|丹丸|材料|灵草|灵材|矿石|食物|货物/.test(String(itemValue.类型 || itemValue.名称 || ''));
+    };
+
+    const buildDuplicateInventoryCommand = (itemValue: any, existingItemId: string): any | null => {
+      if (shouldStackInventoryItem(itemValue)) {
+        const amount = typeof itemValue.数量 === 'number' && Number.isFinite(itemValue.数量)
+          ? Math.max(1, itemValue.数量)
+          : 1;
+        return { action: 'add', key: `${inventoryPath}.${existingItemId}.数量`, value: amount };
+      }
+      return null;
+    };
 
     // 使用队列逐条预处理，确保“展开出来的新指令”也会继续经过后续纠错与拆分
     const queue: any[] = [...commands];
@@ -2952,19 +3026,40 @@ ${saveDataJson}`;
         if (typeof t.分钟 !== 'number') t.分钟 = 0;
       }
 
-      // 修复: AI 把“新增一个物品”写成 set 角色.背包.物品 = {物品对象}
-      if (
-        cmd.action === 'set' &&
-        cmd.key === '角色.背包.物品' &&
-        cmd.value &&
-        typeof cmd.value === 'object' &&
-        !Array.isArray(cmd.value) &&
-        (((cmd.value as any).物品ID && typeof (cmd.value as any).物品ID === 'string') ||
-          (typeof (cmd.value as any).名称 === 'string' && (cmd.value as any).名称) ||
-          (typeof (cmd.value as any).类型 === 'string' && (cmd.value as any).类型))
-      ) {
-        let itemValue: any = cmd.value;
+      if (isInventoryItemSet(cmd)) {
+        let itemValue = normalizeInventoryItemPayload(cmd.value);
         if (itemValue.类型 === '功法') itemValue = this._repairTechniqueItem(itemValue);
+        const existingItemId = findExistingInventoryItemId(itemValue.名称);
+        const targetItemId = String(cmd.key).slice(`${inventoryPath}.`.length);
+        if (existingItemId && existingItemId !== targetItemId) {
+          const replacement = buildDuplicateInventoryCommand(itemValue, existingItemId);
+          if (replacement) {
+            console.warn(`[AI双向系统] 预处理: 背包同名可叠加物品 "${itemValue.名称}" → add ${inventoryPath}.${existingItemId}.数量`);
+            out.push(replacement);
+          } else {
+            console.warn(`[AI双向系统] 预处理: 跳过重复背包物品 "${itemValue.名称}"（已有 ${existingItemId}）`);
+          }
+          continue;
+        }
+        itemValue.物品ID = targetItemId;
+        cmd.value = itemValue;
+      }
+
+      // 修复: AI 把“新增一个物品”写成 set 角色.背包.物品 = {物品对象}
+      if (isInventoryRootSet(cmd)) {
+        let itemValue: any = normalizeInventoryItemPayload(cmd.value);
+        if (itemValue.类型 === '功法') itemValue = this._repairTechniqueItem(itemValue);
+        const existingItemId = findExistingInventoryItemId(itemValue.名称);
+        if (existingItemId) {
+          const replacement = buildDuplicateInventoryCommand(itemValue, existingItemId);
+          if (replacement) {
+            console.warn(`[AI双向系统] 预处理: 背包根 set 同名可叠加物品 "${itemValue.名称}" → add ${inventoryPath}.${existingItemId}.数量`);
+            out.push(replacement);
+          } else {
+            console.warn(`[AI双向系统] 预处理: 跳过背包根 set 重复物品 "${itemValue.名称}"（已有 ${existingItemId}）`);
+          }
+          continue;
+        }
         const itemId =
           typeof itemValue.物品ID === 'string' && itemValue.物品ID.trim()
             ? itemValue.物品ID.trim()
@@ -2981,20 +3076,33 @@ ${saveDataJson}`;
 
         // 兼容：push 进来的是字符串（物品名）
         if (typeof itemValue === 'string') {
-          const itemName = itemValue.trim();
+          const itemName = normalizeNarratedItemName(itemValue.trim());
           itemValue = {
             物品ID: `item_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
             名称: itemName || '未知物品',
             类型: '杂物',
-            品质: { quality: '凡品', grade: 0 },
+            品质: { quality: '凡', grade: 1 },
             数量: 1,
             描述: `一个普通的${itemName || '物品'}。`
           };
         }
+        itemValue = normalizeInventoryItemPayload(itemValue);
 
         // 若是功法物品，补齐功法技能等字段，避免后续校验/显示异常
         if (itemValue && typeof itemValue === 'object' && itemValue.类型 === '功法') {
           itemValue = this._repairTechniqueItem(itemValue);
+        }
+
+        const existingItemId = itemValue && typeof itemValue === 'object' ? findExistingInventoryItemId(itemValue.名称) : null;
+        if (existingItemId) {
+          const replacement = buildDuplicateInventoryCommand(itemValue, existingItemId);
+          if (replacement) {
+            console.warn(`[AI双向系统] 预处理: 背包 push 同名可叠加物品 "${itemValue.名称}" → add ${inventoryPath}.${existingItemId}.数量`);
+            out.push(replacement);
+          } else {
+            console.warn(`[AI双向系统] 预处理: 跳过背包 push 重复物品 "${itemValue.名称}"（已有 ${existingItemId}）`);
+          }
+          continue;
         }
 
         const itemId =
@@ -3023,9 +3131,9 @@ ${saveDataJson}`;
           ...cmd,
           value: {
             物品ID: `item_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-            名称: itemName,
+            名称: normalizeNarratedItemName(itemName),
             类型: '杂物',
-            品质: { quality: '凡品', grade: 0 },
+            品质: { quality: '凡', grade: 1 },
             数量: 1,
             描述: `一个普通的${itemName}。`
           }
@@ -3144,20 +3252,21 @@ ${saveDataJson}`;
     const currentItems = get(saveData, inventoryPath, {}) as Record<string, any>;
     const existingNames = new Set(
       Object.values(currentItems)
-        .map((item: any) => (typeof item?.名称 === 'string' ? item.名称.trim() : ''))
+        .map((item: any) => (typeof item?.名称 === 'string' ? getInventoryItemIdentityKey(item.名称) : ''))
         .filter(Boolean)
     );
     const changes: StateChange[] = [];
 
     for (const rawName of itemNames) {
       const name = rawName.trim();
-      if (!name || existingNames.has(name)) continue;
+      const identity = getInventoryItemIdentityKey(name);
+      if (!name || !identity || existingNames.has(identity)) continue;
 
       const itemId = this.createNarratedInventoryItemId(name, currentItems);
       const item = this.createNarratedInventoryItem(itemId, name);
       set(saveData, `${inventoryPath}.${itemId}`, item);
       currentItems[itemId] = item;
-      existingNames.add(name);
+      existingNames.add(identity);
       changes.push({
         key: `${inventoryPath}.${itemId}`,
         action: 'set',
@@ -3202,7 +3311,7 @@ ${saveDataJson}`;
       物品ID: itemId,
       名称: name,
       类型: type,
-      品质: { quality, grade: quality === '凡' ? 3 : 10 },
+      品质: { quality, grade: quality === '凡' ? 1 : 10 },
       数量: 1,
       描述: `叙事中已明确由玩家随身持有的物品：${name}。`
     };

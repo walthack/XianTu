@@ -49,3 +49,14 @@ test('prefers bracketed item names during inventory check narration', async () =
 
   assert.deepEqual(detectNarratedInventoryPossessions(text), ['仙品·龙睛玉', '云氏玉简']);
 });
+
+test('normalizes action phrases before inventory identity comparison', async () => {
+  const {
+    getInventoryItemIdentityKey,
+    normalizeNarratedItemName,
+  } = await loadTs('../src/utils/narratedInventory.ts');
+
+  assert.equal(normalizeNarratedItemName('【取出云氏玉简】'), '云氏玉简');
+  assert.equal(getInventoryItemIdentityKey('取出云氏玉简'), getInventoryItemIdentityKey('云氏玉简'));
+  assert.notEqual(getInventoryItemIdentityKey('仙品·龙睛玉'), getInventoryItemIdentityKey('龙睛玉'));
+});

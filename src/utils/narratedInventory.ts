@@ -26,12 +26,18 @@ const INVENTORY_ITEM_NOUNS = [
 
 const INVENTORY_ITEM_NOUN_PATTERN = INVENTORY_ITEM_NOUNS.join('|');
 
-function normalizeNarratedItemName(value: string): string {
+export function normalizeNarratedItemName(value: string): string {
   return value
-    .replace(/[“”"「」『』《》]/g, '')
+    .replace(/[【】“”"「」『』《》]/g, '')
     .replace(/^(?:取出|拿出|清点|确认|查看|摸出|掏出|取来|拿起)/, '')
     .replace(/^(?:一枚|一块|一本|一卷|一件|一只|一个|这枚|这块|这本|这卷|这件|那枚|那块|那本|那卷|那件)/, '')
     .replace(/^(?:那|这|此|一)[个件枚块本卷只]?/, '')
+    .trim();
+}
+
+export function getInventoryItemIdentityKey(value: string): string {
+  return normalizeNarratedItemName(value)
+    .replace(/[·\-—_、，。；：:!！?？\s]/g, '')
     .trim();
 }
 
