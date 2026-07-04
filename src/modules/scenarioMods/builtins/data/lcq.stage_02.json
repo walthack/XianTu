@@ -128,7 +128,7 @@
         "id": "lcq.faction.left_guard",
         "name": "左武军",
         "description": "大汉左武卫第一军团，由王哲统领。",
-        "type": "军事机构",
+        "type": "军队",
         "headquartersLocationId": "liuchao.location.jiangzhou",
         "territory": [
           {
@@ -152,13 +152,15 @@
             "y": 6600
           }
         ],
-        "features": []
+        "features": [],
+        "polity": "大汉/六朝",
+        "region": "跨国（草原域外作战）"
       },
       {
         "id": "lcq.faction.roman",
         "name": "罗马军团",
         "description": "军队；目标：扩张与征服；核心：阿伽门侬：罗马联军统帅，奥古斯都称号的终身执政官凯撒之子；人物：阿伽门侬（罗马联军统帅）、第三军团：奥古斯丁、第五军团：云雀、第六军团：钢铁之壁、第十军团：骑士、第十二军团：掷闪电者；与程宗扬：敌对。程宗扬经历与罗马军团的战争，对其有深深的恐惧和厌恶；罗马军团与左武军交战，程宗扬卷入其间。",
-        "type": "军事机构",
+        "type": "军队",
         "headquartersLocationId": "liuchao.location.nanzhao",
         "territory": [
           {
@@ -186,13 +188,15 @@
           "军团战阵：列成战阵作战",
           "装备：椭圆盾牌（三层桦木，铁质龙骨，边缘包铁，蒙羊皮绘标志）、罗马短剑（70厘米）、长弓（英格兰长弓手）",
           "战术：战斗前统帅演说鼓励士兵"
-        ]
+        ],
+        "polity": "域外",
+        "region": "跨国"
       },
       {
         "id": "lcq.faction.macedon",
         "name": "马其顿军团",
         "description": "马其顿方阵，由亚历山大提供。",
-        "type": "军事机构",
+        "type": "军队",
         "headquartersLocationId": "liuchao.location.nanzhao",
         "territory": [
           {
@@ -216,7 +220,9 @@
             "y": 7700
           }
         ],
-        "features": []
+        "features": [],
+        "polity": "域外",
+        "region": "跨国"
       },
       {
         "id": "lcq.faction.beast",
@@ -384,9 +390,11 @@
       {
         "id": "liuchao.faction.xb9033ecdb3",
         "name": "秦军军团",
-        "description": "秦军军团（组织）——简介待补，源自角色归属富化自动补录。",
-        "type": "组织",
-        "features": []
+        "description": "秦国锐士，编入王哲天武营/左武军为核心战力，随其征战；扫灭六国的秦国精锐步兵；以四百八十人为一方阵，强弩为杀伤主力，军功爵制（战殁者赐爵一级）激励死战；主将：王哲、韩庚；三百米外强弩即可穿透罗马军团长盾；列阵如锋利礁石，与横跨欧亚的罗马军团正面交锋不落下风。",
+        "type": "军队",
+        "features": [],
+        "polity": "秦国",
+        "region": "秦国"
       },
       {
         "id": "liuchao.faction.bai_hu_shang_guan",
@@ -1851,6 +1859,50 @@
         "direction": "bidirectional",
         "tags": [
           "同门",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.cheng_zongyang",
+        "toCharacterId": "lcq.character.wang_zhe",
+        "relation": "同袍",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同袍",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.cheng_zongyang",
+        "toCharacterId": "lcq.character.yue_shuang",
+        "relation": "同袍",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同袍",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.cheng_zongyang",
+        "toCharacterId": "lcq.character.han_geng",
+        "relation": "同袍",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同袍",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "lcq.character.agamenon",
+        "toCharacterId": "lcq.character.dai_jixue",
+        "relation": "同袍",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同袍",
           "同势力派生"
         ]
       }
