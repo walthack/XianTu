@@ -25,20 +25,42 @@ const INVENTORY_ITEM_NOUNS = [
 ];
 
 const INVENTORY_ITEM_NOUN_PATTERN = INVENTORY_ITEM_NOUNS.join('|');
+const INVENTORY_ITEM_UNIT_PREFIX =
+  '(?:一|这|那|此)?(?:枚|块|本|卷|件|只|个|颗|粒|瓶|支|张|份|把|柄|条)';
 
 export function normalizeNarratedItemName(value: string): string {
-  return value
+  let normalized = value
     .replace(/[【】“”"「」『』《》]/g, '')
     .replace(/^(?:取出|拿出|清点|确认|查看|摸出|掏出|取来|拿起)/, '')
     .replace(/^(?:一枚|一块|一本|一卷|一件|一只|一个|这枚|这块|这本|这卷|这件|那枚|那块|那本|那卷|那件)/, '')
+    .replace(new RegExp(`^${INVENTORY_ITEM_UNIT_PREFIX}`), '')
     .replace(/^(?:那|这|此|一)[个件枚块本卷只]?/, '')
+    .replace(/^的+/, '')
     .trim();
+
+  const descriptivePrefixMatch = normalized.match(new RegExp(`^[\\u4e00-\\u9fff]{1,8}的(.+(?:${INVENTORY_ITEM_NOUN_PATTERN}))$`));
+  if (descriptivePrefixMatch?.[1]) {
+    normalized = descriptivePrefixMatch[1].trim();
+  }
+
+  return normalized;
 }
 
 export function getInventoryItemIdentityKey(value: string): string {
   return normalizeNarratedItemName(value)
     .replace(/[·\-—_、，。；：:!！?？\s]/g, '')
     .trim();
+}
+
+function isPlausibleNarratedItemName(value: string): boolean {
+  const itemName = normalizeNarratedItemName(value);
+  if (!itemName || itemName.length < 2 || itemName.length > 24) return false;
+  if (!new RegExp(INVENTORY_ITEM_NOUN_PATTERN).test(itemName)) return false;
+  if (/[。；\n]|——|…/.test(itemName)) return false;
+  if (/(?:气息|光芒|紫光|青芒|波动|触感|掌心|怀中|深处|边缘|几行|文字|感觉|散发|复杂)/.test(itemName)) {
+    return false;
+  }
+  return true;
 }
 
 export function detectNarratedInventoryGains(text: string): string[] {
@@ -53,7 +75,7 @@ export function detectNarratedInventoryGains(text: string): string[] {
   for (const pattern of patterns) {
     for (const match of text.matchAll(pattern)) {
       const itemName = normalizeNarratedItemName(match[1] || '');
-      if (itemName && itemName.length <= 24) found.add(itemName);
+      if (isPlausibleNarratedItemName(itemName)) found.add(itemName);
     }
   }
 
@@ -71,9 +93,7 @@ export function detectNarratedInventoryPossessions(text: string): string[] {
   for (const match of text.matchAll(bracketPattern)) {
     const itemName = normalizeNarratedItemName(match[1] || '');
     if (
-      itemName &&
-      itemName.length <= 24 &&
-      new RegExp(INVENTORY_ITEM_NOUN_PATTERN).test(itemName)
+      isPlausibleNarratedItemName(itemName)
     ) {
       found.add(itemName);
     }
@@ -90,7 +110,7 @@ export function detectNarratedInventoryPossessions(text: string): string[] {
     for (const match of text.matchAll(pattern)) {
       const itemName = normalizeNarratedItemName(match[1] || '');
       if (/[【】]/.test(itemName)) continue;
-      if (itemName && itemName.length <= 24) found.add(itemName);
+      if (isPlausibleNarratedItemName(itemName)) found.add(itemName);
     }
   }
 

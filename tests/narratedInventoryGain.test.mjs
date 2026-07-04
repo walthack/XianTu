@@ -58,5 +58,15 @@ test('normalizes action phrases before inventory identity comparison', async () 
 
   assert.equal(normalizeNarratedItemName('【取出云氏玉简】'), '云氏玉简');
   assert.equal(getInventoryItemIdentityKey('取出云氏玉简'), getInventoryItemIdentityKey('云氏玉简'));
+  assert.equal(getInventoryItemIdentityKey('颗冰凉的龙睛玉'), getInventoryItemIdentityKey('龙睛玉'));
+  assert.equal(getInventoryItemIdentityKey('的龙睛玉'), getInventoryItemIdentityKey('龙睛玉'));
   assert.notEqual(getInventoryItemIdentityKey('仙品·龙睛玉'), getInventoryItemIdentityKey('龙睛玉'));
+});
+
+test('rejects sentence fragments during carried item reconciliation', async () => {
+  const { detectNarratedInventoryPossessions } = await loadTs('../src/utils/narratedInventory.ts');
+
+  const text = '程宗扬将龙睛玉收入怀中，玉身散发的气息极其复杂——既有与碧奴玉相近的灵韵，也有掌心那颗冰凉的龙睛玉传来的微光。';
+
+  assert.deepEqual(detectNarratedInventoryPossessions(text), ['龙睛玉']);
 });
