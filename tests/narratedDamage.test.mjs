@@ -20,6 +20,7 @@ test('detects narrated player damage on failed combat judgement with explicit in
 
   assert.deepEqual(detectNarratedPlayerDamage(text, [], makeSaveData()), {
     amount: -15,
+    ratio: 0.15,
     severity: 'minor',
     reason: '叙事战斗失败受伤补账（战斗:失败,判定值:32,难度:40,基础:5,幸运:+4,环境:-3,状态:+26）',
   });
@@ -63,7 +64,21 @@ test('detects injury narration even when a failed dodge partially succeeds', asy
   const text = '在幽暗的山洞深处，你与一只暗影狼王鏖战许久。〔战斗:失败,判定值:32,难度:40〕狼王一声低吼，利爪如墨色闪电般划出，你堪堪侧身闪避，但那锐利的爪尖还是在你臂膀上撕开了一道血痕，鲜血顺着袖口滴落在冰冷的石地上。';
 
   assert.deepEqual(detectNarratedPlayerDamage(text, [], makeSaveData()), {
-    amount: -15,
+    amount: -10,
+    ratio: 0.10,
+    severity: 'minor',
+    reason: '叙事战斗失败受伤补账（战斗:失败,判定值:32,难度:40）',
+  });
+});
+
+test('uses a light 5 percent fallback for minor narrated injuries', async () => {
+  const { detectNarratedPlayerDamage } = await loadTs('../src/utils/narratedDamage.ts');
+
+  const text = '〔战斗:失败,判定值:32,难度:40〕混乱中你挂了彩，气息微乱，却还站得稳。';
+
+  assert.deepEqual(detectNarratedPlayerDamage(text, [], makeSaveData()), {
+    amount: -5,
+    ratio: 0.05,
     severity: 'minor',
     reason: '叙事战斗失败受伤补账（战斗:失败,判定值:32,难度:40）',
   });
@@ -75,4 +90,5 @@ test('detects major narrated player damage on disastrous combat failure', async 
   const text = '〔战斗:大失败,判定值:20,难度:40〕你被一刀贯穿胸口，鲜血喷溅，整个人重重摔倒。';
 
   assert.equal(detectNarratedPlayerDamage(text, [], makeSaveData(80, 100))?.amount, -50);
+  assert.equal(detectNarratedPlayerDamage(text, [], makeSaveData(80, 100))?.ratio, 0.5);
 });
