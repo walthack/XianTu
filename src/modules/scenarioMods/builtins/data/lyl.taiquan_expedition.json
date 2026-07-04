@@ -2548,11 +2548,6 @@
         },
         "affiliations": [
           {
-            "factionId": "liuchao.faction.han_guo_chao_ting",
-            "category": "state",
-            "role": "太皇太后"
-          },
-          {
             "factionId": "lyg.faction.song_state",
             "category": "organization",
             "role": "皇室尊长（皇帝祖母）"
