@@ -280,6 +280,17 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
         return `- ${event.name}：${event.description}\n  ${axisLine ? `${axisLine}\n  ` : ''}相关正典：${context || '无'}\n  完成条件：${formatConditions(event.completion)}`;
       }).join('\n')
     : '- 当前没有已触发事件，不要提前引入未触发事件。';
+  const primaryActiveEvent = activeEvents.find(event => isCriticalStoryEvent(event)) || activeEvents[0];
+  const primaryFocusSection = primaryActiveEvent
+    ? (() => {
+        const axisLine = formatAxisBeat(primaryActiveEvent);
+        return `## 当前主轴推进焦点（GM 主动触发，不等关键词）
+- 优先事件：${primaryActiveEvent.name}：${primaryActiveEvent.description}
+  ${axisLine ? `${axisLine}\n  ` : ''}完成条件：${formatConditions(primaryActiveEvent.completion)}
+推进规则：这是剧情主持人的主动轨道，不是让玩家猜的关键词任务。玩家输入不必说出事件名、NPC 名或道具名；只要没有明确拒绝主线，本轮就必须用环境变化、相关人物主动现身、敌袭、传讯、线索浮现、约定临近、旁人求助等方式，自然把叙事推向这个焦点。玩家若只是闲逛、赶路、休息、查看、聊天、继续等低强度行动，直接让该焦点事件的引子登场。事件达成后必须输出对应 done flag。`;
+      })()
+    : `## 当前主轴推进焦点
+暂无。`;
 
   // 主轴下一拍：找出依赖"当前事件完成条件"的后续事件，作为前进方向喂给 AI（避免 AI 停在原地等玩家）
   const activeCompletionPaths = new Set(
@@ -403,6 +414,8 @@ ${stageLine ? `## 当前关卡\n${stageLine}\n\n` : ''}${chapterSection}
 ${locationLine ? `## 当前地域风貌（环境/建筑/民俗描写以此为准）\n${locationLine}\n\n` : ''}## 当前事件（玩家此刻所处的剧情节点）
 ${eventSection}
 
+${primaryFocusSection}
+
 ## 下一步（达成当前完成条件后，剧情将推进到）
 ${nextSection}
 
@@ -411,7 +424,7 @@ ${JSON.stringify(runtime.flags || {})}
 
 ${focusedCharacterSection ? `${focusedCharacterSection}\n\n` : ''}${loadBearingLine ? `${loadBearingLine}\n\n` : ''}${steeringLine ? `${steeringLine}\n\n` : ''}${reputationLine}\n\n${relationLine ? `${relationLine}\n\n` : ''}${improvLine}\n\n【主动推进剧情，不要停在原地等玩家】：
 
-1. 每一段叙事都要朝“当前事件”的完成条件前进——主动设置场景、引入相关人物、制造契机，引导玩家走向该事件的达成，而不是只描述当前一幕然后停下。
+1. 每一段叙事都要朝“当前主轴推进焦点/当前事件”的完成条件前进——主动设置场景、引入相关人物、制造契机，引导玩家走向该事件的达成；不得等玩家说中事件名、人物名、道具名或其他关键词才触发。
 2. 【每轮必做的收尾核对——叙事与数据必须同步】逐项检查本轮叙事，凡发生以下情况**必须**输出对应指令（只写在正文不发指令＝东西凭空消失，实测：云苍峰赠玉简正文收下了背包却没有）：
    ① 事件达成 → set 世界.状态.剧本模组.flags.event.<id>.done = true（布尔，漏标卡死推进）
    ② 获得物品（受赠/缴获/拾取/购买/接过/收下）→ set 角色.背包.物品.<稳定物品ID> = {物品ID:"<同key末段>",名称,类型,品质:{quality,grade},数量,描述}（例：收下云苍峰玉简 → set 角色.背包.物品.item_yuncangfeng_yujian）；消耗 → add 数量(-1)；用尽 → delete
@@ -419,6 +432,6 @@ ${focusedCharacterSection ? `${focusedCharacterSection}\n\n` : ''}${loadBearingL
    ④ 学会功法/技能 → 对应功法/技能指令；伤势/中毒/增益 → push 角色.效果
    ⑤ 扬名/败名 → set 角色.属性.声望；NPC 好感/记忆变化 → add 好感度 / push 记忆
 3. 关键剧情事件未完成时，不要建议切换下一关；先推动当前关内关键剧情触发。
-4. 避免反复描写同一幕或原地打转；玩家若无明确行动，由你主动顺着主轴往下带。
+4. 避免反复描写同一幕或原地打转；玩家若无明确行动，或只是低强度探索/闲谈/查看/继续，由你主动顺着主轴推进焦点往下带。
 5. 不要猜测、引用或泄露后续章节，以及“下一步”之后尚未触发的事件细节。`;
 }
