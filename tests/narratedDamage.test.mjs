@@ -34,6 +34,27 @@ test('does not infer damage from a failed combat judgement without explicit inju
   assert.equal(detectNarratedPlayerDamage(text, [], makeSaveData()), null);
 });
 
+test('detects non-bleeding combat impact on failed judgement', async () => {
+  const { detectNarratedPlayerDamage } = await loadTs('../src/utils/narratedDamage.ts');
+
+  const text = '〔战斗:失败,判定值:32,难度:40〕刀锋没有见血，却震得护体灵光碎裂，程宗扬胸口发闷，气血一阵翻涌。';
+
+  assert.deepEqual(detectNarratedPlayerDamage(text, [], makeSaveData()), {
+    amount: -10,
+    ratio: 0.10,
+    severity: 'minor',
+    reason: '叙事战斗失败受伤补账（战斗:失败,判定值:32,难度:40）',
+  });
+});
+
+test('does not infer damage from negated non-bleeding impact narration', async () => {
+  const { detectNarratedPlayerDamage } = await loadTs('../src/utils/narratedDamage.ts');
+
+  const text = '〔战斗:失败,判定值:32,难度:40〕程宗扬被逼得连退两步，只是衣袖破开，并未受伤。';
+
+  assert.equal(detectNarratedPlayerDamage(text, [], makeSaveData()), null);
+});
+
 test('does not add fallback damage when commands already update health or effects', async () => {
   const { detectNarratedPlayerDamage } = await loadTs('../src/utils/narratedDamage.ts');
 
