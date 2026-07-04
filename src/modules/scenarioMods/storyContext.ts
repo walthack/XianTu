@@ -280,17 +280,6 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
         return `- ${event.name}：${event.description}\n  ${axisLine ? `${axisLine}\n  ` : ''}相关正典：${context || '无'}\n  完成条件：${formatConditions(event.completion)}`;
       }).join('\n')
     : '- 当前没有已触发事件，不要提前引入未触发事件。';
-  const primaryActiveEvent = activeEvents.find(event => isCriticalStoryEvent(event)) || activeEvents[0];
-  const primaryFocusSection = primaryActiveEvent
-    ? (() => {
-        const axisLine = formatAxisBeat(primaryActiveEvent);
-        return `## 当前主轴推进焦点（默认主动触发，尊重玩家绕行）
-- 优先事件：${primaryActiveEvent.name}：${primaryActiveEvent.description}
-  ${axisLine ? `${axisLine}\n  ` : ''}完成条件：${formatConditions(primaryActiveEvent.completion)}
-推进规则：这是剧情主持人的默认主动轨道，不是让玩家猜的关键词任务。玩家输入不必说出事件名、NPC 名或道具名；若玩家没有明确绕开主线，本轮应用环境变化、相关人物主动现身、敌袭、传讯、线索浮现、约定临近、旁人求助等方式，自然把叙事推向这个焦点。若玩家明确表示“先不管主线/不推进/自由探索/随便逛逛/瞎逛/避开此事”，优先尊重其意图，只做环境、支线、人物日常或弱线索铺垫，不直接触发主线高潮，不强行完成事件。玩家若只是“继续/看看周围/赶路/休息/聊天”等未表达绕行意图的低强度行动，可以让该焦点事件的引子登场。事件达成后必须输出对应 done flag。`;
-      })()
-    : `## 当前主轴推进焦点
-暂无。`;
 
   // 主轴下一拍：找出依赖"当前事件完成条件"的后续事件，作为前进方向喂给 AI（避免 AI 停在原地等玩家）
   const activeCompletionPaths = new Set(
@@ -379,9 +368,9 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
   // 偏离收束：剧情停滞分档提示（≤3 轮自由发挥；4-6 软收束；≥7 硬收束）
   const stallTurns = (runtime as { stallTurns?: number }).stallTurns || 0;
   const steeringLine = stallTurns >= 7
-    ? '【硬收束】剧情已停滞多轮：若玩家没有明确表示暂不推进主线，本轮必须让“当前事件”的直接引子登场（相关人物现身、事态迫近），把叙事拉回主线；若玩家明确要自由探索，只给强烈但可暂时忽略的主线压力或远景异动，不替玩家做决定。'
+    ? '【硬收束】剧情已停滞多轮：本轮必须让“当前事件”的直接引子登场（相关人物现身、事态迫近），把叙事拉回主线，不得继续发散。'
     : stallTurns >= 4
-      ? '【软收束】剧情已数轮未推进：若玩家没有明确绕开主线，请借在场人物、既有伏笔或事件余波，自然地把叙事引向“当前事件”的达成；若玩家明确自由探索，可以保留支线，但要给出不强迫的主线钩子。'
+      ? '【软收束】剧情已数轮未推进：请借在场人物、既有伏笔或事件余波，自然地把叙事引向“当前事件”的达成，避免开新的无关支线。'
       : '';
   const stageLine = [
     runtime.modName || runtime.modId,
@@ -414,8 +403,6 @@ ${stageLine ? `## 当前关卡\n${stageLine}\n\n` : ''}${chapterSection}
 ${locationLine ? `## 当前地域风貌（环境/建筑/民俗描写以此为准）\n${locationLine}\n\n` : ''}## 当前事件（玩家此刻所处的剧情节点）
 ${eventSection}
 
-${primaryFocusSection}
-
 ## 下一步（达成当前完成条件后，剧情将推进到）
 ${nextSection}
 
@@ -424,7 +411,7 @@ ${JSON.stringify(runtime.flags || {})}
 
 ${focusedCharacterSection ? `${focusedCharacterSection}\n\n` : ''}${loadBearingLine ? `${loadBearingLine}\n\n` : ''}${steeringLine ? `${steeringLine}\n\n` : ''}${reputationLine}\n\n${relationLine ? `${relationLine}\n\n` : ''}${improvLine}\n\n【主动推进剧情，不要停在原地等玩家】：
 
-1. 默认让叙事朝“当前主轴推进焦点/当前事件”的完成条件前进——主动设置场景、引入相关人物、制造契机，引导玩家走向该事件的达成；不得等玩家说中事件名、人物名、道具名或其他关键词才触发。但玩家明确表示暂不推进主线、自由探索、随便逛逛、瞎逛或避开此事时，应尊重玩家节奏，只做环境/支线/弱线索铺垫，不强行触发或完成主线事件。
+1. 每一段叙事都要朝“当前事件”的完成条件前进——主动设置场景、引入相关人物、制造契机，引导玩家走向该事件的达成，而不是只描述当前一幕然后停下。
 2. 【每轮必做的收尾核对——叙事与数据必须同步】逐项检查本轮叙事，凡发生以下情况**必须**输出对应指令（只写在正文不发指令＝东西凭空消失，实测：云苍峰赠玉简正文收下了背包却没有）：
    ① 事件达成 → set 世界.状态.剧本模组.flags.event.<id>.done = true（布尔，漏标卡死推进）
    ② 获得物品（受赠/缴获/拾取/购买/接过/收下）→ set 角色.背包.物品.<稳定物品ID> = {物品ID:"<同key末段>",名称,类型,品质:{quality,grade},数量,描述}（例：收下云苍峰玉简 → set 角色.背包.物品.item_yuncangfeng_yujian）；消耗 → add 数量(-1)；用尽 → delete
@@ -432,6 +419,6 @@ ${focusedCharacterSection ? `${focusedCharacterSection}\n\n` : ''}${loadBearingL
    ④ 学会功法/技能 → 对应功法/技能指令；伤势/中毒/增益 → push 角色.效果
    ⑤ 扬名/败名 → set 角色.属性.声望；NPC 好感/记忆变化 → add 好感度 / push 记忆
 3. 关键剧情事件未完成时，不要建议切换下一关；先推动当前关内关键剧情触发。
-4. 避免反复描写同一幕或原地打转；玩家若无明确行动，或只是未表达绕行意图的低强度查看/闲谈/继续，由你主动顺着主轴推进焦点往下带；玩家明确要逛街、调查旁枝、休息游玩时，先满足该行动，再埋下可选择的主线钩子。
+4. 避免反复描写同一幕或原地打转；玩家若无明确行动，由你主动顺着主轴往下带。
 5. 不要猜测、引用或泄露后续章节，以及“下一步”之后尚未触发的事件细节。`;
 }
