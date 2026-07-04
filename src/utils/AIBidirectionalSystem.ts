@@ -29,6 +29,7 @@ import { advanceScenarioRuntime } from '@/modules/scenarioMods/runtime';
 import { applyMilestoneRewards } from '@/modules/scenarioMods/milestoneRewards';
 import { buildScenarioStoryPrompt, createScenarioPromptState } from '@/modules/scenarioMods/storyContext';
 import { buildActionGatePrompt, getNarrativeTurn, pruneExpiredActionGates } from '@/utils/actionGate';
+import { detectNarratedPlayerDamage } from '@/utils/narratedDamage';
 import {
   detectNarratedInventoryPossessions,
   getInventoryItemIdentityKey,
@@ -2209,6 +2210,11 @@ ${step1Text}
     const reconciledInventoryChanges = this.reconcileNarratedInventoryPossessions(saveData, textContent);
     commandAppliedChanges.push(...reconciledInventoryChanges);
 
+    const reconciledDamageChange = this.reconcileNarratedPlayerDamage(saveData, textContent, sortedCommands);
+    if (reconciledDamageChange) {
+      commandAppliedChanges.push(reconciledDamageChange);
+    }
+
     const inspectedItemChanges = this.reconcileInspectedItemDescriptions(
       saveData,
       options?.userAction || '',
@@ -3237,6 +3243,30 @@ ${saveDataJson}`;
     }
 
     return repaired;
+  }
+
+  private reconcileNarratedPlayerDamage(
+    saveData: SaveData,
+    text: string,
+    commands: Array<{ action: string; key: string; value?: unknown }>
+  ): StateChange | null {
+    const damage = detectNarratedPlayerDamage(text, commands, saveData);
+    if (!damage) return null;
+
+    const healthPath = '角色.属性.气血.当前';
+    const oldValue = get(saveData, healthPath);
+    if (typeof oldValue !== 'number') return null;
+
+    const newValue = Math.max(0, oldValue + damage.amount);
+    set(saveData, healthPath, newValue);
+    console.warn(`[AI双向系统] 叙事战斗伤害补账: ${damage.amount} 气血（${damage.reason}）`);
+
+    return {
+      key: healthPath,
+      action: 'add',
+      oldValue: this._summarizeValueForChangeLog(healthPath, oldValue, 'add'),
+      newValue: this._summarizeValueForChangeLog(healthPath, newValue, 'add')
+    };
   }
 
   private reconcileNarratedInventoryPossessions(saveData: SaveData, text: string): StateChange[] {
