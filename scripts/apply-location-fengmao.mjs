@@ -15,6 +15,10 @@ const results = fs.readdirSync(scanDir).filter(f => f.endsWith('.json') && !f.en
   .filter(r => !r.parse_failed && r.region && r.region !== '未知');
 // 用户正典（人工权威，覆盖任何扫描结果）：太泉古阵=现代科技遗迹的六朝式误读（2026-07-04 用户设定）
 const USER_CANON = [
+  // region 钉死（arc 扫描误归：江州篇顺嘴提长安被判宋国）
+  { name: '长安', region: '唐国', confidence: '高' },
+  // 苍澜镇=太泉大陆入口镇（continent taiquan），非南荒
+  { name: '苍澜镇', region: '太泉', confidence: '高' },
   { name: '太泉古阵', region: '太泉', confidence: '高', fengmao: '上古遗迹实为另一个时代的造物：金铁构筑的廊道厅堂、长明不灭的"夜明珠"、显影人像的"光影幻璧"、轻韧透亮的"琉璃纸"、不用牛马自行奔走的"铁车"残骸，六朝人以自身语汇敬畏称之。', customs: '入阵者以"仙家遗泽"解读诸般造物并各自命名；唯穿越者能认出真身，认知差微妙有趣。' },
 ];
 const byName = new Map(results.map(r => [r.name, r]));
