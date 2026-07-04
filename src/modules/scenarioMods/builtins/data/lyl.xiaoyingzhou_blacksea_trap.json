@@ -604,6 +604,13 @@
         "description": "佣兵团（晴州铜狮巷雇佣兵组织）；总部/据点：晴州铜狮巷；目标：公平、正义、责任和勇气；核心：团长薛延山,副团长石之隼,副队长月霜,副队长敖润；架构：团长-副团长-副队长-佣兵（如老张、冯源等）；手段：；人物：敖润,冯源,老张,赵队长（上尉）,徐队长（上尉）；与程宗扬：程宗扬因月霜关系与雪隼佣兵团结交，曾利用供奉身份设计黑魔海阴谋，后委托雪隼佣兵团运送物品至晴州波斯商会，与副团长石之隼、副队长敖润等有直接互动。；关键事件：月霜加入雪隼佣兵团任副队长,雪隼佣兵团受广阳城官府委托对抗劫匪,雪隼佣兵团遭黑魔海卷入，月霜身份被泉玉姬利用，导致六扇门和雪隼佣兵团被一网打尽,黑魔海阴谋中雪隼佣兵团被重创,程宗扬在晴州与雪隼佣兵团合作，石之隼亲自带队执行任务。",
         "type": "组织",
         "features": []
+      },
+      {
+        "id": "liuchao.faction.liangzhou_army",
+        "name": "凉州军",
+        "description": "凉州军（军队）——简介待补，源自角色归属富化自动补录。",
+        "type": "军队",
+        "features": []
       }
     ],
     "locations": [
@@ -3400,12 +3407,16 @@
         ]
       },
       {
-        "id": "liuchao.character.ding_tao_wang_liu_xin",
-        "name": "定陶王刘欣",
+        "id": "liuchao.character.liu_xin",
+        "name": "定陶王",
         "role": "定陶王",
         "gender": "男",
         "profile": {
-          "personality": [],
+          "personality": [
+            "年幼无知",
+            "依赖成人",
+            "偶有任性(如发脾气)"
+          ],
           "race": "人族",
           "origin": "定陶王，后为天子"
         },
@@ -3414,6 +3425,11 @@
             "factionId": "liuchao.faction.han_guo_chao_ting",
             "category": "state",
             "role": "定陶王（宗室藩王）"
+          },
+          {
+            "factionId": "liuchao.faction.liangzhou_army",
+            "category": "military",
+            "role": "被拥立的傀儡皇帝"
           }
         ]
       },

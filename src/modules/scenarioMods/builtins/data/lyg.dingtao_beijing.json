@@ -2777,24 +2777,6 @@
         ]
       },
       {
-        "id": "liuchao.character.ding_tao_wang_liu_xin",
-        "name": "定陶王刘欣",
-        "role": "定陶王",
-        "gender": "男",
-        "profile": {
-          "personality": [],
-          "race": "人族",
-          "origin": "定陶王，后为天子"
-        },
-        "affiliations": [
-          {
-            "factionId": "liuchao.faction.han_guo_chao_ting",
-            "category": "state",
-            "role": "定陶王（宗室藩王）"
-          }
-        ]
-      },
-      {
         "id": "liuchao.character.mu_yan_qi",
         "name": "穆嫣琪",
         "role": "配角",

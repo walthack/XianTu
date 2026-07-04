@@ -1,12 +1,12 @@
 {
   "schema": "xiantu.character-registry.v1",
-  "version": "cr-2026-07-04-77c3106ba3ab31e8",
-  "sourceHash": "77c3106ba3ab31e8",
+  "version": "cr-2026-07-04-e1f6b39c1c94292c",
+  "sourceHash": "e1f6b39c1c94292c",
   "sourceGeneratedAt": "2026-06-30T12:50:33.965Z",
-  "generatedAt": "2026-07-04T07:48:17.588Z",
+  "generatedAt": "2026-07-04T07:53:27.965Z",
   "stats": {
-    "total": 305,
-    "stagePresent": 248,
+    "total": 304,
+    "stagePresent": 247,
     "canonOnly": 57,
     "collisionsMerged": 0
   },
@@ -595,7 +595,11 @@
         "personality": [],
         "appearance": "",
         "speechStyle": "",
-        "principles": [],
+        "principles": [
+          "不公开议论或批评皇帝，不触政治红线",
+          "重视皇家体面和礼仪，恪守亲王身份",
+          "讲究场面圆融，宁可装伤也不得罪人"
+        ],
         "goals": [],
         "weaknesses": [],
         "signatureAbilities": [],
@@ -5402,7 +5406,10 @@
         ],
         "appearance": "容貌绝美，如洋娃娃般精美，桃花眼转为凤目，红唇饱满柔润，肌肤白如脂玉，身姿玲珑婀娜，香柔玉嫩，人比花娇，有处子幽香。",
         "speechStyle": "",
-        "principles": [],
+        "principles": [
+          "绝不留宫，宁随陌生人也不受宦官凌辱",
+          "绝不出家为道姑或尼姑，宁做婢妾"
+        ],
         "goals": [
           "身不由己，被迫顺从"
         ],
@@ -8717,151 +8724,6 @@
         "conflicts": []
       },
       "embedText": "邓晶 ｜ 潘金莲的师妹 ｜ 光明观堂(弟子) ｜ 义愤填膺、倔强、记仇、娇气 ｜ 程宗扬的相识（非后宫/队伍成员）；程宗扬相识的仙子之一 ｜ 对程宗扬：未直接称呼 / 被他人称呼：邓姑娘、邓晶 ｜ 被鱼无夷用渔网束缚并羞辱；被潘金莲救下并罩上外衣；与乐明珠关系亲密，常一起行动"
-    },
-    {
-      "id": "liuchao.character.ding_tao_wang_liu_xin",
-      "canonicalName": "定陶王刘欣",
-      "aliases": [],
-      "gender": "男",
-      "books": [
-        "yunlong",
-        "yange"
-      ],
-      "tier": "主要",
-      "stagePresence": true,
-      "staticProfile": {
-        "identitySummary": "定陶王",
-        "personality": [],
-        "appearance": "",
-        "speechStyle": "",
-        "principles": [],
-        "goals": [],
-        "weaknesses": [
-          "年纪太小，易受惊吓"
-        ],
-        "signatureAbilities": [],
-        "relationToProtagonist": [],
-        "formsOfAddress": [
-          "定陶王刘欣，天子"
-        ],
-        "joining": [],
-        "keyEvents": [
-          "失踪",
-          "继嗣的定陶王年纪太小，受到惊吓”，在宫门处拜送灵柩",
-          "帝位被永安、长秋二宫认可",
-          "由唐衡和徐璜扶着出来送灵"
-        ],
-        "ending": [
-          "失踪"
-        ],
-        "affiliations": [
-          {
-            "faction": "汉国朝廷",
-            "role": "定陶王（宗室藩王）"
-          }
-        ],
-        "debutLocation": {
-          "location": "未明（宫殿议事场所）",
-          "locator": "六朝云龙吟·0365章",
-          "scene": "霍子孟在朝臣商议继嗣人选时提及'还有定陶王刘欣'，将其列为天子驾崩后的嗣君候选人之一"
-        }
-      },
-      "region": "汉国",
-      "phaseIdentities": [
-        {
-          "scope": "stage-projection",
-          "stageId": "lyg.dingtao_beijing",
-          "book": "yange",
-          "seqLo": 948,
-          "seqHi": 997,
-          "identity": "定陶王，后为天子",
-          "role": "定陶王",
-          "description": "",
-          "notes": [],
-          "status": "stage-current"
-        },
-        {
-          "scope": "stage-projection",
-          "stageId": "lyl.han_palace_endgame",
-          "book": "yunlong",
-          "seqLo": 900,
-          "seqHi": 947,
-          "identity": "定陶王，后为天子",
-          "role": "定陶王",
-          "description": "",
-          "notes": [],
-          "status": "stage-current"
-        },
-        {
-          "scope": "stage-projection",
-          "stageId": "lyl.lin_an_bridge",
-          "book": "yunlong",
-          "seqLo": 559,
-          "seqHi": 562,
-          "identity": "定陶王，后为天子",
-          "role": "定陶王",
-          "description": "",
-          "notes": [],
-          "status": "stage-current"
-        },
-        {
-          "scope": "stage-projection",
-          "stageId": "lyl.luoyang_cloud_secret",
-          "book": "yunlong",
-          "seqLo": 777,
-          "seqHi": 884,
-          "identity": "定陶王，后为天子",
-          "role": "定陶王",
-          "description": "",
-          "notes": [],
-          "status": "stage-current"
-        },
-        {
-          "scope": "stage-projection",
-          "stageId": "lyl.taiquan_afterfall",
-          "book": "yunlong",
-          "seqLo": 668,
-          "seqHi": 776,
-          "identity": "定陶王，后为天子",
-          "role": "定陶王",
-          "description": "",
-          "notes": [],
-          "status": "stage-current"
-        },
-        {
-          "scope": "stage-projection",
-          "stageId": "lyl.taiquan_sacred_fruit",
-          "book": "yunlong",
-          "seqLo": 616,
-          "seqHi": 664,
-          "identity": "定陶王，后为天子",
-          "role": "定陶王",
-          "description": "",
-          "notes": [],
-          "status": "stage-current"
-        },
-        {
-          "scope": "stage-projection",
-          "stageId": "lyl.xiaoyingzhou_blacksea_trap",
-          "book": "yunlong",
-          "seqLo": 567,
-          "seqHi": 615,
-          "identity": "定陶王，后为天子",
-          "role": "定陶王",
-          "description": "",
-          "notes": [],
-          "status": "stage-current"
-        }
-      ],
-      "review": {
-        "approved": false,
-        "reviewed": false,
-        "flags": [
-          "duplicate-merged"
-        ],
-        "conflicts": []
-      },
-      "embedText": "定陶王刘欣 ｜ 定陶王 ｜ 【汉国人物】 ｜ 汉国朝廷(定陶王（宗室藩王）) ｜ 登场于未明（宫殿议事场所） ｜ 定陶王刘欣，天子 ｜ 失踪；继嗣的定陶王年纪太小，受到惊吓”，在宫门处拜送灵柩；帝位被永安、长秋二宫认可；由唐衡和徐璜扶着出来送灵"
     },
     {
       "id": "liuchao.character.ding_zhi_xiong",
@@ -17354,7 +17216,8 @@
       "id": "liuchao.character.liu_xin",
       "canonicalName": "定陶王",
       "aliases": [
-        "刘欣"
+        "刘欣",
+        "定陶王刘欣"
       ],
       "gender": "男",
       "books": [
@@ -17436,7 +17299,7 @@
         "flags": [],
         "conflicts": []
       },
-      "embedText": "定陶王 ｜ 刘欣 ｜ 汉国天子/年幼的君王 ｜ 【汉国人物】 ｜ 凉州军(被拥立的傀儡皇帝)、汉国朝廷(被拥立傀儡天子（凉州军挟持）) ｜ 登场于昭阳宫 ｜ 年幼无知、依赖成人、偶有任性(如发脾气) ｜ 程宗扬曾拼死护他登上帝位 ｜ 程宗扬称呼其“那小屁孩” ｜ 被贾文和劫持(第1章)；被剑玉姬转移带走(第3章)；登基为天子(第2章)；试图保护阮香凝(第5章)；组合显示名已拆分：定陶王刘欣 -> 原名 刘欣，alias 定陶王。 用户裁定：批准。"
+      "embedText": "定陶王 ｜ 刘欣 定陶王刘欣 ｜ 汉国天子/年幼的君王 ｜ 【汉国人物】 ｜ 凉州军(被拥立的傀儡皇帝)、汉国朝廷(被拥立傀儡天子（凉州军挟持）) ｜ 登场于昭阳宫 ｜ 年幼无知、依赖成人、偶有任性(如发脾气) ｜ 程宗扬曾拼死护他登上帝位 ｜ 程宗扬称呼其“那小屁孩” ｜ 被贾文和劫持(第1章)；被剑玉姬转移带走(第3章)；登基为天子(第2章)；试图保护阮香凝(第5章)；组合显示名已拆分：定陶王刘欣 -> 原名 刘欣，alias 定陶王。 用户裁定：批准。"
     },
     {
       "id": "liuchao.character.liu_yi_sun",
@@ -29718,7 +29581,9 @@
         ],
         "appearance": "纤腰如玉，盈盈一握，碧衣红袖，眼睛圆圆的",
         "speechStyle": "",
-        "principles": [],
+        "principles": [
+          "身为官伎，只卖艺不卖身"
+        ],
         "goals": [],
         "weaknesses": [
           "身份低微，易受欺凌"
