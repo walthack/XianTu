@@ -80,7 +80,7 @@ export function detectNarratedPlayerDamage(
   if (!Number.isFinite(current) || !Number.isFinite(max) || current <= 0 || max <= 0) return null;
 
   const severity: NarratedPlayerDamage['severity'] = judgement.margin <= -15 ? 'major' : 'minor';
-  const ratio = severity === 'major' ? 0.5 : getMinorDamageRatio(text);
+  const ratio = severity === 'major' ? 0.4 : getMinorDamageRatio(text);
   const amount = -Math.max(1, Math.min(current, Math.round(max * ratio)));
 
   return {

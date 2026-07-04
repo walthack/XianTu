@@ -110,6 +110,6 @@ test('detects major narrated player damage on disastrous combat failure', async 
 
   const text = '〔战斗:大失败,判定值:20,难度:40〕你被一刀贯穿胸口，鲜血喷溅，整个人重重摔倒。';
 
-  assert.equal(detectNarratedPlayerDamage(text, [], makeSaveData(80, 100))?.amount, -50);
-  assert.equal(detectNarratedPlayerDamage(text, [], makeSaveData(80, 100))?.ratio, 0.5);
+  assert.equal(detectNarratedPlayerDamage(text, [], makeSaveData(80, 100))?.amount, -40);
+  assert.equal(detectNarratedPlayerDamage(text, [], makeSaveData(80, 100))?.ratio, 0.4);
 });
