@@ -304,19 +304,6 @@ class AIBidirectionalSystemClass {
     }
   }
 
-  // 正文硬长度上限：MiniMax-M2.7 无视软字数约束（实测 500 上限写 940），只能生成后结构性截断。
-  // 超过 hardCap 时，在最近的句末标点收尾，保留完整句子（不留半句）。
-  private capNarrativeLength(text: string, hardCap = 1000): string {
-    if (!text || text.length <= hardCap) return text;
-    const window = text.slice(0, hardCap);
-    const enders = /[。！？…”」』.!?]/g;
-    let lastEnd = -1; let m: RegExpExecArray | null;
-    while ((m = enders.exec(window)) !== null) lastEnd = m.index;
-    // 找到句末标点（且不至于砍掉超过一半）→ 在此收尾；否则退回硬截断
-    if (lastEnd >= hardCap * 0.5) return window.slice(0, lastEnd + 1);
-    return window.slice(0, lastEnd > 0 ? lastEnd + 1 : hardCap);
-  }
-
   private extractNarrativeText(raw: string): string {
     // 🔥 移除思维链标签（兜底保护）
     // 支持多种变体：<thinking>, <antThinking>, <ant-thinking>, <reasoning>, <thought> 等
@@ -345,7 +332,7 @@ class AIBidirectionalSystemClass {
       }
     }
 
-    return this.capNarrativeLength(result);
+    return result;
   }
 
   private sanitizeActionOptionsForDisplay(options: unknown): string[] {
