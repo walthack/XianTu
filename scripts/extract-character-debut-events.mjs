@@ -24,6 +24,8 @@ const BOOKS = {
 
 // 关注名单（用户给定 26 人）
 const WATCH = ['小紫','潘金莲','云丹琉','云如瑶','卓云君','阮香凝','杨玉环','赵合德','吕雉','蛇夫人','尹馥兰','惊理','泉玉姬','成光','凝羽','阮香琳','齐羽仙','黛绮丝','白霓裳','赵飞燕','月霜','剑玉姬','乐明珠','秦桧','贾文和','萧遥逸'];
+const ONLY = process.env.ONLY ? process.env.ONLY.split(',') : null;
+const SCAN_LIST = ONLY || WATCH;
 
 const reg = JSON.parse(readFileSync(join(root, 'src/modules/scenarioMods/builtins/character-registry.json'), 'utf8'));
 const byName = new Map(reg.characters.map(c => [c.canonicalName, c]));
@@ -101,8 +103,8 @@ const BOOK_ORDER = ['qingyu', 'yunlong', 'yange'];
 async function run() {
   await mkdir(evDir, { recursive: true });
   const results = [];
-  for (let idx = 0; idx < WATCH.length; idx++) {
-    const name = WATCH[idx];
+  for (let idx = 0; idx < SCAN_LIST.length; idx++) {
+    const name = SCAN_LIST[idx];
     const c = byName.get(name);
     const kws = [name, ...((c && c.aliases) || [])].filter(Boolean);
     const books = ((c && c.books && c.books.length) ? c.books : Object.keys(BOOKS))
@@ -113,7 +115,7 @@ async function run() {
       const ev = windows(kws, [b]);
       if (!ev) { perBook.push({ book: b, skipped: 'no_evidence' }); continue; }
       writeFileSync(join(evDir, `${name}.${b}.md`), `# ${name} @${b}\nkw=${kws.join(',')}\n\n${ev}\n`);
-      console.error(`[${idx + 1}/${WATCH.length}] ${name} @${BOOKS[b].title}: 证据 ${ev.length} 字 → MiniMax...`);
+      console.error(`[${idx + 1}/${SCAN_LIST.length}] ${name} @${BOOKS[b].title}: 证据 ${ev.length} 字 → MiniMax...`);
       // 三级兜底：M2.7 → M2.7 重试(空返回/坏JSON是随机抽风) → DeepSeek(最烈内容会软拒,但格式稳)
       let r; try { r = parse(await askMiniMax(name, BOOKS[b].title, ev)); } catch (e) { r = { parse_failed: true, error: String(e.message).slice(0, 200), needsHuman: true }; }
       if (isBad(r)) {
@@ -144,7 +146,7 @@ async function run() {
     writeFileSync(join(outDir, `${name}.result.json`), JSON.stringify(merged, null, 2) + '\n');
     results.push(merged);
   }
-  const md = ['# 重要角色 登场/关键事件 抽取（人工裁定用，未写回正典）', '', `生成：${new Date().toISOString()}`, `模型：MiniMax-M2.7  角色：${WATCH.length}`, ''];
+  const md = ['# 重要角色 登场/关键事件 抽取（人工裁定用，未写回正典）', '', `生成：${new Date().toISOString()}`, `模型：MiniMax-M2.7  角色：${SCAN_LIST.length}`, ''];
   for (const r of results) {
     md.push(`## ${r.name}${r.needsHuman ? '  ⚠needsHuman' : ''}`);
     if (r.debut) md.push(`- 登场【${r.debut.book || '?'}】：${r.debut.scene || ''}（${r.debut.howAppears || ''}｜初始身份:${r.debut.initialIdentity || ''}｜${r.debut.locationHint || ''}）`);
@@ -152,7 +154,7 @@ async function run() {
     if (r.parse_failed) md.push('- ⚠ 解析失败，见 result.json');
     md.push('');
   }
-  writeFileSync(join(outDir, 'REPORT.md'), md.join('\n'));
+  writeFileSync(join(outDir, ONLY ? `REPORT-${ONLY.join('_')}.md` : 'REPORT.md'), md.join('\n'));
   console.error('完成 → ' + outDir);
 }
 run().catch(e => { console.error(e); process.exit(1); });

@@ -1,9 +1,9 @@
 {
   "schema": "xiantu.character-registry.v1",
-  "version": "cr-2026-07-04-e6b6389b8a3642de",
-  "sourceHash": "e6b6389b8a3642de",
+  "version": "cr-2026-07-04-630183ca83f35fef",
+  "sourceHash": "630183ca83f35fef",
   "sourceGeneratedAt": "2026-06-30T12:50:33.965Z",
-  "generatedAt": "2026-07-04T02:05:50.032Z",
+  "generatedAt": "2026-07-04T02:16:39.833Z",
   "stats": {
     "total": 308,
     "stagePresent": 249,
@@ -1803,7 +1803,7 @@
       "tier": "次要",
       "stagePresence": false,
       "staticProfile": {
-        "identitySummary": "",
+        "identitySummary": "穿越者（名号即来自地球）",
         "personality": [],
         "appearance": "",
         "speechStyle": "",
@@ -1826,7 +1826,7 @@
         ],
         "conflicts": []
       },
-      "embedText": "布什一世"
+      "embedText": "布什一世 ｜ 穿越者（名号即来自地球）"
     },
     {
       "id": "canon.character.83e108d676",
@@ -31450,7 +31450,8 @@
           "后期成为秦国正使，在朝会上使用水晶球展现地理图景",
           "请阴阳帐对付王守澄尸傀",
           "因阴阳帐被毁受反噬需静修",
-          "向程宗扬倾诉见过太多死人"
+          "向程宗扬倾诉见过太多死人",
+          "其师傅是穿越者（用户正典）"
         ],
         "ending": [
           "云龙太泉段后续仍活跃，燕歌后期发达为秦国正使"
@@ -34439,7 +34440,7 @@
       "tier": "主要",
       "stagePresence": true,
       "staticProfile": {
-        "identitySummary": "来自地球的穿越者，2044年背景",
+        "identitySummary": "来自地球的穿越者（2044年背景），工程师出身",
         "personality": [
           "拥有现代知识体系，但受自身处境、身体状态与时代环境限制",
           "易激动",
@@ -34623,7 +34624,7 @@
         ],
         "conflicts": []
       },
-      "embedText": "袁天罡 ｜ 来自地球的穿越者，2044年背景 ｜ 登场于留仙坪 ｜ 拥有现代知识体系，但受自身处境、身体状态与时代环境限制、易激动、吐槽役、好色但体虚、反应快、胆小怕事 ｜ 同伴/朋友 ｜ 被程宗扬揭穿穿越者身份，并谈及穿越者处境；目睹杨玉环暴力震惊；殿上遇险急蹲求生；易流鼻血被嘲笑；对佛祖化身冷笑；掩护程宗扬受伤"
+      "embedText": "袁天罡 ｜ 来自地球的穿越者（2044年背景），工程师出身 ｜ 登场于留仙坪 ｜ 拥有现代知识体系，但受自身处境、身体状态与时代环境限制、易激动、吐槽役、好色但体虚、反应快、胆小怕事 ｜ 同伴/朋友 ｜ 被程宗扬揭穿穿越者身份，并谈及穿越者处境；目睹杨玉环暴力震惊；殿上遇险急蹲求生；易流鼻血被嘲笑；对佛祖化身冷笑；掩护程宗扬受伤"
     },
     {
       "id": "liuchao.character.yun_cang_feng",
