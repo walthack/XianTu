@@ -74,8 +74,9 @@ test('story prompt includes current objectives and excludes future plot content'
   assert.match(prompt, /玩家进入建康并接触主要人物/);
   assert.match(prompt, /初会：玩家第一次遇见程宗扬/);
   assert.match(prompt, /flags\.phase gte 1/);
-  assert.match(prompt, /当前主轴推进焦点（GM 主动触发，不等关键词）/);
+  assert.match(prompt, /当前主轴推进焦点（默认主动触发，尊重玩家绕行）/);
   assert.match(prompt, /不得等玩家说中事件名、人物名、道具名或其他关键词才触发/);
+  assert.match(prompt, /自由探索、随便逛逛、瞎逛或避开此事时，应尊重玩家节奏/);
   assert.match(prompt, /当前相关人物正典约束/);
   assert.match(prompt, /主轴拍点：程宗扬在建康城外与玩家初次相遇/);
   assert.match(prompt, /密战开启（下一拍：暗潮浮现/);
