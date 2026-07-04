@@ -2656,8 +2656,8 @@
         ]
       },
       {
-        "id": "liuchao.character.yi_shi_bu_shi_da_shi",
-        "name": "一世不拾大师",
+        "id": "canon.character.526e7db525",
+        "name": "不拾一世",
         "role": "配角",
         "gender": "男",
         "profile": {
@@ -3364,7 +3364,7 @@
       },
       {
         "fromCharacterId": "liuchao.character.lu_zhi_shen",
-        "toCharacterId": "liuchao.character.yi_shi_bu_shi_da_shi",
+        "toCharacterId": "canon.character.526e7db525",
         "relation": "同门",
         "score": 30,
         "direction": "bidirectional",
@@ -3385,7 +3385,7 @@
         ]
       },
       {
-        "fromCharacterId": "liuchao.character.yi_shi_bu_shi_da_shi",
+        "fromCharacterId": "canon.character.526e7db525",
         "toCharacterId": "liuchao.character.ju_qu_er_shi",
         "relation": "同门",
         "score": 30,
@@ -3429,7 +3429,7 @@
         ]
       },
       {
-        "fromCharacterId": "liuchao.character.yi_shi_bu_shi_da_shi",
+        "fromCharacterId": "canon.character.526e7db525",
         "toCharacterId": "liuchao.character.fa_hai",
         "relation": "同门",
         "score": 30,
