@@ -189,6 +189,31 @@ function reconcileSaveWithRegistry(saveData: SaveData, runtime: RuntimeState & {
   runtime.reconciledRegistryVersion = deps.version;
 }
 
+// 正典人格底线投影：把 registry principles 落到 社交.关系.<NPC>.人格底线（UI 显示 + 触犯好感暴跌机制）。
+// 与提示词侧一致地按关系门控——好感≥30 或"自己人类"关系才揭示（陌生/敌对时保持"未记录"=尚未摸透）。
+// 只填空的，不覆盖 LLM/玩家已写的底线；每回合运行(好感是动态的,跨过阈值即补)。
+const 底线揭示好感 = 30;
+const 自己人关系 = /同伴|伙伴|队友|道侣|伴侣|挚友|知己|情人|爱慕|恋|妾|后宫|侍妾|奴|婢|主仆|仆|结义|亲密|归顺|臣服|忠/;
+function projectBottomLinesToNpcs(saveData: SaveData): void {
+  try {
+    /* eslint-disable @typescript-eslint/no-var-requires */
+    const { getRegistryBottomLine } = require('./characterResolver') as { getRegistryBottomLine: (name: string) => string[] };
+    /* eslint-enable @typescript-eslint/no-var-requires */
+    const relations = readPath(saveData, ['社交', '关系']) as Record<string, any> | undefined;
+    if (!relations || typeof relations !== 'object') return;
+    for (const [key, npc] of Object.entries(relations)) {
+      if (!npc || typeof npc !== 'object' || key.startsWith('_')) continue;
+      if (Array.isArray(npc.人格底线) && npc.人格底线.length) continue; // 不覆盖已有
+      const fav = Number(npc.好感度) || 0;
+      const label = String(npc.与玩家关系 || '');
+      if (fav < 底线揭示好感 && !自己人关系.test(label)) continue; // 未达揭示条件 → 保持未记录
+      const name = String(npc.名字 || key);
+      const canon = getRegistryBottomLine(name);
+      if (canon.length) npc.人格底线 = canon;
+    }
+  } catch { /* 惰性 require 在 node 测试环境不可用 → 安全跳过 */ }
+}
+
 export function advanceScenarioRuntime(saveData: SaveData): {
   saveData: SaveData;
   transitions: ScenarioRuntimeTransition[];
@@ -197,6 +222,7 @@ export function advanceScenarioRuntime(saveData: SaveData): {
   const runtime = getRuntime(next);
   if (!runtime) return { saveData: next, transitions: [] };
   reconcileSaveWithRegistry(next, runtime as RuntimeState & { modId?: string });
+  projectBottomLinesToNpcs(next);
   normalizeRuntimeFlags(runtime);
 
   runtime.chapters = Array.isArray(runtime.chapters) ? runtime.chapters : [];

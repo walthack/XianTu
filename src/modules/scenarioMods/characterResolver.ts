@@ -123,9 +123,9 @@ function buildNotes(entry: RegistryEntry, currentPhase: RegistryPhase | undefine
     add('阶段身份', `当前关卡 ${currentPhase.stageId}：${currentPhase.identity || currentPhase.role || ''}`, 520);
     if (currentPhase.forbidden?.length) add('本阶段禁用', `${currentPhase.stageId}：${currentPhase.forbidden.join('、')}`, 360);
   }
-  add('人工正典', entry.review?.humanNotes);
+  // review.humanNotes / followUps 是内部维护记录（含日期/"扫描抓了…"等工程语），不进游戏
+  // （曾泄漏到人物面板与 LLM 提示词）。别名合并信息对 LLM 有用且不尴尬，保留。
   add('人工正典', entry.review?.aliasMerged?.map(alias => `${alias} 已并入 ${entry.canonicalName}`));
-  add('人工正典', entry.review?.followUps);
   return unique(notes);
 }
 
@@ -182,4 +182,10 @@ export const REGISTRY_VERSION: string = (registryJson as { version?: string }).v
 /** 是否有该角色的正典条目（供其他模块按需查询）。 */
 export function hasRegistryEntry(name: string): boolean {
   return byName.has(name);
+}
+
+/** 取某角色的正典人格底线（principles），供运行时投影到 社交.关系 NPC.人格底线。无则空数组。 */
+export function getRegistryBottomLine(name: string): string[] {
+  const entry = byName.get(name);
+  return unique(asArray<string>(entry?.staticProfile?.principles)).filter(Boolean);
 }
