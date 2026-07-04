@@ -120,7 +120,19 @@ function formatCharacterRelationship(
   return lines.join('；');
 }
 
-function formatFocusedCharacter(character: ScenarioModCharacter, runtime: StoryRuntime): string {
+// 底线揭示门控：入队(自己人类关系) 或 好感≥30 才把【底线】喂给 LLM；否则隐去，
+// 避免敌对期把角色真实底线泄漏给 LLM（如小紫入队前的敌对行为被真底线约束住）。
+const BOTTOMLINE_REVEAL_FAVOR = 30;
+const ALLY_RELATION = /同伴|伙伴|队友|道侣|伴侣|挚友|知己|情人|爱慕|恋|妾|后宫|侍妾|奴|婢|主仆|仆|结义|亲密|归顺|臣服|忠/;
+function shouldRevealBottomLine(fav: number, label: string): boolean {
+  return fav >= BOTTOMLINE_REVEAL_FAVOR || ALLY_RELATION.test(label || '');
+}
+
+function formatFocusedCharacter(
+  character: ScenarioModCharacter,
+  runtime: StoryRuntime,
+  favByName?: Map<string, { fav: number; label: string }>,
+): string {
   const profile = character.profile || {};
   const lines: string[] = [`- ${character.name}（${[character.gender, character.role, character.realm].filter(Boolean).join('；') || '正典人物'}）`];
   const base = compactText(character.description || profile.origin || '');
@@ -141,7 +153,21 @@ function formatFocusedCharacter(character: ScenarioModCharacter, runtime: StoryR
   if (profile.currentThought) lines.push(`  当前心思：${compactText(profile.currentThought)}`);
   const memories = formatList(profile.memories, 3);
   if (memories) lines.push(`  记忆：${memories}`);
-  const notes = formatList(profile.notes, 8, 220);
+  // 底线门控：未入队且好感未达阈值 → 隐去【底线】，改提示 LLM"尚未摸透，勿臆断"
+  const canonFav = runtime.canon?.playerRelationships?.find(item => item.characterId === character.id)?.favorability;
+  const live = favByName?.get(character.name);
+  const fav = Number(live?.fav ?? canonFav ?? 0) || 0;
+  const label = live?.label ?? '';
+  const reveal = shouldRevealBottomLine(fav, label);
+  const rawNotes: string[] = Array.isArray(profile.notes) ? profile.notes.map((n: unknown) => String(n)) : [];
+  const hasBottom = rawNotes.some(note => note.startsWith('【底线】'));
+  const gatedNotes = reveal
+    ? rawNotes
+    : [
+        ...rawNotes.filter(note => !note.startsWith('【底线】')),
+        ...(hasBottom ? ['【底线】（尚未与其深交，未摸透此人底线/原则；按其性格与当前立场行事即可，勿臆断其道德红线）'] : []),
+      ];
+  const notes = formatList(gatedNotes, 8, 220);
   if (notes) lines.push(`  正典备注：${notes}`);
   const relation = formatCharacterRelationship(
     character,
@@ -164,7 +190,7 @@ function reputationTier(value: number): string {
   return '籍籍无名';
 }
 
-function buildFocusedCharacterPrompt(runtime: StoryRuntime, activeEvents: ScenarioModEvent[], contextText = ''): string {
+function buildFocusedCharacterPrompt(runtime: StoryRuntime, activeEvents: ScenarioModEvent[], contextText = '', favByName?: Map<string, { fav: number; label: string }>): string {
   const characters = runtime.canon?.characters || [];
   if (!characters.length) return '';
   const focusedIds = new Set<string>();
@@ -194,7 +220,7 @@ function buildFocusedCharacterPrompt(runtime: StoryRuntime, activeEvents: Scenar
   }
   if (!focusedCharacters.length) return '';
   return `## 当前相关人物正典约束（防 OOC）
-${focusedCharacters.map(character => formatFocusedCharacter(character, runtime)).join('\n')}
+${focusedCharacters.map(character => formatFocusedCharacter(character, runtime, favByName)).join('\n')}
 
 【人物正典优先级】：
 1. 上述身份、关系、性格、谈吐/底线/目标、以及【身世】【情节】等正典备注是硬约束；不得改写、否定或让角色无因突变。
@@ -281,7 +307,18 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
     : runtime.nextStageId
       ? `- 本关收束后，建议切换到下一关：${runtime.nextStageName || runtime.nextStageId}（${runtime.nextStageId}）。不要在当前关提前展开下一关正文。`
       : '- （当前事件完成后将进入新章节或迎来结局）';
-  const focusedCharacterSection = buildFocusedCharacterPrompt(runtime, activeEvents, contextText);
+  // 读一次 社交.关系：既供底线门控(好感/关系→是否揭示)，也供下方失配检测复用
+  const relations = readPath(saveData, ['社交', '关系']) as Record<string, { 名字?: string; 与玩家关系?: string; 好感度?: number }> | undefined;
+  const favByName = new Map<string, { fav: number; label: string }>();
+  if (relations && typeof relations === 'object') {
+    for (const [key, npc] of Object.entries(relations)) {
+      if (!npc || typeof npc !== 'object') continue;
+      const entry = { fav: Number(npc.好感度) || 0, label: String(npc.与玩家关系 || '') };
+      favByName.set(key, entry);
+      if (npc.名字) favByName.set(String(npc.名字), entry);
+    }
+  }
+  const focusedCharacterSection = buildFocusedCharacterPrompt(runtime, activeEvents, contextText, favByName);
 
   // 声望与认知闭环：当前值+档位醒目注入（静态 REPUTATION_GUIDE 埋在 worldStandards 里 LLM 不消费——
   // 实测籍籍无名的主角被唐使"底细尽在掌握"）
@@ -289,8 +326,7 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
   const reputationLine = `【声望与认知】主角当前声望：${repValue}（${reputationTier(repValue)}）。NPC 对主角的认知必须匹配声望档位：籍籍无名＝陌生人不识其名、不知其过往事迹与底细；势力若声称"掌握其底细"，必须有情报来源并在剧情中交代（且这类调查本身就是值得叙述的事件）；亲历者与同行者除外。主角做出扬名（或败坏名声）之事时，必须用 set 更新 角色.属性.声望（参考：救人除害+30~300、斩强敌+100~1000、震动一方的大事件+200~2000；恶行记负值）。`;
 
   // 关系-好感失配检测：与玩家关系 是静态标签(物化写一次),从不随好感演进——
-  // 实测 噬心 挂"敌对"却好感35且主动双修。确定性检出失配,交 LLM 剧情内收敛。
-  const relations = readPath(saveData, ['社交', '关系']) as Record<string, { 与玩家关系?: string; 好感度?: number }> | undefined;
+  // 实测 噬心 挂"敌对"却好感35且主动双修。确定性检出失配,交 LLM 剧情内收敛。（复用上方 relations）
   const mismatches: string[] = [];
   if (relations && typeof relations === 'object') {
     for (const [key, npc] of Object.entries(relations)) {
