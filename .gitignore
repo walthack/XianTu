@@ -49,4 +49,11 @@ server/
 .xiantu-server/
 
 # Generated scenario mod data (synced to NAS, not versioned in main repo)
-mod-kit/generated/
+# 核心制度文档豁免(权威=工作目录git, NAS仅阅览镜像; 其余generated照旧不入库)
+mod-kit/generated/*
+!mod-kit/generated/deepseek-v4-flash/
+mod-kit/generated/deepseek-v4-flash/*
+!mod-kit/generated/deepseek-v4-flash/character-canon/
+mod-kit/generated/deepseek-v4-flash/character-canon/*
+!mod-kit/generated/deepseek-v4-flash/character-canon/CANON-DECISIONS.md
+!mod-kit/generated/deepseek-v4-flash/character-canon/AGENT-BRIEF-一致性制度.md
