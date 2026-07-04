@@ -1,9 +1,9 @@
 {
   "schema": "xiantu.character-registry.v1",
-  "version": "cr-2026-07-04-11b88fd19eed979d",
-  "sourceHash": "11b88fd19eed979d",
+  "version": "cr-2026-07-04-43bc0c0e83768c9d",
+  "sourceHash": "43bc0c0e83768c9d",
   "sourceGeneratedAt": "2026-06-30T12:50:33.965Z",
-  "generatedAt": "2026-07-04T14:09:27.530Z",
+  "generatedAt": "2026-07-04T14:12:10.265Z",
   "stats": {
     "total": 304,
     "stagePresent": 248,
@@ -20139,7 +20139,8 @@
           "locator": "chapter35.html",
           "scene": "在某处（疑为青楼或风月场所），与西门大官人相遇，被其以深情目光注视，凝羽冷漠回应其问候。"
         },
-        "race": "羽族·穹羽族（能操月光；族中唯一无翼者）"
+        "race": "羽族·穹羽族（能操月光；族中唯一无翼者）",
+        "birthYear": 196
       },
       "phaseIdentities": [
         {
@@ -24157,7 +24158,8 @@
           "location": "沐羽城",
           "locator": "chapter315.html",
           "scene": "在沐羽城施药分发丹药的活动中，一只玉手拨开肩舆白纱，露出卓云君的仙子面容，申婉盈随后让门人将肩舆抬回并闭门。"
-        }
+        },
+        "birthYear": 202
       },
       "phaseIdentities": [
         {
@@ -28180,7 +28182,8 @@
           "location": "南荒密林",
           "locator": "chapter54.html",
           "scene": "武二郎厚着脸皮与花苗人混在一处，用蛮语跟苏荔说笑，被易彪窘迫的样子逗乐"
-        }
+        },
+        "birthYear": 190
       },
       "phaseIdentities": [
         {
@@ -30980,7 +30983,8 @@
             "faction": "星月湖",
             "role": "八骏·龙骥/岳帅部属"
           }
-        ]
+        ],
+        "birthYear": 190
       },
       "phaseIdentities": [
         {
