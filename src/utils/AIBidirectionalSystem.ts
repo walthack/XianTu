@@ -1005,7 +1005,8 @@ ${textFormatsPrompt}
 
 # 世界观设定
 ${worldStandardsPrompt}
-
+${scenarioCanonPrompt ? `\n---\n\n${scenarioCanonPrompt}\n` : ''}
+${scenarioStoryPrompt ? `\n---\n\n${scenarioStoryPrompt}\n` : ''}
 ---
 
 ${coreStatusSummary}
