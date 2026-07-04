@@ -129,7 +129,7 @@
       {
         "id": "liuchao.faction.shi_fang_cong_lin",
         "name": "十方丛林",
-        "description": "佛门大乘联合组织，由大孚灵鹫寺统领，目前已将程宗扬列为佛门公敌。",
+        "description": "佛门大乘联合组织，由大孚灵鹫寺统领，目前已将程宗扬列为佛门公敌。 曾起草「核武不扩散条约」——即核心武学不扩散条约，旨在管控顶级武学外流（程宗扬初闻误以为地球核武器，惊到半死，被六朝众人嘲笑没常识）。",
         "type": "佛门组织",
         "headquartersLocationId": "lyg.location.dafu_lingjiu_temple"
       },
