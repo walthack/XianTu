@@ -27,6 +27,6 @@
 - NAS `/Volumes/botsvault/06_material/XianTu-Mod-Kit/DeepSeek-V4-Flash/character-canon/` 仅为用户阅览镜像：**单向 rsync 工作目录→NAS**，改动后同步一次；不得反向拉取、不得直接在 NAS 上编辑
 - repo 根 `AGENTS.md` / `CLAUDE.md`（同内容）是本制度的入口精简版
 
-## 4. 规划中（用户尚未拍板，勿自行实施）
+## 4. 暂缓（用户裁定 07-04：先观察现行制度执行情况，勿自行实施）
 
-第二层机器执法：`human-authority.json` 锁定字段清单 + canon:build 第 38 关校验器——锁定字段被改则构建红灯。批准后由发起方实现，届时各脚本的保护集改为从该清单读取（单一事实源）。
+第二层机器执法：`human-authority.json` 锁定字段清单 + canon:build 第 38 关校验器——锁定字段被改则构建红灯。**暂缓**；若再发生保护字段被覆盖的事故，重新提请。届时各脚本的保护集改为从该清单读取（单一事实源）。
