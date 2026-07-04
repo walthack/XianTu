@@ -1,9 +1,9 @@
 {
   "schema": "xiantu.character-registry.v1",
-  "version": "cr-2026-07-04-5d07f22956b8d1e6",
-  "sourceHash": "5d07f22956b8d1e6",
+  "version": "cr-2026-07-04-ce66db6a65218e6a",
+  "sourceHash": "ce66db6a65218e6a",
   "sourceGeneratedAt": "2026-06-30T12:50:33.965Z",
-  "generatedAt": "2026-07-04T02:20:09.267Z",
+  "generatedAt": "2026-07-04T02:28:16.767Z",
   "stats": {
     "total": 308,
     "stagePresent": 249,
@@ -1068,6 +1068,49 @@
       "embedText": "杨艳 ｜ 杨贤妃 ｜ 杨艳（疑似宗室） ｜ 【唐国人物】 ｜ 唐国朝廷(杨贤妃/六宫之主)、舞阳侯府(奴婢/内宅成员) ｜ 登场于蓬莱秘阁 ｜ 别名/称谓：杨贤妃 ｜ 唐国贤妃, 又称杨妃."
     },
     {
+      "id": "canon.character.526e7db525",
+      "canonicalName": "不拾一世",
+      "aliases": [
+        "不拾",
+        "布什一世"
+      ],
+      "gender": "男",
+      "books": [
+        "yunlong",
+        "yange"
+      ],
+      "tier": "次要",
+      "stagePresence": false,
+      "staticProfile": {
+        "identitySummary": "穿越者（名号即来自地球）",
+        "personality": [],
+        "appearance": "",
+        "speechStyle": "",
+        "principles": [],
+        "goals": [],
+        "weaknesses": [],
+        "signatureAbilities": [],
+        "relationToProtagonist": [],
+        "formsOfAddress": [],
+        "joining": [],
+        "keyEvents": [],
+        "ending": []
+      },
+      "phaseIdentities": [],
+      "review": {
+        "approved": false,
+        "reviewed": false,
+        "flags": [
+          "duplicate-merged"
+        ],
+        "conflicts": [],
+        "humanNotes": [
+          "用户勘误2026-07-04：原录布什一世为音近误记，原文为不拾一世（云龙34/燕歌63次命中）"
+        ]
+      },
+      "embedText": "不拾一世 ｜ 不拾 布什一世 ｜ 穿越者（名号即来自地球）"
+    },
+    {
       "id": "canon.character.55df25e1a5",
       "canonicalName": "古格尔",
       "aliases": [],
@@ -1789,44 +1832,6 @@
         ]
       },
       "embedText": "尹思元 ｜ 乾贞道门下 ｜ 乾贞道 ｜ 登场于太泉 ｜ 好色、阴狠、贪婪、狡诈 ｜ 敌对，被主角程宗扬所杀；敌对关系（被主角亲手击杀） ｜ 尹思元 ｜ 在太泉古阵盯上太乙真宗，拉拢神霄宗黑吃黑；重伤后意图侵犯朱殷，被程宗扬用长刀钉死；在第8章被程宗扬亲手干掉"
-    },
-    {
-      "id": "canon.character.8215512188",
-      "canonicalName": "布什一世",
-      "aliases": [],
-      "gender": "男",
-      "books": [
-        "qingyu",
-        "yunlong",
-        "yange"
-      ],
-      "tier": "次要",
-      "stagePresence": false,
-      "staticProfile": {
-        "identitySummary": "穿越者（名号即来自地球）",
-        "personality": [],
-        "appearance": "",
-        "speechStyle": "",
-        "principles": [],
-        "goals": [],
-        "weaknesses": [],
-        "signatureAbilities": [],
-        "relationToProtagonist": [],
-        "formsOfAddress": [],
-        "joining": [],
-        "keyEvents": [],
-        "ending": []
-      },
-      "phaseIdentities": [],
-      "review": {
-        "approved": false,
-        "reviewed": false,
-        "flags": [
-          "duplicate-merged"
-        ],
-        "conflicts": []
-      },
-      "embedText": "布什一世 ｜ 穿越者（名号即来自地球）"
     },
     {
       "id": "canon.character.83e108d676",
