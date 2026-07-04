@@ -34,6 +34,28 @@ test('does not flag narrated item gain when inventory mutation exists', async ()
   assert.deepEqual(getMissingNarratedInventoryGains(text, commands), []);
 });
 
+test('still flags one narrated gain when commands only cover another item', async () => {
+  const { getMissingNarratedInventoryGains } = await loadTs('../src/utils/narratedInventory.ts');
+
+  const text = '程宗扬收下一枚云氏玉简，又接过一颗龙睛玉收入怀中。';
+  const commands = [
+    {
+      action: 'set',
+      key: '角色.背包.物品.item_long_jing_yu',
+      value: {
+        物品ID: 'item_long_jing_yu',
+        名称: '龙睛玉',
+        类型: '材料',
+        品质: { quality: '黄', grade: 3 },
+        数量: 1,
+        描述: '一颗温润的龙睛玉。',
+      },
+    },
+  ];
+
+  assert.deepEqual(getMissingNarratedInventoryGains(text, commands), ['云氏玉简']);
+});
+
 test('detects carried items confirmed in possession narration', async () => {
   const { detectNarratedInventoryPossessions } = await loadTs('../src/utils/narratedInventory.ts');
 

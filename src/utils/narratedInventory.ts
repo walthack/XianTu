@@ -138,8 +138,68 @@ export function hasInventoryItemMutationCommand(commands: unknown[]): boolean {
   });
 }
 
+function addCommandItemIdentity(identities: Set<string>, value: unknown): void {
+  if (typeof value === 'string') {
+    const identity = getInventoryItemIdentityKey(value);
+    if (identity) identities.add(identity);
+    return;
+  }
+
+  if (!value || typeof value !== 'object') return;
+  if (Array.isArray(value)) {
+    for (const entry of value) addCommandItemIdentity(identities, entry);
+    return;
+  }
+
+  const record = value as Record<string, unknown>;
+  for (const key of ['名称', 'name', '物品名', 'itemName']) {
+    if (typeof record[key] === 'string') {
+      const identity = getInventoryItemIdentityKey(record[key]);
+      if (identity) identities.add(identity);
+    }
+  }
+}
+
+function getInventoryMutationItemIdentities(commands: unknown[]): Set<string> {
+  const identities = new Set<string>();
+  if (!Array.isArray(commands)) return identities;
+
+  for (const command of commands) {
+    if (!command || typeof command !== 'object') continue;
+    const cmd = command as Record<string, unknown>;
+    const action = typeof cmd.action === 'string' ? cmd.action : '';
+    const key = typeof cmd.key === 'string' ? cmd.key.trim() : '';
+    if (!['set', 'push', 'add'].includes(action)) continue;
+    if (
+      key !== '角色.背包.物品' &&
+      !key.startsWith('角色.背包.物品.') &&
+      key !== '背包.物品' &&
+      !key.startsWith('背包.物品.') &&
+      key !== '物品栏.物品' &&
+      !key.startsWith('物品栏.物品.')
+    ) {
+      continue;
+    }
+
+    addCommandItemIdentity(identities, cmd.value);
+
+    const suffix = key.split('.').pop() || '';
+    if (/[\u4e00-\u9fff]/.test(suffix)) {
+      const identity = getInventoryItemIdentityKey(suffix);
+      if (identity) identities.add(identity);
+    }
+  }
+
+  return identities;
+}
+
 export function getMissingNarratedInventoryGains(text: string, commands: unknown[]): string[] {
   const gains = detectNarratedInventoryGains(text);
-  if (gains.length === 0 || hasInventoryItemMutationCommand(commands)) return [];
-  return gains;
+  if (gains.length === 0) return [];
+
+  const commandItemIdentities = getInventoryMutationItemIdentities(commands);
+  return gains.filter((itemName) => {
+    const identity = getInventoryItemIdentityKey(itemName);
+    return identity && !commandItemIdentities.has(identity);
+  });
 }
