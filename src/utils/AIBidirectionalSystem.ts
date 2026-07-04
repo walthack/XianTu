@@ -31,6 +31,7 @@ import { buildScenarioStoryPrompt, createScenarioPromptState } from '@/modules/s
 import { buildActionGatePrompt, getNarrativeTurn, pruneExpiredActionGates } from '@/utils/actionGate';
 import { detectNarratedPlayerDamage } from '@/utils/narratedDamage';
 import {
+  detectNarratedInventoryGainEntries,
   detectNarratedInventoryPossessions,
   getInventoryItemIdentityKey,
   getMissingNarratedInventoryGains,
@@ -3272,6 +3273,11 @@ ${saveDataJson}`;
   private reconcileNarratedInventoryPossessions(saveData: SaveData, text: string): StateChange[] {
     const itemNames = detectNarratedInventoryPossessions(text);
     if (itemNames.length === 0) return [];
+    const gainQuantityByIdentity = new Map(
+      detectNarratedInventoryGainEntries(text)
+        .map((item) => [getInventoryItemIdentityKey(item.名称), item.数量] as const)
+        .filter(([identity]) => Boolean(identity))
+    );
 
     const inventoryPath = '角色.背包.物品';
     const items = get(saveData, inventoryPath, {}) as Record<string, any>;
@@ -3280,23 +3286,44 @@ ${saveDataJson}`;
     }
 
     const currentItems = get(saveData, inventoryPath, {}) as Record<string, any>;
-    const existingNames = new Set(
-      Object.values(currentItems)
-        .map((item: any) => (typeof item?.名称 === 'string' ? getInventoryItemIdentityKey(item.名称) : ''))
-        .filter(Boolean)
-    );
+    const existingItemsByIdentity = new Map<string, [string, any]>();
+    for (const [itemId, item] of Object.entries(currentItems)) {
+      const identity = typeof item?.名称 === 'string' ? getInventoryItemIdentityKey(item.名称) : '';
+      if (identity) existingItemsByIdentity.set(identity, [itemId, item]);
+    }
     const changes: StateChange[] = [];
 
     for (const rawName of itemNames) {
       const name = rawName.trim();
       const identity = getInventoryItemIdentityKey(name);
-      if (!name || !identity || existingNames.has(identity)) continue;
+      if (!name || !identity) continue;
+
+      const existing = existingItemsByIdentity.get(identity);
+      const narratedGainQuantity = gainQuantityByIdentity.get(identity) || 0;
+      if (existing) {
+        const [existingItemId, existingItem] = existing;
+        if (narratedGainQuantity > 0 && this.shouldReconcileNarratedGainAsStack(existingItem)) {
+          const quantityPath = `${inventoryPath}.${existingItemId}.数量`;
+          const oldQuantity = get(saveData, quantityPath);
+          const currentQuantity = typeof oldQuantity === 'number' && Number.isFinite(oldQuantity) ? oldQuantity : 1;
+          const newQuantity = currentQuantity + narratedGainQuantity;
+          set(saveData, quantityPath, newQuantity);
+          changes.push({
+            key: quantityPath,
+            action: 'add',
+            oldValue: this._summarizeValueForChangeLog(quantityPath, oldQuantity, 'add'),
+            newValue: this._summarizeValueForChangeLog(quantityPath, newQuantity, 'add')
+          });
+          console.warn(`[AI双向系统] 叙事物品数量补账: ${name} +${narratedGainQuantity} -> ${quantityPath}`);
+        }
+        continue;
+      }
 
       const itemId = this.createNarratedInventoryItemId(name, currentItems);
-      const item = this.createNarratedInventoryItem(itemId, name);
+      const item = this.createNarratedInventoryItem(itemId, name, Math.max(1, narratedGainQuantity || 1));
       set(saveData, `${inventoryPath}.${itemId}`, item);
       currentItems[itemId] = item;
-      existingNames.add(identity);
+      existingItemsByIdentity.set(identity, [itemId, item]);
       changes.push({
         key: `${inventoryPath}.${itemId}`,
         action: 'set',
@@ -3307,6 +3334,13 @@ ${saveDataJson}`;
     }
 
     return changes;
+  }
+
+  private shouldReconcileNarratedGainAsStack(itemValue: any): boolean {
+    if (!itemValue || typeof itemValue !== 'object') return false;
+    const nameAndType = String(`${itemValue.类型 || ''} ${itemValue.名称 || ''}`);
+    if (/仙品|神品|白娘子|依附/.test(nameAndType)) return false;
+    return /丹药|丹丸|材料|灵草|灵材|矿石|食物|货物/.test(nameAndType);
   }
 
   private createNarratedInventoryItemId(name: string, existingItems: Record<string, any>): string {
@@ -3325,7 +3359,7 @@ ${saveDataJson}`;
     return id;
   }
 
-  private createNarratedInventoryItem(itemId: string, name: string): Record<string, any> {
+  private createNarratedInventoryItem(itemId: string, name: string, quantity = 1): Record<string, any> {
     const quality = name.includes('神品') ? '神'
       : name.includes('仙品') ? '仙'
         : name.includes('天品') ? '天'
@@ -3342,7 +3376,7 @@ ${saveDataJson}`;
       名称: name,
       类型: type,
       品质: { quality, grade: quality === '凡' ? 1 : 10 },
-      数量: 1,
+      数量: Math.max(1, quantity),
       描述: `叙事中已明确由玩家随身持有的物品：${name}。`
     };
 

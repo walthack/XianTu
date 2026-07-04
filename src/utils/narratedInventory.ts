@@ -25,9 +25,15 @@ const INVENTORY_ITEM_NOUNS = [
 ];
 
 const INVENTORY_ITEM_NOUN_PATTERN = INVENTORY_ITEM_NOUNS.join('|');
-const INVENTORY_ITEM_COUNT_PREFIX = '(?:[0-9]+|[一二两三四五六七八九十百千万]+|数|几)?';
+const INVENTORY_ITEM_COUNT_VALUE_PATTERN = '[0-9]+|[一二两三四五六七八九十百千万]+|数|几';
+const INVENTORY_ITEM_COUNT_PREFIX = `(?:${INVENTORY_ITEM_COUNT_VALUE_PATTERN})?`;
 const INVENTORY_ITEM_UNIT_PREFIX =
   `(?:这|那|此)?${INVENTORY_ITEM_COUNT_PREFIX}(?:枚|块|本|卷|件|只|个|颗|粒|瓶|支|张|份|把|柄|条)`;
+
+export interface NarratedInventoryGain {
+  名称: string;
+  数量: number;
+}
 
 export function normalizeNarratedItemName(value: string): string {
   let normalized = value
@@ -65,10 +71,56 @@ function isPlausibleNarratedItemName(value: string): boolean {
   return true;
 }
 
-export function detectNarratedInventoryGains(text: string): string[] {
+function parseChineseInteger(value: string): number | null {
+  if (!value) return null;
+  if (/^\d+$/.test(value)) return Number(value);
+  if (value === '两') return 2;
+  const digits: Record<string, number> = {
+    一: 1,
+    二: 2,
+    三: 3,
+    四: 4,
+    五: 5,
+    六: 6,
+    七: 7,
+    八: 8,
+    九: 9,
+  };
+  if (value in digits) return digits[value];
+  if (value === '十') return 10;
+  const tenMatch = value.match(/^([一二两三四五六七八九])?十([一二三四五六七八九])?$/);
+  if (tenMatch) {
+    const tens = tenMatch[1] ? (tenMatch[1] === '两' ? 2 : digits[tenMatch[1]]) : 1;
+    const ones = tenMatch[2] ? digits[tenMatch[2]] : 0;
+    return tens * 10 + ones;
+  }
+  return null;
+}
+
+function getNarratedItemQuantity(rawValue: string): number {
+  const match = rawValue
+    .trim()
+    .match(new RegExp(`^(?:这|那|此)?(${INVENTORY_ITEM_COUNT_VALUE_PATTERN})(?:枚|块|本|卷|件|只|个|颗|粒|瓶|支|张|份|把|柄|条)`));
+  const parsed = parseChineseInteger(match?.[1] || '');
+  return parsed && Number.isFinite(parsed) && parsed > 0 ? parsed : 1;
+}
+
+function addNarratedGain(found: Map<string, NarratedInventoryGain>, rawValue: string): void {
+  const itemName = normalizeNarratedItemName(rawValue || '');
+  if (!isPlausibleNarratedItemName(itemName)) return;
+  const existing = found.get(itemName);
+  const quantity = getNarratedItemQuantity(rawValue);
+  if (existing) {
+    existing.数量 += quantity;
+  } else {
+    found.set(itemName, { 名称: itemName, 数量: quantity });
+  }
+}
+
+export function detectNarratedInventoryGainEntries(text: string): NarratedInventoryGain[] {
   if (!text || typeof text !== 'string') return [];
 
-  const found = new Set<string>();
+  const found = new Map<string, NarratedInventoryGain>();
   const patterns = [
     new RegExp(`(?:获得|得到|取得|接过|收下|收起|拾起|捡起|买下|购得|缴获|受赠|收入囊中|纳入怀中|放入(?:怀中|背包|储物袋|囊中)|揣入怀中)[了着]?(?:一枚|一块|一本|一卷|一件|一只|一个|这枚|这块|这本|这卷|这件|那枚|那块|那本|那卷|那件)?([^，。；、\\n]{0,18}?(?:${INVENTORY_ITEM_NOUN_PATTERN}))`, 'g'),
     new RegExp(`(?:将|把)([^，。；、\\n]{0,18}?(?:${INVENTORY_ITEM_NOUN_PATTERN}))(?:轻轻|顺手|郑重|小心)?(?:收下|收起|收入|纳入|放入|揣入|塞进)`, 'g'),
@@ -77,12 +129,15 @@ export function detectNarratedInventoryGains(text: string): string[] {
 
   for (const pattern of patterns) {
     for (const match of text.matchAll(pattern)) {
-      const itemName = normalizeNarratedItemName(match[1] || '');
-      if (isPlausibleNarratedItemName(itemName)) found.add(itemName);
+      addNarratedGain(found, match[1] || '');
     }
   }
 
-  return [...found];
+  return [...found.values()];
+}
+
+export function detectNarratedInventoryGains(text: string): string[] {
+  return detectNarratedInventoryGainEntries(text).map((item) => item.名称);
 }
 
 export function detectNarratedInventoryPossessions(text: string): string[] {

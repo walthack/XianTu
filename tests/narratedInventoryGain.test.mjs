@@ -120,8 +120,25 @@ test('normalizes descriptive counted item names while keeping special items sepa
   assert.notEqual(getInventoryItemIdentityKey('一枚泛着淡金色光芒的仙品·龙睛玉'), getInventoryItemIdentityKey('龙睛玉'));
 });
 
-test('TODO parses narrated item counts such as 三枚龙睛玉 into quantity 3', {
-  todo: 'narrated gains currently return item names only, not quantities',
+test('parses narrated item counts such as 三枚龙睛玉 into quantity 3', async () => {
+  const { detectNarratedInventoryGainEntries } = await loadTs('../src/utils/narratedInventory.ts');
+
+  const text = '程宗扬收下三枚闪着幽光的龙睛玉，又收下一枚泛着淡金色光芒的仙品·龙睛玉。';
+
+  assert.deepEqual(detectNarratedInventoryGainEntries(text), [
+    { 名称: '龙睛玉', 数量: 3 },
+    { 名称: '仙品·龙睛玉', 数量: 1 },
+  ]);
+});
+
+test('merges repeated narrated gains of the same item into one counted entry', async () => {
+  const { detectNarratedInventoryGainEntries } = await loadTs('../src/utils/narratedInventory.ts');
+
+  const text = '程宗扬先收下两颗龙睛玉，又从匣中收下一颗龙睛玉，一并收入囊中。';
+
+  assert.deepEqual(detectNarratedInventoryGainEntries(text), [
+    { 名称: '龙睛玉', 数量: 3 },
+  ]);
 });
 
 test('rejects sentence fragments during carried item reconciliation', async () => {
