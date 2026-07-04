@@ -1,12 +1,12 @@
 {
   "schema": "xiantu.character-registry.v1",
-  "version": "cr-2026-07-04-af4b503c5d7c6242",
-  "sourceHash": "af4b503c5d7c6242",
+  "version": "cr-2026-07-04-a73c34367ff4ff56",
+  "sourceHash": "a73c34367ff4ff56",
   "sourceGeneratedAt": "2026-06-30T12:50:33.965Z",
-  "generatedAt": "2026-07-04T04:46:21.646Z",
+  "generatedAt": "2026-07-04T04:55:25.481Z",
   "stats": {
-    "total": 306,
-    "stagePresent": 249,
+    "total": 305,
+    "stagePresent": 248,
     "canonOnly": 57,
     "collisionsMerged": 0
   },
@@ -16982,7 +16982,12 @@
     {
       "id": "liuchao.character.liu_e",
       "canonicalName": "刘娥",
-      "aliases": [],
+      "aliases": [
+        "太皇太后(宋)",
+        "刘太后",
+        "宋太皇太后",
+        "太皇太后"
+      ],
       "gender": "女",
       "books": [
         "yunlong",
@@ -16991,7 +16996,7 @@
       "tier": "主要",
       "stagePresence": true,
       "staticProfile": {
-        "identitySummary": "宋国太皇太后/后期受制于程宗扬阵营",
+        "identitySummary": "宋国太皇太后/后期受制于程宗扬阵营；宋主长辈（程宗扬称姨娘），与贾师宪(贾似道)同族，曾受其游说干预朝局",
         "personality": [
           "受虐倾向",
           "淫荡",
@@ -17071,11 +17076,9 @@
         ],
         "conflicts": [],
         "humanReviewed": true,
-        "humanNotes": [
-          "人工批注：转折承接六朝清羽记；六朝云龙吟太泉古阵篇第11集进入受制阶段；转折前身份为宋国太皇太后。"
-        ]
+        "humanNotes": "人工批注：转折承接六朝清羽记；六朝云龙吟太泉古阵篇第11集进入受制阶段；转折前身份为宋国太皇太后。 2026-07-04 二审: 刘娥=太皇太后(宋)(同一人),并入重复卡「太皇太后(宋)」;更正本session裁定#49的匿名描述。"
       },
-      "embedText": "刘娥 ｜ 宋国太皇太后/后期受制于程宗扬阵营 ｜ 【宋国人物】 ｜ 宋国(太皇太后) ｜ 登场于云涛观偏殿 ｜ 受虐倾向、淫荡、顺从、妩媚 ｜ 侍奴/性奴 ｜ 刘娥、娥奴 ｜ 宋国太皇太后，禁止提前写作程宗扬阵营或从属关系；进入受制阶段，之后可写作程宗扬阵营从属 ｜ 被侍奴以假阳具奸弄；被程宗扬干入；被展示桃花谷；自称奴婢完成指令"
+      "embedText": "刘娥 ｜ 太皇太后(宋) 刘太后 宋太皇太后 太皇太后 ｜ 宋国太皇太后/后期受制于程宗扬阵营；宋主长辈（程宗扬称姨娘），与贾师宪(贾似道)同族，曾受其游说干预朝局 ｜ 【宋国人物】 ｜ 宋国(太皇太后) ｜ 登场于云涛观偏殿 ｜ 受虐倾向、淫荡、顺从、妩媚 ｜ 侍奴/性奴 ｜ 刘娥、娥奴 ｜ 宋国太皇太后，禁止提前写作程宗扬阵营或从属关系；进入受制阶段，之后可写作程宗扬阵营从属 ｜ 被侍奴以假阳具奸弄；被程宗扬干入；被展示桃花谷；自称奴婢完成指令"
     },
     {
       "id": "liuchao.character.liu_xin",
@@ -26213,69 +26216,6 @@
         "conflicts": []
       },
       "embedText": "索元礼 ｜ 胡人推事/推事院官员 ｜ 【唐国人物】 ｜ 唐国朝廷(推事院推事) ｜ 登场于推事院大堂 ｜ 阴狠、残忍、贪婪、谄媚、谨慎 ｜ 程宗扬为太平侯，索元礼为下属官员，有利益往来 ｜ 对程宗扬：侯爷/下官；被他人称呼：索元礼/胡人推事 ｜ 审问纳觉容部番僧，用枷笼酷刑；净念献法帖，索元礼与高力士交换眼色；程宗扬找索元礼要人，索元礼表示不敢私自放人"
-    },
-    {
-      "id": "liuchao.character.tai_huang_tai_hou",
-      "canonicalName": "太皇太后(宋)",
-      "aliases": [
-        "宋太皇太后"
-      ],
-      "gender": "女",
-      "books": [
-        "yunlong",
-        "yange"
-      ],
-      "tier": "次要",
-      "stagePresence": true,
-      "staticProfile": {
-        "identitySummary": "太皇太后(宋)：当今大宋之主的祖母，先主之母；已故贾妃的姑辈长亲，与贾师宪(贾似道)同族，故贾师宪能在其面前进言。曾受贾师宪游说，召宋主训诫、逼其贬黜王宰相。",
-        "personality": [],
-        "appearance": "",
-        "speechStyle": "",
-        "principles": [],
-        "goals": [],
-        "weaknesses": [],
-        "signatureAbilities": [],
-        "relationToProtagonist": [],
-        "formsOfAddress": [],
-        "joining": [],
-        "keyEvents": [],
-        "ending": [],
-        "affiliations": [
-          {
-            "faction": "宋国",
-            "role": "皇室尊长（皇帝祖母）"
-          }
-        ],
-        "debutLocation": {
-          "location": "不详",
-          "locator": "第七十三章",
-          "scene": "通过童贯之口提及：贾师宪与陛下对晤之前先去见了太皇太后，太皇太后随后将宋主叫去教训一通，导致王禹玉被贬出朝廷。"
-        }
-      },
-      "region": "宋国",
-      "phaseIdentities": [
-        {
-          "scope": "stage-projection",
-          "stageId": "lyl.taiquan_expedition",
-          "book": "yunlong",
-          "seqLo": 563,
-          "seqHi": 566,
-          "identity": "配角",
-          "role": "配角",
-          "description": "",
-          "notes": [],
-          "status": "stage-current"
-        }
-      ],
-      "review": {
-        "approved": false,
-        "reviewed": false,
-        "flags": [],
-        "conflicts": [],
-        "humanNotes": "2026-07-04 消歧: 原通用名「太皇太后」经原文核定为宋国(宋主祖母/贾师宪族亲);唐国太皇太后另有其人=郭氏。"
-      },
-      "embedText": "太皇太后(宋) ｜ 宋太皇太后 ｜ 太皇太后(宋)：当今大宋之主的祖母，先主之母；已故贾妃的姑辈长亲，与贾师宪(贾似道)同族，故贾师宪能在其面前进言。曾受贾师宪游说，召宋主训诫、逼其贬黜王宰相。 ｜ 【宋国人物】 ｜ 宋国(皇室尊长（皇帝祖母）) ｜ 登场于不详"
     },
     {
       "id": "liuchao.character.tang_heng",

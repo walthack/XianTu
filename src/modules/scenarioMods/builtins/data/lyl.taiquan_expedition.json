@@ -2537,24 +2537,6 @@
         ]
       },
       {
-        "id": "liuchao.character.tai_huang_tai_hou",
-        "name": "太皇太后(宋)",
-        "role": "配角",
-        "gender": "女",
-        "profile": {
-          "personality": [],
-          "race": "人族",
-          "origin": "配角"
-        },
-        "affiliations": [
-          {
-            "factionId": "lyg.faction.song_state",
-            "category": "organization",
-            "role": "皇室尊长（皇帝祖母）"
-          }
-        ]
-      },
-      {
         "id": "liuchao.character.guo_huai",
         "name": "郭槐",
         "role": "太监",
