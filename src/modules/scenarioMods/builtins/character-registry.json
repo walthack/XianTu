@@ -1,9 +1,9 @@
 {
   "schema": "xiantu.character-registry.v1",
-  "version": "cr-2026-07-04-a1cdfdf0c88fa4a5",
-  "sourceHash": "a1cdfdf0c88fa4a5",
+  "version": "cr-2026-07-04-11b88fd19eed979d",
+  "sourceHash": "11b88fd19eed979d",
   "sourceGeneratedAt": "2026-06-30T12:50:33.965Z",
-  "generatedAt": "2026-07-04T13:43:06.333Z",
+  "generatedAt": "2026-07-04T14:09:27.530Z",
   "stats": {
     "total": 304,
     "stagePresent": 248,
@@ -14955,7 +14955,8 @@
             "label": "清羽篇",
             "text": "亲历：乐明珠身份揭露（与程宗扬）；凝羽毒瘾发作（与程宗扬、凝羽）；商队与龙神激战（与程宗扬、谢艺、武二郎）；小紫弑母（与小紫、程宗扬、碧姬）"
           }
-        ]
+        ],
+        "birthYear": 202
       },
       "phaseIdentities": [
         {
@@ -20792,7 +20793,8 @@
           "location": "船上",
           "locator": "chapter261.html",
           "scene": "房门推开半边，潘金莲穿素白衣衫戴口罩，在舱内为陌生婴儿诊脉，展现医者仁心的白衣仙子形象"
-        }
+        },
+        "birthYear": 198
       },
       "phaseIdentities": [
         {
