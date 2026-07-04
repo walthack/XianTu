@@ -32,6 +32,8 @@ const NORMALIZE = {
 // （2026-07-03 审计落地 24 人 + 手工修正批；debut 同理保护 云丹琉=用户裁定清羽ch164）
 const AFF_PROTECTED = new Set(['杨玉环','惊理','苏骁','侯玄','韩庚','张恽','吕巨君','定陶王','莫如霖','慈音','信永','观海','秦翰','曹季兴','高衙内','张之煌','飞鸟萤子','程郑','净念','唐季臣','阿夕','罗令','墨狼','曲武','黛姬雪娜','王哲','小紫','谢艺','武二郎','泉玉姬','岳帅','月霜']);
 const DEBUT_PROTECTED = new Set(['云丹琉']);
+// 成年化裁定(2026-07-04): 这些角色 storyAge 已按用户裁定调整,扫描不得覆盖
+const AGE_PROTECTED = new Set(['雁儿','小玲儿','齐羽仙','王蕙','安康公主','吕奉先','高智商','霍去病']);
 // 桶C pending:仍排除不写(泛外姓人,待复核)
 const PENDING = new Set(['外姓人', '释特昧普势力']);
 
@@ -65,7 +67,7 @@ const applyToCard = (c) => {
   }
   if (aff.length && !AFF_PROTECTED.has(c.canonicalName)) { if (APPLY) sp.affiliations = aff; willAff++; touched = true; }
   if (r.debut && r.debut.location && !DEBUT_PROTECTED.has(c.canonicalName)) { if (APPLY) sp.debutLocation = { location: r.debut.location, locator: r.debut.locator || '', scene: r.debut.scene || '' }; willDebut++; touched = true; }
-  if (r.storyAge && r.storyAge.value != null) { if (APPLY) sp.storyAge = { value: r.storyAge.value, basis: r.storyAge.basis || '' }; willAge++; touched = true; }
+  if (r.storyAge && r.storyAge.value != null && !AGE_PROTECTED.has(c.canonicalName)) { if (APPLY) sp.storyAge = { value: r.storyAge.value, basis: r.storyAge.basis || '' }; willAge++; touched = true; }
   return touched;
 };
 

@@ -1,9 +1,9 @@
 {
   "schema": "xiantu.character-registry.v1",
-  "version": "cr-2026-07-04-95dda3fe2c1f158a",
-  "sourceHash": "95dda3fe2c1f158a",
+  "version": "cr-2026-07-04-d347365f57cad285",
+  "sourceHash": "d347365f57cad285",
   "sourceGeneratedAt": "2026-06-30T12:50:33.965Z",
-  "generatedAt": "2026-07-04T01:40:06.203Z",
+  "generatedAt": "2026-07-04T01:48:26.337Z",
   "stats": {
     "total": 308,
     "stagePresent": 249,
@@ -70,7 +70,7 @@
       "aliases": [
         "陈王"
       ],
-      "gender": "",
+      "gender": "男",
       "books": [
         "yange"
       ],
@@ -81,7 +81,9 @@
         "personality": [],
         "appearance": "",
         "speechStyle": "",
-        "principles": [],
+        "principles": [
+          "未成年角色红线：不得卷入任何成人/性内容描写"
+        ],
         "goals": [],
         "weaknesses": [],
         "signatureAbilities": [],
@@ -347,7 +349,8 @@
         "storyAge": {
           "value": "逾四十",
           "basis": "他年逾四十"
-        }
+        },
+        "birthYear": 180
       },
       "phaseIdentities": [],
       "review": {
@@ -476,9 +479,10 @@
           "scene": "被杨玉环用白绫绑着手拽进殿内，带着哭腔说'我要回去'，被安排坐在安王李溶旁边"
         },
         "storyAge": {
-          "value": "约十四五岁",
-          "basis": "后面还有一个十四五岁的小姑娘，这会儿撅着小嘴，两只手被一条白绫绑着，跟只小羊羔一样，被杨玉环拉扯着拽进殿内"
-        }
+          "value": "18",
+          "basis": "游戏成年化调整为18（用户裁定；原文描写:约十四五岁）"
+        },
+        "birthYear": 202
       },
       "phaseIdentities": [],
       "review": {
@@ -535,7 +539,8 @@
         "storyAge": {
           "value": "逾五十",
           "basis": "夙未央年逾五十"
-        }
+        },
+        "birthYear": 170
       },
       "phaseIdentities": [],
       "review": {
@@ -7768,7 +7773,8 @@
         "storyAge": {
           "value": "四十余岁",
           "basis": "一名四十多岁的尼姑立在门外"
-        }
+        },
+        "birthYear": 180
       },
       "phaseIdentities": [
         {
@@ -8000,7 +8006,8 @@
         "storyAge": {
           "value": "三四十岁",
           "basis": "马上的骑手看上去三四十岁年纪"
-        }
+        },
+        "birthYear": 180
       },
       "phaseIdentities": [
         {
@@ -10371,9 +10378,10 @@
           "scene": "高衙内在席间未让十三太保兄弟们享用新得的美人林娘子，称新鲜劲儿还没过，等三五天再分享"
         },
         "storyAge": {
-          "value": "十六",
-          "basis": "高智商自述\"十六\"（被阮香凝审问时）"
-        }
+          "value": "18",
+          "basis": "游戏成年化调整为18（用户裁定；原文描写:十六）"
+        },
+        "birthYear": 202
       },
       "phaseIdentities": [
         {
@@ -11338,7 +11346,9 @@
         ],
         "appearance": "小脸红扑扑的，年纪尚小，还是孩子模样。",
         "speechStyle": "口齿不清，如叫程宗扬“父父”",
-        "principles": [],
+        "principles": [
+          "未成年角色红线：不得卷入任何成人/性内容描写"
+        ],
         "goals": [],
         "weaknesses": [
           "年幼，无自保能力"
@@ -12554,10 +12564,10 @@
           "scene": "程宗扬在上林苑马市见到天子征用马匹的手笔，派人打听后得知这位霍少的身份背景"
         },
         "storyAge": {
-          "value": "约16-18岁",
-          "basis": "十三岁入皇图天策府骑兵科，入学一两年后获骑兵第一、通过结业考试击败教官李牧"
+          "value": "18",
+          "basis": "用户裁定：已上战场杀敌，定18"
         },
-        "birthYear": 204
+        "birthYear": 202
       },
       "phaseIdentities": [
         {
@@ -15064,7 +15074,8 @@
         "storyAge": {
           "value": "二十六",
           "basis": "李昂比李炎大五岁，如今也不过二十六岁"
-        }
+        },
+        "birthYear": 194
       },
       "phaseIdentities": [
         {
@@ -15800,7 +15811,8 @@
         "storyAge": {
           "value": "二十多岁",
           "basis": "原文描述为「一名二十多岁的年轻人」，且「比李炎也大不了多少」，而李炎「才二十出头」"
-        }
+        },
+        "birthYear": 200
       },
       "phaseIdentities": [
         {
@@ -17062,7 +17074,9 @@
         ],
         "appearance": "原文未描述",
         "speechStyle": "",
-        "principles": [],
+        "principles": [
+          "未成年角色红线：不得卷入任何成人/性内容描写"
+        ],
         "goals": [],
         "weaknesses": [
           "年幼无自保能力、易被挟持/控制"
@@ -17956,8 +17970,8 @@
           "scene": "一人一骑挡住众人去路，骑赤兔马、提方天画戟的白衣少年，自报姓名\"洛下吕奉先\""
         },
         "storyAge": {
-          "value": "十四五岁",
-          "basis": "原文：他只有十四五岁"
+          "value": "18",
+          "basis": "游戏成年化调整为18（用户裁定；原文描写:十四五岁）"
         },
         "crossStageMemories": [
           {
@@ -17965,7 +17979,8 @@
             "label": "云龙篇",
             "text": "亲历：吕奉先单骑破阵（与刘建、苍鹭）"
           }
-        ]
+        ],
+        "birthYear": 202
       },
       "phaseIdentities": [
         {
@@ -19583,7 +19598,8 @@
         "storyAge": {
           "value": "四十多岁",
           "basis": "那莫爷四十多岁年纪，留着长须，气度典雅"
-        }
+        },
+        "birthYear": 180
       },
       "phaseIdentities": [
         {
@@ -20209,7 +20225,8 @@
             "label": "云龙篇",
             "text": "亲历：程宗扬安排退路与联络（与程宗扬、云丹琉、秦桧）"
           }
-        ]
+        ],
+        "birthYear": 170
       },
       "phaseIdentities": [
         {
@@ -21043,9 +21060,10 @@
           "scene": "黑衣丽人立于阶下，身后停着马车，奉剑玉姬之命前来与程宗扬交涉交换荡星鞭事宜"
         },
         "storyAge": {
-          "value": "约十六七",
-          "basis": "原文描写\"她年岁不大，但身姿挺拔\""
-        }
+          "value": "18",
+          "basis": "游戏成年化调整为18（用户裁定；原文描写:约十六七）"
+        },
+        "birthYear": 202
       },
       "phaseIdentities": [
         {
@@ -23222,7 +23240,8 @@
             "label": "云龙篇",
             "text": "亲历：威远危机加剧（与李师师、高衙内、陆谦）"
           }
-        ]
+        ],
+        "birthYear": 193
       },
       "phaseIdentities": [
         {
@@ -25557,7 +25576,8 @@
         "storyAge": {
           "value": "约二十五",
           "basis": "原文载其\"年约二十五六\""
-        }
+        },
+        "birthYear": 195
       },
       "phaseIdentities": [
         {
@@ -26401,7 +26421,8 @@
         "storyAge": {
           "value": "约三十余岁",
           "basis": "三四十岁的男子（晴州陶五风流多金）"
-        }
+        },
+        "birthYear": 190
       },
       "phaseIdentities": [
         {
@@ -26865,9 +26886,10 @@
           "scene": "在秦桧诈死时守在竹榻侧，程宗扬来访时起身福礼，自报姓名"
         },
         "storyAge": {
-          "value": "十七八岁",
-          "basis": "在榻侧的少女……顶多十七八岁"
-        }
+          "value": "18",
+          "basis": "游戏成年化调整为18（用户裁定；原文描写:十七八岁）"
+        },
+        "birthYear": 202
       },
       "phaseIdentities": [
         {
@@ -28729,7 +28751,8 @@
         "storyAge": {
           "value": "二十九",
           "basis": "档案记载：'西门庆，年二十九，清河县人氏'"
-        }
+        },
+        "birthYear": 191
       },
       "phaseIdentities": [
         {
@@ -29425,9 +29448,10 @@
           "scene": "西门庆召唤她出场，她出手杀死众多伤者，神情冷漠漠然"
         },
         "storyAge": {
-          "value": "十六岁",
-          "basis": "西门庆道：'小玲儿已经十六岁了，只是长得水嫩，看着还像十一二岁的模样'"
-        }
+          "value": "18",
+          "basis": "游戏成年化调整为18（用户裁定；原文描写:十六岁）"
+        },
+        "birthYear": 202
       },
       "phaseIdentities": [
         {
@@ -31949,9 +31973,10 @@
           "scene": "作为石超的奉酒侍女出场，为程宗扬奉酒，石超扬言若程宗扬不饮便杀雁儿，后雁儿被作为礼物送给程宗扬"
         },
         "storyAge": {
-          "value": "约十五六岁",
-          "basis": "原文：\"她不过十五六岁年纪\""
-        }
+          "value": "18",
+          "basis": "游戏成年化调整为18（用户裁定；原文描写:约十五六岁）"
+        },
+        "birthYear": 202
       },
       "phaseIdentities": [
         {
@@ -32353,7 +32378,8 @@
         "storyAge": {
           "value": "约二十四岁",
           "basis": "程宗扬推算：岳帅失踪第二年，距今十七、十八年，杨玉环如今差不多是二十四岁"
-        }
+        },
+        "birthYear": 196
       },
       "phaseIdentities": [
         {
@@ -33438,7 +33464,8 @@
         "storyAge": {
           "value": "二十五六岁",
           "basis": "她二十五六岁年纪，梳着一个流苏髻，穿着杏红的衫子，打扮妖冶。"
-        }
+        },
+        "birthYear": 195
       },
       "phaseIdentities": [
         {
@@ -36559,7 +36586,8 @@
         "storyAge": {
           "value": "约四十",
           "basis": "年约四旬"
-        }
+        },
+        "birthYear": 180
       },
       "phaseIdentities": [
         {
@@ -38237,7 +38265,8 @@
         "storyAge": {
           "value": "约二十",
           "basis": "这位宗泽看起来只有二十上下（chapter343.html）"
-        }
+        },
+        "birthYear": 200
       },
       "phaseIdentities": [
         {
@@ -38478,7 +38507,8 @@
         "storyAge": {
           "value": "二十余岁",
           "basis": "武二往人群中一看，半个脸熟的都没撞上，倒是中间一个女子，二十余岁年纪，穿着橙黄的衫子，臂上绕着七彩丝带，容貌颇为艳丽"
-        }
+        },
+        "birthYear": 200
       },
       "phaseIdentities": [
         {
@@ -39274,7 +39304,8 @@
         "storyAge": {
           "value": "约五十",
           "basis": "年约五旬"
-        }
+        },
+        "birthYear": 170
       },
       "phaseIdentities": [
         {
@@ -42433,7 +42464,8 @@
         "storyAge": {
           "value": "约四十",
           "basis": "原文：那女子年约四十，皮肤仍然白皙光滑，但眼角已经有着细密的鱼尾纹"
-        }
+        },
+        "birthYear": 180
       },
       "phaseIdentities": [
         {
