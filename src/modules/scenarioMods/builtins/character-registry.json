@@ -1,13 +1,13 @@
 {
   "schema": "xiantu.character-registry.v1",
-  "version": "cr-2026-07-04-fa8a3e0a9aabe6f3",
-  "sourceHash": "fa8a3e0a9aabe6f3",
+  "version": "cr-2026-07-04-078e93d1329d75b9",
+  "sourceHash": "078e93d1329d75b9",
   "sourceGeneratedAt": "2026-06-30T12:50:33.965Z",
-  "generatedAt": "2026-07-04T07:57:43.616Z",
+  "generatedAt": "2026-07-04T13:40:36.918Z",
   "stats": {
     "total": 304,
-    "stagePresent": 247,
-    "canonOnly": 57,
+    "stagePresent": 248,
+    "canonOnly": 56,
     "collisionsMerged": 0
   },
   "characters": [
@@ -1110,7 +1110,7 @@
         "yange"
       ],
       "tier": "主要",
-      "stagePresence": false,
+      "stagePresence": true,
       "staticProfile": {
         "identitySummary": "兽蛮首领",
         "personality": [],
@@ -1145,7 +1145,8 @@
           "location": "大草原",
           "locator": "六朝清羽记/chapter6",
           "scene": "程宗扬在草原目睹秦军骑兵与兽蛮人激战，虬髯大汉连杀数名兽蛮武士后，古格尔掷出长矛将其刺杀，战斗告一段落。"
-        }
+        },
+        "race": "兽蛮人"
       },
       "phaseIdentities": [],
       "review": {
@@ -5032,7 +5033,8 @@
           "location": "河滩",
           "locator": "第28章",
           "scene": "程宗扬在河滩遭遇兽蛮老者阿合马，阿合马认出程宗扬后怒而厮杀，被哈迷蚩呼唤制止，二兽以兽蛮人结义兄弟礼仪相认"
-        }
+        },
+        "race": "兽蛮人"
       },
       "phaseIdentities": [
         {
@@ -6135,7 +6137,8 @@
           "location": "江州城头",
           "locator": "chapter343",
           "scene": "程宗扬在江州守城战中与一名兽蛮武士激战，对方自报姓名「豹子头」，后被程宗扬以九阳神功六掌击倒擒获"
-        }
+        },
+        "race": "兽蛮人"
       },
       "region": "宋国",
       "phaseIdentities": [
@@ -6251,7 +6254,8 @@
           "location": "南荒鬼王峒",
           "locator": "六朝清羽记·第9集·九幽阴煞",
           "scene": "程宗扬终于见到了让谢艺念兹在兹的女人——碧姬。但，情况似乎不是他所想象的那样……"
-        }
+        },
+        "race": "碧鲮族"
       },
       "region": "南荒",
       "phaseIdentities": [
@@ -11539,7 +11543,8 @@
           "location": "临安",
           "locator": "六朝云龙吟·第0102章",
           "scene": "随祁远抵达临安，青面兽向程宗扬介绍这位族中术者，声称其为“吾族最伟大的术者”。"
-        }
+        },
+        "race": "兽蛮人"
       },
       "region": "宋国",
       "phaseIdentities": [
@@ -13933,7 +13938,8 @@
           "location": "江州",
           "locator": "六朝清羽记/chapter357.html",
           "scene": "金兀术作为兽蛮首领，在被武二郎揍后，于程宗扬审问时挺胸报名"
-        }
+        },
+        "race": "兽蛮人"
       },
       "region": "宋国",
       "phaseIdentities": [
@@ -18564,7 +18570,8 @@
           "location": "永安宫",
           "locator": "第293章",
           "scene": "太后吕雉着黑色长衣高据座上，与刘骜（汉帝）商议赵王谋逆之事，命赵王赐自尽，太子以下尽数贬为庶人。"
-        }
+        },
+        "race": "飞羽族（羽翼纯黑）"
       },
       "region": "汉国",
       "phaseIdentities": [
@@ -20122,7 +20129,8 @@
           "location": "未明确",
           "locator": "chapter35.html",
           "scene": "在某处（疑为青楼或风月场所），与西门大官人相遇，被其以深情目光注视，凝羽冷漠回应其问候。"
-        }
+        },
+        "race": "羽族·穹羽族（能操月光；族中唯一无翼者）"
       },
       "phaseIdentities": [
         {
@@ -21412,7 +21420,8 @@
             "label": "清羽篇",
             "text": "亲历：鬼王峒使者阁罗与程宗扬谈兵器生意（与程宗扬、阁罗）"
           }
-        ]
+        ],
+        "race": "碧鲮族"
       },
       "phaseIdentities": [
         {
@@ -22375,7 +22384,8 @@
             "label": "云龙篇",
             "text": "亲历：荆溪村寨被屠（与程宗扬、秦桧、相雅）"
           }
-        ]
+        ],
+        "race": "兽蛮人"
       },
       "region": "宋国",
       "phaseIdentities": [
@@ -30354,7 +30364,8 @@
             "label": "清羽篇",
             "text": "亲历：小紫疑云（与程宗扬、碧奴、谢艺）；小紫暴露（与程宗扬、阿夕、乐明珠）；辰星七妖现身（与程宗扬）；擒获惊理（与程宗扬）"
           }
-        ]
+        ],
+        "race": "碧鲮族混血（岳帅×碧姬之女；非鲛人，鲛人为碧鲮死敌）"
       },
       "phaseIdentities": [
         {

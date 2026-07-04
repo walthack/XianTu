@@ -423,6 +423,20 @@
         "description": "程宗扬势力（组织）——简介待补，源自角色归属富化自动补录。",
         "type": "组织",
         "features": []
+      },
+      {
+        "id": "liuchao.faction.beidi_shaman",
+        "name": "北地兽蛮人",
+        "description": "北地兽蛮人（组织）——简介待补，源自角色归属富化自动补录。",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "lyl.faction.lyu_clan",
+        "name": "吕氏外戚集团",
+        "description": "吕氏外戚集团（组织）——简介待补，源自角色归属富化自动补录。",
+        "type": "组织",
+        "features": []
       }
     ],
     "locations": [
@@ -1643,6 +1657,29 @@
             "factionId": "liuchao.faction.x2d33e1eaf9",
             "category": "organization",
             "role": "侍奴"
+          }
+        ]
+      },
+      {
+        "id": "canon.character.55df25e1a5",
+        "name": "古格尔",
+        "role": "配角",
+        "gender": "男",
+        "profile": {
+          "race": "兽蛮人",
+          "personality": [],
+          "origin": "兽蛮首领"
+        },
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.beidi_shaman",
+            "category": "organization",
+            "role": "兽蛮首领"
+          },
+          {
+            "factionId": "lyl.faction.lyu_clan",
+            "category": "organization",
+            "role": "雇佣援兵首领"
           }
         ]
       }

@@ -24,6 +24,7 @@ interface RegistryPhase {
 interface RegistryStaticProfile {
   identitySummary?: string;
   appearance?: string;
+  race?: string;
   personality?: string[];
   relationToProtagonist?: string[] | string;
   formsOfAddress?: string[] | string;
@@ -154,6 +155,9 @@ function resolveOne(character: any, stageId: string): boolean {
   if (currentPhase?.role) character.role = currentPhase.role;
   if (origin && !profile.origin) profile.origin = origin;
   if (staticProfile.appearance && !profile.appearance) profile.appearance = staticProfile.appearance;
+  // race：正典权威（种族形态基准/族裔文化规则按它匹配）——registry 有值则覆盖，
+  // 抽取期默认的"人族"曾让兽蛮/碧鲮/羽族角色全部丢失族裔（青面兽被写成人类壮汉的病根）。
+  if (staticProfile.race && (!profile.race || profile.race === '人族')) profile.race = staticProfile.race;
   const personality = unique(asArray(staticProfile.personality));
   if (personality.length) profile.personality = personality;
 
