@@ -1,9 +1,9 @@
 {
   "schema": "xiantu.character-registry.v1",
-  "version": "cr-2026-07-04-231d1490798b91f3",
-  "sourceHash": "231d1490798b91f3",
+  "version": "cr-2026-07-05-d1bdd3a823e6151b",
+  "sourceHash": "d1bdd3a823e6151b",
   "sourceGeneratedAt": "2026-06-30T12:50:33.965Z",
-  "generatedAt": "2026-07-04T14:15:45.752Z",
+  "generatedAt": "2026-07-05T02:55:53.448Z",
   "stats": {
     "total": 304,
     "stagePresent": 248,
@@ -15,7 +15,7 @@
       "id": "canon.character.1bb48e9afc",
       "canonicalName": "齐放鹤",
       "aliases": [],
-      "gender": "",
+      "gender": "男",
       "books": [
         "qingyu",
         "yunlong"
@@ -272,7 +272,7 @@
       "id": "canon.character.23aedf6533",
       "canonicalName": "柳摇金",
       "aliases": [],
-      "gender": "",
+      "gender": "女",
       "books": [
         "yange"
       ],
@@ -325,7 +325,7 @@
       "id": "canon.character.247b1ef678",
       "canonicalName": "任福",
       "aliases": [],
-      "gender": "",
+      "gender": "男",
       "books": [
         "qingyu"
       ],
@@ -458,7 +458,7 @@
       "id": "canon.character.2cf90450c5",
       "canonicalName": "安康公主",
       "aliases": [],
-      "gender": "",
+      "gender": "女",
       "books": [
         "yange"
       ],
@@ -520,7 +520,7 @@
       "id": "canon.character.2dd534d683",
       "canonicalName": "夙未央",
       "aliases": [],
-      "gender": "",
+      "gender": "男",
       "books": [
         "qingyu",
         "yange"
@@ -584,7 +584,7 @@
       "aliases": [
         "抚王"
       ],
-      "gender": "",
+      "gender": "男",
       "books": [
         "yange"
       ],
@@ -648,7 +648,7 @@
       "id": "canon.character.313817337a",
       "canonicalName": "邳忌",
       "aliases": [],
-      "gender": "",
+      "gender": "男",
       "books": [
         "yunlong"
       ],
@@ -703,7 +703,7 @@
       "id": "canon.character.3c47a9ac0b",
       "canonicalName": "萧五",
       "aliases": [],
-      "gender": "",
+      "gender": "男",
       "books": [
         "qingyu",
         "yunlong"
@@ -920,7 +920,7 @@
       "id": "canon.character.4b8b3f6bd2",
       "canonicalName": "任怀亮",
       "aliases": [],
-      "gender": "",
+      "gender": "男",
       "books": [
         "qingyu"
       ],
@@ -1103,7 +1103,7 @@
       "id": "canon.character.55df25e1a5",
       "canonicalName": "古格尔",
       "aliases": [],
-      "gender": "",
+      "gender": "男",
       "books": [
         "qingyu",
         "yunlong",
@@ -1535,7 +1535,7 @@
       "id": "canon.character.6cb668f996",
       "canonicalName": "张承业",
       "aliases": [],
-      "gender": "",
+      "gender": "男",
       "books": [
         "yange"
       ],
@@ -1655,7 +1655,7 @@
       "id": "canon.character.76603f3e4b",
       "canonicalName": "刘彭祖",
       "aliases": [],
-      "gender": "",
+      "gender": "男",
       "books": [
         "yunlong"
       ],
@@ -1708,7 +1708,7 @@
       "id": "canon.character.7830fa3c26",
       "canonicalName": "吴行德",
       "aliases": [],
-      "gender": "",
+      "gender": "男",
       "books": [
         "qingyu"
       ],
@@ -1990,7 +1990,7 @@
       "id": "canon.character.886a02fef4",
       "canonicalName": "阿兰迦",
       "aliases": [],
-      "gender": "",
+      "gender": "女",
       "books": [
         "yunlong"
       ],
@@ -2181,7 +2181,7 @@
       "id": "canon.character.95ef1c4fc9",
       "canonicalName": "徐敖",
       "aliases": [],
-      "gender": "",
+      "gender": "男",
       "books": [
         "qingyu"
       ],
@@ -2420,7 +2420,7 @@
       "id": "canon.character.a409f09c22",
       "canonicalName": "陈乔",
       "aliases": [],
-      "gender": "",
+      "gender": "男",
       "books": [
         "yunlong"
       ],
@@ -2533,7 +2533,7 @@
       "id": "canon.character.afe5070a50",
       "canonicalName": "朱安世",
       "aliases": [],
-      "gender": "",
+      "gender": "男",
       "books": [
         "yunlong"
       ],
@@ -2589,7 +2589,7 @@
       "id": "canon.character.b9996d2635",
       "canonicalName": "葛怀敏",
       "aliases": [],
-      "gender": "",
+      "gender": "男",
       "books": [
         "qingyu"
       ],
@@ -2650,7 +2650,7 @@
       "id": "canon.character.b9d34bc4ad",
       "canonicalName": "赤凫",
       "aliases": [],
-      "gender": "",
+      "gender": "男",
       "books": [
         "yunlong"
       ],
@@ -2882,7 +2882,7 @@
       "id": "canon.character.c31471534d",
       "canonicalName": "鬼金羊",
       "aliases": [],
-      "gender": "",
+      "gender": "男",
       "books": [
         "yange"
       ],
@@ -2980,7 +2980,7 @@
       "aliases": [
         "太皇太后(唐)"
       ],
-      "gender": "",
+      "gender": "女",
       "books": [
         "yange"
       ],
@@ -3126,7 +3126,7 @@
       "id": "canon.character.d30c910ed7",
       "canonicalName": "张之煌",
       "aliases": [],
-      "gender": "",
+      "gender": "男",
       "books": [
         "qingyu"
       ],
@@ -3505,7 +3505,7 @@
       "id": "canon.character.fb2941e742",
       "canonicalName": "曲武",
       "aliases": [],
-      "gender": "",
+      "gender": "男",
       "books": [
         "yange"
       ],
@@ -3560,7 +3560,7 @@
       "id": "canon.character.fd683e0b87",
       "canonicalName": "米远志",
       "aliases": [],
-      "gender": "",
+      "gender": "男",
       "books": [
         "yunlong"
       ],
@@ -5068,7 +5068,7 @@
         "阿姬曼",
         "芭娜"
       ],
-      "gender": "",
+      "gender": "女",
       "books": [
         "qingyu",
         "yunlong",
@@ -13789,7 +13789,7 @@
       "id": "liuchao.character.jin_mi_di",
       "canonicalName": "金蜜镝",
       "aliases": [],
-      "gender": "",
+      "gender": "男",
       "books": [
         "qingyu",
         "yunlong",
@@ -41114,7 +41114,7 @@
       "id": "lyg.character.shi_temeipu",
       "canonicalName": "释特昧普",
       "aliases": [],
-      "gender": "",
+      "gender": "男",
       "books": [
         "yange"
       ],
