@@ -118,8 +118,9 @@ test('normalizes descriptive counted item names while keeping special items sepa
   assert.equal(normalizeNarratedItemName('三枚闪着幽光的龙睛玉'), '龙睛玉');
   assert.equal(normalizeNarratedItemName('有传讯玉'), '传讯玉');
   assert.equal(normalizeNarratedItemName('‘钥匙'), '钥匙');
-  assert.equal(normalizeNarratedItemName('第三把钥匙'), '钥匙');
+  assert.equal(normalizeNarratedItemName('第三把钥匙'), '第三把钥匙');
   assert.equal(getInventoryItemIdentityKey('三枚闪着幽光的龙睛玉'), getInventoryItemIdentityKey('龙睛玉'));
+  assert.notEqual(getInventoryItemIdentityKey('第三把钥匙'), getInventoryItemIdentityKey('钥匙'));
   assert.notEqual(getInventoryItemIdentityKey('一枚泛着淡金色光芒的仙品·龙睛玉'), getInventoryItemIdentityKey('龙睛玉'));
 });
 
