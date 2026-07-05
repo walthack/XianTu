@@ -3743,9 +3743,43 @@ ${saveDataJson}`;
         }
       }
     }
+    // 🔥 已知数值字段钳制（set/add 双路生效）——LLM 扣过头/直写离谱值的兜底：
+    // 实测出过 气血-60/灵气-34（add 无下限）与 NPC 出生年 -210/-344（set 直写负数）。
+    const clampKnownNumeric = (p: string, n: number): number => {
+      if (!Number.isFinite(n)) return n;
+      // 资源当前值：气血/灵气/神识/寿命 ——下限0，上限取同级“上限”（玩家与NPC路径通吃）
+      const resMatch = p.match(/\.(气血|灵气|神识|寿命)\.当前$/);
+      if (resMatch) {
+        const cap = get(saveData, p.replace(/\.当前$/, '.上限'));
+        const upper = typeof cap === 'number' && cap > 0 ? cap : Infinity;
+        const clamped = Math.max(0, Math.min(upper, n));
+        if (clamped !== n) console.warn(`[AI双向系统] ${p} 钳制 ${n} → ${clamped}`);
+        return clamped;
+      }
+      // 货币/灵石/物品数量：不得为负（含旧灵石路径 角色.背包.灵石.下品 等）
+      if (p.includes('灵石') || /\.数量$/.test(p)) {
+        if (n < 0) { console.warn(`[AI双向系统] ${p} 钳制 ${n} → 0`); return 0; }
+        return n;
+      }
+      // 好感度：[-100, 100]
+      if (/好感度$/.test(p)) {
+        const clamped = Math.max(-100, Math.min(100, n));
+        if (clamped !== n) console.warn(`[AI双向系统] ${p} 钳制 ${n} → ${clamped}`);
+        return clamped;
+      }
+      // 出生年：[1, 当前游戏年]（AI 曾把年龄写成负出生年）
+      if (/出生日期\.年$/.test(p)) {
+        const nowYear = Number((saveData as any)?.元数据?.时间?.年) || 220;
+        const clamped = Math.max(1, Math.min(nowYear, n));
+        if (clamped !== n) console.warn(`[AI双向系统] ${p} 出生年钳制 ${n} → ${clamped}`);
+        return clamped;
+      }
+      return n;
+    };
+
     switch (action) {
       case 'set':
-        set(saveData, path, value);
+        set(saveData, path, typeof value === 'number' ? clampKnownNumeric(path, value) : value);
         break;
 
       case 'add': {
@@ -3753,15 +3787,8 @@ ${saveDataJson}`;
         if (typeof currentValue !== 'number' || typeof value !== 'number') {
           throw new Error(`ADD操作要求数值类型，但得到: ${typeof currentValue}, ${typeof value}`);
         }
-        const newValue = currentValue + value;
-
-        // 🔥 防止灵石变成负数
-        if (path.includes('灵石') && newValue < 0) {
-          console.warn(`[AI双向系统] ${path} 执行add后会变成负数 (${currentValue} + ${value} = ${newValue})，已限制为0`);
-          set(saveData, path, 0);
-        } else {
-          set(saveData, path, newValue);
-        }
+        const newValue = clampKnownNumeric(path, currentValue + value);
+        set(saveData, path, newValue);
 
         // ?? 大道经验：add 当前经验 时同步累计总经验（仅正增量）
         const daoCurrentExpMatch = path.match(/^角色\.大道\.大道列表\.([^\.]+)\.当前经验$/);
