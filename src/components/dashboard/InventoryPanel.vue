@@ -1388,9 +1388,9 @@ const currencyCards = computed<CurrencyCard[]>(() => {
     '灵石_中品',
     '灵石_上品',
     '灵石_极品',
-    '铜币',
-    '银两',
-    '金锭',
+    '铜铢',
+    '银铢',
+    '金铢',
   ]
 
   const knownIds = new Set(Object.keys(wallet))
@@ -1415,9 +1415,9 @@ const currencyCards = computed<CurrencyCard[]>(() => {
       灵石_中品: { up: '灵石_上品', down: '灵石_下品' },
       灵石_上品: { up: '灵石_极品', down: '灵石_中品' },
       灵石_极品: { down: '灵石_上品' },
-      铜币: { up: '银两' },
-      银两: { up: '金锭', down: '铜币' },
-      金锭: { down: '银两' },
+      铜铢: { up: '银铢' },
+      银铢: { up: '金铢', down: '铜铢' },
+      金铢: { down: '银铢' },
     }
     const pair = map[id]
     if (!pair) return {}
@@ -1510,15 +1510,21 @@ const handleExchange = async (fromCurrencyId: string, direction: 'up' | 'down') 
     灵石_中品: { up: '灵石_上品', down: '灵石_下品' },
     灵石_上品: { up: '灵石_极品', down: '灵石_中品' },
     灵石_极品: { down: '灵石_上品' },
-    铜币: { up: '银两' },
-    银两: { up: '金锭', down: '铜币' },
-    金锭: { down: '银两' },
+    铜铢: { up: '银铢' },
+    银铢: { up: '金铢', down: '铜铢' },
+    金铢: { down: '银铢' },
   }
   const pair = map[fromCurrencyId]
   if (!pair) return
 
   const fee = 0.02
-  const baseRatio = 100
+  // 基础比率按币种价值度推导（六朝铢系非百进制：1金铢=20银铢；灵石档与铜→银仍是100）
+  const valueOf = (id: string): number => Number((DEFAULT_CURRENCIES as any)[id]?.价值度) || 0
+  const baseRatioFor = (lowId: string, highId: string): number => {
+    const low = valueOf(lowId)
+    const high = valueOf(highId)
+    return low > 0 && high > 0 ? Math.round(high / low) : 100
+  }
   const fromMult = getMarketMultiplier(fromCurrencyId)
 
   const ensureAsset = (id: string) => {
@@ -1536,7 +1542,7 @@ const handleExchange = async (fromCurrencyId: string, direction: 'up' | 'down') 
     ensureAsset(pair.up)
     const toMult = getMarketMultiplier(pair.up)
     const ratio = toMult / fromMult
-    const cost = Math.max(1, Math.ceil(baseRatio * ratio * (1 + fee)))
+    const cost = Math.max(1, Math.ceil(baseRatioFor(fromCurrencyId, pair.up) * ratio * (1 + fee)))
     if (fromAmount < cost) return
 
     wallet[fromCurrencyId].数量 = fromAmount - cost
@@ -1552,7 +1558,7 @@ const handleExchange = async (fromCurrencyId: string, direction: 'up' | 'down') 
     ensureAsset(pair.down)
     const toMult = getMarketMultiplier(pair.down)
     const ratio = toMult / fromMult
-    const yieldAmount = Math.max(1, Math.floor((baseRatio / ratio) * (1 - fee)))
+    const yieldAmount = Math.max(1, Math.floor((baseRatioFor(pair.down, fromCurrencyId) / ratio) * (1 - fee)))
 
     wallet[fromCurrencyId].数量 = fromAmount - 1
     wallet[pair.down].数量 = (wallet[pair.down].数量 as number) + yieldAmount

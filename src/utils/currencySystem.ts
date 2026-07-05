@@ -7,18 +7,27 @@ export type DefaultCurrencyId =
   | '灵石_中品'
   | '灵石_上品'
   | '灵石_极品'
-  | '铜币'
-  | '银两'
-  | '金锭';
+  | '铜铢'
+  | '银铢'
+  | '金铢';
 
+// 世俗币按六朝原文正典：铜铢/银铢/金铢，1银铢=100铜铢，1金铢=20银铢(=2000铜铢)，千枚铜铢=1贯。
+// 灵石↔铢 锚定为游戏约定：1下品灵石≈10金铢（金铢价值度0.1，与旧"金锭"同量级，旧档1:1迁移不失值）。
 export const DEFAULT_CURRENCIES: Record<DefaultCurrencyId, Omit<CurrencyAsset, '数量'>> = {
   灵石_下品: { 币种: '灵石_下品', 名称: '下品灵石', 价值度: 1, 描述: '修士通用货币（基准单位）', 图标: 'Gem' },
   灵石_中品: { 币种: '灵石_中品', 名称: '中品灵石', 价值度: 100, 描述: '约等于 100 下品灵石', 图标: 'Gem' },
   灵石_上品: { 币种: '灵石_上品', 名称: '上品灵石', 价值度: 10000, 描述: '约等于 100 中品灵石', 图标: 'Gem' },
   灵石_极品: { 币种: '灵石_极品', 名称: '极品灵石', 价值度: 1000000, 描述: '约等于 100 上品灵石', 图标: 'Gem' },
-  铜币: { 币种: '铜币', 名称: '铜币', 价值度: 0.00001, 描述: '凡俗常用小额货币', 图标: 'Coins' },
-  银两: { 币种: '银两', 名称: '银两', 价值度: 0.001, 描述: '凡俗常用中额货币（约等于 100 铜币）', 图标: 'HandCoins' },
-  金锭: { 币种: '金锭', 名称: '金锭', 价值度: 0.1, 描述: '凡俗常用大额货币（约等于 100 银两）', 图标: 'BadgeDollarSign' },
+  铜铢: { 币种: '铜铢', 名称: '铜铢', 价值度: 0.00005, 描述: '六朝世俗小额货币；千枚为一贯', 图标: 'Coins' },
+  银铢: { 币种: '银铢', 名称: '银铢', 价值度: 0.005, 描述: '六朝世俗中额货币（1银铢=100铜铢）', 图标: 'HandCoins' },
+  金铢: { 币种: '金铢', 名称: '金铢', 价值度: 0.1, 描述: '六朝世俗大额货币（1金铢=20银铢；日常罕用）', 图标: 'BadgeDollarSign' },
+};
+
+/** 旧币名 → 六朝正典铢系（旧档 1:1 迁移；比值差异属叙事口径，不做折算）。 */
+const LEGACY_CURRENCY_RENAMES: Record<string, DefaultCurrencyId> = {
+  铜币: '铜铢',
+  银两: '银铢',
+  金锭: '金铢',
 };
 
 function clampNumber(value: unknown, min: number, max: number, fallback: number): number {
@@ -146,11 +155,30 @@ export function syncWalletToLegacySpiritStones(backpack: any) {
   backpack.灵石.极品 = supreme;
 }
 
+/** 旧世俗币名(铜币/银两/金锭)迁移为六朝正典铢系；数量并入新币种，删除旧键。幂等。 */
+export function migrateLegacyCurrencyNames(backpack: any) {
+  if (!backpack || typeof backpack !== 'object') return;
+  const wallet = ensureCurrencyWallet(backpack);
+  for (const [oldId, newId] of Object.entries(LEGACY_CURRENCY_RENAMES)) {
+    const old = wallet[oldId];
+    if (!old || typeof old !== 'object') continue;
+    const qty = clampNumber((old as any).数量, 0, 9e15, 0);
+    const def = DEFAULT_CURRENCIES[newId];
+    const existing = wallet[newId];
+    const existingQty = existing ? clampNumber((existing as any).数量, 0, 9e15, 0) : 0;
+    wallet[newId] = { ...def, 数量: existingQty + qty };
+    delete wallet[oldId];
+  }
+}
+
 export function normalizeBackpackCurrencies(backpack: any) {
   if (!backpack || typeof backpack !== 'object') return;
 
   ensureCurrencySettings(backpack);
   ensureCurrencyWallet(backpack);
+
+  // 0) 旧世俗币名 → 六朝铢系（铜币/银两/金锭 → 铜铢/银铢/金铢）
+  migrateLegacyCurrencyNames(backpack);
 
   // 1) 兼容旧存档：先把灵石四档迁移到货币里（仅在货币未初始化时）
   migrateLegacySpiritStonesToWallet(backpack);

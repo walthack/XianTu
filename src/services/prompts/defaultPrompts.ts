@@ -47,7 +47,7 @@ import {
 // 文本格式
 import { TEXT_FORMAT_MARKERS, DICE_ROLLING_RULES, COMBAT_DAMAGE_RULES, NAMING_CONVENTIONS } from '@/utils/prompts/definitions/textFormats';
 // 世界标准
-import { REALM_ATTRIBUTE_STANDARDS, QUALITY_SYSTEM, REPUTATION_GUIDE } from '@/utils/prompts/definitions/worldStandards';
+import { REALM_ATTRIBUTE_STANDARDS, QUALITY_SYSTEM, CURRENCY_SYSTEM, REPUTATION_GUIDE } from '@/utils/prompts/definitions/worldStandards';
 import { ACTION_OPTIONS_RULES } from '@/utils/prompts/definitions/actionOptions';
 import { EVENT_SYSTEM_RULES } from '@/utils/prompts/definitions/eventSystemRules';
 import { PLAYER_PERSONALITY_RULES } from '@/utils/prompts/definitions/playerPersonality';
@@ -139,7 +139,7 @@ const EXTENDED_BUSINESS_RULES = [
 const TEXT_FORMAT_RULES = [TEXT_FORMAT_MARKERS, DICE_ROLLING_RULES, COMBAT_DAMAGE_RULES, NAMING_CONVENTIONS].join('\n\n');
 
 // 合并世界观标准
-const WORLD_STANDARDS = [REALM_ATTRIBUTE_STANDARDS, QUALITY_SYSTEM, REPUTATION_GUIDE].join('\n\n');
+const WORLD_STANDARDS = [REALM_ATTRIBUTE_STANDARDS, QUALITY_SYSTEM, CURRENCY_SYSTEM, REPUTATION_GUIDE].join('\n\n');
 
 export function getSystemPrompts(): Record<string, PromptDefinition> {
   const tavernEnv = isTavernEnv();
