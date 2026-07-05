@@ -318,7 +318,25 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
       if (npc.名字) favByName.set(String(npc.名字), entry);
     }
   }
-  const focusedCharacterSection = buildFocusedCharacterPrompt(runtime, activeEvents, contextText, favByName);
+  // G1 残留修复：自由漫游时"在场但没被点名"的 NPC 此前拿不到档案（只能赌 embedding RAG）。
+  // 确定性补召回：社交.关系 里 当前位置与玩家共享世界地点段（·分隔第2段）的 NPC，
+  // 其名字并入聚焦上下文 → 复用既有名字召回（同一去重/12人上限管道）。
+  const playerLocDesc = String(readPath(saveData, ['角色', '位置', '描述']) || '');
+  const playerLocKey = playerLocDesc.split('·')[1] || '';
+  const sameLocationNames: string[] = [];
+  if (relations && playerLocKey.length >= 2) {
+    for (const [key, npc] of Object.entries(relations)) {
+      if (!npc || typeof npc !== 'object') continue;
+      const npcLoc = String((npc as { 当前位置?: { 描述?: string } }).当前位置?.描述 || '');
+      if (npcLoc && npcLoc.split('·')[1] === playerLocKey) {
+        sameLocationNames.push(String((npc as { 名字?: string }).名字 || key));
+      }
+    }
+  }
+  const focusContext = sameLocationNames.length
+    ? `${contextText}\n【在场】${sameLocationNames.slice(0, 12).join('、')}`
+    : contextText;
+  const focusedCharacterSection = buildFocusedCharacterPrompt(runtime, activeEvents, focusContext, favByName);
 
   // 声望与认知闭环：当前值+档位醒目注入（静态 REPUTATION_GUIDE 埋在 worldStandards 里 LLM 不消费——
   // 实测籍籍无名的主角被唐使"底细尽在掌握"）

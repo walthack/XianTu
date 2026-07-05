@@ -47,7 +47,7 @@ import {
 // 文本格式
 import { TEXT_FORMAT_MARKERS, DICE_ROLLING_RULES, COMBAT_DAMAGE_RULES, NAMING_CONVENTIONS } from '@/utils/prompts/definitions/textFormats';
 // 世界标准
-import { REALM_ATTRIBUTE_STANDARDS, QUALITY_SYSTEM, CURRENCY_SYSTEM, REPUTATION_GUIDE } from '@/utils/prompts/definitions/worldStandards';
+import { REALM_ATTRIBUTE_STANDARDS, QUALITY_SYSTEM, EQUIPMENT_SYSTEM, CURRENCY_SYSTEM, REPUTATION_GUIDE } from '@/utils/prompts/definitions/worldStandards';
 import { ACTION_OPTIONS_RULES } from '@/utils/prompts/definitions/actionOptions';
 import { EVENT_SYSTEM_RULES } from '@/utils/prompts/definitions/eventSystemRules';
 import { PLAYER_PERSONALITY_RULES } from '@/utils/prompts/definitions/playerPersonality';
@@ -139,7 +139,7 @@ const EXTENDED_BUSINESS_RULES = [
 const TEXT_FORMAT_RULES = [TEXT_FORMAT_MARKERS, DICE_ROLLING_RULES, COMBAT_DAMAGE_RULES, NAMING_CONVENTIONS].join('\n\n');
 
 // 合并世界观标准
-const WORLD_STANDARDS = [REALM_ATTRIBUTE_STANDARDS, QUALITY_SYSTEM, CURRENCY_SYSTEM, REPUTATION_GUIDE].join('\n\n');
+const WORLD_STANDARDS = [REALM_ATTRIBUTE_STANDARDS, QUALITY_SYSTEM, EQUIPMENT_SYSTEM, CURRENCY_SYSTEM, REPUTATION_GUIDE].join('\n\n');
 
 export function getSystemPrompts(): Record<string, PromptDefinition> {
   const tavernEnv = isTavernEnv();
@@ -456,7 +456,7 @@ export function getSystemPrompts(): Record<string, PromptDefinition> {
 □ 位置变化 → set \`角色.位置\`
 □ 时间流逝 → add \`元数据.时间.分钟\`（修炼/闭关按实际时长）
 □ 货币变化 → add \`角色.背包.货币.<币种ID>.数量\`
-□ 物品获得/收下/接过/拾取/购买 → set \`角色.背包.物品.<稳定物品ID>\`，value 必须是完整物品对象：{"物品ID":"<同key末段>","名称":"物品名","类型":"杂物/法器/丹药/材料/功法","品质":{"quality":"凡","grade":0},"数量":1,"描述":"用途与来历"}；物品消耗 → add \`角色.背包.物品.<物品ID>.数量\` 负数；用尽/丢失 → delete \`角色.背包.物品.<物品ID>\`
+□ 物品获得/收下/接过/拾取/购买 → set \`角色.背包.物品.<稳定物品ID>\`，value 必须是完整物品对象：{"物品ID":"<同key末段>","名称":"物品名","类型":"杂物/兵刃/甲胄/军械/奇物/法器/丹药/材料/功法","品质":{"quality":"凡","grade":0},"数量":1,"描述":"用途与来历"}；物品消耗 → add \`角色.背包.物品.<物品ID>.数量\` 负数；用尽/丢失 → delete \`角色.背包.物品.<物品ID>\`
 
 ### 修炼与突破
 □ 日常修炼 → add \`角色.属性.境界.当前进度\`
