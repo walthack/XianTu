@@ -517,7 +517,7 @@
           "y": 4366
         },
         "features": [],
-        "region": "晋国"
+        "region": "塞外"
       },
       {
         "id": "liuchao.location.yun_shi_shop",
@@ -591,8 +591,8 @@
         "type": "城池",
         "description": "唐国都城，六朝最大城市。 六朝蹴鞠圣地，唐室大明宫巍峨，城门巍峨，常有鞠社云集，设皇图天策府邸，街市热闹。（民俗：蹴鞠之风极盛，山岳正赛年年在此举办，六朝三十二支鞠社竞逐，是唐国最热闘的体育盛事。）",
         "coordinates": {
-          "x": 2830,
-          "y": 3049
+          "x": 3159,
+          "y": 2767
         },
         "features": [],
         "region": "唐国"
@@ -604,11 +604,11 @@
         "type": "城池",
         "description": "晋国都城，六朝世界的政治中心之一。 六朝金粉地，金陵帝王州。繁华街市豪门宅邸，云氏等商贾世家汇聚，商业鼎盛，富甲一方。 长江南岸重镇，台城宫阙壮丽，秦淮河畔烟火万家（民俗：六朝故都，风流文雅，士人尚清谈，寺院道观遍布）",
         "coordinates": {
-          "x": 7100,
-          "y": 4960
+          "x": 3380,
+          "y": 5992
         },
         "features": [],
-        "region": "宋国"
+        "region": "晋国"
       },
       {
         "id": "liuchao.location.luoyang",
@@ -751,7 +751,7 @@
           "y": 9915
         },
         "features": [],
-        "region": "唐国"
+        "region": "海上"
       },
       {
         "id": "liuchao.location.guangyang",
@@ -786,11 +786,11 @@
         "type": "城池",
         "description": "北府兵驻地。 江畔山城，水师驻防，州城临江而建，西连大江山岭，与江州唇齿相依。（民俗：萧氏经营军镇，水师强盛，民风尚武，州城自治不问朝廷。） 宋境内地，消息传到此处，星月湖大营招募新丁（民俗：大量丁壮闻讯要求入营，民风彪悍，愿为佣兵）",
         "coordinates": {
-          "x": 5100,
-          "y": 5800
+          "x": 4656,
+          "y": 6437
         },
         "features": [],
-        "region": "宋国"
+        "region": "晋国"
       },
       {
         "id": "liuchao.location.jinmingzhai",
@@ -854,7 +854,8 @@
           "x": 5176,
           "y": 3978
         },
-        "features": []
+        "features": [],
+        "region": "秦国"
       },
       {
         "id": "liuchao.location.yongzhou",
@@ -880,7 +881,7 @@
           "y": 3063
         },
         "features": [],
-        "region": "汉国"
+        "region": "秦国"
       },
       {
         "id": "liuchao.location.dantu",
@@ -893,7 +894,7 @@
           "y": 4854
         },
         "features": [],
-        "region": "唐国"
+        "region": "汉国"
       },
       {
         "id": "liuchao.location.longchuan",
@@ -906,7 +907,7 @@
           "y": 6819
         },
         "features": [],
-        "region": "唐国"
+        "region": "宋国"
       },
       {
         "id": "liuchao.location.nanjun",
@@ -919,7 +920,7 @@
           "y": 5276
         },
         "features": [],
-        "region": "昭南"
+        "region": "汉国"
       },
       {
         "id": "liuchao.location.chenzhou",
@@ -941,11 +942,11 @@
         "type": "城池",
         "description": "唐国西北边境州城，凉州盟据点。 边塞荒凉，帐篷散落，门派营地零星分布，沙尘漫天，武人往来频繁（民俗：边塞各派结盟自保，凉州盟统领四堂八会，丹霞宗为本地盟主，门派势力根深蒂固） 铁马堂等帮会势力组成凉州盟，驰骋而来（民俗：凉州人士豪侠，结盟闯阵）",
         "coordinates": {
-          "x": 750,
-          "y": 3600
+          "x": 1430,
+          "y": 2767
         },
         "features": [],
-        "region": "秦国"
+        "region": "唐国"
       },
       {
         "id": "liuchao.location.boling",
@@ -971,7 +972,7 @@
           "y": 7423
         },
         "features": [],
-        "region": "南荒"
+        "region": "宋国"
       },
       {
         "id": "liuchao.location.cuizhi",
