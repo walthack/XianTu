@@ -121,6 +121,50 @@ test('canon guard permits only set commands below runtime flags', async () => {
   assert.equal(result.rejected.length, 3);
 });
 
+test('canon guard rejects malformed and out-of-sequence scenario event flags', async () => {
+  const { guardScenarioModCommands } = await loadTs('../src/modules/scenarioMods/canonGuard.ts');
+  const save = await buildRuntimeSave();
+  const runtime = save.世界.状态.剧本模组;
+  runtime.events.push({
+    id: 'event.future',
+    name: '后续事件',
+    description: '不属于当前章节。',
+    completion: [{ path: 'flags.event.event.future.done', operator: 'eq', value: true }],
+  });
+  runtime.chapters.push({
+    id: 'chapter.future',
+    title: '后续章',
+    summary: '后续章节。',
+    eventIds: ['event.future'],
+  });
+
+  const currentEventDone = { action: 'set', key: '世界.状态.剧本模组.flags.event.event.firstmeeting.done', value: true };
+  const malformedEventFlag = { action: 'set', key: '世界.状态.剧本模组.flags.event.event.firstmeeting', value: true };
+  const futureEventDone = { action: 'set', key: '世界.状态.剧本模组.flags.event.event.future.done', value: true };
+  const typoEventDone = { action: 'set', key: '世界.状态.剧本模组.flags.event.event.future_future.done', value: true };
+  const resetCurrentEvent = { action: 'set', key: '世界.状态.剧本模组.flags.event.event.firstmeeting.done', value: false };
+
+  const result = guardScenarioModCommands(save, [
+    currentEventDone,
+    malformedEventFlag,
+    futureEventDone,
+    typoEventDone,
+    resetCurrentEvent,
+  ]);
+
+  assert.deepEqual(result.accepted, [currentEventDone]);
+  assert.deepEqual(result.rejected.map(item => item.command), [
+    malformedEventFlag,
+    futureEventDone,
+    typoEventDone,
+    resetCurrentEvent,
+  ]);
+  assert.ok(result.rejected[0].reason.includes('.done'));
+  assert.ok(result.rejected[1].reason.includes('不得越级完成'));
+  assert.ok(result.rejected[2].reason.includes('未知剧本事件'));
+  assert.ok(result.rejected[3].reason.includes('只能写入 true'));
+});
+
 test('nested LLM-written flags and string booleans satisfy conditions (regression: stuck stage_04 save)', async () => {
   const { evaluateScenarioCondition } = await loadTs('../src/modules/scenarioMods/runtime.ts');
   const runtime = {

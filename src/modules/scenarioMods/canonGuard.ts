@@ -16,6 +16,10 @@ interface ScenarioRuntimeState {
   mode: 'strict' | 'expand';
   lockedFields?: string[];
   contentAccess?: ScenarioContentAccessRule[];
+  currentChapterId?: string | null;
+  activeEventIds?: string[];
+  chapters?: Array<{ id: string; eventIds?: string[] }>;
+  events?: Array<{ id: string }>;
   opening?: {
     playerCharacterId?: string;
   };
@@ -285,6 +289,50 @@ function findSectMembershipViolation(runtime: ScenarioRuntimeState, command: Com
   return null;
 }
 
+function getScenarioEventIdsAllowedForCompletion(runtime: ScenarioRuntimeState): Set<string> {
+  const allowed = new Set<string>(runtime.activeEventIds || []);
+  const currentChapter = (runtime.chapters || []).find(chapter => chapter.id === runtime.currentChapterId);
+  for (const eventId of currentChapter?.eventIds || []) allowed.add(eventId);
+  return allowed;
+}
+
+function findScenarioFlagViolation(runtime: ScenarioRuntimeState, command: CommandLike, key: string): string | null {
+  if (!key.startsWith('世界.状态.剧本模组.flags.')) return null;
+  if (command.action !== 'set') return '剧本进度 flags 只能用 set 写入';
+
+  const flagPath = key.slice('世界.状态.剧本模组.flags.'.length);
+  const parts = flagPath.split('.');
+  const namespace = parts[0];
+  if (namespace !== 'event' && namespace !== 'chapter') return null;
+
+  if (parts.length < 3 || parts[parts.length - 1] !== 'done') {
+    return `剧本${namespace === 'event' ? '事件' : '章节'}完成标记必须写成 flags.${namespace}.<id>.done`;
+  }
+  if (command.value !== true) {
+    return `剧本${namespace === 'event' ? '事件' : '章节'}完成标记只能写入 true`;
+  }
+
+  const id = parts.slice(1, -1).join('.');
+  if (!id) return `剧本${namespace === 'event' ? '事件' : '章节'}完成标记缺少 id`;
+
+  if (namespace === 'event') {
+    const knownIds = new Set((runtime.events || []).map(event => event.id));
+    if (knownIds.size > 0 && !knownIds.has(id)) return `未知剧本事件 id：${id}`;
+    const allowedIds = getScenarioEventIdsAllowedForCompletion(runtime);
+    if (allowedIds.size > 0 && !allowedIds.has(id)) {
+      return `不得越级完成非当前章节/活跃事件：${id}`;
+    }
+    return null;
+  }
+
+  const knownChapterIds = new Set((runtime.chapters || []).map(chapter => chapter.id));
+  if (knownChapterIds.size > 0 && !knownChapterIds.has(id)) return `未知剧本章节 id：${id}`;
+  if (runtime.currentChapterId && id !== runtime.currentChapterId) {
+    return `不得越级完成非当前章节：${id}`;
+  }
+  return null;
+}
+
 export function compileScenarioProtectedPaths(saveData: SaveData): string[] {
   const runtime = getRuntimeState(saveData);
   if (!runtime) return [];
@@ -359,6 +407,7 @@ export function guardScenarioModCommands(saveData: SaveData, commands: unknown[]
       ? normalizePath((command as CommandLike).key as string)
       : '';
     const isAllowedFlagUpdate = action === 'set' && key.startsWith('世界.状态.剧本模组.flags.');
+    const scenarioFlagViolation = key ? findScenarioFlagViolation(runtime, command as CommandLike, key) : null;
     // 承重保护：正典人物的花名册条目不可被整体删除（防即兴把关键角色从世界抹掉）
     if (['delete', 'remove', 'del'].includes(String(action)) && key.startsWith('社交.关系.')) {
       const targetName = key.slice('社交.关系.'.length).split('.')[0];
@@ -372,8 +421,8 @@ export function guardScenarioModCommands(saveData: SaveData, commands: unknown[]
     const affiliationViolation = key
       ? findCharacterAffiliationViolation(runtime, command as CommandLike, key) || findSectMembershipViolation(runtime, command as CommandLike, key)
       : null;
-    if (accessViolation || affiliationViolation) {
-      rejected.push({ command, reason: accessViolation || affiliationViolation || '' });
+    if (scenarioFlagViolation || accessViolation || affiliationViolation) {
+      rejected.push({ command, reason: scenarioFlagViolation || accessViolation || affiliationViolation || '' });
     } else if (protectedPath && !isAllowedFlagUpdate) {
       rejected.push({
         command,

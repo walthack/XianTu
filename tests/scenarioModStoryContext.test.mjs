@@ -72,7 +72,7 @@ test('story prompt includes current objectives and excludes future plot content'
   assert.match(prompt, /当前关卡/);
   assert.match(prompt, /六朝·建康风云；主轴范围 #10~#20；下一关 六朝·下一关/);
   assert.match(prompt, /玩家进入建康并接触主要人物/);
-  assert.match(prompt, /初会：玩家第一次遇见程宗扬/);
+  assert.match(prompt, /初会（事件ID：event\.firstmeeting）：玩家第一次遇见程宗扬/);
   assert.match(prompt, /flags\.phase gte 1/);
   assert.match(prompt, /当前相关人物正典约束/);
   assert.match(prompt, /主轴拍点：程宗扬在建康城外与玩家初次相遇/);
@@ -86,6 +86,9 @@ test('story prompt includes current objectives and excludes future plot content'
   assert.doesNotMatch(prompt, /暗潮决战/);
   assert.doesNotMatch(prompt, /未来势力冲突/);
   assert.match(prompt, /不要猜测、引用或泄露后续章节/);
+  assert.match(prompt, /只能完成上方“当前事件”列出的事件ID/);
+  assert.match(prompt, /不得写 flags\.event\.<id> = true/);
+  assert.match(prompt, /不得提前完成未来事件/);
 });
 
 test('story prompt names the next stage when the current stage has no next event', async () => {

@@ -277,7 +277,7 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
           namesForIds(event.locationId ? [event.locationId] : [], locations),
         ].filter(Boolean).join('；');
         const axisLine = formatAxisBeat(event);
-        return `- ${event.name}：${event.description}\n  ${axisLine ? `${axisLine}\n  ` : ''}相关正典：${context || '无'}\n  完成条件：${formatConditions(event.completion)}`;
+        return `- ${event.name}（事件ID：${event.id}）：${event.description}\n  ${axisLine ? `${axisLine}\n  ` : ''}相关正典：${context || '无'}\n  完成条件：${formatConditions(event.completion)}`;
       }).join('\n')
     : '- 当前没有已触发事件，不要提前引入未触发事件。';
 
@@ -431,7 +431,7 @@ ${focusedCharacterSection ? `${focusedCharacterSection}\n\n` : ''}${loadBearingL
 
 1. 每一段叙事都要朝“当前事件”的完成条件前进——主动设置场景、引入相关人物、制造契机，引导玩家走向该事件的达成，而不是只描述当前一幕然后停下。
 2. 【每轮必做的收尾核对——叙事与数据必须同步】逐项检查本轮叙事，凡发生以下情况**必须**输出对应指令（只写在正文不发指令＝东西凭空消失，实测：云苍峰赠玉简正文收下了背包却没有）：
-   ① 事件达成 → set 世界.状态.剧本模组.flags.event.<id>.done = true（布尔，漏标卡死推进）
+   ① 事件达成 → 只能完成上方“当前事件”列出的事件ID；set 世界.状态.剧本模组.flags.event.<id>.done = true（布尔，漏标卡死推进）。不得写 flags.event.<id> = true；不得使用未列出的、下一步/后续章节的事件ID；不得提前完成未来事件。
    ② 获得物品（受赠/缴获/拾取/购买/接过/收下）→ set 角色.背包.物品.<稳定物品ID> = {物品ID:"<同key末段>",名称,类型,品质:{quality,grade},数量,描述}（例：收下云苍峰玉简 → set 角色.背包.物品.item_yuncangfeng_yujian）；消耗 → add 数量(-1)；用尽 → delete
    ③ 货币收支 → add 角色.背包.货币.<币种>.数量
    ④ 学会功法/技能 → 对应功法/技能指令；伤势/中毒/增益 → push 角色.效果
