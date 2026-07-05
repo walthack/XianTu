@@ -402,7 +402,7 @@ import type { GameCoordinates } from '@/types/gameMap';
 import type { NpcProfile, GameTime, WorldInfo } from '@/types/game';
 import type { RegionMap } from '@/types/gameMap';
 import RegionMapPanel from './RegionMapPanel.vue';
-import { generateRegionMap, type RegionNpcLocationHint } from '@/utils/worldGeneration/regionMapGenerator';
+import { generateRegionMap, mergeCanonBuildingsIntoRegion, type RegionNpcLocationHint } from '@/utils/worldGeneration/regionMapGenerator';
 import UnmappedLocationsPanel from './UnmappedLocationsPanel.vue';
 import type { UnmappedNpc } from './UnmappedLocationsPanel.vue';
 
@@ -859,17 +859,66 @@ function collectRegionNpcHints(targetLocationName: string): RegionNpcLocationHin
 }
 
 
+// ─── 正典子地点（城内布局咬合）────────────────────────────────────────────
+// 提取期把建筑级正典地点（青龙寺/大慈恩寺/紫云楼…）的坐标钉在其所属城市锚点上（d≈0），
+// 故"同坐标 + 建筑级名称"即从属关系。数据源用剧本运行时 canon.locations（带正典 id）。
+const SUB_PLACE_RE = /寺|观|楼|坊|宫|殿|塔|苑|宅|狱|府|堂|瓦|里/;
+const SUB_PLACE_RADIUS = 150;
+
+function canonLocationsFromRuntime(): Array<{ id: string; name: string; description?: string; coordinates?: { x: number; y: number } }> {
+  const rt: any = (gameStateStore.worldState as any)?.剧本模组;
+  return Array.isArray(rt?.canon?.locations) ? rt.canon.locations : [];
+}
+
+/** 收集"坐标钉在该城上"的正典子地点（不含城市本身） */
+function collectCanonSubPlaces(location: WorldLocation): Array<{ id: string; name: string; description?: string }> {
+  const cx = Number((location as any).coordinates?.x ?? (location as any).坐标?.x);
+  const cy = Number((location as any).coordinates?.y ?? (location as any).坐标?.y);
+  const cityName = location.name || (location as any).名称 || '';
+  if (!Number.isFinite(cx) || !Number.isFinite(cy)) return [];
+  const out: Array<{ id: string; name: string; description?: string }> = [];
+  for (const l of canonLocationsFromRuntime()) {
+    if (!l?.coordinates || !l.name || l.name === cityName) continue;
+    if (!SUB_PLACE_RE.test(l.name)) continue;
+    if (Math.hypot(l.coordinates.x - cx, l.coordinates.y - cy) > SUB_PLACE_RADIUS) continue;
+    out.push({ id: l.id, name: l.name, description: (l as any).description });
+  }
+  return out.slice(0, 17); // 9x9 容量上限 20，留出入口+若干生成建筑
+}
+
+/** 世界地图降噪：该地点是否为某城的从属子地点（子地点住城内图，世界图不再单独画锚） */
+function isCanonSubPlace(location: WorldLocation, all: WorldLocation[]): boolean {
+  const name = location.name || (location as any).名称 || '';
+  if (!SUB_PLACE_RE.test(name)) return false;
+  const x = Number((location as any).coordinates?.x ?? (location as any).坐标?.x);
+  const y = Number((location as any).coordinates?.y ?? (location as any).坐标?.y);
+  if (!Number.isFinite(x) || !Number.isFinite(y)) return false;
+  return all.some(other => {
+    const oName = (other as any).name || (other as any).名称 || '';
+    if (!oName || oName === name || SUB_PLACE_RE.test(oName)) return false;
+    const ox = Number((other as any).coordinates?.x ?? (other as any).坐标?.x);
+    const oy = Number((other as any).coordinates?.y ?? (other as any).坐标?.y);
+    return Number.isFinite(ox) && Number.isFinite(oy) && Math.hypot(ox - x, oy - y) <= SUB_PLACE_RADIUS;
+  });
+}
+
 /**
  * 点击地点弹窗"进入区域地图"按钮
- * 1. 优先使用缓存；2. 没有则 AI 生成；3. 保存并显示
+ * 1. 优先使用缓存（增量补插缺失正典建筑）；2. 没有则 AI 生成（正典建筑必含）；3. 保存并显示
  */
 async function enterRegionMap(location: WorldLocation) {
   const locationName = location.name || (location as any).名称;
   if (!locationName) return;
 
-  // 已有缓存，直接显示
+  const canonBuildings = collectCanonSubPlaces(location);
+
+  // 已有缓存：先增量咬合正典建筑（旧档缓存缺剧情关键建筑的治法），再显示
   const cached = gameStateStore.getRegionMap(locationName);
   if (cached) {
+    if (mergeCanonBuildingsIntoRegion(cached, canonBuildings)) {
+      gameStateStore.saveRegionMap(cached);
+      console.log(`[区域地图] ${locationName} 缓存已补插正典建筑`);
+    }
     activeRegionMap.value = cached;
     closePopup();
     return;
@@ -885,6 +934,7 @@ async function enterRegionMap(location: WorldLocation) {
       locationType: (location as any).type || (location as any).类型 || '',
       locationDesc: location.description || (location as any).描述 || '',
       npcLocationHints,
+      canonBuildings,
     });
 
     if (result.success && result.regionMap) {
@@ -1910,18 +1960,21 @@ const loadMapData = async (options?: { silent?: boolean; reset?: boolean }) => {
       console.log(`[地图] 已加载 ${factions.length} 个势力范围`);
     }
 
-    // 加载地点（包括所有类型）
+    // 加载地点（包括所有类型）；正典子地点（寺/观/宫/楼/坊…与主城同坐标）不画世界锚——
+    // 它们住在城内区域图里，世界图上一点摞十几个标签正是"标注重叠阅读困难"的主源。
     if (worldInfo.地点信息 && Array.isArray(worldInfo.地点信息)) {
       const locations = normalizeLocationsData(worldInfo.地点信息, mapConfig);
+      let skippedSub = 0;
       locations.forEach((location: WorldLocation) => {
         try {
+          if (isCanonSubPlace(location, locations)) { skippedSub++; return; }
           mapManager.value?.addLocation(location);
           locationCount++;
         } catch (error) {
           console.error('[地图] 加载地点失败:', location, error);
         }
       });
-      console.log(`[地图] 已加载 ${locations.length} 个地点`);
+      console.log(`[地图] 已加载 ${locations.length - skippedSub} 个地点（${skippedSub} 个城内子地点归入区域图）`);
     }
 
     // 更新玩家位置

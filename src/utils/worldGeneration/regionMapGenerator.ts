@@ -24,6 +24,14 @@ export interface RegionNpcLocationHint {
   buildingName: string;
 }
 
+/** 正典子地点（剧本模组 canon.locations 里坐标钉在该城的建筑级地点）——城内布局的必含骨架。 */
+export interface RegionCanonBuilding {
+  /** 正典 location id（如 lyg.location.xxx）——沿用为建筑 id，使剧情事件 locationId 与城内建筑咬合 */
+  id: string;
+  name: string;
+  description?: string;
+}
+
 // ─── 规模推断 ──────────────────────────────────────────────────────────────
 
 /**
@@ -89,8 +97,9 @@ async function buildPrompt(params: {
   factionInfo?: string;
   gridSize: number;
   npcLocationHints?: RegionNpcLocationHint[];
+  canonBuildings?: RegionCanonBuilding[];
 }): Promise<string> {
-  const { locationName, locationType, locationDesc, factionInfo, gridSize, npcLocationHints } = params;
+  const { locationName, locationType, locationDesc, factionInfo, gridSize, npcLocationHints, canonBuildings } = params;
 
   // 读取用户自定义提示词（基础规则部分）
   const customBase = await promptStorage.get('regionMapGeneration');
@@ -130,7 +139,17 @@ ${sortedBuildings
 - 若格子数量不足，可保留高频建筑，低频建筑可并入功能区描述。`
     : '\n【NPC 位置线索】当前没有与该地点匹配的 NPC 建筑线索，可按地点信息自由设计。';
 
-  return `${baseRule}\n${locationContext}\n${npcHintSection}`;
+  // 正典建筑：剧情事件挂在这些地点上，缺失/改名会让剧情与城内图脱节——必含且 id/name 禁改
+  const canonSection = (canonBuildings ?? []).length
+    ? `\n【正典建筑（剧情关键地点·必须全部包含）】
+- 下列建筑**必须全部**出现在布局中；\`name\` 与 \`id\` 必须**逐字使用给定值**（禁止改名、合并、省略或另编 id）：
+${(canonBuildings ?? [])
+  .map(c => `  - name:"${c.name}" id:"${c.id}"${c.description ? `（${String(c.description).slice(0, 40)}）` : ''}`)
+  .join('\n')}
+- 其余格子可自由设计市井建筑（商铺/客栈/民居等）；若与上方 NPC 线索同名近义，以正典名称为准合并。`
+    : '';
+
+  return `${baseRule}\n${locationContext}${canonSection}\n${npcHintSection}`;
 }
 
 function getExpectedBuildingCount(gridSize: number): string {
@@ -247,6 +266,72 @@ function autoFixBuildings(buildings: RegionBuilding[], gridSize: number): Region
   return fixed;
 }
 
+// ─── 正典建筑咬合 ─────────────────────────────────────────────────────────
+
+/**
+ * 确定性兜底：无论 LLM 是否听话，保证正典建筑全部在场且 id/name 与正典一致。
+ * - 名称能对上（相等/互相包含）的生成建筑：改用正典 id 与正典名称
+ * - 缺失的正典建筑：插入空格子（从高 y 往低扫；满了则与最后一格共享，宁可挤不可缺）
+ * 幂等：重复调用不产生变化。返回是否有改动。
+ */
+export function enforceCanonBuildings(
+  buildings: RegionBuilding[],
+  canon: RegionCanonBuilding[] | undefined,
+  gridSize: number,
+): boolean {
+  if (!canon?.length) return false;
+  let changed = false;
+  const used = new Set(buildings.map(b => `${b.gridX},${b.gridY}`));
+  const claimed = new Set<string>(); // 已被某正典条目认领的建筑，防两个正典项抢同一建筑
+
+  const findFreeCell = (): { x: number; y: number } | null => {
+    for (let y = gridSize; y >= 1; y--) {
+      for (let x = 1; x <= gridSize; x++) {
+        if (!used.has(`${x},${y}`)) return { x, y };
+      }
+    }
+    return null;
+  };
+
+  for (const c of canon) {
+    if (buildings.some(b => b.id === c.id)) continue; // 已咬合
+    const match = buildings.find(
+      b => !claimed.has(b.id) && !b.isEntrance
+        && (b.name === c.name || b.name.includes(c.name) || c.name.includes(b.name)),
+    );
+    if (match) {
+      claimed.add(c.id);
+      match.id = c.id;
+      match.name = c.name;
+      changed = true;
+      continue;
+    }
+    const cell = findFreeCell() ?? { x: gridSize, y: 1 }; // 满格兜底：共享角落格，宁挤不缺
+    used.add(`${cell.x},${cell.y}`);
+    buildings.push({
+      id: c.id,
+      name: c.name,
+      gridX: cell.x,
+      gridY: cell.y,
+      type: 'main',
+      isEntrance: false,
+      description: c.description || '',
+    });
+    claimed.add(c.id);
+    changed = true;
+  }
+  return changed;
+}
+
+/** 旧档已生成的区域地图缓存：增量补插缺失的正典建筑（不重新生成，幂等）。返回是否有改动。 */
+export function mergeCanonBuildingsIntoRegion(
+  regionMap: RegionMap,
+  canon: RegionCanonBuilding[] | undefined,
+): boolean {
+  if (!regionMap || !Array.isArray(regionMap.buildings)) return false;
+  return enforceCanonBuildings(regionMap.buildings, canon, regionMap.gridWidth || 5);
+}
+
 // ─── 解析 ─────────────────────────────────────────────────────────────────
 
 function parseAIResponse(text: string, gridSize: number): RegionBuilding[] {
@@ -281,6 +366,8 @@ export interface RegionMapGenParams {
   factionInfo?: string;
   /** NPC 在当前地点的建筑级位置线索（如 炼丹房、主峰、藏经阁） */
   npcLocationHints?: RegionNpcLocationHint[];
+  /** 正典子地点（剧情事件挂靠的建筑级地点）——必含骨架，id/name 禁改 */
+  canonBuildings?: RegionCanonBuilding[];
   level?: string;
   /** 强制指定规模，不自动推断 */
   forceScale?: RegionMapScale;
@@ -309,13 +396,21 @@ export async function generateRegionMap(params: RegionMapGenParams): Promise<Reg
     locationDesc = '',
     factionInfo,
     npcLocationHints,
+    canonBuildings,
     level,
     forceScale,
     onStreamChunk,
   } = params;
 
-  // 1. 确定规模
-  const scale: RegionMapScale = forceScale ?? inferScale(locationType, level);
+  // 1. 确定规模；正典建筑多时升格（正典+入口+少量生成建筑要装得下）
+  let scale: RegionMapScale = forceScale ?? inferScale(locationType, level);
+  if (canonBuildings?.length) {
+    const capacity: Record<RegionMapScale, number> = { '1x1': 1, '3x3': 5, '5x5': 9, '7x7': 15, '9x9': 20 };
+    const order: RegionMapScale[] = ['1x1', '3x3', '5x5', '7x7', '9x9'];
+    while (capacity[scale] < canonBuildings.length + 3 && scale !== '9x9') {
+      scale = order[order.indexOf(scale) + 1];
+    }
+  }
   const gridSize = REGION_MAP_SCALE_SIZE[scale];
 
   // 1×1 特殊处理：直接生成一个入口建筑
@@ -351,6 +446,7 @@ export async function generateRegionMap(params: RegionMapGenParams): Promise<Reg
     factionInfo,
     gridSize,
     npcLocationHints,
+    canonBuildings,
   });
 
   // 3. 调用 AI
@@ -382,6 +478,9 @@ export async function generateRegionMap(params: RegionMapGenParams): Promise<Reg
 
     // 5. 解析
     const buildings = parseAIResponse(responseText, gridSize);
+
+    // 5.5 正典建筑咬合（确定性兜底：LLM 漏了/改名了也保证在场且 id 对齐）
+    enforceCanonBuildings(buildings, canonBuildings, gridSize);
 
     // 6. 校验
     const { valid, errors } = validateBuildings(buildings, gridSize);
