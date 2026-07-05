@@ -217,7 +217,7 @@
       {
         "id": "liuchao.faction.gui_wang_dong",
         "name": "鬼王峒",
-        "description": "南荒征服者，控制碧鲮族。",
+        "description": "南荒鬼王峒，鬼巫王统治的势力。鬼巫王妄图借黑魔海之力奴役南荒诸部族、实现其「大同」理想（与黑魔海仅合作-利用，非其信众）；峒中建筑由黑魔海工匠仿洛都国宾驿馆样式所建，峒务由阁罗代理，巫师以腹语传达峒主之命。",
         "type": "部族",
         "headquartersLocationId": "liuchao.location.biyu_village",
         "territory": [
