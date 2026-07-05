@@ -687,12 +687,20 @@ export class GameMapManager {
     else if (levelText.includes('二')) scale = 2.8;
     else if (levelText.includes('三')) scale = 2.5;
 
+    // 真实底图（六朝原图，地名印在图上）：锚点必须钉在真坐标——防重叠挪位会把密集
+    // 城市群沿螺旋推开数百世界单位，造成"锚点与底图偏移"。仅生成式地图才做防重叠挪位。
+    const hasRealMap = Boolean((this as any).hasMapBackground);
     const minDistance = 44 * scale;
-    const resolvedCoordinates = findNonOverlappingLocationPosition(
-      location.coordinates || { x: 0, y: 0 },
-      minDistance,
-      `${location.id}|${location.name}`
-    );
+    const resolvedCoordinates = hasRealMap
+      ? {
+          x: clampToMap(Number(location.coordinates?.x) || 0, 0, this.config.width),
+          y: clampToMap(Number(location.coordinates?.y) || 0, 0, this.config.height),
+        }
+      : findNonOverlappingLocationPosition(
+          location.coordinates || { x: 0, y: 0 },
+          minDistance,
+          `${location.id}|${location.name}`
+        );
     location.coordinates = resolvedCoordinates;
 
     // 创建地点容器
@@ -702,23 +710,25 @@ export class GameMapManager {
     // 禁用交互，使用手动点击检测
     locationContainer.eventMode = 'none';
 
-    // 绘制图标
+    // 绘制图标（真实底图下缩小图标，别压住印刷地名）
     const icon = this.createLocationIcon(location.type, location.iconColor || '#6B7280');
-    icon.scale.set(scale);
+    icon.scale.set(hasRealMap ? scale * 0.7 : scale);
     locationContainer.addChild(icon);
 
-    // 添加文字标签（增大字体）
+    // 文字标签：真实底图上地名已印在图里，锚点大字标签会与其重叠致阅读困难——
+    // 改为小号半透明辅助标签（便于识别无印刷名的新增点位）；生成式地图维持大标签。
     const label = new PIXI.Text(location.name, {
       fontFamily: 'Microsoft YaHei, SimHei, sans-serif',
-      fontSize: 38 * scale, // 增大标签字体
+      fontSize: (hasRealMap ? 16 : 38) * scale,
       fill: location.iconColor || '#6B7280',
-      fontWeight: '700',
+      fontWeight: hasRealMap ? '400' : '700',
       align: 'center',
       stroke: '#ffffff',
-      strokeThickness: 5,
+      strokeThickness: hasRealMap ? 3 : 5,
     });
     label.anchor.set(0.5, 0);
-    label.y = 32 * scale; // 调整标签位置
+    label.y = (hasRealMap ? 20 : 32) * scale;
+    label.alpha = hasRealMap ? 0.85 : 1;
     label.eventMode = 'none';
     locationContainer.addChild(label);
 
