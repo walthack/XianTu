@@ -709,6 +709,20 @@
         "description": "兰陵萧氏（家族）——简介待补，源自角色归属富化自动补录。",
         "type": "家族",
         "features": []
+      },
+      {
+        "id": "liuchao.faction.xad9e87112f",
+        "name": "高俅势力",
+        "description": "高俅势力（组织）——简介待补，源自角色归属富化自动补录。",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.xb51b4a3f61",
+        "name": "十三太保",
+        "description": "十三太保（组织）——简介待补，源自角色归属富化自动补录。",
+        "type": "组织",
+        "features": []
       }
     ],
     "locations": [
@@ -1894,8 +1908,8 @@
         }
       },
       {
-        "id": "liuchao.character.gao_ya_nei",
-        "name": "高衙内",
+        "id": "liuchao.character.gao_zhishang",
+        "name": "高智商",
         "description": "高俅的养子，顶着正五品武职的外壳招摇过市，骨子里却是一头觊觎花魁与美人的恶犬，每到一个地方便洒下灾祸的种子。",
         "role": "敌对人物",
         "gender": "男",
@@ -1910,6 +1924,21 @@
             "factionId": "lyg.faction.song_state",
             "category": "organization",
             "role": "太尉府衙内"
+          },
+          {
+            "factionId": "liuchao.faction.x2d33e1eaf9",
+            "category": "organization",
+            "role": "徒弟"
+          },
+          {
+            "factionId": "liuchao.faction.xad9e87112f",
+            "category": "organization",
+            "role": "衙内（高俅之子）"
+          },
+          {
+            "factionId": "liuchao.faction.xb51b4a3f61",
+            "category": "organization",
+            "role": "成员"
           }
         ],
         "locationId": "liuchao.location.lin_an",
@@ -1940,10 +1969,12 @@
           ],
           "origin": "太尉之子/纨绔衙内",
           "personality": [
-            "淫邪",
-            "好色",
-            "欺软怕硬",
-            "对程宗扬敬畏"
+            "圆滑世故",
+            "滑头",
+            "怕死",
+            "忠诚",
+            "爱吹牛",
+            "易冲动"
           ],
           "appearance": "矮半头的小屁孩，挺着肚子，一脸淫笑",
           "notes": [
@@ -3178,7 +3209,7 @@
         ]
       },
       {
-        "characterId": "liuchao.character.gao_ya_nei",
+        "characterId": "liuchao.character.gao_zhishang",
         "relation": "敌对",
         "favorability": -50,
         "memories": [
@@ -3271,7 +3302,7 @@
       },
       {
         "fromCharacterId": "liuchao.character.lu_qian",
-        "toCharacterId": "liuchao.character.gao_ya_nei",
+        "toCharacterId": "liuchao.character.gao_zhishang",
         "relation": "主从",
         "score": 60,
         "direction": "directed",
@@ -3300,7 +3331,7 @@
         ]
       },
       {
-        "fromCharacterId": "liuchao.character.gao_ya_nei",
+        "fromCharacterId": "liuchao.character.gao_zhishang",
         "toCharacterId": "liuchao.character.li_shi_shi",
         "relation": "觊觎",
         "score": -40,
@@ -3310,7 +3341,7 @@
         ]
       },
       {
-        "fromCharacterId": "liuchao.character.gao_ya_nei",
+        "fromCharacterId": "liuchao.character.gao_zhishang",
         "toCharacterId": "liuchao.character.gao_qiu",
         "relation": "父子",
         "score": 90,
@@ -3327,14 +3358,14 @@
         "direction": "bidirectional"
       },
       {
-        "fromCharacterId": "liuchao.character.gao_ya_nei",
+        "fromCharacterId": "liuchao.character.gao_zhishang",
         "toCharacterId": "liuchao.character.lin_chong",
         "relation": "敌对",
         "score": 5,
         "direction": "bidirectional"
       },
       {
-        "fromCharacterId": "liuchao.character.gao_ya_nei",
+        "fromCharacterId": "liuchao.character.gao_zhishang",
         "toCharacterId": "liuchao.character.ruan_xiang_lin",
         "relation": "情人",
         "score": 75,
@@ -3370,7 +3401,7 @@
       },
       {
         "fromCharacterId": "liuchao.character.ruan_xiang_ning",
-        "toCharacterId": "liuchao.character.gao_ya_nei",
+        "toCharacterId": "liuchao.character.gao_zhishang",
         "relation": "被调戏",
         "score": -40,
         "direction": "bidirectional"
@@ -4071,7 +4102,7 @@
         "liuchao.character.li_shi_shi",
         "liuchao.character.lu_zhi_shen",
         "liuchao.character.xue_yan_shan",
-        "liuchao.character.gao_ya_nei",
+        "liuchao.character.gao_zhishang",
         "liuchao.character.you_chan"
       ]
     },
@@ -4288,7 +4319,7 @@
         "relatedCharacterIds": [
           "liuchao.character.li_shi_shi",
           "liuchao.character.li_yin_chen",
-          "liuchao.character.gao_ya_nei"
+          "liuchao.character.gao_zhishang"
         ],
         "relatedFactionIds": [
           "liuchao.faction.wei_yuan_escort",
@@ -4360,7 +4391,7 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.li_shi_shi",
-          "liuchao.character.gao_ya_nei",
+          "liuchao.character.gao_zhishang",
           "liuchao.character.lu_qian",
           "liuchao.character.ruan_xiang_ning"
         ],
@@ -4387,7 +4418,7 @@
           }
         ],
         "relatedCharacterIds": [
-          "liuchao.character.gao_ya_nei",
+          "liuchao.character.gao_zhishang",
           "liuchao.character.gao_qiu",
           "liuchao.character.lin_chong"
         ],
@@ -4548,7 +4579,7 @@
           "liuchao.character.ruan_xiang_lin",
           "liuchao.character.li_shi_shi",
           "liuchao.character.li_yin_chen",
-          "liuchao.character.gao_ya_nei"
+          "liuchao.character.gao_zhishang"
         ],
         "critical": false
       },
@@ -4567,7 +4598,7 @@
         "relatedCharacterIds": [
           "liuchao.character.ruan_xiang_ning",
           "liuchao.character.li_shi_shi",
-          "liuchao.character.gao_ya_nei",
+          "liuchao.character.gao_zhishang",
           "liuchao.character.cheng_zongyang",
           "liuchao.character.lin_chong",
           "liuchao.character.lin_qing_pu"

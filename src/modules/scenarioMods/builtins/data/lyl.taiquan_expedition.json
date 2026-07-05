@@ -765,6 +765,20 @@
         "description": "兰陵萧氏（家族）——简介待补，源自角色归属富化自动补录。",
         "type": "家族",
         "features": []
+      },
+      {
+        "id": "liuchao.faction.xad9e87112f",
+        "name": "高俅势力",
+        "description": "高俅势力（组织）——简介待补，源自角色归属富化自动补录。",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.xb51b4a3f61",
+        "name": "十三太保",
+        "description": "十三太保（组织）——简介待补，源自角色归属富化自动补录。",
+        "type": "组织",
+        "features": []
       }
     ],
     "locations": [
@@ -1924,8 +1938,8 @@
         }
       },
       {
-        "id": "liuchao.character.gao_ya_nei",
-        "name": "高衙内",
+        "id": "liuchao.character.gao_zhishang",
+        "name": "高智商",
         "description": "高俅的养子，顶着正五品武职的外壳招摇过市，骨子里却是一头觊觎花魁与美人的恶犬，每到一个地方便洒下灾祸的种子。",
         "role": "花花太岁",
         "gender": "男",
@@ -1940,6 +1954,21 @@
             "factionId": "lyg.faction.song_state",
             "category": "organization",
             "role": "太尉府衙内"
+          },
+          {
+            "factionId": "liuchao.faction.x2d33e1eaf9",
+            "category": "organization",
+            "role": "徒弟"
+          },
+          {
+            "factionId": "liuchao.faction.xad9e87112f",
+            "category": "organization",
+            "role": "衙内（高俅之子）"
+          },
+          {
+            "factionId": "liuchao.faction.xb51b4a3f61",
+            "category": "organization",
+            "role": "成员"
           }
         ],
         "locationId": "liuchao.location.linan_city",
@@ -1970,10 +1999,12 @@
           ],
           "origin": "太尉之子/纨绔衙内",
           "personality": [
-            "淫邪",
-            "好色",
-            "欺软怕硬",
-            "对程宗扬敬畏"
+            "圆滑世故",
+            "滑头",
+            "怕死",
+            "忠诚",
+            "爱吹牛",
+            "易冲动"
           ],
           "appearance": "矮半头的小屁孩，挺着肚子，一脸淫笑",
           "notes": [
@@ -3686,7 +3717,7 @@
         ]
       },
       {
-        "characterId": "liuchao.character.gao_ya_nei",
+        "characterId": "liuchao.character.gao_zhishang",
         "relation": "敌对",
         "favorability": -60,
         "memories": [
@@ -3801,7 +3832,7 @@
         ]
       },
       {
-        "fromCharacterId": "liuchao.character.gao_ya_nei",
+        "fromCharacterId": "liuchao.character.gao_zhishang",
         "toCharacterId": "liuchao.character.lu_qian",
         "relation": "主仆",
         "score": 70,
@@ -3811,7 +3842,7 @@
         ]
       },
       {
-        "fromCharacterId": "liuchao.character.gao_ya_nei",
+        "fromCharacterId": "liuchao.character.gao_zhishang",
         "toCharacterId": "liuchao.character.ruan_xiang_lin",
         "relation": "情夫",
         "score": 30,
@@ -3821,7 +3852,7 @@
         ]
       },
       {
-        "fromCharacterId": "liuchao.character.gao_ya_nei",
+        "fromCharacterId": "liuchao.character.gao_zhishang",
         "toCharacterId": "liuchao.character.lin_chong",
         "relation": "敌对",
         "score": -70,
@@ -3832,14 +3863,14 @@
       },
       {
         "fromCharacterId": "liuchao.character.li_shi_shi",
-        "toCharacterId": "liuchao.character.gao_ya_nei",
+        "toCharacterId": "liuchao.character.gao_zhishang",
         "relation": "敌对",
         "score": 5,
         "direction": "bidirectional"
       },
       {
         "fromCharacterId": "liuchao.character.ruan_xiang_ning",
-        "toCharacterId": "liuchao.character.gao_ya_nei",
+        "toCharacterId": "liuchao.character.gao_zhishang",
         "relation": "被催眠",
         "score": 5,
         "direction": "bidirectional"
