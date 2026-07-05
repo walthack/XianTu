@@ -79,7 +79,7 @@ export const REALM_DEFINITIONS: RealmDefinition[] = [
     coreFeature: '引气入体，洗涤凡躯',
     lifespan: '约120载',
     activityScope: '凡尘浊世',
-    gapDescription: '在凡间已是异人，可施展微末法术，被乡野尊为"仙童"。',
+    gapDescription: '在凡间已是异人，内息初成，拳脚兵刃已非寻常武人可敌，被乡野敬为"有真功夫的先生"。',
     stages: createStandardStages(1)
   },
   {

@@ -391,6 +391,9 @@ export function buildScenarioCanonPrompt(saveData: SaveData): string {
   if (!runtime) return '';
   const canon = runtime.canon || {};
   const formatNames = (items: Array<{ name: string }> | undefined) => (items || []).map(item => item.name).join('、') || '无';
+  // 武学带分型标注（六朝化：供"授新武学优先复用正典名"消费）
+  const formatArts = (items: Array<{ name: string; type?: string }> | undefined) =>
+    (items || []).map(item => `${item.name}${item.type ? `〔${item.type}〕` : ''}`).join('、') || '无';
   const playerCharacter = (canon.characters || []).find(character => character.id === runtime.opening?.playerCharacterId);
   const accessRules = (runtime.contentAccess || []).map(rule => {
     const entity = getContentEntity(runtime, rule.contentId);
@@ -413,12 +416,13 @@ export function buildScenarioCanonPrompt(saveData: SaveData): string {
 - 势力：${formatNames(canon.factions)}
 - 地点：${formatNames(canon.locations)}
 - 重要人物：${formatNames(canon.characters)}
-- 技能：${formatNames(canon.skills)}
-- 功法：${formatNames(canon.techniques)}
+- 技能：${formatArts(canon.skills)}
+- 功法：${formatArts(canon.techniques)}
 - 物品：${formatNames(canon.items)}
 - 锁定字段：${(runtime.lockedFields || []).join('、') || '无'}
 ${accessRules.length ? `- 内容归属规则：\n${accessRules.join('\n')}` : '- 内容归属规则：无（未声明内容默认开放）'}
 ${affiliationRules.length ? `- 人物势力归属：\n${affiliationRules.join('\n')}` : '- 人物势力归属：无'}
+授予/提及武学时**优先复用上列正典技能与功法名**；确需新创的武学须符合[武学系统·六朝]命名规范并交代师承，不得造正典的同名变体。
 Mod 已声明的实体与字段是权威正典。可以补充未定义内容，但不得生成同 ID 或同名替代品，不得用自动生成内容覆盖 Mod 已有值。
 restricted 或 exclusive 内容只能由列出的正典身份持有；不得让其他 NPC 或独立玩家学习、复制、继承或获得等价变体。
 人物 affiliation 默认在同类别内排他：可以同时拥有宗派、军队、国家等不同类别身份，但不得被写入另一个同类势力。

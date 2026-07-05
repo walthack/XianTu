@@ -47,7 +47,7 @@ import {
 // 文本格式
 import { TEXT_FORMAT_MARKERS, DICE_ROLLING_RULES, COMBAT_DAMAGE_RULES, NAMING_CONVENTIONS } from '@/utils/prompts/definitions/textFormats';
 // 世界标准
-import { REALM_ATTRIBUTE_STANDARDS, QUALITY_SYSTEM, EQUIPMENT_SYSTEM, CURRENCY_SYSTEM, REPUTATION_GUIDE } from '@/utils/prompts/definitions/worldStandards';
+import { REALM_ATTRIBUTE_STANDARDS, QUALITY_SYSTEM, MARTIAL_SYSTEM, EQUIPMENT_SYSTEM, CURRENCY_SYSTEM, REPUTATION_GUIDE } from '@/utils/prompts/definitions/worldStandards';
 import { ACTION_OPTIONS_RULES } from '@/utils/prompts/definitions/actionOptions';
 import { EVENT_SYSTEM_RULES } from '@/utils/prompts/definitions/eventSystemRules';
 import { PLAYER_PERSONALITY_RULES } from '@/utils/prompts/definitions/playerPersonality';
@@ -139,7 +139,7 @@ const EXTENDED_BUSINESS_RULES = [
 const TEXT_FORMAT_RULES = [TEXT_FORMAT_MARKERS, DICE_ROLLING_RULES, COMBAT_DAMAGE_RULES, NAMING_CONVENTIONS].join('\n\n');
 
 // 合并世界观标准
-const WORLD_STANDARDS = [REALM_ATTRIBUTE_STANDARDS, QUALITY_SYSTEM, EQUIPMENT_SYSTEM, CURRENCY_SYSTEM, REPUTATION_GUIDE].join('\n\n');
+const WORLD_STANDARDS = [REALM_ATTRIBUTE_STANDARDS, QUALITY_SYSTEM, MARTIAL_SYSTEM, EQUIPMENT_SYSTEM, CURRENCY_SYSTEM, REPUTATION_GUIDE].join('\n\n');
 
 export function getSystemPrompts(): Record<string, PromptDefinition> {
   const tavernEnv = isTavernEnv();
@@ -621,10 +621,10 @@ export function getSystemPrompts(): Record<string, PromptDefinition> {
     // ==================== 动态生成提示词 ====================
     npcGeneration: {
       name: 'NPC生成',
-      content: `生成修仙世界NPC。
+      content: `生成六朝世界NPC。
 核心：世界不以玩家为中心，NPC有独立生活；严禁参考玩家境界生成"镜像NPC"或"量身对手"。
-要求：根据场景合理分布境界、姓名性格多样化、身份决定行为。
-输出JSON：{姓名,性别,年龄,境界:{名称,阶段},性格,外貌,背景,说话风格,当前行为,个人目标,初始好感度:50}`,
+要求：符合所在国别风貌（唐汉宋秦晋/南荒/昭南）；种族默认人族（兽蛮/碧鲮/羽族/鲛人须场景合理）；姓名随国别朝代风、**生成前自查不得与剧本正典人物同名同身份**；根据场景合理分布境界、性格多样、身份决定行为。
+输出JSON：{姓名,性别,年龄,种族,境界:{名称,阶段},性格,外貌,背景,说话风格,当前行为,个人目标,初始好感度:50}`,
       category: 'generation',
       description: '动态生成NPC',
       order: 1,
@@ -632,9 +632,10 @@ export function getSystemPrompts(): Record<string, PromptDefinition> {
     },
     eventGeneration: {
       name: '事件生成',
-      content: `生成修仙世界"刚刚发生"的世界事件（用于影响玩家与世界演变）。要求：
-- 必须让玩家受到影响（危险/资源/关系/位置/修炼环境/势力格局至少一项）
-- 事件可以是宗门大战、世界变化、异宝降世、秘境现世、好友出事/突破等
+      content: `生成六朝世界"刚刚发生"的世界事件（用于影响玩家与世界演变）。要求：
+- 必须让玩家受到影响（危险/资源/关系/位置/处境/势力格局至少一项）
+- 事件类型走六朝写实：边关战事、朝堂政争、江湖仇杀、商路劫镖、门派冲突、瘟疫水旱、科举放榜、佛道之争、黑魔海/星月湖异动、部族冲突、好友出事/得势等——❌禁止"异宝降世/秘境现世/天地异象"式泛修仙事件
+- 事件须与当前所在国别风貌相称（唐汉宋秦晋/南荒/昭南各有其事）；优先牵动在场势力，不要凭空造新大势力
 - 涉及好友时，需参考关系/好感度与境界，不能无端超规格
 - 不要公告式总结，要有现场感（刚发生）
 输出JSON（不要代码块/解释/额外文本）：
@@ -661,7 +662,7 @@ export function getSystemPrompts(): Record<string, PromptDefinition> {
     },
     itemGeneration: {
       name: '物品生成',
-      content: `生成修仙世界物品。品质：凡(1-3)/黄(4-5)/玄(6-7)/地(8-9)/天(10)。
+      content: `生成六朝世界物品。品质：凡(1-3)/黄(4-5)/玄(6-7)/地(8-9)/天(10)——市面绝大多数为凡品，命名与来历遵循[装备系统·六朝写实]（禁止泛修仙命名）。
 输出JSON：{物品ID,名称,类型,品质:{quality,grade},描述,数量,效果}`,
       category: 'generation',
       description: '动态生成物品',

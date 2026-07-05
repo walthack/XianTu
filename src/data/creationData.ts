@@ -121,7 +121,7 @@ export const LOCAL_SPIRIT_ROOTS: Omit<SpiritRoot, 'source'>[] = [
     tier: '上品',
     description: '金曰从革，操控金铁，锋锐无匹。修行金系功法事半功倍，是天生的剑修或刀客胚子，攻击性极强。',
     cultivation_speed: '1.6x',
-    special_effects: ['金系法术威力+50%', '器物亲和+30%', '金属感知'],
+    special_effects: ['金系真气威力+50%', '器物亲和+30%', '金属感知'],
     base_multiplier: 1.6,
     talent_cost: 10,
     rarity: 3
@@ -132,7 +132,7 @@ export const LOCAL_SPIRIT_ROOTS: Omit<SpiritRoot, 'source'>[] = [
     tier: '上品',
     description: '木曰曲直，亲和草木，生机盎然。修行木系功法极快，擅长治疗、控制，且对灵植有天生的亲和力。',
     cultivation_speed: '1.6x',
-    special_effects: ['木系法术威力+50%', '生命力恢复+40%', '植物沟通'],
+    special_effects: ['木系真气威力+50%', '生命力恢复+40%', '植物沟通'],
     base_multiplier: 1.6,
     talent_cost: 10,
     rarity: 3
@@ -143,7 +143,7 @@ export const LOCAL_SPIRIT_ROOTS: Omit<SpiritRoot, 'source'>[] = [
     tier: '上品',
     description: '水曰润下，御水之脉，绵延不绝。修行水系功法，法力悠长，变化多端，适应性极强。',
     cultivation_speed: '1.6x',
-    special_effects: ['水系法术威力+50%', '灵气恢复+40%', '水体感知'],
+    special_effects: ['水系真气威力+50%', '灵气恢复+40%', '水体感知'],
     base_multiplier: 1.6,
     talent_cost: 10,
     rarity: 3
@@ -154,7 +154,7 @@ export const LOCAL_SPIRIT_ROOTS: Omit<SpiritRoot, 'source'>[] = [
     tier: '上品',
     description: '火曰炎上，天生火脉，焚尽八荒。修行火系功法，威力绝伦，爆发力强，是炼丹师的绝佳天赋。',
     cultivation_speed: '1.6x',
-    special_effects: ['火系法术威力+50%', '爆发伤害+60%', '火焰免疫'],
+    special_effects: ['火系真气威力+50%', '爆发伤害+60%', '火焰免疫'],
     base_multiplier: 1.6,
     talent_cost: 10,
     rarity: 3
@@ -165,7 +165,7 @@ export const LOCAL_SPIRIT_ROOTS: Omit<SpiritRoot, 'source'>[] = [
     tier: '上品',
     description: '土爰稼穑，大地之子，厚德载物。修行土系功法，防御惊人，稳如泰山，是天生的阵法师材料。',
     cultivation_speed: '1.6x',
-    special_effects: ['土系法术威力+50%', '防御力+40%', '大地感知'],
+    special_effects: ['土系真气威力+50%', '防御力+40%', '大地感知'],
     base_multiplier: 1.6,
     talent_cost: 10,
     rarity: 3
@@ -178,7 +178,7 @@ export const LOCAL_SPIRIT_ROOTS: Omit<SpiritRoot, 'source'>[] = [
     tier: '中品',
     description: '金行资质尚可，修行金系功法有一定天赋，虽不及上品，但也远超常人。',
     cultivation_speed: '1.3x',
-    special_effects: ['金系法术威力+25%', '器物亲和+15%'],
+    special_effects: ['金系真气威力+25%', '器物亲和+15%'],
     base_multiplier: 1.3,
     talent_cost: 6,
     rarity: 2
@@ -189,7 +189,7 @@ export const LOCAL_SPIRIT_ROOTS: Omit<SpiritRoot, 'source'>[] = [
     tier: '中品',
     description: '火行资质良好，对火系功法有不错的亲和力，能够顺利地踏上修行之路。',
     cultivation_speed: '1.3x',
-    special_effects: ['火系法术威力+25%', '爆发伤害+30%'],
+    special_effects: ['火系真气威力+25%', '爆发伤害+30%'],
     base_multiplier: 1.3,
     talent_cost: 6,
     rarity: 2
@@ -202,7 +202,7 @@ export const LOCAL_SPIRIT_ROOTS: Omit<SpiritRoot, 'source'>[] = [
     tier: '极品',
     description: '万中无一的变异灵根，天生雷体，雷霆万钧。修行雷系功法速度极快，威力绝伦，是天劫的宠儿。',
     cultivation_speed: '2.0x',
-    special_effects: ['雷系法术威力+80%', '雷霆免疫', '速度+50%', '穿透攻击'],
+    special_effects: ['雷系真气威力+80%', '雷霆免疫', '速度+50%', '穿透攻击'],
     base_multiplier: 2.0,
     talent_cost: 15,
     rarity: 4
@@ -213,7 +213,7 @@ export const LOCAL_SPIRIT_ROOTS: Omit<SpiritRoot, 'source'>[] = [
     tier: '极品',
     description: '极为罕见的变异灵根，冰霜之躯，万物凋零。修行冰系功法，控制力超凡，能冰封千里。',
     cultivation_speed: '2.0x',
-    special_effects: ['冰系法术威力+80%', '减速效果+100%', '冰霜免疫', '空间冻结'],
+    special_effects: ['冰系真气威力+80%', '减速效果+100%', '冰霜免疫', '空间冻结'],
     base_multiplier: 2.0,
     talent_cost: 15,
     rarity: 4
@@ -226,7 +226,7 @@ export const LOCAL_SPIRIT_ROOTS: Omit<SpiritRoot, 'source'>[] = [
     tier: '神品',
     description: '传说中的至高灵根，万法归一，包容万象。可修行所有属性功法，无瓶颈，但初期进展缓慢，后期一日千里。',
     cultivation_speed: '0.8x(前期) → 2.8x(后期)',
-    special_effects: ['全系法术亲和', '无属性限制', '越阶战斗+50%', '突破概率+30%'],
+    special_effects: ['全系真气亲和', '无属性限制', '越阶战斗+50%', '突破概率+30%'],
     base_multiplier: 2.8,
     talent_cost: 25,
     rarity: 5
@@ -263,7 +263,7 @@ export const LOCAL_SPIRIT_ROOTS: Omit<SpiritRoot, 'source'>[] = [
     tier: '下品',
     description: '较为常见的异种灵根，微风轻抚，虽然资质一般，但胜在灵活多变，身法迅捷。',
     cultivation_speed: '1.1x',
-    special_effects: ['风系法术威力+15%', '移动速度+20%'],
+    special_effects: ['风系真气威力+15%', '移动速度+20%'],
     base_multiplier: 1.1,
     talent_cost: 3,
     rarity: 1
@@ -274,7 +274,7 @@ export const LOCAL_SPIRIT_ROOTS: Omit<SpiritRoot, 'source'>[] = [
     tier: '极品',
     description: '极为罕见的变异灵根，与黑暗为伴，掌控阴影之力。修行暗系功法速度极快，擅长隐匿和暗杀。',
     cultivation_speed: '2.0x',
-    special_effects: ['暗系法术威力+80%', '隐身能力', '暗夜增幅+50%', '影遁'],
+    special_effects: ['暗系真气威力+80%', '隐身能力', '暗夜增幅+50%', '影遁'],
     base_multiplier: 2.0,
     talent_cost: 15,
     rarity: 4
@@ -285,7 +285,7 @@ export const LOCAL_SPIRIT_ROOTS: Omit<SpiritRoot, 'source'>[] = [
     tier: '极品',
     description: '传说中的圣洁灵根，天生亲近光明，驱邪破煞。修行光系功法事半功倍，对邪祟有天然克制。',
     cultivation_speed: '2.0x',
-    special_effects: ['光系法术威力+80%', '邪祟克制+100%', '治愈增幅', '圣光庇护'],
+    special_effects: ['光系真气威力+80%', '邪祟克制+100%', '治愈增幅', '圣光庇护'],
     base_multiplier: 2.0,
     talent_cost: 15,
     rarity: 4
@@ -296,7 +296,7 @@ export const LOCAL_SPIRIT_ROOTS: Omit<SpiritRoot, 'source'>[] = [
     tier: '特殊',
     description: '邪道灵根，以血为引，修行迅速但需要大量鲜血滋养。容易走火入魔，但力量增长极快。',
     cultivation_speed: '1.8x',
-    special_effects: ['血系法术威力+70%', '吸血恢复', '嗜血狂化', '魔道亲和'],
+    special_effects: ['血系真气威力+70%', '吸血恢复', '嗜血狂化', '魔道亲和'],
     base_multiplier: 1.8,
     talent_cost: 10,
     rarity: 4
@@ -307,7 +307,7 @@ export const LOCAL_SPIRIT_ROOTS: Omit<SpiritRoot, 'source'>[] = [
     tier: '特殊',
     description: '罕见的死灵根，天生亲近死气，能够操控骸骨。修行鬼道功法速度极快，但被正道所不容。',
     cultivation_speed: '1.7x',
-    special_effects: ['死灵法术威力+60%', '骸骨操控', '死气免疫', '鬼道天赋'],
+    special_effects: ['死灵秘术威力+60%', '骸骨操控', '死气免疫', '鬼道天赋'],
     base_multiplier: 1.7,
     talent_cost: 8,
     rarity: 4
@@ -318,7 +318,7 @@ export const LOCAL_SPIRIT_ROOTS: Omit<SpiritRoot, 'source'>[] = [
     tier: '中品',
     description: '木行资质尚可，对木系功法有不错的亲和力，能够顺利踏上修行之路。',
     cultivation_speed: '1.3x',
-    special_effects: ['木系法术威力+25%', '生命力恢复+20%'],
+    special_effects: ['木系真气威力+25%', '生命力恢复+20%'],
     base_multiplier: 1.3,
     talent_cost: 6,
     rarity: 2
@@ -329,7 +329,7 @@ export const LOCAL_SPIRIT_ROOTS: Omit<SpiritRoot, 'source'>[] = [
     tier: '中品',
     description: '水行资质良好，法力绵延不绝，适应性强，修行较为顺畅。',
     cultivation_speed: '1.3x',
-    special_effects: ['水系法术威力+25%', '灵气恢复+20%'],
+    special_effects: ['水系真气威力+25%', '灵气恢复+20%'],
     base_multiplier: 1.3,
     talent_cost: 6,
     rarity: 2
@@ -340,7 +340,7 @@ export const LOCAL_SPIRIT_ROOTS: Omit<SpiritRoot, 'source'>[] = [
     tier: '中品',
     description: '土行资质不错，防御力强，稳扎稳打，是阵法师的良好资质。',
     cultivation_speed: '1.3x',
-    special_effects: ['土系法术威力+25%', '防御力+20%'],
+    special_effects: ['土系真气威力+25%', '防御力+20%'],
     base_multiplier: 1.3,
     talent_cost: 6,
     rarity: 2
@@ -351,7 +351,7 @@ export const LOCAL_SPIRIT_ROOTS: Omit<SpiritRoot, 'source'>[] = [
     tier: '极品',
     description: '极为罕见的变异灵根，天生百毒不侵，修行毒功速度极快，是毒道修士梦寐以求的体质。',
     cultivation_speed: '2.0x',
-    special_effects: ['毒系法术威力+80%', '百毒不侵', '剧毒增幅', '毒素感知'],
+    special_effects: ['毒系真气威力+80%', '百毒不侵', '剧毒增幅', '毒素感知'],
     base_multiplier: 2.0,
     talent_cost: 15,
     rarity: 4
@@ -362,7 +362,7 @@ export const LOCAL_SPIRIT_ROOTS: Omit<SpiritRoot, 'source'>[] = [
     tier: '极品',
     description: '万中无一的双属性灵根，同时拥有两种基础灵根的力量。可修炼两系功法，但初期进展缓慢。',
     cultivation_speed: '1.8x',
-    special_effects: ['双系法术亲和', '融合突破+30%', '双修加成'],
+    special_effects: ['双系真气亲和', '融合突破+30%', '双修加成'],
     base_multiplier: 1.8,
     talent_cost: 14,
     rarity: 4
@@ -373,7 +373,7 @@ export const LOCAL_SPIRIT_ROOTS: Omit<SpiritRoot, 'source'>[] = [
     tier: '神品',
     description: '传说中的至高灵根之一，掌控虚空法则，可穿梭空间。修行极难但潜力无穷。',
     cultivation_speed: '0.9x(前期) → 3.0x(后期)',
-    special_effects: ['空间法术精通', '虚空穿梭', '空间锁定', '次元斩'],
+    special_effects: ['空间秘术精通', '虚空穿梭', '空间锁定', '次元斩'],
     base_multiplier: 3.0,
     talent_cost: 25,
     rarity: 5
@@ -384,7 +384,7 @@ export const LOCAL_SPIRIT_ROOTS: Omit<SpiritRoot, 'source'>[] = [
     tier: '神品',
     description: '最为稀有的传说灵根，触及时间法则。修炼艰难但一旦有成，可逆转岁月，掌控因果。',
     cultivation_speed: '0.8x(前期) → 3.2x(后期)',
-    special_effects: ['时间法术精通', '时光倒流', '因果推演', '时间加速'],
+    special_effects: ['时间秘术精通', '时光倒流', '因果推演', '时间加速'],
     base_multiplier: 3.2,
     talent_cost: 28,
     rarity: 5

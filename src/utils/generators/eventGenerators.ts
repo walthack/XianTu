@@ -218,6 +218,17 @@ export async function generateWorldEvent(args: {
       .slice(0, 6);
 
     const promptTemplate = (await getPrompt('eventGeneration')).trim();
+    // 剧本上下文（不剧透）：在场势力与当前章节名，让世界事件长在剧本土壤里而非凭空
+    const rtAny: any = (saveData as any)?.世界?.状态?.剧本模组;
+    const factionNames = Array.isArray(rtAny?.canon?.factions)
+      ? rtAny.canon.factions.map((f: any) => f?.name).filter(Boolean).slice(0, 12)
+      : [];
+    const chapterTitle = Array.isArray(rtAny?.chapters)
+      ? (rtAny.chapters.find((c: any) => c?.id === rtAny.currentChapterId)?.title || '')
+      : '';
+    const scenarioContext = factionNames.length
+      ? `\n# 剧本在场势力（事件优先牵动这些，不要凭空造新大势力）\n- ${factionNames.join('、')}${chapterTitle ? `\n- 当前章节：${chapterTitle}` : ''}`
+      : '';
     const extra = customPrompt && String(customPrompt).trim() ? `\n\n## 额外要求\n${String(customPrompt).trim()}` : '';
 
     const context = `
@@ -230,6 +241,7 @@ export async function generateWorldEvent(args: {
 
 # 玩家关系（好感度Top）
 ${relationList.length ? relationList.map(r => `- ${r.名字} | 关系:${r.与玩家关系 || '未知'} | 好感:${r.好感度} | 境界:${r.境界 || '未知'}`).join('\n') : '- （暂无）'}
+${scenarioContext}
 `.trim();
 
     const finalPrompt = `${promptTemplate}\n\n---\n\n${context}${extra}`.trim();
