@@ -1,9 +1,9 @@
 {
   "schema": "xiantu.character-registry.v1",
-  "version": "cr-2026-07-05-da28e877c183b1fe",
-  "sourceHash": "da28e877c183b1fe",
+  "version": "cr-2026-07-05-7309a5a973038dd8",
+  "sourceHash": "7309a5a973038dd8",
   "sourceGeneratedAt": "2026-06-30T12:50:33.965Z",
-  "generatedAt": "2026-07-05T08:24:05.762Z",
+  "generatedAt": "2026-07-05T08:27:31.147Z",
   "stats": {
     "total": 303,
     "stagePresent": 247,
@@ -52,7 +52,8 @@
           "location": "清远玄真观",
           "locator": "chapter160.html",
           "scene": "蔺采泉遇刺后，齐放鹤与吴行德一同追至清远玄真观等候卓云君，在殿中调息时忽睁眼说\"来了\"，随即与卓云君对峙，追问九阳神功下落"
-        }
+        },
+        "birthYear": 190
       },
       "region": "晋国",
       "phaseIdentities": [],
@@ -623,7 +624,8 @@
           "location": "承天门",
           "locator": "第0105章",
           "scene": "大朝会上，监门校尉唱名'抚王李纮'，他应声'在'，由夹阶校尉象征性搜身后踏入门内"
-        }
+        },
+        "birthYear": 170
       },
       "region": "唐国",
       "phaseIdentities": [],
@@ -1147,7 +1149,8 @@
           "locator": "六朝清羽记/chapter6",
           "scene": "程宗扬在草原目睹秦军骑兵与兽蛮人激战，虬髯大汉连杀数名兽蛮武士后，古格尔掷出长矛将其刺杀，战斗告一段落。"
         },
-        "race": "兽蛮人"
+        "race": "兽蛮人",
+        "birthYear": 170
       },
       "phaseIdentities": [],
       "review": {
@@ -2408,7 +2411,8 @@
             "role": "创建者/之主"
           }
         ],
-        "debutLocation": ""
+        "debutLocation": "",
+        "birthYear": 170
       },
       "phaseIdentities": [],
       "review": {
@@ -2686,7 +2690,8 @@
           "location": "山间",
           "locator": "六朝云龙吟/0249.html",
           "scene": "从树上出现，手持紫色水晶，口中念念有词，施展巫术辅助韩定国与程宗扬交战"
-        }
+        },
+        "birthYear": 190
       },
       "phaseIdentities": [],
       "review": {
@@ -2733,7 +2738,8 @@
           "location": "佛堂",
           "locator": "六朝燕歌行/0127.html",
           "scene": "作为波斯贵妇在佛像前接受释特昧普赐名，被赐法号「善蕴」，自称弟子，展现虔诚的宗教仪式姿态"
-        }
+        },
+        "birthYear": 188
       },
       "phaseIdentities": [],
       "review": {
@@ -2918,7 +2924,8 @@
           "location": "大宁坊某祭堂",
           "locator": "0195.html",
           "scene": "程宗扬在祭堂梁上潜伏，鬼金羊在堂内巡视，瞳孔变为方瞳，映出墙根的黑纱幞头（程宗扬藏身处）"
-        }
+        },
+        "birthYear": 192
       },
       "phaseIdentities": [],
       "review": {
@@ -3677,7 +3684,8 @@
           "location": "战场中央",
           "locator": "chapter12.html",
           "scene": "罗马将领从军团中驰出，近卫骑士上前用生涩语调喝道\"罗马联军统帅，阿伽门侬！\"，随后阿伽门侬与韩庚对峙并展开阵前对话"
-        }
+        },
+        "birthYear": 180
       },
       "phaseIdentities": [
         {
@@ -3850,7 +3858,8 @@
           "location": "现代世界（程宗扬所在城市）",
           "locator": "chapter4.html（第4章）",
           "scene": "段强打来电话邀约程宗扬打篮球，抱怨程宗扬可能忘记约定，调侃说\"小心我穿越了，你再想找我打球，就找不到了\"，随后展开关于穿越的热烈讨论"
-        }
+        },
+        "birthYear": 190
       },
       "phaseIdentities": [
         {
@@ -4040,7 +4049,8 @@
           "location": "草原（王哲军营）",
           "locator": "chapter10",
           "scene": "程宗扬在草原军营中，蔺采泉来访并提及太乙真宗四位教御，其中商乐轩眼高于顶，这是首次明确提及该角色。"
-        }
+        },
+        "birthYear": 170
       },
       "phaseIdentities": [
         {
@@ -4147,7 +4157,8 @@
           "location": "南荒村寨",
           "locator": "chapter48",
           "scene": "吴战威用蛮语与山中老媪攀谈，为商队借宿事宜与对方交涉，展现其熟悉南荒风土的一面。"
-        }
+        },
+        "birthYear": 190
       },
       "phaseIdentities": [
         {
@@ -4374,7 +4385,8 @@
           "location": "废墟",
           "locator": "第103章",
           "scene": "在废墟中生起篝火，配合祁远烧烤采来的蘑菇和碧鲮族带来的鱼干招待众人"
-        }
+        },
+        "birthYear": 190
       },
       "phaseIdentities": [
         {
@@ -4587,7 +4599,8 @@
             "faction": "鬼王峒",
             "role": "峒中主事者（代理鬼巫王处理峒务）"
           }
-        ]
+        ],
+        "birthYear": 190
       },
       "phaseIdentities": [
         {
@@ -4829,7 +4842,8 @@
           "location": "军营帐篷",
           "locator": "chapter11.html",
           "scene": "程宗扬被月霜制服并打断骨头时大声呼救，王哲听到禀报后迅速赶来，一手抓住程宗扬肩头制止月霜的致命攻击"
-        }
+        },
+        "birthYear": 152
       },
       "phaseIdentities": [
         {
@@ -5042,7 +5056,8 @@
           "locator": "第28章",
           "scene": "程宗扬在河滩遭遇兽蛮老者阿合马，阿合马认出程宗扬后怒而厮杀，被哈迷蚩呼唤制止，二兽以兽蛮人结义兄弟礼仪相认"
         },
-        "race": "兽蛮人"
+        "race": "兽蛮人",
+        "birthYear": 162
       },
       "phaseIdentities": [
         {
@@ -5637,7 +5652,8 @@
           "location": "广阳地界",
           "locator": "第248章",
           "scene": "敖润在山路宿营处拿出铜制酒壶与程宗扬分享，自报姓名，豪爽地邀请程宗扬喝酒驱寒"
-        }
+        },
+        "birthYear": 170
       },
       "region": "宋国",
       "phaseIdentities": [
@@ -5778,7 +5794,8 @@
           "location": "临安",
           "locator": "六朝云龙吟/0088.html",
           "scene": "在与太乙真宗米远志的战斗中，八臂魔僧以八臂形态现身，双手各执法器与米远志激战，被米远志认出并喝破名号"
-        }
+        },
+        "birthYear": 155
       },
       "region": "宋国",
       "phaseIdentities": [
@@ -5871,7 +5888,8 @@
           "location": "静室",
           "locator": "第0133章",
           "scene": "赵归真请过程宗扬后，一个头戴玉叶花冠、白衣胜雪的女子轻烟般踏入室内，程宗扬认出她便是瑶池宗的奉玦仙子白霓裳"
-        }
+        },
+        "birthYear": 190
       },
       "phaseIdentities": [
         {
@@ -6151,7 +6169,8 @@
           "locator": "chapter343",
           "scene": "程宗扬在江州守城战中与一名兽蛮武士激战，对方自报姓名「豹子头」，后被程宗扬以九阳神功六掌击倒擒获"
         },
-        "race": "兽蛮人"
+        "race": "兽蛮人",
+        "birthYear": 192
       },
       "region": "宋国",
       "phaseIdentities": [
@@ -6561,7 +6580,8 @@
             "label": "云龙篇",
             "text": "亲历：长秋宫守卫战（与程宗扬、刘建、苍鹭）；剑玉姬与程宗扬谈判（与剑玉姬、程宗扬）"
           }
-        ]
+        ],
+        "birthYear": 190
       },
       "region": "汉国",
       "phaseIdentities": [
@@ -6928,7 +6948,8 @@
           "location": "阙楼",
           "locator": "六朝燕歌行/chapter0003.html",
           "scene": "刘建败亡后，成光作为建逆之妻被江充擒下，狼狈不堪地出现在吴三桂面前"
-        }
+        },
+        "birthYear": 170
       },
       "region": "汉国",
       "phaseIdentities": [
@@ -7257,7 +7278,8 @@
             "label": "云龙篇",
             "text": "亲历：吕冀重伤；左武军入宫；剑玉姬真身；八臂收束"
           }
-        ]
+        ],
+        "birthYear": 200
       },
       "phaseIdentities": [
         {
@@ -8485,7 +8507,8 @@
           "location": "鬼王峒·奴隶洞窟",
           "locator": "chapter114",
           "scene": "在红苗人聚居的洞窟深处，被苏荔发现正与狗头鬼仆进行巫术仪式，原是苏荔闺中密友、娄蒙之妻"
-        }
+        },
+        "birthYear": 190
       },
       "region": "南荒",
       "phaseIdentities": [
@@ -9484,7 +9507,8 @@
           "location": "靖恭坊",
           "locator": "第0114章",
           "scene": "作为女刺客潜入水香楼行刺程宗扬，失手被擒后被关押审讯"
-        }
+        },
+        "birthYear": 190
       },
       "phaseIdentities": [
         {
@@ -10844,7 +10868,8 @@
           "location": "南荒鬼王峒区域",
           "locator": "chapter102",
           "scene": "小紫提及阁罗拿来的棉帕是给鬼巫王大人的礼物，透露其作为鬼王峒统治者接受各族献祭的身份"
-        }
+        },
+        "birthYear": 170
       },
       "region": "南荒",
       "phaseIdentities": [
@@ -11161,7 +11186,8 @@
             "label": "云龙篇",
             "text": "亲历：程宗扬安排退路与联络（与程宗扬、云丹琉、秦桧）"
           }
-        ]
+        ],
+        "birthYear": 190
       },
       "region": "汉国",
       "phaseIdentities": [
@@ -11465,7 +11491,8 @@
           "locator": "六朝云龙吟·第0102章",
           "scene": "随祁远抵达临安，青面兽向程宗扬介绍这位族中术者，声称其为“吾族最伟大的术者”。"
         },
-        "race": "兽蛮人"
+        "race": "兽蛮人",
+        "birthYear": 170
       },
       "region": "宋国",
       "phaseIdentities": [
@@ -11641,7 +11668,8 @@
           "location": "西湖小瀛洲",
           "locator": "六朝云龙吟/0081.html",
           "scene": "星月湖大营易彪中尉下达伏击任务，称呼\"上士韩玉\"，韩玉应声\"到！\"，领命带领二班在岛中湖设伏。"
-        }
+        },
+        "birthYear": 190
       },
       "phaseIdentities": [
         {
@@ -11731,7 +11759,8 @@
           "location": "太泉古阵",
           "locator": "六朝云龙吟/0140章",
           "scene": "众人在太泉古阵洞口前聚集，她被许英杰询问意见后，以大当家身份示意等待许二当家出阵再作计较。"
-        }
+        },
+        "birthYear": 170
       },
       "region": "太泉",
       "phaseIdentities": [
@@ -12174,7 +12203,8 @@
           "location": "洛都永和里",
           "locator": "六朝云龙吟/0240.html",
           "scene": "乘马车到永和里赵王邸前，义姁代为通报\"北宫长使胡夫人\"求见，与平城君相遇"
-        }
+        },
+        "birthYear": 188
       },
       "region": "汉国",
       "phaseIdentities": [
@@ -12259,7 +12289,8 @@
           "location": "池阳（北邙以西）",
           "locator": "六朝云龙吟/0374.html",
           "scene": "敖润奉命前往池阳胡骑大营传诏，桓郁正襟危坐于中军帐内，内着铁甲外穿儒袍，额头扎白布为天子戴孝，接待刘建派来的使者何武。"
-        }
+        },
+        "birthYear": 180
       },
       "region": "汉国",
       "phaseIdentities": [
@@ -12726,7 +12757,8 @@
           "location": "永安宫",
           "locator": "第3章",
           "scene": "随着一声断喝，一直不见踪影的大将军霍子孟闪亮登场，身披大氅、外罩赤袍、内穿锁子甲，跨白马徐徐驶来，厉声喝问董卓"
-        }
+        },
+        "birthYear": 180
       },
       "region": "汉国",
       "phaseIdentities": [
@@ -12922,7 +12954,8 @@
           "location": "洛都",
           "locator": "六朝云龙吟/0406.html",
           "scene": "作为破虏将军董卓幕下谋士，在战车上与董卓论天下局势，评论刘建与吕氏之争道：「连刘建都能图谋大位，可见乱象。」"
-        }
+        },
+        "birthYear": 190
       },
       "region": "汉国",
       "phaseIdentities": [
@@ -13160,7 +13193,8 @@
             "label": "云龙篇",
             "text": "亲历：剑玉姬与程宗扬谈判（与程宗扬、蔡敬仲）"
           }
-        ]
+        ],
+        "birthYear": 190
       },
       "region": "汉国",
       "phaseIdentities": [
@@ -13749,7 +13783,8 @@
           "location": "洛都北宫",
           "locator": "《六朝燕歌行》第0003.html 第1章「退败」",
           "scene": "程宗扬与秦桧等人平叛后，金蜜镝走马上前，接过刘建首级，仔细看过后摘下天子冕旒，将头颅高高举起示众"
-        }
+        },
+        "birthYear": 170
       },
       "region": "汉国",
       "phaseIdentities": [
@@ -13862,7 +13897,8 @@
           "locator": "六朝清羽记/chapter357.html",
           "scene": "金兀术作为兽蛮首领，在被武二郎揍后，于程宗扬审问时挺胸报名"
         },
-        "race": "兽蛮人"
+        "race": "兽蛮人",
+        "birthYear": 170
       },
       "region": "宋国",
       "phaseIdentities": [
@@ -14147,7 +14183,8 @@
             "label": "云龙篇",
             "text": "亲历：黑鸦使者现身（与程宗扬）"
           }
-        ]
+        ],
+        "birthYear": 192
       },
       "phaseIdentities": [
         {
@@ -15506,7 +15543,8 @@
           "location": "林冲宅邸",
           "locator": "第2集/第28章",
           "scene": "程宗扬登门拜访林冲，委托林冲派人去请李师师小姐，欲邀其往凤凰岭一游。"
-        }
+        },
+        "birthYear": 202
       },
       "region": "宋国",
       "phaseIdentities": [
@@ -16353,7 +16391,8 @@
           "location": "草原军营",
           "locator": "六朝清羽记/chapter10.html",
           "scene": "傍晚时分在帐外温和询问程宗扬"
-        }
+        },
+        "birthYear": 170
       },
       "phaseIdentities": [
         {
@@ -16454,7 +16493,8 @@
           "location": "临安城",
           "locator": "第1集·大宋特工",
           "scene": "林冲作为皇城司密探跟踪程宗扬，出现在临安城中执行监视任务"
-        }
+        },
+        "birthYear": 190
       },
       "region": "宋国",
       "phaseIdentities": [
@@ -16585,7 +16625,8 @@
           "location": "建康",
           "locator": "六朝清羽记/chapter157.html",
           "scene": "云苍峰带林清浦来访，程宗扬衣冠不整坐在书房，林清浦穿法衣踏进书房施礼问候，自我介绍\"清浦见过公子\""
-        }
+        },
+        "birthYear": 190
       },
       "region": "晋国",
       "phaseIdentities": [
@@ -17633,7 +17674,8 @@
           "location": "金明寨（江畔战场附近）",
           "locator": "六朝云龙吟/0006.html",
           "scene": "在江州之战后，与斯明信联手火烧金明寨宋军粮草，展现星月湖八骏之一的行动。"
-        }
+        },
+        "birthYear": 190
       },
       "region": "宋国",
       "phaseIdentities": [
@@ -17939,7 +17981,8 @@
           "location": "明庆寺菜园",
           "locator": "六朝云龙吟/0011.html",
           "scene": "鲁智深与小尼姑杨柳比武，撕打间露出身上精美的花绣刺青，被秦桧评价为'花和尚'，明心介绍其俗家姓鲁、法号智深"
-        }
+        },
+        "birthYear": 178
       },
       "phaseIdentities": [
         {
@@ -18284,7 +18327,8 @@
             "label": "云龙篇",
             "text": "亲历：吕氏调动汉军围杀（与程宗扬、吕不疑）；天子暴毙消息传遍洛都（与刘建）；刘建攻占南宫与武库（与刘建）"
           }
-        ]
+        ],
+        "birthYear": 190
       },
       "region": "汉国",
       "phaseIdentities": [
@@ -18502,7 +18546,8 @@
           "locator": "第293章",
           "scene": "太后吕雉着黑色长衣高据座上，与刘骜（汉帝）商议赵王谋逆之事，命赵王赐自尽，太子以下尽数贬为庶人。"
         },
-        "race": "飞羽族（羽翼纯黑）"
+        "race": "飞羽族（羽翼纯黑）",
+        "birthYear": 183
       },
       "region": "汉国",
       "phaseIdentities": [
@@ -18865,7 +18910,8 @@
           "location": "洛都",
           "locator": "第22集·鬻爵得官（第0233章）",
           "scene": "程宗扬在路上遇到被奴仆追打的文士，出面拦下询问，得知其是丹青师毛延寿，刚到洛都因求见襄邑侯误入襄城君门内被赶出，身无分文、走投无路。"
-        }
+        },
+        "birthYear": 170
       },
       "region": "汉国",
       "phaseIdentities": [
@@ -19530,7 +19576,8 @@
           "location": "战场（江州城外）",
           "locator": "六朝清羽记/chapter337.html",
           "scene": "程宗扬率众与选锋营交战时，墨枫林身着道服从铁丝网处缓步现身，以瑶池宗法师身份吸走藏锋道人的阳钧炎龙火焰，与藏锋道人第七次交手。"
-        }
+        },
+        "birthYear": 202
       },
       "region": "宋国",
       "phaseIdentities": [
@@ -21886,7 +21933,8 @@
             "label": "云龙篇",
             "text": "亲历：荆溪村寨被屠（与程宗扬、相雅、王天德）；程宗扬与滕甫交易三十万石粮食（与程宗扬、滕甫）；临安情报收集（与俞子元、林清浦）；程宗扬安排退路与联络（与程宗扬、云丹琉、班超）"
           }
-        ]
+        ],
+        "birthYear": 170
       },
       "phaseIdentities": [
         {
@@ -22321,7 +22369,8 @@
             "text": "亲历：荆溪村寨被屠（与程宗扬、秦桧、相雅）"
           }
         ],
-        "race": "兽蛮人"
+        "race": "兽蛮人",
+        "birthYear": 192
       },
       "region": "宋国",
       "phaseIdentities": [
@@ -24345,7 +24394,8 @@
           "location": "洛都",
           "locator": "六朝云龙吟 0067章",
           "scene": "在殇侯近卫队分赃辎重的场合被月霜点名提及，石敬瑭衡量利弊后默认接受月霜提出的分配方案。"
-        }
+        },
+        "birthYear": 170
       },
       "region": "汉国",
       "phaseIdentities": [
@@ -25164,7 +25214,8 @@
           "location": "建康·长干里",
           "locator": "chapter199.html",
           "scene": "苏妲己卧在软榻上杀死一名男子后，询问被掳走的祁远的下落，吩咐手下查找建康的织坊商会。"
-        }
+        },
+        "birthYear": 184
       },
       "region": "晋国",
       "phaseIdentities": [
@@ -28664,7 +28715,8 @@
           "location": "荆溪县",
           "locator": "六朝云龙吟/0007.html",
           "scene": "程宗扬一行乘船抵达荆溪县衙码头，吴三桂此前外出打探消息，此时归来与众人会合"
-        }
+        },
+        "birthYear": 170
       },
       "phaseIdentities": [
         {
@@ -29981,7 +30033,8 @@
           "location": "未明确",
           "locator": "chapter143",
           "scene": "谢艺临终托付时提到\"带她去星月湖，找王韬、孟非卿、萧遥逸都行\"，萧遥逸的名字首次出现，但未正式出场"
-        }
+        },
+        "birthYear": 190
       },
       "region": "晋国",
       "phaseIdentities": [
@@ -30330,7 +30383,8 @@
             "text": "亲历：小紫疑云（与程宗扬、碧奴、谢艺）；小紫暴露（与程宗扬、阿夕、乐明珠）；辰星七妖现身（与程宗扬）；擒获惊理（与程宗扬）"
           }
         ],
-        "race": "碧鲮族混血（岳帅×碧姬之女；非鲛人，鲛人为碧鲮死敌）"
+        "race": "碧鲮族混血（岳帅×碧姬之女；非鲛人，鲛人为碧鲮死敌）",
+        "birthYear": 202
       },
       "phaseIdentities": [
         {
@@ -31303,7 +31357,8 @@
           "location": "太泉（树林）",
           "locator": "《六朝云龙吟》0135章",
           "scene": "众修士争夺赤阳圣果时，一个肥头大耳、油光满面的和尚排众而出，用油腔滑调的佛号自我介绍，主动献出小还丹为伤者疗伤，并提议佛道两门各分一颗赤阳圣果。"
-        }
+        },
+        "birthYear": 178
       },
       "region": "唐国",
       "phaseIdentities": [
@@ -31404,7 +31459,8 @@
           "location": "洛都某处房室内",
           "locator": "六朝云龙吟/0233章",
           "scene": "冯子都向程宗扬、高智商透露徐璜身份时出场，被介绍为天子最亲信的内臣"
-        }
+        },
+        "birthYear": 190
       },
       "region": "汉国",
       "phaseIdentities": [
@@ -31601,7 +31657,8 @@
             "label": "云龙篇",
             "text": "亲历：寻找出口（与虞白樱）"
           }
-        ]
+        ],
+        "birthYear": 190
       },
       "region": "南荒",
       "phaseIdentities": [
@@ -32123,7 +32180,8 @@
           "location": "晴州",
           "locator": "六朝清羽记 chapter259",
           "scene": "敖润在酒席上介绍雪隼佣兵团时提及团长薛延山与云六爷是过命的交情"
-        }
+        },
+        "birthYear": 190
       },
       "region": "海上",
       "phaseIdentities": [
@@ -32891,7 +32949,8 @@
           "location": "黑石滩",
           "locator": "chapter45.html",
           "scene": "云苍峰命易彪、易虎下水探路，两名大汉应诺跳入水中"
-        }
+        },
+        "birthYear": 192
       },
       "phaseIdentities": [
         {
@@ -32984,7 +33043,8 @@
           "location": "洛都北宫",
           "locator": "六朝云龙吟0224",
           "scene": "太后吕雉在永安宫大殿内与众人议事时，点名命身边女医义姁去探望患病的大司马霍子孟"
-        }
+        },
+        "birthYear": 190
       },
       "region": "汉国",
       "phaseIdentities": [
@@ -33232,7 +33292,8 @@
             "faction": "苏妲己势力",
             "role": "教曲师娘（兰姑）"
           }
-        ]
+        ],
+        "birthYear": 170
       },
       "region": "晋国",
       "phaseIdentities": [
@@ -33461,7 +33522,8 @@
             "faction": "小紫势力",
             "role": "侍奴"
           }
-        ]
+        ],
+        "birthYear": 190
       },
       "region": "宋国",
       "phaseIdentities": [
@@ -33747,7 +33809,8 @@
           "location": "某处庭院廊下",
           "locator": "六朝清羽记/chapter273",
           "scene": "虞白樱追杀月霜，与程宗扬、秋少君相遇，自报姓名后以断月弦欲杀秋少君，声称自己是杀手"
-        }
+        },
+        "birthYear": 192
       },
       "phaseIdentities": [
         {
@@ -34473,7 +34536,8 @@
           "location": "筠州",
           "locator": "第0010章",
           "scene": "程宗扬出行临安，由俞子元领头，带领三名星月湖的老弟兄负责车马护送任务"
-        }
+        },
+        "birthYear": 190
       },
       "region": "宋国",
       "phaseIdentities": [
@@ -36449,7 +36513,8 @@
           "location": "含光殿寝宫",
           "locator": "第360章",
           "scene": "一群黑衣内侍涌 入紧闭的宫门，张恽以尖细的声音自报身份为\"中黄门张恽\"，向友通期昭仪禀报中行说等人图谋篡逆已被拿下"
-        }
+        },
+        "birthYear": 190
       },
       "region": "汉国",
       "phaseIdentities": [
@@ -36570,7 +36635,8 @@
           "location": "洛都北宫",
           "locator": "六朝燕歌行/0003.html",
           "scene": "程宗扬与贾文和对峙期间提及赵飞燕陷身秘境，提及其为支撑病体而出面的皇后殿下"
-        }
+        },
+        "birthYear": 183
       },
       "region": "汉国",
       "phaseIdentities": [
@@ -37271,7 +37337,8 @@
           "location": "东阁寝宫",
           "locator": "六朝云龙吟·第368章",
           "scene": "刘建家奴闯宫作乱时，一名面上带着刀疤的大汉从殿中迈步出来，双手握着近六尺的斩马刀，将闯入者凌空斩杀，展现出百战之士的凶悍气势。"
-        }
+        },
+        "birthYear": 192
       },
       "region": "汉国",
       "phaseIdentities": [
@@ -37615,7 +37682,8 @@
           "location": "皇宫",
           "locator": "六朝云龙吟/0253.html",
           "scene": "赵飞燕与程宗扬对话时，中行说作为天子近侍宦者插嘴干涉，态度傲慢，打断对话并质问程宗扬身份。"
-        }
+        },
+        "birthYear": 190
       },
       "region": "汉国",
       "phaseIdentities": [
@@ -38048,7 +38116,8 @@
             "label": "清羽篇",
             "text": "亲历：太乙真宗介入（与程宗扬、蔺采泉、商乐轩）"
           }
-        ]
+        ],
+        "birthYear": 187
       },
       "phaseIdentities": [
         {
@@ -38916,7 +38985,8 @@
           "location": "未明确（宫中）",
           "locator": "六朝燕歌行/0095.html",
           "scene": "杨玉环向程宗扬介绍宫中有太监在查他底细时提及仇士良有五个儿子，还在皇帝面前替儿子讨封。"
-        }
+        },
+        "birthYear": 190
       },
       "region": "唐国",
       "phaseIdentities": [
@@ -39068,7 +39138,8 @@
             "faction": "刑部六扇门",
             "role": "六扇门得力干将"
           }
-        ]
+        ],
+        "birthYear": 190
       },
       "phaseIdentities": [
         {
@@ -39172,7 +39243,8 @@
           "location": "大慈恩寺（晋昌坊）",
           "locator": "六朝燕歌行/0102.html",
           "scene": "窥基断喝'观海！你们密宗尽可去青龙、兴善二寺演法，何必来我大慈恩寺！'，观海笑着回应后起身告辞"
-        }
+        },
+        "birthYear": 178
       },
       "phaseIdentities": [
         {
@@ -39685,7 +39757,8 @@
           "location": "通善坊杏园",
           "locator": "0166.html",
           "scene": "刚刚接任京兆府少尹、权知府事的罗立言闻讯王守澄被杀，立即带着属下隶卒及长安、万年两县官员赶到凶案现场"
-        }
+        },
+        "birthYear": 190
       },
       "region": "唐国",
       "phaseIdentities": [
@@ -39774,7 +39847,8 @@
           "location": "武帝秘境入口",
           "locator": "六朝云龙吟·第0404章",
           "scene": "巫宗尊者仇雍率众现身，与小紫谈判秘境利益分配，出场时以\"尊者\"身份应承道歉并安排齐羽仙为质"
-        }
+        },
+        "birthYear": 190
       },
       "phaseIdentities": [
         {
@@ -39883,7 +39957,8 @@
           "location": "凉风殿",
           "locator": "六朝云龙吟/0393.html",
           "scene": "以武将装扮入殿拜见刘建皇帝"
-        }
+        },
+        "birthYear": 180
       },
       "phaseIdentities": [
         {
@@ -39962,7 +40037,8 @@
           "location": "北寺狱",
           "locator": "六朝云龙吟·第三九零章",
           "scene": "程宗扬等人闯入北寺狱时，曹季兴正被朱老头追打，一边大哭喊“姐啊，有人打我”，一边自报家门说“打小在宫里当差”"
-        }
+        },
+        "birthYear": 190
       },
       "phaseIdentities": [
         {
@@ -40264,7 +40340,8 @@
           "location": "凤凰岭石佛寺",
           "locator": "六朝云龙吟/0048.html",
           "scene": "布衣芒鞋的僧人踏着阳光缓步走上青石台阶，众和尚恭敬合什行礼迎接，称其为师兄"
-        }
+        },
+        "birthYear": 162
       },
       "phaseIdentities": [
         {
@@ -40436,7 +40513,8 @@
           "location": "摩尼寺",
           "locator": "六朝燕歌行/0097.html",
           "scene": "作为女摩尼师，解开善母的日月头冠包裹，跪倒在地顶礼膜拜"
-        }
+        },
+        "birthYear": 178
       },
       "phaseIdentities": [
         {
@@ -40520,7 +40598,8 @@
           "location": "紫云楼",
           "locator": "六朝燕歌行/0091章",
           "scene": "宴会上首倡其议，自报家门：祖父工部尚书乐少寂，父魏博节度使乐彦祯，自己是六州都指挥使"
-        }
+        },
+        "birthYear": 190
       },
       "phaseIdentities": [
         {
@@ -40586,7 +40665,8 @@
           "location": "小紫家庙（佛堂）",
           "locator": "六朝燕歌行/0147.html",
           "scene": "程宗扬在此佛堂中救出被十方丛林高僧用秘法禁锢、仅嘴巴能动的黛绮丝，黛绮丝恢复神智后自称波斯贵族、摩尼教善母，并向程宗扬宣誓效忠"
-        }
+        },
+        "birthYear": 190
       },
       "phaseIdentities": [
         {
@@ -40739,7 +40819,8 @@
           "location": "留仙客栈",
           "locator": "第0070章",
           "scene": "越二爷问他叫什么名字，他自报姓名\"回二爷，小的姓罗，单名一个令字\"，随后被安排沏茶并伺候客人。"
-        }
+        },
+        "birthYear": 190
       },
       "phaseIdentities": [
         {
@@ -40907,7 +40988,8 @@
           "location": "某处卧室内（通过窥视孔所见）",
           "locator": "六朝云龙吟第0108章",
           "scene": "作为黑衣侍奴出场，手持长鞭审问阮香凝，自称原本姓佘，江湖人称蛇夫人"
-        }
+        },
+        "birthYear": 188
       },
       "phaseIdentities": [
         {
@@ -41023,7 +41105,8 @@
           "location": "建康",
           "locator": "chapter166",
           "scene": "云苍峰设宴，席间向程宗扬介绍宾客名单，提及金谷石家的少主石超也将出席。"
-        }
+        },
+        "birthYear": 190
       },
       "region": "晋国",
       "phaseIdentities": [
@@ -41120,7 +41203,8 @@
           "location": "靖恭坊摩尼寺",
           "locator": "0097.html",
           "scene": "释特昧普在摩尼寺升座，掀帽露出金色螺髻发型，换上金色袈裟、法杖、钵盂、念珠、黄金鞋，以金光闪闪的人造金身形象登场，自称法号昧普，宣称继承不拾一世大师衣钵，为密宗之王、左街僧录。"
-        }
+        },
+        "birthYear": 162
       },
       "region": "唐国",
       "phaseIdentities": [
@@ -41209,7 +41293,8 @@
           "location": "山脚宿营地（苍澜镇太古泉古阵附近）",
           "locator": "六朝云龙吟·第118回",
           "scene": "铁中宝带铁马堂劲装大汉占据营地，声称已被铁马堂占领，要求程宗扬换地方，自称铁马堂副堂主。"
-        }
+        },
+        "birthYear": 190
       },
       "region": "南荒",
       "phaseIdentities": [
@@ -41572,7 +41657,8 @@
           "location": "大明宫待漏院",
           "locator": "第10集·有花堪折 第104回",
           "scene": "程宗扬进入大明宫待漏院，看见门牙掉了两颗、抱膝啸傲旁若无人的风流名士，正是谢家浪荡大爷谢无奕，双方互相认出，多日不见。"
-        }
+        },
+        "birthYear": 190
       },
       "region": "晋国",
       "phaseIdentities": [
@@ -41838,7 +41924,8 @@
           "location": "南宫",
           "locator": "六朝云龙吟 0368.html",
           "scene": "刘建攻打长秋宫受阻，齐羽仙推荐'军伍之事，当问苍鹭'，苍鹭遂向刘建献火攻之策"
-        }
+        },
+        "birthYear": 190
       },
       "phaseIdentities": [
         {
@@ -41931,7 +42018,8 @@
           "location": "未明确",
           "locator": "六朝云龙吟/0295.html",
           "scene": "程宗扬与蔡敬仲讨论时，蔡敬仲提及江都王太子刘建入觐欲图太子之位，天子很喜欢他，程宗扬惊觉此人是历史上有名的性变态者刘建"
-        }
+        },
+        "birthYear": 170
       },
       "phaseIdentities": [
         {
@@ -42189,7 +42277,8 @@
           "location": "上清观",
           "locator": "六朝云龙吟/0214.html",
           "scene": "吕不疑乔装布衣前来委托程宗扬寻找一批人，随手掷出三百金铢，交谈中说'疑人不用'时因避讳而吞吞吐吐，被卢景识破身份。"
-        }
+        },
+        "birthYear": 170
       },
       "region": "汉国",
       "phaseIdentities": [
@@ -42354,7 +42443,8 @@
           "location": "晴州",
           "locator": "六朝清羽记·第313章",
           "scene": "程宗扬通过林清浦的影月宗水镜术，与身在晴州的云秀峰远程会面，商议宋国粮食收购事宜。云秀峰以水镜现身，开门见山询问粮食生意的计划细节。"
-        }
+        },
+        "birthYear": 190
       },
       "region": "海上",
       "phaseIdentities": [
@@ -42535,7 +42625,8 @@
           "location": "河边",
           "locator": "六朝云龙吟/0198.html",
           "scene": "被程宗扬从水中救出后自报家门，程宗扬称其为太守"
-        }
+        },
+        "birthYear": 190
       },
       "region": "汉国",
       "phaseIdentities": [
@@ -42728,7 +42819,8 @@
           "location": "七里坊",
           "locator": "六朝云龙吟/0204.html",
           "scene": "程郑在游冶台开业前的私下聚会上含笑起身拱手，自称姓程名郑，与程宗扬等人见面攀谈。"
-        }
+        },
+        "birthYear": 190
       },
       "phaseIdentities": [
         {
