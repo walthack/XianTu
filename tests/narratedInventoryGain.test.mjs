@@ -160,3 +160,18 @@ test('rejects locations and other characters possessions during carried item rec
 
   assert.deepEqual(detectNarratedInventoryPossessions(text), ['传讯玉']);
 });
+
+test('rejects negated and generic placeholder item names during reconciliation', async () => {
+  const {
+    detectNarratedInventoryPossessions,
+    getInventoryItemIdentityKey,
+    normalizeNarratedItemName,
+  } = await loadTs('../src/utils/narratedInventory.ts');
+
+  assert.equal(normalizeNarratedItemName('携带传讯符箓'), '传讯符箓');
+  assert.notEqual(getInventoryItemIdentityKey('第三把钥匙'), getInventoryItemIdentityKey('钥匙'));
+
+  const text = '程宗扬翻遍怀中，确认没有对应的玉简；他身上虽有些杂物，却没有携带对应符箓。';
+
+  assert.deepEqual(detectNarratedInventoryPossessions(text), []);
+});

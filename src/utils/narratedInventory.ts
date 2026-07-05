@@ -29,6 +29,8 @@ const INVENTORY_ITEM_COUNT_VALUE_PATTERN = '[0-9]+|[一二两三四五六七八�
 const INVENTORY_ITEM_COUNT_PREFIX = `(?:${INVENTORY_ITEM_COUNT_VALUE_PATTERN})?`;
 const INVENTORY_ITEM_UNIT_PREFIX =
   `(?:这|那|此)?${INVENTORY_ITEM_COUNT_PREFIX}(?:枚|块|本|卷|件|只|个|颗|粒|瓶|支|张|份|把|柄|条)`;
+const INVENTORY_NEGATED_OR_GENERIC_ITEM_PATTERN =
+  /(?:没有|并无|未有|无|缺少|找不到|未见|不见|没有对应|未带|没带)[^，。；、\n]{0,12}(?:玉简|玉|令牌|丹药|丹丸|符箓|法器|法宝|功法|秘籍|玉佩|钥匙|书册|卷轴|药瓶|锦盒|灵草|灵材|矿石|信物|地图|阵盘|储物袋)|(?:对应的?|相应的?|相关的?|某个|某种|一类|一种)(?:玉简|玉|令牌|丹药|丹丸|符箓|法器|法宝|功法|秘籍|玉佩|钥匙|书册|卷轴|药瓶|锦盒|灵草|灵材|矿石|信物|地图|阵盘|储物袋)/;
 
 export interface NarratedInventoryGain {
   名称: string;
@@ -39,7 +41,7 @@ export function normalizeNarratedItemName(value: string): string {
   let normalized = value
     .replace(/[【】“”"「」『』《》‘’'`]/g, '')
     .replace(/^(?:取出|拿出|清点|确认|查看|摸出|掏出|取来|拿起)/, '')
-    .replace(/^(?:有|带着|带有|持有|藏着|剩下|只剩)/, '')
+    .replace(/^(?:有|带着|带有|持有|携带|藏着|剩下|只剩)/, '')
     .replace(/^(?:一枚|一块|一本|一卷|一件|一只|一个|一把|这枚|这块|这本|这卷|这件|这把|那枚|那块|那本|那卷|那件|那把)/, '')
     .replace(new RegExp(`^${INVENTORY_ITEM_UNIT_PREFIX}`), '')
     .replace(/^(?:那|这|此|一)[个件枚块本卷只]?/, '')
@@ -62,7 +64,9 @@ export function getInventoryItemIdentityKey(value: string): string {
 }
 
 function isPlausibleNarratedItemName(value: string): boolean {
+  if (INVENTORY_NEGATED_OR_GENERIC_ITEM_PATTERN.test(value)) return false;
   const itemName = normalizeNarratedItemName(value);
+  if (INVENTORY_NEGATED_OR_GENERIC_ITEM_PATTERN.test(itemName)) return false;
   if (!itemName || itemName.length < 2 || itemName.length > 24) return false;
   if (!new RegExp(INVENTORY_ITEM_NOUN_PATTERN).test(itemName)) return false;
   if (/[。；\n]|——|…/.test(itemName)) return false;
