@@ -172,10 +172,25 @@ function reconcileSaveWithRegistry(saveData: SaveData, runtime: RuntimeState & {
     const worldInfo = readPath(saveData, ['世界', '信息']) as Record<string, unknown> | undefined;
     const saveLocations = worldInfo?.地点信息;
     if (mod && Array.isArray(saveLocations)) {
-      const existing = new Set(saveLocations.map((item: any) => item?.名称).filter(Boolean));
+      const byName = new Map<string, any>();
+      for (const item of saveLocations as any[]) {
+        const n = item?.名称;
+        if (typeof n === 'string' && n && !byName.has(n)) byName.set(n, item);
+      }
       for (const loc of (mod.canon?.locations || []) as Array<{ name?: string; description?: string; type?: string; coordinates?: { x: number; y: number } }>) {
-        if (!loc?.name || !loc.coordinates || existing.has(loc.name)) continue;
-        existing.add(loc.name);
+        if (!loc?.name || !loc.coordinates) continue;
+        const found = byName.get(loc.name);
+        if (found) {
+          // 已存在：坐标是正典派生物（非玩家状态），按最新正典强制对齐——
+          // 否则旧档带着修正前的错坐标（实测：建康钉在宋境）永远不更新。
+          const cur = (found as any).coordinates || (found as any).坐标;
+          if (!cur || cur.x !== loc.coordinates.x || cur.y !== loc.coordinates.y) {
+            (found as any).coordinates = { ...loc.coordinates };
+            (found as any).坐标 = { ...loc.coordinates };
+          }
+          continue;
+        }
+        byName.set(loc.name, null);
         saveLocations.push({
           名称: loc.name, 位置: '', coordinates: { ...loc.coordinates }, 坐标: { ...loc.coordinates },
           描述: loc.description || '', 特色: '', 安全等级: '较安全', 开放状态: '开放', 相关势力: [], 类型: loc.type || '城池',

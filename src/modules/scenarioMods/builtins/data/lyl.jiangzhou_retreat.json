@@ -1201,6 +1201,17 @@
           "y": 7296
         },
         "features": []
+      },
+      {
+        "id": "liuchao.location.yongzhou_jin",
+        "name": "邕州",
+        "type": "城池",
+        "description": "晋国南部州城。",
+        "coordinates": {
+          "x": 4178,
+          "y": 6999
+        },
+        "features": []
       }
     ],
     "characters": [
