@@ -29,6 +29,7 @@ import { advanceScenarioRuntime } from '@/modules/scenarioMods/runtime';
 import { applyMilestoneRewards } from '@/modules/scenarioMods/milestoneRewards';
 import { buildScenarioStoryPrompt, createScenarioPromptState } from '@/modules/scenarioMods/storyContext';
 import { buildActionGatePrompt, getNarrativeTurn, pruneExpiredActionGates } from '@/utils/actionGate';
+import { reconcileNarrativeState } from '@/utils/narrativeStateReconciler';
 import { detectNarratedPlayerDamage } from '@/utils/narratedDamage';
 import {
   detectNarratedInventoryGainEntries,
@@ -2231,6 +2232,26 @@ ${step1Text}
       sortedCommands
     );
     commandAppliedChanges.push(...inspectedNpcChanges);
+
+    // 叙事-数据同步兜底（第一版：位置）。默认开，可用 localStorage 'narrative-state-reconcile'='off' 关闭。
+    const narrativeReconcileEnabled = (() => {
+      try {
+        return localStorage.getItem('narrative-state-reconcile') !== 'off';
+      } catch {
+        return true;
+      }
+    })();
+    if (narrativeReconcileEnabled) {
+      const narrativeStateChanges = reconcileNarrativeState({
+        saveDataBefore: saveDataSnapshotBeforeCommands,
+        saveData,
+        text: textContent,
+        commands: sortedCommands,
+        userAction: options?.userAction || '',
+        summarize: this._summarizeValueForChangeLog.bind(this),
+      });
+      commandAppliedChanges.push(...narrativeStateChanges);
+    }
 
     const actionGatePrune = pruneExpiredActionGates(saveData, getNarrativeTurn(saveData));
     if (actionGatePrune.changed) {
