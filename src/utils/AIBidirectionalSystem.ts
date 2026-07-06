@@ -2260,7 +2260,8 @@ ${step1Text}
       const { useAPIManagementStore } = await import('@/stores/apiManagementStore');
       const apiStore = useAPIManagementStore();
       const currentGoals = get(saveData, '系统.扩展.任务追踪.即兴目标');
-      if (apiStore.isFunctionEnabled('progress_audit') && shouldRunAudit(options?.userAction || '', currentGoals)) {
+      // 已知执行错误（可能回滚）时不浪费一次审计 LLM 调用
+      if (!hadExecutionError && apiStore.isFunctionEnabled('progress_audit') && shouldRunAudit(options?.userAction || '', currentGoals)) {
         const auditChanges = await runProgressAudit({
           saveData,
           recentText: textContent,

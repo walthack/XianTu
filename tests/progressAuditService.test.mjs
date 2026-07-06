@@ -51,14 +51,49 @@ test('rejects a distant hearsay item as an active goal', async () => {
   assert.equal(res.changed, false);
 });
 
-test('removes a goal the player explicitly abandoned (with evidence)', async () => {
+test('removes a goal the player explicitly abandoned (with grounded evidence)', async () => {
   const { validateAuditedGoals } = await modPromise;
   const res = validateAuditedGoals(
-    { goals: [{ title: '追查碧奴玉牌线索', status: 'abandoned', evidence: '玩家说先不追碧奴', confidence: 0.9 }] },
-    goals('追查碧奴玉牌线索')
+    { goals: [{ title: '追查碧奴玉牌线索', status: 'abandoned', evidence: '玩家明确放弃', confidence: 0.9 }] },
+    goals('追查碧奴玉牌线索'),
+    '玩家明确表示放弃追查碧奴玉牌线索。'
   );
   assert.deepEqual(res.finalGoals, []);
   assert.equal(res.changed, true);
+});
+
+test('keeps a completed goal whose evidence is not grounded in recent context', async () => {
+  const { validateAuditedGoals } = await modPromise;
+  const res = validateAuditedGoals(
+    { goals: [{ title: '救治小紫', status: 'completed', evidence: '归海之心已温养神魂', confidence: 0.95 }] },
+    goals('救治小紫'),
+    '众人在渔村外的芦苇丛中赶路，无人提及小紫病情。'
+  );
+  assert.deepEqual(res.finalGoals, [{ 标题: '救治小紫' }]);
+  assert.equal(res.changed, false);
+});
+
+test('deduplicates identical current goals without treating it as deletion', async () => {
+  const { validateAuditedGoals } = await modPromise;
+  const res = validateAuditedGoals({}, [{ 标题: '救治小紫' }, { 标题: '救治小紫。' }]);
+  assert.deepEqual(res.finalGoals, [{ 标题: '救治小紫' }]);
+});
+
+test('does not truncate existing goals over the cap', async () => {
+  const { validateAuditedGoals } = await modPromise;
+  const current = goals('追查碧奴玉牌线索', '护送沧月北上长安', '取回归海之心令牌', '安葬旧友遗骨');
+  const res = validateAuditedGoals({}, current);
+  assert.equal(res.finalGoals.length, 4);
+  assert.equal(res.changed, false);
+});
+
+test('wrong-schema / root-array output is a no-op', async () => {
+  const { validateAuditedGoals } = await modPromise;
+  const current = goals('救治小紫');
+  assert.deepEqual(validateAuditedGoals([], current).finalGoals, [{ 标题: '救治小紫' }]);
+  assert.equal(validateAuditedGoals([], current).changed, false);
+  assert.deepEqual(validateAuditedGoals({ foo: 1 }, current).finalGoals, [{ 标题: '救治小紫' }]);
+  assert.equal(validateAuditedGoals({ foo: 1 }, current).changed, false);
 });
 
 test('ignores out-of-scope fields in model output', async () => {

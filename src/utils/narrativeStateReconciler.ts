@@ -54,6 +54,17 @@ function normalizeDesc(desc: unknown): string {
     : '';
 }
 
+// 叙事是否把该目的地写出来了：整段命中，或“大区·地点·区域”的末段命中（把移动与目的地绑定）
+function narrativeMentionsLocation(text: string, rawDesc: string): boolean {
+  const full = normalizeDesc(rawDesc);
+  if (!full) return false;
+  const t = text.replace(/\s+/g, '');
+  if (t.includes(full)) return true;
+  const segs = full.split('·').filter(Boolean);
+  const last = segs[segs.length - 1];
+  return !!last && last.length >= 2 && t.includes(last);
+}
+
 function isLocationObjectWithCoords(value: unknown): value is LocationObject {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
   const obj = value as Record<string, unknown>;
@@ -67,50 +78,67 @@ function isLocationObjectWithCoords(value: unknown): value is LocationObject {
 }
 
 /**
- * 位置兜底：当命令把 ≥2 名 NPC 移动到同一新地点、正文含移动完成词、本轮未写玩家位置时，
- * 把玩家位置补齐为同一位置对象（整块复制，坐标随之带上）。
+ * 位置兜底：当本轮命令把 ≥2 名同队 NPC **真正移动**到同一新地点、正文写出了该地点、
+ * 本轮未写玩家位置时，把玩家位置补齐为同一位置对象（整块复制，坐标随之带上）。
+ *
+ * provenance 严守（宁可漏，绝不误传送）：
+ *  - 仅计 `action==='set'` 的整块 `当前位置` 命令；
+ *  - 用 saveDataBefore 证明该 NPC 本轮地点确实变了（幂等/失败命令不算移动）；
+ *  - 多个"≥2 名"目的地组同时存在 → 歧义，直接拒绝；
+ *  - 目的地必须在正文出现（把移动与目的地绑定）；
+ *  - 候选 NPC 的落账坐标必须一致，否则跳过。
  */
 export function reconcilePlayerLocationFromNarrative(input: NarrativeReconcileInput): StateChange[] {
-  const { saveData, text, commands } = input;
+  const { saveData, saveDataBefore, text, commands } = input;
   const summarize = input.summarize ?? ((_k, v) => v);
 
   // 本轮已写玩家位置 → 不重复补
-  const playerLocationSetThisTurn = commands.some(
-    (c) => c.key === '角色.位置' || c.key.startsWith('角色.位置.')
-  );
-  if (playerLocationSetThisTurn) return [];
+  if (commands.some((c) => c.key === '角色.位置' || c.key.startsWith('角色.位置.'))) return [];
 
   // 必须有移动完成词，否则可能只是 NPC 各自换房间/换镜头，不代表玩家也移动
   if (!MOVE_COMPLETION_RE.test(text)) return [];
 
-  // 收集本轮被整块写了当前位置的 NPC，按目标地点描述分组
-  const npcNamesByDesc = new Map<string, Set<string>>();
+  // 收集本轮"真正发生移动"的 NPC：set 整块当前位置，且移动前后地点确实不同
+  const movedByDesc = new Map<string, { npcs: Set<string>; rawDesc: string }>();
   for (const cmd of commands) {
+    if (cmd.action !== 'set') continue;
     const match = NPC_LOCATION_KEY_RE.exec(cmd.key);
     if (!match) continue;
-    const desc = normalizeDesc((cmd.value as { 描述?: unknown } | undefined)?.描述);
+    const rawDesc =
+      typeof (cmd.value as { 描述?: unknown } | undefined)?.描述 === 'string'
+        ? (cmd.value as { 描述: string }).描述
+        : '';
+    const desc = normalizeDesc(rawDesc);
     if (!desc) continue;
     const npcName = match[1];
-    if (!npcNamesByDesc.has(desc)) npcNamesByDesc.set(desc, new Set());
-    npcNamesByDesc.get(desc)!.add(npcName);
+    const prevDesc = normalizeDesc(get(saveDataBefore, ['社交', '关系', npcName, '当前位置', '描述']));
+    if (prevDesc === desc) continue; // 没真移动（幂等/失败命令）→ 不计入
+    const entry = movedByDesc.get(desc) ?? { npcs: new Set<string>(), rawDesc };
+    entry.npcs.add(npcName);
+    movedByDesc.set(desc, entry);
   }
 
-  // 取“≥2 名 NPC 指向同一地点”的候选
-  const candidateDesc = [...npcNamesByDesc.entries()].find(([, npcs]) => npcs.size >= 2)?.[0];
-  if (!candidateDesc) return [];
+  // 候选：≥2 名真正移动到同一地点；多目的地组同时存在则歧义，拒绝
+  const candidates = [...movedByDesc.entries()].filter(([, g]) => g.npcs.size >= 2);
+  if (candidates.length !== 1) return [];
+  const [candidateDesc, group] = candidates[0];
+
+  // 目的地必须在正文出现，把移动与该地点绑定
+  if (!narrativeMentionsLocation(text, group.rawDesc)) return [];
 
   // 玩家已在该地 → 无需补
-  const currentPlayerDesc = normalizeDesc(get(saveData, '角色.位置.描述'));
-  if (currentPlayerDesc === candidateDesc) return [];
+  if (normalizeDesc(get(saveData, '角色.位置.描述')) === candidateDesc) return [];
 
-  // 从已落账的 NPC 当前位置里取带坐标的完整位置对象（避免造假坐标 / 留旧坐标错位）
-  const npcNames = npcNamesByDesc.get(candidateDesc)!;
+  // 取带坐标的完整位置对象，且候选 NPC 间坐标必须一致（避免造假坐标 / 留旧坐标错位）
   let sourceLocation: LocationObject | null = null;
-  for (const npcName of npcNames) {
+  for (const npcName of group.npcs) {
     const loc = get(saveData, ['社交', '关系', npcName, '当前位置']);
-    if (isLocationObjectWithCoords(loc) && normalizeDesc(loc.描述) === candidateDesc) {
+    if (!isLocationObjectWithCoords(loc) || normalizeDesc(loc.描述) !== candidateDesc) continue;
+    if (!sourceLocation) {
       sourceLocation = loc;
-      break;
+    } else if (sourceLocation.x !== loc.x || sourceLocation.y !== loc.y) {
+      console.warn(`[AI双向系统] 叙事状态补账: 同队 NPC 对「${candidateDesc}」坐标不一致，跳过（仅诊断）`);
+      return [];
     }
   }
   if (!sourceLocation) {
@@ -123,7 +151,7 @@ export function reconcilePlayerLocationFromNarrative(input: NarrativeReconcileIn
   const oldValue = get(saveData, '角色.位置');
   const newValue = cloneDeep(sourceLocation);
   set(saveData, '角色.位置', newValue);
-  console.warn(`[AI双向系统] 叙事状态补账: 玩家位置同步至「${candidateDesc}」（随 ${npcNames.size} 名同队 NPC）`);
+  console.warn(`[AI双向系统] 叙事状态补账: 玩家位置同步至「${candidateDesc}」（随 ${group.npcs.size} 名真正移动的同队 NPC）`);
 
   return [
     {

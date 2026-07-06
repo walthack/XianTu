@@ -14,6 +14,8 @@ import { parseJsonSmart } from '@/utils/jsonExtract';
 
 export const AUDIT_CONFIDENCE_THRESHOLD = 0.75;
 export const MAX_IMPROV_GOALS = 3;
+// 审计调用超时：挂起的辅助模型请求不得无限拖住这一轮
+const AUDIT_TIMEOUT_MS = 20000;
 const TITLE_MIN = 6;
 const TITLE_MAX = 40;
 const GOALS_PATH = ['系统', '扩展', '任务追踪', '即兴目标'];
@@ -64,18 +66,33 @@ function isNonEmptyString(v: unknown): boolean {
   return typeof v === 'string' && v.trim().length > 0;
 }
 
+// 删除接地：只有当目标标题或其 evidence 确实出现在最近正文/玩家输入里，才允许移除旧目标。
+// 模型本身不被信任，故其 evidence 文本必须能在真实上下文里对上，否则视为凭空删、拒绝。
+function isDeletionGrounded(title: string, evidence: unknown, normContext: string): boolean {
+  if (!normContext) return false;
+  const nt = normalizeTitle(title);
+  if (nt && normContext.includes(nt)) return true;
+  const ne = normalizeTitle(evidence);
+  return ne.length >= 4 && normContext.includes(ne);
+}
+
 /**
  * 确定性 validator：把模型输出收敛为可写入的即兴目标数组。纯函数，可脱离 LLM 单测。
  * 契约：
- *  - 保留当前目标，只有 status∈{completed,abandoned} 且有 evidence 且 confidence≥阈值 才移除（不凭空删）。
+ *  - 保留当前目标，只有 status∈{completed,abandoned}、有 evidence、confidence≥阈值、
+ *    且 evidence/标题能在最近上下文里接地 才移除（不凭空删）。
+ *  - 完全相同（标准化后同名）的当前目标去重（视为同一目标，非删除）。
+ *  - 现存目标即使超过 3 条也不截断（截断=无据删除）；上限 3 只约束"新增"。
  *  - 新增 recommended 需：标题 6-40 字、有 evidence、confidence≥阈值、非听闻/远方类、不重复。
- *  - 上限 3 条；去重与截断由本地执行，不信任模型。
+ *  - 去重与截断由本地执行，不信任模型。
+ * @param context 最近正文 + 本轮玩家输入（用于给删除接地）；缺省则不允许任何删除。
  */
-export function validateAuditedGoals(raw: unknown, currentGoals: unknown): ValidateResult {
+export function validateAuditedGoals(raw: unknown, currentGoals: unknown, context = ''): ValidateResult {
   const diagnostics: string[] = [];
   const r = raw && typeof raw === 'object' ? (raw as RawAuditOutput) : {};
   const goals: AuditVerdict[] = Array.isArray(r.goals) ? (r.goals as AuditVerdict[]) : [];
   const recommended: AuditRecommend[] = Array.isArray(r.recommended) ? (r.recommended as AuditRecommend[]) : [];
+  const normContext = typeof context === 'string' ? context.replace(/\s+/g, '') : '';
 
   const verdictByTitle = new Map<string, AuditVerdict>();
   for (const v of goals) {
@@ -88,22 +105,29 @@ export function validateAuditedGoals(raw: unknown, currentGoals: unknown): Valid
   const finalObjs: { 标题: string }[] = [];
   const seen = new Set<string>();
 
-  // 1) 保留当前目标——仅在高置信 completed/abandoned 时移除
+  // 1) 保留当前目标——仅在高置信、接地的 completed/abandoned 时移除
   for (const title of currentTitles) {
     const nt = normalizeTitle(title);
-    if (!nt || seen.has(nt)) continue;
+    if (!nt) continue;
+    if (seen.has(nt)) {
+      // 与已保留目标标准化后同名 → 同一目标去重（不是删除一个独立目标）
+      diagnostics.push(`去重当前目标「${title}」（与已保留目标同名）`);
+      continue;
+    }
     const v = verdictByTitle.get(nt);
     const status = typeof v?.status === 'string' ? v.status : '';
+    const claimsDone = status === 'completed' || status === 'abandoned';
     const removable =
-      (status === 'completed' || status === 'abandoned') &&
+      claimsDone &&
       isNonEmptyString(v?.evidence) &&
-      toNumber(v?.confidence) >= AUDIT_CONFIDENCE_THRESHOLD;
+      toNumber(v?.confidence) >= AUDIT_CONFIDENCE_THRESHOLD &&
+      isDeletionGrounded(title, v?.evidence, normContext);
     if (removable) {
       diagnostics.push(`移除旧目标「${title}」（${status}, conf=${toNumber(v?.confidence)}）`);
       continue;
     }
-    if (status === 'completed' || status === 'abandoned') {
-      diagnostics.push(`保留旧目标「${title}」：判为 ${status} 但 evidence/置信不足，不凭空删`);
+    if (claimsDone) {
+      diagnostics.push(`保留旧目标「${title}」：判为 ${status} 但 evidence/置信/接地不足，不凭空删`);
     }
     seen.add(nt);
     finalNorm.push(nt);
@@ -179,6 +203,20 @@ export interface ProgressAuditInput {
   generate?: (systemPrompt: string, userPrompt: string) => Promise<string>;
 }
 
+async function callWithTimeout<T>(fn: () => Promise<T>, ms: number): Promise<T> {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  try {
+    return await Promise.race([
+      fn(),
+      new Promise<T>((_, reject) => {
+        timer = setTimeout(() => reject(new Error('progress-audit timeout')), ms);
+      }),
+    ]);
+  } finally {
+    if (timer) clearTimeout(timer);
+  }
+}
+
 function buildAuditUserPrompt(input: ProgressAuditInput): string {
   const currentGoals = currentGoalTitles(get(input.saveData, GOALS_PATH));
   const playerDesc = get(input.saveData, '角色.位置.描述');
@@ -209,13 +247,12 @@ export async function runProgressAudit(input: ProgressAuditInput): Promise<State
 
   let rawText: string;
   try {
-    if (input.generate) {
-      rawText = await input.generate('', userPrompt);
-    } else {
+    const call = async (): Promise<string> => {
+      if (input.generate) return input.generate('', userPrompt);
       const { getPrompt } = await import('@/services/defaultPrompts');
       const { aiService } = await import('@/services/aiService');
       const systemPrompt = await getPrompt('progressAudit');
-      rawText = await aiService.generateRaw({
+      return aiService.generateRaw({
         ordered_prompts: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: userPrompt },
@@ -224,9 +261,10 @@ export async function runProgressAudit(input: ProgressAuditInput): Promise<State
         generation_id: `progress_audit_${Date.now()}`,
         usageType: 'progress_audit',
       });
-    }
+    };
+    rawText = await callWithTimeout(call, AUDIT_TIMEOUT_MS);
   } catch (error) {
-    console.warn('[进度审计] 调用失败，跳过本轮审计:', error);
+    console.warn('[进度审计] 调用失败/超时，跳过本轮审计:', error);
     return [];
   }
 
@@ -239,7 +277,8 @@ export async function runProgressAudit(input: ProgressAuditInput): Promise<State
   }
 
   const currentGoals = get(input.saveData, GOALS_PATH);
-  const { finalGoals, changed, diagnostics } = validateAuditedGoals(parsed, currentGoals);
+  const auditContext = `${input.recentText || ''}\n${input.userAction || ''}`;
+  const { finalGoals, changed, diagnostics } = validateAuditedGoals(parsed, currentGoals, auditContext);
   for (const d of diagnostics) console.log('[进度审计]', d);
   if (!changed) return [];
 
