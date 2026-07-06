@@ -491,6 +491,9 @@ export function getSystemPrompts(): Record<string, PromptDefinition> {
 □ 重大事件 → push \`社交.事件.事件记录\`
 □ 宗门贡献 → add \`社交.宗门.成员信息.贡献\`
 
+### 跨轮任务追踪
+□ 确立新的跨轮目标/旧目标达成或失效 → set \`系统.扩展.任务追踪.即兴目标\`（整组重写，元素 {"标题":"..."}，上限3条；只记跨轮仍需追踪的目标，清点/休息/包扎等场景内小动作不记）
+
 ## 🔴 输出格式（必须严格遵守）
 {"mid_term_memory":"50-100字摘要","tavern_commands":[{"action":"add","key":"元数据.时间.分钟","value":30}],"action_options":["选项1","选项2","选项3","选项4","选项5"]}
 
