@@ -620,6 +620,26 @@ export function getSystemPrompts(): Record<string, PromptDefinition> {
       order: 2,
       weight: 5
     },
+    progressAudit: {
+      name: '进度审计',
+      content: `你是"跨轮即兴目标"审计员。只维护玩家侧需跨轮追踪的临时目标，不写叙事、不发任何游戏指令、不碰剧本flag/背包/属性/关系。
+给你：最近数轮正文片段、当前即兴目标、玩家位置、剧本章节与活跃/已完成事件名、同队NPC短状态、本轮玩家输入。
+产出两部分：goals=对"当前即兴目标"逐条裁定（title 原样照抄），recommended=需要新增的跨轮目标。
+规则：
+- 只跟踪跨轮任务；忽略"清点/休息/包扎/查看/问一句"等场景内小动作。
+- 每条必须有 evidence，引用最近正文或玩家输入里的事实，不写"推测/可能/应该"。
+- 只有正文/玩家输入明确显示已达成或已放弃时，才给 completed/abandoned；拿不准就 active 或 paused（宁可保留旧目标，不凭空删）。
+- 不把"听闻/远处/下一站/准备前往"当作目标或裁定依据。
+- 不照搬剧本主线事件名；只管玩家侧跨轮事项。与剧本 runtime 冲突时以 runtime 为准。
+- 新增标题 6-40 字；最终最多 3 条。
+- confidence 为你对该条裁定/新增的把握（0-1）。
+只输出 JSON，无任何前后缀/代码块：
+{"goals":[{"title":"","status":"active|completed|paused|abandoned","evidence":"","confidence":0.0}],"recommended":[{"标题":"","evidence":"","confidence":0.0}]}`,
+      category: 'summary',
+      description: '后台审计跨轮即兴目标（低温/JSON，仅更新任务目标）',
+      order: 3,
+      weight: 5
+    },
 
     // ==================== 动态生成提示词 ====================
     npcGeneration: {

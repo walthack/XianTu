@@ -30,6 +30,7 @@ import { applyMilestoneRewards } from '@/modules/scenarioMods/milestoneRewards';
 import { buildScenarioStoryPrompt, createScenarioPromptState } from '@/modules/scenarioMods/storyContext';
 import { buildActionGatePrompt, getNarrativeTurn, pruneExpiredActionGates } from '@/utils/actionGate';
 import { reconcileNarrativeState } from '@/utils/narrativeStateReconciler';
+import { runProgressAudit, shouldRunAudit } from '@/services/progressAuditService';
 import { detectNarratedPlayerDamage } from '@/utils/narratedDamage';
 import {
   detectNarratedInventoryGainEntries,
@@ -2251,6 +2252,25 @@ ${step1Text}
         summarize: this._summarizeValueForChangeLog.bind(this),
       });
       commandAppliedChanges.push(...narrativeStateChanges);
+    }
+
+    // 进度审计员（第二层，opt-in，默认关）：确定性兜底之后跑。gated + await；
+    // 位于 step1 正文生成之后，不阻塞正文阅读，仅偶发延迟状态/选项更新。失败 no-op。
+    try {
+      const { useAPIManagementStore } = await import('@/stores/apiManagementStore');
+      const apiStore = useAPIManagementStore();
+      const currentGoals = get(saveData, '系统.扩展.任务追踪.即兴目标');
+      if (apiStore.isFunctionEnabled('progress_audit') && shouldRunAudit(options?.userAction || '', currentGoals)) {
+        const auditChanges = await runProgressAudit({
+          saveData,
+          recentText: textContent,
+          userAction: options?.userAction || '',
+          summarize: this._summarizeValueForChangeLog.bind(this),
+        });
+        commandAppliedChanges.push(...auditChanges);
+      }
+    } catch (error) {
+      console.warn('[进度审计] 跳过（异常）:', error);
     }
 
     const actionGatePrune = pruneExpiredActionGates(saveData, getNarrativeTurn(saveData));
