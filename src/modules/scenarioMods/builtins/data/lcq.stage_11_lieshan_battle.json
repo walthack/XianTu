@@ -4156,7 +4156,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "前往烈山，侦察捧日军"
       },
       {
         "id": "lcq.event.s11_02_cement_fortress",
@@ -4176,7 +4177,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "前往江州，查看水泥城防"
       },
       {
         "id": "lcq.event.s11_03_protect_yueshuang",
@@ -4198,7 +4200,8 @@
           "liuchao.character.cheng_zongyang",
           "liuchao.character.xiao_zi",
           "liuchao.character.meng_fei_qing"
-        ]
+        ],
+        "objective": "率部赴三川口，保护月霜"
       },
       {
         "id": "lcq.event.s11_04_xingyue_appears",
@@ -4220,7 +4223,8 @@
           "liuchao.character.cheng_zongyang",
           "liuchao.character.xiao_zi",
           "liuchao.character.meng_fei_qing"
-        ]
+        ],
+        "objective": "在雪原对峙星月湖军"
       },
       {
         "id": "lcq.event.s11_05_wangtao_breaks",
@@ -4242,7 +4246,8 @@
           "liuchao.character.cheng_zongyang",
           "liuchao.character.xiao_zi",
           "liuchao.character.meng_fei_qing"
-        ]
+        ],
+        "objective": "抵挡王韬的焚天斧攻势"
       },
       {
         "id": "lcq.event.s11_06_snow_battle",
@@ -4264,7 +4269,8 @@
           "liuchao.character.cheng_zongyang",
           "liuchao.character.xiao_zi",
           "liuchao.character.meng_fei_qing"
-        ]
+        ],
+        "objective": "在三川口雪原与宋军激战"
       },
       {
         "id": "lcq.event.s11_07_camp_falls",
@@ -4286,7 +4292,8 @@
           "liuchao.character.cheng_zongyang",
           "liuchao.character.xiao_zi",
           "liuchao.character.meng_fei_qing"
-        ]
+        ],
+        "objective": "防守中军大营，抵御雷诀"
       },
       {
         "id": "lcq.event.s11_08_jiangzhou_lockdown",
@@ -4306,7 +4313,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "前往江州，协助城防戒严"
       },
       {
         "id": "lcq.event.s11_09_grain_plan",
@@ -4326,7 +4334,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "从筠州布行暗桩切入，实施粮战"
       },
       {
         "id": "lcq.event.s11_10_sanchuankou_defeat",
@@ -4346,7 +4355,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "在三川口抵御西夏军围攻"
       }
     ]
   },

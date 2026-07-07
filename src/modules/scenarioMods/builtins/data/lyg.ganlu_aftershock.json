@@ -5597,7 +5597,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "前往大慈恩寺会见释特昧普"
       },
       {
         "id": "lyg.event.ganlu_aftershock_02_beat",
@@ -5617,7 +5618,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "入大明宫蓬莱秘阁探听虚实"
       },
       {
         "id": "lyg.event.ganlu_aftershock_03_beat",
@@ -5637,7 +5639,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "调查长安城内劫掠事件"
       },
       {
         "id": "lyg.event.ganlu_aftershock_04_beat",
@@ -5657,7 +5660,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "听取李训在秘阁的供词"
       },
       {
         "id": "lyg.event.ganlu_aftershock_05_beat",
@@ -5677,7 +5681,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "旁观蓬莱秘阁的审判"
       },
       {
         "id": "lyg.event.ganlu_aftershock_06_beat",
@@ -5697,7 +5702,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "思考贾文和杀李昂的建议"
       },
       {
         "id": "lyg.event.ganlu_aftershock_07_beat",
@@ -5717,7 +5723,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "前往曲江苑精舍查看情况"
       },
       {
         "id": "lyg.event.ganlu_aftershock_08_beat",
@@ -5737,7 +5744,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "随仇士良回宫探明状况"
       },
       {
         "id": "lyg.event.ganlu_aftershock_09_beat",
@@ -5757,7 +5765,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "向罗令询问惨案详情"
       }
     ]
   },

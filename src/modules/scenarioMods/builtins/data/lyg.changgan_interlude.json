@@ -5601,7 +5601,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "拜访李药师，获取令箭"
       },
       {
         "id": "lyg.event.changgan_interlude_02_beat",
@@ -5621,7 +5622,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "在马厩救出廖群玉，追问百衲衣线索"
       },
       {
         "id": "lyg.event.changgan_interlude_03_beat",
@@ -5641,7 +5643,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "面见唐皇，应对昭南索赔"
       },
       {
         "id": "lyg.event.changgan_interlude_04_beat",
@@ -5661,7 +5664,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "与昭南卿士谈判，力保张亢"
       },
       {
         "id": "lyg.event.changgan_interlude_05_beat",
@@ -5681,7 +5685,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "回应杨玉环试探，化解宗室疑问"
       },
       {
         "id": "lyg.event.changgan_interlude_06_beat",
@@ -5701,7 +5706,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "探查十方丛林密谋，防备刺杀"
       },
       {
         "id": "lyg.event.changgan_interlude_07_beat",
@@ -5721,7 +5727,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "探望赵飞燕，提出舞都会社"
       },
       {
         "id": "lyg.event.changgan_interlude_08_beat",
@@ -5741,7 +5748,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "以吕雉为饵，引诱十方丛林"
       },
       {
         "id": "lyg.event.changgan_interlude_09_beat",
@@ -5761,7 +5769,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "返程途中，迎战黑衣人伏击"
       },
       {
         "id": "lyg.event.changgan_interlude_10_beat",
@@ -5781,7 +5790,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "救出白霓裳，击杀王守澄"
       },
       {
         "id": "lyg.event.debut_daiqisi",

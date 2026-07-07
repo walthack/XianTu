@@ -5632,7 +5632,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "前往内侍省探听职权变动详情"
       },
       {
         "id": "lyg.event.shituolin_endgame_02_beat",
@@ -5652,7 +5653,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "赶往独柳树刑场查看行刑情况"
       },
       {
         "id": "lyg.event.shituolin_endgame_03_beat",
@@ -5672,7 +5674,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "去善果寺询问高阳坟墓方位"
       },
       {
         "id": "lyg.event.shituolin_endgame_04_beat",
@@ -5692,7 +5695,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "前往尸陀林主现身处探查"
       },
       {
         "id": "lyg.event.shituolin_endgame_05_beat",
@@ -5712,7 +5716,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "与众人合力消灭窥基魔身"
       },
       {
         "id": "lyg.event.shituolin_endgame_06_beat",
@@ -5732,7 +5737,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "前往皇宫确认江王入宫之事"
       },
       {
         "id": "lyg.event.shituolin_endgame_07_beat",
@@ -5752,7 +5758,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "调查太液池黑雾来源"
       },
       {
         "id": "lyg.event.shituolin_endgame_08_beat",
@@ -5772,7 +5779,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "探查婆娑宝树培育地点"
       },
       {
         "id": "lyg.event.shituolin_endgame_09_beat",
@@ -5792,7 +5800,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "前往大明宫参与讨逆行动"
       },
       {
         "id": "lyg.event.shituolin_endgame_10_beat",
@@ -5812,7 +5821,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "在莲座前迎战李辅国"
       },
       {
         "id": "lyg.event.shituolin_endgame_11_beat",
@@ -5832,7 +5842,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "设法逃出浮屠塔困局"
       },
       {
         "id": "lyg.event.shituolin_endgame_12_beat",
@@ -5852,7 +5863,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "联手斩断李辅国肉身"
       },
       {
         "id": "lyg.event.shituolin_endgame_13_beat",
@@ -5872,7 +5884,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "阻止太皇太后被夺舍"
       },
       {
         "id": "lyg.event.shituolin_endgame_14_beat",
@@ -5892,7 +5905,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "搜查宫中找五肉五甘露"
       },
       {
         "id": "lyg.event.shituolin_endgame_15_beat",
@@ -5912,7 +5926,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "在庵堂审讯齐羽仙查旧怨"
       }
     ]
   },

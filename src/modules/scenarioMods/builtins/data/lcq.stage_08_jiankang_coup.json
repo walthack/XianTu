@@ -4160,7 +4160,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "鹰愁峪突围"
       },
       {
         "id": "lcq.event.s08_02_wood_fort",
@@ -4180,7 +4181,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "在木垒坚守"
       },
       {
         "id": "lcq.event.s08_03_beifu_rescue",
@@ -4200,7 +4202,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "在木垒与北府兵会合"
       },
       {
         "id": "lcq.event.s08_04_sudaji_enters",
@@ -4220,7 +4223,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "在庭院迎接苏妲己"
       },
       {
         "id": "lcq.event.s08_05_breakthrough",
@@ -4240,7 +4244,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "在庭院突破修为"
       },
       {
         "id": "lcq.event.s08_06_pursuit_repelled",
@@ -4261,7 +4266,8 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang",
           "liuchao.character.xiao_zi"
-        ]
+        ],
+        "objective": "在庭院外与萧遥逸会合"
       },
       {
         "id": "lcq.event.s08_07_palace_ninja",
@@ -4281,7 +4287,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "在宫室应对东瀛忍者"
       },
       {
         "id": "lcq.event.s08_08_gumingyin_plot",
@@ -4301,7 +4308,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "在宫中识破古冥隐阴谋"
       },
       {
         "id": "lcq.event.s08_09_zhaoming_night",
@@ -4321,7 +4329,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "在昭明宫刑室与古冥隐对峙"
       },
       {
         "id": "lcq.event.s08_10_xuanwu_rescue",
@@ -4341,7 +4350,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "在玄武湖保护晋帝"
       },
       {
         "id": "lcq.event.s08_debut_xiaoyaoyi",

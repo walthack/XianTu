@@ -5795,7 +5795,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "在蚁穴中寻找出路"
       },
       {
         "id": "lyl.event.taiquan_afterfall_02_beat",
@@ -5815,7 +5816,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "前往下水道救人"
       },
       {
         "id": "lyl.event.taiquan_afterfall_03_beat",
@@ -5835,7 +5837,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "前往魔墟寻找宝物"
       },
       {
         "id": "lyl.event.taiquan_afterfall_04_beat",
@@ -5855,7 +5858,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "与莫如霖对质"
       },
       {
         "id": "lyl.event.taiquan_afterfall_05_beat",
@@ -5875,7 +5879,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "探索人类居住区"
       },
       {
         "id": "lyl.event.taiquan_afterfall_06_beat",
@@ -5895,7 +5900,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "登门提亲带走云如瑶"
       },
       {
         "id": "lyl.event.taiquan_afterfall_07_beat",
@@ -5915,7 +5921,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "前往洛都查明风波"
       },
       {
         "id": "lyl.event.taiquan_afterfall_08_beat",
@@ -5935,7 +5942,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "与冯子都结交探听渠道"
       },
       {
         "id": "lyl.event.taiquan_afterfall_09_beat",
@@ -5955,7 +5963,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "通过徐璜求见赵飞燕"
       },
       {
         "id": "lyl.event.taiquan_afterfall_10_beat",
@@ -5975,7 +5984,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "前往襄城君府探查"
       }
     ]
   },

@@ -4195,7 +4195,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "探查浮凌江乱石滩，另寻运粮路线"
       },
       {
         "id": "lcq.event.s12_02_recognize_zhuo",
@@ -4215,7 +4216,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "在沐羽城庆典中确认卓云君身份"
       },
       {
         "id": "lcq.event.s12_03_xiaozi_controls_zhuo",
@@ -4236,7 +4238,8 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang",
           "liuchao.character.xiao_zi"
-        ]
+        ],
+        "objective": "观察小紫如何压制卓云君"
       },
       {
         "id": "lcq.event.s12_04_river_granary",
@@ -4256,7 +4259,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "说服滕知州在江边设粮仓"
       },
       {
         "id": "lcq.event.s12_05_granary_fire_plan",
@@ -4276,7 +4280,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "策划烧毁常平仓"
       },
       {
         "id": "lcq.event.s12_06_dragon_guard_routs",
@@ -4298,7 +4303,8 @@
           "liuchao.character.cheng_zongyang",
           "liuchao.character.xiao_zi",
           "liuchao.character.meng_fei_qing"
-        ]
+        ],
+        "objective": "支援龙卫第一军抗敌"
       },
       {
         "id": "lcq.event.s12_07_left_wing_raid",
@@ -4320,7 +4326,8 @@
           "liuchao.character.cheng_zongyang",
           "liuchao.character.xiao_zi",
           "liuchao.character.meng_fei_qing"
-        ]
+        ],
+        "objective": "突袭龙卫左厢军营地"
       },
       {
         "id": "lcq.event.s12_08_dingchuan_raid",
@@ -4342,7 +4349,8 @@
           "liuchao.character.cheng_zongyang",
           "liuchao.character.xiao_zi",
           "liuchao.character.meng_fei_qing"
-        ]
+        ],
+        "objective": "奇袭定川寨宋军"
       },
       {
         "id": "lcq.event.s12_09_ge_huaimin_killed",
@@ -4364,7 +4372,8 @@
           "liuchao.character.cheng_zongyang",
           "liuchao.character.xiao_zi",
           "liuchao.character.meng_fei_qing"
-        ]
+        ],
+        "objective": "在定川寨外伏击葛怀敏"
       },
       {
         "id": "lcq.event.s12_10_rescue_xiao",
@@ -4384,7 +4393,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "救下被擒的萧遥逸"
       },
       {
         "id": "lcq.event.s12_11_siege_begins",
@@ -4404,7 +4414,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "防守江州城抵御攻城"
       },
       {
         "id": "lcq.event.s12_12_gate_fire",
@@ -4426,7 +4437,8 @@
           "liuchao.character.cheng_zongyang",
           "liuchao.character.xiao_zi",
           "liuchao.character.meng_fei_qing"
-        ]
+        ],
+        "objective": "在城门用火攻消灭冲车"
       },
       {
         "id": "lcq.event.s12_13_long_siege",
@@ -4446,7 +4458,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "应对江州长期围困"
       },
       {
         "id": "lcq.event.s12_14_chenxing_appears",
@@ -4467,7 +4480,8 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang",
           "liuchao.character.xiao_zi"
-        ]
+        ],
+        "objective": "在江州城对抗辰星七妖"
       },
       {
         "id": "lcq.event.s12_15_capture_jingli",
@@ -4488,7 +4502,8 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang",
           "liuchao.character.xiao_zi"
-        ]
+        ],
+        "objective": "擒获龙宸刺客惊理"
       },
       {
         "id": "lcq.event.s12_16_corpse_poison",
@@ -4508,7 +4523,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "利用尸毒击溃宋军阵线"
       },
       {
         "id": "lcq.event.s12_17_shanghou_stays",
@@ -4528,7 +4544,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "说服殇侯留守江州"
       },
       {
         "id": "lcq.event.s12_18_linan_grain_order",
@@ -4548,7 +4565,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "命令秦桧在筠州抛售粮食"
       }
     ]
   },

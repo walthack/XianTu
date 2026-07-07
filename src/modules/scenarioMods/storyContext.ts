@@ -392,7 +392,9 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
     .filter(event => isCriticalStoryEvent(event) && !completedIds.has(event.id))
     .slice()
     .sort((a, b) => (((a as { axisSeq?: number }).axisSeq ?? Infinity)) - (((b as { axisSeq?: number }).axisSeq ?? Infinity)))[0];
-  const dirHint = (nearestCritical && ((nearestCritical as { axisBeat?: string }).axisBeat || nearestCritical.description))
+  // objective（玩家视角+地点+不剧透）最适合当引子锚点；无则回退 axisBeat/description，再回退下一关/章节。
+  const dirHint = (nearestCritical && ((nearestCritical as { objective?: string }).objective
+      || (nearestCritical as { axisBeat?: string }).axisBeat || nearestCritical.description))
     || (runtime.nextStageName ? `本关收束后前往「${runtime.nextStageName}」` : '当前章节目标');
   // 主线偏移冷却（引擎专属，存于 runtime 世界.状态.剧本模组.steeringCooldown，由 processGmResponse 甲/乙置入）：
   // >0 时不推送任何引子（尊重玩家自主选择，由引擎逐轮递减，见 runtime.advanceScenarioRuntime）。

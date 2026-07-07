@@ -5772,7 +5772,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "前往便门瓦牡丹棚打探情报"
       },
       {
         "id": "lyl.event.lin_an_bridge_02_beat",
@@ -5792,7 +5793,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "去小瀛洲保护李师师"
       },
       {
         "id": "lyl.event.lin_an_bridge_03_beat",
@@ -5812,7 +5814,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "拜访鲁智深"
       },
       {
         "id": "lyl.event.lin_an_bridge_04_beat",
@@ -5832,7 +5835,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "去明庆寺与鲁智深林冲会面"
       },
       {
         "id": "lyl.event.debut_yundanliu",

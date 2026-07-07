@@ -5529,7 +5529,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "前往帝陵，追上巫宗"
       },
       {
         "id": "lyg.event.han_succession_02_beat",
@@ -5549,7 +5550,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "在帝陵调查赵氏父兄下落"
       },
       {
         "id": "lyg.event.han_succession_03_beat",
@@ -5569,7 +5571,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "在程府询问吕雉来意"
       },
       {
         "id": "lyg.event.han_succession_04_beat",
@@ -5589,7 +5592,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "转告程宗扬拥立阴谋内容"
       },
       {
         "id": "lyg.event.han_succession_05_beat",
@@ -5609,7 +5613,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "向赵合德询问蛇夫人计划"
       },
       {
         "id": "lyg.event.han_succession_06_beat",
@@ -5629,7 +5634,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "在长秋宫加速登基事宜"
       },
       {
         "id": "lyg.event.han_succession_07_beat",
@@ -5649,7 +5655,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "从密道夜入长秋宫"
       },
       {
         "id": "lyg.event.han_succession_08_beat",
@@ -5669,7 +5676,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "在登基大典助程宗扬行功"
       },
       {
         "id": "lyg.event.han_succession_09_beat",
@@ -5689,7 +5697,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "在登基典仪中突破通幽境"
       },
       {
         "id": "lyg.event.han_succession_10_beat",
@@ -5709,7 +5718,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "审问汪臻关于白员外传说"
       },
       {
         "id": "lyg.event.dengji_yuzuo_yinhuan",

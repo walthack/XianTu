@@ -5818,7 +5818,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "前往吕冀营帐查探情况"
       },
       {
         "id": "lyl.event.han_palace_endgame_02_beat",
@@ -5838,7 +5839,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "随左武军进入皇宫"
       },
       {
         "id": "lyl.event.han_palace_endgame_03_beat",
@@ -5858,7 +5860,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "前往含光殿营救昭仪"
       },
       {
         "id": "lyl.event.han_palace_endgame_04_beat",
@@ -5878,7 +5881,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "通过复道撤离皇宫"
       },
       {
         "id": "lyl.event.han_palace_endgame_05_beat",
@@ -5898,7 +5902,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "赶往平朔殿阻止吕巨君"
       },
       {
         "id": "lyl.event.han_palace_endgame_06_beat",
@@ -5918,7 +5923,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "到定陶王府救出刘建"
       },
       {
         "id": "lyl.event.han_palace_endgame_07_beat",
@@ -5938,7 +5944,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "前往秘境入口处"
       },
       {
         "id": "lyl.event.han_palace_endgame_08_beat",
@@ -5958,7 +5965,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "前往洛都津门拦截董卓"
       },
       {
         "id": "lyl.event.han_palace_endgame_09_beat",
@@ -5978,7 +5986,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "带兵攻入永安宫"
       },
       {
         "id": "lyl.event.han_palace_endgame_10_beat",
@@ -5998,7 +6007,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "到阙楼斩杀刘建"
       }
     ]
   },

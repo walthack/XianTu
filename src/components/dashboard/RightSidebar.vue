@@ -276,7 +276,8 @@ const questMain = computed(() => {
   if (!rt || typeof rt !== 'object') return null;
   const chapter = (rt.chapters || []).find((c: any) => c.id === rt.currentChapterId);
   const activeIds = new Set(rt.activeEventIds || []);
-  const events = (rt.events || []).filter((e: any) => activeIds.has(e.id)).map((e: any) => e.name).filter(Boolean).slice(0, 4);
+  // 主线优先显示 objective（玩家视角+地点，"前往鬼王峒查明碧奴下落"），无则回退事件名（"谢艺杀使"）
+  const events = (rt.events || []).filter((e: any) => activeIds.has(e.id)).map((e: any) => e.objective || e.name).filter(Boolean).slice(0, 4);
   const ready = rt.nextStageReadyId && rt.nextStageReadyId === rt.nextStageId;
   const cleared = ready && !chapter && !events.length;
   const next = ready ? stageDisplayName(rt.nextStageName || rt.nextStageId || '') : '';

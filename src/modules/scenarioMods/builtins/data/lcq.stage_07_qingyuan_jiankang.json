@@ -4160,7 +4160,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "向萧遥逸询问左武军覆灭详情"
       },
       {
         "id": "lcq.event.s07_02_kill_wu",
@@ -4180,7 +4181,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "在清远斩杀吴行德救卓云君"
       },
       {
         "id": "lcq.event.s07_03_xiaozi_appears",
@@ -4201,7 +4203,8 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang",
           "liuchao.character.xiao_zi"
-        ]
+        ],
+        "objective": "协助小紫制服卓云君"
       },
       {
         "id": "lcq.event.s07_04_zhuo_subdued",
@@ -4222,7 +4225,8 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang",
           "liuchao.character.xiao_zi"
-        ]
+        ],
+        "objective": "配合小紫控制卓云君"
       },
       {
         "id": "lcq.event.s07_05_eight_steeds_informed",
@@ -4244,7 +4248,8 @@
           "liuchao.character.cheng_zongyang",
           "liuchao.character.xiao_zi",
           "liuchao.character.meng_fei_qing"
-        ]
+        ],
+        "objective": "向孟非卿报告谢艺之死"
       },
       {
         "id": "lcq.event.s07_06_water_assassins",
@@ -4264,7 +4269,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "在舟上击杀水鬼刺客"
       },
       {
         "id": "lcq.event.s07_07_dragon_hall",
@@ -4284,7 +4290,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "夜探神龙殿查探异状"
       },
       {
         "id": "lcq.event.s07_08_palace_escape",
@@ -4304,7 +4311,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "在皇宫与云丹琉交手后逃生"
       },
       {
         "id": "lcq.event.s07_09_hengtang_ambush",
@@ -4324,7 +4332,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "在横塘设局迫使卓云君屈服"
       },
       {
         "id": "lcq.event.s07_10_dragon_fang",
@@ -4344,7 +4353,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "向萧遥逸查证内奸线索"
       },
       {
         "id": "lcq.event.s07_debut_qinhui",

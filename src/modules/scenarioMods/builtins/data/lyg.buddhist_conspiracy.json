@@ -5624,7 +5624,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "前往仇士良家门前调查刺杀现场"
       },
       {
         "id": "lyg.event.buddhist_conspiracy_02_beat",
@@ -5644,7 +5645,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "前往渭水寻找被掳走的小紫"
       },
       {
         "id": "lyg.event.buddhist_conspiracy_03_beat",
@@ -5664,7 +5666,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "在十方丛林应对僧众围杀"
       },
       {
         "id": "lyg.event.buddhist_conspiracy_04_beat",
@@ -5684,7 +5687,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "在兴唐寺火海中斩杀龙宸杀手"
       },
       {
         "id": "lyg.event.buddhist_conspiracy_05_beat",
@@ -5704,7 +5708,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "拦截龙宸翼火蛇，救下惊理"
       },
       {
         "id": "lyg.event.buddhist_conspiracy_06_beat",
@@ -5724,7 +5729,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "进入大雁塔，破解佛咒幻境"
       },
       {
         "id": "lyg.event.buddhist_conspiracy_07_beat",
@@ -5744,7 +5750,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "部署计策，先取田令孜"
       },
       {
         "id": "lyg.event.buddhist_conspiracy_08_beat",
@@ -5764,7 +5771,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "在程宅应对窥基的假诏逼问"
       },
       {
         "id": "lyg.event.buddhist_conspiracy_09_beat",
@@ -5784,7 +5792,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "在程宅揭穿窥基伪造法旨"
       },
       {
         "id": "lyg.event.buddhist_conspiracy_10_beat",
@@ -5804,7 +5813,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "在程宅应对窥基弃佛入魔"
       },
       {
         "id": "lyg.event.buddhist_conspiracy_11_beat",
@@ -5824,7 +5834,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "在大明宫躲避神策军屠杀"
       }
     ]
   },

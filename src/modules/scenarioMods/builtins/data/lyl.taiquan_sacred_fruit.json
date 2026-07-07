@@ -5795,7 +5795,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "在翠微园处理伤员与善后"
       },
       {
         "id": "lyl.event.taiquan_sacred_fruit_02",
@@ -5815,7 +5816,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "在翠微园花厅商议撤军条件"
       },
       {
         "id": "lyl.event.taiquan_sacred_fruit_03",
@@ -5835,7 +5837,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "与高俅密谈，探查身世之谜"
       },
       {
         "id": "lyl.event.taiquan_sacred_fruit_04",
@@ -5855,7 +5858,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "前往云涛观迷楼探索机关"
       },
       {
         "id": "lyl.event.taiquan_sacred_fruit_05",
@@ -5875,7 +5879,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "在迷楼中寻找太泉钥匙线索"
       },
       {
         "id": "lyl.event.taiquan_sacred_fruit_06",
@@ -5895,7 +5900,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "参加盘江程氏股东大会"
       },
       {
         "id": "lyl.event.taiquan_sacred_fruit_07",
@@ -5915,7 +5921,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "在苍澜镇采购装备物资"
       },
       {
         "id": "lyl.event.taiquan_sacred_fruit_08",
@@ -5935,7 +5942,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "在苍澜镇应对殇侯与君雄飞冲突"
       },
       {
         "id": "lyl.event.taiquan_sacred_fruit_09",
@@ -5955,7 +5963,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "在酒店解决下毒乱战"
       },
       {
         "id": "lyl.event.taiquan_sacred_fruit_10",
@@ -5975,7 +5984,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "前往火山口争夺赤阳圣果"
       }
     ]
   },

@@ -5795,7 +5795,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "前往梵天寺"
       },
       {
         "id": "lyl.event.xiaoyingzhou_blacksea_trap_02_beat",
@@ -5815,7 +5816,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "前往江州与蔺采泉交易"
       },
       {
         "id": "lyl.event.xiaoyingzhou_blacksea_trap_03_beat",
@@ -5835,7 +5837,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "前往江州营救林冲"
       },
       {
         "id": "lyl.event.xiaoyingzhou_blacksea_trap_04_beat",
@@ -5855,7 +5858,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "前往野猪林"
       },
       {
         "id": "lyl.event.xiaoyingzhou_blacksea_trap_05_beat",
@@ -5875,7 +5879,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "在野猪林防范静善"
       },
       {
         "id": "lyl.event.xiaoyingzhou_blacksea_trap_06_beat",
@@ -5895,7 +5900,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "潜入明庆寺观音殿"
       },
       {
         "id": "lyl.event.xiaoyingzhou_blacksea_trap_07_beat",
@@ -5915,7 +5921,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "在太医局调查医档"
       },
       {
         "id": "lyl.event.xiaoyingzhou_blacksea_trap_08_beat",
@@ -5935,7 +5942,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "前往小瀛洲"
       },
       {
         "id": "lyl.event.xiaoyingzhou_blacksea_trap_09_beat",
@@ -5955,7 +5963,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "前往保宁寺放生池"
       },
       {
         "id": "lyl.event.xiaoyingzhou_blacksea_trap_10_beat",
@@ -5975,7 +5984,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "在保宁寺突围"
       }
     ]
   },

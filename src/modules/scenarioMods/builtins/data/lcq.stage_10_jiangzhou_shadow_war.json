@@ -4156,7 +4156,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "前往江州城，探查贾师宪的军令部署"
       },
       {
         "id": "lcq.event.s10_02_yeying_pass",
@@ -4176,7 +4177,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "抵达夜影关，改走陆路前往晴州"
       },
       {
         "id": "lcq.event.s10_03_ninja_trace",
@@ -4196,7 +4198,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "在雪隼佣兵团驻地，追查东瀛女忍者行踪"
       },
       {
         "id": "lcq.event.s10_04_left_army_review",
@@ -4218,7 +4221,8 @@
           "liuchao.character.cheng_zongyang",
           "liuchao.character.xiao_zi",
           "liuchao.character.meng_fei_qing"
-        ]
+        ],
+        "objective": "与孟非卿复盘左武军覆灭原因"
       },
       {
         "id": "lcq.event.s10_05_war_funds",
@@ -4238,7 +4242,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "找陶弘敏借十万金铢军资"
       },
       {
         "id": "lcq.event.s10_06_ruined_temple",
@@ -4258,7 +4263,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "夜探破道观，跟踪可疑人物"
       },
       {
         "id": "lcq.event.s10_07_preemptive_strike",
@@ -4278,7 +4284,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "计划先发制人打击黑魔海"
       },
       {
         "id": "lcq.event.s10_08_lair_reversal",
@@ -4300,7 +4307,8 @@
           "liuchao.character.cheng_zongyang",
           "liuchao.character.xiao_zi",
           "liuchao.character.meng_fei_qing"
-        ]
+        ],
+        "objective": "在星月湖洞穴对抗黑魔海袭击"
       },
       {
         "id": "lcq.event.s10_09_yin_yang_fish",
@@ -4320,7 +4328,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "前往马王巷七海客栈寻找阴阳鱼"
       },
       {
         "id": "lcq.event.s10_10_xiaozi_crisis",
@@ -4341,7 +4350,8 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang",
           "liuchao.character.xiao_zi"
-        ]
+        ],
+        "objective": "在兰汤馆阻止小紫吸血行为"
       }
     ]
   },

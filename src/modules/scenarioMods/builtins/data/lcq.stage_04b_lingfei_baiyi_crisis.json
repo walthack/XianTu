@@ -4174,7 +4174,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "与武二郎商议明晚夺镜计划"
       },
       {
         "id": "lcq.event.s04b_lingfei_baiyi_crisis_02",
@@ -4194,7 +4195,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "在鸦人营地救出乐明珠"
       },
       {
         "id": "lcq.event.s04b_lingfei_baiyi_crisis_03",
@@ -4214,7 +4216,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "趁机斩杀鸦人首领"
       },
       {
         "id": "lcq.event.s04b_lingfei_baiyi_crisis_04",
@@ -4234,7 +4237,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "送羊皮纸至云苍峰鉴定"
       },
       {
         "id": "lcq.event.s04b_lingfei_baiyi_crisis_05",
@@ -4254,7 +4258,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "前往白夷祭坛寻找灵飞镜"
       },
       {
         "id": "lcq.event.s04b_lingfei_baiyi_crisis_06",
@@ -4274,7 +4279,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "与花苗族长商议联手之事"
       },
       {
         "id": "lcq.event.s04b_lingfei_baiyi_crisis_07",
@@ -4294,7 +4300,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "用水镜传讯联系苏妲己"
       },
       {
         "id": "lcq.event.s04b_lingfei_baiyi_crisis_08",
@@ -4314,7 +4321,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "用灵飞镜查探白夷阴谋"
       },
       {
         "id": "lcq.event.s04b_lingfei_baiyi_crisis_09",
@@ -4334,7 +4342,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "观察白夷族长变动"
       },
       {
         "id": "lcq.event.s04b_lingfei_baiyi_crisis_10",
@@ -4354,7 +4363,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "追入地宫甬道躲避陷阱"
       },
       {
         "id": "lcq.event.s04b_lingfei_baiyi_crisis_11",
@@ -4374,7 +4384,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "在战场应对血虎攻击"
       },
       {
         "id": "lcq.event.s04b_lingfei_baiyi_crisis_12",
@@ -4394,7 +4405,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "协助凝羽突袭鬼王峒使者"
       },
       {
         "id": "lcq.event.s04b_lingfei_baiyi_crisis_13",
@@ -4414,7 +4426,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "潜入地宫查明碧宛下落"
       },
       {
         "id": "lcq.event.s04b_lingfei_baiyi_crisis_14",
@@ -4434,7 +4447,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "与商队商议前往碧鲮族"
       },
       {
         "id": "lcq.event.s04b_lingfei_baiyi_crisis_15",
@@ -4454,7 +4468,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "质问谢艺关于阿夕异常"
       },
       {
         "id": "lcq.event.s04b_lingfei_baiyi_crisis_16",
@@ -4474,7 +4489,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "向云苍峰打听岳帅旧闻"
       },
       {
         "id": "lcq.event.s04b_lingfei_baiyi_crisis_17",
@@ -4494,7 +4510,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "在湿热盆地躲避鳄鱼袭击"
       },
       {
         "id": "lcq.event.s04b_lingfei_baiyi_crisis_18",
@@ -4514,7 +4531,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "与谢艺讨论制造技术"
       },
       {
         "id": "lcq.event.s04b_lingfei_baiyi_crisis_19",
@@ -4534,7 +4552,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
-        ]
+        ],
+        "objective": "前往云苍峰"
       }
     ]
   },

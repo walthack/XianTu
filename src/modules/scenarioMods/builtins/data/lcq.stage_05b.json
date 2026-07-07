@@ -4213,7 +4213,8 @@
         "relatedFactionIds": [
           "liuchao.faction.gui_wang_dong"
         ],
-        "locationId": "liuchao.location.biyu"
+        "locationId": "liuchao.location.biyu",
+        "objective": "向碧奴追问小紫的过往"
       },
       {
         "id": "lcq.event.s05b_02_xiaozi_exposed",
@@ -4248,7 +4249,8 @@
         "relatedFactionIds": [
           "liuchao.faction.gui_wang_dong"
         ],
-        "locationId": "liuchao.location.biyu"
+        "locationId": "liuchao.location.biyu",
+        "objective": "质问小紫，揭穿其控制手段"
       },
       {
         "id": "lcq.event.s05b_03_saan_secret_path",
@@ -4284,7 +4286,8 @@
           "liuchao.faction.gui_wang_dong",
           "liuchao.faction.hong_miao"
         ],
-        "locationId": "liuchao.location.gui_wang_dong"
+        "locationId": "liuchao.location.gui_wang_dong",
+        "objective": "从萨安处获取鬼王宫密道"
       },
       {
         "id": "lcq.event.s05b_04_enter_ghost_palace",
@@ -4320,7 +4323,8 @@
         "relatedFactionIds": [
           "liuchao.faction.gui_wang_dong"
         ],
-        "locationId": "liuchao.location.gui_wang_gong"
+        "locationId": "liuchao.location.gui_wang_gong",
+        "objective": "潜入鬼王宫，寻找乐明珠"
       },
       {
         "id": "lcq.event.s05b_05a_meet_ghost_king",
@@ -4353,7 +4357,8 @@
         "relatedFactionIds": [
           "liuchao.faction.gui_wang_dong"
         ],
-        "locationId": "liuchao.location.gui_wang_gong"
+        "locationId": "liuchao.location.gui_wang_gong",
+        "objective": "在鬼王宫面见鬼巫王"
       },
       {
         "id": "lcq.event.s05b_05b_ideology_duel_and_defeat",
@@ -4386,7 +4391,8 @@
         "relatedFactionIds": [
           "liuchao.faction.gui_wang_dong"
         ],
-        "locationId": "liuchao.location.gui_wang_gong"
+        "locationId": "liuchao.location.gui_wang_gong",
+        "objective": "与鬼巫王交锋，设法脱身"
       },
       {
         "id": "lcq.event.s05b_06_breakout_and_reunion",
@@ -4422,7 +4428,8 @@
         "relatedFactionIds": [
           "liuchao.faction.gui_wang_dong"
         ],
-        "locationId": "liuchao.location.gui_wang_gong"
+        "locationId": "liuchao.location.gui_wang_gong",
+        "objective": "在鬼王宫突围，与乐明珠会合"
       },
       {
         "id": "lcq.event.s05b_07_xiaozi_trap",
@@ -4456,7 +4463,8 @@
         "relatedFactionIds": [
           "liuchao.faction.gui_wang_dong"
         ],
-        "locationId": "liuchao.location.gui_wang_gong.jingshen_tai"
+        "locationId": "liuchao.location.gui_wang_gong.jingshen_tai",
+        "objective": "前往深井，营救乐明珠"
       },
       {
         "id": "lcq.event.s05b_08a_rescue_suli",
@@ -4490,7 +4498,8 @@
         "relatedFactionIds": [
           "liuchao.faction.gui_wang_dong"
         ],
-        "locationId": "liuchao.location.gui_wang_gong.jingshen_tai"
+        "locationId": "liuchao.location.gui_wang_gong.jingshen_tai",
+        "objective": "进入深井平台，解救苏荔"
       },
       {
         "id": "lcq.event.s05b_08b_altar_corpse_fight_and_danchen",
@@ -4526,7 +4535,8 @@
         "relatedFactionIds": [
           "liuchao.faction.gui_wang_dong"
         ],
-        "locationId": "liuchao.location.gui_wang_gong.jingshen_tai"
+        "locationId": "liuchao.location.gui_wang_gong.jingshen_tai",
+        "objective": "在祭台对抗尸鬼，寻找突围机会"
       },
       {
         "id": "lcq.event.s05b_09_temporary_pact_with_xiaozi",
@@ -4562,7 +4572,8 @@
           "liuchao.faction.gui_wang_dong",
           "liuchao.faction.hei_mo_hai"
         ],
-        "locationId": "liuchao.location.gui_wang_gong"
+        "locationId": "liuchao.location.gui_wang_gong",
+        "objective": "与小紫达成临时协定"
       },
       {
         "id": "lcq.event.s05b_10_slave_revolt_and_phoenix_change",
@@ -4601,7 +4612,8 @@
           "liuchao.faction.gui_wang_dong",
           "liuchao.faction.guang_ming_guan_tang"
         ],
-        "locationId": "liuchao.location.gui_wang_gong"
+        "locationId": "liuchao.location.gui_wang_gong",
+        "objective": "在鬼王宫策动奴隶倒戈"
       },
       {
         "id": "lcq.event.debut_lemingzhu",
