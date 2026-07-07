@@ -23,6 +23,9 @@ interface RuntimeState extends ScenarioProgressState {
   nextStageReadyId?: string | null;
   /** 剧情停滞轮数：连续多少轮无事件/章节推进（供收束提示分档），推进即清零 */
   stallTurns?: number;
+  /** 回主线引子偏移冷却：玩家主动偏移主线时置 N，引擎逐轮递减、期间暂停 stall 并静默引子。
+   *  存于 runtime(世界.状态.剧本模组)——引擎专属字段，canonGuard 保护、LLM 命令写不到。 */
+  steeringCooldown?: number;
   /** 旧档 reconcile 版本戳：与 registry 版本一致则跳过（正典更新后旧档第一回合自动对齐） */
   reconciledRegistryVersion?: string;
 }
@@ -229,6 +232,17 @@ function projectBottomLinesToNpcs(saveData: SaveData): void {
   } catch { /* 惰性 require 在 node 测试环境不可用 → 安全跳过 */ }
 }
 
+/**
+ * 玩家主动偏移主线时置入的引子静默轮数。
+ * 语义：置入当轮 advanceScenarioRuntime 会立即递减 1，故净静默约 (N-1) 轮；取 4 → 净静默约 3 轮，落在"3~4 轮"目标区间。
+ *
+ * 【判定归乙】玩家是否"主动偏移主线"由乙（分步第2步 LLM，写布尔 系统.扩展.任务追踪.主线偏移提议）判定：
+ * 这需要理解整句意图（是闲逛偏离，还是借闲逛措辞执行主线目标），依赖 NPC/目标/上下文语义。
+ * 曾尝试过关键词正则快判(甲)，经 Codex 五轮复审确认——正则永远追不上自然语言的否定/复合/语义，故废弃。
+ * 引擎只据乙的布尔信号确定性置入本冷却值（见 AIBidirectionalSystem.processGmResponse）。
+ */
+export const STEERING_DIVERGENCE_COOLDOWN = 4;
+
 export function advanceScenarioRuntime(saveData: SaveData): {
   saveData: SaveData;
   transitions: ScenarioRuntimeTransition[];
@@ -320,7 +334,17 @@ export function advanceScenarioRuntime(saveData: SaveData): {
     t.type === 'event_completed' || t.type === 'chapter_completed' || t.type === 'stage_ready',
   );
   const hasPendingWork = Boolean(runtime.currentChapterId) || runtime.activeEventIds.length > 0 || hasPendingCriticalEvent;
-  runtime.stallTurns = progressed || !hasPendingWork ? 0 : (runtime.stallTurns || 0) + 1;
+  // 主线偏移冷却（runtime 专属字段 steeringCooldown，由 processGmResponse 甲/乙确定性置入）：
+  // 冷却期间暂停 stall 计数（玩家主动选支线，不算"迷路"）、抑制引子(见 storyContext)，引擎逐轮递减至 0。
+  const steeringCooldown = typeof runtime.steeringCooldown === 'number' && runtime.steeringCooldown > 0 ? runtime.steeringCooldown : 0;
+  if (progressed || !hasPendingWork) {
+    runtime.stallTurns = 0;
+  } else if (steeringCooldown === 0) {
+    runtime.stallTurns = (runtime.stallTurns || 0) + 1;
+  } // 冷却期：保持 stallTurns 不变（暂停累加）
+  if (steeringCooldown > 0) {
+    runtime.steeringCooldown = steeringCooldown - 1;
+  }
 
   return { saveData: next, transitions };
 }

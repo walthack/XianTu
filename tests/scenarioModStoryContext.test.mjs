@@ -151,16 +151,21 @@ test('load-bearing character protection and stall steering appear in story promp
   assert.match(prompt, /【承重角色保护】/);
   assert.match(prompt, /不得死亡、永久残疾/);
 
-  // 停滞分档：停滞 5 轮 → 轻引子；8 轮 → 强压力；都必须可忽略
+  // 停滞分档：停滞 5 轮 → 轻引子；8 轮 → 强路标；都必须可忽略、且禁止拿追兵充当压力
   runtime.stallTurns = 5;
   const softPrompt = buildScenarioStoryPrompt(save);
-  assert.match(softPrompt, /【轻主线引子（可忽略）】/);
-  assert.match(softPrompt, /玩家可以暂时不理/);
+  assert.match(softPrompt, /【回主线轻引子（玩家可忽略）】/);
+  assert.match(softPrompt, /不得用新增战斗\/追兵充当引子/);
   runtime.stallTurns = 8;
   const hardPrompt = buildScenarioStoryPrompt(save);
-  assert.match(hardPrompt, /【强主线压力（可忽略）】/);
-  assert.match(hardPrompt, /玩家可以先不理/);
+  assert.match(hardPrompt, /【回主线路标（玩家可忽略）】/);
+  assert.match(hardPrompt, /严禁以新增敌袭、追兵或战斗充当压力/);
   assert.match(hardPrompt, /不得直接完成事件/);
   runtime.stallTurns = 0;
-  assert.doesNotMatch(buildScenarioStoryPrompt(save), /主线.*（可忽略）/);
+  assert.doesNotMatch(buildScenarioStoryPrompt(save), /回主线/);
+
+  // 主线偏移冷却：玩家主动偏移期间(runtime.steeringCooldown>0)彻底静默——即使停滞很多轮也不推任何引子
+  runtime.stallTurns = 8;
+  runtime.steeringCooldown = 2;
+  assert.doesNotMatch(buildScenarioStoryPrompt(save), /回主线/);
 });

@@ -25,7 +25,7 @@ import { isSaveDataV3, migrateSaveDataToLatest } from './saveMigration';
 import { parseJsonSmart, stripModelThinking } from '@/utils/jsonExtract';
 import type { APIUsageType } from '@/stores/apiManagementStore';
 import { buildScenarioCanonPrompt, guardScenarioModCommands } from '@/modules/scenarioMods/canonGuard';
-import { advanceScenarioRuntime } from '@/modules/scenarioMods/runtime';
+import { advanceScenarioRuntime, STEERING_DIVERGENCE_COOLDOWN } from '@/modules/scenarioMods/runtime';
 import { applyMilestoneRewards } from '@/modules/scenarioMods/milestoneRewards';
 import { buildScenarioStoryPrompt, createScenarioPromptState } from '@/modules/scenarioMods/storyContext';
 import { buildActionGatePrompt, getNarrativeTurn, pruneExpiredActionGates } from '@/utils/actionGate';
@@ -2344,6 +2344,25 @@ ${step1Text}
     const { removedEffects } = updateStatusEffects(saveData);
     if (removedEffects.length > 0) {
       console.log(`[AI双向系统] Pinia状态更新前: 移除了 ${removedEffects.length} 个过期效果: ${removedEffects.join(', ')}`);
+    }
+
+    // 乙(分步第2步 LLM 置布尔"主线偏移提议")是玩家主动偏移主线的唯一判定入口（整句意图判断，正则甲已废弃）。
+    // 引擎在此据该布尔信号确定性置回主线引子冷却，写入 runtime(世界.状态.剧本模组.steeringCooldown)——
+    // 引擎专属字段，canonGuard 保护、LLM 命令写不到；只在当前无冷却时置(guard)，避免每轮反复刷新永不衰减(Codex #2)；
+    // 随后 advanceScenarioRuntime 逐轮递减。
+    {
+      const sys = ((saveData as any).系统 ??= {});
+      const ext = (sys.扩展 ??= {});
+      const tracker = (ext.任务追踪 ??= {});
+      const llmProposed = tracker.主线偏移提议 === true;
+      if (tracker.主线偏移提议 !== undefined) delete tracker.主线偏移提议; // 一次性信号，消费即清
+      const rt = (saveData as any)?.世界?.状态?.剧本模组;
+      if (rt && typeof rt === 'object') {
+        const active = typeof rt.steeringCooldown === 'number' && rt.steeringCooldown > 0;
+        if (llmProposed && !active) {
+          rt.steeringCooldown = STEERING_DIVERGENCE_COOLDOWN;
+        }
+      }
     }
 
     const scenarioResult = advanceScenarioRuntime(saveData);

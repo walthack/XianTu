@@ -365,8 +365,8 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
   // 即兴目标槽（跨轮追踪，读档不翻转的治本一环）
   const improvGoals = readPath(saveData, ['系统', '扩展', '任务追踪', '即兴目标']);
   const improvLine = Array.isArray(improvGoals) && improvGoals.length
-    ? `【即兴目标·跨轮追踪（读档续写以此为准，不得悄然翻转）】\n${improvGoals.slice(0, 3).map((g: any) => `- ${typeof g === 'string' ? g : g?.标题 || ''}`).filter(Boolean).join('\n')}\n维护规则：目标达成或失效时，必须用 set 更新 系统.扩展.任务追踪.即兴目标（整组重写，上限 3 条）；只记录跨轮仍需追踪的目标，场景内小动作不记。`
-    : `【即兴目标槽】当叙事确立了需跨轮追踪的临时目标（如"取回某物""赴某约"），用 set 写入 系统.扩展.任务追踪.即兴目标（数组，元素 {"标题":"..."}，上限 3 条）；达成/失效必须清除。`;
+    ? `【即兴目标·玩家侧可选支线（跨轮追踪，读档续写保持不悄然翻转）】\n${improvGoals.slice(0, 3).map((g: any) => `- ${typeof g === 'string' ? g : g?.标题 || ''}`).filter(Boolean).join('\n')}\n性质：这些是玩家临时选择的**可选支线**目标，**不代表主线方向，不得盖过或替代上文"当前事件/最近主线节点"**；主叙事推进以主线为准，即兴目标仅在玩家主动选择追踪时顺应。维护规则：目标达成或失效时用 set 更新 系统.扩展.任务追踪.即兴目标（整组重写，上限 3 条）；只记跨轮仍需追踪的目标，场景内小动作不记。`
+    : `【即兴目标槽】当叙事确立了需跨轮追踪的临时目标（如"取回某物""赴某约"），用 set 写入 系统.扩展.任务追踪.即兴目标（数组，元素 {"标题":"..."}，上限 3 条）；达成/失效必须清除。这是玩家侧可选支线，**不得盖过主线**。`;
 
   // 承重角色保护：尚未完成的关键剧情事件所系人物，不得被即兴写死/永久失能（只报名字，不泄事件细节）
   const loadBearingIds = new Set<string>(
@@ -383,12 +383,26 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
     ? `【承重角色保护】以下人物承担本关尚未完成的关键剧情：${loadBearingNames.join('、')}。他们不得死亡、永久残疾、被永久囚禁或从此无法寻见；可以受挫、遇险、暂时离场，但必须保留后续登场能力。`
     : '';
 
-  // 偏离收束：剧情停滞分档提示（≤3 轮自由发挥；4-6 软提示；≥7 强提示）
+  // 偏离收束：剧情停滞分档提示（≤3 轮自由发挥；4-6 软引子；≥7 强路标）
+  // 方向锚点＝active 里"最近的未完成承重(critical)节点"的 axisBeat 悬念，逐轮渐进牵引；
+  // 绝不指 axisSeq 更靠后的节点（否则诱导玩家跳过中间承重桥段→剧情乱序），也绝不用即兴目标
+  //（即兴目标是纯即兴、常挂非剧本 NPC，不是主线硬指标）。无承重节点时退到下一关/当前章节。
   const stallTurns = (runtime as { stallTurns?: number }).stallTurns || 0;
-  const steeringLine = stallTurns >= 7
-    ? '【强主线压力（可忽略）】剧情已停滞多轮：本轮给出与“当前事件”相关的明显压力或引子（相关人物急报、远处异动、传讯、风声、敌意逼近等），并在正文中用角色内/叙事内方式告诉玩家：这是值得关注的主线动向，但玩家可以先不理、继续当前行动。不得替玩家做决定，不得直接完成事件。'
+  const nearestCritical = activeEvents
+    .filter(event => isCriticalStoryEvent(event) && !completedIds.has(event.id))
+    .slice()
+    .sort((a, b) => (((a as { axisSeq?: number }).axisSeq ?? Infinity)) - (((b as { axisSeq?: number }).axisSeq ?? Infinity)))[0];
+  const dirHint = (nearestCritical && ((nearestCritical as { axisBeat?: string }).axisBeat || nearestCritical.description))
+    || (runtime.nextStageName ? `本关收束后前往「${runtime.nextStageName}」` : '当前章节目标');
+  // 主线偏移冷却（引擎专属，存于 runtime 世界.状态.剧本模组.steeringCooldown，由 processGmResponse 甲/乙置入）：
+  // >0 时不推送任何引子（尊重玩家自主选择，由引擎逐轮递减，见 runtime.advanceScenarioRuntime）。
+  const steeringCooldown = Number((runtime as { steeringCooldown?: number }).steeringCooldown ?? 0) || 0;
+  const steeringLine = steeringCooldown > 0
+    ? ''
+    : stallTurns >= 7
+    ? `【回主线路标（玩家可忽略）】剧情已停滞多轮：本轮必须给玩家一条明确、此刻就能采取的回主线下一步。从下述“最近主线节点”里提取尚未揭晓的悬念/待解之谜/人物去向，以过渡钩子牵引，切勿复现该场景原貌、也不得提前演出该桥段：${dirHint}。用旁人指路、一封急报、路上传闻、同伴提议往某地或环境指向等自然方式带出，让玩家清楚“下一步可以往哪走”。严禁以新增敌袭、追兵或战斗充当压力（除非玩家主动招惹）。仅为可选引导：不得替玩家做决定，不得直接完成事件或强行触发主线高潮。`
     : stallTurns >= 4
-      ? '【轻主线引子（可忽略）】剧情已数轮未推进：本轮给出一个与“当前事件”相关的轻量线索、传闻、旁人一句话、环境异样或远景动静，并在正文中让玩家知道这只是可选择追踪的主线引子；玩家可以暂时不理，继续探索或支线。不得强行触发主线高潮，不得直接完成事件。'
+      ? `【回主线轻引子（玩家可忽略）】剧情已数轮未推进：本轮给一个轻量可选线索，指向下述“最近主线节点”的悬念（提取待解之谜/人物去向牵引，不复现场景、不提前演出）：${dirHint}。可用旁人一句话、一则传闻、环境异样或同伴提议带出，让玩家知道“想推进主线可以往这走”。不得强行触发主线高潮，不得直接完成事件，不得用新增战斗/追兵充当引子。`
       : '';
   const stageLine = [
     runtime.modName || runtime.modId,
