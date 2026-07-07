@@ -114,7 +114,14 @@ async function main() {
       const modId = doc.manifest?.modId || doc.scenario?.modId || name.replace('.json', '');
       if (onlyStage && modId !== onlyStage && !name.includes(onlyStage)) continue;
       const events = (doc.scenario?.events) || [];
-      const crit = events.filter(e => e.critical && !e.objective);
+      // 与引擎 isCriticalStoryEvent(runtime.ts:104) 同判定：critical 字段缺失时按 axis 兜底
+      //（否则旧关卡 critical 全空 → 18 关被漏掉不生成，实测踩过）。
+      const isCritical = (e) => {
+        if (e.critical !== undefined) return e.critical;
+        if (e.axisMethod === 'reviewed-no-anchor' || e.axisId === null) return false;
+        return Boolean(e.axisBeat || e.axisId || typeof e.axisSeq === 'number');
+      };
+      const crit = events.filter(e => isCritical(e) && !e.objective);
       if (!crit.length) continue;
       totalStages += 1; totalCrit += crit.length;
       const stageTitle = doc.manifest?.title || doc.scenario?.name || modId;

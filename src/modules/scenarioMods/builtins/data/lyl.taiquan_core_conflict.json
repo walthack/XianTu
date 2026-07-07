@@ -3974,7 +3974,8 @@
         "axisMethod": "deepseek",
         "axisSeq": 667,
         "axisAnchor": "六朝云龙吟·#101·魔墟",
-        "axisBeat": "程宗扬和虞白樱在蚁穴中，程宗扬被触肢咬伤，虞白樱为其吸出淫毒。"
+        "axisBeat": "程宗扬和虞白樱在蚁穴中，程宗扬被触肢咬伤，虞白樱为其吸出淫毒。",
+        "objective": "在蚁穴中寻找出口"
       },
       {
         "id": "lyl.event.yu_baiying_truce",
@@ -3995,7 +3996,8 @@
         "axisMethod": "deepseek",
         "axisSeq": 666,
         "axisAnchor": "六朝云龙吟·#100·未来",
-        "axisBeat": "虞白樱在魔墟中被行淫兽捕获，程宗扬救出她。"
+        "axisBeat": "虞白樱在魔墟中被行淫兽捕获，程宗扬救出她。",
+        "objective": "前往魔墟救出虞白樱"
       },
       {
         "id": "lyl.event.yin_fulan_aid",

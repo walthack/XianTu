@@ -7300,7 +7300,8 @@
         "axisMethod": "deepseek",
         "axisSeq": 1106,
         "axisAnchor": "六朝燕歌行·#79·美射",
-        "axisBeat": "程宗扬将内眷迁至水香楼，设明暗哨包围圈布下陷阱，准备擒获潘金莲。"
+        "axisBeat": "程宗扬将内眷迁至水香楼，设明暗哨包围圈布下陷阱，准备擒获潘金莲。",
+        "objective": "前往水香楼布设陷阱"
       },
       {
         "id": "lyg.event.forewarned_from_xinyong",
@@ -7337,7 +7338,8 @@
         "axisMethod": "deepseek",
         "axisSeq": 1114,
         "axisAnchor": "六朝燕歌行·#83·天雷",
-        "axisBeat": "信永拜访程宗扬揭露蕃密邪径及释特昧普败坏佛门，建议避让但程宗扬决定对抗。"
+        "axisBeat": "信永拜访程宗扬揭露蕃密邪径及释特昧普败坏佛门，建议避让但程宗扬决定对抗。",
+        "objective": "在府邸会见信永了解内幕"
       },
       {
         "id": "lyg.event.investigate_te_master",
@@ -7377,7 +7379,8 @@
         "axisMethod": "deepseek",
         "axisSeq": 1096,
         "axisAnchor": "六朝燕歌行·#72·婴衣",
-        "axisBeat": "程宗扬与小紫潜入青龙寺侦察，发现特大师分赃、波斯美妇祈祷及黑魔海女忍者而警觉撤离。"
+        "axisBeat": "程宗扬与小紫潜入青龙寺侦察，发现特大师分赃、波斯美妇祈祷及黑魔海女忍者而警觉撤离。",
+        "objective": "潜入青龙寺侦察特大师"
       },
       {
         "id": "lyg.event.lure_pan_jinlian",
@@ -7415,7 +7418,8 @@
         "axisMethod": "deepseek",
         "axisSeq": 1106,
         "axisAnchor": "六朝燕歌行·#79·美射",
-        "axisBeat": "程宗扬将内眷迁至水香楼，设明暗哨包围圈布下陷阱，准备擒获潘金莲。"
+        "axisBeat": "程宗扬将内眷迁至水香楼，设明暗哨包围圈布下陷阱，准备擒获潘金莲。",
+        "objective": "在水香楼诱捕潘金莲"
       },
       {
         "id": "lyg.event.capture_feiniao",
@@ -7455,7 +7459,8 @@
         "axisMethod": "deepseek",
         "axisSeq": 1115,
         "axisAnchor": "六朝燕歌行·#84·蕃密",
-        "axisBeat": "程宗扬审讯飞鸟萤子，承认杀其兄，问出三个问题后威胁性虐待但未详刑，飞鸟萤子拒绝合作。"
+        "axisBeat": "程宗扬审讯飞鸟萤子，承认杀其兄，问出三个问题后威胁性虐待但未详刑，飞鸟萤子拒绝合作。",
+        "objective": "审讯飞鸟萤子获取情报"
       },
       {
         "id": "lyg.event.track_dagger_attacker",
@@ -7492,7 +7497,8 @@
         "axisMethod": "deepseek",
         "axisSeq": 1107,
         "axisAnchor": "六朝燕歌行·#80·行刺",
-        "axisBeat": "刺客假扮小厮送药方，药涂麻痹毒药使程宗扬与成光中毒倒地，刺客逃遁后藏匿楼内。"
+        "axisBeat": "刺客假扮小厮送药方，药涂麻痹毒药使程宗扬与成光中毒倒地，刺客逃遁后藏匿楼内。",
+        "objective": "在水香楼追踪刺客"
       },
       {
         "id": "lyg.event.raid_qinglongsi",
@@ -7533,7 +7539,8 @@
         "axisMethod": "deepseek",
         "axisSeq": 1113,
         "axisAnchor": "六朝燕歌行·#83·天雷",
-        "axisBeat": "摩尼寺沙弥酷刑逼问女摩尼师，观海用灌顶法将其度化，程宗扬引爆炸毁僧舍但女师未获救。"
+        "axisBeat": "摩尼寺沙弥酷刑逼问女摩尼师，观海用灌顶法将其度化，程宗扬引爆炸毁僧舍但女师未获救。",
+        "objective": "突袭青龙寺解救女师"
       },
       {
         "id": "lyg.event.escape_or_counter",
@@ -7575,7 +7582,8 @@
         "axisMethod": "deepseek",
         "axisSeq": 1114,
         "axisAnchor": "六朝燕歌行·#83·天雷",
-        "axisBeat": "信永拜访程宗扬揭露蕃密邪径及释特昧普败坏佛门，建议避让但程宗扬决定对抗。"
+        "axisBeat": "信永拜访程宗扬揭露蕃密邪径及释特昧普败坏佛门，建议避让但程宗扬决定对抗。",
+        "objective": "在府邸决定撤离或反击"
       },
       {
         "id": "lyg.event.final_showdown",
@@ -7619,7 +7627,8 @@
         "axisMethod": "deepseek",
         "axisSeq": 1106,
         "axisAnchor": "六朝燕歌行·#79·美射",
-        "axisBeat": "程宗扬将内眷迁至水香楼，设明暗哨包围圈布下陷阱，准备擒获潘金莲。"
+        "axisBeat": "程宗扬将内眷迁至水香楼，设明暗哨包围圈布下陷阱，准备擒获潘金莲。",
+        "objective": "在水香楼围猎擒敌"
       }
     ],
     "chapters": [

@@ -4285,7 +4285,8 @@
         "axisMethod": "deepseek",
         "axisSeq": 556,
         "axisAnchor": "六朝云龙吟·#6·临安",
-        "axisBeat": "程宗扬一行抵达临安，拜祭谢艺墓，遇林冲跟踪，与鲁智深、林冲、杨柳相遇。"
+        "axisBeat": "程宗扬一行抵达临安，拜祭谢艺墓，遇林冲跟踪，与鲁智深、林冲、杨柳相遇。",
+        "objective": "前往临安谢艺墓拜祭"
       },
       {
         "id": "liuchao.event.gather_intel",
@@ -4314,7 +4315,8 @@
         "axisMethod": "deepseek",
         "axisSeq": 557,
         "axisAnchor": "六朝云龙吟·#8·衙内",
-        "axisBeat": "程宗扬在雷峰塔遇李师师与凝姨，得知威远镖局失镖与高衙内有关，后以言语吓退高衙内一行。"
+        "axisBeat": "程宗扬在雷峰塔遇李师师与凝姨，得知威远镖局失镖与高衙内有关，后以言语吓退高衙内一行。",
+        "objective": "前往雷峰塔收集情报"
       },
       {
         "id": "liuchao.event.wei_yuan_first_contact",
@@ -4341,7 +4343,8 @@
         "axisMethod": "deepseek",
         "axisSeq": 557,
         "axisAnchor": "六朝云龙吟·#8·衙内",
-        "axisBeat": "程宗扬在雷峰塔遇李师师与凝姨，得知威远镖局失镖与高衙内有关，后以言语吓退高衙内一行。"
+        "axisBeat": "程宗扬在雷峰塔遇李师师与凝姨，得知威远镖局失镖与高衙内有关，后以言语吓退高衙内一行。",
+        "objective": "探听威远镖局失镖内情"
       },
       {
         "id": "liuchao.event.lin_chong_confront",
@@ -4366,7 +4369,8 @@
         "axisMethod": "deepseek",
         "axisSeq": 556,
         "axisAnchor": "六朝云龙吟·#6·临安",
-        "axisBeat": "程宗扬一行抵达临安，拜祭谢艺墓，遇林冲跟踪，与鲁智深、林冲、杨柳相遇。"
+        "axisBeat": "程宗扬一行抵达临安，拜祭谢艺墓，遇林冲跟踪，与鲁智深、林冲、杨柳相遇。",
+        "objective": "在谢艺墓应对林冲跟踪"
       },
       {
         "id": "liuchao.event.you_chan_meeting",
@@ -4415,7 +4419,8 @@
         "axisMethod": "deepseek",
         "axisSeq": 557,
         "axisAnchor": "六朝云龙吟·#8·衙内",
-        "axisBeat": "程宗扬在雷峰塔遇李师师与凝姨，得知威远镖局失镖与高衙内有关，后以言语吓退高衙内一行。"
+        "axisBeat": "程宗扬在雷峰塔遇李师师与凝姨，得知威远镖局失镖与高衙内有关，后以言语吓退高衙内一行。",
+        "objective": "调查威远镖局危机根源"
       },
       {
         "id": "liuchao.event.gao_yanei_showdown",
@@ -4442,7 +4447,8 @@
         "axisMethod": "deepseek",
         "axisSeq": 558,
         "axisAnchor": "六朝云龙吟·#8·衙内",
-        "axisBeat": "虎翼军遭黑烟怪物铁傀儡袭击，紫衣少女小紫与老头操控铁傀儡击杀军官并收集阴魂。"
+        "axisBeat": "虎翼军遭黑烟怪物铁傀儡袭击，紫衣少女小紫与老头操控铁傀儡击杀军官并收集阴魂。",
+        "objective": "调查虎翼军遇袭事件"
       },
       {
         "id": "liuchao.event.xue_sun_meeting",
