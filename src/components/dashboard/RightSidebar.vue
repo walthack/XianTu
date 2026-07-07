@@ -203,6 +203,7 @@
           <div v-if="questMain" class="quest-main">
             <div v-if="questMain.chapter" class="quest-chapter">{{ questMain.chapter }}</div>
             <div v-for="ev in questMain.events" :key="ev" class="quest-event">◆ {{ ev }}</div>
+            <div v-if="questMain.stalled" class="quest-stall-warn" style="color:#e6a23c;font-size:12px;margin-top:4px;line-height:1.4;">⚠️ 主线疑似脱节（已停滞 {{ questMain.stallCount }} 轮）——剧情可能已跑到主线前面，可在"辅助功能"开启进度审计核查对齐</div>
             <div v-if="questMain.cleared" class="quest-cleared">✅ {{ t('本关剧情已完成') }}</div>
             <template v-if="questMain.next">
               <div class="quest-next">{{ t('下一关') }}：{{ questMain.next }}</div>
@@ -281,8 +282,12 @@ const questMain = computed(() => {
   const ready = rt.nextStageReadyId && rt.nextStageReadyId === rt.nextStageId;
   const cleared = ready && !chapter && !events.length;
   const next = ready ? stageDisplayName(rt.nextStageName || rt.nextStageId || '') : '';
-  if (!chapter && !events.length && !next) return null;
-  return { chapter: chapter ? `章节：${chapter.title || chapter.id}` : '', events, cleared, next };
+  // 脱节哨兵（零成本确定性）：停滞轮数超阈值 → UI 预警"主线疑似脱节"，只提示、不改任何数据。
+  // 阈值 10 高于强引子(7)，避免正常卡关误报；治本对齐仍靠进度审计对账。
+  const stallTurns = Number(rt.stallTurns) || 0;
+  const stalled = stallTurns >= 10;
+  if (!chapter && !events.length && !next && !stalled) return null;
+  return { chapter: chapter ? `章节：${chapter.title || chapter.id}` : '', events, cleared, next, stalled, stallCount: stallTurns };
 });
 const goNextStage = async () => {
   if (stageSwitching.value) return;
