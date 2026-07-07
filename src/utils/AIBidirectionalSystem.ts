@@ -2379,7 +2379,8 @@ ${step1Text}
           userAction: options?.userAction || '',
           summarize: this._summarizeValueForChangeLog.bind(this),
         });
-        commandAppliedChanges.push(...reconcileChanges);
+        // 直接进 changes：commandAppliedChanges 在上方已合并完，此时再 push 进不了本轮日志（Codex 整环审 backlog#2）
+        changes.push(...reconcileChanges);
       }
     } catch (error) {
       console.warn('[事件对账] 跳过（异常）:', error);
