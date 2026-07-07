@@ -302,7 +302,7 @@
 
           <!-- 辅助功能列表 -->
             <div
-              v-for="funcType in ['memory_summary', 'text_optimization', 'world_generation', 'event_generation', 'sect_generation', 'crafting', 'progress_audit', 'embedding']"
+              v-for="funcType in ['memory_summary', 'text_optimization', 'world_generation', 'event_generation', 'sect_generation', 'crafting', 'progress_audit', 'event_reconcile', 'embedding']"
               :key="funcType"
               class="setting-item"
             >
@@ -343,14 +343,14 @@
                   </label>
                 </div>
 
-                <!-- progress_audit 功能的启用开关 -->
-                <div v-if="funcType === 'progress_audit'" class="inline-toggle">
+                <!-- progress_audit / event_reconcile 功能的启用开关 -->
+                <div v-if="funcType === 'progress_audit' || funcType === 'event_reconcile'" class="inline-toggle">
                   <label class="toggle-label">启用</label>
                   <label class="setting-switch compact">
                     <input
                       type="checkbox"
-                      :checked="apiStore.isFunctionEnabled('progress_audit')"
-                      @change="apiStore.setFunctionEnabled('progress_audit', ($event.target as HTMLInputElement).checked)"
+                      :checked="apiStore.isFunctionEnabled(funcType as APIUsageType)"
+                      @change="apiStore.setFunctionEnabled(funcType as APIUsageType, ($event.target as HTMLInputElement).checked)"
                     />
                     <span class="switch-slider"></span>
                   </label>
@@ -856,7 +856,8 @@ const getFunctionName = (type: APIUsageType): string => {
       event_generation: '事件生成',
       sect_generation: '宗门生成',
       crafting: '炼丹炼器',
-      progress_audit: '进度审计'
+      progress_audit: '进度审计',
+      event_reconcile: '事件对账'
     };
   return names[type] || type;
 };
@@ -875,7 +876,8 @@ const getFunctionDesc = (type: APIUsageType): string => {
         event_generation: '生成世界事件（可配置Raw/标准模式）',
         sect_generation: '生成宗门内容如藏经阁、贡献商店（可配置Raw/标准模式）',
         crafting: '炼丹炼器系统（可配置Raw/标准模式）',
-        progress_audit: '后台审计跨轮即兴目标：达成/失效/新增，仅更新任务目标（可用快速模型）'
+        progress_audit: '后台审计跨轮即兴目标：达成/失效/新增，仅更新任务目标（可用快速模型）',
+        event_reconcile: '主线卡死自愈：停滞超阈值时核对存档记忆补落事件标记（哨兵触发、稀有调用，可用快速模型）'
       };
     return descs[type] || '';
   } else {
@@ -890,7 +892,8 @@ const getFunctionDesc = (type: APIUsageType): string => {
         event_generation: '生成世界事件（可用快速模型）',
         sect_generation: '生成宗门内容如藏经阁、贡献商店（可用快速模型）',
         crafting: '炼丹炼器系统（可用快速模型）',
-        progress_audit: '后台审计跨轮即兴目标：达成/失效/新增，仅更新任务目标（可用快速模型）'
+        progress_audit: '后台审计跨轮即兴目标：达成/失效/新增，仅更新任务目标（可用快速模型）',
+        event_reconcile: '主线卡死自愈：停滞超阈值时核对存档记忆补落事件标记（哨兵触发、稀有调用，可用快速模型）'
       };
     return descs[type] || '';
   }

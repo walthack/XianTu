@@ -33,7 +33,8 @@ export type APIUsageType =
   | 'event_generation'  // 世界事件生成（随机事件/世界变革等）
   | 'sect_generation'  // 宗门内容生成（藏经阁、贡献商店等）
   | 'crafting'  // 炼丹炼器
-  | 'progress_audit';  // 进度审计（跨轮即兴目标的独立低温审计，后台事后追更）
+  | 'progress_audit'  // 进度审计（跨轮即兴目标的独立低温审计，后台事后追更）
+  | 'event_reconcile';  // 事件对账（哨兵触发式主线死锁自愈，done/void 双通道，稀有触发）
 
 /**
  * 辅助功能的生成模式（仅酒馆端可选）
@@ -153,7 +154,8 @@ export const useAPIManagementStore = defineStore('apiManagement', () => {
     { type: 'event_generation', apiId: 'default' },
     { type: 'sect_generation', apiId: 'default' },
     { type: 'crafting', apiId: 'default' },
-    { type: 'progress_audit', apiId: 'default' }
+    { type: 'progress_audit', apiId: 'default' },
+    { type: 'event_reconcile', apiId: 'default' }
   ];
 
   const DEFAULT_FUNCTION_MODES: FunctionModeConfig[] = [
@@ -163,7 +165,8 @@ export const useAPIManagementStore = defineStore('apiManagement', () => {
     { type: 'event_generation', mode: 'raw' },
     { type: 'sect_generation', mode: 'raw' },
     { type: 'crafting', mode: 'raw' },
-    { type: 'progress_audit', mode: 'raw' }
+    { type: 'progress_audit', mode: 'raw' },
+    { type: 'event_reconcile', mode: 'raw' }
   ];
 
   // 默认功能启用状态（可选功能默认关闭，核心功能默认开启）
@@ -175,7 +178,8 @@ export const useAPIManagementStore = defineStore('apiManagement', () => {
     { type: 'event_generation', enabled: true },
     { type: 'sect_generation', enabled: true },
     { type: 'crafting', enabled: true },
-    { type: 'progress_audit', enabled: false }  // 进度审计默认关闭，需用户明确启用（加成本/延迟）
+    { type: 'progress_audit', enabled: false },  // 进度审计默认关闭，需用户明确启用（加成本/延迟）
+    { type: 'event_reconcile', enabled: true }  // 事件对账默认开：哨兵触发式（stall≥10 才跑），成本近零但保证死锁自愈
   ];
 
   // API配置列表

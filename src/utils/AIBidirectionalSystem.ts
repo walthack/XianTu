@@ -31,6 +31,7 @@ import { buildScenarioStoryPrompt, createScenarioPromptState } from '@/modules/s
 import { buildActionGatePrompt, getNarrativeTurn, pruneExpiredActionGates } from '@/utils/actionGate';
 import { reconcileNarrativeState } from '@/utils/narrativeStateReconciler';
 import { runProgressAudit, shouldRunAudit } from '@/services/progressAuditService';
+import { runEventReconcile, shouldRunReconcile } from '@/services/eventReconcileService';
 import { detectNarratedPlayerDamage } from '@/utils/narratedDamage';
 import {
   detectNarratedInventoryGainEntries,
@@ -2363,6 +2364,25 @@ ${step1Text}
           rt.steeringCooldown = STEERING_DIVERGENCE_COOLDOWN;
         }
       }
+    }
+
+    // 事件对账（闭环第三环：走偏不卡死）：哨兵触发式——stallTurns 达阈值才跑，核对存档记忆
+    // 补落 done/void 事件 flag，随后 advanceScenarioRuntime 当轮即推进解锁。best-effort，失败无影响。
+    try {
+      const rtForReconcile = (saveData as any)?.世界?.状态?.剧本模组;
+      const { useAPIManagementStore } = await import('@/stores/apiManagementStore');
+      const apiStoreR = useAPIManagementStore();
+      if (!hadExecutionError && rtForReconcile && apiStoreR.isFunctionEnabled('event_reconcile') && shouldRunReconcile(rtForReconcile.stallTurns)) {
+        const reconcileChanges = await runEventReconcile({
+          saveData,
+          recentText: textContent,
+          userAction: options?.userAction || '',
+          summarize: this._summarizeValueForChangeLog.bind(this),
+        });
+        commandAppliedChanges.push(...reconcileChanges);
+      }
+    } catch (error) {
+      console.warn('[事件对账] 跳过（异常）:', error);
     }
 
     const scenarioResult = advanceScenarioRuntime(saveData);

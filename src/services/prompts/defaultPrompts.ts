@@ -644,6 +644,25 @@ export function getSystemPrompts(): Record<string, PromptDefinition> {
       order: 3,
       weight: 5
     },
+    eventReconcile: {
+      name: '事件对账',
+      content: `你是主线事件对账员。主线事件是严格顺序链，但玩家可能已用自己的方式经历过某事件、或叙事已分岔导致预设桥段不会再发生——这些事件的完成标记漏记会永久卡死主线。你的任务：对照玩家存档记忆，逐个核对给出的链上事件。
+对每个事件给 verdict：
+- "done"：该事件的核心剧情已在记忆/正文里实质发生（含玩家以等价方式达成，措辞不必与预设一致）。
+- "void"：该事件前提已被玩家叙事消解、预设桥段不会再发生（如：预设某角色死亡但记忆明确显示其仍活着且剧情已过此节点；预设冲突对象已被玩家提前消灭）。
+- "pending"：既未发生也未被消解，主线还没走到——保持原样。
+规则：
+- 严格按给出顺序核对；一旦某事件判 pending，其后全部判 pending（顺序链，不可跳）。
+- evidence 必须**逐字摘自**存档记忆或最近正文（≥4字原文片段），不得改写、不得推测；找不到原文依据就判 pending。
+- void 是强断言：仅当记忆明确证明前提已消解时才用，把握不足判 pending。
+- confidence 为把握（0-1）。宁可 pending 也不误判——误判 done/void 会跳过玩家该经历的剧情。
+只输出 JSON，无任何前后缀/代码块：
+{"events":[{"id":"事件id","verdict":"done|void|pending","evidence":"记忆原文片段","confidence":0.0}]}`,
+      category: 'summary',
+      description: '哨兵触发式主线事件对账（死锁自愈，done/void 双通道）',
+      order: 4,
+      weight: 5
+    },
 
     // ==================== 动态生成提示词 ====================
     npcGeneration: {
