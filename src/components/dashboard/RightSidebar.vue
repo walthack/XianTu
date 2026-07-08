@@ -201,8 +201,8 @@
         </div>
         <div v-show="!questCollapsed" class="quest-body">
           <div v-if="questMain" class="quest-main">
-            <div v-if="questMain.chapter" class="quest-chapter">{{ questMain.chapter }}</div>
-            <div v-for="ev in questMain.events" :key="ev" class="quest-event">◆ {{ ev }}</div>
+            <div v-if="questMain.chapter" class="quest-chapter"><span class="quest-tag quest-tag-main">主线</span>{{ questMain.chapter }}</div>
+            <div v-for="ev in questMain.events" :key="ev" class="quest-event"><span class="quest-mark-main">◆</span>{{ ev }}</div>
             <div v-if="questMain.stalled" class="quest-stall-warn" style="color:#e6a23c;font-size:12px;margin-top:4px;line-height:1.4;">⚠️ 主线疑似脱节（已停滞 {{ questMain.stallCount }} 轮）——剧情可能已跑到主线前面，系统将自动尝试事件对账修复（可在 API 管理·事件对账 中关闭）</div>
             <div v-if="questMain.cleared" class="quest-cleared">✅ {{ t('本关剧情已完成') }}</div>
             <template v-if="questMain.next">
@@ -214,7 +214,8 @@
             </template>
           </div>
           <div v-if="questGoals.length" class="quest-improv">
-            <div v-for="(g, i) in questGoals" :key="i" class="quest-goal">· {{ g }}</div>
+            <div class="quest-improv-label"><span class="quest-tag quest-tag-side">支线</span>{{ t('临时目标（可选）') }}</div>
+            <div v-for="(g, i) in questGoals" :key="i" class="quest-goal"><span class="quest-mark-side">·</span>{{ g }}</div>
           </div>
         </div>
       </div>
@@ -1758,11 +1759,17 @@ const getReputationClass = (): string => {
 /* 深色主题：使用CSS变量自动适配，无需额外覆盖 */
 
 .quest-section .quest-body { padding: 6px 10px 10px; display: flex; flex-direction: column; gap: 6px; }
-.quest-chapter { font-size: 12px; font-weight: 600; opacity: 0.9; }
-.quest-event { font-size: 12px; line-height: 1.5; opacity: 0.85; }
+.quest-chapter { font-size: 12px; font-weight: 600; opacity: 0.9; display: flex; align-items: center; }
+.quest-event { font-size: 12px; line-height: 1.6; opacity: 0.95; font-weight: 500; padding-left: 2px; }
+.quest-mark-main { color: var(--color-accent, #d4af37); font-weight: 700; margin-right: 6px; }
+.quest-tag { font-size: 10px; line-height: 1; padding: 2px 5px; border-radius: 3px; margin-right: 6px; letter-spacing: 1px; font-weight: 600; }
+.quest-tag-main { color: #1a1a1a; background: var(--color-accent, #d4af37); }
+.quest-tag-side { color: rgba(255,255,255,0.6); background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.12); }
+.quest-improv-label { font-size: 11px; opacity: 0.55; display: flex; align-items: center; margin-bottom: 2px; }
+.quest-mark-side { color: rgba(255,255,255,0.35); margin-right: 6px; }
 .quest-next { font-size: 12px; color: var(--color-accent, #d4af37); }
 .quest-improv { border-top: 1px dashed rgba(255,255,255,0.12); padding-top: 6px; }
-.quest-goal { font-size: 12px; line-height: 1.5; opacity: 0.75; }
+.quest-goal { font-size: 12px; line-height: 1.5; opacity: 0.65; }
 .quest-cleared { font-size: 12px; color: #7dc87d; }
 .quest-next-btn { margin-top: 4px; width: 100%; padding: 5px 8px; font-size: 12px; border: 1px solid var(--color-accent, #d4af37); background: transparent; color: var(--color-accent, #d4af37); border-radius: 4px; cursor: pointer; }
 .quest-next-btn:hover:not(:disabled) { background: rgba(212,175,55,0.15); }
