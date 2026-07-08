@@ -41,14 +41,26 @@ test('跳序拦截：链中一个不过，后续即使高置信也全部拒绝',
   assert.equal(accepted.length, 0);
 });
 
-test('证据接地：evidence 不在记忆/上下文里 → 拒绝（模型编造）', async () => {
+test('证据接地：evidence 与记忆无 bigram 重叠 → 拒绝（模型编造）', async () => {
   const { validateEventReconcile } = await modPromise;
   const raw = { events: [
-    { id: 'e1', verdict: 'done', evidence: '玩家亲手斩杀了魔尊', confidence: 0.99 },
+    { id: 'e1', verdict: 'done', evidence: '玩家亲手斩杀了魔尊统领', confidence: 0.99 },
   ] };
   const { accepted } = validateEventReconcile(raw, chain(), CTX);
   assert.equal(accepted.length, 0);
 });
+
+test('证据接地(bigram)：转述/带省略号但语义对的证据应接地（实测存档11111的真实失败点）', async () => {
+  const { validateEventReconcile } = await modPromise;
+  // 事件 beat="鬼巫王与龙神合体失败被吞"，记忆里是"鬼巫王已死，龙神也已陨落"——
+  // 模型转述成带省略号的叙事措辞，逐字子串匹配会毙掉，bigram 重叠应放行
+  const raw = { events: [
+    { id: 'e1', verdict: 'done', evidence: '鬼巫王…龙神也已陨落', confidence: 0.95 },
+  ] };
+  const { accepted } = validateEventReconcile(raw, chain(), CTX);
+  assert.deepEqual(accepted.map(a => a.id), ['e1']);
+});
+
 
 test('void 阈值高于 done：0.8 的 void 拒绝、0.8 的 done 接受', async () => {
   const { validateEventReconcile } = await modPromise;
@@ -103,11 +115,13 @@ test('buildChainCandidates：排除已完成/已 done，按 axisSeq 排序，截
 
 test('shouldRunReconcile：阈值触发 + 间隔重试节奏', async () => {
   const { shouldRunReconcile } = await modPromise;
+  // 阈值 10、间隔 3：触发点 10/13/16/19…
   assert.equal(shouldRunReconcile(9), false);
   assert.equal(shouldRunReconcile(10), true);
   assert.equal(shouldRunReconcile(12), false);
-  assert.equal(shouldRunReconcile(15), true);
-  assert.equal(shouldRunReconcile(20), true);
+  assert.equal(shouldRunReconcile(13), true);
+  assert.equal(shouldRunReconcile(16), true);
+  assert.equal(shouldRunReconcile(15), false);
   assert.equal(shouldRunReconcile(undefined), false);
 });
 

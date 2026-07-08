@@ -26,7 +26,7 @@ import { parseJsonSmart } from '@/utils/jsonExtract';
  */
 
 export const RECONCILE_STALL_THRESHOLD = 10; // 与脱节哨兵同阈值
-export const RECONCILE_RETRY_INTERVAL = 5;   // 未解锁则每 5 轮再试一次
+export const RECONCILE_RETRY_INTERVAL = 3;   // 未解锁则每 3 轮再试一次（修好接地后首触发即落，此为兜底重试）
 export const DONE_CONFIDENCE = 0.75;
 export const VOID_CONFIDENCE = 0.85;
 export const MAX_FLAGS_PER_RUN = 5;
@@ -128,10 +128,35 @@ function norm(s: unknown): string {
   return typeof s === 'string' ? s.replace(/\s+/g, '') : '';
 }
 
-/** 证据接地：evidence（≥4 字标准化后）必须出现在记忆/最近上下文里，否则视为模型编造、拒绝。 */
+/** 字符二元组集合（中文无分词，用 bigram 近似"关键片段"）。 */
+function bigrams(normed: string): Set<string> {
+  const set = new Set<string>();
+  for (let i = 0; i < normed.length - 1; i += 1) set.add(normed.slice(i, i + 2));
+  return set;
+}
+
+/** a 的 bigram 有多少比例出现在 b 里（0~1）。 */
+function bigramCoverage(a: Set<string>, b: string): number {
+  if (a.size === 0) return 0;
+  let hit = 0;
+  for (const g of a) if (b.includes(g)) hit += 1;
+  return hit / a.size;
+}
+
+/**
+ * 证据接地（实测存档11111坐实的确诊修复）：
+ * 原"逐字子串"过严——LLM 常带省略号/改写措辞/引叙事原文（"鬼巫王…龙神也已陨落"），
+ * 语义对的证据被毙成 pending → 死锁不解。改为字符 bigram 重叠率：证据 bigram ≥60% 出现在
+ * 记忆/上下文里即视为"非编造、有据"（容忍省略与改写）。
+ *
+ * 注：不做"证据须与该事件 beat 词面相关"的检查——试过，反把 done/void 语义对但换了措辞的证据
+ * 又毙掉（void 证据描述反面事实、done 证据常与 beat 用词不同，词面重叠天然低）。Codex 关切的
+ * "真实但与本事件无关的片段蒙混"降级为 backlog：靠连续前缀 + 置信阈值 + 提示词纪律兜着。
+ */
 function isGrounded(evidence: unknown, normContext: string): boolean {
   const ne = norm(evidence);
-  return ne.length >= 4 && normContext.includes(ne);
+  if (ne.length < 4) return false;
+  return bigramCoverage(bigrams(ne), normContext) >= 0.6;
 }
 
 /**
