@@ -203,6 +203,7 @@
           <div v-if="questMain" class="quest-main">
             <div v-if="questMain.chapter" class="quest-chapter"><span class="quest-tag quest-tag-main">主线</span>{{ questMain.chapter }}</div>
             <div v-for="ev in questMain.events" :key="ev" class="quest-event"><span class="quest-mark-main">◆</span>{{ ev }}</div>
+            <div v-if="questMain.moreCount > 0" class="quest-more">{{ t('本关后续还有') }} {{ questMain.moreCount }} {{ t('个节点') }}</div>
             <div v-if="questMain.stalled" class="quest-stall-warn" style="color:#e6a23c;font-size:12px;margin-top:4px;line-height:1.4;">⚠️ 主线疑似脱节（已停滞 {{ questMain.stallCount }} 轮）——剧情可能已跑到主线前面，系统将自动尝试事件对账修复（可在 API 管理·事件对账 中关闭）</div>
             <div v-if="questMain.cleared" class="quest-cleared">✅ {{ t('本关剧情已完成') }}</div>
             <template v-if="questMain.next">
@@ -278,8 +279,14 @@ const questMain = computed(() => {
   if (!rt || typeof rt !== 'object') return null;
   const chapter = (rt.chapters || []).find((c: any) => c.id === rt.currentChapterId);
   const activeIds = new Set(rt.activeEventIds || []);
-  // 主线优先显示 objective（玩家视角+地点，"前往鬼王峒查明碧奴下落"），无则回退事件名（"谢艺杀使"）
-  const events = (rt.events || []).filter((e: any) => activeIds.has(e.id)).map((e: any) => e.objective || e.name).filter(Boolean).slice(0, 4);
+  // 只显示"当前该做的那条"主线：active 事件按 axisSeq 升序取最前面的未完成事件。
+  // 很多关卡事件无顺序门控、会一次性全部 active（整关剁成 N 拍），全铺出来既是墙又常近义重复；
+  // 只亮当前一拍最贴近"下一步做什么"。优先 objective（玩家视角+地点），无则回退事件名。
+  const activeEvents = (rt.events || [])
+    .filter((e: any) => activeIds.has(e.id))
+    .sort((a: any, b: any) => (typeof a.axisSeq === 'number' ? a.axisSeq : Infinity) - (typeof b.axisSeq === 'number' ? b.axisSeq : Infinity));
+  const events = activeEvents.slice(0, 1).map((e: any) => e.objective || e.name).filter(Boolean);
+  const moreCount = Math.max(0, activeEvents.length - 1);
   const ready = rt.nextStageReadyId && rt.nextStageReadyId === rt.nextStageId;
   const cleared = ready && !chapter && !events.length;
   const next = ready ? stageDisplayName(rt.nextStageName || rt.nextStageId || '') : '';
@@ -288,7 +295,7 @@ const questMain = computed(() => {
   const stallTurns = Number(rt.stallTurns) || 0;
   const stalled = stallTurns >= 10;
   if (!chapter && !events.length && !next && !stalled) return null;
-  return { chapter: chapter ? `章节：${chapter.title || chapter.id}` : '', events, cleared, next, stalled, stallCount: stallTurns };
+  return { chapter: chapter ? `章节：${chapter.title || chapter.id}` : '', events, moreCount, cleared, next, stalled, stallCount: stallTurns };
 });
 const goNextStage = async () => {
   if (stageSwitching.value) return;
@@ -1762,6 +1769,7 @@ const getReputationClass = (): string => {
 .quest-chapter { font-size: 12px; font-weight: 600; opacity: 0.9; display: flex; align-items: center; }
 .quest-event { font-size: 12px; line-height: 1.6; opacity: 0.95; font-weight: 500; padding-left: 2px; }
 .quest-mark-main { color: var(--color-accent, #d4af37); font-weight: 700; margin-right: 6px; }
+.quest-more { font-size: 11px; opacity: 0.4; padding-left: 18px; margin-top: 1px; }
 .quest-tag { font-size: 10px; line-height: 1; padding: 2px 5px; border-radius: 3px; margin-right: 6px; letter-spacing: 1px; font-weight: 600; }
 .quest-tag-main { color: #1a1a1a; background: var(--color-accent, #d4af37); }
 .quest-tag-side { color: rgba(255,255,255,0.6); background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.12); }
