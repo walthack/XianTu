@@ -289,8 +289,18 @@ function buildMemoryContext(saveData: SaveData, candidates: ChainCandidate[]): s
     .sort((a, b) => b.hit - a.hit)
     .slice(0, 5)
     .map(x => x.e);
-  // 补捞的旧条目放前面（大致时间序），近期窗口在后
-  return [...retrieved, ...recent].join('\n');
+  // 补捞的旧条目放前面（大致时间序），近期窗口在后。
+  // 窗口封顶：单条≤600字、总量≤8000字——实测 memLen 1.38 万时 MiniMax highspeed 思维链跑不完
+  // 90s 超时（5~7k 可稳定完成）。预算内优先保补捞条目（死锁证据所在），近期条目靠后自然被裁。
+  const out: string[] = [];
+  let budget = 8000;
+  for (const e of [...retrieved, ...recent]) {
+    const t = e.length > 600 ? `${e.slice(0, 600)}…` : e;
+    if (t.length > budget) break;
+    out.push(t);
+    budget -= t.length;
+  }
+  return out.join('\n');
 }
 
 function buildReconcileUserPrompt(candidates: ChainCandidate[], memoryContext: string, input: EventReconcileInput): string {
