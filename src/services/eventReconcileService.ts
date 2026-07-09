@@ -170,7 +170,10 @@ export function validateEventReconcile(
 ): ReconcileValidateResult {
   const diagnostics: string[] = [];
   const r = raw && typeof raw === 'object' ? raw as { events?: unknown } : {};
-  const verdicts: ReconcileVerdict[] = Array.isArray(r.events) ? r.events as ReconcileVerdict[] : [];
+  // 容忍两种输出形态：{"events":[...]} 或裸数组 [...]（实测同款模型两种都出过）
+  const verdicts: ReconcileVerdict[] = Array.isArray(raw)
+    ? raw as ReconcileVerdict[]
+    : Array.isArray(r.events) ? r.events as ReconcileVerdict[] : [];
   const byId = new Map<string, ReconcileVerdict>();
   for (const v of verdicts) {
     if (typeof v?.id === 'string') byId.set(v.id, v);
@@ -257,18 +260,37 @@ function stripModelArtifacts(s: string): string {
   return out.trim();
 }
 
-function buildMemoryContext(saveData: SaveData): string {
+function buildMemoryContext(saveData: SaveData, candidates: ChainCandidate[]): string {
   const mem = get(saveData, '社交.记忆') as Record<string, unknown> | undefined;
-  const pick = (key: string, n: number): string[] => {
+  const entries = (key: string): string[] => {
     const arr = mem?.[key];
     return Array.isArray(arr)
-      ? arr.slice(-n)
-        .map(x => stripModelArtifacts(typeof x === 'string' ? x : JSON.stringify(x)))
-        .filter(Boolean)
+      ? arr.map(x => stripModelArtifacts(typeof x === 'string' ? x : JSON.stringify(x))).filter(Boolean)
       : [];
   };
-  // 死锁的证据往往沉在中期/长期记忆里（"击杀鬼巫王"距今可能已数十轮），不能只看本轮正文
-  return [...pick('长期记忆', 3), ...pick('隐式中期记忆', 10), ...pick('短期记忆', 4)].join('\n');
+  const long = entries('长期记忆');
+  const mid = entries('中期记忆');       // 实测第6层：证据在这个桶，此前窗口漏读了它
+  const imp = entries('隐式中期记忆');
+  const short = entries('短期记忆');
+  // 近期窗口
+  const recent = [...long.slice(-3), ...mid.slice(-6), ...imp.slice(-8), ...short.slice(-4)];
+  const included = new Set(recent);
+  // 相关性补捞：死锁事件多为"很久之前发生"，证据常已滑出近期窗口（实测：左武军证据在中期第15条，
+  // 窗口只取尾部就丢了，模型只能按纪律判 pending）。按候选事件文本的 bigram 重叠从全部中期/隐式里捞。
+  const candBg = bigrams(norm(candidates.map(c => `${c.name}${c.beat}`).join('')));
+  const retrieved = [...mid, ...imp]
+    .filter(e => !included.has(e))
+    .map(e => {
+      let hit = 0;
+      for (const g of bigrams(norm(e))) if (candBg.has(g)) hit += 1;
+      return { e, hit };
+    })
+    .filter(x => x.hit >= 6)
+    .sort((a, b) => b.hit - a.hit)
+    .slice(0, 5)
+    .map(x => x.e);
+  // 补捞的旧条目放前面（大致时间序），近期窗口在后
+  return [...retrieved, ...recent].join('\n');
 }
 
 function buildReconcileUserPrompt(candidates: ChainCandidate[], memoryContext: string, input: EventReconcileInput): string {
@@ -306,7 +328,7 @@ export async function runEventReconcile(input: EventReconcileInput): Promise<Sta
   dbg.candidates = candidates.map(c => c.id.split('.').pop());
   if (!candidates.length) { dbg.bail = 'no-candidates'; return []; }
 
-  const memoryContext = buildMemoryContext(input.saveData);
+  const memoryContext = buildMemoryContext(input.saveData, candidates);
   dbg.memLen = memoryContext.length; dbg.recentLen = (input.recentText || '').length;
   const userPrompt = buildReconcileUserPrompt(candidates, memoryContext, input);
 
