@@ -113,15 +113,13 @@ test('buildChainCandidates：排除已完成/已 done，按 axisSeq 排序，截
   assert.equal(out[0].flagKey, 'event.a.done');
 });
 
-test('shouldRunReconcile：阈值触发 + 间隔重试节奏', async () => {
+test('shouldRunReconcile：停滞≥阈值每轮都触发', async () => {
   const { shouldRunReconcile } = await modPromise;
-  // 阈值 10、间隔 3：触发点 10/13/16/19…
+  // 阈值 10：>=10 每轮都触发（落账使 stall 归零自然停）
   assert.equal(shouldRunReconcile(9), false);
   assert.equal(shouldRunReconcile(10), true);
-  assert.equal(shouldRunReconcile(12), false);
-  assert.equal(shouldRunReconcile(13), true);
-  assert.equal(shouldRunReconcile(16), true);
-  assert.equal(shouldRunReconcile(15), false);
+  assert.equal(shouldRunReconcile(11), true);
+  assert.equal(shouldRunReconcile(33), true);
   assert.equal(shouldRunReconcile(undefined), false);
 });
 

@@ -2372,7 +2372,13 @@ ${step1Text}
       const rtForReconcile = (saveData as any)?.世界?.状态?.剧本模组;
       const { useAPIManagementStore } = await import('@/stores/apiManagementStore');
       const apiStoreR = useAPIManagementStore();
-      if (!hadExecutionError && rtForReconcile && apiStoreR.isFunctionEnabled('event_reconcile') && shouldRunReconcile(rtForReconcile.stallTurns)) {
+      const _enabled = apiStoreR.isFunctionEnabled('event_reconcile');
+      const _should = shouldRunReconcile(rtForReconcile?.stallTurns);
+      // 【临时黑匣子】把门控写进存档，落盘到后端供远程诊断（stall/enabled/shouldRun/hadErr）
+      const _dbgSys = ((saveData as any).系统 ??= {}); const _dbgExt = (_dbgSys.扩展 ??= {});
+      _dbgExt._reconcileDebug = { at: new Date().toISOString(), stall: rtForReconcile?.stallTurns, enabled: _enabled, shouldRun: _should, hadExecErr: hadExecutionError, ran: false };
+      if (!hadExecutionError && rtForReconcile && _enabled && _should) {
+        _dbgExt._reconcileDebug.ran = true;
         const reconcileChanges = await runEventReconcile({
           saveData,
           recentText: textContent,
@@ -2384,6 +2390,7 @@ ${step1Text}
       }
     } catch (error) {
       console.warn('[事件对账] 跳过（异常）:', error);
+      try { (((saveData as any).系统 ??= {}).扩展 ??= {})._reconcileDebug = { ...(((saveData as any).系统?.扩展?._reconcileDebug) || {}), error: String(error).slice(0, 200) }; } catch { /* noop */ }
     }
 
     const scenarioResult = advanceScenarioRuntime(saveData);
@@ -2683,8 +2690,13 @@ ${saveDataJson}`;
       }
 
       // 解析响应（与NPC记忆总结相同的方式）
+      // 先剥推理模型内联思维链：<think>…</think>（未闭合则从起点截断）。否则 JSON.parse 失败时
+      // 整段原始输出（含思维链与"生成250-400字总结"任务说明）会被存进长期记忆——下游任何把记忆
+      // 嵌进 prompt 的消费者（事件对账/进度审计/主叙事）都会被这条陈旧指令注入劫持（存档11111实测）。
       let summaryText: string;
-      const responseText = String(response).replace(/<\/input>/g, '').trim();
+      let responseText = String(response).replace(/<\/input>/g, '').replace(/<think>[\s\S]*?<\/think>/g, '').trim();
+      const unclosedThink = responseText.indexOf('<think>');
+      if (unclosedThink >= 0) responseText = responseText.slice(0, unclosedThink).trim();
 
       const jsonBlockMatch = responseText.match(/```(?:json)?\s*\n?([\s\S]*?)\n?```/);
       if (jsonBlockMatch?.[1]) {
