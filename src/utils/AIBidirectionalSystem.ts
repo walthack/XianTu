@@ -31,7 +31,7 @@ import { buildScenarioStoryPrompt, createScenarioPromptState } from '@/modules/s
 import { buildActionGatePrompt, getNarrativeTurn, pruneExpiredActionGates } from '@/utils/actionGate';
 import { reconcileNarrativeState } from '@/utils/narrativeStateReconciler';
 import { runProgressAudit, shouldRunAudit } from '@/services/progressAuditService';
-import { runEventReconcile, shouldRunReconcile } from '@/services/eventReconcileService';
+import { runEventReconcile, shouldRunReconcile, evidenceLikely, buildChainCandidates } from '@/services/eventReconcileService';
 import { detectNarratedPlayerDamage } from '@/utils/narratedDamage';
 import {
   detectNarratedInventoryGainEntries,
@@ -2373,7 +2373,9 @@ ${step1Text}
       const { useAPIManagementStore } = await import('@/stores/apiManagementStore');
       const apiStoreR = useAPIManagementStore();
       const _enabled = apiStoreR.isFunctionEnabled('event_reconcile');
-      const _should = shouldRunReconcile(rtForReconcile?.stallTurns);
+      // 双触发：停滞兜底阈值 || 证据即触发（本轮正文命中链上前几拍 → 当轮追账，玩家不用干等）
+      const _should = shouldRunReconcile(rtForReconcile?.stallTurns)
+        || (rtForReconcile ? evidenceLikely(textContent, buildChainCandidates(rtForReconcile)) : false);
       // 【临时黑匣子】把门控写进存档，落盘到后端供远程诊断（stall/enabled/shouldRun/hadErr）
       const _dbgSys = ((saveData as any).系统 ??= {}); const _dbgExt = (_dbgSys.扩展 ??= {});
       _dbgExt._reconcileDebug = { at: new Date().toISOString(), stall: rtForReconcile?.stallTurns, enabled: _enabled, shouldRun: _should, hadExecErr: hadExecutionError, ran: false };

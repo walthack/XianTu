@@ -149,3 +149,14 @@ test('runEventReconcile 端到端(注入generate)：落账后 flag 生效、返�
   assert.equal(flags['event.s06_03.void'], true);
   assert.equal(changes.length, 2);
 });
+
+test('evidenceLikely：正文命中事件名/beat 高重叠→触发；无关正文→不触发', async () => {
+  const { evidenceLikely } = await modPromise;
+  const cands = [
+    { id: 'q1', name: '秦桧初登场', beat: '秦桧在建康登场，与程宗扬初次相见', flagKey: 'event.q1.done' },
+    { id: 'q2', name: '秦桧归入麾下', beat: '秦桧决意投效', flagKey: 'event.q2.done' },
+  ];
+  assert.equal(evidenceLikely('厅中一名青衫文士拱手：「在下秦桧，见过程公子。」众人落座叙话，气氛渐热。', cands), true, '正文含事件名应触发');
+  assert.equal(evidenceLikely('夜色沉沉，一行人在渡口清点货物，商队伙计来回搬运，无事发生。', cands), false, '无关正文不触发');
+  assert.equal(evidenceLikely('短', cands), false, '过短正文不触发');
+});

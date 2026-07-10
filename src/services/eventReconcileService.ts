@@ -39,6 +39,27 @@ export function shouldRunReconcile(stallTurns: unknown): boolean {
   return n >= RECONCILE_STALL_THRESHOLD;
 }
 
+/**
+ * 证据即触发（快路）：本轮正文明显命中链上最前几拍（事件名出现在正文，或 beat bigram 高重叠）
+ * → 当轮就对账，不等停滞攒满阈值。实测痛点：叙事 LLM 几乎从不主动 set 事件 flag，
+ * 每一拍都靠对账追——若只有 10 轮兜底阈值，玩家做完任务还要干等 ~9 轮才推进。
+ * 纯字符串判定零成本；只在"大概率有据可落"时才多花一次对账调用。
+ */
+export function evidenceLikely(recentText: unknown, candidates: ChainCandidate[]): boolean {
+  const t = norm(typeof recentText === 'string' ? recentText : '');
+  if (t.length < 20) return false;
+  for (const cand of candidates.slice(0, 3)) {
+    // 事件名任意 bigram 命中即触发（"秦桧初登场"命中正文里的"秦桧"）——事件名是编辑起的短语，
+    // 全名几乎不会原样出现在叙事里。误触发代价=多一次对账调用（validator 保守，无害）。
+    for (const g of bigrams(norm(cand.name))) {
+      if (t.includes(g)) return true;
+    }
+    const beatBg = bigrams(norm(cand.beat).slice(0, 80));
+    if (beatBg.size >= 8 && bigramCoverage(beatBg, t) >= 0.35) return true;
+  }
+  return false;
+}
+
 interface RuntimeEventLike {
   id?: unknown;
   name?: unknown;
