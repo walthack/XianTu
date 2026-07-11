@@ -113,3 +113,26 @@ test('detects major narrated player damage on disastrous combat failure', async 
   assert.equal(detectNarratedPlayerDamage(text, [], makeSaveData(80, 100))?.amount, -40);
   assert.equal(detectNarratedPlayerDamage(text, [], makeSaveData(80, 100))?.ratio, 0.4);
 });
+
+test('narrated damage fallback never reduces a living player to the zero-health death state', async () => {
+  const { detectNarratedPlayerDamage } = await loadTs('../src/utils/narratedDamage.ts');
+  const text = '〔战斗:大失败,判定值:5,难度:40〕你被一刀贯穿胸口，鲜血喷溅，整个人重重摔倒。';
+  assert.equal(detectNarratedPlayerDamage(text, [], makeSaveData(5, 100))?.amount, -4);
+});
+
+test('unmarked zero health recovers as severe injury, while explicit player death remains zero', async () => {
+  const { recoverUnmarkedPlayerZeroHealth } = await loadTs('../src/utils/playerVitalGuard.ts');
+  const fainted = makeSaveData(0, 2400);
+  fainted.角色.身份 = { 名字: '程宗扬' };
+  assert.deepEqual(recoverUnmarkedPlayerZeroHealth(fainted, '程宗扬眼前一黑，昏了过去。'), {
+    oldValue: 0,
+    newValue: 24,
+    reason: '正文未明确写玩家死亡，气血归零按昏迷/重伤保底恢复至上限 1%',
+  });
+  assert.equal(fainted.角色.属性.气血.当前, 24);
+
+  const dead = makeSaveData(0, 2400);
+  dead.角色.身份 = { 名字: '程宗扬' };
+  assert.equal(recoverUnmarkedPlayerZeroHealth(dead, '程宗扬气绝身亡。'), null);
+  assert.equal(dead.角色.属性.气血.当前, 0);
+});

@@ -29,6 +29,7 @@ import { ensureSystemConfigHasNsfw } from '@/utils/nsfw';
 import { isSaveDataV3, migrateSaveDataToLatest } from '@/utils/saveMigration';
 import { normalizeInventoryCurrencies } from '@/utils/currencySystem';
 import { detectPlayerSectLeadership } from '@/utils/sectLeadershipUtils';
+import { recoverUnmarkedPlayerZeroHealth } from '@/utils/playerVitalGuard';
 
 function buildTechniqueProgress(inventory: Inventory | null) {
   const progress: Record<string, { 熟练度: number; 已解锁技能: string[] }> = {};
@@ -292,6 +293,17 @@ export const useGameStateStore = defineStore('gameState', {
      */
     loadFromSaveData(saveData: SaveData) {
       const v3 = (isSaveDataV3(saveData) ? saveData : migrateSaveDataToLatest(saveData).migrated) as any;
+
+      // 兼容修复：旧存档可能被 LLM 指令误扣至 0，但历史正文只写昏迷/受伤。
+      // 读档时先在内存中恢复，允许玩家继续游戏；下一次正常保存会将修复落盘。
+      const recentNarration = [
+        ...(Array.isArray(v3?.系统?.历史?.叙事) ? v3.系统.历史.叙事.slice(-3).map((item: any) => item?.content) : []),
+        ...(Array.isArray(v3?.社交?.记忆?.短期记忆) ? v3.社交.记忆.短期记忆.slice(-3) : []),
+      ].filter((item: unknown): item is string => typeof item === 'string').join('\n');
+      const recoveredHealth = recoverUnmarkedPlayerZeroHealth(v3, recentNarration);
+      if (recoveredHealth) {
+        console.warn(`[GameState] 已恢复非致死误扣气血: ${recoveredHealth.oldValue} → ${recoveredHealth.newValue}`);
+      }
 
       const deepCopy = <T>(value: T): T => JSON.parse(JSON.stringify(value));
 

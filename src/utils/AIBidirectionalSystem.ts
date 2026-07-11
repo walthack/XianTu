@@ -34,6 +34,7 @@ import { reconcileNarrativeState } from '@/utils/narrativeStateReconciler';
 import { runProgressAudit, shouldRunAudit } from '@/services/progressAuditService';
 import { runEventReconcile, shouldRunReconcile, evidenceLikely, buildChainCandidates } from '@/services/eventReconcileService';
 import { detectNarratedPlayerDamage } from '@/utils/narratedDamage';
+import { recoverUnmarkedPlayerZeroHealth } from '@/utils/playerVitalGuard';
 import {
   detectNarratedInventoryGainEntries,
   detectNarratedInventoryPossessions,
@@ -2305,6 +2306,19 @@ ${step1Text}
         summarize: this._summarizeValueForChangeLog.bind(this),
       });
       commandAppliedChanges.push(...narrativeStateChanges);
+    }
+
+    // LLM 指令可直写气血，且 UI 将 0 视为硬死亡；正文未明确写玩家死亡时，
+    // 必须把误扣的 0 恢复为濒死/昏迷保底，不能把“昏过去”变成存档死锁。
+    const nonfatalRecovery = recoverUnmarkedPlayerZeroHealth(saveData, textContent);
+    if (nonfatalRecovery) {
+      console.warn(`[AI双向系统] 非致死叙事气血保底: ${nonfatalRecovery.oldValue} → ${nonfatalRecovery.newValue}`);
+      commandAppliedChanges.push({
+        key: '角色.属性.气血.当前',
+        action: 'set',
+        oldValue: this._summarizeValueForChangeLog('角色.属性.气血.当前', nonfatalRecovery.oldValue, 'set'),
+        newValue: this._summarizeValueForChangeLog('角色.属性.气血.当前', nonfatalRecovery.newValue, 'set'),
+      });
     }
 
     // 进度审计员（第二层，opt-in，默认关）：确定性兜底之后跑。gated + await；

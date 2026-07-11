@@ -77,11 +77,12 @@ export function detectNarratedPlayerDamage(
   const current = get(saveData, PLAYER_HEALTH_PATH);
   const max = get(saveData, '角色.属性.气血.上限');
   if (typeof current !== 'number' || typeof max !== 'number') return null;
-  if (!Number.isFinite(current) || !Number.isFinite(max) || current <= 0 || max <= 0) return null;
+  if (!Number.isFinite(current) || !Number.isFinite(max) || current <= 1 || max <= 0) return null;
 
   const severity: NarratedPlayerDamage['severity'] = judgement.margin <= -15 ? 'major' : 'minor';
   const ratio = severity === 'major' ? 0.4 : getMinorDamageRatio(text);
-  const amount = -Math.max(1, Math.min(current, Math.round(max * ratio)));
+  // 自动补账只补“受伤”，没有明确死亡叙事时绝不可把气血扣到 UI 的死亡值 0。
+  const amount = -Math.min(current - 1, Math.max(1, Math.round(max * ratio)));
 
   return {
     amount,
