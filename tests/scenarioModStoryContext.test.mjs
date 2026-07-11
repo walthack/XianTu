@@ -91,6 +91,19 @@ test('story prompt includes current objectives and excludes future plot content'
   assert.match(prompt, /不得提前完成未来事件/);
 });
 
+test('Canon Rail surfaces the active beat specific forbidden rewrites to the narrator', async () => {
+  const { buildScenarioStoryPrompt } = await loadTs('../src/modules/scenarioMods/storyContext.ts');
+  const save = await buildStorySave();
+  const runtime = save.世界.状态.剧本模组;
+  runtime.modId = 'lcq.stage_01';
+  runtime.events[0].id = 'lcq.event.s01_02';
+  runtime.activeEventIds = ['lcq.event.s01_02'];
+
+  const prompt = buildScenarioStoryPrompt(save);
+
+  assert.match(prompt, /本拍特定禁止改写：段强存活；段强失踪；替换死亡结果/);
+});
+
 test('story prompt names the next stage when the current stage has no next event', async () => {
   const { buildScenarioStoryPrompt } = await loadTs('../src/modules/scenarioMods/storyContext.ts');
   const save = await buildStorySave();

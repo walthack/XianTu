@@ -307,8 +307,11 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
         ].filter(Boolean).join('；');
         const axisLine = formatAxisBeat(event);
         const contract = getCanonRailContract(canonRail, event.id);
+        const forbiddenLine = contract?.forbiddenInCanon?.length
+          ? `  本拍特定禁止改写：${contract.forbiddenInCanon.join('；')}。\n`
+          : '';
         const railLine = contract
-          ? `【Canon Rail·默认正典】本拍必须达成：${contract.mustReach}\n  允许补足：${contract.allowedElaboration}\n  禁止：不得以 void、替代结局、提前跳拍或新增 IF 分支改写此结果；只有用户显式进入 IF 支线时才可改写正典走向。\n  `
+          ? `【Canon Rail·默认正典】本拍必须达成：${contract.mustReach}\n  允许补足：${contract.allowedElaboration}\n${forbiddenLine}  禁止：不得以 void、替代结局、提前跳拍或新增 IF 分支改写此结果；只有用户显式进入 IF 支线时才可改写正典走向。\n  `
           : '';
         return `- ${event.name}（事件ID：${event.id}）：${event.description}\n  ${axisLine ? `${axisLine}\n  ` : ''}${railLine}相关正典：${context || '无'}\n  完成条件：${formatConditions(event.completion)}`;
       }).join('\n')
