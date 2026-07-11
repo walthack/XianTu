@@ -28,6 +28,7 @@ import { buildScenarioCanonPrompt, guardScenarioModCommands } from '@/modules/sc
 import { advanceScenarioRuntime, STEERING_DIVERGENCE_COOLDOWN } from '@/modules/scenarioMods/runtime';
 import { applyMilestoneRewards } from '@/modules/scenarioMods/milestoneRewards';
 import { buildScenarioStoryPrompt, createScenarioPromptState } from '@/modules/scenarioMods/storyContext';
+import { stripNarrativeEntityTypeConflicts } from '@/modules/scenarioMods/characterResolver';
 import { buildActionGatePrompt, getNarrativeTurn, pruneExpiredActionGates } from '@/utils/actionGate';
 import { reconcileNarrativeState } from '@/utils/narrativeStateReconciler';
 import { runProgressAudit, shouldRunAudit } from '@/services/progressAuditService';
@@ -1903,7 +1904,16 @@ ${step1Text}
     }
 
     const timePrefix = this._formatGameTime((saveData as any).元数据?.时间);
-    const textContent = sanitizeAITextForDisplay(response.text || '').trim();
+    let textContent = sanitizeAITextForDisplay(response.text || '').trim();
+    // canonGuard 过去只校验 JSON 指令；正文里的“人变剑/马/功法”会直接污染记忆并被下一轮放大。
+    // 仅在严格剧本存档启用低误伤的实体类型拦截，留下冲突日志便于追查。
+    if ((saveData as any)?.世界?.状态?.剧本模组?.modId && textContent) {
+      const narrativeGuard = stripNarrativeEntityTypeConflicts(textContent);
+      if (narrativeGuard.conflicts.length) {
+        console.warn('[正典叙事守卫] 已移除冲突句：', narrativeGuard.conflicts);
+        textContent = narrativeGuard.text;
+      }
+    }
     const midTermContent = sanitizeAITextForDisplay(response.mid_term_memory || '').trim();
 
     // 处理 text：可选写入叙事历史；可选写入短期记忆

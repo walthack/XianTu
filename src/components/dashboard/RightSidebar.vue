@@ -243,6 +243,8 @@ import { useUIStore } from '@/stores/uiStore';
 import type { StatusEffect } from '@/types/game.d.ts';
 import { formatRealmWithStage } from '@/utils/realmUtils';
 import { calculateAgeFromBirthdate } from '@/utils/lifespanCalculator';
+import { getNarrativeAnchorEvent } from '@/modules/scenarioMods/runtime';
+import { resolveScenarioEventNarrative } from '@/modules/scenarioMods/eventNarrativeView';
 import { useI18n } from '@/i18n';
 
 const { t } = useI18n();
@@ -278,14 +280,13 @@ const questMain = computed(() => {
   const rt: any = (gameStateStore.worldState as any)?.剧本模组;
   if (!rt || typeof rt !== 'object') return null;
   const chapter = (rt.chapters || []).find((c: any) => c.id === rt.currentChapterId);
-  const activeIds = new Set(rt.activeEventIds || []);
-  // 只显示"当前该做的那条"主线：active 事件按 axisSeq 升序取最前面的未完成事件。
-  // 很多关卡事件无顺序门控、会一次性全部 active（整关剁成 N 拍），全铺出来既是墙又常近义重复；
-  // 只亮当前一拍最贴近"下一步做什么"。优先 objective（玩家视角+地点），无则回退事件名。
-  const activeEvents = (rt.events || [])
-    .filter((e: any) => activeIds.has(e.id))
-    .sort((a: any, b: any) => (typeof a.axisSeq === 'number' ? a.axisSeq : Infinity) - (typeof b.axisSeq === 'number' ? b.axisSeq : Infinity));
-  const events = activeEvents.slice(0, 1).map((e: any) => e.objective || e.name).filter(Boolean);
+  // 与主叙事/flag guard 共用同一个运行时锚点，避免 UI 单独从 activeEventIds 选出资料事件。
+  const anchor = getNarrativeAnchorEvent(rt);
+  const activeEvents = anchor ? [anchor] : [];
+  const events = activeEvents.slice(0, 1).map((e: any) => {
+    const view = resolveScenarioEventNarrative(e, rt.flags || {});
+    return view.objective || view.name;
+  }).filter(Boolean);
   const moreCount = Math.max(0, activeEvents.length - 1);
   const ready = rt.nextStageReadyId && rt.nextStageReadyId === rt.nextStageId;
   const cleared = ready && !chapter && !events.length;

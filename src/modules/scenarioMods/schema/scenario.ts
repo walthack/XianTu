@@ -63,6 +63,17 @@ export interface ScenarioModEvent {
   relatedCharacterIds?: string[];
   relatedFactionIds?: string[];
   locationId?: string;
+  objective?: string;
+  narrativeVariants?: ScenarioModEventNarrativeVariant[];
+}
+
+/** 已发生分歧下的叙事投影；不改完成链，只替换玩家看到/LLM 续写的当前事件表述。 */
+export interface ScenarioModEventNarrativeVariant {
+  when: ScenarioCondition[];
+  name?: string;
+  description?: string;
+  axisBeat?: string;
+  objective?: string;
 }
 
 export interface ScenarioModChapter {

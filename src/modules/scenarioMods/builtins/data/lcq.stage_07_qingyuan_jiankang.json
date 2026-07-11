@@ -4249,7 +4249,22 @@
           "liuchao.character.xiao_zi",
           "liuchao.character.meng_fei_qing"
         ],
-        "objective": "向孟非卿报告谢艺之死"
+        "objective": "向孟非卿报告谢艺之死",
+        "narrativeVariants": [
+          {
+            "when": [
+              {
+                "path": "flags.event.s06_03.void",
+                "operator": "eq",
+                "value": true
+              }
+            ],
+            "name": "谢艺生还的后果",
+            "description": "孟非卿得知谢艺在鬼王峒重伤却生还，转而厘清鬼王峒变故、左武军旧案与黑魔海线索。",
+            "axisBeat": "孟非卿确认谢艺仍然生还，要求程宗扬交代鬼王峒变故并商议后续调查。",
+            "objective": "向孟非卿说明谢艺生还与鬼王峒变故"
+          }
+        ]
       },
       {
         "id": "lcq.event.s07_06_water_assassins",

@@ -196,6 +196,62 @@ test('early-set done flags settle never-activated critical events; stage becomes
   assert.equal(rt.nextStageReadyId, 'stage2', 'stage_ready fires');
 });
 
+test('completed chapter events deterministically settle its standard chapter flag and activate the next chapter', async () => {
+  const { advanceScenarioRuntime } = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  const save = { 世界: { 状态: { 剧本模组: {
+    currentChapterId: 'c1',
+    chapters: [
+      { id: 'c1', eventIds: ['e1'], completion: [{ path: 'flags.chapter.c1.done', operator: 'eq', value: true }] },
+      { id: 'c2', eventIds: [], activation: [{ path: 'flags.chapter.c1.done', operator: 'eq', value: true }] },
+    ],
+    events: [{ id: 'e1', completion: [{ path: 'flags.event.e1.done', operator: 'eq', value: true }] }],
+    activeEventIds: ['e1'], completedEventIds: [], completedChapterIds: [],
+    flags: { 'event.e1.done': true, 'chapter.c1.done': false },
+  } } } };
+  const { saveData, transitions } = advanceScenarioRuntime(save);
+  const runtime = saveData.世界.状态.剧本模组;
+  assert.equal(runtime.flags['chapter.c1.done'], true);
+  assert.equal(runtime.currentChapterId, 'c2');
+  assert.deepEqual(transitions.map(t => t.type), ['event_completed', 'chapter_completed', 'chapter_activated']);
+});
+
+test('stage_07 non-critical Qin Hui material event remains data but does not become the mainline anchor', async () => {
+  const { advanceScenarioRuntime } = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  const orphan = 'lcq.event.s07_debut_qinhui';
+  const save = { 世界: { 状态: { 剧本模组: {
+    modId: 'lcq.stage_07_qingyuan_jiankang', currentChapterId: 'c1',
+    chapters: [{ id: 'c1', eventIds: [orphan] }],
+    events: [{ id: orphan, completion: [{ path: 'flags.event.s07_debut_qinhui.done', operator: 'eq', value: true }] }],
+    activeEventIds: [orphan], completedEventIds: [], completedChapterIds: [], flags: {},
+  } } } };
+  const { saveData } = advanceScenarioRuntime(save);
+  const runtime = saveData.世界.状态.剧本模组;
+  assert.equal(runtime.events.length, 1);
+  assert.deepEqual(runtime.chapters[0].eventIds, [orphan]);
+  assert.deepEqual(runtime.activeEventIds, [orphan]);
+});
+
+test('legacy chapter with only active non-critical material auto-advances after its critical chain was already completed', async () => {
+  const { advanceScenarioRuntime } = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  const critical = id => ({ id, critical: true, completion: [{ path: `flags.${id}.done`, operator: 'eq', value: true }] });
+  const material = { id: 'qinhui', critical: false, completion: [{ path: 'flags.qinhui.done', operator: 'eq', value: true }] };
+  const save = { 世界: { 状态: { 剧本模组: {
+    currentChapterId: 'qingyuan',
+    chapters: [
+      { id: 'qingyuan', eventIds: ['e1', 'e2', 'qinhui'], completion: [{ path: 'flags.chapter.qingyuan.done', operator: 'eq', value: true }] },
+      { id: 'jiankang', eventIds: [], activation: [{ path: 'flags.chapter.qingyuan.done', operator: 'eq', value: true }] },
+    ],
+    events: [critical('e1'), critical('e2'), material],
+    activeEventIds: ['qinhui'], completedEventIds: ['e1', 'e2'], completedChapterIds: [],
+    flags: { 'e1.done': true, 'e2.done': true, 'qinhui.done': false, 'chapter.qingyuan.done': false },
+  } } } };
+  const { saveData } = advanceScenarioRuntime(save);
+  const runtime = saveData.世界.状态.剧本模组;
+  assert.equal(runtime.currentChapterId, 'jiankang');
+  assert.equal(runtime.flags['chapter.qingyuan.done'], true);
+  assert.ok(!runtime.activeEventIds.includes('qinhui'));
+});
+
 test('canon guard protects core identity fields (gender/race/灵根/出生日期) of canon characters', async () => {
   const { guardScenarioModCommands } = await loadTs('../src/modules/scenarioMods/canonGuard.ts');
   const save = await buildRuntimeSave();
@@ -220,6 +276,15 @@ test('canon guard rejects deleting a canon character from the roster', async () 
   assert.equal(result.rejected.length, 1);
   assert.match(result.rejected[0].reason, /正典人物不可删除/);
   assert.equal(result.accepted.length, 1);
+});
+
+test('global alias identity guard recalls 青骓 as 崔茂 and removes person-to-weapon narration', async () => {
+  const { findRegistryIdentitiesByContext, stripNarrativeEntityTypeConflicts } = await loadTs('../src/modules/scenarioMods/characterResolver.ts');
+  const identities = findRegistryIdentitiesByContext('星月湖八骏正在议事');
+  assert.ok(identities.some(item => item.canonicalName === '崔茂' && item.aliases.includes('青骓')));
+  const guarded = stripNarrativeEntityTypeConflicts('青骓乃岳帅佩剑。程宗扬转身离开。');
+  assert.equal(guarded.text, '程宗扬转身离开。');
+  assert.match(guarded.conflicts[0], /青骓/);
 });
 
 test('milestone rewards grant titles on stage_ready at story-correct stage; AI cannot self-grant', async () => {

@@ -194,6 +194,14 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
       validateIdArray(entity.relatedCharacterIds, `${entity.__path}.relatedCharacterIds`, add);
       validateIdArray(entity.relatedFactionIds, `${entity.__path}.relatedFactionIds`, add);
       optionalId(entity.locationId, `${entity.__path}.locationId`, add);
+      optionalString(entity.objective, `${entity.__path}.objective`, add);
+      forEachRecord(entity.narrativeVariants, `${entity.__path}.narrativeVariants`, (variant, variantPath) => {
+        validateConditions(variant.when, `${variantPath}.when`, add);
+        optionalString(variant.name, `${variantPath}.name`, add);
+        optionalString(variant.description, `${variantPath}.description`, add);
+        optionalString(variant.axisBeat, `${variantPath}.axisBeat`, add);
+        optionalString(variant.objective, `${variantPath}.objective`, add);
+      });
     });
     validateEntityArray(scenario.chapters, 'scenario.chapters', chapterIds, add, entity => {
       requireString(entity.title, `${entity.__path}.title`, add);

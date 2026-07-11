@@ -1,5 +1,8 @@
 import type { SaveData } from '@/types/game';
 import { formatEarnedTitles } from './milestoneRewards';
+import { getNarrativeAnchorEvent } from './runtime';
+import { resolveScenarioEventNarrative } from './eventNarrativeView';
+import { findRegistryIdentitiesByContext } from './characterResolver';
 
 import type {
   ScenarioCondition,
@@ -240,8 +243,8 @@ export function createScenarioPromptState<T extends SaveData>(saveData: T): T {
   if (!runtime) return promptState;
 
   runtime.chapters = runtime.chapters.filter(chapter => chapter.id === runtime.currentChapterId);
-  const activeIds = new Set(runtime.activeEventIds || []);
-  runtime.events = runtime.events.filter(event => activeIds.has(event.id));
+  const anchor = getNarrativeAnchorEvent(runtime as any);
+  runtime.events = anchor ? [anchor] : [];
   return promptState;
 }
 
@@ -250,8 +253,9 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
   if (!runtime) return '';
 
   const chapter = runtime.chapters.find(item => item.id === runtime.currentChapterId);
-  const activeIds = new Set(runtime.activeEventIds || []);
-  const activeEvents = runtime.events.filter(event => activeIds.has(event.id));
+  const anchor = getNarrativeAnchorEvent(runtime as any);
+  const activeIds = new Set(anchor ? [anchor.id] : []);
+  const activeEvents = anchor ? [anchor] : [];
   const characters = runtime.canon?.characters || [];
   const factions = runtime.canon?.factions || [];
   const locations = runtime.canon?.locations || [];
@@ -270,7 +274,8 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
     .join('\n');
 
   const eventSection = activeEvents.length
-    ? activeEvents.map(event => {
+    ? activeEvents.map(rawEvent => {
+        const event = resolveScenarioEventNarrative(rawEvent, runtime.flags || {});
         const context = [
           namesForIds(event.relatedCharacterIds, characters),
           namesForIds(event.relatedFactionIds, factions),
@@ -337,6 +342,22 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
     ? `${contextText}\n【在场】${sameLocationNames.slice(0, 12).join('、')}`
     : contextText;
   const focusedCharacterSection = buildFocusedCharacterPrompt(runtime, activeEvents, focusContext, favByName);
+  // 关卡投影只带“本关会登场”的角色；但玩家/记忆里可能先提到别名人物。
+  // 用全局正典的最小身份卡补洞，避免模型把“青骓”这类人名望文生义成兵器。
+  const identityContext = [
+    focusContext,
+    chapter?.title || '',
+    chapter?.summary || '',
+    ...activeEvents.map(event => `${event.name} ${event.description} ${(event.relatedFactionIds || []).map(id => factions.find(f => f.id === id)?.name || '').join(' ')}`),
+  ].join('\n');
+  const inRuntime = new Set(characters.map(character => character.name));
+  const globalIdentityLines = findRegistryIdentitiesByContext(identityContext)
+    .filter(identity => !inRuntime.has(identity.canonicalName))
+    .map(identity => `- ${identity.aliases.length ? `${identity.aliases.join('、')}＝` : ''}${identity.canonicalName}：${identity.identity || '正典人物'}`)
+    .slice(0, 12);
+  const globalIdentitySection = globalIdentityLines.length
+    ? `## 别名与实体定锚（不可望文生义）\n${globalIdentityLines.join('\n')}\n以上均为人物姓名/别名，不是兵器、坐骑、功法、物品或可另造的同名角色。`
+    : '';
 
   // 声望与认知闭环：当前值+档位醒目注入（静态 REPUTATION_GUIDE 埋在 worldStandards 里 LLM 不消费——
   // 实测籍籍无名的主角被唐使"底细尽在掌握"）
@@ -443,7 +464,12 @@ ${nextSection}
 ## 剧情标记
 ${JSON.stringify(runtime.flags || {})}
 
-${focusedCharacterSection ? `${focusedCharacterSection}\n\n` : ''}${loadBearingLine ? `${loadBearingLine}\n\n` : ''}${steeringLine ? `${steeringLine}\n\n` : ''}${reputationLine}\n\n${relationLine ? `${relationLine}\n\n` : ''}${improvLine}\n\n【主动推进剧情，不要停在原地等玩家】：
+${focusedCharacterSection ? `${focusedCharacterSection}\n\n` : ''}${globalIdentitySection ? `${globalIdentitySection}\n\n` : ''}${loadBearingLine ? `${loadBearingLine}\n\n` : ''}${steeringLine ? `${steeringLine}\n\n` : ''}${reputationLine}\n\n${relationLine ? `${relationLine}\n\n` : ''}${improvLine}\n\n【正典叙事事实约束】：
+1. 已知人物的姓名、别名、身份、物种、势力、亲属与政治关系均是事实字段：不得把人物写成兵器、坐骑、功法、物品或新角色；不得把称号、别名拆成另一个实体。
+2. 人物之间的血缘、主从、婚配、同党、结盟、仇怨，只有上文正典人物档案或当前事件明确写出时才可断言。没有依据时只能写“尚未可知/传闻待证”，绝不可因同姓、官职、阵营或历史常识擅自补关系。
+3. 叙事正文也必须遵守上述正典；这不是仅约束 tavern_commands 的规则。若玩家要求与正典矛盾的事实，明确说明冲突并以正典版本续写。
+
+【主动推进剧情，不要停在原地等玩家】：
 
 1. 每一段叙事都要朝“当前事件”的完成条件前进——主动设置场景、引入相关人物、制造契机，引导玩家走向该事件的达成，而不是只描述当前一幕然后停下。
 2. 【每轮必做的收尾核对——叙事与数据必须同步】逐项检查本轮叙事，凡发生以下情况**必须**输出对应指令（只写在正文不发指令＝东西凭空消失，实测：云苍峰赠玉简正文收下了背包却没有）：

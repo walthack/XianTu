@@ -16,7 +16,7 @@ export interface ScenarioRuntimeTransition {
   id: string;
 }
 
-interface RuntimeState extends ScenarioProgressState {
+export interface RuntimeState extends ScenarioProgressState {
   currentChapterId: string | null;
   flags: Record<string, ScenarioFlagValue>;
   nextStageId?: string | null;
@@ -107,6 +107,22 @@ function isCriticalStoryEvent(event: ScenarioModEvent): boolean {
   return Boolean(event.axisBeat || event.axisId || typeof event.axisSeq === 'number');
 }
 
+/** 唯一主线锚点：当前章节中最早的已激活、未完成承重事件。
+ * runtime 可同时保留资料/并行事件，但主叙事、UI 与 LLM 完成权限只能围绕这一拍推进。 */
+export function getNarrativeAnchorEvent(runtime: Pick<RuntimeState, 'chapters' | 'events' | 'currentChapterId' | 'activeEventIds' | 'completedEventIds'>): ScenarioModEvent | null {
+  const chapter = (runtime.chapters || []).find(item => item.id === runtime.currentChapterId);
+  const active = new Set(runtime.activeEventIds || []);
+  const completed = new Set(runtime.completedEventIds || []);
+  const order = new Map((chapter?.eventIds || []).map((id, index) => [id, index]));
+  const chapterHasCritical = (runtime.events || []).some(event => order.has(event.id) && isCriticalStoryEvent(event));
+  const candidates = (runtime.events || [])
+    .filter(event => active.has(event.id) && !completed.has(event.id) && order.has(event.id));
+  const anchored = candidates.filter(isCriticalStoryEvent);
+  // 有承重链的章节绝不让资料/彩蛋事件顶替主线；承重链完成后交给 runtime 自动收章。
+  return (chapterHasCritical ? anchored : candidates)
+    .sort((a, b) => (a.axisSeq ?? Infinity) - (b.axisSeq ?? Infinity) || (order.get(a.id)! - order.get(b.id)!))[0] || null;
+}
+
 export function createScenarioProgress(mod: ScenarioMod): ScenarioProgressState {
   return {
     chapters: structuredClone(mod.scenario.chapters || []),
@@ -145,6 +161,33 @@ function normalizeRuntimeFlags(runtime: RuntimeState): void {
       delete flags[key];
     } else {
       flags[key] = coerceScalar(value);
+    }
+  }
+}
+
+/** 当一章列出的事件均已完成时，补上该章的标准完成 flag。
+ *
+ * 事件完成由 LLM 指令或事件对账落账；章节 flag 却没有独立叙事事实，继续让模型额外填写会
+ * 造成“所有事件已完成但章节永远不切换”的死锁。只处理标准的 flags.<key> = true 完成条件，
+ * 其他自定义条件仍保留原有显式判定，避免覆盖作者定义的额外门槛。
+ */
+function settleCompletedChapterFlags(runtime: RuntimeState): void {
+  const completed = new Set(runtime.completedEventIds || []);
+  const flags = runtime.flags as Record<string, unknown>;
+  for (const chapter of runtime.chapters || []) {
+    const listedIds = chapter.eventIds || [];
+    const criticalIds = listedIds.filter(id => {
+      const event = runtime.events.find(item => item.id === id);
+      return Boolean(event && isCriticalStoryEvent(event));
+    });
+    const eventIds = criticalIds.length ? criticalIds : listedIds;
+    const completion = chapter.completion || [];
+    const standardFlagCompletion = completion.length > 0 && completion.every(condition =>
+      condition.path.startsWith('flags.') && condition.operator === 'eq' && condition.value === true,
+    );
+    if (!eventIds.length || !standardFlagCompletion || !eventIds.every(id => completed.has(id))) continue;
+    for (const condition of completion) {
+      flags[condition.path.slice('flags.'.length)] = true;
     }
   }
 }
@@ -286,6 +329,9 @@ export function advanceScenarioRuntime(saveData: SaveData): {
       transitions.push({ type: 'event_completed', id: event.id });
     }
   }
+
+  // 事件落账后立即派生本章完成 flag，保证后续章节 activation 能在同一轮生效。
+  settleCompletedChapterFlags(runtime);
 
   if (current && hasCompletion(current.completion) && conditionsMatch(current.completion, next, runtime)) {
     if (!runtime.completedChapterIds.includes(current.id)) runtime.completedChapterIds.push(current.id);

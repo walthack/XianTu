@@ -1,4 +1,5 @@
 import type { SaveData } from '@/types/game';
+import { getNarrativeAnchorEvent } from './runtime';
 
 import type {
   ScenarioContentAccessRule,
@@ -19,7 +20,8 @@ interface ScenarioRuntimeState {
   currentChapterId?: string | null;
   activeEventIds?: string[];
   chapters?: Array<{ id: string; eventIds?: string[] }>;
-  events?: Array<{ id: string }>;
+  events?: Array<{ id: string; critical?: boolean; axisSeq?: number; axisId?: string | null; axisBeat?: string }>;
+  completedEventIds?: string[];
   opening?: {
     playerCharacterId?: string;
   };
@@ -290,10 +292,11 @@ function findSectMembershipViolation(runtime: ScenarioRuntimeState, command: Com
 }
 
 function getScenarioEventIdsAllowedForCompletion(runtime: ScenarioRuntimeState): Set<string> {
-  const allowed = new Set<string>(runtime.activeEventIds || []);
   const currentChapter = (runtime.chapters || []).find(chapter => chapter.id === runtime.currentChapterId);
-  for (const eventId of currentChapter?.eventIds || []) allowed.add(eventId);
-  return allowed;
+  // 初始化/单测等尚未跑 activation 的时刻，仍只允许当前章最早一拍，而不是退化为“全都可写”。
+  const activeEventIds = runtime.activeEventIds?.length ? runtime.activeEventIds : currentChapter?.eventIds || [];
+  const anchor = getNarrativeAnchorEvent({ ...runtime, activeEventIds } as any);
+  return new Set(anchor ? [anchor.id] : []);
 }
 
 function findScenarioFlagViolation(runtime: ScenarioRuntimeState, command: CommandLike, key: string): string | null {
@@ -475,5 +478,6 @@ ${affiliationRules.length ? `- 人物势力归属：\n${affiliationRules.join('\
 Mod 已声明的实体与字段是权威正典。可以补充未定义内容，但不得生成同 ID 或同名替代品，不得用自动生成内容覆盖 Mod 已有值。
 restricted 或 exclusive 内容只能由列出的正典身份持有；不得让其他 NPC 或独立玩家学习、复制、继承或获得等价变体。
 人物 affiliation 默认在同类别内排他：可以同时拥有宗派、军队、国家等不同类别身份，但不得被写入另一个同类势力。
+人物姓名、别名、称号均指向同一个既有实体：不得望文生义地改写为兵器、坐骑、功法、物品或同名新角色。人物间血缘、主从、婚配、同党、结盟与仇怨必须有本正典或当前事件的明确依据；同姓、官职、阵营、历史常识都不是建立关系的依据。叙事正文与 tavern_commands 同受此约束。
 不得重命名、删除或覆盖锁定正典；除使用 set 更新“世界.状态.剧本模组.flags.*”外，不得生成修改“世界.状态.剧本模组”或“系统.扩展.剧本模组”的 tavern_commands。`;
 }

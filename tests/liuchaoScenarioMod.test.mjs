@@ -116,7 +116,7 @@ test('PR8 activates its opening events while hiding future chapters from story c
   assert.equal(runtime.currentChapterId, 'liuchao.chapter.grassland_arrival');
   assert.deepEqual(runtime.activeEventIds, ['liuchao.event.first_contact', 'liuchao.event.ridge_attack']);
   assert.deepEqual(promptState.世界.状态.剧本模组.chapters.map(item => item.id), ['liuchao.chapter.grassland_arrival']);
-  assert.equal(promptState.世界.状态.剧本模组.events.length, 2);
+  assert.equal(promptState.世界.状态.剧本模组.events.length, 1, 'prompt 只暴露当前主线锚点，避免并列 active 事件把叙事拉散');
   assert.match(storyPrompt, /当前章节：月牙平原/);
   assert.match(storyPrompt, /山丘上的异乡人/);
   assert.doesNotMatch(storyPrompt, /鹰帜压境/);

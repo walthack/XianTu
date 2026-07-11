@@ -188,6 +188,67 @@ export function hasRegistryEntry(name: string): boolean {
   return byName.has(name);
 }
 
+/**
+ * 供叙事提示词按姓名或别名取回“人物而非道具”的最小身份卡。
+ * 不暴露后续剧情，只返回跨关稳定的身份与别名事实。
+ */
+export function getRegistryIdentity(name: string): { canonicalName: string; aliases: string[]; identity: string } | null {
+  const entry = byName.get(name);
+  if (!entry) return null;
+  return {
+    canonicalName: entry.canonicalName,
+    aliases: unique(entry.aliases || []),
+    identity: compact(entry.staticProfile?.identitySummary || '', 180),
+  };
+}
+
+/** 仅以当前已出现的势力名召回其成员，补足关卡投影未携带的别名人物。 */
+export function findRegistryIdentitiesByContext(context: string, limit = 12): Array<{ canonicalName: string; aliases: string[]; identity: string }> {
+  const source = String(context || '');
+  if (!source) return [];
+  const matches: Array<{ canonicalName: string; aliases: string[]; identity: string }> = [];
+  const seen = new Set<string>();
+  for (const entry of (registryJson as { characters: RegistryEntry[] }).characters || []) {
+    const identity = String(entry.staticProfile?.identitySummary || '');
+    const aliases = unique(entry.aliases || []);
+    const directlyMentioned = [entry.canonicalName, ...aliases].some(key => key.length >= 2 && source.includes(key));
+    // 只从已在当前场景出现的明确势力词补召回，避免把无关人物和未来剧情塞进上下文。
+    const factionMentioned = ['星月湖'].some(faction => source.includes(faction) && identity.includes(faction));
+    if (!directlyMentioned && !factionMentioned) continue;
+    if (seen.has(entry.canonicalName)) continue;
+    seen.add(entry.canonicalName);
+    matches.push({ canonicalName: entry.canonicalName, aliases, identity: compact(identity, 180) });
+    if (matches.length >= limit) break;
+  }
+  return matches;
+}
+
+/**
+ * 对正文做低误伤的最后一道确定性拦截：已登记为“人物”的姓名/别名，不能在同一句
+ * 被断言为兵器、坐骑、功法或物品。无法判断的关系叙述交由提示词约束，不能用正则硬删。
+ */
+export function stripNarrativeEntityTypeConflicts(text: string): { text: string; conflicts: string[] } {
+  const parts = String(text || '').split(/([。！？\n]+)/);
+  const conflicts: string[] = [];
+  const protectedNames = [...byName.keys()].filter(name => name.length >= 2);
+  const bannedType = '佩剑|宝剑|断剑|长剑|兵器|武器|法器|坐骑|战马|马匹|功法|秘笈|丹药|玉符';
+  const escapeRegExp = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const kept: string[] = [];
+  for (let index = 0; index < parts.length; index += 2) {
+    const sentence = parts[index] || '';
+    const tail = parts[index + 1] || '';
+    const offender = protectedNames.find(name => new RegExp(
+      `${escapeRegExp(name)}(?:.{0,8}(?:是|乃|为|作).{0,6}|\\s*(?:—|——|：).{0,8})(?:${bannedType})`,
+    ).test(sentence));
+    if (offender) {
+      conflicts.push(`正典人物/别名“${offender}”被叙事改写为非人物实体`);
+      continue;
+    }
+    kept.push(sentence, tail);
+  }
+  return { text: kept.join('').trim(), conflicts };
+}
+
 /** 取某角色的正典人格底线（principles），供运行时投影到 社交.关系 NPC.人格底线。无则空数组。 */
 export function getRegistryBottomLine(name: string): string[] {
   const entry = byName.get(name);
