@@ -294,6 +294,14 @@ test('timeline guard prevents NPC memory from naming an unintroduced canonical c
   assert.match(guarded.conflicts[0], /潘金莲/);
 });
 
+test('narrative canon guards keep alias-named allies and ordinary martial sentences intact', async () => {
+  const { stripNarrativeEntityTypeConflicts, stripNarrativeUnintroducedCharacters } = await loadTs('../src/modules/scenarioMods/characterResolver.ts');
+  assert.equal(stripNarrativeEntityTypeConflicts('青骓为他牵来一匹战马。').text, '青骓为他牵来一匹战马。');
+  assert.equal(stripNarrativeEntityTypeConflicts('崔茂作势要拔出腰间佩剑。').text, '崔茂作势要拔出腰间佩剑。');
+  const guarded = stripNarrativeUnintroducedCharacters('碧奴开口。那贱婢竟敢。潘金莲来了。', ['碧奴']);
+  assert.equal(guarded.text, '碧奴开口。那贱婢竟敢。');
+});
+
 test('milestone rewards grant titles on stage_ready at story-correct stage; AI cannot self-grant', async () => {
   const { applyMilestoneRewards, formatEarnedTitles } = await loadTs('../src/modules/scenarioMods/milestoneRewards.ts');
   const { guardScenarioModCommands } = await loadTs('../src/modules/scenarioMods/canonGuard.ts');

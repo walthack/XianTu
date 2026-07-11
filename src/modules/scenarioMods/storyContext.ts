@@ -33,6 +33,7 @@ interface StoryRuntime {
   activeEventIds: string[];
   completedChapterIds: string[];
   completedEventIds: string[];
+  introducedCharacterIds?: string[];
   canon?: {
     characters?: ScenarioModCharacter[];
     factions?: Array<{ id: string; name: string }>;
@@ -58,6 +59,17 @@ function getRuntime(saveData: SaveData): StoryRuntime | null {
   const record = value as Record<string, unknown>;
   if (typeof record.modId !== 'string') return null;
   return record as unknown as StoryRuntime;
+}
+
+function collectIntroducedCharacterIds(runtime: StoryRuntime): string[] {
+  if (runtime.introducedCharacterIds?.length) return runtime.introducedCharacterIds;
+  const eventIds = new Set([...runtime.activeEventIds, ...runtime.completedEventIds]);
+  const ids = new Set<string>(runtime.opening?.featuredCharacterIds || []);
+  for (const event of runtime.events) {
+    if (!eventIds.has(event.id)) continue;
+    for (const id of event.relatedCharacterIds || []) ids.add(id);
+  }
+  return [...ids];
 }
 
 function formatConditions(conditions: ScenarioCondition[] | undefined): string {
@@ -242,6 +254,7 @@ export function createScenarioPromptState<T extends SaveData>(saveData: T): T {
   const runtime = getRuntime(promptState);
   if (!runtime) return promptState;
 
+  runtime.introducedCharacterIds = collectIntroducedCharacterIds(runtime);
   runtime.chapters = runtime.chapters.filter(chapter => chapter.id === runtime.currentChapterId);
   const anchor = getNarrativeAnchorEvent(runtime as any);
   runtime.events = anchor ? [anchor] : [];
@@ -342,6 +355,11 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
     ? `${contextText}\n【在场】${sameLocationNames.slice(0, 12).join('、')}`
     : contextText;
   const focusedCharacterSection = buildFocusedCharacterPrompt(runtime, activeEvents, focusContext, favByName);
+  const introducedIds = new Set(collectIntroducedCharacterIds(runtime));
+  const introducedNames = new Set<string>(
+    [...introducedIds].map(id => characters.find(character => character.id === id)?.name).filter((name): name is string => !!name),
+  );
+  for (const [key, npc] of Object.entries(relations || {})) introducedNames.add(String(npc?.名字 || key));
   // 关卡投影只带“本关会登场”的角色；但玩家/记忆里可能先提到别名人物。
   // 用全局正典的最小身份卡补洞，避免模型把“青骓”这类人名望文生义成兵器。
   const identityContext = [
@@ -352,25 +370,13 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
   ].join('\n');
   const inRuntime = new Set(characters.map(character => character.name));
   const globalIdentityLines = findRegistryIdentitiesByContext(identityContext)
-    .filter(identity => !inRuntime.has(identity.canonicalName))
+    // 只为本存档已认识的人补别名身份；不能借“别名召回”把未来人物放进上下文。
+    .filter(identity => !inRuntime.has(identity.canonicalName) && introducedNames.has(identity.canonicalName))
     .map(identity => `- ${identity.aliases.length ? `${identity.aliases.join('、')}＝` : ''}${identity.canonicalName}：${identity.identity || '正典人物'}`)
     .slice(0, 12);
   const globalIdentitySection = globalIdentityLines.length
     ? `## 别名与实体定锚（不可望文生义）\n${globalIdentityLines.join('\n')}\n以上均为人物姓名/别名，不是兵器、坐骑、功法、物品或可另造的同名角色。`
     : '';
-  const introducedIds = new Set<string>([
-    ...runtime.activeEventIds,
-    ...runtime.completedEventIds,
-    ...(runtime.opening?.featuredCharacterIds || []),
-  ]);
-  for (const event of runtime.events) {
-    if (!introducedIds.has(event.id)) continue;
-    for (const id of event.relatedCharacterIds || []) introducedIds.add(id);
-  }
-  const introducedNames = new Set<string>(
-    [...introducedIds].map(id => characters.find(character => character.id === id)?.name).filter((name): name is string => !!name),
-  );
-  for (const [key, npc] of Object.entries(relations || {})) introducedNames.add(String(npc?.名字 || key));
   const introducedLine = introducedNames.size
     ? `【本存档已相识人物】${[...introducedNames].slice(0, 30).join('、')}。此名单外的正典人物尚未在本存档登场；NPC 不得认识、回忆、转述其私事或以熟人身份提及。`
     : '【本存档登场门槛】没有被当前事件或既有关系明确带入的人物，NPC 不得认识、回忆或主动提及。';

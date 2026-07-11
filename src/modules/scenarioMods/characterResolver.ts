@@ -237,8 +237,9 @@ export function stripNarrativeEntityTypeConflicts(text: string): { text: string;
   for (let index = 0; index < parts.length; index += 2) {
     const sentence = parts[index] || '';
     const tail = parts[index + 1] || '';
+    // 只拦“X 是/乃 Y”的实体直断，不能把“为他牵马”“作势拔剑”或比喻当成变物。
     const offender = protectedNames.find(name => new RegExp(
-      `${escapeRegExp(name)}(?:.{0,8}(?:是|乃|为|作).{0,6}|\\s*(?:—|——|：).{0,8})(?:${bannedType})`,
+      `${escapeRegExp(name)}\\s*(?:便|正|原来)?(?:是|乃)(?!不是|并非|绝非)[^，。！？]{0,6}(?:${bannedType})`,
     ).test(sentence));
     if (offender) {
       conflicts.push(`正典人物/别名“${offender}”被叙事改写为非人物实体`);
@@ -257,10 +258,14 @@ export function stripNarrativeUnintroducedCharacters(
   text: string,
   introducedCanonicalNames: Iterable<string>,
 ): { text: string; conflicts: string[] } {
-  const introduced = new Set(introducedCanonicalNames);
+  const introduced = new Set([...introducedCanonicalNames].map(name => byName.get(name)?.canonicalName || name));
   const blocked = (registryJson as { characters: RegistryEntry[] }).characters
     .filter(entry => !introduced.has(entry.canonicalName))
-    .flatMap(entry => [entry.canonicalName, ...(entry.aliases || [])])
+    // 时间线删除是不可逆的高风险操作：只用正式姓名和明确专名别名，绝不把“贱婢/郭氏/陈王”
+    // 等泛称、双字昵称纳入黑名单；它们仍可用于提示词召回。
+    .flatMap(entry => [entry.canonicalName, ...(entry.aliases || []).filter(alias =>
+      alias.length >= 3 && !/(?:氏|王|公子|姑娘|夫人|老头|婢|儿)$/.test(alias),
+    )])
     .filter(name => typeof name === 'string' && name.length >= 2)
     .sort((left, right) => right.length - left.length);
   const parts = String(text || '').split(/([。！？\n]+)/);
