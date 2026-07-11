@@ -5534,7 +5534,8 @@
       "chapter.lyg.buddhist_conspiracy.kui_ji.started": false,
       "chapter.lyg.buddhist_conspiracy.kui_ji.done": false,
       "chapter.lyg.buddhist_conspiracy.ganlu.started": false,
-      "chapter.lyg.buddhist_conspiracy.ganlu.done": false
+      "chapter.lyg.buddhist_conspiracy.ganlu.done": false,
+      "event.buddhist_conspiracy_lore_nuclear_treaty.done": false
     },
     "chapters": [
       {
@@ -5552,6 +5553,7 @@
           "lyg.event.buddhist_conspiracy_01_beat",
           "lyg.event.buddhist_conspiracy_02_beat",
           "lyg.event.buddhist_conspiracy_03_beat",
+          "lyg.event.buddhist_conspiracy_lore_nuclear_treaty",
           "lyg.event.buddhist_conspiracy_04_beat",
           "lyg.event.buddhist_conspiracy_05_beat"
         ]
@@ -5668,6 +5670,23 @@
           "liuchao.character.cheng_zongyang"
         ],
         "objective": "在十方丛林应对僧众围杀"
+      },
+      {
+        "id": "lyg.event.buddhist_conspiracy_lore_nuclear_treaty",
+        "name": "核武不扩散条约·惊魂",
+        "description": "程宗扬向身边通晓门派掌故的同伴打听大孚灵鹫寺底细，得知寺中藏经阁绝学如释佛逻耶、易筋洗髓、金钟罩楞严真言，资质门槛极高。同伴娓娓道出灵鹫寺乃十方丛林领袖、《核心武学不扩散条约》（简称《核武不扩散条约》）的发起者——话音未落，程宗扬当场变色失声：“停！什么条约？你再说一遍！”这自穿越者认知里“核武”另有所指的错位令他如见了鬼。同伴一脸无辜不解其惊，而在场若有异族武士，反倒对此条约耳熟能详，哈哈嘲笑家主连兽族武士都听说过的常识竟一无所知。此为一次性趣谈：只在程宗扬首次深入了解灵鹫寺来历时触发一遍，事后不复演。",
+        "conditions": [],
+        "completion": [
+          {
+            "path": "flags.event.buddhist_conspiracy_lore_nuclear_treaty.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "critical": false
       },
       {
         "id": "lyg.event.buddhist_conspiracy_04_beat",
