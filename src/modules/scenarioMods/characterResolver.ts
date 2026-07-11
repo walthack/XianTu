@@ -259,13 +259,15 @@ export function stripNarrativeUnintroducedCharacters(
   introducedCanonicalNames: Iterable<string>,
 ): { text: string; conflicts: string[] } {
   const introduced = new Set([...introducedCanonicalNames].map(name => byName.get(name)?.canonicalName || name));
+  // 正文删除不可逆：两字姓名、氏族/称谓往往也有普通语义（如“龙神”），不能作为
+  // 自动删句的证据。它们仍保留在 registry 中供提示词和身份召回使用。
+  const safeForBlocklist = (name: string) => name.length >= 3
+    && !/(?:氏|王|公子|姑娘|夫人|老头|婢|儿)$/.test(name);
   const blocked = (registryJson as { characters: RegistryEntry[] }).characters
     .filter(entry => !introduced.has(entry.canonicalName))
-    // 时间线删除是不可逆的高风险操作：只用正式姓名和明确专名别名，绝不把“贱婢/郭氏/陈王”
-    // 等泛称、双字昵称纳入黑名单；它们仍可用于提示词召回。
-    .flatMap(entry => [entry.canonicalName, ...(entry.aliases || []).filter(alias =>
-      alias.length >= 3 && !/(?:氏|王|公子|姑娘|夫人|老头|婢|儿)$/.test(alias),
-    )])
+    // 时间线删除是不可逆的高风险操作：只用明确专名，绝不把“贱婢/郭氏/陈王”
+    // 等泛称或双字名纳入黑名单；它们仍可用于提示词召回。
+    .flatMap(entry => [entry.canonicalName, ...(entry.aliases || [])].filter(safeForBlocklist))
     .filter(name => typeof name === 'string' && name.length >= 2)
     .sort((left, right) => right.length - left.length);
   const parts = String(text || '').split(/([。！？\n]+)/);

@@ -298,8 +298,8 @@ test('narrative canon guards keep alias-named allies and ordinary martial senten
   const { stripNarrativeEntityTypeConflicts, stripNarrativeUnintroducedCharacters } = await loadTs('../src/modules/scenarioMods/characterResolver.ts');
   assert.equal(stripNarrativeEntityTypeConflicts('青骓为他牵来一匹战马。').text, '青骓为他牵来一匹战马。');
   assert.equal(stripNarrativeEntityTypeConflicts('崔茂作势要拔出腰间佩剑。').text, '崔茂作势要拔出腰间佩剑。');
-  const guarded = stripNarrativeUnintroducedCharacters('碧奴开口。那贱婢竟敢。潘金莲来了。', ['碧奴']);
-  assert.equal(guarded.text, '碧奴开口。那贱婢竟敢。');
+  const guarded = stripNarrativeUnintroducedCharacters('碧奴开口。那贱婢竟敢。龙神般威武。潘金莲来了。', ['碧奴']);
+  assert.equal(guarded.text, '碧奴开口。那贱婢竟敢。龙神般威武。');
 });
 
 test('milestone rewards grant titles on stage_ready at story-correct stage; AI cannot self-grant', async () => {
