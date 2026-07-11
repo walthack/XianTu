@@ -1,6 +1,7 @@
 import type { SaveData } from '@/types/game';
 
 import type { ScenarioCondition, ScenarioFlagValue, ScenarioMod, ScenarioModChapter, ScenarioModEvent } from './schema';
+import { getCanonRailOrder, getCanonRailProfile, isCanonRailChapter, type CanonRailRuntimeState } from './canonRail';
 
 
 export interface ScenarioProgressState {
@@ -17,6 +18,7 @@ export interface ScenarioRuntimeTransition {
 }
 
 export interface RuntimeState extends ScenarioProgressState {
+  modId?: string;
   currentChapterId: string | null;
   flags: Record<string, ScenarioFlagValue>;
   nextStageId?: string | null;
@@ -28,6 +30,8 @@ export interface RuntimeState extends ScenarioProgressState {
   steeringCooldown?: number;
   /** 旧档 reconcile 版本戳：与 registry 版本一致则跳过（正典更新后旧档第一回合自动对齐） */
   reconciledRegistryVersion?: string;
+  /** Engine-owned opt-in.  Missing on old saves intentionally means disabled. */
+  canonRail?: CanonRailRuntimeState;
 }
 
 function readPath(root: unknown, path: string[]): unknown {
@@ -109,18 +113,21 @@ function isCriticalStoryEvent(event: ScenarioModEvent): boolean {
 
 /** 唯一主线锚点：当前章节中最早的已激活、未完成承重事件。
  * runtime 可同时保留资料/并行事件，但主叙事、UI 与 LLM 完成权限只能围绕这一拍推进。 */
-export function getNarrativeAnchorEvent(runtime: Pick<RuntimeState, 'chapters' | 'events' | 'currentChapterId' | 'activeEventIds' | 'completedEventIds'>): ScenarioModEvent | null {
+export function getNarrativeAnchorEvent(runtime: Pick<RuntimeState, 'chapters' | 'events' | 'currentChapterId' | 'activeEventIds' | 'completedEventIds'> & Partial<Pick<RuntimeState, 'modId' | 'canonRail'>>): ScenarioModEvent | null {
   const chapter = (runtime.chapters || []).find(item => item.id === runtime.currentChapterId);
   const active = new Set(runtime.activeEventIds || []);
   const completed = new Set(runtime.completedEventIds || []);
   const order = new Map((chapter?.eventIds || []).map((id, index) => [id, index]));
   const chapterHasCritical = (runtime.events || []).some(event => order.has(event.id) && isCriticalStoryEvent(event));
+  const railOrder = getCanonRailOrder(getCanonRailProfile(runtime));
   const candidates = (runtime.events || [])
     .filter(event => active.has(event.id) && !completed.has(event.id) && order.has(event.id));
   const anchored = candidates.filter(isCriticalStoryEvent);
   // 有承重链的章节绝不让资料/彩蛋事件顶替主线；承重链完成后交给 runtime 自动收章。
   return (chapterHasCritical ? anchored : candidates)
-    .sort((a, b) => (a.axisSeq ?? Infinity) - (b.axisSeq ?? Infinity) || (order.get(a.id)! - order.get(b.id)!))[0] || null;
+    .sort((a, b) => (railOrder.get(a.id) ?? Infinity) - (railOrder.get(b.id) ?? Infinity)
+      || (a.axisSeq ?? Infinity) - (b.axisSeq ?? Infinity)
+      || (order.get(a.id)! - order.get(b.id)!))[0] || null;
 }
 
 export function createScenarioProgress(mod: ScenarioMod): ScenarioProgressState {
@@ -175,6 +182,8 @@ function settleCompletedChapterFlags(runtime: RuntimeState): void {
   const completed = new Set(runtime.completedEventIds || []);
   const flags = runtime.flags as Record<string, unknown>;
   for (const chapter of runtime.chapters || []) {
+    const profile = getCanonRailProfile(runtime);
+    if (isCanonRailChapter(profile, chapter.id) && !profile!.orderedEventIds.every(id => completed.has(id))) continue;
     const listedIds = chapter.eventIds || [];
     const criticalIds = listedIds.filter(id => {
       const event = runtime.events.find(item => item.id === id);
@@ -303,6 +312,7 @@ export function advanceScenarioRuntime(saveData: SaveData): {
   runtime.activeEventIds = Array.isArray(runtime.activeEventIds) ? runtime.activeEventIds : [];
   runtime.completedEventIds = Array.isArray(runtime.completedEventIds) ? runtime.completedEventIds : [];
   const transitions: ScenarioRuntimeTransition[] = [];
+  const railProfile = getCanonRailProfile(runtime);
 
   const current = runtime.chapters.find(chapter => chapter.id === runtime.currentChapterId);
   const currentEventIds = new Set(current?.eventIds || []);
@@ -322,6 +332,7 @@ export function advanceScenarioRuntime(saveData: SaveData): {
   // 清算未曾活跃但完成条件已满足的事件（LLM 可能提前/越序 set 了 done flag）。
   // 否则章节一完成清空 activeEventIds 后，这些 critical 事件永远进不了 completedEventIds → stage_ready 死锁。
   for (const event of runtime.events) {
+    if (railProfile?.orderedEventIds.includes(event.id)) continue;
     if (runtime.completedEventIds.includes(event.id)) continue;
     if (hasCompletion(event.completion) && conditionsMatch(event.completion, next, runtime)) {
       runtime.activeEventIds = runtime.activeEventIds.filter(id => id !== event.id);
@@ -333,7 +344,9 @@ export function advanceScenarioRuntime(saveData: SaveData): {
   // 事件落账后立即派生本章完成 flag，保证后续章节 activation 能在同一轮生效。
   settleCompletedChapterFlags(runtime);
 
-  if (current && hasCompletion(current.completion) && conditionsMatch(current.completion, next, runtime)) {
+  const currentRailComplete = isCanonRailChapter(railProfile, current?.id)
+    && railProfile!.orderedEventIds.every(id => runtime.completedEventIds.includes(id));
+  if (current && hasCompletion(current.completion) && (currentRailComplete || (!isCanonRailChapter(railProfile, current.id) && conditionsMatch(current.completion, next, runtime)))) {
     if (!runtime.completedChapterIds.includes(current.id)) runtime.completedChapterIds.push(current.id);
     transitions.push({ type: 'chapter_completed', id: current.id });
     runtime.currentChapterId = null;
@@ -352,8 +365,16 @@ export function advanceScenarioRuntime(saveData: SaveData): {
 
   const activeChapter = runtime.chapters.find(chapter => chapter.id === runtime.currentChapterId);
   const chapterEventIds = new Set(activeChapter?.eventIds || []);
+  if (isCanonRailChapter(railProfile, activeChapter?.id)) {
+    const nextRailEventId = railProfile!.orderedEventIds.find(id => !runtime.completedEventIds.includes(id));
+    if (nextRailEventId && !runtime.activeEventIds.includes(nextRailEventId)) {
+      runtime.activeEventIds.push(nextRailEventId);
+      transitions.push({ type: 'event_activated', id: nextRailEventId });
+    }
+  }
   for (const eventId of chapterEventIds) {
     if (runtime.activeEventIds.includes(eventId) || runtime.completedEventIds.includes(eventId)) continue;
+    if (railProfile?.orderedEventIds.includes(eventId)) continue;
     const event = runtime.events.find(item => item.id === eventId);
     if (event && conditionsMatch(event.conditions, next, runtime)) {
       runtime.activeEventIds.push(eventId);

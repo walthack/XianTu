@@ -141,6 +141,30 @@ test('name-mentioned bystander characters join the focused canon block', async (
   assert.match(prompt, /- 王哲（/);
 });
 
+test('focused characters retain registry speech and cannot inherit a relative or ally sect role', async () => {
+  const { buildScenarioStoryPrompt } = await loadTs('../src/modules/scenarioMods/storyContext.ts');
+  const save = await buildStorySave();
+  const runtime = save.世界.状态.剧本模组;
+  runtime.canon.factions.push({ id: 'yun-clan', name: '云氏商会' });
+  runtime.canon.characters.push({
+    id: 'liuchao.character.yun_dan_liu',
+    name: '云丹琉',
+    role: '云氏女骑士',
+    gender: '女',
+    affiliations: [{ factionId: 'yun-clan', category: 'clan', role: '大小姐' }],
+    profile: {},
+  });
+  runtime.events.find(event => event.id === 'event.firstmeeting').relatedCharacterIds.push('liuchao.character.yun_dan_liu');
+
+  const prompt = buildScenarioStoryPrompt(save);
+
+  assert.match(prompt, /云丹琉/);
+  assert.match(prompt, /谈吐：语速快、语调高，泼辣好胜/);
+  assert.match(prompt, /宗派、道号、自称和教内职位同样是逐人事实/);
+  assert.match(prompt, /不得因人物会武、气质近道门、亲属\/师徒属于某派/);
+  assert.match(prompt, /太乙真宗的「掌教／教御／弟子」不是泛称/);
+});
+
 test('load-bearing character protection and stall steering appear in story prompt', async () => {
   const { buildScenarioStoryPrompt } = await loadTs('../src/modules/scenarioMods/storyContext.ts');
   const save = await buildStorySave();

@@ -1,6 +1,7 @@
 import { get } from 'lodash';
 import type { SaveData, StateChange } from '@/types/game';
 import { parseJsonSmart } from '@/utils/jsonExtract';
+import { getCanonRailContract, getCanonRailOrder, getCanonRailProfile } from '@/modules/scenarioMods/canonRail';
 
 /**
  * 事件对账（死锁自愈，闭环第三环：自由探索→软提醒→走偏不卡死）。
@@ -75,6 +76,9 @@ export interface ChainCandidate {
   beat: string;
   /** 完成 flag 的点号键（去掉 flags. 前缀），如 event.s06_01.done */
   flagKey: string;
+  mustReach?: string;
+  completionEvidence?: string[];
+  forbiddenInCanon?: string[];
 }
 
 function eventDoneFlagKey(event: RuntimeEventLike): string {
@@ -105,25 +109,38 @@ export function buildChainCandidates(runtime: {
   events?: RuntimeEventLike[];
   completedEventIds?: string[];
   flags?: Record<string, unknown>;
+  modId?: unknown;
+  canonRail?: { enabled?: boolean; profileId?: string };
 }): ChainCandidate[] {
   const flags = (runtime.flags && typeof runtime.flags === 'object') ? runtime.flags as Record<string, unknown> : {};
   const completed = new Set(runtime.completedEventIds || []);
+  const railOrder = getCanonRailOrder(getCanonRailProfile(runtime));
   const list = (runtime.events || [])
     .filter(e => typeof e?.id === 'string' && !completed.has(e.id as string))
     .map(e => ({ e, flagKey: eventDoneFlagKey(e) }))
     .filter(({ flagKey }) => flagKey && !isFlagTrue(flags, flagKey))
     .sort((a, b) => {
+      const railA = railOrder.get(String(a.e.id));
+      const railB = railOrder.get(String(b.e.id));
+      if (railA !== undefined || railB !== undefined) return (railA ?? Infinity) - (railB ?? Infinity);
       const sa = typeof a.e.axisSeq === 'number' ? a.e.axisSeq as number : Infinity;
       const sb = typeof b.e.axisSeq === 'number' ? b.e.axisSeq as number : Infinity;
       return sa - sb;
     })
     .slice(0, CHAIN_EXPOSE_LIMIT);
-  return list.map(({ e, flagKey }) => ({
-    id: String(e.id),
-    name: typeof e.name === 'string' ? e.name : String(e.id),
-    beat: typeof e.axisBeat === 'string' && e.axisBeat ? e.axisBeat : (typeof e.description === 'string' ? e.description : ''),
-    flagKey,
-  }));
+  const profile = getCanonRailProfile(runtime);
+  return list.map(({ e, flagKey }) => {
+    const contract = getCanonRailContract(profile, String(e.id));
+    return {
+      id: String(e.id),
+      name: typeof e.name === 'string' ? e.name : String(e.id),
+      beat: typeof e.axisBeat === 'string' && e.axisBeat ? e.axisBeat : (typeof e.description === 'string' ? e.description : ''),
+      flagKey,
+      mustReach: contract?.mustReach,
+      completionEvidence: contract?.completionEvidence,
+      forbiddenInCanon: contract?.forbiddenInCanon,
+    };
+  });
 }
 
 interface ReconcileVerdict {
@@ -180,6 +197,16 @@ function isGrounded(evidence: unknown, normContext: string): boolean {
   return bigramCoverage(bigrams(ne), normContext) >= 0.6;
 }
 
+/** Rail 合同中的每个短锚点都须在本轮事实中出现（允许近似转述），避免模型只凭泛化证据落账。 */
+function hasCompletionEvidence(cand: ChainCandidate, normContext: string): boolean {
+  const required = cand.completionEvidence || [];
+  return required.every(term => {
+    const normalized = norm(term);
+    if (normalized.length < 2) return true;
+    return normContext.includes(normalized) || bigramCoverage(bigrams(normalized), normContext) >= 0.5;
+  });
+}
+
 /**
  * 确定性 validator（纯函数，可脱离 LLM 单测）：连续前缀 + 接地 + 分级阈值 + 单次上限。
  * candidates 顺序即链序；第一个不通过的事件即停（其后全部拒绝，防跳序）。
@@ -188,6 +215,7 @@ export function validateEventReconcile(
   raw: unknown,
   candidates: ChainCandidate[],
   context: string,
+  options: { allowVoid?: boolean } = {},
 ): ReconcileValidateResult {
   const diagnostics: string[] = [];
   const r = raw && typeof raw === 'object' ? raw as { events?: unknown } : {};
@@ -209,6 +237,10 @@ export function validateEventReconcile(
     }
     const v = byId.get(cand.id);
     const verdict = typeof v?.verdict === 'string' ? v.verdict : 'pending';
+    if (verdict === 'void' && options.allowVoid === false) {
+      diagnostics.push(`「${cand.name}」正典轨道不允许 void，链在此停止`);
+      break;
+    }
     if (verdict !== 'done' && verdict !== 'void') {
       diagnostics.push(`「${cand.name}」判 ${verdict || 'pending'}，链在此停止`);
       break;
@@ -221,6 +253,10 @@ export function validateEventReconcile(
     }
     if (!isGrounded(v?.evidence, normContext)) {
       diagnostics.push(`「${cand.name}」evidence 未在记忆/上下文接地，链在此停止`);
+      break;
+    }
+    if (!hasCompletionEvidence(cand, normContext)) {
+      diagnostics.push(`「${cand.name}」未覆盖 Canon Rail 完成锚点，链在此停止`);
       break;
     }
     accepted.push({ id: cand.id, flagKey: cand.flagKey, verdict, evidence: String(v?.evidence) });
@@ -325,7 +361,7 @@ function buildMemoryContext(saveData: SaveData, candidates: ChainCandidate[]): s
 }
 
 function buildReconcileUserPrompt(candidates: ChainCandidate[], memoryContext: string, input: EventReconcileInput): string {
-  const list = candidates.map((c, i) => `${i + 1}. id=${c.id}\n   名称：${c.name}\n   预设剧情：${c.beat}`).join('\n');
+  const list = candidates.map((c, i) => `${i + 1}. id=${c.id}\n   名称：${c.name}\n   预设剧情：${c.beat}${c.mustReach ? `\n   Canon Rail 必达结果：${c.mustReach}\n   完成锚点：${(c.completionEvidence || []).join('、')}\n   禁止改写：${(c.forbiddenInCanon || []).join('、')}` : ''}`).join('\n');
   return [
     '【待核对的主线事件（严格顺序链，按序核对）】',
     list,
@@ -348,6 +384,7 @@ function buildReconcileUserPrompt(candidates: ChainCandidate[], memoryContext: s
 export async function runEventReconcile(input: EventReconcileInput): Promise<StateChange[]> {
   const runtime = get(input.saveData, '世界.状态.剧本模组') as {
     events?: RuntimeEventLike[]; completedEventIds?: string[]; flags?: Record<string, unknown>;
+    modId?: string; canonRail?: { enabled?: boolean; profileId?: string };
   } | undefined;
   // 【临时黑匣子】写进存档供远程诊断
   const dbg: Record<string, unknown> = (() => {
@@ -399,7 +436,8 @@ export async function runEventReconcile(input: EventReconcileInput): Promise<Sta
   }
 
   const groundingContext = `${memoryContext}\n${input.recentText || ''}\n${input.userAction || ''}`;
-  const { accepted, diagnostics } = validateEventReconcile(parsed, candidates, groundingContext);
+  const railEnabled = Boolean(getCanonRailProfile(runtime));
+  const { accepted, diagnostics } = validateEventReconcile(parsed, candidates, groundingContext, { allowVoid: !railEnabled });
   dbg.diagnostics = diagnostics.slice(0, 6); dbg.accepted = accepted.map(a => `${a.id.split('.').pop()}:${a.verdict}`);
   for (const d of diagnostics) console.log('[事件对账]', d);
   if (!accepted.length) return [];

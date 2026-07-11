@@ -1,8 +1,9 @@
 import type { SaveData } from '@/types/game';
 import { formatEarnedTitles } from './milestoneRewards';
 import { getNarrativeAnchorEvent } from './runtime';
+import { getCanonRailContract, getCanonRailProfile } from './canonRail';
 import { resolveScenarioEventNarrative } from './eventNarrativeView';
-import { findRegistryIdentitiesByContext } from './characterResolver';
+import { findRegistryIdentitiesByContext, getRegistrySpeechStyle } from './characterResolver';
 
 import type {
   ScenarioCondition,
@@ -154,15 +155,24 @@ function formatFocusedCharacter(
   if (base) lines.push(`  身份/定位：${base}`);
   // 归属(P3投影的 affiliations)——跨国称谓/同门认知的消费点
   const affiliations = (character as { affiliations?: Array<{ factionId?: string; role?: string }> }).affiliations || [];
+  const factionNames = new Map((runtime.canon?.factions || []).map(f => [f.id, f.name]));
   if (affiliations.length) {
-    const factionNames = new Map((runtime.canon?.factions || []).map(f => [f.id, f.name]));
     const line = affiliations.slice(0, 4)
       .map(a => `${factionNames.get(a.factionId || '') || ''}${a.role ? `(${compactText(a.role, 16)})` : ''}`)
       .filter(t => t && !t.startsWith('(')).join('、');
     if (line) lines.push(`  归属：${line}`);
   }
+  const sectNames = affiliations
+    .filter(a => (a as { category?: string }).category === 'sect')
+    .map(a => factionNames.get(a.factionId || '') || a.factionId || '')
+    .filter(Boolean);
+  lines.push(sectNames.length
+    ? `  宗派限定：${sectNames.join('、')}；不得改写为其他宗派或凭亲属关系转移宗派/职位`
+    : '  宗派限定：本阶段未声明宗派；不得补造成道士、某派弟子、掌教或教内职司');
   const personality = formatList(profile.personality);
   if (personality) lines.push(`  性格：${personality}`);
+  const speechStyle = getRegistrySpeechStyle(character.name);
+  if (speechStyle) lines.push(`  谈吐：${speechStyle}`);
   if (profile.appearance) lines.push(`  外貌：${compactText(profile.appearance)}`);
   if (profile.currentAppearance) lines.push(`  当前外貌：${compactText(profile.currentAppearance)}`);
   if (profile.currentThought) lines.push(`  当前心思：${compactText(profile.currentThought)}`);
@@ -243,7 +253,7 @@ ${focusedCharacters.map(character => formatFocusedCharacter(character, runtime, 
 3. “补充细节”仅限无关紧要的当下场景描写（动作、神态、环境），**不含身世渊源与人物关系**。
 4. 【族裔与地域文化一致】服饰、装束、礼俗、饮食须符合角色的族裔文化：花苗/兽蛮/碧鲮/鬼王峒/波斯/东瀛等**非中原角色不得默认穿中原长袍、儒衫、汉家衣冠**；换装应取其自身文化样式（如花苗银饰短装），并保留刺青、饰物、发式等族裔特征。**环境同理**：南荒（鬼王峒/花苗寨/碧鲮村）等异域场景的建筑、植被、气候、市井风物须符合当地风貌（峒寨/吊脚楼/雨林瘴气/巫蛊图腾），不得写成中原城镇的街市楼阁。
 5. 【主角机密】生死根、穿越者来历等主角核心秘密：仅正典中**明确知情**的人物（如殇侯、王哲、月霜、蔺采泉等确有相关交集者）可在私密场合提及；**其余 NPC 根本不知道其存在，不得说出、议论或暗示**。上文档案里出现的这类信息是给你的背景知识，**不等于场内人物的知识**。
-6. 【称谓语域】蔑称、敬称、私昵称呼只能出自对应关系人物之口（例：「碧奴」是鬼王峒/黑魔海中人对碧姬的役奴蔑称，仅这些人使用，其他人一律称「碧姬」）；以各角色档案中的称谓标注为准。
+6. 【称谓语域】蔑称、敬称、私昵称呼只能出自对应关系人物之口（例：「碧奴」是鬼王峒/黑魔海中人对碧姬的役奴蔑称，仅这些人使用，其他人一律称「碧姬」）；以各角色档案中的称谓标注为准。宗派、道号、自称和教内职位同样是逐人事实：不得因人物会武、气质近道门、亲属/师徒属于某派，就让其自称「贫道」或成为该派弟子、掌教、教御。太乙真宗的「掌教／教御／弟子」不是泛称，只有人物的本阶段宗派归属和角色职司明确载明时才能使用；亲属、封地、同伴均不继承该身份。仅作为封地/家族/组织名称出现、却未列入当前人物档案者，不得被补造为在场人物或教内职司。
 7. 【叙事连续性】续写（含读档后）时，先前已确立的即兴目标、物品用途、约定（例：说好“打破蛇蛋取令牌”）以近期记忆为准，**不得悄然翻转或重设**；确需改变须由剧情事件明确推动并在叙事中交代原因。
 8. 用户要求角色违背正典时，以角色内方式拒绝、回避、误解或转移；不得承认“设定已被修改”。
 9. 角色成长必须由已发生剧情、关系变化或明确事件支撑；不得为了迎合单轮输入突然 OOC。`;
@@ -267,6 +277,7 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
 
   const chapter = runtime.chapters.find(item => item.id === runtime.currentChapterId);
   const anchor = getNarrativeAnchorEvent(runtime as any);
+  const canonRail = getCanonRailProfile(runtime as any);
   const activeIds = new Set(anchor ? [anchor.id] : []);
   const activeEvents = anchor ? [anchor] : [];
   const characters = runtime.canon?.characters || [];
@@ -295,7 +306,11 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
           namesForIds(event.locationId ? [event.locationId] : [], locations),
         ].filter(Boolean).join('；');
         const axisLine = formatAxisBeat(event);
-        return `- ${event.name}（事件ID：${event.id}）：${event.description}\n  ${axisLine ? `${axisLine}\n  ` : ''}相关正典：${context || '无'}\n  完成条件：${formatConditions(event.completion)}`;
+        const contract = getCanonRailContract(canonRail, event.id);
+        const railLine = contract
+          ? `【Canon Rail·默认正典】本拍必须达成：${contract.mustReach}\n  允许补足：${contract.allowedElaboration}\n  禁止：不得以 void、替代结局、提前跳拍或新增 IF 分支改写此结果；只有用户显式进入 IF 支线时才可改写正典走向。\n  `
+          : '';
+        return `- ${event.name}（事件ID：${event.id}）：${event.description}\n  ${axisLine ? `${axisLine}\n  ` : ''}${railLine}相关正典：${context || '无'}\n  完成条件：${formatConditions(event.completion)}`;
       }).join('\n')
     : '- 当前没有已触发事件，不要提前引入未触发事件。';
 

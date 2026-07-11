@@ -1,5 +1,6 @@
 import type { SaveData } from '@/types/game';
 import { getNarrativeAnchorEvent } from './runtime';
+import { getCanonRailProfile, type CanonRailRuntimeState } from './canonRail';
 
 import type {
   ScenarioContentAccessRule,
@@ -21,6 +22,7 @@ interface ScenarioRuntimeState {
   activeEventIds?: string[];
   chapters?: Array<{ id: string; eventIds?: string[] }>;
   events?: Array<{ id: string; critical?: boolean; axisSeq?: number; axisId?: string | null; axisBeat?: string }>;
+  canonRail?: CanonRailRuntimeState;
   completedEventIds?: string[];
   opening?: {
     playerCharacterId?: string;
@@ -324,6 +326,9 @@ function findScenarioFlagViolation(runtime: ScenarioRuntimeState, command: Comma
     const allowedIds = getScenarioEventIdsAllowedForCompletion(runtime);
     if (allowedIds.size > 0 && !allowedIds.has(id)) {
       return `不得越级完成非当前章节/活跃事件：${id}`;
+    }
+    if (getCanonRailProfile(runtime)) {
+      return `Canon Rail 事件完成只能由事件核验器落账：${id}`;
     }
     return null;
   }

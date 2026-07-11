@@ -74,6 +74,34 @@ test('void 阈值高于 done：0.8 的 void 拒绝、0.8 的 done 接受', async
   assert.equal(asDone.accepted.length, 1, 'done@0.8 应收');
 });
 
+test('Canon Rail 对账拒绝 void，默认链仍保留原有分歧放行', async () => {
+  const { validateEventReconcile } = await modPromise;
+  const raw = { events: [
+    { id: 'e1', verdict: 'void', evidence: '鬼巫王已死', confidence: 0.95 },
+  ] };
+  const result = validateEventReconcile(raw, chain(), CTX, { allowVoid: false });
+  assert.equal(result.accepted.length, 0);
+  assert.match(result.diagnostics[0], /不允许 void/);
+});
+
+test('Canon Rail 对账要求每个完成锚点已在事实中覆盖', async () => {
+  const { validateEventReconcile } = await modPromise;
+  const railCandidate = [{
+    id: 'rail-1', name: '段强被射杀', beat: '段强遭半兽人袭击身亡', flagKey: 'event.s01_02.done',
+    mustReach: '段强遭半兽人袭击身亡', completionEvidence: ['段强', '半兽人', '射杀'],
+  }];
+  const raw = { events: [{ id: 'rail-1', verdict: 'done', evidence: '段强遭半兽人射杀', confidence: 0.95 }] };
+  assert.equal(validateEventReconcile(raw, railCandidate, '段强遭半兽人射杀，程宗扬独自逃离。', { allowVoid: false }).accepted.length, 1);
+  const missing = validateEventReconcile(
+    { events: [{ id: 'rail-1', verdict: 'done', evidence: '段强遭半兽人袭击', confidence: 0.95 }] },
+    railCandidate,
+    '段强遭半兽人袭击，程宗扬独自逃离。',
+    { allowVoid: false },
+  );
+  assert.equal(missing.accepted.length, 0);
+  assert.match(missing.diagnostics.at(-1), /完成锚点/);
+});
+
 test('单次上限：一次最多落 MAX_FLAGS_PER_RUN 个', async () => {
   const { validateEventReconcile, MAX_FLAGS_PER_RUN } = await modPromise;
   const many = Array.from({ length: 8 }, (_, i) => ({

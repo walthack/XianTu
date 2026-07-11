@@ -34,6 +34,10 @@
             <span>{{ entry.mod.manifest.name }}</span>
             <span class="scenario-mode">{{ entry.mod.rules.mode === 'strict' ? 'Strict' : 'Expand' }}</span>
           </button>
+          <label v-if="store.selectedScenarioMod?.manifest.id === 'lcq.stage_01'" class="canon-rail-toggle">
+            <input v-model="store.canonRailEnabled" type="checkbox" />
+            <span>启用 Canon Rail（正典主线；仅影响新档）</span>
+          </label>
         </div>
 
         <div class="list-container">
@@ -1271,6 +1275,20 @@ const editInitialData = computed(() => {
 .scenario-mode {
   color: var(--color-text-secondary);
   font-size: 0.7rem;
+}
+
+.canon-rail-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0.5rem 0.25rem 0.1rem;
+  color: var(--color-text-secondary);
+  font-size: 0.76rem;
+  cursor: pointer;
+}
+
+.canon-rail-toggle input {
+  accent-color: var(--color-primary);
 }
 
 /* ========== 响应式适配 ========== */

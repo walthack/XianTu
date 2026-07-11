@@ -92,6 +92,75 @@ test('runtime emits stage_ready once after all key plot events are complete', as
   assert.deepEqual(repeated.transitions, []);
 });
 
+test('Canon Rail stage_01 follows source order #9 then #10 and cannot close early', async () => {
+  const { advanceScenarioRuntime, getNarrativeAnchorEvent } = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  const event = (id, axisSeq, done) => ({
+    id, name: id, description: id, axisSeq, axisBeat: id,
+    completion: [{ path: `flags.event.${id.split('.').at(-1)}.done`, operator: 'eq', value: true }],
+  });
+  const s06 = event('lcq.event.s01_06', 18);
+  const s05 = event('lcq.event.s01_05', 19);
+  const ids = ['lcq.event.s01_01', 'lcq.event.s01_02', 'lcq.event.s01_03', 'lcq.event.s01_04', s06.id, s05.id];
+  const save = {
+    世界: { 状态: { 剧本模组: {
+      modId: 'lcq.stage_01', canonRail: { enabled: true, profileId: 'qingyu.stage_01' },
+      chapters: [{ id: 'lcq.chapter.stage_01', eventIds: ids, completion: [{ path: 'flags.event.s01_06.done', operator: 'eq', value: true }] }],
+      events: [
+        ...ids.slice(0, 4).map((id, index) => event(id, index + 1)), s05, s06,
+      ],
+      currentChapterId: 'lcq.chapter.stage_01', activeEventIds: [s06.id],
+      completedEventIds: ids.slice(0, 4), completedChapterIds: [],
+      flags: { 'event.s01_06.done': false, 'event.s01_05.done': false },
+    } } },
+  };
+
+  assert.equal(getNarrativeAnchorEvent(save.世界.状态.剧本模组).id, s06.id);
+  save.世界.状态.剧本模组.flags['event.s01_06.done'] = true;
+  const afterNine = advanceScenarioRuntime(save);
+  const rt = afterNine.saveData.世界.状态.剧本模组;
+  assert.deepEqual(afterNine.transitions, [
+    { type: 'event_completed', id: s06.id },
+    { type: 'event_activated', id: s05.id },
+  ]);
+  assert.equal(rt.currentChapterId, 'lcq.chapter.stage_01', '第 #9 节完成不能提前收章');
+  assert.equal(getNarrativeAnchorEvent(rt).id, s05.id);
+
+  rt.flags['event.s01_05.done'] = true;
+  const afterTen = advanceScenarioRuntime(afterNine.saveData);
+  assert.ok(afterTen.transitions.some(t => t.type === 'chapter_completed' && t.id === 'lcq.chapter.stage_01'));
+});
+
+test('Canon Rail event contracts are carried into reconciliation candidates', async () => {
+  const { buildChainCandidates } = await loadTs('../src/services/eventReconcileService.ts');
+  const candidates = buildChainCandidates({
+    modId: 'lcq.stage_01', canonRail: { enabled: true, profileId: 'qingyu.stage_01' },
+    events: [{
+      id: 'lcq.event.s01_02', name: '段强被射杀', axisSeq: 2, axisBeat: '段强遭半兽人袭击身亡',
+      completion: [{ path: 'flags.event.s01_02.done', operator: 'eq', value: true }],
+    }],
+    completedEventIds: [], flags: { 'event.s01_02.done': false },
+  });
+  assert.deepEqual(candidates[0].completionEvidence, ['段强', '半兽人', '射杀']);
+  assert.match(candidates[0].mustReach, /段强/);
+});
+
+test('Canon Rail rejects direct LLM completion flags; reconciliation remains the only route', async () => {
+  const { guardScenarioModCommands } = await loadTs('../src/modules/scenarioMods/canonGuard.ts');
+  const save = await buildRuntimeSave();
+  const runtime = save.世界.状态.剧本模组;
+  runtime.modId = 'lcq.stage_01';
+  runtime.canonRail = { enabled: true, profileId: 'qingyu.stage_01' };
+  runtime.events[0].id = 's01_01';
+  runtime.events[0].completion = [{ path: 'flags.event.s01_01.done', operator: 'eq', value: true }];
+  runtime.chapters[0].eventIds = ['s01_01'];
+  runtime.activeEventIds = ['s01_01'];
+  const result = guardScenarioModCommands(save, [{
+    action: 'set', key: '世界.状态.剧本模组.flags.event.s01_01.done', value: true,
+  }]);
+  assert.equal(result.accepted.length, 0);
+  assert.match(result.rejected[0].reason, /事件核验器/);
+});
+
 test('condition evaluator supports flat dotted flags and save paths', async () => {
   const { evaluateScenarioCondition } = await loadTs('../src/modules/scenarioMods/runtime.ts');
   const runtime = {

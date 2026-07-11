@@ -1136,6 +1136,7 @@ export async function initializeCharacter(
     const resolvedWorld = await resolveInitialWorldInfo(
       creationStore.selectedScenarioMod,
       () => generateWorld(processedBaseInfo, world),
+      { canonRailEnabled: creationStore.canonRailEnabled },
     );
     const { worldInfo, strictInitialization, expandInitialization } = resolvedWorld;
     if (!(initialSaveData as any).世界) (initialSaveData as any).世界 = { 信息: {}, 状态: {} };

@@ -202,6 +202,12 @@ export function getRegistryIdentity(name: string): { canonicalName: string; alia
   };
 }
 
+/** 供当前人物提示词补回稳定谈吐；不携带阶段剧情，只用于避免角色被泛化为同一类口吻。 */
+export function getRegistrySpeechStyle(name: string): string {
+  const entry = byName.get(name);
+  return compact(unique(asArray(entry?.staticProfile?.speechStyle)).join('；'), 220);
+}
+
 /** 仅以当前已出现的势力名召回其成员，补足关卡投影未携带的别名人物。 */
 export function findRegistryIdentitiesByContext(context: string, limit = 12): Array<{ canonicalName: string; aliases: string[]; identity: string }> {
   const source = String(context || '');

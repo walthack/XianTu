@@ -117,6 +117,8 @@ export const useCharacterCreationStore = defineStore('characterCreation', () => 
   const isLocalCreation = ref(true);
   const initialGameMessage = ref<string | null>(null);
   const selectedScenarioMod = ref<ScenarioMod | null>(null);
+  /** Only used while creating a fresh lcq.stage_01 save; never mutates an existing save. */
+  const canonRailEnabled = ref(false);
   const useStreamingStart = ref(true); // 开局是否使用流式传输（默认启用）
 
   // ========== 角色创建流程状态管理 ==========
@@ -916,10 +918,12 @@ export const useCharacterCreationStore = defineStore('characterCreation', () => 
   
   function selectWorld(worldId: number | '') {
     selectedScenarioMod.value = null;
+    canonRailEnabled.value = false;
     characterPayload.value.world_id = worldId;
   }
   function selectScenarioMod(mod: ScenarioMod | null) {
     selectedScenarioMod.value = mod;
+    if (mod?.manifest.id !== 'lcq.stage_01') canonRailEnabled.value = false;
     characterPayload.value.world_id = mod ? -1 : '';
     const preset = mod?.scenario.opening.creationPreset;
     if (preset) {
@@ -999,6 +1003,7 @@ export const useCharacterCreationStore = defineStore('characterCreation', () => 
     const newPayload = await createEmptyPayload();
     characterPayload.value = newPayload;
     selectedScenarioMod.value = null;
+    canonRailEnabled.value = false;
     currentStep.value = 1;
     // 重置世界生成配置为默认值
     worldGenerationConfig.value = {
@@ -1059,7 +1064,7 @@ export const useCharacterCreationStore = defineStore('characterCreation', () => 
   }
 
   return {
-    mode, isLoading, error, creationData, characterPayload, currentStep, isLocalCreation, initialGameMessage, selectedScenarioMod, scenarioCreationPreset, worldGenerationConfig, useStreamingStart, generateMode, splitResponseGeneration,
+    mode, isLoading, error, creationData, characterPayload, currentStep, isLocalCreation, initialGameMessage, selectedScenarioMod, canonRailEnabled, scenarioCreationPreset, worldGenerationConfig, useStreamingStart, generateMode, splitResponseGeneration,
     // 创建流程状态
     isCreating, creationPhase, creationError,
     gameDifficulty, currentDifficultyPrompt, // 难度配置
