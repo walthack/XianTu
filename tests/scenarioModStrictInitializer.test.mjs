@@ -227,3 +227,27 @@ test('stage transition preserves accumulated NPC relations and switches runtime'
   assert.equal(npc.与玩家关系, '挚友', '关系标签跨关保留');
   assert.ok((npc.记忆 || []).includes('同闯建康的旧事'), '记忆跨关保留');
 });
+
+test('default stage transition skips quarantined freeform/conflict stages', async () => {
+  const { parseScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
+  const { transitionToNextScenarioStage } = await loadTs('../src/modules/scenarioMods/strictInitializer.ts');
+  const { readFile } = await import('node:fs/promises');
+  const raw = JSON.parse(await readFile(new URL('./fixtures/scenario-mod/minimal.json', import.meta.url), 'utf8'));
+  const skippedRaw = structuredClone(raw);
+  skippedRaw.manifest.id = 'lyl.taiquan_expedition';
+  skippedRaw.manifest.nextStageId = 'liuchao.after_quarantine';
+  const afterRaw = structuredClone(raw);
+  afterRaw.manifest.id = 'liuchao.after_quarantine';
+  afterRaw.manifest.nextStageId = null;
+  const save = {
+    角色: { 位置: { 描述: '旧' } },
+    世界: { 信息: {}, 状态: { 剧本模组: {
+      modId: 'liuchao.before_quarantine', nextStageId: 'lyl.taiquan_expedition', nextStageReadyId: 'lyl.taiquan_expedition',
+    } } },
+    系统: { 扩展: {} },
+  };
+  const result = transitionToNextScenarioStage(save, [parseScenarioMod(skippedRaw), parseScenarioMod(afterRaw)]);
+  assert.equal(result.ok, true, result.reason);
+  assert.equal(result.to, 'liuchao.after_quarantine');
+  assert.equal(result.saveData.世界.状态.剧本模组.modId, 'liuchao.after_quarantine');
+});

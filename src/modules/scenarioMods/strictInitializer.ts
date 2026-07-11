@@ -5,6 +5,7 @@ import { buildExpandScenarioInitialization, type ExpandScenarioInitialization } 
 import { withNativeScenarioLocationType } from './locationTypes';
 import { advanceScenarioRuntime, createScenarioProgress, getInitialScenarioChapterId, type ScenarioProgressState } from './runtime';
 import { applyScenarioRelationshipsToSave } from './relationships';
+import { isDefaultLineQuarantinedStageId } from './canonRail';
 
 export interface ScenarioModRuntimeState extends ScenarioProgressState {
   schema: ScenarioMod['schema'];
@@ -249,9 +250,9 @@ export interface StageTransitionResult {
 export function transitionToNextScenarioStage(saveData: SaveData, modsOverride?: ScenarioMod[]): StageTransitionResult {
   const rt = (saveData as any)?.世界?.状态?.剧本模组;
   if (!rt?.modId) return { saveData, ok: false, reason: '当前存档无剧本运行时' };
-  const targetId = rt.nextStageId;
-  if (!targetId) return { saveData, ok: false, reason: '已是最终关，无下一关' };
-  if (rt.nextStageReadyId !== targetId) return { saveData, ok: false, reason: '本关关键剧情尚未完成' };
+  const configuredTargetId = rt.nextStageId;
+  if (!configuredTargetId) return { saveData, ok: false, reason: '已是最终关，无下一关' };
+  if (rt.nextStageReadyId !== configuredTargetId) return { saveData, ok: false, reason: '本关关键剧情尚未完成' };
   let mods = modsOverride;
   if (!mods) {
     try {
@@ -259,7 +260,17 @@ export function transitionToNextScenarioStage(saveData: SaveData, modsOverride?:
       mods = (require('./builtins') as { BUILTIN_SCENARIO_MODS: ScenarioMod[] }).BUILTIN_SCENARIO_MODS;
     } catch { return { saveData, ok: false, reason: '内置剧情模组不可用' }; }
   }
-  const mod = (mods || []).find(item => item.manifest.id === targetId);
+  let targetId = configuredTargetId;
+  let mod = (mods || []).find(item => item.manifest.id === targetId);
+  const skipped = new Set<string>();
+  // Do not silently enter a legacy freeform/mismatched stage from the default
+  // route. Follow its declared continuation; entering it itself requires IF.
+  while (mod && isDefaultLineQuarantinedStageId(targetId)) {
+    if (skipped.has(targetId)) return { saveData, ok: false, reason: `隔离关卡转场循环：${targetId}` };
+    skipped.add(targetId);
+    targetId = mod.manifest.nextStageId || '';
+    mod = targetId ? (mods || []).find(item => item.manifest.id === targetId) : undefined;
+  }
   if (!mod) return { saveData, ok: false, reason: `未找到下一关模组 ${targetId}` };
 
   const relationSnapshot = structuredClone((saveData as any)?.社交?.关系 || {});

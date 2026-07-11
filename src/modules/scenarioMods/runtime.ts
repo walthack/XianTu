@@ -354,9 +354,21 @@ export function advanceScenarioRuntime(saveData: SaveData): {
   // 事件落账后立即派生本章完成 flag，保证后续章节 activation 能在同一轮生效。
   settleCompletedChapterFlags(runtime);
 
-  const currentRailComplete = isCanonRailChapter(railProfile, current?.id)
-    && railProfile!.orderedEventIds.every(id => runtime.completedEventIds.includes(id));
-  if (current && hasCompletion(current.completion) && (currentRailComplete || (!isCanonRailChapter(railProfile, current.id) && conditionsMatch(current.completion, next, runtime)))) {
+  const railStageComplete = Boolean(railProfile
+    && railProfile.orderedEventIds.every(id => runtime.completedEventIds.includes(id)));
+  // Rail is one source-ordered story line even when legacy generated chapters
+  // cross-cut those beats. Once every fixed beat is complete, close the whole
+  // stage deterministically; do not let a missing legacy chapter completion
+  // condition trap the player before stage_ready.
+  if (railStageComplete) {
+    for (const chapter of runtime.chapters) {
+      if (runtime.completedChapterIds.includes(chapter.id)) continue;
+      runtime.completedChapterIds.push(chapter.id);
+      transitions.push({ type: 'chapter_completed', id: chapter.id });
+    }
+    runtime.currentChapterId = null;
+    runtime.activeEventIds = [];
+  } else if (current && hasCompletion(current.completion) && !isCanonRailChapter(railProfile, current.id) && conditionsMatch(current.completion, next, runtime)) {
     if (!runtime.completedChapterIds.includes(current.id)) runtime.completedChapterIds.push(current.id);
     transitions.push({ type: 'chapter_completed', id: current.id });
     runtime.currentChapterId = null;

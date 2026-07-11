@@ -8,6 +8,26 @@
 
 import { GENERATED_CANON_RAIL_PROFILES } from './canonRailProfiles.generated';
 
+/**
+ * These legacy stages cannot appear on the default route: either every plot
+ * beat is unanchored, or source review found a material anchor conflict. They
+ * may only be reached by an explicit IF route after their canon is rebuilt.
+ */
+export const DEFAULT_LINE_QUARANTINED_STAGE_IDS = new Set([
+  'lyl.taiquan_expedition',
+  'lcq.stage_03',
+  'lcq.stage_05',
+  'lcq.stage_06',
+  'lyg.ganlu_bian',
+  'lyg.shixiang_ambush',
+  'lyl.lin_an_black_sea',
+  'lyl.luoyang_coup',
+]);
+
+export function isDefaultLineQuarantinedStageId(stageId: unknown): boolean {
+  return typeof stageId === 'string' && DEFAULT_LINE_QUARANTINED_STAGE_IDS.has(stageId);
+}
+
 export interface CanonRailContract {
   eventId: string;
   /** Source-backed result which must happen before this node can be completed. */

@@ -154,27 +154,29 @@ test('Canon Rail stage_02 uses the reviewed source order and repaired battle nod
   assert.match(profile.contracts.find(c => c.eventId === 'lcq.event.s02_03').mustReach, /秦军/);
 });
 
-test('Canon Rail covers every source-anchored built-in stage and quarantines only the unanchored freeform draft', async () => {
+test('Canon Rail covers every source-anchored built-in stage except explicitly quarantined drafts/conflicts', async () => {
   const { CANON_RAIL_PROFILES, getCanonRailProfile } = await loadTs('../src/modules/scenarioMods/canonRail.ts');
-  assert.equal(CANON_RAIL_PROFILES.length, 36);
-  assert.equal(new Set(CANON_RAIL_PROFILES.map(profile => profile.modId)).size, 36);
-  assert.equal(getCanonRailProfile({ modId: 'lyl.taiquan_expedition' }), null);
+  assert.equal(CANON_RAIL_PROFILES.length, 29);
+  assert.equal(new Set(CANON_RAIL_PROFILES.map(profile => profile.modId)).size, 29);
+  for (const id of ['lyl.taiquan_expedition', 'lcq.stage_03', 'lcq.stage_05', 'lcq.stage_06', 'lyg.ganlu_bian', 'lyg.shixiang_ambush', 'lyl.lin_an_black_sea', 'lyl.luoyang_coup']) {
+    assert.equal(getCanonRailProfile({ modId: id }), null, id);
+  }
   assert.ok(CANON_RAIL_PROFILES.every(profile => profile.orderedEventIds.length > 0 && profile.contracts.length === profile.orderedEventIds.length));
 });
 
 test('Canon Rail keeps source order when an old stage splits those beats across chapters', async () => {
   const { advanceScenarioRuntime, getNarrativeAnchorEvent } = await loadTs('../src/modules/scenarioMods/runtime.ts');
   const { getCanonRailProfile } = await loadTs('../src/modules/scenarioMods/canonRail.ts');
-  const profile = getCanonRailProfile({ modId: 'lyg.ganlu_bian' });
+  const profile = getCanonRailProfile({ modId: 'lcq.stage_05b' });
   const [first, second] = profile.orderedEventIds;
   const event = id => ({
     id, name: id, description: id, axisSeq: 1, axisBeat: id,
     completion: [{ path: `flags.event.${id.split('.').at(-1)}.done`, operator: 'eq', value: true }],
   });
   const save = { 世界: { 状态: { 剧本模组: {
-    modId: 'lyg.ganlu_bian',
-    chapters: [{ id: 'lyg.chapter.arrival', eventIds: [second], completion: [{ path: 'flags.chapter.arrival.done', operator: 'eq', value: true }] }],
-    events: [event(first), event(second)], currentChapterId: 'lyg.chapter.arrival',
+    modId: 'lcq.stage_05b',
+    chapters: [{ id: profile.chapterId, eventIds: [second], completion: [{ path: 'flags.chapter.arrival.done', operator: 'eq', value: true }] }],
+    events: [event(first), event(second)], currentChapterId: profile.chapterId,
     activeEventIds: [], completedEventIds: profile.orderedEventIds.slice(2), completedChapterIds: [],
     flags: { [`event.${first.split('.').at(-1)}.done`]: false, [`event.${second.split('.').at(-1)}.done`]: false },
   } } } };
@@ -188,6 +190,25 @@ test('Canon Rail keeps source order when an old stage splits those beats across 
   assert.ok(advanced.transitions.some(t => t.type === 'event_completed' && t.id === first));
   assert.ok(advanced.transitions.some(t => t.type === 'event_activated' && t.id === second));
   assert.equal(getNarrativeAnchorEvent(advanced.saveData.世界.状态.剧本模组).id, second);
+});
+
+test('a completed Canon Rail stage reaches stage_ready even if a legacy terminal chapter lacks completion', async () => {
+  const { advanceScenarioRuntime } = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  const { getCanonRailProfile } = await loadTs('../src/modules/scenarioMods/canonRail.ts');
+  const profile = getCanonRailProfile({ modId: 'lcq.stage_05b' });
+  const save = { 世界: { 状态: { 剧本模组: {
+    modId: profile.modId, nextStageId: 'lcq.stage_06', nextStageReadyId: null,
+    chapters: [
+      { id: 'legacy.chapter.opening', eventIds: [] },
+      { id: 'legacy.chapter.terminal', eventIds: [], completion: undefined },
+    ],
+    events: [], currentChapterId: 'legacy.chapter.terminal', activeEventIds: [],
+    completedEventIds: [...profile.orderedEventIds], completedChapterIds: [], flags: {},
+  } } } };
+  const advanced = advanceScenarioRuntime(save);
+  assert.equal(advanced.saveData.世界.状态.剧本模组.currentChapterId, null);
+  assert.ok(advanced.transitions.some(t => t.type === 'chapter_completed' && t.id === 'legacy.chapter.terminal'));
+  assert.ok(advanced.transitions.some(t => t.type === 'stage_ready' && t.id === 'lcq.stage_06'));
 });
 
 test('Canon Rail rejects direct LLM completion flags; reconciliation remains the only route', async () => {
