@@ -85,6 +85,63 @@ export const CANON_RAIL_PROFILES: CanonRailProfile[] = [
       },
     ],
   },
+  {
+    id: 'qingyu.stage_02',
+    modId: 'lcq.stage_02',
+    chapterId: 'lcq.chapter.stage_02',
+    orderedEventIds: [
+      'lcq.event.s02_01',
+      'lcq.event.s02_03',
+      'lcq.event.s02_02',
+      'lcq.event.s02_04',
+      'lcq.event.s02_05',
+      'lcq.event.s02_06',
+    ],
+    contracts: [
+      {
+        eventId: 'lcq.event.s02_01',
+        mustReach: '王哲向程宗扬交付锦囊，并托付太泉祭祀与守护月霜之事。',
+        completionEvidence: ['王哲', '锦囊', '月霜'],
+        forbiddenInCanon: ['改写王哲的托付', '提前泄露太泉秘密'],
+        allowedElaboration: '可补足帅帐问答、传功后的余波和临别反应；不得提前演出后续战局。',
+      },
+      {
+        eventId: 'lcq.event.s02_03',
+        mustReach: '天武营秦军与罗马第十二军团交战，罗马战术重创秦军方阵，秦军溃散。',
+        completionEvidence: ['秦军', '罗马', '溃散'],
+        forbiddenInCanon: ['将本拍改写为程宗扬与月霜逃亡', '改写秦军溃散结果'],
+        allowedElaboration: '可补足战场视角、军阵混乱与即时求生；不得新增未登场人物或改写战局结果。',
+      },
+      {
+        eventId: 'lcq.event.s02_02',
+        mustReach: '左武第一军团覆灭，王哲留下以九阳神功牺牲，程宗扬带月霜离开。',
+        completionEvidence: ['王哲', '左武', '九阳'],
+        forbiddenInCanon: ['王哲存活', '左武军完整撤离', '替代牺牲结果'],
+        allowedElaboration: '可补足撤离抉择、战场余波与人物反应；不得跳过王哲的托付与牺牲。',
+      },
+      {
+        eventId: 'lcq.event.s02_04',
+        mustReach: '程宗扬在五原城被误认为逃奴，遭殴打并被烙上奴隶印记。',
+        completionEvidence: ['五原城', '奴隶', '烙印'],
+        forbiddenInCanon: ['提前解除奴隶印记', '避免被误抓的既定结果'],
+        allowedElaboration: '可补足入城过程、误会升级和程宗扬的应对；不得改写烙印已经落下的事实。',
+      },
+      {
+        eventId: 'lcq.event.s02_05',
+        mustReach: '程宗扬被故意放出牢房后遭戈龙伏击，被迫杀死孙疤脸并反抗。',
+        completionEvidence: ['戈龙', '孙疤脸', '伏击'],
+        forbiddenInCanon: ['跳过伏击', '改写孙疤脸的死亡结果'],
+        allowedElaboration: '可补足牢外地形、伏击过程与即时选择；不得提前扩写商馆后续人物关系。',
+      },
+      {
+        eventId: 'lcq.event.s02_06',
+        mustReach: '程宗扬识破苏妲己伪装后遭囚禁，并被追问霓龙丝情报。',
+        completionEvidence: ['苏妲己', '囚禁', '霓龙丝'],
+        forbiddenInCanon: ['将囚禁直接改写为合作交易', '提前解决商馆冲突'],
+        allowedElaboration: '可补足对话试探、商馆氛围和信息博弈；不得替程宗扬直接脱身。',
+      },
+    ],
+  },
 ];
 
 /** Only stages that have passed source/order audit appear in this registry. */

@@ -144,6 +144,16 @@ test('Canon Rail event contracts are carried into reconciliation candidates', as
   assert.match(candidates[0].mustReach, /段强/);
 });
 
+test('Canon Rail stage_02 uses the reviewed source order and repaired battle node', async () => {
+  const { getCanonRailProfile } = await loadTs('../src/modules/scenarioMods/canonRail.ts');
+  const profile = getCanonRailProfile({ modId: 'lcq.stage_02' });
+  assert.deepEqual(profile.orderedEventIds, [
+    'lcq.event.s02_01', 'lcq.event.s02_03', 'lcq.event.s02_02',
+    'lcq.event.s02_04', 'lcq.event.s02_05', 'lcq.event.s02_06',
+  ]);
+  assert.match(profile.contracts.find(c => c.eventId === 'lcq.event.s02_03').mustReach, /秦军/);
+});
+
 test('Canon Rail rejects direct LLM completion flags; reconciliation remains the only route', async () => {
   const { guardScenarioModCommands } = await loadTs('../src/modules/scenarioMods/canonGuard.ts');
   const save = await buildRuntimeSave();
