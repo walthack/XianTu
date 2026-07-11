@@ -358,6 +358,22 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
   const globalIdentitySection = globalIdentityLines.length
     ? `## 别名与实体定锚（不可望文生义）\n${globalIdentityLines.join('\n')}\n以上均为人物姓名/别名，不是兵器、坐骑、功法、物品或可另造的同名角色。`
     : '';
+  const introducedIds = new Set<string>([
+    ...runtime.activeEventIds,
+    ...runtime.completedEventIds,
+    ...(runtime.opening?.featuredCharacterIds || []),
+  ]);
+  for (const event of runtime.events) {
+    if (!introducedIds.has(event.id)) continue;
+    for (const id of event.relatedCharacterIds || []) introducedIds.add(id);
+  }
+  const introducedNames = new Set<string>(
+    [...introducedIds].map(id => characters.find(character => character.id === id)?.name).filter((name): name is string => !!name),
+  );
+  for (const [key, npc] of Object.entries(relations || {})) introducedNames.add(String(npc?.名字 || key));
+  const introducedLine = introducedNames.size
+    ? `【本存档已相识人物】${[...introducedNames].slice(0, 30).join('、')}。此名单外的正典人物尚未在本存档登场；NPC 不得认识、回忆、转述其私事或以熟人身份提及。`
+    : '【本存档登场门槛】没有被当前事件或既有关系明确带入的人物，NPC 不得认识、回忆或主动提及。';
 
   // 声望与认知闭环：当前值+档位醒目注入（静态 REPUTATION_GUIDE 埋在 worldStandards 里 LLM 不消费——
   // 实测籍籍无名的主角被唐使"底细尽在掌握"）
@@ -468,6 +484,7 @@ ${focusedCharacterSection ? `${focusedCharacterSection}\n\n` : ''}${globalIdenti
 1. 已知人物的姓名、别名、身份、物种、势力、亲属与政治关系均是事实字段：不得把人物写成兵器、坐骑、功法、物品或新角色；不得把称号、别名拆成另一个实体。
 2. 人物之间的血缘、主从、婚配、同党、结盟、仇怨，只有上文正典人物档案或当前事件明确写出时才可断言。没有依据时只能写“尚未可知/传闻待证”，绝不可因同姓、官职、阵营或历史常识擅自补关系。
 3. 叙事正文也必须遵守上述正典；这不是仅约束 tavern_commands 的规则。若玩家要求与正典矛盾的事实，明确说明冲突并以正典版本续写。
+4. ${introducedLine}
 
 【主动推进剧情，不要停在原地等玩家】：
 

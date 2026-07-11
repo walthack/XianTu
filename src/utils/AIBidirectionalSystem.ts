@@ -28,7 +28,7 @@ import { buildScenarioCanonPrompt, guardScenarioModCommands } from '@/modules/sc
 import { advanceScenarioRuntime, STEERING_DIVERGENCE_COOLDOWN } from '@/modules/scenarioMods/runtime';
 import { applyMilestoneRewards } from '@/modules/scenarioMods/milestoneRewards';
 import { buildScenarioStoryPrompt, createScenarioPromptState } from '@/modules/scenarioMods/storyContext';
-import { stripNarrativeEntityTypeConflicts } from '@/modules/scenarioMods/characterResolver';
+import { stripNarrativeEntityTypeConflicts, stripNarrativeUnintroducedCharacters } from '@/modules/scenarioMods/characterResolver';
 import { buildActionGatePrompt, getNarrativeTurn, pruneExpiredActionGates } from '@/utils/actionGate';
 import { reconcileNarrativeState } from '@/utils/narrativeStateReconciler';
 import { runProgressAudit, shouldRunAudit } from '@/services/progressAuditService';
@@ -49,6 +49,38 @@ function isPlainObject(value: unknown): value is PlainObject {
   if (Array.isArray(value)) return false;
   const proto = Object.getPrototypeOf(value);
   return proto === Object.prototype || proto === null;
+}
+
+/** 本存档已经接触的正典人物；全局 registry/RAG 中的未来人物不在此列。 */
+function introducedScenarioCharacterNames(saveData: SaveData): Set<string> {
+  const names = new Set<string>();
+  const runtime = (saveData as any)?.世界?.状态?.剧本模组;
+  if (!runtime || typeof runtime !== 'object') return names;
+  const characters = Array.isArray(runtime.canon?.characters) ? runtime.canon.characters : [];
+  const byId = new Map<string, string>(characters
+    .filter((character: any) => typeof character?.id === 'string' && typeof character?.name === 'string')
+    .map((character: any) => [character.id, character.name] as [string, string]));
+  const eventIds = new Set([...(runtime.activeEventIds || []), ...(runtime.completedEventIds || [])]);
+  for (const event of Array.isArray(runtime.events) ? runtime.events : []) {
+    if (!eventIds.has(event.id)) continue;
+    for (const id of event.relatedCharacterIds || []) {
+      const name = byId.get(id);
+      if (name) names.add(name);
+    }
+  }
+  for (const id of runtime.opening?.featuredCharacterIds || []) {
+    const name = byId.get(id);
+    if (name) names.add(name);
+  }
+  const player = byId.get(runtime.opening?.playerCharacterId);
+  if (player) names.add(player);
+  const relations = (saveData as any)?.社交?.关系;
+  if (relations && typeof relations === 'object') {
+    for (const [key, value] of Object.entries(relations)) {
+      names.add(String((value as any)?.名字 || key));
+    }
+  }
+  return names;
 }
 
 function mergePlainObjectsReplacingArrays(base: PlainObject, patch: PlainObject): PlainObject {
@@ -1914,7 +1946,17 @@ ${step1Text}
         textContent = narrativeGuard.text;
       }
     }
-    const midTermContent = sanitizeAITextForDisplay(response.mid_term_memory || '').trim();
+    let midTermContent = sanitizeAITextForDisplay(response.mid_term_memory || '').trim();
+    if ((saveData as any)?.世界?.状态?.剧本模组?.modId) {
+      const introduced = introducedScenarioCharacterNames(saveData);
+      const guardText = stripNarrativeUnintroducedCharacters(textContent, introduced);
+      const guardMemory = stripNarrativeUnintroducedCharacters(midTermContent, introduced);
+      if (guardText.conflicts.length || guardMemory.conflicts.length) {
+        console.warn('[正典时间线守卫] 已移除提前登场人物：', [...guardText.conflicts, ...guardMemory.conflicts]);
+      }
+      textContent = guardText.text;
+      midTermContent = guardMemory.text;
+    }
 
     // 处理 text：可选写入叙事历史；可选写入短期记忆
     if (textContent) {

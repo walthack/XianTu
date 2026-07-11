@@ -249,6 +249,36 @@ export function stripNarrativeEntityTypeConflicts(text: string): { text: string;
   return { text: kept.join('').trim(), conflicts };
 }
 
+/**
+ * 全局库收录不代表本存档已经相识。未进入允许名单的人物不得被正文或 NPC 记忆
+ * 当作已知熟人提及；这样 RAG 命中未来角色时也不会造成时间线泄露。
+ */
+export function stripNarrativeUnintroducedCharacters(
+  text: string,
+  introducedCanonicalNames: Iterable<string>,
+): { text: string; conflicts: string[] } {
+  const introduced = new Set(introducedCanonicalNames);
+  const blocked = (registryJson as { characters: RegistryEntry[] }).characters
+    .filter(entry => !introduced.has(entry.canonicalName))
+    .flatMap(entry => [entry.canonicalName, ...(entry.aliases || [])])
+    .filter(name => typeof name === 'string' && name.length >= 2)
+    .sort((left, right) => right.length - left.length);
+  const parts = String(text || '').split(/([。！？\n]+)/);
+  const conflicts: string[] = [];
+  const kept: string[] = [];
+  for (let index = 0; index < parts.length; index += 2) {
+    const sentence = parts[index] || '';
+    const tail = parts[index + 1] || '';
+    const offender = blocked.find(name => sentence.includes(name));
+    if (offender) {
+      conflicts.push(`未登场正典人物“${offender}”被提前写入叙事/记忆`);
+      continue;
+    }
+    kept.push(sentence, tail);
+  }
+  return { text: kept.join('').trim(), conflicts };
+}
+
 /** 取某角色的正典人格底线（principles），供运行时投影到 社交.关系 NPC.人格底线。无则空数组。 */
 export function getRegistryBottomLine(name: string): string[] {
   const entry = byName.get(name);

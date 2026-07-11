@@ -287,6 +287,13 @@ test('global alias identity guard recalls 青骓 as 崔茂 and removes person-to
   assert.match(guarded.conflicts[0], /青骓/);
 });
 
+test('timeline guard prevents NPC memory from naming an unintroduced canonical character', async () => {
+  const { stripNarrativeUnintroducedCharacters } = await loadTs('../src/modules/scenarioMods/characterResolver.ts');
+  const guarded = stripNarrativeUnintroducedCharacters('小紫忽然提起潘金莲的旧事。她望向窗外。', ['小紫']);
+  assert.equal(guarded.text, '她望向窗外。');
+  assert.match(guarded.conflicts[0], /潘金莲/);
+});
+
 test('milestone rewards grant titles on stage_ready at story-correct stage; AI cannot self-grant', async () => {
   const { applyMilestoneRewards, formatEarnedTitles } = await loadTs('../src/modules/scenarioMods/milestoneRewards.ts');
   const { guardScenarioModCommands } = await loadTs('../src/modules/scenarioMods/canonGuard.ts');
