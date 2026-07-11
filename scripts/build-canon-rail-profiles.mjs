@@ -9,9 +9,9 @@ import { join, resolve } from 'node:path';
 
 const root = resolve(import.meta.dirname, '..');
 const gen = join(root, 'mod-kit', 'generated', 'deepseek-v4-flash');
-const stagesDir = join(root, 'src', 'modules', 'scenarioMods', 'builtins', 'data');
-const reviewDir = join(gen, 'character-canon', 'canon-rail', 'all-stages-review');
-const out = join(root, 'src', 'modules', 'scenarioMods', 'canonRailProfiles.generated.ts');
+const stagesDir = process.env.CANON_RAIL_STAGES_DIR || join(root, 'src', 'modules', 'scenarioMods', 'builtins', 'data');
+const reviewDir = process.env.CANON_RAIL_REVIEW_DIR || join(gen, 'character-canon', 'canon-rail', 'all-stages-review');
+const out = process.env.CANON_RAIL_OUTPUT || join(root, 'src', 'modules', 'scenarioMods', 'canonRailProfiles.generated.ts');
 const rollup = join(reviewDir, 'PROFILE-ROLLUP.md');
 const manualStageIds = new Set(['lcq.stage_01', 'lcq.stage_02']);
 // This legacy freeform draft has no source-axis facts at all. It must stay out
@@ -61,9 +61,10 @@ for (const file of readdirSync(stagesDir).filter(file => file.endsWith('.json'))
   });
   const duplicateAxisIds = [...new Set(events.map(event => event.axisId).filter(axisId => axisId
     && events.filter(event => event.axisId === axisId).length > 1))];
+  const nullAxisCriticalIds = events.filter(event => !event.axisId).map(event => event.id);
   const unresolvedAxisIds = [...new Set(events.map(event => event.axisId).filter(axisId => axisId && !axisById.has(axisId)))];
-  if ((duplicateAxisIds.length || unresolvedAxisIds.length) && !quarantinedSourceConflictStageIds.has(stageId)) {
-    throw new Error(`${stageId} has duplicate (${duplicateAxisIds.join(', ') || 'none'}) or unresolved (${unresolvedAxisIds.join(', ') || 'none'}) source-axis bindings; quarantine or repair before default-line generation.`);
+  if ((nullAxisCriticalIds.length || duplicateAxisIds.length || unresolvedAxisIds.length) && !quarantinedSourceConflictStageIds.has(stageId)) {
+    throw new Error(`${stageId} has null (${nullAxisCriticalIds.join(', ') || 'none'}), duplicate (${duplicateAxisIds.join(', ') || 'none'}) or unresolved (${unresolvedAxisIds.join(', ') || 'none'}) source-axis bindings; quarantine or repair before default-line generation.`);
   }
   if (!events.length) {
     if (!quarantinedUnanchoredStageIds.has(stageId)) {
