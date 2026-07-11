@@ -1,7 +1,7 @@
 import type { SaveData } from '@/types/game';
 
 import type { ScenarioCondition, ScenarioFlagValue, ScenarioMod, ScenarioModChapter, ScenarioModEvent } from './schema';
-import { getCanonRailOrder, getCanonRailProfile, isCanonRailChapter, type CanonRailRuntimeState } from './canonRail';
+import { getCanonRailOrder, getCanonRailProfile, isCanonRailChapter } from './canonRail';
 
 
 export interface ScenarioProgressState {
@@ -30,8 +30,6 @@ export interface RuntimeState extends ScenarioProgressState {
   steeringCooldown?: number;
   /** 旧档 reconcile 版本戳：与 registry 版本一致则跳过（正典更新后旧档第一回合自动对齐） */
   reconciledRegistryVersion?: string;
-  /** Engine-owned opt-in.  Missing on old saves intentionally means disabled. */
-  canonRail?: CanonRailRuntimeState;
 }
 
 function readPath(root: unknown, path: string[]): unknown {
@@ -113,7 +111,7 @@ function isCriticalStoryEvent(event: ScenarioModEvent): boolean {
 
 /** 唯一主线锚点：当前章节中最早的已激活、未完成承重事件。
  * runtime 可同时保留资料/并行事件，但主叙事、UI 与 LLM 完成权限只能围绕这一拍推进。 */
-export function getNarrativeAnchorEvent(runtime: Pick<RuntimeState, 'chapters' | 'events' | 'currentChapterId' | 'activeEventIds' | 'completedEventIds'> & Partial<Pick<RuntimeState, 'modId' | 'canonRail'>>): ScenarioModEvent | null {
+export function getNarrativeAnchorEvent(runtime: Pick<RuntimeState, 'chapters' | 'events' | 'currentChapterId' | 'activeEventIds' | 'completedEventIds'> & Partial<Pick<RuntimeState, 'modId'>>): ScenarioModEvent | null {
   const chapter = (runtime.chapters || []).find(item => item.id === runtime.currentChapterId);
   const active = new Set(runtime.activeEventIds || []);
   const completed = new Set(runtime.completedEventIds || []);

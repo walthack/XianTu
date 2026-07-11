@@ -1,6 +1,6 @@
 import type { SaveData } from '@/types/game';
 import { getNarrativeAnchorEvent } from './runtime';
-import { getCanonRailProfile, type CanonRailRuntimeState } from './canonRail';
+import { getCanonRailProfile } from './canonRail';
 
 import type {
   ScenarioContentAccessRule,
@@ -22,7 +22,6 @@ interface ScenarioRuntimeState {
   activeEventIds?: string[];
   chapters?: Array<{ id: string; eventIds?: string[] }>;
   events?: Array<{ id: string; critical?: boolean; axisSeq?: number; axisId?: string | null; axisBeat?: string }>;
-  canonRail?: CanonRailRuntimeState;
   completedEventIds?: string[];
   opening?: {
     playerCharacterId?: string;

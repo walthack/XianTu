@@ -1,10 +1,9 @@
 /**
  * Canon Rail keeps the default Six Dynasties route on its source-backed beats.
  *
- * A rail is deliberately opt-in per save runtime.  It is not an alternate
- * scenario system: an explicit IF branch remains the only place allowed to
- * replace a canon outcome.  Until a UI switch is added, callers may only set
- * this engine-owned field while creating a fresh scenario runtime.
+ * A rail is selected by its audited stage, not by player choice. It is not an
+ * alternate scenario system: an explicit IF branch remains the only place
+ * allowed to replace a canon outcome.
  */
 
 export interface CanonRailContract {
@@ -25,11 +24,6 @@ export interface CanonRailProfile {
   chapterId: string;
   orderedEventIds: string[];
   contracts: CanonRailContract[];
-}
-
-export interface CanonRailRuntimeState {
-  enabled?: boolean;
-  profileId?: string;
 }
 
 /** The first audited pilot.  The #9/#10 source order fixes the old reversed event conditions. */
@@ -93,13 +87,10 @@ export const CANON_RAIL_PROFILES: CanonRailProfile[] = [
   },
 ];
 
-export const QINGYU_STAGE_01_RAIL_PROFILE_ID = 'qingyu.stage_01';
-
-export function getCanonRailProfile(runtime: { modId?: unknown; canonRail?: CanonRailRuntimeState } | null | undefined): CanonRailProfile | null {
-  if (!runtime?.canonRail?.enabled || typeof runtime.canonRail.profileId !== 'string') return null;
-  return CANON_RAIL_PROFILES.find(profile =>
-    profile.id === runtime.canonRail?.profileId && profile.modId === runtime.modId,
-  ) || null;
+/** Only stages that have passed source/order audit appear in this registry. */
+export function getCanonRailProfile(runtime: { modId?: unknown } | null | undefined): CanonRailProfile | null {
+  if (typeof runtime?.modId !== 'string') return null;
+  return CANON_RAIL_PROFILES.find(profile => profile.modId === runtime.modId) || null;
 }
 
 export function getCanonRailContract(profile: CanonRailProfile | null, eventId: string): CanonRailContract | null {

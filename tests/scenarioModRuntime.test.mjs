@@ -103,7 +103,7 @@ test('Canon Rail stage_01 follows source order #9 then #10 and cannot close earl
   const ids = ['lcq.event.s01_01', 'lcq.event.s01_02', 'lcq.event.s01_03', 'lcq.event.s01_04', s06.id, s05.id];
   const save = {
     世界: { 状态: { 剧本模组: {
-      modId: 'lcq.stage_01', canonRail: { enabled: true, profileId: 'qingyu.stage_01' },
+      modId: 'lcq.stage_01',
       chapters: [{ id: 'lcq.chapter.stage_01', eventIds: ids, completion: [{ path: 'flags.event.s01_06.done', operator: 'eq', value: true }] }],
       events: [
         ...ids.slice(0, 4).map((id, index) => event(id, index + 1)), s05, s06,
@@ -133,7 +133,7 @@ test('Canon Rail stage_01 follows source order #9 then #10 and cannot close earl
 test('Canon Rail event contracts are carried into reconciliation candidates', async () => {
   const { buildChainCandidates } = await loadTs('../src/services/eventReconcileService.ts');
   const candidates = buildChainCandidates({
-    modId: 'lcq.stage_01', canonRail: { enabled: true, profileId: 'qingyu.stage_01' },
+    modId: 'lcq.stage_01',
     events: [{
       id: 'lcq.event.s01_02', name: '段强被射杀', axisSeq: 2, axisBeat: '段强遭半兽人袭击身亡',
       completion: [{ path: 'flags.event.s01_02.done', operator: 'eq', value: true }],
@@ -149,7 +149,6 @@ test('Canon Rail rejects direct LLM completion flags; reconciliation remains the
   const save = await buildRuntimeSave();
   const runtime = save.世界.状态.剧本模组;
   runtime.modId = 'lcq.stage_01';
-  runtime.canonRail = { enabled: true, profileId: 'qingyu.stage_01' };
   runtime.events[0].id = 's01_01';
   runtime.events[0].completion = [{ path: 'flags.event.s01_01.done', operator: 'eq', value: true }];
   runtime.chapters[0].eventIds = ['s01_01'];

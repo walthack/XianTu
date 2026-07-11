@@ -110,7 +110,6 @@ export function buildChainCandidates(runtime: {
   completedEventIds?: string[];
   flags?: Record<string, unknown>;
   modId?: unknown;
-  canonRail?: { enabled?: boolean; profileId?: string };
 }): ChainCandidate[] {
   const flags = (runtime.flags && typeof runtime.flags === 'object') ? runtime.flags as Record<string, unknown> : {};
   const completed = new Set(runtime.completedEventIds || []);
@@ -384,7 +383,7 @@ function buildReconcileUserPrompt(candidates: ChainCandidate[], memoryContext: s
 export async function runEventReconcile(input: EventReconcileInput): Promise<StateChange[]> {
   const runtime = get(input.saveData, '世界.状态.剧本模组') as {
     events?: RuntimeEventLike[]; completedEventIds?: string[]; flags?: Record<string, unknown>;
-    modId?: string; canonRail?: { enabled?: boolean; profileId?: string };
+    modId?: string;
   } | undefined;
   // 【临时黑匣子】写进存档供远程诊断
   const dbg: Record<string, unknown> = (() => {

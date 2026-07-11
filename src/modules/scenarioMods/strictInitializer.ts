@@ -5,8 +5,6 @@ import { buildExpandScenarioInitialization, type ExpandScenarioInitialization } 
 import { withNativeScenarioLocationType } from './locationTypes';
 import { advanceScenarioRuntime, createScenarioProgress, getInitialScenarioChapterId, type ScenarioProgressState } from './runtime';
 import { applyScenarioRelationshipsToSave } from './relationships';
-import type { CanonRailRuntimeState } from './canonRail';
-import { QINGYU_STAGE_01_RAIL_PROFILE_ID } from './canonRail';
 
 export interface ScenarioModRuntimeState extends ScenarioProgressState {
   schema: ScenarioMod['schema'];
@@ -27,8 +25,6 @@ export interface ScenarioModRuntimeState extends ScenarioProgressState {
   contentAccess: NonNullable<ScenarioMod['rules']['contentAccess']>;
   currentChapterId: string | null;
   flags: Record<string, string | number | boolean | null>;
-  /** Kept disabled by default; explicit fresh-save opt-in is wired by the rail switch. */
-  canonRail?: CanonRailRuntimeState;
   canon: {
     factions: NonNullable<ScenarioMod['canon']>['factions'];
     locations: NonNullable<ScenarioMod['canon']>['locations'];
@@ -51,7 +47,6 @@ export interface StrictScenarioInitialization {
 export function buildStrictScenarioInitialization(
   mod: ScenarioMod,
   generatedAt = new Date().toISOString(),
-  options: { canonRailEnabled?: boolean } = {},
 ): StrictScenarioInitialization {
   // Pinia exposes the selected Mod as a reactive Proxy. Normalize the JSON
   // contract before cloning nested values into the save runtime.
@@ -158,9 +153,6 @@ export function buildStrictScenarioInitialization(
     contentAccess: structuredClone(mod.rules.contentAccess || []),
     currentChapterId: getInitialScenarioChapterId(mod),
     flags: { ...(mod.scenario.initialFlags || {}) },
-    canonRail: options.canonRailEnabled && mod.manifest.id === 'lcq.stage_01'
-      ? { enabled: true, profileId: QINGYU_STAGE_01_RAIL_PROFILE_ID }
-      : undefined,
     canon: {
       factions: structuredClone(mod.canon?.factions || []),
       locations: structuredClone(mod.canon?.locations || []),
@@ -222,14 +214,13 @@ export function applyStrictScenarioInitializationToSave(
 export async function resolveInitialWorldInfo(
   scenarioMod: ScenarioMod | null,
   generateWorld: () => Promise<WorldInfo>,
-  options: { canonRailEnabled?: boolean } = {},
 ): Promise<{
   worldInfo: WorldInfo;
   strictInitialization?: StrictScenarioInitialization;
   expandInitialization?: ExpandScenarioInitialization;
 }> {
   if (scenarioMod?.rules.mode === 'strict') {
-    const strictInitialization = buildStrictScenarioInitialization(scenarioMod, new Date().toISOString(), options);
+    const strictInitialization = buildStrictScenarioInitialization(scenarioMod);
     return { worldInfo: strictInitialization.worldInfo, strictInitialization };
   }
   const generatedWorld = await generateWorld();

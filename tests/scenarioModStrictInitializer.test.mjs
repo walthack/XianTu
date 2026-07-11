@@ -55,14 +55,14 @@ test('strict resolution never calls the AI world generator', async () => {
   assert.equal(result.strictInitialization.runtimeState.modId, 'liuchao.jiankang');
 });
 
-test('Canon Rail is explicit fresh-save opt-in and otherwise absent', async () => {
+test('Canon Rail is selected by audited stage without a save-level switch', async () => {
   const { buildStrictScenarioInitialization } = await loadTs('../src/modules/scenarioMods/strictInitializer.ts');
   const mod = await loadMod();
   mod.manifest.id = 'lcq.stage_01';
-  const disabled = buildStrictScenarioInitialization(mod, '2026-06-22T00:00:00.000Z');
-  const enabled = buildStrictScenarioInitialization(mod, '2026-06-22T00:00:00.000Z', { canonRailEnabled: true });
-  assert.equal(disabled.runtimeState.canonRail, undefined);
-  assert.deepEqual(enabled.runtimeState.canonRail, { enabled: true, profileId: 'qingyu.stage_01' });
+  const initialization = buildStrictScenarioInitialization(mod, '2026-06-22T00:00:00.000Z');
+  assert.equal(initialization.runtimeState.canonRail, undefined);
+  const { getCanonRailProfile } = await loadTs('../src/modules/scenarioMods/canonRail.ts');
+  assert.equal(getCanonRailProfile(initialization.runtimeState)?.id, 'qingyu.stage_01');
 });
 
 test('strict initialization accepts a reactive-style Mod proxy from character creation', async () => {
