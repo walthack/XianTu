@@ -19,7 +19,7 @@ const rerun = process.argv.includes('--rerun');
 // Death, irreversible loss, betrayal, transfer, confinement, or a decisive
 // campaign outcome. This deliberately excludes ordinary fights and travel.
 const irreversible = /死亡|身亡|杀死|被杀|斩杀|处死|覆灭|牺牲|自刎|毒杀|背叛|叛变|夺取|抢走|囚禁|烙印|奴隶|传授|传功|筑基|功法|秘籍|灵飞镜|封印|废去|灭门|弑君|失踪|经脉尽绝/u;
-const sensitive = /性|裸|乳|阴|阳具|阳物|阴户|淫|奸|交合|性交|床笫|脱衣|呻吟|高潮|亲热|双修|强暴|后庭|处子|肉体|臀|亲吻|按摩棒/u;
+const sensitive = /性|裸|乳|阴|阳具|阳物|阴户|淫|奸|交合|性交|床笫|脱衣|呻吟|高潮|亲热|双修|强暴|后庭|处子|肉体|臀|亲吻|按摩棒|凌辱|糟蹋|玷污|非礼|猥亵|性侵|性暴力|强迫性/u;
 
 function parseEnv(text) {
   return Object.fromEntries(text.split(/\r?\n/).flatMap(line => {
@@ -34,7 +34,15 @@ function parseEnv(text) {
 function safe(value) {
   const text = String(value || '').replace(/\s+/g, ' ').trim();
   if (!text) return '';
-  return sensitive.test(text) ? '（敏感叙述已略去，不能据此生成语义合同）' : text.slice(0, 360);
+  // Keep the non-adult causal skeleton useful for a plot-outline review. A
+  // residual sensitive token still drops the whole summary rather than risking
+  // a partial redaction leak.
+  const softened = text
+    .replace(/凌辱|糟蹋|玷污|非礼|猥亵|性侵|性暴力|强迫性|强暴/g, '严重侵害')
+    .replace(/性交|交合|双修|床笫|亲热/g, '亲密情节')
+    .replace(/淫|奸/g, '不当行为')
+    .replace(/裸|乳|阴|阳具|阳物|阴户|脱衣|呻吟|高潮|后庭|处子|肉体|臀|亲吻|按摩棒/g, '敏感细节');
+  return sensitive.test(softened) ? '（敏感叙述已略去，不能据此生成语义合同）' : softened.slice(0, 360);
 }
 
 function parseGeneratedProfiles(raw) {
@@ -44,7 +52,7 @@ function parseGeneratedProfiles(raw) {
 }
 
 async function request(key, target) {
-  const system = `你是保守的小说剧情合同审计员。输入只含去成人化的来源轴摘要；严禁输出、猜测、复述或评价成人内容，也不得用外部记忆补造事实。只审查不可逆剧情结果。仅输出 JSON：{stageVerdict:"reviewed|insufficient_evidence",events:[{id:"",status:"supported|unknown",completionEvidence:["不超过8字的实体或结果词，最多3项"],forbiddenInCanon:["不超过16字的具体禁止改写，最多3项"],reason:"不超过35字"}]}。若材料已略去或证据不足，status 必须 unknown，两个数组留空。completionEvidence 必须是叙事中可自然出现的短词，不得是固定句片；forbiddenInCanon 必须针对该拍的不可逆结果，禁止使用“改写原著结果”“提前剧情”等泛词。`;
+  const system = `你是保守的小说剧情合同审计员。输入只含去成人化的来源轴摘要；严禁输出、猜测、复述或评价成人内容，也不得用外部记忆补造事实。只审查不可逆剧情结果。仅输出 JSON：{stageVerdict:"reviewed|insufficient_evidence",events:[{id:"",status:"supported|unknown",completionEvidence:["不超过8字的实体加动作或结果词，最多3项"],forbiddenInCanon:["不超过16字的具体禁止改写，最多3项"],reason:"不超过35字"}]}。若材料已略去或证据不足，status 必须 unknown，两个数组留空。completionEvidence 必须是叙事中可自然出现的短词，且每项均须包含动作或结果；禁止只填人名、地名或物件名，禁止固定句片。forbiddenInCanon 必须针对该拍的不可逆结果，禁止使用“改写原著结果”“提前剧情”等泛词；来源若只说失踪、传闻或衣冠葬，禁止断定人物已死亡。`;
   const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
     method: 'POST', signal: AbortSignal.timeout(60000),
     headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json', 'X-Title': 'XianTu Canon Rail Semantic Contract Review' },
