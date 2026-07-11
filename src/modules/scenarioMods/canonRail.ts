@@ -6,6 +6,8 @@
  * allowed to replace a canon outcome.
  */
 
+import { GENERATED_CANON_RAIL_PROFILES } from './canonRailProfiles.generated';
+
 export interface CanonRailContract {
   eventId: string;
   /** Source-backed result which must happen before this node can be completed. */
@@ -26,8 +28,8 @@ export interface CanonRailProfile {
   contracts: CanonRailContract[];
 }
 
-/** The first audited pilot.  The #9/#10 source order fixes the old reversed event conditions. */
-export const CANON_RAIL_PROFILES: CanonRailProfile[] = [
+/** Hand-reviewed exceptions. The #9/#10 source order fixes the old reversed event conditions. */
+const HAND_REVIEWED_CANON_RAIL_PROFILES: CanonRailProfile[] = [
   {
     id: 'qingyu.stage_01',
     modId: 'lcq.stage_01',
@@ -144,7 +146,17 @@ export const CANON_RAIL_PROFILES: CanonRailProfile[] = [
   },
 ];
 
-/** Only stages that have passed source/order audit appear in this registry. */
+/**
+ * Every source-anchored built-in stage is covered here. Profiles generated
+ * from the source axis are deterministic; hand-reviewed profiles above take
+ * precedence when a source audit supplied stronger wording or a correction.
+ */
+export const CANON_RAIL_PROFILES: CanonRailProfile[] = [
+  ...HAND_REVIEWED_CANON_RAIL_PROFILES,
+  ...GENERATED_CANON_RAIL_PROFILES,
+];
+
+/** Only source-anchored stages may enter the default-line registry. */
 export function getCanonRailProfile(runtime: { modId?: unknown } | null | undefined): CanonRailProfile | null {
   if (typeof runtime?.modId !== 'string') return null;
   return CANON_RAIL_PROFILES.find(profile => profile.modId === runtime.modId) || null;

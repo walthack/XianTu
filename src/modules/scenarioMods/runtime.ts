@@ -109,18 +109,29 @@ function isCriticalStoryEvent(event: ScenarioModEvent): boolean {
   return Boolean(event.axisBeat || event.axisId || typeof event.axisSeq === 'number');
 }
 
-/** 唯一主线锚点：当前章节中最早的已激活、未完成承重事件。
+/** 唯一主线锚点：最早的已激活、未完成承重事件。
+ *
+ * 普通剧本以当前章节为边界。Canon Rail 则以原文 source-axis 为唯一
+ * 顺序依据：旧生成稿的章节分组可能交错，不能让它反过来打乱正典拍点。
  * runtime 可同时保留资料/并行事件，但主叙事、UI 与 LLM 完成权限只能围绕这一拍推进。 */
 export function getNarrativeAnchorEvent(runtime: Pick<RuntimeState, 'chapters' | 'events' | 'currentChapterId' | 'activeEventIds' | 'completedEventIds'> & Partial<Pick<RuntimeState, 'modId'>>): ScenarioModEvent | null {
   const chapter = (runtime.chapters || []).find(item => item.id === runtime.currentChapterId);
   const active = new Set(runtime.activeEventIds || []);
   const completed = new Set(runtime.completedEventIds || []);
   const order = new Map((chapter?.eventIds || []).map((id, index) => [id, index]));
+  const railProfile = getCanonRailProfile(runtime);
   const chapterHasCritical = (runtime.events || []).some(event => order.has(event.id) && isCriticalStoryEvent(event));
-  const railOrder = getCanonRailOrder(getCanonRailProfile(runtime));
+  const railOrder = getCanonRailOrder(railProfile);
   const candidates = (runtime.events || [])
-    .filter(event => active.has(event.id) && !completed.has(event.id) && order.has(event.id));
+    .filter(event => active.has(event.id) && !completed.has(event.id)
+      && (Boolean(railProfile?.orderedEventIds.includes(event.id)) || order.has(event.id)));
   const anchored = candidates.filter(isCriticalStoryEvent);
+  if (railProfile) {
+    return anchored
+      .sort((a, b) => (railOrder.get(a.id) ?? Infinity) - (railOrder.get(b.id) ?? Infinity)
+        || (a.axisSeq ?? Infinity) - (b.axisSeq ?? Infinity)
+        || (order.get(a.id) ?? Infinity) - (order.get(b.id) ?? Infinity))[0] || null;
+  }
   // 有承重链的章节绝不让资料/彩蛋事件顶替主线；承重链完成后交给 runtime 自动收章。
   return (chapterHasCritical ? anchored : candidates)
     .sort((a, b) => (railOrder.get(a.id) ?? Infinity) - (railOrder.get(b.id) ?? Infinity)
@@ -316,7 +327,8 @@ export function advanceScenarioRuntime(saveData: SaveData): {
   const currentEventIds = new Set(current?.eventIds || []);
   for (const activeId of [...runtime.activeEventIds]) {
     const event = runtime.events.find(item => item.id === activeId);
-    if (!event || !currentEventIds.has(activeId)) {
+    const isRailEvent = Boolean(railProfile?.orderedEventIds.includes(activeId));
+    if (!event || (!isRailEvent && !currentEventIds.has(activeId))) {
       runtime.activeEventIds = runtime.activeEventIds.filter(id => id !== activeId);
       continue;
     }
