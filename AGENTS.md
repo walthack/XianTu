@@ -1,5 +1,10 @@
 # Agent 须知（多 agent 一致性）
 
+## 协作记忆基线
+
+- `PROJECT-STATUS.md` 是本项目多 agent 的共享进度、分工、交付与 Git 汇总权威。开始认领、完成交付或改变阶段状态时，先读后更新本文件。
+- 根目录 `CHANGELOG.md` 属原 repo 历史；不得将本协作线的状态记录误写进去。
+
 1. **修改 canon 数据（mod-kit/generated/**）或核心 prompt（src/modules/scenarioMods/storyContext.ts 等）前，必读**
    `mod-kit/generated/deepseek-v4-flash/character-canon/CANON-DECISIONS.md`（正典裁定簿）。
 2. 带执法标记（AFF_PROTECTED / AGE_PROTECTED / DEBUT_PROTECTED / USER_CANON）的字段是人工裁定，
