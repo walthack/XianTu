@@ -1,13 +1,15 @@
 # 仙途 (XianTu) · 项目总体状况与并行分工文档
 
 > 面向「新加入的 agent」。读完这一篇即可独立认领一个模块开工。
-> 最后更新：2026-06-30。基线 git：`bceaf66`（分支 `feat/builtin-scenario-templates` 系一脉）。
+> 最后更新：2026-07-12。基线 git：`d6a3323`（分支 `feat/builtin-scenario-templates` 系一脉；自 `bceaf66` 起 +197 commit）。
+
+> **多 agent 协作基线（用户裁定）**：本文件是本项目的共享进度、分工、交付与 Git 汇总权威；开始认领、完成交付或改变阶段状态时先读后更新。根目录 `CHANGELOG.md` 属原 repo 历史，不记录本协作线的状态。
 
 ---
 
 ## 0. 一句话
 
-把三部「六朝」修真小说（清羽记 / 云龙吟 / 燕歌行）改造成一个可玩的 AI 修真文字游戏的**剧本 Mod 套件**：从小说原文抽取 → 生成 18 个关卡 Mod（地图/角色/关系/物品/事件/势力）→ 内置进 Webpack 应用 → 在测试服跑。当前主轴、人物、地图、关系、if 分支地基都已成型，正处于**数据深度补全 + if 线落地 + 立绘**三条线并行推进阶段。
+把三部「六朝」修真小说（清羽记 / 云龙吟 / 燕歌行）改造成一个可玩的 AI 修真文字游戏的**剧本 Mod 套件**：从小说原文抽取 → 生成 18 个关卡 Mod（地图/角色/关系/物品/事件/势力）→ 内置进 Webpack 应用 → 在测试服跑。当前主轴、人物、地图、关系、if 分支地基都已成型；运行时**默认线正典轨道（Canon Rail）+ 可见行动判定引擎 + 事件对账死锁自愈**三大系统已落地，续写**结局蓝图 v2** 已定稿为真值源。仍在推进：**数据深度补全 + if 线扩量 + 立绘 + 续写 canon 回填**。
 
 ---
 
@@ -18,8 +20,12 @@
 | **真实工作目录**（有 mod-kit/、.env、生成内容） | `/Users/clawbot/Documents/Codex/2026-06-21/xiantu/work/XianTu` |
 | ⚠️ 旧 checkout（**没有** mod-kit，别在这干活） | `/Users/clawbot/Projects/XianTu` |
 | 生成内容根 | `mod-kit/generated/deepseek-v4-flash/`（`qingyu/ yunlong/ yange/ shared-atlas/ character-canon/`）|
-| 脚本（91 个 .mjs） | `scripts/` |
+| 脚本（167 个 .mjs） | `scripts/` |
 | 核心文档 roadmap | `mod-kit/generated/deepseek-v4-flash/character-canon/CORE-DOCS-ROADMAP.md` |
+| **正典裁定簿（改 canon/prompt 前必读）** | `…/character-canon/CANON-DECISIONS.md`（89 条人工裁定 + 执法标记）|
+| 续写总纲 / 剧透血缘密档 | `…/character-canon/ENDING-BLUEPRINT.md` v2（真值源）+ `RELATIONSHIPS-SECRET.md`（关系密档层，裁定 #89）|
+| 默认线正典轨道设计 | `…/character-canon/DEFAULT-CANON-RAIL-DESIGN.md` |
+| 对外发布 roadmap（发布门禁/发布后深耕） | `RELEASE-ROADMAP.md`（仓库根，2026-07-07 立档） |
 | NAS Mod Kit（同步目标） | `/Volumes/botsvault/06_material/XianTu-Mod-Kit/` |
 | NAS 成品区（18 个可导入 Mod） | `…/XianTu-Mod-Kit/完善版剧本Mod/{六朝清羽记,云龙吟,燕歌行}/` |
 | 三本小说原文（抽取源） | `/Volumes/botsvault/06_material/{A-六朝清羽记, B- 六朝云龙吟, C-六朝燕歌行}.epub` |
@@ -90,17 +96,25 @@ epub 原文
 | 世界地图铺满全大陆地点（5→40+/关）+ 主角标记修复 | ✅ |
 | 提示词六朝化（prompts_all）+ 主要女角外貌成年化（去幼态） | ✅ |
 | 主要角色性格重做（统一一套 + 人物卡权威源）+ 关系缺失修复 | ✅ |
-| if 线系统：schema v3 + 校验器 + 三本共 **10 条** 分支（覆盖四模式） | ✅ |
+| if 线系统：schema v3 + 校验器 + 三本共 **14 条** 分支（qingyu4/yunlong5/yange5，覆盖四模式） | ✅ |
 | 头像数据地基（schema/validator/运行时透传）+ EPUB 官方插图抽取 96 张 | ✅ |
 | 时间节点违规清理（D4）、别名清理（D1）、势力 id 归一（D6） | ✅ |
 | 行动门控（二层失败惯性）：失败后结构化记录场景惯性，下一轮不把同一动作当无后果重开 | ✅ |
 | 局域网云存档：人物列表、当前存档、存档数据、剧本 Mod 库通过 `/api/v1/save-storage` 同步，成功保存有用户提示 | ✅ |
 | 云端 API / 提示词配置：API 管理支持上传覆盖云端，提示词自定义项可跨设备同步，无需登录验证 | ✅ |
+| **正典裁定簿 CANON-DECISIONS**（89 条人工裁定中央执法簿 + 溯源/执法标记，改 canon 前必读） | ✅ |
+| **默认线正典轨道 Canon Rail**（未选 if 时沿原著主轴，确定性生成器接入 + 空轴/冲突硬门禁 + 冲突关隔离待复核，裁定 #58-65） | ✅ |
+| **事件对账 + 主线死锁自愈**（哨兵触发/记忆窗口封顶/内嵌 think 剥离/bigram 证据接地，真机验收） | ✅ |
+| **可见行动判定引擎 P0-P5**（本地确定性判定·预检·结算·行动余波·UI 回执，LLM 不重骰，裁定 #66-75） | ✅ |
+| 主线 UI：objective 任务目标（37关205事件）+ 当前一拍显示 + 主/支线金色/灰色视觉区分 | ✅ |
+| **续写结局蓝图 v2**（真值源，三幕脊椎 + 六国收束 + 终战=对抗策展系统）+ 剧透血缘关系密档层（裁定 #80-89） | ✅ |
+| 角色 RAG 向量检索 + 内置瘦身（省 ~25%）；势力富化去重 66→58；BGM 音乐引擎 | ✅ |
+| 单测 76 → **186 全绿** | ✅ |
 
 ### 🔥 进行中 / 待落地
 
 - **qingyu 全本重抽**（`scripts/reextract-qingyu.mjs`）—— 第一本 extraction 早期质量最弱，major 密度 0.63/章 vs 后两本 1.26/1.95，存在欠产 batch（水战弧 10 章 0 事件等）。重抽预期 major 185→~350。⚠️ **这是地基级改动**：完成后 qingyu 主轴段重建 → seq 重编号 → 需重映射脊柱锚点 + if 线样章 anchor。**未落库**（产 `qingyu.reextract.DRAFT.json` 不覆盖现版）。
-- **if 线收尾**：validate-if-branches 接进门禁 runner；用户后审 10 条内容；if schema 接 `attitudeToProtagonist`。
+- **if 线收尾**：validate-if-branches 接进门禁 runner；用户后审 14 条内容；if schema 接 `attitudeToProtagonist`。
 - **态度建模全本跑**：qingyu 试点通过；待扩 yunlong+yange（~15 条处子/破身约束），低置信标人工核。
 
 ### 📋 列入「未来功能」
@@ -122,7 +136,7 @@ epub 原文
 
 ```bash
 npm run type-check          # TS 类型
-npm test                    # 单测（当前 ~76 用例）
+npm test                    # 单测（当前 186 用例，全绿）
 npm run mod:validate        # 18 关卡 Mod 校验，必须 18/18 PASS
 node scripts/validate-shared-scenario-atlas.mjs   # 共享 atlas（exit 0）
 node scripts/validate-if-branches.mjs             # if 线（若动到 if/spine）
@@ -149,7 +163,7 @@ node scripts/validate-if-branches.mjs             # if 线（若动到 if/spine�
 - **认领者必须独占 qingyu 主轴/锚点**，完成前通知其他模块暂停动 qingyu seq。后两本 yunlong/yange 不受影响。
 
 ### C. if 线 / 分支系统
-- 10 条已成型（`if-branches-sample/` + `character-canon/{book}.if-branches.json`）。
+- 14 条已成型（qingyu4/yunlong5/yange5；`if-branches-sample/` + `character-canon/{book}.if-branches.json`）。
 - **可干**：把 `validate-if-branches.mjs` 接进门禁 runner；if schema 接 `attitudeToProtagonist`（翻转处子/破身时态度同步翻）；性别置换轴（genderswap，纯沙盒 if 层永不进 canon，样章已起 `qingyu.if-genderswap.SAMPLE.json`）；云龙/燕歌各再扩几条。
 - **冲突面**：动 `if-branches/` + spine + schema，不动关卡 mod profile → 与 A 并行安全；但 anchor 依赖 qingyu seq，需与 B 协调。
 
@@ -164,9 +178,11 @@ node scripts/validate-if-branches.mjs             # if 线（若动到 if/spine�
 - **内容红线**：未成年/孩童化角色拒绝任何性化立绘；外貌字段取 `*.appearance-draft.json` 的 `appearance`+`bodyFeatures`，**别取** `character-descriptions.json`（有损摘要丢身材）。`portrait-risk-audit.json`：113 SAFE / 10 HIGH。
 - **冲突面**：app 前端（`src/`）+ portraits 数据，与 A/C/D（数据层）几乎不冲突。
 
-### F. 燕歌行续写新 canon（最大未来项）
-- 主轴末端 #1034 之后延长主线，启动钩子 = #1017 李辅国魂魄占郭氏躯体。
-- **难点**：无原文可抽 → 须换「多模型协同创作」。要新增承重脊柱 + 新角色（canon 新造）+ 新地区（扩 shared-atlas）。独立性高但工作量最大、需用户深度参与方向。
+### F. 燕歌行续写新 canon（最大未来项，**设计层已定稿**）
+- **结局蓝图 v2 已定稿=真值源**（`character-canon/ENDING-BLUEPRINT.md`，裁定 #69/#80-89）：三幕脊椎（人→组织→系统逐幕升维）、六国收束、终战=对抗自动策展系统、岳氏全谱/续写"毕业生"终幕；剧透血缘已落**关系密档层**（`RELATIONSHIPS-SECRET.md`，方案 A，不进可见关系网）。启动钩子仍 = #1017 李辅国魂魄占郭氏躯体。
+- **待执行**：141 个空 ending 回填 + if 顶层分岔锚点定义 + 新承重脊柱/新角色（canon 新造）/新地区（扩 shared-atlas）。
+- **独立 milestone（未做）**：运行时"知情 NPC 主动行动"注入引擎（按知情图谱分层可见 / per-stage 解锁），把密档血缘受控注入给该知情的 NPC。
+- **难点**：无原文可抽 → 须「多模型协同创作」；独立性高但工作量最大、需用户深度参与方向。
 
 ### G. 应用侧功能 / 游戏内渲染
 - 势力对外关系（factionRelationships）数据已在 worldInfo，但**游戏 UI 可能未渲染** → 游戏侧 Vue 工作。
@@ -185,7 +201,7 @@ node scripts/validate-if-branches.mjs             # if 线（若动到 if/spine�
 
 ## 7. 给新 agent 的最短上手路径
 
-1. `cd` 进真实工作目录（§1），`git log --oneline -5` 确认在 `bceaf66` 一脉。
+1. `cd` 进真实工作目录（§1），`git log --oneline -5` 确认在 `d6a3323` 一脉。
 2. 读 `character-canon/CORE-DOCS-ROADMAP.md`（带 ✅ 的逐项进度）+ 本文 §5 选一个模块。
 3. 跑一遍 §4 门禁确认基线绿。
 4. 认领模块前，若涉及 qingyu 主轴/锚点，先与模块 B 认领者对齐。
