@@ -30,6 +30,10 @@ export function buildLocalJudgementPreflight(
   currentTurn: number,
 ): JudgementProposal | null {
   const normalized = actionText.trim();
+  // P2 尚未把 active Canon Rail contract 映射为 route_process_only / if_only；
+  // 在 P3 完成前，宁可沿用既有叙事链，也不能把承重过程误判为 free。
+  const runtime = saveData?.世界?.状态?.剧本模组;
+  if (runtime?.modId && Array.isArray(runtime.activeEventIds) && runtime.activeEventIds.length > 0) return null;
   const matched = KEYWORDS.find(([, matcher]) => matcher.test(normalized));
   if (!matched) return null;
   const [kind] = matched;
