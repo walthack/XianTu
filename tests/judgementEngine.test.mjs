@@ -74,3 +74,15 @@ test('near-miss becomes partial while hard miss remains failure or critical fail
   assert.equal(outcomeForTotal(10, 20), 'failure');
   assert.equal(outcomeForTotal(4, 20), 'critical_failure');
 });
+
+test('non-success outcomes deterministically create an action gate exactly once', async () => {
+  const save = { 系统: { 扩展: {} } };
+  const pending = await createPending(save, { difficulty: { band: 'hard', value: 30 } });
+  const { resolvePendingJudgement } = await loadTs('../src/utils/judgementEngine.ts');
+  const result = resolvePendingJudgement(save, pending.id, { currentTurn: 5, roll: () => 2 });
+  resolvePendingJudgement(save, pending.id, { currentTurn: 6, roll: () => 20 });
+
+  assert.equal(result.appliedEffects.length, 1);
+  assert.equal(save.系统.扩展.行动门控.recent.length, 1);
+  assert.equal(save.系统.扩展.行动门控.recent[0].outcome, 'failure');
+});

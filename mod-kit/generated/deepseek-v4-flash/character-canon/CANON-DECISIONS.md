@@ -73,6 +73,7 @@
 | 67 | 07-12 | **可见行动判定 P1 存档契约**：`pending` 最多一条，必须显式执行或取消；结算先写入 recent 再交叙事，按判定 ID 幂等复用，读档／重试不得重骰；取消无骰点、无效果但保留审计记录。接近难度 5 点内预留 `partial`（带代价）结果，P1 尚未接 UI 或主叙事，故不改变实际玩法。 | judgement engine + tests | (本次) |
 | 68 | 07-12 | **可见行动判定 P2（首批）**：仅对本地明确识别为战斗、逃脱、潜入、探索、炼制、修炼、交涉的行动显示确认卡；普通对话不拦截。pending 未确认不得请求叙事模型；确认后把本地已结算结果作为只读事实交给叙事，LLM 不得重骰或改写。首批暂不接 Canon Rail 过程策略，默认仅用于非承重自由行动，Canon Rail 接入须另行完成 P3。 | preflight + MainGamePanel + tests | (本次) |
 | 69 | 07-12 | **可见行动判定 P3（Canon Rail 过程边界）**：活动 source-axis 拍的风险行动默认 `route_process_only`，判定只影响过程代价，不得由引擎或叙事直接完成／void／改写事件；明确收服、后宫、结盟、策反或改写命运等意图标为 `if_only`，默认线禁执行，须先进入显式 IF。 | preflight + UI + tests | (本次) |
+| 70 | 07-12 | **可见行动判定 P4a（确定性行动余波）**：本地判定的 partial／failure／critical_failure 自动一次性写入既有行动门控，记录在 resolution 的 appliedEffects；同一 resolution 重试只复用结果，禁止重复写门控。暂不由引擎直接扣血、消耗物品或改关系，待逐类来源化数值规则核定。 | judgement engine + tests | (本次) |
 | 48 | 07-04 | 各国军队抽档 13 番号 polity/统属/兵种落 faction；秦军军团=原文「秦军」（天武营秦国锐士，非域外军团）、北府军=晋国（史实核定），二者人工核定；左武军/罗马/马其顿军团已有描述只补元数据 | apply-army-details | eb9307b |
 
 ## 结局蓝图裁定（2026-07-12，续写总纲=ENDING-BLUEPRINT.md v2）

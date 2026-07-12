@@ -264,6 +264,44 @@ function archiveResolution(state: JudgementState, resolution: JudgementResolutio
   };
 }
 
+function gateScopeFor(kind: JudgementKind): string {
+  if (kind === 'combat' || kind === 'escape') return 'combat';
+  if (kind === 'social' || kind === 'scheme') return 'social';
+  return 'scene';
+}
+
+function deterministicOutcomeEffects(proposal: JudgementProposal, outcome: JudgementOutcome, currentTurn: number): JudgementResolution['appliedEffects'] {
+  if (!['partial', 'failure', 'critical_failure'].includes(outcome)) return [];
+  const gateOutcome = outcome === 'partial' ? 'partial' : 'failure';
+  const severity = outcome === 'critical_failure' ? '局势明显恶化' : outcome === 'failure' ? '行动受阻' : '目标虽有进展但留下破绽';
+  return [{
+    key: '系统.扩展.行动门控.recent',
+    action: 'push',
+    value: {
+      actionLabel: proposal.actionText.slice(0, 48),
+      outcome: gateOutcome,
+      scope: gateScopeFor(proposal.kind),
+      ...(proposal.target ? { target: proposal.target } : {}),
+      reason: `${severity}（本地判定：${outcome}）`,
+      effect: '重复同一路线须承接既有余波，改做准备、绕行或换目标可降低风险。',
+      createdAtTurn: currentTurn,
+      ttlTurns: 3,
+    },
+  }];
+}
+
+function applyDeterministicEffects(saveData: unknown, effects: JudgementResolution['appliedEffects']): void {
+  if (!effects.length) return;
+  const root = saveData as any;
+  if (!root.系统) root.系统 = {};
+  if (!root.系统.扩展) root.系统.扩展 = {};
+  if (!root.系统.扩展.行动门控) root.系统.扩展.行动门控 = { version: 1, recent: [] };
+  if (!Array.isArray(root.系统.扩展.行动门控.recent)) root.系统.扩展.行动门控.recent = [];
+  for (const effect of effects) {
+    if (effect.key === '系统.扩展.行动门控.recent' && effect.action === 'push') root.系统.扩展.行动门控.recent.push(clone(effect.value));
+  }
+}
+
 /**
  * Resolves a persisted pending proposal once. Calling it again with the same id returns the
  * stored resolution, so retry/reload cannot reroll or duplicate effects.
@@ -280,15 +318,18 @@ export function resolvePendingJudgement(
 
   const roll = Math.max(1, Math.min(20, Math.floor((options.roll || rollD20)())));
   const total = roll + state.pending.factors.reduce((sum, factor) => sum + factor.value, 0);
+  const outcome = outcomeForTotal(total, state.pending.difficulty.value);
+  const appliedEffects = options.appliedEffects ? clone(options.appliedEffects) : deterministicOutcomeEffects(state.pending, outcome, normalizeTurn(options.currentTurn));
   const resolution: JudgementResolution = {
     ...state.pending,
     status: 'resolved',
     roll,
     total,
-    outcome: outcomeForTotal(total, state.pending.difficulty.value),
-    appliedEffects: clone(options.appliedEffects || []),
+    outcome,
+    appliedEffects,
     resolvedAtTurn: normalizeTurn(options.currentTurn),
   };
+  applyDeterministicEffects(saveData, appliedEffects);
   writeJudgementState(saveData, archiveResolution(state, resolution));
   return clone(resolution);
 }
