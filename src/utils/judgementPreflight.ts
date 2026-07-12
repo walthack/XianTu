@@ -19,6 +19,25 @@ const KEYWORDS: Array<[JudgementKind, RegExp]> = [
 ];
 const EXPLICIT_IF_INTENT = /收服|招揽|结盟|策反|纳入后宫|纳妾|改写命运|救下.*不死|提前杀死/;
 
+const STAT_WEIGHTS: Record<JudgementKind, Array<[string, number]>> = {
+  combat: [['根骨', .5], ['灵性', .3], ['气运', .2]], cultivate: [['悟性', .5], ['灵性', .3], ['心性', .2]],
+  craft: [['悟性', .5], ['灵性', .3], ['心性', .2]], explore: [['气运', .5], ['灵性', .3], ['悟性', .2]],
+  social: [['魅力', .5], ['悟性', .3], ['心性', .2]], escape: [['灵性', .5], ['气运', .3], ['根骨', .2]],
+  stealth: [['灵性', .5], ['气运', .3], ['心性', .2]], scheme: [['悟性', .5], ['心性', .3], ['魅力', .2]],
+};
+
+function numeric(value: unknown): number { const n = Number(value); return Number.isFinite(n) ? n : 0; }
+
+function stateFactors(kind: JudgementKind, saveData: any) {
+  const innate = saveData?.角色?.身份?.先天六司 || {};
+  const acquired = saveData?.角色?.身份?.后天六司 || {};
+  const weighted = STAT_WEIGHTS[kind].reduce((sum, [key, weight]) => sum + (numeric(innate[key]) + numeric(acquired[key])) * weight, 0);
+  const factors: any[] = [{ label: '六司', value: Math.round(weighted), source: 'attribute' }];
+  const hp = saveData?.角色?.属性?.气血;
+  if (numeric(hp?.上限) > 0 && numeric(hp?.当前) / numeric(hp?.上限) < .25) factors.push({ label: '重伤', value: -15, source: 'condition' });
+  return factors;
+}
+
 function difficultyFor(kind: JudgementKind): CreateJudgementProposalInput['difficulty'] {
   if (['combat', 'escape', 'stealth'].includes(kind)) return { band: 'hard', value: 20 };
   if (['cultivate', 'craft'].includes(kind)) return { band: 'severe', value: 25 };
@@ -55,6 +74,7 @@ export function buildLocalJudgementPreflight(
     whyNow: '该行动存在可见风险或资源代价，需在叙事前确认。',
     difficulty: difficultyFor(kind),
     factors: [
+      ...stateFactors(kind, saveData),
       { label: '幸运', value: data.幸运点, source: 'condition' },
       environmentFactorFor(kind, data),
     ],
