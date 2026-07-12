@@ -31,7 +31,14 @@ export interface JudgementProposal {
   whyNow: string;
   difficulty: { band: JudgementDifficultyBand; value: number };
   factors: JudgementFactor[];
-  stakes: { success: string; partial: string; failure: string };
+  stakes: {
+    perfect?: string;
+    greatSuccess?: string;
+    success: string;
+    partial: string;
+    failure: string;
+    criticalFailure?: string;
+  };
   canonPolicy: JudgementCanonPolicy;
   sourceEventId?: string;
   createdAtTurn: number;
@@ -152,9 +159,12 @@ function normalizeProposal(raw: unknown): JudgementProposal | null {
     difficulty: { band: difficultyBand, value: difficultyValue },
     factors,
     stakes: {
+      ...(normalizeText(stakes.perfect) ? { perfect: normalizeText(stakes.perfect) } : {}),
+      ...(normalizeText(stakes.greatSuccess) ? { greatSuccess: normalizeText(stakes.greatSuccess) } : {}),
       success: normalizeText(stakes.success),
       partial: normalizeText(stakes.partial),
       failure: normalizeText(stakes.failure),
+      ...(normalizeText(stakes.criticalFailure) ? { criticalFailure: normalizeText(stakes.criticalFailure) } : {}),
     },
     canonPolicy,
     ...(normalizeText(value.sourceEventId) ? { sourceEventId: normalizeText(value.sourceEventId) } : {}),
@@ -232,9 +242,12 @@ export function createJudgementProposal(input: CreateJudgementProposalInput): Ju
     whyNow: normalizeText(input.whyNow),
     factors: input.factors.map(factor => ({ ...factor, label: normalizeText(factor.label), value: Number(factor.value) })),
     stakes: {
+      ...(normalizeText(input.stakes.perfect) ? { perfect: normalizeText(input.stakes.perfect) } : {}),
+      ...(normalizeText(input.stakes.greatSuccess) ? { greatSuccess: normalizeText(input.stakes.greatSuccess) } : {}),
       success: normalizeText(input.stakes.success),
       partial: normalizeText(input.stakes.partial),
       failure: normalizeText(input.stakes.failure),
+      ...(normalizeText(input.stakes.criticalFailure) ? { criticalFailure: normalizeText(input.stakes.criticalFailure) } : {}),
     },
     sourceEventId: normalizeText(input.sourceEventId) || undefined,
     createdAtTurn: currentTurn,

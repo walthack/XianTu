@@ -10,6 +10,7 @@ test('preflight only proposes cards for explicit risky actions', async () => {
   assert.equal(proposal.kind, 'stealth');
   assert.equal(proposal.status, 'pending');
   assert.ok(proposal.factors.some(factor => factor.label === '六司' && factor.value === 7));
+  assert.match(proposal.stakes.greatSuccess, /大幅推进/);
   const queuedAction = composeJudgementAction('继续当前安排', '【操作】双修调息疗伤');
   assert.equal(buildLocalJudgementPreflight(queuedAction, save, 1).kind, 'cultivate');
 });

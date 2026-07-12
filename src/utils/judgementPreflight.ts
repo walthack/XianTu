@@ -71,7 +71,7 @@ export function buildLocalJudgementPreflight(
     return createJudgementProposal({
       actionText: normalized, kind: 'scheme', whyNow: '此行动会改写活动正典拍，默认线必须先进入显式 IF。',
       difficulty: { band: 'extreme', value: 100 }, factors: [],
-      stakes: { success: '仅 IF 支线可继续裁定。', partial: '默认线不产生部分成功。', failure: '默认线拒绝执行。' },
+      stakes: { greatSuccess: '仅 IF 支线可继续裁定。', success: '仅 IF 支线可继续裁定。', partial: '默认线不产生部分成功。', failure: '默认线拒绝执行。' },
       canonPolicy: 'if_only', sourceEventId: contract.eventId, createdAtTurn: currentTurn,
     });
   }
@@ -84,9 +84,12 @@ export function buildLocalJudgementPreflight(
     saveData?.角色?.位置,
   );
   const stakes = {
+    perfect: '以压倒性优势达成目标，且不留下额外代价。',
+    greatSuccess: '大幅推进当前目标，并取得额外收益。',
     success: '按当前做法取得直接进展。',
     partial: '达成部分目标，但会留下代价或余波。',
     failure: '行动受阻，局势可能恶化；可以换做法或先准备。',
+    criticalFailure: '局势显著恶化，必须承接更重的余波。',
   };
   return createJudgementProposal({
     actionText: normalized,
