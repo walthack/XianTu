@@ -121,3 +121,18 @@ test('successful double-cultivation recovery writes core values and one temporar
   assert.equal(save.角色.属性.气血.当前, 400, '重试不会重复恢复');
   assert.equal(save.角色.效果.length, 1, '重试不会重复叠加状态');
 });
+
+test('test outcome override is explicit, auditable, and still uses deterministic effects', async () => {
+  const save = { 角色: { 属性: { 气血: { 当前: 100, 上限: 1000 }, 神识: { 当前: 100, 上限: 1000 } } }, 系统: { 扩展: {} } };
+  const pending = await createPending(save, {
+    actionText: '双修调息疗伤', kind: 'cultivate', difficulty: { band: 'severe', value: 25 }, factors: [{ label: '重伤', value: -15, source: 'condition' }],
+  });
+  const { resolvePendingJudgement, getJudgementState } = await loadTs('../src/utils/judgementEngine.ts');
+  const result = resolvePendingJudgement(save, pending.id, { currentTurn: 5, roll: () => 1, testOutcome: 'great_success' });
+
+  assert.equal(result.roll, 1);
+  assert.equal(result.outcome, 'great_success');
+  assert.equal(result.testOverride, 'great_success');
+  assert.equal(save.角色.属性.气血.当前, 400);
+  assert.equal(getJudgementState(save).recent[0].testOverride, 'great_success');
+});

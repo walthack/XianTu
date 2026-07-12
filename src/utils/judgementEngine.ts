@@ -42,6 +42,8 @@ export interface JudgementResolution extends Omit<JudgementProposal, 'status'> {
   roll?: number;
   total?: number;
   outcome?: JudgementOutcome;
+  /** Present only when a development-only test control forced the result. */
+  testOverride?: JudgementOutcome;
   appliedEffects: Array<{ key: string; action: string; value: unknown }>;
   resolvedAtTurn: number;
 }
@@ -60,6 +62,7 @@ export interface ResolveJudgementOptions {
   currentTurn: number;
   roll?: () => number;
   appliedEffects?: JudgementResolution['appliedEffects'];
+  testOutcome?: JudgementOutcome;
 }
 
 const MAX_RECENT_RESOLUTIONS = 20;
@@ -168,6 +171,7 @@ function normalizeResolution(raw: unknown): JudgementResolution | null {
   const roll = value.roll === undefined ? undefined : Number(value.roll);
   const total = value.total === undefined ? undefined : Number(value.total);
   const outcome = value.outcome;
+  const testOverride = isOutcome(value.testOverride) ? value.testOverride : undefined;
   if (
     status === 'resolved' &&
     (typeof roll !== 'number' || !Number.isInteger(roll) || roll < 1 || roll > 20 ||
@@ -181,6 +185,7 @@ function normalizeResolution(raw: unknown): JudgementResolution | null {
     ...proposal,
     status,
     ...(status === 'resolved' ? { roll, total, outcome } : {}),
+    ...(testOverride ? { testOverride } : {}),
     appliedEffects,
     resolvedAtTurn: normalizeTurn(value.resolvedAtTurn),
   };
@@ -404,7 +409,8 @@ export function resolvePendingJudgement(
 
   const roll = Math.max(1, Math.min(20, Math.floor((options.roll || rollD20)())));
   const total = roll + state.pending.factors.reduce((sum, factor) => sum + factor.value, 0);
-  const outcome = outcomeForTotal(total, state.pending.difficulty.value);
+  const testOutcome = options.testOutcome && isOutcome(options.testOutcome) ? options.testOutcome : undefined;
+  const outcome = testOutcome || outcomeForTotal(total, state.pending.difficulty.value);
   const appliedEffects = options.appliedEffects ? clone(options.appliedEffects) : deterministicOutcomeEffects(saveData, state.pending, outcome, normalizeTurn(options.currentTurn));
   const resolution: JudgementResolution = {
     ...state.pending,
@@ -412,6 +418,7 @@ export function resolvePendingJudgement(
     roll,
     total,
     outcome,
+    ...(testOutcome ? { testOverride: testOutcome } : {}),
     appliedEffects,
     resolvedAtTurn: normalizeTurn(options.currentTurn),
   };

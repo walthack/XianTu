@@ -161,7 +161,10 @@ export default (env, argv) => {
         __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: JSON.stringify(false),
         'APP_VERSION': JSON.stringify(packageJson.version),
         'BACKEND_BASE_URL': JSON.stringify(backendBaseUrl), // 后端路径；开发/局域网测试默认走同源 /api 代理
-        'REMOTE_SAVE_STORAGE_ENABLED': JSON.stringify(process.env.REMOTE_SAVE_STORAGE_ENABLED !== 'false')
+        'REMOTE_SAVE_STORAGE_ENABLED': JSON.stringify(process.env.REMOTE_SAVE_STORAGE_ENABLED !== 'false'),
+        // Test-only deterministic judgement controls. Production bundles erase
+        // this branch at build time.
+        'JUDGEMENT_TEST_CONTROLS': JSON.stringify(!isProduction)
       }),
       new HtmlWebpackPlugin({
         template: './index.html',

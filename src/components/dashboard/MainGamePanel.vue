@@ -167,6 +167,7 @@
         <small v-else>成功：{{ pendingJudgement.stakes.success }}　部分成功：{{ pendingJudgement.stakes.partial }}　失败：{{ pendingJudgement.stakes.failure }}</small>
         <div class="judgement-preflight-actions">
           <button @click="executePendingJudgement" :disabled="isAIProcessing || pendingJudgement.canonPolicy === 'if_only'">执行判定</button>
+          <button v-if="showJudgementTestControls" class="test-great-success-button" @click="executePendingJudgement('great_success')" :disabled="isAIProcessing || pendingJudgement.canonPolicy === 'if_only'">大成功（测试）</button>
           <button @click="changePendingJudgement" :disabled="isAIProcessing">换一种做法</button>
           <button @click="cancelPendingJudgement" :disabled="isAIProcessing">撤回</button>
         </div>
@@ -179,6 +180,7 @@
           <span>总值 {{ latestJudgement.total }}</span>
           <span>难度 {{ latestJudgement.difficulty.value }}</span>
           <span>策略 {{ latestJudgement.canonPolicy }}</span>
+          <span v-if="latestJudgement.testOverride">测试强制 {{ latestJudgement.testOverride }}</span>
         </div>
         <small v-if="latestJudgement.appliedEffects.length">已写入：{{ latestJudgement.appliedEffects.map(describeJudgementEffect).join('、') }}</small>
         <small v-else>本次没有确定性状态余波。</small>
@@ -415,6 +417,7 @@ import {
   describeJudgementEffect,
   type JudgementProposal,
   type JudgementResolution,
+  type JudgementOutcome,
 } from '@/utils/judgementEngine';
 import { buildLocalJudgementPreflight, composeJudgementAction } from '@/utils/judgementPreflight';
 import { getNarrativeTurn } from '@/utils/actionGate';
@@ -446,6 +449,7 @@ const inputText = computed({
 const isInputFocused = ref(false);
 const pendingJudgement = ref<JudgementProposal | null>(null);
 const latestJudgement = ref<JudgementResolution | null>(null);
+const showJudgementTestControls = JUDGEMENT_TEST_CONTROLS;
 
 const refreshPendingJudgement = () => {
   const save = gameStateStore.toSaveData();
@@ -1881,11 +1885,14 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
   }
 };
 
-const executePendingJudgement = async () => {
+const executePendingJudgement = async (testOutcome?: JudgementOutcome) => {
   if (!pendingJudgement.value || isAIProcessing.value) return;
   const save = gameStateStore.toSaveData();
   if (!save) return;
-  const resolution = resolvePendingJudgement(save, pendingJudgement.value.id, { currentTurn: getNarrativeTurn(save) });
+  const resolution = resolvePendingJudgement(save, pendingJudgement.value.id, {
+    currentTurn: getNarrativeTurn(save),
+    ...(testOutcome ? { testOutcome } : {}),
+  });
   await persistJudgementSave(save);
   await sendMessage({ skipPreflight: true, resolution });
 };
@@ -4769,6 +4776,7 @@ const syncGameState = async () => {
 .judgement-preflight-actions { display: flex; gap: 8px; margin-top: 10px; }
 .judgement-preflight-actions button { border: 0; border-radius: 5px; padding: 6px 10px; cursor: pointer; background: #9a6517; color: white; }
 .judgement-preflight-actions button:nth-child(2), .judgement-preflight-actions button:nth-child(3) { background: #7a6c57; }
+.judgement-preflight-actions .test-great-success-button { background: #4f8a3f; font-weight: 700; }
 .judgement-preflight-actions button:disabled { opacity: .5; cursor: not-allowed; }
 [data-theme="dark"] .judgement-preflight-card { background: #30281d; color: #eadcc2; border-color: #a77b35; }
 [data-theme="dark"] .judgement-preflight-title { color: #f0c878; }
