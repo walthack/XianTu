@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 
 // Resets only the narrative layer of a contaminated save to its current
-// source-backed Canon Rail beat. Character attributes, inventory and money are
-// deliberately left untouched. Use --apply to write a timestamped backup.
+// source-backed Canon Rail beat. Player-earned relationship labels, favour,
+// relationship-card memories, character cards, attributes, inventory and money
+// are deliberately left untouched. Use --apply to write a timestamped backup.
 
 import { cp, readFile, readdir, writeFile } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
@@ -101,45 +102,41 @@ const factions = new Map((mod.canon?.factions || []).map(faction => [faction.id,
 const locations = new Map((mod.canon?.locations || []).map(location => [location.id, location]));
 const characters = mod.canon?.characters || [];
 const characterByName = new Map(characters.map(character => [character.name, character]));
-const registry = JSON.parse(await readFile(join(root, 'src', 'modules', 'scenarioMods', 'builtins', 'character-registry.json'), 'utf8'));
-const knownCanonicalNames = new Set((registry.characters || []).flatMap(character => [character.canonicalName, ...(character.aliases || [])]).filter(Boolean));
-const relationshipByCharacterId = new Map((mod.canon?.playerRelationships || []).map(item => [item.characterId, item]));
 const relations = data.社交?.关系 || {};
 for (const [name, relation] of Object.entries(relations)) {
   const character = characterByName.get(name);
   if (!character) {
-    if (knownCanonicalNames.has(name)) {
-      relation.记忆 = [];
-      relation.当前位置 = { 描述: '位置未定' };
-      delete relation.当前外貌状态;
-      delete relation.当前内心想法;
-      report.push(`社交.关系.${name}（保留正典人物，清除动态污染）`);
-      continue;
-    }
-    delete relations[name];
-    report.push(`社交.关系.${name}（不在当前正典名册）`);
+    // A character absent from this stage can still be a player-earned card.
+    // Canon Rail must not erase that relationship merely because the current
+    // stage does not list the character. Persona cleanup, when explicitly
+    // requested, is handled by a separate narrow repair tool.
+    report.push(`社交.关系.${name}（不在当前 stage 名册，保留玩家关系状态）`);
     continue;
   }
-  const declared = relationshipByCharacterId.get(character.id);
   const affiliation = (character.affiliations || [])[0];
   const faction = factions.get(affiliation?.factionId || character.factionId);
   const sect = (character.affiliations || []).find(item => item.category === 'sect');
   const sectFaction = factions.get(sect?.factionId);
   const location = locations.get(character.locationId);
   relation.名字 = character.name;
-  relation.与玩家关系 = declared?.relation || '陌生人';
-  relation.好感度 = declared?.favorability || 0;
-  relation.记忆 = [...(declared?.memories || [])];
+  // These are player-progress state, not a stage bootstrap value. Preserve
+  // them across a Canon Rail repair. For a malformed old card only, seed the
+  // stage default instead of overwriting a valid saved value.
+  const declared = (mod.canon?.playerRelationships || []).find(item => item.characterId === character.id);
+  if (typeof relation.与玩家关系 !== 'string' || !relation.与玩家关系.trim()) {
+    relation.与玩家关系 = declared?.relation || '陌生人';
+  }
+  if (!Number.isFinite(relation.好感度)) {
+    relation.好感度 = declared?.favorability || 0;
+  }
+  if (!Array.isArray(relation.记忆)) relation.记忆 = [...(declared?.memories || [])];
   relation.势力归属 = faction?.name;
   relation.势力归属列表 = (character.affiliations || []).map(item => factions.get(item.factionId)?.name).filter(Boolean);
   if (sectFaction) relation.宗门 = sectFaction.name;
   else delete relation.宗门;
   relation.当前位置 = { 描述: location?.name || '位置未定', ...(location?.coordinates || {}) };
-  delete relation.当前外貌状态;
-  delete relation.当前内心想法;
 }
-data.社交.关系矩阵 = { version: 1, nodes: Object.keys(relations), edges: [] };
-report.push('社交.关系（当前 stage 正典重投影）');
+report.push('社交.关系（保留玩家关系状态，仅补全当前 stage 的正典静态信息）');
 
 runtime.currentChapterId = mod.scenario?.chapters?.[0]?.id || runtime.currentChapterId;
 runtime.completedChapterIds = [];
