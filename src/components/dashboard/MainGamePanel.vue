@@ -155,6 +155,21 @@
 
     <!-- 输入区域 -->
     <div class="input-section">
+      <section v-if="pendingJudgement" class="judgement-preflight-card">
+        <div class="judgement-preflight-title">行动判定 · {{ pendingJudgement.kind }}</div>
+        <div class="judgement-preflight-action">{{ pendingJudgement.actionText }}</div>
+        <p>{{ pendingJudgement.whyNow }}</p>
+        <div class="judgement-preflight-factors">
+          <span v-for="factor in pendingJudgement.factors" :key="factor.label">{{ factor.label }} {{ factor.value >= 0 ? '+' : '' }}{{ factor.value }}</span>
+          <span>难度 {{ pendingJudgement.difficulty.value }}</span>
+        </div>
+        <small>成功：{{ pendingJudgement.stakes.success }}　部分成功：{{ pendingJudgement.stakes.partial }}　失败：{{ pendingJudgement.stakes.failure }}</small>
+        <div class="judgement-preflight-actions">
+          <button @click="executePendingJudgement" :disabled="isAIProcessing">执行判定</button>
+          <button @click="changePendingJudgement" :disabled="isAIProcessing">换一种做法</button>
+          <button @click="cancelPendingJudgement" :disabled="isAIProcessing">撤回</button>
+        </div>
+      </section>
       <!-- 动作队列显示区域 -->
       <div v-if="actionQueue.pendingActions.length > 0" class="action-queue-display">
         <div class="queue-header">
@@ -379,6 +394,16 @@ import { extractTextFromJsonResponse } from '@/utils/textSanitizer';
 import FormattedText from '@/components/common/FormattedText.vue';
 import { useGameStateStore } from '@/stores/gameStateStore';
 import { getSnapshots } from '@/utils/snapshotManager';
+import {
+  cancelPendingJudgement as cancelStoredJudgement,
+  getJudgementState,
+  persistPendingJudgement,
+  resolvePendingJudgement,
+  type JudgementProposal,
+  type JudgementResolution,
+} from '@/utils/judgementEngine';
+import { buildLocalJudgementPreflight } from '@/utils/judgementPreflight';
+import { getNarrativeTurn } from '@/utils/actionGate';
 import type {  CharacterProfile } from '@/types/game';
 import type { GM_Response } from '@/types/AIGameMaster'; // AIGameMaster.d.ts 仍然需要保留
 
@@ -405,6 +430,18 @@ const inputText = computed({
   set: (value: string) => { uiStore.userInputText = value; }
 });
 const isInputFocused = ref(false);
+const pendingJudgement = ref<JudgementProposal | null>(null);
+
+const refreshPendingJudgement = () => {
+  const save = gameStateStore.toSaveData();
+  pendingJudgement.value = save ? getJudgementState(save).pending || null : null;
+};
+
+const persistJudgementSave = async (save: any) => {
+  gameStateStore.loadFromSaveData(save);
+  await characterStore.saveCurrentGame();
+  refreshPendingJudgement();
+};
 // 🔥 使用全局状态替代组件状态
 const isAIProcessing = computed(() => uiStore.isAIProcessing);
 const streamingContent = computed(() => uiStore.streamingContent);
@@ -1430,7 +1467,7 @@ const selectActionOption = (option: string) => {
   });
 };
 
-const sendMessage = async () => {
+const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: JudgementResolution }) => {
   if (!inputText.value.trim()) return;
   if (isAIProcessing.value) {
     toast.warning('AI正在处理中，请稍等...');
@@ -1438,6 +1475,11 @@ const sendMessage = async () => {
   }
   if (!hasActiveCharacter.value) {
     toast.error('请先选择或创建角色');
+    return;
+  }
+
+  if (pendingJudgement.value && !execution?.skipPreflight) {
+    toast.warning('请先处理当前待确认的行动判定');
     return;
   }
 
@@ -1459,6 +1501,16 @@ const sendMessage = async () => {
         toast.error('角色已死亡，寿元耗尽。无法继续游戏，请重新开始或复活角色。');
         return;
       }
+    }
+  }
+
+  if (!execution?.skipPreflight) {
+    const proposal = buildLocalJudgementPreflight(inputText.value, saveData, getNarrativeTurn(saveData));
+    if (proposal) {
+      persistPendingJudgement(saveData, proposal);
+      await persistJudgementSave(saveData);
+      toast.info('此行动存在风险，请先确认判定');
+      return;
     }
   }
 
@@ -1501,6 +1553,10 @@ const sendMessage = async () => {
   } else {
     finalUserMessage = actionQueueText ? `<行动趋向>${actionQueueText}</行动趋向>
 ` : '';
+  }
+  if (execution?.resolution) {
+    const result = execution.resolution;
+    finalUserMessage += `\n【本地判定已结算】类型=${result.kind}；骰点=${result.roll}；总值=${result.total}；难度=${result.difficulty.value}；结果=${result.outcome}。只叙述该既定结果，不得另行掷骰、改写数字或写入系统.扩展.判定。\n`;
   }
   console.log('[前端] 最终发送 finalUserMessage:', finalUserMessage);
 
@@ -1805,6 +1861,35 @@ const sendMessage = async () => {
   }
 };
 
+const executePendingJudgement = async () => {
+  if (!pendingJudgement.value || isAIProcessing.value) return;
+  const save = gameStateStore.toSaveData();
+  if (!save) return;
+  const resolution = resolvePendingJudgement(save, pendingJudgement.value.id, { currentTurn: getNarrativeTurn(save) });
+  await persistJudgementSave(save);
+  await sendMessage({ skipPreflight: true, resolution });
+};
+
+const changePendingJudgement = async () => {
+  if (!pendingJudgement.value) return;
+  const save = gameStateStore.toSaveData();
+  if (!save) return;
+  const actionText = pendingJudgement.value.actionText;
+  cancelStoredJudgement(save, pendingJudgement.value.id, getNarrativeTurn(save));
+  await persistJudgementSave(save);
+  inputText.value = actionText;
+  inputRef.value?.focus();
+};
+
+const cancelPendingJudgement = async () => {
+  if (!pendingJudgement.value) return;
+  const save = gameStateStore.toSaveData();
+  if (!save) return;
+  cancelStoredJudgement(save, pendingJudgement.value.id, getNarrativeTurn(save));
+  await persistJudgementSave(save);
+  toast.success('已撤回行动判定');
+};
+
 // （移除逐条总结逻辑）不再对溢出的短期记忆逐条生成总结
 
 // 键盘事件处理
@@ -1949,6 +2034,7 @@ watch(() => characterStore.rootState.当前激活存档, async (newSlotId, oldSl
     console.log(`[主面板] 存档已切换: 从 ${oldSlotId || '无'} 到 ${newSlotId}`);
     resetPanelState();
     await initializePanelForSave();
+    refreshPendingJudgement();
   }
 });
 
@@ -4643,6 +4729,27 @@ const syncGameState = async () => {
   color: #f3f4f6;
 }
 
+
+.judgement-preflight-card {
+  margin: 8px 12px;
+  padding: 12px;
+  border: 1px solid #d6a85a;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #fffaf0, #fff);
+  color: #4b3518;
+}
+.judgement-preflight-title { font-weight: 700; color: #9a6517; }
+.judgement-preflight-action { margin-top: 4px; font-weight: 600; }
+.judgement-preflight-card p, .judgement-preflight-card small { display: block; margin: 7px 0; line-height: 1.5; }
+.judgement-preflight-factors { display: flex; flex-wrap: wrap; gap: 6px; }
+.judgement-preflight-factors span { padding: 2px 6px; border-radius: 4px; background: #f4e6c9; font-size: .8rem; }
+.judgement-preflight-actions { display: flex; gap: 8px; margin-top: 10px; }
+.judgement-preflight-actions button { border: 0; border-radius: 5px; padding: 6px 10px; cursor: pointer; background: #9a6517; color: white; }
+.judgement-preflight-actions button:nth-child(2), .judgement-preflight-actions button:nth-child(3) { background: #7a6c57; }
+.judgement-preflight-actions button:disabled { opacity: .5; cursor: not-allowed; }
+[data-theme="dark"] .judgement-preflight-card { background: #30281d; color: #eadcc2; border-color: #a77b35; }
+[data-theme="dark"] .judgement-preflight-title { color: #f0c878; }
+[data-theme="dark"] .judgement-preflight-factors span { background: #4a3c28; }
 
 /* 手机端响应式修复 */
 @media (max-width: 768px) {
