@@ -38,8 +38,8 @@ export function buildLocalJudgementPreflight(
   if (!matched) return null;
   const [kind] = matched;
   const data = calculateTurnJudgementData(
-    saveData?.角色?.属性?.先天六司,
-    saveData?.角色?.属性?.后天六司,
+    saveData?.角色?.身份?.先天六司,
+    saveData?.角色?.身份?.后天六司,
     saveData?.角色?.位置,
   );
   const stakes = {

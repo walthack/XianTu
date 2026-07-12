@@ -680,12 +680,16 @@ class AIBidirectionalSystemClass {
         coreStatusSummary += `\n- 天赋: ${formatTalentsForPrompt(character.天赋)}`;
       }
 
-      const judgementData = calculateTurnJudgementData(
-        character?.先天六司,
-        character?.后天六司,
-        stateForAI.角色?.位置,
-      );
-      coreStatusSummary += `\n\n${formatTurnJudgementPrompt(judgementData)}`;
+      if (userMessage.includes('【本地判定已结算】')) {
+        coreStatusSummary += '\n\n# 本回合判定数据\n本回合已有本地判定结算；只可演出用户消息中给出的既定骰点、总值与结果，不得重新计算或掷骰。';
+      } else {
+        const judgementData = calculateTurnJudgementData(
+          character?.先天六司,
+          character?.后天六司,
+          stateForAI.角色?.位置,
+        );
+        coreStatusSummary += `\n\n${formatTurnJudgementPrompt(judgementData)}`;
+      }
       // --- 结束 ---
 
       // 🔥 构建精简版存档数据（用于叙事判定，减少token消耗）

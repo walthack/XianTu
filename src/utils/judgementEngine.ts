@@ -63,6 +63,7 @@ export interface ResolveJudgementOptions {
 }
 
 const MAX_RECENT_RESOLUTIONS = 20;
+let judgementInstanceSequence = 0;
 
 function normalizeText(value: unknown): string {
   return typeof value === 'string' ? value.trim().replace(/\s+/g, ' ') : '';
@@ -216,7 +217,9 @@ export function createJudgementProposal(input: CreateJudgementProposalInput): Ju
   const actionHash = hashJudgementAction(actionText);
   return {
     ...input,
-    id: normalizeText(input.id) || `judge-${currentTurn}-${actionHash}`,
+    // actionHash identifies the wording; the suffix identifies this distinct attempt.
+    // A cancelled attempt must never shadow a later retry of the same wording.
+    id: normalizeText(input.id) || `judge-${currentTurn}-${actionHash}-${Date.now().toString(36)}-${++judgementInstanceSequence}`,
     status: 'pending',
     actionText,
     actionHash,

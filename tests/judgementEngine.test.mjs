@@ -55,6 +55,19 @@ test('cancellation leaves no roll or effects and is retained as an auditable res
   assert.equal(getJudgementState(save).recent[0].id, pending.id);
 });
 
+test('a cancelled action can be proposed again without reusing its cancelled resolution', async () => {
+  const save = { 系统: { 扩展: {} } };
+  const first = await createPending(save);
+  const { cancelPendingJudgement, resolvePendingJudgement } = await loadTs('../src/utils/judgementEngine.ts');
+  cancelPendingJudgement(save, first.id, 5);
+  const second = await createPending(save);
+  const result = resolvePendingJudgement(save, second.id, { currentTurn: 6, roll: () => 12 });
+
+  assert.notEqual(second.id, first.id);
+  assert.equal(result.status, 'resolved');
+  assert.equal(result.roll, 12);
+});
+
 test('near-miss becomes partial while hard miss remains failure or critical failure', async () => {
   const { outcomeForTotal } = await loadTs('../src/utils/judgementEngine.ts');
   assert.equal(outcomeForTotal(19, 20), 'partial');

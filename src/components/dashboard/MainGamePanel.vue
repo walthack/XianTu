@@ -2049,6 +2049,7 @@ onMounted(async () => {
 
     // 为初始加载的存档初始化面板
     await initializePanelForSave();
+    refreshPendingJudgement();
 
     // 监听来自MemoryCenterPanel的配置更新事件
     panelBus.on('memory-settings-updated', (settings: unknown) => {
