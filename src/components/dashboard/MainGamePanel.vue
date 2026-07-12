@@ -163,9 +163,10 @@
           <span v-for="factor in pendingJudgement.factors" :key="factor.label">{{ factor.label }} {{ factor.value >= 0 ? '+' : '' }}{{ factor.value }}</span>
           <span>难度 {{ pendingJudgement.difficulty.value }}</span>
         </div>
-        <small>成功：{{ pendingJudgement.stakes.success }}　部分成功：{{ pendingJudgement.stakes.partial }}　失败：{{ pendingJudgement.stakes.failure }}</small>
+        <small v-if="pendingJudgement.canonPolicy === 'if_only'">此行动会改写正典，须先进入显式 IF 支线；默认线不可执行。</small>
+        <small v-else>成功：{{ pendingJudgement.stakes.success }}　部分成功：{{ pendingJudgement.stakes.partial }}　失败：{{ pendingJudgement.stakes.failure }}</small>
         <div class="judgement-preflight-actions">
-          <button @click="executePendingJudgement" :disabled="isAIProcessing">执行判定</button>
+          <button @click="executePendingJudgement" :disabled="isAIProcessing || pendingJudgement.canonPolicy === 'if_only'">执行判定</button>
           <button @click="changePendingJudgement" :disabled="isAIProcessing">换一种做法</button>
           <button @click="cancelPendingJudgement" :disabled="isAIProcessing">撤回</button>
         </div>
@@ -1556,7 +1557,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
   }
   if (execution?.resolution) {
     const result = execution.resolution;
-    finalUserMessage += `\n【本地判定已结算】类型=${result.kind}；骰点=${result.roll}；总值=${result.total}；难度=${result.difficulty.value}；结果=${result.outcome}。只叙述该既定结果，不得另行掷骰、改写数字或写入系统.扩展.判定。\n`;
+    finalUserMessage += `\n【本地判定已结算】类型=${result.kind}；骰点=${result.roll}；总值=${result.total}；难度=${result.difficulty.value}；结果=${result.outcome}；正典策略=${result.canonPolicy}。只叙述该既定结果，不得另行掷骰、改写数字或写入系统.扩展.判定；若策略为 route_process_only，不得直接完成、void 或改写活动正典事件。\n`;
   }
   console.log('[前端] 最终发送 finalUserMessage:', finalUserMessage);
 

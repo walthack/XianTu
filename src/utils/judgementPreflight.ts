@@ -6,6 +6,7 @@ import {
   type JudgementProposal,
 } from './judgementEngine';
 import { calculateTurnJudgementData } from './judgementRules';
+import { getCanonRailContract, getCanonRailProfile } from '@/modules/scenarioMods/canonRail';
 
 const KEYWORDS: Array<[JudgementKind, RegExp]> = [
   ['combat', /攻击|出手|斩|杀|斗法|交手|战斗|迎战/],
@@ -16,6 +17,7 @@ const KEYWORDS: Array<[JudgementKind, RegExp]> = [
   ['cultivate', /突破|闭关|修炼|冲关/],
   ['social', /说服|威胁|交涉|谈判|收服|招揽/],
 ];
+const EXPLICIT_IF_INTENT = /收服|招揽|结盟|策反|纳入后宫|纳妾|改写命运|救下.*不死|提前杀死/;
 
 function difficultyFor(kind: JudgementKind): CreateJudgementProposalInput['difficulty'] {
   if (['combat', 'escape', 'stealth'].includes(kind)) return { band: 'hard', value: 20 };
@@ -30,10 +32,10 @@ export function buildLocalJudgementPreflight(
   currentTurn: number,
 ): JudgementProposal | null {
   const normalized = actionText.trim();
-  // P2 尚未把 active Canon Rail contract 映射为 route_process_only / if_only；
-  // 在 P3 完成前，宁可沿用既有叙事链，也不能把承重过程误判为 free。
   const runtime = saveData?.世界?.状态?.剧本模组;
-  if (runtime?.modId && Array.isArray(runtime.activeEventIds) && runtime.activeEventIds.length > 0) return null;
+  const profile = getCanonRailProfile(runtime);
+  const activeEventId = Array.isArray(runtime?.activeEventIds) ? runtime.activeEventIds[0] : undefined;
+  const contract = activeEventId ? getCanonRailContract(profile, activeEventId) : null;
   const matched = KEYWORDS.find(([, matcher]) => matcher.test(normalized));
   if (!matched) return null;
   const [kind] = matched;
@@ -57,7 +59,8 @@ export function buildLocalJudgementPreflight(
       environmentFactorFor(kind, data),
     ],
     stakes,
-    canonPolicy: 'free',
+    canonPolicy: contract ? (EXPLICIT_IF_INTENT.test(normalized) ? 'if_only' : 'route_process_only') : 'free',
+    ...(contract ? { sourceEventId: contract.eventId } : {}),
     createdAtTurn: currentTurn,
   });
 }

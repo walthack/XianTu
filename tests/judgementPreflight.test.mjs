@@ -11,8 +11,9 @@ test('preflight only proposes cards for explicit risky actions', async () => {
   assert.equal(proposal.status, 'pending');
 });
 
-test('preflight stays inert for active Canon Rail events until P3 supplies a process policy', async () => {
+test('active Canon Rail events use process-only policy while explicit rewrites require IF', async () => {
   const { buildLocalJudgementPreflight } = await loadTs('../src/utils/judgementPreflight.ts');
-  const save = { 世界: { 状态: { 剧本模组: { modId: 'lcq.stage_08', activeEventIds: ['e1'] } } } };
-  assert.equal(buildLocalJudgementPreflight('我潜入守卫森严的府邸', save, 1), null);
+  const save = { 世界: { 状态: { 剧本模组: { modId: 'lcq.stage_01', activeEventIds: ['lcq.event.s01_04'] } } } };
+  assert.equal(buildLocalJudgementPreflight('我潜入守卫森严的府邸', save, 1).canonPolicy, 'route_process_only');
+  assert.equal(buildLocalJudgementPreflight('我收服卓云君并纳入后宫', save, 1).canonPolicy, 'if_only');
 });
