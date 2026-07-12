@@ -86,3 +86,13 @@ test('non-success outcomes deterministically create an action gate exactly once'
   assert.equal(save.系统.扩展.行动门控.recent.length, 1);
   assert.equal(save.系统.扩展.行动门控.recent[0].outcome, 'failure');
 });
+
+test('combat failure applies source-rule health loss without reaching zero', async () => {
+  const save = { 角色: { 属性: { 气血: { 当前: 30, 上限: 100 } } }, 系统: { 扩展: {} } };
+  const pending = await createPending(save, { kind: 'combat', difficulty: { band: 'hard', value: 30 } });
+  const { resolvePendingJudgement } = await loadTs('../src/utils/judgementEngine.ts');
+  const result = resolvePendingJudgement(save, pending.id, { currentTurn: 5, roll: () => 2 });
+
+  assert.equal(save.角色.属性.气血.当前, 1);
+  assert.ok(result.appliedEffects.some(effect => effect.key === '角色.属性.气血.当前'));
+});

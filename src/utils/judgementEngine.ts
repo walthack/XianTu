@@ -270,11 +270,21 @@ function gateScopeFor(kind: JudgementKind): string {
   return 'scene';
 }
 
-function deterministicOutcomeEffects(proposal: JudgementProposal, outcome: JudgementOutcome, currentTurn: number): JudgementResolution['appliedEffects'] {
+function deterministicOutcomeEffects(saveData: unknown, proposal: JudgementProposal, outcome: JudgementOutcome, currentTurn: number): JudgementResolution['appliedEffects'] {
   if (!['partial', 'failure', 'critical_failure'].includes(outcome)) return [];
+  const effects: JudgementResolution['appliedEffects'] = [];
+  if (proposal.kind === 'combat') {
+    const root = saveData as any;
+    const current = Number(root?.角色?.属性?.气血?.当前);
+    const max = Number(root?.角色?.属性?.气血?.上限);
+    const ratio = outcome === 'critical_failure' ? .4 : outcome === 'failure' ? .15 : .05;
+    if (Number.isFinite(current) && Number.isFinite(max) && current > 1 && max > 0) {
+      effects.push({ key: '角色.属性.气血.当前', action: 'add', value: -Math.min(current - 1, Math.max(1, Math.round(max * ratio))) });
+    }
+  }
   const gateOutcome = outcome === 'partial' ? 'partial' : 'failure';
   const severity = outcome === 'critical_failure' ? '局势明显恶化' : outcome === 'failure' ? '行动受阻' : '目标虽有进展但留下破绽';
-  return [{
+  effects.push({
     key: '系统.扩展.行动门控.recent',
     action: 'push',
     value: {
@@ -287,7 +297,8 @@ function deterministicOutcomeEffects(proposal: JudgementProposal, outcome: Judge
       createdAtTurn: currentTurn,
       ttlTurns: 3,
     },
-  }];
+  });
+  return effects;
 }
 
 function applyDeterministicEffects(saveData: unknown, effects: JudgementResolution['appliedEffects']): void {
@@ -298,6 +309,10 @@ function applyDeterministicEffects(saveData: unknown, effects: JudgementResoluti
   if (!root.系统.扩展.行动门控) root.系统.扩展.行动门控 = { version: 1, recent: [] };
   if (!Array.isArray(root.系统.扩展.行动门控.recent)) root.系统.扩展.行动门控.recent = [];
   for (const effect of effects) {
+    if (effect.key === '角色.属性.气血.当前' && effect.action === 'add' && typeof effect.value === 'number') {
+      root.角色 ??= {}; root.角色.属性 ??= {}; root.角色.属性.气血 ??= {};
+      root.角色.属性.气血.当前 = Math.max(1, Number(root.角色.属性.气血.当前 || 1) + effect.value);
+    }
     if (effect.key === '系统.扩展.行动门控.recent' && effect.action === 'push') root.系统.扩展.行动门控.recent.push(clone(effect.value));
   }
 }
@@ -319,7 +334,7 @@ export function resolvePendingJudgement(
   const roll = Math.max(1, Math.min(20, Math.floor((options.roll || rollD20)())));
   const total = roll + state.pending.factors.reduce((sum, factor) => sum + factor.value, 0);
   const outcome = outcomeForTotal(total, state.pending.difficulty.value);
-  const appliedEffects = options.appliedEffects ? clone(options.appliedEffects) : deterministicOutcomeEffects(state.pending, outcome, normalizeTurn(options.currentTurn));
+  const appliedEffects = options.appliedEffects ? clone(options.appliedEffects) : deterministicOutcomeEffects(saveData, state.pending, outcome, normalizeTurn(options.currentTurn));
   const resolution: JudgementResolution = {
     ...state.pending,
     status: 'resolved',
