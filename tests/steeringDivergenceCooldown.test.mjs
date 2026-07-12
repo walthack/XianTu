@@ -51,3 +51,10 @@ test('#2 越权封堵：commandValidator 拒绝 LLM 直写 steeringCooldown、�
   const allowed = validateCommand({ action: 'set', key: '系统.扩展.任务追踪.主线偏移提议', value: true }, 0);
   assert.equal(allowed.valid, true, 'set 主线偏移提议(布尔信号)应放行');
 });
+
+test('行动判定状态只能由本地引擎写入', async () => {
+  const { validateCommand } = await loadTs('../src/utils/commandValidator.ts');
+  const blocked = validateCommand({ action: 'set', key: '系统.扩展.判定.pending', value: { outcome: 'success' } }, 0);
+  assert.equal(blocked.valid, false, 'LLM 不得伪造判定结果');
+  assert.match(blocked.errors.join('\n'), /禁止AI操作/);
+});

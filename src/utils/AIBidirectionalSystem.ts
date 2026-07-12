@@ -30,6 +30,11 @@ import { applyMilestoneRewards } from '@/modules/scenarioMods/milestoneRewards';
 import { buildScenarioStoryPrompt, createScenarioPromptState } from '@/modules/scenarioMods/storyContext';
 import { stripNarrativeEntityTypeConflicts, stripNarrativeUnintroducedCharacters } from '@/modules/scenarioMods/characterResolver';
 import { buildActionGatePrompt, getNarrativeTurn, pruneExpiredActionGates } from '@/utils/actionGate';
+import {
+  calculateTurnJudgementData,
+  extractLegacyJudgementMarkers,
+  formatTurnJudgementPrompt,
+} from '@/utils/judgementRules';
 import { reconcileNarrativeState } from '@/utils/narrativeStateReconciler';
 import { runProgressAudit, shouldRunAudit } from '@/services/progressAuditService';
 import { runEventReconcile, shouldRunReconcile, evidenceLikely, buildChainCandidates } from '@/services/eventReconcileService';
@@ -675,57 +680,12 @@ class AIBidirectionalSystemClass {
         coreStatusSummary += `\n- 天赋: ${formatTalentsForPrompt(character.天赋)}`;
       }
 
-      // 🍀 前端计算幸运点（基于气运和随机数，AI不知道具体骰子点数）
-      const innate = character?.先天六司 || {};
-      const acquired = character?.后天六司 || {};
-      // 气运范围 0-10，先天+后天
-      const fortune = Math.min(10, Math.max(0, (innate.气运 || 5) + (acquired.气运 || 0)));
-
-      // 幸运点计算逻辑（气运 0-10）
-      // 设计目标：
-      // - 气运 0：范围 -10 到 +5，期望值约 -2.5
-      // - 气运 5：范围 -8 到 +10，期望值约 +1
-      // - 气运 10：范围 -5 到 +15，期望值约 +5
-
-      // 基础随机：-10 到 +5 的波动（15个档位）
-      const baseRandom = Math.floor(Math.random() * 16) - 10;
-
-      // 气运提升上限：每点气运增加 1 点上限
-      const fortuneUpperBonus = Math.floor(Math.random() * (fortune + 1));
-
-      // 气运减少下限惩罚：每点气运减少 0.5 点下限惩罚（向上取整）
-      const fortuneLowerBonus = Math.ceil(fortune * 0.5);
-
-      // 最终幸运点 = 基础随机 + 气运上限加成 + 气运下限保护
-      const luckyPoints = baseRandom + fortuneUpperBonus + fortuneLowerBonus;
-
-      // 计算灵气浓度的环境修正（如果有位置信息）
-      const currentLocation = stateForAI.角色?.位置;
-      const spiritDensity = currentLocation?.灵气浓度 || 50; // 默认50
-
-      // 🔥 结构化判定数据（直接传给AI使用，无需AI自己计算）
-      const judgmentData = {
-        幸运点: luckyPoints,
-        气运值: fortune,
-        环境: {
-          灵气浓度: spiritDensity,
-          修炼修正: Math.round((spiritDensity - 50) / 10),  // 修炼突破用
-          炼制修正: Math.round((spiritDensity - 50) / 15),  // 炼丹炼器用
-          战斗修正: Math.round((spiritDensity - 50) / 20)   // 战斗用
-        }
-      };
-
-      coreStatusSummary += `\n\n# 本回合判定数据（前端已计算）
-**幸运点**: ${luckyPoints >= 0 ? '+' : ''}${luckyPoints}
-**环境修正**:
-  - 灵气浓度: ${spiritDensity}
-  - 修炼/突破: ${judgmentData.环境.修炼修正 >= 0 ? '+' : ''}${judgmentData.环境.修炼修正}
-  - 炼丹/炼器: ${judgmentData.环境.炼制修正 >= 0 ? '+' : ''}${judgmentData.环境.炼制修正}
-  - 战斗施法: ${judgmentData.环境.战斗修正 >= 0 ? '+' : ''}${judgmentData.环境.战斗修正}
-
-⚠️ **重要**：判定时直接使用以上数值，不要自己计算！
-- 幸运点固定为: ${luckyPoints >= 0 ? '+' : ''}${luckyPoints}
-- 环境修正根据判定类型选择对应的值`;
+      const judgementData = calculateTurnJudgementData(
+        character?.先天六司,
+        character?.后天六司,
+        stateForAI.角色?.位置,
+      );
+      coreStatusSummary += `\n\n${formatTurnJudgementPrompt(judgementData)}`;
       // --- 结束 ---
 
       // 🔥 构建精简版存档数据（用于叙事判定，减少token消耗）
@@ -1938,6 +1898,10 @@ ${step1Text}
 
     const timePrefix = this._formatGameTime((saveData as any).元数据?.时间);
     let textContent = sanitizeAITextForDisplay(response.text || '').trim();
+    const legacyJudgementMarkers = extractLegacyJudgementMarkers(textContent);
+    if (legacyJudgementMarkers.length) {
+      console.debug('[判定 P0] 观察到 legacy 正文判定标签（不作为状态事实）:', legacyJudgementMarkers);
+    }
     // canonGuard 过去只校验 JSON 指令；正文里的“人变剑/马/功法”会直接污染记忆并被下一轮放大。
     // 仅在严格剧本存档启用低误伤的实体类型拦截，留下冲突日志便于追查。
     if ((saveData as any)?.世界?.状态?.剧本模组?.modId && textContent) {
@@ -2077,7 +2041,7 @@ ${step1Text}
     if (protectionMode === 'skeleton') {
       const allowedRoots = ['元数据', '角色', '社交', '世界', '系统'] as const;
       const isV3Path = (p: string) => allowedRoots.some((root) => p === root || p.startsWith(`${root}.`));
-      const forbiddenPrefixes = ['社交.记忆', '系统.历史.叙事'];
+      const forbiddenPrefixes = ['社交.记忆', '系统.历史.叙事', '系统.扩展.判定'];
       const validActions = new Set(['set', 'add', 'push', 'delete', 'pull']);
 
       preprocessedCommands.forEach((cmd, index) => {

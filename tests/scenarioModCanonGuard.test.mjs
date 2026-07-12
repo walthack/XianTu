@@ -60,6 +60,17 @@ test('canon guard is inactive for saves without a Scenario Mod', async () => {
   assert.deepEqual(result.rejected, []);
 });
 
+test('canon guard rejects LLM writes to the engine-only judgement state', async () => {
+  const { guardScenarioModCommands } = await loadTs('../src/modules/scenarioMods/canonGuard.ts');
+  const save = await buildScenarioSave();
+  const command = { action: 'set', key: '系统.扩展.判定.pending', value: { outcome: 'success' } };
+
+  const result = guardScenarioModCommands(save, [command]);
+
+  assert.deepEqual(result.accepted, []);
+  assert.match(result.rejected[0].reason, /本地引擎/);
+});
+
 test('content access guard rejects exclusive content for the player and unauthorized NPCs', async () => {
   const { guardScenarioModCommands } = await loadTs('../src/modules/scenarioMods/canonGuard.ts');
   const save = await buildScenarioSave();

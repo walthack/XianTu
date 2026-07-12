@@ -413,6 +413,10 @@ export function guardScenarioModCommands(saveData: SaveData, commands: unknown[]
     const key = typeof (command as CommandLike)?.key === 'string'
       ? normalizePath((command as CommandLike).key as string)
       : '';
+    if (key === '系统.扩展.判定' || key.startsWith('系统.扩展.判定.')) {
+      rejected.push({ command, reason: '行动判定状态仅可由本地引擎写入' });
+      continue;
+    }
     const isAllowedFlagUpdate = action === 'set' && key.startsWith('世界.状态.剧本模组.flags.');
     const scenarioFlagViolation = key ? findScenarioFlagViolation(runtime, command as CommandLike, key) : null;
     // 承重保护：正典人物的花名册条目不可被整体删除（防即兴把关键角色从世界抹掉）
