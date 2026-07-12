@@ -79,6 +79,7 @@
 | 73 | 07-12 | **可见行动判定 P5（首批来源化效果）**：战斗 partial／failure／critical_failure 按既有规则分别确定性扣除气血上限的 5%／15%／40%，且始终保留至少 1 点气血；逃脱、探索暂只产生已核定的行动门控余波，不凭空生成资源、物品或关系变化。 | judgement engine + tests | (本次) |
 | 74 | 07-12 | **P3-P5 二审止损**：本地结算已写战斗气血的回合，叙事补账必须跳过，防同回合双扣；活动 Canon Rail 判类优先复用 `getNarrativeAnchorEvent`，仅在简化/旧数据缺事件表时回退 activeEventIds 首项。 | response pipeline + preflight + tests | (本次) |
 | 75 | 07-12 | **P3-P5 二审收口**：IF 改写意图先于普通风险词识别，结盟、策反、后宫等即使不含战斗/交涉词也必须显示 `if_only`；叙事补伤只在本地实际写入战斗气血时跳过，逃跑等未本地扣血的结算仍保留既有叙事伤害兜底。 | preflight + response pipeline + tests | (本次) |
+| 76 | 07-13 | **判定回执闭环**（用户实机问题修复）：动作队列是玩家行动的一部分，必须与输入框共同经过预检；双修／调息／疗伤归类为修炼判定。疗伤型修炼的气血、神识恢复与“阴阳调和”临时状态只由本地 resolution 一次性写入；确认回合中 LLM 的旧式 `〔判定〕` 标签及对上述字段的重复命令一律不作为事实。默认线仍仅影响过程数值/状态，不改 Canon Rail 事件结果。 | preflight + judgement engine + response pipeline + tests | (本次) |
 | 48 | 07-04 | 各国军队抽档 13 番号 polity/统属/兵种落 faction；秦军军团=原文「秦军」（天武营秦国锐士，非域外军团）、北府军=晋国（史实核定），二者人工核定；左武军/罗马/马其顿军团已有描述只补元数据 | apply-army-details | eb9307b |
 
 ## 结局蓝图裁定（2026-07-12，续写总纲=ENDING-BLUEPRINT.md v2）

@@ -180,7 +180,7 @@
           <span>难度 {{ latestJudgement.difficulty.value }}</span>
           <span>策略 {{ latestJudgement.canonPolicy }}</span>
         </div>
-        <small v-if="latestJudgement.appliedEffects.length">已写入：{{ latestJudgement.appliedEffects.map(effect => effect.key).join('、') }}</small>
+        <small v-if="latestJudgement.appliedEffects.length">已写入：{{ latestJudgement.appliedEffects.map(describeJudgementEffect).join('、') }}</small>
         <small v-else>本次没有确定性状态余波。</small>
       </section>
       <!-- 动作队列显示区域 -->
@@ -412,10 +412,11 @@ import {
   getJudgementState,
   persistPendingJudgement,
   resolvePendingJudgement,
+  describeJudgementEffect,
   type JudgementProposal,
   type JudgementResolution,
 } from '@/utils/judgementEngine';
-import { buildLocalJudgementPreflight } from '@/utils/judgementPreflight';
+import { buildLocalJudgementPreflight, composeJudgementAction } from '@/utils/judgementPreflight';
 import { getNarrativeTurn } from '@/utils/actionGate';
 import type {  CharacterProfile } from '@/types/game';
 import type { GM_Response } from '@/types/AIGameMaster'; // AIGameMaster.d.ts 仍然需要保留
@@ -1484,7 +1485,9 @@ const selectActionOption = (option: string) => {
 };
 
 const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: JudgementResolution }) => {
-  if (!inputText.value.trim()) return;
+  const actionQueueText = actionQueue.getActionPrompt();
+  const judgementAction = composeJudgementAction(inputText.value, actionQueueText);
+  if (!judgementAction) return;
   if (isAIProcessing.value) {
     toast.warning('AI正在处理中，请稍等...');
     return;
@@ -1521,7 +1524,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
   }
 
   if (!execution?.skipPreflight) {
-    const proposal = buildLocalJudgementPreflight(inputText.value, saveData, getNarrativeTurn(saveData));
+    const proposal = buildLocalJudgementPreflight(judgementAction, saveData, getNarrativeTurn(saveData));
     if (proposal) {
       persistPendingJudgement(saveData, proposal);
       await persistJudgementSave(saveData);
@@ -1558,7 +1561,6 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
 	  }
 
   // 获取动作队列中的文本
-  const actionQueueText = actionQueue.getActionPrompt();
   console.log('[前端] 动作队列 actionQueueText:', actionQueueText);
 
   let finalUserMessage = '';
@@ -1572,8 +1574,9 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
   }
   if (execution?.resolution) {
     const result = execution.resolution;
-    const localDamageApplied = result.appliedEffects.some(effect => effect.key === '角色.属性.气血.当前');
-    finalUserMessage += `\n【本地判定已结算】类型=${result.kind}；骰点=${result.roll}；总值=${result.total}；难度=${result.difficulty.value}；结果=${result.outcome}；正典策略=${result.canonPolicy}${localDamageApplied ? '；本地战斗伤害已结算=true' : ''}。只叙述该既定结果，不得另行掷骰、改写数字或写入系统.扩展.判定；若策略为 route_process_only，不得直接完成、void 或改写活动正典事件。\n`;
+    const localDamageApplied = result.kind === 'combat' && result.appliedEffects.some(effect => effect.key === '角色.属性.气血.当前');
+    const effectSummary = result.appliedEffects.map(describeJudgementEffect).join('；') || '无';
+    finalUserMessage += `\n【本地判定已结算】类型=${result.kind}；骰点=${result.roll}；总值=${result.total}；难度=${result.difficulty.value}；结果=${result.outcome}；正典策略=${result.canonPolicy}；已写入=${effectSummary}${localDamageApplied ? '；本地战斗伤害已结算=true' : ''}。只叙述该既定结果和已写入状态，不得另行掷骰、改写数字、杜撰额外状态效果或写入系统.扩展.判定；若策略为 route_process_only，不得直接完成、void 或改写活动正典事件。\n`;
   }
   console.log('[前端] 最终发送 finalUserMessage:', finalUserMessage);
 

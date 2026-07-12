@@ -1905,6 +1905,12 @@ ${step1Text}
     const legacyJudgementMarkers = extractLegacyJudgementMarkers(textContent);
     if (legacyJudgementMarkers.length) {
       console.debug('[判定 P0] 观察到 legacy 正文判定标签（不作为状态事实）:', legacyJudgementMarkers);
+      if (options?.userAction?.includes('【本地判定已结算】')) {
+        // Confirmed actions have one source of truth: the persisted local
+        // resolution. A model-produced legacy marker must not contradict it in
+        // the UI or enter the next narrative-memory window.
+        textContent = textContent.replace(/〔(?:战斗|修炼|炼制|探索|社交|逃脱|潜行|谋略):[^〕]*〕/g, '').trim();
+      }
     }
     // canonGuard 过去只校验 JSON 指令；正文里的“人变剑/马/功法”会直接污染记忆并被下一轮放大。
     // 仅在严格剧本存档启用低误伤的实体类型拦截，留下冲突日志便于追查。
@@ -2118,6 +2124,17 @@ ${step1Text}
       const cleanedCommands = cleanCommands(validCommands);
       validCommands.length = 0;
       cleanedCommands.forEach((c) => validCommands.push(c));
+    }
+
+    if (options?.userAction?.includes('【本地判定已结算】')) {
+      const localOnlyPrefixes = ['角色.属性.气血.当前', '角色.属性.神识.当前', '角色.效果'];
+      for (let index = validCommands.length - 1; index >= 0; index -= 1) {
+        const command = validCommands[index];
+        if (localOnlyPrefixes.some(prefix => command.key === prefix || command.key.startsWith(`${prefix}.`) || command.key.startsWith(`${prefix}[`))) {
+          validCommands.splice(index, 1);
+          rejectedCommands.push({ command, errors: ['本回合核心数值与状态效果由本地判定结算，拒绝 LLM 重复或改写'] });
+        }
+      }
     }
 
     // 记录被拒绝的指令（格式/只读保护/value 完整性）

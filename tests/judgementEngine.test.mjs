@@ -96,3 +96,28 @@ test('combat failure applies source-rule health loss without reaching zero', asy
   assert.equal(save.角色.属性.气血.当前, 1);
   assert.ok(result.appliedEffects.some(effect => effect.key === '角色.属性.气血.当前'));
 });
+
+test('successful double-cultivation recovery writes core values and one temporary status', async () => {
+  const save = {
+    角色: { 属性: { 气血: { 当前: 100, 上限: 1000 }, 神识: { 当前: 200, 上限: 800 }, 效果: [] } },
+    元数据: { 时间: { 年: 220, 月: 1, 日: 1, 小时: 1, 分钟: 1 } },
+    系统: { 扩展: {} },
+  };
+  const pending = await createPending(save, {
+    actionText: '与同伴双修调息疗伤，修复经脉', kind: 'cultivate', difficulty: { band: 'hard', value: 20 },
+    factors: [{ label: '功法相合', value: 15, source: 'skill' }],
+  });
+  const { resolvePendingJudgement, describeJudgementEffect } = await loadTs('../src/utils/judgementEngine.ts');
+  const result = resolvePendingJudgement(save, pending.id, { currentTurn: 5, roll: () => 20 });
+
+  assert.equal(result.outcome, 'great_success');
+  assert.equal(save.角色.属性.气血.当前, 400);
+  assert.equal(save.角色.属性.神识.当前, 440);
+  assert.deepEqual(save.角色.效果.map(effect => effect.状态名称), ['阴阳调和']);
+  assert.equal(save.角色.效果[0].持续时间分钟, 360);
+  assert.ok(result.appliedEffects.map(describeJudgementEffect).includes('气血恢复至 400'));
+
+  resolvePendingJudgement(save, pending.id, { currentTurn: 6, roll: () => 1 });
+  assert.equal(save.角色.属性.气血.当前, 400, '重试不会重复恢复');
+  assert.equal(save.角色.效果.length, 1, '重试不会重复叠加状态');
+});

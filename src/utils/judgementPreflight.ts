@@ -15,10 +15,19 @@ const KEYWORDS: Array<[JudgementKind, RegExp]> = [
   ['stealth', /潜入|潜行|偷|窃|暗杀|躲过/],
   ['explore', /探索|搜查|探查|翻越|闯入|调查/],
   ['craft', /炼丹|炼器|制符|布阵|炼制/],
-  ['cultivate', /突破|闭关|修炼|冲关/],
+  ['cultivate', /突破|闭关|修炼|冲关|双修|调息|疗伤/],
   ['social', /说服|威胁|交涉|谈判|收服|招揽/],
 ];
 const EXPLICIT_IF_INTENT = /收服|招揽|结盟|策反|纳入后宫|纳妾|改写命运|救下.*不死|提前杀死/;
+
+/** The queued action is part of the submitted intent and must be preflighted too. */
+export function composeJudgementAction(intentText: string, actionQueueText: string): string {
+  const intent = intentText.trim();
+  const queue = actionQueueText.trim();
+  if (!queue || intent.includes(queue)) return intent;
+  if (!intent) return queue;
+  return `${intent}\n\n${queue}`;
+}
 
 const STAT_WEIGHTS: Record<JudgementKind, Array<[string, number]>> = {
   combat: [['根骨', .5], ['灵性', .3], ['气运', .2]], cultivate: [['悟性', .5], ['灵性', .3], ['心性', .2]],

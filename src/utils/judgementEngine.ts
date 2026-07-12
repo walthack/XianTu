@@ -270,9 +270,52 @@ function gateScopeFor(kind: JudgementKind): string {
   return 'scene';
 }
 
-function deterministicOutcomeEffects(saveData: unknown, proposal: JudgementProposal, outcome: JudgementOutcome, currentTurn: number): JudgementResolution['appliedEffects'] {
-  if (!['partial', 'failure', 'critical_failure'].includes(outcome)) return [];
+const CULTIVATION_RECOVERY_KEYWORDS = /疗伤|疗愈|调息|恢复|修复|经脉|丹田|双修/;
+const CULTIVATION_RECOVERY_RATIO: Partial<Record<JudgementOutcome, number>> = {
+  partial: .05,
+  success: .15,
+  great_success: .3,
+  perfect: .4,
+};
+
+function targetAfterRecovery(root: any, attribute: '气血' | '神识', ratio: number): number | null {
+  const current = Number(root?.角色?.属性?.[attribute]?.当前);
+  const max = Number(root?.角色?.属性?.[attribute]?.上限);
+  if (!Number.isFinite(current) || !Number.isFinite(max) || max <= 0) return null;
+  return Math.min(max, Math.max(0, current + Math.max(1, Math.round(max * ratio))));
+}
+
+function cultivationRecoveryEffects(saveData: unknown, proposal: JudgementProposal, outcome: JudgementOutcome): JudgementResolution['appliedEffects'] {
+  const ratio = CULTIVATION_RECOVERY_RATIO[outcome];
+  if (proposal.kind !== 'cultivate' || !ratio || !CULTIVATION_RECOVERY_KEYWORDS.test(proposal.actionText)) return [];
+  const root = saveData as any;
   const effects: JudgementResolution['appliedEffects'] = [];
+  for (const attribute of ['气血', '神识'] as const) {
+    const target = targetAfterRecovery(root, attribute, ratio);
+    if (target !== null) effects.push({ key: `角色.属性.${attribute}.当前`, action: 'set', value: target });
+  }
+  if (/双修/.test(proposal.actionText)) {
+    const durationByOutcome: Partial<Record<JudgementOutcome, number>> = {
+      partial: 120, success: 240, great_success: 360, perfect: 480,
+    };
+    effects.push({
+      key: '角色.效果', action: 'upsert', value: {
+        状态名称: '阴阳调和', 类型: 'buff', 生成时间: clone(root?.元数据?.时间 || {}),
+        持续时间分钟: durationByOutcome[outcome] || 120,
+        状态描述: '本地双修疗伤结算获得：修炼速度+10%，伤势恢复速度+20%，双修效果+30%。',
+        强度: 1, 来源: '本地判定',
+      },
+    });
+  }
+  return effects;
+}
+
+function deterministicOutcomeEffects(saveData: unknown, proposal: JudgementProposal, outcome: JudgementOutcome, currentTurn: number): JudgementResolution['appliedEffects'] {
+  const effects: JudgementResolution['appliedEffects'] = [];
+  if (['partial', 'success', 'great_success', 'perfect'].includes(outcome)) {
+    effects.push(...cultivationRecoveryEffects(saveData, proposal, outcome));
+  }
+  if (!['partial', 'failure', 'critical_failure'].includes(outcome)) return effects;
   if (proposal.kind === 'combat') {
     const root = saveData as any;
     const current = Number(root?.角色?.属性?.气血?.当前);
@@ -313,8 +356,36 @@ function applyDeterministicEffects(saveData: unknown, effects: JudgementResoluti
       root.角色 ??= {}; root.角色.属性 ??= {}; root.角色.属性.气血 ??= {};
       root.角色.属性.气血.当前 = Math.max(1, Number(root.角色.属性.气血.当前 || 1) + effect.value);
     }
+    if ((effect.key === '角色.属性.气血.当前' || effect.key === '角色.属性.神识.当前') && effect.action === 'set' && typeof effect.value === 'number') {
+      const attribute = effect.key.includes('气血') ? '气血' : '神识';
+      root.角色 ??= {}; root.角色.属性 ??= {}; root.角色.属性[attribute] ??= {};
+      const max = Number(root.角色.属性[attribute].上限);
+      root.角色.属性[attribute].当前 = Number.isFinite(max)
+        ? Math.min(max, Math.max(0, Math.round(effect.value)))
+        : Math.max(0, Math.round(effect.value));
+    }
+    if (effect.key === '角色.效果' && effect.action === 'upsert' && effect.value && typeof effect.value === 'object') {
+      const status = clone(effect.value as Record<string, unknown>);
+      const name = normalizeText(status.状态名称);
+      if (name) {
+        root.角色 ??= {}; root.角色.效果 ??= [];
+        if (!Array.isArray(root.角色.效果)) root.角色.效果 = [];
+        const index = root.角色.效果.findIndex((item: any) => normalizeText(item?.状态名称) === name);
+        if (index >= 0) root.角色.效果[index] = status;
+        else root.角色.效果.push(status);
+      }
+    }
     if (effect.key === '系统.扩展.行动门控.recent' && effect.action === 'push') root.系统.扩展.行动门控.recent.push(clone(effect.value));
   }
+}
+
+/** User-facing receipt text for deterministic changes; never inferred from model prose. */
+export function describeJudgementEffect(effect: JudgementResolution['appliedEffects'][number]): string {
+  if (effect.key === '角色.属性.气血.当前') return effect.action === 'set' ? `气血恢复至 ${effect.value}` : `气血 ${Number(effect.value) >= 0 ? '+' : ''}${effect.value}`;
+  if (effect.key === '角色.属性.神识.当前') return effect.action === 'set' ? `神识恢复至 ${effect.value}` : `神识 ${Number(effect.value) >= 0 ? '+' : ''}${effect.value}`;
+  if (effect.key === '角色.效果' && effect.action === 'upsert') return `获得临时状态「${(effect.value as any)?.状态名称 || '未知'}」`;
+  if (effect.key === '系统.扩展.行动门控.recent') return '写入行动余波';
+  return `${effect.key} ${effect.action}`;
 }
 
 /**
