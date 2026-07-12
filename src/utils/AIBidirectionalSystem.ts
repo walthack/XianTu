@@ -2235,7 +2235,12 @@ ${step1Text}
     const reconciledInventoryChanges = this.reconcileNarratedInventoryPossessions(saveData, textContent);
     commandAppliedChanges.push(...reconciledInventoryChanges);
 
-    const reconciledDamageChange = this.reconcileNarratedPlayerDamage(saveData, textContent, sortedCommands);
+    // 本地判定已先把来源化战斗伤害写入 resolution；本回合正文只负责演出，
+    // 不得再由叙事补账第二次扣血。
+    const hasLocalJudgementResolution = options?.userAction?.includes('【本地判定已结算】') === true;
+    const reconciledDamageChange = hasLocalJudgementResolution
+      ? null
+      : this.reconcileNarratedPlayerDamage(saveData, textContent, sortedCommands);
     if (reconciledDamageChange) {
       commandAppliedChanges.push(reconciledDamageChange);
     }

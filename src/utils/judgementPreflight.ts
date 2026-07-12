@@ -7,6 +7,7 @@ import {
 } from './judgementEngine';
 import { calculateTurnJudgementData } from './judgementRules';
 import { getCanonRailContract, getCanonRailProfile } from '@/modules/scenarioMods/canonRail';
+import { getNarrativeAnchorEvent } from '@/modules/scenarioMods/runtime';
 
 const KEYWORDS: Array<[JudgementKind, RegExp]> = [
   ['combat', /攻击|出手|斩|杀|斗法|交手|战斗|迎战/],
@@ -53,7 +54,8 @@ export function buildLocalJudgementPreflight(
   const normalized = actionText.trim();
   const runtime = saveData?.世界?.状态?.剧本模组;
   const profile = getCanonRailProfile(runtime);
-  const activeEventId = Array.isArray(runtime?.activeEventIds) ? runtime.activeEventIds[0] : undefined;
+  const activeEventId = getNarrativeAnchorEvent(runtime || {})?.id
+    || (Array.isArray(runtime?.activeEventIds) ? runtime.activeEventIds[0] : undefined);
   const contract = activeEventId ? getCanonRailContract(profile, activeEventId) : null;
   const matched = KEYWORDS.find(([, matcher]) => matcher.test(normalized));
   if (!matched) return null;
