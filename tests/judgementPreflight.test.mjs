@@ -17,4 +17,5 @@ test('active Canon Rail events use process-only policy while explicit rewrites r
   const save = { 世界: { 状态: { 剧本模组: { modId: 'lcq.stage_01', activeEventIds: ['lcq.event.s01_04'] } } } };
   assert.equal(buildLocalJudgementPreflight('我潜入守卫森严的府邸', save, 1).canonPolicy, 'route_process_only');
   assert.equal(buildLocalJudgementPreflight('我收服卓云君并纳入后宫', save, 1).canonPolicy, 'if_only');
+  assert.equal(buildLocalJudgementPreflight('我打算与卓云君结盟', save, 1).canonPolicy, 'if_only');
 });

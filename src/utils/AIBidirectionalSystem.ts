@@ -2237,8 +2237,8 @@ ${step1Text}
 
     // 本地判定已先把来源化战斗伤害写入 resolution；本回合正文只负责演出，
     // 不得再由叙事补账第二次扣血。
-    const hasLocalJudgementResolution = options?.userAction?.includes('【本地判定已结算】') === true;
-    const reconciledDamageChange = hasLocalJudgementResolution
+    const hasLocalCombatDamage = options?.userAction?.includes('本地战斗伤害已结算=true') === true;
+    const reconciledDamageChange = hasLocalCombatDamage
       ? null
       : this.reconcileNarratedPlayerDamage(saveData, textContent, sortedCommands);
     if (reconciledDamageChange) {

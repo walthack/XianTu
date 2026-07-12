@@ -1572,7 +1572,8 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
   }
   if (execution?.resolution) {
     const result = execution.resolution;
-    finalUserMessage += `\n【本地判定已结算】类型=${result.kind}；骰点=${result.roll}；总值=${result.total}；难度=${result.difficulty.value}；结果=${result.outcome}；正典策略=${result.canonPolicy}。只叙述该既定结果，不得另行掷骰、改写数字或写入系统.扩展.判定；若策略为 route_process_only，不得直接完成、void 或改写活动正典事件。\n`;
+    const localDamageApplied = result.appliedEffects.some(effect => effect.key === '角色.属性.气血.当前');
+    finalUserMessage += `\n【本地判定已结算】类型=${result.kind}；骰点=${result.roll}；总值=${result.total}；难度=${result.difficulty.value}；结果=${result.outcome}；正典策略=${result.canonPolicy}${localDamageApplied ? '；本地战斗伤害已结算=true' : ''}。只叙述该既定结果，不得另行掷骰、改写数字或写入系统.扩展.判定；若策略为 route_process_only，不得直接完成、void 或改写活动正典事件。\n`;
   }
   console.log('[前端] 最终发送 finalUserMessage:', finalUserMessage);
 

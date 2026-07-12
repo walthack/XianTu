@@ -57,6 +57,15 @@ export function buildLocalJudgementPreflight(
   const activeEventId = getNarrativeAnchorEvent(runtime || {})?.id
     || (Array.isArray(runtime?.activeEventIds) ? runtime.activeEventIds[0] : undefined);
   const contract = activeEventId ? getCanonRailContract(profile, activeEventId) : null;
+  // IF 改写是正典边界，不依赖“战斗/潜入”等普通风险词命中。
+  if (contract && EXPLICIT_IF_INTENT.test(normalized)) {
+    return createJudgementProposal({
+      actionText: normalized, kind: 'scheme', whyNow: '此行动会改写活动正典拍，默认线必须先进入显式 IF。',
+      difficulty: { band: 'extreme', value: 100 }, factors: [],
+      stakes: { success: '仅 IF 支线可继续裁定。', partial: '默认线不产生部分成功。', failure: '默认线拒绝执行。' },
+      canonPolicy: 'if_only', sourceEventId: contract.eventId, createdAtTurn: currentTurn,
+    });
+  }
   const matched = KEYWORDS.find(([, matcher]) => matcher.test(normalized));
   if (!matched) return null;
   const [kind] = matched;
@@ -81,7 +90,7 @@ export function buildLocalJudgementPreflight(
       environmentFactorFor(kind, data),
     ],
     stakes,
-    canonPolicy: contract ? (EXPLICIT_IF_INTENT.test(normalized) ? 'if_only' : 'route_process_only') : 'free',
+    canonPolicy: contract ? 'route_process_only' : 'free',
     ...(contract ? { sourceEventId: contract.eventId } : {}),
     createdAtTurn: currentTurn,
   });
