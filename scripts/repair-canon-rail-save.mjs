@@ -12,6 +12,7 @@ const storage = join(root, '.xiantu-server', 'save-storage');
 const slotIndex = process.argv.indexOf('--slot');
 const slot = slotIndex >= 0 ? process.argv[slotIndex + 1] : '';
 const apply = process.argv.includes('--apply');
+const seedNarrativeOnly = process.argv.includes('--seed-narrative');
 if (!slot) throw new Error('需要指定单一存档：--slot <存档名>');
 
 const matches = (await readdir(storage)).filter(name => name.startsWith('savedata_') && name.endsWith(`_${slot}.json`));
@@ -44,6 +45,38 @@ for (const event of events) {
 }
 const nextEvent = events.find(event => !completed.includes(event.id)) || null;
 const report = [];
+
+// A blank memory/history makes MainGamePanel show its generic "开局生成失败"
+// placeholder even when the save itself is valid. This targeted mode restores
+// one deterministic, non-completing Canon Rail handoff without changing any
+// progress, characters, inventory, or relationship state.
+if (seedNarrativeOnly) {
+  if (!nextEvent) throw new Error('当前关已无待推进的正典事件，无法写入继续点');
+  const existingMemory = data.社交?.记忆?.短期记忆;
+  const existingNarrative = data.系统?.历史?.叙事;
+  if ((Array.isArray(existingMemory) && existingMemory.length) || (Array.isArray(existingNarrative) && existingNarrative.length)) {
+    throw new Error('存档已有叙事记录，拒绝覆盖；请使用完整修复或人工核查');
+  }
+  const handoff = `【正典进度已定位】当前主线锚点：${nextEvent.name}。请围绕此拍展开行动；未发生的后续剧情不得提前叙述。`;
+  data.社交 ??= {};
+  data.社交.记忆 ??= {};
+  data.社交.记忆.短期记忆 = [handoff];
+  data.系统 ??= {};
+  data.系统.历史 ??= {};
+  data.系统.历史.叙事 = [{
+    type: 'system', role: 'assistant', content: handoff, time: '【正典定位】',
+    actionOptions: ['查看当前局势', '继续当前主线'], stateChanges: { changes: [] },
+  }];
+  console.log(`${apply ? '将补写继续点' : '预览继续点'}：${file}`);
+  console.log(`- ${handoff}`);
+  if (apply) {
+    const backup = `${file}.bak-canon-rail-handoff-${new Date().toISOString().replace(/[:.]/g, '-')}`;
+    await cp(file, backup);
+    await writeFile(file, `${JSON.stringify(wrapper, null, 2)}\n`);
+    console.log(`已写入；备份：${backup}`);
+  }
+  process.exit(0);
+}
 
 for (const key of ['短期记忆', '中期记忆', '长期记忆', '隐式中期记忆']) {
   if (Array.isArray(data.社交?.记忆?.[key]) && data.社交.记忆[key].length) {
