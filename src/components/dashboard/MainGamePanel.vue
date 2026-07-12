@@ -171,6 +171,18 @@
           <button @click="cancelPendingJudgement" :disabled="isAIProcessing">撤回</button>
         </div>
       </section>
+      <section v-else-if="latestJudgement?.status === 'resolved'" class="judgement-result-card">
+        <div class="judgement-preflight-title">本地判定结果 · {{ latestJudgement.outcome }}</div>
+        <div>{{ latestJudgement.actionText }}</div>
+        <div class="judgement-preflight-factors">
+          <span>骰点 {{ latestJudgement.roll }}</span>
+          <span>总值 {{ latestJudgement.total }}</span>
+          <span>难度 {{ latestJudgement.difficulty.value }}</span>
+          <span>策略 {{ latestJudgement.canonPolicy }}</span>
+        </div>
+        <small v-if="latestJudgement.appliedEffects.length">已写入：{{ latestJudgement.appliedEffects.map(effect => effect.key).join('、') }}</small>
+        <small v-else>本次没有确定性状态余波。</small>
+      </section>
       <!-- 动作队列显示区域 -->
       <div v-if="actionQueue.pendingActions.length > 0" class="action-queue-display">
         <div class="queue-header">
@@ -432,10 +444,13 @@ const inputText = computed({
 });
 const isInputFocused = ref(false);
 const pendingJudgement = ref<JudgementProposal | null>(null);
+const latestJudgement = ref<JudgementResolution | null>(null);
 
 const refreshPendingJudgement = () => {
   const save = gameStateStore.toSaveData();
-  pendingJudgement.value = save ? getJudgementState(save).pending || null : null;
+  const state = save ? getJudgementState(save) : null;
+  pendingJudgement.value = state?.pending || null;
+  latestJudgement.value = state?.recent.at(-1) || null;
 };
 
 const persistJudgementSave = async (save: any) => {
@@ -4740,6 +4755,8 @@ const syncGameState = async () => {
   background: linear-gradient(135deg, #fffaf0, #fff);
   color: #4b3518;
 }
+.judgement-result-card { margin: 8px 12px; padding: 10px 12px; border-left: 4px solid #5d8a5d; border-radius: 6px; background: #f2f8f0; color: #274227; }
+[data-theme="dark"] .judgement-result-card { background: #1f3120; color: #d8ead6; border-color: #7caf76; }
 .judgement-preflight-title { font-weight: 700; color: #9a6517; }
 .judgement-preflight-action { margin-top: 4px; font-weight: 600; }
 .judgement-preflight-card p, .judgement-preflight-card small { display: block; margin: 7px 0; line-height: 1.5; }
