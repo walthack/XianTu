@@ -20,7 +20,7 @@
 - [x] **R1-1 主线死锁软完成 / 主线对齐叙事**（✅ 2026-07-07 深夜落地，commit `ea65eb1`+`a7476bf`）
   实现＝事件对账 `eventReconcileService`：哨兵触发式（stallTurns≥10、每 5 轮重试，非每轮），LLM 核对存档记忆（长3+中10+短4）输出 **done（已实质发生，含玩家等价路径）/void（前提被玩家叙事消解，机械放行）/pending**；确定性 validator 护栏（连续前缀防跳序/evidence 逐字接地/void 0.85>done 0.75/单次上限5/宁 pending）；落 flag 当轮 advance 即推进、stall 清零。usageType `event_reconcile` 默认开（稀有触发成本近零，面板可关）。**Codex 整环审判定"闭环条件闭合、无 blocking、可落地"**。两死锁存档（stall 16/23，含"谢艺该死却被玩家救活永卡链"分岔案例）已手动处置并写成端到端测试。
   残余 backlog（非阻塞，见记忆 `xiantu-steering-cooldown-wip`）：evidence 只验接地不验语义相关性；持续主动偏移推迟对账；"走回主线途中"stall 不清零仍会催。
-- [~] **R1-2 steering-cooldown 收尾**（2026-07-07 全部完成）
+- [x] **R1-2 steering-cooldown 收尾**（2026-07-07 全部完成）
   - [x] 第一批 回主线引子重做 + 偏移冷却，**判定完全交乙**（关键词甲经 Codex 五轮复审证明追不上自然语言的否定/复合/语义 → 砍甲；冷却字段挪进 runtime 保护区 canonGuard+commandValidator 双拦）。产物 commit `2bcc7fc`，落 `feat/builtin-scenario-templates`（此 repo 用 feature 分支工作流、非 master；临时 `feat/steering-cooldown` 已 ff-merge 回原线并删）。
   - [x] 第二批 objective：205 个 critical 事件（37 关中 19 关含关键事件）补 `objective`（玩家视角+地点+不剧透，DeepSeek-V4-Flash 按关批量生成）→ RightSidebar 主线渲染 + steeringLine 引子共用；`sync-builtin-mods` 传导进内置 mod；当前存档单档注入。产物 commit `d047139`。**范围/模型已拍板=全 37 关 / DeepSeek-V4-Flash**。
   - [x] 脱节哨兵：stallTurns≥10 UI 预警（零成本确定性、默认开、只提示不改数据）。产物 commit `3cf81b5`。
@@ -34,6 +34,14 @@
 
 ## R2 · 发布前应修（不修也能发，但会立刻收到差评）
 
+- [ ] **R2-0 玩家分歧演化 + 世界引力**（⭐ 愿景核心，2026-07-13 用户拍板列高优先；R2 内排第一）
+  偏离处置三档定案（用户认可）：**小偏放任**（逛街/支线，冷却已覆盖，代价只有时间流逝）／**中偏弯轨**（玩家用自己的方式做了主线＝玩家版本的正典，主线承认玩家现实往下接着走，不拉回"原著那一幕"）／**大偏让世界压过来或毕业成结局**（脊柱事件是世界级事实、不等玩家；全钩子无视到底→"你缺席的结局" ending terminus）。**催促式拉回一次都不要有，拉回感只来自剧情引力。**
+  三块地基已在库中互相未接：`eventReconcileService` 的 void 判定（只落审计标记）、if 线 schema 的 `fork.eventId`/`stateEffects`/`replacementNodes`（预写 14 条、运行时不消费）、`eventNarrativeView` 手写"谢艺生还后果"变体（分歧承认已被手工做过一次）。本项＝把三者接通：
+  - [ ] **一期 分歧账本落存档**：RuntimeState 加 `divergences[]`（canonGuard+commandValidator 保护，沿 steeringCooldown 先例）；对账 void 输出扩 `worldDelta`（一句话世界差异）+ `characterStates`（角色id→状态）；validator 两护栏＝characterId registry 可解析 + worldDelta 走 bigram 接地；`applyReconcileFlags` 落 `.void` 同时推账本。验收＝谢艺生还死锁存档跑出账本条目。
+  - [ ] **三期（提前与一期同批）void→if 线自动接轨**：void 的 eventId 确定性匹配 if 线 `fork.eventId`（实证：被 void 的 `lcq.event.s06_03` 恰是 `lcq.if_xieyi_longrest` fork 点），命中则激活分支（replacementNodes 精写剧情/reconverge 回流/spineConstraints 红线）替代裸 void——14 条预写 if 线从菜单选项变成玩家行为自动触发；账本兜长尾、if 线兜高光。
+  - [ ] **二期 账本注入消费**：①`buildScenarioStoryPrompt` 加【本世界线分歧】段（封顶条数，近期/在场角色优先）；②`characterStates` 写 `flags.character.<id>.status`（与 if 线 stateEffects 同路径约定，统一两套状态语义），RAG/resolver 召回带状态；③`eventNarrativeView` 变体机制化——下游事件引用已分歧角色时 objective/axisBeat 一次性 LLM 重写并缓存进存档（消灭"去和已被你杀死的鬼巫王冲突"类荒谬引子）。
+  - [ ] **四期 世界引力 / offscreen 结算**：脊柱节点加 `offscreenResolution`（玩家缺席时默认走向＝原著 axisBeat 现成）；stall 超阈值＋距脊柱锚点超 N 拍→按原著走向结算该节点、落账本、余波注入叙事（steering 终态从文字催促升级为事件压力：战报/通缉/故人寻来找上门）；ending terminus 出口复用 if 线主角死亡先例。
+  实施顺序：一期+三期先行（改动面小、护栏现成、死锁存档即验收用例），二期随后，四期单独出 spec 过 Codex 严审（碰对账与 runtime 保护区）。
 - [ ] **R2-1 发布形态与 API 配置 onboarding**
   用户自带 key（OpenRouter/MiniMax）：首次配置引导、key 无效/额度耗尽的明确报错与降级；修"API 配置自动上传 fire-and-forget 悄悄丢"的可靠性问题（见记忆 `xiantu-config-sync`）。
 - [ ] **R2-2 存档校验大洞**（已被标记为独立 milestone，见 steering WIP 记忆）
@@ -42,6 +50,12 @@
   发布后再动主轴 seq/事件 id，老玩家存档兼容会很痛。event.id append-only 契约已在；发布前确认无 pending 的主轴重排（qingyu 重抽若仍有未合入产物，定稿或明确弃用），之后主轴改动只走 regen-binding。
 - [ ] **R2-4 新玩家首小时**
   切关仪式感 + 战役编年史（已批设计，见 CORE-DOCS-ROADMAP"已批待做"节）建议赶发布车——它同时解决"我在哪/我完成了什么"的定向问题；开局创建角色→选剧本→第一关引导流程完整跑一遍外部视角审。
+  - [ ] **即兴任务持久化**：LLM 即兴给的任务目标（"打破蛇蛋取令牌"）只存在叙事记忆，读档后重新即兴会翻转成"孵化蛇蛋"（治标规则 7 已加）。治本＝即兴目标结构化写入存档任务槽 + 读档注入 prompt，与玩家侧任务面板是同一件事。
+  - [ ] **切关/任务面板去直白化**（裁定 #44 留档待修）："▶ 进入下一关：灵飞镜与白夷危局"直接剧透关名、导演视角。四方向择组合：叙事化引子（模糊世界动向）/叙事内触发（说出启程行动→AI 确认切关，按钮降兜底）/if 线多分岔选择/事件名去 meta（playerHint 字段）。
+- [ ] **R2-5 角色 OOC / 卡设定被无视（CORE-DOCS G1）**
+  游戏里 AI 把角色演脱戏、无视卡内人设/灵根/性别/关系（前例：凝羽灵根被改成风灵根、谢艺被演成女、苏妲己契约关系被无视）。Character RAG 已上线是地基；需盘点「卡字段→prompt 消费」链路哪些设定根本没进 prompt，再加违设定护栏。直接影响外部玩家对"角色对不对味"的第一印象。
+- [ ] **R2-6 跨关长期记忆 A 方案**（2026-07-13 自 R3-5 提前）
+  关键旧人旧事写进全程在场主要角色卡的 keyEvents/记忆/关系（纯数据管线活，与既有"补空不覆盖"脚本同构，随卡任何关注入）。"后期小紫答不上王哲/谢艺是谁"对「重新体验小说」是根性破坏，不属打磨档。B（全局花名册/长期记忆注入机制，改 prompt 管线）仍留 R3-5。
 
 ## R2.5 · steering/objective 闭环残余（非阻塞，实测中收集）
 
@@ -53,12 +67,34 @@
 
 ## R3 · 发布后深耕（价值排序）
 
-1. [ ] **枢纽事件演出密度**：高光节点专属立绘构图 + BGM mood（musicEngine 加"正典高光"类）+ 半预制核心文本，AI 日常段落与精雕枢纽段落形成节奏对比。投入产出比最高的表现力升级，不动架构。
+1. [ ] **枢纽事件演出密度**：高光节点专属立绘构图 + BGM mood（musicEngine 加"正典高光"类）+ 半预制核心文本，AI 日常段落与精雕枢纽段落形成节奏对比。投入产出比最高的表现力升级，不动架构。**与 R3-8 捆绑纵切**（2026-07-13 调序）：R3-8 打样时挑一个枢纽（如董卓之死）把 event+立绘+BGM+半预制文本一次做穿，验证"精雕枢纽"完整形态后再定 242 条铺法。
 2. [ ] **续写缺失的后续篇章**（if 线待办已重定目标为大纲级续写，见记忆 `xiantu-ifline-design` 顶部 2026-07-04 重定）。
-3. [ ] **燕歌行续作 canon（第③层）+ 世界暗线揭盅**：以 **`character-canon/ENDING-BLUEPRINT.md` v2 为真值源**（三幕脊椎 人→组织→系统、终战=对抗自动策展系统、岳氏全谱、"毕业生"终幕；裁定 #69/#80-89）。落地项＝141 个空 ending 回填 + if 顶层分岔锚点定义 + #1017 李辅国借尸钩子 + 试验场假说揭盅（`WORLD-暗线-试验场假说.md`）+ 新脊柱/新角色/新地区。管线需从"epub 抽取"换成"多模型协同创作"，单独立项。
+3. [ ] **燕歌行续作 canon（第③层）+ 世界暗线揭盅**：以 **`character-canon/ENDING-BLUEPRINT.md` v2 为真值源**（三幕脊椎 人→组织→系统、终战=对抗自动策展系统、岳氏全谱、"毕业生"终幕；裁定 #69/#80-89）。落地项＝141 个空 ending 回填 + if 顶层分岔锚点定义 + #1017 李辅国借尸钩子 + 试验场假说揭盅（`WORLD-暗线-试验场假说.md`）+ 新脊柱/新角色/新地区。管线需从"epub 抽取"换成"多模型协同创作"，单独立项。**启动顺序约定（2026-07-13）**：先做第一幕（长安驱魂局）**可玩纵切**验证引擎能否承载蓝图级剧情，再定 141 ending 回填广度；知情注入引擎 B/C 与 R2-0 分歧账本注入共享管道（本质都是"哪些事实注入给谁"），两者排在一起设计。
    - [ ] **关系密档知情注入引擎（B/C，独立 milestone）**：把 `character-canon/RELATIONSHIPS-SECRET.md` 的剧透血缘（岳氏父女谱/碧姬=西施/林妙仙身体本主等；裁定 #89 密档层方案 A 已落，边不进可见关系网）按**知情图谱分层可见**（B）或 **per-stage 解锁**（C）受控注入给该知情的 NPC——让"该知道的 NPC 才知道、不知情者问答不泄底"。升级为运行时可见须过 18-mod validator 引用解析。参照小紫弑母 per-stage 快照先例 + 生死根机密 prompt 规则（裁定 #12）。
 4. [ ] **立绘补全**（E-M2~M4）：96 张官方图已覆盖主要角色；余量等额度恢复后按 SAFE 名单慢铺（内容红线见记忆 `xiantu-portrait-pipeline`）。
 5. [ ] **细粒度打磨**：态度建模全本跑（yunlong/yange ~15 条）、好感分阶段化、faction 对外关系 UI 渲染、次要角色 description 小说化余量、63 归属审计裁定、性转沙盒 if 模式。
+   - [ ] **全局花名册 / 长期记忆注入机制（B）**：改 prompt 管线的通用方案。A（关键旧人旧事写进主要角色卡）已提前至 **R2-6**（2026-07-13 调序）。
+   - [ ] **地点→角色检索 + 地点风貌富化**（同一批扫描数据两用）：registry 每角色加 region/常驻地点字段，按当前地点过滤/加权召回（漫游到唐国自动遇杨玉环等常驻角色，与语义 RAG 叠加、配合阶段身份门禁）；地点 canon 太薄（一句话+无 region/文化圈）致 LLM 裸猜成中原样，派模型按地点扫原文抽「风貌/建筑/植被/民俗/文化圈」富化 canon.locations。
+6. [ ] **六朝写实化二期（系统×正典脱节四件套，2026-07-03 用户点名）**：原版通用修仙系统没吃六朝正典。
+   ① 技能系统×六朝功法（mod 已有功法 88/技能 194，但玩家习得/技能面板/战斗可能仍走通用技能库——盘点可学池是否消费 scenario content）；
+   ② 地图机制×六朝疆界（背景真图+地点已做，但移动/传送/探索半径是否受五国疆界/三大陆地理约束未验）；
+   ③ 装备生成×六朝设定（品质映射已通，但商店/掉落仍通用修仙风——唐横刀/秦甲等国别特色未接）；
+   ④ 货币双轨（机制层灵石 vs 叙事金铢/贯/银两对不上，倾向 C 双轨：金铢等配成正式币种+汇率、灵石作修炼资源另计）。
+   共同修法＝先各做一次「系统消费点盘点」，再定换数据源还是加 prompt 约束；四件可打包立项。
+7. [ ] **地区沙盒模式（平行选国自由线，远期）**：用户裁定线性为骨；平行选国做成 if 线 overlay 机制的大号预设（runtime overlay 永不写回正典，参照 genderswap 先例），与地图功能一并讨论后立项。
+8. [ ] **角色高光/机趣落 beat（2026-07-13 立项，双模型审计已完成，待圈选落地）**
+   **设计原则（用户定）**：每个角色高光都该在 mod 里有落点；优先级按**聚光灯稀缺度**加权——配角的定义性时刻（死亡/登场/转身）压过主角的日常高光（程宗扬 309 beats vs 董卓 4 / 班超 1，主角高光边际递减）。三段探针全验证：核武不扩散条约梗（机趣，**已落 beat** commit `12c6d84`：一次性触发 event + lore 本就在十方丛林 faction desc）、董卓之死（beat 在但压扁——加权后自动冲燕歌行 #1）、班超立威（角色卡在但 signature 场景无 event，纯漏——排 #23）。
+   **失败模式两种**：A=有卡无 beat（班超型）；B=beat 在但 description 压成机械摘要丢记忆点（董卓型）。根因＝抽取管线无"高光"维度。
+   **审计管线（scripts/ 四脚本，只出报告不改 stage）**：
+   ① `audit-highlight-moments.mjs`：读 NAS 三本 epub（`/Volumes/botsvault/06_material/[ABC]-六朝*.epub`）按 7000 字窗对照现有 beats，双维度（高光=戏剧峰值 / 机趣=名梗错位）出 missing/flattened；DeepSeek-V4-Flash（OpenRouter）与 MiniMax-M2.7（mmx CLI）**双模型独立全量**各 ~1634 窗；断点续跑缓存 `{book}/_audit-cache/`（⚠️ 哈希不含 prompt，改 prompt 须先清缓存）。
+   ② `triage-highlight-findings.mjs`：原始命中过火（DS 4418 / MM 4799 条），LLM 判 S/A/B/C/D + char/def 归因；**综合优先级 pri = tier 基础分(S100/A70/B40/C15) × 稀缺乘子(角色全书 ≤4 beats ×1.6 / 5-19 ×1.3 / 20-79 ×1.0 / ≥80 主角级 ×0.65) + 定义性加成(死亡/登场/转身 +25)**；缓存 `{book}/_triage-cache/`。
+   ③ `build-highlight-worklist.mjs`：去重 + 四区工单；④ `merge-highlight-models.mjs`：双模型交叉（同窗 + 标题 bigram Jaccard≥0.34 → 双证）。
+   **产物索引**（`mod-kit/generated/deepseek-v4-flash/` 下）：`{book}/highlight-audit.{model}.{md,json}` 原始审计 → `{book}/highlight-graded.{model}.json` 带 pri/char/def → `{book}/highlight-worklist.deepseek.{md,json}` 四区工单 → `highlight-merged.json` 双模型合并；可视化工单 Artifact（必落/增补/建议/脱敏四区，双证优先）：https://claude.ai/code/artifact/5e164ba1-3d04-4837-8668-3bb27c5be6d7
+   **规模**：必落(pri≥137) 清63/云95/燕84 ≈242，其中**双证**（两模型都命中，置信最高）19/22/20 ≈61；MiniMax 独有顶档增补 57/55/61 ≈173。⚠️ 整体双证率仅 ~23%——长尾各说各话，非双证≠不重要。
+   **内容红线（用户裁定）**：性相关 beat 一律**脱敏改造**（保留事件骨架，非性化为臣服/要挟/牺牲/权谋）且压中低档（pri≤55），清62/云57/燕74 条已单列隔离，不得 featured。
+   - [ ] 用户过工单圈选 → 燕歌行双证必落 Top 打样（董卓之死 enrich + 班超立威 new；落法同核武梗样板：event + initialFlags + chapter.eventIds + `validate-scenario-mod` PASS + `sync-builtin-mods`，老存档吃不到需新开局）
+   - [ ] 批量落 beat（enrich 补写 flattened / new 建 event）；与 R3-1 枢纽演出密度衔接——本工单即"哪些节点值得精雕"的输入
+   - [ ] 脱敏区非性化改造规范定稿后再落
 
 ## 修订记录
 
@@ -66,3 +102,6 @@
 - 2026-07-07 更新 R1-2：第一批（回主线引子重做 + 偏移冷却，Codex 五轮复审后砍关键词甲、判定完全交乙）、objective（205 个 critical 事件玩家视角目标，DeepSeek-V4-Flash 全 37 关）、脱节哨兵 三项完成，落 `feat/builtin-scenario-templates`（commit `2bcc7fc`/`d047139`/`3cf81b5`）。事件对账暂缓，并入 R1-1 主线对齐大工程（落 flag 严护栏 + Codex 多轮审）。分支口径修正：此 repo 用 feature 分支工作流、非 master 直开发。
 - 2026-07-07 深夜 **R1-1 完成**：用户点破"自由探索/软提醒/不卡死本是连贯闭环"→ 同晚落地事件对账（`ea65eb1`）+ objective 补 17 关（`f65600a`）+ 整环审收尾（`a7476bf`）。Codex 整环审（非逐 diff）判定闭环条件闭合、无 blocking。R1 仅剩 R1-3 合规终审。
 - 2026-07-12 R3-3 扩写：续作 canon 挂真值源 `ENDING-BLUEPRINT.md` v2（结局蓝图定稿 + 裁定 #80-89）；新增子项**关系密档知情注入引擎（B/C）**——本次会话落了关系补边密档层（方案 A，`RELATIONSHIPS-SECRET.md`，裁定 #89），运行时按知情图谱/进度注入是其下一步独立 milestone。
+- 2026-07-13 已完成态刷新（R1-2 `[~]`→`[x]`）+ 缺口补录（与 `TODO-待完成.md`/`CORE-DOCS-ROADMAP.md` 对账）：R2-4 挂两子项（即兴任务持久化 / 切关去直白化〔裁定 #44〕）、新增 **R2-5 角色 OOC（G1）**、R3-5 下挂跨关长期记忆 + 地点检索/风貌富化、新增 **R3-6 六朝写实化二期**（技能/地图/装备/货币四件套）与 **R3-7 地区沙盒模式**。内容质量类待办（招牌登场补全/卡描述二审/归属审计/军队抽档等）按本档口径仍留 TODO/CORE-DOCS，不进本档。
+- 2026-07-13 新增 **R3-8 角色高光/机趣落 beat**：从用户分享三段原著高光（核武梗/董卓死/班超立威）出发，立"高光都该有落点+按角色稀缺度定优先级"原则，同日建成 4 脚本审计管线并双模型（DeepSeek+MiniMax）全量跑完三本，产出四区工单+Artifact 可视化。核武梗 beat 已作样板落地（commit `12c6d84`，灵鹫寺线一次性 event）。待用户圈选后批量落。
+- 2026-07-13 **愿景对齐重排（用户拍板）**：源于"系统/架构是否偏离原始愿景（重新体验小说/自己的方式推动剧情/走到小说没有的终点）"复盘。结论＝架构没歪但重心倒挂：偏离被做成防御机制而非玩法、正典数据深度远超体验密度、结局设计超前引擎承载。新增 **R2-0 玩家分歧演化+世界引力**（分歧账本四期，偏离处置三档：小偏放任/中偏弯轨/大偏世界压过来或毕业成结局；催促式拉回一次都不要有）列 R2 首位；**跨关记忆 A 提前 R3-5→R2-6**；R3-1×R3-8 捆绑演出纵切；R3-3 加"第一幕可玩纵切先行"约定。原"主线对齐叙事"独立 milestone（见 steering WIP 记忆）由 R2-0 吸收升格。
