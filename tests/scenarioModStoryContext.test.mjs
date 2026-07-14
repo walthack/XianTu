@@ -5,6 +5,11 @@ import test from 'node:test';
 import { loadTs } from './loadTs.mjs';
 
 const fixtureUrl = new URL('./fixtures/scenario-mod/minimal.json', import.meta.url);
+const stage07Url = new URL('../src/modules/scenarioMods/builtins/data/lcq.stage_07_qingyuan_jiankang.json', import.meta.url);
+const stage08Url = new URL('../src/modules/scenarioMods/builtins/data/lcq.stage_08_jiankang_coup.json', import.meta.url);
+const stage09Url = new URL('../src/modules/scenarioMods/builtins/data/lcq.stage_09_trade_and_escape.json', import.meta.url);
+const stage12Url = new URL('../src/modules/scenarioMods/builtins/data/lcq.stage_12_jiangzhou_counterwar.json', import.meta.url);
+const yangeOpeningUrl = new URL('../src/modules/scenarioMods/builtins/data/lyg.dingtao_beijing.json', import.meta.url);
 
 async function buildStorySave() {
   const { parseScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
@@ -102,6 +107,300 @@ test('Canon Rail surfaces the active beat specific forbidden rewrites to the nar
   const prompt = buildScenarioStoryPrompt(save);
 
   assert.match(prompt, /本拍特定禁止改写：段强存活；段强失踪；替换死亡结果/);
+});
+
+test('谢艺生还 variant 替代旧死亡 Rail 合同，并要求孟非卿采取具体行动', async () => {
+  const { buildScenarioStoryPrompt } = await loadTs('../src/modules/scenarioMods/storyContext.ts');
+  const save = await buildStorySave();
+  const runtime = save.世界.状态.剧本模组;
+  runtime.modId = 'lcq.stage_07_qingyuan_jiankang';
+  runtime.flags['branch.lcq.if_xieyi_longrest.active'] = true;
+  runtime.events[0] = {
+    ...runtime.events[0],
+    id: 'lcq.event.s07_05_eight_steeds_informed',
+    name: '八骏得讯',
+    description: '孟非卿得知谢艺死因与黑魔海相关。',
+    axisBeat: '孟非卿得知谢艺之死与黑魔海有关后决定报复。',
+    narrativeVariants: [{
+      when: [{ path: 'flags.branch.lcq.if_xieyi_longrest.active', operator: 'eq', value: true }],
+      replacesCanonRail: true,
+      name: '谢艺生还的后果',
+      description: '孟非卿得知谢艺生还；他必须据此调度星月湖人手，而非只确认消息。',
+      axisBeat: '孟非卿确认谢艺仍然生还，当场至少作出一项具体安排：派人接应或探望谢艺，或命人调查黑魔海与鬼王峒线索。',
+      objective: '说明谢艺生还与鬼王峒变故，并见证孟非卿作出具体安排',
+    }],
+  };
+  runtime.activeEventIds = ['lcq.event.s07_05_eight_steeds_informed'];
+
+  const prompt = buildScenarioStoryPrompt(save);
+
+  assert.match(prompt, /当场至少作出一项具体安排/);
+  assert.match(prompt, /接应或探望谢艺/);
+  assert.doesNotMatch(prompt, /谢艺之死与黑魔海有关后/);
+});
+
+test('谢艺缺席失败以搜寻与联络线防卫替代死亡 Rail，并保留玩家分工', async () => {
+  const { buildScenarioStoryPrompt } = await loadTs('../src/modules/scenarioMods/storyContext.ts');
+  const save = await buildStorySave();
+  const runtime = save.世界.状态.剧本模组;
+  runtime.modId = 'lcq.stage_07_qingyuan_jiankang';
+  runtime.flags['world.xieyi_absence.active'] = true;
+  runtime.events[0] = {
+    ...runtime.events[0],
+    id: 'lcq.event.s07_05_eight_steeds_informed', name: '八骏得讯',
+    description: '孟非卿得知谢艺死因与黑魔海相关。',
+    axisBeat: '孟非卿得知谢艺之死与黑魔海有关后决定报复。',
+    narrativeVariants: [{
+      when: [{ path: 'flags.world.xieyi_absence.active', operator: 'eq', value: true }],
+      replacesCanonRail: true, name: '谢艺失踪的后果',
+      axisBeat: '不得确认谢艺死亡或安全。孟非卿须分出人手追查谢艺下落，并护住或改换可能泄露的联络线；玩家可选择参与其中一项，另一项仍作为持续压力存在。',
+      objective: '协助搜寻谢艺踪迹，或守住星月湖被黑魔海窥伺的联络线',
+    }],
+  };
+  runtime.activeEventIds = ['lcq.event.s07_05_eight_steeds_informed'];
+
+  const prompt = buildScenarioStoryPrompt(save);
+
+  assert.match(prompt, /不得确认谢艺死亡或安全/);
+  assert.match(prompt, /分出人手追查谢艺下落/);
+  assert.match(prompt, /玩家可选择参与其中一项/);
+  assert.doesNotMatch(prompt, /谢艺之死与黑魔海有关后决定报复/);
+});
+
+test('谢艺正典路线保留死亡 Rail，且不混入生还或失踪合同', async () => {
+  const { buildScenarioStoryPrompt } = await loadTs('../src/modules/scenarioMods/storyContext.ts');
+  const save = await buildStorySave();
+  const runtime = save.世界.状态.剧本模组;
+  runtime.modId = 'lcq.stage_07_qingyuan_jiankang';
+  runtime.events[0] = {
+    ...runtime.events[0],
+    id: 'lcq.event.s07_05_eight_steeds_informed', name: '八骏得讯',
+    description: '孟非卿得知谢艺死因与黑魔海相关。',
+    axisBeat: '孟非卿得知谢艺之死与黑魔海有关后决定报复。',
+  };
+  runtime.activeEventIds = ['lcq.event.s07_05_eight_steeds_informed'];
+
+  const prompt = buildScenarioStoryPrompt(save);
+
+  assert.match(prompt, /谢艺之死与黑魔海有关后决定报复/);
+  assert.doesNotMatch(prompt, /谢艺仍然生还/);
+  assert.doesNotMatch(prompt, /谢艺下落不明/);
+});
+
+test('内置 stage_07 将谢艺生还与失踪后果绑定到互斥状态，而非裸 void', async () => {
+  const stage = JSON.parse(await readFile(stage07Url, 'utf8'));
+  const event = stage.scenario.events.find(item => item.id === 'lcq.event.s07_05_eight_steeds_informed');
+  const survival = event?.narrativeVariants?.find(item => item.name === '谢艺生还的后果');
+  const absence = event?.narrativeVariants?.find(item => item.name === '谢艺失踪的后果');
+
+  assert.deepEqual(survival?.when, [{
+    path: 'flags.branch.lcq.if_xieyi_longrest.active', operator: 'eq', value: true,
+  }]);
+  assert.equal(survival?.replacesCanonRail, true);
+  assert.deepEqual(absence?.when, [{
+    path: 'flags.world.xieyi_absence.active', operator: 'eq', value: true,
+  }]);
+  assert.equal(absence?.replacesCanonRail, true);
+  assert.match(absence?.axisBeat ?? '', /不得确认谢艺死亡或安全/);
+  assert.match(absence?.axisBeat ?? '', /联络线/);
+});
+
+test('小紫未弑母 variant 在后续关要求处置碧姬，且替代原 Rail', async () => {
+  const { buildScenarioStoryPrompt } = await loadTs('../src/modules/scenarioMods/storyContext.ts');
+  const save = await buildStorySave();
+  const runtime = save.世界.状态.剧本模组;
+  runtime.modId = 'lcq.stage_07_qingyuan_jiankang';
+  runtime.flags['branch.lcq.if_xiaozi_spares_mother.active'] = true;
+  runtime.events[0] = {
+    ...runtime.events[0],
+    id: 'lcq.event.s07_03_xiaozi_appears',
+    name: '小紫现身',
+    description: '小紫以毒戒制住卓云君并救下程宗扬，她先前的弱态伪装开始转向残忍操控。',
+    axisBeat: '小紫突然现身，以轻灵身法和毒戒制服重伤的卓云君，救下被卓云君制住的程宗扬。',
+    narrativeVariants: [{
+      when: [{ path: 'flags.branch.lcq.if_xiaozi_spares_mother.active', operator: 'eq', value: true }],
+      replacesCanonRail: true,
+      name: '小紫现身·未弑母的余波',
+      description: '碧姬仍活着；小紫或同行者必须当场明确其看守、送离或托付给可信者的具体处置。',
+      axisBeat: '小紫不得被写成已弑母；碧姬仍活着，必须由小紫或同行者当场作出看守、送离或托付给可信者的一项具体处置。',
+      objective: '协助小紫制服卓云君，并落实碧姬仍活着后的具体处置',
+    }],
+  };
+  runtime.activeEventIds = ['lcq.event.s07_03_xiaozi_appears'];
+
+  const prompt = buildScenarioStoryPrompt(save);
+
+  assert.match(prompt, /不得被写成已弑母/);
+  assert.match(prompt, /看守、送离或托付给可信者/);
+  assert.doesNotMatch(prompt, /先前的弱态伪装开始转向残忍操控/);
+});
+
+test('内置 stage_07 携带小紫未弑母的跨关回响合同', async () => {
+  const stage = JSON.parse(await readFile(stage07Url, 'utf8'));
+  const event = stage.scenario.events.find(item => item.id === 'lcq.event.s07_03_xiaozi_appears');
+  const variant = event?.narrativeVariants?.find(item => item.name === '小紫现身·未弑母的余波');
+
+  assert.ok(variant);
+  assert.deepEqual(variant.when, [{
+    path: 'flags.branch.lcq.if_xiaozi_spares_mother.active', operator: 'eq', value: true,
+  }]);
+  assert.equal(variant.replacesCanonRail, true);
+  assert.match(variant.axisBeat, /不得被写成已弑母/);
+  assert.match(variant.axisBeat, /看守、送离或托付给可信者/);
+});
+
+test('普通条件化 variant 不会吞掉 Canon Rail 合同', async () => {
+  const { buildScenarioStoryPrompt } = await loadTs('../src/modules/scenarioMods/storyContext.ts');
+  const save = await buildStorySave();
+  const runtime = save.世界.状态.剧本模组;
+  runtime.modId = 'lcq.stage_07_qingyuan_jiankang';
+  runtime.flags['event.s06_03.void'] = true;
+  runtime.events[0] = {
+    ...runtime.events[0],
+    id: 'lcq.event.s07_05_eight_steeds_informed',
+    name: '八骏得讯',
+    description: '孟非卿得知谢艺死因与黑魔海相关。',
+    axisBeat: '孟非卿得知谢艺之死与黑魔海有关后决定报复。',
+    narrativeVariants: [{
+      when: [{ path: 'flags.event.s06_03.void', operator: 'eq', value: true }],
+      axisBeat: '仅改变本拍的叙事语气，不替代默认结局。',
+    }],
+  };
+  runtime.activeEventIds = ['lcq.event.s07_05_eight_steeds_informed'];
+
+  const prompt = buildScenarioStoryPrompt(save);
+
+  assert.match(prompt, /仅改变本拍的叙事语气/);
+  assert.match(prompt, /【Canon Rail·默认正典】/);
+});
+
+test('苏妲己伏诛在 stage_08 到 stage_09 替代追杀链且保留可继续局面', async () => {
+  const { buildScenarioStoryPrompt } = await loadTs('../src/modules/scenarioMods/storyContext.ts');
+  const save = await buildStorySave();
+  const runtime = save.世界.状态.剧本模组;
+  runtime.modId = 'lcq.stage_09_trade_and_escape';
+  runtime.flags['branch.lcq.if_sudaji_slain_mochou.active'] = true;
+  runtime.events[0] = {
+    ...runtime.events[0],
+    id: 'lcq.event.s09_03_xiaozi_wounded',
+    name: '小紫重伤',
+    description: '程宗扬巡视产业时遭苏妲己暗算，小紫重伤，程宗扬与小紫坠入大江。',
+    axisBeat: '程宗扬巡视产业时遭苏妲己暗算，小紫重伤，程宗扬与小紫坠入大江。',
+    narrativeVariants: [{
+      when: [{ path: 'flags.branch.lcq.if_sudaji_slain_mochou.active', operator: 'eq', value: true }],
+      replacesCanonRail: true,
+      description: '苏妲己已死，原本的暗算不再发生。程宗扬必须处理黑魔海遗留账册与联络点。',
+      axisBeat: '不得让苏妲己继续暗算，亦不得把小紫写成因她重伤坠江。众人必须处理黑魔海遗留账册与联络点。',
+      objective: '保住黑魔海遗留账册，并决定其交接或封存方式',
+    }],
+  };
+  runtime.activeEventIds = ['lcq.event.s09_03_xiaozi_wounded'];
+
+  const prompt = buildScenarioStoryPrompt(save);
+
+  assert.match(prompt, /不得让苏妲己继续暗算/);
+  assert.match(prompt, /处理黑魔海遗留账册/);
+  assert.doesNotMatch(prompt, /小紫重伤，程宗扬与小紫坠入大江/);
+  assert.doesNotMatch(prompt, /【Canon Rail·默认正典】/);
+});
+
+test('英逝双枢纽在同关落为受限辅政与凉州收束，而不推翻登基脊柱', async () => {
+  const { buildScenarioStoryPrompt } = await loadTs('../src/modules/scenarioMods/storyContext.ts');
+  const save = await buildStorySave();
+  const runtime = save.世界.状态.剧本模组;
+  runtime.modId = 'lyg.dingtao_beijing';
+  runtime.flags['branch.lyg.if_guojie_longrest.active'] = true;
+  runtime.flags['branch.lyg.if_dongzhuo_longrest.active'] = true;
+  runtime.events[0] = {
+    ...runtime.events[0],
+    id: 'lyg.event.s01_08',
+    name: '阮香凝透露定陶王与盛姬关联',
+    description: '阮香凝告知程宗扬定陶王因盛姬而亲近她。',
+    axisBeat: '阮香凝告知程宗扬盛姬线索。',
+    narrativeVariants: [{
+      when: [
+        { path: 'flags.branch.lyg.if_guojie_longrest.active', operator: 'eq', value: true },
+        { path: 'flags.branch.lyg.if_dongzhuo_longrest.active', operator: 'eq', value: true },
+      ],
+      replacesCanonRail: true,
+      name: '英逝双线·新朝的两份遗产',
+      description: '郭解的游侠耳目与贾文和收束的凉州旧部成为新朝两条外线。',
+      axisBeat: '盛姬线索照常成立。郭解以游侠网络辅政；董卓不得回京争权，贾文和须收束凉州旧部。两条外线都服务定陶王新朝。',
+      objective: '明确两条外线如何护持而不挟持新朝',
+    }],
+  };
+  runtime.activeEventIds = ['lyg.event.s01_08'];
+
+  const prompt = buildScenarioStoryPrompt(save);
+
+  assert.match(prompt, /郭解以游侠网络辅政/);
+  assert.match(prompt, /贾文和须收束凉州旧部/);
+  assert.match(prompt, /定陶王新朝/);
+  assert.doesNotMatch(prompt, /阮香凝告知程宗扬盛姬线索。/);
+});
+
+test('内置燕歌开篇携带英逝双枢纽的同关可见余波合同', async () => {
+  const stage = JSON.parse(await readFile(yangeOpeningUrl, 'utf8'));
+  const guojie = stage.scenario.events.find(item => item.id === 'lyg.event.s01_06');
+  const dongzhuo = stage.scenario.events.find(item => item.id === 'lyg.event.s01_07');
+  const aftermath = stage.scenario.events.find(item => item.id === 'lyg.event.s01_08');
+
+  assert.equal(guojie?.narrativeVariants?.[0]?.replacesCanonRail, true);
+  assert.match(guojie?.narrativeVariants?.[0]?.axisBeat ?? '', /不得被写死/);
+  assert.equal(dongzhuo?.narrativeVariants?.[0]?.replacesCanonRail, true);
+  assert.match(dongzhuo?.narrativeVariants?.[0]?.axisBeat ?? '', /不得回京夺权/);
+  const combined = aftermath?.narrativeVariants?.find(item => item.name === '英逝双线·新朝的两份遗产');
+  assert.ok(combined);
+  assert.equal(combined.replacesCanonRail, true);
+  assert.match(combined.axisBeat, /定陶王登基/);
+});
+
+test('星月湖战争缺席后，stage_12 以战报和余波替代玩家亲历叙事', async () => {
+  const { buildScenarioStoryPrompt } = await loadTs('../src/modules/scenarioMods/storyContext.ts');
+  const save = await buildStorySave();
+  const runtime = save.世界.状态.剧本模组;
+  runtime.modId = 'lcq.stage_12_jiangzhou_counterwar';
+  runtime.flags['world.xingyuehu_war.offscreen_resolved'] = true;
+  runtime.events[0] = {
+    ...runtime.events[0],
+    id: 'lcq.event.s12_01_grain_route_blocked', name: '粮路受阻',
+    description: '程宗扬发现浮凌江乱石滩无法通航。', axisBeat: '程宗扬发现粮食转运计划受阻。',
+    narrativeVariants: [{
+      when: [{ path: 'flags.world.xingyuehu_war.offscreen_resolved', operator: 'eq', value: true }],
+      replacesCanonRail: true, name: '缺席后的江州战报', description: '烈山之战未等程宗扬赶到便已推进，江州提前戒严。',
+      axisBeat: '不得把程宗扬写成亲历烈山战场；以战报、伤员与江州戒严承接缺席后果，玩家只能介入余波或继续置身事外。',
+      objective: '在江州戒严与粮线告急中决定是否介入战后余波',
+    }],
+  };
+  runtime.activeEventIds = ['lcq.event.s12_01_grain_route_blocked'];
+
+  const prompt = buildScenarioStoryPrompt(save);
+  assert.match(prompt, /不得把程宗扬写成亲历烈山战场/);
+  assert.match(prompt, /战报、伤员与江州戒严/);
+  assert.doesNotMatch(prompt, /程宗扬发现粮食转运计划受阻。/);
+});
+
+test('内置 stage_12 携带星月湖战争缺席后的战报合同', async () => {
+  const stage = JSON.parse(await readFile(stage12Url, 'utf8'));
+  const event = stage.scenario.events.find(item => item.id === 'lcq.event.s12_01_grain_route_blocked');
+  const variant = event?.narrativeVariants?.find(item => item.name === '缺席后的江州战报');
+  assert.ok(variant);
+  assert.equal(variant.replacesCanonRail, true);
+  assert.match(variant.axisBeat, /不得把程宗扬写成亲历了烈山战场/);
+  assert.match(variant.objective, /粮线告急/);
+});
+
+test('内置 stage_08/09 携带苏妲己伏诛的跨关合同', async () => {
+  const [stage08, stage09] = await Promise.all([stage08Url, stage09Url].map(async url => JSON.parse(await readFile(url, 'utf8'))));
+  const first = stage08.scenario.events.find(item => item.id === 'lcq.event.s08_06_pursuit_repelled');
+  const downstream = stage09.scenario.events.find(item => item.id === 'lcq.event.s09_03_xiaozi_wounded');
+  const firstVariant = first?.narrativeVariants?.find(item => item.name === '莫愁伏诛·黑魔海断线');
+  const downstreamVariant = downstream?.narrativeVariants?.find(item => item.name === '伏诛后的产业清算');
+
+  assert.equal(firstVariant?.replacesCanonRail, true);
+  assert.match(firstVariant?.axisBeat || '', /苏妲己已死/);
+  assert.equal(downstreamVariant?.replacesCanonRail, true);
+  assert.match(downstreamVariant?.axisBeat || '', /不得让苏妲己继续暗算/);
 });
 
 test('story prompt names the next stage when the current stage has no next event', async () => {
@@ -205,4 +504,23 @@ test('load-bearing character protection and stall steering appear in story promp
   runtime.stallTurns = 8;
   runtime.steeringCooldown = 2;
   assert.doesNotMatch(buildScenarioStoryPrompt(save), /回主线/);
+});
+
+test('已落账的世界线分歧进入叙事 prompt，并要求人物采取行动', async () => {
+  const { buildScenarioStoryPrompt } = await loadTs('../src/modules/scenarioMods/storyContext.ts');
+  const save = await buildStorySave();
+  save.世界.状态.剧本模组.divergences = [{
+    id: 'divergence.lcq.event.s06_03.1',
+    eventId: 'lcq.event.s06_03',
+    branchId: 'lcq.if_xieyi_longrest',
+    worldDelta: '谢艺在围猎后生还，但需长期静养',
+    characterStates: [{ characterId: 'liuchao.character.xie_yi', status: 'longrest' }],
+    evidence: '谢艺拄刀而立',
+    sequence: 1,
+  }];
+  const prompt = buildScenarioStoryPrompt(save);
+  assert.match(prompt, /【本世界线分歧·已经发生的事实】/);
+  assert.match(prompt, /谢艺在围猎后生还/);
+  assert.match(prompt, /相关人物据此采取行动/);
+  assert.match(prompt, /不得把原著旧结果重新写回/);
 });

@@ -1,9 +1,9 @@
 {
   "schema": "xiantu.character-registry.v1",
-  "version": "cr-2026-07-11-53547fcda3a95b0f",
-  "sourceHash": "53547fcda3a95b0f",
+  "version": "cr-2026-07-14-d6c80d272031a7c9",
+  "sourceHash": "d6c80d272031a7c9",
   "sourceGeneratedAt": "2026-06-30T12:50:33.965Z",
-  "generatedAt": "2026-07-11T03:14:43.159Z",
+  "generatedAt": "2026-07-14T23:52:08.544Z",
   "stats": {
     "total": 302,
     "stagePresent": 247,
@@ -35563,7 +35563,11 @@
           "locator": "chapter173.html",
           "scene": "程宗扬在云府遇到正在烤火的病弱少女云如瑶，她是云苍峰隐瞒的庶出妹妹，身披狐裘、手捧手炉。"
         },
-        "birthYear": 204
+        "birthYear": 202,
+        "storyAge": {
+          "value": "18",
+          "basis": "用户裁定(2026-07-14)：云如瑶年龄接近或超过云丹琉(18,原文二九年华)，取≥18下限=18；原扫描值16(birthYear 204)系误抽，且违反裁定#6涉性女角≥18。重扫不得下调"
+        }
       },
       "phaseIdentities": [
         {

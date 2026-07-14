@@ -4196,7 +4196,23 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "探查浮凌江乱石滩，另寻运粮路线"
+        "objective": "探查浮凌江乱石滩，另寻运粮路线",
+        "narrativeVariants": [
+          {
+            "when": [
+              {
+                "path": "flags.world.xingyuehu_war.offscreen_resolved",
+                "operator": "eq",
+                "value": true
+              }
+            ],
+            "replacesCanonRail": true,
+            "name": "缺席后的江州战报",
+            "description": "烈山之战未等程宗扬赶到便已推进。星月湖前锋伤亡更重，江州提前戒严；粮道的每一次迟滞都不再只是账面损耗，而是前线伤员与守军的口粮。",
+            "axisBeat": "不得把程宗扬写成亲历了烈山战场。以抵达的战报、伤员与江州戒严承接其缺席后果；战争脊柱已自行推进，玩家现在可介入粮线和城防余波，或继续置身事外并承受新的世界后果。",
+            "objective": "在江州戒严与粮线告急中决定是否介入战后余波"
+          }
+        ]
       },
       {
         "id": "lcq.event.s12_02_recognize_zhuo",

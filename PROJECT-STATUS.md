@@ -1,7 +1,7 @@
 # 仙途 (XianTu) · 项目总体状况与并行分工文档
 
 > 面向「新加入的 agent」。读完这一篇即可独立认领一个模块开工。
-> 最后更新：2026-07-12。基线 git：`d6a3323`（分支 `feat/builtin-scenario-templates` 系一脉；自 `bceaf66` 起 +197 commit）。
+> 最后更新：2026-07-14（R2-2 skeleton 存档写入绕过已封、R2.5 对账 evidence 语义相关性校验已完成；R1-3 内容合规终审已委托 Claude 执行，等待回收；R2-0V 新增莫愁湖苏妲己伏诛 event-chain；谢艺生还 Chrome 真机端到端通过，三路线验收已改用真实 stage_06 重放）。基线 git：`edc7434`（工作树含本轮 R2-0V 实现，未提交）。
 
 > **多 agent 协作基线（用户裁定）**：本文件是本项目的共享进度、分工、交付与 Git 汇总权威；开始认领、完成交付或改变阶段状态时先读后更新。根目录 `CHANGELOG.md` 属原 repo 历史，不记录本协作线的状态。
 
@@ -22,7 +22,7 @@
 | 生成内容根 | `mod-kit/generated/deepseek-v4-flash/`（`qingyu/ yunlong/ yange/ shared-atlas/ character-canon/`）|
 | 脚本（167 个 .mjs） | `scripts/` |
 | 核心文档 roadmap | `mod-kit/generated/deepseek-v4-flash/character-canon/CORE-DOCS-ROADMAP.md` |
-| **正典裁定簿（改 canon/prompt 前必读）** | `…/character-canon/CANON-DECISIONS.md`（89 条人工裁定 + 执法标记）|
+| **正典裁定簿（改 canon/prompt 前必读）** | `…/character-canon/CANON-DECISIONS.md`（96 条人工裁定 + 执法标记）|
 | 续写总纲 / 剧透血缘密档 | `…/character-canon/ENDING-BLUEPRINT.md` v2（真值源）+ `RELATIONSHIPS-SECRET.md`（关系密档层，裁定 #89）|
 | 默认线正典轨道设计 | `…/character-canon/DEFAULT-CANON-RAIL-DESIGN.md` |
 | 对外发布 roadmap（发布门禁/发布后深耕） | `RELEASE-ROADMAP.md`（仓库根，2026-07-07 立档） |
@@ -104,7 +104,7 @@ epub 原文
 | 行动门控（二层失败惯性）：失败后结构化记录场景惯性，下一轮不把同一动作当无后果重开 | ✅ |
 | 局域网云存档：人物列表、当前存档、存档数据、剧本 Mod 库通过 `/api/v1/save-storage` 同步，成功保存有用户提示 | ✅ |
 | 云端 API / 提示词配置：API 管理支持上传覆盖云端，提示词自定义项可跨设备同步，无需登录验证 | ✅ |
-| **正典裁定簿 CANON-DECISIONS**（89 条人工裁定中央执法簿 + 溯源/执法标记，改 canon 前必读） | ✅ |
+| **正典裁定簿 CANON-DECISIONS**（96 条人工裁定中央执法簿 + 溯源/执法标记，改 canon 前必读） | ✅ |
 | **默认线正典轨道 Canon Rail**（未选 if 时沿原著主轴，确定性生成器接入 + 空轴/冲突硬门禁 + 冲突关隔离待复核，裁定 #58-65） | ✅ |
 | **事件对账 + 主线死锁自愈**（哨兵触发/记忆窗口封顶/内嵌 think 剥离/bigram 证据接地，真机验收） | ✅ |
 | **可见行动判定引擎 P0-P5**（本地确定性判定·预检·结算·行动余波·UI 回执，LLM 不重骰，裁定 #66-75） | ✅ |
@@ -114,13 +114,21 @@ epub 原文
 | 主线 UI：objective 任务目标（37关205事件）+ 当前一拍显示 + 主/支线金色/灰色视觉区分 | ✅ |
 | **续写结局蓝图 v2**（真值源，三幕脊椎 + 六国收束 + 终战=对抗策展系统）+ 剧透血缘关系密档层（裁定 #80-89） | ✅ |
 | 角色 RAG 向量检索 + 内置瘦身（省 ~25%）；势力富化去重 66→58；BGM 音乐引擎 | ✅ |
-| 单测 76 → **186 全绿** | ✅ |
+| 单测 76 → **195 全绿** | ✅ |
 
 ### 🔥 进行中 / 待落地
 
+- **R2-0V 可玩纵切**：锚点冻结/三路线 spec/最小引擎闭环已落。谢艺生还已 Chrome 真机端到端通过；正典、缺席失败与两种结构性下游局面已补齐运行时合同与自动化覆盖（裁定 #97）：正典保持死讯 Rail，生还走接应/疗养，失踪失败则强制“搜寻 + 联络线防卫”两项持续压力，且不会再被 `void` 误作生还。2026-07-14 UI 导入三条一次性种子失败后，Claude 只读审查确认 `importSave()` 静默 return 与批量 UI 无条件成功提示构成假阳性；该链路单列修复，**不再作为路线验收前置**。P0 验收改为从既有真实 `lcq.stage_06` 存档在 `lcq.event.s06_03` 分支点分别重放正典／生还／失踪；生还保留已通过证据，正典和失踪待真机。相关定向 57/57、全量 222/222、37 关 schema、type-check 与 IF 校验均通过。小紫/碧姬、苏妲己伏诛、燕歌英逝与星月湖战争场外结算均已实现、待 R2-0V 后各一次真机抽检；死亡 IF 仍仅为 ending 资料态。Claude 二审无 P0；R2.5 P1 已收口前端泄漏、重载遗留禁用态及坏 JSON 重试副作用，待记忆总结失败真机验证。
+- ✅ **R1-3 内容合规终审已回收**（2026-07-14 Claude 完成，R1 全清）：隔离图零泄漏/幼态复查修复4项（云如瑶16→18=裁定#98）/脱敏抽查按边界收口（成人内容不动=裁定#43，红线仅未成年×性化）。报告=`character-canon/R1-3-合规终审-2026-07-14.md`。R0 依赖项：公开发行需补角色档案层 NSFW 门控。
+- ✅ **R2-6 跨关记忆 A 已落地**（2026-07-14 Claude）：lyl+lyg 2498 条/约 40 跨书角色，落点=stage `profile.memories` 按关直写（切关合并注入，时间门控天然）；红线=不写分歧 fork 终局+知情图谱保守+无据不编造。详设=`character-canon/R2-6-跨关记忆A-试点-2026-07-14.md`。
+- ✅ **R2-5 OOC 盘点+修复已完成**（2026-07-14/15 Claude，执法=裁定#99）：4 边角落地——灵根注入点名档案/静态设定字段（性别/灵根/种族/出生日期）指令写保护+负向测试/NPC 边强约束优先/档案记忆 cap5。三前例（凝羽灵根/谢艺性别/苏妲己契约）双侧闭环。盘点=`character-canon/R2-5-OOC盘点-2026-07-14.md`。
+- **R2-2 存档修复绕写封堵**：已完成。`characterStore.executeTavernCommands` 已接入 canonGuard、格式/值校验，并在修复模式绝对拒绝 `世界.状态.剧本模组` 与 `系统.扩展.剧本模组` 的所有写入（含 flags）；修复专用 validator 仅放行 `set`。全路径审计发现 skeleton 模式曾绕开 `commandValidator`、值校验和字段清理，现已与 strict 共用同一模型命令校验入口，仅在执行时保留轻量结构修复。P1 已用真实函数级执行通路补测并经 Claude 复审关闭；复审结论＝无 P0/P1、建议合入（定向 19/19、type-check、全量 225、37 关 schema 通过）。
+- **R2.5 对账 evidence 语义相关性**：已完成。对账输出新增 `matchedCore`，并由 validator 强制与当前事件、逐字 evidence、存档上下文三点一致；已覆盖“真实但无关的上下文证据”拒绝用例。`knownCharacterIds` 为空集时拒绝 `characterStates` 的边界已补测；Claude 复审结论＝无 P0/P1、建议合入。P2 建议将 `matchedCore` 最短长度由 2 收紧至 3–4 字，暂不改变现有兼容性（定向 19/19、type-check、全量 225、37 关 schema 通过）。
+- **R2 IF 重审**：14 条预写 IF 已按“自由行动后的自动承接 + 玩家可见后果”复审：谢艺、小紫、苏妲己伏诛与燕歌英逝双枢纽已是当前 event-chain 纵切（角色状态须精确匹配才触发）；其余 10 条仍属 future-stage 或余波不足的设计资产，不再虚报可玩。详见 `docs/R2-IF-BRANCH-AUDIT-2026-07-13.md`。
 - **qingyu 全本重抽**（`scripts/reextract-qingyu.mjs`）—— 第一本 extraction 早期质量最弱，major 密度 0.63/章 vs 后两本 1.26/1.95，存在欠产 batch（水战弧 10 章 0 事件等）。重抽预期 major 185→~350。⚠️ **这是地基级改动**：完成后 qingyu 主轴段重建 → seq 重编号 → 需重映射脊柱锚点 + if 线样章 anchor。**未落库**（产 `qingyu.reextract.DRAFT.json` 不覆盖现版）。
 - **if 线收尾**：validate-if-branches 接进门禁 runner；用户后审 14 条内容；if schema 接 `attitudeToProtagonist`。
 - **态度建模全本跑**：qingyu 试点通过；待扩 yunlong+yange（~15 条处子/破身约束），低置信标人工核。
+- **角色高光/机趣落 beat（R3-8，2026-07-13 立项）**：双模型（DeepSeek+MiniMax）全量审计三本原文完成，四区工单产出（必落≈242 其中双证≈61 / MiniMax 增补≈173 / 脱敏隔离≈193 压中低档）；核武梗样板 beat 已落（`12c6d84`）。**方法论/材料索引/优先级公式全录 `RELEASE-ROADMAP.md` R3-8**；脚本 `scripts/{audit-highlight-moments,triage-highlight-findings,build-highlight-worklist,merge-highlight-models}.mjs`。待用户圈选工单后批量落。
 
 ### 📋 列入「未来功能」
 

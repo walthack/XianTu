@@ -23,9 +23,11 @@ import { updateMasteredSkills } from '@/utils/masteredSkillsCalculator'; // <-- 
 import { updateStatusEffects } from '@/utils/statusEffectManager'; // <-- 导入状态效果管理工具
 import { detectLegacySaveData, isSaveDataV3, migrateSaveDataToLatest, extractSaveDisplayInfo } from '@/utils/saveMigration';
 import { validateSaveDataV3 } from '@/utils/saveValidationV3';
+import { executeValidatedRepairCommands } from '@/utils/repairCommandPipeline';
 import { useGameStateStore } from '@/stores/gameStateStore';
 import SaveMigrationModal from '@/components/dashboard/components/SaveMigrationModal.vue';
 import type { World} from '@/types';
+import type { TavernCommand as ValidatedTavernCommand } from '@/types/AIGameMaster';
 import type { LocalStorageRoot, CharacterProfile, CharacterBaseInfo, SaveSlot, SaveData, StateChangeLog, Realm, NpcProfile, Item } from '@/types/game';
 
 // 假设的创角数据包，实际应从创角流程获取
@@ -121,7 +123,6 @@ function filterSaveDataForCloud(saveData: SaveData | null): SaveData | null {
 
   return filtered;
 }
-
 
 export const useCharacterStore = defineStore('characterV3', () => {
   // --- 状态 (State) ---
@@ -2223,56 +2224,7 @@ export const useCharacterStore = defineStore('characterV3', () => {
    * @param profile 当前角色档案
    * @param commands 指令数组
    */
-  const executeTavernCommands = async (saveData: SaveData, profile: CharacterProfile, commands: TavernCommand[]): Promise<string[]> => {
-    const errors: string[] = [];
-
-    // 简化的路径解析和设置函数
-    const setNestedValue = (obj: Record<string, unknown> | SaveData | CharacterProfile, path: string, value: unknown) => {
-      const keys = path.split('.');
-      let current = obj as Record<string, unknown>;
-      for (let i = 0; i < keys.length - 1; i++) {
-        if (current[keys[i]] === undefined || typeof current[keys[i]] !== 'object') {
-          current[keys[i]] = {};
-        }
-        current = current[keys[i]] as Record<string, unknown>;
-      }
-      current[keys[keys.length - 1]] = value;
-    };
-
-    for (const command of commands) {
-      try {
-        const { action, key, value } = command;
-        if (!action || !key) {
-          errors.push(`无效指令: ${JSON.stringify(command)}`);
-          continue;
-        }
-
-        // 确定操作的根对象
-        let rootObject: Record<string, unknown> | SaveData | CharacterProfile;
-        let relativeKey: string;
-
-        if (key.startsWith('character.profile.')) {
-          rootObject = profile;
-          relativeKey = key.substring('character.profile.'.length);
-        } else {
-          // 默认操作saveData
-          rootObject = saveData;
-          relativeKey = key;
-        }
-
-        if (action === 'set') {
-          setNestedValue(rootObject, relativeKey, value);
-          debug.log('AI修复', `执行 set: ${key} =`, value);
-        } else {
-          debug.warn('AI修复', `暂不支持的指令 action: ${action}`);
-        }
-      } catch (e) {
-        errors.push(`执行指令失败: ${JSON.stringify(command)}`);
-        debug.error('AI修复', '执行指令时出错', e);
-      }
-    }
-    return errors;
-  };
+  const executeTavernCommands = executeValidatedRepairCommands;
 
   /**
    * [新增] 使用AI修复存档数据结构

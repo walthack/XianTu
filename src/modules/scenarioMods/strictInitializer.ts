@@ -274,6 +274,12 @@ export function transitionToNextScenarioStage(saveData: SaveData, modsOverride?:
   if (!mod) return { saveData, ok: false, reason: `未找到下一关模组 ${targetId}` };
 
   const relationSnapshot = structuredClone((saveData as any)?.社交?.关系 || {});
+  // 世界线分歧是玩家历史，不是当前关卡模板数据。切关时必须跨关携带；
+  // done/章节进度仍按新关初始化，只继承分支、人物状态与 void 审计标记。
+  const divergenceSnapshot = structuredClone(Array.isArray(rt.divergences) ? rt.divergences : []);
+  const inheritedWorldlineFlags = Object.fromEntries(Object.entries(rt.flags || {}).filter(([key]) =>
+    key.startsWith('branch.') || key.startsWith('character.') || key.endsWith('.void'),
+  ));
   const initialization = buildStrictScenarioInitialization(mod);
   const next = applyStrictScenarioInitializationToSave(saveData, initialization);
   // 回填累积关系：旧值(好感/关系/记忆等)优先，新关正典只补新增字段与新记忆
@@ -289,6 +295,8 @@ export function transitionToNextScenarioStage(saveData: SaveData, modsOverride?:
   }
   const newRuntime = (next as any).世界.状态.剧本模组;
   newRuntime.reconciledRegistryVersion = rt.reconciledRegistryVersion;
+  if (divergenceSnapshot.length) newRuntime.divergences = divergenceSnapshot;
+  Object.assign(newRuntime.flags, inheritedWorldlineFlags);
   // 立即推进一轮：激活新关首章/首批事件
   const advanced = advanceScenarioRuntime(next);
   return { saveData: advanced.saveData, ok: true, from: rt.modId, to: targetId, toName: mod.manifest.name };

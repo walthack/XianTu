@@ -2,7 +2,8 @@ import type { SaveData } from '@/types/game';
 import { formatEarnedTitles } from './milestoneRewards';
 import { getNarrativeAnchorEvent } from './runtime';
 import { getCanonRailContract, getCanonRailProfile } from './canonRail';
-import { resolveScenarioEventNarrative } from './eventNarrativeView';
+import { narrativeVariantReplacesCanonRail, resolveScenarioEventNarrative } from './eventNarrativeView';
+import { formatDivergencePrompt } from './divergenceLedger';
 import { findRegistryIdentitiesByContext, getRegistrySpeechStyle } from './characterResolver';
 
 import type {
@@ -124,8 +125,13 @@ function formatCharacterRelationship(
     const memories = formatList(playerRelation.memories, 2);
     if (memories) lines.push(`共同记忆：${memories}`);
   }
+  // 强约束边（契约/主仆/师徒/血亲等）优先入前 3，防关键关系被截断（R2-5：苏妲己契约被无视前例）
+  const STRONG_RELATION = /契约|主仆|师徒|师父|师尊|弟子|血亲|父|母|兄|弟|姐|妹|子女|夫|妻|妾|奴|婢|结拜|结义/;
   const relationLines = (relationships || [])
     .filter(item => item.fromCharacterId === character.id || item.toCharacterId === character.id)
+    .sort((a, b) =>
+      ((STRONG_RELATION.test(b.relation) ? 1 : 0) - (STRONG_RELATION.test(a.relation) ? 1 : 0)) ||
+      (Math.abs(b.score ?? 0) - Math.abs(a.score ?? 0)))
     .slice(0, 3)
     .map(item => {
       const otherId = item.fromCharacterId === character.id ? item.toCharacterId : item.fromCharacterId;
@@ -173,10 +179,15 @@ function formatFocusedCharacter(
   if (personality) lines.push(`  性格：${personality}`);
   const speechStyle = getRegistrySpeechStyle(character.name);
   if (speechStyle) lines.push(`  谈吐：${speechStyle}`);
+  // 灵根=正典静态设定（R2-5：凝羽灵根曾被 LLM 改写）；"原作未载"占位不注入
+  const spiritRootName = profile.spiritRoot?.name;
+  if (spiritRootName && spiritRootName !== '原作未载') {
+    lines.push(`  灵根：${spiritRootName}${profile.spiritRoot?.tier ? `（${profile.spiritRoot.tier}）` : ''}——正典设定，不得改写`);
+  }
   if (profile.appearance) lines.push(`  外貌：${compactText(profile.appearance)}`);
   if (profile.currentAppearance) lines.push(`  当前外貌：${compactText(profile.currentAppearance)}`);
   if (profile.currentThought) lines.push(`  当前心思：${compactText(profile.currentThought)}`);
-  const memories = formatList(profile.memories, 3);
+  const memories = formatList(profile.memories, 5);
   if (memories) lines.push(`  记忆：${memories}`);
   // 底线门控：未入队且好感未达阈值 → 隐去【底线】，改提示 LLM"尚未摸透，勿臆断"
   const canonFav = runtime.canon?.playerRelationships?.find(item => item.characterId === character.id)?.favorability;
@@ -306,7 +317,11 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
           namesForIds(event.locationId ? [event.locationId] : [], locations),
         ].filter(Boolean).join('；');
         const axisLine = formatAxisBeat(event);
-        const contract = getCanonRailContract(canonRail, event.id);
+        // 分歧文案已经替代原事件结果时，旧 Canon Rail 合同（例如“谢艺之死”）
+        // 不得继续注入并与分歧事实打架；分歧 variant 的 axisBeat 就是本拍合同。
+        const contract = narrativeVariantReplacesCanonRail(rawEvent, runtime.flags || {})
+          ? undefined
+          : getCanonRailContract(canonRail, event.id);
         const forbiddenLine = contract?.forbiddenInCanon?.length
           ? `  本拍特定禁止改写：${contract.forbiddenInCanon.join('；')}。\n`
           : '';
@@ -422,6 +437,7 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
   const relationLine = mismatches.length
     ? `【关系-好感失配修正】以下 NPC 的关系标签与好感度明显失配：${mismatches.join('、')}。本轮起以角色内方式收敛：要么让关系随剧情演进并用 set 更新 社交.关系.<名字>.与玩家关系（如"敌对"→"亦敌亦友/表面敌对暗生情愫"），要么在叙事中交代表里不一的原因并把标签改为体现这种复杂性的表述。此后好感度跨档变化时必须同步演进关系标签，不得让标签僵死。`
     : '';
+  const divergenceLine = formatDivergencePrompt((runtime as { divergences?: any[] }).divergences);
 
   // 即兴目标槽（跨轮追踪，读档不翻转的治本一环）
   const improvGoals = readPath(saveData, ['系统', '扩展', '任务追踪', '即兴目标']);
@@ -504,7 +520,7 @@ ${nextSection}
 ## 剧情标记
 ${JSON.stringify(runtime.flags || {})}
 
-${focusedCharacterSection ? `${focusedCharacterSection}\n\n` : ''}${globalIdentitySection ? `${globalIdentitySection}\n\n` : ''}${loadBearingLine ? `${loadBearingLine}\n\n` : ''}${steeringLine ? `${steeringLine}\n\n` : ''}${reputationLine}\n\n${relationLine ? `${relationLine}\n\n` : ''}${improvLine}\n\n【正典叙事事实约束】：
+${focusedCharacterSection ? `${focusedCharacterSection}\n\n` : ''}${globalIdentitySection ? `${globalIdentitySection}\n\n` : ''}${loadBearingLine ? `${loadBearingLine}\n\n` : ''}${divergenceLine ? `${divergenceLine}\n\n` : ''}${steeringLine ? `${steeringLine}\n\n` : ''}${reputationLine}\n\n${relationLine ? `${relationLine}\n\n` : ''}${improvLine}\n\n【正典叙事事实约束】：
 1. 已知人物的姓名、别名、身份、物种、势力、亲属与政治关系均是事实字段：不得把人物写成兵器、坐骑、功法、物品或新角色；不得把称号、别名拆成另一个实体。
 2. 人物之间的血缘、主从、婚配、同党、结盟、仇怨，只有上文正典人物档案或当前事件明确写出时才可断言。没有依据时只能写“尚未可知/传闻待证”，绝不可因同姓、官职、阵营或历史常识擅自补关系。
 3. 叙事正文也必须遵守上述正典；这不是仅约束 tavern_commands 的规则。若玩家要求与正典矛盾的事实，明确说明冲突并以正典版本续写。

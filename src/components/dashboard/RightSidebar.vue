@@ -220,6 +220,26 @@
           </div>
         </div>
       </div>
+
+      <!-- 世界线记录：先由正文呈现后果，这里只留可回看的变化凭据 -->
+      <div v-if="worldlineEntries.length" class="collapsible-section quest-section">
+        <div class="section-header" @click="worldlineCollapsed = !worldlineCollapsed">
+          <h3 class="section-title">
+            <Clock :size="14" class="section-icon gold" />
+            <span>{{ t('世界线记录') }}</span>
+          </h3>
+          <button class="collapse-toggle" :class="{ 'collapsed': worldlineCollapsed }">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M8 10l4-4H4l4 4z"/>
+            </svg>
+          </button>
+        </div>
+        <div v-show="!worldlineCollapsed" class="quest-body">
+          <div v-for="entry in worldlineEntries" :key="entry.id" class="quest-event">
+            <span class="quest-mark-main">◇</span>{{ entry.worldDelta }}
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- 无角色数据 -->
@@ -268,6 +288,7 @@ const statusEffects = computed(() => {
 });
 
 const questCollapsed = ref(false);
+const worldlineCollapsed = ref(false);
 const stageSwitching = ref(false);
 const stageSwitchError = ref('');
 // 去掉关卡名的开发向前缀（「六朝清羽记·第56-72章·灵飞镜与白夷危局」→「灵飞镜与白夷危局」）
@@ -316,6 +337,16 @@ const questGoals = computed(() => {
   const goals: any = (gameStateStore.systemExtensions as any)?.任务追踪?.即兴目标;
   if (!Array.isArray(goals)) return [] as string[];
   return goals.slice(0, 3).map((g: any) => typeof g === 'string' ? g : g?.标题 || '').filter(Boolean);
+});
+const worldlineEntries = computed(() => {
+  const rt: any = (gameStateStore.worldState as any)?.剧本模组;
+  if (!Array.isArray(rt?.divergences)) return [] as Array<{ id: string; worldDelta: string }>;
+  return rt.divergences.slice(-5).reverse()
+    .filter((item: any) => item && typeof item.worldDelta === 'string')
+    .map((item: any, index: number) => ({
+      id: String(item.id || `divergence-${index}`),
+      worldDelta: item.worldDelta,
+    }));
 });
 
 // 自动计算当前年龄（基于出生日期）

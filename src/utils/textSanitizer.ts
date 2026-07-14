@@ -1,4 +1,5 @@
 import type { TextReplaceRule } from '@/types/textRules';
+import { stripModelThinking } from './jsonExtract';
 
 const MAX_LINE_LENGTH = 500;
 const MAX_REPLACE_RULES = 50;
@@ -122,18 +123,14 @@ export function sanitizeAITextForDisplay(text: string): string {
 export function extractTextFromJsonResponse(text: string): string {
   if (!text) return '';
 
-  // 先移除 thinking 类标签
-  const cleaned = text
-    .replace(/<think[^>]*>[\s\S]*?<\/think[^>]*>/gi, '')
-    .replace(/<\/?think[^>]*>/gi, '')
-    .trim();
+  const cleaned = stripModelThinking(text);
 
   // 查找 JSON 对象
   const jsonStart = cleaned.indexOf('{');
   const jsonEnd = cleaned.lastIndexOf('}');
 
   if (jsonStart === -1 || jsonEnd === -1 || jsonEnd <= jsonStart) {
-    return cleaned;
+    return '';
   }
 
   const jsonStr = cleaned.slice(jsonStart, jsonEnd + 1);
@@ -144,8 +141,45 @@ export function extractTextFromJsonResponse(text: string): string {
       return parsed.text;
     }
   } catch {
-    // JSON 解析失败，返回原文
+    // 不将残缺 JSON 或模型分析当作玩家叙事回显。
   }
 
-  return cleaned;
+  return '';
+}
+
+/**
+ * 从流式 JSON 中安全预览已输出的 text 字段。
+ * 只有确认出现 text 键时才显示，避免把前置分析或半截 JSON 渲染给玩家。
+ */
+export function extractStreamingNarrativeText(text: string): string {
+  const cleaned = stripModelThinking(text);
+  if (!cleaned) return '';
+
+  const textKey = /"(?:text|叙事文本|narrative)"\s*:\s*"/.exec(cleaned);
+  if (!textKey || textKey.index === undefined) return '';
+
+  const valueStart = textKey.index + textKey[0].length;
+  let escaped = false;
+  let value = '';
+  for (let i = valueStart; i < cleaned.length; i++) {
+    const ch = cleaned[i];
+    if (escaped) {
+      value += `\\${ch}`;
+      escaped = false;
+      continue;
+    }
+    if (ch === '\\') {
+      escaped = true;
+      continue;
+    }
+    if (ch === '"') break;
+    value += ch;
+  }
+
+  try {
+    return JSON.parse(`"${value}"`) as string;
+  } catch {
+    // 流仍未结束时，保守地保留已形成的普通字符，而不显示原始 JSON。
+    return value.replace(/\\n/g, '\n').replace(/\\"/g, '"').replace(/\\\\/g, '\\');
+  }
 }

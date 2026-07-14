@@ -253,7 +253,7 @@ import { heartbeatPresenceSilent } from '@/services/presence';
 import { endTravelBeacon } from '@/services/onlineTravel';
 import { getFullscreenElement, requestFullscreen, exitFullscreen, explainFullscreenError } from './utils/fullscreen';
 import { MUSIC_SETTINGS_EVENT, musicEngine, readMusicSettings, type MusicSettings } from './utils/musicEngine';
-import { resolveMusicMoodForScenario, pickTrackForMood, musicMoodRank, type MusicMood } from './utils/musicLibrary';
+import { resolveMusicMoodForScenario, resolveMoodFromNarrative, pickTrackForMood, musicMoodRank, type MusicMood } from './utils/musicLibrary';
 import type { CharacterBaseInfo } from '@/types/game';
 import type { CharacterCreationPayload, Talent } from '@/types';
 
@@ -333,14 +333,41 @@ const activeScenarioEvents = computed(() => {
   });
 });
 
+// 最新一轮 AI 叙事正文——L0.5 正文层信号源（捕捉双修/调查等玩家自发行为）。
+// 取源与 MainGamePanel 的 currentNarrative 一致：主对话实时正文在 memory.短期记忆
+// （narrativeHistory 运行中不更新，只作兜底）。
+const latestAiNarrative = computed(() => {
+  if (!isInGameView.value || !gameStateStore.isGameLoaded) return '';
+  const shortTerm = (gameStateStore.memory as any)?.短期记忆;
+  if (Array.isArray(shortTerm) && shortTerm.length > 0) {
+    const latest = shortTerm[shortTerm.length - 1];
+    if (typeof latest === 'string' && latest) return latest;
+  }
+  const history = gameStateStore.narrativeHistory || [];
+  for (let i = history.length - 1; i >= 0; i--) {
+    const message = history[i];
+    if (message?.type === 'ai' && typeof message.content === 'string') return message.content;
+  }
+  return '';
+});
+
 // mood 不变则不换曲（不打断当前变体）；mood 变化时才从该 mood 曲库随机挑一首。
 // 防抖：升档（更高优先级，如 →climax/horror）立即切；降档需连续 2 次解析一致才切,
 // 避免决战中插一句对话就掉回低档曲。
 const currentMusicMood = ref<MusicMood | null>(null);
 let pendingMusicMood: MusicMood | null = null;
 let pendingMusicMoodCount = 0;
-watch([activeScenarioChapterId, activeScenarioEvents], ([chapterId, events]) => {
-  const mood = resolveMusicMoodForScenario(chapterId, events);
+watch([activeScenarioChapterId, activeScenarioEvents, latestAiNarrative], ([chapterId, events, narrative]) => {
+  const mood = resolveMusicMoodForScenario(chapterId, events, narrative);
+  console.info('[music] 解析', {
+    结果mood: mood,
+    当前mood: currentMusicMood.value,
+    正文层命中: resolveMoodFromNarrative(narrative),
+    章节: chapterId,
+    活跃事件: events.map(e => e?.id || '?'),
+    正文长度: (narrative || '').length,
+    正文尾部: (narrative || '').slice(-50),
+  });
   if (mood === currentMusicMood.value) {
     pendingMusicMood = null;
     pendingMusicMoodCount = 0;

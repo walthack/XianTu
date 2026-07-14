@@ -70,6 +70,8 @@ export interface ScenarioModEvent {
 /** 已发生分歧下的叙事投影；不改完成链，只替换玩家看到/LLM 续写的当前事件表述。 */
 export interface ScenarioModEventNarrativeVariant {
   when: ScenarioCondition[];
+  /** 明确替代默认正典合同的分歧投影；普通条件化文案不得关闭 Canon Rail。 */
+  replacesCanonRail?: boolean;
   name?: string;
   description?: string;
   axisBeat?: string;

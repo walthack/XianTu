@@ -217,13 +217,30 @@ export function musicMoodRank(mood: MusicMood): number {
   return rank === -1 ? EVENT_MOOD_PRIORITY.length : rank;
 }
 
-// 分层判定：
-// L1 人工锚点 override（EVENT_MOOD_MAP）无条件最高；
-// L2 正则推出的事件 mood 与章节 mood 一起按优先级竞争
-//    ——避免决战章节(climax)被普通战斗事件(battle)拉低（鬼巫王案例）。
+// L0.5 正文规则：匹配最新一轮 AI 叙事正文，捕捉事件元数据必然缺失的"玩家自发行为"
+// （双修/调查/疗愈/休整）。只放高特异性词；战斗/危机类宽词不进正文层——
+// 事件元数据已覆盖，正文误命中代价高。数组顺序即命中优先。
+const NARRATIVE_MOOD_RULES: Array<[RegExp, MusicMood]> = [
+  [/双修|欢好|云雨|侍寝|春宵|交合|承欢|缠绵|宽衣解带/i, 'sensual'],
+  [/疗伤|施针|调养|温元丹|把脉|敷药|上药|包扎/i, 'emotion'],
+  [/调查|查探|勘察|搜查|搜证|排查|追查线索|翻检/i, 'explore'],
+  [/休整|歇息|安歇|设宴|宴饮|沐浴|梳洗/i, 'daily'],
+];
+
+export function resolveMoodFromNarrative(narrative: string | null | undefined): MusicMood | null {
+  if (!narrative) return null;
+  return NARRATIVE_MOOD_RULES.find(([pattern]) => pattern.test(narrative))?.[1] || null;
+}
+
+// 分层判定（信号新鲜度：正文=当下这一拍 > 事件元数据 > 章节）：
+// L1   人工锚点 override（EVENT_MOOD_MAP）无条件最高；
+// L0.5 最新叙事正文的高特异性规则（玩家自发行为：双修/调查/疗愈/休整）；
+// L2   正则推出的事件 mood 与章节 mood 一起按优先级竞争
+//      ——避免决战章节(climax)被普通战斗事件(battle)拉低（鬼巫王案例）。
 export function resolveMusicMoodForScenario(
   chapterId: string | null | undefined,
   activeEvents: ScenarioMusicEvent[] = [],
+  latestNarrative?: string | null,
 ): MusicMood {
   const exactMoods: MusicMood[] = [];
   const ruleMoods: MusicMood[] = [];
@@ -241,6 +258,9 @@ export function resolveMusicMoodForScenario(
   if (exactMoods.length > 0) {
     return EVENT_MOOD_PRIORITY.find(priority => exactMoods.includes(priority)) || exactMoods[0];
   }
+
+  const narrativeMood = resolveMoodFromNarrative(latestNarrative);
+  if (narrativeMood) return narrativeMood;
 
   const chapterMood = resolveMusicMoodForChapter(chapterId);
   const candidates = [...ruleMoods, chapterMood];

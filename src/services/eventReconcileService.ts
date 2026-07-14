@@ -2,6 +2,7 @@ import { get } from 'lodash';
 import type { SaveData, StateChange } from '@/types/game';
 import { parseJsonSmart } from '@/utils/jsonExtract';
 import { getCanonRailContract, getCanonRailOrder, getCanonRailProfile } from '@/modules/scenarioMods/canonRail';
+import { recordReconcileDivergences } from '@/modules/scenarioMods/divergenceLedger';
 
 /**
  * 事件对账（死锁自愈，闭环第三环：自由探索→软提醒→走偏不卡死）。
@@ -68,6 +69,7 @@ interface RuntimeEventLike {
   description?: unknown;
   axisSeq?: unknown;
   completion?: Array<{ path?: unknown; operator?: unknown; value?: unknown }>;
+  relatedCharacterIds?: unknown;
 }
 
 export interface ChainCandidate {
@@ -79,6 +81,7 @@ export interface ChainCandidate {
   mustReach?: string;
   completionEvidence?: string[];
   forbiddenInCanon?: string[];
+  relatedCharacterIds?: string[];
 }
 
 function eventDoneFlagKey(event: RuntimeEventLike): string {
@@ -138,6 +141,9 @@ export function buildChainCandidates(runtime: {
       mustReach: contract?.mustReach,
       completionEvidence: contract?.completionEvidence,
       forbiddenInCanon: contract?.forbiddenInCanon,
+      relatedCharacterIds: Array.isArray(e.relatedCharacterIds)
+        ? e.relatedCharacterIds.filter((id): id is string => typeof id === 'string')
+        : [],
     };
   });
 }
@@ -146,7 +152,10 @@ interface ReconcileVerdict {
   id?: unknown;
   verdict?: unknown;
   evidence?: unknown;
+  matchedCore?: unknown;
   confidence?: unknown;
+  worldDelta?: unknown;
+  characterStates?: unknown;
 }
 
 export interface AcceptedFlag {
@@ -154,6 +163,8 @@ export interface AcceptedFlag {
   flagKey: string;
   verdict: 'done' | 'void';
   evidence: string;
+  worldDelta?: string;
+  characterStates?: Record<string, string>;
 }
 
 export interface ReconcileValidateResult {
@@ -186,14 +197,27 @@ function bigramCoverage(a: Set<string>, b: string): number {
  * 语义对的证据被毙成 pending → 死锁不解。改为字符 bigram 重叠率：证据 bigram ≥60% 出现在
  * 记忆/上下文里即视为"非编造、有据"（容忍省略与改写）。
  *
- * 注：不做"证据须与该事件 beat 词面相关"的检查——试过，反把 done/void 语义对但换了措辞的证据
- * 又毙掉（void 证据描述反面事实、done 证据常与 beat 用词不同，词面重叠天然低）。Codex 关切的
- * "真实但与本事件无关的片段蒙混"降级为 backlog：靠连续前缀 + 置信阈值 + 提示词纪律兜着。
  */
 function isGrounded(evidence: unknown, normContext: string): boolean {
   const ne = norm(evidence);
   if (ne.length < 4) return false;
   return bigramCoverage(bigrams(ne), normContext) >= 0.6;
+}
+
+/**
+ * `matchedCore` is a compact, literal bridge between the quoted evidence and
+ * the candidate being reconciled.  Comparing arbitrary beat/evidence text
+ * directly was too brittle (an equivalent player solution often changes the
+ * wording), so the model selects one concrete candidate term that must occur
+ * verbatim in all three places: candidate, evidence, and saved context.
+ */
+function hasMatchedCore(v: ReconcileVerdict | undefined, cand: ChainCandidate, normContext: string): boolean {
+  const core = norm(v?.matchedCore);
+  if (core.length < 2 || core.length > 16) return false;
+  const candidateText = norm(`${cand.name} ${cand.beat} ${(cand.completionEvidence || []).join(' ')}`);
+  return candidateText.includes(core)
+    && norm(v?.evidence).includes(core)
+    && normContext.includes(core);
 }
 
 /** Rail 合同中的每个短锚点都须在本轮事实中出现（允许近似转述），避免模型只凭泛化证据落账。 */
@@ -214,7 +238,7 @@ export function validateEventReconcile(
   raw: unknown,
   candidates: ChainCandidate[],
   context: string,
-  options: { allowVoid?: boolean } = {},
+  options: { allowVoid?: boolean; requireDivergenceDetails?: boolean; requireEvidenceRelation?: boolean; knownCharacterIds?: Set<string> } = {},
 ): ReconcileValidateResult {
   const diagnostics: string[] = [];
   const r = raw && typeof raw === 'object' ? raw as { events?: unknown } : {};
@@ -254,11 +278,49 @@ export function validateEventReconcile(
       diagnostics.push(`「${cand.name}」evidence 未在记忆/上下文接地，链在此停止`);
       break;
     }
+    if (options.requireEvidenceRelation && !hasMatchedCore(v, cand, normContext)) {
+      diagnostics.push(`「${cand.name}」evidence 未以 matchedCore 对应当前事件，链在此停止`);
+      break;
+    }
     if (!hasCompletionEvidence(cand, normContext)) {
       diagnostics.push(`「${cand.name}」未覆盖 Canon Rail 完成锚点，链在此停止`);
       break;
     }
-    accepted.push({ id: cand.id, flagKey: cand.flagKey, verdict, evidence: String(v?.evidence) });
+    let worldDelta: string | undefined;
+    let characterStates: Record<string, string> | undefined;
+    if (verdict === 'void' && options.requireDivergenceDetails) {
+      worldDelta = typeof v?.worldDelta === 'string' ? v.worldDelta.trim() : '';
+      const deltaNorm = norm(worldDelta);
+      if (deltaNorm.length < 4 || bigramCoverage(bigrams(deltaNorm), normContext) < 0.35) {
+        diagnostics.push(`「${cand.name}」worldDelta 未在记忆/上下文接地，链在此停止`);
+        break;
+      }
+      const rawStates = v?.characterStates;
+      if (!rawStates || typeof rawStates !== 'object' || Array.isArray(rawStates)) {
+        diagnostics.push(`「${cand.name}」void 缺 characterStates，链在此停止`);
+        break;
+      }
+      characterStates = {};
+      let invalidState = '';
+      for (const [characterId, rawStatus] of Object.entries(rawStates as Record<string, unknown>)) {
+        const status = typeof rawStatus === 'string' ? rawStatus.trim() : '';
+        if (!options.knownCharacterIds?.has(characterId)) { invalidState = `未知角色 id ${characterId}`; break; }
+        if (!/^(alive|dead|longrest|incapacitated|missing)$/i.test(status)) { invalidState = `非法人物状态 ${status || '(空)'}`; break; }
+        characterStates[characterId] = status.toLowerCase();
+      }
+      if (invalidState) {
+        diagnostics.push(`「${cand.name}」characterStates 无效：${invalidState}，链在此停止`);
+        break;
+      }
+    }
+    accepted.push({
+      id: cand.id,
+      flagKey: cand.flagKey,
+      verdict,
+      evidence: String(v?.evidence),
+      ...(worldDelta ? { worldDelta } : {}),
+      ...(characterStates ? { characterStates } : {}),
+    });
     diagnostics.push(`「${cand.name}」→ ${verdict}（conf=${conf}）`);
   }
   return { accepted, diagnostics };
@@ -360,7 +422,7 @@ function buildMemoryContext(saveData: SaveData, candidates: ChainCandidate[]): s
 }
 
 function buildReconcileUserPrompt(candidates: ChainCandidate[], memoryContext: string, input: EventReconcileInput): string {
-  const list = candidates.map((c, i) => `${i + 1}. id=${c.id}\n   名称：${c.name}\n   预设剧情：${c.beat}${c.mustReach ? `\n   Canon Rail 必达结果：${c.mustReach}\n   完成锚点：${(c.completionEvidence || []).join('、')}\n   禁止改写：${(c.forbiddenInCanon || []).join('、')}` : ''}`).join('\n');
+  const list = candidates.map((c, i) => `${i + 1}. id=${c.id}\n   名称：${c.name}\n   预设剧情：${c.beat}\n   相关角色ID：${(c.relatedCharacterIds || []).join('、') || '无'}${c.mustReach ? `\n   Canon Rail 必达结果：${c.mustReach}\n   完成锚点：${(c.completionEvidence || []).join('、')}\n   禁止改写：${(c.forbiddenInCanon || []).join('、')}` : ''}`).join('\n');
   return [
     '【待核对的主线事件（严格顺序链，按序核对）】',
     list,
@@ -384,6 +446,8 @@ export async function runEventReconcile(input: EventReconcileInput): Promise<Sta
   const runtime = get(input.saveData, '世界.状态.剧本模组') as {
     events?: RuntimeEventLike[]; completedEventIds?: string[]; flags?: Record<string, unknown>;
     modId?: string;
+    canon?: { characters?: Array<{ id?: unknown }> };
+    divergences?: unknown[];
   } | undefined;
   // 【临时黑匣子】写进存档供远程诊断
   const dbg: Record<string, unknown> = (() => {
@@ -436,19 +500,38 @@ export async function runEventReconcile(input: EventReconcileInput): Promise<Sta
 
   const groundingContext = `${memoryContext}\n${input.recentText || ''}\n${input.userAction || ''}`;
   const railEnabled = Boolean(getCanonRailProfile(runtime));
-  const { accepted, diagnostics } = validateEventReconcile(parsed, candidates, groundingContext, { allowVoid: !railEnabled });
+  const knownCharacterIds = new Set((runtime.canon?.characters || [])
+    .map(character => character?.id)
+    .filter((id): id is string => typeof id === 'string'));
+  const { accepted, diagnostics } = validateEventReconcile(parsed, candidates, groundingContext, {
+    allowVoid: !railEnabled,
+    requireDivergenceDetails: true,
+    requireEvidenceRelation: true,
+    knownCharacterIds,
+  });
   dbg.diagnostics = diagnostics.slice(0, 6); dbg.accepted = accepted.map(a => `${a.id.split('.').pop()}:${a.verdict}`);
   for (const d of diagnostics) console.log('[事件对账]', d);
   if (!accepted.length) return [];
 
   applyReconcileFlags(runtime.flags as Record<string, unknown>, accepted);
+  const addedDivergences = recordReconcileDivergences(
+    runtime as { flags: Record<string, unknown>; divergences?: any[] },
+    accepted,
+  );
   console.warn(`[事件对账] 已落账 ${accepted.length} 个事件 flag：${accepted.map(a => `${a.id}(${a.verdict})`).join('、')}`);
 
   const summarize = input.summarize ?? ((_k: string, v: unknown) => v);
-  return accepted.map(a => ({
+  const changes = accepted.map(a => ({
     key: `世界.状态.剧本模组.flags.${a.flagKey}`,
     action: 'event_reconcile',
     oldValue: summarize(a.flagKey, false, 'set'),
     newValue: summarize(a.flagKey, { verdict: a.verdict, evidence: a.evidence.slice(0, 60) }, 'set'),
   } as StateChange));
+  changes.push(...addedDivergences.map(item => ({
+    key: '世界.状态.剧本模组.divergences',
+    action: 'event_reconcile_divergence',
+    oldValue: undefined,
+    newValue: summarize(item.id, { worldDelta: item.worldDelta, branchId: item.branchId }, 'push'),
+  } as StateChange)));
+  return changes;
 }

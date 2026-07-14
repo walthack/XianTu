@@ -212,6 +212,16 @@ test('stage transition preserves accumulated NPC relations and switches runtime'
   // 玩家与程宗扬的累积状态
   save.社交.关系['程宗扬'] = { ...(save.社交.关系['程宗扬'] || {}), 名字: '程宗扬', 与玩家关系: '挚友', 好感度: 77, 记忆: ['同闯建康的旧事'] };
   const rt = save.世界.状态.剧本模组;
+  rt.divergences = [{
+    id: 'divergence.lcq.event.s06_03.1', eventId: 'lcq.event.s06_03',
+    branchId: 'lcq.if_xieyi_longrest', worldDelta: '谢艺生还',
+    characterStates: [{ characterId: 'liuchao.character.xie_yi', status: 'longrest' }],
+    evidence: '谢艺拄刀而立', sequence: 1,
+  }];
+  rt.flags['event.s06_03.void'] = true;
+  rt.flags['branch.lcq.if_xieyi_longrest.active'] = true;
+  rt.flags['character.xie_yi.status'] = 'longrest';
+  rt.flags['event.s06_03.done'] = true;
   rt.nextStageReadyId = rt.nextStageId; // 模拟本关关键剧情已完成
 
   // 未就绪时拒绝
@@ -222,6 +232,11 @@ test('stage transition preserves accumulated NPC relations and switches runtime'
   assert.equal(result.ok, true, result.reason);
   const newRt = result.saveData.世界.状态.剧本模组;
   assert.equal(newRt.modId, 'liuchao.next_stage');
+  assert.equal(newRt.divergences.length, 1, '分歧账本跨关保留');
+  assert.equal(newRt.flags['event.s06_03.void'], true, 'void 审计标记跨关保留');
+  assert.equal(newRt.flags['branch.lcq.if_xieyi_longrest.active'], true, 'IF 激活状态跨关保留');
+  assert.equal(newRt.flags['character.xie_yi.status'], 'longrest', '分歧人物状态跨关保留');
+  assert.notEqual(newRt.flags['event.s06_03.done'], true, '旧关 done 进度不得污染新关');
   const npc = result.saveData.社交.关系['程宗扬'];
   assert.equal(npc.好感度, 77, '好感度跨关保留');
   assert.equal(npc.与玩家关系, '挚友', '关系标签跨关保留');

@@ -4188,6 +4188,22 @@
         "id": "lcq.event.s07_03_xiaozi_appears",
         "name": "小紫现身",
         "description": "小紫以毒戒制住卓云君并救下程宗扬，她先前的弱态伪装开始转向残忍操控。",
+        "narrativeVariants": [
+          {
+            "when": [
+              {
+                "path": "flags.branch.lcq.if_xiaozi_spares_mother.active",
+                "operator": "eq",
+                "value": true
+              }
+            ],
+            "replacesCanonRail": true,
+            "name": "小紫现身·未弑母的余波",
+            "description": "小紫以毒戒制住卓云君并救下程宗扬。碧姬仍活着的消息不能被搁置：小紫或同行者必须当场明确其看守、送离或托付给可信者的具体处置，并承担由此留下的余波。",
+            "axisBeat": "小紫突然现身，以轻灵身法和毒戒制服重伤的卓云君、救下程宗扬；她不得被写成已弑母，也不能被套入弑母后的悔恨。碧姬仍活着，必须由小紫或同行者当场作出看守、送离或托付给可信者的一项具体处置。",
+            "objective": "协助小紫制服卓云君，并落实碧姬仍活着后的具体处置"
+          }
+        ],
         "axisId": "qingyu.134.1",
         "axisAnchor": "六朝清羽记·#134·第132章·云落",
         "axisSeq": 238,
@@ -4254,15 +4270,30 @@
           {
             "when": [
               {
-                "path": "flags.event.s06_03.void",
+                "path": "flags.branch.lcq.if_xieyi_longrest.active",
                 "operator": "eq",
                 "value": true
               }
             ],
+            "replacesCanonRail": true,
             "name": "谢艺生还的后果",
-            "description": "孟非卿得知谢艺在鬼王峒重伤却生还，转而厘清鬼王峒变故、左武军旧案与黑魔海线索。",
-            "axisBeat": "孟非卿确认谢艺仍然生还，要求程宗扬交代鬼王峒变故并商议后续调查。",
-            "objective": "向孟非卿说明谢艺生还与鬼王峒变故"
+            "description": "孟非卿得知谢艺在鬼王峒重伤却生还；他必须据此调度星月湖人手，而非只确认消息。",
+            "axisBeat": "孟非卿确认谢艺仍然生还，当场至少作出一项具体安排：派人接应或探望谢艺，或命人调查黑魔海与鬼王峒线索。",
+            "objective": "说明谢艺生还与鬼王峒变故，并见证孟非卿作出具体安排"
+          },
+          {
+            "when": [
+              {
+                "path": "flags.world.xieyi_absence.active",
+                "operator": "eq",
+                "value": true
+              }
+            ],
+            "replacesCanonRail": true,
+            "name": "谢艺失踪的后果",
+            "description": "谢艺在鬼王峒战后下落不明。孟非卿不能为他发丧，也不能把他当作已安然脱险；星月湖必须同时派人搜寻、守住被黑魔海盯上的联络线。",
+            "axisBeat": "不得确认谢艺死亡或安全，不得把他写成已生还。孟非卿须当场作出两项彼此牵制的具体安排：分出人手追查谢艺下落，并护住或改换星月湖与鬼王峒之间可能泄露的联络线；玩家可选择参与其中一项，另一项仍作为持续压力存在。",
+            "objective": "协助搜寻谢艺踪迹，或守住星月湖被黑魔海窥伺的联络线"
           }
         ]
       },

@@ -117,6 +117,8 @@ const FORBIDDEN_PATHS: string[] = [
   // 回主线引子冷却：引擎专属字段（世界.状态.剧本模组.steeringCooldown），只由引擎据布尔"主线偏移提议"置入并递减。
   // 剧本模组主要靠 canonGuard 保护，这里再加一层禁止 LLM 直写作纵深防御（Codex 二审 #2）。布尔"主线偏移提议"仍允许写。
   '世界.状态.剧本模组.steeringCooldown',
+  // 世界线分歧账本由本地对账/IF 引擎独占，LLM 不得伪造或改写历史。
+  '世界.状态.剧本模组.divergences',
   // 行动判定状态由本地引擎结算；LLM 只能叙述已经结算的结果。
   '系统.扩展.判定',
   // 注意：角色.身份 已移除，允许 AI 修改身份相关信息
@@ -321,6 +323,16 @@ export function validateCommand(command: unknown, index: number): ValidationResu
       errors.push(`指令${index}: ${cmd.action}操作必须提供value字段`);
     }
 
+    // 6b. NPC 静态正典设定写保护（R2-5 OOC：凝羽灵根被改/谢艺被演成女 前例）——
+    // 性别/灵根/种族/出生日期 由剧本正典与本地初始化决定，LLM 指令不得改写或删除；
+    // 与 value 无关，delete 同拦。合法写入路径（lifespanCalculator/dataValidation/修复脚本）不经指令通道。
+    if (typeof cmd.key === 'string') {
+      const staticFieldMatch = cmd.key.match(/^社交\.关系\.[^.]+\.(性别|灵根|种族|出生日期)$/);
+      if (staticFieldMatch) {
+        errors.push(`指令${index}: NPC「${staticFieldMatch[1]}」为正典静态设定，禁止通过指令改写或删除`);
+      }
+    }
+
     // 7. 检查多余字段（scope虽然在类型中但不应使用）
     const allowedFields = ['action', 'key', 'value'];
     const extraFields = Object.keys(cmd).filter(k => !allowedFields.includes(k));
@@ -349,6 +361,22 @@ export function validateCommand(command: unknown, index: number): ValidationResu
     errors.push(`指令${index}: 验证过程发生严重异常`);
     return { valid: false, errors, warnings };
   }
+}
+
+/**
+ * 存档修复是受限的维护通道，不是普通回合指令的另一种执行器。
+ * 执行器只支持 set；在这里显式拒绝其余动作，避免未来新增执行分支时
+ * 让 repair 模型携带的 add/delete/push 意外获得写入权限。
+ */
+export function validateRepairCommand(command: unknown, index: number): ValidationResult {
+  const result = validateCommand(command, index);
+  const action = command && typeof command === 'object'
+    ? (command as Record<string, unknown>).action
+    : undefined;
+  if (action !== 'set') {
+    result.errors.push(`指令${index}: 存档修复仅允许 set 操作`);
+  }
+  return { ...result, valid: result.errors.length === 0 };
 }
 
 /**
@@ -471,6 +499,7 @@ function validateValueType(key: string, value: unknown, action: string): string[
         if (val.阶段 !== undefined && typeof val.阶段 !== 'string') errors.push('NPC境界.阶段必须是字符串类型');
       }
     }
+
 
     // 大道对象（角色.大道.大道列表.<道名>）
     if (key.startsWith('角色.大道.大道列表.') && action === 'set' && (key.match(/\./g) || []).length === 3) {

@@ -4184,6 +4184,22 @@
         "id": "lcq.event.s09_03_xiaozi_wounded",
         "name": "小紫重伤",
         "description": "程宗扬巡视产业时遭苏妲己暗算，小紫重伤，程宗扬与小紫坠入大江。",
+        "narrativeVariants": [
+          {
+            "when": [
+              {
+                "path": "flags.branch.lcq.if_sudaji_slain_mochou.active",
+                "operator": "eq",
+                "value": true
+              }
+            ],
+            "replacesCanonRail": true,
+            "name": "伏诛后的产业清算",
+            "description": "苏妲己已死，原本的暗算不再发生，小紫也不因她重伤。程宗扬巡视产业时发现黑魔海遗留的账册与联络点正在被人销毁，必须保住证据并决定交给谁处置。",
+            "axisBeat": "不得让苏妲己继续暗算、追杀，亦不得把小紫写成因她重伤坠江。众人必须在建康处理黑魔海遗留账册与联络点，作出至少一项可追溯的处置。",
+            "objective": "保住黑魔海遗留账册，并决定其交接或封存方式"
+          }
+        ],
         "axisId": "qingyu.194.2",
         "axisAnchor": "六朝清羽记·#194·第20集·如梦幻泡",
         "axisSeq": 347,
@@ -4228,6 +4244,22 @@
         "id": "lcq.event.s09_05_drain_escape",
         "name": "排水沟沉江",
         "description": "苏妲己追杀至排水沟，小紫拼死抵抗，三人最终坠江顺流脱险。",
+        "narrativeVariants": [
+          {
+            "when": [
+              {
+                "path": "flags.branch.lcq.if_sudaji_slain_mochou.active",
+                "operator": "eq",
+                "value": true
+              }
+            ],
+            "replacesCanonRail": true,
+            "name": "余党灭证",
+            "description": "苏妲己伏诛后，黑魔海余党试图借排水沟销毁账册与联络物。程宗扬、小紫和卓云君不必沉江逃亡，必须在不扩大建康动荡的前提下截住灭证者并决定证物去向。",
+            "axisBeat": "苏妲己不得继续追杀，众人也不得再以沉江逃亡重演原著结果。黑魔海余党正在灭证，必须由程宗扬一行截住线索并作出公开、封存或交给可信者的一项具体决定。",
+            "objective": "截住黑魔海余党的灭证行动，并处置关键证物"
+          }
+        ],
         "axisId": "qingyu.204.1",
         "axisAnchor": "六朝清羽记·#204·第200章·沉江",
         "axisSeq": 362,

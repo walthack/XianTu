@@ -1,3 +1,18 @@
+function isWebpackDevServerHost(hostname: string): boolean {
+  return (
+    hostname === 'localhost' ||
+    hostname === '127.0.0.1' ||
+    hostname.startsWith('192.168.') ||
+    hostname.startsWith('10.') ||
+    // Tailscale assigns IPv4 addresses from the CGNAT range 100.64.0.0/10.
+    // This is still the local webpack dev server, so save-storage must use its
+    // same-origin /api endpoint instead of falling back to a fresh IndexedDB.
+    /^100\.(?:6[4-9]|[789]\d|1[01]\d|12[0-7])\./.test(hostname) ||
+    /^172\.(1[6-9]|2\d|3[0-1])\./.test(hostname) ||
+    hostname.includes('local')
+  );
+}
+
 export function normalizeBackendUrl(input: string): string {
   if (!input) return '';
   let url = input.trim();
@@ -9,13 +24,7 @@ export function normalizeBackendUrl(input: string): string {
 
 export function getBackendServerUrl(): string {
   // 开发模式：检查是否通过webpack dev server运行
-  const isDevelopment =
-    window.location.hostname === 'localhost' ||
-    window.location.hostname === '127.0.0.1' ||
-    window.location.hostname.startsWith('192.168.') ||
-    window.location.hostname.startsWith('10.') ||
-    /^172\.(1[6-9]|2\d|3[0-1])\./.test(window.location.hostname) ||
-    window.location.hostname.includes('local');
+  const isDevelopment = isWebpackDevServerHost(window.location.hostname);
 
   // 如果是开发模式且有webpack代理，使用空字符串（相对路径）
   // 这样请求会发送到同源，然后被webpack代理转发到后端
@@ -33,13 +42,7 @@ export function getBackendServerUrl(): string {
 
 export function isBackendConfigured(): boolean {
   // 开发模式下，如果通过webpack dev server运行，认为已配置（使用代理）
-  const isDevelopment =
-    window.location.hostname === 'localhost' ||
-    window.location.hostname === '127.0.0.1' ||
-    window.location.hostname.startsWith('192.168.') ||
-    window.location.hostname.startsWith('10.') ||
-    /^172\.(1[6-9]|2\d|3[0-1])\./.test(window.location.hostname) ||
-    window.location.hostname.includes('local');
+  const isDevelopment = isWebpackDevServerHost(window.location.hostname);
 
   if (isDevelopment) {
     return true; // 开发模式下使用代理，认为已配置

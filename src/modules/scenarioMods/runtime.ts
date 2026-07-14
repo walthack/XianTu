@@ -1,6 +1,7 @@
 import type { SaveData } from '@/types/game';
 
 import type { ScenarioCondition, ScenarioFlagValue, ScenarioMod, ScenarioModChapter, ScenarioModEvent } from './schema';
+import { recordOffscreenDivergence, type ScenarioDivergence } from './divergenceLedger';
 import { getCanonRailOrder, getCanonRailProfile, isCanonRailChapter } from './canonRail';
 
 
@@ -13,7 +14,7 @@ export interface ScenarioProgressState {
 }
 
 export interface ScenarioRuntimeTransition {
-  type: 'chapter_activated' | 'chapter_completed' | 'event_activated' | 'event_completed' | 'stage_ready';
+  type: 'chapter_activated' | 'chapter_completed' | 'event_activated' | 'event_completed' | 'stage_ready' | 'world_event_resolved';
   id: string;
 }
 
@@ -28,6 +29,10 @@ export interface RuntimeState extends ScenarioProgressState {
   /** 回主线引子偏移冷却：玩家主动偏移主线时置 N，引擎逐轮递减、期间暂停 stall 并静默引子。
    *  存于 runtime(世界.状态.剧本模组)——引擎专属字段，canonGuard 保护、LLM 命令写不到。 */
   steeringCooldown?: number;
+  /** 玩家造成的世界线差异；本地对账引擎独占写入，LLM 只读。 */
+  divergences?: ScenarioDivergence[];
+  /** 场外世界事件已结算的原事件；与 completedEventIds 分离，防止把玩家未参与的原著拍伪记为完成。 */
+  offscreenResolvedEventIds?: string[];
   /** 旧档 reconcile 版本戳：与 registry 版本一致则跳过（正典更新后旧档第一回合自动对齐） */
   reconciledRegistryVersion?: string;
 }
@@ -107,6 +112,35 @@ function isCriticalStoryEvent(event: ScenarioModEvent): boolean {
   if (event.critical !== undefined) return event.critical;
   if (event.axisMethod === 'reviewed-no-anchor' || event.axisId === null) return false;
   return Boolean(event.axisBeat || event.axisId || typeof event.axisSeq === 'number');
+}
+
+export const OFFSCREEN_WORLD_EVENT_STALL_THRESHOLD = 10;
+const XINGYUEHU_WAR_STAGE = 'lcq.stage_11_lieshan_battle';
+const XINGYUEHU_WAR_OFFSCREEN_FLAG = 'world.xingyuehu_war.offscreen_resolved';
+
+function isEventSettled(runtime: RuntimeState, eventId: string): boolean {
+  return runtime.completedEventIds.includes(eventId)
+    || (runtime.offscreenResolvedEventIds || []).includes(eventId);
+}
+
+/** 第一条世界引力样板：战争不等玩家领取任务，缺席者只能承接已经发生的余波。 */
+function resolveOffscreenWorldEvents(runtime: RuntimeState, transitions: ScenarioRuntimeTransition[]): void {
+  if (runtime.modId !== XINGYUEHU_WAR_STAGE
+    || (runtime.stallTurns || 0) < OFFSCREEN_WORLD_EVENT_STALL_THRESHOLD
+    || runtime.flags[XINGYUEHU_WAR_OFFSCREEN_FLAG] === true) return;
+  const warEventIds = runtime.events
+    .filter(event => event.id.startsWith('lcq.event.s11_') && isCriticalStoryEvent(event))
+    .map(event => event.id);
+  if (!warEventIds.length) return;
+  runtime.flags[XINGYUEHU_WAR_OFFSCREEN_FLAG] = true;
+  runtime.offscreenResolvedEventIds = [...new Set([...(runtime.offscreenResolvedEventIds || []), ...warEventIds])];
+  runtime.activeEventIds = runtime.activeEventIds.filter(id => !warEventIds.includes(id));
+  recordOffscreenDivergence(runtime, {
+    id: 'offscreen.lcq.xingyuehu_war', eventId: 'lcq.event.s11_04_xingyue_appears',
+    worldDelta: '你未赴烈山，星月湖与宋军的战争仍自行推进；前锋伤亡更重，江州提前戒严，粮线告急的战报送到了你面前。',
+    evidence: '引擎按星月湖战争脊柱结算玩家缺席后的战报与余波。',
+  });
+  transitions.push({ type: 'world_event_resolved', id: 'offscreen.lcq.xingyuehu_war' });
 }
 
 /** 唯一主线锚点：最早的已激活、未完成承重事件。
@@ -320,8 +354,11 @@ export function advanceScenarioRuntime(saveData: SaveData): {
   runtime.completedChapterIds = Array.isArray(runtime.completedChapterIds) ? runtime.completedChapterIds : [];
   runtime.activeEventIds = Array.isArray(runtime.activeEventIds) ? runtime.activeEventIds : [];
   runtime.completedEventIds = Array.isArray(runtime.completedEventIds) ? runtime.completedEventIds : [];
+  runtime.offscreenResolvedEventIds = Array.isArray(runtime.offscreenResolvedEventIds) ? runtime.offscreenResolvedEventIds : [];
   const transitions: ScenarioRuntimeTransition[] = [];
   const railProfile = getCanonRailProfile(runtime);
+
+  resolveOffscreenWorldEvents(runtime, transitions);
 
   const current = runtime.chapters.find(chapter => chapter.id === runtime.currentChapterId);
   const currentEventIds = new Set(current?.eventIds || []);
@@ -329,6 +366,10 @@ export function advanceScenarioRuntime(saveData: SaveData): {
     const event = runtime.events.find(item => item.id === activeId);
     const isRailEvent = Boolean(railProfile?.orderedEventIds.includes(activeId));
     if (!event || (!isRailEvent && !currentEventIds.has(activeId))) {
+      runtime.activeEventIds = runtime.activeEventIds.filter(id => id !== activeId);
+      continue;
+    }
+    if (isEventSettled(runtime, activeId)) {
       runtime.activeEventIds = runtime.activeEventIds.filter(id => id !== activeId);
       continue;
     }
@@ -343,7 +384,7 @@ export function advanceScenarioRuntime(saveData: SaveData): {
   // 否则章节一完成清空 activeEventIds 后，这些 critical 事件永远进不了 completedEventIds → stage_ready 死锁。
   for (const event of runtime.events) {
     if (railProfile?.orderedEventIds.includes(event.id)) continue;
-    if (runtime.completedEventIds.includes(event.id)) continue;
+    if (isEventSettled(runtime, event.id)) continue;
     if (hasCompletion(event.completion) && conditionsMatch(event.completion, next, runtime)) {
       runtime.activeEventIds = runtime.activeEventIds.filter(id => id !== event.id);
       runtime.completedEventIds.push(event.id);
@@ -355,7 +396,7 @@ export function advanceScenarioRuntime(saveData: SaveData): {
   settleCompletedChapterFlags(runtime);
 
   const railStageComplete = Boolean(railProfile
-    && railProfile.orderedEventIds.every(id => runtime.completedEventIds.includes(id)));
+    && railProfile.orderedEventIds.every(id => isEventSettled(runtime, id)));
   // Rail is one source-ordered story line even when legacy generated chapters
   // cross-cut those beats. Once every fixed beat is complete, close the whole
   // stage deterministically; do not let a missing legacy chapter completion
@@ -388,14 +429,14 @@ export function advanceScenarioRuntime(saveData: SaveData): {
   const activeChapter = runtime.chapters.find(chapter => chapter.id === runtime.currentChapterId);
   const chapterEventIds = new Set(activeChapter?.eventIds || []);
   if (isCanonRailChapter(railProfile, activeChapter?.id)) {
-    const nextRailEventId = railProfile!.orderedEventIds.find(id => !runtime.completedEventIds.includes(id));
+    const nextRailEventId = railProfile!.orderedEventIds.find(id => !isEventSettled(runtime, id));
     if (nextRailEventId && !runtime.activeEventIds.includes(nextRailEventId)) {
       runtime.activeEventIds.push(nextRailEventId);
       transitions.push({ type: 'event_activated', id: nextRailEventId });
     }
   }
   for (const eventId of chapterEventIds) {
-    if (runtime.activeEventIds.includes(eventId) || runtime.completedEventIds.includes(eventId)) continue;
+    if (runtime.activeEventIds.includes(eventId) || isEventSettled(runtime, eventId)) continue;
     if (railProfile?.orderedEventIds.includes(eventId)) continue;
     const event = runtime.events.find(item => item.id === eventId);
     if (event && conditionsMatch(event.conditions, next, runtime)) {
@@ -405,7 +446,7 @@ export function advanceScenarioRuntime(saveData: SaveData): {
   }
 
   const hasPendingCriticalEvent = runtime.events.some(event =>
-    isCriticalStoryEvent(event) && !runtime.completedEventIds.includes(event.id),
+    isCriticalStoryEvent(event) && !isEventSettled(runtime, event.id),
   );
   if (
     runtime.nextStageId &&
@@ -420,7 +461,7 @@ export function advanceScenarioRuntime(saveData: SaveData): {
 
   // 剧情停滞计数：有待推进内容却本轮无任何推进 → +1；推进/无内容 → 清零。供收束提示分档。
   const progressed = transitions.some(t =>
-    t.type === 'event_completed' || t.type === 'chapter_completed' || t.type === 'stage_ready',
+    t.type === 'event_completed' || t.type === 'chapter_completed' || t.type === 'stage_ready' || t.type === 'world_event_resolved',
   );
   const hasPendingWork = Boolean(runtime.currentChapterId) || runtime.activeEventIds.length > 0 || hasPendingCriticalEvent;
   // 主线偏移冷却（runtime 专属字段 steeringCooldown，由 processGmResponse 甲/乙确定性置入）：

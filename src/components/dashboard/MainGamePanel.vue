@@ -410,7 +410,7 @@ import { isTavernEnv } from '@/utils/tavern';
 import { toast } from '@/utils/toast';
 import { calculateAgeFromBirthdate } from '@/utils/lifespanCalculator';
 import { aiService } from '@/services/aiService';
-import { extractTextFromJsonResponse } from '@/utils/textSanitizer';
+import { extractTextFromJsonResponse, extractStreamingNarrativeText } from '@/utils/textSanitizer';
 import FormattedText from '@/components/common/FormattedText.vue';
 import { useGameStateStore } from '@/stores/gameStateStore';
 import { getSnapshots } from '@/utils/snapshotManager';
@@ -485,7 +485,8 @@ const lastThinkingContent = ref('');
 // 🔥 流式内容解析状态（用于解析 <thinking> 标签）
 const streamParseState = ref({
   inThinking: false,
-  buffer: ''
+  buffer: '',
+  rawResponse: ''
 });
 
 // 🔥 处理流式 chunk，解析思维链标签
@@ -493,6 +494,7 @@ const handleStreamChunk = (chunk: string) => {
   if (!chunk) return;
 
   const state = streamParseState.value;
+  state.rawResponse += chunk;
   state.buffer += chunk;
 
   // 处理缓冲区中的内容
@@ -561,6 +563,10 @@ const handleStreamChunk = (chunk: string) => {
       }
     }
   }
+
+  // appendStreamingContent above is retained for thinking-tag parsing compatibility;
+  // replace it synchronously with the only player-safe preview before Vue renders.
+  uiStore.setStreamingContent(extractStreamingNarrativeText(state.rawResponse));
 };
 
 // 🔥 重置流式解析状态
@@ -569,7 +575,7 @@ const resetStreamParseState = () => {
   if (uiStore.thinkingContent) {
     lastThinkingContent.value = uiStore.thinkingContent;
   }
-  streamParseState.value = { inThinking: false, buffer: '' };
+  streamParseState.value = { inThinking: false, buffer: '', rawResponse: '' };
   uiStore.clearThinkingContent();
   uiStore.clearStreamingContent();
 };
@@ -613,8 +619,11 @@ const toggleMemory = () => {
 const restoreAIProcessingState = () => {
   const saved = sessionStorage.getItem('ai-processing-state');
   if (saved === 'true') {
-    uiStore.setAIProcessing(true);
-    console.log('[状态恢复] 恢复AI处理状态');
+    // 请求无法跨页面重载继续；恢复为“生成中”只会留下一个无法解除的禁用输入框。
+    console.warn('[状态恢复] 清除页面重载遗留的AI处理状态');
+    uiStore.resetStreamingState();
+    sessionStorage.removeItem('ai-processing-state');
+    sessionStorage.removeItem('ai-processing-timestamp');
   }
 };
 
@@ -2151,7 +2160,7 @@ onMounted(async () => {
             if (isStep2) return;
             // 增量追加到原始内容
             rawStreamingContent.value += chunk;
-            uiStore.setStreamingContent(rawStreamingContent.value);
+            uiStore.setStreamingContent(extractStreamingNarrativeText(rawStreamingContent.value));
           }
         };
 

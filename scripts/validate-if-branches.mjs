@@ -22,6 +22,8 @@ const binding = JSON.parse(readFileSync(join(ccDir, 'axis-binding.json'), 'utf8'
 const byAxisId = new Map(binding.nodes.map(n => [n.axisId, n]));
 const byAnchor = new Map(); // anchor 串 → 节点数组(可能多个)
 for (const n of binding.nodes) { if (!byAnchor.has(n.anchor)) byAnchor.set(n.anchor, []); byAnchor.get(n.anchor).push(n); }
+const aliasRegistry = JSON.parse(readFileSync(join(ccDir, 'character-alias-registry.json'), 'utf8'));
+const characterIds = new Set((aliasRegistry.characters || []).map(x => x.id).filter(Boolean));
 
 // 各书脊柱:spineId 集 + 脊柱锚点 axisId 集(不可删)
 const spineIds = {}, spineAxisIds = {};
@@ -83,6 +85,18 @@ function validateFile(file) {
     }
     // 5. spineConstraints
     for (const sc of b.spineConstraints || []) if (!sIds.has(sc.spineId)) errs.push(`${tag}.spineConstraints「${sc.spineId}」不在 ${book} 脊柱`);
+    // 6. 运行时自动激活：eventId 只召回候选，人物状态谓词作二次确认。
+    if (b.runtimeActivation) {
+      const ra = b.runtimeActivation;
+      if (ra.source !== 'event_reconcile_void') errs.push(`${tag}.runtimeActivation.source「${ra.source}」非法`);
+      if (!b.fork?.eventId || ra.eventId !== b.fork.eventId) errs.push(`${tag}.runtimeActivation.eventId 必须与 fork.eventId 一致`);
+      const cs = ra.characterState || {};
+      if (!characterIds.has(cs.characterId)) errs.push(`${tag}.runtimeActivation.characterId「${cs.characterId}」无法解析`);
+      const allowed = new Set(['alive', 'dead', 'longrest', 'incapacitated', 'missing']);
+      if (!Array.isArray(cs.statuses) || cs.statuses.length === 0 || cs.statuses.some(x => !allowed.has(x))) {
+        errs.push(`${tag}.runtimeActivation.statuses 缺失或含非法状态`);
+      }
+    }
   }
   return { errs, warns, n: (data.branches || []).length };
 }

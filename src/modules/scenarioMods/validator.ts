@@ -197,6 +197,7 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
       optionalString(entity.objective, `${entity.__path}.objective`, add);
       forEachRecord(entity.narrativeVariants, `${entity.__path}.narrativeVariants`, (variant, variantPath) => {
         validateConditions(variant.when, `${variantPath}.when`, add);
+        optionalBoolean(variant.replacesCanonRail, `${variantPath}.replacesCanonRail`, add);
         optionalString(variant.name, `${variantPath}.name`, add);
         optionalString(variant.description, `${variantPath}.description`, add);
         optionalString(variant.axisBeat, `${variantPath}.axisBeat`, add);

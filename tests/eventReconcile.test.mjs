@@ -61,6 +61,23 @@ test('证据接地(bigram)：转述/带省略号但语义对的证据应接地�
   assert.deepEqual(accepted.map(a => a.id), ['e1']);
 });
 
+test('证据语义关联：拒绝上下文中真实、但属于另一事件的 evidence', async () => {
+  const { validateEventReconcile } = await modPromise;
+  const result = validateEventReconcile({ events: [
+    { id: 'e1', verdict: 'done', evidence: '谢艺拄着刀单臂撑在石壁上', matchedCore: '谢艺', confidence: 0.95 },
+  ] }, chain(), CTX, { requireEvidenceRelation: true });
+  assert.equal(result.accepted.length, 0);
+  assert.match(result.diagnostics.at(-1), /matchedCore/);
+});
+
+test('证据语义关联：matchedCore 必须同时属于当前事件、引文和上下文', async () => {
+  const { validateEventReconcile } = await modPromise;
+  const result = validateEventReconcile({ events: [
+    { id: 'e1', verdict: 'done', evidence: '鬼巫王已死', matchedCore: '鬼巫王', confidence: 0.95 },
+  ] }, chain(), CTX, { requireEvidenceRelation: true });
+  assert.deepEqual(result.accepted.map(item => item.id), ['e1']);
+});
+
 
 test('void 阈值高于 done：0.8 的 void 拒绝、0.8 的 done 接受', async () => {
   const { validateEventReconcile } = await modPromise;
@@ -124,6 +141,50 @@ test('applyReconcileFlags：扁平+嵌套双写，void 记审计标记', async (
   assert.equal(flags['event.s06_03.void'], true, 'void 审计标记');
 });
 
+test('分歧详情护栏：worldDelta须接地、人物ID须能在canon解析', async () => {
+  const { validateEventReconcile } = await modPromise;
+  const options = {
+    requireDivergenceDetails: true,
+    knownCharacterIds: new Set(['liuchao.character.xie_yi']),
+  };
+  const valid = validateEventReconcile({ events: [{
+    id: 'e3', verdict: 'void', evidence: '谢艺拄着刀单臂撑在石壁上', confidence: 0.95,
+    worldDelta: '谢艺拄着刀单臂撑在石壁上，仍然活着',
+    characterStates: { 'liuchao.character.xie_yi': 'alive' },
+  }] }, [chain()[2]], CTX, options);
+  assert.equal(valid.accepted.length, 1);
+  assert.equal(valid.accepted[0].characterStates['liuchao.character.xie_yi'], 'alive');
+
+  const noCharacter = validateEventReconcile({ events: [{
+    id: 'e3', verdict: 'void', evidence: '谢艺拄着刀单臂撑在石壁上', confidence: 0.95,
+    worldDelta: '谢艺拄着刀单臂撑在石壁上，预设桥段已失效',
+    characterStates: {},
+  }] }, [chain()[2]], CTX, options);
+  assert.equal(noCharacter.accepted.length, 1, '非人物型分歧允许空人物状态，但不会自动激活人物 IF');
+
+  const unknown = validateEventReconcile({ events: [{
+    id: 'e3', verdict: 'void', evidence: '谢艺拄着刀单臂撑在石壁上', confidence: 0.95,
+    worldDelta: '谢艺拄着刀单臂撑在石壁上，仍然活着',
+    characterStates: { 'liuchao.character.fake_xieyi': 'alive' },
+  }] }, [chain()[2]], CTX, options);
+  assert.equal(unknown.accepted.length, 0);
+  assert.match(unknown.diagnostics.at(-1), /未知角色 id/);
+});
+
+test('分歧详情护栏：knownCharacterIds 为空时拒绝人物状态，不能把空 registry 当作放行', async () => {
+  const { validateEventReconcile } = await modPromise;
+  const result = validateEventReconcile({ events: [{
+    id: 'e3', verdict: 'void', evidence: '谢艺拄着刀单臂撑在石壁上', confidence: 0.95,
+    worldDelta: '谢艺拄着刀单臂撑在石壁上，仍然活着',
+    characterStates: { 'liuchao.character.xie_yi': 'alive' },
+  }] }, [chain()[2]], CTX, {
+    requireDivergenceDetails: true,
+    knownCharacterIds: new Set(),
+  });
+  assert.equal(result.accepted.length, 0);
+  assert.match(result.diagnostics.at(-1), /未知角色 id/);
+});
+
 test('buildChainCandidates：排除已完成/已 done，按 axisSeq 排序，截断暴露上限', async () => {
   const { buildChainCandidates } = await modPromise;
   const mk = (id, seq, done = false) => ({
@@ -161,21 +222,27 @@ test('runEventReconcile 端到端(注入generate)：落账后 flag 生效、返�
       ],
       completedEventIds: [],
       flags: { 'event.s06_01.done': false, 'event.s06_03.done': false },
+      canon: { characters: [{ id: 'liuchao.character.xie_yi' }] },
     } } },
     社交: { 记忆: { 隐式中期记忆: ['击杀鬼巫王后与苏荔同行离开鬼王峒', '谢艺拄刀而立与程宗扬说话'] } },
   };
   const changes = await runEventReconcile({
     saveData, recentText: '', userAction: '',
     generate: async () => JSON.stringify({ events: [
-      { id: 'e1', verdict: 'done', evidence: '击杀鬼巫王', confidence: 0.95 },
-      { id: 'e3', verdict: 'void', evidence: '谢艺拄刀而立', confidence: 0.9 },
+      { id: 'e1', verdict: 'done', evidence: '击杀鬼巫王', matchedCore: '鬼巫王', confidence: 0.95 },
+      {
+        id: 'e3', verdict: 'void', evidence: '谢艺拄刀而立', matchedCore: '谢艺', confidence: 0.9,
+        worldDelta: '谢艺拄刀而立，仍然活着',
+        characterStates: { 'liuchao.character.xie_yi': 'alive' },
+      },
     ] }),
   });
   const flags = saveData.世界.状态.剧本模组.flags;
   assert.equal(flags['event.s06_01.done'], true);
   assert.equal(flags['event.s06_03.done'], true);
   assert.equal(flags['event.s06_03.void'], true);
-  assert.equal(changes.length, 2);
+  assert.equal(saveData.世界.状态.剧本模组.divergences.length, 1);
+  assert.equal(changes.length, 3);
 });
 
 test('evidenceLikely：正文命中事件名/beat 高重叠→触发；无关正文→不触发', async () => {

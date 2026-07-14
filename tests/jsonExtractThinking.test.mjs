@@ -13,7 +13,7 @@ test('strips MiniMax think blocks before parsing JSON', () => {
 
 test('strips common reasoning block variants', () => {
   assert.equal(stripModelThinking('<thinking>hidden</thinking>{"ok":1}'), '{"ok":1}');
+  assert.equal(stripModelThinking('<analysis>hidden</analysis>{"ok":1}'), '{"ok":1}');
   assert.equal(stripModelThinking('<reasoning>hidden</reasoning>{"ok":1}'), '{"ok":1}');
   assert.equal(stripModelThinking('<thought>hidden</thought>{"ok":1}'), '{"ok":1}');
 });
-

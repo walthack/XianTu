@@ -1,9 +1,9 @@
 export function stripModelThinking(text: string): string {
   return String(text || '')
     .replace(/<(?:ant[-_]?)?(?:think|thinking)>[\s\S]*?<\/(?:ant[-_]?)?(?:think|thinking)>/gi, '')
-    .replace(/<(?:reasoning|thought)>[\s\S]*?<\/(?:reasoning|thought)>/gi, '')
+    .replace(/<(?:analysis|reasoning|thought)>[\s\S]*?<\/(?:analysis|reasoning|thought)>/gi, '')
     .replace(/<(?:ant[-_]?)?(?:think|thinking)>[\s\S]*/gi, '')
-    .replace(/<(?:reasoning|thought)>[\s\S]*/gi, '')
+    .replace(/<(?:analysis|reasoning|thought)>[\s\S]*/gi, '')
     .trim();
 }
 

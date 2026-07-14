@@ -4251,6 +4251,22 @@
         "id": "lcq.event.s08_06_pursuit_repelled",
         "name": "追杀暂退",
         "description": "苏妲己追杀程宗扬，小紫和萧遥逸及时救援，使追杀暂时中断。",
+        "narrativeVariants": [
+          {
+            "when": [
+              {
+                "path": "flags.branch.lcq.if_sudaji_slain_mochou.active",
+                "operator": "eq",
+                "value": true
+              }
+            ],
+            "replacesCanonRail": true,
+            "name": "莫愁伏诛·黑魔海断线",
+            "description": "程宗扬与萧遥逸合力封死苏妲己的退路，她在莫愁湖伏诛。黑魔海失去这一条直接追杀线，众人必须立刻收拢其遗留人手、物资与线索，防止余党借乱灭证。",
+            "axisBeat": "苏妲己已死，不得再写成受伤逃走或继续追杀。程宗扬、小紫与萧遥逸必须当场决定如何收拢黑魔海遗留网络，并留下可追查的线索与风险。",
+            "objective": "确认苏妲己伏诛，并收拢黑魔海遗留线索"
+          }
+        ],
         "axisId": "qingyu.167.1",
         "axisAnchor": "六朝清羽记·#167·第165章·掌誓",
         "axisSeq": 299,

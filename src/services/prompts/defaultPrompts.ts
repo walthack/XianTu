@@ -653,11 +653,12 @@ export function getSystemPrompts(): Record<string, PromptDefinition> {
 - "pending"：既未发生也未被消解，主线还没走到——保持原样。
 规则：
 - 严格按给出顺序核对；一旦某事件判 pending，其后全部判 pending（顺序链，不可跳）。
-- evidence 必须**逐字摘自**存档记忆或最近正文（≥4字原文片段），不得改写、不得推测；找不到原文依据就判 pending。
+- evidence 必须**逐字摘自**存档记忆或最近正文（≥4字原文片段），不得改写、不得推测；找不到原文依据就判 pending。并填 matchedCore：从该事件名称、预设剧情或完成锚点中抄一个 2–16 字的具体短语；它必须同时原样出现在 evidence 和记忆/正文中。不可填泛词或另一个事件的人名/事实。
 - void 是强断言：仅当记忆明确证明前提已消解时才用，把握不足判 pending。
+- verdict=void 时还必须给 worldDelta（一句话说明世界与预设相比发生了什么变化）和 characterStates（仅列证据明确涉及的人物，key 必须使用事件清单给出的角色ID）；worldDelta 必须扎根 evidence 所在事实，不得扩写推测。done/pending 的这两项留空。
 - confidence 为把握（0-1）。宁可 pending 也不误判——误判 done/void 会跳过玩家该经历的剧情。
 只输出 JSON，无任何前后缀/代码块：
-{"events":[{"id":"事件id","verdict":"done|void|pending","evidence":"记忆原文片段","confidence":0.0}]}`,
+{"events":[{"id":"事件id","verdict":"done|void|pending","evidence":"记忆原文片段","matchedCore":"该事件的具体短语","confidence":0.0,"worldDelta":"","characterStates":{"角色id":"alive|dead|longrest|incapacitated|missing"}}]}`,
       category: 'summary',
       description: '哨兵触发式主线事件对账（死锁自愈，done/void 双通道）',
       order: 4,

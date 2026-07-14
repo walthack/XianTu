@@ -24,7 +24,7 @@ import { stripNsfwContent } from '@/utils/prompts/definitions/dataDefinitions';
 import { isSaveDataV3, migrateSaveDataToLatest } from './saveMigration';
 import { parseJsonSmart, stripModelThinking } from '@/utils/jsonExtract';
 import type { APIUsageType } from '@/stores/apiManagementStore';
-import { buildScenarioCanonPrompt, guardScenarioModCommands } from '@/modules/scenarioMods/canonGuard';
+import { buildScenarioCanonPrompt } from '@/modules/scenarioMods/canonGuard';
 import { advanceScenarioRuntime, STEERING_DIVERGENCE_COOLDOWN } from '@/modules/scenarioMods/runtime';
 import { applyMilestoneRewards } from '@/modules/scenarioMods/milestoneRewards';
 import { buildScenarioStoryPrompt, createScenarioPromptState } from '@/modules/scenarioMods/storyContext';
@@ -39,6 +39,7 @@ import { reconcileNarrativeState } from '@/utils/narrativeStateReconciler';
 import { runProgressAudit, shouldRunAudit } from '@/services/progressAuditService';
 import { runEventReconcile, shouldRunReconcile, evidenceLikely, buildChainCandidates } from '@/services/eventReconcileService';
 import { detectNarratedPlayerDamage } from '@/utils/narratedDamage';
+import { validateModelCommandPipeline } from '@/utils/modelCommandPipeline';
 import { recoverUnmarkedPlayerZeroHealth } from '@/utils/playerVitalGuard';
 import {
   detectNarratedInventoryGainEntries,
@@ -547,6 +548,8 @@ class AIBidirectionalSystemClass {
     // 2. 准备AI上下文
     options?.onProgressUpdate?.('构建提示词并请求AI生成…');
     let gmResponse: GM_Response = { text: '', mid_term_memory: '', tavern_commands: [], action_options: [] };
+    // UI 会对占位响应发起一次结构化重试；失败响应本身必须是零副作用的。
+    let generationFailed = false;
     try {
       const v3 = isSaveDataV3(saveData) ? (saveData as any) : migrateSaveDataToLatest(saveData).migrated;
 
@@ -1265,12 +1268,15 @@ ${missingItems.length > 0 ? `【上次结构化输出缺失】
                   extractedCommands = jsonObj.tavern_commands || [];
                   extractedActionOptions = jsonObj.action_options || [];
                 } catch {
-                  // 5. 最后降级：使用整个响应作为文本
-                  extractedText = responseText;
+                  // 不能把残缺 JSON 或前置分析当作玩家叙事回显；交给外层重试。
                 }
               }
             }
           }
+        }
+
+        if (!extractedText.trim()) {
+          throw new Error('AI响应中未提取到有效叙事文本');
         }
 
         // 🔥 action_options：仅在启用时兜底默认；关闭时保持为空，避免“关不掉”的体验
@@ -1315,6 +1321,7 @@ ${missingItems.length > 0 ? `【上次结构化输出缺失】
       }
     } catch (error) {
       console.error('[AI双向系统] AI生成失败:', error);
+      generationFailed = true;
       gmResponse = {
         text: '（AI生成失败）',
         mid_term_memory: '',
@@ -1322,6 +1329,10 @@ ${missingItems.length > 0 ? `【上次结构化输出缺失】
         action_options: actionOptionsEnabled ? ['重试当前操作', '查看自身状态', '稍作休息'] : []
       };
     }
+
+    // 不能让“AI生成失败”占位文本写进叙事历史/记忆，也不能执行任何旧命令。
+    // 调用方会看到 mid_term_memory 为空并走既有 retryAIResponse 流程。
+    if (generationFailed) return gmResponse;
 
     // 3. 执行AI指令
     options?.onProgressUpdate?.('执行AI指令…');
@@ -2036,94 +2047,11 @@ ${step1Text}
 
     // 🔥 新增：预处理指令以修复常见的AI错误
     const preprocessingResult = this._preprocessCommands(response.tavern_commands || [], saveData);
-    const scenarioGuardResult = guardScenarioModCommands(saveData, preprocessingResult);
-    const preprocessedCommands = scenarioGuardResult.accepted;
-
-    // 🔥 步骤1：指令格式校验（路径/字段/只读保护） + 指令值校验（结构完整性）
-    // 重要：两者都通过的指令才允许执行，避免“只校验但仍执行”的漏网风险
-    const validCommands: TavernCommand[] = [];
-    const rejectedCommands: Array<{ command: any; errors: string[] }> = scenarioGuardResult.rejected.map(item => ({
-      command: item.command,
-      errors: [item.reason],
-    }));
-    const validationWarnings: string[] = [];
-
-    if (protectionMode === 'skeleton') {
-      const allowedRoots = ['元数据', '角色', '社交', '世界', '系统'] as const;
-      const isV3Path = (p: string) => allowedRoots.some((root) => p === root || p.startsWith(`${root}.`));
-      const forbiddenPrefixes = ['社交.记忆', '系统.历史.叙事', '系统.扩展.判定'];
-      const validActions = new Set(['set', 'add', 'push', 'delete', 'pull']);
-
-      preprocessedCommands.forEach((cmd, index) => {
-        if (!cmd || typeof cmd !== 'object') {
-          rejectedCommands.push({ command: cmd, errors: [`指令${index}: 不是对象`] });
-          return;
-        }
-        const action = String((cmd as any).action || '').trim();
-        const key = String((cmd as any).key || '').trim();
-        if (!validActions.has(action)) {
-          rejectedCommands.push({ command: cmd, errors: [`指令${index}: action 无效（${action}）`] });
-          return;
-        }
-        if (!key) {
-          rejectedCommands.push({ command: cmd, errors: [`指令${index}: key 为空`] });
-          return;
-        }
-        if (!isV3Path(key)) {
-          rejectedCommands.push({ command: cmd, errors: [`指令${index}: key 必须以 元数据/角色/社交/世界/系统 开头（当前: ${key}）`] });
-          return;
-        }
-        if (forbiddenPrefixes.some((p) => key === p || key.startsWith(`${p}.`))) {
-          rejectedCommands.push({ command: cmd, errors: [`指令${index}: 禁止AI直接操作系统自动字段（${key}）`] });
-          return;
-        }
-        if (action === 'delete' && allowedRoots.includes(key as any)) {
-          rejectedCommands.push({ command: cmd, errors: [`指令${index}: 禁止删除存档骨干根节点（${key}）`] });
-          return;
-        }
-        validCommands.push({ action, key, value: (cmd as any).value } as TavernCommand);
-      });
-    } else {
-      const { validateCommand, cleanCommands } = await import('./commandValidator');
-      const { validateAndRepairCommandValue } = await import('./commandValueValidator');
-
-      preprocessedCommands.forEach((cmd, index) => {
-        const formatResult = validateCommand(cmd, index);
-        validationWarnings.push(...formatResult.warnings);
-        if (!formatResult.valid) {
-          rejectedCommands.push({ command: cmd, errors: formatResult.errors });
-          return;
-        }
-
-        // 仅在“看起来像指令对象”时做 value 校验；否则按格式错误处理
-        try {
-          const valueResult = validateAndRepairCommandValue(cmd as TavernCommand);
-          if (!valueResult.valid) {
-            rejectedCommands.push({
-              command: cmd,
-              errors: valueResult.errors.map((e) => `指令${index}: ${e}`),
-            });
-            return;
-          }
-        } catch (e) {
-          rejectedCommands.push({
-            command: cmd,
-            errors: [`指令${index}: value 校验异常: ${e instanceof Error ? e.message : String(e)}`],
-          });
-          return;
-        }
-
-        validCommands.push(cmd as TavernCommand);
-      });
-
-      if (validationWarnings.length > 0) {
-        validationWarnings.forEach((warn) => console.warn(`[AI双向系统] ${warn}`));
-      }
-
-      // 🔥 步骤2：清理指令，移除多余字段（只处理通过验证的指令）
-      const cleanedCommands = cleanCommands(validCommands);
-      validCommands.length = 0;
-      cleanedCommands.forEach((c) => validCommands.push(c));
+    const commandPipeline = await validateModelCommandPipeline(preprocessingResult, saveData);
+    const validCommands = commandPipeline.validCommands;
+    const rejectedCommands = commandPipeline.rejectedCommands;
+    if (commandPipeline.warnings.length > 0) {
+      commandPipeline.warnings.forEach((warn) => console.warn(`[AI双向系统] ${warn}`));
     }
 
     if (options?.userAction?.includes('【本地判定已结算】')) {
