@@ -331,6 +331,7 @@ test('runEventReconcile 端到端(注入generate)：落账后 flag 生效、返�
   assert.equal(flags['event.s06_03.void'], true);
   assert.equal(saveData.世界.状态.剧本模组.divergences.length, 1);
   assert.equal(changes.length, 3);
+  assert.equal(saveData.系统, undefined, '事件对账不应再把临时调试黑匣子写进存档');
 });
 
 test('evidenceLikely：正文命中事件名/beat 高重叠→触发；无关正文→不触发', async () => {

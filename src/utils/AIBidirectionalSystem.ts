@@ -24,6 +24,7 @@ import { validateAndRepairNpcProfile } from '@/utils/dataValidation';
 import { stripNsfwContent } from '@/utils/prompts/definitions/dataDefinitions';
 import { isSaveDataV3, migrateSaveDataToLatest } from './saveMigration';
 import { parseJsonSmart, stripModelThinking } from '@/utils/jsonExtract';
+import { sanitizePersistedMemoryEntry } from '@/utils/memorySanitizer';
 import type { APIUsageType } from '@/stores/apiManagementStore';
 import { buildScenarioCanonPrompt } from '@/modules/scenarioMods/canonGuard';
 import { advanceScenarioRuntime, STEERING_DIVERGENCE_COOLDOWN } from '@/modules/scenarioMods/runtime';
@@ -2478,22 +2479,12 @@ ${step1Text}
       // 双触发：停滞兜底阈值 || 证据即触发（本轮正文命中链上前几拍 → 当轮追账，玩家不用干等）
       const _should = shouldRunReconcile(rtForReconcile?.stallTurns)
         || (rtForReconcile ? evidenceLikely(textContent, buildChainCandidates(rtForReconcile)) : false);
-      // 【临时黑匣子】把门控写进存档，落盘到后端供远程诊断（stall/enabled/shouldRun/hadErr）
-      const _dbgSys = ((saveData as any).系统 ??= {}); const _dbgExt = (_dbgSys.扩展 ??= {});
-      _dbgExt._reconcileDebug = { at: new Date().toISOString(), stall: rtForReconcile?.stallTurns, enabled: _enabled, shouldRun: _should, hadExecErr: hadExecutionError, ran: false };
       if (!hadExecutionError && rtForReconcile && _enabled && _should) {
-        _dbgExt._reconcileDebug.ran = true;
         const deterministicChanges = [
           ...runDeterministicXieyiReconcile(saveData, textContent),
           ...runDeterministicBijiReconcile(saveData, textContent),
         ];
         if (deterministicChanges.length) {
-          _dbgExt._reconcileDebug = {
-            ..._dbgExt._reconcileDebug,
-            deterministic: 'xieyi_outcome',
-            status: 'merged',
-            completedAt: new Date().toISOString(),
-          };
           changes.push(...deterministicChanges);
           console.info(`[事件对账] 谢艺互斥结果确定性落账，变更 ${deterministicChanges.length} 项`);
         } else {
@@ -2503,7 +2494,6 @@ ${step1Text}
         const activeAtLaunch = characterStore.rootState.当前激活存档
           ? { ...characterStore.rootState.当前激活存档 }
           : null;
-        _dbgExt._reconcileDebug = { ...(_dbgExt._reconcileDebug || {}), deferred: true, status: 'pending' };
 
         // 事件对账负责主线 flag/分歧账本，不能丢弃；但也不能让二次 LLM 锁住正文、输入和主存档。
         // 在隔离副本继续执行，完成后做三方合并并二次落盘。
@@ -2525,13 +2515,6 @@ ${step1Text}
             const currentSave = useGameStateStore().toSaveData();
             if (!currentSave) return;
             const merged = mergeDeferredReconcileResult(currentSave, baselineSaveData, isolatedSaveData);
-            const isolatedDebug = get(isolatedSaveData, '系统.扩展._reconcileDebug');
-            set(currentSave, '系统.扩展._reconcileDebug', {
-              ...(isolatedDebug || {}),
-              deferred: true,
-              status: merged ? 'merged' : 'no_change',
-              completedAt: new Date().toISOString(),
-            });
             if (merged) {
               const advanced = advanceScenarioRuntime(currentSave);
               useGameStateStore().loadFromSaveData(advanced.saveData);
@@ -2550,7 +2533,6 @@ ${step1Text}
       }
     } catch (error) {
       console.warn('[事件对账] 跳过（异常）:', error);
-      try { (((saveData as any).系统 ??= {}).扩展 ??= {})._reconcileDebug = { ...(((saveData as any).系统?.扩展?._reconcileDebug) || {}), error: String(error).slice(0, 200) }; } catch { /* noop */ }
     }
 
     const scenarioResult = advanceScenarioRuntime(saveData);
@@ -2849,40 +2831,8 @@ ${saveDataJson}`;
         }
       }
 
-      // 解析响应（与NPC记忆总结相同的方式）
-      // 先剥推理模型内联思维链：<think>…</think>（未闭合则从起点截断）。否则 JSON.parse 失败时
-      // 整段原始输出（含思维链与"生成250-400字总结"任务说明）会被存进长期记忆——下游任何把记忆
-      // 嵌进 prompt 的消费者（事件对账/进度审计/主叙事）都会被这条陈旧指令注入劫持（存档11111实测）。
-      let summaryText: string;
-      let responseText = String(response).replace(/<\/input>/g, '').replace(/<think>[\s\S]*?<\/think>/g, '').trim();
-      const unclosedThink = responseText.indexOf('<think>');
-      if (unclosedThink >= 0) responseText = responseText.slice(0, unclosedThink).trim();
-
-      const jsonBlockMatch = responseText.match(/```(?:json)?\s*\n?([\s\S]*?)\n?```/);
-      if (jsonBlockMatch?.[1]) {
-        const fenced = jsonBlockMatch[1].trim();
-        try {
-          summaryText = JSON.parse(fenced).text?.trim() || '';
-        } catch {
-          // 容错：模型可能在代码块里输出纯文本或非严格JSON（尾逗号/注释等）
-          const textFieldMatch = fenced.match(/"text"\s*:\s*"([\s\S]*?)"\s*[},]/);
-          if (textFieldMatch?.[1]) {
-            try {
-              summaryText = JSON.parse('"' + textFieldMatch[1].replace(/"/g, '\\"') + '"').trim();
-            } catch {
-              summaryText = textFieldMatch[1].trim();
-            }
-          } else {
-            summaryText = fenced;
-          }
-        }
-      } else {
-        try {
-          summaryText = JSON.parse(responseText).text?.trim() || '';
-        } catch {
-          summaryText = responseText.trim();
-        }
-      }
+      // 与读档清扫共用同一规则，避免新总结再次写入思维链、JSON 包装或任务说明。
+      const summaryText = sanitizePersistedMemoryEntry(response);
 
       if (!summaryText || summaryText.length === 0) {
         throw new Error('AI返回了空的总结结果');

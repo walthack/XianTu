@@ -45,14 +45,25 @@ test('game state load and save preserves scenario runtime metadata', async () =>
       大道: { 大道列表: {} },
       技能: { 掌握技能: [], 装备栏: [], 冷却: {} },
     },
-    社交: { 关系: {}, 宗门: null, 事件: {}, 记忆: {} },
+    社交: { 关系: {}, 宗门: null, 事件: {}, 记忆: {
+      短期记忆: ['程宗扬抵达草庐。'],
+      中期记忆: [],
+      长期记忆: [
+        '<think>用户要求我生成总结。</think>{"text":"谢艺获救后仍在休养。"}',
+        '用户要求我生成250-400字总结，需要输出JSON。',
+      ],
+      隐式中期记忆: [],
+    } },
     世界: { 信息: { 世界名称: '六朝并置世界' }, 状态: { 剧本模组: scenarioRuntime } },
     系统: {
       配置: {},
       设置: {},
       缓存: {},
       历史: { 叙事: [] },
-      扩展: { 剧本模组: { modId: scenarioRuntime.modId, modVersion: scenarioRuntime.modVersion, mode: 'strict' } },
+      扩展: {
+        剧本模组: { modId: scenarioRuntime.modId, modVersion: scenarioRuntime.modVersion, mode: 'strict' },
+        _reconcileDebug: { ran: true, rawSnippet: 'legacy diagnostic' },
+      },
       联机: { 模式: '单机', 只读路径: [] },
     },
   };
@@ -66,4 +77,6 @@ test('game state load and save preserves scenario runtime metadata', async () =>
     modVersion: '1.1.0',
     mode: 'strict',
   });
+  assert.deepEqual(exported.社交.记忆.长期记忆, ['谢艺获救后仍在休养。']);
+  assert.equal('_reconcileDebug' in exported.系统.扩展, false);
 });

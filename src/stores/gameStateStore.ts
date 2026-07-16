@@ -30,6 +30,7 @@ import { isSaveDataV3, migrateSaveDataToLatest } from '@/utils/saveMigration';
 import { normalizeInventoryCurrencies } from '@/utils/currencySystem';
 import { detectPlayerSectLeadership } from '@/utils/sectLeadershipUtils';
 import { recoverUnmarkedPlayerZeroHealth } from '@/utils/playerVitalGuard';
+import { sanitizePersistedMemoryArray } from '@/utils/memorySanitizer';
 
 function buildTechniqueProgress(inventory: Inventory | null) {
   const progress: Record<string, { 熟练度: number; 已解锁技能: string[] }> = {};
@@ -342,6 +343,9 @@ export const useGameStateStore = defineStore('gameState', {
       const relationshipMatrix = normalizeRelationshipMatrixV3(v3?.社交?.关系矩阵, Object.keys(relationships || {}));
       const worldInfo: WorldInfo | null = v3?.世界?.信息 ? deepCopy(v3.世界.信息) : null;
       const worldState = v3?.世界?.状态 ? deepCopy(v3.世界.状态) : null;
+      if (v3?.系统?.扩展 && typeof v3.系统.扩展 === 'object') {
+        delete v3.系统.扩展._reconcileDebug;
+      }
       const systemExtensions = v3?.系统?.扩展 ? deepCopy(v3.系统.扩展) : null;
       const realmMapCollection: Record<string, WorldInfo> | null =
         v3?.世界?.地图集 && typeof v3.世界.地图集 === 'object' && !Array.isArray(v3.世界.地图集)
@@ -375,17 +379,12 @@ export const useGameStateStore = defineStore('gameState', {
       } catch (e) {
         console.warn('[gameStateStore.loadFromSaveData] 自动补齐 sectMemberInfo 失败（非致命）:', e);
       }
-      const coerceMemoryArray = (value: unknown): string[] => {
-        if (Array.isArray(value)) return value.filter((v): v is string => typeof v === 'string' && v.trim().length > 0);
-        if (typeof value === 'string' && value.trim().length > 0) return [value.trim()];
-        return [];
-      };
       const memoryCandidate: any = v3?.社交?.记忆 ? deepCopy(v3.社交.记忆) : {};
       const memory: Memory = {
-        短期记忆: coerceMemoryArray(memoryCandidate?.短期记忆),
-        中期记忆: coerceMemoryArray(memoryCandidate?.中期记忆),
-        长期记忆: coerceMemoryArray(memoryCandidate?.长期记忆),
-        隐式中期记忆: coerceMemoryArray(memoryCandidate?.隐式中期记忆),
+        短期记忆: sanitizePersistedMemoryArray(memoryCandidate?.短期记忆),
+        中期记忆: sanitizePersistedMemoryArray(memoryCandidate?.中期记忆),
+        长期记忆: sanitizePersistedMemoryArray(memoryCandidate?.长期记忆),
+        隐式中期记忆: sanitizePersistedMemoryArray(memoryCandidate?.隐式中期记忆),
       };
       const gameTime: GameTime | null = v3?.元数据?.时间 ? deepCopy(v3.元数据.时间) : null;
 

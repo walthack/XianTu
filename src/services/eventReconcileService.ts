@@ -1,6 +1,7 @@
 import { get } from 'lodash';
 import type { SaveData, StateChange } from '@/types/game';
 import { parseJsonSmart } from '@/utils/jsonExtract';
+import { sanitizePersistedMemoryEntry } from '@/utils/memorySanitizer';
 import { getCanonRailContract, getCanonRailOrder, getCanonRailProfile } from '@/modules/scenarioMods/canonRail';
 import { recordReconcileDivergences } from '@/modules/scenarioMods/divergenceLedger';
 
@@ -479,25 +480,12 @@ async function callWithTimeout<T>(fn: () => Promise<T>, ms: number): Promise<T> 
   }
 }
 
-/**
- * 剥除记忆条目里残留的模型产物（实测坐实的提示词注入源）：
- * 记忆总结模型(MiniMax 等)的原始输出连 <think> 思维链和任务说明（"用户要求我生成250-400字总结…"）
- * 一起被存进了 长期记忆——下游把记忆嵌进 prompt 时等于注入一条陈旧任务指令，
- * 对账模型被劫持去"做总结/自由发挥"而不按事件清单核对（存档11111 实测两次）。
- */
-function stripModelArtifacts(s: string): string {
-  let out = s.replace(/<think>[\s\S]*?<\/think>/g, '');
-  const open = out.indexOf('<think>');
-  if (open >= 0) out = out.slice(0, open); // 未闭合的 think：从起点截断
-  return out.trim();
-}
-
 function buildMemoryContext(saveData: SaveData, candidates: ChainCandidate[]): string {
   const mem = get(saveData, '社交.记忆') as Record<string, unknown> | undefined;
   const entries = (key: string): string[] => {
     const arr = mem?.[key];
     return Array.isArray(arr)
-      ? arr.map(x => stripModelArtifacts(typeof x === 'string' ? x : JSON.stringify(x))).filter(Boolean)
+      ? arr.map(x => sanitizePersistedMemoryEntry(typeof x === 'string' ? x : JSON.stringify(x))).filter(Boolean)
       : [];
   };
   const long = entries('长期记忆');
@@ -563,18 +551,11 @@ export async function runEventReconcile(input: EventReconcileInput): Promise<Sta
     canon?: { characters?: Array<{ id?: unknown }> };
     divergences?: unknown[];
   } | undefined;
-  // 【临时黑匣子】写进存档供远程诊断
-  const dbg: Record<string, unknown> = (() => {
-    const sys = (input.saveData as Record<string, any>).系统 ??= {}; const ext = sys.扩展 ??= {};
-    const d = (ext._reconcileDebug ??= {}); return d as Record<string, unknown>;
-  })();
-  if (!runtime || typeof runtime !== 'object' || !runtime.flags) { dbg.bail = 'no-runtime'; return []; }
+  if (!runtime || typeof runtime !== 'object' || !runtime.flags) return [];
   const candidates = buildChainCandidates(runtime);
-  dbg.candidates = candidates.map(c => c.id.split('.').pop());
-  if (!candidates.length) { dbg.bail = 'no-candidates'; return []; }
+  if (!candidates.length) return [];
 
   const memoryContext = buildMemoryContext(input.saveData, candidates);
-  dbg.memLen = memoryContext.length; dbg.recentLen = (input.recentText || '').length;
   const userPrompt = buildReconcileUserPrompt(candidates, memoryContext, input);
 
   let rawText: string;
@@ -584,7 +565,6 @@ export async function runEventReconcile(input: EventReconcileInput): Promise<Sta
       const { getPrompt } = await import('@/services/defaultPrompts');
       const { aiService } = await import('@/services/aiService');
       const systemPrompt = await getPrompt('eventReconcile');
-      dbg.sysPromptLen = systemPrompt.length;
       return aiService.generateRaw({
         ordered_prompts: [
           { role: 'system', content: systemPrompt },
@@ -596,10 +576,8 @@ export async function runEventReconcile(input: EventReconcileInput): Promise<Sta
       });
     };
     rawText = await callWithTimeout(call, RECONCILE_TIMEOUT_MS);
-    dbg.rawSnippet = (rawText || '').slice(0, 500);
   } catch (error) {
     console.warn('[事件对账] 调用失败/超时，跳过本轮:', error);
-    dbg.bail = 'llm-call-failed'; dbg.error = String(error).slice(0, 200);
     return [];
   }
 
@@ -608,7 +586,6 @@ export async function runEventReconcile(input: EventReconcileInput): Promise<Sta
     parsed = parseJsonSmart(rawText, true);
   } catch {
     console.warn('[事件对账] JSON 解析失败，跳过');
-    dbg.bail = 'json-parse-failed';
     return [];
   }
 
@@ -623,7 +600,6 @@ export async function runEventReconcile(input: EventReconcileInput): Promise<Sta
     requireEvidenceRelation: true,
     knownCharacterIds,
   });
-  dbg.diagnostics = diagnostics.slice(0, 6); dbg.accepted = accepted.map(a => `${a.id.split('.').pop()}:${a.verdict}`);
   for (const d of diagnostics) console.log('[事件对账]', d);
   if (!accepted.length) return [];
 
