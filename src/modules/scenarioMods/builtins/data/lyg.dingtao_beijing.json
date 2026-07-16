@@ -4580,6 +4580,7 @@
       "event.s01_05.done": false,
       "event.s01_06.done": false,
       "event.s01_07.done": false,
+      "event.highlight_banchao_lamb_leg.done": false,
       "event.s01_08.done": false,
       "event.s01_09.done": false,
       "event.debut_lvzhi.done": false,
@@ -4812,7 +4813,7 @@
       {
         "id": "lyg.event.s01_07",
         "name": "董卓之死",
-        "description": "董卓被卢景、敖润暗箭射中肩头重伤，在贾文和怀中去世。",
+        "description": "董卓中箭重伤后拒绝哭泣送别，自陈戎马一生、死于锋刃正合夙愿，又以北邙墓穴和身后首级作黑色笑谈；他留下胡骑异动、边地数月内恐生剧变的军情，倚在贾文和怀中安然死去。贾文和以“时也，命也”送别旧主，吐血倒下。",
         "conditions": [
           {
             "path": "flags.event.s01_06.done",
@@ -4838,7 +4839,7 @@
         "axisId": "yange.3.2",
         "axisSeq": 957,
         "axisAnchor": "六朝燕歌行·#3·英逝",
-        "axisBeat": "董卓被卢景、敖润暗箭射中肩头重伤，在贾文和怀中去世。",
+        "axisBeat": "半预制高光：先写董卓喝止众人哭泣，以戎马无愧、死于锋刃正合夙愿定其一生；再让他以北邙墓穴要修得大些、身后恐遭悬首作最后的黑色笑谈。笑意收住后转入军情：胡骑踪迹可疑，边地三至八个月内或有剧变，须有人接住这份遗命。董卓说倦了，倚在贾文和怀中死去；贾文和不得写成失控哀号，只以“时也，命也”的宿命感送别，随后吐血倒下。保留肃杀、幽默、军人警觉三层反差，不得压缩成一句“中箭去世”。",
         "objective": "在昭阳宫保护董卓",
         "narrativeVariants": [
           {
@@ -4856,6 +4857,35 @@
             "objective": "确认董卓退场安排，并协助贾文和收束凉州旧部"
           }
         ]
+      },
+      {
+        "id": "lyg.event.highlight_banchao_lamb_leg",
+        "name": "班超羊腿镇场",
+        "description": "洛都商贾仍想倚众压价时，班超排闼而入，将一条烤羊腿砸上案头震散杯箸；他用刀尖挑肉逼吉策当面吃下，逐条点破九门出入记录与众人的盘算。威势压住全场后，他却转身替田荣寻一份差事，以霹雳手段和收束余地同时立下程氏商会的规矩。",
+        "conditions": [
+          {
+            "path": "flags.event.s01_07.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.highlight_banchao_lamb_leg.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.np069",
+          "liuchao.character.cheng_zongyang"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.cheng_shi_shang_hui"
+        ],
+        "axisBeat": "半预制高光：班超必须以“排闼—羊腿砸案—刀尖挑肉逼吉策吃下”三拍强行夺走场面，再用九门出入记录证明威吓不是莽撞而是有备而来。众商贾服软后立刻收锋，平静替田荣谋一份可做的差事，形成霹雳手段与留人余地的反差。不得把班超写成只会动粗，也不得让秦桧或程宗扬抢走这一场的主导权。",
+        "objective": "见证班超压服商贾并为田荣留下出路",
+        "critical": false
       },
       {
         "id": "lyg.event.s01_08",
@@ -5057,6 +5087,7 @@
           "lyg.event.s01_05",
           "lyg.event.s01_06",
           "lyg.event.s01_07",
+          "lyg.event.highlight_banchao_lamb_leg",
           "lyg.event.s01_08",
           "lyg.event.s01_09",
           "lyg.event.debut_lvzhi",

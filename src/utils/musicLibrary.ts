@@ -141,6 +141,8 @@ const EVENT_MOOD_MAP: Record<string, MusicMood> = {
   'lcq.event.s11_04_xingyue_appears': 'aspire',
 
   'lyg.event.s01_01': 'battle',
+  'lyg.event.s01_07': 'lament',
+  'lyg.event.highlight_banchao_lamb_leg': 'intrigue',
   'lyg.event.s01_08': 'court',
   'lyg.event.s02_09': 'aspire',
   'lyg.event.release_jingnian': 'court',

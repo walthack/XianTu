@@ -108,7 +108,7 @@
 
 ## R3 · 发布后深耕（价值排序）
 
-1. [ ] **枢纽事件演出密度**：高光节点专属立绘构图 + BGM mood（musicEngine 加"正典高光"类）+ 半预制核心文本，AI 日常段落与精雕枢纽段落形成节奏对比。投入产出比最高的表现力升级，不动架构。**与 R3-8 捆绑纵切**（2026-07-13 调序）：R3-8 打样时挑一个枢纽（如董卓之死）把 event+立绘+BGM+半预制文本一次做穿，验证"精雕枢纽"完整形态后再定 242 条铺法。
+1. [~] **枢纽事件演出密度**：高光节点专属立绘构图 + BGM mood（musicEngine 加"正典高光"类）+ 半预制核心文本，AI 日常段落与精雕枢纽段落形成节奏对比。投入产出比最高的表现力升级，不动架构。**与 R3-8 捆绑纵切**（2026-07-13 调序）：2026-07-16 已完成首个“董卓之死 enrich＋班超羊腿镇场 new”样板，含 event、专属 BGM mood 与半预制核心文本；现有事件系统尚无专属立绘呈现槽，本轮不扩 UI 架构，先交小圈子验证文字/BGM/节奏形态，报告=`docs/R3-8-HIGHLIGHT-VERTICAL-SLICE-2026-07-16.md`。反馈通过后再定立绘槽与 242 条铺法。
 2. [ ] **续写缺失的后续篇章**（if 线待办已重定目标为大纲级续写，见记忆 `xiantu-ifline-design` 顶部 2026-07-04 重定）。
 3. [ ] **燕歌行续作 canon（第③层）+ 世界暗线揭盅**：以 **`character-canon/ENDING-BLUEPRINT.md` v2 为真值源**（三幕脊椎 人→组织→系统、终战=对抗自动策展系统、岳氏全谱、"毕业生"终幕；裁定 #69/#80-89）。落地项＝141 个空 ending 回填 + if 顶层分岔锚点定义 + #1017 李辅国借尸钩子 + 试验场假说揭盅（`WORLD-暗线-试验场假说.md`）+ 新脊柱/新角色/新地区。管线需从"epub 抽取"换成"多模型协同创作"，单独立项。**启动顺序约定（2026-07-13）**：先做第一幕（长安驱魂局）**可玩纵切**验证引擎能否承载蓝图级剧情，再定 141 ending 回填广度；知情注入引擎 B/C 与 R2-0 分歧账本注入共享管道（本质都是"哪些事实注入给谁"），两者排在一起设计。
    - [ ] **关系密档知情注入引擎（B/C，独立 milestone）**：把 `character-canon/RELATIONSHIPS-SECRET.md` 的剧透血缘（岳氏父女谱/碧姬=西施/林妙仙身体本主等；裁定 #89 密档层方案 A 已落，边不进可见关系网）按**知情图谱分层可见**（B）或 **per-stage 解锁**（C）受控注入给该知情的 NPC——让"该知道的 NPC 才知道、不知情者问答不泄底"。升级为运行时可见须过 18-mod validator 引用解析。参照小紫弑母 per-stage 快照先例 + 生死根机密 prompt 规则（裁定 #12）。
@@ -133,7 +133,7 @@
    **产物索引**（`mod-kit/generated/deepseek-v4-flash/` 下）：`{book}/highlight-audit.{model}.{md,json}` 原始审计 → `{book}/highlight-graded.{model}.json` 带 pri/char/def → `{book}/highlight-worklist.deepseek.{md,json}` 四区工单 → `highlight-merged.json` 双模型合并；可视化工单 Artifact（必落/增补/建议/脱敏四区，双证优先）：https://claude.ai/code/artifact/5e164ba1-3d04-4837-8668-3bb27c5be6d7
    **规模**：必落(pri≥137) 清63/云95/燕84 ≈242，其中**双证**（两模型都命中，置信最高）19/22/20 ≈61；MiniMax 独有顶档增补 57/55/61 ≈173。⚠️ 整体双证率仅 ~23%——长尾各说各话，非双证≠不重要。
    **内容红线（用户裁定）**：性相关 beat 一律**脱敏改造**（保留事件骨架，非性化为臣服/要挟/牺牲/权谋）且压中低档（pri≤55），清62/云57/燕74 条已单列隔离，不得 featured。
-   - [ ] 用户过工单圈选 → 燕歌行双证必落 Top 打样（董卓之死 enrich + 班超立威 new；落法同核武梗样板：event + initialFlags + chapter.eventIds + `validate-scenario-mod` PASS + `sync-builtin-mods`，老存档吃不到需新开局）
+   - [x] 用户过工单圈选 → 燕歌行 Top 打样（2026-07-16：董卓之死 enrich + 班超立威 new；event + initialFlags + chapter.eventIds + 专属 BGM + 半预制核心文本已落，MiniMax 全量补强二裁完成并确认旧版裁定继续作为蓝本；报告=`docs/R3-8-HIGHLIGHT-VERTICAL-SLICE-2026-07-16.md`）
    - [ ] 批量落 beat（enrich 补写 flattened / new 建 event）；与 R3-1 枢纽演出密度衔接——本工单即"哪些节点值得精雕"的输入
    - [ ] 脱敏区非性化改造规范定稿后再落
 
