@@ -203,6 +203,24 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
         optionalString(variant.axisBeat, `${variantPath}.axisBeat`, add);
         optionalString(variant.objective, `${variantPath}.objective`, add);
       });
+      if (entity.offscreenResolution !== undefined) {
+        const resolutionPath = `${entity.__path}.offscreenResolution`;
+        if (!isRecord(entity.offscreenResolution)) {
+          add(resolutionPath, 'invalid_type', 'offscreenResolution must be an object.');
+        } else {
+          validateId(entity.offscreenResolution.id, `${resolutionPath}.id`, add);
+          optionalNumber(entity.offscreenResolution.afterStallTurns, `${resolutionPath}.afterStallTurns`, add);
+          if (typeof entity.offscreenResolution.afterStallTurns !== 'number' || entity.offscreenResolution.afterStallTurns < 1) {
+            add(`${resolutionPath}.afterStallTurns`, 'invalid_range', 'afterStallTurns must be at least 1.');
+          }
+          if (!validateScenarioPath(entity.offscreenResolution.flagKey)) {
+            add(`${resolutionPath}.flagKey`, 'invalid_path', 'flagKey must be a safe dotted runtime flag path.');
+          }
+          validateIdArray(entity.offscreenResolution.resolvedEventIds, `${resolutionPath}.resolvedEventIds`, add);
+          requireString(entity.offscreenResolution.worldDelta, `${resolutionPath}.worldDelta`, add);
+          requireString(entity.offscreenResolution.evidence, `${resolutionPath}.evidence`, add);
+        }
+      }
     });
     validateEntityArray(scenario.chapters, 'scenario.chapters', chapterIds, add, entity => {
       requireString(entity.title, `${entity.__path}.title`, add);
@@ -335,6 +353,9 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
       checkRefs(entity.relatedCharacterIds, characterIds, `${path}.relatedCharacterIds`, 'character', add);
       checkRefs(entity.relatedFactionIds, factionIds, `${path}.relatedFactionIds`, 'faction', add);
       checkRef(entity.locationId, locationIds, `${path}.locationId`, 'location', add);
+      if (isRecord(entity.offscreenResolution)) {
+        checkRefs(entity.offscreenResolution.resolvedEventIds, eventIds, `${path}.offscreenResolution.resolvedEventIds`, 'event', add);
+      }
     });
     forEachRecord(scenario.chapters, 'scenario.chapters', (entity, path) => {
       checkRefs(entity.eventIds, eventIds, `${path}.eventIds`, 'event', add);

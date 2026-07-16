@@ -8,7 +8,9 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import { API_PROVIDER_PRESETS, type APIProvider } from '@/services/aiService';
-import { loadUserCloudData, saveUserCloudData, saveUserCloudDataDetailed, type UserCloudSaveResult } from '@/services/userCloudStorage';
+import { loadUserCloudData, saveUserCloudDataDetailed, type UserCloudSaveResult } from '@/services/userCloudStorage';
+import { isBackendConfigured } from '@/services/backendConfig';
+import { createLatestWriteQueue } from '@/utils/latestWriteQueue';
 
 export interface APIConfig {
   id: string;
@@ -70,6 +72,12 @@ export interface APIAssignment {
 export type RunMode = 'tavern' | 'web';
 
 const API_MANAGEMENT_CLOUD_KEY = 'user_config_api_management_v1';
+const API_MANAGEMENT_PENDING_KEY = 'api_management_cloud_pending_v1';
+
+interface PendingCloudConfig {
+  revision: string;
+  payload: Record<string, unknown>;
+}
 
 export const useAPIManagementStore = defineStore('apiManagement', () => {
   const normalizeDeepSeekConfig = (config: APIConfig): APIConfig => {
@@ -200,6 +208,12 @@ export const useAPIManagementStore = defineStore('apiManagement', () => {
   });
 
   let isApplyingRemoteConfig = false;
+  const cloudSyncState = ref<{
+    status: 'idle' | 'syncing' | 'synced' | 'failed' | 'local_only';
+    message?: string;
+  }>({ status: isBackendConfigured() ? 'idle' : 'local_only' });
+  let cloudRevision = 0;
+  let lastCloudSaveResult: UserCloudSaveResult = { success: false, message: '尚未同步' };
 
   // 计算属性：获取所有已启用的API
   const enabledAPIs = computed(() => {
@@ -298,6 +312,53 @@ export const useAPIManagementStore = defineStore('apiManagement', () => {
     aiGenerationSettings: aiGenerationSettings.value
   });
 
+  const clonePayload = (payload: ReturnType<typeof buildStoragePayload>): Record<string, unknown> =>
+    JSON.parse(JSON.stringify(payload)) as Record<string, unknown>;
+
+  const readPendingCloudConfig = (): PendingCloudConfig | null => {
+    try {
+      const raw = localStorage.getItem(API_MANAGEMENT_PENDING_KEY);
+      if (!raw) return null;
+      const parsed = JSON.parse(raw) as PendingCloudConfig;
+      return parsed && typeof parsed.revision === 'string' && parsed.payload && typeof parsed.payload === 'object'
+        ? parsed
+        : null;
+    } catch {
+      return null;
+    }
+  };
+
+  const cloudWriteQueue = createLatestWriteQueue<PendingCloudConfig>(async (record) => {
+    cloudSyncState.value = { status: 'syncing' };
+    const result = await saveUserCloudDataDetailed(API_MANAGEMENT_CLOUD_KEY, record.payload);
+    lastCloudSaveResult = result;
+    if (result.success) {
+      // 只清除自己写成功的 revision；更新的待写配置不能被旧请求误删。
+      if (readPendingCloudConfig()?.revision === record.revision) {
+        localStorage.removeItem(API_MANAGEMENT_PENDING_KEY);
+      }
+      cloudSyncState.value = { status: 'synced' };
+    } else {
+      cloudSyncState.value = { status: 'failed', message: result.message || '云端同步失败，已保留本地待重试配置' };
+    }
+  });
+
+  const enqueueCloudSave = (
+    payload: ReturnType<typeof buildStoragePayload>,
+    existingRevision?: string,
+  ) => {
+    if (!isBackendConfigured()) {
+      cloudSyncState.value = { status: 'local_only', message: '未配置后端，配置已保存在本机' };
+      return;
+    }
+    const record: PendingCloudConfig = {
+      revision: existingRevision || `${Date.now()}-${++cloudRevision}`,
+      payload: clonePayload(payload),
+    };
+    localStorage.setItem(API_MANAGEMENT_PENDING_KEY, JSON.stringify(record));
+    cloudWriteQueue.enqueue(record);
+  };
+
   // 初始化：先从 localStorage 加载，再尝试从云端覆盖
   const loadFromStorage = async () => {
     try {
@@ -307,12 +368,23 @@ export const useAPIManagementStore = defineStore('apiManagement', () => {
         applyStoredConfig(data);
 
         // 清理旧版本/非法配置（如未知 type：npc_generation），并补齐新功能的默认项（如 embedding）
-        // 这里直接回写一次，避免下次加载又出现脏数据
-        saveToStorage();
+        // 这里只回写本地，不能在读取云端前抢先发一次旧配置上传。
+        localStorage.setItem('api_management_config', JSON.stringify(buildStoragePayload()));
       }
 
       // 如果没有配置，添加默认配置
       ensureDefaultConfig();
+
+      // 上次自动上传失败/页面提前关闭：本地 pending 是尚未送达的最新写，优先恢复并重试，
+      // 不允许旧云端配置反向覆盖它。
+      const pending = readPendingCloudConfig();
+      if (pending) {
+        applyStoredConfig(pending.payload);
+        ensureDefaultConfig();
+        localStorage.setItem('api_management_config', JSON.stringify(buildStoragePayload()));
+        enqueueCloudSave(buildStoragePayload(), pending.revision);
+        return;
+      }
 
       const remoteData = await loadUserCloudData<any>(API_MANAGEMENT_CLOUD_KEY);
       if (remoteData) {
@@ -321,8 +393,9 @@ export const useAPIManagementStore = defineStore('apiManagement', () => {
         ensureDefaultConfig();
         localStorage.setItem('api_management_config', JSON.stringify(buildStoragePayload()));
         isApplyingRemoteConfig = false;
+        cloudSyncState.value = { status: 'synced' };
       } else if (saved) {
-        void saveUserCloudData(API_MANAGEMENT_CLOUD_KEY, buildStoragePayload());
+        enqueueCloudSave(buildStoragePayload());
       }
     } catch (error) {
       isApplyingRemoteConfig = false;
@@ -336,7 +409,7 @@ export const useAPIManagementStore = defineStore('apiManagement', () => {
       const data = buildStoragePayload();
       localStorage.setItem('api_management_config', JSON.stringify(data));
       if (!isApplyingRemoteConfig) {
-        void saveUserCloudData(API_MANAGEMENT_CLOUD_KEY, data);
+        enqueueCloudSave(data);
       }
     } catch (error) {
       console.error('[API管理] 保存配置失败:', error);
@@ -469,7 +542,12 @@ export const useAPIManagementStore = defineStore('apiManagement', () => {
 
   const uploadConfigToCloud = async (): Promise<UserCloudSaveResult> => {
     try {
-      return await saveUserCloudDataDetailed(API_MANAGEMENT_CLOUD_KEY, buildStoragePayload());
+      if (!isBackendConfigured()) {
+        return { success: false, message: '未配置后端服务器' };
+      }
+      enqueueCloudSave(buildStoragePayload());
+      await cloudWriteQueue.flush();
+      return lastCloudSaveResult;
     } catch (error) {
       console.error('[API管理] 上传云端配置失败:', error);
       return {
@@ -540,6 +618,7 @@ export const useAPIManagementStore = defineStore('apiManagement', () => {
     functionModes,
     functionEnabled,
     aiGenerationSettings,
+    cloudSyncState,
     enabledAPIs,
     shouldEnableSplitGeneration,
     loadFromStorage,

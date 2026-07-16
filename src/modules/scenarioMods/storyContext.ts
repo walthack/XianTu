@@ -3,7 +3,7 @@ import { formatEarnedTitles } from './milestoneRewards';
 import { getNarrativeAnchorEvent } from './runtime';
 import { getCanonRailContract, getCanonRailProfile } from './canonRail';
 import { narrativeVariantReplacesCanonRail, resolveScenarioEventNarrative } from './eventNarrativeView';
-import { formatDivergencePrompt } from './divergenceLedger';
+import { formatDivergencePrompt, type ScenarioDivergence } from './divergenceLedger';
 import { findRegistryIdentitiesByContext, getRegistrySpeechStyle } from './characterResolver';
 
 import type {
@@ -35,6 +35,7 @@ interface StoryRuntime {
   activeEventIds: string[];
   completedChapterIds: string[];
   completedEventIds: string[];
+  divergences?: ScenarioDivergence[];
   introducedCharacterIds?: string[];
   canon?: {
     characters?: ScenarioModCharacter[];
@@ -310,7 +311,7 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
 
   const eventSection = activeEvents.length
     ? activeEvents.map(rawEvent => {
-        const event = resolveScenarioEventNarrative(rawEvent, runtime.flags || {});
+        const event = resolveScenarioEventNarrative(rawEvent, runtime.flags || {}, runtime.divergences);
         const context = [
           namesForIds(event.relatedCharacterIds, characters),
           namesForIds(event.relatedFactionIds, factions),
@@ -319,7 +320,7 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
         const axisLine = formatAxisBeat(event);
         // 分歧文案已经替代原事件结果时，旧 Canon Rail 合同（例如“谢艺之死”）
         // 不得继续注入并与分歧事实打架；分歧 variant 的 axisBeat 就是本拍合同。
-        const contract = narrativeVariantReplacesCanonRail(rawEvent, runtime.flags || {})
+        const contract = narrativeVariantReplacesCanonRail(rawEvent, runtime.flags || {}, runtime.divergences)
           ? undefined
           : getCanonRailContract(canonRail, event.id);
         const forbiddenLine = contract?.forbiddenInCanon?.length
@@ -356,7 +357,7 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
     : pendingCriticalEvents.length
       ? `- 本关仍有关键剧情未触发，不能切换下一关。继续围绕当前章节完成条件制造线索、调度相关人物，促成最近的关键剧情节点。`
     : runtime.nextStageId
-      ? `- 本关收束后，建议切换到下一关：${runtime.nextStageName || runtime.nextStageId}（${runtime.nextStageId}）。不要在当前关提前展开下一关正文。`
+      ? `- 本关已经收束。若玩家准备启程，用来信、人物提议、路况或远近局势等角色可感知的契机自然引出转场；不得说“下一关”、不得透露关卡名或内部 ID，也不要在当前场景提前展开下一段正文。`
       : '- （当前事件完成后将进入新章节或迎来结局）';
   // 读一次 社交.关系：既供底线门控(好感/关系→是否揭示)，也供下方失配检测复用
   const relations = readPath(saveData, ['社交', '关系']) as Record<string, { 名字?: string; 与玩家关系?: string; 好感度?: number }> | undefined;
@@ -420,7 +421,7 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
   const reputationLine = `【声望与认知】主角当前声望：${repValue}（${reputationTier(repValue)}）。NPC 对主角的认知必须匹配声望档位：籍籍无名＝陌生人不识其名、不知其过往事迹与底细；势力若声称"掌握其底细"，必须有情报来源并在剧情中交代（且这类调查本身就是值得叙述的事件）；亲历者与同行者除外。主角做出扬名（或败坏名声）之事时，必须用 set 更新 角色.属性.声望（参考：救人除害+30~300、斩强敌+100~1000、震动一方的大事件+200~2000；恶行记负值）。`;
 
   // 关系-好感失配检测：与玩家关系 是静态标签(物化写一次),从不随好感演进——
-  // 实测 噬心 挂"敌对"却好感35且主动双修。确定性检出失配,交 LLM 剧情内收敛。（复用上方 relations）
+  // 实测某临时角色挂"敌对"却好感35且主动双修。确定性检出失配,交 LLM 剧情内收敛。（复用上方 relations）
   const mismatches: string[] = [];
   if (relations && typeof relations === 'object') {
     for (const [key, npc] of Object.entries(relations)) {
@@ -472,7 +473,7 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
   // objective（玩家视角+地点+不剧透）最适合当引子锚点；无则回退 axisBeat/description，再回退下一关/章节。
   const dirHint = (nearestCritical && ((nearestCritical as { objective?: string }).objective
       || (nearestCritical as { axisBeat?: string }).axisBeat || nearestCritical.description))
-    || (runtime.nextStageName ? `本关收束后前往「${runtime.nextStageName}」` : '当前章节目标');
+    || (runtime.nextStageId ? '本关收束后的自然启程契机' : '当前章节目标');
   // 主线偏移冷却（引擎专属，存于 runtime 世界.状态.剧本模组.steeringCooldown，由 processGmResponse 甲/乙置入）：
   // >0 时不推送任何引子（尊重玩家自主选择，由引擎逐轮递减，见 runtime.advanceScenarioRuntime）。
   const steeringCooldown = Number((runtime as { steeringCooldown?: number }).steeringCooldown ?? 0) || 0;
@@ -486,7 +487,6 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
   const stageLine = [
     runtime.modName || runtime.modId,
     typeof runtime.axisSeqLo === 'number' && typeof runtime.axisSeqHi === 'number' ? `主轴范围 #${runtime.axisSeqLo}~#${runtime.axisSeqHi}` : '',
-    runtime.nextStageId ? `下一关 ${runtime.nextStageName || runtime.nextStageId}` : '',
     // 称号=里程碑奖励的运行时状态（引擎授予）：从存档读，未获得的头衔不进 prompt → 结构上防"未卜先知"
     formatEarnedTitles(saveData),
   ].filter(Boolean).join('；');

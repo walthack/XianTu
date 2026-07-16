@@ -351,6 +351,120 @@ export interface EventReconcileInput {
   generate?: (systemPrompt: string, userPrompt: string) => Promise<string>;
 }
 
+function explicitOutcomeSentence(text: string, pattern: RegExp): string {
+  return text
+    .split(/(?<=[。！？!?】])|\n+/)
+    .map(sentence => sentence.trim())
+    .find(sentence => sentence.includes('谢艺')
+      && !/打算|设法|准备|试图|尝试|若能|希望|想要|计划|尚未/.test(sentence)
+      && pattern.test(sentence)) || '';
+}
+
+/**
+ * R2-0V 的互斥人物结果已是正式运行时契约，不必再让第二个模型重复猜一次。
+ * 只信任本轮 GM 正文中的明确完成事实；玩家输入、含糊伤势或推测均不能触发。
+ */
+export function runDeterministicXieyiReconcile(saveData: SaveData, recentText: string): StateChange[] {
+  const runtime = get(saveData, '世界.状态.剧本模组') as {
+    events?: RuntimeEventLike[];
+    completedEventIds?: string[];
+    flags?: Record<string, unknown>;
+    divergences?: any[];
+  } | undefined;
+  if (!runtime?.flags) return [];
+  const candidate = buildChainCandidates(runtime)[0];
+  if (candidate?.id !== 'lcq.event.s06_03') return [];
+
+  const death = explicitOutcomeSentence(recentText, /战死|确认(?:其|谢艺)?(?:已经)?死亡|再无气息|呼吸(?:已经)?断绝|心跳(?:都)?已消失|重伤不治/);
+  const survival = explicitOutcomeSentence(recentText, /生还|活了下来|仍然活着|尚有气息|救回|抢救成功|保住(?:了)?性命|并未(?:当场)?(?:殒命|死亡)|最后一丝生机|胸口微微起伏|呼吸.{0,8}平稳|苏醒|睁开(?:了)?眼/);
+  const missing = explicitOutcomeSentence(recentText, /失踪|下落不明|不知所踪|未找到遗体|生死未卜/);
+
+  let accepted: AcceptedFlag[] = [];
+  if (death && !survival && !missing) {
+    accepted = [{ id: candidate.id, flagKey: candidate.flagKey, verdict: 'done', evidence: death }];
+  } else if (survival && !death && !missing) {
+    const status = /重伤|昏迷|休养|长养/.test(recentText) ? 'longrest' : 'alive';
+    accepted = [{
+      id: candidate.id,
+      flagKey: candidate.flagKey,
+      verdict: 'void',
+      evidence: survival,
+      worldDelta: survival,
+      characterStates: { 'liuchao.character.xie_yi': status },
+    }];
+  } else if (missing && !death && !survival) {
+    accepted = [{
+      id: candidate.id,
+      flagKey: candidate.flagKey,
+      verdict: 'void',
+      evidence: missing,
+      worldDelta: missing,
+      characterStates: { 'liuchao.character.xie_yi': 'missing' },
+    }];
+  }
+  if (!accepted.length) return [];
+
+  const flags = runtime.flags;
+  applyReconcileFlags(flags, accepted);
+  const addedDivergences = recordReconcileDivergences(
+    runtime as typeof runtime & { flags: Record<string, unknown> },
+    accepted,
+  );
+  return [
+    ...accepted.map(item => ({
+      key: `世界.状态.剧本模组.flags.${item.flagKey}`,
+      action: 'deterministic_event_reconcile',
+      oldValue: false,
+      newValue: { verdict: item.verdict, evidence: item.evidence.slice(0, 80) },
+    } as StateChange)),
+    ...addedDivergences.map(item => ({
+      key: '世界.状态.剧本模组.divergences',
+      action: 'deterministic_reconcile_divergence',
+      oldValue: undefined,
+      newValue: { id: item.id, worldDelta: item.worldDelta, branchId: item.branchId },
+    } as StateChange)),
+  ];
+}
+
+/**
+ * stage_06 的第二个明确事实快路：只在 GM 正文同时点名小紫、碧姬并明确写出碧姬死亡时，
+ * 结算正典死亡结果。放生、犹豫、计划杀死或只写重伤均不触发。
+ */
+export function runDeterministicBijiReconcile(saveData: SaveData, recentText: string): StateChange[] {
+  const runtime = get(saveData, '世界.状态.剧本模组') as {
+    events?: RuntimeEventLike[];
+    completedEventIds?: string[];
+    flags?: Record<string, unknown>;
+  } | undefined;
+  if (!runtime?.flags) return [];
+  const candidate = buildChainCandidates(runtime)[0];
+  if (candidate?.id !== 'lcq.event.s06_04') return [];
+
+  const death = recentText.includes('小紫')
+    ? recentText
+      .split(/(?<=[。！？!?】])|\n+/)
+      .map(sentence => sentence.trim())
+      .find(sentence => sentence.includes('碧姬')
+        && !/打算|设法|准备|试图|尝试|若能|希望|想要|计划|尚未/.test(sentence)
+        && /(?:亲手)?(?:杀死|刺死|杀了|处死)碧姬|碧姬.{0,24}(?:死去|死亡|断气|毙命|再无气息|最后一丝气息|尸体|尸身)|碧姬的尸体/.test(sentence)) || ''
+    : '';
+  if (!death) return [];
+
+  const accepted: AcceptedFlag[] = [{
+    id: candidate.id,
+    flagKey: candidate.flagKey,
+    verdict: 'done',
+    evidence: death,
+  }];
+  applyReconcileFlags(runtime.flags, accepted);
+  return accepted.map(item => ({
+    key: `世界.状态.剧本模组.flags.${item.flagKey}`,
+    action: 'deterministic_event_reconcile',
+    oldValue: false,
+    newValue: { verdict: item.verdict, evidence: item.evidence.slice(0, 80) },
+  } as StateChange));
+}
+
 async function callWithTimeout<T>(fn: () => Promise<T>, ms: number): Promise<T> {
   let timer: ReturnType<typeof setTimeout> | undefined;
   try {

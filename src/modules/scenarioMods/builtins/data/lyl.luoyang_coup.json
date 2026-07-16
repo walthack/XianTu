@@ -5057,10 +5057,10 @@
           "lyl.faction.lyu_clan"
         ],
         "locationId": "liuchao.location.luoyang",
-        "axisId": "yunlong.282.2",
-        "axisSeq": 895,
-        "axisAnchor": "六朝云龙吟·#282·替身",
-        "axisBeat": "吕冀淫辱勒害的\"赵昭仪\"实为替身友通期，其\"死\"系六识禁绝丹假死（后成失魂期夫人）；真赵合德得保，后于含光殿获救。",
+        "axisId": "yunlong.278.2",
+        "axisSeq": 891,
+        "axisAnchor": "六朝云龙吟·#278·",
+        "axisBeat": "吕冀在含光殿用绳索勒死赵昭仪（友通期），并凌辱其尸。",
         "objective": "潜入伪赵昭仪处，查清真相"
       },
       {

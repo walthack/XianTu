@@ -57,3 +57,4 @@ mod-kit/generated/deepseek-v4-flash/*
 mod-kit/generated/deepseek-v4-flash/character-canon/*
 !mod-kit/generated/deepseek-v4-flash/character-canon/CANON-DECISIONS.md
 !mod-kit/generated/deepseek-v4-flash/character-canon/AGENT-BRIEF-一致性制度.md
+!mod-kit/generated/deepseek-v4-flash/character-canon/SAVE-CONTRACT.json

@@ -4157,7 +4157,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "前往烈山，侦察捧日军"
+        "objective": "前往烈山，侦察捧日军",
+        "offscreenResolution": {
+          "id": "offscreen.lcq.xingyuehu_war",
+          "afterStallTurns": 10,
+          "flagKey": "world.xingyuehu_war.offscreen_resolved",
+          "resolvedEventIds": [
+            "lcq.event.s11_01_pengri_arrives",
+            "lcq.event.s11_02_cement_fortress",
+            "lcq.event.s11_03_protect_yueshuang",
+            "lcq.event.s11_04_xingyue_appears",
+            "lcq.event.s11_05_wangtao_breaks",
+            "lcq.event.s11_06_snow_battle",
+            "lcq.event.s11_07_camp_falls",
+            "lcq.event.s11_08_jiangzhou_lockdown",
+            "lcq.event.s11_09_grain_plan",
+            "lcq.event.s11_10_sanchuankou_defeat"
+          ],
+          "worldDelta": "你未赴烈山，星月湖与宋军的战争仍自行推进；前锋伤亡更重，江州提前戒严，粮线告急的战报送到了你面前。",
+          "evidence": "引擎按星月湖战争脊柱结算玩家缺席后的战报与余波。"
+        }
       },
       {
         "id": "lcq.event.s11_02_cement_fortress",

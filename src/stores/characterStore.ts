@@ -2009,27 +2009,27 @@ export const useCharacterStore = defineStore('characterV3', () => {
    * 导入存档数据
    * @param saveData 要导入的存档数据
    */
-  const importSave = async (charId: string, saveData: SaveSlot) => {
+  const importSave = async (charId: string, saveData: SaveSlot, options?: { overwrite?: boolean }) => {
     const profile = rootState.value.角色列表[charId];
 
     if (!profile) {
       toast.error('找不到角色，无法导入存档');
-      return;
+      throw new Error('找不到角色，无法导入存档');
     }
 
     if (profile.模式 !== '单机') {
       toast.error('联机模式不支持存档导入');
-      return;
+      throw new Error('联机模式不支持存档导入');
     }
 
     if (!profile.存档列表) {
       profile.存档列表 = {};
     }
 
-    // 生成新的存档名称，避免冲突
+    // 默认保留导入去重语义；DEV 验收入口可显式覆盖同名的隔离测试槽。
     let importName = saveData.存档名 || '导入存档';
     let counter = 1;
-    while (profile.存档列表[importName]) {
+    while (!options?.overwrite && profile.存档列表[importName]) {
       importName = `${saveData.存档名 || '导入存档'}_${counter}`;
       counter++;
     }
@@ -2042,7 +2042,7 @@ export const useCharacterStore = defineStore('characterV3', () => {
       if (!validation.isValid) {
         console.error('[导入存档] V3校验失败:', validation.errors);
         toast.error(`导入失败：存档结构不合法（${validation.errors[0] || '未知原因'}）`);
-        return;
+        throw new Error(`存档结构不合法（${validation.errors[0] || '未知原因'}）`);
       }
 
       await storage.saveSaveData(charId, importName, v3Data);
@@ -2071,6 +2071,7 @@ export const useCharacterStore = defineStore('characterV3', () => {
 
     await commitMetadataToStorage();
     toast.success(`存档【${importName}】导入成功`);
+    return importName;
   };
 
   /**

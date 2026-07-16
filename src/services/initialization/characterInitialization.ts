@@ -69,7 +69,8 @@ async function robustAICall<T>(
   aiFunction: () => Promise<T>,
   validator: (response: T) => boolean,
   maxRetries: number,
-  progressMessage: string
+  progressMessage: string,
+  allowUserRetry: boolean = true,
 ): Promise<T> {
   const uiStore = useUIStore();
   let lastError: Error | null = null;
@@ -96,6 +97,9 @@ async function robustAICall<T>(
       console.warn(`[AI调用重试] 第 ${attempt} 次尝试失败:`, lastError.message);
 
       if (attempt > maxRetries) {
+        if (!allowUserRetry) {
+          throw new Error(`${progressMessage}失败：${lastError.message}`);
+        }
         const userWantsToRetry = await askUserForRetry(progressMessage, lastError.message);
         if (userWantsToRetry) {
           attempt = 0; // 重置计数器，开始新一轮的用户确认重试
@@ -535,8 +539,14 @@ async () => {
       },
       onProgressUpdate: (status: string) => {
         // 分步生成时更新进度提示
-        const statusWithChars = receivedChars > 0
-          ? `${status}（已接收 ${receivedChars} 字符）`
+        const isStep1Retry = status.includes('第1步自动修复');
+        if (isStep1Retry) {
+          receivedChars = 0;
+          fullStreamingText = '';
+        }
+        const isInitializationPhase = status.includes('第2步') || status.includes('初始化数据');
+        const statusWithChars = receivedChars > 0 && !isInitializationPhase
+          ? `${status}（已接收 ${receivedChars} 个原始字符）`
           : status;
         uiStore.updateLoadingText(`${loadingHeaderHtml}<br/><span style="font-size: 0.9em; opacity: 0.8;">${statusWithChars}</span>`);
       }
@@ -591,8 +601,12 @@ async () => {
       }
 
       if (response.tavern_commands.length === 0) {
-        console.warn('[AI验证] ❌ tavern_commands是空数组');
-        return false;
+        if ((response as any).__initializationDegraded === true) {
+          console.warn('[AI验证] ⚠️ 初始化指令两次失败，允许本地安全默认值接管');
+        } else {
+          console.warn('[AI验证] ❌ tavern_commands是空数组');
+          return false;
+        }
       }
 
       console.log('[AI验证-诊断] tavern_commands数量:', response.tavern_commands.length);
@@ -652,9 +666,14 @@ async () => {
       console.log('[AI验证] ✅ 所有验证通过');
       return true;
     },
-    3,
-    '天道正在书写命运之章'
+    splitResponseGeneration ? 0 : 3,
+    '天道正在书写命运之章',
+    !splitResponseGeneration,
   );
+
+  if ((initialMessageResponse as any).__initializationDegraded === true) {
+    toast.warning('AI 初始化数据连续两次失败，已使用本地安全默认值完成创角；开局正文已保留。');
+  }
 
   // =================================================================
   // 步骤 3.4: 处理AI响应

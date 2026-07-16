@@ -164,7 +164,9 @@ export default (env, argv) => {
         'REMOTE_SAVE_STORAGE_ENABLED': JSON.stringify(process.env.REMOTE_SAVE_STORAGE_ENABLED !== 'false'),
         // Test-only deterministic judgement controls. Production bundles erase
         // this branch at build time.
-        'JUDGEMENT_TEST_CONTROLS': JSON.stringify(!isProduction)
+        'JUDGEMENT_TEST_CONTROLS': JSON.stringify(!isProduction),
+        // Disposable R2 acceptance character/fixture controls. Never ship in production.
+        'R2_ACCEPTANCE_CONTROLS': JSON.stringify(!isProduction)
       }),
       new HtmlWebpackPlugin({
         template: './index.html',

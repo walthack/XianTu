@@ -623,7 +623,7 @@ function createMinimalSaveData(): SaveData {
   return createMinimalSaveDataV3();
 }
 
-function createMinimalSaveDataV3(): SaveData {
+export function createMinimalSaveDataV3(): SaveData {
   const nowIso = new Date().toISOString();
   const time = { 年: 纪元基点, 月: 1, 日: 1, 小时: 8, 分钟: 0 } as GameTime;
   return {

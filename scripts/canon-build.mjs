@@ -20,6 +20,7 @@ const steps = [
   ['归属投影 stage', 'node', ['scripts/project-affiliations-to-stages.mjs', '--apply']],
   ['同门/同族/同袍派生', 'node', ['scripts/derive-tongmen-edges.mjs', '--apply']],
   ['内置 mod 同步', 'node', ['scripts/sync-builtin-mods.mjs']],
+  ['主轴/存档契约校验', 'node', ['scripts/validate-axis-save-contract.mjs']],
 ];
 if (!FAST) {
   const stageFiles = [];
@@ -28,7 +29,9 @@ if (!FAST) {
     for (const f of readdirSync(dir).filter(x => x.endsWith('.json') && !x.endsWith('.uncertainties.json'))) stageFiles.push(join(dir, f));
   }
   steps.push(['37 关 schema 校验', 'node', ['scripts/validate-scenario-mod.mjs', ...stageFiles]]);
-  steps.push(['单元测试', 'node', ['--test', ...readdirSync(join(root, 'tests')).filter(f => f.endsWith('.test.mjs')).map(f => join('tests', f))]]);
+  // Node 25 的并发 test worker 在大型 JSON fixture + 后台模型进程并存时偶发 IPC
+  // structured-clone 反序列化失败；单并发不改变测试内容，只让正典门禁可重复。
+  steps.push(['单元测试', 'node', ['--test', '--test-concurrency=1', ...readdirSync(join(root, 'tests')).filter(f => f.endsWith('.test.mjs')).map(f => join('tests', f))]]);
 }
 
 const t0 = Date.now();

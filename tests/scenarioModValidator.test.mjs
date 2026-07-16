@@ -171,6 +171,24 @@ test('validates event completion conditions', async () => {
   assert.ok(result.issues.some(issue => issue.path === 'scenario.events[0].completion[0].operator'));
 });
 
+test('offscreenResolution requires safe flags and existing event references', async () => {
+  const { validateScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
+  const raw = await loadFixture();
+  raw.scenario.events[0].offscreenResolution = {
+    id: 'offscreen.demo', afterStallTurns: 10, flagKey: 'world.demo.resolved',
+    resolvedEventIds: ['missing.event'], worldDelta: '世界已经自行推进', evidence: '引擎结算',
+  };
+  const result = validateScenarioMod(raw);
+  assert.equal(result.valid, false);
+  assert.ok(result.issues.some(issue => issue.path.includes('resolvedEventIds') && issue.code === 'missing_reference'));
+
+  raw.scenario.events[0].offscreenResolution.resolvedEventIds = [raw.scenario.events[0].id];
+  raw.scenario.events[0].offscreenResolution.flagKey = '__proto__.polluted';
+  const unsafe = validateScenarioMod(raw);
+  assert.equal(unsafe.valid, false);
+  assert.ok(unsafe.issues.some(issue => issue.path.endsWith('.flagKey') && issue.code === 'invalid_path'));
+});
+
 test('rejects invalid canonical creation preset boundaries', async () => {
   const { validateScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
   const fixture = await loadFixture();

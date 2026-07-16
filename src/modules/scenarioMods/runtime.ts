@@ -18,6 +18,15 @@ export interface ScenarioRuntimeTransition {
   id: string;
 }
 
+export interface ScenarioChronicleEntry {
+  id: string;
+  type: 'event' | 'world' | 'stage';
+  stageId: string;
+  title: string;
+  detail?: string;
+  sequence: number;
+}
+
 export interface RuntimeState extends ScenarioProgressState {
   modId?: string;
   currentChapterId: string | null;
@@ -33,6 +42,8 @@ export interface RuntimeState extends ScenarioProgressState {
   divergences?: ScenarioDivergence[];
   /** 场外世界事件已结算的原事件；与 completedEventIds 分离，防止把玩家未参与的原著拍伪记为完成。 */
   offscreenResolvedEventIds?: string[];
+  /** 玩家可回看的战役编年史；只记已结算事实，跨关继承。 */
+  chronicle?: ScenarioChronicleEntry[];
   /** 旧档 reconcile 版本戳：与 registry 版本一致则跳过（正典更新后旧档第一回合自动对齐） */
   reconciledRegistryVersion?: string;
 }
@@ -115,32 +126,84 @@ function isCriticalStoryEvent(event: ScenarioModEvent): boolean {
 }
 
 export const OFFSCREEN_WORLD_EVENT_STALL_THRESHOLD = 10;
-const XINGYUEHU_WAR_STAGE = 'lcq.stage_11_lieshan_battle';
-const XINGYUEHU_WAR_OFFSCREEN_FLAG = 'world.xingyuehu_war.offscreen_resolved';
 
 function isEventSettled(runtime: RuntimeState, eventId: string): boolean {
   return runtime.completedEventIds.includes(eventId)
     || (runtime.offscreenResolvedEventIds || []).includes(eventId);
 }
 
-/** 第一条世界引力样板：战争不等玩家领取任务，缺席者只能承接已经发生的余波。 */
-function resolveOffscreenWorldEvents(runtime: RuntimeState, transitions: ScenarioRuntimeTransition[]): void {
-  if (runtime.modId !== XINGYUEHU_WAR_STAGE
-    || (runtime.stallTurns || 0) < OFFSCREEN_WORLD_EVENT_STALL_THRESHOLD
-    || runtime.flags[XINGYUEHU_WAR_OFFSCREEN_FLAG] === true) return;
-  const warEventIds = runtime.events
+function legacyOffscreenResolution(runtime: RuntimeState): NonNullable<ScenarioModEvent['offscreenResolution']> | undefined {
+  if (runtime.modId !== 'lcq.stage_11_lieshan_battle') return undefined;
+  const resolvedEventIds = runtime.events
     .filter(event => event.id.startsWith('lcq.event.s11_') && isCriticalStoryEvent(event))
     .map(event => event.id);
-  if (!warEventIds.length) return;
-  runtime.flags[XINGYUEHU_WAR_OFFSCREEN_FLAG] = true;
-  runtime.offscreenResolvedEventIds = [...new Set([...(runtime.offscreenResolvedEventIds || []), ...warEventIds])];
-  runtime.activeEventIds = runtime.activeEventIds.filter(id => !warEventIds.includes(id));
-  recordOffscreenDivergence(runtime, {
-    id: 'offscreen.lcq.xingyuehu_war', eventId: 'lcq.event.s11_04_xingyue_appears',
+  return resolvedEventIds.length ? {
+    id: 'offscreen.lcq.xingyuehu_war', afterStallTurns: OFFSCREEN_WORLD_EVENT_STALL_THRESHOLD,
+    flagKey: 'world.xingyuehu_war.offscreen_resolved', resolvedEventIds,
     worldDelta: '你未赴烈山，星月湖与宋军的战争仍自行推进；前锋伤亡更重，江州提前戒严，粮线告急的战报送到了你面前。',
     evidence: '引擎按星月湖战争脊柱结算玩家缺席后的战报与余波。',
-  });
-  transitions.push({ type: 'world_event_resolved', id: 'offscreen.lcq.xingyuehu_war' });
+  } : undefined;
+}
+
+/** 世界级事件不等玩家领取任务；合同来自事件数据，旧存档由兼容层补齐。 */
+function resolveOffscreenWorldEvents(runtime: RuntimeState, transitions: ScenarioRuntimeTransition[]): void {
+  const declared = runtime.events.map(event => event.offscreenResolution).filter(Boolean) as NonNullable<ScenarioModEvent['offscreenResolution']>[];
+  const resolutions = declared.length ? declared : [legacyOffscreenResolution(runtime)].filter(Boolean) as NonNullable<ScenarioModEvent['offscreenResolution']>[];
+  for (const resolution of resolutions) {
+    if ((runtime.stallTurns || 0) < resolution.afterStallTurns || runtime.flags[resolution.flagKey] === true) continue;
+    const knownIds = resolution.resolvedEventIds.filter(id => runtime.events.some(event => event.id === id));
+    if (!knownIds.length) continue;
+    runtime.flags[resolution.flagKey] = true;
+    runtime.offscreenResolvedEventIds = [...new Set([...(runtime.offscreenResolvedEventIds || []), ...knownIds])];
+    runtime.activeEventIds = runtime.activeEventIds.filter(id => !knownIds.includes(id));
+    recordOffscreenDivergence(runtime, {
+      id: resolution.id, eventId: knownIds[0],
+      worldDelta: resolution.worldDelta, evidence: resolution.evidence,
+    });
+    transitions.push({ type: 'world_event_resolved', id: resolution.id });
+  }
+}
+
+function appendChronicleEntry(
+  runtime: RuntimeState,
+  entry: Omit<ScenarioChronicleEntry, 'sequence'>,
+): void {
+  const chronicle = runtime.chronicle ??= [];
+  if (chronicle.some(item => item.id === entry.id)) return;
+  chronicle.push({ ...entry, sequence: chronicle.length + 1 });
+}
+
+function recordChronicleTransitions(runtime: RuntimeState, transitions: ScenarioRuntimeTransition[]): void {
+  for (const transition of transitions) {
+    if (transition.type === 'event_completed') {
+      const event = runtime.events.find(item => item.id === transition.id);
+      appendChronicleEntry(runtime, {
+        id: `chronicle.${runtime.modId || 'unknown'}.${transition.id}`,
+        type: 'event', stageId: runtime.modId || '',
+        title: event?.name || transition.id,
+        detail: event?.objective || event?.axisBeat || event?.description,
+      });
+    } else if (transition.type === 'world_event_resolved') {
+      const divergence = runtime.divergences?.find(item => item.id === transition.id);
+      appendChronicleEntry(runtime, {
+        id: `chronicle.${runtime.modId || 'unknown'}.${transition.id}`,
+        type: 'world', stageId: runtime.modId || '',
+        title: '世界自行推进', detail: divergence?.worldDelta || transition.id,
+      });
+    }
+  }
+}
+
+function backfillCompletedEventChronicle(runtime: RuntimeState): void {
+  for (const eventId of runtime.completedEventIds || []) {
+    const event = runtime.events.find(item => item.id === eventId);
+    appendChronicleEntry(runtime, {
+      id: `chronicle.${runtime.modId || 'unknown'}.${eventId}`,
+      type: 'event', stageId: runtime.modId || '',
+      title: event?.name || eventId,
+      detail: event?.objective || event?.axisBeat || event?.description,
+    });
+  }
 }
 
 /** 唯一主线锚点：最早的已激活、未完成承重事件。
@@ -251,10 +314,10 @@ function settleCompletedChapterFlags(runtime: RuntimeState): void {
 // node 测试环境加载不了 → 安全降级为 no-op(不 stamp,真实环境仍会对齐)。
 function getReconcileDeps(): { version: string; resolve: (c: unknown[] | undefined, id: string) => number; mods: ScenarioMod[] } | null {
   try {
-    /* eslint-disable @typescript-eslint/no-var-requires */
+    /* eslint-disable @typescript-eslint/no-require-imports -- Webpack-only builtins must remain lazy for the Node test harness. */
     const resolver = require('./characterResolver') as { REGISTRY_VERSION: string; resolveScenarioCharacters: (c: unknown[] | undefined, id: string) => number };
     const builtins = require('./builtins') as { BUILTIN_SCENARIO_MODS: ScenarioMod[] };
-    /* eslint-enable @typescript-eslint/no-var-requires */
+    /* eslint-enable @typescript-eslint/no-require-imports */
     return { version: resolver.REGISTRY_VERSION, resolve: resolver.resolveScenarioCharacters, mods: builtins.BUILTIN_SCENARIO_MODS || [] };
   } catch { return null; }
 }
@@ -309,9 +372,9 @@ const 底线揭示好感 = 30;
 const 自己人关系 = /同伴|伙伴|队友|道侣|伴侣|挚友|知己|情人|爱慕|恋|妾|后宫|侍妾|奴|婢|主仆|仆|结义|亲密|归顺|臣服|忠/;
 function projectBottomLinesToNpcs(saveData: SaveData): void {
   try {
-    /* eslint-disable @typescript-eslint/no-var-requires */
+    /* eslint-disable @typescript-eslint/no-require-imports -- keep registry loading optional outside the Webpack runtime. */
     const { getRegistryBottomLine } = require('./characterResolver') as { getRegistryBottomLine: (name: string) => string[] };
-    /* eslint-enable @typescript-eslint/no-var-requires */
+    /* eslint-enable @typescript-eslint/no-require-imports */
     const relations = readPath(saveData, ['社交', '关系']) as Record<string, any> | undefined;
     if (!relations || typeof relations !== 'object') return;
     for (const [key, npc] of Object.entries(relations)) {
@@ -355,6 +418,7 @@ export function advanceScenarioRuntime(saveData: SaveData): {
   runtime.activeEventIds = Array.isArray(runtime.activeEventIds) ? runtime.activeEventIds : [];
   runtime.completedEventIds = Array.isArray(runtime.completedEventIds) ? runtime.completedEventIds : [];
   runtime.offscreenResolvedEventIds = Array.isArray(runtime.offscreenResolvedEventIds) ? runtime.offscreenResolvedEventIds : [];
+  backfillCompletedEventChronicle(runtime);
   const transitions: ScenarioRuntimeTransition[] = [];
   const railProfile = getCanonRailProfile(runtime);
 
@@ -475,6 +539,8 @@ export function advanceScenarioRuntime(saveData: SaveData): {
   if (steeringCooldown > 0) {
     runtime.steeringCooldown = steeringCooldown - 1;
   }
+
+  recordChronicleTransitions(runtime, transitions);
 
   return { saveData: next, transitions };
 }

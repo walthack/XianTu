@@ -1,0 +1,2263 @@
+{
+  "schema": "xiantu.save-contract.v1",
+  "frozenAt": "2026-07-16T13:34:15.804Z",
+  "rule": "stage/chapter/event IDs and existing completion flag paths are append-only. New IDs/paths may be added; frozen entries may not be removed, renamed, moved, or repurposed.",
+  "stages": {
+    "lcq.stage_01": {
+      "book": "qingyu",
+      "chapterIds": [
+        "lcq.chapter.stage_01"
+      ],
+      "eventIds": [
+        "lcq.event.debut_yueshuang",
+        "lcq.event.s01_01",
+        "lcq.event.s01_02",
+        "lcq.event.s01_03",
+        "lcq.event.s01_04",
+        "lcq.event.s01_05",
+        "lcq.event.s01_06"
+      ],
+      "chapterFlagPaths": {
+        "lcq.chapter.stage_01": [
+          "flags.event.s01_06.done"
+        ]
+      },
+      "eventFlagPaths": {
+        "lcq.event.s01_01": [
+          "flags.event.s01_01.done"
+        ],
+        "lcq.event.s01_02": [
+          "flags.event.s01_02.done"
+        ],
+        "lcq.event.s01_03": [
+          "flags.event.s01_03.done"
+        ],
+        "lcq.event.s01_04": [
+          "flags.event.s01_04.done"
+        ],
+        "lcq.event.s01_05": [
+          "flags.event.s01_05.done"
+        ],
+        "lcq.event.s01_06": [
+          "flags.event.s01_06.done"
+        ],
+        "lcq.event.debut_yueshuang": [
+          "flags.event.debut_yueshuang.done"
+        ]
+      }
+    },
+    "lcq.stage_02": {
+      "book": "qingyu",
+      "chapterIds": [
+        "lcq.chapter.stage_02"
+      ],
+      "eventIds": [
+        "lcq.event.s02_01",
+        "lcq.event.s02_02",
+        "lcq.event.s02_03",
+        "lcq.event.s02_04",
+        "lcq.event.s02_05",
+        "lcq.event.s02_06"
+      ],
+      "chapterFlagPaths": {
+        "lcq.chapter.stage_02": [
+          "flags.event.s02_06.done"
+        ]
+      },
+      "eventFlagPaths": {
+        "lcq.event.s02_01": [
+          "flags.event.s02_01.done"
+        ],
+        "lcq.event.s02_02": [
+          "flags.event.s02_02.done"
+        ],
+        "lcq.event.s02_03": [
+          "flags.event.s02_03.done"
+        ],
+        "lcq.event.s02_04": [
+          "flags.event.s02_04.done"
+        ],
+        "lcq.event.s02_05": [
+          "flags.event.s02_05.done"
+        ],
+        "lcq.event.s02_06": [
+          "flags.event.s02_06.done"
+        ]
+      }
+    },
+    "lcq.stage_03": {
+      "book": "qingyu",
+      "chapterIds": [
+        "lcq.chapter.stage_03"
+      ],
+      "eventIds": [
+        "lcq.event.debut_ningyu",
+        "lcq.event.s03_01",
+        "lcq.event.s03_02",
+        "lcq.event.s03_03",
+        "lcq.event.s03_04",
+        "lcq.event.s03_05",
+        "lcq.event.s03_06",
+        "lcq.event.s03_07",
+        "lcq.event.s03_08",
+        "lcq.event.s03_09"
+      ],
+      "chapterFlagPaths": {
+        "lcq.chapter.stage_03": [
+          "flags.event.s03_09.done"
+        ]
+      },
+      "eventFlagPaths": {
+        "lcq.event.s03_01": [
+          "flags.event.s03_01.done"
+        ],
+        "lcq.event.s03_02": [
+          "flags.event.s03_02.done"
+        ],
+        "lcq.event.s03_03": [
+          "flags.event.s03_03.done"
+        ],
+        "lcq.event.s03_04": [
+          "flags.event.s03_04.done"
+        ],
+        "lcq.event.s03_05": [
+          "flags.event.s03_05.done"
+        ],
+        "lcq.event.s03_06": [
+          "flags.event.s03_06.done"
+        ],
+        "lcq.event.s03_07": [
+          "flags.event.s03_07.done"
+        ],
+        "lcq.event.s03_08": [
+          "flags.event.s03_08.done"
+        ],
+        "lcq.event.s03_09": [
+          "flags.event.s03_09.done"
+        ],
+        "lcq.event.debut_ningyu": [
+          "flags.event.debut_ningyu.done"
+        ]
+      }
+    },
+    "lcq.stage_03b_snake_flower_bridge": {
+      "book": "qingyu",
+      "chapterIds": [
+        "lcq.chapter.s03b_snake_flower_bridge_flower",
+        "lcq.chapter.s03b_snake_flower_bridge_snake"
+      ],
+      "eventIds": [
+        "lcq.event.s03b_snake_flower_bridge_01",
+        "lcq.event.s03b_snake_flower_bridge_02",
+        "lcq.event.s03b_snake_flower_bridge_03",
+        "lcq.event.s03b_snake_flower_bridge_04",
+        "lcq.event.s03b_snake_flower_bridge_05",
+        "lcq.event.s03b_snake_flower_bridge_06",
+        "lcq.event.s03b_snake_flower_bridge_07"
+      ],
+      "chapterFlagPaths": {
+        "lcq.chapter.s03b_snake_flower_bridge_snake": [
+          "flags.chapter.lcq.stage_03b_snake_flower_bridge.snake.done"
+        ],
+        "lcq.chapter.s03b_snake_flower_bridge_flower": [
+          "flags.chapter.lcq.stage_03b_snake_flower_bridge.flower.done"
+        ]
+      },
+      "eventFlagPaths": {
+        "lcq.event.s03b_snake_flower_bridge_01": [
+          "flags.event.s03b_snake_flower_bridge_01.done"
+        ],
+        "lcq.event.s03b_snake_flower_bridge_02": [
+          "flags.event.s03b_snake_flower_bridge_02.done"
+        ],
+        "lcq.event.s03b_snake_flower_bridge_03": [
+          "flags.event.s03b_snake_flower_bridge_03.done"
+        ],
+        "lcq.event.s03b_snake_flower_bridge_04": [
+          "flags.event.s03b_snake_flower_bridge_04.done"
+        ],
+        "lcq.event.s03b_snake_flower_bridge_05": [
+          "flags.event.s03b_snake_flower_bridge_05.done"
+        ],
+        "lcq.event.s03b_snake_flower_bridge_06": [
+          "flags.event.s03b_snake_flower_bridge_06.done"
+        ],
+        "lcq.event.s03b_snake_flower_bridge_07": [
+          "flags.event.s03b_snake_flower_bridge_07.done"
+        ]
+      }
+    },
+    "lcq.stage_04": {
+      "book": "qingyu",
+      "chapterIds": [
+        "lcq.chapter.stage_04"
+      ],
+      "eventIds": [
+        "lcq.event.s04_01",
+        "lcq.event.s04_02",
+        "lcq.event.s04_03",
+        "lcq.event.s04_04",
+        "lcq.event.s04_05",
+        "lcq.event.s04_06",
+        "lcq.event.s04_07"
+      ],
+      "chapterFlagPaths": {
+        "lcq.chapter.stage_04": [
+          "flags.event.s04_07.done"
+        ]
+      },
+      "eventFlagPaths": {
+        "lcq.event.s04_01": [
+          "flags.event.s04_01.done"
+        ],
+        "lcq.event.s04_02": [
+          "flags.event.s04_02.done"
+        ],
+        "lcq.event.s04_03": [
+          "flags.event.s04_03.done"
+        ],
+        "lcq.event.s04_04": [
+          "flags.event.s04_04.done"
+        ],
+        "lcq.event.s04_05": [
+          "flags.event.s04_05.done"
+        ],
+        "lcq.event.s04_06": [
+          "flags.event.s04_06.done"
+        ],
+        "lcq.event.s04_07": [
+          "flags.event.s04_07.done"
+        ]
+      }
+    },
+    "lcq.stage_04b_lingfei_baiyi_crisis": {
+      "book": "qingyu",
+      "chapterIds": [
+        "lcq.chapter.s04b_lingfei_baiyi_crisis_aftermath",
+        "lcq.chapter.s04b_lingfei_baiyi_crisis_baiyi",
+        "lcq.chapter.s04b_lingfei_baiyi_crisis_mirror"
+      ],
+      "eventIds": [
+        "lcq.event.s04b_lingfei_baiyi_crisis_01",
+        "lcq.event.s04b_lingfei_baiyi_crisis_02",
+        "lcq.event.s04b_lingfei_baiyi_crisis_03",
+        "lcq.event.s04b_lingfei_baiyi_crisis_04",
+        "lcq.event.s04b_lingfei_baiyi_crisis_05",
+        "lcq.event.s04b_lingfei_baiyi_crisis_06",
+        "lcq.event.s04b_lingfei_baiyi_crisis_07",
+        "lcq.event.s04b_lingfei_baiyi_crisis_08",
+        "lcq.event.s04b_lingfei_baiyi_crisis_09",
+        "lcq.event.s04b_lingfei_baiyi_crisis_10",
+        "lcq.event.s04b_lingfei_baiyi_crisis_11",
+        "lcq.event.s04b_lingfei_baiyi_crisis_12",
+        "lcq.event.s04b_lingfei_baiyi_crisis_13",
+        "lcq.event.s04b_lingfei_baiyi_crisis_14",
+        "lcq.event.s04b_lingfei_baiyi_crisis_15",
+        "lcq.event.s04b_lingfei_baiyi_crisis_16",
+        "lcq.event.s04b_lingfei_baiyi_crisis_17",
+        "lcq.event.s04b_lingfei_baiyi_crisis_18",
+        "lcq.event.s04b_lingfei_baiyi_crisis_19"
+      ],
+      "chapterFlagPaths": {
+        "lcq.chapter.s04b_lingfei_baiyi_crisis_mirror": [
+          "flags.chapter.lcq.stage_04b_lingfei_baiyi_crisis.mirror.done"
+        ],
+        "lcq.chapter.s04b_lingfei_baiyi_crisis_baiyi": [
+          "flags.chapter.lcq.stage_04b_lingfei_baiyi_crisis.baiyi.done"
+        ],
+        "lcq.chapter.s04b_lingfei_baiyi_crisis_aftermath": [
+          "flags.chapter.lcq.stage_04b_lingfei_baiyi_crisis.aftermath.done"
+        ]
+      },
+      "eventFlagPaths": {
+        "lcq.event.s04b_lingfei_baiyi_crisis_01": [
+          "flags.event.s04b_lingfei_baiyi_crisis_01.done"
+        ],
+        "lcq.event.s04b_lingfei_baiyi_crisis_02": [
+          "flags.event.s04b_lingfei_baiyi_crisis_02.done"
+        ],
+        "lcq.event.s04b_lingfei_baiyi_crisis_03": [
+          "flags.event.s04b_lingfei_baiyi_crisis_03.done"
+        ],
+        "lcq.event.s04b_lingfei_baiyi_crisis_04": [
+          "flags.event.s04b_lingfei_baiyi_crisis_04.done"
+        ],
+        "lcq.event.s04b_lingfei_baiyi_crisis_05": [
+          "flags.event.s04b_lingfei_baiyi_crisis_05.done"
+        ],
+        "lcq.event.s04b_lingfei_baiyi_crisis_06": [
+          "flags.event.s04b_lingfei_baiyi_crisis_06.done"
+        ],
+        "lcq.event.s04b_lingfei_baiyi_crisis_07": [
+          "flags.event.s04b_lingfei_baiyi_crisis_07.done"
+        ],
+        "lcq.event.s04b_lingfei_baiyi_crisis_08": [
+          "flags.event.s04b_lingfei_baiyi_crisis_08.done"
+        ],
+        "lcq.event.s04b_lingfei_baiyi_crisis_09": [
+          "flags.event.s04b_lingfei_baiyi_crisis_09.done"
+        ],
+        "lcq.event.s04b_lingfei_baiyi_crisis_10": [
+          "flags.event.s04b_lingfei_baiyi_crisis_10.done"
+        ],
+        "lcq.event.s04b_lingfei_baiyi_crisis_11": [
+          "flags.event.s04b_lingfei_baiyi_crisis_11.done"
+        ],
+        "lcq.event.s04b_lingfei_baiyi_crisis_12": [
+          "flags.event.s04b_lingfei_baiyi_crisis_12.done"
+        ],
+        "lcq.event.s04b_lingfei_baiyi_crisis_13": [
+          "flags.event.s04b_lingfei_baiyi_crisis_13.done"
+        ],
+        "lcq.event.s04b_lingfei_baiyi_crisis_14": [
+          "flags.event.s04b_lingfei_baiyi_crisis_14.done"
+        ],
+        "lcq.event.s04b_lingfei_baiyi_crisis_15": [
+          "flags.event.s04b_lingfei_baiyi_crisis_15.done"
+        ],
+        "lcq.event.s04b_lingfei_baiyi_crisis_16": [
+          "flags.event.s04b_lingfei_baiyi_crisis_16.done"
+        ],
+        "lcq.event.s04b_lingfei_baiyi_crisis_17": [
+          "flags.event.s04b_lingfei_baiyi_crisis_17.done"
+        ],
+        "lcq.event.s04b_lingfei_baiyi_crisis_18": [
+          "flags.event.s04b_lingfei_baiyi_crisis_18.done"
+        ],
+        "lcq.event.s04b_lingfei_baiyi_crisis_19": [
+          "flags.event.s04b_lingfei_baiyi_crisis_19.done"
+        ]
+      }
+    },
+    "lcq.stage_05": {
+      "book": "qingyu",
+      "chapterIds": [
+        "lcq.chapter.stage_05"
+      ],
+      "eventIds": [
+        "lcq.event.debut_xiaozi",
+        "lcq.event.s05_01",
+        "lcq.event.s05_02",
+        "lcq.event.s05_03",
+        "lcq.event.s05_04",
+        "lcq.event.s05_05",
+        "lcq.event.s05_06",
+        "lcq.event.s05_07",
+        "lcq.event.s05_08",
+        "lcq.event.s05_09"
+      ],
+      "chapterFlagPaths": {
+        "lcq.chapter.stage_05": [
+          "flags.event.s05_09.done"
+        ]
+      },
+      "eventFlagPaths": {
+        "lcq.event.s05_01": [
+          "flags.event.s05_01.done"
+        ],
+        "lcq.event.s05_02": [
+          "flags.event.s05_02.done"
+        ],
+        "lcq.event.s05_03": [
+          "flags.event.s05_03.done"
+        ],
+        "lcq.event.s05_04": [
+          "flags.event.s05_04.done"
+        ],
+        "lcq.event.s05_05": [
+          "flags.event.s05_05.done"
+        ],
+        "lcq.event.s05_06": [
+          "flags.event.s05_06.done"
+        ],
+        "lcq.event.s05_07": [
+          "flags.event.s05_07.done"
+        ],
+        "lcq.event.s05_08": [
+          "flags.event.s05_08.done"
+        ],
+        "lcq.event.s05_09": [
+          "flags.event.s05_09.done"
+        ],
+        "lcq.event.debut_xiaozi": [
+          "flags.event.debut_xiaozi.done"
+        ]
+      }
+    },
+    "lcq.stage_05b": {
+      "book": "qingyu",
+      "chapterIds": [
+        "lcq.chapter.stage_05b_investigation",
+        "lcq.chapter.stage_05b_palace",
+        "lcq.chapter.stage_05b_reversal"
+      ],
+      "eventIds": [
+        "lcq.event.debut_lemingzhu",
+        "lcq.event.s05b_01_binu_reveals_xiaozi",
+        "lcq.event.s05b_02_xiaozi_exposed",
+        "lcq.event.s05b_03_saan_secret_path",
+        "lcq.event.s05b_04_enter_ghost_palace",
+        "lcq.event.s05b_05a_meet_ghost_king",
+        "lcq.event.s05b_05b_ideology_duel_and_defeat",
+        "lcq.event.s05b_06_breakout_and_reunion",
+        "lcq.event.s05b_07_xiaozi_trap",
+        "lcq.event.s05b_08a_rescue_suli",
+        "lcq.event.s05b_08b_altar_corpse_fight_and_danchen",
+        "lcq.event.s05b_09_temporary_pact_with_xiaozi",
+        "lcq.event.s05b_10_slave_revolt_and_phoenix_change"
+      ],
+      "chapterFlagPaths": {
+        "lcq.chapter.stage_05b_investigation": [
+          "flags.chapter.lcq.stage_05b.investigation.done"
+        ],
+        "lcq.chapter.stage_05b_palace": [
+          "flags.chapter.lcq.stage_05b.palace.done"
+        ],
+        "lcq.chapter.stage_05b_reversal": [
+          "flags.chapter.lcq.stage_05b.reversal.done"
+        ]
+      },
+      "eventFlagPaths": {
+        "lcq.event.s05b_01_binu_reveals_xiaozi": [
+          "flags.event.s05b_01.done"
+        ],
+        "lcq.event.s05b_02_xiaozi_exposed": [
+          "flags.event.s05b_02.done"
+        ],
+        "lcq.event.s05b_03_saan_secret_path": [
+          "flags.event.s05b_03.done"
+        ],
+        "lcq.event.s05b_04_enter_ghost_palace": [
+          "flags.event.s05b_04.done"
+        ],
+        "lcq.event.s05b_05a_meet_ghost_king": [
+          "flags.event.s05b_05.done"
+        ],
+        "lcq.event.s05b_05b_ideology_duel_and_defeat": [
+          "flags.event.s05b_06.done"
+        ],
+        "lcq.event.s05b_06_breakout_and_reunion": [
+          "flags.event.s05b_07.done"
+        ],
+        "lcq.event.s05b_07_xiaozi_trap": [
+          "flags.event.s05b_08.done"
+        ],
+        "lcq.event.s05b_08a_rescue_suli": [
+          "flags.event.s05b_09.done"
+        ],
+        "lcq.event.s05b_08b_altar_corpse_fight_and_danchen": [
+          "flags.event.s05b_10.done"
+        ],
+        "lcq.event.s05b_09_temporary_pact_with_xiaozi": [
+          "flags.event.s05b_11.done"
+        ],
+        "lcq.event.s05b_10_slave_revolt_and_phoenix_change": [
+          "flags.event.s05b_12.done"
+        ],
+        "lcq.event.debut_lemingzhu": [
+          "flags.event.debut_lemingzhu.done"
+        ]
+      }
+    },
+    "lcq.stage_06": {
+      "book": "qingyu",
+      "chapterIds": [
+        "lcq.chapter.stage_06"
+      ],
+      "eventIds": [
+        "lcq.event.s06_01",
+        "lcq.event.s06_02",
+        "lcq.event.s06_03",
+        "lcq.event.s06_04",
+        "lcq.event.s06_05",
+        "lcq.event.s06_06"
+      ],
+      "chapterFlagPaths": {
+        "lcq.chapter.stage_06": [
+          "flags.event.s06_06.done"
+        ]
+      },
+      "eventFlagPaths": {
+        "lcq.event.s06_01": [
+          "flags.event.s06_01.done"
+        ],
+        "lcq.event.s06_02": [
+          "flags.event.s06_02.done"
+        ],
+        "lcq.event.s06_03": [
+          "flags.event.s06_03.done"
+        ],
+        "lcq.event.s06_04": [
+          "flags.event.s06_04.done"
+        ],
+        "lcq.event.s06_05": [
+          "flags.event.s06_05.done"
+        ],
+        "lcq.event.s06_06": [
+          "flags.event.s06_06.done"
+        ]
+      }
+    },
+    "lcq.stage_07_qingyuan_jiankang": {
+      "book": "qingyu",
+      "chapterIds": [
+        "lcq.chapter.stage_07_qingyuan_jiankang_hengtang",
+        "lcq.chapter.stage_07_qingyuan_jiankang_jiankang",
+        "lcq.chapter.stage_07_qingyuan_jiankang_qingyuan"
+      ],
+      "eventIds": [
+        "lcq.event.s07_01_old_case",
+        "lcq.event.s07_02_kill_wu",
+        "lcq.event.s07_03_xiaozi_appears",
+        "lcq.event.s07_04_zhuo_subdued",
+        "lcq.event.s07_05_eight_steeds_informed",
+        "lcq.event.s07_06_water_assassins",
+        "lcq.event.s07_07_dragon_hall",
+        "lcq.event.s07_08_palace_escape",
+        "lcq.event.s07_09_hengtang_ambush",
+        "lcq.event.s07_10_dragon_fang",
+        "lcq.event.s07_debut_qinhui",
+        "lcq.event.s07_qinhui_join"
+      ],
+      "chapterFlagPaths": {
+        "lcq.chapter.stage_07_qingyuan_jiankang_qingyuan": [
+          "flags.chapter.lcq.stage_07_qingyuan_jiankang.qingyuan.done"
+        ],
+        "lcq.chapter.stage_07_qingyuan_jiankang_jiankang": [
+          "flags.chapter.lcq.stage_07_qingyuan_jiankang.jiankang.done"
+        ],
+        "lcq.chapter.stage_07_qingyuan_jiankang_hengtang": [
+          "flags.chapter.lcq.stage_07_qingyuan_jiankang.hengtang.done"
+        ]
+      },
+      "eventFlagPaths": {
+        "lcq.event.s07_01_old_case": [
+          "flags.event.s07_01.done"
+        ],
+        "lcq.event.s07_02_kill_wu": [
+          "flags.event.s07_02.done"
+        ],
+        "lcq.event.s07_03_xiaozi_appears": [
+          "flags.event.s07_03.done"
+        ],
+        "lcq.event.s07_04_zhuo_subdued": [
+          "flags.event.s07_04.done"
+        ],
+        "lcq.event.s07_05_eight_steeds_informed": [
+          "flags.event.s07_05.done"
+        ],
+        "lcq.event.s07_06_water_assassins": [
+          "flags.event.s07_06.done"
+        ],
+        "lcq.event.s07_07_dragon_hall": [
+          "flags.event.s07_07.done"
+        ],
+        "lcq.event.s07_08_palace_escape": [
+          "flags.event.s07_08.done"
+        ],
+        "lcq.event.s07_09_hengtang_ambush": [
+          "flags.event.s07_09.done"
+        ],
+        "lcq.event.s07_10_dragon_fang": [
+          "flags.event.s07_10.done"
+        ],
+        "lcq.event.s07_debut_qinhui": [
+          "flags.event.s07_debut_qinhui.done"
+        ],
+        "lcq.event.s07_qinhui_join": [
+          "flags.event.s07_qinhui_join.done"
+        ]
+      }
+    },
+    "lcq.stage_08_jiankang_coup": {
+      "book": "qingyu",
+      "chapterIds": [
+        "lcq.chapter.stage_08_jiankang_coup_ambush",
+        "lcq.chapter.stage_08_jiankang_coup_coup",
+        "lcq.chapter.stage_08_jiankang_coup_sudaji"
+      ],
+      "eventIds": [
+        "lcq.event.debut_panjinlian",
+        "lcq.event.s08_01_eagle_valley",
+        "lcq.event.s08_02_wood_fort",
+        "lcq.event.s08_03_beifu_rescue",
+        "lcq.event.s08_04_sudaji_enters",
+        "lcq.event.s08_05_breakthrough",
+        "lcq.event.s08_06_pursuit_repelled",
+        "lcq.event.s08_07_palace_ninja",
+        "lcq.event.s08_08_gumingyin_plot",
+        "lcq.event.s08_09_zhaoming_night",
+        "lcq.event.s08_10_xuanwu_rescue",
+        "lcq.event.s08_debut_xiaoyaoyi"
+      ],
+      "chapterFlagPaths": {
+        "lcq.chapter.stage_08_jiankang_coup_ambush": [
+          "flags.chapter.lcq.stage_08_jiankang_coup.ambush.done"
+        ],
+        "lcq.chapter.stage_08_jiankang_coup_sudaji": [
+          "flags.chapter.lcq.stage_08_jiankang_coup.sudaji.done"
+        ],
+        "lcq.chapter.stage_08_jiankang_coup_coup": [
+          "flags.chapter.lcq.stage_08_jiankang_coup.coup.done"
+        ]
+      },
+      "eventFlagPaths": {
+        "lcq.event.s08_01_eagle_valley": [
+          "flags.event.s08_01.done"
+        ],
+        "lcq.event.s08_02_wood_fort": [
+          "flags.event.s08_02.done"
+        ],
+        "lcq.event.s08_03_beifu_rescue": [
+          "flags.event.s08_03.done"
+        ],
+        "lcq.event.s08_04_sudaji_enters": [
+          "flags.event.s08_04.done"
+        ],
+        "lcq.event.s08_05_breakthrough": [
+          "flags.event.s08_05.done"
+        ],
+        "lcq.event.s08_06_pursuit_repelled": [
+          "flags.event.s08_06.done"
+        ],
+        "lcq.event.s08_07_palace_ninja": [
+          "flags.event.s08_07.done"
+        ],
+        "lcq.event.s08_08_gumingyin_plot": [
+          "flags.event.s08_08.done"
+        ],
+        "lcq.event.s08_09_zhaoming_night": [
+          "flags.event.s08_09.done"
+        ],
+        "lcq.event.s08_10_xuanwu_rescue": [
+          "flags.event.s08_10.done"
+        ],
+        "lcq.event.s08_debut_xiaoyaoyi": [
+          "flags.event.s08_debut_xiaoyaoyi.done"
+        ],
+        "lcq.event.debut_panjinlian": [
+          "flags.event.debut_panjinlian.done"
+        ]
+      }
+    },
+    "lcq.stage_09_trade_and_escape": {
+      "book": "qingyu",
+      "chapterIds": [
+        "lcq.chapter.stage_09_trade_and_escape_aftermath",
+        "lcq.chapter.stage_09_trade_and_escape_guangyang",
+        "lcq.chapter.stage_09_trade_and_escape_sinking"
+      ],
+      "eventIds": [
+        "lcq.event.s09_01_eight_steeds_leave",
+        "lcq.event.s09_02_yun_ruyao_faints",
+        "lcq.event.s09_03_xiaozi_wounded",
+        "lcq.event.s09_04_weaving_trade",
+        "lcq.event.s09_05_drain_escape",
+        "lcq.event.s09_06_blacksea_fracture",
+        "lcq.event.s09_07_feiniao_infiltration",
+        "lcq.event.s09_08_six_doors_confession",
+        "lcq.event.s09_09_jiangzhou_crisis",
+        "lcq.event.s09_10_separation"
+      ],
+      "chapterFlagPaths": {
+        "lcq.chapter.stage_09_trade_and_escape_aftermath": [
+          "flags.chapter.lcq.stage_09_trade_and_escape.aftermath.done"
+        ],
+        "lcq.chapter.stage_09_trade_and_escape_sinking": [
+          "flags.chapter.lcq.stage_09_trade_and_escape.sinking.done"
+        ],
+        "lcq.chapter.stage_09_trade_and_escape_guangyang": [
+          "flags.chapter.lcq.stage_09_trade_and_escape.guangyang.done"
+        ]
+      },
+      "eventFlagPaths": {
+        "lcq.event.s09_01_eight_steeds_leave": [
+          "flags.event.s09_01.done"
+        ],
+        "lcq.event.s09_02_yun_ruyao_faints": [
+          "flags.event.s09_02.done"
+        ],
+        "lcq.event.s09_03_xiaozi_wounded": [
+          "flags.event.s09_03.done"
+        ],
+        "lcq.event.s09_04_weaving_trade": [
+          "flags.event.s09_04.done"
+        ],
+        "lcq.event.s09_05_drain_escape": [
+          "flags.event.s09_05.done"
+        ],
+        "lcq.event.s09_06_blacksea_fracture": [
+          "flags.event.s09_06.done"
+        ],
+        "lcq.event.s09_07_feiniao_infiltration": [
+          "flags.event.s09_07.done"
+        ],
+        "lcq.event.s09_08_six_doors_confession": [
+          "flags.event.s09_08.done"
+        ],
+        "lcq.event.s09_09_jiangzhou_crisis": [
+          "flags.event.s09_09.done"
+        ],
+        "lcq.event.s09_10_separation": [
+          "flags.event.s09_10.done"
+        ]
+      }
+    },
+    "lcq.stage_10_jiangzhou_shadow_war": {
+      "book": "qingyu",
+      "chapterIds": [
+        "lcq.chapter.stage_10_jiangzhou_shadow_war_lair",
+        "lcq.chapter.stage_10_jiangzhou_shadow_war_orders",
+        "lcq.chapter.stage_10_jiangzhou_shadow_war_qingzhou"
+      ],
+      "eventIds": [
+        "lcq.event.s10_01_jiangzhou_order",
+        "lcq.event.s10_02_yeying_pass",
+        "lcq.event.s10_03_ninja_trace",
+        "lcq.event.s10_04_left_army_review",
+        "lcq.event.s10_05_war_funds",
+        "lcq.event.s10_06_ruined_temple",
+        "lcq.event.s10_07_preemptive_strike",
+        "lcq.event.s10_08_lair_reversal",
+        "lcq.event.s10_09_yin_yang_fish",
+        "lcq.event.s10_10_xiaozi_crisis"
+      ],
+      "chapterFlagPaths": {
+        "lcq.chapter.stage_10_jiangzhou_shadow_war_orders": [
+          "flags.chapter.lcq.stage_10_jiangzhou_shadow_war.orders.done"
+        ],
+        "lcq.chapter.stage_10_jiangzhou_shadow_war_qingzhou": [
+          "flags.chapter.lcq.stage_10_jiangzhou_shadow_war.qingzhou.done"
+        ],
+        "lcq.chapter.stage_10_jiangzhou_shadow_war_lair": [
+          "flags.chapter.lcq.stage_10_jiangzhou_shadow_war.lair.done"
+        ]
+      },
+      "eventFlagPaths": {
+        "lcq.event.s10_01_jiangzhou_order": [
+          "flags.event.s10_01.done"
+        ],
+        "lcq.event.s10_02_yeying_pass": [
+          "flags.event.s10_02.done"
+        ],
+        "lcq.event.s10_03_ninja_trace": [
+          "flags.event.s10_03.done"
+        ],
+        "lcq.event.s10_04_left_army_review": [
+          "flags.event.s10_04.done"
+        ],
+        "lcq.event.s10_05_war_funds": [
+          "flags.event.s10_05.done"
+        ],
+        "lcq.event.s10_06_ruined_temple": [
+          "flags.event.s10_06.done"
+        ],
+        "lcq.event.s10_07_preemptive_strike": [
+          "flags.event.s10_07.done"
+        ],
+        "lcq.event.s10_08_lair_reversal": [
+          "flags.event.s10_08.done"
+        ],
+        "lcq.event.s10_09_yin_yang_fish": [
+          "flags.event.s10_09.done"
+        ],
+        "lcq.event.s10_10_xiaozi_crisis": [
+          "flags.event.s10_10.done"
+        ]
+      }
+    },
+    "lcq.stage_11_lieshan_battle": {
+      "book": "qingyu",
+      "chapterIds": [
+        "lcq.chapter.stage_11_lieshan_battle_fortress",
+        "lcq.chapter.stage_11_lieshan_battle_grain",
+        "lcq.chapter.stage_11_lieshan_battle_sanchuankou"
+      ],
+      "eventIds": [
+        "lcq.event.s11_01_pengri_arrives",
+        "lcq.event.s11_02_cement_fortress",
+        "lcq.event.s11_03_protect_yueshuang",
+        "lcq.event.s11_04_xingyue_appears",
+        "lcq.event.s11_05_wangtao_breaks",
+        "lcq.event.s11_06_snow_battle",
+        "lcq.event.s11_07_camp_falls",
+        "lcq.event.s11_08_jiangzhou_lockdown",
+        "lcq.event.s11_09_grain_plan",
+        "lcq.event.s11_10_sanchuankou_defeat"
+      ],
+      "chapterFlagPaths": {
+        "lcq.chapter.stage_11_lieshan_battle_fortress": [
+          "flags.chapter.lcq.stage_11_lieshan_battle.fortress.done"
+        ],
+        "lcq.chapter.stage_11_lieshan_battle_sanchuankou": [
+          "flags.chapter.lcq.stage_11_lieshan_battle.sanchuankou.done"
+        ],
+        "lcq.chapter.stage_11_lieshan_battle_grain": [
+          "flags.chapter.lcq.stage_11_lieshan_battle.grain.done"
+        ]
+      },
+      "eventFlagPaths": {
+        "lcq.event.s11_01_pengri_arrives": [
+          "flags.event.s11_01.done"
+        ],
+        "lcq.event.s11_02_cement_fortress": [
+          "flags.event.s11_02.done"
+        ],
+        "lcq.event.s11_03_protect_yueshuang": [
+          "flags.event.s11_03.done"
+        ],
+        "lcq.event.s11_04_xingyue_appears": [
+          "flags.event.s11_04.done"
+        ],
+        "lcq.event.s11_05_wangtao_breaks": [
+          "flags.event.s11_05.done"
+        ],
+        "lcq.event.s11_06_snow_battle": [
+          "flags.event.s11_06.done"
+        ],
+        "lcq.event.s11_07_camp_falls": [
+          "flags.event.s11_07.done"
+        ],
+        "lcq.event.s11_08_jiangzhou_lockdown": [
+          "flags.event.s11_08.done"
+        ],
+        "lcq.event.s11_09_grain_plan": [
+          "flags.event.s11_09.done"
+        ],
+        "lcq.event.s11_10_sanchuankou_defeat": [
+          "flags.event.s11_10.done"
+        ]
+      }
+    },
+    "lcq.stage_12_jiangzhou_counterwar": {
+      "book": "qingyu",
+      "chapterIds": [
+        "lcq.chapter.stage_12_jiangzhou_counterwar_chenxing",
+        "lcq.chapter.stage_12_jiangzhou_counterwar_dingchuan",
+        "lcq.chapter.stage_12_jiangzhou_counterwar_grainroad",
+        "lcq.chapter.stage_12_jiangzhou_counterwar_siege"
+      ],
+      "eventIds": [
+        "lcq.event.s12_01_grain_route_blocked",
+        "lcq.event.s12_02_recognize_zhuo",
+        "lcq.event.s12_03_xiaozi_controls_zhuo",
+        "lcq.event.s12_04_river_granary",
+        "lcq.event.s12_05_granary_fire_plan",
+        "lcq.event.s12_06_dragon_guard_routs",
+        "lcq.event.s12_07_left_wing_raid",
+        "lcq.event.s12_08_dingchuan_raid",
+        "lcq.event.s12_09_ge_huaimin_killed",
+        "lcq.event.s12_10_rescue_xiao",
+        "lcq.event.s12_11_siege_begins",
+        "lcq.event.s12_12_gate_fire",
+        "lcq.event.s12_13_long_siege",
+        "lcq.event.s12_14_chenxing_appears",
+        "lcq.event.s12_15_capture_jingli",
+        "lcq.event.s12_16_corpse_poison",
+        "lcq.event.s12_17_shanghou_stays",
+        "lcq.event.s12_18_linan_grain_order"
+      ],
+      "chapterFlagPaths": {
+        "lcq.chapter.stage_12_jiangzhou_counterwar_grainroad": [
+          "flags.chapter.lcq.stage_12_jiangzhou_counterwar.grainroad.done"
+        ],
+        "lcq.chapter.stage_12_jiangzhou_counterwar_dingchuan": [
+          "flags.chapter.lcq.stage_12_jiangzhou_counterwar.dingchuan.done"
+        ],
+        "lcq.chapter.stage_12_jiangzhou_counterwar_siege": [
+          "flags.chapter.lcq.stage_12_jiangzhou_counterwar.siege.done"
+        ],
+        "lcq.chapter.stage_12_jiangzhou_counterwar_chenxing": [
+          "flags.chapter.lcq.stage_12_jiangzhou_counterwar.chenxing.done"
+        ]
+      },
+      "eventFlagPaths": {
+        "lcq.event.s12_01_grain_route_blocked": [
+          "flags.event.s12_01.done"
+        ],
+        "lcq.event.s12_02_recognize_zhuo": [
+          "flags.event.s12_02.done"
+        ],
+        "lcq.event.s12_03_xiaozi_controls_zhuo": [
+          "flags.event.s12_03.done"
+        ],
+        "lcq.event.s12_04_river_granary": [
+          "flags.event.s12_04.done"
+        ],
+        "lcq.event.s12_05_granary_fire_plan": [
+          "flags.event.s12_05.done"
+        ],
+        "lcq.event.s12_06_dragon_guard_routs": [
+          "flags.event.s12_06.done"
+        ],
+        "lcq.event.s12_07_left_wing_raid": [
+          "flags.event.s12_07.done"
+        ],
+        "lcq.event.s12_08_dingchuan_raid": [
+          "flags.event.s12_08.done"
+        ],
+        "lcq.event.s12_09_ge_huaimin_killed": [
+          "flags.event.s12_09.done"
+        ],
+        "lcq.event.s12_10_rescue_xiao": [
+          "flags.event.s12_10.done"
+        ],
+        "lcq.event.s12_11_siege_begins": [
+          "flags.event.s12_11.done"
+        ],
+        "lcq.event.s12_12_gate_fire": [
+          "flags.event.s12_12.done"
+        ],
+        "lcq.event.s12_13_long_siege": [
+          "flags.event.s12_13.done"
+        ],
+        "lcq.event.s12_14_chenxing_appears": [
+          "flags.event.s12_14.done"
+        ],
+        "lcq.event.s12_15_capture_jingli": [
+          "flags.event.s12_15.done"
+        ],
+        "lcq.event.s12_16_corpse_poison": [
+          "flags.event.s12_16.done"
+        ],
+        "lcq.event.s12_17_shanghou_stays": [
+          "flags.event.s12_17.done"
+        ],
+        "lcq.event.s12_18_linan_grain_order": [
+          "flags.event.s12_18.done"
+        ]
+      }
+    },
+    "lyg.buddhist_conspiracy": {
+      "book": "yange",
+      "chapterIds": [
+        "lyg.chapter.buddhist_conspiracy_ganlu",
+        "lyg.chapter.buddhist_conspiracy_kui_ji",
+        "lyg.chapter.buddhist_conspiracy_siege"
+      ],
+      "eventIds": [
+        "lyg.event.buddhist_conspiracy_01_beat",
+        "lyg.event.buddhist_conspiracy_02_beat",
+        "lyg.event.buddhist_conspiracy_03_beat",
+        "lyg.event.buddhist_conspiracy_04_beat",
+        "lyg.event.buddhist_conspiracy_05_beat",
+        "lyg.event.buddhist_conspiracy_06_beat",
+        "lyg.event.buddhist_conspiracy_07_beat",
+        "lyg.event.buddhist_conspiracy_08_beat",
+        "lyg.event.buddhist_conspiracy_09_beat",
+        "lyg.event.buddhist_conspiracy_10_beat",
+        "lyg.event.buddhist_conspiracy_11_beat",
+        "lyg.event.buddhist_conspiracy_lore_nuclear_treaty"
+      ],
+      "chapterFlagPaths": {
+        "lyg.chapter.buddhist_conspiracy_siege": [
+          "flags.chapter.lyg.buddhist_conspiracy.siege.done"
+        ],
+        "lyg.chapter.buddhist_conspiracy_kui_ji": [
+          "flags.chapter.lyg.buddhist_conspiracy.kui_ji.done"
+        ],
+        "lyg.chapter.buddhist_conspiracy_ganlu": [
+          "flags.chapter.lyg.buddhist_conspiracy.ganlu.done"
+        ]
+      },
+      "eventFlagPaths": {
+        "lyg.event.buddhist_conspiracy_01_beat": [
+          "flags.event.buddhist_conspiracy_01.done"
+        ],
+        "lyg.event.buddhist_conspiracy_02_beat": [
+          "flags.event.buddhist_conspiracy_02.done"
+        ],
+        "lyg.event.buddhist_conspiracy_03_beat": [
+          "flags.event.buddhist_conspiracy_03.done"
+        ],
+        "lyg.event.buddhist_conspiracy_lore_nuclear_treaty": [
+          "flags.event.buddhist_conspiracy_lore_nuclear_treaty.done"
+        ],
+        "lyg.event.buddhist_conspiracy_04_beat": [
+          "flags.event.buddhist_conspiracy_04.done"
+        ],
+        "lyg.event.buddhist_conspiracy_05_beat": [
+          "flags.event.buddhist_conspiracy_05.done"
+        ],
+        "lyg.event.buddhist_conspiracy_06_beat": [
+          "flags.event.buddhist_conspiracy_06.done"
+        ],
+        "lyg.event.buddhist_conspiracy_07_beat": [
+          "flags.event.buddhist_conspiracy_07.done"
+        ],
+        "lyg.event.buddhist_conspiracy_08_beat": [
+          "flags.event.buddhist_conspiracy_08.done"
+        ],
+        "lyg.event.buddhist_conspiracy_09_beat": [
+          "flags.event.buddhist_conspiracy_09.done"
+        ],
+        "lyg.event.buddhist_conspiracy_10_beat": [
+          "flags.event.buddhist_conspiracy_10.done"
+        ],
+        "lyg.event.buddhist_conspiracy_11_beat": [
+          "flags.event.buddhist_conspiracy_11.done"
+        ]
+      }
+    },
+    "lyg.changgan_begins": {
+      "book": "yange",
+      "chapterIds": [
+        "lyg.chapter.changgan_begins"
+      ],
+      "eventIds": [
+        "lyg.event.debut_shefuren",
+        "lyg.event.s03_01",
+        "lyg.event.s03_02",
+        "lyg.event.s03_03",
+        "lyg.event.s03_04",
+        "lyg.event.s03_05",
+        "lyg.event.s03_06",
+        "lyg.event.s03_07",
+        "lyg.event.s03_08",
+        "lyg.event.s03_09"
+      ],
+      "chapterFlagPaths": {
+        "lyg.chapter.changgan_begins": [
+          "flags.event.s03_09.done"
+        ]
+      },
+      "eventFlagPaths": {
+        "lyg.event.s03_01": [
+          "flags.event.s03_01.done"
+        ],
+        "lyg.event.s03_02": [
+          "flags.event.s03_02.done"
+        ],
+        "lyg.event.s03_03": [
+          "flags.event.s03_03.done"
+        ],
+        "lyg.event.s03_04": [
+          "flags.event.s03_04.done"
+        ],
+        "lyg.event.s03_05": [
+          "flags.event.s03_05.done"
+        ],
+        "lyg.event.s03_06": [
+          "flags.event.s03_06.done"
+        ],
+        "lyg.event.s03_07": [
+          "flags.event.s03_07.done"
+        ],
+        "lyg.event.s03_08": [
+          "flags.event.s03_08.done"
+        ],
+        "lyg.event.s03_09": [
+          "flags.event.s03_09.done"
+        ],
+        "lyg.event.debut_shefuren": [
+          "flags.event.debut_shefuren.done"
+        ]
+      }
+    },
+    "lyg.changgan_interlude": {
+      "book": "yange",
+      "chapterIds": [
+        "lyg.chapter.changgan_interlude_ambush",
+        "lyg.chapter.changgan_interlude_court"
+      ],
+      "eventIds": [
+        "lyg.event.changgan_interlude_01_beat",
+        "lyg.event.changgan_interlude_02_beat",
+        "lyg.event.changgan_interlude_03_beat",
+        "lyg.event.changgan_interlude_04_beat",
+        "lyg.event.changgan_interlude_05_beat",
+        "lyg.event.changgan_interlude_06_beat",
+        "lyg.event.changgan_interlude_07_beat",
+        "lyg.event.changgan_interlude_08_beat",
+        "lyg.event.changgan_interlude_09_beat",
+        "lyg.event.changgan_interlude_10_beat",
+        "lyg.event.debut_daiqisi"
+      ],
+      "chapterFlagPaths": {
+        "lyg.chapter.changgan_interlude_court": [
+          "flags.chapter.lyg.changgan_interlude.court.done"
+        ],
+        "lyg.chapter.changgan_interlude_ambush": [
+          "flags.chapter.lyg.changgan_interlude.ambush.done"
+        ]
+      },
+      "eventFlagPaths": {
+        "lyg.event.changgan_interlude_01_beat": [
+          "flags.event.changgan_interlude_01.done"
+        ],
+        "lyg.event.changgan_interlude_02_beat": [
+          "flags.event.changgan_interlude_02.done"
+        ],
+        "lyg.event.changgan_interlude_03_beat": [
+          "flags.event.changgan_interlude_03.done"
+        ],
+        "lyg.event.changgan_interlude_04_beat": [
+          "flags.event.changgan_interlude_04.done"
+        ],
+        "lyg.event.changgan_interlude_05_beat": [
+          "flags.event.changgan_interlude_05.done"
+        ],
+        "lyg.event.changgan_interlude_06_beat": [
+          "flags.event.changgan_interlude_06.done"
+        ],
+        "lyg.event.changgan_interlude_07_beat": [
+          "flags.event.changgan_interlude_07.done"
+        ],
+        "lyg.event.changgan_interlude_08_beat": [
+          "flags.event.changgan_interlude_08.done"
+        ],
+        "lyg.event.changgan_interlude_09_beat": [
+          "flags.event.changgan_interlude_09.done"
+        ],
+        "lyg.event.changgan_interlude_10_beat": [
+          "flags.event.changgan_interlude_10.done"
+        ],
+        "lyg.event.debut_daiqisi": [
+          "flags.event.debut_daiqisi.done"
+        ]
+      }
+    },
+    "lyg.dingtao_beijing": {
+      "book": "yange",
+      "chapterIds": [
+        "lyg.chapter.dingtao_beijing"
+      ],
+      "eventIds": [
+        "lyg.event.debut_chengguang",
+        "lyg.event.debut_jiawenhe",
+        "lyg.event.debut_lvzhi",
+        "lyg.event.debut_qiyuxian",
+        "lyg.event.lvzhi_zhenjiu",
+        "lyg.event.s01_01",
+        "lyg.event.s01_02",
+        "lyg.event.s01_03",
+        "lyg.event.s01_04",
+        "lyg.event.s01_05",
+        "lyg.event.s01_06",
+        "lyg.event.s01_07",
+        "lyg.event.s01_08",
+        "lyg.event.s01_09"
+      ],
+      "chapterFlagPaths": {
+        "lyg.chapter.dingtao_beijing": [
+          "flags.event.s01_09.done"
+        ]
+      },
+      "eventFlagPaths": {
+        "lyg.event.s01_01": [
+          "flags.event.s01_01.done"
+        ],
+        "lyg.event.s01_02": [
+          "flags.event.s01_02.done"
+        ],
+        "lyg.event.s01_03": [
+          "flags.event.s01_03.done"
+        ],
+        "lyg.event.s01_04": [
+          "flags.event.s01_04.done"
+        ],
+        "lyg.event.s01_05": [
+          "flags.event.s01_05.done"
+        ],
+        "lyg.event.s01_06": [
+          "flags.event.s01_06.done"
+        ],
+        "lyg.event.s01_07": [
+          "flags.event.s01_07.done"
+        ],
+        "lyg.event.s01_08": [
+          "flags.event.s01_08.done"
+        ],
+        "lyg.event.s01_09": [
+          "flags.event.s01_09.done"
+        ],
+        "lyg.event.debut_lvzhi": [
+          "flags.event.debut_lvzhi.done"
+        ],
+        "lyg.event.lvzhi_zhenjiu": [
+          "flags.event.lvzhi_zhenjiu.done"
+        ],
+        "lyg.event.debut_chengguang": [
+          "flags.event.debut_chengguang.done"
+        ],
+        "lyg.event.debut_qiyuxian": [
+          "flags.event.debut_qiyuxian.done"
+        ],
+        "lyg.event.debut_jiawenhe": [
+          "flags.event.debut_jiawenhe.done"
+        ]
+      }
+    },
+    "lyg.ganlu_aftershock": {
+      "book": "yange",
+      "chapterIds": [
+        "lyg.chapter.ganlu_aftershock_chaos",
+        "lyg.chapter.ganlu_aftershock_regicide"
+      ],
+      "eventIds": [
+        "lyg.event.ganlu_aftershock_01_beat",
+        "lyg.event.ganlu_aftershock_02_beat",
+        "lyg.event.ganlu_aftershock_03_beat",
+        "lyg.event.ganlu_aftershock_04_beat",
+        "lyg.event.ganlu_aftershock_05_beat",
+        "lyg.event.ganlu_aftershock_06_beat",
+        "lyg.event.ganlu_aftershock_07_beat",
+        "lyg.event.ganlu_aftershock_08_beat",
+        "lyg.event.ganlu_aftershock_09_beat"
+      ],
+      "chapterFlagPaths": {
+        "lyg.chapter.ganlu_aftershock_chaos": [
+          "flags.chapter.lyg.ganlu_aftershock.chaos.done"
+        ],
+        "lyg.chapter.ganlu_aftershock_regicide": [
+          "flags.chapter.lyg.ganlu_aftershock.regicide.done"
+        ]
+      },
+      "eventFlagPaths": {
+        "lyg.event.ganlu_aftershock_01_beat": [
+          "flags.event.ganlu_aftershock_01.done"
+        ],
+        "lyg.event.ganlu_aftershock_02_beat": [
+          "flags.event.ganlu_aftershock_02.done"
+        ],
+        "lyg.event.ganlu_aftershock_03_beat": [
+          "flags.event.ganlu_aftershock_03.done"
+        ],
+        "lyg.event.ganlu_aftershock_04_beat": [
+          "flags.event.ganlu_aftershock_04.done"
+        ],
+        "lyg.event.ganlu_aftershock_05_beat": [
+          "flags.event.ganlu_aftershock_05.done"
+        ],
+        "lyg.event.ganlu_aftershock_06_beat": [
+          "flags.event.ganlu_aftershock_06.done"
+        ],
+        "lyg.event.ganlu_aftershock_07_beat": [
+          "flags.event.ganlu_aftershock_07.done"
+        ],
+        "lyg.event.ganlu_aftershock_08_beat": [
+          "flags.event.ganlu_aftershock_08.done"
+        ],
+        "lyg.event.ganlu_aftershock_09_beat": [
+          "flags.event.ganlu_aftershock_09.done"
+        ]
+      }
+    },
+    "lyg.ganlu_bian": {
+      "book": "yange",
+      "chapterIds": [
+        "lyg.chapter.arrival",
+        "lyg.chapter.ganlu_crisis",
+        "lyg.chapter.manipulation",
+        "lyg.chapter.power_gathering"
+      ],
+      "eventIds": [
+        "lyg.event.bai_nichang_defeat",
+        "lyg.event.ganlu_crisis_final",
+        "lyg.event.jia_wenhe_plan",
+        "lyg.event.li_jinxiang_meeting",
+        "lyg.event.liangzhou_victory",
+        "lyg.event.release_jingnian",
+        "lyg.event.soul_summoning",
+        "lyg.event.su_sha_identified",
+        "lyg.event.xiao_zi_departure",
+        "lyg.event.yang_yuhuan_report"
+      ],
+      "chapterFlagPaths": {
+        "lyg.chapter.arrival": [
+          "flags.event.li_jinxiang_meeting_done",
+          "flags.event.yang_yuhuan_report_done"
+        ],
+        "lyg.chapter.manipulation": [
+          "flags.event.qiankui_plan_foiled",
+          "flags.event.soul_summoning_done"
+        ],
+        "lyg.chapter.power_gathering": [
+          "flags.event.su_sha_identified",
+          "flags.event.xiao_zi_departure_done"
+        ],
+        "lyg.chapter.ganlu_crisis": [
+          "flags.chapter.ganlu_crisis.done"
+        ]
+      },
+      "eventFlagPaths": {
+        "lyg.event.li_jinxiang_meeting": [
+          "flags.event.li_jinxiang_meeting_done"
+        ],
+        "lyg.event.yang_yuhuan_report": [
+          "flags.event.yang_yuhuan_report_done"
+        ],
+        "lyg.event.jia_wenhe_plan": [
+          "flags.event.jia_wenhe_plan_done"
+        ],
+        "lyg.event.soul_summoning": [
+          "flags.event.soul_summoning_done"
+        ],
+        "lyg.event.bai_nichang_defeat": [
+          "flags.event.bai_nichang_defeat_done"
+        ],
+        "lyg.event.liangzhou_victory": [
+          "flags.event.liangzhou_victory_done"
+        ],
+        "lyg.event.su_sha_identified": [
+          "flags.event.su_sha_identified"
+        ],
+        "lyg.event.xiao_zi_departure": [
+          "flags.event.xiao_zi_departure_done"
+        ],
+        "lyg.event.release_jingnian": [
+          "flags.event.qiankui_plan_foiled"
+        ],
+        "lyg.event.ganlu_crisis_final": [
+          "flags.chapter.ganlu_crisis.done"
+        ]
+      }
+    },
+    "lyg.han_succession": {
+      "book": "yange",
+      "chapterIds": [
+        "lyg.chapter.han_succession_breakthrough",
+        "lyg.chapter.han_succession_succession"
+      ],
+      "eventIds": [
+        "lyg.event.debut_bainichang",
+        "lyg.event.debut_quanyuji",
+        "lyg.event.debut_yangyuhuan",
+        "lyg.event.dengji_yuzuo_yinhuan",
+        "lyg.event.han_succession_01_beat",
+        "lyg.event.han_succession_02_beat",
+        "lyg.event.han_succession_03_beat",
+        "lyg.event.han_succession_04_beat",
+        "lyg.event.han_succession_05_beat",
+        "lyg.event.han_succession_06_beat",
+        "lyg.event.han_succession_07_beat",
+        "lyg.event.han_succession_08_beat",
+        "lyg.event.han_succession_09_beat",
+        "lyg.event.han_succession_10_beat"
+      ],
+      "chapterFlagPaths": {
+        "lyg.chapter.han_succession_succession": [
+          "flags.chapter.lyg.han_succession.succession.done"
+        ],
+        "lyg.chapter.han_succession_breakthrough": [
+          "flags.chapter.lyg.han_succession.breakthrough.done"
+        ]
+      },
+      "eventFlagPaths": {
+        "lyg.event.han_succession_01_beat": [
+          "flags.event.han_succession_01.done"
+        ],
+        "lyg.event.han_succession_02_beat": [
+          "flags.event.han_succession_02.done"
+        ],
+        "lyg.event.han_succession_03_beat": [
+          "flags.event.han_succession_03.done"
+        ],
+        "lyg.event.han_succession_04_beat": [
+          "flags.event.han_succession_04.done"
+        ],
+        "lyg.event.han_succession_05_beat": [
+          "flags.event.han_succession_05.done"
+        ],
+        "lyg.event.han_succession_06_beat": [
+          "flags.event.han_succession_06.done"
+        ],
+        "lyg.event.han_succession_07_beat": [
+          "flags.event.han_succession_07.done"
+        ],
+        "lyg.event.han_succession_08_beat": [
+          "flags.event.han_succession_08.done"
+        ],
+        "lyg.event.han_succession_09_beat": [
+          "flags.event.han_succession_09.done"
+        ],
+        "lyg.event.han_succession_10_beat": [
+          "flags.event.han_succession_10.done"
+        ],
+        "lyg.event.dengji_yuzuo_yinhuan": [
+          "flags.event.dengji_yuzuo_yinhuan.done"
+        ],
+        "lyg.event.debut_yangyuhuan": [
+          "flags.event.debut_yangyuhuan.done"
+        ],
+        "lyg.event.debut_quanyuji": [
+          "flags.event.debut_quanyuji.done"
+        ],
+        "lyg.event.debut_bainichang": [
+          "flags.event.debut_bainichang.done"
+        ]
+      }
+    },
+    "lyg.liangzhou_league": {
+      "book": "yange",
+      "chapterIds": [
+        "lyg.chapter.liangzhou_league"
+      ],
+      "eventIds": [
+        "lyg.event.s06_01",
+        "lyg.event.s06_02",
+        "lyg.event.s06_03",
+        "lyg.event.s06_04",
+        "lyg.event.s06_05",
+        "lyg.event.s06_06",
+        "lyg.event.s06_07",
+        "lyg.event.s06_08",
+        "lyg.event.s06_09"
+      ],
+      "chapterFlagPaths": {
+        "lyg.chapter.liangzhou_league": [
+          "flags.event.s06_09.done"
+        ]
+      },
+      "eventFlagPaths": {
+        "lyg.event.s06_01": [
+          "flags.event.s06_01.done"
+        ],
+        "lyg.event.s06_02": [
+          "flags.event.s06_02.done"
+        ],
+        "lyg.event.s06_03": [
+          "flags.event.s06_03.done"
+        ],
+        "lyg.event.s06_04": [
+          "flags.event.s06_04.done"
+        ],
+        "lyg.event.s06_05": [
+          "flags.event.s06_05.done"
+        ],
+        "lyg.event.s06_06": [
+          "flags.event.s06_06.done"
+        ],
+        "lyg.event.s06_07": [
+          "flags.event.s06_07.done"
+        ],
+        "lyg.event.s06_08": [
+          "flags.event.s06_08.done"
+        ],
+        "lyg.event.s06_09": [
+          "flags.event.s06_09.done"
+        ]
+      }
+    },
+    "lyg.mijing_rumen": {
+      "book": "yange",
+      "chapterIds": [
+        "lyg.chapter.mijing_rumen"
+      ],
+      "eventIds": [
+        "lyg.event.s02_01",
+        "lyg.event.s02_02",
+        "lyg.event.s02_03",
+        "lyg.event.s02_04",
+        "lyg.event.s02_05",
+        "lyg.event.s02_06",
+        "lyg.event.s02_07",
+        "lyg.event.s02_08",
+        "lyg.event.s02_09",
+        "lyg.event.yangwuhou_rumor"
+      ],
+      "chapterFlagPaths": {
+        "lyg.chapter.mijing_rumen": [
+          "flags.event.s02_09.done"
+        ]
+      },
+      "eventFlagPaths": {
+        "lyg.event.s02_01": [
+          "flags.event.s02_01.done"
+        ],
+        "lyg.event.s02_02": [
+          "flags.event.s02_02.done"
+        ],
+        "lyg.event.s02_03": [
+          "flags.event.s02_03.done"
+        ],
+        "lyg.event.s02_04": [
+          "flags.event.s02_04.done"
+        ],
+        "lyg.event.s02_05": [
+          "flags.event.s02_05.done"
+        ],
+        "lyg.event.s02_06": [
+          "flags.event.s02_06.done"
+        ],
+        "lyg.event.s02_07": [
+          "flags.event.s02_07.done"
+        ],
+        "lyg.event.s02_08": [
+          "flags.event.s02_08.done"
+        ],
+        "lyg.event.s02_09": [
+          "flags.event.s02_09.done"
+        ],
+        "lyg.event.yangwuhou_rumor": [
+          "flags.event.yangwuhou_rumor.done"
+        ]
+      }
+    },
+    "lyg.shituolin_endgame": {
+      "book": "yange",
+      "chapterIds": [
+        "lyg.chapter.shituolin_endgame_kui_ji",
+        "lyg.chapter.shituolin_endgame_li_fuguo",
+        "lyg.chapter.shituolin_endgame_old_grudge"
+      ],
+      "eventIds": [
+        "lyg.event.shituolin_endgame_01_beat",
+        "lyg.event.shituolin_endgame_02_beat",
+        "lyg.event.shituolin_endgame_03_beat",
+        "lyg.event.shituolin_endgame_04_beat",
+        "lyg.event.shituolin_endgame_05_beat",
+        "lyg.event.shituolin_endgame_06_beat",
+        "lyg.event.shituolin_endgame_07_beat",
+        "lyg.event.shituolin_endgame_08_beat",
+        "lyg.event.shituolin_endgame_09_beat",
+        "lyg.event.shituolin_endgame_10_beat",
+        "lyg.event.shituolin_endgame_11_beat",
+        "lyg.event.shituolin_endgame_12_beat",
+        "lyg.event.shituolin_endgame_13_beat",
+        "lyg.event.shituolin_endgame_14_beat",
+        "lyg.event.shituolin_endgame_15_beat"
+      ],
+      "chapterFlagPaths": {
+        "lyg.chapter.shituolin_endgame_kui_ji": [
+          "flags.chapter.lyg.shituolin_endgame.kui_ji.done"
+        ],
+        "lyg.chapter.shituolin_endgame_li_fuguo": [
+          "flags.chapter.lyg.shituolin_endgame.li_fuguo.done"
+        ],
+        "lyg.chapter.shituolin_endgame_old_grudge": [
+          "flags.chapter.lyg.shituolin_endgame.old_grudge.done"
+        ]
+      },
+      "eventFlagPaths": {
+        "lyg.event.shituolin_endgame_01_beat": [
+          "flags.event.shituolin_endgame_01.done"
+        ],
+        "lyg.event.shituolin_endgame_02_beat": [
+          "flags.event.shituolin_endgame_02.done"
+        ],
+        "lyg.event.shituolin_endgame_03_beat": [
+          "flags.event.shituolin_endgame_03.done"
+        ],
+        "lyg.event.shituolin_endgame_04_beat": [
+          "flags.event.shituolin_endgame_04.done"
+        ],
+        "lyg.event.shituolin_endgame_05_beat": [
+          "flags.event.shituolin_endgame_05.done"
+        ],
+        "lyg.event.shituolin_endgame_06_beat": [
+          "flags.event.shituolin_endgame_06.done"
+        ],
+        "lyg.event.shituolin_endgame_07_beat": [
+          "flags.event.shituolin_endgame_07.done"
+        ],
+        "lyg.event.shituolin_endgame_08_beat": [
+          "flags.event.shituolin_endgame_08.done"
+        ],
+        "lyg.event.shituolin_endgame_09_beat": [
+          "flags.event.shituolin_endgame_09.done"
+        ],
+        "lyg.event.shituolin_endgame_10_beat": [
+          "flags.event.shituolin_endgame_10.done"
+        ],
+        "lyg.event.shituolin_endgame_11_beat": [
+          "flags.event.shituolin_endgame_11.done"
+        ],
+        "lyg.event.shituolin_endgame_12_beat": [
+          "flags.event.shituolin_endgame_12.done"
+        ],
+        "lyg.event.shituolin_endgame_13_beat": [
+          "flags.event.shituolin_endgame_13.done"
+        ],
+        "lyg.event.shituolin_endgame_14_beat": [
+          "flags.event.shituolin_endgame_14.done"
+        ],
+        "lyg.event.shituolin_endgame_15_beat": [
+          "flags.event.shituolin_endgame_15.done"
+        ]
+      }
+    },
+    "lyg.shixiang_ambush": {
+      "book": "yange",
+      "chapterIds": [
+        "lyg.chapter.ambush",
+        "lyg.chapter.final_move",
+        "lyg.chapter.multiple_enemies",
+        "lyg.chapter.resolve"
+      ],
+      "eventIds": [
+        "lyg.event.ambush_at_shuixiang",
+        "lyg.event.capture_feiniao",
+        "lyg.event.escape_or_counter",
+        "lyg.event.final_showdown",
+        "lyg.event.forewarned_from_xinyong",
+        "lyg.event.investigate_te_master",
+        "lyg.event.lure_pan_jinlian",
+        "lyg.event.raid_qinglongsi",
+        "lyg.event.track_dagger_attacker"
+      ],
+      "chapterFlagPaths": {
+        "lyg.chapter.ambush": [
+          "flags.chapter.ambush.done"
+        ],
+        "lyg.chapter.multiple_enemies": [
+          "flags.chapter.multiple_enemies.done"
+        ],
+        "lyg.chapter.resolve": [
+          "flags.chapter.resolve.done"
+        ],
+        "lyg.chapter.final_move": []
+      },
+      "eventFlagPaths": {
+        "lyg.event.ambush_at_shuixiang": [
+          "flags.event.ambush_at_shuixiang.triggered"
+        ],
+        "lyg.event.forewarned_from_xinyong": [
+          "flags.event.forewarned_from_xinyong.triggered"
+        ],
+        "lyg.event.investigate_te_master": [
+          "flags.event.investigate_te_master.triggered"
+        ],
+        "lyg.event.lure_pan_jinlian": [
+          "flags.event.lure_pan_jinlian.triggered"
+        ],
+        "lyg.event.capture_feiniao": [
+          "flags.event.capture_feiniao.done"
+        ],
+        "lyg.event.track_dagger_attacker": [
+          "flags.event.track_dagger_attacker.triggered"
+        ],
+        "lyg.event.raid_qinglongsi": [
+          "flags.event.raid_qinglongsi.done"
+        ],
+        "lyg.event.escape_or_counter": [
+          "flags.event.escape_or_counter.triggered"
+        ],
+        "lyg.event.final_showdown": [
+          "flags.event.final_showdown.triggered"
+        ]
+      }
+    },
+    "lyl.han_palace_endgame": {
+      "book": "yunlong",
+      "chapterIds": [
+        "lyl.chapter.han_palace_endgame_endgame",
+        "lyl.chapter.han_palace_endgame_palace"
+      ],
+      "eventIds": [
+        "lyl.event.han_palace_endgame_01_beat",
+        "lyl.event.han_palace_endgame_02_beat",
+        "lyl.event.han_palace_endgame_03_beat",
+        "lyl.event.han_palace_endgame_04_beat",
+        "lyl.event.han_palace_endgame_05_beat",
+        "lyl.event.han_palace_endgame_06_beat",
+        "lyl.event.han_palace_endgame_07_beat",
+        "lyl.event.han_palace_endgame_08_beat",
+        "lyl.event.han_palace_endgame_09_beat",
+        "lyl.event.han_palace_endgame_10_beat"
+      ],
+      "chapterFlagPaths": {
+        "lyl.chapter.han_palace_endgame_palace": [
+          "flags.chapter.lyl.han_palace_endgame.palace.done"
+        ],
+        "lyl.chapter.han_palace_endgame_endgame": [
+          "flags.chapter.lyl.han_palace_endgame.endgame.done"
+        ]
+      },
+      "eventFlagPaths": {
+        "lyl.event.han_palace_endgame_01_beat": [
+          "flags.event.han_palace_endgame_01.done"
+        ],
+        "lyl.event.han_palace_endgame_02_beat": [
+          "flags.event.han_palace_endgame_02.done"
+        ],
+        "lyl.event.han_palace_endgame_03_beat": [
+          "flags.event.han_palace_endgame_03.done"
+        ],
+        "lyl.event.han_palace_endgame_04_beat": [
+          "flags.event.han_palace_endgame_04.done"
+        ],
+        "lyl.event.han_palace_endgame_05_beat": [
+          "flags.event.han_palace_endgame_05.done"
+        ],
+        "lyl.event.han_palace_endgame_06_beat": [
+          "flags.event.han_palace_endgame_06.done"
+        ],
+        "lyl.event.han_palace_endgame_07_beat": [
+          "flags.event.han_palace_endgame_07.done"
+        ],
+        "lyl.event.han_palace_endgame_08_beat": [
+          "flags.event.han_palace_endgame_08.done"
+        ],
+        "lyl.event.han_palace_endgame_09_beat": [
+          "flags.event.han_palace_endgame_09.done"
+        ],
+        "lyl.event.han_palace_endgame_10_beat": [
+          "flags.event.han_palace_endgame_10.done"
+        ]
+      }
+    },
+    "lyl.jiangzhou_retreat": {
+      "book": "yunlong",
+      "chapterIds": [
+        "lyl.chapter.jiangzhou_retreat"
+      ],
+      "eventIds": [
+        "lyl.event.debut_zhuoyunjun",
+        "lyl.event.s01_01",
+        "lyl.event.s01_02",
+        "lyl.event.s01_03",
+        "lyl.event.s01_04",
+        "lyl.event.s01_05"
+      ],
+      "chapterFlagPaths": {
+        "lyl.chapter.jiangzhou_retreat": [
+          "flags.event.s01_05.done"
+        ]
+      },
+      "eventFlagPaths": {
+        "lyl.event.s01_01": [
+          "flags.event.s01_01.done"
+        ],
+        "lyl.event.s01_02": [
+          "flags.event.s01_02.done"
+        ],
+        "lyl.event.s01_03": [
+          "flags.event.s01_03.done"
+        ],
+        "lyl.event.s01_04": [
+          "flags.event.s01_04.done"
+        ],
+        "lyl.event.s01_05": [
+          "flags.event.s01_05.done"
+        ],
+        "lyl.event.debut_zhuoyunjun": [
+          "flags.event.debut_zhuoyunjun.done"
+        ]
+      }
+    },
+    "lyl.lin_an_black_sea": {
+      "book": "yunlong",
+      "chapterIds": [
+        "liuchao.chapter.arrival",
+        "liuchao.chapter.black_sea_prelude",
+        "liuchao.chapter.lin_chong_track",
+        "liuchao.chapter.wei_yuan_affair",
+        "liuchao.chapter.xue_sun_trust"
+      ],
+      "eventIds": [
+        "liuchao.event.black_sea_approach",
+        "liuchao.event.cold_poison_mystery",
+        "liuchao.event.factory_registration",
+        "liuchao.event.final_preparations",
+        "liuchao.event.gao_yanei_showdown",
+        "liuchao.event.gather_intel",
+        "liuchao.event.lin_chong_confront",
+        "liuchao.event.wei_yuan_crisis_deepen",
+        "liuchao.event.wei_yuan_first_contact",
+        "liuchao.event.xue_sun_meeting",
+        "liuchao.event.you_chan_meeting",
+        "lyl.event.debut_ruan_sisters",
+        "lyl.event.mingqingsi_encounter",
+        "lyl.event.ruan_xianglin_scheme",
+        "lyl.event.ruan_xiangning_secret"
+      ],
+      "chapterFlagPaths": {
+        "liuchao.chapter.arrival": [
+          "flags.chapter.arrival.done"
+        ],
+        "liuchao.chapter.lin_chong_track": [
+          "flags.chapter.lin_chong.done"
+        ],
+        "liuchao.chapter.wei_yuan_affair": [
+          "flags.chapter.wei_yuan.done"
+        ],
+        "liuchao.chapter.xue_sun_trust": [
+          "flags.chapter.xue_sun.done"
+        ],
+        "liuchao.chapter.black_sea_prelude": [
+          "flags.chapter.black_sea_prelude.done"
+        ]
+      },
+      "eventFlagPaths": {
+        "liuchao.event.factory_registration": [
+          "flags.event.factory_registration.done"
+        ],
+        "liuchao.event.gather_intel": [
+          "flags.event.gather_intel.done"
+        ],
+        "liuchao.event.wei_yuan_first_contact": [
+          "flags.event.wei_yuan_first_contact.done"
+        ],
+        "liuchao.event.lin_chong_confront": [
+          "flags.event.lin_chong_confront.done"
+        ],
+        "liuchao.event.you_chan_meeting": [
+          "flags.event.you_chan_meeting.done"
+        ],
+        "liuchao.event.wei_yuan_crisis_deepen": [
+          "flags.event.wei_yuan_crisis_deepen.done"
+        ],
+        "liuchao.event.gao_yanei_showdown": [
+          "flags.event.gao_yanei_showdown.done"
+        ],
+        "liuchao.event.xue_sun_meeting": [
+          "flags.event.xue_sun_meeting.done"
+        ],
+        "liuchao.event.cold_poison_mystery": [
+          "flags.event.cold_poison_mystery.done"
+        ],
+        "liuchao.event.black_sea_approach": [
+          "flags.event.black_sea_approach.done"
+        ],
+        "liuchao.event.final_preparations": [
+          "flags.event.final_preparations.done"
+        ],
+        "lyl.event.debut_ruan_sisters": [
+          "flags.event.debut_ruan_sisters.done"
+        ],
+        "lyl.event.ruan_xiangning_secret": [
+          "flags.event.ruan_xiangning_secret.done"
+        ],
+        "lyl.event.ruan_xianglin_scheme": [
+          "flags.event.ruan_xianglin_scheme.done"
+        ],
+        "lyl.event.mingqingsi_encounter": [
+          "flags.event.mingqingsi_encounter.done"
+        ]
+      }
+    },
+    "lyl.lin_an_bridge": {
+      "book": "yunlong",
+      "chapterIds": [
+        "lyl.chapter.lin_an_bridge_intel"
+      ],
+      "eventIds": [
+        "lyl.event.debut_jianyuji",
+        "lyl.event.debut_jingli",
+        "lyl.event.debut_yinfulan",
+        "lyl.event.debut_yundanliu",
+        "lyl.event.debut_yunruyao",
+        "lyl.event.debut_zhaohede",
+        "lyl.event.lin_an_bridge_01_beat",
+        "lyl.event.lin_an_bridge_02_beat",
+        "lyl.event.lin_an_bridge_03_beat",
+        "lyl.event.lin_an_bridge_04_beat"
+      ],
+      "chapterFlagPaths": {
+        "lyl.chapter.lin_an_bridge_intel": [
+          "flags.chapter.lyl.lin_an_bridge.intel.done"
+        ]
+      },
+      "eventFlagPaths": {
+        "lyl.event.lin_an_bridge_01_beat": [
+          "flags.event.lin_an_bridge_01.done"
+        ],
+        "lyl.event.lin_an_bridge_02_beat": [
+          "flags.event.lin_an_bridge_02.done"
+        ],
+        "lyl.event.lin_an_bridge_03_beat": [
+          "flags.event.lin_an_bridge_03.done"
+        ],
+        "lyl.event.lin_an_bridge_04_beat": [
+          "flags.event.lin_an_bridge_04.done"
+        ],
+        "lyl.event.debut_yundanliu": [
+          "flags.event.debut_yundanliu.done"
+        ],
+        "lyl.event.debut_yunruyao": [
+          "flags.event.debut_yunruyao.done"
+        ],
+        "lyl.event.debut_zhaohede": [
+          "flags.event.debut_zhaohede.done"
+        ],
+        "lyl.event.debut_yinfulan": [
+          "flags.event.debut_yinfulan.done"
+        ],
+        "lyl.event.debut_jingli": [
+          "flags.event.debut_jingli.done"
+        ],
+        "lyl.event.debut_jianyuji": [
+          "flags.event.debut_jianyuji.done"
+        ]
+      }
+    },
+    "lyl.luoyang_cloud_secret": {
+      "book": "yunlong",
+      "chapterIds": [
+        "lyl.chapter.luoyang_cloud_secret"
+      ],
+      "eventIds": [
+        "lyl.event.s05_01",
+        "lyl.event.s05_02",
+        "lyl.event.s05_03",
+        "lyl.event.s05_04",
+        "lyl.event.s05_05",
+        "lyl.event.s05_06",
+        "lyl.event.s05_07",
+        "lyl.event.s05_08",
+        "lyl.event.s05_09"
+      ],
+      "chapterFlagPaths": {
+        "lyl.chapter.luoyang_cloud_secret": [
+          "flags.event.s05_09.done"
+        ]
+      },
+      "eventFlagPaths": {
+        "lyl.event.s05_01": [
+          "flags.event.s05_01.done"
+        ],
+        "lyl.event.s05_02": [
+          "flags.event.s05_02.done"
+        ],
+        "lyl.event.s05_03": [
+          "flags.event.s05_03.done"
+        ],
+        "lyl.event.s05_04": [
+          "flags.event.s05_04.done"
+        ],
+        "lyl.event.s05_05": [
+          "flags.event.s05_05.done"
+        ],
+        "lyl.event.s05_06": [
+          "flags.event.s05_06.done"
+        ],
+        "lyl.event.s05_07": [
+          "flags.event.s05_07.done"
+        ],
+        "lyl.event.s05_08": [
+          "flags.event.s05_08.done"
+        ],
+        "lyl.event.s05_09": [
+          "flags.event.s05_09.done"
+        ]
+      }
+    },
+    "lyl.luoyang_coup": {
+      "book": "yunlong",
+      "chapterIds": [
+        "lyl.chapter.luoyang_coup"
+      ],
+      "eventIds": [
+        "lyl.event.s06_01",
+        "lyl.event.s06_01b",
+        "lyl.event.s06_02",
+        "lyl.event.s06_03",
+        "lyl.event.s06_04",
+        "lyl.event.s06_05",
+        "lyl.event.s06_06"
+      ],
+      "chapterFlagPaths": {
+        "lyl.chapter.luoyang_coup": [
+          "flags.event.s06_06.done"
+        ]
+      },
+      "eventFlagPaths": {
+        "lyl.event.s06_01": [
+          "flags.event.s06_01.done"
+        ],
+        "lyl.event.s06_01b": [
+          "flags.event.s06_01b.done"
+        ],
+        "lyl.event.s06_02": [
+          "flags.event.s06_02.done"
+        ],
+        "lyl.event.s06_03": [
+          "flags.event.s06_03.done"
+        ],
+        "lyl.event.s06_04": [
+          "flags.event.s06_04.done"
+        ],
+        "lyl.event.s06_05": [
+          "flags.event.s06_05.done"
+        ],
+        "lyl.event.s06_06": [
+          "flags.event.s06_06.done"
+        ]
+      }
+    },
+    "lyl.taiquan_afterfall": {
+      "book": "yunlong",
+      "chapterIds": [
+        "lyl.chapter.taiquan_afterfall_luodu",
+        "lyl.chapter.taiquan_afterfall_taquan"
+      ],
+      "eventIds": [
+        "lyl.event.taiquan_afterfall_01_beat",
+        "lyl.event.taiquan_afterfall_02_beat",
+        "lyl.event.taiquan_afterfall_03_beat",
+        "lyl.event.taiquan_afterfall_04_beat",
+        "lyl.event.taiquan_afterfall_05_beat",
+        "lyl.event.taiquan_afterfall_06_beat",
+        "lyl.event.taiquan_afterfall_07_beat",
+        "lyl.event.taiquan_afterfall_08_beat",
+        "lyl.event.taiquan_afterfall_09_beat",
+        "lyl.event.taiquan_afterfall_10_beat"
+      ],
+      "chapterFlagPaths": {
+        "lyl.chapter.taiquan_afterfall_taquan": [
+          "flags.chapter.lyl.taiquan_afterfall.taquan.done"
+        ],
+        "lyl.chapter.taiquan_afterfall_luodu": [
+          "flags.chapter.lyl.taiquan_afterfall.luodu.done"
+        ]
+      },
+      "eventFlagPaths": {
+        "lyl.event.taiquan_afterfall_01_beat": [
+          "flags.event.taiquan_afterfall_01.done"
+        ],
+        "lyl.event.taiquan_afterfall_02_beat": [
+          "flags.event.taiquan_afterfall_02.done"
+        ],
+        "lyl.event.taiquan_afterfall_03_beat": [
+          "flags.event.taiquan_afterfall_03.done"
+        ],
+        "lyl.event.taiquan_afterfall_04_beat": [
+          "flags.event.taiquan_afterfall_04.done"
+        ],
+        "lyl.event.taiquan_afterfall_05_beat": [
+          "flags.event.taiquan_afterfall_05.done"
+        ],
+        "lyl.event.taiquan_afterfall_06_beat": [
+          "flags.event.taiquan_afterfall_06.done"
+        ],
+        "lyl.event.taiquan_afterfall_07_beat": [
+          "flags.event.taiquan_afterfall_07.done"
+        ],
+        "lyl.event.taiquan_afterfall_08_beat": [
+          "flags.event.taiquan_afterfall_08.done"
+        ],
+        "lyl.event.taiquan_afterfall_09_beat": [
+          "flags.event.taiquan_afterfall_09.done"
+        ],
+        "lyl.event.taiquan_afterfall_10_beat": [
+          "flags.event.taiquan_afterfall_10.done"
+        ]
+      }
+    },
+    "lyl.taiquan_core_conflict": {
+      "book": "yunlong",
+      "chapterIds": [
+        "lyl.chapter.aftermath",
+        "lyl.chapter.confront_pan_jinlian",
+        "lyl.chapter.escape_ant_hill",
+        "lyl.chapter.meet_yin_fulan"
+      ],
+      "eventIds": [
+        "lyl.event.decide_yin_fulan_fate",
+        "lyl.event.find_exit",
+        "lyl.event.pan_jinlian_ambush",
+        "lyl.event.plan_counterattack",
+        "lyl.event.yin_fulan_aid",
+        "lyl.event.yin_yang_counter",
+        "lyl.event.yu_baiying_truce"
+      ],
+      "chapterFlagPaths": {
+        "lyl.chapter.escape_ant_hill": [
+          "flags.chapter.escape_ant_hill.done"
+        ],
+        "lyl.chapter.meet_yin_fulan": [
+          "flags.chapter.meet_yin_fulan.done"
+        ],
+        "lyl.chapter.confront_pan_jinlian": [
+          "flags.chapter.confront_pan_jinlian.done"
+        ],
+        "lyl.chapter.aftermath": [
+          "flags.chapter.aftermath.done"
+        ]
+      },
+      "eventFlagPaths": {
+        "lyl.event.find_exit": [
+          "flags.chapter.escape_ant_hill.done"
+        ],
+        "lyl.event.yu_baiying_truce": [
+          "flags.chapter.escape_ant_hill.done"
+        ],
+        "lyl.event.yin_fulan_aid": [
+          "flags.event.yin_fulan_aid.done"
+        ],
+        "lyl.event.plan_counterattack": [
+          "flags.chapter.meet_yin_fulan.done"
+        ],
+        "lyl.event.pan_jinlian_ambush": [
+          "flags.chapter.confront_pan_jinlian.done"
+        ],
+        "lyl.event.yin_yang_counter": [
+          "flags.chapter.confront_pan_jinlian.done"
+        ],
+        "lyl.event.decide_yin_fulan_fate": [
+          "flags.chapter.aftermath.done"
+        ]
+      }
+    },
+    "lyl.taiquan_expedition": {
+      "book": "yunlong",
+      "chapterIds": [
+        "liuchao.chapter.alliance_and_conflict",
+        "liuchao.chapter.arrival_in_canglan",
+        "liuchao.chapter.final_showdown",
+        "liuchao.chapter.hunt_for_fruit",
+        "liuchao.chapter.taiquan_exploration"
+      ],
+      "eventIds": [
+        "liuchao.event.du_zong_raid",
+        "liuchao.event.enter_taiquan",
+        "liuchao.event.escape_taiquan",
+        "liuchao.event.fruit_conflict",
+        "liuchao.event.reconnoiter"
+      ],
+      "chapterFlagPaths": {
+        "liuchao.chapter.arrival_in_canglan": [
+          "flags.chapter.arrival_in_canglan.done"
+        ],
+        "liuchao.chapter.taiquan_exploration": [
+          "flags.chapter.taiquan_exploration.done"
+        ],
+        "liuchao.chapter.alliance_and_conflict": [
+          "flags.event.du_zong_raid.done"
+        ],
+        "liuchao.chapter.hunt_for_fruit": [
+          "flags.chapter.hunt_for_fruit.done"
+        ],
+        "liuchao.chapter.final_showdown": [
+          "flags.chapter.final_showdown.done"
+        ]
+      },
+      "eventFlagPaths": {
+        "liuchao.event.enter_taiquan": [
+          "flags.event.enter_taiquan.done"
+        ],
+        "liuchao.event.reconnoiter": [
+          "flags.event.reconnoiter.done"
+        ],
+        "liuchao.event.du_zong_raid": [
+          "flags.event.du_zong_raid.done"
+        ],
+        "liuchao.event.fruit_conflict": [
+          "flags.event.fruit_conflict.done"
+        ],
+        "liuchao.event.escape_taiquan": [
+          "flags.event.escape_taiquan.done"
+        ]
+      }
+    },
+    "lyl.taiquan_sacred_fruit": {
+      "book": "yunlong",
+      "chapterIds": [
+        "lyl.chapter.taiquan_sacred_fruit_canglan",
+        "lyl.chapter.taiquan_sacred_fruit_linan_close"
+      ],
+      "eventIds": [
+        "lyl.event.taiquan_sacred_fruit_01",
+        "lyl.event.taiquan_sacred_fruit_02",
+        "lyl.event.taiquan_sacred_fruit_03",
+        "lyl.event.taiquan_sacred_fruit_04",
+        "lyl.event.taiquan_sacred_fruit_05",
+        "lyl.event.taiquan_sacred_fruit_06",
+        "lyl.event.taiquan_sacred_fruit_07",
+        "lyl.event.taiquan_sacred_fruit_08",
+        "lyl.event.taiquan_sacred_fruit_09",
+        "lyl.event.taiquan_sacred_fruit_10"
+      ],
+      "chapterFlagPaths": {
+        "lyl.chapter.taiquan_sacred_fruit_linan_close": [
+          "flags.chapter.lyl.taiquan_sacred_fruit.linan_close.done"
+        ],
+        "lyl.chapter.taiquan_sacred_fruit_canglan": [
+          "flags.chapter.lyl.taiquan_sacred_fruit.canglan.done"
+        ]
+      },
+      "eventFlagPaths": {
+        "lyl.event.taiquan_sacred_fruit_01": [
+          "flags.event.taiquan_sacred_fruit_01.done"
+        ],
+        "lyl.event.taiquan_sacred_fruit_02": [
+          "flags.event.taiquan_sacred_fruit_02.done"
+        ],
+        "lyl.event.taiquan_sacred_fruit_03": [
+          "flags.event.taiquan_sacred_fruit_03.done"
+        ],
+        "lyl.event.taiquan_sacred_fruit_04": [
+          "flags.event.taiquan_sacred_fruit_04.done"
+        ],
+        "lyl.event.taiquan_sacred_fruit_05": [
+          "flags.event.taiquan_sacred_fruit_05.done"
+        ],
+        "lyl.event.taiquan_sacred_fruit_06": [
+          "flags.event.taiquan_sacred_fruit_06.done"
+        ],
+        "lyl.event.taiquan_sacred_fruit_07": [
+          "flags.event.taiquan_sacred_fruit_07.done"
+        ],
+        "lyl.event.taiquan_sacred_fruit_08": [
+          "flags.event.taiquan_sacred_fruit_08.done"
+        ],
+        "lyl.event.taiquan_sacred_fruit_09": [
+          "flags.event.taiquan_sacred_fruit_09.done"
+        ],
+        "lyl.event.taiquan_sacred_fruit_10": [
+          "flags.event.taiquan_sacred_fruit_10.done"
+        ]
+      }
+    },
+    "lyl.xiaoyingzhou_blacksea_trap": {
+      "book": "yunlong",
+      "chapterIds": [
+        "lyl.chapter.xiaoyingzhou_blacksea_trap_linchong",
+        "lyl.chapter.xiaoyingzhou_blacksea_trap_trap"
+      ],
+      "eventIds": [
+        "lyl.event.xiaoyingzhou_blacksea_trap_01_beat",
+        "lyl.event.xiaoyingzhou_blacksea_trap_02_beat",
+        "lyl.event.xiaoyingzhou_blacksea_trap_03_beat",
+        "lyl.event.xiaoyingzhou_blacksea_trap_04_beat",
+        "lyl.event.xiaoyingzhou_blacksea_trap_05_beat",
+        "lyl.event.xiaoyingzhou_blacksea_trap_06_beat",
+        "lyl.event.xiaoyingzhou_blacksea_trap_07_beat",
+        "lyl.event.xiaoyingzhou_blacksea_trap_08_beat",
+        "lyl.event.xiaoyingzhou_blacksea_trap_09_beat",
+        "lyl.event.xiaoyingzhou_blacksea_trap_10_beat"
+      ],
+      "chapterFlagPaths": {
+        "lyl.chapter.xiaoyingzhou_blacksea_trap_linchong": [
+          "flags.chapter.lyl.xiaoyingzhou_blacksea_trap.linchong.done"
+        ],
+        "lyl.chapter.xiaoyingzhou_blacksea_trap_trap": [
+          "flags.chapter.lyl.xiaoyingzhou_blacksea_trap.trap.done"
+        ]
+      },
+      "eventFlagPaths": {
+        "lyl.event.xiaoyingzhou_blacksea_trap_01_beat": [
+          "flags.event.xiaoyingzhou_blacksea_trap_01.done"
+        ],
+        "lyl.event.xiaoyingzhou_blacksea_trap_02_beat": [
+          "flags.event.xiaoyingzhou_blacksea_trap_02.done"
+        ],
+        "lyl.event.xiaoyingzhou_blacksea_trap_03_beat": [
+          "flags.event.xiaoyingzhou_blacksea_trap_03.done"
+        ],
+        "lyl.event.xiaoyingzhou_blacksea_trap_04_beat": [
+          "flags.event.xiaoyingzhou_blacksea_trap_04.done"
+        ],
+        "lyl.event.xiaoyingzhou_blacksea_trap_05_beat": [
+          "flags.event.xiaoyingzhou_blacksea_trap_05.done"
+        ],
+        "lyl.event.xiaoyingzhou_blacksea_trap_06_beat": [
+          "flags.event.xiaoyingzhou_blacksea_trap_06.done"
+        ],
+        "lyl.event.xiaoyingzhou_blacksea_trap_07_beat": [
+          "flags.event.xiaoyingzhou_blacksea_trap_07.done"
+        ],
+        "lyl.event.xiaoyingzhou_blacksea_trap_08_beat": [
+          "flags.event.xiaoyingzhou_blacksea_trap_08.done"
+        ],
+        "lyl.event.xiaoyingzhou_blacksea_trap_09_beat": [
+          "flags.event.xiaoyingzhou_blacksea_trap_09.done"
+        ],
+        "lyl.event.xiaoyingzhou_blacksea_trap_10_beat": [
+          "flags.event.xiaoyingzhou_blacksea_trap_10.done"
+        ]
+      }
+    }
+  }
+}

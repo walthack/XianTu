@@ -13,6 +13,8 @@
 import axios from 'axios';
 import type { APIUsageType, APIConfig as StoreAPIConfig } from '@/stores/apiManagementStore';
 import { buildOpenAICompatibleEndpoint, normalizeOpenAIBaseUrl } from './openAIEndpoint';
+import { toUserFacingAIError } from './apiErrorMessage';
+import { isTruncatedFinishReason } from './aiResponseTermination';
 
 // ============ API提供商类型 ============
 export type APIProvider = 'openai' | 'claude' | 'gemini' | 'deepseek' | 'zhipu' | 'xai' | 'openrouter' | 'ollama' | 'siliconflow-embedding' | 'custom';
@@ -92,6 +94,10 @@ export interface GenerateOptions {
     world_info_after?: string;
   };
   onStreamChunk?: (chunk: string) => void;
+  /** 本次调用的输出 token 上限；只收紧当前请求，不改写用户保存的全局 API 配置。 */
+  maxTokens?: number;
+  /** 本次调用在服务层的隐式重试次数；开局分步状态机设为 0，由外层统一控制总预算。 */
+  requestMaxRetries?: number;
   /** 强制JSON格式输出（仅支持OpenAI兼容API，如DeepSeek）*/
   responseFormat?: 'json_object';
 }
@@ -159,9 +165,10 @@ class AIService {
    */
   private async executeWithRetry<T>(
     fn: () => Promise<T>,
-    operationName: string
+    operationName: string,
+    maxRetriesOverride?: number,
   ): Promise<T> {
-    const maxRetries = this.config.maxRetries ?? 1;
+    const maxRetries = maxRetriesOverride ?? this.config.maxRetries ?? 1;
     let lastError: Error | null = null;
 
     for (let attempt = 0; attempt <= maxRetries; attempt++) {
@@ -746,7 +753,7 @@ class AIService {
 
       // 网页模式默认
       return this.generateWithCustomAPI(options);
-    }, `generate[${options.usageType || 'main'}]`);
+    }, `generate[${options.usageType || 'main'}]`, options.requestMaxRetries);
   }
 
   /**
@@ -816,7 +823,7 @@ class AIService {
 
       // 网页模式默认
       return this.generateRawWithCustomAPI(options);
-    }, `generateRaw[${options.usageType || 'main'}]`);
+    }, `generateRaw[${options.usageType || 'main'}]`, options.requestMaxRetries);
   }
 
   /**
@@ -921,7 +928,7 @@ class AIService {
           throw new Error('请求已被取消');
         }
         return await tavernHelper.generate(options);
-      });
+      }, { retries: options.requestMaxRetries });
     } catch (error) {
       throw this.toUserFacingError(error);
     }
@@ -943,7 +950,7 @@ class AIService {
           throw new Error('请求已被取消');
         }
         return await tavernHelper.generateRaw(options);
-      });
+      }, { retries: options.requestMaxRetries });
       return String(result);
     } catch (error) {
       throw this.toUserFacingError(error);
@@ -1058,35 +1065,7 @@ class AIService {
   }
 
   private toUserFacingError(error: unknown): Error {
-    const anyErr = error as any;
-    const message = (() => {
-      if (!error) return '未知错误';
-      if (typeof error === 'string') return error;
-      if (error instanceof Error) return error.message || '未知错误';
-      return String(error);
-    })();
-
-    const status = anyErr?.status ?? anyErr?.response?.status ?? anyErr?.cause?.status ?? anyErr?.cause?.response?.status;
-
-    // 重点提示：503/服务不可用（用户日志里就是这个）
-    if (status === 503 || /service unavailable/i.test(message)) {
-      const e = new Error(
-        'AI 服务暂不可用（Service Unavailable/503）。我已自动重试仍失败：如果在 SillyTavern 内使用，请检查当前 API 提供方/代理/额度是否正常；也可能是上游临时故障，稍后再试。'
-      );
-      (e as any).cause = error;
-      return e;
-    }
-
-    if (status === 429 || /\b429\b/.test(message)) {
-      const e = new Error('AI 请求过于频繁（429）。我已自动重试，仍失败请稍后再试或降低并发/频率。');
-      (e as any).cause = error;
-      return e;
-    }
-
-    // 保留原始信息，但避免直接把对象打印到 toast 里
-    const e = new Error(message || 'AI 调用失败');
-    (e as any).cause = error;
-    return e;
+    return toUserFacingAIError(error);
   }
 
   /**
@@ -1209,7 +1188,7 @@ class AIService {
     const usageType = options.usageType;
     const apiConfig = usageType ? this.getAPIConfigForUsageType(usageType) : null;
     const responseFormat = options.responseFormat || (apiConfig?.forceJsonOutput ? 'json_object' : undefined);
-    return this.callAPI(messages, shouldStream, options.onStreamChunk, responseFormat, options.usageType);
+    return this.callAPI(messages, shouldStream, options.onStreamChunk, responseFormat, options.usageType, options.maxTokens);
   }
 
   private async generateRawWithCustomAPI(options: GenerateOptions): Promise<string> {
@@ -1229,7 +1208,7 @@ class AIService {
     const apiConfig = usageType ? this.getAPIConfigForUsageType(usageType) : null;
     const responseFormat = options.responseFormat || (apiConfig?.forceJsonOutput ? 'json_object' : undefined);
     console.log(`[AI服务-自定义Raw] shouldStream=${shouldStream}, hasOnStreamChunk=${!!options.onStreamChunk}, options.should_stream=${options.should_stream}, config.streaming=${this.config.streaming}`);
-    return this.callAPI(messages, shouldStream, options.onStreamChunk, responseFormat, options.usageType);
+    return this.callAPI(messages, shouldStream, options.onStreamChunk, responseFormat, options.usageType, options.maxTokens);
   }
 
   private async callAPI(
@@ -1237,7 +1216,8 @@ class AIService {
     streaming: boolean,
     onStreamChunk?: (chunk: string) => void,
     responseFormat?: 'json_object',
-    usageType?: APIUsageType
+    usageType?: APIUsageType,
+    maxTokensOverride?: number
   ): Promise<string> {
     const { provider, url, apiKey, model, temperature, maxTokens } = this.config.customAPI!;
 
@@ -1273,9 +1253,9 @@ class AIService {
     // 根据provider选择不同的调用方式
     switch (provider) {
       case 'claude':
-        return this.callClaudeAPI(finalMessages, streaming, onStreamChunk, effectiveResponseFormat);
+        return this.callClaudeAPI(finalMessages, streaming, onStreamChunk, effectiveResponseFormat, maxTokensOverride);
       case 'gemini':
-        return this.callGeminiAPI(finalMessages, streaming, onStreamChunk, effectiveResponseFormat);
+        return this.callGeminiAPI(finalMessages, streaming, onStreamChunk, effectiveResponseFormat, maxTokensOverride);
       case 'openai':
       case 'deepseek':
       case 'zhipu':
@@ -1284,7 +1264,7 @@ class AIService {
       case 'ollama':
       case 'custom':
       default:
-        return this.callOpenAICompatibleAPI(finalMessages, streaming, onStreamChunk, effectiveResponseFormat, usageType);
+        return this.callOpenAICompatibleAPI(finalMessages, streaming, onStreamChunk, effectiveResponseFormat, usageType, maxTokensOverride);
     }
   }
 
@@ -1416,10 +1396,11 @@ class AIService {
     streaming: boolean,
     onStreamChunk?: (chunk: string) => void,
     responseFormat?: 'json_object',
-    usageType?: APIUsageType
+    usageType?: APIUsageType,
+    maxTokensOverride?: number
   ): Promise<string> {
     const { provider, url, apiKey, model, temperature, maxTokens } = this.config.customAPI!;
-    const requestedMaxTokens = this.getEffectiveRequestedMaxTokens(provider, model, maxTokens || 16000, usageType);
+    const requestedMaxTokens = this.getEffectiveRequestedMaxTokens(provider, model, maxTokensOverride ?? maxTokens ?? 16000, usageType);
     const safeMaxTokens = this.clampMaxTokensForContext(provider, model, messages, requestedMaxTokens);
 
     // 智谱AI使用不同的API路径
@@ -1473,8 +1454,8 @@ class AIService {
           const message = response.data.choices?.[0]?.message;
           const content = message?.content || message?.reasoning_content || message?.reasoning || '';
           const finishReason = response.data.choices?.[0]?.finish_reason;
-          if (finishReason === 'length') {
-            console.warn(`[AI服务-OpenAI] 响应因输出长度限制被截断，当前maxTokens=${safeMaxTokens}`);
+          if (isTruncatedFinishReason(finishReason)) {
+            throw new Error(`响应因输出长度限制被截断（maxTokens=${safeMaxTokens}）`);
           }
           console.log(`[AI服务-OpenAI] 响应长度: ${content.length}`);
           return content;
@@ -1514,8 +1495,8 @@ class AIService {
         const message = response.data.choices?.[0]?.message;
         const content = message?.content || message?.reasoning_content || message?.reasoning || '';
         const finishReason = response.data.choices?.[0]?.finish_reason;
-        if (finishReason === 'length') {
-          console.warn(`[AI服务-OpenAI] 响应因输出长度限制被截断，当前maxTokens=${safeMaxTokens}`);
+        if (isTruncatedFinishReason(finishReason)) {
+          throw new Error(`响应因输出长度限制被截断（maxTokens=${safeMaxTokens}）`);
         }
         console.log(`[AI服务-OpenAI] 响应长度: ${content.length}`);
         return content;
@@ -1538,7 +1519,8 @@ class AIService {
     messages: AIMessage[],
     streaming: boolean,
     onStreamChunk?: (chunk: string) => void,
-    responseFormat?: 'json_object'
+    responseFormat?: 'json_object',
+    maxTokensOverride?: number
   ): Promise<string> {
     const { provider, url, apiKey, model, temperature, maxTokens } = this.config.customAPI!;
 
@@ -1567,7 +1549,7 @@ class AIService {
         ...(systemPrompt ? [{ content: systemPrompt }] : []),
         ...claudeMessages.map(m => ({ content: m.content })),
       ],
-      maxTokens || 8192
+      maxTokensOverride ?? maxTokens ?? 8192
     );
 
     // 构建请求体
@@ -1617,6 +1599,9 @@ class AIService {
           );
 
           let content = response.data.content[0]?.text || '';
+          if (isTruncatedFinishReason(response.data.stop_reason)) {
+            throw new Error(`响应因输出长度限制被截断（maxTokens=${safeMaxTokens}）`);
+          }
           // 如果使用了 prefill，需要在返回内容前加上 '{'
           if (responseFormat === 'json_object' && content && !content.startsWith('{')) {
             content = '{' + content;
@@ -1640,6 +1625,9 @@ class AIService {
         );
 
         let content = response.data.content[0]?.text || '';
+        if (isTruncatedFinishReason(response.data.stop_reason)) {
+          throw new Error(`响应因输出长度限制被截断（maxTokens=${safeMaxTokens}）`);
+        }
         // 如果使用了 prefill，需要在返回内容前加上 '{'
         if (responseFormat === 'json_object' && content && !content.startsWith('{')) {
           content = '{' + content;
@@ -1663,7 +1651,8 @@ class AIService {
     messages: AIMessage[],
     streaming: boolean,
     onStreamChunk?: (chunk: string) => void,
-    responseFormat?: 'json_object'
+    responseFormat?: 'json_object',
+    maxTokensOverride?: number
   ): Promise<string> {
     const { provider, url, apiKey, model, temperature, maxTokens } = this.config.customAPI!;
 
@@ -1701,7 +1690,7 @@ class AIService {
         ...(systemInstruction ? [{ content: systemInstruction }] : []),
         ...contents.map(c => ({ content: (c.parts || []).map(p => p.text).join('\n') })),
       ],
-      maxTokens || 8192
+      maxTokensOverride ?? maxTokens ?? 8192
     );
 
     // 构建 generationConfig
@@ -1745,6 +1734,14 @@ class AIService {
       });
     };
 
+    const readGeminiContent = (response: any): string => {
+      const candidate = response.data.candidates?.[0];
+      if (isTruncatedFinishReason(candidate?.finishReason)) {
+        throw new Error(`响应因输出长度限制被截断（maxTokens=${safeMaxTokens}）`);
+      }
+      return candidate?.content?.parts?.[0]?.text || '';
+    };
+
     try {
       if (streaming) {
         try {
@@ -1757,7 +1754,7 @@ class AIService {
           // 尝试查询参数方式
           try {
             const response = await makeGeminiRequest(`/v1beta/models/${model}:generateContent`, true);
-            const content = response.data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+            const content = readGeminiContent(response);
             console.log(`[AI服务-Gemini] 响应长度: ${content.length}`);
             return content;
           } catch (queryError) {
@@ -1765,7 +1762,7 @@ class AIService {
             if (axios.isAxiosError(queryError) && queryError.response?.status === 401) {
               console.warn('[AI服务-Gemini] 查询参数认证失败，尝试Bearer token方式');
               const response = await makeGeminiRequest(`/v1beta/models/${model}:generateContent`, false);
-              const content = response.data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+              const content = readGeminiContent(response);
               console.log(`[AI服务-Gemini] 响应长度: ${content.length}`);
               return content;
             }
@@ -1776,7 +1773,7 @@ class AIService {
         // 尝试查询参数方式
         try {
           const response = await makeGeminiRequest(`/v1beta/models/${model}:${endpoint}`, true);
-          const content = response.data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+          const content = readGeminiContent(response);
           console.log(`[AI服务-Gemini] 响应长度: ${content.length}`);
           return content;
         } catch (queryError) {
@@ -1784,7 +1781,7 @@ class AIService {
           if (axios.isAxiosError(queryError) && queryError.response?.status === 401) {
             console.warn('[AI服务-Gemini] 查询参数认证失败，尝试Bearer token方式');
             const response = await makeGeminiRequest(`/v1beta/models/${model}:${endpoint}`, false);
-            const content = response.data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+            const content = readGeminiContent(response);
             console.log(`[AI服务-Gemini] 响应长度: ${content.length}`);
             return content;
           }
@@ -1868,12 +1865,13 @@ class AIService {
     // 把思考放在独立字段、content 为空。正式内容优先；若整段流没有任何 content，
     // 则回退使用思维链文本，避免返回空结果导致“AI生成失败”。
     let reasoningBuffer = '';
+    let truncated = false;
     const result = await this.processSSEStream(response, (data) => {
       const parsed = JSON.parse(data);
       const choice = parsed.choices[0];
       const delta = choice?.delta;
-      if (choice?.finish_reason === 'length') {
-        console.warn(`[AI服务-OpenAI流式] 响应因输出长度限制被截断，当前maxTokens=${maxTokens}`);
+      if (isTruncatedFinishReason(choice?.finish_reason)) {
+        truncated = true;
       }
 
       const reasoningPiece = delta?.reasoning_content ?? delta?.reasoning;
@@ -1887,6 +1885,10 @@ class AIService {
 
       return '';
     }, onStreamChunk);
+
+    if (truncated) {
+      throw new Error(`响应因输出长度限制被截断（maxTokens=${maxTokens}）`);
+    }
 
     return result.trim() ? result : reasoningBuffer;
   }
@@ -1936,9 +1938,14 @@ class AIService {
 
     // Claude thinking 状态追踪
     let inThinkingPhase = false;
+    let truncated = false;
 
-    return this.processSSEStream(response, (data) => {
+    const result = await this.processSSEStream(response, (data) => {
       const parsed = JSON.parse(data);
+
+      if (parsed.type === 'message_delta' && isTruncatedFinishReason(parsed.delta?.stop_reason)) {
+        truncated = true;
+      }
 
       // Claude extended thinking: 处理 thinking content block
       if (parsed.type === 'content_block_start') {
@@ -1964,6 +1971,11 @@ class AIService {
       }
       return '';
     }, onStreamChunk);
+
+    if (truncated) {
+      throw new Error(`响应因输出长度限制被截断（maxTokens=${maxTokens}）`);
+    }
+    return result;
   }
 
   // Gemini格式流式请求
@@ -2006,9 +2018,13 @@ class AIService {
 
     // Gemini thinking 状态追踪
     let lastWasThought = false;
+    let truncated = false;
 
-    return this.processSSEStream(response, (data) => {
+    const result = await this.processSSEStream(response, (data) => {
       const parsed = JSON.parse(data);
+      if (isTruncatedFinishReason(parsed.candidates?.[0]?.finishReason)) {
+        truncated = true;
+      }
       const parts = parsed.candidates?.[0]?.content?.parts || [];
       let result = '';
 
@@ -2031,6 +2047,11 @@ class AIService {
 
       return result;
     }, onStreamChunk);
+
+    if (truncated) {
+      throw new Error(`响应因输出长度限制被截断（maxTokens=${maxTokens}）`);
+    }
+    return result;
   }
 
   // 通用SSE流处理 - 真流式版本（保留thinking标签，前端处理显示）

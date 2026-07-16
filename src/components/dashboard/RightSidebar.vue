@@ -207,9 +207,9 @@
             <div v-if="questMain.stalled" class="quest-stall-warn" style="color:#e6a23c;font-size:12px;margin-top:4px;line-height:1.4;">⚠️ 主线疑似脱节（已停滞 {{ questMain.stallCount }} 轮）——剧情可能已跑到主线前面，系统将自动尝试事件对账修复（可在 API 管理·事件对账 中关闭）</div>
             <div v-if="questMain.cleared" class="quest-cleared">✅ {{ t('本关剧情已完成') }}</div>
             <template v-if="questMain.next">
-              <div class="quest-next">{{ t('下一关') }}：{{ questMain.next }}</div>
+              <div class="quest-next">{{ t('此地诸事已暂告一段落。若已准备好，可顺势启程。') }}</div>
               <button class="quest-next-btn" :disabled="stageSwitching" @click="goNextStage">
-                {{ stageSwitching ? t('切换中…') : t('▶ 进入下一关') }}
+                {{ stageSwitching ? t('启程中…') : t('▶ 启程') }}
               </button>
               <div v-if="stageSwitchError" class="quest-error">{{ stageSwitchError }}</div>
             </template>
@@ -236,7 +236,28 @@
         </div>
         <div v-show="!worldlineCollapsed" class="quest-body">
           <div v-for="entry in worldlineEntries" :key="entry.id" class="quest-event">
-            <span class="quest-mark-main">◇</span>{{ entry.worldDelta }}
+            <span class="quest-mark-main">◇</span>
+            <span>{{ entry.worldDelta }}<template v-if="entry.receipt">（{{ entry.receipt }}）</template></span>
+          </div>
+        </div>
+      </div>
+
+      <div v-if="chronicleEntries.length" class="collapsible-section quest-section">
+        <div class="section-header" @click="chronicleCollapsed = !chronicleCollapsed">
+          <h3 class="section-title">
+            <Star :size="14" class="section-icon gold" />
+            <span>{{ t('战役编年史') }}</span>
+          </h3>
+          <button class="collapse-toggle" :class="{ 'collapsed': chronicleCollapsed }">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M8 10l4-4H4l4 4z"/>
+            </svg>
+          </button>
+        </div>
+        <div v-show="!chronicleCollapsed" class="quest-body">
+          <div v-for="entry in chronicleEntries" :key="entry.id" class="quest-event">
+            <span class="quest-mark-main">{{ entry.mark }}</span>
+            <span>{{ entry.title }}<template v-if="entry.detail">：{{ entry.detail }}</template></span>
           </div>
         </div>
       </div>
@@ -289,13 +310,9 @@ const statusEffects = computed(() => {
 
 const questCollapsed = ref(false);
 const worldlineCollapsed = ref(false);
+const chronicleCollapsed = ref(true);
 const stageSwitching = ref(false);
 const stageSwitchError = ref('');
-// 去掉关卡名的开发向前缀（「六朝清羽记·第56-72章·灵飞镜与白夷危局」→「灵飞镜与白夷危局」）
-const stageDisplayName = (name: string): string => {
-  const parts = String(name || '').split('·').filter(Boolean);
-  return parts.length ? parts[parts.length - 1] : String(name || '');
-};
 // 剧情主线：章节/活跃事件/清关状态/下一关（确定性，读 worldState.剧本模组）
 const questMain = computed(() => {
   const rt: any = (gameStateStore.worldState as any)?.剧本模组;
@@ -305,13 +322,13 @@ const questMain = computed(() => {
   const anchor = getNarrativeAnchorEvent(rt);
   const activeEvents = anchor ? [anchor] : [];
   const events = activeEvents.slice(0, 1).map((e: any) => {
-    const view = resolveScenarioEventNarrative(e, rt.flags || {});
+    const view = resolveScenarioEventNarrative(e, rt.flags || {}, rt.divergences);
     return view.objective || view.name;
   }).filter(Boolean);
   const moreCount = Math.max(0, activeEvents.length - 1);
   const ready = rt.nextStageReadyId && rt.nextStageReadyId === rt.nextStageId;
   const cleared = ready && !chapter && !events.length;
-  const next = ready ? stageDisplayName(rt.nextStageName || rt.nextStageId || '') : '';
+  const next = Boolean(ready);
   // 脱节哨兵（零成本确定性）：停滞轮数超阈值 → UI 预警"主线疑似脱节"，只提示、不改任何数据。
   // 阈值 10 高于强引子(7)，避免正常卡关误报；治本对齐仍靠进度审计对账。
   const stallTurns = Number(rt.stallTurns) || 0;
@@ -340,12 +357,34 @@ const questGoals = computed(() => {
 });
 const worldlineEntries = computed(() => {
   const rt: any = (gameStateStore.worldState as any)?.剧本模组;
-  if (!Array.isArray(rt?.divergences)) return [] as Array<{ id: string; worldDelta: string }>;
+  if (!Array.isArray(rt?.divergences)) return [] as Array<{ id: string; worldDelta: string; receipt: string }>;
+  const names = new Map((rt?.canon?.characters || []).map((character: any) => [character.id, character.name]));
+  const statusText: Record<string, string> = {
+    alive: '生还', dead: '死亡', longrest: '长养', incapacitated: '失能', missing: '失踪',
+  };
   return rt.divergences.slice(-5).reverse()
     .filter((item: any) => item && typeof item.worldDelta === 'string')
     .map((item: any, index: number) => ({
       id: String(item.id || `divergence-${index}`),
       worldDelta: item.worldDelta,
+      receipt: Array.isArray(item.characterStates)
+        ? item.characterStates.map((state: any) => {
+          const name = names.get(state.characterId) || String(state.characterId || '').split('.').at(-1);
+          return `${name}：${statusText[String(state.status || '').toLowerCase()] || state.status}`;
+        }).filter(Boolean).join('、')
+        : '',
+    }));
+});
+const chronicleEntries = computed(() => {
+  const rt: any = (gameStateStore.worldState as any)?.剧本模组;
+  if (!Array.isArray(rt?.chronicle)) return [] as Array<{ id: string; mark: string; title: string; detail: string }>;
+  return rt.chronicle.slice(-8).reverse()
+    .filter((item: any) => item && typeof item.title === 'string')
+    .map((item: any, index: number) => ({
+      id: String(item.id || `chronicle-${index}`),
+      mark: item.type === 'stage' ? '◆' : item.type === 'world' ? '◇' : '·',
+      title: String(item.title),
+      detail: typeof item.detail === 'string' ? item.detail : '',
     }));
 });
 

@@ -1,4 +1,5 @@
 import type { ScenarioCondition, ScenarioModEvent } from './schema';
+import type { ScenarioDivergence } from './divergenceLedger';
 
 // 旧存档把事件快照直接落在 runtime.events 中。它们不会随着内置关卡
 // 数据升级而自动补齐 narrativeVariants，因此这里保留极小的兼容层。
@@ -40,19 +41,54 @@ function matches(condition: ScenarioCondition, flags: Record<string, unknown>): 
   return false;
 }
 
+function relatedDivergence(
+  event: ScenarioModEvent,
+  divergences: ScenarioDivergence[] | undefined,
+): ScenarioDivergence | undefined {
+  const related = new Set(event.relatedCharacterIds || []);
+  if (!related.size || !Array.isArray(divergences)) return undefined;
+  return [...divergences].reverse().find(item => item.characterStates.some(state => related.has(state.characterId)));
+}
+
+function projectFromDivergence(event: ScenarioModEvent, divergence: ScenarioDivergence): ScenarioModEvent {
+  const states = divergence.characterStates
+    .filter(state => (event.relatedCharacterIds || []).includes(state.characterId))
+    .map(state => `${state.characterId}=${state.status}`)
+    .join('、');
+  const consequence = `本世界线既有事实：${divergence.worldDelta}${states ? `（${states}）` : ''}`;
+  return {
+    ...event,
+    name: `${event.name}·世界线承接`,
+    description: `${consequence}。原事件只能作为因果背景，必须改写为这一变化造成的新局面。`,
+    axisBeat: `${consequence}。让仍在场的人物据此采取具体行动，不得复写已失效的原著结果。`,
+    objective: `承接“${divergence.worldDelta}”造成的后果`,
+  };
+}
+
 /** 返回当前存档分歧下可见的事件文案；事件 id / 完成条件不变，避免把追认误当重演。 */
-export function resolveScenarioEventNarrative(event: ScenarioModEvent, flags: Record<string, unknown>): ScenarioModEvent {
+export function resolveScenarioEventNarrative(
+  event: ScenarioModEvent,
+  flags: Record<string, unknown>,
+  divergences?: ScenarioDivergence[],
+): ScenarioModEvent {
   const compatibilityVariants = legacyNarrativeVariants[event.id];
   // 新版内置关卡的数据是权威；兼容层只填补老存档快照缺失的 variants，不能反向覆盖新数据。
   const variants = event.narrativeVariants?.length ? event.narrativeVariants : compatibilityVariants;
   const variant = variants?.find(item => item.when.every(condition => matches(condition, flags)));
-  return variant ? { ...event, ...variant } : event;
+  if (variant) return { ...event, ...variant };
+  const divergence = relatedDivergence(event, divergences);
+  return divergence ? projectFromDivergence(event, divergence) : event;
 }
 
 /** 仅显式声明的分歧投影可替代 Canon Rail；普通条件化文案仍保留默认正典合同。 */
-export function narrativeVariantReplacesCanonRail(event: ScenarioModEvent, flags: Record<string, unknown>): boolean {
+export function narrativeVariantReplacesCanonRail(
+  event: ScenarioModEvent,
+  flags: Record<string, unknown>,
+  divergences?: ScenarioDivergence[],
+): boolean {
   const compatibilityVariants = legacyNarrativeVariants[event.id];
   const variants = event.narrativeVariants?.length ? event.narrativeVariants : compatibilityVariants;
-  return variants?.some(item => item.replacesCanonRail === true
+  const explicitReplacement = variants?.some(item => item.replacesCanonRail === true
     && item.when.every(condition => matches(condition, flags))) ?? false;
+  return explicitReplacement || Boolean(relatedDivergence(event, divergences));
 }

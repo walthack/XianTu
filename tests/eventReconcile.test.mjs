@@ -212,6 +212,94 @@ test('shouldRunReconcile：停滞≥阈值每轮都触发', async () => {
   assert.equal(shouldRunReconcile(undefined), false);
 });
 
+function xieyiRuntimeSave() {
+  return {
+    世界: { 状态: { 剧本模组: {
+      modId: 'lcq.stage_06',
+      events: [{
+        id: 'lcq.event.s06_03', name: '谢艺死亡', axisSeq: 210,
+        axisBeat: '谢艺被闪电击中，重伤不治，临终将小紫托付给程宗扬',
+        completion: [{ path: 'flags.event.s06_03.done', operator: 'eq', value: true }],
+      }],
+      completedEventIds: [],
+      flags: { 'event.s06_03.done': false },
+      divergences: [],
+    } } },
+  };
+}
+
+test('R2-0V 确定性快路：只凭 GM 正文明示落死亡、生还或失踪互斥结果', async () => {
+  const { runDeterministicXieyiReconcile } = await modPromise;
+
+  const canon = xieyiRuntimeSave();
+  assert.equal(runDeterministicXieyiReconcile(canon, '谢艺倒在乱石间，呼吸断绝，确认其已经死亡。').length, 1);
+  assert.equal(canon.世界.状态.剧本模组.flags['event.s06_03.done'], true);
+  assert.equal(canon.世界.状态.剧本模组.flags['event.s06_03.void'], undefined);
+
+  const alive = xieyiRuntimeSave();
+  assert.ok(runDeterministicXieyiReconcile(alive, '谢艺重伤昏迷但尚有气息，众人救回了他，确认谢艺生还。').length >= 2);
+  assert.equal(alive.世界.状态.剧本模组.flags['event.s06_03.void'], true);
+  assert.equal(alive.世界.状态.剧本模组.flags['branch.lcq.if_xieyi_longrest.active'], true);
+  assert.equal(alive.世界.状态.剧本模组.flags['character.xie_yi.status'], 'longrest');
+
+  const survivedByNegation = xieyiRuntimeSave();
+  assert.ok(runDeterministicXieyiReconcile(survivedByNegation, '谢艺只是被余波震伤，并未当场殒命，小紫稳住了他最后一丝生机。').length >= 2);
+  assert.equal(survivedByNegation.世界.状态.剧本模组.flags['branch.lcq.if_xieyi_longrest.active'], true);
+
+  const survivedByVitalSigns = xieyiRuntimeSave();
+  assert.ok(runDeterministicXieyiReconcile(survivedByVitalSigns, '谢艺躺在榻上，胸口微微起伏，呼吸虽弱，却已经平稳。').length >= 2);
+  assert.equal(survivedByVitalSigns.世界.状态.剧本模组.flags['character.xie_yi.status'], 'longrest');
+
+  const survivedByStableBreathing = xieyiRuntimeSave();
+  assert.ok(runDeterministicXieyiReconcile(survivedByStableBreathing, '谢艺闭上眼睛，呼吸渐渐平稳下来。').length >= 2);
+
+  const missing = xieyiRuntimeSave();
+  assert.ok(runDeterministicXieyiReconcile(missing, '战场崩塌后谢艺下落不明，众人未找到遗体。').length >= 2);
+  assert.equal(missing.世界.状态.剧本模组.flags['event.s06_03.void'], true);
+  assert.equal(missing.世界.状态.剧本模组.flags['world.xieyi_absence.active'], true);
+  assert.equal(missing.世界.状态.剧本模组.flags['branch.lcq.if_xieyi_longrest.active'], undefined);
+});
+
+test('R2-0V 确定性快路不信玩家意图式或互相冲突的正文', async () => {
+  const { runDeterministicXieyiReconcile } = await modPromise;
+  const vague = xieyiRuntimeSave();
+  assert.deepEqual(runDeterministicXieyiReconcile(vague, '程宗扬打算设法救回谢艺，但战局仍未结束。'), []);
+  const conflict = xieyiRuntimeSave();
+  assert.deepEqual(runDeterministicXieyiReconcile(conflict, '有人误传谢艺战死，随后谢艺生还并走出废墟。'), []);
+});
+
+function bijiRuntimeSave() {
+  return {
+    世界: { 状态: { 剧本模组: {
+      modId: 'lcq.stage_06',
+      events: [{
+        id: 'lcq.event.s06_04', name: '小紫弑母', axisSeq: 220,
+        axisBeat: '小紫亲手杀死碧姬',
+        completion: [{ path: 'flags.event.s06_04.done', operator: 'eq', value: true }],
+      }],
+      completedEventIds: [],
+      flags: { 'event.s06_04.done': false },
+    } } },
+  };
+}
+
+test('stage_06 碧姬快路：仅 GM 正文明确小紫杀死碧姬时结算', async () => {
+  const { runDeterministicBijiReconcile } = await modPromise;
+  const completed = bijiRuntimeSave();
+  assert.equal(runDeterministicBijiReconcile(completed, '小紫将匕首刺入碧姬咽喉，静静看着碧姬死去。').length, 1);
+  assert.equal(completed.世界.状态.剧本模组.flags['event.s06_04.done'], true);
+
+  const aftermath = bijiRuntimeSave();
+  assert.equal(runDeterministicBijiReconcile(aftermath, '小紫伏在乐明珠怀里哭泣。凝羽走到碧姬的尸体旁，俯身合上她的眼睛。').length, 1);
+
+  const planned = bijiRuntimeSave();
+  assert.deepEqual(runDeterministicBijiReconcile(planned, '程宗扬打算让小紫亲手杀死碧姬。'), []);
+  const spared = bijiRuntimeSave();
+  assert.deepEqual(runDeterministicBijiReconcile(spared, '小紫最终放过碧姬，带她离开废墟。'), []);
+  const alive = bijiRuntimeSave();
+  assert.deepEqual(runDeterministicBijiReconcile(alive, '小紫站在一旁，碧姬仍然活着并向众人求救。'), []);
+});
+
 test('runEventReconcile 端到端(注入generate)：落账后 flag 生效、返回变更日志', async () => {
   const { runEventReconcile } = await modPromise;
   const saveData = {

@@ -68,9 +68,12 @@ test('runtime activates, completes, and advances scenario content deterministica
   assert.deepEqual(nextRuntime.completedChapterIds, ['chapter.arrival']);
   assert.deepEqual(nextRuntime.completedEventIds, ['event.firstmeeting']);
   assert.deepEqual(nextRuntime.activeEventIds, []);
+  assert.equal(nextRuntime.chronicle[0].type, 'event');
+  assert.equal(nextRuntime.chronicle[0].title, '初会');
 
   const reloaded = JSON.parse(JSON.stringify(advanced.saveData));
   assert.equal(reloaded.世界.状态.剧本模组.currentChapterId, 'chapter.aftermath');
+  assert.equal(reloaded.世界.状态.剧本模组.chronicle.length, 1);
 });
 
 test('runtime emits stage_ready once after all key plot events are complete', async () => {
@@ -90,6 +93,7 @@ test('runtime emits stage_ready once after all key plot events are complete', as
 
   const repeated = advanceScenarioRuntime(ready.saveData);
   assert.deepEqual(repeated.transitions, []);
+  assert.equal(repeated.saveData.世界.状态.剧本模组.chronicle[0].title, '初会', '旧档已完成事件应补进编年史');
 });
 
 test('Canon Rail stage_01 follows source order #9 then #10 and cannot close early', async () => {

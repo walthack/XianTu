@@ -75,7 +75,8 @@ test('story prompt includes current objectives and excludes future plot content'
 
   assert.match(prompt, /当前章节：入城/);
   assert.match(prompt, /当前关卡/);
-  assert.match(prompt, /六朝·建康风云；主轴范围 #10~#20；下一关 六朝·下一关/);
+  assert.match(prompt, /六朝·建康风云；主轴范围 #10~#20/);
+  assert.doesNotMatch(prompt, /下一关 六朝·下一关/);
   assert.match(prompt, /玩家进入建康并接触主要人物/);
   assert.match(prompt, /初会（事件ID：event\.firstmeeting）：玩家第一次遇见程宗扬/);
   assert.match(prompt, /flags\.phase gte 1/);
@@ -403,7 +404,7 @@ test('内置 stage_08/09 携带苏妲己伏诛的跨关合同', async () => {
   assert.match(downstreamVariant?.axisBeat || '', /不得让苏妲己继续暗算/);
 });
 
-test('story prompt names the next stage when the current stage has no next event', async () => {
+test('story prompt offers an in-world transition without leaking the next stage', async () => {
   const { buildScenarioStoryPrompt } = await loadTs('../src/modules/scenarioMods/storyContext.ts');
   const save = await buildStorySave();
   const runtime = save.世界.状态.剧本模组;
@@ -412,8 +413,10 @@ test('story prompt names the next stage when the current stage has no next event
 
   const prompt = buildScenarioStoryPrompt(save);
 
-  assert.match(prompt, /建议切换到下一关：六朝·下一关（liuchao\.next_stage）/);
-  assert.match(prompt, /不要在当前关提前展开下一关正文/);
+  assert.match(prompt, /用来信、人物提议、路况或远近局势等角色可感知的契机自然引出转场/);
+  assert.match(prompt, /不得说“下一关”/);
+  assert.doesNotMatch(prompt, /六朝·下一关/);
+  assert.doesNotMatch(prompt, /liuchao\.next_stage/);
 });
 
 test('story prompt blocks next stage while key plot events remain untriggered', async () => {

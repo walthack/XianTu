@@ -120,6 +120,16 @@
               <span>{{ $t('导入') }}</span>
             </button>
             <button
+              v-if="r2AcceptanceControls"
+              @click="createR20VAcceptanceCharacter"
+              class="btn-header-action migrate"
+              :disabled="loading"
+              title="创建可删除的 R2-0V 三路线真机验收角色"
+            >
+              <Wrench :size="16" />
+              <span>R2-0V 验收</span>
+            </button>
+            <button
               @click="openLegacyMigrationStandalone"
               class="btn-header-action migrate"
               :title="$t('导入旧版本角色')"
@@ -572,6 +582,12 @@ import { createDadBundle, unwrapDadBundle } from '@/utils/dadBundle';
 import type { SaveDataV3 } from '@/types/saveSchemaV3';
 import { verifyStoredToken } from '@/services/request';
 import { isBackendConfigured } from '@/services/backendConfig';
+import { BUILTIN_SCENARIO_MODS } from '@/modules/scenarioMods/builtins';
+import {
+  buildR20VAcceptancePack,
+  isR20VAcceptanceProfile,
+  R2_ACCEPTANCE_MARKER,
+} from '@/modules/scenarioMods/r2AcceptanceFixtures';
 
 interface Props {
   fullscreen?: boolean;
@@ -605,6 +621,40 @@ const isLoadingSaves = ref(false); // 新增：用于控制存档加载状态
 const importMode = ref<'character' | 'saves'>('character');
 const showLegacyMigrationModal = ref(false);
 const legacyMigrationStandalone = ref(false);
+const r2AcceptanceControls = R2_ACCEPTANCE_CONTROLS;
+
+const createR20VAcceptanceCharacter = async () => {
+  if (!R2_ACCEPTANCE_CONTROLS || loading.value) return;
+  loading.value = true;
+  try {
+    const existingFixtureId = Object.entries(characterStore.rootState.角色列表)
+      .filter(([, profile]) => isR20VAcceptanceProfile(profile))
+      .map(([charId]) => charId)[0];
+
+    const mod = BUILTIN_SCENARIO_MODS.find(item => item.manifest.id === 'lcq.stage_06');
+    if (!mod) throw new Error('内置 lcq.stage_06 未加载');
+    const pack = buildR20VAcceptancePack(mod);
+    const targetCharId = existingFixtureId || await characterStore.importCharacter(pack.profile as any);
+    for (const save of pack.saves) {
+      const importedName = await characterStore.importSave(targetCharId, save, { overwrite: true });
+      const persisted = await characterStore.loadSaveData(targetCharId, importedName);
+      const runtime = (persisted as any)?.世界?.状态?.剧本模组;
+      if (runtime?.modId !== 'lcq.stage_06' || runtime?.activeEventIds?.[0] !== 'lcq.event.s06_03') {
+        throw new Error(`存档 ${importedName} 持久化读回未停在 s06_03`);
+      }
+      if ((persisted as any)?.系统?.扩展?.开发验收?.kind !== R2_ACCEPTANCE_MARKER) {
+        throw new Error(`存档 ${importedName} 缺少 DEV-only 验收标记`);
+      }
+    }
+    await selectCharacter(targetCharId);
+    toast.success(`R2-0V 临时角色已${existingFixtureId ? '重置' : '创建'}：三条存档均从同一 s06_03 前置点开始`);
+  } catch (error) {
+    console.error('[R2-0V 验收入口] 创建失败', error);
+    toast.error(`R2-0V 验收入口创建失败：${error instanceof Error ? error.message : String(error)}`);
+  } finally {
+    loading.value = false;
+  }
+};
 
 // 响应式屏幕尺寸检测
 const screenWidth = ref(window.innerWidth);

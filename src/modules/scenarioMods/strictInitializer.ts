@@ -256,7 +256,7 @@ export function transitionToNextScenarioStage(saveData: SaveData, modsOverride?:
   let mods = modsOverride;
   if (!mods) {
     try {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      // eslint-disable-next-line @typescript-eslint/no-require-imports -- builtins use require.context and are unavailable to the Node harness.
       mods = (require('./builtins') as { BUILTIN_SCENARIO_MODS: ScenarioMod[] }).BUILTIN_SCENARIO_MODS;
     } catch { return { saveData, ok: false, reason: '内置剧情模组不可用' }; }
   }
@@ -277,6 +277,16 @@ export function transitionToNextScenarioStage(saveData: SaveData, modsOverride?:
   // 世界线分歧是玩家历史，不是当前关卡模板数据。切关时必须跨关携带；
   // done/章节进度仍按新关初始化，只继承分支、人物状态与 void 审计标记。
   const divergenceSnapshot = structuredClone(Array.isArray(rt.divergences) ? rt.divergences : []);
+  const chronicleSnapshot = structuredClone(Array.isArray(rt.chronicle) ? rt.chronicle : []);
+  if (!chronicleSnapshot.some((item: any) => item?.id === `chronicle.stage.${rt.modId}.${targetId}`)) {
+    chronicleSnapshot.push({
+      id: `chronicle.stage.${rt.modId}.${targetId}`,
+      type: 'stage', stageId: String(rt.modId || ''),
+      title: `完成「${rt.modName || rt.modId}」`,
+      detail: `进入「${mod.manifest.name}」`,
+      sequence: chronicleSnapshot.length + 1,
+    });
+  }
   const inheritedWorldlineFlags = Object.fromEntries(Object.entries(rt.flags || {}).filter(([key]) =>
     key.startsWith('branch.') || key.startsWith('character.') || key.endsWith('.void'),
   ));
@@ -296,6 +306,7 @@ export function transitionToNextScenarioStage(saveData: SaveData, modsOverride?:
   const newRuntime = (next as any).世界.状态.剧本模组;
   newRuntime.reconciledRegistryVersion = rt.reconciledRegistryVersion;
   if (divergenceSnapshot.length) newRuntime.divergences = divergenceSnapshot;
+  if (chronicleSnapshot.length) newRuntime.chronicle = chronicleSnapshot;
   Object.assign(newRuntime.flags, inheritedWorldlineFlags);
   // 立即推进一轮：激活新关首章/首批事件
   const advanced = advanceScenarioRuntime(next);

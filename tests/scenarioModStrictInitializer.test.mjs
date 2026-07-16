@@ -218,6 +218,10 @@ test('stage transition preserves accumulated NPC relations and switches runtime'
     characterStates: [{ characterId: 'liuchao.character.xie_yi', status: 'longrest' }],
     evidence: '谢艺拄刀而立', sequence: 1,
   }];
+  rt.chronicle = [{
+    id: 'chronicle.event.first', type: 'event', stageId: rt.modId,
+    title: '完成旧事', detail: '旧关事件已经结算', sequence: 1,
+  }];
   rt.flags['event.s06_03.void'] = true;
   rt.flags['branch.lcq.if_xieyi_longrest.active'] = true;
   rt.flags['character.xie_yi.status'] = 'longrest';
@@ -236,6 +240,8 @@ test('stage transition preserves accumulated NPC relations and switches runtime'
   assert.equal(newRt.flags['event.s06_03.void'], true, 'void 审计标记跨关保留');
   assert.equal(newRt.flags['branch.lcq.if_xieyi_longrest.active'], true, 'IF 激活状态跨关保留');
   assert.equal(newRt.flags['character.xie_yi.status'], 'longrest', '分歧人物状态跨关保留');
+  assert.equal(newRt.chronicle.length, 2, '编年史事件与切关记录跨关保留');
+  assert.equal(newRt.chronicle[1].type, 'stage');
   assert.notEqual(newRt.flags['event.s06_03.done'], true, '旧关 done 进度不得污染新关');
   const npc = result.saveData.社交.关系['程宗扬'];
   assert.equal(npc.好感度, 77, '好感度跨关保留');

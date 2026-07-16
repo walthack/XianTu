@@ -16,6 +16,7 @@ declare const APP_VERSION: string;
 declare const BACKEND_BASE_URL: string;
 declare const REMOTE_SAVE_STORAGE_ENABLED: boolean;
 declare const JUDGEMENT_TEST_CONTROLS: boolean;
+declare const R2_ACCEPTANCE_CONTROLS: boolean;
 
 // Augment Window with TavernHelper from tavernCore
 type TavernHelper = import('./utils/tavernCore').TavernHelper;

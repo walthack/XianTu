@@ -101,6 +101,10 @@ function setFlag(flags: Record<string, unknown>, key: string, value: unknown): v
   flags[key] = value;
 }
 
+function characterFlagSlug(characterId: string): string {
+  return characterId.split('.').filter(Boolean).at(-1) || characterId;
+}
+
 function matchingBranch(input: ReconciledDivergenceInput): AutoBranchRule | undefined {
   if (input.verdict !== 'void') return undefined;
   return AUTO_BRANCH_RULES.find(rule => {
@@ -149,6 +153,12 @@ export function recordReconcileDivergences(
     };
     ledger.push(record);
     added.push(record);
+
+    // 所有人物分歧都写入统一状态路径；IF 只是高光承接包，不能垄断人物状态语义。
+    // 这样下游任意关卡都能按 relatedCharacterIds 识别 dead/missing/longrest 等现实。
+    for (const state of states) {
+      setFlag(runtime.flags, `character.${characterFlagSlug(state.characterId)}.status`, state.status.toLowerCase());
+    }
 
     if (branch) {
       setFlag(runtime.flags, `branch.${branch.branchId}.unlocked`, true);

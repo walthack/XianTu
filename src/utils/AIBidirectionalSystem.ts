@@ -19,6 +19,7 @@ import { getPrompt } from '@/services/defaultPrompts';
 import { normalizeGameTime } from './time';
 import { updateStatusEffects } from './statusEffectManager';
 import { sanitizeAITextForDisplay } from '@/utils/textSanitizer';
+import { INITIAL_GENERATION_POLICY, initialGenerationRequestLimits, shouldRetryInitialNarrative } from '@/utils/initialGenerationPolicy';
 import { validateAndRepairNpcProfile } from '@/utils/dataValidation';
 import { stripNsfwContent } from '@/utils/prompts/definitions/dataDefinitions';
 import { isSaveDataV3, migrateSaveDataToLatest } from './saveMigration';
@@ -37,10 +38,12 @@ import {
 } from '@/utils/judgementRules';
 import { reconcileNarrativeState } from '@/utils/narrativeStateReconciler';
 import { runProgressAudit, shouldRunAudit } from '@/services/progressAuditService';
-import { runEventReconcile, shouldRunReconcile, evidenceLikely, buildChainCandidates } from '@/services/eventReconcileService';
+import { runDeterministicBijiReconcile, runDeterministicXieyiReconcile, runEventReconcile, shouldRunReconcile, evidenceLikely, buildChainCandidates } from '@/services/eventReconcileService';
 import { detectNarratedPlayerDamage } from '@/utils/narratedDamage';
 import { validateModelCommandPipeline } from '@/utils/modelCommandPipeline';
 import { recoverUnmarkedPlayerZeroHealth } from '@/utils/playerVitalGuard';
+import { runBoundedAuxiliaryTask } from '@/utils/boundedAuxiliaryTask';
+import { mergeDeferredReconcileResult } from '@/modules/scenarioMods/deferredReconcileMerge';
 import {
   detectNarratedInventoryGainEntries,
   detectNarratedInventoryPossessions,
@@ -50,6 +53,10 @@ import {
 } from '@/utils/narratedInventory';
 
 type PlainObject = Record<string, unknown>;
+
+// 正文与确定性状态是主事务；二次 LLM 只能占用有限的尾延迟。
+// 超时任务运行在隔离副本上，晚到结果不会写回当前存档。
+const AUXILIARY_LLM_WAIT_MS = 15000;
 
 function isPlainObject(value: unknown): value is PlainObject {
   if (!value || typeof value !== 'object') return false;
@@ -1528,7 +1535,7 @@ ${userPrompt}
         };
 
         type InitialSplitUsageType = 'main' | 'instruction_generation';
-        const generateOnce = async (args: { step: 1 | 2; system: string; user: string; should_stream: boolean; usageType?: InitialSplitUsageType; onStreamChunk?: (chunk: string) => void; }): Promise<string> => {
+        const generateOnce = async (args: { step: 1 | 2; system: string; user: string; should_stream: boolean; usageType?: InitialSplitUsageType; maxTokens: number; onStreamChunk?: (chunk: string) => void; }): Promise<string> => {
           const generationId = `initial_message_split_step${args.step}_${Date.now()}`;
           const usageType = args.usageType || 'main';
 
@@ -1542,6 +1549,7 @@ ${userPrompt}
               should_stream: args.should_stream,
               generation_id: generationId,
               usageType,
+              ...initialGenerationRequestLimits(args.maxTokens),
               onStreamChunk: args.onStreamChunk,
             });
           }
@@ -1554,23 +1562,83 @@ ${userPrompt}
             should_stream: args.should_stream,
             generation_id: generationId,
             usageType,
+            ...initialGenerationRequestLimits(args.maxTokens),
             injects: injects as any,
             onStreamChunk: args.onStreamChunk,
           });
         };
 
         // ========== 第1步：开局正文生成 ==========
-        options?.onProgressUpdate?.('分步生成：第1步（开局正文）…');
-        const step1Raw = await generateOnce({
-          step: 1,
-          system: await buildInitialSplitSystemPrompt(1),
-          user: userPrompt,
-          should_stream: useStreaming,
-          usageType: 'main',
-          onStreamChunk: options?.onStreamChunk,
-        });
+        // 整个分步开局最多 4 次模型调用：Step1/Step2 各一次首调 + 各一次重试。
+        // token 预算只约束本次调用，不改用户保存的全局 API 配置。
+        let step1Text = '';
+        let bestStep1Text = '';
+        let lastStep1Error = '';
+        const step1SystemPrompt = await buildInitialSplitSystemPrompt(1);
 
-        const step1Text = this.extractNarrativeText(String(step1Raw));
+        for (let attempt = 1; attempt <= INITIAL_GENERATION_POLICY.attemptsPerStep; attempt++) {
+          const attemptStartedAt = Date.now();
+          try {
+            if (attempt === 1) {
+              options?.onProgressUpdate?.('分步生成：第1步（开局正文）…');
+            } else {
+              options?.onProgressUpdate?.(`分步生成：第1步自动修复（1/1）${lastStep1Error ? `（${lastStep1Error.slice(0, 80)}）` : ''}`);
+            }
+            const strictLengthSuffix = attempt === 2
+              ? '\n\n# 本次修复的最高优先级要求\n正文必须为完整 JSON，text 严格控制在 600–1000 个中文字符；不要扩写背景，不得超过 1500 字。'
+              : '';
+            const step1Raw = await generateOnce({
+              step: 1,
+              system: `${step1SystemPrompt}${strictLengthSuffix}`,
+              user: userPrompt,
+              should_stream: useStreaming,
+              usageType: 'main',
+              maxTokens: INITIAL_GENERATION_POLICY.step1MaxTokens,
+              onStreamChunk: options?.onStreamChunk,
+            });
+
+            const candidate = this.extractNarrativeText(String(step1Raw)).trim();
+            console.info('[开局生成遥测]', {
+              step: 1,
+              attempt,
+              maxTokens: INITIAL_GENERATION_POLICY.step1MaxTokens,
+              elapsedMs: Date.now() - attemptStartedAt,
+              narrativeChars: candidate.length,
+              outcome: shouldRetryInitialNarrative(candidate.length) ? 'retryable_length' : 'accepted',
+            });
+            if (candidate.length >= INITIAL_GENERATION_POLICY.step1MinChars && (!bestStep1Text || candidate.length < bestStep1Text.length)) {
+              bestStep1Text = candidate;
+            }
+            if (!shouldRetryInitialNarrative(candidate.length)) {
+              step1Text = candidate;
+              break;
+            }
+            lastStep1Error = candidate.length < INITIAL_GENERATION_POLICY.step1MinChars
+              ? `正文过短（${candidate.length}字）`
+              : `正文严重超长（${candidate.length}字）`;
+          } catch (error) {
+            lastStep1Error = error instanceof Error ? error.message : String(error);
+            console.info('[开局生成遥测]', {
+              step: 1,
+              attempt,
+              maxTokens: INITIAL_GENERATION_POLICY.step1MaxTokens,
+              elapsedMs: Date.now() - attemptStartedAt,
+              outcome: 'failed',
+              reason: lastStep1Error.slice(0, 160),
+            });
+            console.warn(`[分步生成-开局] 第1步第${attempt}次失败:`, error);
+          }
+        }
+
+        if (!step1Text) {
+          if (bestStep1Text) {
+            // 两次均严重超长时保留更短的完整可解析版本，避免为了长度丢掉整个创角流程。
+            step1Text = bestStep1Text;
+            options?.onProgressUpdate?.(`分步生成：正文偏长（${step1Text.length}字），继续初始化数据…`);
+          } else {
+            throw new Error(`开局正文两次生成均不可用：${lastStep1Error || '无有效正文'}`);
+          }
+        }
 
         if (useStreaming && options?.onStreamComplete) {
           options.onStreamComplete();
@@ -1596,7 +1664,8 @@ ${step1Text}
         options?.onProgressUpdate?.('分步生成：第2步（指令生成）…');
         let parsedStep2: GM_Response | null = null;
         let lastStep2Error = '';
-        for (let attempt = 1; attempt <= 2; attempt++) {
+        for (let attempt = 1; attempt <= INITIAL_GENERATION_POLICY.attemptsPerStep; attempt++) {
+          const attemptStartedAt = Date.now();
           try {
             if (attempt > 1) {
               const reason = lastStep2Error ? `（上次失败：${lastStep2Error.slice(0, 80)}）` : '';
@@ -1605,22 +1674,59 @@ ${step1Text}
             const step2Response = await generateOnce({
               step: 2,
               system: await buildInitialSplitSystemPrompt(2),
-              user: step2UserPrompt,
+              user: attempt === 1
+                ? step2UserPrompt
+                : `${step2UserPrompt}\n\n【格式修复】上次输出未通过结构校验：${lastStep2Error || '缺少初始化指令'}。只返回一个完整 JSON 对象，必须包含至少一条合法 tavern_commands；不要解释。`,
               should_stream: step2StreamingInitial,
               usageType: initStep2UsageType,
+              maxTokens: INITIAL_GENERATION_POLICY.step2MaxTokens,
               onStreamChunk: undefined,
             });
             parsedStep2 = this.parseAIResponse(String(step2Response), initStep2ForceJson, actionOptionsEnabled);
-            if (parsedStep2.tavern_commands && parsedStep2.tavern_commands.length > 0) break;
+            if (parsedStep2.tavern_commands && parsedStep2.tavern_commands.length > 0) {
+              console.info('[开局生成遥测]', {
+                step: 2,
+                attempt,
+                maxTokens: INITIAL_GENERATION_POLICY.step2MaxTokens,
+                elapsedMs: Date.now() - attemptStartedAt,
+                commandCount: parsedStep2.tavern_commands.length,
+                outcome: 'accepted',
+              });
+              break;
+            }
+            lastStep2Error = '缺少有效的 tavern_commands';
+            console.info('[开局生成遥测]', {
+              step: 2,
+              attempt,
+              maxTokens: INITIAL_GENERATION_POLICY.step2MaxTokens,
+              elapsedMs: Date.now() - attemptStartedAt,
+              outcome: 'failed',
+              reason: lastStep2Error,
+            });
             parsedStep2 = null;
           } catch (e) {
             lastStep2Error = e instanceof Error ? e.message : String(e);
+            console.info('[开局生成遥测]', {
+              step: 2,
+              attempt,
+              maxTokens: INITIAL_GENERATION_POLICY.step2MaxTokens,
+              elapsedMs: Date.now() - attemptStartedAt,
+              outcome: 'failed',
+              reason: lastStep2Error.slice(0, 160),
+            });
             options?.onProgressUpdate?.(`分步生成：第2步解析失败，准备重试（${lastStep2Error.slice(0, 100)}）`);
             console.warn(`[分步生成-开局] 第2步第${attempt}次失败:`, e);
           }
         }
+        const step2Degraded = !parsedStep2;
         if (!parsedStep2) {
-          parsedStep2 = { text: '', mid_term_memory: '', tavern_commands: [], action_options: [] } as GM_Response;
+          options?.onProgressUpdate?.('分步生成：初始化数据两次失败，使用本地安全默认值继续…');
+          parsedStep2 = {
+            text: '',
+            mid_term_memory: step1Text.slice(0, 100),
+            tavern_commands: [],
+            action_options: []
+          } as GM_Response;
         }
 
         const defaultInitialActionOptions = [
@@ -1639,6 +1745,9 @@ ${step1Text}
             ? this.sanitizeActionOptionsForDisplay(parsedStep2.action_options?.length ? parsedStep2.action_options : defaultInitialActionOptions)
             : []
         };
+        if (step2Degraded) {
+          (gmResponse as any).__initializationDegraded = true;
+        }
 
         // 🔥 文本优化：如果启用，对生成的文本进行润色（分步模式）
         gmResponse.text = await this.optimizeText(gmResponse.text, options?.onProgressUpdate);
@@ -2206,7 +2315,7 @@ ${step1Text}
     );
     commandAppliedChanges.push(...inspectedNpcChanges);
 
-    // 叙事-数据同步兜底（第一版：位置）。默认开，可用 localStorage 'narrative-state-reconcile'='off' 关闭。
+    // 叙事-数据同步兜底（位置 + 跨轮即兴目标）。默认开，可用 localStorage 'narrative-state-reconcile'='off' 关闭。
     const narrativeReconcileEnabled = (() => {
       try {
         return localStorage.getItem('narrative-state-reconcile') !== 'off';
@@ -2247,13 +2356,22 @@ ${step1Text}
       const currentGoals = get(saveData, '系统.扩展.任务追踪.即兴目标');
       // 已知执行错误（可能回滚）时不浪费一次审计 LLM 调用
       if (!hadExecutionError && apiStore.isFunctionEnabled('progress_audit') && shouldRunAudit(options?.userAction || '', currentGoals)) {
-        const auditChanges = await runProgressAudit({
-          saveData,
+        const isolatedSaveData = cloneDeep(saveData);
+        const auditResult = await runBoundedAuxiliaryTask(() => runProgressAudit({
+          saveData: isolatedSaveData,
           recentText: textContent,
           userAction: options?.userAction || '',
           summarize: this._summarizeValueForChangeLog.bind(this),
-        });
-        commandAppliedChanges.push(...auditChanges);
+        }), AUXILIARY_LLM_WAIT_MS);
+        if (auditResult.status === 'completed') {
+          const isolatedGoals = get(isolatedSaveData, '系统.扩展.任务追踪.即兴目标');
+          if (isolatedGoals !== undefined) set(saveData, '系统.扩展.任务追踪.即兴目标', cloneDeep(isolatedGoals));
+          commandAppliedChanges.push(...auditResult.value);
+        } else if (auditResult.status === 'timed_out') {
+          console.warn(`[进度审计] 超过 ${AUXILIARY_LLM_WAIT_MS}ms，主事务继续；晚到结果已隔离`);
+        } else {
+          console.warn('[进度审计] 辅助任务失败，主事务继续:', auditResult.error);
+        }
       }
     } catch (error) {
       console.warn('[进度审计] 跳过（异常）:', error);
@@ -2365,14 +2483,70 @@ ${step1Text}
       _dbgExt._reconcileDebug = { at: new Date().toISOString(), stall: rtForReconcile?.stallTurns, enabled: _enabled, shouldRun: _should, hadExecErr: hadExecutionError, ran: false };
       if (!hadExecutionError && rtForReconcile && _enabled && _should) {
         _dbgExt._reconcileDebug.ran = true;
-        const reconcileChanges = await runEventReconcile({
-          saveData,
-          recentText: textContent,
-          userAction: options?.userAction || '',
-          summarize: this._summarizeValueForChangeLog.bind(this),
-        });
-        // 直接进 changes：commandAppliedChanges 在上方已合并完，此时再 push 进不了本轮日志（Codex 整环审 backlog#2）
-        changes.push(...reconcileChanges);
+        const deterministicChanges = [
+          ...runDeterministicXieyiReconcile(saveData, textContent),
+          ...runDeterministicBijiReconcile(saveData, textContent),
+        ];
+        if (deterministicChanges.length) {
+          _dbgExt._reconcileDebug = {
+            ..._dbgExt._reconcileDebug,
+            deterministic: 'xieyi_outcome',
+            status: 'merged',
+            completedAt: new Date().toISOString(),
+          };
+          changes.push(...deterministicChanges);
+          console.info(`[事件对账] 谢艺互斥结果确定性落账，变更 ${deterministicChanges.length} 项`);
+        } else {
+        const baselineSaveData = cloneDeep(saveData);
+        const isolatedSaveData = cloneDeep(saveData);
+        const characterStore = useCharacterStore();
+        const activeAtLaunch = characterStore.rootState.当前激活存档
+          ? { ...characterStore.rootState.当前激活存档 }
+          : null;
+        _dbgExt._reconcileDebug = { ...(_dbgExt._reconcileDebug || {}), deferred: true, status: 'pending' };
+
+        // 事件对账负责主线 flag/分歧账本，不能丢弃；但也不能让二次 LLM 锁住正文、输入和主存档。
+        // 在隔离副本继续执行，完成后做三方合并并二次落盘。
+        void (async () => {
+          try {
+            const reconcileChanges = await runEventReconcile({
+              saveData: isolatedSaveData,
+              recentText: textContent,
+              userAction: options?.userAction || '',
+              summarize: this._summarizeValueForChangeLog.bind(this),
+            });
+            const activeNow = characterStore.rootState.当前激活存档;
+            if (!activeAtLaunch || !activeNow
+              || activeNow.角色ID !== activeAtLaunch.角色ID
+              || activeNow.存档槽位 !== activeAtLaunch.存档槽位) {
+              console.warn('[事件对账] 后台结果到达时已切换存档，安全丢弃');
+              return;
+            }
+            const currentSave = useGameStateStore().toSaveData();
+            if (!currentSave) return;
+            const merged = mergeDeferredReconcileResult(currentSave, baselineSaveData, isolatedSaveData);
+            const isolatedDebug = get(isolatedSaveData, '系统.扩展._reconcileDebug');
+            set(currentSave, '系统.扩展._reconcileDebug', {
+              ...(isolatedDebug || {}),
+              deferred: true,
+              status: merged ? 'merged' : 'no_change',
+              completedAt: new Date().toISOString(),
+            });
+            if (merged) {
+              const advanced = advanceScenarioRuntime(currentSave);
+              useGameStateStore().loadFromSaveData(advanced.saveData);
+              await characterStore.saveCurrentGame();
+              toast.info(`事件账本已后台对齐（${reconcileChanges.length} 项）`);
+              console.info(`[事件对账] 后台三方合并完成，变更 ${reconcileChanges.length} 项`);
+            } else {
+              useGameStateStore().loadFromSaveData(currentSave);
+              await characterStore.saveCurrentGame();
+            }
+          } catch (error) {
+            console.warn('[事件对账] 后台任务失败，主事务不受影响:', error);
+          }
+        })();
+        }
       }
     } catch (error) {
       console.warn('[事件对账] 跳过（异常）:', error);

@@ -10,6 +10,9 @@
         </div>
       </div>
       <div class="header-actions">
+        <span class="cloud-sync-status" :class="apiStore.cloudSyncState.status">
+          {{ cloudSyncStatusText }}
+        </span>
         <button class="action-btn" @click="handleCloudDownload">
           <Download :size="16" />
           <span class="btn-text">{{ t('下载云端') }}</span>
@@ -35,6 +38,17 @@
 
     <!-- 内容区域 -->
     <div class="settings-container">
+      <div v-if="!isTavernEnvFlag" class="onboarding-card" :class="{ ready: defaultAPIReady }">
+        <div class="onboarding-copy">
+          <strong>{{ defaultAPIReady ? '✅ 主流程 API 已配置' : '第一次使用？先完成主流程 API 配置' }}</strong>
+          <span v-if="defaultAPIReady">保存后会自动测试连接；游戏生成失败时会区分密钥无效、额度不足和限流。</span>
+          <span v-else>① 选择提供商　② 填写密钥　③ 确认模型　④ 保存并测试。配置成功后即可创建角色和游玩。</span>
+        </div>
+        <button class="onboarding-action" @click="configureDefaultAPI">
+          {{ defaultAPIReady ? '检查默认 API' : '开始配置' }}
+        </button>
+      </div>
+
       <!-- API列表区 -->
       <div class="settings-section">
         <div class="section-header">
@@ -617,7 +631,7 @@
         </div>
         <div class="modal-footer">
           <button class="btn-cancel" @click="closeDialogs">{{ t('取消') }}</button>
-          <button class="btn-confirm" @click="saveAPI">{{ t('保存') }}</button>
+          <button class="btn-confirm" @click="saveAPI">{{ t('保存并测试') }}</button>
         </div>
       </div>
     </div>
@@ -801,6 +815,27 @@ const selectModel = (model: string) => {
 // API测试状态
 const testingApiId = ref<string | null>(null);
 const apiTestResults = ref<Record<string, 'success' | 'fail' | null>>({});
+
+const defaultAPI = computed(() => apiStore.apiConfigs.find((api) => api.id === 'default'));
+const defaultAPIReady = computed(() => {
+  const api = defaultAPI.value;
+  if (!api || !api.enabled || !api.url?.trim() || !api.model?.trim()) return false;
+  return !providerRequiresApiKey(api.provider, api.url) || !!api.apiKey?.trim();
+});
+const cloudSyncStatusText = computed(() => {
+  const state = apiStore.cloudSyncState;
+  if (state.status === 'syncing') return '云端同步中…';
+  if (state.status === 'synced') return '云端已同步';
+  if (state.status === 'failed') return '云端待重试';
+  if (state.status === 'local_only') return '仅本机保存';
+  return '云端未同步';
+});
+
+const configureDefaultAPI = () => {
+  const api = defaultAPI.value;
+  if (api) editAPI(api);
+  else showAddDialog.value = true;
+};
 
 // 获取提供商名称
 const getProviderName = (provider: APIProvider): string => {
@@ -1027,9 +1062,9 @@ const fetchModelsForEditing = async () => {
   }
 
   isFetchingModels.value = true;
+  const currentConfig = aiService.getConfig();
   try {
     // 临时设置配置
-    const currentConfig = aiService.getConfig();
     aiService.saveConfig({
       mode: 'custom',
       customAPI: {
@@ -1047,40 +1082,59 @@ const fetchModelsForEditing = async () => {
     showModelDropdown.value = true;
     toast.success(`${t('获取到')} ${models.length} ${t('个模型')}`);
 
-    // 恢复配置
-    aiService.saveConfig(currentConfig);
   } catch (error) {
-    toast.error(t('获取模型列表失败'));
+    toast.error(error instanceof Error ? error.message : t('获取模型列表失败'));
   } finally {
+    // 成功或失败都必须恢复；否则一次模型列表请求会悄悄改写主流程 API。
+    aiService.saveConfig(currentConfig);
     isFetchingModels.value = false;
   }
 };
 
 // 保存API配置
-const saveAPI = () => {
+const saveAPI = async () => {
   if (!editingAPI.value.name) {
     toast.warning(t('请填写配置名称'));
     return;
   }
 
+  const provider = editingAPI.value.provider as APIProvider;
+  const url = (editingAPI.value.url || getProviderPresetUrl(provider)).trim();
+  const apiKey = (editingAPI.value.apiKey || '').trim();
+  const model = (editingAPI.value.model || getProviderPresetModel(provider)).trim();
+  if (!url) {
+    toast.warning(t('请先填写API地址'));
+    return;
+  }
+  if (providerRequiresApiKey(provider, url) && !apiKey) {
+    toast.warning(t('请先填写API地址和密钥'));
+    return;
+  }
+  if (!model) {
+    toast.warning('请填写模型名称，或点击刷新按钮获取模型列表');
+    return;
+  }
+
+  let savedId: string;
   if (showEditDialog.value && editingAPIId.value) {
     // 编辑模式
-    apiStore.updateAPI(editingAPIId.value, editingAPI.value);
+    savedId = editingAPIId.value;
+    apiStore.updateAPI(savedId, { ...editingAPI.value, provider, url, apiKey, model });
     toast.success(t('API配置已更新'));
   } else {
     // 新增模式
     const newConfig = {
       name: editingAPI.value.name!,
-      provider: editingAPI.value.provider as APIProvider,
-      url: editingAPI.value.url || getProviderPresetUrl(editingAPI.value.provider as APIProvider),
-      apiKey: editingAPI.value.apiKey || '',
-      model: editingAPI.value.model || getProviderPresetModel(editingAPI.value.provider as APIProvider),
+      provider,
+      url,
+      apiKey,
+      model,
       temperature: editingAPI.value.temperature || 0.7,
       maxTokens: editingAPI.value.maxTokens || getProviderPresetMaxTokens(editingAPI.value.provider as APIProvider),
       enabled: true,
       forceJsonOutput: editingAPI.value.forceJsonOutput || false
     };
-    apiStore.addAPI(newConfig);
+    savedId = apiStore.addAPI(newConfig);
     toast.success(t('API配置已添加'));
   }
 
@@ -1088,6 +1142,9 @@ const saveAPI = () => {
 
   // 同步默认API配置到aiService
   syncDefaultAPIToService();
+
+  const saved = apiStore.apiConfigs.find((api) => api.id === savedId);
+  if (saved) await testAPI(saved);
 };
 
 // 同步默认API到aiService
@@ -1270,6 +1327,58 @@ const handleImport = () => {
   flex-wrap: wrap;
   justify-content: flex-end;
   min-width: 0;
+}
+
+.cloud-sync-status {
+  align-self: center;
+  padding: 0.3rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+  background: color-mix(in srgb, var(--color-surface) 80%, var(--color-border));
+}
+
+.cloud-sync-status.synced { color: #22c55e; }
+.cloud-sync-status.syncing { color: #3b82f6; }
+.cloud-sync-status.failed { color: #f59e0b; }
+
+.onboarding-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid color-mix(in srgb, #f59e0b 55%, var(--color-border));
+  border-radius: 0.75rem;
+  background: color-mix(in srgb, #f59e0b 8%, var(--color-surface));
+}
+
+.onboarding-card.ready {
+  border-color: color-mix(in srgb, #22c55e 45%, var(--color-border));
+  background: color-mix(in srgb, #22c55e 7%, var(--color-surface));
+}
+
+.onboarding-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  color: var(--color-text);
+}
+
+.onboarding-copy span {
+  color: var(--color-text-secondary);
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+
+.onboarding-action {
+  flex: 0 0 auto;
+  border: 0;
+  border-radius: 0.5rem;
+  padding: 0.55rem 0.8rem;
+  color: white;
+  background: #3b82f6;
+  cursor: pointer;
 }
 
 .action-btn {

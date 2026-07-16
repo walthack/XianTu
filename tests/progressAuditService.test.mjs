@@ -12,7 +12,7 @@ function goals(...titles) {
 test('low-confidence recommendation is not written', async () => {
   const { validateAuditedGoals } = await modPromise;
   const res = validateAuditedGoals(
-    { recommended: [{ 标题: '护送沧月北上长安', evidence: '正文提到北上', confidence: 0.5 }] },
+    { recommended: [{ 标题: '护送谢艺前往草庐', evidence: '正文提到草庐', confidence: 0.5 }] },
     []
   );
   assert.deepEqual(res.finalGoals, []);
@@ -31,7 +31,7 @@ test('completed verdict without evidence does not delete the old goal', async ()
 
 test('caps improvised goals at three and truncates the fourth', async () => {
   const { validateAuditedGoals } = await modPromise;
-  const current = goals('追查碧奴玉牌线索', '护送沧月北上长安', '取回归海之心令牌');
+  const current = goals('追查碧奴玉牌线索', '护送谢艺前往草庐', '取回归海之心令牌');
   const res = validateAuditedGoals(
     { recommended: [{ 标题: '调查星月湖船队', evidence: '正文明确共鸣', confidence: 0.9 }] },
     current
@@ -81,7 +81,7 @@ test('deduplicates identical current goals without treating it as deletion', asy
 
 test('does not truncate existing goals over the cap', async () => {
   const { validateAuditedGoals } = await modPromise;
-  const current = goals('追查碧奴玉牌线索', '护送沧月北上长安', '取回归海之心令牌', '安葬旧友遗骨');
+  const current = goals('追查碧奴玉牌线索', '护送谢艺前往草庐', '取回归海之心令牌', '安葬旧友遗骨');
   const res = validateAuditedGoals({}, current);
   assert.equal(res.finalGoals.length, 4);
   assert.equal(res.changed, false);
@@ -131,14 +131,14 @@ test('runProgressAudit writes validated goals via injected generate', async () =
 
   const changes = await runProgressAudit({
     saveData,
-    recentText: '程宗扬当机立断，决定护送沧月北上长安。',
-    userAction: '北上',
+    recentText: '程宗扬当机立断，决定护送谢艺前往草庐疗伤。',
+    userAction: '前往草庐',
     generate: async () =>
-      JSON.stringify({ recommended: [{ 标题: '护送沧月北上长安', evidence: '正文明确决定北上', confidence: 0.9 }] }),
+      JSON.stringify({ recommended: [{ 标题: '护送谢艺前往草庐', evidence: '正文明确决定前往草庐', confidence: 0.9 }] }),
   });
 
   assert.equal(changes.length, 1);
-  assert.deepEqual(saveData.系统.扩展.任务追踪.即兴目标, [{ 标题: '护送沧月北上长安' }]);
+  assert.deepEqual(saveData.系统.扩展.任务追踪.即兴目标, [{ 标题: '护送谢艺前往草庐' }]);
 });
 
 test('shouldRunAudit gates on existing goals or player intent', async () => {

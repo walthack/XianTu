@@ -2,7 +2,7 @@
 
 // 用 qingyu 重抽草稿重建主轴 qingyu 段(确定性,无LLM)。yunlong/yange 段保留原样。
 // 全表重新编 seq。锚点串 idx-based 不变,仅 seq 变。产 story-timeline.rebuild.DRAFT.{json,md},不覆盖现版。
-// 同时校验脊柱4锚点(idx6/122/241/287)在新版是否存在 + 报新 seq。
+// 同时校验权威脊柱4锚点(idx10/122/241/292)在新版是否存在 + 报新 seq。
 // Usage: node scripts/rebuild-timeline-qingyu.mjs
 
 import { readFileSync } from 'node:fs';
@@ -31,11 +31,12 @@ function run() {
   all.forEach((n, i) => { n.seq = i + 1; });
 
   const out = { ...(old.nodes ? old : {}), generatedAt: new Date().toISOString(),
+    totalNodes: all.length,
     note: 'qingyu 段用重抽草稿重建(major 185→' + qj.length + '),yunlong/yange 原样。全表重编 seq。待审切换。', nodes: all };
   // 写 json
   // md
   const lines = ['# 仙途 · 六朝三部曲线性时间线（主轴 · 重建草稿）', '',
-    `> qingyu 重建 ${qj.length} 节点(旧185)。yunlong ${rest.filter(n=>n.book==='yunlong').length} / yange ${rest.filter(n=>n.book==='yange').length}。共 ${all.length}(旧1034)。`, ''];
+    `> qingyu 重建 ${qj.length} 节点(旧185)。yunlong ${rest.filter(n=>n.book==='yunlong').length} / yange ${rest.filter(n=>n.book==='yange').length}。共 ${all.length}(旧${oldNodes.length})。`, ''];
   let curBook = '', curHead = '';
   for (const n of all) {
     if (n.book !== curBook) { lines.push(`\n## 《${n.bookTitle}》`); curBook = n.book; curHead = ''; }
@@ -44,7 +45,7 @@ function run() {
   }
 
   // 脊柱锚点校验
-  const spineIdx = [{ idx: 6, h: '第5章·师帅' }, { idx: 122, h: '第120章·殇侯' }, { idx: 241, h: '第237章·雪战' }, { idx: 287, h: '第282章·刺客' }];
+  const spineIdx = [{ idx: 10, h: '第9章·传功' }, { idx: 122, h: '第120章·殇侯' }, { idx: 241, h: '第237章·雪战' }, { idx: 292, h: '第287章·尸毒' }];
   const report = spineIdx.map(s => {
     const hit = qj.find(n => n.idx === s.idx);
     const node = hit ? all.find(n => n.book === 'qingyu' && n.idx === s.idx) : null;

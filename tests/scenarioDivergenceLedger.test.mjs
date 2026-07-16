@@ -35,6 +35,7 @@ test('谢艺缺席失败不误激活长养 IF，并留下搜寻与联络线防�
   assert.equal(added[0].branchId, undefined);
   assert.equal(runtime.flags['branch.lcq.if_xieyi_longrest.active'], undefined);
   assert.equal(runtime.flags['world.xieyi_absence.active'], true);
+  assert.equal(runtime.flags['character.xie_yi.status'], 'missing');
   const prompt = formatDivergencePrompt(runtime.divergences);
   assert.match(prompt, /不得确认其死亡或安全/);
   assert.match(prompt, /分出人手搜寻/);
@@ -144,4 +145,15 @@ test('分歧账本幂等，prompt要求NPC据变化行动', async () => {
   assert.equal(runtime.divergences.length, 1);
   assert.match(formatDivergencePrompt(runtime.divergences), /谢艺没有死去/);
   assert.match(formatDivergencePrompt(runtime.divergences), /相关人物据此采取行动/);
+});
+
+test('没有预写 IF 的人物分歧也写入统一状态路径', async () => {
+  const { recordReconcileDivergences } = await modPromise;
+  const runtime = { flags: {} };
+  recordReconcileDivergences(runtime, [{
+    id: 'custom.event.01', verdict: 'void', evidence: '赵甲失踪',
+    worldDelta: '赵甲在山道失踪，原会面无法发生',
+    characterStates: { 'custom.character.zhao_jia': 'missing' },
+  }]);
+  assert.equal(runtime.flags['character.zhao_jia.status'], 'missing');
 });

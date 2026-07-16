@@ -65,6 +65,17 @@ export interface ScenarioModEvent {
   locationId?: string;
   objective?: string;
   narrativeVariants?: ScenarioModEventNarrativeVariant[];
+  /** 玩家长期缺席时由世界自行结算的事件组；不计作玩家完成。 */
+  offscreenResolution?: ScenarioModEventOffscreenResolution;
+}
+
+export interface ScenarioModEventOffscreenResolution {
+  id: string;
+  afterStallTurns: number;
+  flagKey: string;
+  resolvedEventIds: string[];
+  worldDelta: string;
+  evidence: string;
 }
 
 /** 已发生分歧下的叙事投影；不改完成链，只替换玩家看到/LLM 续写的当前事件表述。 */

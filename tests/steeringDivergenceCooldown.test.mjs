@@ -81,6 +81,31 @@ test('星月湖战争未到缺席阈值时绝不自动结算', async () => {
   assert.equal(saveData.世界.状态.剧本模组.flags['world.xingyuehu_war.offscreen_resolved'], undefined);
 });
 
+test('任意剧本可用事件级 offscreenResolution 数据合同结算世界事件', async () => {
+  const { advanceScenarioRuntime } = await modPromise;
+  const save = stalledSave(undefined);
+  const rt = save.世界.状态.剧本模组;
+  rt.modId = 'demo.world_stage';
+  rt.stallTurns = 3;
+  rt.events = [{
+    id: 'demo.event.war', name: '边城战事', axisId: 'demo.axis.1', axisBeat: '边城战事爆发', critical: true,
+    offscreenResolution: {
+      id: 'offscreen.demo.war', afterStallTurns: 3, flagKey: 'world.demo_war.resolved',
+      resolvedEventIds: ['demo.event.war'], worldDelta: '玩家缺席时边城已经失守', evidence: '测试合同',
+    },
+  }];
+  rt.activeEventIds = ['demo.event.war'];
+  rt.chapters = [{ id: 'c1', eventIds: rt.activeEventIds, completion: [{ path: 'flags.chapdone', operator: 'eq', value: true }] }];
+  const { saveData, transitions } = advanceScenarioRuntime(save);
+  const resolved = saveData.世界.状态.剧本模组;
+  assert.equal(resolved.flags['world.demo_war.resolved'], true);
+  assert.deepEqual(resolved.offscreenResolvedEventIds, ['demo.event.war']);
+  assert.equal(resolved.completedEventIds.length, 0);
+  assert.match(resolved.divergences[0].worldDelta, /边城已经失守/);
+  assert.equal(resolved.chronicle[0].type, 'world');
+  assert.ok(transitions.some(item => item.id === 'offscreen.demo.war'));
+});
+
 test('真实 stage_11 缺席结算后可进入下一关，不遗留旧战场锚点', async () => {
   const { advanceScenarioRuntime, OFFSCREEN_WORLD_EVENT_STALL_THRESHOLD } = await modPromise;
   const stage = JSON.parse(await readFile(stage11Url, 'utf8'));
