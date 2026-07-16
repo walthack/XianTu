@@ -1062,22 +1062,15 @@ const fetchModelsForEditing = async () => {
   }
 
   isFetchingModels.value = true;
-  const currentConfig = aiService.getConfig();
   try {
-    // 临时设置配置
-    aiService.saveConfig({
-      mode: 'custom',
-      customAPI: {
-        provider: editingAPI.value.provider as APIProvider,
-        url: editingAPI.value.url,
-        apiKey: editingAPI.value.apiKey,
-        model: editingAPI.value.model || 'gpt-4o',
-        temperature: editingAPI.value.temperature || 0.7,
-        maxTokens: editingAPI.value.maxTokens || 16000
-      }
+    const models = await aiService.fetchModelsForConfig({
+      provider: editingAPI.value.provider as APIProvider,
+      url: editingAPI.value.url,
+      apiKey: editingAPI.value.apiKey,
+      model: editingAPI.value.model || 'gpt-4o',
+      temperature: editingAPI.value.temperature || 0.7,
+      maxTokens: editingAPI.value.maxTokens || 16000
     });
-
-    const models = await aiService.fetchModels();
     availableModels.value = models;
     showModelDropdown.value = true;
     toast.success(`${t('获取到')} ${models.length} ${t('个模型')}`);
@@ -1085,8 +1078,6 @@ const fetchModelsForEditing = async () => {
   } catch (error) {
     toast.error(error instanceof Error ? error.message : t('获取模型列表失败'));
   } finally {
-    // 成功或失败都必须恢复；否则一次模型列表请求会悄悄改写主流程 API。
-    aiService.saveConfig(currentConfig);
     isFetchingModels.value = false;
   }
 };

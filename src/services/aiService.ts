@@ -37,6 +37,8 @@ export interface AIConfig {
   };
 }
 
+type DirectAPIConfig = NonNullable<AIConfig['customAPI']>;
+
 // API提供商预设配置
 export const API_PROVIDER_PRESETS: Record<APIProvider, {
   url: string;
@@ -98,6 +100,8 @@ export interface GenerateOptions {
   maxTokens?: number;
   /** 本次调用在服务层的隐式重试次数；开局分步状态机设为 0，由外层统一控制总预算。 */
   requestMaxRetries?: number;
+  /** 调用级取消信号；由 AIService 为每次顶层请求创建并向下透传。 */
+  signal?: AbortSignal;
   /** 强制JSON格式输出（仅支持OpenAI兼容API，如DeepSeek）*/
   responseFormat?: 'json_object';
 }
@@ -120,9 +124,8 @@ class AIService {
     }
   };
 
-  // 用于取消正在进行的请求
-  private abortController: AbortController | null = null;
-  private isAborted = false;
+  // 每个顶层请求各有独立 controller；集合只用于“取消全部”，不会决定单次请求配置或信号。
+  private activeAbortControllers = new Set<AbortController>();
 
   constructor() {
     this.loadConfig();
@@ -133,11 +136,8 @@ class AIService {
    */
   cancelAllRequests() {
     console.log('[AI服务] 取消所有请求');
-    this.isAborted = true;
-    if (this.abortController) {
-      this.abortController.abort();
-      this.abortController = null;
-    }
+    for (const controller of this.activeAbortControllers) controller.abort();
+    this.activeAbortControllers.clear();
     const tavernHelper = this.getTavernHelper();
     if (tavernHelper) {
       if (typeof (tavernHelper as any).abortGeneration === 'function') {
@@ -152,12 +152,27 @@ class AIService {
     }
   }
 
-  /**
-   * 重置取消状态（在新请求开始前调用）
-   */
-  private resetAbortState() {
-    this.isAborted = false;
-    this.abortController = new AbortController();
+  private createRequestController(): AbortController {
+    const controller = new AbortController();
+    this.activeAbortControllers.add(controller);
+    return controller;
+  }
+
+  private releaseRequestController(controller: AbortController): void {
+    this.activeAbortControllers.delete(controller);
+  }
+
+  private async withRequestController<T>(
+    fn: (signal: AbortSignal) => Promise<T>,
+    inheritedSignal?: AbortSignal,
+  ): Promise<T> {
+    if (inheritedSignal) return fn(inheritedSignal);
+    const controller = this.createRequestController();
+    try {
+      return await fn(controller.signal);
+    } finally {
+      this.releaseRequestController(controller);
+    }
   }
 
   /**
@@ -167,6 +182,7 @@ class AIService {
     fn: () => Promise<T>,
     operationName: string,
     maxRetriesOverride?: number,
+    signal?: AbortSignal,
   ): Promise<T> {
     const maxRetries = maxRetriesOverride ?? this.config.maxRetries ?? 1;
     let lastError: Error | null = null;
@@ -174,7 +190,7 @@ class AIService {
     for (let attempt = 0; attempt <= maxRetries; attempt++) {
       try {
         // 在每次尝试前检查是否已取消
-        if (this.isAborted) {
+        if (signal?.aborted) {
           console.log(`[AI服务] ${operationName} 已被取消，停止执行`);
           throw new Error('请求已被取消');
         }
@@ -188,7 +204,7 @@ class AIService {
         lastError = error as Error;
 
         // 如果是取消操作，立即停止，不重试
-        if (this.isAborted || lastError.message?.includes('取消') || lastError.message?.includes('abort')) {
+        if (signal?.aborted || lastError.message?.includes('取消') || lastError.message?.includes('abort')) {
           console.log(`[AI服务] ${operationName} 检测到取消信号，立即停止`);
           throw lastError;
         }
@@ -201,7 +217,7 @@ class AIService {
           const delayMs = 1000 * (attempt + 1);
           const checkInterval = 100; // 每100ms检查一次
           for (let waited = 0; waited < delayMs; waited += checkInterval) {
-            if (this.isAborted) {
+            if (signal?.aborted) {
               console.log(`[AI服务] ${operationName} 在重试等待期间被取消`);
               throw new Error('请求已被取消');
             }
@@ -212,10 +228,6 @@ class AIService {
     }
 
     throw lastError || new Error(`${operationName} 失败`);
-  }
-
-  private getAbortSignal(): AbortSignal | undefined {
-    return this.abortController?.signal;
   }
 
   private syncModeWithEnvironment() {
@@ -268,18 +280,11 @@ class AIService {
   }, testPrompt: string): Promise<string> {
     console.log(`[AI服务] 直接测试API: ${apiConfig.url}, model: ${apiConfig.model}`);
 
-    if (apiConfig.provider === 'ollama') {
-      return this.testOllamaAPIDirectly(apiConfig, testPrompt);
-    }
-
-    // 临时保存当前配置
-    const originalConfig = this.config.customAPI ? { ...this.config.customAPI } : null;
-    const originalMode = this.config.mode;
-
-    try {
-      // 强制使用custom模式和指定的API配置
-      this.config.mode = 'custom';
-      this.config.customAPI = {
+    return this.withRequestController(async (signal) => {
+      if (apiConfig.provider === 'ollama') {
+        return this.testOllamaAPIDirectly(apiConfig, testPrompt, signal);
+      }
+      const directConfig: DirectAPIConfig = {
         provider: apiConfig.provider,
         url: apiConfig.url.replace(/\/v1\/?$/, '').replace(/\/+$/, ''),
         apiKey: apiConfig.apiKey,
@@ -288,19 +293,12 @@ class AIService {
         maxTokens: apiConfig.maxTokens ?? 1000,
         forceJsonOutput: apiConfig.forceJsonOutput
       };
-
-      // 直接调用自定义API（不走环境检测）
-      return await this.generateWithCustomAPI({
+      return this.generateWithCustomAPI({
         user_input: testPrompt,
-        should_stream: false
-      });
-    } finally {
-      // 恢复原配置
-      this.config.mode = originalMode;
-      if (originalConfig) {
-        this.config.customAPI = originalConfig;
-      }
-    }
+        should_stream: false,
+        signal,
+      }, directConfig);
+    });
   }
 
   private getOllamaBaseUrl(url: string): string {
@@ -311,14 +309,14 @@ class AIService {
       .replace(/\/+$/, '');
   }
 
-  private async resolveOllamaModel(baseUrl: string, model: string): Promise<string> {
+  private async resolveOllamaModel(baseUrl: string, model: string, signal?: AbortSignal): Promise<string> {
     const requested = (model || '').trim();
     if (!requested) return requested;
 
     try {
       const response = await axios.get(`${baseUrl}/api/tags`, {
         timeout: 10000,
-        signal: this.getAbortSignal()
+        signal
       });
       const models: string[] = (response.data?.models || [])
         .map((item: any) => item?.model || item?.name)
@@ -344,16 +342,16 @@ class AIService {
     model: string;
     temperature?: number;
     maxTokens?: number;
-  }, testPrompt: string): Promise<string> {
+  }, testPrompt: string, signal?: AbortSignal): Promise<string> {
     const baseUrl = this.getOllamaBaseUrl(apiConfig.url);
     const proxyBaseUrl = this.getOllamaProxyBaseUrl();
 
     try {
-      return await this.testOllamaViaBaseUrl(baseUrl, apiConfig, testPrompt);
+      return await this.testOllamaViaBaseUrl(baseUrl, apiConfig, testPrompt, signal);
     } catch (error) {
       if (proxyBaseUrl && this.isNetworkError(error)) {
         console.warn('[AI服务-Ollama测试] 浏览器直连失败，改用同源代理重试:', error);
-        return this.testOllamaViaBaseUrl(proxyBaseUrl, apiConfig, testPrompt);
+        return this.testOllamaViaBaseUrl(proxyBaseUrl, apiConfig, testPrompt, signal);
       }
       throw error;
     }
@@ -373,8 +371,8 @@ class AIService {
     model: string;
     temperature?: number;
     maxTokens?: number;
-  }, testPrompt: string): Promise<string> {
-    const model = await this.resolveOllamaModel(baseUrl, apiConfig.model);
+  }, testPrompt: string, signal?: AbortSignal): Promise<string> {
+    const model = await this.resolveOllamaModel(baseUrl, apiConfig.model, signal);
 
     if (!model) {
       throw new Error('请先配置Ollama模型名称');
@@ -400,7 +398,7 @@ class AIService {
       const response = await axios.post(`${baseUrl}/api/chat`, requestBody, {
         headers: { 'Content-Type': 'application/json' },
         timeout: 120000,
-        signal: this.getAbortSignal()
+        signal
       });
 
       const message = response.data?.message;
@@ -430,12 +428,26 @@ class AIService {
    * 获取可用模型列表
    */
   async fetchModels(): Promise<string[]> {
-    const needsKey = providerRequiresApiKey(this.config.customAPI?.provider, this.config.customAPI?.url);
-    if (!this.config.customAPI?.url || (needsKey && !this.config.customAPI?.apiKey)) {
+    const apiConfig = this.config.customAPI ? { ...this.config.customAPI } : null;
+    if (!apiConfig) throw new Error('请先配置API地址');
+    return this.withRequestController(signal => this.fetchModelsWithConfig(apiConfig, signal));
+  }
+
+  async fetchModelsForConfig(apiConfig: DirectAPIConfig): Promise<string[]> {
+    const snapshot: DirectAPIConfig = {
+      ...apiConfig,
+      url: apiConfig.url.replace(/\/v1\/?$/, '').replace(/\/+$/, ''),
+    };
+    return this.withRequestController(signal => this.fetchModelsWithConfig(snapshot, signal));
+  }
+
+  private async fetchModelsWithConfig(apiConfig: DirectAPIConfig, signal: AbortSignal): Promise<string[]> {
+    const needsKey = providerRequiresApiKey(apiConfig.provider, apiConfig.url);
+    if (!apiConfig.url || (needsKey && !apiConfig.apiKey)) {
       throw new Error(needsKey ? '请先配置API地址和密钥' : '请先配置API地址');
     }
 
-    const { provider, url, apiKey } = this.config.customAPI;
+    const { provider, url, apiKey } = apiConfig;
     const baseUrl = normalizeOpenAIBaseUrl(url);
 
     try {
@@ -446,7 +458,7 @@ class AIService {
           try {
             // 首先尝试使用查询参数方式（官方Gemini格式）
             const response = await axios.get(`${baseUrl}/v1beta/models?key=${apiKey}`, {
-              signal: this.getAbortSignal(),
+              signal,
               timeout: 10000
             });
 
@@ -462,7 +474,7 @@ class AIService {
               try {
                 const response = await axios.get(`${baseUrl}/v1beta/models`, {
                   headers: { 'Authorization': `Bearer ${apiKey}` },
-                  signal: this.getAbortSignal(),
+                  signal,
                   timeout: 10000
                 });
 
@@ -506,7 +518,7 @@ class AIService {
           try {
             const response = await axios.get(`${buildOpenAICompatibleEndpoint(baseUrl, 'models')}?sub_type=embedding`, {
               headers: { 'Authorization': `Bearer ${apiKey}` },
-              signal: this.getAbortSignal(),
+              signal,
               timeout: 10000
             });
 
@@ -539,7 +551,7 @@ class AIService {
           try {
             const response = await axios.get(buildOpenAICompatibleEndpoint(baseUrl, 'models'), {
               headers: { 'Authorization': `Bearer ${apiKey}` },
-              signal: this.getAbortSignal(),
+              signal,
               timeout: 10000
             });
 
@@ -698,13 +710,11 @@ class AIService {
    * - 如果没有配置独立API，使用默认API
    */
   async generate(options: GenerateOptions): Promise<string> {
-    // 重置取消状态（只在最外层重置一次，重试时不再重置）
-    this.resetAbortState();
-
-    return this.executeWithRetry(async () => {
+    return this.withRequestController(async (signal) => this.executeWithRetry(async () => {
+      const requestOptions = { ...options, signal };
       this.syncModeWithEnvironment();
-      const usageType = options.usageType || 'main';
-      console.log(`[AI服务] 调用generate，模式: ${this.config.mode}, usageType: ${usageType}, hasOnStreamChunk=${!!options.onStreamChunk}`);
+      const usageType = requestOptions.usageType || 'main';
+      console.log(`[AI服务] 调用generate，模式: ${this.config.mode}, usageType: ${usageType}, hasOnStreamChunk=${!!requestOptions.onStreamChunk}`);
 
       // 酒馆模式特殊处理
       if (this.config.mode === 'tavern') {
@@ -715,10 +725,10 @@ class AIService {
         if (apiConfig && apiConfig.id !== 'default') {
           console.log(`[AI服务-酒馆] 功能[${usageType}]使用独立API直连: ${apiConfig.name}`);
           // 如果API配置启用了强制JSON输出，设置responseFormat
-          if (apiConfig.forceJsonOutput && !options.responseFormat) {
-            options = { ...options, responseFormat: 'json_object' };
+          if (apiConfig.forceJsonOutput && !requestOptions.responseFormat) {
+            requestOptions.responseFormat = 'json_object';
           }
-          return this.generateWithAPIConfig(options, {
+          return this.generateWithAPIConfig(requestOptions, {
             provider: apiConfig.provider,
             url: apiConfig.url,
             apiKey: apiConfig.apiKey,
@@ -730,7 +740,7 @@ class AIService {
 
         // 没有配置独立API（使用default），走酒馆
         console.log(`[AI服务-酒馆] 功能[${usageType}]使用酒馆TavernHelper`);
-        return this.generateWithTavern(options);
+        return this.generateWithTavern(requestOptions);
       }
 
       // 网页模式：检查是否需要使用特定功能的 API 配置
@@ -738,10 +748,10 @@ class AIService {
       if (apiConfig) {
         console.log(`[AI服务-网页] 使用功能[${usageType}]分配的API: ${apiConfig.name}`);
         // 如果API配置启用了强制JSON输出，设置responseFormat
-        if (apiConfig.forceJsonOutput && !options.responseFormat) {
-          options = { ...options, responseFormat: 'json_object' };
+        if (apiConfig.forceJsonOutput && !requestOptions.responseFormat) {
+          requestOptions.responseFormat = 'json_object';
         }
-        return this.generateWithAPIConfig(options, {
+        return this.generateWithAPIConfig(requestOptions, {
           provider: apiConfig.provider,
           url: apiConfig.url,
           apiKey: apiConfig.apiKey,
@@ -752,8 +762,8 @@ class AIService {
       }
 
       // 网页模式默认
-      return this.generateWithCustomAPI(options);
-    }, `generate[${options.usageType || 'main'}]`, options.requestMaxRetries);
+      return this.generateWithCustomAPI(requestOptions);
+    }, `generate[${options.usageType || 'main'}]`, options.requestMaxRetries, signal), options.signal);
   }
 
   /**
@@ -768,12 +778,10 @@ class AIService {
    * - 如果没有配置独立API，使用默认API
    */
   async generateRaw(options: GenerateOptions): Promise<string> {
-    // 重置取消状态
-    this.resetAbortState();
-
-    return this.executeWithRetry(async () => {
+    return this.withRequestController(async (signal) => this.executeWithRetry(async () => {
+      const requestOptions = { ...options, signal };
       this.syncModeWithEnvironment();
-      const usageType = options.usageType || 'main';
+      const usageType = requestOptions.usageType || 'main';
       console.log(`[AI服务] 调用generateRaw，模式: ${this.config.mode}, usageType: ${usageType}`);
 
       // 酒馆模式特殊处理
@@ -785,10 +793,10 @@ class AIService {
         if (apiConfig && apiConfig.id !== 'default') {
           console.log(`[AI服务-酒馆] 功能[${usageType}]使用独立API直连(Raw): ${apiConfig.name}`);
           // 如果API配置启用了强制JSON输出，设置responseFormat
-          if (apiConfig.forceJsonOutput && !options.responseFormat) {
-            options = { ...options, responseFormat: 'json_object' };
+          if (apiConfig.forceJsonOutput && !requestOptions.responseFormat) {
+            requestOptions.responseFormat = 'json_object';
           }
-          return this.generateRawWithAPIConfig(options, {
+          return this.generateRawWithAPIConfig(requestOptions, {
             provider: apiConfig.provider,
             url: apiConfig.url,
             apiKey: apiConfig.apiKey,
@@ -800,7 +808,7 @@ class AIService {
 
         // 没有配置独立API（使用default），走酒馆
         console.log(`[AI服务-酒馆] 功能[${usageType}]使用酒馆TavernHelper(Raw)`);
-        return this.generateRawWithTavern(options);
+        return this.generateRawWithTavern(requestOptions);
       }
 
       // 网页模式：检查是否需要使用特定功能的 API 配置
@@ -808,10 +816,10 @@ class AIService {
       if (apiConfig) {
         console.log(`[AI服务-网页] 使用功能[${usageType}]分配的API: ${apiConfig.name}`);
         // 如果API配置启用了强制JSON输出，设置responseFormat
-        if (apiConfig.forceJsonOutput && !options.responseFormat) {
-          options = { ...options, responseFormat: 'json_object' };
+        if (apiConfig.forceJsonOutput && !requestOptions.responseFormat) {
+          requestOptions.responseFormat = 'json_object';
         }
-        return this.generateRawWithAPIConfig(options, {
+        return this.generateRawWithAPIConfig(requestOptions, {
           provider: apiConfig.provider,
           url: apiConfig.url,
           apiKey: apiConfig.apiKey,
@@ -822,8 +830,8 @@ class AIService {
       }
 
       // 网页模式默认
-      return this.generateRawWithCustomAPI(options);
-    }, `generateRaw[${options.usageType || 'main'}]`, options.requestMaxRetries);
+      return this.generateRawWithCustomAPI(requestOptions);
+    }, `generateRaw[${options.usageType || 'main'}]`, options.requestMaxRetries, signal), options.signal);
   }
 
   /**
@@ -842,31 +850,18 @@ class AIService {
     }
   ): Promise<string> {
     console.log(`[AI服务] 使用指定API配置生成，provider: ${apiConfig.provider}, model: ${apiConfig.model}`);
-
-    // 临时保存当前配置（深拷贝以避免引用问题）
-    const originalConfig = this.config.customAPI ? { ...this.config.customAPI } : null;
-
-    try {
-      // 使用指定的API配置
-      this.config.customAPI = {
+    const directConfig: DirectAPIConfig = {
         provider: apiConfig.provider,
         url: apiConfig.url,
         apiKey: apiConfig.apiKey,
         model: apiConfig.model,
         temperature: apiConfig.temperature ?? 0.7,
         maxTokens: apiConfig.maxTokens ?? 16000
-      };
-
-      // 强制使用custom模式
-      const result = await this.generateWithCustomAPI(options);
-
-      return result;
-    } finally {
-      // 恢复原配置
-      if (originalConfig) {
-        this.config.customAPI = originalConfig;
-      }
-    }
+    };
+    return this.withRequestController(
+      signal => this.generateWithCustomAPI({ ...options, signal }, directConfig),
+      options.signal,
+    );
   }
 
   /**
@@ -884,31 +879,18 @@ class AIService {
     }
   ): Promise<string> {
     console.log(`[AI服务] 使用指定API配置进行纯净生成，provider: ${apiConfig.provider}, model: ${apiConfig.model}`);
-
-    // 临时保存当前配置（深拷贝以避免引用问题）
-    const originalConfig = this.config.customAPI ? { ...this.config.customAPI } : null;
-
-    try {
-      // 使用指定的API配置
-      this.config.customAPI = {
+    const directConfig: DirectAPIConfig = {
         provider: apiConfig.provider,
         url: apiConfig.url,
         apiKey: apiConfig.apiKey,
         model: apiConfig.model,
         temperature: apiConfig.temperature ?? 0.7,
         maxTokens: apiConfig.maxTokens ?? 16000
-      };
-
-      // 强制使用custom模式
-      const result = await this.generateRawWithCustomAPI(options);
-
-      return result;
-    } finally {
-      // 恢复原配置
-      if (originalConfig) {
-        this.config.customAPI = originalConfig;
-      }
-    }
+    };
+    return this.withRequestController(
+      signal => this.generateRawWithCustomAPI({ ...options, signal }, directConfig),
+      options.signal,
+    );
   }
 
   // ============ 酒馆模式实现 ============
@@ -924,11 +906,11 @@ class AIService {
     try {
       return await this.withRetry('tavern.generate', async () => {
         // 在调用前检查是否已取消
-        if (this.isAborted) {
+        if (options.signal?.aborted) {
           throw new Error('请求已被取消');
         }
         return await tavernHelper.generate(options);
-      }, { retries: options.requestMaxRetries });
+      }, { retries: options.requestMaxRetries, signal: options.signal });
     } catch (error) {
       throw this.toUserFacingError(error);
     }
@@ -946,11 +928,11 @@ class AIService {
     try {
       const result = await this.withRetry('tavern.generateRaw', async () => {
         // 在调用前检查是否已取消
-        if (this.isAborted) {
+        if (options.signal?.aborted) {
           throw new Error('请求已被取消');
         }
         return await tavernHelper.generateRaw(options);
-      }, { retries: options.requestMaxRetries });
+      }, { retries: options.requestMaxRetries, signal: options.signal });
       return String(result);
     } catch (error) {
       throw this.toUserFacingError(error);
@@ -960,7 +942,7 @@ class AIService {
   private async withRetry<T>(
     label: string,
     fn: () => Promise<T>,
-    opts?: { retries?: number; baseDelayMs?: number },
+    opts?: { retries?: number; baseDelayMs?: number; signal?: AbortSignal },
   ): Promise<T> {
     const retries = opts?.retries ?? this.config.maxRetries ?? 2;
     const baseDelayMs = opts?.baseDelayMs ?? 800;
@@ -968,7 +950,7 @@ class AIService {
     let lastError: unknown;
     for (let attempt = 0; attempt <= retries; attempt++) {
       // 检查是否已取消
-      if (this.isAborted) {
+      if (opts?.signal?.aborted) {
         console.log(`[AI服务] ${label} 请求已被取消，停止重试`);
         throw new Error('请求已取消');
       }
@@ -978,7 +960,7 @@ class AIService {
         let checkInterval: NodeJS.Timeout | null = null;
         const abortPromise = new Promise<never>((_, reject) => {
           checkInterval = setInterval(() => {
-            if (this.isAborted) {
+            if (opts?.signal?.aborted) {
               if (checkInterval) clearInterval(checkInterval);
               reject(new Error('请求已被取消'));
             }
@@ -997,7 +979,7 @@ class AIService {
         }
       } catch (error) {
         // 再次检查取消状态
-        if (this.isAborted) {
+        if (opts?.signal?.aborted) {
           console.log(`[AI服务] ${label} 请求已被取消，停止重试`);
           throw new Error('请求已取消');
         }
@@ -1027,7 +1009,7 @@ class AIService {
 
           // 如果在等待期间被取消，立即结束
           checkAbort = setInterval(() => {
-            if (this.isAborted) {
+            if (opts?.signal?.aborted) {
               cleanup();
               reject(new Error('请求已取消'));
             }
@@ -1146,8 +1128,11 @@ class AIService {
   }
 
   // ============ 自定义API模式实现 ============
-  private async generateWithCustomAPI(options: GenerateOptions): Promise<string> {
-    if (!this.config.customAPI) {
+  private async generateWithCustomAPI(
+    options: GenerateOptions,
+    requestConfig: DirectAPIConfig | undefined = this.config.customAPI,
+  ): Promise<string> {
+    if (!requestConfig) {
       throw new Error('自定义API未配置');
     }
 
@@ -1186,13 +1171,16 @@ class AIService {
     const shouldStream = options.should_stream ?? this.config.streaming ?? false;
     // 🔥 读取功能对应的 API 配置的 forceJsonOutput 设置
     const usageType = options.usageType;
-    const apiConfig = usageType ? this.getAPIConfigForUsageType(usageType) : null;
-    const responseFormat = options.responseFormat || (apiConfig?.forceJsonOutput ? 'json_object' : undefined);
-    return this.callAPI(messages, shouldStream, options.onStreamChunk, responseFormat, options.usageType, options.maxTokens);
+    const assignedConfig = usageType ? this.getAPIConfigForUsageType(usageType) : null;
+    const responseFormat = options.responseFormat || (assignedConfig?.forceJsonOutput ? 'json_object' : undefined);
+    return this.callAPI(messages, shouldStream, options.onStreamChunk, responseFormat, options.usageType, options.maxTokens, requestConfig, options.signal);
   }
 
-  private async generateRawWithCustomAPI(options: GenerateOptions): Promise<string> {
-    if (!this.config.customAPI) {
+  private async generateRawWithCustomAPI(
+    options: GenerateOptions,
+    requestConfig: DirectAPIConfig | undefined = this.config.customAPI,
+  ): Promise<string> {
+    if (!requestConfig) {
       throw new Error('自定义API未配置');
     }
 
@@ -1205,10 +1193,10 @@ class AIService {
     const shouldStream = options.should_stream ?? this.config.streaming ?? false;
     // 🔥 读取功能对应的 API 配置的 forceJsonOutput 设置
     const usageType = options.usageType;
-    const apiConfig = usageType ? this.getAPIConfigForUsageType(usageType) : null;
-    const responseFormat = options.responseFormat || (apiConfig?.forceJsonOutput ? 'json_object' : undefined);
+    const assignedConfig = usageType ? this.getAPIConfigForUsageType(usageType) : null;
+    const responseFormat = options.responseFormat || (assignedConfig?.forceJsonOutput ? 'json_object' : undefined);
     console.log(`[AI服务-自定义Raw] shouldStream=${shouldStream}, hasOnStreamChunk=${!!options.onStreamChunk}, options.should_stream=${options.should_stream}, config.streaming=${this.config.streaming}`);
-    return this.callAPI(messages, shouldStream, options.onStreamChunk, responseFormat, options.usageType, options.maxTokens);
+    return this.callAPI(messages, shouldStream, options.onStreamChunk, responseFormat, options.usageType, options.maxTokens, requestConfig, options.signal);
   }
 
   private async callAPI(
@@ -1217,9 +1205,11 @@ class AIService {
     onStreamChunk?: (chunk: string) => void,
     responseFormat?: 'json_object',
     usageType?: APIUsageType,
-    maxTokensOverride?: number
+    maxTokensOverride?: number,
+    apiConfig: DirectAPIConfig = this.config.customAPI!,
+    signal?: AbortSignal,
   ): Promise<string> {
-    const { provider, url, apiKey, model, temperature, maxTokens } = this.config.customAPI!;
+    const { provider, url, apiKey, model, temperature, maxTokens } = apiConfig;
 
     // 🔥 某些模型/API不支持 response_format: json_object
     const isReasonerModel = model.includes('reasoner') || model.includes('r1');
@@ -1253,9 +1243,9 @@ class AIService {
     // 根据provider选择不同的调用方式
     switch (provider) {
       case 'claude':
-        return this.callClaudeAPI(finalMessages, streaming, onStreamChunk, effectiveResponseFormat, maxTokensOverride);
+        return this.callClaudeAPI(finalMessages, streaming, onStreamChunk, effectiveResponseFormat, maxTokensOverride, apiConfig, signal);
       case 'gemini':
-        return this.callGeminiAPI(finalMessages, streaming, onStreamChunk, effectiveResponseFormat, maxTokensOverride);
+        return this.callGeminiAPI(finalMessages, streaming, onStreamChunk, effectiveResponseFormat, maxTokensOverride, apiConfig, signal);
       case 'openai':
       case 'deepseek':
       case 'zhipu':
@@ -1264,7 +1254,7 @@ class AIService {
       case 'ollama':
       case 'custom':
       default:
-        return this.callOpenAICompatibleAPI(finalMessages, streaming, onStreamChunk, effectiveResponseFormat, usageType, maxTokensOverride);
+        return this.callOpenAICompatibleAPI(finalMessages, streaming, onStreamChunk, effectiveResponseFormat, usageType, maxTokensOverride, apiConfig, signal);
     }
   }
 
@@ -1397,9 +1387,11 @@ class AIService {
     onStreamChunk?: (chunk: string) => void,
     responseFormat?: 'json_object',
     usageType?: APIUsageType,
-    maxTokensOverride?: number
+    maxTokensOverride?: number,
+    apiConfig: DirectAPIConfig = this.config.customAPI!,
+    signal?: AbortSignal,
   ): Promise<string> {
-    const { provider, url, apiKey, model, temperature, maxTokens } = this.config.customAPI!;
+    const { provider, url, apiKey, model, temperature, maxTokens } = apiConfig;
     const requestedMaxTokens = this.getEffectiveRequestedMaxTokens(provider, model, maxTokensOverride ?? maxTokens ?? 16000, usageType);
     const safeMaxTokens = this.clampMaxTokensForContext(provider, model, messages, requestedMaxTokens);
 
@@ -1414,7 +1406,7 @@ class AIService {
     try {
       if (streaming) {
         try {
-          return await this.streamingRequestOpenAI(url, apiKey, model, messages, temperature || 0.7, safeMaxTokens, onStreamChunk, responseFormat, provider);
+          return await this.streamingRequestOpenAI(url, apiKey, model, messages, temperature || 0.7, safeMaxTokens, onStreamChunk, responseFormat, provider, signal);
         } catch (e) {
           const msg = e instanceof Error ? e.message : String(e);
           if (!this.isStreamUnsupportedError(msg)) throw e;
@@ -1447,7 +1439,7 @@ class AIService {
                 'Content-Type': 'application/json'
               },
               timeout: 60000, // 减少到60秒
-              signal: this.getAbortSignal()
+              signal
             }
           );
 
@@ -1488,7 +1480,7 @@ class AIService {
               'Content-Type': 'application/json'
             },
             timeout: 120000,
-            signal: this.getAbortSignal()
+            signal
           }
         );
 
@@ -1520,9 +1512,11 @@ class AIService {
     streaming: boolean,
     onStreamChunk?: (chunk: string) => void,
     responseFormat?: 'json_object',
-    maxTokensOverride?: number
+    maxTokensOverride?: number,
+    apiConfig: DirectAPIConfig = this.config.customAPI!,
+    signal?: AbortSignal,
   ): Promise<string> {
-    const { provider, url, apiKey, model, temperature, maxTokens } = this.config.customAPI!;
+    const { provider, url, apiKey, model, temperature, maxTokens } = apiConfig;
 
     // 转换消息格式：提取system消息，其余转为Claude格式
     let systemPrompt = '';
@@ -1578,7 +1572,7 @@ class AIService {
     try {
       if (streaming) {
         try {
-          return await this.streamingRequestClaude(baseUrl, apiKey, model, systemPrompt, claudeMessages, temperature || 0.7, safeMaxTokens, onStreamChunk);
+          return await this.streamingRequestClaude(baseUrl, apiKey, model, systemPrompt, claudeMessages, temperature || 0.7, safeMaxTokens, onStreamChunk, signal);
         } catch (e) {
           const msg = e instanceof Error ? e.message : String(e);
           if (!this.isStreamUnsupportedError(msg)) throw e;
@@ -1594,7 +1588,7 @@ class AIService {
                 'Content-Type': 'application/json'
               },
               timeout: 60000, // 减少到60秒
-              signal: this.getAbortSignal()
+              signal
             }
           );
 
@@ -1620,7 +1614,7 @@ class AIService {
               'Content-Type': 'application/json'
             },
             timeout: 120000,
-            signal: this.getAbortSignal()
+            signal
           }
         );
 
@@ -1652,9 +1646,11 @@ class AIService {
     streaming: boolean,
     onStreamChunk?: (chunk: string) => void,
     responseFormat?: 'json_object',
-    maxTokensOverride?: number
+    maxTokensOverride?: number,
+    apiConfig: DirectAPIConfig = this.config.customAPI!,
+    signal?: AbortSignal,
   ): Promise<string> {
-    const { provider, url, apiKey, model, temperature, maxTokens } = this.config.customAPI!;
+    const { provider, url, apiKey, model, temperature, maxTokens } = apiConfig;
 
     // 验证必需参数
     if (!model || model.trim() === '') {
@@ -1730,7 +1726,7 @@ class AIService {
       return axios.post(requestUrl, requestBody, {
         headers,
         timeout: 120000,
-        signal: this.getAbortSignal()
+        signal
       });
     };
 
@@ -1745,7 +1741,7 @@ class AIService {
     try {
       if (streaming) {
         try {
-          return await this.streamingRequestGemini(baseUrl, apiKey, model, systemInstruction, contents, temperature || 0.7, safeMaxTokens, onStreamChunk);
+          return await this.streamingRequestGemini(baseUrl, apiKey, model, systemInstruction, contents, temperature || 0.7, safeMaxTokens, onStreamChunk, signal);
         } catch (e) {
           const msg = e instanceof Error ? e.message : String(e);
           if (!this.isStreamUnsupportedError(msg)) throw e;
@@ -1809,7 +1805,8 @@ class AIService {
     maxTokens: number,
     onStreamChunk?: (chunk: string) => void,
     responseFormat?: 'json_object',
-    provider?: APIProvider
+    provider?: APIProvider,
+    signal?: AbortSignal,
   ): Promise<string> {
     console.log('[AI服务-OpenAI流式] 开始');
 
@@ -1849,7 +1846,7 @@ class AIService {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(requestBody),
-      signal: this.getAbortSignal()
+      signal
     });
 
     if (!response.ok) {
@@ -1884,7 +1881,7 @@ class AIService {
       }
 
       return '';
-    }, onStreamChunk);
+    }, onStreamChunk, signal);
 
     if (truncated) {
       throw new Error(`响应因输出长度限制被截断（maxTokens=${maxTokens}）`);
@@ -1902,7 +1899,8 @@ class AIService {
     messages: Array<{ role: 'user' | 'assistant'; content: string }>,
     temperature: number,
     maxTokens: number,
-    onStreamChunk?: (chunk: string) => void
+    onStreamChunk?: (chunk: string) => void,
+    signal?: AbortSignal,
   ): Promise<string> {
     console.log(`[AI服务-Claude流式] 开始`);
 
@@ -1924,7 +1922,7 @@ class AIService {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(requestBody),
-      signal: this.getAbortSignal()
+      signal
     });
 
     if (!response.ok) {
@@ -1970,7 +1968,7 @@ class AIService {
         return parsed.delta?.text || '';
       }
       return '';
-    }, onStreamChunk);
+    }, onStreamChunk, signal);
 
     if (truncated) {
       throw new Error(`响应因输出长度限制被截断（maxTokens=${maxTokens}）`);
@@ -1987,7 +1985,8 @@ class AIService {
     contents: Array<{ role: 'user' | 'model'; parts: Array<{ text: string }> }>,
     temperature: number,
     maxTokens: number,
-    onStreamChunk?: (chunk: string) => void
+    onStreamChunk?: (chunk: string) => void,
+    signal?: AbortSignal,
   ): Promise<string> {
     console.log(`[AI服务-Gemini流式] 开始`);
 
@@ -2004,7 +2003,7 @@ class AIService {
         systemInstruction: systemInstruction ? { parts: [{ text: systemInstruction }] } : undefined,
         generationConfig
       }),
-      signal: this.getAbortSignal()
+      signal
     });
 
     if (!response.ok) {
@@ -2046,7 +2045,7 @@ class AIService {
       }
 
       return result;
-    }, onStreamChunk);
+    }, onStreamChunk, signal);
 
     if (truncated) {
       throw new Error(`响应因输出长度限制被截断（maxTokens=${maxTokens}）`);
@@ -2058,7 +2057,8 @@ class AIService {
   private async processSSEStream(
     response: Response,
     extractContent: (data: string) => string,
-    onStreamChunk?: (chunk: string) => void
+    onStreamChunk?: (chunk: string) => void,
+    signal?: AbortSignal,
   ): Promise<string> {
     console.log(`[AI服务-流式] processSSEStream 开始, hasOnStreamChunk=${!!onStreamChunk}`);
 
@@ -2085,7 +2085,7 @@ class AIService {
 
     try {
       while (true) {
-        if (this.isAborted) {
+        if (signal?.aborted) {
           try { await reader.cancel(); } catch { /* ignore */ }
           throw new Error('请求已取消');
         }

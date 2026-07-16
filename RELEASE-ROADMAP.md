@@ -103,7 +103,7 @@
 - [ ] **持续主动偏移会推迟对账**（尊重自由探索的代价）：若实测乙误判偏移多，加"stall 已很高时冷却只静默引子、不暂停对账"。
 - [ ] **黑匣子 `_reconcileDebug` 稳定后移除**（POSTMORTEM 遗留）：临时观测件（单条覆盖式、"读不到≠没发生"、本身未验证），对账 live 稳定后从 `AIBidirectionalSystem.ts` 摘除。
 - [ ] **旧存档被污染的长期记忆清扫 + 记忆消费者排查**（POSTMORTEM 层5 遗留）：memory_summary 曾把 `<think>` 思维链+任务说明整段入库，`ed1cf0e` 只修了读取侧消毒+新入库剥离——旧存档存量污染条目仍在；并排查主叙事/进度审计等其他记忆消费者是否同样被注入影响。
-- [ ] **aiService `customAPI` 全局改写非并发安全 + 全局 AbortController**（POSTMORTEM 遗留，Codex 鉴别诊断 #1/#3）：aux 调用（对账/总结/审计）与主叙事交错时可能串配置；swap-restore 模式（`aiService.ts` originalConfig）待改为 per-call 配置。
+- [x] **aiService `customAPI` 全局改写非并发安全 + 全局 AbortController**（2026-07-16 完成）：所有直连请求改为携带不可变 API 配置快照与调用级 `AbortSignal`，不再临时替换/恢复全局 `customAPI`；活动 controller 以集合隔离管理，`cancelAllRequests()` 可同时取消所有在途请求。API 面板刷新编辑中模型列表也改为直接传配置快照。新增并发回归覆盖双模型并行不串线、取消全部和模型列表不污染主配置；`canon:build` 275 测试及 production build 全绿。
 - ⚠️ **工程纪律**（自省，2026-07-08）：手改磁盘存档 `.xiantu-server/save-storage/*.json` 在游戏运行时**无效**——每次自动存档用内存状态覆盖磁盘。载入路径已验证＝后端优先(8091代理→后端读该目录)+IDB兜底。要注入存档必须游戏退出/不自动存档时做，或走游戏内正常通道（对账模块就是对的做法）。关键路径先验证再断言，勿吃记忆老本。
 
 ## R3 · 发布后深耕（价值排序）
