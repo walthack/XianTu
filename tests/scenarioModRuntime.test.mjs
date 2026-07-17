@@ -251,6 +251,27 @@ test('Canon Rail accepts only the exact current anchor completion flag for same-
   ));
 });
 
+test('Canon Rail rejects declared completion flags when no narrative anchor exists', async () => {
+  const { guardScenarioModCommands } = await loadTs('../src/modules/scenarioMods/canonGuard.ts');
+  const save = await buildRuntimeSave();
+  const runtime = save.世界.状态.剧本模组;
+  runtime.modId = 'lcq.stage_01';
+  runtime.events[0].id = 'lcq.event.s01_01';
+  runtime.events[0].completion = [{ path: 'flags.event.s01_01.done', operator: 'eq', value: true }];
+  runtime.currentChapterId = null;
+  runtime.activeEventIds = [];
+  const completion = {
+    action: 'set',
+    key: '世界.状态.剧本模组.flags.event.s01_01.done',
+    value: true,
+  };
+
+  const result = guardScenarioModCommands(save, [completion]);
+  assert.deepEqual(result.accepted, []);
+  assert.deepEqual(result.rejected.map(item => item.command), [completion]);
+  assert.match(result.rejected[0].reason, /当前没有可完成的剧本事件/);
+});
+
 test('condition evaluator supports flat dotted flags and save paths', async () => {
   const { evaluateScenarioCondition } = await loadTs('../src/modules/scenarioMods/runtime.ts');
   const runtime = {
