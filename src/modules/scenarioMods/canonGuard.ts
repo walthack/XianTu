@@ -1,6 +1,5 @@
 import type { SaveData } from '@/types/game';
 import { getNarrativeAnchorEvent } from './runtime';
-import { getCanonRailProfile } from './canonRail';
 
 import type {
   ScenarioContentAccessRule,
@@ -21,7 +20,14 @@ interface ScenarioRuntimeState {
   currentChapterId?: string | null;
   activeEventIds?: string[];
   chapters?: Array<{ id: string; eventIds?: string[] }>;
-  events?: Array<{ id: string; critical?: boolean; axisSeq?: number; axisId?: string | null; axisBeat?: string }>;
+  events?: Array<{
+    id: string;
+    critical?: boolean;
+    axisSeq?: number;
+    axisId?: string | null;
+    axisBeat?: string;
+    completion?: Array<{ path?: string; operator?: string; value?: unknown }>;
+  }>;
   completedEventIds?: string[];
   opening?: {
     playerCharacterId?: string;
@@ -300,6 +306,23 @@ function getScenarioEventIdsAllowedForCompletion(runtime: ScenarioRuntimeState):
   return new Set(anchor ? [anchor.id] : []);
 }
 
+function findScenarioEventForCompletionFlag(
+  runtime: ScenarioRuntimeState,
+  flagPath: string,
+): { event?: NonNullable<ScenarioRuntimeState['events']>[number]; error?: string } {
+  const completionPath = `flags.${flagPath}`;
+  const matches = (runtime.events || []).filter(event =>
+    (event.completion || []).some(condition =>
+      condition.path === completionPath
+      && condition.operator === 'eq'
+      && condition.value === true,
+    ),
+  );
+  if (matches.length === 0) return { error: `未知剧本事件完成标记：${completionPath}` };
+  if (matches.length > 1) return { error: `剧本事件完成标记不唯一：${completionPath}` };
+  return { event: matches[0] };
+}
+
 function findScenarioFlagViolation(runtime: ScenarioRuntimeState, command: CommandLike, key: string): string | null {
   if (!key.startsWith('世界.状态.剧本模组.flags.')) return null;
   if (command.action !== 'set') return '剧本进度 flags 只能用 set 写入';
@@ -320,15 +343,15 @@ function findScenarioFlagViolation(runtime: ScenarioRuntimeState, command: Comma
   if (!id) return `剧本${namespace === 'event' ? '事件' : '章节'}完成标记缺少 id`;
 
   if (namespace === 'event') {
-    const knownIds = new Set((runtime.events || []).map(event => event.id));
-    if (knownIds.size > 0 && !knownIds.has(id)) return `未知剧本事件 id：${id}`;
+    const resolved = findScenarioEventForCompletionFlag(runtime, flagPath);
+    if (resolved.error || !resolved.event) return resolved.error || `未知剧本事件完成标记：flags.${flagPath}`;
     const allowedIds = getScenarioEventIdsAllowedForCompletion(runtime);
-    if (allowedIds.size > 0 && !allowedIds.has(id)) {
-      return `不得越级完成非当前章节/活跃事件：${id}`;
+    if (allowedIds.size === 0) return `当前没有可完成的剧本事件：${resolved.event.id}`;
+    if (!allowedIds.has(resolved.event.id)) {
+      return `不得越级完成非当前章节/活跃事件：${resolved.event.id}`;
     }
-    if (getCanonRailProfile(runtime)) {
-      return `Canon Rail 事件完成只能由事件核验器落账：${id}`;
-    }
+    // Canon Rail 只放行“当前叙事锚点 → 该事件唯一 completion flag → set true”。
+    // 顺序、路径和值均由本地 runtime 确定性核验；事件对账仍负责漏标、等价路径与分歧自愈。
     return null;
   }
 

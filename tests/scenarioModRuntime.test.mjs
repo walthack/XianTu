@@ -215,20 +215,40 @@ test('a completed Canon Rail stage reaches stage_ready even if a legacy terminal
   assert.ok(advanced.transitions.some(t => t.type === 'stage_ready' && t.id === 'lcq.stage_06'));
 });
 
-test('Canon Rail rejects direct LLM completion flags; reconciliation remains the only route', async () => {
+test('Canon Rail accepts only the exact current anchor completion flag for same-turn advancement', async () => {
   const { guardScenarioModCommands } = await loadTs('../src/modules/scenarioMods/canonGuard.ts');
   const save = await buildRuntimeSave();
   const runtime = save.世界.状态.剧本模组;
   runtime.modId = 'lcq.stage_01';
-  runtime.events[0].id = 's01_01';
+  runtime.events[0].id = 'lcq.event.s01_01';
   runtime.events[0].completion = [{ path: 'flags.event.s01_01.done', operator: 'eq', value: true }];
-  runtime.chapters[0].eventIds = ['s01_01'];
-  runtime.activeEventIds = ['s01_01'];
-  const result = guardScenarioModCommands(save, [{
-    action: 'set', key: '世界.状态.剧本模组.flags.event.s01_01.done', value: true,
-  }]);
-  assert.equal(result.accepted.length, 0);
-  assert.match(result.rejected[0].reason, /事件核验器/);
+  runtime.events.push({
+    id: 'lcq.event.s01_02',
+    completion: [{ path: 'flags.event.s01_02.done', operator: 'eq', value: true }],
+  });
+  runtime.chapters[0].eventIds = ['lcq.event.s01_01', 'lcq.event.s01_02'];
+  runtime.activeEventIds = ['lcq.event.s01_01'];
+  const current = { action: 'set', key: '世界.状态.剧本模组.flags.event.s01_01.done', value: true };
+  const future = { action: 'set', key: '世界.状态.剧本模组.flags.event.s01_02.done', value: true };
+  const guessedFromEventId = {
+    action: 'set',
+    key: '世界.状态.剧本模组.flags.event.lcq.event.s01_01.done',
+    value: true,
+  };
+
+  const result = guardScenarioModCommands(save, [current, future, guessedFromEventId]);
+  assert.deepEqual(result.accepted, [current]);
+  assert.deepEqual(result.rejected.map(item => item.command), [future, guessedFromEventId]);
+  assert.match(result.rejected[0].reason, /不得越级/);
+  assert.match(result.rejected[1].reason, /未知剧本事件完成标记/);
+
+  runtime.flags.event ??= {};
+  runtime.flags.event.s01_01 = { done: true };
+  const { advanceScenarioRuntime } = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  const advanced = advanceScenarioRuntime(save);
+  assert.ok(advanced.transitions.some(item =>
+    item.type === 'event_completed' && item.id === 'lcq.event.s01_01',
+  ));
 });
 
 test('condition evaluator supports flat dotted flags and save paths', async () => {
@@ -264,6 +284,11 @@ test('canon guard rejects malformed and out-of-sequence scenario event flags', a
   const { guardScenarioModCommands } = await loadTs('../src/modules/scenarioMods/canonGuard.ts');
   const save = await buildRuntimeSave();
   const runtime = save.世界.状态.剧本模组;
+  runtime.events[0].completion = [{
+    path: 'flags.event.event.firstmeeting.done',
+    operator: 'eq',
+    value: true,
+  }];
   runtime.events.push({
     id: 'event.future',
     name: '后续事件',

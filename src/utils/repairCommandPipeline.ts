@@ -14,19 +14,20 @@ export async function executeValidatedRepairCommands(
   commands: RepairCommand[],
 ): Promise<string[]> {
   const errors: string[] = [];
-  const scenarioResult = guardScenarioModCommands(saveData, commands);
+  const nonRuntimeCommands = commands.filter(command => {
+    const key = typeof command?.key === 'string' ? command.key.trim() : '';
+    const touchesRuntime =
+      key === '世界.状态.剧本模组' || key.startsWith('世界.状态.剧本模组.') ||
+      key === '系统.扩展.剧本模组' || key.startsWith('系统.扩展.剧本模组.');
+    if (touchesRuntime) errors.push(`修复指令已拒绝: 不得修改剧本运行时（${key || '无路径'}）`);
+    return !touchesRuntime;
+  });
+  const scenarioResult = guardScenarioModCommands(saveData, nonRuntimeCommands);
   scenarioResult.rejected.forEach(({ reason }) => errors.push(`修复指令已拒绝: ${reason}`));
   const safeCommands: RepairCommand[] = [];
   for (const rawCommand of scenarioResult.accepted) {
     const command = rawCommand as RepairCommand;
     const key = typeof command?.key === 'string' ? command.key.trim() : '';
-    if (
-      key === '世界.状态.剧本模组' || key.startsWith('世界.状态.剧本模组.') ||
-      key === '系统.扩展.剧本模组' || key.startsWith('系统.扩展.剧本模组.')
-    ) {
-      errors.push(`修复指令已拒绝: 不得修改剧本运行时（${key || '无路径'}）`);
-      continue;
-    }
     const format = validateRepairCommand(command, safeCommands.length);
     const value = validateAndRepairCommandValue(command as ValidatedTavernCommand);
     if (!format.valid || !value.valid) {

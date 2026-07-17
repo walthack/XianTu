@@ -70,6 +70,9 @@ test('prompt state keeps only the current chapter and active events without muta
 test('story prompt includes current objectives and excludes future plot content', async () => {
   const { buildScenarioStoryPrompt } = await loadTs('../src/modules/scenarioMods/storyContext.ts');
   const save = await buildStorySave();
+  const runtime = save.世界.状态.剧本模组;
+  runtime.events[0].completion = [{ path: 'flags.event.firstmeeting.done', operator: 'eq', value: true }];
+  runtime.events[1].conditions = [{ path: 'flags.event.firstmeeting.done', operator: 'eq', value: true }];
 
   const prompt = buildScenarioStoryPrompt(save);
 
@@ -92,8 +95,9 @@ test('story prompt includes current objectives and excludes future plot content'
   assert.doesNotMatch(prompt, /暗潮决战/);
   assert.doesNotMatch(prompt, /未来势力冲突/);
   assert.match(prompt, /不要猜测、引用或泄露后续章节/);
-  assert.match(prompt, /只能完成上方“当前事件”列出的事件ID/);
-  assert.match(prompt, /不得写 flags\.event\.<id> = true/);
+  assert.match(prompt, /完成写入键（事件达成时原样 set true）：世界\.状态\.剧本模组\.flags\.event\.firstmeeting\.done/);
+  assert.match(prompt, /只能使用上方“当前事件”逐条列出的“完成写入键”/);
+  assert.match(prompt, /不得自行用事件ID拼接 flag 路径/);
   assert.match(prompt, /不得提前完成未来事件/);
 });
 
