@@ -42,6 +42,11 @@ test('cross-book highlight batch keeps full contracts and deterministic completi
   const dongZhuo = events.get('lyg.event.s01_07');
   assert.match(dongZhuo.axisBeat, /^半预制高光：/);
   assert.match(dongZhuo.axisBeat, /时也，命也/);
+
+  const yiHu = events.get('lcq.event.s04_05');
+  assert.match(yiHu.description, /先后救下易彪与一名年轻军士/);
+  assert.match(yiHu.description, /洪水吞没/);
+  assert.doesNotMatch(yiHu.description, /被岩石砸死/);
 });
 
 test('highlight batch uses explicit per-event BGM moods', async () => {
@@ -58,4 +63,16 @@ test('highlight batch uses explicit per-event BGM moods', async () => {
     const mapping = `'${eventId}': '${expectedMood}'`;
     assert.equal(source.split(mapping).length - 1, 1, `${eventId} should have one explicit ${expectedMood} mapping`);
   }
+});
+
+test('optional highlight completion cannot gate same-turn ordinary reconciliation', async () => {
+  const source = await readFile(new URL('../src/utils/AIBidirectionalSystem.ts', import.meta.url), 'utf8');
+  assert.match(
+    source,
+    /if \(!hadExecutionError && rtForReconcile && _enabled && _should\) \{\s*const deterministicChanges/,
+  );
+  assert.doesNotMatch(
+    source,
+    /_should\s*&&\s*highlightChanges\.length\s*===\s*0/,
+  );
 });
