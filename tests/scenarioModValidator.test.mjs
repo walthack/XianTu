@@ -90,6 +90,17 @@ test('reports dangling entity references with their full path', async () => {
   ));
 });
 
+test('validates the optional canonical location region field', async () => {
+  const { validateScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
+  const fixture = await loadFixture();
+  fixture.canon.locations[0].region = '晋国';
+  assert.equal(validateScenarioMod(fixture).valid, true);
+  fixture.canon.locations[0].region = 7;
+  assert.ok(validateScenarioMod(fixture).issues.some(issue =>
+    issue.path === 'canon.locations[0].region' && issue.code === 'invalid_string'
+  ));
+});
+
 test('validates content access identities and content references', async () => {
   const { validateScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
   const fixture = await loadFixture();

@@ -769,6 +769,8 @@ export interface WorldLocation {
   名称: string;
   类型: '城池' | '宗门' | '秘境' | '险地' | '商会' | '坊市' | '洞府' | string;
   位置: string;
+  /** 剧本正典中的国别/文化地域。 */
+  地域?: string;
   coordinates?: { x: number; y: number }; // 原始坐标数据
   描述: string;
   特色: string;

@@ -118,6 +118,7 @@ export function buildStrictScenarioInitialization(
       return withNativeScenarioLocationType({
         名称: location.name,
         位置: continent?.name || firstContinentName,
+        ...(location.region ? { 地域: location.region } : {}),
         coordinates: location.coordinates ? structuredClone(location.coordinates) : undefined,
         坐标: location.coordinates ? structuredClone(location.coordinates) : undefined,
         描述: location.description || '',

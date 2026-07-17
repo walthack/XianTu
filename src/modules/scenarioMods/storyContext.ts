@@ -12,6 +12,7 @@ import type {
   ScenarioModCharacter,
   ScenarioModCharacterRelationship,
   ScenarioModEvent,
+  ScenarioModLocation,
   ScenarioModOpening,
   ScenarioModPlayerRelationship,
 } from './schema';
@@ -40,7 +41,7 @@ interface StoryRuntime {
   canon?: {
     characters?: ScenarioModCharacter[];
     factions?: Array<{ id: string; name: string }>;
-    locations?: Array<{ id: string; name: string }>;
+    locations?: ScenarioModLocation[];
     playerRelationships?: ScenarioModPlayerRelationship[];
     relationships?: ScenarioModCharacterRelationship[];
   };
@@ -73,6 +74,32 @@ function collectIntroducedCharacterIds(runtime: StoryRuntime): string[] {
     for (const id of event.relatedCharacterIds || []) ids.add(id);
   }
   return [...ids];
+}
+
+function resolveCurrentScenarioLocation(runtime: StoryRuntime, saveData: SaveData): ScenarioModLocation | null {
+  const locations = runtime.canon?.locations || [];
+  if (!locations.length) return null;
+  const description = String(readPath(saveData, ['角色', '位置', '描述']) || '').replace(/\s+/g, '');
+  if (description) {
+    // 地点名可能互相包含（如“白夷”/“白夷谷”）；优先最长的明确命中。
+    const byName = locations
+      .filter(location => location.name.length >= 2 && description.includes(location.name.replace(/\s+/g, '')))
+      .sort((a, b) => b.name.length - a.name.length)[0];
+    if (byName) return byName;
+  }
+  const x = Number(readPath(saveData, ['角色', '位置', 'x']));
+  const y = Number(readPath(saveData, ['角色', '位置', 'y']));
+  if (!Number.isFinite(x) || !Number.isFinite(y)) return null;
+  return locations.find(location => location.coordinates?.x === x && location.coordinates?.y === y) || null;
+}
+
+function formatLocationContext(location: ScenarioModLocation): string {
+  const identity = [location.name, location.region ? `地域：${location.region}` : ''].filter(Boolean).join('；');
+  const details = [
+    compactText(location.description, 180),
+    location.features?.length ? `风貌要素：${formatList(location.features, 6, 36)}` : '',
+  ].filter(Boolean).join('；');
+  return `- ${identity}${details ? `：${details}` : ''}`;
 }
 
 function formatConditions(conditions: ScenarioCondition[] | undefined): string {
@@ -337,16 +364,20 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
   const characters = runtime.canon?.characters || [];
   const factions = runtime.canon?.factions || [];
   const locations = runtime.canon?.locations || [];
+  const currentLocation = resolveCurrentScenarioLocation(runtime, saveData);
 
   const chapterSection = chapter
     ? `## 当前章节：${chapter.title}\n${chapter.summary}\n章节完成条件：${formatConditions(chapter.completion)}`
     : '## 当前章节\n暂无已激活章节。不要自行使用或透露后续章节内容。';
   // 当前地域风貌：活跃事件所在地点的正典描述（否则 LLM 查看环境时裸猜，南荒写成中原样）
-  const activeLocationIds = [...new Set(activeEvents.map(event => event.locationId).filter(Boolean))] as string[];
+  const activeLocationIds = [...new Set([
+    currentLocation?.id,
+    ...activeEvents.map(event => event.locationId),
+  ].filter(Boolean))] as string[];
   const locationLine = activeLocationIds
     .map(id => {
-      const loc = locations.find(item => item.id === id) as { name?: string; description?: string } | undefined;
-      return loc?.description ? `- ${loc.name}：${compactText(loc.description, 160)}` : '';
+      const loc = locations.find(item => item.id === id);
+      return loc ? formatLocationContext(loc) : '';
     })
     .filter(Boolean)
     .join('\n');
@@ -418,20 +449,31 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
   // G1 残留修复：自由漫游时"在场但没被点名"的 NPC 此前拿不到档案（只能赌 embedding RAG）。
   // 确定性补召回：社交.关系 里 当前位置与玩家共享世界地点段（·分隔第2段）的 NPC，
   // 其名字并入聚焦上下文 → 复用既有名字召回（同一去重/12人上限管道）。
+  const introducedAtLocation = new Set(collectIntroducedCharacterIds(runtime));
+  const canonicalSameLocationNames = currentLocation
+    ? characters
+        .filter(character =>
+          character.id !== runtime.opening?.playerCharacterId
+          && character.locationId === currentLocation.id
+          && introducedAtLocation.has(character.id),
+        )
+        .map(character => character.name)
+    : [];
   const playerLocDesc = String(readPath(saveData, ['角色', '位置', '描述']) || '');
   const playerLocKey = playerLocDesc.split('·')[1] || '';
-  const sameLocationNames: string[] = [];
+  const sameLocationNames = new Set<string>(canonicalSameLocationNames);
   if (relations && playerLocKey.length >= 2) {
     for (const [key, npc] of Object.entries(relations)) {
       if (!npc || typeof npc !== 'object') continue;
       const npcLoc = String((npc as { 当前位置?: { 描述?: string } }).当前位置?.描述 || '');
-      if (npcLoc && npcLoc.split('·')[1] === playerLocKey) {
-        sameLocationNames.push(String((npc as { 名字?: string }).名字 || key));
+      if (npcLoc && (npcLoc.includes(playerLocKey) || npcLoc.split('·')[1] === playerLocKey)) {
+        sameLocationNames.add(String((npc as { 名字?: string }).名字 || key));
       }
     }
   }
-  const focusContext = sameLocationNames.length
-    ? `${contextText}\n【在场】${sameLocationNames.slice(0, 12).join('、')}`
+  const sameLocationList = [...sameLocationNames];
+  const focusContext = sameLocationList.length
+    ? `${contextText}\n【在场】${sameLocationList.slice(0, 12).join('、')}`
     : contextText;
   const focusedCharacterSection = buildFocusedCharacterPrompt(runtime, activeEvents, focusContext, favByName);
   const introducedIds = new Set(collectIntroducedCharacterIds(runtime));

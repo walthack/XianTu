@@ -48,6 +48,53 @@ function stateFactors(kind: JudgementKind, saveData: any) {
   return factors;
 }
 
+const SKILL_KIND_HINTS: Record<JudgementKind, RegExp> = {
+  combat: /刀|剑|拳|掌|枪|矛|弓|战|攻|杀|破甲|护体|真气|劲/,
+  cultivate: /功法|内功|心法|修炼|真气|灵气|疗伤|调息|双修|生机|经脉/,
+  craft: /炼丹|炼器|制符|布阵|锻造|药|丹|器|阵|符/,
+  explore: /探查|探索|感应|追踪|辨识|寻路|侦察|生死气息/,
+  social: /口才|交涉|说服|威慑|魅惑|礼法|辩/,
+  escape: /身法|轻功|遁|逃|步法|疾行/,
+  stealth: /潜行|隐匿|敛息|藏形|暗杀/,
+  scheme: /谋略|计策|筹算|布局|权谋/,
+};
+const UNAVAILABLE_SKILL = /未传授|并未传授|尚未传授|未学会|尚未掌握|不会施展|不能使用|不可使用/;
+
+function masteredSkillEntries(saveData: any): Array<{ name: string; mastery: number }> {
+  const raw = saveData?.角色?.技能?.掌握技能;
+  if (!Array.isArray(raw)) return [];
+  return raw.flatMap((entry: any) => {
+    if (typeof entry === 'string' && entry.trim()) return [{ name: entry.trim(), mastery: 0 }];
+    const name = typeof entry?.技能名称 === 'string' ? entry.技能名称.trim() : '';
+    return name ? [{ name, mastery: Math.max(0, Math.min(100, numeric(entry?.熟练度))) }] : [];
+  });
+}
+
+/** 只消费“运行时正典存在 + 存档已掌握 + 本轮显式点名 + 语义适配”的技能，拒绝模型临场自报。 */
+function scenarioSkillFactors(kind: JudgementKind, actionText: string, saveData: any) {
+  const canonSkills = saveData?.世界?.状态?.剧本模组?.canon?.skills;
+  if (!Array.isArray(canonSkills)) return [];
+  const mastered = new Map(masteredSkillEntries(saveData).map(entry => [entry.name, entry.mastery]));
+  const candidates = canonSkills.flatMap((skill: any) => {
+    const name = typeof skill?.name === 'string' ? skill.name.trim() : '';
+    const description = [
+      skill?.description,
+      skill?.type,
+      ...(Array.isArray(skill?.effects) ? skill.effects : []),
+    ].filter((value): value is string => typeof value === 'string').join('；');
+    if (
+      name.length < 2
+      || !actionText.includes(name)
+      || !mastered.has(name)
+      || UNAVAILABLE_SKILL.test(description)
+      || !SKILL_KIND_HINTS[kind].test(`${name}；${description}`)
+    ) return [];
+    const mastery = mastered.get(name) || 0;
+    return [{ label: `正典技能·${name}`, value: Math.min(12, 6 + Math.floor(mastery / 20)), source: 'skill' as const }];
+  });
+  return candidates.sort((a, b) => b.value - a.value).slice(0, 1);
+}
+
 function difficultyFor(kind: JudgementKind): CreateJudgementProposalInput['difficulty'] {
   if (['combat', 'escape', 'stealth'].includes(kind)) return { band: 'hard', value: 20 };
   if (['cultivate', 'craft'].includes(kind)) return { band: 'severe', value: 25 };
@@ -98,6 +145,7 @@ export function buildLocalJudgementPreflight(
     difficulty: difficultyFor(kind),
     factors: [
       ...stateFactors(kind, saveData),
+      ...scenarioSkillFactors(kind, normalized, saveData),
       { label: '幸运', value: data.幸运点, source: 'condition' },
       environmentFactorFor(kind, data),
     ],

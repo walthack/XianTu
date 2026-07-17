@@ -103,6 +103,29 @@ test('story prompt includes current objectives and excludes future plot content'
   assert.match(prompt, /不得为其创建或更新 社交\.关系、身份、属性、灵根、技能、背包等持久状态/);
 });
 
+test('free roaming injects current region and only recalls introduced canon residents', async () => {
+  const { buildScenarioStoryPrompt } = await loadTs('../src/modules/scenarioMods/storyContext.ts');
+  const save = await buildStorySave();
+  const runtime = save.世界.状态.剧本模组;
+  const jiankang = runtime.canon.locations.find(location => location.id === 'location.jiankang');
+  jiankang.region = '晋国';
+  jiankang.description = '晋国都城，乌衣巷第宅与宫阙相望，士族往来讲究门第礼数。';
+  runtime.canon.characters.push(
+    { id: 'character.local', name: '本地旧识', locationId: 'location.jiankang', profile: { personality: ['谨慎'] } },
+    { id: 'character.future', name: '未来来客', locationId: 'location.jiankang', profile: { personality: ['神秘'] } },
+  );
+  runtime.introducedCharacterIds = [...(runtime.introducedCharacterIds || []), 'character.local'];
+  runtime.events[0].locationId = undefined;
+
+  const prompt = buildScenarioStoryPrompt(save, '我在城中随意走走');
+
+  assert.match(prompt, /当前地域风貌/);
+  assert.match(prompt, /建康；地域：晋国/);
+  assert.match(prompt, /乌衣巷第宅与宫阙相望/);
+  assert.match(prompt, /本地旧识/);
+  assert.doesNotMatch(prompt, /未来来客/);
+});
+
 test('a player-mentioned active noncritical highlight joins the prompt but stays absent otherwise', async () => {
   const { buildScenarioStoryPrompt } = await loadTs('../src/modules/scenarioMods/storyContext.ts');
   const save = await buildStorySave();

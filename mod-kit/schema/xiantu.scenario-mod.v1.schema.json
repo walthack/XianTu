@@ -135,6 +135,7 @@
         "name": { "$ref": "#/$defs/nonEmptyString" },
         "description": { "$ref": "#/$defs/nonEmptyString" },
         "type": { "$ref": "#/$defs/nonEmptyString" },
+        "region": { "$ref": "#/$defs/nonEmptyString" },
         "continentId": { "$ref": "#/$defs/id" },
         "factionId": { "$ref": "#/$defs/id" },
         "coordinates": { "$ref": "#/$defs/mapPoint" },

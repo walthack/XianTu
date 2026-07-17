@@ -62,6 +62,7 @@
         "id": "location.jiankang",
         "name": "建康",
         "type": "capital",
+        "region": "晋国",
         "continentId": "continent.jiangnan",
         "coordinates": { "x": 7100, "y": 4960 },
         "features": ["晋国都城"],

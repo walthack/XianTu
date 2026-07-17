@@ -14,6 +14,8 @@ export interface ScenarioModLocation {
   name: string;
   description?: string;
   type?: string;
+  /** 六朝国别/文化地域，如唐国、宋国、南荒、昭南、太泉。 */
+  region?: string;
   continentId?: string;
   factionId?: string;
   coordinates?: ScenarioModCanonMapPoint;

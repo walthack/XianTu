@@ -31,4 +31,5 @@ test('Mod Kit JSON Schema matches the current contract identity', async () => {
   assert.ok(schema.$defs.opening.properties.playerCharacterId);
   assert.deepEqual(schema.$defs.characterAffiliation.properties.category.enum, ['sect', 'military', 'state', 'clan', 'organization']);
   assert.ok(schema.$defs.event.properties.completion);
+  assert.ok(schema.$defs.location.properties.region);
 });

@@ -37,6 +37,7 @@ test('converts strict canon into native WorldInfo without renaming entities', as
   assert.deepEqual(result.worldInfo.地点信息[0].coordinates, { x: 7100, y: 4960 });
   assert.equal(result.worldInfo.地点信息[0].类型, '城池');
   assert.equal(result.worldInfo.地点信息[0].原始类型, 'capital');
+  assert.equal(result.worldInfo.地点信息[0].地域, '晋国');
   assert.equal(result.worldInfo.地点信息[1].类型, '宗门');
   assert.equal(result.worldInfo.地点信息[1].原始类型, '宗门驻地');
 });

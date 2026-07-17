@@ -115,6 +115,7 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
     validateEntityArray(canon.locations, 'canon.locations', locationIds, add, entity => {
       optionalString(entity.description, `${entity.__path}.description`, add);
       optionalString(entity.type, `${entity.__path}.type`, add);
+      optionalString(entity.region, `${entity.__path}.region`, add);
       optionalId(entity.continentId, `${entity.__path}.continentId`, add);
       optionalId(entity.factionId, `${entity.__path}.factionId`, add);
       validatePoint(entity.coordinates, `${entity.__path}.coordinates`, add);
