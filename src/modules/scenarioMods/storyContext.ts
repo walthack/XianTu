@@ -436,7 +436,12 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
       ? `- 本关已经收束。若玩家准备启程，用来信、人物提议、路况或远近局势等角色可感知的契机自然引出转场；不得说“下一关”、不得透露关卡名或内部 ID，也不要在当前场景提前展开下一段正文。`
       : '- （当前事件完成后将进入新章节或迎来结局）';
   // 读一次 社交.关系：既供底线门控(好感/关系→是否揭示)，也供下方失配检测复用
-  const relations = readPath(saveData, ['社交', '关系']) as Record<string, { 名字?: string; 与玩家关系?: string; 好感度?: number }> | undefined;
+  const relations = readPath(saveData, ['社交', '关系']) as Record<string, {
+    名字?: string;
+    与玩家关系?: string;
+    好感度?: number;
+    当前位置?: { 描述?: string };
+  }> | undefined;
   const favByName = new Map<string, { fav: number; label: string }>();
   if (relations && typeof relations === 'object') {
     for (const [key, npc] of Object.entries(relations)) {
@@ -450,23 +455,31 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
   // 确定性补召回：社交.关系 里 当前位置与玩家共享世界地点段（·分隔第2段）的 NPC，
   // 其名字并入聚焦上下文 → 复用既有名字召回（同一去重/12人上限管道）。
   const introducedAtLocation = new Set(collectIntroducedCharacterIds(runtime));
+  const charactersWithDynamicState = new Set<string>();
+  for (const [key, npc] of Object.entries(relations || {})) {
+    charactersWithDynamicState.add(key);
+    if (npc?.名字) charactersWithDynamicState.add(String(npc.名字));
+  }
   const canonicalSameLocationNames = currentLocation
     ? characters
         .filter(character =>
           character.id !== runtime.opening?.playerCharacterId
           && character.locationId === currentLocation.id
-          && introducedAtLocation.has(character.id),
+          && introducedAtLocation.has(character.id)
+          && !charactersWithDynamicState.has(character.name),
         )
         .map(character => character.name)
     : [];
-  const playerLocDesc = String(readPath(saveData, ['角色', '位置', '描述']) || '');
-  const playerLocKey = playerLocDesc.split('·')[1] || '';
   const sameLocationNames = new Set<string>(canonicalSameLocationNames);
-  if (relations && playerLocKey.length >= 2) {
+  if (relations && currentLocation) {
+    const currentLocationName = currentLocation.name.replace(/\s+/g, '');
     for (const [key, npc] of Object.entries(relations)) {
       if (!npc || typeof npc !== 'object') continue;
-      const npcLoc = String((npc as { 当前位置?: { 描述?: string } }).当前位置?.描述 || '');
-      if (npcLoc && (npcLoc.includes(playerLocKey) || npcLoc.split('·')[1] === playerLocKey)) {
+      const npcLocationSegments = String(npc.当前位置?.描述 || '')
+        .split('·')
+        .map(segment => segment.replace(/\s+/g, ''))
+        .filter(Boolean);
+      if (currentLocationName.length >= 2 && npcLocationSegments.includes(currentLocationName)) {
         sameLocationNames.add(String((npc as { 名字?: string }).名字 || key));
       }
     }

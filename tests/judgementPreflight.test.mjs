@@ -71,4 +71,9 @@ test('preflight consumes only explicit source-verified mastered scenario skills'
     false,
     'a save-only invented skill must not become a source-verified factor',
   );
+  assert.equal(
+    buildLocalJudgementPreflight('我用九阳神功说服店家', save, 1).factors.some(factor => factor.source === 'skill'),
+    false,
+    'a mastered canon skill must still match the judgement kind',
+  );
 });

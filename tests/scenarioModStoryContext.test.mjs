@@ -113,17 +113,35 @@ test('free roaming injects current region and only recalls introduced canon resi
   runtime.canon.characters.push(
     { id: 'character.local', name: '本地旧识', locationId: 'location.jiankang', profile: { personality: ['谨慎'] } },
     { id: 'character.future', name: '未来来客', locationId: 'location.jiankang', profile: { personality: ['神秘'] } },
+    { id: 'character.moved', name: '已经离场', locationId: 'location.jiankang', profile: { personality: ['果断'] } },
+    { id: 'character.substring', name: '近名地点客', profile: { personality: ['沉默'] } },
+    { id: 'character.dynamic', name: '动态在场', profile: { personality: ['敏锐'] } },
   );
-  runtime.introducedCharacterIds = [...(runtime.introducedCharacterIds || []), 'character.local'];
+  runtime.introducedCharacterIds = [
+    ...(runtime.introducedCharacterIds || []),
+    'character.local',
+    'character.moved',
+    'character.substring',
+    'character.dynamic',
+  ];
   runtime.events[0].locationId = undefined;
+  save.社交.关系 = {
+    已经离场: { 名字: '已经离场', 当前位置: { 描述: '江南·太乙真宗山门' } },
+    近名地点客: { 名字: '近名地点客', 当前位置: { 描述: '江南·新建康' } },
+    动态在场: { 名字: '动态在场', 当前位置: { 描述: '江南·建康' } },
+  };
 
   const prompt = buildScenarioStoryPrompt(save, '我在城中随意走走');
+  const focusedSection = prompt.match(/## 当前相关人物正典约束（防 OOC）[\s\S]*?(?=\n【人物正典优先级】)/)?.[0] || '';
 
   assert.match(prompt, /当前地域风貌/);
   assert.match(prompt, /建康；地域：晋国/);
   assert.match(prompt, /乌衣巷第宅与宫阙相望/);
-  assert.match(prompt, /本地旧识/);
+  assert.match(focusedSection, /本地旧识/);
+  assert.match(focusedSection, /动态在场/);
   assert.doesNotMatch(prompt, /未来来客/);
+  assert.doesNotMatch(focusedSection, /已经离场/);
+  assert.doesNotMatch(focusedSection, /近名地点客/);
 });
 
 test('a player-mentioned active noncritical highlight joins the prompt but stays absent otherwise', async () => {
