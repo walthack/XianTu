@@ -1,6 +1,6 @@
 {
   "schema": "xiantu.save-contract.v1",
-  "frozenAt": "2026-07-16T13:34:15.804Z",
+  "frozenAt": "2026-07-17T07:49:33.770Z",
   "rule": "stage/chapter/event IDs and existing completion flag paths are append-only. New IDs/paths may be added; frozen entries may not be removed, renamed, moved, or repurposed.",
   "stages": {
     "lcq.stage_01": {
@@ -1127,6 +1127,7 @@
         "lyg.event.debut_jiawenhe",
         "lyg.event.debut_lvzhi",
         "lyg.event.debut_qiyuxian",
+        "lyg.event.highlight_banchao_lamb_leg",
         "lyg.event.lvzhi_zhenjiu",
         "lyg.event.s01_01",
         "lyg.event.s01_02",
@@ -1164,6 +1165,9 @@
         ],
         "lyg.event.s01_07": [
           "flags.event.s01_07.done"
+        ],
+        "lyg.event.highlight_banchao_lamb_leg": [
+          "flags.event.highlight_banchao_lamb_leg.done"
         ],
         "lyg.event.s01_08": [
           "flags.event.s01_08.done"

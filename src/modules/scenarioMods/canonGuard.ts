@@ -303,7 +303,16 @@ function getScenarioEventIdsAllowedForCompletion(runtime: ScenarioRuntimeState):
   // 初始化/单测等尚未跑 activation 的时刻，仍只允许当前章最早一拍，而不是退化为“全都可写”。
   const activeEventIds = runtime.activeEventIds?.length ? runtime.activeEventIds : currentChapter?.eventIds || [];
   const anchor = getNarrativeAnchorEvent({ ...runtime, activeEventIds } as any);
-  return new Set(anchor ? [anchor.id] : []);
+  const allowed = new Set(anchor ? [anchor.id] : []);
+  // 显式 critical:false 的事件是隔离内容层：只在已经由 runtime 激活时允许落自己的
+  // 唯一完成键，不取得主轴锚点地位，也不能借此完成尚未激活的未来事件。
+  if (runtime.currentChapterId && runtime.activeEventIds?.length) {
+    const trulyActiveIds = new Set(runtime.activeEventIds);
+    for (const event of runtime.events || []) {
+      if (event.critical === false && trulyActiveIds.has(event.id)) allowed.add(event.id);
+    }
+  }
+  return allowed;
 }
 
 function findScenarioEventForCompletionFlag(
@@ -335,6 +344,9 @@ function findScenarioFlagViolation(runtime: ScenarioRuntimeState, command: Comma
   if (parts.length < 3 || parts[parts.length - 1] !== 'done') {
     return `剧本${namespace === 'event' ? '事件' : '章节'}完成标记必须写成 flags.${namespace}.<id>.done`;
   }
+  // Some compatible models serialize an exact boolean completion as the string "true".
+  // Normalize only inside this declared completion namespace; arbitrary flags stay untouched.
+  if (command.value === 'true') command.value = true;
   if (command.value !== true) {
     return `剧本${namespace === 'event' ? '事件' : '章节'}完成标记只能写入 true`;
   }

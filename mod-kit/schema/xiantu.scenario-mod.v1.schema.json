@@ -415,6 +415,7 @@
         "description": { "$ref": "#/$defs/nonEmptyString" },
         "conditions": { "type": "array", "items": { "$ref": "#/$defs/condition" } },
         "completion": { "type": "array", "items": { "$ref": "#/$defs/condition" } },
+        "completionEvidence": { "type": "array", "items": { "$ref": "#/$defs/nonEmptyString" }, "minItems": 3, "uniqueItems": true },
         "relatedCharacterIds": { "$ref": "#/$defs/idArray" },
         "relatedFactionIds": { "$ref": "#/$defs/idArray" },
         "locationId": { "$ref": "#/$defs/id" }

@@ -99,6 +99,41 @@ test('story prompt includes current objectives and excludes future plot content'
   assert.match(prompt, /只能使用上方“当前事件”逐条列出的“完成写入键”/);
   assert.match(prompt, /不得自行用事件ID拼接 flag 路径/);
   assert.match(prompt, /不得提前完成未来事件/);
+  assert.match(prompt, /纯文本临时人物只用于本场演出/);
+  assert.match(prompt, /不得为其创建或更新 社交\.关系、身份、属性、灵根、技能、背包等持久状态/);
+});
+
+test('a player-mentioned active noncritical highlight joins the prompt but stays absent otherwise', async () => {
+  const { buildScenarioStoryPrompt } = await loadTs('../src/modules/scenarioMods/storyContext.ts');
+  const save = await buildStorySave();
+  const runtime = save.世界.状态.剧本模组;
+  runtime.canon.characters.push({ id: 'character.banchao', name: '班超', profile: {} });
+  runtime.events.push({
+    id: 'event.highlight_banchao',
+    name: '班超镇场',
+    description: '班超以羊腿与短刀压住商贾。',
+    critical: false,
+    relatedCharacterIds: ['character.banchao'],
+    completion: [{ path: 'flags.event.highlight_banchao.done', operator: 'eq', value: true }],
+  });
+  runtime.activeEventIds.push('event.highlight_banchao');
+
+  assert.doesNotMatch(buildScenarioStoryPrompt(save, '继续当前主线'), /班超镇场/);
+  const prompt = buildScenarioStoryPrompt(save, '我去旁观班超处理压价商贾');
+  assert.match(prompt, /班超镇场（事件ID：event\.highlight_banchao）/);
+  assert.match(prompt, /世界\.状态\.剧本模组\.flags\.event\.highlight_banchao\.done/);
+});
+
+test('semi-prebuilt highlight contracts are not truncated and require every beat before completion', async () => {
+  const { buildScenarioStoryPrompt } = await loadTs('../src/modules/scenarioMods/storyContext.ts');
+  const save = await buildStorySave();
+  const event = save.世界.状态.剧本模组.events[0];
+  event.axisBeat = `半预制高光：${'前段铺垫；'.repeat(30)}末段必须保留：贾文和吐血倒下。`;
+
+  const prompt = buildScenarioStoryPrompt(save);
+  assert.match(prompt, /末段必须保留：贾文和吐血倒下/);
+  assert.match(prompt, /【高光演出硬合同】/);
+  assert.match(prompt, /全部演完后才可写完成键/);
 });
 
 test('Canon Rail surfaces the active beat specific forbidden rewrites to the narrator', async () => {

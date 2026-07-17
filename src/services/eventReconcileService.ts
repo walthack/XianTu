@@ -70,7 +70,54 @@ interface RuntimeEventLike {
   description?: unknown;
   axisSeq?: unknown;
   completion?: Array<{ path?: unknown; operator?: unknown; value?: unknown }>;
+  completionEvidence?: unknown;
+  critical?: unknown;
   relatedCharacterIds?: unknown;
+}
+
+const HIGHLIGHT_EVIDENCE_FALLBACK: Record<string, string[]> = {
+  // 旧存档快照没有新增 completionEvidence 字段；冻结 ID 下保留一次兼容映射。
+  'lyg.event.highlight_banchao_lamb_leg': ['羊腿', '刀尖', '吉策', '九门出入记录', '田荣', '差事'],
+};
+
+/**
+ * 半预制高光的每一拍都已由编辑给出可机械核验的证据。全部证据同时出现在本轮正文时，
+ * 直接落该已激活非阻塞事件的唯一完成键；这不是语义猜测，也不会推进当前 critical 锚点。
+ */
+export function runDeterministicHighlightReconcile(saveData: SaveData, recentText: string): StateChange[] {
+  const runtime = get(saveData, '世界.状态.剧本模组') as {
+    events?: RuntimeEventLike[];
+    activeEventIds?: string[];
+    completedEventIds?: string[];
+    flags?: Record<string, unknown>;
+  } | undefined;
+  if (!runtime?.flags || !recentText) return [];
+  const active = new Set(runtime.activeEventIds || []);
+  const completed = new Set(runtime.completedEventIds || []);
+  const text = norm(recentText);
+  const accepted: AcceptedFlag[] = [];
+
+  for (const event of runtime.events || []) {
+    const id = typeof event.id === 'string' ? event.id : '';
+    if (!id || event.critical !== false || !active.has(id) || completed.has(id)) continue;
+    const flagKey = eventDoneFlagKey(event);
+    if (!flagKey || isFlagTrue(runtime.flags, flagKey)) continue;
+    const declared = Array.isArray(event.completionEvidence)
+      ? event.completionEvidence.filter((item): item is string => typeof item === 'string' && item.trim().length > 0)
+      : [];
+    const evidence = declared.length ? declared : (HIGHLIGHT_EVIDENCE_FALLBACK[id] || []);
+    if (evidence.length < 3 || !evidence.every(item => text.includes(norm(item)))) continue;
+    accepted.push({ id, flagKey, verdict: 'done', evidence: evidence.join('、') });
+  }
+
+  if (!accepted.length) return [];
+  applyReconcileFlags(runtime.flags, accepted);
+  return accepted.map(item => ({
+    key: `世界.状态.剧本模组.flags.${item.flagKey}`,
+    action: 'deterministic_highlight_reconcile',
+    oldValue: false,
+    newValue: { verdict: item.verdict, evidence: item.evidence },
+  } as StateChange));
 }
 
 export interface ChainCandidate {

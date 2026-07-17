@@ -95,10 +95,39 @@ function formatCompletionWriteKeys(conditions: ScenarioCondition[] | undefined):
 }
 
 function formatAxisBeat(event: ScenarioModEvent, prefix = '主轴拍点'): string {
-  const beat = compactText(event.axisBeat, 120);
+  // “半预制高光”本身就是逐拍演出合同。普通拍点可摘要，高光合同不可在提示词层被
+  // 120 字截断，否则模型只会看到前半幕，并在漏掉反差/收束动作后仍写完成键。
+  const isHighlightContract = /^半预制高光[：:]/.test((event.axisBeat || '').trim());
+  const beat = compactText(event.axisBeat, isHighlightContract ? 600 : 120);
   if (beat) return `${prefix}：${beat}`;
   if (event.axisId) return `${prefix}：${event.axisId}`;
   return '';
+}
+
+function selectContextualOptionalEvents(
+  runtime: StoryRuntime,
+  anchor: ScenarioModEvent | null,
+  contextText: string,
+): ScenarioModEvent[] {
+  const normalizedContext = contextText.replace(/\s+/g, '');
+  if (!normalizedContext) return [];
+  const characters = runtime.canon?.characters || [];
+  const activeIds = new Set(runtime.activeEventIds || []);
+  return runtime.events
+    .filter(event =>
+      event.id !== anchor?.id
+      && activeIds.has(event.id)
+      && event.critical === false
+      && !(runtime.completedEventIds || []).includes(event.id),
+    )
+    .filter(event => {
+      if (event.name.length >= 2 && normalizedContext.includes(event.name.replace(/\s+/g, ''))) return true;
+      return (event.relatedCharacterIds || []).some(id => {
+        const name = characters.find(character => character.id === id)?.name || '';
+        return name.length >= 2 && normalizedContext.includes(name.replace(/\s+/g, ''));
+      });
+    })
+    .slice(0, 1);
 }
 
 function isCriticalStoryEvent(event: ScenarioModEvent): boolean {
@@ -301,9 +330,10 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
 
   const chapter = runtime.chapters.find(item => item.id === runtime.currentChapterId);
   const anchor = getNarrativeAnchorEvent(runtime as any);
+  const optionalEvents = selectContextualOptionalEvents(runtime, anchor, contextText);
   const canonRail = getCanonRailProfile(runtime as any);
-  const activeIds = new Set(anchor ? [anchor.id] : []);
-  const activeEvents = anchor ? [anchor] : [];
+  const activeEvents = [...(anchor ? [anchor] : []), ...optionalEvents];
+  const activeIds = new Set(activeEvents.map(event => event.id));
   const characters = runtime.canon?.characters || [];
   const factions = runtime.canon?.factions || [];
   const locations = runtime.canon?.locations || [];
@@ -330,6 +360,9 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
           namesForIds(event.locationId ? [event.locationId] : [], locations),
         ].filter(Boolean).join('；');
         const axisLine = formatAxisBeat(event);
+        const highlightLine = /^半预制高光[：:]/.test((event.axisBeat || '').trim())
+          ? '【高光演出硬合同】主轴拍点中的动作、顺序、反差与收束必须逐项完整呈现，不得摘要、并拍或漏拍；全部演完后才可写完成键。\n  '
+          : '';
         // 分歧文案已经替代原事件结果时，旧 Canon Rail 合同（例如“谢艺之死”）
         // 不得继续注入并与分歧事实打架；分歧 variant 的 axisBeat 就是本拍合同。
         const contract = narrativeVariantReplacesCanonRail(rawEvent, runtime.flags || {}, runtime.divergences)
@@ -341,7 +374,7 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
         const railLine = contract
           ? `【Canon Rail·默认正典】本拍必须达成：${contract.mustReach}\n  允许补足：${contract.allowedElaboration}\n${forbiddenLine}  禁止：不得以 void、替代结局、提前跳拍或新增 IF 分支改写此结果；只有用户显式进入 IF 支线时才可改写正典走向。\n  `
           : '';
-        return `- ${event.name}（事件ID：${event.id}）：${event.description}\n  ${axisLine ? `${axisLine}\n  ` : ''}${railLine}相关正典：${context || '无'}\n  完成条件：${formatConditions(event.completion)}\n  完成写入键（事件达成时原样 set true）：${formatCompletionWriteKeys(event.completion)}`;
+        return `- ${event.name}（事件ID：${event.id}）：${event.description}\n  ${axisLine ? `${axisLine}\n  ` : ''}${highlightLine}${railLine}相关正典：${context || '无'}\n  完成条件：${formatConditions(event.completion)}\n  完成写入键（事件达成时原样 set true）：${formatCompletionWriteKeys(event.completion)}`;
       }).join('\n')
     : '- 当前没有已触发事件，不要提前引入未触发事件。';
 
@@ -537,6 +570,7 @@ ${focusedCharacterSection ? `${focusedCharacterSection}\n\n` : ''}${globalIdenti
 2. 人物之间的血缘、主从、婚配、同党、结盟、仇怨，只有上文正典人物档案或当前事件明确写出时才可断言。没有依据时只能写“尚未可知/传闻待证”，绝不可因同姓、官职、阵营或历史常识擅自补关系。
 3. 叙事正文也必须遵守上述正典；这不是仅约束 tavern_commands 的规则。若玩家要求与正典矛盾的事实，明确说明冲突并以正典版本续写。
 4. ${introducedLine}
+5. 当前事件正文里出现、但没有列入“相关正典”的纯文本临时人物只用于本场演出：不得为其创建或更新 社交.关系、身份、属性、灵根、技能、背包等持久状态；除非玩家在后续明确将其收为长期同行者。
 
 【主动推进剧情，不要停在原地等玩家】：
 

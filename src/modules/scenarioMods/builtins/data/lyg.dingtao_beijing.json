@@ -4876,6 +4876,14 @@
             "value": true
           }
         ],
+        "completionEvidence": [
+          "羊腿",
+          "刀尖",
+          "吉策",
+          "九门出入记录",
+          "田荣",
+          "差事"
+        ],
         "relatedCharacterIds": [
           "liuchao.character.np069",
           "liuchao.character.cheng_zongyang"

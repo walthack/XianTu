@@ -39,7 +39,7 @@ import {
 } from '@/utils/judgementRules';
 import { reconcileNarrativeState } from '@/utils/narrativeStateReconciler';
 import { runProgressAudit, shouldRunAudit } from '@/services/progressAuditService';
-import { runDeterministicBijiReconcile, runDeterministicXieyiReconcile, runEventReconcile, shouldRunReconcile, evidenceLikely, buildChainCandidates } from '@/services/eventReconcileService';
+import { runDeterministicBijiReconcile, runDeterministicHighlightReconcile, runDeterministicXieyiReconcile, runEventReconcile, shouldRunReconcile, evidenceLikely, buildChainCandidates } from '@/services/eventReconcileService';
 import { detectNarratedPlayerDamage } from '@/utils/narratedDamage';
 import { validateModelCommandPipeline } from '@/utils/modelCommandPipeline';
 import { recoverUnmarkedPlayerZeroHealth } from '@/utils/playerVitalGuard';
@@ -52,6 +52,7 @@ import {
   getMissingNarratedInventoryGains,
   normalizeNarratedItemName,
 } from '@/utils/narratedInventory';
+import { buildNarrativePromptState } from '@/utils/narrativePromptState';
 
 type PlainObject = Record<string, unknown>;
 
@@ -705,35 +706,8 @@ class AIBidirectionalSystemClass {
 
       // 🔥 构建精简版存档数据（用于叙事判定，减少token消耗）
       // 无论单步还是分步模式，都使用精简版存档
-      const buildNarrativeState = (): Record<string, unknown> => {
-        return {
-          元数据: { 时间: stateForAI.元数据?.时间 },
-          角色: {
-            身份: stateForAI.角色?.身份,
-            属性: stateForAI.角色?.属性,
-            位置: stateForAI.角色?.位置,
-            效果: stateForAI.角色?.效果,
-            身体: stateForAI.角色?.身体,
-            背包: stateForAI.角色?.背包,
-            装备: stateForAI.角色?.装备,
-            功法: stateForAI.角色?.功法,
-            修炼: stateForAI.角色?.修炼,
-            大道: stateForAI.角色?.大道,
-            技能: stateForAI.角色?.技能,
-          },
-          社交: {
-            关系: stateForAI.社交?.关系,
-            宗门: stateForAI.社交?.宗门,
-            任务: stateForAI.社交?.任务,
-            事件: stateForAI.社交?.事件,
-            记忆: {
-              中期记忆: stateForAI.社交?.记忆?.中期记忆,
-              长期记忆: stateForAI.社交?.记忆?.长期记忆,
-            },
-          },
-          世界: stateForAI.世界,
-        };
-      };
+      const buildNarrativeState = (): Record<string, unknown> =>
+        buildNarrativePromptState(stateForAI as SaveData);
 
       const stateJsonString = JSON.stringify(buildNarrativeState());
 
@@ -754,7 +728,9 @@ class AIBidirectionalSystemClass {
       // 聚焦上下文：玩家输入+近期叙事，供剧本 prompt 做确定性名字召回（点名的在场角色档案也注入，防自由闲聊零档案）
       const focusContextText = [userMessage || '', (v3?.社交?.记忆?.短期记忆 || []).slice(-2).join('\n')]
         .filter(Boolean).join('\n');
-      const scenarioStoryPrompt = buildScenarioStoryPrompt(stateForAI as SaveData, focusContextText);
+      // 使用完整 runtime 做“下一拍”和玩家点名的非阻塞高光选择；输出到模型的状态 JSON
+      // 仍由 buildNarrativePromptState 去重压缩，避免重复发送整份 canon/events。
+      const scenarioStoryPrompt = buildScenarioStoryPrompt(v3 as SaveData, focusContextText);
       const actionGatePrompt = buildActionGatePrompt(saveData, getNarrativeTurn(saveData));
 
       // 🌐 构建穿越状态提示（直接写入主提示词，确保AI一定能看到）
@@ -2473,13 +2449,20 @@ ${step1Text}
     // 补落 done/void 事件 flag，随后 advanceScenarioRuntime 当轮即推进解锁。best-effort，失败无影响。
     try {
       const rtForReconcile = (saveData as any)?.世界?.状态?.剧本模组;
+      const highlightChanges = !hadExecutionError && rtForReconcile
+        ? runDeterministicHighlightReconcile(saveData, textContent)
+        : [];
+      if (highlightChanges.length) {
+        changes.push(...highlightChanges);
+        console.info(`[高光对账] 逐拍证据全部命中，确定性落账 ${highlightChanges.length} 项`);
+      }
       const { useAPIManagementStore } = await import('@/stores/apiManagementStore');
       const apiStoreR = useAPIManagementStore();
       const _enabled = apiStoreR.isFunctionEnabled('event_reconcile');
       // 双触发：停滞兜底阈值 || 证据即触发（本轮正文命中链上前几拍 → 当轮追账，玩家不用干等）
       const _should = shouldRunReconcile(rtForReconcile?.stallTurns)
         || (rtForReconcile ? evidenceLikely(textContent, buildChainCandidates(rtForReconcile)) : false);
-      if (!hadExecutionError && rtForReconcile && _enabled && _should) {
+      if (!hadExecutionError && rtForReconcile && _enabled && _should && highlightChanges.length === 0) {
         const deterministicChanges = [
           ...runDeterministicXieyiReconcile(saveData, textContent),
           ...runDeterministicBijiReconcile(saveData, textContent),

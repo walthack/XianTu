@@ -4708,6 +4708,13 @@
             "value": true
           }
         ],
+        "completionEvidence": [
+          "高衙内",
+          "阮香凝",
+          "林冲",
+          "拳头",
+          "水镜"
+        ],
         "relatedCharacterIds": [
           "liuchao.character.ruan_xiang_ning",
           "liuchao.character.li_shi_shi",
@@ -4716,6 +4723,7 @@
           "liuchao.character.lin_chong",
           "liuchao.character.lin_qing_pu"
         ],
+        "axisBeat": "半预制高光：高衙内在五岳楼前轻薄阮香凝，林冲赶到后脸色由青转红，拳头已经高高举起，却因禁军官身与高俅权势迟迟落不下；程宗扬从旁化解冲突，而林清浦以水镜把这份屈辱完整录下。核心是血性与官身相互撕扯，不得让林冲当场痛打高衙内，也不得把他的克制写成怯懦。",
         "critical": false
       }
     ]

@@ -1315,8 +1315,14 @@ class AIService {
     return null;
   }
 
-  private getEffectiveRequestedMaxTokens(_provider: APIProvider, _model: string, requestedMaxTokens: number, _usageType?: APIUsageType): number {
-    return requestedMaxTokens;
+  private getEffectiveRequestedMaxTokens(_provider: APIProvider, _model: string, requestedMaxTokens: number, usageType?: APIUsageType): number {
+    // 主叙事默认配置曾请求 16k 输出；在 163,840 上下文的兼容端点上，长存档输入
+    // 约 149k 时会形成必然失败的 149k+16k 请求。8k 足够正文+结构化指令，并为
+    // 未知模型（无法可靠推断 context window）保留安全余量。显式单次 override 仍会
+    // 先经过这里，因此主流程始终受同一上限保护。
+    return usageType === 'main' || usageType === undefined
+      ? Math.min(requestedMaxTokens, 8192)
+      : requestedMaxTokens;
   }
 
   private clampMaxTokensForOutputLimit(

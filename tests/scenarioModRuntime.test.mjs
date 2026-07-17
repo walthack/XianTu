@@ -272,6 +272,63 @@ test('Canon Rail rejects declared completion flags when no narrative anchor exis
   assert.match(result.rejected[0].reason, /当前没有可完成的剧本事件/);
 });
 
+test('canon guard permits an active explicit noncritical event completion without advancing the anchor', async () => {
+  const { guardScenarioModCommands } = await loadTs('../src/modules/scenarioMods/canonGuard.ts');
+  const save = await buildRuntimeSave();
+  const runtime = save.世界.状态.剧本模组;
+  runtime.events.push(
+    {
+      id: 'event.highlight.active',
+      critical: false,
+      completion: [{ path: 'flags.event.highlight.active.done', operator: 'eq', value: true }],
+    },
+    {
+      id: 'event.highlight.future',
+      critical: false,
+      completion: [{ path: 'flags.event.highlight.future.done', operator: 'eq', value: true }],
+    },
+  );
+  runtime.activeEventIds.push('event.highlight.active');
+  const active = {
+    action: 'set',
+    key: '世界.状态.剧本模组.flags.event.highlight.active.done',
+    value: true,
+  };
+  const future = {
+    action: 'set',
+    key: '世界.状态.剧本模组.flags.event.highlight.future.done',
+    value: true,
+  };
+
+  const result = guardScenarioModCommands(save, [active, future]);
+  assert.deepEqual(result.accepted, [active]);
+  assert.deepEqual(result.rejected.map(item => item.command), [future]);
+  assert.match(result.rejected[0].reason, /不得越级/);
+});
+
+test('canon guard normalizes string true only for an exact active completion contract', async () => {
+  const { guardScenarioModCommands } = await loadTs('../src/modules/scenarioMods/canonGuard.ts');
+  const save = await buildRuntimeSave();
+  const runtime = save.世界.状态.剧本模组;
+  runtime.events[0].completion = [{
+    path: 'flags.event.event.firstmeeting.done',
+    operator: 'eq',
+    value: true,
+  }];
+  const completion = {
+    action: 'set',
+    key: '世界.状态.剧本模组.flags.event.event.firstmeeting.done',
+    value: 'true',
+  };
+
+  const result = guardScenarioModCommands(save, [completion]);
+  assert.deepEqual(result.accepted, [{
+    action: 'set',
+    key: '世界.状态.剧本模组.flags.event.event.firstmeeting.done',
+    value: true,
+  }]);
+});
+
 test('condition evaluator supports flat dotted flags and save paths', async () => {
   const { evaluateScenarioCondition } = await loadTs('../src/modules/scenarioMods/runtime.ts');
   const runtime = {

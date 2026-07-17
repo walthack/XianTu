@@ -60,6 +60,8 @@ export interface ScenarioModEvent {
   critical?: boolean;
   conditions?: ScenarioCondition[];
   completion?: ScenarioCondition[];
+  /** 全部命中本轮正文时可确定性落账；仅用于逐拍高光合同。 */
+  completionEvidence?: string[];
   relatedCharacterIds?: string[];
   relatedFactionIds?: string[];
   locationId?: string;

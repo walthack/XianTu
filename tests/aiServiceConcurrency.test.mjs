@@ -27,6 +27,12 @@ function directConfig(url, model) {
   };
 }
 
+test('main narrative output reserves context headroom on unknown compatible models', async () => {
+  const { aiService } = await modPromise;
+  assert.equal(aiService.getEffectiveRequestedMaxTokens('custom', 'unknown-163k-model', 16000, 'main'), 8192);
+  assert.equal(aiService.getEffectiveRequestedMaxTokens('custom', 'unknown-163k-model', 16000, 'event_reconcile'), 16000);
+});
+
 test('concurrent direct calls keep immutable per-request API configurations', async () => {
   const { aiService } = await modPromise;
   const originalPost = axios.post;

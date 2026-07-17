@@ -300,6 +300,29 @@ test('stage_06 碧姬快路：仅 GM 正文明确小紫杀死碧姬时结算', a
   assert.deepEqual(runDeterministicBijiReconcile(alive, '小紫站在一旁，碧姬仍然活着并向众人求救。'), []);
 });
 
+test('active noncritical highlight settles only after every declared evidence beat appears', async () => {
+  const { runDeterministicHighlightReconcile } = await modPromise;
+  const save = {
+    世界: { 状态: { 剧本模组: {
+      activeEventIds: ['event.highlight.demo'],
+      completedEventIds: [],
+      flags: {},
+      events: [{
+        id: 'event.highlight.demo',
+        name: '高光',
+        critical: false,
+        completionEvidence: ['羊腿', '刀尖', '田荣'],
+        completion: [{ path: 'flags.event.highlight.demo.done', operator: 'eq', value: true }],
+      }],
+    } } },
+  };
+
+  assert.deepEqual(runDeterministicHighlightReconcile(save, '班超以羊腿和刀尖镇场。'), []);
+  const changes = runDeterministicHighlightReconcile(save, '班超以羊腿和刀尖镇场，最后替田荣留了差事。');
+  assert.equal(changes.length, 1);
+  assert.equal(save.世界.状态.剧本模组.flags['event.highlight.demo.done'], true);
+});
+
 test('runEventReconcile 端到端(注入generate)：落账后 flag 生效、返回变更日志', async () => {
   const { runEventReconcile } = await modPromise;
   const saveData = {

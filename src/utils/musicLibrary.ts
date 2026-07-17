@@ -109,7 +109,7 @@ const EVENT_MOOD_MAP: Record<string, MusicMood> = {
   'lcq.event.s01_06': 'emotion',
 
   'lcq.event.s02_01': 'aspire',
-  'lcq.event.s02_02': 'climax',
+  'lcq.event.s02_02': 'lament',
   'lcq.event.s02_03': 'danger',
   'lcq.event.s02_04': 'danger',
   'lcq.event.s02_05': 'battle',
@@ -143,6 +143,8 @@ const EVENT_MOOD_MAP: Record<string, MusicMood> = {
   'lyg.event.s01_01': 'battle',
   'lyg.event.s01_07': 'lament',
   'lyg.event.highlight_banchao_lamb_leg': 'intrigue',
+  'lcq.event.s04_05': 'lament',
+  'lyl.event.mingqingsi_encounter': 'intrigue',
   'lyg.event.s01_08': 'court',
   'lyg.event.s02_09': 'aspire',
   'lyg.event.release_jingnian': 'court',
