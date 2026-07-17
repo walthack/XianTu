@@ -202,6 +202,26 @@ test('buildChainCandidates：排除已完成/已 done，按 axisSeq 排序，截
   assert.equal(out[0].flagKey, 'event.a.done');
 });
 
+test('event completionEvidence overrides the shorter Canon Rail fallback for mainline highlights', async () => {
+  const { buildChainCandidates } = await modPromise;
+  const runtime = {
+    modId: 'lcq.stage_02',
+    completedEventIds: [],
+    flags: {},
+    events: [{
+      id: 'lcq.event.s02_02',
+      name: '王哲九阳自爆',
+      axisSeq: 20,
+      axisBeat: '半预制高光',
+      completionEvidence: ['左武第一军团', '王哲', '九阳', '日轮', '阿伽门侬', '焦土'],
+      completion: [{ path: 'flags.event.s02_02.done', operator: 'eq', value: true }],
+    }],
+  };
+
+  assert.deepEqual(buildChainCandidates(runtime)[0].completionEvidence,
+    ['左武第一军团', '王哲', '九阳', '日轮', '阿伽门侬', '焦土']);
+});
+
 test('shouldRunReconcile：停滞≥阈值每轮都触发', async () => {
   const { shouldRunReconcile } = await modPromise;
   // 阈值 10：>=10 每轮都触发（落账使 stall 归零自然停）
@@ -318,6 +338,10 @@ test('active noncritical highlight settles only after every declared evidence be
   };
 
   assert.deepEqual(runDeterministicHighlightReconcile(save, '班超以羊腿和刀尖镇场。'), []);
+  assert.deepEqual(
+    runDeterministicHighlightReconcile(save, '班超打算以羊腿和刀尖镇场，之后替田荣留一条路。'),
+    [],
+  );
   const changes = runDeterministicHighlightReconcile(save, '班超以羊腿和刀尖镇场，最后替田荣留了差事。');
   assert.equal(changes.length, 1);
   assert.equal(save.世界.状态.剧本模组.flags['event.highlight.demo.done'], true);

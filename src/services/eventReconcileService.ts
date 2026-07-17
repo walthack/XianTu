@@ -78,7 +78,17 @@ interface RuntimeEventLike {
 const HIGHLIGHT_EVIDENCE_FALLBACK: Record<string, string[]> = {
   // 旧存档快照没有新增 completionEvidence 字段；冻结 ID 下保留一次兼容映射。
   'lyg.event.highlight_banchao_lamb_leg': ['羊腿', '刀尖', '吉策', '九门出入记录', '田荣', '差事'],
+  'lyl.event.mingqingsi_encounter': ['高衙内', '阮香凝', '林冲', '拳头', '水镜'],
 };
+
+const HIGHLIGHT_NON_OCCURRENCE_PREFIX = '(?:打算|准备|试图|设法|计划|将要|正要|欲要|尚未|还未|未曾|没能)';
+
+function evidenceIsOnlyPlanned(text: string, evidence: string[]): boolean {
+  return evidence.some(item => {
+    const escaped = norm(item).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    return escaped.length > 0 && new RegExp(`${HIGHLIGHT_NON_OCCURRENCE_PREFIX}.{0,32}${escaped}`).test(text);
+  });
+}
 
 /**
  * 半预制高光的每一拍都已由编辑给出可机械核验的证据。全部证据同时出现在本轮正文时，
@@ -106,6 +116,8 @@ export function runDeterministicHighlightReconcile(saveData: SaveData, recentTex
       ? event.completionEvidence.filter((item): item is string => typeof item === 'string' && item.trim().length > 0)
       : [];
     const evidence = declared.length ? declared : (HIGHLIGHT_EVIDENCE_FALLBACK[id] || []);
+    // 逐拍证据只能证明已经发生的演出；紧邻证据的意图、计划或明确未发生表述宁可漏判。
+    if (evidenceIsOnlyPlanned(text, evidence)) continue;
     if (evidence.length < 3 || !evidence.every(item => text.includes(norm(item)))) continue;
     accepted.push({ id, flagKey, verdict: 'done', evidence: evidence.join('、') });
   }
@@ -187,7 +199,11 @@ export function buildChainCandidates(runtime: {
       beat: typeof e.axisBeat === 'string' && e.axisBeat ? e.axisBeat : (typeof e.description === 'string' ? e.description : ''),
       flagKey,
       mustReach: contract?.mustReach,
-      completionEvidence: contract?.completionEvidence,
+      // 半预制高光把逐拍证据放在 event 数据中，主轴与非阻塞事件共用同一真值；
+      // 旧事件没有该字段时继续回退到人工 Canon Rail 合同。
+      completionEvidence: Array.isArray(e.completionEvidence)
+        ? e.completionEvidence.filter((item): item is string => typeof item === 'string' && item.trim().length > 0)
+        : contract?.completionEvidence,
       forbiddenInCanon: contract?.forbiddenInCanon,
       relatedCharacterIds: Array.isArray(e.relatedCharacterIds)
         ? e.relatedCharacterIds.filter((id): id is string => typeof id === 'string')

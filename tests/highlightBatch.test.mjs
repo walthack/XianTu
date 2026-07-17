@@ -11,7 +11,7 @@ const stageFiles = [
 
 const highlightContracts = {
   'lcq.event.s02_02': ['左武第一军团', '王哲', '九阳', '日轮', '阿伽门侬', '焦土'],
-  'lcq.event.s04_05': ['山洪', '易虎', '沉腰', '千斤坠', '巨石', '哭喊'],
+  'lcq.event.s04_05': ['山洪', '易虎', '千斤坠', '巨石', '洪水吞没', '他是我哥'],
   'lyl.event.mingqingsi_encounter': ['高衙内', '阮香凝', '林冲', '拳头', '水镜'],
   'lyg.event.highlight_banchao_lamb_leg': ['羊腿', '刀尖', '吉策', '九门出入记录', '田荣', '差事'],
 };

@@ -75,7 +75,7 @@
 | 燕歌 | 董卓之死 `lyg.event.s01_07` | enrich | 遗言、黑色幽默、边地军情、克制送别 | lament |
 | 燕歌 | 班超羊腿镇场 `lyg.event.highlight_banchao_lamb_leg` | new / noncritical | 霹雳手段与替田荣留路 | intrigue |
 | 清羽 | 王哲九阳自爆 `lcq.event.s02_02` | enrich | 军团覆灭铺垫、九阳合日、以身殉军 | lament |
-| 清羽 | 易虎舍身救同伴 `lcq.event.s04_05` | enrich | 先救人、扛洪峰、受巨石、最后倒下 | lament |
+| 清羽 | 易虎舍身救同伴 `lcq.event.s04_05` | enrich | 先救人、扛洪峰、被洪水吞没、弟弟认兄送别 | lament |
 | 云龙 | 林冲举拳难落 `lyl.event.mingqingsi_encounter` | enrich / noncritical | 血性与官身撕扯，不写成怯懦 | intrigue |
 
 选择理由：覆盖“死亡收束、牺牲、立威、受权势压制”四种戏剧形态；复用 4 个既有事件，只新增
@@ -87,7 +87,22 @@
 - `SAVE-CONTRACT.json` 已重新冻结班超 event ID 与完成键；
 - 主轴/存档契约：1399 节点、37 关、380 event IDs PASS；
 - 37 关 schema PASS；
-- `canon:build`：288/288 测试通过。
+- `canon:build`：首提交 288/288 测试通过。
+
+Claude 只读二审 `claude-2026-07-17T07-54-09-213Z-e08f6e11` 对首提交提出 1 条 P0、
+2 条 P1 与 2 条 P2，均已核证处理：
+
+- P0 质疑易虎死亡与 `qingyu.54.1` 摘要冲突。回查 EPUB 原著第52章《旱洪》确认：
+  易虎先救易彪与年轻军士，以千斤坠硬扛洪峰，被巨石砸中后由洪水吞没；易彪跪岸说
+  “他是我哥”并磕头送别。错误在旧轴摘要漏掉易虎牺牲，不在高光工单。现已同步修正
+  timeline、axis binding、Canon Rail 合同和高光尾拍；后续“血虎”是遗体被鬼王峒改造，
+  并非易虎生还。
+- P1“高光落账会跳过同轮普通事件对账”已解除互斥，两条链可同轮独立结算。
+- P1“主轴高光的 completionEvidence 无消费者”已改为事件数据优先、旧 Rail 合同回退，
+  王哲与易虎也执行完整逐拍证据。
+- P2 增补林冲旧存档 evidence fallback，并拒绝紧邻证据的“打算/试图/尚未”等意图式文本，
+  避免只提计划就误落高光。
+- 修复后 `canon:build`：289/289 测试、37 关、1399 轴节点、380 event IDs 全绿。
 
 ## 五、小圈子内测卡
 

@@ -144,7 +144,7 @@ export const GENERATED_CANON_RAIL_PROFILES: CanonRailProfile[] = [
       },
       {
         "eventId": "lcq.event.s04_05",
-        "mustReach": "朱老头故意绕路被识破后加快行程，途中遭遇山洪，易虎、易彪奋力救援，仍有一名年轻军士被洪水卷走。",
+        "mustReach": "朱老头故意绕路被识破后加快行程；山洪突袭商队，一名军士被卷走，易虎先后救起易彪与另一名年轻军士，以千斤坠硬扛洪峰后被巨石砸中并卷走；易彪跪岸认兄送别。",
         "completionEvidence": [],
         "forbiddenInCanon": [
           "改写本拍原著结果",

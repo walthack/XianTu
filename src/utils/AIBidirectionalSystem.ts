@@ -2462,7 +2462,9 @@ ${step1Text}
       // 双触发：停滞兜底阈值 || 证据即触发（本轮正文命中链上前几拍 → 当轮追账，玩家不用干等）
       const _should = shouldRunReconcile(rtForReconcile?.stallTurns)
         || (rtForReconcile ? evidenceLikely(textContent, buildChainCandidates(rtForReconcile)) : false);
-      if (!hadExecutionError && rtForReconcile && _enabled && _should && highlightChanges.length === 0) {
+      // 可选高光与主轴可能在同一轮同时收束；两条对账链必须独立运行，不能因高光
+      // 已落账就吞掉主轴当轮证据、迫使玩家再等停滞兜底。
+      if (!hadExecutionError && rtForReconcile && _enabled && _should) {
         const deterministicChanges = [
           ...runDeterministicXieyiReconcile(saveData, textContent),
           ...runDeterministicBijiReconcile(saveData, textContent),
