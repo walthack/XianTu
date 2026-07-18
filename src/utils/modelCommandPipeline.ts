@@ -17,6 +17,9 @@ export async function validateModelCommandPipeline(commands: unknown[], saveData
   const warnings: string[] = [];
   const { validateCommand, cleanCommands } = await import('./commandValidator');
   const { validateAndRepairCommandValue } = await import('./commandValueValidator');
+  // 时间只进不退(内测追加):模型可推进时间(含闭关跳年),但不得把年份写回过去——
+  // 曾把开局 220 年写回 200,致关系投影出生年错位、孩童显示负岁。起始年=年龄纯函数,由代码定。
+  const currentYear = Number((saveData as any)?.元数据?.时间?.年);
 
   scenarioGuardResult.accepted.forEach((cmd, index) => {
     const formatResult = validateCommand(cmd, index);
@@ -24,6 +27,20 @@ export async function validateModelCommandPipeline(commands: unknown[], saveData
     if (!formatResult.valid) {
       rejectedCommands.push({ command: cmd, errors: formatResult.errors });
       return;
+    }
+    if (Number.isFinite(currentYear)) {
+      const key = typeof (cmd as any).key === 'string' ? (cmd as any).key : '';
+      const action = String((cmd as any).action);
+      const value = (cmd as any).value;
+      const backwardYear =
+        (key === '元数据.时间.年' && action === 'set' && Number.isFinite(Number(value)) && Number(value) < currentYear) ||
+        (key === '元数据.时间.年' && action === 'add' && Number.isFinite(Number(value)) && Number(value) < 0) ||
+        (key === '元数据.时间' && action === 'set' && !!value && typeof value === 'object' &&
+          Number.isFinite(Number((value as Record<string, unknown>).年)) && Number((value as Record<string, unknown>).年) < currentYear);
+      if (backwardYear) {
+        rejectedCommands.push({ command: cmd, errors: [`指令${index}: 游戏时间只进不退,不得把年份从 ${currentYear} 写回过去`] });
+        return;
+      }
     }
     try {
       const valueResult = validateAndRepairCommandValue(cmd as TavernCommand);

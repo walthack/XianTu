@@ -331,6 +331,10 @@ export function validateCommand(command: unknown, index: number): ValidationResu
       if (staticFieldMatch) {
         errors.push(`指令${index}: NPC「${staticFieldMatch[1]}」为正典静态设定，禁止通过指令改写或删除`);
       }
+      // 主角出生日期同理（内测追加：出生年=纪元基点纯函数，被 LLM 改写会造成全员年龄错位/负岁）
+      if (/^角色\.身份\.出生日期(\.|$)/.test(cmd.key)) {
+        errors.push(`指令${index}: 主角出生日期由纪元基点确定（lifespanCalculator），禁止通过指令改写`);
+      }
     }
 
     // 7. 检查多余字段（scope虽然在类型中但不应使用）
