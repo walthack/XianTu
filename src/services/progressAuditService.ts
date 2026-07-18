@@ -76,6 +76,19 @@ function isDeletionGrounded(title: string, evidence: unknown, normContext: strin
   return ne.length >= 4 && normContext.includes(ne);
 }
 
+// 新增接地（#12）：模型可能把预训练里的原著桥段当本局事实立目标（渔村撤离案）。
+// evidence 是转述而非逐字引用，故校验放宽为「≥4 字连续片段命中本轮上下文」
+// （与事件对账 matchedCore 同标准）；一个片段都命不中即视为凭空编造，拒绝。
+function hasGroundedRun(text: unknown, normContext: string, minRun = 4): boolean {
+  if (!normContext) return false;
+  const nt = normalizeTitle(text);
+  if (nt.length < minRun) return false;
+  for (let i = 0; i + minRun <= nt.length; i++) {
+    if (normContext.includes(nt.slice(i, i + minRun))) return true;
+  }
+  return false;
+}
+
 /**
  * 确定性 validator：把模型输出收敛为可写入的即兴目标数组。纯函数，可脱离 LLM 单测。
  * 契约：
@@ -157,6 +170,10 @@ export function validateAuditedGoals(raw: unknown, currentGoals: unknown, contex
     }
     if (!isNonEmptyString(rec?.evidence)) {
       diagnostics.push(`拒绝新增「${title}」：缺 evidence`);
+      continue;
+    }
+    if (!hasGroundedRun(rec?.evidence, normContext) && !hasGroundedRun(title, normContext)) {
+      diagnostics.push(`拒绝新增「${title}」：evidence/标题未命中本轮上下文（疑似凭空或原著知识泄漏）`);
       continue;
     }
     if (toNumber(rec?.confidence) < AUDIT_CONFIDENCE_THRESHOLD) {

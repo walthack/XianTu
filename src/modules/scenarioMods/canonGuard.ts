@@ -26,6 +26,7 @@ interface ScenarioRuntimeState {
     axisSeq?: number;
     axisId?: string | null;
     axisBeat?: string;
+    relatedCharacterIds?: string[];
     completion?: Array<{ path?: string; operator?: string; value?: unknown }>;
   }>;
   completedEventIds?: string[];
@@ -434,11 +435,45 @@ export function compileScenarioProtectedPaths(saveData: SaveData): string[] {
   return [...paths];
 }
 
+// #18:rail 前方事件相关角色的死亡级词表。生死权只归事件在场演出与场外结算,
+// 模型命令先斩后奏会吞掉高光演出合同与生还 IF 的触发窗口。
+const RAIL_AHEAD_DEATH_RE = /死亡|已死|身亡|殒命|战死|阵亡|暴毙|气绝|绝命|尸首|曝尸|失踪|下落不明/;
+
+// 收集「尚未到达」主线事件(未完成且未激活)牵涉的正典角色名。
+// 激活中的事件不保护——在场演出里写死亡是事件本身的合法进程。
+function collectRailAheadCharacterNames(runtime: ScenarioRuntimeState): Set<string> {
+  const names = new Set<string>();
+  const completed = new Set(runtime.completedEventIds || []);
+  const active = new Set(runtime.activeEventIds || []);
+  const idToName = new Map(
+    (runtime.canon?.characters || []).map(character => [character.id, character.name] as const),
+  );
+  for (const event of runtime.events || []) {
+    if (!event?.id || completed.has(event.id) || active.has(event.id)) continue;
+    for (const characterId of event.relatedCharacterIds || []) {
+      const name = idToName.get(characterId);
+      if (name) names.add(name);
+    }
+  }
+  return names;
+}
+
+function serializeCommandValue(command: unknown): string {
+  const value = (command as CommandLike)?.value;
+  if (typeof value === 'string') return value;
+  try {
+    return JSON.stringify(value ?? '');
+  } catch {
+    return String(value ?? '');
+  }
+}
+
 export function guardScenarioModCommands(saveData: SaveData, commands: unknown[]): ScenarioCommandGuardResult {
   const runtime = getRuntimeState(saveData);
   const protectedPaths = compileScenarioProtectedPaths(saveData);
   if (!runtime || protectedPaths.length === 0) return { accepted: [...commands], rejected: [] };
 
+  const railAheadNames = collectRailAheadCharacterNames(runtime);
   const accepted: unknown[] = [];
   const rejected: RejectedScenarioCommand[] = [];
   for (const command of commands) {
@@ -459,6 +494,18 @@ export function guardScenarioModCommands(saveData: SaveData, commands: unknown[]
       const targetName = key.slice('社交.关系.'.length).split('.')[0];
       if (key === `社交.关系.${targetName}` && (runtime.canon?.characters || []).some(c => c.name === targetName)) {
         rejected.push({ command, reason: `剧本正典人物不可删除：${targetName}` });
+        continue;
+      }
+    }
+    // #18 生死护栏：牵涉 rail 前方事件的正典角色，不得由模型命令写入死亡/失踪级状态
+    //（先斩后奏会吞掉高光合同与生还 IF；在场事件与场外结算不走本通道，不受影响）
+    if (railAheadNames.size > 0 && key.startsWith('社交.关系.')) {
+      const targetName = key.slice('社交.关系.'.length).split('.')[0];
+      if (railAheadNames.has(targetName) && RAIL_AHEAD_DEATH_RE.test(serializeCommandValue(command))) {
+        rejected.push({
+          command,
+          reason: `「${targetName}」牵涉尚未到达的主线事件，其死亡/失踪只能由对应事件在场演出或场外结算落账`,
+        });
         continue;
       }
     }

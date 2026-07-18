@@ -25,6 +25,7 @@ import { stripNsfwContent } from '@/utils/prompts/definitions/dataDefinitions';
 import { isSaveDataV3, migrateSaveDataToLatest } from './saveMigration';
 import { parseJsonSmart, stripModelThinking } from '@/utils/jsonExtract';
 import { composeShortTermMemoryEntry, sanitizePersistedMemoryEntry } from '@/utils/memorySanitizer';
+import { filterActionOptionsByPov } from '@/utils/actionOptionsPovGuard';
 import type { APIUsageType } from '@/stores/apiManagementStore';
 import { buildScenarioCanonPrompt } from '@/modules/scenarioMods/canonGuard';
 import { advanceScenarioRuntime, STEERING_DIVERGENCE_COOLDOWN } from '@/modules/scenarioMods/runtime';
@@ -396,10 +397,19 @@ class AIBidirectionalSystemClass {
 
   private sanitizeActionOptionsForDisplay(options: unknown): string[] {
     if (!Array.isArray(options)) return [];
-    return options
+    const cleaned = options
       .filter((opt) => typeof opt === 'string')
       .map((opt) => sanitizeAITextForDisplay(opt).trim())
       .filter((opt) => opt.length > 0);
+    // #14:选项含主角名=视角漂移到同伴 NPC 的确定性信号,拒收
+    try {
+      const playerName = String((useGameStateStore() as any)?.character?.名字 || '').trim();
+      const { kept, dropped } = filterActionOptionsByPov(cleaned, playerName);
+      if (dropped.length) console.warn('[行动选项POV守卫] 拒收含主角名的选项:', dropped);
+      return kept;
+    } catch {
+      return cleaned;
+    }
   }
 
   private readBoolFlag(value: unknown, defaultValue: boolean): boolean {

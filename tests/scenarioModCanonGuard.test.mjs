@@ -168,3 +168,28 @@ test('canon prompt exposes the active Mod identity, names, and locks', async () 
   assert.match(prompt, /不得生成同 ID 或同名替代品/);
   assert.match(prompt, /不得重命名、删除或覆盖锁定正典/);
 });
+
+test('#18 生死护栏:rail 前方事件相关角色不可被模型命令写死/写失踪', async () => {
+  const { guardScenarioModCommands } = await loadTs('../src/modules/scenarioMods/canonGuard.ts');
+  const save = await buildScenarioSave((input) => {
+    input.scenario.events.push({
+      id: 'event.wangzhe_sacrifice',
+      name: '王哲九阳自爆',
+      description: '王哲以身殉军。',
+      conditions: [{ path: 'flags.chapter.started', operator: 'eq', value: true }],
+      relatedCharacterIds: ['character.wangzhe'],
+      locationId: 'location.jiankang',
+    });
+    input.scenario.chapters[0].eventIds.push('event.wangzhe_sacrifice');
+  });
+  const commands = [
+    { action: 'set', key: '社交.关系.王哲.当前状态', value: '身中二十七箭，已死亡' },
+    { action: 'set', key: '社交.关系.王哲.当前状态', value: '受了轻伤，正在调息' },
+  ];
+  const result = guardScenarioModCommands(save, commands);
+  assert.equal(result.rejected.length, 1, JSON.stringify(result.rejected));
+  assert.ok(result.rejected[0].reason.includes('王哲'));
+  assert.ok(result.rejected[0].reason.includes('场外结算'));
+  assert.equal(result.accepted.length, 1);
+  assert.equal(result.accepted[0].value, '受了轻伤，正在调息');
+});

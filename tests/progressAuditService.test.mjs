@@ -169,3 +169,26 @@ test('runProgressAudit is best-effort: llm failure yields no changes', async () 
   assert.deepEqual(changes, []);
   assert.deepEqual(saveData.系统.扩展.任务追踪.即兴目标, [{ 标题: '救治小紫' }]);
 });
+
+test('#12 接地守卫:凭空/原著知识目标被拒(渔村案回放)', async () => {
+  const { validateAuditedGoals } = await modPromise;
+  const context = '程宗扬立在昭阳殿丹陛之下，百官朝贺，定陶王稚嫩的谢恩词已近尾声。玩家输入：静观登基大典。';
+  const res = validateAuditedGoals(
+    { recommended: [{ 标题: '带小紫与归海之心撤离荒废渔村', evidence: '小紫携归海之心受困荒废渔村，泊陵鱼氏追索', confidence: 0.95 }] },
+    [],
+    context
+  );
+  assert.deepEqual(res.finalGoals, [], '未命中上下文的目标应被拒');
+  assert.ok(res.diagnostics.some((d) => d.includes('未命中本轮上下文')));
+});
+
+test('#12 接地守卫:转述式 evidence 含真实片段仍可通过', async () => {
+  const { validateAuditedGoals } = await modPromise;
+  const context = '程宗扬当机立断，决定护送谢艺前往草庐疗伤。';
+  const res = validateAuditedGoals(
+    { recommended: [{ 标题: '护送谢艺前往草庐疗伤', evidence: '正文明确决定护送谢艺前往草庐', confidence: 0.9 }] },
+    [],
+    context
+  );
+  assert.deepEqual(res.finalGoals, [{ 标题: '护送谢艺前往草庐疗伤' }]);
+});
