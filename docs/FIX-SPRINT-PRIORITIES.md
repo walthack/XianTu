@@ -3,7 +3,7 @@
 > 依据 = `docs/PLAYTEST-FEEDBACK-LEDGER.md` 全部 21 条;总目标 = #21(剧情跑歪无法收束)。
 > 执行纪律:重启测试服避开测试者在线时段;提示词改动必须分步(splitGenerationStep1)+非分步双写;每批过门禁(`canon:build`+`validate:all`)+ selftest 回归。
 
-## P0 · 立即动手(小改·零争议·新档立即受益,一个重启窗口全带上)
+## P0 · ✅ 已完成(2026-07-18,Claude 执行;commits 868a764/5b38a09/a4cd510/cc44ce2;308 单测全绿+validate:all 过+真机验证 39 人 0 超寿元、郭靖 4 岁)
 
 1. **#7 年龄投影修复**:`relationships.ts` REALM_AGE_RANGE 改六朝压缩口径(凡人/练气16-50/筑基25-60/金丹30-70/元婴40-80/化神50-90/炼虚60-100/合体渡劫70-110)+估龄 clamp 至寿元上限内+孩童/少年关键词绝对年龄段优先(治#6)。~30行。
 2. **小紫毒宗回归修正**(执行裁定#55):`apply-char-support.mjs:13` 两处"巫宗正统传人"→毒宗措辞;+ 定陶王 `liu_xin` realm"元婴"删除(#6)。重跑投影+rebuild。
