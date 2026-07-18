@@ -54,7 +54,11 @@ import {
   normalizeNarratedItemName,
 } from '@/utils/narratedInventory';
 import { buildNarrativePromptState } from '@/utils/narrativePromptState';
-import { performanceRetryInstruction, validateNarrativePerformance } from '@/modules/scenarioMods/narrativePerformanceGuard';
+import {
+  decideNarrativePerformanceAttempt,
+  performanceRetryInstruction,
+  validateNarrativePerformance,
+} from '@/modules/scenarioMods/narrativePerformanceGuard';
 
 type PlainObject = Record<string, unknown>;
 
@@ -1114,14 +1118,24 @@ ${stateJsonString}
               usageType: 'main',
               onStreamChunk: options?.onStreamChunk,
             });
-            step1Text = this.extractNarrativeText(String(step1Raw));
-            if (step1Text.trim().length > 0) {
-              const performance = validateNarrativePerformance(step1Text, finalUserInput, scenarioStoryPrompt);
+            const candidateText = this.extractNarrativeText(String(step1Raw));
+            if (candidateText.trim().length > 0) {
+              const performance = decideNarrativePerformanceAttempt(
+                candidateText,
+                finalUserInput,
+                scenarioStoryPrompt,
+                attempt,
+                2,
+              );
+              step1Text = performance.narrative;
               if (performance.valid) break;
-              performanceCorrection = performanceRetryInstruction(performance.issues);
-              console.warn('[角色表演门禁] 分步正文退回重写：', performance.issues);
-              step1Text = '';
-              continue;
+              performanceCorrection = performance.retryInstruction;
+              if (performance.shouldRetry) {
+                console.warn('[角色表演门禁] 分步正文退回重写：', performance.issues);
+                continue;
+              }
+              console.warn('[角色表演门禁] 分步正文末次仍未达标，保留末稿降级继续：', performance.issues);
+              break;
             }
             step1Text = '';
           } catch (e) {

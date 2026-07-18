@@ -31,3 +31,20 @@ test('voice-card decision scene accepts a named active plan and ignores ordinary
     prompt,
   ).valid, true);
 });
+
+test('split performance retry discards only the retryable draft and preserves the final draft', async () => {
+  const { decideNarrativePerformanceAttempt } =
+    await loadTs('../src/modules/scenarioMods/narrativePerformanceGuard.ts');
+  const reportOnly = '小紫道：“敌军还在城外。程头儿要不要去看看？”她等着回话。';
+
+  const first = decideNarrativePerformanceAttempt(reportOnly, '让小紫说明敌情和下一步计划', prompt, 1, 2);
+  assert.equal(first.valid, false);
+  assert.equal(first.shouldRetry, true);
+  assert.equal(first.narrative, '');
+  assert.match(first.retryInstruction, /表演门禁退回重写/);
+
+  const final = decideNarrativePerformanceAttempt(reportOnly, '让小紫说明敌情和下一步计划', prompt, 2, 2);
+  assert.equal(final.valid, false);
+  assert.equal(final.shouldRetry, false);
+  assert.equal(final.narrative, reportOnly);
+});

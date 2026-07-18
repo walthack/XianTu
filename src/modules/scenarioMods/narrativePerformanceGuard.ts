@@ -3,6 +3,12 @@ export interface NarrativePerformanceCheck {
   issues: string[];
 }
 
+export interface NarrativePerformanceAttemptDecision extends NarrativePerformanceCheck {
+  narrative: string;
+  shouldRetry: boolean;
+  retryInstruction: string;
+}
+
 const DECISION_SCENE = /情报|敌情|局势|侦察|探子|计划|打算|安排|怎么办|如何行动|下一步|计策|谋划|决策/;
 const ACTIVE_PLAN = /我已|我让|我命|我先|我会|已经安排|你现在|你只需|先[^。！？]{0,24}再|退路|后手|备用|若[^。！？]{0,24}便/;
 
@@ -31,4 +37,25 @@ export function validateNarrativePerformance(
 
 export function performanceRetryInstruction(issues: string[]): string {
   return `【表演门禁退回重写】上稿未通过：${issues.join('；')}。保留已接地事实，整段重写；必须让被点名角色亲口说出或亲自实施一个具体可行动方案（含先手、后手、代价或退出条件之一），随后把选择留给玩家。不得让主角代为分析/下令，不得新增存档与正典没有的兵力、伤亡、人物或事件。`;
+}
+
+/**
+ * 分步正文仅在尚有调用预算时丢弃未通过稿；最后一次即使仍未达标，
+ * 也必须保留模型正文，避免 Step 2 收到空叙事并让玩家整段丢失。
+ */
+export function decideNarrativePerformanceAttempt(
+  narrative: string,
+  userInput: string,
+  scenarioPrompt: string,
+  attempt: number,
+  maxAttempts: number,
+): NarrativePerformanceAttemptDecision {
+  const performance = validateNarrativePerformance(narrative, userInput, scenarioPrompt);
+  const shouldRetry = !performance.valid && attempt < maxAttempts;
+  return {
+    ...performance,
+    narrative: shouldRetry ? '' : narrative,
+    shouldRetry,
+    retryInstruction: performance.valid ? '' : performanceRetryInstruction(performance.issues),
+  };
 }
