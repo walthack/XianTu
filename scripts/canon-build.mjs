@@ -20,6 +20,7 @@ const steps = [
   ['归属投影 stage', 'node', ['scripts/project-affiliations-to-stages.mjs', '--apply']],
   ['同门/同族/同袍派生', 'node', ['scripts/derive-tongmen-edges.mjs', '--apply']],
   ['内置 mod 同步', 'node', ['scripts/sync-builtin-mods.mjs']],
+  ['人工裁定执法', 'node', ['scripts/validate-canon-decisions.mjs']],
   ['主轴/存档契约校验', 'node', ['scripts/validate-axis-save-contract.mjs']],
 ];
 if (!FAST) {

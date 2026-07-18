@@ -59,7 +59,43 @@ test('removes a goal the player explicitly abandoned (with grounded evidence)', 
     '玩家明确表示放弃追查碧奴玉牌线索。'
   );
   assert.deepEqual(res.finalGoals, []);
+  assert.deepEqual(res.completedGoals, []);
   assert.equal(res.changed, true);
+});
+
+test('completed grounded goal emits a one-shot narrative reward receipt', async () => {
+  const { validateAuditedGoals, runProgressAudit } = await modPromise;
+  const raw = {
+    goals: [{
+      title: '护送谢艺前往草庐',
+      status: 'completed',
+      evidence: '谢艺已经安置进草庐',
+      confidence: 0.95,
+    }],
+    recommended: [],
+  };
+  const context = '众人终于把谢艺送到，谢艺已经安置进草庐。';
+  const validated = validateAuditedGoals(raw, goals('护送谢艺前往草庐'), context);
+  assert.deepEqual(validated.completedGoals, [{
+    标题: '护送谢艺前往草庐',
+    证据: '谢艺已经安置进草庐',
+  }]);
+
+  const saveData = {
+    系统: { 扩展: { 任务追踪: { 即兴目标: goals('护送谢艺前往草庐') } } },
+    角色: { 位置: { 描述: '草庐' } },
+  };
+  const changes = await runProgressAudit({
+    saveData,
+    recentText: context,
+    userAction: '安顿谢艺',
+    generate: async () => JSON.stringify(raw),
+  });
+  assert.equal(changes.length, 2);
+  assert.deepEqual(saveData.系统.扩展.任务追踪.最近完成待回报, [{
+    标题: '护送谢艺前往草庐',
+    证据: '谢艺已经安置进草庐',
+  }]);
 });
 
 test('keeps a completed goal whose evidence is not grounded in recent context', async () => {

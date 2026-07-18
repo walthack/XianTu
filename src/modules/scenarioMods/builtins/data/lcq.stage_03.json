@@ -2094,7 +2094,17 @@
         "axisSeq": 49,
         "axisAnchor": "六朝清羽记·#32·第30章·险路",
         "axisBeat": "武二郎因伤口中毒濒死，程宗扬试图用自身血液救治但无效，凝羽协助疗伤。",
-        "objective": "在商队救治武二郎"
+        "objective": "在商队救治武二郎",
+        "offscreenResolution": {
+          "id": "offscreen.r2_9.lcq_event_s03_06",
+          "afterStallTurns": 8,
+          "flagKey": "world.r2_9.lcq_event_s03_06.offscreen_resolved",
+          "resolvedEventIds": [
+            "lcq.event.s03_06"
+          ],
+          "worldDelta": "商队仍遭袭击，武二郎因此卷入队伍；你未在场的交锋以伤员、戒备和同行关系留下余波。",
+          "evidence": "R2-9 世界引力合同：武二郎加入商队及遇袭属于不依赖玩家领取任务才会发生的世界事件；仅在该节点已激活且长期停滞时结算。"
+        }
       },
       {
         "id": "lcq.event.s03_07",

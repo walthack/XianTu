@@ -133,6 +133,7 @@
           </button>
         </div>
         <div v-show="!talentsCollapsed" class="talents-list">
+          <div class="empty-text" style="margin-bottom:6px;">{{ t('影响演绎与情境判定，不直接改面板数值') }}</div>
           <div
             v-for="talent in characterInfo.天赋"
             :key="typeof talent === 'string' ? talent : talent.name"
@@ -205,6 +206,12 @@
             <div v-for="ev in questMain.events" :key="ev" class="quest-event"><span class="quest-mark-main">◆</span>{{ ev }}</div>
             <div v-if="questMain.moreCount > 0" class="quest-more">{{ t('本关后续还有') }} {{ questMain.moreCount }} {{ t('个节点') }}</div>
             <div v-if="questMain.stalled" class="quest-stall-warn" style="color:#e6a23c;font-size:12px;margin-top:4px;line-height:1.4;">⚠️ 主线疑似脱节（已停滞 {{ questMain.stallCount }} 轮）——剧情可能已跑到主线前面，系统将自动尝试事件对账修复（可在 API 管理·事件对账 中关闭）</div>
+            <div v-if="questMain.signal?.level === 'medium' || questMain.signal?.level === 'high'" class="quest-stall-warn" style="color:#e6a23c;font-size:12px;margin-top:4px;line-height:1.4;">
+              世界线偏离：{{ questMain.signal.level === 'high' ? '大偏' : '中偏' }}（{{ questMain.signal.score }}/100）。你可以继续当前支流，也可以主动回到最近承重节点。
+            </div>
+            <button v-if="questMain.canReturn" class="quest-next-btn" :disabled="returningToCanon" @click="cutBackToCanon">
+              {{ returningToCanon ? t('回轨中…') : t('↩ 斩线回轨') }}
+            </button>
             <div v-if="questMain.cleared" class="quest-cleared">✅ {{ t('本关剧情已完成') }}</div>
             <template v-if="questMain.next">
               <div class="quest-next">{{ t('此地诸事已暂告一段落。若已准备好，可顺势启程。') }}</div>
@@ -286,6 +293,7 @@ import { formatRealmWithStage } from '@/utils/realmUtils';
 import { calculateAgeFromBirthdate } from '@/utils/lifespanCalculator';
 import { getNarrativeAnchorEvent } from '@/modules/scenarioMods/runtime';
 import { resolveScenarioEventNarrative } from '@/modules/scenarioMods/eventNarrativeView';
+import { returnToCanonAnchor } from '@/modules/scenarioMods/divergenceControl';
 import { useI18n } from '@/i18n';
 
 const { t } = useI18n();
@@ -313,6 +321,7 @@ const worldlineCollapsed = ref(false);
 const chronicleCollapsed = ref(true);
 const stageSwitching = ref(false);
 const stageSwitchError = ref('');
+const returningToCanon = ref(false);
 // 剧情主线：章节/活跃事件/清关状态/下一关（确定性，读 worldState.剧本模组）
 const questMain = computed(() => {
   const rt: any = (gameStateStore.worldState as any)?.剧本模组;
@@ -334,7 +343,9 @@ const questMain = computed(() => {
   const stallTurns = Number(rt.stallTurns) || 0;
   const stalled = stallTurns >= 10;
   if (!chapter && !events.length && !next && !stalled) return null;
-  return { chapter: chapter ? `章节：${chapter.title || chapter.id}` : '', events, moreCount, cleared, next, stalled, stallCount: stallTurns };
+  const signal = rt.divergenceSignal;
+  const canReturn = signal?.level === 'medium' || signal?.level === 'high' || stalled;
+  return { chapter: chapter ? `章节：${chapter.title || chapter.id}` : '', events, moreCount, cleared, next, stalled, stallCount: stallTurns, signal, canReturn };
 });
 const goNextStage = async () => {
   if (stageSwitching.value) return;
@@ -347,6 +358,23 @@ const goNextStage = async () => {
     stageSwitchError.value = String((error as Error)?.message || error);
   } finally {
     stageSwitching.value = false;
+  }
+};
+const cutBackToCanon = async () => {
+  if (returningToCanon.value) return;
+  returningToCanon.value = true;
+  stageSwitchError.value = '';
+  try {
+    const save = gameStateStore.toSaveData();
+    if (!save) throw new Error('存档数据不完整');
+    const result = returnToCanonAnchor(save);
+    if (!result.ok) throw new Error(result.reason || '当前无法回轨');
+    gameStateStore.loadFromSaveData(save);
+    await gameStateStore.saveGame();
+  } catch (error) {
+    stageSwitchError.value = String((error as Error)?.message || error);
+  } finally {
+    returningToCanon.value = false;
   }
 };
 // 即兴目标（LLM 维护的跨轮任务槽，上限 3）

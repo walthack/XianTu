@@ -2451,7 +2451,17 @@
         "axisSeq": 71,
         "axisAnchor": "六朝清羽记·#48·第46章·幻真",
         "axisBeat": "商队与花苗人遭遇鬼王峒武士袭击，武二郎以双刀斩杀多名武士，扭转战局。",
-        "objective": "协助武二郎击退鬼王峒武士"
+        "objective": "协助武二郎击退鬼王峒武士",
+        "offscreenResolution": {
+          "id": "offscreen.r2_9.lcq_event_s04_02",
+          "afterStallTurns": 7,
+          "flagKey": "world.r2_9.lcq_event_s04_02.offscreen_resolved",
+          "resolvedEventIds": [
+            "lcq.event.s04_02"
+          ],
+          "worldDelta": "鬼王峒武士已发动袭击，队伍的路线与戒备被迫改变；玩家仍可介入战后追踪或救援。",
+          "evidence": "R2-9 世界引力合同：鬼王峒武士袭击属于不依赖玩家领取任务才会发生的世界事件；仅在该节点已激活且长期停滞时结算。"
+        }
       },
       {
         "id": "lcq.event.s04_03",
@@ -2514,7 +2524,17 @@
         "axisSeq": 78,
         "axisAnchor": "六朝清羽记·#53·第51章·异物",
         "axisBeat": "夜晚，谢艺、云苍峰和祁远目睹从门外蔓延的黑色发丝袭击朱老头，但发丝在接近他时突然退缩，随后谢艺一刀劈碎木门，发丝如幻影般消失无踪。",
-        "objective": "查明夜晚发丝袭击事件"
+        "objective": "查明夜晚发丝袭击事件",
+        "offscreenResolution": {
+          "id": "offscreen.r2_9.lcq_event_s04_04",
+          "afterStallTurns": 8,
+          "flagKey": "world.r2_9.lcq_event_s04_04.offscreen_resolved",
+          "resolvedEventIds": [
+            "lcq.event.s04_04"
+          ],
+          "worldDelta": "发蛊事件仍然发生，受害者与蛊毒威胁进入队伍现实；你只能从处置后果而非倒带事件开始介入。",
+          "evidence": "R2-9 世界引力合同：发蛊事件属于不依赖玩家领取任务才会发生的世界事件；仅在该节点已激活且长期停滞时结算。"
+        }
       },
       {
         "id": "lcq.event.s04_05",
@@ -2553,7 +2573,17 @@
           "洪水吞没",
           "他是我哥"
         ],
-        "objective": "在山洪中救助落水军士"
+        "objective": "在山洪中救助落水军士",
+        "offscreenResolution": {
+          "id": "offscreen.r2_9.lcq_event_s04_05",
+          "afterStallTurns": 9,
+          "flagKey": "world.r2_9.lcq_event_s04_05.offscreen_resolved",
+          "resolvedEventIds": [
+            "lcq.event.s04_05"
+          ],
+          "worldDelta": "旱洪席卷去路，易虎之死已成为队伍共同经历；灾后失散、哀恸与道路中断继续影响众人。",
+          "evidence": "R2-9 世界引力合同：旱洪与易虎之死属于不依赖玩家领取任务才会发生的世界事件；仅在该节点已激活且长期停滞时结算。"
+        }
       },
       {
         "id": "lcq.event.s04_06",

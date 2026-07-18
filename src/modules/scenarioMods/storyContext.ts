@@ -5,6 +5,7 @@ import { getCanonRailContract, getCanonRailProfile } from './canonRail';
 import { narrativeVariantReplacesCanonRail, resolveScenarioEventNarrative } from './eventNarrativeView';
 import { formatDivergencePrompt, type ScenarioDivergence } from './divergenceLedger';
 import { findRegistryIdentitiesByContext, getRegistrySpeechStyle } from './characterResolver';
+import { formatVoiceCard } from './voiceCards';
 
 import type {
   ScenarioCondition,
@@ -246,8 +247,18 @@ function formatFocusedCharacter(
     : '  宗派限定：本阶段未声明宗派；不得补造成道士、某派弟子、掌教或教内职司');
   const personality = formatList(profile.personality);
   if (personality) lines.push(`  性格：${personality}`);
+  const intelligenceProfile = [
+    ...(Array.isArray(profile.personality) ? profile.personality : []),
+    character.description || '',
+    profile.origin || '',
+  ].join(' ');
+  if (/智商|高智|谋士|谋略|智囊|城府|精明|机敏|敏达|洞察|算计|足智/.test(intelligenceProfile)) {
+    lines.push(`  【${character.name}·高智行为硬合同】情报/决策场景中，必须由${character.name}本人先直接说出或实施至少一个具体方案（合格形态：“我已安排甲做乙，你现在可利用丙”），且该方案改变本轮选择；不得只报告情报、点头领命、等待主角追问，或只用旁白暗示“另有后手”。`);
+  }
   const speechStyle = getRegistrySpeechStyle(character.name);
   if (speechStyle) lines.push(`  谈吐：${speechStyle}`);
+  const voiceCard = formatVoiceCard(character.name, { modId: runtime.modId });
+  if (voiceCard) lines.push(`  ${voiceCard}`);
   // 灵根=正典静态设定（R2-5：凝羽灵根曾被 LLM 改写）；"原作未载"占位不注入
   const spiritRootName = profile.spiritRoot?.name;
   if (spiritRootName && spiritRootName !== '原作未载') {
@@ -542,6 +553,10 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
 
   // 即兴目标槽（跨轮追踪，读档不翻转的治本一环）
   const improvGoals = readPath(saveData, ['系统', '扩展', '任务追踪', '即兴目标']);
+  const completedGoalReceipts = readPath(saveData, ['系统', '扩展', '任务追踪', '最近完成待回报']);
+  const completedGoalLine = Array.isArray(completedGoalReceipts) && completedGoalReceipts.length
+    ? `【刚完成的即兴目标·本轮必须叙事回报】\n${completedGoalReceipts.slice(0, 3).map((g: any) => `- ${g?.标题 || ''}${g?.证据 ? `（依据：${compactText(String(g.证据), 80)}）` : ''}`).filter(Boolean).join('\n')}\n这些目标已经由接地审计确认完成。本轮须在正文中给出与目标规模相称、且有当前处境依据的回报：情报、关系变化、财货、声望或新机会至少一种；需要落状态时输出对应合法指令。不得重复完成目标、不得凭空发放超额奖励。`
+    : '';
   const improvLine = Array.isArray(improvGoals) && improvGoals.length
     ? `【即兴目标·玩家侧可选支线（跨轮追踪，读档续写保持不悄然翻转）】\n${improvGoals.slice(0, 3).map((g: any) => `- ${typeof g === 'string' ? g : g?.标题 || ''}`).filter(Boolean).join('\n')}\n性质：这些是玩家临时选择的**可选支线**目标，**不代表主线方向，不得盖过或替代上文"当前事件/最近主线节点"**；主叙事推进以主线为准，即兴目标仅在玩家主动选择追踪时顺应。维护规则：目标达成或失效时用 set 更新 系统.扩展.任务追踪.即兴目标（整组重写，上限 3 条）；只记跨轮仍需追踪的目标，场景内小动作不记。`
     : `【即兴目标槽】当叙事确立了需跨轮追踪的临时目标（如"取回某物""赴某约"），用 set 写入 系统.扩展.任务追踪.即兴目标（数组，元素 {"标题":"..."}，上限 3 条）；达成/失效必须清除。这是玩家侧可选支线，**不得盖过主线**。`;
@@ -584,6 +599,20 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
     : stallTurns >= 4
       ? `【回主线轻引子（玩家可忽略）】剧情已数轮未推进：本轮给一个轻量可选线索，指向下述“最近主线节点”的悬念（提取待解之谜/人物去向牵引，不复现场景、不提前演出）：${dirHint}。可用旁人一句话、一则传闻、环境异样或同伴提议带出，让玩家知道“想推进主线可以往这走”。不得强行触发主线高潮，不得直接完成事件，不得用新增战斗/追兵充当引子。`
       : '';
+  const divergenceSignal = (runtime as any).divergenceSignal;
+  const divergenceControlLine = divergenceSignal?.level === 'high'
+    ? `【大偏离·必须给玩家选择】近轮剧情与主轴明显分离（确定性评分 ${divergenceSignal.score}/100）。不得催促或替玩家回归；本轮把当前衍生线明确表述为“本世界线支流”，并同时给出两个可执行选择：继续支流，或自然接回“${dirHint}”。`
+    : divergenceSignal?.level === 'medium'
+      ? `【中偏离·收编桥】近轮剧情开始偏离主轴（确定性评分 ${divergenceSignal.score}/100）。本轮把现有支线的人物、后果或线索收编为“${dirHint}”的前奏或余波；不得梦醒抹除，不得强制玩家行动。`
+      : '';
+  const returnBridge = (runtime as any).returnBridge;
+  const returnBridgeLine = returnBridge
+    ? `【玩家已主动斩线回轨·本轮最高优先级】玩家选择结束衍生支线“${returnBridge.branchSummary}”。保留它已经造成的关系与后果，但立即用章节转场、来信、人物提议或局势变化把镜头接回“${returnBridge.anchorObjective}”。不得继续扩建旧支线，不得写成梦境或清空经历；本轮必须让玩家抵达该承重节点的可行动入口。`
+    : '';
+  const worldPush = (runtime as any).worldPush;
+  const worldPushLine = worldPush?.due
+    ? `【世界回合·本轮世界必须行动】原因=${worldPush.reason}，强度=${worldPush.intensity}。本轮至少让一个已登场 NPC、当前活跃事件或正典势力主动采取具体行动，改变玩家眼前的选择或局势；失败意味着世界取得行动权。不得只给静态环境描写、泛泛情报或等玩家追问。`
+    : '';
   const stageLine = [
     runtime.modName || runtime.modId,
     typeof runtime.axisSeqLo === 'number' && typeof runtime.axisSeqHi === 'number' ? `主轴范围 #${runtime.axisSeqLo}~#${runtime.axisSeqHi}` : '',
@@ -620,7 +649,7 @@ ${nextSection}
 ## 剧情标记
 ${JSON.stringify(runtime.flags || {})}
 
-${focusedCharacterSection ? `${focusedCharacterSection}\n\n` : ''}${globalIdentitySection ? `${globalIdentitySection}\n\n` : ''}${loadBearingLine ? `${loadBearingLine}\n\n` : ''}${divergenceLine ? `${divergenceLine}\n\n` : ''}${steeringLine ? `${steeringLine}\n\n` : ''}${reputationLine}\n\n${relationLine ? `${relationLine}\n\n` : ''}${improvLine}\n\n【正典叙事事实约束】：
+${focusedCharacterSection ? `${focusedCharacterSection}\n\n` : ''}${globalIdentitySection ? `${globalIdentitySection}\n\n` : ''}${loadBearingLine ? `${loadBearingLine}\n\n` : ''}${divergenceLine ? `${divergenceLine}\n\n` : ''}${returnBridgeLine ? `${returnBridgeLine}\n\n` : ''}${divergenceControlLine ? `${divergenceControlLine}\n\n` : ''}${worldPushLine ? `${worldPushLine}\n\n` : ''}${steeringLine ? `${steeringLine}\n\n` : ''}${reputationLine}\n\n${relationLine ? `${relationLine}\n\n` : ''}${completedGoalLine ? `${completedGoalLine}\n\n` : ''}${improvLine}\n\n【正典叙事事实约束】：
 1. 已知人物的姓名、别名、身份、物种、势力、亲属与政治关系均是事实字段：不得把人物写成兵器、坐骑、功法、物品或新角色；不得把称号、别名拆成另一个实体。
 2. 人物之间的血缘、主从、婚配、同党、结盟、仇怨，只有上文正典人物档案或当前事件明确写出时才可断言。没有依据时只能写“尚未可知/传闻待证”，绝不可因同姓、官职、阵营或历史常识擅自补关系。
 3. 叙事正文也必须遵守上述正典；这不是仅约束 tavern_commands 的规则。若玩家要求与正典矛盾的事实，明确说明冲突并以正典版本续写。

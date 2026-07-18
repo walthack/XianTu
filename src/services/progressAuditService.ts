@@ -8,7 +8,8 @@ import { parseJsonSmart } from '@/utils/jsonExtract';
  * 定位：不替代第一层的确定性兜底（位置），只处理规则难稳判的「跨轮即兴目标」管理——
  * 合并/暂停/放弃/多轮演进/玩家意图改变。默认关闭（opt-in），后台事后追更（不阻塞正文）。
  *
- * 权限边界：只写 `系统.扩展.任务追踪.即兴目标`。绝不碰剧本 flag/背包/属性/关系/位置。
+ * 权限边界：只写 `系统.扩展.任务追踪.{即兴目标,最近完成待回报}`。
+ * `最近完成待回报` 是确定性的一次性叙事信号，不直接发奖励；绝不碰剧本 flag/背包/属性/关系/位置。
  * 所有模型输出必须过下方确定性 validator；模型不被信任去重、截断或凭空删目标。
  */
 
@@ -19,6 +20,7 @@ const AUDIT_TIMEOUT_MS = 20000;
 const TITLE_MIN = 6;
 const TITLE_MAX = 40;
 const GOALS_PATH = ['系统', '扩展', '任务追踪', '即兴目标'];
+const COMPLETED_RECEIPTS_PATH = ['系统', '扩展', '任务追踪', '最近完成待回报'];
 
 // 剧透 / 远闻类：不得作为 active 目标或裁定依据
 const REJECT_TITLE_RE = /听闻|远处|据说|下一站|准备前往|打算去|传来|遥望/;
@@ -41,6 +43,7 @@ export interface RawAuditOutput {
 
 export interface ValidateResult {
   finalGoals: { 标题: string }[];
+  completedGoals: { 标题: string; 证据: string }[];
   changed: boolean;
   diagnostics: string[];
 }
@@ -116,6 +119,7 @@ export function validateAuditedGoals(raw: unknown, currentGoals: unknown, contex
   const currentTitles = currentGoalTitles(currentGoals);
   const finalNorm: string[] = [];
   const finalObjs: { 标题: string }[] = [];
+  const completedGoals: { 标题: string; 证据: string }[] = [];
   const seen = new Set<string>();
 
   // 1) 保留当前目标——仅在高置信、接地的 completed/abandoned 时移除
@@ -137,6 +141,9 @@ export function validateAuditedGoals(raw: unknown, currentGoals: unknown, contex
       isDeletionGrounded(title, v?.evidence, normContext);
     if (removable) {
       diagnostics.push(`移除旧目标「${title}」（${status}, conf=${toNumber(v?.confidence)}）`);
+      if (status === 'completed') {
+        completedGoals.push({ 标题: title.trim(), 证据: String(v?.evidence).trim().slice(0, 120) });
+      }
       continue;
     }
     if (claimsDone) {
@@ -189,7 +196,7 @@ export function validateAuditedGoals(raw: unknown, currentGoals: unknown, contex
   const changed =
     currentNorm.length !== finalNorm.length || currentNorm.some((t, i) => t !== finalNorm[i]);
 
-  return { finalGoals: finalObjs, changed, diagnostics };
+  return { finalGoals: finalObjs, completedGoals, changed, diagnostics };
 }
 
 // 玩家侧跨轮意图词：出现即值得让审计员看一眼目标是否要变
@@ -295,7 +302,7 @@ export async function runProgressAudit(input: ProgressAuditInput): Promise<State
 
   const currentGoals = get(input.saveData, GOALS_PATH);
   const auditContext = `${input.recentText || ''}\n${input.userAction || ''}`;
-  const { finalGoals, changed, diagnostics } = validateAuditedGoals(parsed, currentGoals, auditContext);
+  const { finalGoals, completedGoals, changed, diagnostics } = validateAuditedGoals(parsed, currentGoals, auditContext);
   for (const d of diagnostics) console.log('[进度审计]', d);
   if (!changed) return [];
 
@@ -304,12 +311,22 @@ export async function runProgressAudit(input: ProgressAuditInput): Promise<State
   set(input.saveData, GOALS_PATH, finalGoals);
   console.warn(`[进度审计] 即兴目标已更新为 ${finalGoals.length} 条`);
 
-  return [
-    {
-      key: '系统.扩展.任务追踪.即兴目标',
+  const changes: StateChange[] = [{
+    key: '系统.扩展.任务追踪.即兴目标',
+    action: 'set',
+    oldValue: summarize('系统.扩展.任务追踪.即兴目标', oldValue, 'set'),
+    newValue: summarize('系统.扩展.任务追踪.即兴目标', finalGoals, 'set'),
+  }];
+  if (completedGoals.length) {
+    const oldReceipts = get(input.saveData, COMPLETED_RECEIPTS_PATH);
+    const nextReceipts = completedGoals.slice(0, MAX_IMPROV_GOALS);
+    set(input.saveData, COMPLETED_RECEIPTS_PATH, nextReceipts);
+    changes.push({
+      key: '系统.扩展.任务追踪.最近完成待回报',
       action: 'set',
-      oldValue: summarize('系统.扩展.任务追踪.即兴目标', oldValue, 'set'),
-      newValue: summarize('系统.扩展.任务追踪.即兴目标', finalGoals, 'set'),
-    },
-  ];
+      oldValue: summarize('系统.扩展.任务追踪.最近完成待回报', oldReceipts, 'set'),
+      newValue: summarize('系统.扩展.任务追踪.最近完成待回报', nextReceipts, 'set'),
+    });
+  }
+  return changes;
 }

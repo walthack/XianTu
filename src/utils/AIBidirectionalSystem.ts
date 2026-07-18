@@ -54,6 +54,7 @@ import {
   normalizeNarratedItemName,
 } from '@/utils/narratedInventory';
 import { buildNarrativePromptState } from '@/utils/narrativePromptState';
+import { performanceRetryInstruction, validateNarrativePerformance } from '@/modules/scenarioMods/narrativePerformanceGuard';
 
 type PlainObject = Record<string, unknown>;
 
@@ -1101,11 +1102,12 @@ ${stateJsonString}
         const systemPromptStep1 = await buildSplitSystemPrompt(1);
         const injectsStep1 = buildSplitInjects(systemPromptStep1, true);
         let step1Text = '';
+        let performanceCorrection = '';
         for (let attempt = 1; attempt <= 2; attempt++) {
           try {
             if (attempt > 1) options?.onProgressUpdate?.('分步生成：第1步重试…');
             const step1Raw = await generateOnce({
-              user_input: finalUserInput,
+              user_input: performanceCorrection ? `${finalUserInput}\n\n${performanceCorrection}` : finalUserInput,
               should_stream: useStreaming,
               generation_id: `${generationId}_step1_${attempt}`,
               injects: injectsStep1 as any,
@@ -1113,7 +1115,14 @@ ${stateJsonString}
               onStreamChunk: options?.onStreamChunk,
             });
             step1Text = this.extractNarrativeText(String(step1Raw));
-            if (step1Text.trim().length > 0) break;
+            if (step1Text.trim().length > 0) {
+              const performance = validateNarrativePerformance(step1Text, finalUserInput, scenarioStoryPrompt);
+              if (performance.valid) break;
+              performanceCorrection = performanceRetryInstruction(performance.issues);
+              console.warn('[角色表演门禁] 分步正文退回重写：', performance.issues);
+              step1Text = '';
+              continue;
+            }
             step1Text = '';
           } catch (e) {
             console.warn(`[分步生成] 第1步第${attempt}次失败:`, e);
@@ -1289,6 +1298,36 @@ ${missingItems.length > 0 ? `【上次结构化输出缺失】
         };
         console.warn('[AI双向系统] 使用容错模式提取内容 - 文本长度:', extractedText.length, '记忆:', extractedMemory.length, '指令数:', extractedCommands.length, '行动选项:', extractedActionOptions.length);
       }
+      }
+
+      // 非分步路由同样执行一次表演门禁；仅点名决策场景触发，最多额外调用一次。
+      if (!shouldActuallySplit && gmResponse?.text) {
+        const performance = validateNarrativePerformance(gmResponse.text, finalUserInput, scenarioStoryPrompt);
+        if (!performance.valid) {
+          options?.onProgressUpdate?.('角色表演门禁：重写正文…');
+          const retryInput = `${finalUserInput}\n\n${performanceRetryInstruction(performance.issues)}`;
+          console.warn('[角色表演门禁] 非分步正文退回重写：', performance.issues);
+          const retryRaw = tavernHelper
+            ? await tavernHelper.generate({
+                user_input: retryInput,
+                should_stream: false,
+                generation_id: `${generationId}_performance_retry`,
+                usageType: 'main',
+                injects: injects as any,
+              })
+            : await aiService.generate({
+                user_input: retryInput,
+                should_stream: false,
+                generation_id: `${generationId}_performance_retry`,
+                usageType: 'main',
+                injects: injects as any,
+              });
+          gmResponse = this.parseAIResponse(
+            String(retryRaw),
+            aiService.isForceJsonEnabled('main'),
+            actionOptionsEnabled,
+          );
+        }
       }
 
       // 🔥 文本优化：如果启用，对生成的文本进行润色
@@ -2326,6 +2365,21 @@ ${step1Text}
       commandAppliedChanges.push(...narrativeStateChanges);
     }
 
+    // #5：进度审计在上一轮写入的一次性“完成待回报”已经进入本轮 prompt。
+    // 正文生成完即确定性消费；随后本轮审计若又确认新目标完成，会在下方重新写入供下一轮使用。
+    const completedReceiptPath = '系统.扩展.任务追踪.最近完成待回报';
+    const receiptsSeenByNarrator = get(saveDataSnapshotBeforeCommands, completedReceiptPath);
+    if (textContent.trim() && Array.isArray(receiptsSeenByNarrator) && receiptsSeenByNarrator.length) {
+      const currentReceipts = get(saveData, completedReceiptPath);
+      unset(saveData, completedReceiptPath);
+      commandAppliedChanges.push({
+        key: completedReceiptPath,
+        action: 'delete',
+        oldValue: this._summarizeValueForChangeLog(completedReceiptPath, currentReceipts, 'delete'),
+        newValue: undefined,
+      });
+    }
+
     // LLM 指令可直写气血，且 UI 将 0 视为硬死亡；正文未明确写玩家死亡时，
     // 必须把误扣的 0 恢复为濒死/昏迷保底，不能把“昏过去”变成存档死锁。
     const nonfatalRecovery = recoverUnmarkedPlayerZeroHealth(saveData, textContent);
@@ -2357,6 +2411,10 @@ ${step1Text}
         if (auditResult.status === 'completed') {
           const isolatedGoals = get(isolatedSaveData, '系统.扩展.任务追踪.即兴目标');
           if (isolatedGoals !== undefined) set(saveData, '系统.扩展.任务追踪.即兴目标', cloneDeep(isolatedGoals));
+          const isolatedReceipts = get(isolatedSaveData, '系统.扩展.任务追踪.最近完成待回报');
+          if (isolatedReceipts !== undefined) {
+            set(saveData, '系统.扩展.任务追踪.最近完成待回报', cloneDeep(isolatedReceipts));
+          }
           commandAppliedChanges.push(...auditResult.value);
         } else if (auditResult.status === 'timed_out') {
           console.warn(`[进度审计] 超过 ${AUXILIARY_LLM_WAIT_MS}ms，主事务继续；晚到结果已隔离`);
@@ -2536,6 +2594,11 @@ ${step1Text}
 
     const scenarioResult = advanceScenarioRuntime(saveData);
     saveData = scenarioResult.saveData;
+    const runtimeAfterAdvance = (saveData as any)?.世界?.状态?.剧本模组;
+    if (runtimeAfterAdvance?.returnBridge && textContent) {
+      // 桥接合同只消费一次；世界线账本已永久保留玩家的斩线选择。
+      delete runtimeAfterAdvance.returnBridge;
+    }
     scenarioResult.transitions.forEach(transition => {
       changes.push({
         key: '世界.状态.剧本模组',

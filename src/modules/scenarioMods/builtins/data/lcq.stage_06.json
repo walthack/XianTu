@@ -3994,7 +3994,17 @@
         "axisSeq": 207,
         "axisAnchor": "六朝清羽记·#115·第113章·破峒",
         "axisBeat": "鬼巫王试图与龙神合体，反被龙神吞噬，导致龙神失控并毁灭鬼王峒。",
-        "objective": "潜入鬼王峒调查龙神"
+        "objective": "潜入鬼王峒调查龙神",
+        "offscreenResolution": {
+          "id": "offscreen.r2_9.lcq_event_s06_01",
+          "afterStallTurns": 7,
+          "flagKey": "world.r2_9.lcq_event_s06_01.offscreen_resolved",
+          "resolvedEventIds": [
+            "lcq.event.s06_01"
+          ],
+          "worldDelta": "鬼巫王与龙神的合体仍以失败告终并引发吞噬，鬼王峒权力与战场局势随之崩裂。",
+          "evidence": "R2-9 世界引力合同：鬼巫王与龙神合体失败被吞属于不依赖玩家领取任务才会发生的世界事件；仅在该节点已激活且长期停滞时结算。"
+        }
       },
       {
         "id": "lcq.event.s06_02",

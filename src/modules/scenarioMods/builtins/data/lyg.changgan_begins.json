@@ -5098,7 +5098,17 @@
         "axisSeq": 1068,
         "axisAnchor": "六朝燕歌行·#56·胡戏",
         "axisBeat": "程宗扬一行观看泼寒胡戏时撞见杨玉环驾车追逐少年并痛斥胡人，与程宗扬短暂对视，潘金莲提剑警戒。",
-        "objective": "观看泼寒胡戏，留意杨玉环"
+        "objective": "观看泼寒胡戏，留意杨玉环",
+        "offscreenResolution": {
+          "id": "offscreen.r2_9.lyg_event_s03_03",
+          "afterStallTurns": 9,
+          "flagKey": "world.r2_9.lyg_event_s03_03.offscreen_resolved",
+          "resolvedEventIds": [
+            "lyg.event.s03_03"
+          ],
+          "worldDelta": "泼寒胡戏照常举行并演变为杨玉环的街头冲突，长安市井已经留下围观、流言与官面反应。",
+          "evidence": "R2-9 世界引力合同：泼寒胡戏与杨玉环飙车斗殴属于不依赖玩家领取任务才会发生的世界事件；仅在该节点已激活且长期停滞时结算。"
+        }
       },
       {
         "id": "lyg.event.s03_04",

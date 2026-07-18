@@ -4615,7 +4615,17 @@
         "axisSeq": 948,
         "axisAnchor": "六朝燕歌行·#1·退败",
         "axisBeat": "秦桧在永安宫斩刘建首级，吴三桂擒成光并卸其关节，平叛军士气大涨。",
-        "objective": "前往永安宫参与平叛"
+        "objective": "前往永安宫参与平叛",
+        "offscreenResolution": {
+          "id": "offscreen.r2_9.lyg_event_s01_01",
+          "afterStallTurns": 7,
+          "flagKey": "world.r2_9.lyg_event_s01_01.offscreen_resolved",
+          "resolvedEventIds": [
+            "lyg.event.s01_01"
+          ],
+          "worldDelta": "秦桧已斩杀刘建，洛都政变的第一枚棋子落下；你只能承接由此扩散的追捕与朝局震荡。",
+          "evidence": "R2-9 世界引力合同：秦桧斩刘建属于不依赖玩家领取任务才会发生的世界事件；仅在该节点已激活且长期停滞时结算。"
+        }
       },
       {
         "id": "lyg.event.s01_02",
@@ -4654,7 +4664,17 @@
         "axisSeq": 949,
         "axisAnchor": "六朝燕歌行·#1·退败",
         "axisBeat": "贾文和挟持定陶王为人质，与程宗扬、董卓、霍子孟等对峙，最终以五名扈卫代价放行。",
-        "objective": "在洛都救出定陶王"
+        "objective": "在洛都救出定陶王",
+        "offscreenResolution": {
+          "id": "offscreen.r2_9.lyg_event_s01_02",
+          "afterStallTurns": 7,
+          "flagKey": "world.r2_9.lyg_event_s01_02.offscreen_resolved",
+          "resolvedEventIds": [
+            "lyg.event.s01_02"
+          ],
+          "worldDelta": "贾文和已劫持定陶王，帝统争夺进入不可逆的新阶段；各方开始围绕王驾采取行动。",
+          "evidence": "R2-9 世界引力合同：贾文和劫持定陶王属于不依赖玩家领取任务才会发生的世界事件；仅在该节点已激活且长期停滞时结算。"
+        }
       },
       {
         "id": "lyg.event.s01_03",
@@ -4692,7 +4712,17 @@
         "axisSeq": 950,
         "axisAnchor": "六朝燕歌行·#1·退败",
         "axisBeat": "董卓率凉州军挟持定陶王出洛都，程宗扬等五人随行，凉州军士割袍追随。",
-        "objective": "随定陶王队伍出洛都"
+        "objective": "随定陶王队伍出洛都",
+        "offscreenResolution": {
+          "id": "offscreen.r2_9.lyg_event_s01_03",
+          "afterStallTurns": 7,
+          "flagKey": "world.r2_9.lyg_event_s01_03.offscreen_resolved",
+          "resolvedEventIds": [
+            "lyg.event.s01_03"
+          ],
+          "worldDelta": "董卓已经挟定陶王离开洛都，凉州军与朝廷势力的空间位置随之改变。",
+          "evidence": "R2-9 世界引力合同：董卓挟持定陶王出洛都属于不依赖玩家领取任务才会发生的世界事件；仅在该节点已激活且长期停滞时结算。"
+        }
       },
       {
         "id": "lyg.event.s01_04",
@@ -4726,7 +4756,17 @@
         "axisSeq": 951,
         "axisAnchor": "六朝燕歌行·#2·拥立",
         "axisBeat": "吕雉在长秋宫凤辇内与霍子孟对话，宣布退位、处置吕冀等，支持立定陶王。",
-        "objective": "前往长秋宫拜见吕雉"
+        "objective": "前往长秋宫拜见吕雉",
+        "offscreenResolution": {
+          "id": "offscreen.r2_9.lyg_event_s01_04",
+          "afterStallTurns": 8,
+          "flagKey": "world.r2_9.lyg_event_s01_04.offscreen_resolved",
+          "resolvedEventIds": [
+            "lyg.event.s01_04"
+          ],
+          "worldDelta": "霍子孟已经与吕雉接触并交换朝局判断，长秋宫一方不再停在原地等待玩家。",
+          "evidence": "R2-9 世界引力合同：霍子孟见吕雉属于不依赖玩家领取任务才会发生的世界事件；仅在该节点已激活且长期停滞时结算。"
+        }
       },
       {
         "id": "lyg.event.s01_05",
@@ -4759,7 +4799,17 @@
         "axisSeq": 952,
         "axisAnchor": "六朝燕歌行·#2·拥立",
         "axisBeat": "董卓在昭阳宫先帝灵前拥立定陶王为帝，贾文和献计大赦、选材、迁都等。",
-        "objective": "到昭阳宫参与新帝登基"
+        "objective": "到昭阳宫参与新帝登基",
+        "offscreenResolution": {
+          "id": "offscreen.r2_9.lyg_event_s01_05",
+          "afterStallTurns": 8,
+          "flagKey": "world.r2_9.lyg_event_s01_05.offscreen_resolved",
+          "resolvedEventIds": [
+            "lyg.event.s01_05"
+          ],
+          "worldDelta": "董卓已经拥立定陶王为帝，诏令、军心与宫城秩序成为既成事实；玩家仍可选择如何介入新帝朝局。",
+          "evidence": "R2-9 世界引力合同：董卓拥立定陶王为帝属于不依赖玩家领取任务才会发生的世界事件；仅在该节点已激活且长期停滞时结算。"
+        }
       },
       {
         "id": "lyg.event.s01_06",

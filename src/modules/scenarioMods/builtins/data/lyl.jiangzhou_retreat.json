@@ -2844,7 +2844,17 @@
         "axisSeq": 551,
         "axisAnchor": "六朝云龙吟·#1·坠美",
         "axisBeat": "夏用和与秦翰于江州主持决战，宋军大溃，粮尽兵疲，决定退军，秦翰率选锋营断后。",
-        "objective": "前往江州协助撤退"
+        "objective": "前往江州协助撤退",
+        "offscreenResolution": {
+          "id": "offscreen.r2_9.lyl_event_s01_01",
+          "afterStallTurns": 7,
+          "flagKey": "world.r2_9.lyl_event_s01_01.offscreen_resolved",
+          "resolvedEventIds": [
+            "lyl.event.s01_01"
+          ],
+          "worldDelta": "江州宋军主力已经溃退，残军、伤员与失守道路涌向后方；战局不会因玩家缺席冻结。",
+          "evidence": "R2-9 世界引力合同：江州宋军大溃与退军属于不依赖玩家领取任务才会发生的世界事件；仅在该节点已激活且长期停滞时结算。"
+        }
       },
       {
         "id": "lyl.event.s01_02",
@@ -2914,7 +2924,17 @@
         "axisSeq": 553,
         "axisAnchor": "六朝云龙吟·#2·灭族",
         "axisBeat": "王团练手下乡兵屠荆溪村寨、凌辱妇女，程宗扬等人赶到救援，斩杀乡兵。",
-        "objective": "赶往荆溪村寨救援"
+        "objective": "赶往荆溪村寨救援",
+        "offscreenResolution": {
+          "id": "offscreen.r2_9.lyl_event_s01_03",
+          "afterStallTurns": 8,
+          "flagKey": "world.r2_9.lyl_event_s01_03.offscreen_resolved",
+          "resolvedEventIds": [
+            "lyl.event.s01_03"
+          ],
+          "worldDelta": "王团练部众已经袭击荆溪村寨，村民伤亡与逃难成为玩家赶到后必须面对的后果。",
+          "evidence": "R2-9 世界引力合同：荆溪村寨被屠属于不依赖玩家领取任务才会发生的世界事件；仅在该节点已激活且长期停滞时结算。"
+        }
       },
       {
         "id": "lyl.event.s01_04",

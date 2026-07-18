@@ -77,3 +77,22 @@ test('preflight consumes only explicit source-verified mastered scenario skills'
     'a mastered canon skill must still match the judgement kind',
   );
 });
+
+test('explicit matching talent affects situational judgement but never grants an implicit bonus', async () => {
+  const { buildLocalJudgementPreflight } = await loadTs('../src/utils/judgementPreflight.ts');
+  const save = {
+    角色: {
+      身份: {
+        先天六司: {}, 后天六司: {},
+        天赋: [{ name: '听风辨位', description: '擅长感应、追踪与侦察细微声息' }],
+      },
+      位置: { 灵气浓度: 50 },
+    },
+  };
+  const named = buildLocalJudgementPreflight('我运用听风辨位探查暗门', save, 1);
+  assert.deepEqual(named.factors.filter(factor => factor.source === 'talent'), [
+    { label: '天赋·听风辨位', value: 4, source: 'talent' },
+  ]);
+  const unnamed = buildLocalJudgementPreflight('我探查暗门', save, 1);
+  assert.equal(unnamed.factors.some(factor => factor.source === 'talent'), false);
+});

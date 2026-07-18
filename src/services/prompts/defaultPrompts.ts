@@ -22,6 +22,7 @@ import {
   COMMAND_PATH_CONSTRUCTION_RULES,
   TECHNIQUE_SYSTEM_RULES,
   PLAYER_AUTONOMY_RULES,
+  R2_9_NARRATIVE_GUARD_RULES,
   MODERN_KNOWLEDGE_BOUNDARY_RULES,
   RATIONALITY_AUDIT_RULES,
   PROFESSION_MASTERY_RULES,
@@ -111,7 +112,8 @@ const BUSINESS_RULES = [
   TECHNIQUE_SYSTEM_RULES,
   COMBAT_ALCHEMY_RISK_RULES,
   COMBAT_TURN_BASED_RULES,
-  PLAYER_AUTONOMY_RULES
+  PLAYER_AUTONOMY_RULES,
+  R2_9_NARRATIVE_GUARD_RULES
 ].join('\n\n');
 
 // 扩展业务规则（可选，用户可自定义开启）
@@ -427,6 +429,8 @@ export function getSystemPrompts(): Record<string, PromptDefinition> {
 4. **叙事风格**：多描写少总结，结尾留钩子，承接上文情节
 5. **格式标记**：合理使用【】环境、\`心理\`、""对话、〔〕判定
 6. **画面感配方（最低标准）**：至少1个可见动作细节+1轮"对话"或NPC内心\`...\`；【环境】仅在场景变化/信息必要时写1-2句（动作细节必须融入叙事，禁止写成“动作细节一/二”等编号）
+
+${R2_9_NARRATIVE_GUARD_RULES}
 
 ## ⚔️ 战斗场景特别要求
 - 本轮只推进一次攻防交换、只做一次判定，给出结果后立即停下等玩家；禁止一轮内连续多次攻防或替玩家打完整场战斗

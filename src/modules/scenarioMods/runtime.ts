@@ -3,6 +3,7 @@ import type { SaveData } from '@/types/game';
 import type { ScenarioCondition, ScenarioFlagValue, ScenarioMod, ScenarioModChapter, ScenarioModEvent } from './schema';
 import { recordOffscreenDivergence, type ScenarioDivergence } from './divergenceLedger';
 import { getCanonRailOrder, getCanonRailProfile, isCanonRailChapter } from './canonRail';
+import { updateDivergenceControl, type DivergenceSignal, type WorldPushState } from './divergenceControl';
 
 
 export interface ScenarioProgressState {
@@ -46,6 +47,19 @@ export interface RuntimeState extends ScenarioProgressState {
   chronicle?: ScenarioChronicleEntry[];
   /** 旧档 reconcile 版本戳：与 registry 版本一致则跳过（正典更新后旧档第一回合自动对齐） */
   reconciledRegistryVersion?: string;
+  /** R2-9 可复算偏离信号；只驱动提示/UI，不直接裁定剧情事实。 */
+  divergenceSignal?: DivergenceSignal;
+  /** 世界每 2-3 回合取得一次行动权；失败/低张力可加权。 */
+  worldTurn?: number;
+  worldPush?: WorldPushState;
+  lastWorldPushJudgementId?: string;
+  /** 玩家主动斩线后的单次桥接合同。 */
+  returnBridge?: {
+    anchorEventId: string;
+    anchorObjective: string;
+    branchSummary: string;
+    requestedAtTurn: number;
+  };
 }
 
 function readPath(root: unknown, path: string[]): unknown {
@@ -153,6 +167,9 @@ function resolveOffscreenWorldEvents(runtime: RuntimeState, transitions: Scenari
     if ((runtime.stallTurns || 0) < resolution.afterStallTurns || runtime.flags[resolution.flagKey] === true) continue;
     const knownIds = resolution.resolvedEventIds.filter(id => runtime.events.some(event => event.id === id));
     if (!knownIds.length) continue;
+    // 数据增量会把一个关卡拆成多个场外合同；只允许当前已经激活的世界事件启动结算，
+    // 否则同一 stall 阈值会把整关未来事件一次烧完。多事件战争合同仍由首个活跃节点启动整组。
+    if (!knownIds.some(id => runtime.activeEventIds.includes(id))) continue;
     runtime.flags[resolution.flagKey] = true;
     runtime.offscreenResolvedEventIds = [...new Set([...(runtime.offscreenResolvedEventIds || []), ...knownIds])];
     runtime.activeEventIds = runtime.activeEventIds.filter(id => !knownIds.includes(id));
@@ -540,6 +557,7 @@ export function advanceScenarioRuntime(saveData: SaveData): {
     runtime.steeringCooldown = steeringCooldown - 1;
   }
 
+  updateDivergenceControl(next, progressed);
   recordChronicleTransitions(runtime, transitions);
 
   return { saveData: next, transitions };

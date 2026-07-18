@@ -2353,7 +2353,17 @@
           "阿伽门侬",
           "焦土"
         ],
-        "objective": "在左武军战场，观察王哲的行动"
+        "objective": "在左武军战场，观察王哲的行动",
+        "offscreenResolution": {
+          "id": "offscreen.r2_9.lcq_event_s02_02",
+          "afterStallTurns": 7,
+          "flagKey": "world.r2_9.lcq_event_s02_02.offscreen_resolved",
+          "resolvedEventIds": [
+            "lcq.event.s02_02"
+          ],
+          "worldDelta": "左武军与罗马军团的战事自行爆发，前线死伤与溃兵已经改变五原周边局势。",
+          "evidence": "R2-9 世界引力合同：左武军与罗马军团大战属于不依赖玩家领取任务才会发生的世界事件；仅在该节点已激活且长期停滞时结算。"
+        }
       },
       {
         "id": "lcq.event.s02_03",
@@ -2382,7 +2392,17 @@
         "axisSeq": 22,
         "axisAnchor": "六朝清羽记·#11·第10章·军团",
         "axisBeat": "天武营秦军与罗马第十二军团交战，弩手远程杀伤敌军，但罗马军团投掷标枪重创秦军方阵，短兵相接后秦军因罗马右刺战术而溃散。",
-        "objective": "在秦军与罗马军的交战中求生并观察战局"
+        "objective": "在秦军与罗马军的交战中求生并观察战局",
+        "offscreenResolution": {
+          "id": "offscreen.r2_9.lcq_event_s02_03",
+          "afterStallTurns": 7,
+          "flagKey": "world.r2_9.lcq_event_s02_03.offscreen_resolved",
+          "resolvedEventIds": [
+            "lcq.event.s02_03"
+          ],
+          "worldDelta": "秦军随后卷入罗马军团战事，军情、俘虏与道路封锁成为玩家缺席后的既成事实。",
+          "evidence": "R2-9 世界引力合同：秦军与罗马军团交战属于不依赖玩家领取任务才会发生的世界事件；仅在该节点已激活且长期停滞时结算。"
+        }
       },
       {
         "id": "lcq.event.s02_04",

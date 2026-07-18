@@ -106,6 +106,29 @@ test('任意剧本可用事件级 offscreenResolution 数据合同结算世界�
   assert.ok(transitions.some(item => item.id === 'offscreen.demo.war'));
 });
 
+test('场外合同只能从当前已激活节点启动，不能同阈值烧掉未来事件', async () => {
+  const { advanceScenarioRuntime, OFFSCREEN_WORLD_EVENT_STALL_THRESHOLD } = await modPromise;
+  const save = stalledSave(undefined);
+  const rt = save.世界.状态.剧本模组;
+  rt.stallTurns = OFFSCREEN_WORLD_EVENT_STALL_THRESHOLD;
+  rt.events.push({
+    id: 'future.event', name: '未来朝局', critical: true,
+    offscreenResolution: {
+      id: 'offscreen.future.event',
+      afterStallTurns: 2,
+      flagKey: 'world.future.offscreen',
+      resolvedEventIds: ['future.event'],
+      worldDelta: '未来朝局自行结算。',
+      evidence: '测试合同',
+    },
+  });
+  const { saveData, transitions } = advanceScenarioRuntime(save);
+  const after = saveData.世界.状态.剧本模组;
+  assert.equal(after.flags['world.future.offscreen'], undefined);
+  assert.equal(after.offscreenResolvedEventIds?.includes('future.event') || false, false);
+  assert.equal(transitions.some(item => item.id === 'offscreen.future.event'), false);
+});
+
 test('真实 stage_11 缺席结算后可进入下一关，不遗留旧战场锚点', async () => {
   const { advanceScenarioRuntime, OFFSCREEN_WORLD_EVENT_STALL_THRESHOLD } = await modPromise;
   const stage = JSON.parse(await readFile(stage11Url, 'utf8'));

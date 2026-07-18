@@ -18,7 +18,7 @@ export type JudgementCanonPolicy = 'free' | 'route_process_only' | 'if_only';
 export interface JudgementFactor {
   label: string;
   value: number;
-  source: 'attribute' | 'realm' | 'skill' | 'item' | 'condition' | 'environment' | 'ally';
+  source: 'attribute' | 'realm' | 'skill' | 'talent' | 'item' | 'condition' | 'environment' | 'ally';
 }
 
 export interface JudgementProposal {
@@ -118,7 +118,7 @@ function normalizeFactor(raw: unknown): JudgementFactor | null {
   const value = Number(factor.value);
   const source = factor.source;
   if (!label || !Number.isFinite(value)) return null;
-  if (!['attribute', 'realm', 'skill', 'item', 'condition', 'environment', 'ally'].includes(String(source))) return null;
+  if (!['attribute', 'realm', 'skill', 'talent', 'item', 'condition', 'environment', 'ally'].includes(String(source))) return null;
   return { label, value, source: source as JudgementFactor['source'] };
 }
 

@@ -2011,7 +2011,17 @@
         "axisSeq": 2,
         "axisAnchor": "六朝清羽记·#1·第1集·太乙真宗",
         "axisBeat": "段强在穿越后的异世界中遭遇半兽人袭击而死亡。",
-        "objective": "避开半兽人袭击"
+        "objective": "避开半兽人袭击",
+        "offscreenResolution": {
+          "id": "offscreen.r2_9.lcq_event_s01_02",
+          "afterStallTurns": 8,
+          "flagKey": "world.r2_9.lcq_event_s01_02.offscreen_resolved",
+          "resolvedEventIds": [
+            "lcq.event.s01_02"
+          ],
+          "worldDelta": "段强仍在草原遭半兽人箭袭身亡；这场袭击没有因你缺席而停下，幸存者与战场痕迹成为后来者能接触到的后果。",
+          "evidence": "R2-9 世界引力合同：段强被射杀属于不依赖玩家领取任务才会发生的世界事件；仅在该节点已激活且长期停滞时结算。"
+        }
       },
       {
         "id": "lcq.event.s01_03",
@@ -2079,7 +2089,17 @@
         "axisSeq": 8,
         "axisAnchor": "六朝清羽记·#5·第4章·生死",
         "axisBeat": "程宗扬被半兽人围攻，卓云君施展烈火法术救下他和月霜，太乙真宗四位教御及其弟子现身并全歼兽蛮武士。",
-        "objective": "加入太乙真宗阵营"
+        "objective": "加入太乙真宗阵营",
+        "offscreenResolution": {
+          "id": "offscreen.r2_9.lcq_event_s01_04",
+          "afterStallTurns": 8,
+          "flagKey": "world.r2_9.lcq_event_s01_04.offscreen_resolved",
+          "resolvedEventIds": [
+            "lcq.event.s01_04"
+          ],
+          "worldDelta": "太乙真宗已介入草原战局并带走伤员；你错过了最初接触，只能从留下的人证与去向继续追赶。",
+          "evidence": "R2-9 世界引力合同：太乙真宗介入属于不依赖玩家领取任务才会发生的世界事件；仅在该节点已激活且长期停滞时结算。"
+        }
       },
       {
         "id": "lcq.event.s01_05",

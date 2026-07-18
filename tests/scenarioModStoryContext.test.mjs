@@ -103,6 +103,22 @@ test('story prompt includes current objectives and excludes future plot content'
   assert.match(prompt, /不得为其创建或更新 社交\.关系、身份、属性、灵根、技能、背包等持久状态/);
 });
 
+test('a grounded completed improvised goal is injected as a one-shot narrative reward obligation', async () => {
+  const { buildScenarioStoryPrompt } = await loadTs('../src/modules/scenarioMods/storyContext.ts');
+  const save = await buildStorySave();
+  save.系统.扩展.任务追踪 = {
+    即兴目标: [],
+    最近完成待回报: [{ 标题: '护送谢艺前往草庐', 证据: '谢艺已经安置进草庐' }],
+  };
+
+  const prompt = buildScenarioStoryPrompt(save);
+
+  assert.match(prompt, /刚完成的即兴目标·本轮必须叙事回报/);
+  assert.match(prompt, /护送谢艺前往草庐/);
+  assert.match(prompt, /情报、关系变化、财货、声望或新机会至少一种/);
+  assert.match(prompt, /不得凭空发放超额奖励/);
+});
+
 test('free roaming injects current region and only recalls introduced canon residents', async () => {
   const { buildScenarioStoryPrompt } = await loadTs('../src/modules/scenarioMods/storyContext.ts');
   const save = await buildStorySave();
@@ -558,6 +574,33 @@ test('focused characters retain registry speech and cannot inherit a relative or
   assert.match(prompt, /宗派、道号、自称和教内职位同样是逐人事实/);
   assert.match(prompt, /不得因人物会武、气质近道门、亲属\/师徒属于某派/);
   assert.match(prompt, /太乙真宗的「掌教／教御／弟子」不是泛称/);
+});
+
+test('focused high-intelligence characters receive a named behavior contract instead of adjective-only personality', async () => {
+  const { buildScenarioStoryPrompt } = await loadTs('../src/modules/scenarioMods/storyContext.ts');
+  const save = await buildStorySave();
+  const runtime = save.世界.状态.剧本模组;
+  const character = runtime.canon.characters.find(item => item.name === '程宗扬');
+  character.profile.personality = ['智商天花板', '善留后手'];
+
+  const prompt = buildScenarioStoryPrompt(save, '听程宗扬分析敌情');
+
+  assert.match(prompt, /程宗扬·高智行为硬合同/);
+  assert.match(prompt, /必须由程宗扬本人先直接说出或实施至少一个具体方案/);
+  assert.match(prompt, /不得只报告情报、点头领命、等待主角追问/);
+});
+
+test('小紫与贾文和纵切使用阶段化角色表演卡，而非共用性格形容词', async () => {
+  const { formatVoiceCard } = await loadTs('../src/modules/scenarioMods/voiceCards.ts');
+  const early = formatVoiceCard('小紫', { modId: 'lcq.stage_02' });
+  const late = formatVoiceCard('小紫', { modId: 'lyg.dingtao_beijing' });
+  const jia = formatVoiceCard('贾文和', { modId: 'lyg.dingtao_beijing' });
+  assert.match(early, /早期伪装期/);
+  assert.match(early, /程头儿/);
+  assert.match(early, /不得提前演成公开全知/);
+  assert.match(late, /已经落子的先手/);
+  assert.match(jia, /先报最坏后果/);
+  assert.match(jia, /代价、退出条件或备用手段/);
 });
 
 test('load-bearing character protection and stall steering appear in story prompt', async () => {

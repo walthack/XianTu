@@ -5027,7 +5027,17 @@
         "axisSeq": 894,
         "axisAnchor": "六朝云龙吟·#282·矫诏",
         "axisBeat": "刘骜驾崩的消息传开，吕冀主持丧礼，刘建假传诏书劫持吕冀，中行说也参与进来，乱军攻入宫中。",
-        "objective": "前往洛都宫中，探明局势"
+        "objective": "前往洛都宫中，探明局势",
+        "offscreenResolution": {
+          "id": "offscreen.r2_9.lyl_event_s06_01",
+          "afterStallTurns": 7,
+          "flagKey": "world.r2_9.lyl_event_s06_01.offscreen_resolved",
+          "resolvedEventIds": [
+            "lyl.event.s06_01"
+          ],
+          "worldDelta": "天子暴毙的消息已经传遍洛都，宫门、军营与豪门同时开始站队。",
+          "evidence": "R2-9 世界引力合同：天子暴毙消息传遍洛都属于不依赖玩家领取任务才会发生的世界事件；仅在该节点已激活且长期停滞时结算。"
+        }
       },
       {
         "id": "lyl.event.s06_01b",
@@ -5128,7 +5138,17 @@
         "axisSeq": 896,
         "axisAnchor": "六朝云龙吟·#284·乱军",
         "axisBeat": "刘建带中垒军和虎贲军攻下南宫、夺走武库，把北宫团团围住。",
-        "objective": "前往南宫武库，应对危机"
+        "objective": "前往南宫武库，应对危机",
+        "offscreenResolution": {
+          "id": "offscreen.r2_9.lyl_event_s06_03",
+          "afterStallTurns": 8,
+          "flagKey": "world.r2_9.lyl_event_s06_03.offscreen_resolved",
+          "resolvedEventIds": [
+            "lyl.event.s06_03"
+          ],
+          "worldDelta": "刘建一方已经攻占南宫与武库，兵械和宫城通道易手，长秋宫危机随之升级。",
+          "evidence": "R2-9 世界引力合同：刘建攻占南宫与武库属于不依赖玩家领取任务才会发生的世界事件；仅在该节点已激活且长期停滞时结算。"
+        }
       },
       {
         "id": "lyl.event.s06_04",
@@ -5159,7 +5179,17 @@
         "axisSeq": 897,
         "axisAnchor": "六朝云龙吟·#285·空饷",
         "axisBeat": "蔡敬仲带内侍和期门武士死守长秋宫，多次打退中垒军的进攻。",
-        "objective": "守卫长秋宫，抵御进攻"
+        "objective": "守卫长秋宫，抵御进攻",
+        "offscreenResolution": {
+          "id": "offscreen.r2_9.lyl_event_s06_04",
+          "afterStallTurns": 8,
+          "flagKey": "world.r2_9.lyl_event_s06_04.offscreen_resolved",
+          "resolvedEventIds": [
+            "lyl.event.s06_04"
+          ],
+          "worldDelta": "长秋宫守卫战已经爆发，宫门攻防与伤亡迫使各方公开表态；玩家可介入余波但不能倒带战事。",
+          "evidence": "R2-9 世界引力合同：长秋宫守卫战属于不依赖玩家领取任务才会发生的世界事件；仅在该节点已激活且长期停滞时结算。"
+        }
       },
       {
         "id": "lyl.event.s06_05",
@@ -5224,7 +5254,17 @@
         "axisSeq": 899,
         "axisAnchor": "六朝云龙吟·#288·阻境",
         "axisBeat": "吕奉先单枪匹马杀出斩杀越骑军司马，打退刘建，双方进入僵持。",
-        "objective": "前往南宫前线，支援吕奉先"
+        "objective": "前往南宫前线，支援吕奉先",
+        "offscreenResolution": {
+          "id": "offscreen.r2_9.lyl_event_s06_06",
+          "afterStallTurns": 9,
+          "flagKey": "world.r2_9.lyl_event_s06_06.offscreen_resolved",
+          "resolvedEventIds": [
+            "lyl.event.s06_06"
+          ],
+          "worldDelta": "吕奉先已经单骑破阵，南宫战线与双方士气被这一行动改写；玩家面对的是变化后的战场。",
+          "evidence": "R2-9 世界引力合同：吕奉先单骑破阵属于不依赖玩家领取任务才会发生的世界事件；仅在该节点已激活且长期停滞时结算。"
+        }
       }
     ],
     "chapters": [

@@ -95,6 +95,20 @@ function scenarioSkillFactors(kind: JudgementKind, actionText: string, saveData:
   return candidates.sort((a, b) => b.value - a.value).slice(0, 1);
 }
 
+/** 天赋只在玩家本轮点名且语义匹配时提供小幅情境因子；不直接改面板数值。 */
+function explicitTalentFactors(kind: JudgementKind, actionText: string, saveData: any) {
+  const raw = saveData?.角色?.身份?.天赋;
+  if (!Array.isArray(raw)) return [];
+  return raw.flatMap((entry: any) => {
+    const name = typeof entry === 'string' ? entry.trim() : String(entry?.name || entry?.名称 || '').trim();
+    const description = typeof entry === 'object'
+      ? String(entry?.description || entry?.描述 || entry?.effect || entry?.效果 || '')
+      : '';
+    if (name.length < 2 || !actionText.includes(name) || !SKILL_KIND_HINTS[kind].test(`${name}；${description}`)) return [];
+    return [{ label: `天赋·${name}`, value: 4, source: 'talent' as const }];
+  }).slice(0, 1);
+}
+
 function difficultyFor(kind: JudgementKind): CreateJudgementProposalInput['difficulty'] {
   if (['combat', 'escape', 'stealth'].includes(kind)) return { band: 'hard', value: 20 };
   if (['cultivate', 'craft'].includes(kind)) return { band: 'severe', value: 25 };
@@ -146,6 +160,7 @@ export function buildLocalJudgementPreflight(
     factors: [
       ...stateFactors(kind, saveData),
       ...scenarioSkillFactors(kind, normalized, saveData),
+      ...explicitTalentFactors(kind, normalized, saveData),
       { label: '幸运', value: data.幸运点, source: 'condition' },
       environmentFactorFor(kind, data),
     ],
