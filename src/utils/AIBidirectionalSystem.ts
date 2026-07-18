@@ -24,7 +24,7 @@ import { validateAndRepairNpcProfile } from '@/utils/dataValidation';
 import { stripNsfwContent } from '@/utils/prompts/definitions/dataDefinitions';
 import { isSaveDataV3, migrateSaveDataToLatest } from './saveMigration';
 import { parseJsonSmart, stripModelThinking } from '@/utils/jsonExtract';
-import { sanitizePersistedMemoryEntry } from '@/utils/memorySanitizer';
+import { composeShortTermMemoryEntry, sanitizePersistedMemoryEntry } from '@/utils/memorySanitizer';
 import type { APIUsageType } from '@/stores/apiManagementStore';
 import { buildScenarioCanonPrompt } from '@/modules/scenarioMods/canonGuard';
 import { advanceScenarioRuntime, STEERING_DIVERGENCE_COOLDOWN } from '@/modules/scenarioMods/runtime';
@@ -2050,10 +2050,14 @@ ${step1Text}
       }
 
       if (behavior.appendShortTermMemoryFromText) {
-        if (!(saveData as any).社交) (saveData as any).社交 = {};
-        if (!(saveData as any).社交.记忆) (saveData as any).社交.记忆 = { 短期记忆: [], 中期记忆: [], 长期记忆: [], 隐式中期记忆: [] };
-        if (!Array.isArray((saveData as any).社交.记忆.短期记忆)) (saveData as any).社交.记忆.短期记忆 = [];
-        (saveData as any).社交.记忆.短期记忆.push(`${timePrefix}${textContent}`);
+        // #11:逐轮正文入库统一过清洗(剥 JSON 壳/思维链,防双时间戳),脏文本不落库
+        const shortMemoryEntry = composeShortTermMemoryEntry(timePrefix, textContent);
+        if (shortMemoryEntry) {
+          if (!(saveData as any).社交) (saveData as any).社交 = {};
+          if (!(saveData as any).社交.记忆) (saveData as any).社交.记忆 = { 短期记忆: [], 中期记忆: [], 长期记忆: [], 隐式中期记忆: [] };
+          if (!Array.isArray((saveData as any).社交.记忆.短期记忆)) (saveData as any).社交.记忆.短期记忆 = [];
+          (saveData as any).社交.记忆.短期记忆.push(shortMemoryEntry);
+        }
       }
     }
 

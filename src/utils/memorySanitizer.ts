@@ -32,6 +32,19 @@ export function sanitizePersistedMemoryEntry(value: unknown): string {
   return cleaned;
 }
 
+const TIME_PREFIX_RE = /^【(?:仙道|仙历|未知时间)/;
+
+/**
+ * 逐轮正文写入短期记忆的统一入口：先过持久化清洗（剥思维链/JSON 壳/围栏），
+ * 再拼时间前缀；清洗后的文本若自带时间前缀则不重复叠加（防【10:30】【09:45】双戳）。
+ * 返回空串表示该条不应入库。（内测台账 #11：逐轮路径曾绕过清洗落入 {"text": 原壳）
+ */
+export function composeShortTermMemoryEntry(timePrefix: string, rawText: unknown): string {
+  const cleaned = sanitizePersistedMemoryEntry(rawText);
+  if (!cleaned) return '';
+  return TIME_PREFIX_RE.test(cleaned) ? cleaned : `${timePrefix}${cleaned}`;
+}
+
 export function sanitizePersistedMemoryArray(value: unknown): string[] {
   if (!Array.isArray(value)) {
     const single = sanitizePersistedMemoryEntry(value);

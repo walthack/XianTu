@@ -30,7 +30,7 @@ import { isSaveDataV3, migrateSaveDataToLatest } from '@/utils/saveMigration';
 import { normalizeInventoryCurrencies } from '@/utils/currencySystem';
 import { detectPlayerSectLeadership } from '@/utils/sectLeadershipUtils';
 import { recoverUnmarkedPlayerZeroHealth } from '@/utils/playerVitalGuard';
-import { sanitizePersistedMemoryArray } from '@/utils/memorySanitizer';
+import { composeShortTermMemoryEntry, sanitizePersistedMemoryArray } from '@/utils/memorySanitizer';
 
 function buildTechniqueProgress(inventory: Inventory | null) {
   const progress: Record<string, { 熟练度: number; 已解锁技能: string[] }> = {};
@@ -947,8 +947,9 @@ export const useGameStateStore = defineStore('gameState', {
         ? `【仙道${gameTime.年}年${gameTime.月}月${gameTime.日}日 ${String(gameTime.小时).padStart(2, '0')}:${String(minutes).padStart(2, '0')}】`
         : '【未知时间】';
 
-      const hasTimePrefix = content.startsWith('【仙道') || content.startsWith('【未知时间】') || content.startsWith('【仙历');
-      const finalContent = hasTimePrefix ? content : `${timePrefix}${content}`;
+      // #11:入库统一过清洗(剥 JSON 壳/思维链,防双时间戳),脏文本不落库
+      const finalContent = composeShortTermMemoryEntry(timePrefix, content);
+      if (!finalContent) return;
 
       // 与 AIBidirectionalSystem / 主面板显示保持一致：使用 push，最新的在末尾
       this.memory.短期记忆.push(finalContent);
