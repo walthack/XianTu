@@ -30,22 +30,33 @@ function gender(value?: string): '男' | '女' | '其他' {
   return '其他';
 }
 
-// mod canon 不含年龄字段，按境界估龄（修士长寿）：境界给年龄区间，name-hash 抖动避免同档雷同，
-// role 关键词（老祖/弟子等）再微调。出生年由调用方用「当前游戏年 - 估龄」反推（见 createNpcProfile）。
+// mod canon 不含年龄字段，按境界估龄：六朝是寿命压缩的低武世界（寿元上限约 85-130，境界≠长寿），
+// 区间取人间尺度；name-hash 抖动避免同档雷同。孩童/少年 role 关键词给绝对年龄段、优先于境界区间
+// （幼帝不因高境界变老，内测台账 #6/#7）。出生年由调用方用「当前游戏年 - 估龄」反推（见 createNpcProfile）。
 const REALM_AGE_RANGE: Record<string, [number, number]> = {
-  凡人: [16, 35], 练气: [18, 45], 筑基: [35, 90], 金丹: [70, 180],
-  元婴: [150, 350], 化神: [300, 600], 炼虚: [500, 900], 合体: [800, 1500], 渡劫: [1500, 3000],
+  凡人: [16, 45], 练气: [18, 50], 筑基: [25, 60], 金丹: [30, 70],
+  元婴: [40, 80], 化神: [50, 90], 炼虚: [60, 95], 合体: [65, 95], 渡劫: [70, 95],
 };
-function estimateNpcAge(character: ScenarioModCharacter): number {
-  const [lo, hi] = REALM_AGE_RANGE[character.realm || ''] || [18, 50];
+// 与投影默认 属性.寿元上限:100 对齐；估龄恒低于寿元上限，避免"年龄>寿元"的自相矛盾卡片。
+const NPC_LIFESPAN_CAP = 100;
+// 绝对年龄段（命中即返回，不受境界地板影响）。关键词取窄词避免误伤（"幼妹"是辈分不是孩童）。
+const ABSOLUTE_AGE_BANDS: Array<[RegExp, [number, number]]> = [
+  [/幼帝|幼子|幼女|幼童|孩童|婴孩|稚童|年幼/, [4, 12]],
+  [/少年|少女|童子|学徒/, [13, 18]],
+];
+export function estimateNpcAge(character: ScenarioModCharacter): number {
   const key = character.id || character.name || '';
   let h = 0;
   for (let i = 0; i < key.length; i++) h = (h * 31 + key.charCodeAt(i)) >>> 0;
-  let age = lo + (h % (hi - lo + 1));
   const role = `${character.role || ''}${character.profile?.origin || ''}`;
+  for (const [pattern, [bandLo, bandHi]] of ABSOLUTE_AGE_BANDS) {
+    if (pattern.test(role)) return bandLo + (h % (bandHi - bandLo + 1));
+  }
+  const [lo, hi] = REALM_AGE_RANGE[character.realm || ''] || [18, 50];
+  let age = lo + (h % (hi - lo + 1));
   if (/老祖|祖师|太上|前辈|老者|老妪|老怪|宿老/.test(role)) age = Math.round((age + hi) / 2);
-  if (/弟子|少年|少女|童|幼|婴|孩|侍女|丫鬟|学徒/.test(role)) age = Math.max(lo, Math.round(age * 0.6));
-  return age;
+  if (/弟子|侍女|丫鬟/.test(role)) age = Math.max(16, Math.round(age * 0.6));
+  return Math.min(age, NPC_LIFESPAN_CAP - 5);
 }
 
 function itemType(type: ScenarioModItem['type']): '装备' | '丹药' | '材料' | '其他' {
