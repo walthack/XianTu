@@ -13,6 +13,8 @@ import {
   applyNpcDecisionEffects,
   applyNpcDecisionActorState,
   decideNpcActions,
+  npcDecisionConfigHash,
+  selectVisibleNpcDecisionIds,
   type NpcDecisionReceipt,
 } from './npcDecisionCore';
 import { recordOffscreenDivergence, type ScenarioDivergence } from './divergenceLedger';
@@ -69,6 +71,7 @@ export interface ScenarioActorEngineState {
   lastHandledWorldPushTurn?: number;
   /** R2-10B 确定性人物决策；候选评分回执可重放、可审计。 */
   decisionInputHash?: string;
+  decisionConfigHash?: string;
   decisions?: NpcDecisionReceipt[];
   visibleDecisionIds?: string[];
   situationValues?: Record<string, number>;
@@ -132,6 +135,10 @@ function findOpportunity(event: ScenarioModEvent | undefined, opportunityId: str
   return event.worldActor.opportunities.find(item => item.id === opportunityId);
 }
 
+function settledTurn(runtime: RuntimeState): number {
+  return Math.max(0, (Number(runtime.worldTurn) || 0) - 1);
+}
+
 function syncActorEngine(runtime: RuntimeState): void {
   const state = ensureActorEngine(runtime);
   const anchor = getNarrativeAnchorEvent(runtime);
@@ -151,7 +158,7 @@ function syncActorEngine(runtime: RuntimeState): void {
           title: `世界已推进：${previousAnchor?.name || state.anchorEventId}`,
           detail: '该承重拍由世界场外推进；未伪记为玩家亲历，介入机会均已关闭且未授予权限。',
           outcome: 'offscreen',
-          resolvedAtTurn: Math.max(0, Number(runtime.worldTurn) || 0),
+          resolvedAtTurn: settledTurn(runtime),
         });
       }
     }
@@ -168,7 +175,7 @@ function syncActorEngine(runtime: RuntimeState): void {
             ? `你亲历完成当前承重拍，获得行为权限：${opportunity.rewardLabel}`
             : '该机会随世界场外推进而关闭；未伪记为玩家亲历，也未授予权限。',
           outcome: participated ? 'participated' : 'offscreen',
-          resolvedAtTurn: Math.max(0, Number(runtime.worldTurn) || 0),
+          resolvedAtTurn: settledTurn(runtime),
         });
       }
       if (participated && !state.entitlements.some(item => item.key === opportunity.rewardKey)) {
@@ -176,7 +183,7 @@ function syncActorEngine(runtime: RuntimeState): void {
           key: opportunity.rewardKey,
           label: opportunity.rewardLabel,
           sourceOpportunityId: opportunity.id,
-          earnedAtTurn: Math.max(0, Number(runtime.worldTurn) || 0),
+          earnedAtTurn: settledTurn(runtime),
         });
       }
     }
@@ -188,6 +195,7 @@ function syncActorEngine(runtime: RuntimeState): void {
     state.trackedAtTurn = undefined;
     state.lastHandledWorldPushTurn = undefined;
     state.decisionInputHash = undefined;
+    state.decisionConfigHash = undefined;
     state.decisions = undefined;
     state.visibleDecisionIds = undefined;
     state.situationValues = undefined;
@@ -197,6 +205,22 @@ function syncActorEngine(runtime: RuntimeState): void {
 
   const contract = anchor?.worldActor;
   if (!anchor || !contract) return;
+  const configHash = contract.decisionCore ? npcDecisionConfigHash(contract.decisionCore) : undefined;
+  if (
+    state.anchorEventId === anchor.id
+    && contract.decisionCore
+    && state.decisionConfigHash !== configHash
+  ) {
+    state.npcStates = structuredClone(contract.decisionCore.actors);
+    state.situationValues = { ...contract.decisionCore.situation.initialValues };
+    const round = decideNpcActions(contract.decisionCore, state.situationValues, state.npcStates);
+    state.decisionInputHash = round.inputHash;
+    state.decisionConfigHash = configHash;
+    state.decisions = round.decisions;
+    state.visibleDecisionIds = selectVisibleNpcDecisionIds(round.decisions, contract.decisionCore.maxVisibleActions);
+    state.decisionRound = 0;
+    state.lastHandledWorldPushTurn = undefined;
+  }
   if (state.anchorEventId !== anchor.id) {
     state.anchorEventId = anchor.id;
     state.pressureId = contract.pressure.id;
@@ -206,8 +230,9 @@ function syncActorEngine(runtime: RuntimeState): void {
       state.npcStates = structuredClone(contract.decisionCore.actors);
       const round = decideNpcActions(contract.decisionCore, contract.decisionCore.situation.initialValues, state.npcStates);
       state.decisionInputHash = round.inputHash;
+      state.decisionConfigHash = configHash;
       state.decisions = round.decisions;
-      state.visibleDecisionIds = round.decisions.slice(0, contract.decisionCore.maxVisibleActions).map(item => item.id);
+      state.visibleDecisionIds = selectVisibleNpcDecisionIds(round.decisions, contract.decisionCore.maxVisibleActions);
       state.situationValues = { ...contract.decisionCore.situation.initialValues };
       state.decisionRound = 0;
       state.activeAgendaId = undefined;
@@ -223,7 +248,7 @@ function syncActorEngine(runtime: RuntimeState): void {
     const round = decideNpcActions(contract.decisionCore, situation, npcStates);
     state.decisionInputHash = round.inputHash;
     state.decisions = round.decisions;
-    state.visibleDecisionIds = round.decisions.slice(0, contract.decisionCore.maxVisibleActions).map(item => item.id);
+    state.visibleDecisionIds = selectVisibleNpcDecisionIds(round.decisions, contract.decisionCore.maxVisibleActions);
     state.situationValues = applyNpcDecisionEffects(contract.decisionCore, situation, round.decisions);
     state.npcStates = applyNpcDecisionActorState(contract.decisionCore, npcStates, round.decisions);
     state.decisionRound = (state.decisionRound || 0) + 1;
@@ -251,9 +276,10 @@ export function trackStoryOpportunity(
   const anchor = getNarrativeAnchorEvent(runtime);
   const opportunity = findOpportunity(anchor || undefined, opportunityId);
   if (!anchor?.worldActor || !opportunity) return { ok: false, reason: '当前机会已失效' };
+  // 先建立完整 round-0 决策态，再写玩家追踪意图，避免 track 提前占用 anchorId
+  // 导致首次提示词出现一轮决策空窗。
+  syncActorEngine(runtime);
   const state = ensureActorEngine(runtime);
-  state.anchorEventId = anchor.id;
-  state.pressureId = anchor.worldActor.pressure.id;
   state.trackedOpportunityId = opportunity.id;
   state.trackedAtTurn = Math.max(0, Number(runtime.worldTurn) || 0);
   if (!state.activeAgendaId) {
@@ -341,6 +367,7 @@ function isCriticalStoryEvent(event: ScenarioModEvent): boolean {
 }
 
 export const OFFSCREEN_WORLD_EVENT_STALL_THRESHOLD = 10;
+export const TRACKED_OPPORTUNITY_MAX_TURNS = 6;
 
 function isEventSettled(runtime: RuntimeState, eventId: string): boolean {
   return runtime.completedEventIds.includes(eventId)
@@ -365,23 +392,27 @@ function resolveOffscreenWorldEvents(runtime: RuntimeState, transitions: Scenari
   const declared = runtime.events.map(event => event.offscreenResolution).filter(Boolean) as NonNullable<ScenarioModEvent['offscreenResolution']>[];
   const resolutions = declared.length ? declared : [legacyOffscreenResolution(runtime)].filter(Boolean) as NonNullable<ScenarioModEvent['offscreenResolution']>[];
   for (const resolution of resolutions) {
+    const knownIds = resolution.resolvedEventIds.filter(id => runtime.events.some(event => event.id === id));
+    if (!knownIds.length) continue;
     // worldActor 合同的玩家介入判定发生在当前轮，故需要预判本轮即将增加的 stall；
     // 旧世界事件合同沿用“已完整停滞轮数”语义，避免改变既有结算时点。
-    const actorDrivenResolution = resolution.resolvedEventIds.some(id =>
+    const actorDrivenResolution = knownIds.every(id =>
       Boolean(runtime.events.find(event => event.id === id)?.worldActor),
     );
-    const effectiveStall = (runtime.stallTurns || 0) + (actorDrivenResolution ? 1 : 0);
+    const effectiveStall = (runtime.stallTurns || 0)
+      + (actorDrivenResolution && (runtime.steeringCooldown || 0) === 0 ? 1 : 0);
+    const trackedAge = (Number(runtime.worldTurn) || 0)
+      - (runtime.actorEngine?.trackedAtTurn ?? Number.POSITIVE_INFINITY);
     const hasTrackedIntervention = Boolean(
       runtime.actorEngine?.trackedOpportunityId
-      && resolution.resolvedEventIds.includes(runtime.actorEngine.anchorEventId || ''),
+      && resolution.resolvedEventIds.includes(runtime.actorEngine.anchorEventId || '')
+      && trackedAge <= TRACKED_OPPORTUNITY_MAX_TURNS
     );
     if (
       effectiveStall < resolution.afterStallTurns
       || runtime.flags[resolution.flagKey] === true
       || hasTrackedIntervention
     ) continue;
-    const knownIds = resolution.resolvedEventIds.filter(id => runtime.events.some(event => event.id === id));
-    if (!knownIds.length) continue;
     // 数据增量会把一个关卡拆成多个场外合同；只允许当前已经激活的世界事件启动结算，
     // 否则同一 stall 阈值会把整关未来事件一次烧完。多事件战争合同仍由首个活跃节点启动整组。
     if (!knownIds.some(id => runtime.activeEventIds.includes(id))) continue;

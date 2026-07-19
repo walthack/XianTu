@@ -73,24 +73,24 @@ test('NPC rendering contract rejects mustNotInvent violations even outside voice
   );
   assert.equal(result.valid, false);
   assert.match(result.issues.join('；'), /具体兵力数字/);
-  assert.match(result.issues.join('；'), /阮香凝机密身份/);
+  assert.equal(result.issues.some(issue => /阮香凝/.test(issue)), false, 'stage secrets must come from the data-driven render guard');
 });
 
-test('NPC rendering contract rejects future death beats leaked by pretrained canon knowledge', async () => {
+test('future death variants are rejected through the data-driven stage guard', async () => {
   const { validateNarrativePerformance } = await loadTs('../src/modules/scenarioMods/narrativePerformanceGuard.ts');
-  const scenarioPrompt = 'mustNotInvent=具体兵力数字、郭解或董卓后续生死。';
+  const scenarioPrompt = 'mustNotInvent=具体兵力数字、郭解或董卓后续生死。renderGuard.forbiddenTerms=郭解托孤|郭解身亡|董卓身亡。';
   const result = validateNarrativePerformance(
-    '秦桧低声说郭解伤及心脉，怕是撑不了太久，昏迷前已经托孤。',
+    '秦桧低声说郭解托孤已成定局。',
     '继续',
     scenarioPrompt,
   );
   assert.equal(result.valid, false);
-  assert.match(result.issues.join('；'), /后续生死节点/);
+  assert.match(result.issues.join('；'), /郭解托孤/);
 });
 
-test('data-driven render guard rejects stage secrets and concrete quantities without blocking civilian counts', async () => {
+test('real combined prompt rejects authoritative military quantities without blocking civilian counts or hypotheses', async () => {
   const { validateNarrativePerformance } = await loadTs('../src/modules/scenarioMods/narrativePerformanceGuard.ts');
-  const scenarioPrompt = 'renderGuard.forbiddenTerms=黑魔海|吕冀|暗道|伏兵；renderGuard.rejectConcreteQuantities=true。';
+  const scenarioPrompt = 'mustNotInvent=具体兵力数字、秘密盟约。renderGuard.forbiddenTerms=黑魔海|吕冀|暗道|伏兵；renderGuard.rejectConcreteQuantities=true。';
   for (const text of [
     '霍子孟说北军在宫门外布置三百甲士。',
     '界碑距宫门只有三十步。',
@@ -105,9 +105,34 @@ test('data-driven render guard rejects stage secrets and concrete quantities wit
     validateNarrativePerformance('一名宫女送来已经公开的诏书。', '继续', scenarioPrompt).valid,
     true,
   );
+  assert.equal(validateNarrativePerformance('殿内无一人出声。', '继续', scenarioPrompt).valid, true);
+  assert.equal(validateNarrativePerformance('两人对视一眼。', '继续', scenarioPrompt).valid, true);
+  assert.equal(validateNarrativePerformance('一队宫女鱼贯而入。', '继续', scenarioPrompt).valid, true);
+  assert.equal(validateNarrativePerformance('一名宫女走到宫门前送诏书。', '继续', scenarioPrompt).valid, true);
+  assert.equal(validateNarrativePerformance('他心想莫非有伏兵。', '继续', scenarioPrompt).valid, true);
+  assert.equal(validateNarrativePerformance('北军已有三百人驻守要道。', '继续', scenarioPrompt).valid, false);
   assert.equal(
     validateNarrativePerformance('太后如今每一步都需借力。', '继续', scenarioPrompt).valid,
     true,
+  );
+});
+
+test('unverified military numbers require explicit stage authorization and attribution', async () => {
+  const { validateNarrativePerformance } = await loadTs('../src/modules/scenarioMods/narrativePerformanceGuard.ts');
+  const text = '探子声称宫门外有三百甲士，但这份军报未经核实。';
+  const blocked = 'mustNotInvent=具体兵力数字。renderGuard.rejectConcreteQuantities=true。';
+  const allowed = `${blocked}renderGuard.allowUnverifiedQuantities=true。`;
+  assert.equal(validateNarrativePerformance(text, '继续', blocked).valid, false);
+  assert.equal(validateNarrativePerformance(text, '继续', allowed).valid, true);
+  assert.equal(
+    validateNarrativePerformance('宫门外确有三百甲士。', '继续', allowed).valid,
+    false,
+    'authorization permits attributed uncertainty, not authoritative invention',
+  );
+  assert.equal(
+    validateNarrativePerformance('宫门外确有三百甲士，另有消息说援军可能迟到。', '继续', allowed).valid,
+    false,
+    'a vague possibility elsewhere in the sentence cannot launder an authoritative number',
   );
 });
 
@@ -126,12 +151,12 @@ test('hard render violations are buffered and replaced locally if the final retr
   assert.doesNotMatch(final.narrative, /黑魔海|三百/);
 });
 
-test('hard render violations degrade locally on the first draft instead of spending another model call', async () => {
-  const { decideNarrativePerformanceAttempt, safeNarrativeFallback } =
+test('hard render violations receive one buffered rewrite before local fallback', async () => {
+  const { decideNarrativePerformanceAttempt } =
     await loadTs('../src/modules/scenarioMods/narrativePerformanceGuard.ts');
   const scenarioPrompt = 'renderGuard.forbiddenTerms=黑魔海；renderGuard.rejectConcreteQuantities=true。';
   const first = decideNarrativePerformanceAttempt('黑魔海已有三百甲士。', '继续', scenarioPrompt, 1, 2);
   assert.equal(first.valid, false);
-  assert.equal(first.shouldRetry, false);
-  assert.equal(first.narrative, safeNarrativeFallback());
+  assert.equal(first.shouldRetry, true);
+  assert.equal(first.narrative, '');
 });

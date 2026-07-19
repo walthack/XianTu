@@ -87,12 +87,31 @@ test('Dingtao built-in validates with a single-stage world actor contract', asyn
   assert.equal(knownFacts.some(item => /阮香凝|凝玉姬|黑魔海玉姬/.test(item)), false, 'NPC knowledge must not leak Ruan');
 });
 
+test('decision-core validator rejects ambiguous bindings, coercive limits, and broken actor references', async () => {
+  const { validateScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
+  const source = JSON.parse(await readFile(stageUrl, 'utf8'));
+  const coreOf = value => value.scenario.events.find(item => item.id === 'lyg.event.s01_05').worldActor.decisionCore;
+
+  const coercive = structuredClone(source);
+  coreOf(coercive).maxVisibleActions = '3';
+  assert.equal(validateScenarioMod(coercive).issues.some(item => item.path.endsWith('maxVisibleActions')), true);
+
+  const duplicate = structuredClone(source);
+  coreOf(duplicate).actionBindings.push(structuredClone(coreOf(duplicate).actionBindings[0]));
+  assert.equal(validateScenarioMod(duplicate).issues.some(item => item.code === 'duplicate_binding'), true);
+
+  const brokenReference = structuredClone(source);
+  coreOf(brokenReference).actionBindings[0].actorIds = ['liuchao.character.typo'];
+  assert.equal(validateScenarioMod(brokenReference).issues.some(item => item.code === 'unknown_reference'), true);
+});
+
 test('s01_05 deterministic core derives four distinct actions with explainable scores and hard canon elimination', async () => {
   const {
     NPC_ACTION_LIBRARY,
     applyNpcDecisionActorState,
     applyNpcDecisionEffects,
     decideNpcActions,
+    selectVisibleNpcDecisionIds,
   } = await loadTs('../src/modules/scenarioMods/npcDecisionCore.ts');
   const raw = JSON.parse(await readFile(stageUrl, 'utf8'));
   const core = raw.scenario.events.find(item => item.id === 'lyg.event.s01_05').worldActor.decisionCore;
@@ -101,6 +120,9 @@ test('s01_05 deterministic core derives four distinct actions with explainable s
   const first = decideNpcActions(core);
   const replay = decideNpcActions(structuredClone(core), structuredClone(core.situation.initialValues));
   assert.deepEqual(replay, first, 'same situation must replay byte-for-byte');
+  const changedBinding = structuredClone(core);
+  changedBinding.actionBindings[0].reason += '（修订）';
+  assert.notEqual(decideNpcActions(changedBinding).inputHash, first.inputHash, 'binding changes must alter the audit hash');
   assert.deepEqual(first.decisions.map(item => item.actionId), [
     'secure_palace_access',
     'prepare_fallback_route',
@@ -115,6 +137,17 @@ test('s01_05 deterministic core derives four distinct actions with explainable s
     assert.equal(decision.score > runnerUp.score, true, `${decision.actorId} winner must beat a visible runner-up`);
     assert.equal(Object.values(decision.candidates[0].breakdown).every(Number.isFinite), true);
   }
+  const tense = decideNpcActions(core, { courtLegitimacy: 42, militaryTension: 100 });
+  assert.notEqual(
+    tense.decisions[0].candidates.find(item => item.actionId === 'secure_palace_access').score,
+    first.decisions[0].candidates.find(item => item.actionId === 'secure_palace_access').score,
+    'situation values must participate in utility scoring',
+  );
+  assert.deepEqual(
+    selectVisibleNpcDecisionIds(first.decisions, 3),
+    first.decisions.filter(item => item.visibility !== 'hidden').slice(0, 3).map(item => item.id),
+  );
+  assert.equal(selectVisibleNpcDecisionIds(first.decisions, 4).some(id => /lv_zhi/.test(id)), false);
   const dong = first.decisions[0];
   const forbidden = dong.candidates.find(item => item.actionId === 'force_succession');
   assert.equal(forbidden.eligible, false);
@@ -128,9 +161,20 @@ test('s01_05 deterministic core derives four distinct actions with explainable s
   assert.equal(actorState[0].resources.troops, 3, 'winning action cost must settle into NPC state');
   assert.equal(actorState[0].agendas[0].clock, 3, 'agenda clock caps at its escalation ladder');
   assert.equal(actorState[1].resources.intelligence, 4);
-  assert.throws(() => applyNpcDecisionEffects(core, changed, [{
+  const nextRound = decideNpcActions(core, changed, actorState);
+  assert.equal(
+    nextRound.decisions[0].candidates.find(item => item.actionId === 'secure_palace_access').eliminatedReason,
+    'cooldown:1',
+    'durationTurns must prevent immediate repeat',
+  );
+  assert.deepEqual(applyNpcDecisionEffects(core, changed, [{
     ...dong, effects: { globalPopulation: -1 },
-  }]), /outside the stage situation whitelist/);
+  }]), changed, 'legacy snapshot effects outside the whitelist degrade by skipping');
+  assert.equal(
+    applyNpcDecisionEffects(core, { courtLegitimacy: 99, militaryTension: 99 }, first.decisions).courtLegitimacy,
+    100,
+    'situation effects must respect declared bounds',
+  );
 });
 
 test('NPC decision core has no LLM or network dependency', async () => {
@@ -172,6 +216,7 @@ test('Dingtao new save skips initial completed beats and opens on the enthroneme
   assert.match(prompt, /控制宫门并召集登基见证者/);
   assert.match(prompt, /knownFacts=/);
   assert.match(prompt, /mustNotInvent=/);
+  assert.match(prompt, /角色主张，绝不等同或写回世界真值/);
 });
 
 test('tracking an opportunity awards one persistent permission only after player completion', async () => {
@@ -276,6 +321,38 @@ test('tracked s01_05 route remains participant-owned at the stall threshold', as
   assert.equal(settled.completedEventIds.includes('lyg.event.s01_05'), true);
   assert.equal(settled.offscreenResolvedEventIds.includes('lyg.event.s01_05'), false);
   assert.equal(settled.actorEngine.entitlements.some(item => item.key === 'permission.lyg.jia_wenhe.exchange_judgement'), true);
+});
+
+test('tracking initializes round zero but expires instead of freezing offscreen resolution forever', async () => {
+  const {
+    advanceScenarioRuntime,
+    trackStoryOpportunity,
+    TRACKED_OPPORTUNITY_MAX_TURNS,
+  } = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  const raw = JSON.parse(await readFile(stageUrl, 'utf8'));
+  const data = save();
+  data.世界.状态.剧本模组 = {
+    modId: raw.manifest.id,
+    currentChapterId: 'lyg.chapter.s01',
+    chapters: structuredClone(raw.scenario.chapters),
+    events: structuredClone(raw.scenario.events),
+    flags: { ...raw.scenario.initialFlags },
+    activeEventIds: ['lyg.event.s01_05'],
+    completedEventIds: ['lyg.event.s01_01', 'lyg.event.s01_02', 'lyg.event.s01_03', 'lyg.event.s01_04'],
+    completedChapterIds: [],
+    offscreenResolvedEventIds: [],
+    stallTurns: 7,
+    worldTurn: 9,
+    nextStageId: raw.manifest.nextStageId,
+  };
+  assert.equal(trackStoryOpportunity(data, 'opportunity.lyg.s01_05.first_edict').ok, true);
+  const before = data.世界.状态.剧本模组;
+  assert.equal(before.actorEngine.decisionRound, 0);
+  assert.equal(before.actorEngine.decisions.length, 4, 'tracking must not create a round-0 prompt gap');
+  before.worldTurn = before.actorEngine.trackedAtTurn + TRACKED_OPPORTUNITY_MAX_TURNS + 1;
+  const settled = advanceScenarioRuntime(data).saveData.世界.状态.剧本模组;
+  assert.equal(settled.offscreenResolvedEventIds.includes('lyg.event.s01_05'), true);
+  assert.equal(settled.actorEngine.entitlements.length, 0);
 });
 
 test('story prompt exposes actor signal and tracked opportunity without changing the canon result', async () => {

@@ -257,7 +257,7 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
             validateStringArray(agenda.forbiddenOutcomes, `${agendaPath}.forbiddenOutcomes`, add);
           });
           if (entity.worldActor.decisionCore !== undefined) {
-            validateNpcDecisionCore(entity.worldActor.decisionCore, `${actorPath}.decisionCore`, add);
+            validateNpcDecisionCore(entity.worldActor.decisionCore, `${actorPath}.decisionCore`, characterIds, add);
           }
           if (!Array.isArray(entity.worldActor.opportunities) || entity.worldActor.opportunities.length === 0) {
             add(`${actorPath}.opportunities`, 'required_array', 'worldActor.opportunities must contain at least one opportunity.');
@@ -454,7 +454,12 @@ export function parseScenarioMod(input: unknown): ScenarioMod {
 type AddIssue = (path: string, code: string, message: string) => void;
 type EntityRecord = Record<string, unknown> & { __path: string };
 
-function validateNpcDecisionCore(value: unknown, path: string, add: AddIssue): void {
+function validateNpcDecisionCore(
+  value: unknown,
+  path: string,
+  characterIds: Set<string>,
+  add: AddIssue,
+): void {
   if (!isRecord(value)) {
     add(path, 'invalid_type', 'decisionCore must be an object.');
     return;
@@ -479,6 +484,22 @@ function validateNpcDecisionCore(value: unknown, path: string, add: AddIssue): v
         if (!(key in situation.initialValues)) add(`${path}.situation.initialValues.${key}`, 'missing_initial_value', 'Every whitelisted situation key needs an initial value.');
       }
     }
+    if (situation.limits !== undefined && !isRecord(situation.limits)) {
+      add(`${path}.situation.limits`, 'invalid_type', 'situation.limits must be an object.');
+    } else if (isRecord(situation.limits)) {
+      for (const [key, rawLimit] of Object.entries(situation.limits)) {
+        if (!whitelist.has(key)) add(`${path}.situation.limits.${key}`, 'effect_not_whitelisted', 'Situation limit key must be declared in whitelist.');
+        if (!isRecord(rawLimit)) {
+          add(`${path}.situation.limits.${key}`, 'invalid_type', 'Situation limit must contain numeric min and max.');
+          continue;
+        }
+        optionalNumber(rawLimit.min, `${path}.situation.limits.${key}.min`, add);
+        optionalNumber(rawLimit.max, `${path}.situation.limits.${key}.max`, add);
+        if (typeof rawLimit.min === 'number' && typeof rawLimit.max === 'number' && rawLimit.min >= rawLimit.max) {
+          add(`${path}.situation.limits.${key}`, 'invalid_range', 'Situation limit min must be lower than max.');
+        }
+      }
+    }
   }
   if (!isRecord(value.canonPolicy)) {
     add(`${path}.canonPolicy`, 'required_object', 'decisionCore.canonPolicy is required.');
@@ -487,7 +508,7 @@ function validateNpcDecisionCore(value: unknown, path: string, add: AddIssue): v
     validateStringArray(value.canonPolicy.forbiddenBefore, `${path}.canonPolicy.forbiddenBefore`, add);
     validateStringArray(value.canonPolicy.processFreedom, `${path}.canonPolicy.processFreedom`, add);
   }
-  if (![1, 2, 3].includes(Number(value.maxVisibleActions))) {
+  if (typeof value.maxVisibleActions !== 'number' || ![1, 2, 3].includes(value.maxVisibleActions)) {
     add(`${path}.maxVisibleActions`, 'invalid_enum', 'maxVisibleActions must be 1, 2, or 3.');
   }
   if (value.narrativeGuard !== undefined) {
@@ -501,11 +522,18 @@ function validateNpcDecisionCore(value: unknown, path: string, add: AddIssue): v
       ) {
         add(`${path}.narrativeGuard.rejectConcreteQuantities`, 'invalid_type', 'rejectConcreteQuantities must be boolean.');
       }
+      if (
+        value.narrativeGuard.allowUnverifiedQuantities !== undefined
+        && typeof value.narrativeGuard.allowUnverifiedQuantities !== 'boolean'
+      ) {
+        add(`${path}.narrativeGuard.allowUnverifiedQuantities`, 'invalid_type', 'allowUnverifiedQuantities must be boolean.');
+      }
     }
   }
 
   const knownActions = new Set(NPC_ACTION_LIBRARY.map(item => item.id));
   const boundActions = new Set<string>();
+  const bindingScopes: Array<{ actionId: string; actorIds?: string[] }> = [];
   if (!Array.isArray(value.actionBindings) || value.actionBindings.length === 0) {
     add(`${path}.actionBindings`, 'required_array', 'decisionCore.actionBindings must not be empty.');
   }
@@ -514,17 +542,48 @@ function validateNpcDecisionCore(value: unknown, path: string, add: AddIssue): v
     if (!knownActions.has(binding.actionId as string)) add(`${bindingPath}.actionId`, 'unknown_action', 'actionId is not in the shared NPC action library.');
     boundActions.add(binding.actionId as string);
     validateIdArray(binding.actorIds, `${bindingPath}.actorIds`, add);
+    const actorIds = Array.isArray(binding.actorIds)
+      ? binding.actorIds.filter((item): item is string => typeof item === 'string')
+      : undefined;
+    for (const actorId of actorIds || []) {
+      if (!characterIds.has(actorId)) add(`${bindingPath}.actorIds`, 'unknown_reference', `Unknown actor characterId "${actorId}".`);
+    }
+    if (typeof binding.actionId === 'string') {
+      const overlaps = bindingScopes.some(previous =>
+        previous.actionId === binding.actionId
+        && (!previous.actorIds?.length || !actorIds?.length || previous.actorIds.some(id => actorIds.includes(id))));
+      if (overlaps) add(bindingPath, 'duplicate_binding', 'An actor/action pair may have only one binding contract.');
+      bindingScopes.push({ actionId: binding.actionId, actorIds });
+    }
     for (const key of ['label', 'reason', 'visibleSignal', 'offscreenAction']) requireString(binding[key], `${bindingPath}.${key}`, add);
     validateStringArray(binding.knownFacts, `${bindingPath}.knownFacts`, add);
     validateStringArray(binding.mustNotInvent, `${bindingPath}.mustNotInvent`, add);
     if (!['public', 'rumor', 'hidden'].includes(String(binding.visibility))) add(`${bindingPath}.visibility`, 'invalid_enum', 'visibility must be public, rumor, or hidden.');
-    optionalNumber(binding.durationTurns, `${bindingPath}.durationTurns`, add);
-    if (typeof binding.durationTurns !== 'number' || binding.durationTurns < 1) add(`${bindingPath}.durationTurns`, 'invalid_range', 'durationTurns must be at least 1.');
-    for (const numericGroup of ['requirements', 'costs', 'utility']) {
+    if (typeof binding.durationTurns !== 'number') {
+      add(`${bindingPath}.durationTurns`, 'invalid_type', 'durationTurns must be a number.');
+    } else if (binding.durationTurns < 1) {
+      add(`${bindingPath}.durationTurns`, 'invalid_range', 'durationTurns must be at least 1.');
+    }
+    for (const numericGroup of ['requirements', 'costs']) {
       if (binding[numericGroup] !== undefined && !isRecord(binding[numericGroup])) {
         add(`${bindingPath}.${numericGroup}`, 'invalid_type', `${numericGroup} must be an object.`);
       } else if (isRecord(binding[numericGroup])) {
         for (const [key, amount] of Object.entries(binding[numericGroup])) optionalNumber(amount, `${bindingPath}.${numericGroup}.${key}`, add);
+      }
+    }
+    if (binding.utility !== undefined && !isRecord(binding.utility)) {
+      add(`${bindingPath}.utility`, 'invalid_type', 'utility must be an object.');
+    } else if (isRecord(binding.utility)) {
+      for (const key of ['urgency', 'factionGoal', 'expectedBenefit', 'failureRisk', 'escalation']) {
+        optionalNumber(binding.utility[key], `${bindingPath}.utility.${key}`, add);
+      }
+      if (binding.utility.situation !== undefined && !isRecord(binding.utility.situation)) {
+        add(`${bindingPath}.utility.situation`, 'invalid_type', 'utility.situation must be an object.');
+      } else if (isRecord(binding.utility.situation)) {
+        for (const [key, weight] of Object.entries(binding.utility.situation)) {
+          optionalNumber(weight, `${bindingPath}.utility.situation.${key}`, add);
+          if (!whitelist.has(key)) add(`${bindingPath}.utility.situation.${key}`, 'effect_not_whitelisted', 'Situation utility may only use this stage whitelist.');
+        }
       }
     }
     if (binding.effects !== undefined && !isRecord(binding.effects)) {
@@ -543,6 +602,9 @@ function validateNpcDecisionCore(value: unknown, path: string, add: AddIssue): v
   }
   forEachRecord(value.actors, `${path}.actors`, (actor, actorPath) => {
     validateId(actor.characterId, `${actorPath}.characterId`, add);
+    if (typeof actor.characterId === 'string' && !characterIds.has(actor.characterId)) {
+      add(`${actorPath}.characterId`, 'unknown_reference', `Unknown actor characterId "${actor.characterId}".`);
+    }
     if (!isRecord(actor.identity)) {
       add(`${actorPath}.identity`, 'required_object', 'actor.identity is required.');
     } else {
@@ -567,12 +629,15 @@ function validateNpcDecisionCore(value: unknown, path: string, add: AddIssue): v
       }
     }
     if (isRecord(actor.personality) && Object.keys(actor.personality).length > 4) {
-      add(`${actorPath}.personality`, 'too_many_dimensions', 's01_05 personality may use at most four dimensions.');
+      add(`${actorPath}.personality`, 'too_many_dimensions', 'NPC personality may use at most four dimensions.');
     }
     if (!isRecord(actor.relationships)) {
       add(`${actorPath}.relationships`, 'required_object', 'actor.relationships is required.');
     } else {
       for (const [targetId, relation] of Object.entries(actor.relationships)) {
+        if (!characterIds.has(targetId)) {
+          add(`${actorPath}.relationships.${targetId}`, 'unknown_reference', `Unknown relationship target "${targetId}".`);
+        }
         if (!isRecord(relation)) {
           add(`${actorPath}.relationships.${targetId}`, 'invalid_type', 'relationship dimensions must be an object.');
           continue;

@@ -15,33 +15,25 @@ const DECISION_SCENE = /情报|敌情|局势|侦察|探子|计划|打算|安排|
 const ACTIVE_PLAN = /我已|我让|我命|我先|我会|已经安排|你现在|你只需|先[^。！？]{0,24}再|退路|后手|备用|若[^。！？]{0,24}便/;
 const HARD_ISSUE_PREFIX = '硬门禁：';
 const QUANTITY_NUMBER = String.raw`(?:\d+(?:\.\d+)?|[零〇一二三四五六七八九十百千万两]+)`;
-const DIRECT_QUANTITY = new RegExp(`${QUANTITY_NUMBER}\\s*(?:骑|兵|军士|甲士|部众|校尉|亲兵|家兵|营|队)`);
-const PERSON_QUANTITY = new RegExp(`${QUANTITY_NUMBER}\\s*(?:名|人)`);
+const DIRECT_MILITARY_QUANTITY = new RegExp(`${QUANTITY_NUMBER}\\s*(?:骑|兵|军士|甲士|部众|校尉|亲兵|家兵|营)`);
+const MILITARY_HEADCOUNT = new RegExp(
+  `(?:军|兵|骑|甲士|北军|凉州军)[^。！？\\n]{0,12}${QUANTITY_NUMBER}\\s*(?:名|人|队)`
+  + `|${QUANTITY_NUMBER}\\s*(?:名|人|队)[^。！？\\n]{0,12}(?:驻守|列阵|持兵|披甲|围宫|攻城|骑兵|甲士|军士)`,
+);
 const DISTANCE_QUANTITY = new RegExp(`${QUANTITY_NUMBER}\\s*(?:步|尺|里|坊)`);
 const RATIO_QUANTITY = new RegExp(`${QUANTITY_NUMBER}\\s*成`);
-const MILITARY_CONTEXT = /军|兵|骑|甲|校尉|宫门|要道|伏|驻|调动|集结|列队|入宫|守卫|兵力/;
 const DISTANCE_CONTEXT = /距离|相隔|开外|以内|界碑|宫门|布置|驻扎|列阵|行军|路线|要道/;
 const RATIO_CONTEXT = /增|减|税|比例|折|抽|征|份额/;
+const QUANTITY_CLAIM_SOURCE = /探子|斥候|军报|来报|使者|消息|号称|声称|自称|据报|传闻|据说/;
+const UNVERIFIED_QUANTITY_CONTEXT = /号称|声称|据报|传闻|据说|未核实|未经核实|尚待核实|无法证实|真假难辨/;
+const AUTHORITATIVE_QUANTITY_CONTEXT = /确有|确认|查明|已经核实|确切|实有/;
+const HYPOTHETICAL_CONTEXT = /莫非|是否|会不会|难道|假若|倘若|若有|并无|没有|未见|不曾/;
+const CONTEXTUAL_FORBIDDEN_TERMS = new Set(['暗道', '伏兵', '暗桩', '魂丹']);
 const INVENTION_GUARDS: Array<{ marker: RegExp; violation: RegExp; issue: string }> = [
-  {
-    marker: /mustNotInvent=[^。\n]*具体兵力数字/,
-    violation: /(?:\d+|[一二三四五六七八九十百千万两]+)\s*(?:名|人|骑|兵|军士|甲士|部众)/,
-    issue: '渲染补造了 mustNotInvent 禁止的具体兵力数字',
-  },
   {
     marker: /mustNotInvent=[^。\n]*(?:秘密盟约|具体秘密盟约)/,
     violation: /密约|秘密盟约|歃血为盟|暗中结盟/,
     issue: '渲染补造了 mustNotInvent 禁止的秘密盟约',
-  },
-  {
-    marker: /mustNotInvent=[^。\n]*阮香凝的黑魔海身份/,
-    violation: /阮香凝[^。！？]{0,32}(?:凝玉姬|黑魔海|玉姬|暗桩)|(?:凝玉姬|黑魔海玉姬)[^。！？]{0,16}阮香凝/,
-    issue: '渲染泄露了 mustNotInvent 禁止的阮香凝机密身份',
-  },
-  {
-    marker: /mustNotInvent=[^。\n]*(?:郭解或董卓后续生死|郭解[^。\n]*后续生死|董卓[^。\n]*后续生死)/,
-    violation: /(?:郭解|董卓)[^。！？]{0,48}(?:伤及心脉|撑不了|死志|托孤|临终|身亡|死亡|被杀|永久失能)/,
-    issue: '渲染提前演出了 mustNotInvent 禁止的郭解或董卓后续生死节点',
   },
 ];
 
@@ -60,14 +52,33 @@ function parseForbiddenTerms(scenarioPrompt: string): string[] {
   return match[1].split('|').map(item => item.trim()).filter(Boolean);
 }
 
-function concreteQuantityViolation(narrative: string, scenarioPrompt: string): boolean {
-  if (!/renderGuard\.rejectConcreteQuantities=true/.test(scenarioPrompt)) return false;
-  return narrative.split(/[。！？\n]/).some(sentence =>
-    DIRECT_QUANTITY.test(sentence)
-    || (PERSON_QUANTITY.test(sentence) && MILITARY_CONTEXT.test(sentence))
+function sentenceHasUnauthorizedQuantity(sentence: string, scenarioPrompt: string): boolean {
+  if (
+    /renderGuard\.allowUnverifiedQuantities=true/.test(scenarioPrompt)
+    && QUANTITY_CLAIM_SOURCE.test(sentence)
+    && UNVERIFIED_QUANTITY_CONTEXT.test(sentence)
+    && !AUTHORITATIVE_QUANTITY_CONTEXT.test(sentence)
+  ) return false;
+  return DIRECT_MILITARY_QUANTITY.test(sentence)
+    || MILITARY_HEADCOUNT.test(sentence)
     || (DISTANCE_QUANTITY.test(sentence) && DISTANCE_CONTEXT.test(sentence))
-    || (RATIO_QUANTITY.test(sentence) && RATIO_CONTEXT.test(sentence))
+    || (RATIO_QUANTITY.test(sentence) && RATIO_CONTEXT.test(sentence));
+}
+
+function concreteQuantityViolation(narrative: string, scenarioPrompt: string): boolean {
+  const guarded = /renderGuard\.rejectConcreteQuantities=true/.test(scenarioPrompt)
+    || /mustNotInvent=[^。\n]*具体兵力数字/.test(scenarioPrompt);
+  if (!guarded) return false;
+  return narrative.split(/[。！？\n]/).some(sentence =>
+    sentenceHasUnauthorizedQuantity(sentence, scenarioPrompt)
   );
+}
+
+function leakedForbiddenTerm(narrative: string, terms: string[]): string | undefined {
+  return terms.find(term => narrative.split(/[。！？\n]/).some(sentence => {
+    if (!new RegExp(escapeRegExp(term), 'u').test(sentence)) return false;
+    return !(CONTEXTUAL_FORBIDDEN_TERMS.has(term) && HYPOTHETICAL_CONTEXT.test(sentence));
+  }));
 }
 
 export function requiresNarrativeBuffering(scenarioPrompt: string): boolean {
@@ -97,12 +108,12 @@ export function validateNarrativePerformance(
     if (guard.marker.test(scenarioPrompt) && guard.violation.test(narrative)) issues.push(`${HARD_ISSUE_PREFIX}${guard.issue}`);
   }
   const forbiddenTerms = parseForbiddenTerms(scenarioPrompt);
-  const leakedTerm = forbiddenTerms.find(term => new RegExp(escapeRegExp(term), 'u').test(narrative));
+  const leakedTerm = leakedForbiddenTerm(narrative, forbiddenTerms);
   if (leakedTerm) {
     issues.push(`${HARD_ISSUE_PREFIX}正文命中阶段禁词“${leakedTerm}”`);
   }
   if (concreteQuantityViolation(narrative, scenarioPrompt)) {
-    issues.push(`${HARD_ISSUE_PREFIX}正文补造了具体人数、兵力、距离或比例`);
+    issues.push(`${HARD_ISSUE_PREFIX}正文补造了具体兵力数字、军事距离或比例`);
   }
   if (!DECISION_SCENE.test(userInput)) return { valid: issues.length === 0, issues };
   for (const name of ['小紫', '贾文和']) {
@@ -132,9 +143,9 @@ export function decideNarrativePerformanceAttempt(
 ): NarrativePerformanceAttemptDecision {
   const performance = validateNarrativePerformance(narrative, userInput, scenarioPrompt);
   const hasHardViolation = hasHardNarrativeViolation(performance);
-  // 正典/发明硬违规不可展示，也不值得再支付一次非确定性调用；
-  // 当轮直接使用本地安全正文。普通表演问题仍保留一次模型重写。
-  const shouldRetry = !hasHardViolation && !performance.valid && attempt < maxAttempts;
+  // 所有首稿失败均允许一次带明确问题说明的定向重写；硬违规草稿仍保持缓冲，
+  // 只有末次继续违规才使用本地安全正文，避免一次误报直接把整轮退化成罐头。
+  const shouldRetry = !performance.valid && attempt < maxAttempts;
   return {
     ...performance,
     narrative: shouldRetry ? '' : (hasHardViolation ? safeNarrativeFallback() : narrative),

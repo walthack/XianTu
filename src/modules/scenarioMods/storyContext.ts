@@ -221,7 +221,7 @@ function formatWorldActorContract(runtime: StoryRuntime, anchor: ScenarioModEven
     : '该压力持续存在；保持角色有自己的路线，但不得每轮机械重复同一征兆。';
   const guard = contract.decisionCore?.narrativeGuard;
   const guardLine = guard
-    ? `\n- renderGuard.forbiddenTerms=${(guard.forbiddenTerms || []).join('|')}；renderGuard.rejectConcreteQuantities=${guard.rejectConcreteQuantities === true}。该行是最终落稿硬门禁，命中时必须重写，不得展示违规草稿。`
+    ? `\n- renderGuard.forbiddenTerms=${(guard.forbiddenTerms || []).join('|')}；renderGuard.rejectConcreteQuantities=${guard.rejectConcreteQuantities === true}；renderGuard.allowUnverifiedQuantities=${guard.allowUnverifiedQuantities === true}。未核实数字必须带明确消息来源与不确定性，只是角色主张，绝不等同或写回世界真值。该行是最终落稿硬门禁，命中时必须重写，不得展示违规草稿。`
     : '';
   const forbiddenBefore = contract.decisionCore?.canonPolicy.forbiddenBefore || [];
   return `【世界演员合同·${contract.pressure.canonPolicy}】压力=${contract.pressure.summary}（范围=${contract.pressure.scope}，强度=${contract.pressure.intensity}）。${actionLine}\n- ${actorLine}\n- ${opportunityLine}\n- 决策阶段已结束，禁止重选行动或修改结算；只可依据 knownFacts 渲染，mustNotInvent 任一项均不得补造。${guardLine}\n- forbiddenBefore=${forbiddenBefore.join('|')}。\n- 正典边界：只改变过程、关系入口与行为权限；不得改写“${anchor.name}”的既定结果，不得提前演出后续事件或秘密。`;

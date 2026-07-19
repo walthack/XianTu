@@ -117,6 +117,8 @@ export interface ScenarioNpcDecisionActor {
   knowledge: string[];
   agendas: ScenarioNpcDecisionAgenda[];
   allowedActionIds: string[];
+  /** 运行时字段：行动在持续期内不可被重复裁定；正典配置可省略。 */
+  actionCooldowns?: Record<string, number>;
   /** 每个数值字段的正典依据；键为 identity.rank/personality.* 等相对路径。 */
   evidence: Record<string, string>;
 }
@@ -138,6 +140,10 @@ export interface ScenarioNpcDecisionActionBinding {
     factionGoal?: number;
     expectedBenefit?: number;
     failureRisk?: number;
+    /** 局势键到效用权重；局势值先按 limits 归一到 -1..1。 */
+    situation?: Record<string, number>;
+    /** 当前议程升级阶梯对该行动的权重。 */
+    escalation?: number;
   };
   canonTags?: string[];
   visibility: ScenarioNpcDecisionVisibility;
@@ -148,6 +154,7 @@ export interface ScenarioNpcDecisionCore {
   situation: {
     whitelist: string[];
     initialValues: Record<string, number>;
+    limits?: Record<string, { min: number; max: number }>;
   };
   canonPolicy: {
     invariant: string[];
@@ -161,6 +168,8 @@ export interface ScenarioNpcDecisionCore {
   narrativeGuard?: {
     forbiddenTerms?: string[];
     rejectConcreteQuantities?: boolean;
+    /** 允许“某来源声称 + 明示未核实”的数字；它只是传闻，不会写回局势真值。 */
+    allowUnverifiedQuantities?: boolean;
   };
 }
 

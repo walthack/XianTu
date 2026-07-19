@@ -31,6 +31,8 @@ export interface NpcCandidateScore {
     factionGoal: number;
     relationshipMotive: number;
     expectedBenefit: number;
+    situationFit: number;
+    escalationPressure: number;
     resourceCost: number;
     failureRisk: number;
   };
@@ -57,6 +59,8 @@ export interface NpcDecisionRound {
   inputHash: string;
   decisions: NpcDecisionReceipt[];
 }
+
+export const NPC_ACTION_LIBRARY_VERSION = 'r2-10b.2';
 
 // 通用行动词表保持小而可复用；stage 只绑定其中适用项及白名单 effects。
 // 32 项满足首批 30–50 的规格边界，未绑定的行动不会进入该 stage 候选池。
@@ -101,7 +105,7 @@ const RESOURCES: ScenarioNpcDecisionResource[] = ['influence', 'wealth', 'troops
 function stable(value: unknown): string {
   if (Array.isArray(value)) return `[${value.map(stable).join(',')}]`;
   if (value && typeof value === 'object') {
-    return `{${Object.entries(value as Record<string, unknown>).sort(([a], [b]) => a.localeCompare(b)).map(([key, item]) => `${key}:${stable(item)}`).join(',')}}`;
+    return `{${Object.entries(value as Record<string, unknown>).sort(([a], [b]) => a < b ? -1 : a > b ? 1 : 0).map(([key, item]) => `${key}:${stable(item)}`).join(',')}}`;
   }
   return JSON.stringify(value);
 }
@@ -113,6 +117,10 @@ function hash(value: unknown): string {
     result = Math.imul(result, 16777619);
   }
   return (result >>> 0).toString(16).padStart(8, '0');
+}
+
+export function npcDecisionConfigHash(core: ScenarioNpcDecisionCore): string {
+  return hash({ libraryVersion: NPC_ACTION_LIBRARY_VERSION, core });
 }
 
 function dot(values: Record<string, number>, weights: Record<string, number> | undefined): number {
@@ -129,6 +137,7 @@ function resourceCost(binding: ScenarioNpcDecisionActionBinding): number {
 }
 
 function requirementFailure(actor: ScenarioNpcDecisionActor, binding: ScenarioNpcDecisionActionBinding): string | undefined {
+  if ((actor.actionCooldowns?.[binding.actionId] || 0) > 0) return `cooldown:${actor.actionCooldowns![binding.actionId]}`;
   for (const key of RESOURCES) {
     const minimum = binding.requirements?.[key];
     if (minimum !== undefined && actor.resources[key] < minimum) {
@@ -144,11 +153,14 @@ function scoreCandidate(
   actor: ScenarioNpcDecisionActor,
   binding: ScenarioNpcDecisionActionBinding,
   forbiddenBefore: Set<string>,
+  situationValues: Record<string, number>,
+  core: ScenarioNpcDecisionCore,
 ): NpcCandidateScore {
   const template = ACTIONS.get(binding.actionId);
   const empty = {
     urgency: 0, personalityFit: 0, motiveFit: 0, factionGoal: 0,
-    relationshipMotive: 0, expectedBenefit: 0, resourceCost: 0, failureRisk: 0,
+    relationshipMotive: 0, expectedBenefit: 0, situationFit: 0,
+    escalationPressure: 0, resourceCost: 0, failureRisk: 0,
   };
   if (!template) return { actionId: binding.actionId, label: binding.label, eligible: false, eliminatedReason: 'unknown_action', breakdown: empty };
   const canonConflict = (binding.canonTags || []).find(tag => forbiddenBefore.has(tag));
@@ -157,6 +169,14 @@ function scoreCandidate(
   }
   const failed = requirementFailure(actor, binding);
   if (failed) return { actionId: binding.actionId, label: binding.label, eligible: false, eliminatedReason: failed, breakdown: empty };
+  const normalizedSituation = Object.fromEntries(Object.entries(situationValues).map(([key, value]) => {
+    const limit = core.situation.limits?.[key];
+    if (!limit || limit.max <= limit.min) return [key, value];
+    const midpoint = (limit.min + limit.max) / 2;
+    return [key, (value - midpoint) / ((limit.max - limit.min) / 2)];
+  }));
+  const agendaProgress = actor.agendas.reduce((max, agenda) =>
+    Math.max(max, agenda.escalation.length ? agenda.clock / agenda.escalation.length : 0), 0);
   const breakdown = {
     urgency: template.baseUrgency + (binding.utility?.urgency || 0),
     personalityFit: dot(actor.personality, template.personality),
@@ -164,11 +184,14 @@ function scoreCandidate(
     factionGoal: binding.utility?.factionGoal || 0,
     relationshipMotive: relationshipFit(actor, template.relationship),
     expectedBenefit: template.baseBenefit + (binding.utility?.expectedBenefit || 0),
+    situationFit: dot(normalizedSituation, binding.utility?.situation),
+    escalationPressure: agendaProgress * (binding.utility?.escalation || 0),
     resourceCost: resourceCost(binding),
     failureRisk: template.baseRisk + (binding.utility?.failureRisk || 0),
   };
   const score = breakdown.urgency + breakdown.personalityFit + breakdown.motiveFit
     + breakdown.factionGoal + breakdown.relationshipMotive + breakdown.expectedBenefit
+    + breakdown.situationFit + breakdown.escalationPressure
     - breakdown.resourceCost - breakdown.failureRisk;
   return { actionId: binding.actionId, label: binding.label, eligible: true, score, breakdown };
 }
@@ -184,12 +207,17 @@ export function decideNpcActions(
     const bindings = core.actionBindings.filter(binding =>
       actor.allowedActionIds.includes(binding.actionId)
       && (!binding.actorIds?.length || binding.actorIds.includes(actor.characterId)));
-    const candidates = bindings.map(binding => scoreCandidate(actor, binding, forbidden));
-    const ranked = candidates.filter(candidate => candidate.eligible)
-      .sort((a, b) => (b.score! - a.score!) || a.actionId.localeCompare(b.actionId));
-    const winner = ranked[0];
-    if (!winner) continue;
-    const binding = bindings.find(item => item.actionId === winner.actionId)!;
+    const candidatesWithBindings = bindings.map(binding => ({
+      binding,
+      candidate: scoreCandidate(actor, binding, forbidden, situationValues, core),
+    }));
+    const candidates = candidatesWithBindings.map(item => item.candidate);
+    const ranked = candidatesWithBindings.filter(item => item.candidate.eligible)
+      .sort((a, b) => (b.candidate.score! - a.candidate.score!)
+        || (a.candidate.actionId < b.candidate.actionId ? -1 : a.candidate.actionId > b.candidate.actionId ? 1 : 0));
+    const selected = ranked[0];
+    if (!selected) continue;
+    const { binding, candidate: winner } = selected;
     decisions.push({
       id: `npc-decision.${actor.characterId}.${winner.actionId}`,
       actorId: actor.characterId,
@@ -208,7 +236,13 @@ export function decideNpcActions(
     });
   }
   return {
-    inputHash: hash({ actors, situationValues, canonPolicy: core.canonPolicy }),
+    inputHash: hash({
+      libraryVersion: NPC_ACTION_LIBRARY_VERSION,
+      actors,
+      situationValues,
+      actionBindings: core.actionBindings,
+      canonPolicy: core.canonPolicy,
+    }),
     decisions,
   };
 }
@@ -220,12 +254,23 @@ export function applyNpcDecisionActorState(
   decisions: NpcDecisionReceipt[],
 ): ScenarioNpcDecisionActor[] {
   const next = structuredClone(actors);
+  for (const actor of next) {
+    actor.actionCooldowns = Object.fromEntries(
+      Object.entries(actor.actionCooldowns || {})
+        .map(([actionId, turns]): [string, number] => [actionId, Math.max(0, turns - 1)])
+        .filter(([, turns]) => turns > 0),
+    );
+  }
   for (const decision of decisions) {
     const actor = next.find(item => item.characterId === decision.actorId);
     const binding = core.actionBindings.find(item =>
       item.actionId === decision.actionId
       && (!item.actorIds?.length || item.actorIds.includes(decision.actorId)));
     if (!actor || !binding) continue;
+    if (binding.durationTurns > 1) {
+      actor.actionCooldowns ||= {};
+      actor.actionCooldowns[binding.actionId] = binding.durationTurns - 1;
+    }
     for (const key of RESOURCES) {
       actor.resources[key] = Math.max(0, actor.resources[key] - Math.max(0, binding.costs?.[key] || 0));
     }
@@ -245,9 +290,23 @@ export function applyNpcDecisionEffects(
   const next = { ...situationValues };
   for (const decision of decisions) {
     for (const [key, delta] of Object.entries(decision.effects)) {
-      if (!whitelist.has(key)) throw new Error(`NPC decision effect "${key}" is outside the stage situation whitelist.`);
-      next[key] = (next[key] || 0) + delta;
+      // Registry 装载时会严格拒绝越界；这里面对旧档快照选择降级跳过，避免整回合硬崩。
+      if (!whitelist.has(key)) continue;
+      const raw = (next[key] || 0) + delta;
+      const limit = core.situation.limits?.[key];
+      next[key] = limit ? Math.min(limit.max, Math.max(limit.min, raw)) : raw;
     }
   }
   return next;
+}
+
+/** hidden 是引擎秘密，不得仅靠文案含蓄兜底。 */
+export function selectVisibleNpcDecisionIds(
+  decisions: NpcDecisionReceipt[],
+  maxVisibleActions: number,
+): string[] {
+  return decisions
+    .filter(decision => decision.visibility !== 'hidden')
+    .slice(0, maxVisibleActions)
+    .map(decision => decision.id);
 }

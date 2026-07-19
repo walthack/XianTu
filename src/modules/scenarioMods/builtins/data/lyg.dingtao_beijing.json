@@ -4840,6 +4840,16 @@
               "initialValues": {
                 "courtLegitimacy": 42,
                 "militaryTension": 68
+              },
+              "limits": {
+                "courtLegitimacy": {
+                  "min": 0,
+                  "max": 100
+                },
+                "militaryTension": {
+                  "min": 0,
+                  "max": 100
+                }
               }
             },
             "canonPolicy": {
@@ -5152,7 +5162,12 @@
                 "utility": {
                   "urgency": 2,
                   "factionGoal": 4,
-                  "expectedBenefit": 2
+                  "expectedBenefit": 2,
+                  "situation": {
+                    "militaryTension": 2,
+                    "courtLegitimacy": -1
+                  },
+                  "escalation": 2
                 },
                 "visibility": "public",
                 "durationTurns": 2
@@ -5185,7 +5200,11 @@
                   "militaryTension": 8
                 },
                 "utility": {
-                  "factionGoal": 2
+                  "factionGoal": 2,
+                  "situation": {
+                    "militaryTension": 4
+                  },
+                  "escalation": 3
                 },
                 "visibility": "public",
                 "durationTurns": 1
@@ -5213,7 +5232,11 @@
                   "militaryTension": 2
                 },
                 "utility": {
-                  "factionGoal": 3
+                  "factionGoal": 3,
+                  "situation": {
+                    "courtLegitimacy": -3
+                  },
+                  "escalation": 2
                 },
                 "visibility": "public",
                 "durationTurns": 1
@@ -5279,7 +5302,11 @@
                 },
                 "utility": {
                   "factionGoal": 4,
-                  "expectedBenefit": 2
+                  "expectedBenefit": 2,
+                  "situation": {
+                    "militaryTension": 4
+                  },
+                  "escalation": 2
                 },
                 "visibility": "rumor",
                 "durationTurns": 2
@@ -5307,7 +5334,12 @@
                   "militaryTension": -1
                 },
                 "utility": {
-                  "factionGoal": 4
+                  "factionGoal": 4,
+                  "situation": {
+                    "militaryTension": 2,
+                    "courtLegitimacy": -2
+                  },
+                  "escalation": 1
                 },
                 "visibility": "rumor",
                 "durationTurns": 2
@@ -5392,7 +5424,12 @@
                 },
                 "utility": {
                   "factionGoal": 4,
-                  "expectedBenefit": 2
+                  "expectedBenefit": 2,
+                  "situation": {
+                    "militaryTension": 4,
+                    "courtLegitimacy": -2
+                  },
+                  "escalation": 2
                 },
                 "visibility": "public",
                 "durationTurns": 2
@@ -5421,7 +5458,11 @@
                   "militaryTension": -5
                 },
                 "utility": {
-                  "factionGoal": 3
+                  "factionGoal": 3,
+                  "situation": {
+                    "militaryTension": 5
+                  },
+                  "escalation": 2
                 },
                 "visibility": "public",
                 "durationTurns": 1
@@ -5481,7 +5522,11 @@
                 },
                 "utility": {
                   "factionGoal": 3,
-                  "expectedBenefit": 2
+                  "expectedBenefit": 2,
+                  "situation": {
+                    "courtLegitimacy": -2
+                  },
+                  "escalation": 2
                 },
                 "visibility": "hidden",
                 "durationTurns": 2
@@ -5549,9 +5594,15 @@
                 "暗道",
                 "伏兵",
                 "暗桩",
-                "魂丹"
+                "魂丹",
+                "郭解托孤",
+                "郭解身亡",
+                "郭解死亡",
+                "董卓身亡",
+                "董卓死亡"
               ],
-              "rejectConcreteQuantities": true
+              "rejectConcreteQuantities": true,
+              "allowUnverifiedQuantities": true
             }
           },
           "opportunities": [
