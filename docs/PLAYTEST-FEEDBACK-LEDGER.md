@@ -271,3 +271,40 @@
 - **对示例对白的直接结论**：可公开“阮香凝协助救驾、施展瞑寂扰敌”及其当前从属关系；不得默认公开“凝玉姬/黑魔海高层”真身。若程宗扬确要主动向吕雉披露，正文必须把它写成一次有政治代价的明确泄密决定，而不能作为普通履历介绍；霍子孟也不能凭空断言贾文和与她同门。
 - **状态**：✅ 2026-07-19 已完成。`canon:build`（327/327）、37 关 schema、`validate:all` 与 production build 全绿；裁定簿已单向同步 NAS 镜像并逐字节核同。
 - **Claude 二审与补洞**（job `claude-2026-07-19T02-03-27-975Z-c14c5787`）：二审认可“通用机密隔离 + 阮香凝点名纵切”方向，但指出 lint 只在手动 `canon:build`、最终 builtin 与可重建 v2 输入未直扫、本人公开/玩家泄密语义未区分、仅阮香凝有回归。07-19 依建议修复：`validate:all` 与 production `prebuild` 强制执行裁定 lint；扫描范围扩至生成 stage + `builtins/data` + registry + 三份脚本 + v2 输入；清理 v2/势力抽档残留并留 `backups/pre-108-source-cleanup-20260719/`；双路由明确允许可见异常盘问、禁止先知点破，已揭露者延续知情，玩家泄密须明确授权并承担政治/关系后果；新增游婵通用规则与门禁编排回归。结构化 `revealedTo` 留待 B/C。`canon:build` 330/330、100 份裁定产物、`validate:all` 与 production build 全绿。
+
+## #24 UI 简陋、人物无头像，缺少代入感 —— 🔴 待修（素材已有，消费链与展示槽未完成）
+
+- **反馈**（2026-07-19，用户）：当前 UI 偏工具面板，人物连头像都没有；大量角色看起来只是同质化文字条目，缺少“正在与谁相处/对话”的代入感。
+- **代码级核实**：
+  1. 不是纯素材短缺：`character-canon/portraits/` 已有 96 张官方插图（目录共 97 个文件，含非图片/组合图等边界），覆盖约 50 名主要角色；角色 schema、validator 与关系投影也已有 `avatar/portrait` 字段；
+  2. 但现行 stage/registry 基本没有把图片引用写进角色 profile，官方图目录也没有形成前端可解析的资产 manifest；
+  3. `RelationshipNetworkPanel.vue` 的列表与详情仍固定显示姓名首字，`SectMembersContent.vue`、`UnmappedLocationsPanel.vue` 等同样如此；`CharacterDetailsPanel.vue` 虽有 `<img>` 槽，却只接受 `http/data:`，明确把 `img:<key>` 留到 E-M2，且只服务玩家自身；
+  4. 主叙事区没有“当前发言者/在场角色”头像槽，因此即使关系面板接图，核心阅读回合仍不会增加人物在场感。
+- **根因**：R3-4 目前只完成“数据地基 + 官图抽取”，E-M2（图片存储/解析）、E-M3（展示区）未实施；roadmap 先前把“96 张官图已覆盖”写得像体验已覆盖，实际只是素材覆盖，UI 消费尚未闭环。
+- **文件指针**：`mod-kit/generated/deepseek-v4-flash/character-canon/portraits/`；`src/modules/scenarioMods/schema/canon.ts::ScenarioModCharacterProfile`；`validator.ts:518-519`；`relationships.ts:198-199`；`RelationshipNetworkPanel.vue:53-55,112-114`；`CharacterDetailsPanel.vue:613-621`；`RELEASE-ROADMAP.md::R3-4`。
+- **推荐方案（先做主要角色纵切，不全量铺图）**：
+  1. 生成可审计的 `portrait-manifest`：正典角色 ID/规范名 → SAFE 官图资源；组合图、限制版、高风险图不自动进默认 UI；
+  2. 建一个统一 `resolveCharacterPortrait()`，支持打包静态资源、未来 `img:<key>`、URL/data 与姓名首字/剪影回退，避免各面板各写一套；
+  3. 首批只接主叙事在场/发言人物、关系列表/详情两个高频槽；选 6–10 位首轮主要角色做真机纵切，再决定宗门/地图等次级槽；
+  4. 图片只能按“已登场/已建立关系”消费，不能因 manifest 存在而泄露未来角色。
+- **验证标准**：首批主要角色在叙事区与关系面板显示同一张可追溯头像；无图/加载失败稳定回退；未登场人物不泄漏；移动端不挤压正文；SAFE/限制版边界有测试或 lint；用同一存档对照测试“辨认当前发言者速度与人物区分度”。
+- **状态**：2026-07-19 已立项，未实施。优先级 P1（体验纵切）；不应等待 AI 补齐全部余量，先消费已有官图。
+
+## #25 掷骰触发规则模糊，出现未预告便已掷骰 —— 🔴 待修（P0 玩家代理权；新旧判定双轨分裂）
+
+- **反馈**（2026-07-19，用户）：玩家不知道什么行动会触发掷骰，多次看到正文已经给出骰点/判定结果，却没有事先告知或确认。
+- **代码级核实**：
+  1. 新本地判定路径本身有前置卡：`MainGamePanel.sendMessage()` 先调用 `buildLocalJudgementPreflight()`，保存 pending 后停止请求模型；只有玩家点击“执行判定”才调用 `resolvePendingJudgement()` 掷 d20；
+  2. 但预检分类器只是保守关键词表，例如战斗仅识别“攻击/出手/斩/杀/斗法/交手/战斗/迎战”，社交仅识别“说服/威胁/交涉/谈判/收服/招揽”。“试着劝他”“挡住追兵”“检查伤势”等大量自然表达会漏判；
+  3. 与此同时，旧主叙事合同仍明确要求模型在“战斗/修炼/炼丹/探索/社交等场景必须使用判定”，并输出 `〔类型:结果,判定值...〕`；`FormattedText.vue` 还会把这种旧标签渲染成正式判定卡；
+  4. 管线只在本地 resolution 已存在时禁止模型重骰。未命中新预检时，旧模型判定仍会直接出现；风险若由本轮剧情中新生，也没有“先停在风险门前、下一轮再确认”的协议。
+- **根因**：可见行动判定只完成了“命中关键词时的本地前置闭环”，尚未完成旧式 LLM 判定的退役与全入口迁移。新引擎把旧 `〔判定〕` 当“仅叙事展示”，UI 却仍把它画成系统结果，玩家看不出两者权威差异，形成事实上的暗骰。
+- **文件指针**：`src/utils/judgementPreflight.ts::KEYWORDS/buildLocalJudgementPreflight`；`src/components/dashboard/MainGamePanel.vue:1505-1551,1902-1912`；`src/services/prompts/defaultPrompts.ts:414-426`；`src/utils/prompts/definitions/businessRules.ts:132-141`；`src/components/common/FormattedText.vue:314-365,641`；`src/utils/AIBidirectionalSystem.ts:2067-2069`；`src/utils/judgementRules.ts::extractLegacyJudgementMarkers`。
+- **推荐方案（单一权威，先止暗骰）**：
+  1. 主叙事双路由删除“模型必须自行判定/计算数值”，改为：没有 `【本地判定已结算】` 就不得输出骰点或 `〔判定〕`；叙事中新生风险必须停在行动门前，给玩家可选择的风险行动，下一轮由本地预检接管；
+  2. 所有玩家入口继续汇入同一 preflight；分类从散落关键词升级为“显式动作词 + 目标/风险语义”规则，至少覆盖当前旧合同列出的战斗、突破、交涉、潜行、炼制、搜索、偷窃、欺骗，并为未命中的高风险措辞加回归语料；
+  3. 前置卡标题明确写“尚未掷骰”，列出触发原因、难度、已计入因子与六档后果；按钮改为“确认并掷骰”，消除“执行判定”是否已掷的歧义；
+  4. `FormattedText` 对无本地 resolution ID 的旧式判定不再渲染成权威系统卡：迁移期可标“旧叙事描述（不计入系统）”并报警，稳定后直接拒收/重写；
+  5. 给 proposal/resolution 使用同一 ID 做 UI 与存档审计断言：任何玩家行动 resolution 必须存在先前 pending；重试/读档不能绕过或重骰。
+- **验证标准**：手输、行动选项、动作队列三入口各跑战斗/逃脱/潜入/探索/炼制/修炼/交涉与自然同义表达；每次真实 d20 前都可见“尚未掷骰”卡并由玩家确认；普通对话不滥弹；模型不可在无本地回执时生成权威骰点；风险由正文中新生时停在门前；刷新/重试保持同一 pending/resolution ID 且只结算一次。
+- **状态**：2026-07-19 已立项，未实施。优先级 P0；先于 #24 处理，因为它直接影响玩家代理权与对规则的信任。
