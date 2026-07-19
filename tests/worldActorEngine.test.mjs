@@ -84,6 +84,37 @@ test('Dingtao built-in validates with a single-stage world actor contract', asyn
   assert.equal(JSON.stringify(event.worldActor).includes('ruan_xiangning'), false, 'current actor slice must not leak Ruan');
 });
 
+test('Dingtao new save skips initial completed beats and opens on the enthronement actor slice', async () => {
+  const { parseScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
+  const {
+    applyStrictScenarioInitializationToSave,
+    buildStrictScenarioInitialization,
+  } = await loadTs('../src/modules/scenarioMods/strictInitializer.ts');
+  const { advanceScenarioRuntime, getNarrativeAnchorEvent } = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  const mod = parseScenarioMod(JSON.parse(await readFile(stageUrl, 'utf8')));
+  const initialization = buildStrictScenarioInitialization(mod, '2026-07-19T00:00:00.000Z');
+  const initialized = applyStrictScenarioInitializationToSave({
+    角色: { 位置: { 描述: '旧地点' } },
+    社交: { 关系: {} },
+    世界: { 信息: {}, 状态: {} },
+    系统: { 扩展: {} },
+  }, initialization);
+  const beforeAdvance = initialized.世界.状态.剧本模组;
+  assert.deepEqual(beforeAdvance.completedEventIds.slice(0, 4), [
+    'lyg.event.s01_01',
+    'lyg.event.s01_02',
+    'lyg.event.s01_03',
+    'lyg.event.s01_04',
+  ]);
+
+  const advanced = advanceScenarioRuntime(initialized).saveData;
+  const runtime = advanced.世界.状态.剧本模组;
+  assert.equal(getNarrativeAnchorEvent(runtime).id, 'lyg.event.s01_05');
+  assert.equal(getNarrativeAnchorEvent(runtime).objective, '到昭阳宫参与新帝登基');
+  assert.equal(runtime.activeEventIds.includes('lyg.event.s01_01'), false);
+  assert.equal(runtime.actorEngine.anchorEventId, 'lyg.event.s01_05');
+});
+
 test('tracking an opportunity awards one persistent permission only after player completion', async () => {
   const { advanceScenarioRuntime, trackStoryOpportunity } = await loadTs('../src/modules/scenarioMods/runtime.ts');
   const data = save();

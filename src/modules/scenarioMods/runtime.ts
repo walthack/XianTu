@@ -394,12 +394,31 @@ export function getNarrativeAnchorEvent(runtime: Pick<RuntimeState, 'chapters' |
 }
 
 export function createScenarioProgress(mod: ScenarioMod): ScenarioProgressState {
-  return {
-    chapters: structuredClone(mod.scenario.chapters || []),
-    events: structuredClone(mod.scenario.events || []),
+  const chapters = structuredClone(mod.scenario.chapters || []);
+  const events = structuredClone(mod.scenario.events || []);
+  const runtimeForInitialFlags = {
+    chapters,
+    events,
     completedChapterIds: [],
     activeEventIds: [],
     completedEventIds: [],
+    currentChapterId: null,
+    flags: { ...(mod.scenario.initialFlags || {}) },
+  } as RuntimeState;
+  const emptySave = {} as SaveData;
+  // initialFlags 描述的是开场前已经发生的事实。必须在第一次 Rail 选锚前
+  // 把对应事件写入 completedEventIds；否则 UI 会先激活并展示一个 flag
+  // 已经为 true 的旧事件，直到玩家完成首轮操作后才被运行时清算。
+  const completedEventIds = events
+    .filter(event => hasCompletion(event.completion)
+      && conditionsMatch(event.completion, emptySave, runtimeForInitialFlags))
+    .map(event => event.id);
+  return {
+    chapters,
+    events,
+    completedChapterIds: [],
+    activeEventIds: [],
+    completedEventIds,
   };
 }
 
