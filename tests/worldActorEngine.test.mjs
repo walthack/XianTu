@@ -103,6 +103,13 @@ test('decision-core validator rejects ambiguous bindings, coercive limits, and b
   const brokenReference = structuredClone(source);
   coreOf(brokenReference).actionBindings[0].actorIds = ['liuchao.character.typo'];
   assert.equal(validateScenarioMod(brokenReference).issues.some(item => item.code === 'unknown_reference'), true);
+
+  const brokenAssociation = structuredClone(source);
+  coreOf(brokenAssociation).narrativeGuard.forbiddenAssociations[0].maxDistance = 0;
+  assert.equal(
+    validateScenarioMod(brokenAssociation).issues.some(item => item.path.endsWith('maxDistance')),
+    true,
+  );
 });
 
 test('s01_05 deterministic core derives four distinct actions with explainable scores and hard canon elimination', async () => {
@@ -110,6 +117,7 @@ test('s01_05 deterministic core derives four distinct actions with explainable s
     NPC_ACTION_LIBRARY,
     applyNpcDecisionActorState,
     applyNpcDecisionEffects,
+    applyNpcDecisionEffectsWithAudit,
     decideNpcActions,
     selectVisibleNpcDecisionIds,
   } = await loadTs('../src/modules/scenarioMods/npcDecisionCore.ts');
@@ -170,6 +178,16 @@ test('s01_05 deterministic core derives four distinct actions with explainable s
   assert.deepEqual(applyNpcDecisionEffects(core, changed, [{
     ...dong, effects: { globalPopulation: -1 },
   }]), changed, 'legacy snapshot effects outside the whitelist degrade by skipping');
+  const auditedLegacyEffect = applyNpcDecisionEffectsWithAudit(core, changed, [{
+    ...dong, effects: { globalPopulation: -1 },
+  }]);
+  assert.deepEqual(auditedLegacyEffect.situationValues, changed);
+  assert.deepEqual(auditedLegacyEffect.rejectedEffects, [{
+    decisionId: dong.id,
+    key: 'globalPopulation',
+    delta: -1,
+    reason: 'effect_not_whitelisted',
+  }]);
   assert.equal(
     applyNpcDecisionEffects(core, { courtLegitimacy: 99, militaryTension: 99 }, first.decisions).courtLegitimacy,
     100,
@@ -217,6 +235,13 @@ test('Dingtao new save skips initial completed beats and opens on the enthroneme
   assert.match(prompt, /knownFacts=/);
   assert.match(prompt, /mustNotInvent=/);
   assert.match(prompt, /角色主张，绝不等同或写回世界真值/);
+
+  const drifted = structuredClone(advanced);
+  drifted.世界.状态.剧本模组.actorEngine.decisionConfigHash = 'legacy-config';
+  const migrated = advanceScenarioRuntime(drifted).saveData.世界.状态.剧本模组.actorEngine;
+  assert.equal(migrated.configMigrations.at(-1).fromHash, 'legacy-config');
+  assert.equal(migrated.configMigrations.at(-1).toHash, migrated.decisionConfigHash);
+  assert.equal(migrated.decisionRound, 0, 'config migration must explicitly rebuild from round zero');
 });
 
 test('tracking an opportunity awards one persistent permission only after player completion', async () => {
@@ -349,6 +374,14 @@ test('tracking initializes round zero but expires instead of freezing offscreen 
   const before = data.世界.状态.剧本模组;
   assert.equal(before.actorEngine.decisionRound, 0);
   assert.equal(before.actorEngine.decisions.length, 4, 'tracking must not create a round-0 prompt gap');
+  const legacyMissingTurn = structuredClone(data);
+  delete legacyMissingTurn.世界.状态.剧本模组.actorEngine.trackedAtTurn;
+  const legacySettled = advanceScenarioRuntime(legacyMissingTurn).saveData.世界.状态.剧本模组;
+  assert.equal(
+    legacySettled.offscreenResolvedEventIds.includes('lyg.event.s01_05'),
+    true,
+    'legacy tracking without trackedAtTurn must expire instead of freezing forever',
+  );
   before.worldTurn = before.actorEngine.trackedAtTurn + TRACKED_OPPORTUNITY_MAX_TURNS + 1;
   const settled = advanceScenarioRuntime(data).saveData.世界.状态.剧本模组;
   assert.equal(settled.offscreenResolvedEventIds.includes('lyg.event.s01_05'), true);

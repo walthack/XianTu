@@ -28,6 +28,7 @@ const QUANTITY_CLAIM_SOURCE = /探子|斥候|军报|来报|使者|消息|号称|
 const UNVERIFIED_QUANTITY_CONTEXT = /号称|声称|据报|传闻|据说|未核实|未经核实|尚待核实|无法证实|真假难辨/;
 const AUTHORITATIVE_QUANTITY_CONTEXT = /确有|确认|查明|已经核实|确切|实有/;
 const HYPOTHETICAL_CONTEXT = /莫非|是否|会不会|难道|假若|倘若|若有|并无|没有|未见|不曾/;
+const CONFIRMING_CONTEXT = /确有|果然|原来|证实|查明|确认|实有|的确|属实/;
 const CONTEXTUAL_FORBIDDEN_TERMS = new Set(['暗道', '伏兵', '暗桩', '魂丹']);
 const INVENTION_GUARDS: Array<{ marker: RegExp; violation: RegExp; issue: string }> = [
   {
@@ -50,6 +51,28 @@ function parseForbiddenTerms(scenarioPrompt: string): string[] {
   const match = scenarioPrompt.match(/renderGuard\.forbiddenTerms=([^；。\n]*)/);
   if (!match?.[1]) return [];
   return match[1].split('|').map(item => item.trim()).filter(Boolean);
+}
+
+interface ForbiddenAssociation {
+  subjects: string[];
+  predicates: string[];
+  maxDistance?: number;
+}
+
+function parseForbiddenAssociations(scenarioPrompt: string): ForbiddenAssociation[] {
+  const marker = 'renderGuard.forbiddenAssociations=';
+  const start = scenarioPrompt.indexOf(marker);
+  if (start < 0) return [];
+  const valueStart = start + marker.length;
+  const end = scenarioPrompt.indexOf('；renderGuard.', valueStart);
+  if (end < 0) return [];
+  try {
+    const parsed = JSON.parse(scenarioPrompt.slice(valueStart, end));
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    // 配置装载时由 validator 拒绝；渲染门禁遇到损坏提示词时保持保守但不中断回合。
+    return [];
+  }
 }
 
 function sentenceHasUnauthorizedQuantity(sentence: string, scenarioPrompt: string): boolean {
@@ -75,14 +98,38 @@ function concreteQuantityViolation(narrative: string, scenarioPrompt: string): b
 }
 
 function leakedForbiddenTerm(narrative: string, terms: string[]): string | undefined {
-  return terms.find(term => narrative.split(/[。！？\n]/).some(sentence => {
+  const sentences = narrative.split(/[。！？\n]/);
+  return terms.find(term => sentences.some((sentence, index) => {
     if (!new RegExp(escapeRegExp(term), 'u').test(sentence)) return false;
-    return !(CONTEXTUAL_FORBIDDEN_TERMS.has(term) && HYPOTHETICAL_CONTEXT.test(sentence));
+    if (!CONTEXTUAL_FORBIDDEN_TERMS.has(term) || !HYPOTHETICAL_CONTEXT.test(sentence)) return true;
+    // 假设/否定句只在没有被本句或紧邻下一句坐实时放行，防止
+    // “是否另有暗道？确有一条通往北阙”用跨句省略主语绕过门禁。
+    return CONFIRMING_CONTEXT.test(sentence) || CONFIRMING_CONTEXT.test(sentences[index + 1] || '');
   }));
 }
 
+function leakedForbiddenAssociation(
+  narrative: string,
+  associations: ForbiddenAssociation[],
+): ForbiddenAssociation | undefined {
+  return associations.find(rule => {
+    const maxDistance = Number.isInteger(rule.maxDistance) ? rule.maxDistance! : 48;
+    return rule.subjects.some(subject => {
+      for (let subjectAt = narrative.indexOf(subject); subjectAt >= 0; subjectAt = narrative.indexOf(subject, subjectAt + subject.length)) {
+        if (rule.predicates.some(predicate => {
+          for (let predicateAt = narrative.indexOf(predicate); predicateAt >= 0; predicateAt = narrative.indexOf(predicate, predicateAt + predicate.length)) {
+            if (Math.abs(predicateAt - subjectAt) <= maxDistance) return true;
+          }
+          return false;
+        })) return true;
+      }
+      return false;
+    });
+  });
+}
+
 export function requiresNarrativeBuffering(scenarioPrompt: string): boolean {
-  return /mustNotInvent=|renderGuard\.(?:forbiddenTerms|rejectConcreteQuantities)=/.test(scenarioPrompt);
+  return /mustNotInvent=|renderGuard\.(?:forbiddenTerms|forbiddenAssociations|rejectConcreteQuantities)=/.test(scenarioPrompt);
 }
 
 export function safeNarrativeFallback(): string {
@@ -111,6 +158,10 @@ export function validateNarrativePerformance(
   const leakedTerm = leakedForbiddenTerm(narrative, forbiddenTerms);
   if (leakedTerm) {
     issues.push(`${HARD_ISSUE_PREFIX}正文命中阶段禁词“${leakedTerm}”`);
+  }
+  const leakedAssociation = leakedForbiddenAssociation(narrative, parseForbiddenAssociations(scenarioPrompt));
+  if (leakedAssociation) {
+    issues.push(`${HARD_ISSUE_PREFIX}正文提前演出受保护人物的后续状态`);
   }
   if (concreteQuantityViolation(narrative, scenarioPrompt)) {
     issues.push(`${HARD_ISSUE_PREFIX}正文补造了具体兵力数字、军事距离或比例`);

@@ -5601,6 +5601,26 @@
                 "董卓身亡",
                 "董卓死亡"
               ],
+              "forbiddenAssociations": [
+                {
+                  "subjects": [
+                    "郭解",
+                    "董卓"
+                  ],
+                  "predicates": [
+                    "伤及心脉",
+                    "撑不了",
+                    "死志",
+                    "托孤",
+                    "临终",
+                    "身亡",
+                    "死亡",
+                    "被杀",
+                    "永久失能"
+                  ],
+                  "maxDistance": 48
+                }
+              ],
               "rejectConcreteQuantities": true,
               "allowUnverifiedQuantities": true
             }

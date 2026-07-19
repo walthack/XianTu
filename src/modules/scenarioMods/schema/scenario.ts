@@ -167,6 +167,12 @@ export interface ScenarioNpcDecisionCore {
   /** 只约束 LLM 渲染，不参与本地决策和结算。 */
   narrativeGuard?: {
     forbiddenTerms?: string[];
+    /** 数据驱动的“主体 + 禁止谓词”近邻门禁，避免把某一关人物硬编码进通用引擎。 */
+    forbiddenAssociations?: Array<{
+      subjects: string[];
+      predicates: string[];
+      maxDistance?: number;
+    }>;
     rejectConcreteQuantities?: boolean;
     /** 允许“某来源声称 + 明示未核实”的数字；它只是传闻，不会写回局势真值。 */
     allowUnverifiedQuantities?: boolean;

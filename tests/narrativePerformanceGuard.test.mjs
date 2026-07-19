@@ -78,14 +78,27 @@ test('NPC rendering contract rejects mustNotInvent violations even outside voice
 
 test('future death variants are rejected through the data-driven stage guard', async () => {
   const { validateNarrativePerformance } = await loadTs('../src/modules/scenarioMods/narrativePerformanceGuard.ts');
-  const scenarioPrompt = 'mustNotInvent=具体兵力数字、郭解或董卓后续生死。renderGuard.forbiddenTerms=郭解托孤|郭解身亡|董卓身亡。';
-  const result = validateNarrativePerformance(
+  const associations = [{
+    subjects: ['郭解', '董卓'],
+    predicates: ['伤及心脉', '撑不了', '死志', '托孤', '临终', '身亡', '死亡', '被杀', '永久失能'],
+    maxDistance: 48,
+  }];
+  const scenarioPrompt = `mustNotInvent=具体兵力数字、郭解或董卓后续生死。renderGuard.forbiddenTerms=郭解托孤|郭解身亡|董卓身亡；renderGuard.forbiddenAssociations=${JSON.stringify(associations)}；renderGuard.rejectConcreteQuantities=true。`;
+  for (const narrative of [
     '秦桧低声说郭解托孤已成定局。',
-    '继续',
-    scenarioPrompt,
+    '郭解伤及心脉，撑不了几日了。',
+    '董卓已经显出死志。',
+    '郭解恐怕即将永久失能。',
+  ]) {
+    const result = validateNarrativePerformance(narrative, '继续', scenarioPrompt);
+    assert.equal(result.valid, false, narrative);
+    assert.match(result.issues.join('；'), /硬门禁/);
+  }
+  assert.equal(
+    validateNarrativePerformance(`宫女伤及心脉。${'宫灯依次亮起，'.repeat(12)}郭解在远处整顿衣冠。`, '继续', scenarioPrompt).valid,
+    true,
+    'association guard must require subject/predicate proximity',
   );
-  assert.equal(result.valid, false);
-  assert.match(result.issues.join('；'), /郭解托孤/);
 });
 
 test('real combined prompt rejects authoritative military quantities without blocking civilian counts or hypotheses', async () => {
@@ -110,6 +123,11 @@ test('real combined prompt rejects authoritative military quantities without blo
   assert.equal(validateNarrativePerformance('一队宫女鱼贯而入。', '继续', scenarioPrompt).valid, true);
   assert.equal(validateNarrativePerformance('一名宫女走到宫门前送诏书。', '继续', scenarioPrompt).valid, true);
   assert.equal(validateNarrativePerformance('他心想莫非有伏兵。', '继续', scenarioPrompt).valid, true);
+  assert.equal(
+    validateNarrativePerformance('宫中是否另有暗道？确有一条通往北阙。', '继续', scenarioPrompt).valid,
+    false,
+    'a following confirmation sentence cannot launder a contextual forbidden term',
+  );
   assert.equal(validateNarrativePerformance('北军已有三百人驻守要道。', '继续', scenarioPrompt).valid, false);
   assert.equal(
     validateNarrativePerformance('太后如今每一步都需借力。', '继续', scenarioPrompt).valid,

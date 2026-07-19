@@ -60,6 +60,18 @@ export interface NpcDecisionRound {
   decisions: NpcDecisionReceipt[];
 }
 
+export interface RejectedNpcDecisionEffect {
+  decisionId: string;
+  key: string;
+  delta: number;
+  reason: 'effect_not_whitelisted';
+}
+
+export interface NpcDecisionEffectApplication {
+  situationValues: Record<string, number>;
+  rejectedEffects: RejectedNpcDecisionEffect[];
+}
+
 export const NPC_ACTION_LIBRARY_VERSION = 'r2-10b.2';
 
 // 通用行动词表保持小而可复用；stage 只绑定其中适用项及白名单 effects。
@@ -281,23 +293,44 @@ export function applyNpcDecisionActorState(
   return next;
 }
 
-export function applyNpcDecisionEffects(
+export function applyNpcDecisionEffectsWithAudit(
   core: ScenarioNpcDecisionCore,
   situationValues: Record<string, number>,
   decisions: NpcDecisionReceipt[],
-): Record<string, number> {
+): NpcDecisionEffectApplication {
   const whitelist = new Set(core.situation.whitelist);
   const next = { ...situationValues };
+  const rejectedEffects: RejectedNpcDecisionEffect[] = [];
   for (const decision of decisions) {
     for (const [key, delta] of Object.entries(decision.effects)) {
       // Registry 装载时会严格拒绝越界；这里面对旧档快照选择降级跳过，避免整回合硬崩。
-      if (!whitelist.has(key)) continue;
+      if (!whitelist.has(key)) {
+        rejectedEffects.push({
+          decisionId: decision.id,
+          key,
+          delta,
+          reason: 'effect_not_whitelisted',
+        });
+        continue;
+      }
       const raw = (next[key] || 0) + delta;
       const limit = core.situation.limits?.[key];
       next[key] = limit ? Math.min(limit.max, Math.max(limit.min, raw)) : raw;
     }
   }
-  return next;
+  return { situationValues: next, rejectedEffects };
+}
+
+export function applyNpcDecisionEffects(
+  core: ScenarioNpcDecisionCore,
+  situationValues: Record<string, number>,
+  decisions: NpcDecisionReceipt[],
+): Record<string, number> {
+  const applied = applyNpcDecisionEffectsWithAudit(core, situationValues, decisions);
+  if (applied.rejectedEffects.length && typeof console !== 'undefined' && console.warn) {
+    console.warn('[NPC Decision Core] skipped invalid legacy effects', applied.rejectedEffects);
+  }
+  return applied.situationValues;
 }
 
 /** hidden 是引擎秘密，不得仅靠文案含蓄兜底。 */

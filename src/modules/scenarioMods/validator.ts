@@ -516,6 +516,38 @@ function validateNpcDecisionCore(
       add(`${path}.narrativeGuard`, 'invalid_type', 'narrativeGuard must be an object.');
     } else {
       validateStringArray(value.narrativeGuard.forbiddenTerms, `${path}.narrativeGuard.forbiddenTerms`, add);
+      if (value.narrativeGuard.forbiddenAssociations !== undefined) {
+        if (!Array.isArray(value.narrativeGuard.forbiddenAssociations)) {
+          add(`${path}.narrativeGuard.forbiddenAssociations`, 'invalid_type', 'forbiddenAssociations must be an array.');
+        } else {
+          value.narrativeGuard.forbiddenAssociations.forEach((rawRule, index) => {
+            const rulePath = `${path}.narrativeGuard.forbiddenAssociations[${index}]`;
+            if (!isRecord(rawRule)) {
+              add(rulePath, 'invalid_type', 'Forbidden association must be an object.');
+              return;
+            }
+            validateStringArray(rawRule.subjects, `${rulePath}.subjects`, add);
+            validateStringArray(rawRule.predicates, `${rulePath}.predicates`, add);
+            if (!Array.isArray(rawRule.subjects) || rawRule.subjects.length === 0) {
+              add(`${rulePath}.subjects`, 'required_array', 'Forbidden association requires at least one subject.');
+            }
+            if (!Array.isArray(rawRule.predicates) || rawRule.predicates.length === 0) {
+              add(`${rulePath}.predicates`, 'required_array', 'Forbidden association requires at least one predicate.');
+            }
+            if (
+              rawRule.maxDistance !== undefined
+              && (
+                typeof rawRule.maxDistance !== 'number'
+                || !Number.isInteger(rawRule.maxDistance)
+                || rawRule.maxDistance < 1
+                || rawRule.maxDistance > 200
+              )
+            ) {
+              add(`${rulePath}.maxDistance`, 'invalid_range', 'maxDistance must be an integer from 1 to 200.');
+            }
+          });
+        }
+      }
       if (
         value.narrativeGuard.rejectConcreteQuantities !== undefined
         && typeof value.narrativeGuard.rejectConcreteQuantities !== 'boolean'

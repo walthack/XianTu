@@ -10,12 +10,13 @@ import type {
   ScenarioStoryOpportunity,
 } from './schema';
 import {
-  applyNpcDecisionEffects,
+  applyNpcDecisionEffectsWithAudit,
   applyNpcDecisionActorState,
   decideNpcActions,
   npcDecisionConfigHash,
   selectVisibleNpcDecisionIds,
   type NpcDecisionReceipt,
+  type RejectedNpcDecisionEffect,
 } from './npcDecisionCore';
 import { recordOffscreenDivergence, type ScenarioDivergence } from './divergenceLedger';
 import { getCanonRailOrder, getCanonRailProfile, isCanonRailChapter } from './canonRail';
@@ -77,6 +78,15 @@ export interface ScenarioActorEngineState {
   situationValues?: Record<string, number>;
   npcStates?: ScenarioNpcDecisionActor[];
   decisionRound?: number;
+  /** 旧档携带越界 effect 时的可审计降级记录；不得让回执与实际落账静默分叉。 */
+  effectAudit?: Array<RejectedNpcDecisionEffect & { detectedAtTurn: number }>;
+  /** 决策配置热更导致 round-0 重建时保留旧/新哈希，避免局势回滚无迹可查。 */
+  configMigrations?: Array<{
+    anchorEventId: string;
+    fromHash: string;
+    toHash: string;
+    migratedAtTurn: number;
+  }>;
   receipts: ScenarioActorReceipt[];
   entitlements: ScenarioActorEntitlement[];
 }
@@ -126,6 +136,8 @@ function ensureActorEngine(runtime: RuntimeState): ScenarioActorEngineState {
   state.surfacedAgendaIds = Array.isArray(state.surfacedAgendaIds) ? state.surfacedAgendaIds : [];
   state.receipts = Array.isArray(state.receipts) ? state.receipts : [];
   state.entitlements = Array.isArray(state.entitlements) ? state.entitlements : [];
+  state.effectAudit = Array.isArray(state.effectAudit) ? state.effectAudit : [];
+  state.configMigrations = Array.isArray(state.configMigrations) ? state.configMigrations : [];
   runtime.actorEngine = state;
   return state;
 }
@@ -136,6 +148,8 @@ function findOpportunity(event: ScenarioModEvent | undefined, opportunityId: str
 }
 
 function settledTurn(runtime: RuntimeState): number {
+  // divergenceControl 在回合开头先递增 worldTurn；回执记“刚结算完成的回合”，
+  // 而 trackedAtTurn 记“玩家开始追踪时的当前回合”，两者纪年语义不同。
   return Math.max(0, (Number(runtime.worldTurn) || 0) - 1);
 }
 
@@ -211,6 +225,21 @@ function syncActorEngine(runtime: RuntimeState): void {
     && contract.decisionCore
     && state.decisionConfigHash !== configHash
   ) {
+    const fromHash = state.decisionConfigHash || 'legacy-unversioned';
+    if (!state.configMigrations!.some(item =>
+      item.anchorEventId === anchor.id && item.fromHash === fromHash && item.toHash === configHash
+    )) {
+      state.configMigrations!.push({
+        anchorEventId: anchor.id,
+        fromHash,
+        toHash: configHash!,
+        migratedAtTurn: Number(runtime.worldTurn) || 0,
+      });
+      if (state.configMigrations!.length > 20) state.configMigrations = state.configMigrations!.slice(-20);
+      if (typeof console !== 'undefined' && console.info) {
+        console.info(`[NPC Decision Core] config migrated ${fromHash} -> ${configHash}`);
+      }
+    }
     state.npcStates = structuredClone(contract.decisionCore.actors);
     state.situationValues = { ...contract.decisionCore.situation.initialValues };
     const round = decideNpcActions(contract.decisionCore, state.situationValues, state.npcStates);
@@ -249,7 +278,18 @@ function syncActorEngine(runtime: RuntimeState): void {
     state.decisionInputHash = round.inputHash;
     state.decisions = round.decisions;
     state.visibleDecisionIds = selectVisibleNpcDecisionIds(round.decisions, contract.decisionCore.maxVisibleActions);
-    state.situationValues = applyNpcDecisionEffects(contract.decisionCore, situation, round.decisions);
+    const effectApplication = applyNpcDecisionEffectsWithAudit(contract.decisionCore, situation, round.decisions);
+    state.situationValues = effectApplication.situationValues;
+    if (effectApplication.rejectedEffects.length) {
+      const detectedAtTurn = settledTurn(runtime);
+      state.effectAudit = [
+        ...(state.effectAudit || []),
+        ...effectApplication.rejectedEffects.map(item => ({ ...item, detectedAtTurn })),
+      ].slice(-50);
+      if (typeof console !== 'undefined' && console.warn) {
+        console.warn('[NPC Decision Core] skipped invalid legacy effects', effectApplication.rejectedEffects);
+      }
+    }
     state.npcStates = applyNpcDecisionActorState(contract.decisionCore, npcStates, round.decisions);
     state.decisionRound = (state.decisionRound || 0) + 1;
     state.activeAgendaId = undefined;
@@ -401,8 +441,12 @@ function resolveOffscreenWorldEvents(runtime: RuntimeState, transitions: Scenari
     );
     const effectiveStall = (runtime.stallTurns || 0)
       + (actorDrivenResolution && (runtime.steeringCooldown || 0) === 0 ? 1 : 0);
-    const trackedAge = (Number(runtime.worldTurn) || 0)
-      - (runtime.actorEngine?.trackedAtTurn ?? Number.POSITIVE_INFINITY);
+    const trackedAtTurn = Number(runtime.actorEngine?.trackedAtTurn);
+    // 旧档可能只有 trackedOpportunityId 而没有 trackedAtTurn；这种不完整追踪
+    // 必须立即视为过期，不能再次形成永久冻结场外结算的死锁。
+    const trackedAge = Number.isFinite(trackedAtTurn)
+      ? (Number(runtime.worldTurn) || 0) - trackedAtTurn
+      : Number.POSITIVE_INFINITY;
     const hasTrackedIntervention = Boolean(
       runtime.actorEngine?.trackedOpportunityId
       && resolution.resolvedEventIds.includes(runtime.actorEngine.anchorEventId || '')
