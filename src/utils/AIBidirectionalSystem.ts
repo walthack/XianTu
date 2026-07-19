@@ -1442,7 +1442,7 @@ ${missingItems.length > 0 ? `【上次结构化输出缺失】
               })
               .join('；');
 
-            const snippet = String((gmResponse as any)?.text || '')
+            const snippet = sanitizeAITextForDisplay(String((gmResponse as any)?.text || ''))
               .replace(/\s+/g, ' ')
               .trim()
               .slice(0, 80);
@@ -1638,24 +1638,39 @@ ${userPrompt}
             });
 
             const candidate = this.extractNarrativeText(String(step1Raw)).trim();
+            const narrativeControlCheck = validateNarrativePerformance(candidate, '', userPrompt);
+            const hasControlLeak = !narrativeControlCheck.valid;
             console.info('[开局生成遥测]', {
               step: 1,
               attempt,
               maxTokens: INITIAL_GENERATION_POLICY.step1MaxTokens,
               elapsedMs: Date.now() - attemptStartedAt,
               narrativeChars: candidate.length,
-              outcome: shouldRetryInitialNarrative(candidate.length) ? 'retryable_length' : 'accepted',
+              outcome: hasControlLeak
+                ? 'retryable_control_leak'
+                : (shouldRetryInitialNarrative(candidate.length) ? 'retryable_length' : 'accepted'),
             });
-            if (candidate.length >= INITIAL_GENERATION_POLICY.step1MinChars && (!bestStep1Text || candidate.length < bestStep1Text.length)) {
+            if (!hasControlLeak && candidate.length >= INITIAL_GENERATION_POLICY.step1MinChars && (!bestStep1Text || candidate.length < bestStep1Text.length)) {
               bestStep1Text = candidate;
             }
-            if (!shouldRetryInitialNarrative(candidate.length)) {
+            if (!hasControlLeak && !shouldRetryInitialNarrative(candidate.length)) {
               step1Text = candidate;
               break;
             }
-            lastStep1Error = candidate.length < INITIAL_GENERATION_POLICY.step1MinChars
-              ? `正文过短（${candidate.length}字）`
-              : `正文严重超长（${candidate.length}字）`;
+            if (hasControlLeak) {
+              lastStep1Error = narrativeControlCheck.issues.join('；');
+              if (attempt === INITIAL_GENERATION_POLICY.attemptsPerStep) {
+                const sanitizedCandidate = sanitizeAITextForDisplay(candidate).trim();
+                if (!shouldRetryInitialNarrative(sanitizedCandidate.length)) {
+                  step1Text = sanitizedCandidate;
+                  break;
+                }
+              }
+            } else {
+              lastStep1Error = candidate.length < INITIAL_GENERATION_POLICY.step1MinChars
+                ? `正文过短（${candidate.length}字）`
+                : `正文严重超长（${candidate.length}字）`;
+            }
           } catch (error) {
             lastStep1Error = error instanceof Error ? error.message : String(error);
             console.info('[开局生成遥测]', {
@@ -2294,7 +2309,8 @@ ${step1Text}
             if (typeof note === 'string') {
               const trimmed = note.trim();
               if (trimmed) {
-                const safeNote = trimmed.slice(0, 600);
+                const safeNote = sanitizeAITextForDisplay(trimmed).trim().slice(0, 600);
+                if (!safeNote) continue;
                 const { tryPostTravelNoteWithQueue } = await import('@/services/onlineLogQueue');
                 await tryPostTravelNoteWithQueue(sessionId, safeNote, meta);
                 onlineLogPosted = true;

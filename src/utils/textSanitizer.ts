@@ -16,6 +16,8 @@ const INTERNAL_NARRATIVE_CONTROL_MARKERS: Array<{ label: string; re: RegExp }> =
   { label: '世界演员合同', re: /【世界演员合同·[^】\r\n]+】/ },
   { label: '世界回合指令', re: /【世界回合·本轮世界必须行动】/ },
   { label: '机会追踪指令', re: /【玩家已追踪机会·本轮最高优先级】/ },
+  { label: '可选介入窗口', re: /【可选介入窗口】/ },
+  { label: '角色表演卡', re: /【[^】\r\n]{1,40}·角色表演卡(?:（逐轮硬合同）|\(逐轮硬合同\))】/ },
   { label: '承重角色保护', re: /【承重角色保护】/ },
   { label: 'Canon Rail控制协议', re: /【Canon Rail·默认正典】|【高光演出硬合同】/ },
 ];
@@ -152,6 +154,8 @@ export function stripInternalNarrativeControlLeaks(text: string): string {
     .replace(WORLD_HOOK_DIRECTIVE_RE, '')
     .replace(HIGH_INTELLIGENCE_CONTRACT_LABEL_RE, '')
     .replace(/【世界留钩】/g, '')
+    .replace(/【可选介入窗口】/g, '')
+    .replace(/【[^】\r\n]{1,40}·角色表演卡(?:（逐轮硬合同）|\(逐轮硬合同\))】/g, '')
     .replace(/\[R2-9叙事护栏·硬约束\]/g, '')
     .replace(/【表演门禁退回重写】/g, '');
   const changedByProtocolFilter = result !== text;

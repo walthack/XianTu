@@ -59,7 +59,20 @@ test('game state load and save preserves scenario runtime metadata', async () =>
       配置: {},
       设置: {},
       缓存: {},
-      历史: { 叙事: [] },
+      历史: { 叙事: [
+        {
+          type: 'gm',
+          content: '【贾文和·高智行为硬合同】贾文和展开绢图。',
+          time: '【仙历16年1月1日 00:00】',
+          actionOptions: [],
+        },
+        {
+          type: 'gm',
+          content: '`【世界留钩】正文结尾必须留下1-2个来自世界自身的新动静（信息、异动、NPC议程、风险或机会窗口）。`',
+          time: '【仙历16年1月1日 00:01】',
+          actionOptions: [],
+        },
+      ] },
       扩展: {
         剧本模组: { modId: scenarioRuntime.modId, modVersion: scenarioRuntime.modVersion, mode: 'strict' },
         _reconcileDebug: { ran: true, rawSnippet: 'legacy diagnostic' },
@@ -78,5 +91,9 @@ test('game state load and save preserves scenario runtime metadata', async () =>
     mode: 'strict',
   });
   assert.deepEqual(exported.社交.记忆.长期记忆, ['谢艺获救后仍在休养。']);
+  assert.deepEqual(
+    exported.系统.历史.叙事.map(message => message.content),
+    ['贾文和展开绢图。'],
+  );
   assert.equal('_reconcileDebug' in exported.系统.扩展, false);
 });

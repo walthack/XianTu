@@ -3,7 +3,7 @@ import test from 'node:test';
 
 import { loadTs } from './loadTs.mjs';
 
-test('R2-9 十二条叙事护栏同时进入非分步与分步正文路由', async () => {
+test('R2-9 十二条叙事护栏同时进入非分步、逐轮分步与开局分步正文路由', async () => {
   const { R2_9_NARRATIVE_GUARD_RULES } = await loadTs('../src/utils/prompts/definitions/businessRules.ts');
   const { getSystemPrompts } = await loadTs('../src/services/prompts/defaultPrompts.ts');
   const prompts = getSystemPrompts();
@@ -11,6 +11,7 @@ test('R2-9 十二条叙事护栏同时进入非分步与分步正文路由', asy
   assert.ok(R2_9_NARRATIVE_GUARD_RULES.length > 500);
   assert.match(prompts.businessRules.content, /\[R2-9叙事护栏·硬约束\]/);
   assert.match(prompts.splitGenerationStep1.content, /\[R2-9叙事护栏·硬约束\]/);
+  assert.match(prompts.splitInitStep1.content, /\[R2-9叙事护栏·硬约束\]/);
   assert.match(prompts.businessRules.content, /严禁在text、叙事正文、角色对白、心理或系统提示中复述/);
   assert.match(prompts.splitGenerationStep1.content, /正文只能呈现遵守规则后的故事内容/);
 
@@ -31,6 +32,7 @@ test('R2-9 十二条叙事护栏同时进入非分步与分步正文路由', asy
   for (const label of requiredRules) {
     assert.match(prompts.businessRules.content, new RegExp(label));
     assert.match(prompts.splitGenerationStep1.content, new RegExp(label));
+    assert.match(prompts.splitInitStep1.content, new RegExp(label));
   }
 
   assert.match(prompts.businessRules.content, /角色档案中的真身、卧底、伪装、内部称号与秘密归属/);

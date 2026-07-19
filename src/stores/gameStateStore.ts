@@ -31,6 +31,7 @@ import { normalizeInventoryCurrencies } from '@/utils/currencySystem';
 import { detectPlayerSectLeadership } from '@/utils/sectLeadershipUtils';
 import { recoverUnmarkedPlayerZeroHealth } from '@/utils/playerVitalGuard';
 import { composeShortTermMemoryEntry, sanitizePersistedMemoryArray } from '@/utils/memorySanitizer';
+import { stripInternalNarrativeControlLeaks } from '@/utils/textSanitizer';
 
 function buildTechniqueProgress(inventory: Inventory | null) {
   const progress: Record<string, { 熟练度: number; 已解锁技能: string[] }> = {};
@@ -388,7 +389,14 @@ export const useGameStateStore = defineStore('gameState', {
       };
       const gameTime: GameTime | null = v3?.元数据?.时间 ? deepCopy(v3.元数据.时间) : null;
 
-      const narrativeHistory: GameMessage[] = Array.isArray(v3?.系统?.历史?.叙事) ? deepCopy(v3.系统.历史.叙事) : [];
+      const narrativeHistory: GameMessage[] = Array.isArray(v3?.系统?.历史?.叙事)
+        ? deepCopy(v3.系统.历史.叙事)
+          .map((message: GameMessage) => ({
+            ...message,
+            content: stripInternalNarrativeControlLeaks(String(message?.content || '')),
+          }))
+          .filter((message: GameMessage) => message.content.trim().length > 0)
+        : [];
 
       const daoSystem = v3?.角色?.大道 ? deepCopy(v3.角色.大道) : null;
       const eventSystem: EventSystem | null = v3?.社交?.事件 ? deepCopy(v3.社交.事件) : null;

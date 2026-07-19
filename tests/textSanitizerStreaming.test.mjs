@@ -19,6 +19,14 @@ test('preserves normal environment markers and paired NPC-thought backticks', ()
   assert.equal(sanitizeAITextForDisplay(narrative), narrative);
 });
 
+test('detects and strips world-actor opportunity and voice-card control labels', () => {
+  const narrative = '【可选介入窗口】宫门正在核验官印。\n【贾文和·角色表演卡（逐轮硬合同）】贾文和展开绢图。';
+  assert.equal(
+    sanitizeAITextForDisplay(narrative),
+    '宫门正在核验官印。\n贾文和展开绢图。',
+  );
+});
+
 test('does not treat malformed JSON or analysis as a final narrative', () => {
   assert.equal(extractTextFromJsonResponse('先分析一下局势。\n{"text":"不应显示'), '');
   assert.equal(extractTextFromJsonResponse('<analysis>推理过程</analysis>{"text":"已落定"'), '');
