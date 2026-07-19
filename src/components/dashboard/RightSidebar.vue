@@ -228,6 +228,50 @@
         </div>
       </div>
 
+      <!-- 世界演员：角色先行动，玩家可选择是否介入 -->
+      <div v-if="actorView" class="collapsible-section quest-section actor-section">
+        <div class="section-header" @click="actorCollapsed = !actorCollapsed">
+          <h3 class="section-title">
+            <Sparkles :size="14" class="section-icon gold" />
+            <span>{{ t('世界正在行动') }}</span>
+          </h3>
+          <button class="collapse-toggle" :class="{ 'collapsed': actorCollapsed }">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M8 10l4-4H4l4 4z"/>
+            </svg>
+          </button>
+        </div>
+        <div v-show="!actorCollapsed" class="quest-body">
+          <div v-if="actorView.pressure" class="actor-pressure">{{ actorView.pressure }}</div>
+          <div v-if="actorView.signal" class="actor-signal">
+            <span class="quest-mark-main">◆</span>
+            <span><strong>{{ actorView.actorName }}</strong>：{{ actorView.signal }}</span>
+          </div>
+          <div v-for="card in actorView.opportunities" :key="card.id" class="actor-card">
+            <div class="actor-card-title">{{ card.title }}</div>
+            <div class="actor-card-line"><span>现在</span>{{ card.whyNow }}</div>
+            <div class="actor-card-line"><span>下一步</span>{{ card.nextStep }}</div>
+            <div class="actor-card-line"><span>可能获得</span>{{ card.rewardPreview }}</div>
+            <div class="actor-card-risk">风险：{{ card.stakes }}</div>
+            <button
+              class="quest-next-btn"
+              :disabled="trackingOpportunity === card.id || actorView.trackedId === card.id"
+              @click="trackOpportunity(card.id)"
+            >
+              {{ actorView.trackedId === card.id ? t('✓ 已追踪') : trackingOpportunity === card.id ? t('追踪中…') : t('追踪此机会') }}
+            </button>
+          </div>
+          <div v-if="actorView.opportunities.length" class="actor-ignore">{{ t('也可暂不介入；世界会继续推进，不会伪记为你亲历。') }}</div>
+          <div v-for="receipt in actorView.receipts" :key="receipt.id" class="actor-receipt">
+            {{ receipt.outcome === 'participated' ? '✓' : '◇' }} {{ receipt.title }}：{{ receipt.detail }}
+          </div>
+          <div v-for="permission in actorView.entitlements" :key="permission.key" class="actor-permission">
+            已解锁：{{ permission.label }}
+          </div>
+          <div v-if="stageSwitchError" class="quest-error">{{ stageSwitchError }}</div>
+        </div>
+      </div>
+
       <!-- 世界线记录：先由正文呈现后果，这里只留可回看的变化凭据 -->
       <div v-if="worldlineEntries.length" class="collapsible-section quest-section">
         <div class="section-header" @click="worldlineCollapsed = !worldlineCollapsed">
@@ -287,11 +331,12 @@ import { LOCAL_TALENTS } from '@/data/creationData';
 import DetailModal from '@/components/common/DetailModal.vue';
 import StatusDetailCard from './components/StatusDetailCard.vue';
 import { useGameStateStore } from '@/stores/gameStateStore';
+import { useActionQueueStore } from '@/stores/actionQueueStore';
 import { useUIStore } from '@/stores/uiStore';
 import type { StatusEffect } from '@/types/game.d.ts';
 import { formatRealmWithStage } from '@/utils/realmUtils';
 import { calculateAgeFromBirthdate } from '@/utils/lifespanCalculator';
-import { getNarrativeAnchorEvent } from '@/modules/scenarioMods/runtime';
+import { getNarrativeAnchorEvent, trackStoryOpportunity } from '@/modules/scenarioMods/runtime';
 import { resolveScenarioEventNarrative } from '@/modules/scenarioMods/eventNarrativeView';
 import { returnToCanonAnchor } from '@/modules/scenarioMods/divergenceControl';
 import { useI18n } from '@/i18n';
@@ -300,6 +345,7 @@ const { t } = useI18n();
 
 
 const gameStateStore = useGameStateStore();
+const actionQueueStore = useActionQueueStore();
 const uiStore = useUIStore();
 
 // 数据加载状态
@@ -319,9 +365,11 @@ const statusEffects = computed(() => {
 const questCollapsed = ref(false);
 const worldlineCollapsed = ref(false);
 const chronicleCollapsed = ref(true);
+const actorCollapsed = ref(false);
 const stageSwitching = ref(false);
 const stageSwitchError = ref('');
 const returningToCanon = ref(false);
+const trackingOpportunity = ref('');
 // 剧情主线：章节/活跃事件/清关状态/下一关（确定性，读 worldState.剧本模组）
 const questMain = computed(() => {
   const rt: any = (gameStateStore.worldState as any)?.剧本模组;
@@ -347,6 +395,49 @@ const questMain = computed(() => {
   const canReturn = signal?.level === 'medium' || signal?.level === 'high' || stalled;
   return { chapter: chapter ? `章节：${chapter.title || chapter.id}` : '', events, moreCount, cleared, next, stalled, stallCount: stallTurns, signal, canReturn };
 });
+const actorView = computed(() => {
+  const rt: any = (gameStateStore.worldState as any)?.剧本模组;
+  if (!rt || typeof rt !== 'object') return null;
+  const anchor: any = getNarrativeAnchorEvent(rt);
+  const contract = anchor?.worldActor;
+  const engine = rt.actorEngine || {};
+  const receipts = Array.isArray(engine.receipts) ? engine.receipts.slice(-3).reverse() : [];
+  const entitlements = Array.isArray(engine.entitlements) ? engine.entitlements.slice(-3).reverse() : [];
+  if (!contract && !receipts.length && !entitlements.length) return null;
+  const agenda = contract?.agendas?.find((item: any) => item.id === engine.activeAgendaId) || contract?.agendas?.[0];
+  const names = new Map((rt.canon?.characters || []).map((character: any) => [character.id, character.name]));
+  return {
+    pressure: String(contract?.pressure?.summary || ''),
+    actorName: String(names.get(agenda?.characterId) || ''),
+    signal: String(agenda?.visibleSignal || ''),
+    opportunities: Array.isArray(contract?.opportunities) ? contract.opportunities.slice(0, 2) : [],
+    trackedId: engine.anchorEventId === anchor?.id ? String(engine.trackedOpportunityId || '') : '',
+    receipts,
+    entitlements,
+  };
+});
+const trackOpportunity = async (opportunityId: string) => {
+  if (trackingOpportunity.value) return;
+  trackingOpportunity.value = opportunityId;
+  stageSwitchError.value = '';
+  try {
+    const save = gameStateStore.toSaveData();
+    if (!save) throw new Error('存档数据不完整');
+    const result = trackStoryOpportunity(save, opportunityId);
+    if (!result.ok) throw new Error(result.reason || '当前机会已失效');
+    gameStateStore.loadFromSaveData(save);
+    actionQueueStore.addAction({
+      type: 'custom',
+      itemName: opportunityId,
+      description: result.actionText,
+    });
+    await gameStateStore.saveGame();
+  } catch (error) {
+    stageSwitchError.value = String((error as Error)?.message || error);
+  } finally {
+    trackingOpportunity.value = '';
+  }
+};
 const goNextStage = async () => {
   if (stageSwitching.value) return;
   stageSwitching.value = true;
@@ -1882,5 +1973,15 @@ const getReputationClass = (): string => {
 .quest-next-btn:hover:not(:disabled) { background: rgba(212,175,55,0.15); }
 .quest-next-btn:disabled { opacity: 0.5; cursor: default; }
 .quest-error { font-size: 11px; color: #e07a7a; }
+.actor-pressure { font-size: 12px; line-height: 1.55; padding: 7px 8px; border-left: 2px solid var(--color-accent, #d4af37); background: rgba(212,175,55,0.07); }
+.actor-signal { display: flex; font-size: 12px; line-height: 1.55; }
+.actor-card { padding: 8px; border: 1px solid rgba(212,175,55,0.25); border-radius: 6px; background: rgba(255,255,255,0.025); }
+.actor-card-title { color: var(--color-accent, #d4af37); font-size: 12px; font-weight: 700; margin-bottom: 5px; }
+.actor-card-line { font-size: 11px; line-height: 1.5; opacity: 0.9; margin-top: 3px; }
+.actor-card-line > span { display: inline-block; min-width: 48px; opacity: 0.55; }
+.actor-card-risk { margin-top: 4px; font-size: 11px; line-height: 1.45; color: #d99a70; }
+.actor-ignore { font-size: 10px; line-height: 1.45; opacity: 0.5; text-align: center; }
+.actor-receipt { font-size: 11px; line-height: 1.5; color: #8fc98f; }
+.actor-permission { font-size: 11px; line-height: 1.5; padding: 5px 7px; border-radius: 4px; color: #e3c970; background: rgba(212,175,55,0.09); }
 
 </style>

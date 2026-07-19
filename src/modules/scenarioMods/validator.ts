@@ -20,6 +20,8 @@ export interface ScenarioModValidationResult {
 const ID_PATTERN = /^[a-z0-9][a-z0-9._-]*$/;
 const CONDITION_OPERATORS = new Set(['eq', 'neq', 'gt', 'gte', 'lt', 'lte', 'includes', 'exists']);
 const ITEM_TYPES = new Set(['weapon', 'armor', 'consumable', 'material', 'other']);
+const WORLD_ACTOR_SCOPES = new Set(['world', 'state', 'region', 'faction', 'local', 'character']);
+const WORLD_ACTOR_POLICIES = new Set(['process_only', 'local_state', 'divergence_allowed', 'if_only']);
 const FORBIDDEN_PATH_SEGMENTS = new Set(['__proto__', 'prototype', 'constructor']);
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -223,6 +225,50 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
           requireString(entity.offscreenResolution.evidence, `${resolutionPath}.evidence`, add);
         }
       }
+      if (entity.worldActor !== undefined) {
+        const actorPath = `${entity.__path}.worldActor`;
+        if (!isRecord(entity.worldActor)) {
+          add(actorPath, 'invalid_type', 'worldActor must be an object.');
+        } else {
+          const pressure = entity.worldActor.pressure;
+          if (!isRecord(pressure)) {
+            add(`${actorPath}.pressure`, 'required_object', 'worldActor.pressure is required.');
+          } else {
+            validateId(pressure.id, `${actorPath}.pressure.id`, add);
+            requireString(pressure.summary, `${actorPath}.pressure.summary`, add);
+            if (!WORLD_ACTOR_SCOPES.has(String(pressure.scope))) add(`${actorPath}.pressure.scope`, 'invalid_enum', 'worldActor pressure scope is not supported.');
+            if (!WORLD_ACTOR_POLICIES.has(String(pressure.canonPolicy))) add(`${actorPath}.pressure.canonPolicy`, 'invalid_enum', 'worldActor canonPolicy is not supported.');
+            if (![1, 2, 3].includes(Number(pressure.intensity))) add(`${actorPath}.pressure.intensity`, 'invalid_enum', 'worldActor intensity must be 1, 2, or 3.');
+            validateStringArray(pressure.domains, `${actorPath}.pressure.domains`, add);
+            validateStringArray(pressure.geography, `${actorPath}.pressure.geography`, add);
+            validateIdArray(pressure.factionIds, `${actorPath}.pressure.factionIds`, add);
+          }
+          if (!Array.isArray(entity.worldActor.agendas) || entity.worldActor.agendas.length === 0) {
+            add(`${actorPath}.agendas`, 'required_array', 'worldActor.agendas must contain at least one agenda.');
+          }
+          forEachRecord(entity.worldActor.agendas, `${actorPath}.agendas`, (agenda, agendaPath) => {
+            validateId(agenda.id, `${agendaPath}.id`, add);
+            validateId(agenda.characterId, `${agendaPath}.characterId`, add);
+            requireString(agenda.goal, `${agendaPath}.goal`, add);
+            requireString(agenda.nextAction, `${agendaPath}.nextAction`, add);
+            requireString(agenda.visibleSignal, `${agendaPath}.visibleSignal`, add);
+            requireString(agenda.offscreenAction, `${agendaPath}.offscreenAction`, add);
+            validateStringArray(agenda.forbiddenOutcomes, `${agendaPath}.forbiddenOutcomes`, add);
+          });
+          if (!Array.isArray(entity.worldActor.opportunities) || entity.worldActor.opportunities.length === 0) {
+            add(`${actorPath}.opportunities`, 'required_array', 'worldActor.opportunities must contain at least one opportunity.');
+          }
+          forEachRecord(entity.worldActor.opportunities, `${actorPath}.opportunities`, (opportunity, opportunityPath) => {
+            validateId(opportunity.id, `${opportunityPath}.id`, add);
+            requireString(opportunity.title, `${opportunityPath}.title`, add);
+            validateIdArray(opportunity.characterIds, `${opportunityPath}.characterIds`, add);
+            for (const key of ['whyNow', 'nextStep', 'stakes', 'rewardPreview', 'futureHint', 'actionText', 'rewardLabel']) {
+              requireString(opportunity[key], `${opportunityPath}.${key}`, add);
+            }
+            validateId(opportunity.rewardKey, `${opportunityPath}.rewardKey`, add);
+          });
+        }
+      }
     });
     validateEntityArray(scenario.chapters, 'scenario.chapters', chapterIds, add, entity => {
       requireString(entity.title, `${entity.__path}.title`, add);
@@ -357,6 +403,17 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
       checkRef(entity.locationId, locationIds, `${path}.locationId`, 'location', add);
       if (isRecord(entity.offscreenResolution)) {
         checkRefs(entity.offscreenResolution.resolvedEventIds, eventIds, `${path}.offscreenResolution.resolvedEventIds`, 'event', add);
+      }
+      if (isRecord(entity.worldActor)) {
+        if (isRecord(entity.worldActor.pressure)) {
+          checkRefs(entity.worldActor.pressure.factionIds, factionIds, `${path}.worldActor.pressure.factionIds`, 'faction', add);
+        }
+        forEachRecord(entity.worldActor.agendas, `${path}.worldActor.agendas`, (agenda, agendaPath) => {
+          checkRef(agenda.characterId, characterIds, `${agendaPath}.characterId`, 'character', add);
+        });
+        forEachRecord(entity.worldActor.opportunities, `${path}.worldActor.opportunities`, (opportunity, opportunityPath) => {
+          checkRefs(opportunity.characterIds, characterIds, `${opportunityPath}.characterIds`, 'character', add);
+        });
       }
     });
     forEachRecord(scenario.chapters, 'scenario.chapters', (entity, path) => {

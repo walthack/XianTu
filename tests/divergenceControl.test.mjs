@@ -58,4 +58,5 @@ test('failed judgement gives the world an immediate weighted turn', async () => 
   assert.equal(runtime.worldPush.intensity, 2);
   updateDivergenceControl(data, false);
   assert.equal(runtime.lastWorldPushJudgementId, 'j1');
+  assert.equal(runtime.worldPush, undefined, 'a consumed world push must not repeat forever');
 });

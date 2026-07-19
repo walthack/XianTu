@@ -37,6 +37,13 @@ interface StoryRuntime {
   activeEventIds: string[];
   completedChapterIds: string[];
   completedEventIds: string[];
+  actorEngine?: {
+    anchorEventId?: string;
+    activeAgendaId?: string;
+    surfacedAgendaIds?: string[];
+    trackedOpportunityId?: string;
+    entitlements?: Array<{ key: string; label: string }>;
+  };
   divergences?: ScenarioDivergence[];
   introducedCharacterIds?: string[];
   canon?: {
@@ -175,6 +182,26 @@ function namesForIds(
 function compactText(value: string | undefined, maxLength = 90): string {
   const compacted = (value || '').replace(/\s+/g, ' ').trim();
   return compacted.length > maxLength ? `${compacted.slice(0, maxLength)}...` : compacted;
+}
+
+function formatWorldActorContract(runtime: StoryRuntime, anchor: ScenarioModEvent | null, worldPushDue: boolean): string {
+  const contract = anchor?.worldActor;
+  if (!anchor || !contract) return '';
+  const state = runtime.actorEngine?.anchorEventId === anchor.id ? runtime.actorEngine : undefined;
+  const agenda = contract.agendas.find(item => item.id === state?.activeAgendaId) || contract.agendas[0];
+  const opportunity = contract.opportunities.find(item => item.id === state?.trackedOpportunityId);
+  const names = runtime.canon?.characters || [];
+  const nameOf = (id: string) => names.find(character => character.id === id)?.name || id;
+  const actorLine = agenda
+    ? `${nameOf(agenda.characterId)}正在谋求“${agenda.goal}”；下一步=${agenda.nextAction}；玩家可见征兆=${agenda.visibleSignal}；玩家不介入时=${agenda.offscreenAction}。隐藏目标不可原样念成旁白，只能通过行动和征兆让玩家推断。`
+    : '';
+  const opportunityLine = opportunity
+    ? `【玩家已追踪机会·本轮最高优先级】${opportunity.title}：${opportunity.nextStep}。风险=${opportunity.stakes}。必须先回应玩家的介入并让其亲自行动；不得替玩家完成，不得提前授予“${opportunity.rewardLabel}”。`
+    : `【可选介入窗口】${contract.opportunities.map(item => `${item.title}（为什么是现在：${item.whyNow}；下一步：${item.nextStep}；风险：${item.stakes}）`).join('；')}。只把窗口自然演出来，不得替玩家选择；玩家忽略也要让世界继续。`;
+  const actionLine = worldPushDue
+    ? '本轮世界已经取得行动权：必须先演出上述角色的一项具体行动及其可见后果，不能只写静态局势或等玩家发问。'
+    : '该压力持续存在；保持角色有自己的路线，但不得每轮机械重复同一征兆。';
+  return `【世界演员合同·${contract.pressure.canonPolicy}】压力=${contract.pressure.summary}（范围=${contract.pressure.scope}，强度=${contract.pressure.intensity}）。${actionLine}\n- ${actorLine}\n- ${opportunityLine}\n- 正典边界：只改变过程、关系入口与行为权限；不得改写“${anchor.name}”的既定结果，不得提前演出后续事件或秘密。`;
 }
 
 function formatList(values: string[] | undefined, maxItems = 4, maxLen = 48): string {
@@ -618,7 +645,8 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
     ? `【玩家已主动斩线回轨·本轮最高优先级】玩家选择结束衍生支线“${returnBridge.branchSummary}”。保留它已经造成的关系与后果，但立即用章节转场、来信、人物提议或局势变化把镜头接回“${returnBridge.anchorObjective}”。不得继续扩建旧支线，不得写成梦境或清空经历；本轮必须让玩家抵达该承重节点的可行动入口。`
     : '';
   const worldPush = (runtime as any).worldPush;
-  const worldPushLine = worldPush?.due
+  const worldActorLine = formatWorldActorContract(runtime, nearestCritical || anchor, Boolean(worldPush?.due));
+  const worldPushLine = worldPush?.due && !worldActorLine
     ? `【世界回合·本轮世界必须行动】原因=${worldPush.reason}，强度=${worldPush.intensity}。本轮至少让一个已登场 NPC、当前活跃事件或正典势力主动采取具体行动，改变玩家眼前的选择或局势；失败意味着世界取得行动权。不得只给静态环境描写、泛泛情报或等玩家追问。`
     : '';
   const stageLine = [
@@ -657,7 +685,7 @@ ${nextSection}
 ## 剧情标记
 ${JSON.stringify(runtime.flags || {})}
 
-${focusedCharacterSection ? `${focusedCharacterSection}\n\n` : ''}${globalIdentitySection ? `${globalIdentitySection}\n\n` : ''}${loadBearingLine ? `${loadBearingLine}\n\n` : ''}${divergenceLine ? `${divergenceLine}\n\n` : ''}${returnBridgeLine ? `${returnBridgeLine}\n\n` : ''}${divergenceControlLine ? `${divergenceControlLine}\n\n` : ''}${worldPushLine ? `${worldPushLine}\n\n` : ''}${steeringLine ? `${steeringLine}\n\n` : ''}${reputationLine}\n\n${relationLine ? `${relationLine}\n\n` : ''}${completedGoalLine ? `${completedGoalLine}\n\n` : ''}${improvLine}\n\n【正典叙事事实约束】：
+${focusedCharacterSection ? `${focusedCharacterSection}\n\n` : ''}${globalIdentitySection ? `${globalIdentitySection}\n\n` : ''}${loadBearingLine ? `${loadBearingLine}\n\n` : ''}${divergenceLine ? `${divergenceLine}\n\n` : ''}${returnBridgeLine ? `${returnBridgeLine}\n\n` : ''}${divergenceControlLine ? `${divergenceControlLine}\n\n` : ''}${worldActorLine ? `${worldActorLine}\n\n` : ''}${worldPushLine ? `${worldPushLine}\n\n` : ''}${steeringLine ? `${steeringLine}\n\n` : ''}${reputationLine}\n\n${relationLine ? `${relationLine}\n\n` : ''}${completedGoalLine ? `${completedGoalLine}\n\n` : ''}${improvLine}\n\n【正典叙事事实约束】：
 1. 已知人物的姓名、别名、身份、物种、势力、亲属与政治关系均是事实字段：不得把人物写成兵器、坐骑、功法、物品或新角色；不得把称号、别名拆成另一个实体。
 2. 人物之间的血缘、主从、婚配、同党、结盟、仇怨，只有上文正典人物档案或当前事件明确写出时才可断言。没有依据时只能写“尚未可知/传闻待证”，绝不可因同姓、官职、阵营或历史常识擅自补关系。
 3. 叙事正文也必须遵守上述正典；这不是仅约束 tavern_commands 的规则。若玩家要求与正典矛盾的事实，明确说明冲突并以正典版本续写。

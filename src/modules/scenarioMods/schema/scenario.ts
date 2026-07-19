@@ -69,6 +69,52 @@ export interface ScenarioModEvent {
   narrativeVariants?: ScenarioModEventNarrativeVariant[];
   /** 玩家长期缺席时由世界自行结算的事件组；不计作玩家完成。 */
   offscreenResolution?: ScenarioModEventOffscreenResolution;
+  /** 当前承重拍的世界演员纵切；数据通用、按事件显式启用。 */
+  worldActor?: ScenarioWorldActorContract;
+}
+
+export type ScenarioWorldActorCanonPolicy = 'process_only' | 'local_state' | 'divergence_allowed' | 'if_only';
+export type ScenarioWorldActorScope = 'world' | 'state' | 'region' | 'faction' | 'local' | 'character';
+
+export interface ScenarioWorldActorPressure {
+  id: string;
+  scope: ScenarioWorldActorScope;
+  summary: string;
+  domains?: string[];
+  geography?: string[];
+  factionIds?: string[];
+  intensity: 1 | 2 | 3;
+  canonPolicy: ScenarioWorldActorCanonPolicy;
+}
+
+export interface ScenarioWorldActorAgenda {
+  id: string;
+  characterId: string;
+  goal: string;
+  nextAction: string;
+  visibleSignal: string;
+  offscreenAction: string;
+  forbiddenOutcomes?: string[];
+}
+
+export interface ScenarioStoryOpportunity {
+  id: string;
+  title: string;
+  characterIds: string[];
+  whyNow: string;
+  nextStep: string;
+  stakes: string;
+  rewardPreview: string;
+  futureHint: string;
+  actionText: string;
+  rewardKey: string;
+  rewardLabel: string;
+}
+
+export interface ScenarioWorldActorContract {
+  pressure: ScenarioWorldActorPressure;
+  agendas: ScenarioWorldActorAgenda[];
+  opportunities: ScenarioStoryOpportunity[];
 }
 
 export interface ScenarioModEventOffscreenResolution {

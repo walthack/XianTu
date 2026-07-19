@@ -4809,6 +4809,103 @@
           ],
           "worldDelta": "董卓已经拥立定陶王为帝，诏令、军心与宫城秩序成为既成事实；玩家仍可选择如何介入新帝朝局。",
           "evidence": "R2-9 世界引力合同：董卓拥立定陶王为帝属于不依赖玩家领取任务才会发生的世界事件；仅在该节点已激活且长期停滞时结算。"
+        },
+        "worldActor": {
+          "pressure": {
+            "id": "world.lyg.s01_05.enthronement_imminent",
+            "scope": "state",
+            "summary": "定陶王登基在即，凉州军的军事控制必须转化为朝廷可承认的新秩序。",
+            "domains": [
+              "politics",
+              "military",
+              "court"
+            ],
+            "geography": [
+              "洛都",
+              "昭阳宫"
+            ],
+            "factionIds": [
+              "liuchao.faction.liangzhou_army",
+              "liuchao.faction.han_guo_chao_ting"
+            ],
+            "intensity": 3,
+            "canonPolicy": "process_only"
+          },
+          "agendas": [
+            {
+              "id": "agenda.lyg.s01_05.dong_zhuo",
+              "characterId": "liuchao.character.dong_zhuo",
+              "goal": "把军事实力换成公开合法性，让拥立落成",
+              "nextAction": "布置宫门与仪仗，主动召集能为登基作证的人",
+              "visibleSignal": "昭阳宫钟鼓响起，凉州军割袍结队，宫门开始核验官印",
+              "offscreenAction": "完成拥立准备，并把缺席者记作未在关键时刻站队",
+              "forbiddenOutcomes": [
+                "本拍不得死亡或永久失能",
+                "不得取消定陶王登基",
+                "不得抢先演出郭解或董卓后续生死节点"
+              ]
+            },
+            {
+              "id": "agenda.lyg.s01_05.jia_wenhe",
+              "characterId": "liuchao.character.jia_wenhe",
+              "goal": "把一次拥立变成能运转的新朝",
+              "nextAction": "递出大赦、选材、迁都三项草案，迫使程宗扬优先保下一项",
+              "visibleSignal": "无名短札只列安民、选材、定都三行，末尾留一处空白等人落笔",
+              "offscreenAction": "自行排序三项草案，优先保障拥立与军心",
+              "forbiddenOutcomes": [
+                "不得提及错刀、武帝秘境或玉牌",
+                "不得提前演出董卓死亡",
+                "不得长篇解释并把决定全部推回玩家"
+              ]
+            },
+            {
+              "id": "agenda.lyg.s01_05.huo_zi_meng",
+              "characterId": "liuchao.character.huo_zi_meng",
+              "goal": "让汉廷承认拥立，同时保留朝廷的制度位置",
+              "nextAction": "确认定陶王安全、昭阳宫可控，并试探程宗扬准备站在哪一边",
+              "visibleSignal": "北军封住两条要道而不攻宫，霍府来人只递半枚铜符",
+              "offscreenAction": "最低限度承认新帝，同时对董卓与程宗扬保留戒心",
+              "forbiddenOutcomes": [
+                "不得推翻此前支持定陶王的判断",
+                "不得凭空知道阮香凝身份等黑魔海机密",
+                "不得阻止或替代登基"
+              ]
+            }
+          ],
+          "opportunities": [
+            {
+              "id": "opportunity.lyg.s01_05.first_edict",
+              "title": "新帝第一道诏令",
+              "characterIds": [
+                "liuchao.character.jia_wenhe",
+                "liuchao.character.dong_zhuo"
+              ],
+              "whyNow": "登基一旦落成，第一轮制度安排会立即成为新朝方向。",
+              "nextStep": "前往昭阳宫，在安民、选材、定都中明确优先保下一项，并承担公开站队的后果。",
+              "stakes": "可能被朝臣视为凉州军同路；另外两项由贾文和自行处置。",
+              "rewardPreview": "影响一项新朝政策，取得凉州军关键场所通行，并打开后续谋议入口。",
+              "futureHint": "以后重大决策中，贾文和可能主动向你递交可交换的判断。",
+              "actionText": "我追踪“新帝第一道诏令”：前往昭阳宫，在安民、选材、定都三项草案中明确优先保下一项，并亲自承担站队后果。",
+              "rewardKey": "permission.lyg.jia_wenhe.exchange_judgement",
+              "rewardLabel": "贾文和·可交换判断与首轮谋议入口"
+            },
+            {
+              "id": "opportunity.lyg.s01_05.court_entry",
+              "title": "让朝廷进入昭阳宫",
+              "characterIds": [
+                "liuchao.character.huo_zi_meng",
+                "liuchao.character.dong_zhuo"
+              ],
+              "whyNow": "霍子孟已支持定陶王，但朝廷能否正式见证登基仍取决于宫城秩序。",
+              "nextStep": "证明定陶王安全，并在北军与凉州军之间确定一条不拔刀的入宫路线。",
+              "stakes": "无法兑现的保证会同时损害霍子孟与董卓的信任。",
+              "rewardPreview": "取得可信军情交换、宫城通行与一次政治背书。",
+              "futureHint": "新朝危机时，朝廷或凉州军会更愿意回应你的协调。",
+              "actionText": "我追踪“让朝廷进入昭阳宫”：向霍子孟证明定陶王安全，并协调一条北军与凉州军都不拔刀的入宫路线。",
+              "rewardKey": "permission.lyg.huo_zimeng.trusted_intelligence",
+              "rewardLabel": "霍子孟·可信军情交换与政治背书"
+            }
+          ]
         }
       },
       {

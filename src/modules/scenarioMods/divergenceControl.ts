@@ -131,6 +131,10 @@ export function updateDivergenceControl(saveData: SaveData, progressed: boolean)
   if (!runtime) return;
   runtime.worldTurn = Math.max(0, Number(runtime.worldTurn) || 0) + 1;
   runtime.divergenceSignal = computeDivergenceSignal(saveData) || undefined;
+  // scheduledAtTurn 对应的下一次叙事已经消费世界行动权；不能让同一 push 永久重复。
+  if (runtime.worldPush?.due && runtime.worldPush.scheduledAtTurn < runtime.worldTurn) {
+    runtime.worldPush = undefined;
+  }
   if (progressed) runtime.worldPush = undefined;
 
   const failed = latestFailedJudgement(saveData);

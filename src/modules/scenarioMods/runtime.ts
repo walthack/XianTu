@@ -1,6 +1,13 @@
 import type { SaveData } from '@/types/game';
 
-import type { ScenarioCondition, ScenarioFlagValue, ScenarioMod, ScenarioModChapter, ScenarioModEvent } from './schema';
+import type {
+  ScenarioCondition,
+  ScenarioFlagValue,
+  ScenarioMod,
+  ScenarioModChapter,
+  ScenarioModEvent,
+  ScenarioStoryOpportunity,
+} from './schema';
 import { recordOffscreenDivergence, type ScenarioDivergence } from './divergenceLedger';
 import { getCanonRailOrder, getCanonRailProfile, isCanonRailChapter } from './canonRail';
 import { updateDivergenceControl, type DivergenceSignal, type WorldPushState } from './divergenceControl';
@@ -28,6 +35,35 @@ export interface ScenarioChronicleEntry {
   sequence: number;
 }
 
+export interface ScenarioActorReceipt {
+  id: string;
+  anchorEventId: string;
+  opportunityId?: string;
+  title: string;
+  detail: string;
+  outcome: 'participated' | 'offscreen';
+  resolvedAtTurn: number;
+}
+
+export interface ScenarioActorEntitlement {
+  key: string;
+  label: string;
+  sourceOpportunityId: string;
+  earnedAtTurn: number;
+}
+
+export interface ScenarioActorEngineState {
+  anchorEventId?: string;
+  pressureId?: string;
+  activeAgendaId?: string;
+  surfacedAgendaIds: string[];
+  trackedOpportunityId?: string;
+  trackedAtTurn?: number;
+  lastHandledWorldPushTurn?: number;
+  receipts: ScenarioActorReceipt[];
+  entitlements: ScenarioActorEntitlement[];
+}
+
 export interface RuntimeState extends ScenarioProgressState {
   modId?: string;
   currentChapterId: string | null;
@@ -53,6 +89,8 @@ export interface RuntimeState extends ScenarioProgressState {
   worldTurn?: number;
   worldPush?: WorldPushState;
   lastWorldPushJudgementId?: string;
+  /** 世界演员纵切状态；合同来自事件，存档只保留调度、追踪和一次性回执。 */
+  actorEngine?: ScenarioActorEngineState;
   /** 玩家主动斩线后的单次桥接合同。 */
   returnBridge?: {
     anchorEventId: string;
@@ -60,6 +98,108 @@ export interface RuntimeState extends ScenarioProgressState {
     branchSummary: string;
     requestedAtTurn: number;
   };
+}
+
+function ensureActorEngine(runtime: RuntimeState): ScenarioActorEngineState {
+  const state = runtime.actorEngine || {
+    surfacedAgendaIds: [],
+    receipts: [],
+    entitlements: [],
+  };
+  state.surfacedAgendaIds = Array.isArray(state.surfacedAgendaIds) ? state.surfacedAgendaIds : [];
+  state.receipts = Array.isArray(state.receipts) ? state.receipts : [];
+  state.entitlements = Array.isArray(state.entitlements) ? state.entitlements : [];
+  runtime.actorEngine = state;
+  return state;
+}
+
+function findOpportunity(event: ScenarioModEvent | undefined, opportunityId: string | undefined): ScenarioStoryOpportunity | undefined {
+  if (!event?.worldActor || !opportunityId) return undefined;
+  return event.worldActor.opportunities.find(item => item.id === opportunityId);
+}
+
+function syncActorEngine(runtime: RuntimeState): void {
+  const state = ensureActorEngine(runtime);
+  const anchor = getNarrativeAnchorEvent(runtime);
+  const previousAnchor = state.anchorEventId
+    ? runtime.events.find(event => event.id === state.anchorEventId)
+    : undefined;
+
+  if (state.anchorEventId && state.anchorEventId !== anchor?.id) {
+    const opportunity = findOpportunity(previousAnchor, state.trackedOpportunityId);
+    if (opportunity) {
+      const participated = runtime.completedEventIds.includes(state.anchorEventId);
+      const offscreen = runtime.offscreenResolvedEventIds?.includes(state.anchorEventId);
+      const receiptId = `actor.receipt.${state.anchorEventId}.${opportunity.id}.${participated ? 'participated' : 'offscreen'}`;
+      if ((participated || offscreen) && !state.receipts.some(item => item.id === receiptId)) {
+        state.receipts.push({
+          id: receiptId,
+          anchorEventId: state.anchorEventId,
+          opportunityId: opportunity.id,
+          title: participated ? `已兑现：${opportunity.title}` : `世界已推进：${opportunity.title}`,
+          detail: participated
+            ? `你亲历完成当前承重拍，获得行为权限：${opportunity.rewardLabel}`
+            : '该机会随世界场外推进而关闭；未伪记为玩家亲历，也未授予权限。',
+          outcome: participated ? 'participated' : 'offscreen',
+          resolvedAtTurn: Math.max(0, Number(runtime.worldTurn) || 0),
+        });
+      }
+      if (participated && !state.entitlements.some(item => item.key === opportunity.rewardKey)) {
+        state.entitlements.push({
+          key: opportunity.rewardKey,
+          label: opportunity.rewardLabel,
+          sourceOpportunityId: opportunity.id,
+          earnedAtTurn: Math.max(0, Number(runtime.worldTurn) || 0),
+        });
+      }
+    }
+    state.anchorEventId = undefined;
+    state.pressureId = undefined;
+    state.activeAgendaId = undefined;
+    state.surfacedAgendaIds = [];
+    state.trackedOpportunityId = undefined;
+    state.trackedAtTurn = undefined;
+    state.lastHandledWorldPushTurn = undefined;
+  }
+
+  const contract = anchor?.worldActor;
+  if (!anchor || !contract) return;
+  if (state.anchorEventId !== anchor.id) {
+    state.anchorEventId = anchor.id;
+    state.pressureId = contract.pressure.id;
+    state.activeAgendaId = contract.agendas[0]?.id;
+    state.surfacedAgendaIds = state.activeAgendaId ? [state.activeAgendaId] : [];
+  }
+  const pushTurn = runtime.worldPush?.due ? runtime.worldPush.scheduledAtTurn : undefined;
+  if (pushTurn !== undefined && state.lastHandledWorldPushTurn !== pushTurn && contract.agendas.length) {
+    const nextAgenda = contract.agendas.find(item => !state.surfacedAgendaIds.includes(item.id))
+      || contract.agendas[(pushTurn + contract.agendas.length) % contract.agendas.length];
+    state.activeAgendaId = nextAgenda.id;
+    if (!state.surfacedAgendaIds.includes(nextAgenda.id)) state.surfacedAgendaIds.push(nextAgenda.id);
+    state.lastHandledWorldPushTurn = pushTurn;
+  }
+}
+
+/** UI 明确追踪一个机会；只写运行时意图，不直接授奖或改 Canon Rail。 */
+export function trackStoryOpportunity(
+  saveData: SaveData,
+  opportunityId: string,
+): { ok: boolean; reason?: string; actionText?: string } {
+  const runtime = getRuntime(saveData);
+  if (!runtime) return { ok: false, reason: '当前存档没有严格剧本运行时' };
+  const anchor = getNarrativeAnchorEvent(runtime);
+  const opportunity = findOpportunity(anchor || undefined, opportunityId);
+  if (!anchor?.worldActor || !opportunity) return { ok: false, reason: '当前机会已失效' };
+  const state = ensureActorEngine(runtime);
+  state.anchorEventId = anchor.id;
+  state.pressureId = anchor.worldActor.pressure.id;
+  state.trackedOpportunityId = opportunity.id;
+  state.trackedAtTurn = Math.max(0, Number(runtime.worldTurn) || 0);
+  if (!state.activeAgendaId) {
+    state.activeAgendaId = anchor.worldActor.agendas[0]?.id;
+    state.surfacedAgendaIds = state.activeAgendaId ? [state.activeAgendaId] : [];
+  }
+  return { ok: true, actionText: opportunity.actionText };
 }
 
 function readPath(root: unknown, path: string[]): unknown {
@@ -558,6 +698,7 @@ export function advanceScenarioRuntime(saveData: SaveData): {
   }
 
   updateDivergenceControl(next, progressed);
+  syncActorEngine(runtime);
   recordChronicleTransitions(runtime, transitions);
 
   return { saveData: next, transitions };
