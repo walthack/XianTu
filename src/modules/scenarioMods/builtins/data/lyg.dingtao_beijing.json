@@ -4831,47 +4831,729 @@
             "intensity": 3,
             "canonPolicy": "process_only"
           },
-          "agendas": [
-            {
-              "id": "agenda.lyg.s01_05.dong_zhuo",
-              "characterId": "liuchao.character.dong_zhuo",
-              "goal": "把军事实力换成公开合法性，让拥立落成",
-              "nextAction": "布置宫门与仪仗，主动召集能为登基作证的人",
-              "visibleSignal": "昭阳宫钟鼓响起，凉州军割袍结队，宫门开始核验官印",
-              "offscreenAction": "完成拥立准备，并把缺席者记作未在关键时刻站队",
-              "forbiddenOutcomes": [
-                "本拍不得死亡或永久失能",
-                "不得取消定陶王登基",
-                "不得抢先演出郭解或董卓后续生死节点"
+          "decisionCore": {
+            "situation": {
+              "whitelist": [
+                "courtLegitimacy",
+                "militaryTension"
+              ],
+              "initialValues": {
+                "courtLegitimacy": 42,
+                "militaryTension": 68
+              }
+            },
+            "canonPolicy": {
+              "invariant": [
+                "定陶王在本阶段完成登基"
+              ],
+              "forbiddenBefore": [
+                "event.guo_jie_death",
+                "event.dong_zhuo_death",
+                "secret.ruan_xiangning_identity",
+                "invariant.cancel_enthronement"
+              ],
+              "processFreedom": [
+                "入宫路线",
+                "见证登基的参与者",
+                "朝廷与凉州军的政治背书",
+                "玩家取得的关系入口与行为权限"
               ]
             },
-            {
-              "id": "agenda.lyg.s01_05.jia_wenhe",
-              "characterId": "liuchao.character.jia_wenhe",
-              "goal": "把一次拥立变成能运转的新朝",
-              "nextAction": "递出大赦、选材、迁都三项草案，迫使程宗扬优先保下一项",
-              "visibleSignal": "无名短札只列安民、选材、定都三行，末尾留一处空白等人落笔",
-              "offscreenAction": "自行排序三项草案，优先保障拥立与军心",
-              "forbiddenOutcomes": [
-                "不得提及错刀、武帝秘境或玉牌",
-                "不得提前演出董卓死亡",
-                "不得长篇解释并把决定全部推回玩家"
-              ]
-            },
-            {
-              "id": "agenda.lyg.s01_05.huo_zi_meng",
-              "characterId": "liuchao.character.huo_zi_meng",
-              "goal": "让汉廷承认拥立，同时保留朝廷的制度位置",
-              "nextAction": "确认定陶王安全、昭阳宫可控，并试探程宗扬准备站在哪一边",
-              "visibleSignal": "北军封住两条要道而不攻宫，霍府来人只递半枚铜符",
-              "offscreenAction": "最低限度承认新帝，同时对董卓与程宗扬保留戒心",
-              "forbiddenOutcomes": [
-                "不得推翻此前支持定陶王的判断",
-                "不得凭空知道阮香凝身份等黑魔海机密",
-                "不得阻止或替代登基"
-              ]
+            "actors": [
+              {
+                "characterId": "liuchao.character.dong_zhuo",
+                "identity": {
+                  "factionId": "liuchao.faction.liangzhou_army",
+                  "office": "凉州军领袖、拥立主导者",
+                  "rank": 5
+                },
+                "personality": {
+                  "aggression": 4,
+                  "caution": 1,
+                  "honor": 1,
+                  "ambition": 4
+                },
+                "motives": {
+                  "control": 4,
+                  "legitimacy": 3,
+                  "stability": 1
+                },
+                "resources": {
+                  "influence": 5,
+                  "wealth": 3,
+                  "troops": 5,
+                  "intelligence": 2
+                },
+                "relationships": {},
+                "knowledge": [
+                  "北军封住两条要道",
+                  "定陶王登基在即",
+                  "凉州军控制昭阳宫外围"
+                ],
+                "agendas": [
+                  {
+                    "id": "agenda.lyg.s01_05.dong_zhuo",
+                    "goal": "把军事实力换成公开合法性，让拥立落成",
+                    "clock": 3,
+                    "escalation": [
+                      "召集见证者",
+                      "控制宫门与仪仗",
+                      "完成拥立并记录站队"
+                    ]
+                  }
+                ],
+                "allowedActionIds": [
+                  "secure_palace_access",
+                  "mobilize_forces",
+                  "public_declaration",
+                  "force_succession"
+                ],
+                "evidence": {
+                  "identity.rank": "s01_05 轴拍：董卓主导昭阳宫拥立，凉州军已形成军事控制。",
+                  "personality.aggression": "人物卡及本拍行为：以军事实力直接推进拥立。",
+                  "personality.caution": "本拍优先抢占程序与宫门，风险规避不是其主导特征。",
+                  "personality.honor": "正典以结果与控制为先，不以朝廷程序自限。",
+                  "personality.ambition": "从军权主动换取新朝合法性与政治位置。",
+                  "motives.control": "宫门、仪仗和拥立现场均由其主动控制。",
+                  "motives.legitimacy": "本拍核心是把军事实力转化为公开拥立。",
+                  "motives.stability": "需要新秩序落成，但稳定服从于拥立控制。",
+                  "resources.influence": "凉州军领袖且能召集拥立见证者。",
+                  "resources.wealth": "本拍无精确财货事实，仅确认能组织仪仗，取中值不作经济模拟。",
+                  "resources.troops": "凉州军控制昭阳宫外围并可核验宫门。",
+                  "resources.intelligence": "掌握现场军情，未见独立情报网优势。",
+                  "agendas.agenda.lyg.s01_05.dong_zhuo.clock": "登基在即，议程已到控制宫门的第二阶。"
+                }
+              },
+              {
+                "characterId": "liuchao.character.jia_wenhe",
+                "identity": {
+                  "factionId": "liuchao.faction.liangzhou_army",
+                  "office": "凉州军谋主",
+                  "rank": 4
+                },
+                "personality": {
+                  "aggression": 1,
+                  "caution": 5,
+                  "honor": 1,
+                  "ambition": 3
+                },
+                "motives": {
+                  "control": 4,
+                  "legitimacy": 2,
+                  "stability": 5
+                },
+                "resources": {
+                  "influence": 4,
+                  "wealth": 2,
+                  "troops": 1,
+                  "intelligence": 5
+                },
+                "relationships": {},
+                "knowledge": [
+                  "北军封住两条要道",
+                  "定陶王登基在即",
+                  "大赦、选材、定都不能同时优先"
+                ],
+                "agendas": [
+                  {
+                    "id": "agenda.lyg.s01_05.jia_wenhe",
+                    "goal": "把一次拥立变成能运转且留有退路的新朝",
+                    "clock": 2,
+                    "escalation": [
+                      "比较三项新政代价",
+                      "设置缓冲线与退出条件",
+                      "迫使关键参与者承担取舍"
+                    ]
+                  }
+                ],
+                "allowedActionIds": [
+                  "prepare_fallback_route",
+                  "propose_compromise",
+                  "gather_intelligence",
+                  "delay_commitment"
+                ],
+                "evidence": {
+                  "identity.rank": "s01_05 轴拍：贾文和直接献计大赦、选材、迁都，是拥立核心谋主。",
+                  "personality.aggression": "表演卡裁定 #106：先报最坏后果，以方案而非正面强攻推进。",
+                  "personality.caution": "裁定 #106：方案必须含代价、退出条件或备用手段。",
+                  "personality.honor": "其决策不以礼法自限，程序只作可利用条件。",
+                  "personality.ambition": "主动把一次拥立设计为可运转的新朝。",
+                  "motives.control": "通过排序草案与保留选项控制决策空间。",
+                  "motives.legitimacy": "承认新帝合法性重要，但服从可运转性。",
+                  "motives.stability": "三项草案均服务于安民、用人和政权延续。",
+                  "resources.influence": "能向董卓与关键参与者递交新政方案。",
+                  "resources.wealth": "本拍无财货支配证据，低值只表示非本议程资源。",
+                  "resources.troops": "本人依赖凉州军执行，不单列兵权。",
+                  "resources.intelligence": "人物卡与表演卡均以高智、预案和最坏后果判断为承重特征。",
+                  "agendas.agenda.lyg.s01_05.jia_wenhe.clock": "三项草案已提出，正进入取舍与留退路阶段。"
+                }
+              },
+              {
+                "characterId": "liuchao.character.huo_zi_meng",
+                "identity": {
+                  "factionId": "liuchao.faction.han_guo_chao_ting",
+                  "office": "汉廷重臣、北军协调者",
+                  "rank": 5
+                },
+                "personality": {
+                  "aggression": 1,
+                  "caution": 4,
+                  "honor": 5,
+                  "ambition": 2
+                },
+                "motives": {
+                  "control": 2,
+                  "legitimacy": 5,
+                  "stability": 4
+                },
+                "resources": {
+                  "influence": 5,
+                  "wealth": 3,
+                  "troops": 4,
+                  "intelligence": 4
+                },
+                "relationships": {},
+                "knowledge": [
+                  "北军封住两条要道",
+                  "定陶王登基在即",
+                  "吕雉已经支持立定陶王"
+                ],
+                "agendas": [
+                  {
+                    "id": "agenda.lyg.s01_05.huo_zi_meng",
+                    "goal": "让汉廷承认拥立，同时保留朝廷的制度位置",
+                    "clock": 2,
+                    "escalation": [
+                      "确认定陶王安全",
+                      "争取朝廷见证程序",
+                      "以北军背书换取制度位置"
+                    ]
+                  }
+                ],
+                "allowedActionIds": [
+                  "negotiate_court_procedure",
+                  "open_safe_route",
+                  "test_loyalty",
+                  "request_audience"
+                ],
+                "evidence": {
+                  "identity.rank": "s01_04 与 s01_05：霍子孟代表汉廷与吕雉交换朝局判断，并能协调北军。",
+                  "personality.aggression": "北军封路而不攻宫，避免先开战端。",
+                  "personality.caution": "先确认定陶王安全与昭阳宫可控，再承认程序。",
+                  "personality.honor": "目标明确保留汉廷制度位置与正式见证。",
+                  "personality.ambition": "维护朝廷位置，但不取代新帝或拥立主导者。",
+                  "motives.control": "要求军情与路线可控，不争独占宫城。",
+                  "motives.legitimacy": "其承重作用是让汉廷正式承认拥立。",
+                  "motives.stability": "北军不攻宫并寻求不拔刀入宫路线。",
+                  "resources.influence": "汉廷重臣且能代表朝廷作政治背书。",
+                  "resources.wealth": "本拍未给精确财货，只按重臣常规组织能力取中值。",
+                  "resources.troops": "北军能封锁要道，但没有取代凉州军控制昭阳宫。",
+                  "resources.intelligence": "已与吕雉交换判断并掌握宫外军情。",
+                  "agendas.agenda.lyg.s01_05.huo_zi_meng.clock": "支持定陶王已定，下一阶是争取正式见证程序。"
+                }
+              },
+              {
+                "characterId": "liuchao.character.lv_zhi",
+                "identity": {
+                  "factionId": "liuchao.faction.han_guo_chao_ting",
+                  "office": "太皇太后",
+                  "rank": 5
+                },
+                "personality": {
+                  "aggression": 1,
+                  "caution": 5,
+                  "honor": 3,
+                  "ambition": 4
+                },
+                "motives": {
+                  "control": 5,
+                  "legitimacy": 3,
+                  "stability": 4
+                },
+                "resources": {
+                  "influence": 5,
+                  "wealth": 4,
+                  "troops": 2,
+                  "intelligence": 5
+                },
+                "relationships": {},
+                "knowledge": [
+                  "定陶王登基在即",
+                  "霍子孟已经接受支持定陶王的判断",
+                  "朝廷参与者的站队仍未完全显明"
+                ],
+                "agendas": [
+                  {
+                    "id": "agenda.lyg.s01_05.lv_zhi",
+                    "goal": "在退位与拥立过程中辨明谁会维护汉廷秩序",
+                    "clock": 1,
+                    "escalation": [
+                      "授权霍子孟见证",
+                      "观察关键参与者站队",
+                      "按选择分配后续信任"
+                    ]
+                  }
+                ],
+                "allowedActionIds": [
+                  "test_loyalty",
+                  "gather_intelligence",
+                  "call_in_obligation",
+                  "secret_alliance"
+                ],
+                "evidence": {
+                  "identity.rank": "裁定 #49 与 s01_04：吕雉为汉廷阶段性最高位阶并宣布退位、支持定陶王。",
+                  "personality.aggression": "本拍通过霍子孟与朝廷程序行动，不亲自以武力争宫。",
+                  "personality.caution": "在退位与处置朝局时保留观察和授权层级。",
+                  "personality.honor": "维护汉廷名分，但也采用现实权力手段。",
+                  "personality.ambition": "退位不等于放弃对新秩序与人事的影响。",
+                  "motives.control": "通过授权、观察站队与后续信任维持影响。",
+                  "motives.legitimacy": "明确支持立定陶王并让汉廷承认。",
+                  "motives.stability": "处置吕冀等并支持新帝以终止权力真空。",
+                  "resources.influence": "太皇太后身份与退位决定可左右朝廷承认。",
+                  "resources.wealth": "皇室最高位阶具组织资源，但本阶段不展开经济模拟。",
+                  "resources.troops": "通过霍子孟和北军间接影响，不直接掌握昭阳宫军权。",
+                  "resources.intelligence": "已与霍子孟交换朝局判断并能观察朝廷站队。",
+                  "agendas.agenda.lyg.s01_05.lv_zhi.clock": "退位与拥立决定已公开，当前进入观察站队的第一阶。"
+                }
+              }
+            ],
+            "actionBindings": [
+              {
+                "actionId": "secure_palace_access",
+                "actorIds": [
+                  "liuchao.character.dong_zhuo"
+                ],
+                "label": "控制宫门并召集登基见证者",
+                "reason": "以现有军力确保拥立落成，再把军事控制换成公开合法性",
+                "knownFacts": [
+                  "北军封住两条要道",
+                  "定陶王登基在即",
+                  "凉州军控制昭阳宫外围"
+                ],
+                "mustNotInvent": [
+                  "具体兵力数字",
+                  "未入档主将",
+                  "郭解或董卓后续生死"
+                ],
+                "visibleSignal": "昭阳宫钟鼓响起，凉州军开始核验官印并召集见证者",
+                "offscreenAction": "完成宫门与仪仗布置，并记录关键人物是否到场站队",
+                "requirements": {
+                  "troops": 4,
+                  "influence": 3
+                },
+                "costs": {
+                  "troops": 2,
+                  "influence": 1
+                },
+                "effects": {
+                  "courtLegitimacy": 5,
+                  "militaryTension": 3
+                },
+                "utility": {
+                  "urgency": 2,
+                  "factionGoal": 4,
+                  "expectedBenefit": 2
+                },
+                "visibility": "public",
+                "durationTurns": 2
+              },
+              {
+                "actionId": "mobilize_forces",
+                "actorIds": [
+                  "liuchao.character.dong_zhuo"
+                ],
+                "label": "增派凉州军压住昭阳宫外围",
+                "reason": "直接扩大现场控制，代价是推高两军冲突",
+                "knownFacts": [
+                  "北军封住两条要道",
+                  "凉州军控制昭阳宫外围"
+                ],
+                "mustNotInvent": [
+                  "具体兵力数字",
+                  "新编军队番号"
+                ],
+                "visibleSignal": "凉州军队列向宫门收紧",
+                "offscreenAction": "扩大昭阳宫外围控制",
+                "requirements": {
+                  "troops": 4
+                },
+                "costs": {
+                  "troops": 3
+                },
+                "effects": {
+                  "courtLegitimacy": 1,
+                  "militaryTension": 8
+                },
+                "utility": {
+                  "factionGoal": 2
+                },
+                "visibility": "public",
+                "durationTurns": 1
+              },
+              {
+                "actionId": "public_declaration",
+                "actorIds": [
+                  "liuchao.character.dong_zhuo"
+                ],
+                "label": "公开宣告拥立",
+                "reason": "以公开表态争取既成事实",
+                "knownFacts": [
+                  "定陶王登基在即"
+                ],
+                "mustNotInvent": [
+                  "未定稿诏书全文"
+                ],
+                "visibleSignal": "拥立檄文在宫门外传阅",
+                "offscreenAction": "让拥立成为公开立场",
+                "costs": {
+                  "influence": 1
+                },
+                "effects": {
+                  "courtLegitimacy": 3,
+                  "militaryTension": 2
+                },
+                "utility": {
+                  "factionGoal": 3
+                },
+                "visibility": "public",
+                "durationTurns": 1
+              },
+              {
+                "actionId": "force_succession",
+                "actorIds": [
+                  "liuchao.character.dong_zhuo"
+                ],
+                "label": "改立他人以独占朝局",
+                "reason": "高收益地重置继承结果",
+                "knownFacts": [
+                  "定陶王登基在即"
+                ],
+                "mustNotInvent": [
+                  "替代继承人"
+                ],
+                "visibleSignal": "军令试图改变既定拥立",
+                "offscreenAction": "取消定陶王登基",
+                "effects": {
+                  "courtLegitimacy": 20,
+                  "militaryTension": 10
+                },
+                "utility": {
+                  "urgency": 10,
+                  "factionGoal": 10,
+                  "expectedBenefit": 10
+                },
+                "canonTags": [
+                  "invariant.cancel_enthronement"
+                ],
+                "visibility": "public",
+                "durationTurns": 1
+              },
+              {
+                "actionId": "prepare_fallback_route",
+                "actorIds": [
+                  "liuchao.character.jia_wenhe"
+                ],
+                "label": "设置伊阙缓冲线与新政退路",
+                "reason": "降低两军冲突，同时保留凉州军控制力与草案退出条件",
+                "knownFacts": [
+                  "北军封住两条要道",
+                  "定陶王登基在即",
+                  "大赦、选材、定都不能同时优先"
+                ],
+                "mustNotInvent": [
+                  "具体兵力数字",
+                  "未入档主将",
+                  "秘密盟约"
+                ],
+                "visibleSignal": "无名短札先列最坏后果，再标出伊阙与宫门两条退路",
+                "offscreenAction": "自行排序三项草案，并保留冲突升级时的退出路线",
+                "requirements": {
+                  "intelligence": 4
+                },
+                "costs": {
+                  "intelligence": 1
+                },
+                "effects": {
+                  "courtLegitimacy": 2,
+                  "militaryTension": -2
+                },
+                "utility": {
+                  "factionGoal": 4,
+                  "expectedBenefit": 2
+                },
+                "visibility": "rumor",
+                "durationTurns": 2
+              },
+              {
+                "actionId": "propose_compromise",
+                "actorIds": [
+                  "liuchao.character.jia_wenhe"
+                ],
+                "label": "提出三项草案的折中次序",
+                "reason": "把安民、选材、定都拆成先后次序",
+                "knownFacts": [
+                  "大赦、选材、定都不能同时优先"
+                ],
+                "mustNotInvent": [
+                  "草案之外的新制度"
+                ],
+                "visibleSignal": "三行草案被重新编号",
+                "offscreenAction": "按风险排序三项草案",
+                "costs": {
+                  "influence": 1
+                },
+                "effects": {
+                  "courtLegitimacy": 3,
+                  "militaryTension": -1
+                },
+                "utility": {
+                  "factionGoal": 4
+                },
+                "visibility": "rumor",
+                "durationTurns": 2
+              },
+              {
+                "actionId": "gather_intelligence",
+                "actorIds": [
+                  "liuchao.character.jia_wenhe",
+                  "liuchao.character.lv_zhi"
+                ],
+                "label": "收集朝廷站队情报",
+                "reason": "在落笔前确认各方承受代价的能力",
+                "knownFacts": [
+                  "定陶王登基在即"
+                ],
+                "mustNotInvent": [
+                  "未揭露的黑魔海身份",
+                  "玩家未说出的秘密"
+                ],
+                "visibleSignal": "数名不署名的信使在宫门与长秋宫之间往返",
+                "offscreenAction": "更新朝廷参与者的公开站队记录",
+                "costs": {
+                  "intelligence": 1
+                },
+                "effects": {
+                  "courtLegitimacy": 1,
+                  "militaryTension": 0
+                },
+                "visibility": "hidden",
+                "durationTurns": 1
+              },
+              {
+                "actionId": "delay_commitment",
+                "actorIds": [
+                  "liuchao.character.jia_wenhe"
+                ],
+                "label": "暂缓三项草案落笔",
+                "reason": "等待更多信息后再决定新政顺序",
+                "knownFacts": [
+                  "大赦、选材、定都不能同时优先"
+                ],
+                "mustNotInvent": [
+                  "新的政策选项"
+                ],
+                "visibleSignal": "草案末尾仍留空白",
+                "offscreenAction": "暂不提交草案",
+                "effects": {
+                  "courtLegitimacy": -1,
+                  "militaryTension": 0
+                },
+                "visibility": "hidden",
+                "durationTurns": 1
+              },
+              {
+                "actionId": "negotiate_court_procedure",
+                "actorIds": [
+                  "liuchao.character.huo_zi_meng"
+                ],
+                "label": "争取汉廷见证登基的正式程序",
+                "reason": "承认定陶王，同时让朝廷而非单一军队为新秩序背书",
+                "knownFacts": [
+                  "北军封住两条要道",
+                  "定陶王登基在即",
+                  "吕雉已经支持立定陶王"
+                ],
+                "mustNotInvent": [
+                  "阮香凝的黑魔海身份",
+                  "具体兵力数字",
+                  "取消登基"
+                ],
+                "visibleSignal": "北军仍不攻宫，霍府使者递来半枚铜符与见证官名单",
+                "offscreenAction": "以最低限度承认新帝，换取汉廷正式进入昭阳宫",
+                "requirements": {
+                  "influence": 4
+                },
+                "costs": {
+                  "influence": 1
+                },
+                "effects": {
+                  "courtLegitimacy": 4,
+                  "militaryTension": -4
+                },
+                "utility": {
+                  "factionGoal": 4,
+                  "expectedBenefit": 2
+                },
+                "visibility": "public",
+                "durationTurns": 2
+              },
+              {
+                "actionId": "open_safe_route",
+                "actorIds": [
+                  "liuchao.character.huo_zi_meng"
+                ],
+                "label": "协调一条不拔刀的入宫路线",
+                "reason": "先降低北军与凉州军的接触风险",
+                "knownFacts": [
+                  "北军封住两条要道",
+                  "定陶王登基在即"
+                ],
+                "mustNotInvent": [
+                  "具体兵力数字"
+                ],
+                "visibleSignal": "一条要道解除拒马，只许持铜符者通行",
+                "offscreenAction": "开放受控入宫路线",
+                "costs": {
+                  "influence": 1
+                },
+                "effects": {
+                  "courtLegitimacy": 2,
+                  "militaryTension": -5
+                },
+                "utility": {
+                  "factionGoal": 3
+                },
+                "visibility": "public",
+                "durationTurns": 1
+              },
+              {
+                "actionId": "request_audience",
+                "actorIds": [
+                  "liuchao.character.huo_zi_meng"
+                ],
+                "label": "请求以汉廷重臣身份觐见",
+                "reason": "用本人到场确认新帝安全",
+                "knownFacts": [
+                  "定陶王登基在即"
+                ],
+                "mustNotInvent": [
+                  "新帝私下承诺"
+                ],
+                "visibleSignal": "霍府正式名帖递到宫门",
+                "offscreenAction": "等待昭阳宫确认觐见",
+                "costs": {
+                  "influence": 1
+                },
+                "effects": {
+                  "courtLegitimacy": 2,
+                  "militaryTension": -1
+                },
+                "visibility": "public",
+                "durationTurns": 1
+              },
+              {
+                "actionId": "test_loyalty",
+                "actorIds": [
+                  "liuchao.character.huo_zi_meng",
+                  "liuchao.character.lv_zhi"
+                ],
+                "label": "以半枚铜符试探关键人物忠诚",
+                "reason": "不先公开秘密，只观察谁愿为汉廷秩序承担风险",
+                "knownFacts": [
+                  "定陶王登基在即",
+                  "朝廷参与者的站队仍未完全显明"
+                ],
+                "mustNotInvent": [
+                  "阮香凝的黑魔海身份",
+                  "玩家未明确作出的站队"
+                ],
+                "visibleSignal": "半枚铜符经霍府来人送出，回话只问是否到场",
+                "offscreenAction": "按是否回应铜符更新后续信任次序",
+                "requirements": {
+                  "intelligence": 3
+                },
+                "costs": {
+                  "intelligence": 1
+                },
+                "effects": {
+                  "courtLegitimacy": 1,
+                  "militaryTension": 1
+                },
+                "utility": {
+                  "factionGoal": 3,
+                  "expectedBenefit": 2
+                },
+                "visibility": "hidden",
+                "durationTurns": 2
+              },
+              {
+                "actionId": "call_in_obligation",
+                "actorIds": [
+                  "liuchao.character.lv_zhi"
+                ],
+                "label": "召见旧臣要求履行朝廷义务",
+                "reason": "以既有名分换取公开站队",
+                "knownFacts": [
+                  "定陶王登基在即"
+                ],
+                "mustNotInvent": [
+                  "未入档旧约"
+                ],
+                "visibleSignal": "长秋宫向数名旧臣发出召见",
+                "offscreenAction": "要求旧臣公开表态",
+                "costs": {
+                  "influence": 1
+                },
+                "effects": {
+                  "courtLegitimacy": 2,
+                  "militaryTension": 1
+                },
+                "visibility": "rumor",
+                "durationTurns": 2
+              },
+              {
+                "actionId": "secret_alliance",
+                "actorIds": [
+                  "liuchao.character.lv_zhi"
+                ],
+                "label": "秘密结交新朝参与者",
+                "reason": "在公开退位后保留隐蔽影响",
+                "knownFacts": [
+                  "定陶王登基在即"
+                ],
+                "mustNotInvent": [
+                  "具体秘密盟约",
+                  "未入档交换条件"
+                ],
+                "visibleSignal": "长秋宫夜间使者避开正门",
+                "offscreenAction": "尝试建立未公开联络",
+                "costs": {
+                  "influence": 1,
+                  "intelligence": 1
+                },
+                "effects": {
+                  "courtLegitimacy": 0,
+                  "militaryTension": 1
+                },
+                "visibility": "hidden",
+                "durationTurns": 3
+              }
+            ],
+            "maxVisibleActions": 3,
+            "narrativeGuard": {
+              "forbiddenTerms": [
+                "阮香凝",
+                "盛姬",
+                "黑魔海",
+                "吕冀",
+                "暗道",
+                "伏兵",
+                "暗桩",
+                "魂丹"
+              ],
+              "rejectConcreteQuantities": true
             }
-          ],
+          },
           "opportunities": [
             {
               "id": "opportunity.lyg.s01_05.first_edict",

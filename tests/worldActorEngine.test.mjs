@@ -76,12 +76,66 @@ test('Dingtao built-in validates with a single-stage world actor contract', asyn
   const result = validateScenarioMod(raw);
   assert.equal(result.valid, true, JSON.stringify(result.issues, null, 2));
   const event = raw.scenario.events.find(item => item.id === 'lyg.event.s01_05');
-  assert.deepEqual(event.worldActor.agendas.map(item => item.characterId), [
+  assert.deepEqual(event.worldActor.decisionCore.actors.map(item => item.characterId), [
     'liuchao.character.dong_zhuo',
     'liuchao.character.jia_wenhe',
     'liuchao.character.huo_zi_meng',
+    'liuchao.character.lv_zhi',
   ]);
-  assert.equal(JSON.stringify(event.worldActor).includes('ruan_xiangning'), false, 'current actor slice must not leak Ruan');
+  assert.equal(event.worldActor.agendas, undefined, 's01_05 must not fall back to hand-written agenda rotation');
+  const knownFacts = event.worldActor.decisionCore.actionBindings.flatMap(item => item.knownFacts);
+  assert.equal(knownFacts.some(item => /阮香凝|凝玉姬|黑魔海玉姬/.test(item)), false, 'NPC knowledge must not leak Ruan');
+});
+
+test('s01_05 deterministic core derives four distinct actions with explainable scores and hard canon elimination', async () => {
+  const {
+    NPC_ACTION_LIBRARY,
+    applyNpcDecisionActorState,
+    applyNpcDecisionEffects,
+    decideNpcActions,
+  } = await loadTs('../src/modules/scenarioMods/npcDecisionCore.ts');
+  const raw = JSON.parse(await readFile(stageUrl, 'utf8'));
+  const core = raw.scenario.events.find(item => item.id === 'lyg.event.s01_05').worldActor.decisionCore;
+  assert.equal(NPC_ACTION_LIBRARY.length >= 30 && NPC_ACTION_LIBRARY.length <= 50, true);
+
+  const first = decideNpcActions(core);
+  const replay = decideNpcActions(structuredClone(core), structuredClone(core.situation.initialValues));
+  assert.deepEqual(replay, first, 'same situation must replay byte-for-byte');
+  assert.deepEqual(first.decisions.map(item => item.actionId), [
+    'secure_palace_access',
+    'prepare_fallback_route',
+    'negotiate_court_procedure',
+    'test_loyalty',
+  ]);
+
+  for (const decision of first.decisions) {
+    assert.equal(decision.candidates.filter(item => item.eligible).length >= 2, true);
+    const runnerUp = decision.candidates.filter(item => item.eligible)
+      .sort((a, b) => b.score - a.score)[1];
+    assert.equal(decision.score > runnerUp.score, true, `${decision.actorId} winner must beat a visible runner-up`);
+    assert.equal(Object.values(decision.candidates[0].breakdown).every(Number.isFinite), true);
+  }
+  const dong = first.decisions[0];
+  const forbidden = dong.candidates.find(item => item.actionId === 'force_succession');
+  assert.equal(forbidden.eligible, false);
+  assert.equal(forbidden.score, undefined, 'canon conflict must be eliminated before scoring');
+  assert.match(forbidden.eliminatedReason, /^forbiddenBefore:/);
+
+  const changed = applyNpcDecisionEffects(core, core.situation.initialValues, first.decisions);
+  assert.deepEqual(Object.keys(changed).sort(), ['courtLegitimacy', 'militaryTension']);
+  const actorState = applyNpcDecisionActorState(core, core.actors, first.decisions);
+  assert.equal(core.actors[0].resources.troops, 5, 'canon config must remain immutable');
+  assert.equal(actorState[0].resources.troops, 3, 'winning action cost must settle into NPC state');
+  assert.equal(actorState[0].agendas[0].clock, 3, 'agenda clock caps at its escalation ladder');
+  assert.equal(actorState[1].resources.intelligence, 4);
+  assert.throws(() => applyNpcDecisionEffects(core, changed, [{
+    ...dong, effects: { globalPopulation: -1 },
+  }]), /outside the stage situation whitelist/);
+});
+
+test('NPC decision core has no LLM or network dependency', async () => {
+  const source = await readFile(new URL('../src/modules/scenarioMods/npcDecisionCore.ts', import.meta.url), 'utf8');
+  assert.doesNotMatch(source, /aiService|tavern|axios|fetch\s*\(/i);
 });
 
 test('Dingtao new save skips initial completed beats and opens on the enthronement actor slice', async () => {
@@ -113,6 +167,11 @@ test('Dingtao new save skips initial completed beats and opens on the enthroneme
   assert.equal(getNarrativeAnchorEvent(runtime).objective, '到昭阳宫参与新帝登基');
   assert.equal(runtime.activeEventIds.includes('lyg.event.s01_01'), false);
   assert.equal(runtime.actorEngine.anchorEventId, 'lyg.event.s01_05');
+  const { buildScenarioStoryPrompt } = await loadTs('../src/modules/scenarioMods/storyContext.ts');
+  const prompt = buildScenarioStoryPrompt(advanced);
+  assert.match(prompt, /控制宫门并召集登基见证者/);
+  assert.match(prompt, /knownFacts=/);
+  assert.match(prompt, /mustNotInvent=/);
 });
 
 test('tracking an opportunity awards one persistent permission only after player completion', async () => {
@@ -155,6 +214,68 @@ test('world cadence rotates agendas while offscreen completion closes a tracked 
   assert.equal(settled.entitlements.length, 0);
   assert.equal(settled.receipts[0].outcome, 'offscreen');
   assert.match(settled.receipts[0].detail, /未授予权限/);
+});
+
+test('s01_05 untracked stall threshold resolves offscreen before a same-turn done flag can claim participation', async () => {
+  const { advanceScenarioRuntime } = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  const raw = JSON.parse(await readFile(stageUrl, 'utf8'));
+  let data = save();
+  data.世界.状态.剧本模组 = {
+    modId: raw.manifest.id,
+    currentChapterId: 'lyg.chapter.s01',
+    chapters: structuredClone(raw.scenario.chapters),
+    events: structuredClone(raw.scenario.events),
+    flags: { ...raw.scenario.initialFlags },
+    activeEventIds: ['lyg.event.s01_05'],
+    completedEventIds: ['lyg.event.s01_01', 'lyg.event.s01_02', 'lyg.event.s01_03', 'lyg.event.s01_04'],
+    completedChapterIds: [],
+    offscreenResolvedEventIds: [],
+    stallTurns: 6,
+    worldTurn: 9,
+    nextStageId: raw.manifest.nextStageId,
+  };
+  data = advanceScenarioRuntime(data).saveData;
+  data.世界.状态.剧本模组.stallTurns = 7;
+  data.世界.状态.剧本模组.flags['event.s01_05.done'] = true;
+
+  const result = advanceScenarioRuntime(data);
+  const runtime = result.saveData.世界.状态.剧本模组;
+  assert.equal(runtime.offscreenResolvedEventIds.includes('lyg.event.s01_05'), true);
+  assert.equal(runtime.completedEventIds.includes('lyg.event.s01_05'), false);
+  assert.equal(runtime.actorEngine.entitlements.length, 0);
+  assert.equal(runtime.actorEngine.receipts[0].outcome, 'offscreen');
+  assert.match(runtime.actorEngine.receipts[0].detail, /未伪记为玩家亲历/);
+  const worldEntry = runtime.chronicle.find(item => item.type === 'world');
+  assert.match(worldEntry.detail, /董卓已经拥立定陶王为帝/);
+  assert.doesNotMatch(worldEntry.detail, /到昭阳宫参与/);
+});
+
+test('tracked s01_05 route remains participant-owned at the stall threshold', async () => {
+  const { advanceScenarioRuntime, trackStoryOpportunity } = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  const raw = JSON.parse(await readFile(stageUrl, 'utf8'));
+  let data = save();
+  data.世界.状态.剧本模组 = {
+    modId: raw.manifest.id,
+    currentChapterId: 'lyg.chapter.s01',
+    chapters: structuredClone(raw.scenario.chapters),
+    events: structuredClone(raw.scenario.events),
+    flags: { ...raw.scenario.initialFlags },
+    activeEventIds: ['lyg.event.s01_05'],
+    completedEventIds: ['lyg.event.s01_01', 'lyg.event.s01_02', 'lyg.event.s01_03', 'lyg.event.s01_04'],
+    completedChapterIds: [],
+    offscreenResolvedEventIds: [],
+    stallTurns: 6,
+    worldTurn: 9,
+    nextStageId: raw.manifest.nextStageId,
+  };
+  data = advanceScenarioRuntime(data).saveData;
+  assert.equal(trackStoryOpportunity(data, 'opportunity.lyg.s01_05.first_edict').ok, true);
+  data.世界.状态.剧本模组.stallTurns = 7;
+  data.世界.状态.剧本模组.flags['event.s01_05.done'] = true;
+  const settled = advanceScenarioRuntime(data).saveData.世界.状态.剧本模组;
+  assert.equal(settled.completedEventIds.includes('lyg.event.s01_05'), true);
+  assert.equal(settled.offscreenResolvedEventIds.includes('lyg.event.s01_05'), false);
+  assert.equal(settled.actorEngine.entitlements.some(item => item.key === 'permission.lyg.jia_wenhe.exchange_judgement'), true);
 });
 
 test('story prompt exposes actor signal and tracked opportunity without changing the canon result', async () => {

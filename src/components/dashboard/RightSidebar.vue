@@ -243,9 +243,9 @@
         </div>
         <div v-show="!actorCollapsed" class="quest-body">
           <div v-if="actorView.pressure" class="actor-pressure">{{ actorView.pressure }}</div>
-          <div v-if="actorView.signal" class="actor-signal">
+          <div v-for="decision in actorView.decisions" :key="decision.id" class="actor-signal">
             <span class="quest-mark-main">◆</span>
-            <span><strong>{{ actorView.actorName }}</strong>：{{ actorView.signal }}</span>
+            <span><strong>{{ decision.actorName }}</strong>：{{ decision.signal }}</span>
           </div>
           <div v-for="card in actorView.opportunities" :key="card.id" class="actor-card">
             <div class="actor-card-title">{{ card.title }}</div>
@@ -404,12 +404,26 @@ const actorView = computed(() => {
   const receipts = Array.isArray(engine.receipts) ? engine.receipts.slice(-3).reverse() : [];
   const entitlements = Array.isArray(engine.entitlements) ? engine.entitlements.slice(-3).reverse() : [];
   if (!contract && !receipts.length && !entitlements.length) return null;
-  const agenda = contract?.agendas?.find((item: any) => item.id === engine.activeAgendaId) || contract?.agendas?.[0];
   const names = new Map((rt.canon?.characters || []).map((character: any) => [character.id, character.name]));
+  const visibleIds = new Set(Array.isArray(engine.visibleDecisionIds) ? engine.visibleDecisionIds : []);
+  const decisions = Array.isArray(engine.decisions)
+    ? engine.decisions.filter((item: any) => visibleIds.has(item.id)).map((item: any) => ({
+      id: String(item.id || ''),
+      actorName: String(names.get(item.actorId) || item.actorId || ''),
+      signal: String(item.visibleSignal || item.label || ''),
+    }))
+    : [];
+  const agenda = contract?.agendas?.find((item: any) => item.id === engine.activeAgendaId) || contract?.agendas?.[0];
+  if (!decisions.length && agenda) {
+    decisions.push({
+      id: String(agenda.id || ''),
+      actorName: String(names.get(agenda.characterId) || ''),
+      signal: String(agenda.visibleSignal || ''),
+    });
+  }
   return {
     pressure: String(contract?.pressure?.summary || ''),
-    actorName: String(names.get(agenda?.characterId) || ''),
-    signal: String(agenda?.visibleSignal || ''),
+    decisions,
     opportunities: Array.isArray(contract?.opportunities) ? contract.opportunities.slice(0, 2) : [],
     trackedId: engine.anchorEventId === anchor?.id ? String(engine.trackedOpportunityId || '') : '',
     receipts,

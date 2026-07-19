@@ -43,6 +43,17 @@ interface StoryRuntime {
     surfacedAgendaIds?: string[];
     trackedOpportunityId?: string;
     entitlements?: Array<{ key: string; label: string }>;
+    decisions?: Array<{
+      id: string;
+      actorId: string;
+      label: string;
+      reason: string;
+      knownFacts: string[];
+      mustNotInvent: string[];
+      visibleSignal: string;
+      offscreenAction: string;
+    }>;
+    visibleDecisionIds?: string[];
   };
   divergences?: ScenarioDivergence[];
   introducedCharacterIds?: string[];
@@ -188,20 +199,32 @@ function formatWorldActorContract(runtime: StoryRuntime, anchor: ScenarioModEven
   const contract = anchor?.worldActor;
   if (!anchor || !contract) return '';
   const state = runtime.actorEngine?.anchorEventId === anchor.id ? runtime.actorEngine : undefined;
-  const agenda = contract.agendas.find(item => item.id === state?.activeAgendaId) || contract.agendas[0];
+  const agenda = contract.agendas?.find(item => item.id === state?.activeAgendaId) || contract.agendas?.[0];
   const opportunity = contract.opportunities.find(item => item.id === state?.trackedOpportunityId);
   const names = runtime.canon?.characters || [];
   const nameOf = (id: string) => names.find(character => character.id === id)?.name || id;
-  const actorLine = agenda
-    ? `${nameOf(agenda.characterId)}正在谋求“${agenda.goal}”；下一步=${agenda.nextAction}；玩家可见征兆=${agenda.visibleSignal}；玩家不介入时=${agenda.offscreenAction}。隐藏目标不可原样念成旁白，只能通过行动和征兆让玩家推断。`
+  const visibleIds = new Set(state?.visibleDecisionIds || []);
+  const decisions = (state?.decisions || []).filter(item => visibleIds.has(item.id));
+  const decisionLine = decisions.length
+    ? decisions.map(decision =>
+      `${nameOf(decision.actorId)}已由本地决策器裁定“${decision.label}”；理由=${decision.reason}；可见征兆=${decision.visibleSignal}；玩家不介入时=${decision.offscreenAction}；knownFacts=${decision.knownFacts.join('、')}；mustNotInvent=${decision.mustNotInvent.join('、')}。`,
+    ).join('\n- ')
     : '';
+  const actorLine = decisionLine || (agenda
+    ? `${nameOf(agenda.characterId)}正在谋求“${agenda.goal}”；下一步=${agenda.nextAction}；玩家可见征兆=${agenda.visibleSignal}；玩家不介入时=${agenda.offscreenAction}。隐藏目标不可原样念成旁白，只能通过行动和征兆让玩家推断。`
+    : '');
   const opportunityLine = opportunity
     ? `【玩家已追踪机会·本轮最高优先级】${opportunity.title}：${opportunity.nextStep}。风险=${opportunity.stakes}。必须先回应玩家的介入并让其亲自行动；不得替玩家完成，不得提前授予“${opportunity.rewardLabel}”。`
     : `【可选介入窗口】${contract.opportunities.map(item => `${item.title}（为什么是现在：${item.whyNow}；下一步：${item.nextStep}；风险：${item.stakes}）`).join('；')}。只把窗口自然演出来，不得替玩家选择；玩家忽略也要让世界继续。`;
   const actionLine = worldPushDue
     ? '本轮世界已经取得行动权：必须先演出上述角色的一项具体行动及其可见后果，不能只写静态局势或等玩家发问。'
     : '该压力持续存在；保持角色有自己的路线，但不得每轮机械重复同一征兆。';
-  return `【世界演员合同·${contract.pressure.canonPolicy}】压力=${contract.pressure.summary}（范围=${contract.pressure.scope}，强度=${contract.pressure.intensity}）。${actionLine}\n- ${actorLine}\n- ${opportunityLine}\n- 正典边界：只改变过程、关系入口与行为权限；不得改写“${anchor.name}”的既定结果，不得提前演出后续事件或秘密。`;
+  const guard = contract.decisionCore?.narrativeGuard;
+  const guardLine = guard
+    ? `\n- renderGuard.forbiddenTerms=${(guard.forbiddenTerms || []).join('|')}；renderGuard.rejectConcreteQuantities=${guard.rejectConcreteQuantities === true}。该行是最终落稿硬门禁，命中时必须重写，不得展示违规草稿。`
+    : '';
+  const forbiddenBefore = contract.decisionCore?.canonPolicy.forbiddenBefore || [];
+  return `【世界演员合同·${contract.pressure.canonPolicy}】压力=${contract.pressure.summary}（范围=${contract.pressure.scope}，强度=${contract.pressure.intensity}）。${actionLine}\n- ${actorLine}\n- ${opportunityLine}\n- 决策阶段已结束，禁止重选行动或修改结算；只可依据 knownFacts 渲染，mustNotInvent 任一项均不得补造。${guardLine}\n- forbiddenBefore=${forbiddenBefore.join('|')}。\n- 正典边界：只改变过程、关系入口与行为权限；不得改写“${anchor.name}”的既定结果，不得提前演出后续事件或秘密。`;
 }
 
 function formatList(values: string[] | undefined, maxItems = 4, maxLen = 48): string {

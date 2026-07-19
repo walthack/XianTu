@@ -97,6 +97,73 @@ export interface ScenarioWorldActorAgenda {
   forbiddenOutcomes?: string[];
 }
 
+export type ScenarioNpcDecisionVisibility = 'public' | 'rumor' | 'hidden';
+export type ScenarioNpcDecisionResource = 'influence' | 'wealth' | 'troops' | 'intelligence';
+
+export interface ScenarioNpcDecisionAgenda {
+  id: string;
+  goal: string;
+  clock: number;
+  escalation: string[];
+}
+
+export interface ScenarioNpcDecisionActor {
+  characterId: string;
+  identity: { factionId: string; office?: string; rank: number };
+  personality: Record<string, number>;
+  motives: Record<string, number>;
+  resources: Record<ScenarioNpcDecisionResource, number>;
+  relationships: Record<string, Record<string, number>>;
+  knowledge: string[];
+  agendas: ScenarioNpcDecisionAgenda[];
+  allowedActionIds: string[];
+  /** 每个数值字段的正典依据；键为 identity.rank/personality.* 等相对路径。 */
+  evidence: Record<string, string>;
+}
+
+export interface ScenarioNpcDecisionActionBinding {
+  actionId: string;
+  actorIds?: string[];
+  label: string;
+  reason: string;
+  knownFacts: string[];
+  mustNotInvent: string[];
+  visibleSignal: string;
+  offscreenAction: string;
+  requirements?: Partial<Record<ScenarioNpcDecisionResource, number>>;
+  costs?: Partial<Record<ScenarioNpcDecisionResource, number>>;
+  effects?: Record<string, number>;
+  utility?: {
+    urgency?: number;
+    factionGoal?: number;
+    expectedBenefit?: number;
+    failureRisk?: number;
+  };
+  canonTags?: string[];
+  visibility: ScenarioNpcDecisionVisibility;
+  durationTurns: number;
+}
+
+export interface ScenarioNpcDecisionCore {
+  situation: {
+    whitelist: string[];
+    initialValues: Record<string, number>;
+  };
+  canonPolicy: {
+    invariant: string[];
+    forbiddenBefore: string[];
+    processFreedom: string[];
+  };
+  actors: ScenarioNpcDecisionActor[];
+  actionBindings: ScenarioNpcDecisionActionBinding[];
+  maxVisibleActions: 1 | 2 | 3;
+  /** 只约束 LLM 渲染，不参与本地决策和结算。 */
+  narrativeGuard?: {
+    forbiddenTerms?: string[];
+    rejectConcreteQuantities?: boolean;
+  };
+}
+
 export interface ScenarioStoryOpportunity {
   id: string;
   title: string;
@@ -113,7 +180,9 @@ export interface ScenarioStoryOpportunity {
 
 export interface ScenarioWorldActorContract {
   pressure: ScenarioWorldActorPressure;
-  agendas: ScenarioWorldActorAgenda[];
+  /** 旧存档兼容层；配置 decisionCore 时不再参与调度。 */
+  agendas?: ScenarioWorldActorAgenda[];
+  decisionCore?: ScenarioNpcDecisionCore;
   opportunities: ScenarioStoryOpportunity[];
 }
 

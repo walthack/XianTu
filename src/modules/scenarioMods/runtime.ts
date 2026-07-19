@@ -6,8 +6,15 @@ import type {
   ScenarioMod,
   ScenarioModChapter,
   ScenarioModEvent,
+  ScenarioNpcDecisionActor,
   ScenarioStoryOpportunity,
 } from './schema';
+import {
+  applyNpcDecisionEffects,
+  applyNpcDecisionActorState,
+  decideNpcActions,
+  type NpcDecisionReceipt,
+} from './npcDecisionCore';
 import { recordOffscreenDivergence, type ScenarioDivergence } from './divergenceLedger';
 import { getCanonRailOrder, getCanonRailProfile, isCanonRailChapter } from './canonRail';
 import { updateDivergenceControl, type DivergenceSignal, type WorldPushState } from './divergenceControl';
@@ -60,6 +67,13 @@ export interface ScenarioActorEngineState {
   trackedOpportunityId?: string;
   trackedAtTurn?: number;
   lastHandledWorldPushTurn?: number;
+  /** R2-10B 确定性人物决策；候选评分回执可重放、可审计。 */
+  decisionInputHash?: string;
+  decisions?: NpcDecisionReceipt[];
+  visibleDecisionIds?: string[];
+  situationValues?: Record<string, number>;
+  npcStates?: ScenarioNpcDecisionActor[];
+  decisionRound?: number;
   receipts: ScenarioActorReceipt[];
   entitlements: ScenarioActorEntitlement[];
 }
@@ -127,9 +141,22 @@ function syncActorEngine(runtime: RuntimeState): void {
 
   if (state.anchorEventId && state.anchorEventId !== anchor?.id) {
     const opportunity = findOpportunity(previousAnchor, state.trackedOpportunityId);
+    const offscreen = runtime.offscreenResolvedEventIds?.includes(state.anchorEventId);
+    if (offscreen && !opportunity) {
+      const receiptId = `actor.receipt.${state.anchorEventId}.offscreen`;
+      if (!state.receipts.some(item => item.id === receiptId)) {
+        state.receipts.push({
+          id: receiptId,
+          anchorEventId: state.anchorEventId,
+          title: `世界已推进：${previousAnchor?.name || state.anchorEventId}`,
+          detail: '该承重拍由世界场外推进；未伪记为玩家亲历，介入机会均已关闭且未授予权限。',
+          outcome: 'offscreen',
+          resolvedAtTurn: Math.max(0, Number(runtime.worldTurn) || 0),
+        });
+      }
+    }
     if (opportunity) {
       const participated = runtime.completedEventIds.includes(state.anchorEventId);
-      const offscreen = runtime.offscreenResolvedEventIds?.includes(state.anchorEventId);
       const receiptId = `actor.receipt.${state.anchorEventId}.${opportunity.id}.${participated ? 'participated' : 'offscreen'}`;
       if ((participated || offscreen) && !state.receipts.some(item => item.id === receiptId)) {
         state.receipts.push({
@@ -160,6 +187,12 @@ function syncActorEngine(runtime: RuntimeState): void {
     state.trackedOpportunityId = undefined;
     state.trackedAtTurn = undefined;
     state.lastHandledWorldPushTurn = undefined;
+    state.decisionInputHash = undefined;
+    state.decisions = undefined;
+    state.visibleDecisionIds = undefined;
+    state.situationValues = undefined;
+    state.npcStates = undefined;
+    state.decisionRound = undefined;
   }
 
   const contract = anchor?.worldActor;
@@ -167,11 +200,39 @@ function syncActorEngine(runtime: RuntimeState): void {
   if (state.anchorEventId !== anchor.id) {
     state.anchorEventId = anchor.id;
     state.pressureId = contract.pressure.id;
-    state.activeAgendaId = contract.agendas[0]?.id;
+    state.activeAgendaId = contract.agendas?.[0]?.id;
     state.surfacedAgendaIds = state.activeAgendaId ? [state.activeAgendaId] : [];
+    if (contract.decisionCore) {
+      state.npcStates = structuredClone(contract.decisionCore.actors);
+      const round = decideNpcActions(contract.decisionCore, contract.decisionCore.situation.initialValues, state.npcStates);
+      state.decisionInputHash = round.inputHash;
+      state.decisions = round.decisions;
+      state.visibleDecisionIds = round.decisions.slice(0, contract.decisionCore.maxVisibleActions).map(item => item.id);
+      state.situationValues = { ...contract.decisionCore.situation.initialValues };
+      state.decisionRound = 0;
+      state.activeAgendaId = undefined;
+      if (typeof console !== 'undefined' && console.debug) {
+        console.debug('[NPC Decision Core]', round);
+      }
+    }
   }
   const pushTurn = runtime.worldPush?.due ? runtime.worldPush.scheduledAtTurn : undefined;
-  if (pushTurn !== undefined && state.lastHandledWorldPushTurn !== pushTurn && contract.agendas.length) {
+  if (pushTurn !== undefined && state.lastHandledWorldPushTurn !== pushTurn && contract.decisionCore) {
+    const situation = state.situationValues || { ...contract.decisionCore.situation.initialValues };
+    const npcStates = state.npcStates || structuredClone(contract.decisionCore.actors);
+    const round = decideNpcActions(contract.decisionCore, situation, npcStates);
+    state.decisionInputHash = round.inputHash;
+    state.decisions = round.decisions;
+    state.visibleDecisionIds = round.decisions.slice(0, contract.decisionCore.maxVisibleActions).map(item => item.id);
+    state.situationValues = applyNpcDecisionEffects(contract.decisionCore, situation, round.decisions);
+    state.npcStates = applyNpcDecisionActorState(contract.decisionCore, npcStates, round.decisions);
+    state.decisionRound = (state.decisionRound || 0) + 1;
+    state.activeAgendaId = undefined;
+    if (typeof console !== 'undefined' && console.debug) {
+      console.debug('[NPC Decision Core]', round);
+    }
+    state.lastHandledWorldPushTurn = pushTurn;
+  } else if (pushTurn !== undefined && state.lastHandledWorldPushTurn !== pushTurn && contract.agendas?.length) {
     const nextAgenda = contract.agendas.find(item => !state.surfacedAgendaIds.includes(item.id))
       || contract.agendas[(pushTurn + contract.agendas.length) % contract.agendas.length];
     state.activeAgendaId = nextAgenda.id;
@@ -196,7 +257,7 @@ export function trackStoryOpportunity(
   state.trackedOpportunityId = opportunity.id;
   state.trackedAtTurn = Math.max(0, Number(runtime.worldTurn) || 0);
   if (!state.activeAgendaId) {
-    state.activeAgendaId = anchor.worldActor.agendas[0]?.id;
+    state.activeAgendaId = anchor.worldActor.agendas?.[0]?.id;
     state.surfacedAgendaIds = state.activeAgendaId ? [state.activeAgendaId] : [];
   }
   return { ok: true, actionText: opportunity.actionText };
@@ -304,7 +365,21 @@ function resolveOffscreenWorldEvents(runtime: RuntimeState, transitions: Scenari
   const declared = runtime.events.map(event => event.offscreenResolution).filter(Boolean) as NonNullable<ScenarioModEvent['offscreenResolution']>[];
   const resolutions = declared.length ? declared : [legacyOffscreenResolution(runtime)].filter(Boolean) as NonNullable<ScenarioModEvent['offscreenResolution']>[];
   for (const resolution of resolutions) {
-    if ((runtime.stallTurns || 0) < resolution.afterStallTurns || runtime.flags[resolution.flagKey] === true) continue;
+    // worldActor 合同的玩家介入判定发生在当前轮，故需要预判本轮即将增加的 stall；
+    // 旧世界事件合同沿用“已完整停滞轮数”语义，避免改变既有结算时点。
+    const actorDrivenResolution = resolution.resolvedEventIds.some(id =>
+      Boolean(runtime.events.find(event => event.id === id)?.worldActor),
+    );
+    const effectiveStall = (runtime.stallTurns || 0) + (actorDrivenResolution ? 1 : 0);
+    const hasTrackedIntervention = Boolean(
+      runtime.actorEngine?.trackedOpportunityId
+      && resolution.resolvedEventIds.includes(runtime.actorEngine.anchorEventId || ''),
+    );
+    if (
+      effectiveStall < resolution.afterStallTurns
+      || runtime.flags[resolution.flagKey] === true
+      || hasTrackedIntervention
+    ) continue;
     const knownIds = resolution.resolvedEventIds.filter(id => runtime.events.some(event => event.id === id));
     if (!knownIds.length) continue;
     // 数据增量会把一个关卡拆成多个场外合同；只允许当前已经激活的世界事件启动结算，

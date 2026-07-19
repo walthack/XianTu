@@ -4,6 +4,7 @@ import {
   type ScenarioCondition,
   type ScenarioMod,
 } from './schema';
+import { NPC_ACTION_LIBRARY } from './npcDecisionCore';
 
 export interface ScenarioModValidationIssue {
   path: string;
@@ -243,8 +244,8 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
             validateStringArray(pressure.geography, `${actorPath}.pressure.geography`, add);
             validateIdArray(pressure.factionIds, `${actorPath}.pressure.factionIds`, add);
           }
-          if (!Array.isArray(entity.worldActor.agendas) || entity.worldActor.agendas.length === 0) {
-            add(`${actorPath}.agendas`, 'required_array', 'worldActor.agendas must contain at least one agenda.');
+          if (!Array.isArray(entity.worldActor.agendas) && !isRecord(entity.worldActor.decisionCore)) {
+            add(`${actorPath}.agendas`, 'required_array', 'worldActor requires legacy agendas or a decisionCore.');
           }
           forEachRecord(entity.worldActor.agendas, `${actorPath}.agendas`, (agenda, agendaPath) => {
             validateId(agenda.id, `${agendaPath}.id`, add);
@@ -255,6 +256,9 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
             requireString(agenda.offscreenAction, `${agendaPath}.offscreenAction`, add);
             validateStringArray(agenda.forbiddenOutcomes, `${agendaPath}.forbiddenOutcomes`, add);
           });
+          if (entity.worldActor.decisionCore !== undefined) {
+            validateNpcDecisionCore(entity.worldActor.decisionCore, `${actorPath}.decisionCore`, add);
+          }
           if (!Array.isArray(entity.worldActor.opportunities) || entity.worldActor.opportunities.length === 0) {
             add(`${actorPath}.opportunities`, 'required_array', 'worldActor.opportunities must contain at least one opportunity.');
           }
@@ -411,6 +415,12 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
         forEachRecord(entity.worldActor.agendas, `${path}.worldActor.agendas`, (agenda, agendaPath) => {
           checkRef(agenda.characterId, characterIds, `${agendaPath}.characterId`, 'character', add);
         });
+        if (isRecord(entity.worldActor.decisionCore)) {
+          forEachRecord(entity.worldActor.decisionCore.actors, `${path}.worldActor.decisionCore.actors`, (actor, actorPath) => {
+            checkRef(actor.characterId, characterIds, `${actorPath}.characterId`, 'character', add);
+            if (isRecord(actor.identity)) checkRef(actor.identity.factionId, factionIds, `${actorPath}.identity.factionId`, 'faction', add);
+          });
+        }
         forEachRecord(entity.worldActor.opportunities, `${path}.worldActor.opportunities`, (opportunity, opportunityPath) => {
           checkRefs(opportunity.characterIds, characterIds, `${opportunityPath}.characterIds`, 'character', add);
         });
@@ -443,6 +453,151 @@ export function parseScenarioMod(input: unknown): ScenarioMod {
 
 type AddIssue = (path: string, code: string, message: string) => void;
 type EntityRecord = Record<string, unknown> & { __path: string };
+
+function validateNpcDecisionCore(value: unknown, path: string, add: AddIssue): void {
+  if (!isRecord(value)) {
+    add(path, 'invalid_type', 'decisionCore must be an object.');
+    return;
+  }
+  const situation = value.situation;
+  const whitelist = new Set<string>();
+  if (!isRecord(situation)) {
+    add(`${path}.situation`, 'required_object', 'decisionCore.situation is required.');
+  } else {
+    validateStringArray(situation.whitelist, `${path}.situation.whitelist`, add);
+    for (const key of Array.isArray(situation.whitelist) ? situation.whitelist : []) {
+      if (typeof key === 'string') whitelist.add(key);
+    }
+    if (!isRecord(situation.initialValues)) {
+      add(`${path}.situation.initialValues`, 'required_object', 'situation.initialValues is required.');
+    } else {
+      for (const [key, initial] of Object.entries(situation.initialValues)) {
+        if (!whitelist.has(key)) add(`${path}.situation.initialValues.${key}`, 'effect_not_whitelisted', 'Initial situation key must be declared in whitelist.');
+        optionalNumber(initial, `${path}.situation.initialValues.${key}`, add);
+      }
+      for (const key of whitelist) {
+        if (!(key in situation.initialValues)) add(`${path}.situation.initialValues.${key}`, 'missing_initial_value', 'Every whitelisted situation key needs an initial value.');
+      }
+    }
+  }
+  if (!isRecord(value.canonPolicy)) {
+    add(`${path}.canonPolicy`, 'required_object', 'decisionCore.canonPolicy is required.');
+  } else {
+    validateStringArray(value.canonPolicy.invariant, `${path}.canonPolicy.invariant`, add);
+    validateStringArray(value.canonPolicy.forbiddenBefore, `${path}.canonPolicy.forbiddenBefore`, add);
+    validateStringArray(value.canonPolicy.processFreedom, `${path}.canonPolicy.processFreedom`, add);
+  }
+  if (![1, 2, 3].includes(Number(value.maxVisibleActions))) {
+    add(`${path}.maxVisibleActions`, 'invalid_enum', 'maxVisibleActions must be 1, 2, or 3.');
+  }
+  if (value.narrativeGuard !== undefined) {
+    if (!isRecord(value.narrativeGuard)) {
+      add(`${path}.narrativeGuard`, 'invalid_type', 'narrativeGuard must be an object.');
+    } else {
+      validateStringArray(value.narrativeGuard.forbiddenTerms, `${path}.narrativeGuard.forbiddenTerms`, add);
+      if (
+        value.narrativeGuard.rejectConcreteQuantities !== undefined
+        && typeof value.narrativeGuard.rejectConcreteQuantities !== 'boolean'
+      ) {
+        add(`${path}.narrativeGuard.rejectConcreteQuantities`, 'invalid_type', 'rejectConcreteQuantities must be boolean.');
+      }
+    }
+  }
+
+  const knownActions = new Set(NPC_ACTION_LIBRARY.map(item => item.id));
+  const boundActions = new Set<string>();
+  if (!Array.isArray(value.actionBindings) || value.actionBindings.length === 0) {
+    add(`${path}.actionBindings`, 'required_array', 'decisionCore.actionBindings must not be empty.');
+  }
+  forEachRecord(value.actionBindings, `${path}.actionBindings`, (binding, bindingPath) => {
+    if (!validateId(binding.actionId, `${bindingPath}.actionId`, add)) return;
+    if (!knownActions.has(binding.actionId as string)) add(`${bindingPath}.actionId`, 'unknown_action', 'actionId is not in the shared NPC action library.');
+    boundActions.add(binding.actionId as string);
+    validateIdArray(binding.actorIds, `${bindingPath}.actorIds`, add);
+    for (const key of ['label', 'reason', 'visibleSignal', 'offscreenAction']) requireString(binding[key], `${bindingPath}.${key}`, add);
+    validateStringArray(binding.knownFacts, `${bindingPath}.knownFacts`, add);
+    validateStringArray(binding.mustNotInvent, `${bindingPath}.mustNotInvent`, add);
+    if (!['public', 'rumor', 'hidden'].includes(String(binding.visibility))) add(`${bindingPath}.visibility`, 'invalid_enum', 'visibility must be public, rumor, or hidden.');
+    optionalNumber(binding.durationTurns, `${bindingPath}.durationTurns`, add);
+    if (typeof binding.durationTurns !== 'number' || binding.durationTurns < 1) add(`${bindingPath}.durationTurns`, 'invalid_range', 'durationTurns must be at least 1.');
+    for (const numericGroup of ['requirements', 'costs', 'utility']) {
+      if (binding[numericGroup] !== undefined && !isRecord(binding[numericGroup])) {
+        add(`${bindingPath}.${numericGroup}`, 'invalid_type', `${numericGroup} must be an object.`);
+      } else if (isRecord(binding[numericGroup])) {
+        for (const [key, amount] of Object.entries(binding[numericGroup])) optionalNumber(amount, `${bindingPath}.${numericGroup}.${key}`, add);
+      }
+    }
+    if (binding.effects !== undefined && !isRecord(binding.effects)) {
+      add(`${bindingPath}.effects`, 'invalid_type', 'effects must be an object.');
+    } else if (isRecord(binding.effects)) {
+      for (const [key, delta] of Object.entries(binding.effects)) {
+        optionalNumber(delta, `${bindingPath}.effects.${key}`, add);
+        if (!whitelist.has(key)) add(`${bindingPath}.effects.${key}`, 'effect_not_whitelisted', 'NPC effects may only target this stage situation whitelist.');
+      }
+    }
+    validateStringArray(binding.canonTags, `${bindingPath}.canonTags`, add);
+  });
+
+  if (!Array.isArray(value.actors) || value.actors.length === 0) {
+    add(`${path}.actors`, 'required_array', 'decisionCore.actors must not be empty.');
+  }
+  forEachRecord(value.actors, `${path}.actors`, (actor, actorPath) => {
+    validateId(actor.characterId, `${actorPath}.characterId`, add);
+    if (!isRecord(actor.identity)) {
+      add(`${actorPath}.identity`, 'required_object', 'actor.identity is required.');
+    } else {
+      validateId(actor.identity.factionId, `${actorPath}.identity.factionId`, add);
+      optionalString(actor.identity.office, `${actorPath}.identity.office`, add);
+      optionalNumber(actor.identity.rank, `${actorPath}.identity.rank`, add);
+    }
+    const evidence = isRecord(actor.evidence) ? actor.evidence : {};
+    if (!isRecord(actor.evidence)) add(`${actorPath}.evidence`, 'required_object', 'actor.evidence is required.');
+    const requireEvidence = (key: string) => {
+      if (!isNonEmptyString(evidence[key])) add(`${actorPath}.evidence.${key}`, 'missing_canon_evidence', `Numeric field "${key}" requires canon evidence.`);
+    };
+    requireEvidence('identity.rank');
+    for (const group of ['personality', 'motives', 'resources']) {
+      if (!isRecord(actor[group])) {
+        add(`${actorPath}.${group}`, 'required_object', `actor.${group} is required.`);
+        continue;
+      }
+      for (const [key, amount] of Object.entries(actor[group])) {
+        optionalNumber(amount, `${actorPath}.${group}.${key}`, add);
+        requireEvidence(`${group}.${key}`);
+      }
+    }
+    if (isRecord(actor.personality) && Object.keys(actor.personality).length > 4) {
+      add(`${actorPath}.personality`, 'too_many_dimensions', 's01_05 personality may use at most four dimensions.');
+    }
+    if (!isRecord(actor.relationships)) {
+      add(`${actorPath}.relationships`, 'required_object', 'actor.relationships is required.');
+    } else {
+      for (const [targetId, relation] of Object.entries(actor.relationships)) {
+        if (!isRecord(relation)) {
+          add(`${actorPath}.relationships.${targetId}`, 'invalid_type', 'relationship dimensions must be an object.');
+          continue;
+        }
+        if (Object.keys(relation).length > 3) add(`${actorPath}.relationships.${targetId}`, 'too_many_dimensions', 'A relationship may use at most three dimensions.');
+        for (const [dimension, amount] of Object.entries(relation)) {
+          optionalNumber(amount, `${actorPath}.relationships.${targetId}.${dimension}`, add);
+          requireEvidence(`relationships.${targetId}.${dimension}`);
+        }
+      }
+    }
+    validateStringArray(actor.knowledge, `${actorPath}.knowledge`, add);
+    validateIdArray(actor.allowedActionIds, `${actorPath}.allowedActionIds`, add);
+    for (const actionId of Array.isArray(actor.allowedActionIds) ? actor.allowedActionIds : []) {
+      if (typeof actionId === 'string' && !boundActions.has(actionId)) add(`${actorPath}.allowedActionIds`, 'unbound_action', `Allowed action "${actionId}" has no stage binding.`);
+    }
+    forEachRecord(actor.agendas, `${actorPath}.agendas`, (agenda, agendaPath) => {
+      validateId(agenda.id, `${agendaPath}.id`, add);
+      requireString(agenda.goal, `${agendaPath}.goal`, add);
+      optionalNumber(agenda.clock, `${agendaPath}.clock`, add);
+      validateStringArray(agenda.escalation, `${agendaPath}.escalation`, add);
+      if (typeof agenda.id === 'string') requireEvidence(`agendas.${agenda.id}.clock`);
+    });
+  });
+}
 
 function requireString(value: unknown, path: string, add: AddIssue): void {
   if (!isNonEmptyString(value)) add(path, 'required_string', `${path} must be a non-empty string.`);

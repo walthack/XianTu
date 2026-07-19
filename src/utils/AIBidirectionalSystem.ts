@@ -56,7 +56,10 @@ import {
 import { buildNarrativePromptState } from '@/utils/narrativePromptState';
 import {
   decideNarrativePerformanceAttempt,
+  hasHardNarrativeViolation,
   performanceRetryInstruction,
+  requiresNarrativeBuffering,
+  safeNarrativeFallback,
   validateNarrativePerformance,
 } from '@/modules/scenarioMods/narrativePerformanceGuard';
 
@@ -960,6 +963,9 @@ ${stateJsonString}
       const { aiService } = await import('@/services/aiService');
       const aiConfig = aiService.getConfig();
       const useStreaming = options?.useStreaming ?? aiConfig.streaming ?? true;
+      // 含正典渲染硬门禁时只关闭 UI 分片回调；网络层仍可流式收齐，
+      // 避免部分供应商的非流式请求显著变慢，同时保证首稿不会提前展示。
+      const narrativeStreaming = useStreaming && !requiresNarrativeBuffering(scenarioStoryPrompt);
 
       const isSplitEnabled = (() => {
         if (typeof options?.splitResponseGeneration === 'boolean') return options.splitResponseGeneration;
@@ -1116,7 +1122,7 @@ ${stateJsonString}
               generation_id: `${generationId}_step1_${attempt}`,
               injects: injectsStep1 as any,
               usageType: 'main',
-              onStreamChunk: options?.onStreamChunk,
+              onStreamChunk: narrativeStreaming ? options?.onStreamChunk : undefined,
             });
             const candidateText = this.extractNarrativeText(String(step1Raw));
             if (candidateText.trim().length > 0) {
@@ -1214,7 +1220,7 @@ ${missingItems.length > 0 ? `【上次结构化输出缺失】
           generation_id: generationId,
           usageType: 'main',
           injects: injects as any,
-          onStreamChunk: options?.onStreamChunk,
+          onStreamChunk: narrativeStreaming ? options?.onStreamChunk : undefined,
         });
       } else {
         // 自定义API模式
@@ -1226,7 +1232,7 @@ ${missingItems.length > 0 ? `【上次结构化输出缺失】
           generation_id: generationId,
           usageType: 'main',
           injects: injects as any,
-          onStreamChunk: options?.onStreamChunk,
+          onStreamChunk: narrativeStreaming ? options?.onStreamChunk : undefined,
         });
       }
 
@@ -1341,6 +1347,14 @@ ${missingItems.length > 0 ? `【上次结构化输出缺失】
             aiService.isForceJsonEnabled('main'),
             actionOptionsEnabled,
           );
+          const finalPerformance = validateNarrativePerformance(gmResponse.text || '', finalUserInput, scenarioStoryPrompt);
+          if (hasHardNarrativeViolation(finalPerformance)) {
+            gmResponse.text = safeNarrativeFallback();
+            gmResponse.mid_term_memory = '';
+            gmResponse.tavern_commands = [];
+            gmResponse.action_options = [];
+            console.error('[叙事硬门禁] 非分步重试仍违规，已丢弃正文与伴随指令：', finalPerformance.issues);
+          }
         }
       }
 
@@ -1351,6 +1365,14 @@ ${missingItems.length > 0 ? `【上次结构化输出缺失】
       }
       if (gmResponse && gmResponse.text) {
         gmResponse.text = await this.optimizeText(gmResponse.text, options?.onProgressUpdate);
+        const finalPerformance = validateNarrativePerformance(gmResponse.text, finalUserInput, scenarioStoryPrompt);
+        if (hasHardNarrativeViolation(finalPerformance)) {
+          gmResponse.text = safeNarrativeFallback();
+          gmResponse.mid_term_memory = '';
+          gmResponse.tavern_commands = [];
+          gmResponse.action_options = [];
+          console.error('[叙事硬门禁] 最终落稿违规，已丢弃正文与伴随指令：', finalPerformance.issues);
+        }
       }
 
       if (shouldAbort()) {
@@ -1500,6 +1522,7 @@ ${missingItems.length > 0 ? `【上次结构化输出缺失】
       const { aiService } = await import('@/services/aiService');
       const aiConfig = aiService.getConfig();
       const useStreaming = options?.useStreaming ?? aiConfig.streaming ?? true;
+      const narrativeStreaming = useStreaming && !requiresNarrativeBuffering(userPrompt);
       const generateMode = options?.generateMode || 'generate'; // 默认使用 generate 模式
       const isSplitEnabled = (() => {
         if (typeof options?.splitResponseGeneration === 'boolean') return options.splitResponseGeneration;
@@ -1634,7 +1657,7 @@ ${userPrompt}
               should_stream: useStreaming,
               usageType: 'main',
               maxTokens: INITIAL_GENERATION_POLICY.step1MaxTokens,
-              onStreamChunk: options?.onStreamChunk,
+              onStreamChunk: narrativeStreaming ? options?.onStreamChunk : undefined,
             });
 
             const candidate = this.extractNarrativeText(String(step1Raw)).trim();
@@ -1660,8 +1683,10 @@ ${userPrompt}
             if (hasControlLeak) {
               lastStep1Error = narrativeControlCheck.issues.join('；');
               if (attempt === INITIAL_GENERATION_POLICY.attemptsPerStep) {
-                const sanitizedCandidate = sanitizeAITextForDisplay(candidate).trim();
-                if (!shouldRetryInitialNarrative(sanitizedCandidate.length)) {
+                const sanitizedCandidate = hasHardNarrativeViolation(narrativeControlCheck)
+                  ? safeNarrativeFallback()
+                  : sanitizeAITextForDisplay(candidate).trim();
+                if (hasHardNarrativeViolation(narrativeControlCheck) || !shouldRetryInitialNarrative(sanitizedCandidate.length)) {
                   step1Text = sanitizedCandidate;
                   break;
                 }
@@ -1854,7 +1879,7 @@ ${step1Text}
             should_stream: useStreaming,
             generation_id: `initial_message_raw_${Date.now()}`,
             usageType: 'main',
-            onStreamChunk: options?.onStreamChunk,
+            onStreamChunk: narrativeStreaming ? options?.onStreamChunk : undefined,
           });
         } else {
           console.log('[AI双向系统] 自定义API模式 - 使用 generate 模式生成初始消息');
@@ -1873,7 +1898,7 @@ ${step1Text}
             generation_id: `initial_message_${Date.now()}`,
             usageType: 'main',
             injects: injects as any,
-            onStreamChunk: options?.onStreamChunk,
+            onStreamChunk: narrativeStreaming ? options?.onStreamChunk : undefined,
           });
         }
       }
@@ -1979,8 +2004,26 @@ ${step1Text}
           throw new Error('AI响应解析失败或为空');
         }
 
+        const finalPerformance = validateNarrativePerformance(gmResponse.text, '', userPrompt);
+        if (hasHardNarrativeViolation(finalPerformance)) {
+          gmResponse.text = safeNarrativeFallback();
+          gmResponse.mid_term_memory = '';
+          gmResponse.tavern_commands = [];
+          gmResponse.action_options = [];
+          console.error('[叙事硬门禁] 开局最终落稿违规，已丢弃正文与伴随指令：', finalPerformance.issues);
+        }
+
         // 🔥 文本优化：如果启用，对生成的文本进行润色（非分步模式）
         gmResponse.text = await this.optimizeText(gmResponse.text, options?.onProgressUpdate);
+      }
+
+      const finalInitialPerformance = validateNarrativePerformance(gmResponse!.text || '', '', userPrompt);
+      if (hasHardNarrativeViolation(finalInitialPerformance)) {
+        gmResponse!.text = safeNarrativeFallback();
+        gmResponse!.mid_term_memory = '';
+        gmResponse!.tavern_commands = [];
+        gmResponse!.action_options = [];
+        console.error('[叙事硬门禁] 开局优化后落稿违规，已丢弃正文与伴随指令：', finalInitialPerformance.issues);
       }
 
       // 流式传输完成后调用回调
