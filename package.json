@@ -15,7 +15,7 @@
  },
  "scripts": {
   "bundle:builtins": "node scripts/sync-builtin-mods.mjs",
-  "prebuild": "node scripts/sync-builtin-mods.mjs",
+  "prebuild": "node scripts/sync-builtin-mods.mjs && node scripts/validate-canon-decisions.mjs",
   "prebuild:single": "node scripts/sync-builtin-mods.mjs",
   "prewatch": "node scripts/sync-builtin-mods.mjs",
   "preserve": "node scripts/sync-builtin-mods.mjs",
@@ -26,10 +26,11 @@
   "test": "node --test tests/*.test.mjs",
   "mod:validate": "node scripts/validate-scenario-mod.mjs",
   "if:validate": "node scripts/validate-if-branches.mjs",
+  "canon:validate": "node scripts/validate-canon-decisions.mjs",
   "lint": "eslint . --ext .ts,.vue --fix",
   "lint:check": "eslint . --ext .ts,.vue",
   "type-check": "tsc --noEmit",
-  "validate:all": "npm run type-check && npm test && npm run if:validate && npm run mod:validate -- src/modules/scenarioMods/builtins/data/*.json",
+  "validate:all": "npm run type-check && npm run canon:validate && npm test && npm run if:validate && npm run mod:validate -- src/modules/scenarioMods/builtins/data/*.json",
   "canon:build": "node scripts/canon-build.mjs"
  },
  "dependencies": {

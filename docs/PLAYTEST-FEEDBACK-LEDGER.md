@@ -270,3 +270,4 @@
 - **验证标准**：分步与非分步 prompt 均含角色机密隔离；点名“阮香凝+吕雉/霍子孟”时出现专属知情边界；现行 stage/registry 与生成源不得再出现“十二玉姬”（校验规则定义本身除外）；`canon:build`、`validate:all`、production build 全绿。
 - **对示例对白的直接结论**：可公开“阮香凝协助救驾、施展瞑寂扰敌”及其当前从属关系；不得默认公开“凝玉姬/黑魔海高层”真身。若程宗扬确要主动向吕雉披露，正文必须把它写成一次有政治代价的明确泄密决定，而不能作为普通履历介绍；霍子孟也不能凭空断言贾文和与她同门。
 - **状态**：✅ 2026-07-19 已完成。`canon:build`（327/327）、37 关 schema、`validate:all` 与 production build 全绿；裁定簿已单向同步 NAS 镜像并逐字节核同。
+- **Claude 二审与补洞**（job `claude-2026-07-19T02-03-27-975Z-c14c5787`）：二审认可“通用机密隔离 + 阮香凝点名纵切”方向，但指出 lint 只在手动 `canon:build`、最终 builtin 与可重建 v2 输入未直扫、本人公开/玩家泄密语义未区分、仅阮香凝有回归。07-19 依建议修复：`validate:all` 与 production `prebuild` 强制执行裁定 lint；扫描范围扩至生成 stage + `builtins/data` + registry + 三份脚本 + v2 输入；清理 v2/势力抽档残留并留 `backups/pre-108-source-cleanup-20260719/`；双路由明确允许可见异常盘问、禁止先知点破，已揭露者延续知情，玩家泄密须明确授权并承担政治/关系后果；新增游婵通用规则与门禁编排回归。结构化 `revealedTo` 留待 B/C。`canon:build` 330/330、100 份裁定产物、`validate:all` 与 production build 全绿。

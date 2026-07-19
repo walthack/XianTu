@@ -33,6 +33,9 @@ test('R2-9 十二条叙事护栏同时进入非分步与分步正文路由', asy
 
   assert.match(prompts.businessRules.content, /角色档案中的真身、卧底、伪装、内部称号与秘密归属/);
   assert.match(prompts.splitGenerationStep1.content, /不等于场内NPC已经知情/);
+  assert.match(prompts.businessRules.content, /已获知者延续知情,未在场\/未被告知者不得自动继承/);
+  assert.match(prompts.splitGenerationStep1.content, /可基于亲眼所见的异常怀疑并盘问来历/);
+  assert.match(prompts.businessRules.content, /玩家向外披露须由玩家明确授权并产生符合局势的风险或关系后果/);
 });
 
 test('行动选项规则锁定主角视角并承接世界留钩', async () => {

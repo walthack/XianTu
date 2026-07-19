@@ -473,9 +473,36 @@ test('阮香凝的凝玉姬真身作为后台机密注入，不授予无证据 N
 
   assert.match(prompt, /【机密身份·知情边界】/);
   assert.match(prompt, /“凝玉姬”.*黑魔海内部机密/);
-  assert.match(prompt, /吕雉、霍子孟等其他人物.*不得直接识别、说出或据此审问/);
+  assert.match(prompt, /所有其他人物（吕雉、霍子孟仅为例）都不得先知式识别/);
+  assert.match(prompt, /可以依据亲眼所见的施术、伤势、言行矛盾等可见异常保持怀疑并盘问来历/);
+  assert.match(prompt, /已明确向某人公开，该人物后续应延续知情/);
+  assert.match(prompt, /程宗扬向外披露则属于玩家泄密决策，必须有玩家明确授权/);
+  assert.match(prompt, /不得替玩家把机密当普通履历介绍/);
   assert.match(prompt, /人物档案中的真身、卧底、伪装、内部称号与秘密归属/);
   assert.match(prompt, /不等于场内人物的知识/);
+});
+
+test('非点名暗桩角色也受通用机密规则保护，不依赖阮香凝专属文本', async () => {
+  const { buildScenarioStoryPrompt } = await loadTs('../src/modules/scenarioMods/storyContext.ts');
+  const save = await buildStorySave();
+  const runtime = save.世界.状态.剧本模组;
+  runtime.canon.characters.push({
+    id: 'character.you_chang',
+    name: '游婵',
+    role: '黑魔海暗桩',
+    description: '以普通联络人身份活动，真实归属不向外公开。',
+    profile: { origin: '黑魔海秘密联络人', personality: ['谨慎'] },
+  });
+
+  const prompt = buildScenarioStoryPrompt(save, '我让本地官吏询问游婵为何在此');
+  const focusedSection = prompt.match(/## 当前相关人物正典约束（防 OOC）[\s\S]*?(?=\n【人物正典优先级】)/)?.[0] || '';
+
+  assert.match(focusedSection, /游婵/);
+  assert.match(focusedSection, /黑魔海暗桩/);
+  assert.doesNotMatch(focusedSection, /【机密身份·知情边界】/);
+  assert.match(prompt, /人物档案中的真身、卧底、伪装、内部称号与秘密归属/);
+  assert.match(prompt, /其余 NPC 可依据亲眼所见的异常保持怀疑并盘问来历/);
+  assert.match(prompt, /不得先知式说出秘密称号、归属或拿真相作为既知前提推理/);
 });
 
 test('星月湖战争缺席后，stage_12 以战报和余波替代玩家亲历叙事', async () => {

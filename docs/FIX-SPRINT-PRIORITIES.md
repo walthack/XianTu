@@ -1,6 +1,6 @@
 # 内测修复冲刺 · 优先级(2026-07-18 定稿)
 
-> 依据 = `docs/PLAYTEST-FEEDBACK-LEDGER.md` 全部 21 条;总目标 = #21(剧情跑歪无法收束)。
+> 依据 = `docs/PLAYTEST-FEEDBACK-LEDGER.md` 全部 23 条;总目标 = #21(剧情跑歪无法收束)，#22/#23 为收口期补充发现。
 > 执行纪律:重启测试服避开测试者在线时段;提示词改动必须分步(splitGenerationStep1)+非分步双写;每批过门禁(`canon:build`+`validate:all`)+ selftest 回归。
 
 ## P0 · ✅ 已完成(2026-07-18,Claude 执行;commits 868a764/5b38a09/a4cd510/cc44ce2;308 单测全绿+validate:all 过+真机验证 39 人 0 超寿元、郭靖 4 岁)
@@ -45,3 +45,4 @@
 - 世界引力：新增 22 个场外合同，总覆盖 23/380；仅当前已激活节点可启动，IF 生死节点跳过。
 - P3：裁定 #55 首个硬 lint；天赋情境判定；1616 人物实例审计报告=`R2-9-DATA-GOVERNANCE-AUDIT-2026-07-18.md`。
 - R3-8 纵切：小紫+贾文和两张阶段化 Voice Card 已接入；MiniMax 预扫不直接写正典。
+- 07-19 二审补洞：裁定 lint 已强制进入 `validate:all` 与 production `prebuild`，并直接扫描生成 stage、最终 `builtins/data`、registry、三份生成脚本及可重建 v3 的 v2 输入；#23 机密知情规则区分怀疑性盘问、本人公开与玩家泄密，结构化知情图谱仍留 B/C。
