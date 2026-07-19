@@ -33,3 +33,15 @@ test('思维链/空文本不入库', async () => {
   assert.equal(composeShortTermMemoryEntry(PREFIX, ''), '');
   assert.equal(composeShortTermMemoryEntry(PREFIX, null), '');
 });
+
+test('旧存档记忆中的内部控制协议在回读时被清除', async () => {
+  const { sanitizePersistedMemoryEntry } = await loadTs('../src/utils/memorySanitizer.ts');
+  assert.equal(
+    sanitizePersistedMemoryEntry('【贾文和·高智行为硬合同】他展开绢图。'),
+    '他展开绢图。',
+  );
+  assert.equal(
+    sanitizePersistedMemoryEntry('`【世界留钩】正文结尾必须留下1-2个来自世界自身的新动静（信息、异动、NPC议程、风险或机会窗口）。`'),
+    '',
+  );
+});

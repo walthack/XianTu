@@ -8,6 +8,22 @@ const MAX_REPLACE_REPLACEMENT_LENGTH = 1500;
 let cachedReplaceKey: string | null = null;
 let cachedCompiledReplaceRules: Array<{ re: RegExp; replacement: string }> = [];
 
+const INTERNAL_NARRATIVE_CONTROL_MARKERS: Array<{ label: string; re: RegExp }> = [
+  { label: 'R2-9叙事护栏', re: /\[R2-9叙事护栏·硬约束\]/ },
+  { label: '世界留钩', re: /【世界留钩】|正文结尾必须留下\s*1\s*[-~～至]\s*2\s*个来自世界自身的新动静/ },
+  { label: '高智行为约束', re: /【[^】\r\n]{1,40}·高智行为硬合同】/ },
+  { label: '角色表演重写指令', re: /【表演门禁退回重写】/ },
+  { label: '世界演员合同', re: /【世界演员合同·[^】\r\n]+】/ },
+  { label: '世界回合指令', re: /【世界回合·本轮世界必须行动】/ },
+  { label: '机会追踪指令', re: /【玩家已追踪机会·本轮最高优先级】/ },
+  { label: '承重角色保护', re: /【承重角色保护】/ },
+  { label: 'Canon Rail控制协议', re: /【Canon Rail·默认正典】|【高光演出硬合同】/ },
+];
+
+const WORLD_HOOK_DIRECTIVE_RE =
+  /`?(?:【世界留钩】\s*)?正文结尾必须留下\s*1\s*[-~～至]\s*2\s*个来自世界自身的新动静\s*[（(]信息、异动、NPC议程、风险或机会窗口[）)]\s*[,，;；]?\s*(?:action_options\s*至少一个承接该钩\s*[,，;；]?\s*)?(?:不得把场面完全收干净后只等玩家续写)?[。.]?`?/gi;
+const HIGH_INTELLIGENCE_CONTRACT_LABEL_RE = /【[^】\r\n]{1,40}·高智行为硬合同】/g;
+
 type SanitizerSettings = {
   replaceRules: TextReplaceRule[];
 };
@@ -105,6 +121,8 @@ function sanitizeWithRules(
     .replace(/<thought>[\s\S]*?<\/thought>/gi, '')
     .replace(/<\/?thought>/gi, '');
 
+  result = stripInternalNarrativeControlLeaks(result);
+
   for (const rule of replaceRules) {
     result = result.replace(rule.re, rule.replacement);
   }
@@ -114,6 +132,39 @@ function sanitizeWithRules(
 
 export function sanitizeAITextForDisplay(text: string): string {
   return sanitizeWithRules(text, getCompiledReplaceRules());
+}
+
+/** 识别模型是否把系统/剧本控制协议复述进玩家正文，用于生成阶段退回重写。 */
+export function findInternalNarrativeControlLeaks(text: string): string[] {
+  if (!text) return [];
+  return INTERNAL_NARRATIVE_CONTROL_MARKERS
+    .filter(({ re }) => re.test(text))
+    .map(({ label }) => label);
+}
+
+/**
+ * 最终展示与入库前的窄范围兜底。
+ * 只清理由真机样本证实会泄漏的固定协议文本；正常【环境】标记与成对 NPC 心理反引号保留。
+ */
+export function stripInternalNarrativeControlLeaks(text: string): string {
+  if (!text) return '';
+  let result = text
+    .replace(WORLD_HOOK_DIRECTIVE_RE, '')
+    .replace(HIGH_INTELLIGENCE_CONTRACT_LABEL_RE, '')
+    .replace(/【世界留钩】/g, '')
+    .replace(/\[R2-9叙事护栏·硬约束\]/g, '')
+    .replace(/【表演门禁退回重写】/g, '');
+  const changedByProtocolFilter = result !== text;
+
+  // 模型偶尔把提示词里的 Markdown 定界符粘到正文末尾；只移除无法配对的末尾孤立反引号。
+  const backtickCount = (result.match(/`/g) || []).length;
+  if (backtickCount % 2 === 1) {
+    result = result.replace(/`\s*$/, '');
+  }
+  const cleaned = result
+    .replace(/[ \t]+\n/g, '\n')
+    .replace(/\n{3,}/g, '\n\n');
+  return changedByProtocolFilter || cleaned !== result ? cleaned.trim() : cleaned;
 }
 
 /**

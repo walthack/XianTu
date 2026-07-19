@@ -41,10 +41,24 @@ test('split performance retry discards only the retryable draft and preserves th
   assert.equal(first.valid, false);
   assert.equal(first.shouldRetry, true);
   assert.equal(first.narrative, '');
-  assert.match(first.retryInstruction, /表演门禁退回重写/);
+  assert.match(first.retryInstruction, /上稿未通过内部检查/);
 
   const final = decideNarrativePerformanceAttempt(reportOnly, '让小紫说明敌情和下一步计划', prompt, 2, 2);
   assert.equal(final.valid, false);
   assert.equal(final.shouldRetry, false);
   assert.equal(final.narrative, reportOnly);
+});
+
+test('internal control protocol leakage triggers a retry even outside decision scenes', async () => {
+  const { validateNarrativePerformance, performanceRetryInstruction } =
+    await loadTs('../src/modules/scenarioMods/narrativePerformanceGuard.ts');
+  const result = validateNarrativePerformance(
+    '【世界留钩】正文结尾必须留下1-2个来自世界自身的新动静。',
+    '我观察殿外动静',
+    '',
+  );
+  assert.equal(result.valid, false);
+  assert.match(result.issues.join('；'), /世界留钩/);
+  assert.match(performanceRetryInstruction(result.issues), /严禁复述到正文/);
+  assert.doesNotMatch(performanceRetryInstruction(result.issues), /【表演门禁退回重写】/);
 });

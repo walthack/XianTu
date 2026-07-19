@@ -1,4 +1,5 @@
 import { extractFirstJsonSnippet, stripModelThinking } from './jsonExtract';
+import { stripInternalNarrativeControlLeaks } from './textSanitizer';
 
 const META_INSTRUCTION_RE = /^(?:用户要求我|用户希望我|我的任务是|作为(?:AI|助手|模型)|以下是(?:对|根据).{0,20}(?:记忆|内容)的总结|请(?:生成|输出|总结)|需要(?:生成|输出|总结)).{0,80}/i;
 
@@ -28,6 +29,7 @@ export function sanitizePersistedMemoryEntry(value: unknown): string {
     .replace(/^```(?:json|text)?\s*/i, '')
     .replace(/\s*```$/i, '')
     .trim();
+  cleaned = stripInternalNarrativeControlLeaks(cleaned);
   if (!cleaned || META_INSTRUCTION_RE.test(cleaned)) return '';
   return cleaned;
 }

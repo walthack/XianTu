@@ -1,3 +1,5 @@
+import { findInternalNarrativeControlLeaks } from '@/utils/textSanitizer';
+
 export interface NarrativePerformanceCheck {
   valid: boolean;
   issues: string[];
@@ -24,7 +26,11 @@ export function validateNarrativePerformance(
   scenarioPrompt: string,
 ): NarrativePerformanceCheck {
   const issues: string[] = [];
-  if (!DECISION_SCENE.test(userInput)) return { valid: true, issues };
+  const controlLeaks = findInternalNarrativeControlLeaks(narrative);
+  if (controlLeaks.length) {
+    issues.push(`正文复述内部控制协议：${controlLeaks.join('、')}`);
+  }
+  if (!DECISION_SCENE.test(userInput)) return { valid: issues.length === 0, issues };
   for (const name of ['小紫', '贾文和']) {
     if (!scenarioPrompt.includes(`【${name}·角色表演卡`) || !narrative.includes(name)) continue;
     const speech = namedSpeech(narrative, name);
@@ -36,7 +42,7 @@ export function validateNarrativePerformance(
 }
 
 export function performanceRetryInstruction(issues: string[]): string {
-  return `【表演门禁退回重写】上稿未通过：${issues.join('；')}。保留已接地事实，整段重写；必须让被点名角色亲口说出或亲自实施一个具体可行动方案（含先手、后手、代价或退出条件之一），随后把选择留给玩家。不得让主角代为分析/下令，不得新增存档与正典没有的兵力、伤亡、人物或事件。`;
+  return `上稿未通过内部检查：${issues.join('；')}。这段检查说明只供重写时使用，严禁复述到正文。保留已接地事实，整段重写；必须让被点名角色亲口说出或亲自实施一个具体可行动方案（含先手、后手、代价或退出条件之一），随后把选择留给玩家。不得让主角代为分析/下令，不得新增存档与正典没有的兵力、伤亡、人物或事件。`;
 }
 
 /**

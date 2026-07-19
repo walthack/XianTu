@@ -11,6 +11,8 @@ test('R2-9 十二条叙事护栏同时进入非分步与分步正文路由', asy
   assert.ok(R2_9_NARRATIVE_GUARD_RULES.length > 500);
   assert.match(prompts.businessRules.content, /\[R2-9叙事护栏·硬约束\]/);
   assert.match(prompts.splitGenerationStep1.content, /\[R2-9叙事护栏·硬约束\]/);
+  assert.match(prompts.businessRules.content, /严禁在text、叙事正文、角色对白、心理或系统提示中复述/);
+  assert.match(prompts.splitGenerationStep1.content, /正文只能呈现遵守规则后的故事内容/);
 
   const requiredRules = [
     '玩家代理权',

@@ -338,3 +338,19 @@
   4. 未登场角色、未解锁秘密和未来正典事件不因机会预览泄漏；
   5. 普通寒暄与场景小动作不自动生成机会卡，避免 UI 再次变成杂乱待办栏。
 - **状态**：2026-07-19 通用骨架已接运行时，首批仅启用 `lyg.dingtao_beijing/s01_05`。事件 schema/validator 承载压力、议程与机会；runtime 复用 `worldPush` 轮换董卓/贾文和/霍子孟，右栏展示征兆、why now、下一步、风险/收益及追踪；追踪进入行动队列，只有玩家亲历完成当前承重拍才幂等授予关系/谋议权限，场外推进只关闭机会而不冒充亲历或授奖。默认 `process_only`，不改定陶王登基；阮香凝仍锁 `s01_08`。下一步按“诏令/入宫/不介入”跑三条 10–15 回合真机验收。
+
+## #27 R2-9/角色表演内部控制协议直接暴露在正文 —— ✅ 已修（P1 正文污染）
+
+- **反馈**（2026-07-19，用户）：世界演员纵切中正文直接出现 `【贾文和·高智行为硬合同】`、``【世界留钩】正文结尾必须留下1-2个……``，并残留末尾孤立反引号。
+- **根因**：
+  1. R2-9 护栏和 `storyContext` 角色级合同使用了与正文环境标记相同的醒目标题，但只要求模型“遵守”，没有明确禁止复述控制文本；
+  2. 角色表演门禁只检查小紫/贾文和是否主动提出方案，不识别 prompt echo；
+  3. `sanitizeAITextForDisplay()` 只清思维链与用户替换规则，分步流式展示、最终正文、短期记忆和后续事件审计没有控制协议泄漏兜底。
+- **文件指针**：`src/utils/prompts/definitions/businessRules.ts::R2_9_NARRATIVE_GUARD_RULES`；`src/modules/scenarioMods/storyContext.ts::formatFocusedCharacter`；`src/modules/scenarioMods/narrativePerformanceGuard.ts`；`src/utils/textSanitizer.ts`；`src/stores/uiStore.ts`；`src/utils/AIBidirectionalSystem.ts::processGmResponse`。
+- **修复**：
+  1. R2-9 单一共享文本源新增“标题/编号/规则名/示例只供内部遵守、不得进入正文”，因此分步与非分步自动双写；
+  2. 移除容易被照抄的“某角色·高智行为硬合同”标题，改为低显著度内部角色行为要求；
+  3. 表演门禁在普通场景也检测已知内部协议，尚有调用预算时整段退回重写；
+  4. 流式展示与最终入库共用的 sanitizer 窄范围移除已证实的合同标签、整条世界留钩指令和末尾不成对反引号，保留真实世界动静、正常 `【环境】` 与成对 NPC 心理标记。
+- **验证标准**：分步/非分步均禁止复述；泄漏首稿触发重写；末次降级稿也不得把已知协议写进展示、叙事历史或记忆；正常环境/心理/世界留钩内容不被误删；旧存档可直接续测。
+- **状态**：✅ 2026-07-19 已实现；`canon:build`、`validate:all`（339 测试）、type-check 与 production build 全绿。

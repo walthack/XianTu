@@ -284,7 +284,7 @@ function formatFocusedCharacter(
     profile.origin || '',
   ].join(' ');
   if (/智商|高智|谋士|谋略|智囊|城府|精明|机敏|敏达|洞察|算计|足智/.test(intelligenceProfile)) {
-    lines.push(`  【${character.name}·高智行为硬合同】情报/决策场景中，必须由${character.name}本人先直接说出或实施至少一个具体方案（合格形态：“我已安排甲做乙，你现在可利用丙”），且该方案改变本轮选择；不得只报告情报、点头领命、等待主角追问，或只用旁白暗示“另有后手”。`);
+    lines.push(`  内部角色行为要求（不得写入正文）：情报/决策场景中，必须由${character.name}本人先直接说出或实施至少一个具体方案（合格形态：“我已安排甲做乙，你现在可利用丙”），且该方案改变本轮选择；不得只报告情报、点头领命、等待主角追问，或只用旁白暗示“另有后手”。`);
   }
   const speechStyle = getRegistrySpeechStyle(character.name);
   if (speechStyle) lines.push(`  谈吐：${speechStyle}`);

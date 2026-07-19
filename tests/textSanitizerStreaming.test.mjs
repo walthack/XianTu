@@ -5,7 +5,19 @@ import { loadTs } from './loadTs.mjs';
 const {
   extractTextFromJsonResponse,
   extractStreamingNarrativeText,
+  sanitizeAITextForDisplay,
 } = await loadTs('../src/utils/textSanitizer.ts');
+
+test('removes known internal protocol leaks while preserving the actual narrative', () => {
+  const leaked = '【贾文和·高智行为硬合同】他展开绢图，指向伊阙。\n`【世界留钩】正文结尾必须留下1-2个来自世界自身的新动静（信息、异动、NPC议程、风险或机会窗口）。`';
+  const cleaned = sanitizeAITextForDisplay(leaked);
+  assert.equal(cleaned, '他展开绢图，指向伊阙。');
+});
+
+test('preserves normal environment markers and paired NPC-thought backticks', () => {
+  const narrative = '【殿外风雨】贾文和垂下眼帘。`北军仍在等。`';
+  assert.equal(sanitizeAITextForDisplay(narrative), narrative);
+});
 
 test('does not treat malformed JSON or analysis as a final narrative', () => {
   assert.equal(extractTextFromJsonResponse('先分析一下局势。\n{"text":"不应显示'), '');

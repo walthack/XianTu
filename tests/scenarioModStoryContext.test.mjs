@@ -629,7 +629,7 @@ test('focused characters retain registry speech and cannot inherit a relative or
   assert.match(prompt, /太乙真宗的「掌教／教御／弟子」不是泛称/);
 });
 
-test('focused high-intelligence characters receive a named behavior contract instead of adjective-only personality', async () => {
+test('focused high-intelligence characters receive an internal behavior requirement instead of an echoable contract label', async () => {
   const { buildScenarioStoryPrompt } = await loadTs('../src/modules/scenarioMods/storyContext.ts');
   const save = await buildStorySave();
   const runtime = save.世界.状态.剧本模组;
@@ -638,7 +638,8 @@ test('focused high-intelligence characters receive a named behavior contract ins
 
   const prompt = buildScenarioStoryPrompt(save, '听程宗扬分析敌情');
 
-  assert.match(prompt, /程宗扬·高智行为硬合同/);
+  assert.match(prompt, /内部角色行为要求（不得写入正文）/);
+  assert.doesNotMatch(prompt, /程宗扬·高智行为硬合同/);
   assert.match(prompt, /必须由程宗扬本人先直接说出或实施至少一个具体方案/);
   assert.match(prompt, /不得只报告情报、点头领命、等待主角追问/);
 });
