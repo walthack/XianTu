@@ -11,6 +11,8 @@ export interface ScenarioDivergence {
   characterStates: ScenarioDivergenceCharacterState[];
   evidence: string;
   sequence: number;
+  /** false 表示事实已在世界发生，但尚未公开或被玩家获知。旧档缺省即已知。 */
+  revealed?: boolean;
 }
 
 interface ReconciledDivergenceInput {
@@ -173,7 +175,7 @@ export function recordReconcileDivergences(
 /** 世界级事件不等玩家：引擎结算的缺席后果进入可见账本，但绝不伪装成 LLM 对账或玩家完成。 */
 export function recordOffscreenDivergence(
   runtime: DivergenceRuntime,
-  input: Pick<ScenarioDivergence, 'id' | 'eventId' | 'worldDelta' | 'evidence'>,
+  input: Pick<ScenarioDivergence, 'id' | 'eventId' | 'worldDelta' | 'evidence'> & { revealed?: boolean },
 ): ScenarioDivergence | undefined {
   const ledger = runtime.divergences ??= [];
   if (ledger.some(item => item.id === input.id)) return undefined;
@@ -184,7 +186,8 @@ export function recordOffscreenDivergence(
 
 export function formatDivergencePrompt(divergences: ScenarioDivergence[] | undefined): string {
   if (!Array.isArray(divergences) || divergences.length === 0) return '';
-  const recent = divergences.slice(-5);
+  const recent = divergences.filter(item => item.revealed !== false).slice(-5);
+  if (!recent.length) return '';
   return `【本世界线分歧·已经发生的事实】\n${recent.map(item => {
     const states = item.characterStates.map(s => `${s.characterId}=${s.status}`).join('、');
     const consequence = item.branchId === 'lcq.if_xiaozi_spares_mother'

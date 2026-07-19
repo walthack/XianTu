@@ -200,6 +200,71 @@ test('NPC decision core has no LLM or network dependency', async () => {
   assert.doesNotMatch(source, /aiService|tavern|axios|fetch\s*\(/i);
 });
 
+test('event timeline separates eligibility, activation, occurrence, public reveal, and player knowledge', async () => {
+  const { advanceScenarioRuntime } = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  const { buildScenarioStoryPrompt } = await loadTs('../src/modules/scenarioMods/storyContext.ts');
+  let data = save();
+  const runtime = data.世界.状态.剧本模组;
+  runtime.activeEventIds = [];
+  runtime.events = [{
+    id: 'event.e1',
+    name: '定时世界事件',
+    description: '消息尚未传到玩家处',
+    critical: true,
+    conditions: [],
+    completion: [{ path: 'flags.event.e1.done', operator: 'eq', value: true }],
+    timeline: {
+      kind: 'canon_anchor',
+      notBeforeTurns: 2,
+      deadlineTurns: 4,
+      reveal: { publicAfterTurns: 2, playerKnowledge: 'public_report' },
+    },
+    offscreenResolution: {
+      id: 'offscreen.demo.timed',
+      afterStallTurns: 99,
+      flagKey: 'world.demo.timed_resolved',
+      resolvedEventIds: ['event.e1'],
+      worldDelta: '定时事件已经发生，但消息尚在路上。',
+      evidence: '程序时间合同',
+    },
+  }];
+  runtime.chapters = [{
+    id: 'chapter.demo',
+    title: '时间合同',
+    summary: '测试',
+    eventIds: ['event.e1'],
+  }];
+  runtime.flags = { 'event.e1.done': false };
+  runtime.steeringCooldown = 20;
+
+  data = advanceScenarioRuntime(data).saveData;
+  assert.equal(data.世界.状态.剧本模组.activeEventIds.length, 0, 'notBefore must keep the event dormant');
+  data = advanceScenarioRuntime(data).saveData;
+  assert.equal(data.世界.状态.剧本模组.activeEventIds.length, 0);
+  data = advanceScenarioRuntime(data).saveData;
+  assert.deepEqual(data.世界.状态.剧本模组.activeEventIds, ['event.e1']);
+  assert.equal(data.世界.状态.剧本模组.eventTimeline['event.e1'].activatedAtTurn, 2);
+
+  data = advanceScenarioRuntime(data).saveData;
+  data = advanceScenarioRuntime(data).saveData;
+  let timed = data.世界.状态.剧本模组;
+  assert.equal(timed.offscreenResolvedEventIds.includes('event.e1'), true, 'deadline must ignore frozen stall');
+  assert.equal(timed.eventTimeline['event.e1'].occurredAtTurn, 4);
+  assert.equal(timed.eventTimeline['event.e1'].playerLearnedAtTurn, undefined);
+  assert.equal(timed.divergences[0].revealed, false);
+  assert.doesNotMatch(buildScenarioStoryPrompt(data), /定时事件已经发生/);
+  assert.equal((timed.chronicle || []).some(item => /定时事件已经发生/.test(item.detail || '')), false);
+
+  data = advanceScenarioRuntime(data).saveData;
+  data = advanceScenarioRuntime(data).saveData;
+  timed = data.世界.状态.剧本模组;
+  assert.equal(timed.eventTimeline['event.e1'].publiclyRevealedAtTurn, 6);
+  assert.equal(timed.eventTimeline['event.e1'].playerLearnedAtTurn, 6);
+  assert.equal(timed.divergences[0].revealed, true);
+  assert.match(buildScenarioStoryPrompt(data), /定时事件已经发生/);
+  assert.equal(timed.chronicle.some(item => /定时事件已经发生/.test(item.detail || '')), true);
+});
+
 test('Dingtao new save skips initial completed beats and opens on the enthronement actor slice', async () => {
   const { parseScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
   const {

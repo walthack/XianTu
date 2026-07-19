@@ -200,6 +200,44 @@ test('offscreenResolution requires safe flags and existing event references', as
   assert.ok(unsafe.issues.some(issue => issue.path.endsWith('.flagKey') && issue.code === 'invalid_path'));
 });
 
+test('event timeline validates windows, deadlines, reveal policy, and required resolution', async () => {
+  const { validateScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
+  const raw = await loadFixture();
+  const event = raw.scenario.events[0];
+  event.timeline = {
+    kind: 'canon_anchor',
+    notBeforeTurns: 2,
+    deadlineTurns: 6,
+    reveal: { publicAfterTurns: 1, playerKnowledge: 'public_report' },
+  };
+  let result = validateScenarioMod(raw);
+  assert.equal(result.valid, false);
+  assert.ok(result.issues.some(issue => issue.code === 'missing_resolution'));
+
+  event.offscreenResolution = {
+    id: 'offscreen.demo.timeline',
+    afterStallTurns: 99,
+    flagKey: 'world.demo.timeline_resolved',
+    resolvedEventIds: [event.id],
+    worldDelta: '世界按时间合同推进',
+    evidence: '测试时间合同',
+  };
+  result = validateScenarioMod(raw);
+  assert.equal(result.valid, true, JSON.stringify(result.issues, null, 2));
+
+  event.timeline.deadlineTurns = 1;
+  assert.ok(validateScenarioMod(raw).issues.some(issue => issue.path.endsWith('.deadlineTurns')));
+  event.timeline.deadlineTurns = 6;
+  event.timeline.reveal = { playerKnowledge: 'permission' };
+  assert.ok(validateScenarioMod(raw).issues.some(issue => issue.path.endsWith('.permissionKey')));
+  event.timeline.reveal = { playerKnowledge: 'immediate' };
+  event.timeline.kind = 'emergent';
+  assert.ok(validateScenarioMod(raw).issues.some(issue => issue.code === 'unexpected_value'));
+  event.timeline.kind = 'window';
+  delete event.timeline.deadlineTurns;
+  assert.ok(validateScenarioMod(raw).issues.some(issue => issue.code === 'required_number'));
+});
+
 test('rejects invalid canonical creation preset boundaries', async () => {
   const { validateScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
   const fixture = await loadFixture();

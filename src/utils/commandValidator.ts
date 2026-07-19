@@ -117,6 +117,13 @@ const FORBIDDEN_PATHS: string[] = [
   // 回主线引子冷却：引擎专属字段（世界.状态.剧本模组.steeringCooldown），只由引擎据布尔"主线偏移提议"置入并递减。
   // 剧本模组主要靠 canonGuard 保护，这里再加一层禁止 LLM 直写作纵深防御（Codex 二审 #2）。布尔"主线偏移提议"仍允许写。
   '世界.状态.剧本模组.steeringCooldown',
+  // 世界时钟、演员决策、时间线、场外结算与编年史均为本地引擎权威状态。
+  '世界.状态.剧本模组.worldTurn',
+  '世界.状态.剧本模组.worldPush',
+  '世界.状态.剧本模组.actorEngine',
+  '世界.状态.剧本模组.eventTimeline',
+  '世界.状态.剧本模组.offscreenResolvedEventIds',
+  '世界.状态.剧本模组.chronicle',
   // 世界线分歧账本由本地对账/IF 引擎独占，LLM 不得伪造或改写历史。
   '世界.状态.剧本模组.divergences',
   // 行动判定状态由本地引擎结算；LLM 只能叙述已经结算的结果。

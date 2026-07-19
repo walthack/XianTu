@@ -496,7 +496,7 @@ const worldlineEntries = computed(() => {
     alive: '生还', dead: '死亡', longrest: '长养', incapacitated: '失能', missing: '失踪',
   };
   return rt.divergences.slice(-5).reverse()
-    .filter((item: any) => item && typeof item.worldDelta === 'string')
+    .filter((item: any) => item && item.revealed !== false && typeof item.worldDelta === 'string')
     .map((item: any, index: number) => ({
       id: String(item.id || `divergence-${index}`),
       worldDelta: item.worldDelta,

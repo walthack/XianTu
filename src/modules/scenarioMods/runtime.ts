@@ -32,7 +32,7 @@ export interface ScenarioProgressState {
 }
 
 export interface ScenarioRuntimeTransition {
-  type: 'chapter_activated' | 'chapter_completed' | 'event_activated' | 'event_completed' | 'stage_ready' | 'world_event_resolved';
+  type: 'chapter_activated' | 'chapter_completed' | 'event_activated' | 'event_completed' | 'event_revealed' | 'stage_ready' | 'world_event_resolved';
   id: string;
 }
 
@@ -60,6 +60,15 @@ export interface ScenarioActorEntitlement {
   label: string;
   sourceOpportunityId: string;
   earnedAtTurn: number;
+}
+
+export interface ScenarioEventTimelineState {
+  eligibleAtTurn: number;
+  activatedAtTurn?: number;
+  occurredAtTurn?: number;
+  publiclyRevealedAtTurn?: number;
+  playerLearnedAtTurn?: number;
+  outcome?: 'participated' | 'offscreen';
 }
 
 export interface ScenarioActorEngineState {
@@ -118,6 +127,8 @@ export interface RuntimeState extends ScenarioProgressState {
   lastWorldPushJudgementId?: string;
   /** 世界演员纵切状态；合同来自事件，存档只保留调度、追踪和一次性回执。 */
   actorEngine?: ScenarioActorEngineState;
+  /** 数据驱动的事件时钟；发生、公开、玩家获知分别留痕。 */
+  eventTimeline?: Record<string, ScenarioEventTimelineState>;
   /** 玩家主动斩线后的单次桥接合同。 */
   returnBridge?: {
     anchorEventId: string;
@@ -414,6 +425,117 @@ function isEventSettled(runtime: RuntimeState, eventId: string): boolean {
     || (runtime.offscreenResolvedEventIds || []).includes(eventId);
 }
 
+function eventTimelineState(runtime: RuntimeState, eventId: string): ScenarioEventTimelineState | undefined {
+  return runtime.eventTimeline?.[eventId];
+}
+
+function eventIsKnownToPlayer(runtime: RuntimeState, eventId: string): boolean {
+  const event = runtime.events.find(item => item.id === eventId);
+  if (!event?.timeline) return true;
+  return eventTimelineState(runtime, eventId)?.playerLearnedAtTurn !== undefined;
+}
+
+function syncEventTimelineEligibility(saveData: SaveData, runtime: RuntimeState): void {
+  const now = Math.max(0, Number(runtime.worldTurn) || 0);
+  const rail = getCanonRailProfile(runtime);
+  const nextRailId = rail?.orderedEventIds.find(id => !isEventSettled(runtime, id));
+  runtime.eventTimeline ||= {};
+  for (const event of runtime.events) {
+    if (!event.timeline) continue;
+    if (isEventSettled(runtime, event.id)) {
+      if (!runtime.eventTimeline[event.id]) {
+        runtime.eventTimeline[event.id] = {
+          eligibleAtTurn: now,
+          activatedAtTurn: now,
+          occurredAtTurn: now,
+          outcome: runtime.completedEventIds.includes(event.id) ? 'participated' : 'offscreen',
+        };
+      }
+      continue;
+    }
+    const structurallyEligible = rail?.orderedEventIds.includes(event.id)
+      ? event.id === nextRailId
+      : conditionsMatch(event.conditions, saveData, runtime);
+    if (!structurallyEligible) continue;
+    if (!runtime.eventTimeline[event.id]) {
+      // 旧档已在事件中途时用 stall 回推资格起点，避免热更后时间窗从零重算。
+      const legacyAge = runtime.activeEventIds.includes(event.id)
+        ? Math.max(0, Number(runtime.stallTurns) || 0)
+        : 0;
+      runtime.eventTimeline[event.id] = {
+        eligibleAtTurn: Math.max(0, now - legacyAge),
+        ...(runtime.activeEventIds.includes(event.id) ? { activatedAtTurn: Math.max(0, now - legacyAge) } : {}),
+      };
+    }
+  }
+}
+
+function eventTimelineOpen(runtime: RuntimeState, event: ScenarioModEvent): boolean {
+  if (!event.timeline) return true;
+  const state = eventTimelineState(runtime, event.id);
+  if (!state) return false;
+  const age = Math.max(0, (Number(runtime.worldTurn) || 0) - state.eligibleAtTurn);
+  return age >= event.timeline.notBeforeTurns;
+}
+
+function eventTimelineDeadlineDue(runtime: RuntimeState, event: ScenarioModEvent | undefined): boolean {
+  if (!event?.timeline || event.timeline.deadlineTurns === undefined) return false;
+  const state = eventTimelineState(runtime, event.id);
+  if (!state) return false;
+  return (Number(runtime.worldTurn) || 0) - state.eligibleAtTurn >= event.timeline.deadlineTurns;
+}
+
+function markEventTimelineOccurred(
+  runtime: RuntimeState,
+  eventId: string,
+  outcome: 'participated' | 'offscreen',
+): void {
+  const event = runtime.events.find(item => item.id === eventId);
+  if (!event?.timeline) return;
+  runtime.eventTimeline ||= {};
+  const now = Math.max(0, Number(runtime.worldTurn) || 0);
+  const state = runtime.eventTimeline[eventId] ||= { eligibleAtTurn: now };
+  if (state.occurredAtTurn === undefined) state.occurredAtTurn = now;
+  state.outcome ||= outcome;
+}
+
+function refreshEventTimelineRevelations(
+  runtime: RuntimeState,
+  transitions: ScenarioRuntimeTransition[],
+): void {
+  const now = Math.max(0, Number(runtime.worldTurn) || 0);
+  for (const event of runtime.events) {
+    const contract = event.timeline;
+    const state = eventTimelineState(runtime, event.id);
+    if (!contract || state?.occurredAtTurn === undefined) continue;
+    if (
+      contract.reveal.publicAfterTurns !== undefined
+      && state.publiclyRevealedAtTurn === undefined
+      && now - state.occurredAtTurn >= contract.reveal.publicAfterTurns
+    ) {
+      state.publiclyRevealedAtTurn = now;
+    }
+    const learned = contract.reveal.playerKnowledge === 'immediate'
+      || (
+        contract.reveal.playerKnowledge === 'public_report'
+        && state.publiclyRevealedAtTurn !== undefined
+      )
+      || (
+        contract.reveal.playerKnowledge === 'permission'
+        && Boolean(runtime.actorEngine?.entitlements.some(item => item.key === contract.reveal.permissionKey))
+      );
+    if (learned && state.playerLearnedAtTurn === undefined) {
+      state.playerLearnedAtTurn = now;
+      transitions.push({ type: 'event_revealed', id: event.id });
+    }
+  }
+  for (const divergence of runtime.divergences || []) {
+    if (divergence.revealed === false && eventIsKnownToPlayer(runtime, divergence.eventId)) {
+      divergence.revealed = true;
+    }
+  }
+}
+
 function legacyOffscreenResolution(runtime: RuntimeState): NonNullable<ScenarioModEvent['offscreenResolution']> | undefined {
   if (runtime.modId !== 'lcq.stage_11_lieshan_battle') return undefined;
   const resolvedEventIds = runtime.events
@@ -434,6 +556,8 @@ function resolveOffscreenWorldEvents(runtime: RuntimeState, transitions: Scenari
   for (const resolution of resolutions) {
     const knownIds = resolution.resolvedEventIds.filter(id => runtime.events.some(event => event.id === id));
     if (!knownIds.length) continue;
+    const owner = runtime.events.find(event => event.offscreenResolution?.id === resolution.id)
+      || runtime.events.find(event => knownIds.includes(event.id));
     // worldActor 合同的玩家介入判定发生在当前轮，故需要预判本轮即将增加的 stall；
     // 旧世界事件合同沿用“已完整停滞轮数”语义，避免改变既有结算时点。
     const actorDrivenResolution = knownIds.every(id =>
@@ -452,20 +576,22 @@ function resolveOffscreenWorldEvents(runtime: RuntimeState, transitions: Scenari
       && resolution.resolvedEventIds.includes(runtime.actorEngine.anchorEventId || '')
       && trackedAge <= TRACKED_OPPORTUNITY_MAX_TURNS
     );
-    if (
-      effectiveStall < resolution.afterStallTurns
-      || runtime.flags[resolution.flagKey] === true
-      || hasTrackedIntervention
-    ) continue;
+    const due = owner?.timeline?.deadlineTurns !== undefined
+      ? eventTimelineDeadlineDue(runtime, owner)
+      : effectiveStall >= resolution.afterStallTurns;
+    if (!due || runtime.flags[resolution.flagKey] === true || hasTrackedIntervention) continue;
     // 数据增量会把一个关卡拆成多个场外合同；只允许当前已经激活的世界事件启动结算，
     // 否则同一 stall 阈值会把整关未来事件一次烧完。多事件战争合同仍由首个活跃节点启动整组。
     if (!knownIds.some(id => runtime.activeEventIds.includes(id))) continue;
     runtime.flags[resolution.flagKey] = true;
     runtime.offscreenResolvedEventIds = [...new Set([...(runtime.offscreenResolvedEventIds || []), ...knownIds])];
     runtime.activeEventIds = runtime.activeEventIds.filter(id => !knownIds.includes(id));
+    for (const eventId of knownIds) markEventTimelineOccurred(runtime, eventId, 'offscreen');
+    refreshEventTimelineRevelations(runtime, transitions);
     recordOffscreenDivergence(runtime, {
       id: resolution.id, eventId: knownIds[0],
       worldDelta: resolution.worldDelta, evidence: resolution.evidence,
+      revealed: knownIds.every(id => eventIsKnownToPlayer(runtime, id)),
     });
     transitions.push({ type: 'world_event_resolved', id: resolution.id });
   }
@@ -483,6 +609,7 @@ function appendChronicleEntry(
 function recordChronicleTransitions(runtime: RuntimeState, transitions: ScenarioRuntimeTransition[]): void {
   for (const transition of transitions) {
     if (transition.type === 'event_completed') {
+      if (!eventIsKnownToPlayer(runtime, transition.id)) continue;
       const event = runtime.events.find(item => item.id === transition.id);
       appendChronicleEntry(runtime, {
         id: `chronicle.${runtime.modId || 'unknown'}.${transition.id}`,
@@ -492,17 +619,37 @@ function recordChronicleTransitions(runtime: RuntimeState, transitions: Scenario
       });
     } else if (transition.type === 'world_event_resolved') {
       const divergence = runtime.divergences?.find(item => item.id === transition.id);
+      if (divergence?.revealed === false) continue;
       appendChronicleEntry(runtime, {
         id: `chronicle.${runtime.modId || 'unknown'}.${transition.id}`,
         type: 'world', stageId: runtime.modId || '',
         title: '世界自行推进', detail: divergence?.worldDelta || transition.id,
       });
+    } else if (transition.type === 'event_revealed') {
+      const event = runtime.events.find(item => item.id === transition.id);
+      const timeline = eventTimelineState(runtime, transition.id);
+      if (timeline?.outcome === 'offscreen') {
+        const divergence = runtime.divergences?.find(item => item.eventId === transition.id);
+        appendChronicleEntry(runtime, {
+          id: `chronicle.${runtime.modId || 'unknown'}.${divergence?.id || transition.id}.revealed`,
+          type: 'world', stageId: runtime.modId || '',
+          title: '消息传来', detail: divergence?.worldDelta || event?.description || transition.id,
+        });
+      } else {
+        appendChronicleEntry(runtime, {
+          id: `chronicle.${runtime.modId || 'unknown'}.${transition.id}`,
+          type: 'event', stageId: runtime.modId || '',
+          title: event?.name || transition.id,
+          detail: event?.objective || event?.axisBeat || event?.description,
+        });
+      }
     }
   }
 }
 
 function backfillCompletedEventChronicle(runtime: RuntimeState): void {
   for (const eventId of runtime.completedEventIds || []) {
+    if (!eventIsKnownToPlayer(runtime, eventId)) continue;
     const event = runtime.events.find(item => item.id === eventId);
     appendChronicleEntry(runtime, {
       id: `chronicle.${runtime.modId || 'unknown'}.${eventId}`,
@@ -744,10 +891,15 @@ export function advanceScenarioRuntime(saveData: SaveData): {
   runtime.activeEventIds = Array.isArray(runtime.activeEventIds) ? runtime.activeEventIds : [];
   runtime.completedEventIds = Array.isArray(runtime.completedEventIds) ? runtime.completedEventIds : [];
   runtime.offscreenResolvedEventIds = Array.isArray(runtime.offscreenResolvedEventIds) ? runtime.offscreenResolvedEventIds : [];
-  backfillCompletedEventChronicle(runtime);
+  runtime.eventTimeline = runtime.eventTimeline && typeof runtime.eventTimeline === 'object'
+    ? runtime.eventTimeline
+    : {};
   const transitions: ScenarioRuntimeTransition[] = [];
   const railProfile = getCanonRailProfile(runtime);
 
+  syncEventTimelineEligibility(next, runtime);
+  refreshEventTimelineRevelations(runtime, transitions);
+  backfillCompletedEventChronicle(runtime);
   resolveOffscreenWorldEvents(runtime, transitions);
 
   const current = runtime.chapters.find(chapter => chapter.id === runtime.currentChapterId);
@@ -766,6 +918,7 @@ export function advanceScenarioRuntime(saveData: SaveData): {
     if (hasCompletion(event.completion) && conditionsMatch(event.completion, next, runtime)) {
       runtime.activeEventIds = runtime.activeEventIds.filter(id => id !== activeId);
       if (!runtime.completedEventIds.includes(activeId)) runtime.completedEventIds.push(activeId);
+      markEventTimelineOccurred(runtime, activeId, 'participated');
       transitions.push({ type: 'event_completed', id: activeId });
     }
   }
@@ -778,6 +931,7 @@ export function advanceScenarioRuntime(saveData: SaveData): {
     if (hasCompletion(event.completion) && conditionsMatch(event.completion, next, runtime)) {
       runtime.activeEventIds = runtime.activeEventIds.filter(id => id !== event.id);
       runtime.completedEventIds.push(event.id);
+      markEventTimelineOccurred(runtime, event.id, 'participated');
       transitions.push({ type: 'event_completed', id: event.id });
     }
   }
@@ -818,10 +972,19 @@ export function advanceScenarioRuntime(saveData: SaveData): {
 
   const activeChapter = runtime.chapters.find(chapter => chapter.id === runtime.currentChapterId);
   const chapterEventIds = new Set(activeChapter?.eventIds || []);
+  syncEventTimelineEligibility(next, runtime);
   if (isCanonRailChapter(railProfile, activeChapter?.id)) {
     const nextRailEventId = railProfile!.orderedEventIds.find(id => !isEventSettled(runtime, id));
-    if (nextRailEventId && !runtime.activeEventIds.includes(nextRailEventId)) {
+    const nextRailEvent = runtime.events.find(item => item.id === nextRailEventId);
+    if (
+      nextRailEventId
+      && nextRailEvent
+      && eventTimelineOpen(runtime, nextRailEvent)
+      && !runtime.activeEventIds.includes(nextRailEventId)
+    ) {
       runtime.activeEventIds.push(nextRailEventId);
+      const state = eventTimelineState(runtime, nextRailEventId);
+      if (state && state.activatedAtTurn === undefined) state.activatedAtTurn = Math.max(0, Number(runtime.worldTurn) || 0);
       transitions.push({ type: 'event_activated', id: nextRailEventId });
     }
   }
@@ -829,8 +992,10 @@ export function advanceScenarioRuntime(saveData: SaveData): {
     if (runtime.activeEventIds.includes(eventId) || isEventSettled(runtime, eventId)) continue;
     if (railProfile?.orderedEventIds.includes(eventId)) continue;
     const event = runtime.events.find(item => item.id === eventId);
-    if (event && conditionsMatch(event.conditions, next, runtime)) {
+    if (event && conditionsMatch(event.conditions, next, runtime) && eventTimelineOpen(runtime, event)) {
       runtime.activeEventIds.push(eventId);
+      const state = eventTimelineState(runtime, eventId);
+      if (state && state.activatedAtTurn === undefined) state.activatedAtTurn = Math.max(0, Number(runtime.worldTurn) || 0);
       transitions.push({ type: 'event_activated', id: eventId });
     }
   }
@@ -868,6 +1033,7 @@ export function advanceScenarioRuntime(saveData: SaveData): {
 
   updateDivergenceControl(next, progressed);
   syncActorEngine(runtime);
+  refreshEventTimelineRevelations(runtime, transitions);
   recordChronicleTransitions(runtime, transitions);
 
   return { saveData: next, transitions };

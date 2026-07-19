@@ -89,7 +89,7 @@ R1/R2 走玩家亲历完成，故 `event.s01_05.done=true`；R3 保持该 flag �
 
 ## 6. 当前门禁与扩量裁定（G1/G2 分层后）
 
-- 当前工程门禁：353/353 自动化、37 关 schema、`canon:build`、`validate:all`、production build 全绿。
+- 当前工程门禁：357/357 自动化、37 关 schema、`canon:build`、`validate:all`、production build 全绿。
 - G1：`npm run test:g1:npc` 三路线全绿，已成为 `npm test` 的组成部分。
 - G2：真实模型三路线尚未在当前版本重放，保持 pending。
 - 两轮二审修复覆盖：真实提示词数量误杀、一次定向重写、数据驱动秘密与人物后续状态近邻门禁、跨句坐实防绕过、局势效用、议程升级、持续期冷却、hidden 可见性、局势上下限、绑定歧义、追踪过期（含旧档缺时间戳）、旧档配置刷新与迁移审计、完整审计哈希、回执轮号及越界 effect 降级审计。

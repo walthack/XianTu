@@ -37,6 +37,14 @@ interface StoryRuntime {
   activeEventIds: string[];
   completedChapterIds: string[];
   completedEventIds: string[];
+  worldTurn?: number;
+  eventTimeline?: Record<string, {
+    eligibleAtTurn: number;
+    activatedAtTurn?: number;
+    occurredAtTurn?: number;
+    publiclyRevealedAtTurn?: number;
+    playerLearnedAtTurn?: number;
+  }>;
   actorEngine?: {
     anchorEventId?: string;
     activeAgendaId?: string;
@@ -224,7 +232,14 @@ function formatWorldActorContract(runtime: StoryRuntime, anchor: ScenarioModEven
     ? `\n- renderGuard.forbiddenTerms=${(guard.forbiddenTerms || []).join('|')}；renderGuard.forbiddenAssociations=${JSON.stringify(guard.forbiddenAssociations || [])}；renderGuard.rejectConcreteQuantities=${guard.rejectConcreteQuantities === true}；renderGuard.allowUnverifiedQuantities=${guard.allowUnverifiedQuantities === true}。未核实数字必须带明确消息来源与不确定性，只是角色主张，绝不等同或写回世界真值。该行是最终落稿硬门禁，命中时必须重写，不得展示违规草稿。`
     : '';
   const forbiddenBefore = contract.decisionCore?.canonPolicy.forbiddenBefore || [];
-  return `【世界演员合同·${contract.pressure.canonPolicy}】压力=${contract.pressure.summary}（范围=${contract.pressure.scope}，强度=${contract.pressure.intensity}）。${actionLine}\n- ${actorLine}\n- ${opportunityLine}\n- 决策阶段已结束，禁止重选行动或修改结算；只可依据 knownFacts 渲染，mustNotInvent 任一项均不得补造。${guardLine}\n- forbiddenBefore=${forbiddenBefore.join('|')}。\n- 正典边界：只改变过程、关系入口与行为权限；不得改写“${anchor.name}”的既定结果，不得提前演出后续事件或秘密。`;
+  const timelineState = runtime.eventTimeline?.[anchor.id];
+  const timelineAge = timelineState
+    ? Math.max(0, (Number(runtime.worldTurn) || 0) - timelineState.eligibleAtTurn)
+    : 0;
+  const timelineLine = anchor.timeline
+    ? `\n- 事件时钟=${anchor.timeline.kind}；资格后第 ${timelineAge} 回合；最早=${anchor.timeline.notBeforeTurns}；截止=${anchor.timeline.deadlineTurns ?? '无硬截止'}。截止只由程序结算，LLM 不得自行提前宣告发生。`
+    : '';
+  return `【世界演员合同·${contract.pressure.canonPolicy}】压力=${contract.pressure.summary}（范围=${contract.pressure.scope}，强度=${contract.pressure.intensity}）。${actionLine}\n- ${actorLine}\n- ${opportunityLine}\n- 决策阶段已结束，禁止重选行动或修改结算；只可依据 knownFacts 渲染，mustNotInvent 任一项均不得补造。${guardLine}\n- forbiddenBefore=${forbiddenBefore.join('|')}。${timelineLine}\n- 正典边界：只改变过程、关系入口与行为权限；不得改写“${anchor.name}”的既定结果，不得提前演出后续事件或秘密。`;
 }
 
 function formatList(values: string[] | undefined, maxItems = 4, maxLen = 48): string {

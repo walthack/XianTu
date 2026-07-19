@@ -66,11 +66,32 @@ export interface ScenarioModEvent {
   relatedFactionIds?: string[];
   locationId?: string;
   objective?: string;
+  /** 程序层事件时钟；相对“事件首次具备结构条件”的世界回合计时。 */
+  timeline?: ScenarioModEventTimeline;
   narrativeVariants?: ScenarioModEventNarrativeVariant[];
   /** 玩家长期缺席时由世界自行结算的事件组；不计作玩家完成。 */
   offscreenResolution?: ScenarioModEventOffscreenResolution;
   /** 当前承重拍的世界演员纵切；数据通用、按事件显式启用。 */
   worldActor?: ScenarioWorldActorContract;
+}
+
+export type ScenarioModEventTimelineKind = 'canon_anchor' | 'window' | 'emergent';
+export type ScenarioModEventKnowledgePolicy = 'immediate' | 'public_report' | 'permission';
+
+export interface ScenarioModEventTimeline {
+  kind: ScenarioModEventTimelineKind;
+  /** 具备结构条件后至少等待多少世界回合才可成为叙事锚点。 */
+  notBeforeTurns: number;
+  /** 到达后由本事件的 offscreenResolution 确定性结算；emergent 可省略。 */
+  deadlineTurns?: number;
+  reveal: {
+    /** 事件发生后多少回合成为公共消息；省略表示不会自动公开。 */
+    publicAfterTurns?: number;
+    /** 玩家何时可把结果当成已知事实。 */
+    playerKnowledge: ScenarioModEventKnowledgePolicy;
+    /** playerKnowledge=permission 时必须持有的世界演员权限。 */
+    permissionKey?: string;
+  };
 }
 
 export type ScenarioWorldActorCanonPolicy = 'process_only' | 'local_state' | 'divergence_allowed' | 'if_only';

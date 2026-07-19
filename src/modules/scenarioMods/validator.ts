@@ -23,6 +23,8 @@ const CONDITION_OPERATORS = new Set(['eq', 'neq', 'gt', 'gte', 'lt', 'lte', 'inc
 const ITEM_TYPES = new Set(['weapon', 'armor', 'consumable', 'material', 'other']);
 const WORLD_ACTOR_SCOPES = new Set(['world', 'state', 'region', 'faction', 'local', 'character']);
 const WORLD_ACTOR_POLICIES = new Set(['process_only', 'local_state', 'divergence_allowed', 'if_only']);
+const EVENT_TIMELINE_KINDS = new Set(['canon_anchor', 'window', 'emergent']);
+const EVENT_KNOWLEDGE_POLICIES = new Set(['immediate', 'public_report', 'permission']);
 const FORBIDDEN_PATH_SEGMENTS = new Set(['__proto__', 'prototype', 'constructor']);
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -200,6 +202,61 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
       validateIdArray(entity.relatedFactionIds, `${entity.__path}.relatedFactionIds`, add);
       optionalId(entity.locationId, `${entity.__path}.locationId`, add);
       optionalString(entity.objective, `${entity.__path}.objective`, add);
+      if (entity.timeline !== undefined) {
+        const timelinePath = `${entity.__path}.timeline`;
+        if (!isRecord(entity.timeline)) {
+          add(timelinePath, 'invalid_type', 'timeline must be an object.');
+        } else {
+          if (!EVENT_TIMELINE_KINDS.has(String(entity.timeline.kind))) {
+            add(`${timelinePath}.kind`, 'invalid_enum', 'timeline kind must be canon_anchor, window, or emergent.');
+          }
+          const notBefore = entity.timeline.notBeforeTurns;
+          if (typeof notBefore !== 'number' || !Number.isInteger(notBefore) || notBefore < 0) {
+            add(`${timelinePath}.notBeforeTurns`, 'invalid_range', 'notBeforeTurns must be a non-negative integer.');
+          }
+          const deadline = entity.timeline.deadlineTurns;
+          if (
+            deadline !== undefined
+            && (typeof deadline !== 'number' || !Number.isInteger(deadline) || deadline < 0)
+          ) {
+            add(`${timelinePath}.deadlineTurns`, 'invalid_range', 'deadlineTurns must be a non-negative integer.');
+          }
+          if (typeof notBefore === 'number' && typeof deadline === 'number' && deadline < notBefore) {
+            add(`${timelinePath}.deadlineTurns`, 'invalid_range', 'deadlineTurns must not precede notBeforeTurns.');
+          }
+          if (['canon_anchor', 'window'].includes(String(entity.timeline.kind)) && typeof deadline !== 'number') {
+            add(`${timelinePath}.deadlineTurns`, 'required_number', 'canon_anchor and window timelines require a deadlineTurns value.');
+          }
+          if (entity.timeline.kind === 'emergent' && deadline !== undefined) {
+            add(`${timelinePath}.deadlineTurns`, 'unexpected_value', 'emergent timelines must not declare a hard deadline.');
+          }
+          if (typeof deadline === 'number' && !isRecord(entity.offscreenResolution)) {
+            add(`${timelinePath}.deadlineTurns`, 'missing_resolution', 'A timeline deadline requires offscreenResolution.');
+          }
+          if (!isRecord(entity.timeline.reveal)) {
+            add(`${timelinePath}.reveal`, 'required_object', 'timeline.reveal is required.');
+          } else {
+            const publicAfter = entity.timeline.reveal.publicAfterTurns;
+            if (
+              publicAfter !== undefined
+              && (typeof publicAfter !== 'number' || !Number.isInteger(publicAfter) || publicAfter < 0)
+            ) {
+              add(`${timelinePath}.reveal.publicAfterTurns`, 'invalid_range', 'publicAfterTurns must be a non-negative integer.');
+            }
+            if (!EVENT_KNOWLEDGE_POLICIES.has(String(entity.timeline.reveal.playerKnowledge))) {
+              add(`${timelinePath}.reveal.playerKnowledge`, 'invalid_enum', 'playerKnowledge must be immediate, public_report, or permission.');
+            }
+            if (entity.timeline.reveal.playerKnowledge === 'public_report' && typeof publicAfter !== 'number') {
+              add(`${timelinePath}.reveal.publicAfterTurns`, 'required_number', 'public_report requires publicAfterTurns.');
+            }
+            if (entity.timeline.reveal.playerKnowledge === 'permission') {
+              validateId(entity.timeline.reveal.permissionKey, `${timelinePath}.reveal.permissionKey`, add);
+            } else if (entity.timeline.reveal.permissionKey !== undefined) {
+              add(`${timelinePath}.reveal.permissionKey`, 'unexpected_value', 'permissionKey is only valid for permission knowledge.');
+            }
+          }
+        }
+      }
       forEachRecord(entity.narrativeVariants, `${entity.__path}.narrativeVariants`, (variant, variantPath) => {
         validateConditions(variant.when, `${variantPath}.when`, add);
         optionalBoolean(variant.replacesCanonRail, `${variantPath}.replacesCanonRail`, add);

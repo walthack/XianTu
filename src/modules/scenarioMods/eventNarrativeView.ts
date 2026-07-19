@@ -47,7 +47,9 @@ function relatedDivergence(
 ): ScenarioDivergence | undefined {
   const related = new Set(event.relatedCharacterIds || []);
   if (!related.size || !Array.isArray(divergences)) return undefined;
-  return [...divergences].reverse().find(item => item.characterStates.some(state => related.has(state.characterId)));
+  return [...divergences].reverse().find(item =>
+    item.revealed !== false && item.characterStates.some(state => related.has(state.characterId)),
+  );
 }
 
 function projectFromDivergence(event: ScenarioModEvent, divergence: ScenarioDivergence): ScenarioModEvent {
