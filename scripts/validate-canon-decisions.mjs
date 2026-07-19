@@ -12,6 +12,11 @@ const rules = [
     description: '小紫是毒宗嫡传，不得回归为巫宗正统传人',
     banned: ['巫宗正统传人'],
   },
+  {
+    decision: 108,
+    description: '原典未限定玉姬总数为十二，不得回流固定数字编制',
+    banned: ['十二玉姬'],
+  },
 ];
 
 async function jsonFiles(dir) {
@@ -30,6 +35,9 @@ const files = [
   ...await jsonFiles(path.join(stageRoot, 'yunlong/stages')),
   ...await jsonFiles(path.join(stageRoot, 'yange/stages')),
   path.join(builtinRoot, 'character-registry.json'),
+  path.join(root, 'scripts/apply-char-support.mjs'),
+  path.join(root, 'scripts/apply-review-decisions-to-canon.mjs'),
+  path.join(root, 'scripts/extract-faction-details-from-epub.mjs'),
 ];
 const errors = [];
 for (const file of files) {

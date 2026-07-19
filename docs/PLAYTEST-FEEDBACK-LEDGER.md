@@ -254,3 +254,19 @@
 - **根因**:`元数据.时间.年` 在模型可写白名单内(commandValidator 允许 set/add);主角 `角色.身份.出生日期` 无写保护(R2-5 只保了 NPC)。违反 lifespanCalculator 自身裁定"起始年=年龄纯函数,不交给 LLM"。
 - **修复**(f44dd76):①时间只进不退——set/add/整对象写入年份倒退一律拒收,前跳放行(保留闭关跳年的合法性);②主角出生日期并入静态写保护(同 R2-5 NPC 先例)。4 用例单测;真机复验:新退败档 年=220、主角出生 200、0 负岁、郭靖 4 岁。
 - **教训**:大数值 bug 修复后要复查它掩蔽的邻近不变量——"全员 600 岁"消失才看得见"20 年错位"。
+
+## #23 阮香凝“凝玉姬”机密被无依据公开 + “十二玉姬”伪固定编制 —— ✅ 已修（R2-9 补充收口）
+
+- **反馈**（2026-07-19，用户）：宫中复盘救驾时，程宗扬直接向吕雉、霍子孟介绍阮香凝“原为黑魔海凝玉姬”，霍子孟继而以“同门”追问；但玉姬身份属于黑魔海内部机密，外人不应天然知道。“十二玉姬”也不是原典确立的固定数字限制，须删除。
+- **根因**：
+  1. `src/modules/scenarioMods/storyContext.ts` 把角色 `description/origin/affiliations/notes` 作为共享聚焦档案注入，却只为主角生死根/穿越来历声明“后台真值不等于 NPC 知识”，没有覆盖 NPC 真身、卧底、内部称号；
+  2. `src/utils/prompts/definitions/businessRules.ts` 的原著知识隔离没有明确限制角色档案机密在场内传播；
+  3. “十二玉姬”虽已不在现行 stage/registry 成品中，但仍残留于 `scripts/apply-char-support.mjs`、`scripts/apply-review-decisions-to-canon.mjs` 与 `scripts/extract-faction-details-from-epub.mjs`，重跑生成链会回灌。
+- **文件指针**：`storyContext.ts::CHARACTER_SECRET_KNOWLEDGE_BOUNDARIES/formatFocusedCharacter/buildFocusedCharacterPrompt`；`businessRules.ts::R2_9_NARRATIVE_GUARD_RULES#11`；上述三份生成/抽档脚本；`validate-canon-decisions.mjs` 裁定 #108。
+- **修复**：
+  1. 双路由共享护栏扩为“原著知识与角色机密隔离”，真身、卧底、伪装、内部称号、秘密归属只有明确知情/主动公开/本局可见揭露证据时才传播；
+  2. 阮香凝点名注入“凝玉姬/黑魔海玉姬高层/潜伏暗桩”为内部机密，并列明吕雉、霍子孟无证据不得直接识别、说出或审问；
+  3. 从生成链源头删除“十二玉姬”，`canon:build` 新增禁词门禁防回流。
+- **验证标准**：分步与非分步 prompt 均含角色机密隔离；点名“阮香凝+吕雉/霍子孟”时出现专属知情边界；现行 stage/registry 与生成源不得再出现“十二玉姬”（校验规则定义本身除外）；`canon:build`、`validate:all`、production build 全绿。
+- **对示例对白的直接结论**：可公开“阮香凝协助救驾、施展瞑寂扰敌”及其当前从属关系；不得默认公开“凝玉姬/黑魔海高层”真身。若程宗扬确要主动向吕雉披露，正文必须把它写成一次有政治代价的明确泄密决定，而不能作为普通履历介绍；霍子孟也不能凭空断言贾文和与她同门。
+- **状态**：✅ 2026-07-19 已完成。`canon:build`（327/327）、37 关 schema、`validate:all` 与 production build 全绿；裁定簿已单向同步 NAS 镜像并逐字节核同。

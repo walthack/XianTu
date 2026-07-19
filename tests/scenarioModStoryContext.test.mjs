@@ -452,6 +452,32 @@ test('内置燕歌开篇携带英逝双枢纽的同关可见余波合同', async
   assert.match(combined.axisBeat, /定陶王登基/);
 });
 
+test('阮香凝的凝玉姬真身作为后台机密注入，不授予无证据 NPC 知情权', async () => {
+  const { parseScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
+  const {
+    applyStrictScenarioInitializationToSave,
+    buildStrictScenarioInitialization,
+  } = await loadTs('../src/modules/scenarioMods/strictInitializer.ts');
+  const { advanceScenarioRuntime } = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  const { buildScenarioStoryPrompt } = await loadTs('../src/modules/scenarioMods/storyContext.ts');
+  const raw = JSON.parse(await readFile(yangeOpeningUrl, 'utf8'));
+  const mod = parseScenarioMod(raw);
+  const initialized = applyStrictScenarioInitializationToSave({
+    角色: { 位置: { 描述: '汉国·洛都·长秋宫' } },
+    世界: { 信息: {}, 状态: {} },
+    系统: { 扩展: {} },
+  }, buildStrictScenarioInitialization(mod, '2026-07-19T00:00:00.000Z'));
+  const save = advanceScenarioRuntime(initialized).saveData;
+
+  const prompt = buildScenarioStoryPrompt(save, '我带阮香凝入宫，让吕雉和霍子孟询问救驾经过');
+
+  assert.match(prompt, /【机密身份·知情边界】/);
+  assert.match(prompt, /“凝玉姬”.*黑魔海内部机密/);
+  assert.match(prompt, /吕雉、霍子孟等其他人物.*不得直接识别、说出或据此审问/);
+  assert.match(prompt, /人物档案中的真身、卧底、伪装、内部称号与秘密归属/);
+  assert.match(prompt, /不等于场内人物的知识/);
+});
+
 test('星月湖战争缺席后，stage_12 以战报和余波替代玩家亲历叙事', async () => {
   const { buildScenarioStoryPrompt } = await loadTs('../src/modules/scenarioMods/storyContext.ts');
   const save = await buildStorySave();

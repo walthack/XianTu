@@ -23,13 +23,16 @@ test('R2-9 十二条叙事护栏同时进入非分步与分步正文路由', asy
     '正典生死权',
     '正典留白',
     '时限与回报',
-    '原著知识隔离',
+    '原著知识与角色机密隔离',
     '世界留钩',
   ];
   for (const label of requiredRules) {
     assert.match(prompts.businessRules.content, new RegExp(label));
     assert.match(prompts.splitGenerationStep1.content, new RegExp(label));
   }
+
+  assert.match(prompts.businessRules.content, /角色档案中的真身、卧底、伪装、内部称号与秘密归属/);
+  assert.match(prompts.splitGenerationStep1.content, /不等于场内NPC已经知情/);
 });
 
 test('行动选项规则锁定主角视角并承接世界留钩', async () => {
