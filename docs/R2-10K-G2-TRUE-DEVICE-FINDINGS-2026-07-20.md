@@ -1,7 +1,8 @@
 # R2-10K G2 真机首轮发现与修复交接
 
 - 日期：2026-07-20
-- 执行：Claude（真机 Playwright + 真实 MiniMax-M2.7）
+- 执行：Claude（真机 Playwright + 真实模型）
+- ⚠️ 更正（2026-07-20 晚，见 `docs/R2-10M-G2-REVERIFY-2026-07-20.md` §4）：本轮主叙事模型实为 OpenRouter 上的 `deepseek/deepseek-v3.2`，**不是** MiniMax-M2.7。驱动器经 localStorage 注入的 MiniMax 配置被后端权威配置覆盖，只生效在次级功能位。状态层结论不受影响。
 - 上游门禁定义：`docs/R2-10B-NPC-DECISION-CORE-TRUE-DEVICE-ACCEPTANCE-2026-07-19.md`
 - 范围：`lyg.dingtao_beijing` / `lyg.event.s01_05` 三路线（用户裁定，不含 s01_06–08 与跨书）
 - 代码状态：**本轮未改任何生产代码**。修复交由 Codex 认领。
