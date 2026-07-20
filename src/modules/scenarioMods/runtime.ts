@@ -62,6 +62,12 @@ export interface ScenarioActorEntitlement {
   earnedAtTurn: number;
 }
 
+export interface ScenarioActorMemory {
+  relationships: Record<string, Record<string, number>>;
+  knowledge: string[];
+  updatedAtTurn: number;
+}
+
 export interface ScenarioEventTimelineState {
   eligibleAtTurn: number;
   activatedAtTurn?: number;
@@ -96,6 +102,8 @@ export interface ScenarioActorEngineState {
     toHash: string;
     migratedAtTurn: number;
   }>;
+  /** 跨事件保留承重 NPC 的态度与已知事实；资源仍由每个事件局部配置。 */
+  actorMemory?: Record<string, ScenarioActorMemory>;
   receipts: ScenarioActorReceipt[];
   entitlements: ScenarioActorEntitlement[];
 }
@@ -149,8 +157,46 @@ function ensureActorEngine(runtime: RuntimeState): ScenarioActorEngineState {
   state.entitlements = Array.isArray(state.entitlements) ? state.entitlements : [];
   state.effectAudit = Array.isArray(state.effectAudit) ? state.effectAudit : [];
   state.configMigrations = Array.isArray(state.configMigrations) ? state.configMigrations : [];
+  state.actorMemory = state.actorMemory && typeof state.actorMemory === 'object'
+    ? state.actorMemory
+    : {};
   runtime.actorEngine = state;
   return state;
+}
+
+function persistNpcMemory(runtime: RuntimeState, state: ScenarioActorEngineState): void {
+  if (!state.npcStates?.length) return;
+  const memory = state.actorMemory ||= {};
+  for (const actor of state.npcStates) {
+    memory[actor.characterId] = {
+      relationships: structuredClone(actor.relationships),
+      knowledge: [...new Set(actor.knowledge)].sort(),
+      updatedAtTurn: settledTurn(runtime),
+    };
+  }
+}
+
+function hydrateNpcActors(
+  core: NonNullable<ScenarioModEvent['worldActor']>['decisionCore'],
+  memory: Record<string, ScenarioActorMemory> | undefined,
+): ScenarioNpcDecisionActor[] {
+  if (!core) return [];
+  const declaredKnowledge = core.knowledgeFacts ? new Set(Object.keys(core.knowledgeFacts)) : undefined;
+  return structuredClone(core.actors).map(actor => {
+    const remembered = memory?.[actor.characterId];
+    if (!remembered) return actor;
+    for (const [targetId, dimensions] of Object.entries(remembered.relationships)) {
+      actor.relationships[targetId] = {
+        ...(actor.relationships[targetId] || {}),
+        ...structuredClone(dimensions),
+      };
+    }
+    actor.knowledge = [...new Set([
+      ...actor.knowledge,
+      ...remembered.knowledge.filter(factId => !declaredKnowledge || declaredKnowledge.has(factId)),
+    ])].sort();
+    return actor;
+  });
 }
 
 function findOpportunity(event: ScenarioModEvent | undefined, opportunityId: string | undefined): ScenarioStoryOpportunity | undefined {
@@ -172,6 +218,7 @@ function syncActorEngine(runtime: RuntimeState): void {
     : undefined;
 
   if (state.anchorEventId && state.anchorEventId !== anchor?.id) {
+    persistNpcMemory(runtime, state);
     const opportunity = findOpportunity(previousAnchor, state.trackedOpportunityId);
     const offscreen = runtime.offscreenResolvedEventIds?.includes(state.anchorEventId);
     if (offscreen && !opportunity) {
@@ -236,6 +283,7 @@ function syncActorEngine(runtime: RuntimeState): void {
     && contract.decisionCore
     && state.decisionConfigHash !== configHash
   ) {
+    persistNpcMemory(runtime, state);
     const fromHash = state.decisionConfigHash || 'legacy-unversioned';
     if (!state.configMigrations!.some(item =>
       item.anchorEventId === anchor.id && item.fromHash === fromHash && item.toHash === configHash
@@ -251,7 +299,7 @@ function syncActorEngine(runtime: RuntimeState): void {
         console.info(`[NPC Decision Core] config migrated ${fromHash} -> ${configHash}`);
       }
     }
-    state.npcStates = structuredClone(contract.decisionCore.actors);
+    state.npcStates = hydrateNpcActors(contract.decisionCore, state.actorMemory);
     state.situationValues = { ...contract.decisionCore.situation.initialValues };
     const round = decideNpcActions(contract.decisionCore, state.situationValues, state.npcStates);
     state.decisionInputHash = round.inputHash;
@@ -267,7 +315,7 @@ function syncActorEngine(runtime: RuntimeState): void {
     state.activeAgendaId = contract.agendas?.[0]?.id;
     state.surfacedAgendaIds = state.activeAgendaId ? [state.activeAgendaId] : [];
     if (contract.decisionCore) {
-      state.npcStates = structuredClone(contract.decisionCore.actors);
+      state.npcStates = hydrateNpcActors(contract.decisionCore, state.actorMemory);
       const round = decideNpcActions(contract.decisionCore, contract.decisionCore.situation.initialValues, state.npcStates);
       state.decisionInputHash = round.inputHash;
       state.decisionConfigHash = configHash;
@@ -284,7 +332,7 @@ function syncActorEngine(runtime: RuntimeState): void {
   const pushTurn = runtime.worldPush?.due ? runtime.worldPush.scheduledAtTurn : undefined;
   if (pushTurn !== undefined && state.lastHandledWorldPushTurn !== pushTurn && contract.decisionCore) {
     const situation = state.situationValues || { ...contract.decisionCore.situation.initialValues };
-    const npcStates = state.npcStates || structuredClone(contract.decisionCore.actors);
+    const npcStates = state.npcStates || hydrateNpcActors(contract.decisionCore, state.actorMemory);
     const round = decideNpcActions(contract.decisionCore, situation, npcStates);
     state.decisionInputHash = round.inputHash;
     state.decisions = round.decisions;
@@ -302,6 +350,7 @@ function syncActorEngine(runtime: RuntimeState): void {
       }
     }
     state.npcStates = applyNpcDecisionActorState(contract.decisionCore, npcStates, round.decisions);
+    persistNpcMemory(runtime, state);
     state.decisionRound = (state.decisionRound || 0) + 1;
     state.activeAgendaId = undefined;
     if (typeof console !== 'undefined' && console.debug) {

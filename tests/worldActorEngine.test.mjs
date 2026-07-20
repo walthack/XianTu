@@ -110,6 +110,34 @@ test('decision-core validator rejects ambiguous bindings, coercive limits, and b
     validateScenarioMod(brokenAssociation).issues.some(item => item.path.endsWith('maxDistance')),
     true,
   );
+
+  const unknownKnowledge = structuredClone(source);
+  coreOf(unknownKnowledge).actionBindings[0].requiresKnowledge.push('knowledge.lyg.missing');
+  assert.equal(validateScenarioMod(unknownKnowledge).issues.some(item => item.code === 'unknown_knowledge'), true);
+
+  const invalidStateActor = structuredClone(source);
+  coreOf(invalidStateActor).actionBindings[0].stateEffects.relationships[0].actorId =
+    'liuchao.character.guo_jie';
+  assert.equal(
+    validateScenarioMod(invalidStateActor).issues.some(item =>
+      item.code === 'unknown_reference' && item.path.endsWith('actorId')),
+    true,
+  );
+
+  const invalidResource = structuredClone(source);
+  coreOf(invalidResource).actionBindings[0].stateEffects.resources = { globalPopulation: -1 };
+  assert.equal(validateScenarioMod(invalidResource).issues.some(item => item.code === 'unknown_resource'), true);
+
+  const secretProjection = structuredClone(source);
+  const secretCore = secretProjection.scenario.events
+    .find(item => item.id === 'lyg.event.s01_08').worldActor.decisionCore;
+  const secretId = Object.entries(secretCore.knowledgeFacts)
+    .find(([, fact]) => fact.access === 'secret')[0];
+  secretCore.actionBindings[0].knownFactIds.push(secretId);
+  assert.equal(
+    validateScenarioMod(secretProjection).issues.some(item => item.code === 'secret_knowledge_exposure'),
+    true,
+  );
 });
 
 test('s01_05 deterministic core derives four distinct actions with explainable scores and hard canon elimination', async () => {

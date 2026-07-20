@@ -4894,11 +4894,16 @@
                   "troops": 5,
                   "intelligence": 2
                 },
-                "relationships": {},
+                "relationships": {
+                  "liuchao.character.jia_wenhe": {
+                    "trust": 52,
+                    "obligation": 35
+                  }
+                },
                 "knowledge": [
-                  "北军封住两条要道",
-                  "定陶王登基在即",
-                  "凉州军控制昭阳宫外围"
+                  "knowledge.lyg.s01_05.01",
+                  "knowledge.lyg.s01_05.02",
+                  "knowledge.lyg.s01_05.03"
                 ],
                 "agendas": [
                   {
@@ -4931,7 +4936,9 @@
                   "resources.wealth": "本拍无精确财货事实，仅确认能组织仪仗，取中值不作经济模拟。",
                   "resources.troops": "凉州军控制昭阳宫外围并可核验宫门。",
                   "resources.intelligence": "掌握现场军情，未见独立情报网优势。",
-                  "agendas.agenda.lyg.s01_05.dong_zhuo.clock": "登基在即，议程已到控制宫门的第二阶。"
+                  "agendas.agenda.lyg.s01_05.dong_zhuo.clock": "登基在即，议程已到控制宫门的第二阶。",
+                  "relationships.liuchao.character.jia_wenhe.trust": "董卓倚重贾文和筹划拥立与凉州军退路。",
+                  "relationships.liuchao.character.jia_wenhe.obligation": "董卓倚重贾文和筹划拥立与凉州军退路。"
                 }
               },
               {
@@ -4958,11 +4965,16 @@
                   "troops": 1,
                   "intelligence": 5
                 },
-                "relationships": {},
+                "relationships": {
+                  "liuchao.character.dong_zhuo": {
+                    "trust": 46,
+                    "obligation": 58
+                  }
+                },
                 "knowledge": [
-                  "北军封住两条要道",
-                  "定陶王登基在即",
-                  "大赦、选材、定都不能同时优先"
+                  "knowledge.lyg.s01_05.01",
+                  "knowledge.lyg.s01_05.02",
+                  "knowledge.lyg.s01_05.04"
                 ],
                 "agendas": [
                   {
@@ -4995,7 +5007,9 @@
                   "resources.wealth": "本拍无财货支配证据，低值只表示非本议程资源。",
                   "resources.troops": "本人依赖凉州军执行，不单列兵权。",
                   "resources.intelligence": "人物卡与表演卡均以高智、预案和最坏后果判断为承重特征。",
-                  "agendas.agenda.lyg.s01_05.jia_wenhe.clock": "三项草案已提出，正进入取舍与留退路阶段。"
+                  "agendas.agenda.lyg.s01_05.jia_wenhe.clock": "三项草案已提出，正进入取舍与留退路阶段。",
+                  "relationships.liuchao.character.dong_zhuo.trust": "贾文和为董卓谋划并承担凉州旧部收束责任。",
+                  "relationships.liuchao.character.dong_zhuo.obligation": "贾文和为董卓谋划并承担凉州旧部收束责任。"
                 }
               },
               {
@@ -5022,11 +5036,16 @@
                   "troops": 4,
                   "intelligence": 4
                 },
-                "relationships": {},
+                "relationships": {
+                  "liuchao.character.lv_zhi": {
+                    "trust": 42,
+                    "obligation": 30
+                  }
+                },
                 "knowledge": [
-                  "北军封住两条要道",
-                  "定陶王登基在即",
-                  "吕雉已经支持立定陶王"
+                  "knowledge.lyg.s01_05.01",
+                  "knowledge.lyg.s01_05.02",
+                  "knowledge.lyg.s01_05.05"
                 ],
                 "agendas": [
                   {
@@ -5059,7 +5078,9 @@
                   "resources.wealth": "本拍未给精确财货，只按重臣常规组织能力取中值。",
                   "resources.troops": "北军能封锁要道，但没有取代凉州军控制昭阳宫。",
                   "resources.intelligence": "已与吕雉交换判断并掌握宫外军情。",
-                  "agendas.agenda.lyg.s01_05.huo_zi_meng.clock": "支持定陶王已定，下一阶是争取正式见证程序。"
+                  "agendas.agenda.lyg.s01_05.huo_zi_meng.clock": "支持定陶王已定，下一阶是争取正式见证程序。",
+                  "relationships.liuchao.character.lv_zhi.trust": "霍子孟接受吕雉支持定陶王的判断，但仍坚持朝廷程序。",
+                  "relationships.liuchao.character.lv_zhi.obligation": "霍子孟接受吕雉支持定陶王的判断，但仍坚持朝廷程序。"
                 }
               },
               {
@@ -5086,11 +5107,16 @@
                   "troops": 2,
                   "intelligence": 5
                 },
-                "relationships": {},
+                "relationships": {
+                  "liuchao.character.huo_zi_meng": {
+                    "trust": 38,
+                    "obligation": 24
+                  }
+                },
                 "knowledge": [
-                  "定陶王登基在即",
-                  "霍子孟已经接受支持定陶王的判断",
-                  "朝廷参与者的站队仍未完全显明"
+                  "knowledge.lyg.s01_05.02",
+                  "knowledge.lyg.s01_05.06",
+                  "knowledge.lyg.s01_05.07"
                 ],
                 "agendas": [
                   {
@@ -5123,7 +5149,9 @@
                   "resources.wealth": "皇室最高位阶具组织资源，但本阶段不展开经济模拟。",
                   "resources.troops": "通过霍子孟和北军间接影响，不直接掌握昭阳宫军权。",
                   "resources.intelligence": "已与霍子孟交换朝局判断并能观察朝廷站队。",
-                  "agendas.agenda.lyg.s01_05.lv_zhi.clock": "退位与拥立决定已公开，当前进入观察站队的第一阶。"
+                  "agendas.agenda.lyg.s01_05.lv_zhi.clock": "退位与拥立决定已公开，当前进入观察站队的第一阶。",
+                  "relationships.liuchao.character.huo_zi_meng.trust": "吕雉需要霍子孟为定陶王登基提供程序背书。",
+                  "relationships.liuchao.character.huo_zi_meng.obligation": "吕雉需要霍子孟为定陶王登基提供程序背书。"
                 }
               }
             ],
@@ -5135,11 +5163,7 @@
                 ],
                 "label": "控制宫门并召集登基见证者",
                 "reason": "以现有军力确保拥立落成，再把军事控制换成公开合法性",
-                "knownFacts": [
-                  "北军封住两条要道",
-                  "定陶王登基在即",
-                  "凉州军控制昭阳宫外围"
-                ],
+                "knownFacts": [],
                 "mustNotInvent": [
                   "具体兵力数字",
                   "未入档主将",
@@ -5170,7 +5194,29 @@
                   "escalation": 2
                 },
                 "visibility": "public",
-                "durationTurns": 2
+                "durationTurns": 2,
+                "knownFactIds": [
+                  "knowledge.lyg.s01_05.01",
+                  "knowledge.lyg.s01_05.02",
+                  "knowledge.lyg.s01_05.03"
+                ],
+                "requiresKnowledge": [
+                  "knowledge.lyg.s01_05.01",
+                  "knowledge.lyg.s01_05.02",
+                  "knowledge.lyg.s01_05.03"
+                ],
+                "stateEffects": {
+                  "relationships": [
+                    {
+                      "actorId": "liuchao.character.jia_wenhe",
+                      "targetCharacterId": "liuchao.character.dong_zhuo",
+                      "deltas": {
+                        "trust": -4,
+                        "obligation": 3
+                      }
+                    }
+                  ]
+                }
               },
               {
                 "actionId": "mobilize_forces",
@@ -5179,10 +5225,7 @@
                 ],
                 "label": "增派凉州军压住昭阳宫外围",
                 "reason": "直接扩大现场控制，代价是推高两军冲突",
-                "knownFacts": [
-                  "北军封住两条要道",
-                  "凉州军控制昭阳宫外围"
-                ],
+                "knownFacts": [],
                 "mustNotInvent": [
                   "具体兵力数字",
                   "新编军队番号"
@@ -5207,7 +5250,15 @@
                   "escalation": 3
                 },
                 "visibility": "public",
-                "durationTurns": 1
+                "durationTurns": 1,
+                "knownFactIds": [
+                  "knowledge.lyg.s01_05.01",
+                  "knowledge.lyg.s01_05.03"
+                ],
+                "requiresKnowledge": [
+                  "knowledge.lyg.s01_05.01",
+                  "knowledge.lyg.s01_05.03"
+                ]
               },
               {
                 "actionId": "public_declaration",
@@ -5216,9 +5267,7 @@
                 ],
                 "label": "公开宣告拥立",
                 "reason": "以公开表态争取既成事实",
-                "knownFacts": [
-                  "定陶王登基在即"
-                ],
+                "knownFacts": [],
                 "mustNotInvent": [
                   "未定稿诏书全文"
                 ],
@@ -5239,7 +5288,13 @@
                   "escalation": 2
                 },
                 "visibility": "public",
-                "durationTurns": 1
+                "durationTurns": 1,
+                "knownFactIds": [
+                  "knowledge.lyg.s01_05.02"
+                ],
+                "requiresKnowledge": [
+                  "knowledge.lyg.s01_05.02"
+                ]
               },
               {
                 "actionId": "force_succession",
@@ -5248,9 +5303,7 @@
                 ],
                 "label": "改立他人以独占朝局",
                 "reason": "高收益地重置继承结果",
-                "knownFacts": [
-                  "定陶王登基在即"
-                ],
+                "knownFacts": [],
                 "mustNotInvent": [
                   "替代继承人"
                 ],
@@ -5269,7 +5322,13 @@
                   "invariant.cancel_enthronement"
                 ],
                 "visibility": "public",
-                "durationTurns": 1
+                "durationTurns": 1,
+                "knownFactIds": [
+                  "knowledge.lyg.s01_05.02"
+                ],
+                "requiresKnowledge": [
+                  "knowledge.lyg.s01_05.02"
+                ]
               },
               {
                 "actionId": "prepare_fallback_route",
@@ -5278,11 +5337,7 @@
                 ],
                 "label": "设置伊阙缓冲线与新政退路",
                 "reason": "降低两军冲突，同时保留凉州军控制力与草案退出条件",
-                "knownFacts": [
-                  "北军封住两条要道",
-                  "定陶王登基在即",
-                  "大赦、选材、定都不能同时优先"
-                ],
+                "knownFacts": [],
                 "mustNotInvent": [
                   "具体兵力数字",
                   "未入档主将",
@@ -5306,10 +5361,45 @@
                   "situation": {
                     "militaryTension": 4
                   },
-                  "escalation": 2
+                  "escalation": 2,
+                  "relationships": [
+                    {
+                      "targetCharacterId": "liuchao.character.dong_zhuo",
+                      "dimension": "obligation",
+                      "weight": 4
+                    }
+                  ]
                 },
                 "visibility": "rumor",
-                "durationTurns": 2
+                "durationTurns": 2,
+                "knownFactIds": [
+                  "knowledge.lyg.s01_05.01",
+                  "knowledge.lyg.s01_05.02",
+                  "knowledge.lyg.s01_05.04"
+                ],
+                "requiresKnowledge": [
+                  "knowledge.lyg.s01_05.01",
+                  "knowledge.lyg.s01_05.02",
+                  "knowledge.lyg.s01_05.04"
+                ],
+                "stateEffects": {
+                  "relationships": [
+                    {
+                      "actorId": "liuchao.character.dong_zhuo",
+                      "targetCharacterId": "liuchao.character.jia_wenhe",
+                      "deltas": {
+                        "trust": 6
+                      }
+                    }
+                  ],
+                  "knowledge": [
+                    {
+                      "add": [
+                        "knowledge.lyg.jia_fallback_prepared"
+                      ]
+                    }
+                  ]
+                }
               },
               {
                 "actionId": "propose_compromise",
@@ -5318,9 +5408,7 @@
                 ],
                 "label": "提出三项草案的折中次序",
                 "reason": "把安民、选材、定都拆成先后次序",
-                "knownFacts": [
-                  "大赦、选材、定都不能同时优先"
-                ],
+                "knownFacts": [],
                 "mustNotInvent": [
                   "草案之外的新制度"
                 ],
@@ -5342,7 +5430,13 @@
                   "escalation": 1
                 },
                 "visibility": "rumor",
-                "durationTurns": 2
+                "durationTurns": 2,
+                "knownFactIds": [
+                  "knowledge.lyg.s01_05.04"
+                ],
+                "requiresKnowledge": [
+                  "knowledge.lyg.s01_05.04"
+                ]
               },
               {
                 "actionId": "gather_intelligence",
@@ -5352,9 +5446,7 @@
                 ],
                 "label": "收集朝廷站队情报",
                 "reason": "在落笔前确认各方承受代价的能力",
-                "knownFacts": [
-                  "定陶王登基在即"
-                ],
+                "knownFacts": [],
                 "mustNotInvent": [
                   "未揭露的黑魔海身份",
                   "玩家未说出的秘密"
@@ -5369,7 +5461,13 @@
                   "militaryTension": 0
                 },
                 "visibility": "hidden",
-                "durationTurns": 1
+                "durationTurns": 1,
+                "knownFactIds": [
+                  "knowledge.lyg.s01_05.02"
+                ],
+                "requiresKnowledge": [
+                  "knowledge.lyg.s01_05.02"
+                ]
               },
               {
                 "actionId": "delay_commitment",
@@ -5378,9 +5476,7 @@
                 ],
                 "label": "暂缓三项草案落笔",
                 "reason": "等待更多信息后再决定新政顺序",
-                "knownFacts": [
-                  "大赦、选材、定都不能同时优先"
-                ],
+                "knownFacts": [],
                 "mustNotInvent": [
                   "新的政策选项"
                 ],
@@ -5391,7 +5487,13 @@
                   "militaryTension": 0
                 },
                 "visibility": "hidden",
-                "durationTurns": 1
+                "durationTurns": 1,
+                "knownFactIds": [
+                  "knowledge.lyg.s01_05.04"
+                ],
+                "requiresKnowledge": [
+                  "knowledge.lyg.s01_05.04"
+                ]
               },
               {
                 "actionId": "negotiate_court_procedure",
@@ -5400,11 +5502,7 @@
                 ],
                 "label": "争取汉廷见证登基的正式程序",
                 "reason": "承认定陶王，同时让朝廷而非单一军队为新秩序背书",
-                "knownFacts": [
-                  "北军封住两条要道",
-                  "定陶王登基在即",
-                  "吕雉已经支持立定陶王"
-                ],
+                "knownFacts": [],
                 "mustNotInvent": [
                   "阮香凝的黑魔海身份",
                   "具体兵力数字",
@@ -5432,7 +5530,28 @@
                   "escalation": 2
                 },
                 "visibility": "public",
-                "durationTurns": 2
+                "durationTurns": 2,
+                "knownFactIds": [
+                  "knowledge.lyg.s01_05.01",
+                  "knowledge.lyg.s01_05.02",
+                  "knowledge.lyg.s01_05.05"
+                ],
+                "requiresKnowledge": [
+                  "knowledge.lyg.s01_05.01",
+                  "knowledge.lyg.s01_05.02",
+                  "knowledge.lyg.s01_05.05"
+                ],
+                "stateEffects": {
+                  "relationships": [
+                    {
+                      "actorId": "liuchao.character.lv_zhi",
+                      "targetCharacterId": "liuchao.character.huo_zi_meng",
+                      "deltas": {
+                        "trust": 5
+                      }
+                    }
+                  ]
+                }
               },
               {
                 "actionId": "open_safe_route",
@@ -5441,10 +5560,7 @@
                 ],
                 "label": "协调一条不拔刀的入宫路线",
                 "reason": "先降低北军与凉州军的接触风险",
-                "knownFacts": [
-                  "北军封住两条要道",
-                  "定陶王登基在即"
-                ],
+                "knownFacts": [],
                 "mustNotInvent": [
                   "具体兵力数字"
                 ],
@@ -5465,7 +5581,15 @@
                   "escalation": 2
                 },
                 "visibility": "public",
-                "durationTurns": 1
+                "durationTurns": 1,
+                "knownFactIds": [
+                  "knowledge.lyg.s01_05.01",
+                  "knowledge.lyg.s01_05.02"
+                ],
+                "requiresKnowledge": [
+                  "knowledge.lyg.s01_05.01",
+                  "knowledge.lyg.s01_05.02"
+                ]
               },
               {
                 "actionId": "request_audience",
@@ -5474,9 +5598,7 @@
                 ],
                 "label": "请求以汉廷重臣身份觐见",
                 "reason": "用本人到场确认新帝安全",
-                "knownFacts": [
-                  "定陶王登基在即"
-                ],
+                "knownFacts": [],
                 "mustNotInvent": [
                   "新帝私下承诺"
                 ],
@@ -5490,7 +5612,13 @@
                   "militaryTension": -1
                 },
                 "visibility": "public",
-                "durationTurns": 1
+                "durationTurns": 1,
+                "knownFactIds": [
+                  "knowledge.lyg.s01_05.02"
+                ],
+                "requiresKnowledge": [
+                  "knowledge.lyg.s01_05.02"
+                ]
               },
               {
                 "actionId": "test_loyalty",
@@ -5500,10 +5628,7 @@
                 ],
                 "label": "以半枚铜符试探关键人物忠诚",
                 "reason": "不先公开秘密，只观察谁愿为汉廷秩序承担风险",
-                "knownFacts": [
-                  "定陶王登基在即",
-                  "朝廷参与者的站队仍未完全显明"
-                ],
+                "knownFacts": [],
                 "mustNotInvent": [
                   "阮香凝的黑魔海身份",
                   "玩家未明确作出的站队"
@@ -5526,10 +5651,25 @@
                   "situation": {
                     "courtLegitimacy": -2
                   },
-                  "escalation": 2
+                  "escalation": 2,
+                  "relationships": [
+                    {
+                      "targetCharacterId": "liuchao.character.huo_zi_meng",
+                      "dimension": "trust",
+                      "weight": -5
+                    }
+                  ]
                 },
                 "visibility": "hidden",
-                "durationTurns": 2
+                "durationTurns": 2,
+                "knownFactIds": [
+                  "knowledge.lyg.s01_05.02",
+                  "knowledge.lyg.s01_05.07"
+                ],
+                "requiresKnowledge": [
+                  "knowledge.lyg.s01_05.02",
+                  "knowledge.lyg.s01_05.07"
+                ]
               },
               {
                 "actionId": "call_in_obligation",
@@ -5538,9 +5678,7 @@
                 ],
                 "label": "召见旧臣要求履行朝廷义务",
                 "reason": "以既有名分换取公开站队",
-                "knownFacts": [
-                  "定陶王登基在即"
-                ],
+                "knownFacts": [],
                 "mustNotInvent": [
                   "未入档旧约"
                 ],
@@ -5554,7 +5692,13 @@
                   "militaryTension": 1
                 },
                 "visibility": "rumor",
-                "durationTurns": 2
+                "durationTurns": 2,
+                "knownFactIds": [
+                  "knowledge.lyg.s01_05.02"
+                ],
+                "requiresKnowledge": [
+                  "knowledge.lyg.s01_05.02"
+                ]
               },
               {
                 "actionId": "secret_alliance",
@@ -5563,9 +5707,7 @@
                 ],
                 "label": "秘密结交新朝参与者",
                 "reason": "在公开退位后保留隐蔽影响",
-                "knownFacts": [
-                  "定陶王登基在即"
-                ],
+                "knownFacts": [],
                 "mustNotInvent": [
                   "具体秘密盟约",
                   "未入档交换条件"
@@ -5581,7 +5723,13 @@
                   "militaryTension": 1
                 },
                 "visibility": "hidden",
-                "durationTurns": 3
+                "durationTurns": 3,
+                "knownFactIds": [
+                  "knowledge.lyg.s01_05.02"
+                ],
+                "requiresKnowledge": [
+                  "knowledge.lyg.s01_05.02"
+                ]
               }
             ],
             "maxVisibleActions": 3,
@@ -5623,6 +5771,48 @@
               ],
               "rejectConcreteQuantities": true,
               "allowUnverifiedQuantities": true
+            },
+            "knowledgeFacts": {
+              "knowledge.lyg.s01_05.01": {
+                "text": "北军封住两条要道",
+                "access": "public",
+                "evidence": "R2-10D：沿用 lyg.s01_05 既有 worldActor knownFacts，不新增原著事实。"
+              },
+              "knowledge.lyg.s01_05.02": {
+                "text": "定陶王登基在即",
+                "access": "public",
+                "evidence": "R2-10D：沿用 lyg.s01_05 既有 worldActor knownFacts，不新增原著事实。"
+              },
+              "knowledge.lyg.s01_05.03": {
+                "text": "凉州军控制昭阳宫外围",
+                "access": "public",
+                "evidence": "R2-10D：沿用 lyg.s01_05 既有 worldActor knownFacts，不新增原著事实。"
+              },
+              "knowledge.lyg.s01_05.04": {
+                "text": "大赦、选材、定都不能同时优先",
+                "access": "public",
+                "evidence": "R2-10D：沿用 lyg.s01_05 既有 worldActor knownFacts，不新增原著事实。"
+              },
+              "knowledge.lyg.s01_05.05": {
+                "text": "吕雉已经支持立定陶王",
+                "access": "public",
+                "evidence": "R2-10D：沿用 lyg.s01_05 既有 worldActor knownFacts，不新增原著事实。"
+              },
+              "knowledge.lyg.s01_05.06": {
+                "text": "霍子孟已经接受支持定陶王的判断",
+                "access": "public",
+                "evidence": "R2-10D：沿用 lyg.s01_05 既有 worldActor knownFacts，不新增原著事实。"
+              },
+              "knowledge.lyg.s01_05.07": {
+                "text": "朝廷参与者的站队仍未完全显明",
+                "access": "public",
+                "evidence": "R2-10D：沿用 lyg.s01_05 既有 worldActor knownFacts，不新增原著事实。"
+              },
+              "knowledge.lyg.jia_fallback_prepared": {
+                "text": "贾文和已经备好凉州旧部的退场次序",
+                "access": "restricted",
+                "evidence": "裁定 #95：董卓生死节点须由贾文和收束凉州旧部，不得回京争权。"
+              }
             }
           },
           "opportunities": [
@@ -5808,11 +5998,16 @@
                   "troops": 2,
                   "intelligence": 4
                 },
-                "relationships": {},
+                "relationships": {
+                  "liuchao.character.jian_yu_ji": {
+                    "hostility": 72,
+                    "respect": 28
+                  }
+                },
                 "knowledge": [
-                  "定陶王刚完成登基",
-                  "宫城仍有敌对高手活动",
-                  "游侠耳目可用于疏散与传讯"
+                  "knowledge.lyg.s01_06.01",
+                  "knowledge.lyg.s01_06.02",
+                  "knowledge.lyg.s01_06.03"
                 ],
                 "agendas": [
                   {
@@ -5844,7 +6039,9 @@
                   "resources.wealth": "yange.3.1 与裁定 #95：郭解以布衣大侠身份保护定陶王，游侠网络可承接护持但不能夺位。",
                   "resources.troops": "yange.3.1 与裁定 #95：郭解以布衣大侠身份保护定陶王，游侠网络可承接护持但不能夺位。",
                   "resources.intelligence": "yange.3.1 与裁定 #95：郭解以布衣大侠身份保护定陶王，游侠网络可承接护持但不能夺位。",
-                  "agendas.agenda.lyg.s01_06.guo_jie.clock": "yange.3.1 与裁定 #95：郭解以布衣大侠身份保护定陶王，游侠网络可承接护持但不能夺位。"
+                  "agendas.agenda.lyg.s01_06.guo_jie.clock": "yange.3.1 与裁定 #95：郭解以布衣大侠身份保护定陶王，游侠网络可承接护持但不能夺位。",
+                  "relationships.liuchao.character.jian_yu_ji.hostility": "郭解明确面对阻断拥立与危及定陶王的敌对高手。",
+                  "relationships.liuchao.character.jian_yu_ji.respect": "郭解明确面对阻断拥立与危及定陶王的敌对高手。"
                 }
               },
               {
@@ -5871,11 +6068,16 @@
                   "troops": 2,
                   "intelligence": 5
                 },
-                "relationships": {},
+                "relationships": {
+                  "liuchao.character.guo_jie": {
+                    "hostility": 68,
+                    "respect": 36
+                  }
+                },
                 "knowledge": [
-                  "郭解正在护持定陶王",
-                  "宫城秩序仍在重组",
-                  "公开交战会暴露行动目的"
+                  "knowledge.lyg.s01_06.04",
+                  "knowledge.lyg.s01_06.05",
+                  "knowledge.lyg.s01_06.06"
                 ],
                 "agendas": [
                   {
@@ -5907,7 +6109,9 @@
                   "resources.wealth": "yange.3.1：剑玉姬亲自出剑重创郭解；人物卡支持其谨慎、控制与隐蔽行动取向。",
                   "resources.troops": "yange.3.1：剑玉姬亲自出剑重创郭解；人物卡支持其谨慎、控制与隐蔽行动取向。",
                   "resources.intelligence": "yange.3.1：剑玉姬亲自出剑重创郭解；人物卡支持其谨慎、控制与隐蔽行动取向。",
-                  "agendas.agenda.lyg.s01_06.jian_yu_ji.clock": "yange.3.1：剑玉姬亲自出剑重创郭解；人物卡支持其谨慎、控制与隐蔽行动取向。"
+                  "agendas.agenda.lyg.s01_06.jian_yu_ji.clock": "yange.3.1：剑玉姬亲自出剑重创郭解；人物卡支持其谨慎、控制与隐蔽行动取向。",
+                  "relationships.liuchao.character.guo_jie.hostility": "剑玉姬将郭解视为当前行动的主要阻碍。",
+                  "relationships.liuchao.character.guo_jie.respect": "剑玉姬将郭解视为当前行动的主要阻碍。"
                 }
               }
             ],
@@ -5919,10 +6123,7 @@
                 ],
                 "label": "贴身护住定陶王",
                 "reason": "把新君安全置于自身退路之前",
-                "knownFacts": [
-                  "定陶王刚完成登基",
-                  "宫城仍有敌对高手活动"
-                ],
+                "knownFacts": [],
                 "mustNotInvent": [
                   "郭解已经死亡",
                   "董卓之死",
@@ -5945,10 +6146,44 @@
                     "royalSafety": -5,
                     "assailantPressure": 4
                   },
-                  "escalation": 3
+                  "escalation": 3,
+                  "relationships": [
+                    {
+                      "targetCharacterId": "liuchao.character.jian_yu_ji",
+                      "dimension": "hostility",
+                      "weight": 4
+                    }
+                  ]
                 },
                 "visibility": "public",
-                "durationTurns": 2
+                "durationTurns": 2,
+                "knownFactIds": [
+                  "knowledge.lyg.s01_06.01",
+                  "knowledge.lyg.s01_06.02"
+                ],
+                "requiresKnowledge": [
+                  "knowledge.lyg.s01_06.01",
+                  "knowledge.lyg.s01_06.02"
+                ],
+                "stateEffects": {
+                  "knowledge": [
+                    {
+                      "add": [
+                        "knowledge.lyg.s01_06.safe_route_prepared"
+                      ]
+                    }
+                  ],
+                  "relationships": [
+                    {
+                      "actorId": "liuchao.character.jian_yu_ji",
+                      "targetCharacterId": "liuchao.character.guo_jie",
+                      "deltas": {
+                        "respect": 5,
+                        "hostility": 3
+                      }
+                    }
+                  ]
+                }
               },
               {
                 "actionId": "escort_witness",
@@ -5957,9 +6192,7 @@
                 ],
                 "label": "调游侠耳目护送新君",
                 "reason": "让护持网络在本人失去行动力后仍能运转",
-                "knownFacts": [
-                  "游侠耳目可用于疏散与传讯"
-                ],
+                "knownFacts": [],
                 "mustNotInvent": [
                   "未入档的游侠姓名",
                   "具体人数"
@@ -5979,10 +6212,25 @@
                   "situation": {
                     "royalSafety": -4
                   },
-                  "escalation": 2
+                  "escalation": 2,
+                  "relationships": [
+                    {
+                      "targetCharacterId": "liuchao.character.jian_yu_ji",
+                      "dimension": "hostility",
+                      "weight": 2
+                    }
+                  ]
                 },
                 "visibility": "rumor",
-                "durationTurns": 2
+                "durationTurns": 2,
+                "knownFactIds": [
+                  "knowledge.lyg.s01_06.03",
+                  "knowledge.lyg.s01_06.safe_route_prepared"
+                ],
+                "requiresKnowledge": [
+                  "knowledge.lyg.s01_06.03",
+                  "knowledge.lyg.s01_06.safe_route_prepared"
+                ]
               },
               {
                 "actionId": "open_safe_route",
@@ -5991,9 +6239,7 @@
                 ],
                 "label": "打开不经正门的撤离次序",
                 "reason": "减少新君与刺杀者正面接触的机会",
-                "knownFacts": [
-                  "宫城秩序仍在重组"
-                ],
+                "knownFacts": [],
                 "mustNotInvent": [
                   "秘密暗道",
                   "具体宫防数字"
@@ -6008,7 +6254,13 @@
                   "assailantPressure": -2
                 },
                 "visibility": "public",
-                "durationTurns": 1
+                "durationTurns": 1,
+                "knownFactIds": [
+                  "knowledge.lyg.s01_06.05"
+                ],
+                "requiresKnowledge": [
+                  "knowledge.lyg.s01_06.05"
+                ]
               },
               {
                 "actionId": "sabotage_agenda",
@@ -6017,10 +6269,7 @@
                 ],
                 "label": "切断郭解的护送部署",
                 "reason": "先破坏接应次序，再寻找一击窗口",
-                "knownFacts": [
-                  "郭解正在护持定陶王",
-                  "宫城秩序仍在重组"
-                ],
+                "knownFacts": [],
                 "mustNotInvent": [
                   "阮香凝身份",
                   "黑魔海后续计划",
@@ -6042,10 +6291,44 @@
                     "royalSafety": 4,
                     "assailantPressure": -2
                   },
-                  "escalation": 3
+                  "escalation": 3,
+                  "relationships": [
+                    {
+                      "targetCharacterId": "liuchao.character.guo_jie",
+                      "dimension": "hostility",
+                      "weight": 4
+                    }
+                  ]
                 },
                 "visibility": "rumor",
-                "durationTurns": 2
+                "durationTurns": 2,
+                "knownFactIds": [
+                  "knowledge.lyg.s01_06.04",
+                  "knowledge.lyg.s01_06.05"
+                ],
+                "requiresKnowledge": [
+                  "knowledge.lyg.s01_06.04",
+                  "knowledge.lyg.s01_06.05"
+                ],
+                "stateEffects": {
+                  "knowledge": [
+                    {
+                      "add": [
+                        "knowledge.lyg.s01_06.guard_pattern_observed"
+                      ]
+                    }
+                  ],
+                  "relationships": [
+                    {
+                      "actorId": "liuchao.character.guo_jie",
+                      "targetCharacterId": "liuchao.character.jian_yu_ji",
+                      "deltas": {
+                        "hostility": 4,
+                        "respect": 2
+                      }
+                    }
+                  ]
+                }
               },
               {
                 "actionId": "conceal_evidence",
@@ -6054,9 +6337,7 @@
                 ],
                 "label": "隐去接近宫城的痕迹",
                 "reason": "避免护持者提前确定威胁来自何处",
-                "knownFacts": [
-                  "公开交战会暴露行动目的"
-                ],
+                "knownFacts": [],
                 "mustNotInvent": [
                   "伪造的宫廷内应姓名",
                   "未发生的毒杀"
@@ -6077,7 +6358,13 @@
                   "escalation": 1
                 },
                 "visibility": "hidden",
-                "durationTurns": 2
+                "durationTurns": 2,
+                "knownFactIds": [
+                  "knowledge.lyg.s01_06.06"
+                ],
+                "requiresKnowledge": [
+                  "knowledge.lyg.s01_06.06"
+                ]
               },
               {
                 "actionId": "block_road",
@@ -6086,9 +6373,7 @@
                 ],
                 "label": "逼停一条护送路线",
                 "reason": "迫使郭解暴露本人和新君的位置",
-                "knownFacts": [
-                  "郭解正在护持定陶王"
-                ],
+                "knownFacts": [],
                 "mustNotInvent": [
                   "具体封锁兵力",
                   "未公开密道"
@@ -6110,7 +6395,14 @@
                   "escalation": 2
                 },
                 "visibility": "public",
-                "durationTurns": 1
+                "durationTurns": 1,
+                "knownFactIds": [
+                  "knowledge.lyg.s01_06.04"
+                ],
+                "requiresKnowledge": [
+                  "knowledge.lyg.s01_06.04",
+                  "knowledge.lyg.s01_06.guard_pattern_observed"
+                ]
               }
             ],
             "maxVisibleActions": 2,
@@ -6123,6 +6415,48 @@
               ],
               "rejectConcreteQuantities": true,
               "allowUnverifiedQuantities": true
+            },
+            "knowledgeFacts": {
+              "knowledge.lyg.s01_06.01": {
+                "text": "定陶王刚完成登基",
+                "access": "public",
+                "evidence": "R2-10D：沿用 lyg.s01_06 既有 worldActor knownFacts，不新增原著事实。"
+              },
+              "knowledge.lyg.s01_06.02": {
+                "text": "宫城仍有敌对高手活动",
+                "access": "public",
+                "evidence": "R2-10D：沿用 lyg.s01_06 既有 worldActor knownFacts，不新增原著事实。"
+              },
+              "knowledge.lyg.s01_06.03": {
+                "text": "游侠耳目可用于疏散与传讯",
+                "access": "public",
+                "evidence": "R2-10D：沿用 lyg.s01_06 既有 worldActor knownFacts，不新增原著事实。"
+              },
+              "knowledge.lyg.s01_06.04": {
+                "text": "郭解正在护持定陶王",
+                "access": "public",
+                "evidence": "R2-10D：沿用 lyg.s01_06 既有 worldActor knownFacts，不新增原著事实。"
+              },
+              "knowledge.lyg.s01_06.05": {
+                "text": "宫城秩序仍在重组",
+                "access": "public",
+                "evidence": "R2-10D：沿用 lyg.s01_06 既有 worldActor knownFacts，不新增原著事实。"
+              },
+              "knowledge.lyg.s01_06.06": {
+                "text": "公开交战会暴露行动目的",
+                "access": "public",
+                "evidence": "R2-10D：沿用 lyg.s01_06 既有 worldActor knownFacts，不新增原著事实。"
+              },
+              "knowledge.lyg.s01_06.safe_route_prepared": {
+                "text": "郭解已经布置一条不经过正门的疏散路线",
+                "access": "restricted",
+                "evidence": "由郭解本事件内的护持行动确定性产生。"
+              },
+              "knowledge.lyg.s01_06.guard_pattern_observed": {
+                "text": "剑玉姬已经摸清郭解护持定陶王的换防规律",
+                "access": "secret",
+                "evidence": "由剑玉姬本事件内的破坏行动确定性产生。"
+              }
             }
           },
           "opportunities": [
@@ -6291,11 +6625,16 @@
                   "troops": 4,
                   "intelligence": 3
                 },
-                "relationships": {},
+                "relationships": {
+                  "liuchao.character.jia_wenhe": {
+                    "trust": 52,
+                    "obligation": 35
+                  }
+                },
                 "knowledge": [
-                  "本人伤势已无法久持",
-                  "北境胡骑踪迹可疑",
-                  "凉州旧部可能因失去主将而分裂"
+                  "knowledge.lyg.s01_07.01",
+                  "knowledge.lyg.s01_07.02",
+                  "knowledge.lyg.s01_07.03"
                 ],
                 "agendas": [
                   {
@@ -6327,7 +6666,9 @@
                   "resources.wealth": "yange.3.2 高光合同：董卓以军人方式送别、留下胡骑与边地剧变军情，不以哀号收场。",
                   "resources.troops": "yange.3.2 高光合同：董卓以军人方式送别、留下胡骑与边地剧变军情，不以哀号收场。",
                   "resources.intelligence": "yange.3.2 高光合同：董卓以军人方式送别、留下胡骑与边地剧变军情，不以哀号收场。",
-                  "agendas.agenda.lyg.s01_07.dong_zhuo.clock": "yange.3.2 高光合同：董卓以军人方式送别、留下胡骑与边地剧变军情，不以哀号收场。"
+                  "agendas.agenda.lyg.s01_07.dong_zhuo.clock": "yange.3.2 高光合同：董卓以军人方式送别、留下胡骑与边地剧变军情，不以哀号收场。",
+                  "relationships.liuchao.character.jia_wenhe.trust": "董卓倚重贾文和安排凉州旧部退场。",
+                  "relationships.liuchao.character.jia_wenhe.obligation": "董卓倚重贾文和安排凉州旧部退场。"
                 }
               },
               {
@@ -6354,11 +6695,16 @@
                   "troops": 2,
                   "intelligence": 5
                 },
-                "relationships": {},
+                "relationships": {
+                  "liuchao.character.dong_zhuo": {
+                    "trust": 46,
+                    "obligation": 58
+                  }
+                },
                 "knowledge": [
-                  "董卓伤势已无法久持",
-                  "凉州旧部需要明确退场次序",
-                  "定陶王登基结果不能被旧部争权破坏"
+                  "knowledge.lyg.s01_07.04",
+                  "knowledge.lyg.s01_07.05",
+                  "knowledge.lyg.s01_07.06"
                 ],
                 "agendas": [
                   {
@@ -6390,7 +6736,9 @@
                   "resources.wealth": "裁定 #95 与 yange.3.2：贾文和送别旧主后必须收束凉州旧部，董卓生还 IF 中同样不得回京争权。",
                   "resources.troops": "裁定 #95 与 yange.3.2：贾文和送别旧主后必须收束凉州旧部，董卓生还 IF 中同样不得回京争权。",
                   "resources.intelligence": "裁定 #95 与 yange.3.2：贾文和送别旧主后必须收束凉州旧部，董卓生还 IF 中同样不得回京争权。",
-                  "agendas.agenda.lyg.s01_07.jia_wenhe.clock": "裁定 #95 与 yange.3.2：贾文和送别旧主后必须收束凉州旧部，董卓生还 IF 中同样不得回京争权。"
+                  "agendas.agenda.lyg.s01_07.jia_wenhe.clock": "裁定 #95 与 yange.3.2：贾文和送别旧主后必须收束凉州旧部，董卓生还 IF 中同样不得回京争权。",
+                  "relationships.liuchao.character.dong_zhuo.trust": "贾文和承担董卓身后凉州旧部的收束责任。",
+                  "relationships.liuchao.character.dong_zhuo.obligation": "贾文和承担董卓身后凉州旧部的收束责任。"
                 }
               }
             ],
@@ -6402,10 +6750,7 @@
                 ],
                 "label": "压住哭声交代军中遗命",
                 "reason": "用军人命令维持最后的秩序",
-                "knownFacts": [
-                  "本人伤势已无法久持",
-                  "凉州旧部可能因失去主将而分裂"
-                ],
+                "knownFacts": [],
                 "mustNotInvent": [
                   "具体军队人数",
                   "阮香凝身份",
@@ -6429,7 +6774,27 @@
                   "escalation": 3
                 },
                 "visibility": "public",
-                "durationTurns": 2
+                "durationTurns": 2,
+                "knownFactIds": [
+                  "knowledge.lyg.s01_07.01",
+                  "knowledge.lyg.s01_07.03"
+                ],
+                "requiresKnowledge": [
+                  "knowledge.lyg.s01_07.01",
+                  "knowledge.lyg.s01_07.03"
+                ],
+                "stateEffects": {
+                  "relationships": [
+                    {
+                      "actorId": "liuchao.character.jia_wenhe",
+                      "targetCharacterId": "liuchao.character.dong_zhuo",
+                      "deltas": {
+                        "obligation": 6,
+                        "trust": 4
+                      }
+                    }
+                  ]
+                }
               },
               {
                 "actionId": "spread_message",
@@ -6438,9 +6803,7 @@
                 ],
                 "label": "把边警交给可信传递者",
                 "reason": "让胡骑异动不随本人死亡断线",
-                "knownFacts": [
-                  "北境胡骑踪迹可疑"
-                ],
+                "knownFacts": [],
                 "mustNotInvent": [
                   "确定入侵日期",
                   "权威兵力数字"
@@ -6462,7 +6825,13 @@
                   "escalation": 3
                 },
                 "visibility": "public",
-                "durationTurns": 1
+                "durationTurns": 1,
+                "knownFactIds": [
+                  "knowledge.lyg.s01_07.02"
+                ],
+                "requiresKnowledge": [
+                  "knowledge.lyg.s01_07.02"
+                ]
               },
               {
                 "actionId": "protect_principal",
@@ -6471,9 +6840,7 @@
                 ],
                 "label": "最后确认新帝不受旧部挟持",
                 "reason": "让拥立结果不因本人退场倒退",
-                "knownFacts": [
-                  "定陶王已经登基"
-                ],
+                "knownFacts": [],
                 "mustNotInvent": [
                   "新帝私下承诺",
                   "董卓继续掌权"
@@ -6487,7 +6854,13 @@
                   "liangzhouCohesion": 3
                 },
                 "visibility": "rumor",
-                "durationTurns": 1
+                "durationTurns": 1,
+                "knownFactIds": [
+                  "knowledge.lyg.s01_07.07"
+                ],
+                "requiresKnowledge": [
+                  "knowledge.lyg.s01_07.07"
+                ]
               },
               {
                 "actionId": "withdraw_force",
@@ -6496,10 +6869,7 @@
                 ],
                 "label": "安排凉州旧部退出洛都争权",
                 "reason": "先把最危险的军政冲突从宫城移开",
-                "knownFacts": [
-                  "凉州旧部需要明确退场次序",
-                  "定陶王登基结果不能被旧部争权破坏"
-                ],
+                "knownFacts": [],
                 "mustNotInvent": [
                   "具体撤军数量",
                   "未经确认的封赏"
@@ -6520,10 +6890,52 @@
                   "situation": {
                     "liangzhouCohesion": -5
                   },
-                  "escalation": 3
+                  "escalation": 3,
+                  "relationships": [
+                    {
+                      "targetCharacterId": "liuchao.character.dong_zhuo",
+                      "dimension": "obligation",
+                      "weight": 6
+                    }
+                  ]
                 },
                 "visibility": "public",
-                "durationTurns": 2
+                "durationTurns": 2,
+                "knownFactIds": [
+                  "knowledge.lyg.s01_07.05",
+                  "knowledge.lyg.s01_07.06",
+                  "knowledge.lyg.jia_fallback_prepared"
+                ],
+                "requiresKnowledge": [
+                  "knowledge.lyg.s01_07.05",
+                  "knowledge.lyg.s01_07.06",
+                  "knowledge.lyg.jia_fallback_prepared"
+                ],
+                "relationshipRequirements": [
+                  {
+                    "targetCharacterId": "liuchao.character.dong_zhuo",
+                    "dimension": "obligation",
+                    "min": 45
+                  }
+                ],
+                "stateEffects": {
+                  "relationships": [
+                    {
+                      "targetCharacterId": "liuchao.character.dong_zhuo",
+                      "deltas": {
+                        "obligation": -12,
+                        "trust": 5
+                      }
+                    },
+                    {
+                      "actorId": "liuchao.character.dong_zhuo",
+                      "targetCharacterId": "liuchao.character.jia_wenhe",
+                      "deltas": {
+                        "trust": 8
+                      }
+                    }
+                  ]
+                }
               },
               {
                 "actionId": "reserve_supplies",
@@ -6532,9 +6944,7 @@
                 ],
                 "label": "为退往边地的旧部留出补给",
                 "reason": "没有补给的退场会迅速变成兵变",
-                "knownFacts": [
-                  "凉州旧部需要明确退场次序"
-                ],
+                "knownFacts": [],
                 "mustNotInvent": [
                   "具体粮秣数字",
                   "未入档仓库"
@@ -6556,7 +6966,13 @@
                   "escalation": 1
                 },
                 "visibility": "rumor",
-                "durationTurns": 2
+                "durationTurns": 2,
+                "knownFactIds": [
+                  "knowledge.lyg.s01_07.05"
+                ],
+                "requiresKnowledge": [
+                  "knowledge.lyg.s01_07.05"
+                ]
               },
               {
                 "actionId": "prepare_fallback_route",
@@ -6565,9 +6981,7 @@
                 ],
                 "label": "保留边警失联后的备用传递线",
                 "reason": "旧主退场后仍要让北境消息抵达新朝",
-                "knownFacts": [
-                  "北境胡骑踪迹可疑"
-                ],
+                "knownFacts": [],
                 "mustNotInvent": [
                   "暗桩名单",
                   "确定开战时间"
@@ -6589,7 +7003,13 @@
                   "escalation": 2
                 },
                 "visibility": "hidden",
-                "durationTurns": 2
+                "durationTurns": 2,
+                "knownFactIds": [
+                  "knowledge.lyg.s01_07.02"
+                ],
+                "requiresKnowledge": [
+                  "knowledge.lyg.s01_07.02"
+                ]
               }
             ],
             "maxVisibleActions": 2,
@@ -6602,6 +7022,48 @@
               ],
               "rejectConcreteQuantities": true,
               "allowUnverifiedQuantities": true
+            },
+            "knowledgeFacts": {
+              "knowledge.lyg.s01_07.01": {
+                "text": "本人伤势已无法久持",
+                "access": "restricted",
+                "evidence": "R2-10D：沿用 lyg.s01_07 既有 worldActor knownFacts，不新增原著事实。"
+              },
+              "knowledge.lyg.s01_07.02": {
+                "text": "北境胡骑踪迹可疑",
+                "access": "public",
+                "evidence": "R2-10D：沿用 lyg.s01_07 既有 worldActor knownFacts，不新增原著事实。"
+              },
+              "knowledge.lyg.s01_07.03": {
+                "text": "凉州旧部可能因失去主将而分裂",
+                "access": "public",
+                "evidence": "R2-10D：沿用 lyg.s01_07 既有 worldActor knownFacts，不新增原著事实。"
+              },
+              "knowledge.lyg.s01_07.04": {
+                "text": "董卓伤势已无法久持",
+                "access": "restricted",
+                "evidence": "R2-10D：沿用 lyg.s01_07 既有 worldActor knownFacts，不新增原著事实。"
+              },
+              "knowledge.lyg.s01_07.05": {
+                "text": "凉州旧部需要明确退场次序",
+                "access": "public",
+                "evidence": "R2-10D：沿用 lyg.s01_07 既有 worldActor knownFacts，不新增原著事实。"
+              },
+              "knowledge.lyg.s01_07.06": {
+                "text": "定陶王登基结果不能被旧部争权破坏",
+                "access": "public",
+                "evidence": "R2-10D：沿用 lyg.s01_07 既有 worldActor knownFacts，不新增原著事实。"
+              },
+              "knowledge.lyg.s01_07.07": {
+                "text": "定陶王已经登基",
+                "access": "public",
+                "evidence": "R2-10D：沿用 lyg.s01_07 既有 worldActor knownFacts，不新增原著事实。"
+              },
+              "knowledge.lyg.jia_fallback_prepared": {
+                "text": "贾文和已经备好凉州旧部的退场次序",
+                "access": "restricted",
+                "evidence": "继承 s01_05 行动结果；裁定 #95 要求贾文和收束凉州旧部。"
+              }
             }
           },
           "opportunities": [
@@ -6798,11 +7260,16 @@
                   "troops": 0,
                   "intelligence": 5
                 },
-                "relationships": {},
+                "relationships": {
+                  "liuchao.character.cheng_zongyang": {
+                    "trust": 44,
+                    "caution": 62
+                  }
+                },
                 "knowledge": [
-                  "定陶王因盛姬而对阮香凝产生亲近感",
-                  "盛姬与黑魔海御姬奴有关",
-                  "这条线索尚未向无关人物公开"
+                  "knowledge.lyg.s01_08.01",
+                  "knowledge.lyg.s01_08.02",
+                  "knowledge.lyg.s01_08.03"
                 ],
                 "agendas": [
                   {
@@ -6834,7 +7301,9 @@
                   "resources.wealth": "yange.8.2 与裁定 #108-109：阮香凝可向程宗扬揭露盛姬关联，其他未获知人物不得自动继承秘密。",
                   "resources.troops": "yange.8.2 与裁定 #108-109：阮香凝可向程宗扬揭露盛姬关联，其他未获知人物不得自动继承秘密。",
                   "resources.intelligence": "yange.8.2 与裁定 #108-109：阮香凝可向程宗扬揭露盛姬关联，其他未获知人物不得自动继承秘密。",
-                  "agendas.agenda.lyg.s01_08.ruan_xiangning.clock": "yange.8.2 与裁定 #108-109：阮香凝可向程宗扬揭露盛姬关联，其他未获知人物不得自动继承秘密。"
+                  "agendas.agenda.lyg.s01_08.ruan_xiangning.clock": "yange.8.2 与裁定 #108-109：阮香凝可向程宗扬揭露盛姬关联，其他未获知人物不得自动继承秘密。",
+                  "relationships.liuchao.character.cheng_zongyang.trust": "阮香凝愿意向程宗扬递出有限线索，但仍控制黑魔海机密的知情范围。",
+                  "relationships.liuchao.character.cheng_zongyang.caution": "阮香凝愿意向程宗扬递出有限线索，但仍控制黑魔海机密的知情范围。"
                 }
               }
             ],
@@ -6846,9 +7315,7 @@
                 ],
                 "label": "先核对定陶王亲近她的缘由",
                 "reason": "避免把相似感受直接当成完整秘密",
-                "knownFacts": [
-                  "定陶王因盛姬而对阮香凝产生亲近感"
-                ],
+                "knownFacts": [],
                 "mustNotInvent": [
                   "盛姬当前下落",
                   "其他人物已经知情",
@@ -6871,10 +7338,44 @@
                     "trustWindow": -3,
                     "exposureRisk": 3
                   },
-                  "escalation": 2
+                  "escalation": 2,
+                  "relationships": [
+                    {
+                      "targetCharacterId": "liuchao.character.cheng_zongyang",
+                      "dimension": "trust",
+                      "weight": 4
+                    }
+                  ]
                 },
                 "visibility": "public",
-                "durationTurns": 1
+                "durationTurns": 1,
+                "knownFactIds": [
+                  "knowledge.lyg.s01_08.01"
+                ],
+                "requiresKnowledge": [
+                  "knowledge.lyg.s01_08.01"
+                ],
+                "stateEffects": {
+                  "knowledge": [
+                    {
+                      "add": [
+                        "knowledge.lyg.s01_08.source_verified"
+                      ]
+                    }
+                  ],
+                  "relationships": [
+                    {
+                      "targetCharacterId": "liuchao.character.cheng_zongyang",
+                      "deltas": {
+                        "trust": 5,
+                        "caution": -3
+                      }
+                    }
+                  ],
+                  "resources": {
+                    "intelligence": 1
+                  }
+                }
               },
               {
                 "actionId": "gather_intelligence",
@@ -6883,9 +7384,7 @@
                 ],
                 "label": "补齐盛姬关联的可核线索",
                 "reason": "让玩家能区分她亲知的事实与仍待查证的推断",
-                "knownFacts": [
-                  "盛姬与黑魔海御姬奴有关"
-                ],
+                "knownFacts": [],
                 "mustNotInvent": [
                   "黑魔海完整组织图",
                   "未来事件",
@@ -6905,10 +7404,24 @@
                   "situation": {
                     "trustWindow": -4
                   },
-                  "escalation": 2
+                  "escalation": 2,
+                  "relationships": [
+                    {
+                      "targetCharacterId": "liuchao.character.cheng_zongyang",
+                      "dimension": "trust",
+                      "weight": 5
+                    }
+                  ]
                 },
                 "visibility": "rumor",
-                "durationTurns": 2
+                "durationTurns": 2,
+                "knownFactIds": [
+                  "knowledge.lyg.s01_08.source_verified"
+                ],
+                "requiresKnowledge": [
+                  "knowledge.lyg.s01_08.02",
+                  "knowledge.lyg.s01_08.source_verified"
+                ]
               },
               {
                 "actionId": "conceal_evidence",
@@ -6917,9 +7430,7 @@
                 ],
                 "label": "控制谈话的知情范围",
                 "reason": "秘密一旦被无关人物听见就会反向伤及她与玩家",
-                "knownFacts": [
-                  "这条线索尚未向无关人物公开"
-                ],
+                "knownFacts": [],
                 "mustNotInvent": [
                   "暗桩名单",
                   "吕雉或霍子孟已知秘密"
@@ -6938,10 +7449,34 @@
                   "situation": {
                     "exposureRisk": 5
                   },
-                  "escalation": 1
+                  "escalation": 1,
+                  "relationships": [
+                    {
+                      "targetCharacterId": "liuchao.character.cheng_zongyang",
+                      "dimension": "caution",
+                      "weight": 5
+                    }
+                  ]
                 },
                 "visibility": "hidden",
-                "durationTurns": 2
+                "durationTurns": 2,
+                "knownFactIds": [
+                  "knowledge.lyg.s01_08.03"
+                ],
+                "requiresKnowledge": [
+                  "knowledge.lyg.s01_08.03"
+                ],
+                "stateEffects": {
+                  "relationships": [
+                    {
+                      "targetCharacterId": "liuchao.character.cheng_zongyang",
+                      "deltas": {
+                        "caution": 4,
+                        "trust": -2
+                      }
+                    }
+                  ]
+                }
               }
             ],
             "maxVisibleActions": 2,
@@ -6952,6 +7487,28 @@
               ],
               "rejectConcreteQuantities": true,
               "allowUnverifiedQuantities": true
+            },
+            "knowledgeFacts": {
+              "knowledge.lyg.s01_08.01": {
+                "text": "定陶王因盛姬而对阮香凝产生亲近感",
+                "access": "public",
+                "evidence": "R2-10D：沿用 lyg.s01_08 既有 worldActor knownFacts，不新增原著事实。"
+              },
+              "knowledge.lyg.s01_08.02": {
+                "text": "盛姬与黑魔海御姬奴有关",
+                "access": "secret",
+                "evidence": "R2-10D：沿用 lyg.s01_08 既有 worldActor knownFacts，不新增原著事实。"
+              },
+              "knowledge.lyg.s01_08.03": {
+                "text": "这条线索尚未向无关人物公开",
+                "access": "restricted",
+                "evidence": "R2-10D：沿用 lyg.s01_08 既有 worldActor knownFacts，不新增原著事实。"
+              },
+              "knowledge.lyg.s01_08.source_verified": {
+                "text": "阮香凝已经核实盛姬线索的来源链，但尚未向无关人物披露",
+                "access": "restricted",
+                "evidence": "由本事件内 verify_rumor 行动确定性产生。"
+              }
             }
           },
           "opportunities": [

@@ -120,6 +120,43 @@ export interface ScenarioWorldActorAgenda {
 
 export type ScenarioNpcDecisionVisibility = 'public' | 'rumor' | 'hidden';
 export type ScenarioNpcDecisionResource = 'influence' | 'wealth' | 'troops' | 'intelligence';
+export type ScenarioNpcKnowledgeAccess = 'public' | 'restricted' | 'secret';
+
+export interface ScenarioNpcKnowledgeFact {
+  text: string;
+  access: ScenarioNpcKnowledgeAccess;
+  evidence: string;
+}
+
+export interface ScenarioNpcRelationshipRequirement {
+  targetCharacterId: string;
+  dimension: string;
+  min?: number;
+  max?: number;
+}
+
+export interface ScenarioNpcRelationshipUtility {
+  targetCharacterId: string;
+  dimension: string;
+  weight: number;
+}
+
+export interface ScenarioNpcDecisionStateEffects {
+  /** 对行动发起者自身资源的增减；行动成本仍由 costs 单独结算。 */
+  resources?: Partial<Record<ScenarioNpcDecisionResource, number>>;
+  /** actorId 省略时修改行动发起者；显式 actorId 可表达对方态度变化。 */
+  relationships?: Array<{
+    actorId?: string;
+    targetCharacterId: string;
+    deltas: Record<string, number>;
+  }>;
+  /** actorIds 省略时修改行动发起者；知识只能引用本 core 的 knowledgeFacts。 */
+  knowledge?: Array<{
+    actorIds?: string[];
+    add?: string[];
+    remove?: string[];
+  }>;
+}
 
 export interface ScenarioNpcDecisionAgenda {
   id: string;
@@ -150,12 +187,18 @@ export interface ScenarioNpcDecisionActionBinding {
   label: string;
   reason: string;
   knownFacts: string[];
+  /** 新合同使用知识条目 id；knownFacts 保留为旧数据兼容层。 */
+  knownFactIds?: string[];
+  requiresKnowledge?: string[];
+  relationshipRequirements?: ScenarioNpcRelationshipRequirement[];
   mustNotInvent: string[];
   visibleSignal: string;
   offscreenAction: string;
   requirements?: Partial<Record<ScenarioNpcDecisionResource, number>>;
   costs?: Partial<Record<ScenarioNpcDecisionResource, number>>;
   effects?: Record<string, number>;
+  /** 资源、态度和知识的确定性反馈；不得写全局自由路径。 */
+  stateEffects?: ScenarioNpcDecisionStateEffects;
   utility?: {
     urgency?: number;
     factionGoal?: number;
@@ -163,6 +206,7 @@ export interface ScenarioNpcDecisionActionBinding {
     failureRisk?: number;
     /** 局势键到效用权重；局势值先按 limits 归一到 -1..1。 */
     situation?: Record<string, number>;
+    relationships?: ScenarioNpcRelationshipUtility[];
     /** 当前议程升级阶梯对该行动的权重。 */
     escalation?: number;
   };
@@ -172,6 +216,8 @@ export interface ScenarioNpcDecisionActionBinding {
 }
 
 export interface ScenarioNpcDecisionCore {
+  /** 角色知识的本地权威词典；actor.knowledge 存其中的 id。 */
+  knowledgeFacts?: Record<string, ScenarioNpcKnowledgeFact>;
   situation: {
     whitelist: string[];
     initialValues: Record<string, number>;

@@ -521,6 +521,35 @@ function validateNpcDecisionCore(
     add(path, 'invalid_type', 'decisionCore must be an object.');
     return;
   }
+  const knowledgeFactIds = new Set<string>();
+  const knowledgeAccess = new Map<string, string>();
+  if (value.knowledgeFacts !== undefined && !isRecord(value.knowledgeFacts)) {
+    add(`${path}.knowledgeFacts`, 'invalid_type', 'decisionCore.knowledgeFacts must be an object.');
+  } else if (isRecord(value.knowledgeFacts)) {
+    for (const [factId, rawFact] of Object.entries(value.knowledgeFacts)) {
+      const factPath = `${path}.knowledgeFacts.${factId}`;
+      if (validateId(factId, factPath, add)) knowledgeFactIds.add(factId);
+      if (!isRecord(rawFact)) {
+        add(factPath, 'invalid_type', 'Knowledge fact must be an object.');
+        continue;
+      }
+      requireString(rawFact.text, `${factPath}.text`, add);
+      requireString(rawFact.evidence, `${factPath}.evidence`, add);
+      if (!['public', 'restricted', 'secret'].includes(String(rawFact.access))) {
+        add(`${factPath}.access`, 'invalid_enum', 'Knowledge access must be public, restricted, or secret.');
+      } else {
+        knowledgeAccess.set(factId, String(rawFact.access));
+      }
+    }
+  }
+  const coreActorIds = new Set(
+    Array.isArray(value.actors)
+      ? value.actors
+        .filter(isRecord)
+        .map(actor => actor.characterId)
+        .filter((id): id is string => typeof id === 'string')
+      : [],
+  );
   const situation = value.situation;
   const whitelist = new Set<string>();
   if (!isRecord(situation)) {
@@ -646,8 +675,43 @@ function validateNpcDecisionCore(
     }
     for (const key of ['label', 'reason', 'visibleSignal', 'offscreenAction']) requireString(binding[key], `${bindingPath}.${key}`, add);
     validateStringArray(binding.knownFacts, `${bindingPath}.knownFacts`, add);
+    validateIdArray(binding.knownFactIds, `${bindingPath}.knownFactIds`, add);
+    validateIdArray(binding.requiresKnowledge, `${bindingPath}.requiresKnowledge`, add);
+    for (const group of ['knownFactIds', 'requiresKnowledge']) {
+      for (const factId of Array.isArray(binding[group]) ? binding[group] : []) {
+        if (typeof factId === 'string' && !knowledgeFactIds.has(factId)) {
+          add(`${bindingPath}.${group}`, 'unknown_knowledge', `Unknown knowledge fact "${factId}".`);
+        }
+      }
+    }
+    forEachRecord(binding.relationshipRequirements, `${bindingPath}.relationshipRequirements`, (requirement, requirementPath) => {
+      validateId(requirement.targetCharacterId, `${requirementPath}.targetCharacterId`, add);
+      if (typeof requirement.targetCharacterId === 'string' && !characterIds.has(requirement.targetCharacterId)) {
+        add(`${requirementPath}.targetCharacterId`, 'unknown_reference', `Unknown relationship target "${requirement.targetCharacterId}".`);
+      }
+      requireString(requirement.dimension, `${requirementPath}.dimension`, add);
+      optionalNumber(requirement.min, `${requirementPath}.min`, add);
+      optionalNumber(requirement.max, `${requirementPath}.max`, add);
+      if (requirement.min === undefined && requirement.max === undefined) {
+        add(requirementPath, 'missing_threshold', 'Relationship requirement needs min or max.');
+      }
+      if (typeof requirement.min === 'number' && typeof requirement.max === 'number' && requirement.min > requirement.max) {
+        add(requirementPath, 'invalid_range', 'Relationship requirement min must not exceed max.');
+      }
+    });
     validateStringArray(binding.mustNotInvent, `${bindingPath}.mustNotInvent`, add);
     if (!['public', 'rumor', 'hidden'].includes(String(binding.visibility))) add(`${bindingPath}.visibility`, 'invalid_enum', 'visibility must be public, rumor, or hidden.');
+    if (binding.visibility !== 'hidden') {
+      for (const factId of Array.isArray(binding.knownFactIds) ? binding.knownFactIds : []) {
+        if (typeof factId === 'string' && knowledgeAccess.get(factId) === 'secret') {
+          add(
+            `${bindingPath}.knownFactIds`,
+            'secret_knowledge_exposure',
+            'Visible decisions must not project secret knowledge to the narrative renderer.',
+          );
+        }
+      }
+    }
     if (typeof binding.durationTurns !== 'number') {
       add(`${bindingPath}.durationTurns`, 'invalid_type', 'durationTurns must be a number.');
     } else if (binding.durationTurns < 1) {
@@ -674,6 +738,14 @@ function validateNpcDecisionCore(
           if (!whitelist.has(key)) add(`${bindingPath}.utility.situation.${key}`, 'effect_not_whitelisted', 'Situation utility may only use this stage whitelist.');
         }
       }
+      forEachRecord(binding.utility.relationships, `${bindingPath}.utility.relationships`, (relation, relationPath) => {
+        validateId(relation.targetCharacterId, `${relationPath}.targetCharacterId`, add);
+        if (typeof relation.targetCharacterId === 'string' && !characterIds.has(relation.targetCharacterId)) {
+          add(`${relationPath}.targetCharacterId`, 'unknown_reference', `Unknown relationship target "${relation.targetCharacterId}".`);
+        }
+        requireString(relation.dimension, `${relationPath}.dimension`, add);
+        optionalNumber(relation.weight, `${relationPath}.weight`, add);
+      });
     }
     if (binding.effects !== undefined && !isRecord(binding.effects)) {
       add(`${bindingPath}.effects`, 'invalid_type', 'effects must be an object.');
@@ -682,6 +754,60 @@ function validateNpcDecisionCore(
         optionalNumber(delta, `${bindingPath}.effects.${key}`, add);
         if (!whitelist.has(key)) add(`${bindingPath}.effects.${key}`, 'effect_not_whitelisted', 'NPC effects may only target this stage situation whitelist.');
       }
+    }
+    if (binding.stateEffects !== undefined && !isRecord(binding.stateEffects)) {
+      add(`${bindingPath}.stateEffects`, 'invalid_type', 'stateEffects must be an object.');
+    } else if (isRecord(binding.stateEffects)) {
+      if (binding.stateEffects.resources !== undefined && !isRecord(binding.stateEffects.resources)) {
+        add(`${bindingPath}.stateEffects.resources`, 'invalid_type', 'stateEffects.resources must be an object.');
+      } else if (isRecord(binding.stateEffects.resources)) {
+        for (const [resource, delta] of Object.entries(binding.stateEffects.resources)) {
+          if (!['influence', 'wealth', 'troops', 'intelligence'].includes(resource)) {
+            add(`${bindingPath}.stateEffects.resources.${resource}`, 'unknown_resource', `Unknown NPC resource "${resource}".`);
+          }
+          optionalNumber(delta, `${bindingPath}.stateEffects.resources.${resource}`, add);
+        }
+      }
+      forEachRecord(binding.stateEffects.relationships, `${bindingPath}.stateEffects.relationships`, (relation, relationPath) => {
+        if (relation.actorId !== undefined) {
+          validateId(relation.actorId, `${relationPath}.actorId`, add);
+          if (typeof relation.actorId === 'string' && !coreActorIds.has(relation.actorId)) {
+            add(`${relationPath}.actorId`, 'unknown_reference', `Relationship effect actor "${relation.actorId}" is not active in this core.`);
+          }
+        }
+        validateId(relation.targetCharacterId, `${relationPath}.targetCharacterId`, add);
+        if (typeof relation.targetCharacterId === 'string' && !characterIds.has(relation.targetCharacterId)) {
+          add(`${relationPath}.targetCharacterId`, 'unknown_reference', `Unknown relationship target "${relation.targetCharacterId}".`);
+        }
+        if (!isRecord(relation.deltas)) {
+          add(`${relationPath}.deltas`, 'required_object', 'Relationship effect deltas are required.');
+        } else {
+          for (const [dimension, delta] of Object.entries(relation.deltas)) {
+            optionalNumber(delta, `${relationPath}.deltas.${dimension}`, add);
+          }
+        }
+      });
+      forEachRecord(binding.stateEffects.knowledge, `${bindingPath}.stateEffects.knowledge`, (knowledge, knowledgePath) => {
+        validateIdArray(knowledge.actorIds, `${knowledgePath}.actorIds`, add);
+        for (const actorId of Array.isArray(knowledge.actorIds) ? knowledge.actorIds : []) {
+          if (typeof actorId === 'string' && !coreActorIds.has(actorId)) {
+            add(`${knowledgePath}.actorIds`, 'unknown_reference', `Knowledge effect actor "${actorId}" is not active in this core.`);
+          }
+        }
+        validateIdArray(knowledge.add, `${knowledgePath}.add`, add);
+        validateIdArray(knowledge.remove, `${knowledgePath}.remove`, add);
+        if (!Array.isArray(knowledge.add) && !Array.isArray(knowledge.remove)) {
+          add(knowledgePath, 'missing_effect', 'Knowledge effect needs add or remove.');
+        }
+        for (const factId of [
+          ...(Array.isArray(knowledge.add) ? knowledge.add : []),
+          ...(Array.isArray(knowledge.remove) ? knowledge.remove : []),
+        ]) {
+          if (typeof factId === 'string' && !knowledgeFactIds.has(factId)) {
+            add(knowledgePath, 'unknown_knowledge', `Unknown knowledge fact "${factId}".`);
+          }
+        }
+      });
     }
     validateStringArray(binding.canonTags, `${bindingPath}.canonTags`, add);
   });
@@ -739,6 +865,13 @@ function validateNpcDecisionCore(
       }
     }
     validateStringArray(actor.knowledge, `${actorPath}.knowledge`, add);
+    if (knowledgeFactIds.size) {
+      for (const factId of Array.isArray(actor.knowledge) ? actor.knowledge : []) {
+        if (typeof factId === 'string' && !knowledgeFactIds.has(factId)) {
+          add(`${actorPath}.knowledge`, 'unknown_knowledge', `Unknown knowledge fact "${factId}".`);
+        }
+      }
+    }
     validateIdArray(actor.allowedActionIds, `${actorPath}.allowedActionIds`, add);
     for (const actionId of Array.isArray(actor.allowedActionIds) ? actor.allowedActionIds : []) {
       if (typeof actionId === 'string' && !boundActions.has(actionId)) add(`${actorPath}.allowedActionIds`, 'unbound_action', `Allowed action "${actionId}" has no stage binding.`);

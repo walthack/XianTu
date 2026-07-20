@@ -3,6 +3,7 @@ import type {
   ScenarioNpcDecisionActor,
   ScenarioNpcDecisionCore,
   ScenarioNpcDecisionResource,
+  ScenarioNpcDecisionStateEffects,
 } from './schema';
 
 type UtilityVector = {
@@ -44,7 +45,9 @@ export interface NpcDecisionReceipt {
   actionId: string;
   label: string;
   reason: string;
+  knownFactIds: string[];
   knownFacts: string[];
+  attitudes: Array<{ targetCharacterId: string; dimension: string; value: number }>;
   mustNotInvent: string[];
   visibleSignal: string;
   offscreenAction: string;
@@ -53,6 +56,7 @@ export interface NpcDecisionReceipt {
   score: number;
   candidates: NpcCandidateScore[];
   effects: Record<string, number>;
+  stateEffects?: ScenarioNpcDecisionStateEffects;
 }
 
 export interface NpcDecisionRound {
@@ -72,7 +76,7 @@ export interface NpcDecisionEffectApplication {
   rejectedEffects: RejectedNpcDecisionEffect[];
 }
 
-export const NPC_ACTION_LIBRARY_VERSION = 'r2-10b.2';
+export const NPC_ACTION_LIBRARY_VERSION = 'r2-10d.1';
 
 // 通用行动词表保持小而可复用；stage 只绑定其中适用项及白名单 effects。
 // 32 项满足首批 30–50 的规格边界，未绑定的行动不会进入该 stage 候选池。
@@ -141,7 +145,18 @@ function dot(values: Record<string, number>, weights: Record<string, number> | u
 
 function relationshipFit(actor: ScenarioNpcDecisionActor, weights: Record<string, number> | undefined): number {
   if (!weights) return 0;
-  return Object.values(actor.relationships).reduce((total, relation) => total + dot(relation, weights), 0);
+  return Object.values(actor.relationships)
+    .reduce((total, relation) => total + dot(relation, weights) / 100, 0);
+}
+
+function bindingRelationshipFit(
+  actor: ScenarioNpcDecisionActor,
+  binding: ScenarioNpcDecisionActionBinding,
+): number {
+  return (binding.utility?.relationships || []).reduce((sum, item) => {
+    const value = actor.relationships[item.targetCharacterId]?.[item.dimension] || 0;
+    return sum + (value / 100) * item.weight;
+  }, 0);
 }
 
 function resourceCost(binding: ScenarioNpcDecisionActionBinding): number {
@@ -150,6 +165,18 @@ function resourceCost(binding: ScenarioNpcDecisionActionBinding): number {
 
 function requirementFailure(actor: ScenarioNpcDecisionActor, binding: ScenarioNpcDecisionActionBinding): string | undefined {
   if ((actor.actionCooldowns?.[binding.actionId] || 0) > 0) return `cooldown:${actor.actionCooldowns![binding.actionId]}`;
+  const knowledge = new Set(actor.knowledge);
+  const missingKnowledge = (binding.requiresKnowledge || []).find(factId => !knowledge.has(factId));
+  if (missingKnowledge) return `knowledge:${missingKnowledge}`;
+  for (const requirement of binding.relationshipRequirements || []) {
+    const value = actor.relationships[requirement.targetCharacterId]?.[requirement.dimension] || 0;
+    if (requirement.min !== undefined && value < requirement.min) {
+      return `relationship:${requirement.targetCharacterId}.${requirement.dimension}>=${requirement.min}`;
+    }
+    if (requirement.max !== undefined && value > requirement.max) {
+      return `relationship:${requirement.targetCharacterId}.${requirement.dimension}<=${requirement.max}`;
+    }
+  }
   for (const key of RESOURCES) {
     const minimum = binding.requirements?.[key];
     if (minimum !== undefined && actor.resources[key] < minimum) {
@@ -194,7 +221,7 @@ function scoreCandidate(
     personalityFit: dot(actor.personality, template.personality),
     motiveFit: dot(actor.motives, template.motives),
     factionGoal: binding.utility?.factionGoal || 0,
-    relationshipMotive: relationshipFit(actor, template.relationship),
+    relationshipMotive: relationshipFit(actor, template.relationship) + bindingRelationshipFit(actor, binding),
     expectedBenefit: template.baseBenefit + (binding.utility?.expectedBenefit || 0),
     situationFit: dot(normalizedSituation, binding.utility?.situation),
     escalationPressure: agendaProgress * (binding.utility?.escalation || 0),
@@ -230,13 +257,36 @@ export function decideNpcActions(
     const selected = ranked[0];
     if (!selected) continue;
     const { binding, candidate: winner } = selected;
+    const attitudeKeys = [
+      ...(binding.utility?.relationships || []),
+      ...(binding.relationshipRequirements || []),
+    ];
+    const seenAttitudes = new Set<string>();
     decisions.push({
       id: `npc-decision.${actor.characterId}.${winner.actionId}`,
       actorId: actor.characterId,
       actionId: winner.actionId,
       label: binding.label,
       reason: binding.reason,
-      knownFacts: [...binding.knownFacts],
+      knownFactIds: (binding.knownFactIds || []).filter(factId => actor.knowledge.includes(factId)),
+      knownFacts: binding.knownFactIds?.length
+        ? binding.knownFactIds
+          .filter(factId => actor.knowledge.includes(factId))
+          .map(factId => core.knowledgeFacts?.[factId]?.text)
+          .filter((fact): fact is string => Boolean(fact))
+        : [...binding.knownFacts],
+      attitudes: attitudeKeys
+        .filter(item => {
+          const key = `${item.targetCharacterId}.${item.dimension}`;
+          if (seenAttitudes.has(key)) return false;
+          seenAttitudes.add(key);
+          return true;
+        })
+        .map(item => ({
+          targetCharacterId: item.targetCharacterId,
+          dimension: item.dimension,
+          value: actor.relationships[item.targetCharacterId]?.[item.dimension] || 0,
+        })),
       mustNotInvent: [...binding.mustNotInvent],
       visibleSignal: binding.visibleSignal,
       offscreenAction: binding.offscreenAction,
@@ -245,6 +295,7 @@ export function decideNpcActions(
       score: winner.score!,
       candidates,
       effects: { ...(binding.effects || {}) },
+      stateEffects: binding.stateEffects ? structuredClone(binding.stateEffects) : undefined,
     });
   }
   return {
@@ -289,8 +340,44 @@ export function applyNpcDecisionActorState(
     for (const agenda of actor.agendas) {
       agenda.clock = Math.min(agenda.escalation.length, Math.max(0, agenda.clock) + 1);
     }
+    applyNpcStateEffects(next, decision.actorId, decision.stateEffects);
   }
   return next;
+}
+
+function applyNpcStateEffects(
+  actors: ScenarioNpcDecisionActor[],
+  sourceActorId: string,
+  effects: ScenarioNpcDecisionStateEffects | undefined,
+): void {
+  if (!effects) return;
+  const source = actors.find(item => item.characterId === sourceActorId);
+  if (source) {
+    for (const [resource, delta] of Object.entries(effects.resources || {})) {
+      const key = resource as ScenarioNpcDecisionResource;
+      source.resources[key] = Math.max(0, (source.resources[key] || 0) + (delta || 0));
+    }
+  }
+  for (const relationship of effects.relationships || []) {
+    const owner = actors.find(item => item.characterId === (relationship.actorId || sourceActorId));
+    if (!owner) continue;
+    const current = owner.relationships[relationship.targetCharacterId] ||= {};
+    for (const [dimension, delta] of Object.entries(relationship.deltas)) {
+      current[dimension] = Math.min(100, Math.max(-100, (current[dimension] || 0) + delta));
+    }
+  }
+  for (const knowledgeEffect of effects.knowledge || []) {
+    const targets = knowledgeEffect.actorIds?.length
+      ? actors.filter(item => knowledgeEffect.actorIds!.includes(item.characterId))
+      : actors.filter(item => item.characterId === sourceActorId);
+    for (const target of targets) {
+      const removed = new Set(knowledgeEffect.remove || []);
+      target.knowledge = [...new Set([
+        ...target.knowledge.filter(factId => !removed.has(factId)),
+        ...(knowledgeEffect.add || []),
+      ])].sort();
+    }
+  }
 }
 
 export function applyNpcDecisionEffectsWithAudit(
