@@ -223,13 +223,23 @@ export function evaluateNpcWake(
 }
 
 function dot(values: Record<string, number>, weights: Record<string, number> | undefined): number {
-  return Object.entries(weights || {}).reduce((sum, [key, weight]) => sum + (values[key] || 0) * weight, 0);
+  return Object.entries(weights || {})
+    .sort(([left], [right]) => left < right ? -1 : left > right ? 1 : 0)
+    .reduce((sum, [key, weight]) => sum + (values[key] || 0) * weight, 0);
+}
+
+function clampAttitude(value: number): number {
+  return Math.min(100, Math.max(-100, Number.isFinite(value) ? value : 0));
 }
 
 function relationshipFit(actor: ScenarioNpcDecisionActor, weights: Record<string, number> | undefined): number {
   if (!weights) return 0;
-  return Object.values(actor.relationships)
-    .reduce((total, relation) => total + dot(relation, weights) / 100, 0);
+  return Object.entries(actor.relationships)
+    .sort(([left], [right]) => left < right ? -1 : left > right ? 1 : 0)
+    .reduce((total, [, relation]) => total + dot(
+      Object.fromEntries(Object.entries(relation).map(([key, value]) => [key, clampAttitude(value)])),
+      weights,
+    ) / 100, 0);
 }
 
 function bindingRelationshipFit(
@@ -237,7 +247,7 @@ function bindingRelationshipFit(
   binding: ScenarioNpcDecisionActionBinding,
 ): number {
   return (binding.utility?.relationships || []).reduce((sum, item) => {
-    const value = actor.relationships[item.targetCharacterId]?.[item.dimension] || 0;
+    const value = clampAttitude(actor.relationships[item.targetCharacterId]?.[item.dimension] || 0);
     return sum + (value / 100) * item.weight;
   }, 0);
 }
@@ -264,7 +274,7 @@ function requirementFailure(actor: ScenarioNpcDecisionActor, binding: ScenarioNp
   const missingKnowledge = (binding.requiresKnowledge || []).find(factId => !knowledge.has(factId));
   if (missingKnowledge) return `knowledge:${missingKnowledge}`;
   for (const requirement of binding.relationshipRequirements || []) {
-    const value = actor.relationships[requirement.targetCharacterId]?.[requirement.dimension] || 0;
+    const value = clampAttitude(actor.relationships[requirement.targetCharacterId]?.[requirement.dimension] || 0);
     if (requirement.min !== undefined && value < requirement.min) {
       return `relationship:${requirement.targetCharacterId}.${requirement.dimension}>=${requirement.min}`;
     }
@@ -369,7 +379,7 @@ function receiptFor(
       .map(item => ({
         targetCharacterId: item.targetCharacterId,
         dimension: item.dimension,
-        value: actor.relationships[item.targetCharacterId]?.[item.dimension] || 0,
+        value: clampAttitude(actor.relationships[item.targetCharacterId]?.[item.dimension] || 0),
       })),
     memories: (actor.memories || [])
       .filter(memory => memory.tags.some(tag => relevantMemoryTags.has(tag)))
@@ -408,16 +418,25 @@ function conflictStrength(
   return decision.score + (binding.interaction?.power || 0);
 }
 
-/** 两个相反意图在同一冲突域相遇时，本地确定性裁定；LLM 不得重赛。 */
+/** 冲突按强度从高到低整体裁定；败方立即退出本轮，不能再阻断第三方。 */
 export function resolveNpcActionConflicts(
   core: ScenarioNpcDecisionCore,
   decisions: NpcDecisionReceipt[],
 ): NpcDecisionReceipt[] {
   const next = structuredClone(decisions);
-  for (let leftIndex = 0; leftIndex < next.length; leftIndex++) {
-    for (let rightIndex = leftIndex + 1; rightIndex < next.length; rightIndex++) {
-      const left = next[leftIndex];
-      const right = next[rightIndex];
+  const ranked = next
+    .map(decision => ({ decision, binding: bindingForDecision(core, decision) }))
+    .filter((item): item is { decision: NpcDecisionReceipt; binding: ScenarioNpcDecisionActionBinding } =>
+      Boolean(item.binding?.interaction))
+    .sort((left, right) =>
+      conflictStrength(right.binding, right.decision) - conflictStrength(left.binding, left.decision)
+      || (left.decision.id < right.decision.id ? -1 : left.decision.id > right.decision.id ? 1 : 0));
+  for (let leftIndex = 0; leftIndex < ranked.length; leftIndex++) {
+    const left = ranked[leftIndex].decision;
+    if (left.outcome === 'blocked') continue;
+    for (let rightIndex = leftIndex + 1; rightIndex < ranked.length; rightIndex++) {
+      const right = ranked[rightIndex].decision;
+      if (right.outcome === 'blocked') continue;
       const leftBinding = bindingForDecision(core, left);
       const rightBinding = bindingForDecision(core, right);
       const leftInteraction = leftBinding?.interaction;
@@ -431,15 +450,14 @@ export function resolveNpcActionConflicts(
       const domain = opposed ? leftInteraction.domain : `${leftInteraction.domain}:${rightInteraction.domain}`;
       const leftStrength = conflictStrength(leftBinding, left);
       const rightStrength = conflictStrength(rightBinding, right);
-      const leftWins = leftStrength > rightStrength
-        || (leftStrength === rightStrength && left.id < right.id);
-      const winner = leftWins ? left : right;
-      const loser = leftWins ? right : left;
-      const winnerStrength = leftWins ? leftStrength : rightStrength;
-      const loserStrength = leftWins ? rightStrength : leftStrength;
-      if (winner.outcome !== 'blocked') winner.outcome = 'succeeded';
+      // ranked 已确保 left 更强；平分时稳定 id 较小者在前。
+      const winner = left;
+      const loser = right;
+      const winnerStrength = leftStrength;
+      const loserStrength = rightStrength;
+      winner.outcome = 'succeeded';
       loser.outcome = 'blocked';
-      winner.conflict = {
+      winner.conflict ||= {
         domain,
         opponentDecisionId: loser.id,
         ownStrength: winnerStrength,
@@ -464,11 +482,14 @@ export function decideNpcActions(
   actors: ScenarioNpcDecisionActor[] = core.actors,
   wakeContext?: NpcWakeContext,
 ): NpcDecisionRound {
+  const normalizedWakeContext = wakeContext
+    ? Object.fromEntries(Object.entries(wakeContext).filter(([, value]) => value !== undefined)) as NpcWakeContext
+    : undefined;
   const forbidden = new Set(core.canonPolicy.forbiddenBefore);
   const decisions: NpcDecisionReceipt[] = [];
   const wakeAudit: NpcWakeAudit[] = [];
   for (const actor of actors) {
-    const wake = evaluateNpcWake(actor, wakeContext);
+    const wake = evaluateNpcWake(actor, normalizedWakeContext);
     wakeAudit.push({ actorId: actor.characterId, ...wake });
     if (!wake.awake) continue;
     if (actor.activeAction) {
@@ -517,7 +538,7 @@ export function decideNpcActions(
       situationValues,
       actionBindings: core.actionBindings,
       canonPolicy: core.canonPolicy,
-      wakeContext,
+      wakeContext: normalizedWakeContext,
     }),
     decisions: resolveNpcActionConflicts(core, decisions),
     wakeAudit,

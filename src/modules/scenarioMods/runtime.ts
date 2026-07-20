@@ -287,13 +287,23 @@ function refreshOpportunityStates(
       states[opportunity.id] = { status: 'available', surfacedAtTurn: turn };
       continue;
     }
-    if (
-      current?.status === 'available'
+    const trackedExpired = current?.trackedAtTurn !== undefined
+      && turn - current.trackedAtTurn >= TRACKED_OPPORTUNITY_MAX_TURNS;
+    const untrackedExpired = current?.status === 'available'
+      && current.trackedAtTurn === undefined
       && opportunity.expiresAfterTurns !== undefined
-      && turn - current.surfacedAtTurn >= opportunity.expiresAfterTurns
+      && turn - current.surfacedAtTurn >= opportunity.expiresAfterTurns;
+    if (
+      current
+      && ['available', 'tracked'].includes(current.status)
+      && (trackedExpired || untrackedExpired)
     ) {
       current.status = 'expired';
       current.resolvedAtTurn = turn;
+      if (state.trackedOpportunityId === opportunity.id) {
+        state.trackedOpportunityId = undefined;
+        state.trackedAtTurn = undefined;
+      }
     }
   }
 }
@@ -572,14 +582,15 @@ export function trackStoryOpportunity(
     const previous = state.opportunityStates?.[state.trackedOpportunityId];
     if (previous?.status === 'tracked') {
       previous.status = 'available';
-      previous.trackedAtTurn = undefined;
     }
   }
   state.trackedOpportunityId = opportunity.id;
   if (opportunityState.status === 'available') {
-    state.trackedAtTurn = Math.max(0, Number(runtime.worldTurn) || 0);
+    const firstTrackedAt = opportunityState.trackedAtTurn
+      ?? Math.max(0, Number(runtime.worldTurn) || 0);
+    state.trackedAtTurn = firstTrackedAt;
     opportunityState.status = 'tracked';
-    opportunityState.trackedAtTurn = state.trackedAtTurn;
+    opportunityState.trackedAtTurn = firstTrackedAt;
   } else {
     state.trackedAtTurn = opportunityState.trackedAtTurn ?? state.trackedAtTurn;
   }
@@ -824,7 +835,7 @@ function resolveOffscreenWorldEvents(runtime: RuntimeState, transitions: Scenari
     const hasTrackedIntervention = Boolean(
       runtime.actorEngine?.trackedOpportunityId
       && resolution.resolvedEventIds.includes(runtime.actorEngine.anchorEventId || '')
-      && trackedAge <= TRACKED_OPPORTUNITY_MAX_TURNS
+      && trackedAge < TRACKED_OPPORTUNITY_MAX_TURNS
     );
     const due = owner?.timeline?.deadlineTurns !== undefined
       ? eventTimelineDeadlineDue(runtime, owner)

@@ -747,6 +747,8 @@ function validateNpcDecisionCore(
       requireString(requirement.dimension, `${requirementPath}.dimension`, add);
       optionalNumber(requirement.min, `${requirementPath}.min`, add);
       optionalNumber(requirement.max, `${requirementPath}.max`, add);
+      validateAttitudeRange(requirement.min, `${requirementPath}.min`, add);
+      validateAttitudeRange(requirement.max, `${requirementPath}.max`, add);
       if (requirement.min === undefined && requirement.max === undefined) {
         add(requirementPath, 'missing_threshold', 'Relationship requirement needs min or max.');
       }
@@ -858,6 +860,7 @@ function validateNpcDecisionCore(
         } else {
           for (const [dimension, delta] of Object.entries(relation.deltas)) {
             optionalNumber(delta, `${relationPath}.deltas.${dimension}`, add);
+            validateAttitudeRange(delta, `${relationPath}.deltas.${dimension}`, add);
           }
         }
       });
@@ -934,6 +937,7 @@ function validateNpcDecisionCore(
         if (Object.keys(relation).length > 3) add(`${actorPath}.relationships.${targetId}`, 'too_many_dimensions', 'A relationship may use at most three dimensions.');
         for (const [dimension, amount] of Object.entries(relation)) {
           optionalNumber(amount, `${actorPath}.relationships.${targetId}.${dimension}`, add);
+          validateAttitudeRange(amount, `${actorPath}.relationships.${targetId}.${dimension}`, add);
           requireEvidence(`relationships.${targetId}.${dimension}`);
         }
       }
@@ -1012,6 +1016,12 @@ function optionalStringOrNull(value: unknown, path: string, add: AddIssue): void
 function optionalNumber(value: unknown, path: string, add: AddIssue): void {
   if (value !== undefined && (typeof value !== 'number' || !Number.isFinite(value))) {
     add(path, 'invalid_number', `${path} must be a finite number.`);
+  }
+}
+
+function validateAttitudeRange(value: unknown, path: string, add: AddIssue): void {
+  if (typeof value === 'number' && Number.isFinite(value) && (value < -100 || value > 100)) {
+    add(path, 'invalid_range', `${path} must stay within the NPC attitude range -100..100.`);
   }
 }
 

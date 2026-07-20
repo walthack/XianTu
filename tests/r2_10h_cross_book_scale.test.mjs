@@ -4,6 +4,10 @@ import test from 'node:test';
 
 import { loadTs } from './loadTs.mjs';
 
+const CURRENT_REGISTRY_VERSION = JSON.parse(
+  await readFile(new URL('../src/modules/scenarioMods/builtins/character-registry.json', import.meta.url), 'utf8'),
+).version;
+
 const cases = [
   {
     file: 'lcq.stage_10_jiangzhou_shadow_war.json',
@@ -62,6 +66,7 @@ function fixture(stage, eventId) {
           chronicle: [],
           stallTurns: 0,
           worldTurn: 0,
+          reconciledRegistryVersion: CURRENT_REGISTRY_VERSION,
           nextStageId: stage.manifest.nextStageId,
           canon: structuredClone(stage.canon),
         },
@@ -71,6 +76,15 @@ function fixture(stage, eventId) {
 }
 
 const runtimeOf = save => save.世界.状态.剧本模组;
+
+function assertByteIdentical(actual, expected, message) {
+  if (actual === expected) return;
+  let offset = 0;
+  while (offset < actual.length && offset < expected.length && actual[offset] === expected[offset]) offset++;
+  const start = Math.max(0, offset - 80);
+  const end = offset + 120;
+  assert.fail(`${message}; first byte difference at ${offset}\nactual: ${actual.slice(start, end)}\nexpected: ${expected.slice(start, end)}`);
+}
 
 test('Qingyu and Yunlong reuse one deterministic core for different event structures', async () => {
   const { decideNpcActions } = await loadTs('../src/modules/scenarioMods/npcDecisionCore.ts');
@@ -86,17 +100,34 @@ test('Qingyu and Yunlong reuse one deterministic core for different event struct
       majorEvent: true,
     };
     const first = decideNpcActions(core, core.situation.initialValues, core.actors, context);
+    const reloadedCore = JSON.parse(JSON.stringify(core));
+    const reloadedContext = JSON.parse(JSON.stringify(context));
     const replay = decideNpcActions(
-      structuredClone(core),
-      structuredClone(core.situation.initialValues),
-      structuredClone(core.actors),
-      structuredClone(context),
+      reloadedCore,
+      JSON.parse(JSON.stringify(core.situation.initialValues)),
+      JSON.parse(JSON.stringify(core.actors)),
+      reloadedContext,
     );
-    assert.deepEqual(replay, first, `${item.eventId} must replay byte-for-byte`);
+    assertByteIdentical(JSON.stringify(replay), JSON.stringify(first), `${item.eventId} must replay byte-for-byte after JSON reload`);
     assert.deepEqual(Object.keys(core.situation.initialValues).sort(), item.situationKeys);
     assert.deepEqual(first.decisions.map(decision => decision.actionId), item.expectedActions);
     assert.equal(first.wakeAudit.every(audit => audit.awake), true);
     assert.equal(event.timeline.kind, item.timelineKind);
+  }
+});
+
+test('cross-book runtime remains byte-identical through JSON reload across multiple rounds', async () => {
+  const { advanceScenarioRuntime } = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  for (const item of cases) {
+    const stage = JSON.parse(await readFile(new URL(`../src/modules/scenarioMods/builtins/data/${item.file}`, import.meta.url), 'utf8'));
+    let left = fixture(stage, item.eventId);
+    let right = JSON.parse(JSON.stringify(left));
+    for (let round = 0; round < 3; round++) {
+      left = advanceScenarioRuntime(JSON.parse(JSON.stringify(left))).saveData;
+      right = advanceScenarioRuntime(JSON.parse(JSON.stringify(right))).saveData;
+      assertByteIdentical(JSON.stringify(right), JSON.stringify(left), `${item.eventId} runtime diverged after JSON round ${round + 1}`);
+      assert.equal(runtimeOf(left).actorEngine.decisionInputHash, runtimeOf(right).actorEngine.decisionInputHash);
+    }
   }
 });
 
@@ -122,6 +153,7 @@ test('emergent Qingyu event waits while Yunlong window reaches its declared offs
   for (let turn = 0; turn < 8; turn++) qingyu = advanceScenarioRuntime(qingyu).saveData;
   assert.equal(runtimeOf(qingyu).offscreenResolvedEventIds.includes(qingyuCase.eventId), false);
   assert.equal(runtimeOf(qingyu).completedEventIds.includes(qingyuCase.eventId), false);
+  assert.equal(runtimeOf(qingyu).actorEngine.entitlements.length, 0);
 
   const yunlongStage = JSON.parse(await readFile(new URL(`../src/modules/scenarioMods/builtins/data/${yunlongCase.file}`, import.meta.url), 'utf8'));
   let yunlong = fixture(yunlongStage, yunlongCase.eventId);

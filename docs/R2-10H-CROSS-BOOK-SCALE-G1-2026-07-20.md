@@ -36,14 +36,17 @@
 
 `tests/r2_10h_cross_book_scale.test.mjs` 覆盖：
 
-1. 两书 core 在 JSON 重载后逐字节重放；
-2. 两种局势白名单、行动组合和 wake audit 独立；
-3. 机会从本地决定触发，不依赖 LLM；
-4. 清羽 emergent 等待 8 回合仍不被强制结算；
-5. 云龙 window 到期只落 offscreen 状态、回执和时间线，零权限；
-6. 两份 Mod schema 全绿，prompt 保留各自未来禁区。
+1. 两书 core 经过真实 `JSON.stringify/parse` 往返后逐字节重放；
+2. 两书生产 runtime 连续三轮 JSON 往返，整份存档字节串与决策哈希均一致；
+3. 两种局势白名单、行动组合和 wake audit 独立；
+4. 机会从本地决定触发，不依赖 LLM；
+5. 清羽 emergent 等待 8 回合仍不被强制结算且零权限；
+6. 云龙 window 到期只落 offscreen 状态、回执和时间线，零权限；
+7. 两份 Mod schema 全绿，prompt 保留各自未来禁区。
 
 命令：`npm run test:g1:npc`。
+
+统一二审曾指出旧测试只用 `structuredClone + deepEqual`，不足以支持“JSON 重载后逐字节重放”的报告措辞；上述第 1、2、5 项是修复后的真实证据。收口详情见 `docs/R2-10I-SECOND-REVIEW-CLOSURE-2026-07-20.md`。
 
 ## 扩量边界
 

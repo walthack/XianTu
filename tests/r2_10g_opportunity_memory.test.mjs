@@ -67,6 +67,29 @@ test('opportunity cards surface from decisions, expire deterministically, and re
   assert.equal(runtimeOf(hidden).actorEngine.opportunityStates[FIRST_EDICT], undefined);
 });
 
+test('switching opportunity cards preserves the first tracking turn and tracked cards expire explicitly', async () => {
+  const stage = JSON.parse(await readFile(stageUrl, 'utf8'));
+  const { advanceScenarioRuntime, trackStoryOpportunity, TRACKED_OPPORTUNITY_MAX_TURNS } =
+    await loadTs('../src/modules/scenarioMods/runtime.ts');
+  const courtEntry = 'opportunity.lyg.s01_05.court_entry';
+  let save = advanceScenarioRuntime(fixture(stage)).saveData;
+  assert.equal(trackStoryOpportunity(save, FIRST_EDICT).ok, true);
+  const firstTrackedAt = runtimeOf(save).actorEngine.opportunityStates[FIRST_EDICT].trackedAtTurn;
+  while (runtimeOf(save).worldTurn < 4) save = advanceScenarioRuntime(save).saveData;
+  assert.equal(trackStoryOpportunity(save, courtEntry).ok, true);
+  assert.equal(trackStoryOpportunity(save, FIRST_EDICT).ok, true);
+  const engine = runtimeOf(save).actorEngine;
+  assert.equal(engine.opportunityStates[FIRST_EDICT].trackedAtTurn, firstTrackedAt);
+  assert.equal(engine.trackedAtTurn, firstTrackedAt);
+
+  while (runtimeOf(save).worldTurn - firstTrackedAt < TRACKED_OPPORTUNITY_MAX_TURNS) {
+    save = advanceScenarioRuntime(save).saveData;
+  }
+  assert.equal(runtimeOf(save).actorEngine.opportunityStates[FIRST_EDICT].status, 'expired');
+  assert.notEqual(runtimeOf(save).actorEngine.trackedOpportunityId, FIRST_EDICT);
+  assert.equal(trackStoryOpportunity(save, FIRST_EDICT).ok, false);
+});
+
 test('participated opportunity becomes durable NPC memory and changes a later utility score', async () => {
   const stage = JSON.parse(await readFile(stageUrl, 'utf8'));
   const { advanceScenarioRuntime, trackStoryOpportunity } =
