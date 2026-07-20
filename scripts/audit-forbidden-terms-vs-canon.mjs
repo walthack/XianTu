@@ -1,18 +1,16 @@
 #!/usr/bin/env node
 /**
- * 禁词审计：narrativeGuard.forbiddenTerms 不应把「本关已存在的正典实体」整个名字列为绝对禁词。
+ * 禁词审计：找出 narrativeGuard.forbiddenTerms 与本关正典实体同名的嫌疑项。
  *
- * 规则（2026-07-20 用户裁定，见 PROJECT-STATUS.md §2.3）：
- *   本关 canon.characters / canon.factions 里已存在的实体，其**名字**不是秘密——
- *   玩家在本关本来就认识它。需要保护的是关于它的某个**未揭露命题**，
- *   那应该写成 forbiddenAssociations（subjects × predicates），而不是拉黑名字。
+ * canon 成员关系只证明实体存在于世界真值，不证明视角人物已经知情。这里的命中
+ * 只能进入人工审计清单，不能自动删除禁词、自动裁定或作为 CI 失败条件。
  *
  * 把名字当绝对禁词的代价是实测过的：正文只要正常提到同伴或已知人物就整轮硬违规、
  * 退两稿、降级成罐头，玩家白白损失一个回合。
  *
  * 用法：
  *   node scripts/audit-forbidden-terms-vs-canon.mjs            列出嫌疑
- *   node scripts/audit-forbidden-terms-vs-canon.mjs --fail     有嫌疑则退出码 1（CI 用）
+ * 脚本始终以 0 退出；它是启发式报告，不是门禁。
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -34,7 +32,7 @@ for (const file of fs.readdirSync(dataDir).filter(name => name.endsWith('.json')
     for (const term of terms) {
       const character = characters.get(term);
       const faction = factions.get(term);
-      if (!character && !faction) continue;      // 非本关实体 → 合理的绝对禁词
+      if (!character && !faction) continue;
       findings.push({
         stage: mod.manifest?.id || file.replace(/\.json$/, ''),
         eventId: event.id,
@@ -47,15 +45,13 @@ for (const file of fs.readdirSync(dataDir).filter(name => name.endsWith('.json')
 }
 
 if (!findings.length) {
-  console.log('✅ 未发现把本关已存在正典实体列为绝对禁词的情况。');
+  console.log('✅ 本次启发式审计未发现“禁词与本关正典实体同名”的嫌疑项。');
   process.exit(0);
 }
 
-console.log(`⚠️  ${findings.length} 处禁词命中本关已存在的正典实体：\n`);
+console.log(`⚠️  ${findings.length} 处禁词与本关正典实体同名（仅为人工复核嫌疑）：\n`);
 for (const item of findings) {
   console.log(`  ${item.stage} / ${item.eventId}`);
   console.log(`    禁词「${item.term}」已是 ${item.kind}：${item.summary}…`);
-  console.log('    → 名字不该拉黑；把要保护的未揭露命题改写成 forbiddenAssociations。\n');
+  console.log('    → 请按主角记忆、已亲历揭露或开场明示核对；canon 成员关系本身不能证明玩家知情。\n');
 }
-
-if (process.argv.includes('--fail')) process.exit(1);

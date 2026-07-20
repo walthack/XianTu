@@ -1,38 +1,100 @@
 import assert from 'node:assert/strict';
+import { spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 
+import { loadTs } from './loadTs.mjs';
+
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const dataDir = path.join(root, 'src/modules/scenarioMods/builtins/data');
+const stagePath = path.join(root, 'src/modules/scenarioMods/builtins/data/lyg.dingtao_beijing.json');
 
-// 规则（PROJECT-STATUS.md §2.3）：本关 canon 里已存在的实体，其名字不是秘密——玩家本来就认识它。
-// 要保护的未揭露命题应写成 forbiddenAssociations（subjects × predicates），而不是把名字拉黑。
-// 真机代价实测：正文正常提到同伴或已知人物即整轮硬违规、退两稿、降级成罐头。
-test('forbidden terms never blacklist an entity that already exists in the same stage canon', () => {
-  const offenders = [];
+function eventCore(stage, eventId) {
+  const event = stage.scenario.events.find(item => item.id === eventId);
+  assert.ok(event?.worldActor?.decisionCore, `missing decision core for ${eventId}`);
+  return event.worldActor.decisionCore;
+}
 
-  for (const file of fs.readdirSync(dataDir).filter(name => name.endsWith('.json')).sort()) {
-    const mod = JSON.parse(fs.readFileSync(path.join(dataDir, file), 'utf8'));
-    const known = new Set([
-      ...(mod.canon?.characters || []).map(item => item.name),
-      ...(mod.canon?.factions || []).map(item => item.name),
-    ].filter(Boolean));
+function guardPrompt(guard) {
+  return `renderGuard.forbiddenTerms=${(guard.forbiddenTerms || []).join('|')}；`
+    + `renderGuard.forbiddenAssociations=${JSON.stringify(guard.forbiddenAssociations || [])}；`
+    + `renderGuard.rejectConcreteQuantities=${guard.rejectConcreteQuantities === true}；`
+    + `renderGuard.allowUnverifiedQuantities=${guard.allowUnverifiedQuantities === true}。`;
+}
 
-    for (const event of mod.scenario?.events || []) {
-      const terms = event.worldActor?.decisionCore?.narrativeGuard?.forbiddenTerms;
-      if (!Array.isArray(terms)) continue;
-      for (const term of terms) {
-        if (known.has(term)) offenders.push(`${event.id} → 「${term}」`);
-      }
+test('adjudicated known names are allowed while their unrevealed propositions remain guarded', async () => {
+  const stage = JSON.parse(fs.readFileSync(stagePath, 'utf8'));
+  const { validateNarrativePerformance } = await loadTs('../src/modules/scenarioMods/narrativePerformanceGuard.ts');
+  const expectations = [
+    ['lyg.event.s01_05', ['阮香凝', '吕冀']],
+    ['lyg.event.s01_06', ['阮香凝', '吕冀']],
+    ['lyg.event.s01_07', ['阮香凝', '黑魔海']],
+  ];
+
+  for (const [eventId, allowedNames] of expectations) {
+    const guard = eventCore(stage, eventId).narrativeGuard;
+    for (const name of allowedNames) {
+      assert.equal(guard.forbiddenTerms.includes(name), false, `${eventId} must not blacklist ${name}`);
+      assert.equal(
+        validateNarrativePerformance(`${name}正在殿外等候消息。`, '继续', guardPrompt(guard)).valid,
+        true,
+        `${eventId} should allow an ordinary mention of ${name}`,
+      );
     }
+    assert.equal(
+      validateNarrativePerformance('阮香凝就是黑魔海的凝玉姬。', '继续', guardPrompt(guard)).valid,
+      false,
+      `${eventId} must still block Ruan's unrevealed identity`,
+    );
   }
 
-  assert.deepEqual(
-    offenders,
-    [],
-    '以下禁词命中本关已存在的正典实体，应改用 forbiddenAssociations：\n'
-      + offenders.map(item => `  - ${item}`).join('\n'),
+  const s05Guard = eventCore(stage, 'lyg.event.s01_05').narrativeGuard;
+  assert.equal(
+    validateNarrativePerformance('吕冀理应为旧事接受问罪。', '继续', guardPrompt(s05Guard)).valid,
+    true,
+    'an opinion about accountability is not the protected future outcome',
   );
+  assert.equal(
+    validateNarrativePerformance('宫中已经决定赐死吕冀。', '继续', guardPrompt(s05Guard)).valid,
+    false,
+    'the unrevealed execution outcome remains protected',
+  );
+});
+
+test('canon-name audit is advisory even when invoked with a legacy --fail argument', () => {
+  const result = spawnSync(process.execPath, [
+    path.join(root, 'scripts/audit-forbidden-terms-vs-canon.mjs'),
+    '--fail',
+  ], { encoding: 'utf8' });
+  assert.equal(result.status, 0, result.stderr || result.stdout);
+});
+
+test('minimal player knowledge ledger survives initialization and is projected into the render boundary', async () => {
+  const raw = JSON.parse(fs.readFileSync(stagePath, 'utf8'));
+  const { parseScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
+  const {
+    applyStrictScenarioInitializationToSave,
+    buildStrictScenarioInitialization,
+  } = await loadTs('../src/modules/scenarioMods/strictInitializer.ts');
+  const { advanceScenarioRuntime } = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  const { buildScenarioStoryPrompt } = await loadTs('../src/modules/scenarioMods/storyContext.ts');
+  const mod = parseScenarioMod(raw);
+  const initialized = applyStrictScenarioInitializationToSave({
+    角色: { 位置: { 描述: '长秋宫外' } },
+    世界: { 信息: {}, 状态: {} },
+    系统: { 扩展: {} },
+  }, buildStrictScenarioInitialization(mod, '2026-07-21T00:00:00.000Z'));
+  const save = advanceScenarioRuntime(initialized).saveData;
+  const runtime = save.世界.状态.剧本模组;
+
+  assert.equal(runtime.playerKnowledge['knowledge.player.entity.ruan_xiang_ning'].status, 'confirmed');
+  assert.equal(runtime.playerKnowledge['knowledge.player.entity.lv_ji'].sourceEventId, 'lyg.event.s01_04');
+  assert.equal(runtime.playerKnowledge['knowledge.player.entity.hei_mo_hai'].disclosureScope, 'player');
+
+  const prompt = buildScenarioStoryPrompt(save);
+  assert.match(prompt, /玩家知识账本=.*阮香凝\.known\[confirmed\/player@0\]/);
+  assert.match(prompt, /黑魔海\.known\[confirmed\/player@0\]/);
+  assert.doesNotMatch(prompt, /renderGuard\.forbiddenTerms=[^；]*(?:阮香凝|吕冀|黑魔海)/);
+  assert.match(prompt, /renderGuard\.forbiddenAssociations=.*阮香凝.*凝玉姬/);
 });

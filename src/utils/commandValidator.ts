@@ -122,6 +122,7 @@ const FORBIDDEN_PATHS: string[] = [
   '世界.状态.剧本模组.worldPush',
   '世界.状态.剧本模组.actorEngine',
   '世界.状态.剧本模组.eventTimeline',
+  '世界.状态.剧本模组.playerKnowledge',
   '世界.状态.剧本模组.offscreenResolvedEventIds',
   '世界.状态.剧本模组.chronicle',
   // 世界线分歧账本由本地对账/IF 引擎独占，LLM 不得伪造或改写历史。

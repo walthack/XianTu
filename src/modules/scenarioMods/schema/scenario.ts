@@ -48,6 +48,23 @@ export interface ScenarioModCreationPreset {
   locked?: boolean;
 }
 
+export type ScenarioPlayerKnowledgeStatus = 'confirmed' | 'rumor';
+export type ScenarioPlayerKnowledgeScope = 'player' | 'public';
+
+/** 玩家认知账本的最小事实；与世界真值、NPC knowledgeFacts 分开存储。 */
+export interface ScenarioPlayerKnowledgeFact {
+  factId: string;
+  subjectId: string;
+  predicate: string;
+  objectId?: string;
+  status: ScenarioPlayerKnowledgeStatus;
+  disclosureScope: ScenarioPlayerKnowledgeScope;
+  learnedAtTurn: number;
+  sourceEventId?: string;
+}
+
+export type ScenarioInitialPlayerKnowledgeFact = Omit<ScenarioPlayerKnowledgeFact, 'learnedAtTurn'>;
+
 export interface ScenarioModEvent {
   id: string;
   name: string;
@@ -359,6 +376,8 @@ export interface ScenarioModChapter {
 export interface ScenarioModScenario {
   opening: ScenarioModOpening;
   initialFlags?: Record<string, ScenarioFlagValue>;
+  /** 仅为有明确证据的纵切显式声明；旧事件不要求批量回填。 */
+  initialPlayerKnowledge?: ScenarioInitialPlayerKnowledgeFact[];
   chapters?: ScenarioModChapter[];
   events?: ScenarioModEvent[];
 }

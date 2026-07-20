@@ -279,6 +279,9 @@ export function transitionToNextScenarioStage(saveData: SaveData, modsOverride?:
   // done/章节进度仍按新关初始化，只继承分支、人物状态与 void 审计标记。
   const divergenceSnapshot = structuredClone(Array.isArray(rt.divergences) ? rt.divergences : []);
   const chronicleSnapshot = structuredClone(Array.isArray(rt.chronicle) ? rt.chronicle : []);
+  const playerKnowledgeSnapshot = structuredClone(
+    rt.playerKnowledge && typeof rt.playerKnowledge === 'object' ? rt.playerKnowledge : {},
+  );
   if (!chronicleSnapshot.some((item: any) => item?.id === `chronicle.stage.${rt.modId}.${targetId}`)) {
     chronicleSnapshot.push({
       id: `chronicle.stage.${rt.modId}.${targetId}`,
@@ -308,6 +311,10 @@ export function transitionToNextScenarioStage(saveData: SaveData, modsOverride?:
   newRuntime.reconciledRegistryVersion = rt.reconciledRegistryVersion;
   if (divergenceSnapshot.length) newRuntime.divergences = divergenceSnapshot;
   if (chronicleSnapshot.length) newRuntime.chronicle = chronicleSnapshot;
+  newRuntime.playerKnowledge = {
+    ...(newRuntime.playerKnowledge || {}),
+    ...playerKnowledgeSnapshot,
+  };
   Object.assign(newRuntime.flags, inheritedWorldlineFlags);
   // 立即推进一轮：激活新关首章/首批事件
   const advanced = advanceScenarioRuntime(next);

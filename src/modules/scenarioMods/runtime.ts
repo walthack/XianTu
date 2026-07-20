@@ -8,6 +8,7 @@ import type {
   ScenarioModEvent,
   ScenarioNpcDecisionActor,
   ScenarioNpcMemoryEpisode,
+  ScenarioPlayerKnowledgeFact,
   ScenarioStoryOpportunity,
 } from './schema';
 import {
@@ -32,6 +33,7 @@ export interface ScenarioProgressState {
   completedChapterIds: string[];
   activeEventIds: string[];
   completedEventIds: string[];
+  playerKnowledge?: Record<string, ScenarioPlayerKnowledgeFact>;
 }
 
 export interface ScenarioRuntimeTransition {
@@ -162,6 +164,13 @@ export interface RuntimeState extends ScenarioProgressState {
   offscreenResolvedEventIds?: string[];
   /** 玩家可回看的战役编年史；只记已结算事实，跨关继承。 */
   chronicle?: ScenarioChronicleEntry[];
+  /** 玩家认知与世界真值、NPC 知识分账；旧档可缺省。 */
+  playerKnowledge?: Record<string, ScenarioPlayerKnowledgeFact>;
+  canon?: {
+    characters?: Array<{ id: string; name: string; profile?: { memories?: string[] } }>;
+    factions?: Array<{ id: string; name: string }>;
+  };
+  opening?: { text: string; playerCharacterId?: string };
   /** 旧档 reconcile 版本戳：与 registry 版本一致则跳过（正典更新后旧档第一回合自动对齐） */
   reconciledRegistryVersion?: string;
   /** R2-9 可复算偏离信号；只驱动提示/UI，不直接裁定剧情事实。 */
@@ -181,6 +190,15 @@ export interface RuntimeState extends ScenarioProgressState {
     branchSummary: string;
     requestedAtTurn: number;
   };
+}
+
+export function createInitialPlayerKnowledge(
+  mod: ScenarioMod,
+): Record<string, ScenarioPlayerKnowledgeFact> {
+  return Object.fromEntries((mod.scenario.initialPlayerKnowledge || []).map(fact => [
+    fact.factId,
+    { ...structuredClone(fact), learnedAtTurn: 0 },
+  ]));
 }
 
 function ensureActorEngine(runtime: RuntimeState): ScenarioActorEngineState {
@@ -898,6 +916,43 @@ function eventIsKnownToPlayer(runtime: RuntimeState, eventId: string): boolean {
   return eventTimelineState(runtime, eventId)?.playerLearnedAtTurn !== undefined;
 }
 
+/**
+ * 第一版只从强证据建立“认识该实体”事实：主角档案记忆、开场明示、已亲历且玩家已获知的事件。
+ * canon 列表只作为名字词典，不因“实体存在”自动授予知识；关系网络完全不参与。
+ */
+function syncPlayerKnowledgeLedger(runtime: RuntimeState): void {
+  const ledger = runtime.playerKnowledge ||= {};
+  const characters = runtime.canon?.characters || [];
+  const factions = runtime.canon?.factions || [];
+  const player = characters.find(item => item.id === runtime.opening?.playerCharacterId);
+  const sources: Array<{ text: string; turn: number; sourceEventId?: string }> = [
+    ...((player?.profile?.memories || []).map(text => ({ text, turn: 0 }))),
+    ...(runtime.opening?.text ? [{ text: runtime.opening.text, turn: 0 }] : []),
+  ];
+  for (const event of runtime.events) {
+    if (!runtime.completedEventIds.includes(event.id) || !eventIsKnownToPlayer(runtime, event.id)) continue;
+    sources.push({
+      text: [event.name, event.description, event.axisBeat, event.objective].filter(Boolean).join('；'),
+      turn: eventTimelineState(runtime, event.id)?.playerLearnedAtTurn ?? 0,
+      sourceEventId: event.id,
+    });
+  }
+  for (const entity of [...characters, ...factions]) {
+    const source = sources.find(item => item.text.includes(entity.name));
+    if (!source) continue;
+    const factId = `knowledge.player.entity.${entity.id}`;
+    ledger[factId] ||= {
+      factId,
+      subjectId: entity.id,
+      predicate: 'known',
+      status: 'confirmed',
+      disclosureScope: 'player',
+      learnedAtTurn: source.turn,
+      ...(source.sourceEventId ? { sourceEventId: source.sourceEventId } : {}),
+    };
+  }
+}
+
 function syncEventTimelineEligibility(saveData: SaveData, runtime: RuntimeState): void {
   const now = Math.max(0, Number(runtime.worldTurn) || 0);
   const rail = getCanonRailProfile(runtime);
@@ -989,6 +1044,17 @@ function refreshEventTimelineRevelations(
       );
     if (learned && state.playerLearnedAtTurn === undefined) {
       state.playerLearnedAtTurn = now;
+      const factId = `knowledge.player.event.${event.id}`;
+      runtime.playerKnowledge ||= {};
+      runtime.playerKnowledge[factId] ||= {
+        factId,
+        subjectId: event.id,
+        predicate: 'occurred',
+        status: 'confirmed',
+        disclosureScope: state.publiclyRevealedAtTurn !== undefined ? 'public' : 'player',
+        learnedAtTurn: now,
+        sourceEventId: event.id,
+      };
       transitions.push({ type: 'event_revealed', id: event.id });
     }
   }
@@ -1188,6 +1254,7 @@ export function createScenarioProgress(mod: ScenarioMod): ScenarioProgressState 
     completedChapterIds: [],
     activeEventIds: [],
     completedEventIds,
+    playerKnowledge: createInitialPlayerKnowledge(mod),
   };
 }
 
@@ -1367,11 +1434,15 @@ export function advanceScenarioRuntime(saveData: SaveData): {
   runtime.eventTimeline = runtime.eventTimeline && typeof runtime.eventTimeline === 'object'
     ? runtime.eventTimeline
     : {};
+  runtime.playerKnowledge = runtime.playerKnowledge && typeof runtime.playerKnowledge === 'object'
+    ? runtime.playerKnowledge
+    : {};
   const transitions: ScenarioRuntimeTransition[] = [];
   const railProfile = getCanonRailProfile(runtime);
 
   syncEventTimelineEligibility(next, runtime);
   refreshEventTimelineRevelations(runtime, transitions);
+  syncPlayerKnowledgeLedger(runtime);
   backfillCompletedEventChronicle(runtime);
   resolveOffscreenWorldEvents(runtime, transitions);
 

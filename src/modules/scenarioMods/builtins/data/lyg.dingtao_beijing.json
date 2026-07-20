@@ -4588,6 +4588,30 @@
       "event.debut_qiyuxian.done": false,
       "event.debut_jiawenhe.done": false
     },
+    "initialPlayerKnowledge": [
+      {
+        "factId": "knowledge.player.entity.ruan_xiang_ning",
+        "subjectId": "liuchao.character.ruan_xiang_ning",
+        "predicate": "known",
+        "status": "confirmed",
+        "disclosureScope": "player"
+      },
+      {
+        "factId": "knowledge.player.entity.lv_ji",
+        "subjectId": "liuchao.character.lv_ji",
+        "predicate": "known",
+        "status": "confirmed",
+        "disclosureScope": "player",
+        "sourceEventId": "lyg.event.s01_04"
+      },
+      {
+        "factId": "knowledge.player.entity.hei_mo_hai",
+        "subjectId": "liuchao.faction.hei_mo_hai",
+        "predicate": "known",
+        "status": "confirmed",
+        "disclosureScope": "player"
+      }
+    ],
     "events": [
       {
         "id": "lyg.event.s01_01",
@@ -5772,11 +5796,21 @@
                   "predicates": [
                     "赐死",
                     "伏诛",
-                    "下狱",
-                    "入罪",
-                    "问罪",
-                    "处死",
-                    "抄家"
+                    "处死"
+                  ],
+                  "maxDistance": 48
+                },
+                {
+                  "subjects": [
+                    "阮香凝"
+                  ],
+                  "predicates": [
+                    "凝玉姬",
+                    "黑魔海玉姬",
+                    "黑魔海高层",
+                    "潜伏暗桩",
+                    "隶属黑魔海",
+                    "出身黑魔海"
                   ],
                   "maxDistance": 48
                 }
@@ -6597,11 +6631,21 @@
                   "predicates": [
                     "赐死",
                     "伏诛",
-                    "下狱",
-                    "入罪",
-                    "问罪",
-                    "处死",
-                    "抄家"
+                    "处死"
+                  ],
+                  "maxDistance": 48
+                },
+                {
+                  "subjects": [
+                    "阮香凝"
+                  ],
+                  "predicates": [
+                    "凝玉姬",
+                    "黑魔海玉姬",
+                    "黑魔海高层",
+                    "潜伏暗桩",
+                    "隶属黑魔海",
+                    "出身黑魔海"
                   ],
                   "maxDistance": 48
                 }
@@ -7262,6 +7306,22 @@
               "forbiddenTerms": [
                 "盛姬",
                 "吕冀赐死"
+              ],
+              "forbiddenAssociations": [
+                {
+                  "subjects": [
+                    "阮香凝"
+                  ],
+                  "predicates": [
+                    "凝玉姬",
+                    "黑魔海玉姬",
+                    "黑魔海高层",
+                    "潜伏暗桩",
+                    "隶属黑魔海",
+                    "出身黑魔海"
+                  ],
+                  "maxDistance": 48
+                }
               ],
               "rejectConcreteQuantities": true,
               "allowUnverifiedQuantities": true

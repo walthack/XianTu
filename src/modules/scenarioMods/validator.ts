@@ -187,6 +187,34 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
       validateIdArray(opening.featuredCharacterIds, 'scenario.opening.featuredCharacterIds', add);
     }
     validateFlags(scenario.initialFlags, 'scenario.initialFlags', add);
+    if (scenario.initialPlayerKnowledge !== undefined) {
+      if (!Array.isArray(scenario.initialPlayerKnowledge)) {
+        add('scenario.initialPlayerKnowledge', 'invalid_type', 'initialPlayerKnowledge must be an array.');
+      } else {
+        const factIds = new Set<string>();
+        scenario.initialPlayerKnowledge.forEach((rawFact, index) => {
+          const path = `scenario.initialPlayerKnowledge[${index}]`;
+          if (!isRecord(rawFact)) {
+            add(path, 'invalid_type', `${path} must be an object.`);
+            return;
+          }
+          if (validateId(rawFact.factId, `${path}.factId`, add)) {
+            if (factIds.has(rawFact.factId)) add(`${path}.factId`, 'duplicate_id', `Duplicate player knowledge fact "${rawFact.factId}".`);
+            factIds.add(rawFact.factId);
+          }
+          validateId(rawFact.subjectId, `${path}.subjectId`, add);
+          requireString(rawFact.predicate, `${path}.predicate`, add);
+          optionalId(rawFact.objectId, `${path}.objectId`, add);
+          optionalId(rawFact.sourceEventId, `${path}.sourceEventId`, add);
+          if (rawFact.status !== 'confirmed' && rawFact.status !== 'rumor') {
+            add(`${path}.status`, 'invalid_enum', 'status must be confirmed or rumor.');
+          }
+          if (rawFact.disclosureScope !== 'player' && rawFact.disclosureScope !== 'public') {
+            add(`${path}.disclosureScope`, 'invalid_enum', 'disclosureScope must be player or public.');
+          }
+        });
+      }
+    }
     validateEntityArray(scenario.events, 'scenario.events', eventIds, add, entity => {
       requireString(entity.description, `${entity.__path}.description`, add);
       optionalStringOrNull(entity.axisId, `${entity.__path}.axisId`, add);
@@ -556,6 +584,12 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
       checkRef(scenario.opening.playerCharacterId, characterIds, 'scenario.opening.playerCharacterId', 'character', add);
       checkRefs(scenario.opening.featuredCharacterIds, characterIds, 'scenario.opening.featuredCharacterIds', 'character', add);
     }
+    forEachRecord(scenario.initialPlayerKnowledge, 'scenario.initialPlayerKnowledge', (fact, path) => {
+      const subjectIds = new Set([...characterIds, ...factionIds, ...eventIds]);
+      checkRef(fact.subjectId, subjectIds, `${path}.subjectId`, 'knowledge subject', add);
+      checkRef(fact.objectId, new Set([...characterIds, ...factionIds]), `${path}.objectId`, 'knowledge object', add);
+      checkRef(fact.sourceEventId, eventIds, `${path}.sourceEventId`, 'event', add);
+    });
     forEachRecord(scenario.events, 'scenario.events', (entity, path) => {
       checkRefs(entity.relatedCharacterIds, characterIds, `${path}.relatedCharacterIds`, 'character', add);
       checkRefs(entity.relatedFactionIds, factionIds, `${path}.relatedFactionIds`, 'faction', add);
