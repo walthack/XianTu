@@ -28,6 +28,7 @@
   "mod:validate": "node scripts/validate-scenario-mod.mjs",
   "if:validate": "node scripts/validate-if-branches.mjs",
   "canon:validate": "node scripts/validate-canon-decisions.mjs",
+  "canon:forbidden-audit": "node scripts/audit-forbidden-terms-vs-canon.mjs",
   "canon:audit-cards": "node scripts/audit-load-bearing-character-cards.mjs --fail-on-stage-gap",
   "lint": "eslint . --ext .ts,.vue --fix",
   "lint:check": "eslint . --ext .ts,.vue",

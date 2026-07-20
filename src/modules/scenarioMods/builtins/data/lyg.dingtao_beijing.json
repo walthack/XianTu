@@ -5735,9 +5735,7 @@
             "maxVisibleActions": 3,
             "narrativeGuard": {
               "forbiddenTerms": [
-                "阮香凝",
                 "盛姬",
-                "吕冀",
                 "暗道",
                 "伏兵",
                 "暗桩",
@@ -5764,6 +5762,21 @@
                     "死亡",
                     "被杀",
                     "永久失能"
+                  ],
+                  "maxDistance": 48
+                },
+                {
+                  "subjects": [
+                    "吕冀"
+                  ],
+                  "predicates": [
+                    "赐死",
+                    "伏诛",
+                    "下狱",
+                    "入罪",
+                    "问罪",
+                    "处死",
+                    "抄家"
                   ],
                   "maxDistance": 48
                 }
@@ -6571,13 +6584,28 @@
             "maxVisibleActions": 2,
             "narrativeGuard": {
               "forbiddenTerms": [
-                "阮香凝",
                 "盛姬",
-                "董卓之死",
-                "吕冀"
+                "董卓之死"
               ],
               "rejectConcreteQuantities": true,
-              "allowUnverifiedQuantities": true
+              "allowUnverifiedQuantities": true,
+              "forbiddenAssociations": [
+                {
+                  "subjects": [
+                    "吕冀"
+                  ],
+                  "predicates": [
+                    "赐死",
+                    "伏诛",
+                    "下狱",
+                    "入罪",
+                    "问罪",
+                    "处死",
+                    "抄家"
+                  ],
+                  "maxDistance": 48
+                }
+              ]
             },
             "knowledgeFacts": {
               "knowledge.lyg.s01_06.01": {
@@ -7232,9 +7260,7 @@
             "maxVisibleActions": 2,
             "narrativeGuard": {
               "forbiddenTerms": [
-                "阮香凝",
                 "盛姬",
-                "黑魔海",
                 "吕冀赐死"
               ],
               "rejectConcreteQuantities": true,
