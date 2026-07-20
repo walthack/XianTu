@@ -424,7 +424,13 @@ const actorView = computed(() => {
   return {
     pressure: String(contract?.pressure?.summary || ''),
     decisions,
-    opportunities: Array.isArray(contract?.opportunities) ? contract.opportunities.slice(0, 2) : [],
+    opportunities: Array.isArray(contract?.opportunities)
+      ? contract.opportunities
+        .filter((item: any) =>
+          !engine.opportunityStates
+          || ['available', 'tracked'].includes(String(engine.opportunityStates[item.id]?.status || '')))
+        .slice(0, 2)
+      : [],
     trackedId: engine.anchorEventId === anchor?.id ? String(engine.trackedOpportunityId || '') : '',
     receipts,
     entitlements,

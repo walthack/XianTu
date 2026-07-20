@@ -31,6 +31,7 @@ export interface NpcCandidateScore {
     motiveFit: number;
     factionGoal: number;
     relationshipMotive: number;
+    memoryMotive: number;
     expectedBenefit: number;
     situationFit: number;
     escalationPressure: number;
@@ -48,6 +49,7 @@ export interface NpcDecisionReceipt {
   knownFactIds: string[];
   knownFacts: string[];
   attitudes: Array<{ targetCharacterId: string; dimension: string; value: number }>;
+  memories: Array<{ id: string; summary: string; salience: number }>;
   mustNotInvent: string[];
   visibleSignal: string;
   offscreenAction: string;
@@ -114,7 +116,7 @@ export interface NpcDecisionEffectApplication {
   rejectedEffects: RejectedNpcDecisionEffect[];
 }
 
-export const NPC_ACTION_LIBRARY_VERSION = 'r2-10f.1';
+export const NPC_ACTION_LIBRARY_VERSION = 'r2-10g.1';
 
 // 通用行动词表保持小而可复用；stage 只绑定其中适用项及白名单 effects。
 // 32 项满足首批 30–50 的规格边界，未绑定的行动不会进入该 stage 候选池。
@@ -240,6 +242,18 @@ function bindingRelationshipFit(
   }, 0);
 }
 
+function bindingMemoryFit(
+  actor: ScenarioNpcDecisionActor,
+  binding: ScenarioNpcDecisionActionBinding,
+): number {
+  return (binding.utility?.memories || []).reduce((sum, item) => {
+    const salience = (actor.memories || [])
+      .filter(memory => memory.tags.includes(item.tag))
+      .reduce((max, memory) => Math.max(max, memory.salience), 0);
+    return sum + (salience / 100) * item.weight;
+  }, 0);
+}
+
 function resourceCost(binding: ScenarioNpcDecisionActionBinding): number {
   return RESOURCES.reduce((sum, key) => sum + Math.max(0, binding.costs?.[key] || 0), 0);
 }
@@ -279,7 +293,7 @@ function scoreCandidate(
   const template = ACTIONS.get(binding.actionId);
   const empty = {
     urgency: 0, personalityFit: 0, motiveFit: 0, factionGoal: 0,
-    relationshipMotive: 0, expectedBenefit: 0, situationFit: 0,
+    relationshipMotive: 0, memoryMotive: 0, expectedBenefit: 0, situationFit: 0,
     escalationPressure: 0, resourceCost: 0, failureRisk: 0,
   };
   if (!template) return { actionId: binding.actionId, label: binding.label, eligible: false, eliminatedReason: 'unknown_action', breakdown: empty };
@@ -303,6 +317,7 @@ function scoreCandidate(
     motiveFit: dot(actor.motives, template.motives),
     factionGoal: binding.utility?.factionGoal || 0,
     relationshipMotive: relationshipFit(actor, template.relationship) + bindingRelationshipFit(actor, binding),
+    memoryMotive: bindingMemoryFit(actor, binding),
     expectedBenefit: template.baseBenefit + (binding.utility?.expectedBenefit || 0),
     situationFit: dot(normalizedSituation, binding.utility?.situation),
     escalationPressure: agendaProgress * (binding.utility?.escalation || 0),
@@ -310,7 +325,7 @@ function scoreCandidate(
     failureRisk: template.baseRisk + (binding.utility?.failureRisk || 0),
   };
   const score = breakdown.urgency + breakdown.personalityFit + breakdown.motiveFit
-    + breakdown.factionGoal + breakdown.relationshipMotive + breakdown.expectedBenefit
+    + breakdown.factionGoal + breakdown.relationshipMotive + breakdown.memoryMotive + breakdown.expectedBenefit
     + breakdown.situationFit + breakdown.escalationPressure
     - breakdown.resourceCost - breakdown.failureRisk;
   return { actionId: binding.actionId, label: binding.label, eligible: true, score, breakdown };
@@ -330,6 +345,7 @@ function receiptFor(
   ];
   const seenAttitudes = new Set<string>();
   const appliesEffects = phase === 'instant' || phase === 'started';
+  const relevantMemoryTags = new Set((binding.utility?.memories || []).map(item => item.tag));
   return {
     id: `npc-decision.${actor.characterId}.${binding.actionId}`,
     actorId: actor.characterId,
@@ -355,6 +371,11 @@ function receiptFor(
         dimension: item.dimension,
         value: actor.relationships[item.targetCharacterId]?.[item.dimension] || 0,
       })),
+    memories: (actor.memories || [])
+      .filter(memory => memory.tags.some(tag => relevantMemoryTags.has(tag)))
+      .sort((a, b) => b.salience - a.salience || b.occurredAtTurn - a.occurredAtTurn)
+      .slice(0, 3)
+      .map(memory => ({ id: memory.id, summary: memory.summary, salience: memory.salience })),
     mustNotInvent: [...binding.mustNotInvent],
     visibleSignal: binding.visibleSignal,
     offscreenAction: binding.offscreenAction,

@@ -334,6 +334,52 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
               requireString(opportunity[key], `${opportunityPath}.${key}`, add);
             }
             validateId(opportunity.rewardKey, `${opportunityPath}.rewardKey`, add);
+            if (
+              opportunity.expiresAfterTurns !== undefined
+              && (
+                typeof opportunity.expiresAfterTurns !== 'number'
+                || !Number.isInteger(opportunity.expiresAfterTurns)
+                || opportunity.expiresAfterTurns < 1
+                || opportunity.expiresAfterTurns > 20
+              )
+            ) {
+              add(`${opportunityPath}.expiresAfterTurns`, 'invalid_range', 'expiresAfterTurns must be an integer from 1 to 20.');
+            }
+            if (opportunity.trigger !== undefined && !isRecord(opportunity.trigger)) {
+              add(`${opportunityPath}.trigger`, 'invalid_type', 'opportunity.trigger must be an object.');
+            } else if (isRecord(opportunity.trigger)) {
+              const trigger = opportunity.trigger;
+              validateIdArray(trigger.actorIds, `${opportunityPath}.trigger.actorIds`, add);
+              for (const actorId of Array.isArray(trigger.actorIds) ? trigger.actorIds : []) {
+                if (typeof actorId === 'string' && !characterIds.has(actorId)) {
+                  add(`${opportunityPath}.trigger.actorIds`, 'unknown_reference', `Unknown opportunity actor "${actorId}".`);
+                }
+              }
+              validateIdArray(trigger.actionIds, `${opportunityPath}.trigger.actionIds`, add);
+              const knownActions = new Set(NPC_ACTION_LIBRARY.map(item => item.id));
+              for (const actionId of Array.isArray(trigger.actionIds) ? trigger.actionIds : []) {
+                if (typeof actionId === 'string' && !knownActions.has(actionId)) {
+                  add(`${opportunityPath}.trigger.actionIds`, 'unknown_action', `Unknown opportunity action "${actionId}".`);
+                }
+              }
+              validateIdArray(trigger.knowledgeFactIds, `${opportunityPath}.trigger.knowledgeFactIds`, add);
+              const worldActor = entity.worldActor as Record<string, unknown>;
+              const decisionCore = worldActor.decisionCore;
+              const facts = isRecord(decisionCore)
+                && isRecord(decisionCore.knowledgeFacts)
+                ? new Set(Object.keys(decisionCore.knowledgeFacts))
+                : new Set<string>();
+              for (const factId of Array.isArray(trigger.knowledgeFactIds) ? trigger.knowledgeFactIds : []) {
+                if (typeof factId === 'string' && !facts.has(factId)) {
+                  add(`${opportunityPath}.trigger.knowledgeFactIds`, 'unknown_knowledge', `Unknown opportunity knowledge "${factId}".`);
+                }
+              }
+              if (!['actorIds', 'actionIds', 'knowledgeFactIds'].some(key =>
+                Array.isArray(trigger[key]) && (trigger[key] as unknown[]).length > 0
+              )) {
+                add(`${opportunityPath}.trigger`, 'empty_trigger', 'Opportunity trigger needs at least one actor, action, or knowledge fact.');
+              }
+            }
           });
         }
       }
@@ -769,6 +815,10 @@ function validateNpcDecisionCore(
         }
         requireString(relation.dimension, `${relationPath}.dimension`, add);
         optionalNumber(relation.weight, `${relationPath}.weight`, add);
+      });
+      forEachRecord(binding.utility.memories, `${bindingPath}.utility.memories`, (memory, memoryPath) => {
+        requireString(memory.tag, `${memoryPath}.tag`, add);
+        optionalNumber(memory.weight, `${memoryPath}.weight`, add);
       });
     }
     if (binding.effects !== undefined && !isRecord(binding.effects)) {

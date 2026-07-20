@@ -5830,7 +5830,16 @@
               "futureHint": "以后重大决策中，贾文和可能主动向你递交可交换的判断。",
               "actionText": "我追踪“新帝第一道诏令”：前往昭阳宫，在安民、选材、定都三项草案中明确优先保下一项，并亲自承担站队后果。",
               "rewardKey": "permission.lyg.jia_wenhe.exchange_judgement",
-              "rewardLabel": "贾文和·可交换判断与首轮谋议入口"
+              "rewardLabel": "贾文和·可交换判断与首轮谋议入口",
+              "trigger": {
+                "actorIds": [
+                  "liuchao.character.jia_wenhe"
+                ],
+                "actionIds": [
+                  "prepare_fallback_route"
+                ]
+              },
+              "expiresAfterTurns": 6
             },
             {
               "id": "opportunity.lyg.s01_05.court_entry",
@@ -5846,7 +5855,16 @@
               "futureHint": "新朝危机时，朝廷或凉州军会更愿意回应你的协调。",
               "actionText": "我追踪“让朝廷进入昭阳宫”：向霍子孟证明定陶王安全，并协调一条北军与凉州军都不拔刀的入宫路线。",
               "rewardKey": "permission.lyg.huo_zimeng.trusted_intelligence",
-              "rewardLabel": "霍子孟·可信军情交换与政治背书"
+              "rewardLabel": "霍子孟·可信军情交换与政治背书",
+              "trigger": {
+                "actorIds": [
+                  "liuchao.character.huo_zi_meng"
+                ],
+                "actionIds": [
+                  "negotiate_court_procedure"
+                ]
+              },
+              "expiresAfterTurns": 6
             }
           ]
         }
@@ -6527,7 +6545,18 @@
               "futureHint": "郭解留下的护持网络会记住谁在最危险时接住了新君。",
               "actionText": "我追踪“护住新君的退路”：协助郭解确认宫道、护送定陶王，并亲自把新君交到下一段接应者手中。",
               "rewardKey": "permission.lyg.guo_jie.youxia_dispatch",
-              "rewardLabel": "郭解·洛都游侠耳目一次调度"
+              "rewardLabel": "郭解·洛都游侠耳目一次调度",
+              "trigger": {
+                "actorIds": [
+                  "liuchao.character.guo_jie"
+                ],
+                "actionIds": [
+                  "protect_principal",
+                  "escort_witness",
+                  "open_safe_route"
+                ]
+              },
+              "expiresAfterTurns": 3
             }
           ]
         }
@@ -7042,7 +7071,13 @@
                   "situation": {
                     "liangzhouCohesion": -3
                   },
-                  "escalation": 1
+                  "escalation": 1,
+                  "memories": [
+                    {
+                      "tag": "opportunity:opportunity.lyg.s01_05.first_edict",
+                      "weight": 3
+                    }
+                  ]
                 },
                 "visibility": "rumor",
                 "durationTurns": 2,
@@ -7172,7 +7207,19 @@
               "futureHint": "北境真正起变时，贾文和会优先向曾接住军情的人递出第二份判断。",
               "actionText": "我追踪“接住董卓的边地军情”：核对消息来源与不确定性，并把边警交给一条能在凉州旧部退场后继续运作的联络线。",
               "rewardKey": "permission.lyg.jia_wenhe.border_warning",
-              "rewardLabel": "贾文和·边警来源核对与备用判断"
+              "rewardLabel": "贾文和·边警来源核对与备用判断",
+              "trigger": {
+                "actorIds": [
+                  "liuchao.character.dong_zhuo",
+                  "liuchao.character.jia_wenhe"
+                ],
+                "actionIds": [
+                  "public_declaration",
+                  "spread_message",
+                  "withdraw_force"
+                ]
+              },
+              "expiresAfterTurns": 3
             }
           ]
         }
@@ -7634,7 +7681,17 @@
               "futureHint": "后续再遇黑魔海相关线索时，她会明确区分“亲知”“推断”和“不知”。",
               "actionText": "我追踪“核验盛姬留下的关联”：与阮香凝单独交谈，逐项区分亲知事实、定陶王反应与仍待核验的推断。",
               "rewardKey": "permission.lyg.ruan_xiangning.source_check",
-              "rewardLabel": "阮香凝·秘密来源核对与知情边界"
+              "rewardLabel": "阮香凝·秘密来源核对与知情边界",
+              "trigger": {
+                "actorIds": [
+                  "liuchao.character.ruan_xiang_ning"
+                ],
+                "actionIds": [
+                  "verify_rumor",
+                  "gather_intelligence"
+                ]
+              },
+              "expiresAfterTurns": 4
             }
           ]
         }

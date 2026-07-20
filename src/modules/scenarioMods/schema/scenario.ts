@@ -166,6 +166,15 @@ export interface ScenarioNpcDecisionAgenda {
   escalation: string[];
 }
 
+export interface ScenarioNpcMemoryEpisode {
+  id: string;
+  eventId: string;
+  summary: string;
+  tags: string[];
+  salience: number;
+  occurredAtTurn: number;
+}
+
 export interface ScenarioNpcDecisionActor {
   characterId: string;
   identity: { factionId: string; office?: string; rank: number };
@@ -183,6 +192,8 @@ export interface ScenarioNpcDecisionActor {
     locationIds?: string[];
     factionIds?: string[];
   };
+  /** 运行时长期经历；按显著度和时间封顶，正典配置可省略。 */
+  memories?: ScenarioNpcMemoryEpisode[];
   /** 运行时字段：行动在持续期内不可被重复裁定；正典配置可省略。 */
   actionCooldowns?: Record<string, number>;
   /** 运行时字段：durationTurns>1 的行动在后续世界行动轮继续推进。 */
@@ -221,6 +232,8 @@ export interface ScenarioNpcDecisionActionBinding {
     /** 局势键到效用权重；局势值先按 limits 归一到 -1..1。 */
     situation?: Record<string, number>;
     relationships?: ScenarioNpcRelationshipUtility[];
+    /** 长期经历标签到效用权重；按匹配经历的最高显著度归一。 */
+    memories?: Array<{ tag: string; weight: number }>;
     /** 当前议程升级阶梯对该行动的权重。 */
     escalation?: number;
   };
@@ -279,6 +292,14 @@ export interface ScenarioStoryOpportunity {
   actionText: string;
   rewardKey: string;
   rewardLabel: string;
+  /** 无 trigger 的旧卡在锚点建立时立即出现；新卡由已裁定行动/知识确定性触发。 */
+  trigger?: {
+    actorIds?: string[];
+    actionIds?: string[];
+    knowledgeFactIds?: string[];
+  };
+  /** 未追踪卡在出现后的确定性世界回合寿命；追踪后沿用全局介入上限。 */
+  expiresAfterTurns?: number;
 }
 
 export interface ScenarioWorldActorContract {

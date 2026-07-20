@@ -7,6 +7,7 @@ import type {
   ScenarioModChapter,
   ScenarioModEvent,
   ScenarioNpcDecisionActor,
+  ScenarioNpcMemoryEpisode,
   ScenarioStoryOpportunity,
 } from './schema';
 import {
@@ -67,7 +68,15 @@ export interface ScenarioActorEntitlement {
 export interface ScenarioActorMemory {
   relationships: Record<string, Record<string, number>>;
   knowledge: string[];
+  episodes: ScenarioNpcMemoryEpisode[];
   updatedAtTurn: number;
+}
+
+export interface ScenarioOpportunityState {
+  status: 'available' | 'tracked' | 'expired' | 'participated' | 'offscreen';
+  surfacedAtTurn: number;
+  trackedAtTurn?: number;
+  resolvedAtTurn?: number;
 }
 
 export interface ScenarioEventTimelineState {
@@ -86,6 +95,7 @@ export interface ScenarioActorEngineState {
   surfacedAgendaIds: string[];
   trackedOpportunityId?: string;
   trackedAtTurn?: number;
+  opportunityStates?: Record<string, ScenarioOpportunityState>;
   lastHandledWorldPushTurn?: number;
   /** R2-10B 确定性人物决策；候选评分回执可重放、可审计。 */
   decisionInputHash?: string;
@@ -164,8 +174,18 @@ function ensureActorEngine(runtime: RuntimeState): ScenarioActorEngineState {
   state.actorMemory = state.actorMemory && typeof state.actorMemory === 'object'
     ? state.actorMemory
     : {};
+  state.opportunityStates = state.opportunityStates && typeof state.opportunityStates === 'object'
+    ? state.opportunityStates
+    : {};
   runtime.actorEngine = state;
   return state;
+}
+
+function normalizeMemoryEpisodes(episodes: ScenarioNpcMemoryEpisode[]): ScenarioNpcMemoryEpisode[] {
+  return structuredClone(episodes)
+    .sort((a, b) => b.salience - a.salience || b.occurredAtTurn - a.occurredAtTurn || (a.id < b.id ? -1 : 1))
+    .slice(0, 12)
+    .sort((a, b) => a.occurredAtTurn - b.occurredAtTurn || (a.id < b.id ? -1 : 1));
 }
 
 function persistNpcMemory(runtime: RuntimeState, state: ScenarioActorEngineState): void {
@@ -175,6 +195,7 @@ function persistNpcMemory(runtime: RuntimeState, state: ScenarioActorEngineState
     memory[actor.characterId] = {
       relationships: structuredClone(actor.relationships),
       knowledge: [...new Set(actor.knowledge)].sort(),
+      episodes: normalizeMemoryEpisodes(actor.memories || []),
       updatedAtTurn: settledTurn(runtime),
     };
   }
@@ -199,8 +220,29 @@ function hydrateNpcActors(
       ...actor.knowledge,
       ...remembered.knowledge.filter(factId => !declaredKnowledge || declaredKnowledge.has(factId)),
     ])].sort();
+    actor.memories = normalizeMemoryEpisodes(remembered.episodes || []);
     return actor;
   });
+}
+
+function addNpcMemoryEpisodes(
+  state: ScenarioActorEngineState,
+  actorIds: string[],
+  episode: ScenarioNpcMemoryEpisode,
+): void {
+  const memory = state.actorMemory ||= {};
+  for (const actorId of actorIds) {
+    const current = memory[actorId] ||= {
+      relationships: {},
+      knowledge: [],
+      episodes: [],
+      updatedAtTurn: episode.occurredAtTurn,
+    };
+    const episodes = Array.isArray(current.episodes) ? current.episodes : [];
+    if (!episodes.some(item => item.id === episode.id)) episodes.push(structuredClone(episode));
+    current.episodes = normalizeMemoryEpisodes(episodes);
+    current.updatedAtTurn = episode.occurredAtTurn;
+  }
 }
 
 function findOpportunity(event: ScenarioModEvent | undefined, opportunityId: string | undefined): ScenarioStoryOpportunity | undefined {
@@ -212,6 +254,76 @@ function settledTurn(runtime: RuntimeState): number {
   // divergenceControl 在回合开头先递增 worldTurn；回执记“刚结算完成的回合”，
   // 而 trackedAtTurn 记“玩家开始追踪时的当前回合”，两者纪年语义不同。
   return Math.max(0, (Number(runtime.worldTurn) || 0) - 1);
+}
+
+function opportunityTriggered(
+  opportunity: ScenarioStoryOpportunity,
+  state: ScenarioActorEngineState,
+): boolean {
+  const trigger = opportunity.trigger;
+  if (!trigger) return true;
+  const decisions = state.decisions || [];
+  const decisionMatch = decisions.some(decision =>
+    (!trigger.actorIds?.length || trigger.actorIds.includes(decision.actorId))
+    && (!trigger.actionIds?.length || trigger.actionIds.includes(decision.actionId)));
+  if ((trigger.actorIds?.length || trigger.actionIds?.length) && !decisionMatch) return false;
+  if (trigger.knowledgeFactIds?.length) {
+    const known = new Set((state.npcStates || []).flatMap(actor => actor.knowledge));
+    if (!trigger.knowledgeFactIds.every(factId => known.has(factId))) return false;
+  }
+  return true;
+}
+
+function refreshOpportunityStates(
+  runtime: RuntimeState,
+  event: ScenarioModEvent,
+  state: ScenarioActorEngineState,
+): void {
+  const states = state.opportunityStates ||= {};
+  const turn = Math.max(0, Number(runtime.worldTurn) || 0);
+  for (const opportunity of event.worldActor?.opportunities || []) {
+    const current = states[opportunity.id];
+    if (!current && opportunityTriggered(opportunity, state)) {
+      states[opportunity.id] = { status: 'available', surfacedAtTurn: turn };
+      continue;
+    }
+    if (
+      current?.status === 'available'
+      && opportunity.expiresAfterTurns !== undefined
+      && turn - current.surfacedAtTurn >= opportunity.expiresAfterTurns
+    ) {
+      current.status = 'expired';
+      current.resolvedAtTurn = turn;
+    }
+  }
+}
+
+function recordDecisionEpisodes(
+  runtime: RuntimeState,
+  state: ScenarioActorEngineState,
+  eventId: string,
+  decisions: NpcDecisionReceipt[],
+): void {
+  const turn = settledTurn(runtime);
+  for (const decision of decisions) {
+    if (!['instant', 'started'].includes(decision.phase)) continue;
+    const episode: ScenarioNpcMemoryEpisode = {
+      id: `memory.${eventId}.${state.decisionRound || 0}.${decision.actorId}.${decision.actionId}.${decision.outcome}`,
+      eventId,
+      summary: `${decision.label}（${decision.outcome}）`,
+      tags: [
+        `event:${eventId}`,
+        `action:${decision.actionId}`,
+        `outcome:${decision.outcome}`,
+        ...(decision.conflict ? [`conflict:${decision.conflict.domain}`] : []),
+      ],
+      salience: decision.outcome === 'succeeded' ? 80 : decision.outcome === 'blocked' ? 60 : 65,
+      occurredAtTurn: turn,
+    };
+    addNpcMemoryEpisodes(state, [decision.actorId], episode);
+    const actor = state.npcStates?.find(item => item.characterId === decision.actorId);
+    if (actor) actor.memories = structuredClone(state.actorMemory?.[decision.actorId]?.episodes || []);
+  }
 }
 
 function syncActorEngine(runtime: RuntimeState): void {
@@ -240,6 +352,7 @@ function syncActorEngine(runtime: RuntimeState): void {
     }
     if (opportunity) {
       const participated = runtime.completedEventIds.includes(state.anchorEventId);
+      const resolution = participated ? 'participated' : 'offscreen';
       const receiptId = `actor.receipt.${state.anchorEventId}.${opportunity.id}.${participated ? 'participated' : 'offscreen'}`;
       if ((participated || offscreen) && !state.receipts.some(item => item.id === receiptId)) {
         state.receipts.push({
@@ -261,6 +374,34 @@ function syncActorEngine(runtime: RuntimeState): void {
           sourceOpportunityId: opportunity.id,
           earnedAtTurn: settledTurn(runtime),
         });
+      }
+      const opportunityState = state.opportunityStates?.[opportunity.id];
+      if (opportunityState && (participated || offscreen)) {
+        opportunityState.status = resolution;
+        opportunityState.resolvedAtTurn = settledTurn(runtime);
+      }
+      if (participated || offscreen) {
+        addNpcMemoryEpisodes(state, opportunity.characterIds, {
+          id: `memory.${state.anchorEventId}.${opportunity.id}.${resolution}`,
+          eventId: state.anchorEventId,
+          summary: participated
+            ? `玩家介入并兑现“${opportunity.title}”`
+            : `玩家未介入，“${opportunity.title}”由世界场外推进`,
+          tags: [
+            `event:${state.anchorEventId}`,
+            `opportunity:${opportunity.id}`,
+            `player:${resolution}`,
+          ],
+          salience: participated ? 100 : 70,
+          occurredAtTurn: settledTurn(runtime),
+        });
+      }
+    }
+    for (const item of previousAnchor?.worldActor?.opportunities || []) {
+      const opportunityState = state.opportunityStates?.[item.id];
+      if (opportunityState && ['available', 'tracked'].includes(opportunityState.status)) {
+        opportunityState.status = offscreen ? 'offscreen' : 'expired';
+        opportunityState.resolvedAtTurn = settledTurn(runtime);
       }
     }
     state.anchorEventId = undefined;
@@ -333,6 +474,7 @@ function syncActorEngine(runtime: RuntimeState): void {
     state.visibleDecisionIds = selectVisibleNpcDecisionIds(round.decisions, contract.decisionCore.maxVisibleActions);
     state.decisionRound = 0;
     state.lastHandledWorldPushTurn = undefined;
+    refreshOpportunityStates(runtime, anchor, state);
   }
   if (state.anchorEventId !== anchor.id) {
     state.anchorEventId = anchor.id;
@@ -358,6 +500,7 @@ function syncActorEngine(runtime: RuntimeState): void {
       if (typeof console !== 'undefined' && console.debug) {
         console.debug('[NPC Decision Core]', round);
       }
+      refreshOpportunityStates(runtime, anchor, state);
     }
   }
   const pushTurn = runtime.worldPush?.due ? runtime.worldPush.scheduledAtTurn : undefined;
@@ -387,6 +530,7 @@ function syncActorEngine(runtime: RuntimeState): void {
       }
     }
     state.npcStates = applyNpcDecisionActorState(contract.decisionCore, npcStates, round.decisions);
+    recordDecisionEpisodes(runtime, state, anchor.id, round.decisions);
     persistNpcMemory(runtime, state);
     state.decisionRound = (state.decisionRound || 0) + 1;
     state.activeAgendaId = undefined;
@@ -394,13 +538,16 @@ function syncActorEngine(runtime: RuntimeState): void {
       console.debug('[NPC Decision Core]', round);
     }
     state.lastHandledWorldPushTurn = pushTurn;
+    refreshOpportunityStates(runtime, anchor, state);
   } else if (pushTurn !== undefined && state.lastHandledWorldPushTurn !== pushTurn && contract.agendas?.length) {
     const nextAgenda = contract.agendas.find(item => !state.surfacedAgendaIds.includes(item.id))
       || contract.agendas[(pushTurn + contract.agendas.length) % contract.agendas.length];
     state.activeAgendaId = nextAgenda.id;
     if (!state.surfacedAgendaIds.includes(nextAgenda.id)) state.surfacedAgendaIds.push(nextAgenda.id);
     state.lastHandledWorldPushTurn = pushTurn;
+    refreshOpportunityStates(runtime, anchor, state);
   }
+  refreshOpportunityStates(runtime, anchor, state);
 }
 
 /** UI 明确追踪一个机会；只写运行时意图，不直接授奖或改 Canon Rail。 */
@@ -417,8 +564,25 @@ export function trackStoryOpportunity(
   // 导致首次提示词出现一轮决策空窗。
   syncActorEngine(runtime);
   const state = ensureActorEngine(runtime);
+  const opportunityState = state.opportunityStates?.[opportunity.id];
+  if (!opportunityState || !['available', 'tracked'].includes(opportunityState.status)) {
+    return { ok: false, reason: '当前机会尚未出现或已经关闭' };
+  }
+  if (state.trackedOpportunityId && state.trackedOpportunityId !== opportunity.id) {
+    const previous = state.opportunityStates?.[state.trackedOpportunityId];
+    if (previous?.status === 'tracked') {
+      previous.status = 'available';
+      previous.trackedAtTurn = undefined;
+    }
+  }
   state.trackedOpportunityId = opportunity.id;
-  state.trackedAtTurn = Math.max(0, Number(runtime.worldTurn) || 0);
+  if (opportunityState.status === 'available') {
+    state.trackedAtTurn = Math.max(0, Number(runtime.worldTurn) || 0);
+    opportunityState.status = 'tracked';
+    opportunityState.trackedAtTurn = state.trackedAtTurn;
+  } else {
+    state.trackedAtTurn = opportunityState.trackedAtTurn ?? state.trackedAtTurn;
+  }
   if (!state.activeAgendaId) {
     state.activeAgendaId = anchor.worldActor.agendas?.[0]?.id;
     state.surfacedAgendaIds = state.activeAgendaId ? [state.activeAgendaId] : [];

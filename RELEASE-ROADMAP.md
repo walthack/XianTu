@@ -122,6 +122,7 @@
 - [x] **R2-10D · 态度／knowledge／effects 反馈环 G1（2026-07-20）**：知识条目 id 成为行动资格，少维度态度成为阈值／效用，`stateEffects` 白名单结算资源、态度与知识；跨事件只继承态度和知识。`s01_06` 攻守、`s01_08` 机密核验、`s01_05→07` 贾文和退场承接均通过确定性、JSON 重载与防泄漏回归。报告=`docs/R2-10D-NPC-FEEDBACK-LOOP-G1-2026-07-20.md`。**下一门：行动冲突、反制和多回合生命周期。**
 - [x] **R2-10E · 行动冲突、反制与多回合生命周期 G1（2026-07-20）**：持续行动进入可存档 `activeAction`，只在 started 落一次 effects；同域相反 stance／显式 counter 由本地分数裁定，败方不落反馈，更强反制可中断在途行动。`s01_06` 攻守/封路冲突与 `s01_07–08` 生命周期已通过确定性和 JSON 重载回归。报告=`docs/R2-10E-NPC-CONFLICT-AND-LIFECYCLE-G1-2026-07-20.md`。**下一门：地区／势力／人物分层唤醒。**
 - [x] **R2-10F · 地区／势力／人物分层唤醒 G1（2026-07-20）**：五档 wake budget 已进入 schema、validator、决策核与 runtime；在途行动强制唤醒，休眠 actor 不产生状态变化，每轮 `wakeAudit` 可重放。`s01_06–08` 已配置本地关键、场外关键和势力 cadence，minor/group 由合成回归覆盖。报告=`docs/R2-10F-LAYERED-WAKE-G1-2026-07-20.md`。**下一门：机会卡与长期 NPC 记忆。**
+- [x] **R2-10G · 机会卡与长期 NPC 记忆 G1（2026-07-20）**：机会卡由已裁定行动/知识触发，具备 available/tracked/expired/participated/offscreen 生命周期；UI/prompt 不提前显示未触发卡。NPC 行动、冲突与玩家介入形成显著度封顶 12 条的长期经历，并可通过声明标签改变后续效用。报告=`docs/R2-10G-OPPORTUNITY-AND-NPC-MEMORY-G1-2026-07-20.md`。**下一门：跨书异构扩量。**
 
 ### 世界/NPC 引擎设计参照系（2026-07-19 用户拍板，实现指引）
 

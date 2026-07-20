@@ -50,6 +50,7 @@ interface StoryRuntime {
     activeAgendaId?: string;
     surfacedAgendaIds?: string[];
     trackedOpportunityId?: string;
+    opportunityStates?: Record<string, { status: string; surfacedAtTurn: number }>;
     entitlements?: Array<{ key: string; label: string }>;
     decisions?: Array<{
       id: string;
@@ -58,6 +59,7 @@ interface StoryRuntime {
       reason: string;
       knownFacts: string[];
       attitudes?: Array<{ targetCharacterId: string; dimension: string; value: number }>;
+      memories?: Array<{ id: string; summary: string; salience: number }>;
       phase?: 'instant' | 'started' | 'continuing' | 'completed';
       outcome?: 'unopposed' | 'succeeded' | 'blocked';
       conflict?: { domain: string; opponentDecisionId: string };
@@ -214,13 +216,16 @@ function formatWorldActorContract(runtime: StoryRuntime, anchor: ScenarioModEven
   const state = runtime.actorEngine?.anchorEventId === anchor.id ? runtime.actorEngine : undefined;
   const agenda = contract.agendas?.find(item => item.id === state?.activeAgendaId) || contract.agendas?.[0];
   const opportunity = contract.opportunities.find(item => item.id === state?.trackedOpportunityId);
+  const availableOpportunities = contract.opportunities.filter(item =>
+    !state?.opportunityStates
+    || ['available', 'tracked'].includes(state.opportunityStates[item.id]?.status || ''));
   const names = runtime.canon?.characters || [];
   const nameOf = (id: string) => names.find(character => character.id === id)?.name || id;
   const visibleIds = new Set(state?.visibleDecisionIds || []);
   const decisions = (state?.decisions || []).filter(item => visibleIds.has(item.id));
   const decisionLine = decisions.length
     ? decisions.map(decision =>
-      `${nameOf(decision.actorId)}已由本地决策器裁定“${decision.label}”；阶段=${decision.phase || 'instant'}；结果=${decision.outcome || 'unopposed'}${decision.conflict ? `（冲突域=${decision.conflict.domain}，对手=${visibleIds.has(decision.conflict.opponentDecisionId) ? decision.conflict.opponentDecisionId : '未公开反制'}）` : ''}；理由=${decision.reason}；态度=${(decision.attitudes || []).map(item => `${nameOf(item.targetCharacterId)}.${item.dimension}=${item.value}`).join('、') || '无显式态度因子'}；可见征兆=${decision.visibleSignal}；玩家不介入时=${decision.offscreenAction}；knownFacts=${decision.knownFacts.join('、')}；mustNotInvent=${decision.mustNotInvent.join('、')}。`,
+      `${nameOf(decision.actorId)}已由本地决策器裁定“${decision.label}”；阶段=${decision.phase || 'instant'}；结果=${decision.outcome || 'unopposed'}${decision.conflict ? `（冲突域=${decision.conflict.domain}，对手=${visibleIds.has(decision.conflict.opponentDecisionId) ? decision.conflict.opponentDecisionId : '未公开反制'}）` : ''}；理由=${decision.reason}；态度=${(decision.attitudes || []).map(item => `${nameOf(item.targetCharacterId)}.${item.dimension}=${item.value}`).join('、') || '无显式态度因子'}；相关长期经历=${(decision.memories || []).map(item => item.summary).join('、') || '无'}；可见征兆=${decision.visibleSignal}；玩家不介入时=${decision.offscreenAction}；knownFacts=${decision.knownFacts.join('、')}；mustNotInvent=${decision.mustNotInvent.join('、')}。`,
     ).join('\n- ')
     : '';
   const actorLine = decisionLine || (agenda
@@ -228,7 +233,9 @@ function formatWorldActorContract(runtime: StoryRuntime, anchor: ScenarioModEven
     : '');
   const opportunityLine = opportunity
     ? `【玩家已追踪机会·本轮最高优先级】${opportunity.title}：${opportunity.nextStep}。风险=${opportunity.stakes}。必须先回应玩家的介入并让其亲自行动；不得替玩家完成，不得提前授予“${opportunity.rewardLabel}”。`
-    : `【可选介入窗口】${contract.opportunities.map(item => `${item.title}（为什么是现在：${item.whyNow}；下一步：${item.nextStep}；风险：${item.stakes}）`).join('；')}。只把窗口自然演出来，不得替玩家选择；玩家忽略也要让世界继续。`;
+    : availableOpportunities.length
+      ? `【可选介入窗口】${availableOpportunities.map(item => `${item.title}（为什么是现在：${item.whyNow}；下一步：${item.nextStep}；风险：${item.stakes}）`).join('；')}。只把窗口自然演出来，不得替玩家选择；玩家忽略也要让世界继续。`
+      : '【介入窗口】本轮没有已经触发的机会卡；不得提前展示尚未满足条件的机会。';
   const actionLine = worldPushDue
     ? '本轮世界已经取得行动权：必须先演出上述角色的一项具体行动及其可见后果，不能只写静态局势或等玩家发问。'
     : '该压力持续存在；保持角色有自己的路线，但不得每轮机械重复同一征兆。';
