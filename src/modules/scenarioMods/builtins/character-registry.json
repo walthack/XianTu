@@ -1,12 +1,12 @@
 {
   "schema": "xiantu.character-registry.v1",
-  "version": "cr-2026-07-19-1a6593c15bfc2cee",
-  "sourceHash": "1a6593c15bfc2cee",
+  "version": "cr-2026-07-20-aa6f4bd5d7a3fb36",
+  "sourceHash": "aa6f4bd5d7a3fb36",
   "sourceGeneratedAt": "2026-06-30T12:50:33.965Z",
-  "generatedAt": "2026-07-19T13:30:52.143Z",
+  "generatedAt": "2026-07-20T07:55:20.504Z",
   "stats": {
-    "total": 302,
-    "stagePresent": 247,
+    "total": 305,
+    "stagePresent": 250,
     "canonOnly": 55,
     "collisionsMerged": 0
   },
@@ -2945,7 +2945,8 @@
       "id": "canon.character.cbc4a42afc",
       "canonicalName": "郭氏",
       "aliases": [
-        "太皇太后(唐)"
+        "太皇太后(唐)",
+        "太皇太后郭氏"
       ],
       "gender": "女",
       "books": [
@@ -3012,7 +3013,7 @@
           "用户裁定：唐国篇郭氏称谓限定为太皇太后(唐)，避免与其他国家/阶段的太皇太后误合并。"
         ]
       },
-      "embedText": "郭氏 ｜ 太皇太后(唐) ｜ 太皇太后 ｜ 【唐国人物】 ｜ 唐国朝廷(太皇太后) ｜ 登场于曲江苑 ｜ 别名/称谓：太皇太后(唐) ｜ 用户裁定：唐国篇郭氏称谓限定为太皇太后(唐)，避免与其他国家/阶段的太皇太后误合并。"
+      "embedText": "郭氏 ｜ 太皇太后(唐) 太皇太后郭氏 ｜ 太皇太后 ｜ 【唐国人物】 ｜ 唐国朝廷(太皇太后) ｜ 登场于曲江苑 ｜ 别名/称谓：太皇太后(唐) ｜ 用户裁定：唐国篇郭氏称谓限定为太皇太后(唐)，避免与其他国家/阶段的太皇太后误合并。"
     },
     {
       "id": "canon.character.ccd9ad66ad",
@@ -3962,6 +3963,64 @@
       "embedText": "韩庚 ｜ 王哲下属，汉军天武营主将 ｜ 左武军(第一军团天武营主将)、太乙真宗(王哲爱徒（拟传掌教；后与王哲一同战死草原）) ｜ 登场于草原战场 ｜ 傲慢、冷漠、决绝、自信 ｜ 无直接关系 ｜ 韩庚 / 被称‘大貂珰’ ｜ 以三千对三万，毫无惧色；被金发女子斩首"
     },
     {
+      "id": "lcq.character.mi_gu",
+      "canonicalName": "弥骨",
+      "aliases": [],
+      "gender": "男",
+      "books": [
+        "qingyu"
+      ],
+      "tier": "次要",
+      "stagePresence": true,
+      "staticProfile": {
+        "identitySummary": "鬼王峒武将级人物，负责追击与维持集会秩序",
+        "personality": [
+          "凶悍",
+          "服从鬼巫王",
+          "负责追击与维持集会秩序"
+        ],
+        "appearance": "",
+        "speechStyle": "",
+        "principles": [],
+        "goals": [
+          "追击闯入者并维持鬼王峒集会秩序"
+        ],
+        "weaknesses": [],
+        "signatureAbilities": [],
+        "relationToProtagonist": [
+          "作为追兵向程宗扬一行施压"
+        ],
+        "formsOfAddress": [],
+        "joining": [],
+        "keyEvents": [
+          "承接突围、追击和小紫倒戈前夜的压力"
+        ],
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "鬼王峒",
+            "role": "武将/追兵"
+          }
+        ],
+        "debutLocation": {
+          "location": "鬼王宫",
+          "locator": "lcq.stage_05b",
+          "scene": "作为追兵与集会秩序力量出现"
+        }
+      },
+      "phaseIdentities": [],
+      "review": {
+        "approved": false,
+        "reviewed": true,
+        "flags": [
+          "stage-canon-gap-recovered"
+        ],
+        "conflicts": [],
+        "note": "结构化缺卡审计补建；仅采用已入库关卡正典，不外推原作未载事实"
+      },
+      "embedText": "弥骨 ｜ 鬼王峒武将级人物，负责追击与维持集会秩序 ｜ 鬼王峒(武将/追兵) ｜ 登场于鬼王宫 ｜ 凶悍、服从鬼巫王、负责追击与维持集会秩序 ｜ 作为追兵向程宗扬一行施压 ｜ 承接突围、追击和小紫倒戈前夜的压力"
+    },
+    {
       "id": "lcq.character.np001",
       "canonicalName": "商乐轩",
       "aliases": [],
@@ -4754,6 +4813,67 @@
       "embedText": "阁罗 ｜ 鬼王峒(峒中主事者（代理鬼巫王处理峒务）) ｜ 登场于程宗扬与鬼巫王使者初次会面并谈生意 ｜ 淫恶、凶狠、施虐狂、得意、粗鄙 ｜ 开始视作商业伙伴，知晓商队一行会干扰鬼谷巫王计划后敌对 ｜ 敌对前“商人朋友”，敌对后“阁罗的敌人” ｜ 奸淫碧奴；强暴达古妻子姐妹花；在程宗扬面前施虐炫耀；与程宗扬交战，使用黑色长鞭"
     },
     {
+      "id": "lcq.character.saan",
+      "canonicalName": "萨安",
+      "aliases": [],
+      "gender": "男",
+      "books": [
+        "qingyu"
+      ],
+      "tier": "次要",
+      "stagePresence": true,
+      "staticProfile": {
+        "identitySummary": "红苗厨师，熟悉鬼王宫后厨与秘密小道",
+        "personality": [
+          "惊惧",
+          "复仇心重",
+          "熟悉鬼王宫后厨与密道"
+        ],
+        "appearance": "",
+        "speechStyle": "",
+        "principles": [],
+        "goals": [
+          "提供鬼王宫位置与秘密小道情报"
+        ],
+        "weaknesses": [],
+        "signatureAbilities": [
+          "熟悉鬼王宫后厨与秘密小道"
+        ],
+        "relationToProtagonist": [
+          "向程宗扬、谢艺提供潜入鬼王宫的关键线索"
+        ],
+        "formsOfAddress": [],
+        "joining": [],
+        "keyEvents": [
+          "提供鬼王宫位置与秘密小道情报，推动潜入行动"
+        ],
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "红苗族",
+            "role": "厨师"
+          }
+        ],
+        "debutLocation": {
+          "location": "鬼王峒",
+          "locator": "lcq.stage_05b",
+          "scene": "作为线索人物提供鬼王宫秘密小道情报"
+        }
+      },
+      "region": "南荒",
+      "phaseIdentities": [],
+      "review": {
+        "approved": false,
+        "reviewed": true,
+        "flags": [
+          "stage-canon-gap-recovered"
+        ],
+        "conflicts": [],
+        "note": "结构化缺卡审计补建；仅采用已入库关卡正典，不外推原作未载事实"
+      },
+      "embedText": "萨安 ｜ 红苗厨师，熟悉鬼王宫后厨与秘密小道 ｜ 【南荒人物】 ｜ 红苗族(厨师) ｜ 登场于鬼王峒 ｜ 惊惧、复仇心重、熟悉鬼王宫后厨与密道 ｜ 向程宗扬、谢艺提供潜入鬼王宫的关键线索 ｜ 提供鬼王宫位置与秘密小道情报，推动潜入行动"
+    },
+    {
       "id": "lcq.character.wang_zhe",
       "canonicalName": "王哲",
       "aliases": [],
@@ -4963,6 +5083,58 @@
         "conflicts": []
       },
       "embedText": "月霜 ｜ 岳帅遗孤之一 ｜ 太乙真宗(王哲门下（九阳神功传承）)、左武军(成员（王哲军中）)、星月湖(岳帅遗孤) ｜ 登场于军营或战地 ｜ 极度傲娇自以为是的\"圣母纸老虎\"、自私虚伪、行事双标（濒死要救命恩人心头血作药引）、智商与江湖经验匮乏、推卸责任的受害者心态、复杂亲缘认同（嘴拒认岳帅是父、却以\"八骏新主人\"自居） ｜ 王哲临终托付给程宗扬，她穴道解开后第一件事却试图杀男主；为\"取血\"解毒半强迫与其发生关系，事后不愧疚反觉被毁贞洁而委屈；后期寒毒发作时多次和男主勉强交合，每次结束都想杀了他。"
+    },
+    {
+      "id": "lcq.character.zhu_nuo",
+      "canonicalName": "朱诺",
+      "aliases": [],
+      "gender": "女",
+      "books": [
+        "qingyu"
+      ],
+      "tier": "次要",
+      "stagePresence": true,
+      "staticProfile": {
+        "identitySummary": "江纳丝人族长；在鬼王宫祭台战斗中作为女尸鬼出现",
+        "personality": [],
+        "appearance": "",
+        "speechStyle": "",
+        "principles": [],
+        "goals": [],
+        "weaknesses": [],
+        "signatureAbilities": [],
+        "relationToProtagonist": [
+          "鬼王宫祭台战斗中的敌对尸鬼"
+        ],
+        "formsOfAddress": [],
+        "joining": [],
+        "keyEvents": [
+          "祭台尸鬼战斗中出现，推动丹宸之死与程宗扬等人脱险"
+        ],
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "鬼王峒",
+            "role": "尸鬼"
+          }
+        ],
+        "debutLocation": {
+          "location": "鬼王宫祭台",
+          "locator": "lcq.stage_05b",
+          "scene": "作为女尸鬼参与祭台战斗"
+        }
+      },
+      "phaseIdentities": [],
+      "review": {
+        "approved": false,
+        "reviewed": true,
+        "flags": [
+          "stage-canon-gap-recovered"
+        ],
+        "conflicts": [],
+        "note": "结构化缺卡审计补建；仅采用已入库关卡正典，不外推原作未载事实"
+      },
+      "embedText": "朱诺 ｜ 江纳丝人族长；在鬼王宫祭台战斗中作为女尸鬼出现 ｜ 鬼王峒(尸鬼) ｜ 登场于鬼王宫祭台 ｜ 鬼王宫祭台战斗中的敌对尸鬼 ｜ 祭台尸鬼战斗中出现，推动丹宸之死与程宗扬等人脱险"
     },
     {
       "id": "liuchao.character.a_he_ma",
@@ -5397,7 +5569,8 @@
       "id": "liuchao.character.an_le_gong_zhu",
       "canonicalName": "安乐公主",
       "aliases": [
-        "李裹儿"
+        "李裹儿",
+        "安乐"
       ],
       "gender": "女",
       "books": [
@@ -5576,7 +5749,7 @@
           "alias-unification approved"
         ]
       },
-      "embedText": "安乐公主 ｜ 李裹儿 ｜ 唐国公主，李昂嫡亲胞妹 ｜ 【唐国人物】 ｜ 唐国朝廷(公主（唐皇李昂胞妹）) ｜ 登场于大明宫东内苑 ｜ 娇弱、羞怯、温顺 ｜ 性奴/情妇 ｜ 别名/称谓：李裹儿 ｜ 唐国公主，李昂嫡亲胞妹；禁止提前称为后宫、侍妾、情人或程宗扬阵营成员；关系转折后，可按原文写入程宗扬阵营/被收编 ｜ 被程宗扬发现并夺去元红；与杨氏、萧氏一同被裸裎观赏；在程宗扬面前哭泣求饶；被潘金莲扶起并露出后颈小符"
+      "embedText": "安乐公主 ｜ 李裹儿 安乐 ｜ 唐国公主，李昂嫡亲胞妹 ｜ 【唐国人物】 ｜ 唐国朝廷(公主（唐皇李昂胞妹）) ｜ 登场于大明宫东内苑 ｜ 娇弱、羞怯、温顺 ｜ 性奴/情妇 ｜ 别名/称谓：李裹儿 ｜ 唐国公主，李昂嫡亲胞妹；禁止提前称为后宫、侍妾、情人或程宗扬阵营成员；关系转折后，可按原文写入程宗扬阵营/被收编 ｜ 被程宗扬发现并夺去元红；与杨氏、萧氏一同被裸裎观赏；在程宗扬面前哭泣求饶；被潘金莲扶起并露出后颈小符"
     },
     {
       "id": "liuchao.character.ao_run",
@@ -15128,7 +15301,9 @@
     {
       "id": "liuchao.character.li_ang",
       "canonicalName": "李昂",
-      "aliases": [],
+      "aliases": [
+        "唐皇李昂"
+      ],
       "gender": "男",
       "books": [
         "yange"
@@ -15239,7 +15414,7 @@
         "flags": [],
         "conflicts": []
       },
-      "embedText": "李昂 ｜ 唐朝皇帝 ｜ 【唐国人物】 ｜ 唐国朝廷(皇帝) ｜ 登场于大明宫清思殿 ｜ 隐忍、愤怒、无力、屈辱 ｜ 被程宗扬控制、胁迫和羞辱的对象 ｜ 被鱼弘志抽耳光；被迫目睹杨妃被程宗扬奸淫；被程宗扬拖拽并威胁割首；目睹生母萧太后被凌辱"
+      "embedText": "李昂 ｜ 唐皇李昂 ｜ 唐朝皇帝 ｜ 【唐国人物】 ｜ 唐国朝廷(皇帝) ｜ 登场于大明宫清思殿 ｜ 隐忍、愤怒、无力、屈辱 ｜ 被程宗扬控制、胁迫和羞辱的对象 ｜ 被鱼弘志抽耳光；被迫目睹杨妃被程宗扬奸淫；被程宗扬拖拽并威胁割首；目睹生母萧太后被凌辱"
     },
     {
       "id": "liuchao.character.li_fuguo",
@@ -37001,7 +37176,9 @@
     {
       "id": "liuchao.character.zhao_he_de",
       "canonicalName": "赵合德",
-      "aliases": [],
+      "aliases": [
+        "合德"
+      ],
       "gender": "女",
       "books": [
         "yunlong",
@@ -37341,7 +37518,7 @@
         "humanReviewed": true,
         "humanNotes": "人工批注：六朝云龙吟汉国篇第30集第7章弑君明确关系转折；转折前为汉国昭仪。 2026-07-04 补替身局: 赵合德=真赵昭仪(昭仪系职位),友通期=伪。"
       },
-      "embedText": "赵合德 ｜ 汉国昭仪（真）/赵飞燕之妹（昭仪=汉国后宫职位，天子亲封、位比丞相爵比诸侯） ｜ 【汉国人物】 ｜ 长秋宫(女傅江映秋照料的养女/昭仪待封)、汉国朝廷(昭仪（天子刘骜下诏入宫）)、程宗扬势力(内眷/妾室) ｜ 登场于上清观 ｜ 妖艳主动、冷静城府深、\"拉皮条\"天才、无道德包袱、深知姐妹一体不嫉妒 ｜ 程宗扬的妾室/情人 ｜ 对程宗扬称‘好哥哥’、‘夫君’；被他人称‘合德’、‘妹妹’ 赵昭仪（昭仪为汉国后宫职位，非名字；仅汉国语境） ｜ 汉国昭仪/赵飞燕之妹，禁止提前写作程宗扬妾室或情人；确认关系转折，之后可写作程宗扬内宅成员 ｜ 洛都之乱：程宗扬以友通期作「赵昭仪（伪）」替身顶替入宫，本人被藏起；吕冀淫辱杀害的是伪昭仪，她于含光殿获救；与姐姐赵飞燕一同侍奉程宗扬；被程宗扬挑逗后羞怯地脱去衣物；在程宗扬面前张开芳唇舔舐肉棒；与姐姐并乳同臀供程宗扬淫乐"
+      "embedText": "赵合德 ｜ 合德 ｜ 汉国昭仪（真）/赵飞燕之妹（昭仪=汉国后宫职位，天子亲封、位比丞相爵比诸侯） ｜ 【汉国人物】 ｜ 长秋宫(女傅江映秋照料的养女/昭仪待封)、汉国朝廷(昭仪（天子刘骜下诏入宫）)、程宗扬势力(内眷/妾室) ｜ 登场于上清观 ｜ 妖艳主动、冷静城府深、\"拉皮条\"天才、无道德包袱、深知姐妹一体不嫉妒 ｜ 程宗扬的妾室/情人 ｜ 对程宗扬称‘好哥哥’、‘夫君’；被他人称‘合德’、‘妹妹’ 赵昭仪（昭仪为汉国后宫职位，非名字；仅汉国语境） ｜ 汉国昭仪/赵飞燕之妹，禁止提前写作程宗扬妾室或情人；确认关系转折，之后可写作程宗扬内宅成员 ｜ 洛都之乱：程宗扬以友通期作「赵昭仪（伪）」替身顶替入宫，本人被藏起；吕冀淫辱杀害的是伪昭仪，她于含光殿获救；与姐姐赵飞燕一同侍奉程宗扬；被程宗扬挑逗后羞怯地脱去衣物；在程宗扬面前张开芳唇舔舐肉棒；与姐姐并乳同臀供程宗扬淫乐"
     },
     {
       "id": "liuchao.character.zhao_ying",
