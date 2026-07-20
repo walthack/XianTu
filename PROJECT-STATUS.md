@@ -130,6 +130,13 @@ R2-11 方案①现已让其中 **1/380** 可计算：`s01_05` 的机会卡按玩
 `player_action_sequence`，每个成功回合最多推进一步。②通用 runtime completion 与③结构化语义主张
 保留给非机会卡事件，待纵切真机复验后分结构推进。
 
+**后续交互方向已落档、暂不实施（2026-07-20 用户认可）**：当前“追踪时塞入整段 `actionText`，
+后续由 LLM 生成普通字符串选项，再靠关键词匹配推进”仅作为纵切过渡态。目标是追踪与执行分离，
+由引擎固定提供带 `opportunityId / stepId / actionId / timeCost` 的推进选项，与 LLM 自由选项合并；
+具体政策选择进入状态，模糊自由文本不误推进。关键事件采用不受 `steeringCooldown` 冻结的绝对截止，
+UI显示进度、剩余窗口与时间成本，截止按 `participated / partial / offscreen` 收束。设计与实施门禁见
+`docs/R2-11-OPPORTUNITY-ACTION-UX-DESIGN-2026-07-20.md`；当前真机验证期间不得改动生产基线。
+
 **实施须知**：这是架构项，不是 G2 遗留缺陷。用户已选择方案①；相关背景与实证见
 `docs/R2-10M-G2-REVERIFY-2026-07-20.md`，首个纵切见
 `docs/R2-11-OPTION1-DETERMINISTIC-OPPORTUNITY-COMPLETION-2026-07-20.md`。
