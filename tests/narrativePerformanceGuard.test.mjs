@@ -158,6 +158,32 @@ test('quantity guard allows ordinary commerce and ward navigation without weaken
   }
 });
 
+// 反例按「主语 × 表述」铺开，不枚举个别句子：收窄比例语境时若只对着少数样本
+// 调词表，同义表述（折损／抽丁／守军减）会整片逃逸而测试仍全绿。
+test('ratio guard keys on military or fiscal subjects, not on a fixed verb list', async () => {
+  const { validateNarrativePerformance } = await loadTs('../src/modules/scenarioMods/narrativePerformanceGuard.ts');
+  const scenarioPrompt = 'renderGuard.forbiddenTerms=；renderGuard.forbiddenAssociations=[]；renderGuard.rejectConcreteQuantities=true；renderGuard.allowUnverifiedQuantities=true。';
+  for (const narrative of [
+    '凉州军折损三成。',
+    '城中抽丁三成充作辅兵。',
+    '守军较上月减了三成。',
+    '北军甲士折了三成。',
+    '徭役加派三成。',
+    '军粮只剩三成。',
+  ]) {
+    assert.equal(validateNarrativePerformance(narrative, '继续', scenarioPrompt).valid, false, narrative);
+  }
+  // 同样的动词落在商贸主语上必须放行，否则回到误杀主角语域的老问题。
+  for (const narrative of [
+    '这批绢帛折了三成，掌柜的仍不肯松口。',
+    '程宗扬还到抽两成利便成交。',
+    '粮价较上月增了三成，米行门前排起长队。',
+    '船行运费减了三成，商队仍嫌贵。',
+  ]) {
+    assert.equal(validateNarrativePerformance(narrative, '继续', scenarioPrompt).valid, true, narrative);
+  }
+});
+
 test('contextual secret guard accepts 有无 questions but not 有无数 as a false question marker', async () => {
   const { validateNarrativePerformance } = await loadTs('../src/modules/scenarioMods/narrativePerformanceGuard.ts');
   const scenarioPrompt = 'renderGuard.forbiddenTerms=暗道|伏兵；renderGuard.forbiddenAssociations=[]；renderGuard.rejectConcreteQuantities=false；renderGuard.allowUnverifiedQuantities=false。';

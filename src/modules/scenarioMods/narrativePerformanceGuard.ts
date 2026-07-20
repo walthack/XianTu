@@ -25,7 +25,10 @@ const WARD_DISTANCE_QUANTITY = new RegExp(`${QUANTITY_NUMBER}\\s*坊`);
 const RATIO_QUANTITY = new RegExp(`${QUANTITY_NUMBER}\\s*成`);
 const DISTANCE_CONTEXT = /距离|相隔|开外|以内|界碑|宫门|布置|驻扎|列阵|行军|路线|要道/;
 const MILITARY_WARD_CONTEXT = /军|兵|骑|甲士|军士|部众|校尉|亲兵|家兵|营|驻扎|驻守|列阵|行军|布防|设防|围宫|攻城/;
-const RATIO_CONTEXT = /税|赋|军饷|军费|军粮|军需|征发|徭役|兵力|伤亡/;
+// 比例拦截按「主语」判定，不按动词枚举：折损／抽丁／守军减 与 折价／抽成／减价
+// 用的是同一批动词，只有主语能区分军政与商贸。枚举动词必然漏同义表述。
+const RATIO_FISCAL_CONTEXT = /税|赋|军饷|军费|军粮|军需|征发|徭役|兵力|伤亡/;
+const RATIO_CONTEXT = new RegExp(`${RATIO_FISCAL_CONTEXT.source}|${MILITARY_WARD_CONTEXT.source}|丁`);
 const QUANTITY_CLAIM_SOURCE = /探子|斥候|军报|来报|使者|消息|号称|声称|自称|据报|传闻|据说/;
 const UNVERIFIED_QUANTITY_CONTEXT = /号称|声称|据报|传闻|据说|未核实|未经核实|尚待核实|无法证实|真假难辨/;
 const AUTHORITATIVE_QUANTITY_CONTEXT = /确有|确认|查明|已经核实|确切|实有/;
