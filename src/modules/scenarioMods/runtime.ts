@@ -922,6 +922,23 @@ function eventIsKnownToPlayer(runtime: RuntimeState, eventId: string): boolean {
  */
 function syncPlayerKnowledgeLedger(runtime: RuntimeState): void {
   const ledger = runtime.playerKnowledge ||= {};
+  const seenKnownFacts = new Set<string>();
+  for (const [factId, fact] of Object.entries(ledger).sort(([, left], [, right]) =>
+    left.learnedAtTurn - right.learnedAtTurn
+    || left.factId.length - right.factId.length
+    || (left.factId < right.factId ? -1 : left.factId > right.factId ? 1 : 0)
+  )) {
+    if (fact.predicate !== 'known') continue;
+    const semanticKey = [
+      fact.subjectId,
+      fact.predicate,
+      fact.objectId || '',
+      fact.status,
+      fact.disclosureScope,
+    ].join('\u0000');
+    if (seenKnownFacts.has(semanticKey)) delete ledger[factId];
+    else seenKnownFacts.add(semanticKey);
+  }
   const characters = runtime.canon?.characters || [];
   const factions = runtime.canon?.factions || [];
   const player = characters.find(item => item.id === runtime.opening?.playerCharacterId);
@@ -940,6 +957,14 @@ function syncPlayerKnowledgeLedger(runtime: RuntimeState): void {
   for (const entity of [...characters, ...factions]) {
     const source = sources.find(item => item.text.includes(entity.name));
     if (!source) continue;
+    const alreadyConfirmed = Object.values(ledger).some(fact =>
+      fact.subjectId === entity.id
+      && fact.predicate === 'known'
+      && fact.objectId === undefined
+      && fact.status === 'confirmed'
+      && (fact.disclosureScope === 'player' || fact.disclosureScope === 'public')
+    );
+    if (alreadyConfirmed) continue;
     const factId = `knowledge.player.entity.${entity.id}`;
     ledger[factId] ||= {
       factId,

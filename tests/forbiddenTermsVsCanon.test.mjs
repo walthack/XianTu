@@ -85,16 +85,42 @@ test('minimal player knowledge ledger survives initialization and is projected i
     世界: { 信息: {}, 状态: {} },
     系统: { 扩展: {} },
   }, buildStrictScenarioInitialization(mod, '2026-07-21T00:00:00.000Z'));
-  const save = advanceScenarioRuntime(initialized).saveData;
-  const runtime = save.世界.状态.剧本模组;
+  let save = advanceScenarioRuntime(initialized).saveData;
+  let runtime = save.世界.状态.剧本模组;
+
+  runtime.playerKnowledge['knowledge.player.entity.liuchao.character.lv_ji'] = {
+    ...runtime.playerKnowledge['knowledge.player.entity.lv_ji'],
+    factId: 'knowledge.player.entity.liuchao.character.lv_ji',
+  };
+  save = advanceScenarioRuntime(save).saveData;
+  runtime = save.世界.状态.剧本模组;
+  assert.equal(
+    runtime.playerKnowledge['knowledge.player.entity.liuchao.character.lv_ji'],
+    undefined,
+    'legacy saves must deterministically collapse semantically duplicate known facts',
+  );
 
   assert.equal(runtime.playerKnowledge['knowledge.player.entity.ruan_xiang_ning'].status, 'confirmed');
   assert.equal(runtime.playerKnowledge['knowledge.player.entity.lv_ji'].sourceEventId, 'lyg.event.s01_04');
   assert.equal(runtime.playerKnowledge['knowledge.player.entity.hei_mo_hai'].disclosureScope, 'player');
+  for (const subjectId of [
+    'liuchao.character.ruan_xiang_ning',
+    'liuchao.character.lv_ji',
+    'liuchao.faction.hei_mo_hai',
+  ]) {
+    assert.equal(
+      Object.values(runtime.playerKnowledge).filter(fact =>
+        fact.subjectId === subjectId && fact.predicate === 'known' && fact.status === 'confirmed'
+      ).length,
+      1,
+      `${subjectId} must not be duplicated by deterministic evidence sync`,
+    );
+  }
 
   const prompt = buildScenarioStoryPrompt(save);
   assert.match(prompt, /玩家知识账本=.*阮香凝\.known\[confirmed\/player@0\]/);
   assert.match(prompt, /黑魔海\.known\[confirmed\/player@0\]/);
   assert.doesNotMatch(prompt, /renderGuard\.forbiddenTerms=[^；]*(?:阮香凝|吕冀|黑魔海)/);
   assert.match(prompt, /renderGuard\.forbiddenAssociations=.*阮香凝.*凝玉姬/);
+  assert.match(prompt, /涉及军务、护卫或路线时，只写职责、通行、次序、联络和可见动作/);
 });

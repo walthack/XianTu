@@ -236,11 +236,14 @@ test('hard render violations are buffered and replaced locally if the final retr
 });
 
 test('hard render violations receive one buffered rewrite before local fallback', async () => {
-  const { decideNarrativePerformanceAttempt } =
+  const { decideNarrativePerformanceAttempt, performanceRetryInstruction } =
     await loadTs('../src/modules/scenarioMods/narrativePerformanceGuard.ts');
   const scenarioPrompt = 'renderGuard.forbiddenTerms=黑魔海；renderGuard.rejectConcreteQuantities=true。';
   const first = decideNarrativePerformanceAttempt('黑魔海已有三百甲士。', '继续', scenarioPrompt, 1, 2);
   assert.equal(first.valid, false);
   assert.equal(first.shouldRetry, true);
   assert.equal(first.narrative, '');
+  assert.match(first.retryInstruction, /职责、通行、次序、联络和可见动作/);
+  assert.match(first.retryInstruction, /不得补人数、距离或比例/);
+  assert.match(performanceRetryInstruction(first.issues), /不得换一种肯定说法再次坐实/);
 });

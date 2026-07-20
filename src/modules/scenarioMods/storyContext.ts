@@ -273,7 +273,7 @@ function formatWorldActorContract(runtime: StoryRuntime, anchor: ScenarioModEven
     .filter((name): name is string => Boolean(name)));
   const guardedTerms = (guard?.forbiddenTerms || []).filter(term => !confirmedKnownNames.has(term));
   const guardLine = guard
-    ? `\n- renderGuard.forbiddenTerms=${guardedTerms.join('|')}；renderGuard.forbiddenAssociations=${JSON.stringify(guard.forbiddenAssociations || [])}；renderGuard.rejectConcreteQuantities=${guard.rejectConcreteQuantities === true}；renderGuard.allowUnverifiedQuantities=${guard.allowUnverifiedQuantities === true}。未核实数字必须带明确消息来源与不确定性，只是角色主张，绝不等同或写回世界真值。该行是最终落稿硬门禁，命中时必须重写，不得展示违规草稿。`
+    ? `\n- renderGuard.forbiddenTerms=${guardedTerms.join('|')}；renderGuard.forbiddenAssociations=${JSON.stringify(guard.forbiddenAssociations || [])}；renderGuard.rejectConcreteQuantities=${guard.rejectConcreteQuantities === true}；renderGuard.allowUnverifiedQuantities=${guard.allowUnverifiedQuantities === true}。未核实数字必须带明确消息来源与不确定性，只是角色主张，绝不等同或写回世界真值。${guard.rejectConcreteQuantities === true ? '涉及军务、护卫或路线时，只写职责、通行、次序、联络和可见动作；除非存档已明确给出，否则不得自行补人数、距离或比例。' : ''}该行是最终落稿硬门禁，命中时必须重写，不得展示违规草稿。`
     : '';
   const knowledgeLine = playerKnowledge.length
     ? `\n- 玩家知识账本=${playerKnowledge.map(fact => {
