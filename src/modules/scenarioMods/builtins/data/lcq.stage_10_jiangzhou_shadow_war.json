@@ -4222,7 +4222,431 @@
           "liuchao.character.xiao_zi",
           "liuchao.character.meng_fei_qing"
         ],
-        "objective": "与孟非卿复盘左武军覆灭原因"
+        "objective": "与孟非卿复盘左武军覆灭原因",
+        "relatedFactionIds": [
+          "liuchao.faction.xing_yue_hu"
+        ],
+        "timeline": {
+          "kind": "emergent",
+          "notBeforeTurns": 0,
+          "reveal": {
+            "playerKnowledge": "immediate"
+          }
+        },
+        "worldActor": {
+          "pressure": {
+            "id": "world.lcq.s10_04.supply_leak_review",
+            "scope": "faction",
+            "summary": "左武军覆灭留下的补给断线与军机泄露正在影响江州备战，星月湖必须先找出可复用的漏洞。",
+            "domains": [
+              "logistics",
+              "intelligence",
+              "war"
+            ],
+            "geography": [
+              "晴州",
+              "江州"
+            ],
+            "factionIds": [
+              "liuchao.faction.xing_yue_hu"
+            ],
+            "intensity": 2,
+            "canonPolicy": "local_state"
+          },
+          "decisionCore": {
+            "knowledgeFacts": {
+              "knowledge.lcq.s10_04.supply_cut": {
+                "text": "左武军覆灭前存在补给被切断和军机外泄。",
+                "access": "public",
+                "evidence": "qingyu.222.2：程宗扬与孟非卿复盘左武军覆灭原因。"
+              },
+              "knowledge.lcq.s10_04.jin_cleared": {
+                "text": "现有复盘排除了金蜜镝直接泄密的嫌疑。",
+                "access": "restricted",
+                "evidence": "qingyu.222.2 轴拍明确写明排除金蜜镝嫌疑。"
+              }
+            },
+            "situation": {
+              "whitelist": [
+                "supplyContinuity",
+                "leakRisk"
+              ],
+              "initialValues": {
+                "supplyContinuity": 32,
+                "leakRisk": 72
+              },
+              "limits": {
+                "supplyContinuity": {
+                  "min": 0,
+                  "max": 100
+                },
+                "leakRisk": {
+                  "min": 0,
+                  "max": 100
+                }
+              }
+            },
+            "canonPolicy": {
+              "invariant": [
+                "左武军已经覆灭",
+                "江州大战压力继续推进"
+              ],
+              "forbiddenBefore": [
+                "泄密真凶已确定",
+                "江州战争胜负已定"
+              ],
+              "processFreedom": [
+                "复盘补给链",
+                "核验军机接触者",
+                "建立江州备战的替代联络"
+              ]
+            },
+            "actors": [
+              {
+                "characterId": "liuchao.character.meng_fei_qing",
+                "identity": {
+                  "factionId": "liuchao.faction.xing_yue_hu",
+                  "office": "星月湖三团团长",
+                  "rank": 5
+                },
+                "personality": {
+                  "caution": 4,
+                  "honor": 4,
+                  "aggression": 3
+                },
+                "motives": {
+                  "stability": 5,
+                  "control": 4,
+                  "legitimacy": 2
+                },
+                "resources": {
+                  "influence": 4,
+                  "wealth": 2,
+                  "troops": 4,
+                  "intelligence": 4
+                },
+                "relationships": {},
+                "knowledge": [
+                  "knowledge.lcq.s10_04.supply_cut",
+                  "knowledge.lcq.s10_04.jin_cleared"
+                ],
+                "agendas": [
+                  {
+                    "id": "agenda.lcq.s10_04.meng_feiqing",
+                    "goal": "把左武军覆灭教训转成江州可执行的补给与军机纪律",
+                    "clock": 1,
+                    "escalation": [
+                      "复盘断点",
+                      "重建联络",
+                      "压实备战责任"
+                    ]
+                  }
+                ],
+                "allowedActionIds": [
+                  "audit_resources",
+                  "reserve_supplies",
+                  "prepare_fallback_route"
+                ],
+                "wake": {
+                  "tier": "faction",
+                  "cadenceTurns": 2,
+                  "factionIds": [
+                    "liuchao.faction.xing_yue_hu"
+                  ]
+                },
+                "evidence": {
+                  "identity.rank": "人物卡：孟非卿为八骏之首、星月湖三团团长。",
+                  "personality.caution": "人物卡：威猛沉稳、极端冷静。",
+                  "personality.honor": "人物卡：忠诚、有担当。",
+                  "personality.aggression": "人物卡：豪猛果决。",
+                  "motives.stability": "qingyu.222.2：以复盘保证江州备战不重蹈覆辙。",
+                  "motives.control": "qingyu.222.2：主动分析补给与军机断点。",
+                  "motives.legitimacy": "人物卡：以星月湖承重将领身份承担责任。",
+                  "resources.influence": "人物卡：八骏之首、三团团长。",
+                  "resources.wealth": "本拍只坐实军务调度，不扩张私人财力。",
+                  "resources.troops": "人物卡：掌星月湖一团兵力。",
+                  "resources.intelligence": "qingyu.222.2：能完成军机复盘并排除错误嫌疑。",
+                  "agendas.agenda.lcq.s10_04.meng_feiqing.clock": "本拍已经进入原因复盘阶段。"
+                }
+              },
+              {
+                "characterId": "liuchao.character.xiao_zi",
+                "identity": {
+                  "factionId": "liuchao.faction.xing_yue_hu",
+                  "office": "岳帅遗孤",
+                  "rank": 4
+                },
+                "personality": {
+                  "caution": 5,
+                  "ambition": 4,
+                  "aggression": 2
+                },
+                "motives": {
+                  "control": 5,
+                  "stability": 3
+                },
+                "resources": {
+                  "influence": 3,
+                  "wealth": 2,
+                  "troops": 1,
+                  "intelligence": 5
+                },
+                "relationships": {},
+                "knowledge": [
+                  "knowledge.lcq.s10_04.supply_cut"
+                ],
+                "agendas": [
+                  {
+                    "id": "agenda.lcq.s10_04.xiaozi",
+                    "goal": "沿泄密链找到仍会威胁程宗扬与星月湖的可疑接触点",
+                    "clock": 0,
+                    "escalation": [
+                      "旁听复盘",
+                      "暗查接触",
+                      "留下可验证后手"
+                    ]
+                  }
+                ],
+                "allowedActionIds": [
+                  "gather_intelligence",
+                  "test_loyalty",
+                  "prepare_fallback_route"
+                ],
+                "wake": {
+                  "tier": "minor",
+                  "factionIds": [
+                    "liuchao.faction.xing_yue_hu"
+                  ]
+                },
+                "evidence": {
+                  "identity.rank": "人物卡：小紫为岳帅遗孤、毒宗唯一嫡传和关键人物。",
+                  "personality.caution": "人物卡：城府极深、善于伪装并预先布局。",
+                  "personality.ambition": "人物卡：主动收服并控制威胁。",
+                  "personality.aggression": "人物卡：手段果断狠辣，但本拍以暗查为主。",
+                  "motives.control": "人物卡与裁定 #106：高智行动必须已有先手或可验证后手。",
+                  "motives.stability": "本拍在江州战前消除可复用的军机漏洞。",
+                  "resources.influence": "人物卡：在程宗扬核心圈与星月湖关系中具影响。",
+                  "resources.wealth": "本拍没有坐实独立财源，取低值。",
+                  "resources.troops": "本拍以个人暗查而非统军行动。",
+                  "resources.intelligence": "人物卡：智商与布局能力为核心特征。",
+                  "agendas.agenda.lcq.s10_04.xiaozi.clock": "本拍开始旁听并寻找军机泄露线索。"
+                }
+              }
+            ],
+            "actionBindings": [
+              {
+                "actionId": "audit_resources",
+                "actorIds": [
+                  "liuchao.character.meng_fei_qing"
+                ],
+                "label": "逐段复盘补给与军机接触",
+                "reason": "先把覆灭原因拆成可验证断点，再决定江州如何补洞",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lcq.s10_04.supply_cut",
+                  "knowledge.lcq.s10_04.jin_cleared"
+                ],
+                "mustNotInvent": [
+                  "泄密真凶",
+                  "江州战争胜负",
+                  "未声明的兵力数字"
+                ],
+                "visibleSignal": "孟非卿把补给路、军令传递与接触名单分成三列逐项核对",
+                "offscreenAction": "形成一份江州备战断点清单",
+                "costs": {
+                  "intelligence": 1
+                },
+                "effects": {
+                  "supplyContinuity": 8,
+                  "leakRisk": -6
+                },
+                "utility": {
+                  "urgency": 10,
+                  "factionGoal": 10,
+                  "expectedBenefit": 8,
+                  "situation": {
+                    "leakRisk": 4
+                  },
+                  "escalation": 2
+                },
+                "visibility": "public",
+                "durationTurns": 2
+              },
+              {
+                "actionId": "reserve_supplies",
+                "actorIds": [
+                  "liuchao.character.meng_fei_qing"
+                ],
+                "label": "为江州另建一条补给备份",
+                "reason": "复盘尚未找出全貌前先降低单线断供风险",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lcq.s10_04.supply_cut"
+                ],
+                "mustNotInvent": [
+                  "具体库存数量",
+                  "未发生的江州胜负"
+                ],
+                "visibleSignal": "几份补给账册被拆开保管，联络不再只经一处",
+                "offscreenAction": "建立不依赖单一接触人的补给备份",
+                "costs": {
+                  "wealth": 1,
+                  "influence": 1
+                },
+                "effects": {
+                  "supplyContinuity": 10
+                },
+                "utility": {
+                  "situation": {
+                    "supplyContinuity": -3
+                  },
+                  "escalation": 1
+                },
+                "visibility": "rumor",
+                "durationTurns": 1
+              },
+              {
+                "actionId": "prepare_fallback_route",
+                "actorIds": [
+                  "liuchao.character.meng_fei_qing",
+                  "liuchao.character.xiao_zi"
+                ],
+                "label": "保留断线后的替代联络",
+                "reason": "不等所有疑点查清，先确保江州军机能在一处暴露后继续传递",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lcq.s10_04.supply_cut"
+                ],
+                "mustNotInvent": [
+                  "秘密暗道",
+                  "具体路线坐标"
+                ],
+                "visibleSignal": "原有联络被拆成互不知全貌的几段",
+                "offscreenAction": "预留一条断线后仍可启用的接续方案",
+                "costs": {
+                  "intelligence": 1
+                },
+                "effects": {
+                  "supplyContinuity": 5,
+                  "leakRisk": -3
+                },
+                "utility": {
+                  "expectedBenefit": 2,
+                  "situation": {
+                    "leakRisk": 2
+                  }
+                },
+                "visibility": "hidden",
+                "durationTurns": 2
+              },
+              {
+                "actionId": "gather_intelligence",
+                "actorIds": [
+                  "liuchao.character.xiao_zi"
+                ],
+                "label": "暗查军机接触链",
+                "reason": "从被排除者之外寻找仍能同时接触补给与军令的人",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lcq.s10_04.supply_cut"
+                ],
+                "mustNotInvent": [
+                  "泄密真凶",
+                  "黑魔海幕后结论"
+                ],
+                "visibleSignal": "小紫没有追问结论，只悄悄记下每个断点曾经接触过谁",
+                "offscreenAction": "沿接触链留下可复核的暗查记录",
+                "costs": {
+                  "intelligence": 1
+                },
+                "effects": {
+                  "leakRisk": -5
+                },
+                "utility": {
+                  "urgency": 10,
+                  "factionGoal": 6,
+                  "expectedBenefit": 10,
+                  "situation": {
+                    "leakRisk": 4
+                  },
+                  "escalation": 2
+                },
+                "visibility": "rumor",
+                "durationTurns": 2
+              },
+              {
+                "actionId": "test_loyalty",
+                "actorIds": [
+                  "liuchao.character.xiao_zi"
+                ],
+                "label": "用错位消息试探接触者",
+                "reason": "不直接指认嫌疑人，以不同版本消息观察哪条最先外泄",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lcq.s10_04.supply_cut"
+                ],
+                "mustNotInvent": [
+                  "试探已经坐实真凶",
+                  "玩家同意泄露军机"
+                ],
+                "visibleSignal": "同一条军情被换了几种无关紧要的说法分别递出",
+                "offscreenAction": "记录不同消息版本的传播去向",
+                "costs": {
+                  "influence": 1,
+                  "intelligence": 1
+                },
+                "effects": {
+                  "leakRisk": -4
+                },
+                "utility": {
+                  "expectedBenefit": 3,
+                  "failureRisk": 1,
+                  "escalation": 2
+                },
+                "visibility": "hidden",
+                "durationTurns": 1
+              }
+            ],
+            "maxVisibleActions": 2,
+            "narrativeGuard": {
+              "forbiddenTerms": [
+                "泄密真凶已经确定",
+                "江州大战已经结束"
+              ],
+              "rejectConcreteQuantities": true,
+              "allowUnverifiedQuantities": true
+            }
+          },
+          "opportunities": [
+            {
+              "id": "opportunity.lcq.s10_04.close_supply_gap",
+              "title": "补上江州军机断点",
+              "characterIds": [
+                "liuchao.character.meng_fei_qing",
+                "liuchao.character.xiao_zi"
+              ],
+              "whyNow": "左武军的覆灭原因若只停在复盘，江州仍会沿同一条补给与军机链暴露。",
+              "nextStep": "从一处可验证断点入手，协助建立替代联络或核验接触链。",
+              "stakes": "错误指认会破坏星月湖内部信任，过度公开又会暴露新的备战路径。",
+              "rewardPreview": "取得一次调用星月湖补给复盘与军机核验的权限。",
+              "futureHint": "江州再出现断供或泄密征兆时，孟非卿会记得谁真正补过漏洞。",
+              "actionText": "我追踪“补上江州军机断点”：选择一处有证据的补给或接触断点，协助孟非卿与小紫建立可复核的替代方案。",
+              "rewardKey": "permission.lcq.xingyue.logistics_review",
+              "rewardLabel": "星月湖·补给复盘与军机核验",
+              "trigger": {
+                "actorIds": [
+                  "liuchao.character.meng_fei_qing",
+                  "liuchao.character.xiao_zi"
+                ],
+                "actionIds": [
+                  "audit_resources",
+                  "gather_intelligence"
+                ]
+              },
+              "expiresAfterTurns": 4
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s10_05_war_funds",

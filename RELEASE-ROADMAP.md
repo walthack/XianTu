@@ -123,6 +123,7 @@
 - [x] **R2-10E · 行动冲突、反制与多回合生命周期 G1（2026-07-20）**：持续行动进入可存档 `activeAction`，只在 started 落一次 effects；同域相反 stance／显式 counter 由本地分数裁定，败方不落反馈，更强反制可中断在途行动。`s01_06` 攻守/封路冲突与 `s01_07–08` 生命周期已通过确定性和 JSON 重载回归。报告=`docs/R2-10E-NPC-CONFLICT-AND-LIFECYCLE-G1-2026-07-20.md`。**下一门：地区／势力／人物分层唤醒。**
 - [x] **R2-10F · 地区／势力／人物分层唤醒 G1（2026-07-20）**：五档 wake budget 已进入 schema、validator、决策核与 runtime；在途行动强制唤醒，休眠 actor 不产生状态变化，每轮 `wakeAudit` 可重放。`s01_06–08` 已配置本地关键、场外关键和势力 cadence，minor/group 由合成回归覆盖。报告=`docs/R2-10F-LAYERED-WAKE-G1-2026-07-20.md`。**下一门：机会卡与长期 NPC 记忆。**
 - [x] **R2-10G · 机会卡与长期 NPC 记忆 G1（2026-07-20）**：机会卡由已裁定行动/知识触发，具备 available/tracked/expired/participated/offscreen 生命周期；UI/prompt 不提前显示未触发卡。NPC 行动、冲突与玩家介入形成显著度封顶 12 条的长期经历，并可通过声明标签改变后续效用。报告=`docs/R2-10G-OPPORTUNITY-AND-NPC-MEMORY-G1-2026-07-20.md`。**下一门：跨书异构扩量。**
+- [x] **R2-10H · 跨书异构扩量 G1（2026-07-20）**：清羽 `s10_04` 以势力级 emergent 军机复盘验证“无截止仍可动”，云龙 `s05_09` 以本地 window 押运遇劫验证硬截止场外归因；两书独立局势、行动、wake、机会与禁区均通过同核重放。报告=`docs/R2-10H-CROSS-BOOK-SCALE-G1-2026-07-20.md`。**R2-10 引擎 G1 路线至此完整；G2/共享外测门禁不变。**
 
 ### 世界/NPC 引擎设计参照系（2026-07-19 用户拍板，实现指引）
 
