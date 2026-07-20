@@ -20,14 +20,16 @@ const MILITARY_HEADCOUNT = new RegExp(
   `(?:军|兵|骑|甲士|北军|凉州军)[^。！？\\n]{0,12}${QUANTITY_NUMBER}\\s*(?:名|人|队)`
   + `|${QUANTITY_NUMBER}\\s*(?:名|人|队)[^。！？\\n]{0,12}(?:驻守|列阵|持兵|披甲|围宫|攻城|骑兵|甲士|军士)`,
 );
-const DISTANCE_QUANTITY = new RegExp(`${QUANTITY_NUMBER}\\s*(?:步|尺|里|坊)`);
+const DISTANCE_QUANTITY = new RegExp(`${QUANTITY_NUMBER}\\s*(?:步|尺|里)`);
+const WARD_DISTANCE_QUANTITY = new RegExp(`${QUANTITY_NUMBER}\\s*坊`);
 const RATIO_QUANTITY = new RegExp(`${QUANTITY_NUMBER}\\s*成`);
 const DISTANCE_CONTEXT = /距离|相隔|开外|以内|界碑|宫门|布置|驻扎|列阵|行军|路线|要道/;
-const RATIO_CONTEXT = /增|减|税|比例|折|抽|征|份额/;
+const MILITARY_WARD_CONTEXT = /军|兵|骑|甲士|军士|部众|校尉|亲兵|家兵|营|驻扎|驻守|列阵|行军|布防|设防|围宫|攻城/;
+const RATIO_CONTEXT = /税|赋|军饷|军费|军粮|军需|征发|徭役|兵力|伤亡/;
 const QUANTITY_CLAIM_SOURCE = /探子|斥候|军报|来报|使者|消息|号称|声称|自称|据报|传闻|据说/;
 const UNVERIFIED_QUANTITY_CONTEXT = /号称|声称|据报|传闻|据说|未核实|未经核实|尚待核实|无法证实|真假难辨/;
 const AUTHORITATIVE_QUANTITY_CONTEXT = /确有|确认|查明|已经核实|确切|实有/;
-const HYPOTHETICAL_CONTEXT = /莫非|是否|会不会|难道|假若|倘若|若有|并无|没有|未见|不曾/;
+const HYPOTHETICAL_CONTEXT = /莫非|是否|会不会|难道|假若|倘若|若有|有无(?!数)|有没有|并无|没有|未见|不曾/;
 const CONFIRMING_CONTEXT = /确有|果然|原来|证实|查明|确认|实有|的确|属实/;
 const CONTEXTUAL_FORBIDDEN_TERMS = new Set(['暗道', '伏兵', '暗桩', '魂丹']);
 const INVENTION_GUARDS: Array<{ marker: RegExp; violation: RegExp; issue: string }> = [
@@ -85,6 +87,7 @@ function sentenceHasUnauthorizedQuantity(sentence: string, scenarioPrompt: strin
   return DIRECT_MILITARY_QUANTITY.test(sentence)
     || MILITARY_HEADCOUNT.test(sentence)
     || (DISTANCE_QUANTITY.test(sentence) && DISTANCE_CONTEXT.test(sentence))
+    || (WARD_DISTANCE_QUANTITY.test(sentence) && MILITARY_WARD_CONTEXT.test(sentence))
     || (RATIO_QUANTITY.test(sentence) && RATIO_CONTEXT.test(sentence));
 }
 

@@ -135,6 +135,46 @@ test('real combined prompt rejects authoritative military quantities without blo
   );
 });
 
+test('quantity guard allows ordinary commerce and ward navigation without weakening military checks', async () => {
+  const { validateNarrativePerformance } = await loadTs('../src/modules/scenarioMods/narrativePerformanceGuard.ts');
+  const scenarioPrompt = 'renderGuard.forbiddenTerms=；renderGuard.forbiddenAssociations=[]；renderGuard.rejectConcreteQuantities=true；renderGuard.allowUnverifiedQuantities=true。';
+  for (const narrative of [
+    '市集上摊贩喊价，程宗扬还到抽两成利便成交。',
+    '这批绢帛按市价折了三成，掌柜的仍不肯松口。',
+    '东市往西三坊便是米行，路线程宗扬还算熟。',
+    '粮价较上月增了三成，米行门前排起长队。',
+  ]) {
+    assert.equal(validateNarrativePerformance(narrative, '继续', scenarioPrompt).valid, true, narrative);
+  }
+  for (const narrative of [
+    '增税三成。',
+    '三百甲士列阵。',
+    '宫门三十步外有人布防。',
+    '八校尉已经入宫。',
+    '两队人马驻守宫门。',
+    '凉州军在宫门外三坊驻扎。',
+  ]) {
+    assert.equal(validateNarrativePerformance(narrative, '继续', scenarioPrompt).valid, false, narrative);
+  }
+});
+
+test('contextual secret guard accepts 有无 questions but not 有无数 as a false question marker', async () => {
+  const { validateNarrativePerformance } = await loadTs('../src/modules/scenarioMods/narrativePerformanceGuard.ts');
+  const scenarioPrompt = 'renderGuard.forbiddenTerms=暗道|伏兵；renderGuard.forbiddenAssociations=[]；renderGuard.rejectConcreteQuantities=false；renderGuard.allowUnverifiedQuantities=false。';
+  for (const narrative of [
+    '探查宫道两侧有无伏兵。',
+    '探查宫中有没有暗道。',
+  ]) {
+    assert.equal(validateNarrativePerformance(narrative, '继续', scenarioPrompt).valid, true, narrative);
+  }
+  for (const narrative of [
+    '查明宫道两侧确有伏兵。',
+    '宫道有无数伏兵涌出。',
+  ]) {
+    assert.equal(validateNarrativePerformance(narrative, '继续', scenarioPrompt).valid, false, narrative);
+  }
+});
+
 test('unverified military numbers require explicit stage authorization and attribution', async () => {
   const { validateNarrativePerformance } = await loadTs('../src/modules/scenarioMods/narrativePerformanceGuard.ts');
   const text = '探子声称宫门外有三百甲士，但这份军报未经核实。';

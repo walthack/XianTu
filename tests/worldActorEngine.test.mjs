@@ -85,6 +85,9 @@ test('Dingtao built-in validates with a single-stage world actor contract', asyn
   assert.equal(event.worldActor.agendas, undefined, 's01_05 must not fall back to hand-written agenda rotation');
   const knownFacts = event.worldActor.decisionCore.actionBindings.flatMap(item => item.knownFacts);
   assert.equal(knownFacts.some(item => /阮香凝|凝玉姬|黑魔海玉姬/.test(item)), false, 'NPC knowledge must not leak Ruan');
+  const forbiddenTerms = event.worldActor.decisionCore.narrativeGuard.forbiddenTerms;
+  assert.equal(forbiddenTerms.includes('黑魔海'), false, 'the organization name is already known to the protagonist');
+  assert.equal(forbiddenTerms.includes('盛姬'), true, 'the unrevealed caregiver name remains protected');
 });
 
 test('decision-core validator rejects ambiguous bindings, coercive limits, and broken actor references', async () => {
