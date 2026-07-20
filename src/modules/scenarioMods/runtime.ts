@@ -69,6 +69,19 @@ export interface ScenarioActorMemory {
   relationships: Record<string, Record<string, number>>;
   knowledge: string[];
   episodes: ScenarioNpcMemoryEpisode[];
+  /**
+   * 下列运行时字段所属的锚点事件。跨事件只继承态度、知识与经历（R2-10C 合同），
+   * 换锚点后一律回落 core 初值；只有同锚点重建（配置迁移、npcStates 丢失）才承接。
+   */
+  runtimeAnchorEventId?: string;
+  /** 已消耗的资源余额；缺省表示旧档，回落 core 声明的初值。 */
+  resources?: Record<string, number>;
+  /** 剩余冷却轮数；败方一轮内不得重赛的唯一刹车，必须跨配置迁移承接。 */
+  actionCooldowns?: Record<string, number>;
+  /** 在途的多回合行动；迁移后若绑定已消失则显式作废，不得留僵尸。 */
+  activeAction?: { actionId: string; remainingTurns: number; score: number };
+  /** 议程时钟按 agenda.id 存，避免配置增删议程后按下标错位。 */
+  agendaClocks?: Record<string, number>;
   updatedAtTurn: number;
 }
 
@@ -188,6 +201,15 @@ function normalizeMemoryEpisodes(episodes: ScenarioNpcMemoryEpisode[]): Scenario
     .sort((a, b) => a.occurredAtTurn - b.occurredAtTurn || (a.id < b.id ? -1 : 1));
 }
 
+/** 键序参与 inputHash，落档前统一排序，避免内存对象与 JSON 重载对象产生不同哈希。 */
+function sortedNumberMap(source: Record<string, number> | undefined): Record<string, number> {
+  return Object.fromEntries(
+    Object.entries(source || {})
+      .filter(([, value]) => typeof value === 'number' && Number.isFinite(value))
+      .sort(([left], [right]) => left < right ? -1 : left > right ? 1 : 0),
+  );
+}
+
 function persistNpcMemory(runtime: RuntimeState, state: ScenarioActorEngineState): void {
   if (!state.npcStates?.length) return;
   const memory = state.actorMemory ||= {};
@@ -196,6 +218,13 @@ function persistNpcMemory(runtime: RuntimeState, state: ScenarioActorEngineState
       relationships: structuredClone(actor.relationships),
       knowledge: [...new Set(actor.knowledge)].sort(),
       episodes: normalizeMemoryEpisodes(actor.memories || []),
+      ...(state.anchorEventId ? { runtimeAnchorEventId: state.anchorEventId } : {}),
+      resources: sortedNumberMap(actor.resources),
+      actionCooldowns: sortedNumberMap(actor.actionCooldowns),
+      ...(actor.activeAction ? { activeAction: structuredClone(actor.activeAction) } : {}),
+      agendaClocks: sortedNumberMap(
+        Object.fromEntries(actor.agendas.map(agenda => [agenda.id, agenda.clock])),
+      ),
       updatedAtTurn: settledTurn(runtime),
     };
   }
@@ -204,6 +233,7 @@ function persistNpcMemory(runtime: RuntimeState, state: ScenarioActorEngineState
 function hydrateNpcActors(
   core: NonNullable<ScenarioModEvent['worldActor']>['decisionCore'],
   memory: Record<string, ScenarioActorMemory> | undefined,
+  anchorEventId: string | undefined,
 ): ScenarioNpcDecisionActor[] {
   if (!core) return [];
   const declaredKnowledge = core.knowledgeFacts ? new Set(Object.keys(core.knowledgeFacts)) : undefined;
@@ -221,6 +251,35 @@ function hydrateNpcActors(
       ...remembered.knowledge.filter(factId => !declaredKnowledge || declaredKnowledge.has(factId)),
     ])].sort();
     actor.memories = normalizeMemoryEpisodes(remembered.episodes || []);
+    // 换锚点即换合同：资源、冷却、议程时钟与在途行动都属于上一个事件，不得跨事件生效。
+    if (!anchorEventId || remembered.runtimeAnchorEventId !== anchorEventId) return actor;
+    for (const [key, value] of Object.entries(remembered.resources || {})) {
+      if (!(key in actor.resources)) continue;
+      actor.resources[key as keyof typeof actor.resources] = Math.max(0, value);
+    }
+    const cooldowns = sortedNumberMap(remembered.actionCooldowns);
+    actor.actionCooldowns = Object.fromEntries(
+      Object.entries(cooldowns).filter(([, turns]) => turns > 0),
+    );
+    for (const agenda of actor.agendas) {
+      const clock = remembered.agendaClocks?.[agenda.id];
+      if (typeof clock !== 'number') continue;
+      agenda.clock = Math.min(agenda.escalation.length, Math.max(0, clock));
+    }
+    // 配置迁移可能删掉或改写绑定；在途行动一旦失去合同就必须显式作废并落冷却，
+    // 否则 decideNpcActions 找不到绑定会静默改选新行动，留下永不消解的僵尸 activeAction。
+    const resumed = remembered.activeAction;
+    const bindingStillValid = resumed
+      && actor.allowedActionIds.includes(resumed.actionId)
+      && core.actionBindings.some(binding =>
+        binding.actionId === resumed.actionId
+        && (!binding.actorIds?.length || binding.actorIds.includes(actor.characterId)));
+    if (resumed && bindingStillValid && resumed.remainingTurns > 0) {
+      actor.activeAction = structuredClone(resumed);
+    } else if (resumed) {
+      actor.activeAction = undefined;
+      actor.actionCooldowns[resumed.actionId] = 1;
+    }
     return actor;
   });
 }
@@ -469,7 +528,7 @@ function syncActorEngine(runtime: RuntimeState): void {
         console.info(`[NPC Decision Core] config migrated ${fromHash} -> ${configHash}`);
       }
     }
-    state.npcStates = hydrateNpcActors(contract.decisionCore, state.actorMemory);
+    state.npcStates = hydrateNpcActors(contract.decisionCore, state.actorMemory, anchor.id);
     state.situationValues = { ...contract.decisionCore.situation.initialValues };
     const round = decideNpcActions(
       contract.decisionCore,
@@ -492,7 +551,7 @@ function syncActorEngine(runtime: RuntimeState): void {
     state.activeAgendaId = contract.agendas?.[0]?.id;
     state.surfacedAgendaIds = state.activeAgendaId ? [state.activeAgendaId] : [];
     if (contract.decisionCore) {
-      state.npcStates = hydrateNpcActors(contract.decisionCore, state.actorMemory);
+      state.npcStates = hydrateNpcActors(contract.decisionCore, state.actorMemory, anchor.id);
       const round = decideNpcActions(
         contract.decisionCore,
         contract.decisionCore.situation.initialValues,
@@ -516,7 +575,7 @@ function syncActorEngine(runtime: RuntimeState): void {
   const pushTurn = runtime.worldPush?.due ? runtime.worldPush.scheduledAtTurn : undefined;
   if (pushTurn !== undefined && state.lastHandledWorldPushTurn !== pushTurn && contract.decisionCore) {
     const situation = state.situationValues || { ...contract.decisionCore.situation.initialValues };
-    const npcStates = state.npcStates || hydrateNpcActors(contract.decisionCore, state.actorMemory);
+    const npcStates = state.npcStates || hydrateNpcActors(contract.decisionCore, state.actorMemory, anchor.id);
     const round = decideNpcActions(
       contract.decisionCore,
       situation,

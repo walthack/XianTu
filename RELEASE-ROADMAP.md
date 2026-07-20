@@ -124,6 +124,7 @@
 - [x] **R2-10F · 地区／势力／人物分层唤醒 G1（2026-07-20）**：五档 wake budget 已进入 schema、validator、决策核与 runtime；在途行动强制唤醒，休眠 actor 不产生状态变化，每轮 `wakeAudit` 可重放。`s01_06–08` 已配置本地关键、场外关键和势力 cadence，minor/group 由合成回归覆盖。报告=`docs/R2-10F-LAYERED-WAKE-G1-2026-07-20.md`。**下一门：机会卡与长期 NPC 记忆。**
 - [x] **R2-10G · 机会卡与长期 NPC 记忆 G1（2026-07-20，二审收口）**：机会卡由已裁定行动/知识触发，具备 available/tracked/expired/participated/offscreen 生命周期；首次追踪回合不可由换卡刷新，六回合到点显式过期。NPC 行动、冲突与玩家介入形成显著度封顶 12 条的长期经历，并可通过声明标签改变后续效用。报告=`docs/R2-10G-OPPORTUNITY-AND-NPC-MEMORY-G1-2026-07-20.md`。
 - [x] **R2-10H · 跨书异构扩量 G1（2026-07-20，二审收口）**：清羽 `s10_04` 与云龙 `s05_09` 的独立局势、行动、wake、机会与禁区均通过同核重放；现已使用真实 JSON 往返、连续三轮生产 runtime、整份存档逐字节／哈希比较，并分别断言零权限。评分遍历与可选上下文也已稳定化。报告=`docs/R2-10H-CROSS-BOOK-SCALE-G1-2026-07-20.md`，统一收口=`docs/R2-10I-SECOND-REVIEW-CLOSURE-2026-07-20.md`。**R2-10 引擎 G1 及统一二审已完成；G2/共享外测门禁不变。**
+- [x] **R2-10J · 配置迁移演员状态承接（2026-07-20，Claude 三审）**：`ScenarioActorMemory` 补 `resources`／`actionCooldowns`／`activeAction`／`agendaClocks` 并按 `runtimeAnchorEventId` 归属承接。此前 decisionCore 每次发版改动都会让进行中存档走 `hydrateNpcActors` 重建，静默退还已花资源、清空败方冷却、回退议程时钟并中断在途多回合行动；三书 6 处 core 均受影响。跨事件仍只继承态度／知识／经历（R2-10C 合同不变），迁移后失去绑定的在途行动显式作废并落一轮冷却。旧档时间线 `stallTurns` 回推补齐特征化回归。反例=`tests/r2_10j_config_migration_state.test.mjs`、`tests/r2_10j_legacy_timeline_backfill.test.mjs`，已并入 `npm run test:g1:npc`。
 
 ### 世界/NPC 引擎设计参照系（2026-07-19 用户拍板，实现指引）
 
