@@ -58,6 +58,9 @@ interface StoryRuntime {
       reason: string;
       knownFacts: string[];
       attitudes?: Array<{ targetCharacterId: string; dimension: string; value: number }>;
+      phase?: 'instant' | 'started' | 'continuing' | 'completed';
+      outcome?: 'unopposed' | 'succeeded' | 'blocked';
+      conflict?: { domain: string; opponentDecisionId: string };
       mustNotInvent: string[];
       visibleSignal: string;
       offscreenAction: string;
@@ -216,7 +219,7 @@ function formatWorldActorContract(runtime: StoryRuntime, anchor: ScenarioModEven
   const decisions = (state?.decisions || []).filter(item => visibleIds.has(item.id));
   const decisionLine = decisions.length
     ? decisions.map(decision =>
-      `${nameOf(decision.actorId)}已由本地决策器裁定“${decision.label}”；理由=${decision.reason}；态度=${(decision.attitudes || []).map(item => `${nameOf(item.targetCharacterId)}.${item.dimension}=${item.value}`).join('、') || '无显式态度因子'}；可见征兆=${decision.visibleSignal}；玩家不介入时=${decision.offscreenAction}；knownFacts=${decision.knownFacts.join('、')}；mustNotInvent=${decision.mustNotInvent.join('、')}。`,
+      `${nameOf(decision.actorId)}已由本地决策器裁定“${decision.label}”；阶段=${decision.phase || 'instant'}；结果=${decision.outcome || 'unopposed'}${decision.conflict ? `（冲突域=${decision.conflict.domain}，对手=${visibleIds.has(decision.conflict.opponentDecisionId) ? decision.conflict.opponentDecisionId : '未公开反制'}）` : ''}；理由=${decision.reason}；态度=${(decision.attitudes || []).map(item => `${nameOf(item.targetCharacterId)}.${item.dimension}=${item.value}`).join('、') || '无显式态度因子'}；可见征兆=${decision.visibleSignal}；玩家不介入时=${decision.offscreenAction}；knownFacts=${decision.knownFacts.join('、')}；mustNotInvent=${decision.mustNotInvent.join('、')}。`,
     ).join('\n- ')
     : '';
   const actorLine = decisionLine || (agenda

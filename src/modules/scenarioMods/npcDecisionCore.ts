@@ -53,6 +53,14 @@ export interface NpcDecisionReceipt {
   offscreenAction: string;
   visibility: 'public' | 'rumor' | 'hidden';
   durationTurns: number;
+  phase: 'instant' | 'started' | 'continuing' | 'completed';
+  outcome: 'unopposed' | 'succeeded' | 'blocked';
+  conflict?: {
+    domain: string;
+    opponentDecisionId: string;
+    ownStrength: number;
+    opponentStrength: number;
+  };
   score: number;
   candidates: NpcCandidateScore[];
   effects: Record<string, number>;
@@ -76,7 +84,7 @@ export interface NpcDecisionEffectApplication {
   rejectedEffects: RejectedNpcDecisionEffect[];
 }
 
-export const NPC_ACTION_LIBRARY_VERSION = 'r2-10d.1';
+export const NPC_ACTION_LIBRARY_VERSION = 'r2-10e.1';
 
 // 通用行动词表保持小而可复用；stage 只绑定其中适用项及白名单 effects。
 // 32 项满足首批 30–50 的规格边界，未绑定的行动不会进入该 stage 候选池。
@@ -235,6 +243,127 @@ function scoreCandidate(
   return { actionId: binding.actionId, label: binding.label, eligible: true, score, breakdown };
 }
 
+function receiptFor(
+  core: ScenarioNpcDecisionCore,
+  actor: ScenarioNpcDecisionActor,
+  binding: ScenarioNpcDecisionActionBinding,
+  score: number,
+  candidates: NpcCandidateScore[],
+  phase: NpcDecisionReceipt['phase'],
+): NpcDecisionReceipt {
+  const attitudeKeys = [
+    ...(binding.utility?.relationships || []),
+    ...(binding.relationshipRequirements || []),
+  ];
+  const seenAttitudes = new Set<string>();
+  const appliesEffects = phase === 'instant' || phase === 'started';
+  return {
+    id: `npc-decision.${actor.characterId}.${binding.actionId}`,
+    actorId: actor.characterId,
+    actionId: binding.actionId,
+    label: binding.label,
+    reason: binding.reason,
+    knownFactIds: (binding.knownFactIds || []).filter(factId => actor.knowledge.includes(factId)),
+    knownFacts: binding.knownFactIds?.length
+      ? binding.knownFactIds
+        .filter(factId => actor.knowledge.includes(factId))
+        .map(factId => core.knowledgeFacts?.[factId]?.text)
+        .filter((fact): fact is string => Boolean(fact))
+      : [...binding.knownFacts],
+    attitudes: attitudeKeys
+      .filter(item => {
+        const key = `${item.targetCharacterId}.${item.dimension}`;
+        if (seenAttitudes.has(key)) return false;
+        seenAttitudes.add(key);
+        return true;
+      })
+      .map(item => ({
+        targetCharacterId: item.targetCharacterId,
+        dimension: item.dimension,
+        value: actor.relationships[item.targetCharacterId]?.[item.dimension] || 0,
+      })),
+    mustNotInvent: [...binding.mustNotInvent],
+    visibleSignal: binding.visibleSignal,
+    offscreenAction: binding.offscreenAction,
+    visibility: binding.visibility,
+    durationTurns: binding.durationTurns,
+    phase,
+    outcome: 'unopposed',
+    score,
+    candidates,
+    effects: appliesEffects ? { ...(binding.effects || {}) } : {},
+    stateEffects: appliesEffects && binding.stateEffects
+      ? structuredClone(binding.stateEffects)
+      : undefined,
+  };
+}
+
+function bindingForDecision(
+  core: ScenarioNpcDecisionCore,
+  decision: NpcDecisionReceipt,
+): ScenarioNpcDecisionActionBinding | undefined {
+  return core.actionBindings.find(item =>
+    item.actionId === decision.actionId
+    && (!item.actorIds?.length || item.actorIds.includes(decision.actorId)));
+}
+
+function conflictStrength(
+  binding: ScenarioNpcDecisionActionBinding,
+  decision: NpcDecisionReceipt,
+): number {
+  return decision.score + (binding.interaction?.power || 0);
+}
+
+/** 两个相反意图在同一冲突域相遇时，本地确定性裁定；LLM 不得重赛。 */
+export function resolveNpcActionConflicts(
+  core: ScenarioNpcDecisionCore,
+  decisions: NpcDecisionReceipt[],
+): NpcDecisionReceipt[] {
+  const next = structuredClone(decisions);
+  for (let leftIndex = 0; leftIndex < next.length; leftIndex++) {
+    for (let rightIndex = leftIndex + 1; rightIndex < next.length; rightIndex++) {
+      const left = next[leftIndex];
+      const right = next[rightIndex];
+      const leftBinding = bindingForDecision(core, left);
+      const rightBinding = bindingForDecision(core, right);
+      const leftInteraction = leftBinding?.interaction;
+      const rightInteraction = rightBinding?.interaction;
+      if (!leftBinding || !rightBinding || !leftInteraction || !rightInteraction) continue;
+      const explicitCounter = leftInteraction.counters?.includes(right.actionId)
+        || rightInteraction.counters?.includes(left.actionId);
+      const opposed = leftInteraction.domain === rightInteraction.domain
+        && leftInteraction.stance !== rightInteraction.stance;
+      if (!opposed && !explicitCounter) continue;
+      const domain = opposed ? leftInteraction.domain : `${leftInteraction.domain}:${rightInteraction.domain}`;
+      const leftStrength = conflictStrength(leftBinding, left);
+      const rightStrength = conflictStrength(rightBinding, right);
+      const leftWins = leftStrength > rightStrength
+        || (leftStrength === rightStrength && left.id < right.id);
+      const winner = leftWins ? left : right;
+      const loser = leftWins ? right : left;
+      const winnerStrength = leftWins ? leftStrength : rightStrength;
+      const loserStrength = leftWins ? rightStrength : leftStrength;
+      if (winner.outcome !== 'blocked') winner.outcome = 'succeeded';
+      loser.outcome = 'blocked';
+      winner.conflict = {
+        domain,
+        opponentDecisionId: loser.id,
+        ownStrength: winnerStrength,
+        opponentStrength: loserStrength,
+      };
+      loser.conflict = {
+        domain,
+        opponentDecisionId: winner.id,
+        ownStrength: loserStrength,
+        opponentStrength: winnerStrength,
+      };
+      loser.effects = {};
+      loser.stateEffects = undefined;
+    }
+  }
+  return next;
+}
+
 export function decideNpcActions(
   core: ScenarioNpcDecisionCore,
   situationValues: Record<string, number> = core.situation.initialValues,
@@ -243,6 +372,22 @@ export function decideNpcActions(
   const forbidden = new Set(core.canonPolicy.forbiddenBefore);
   const decisions: NpcDecisionReceipt[] = [];
   for (const actor of actors) {
+    if (actor.activeAction) {
+      const binding = core.actionBindings.find(item =>
+        item.actionId === actor.activeAction!.actionId
+        && (!item.actorIds?.length || item.actorIds.includes(actor.characterId)));
+      if (binding) {
+        decisions.push(receiptFor(
+          core,
+          actor,
+          binding,
+          actor.activeAction.score,
+          [],
+          actor.activeAction.remainingTurns <= 1 ? 'completed' : 'continuing',
+        ));
+        continue;
+      }
+    }
     const bindings = core.actionBindings.filter(binding =>
       actor.allowedActionIds.includes(binding.actionId)
       && (!binding.actorIds?.length || binding.actorIds.includes(actor.characterId)));
@@ -257,46 +402,14 @@ export function decideNpcActions(
     const selected = ranked[0];
     if (!selected) continue;
     const { binding, candidate: winner } = selected;
-    const attitudeKeys = [
-      ...(binding.utility?.relationships || []),
-      ...(binding.relationshipRequirements || []),
-    ];
-    const seenAttitudes = new Set<string>();
-    decisions.push({
-      id: `npc-decision.${actor.characterId}.${winner.actionId}`,
-      actorId: actor.characterId,
-      actionId: winner.actionId,
-      label: binding.label,
-      reason: binding.reason,
-      knownFactIds: (binding.knownFactIds || []).filter(factId => actor.knowledge.includes(factId)),
-      knownFacts: binding.knownFactIds?.length
-        ? binding.knownFactIds
-          .filter(factId => actor.knowledge.includes(factId))
-          .map(factId => core.knowledgeFacts?.[factId]?.text)
-          .filter((fact): fact is string => Boolean(fact))
-        : [...binding.knownFacts],
-      attitudes: attitudeKeys
-        .filter(item => {
-          const key = `${item.targetCharacterId}.${item.dimension}`;
-          if (seenAttitudes.has(key)) return false;
-          seenAttitudes.add(key);
-          return true;
-        })
-        .map(item => ({
-          targetCharacterId: item.targetCharacterId,
-          dimension: item.dimension,
-          value: actor.relationships[item.targetCharacterId]?.[item.dimension] || 0,
-        })),
-      mustNotInvent: [...binding.mustNotInvent],
-      visibleSignal: binding.visibleSignal,
-      offscreenAction: binding.offscreenAction,
-      visibility: binding.visibility,
-      durationTurns: binding.durationTurns,
-      score: winner.score!,
+    decisions.push(receiptFor(
+      core,
+      actor,
+      binding,
+      winner.score!,
       candidates,
-      effects: { ...(binding.effects || {}) },
-      stateEffects: binding.stateEffects ? structuredClone(binding.stateEffects) : undefined,
-    });
+      binding.durationTurns > 1 ? 'started' : 'instant',
+    ));
   }
   return {
     inputHash: hash({
@@ -306,7 +419,7 @@ export function decideNpcActions(
       actionBindings: core.actionBindings,
       canonPolicy: core.canonPolicy,
     }),
-    decisions,
+    decisions: resolveNpcActionConflicts(core, decisions),
   };
 }
 
@@ -326,13 +439,22 @@ export function applyNpcDecisionActorState(
   }
   for (const decision of decisions) {
     const actor = next.find(item => item.characterId === decision.actorId);
-    const binding = core.actionBindings.find(item =>
-      item.actionId === decision.actionId
-      && (!item.actorIds?.length || item.actorIds.includes(decision.actorId)));
+    const binding = bindingForDecision(core, decision);
     if (!actor || !binding) continue;
-    if (binding.durationTurns > 1) {
+    if (decision.phase === 'continuing' || decision.phase === 'completed') {
+      if (decision.outcome === 'blocked' || decision.phase === 'completed') {
+        actor.activeAction = undefined;
+        actor.actionCooldowns ||= {};
+        actor.actionCooldowns[binding.actionId] = 1;
+      } else if (actor.activeAction) {
+        actor.activeAction.remainingTurns = Math.max(1, actor.activeAction.remainingTurns - 1);
+      }
+      continue;
+    }
+    if (decision.outcome === 'blocked') {
       actor.actionCooldowns ||= {};
-      actor.actionCooldowns[binding.actionId] = binding.durationTurns - 1;
+      actor.actionCooldowns[binding.actionId] = 1;
+      continue;
     }
     for (const key of RESOURCES) {
       actor.resources[key] = Math.max(0, actor.resources[key] - Math.max(0, binding.costs?.[key] || 0));
@@ -341,6 +463,13 @@ export function applyNpcDecisionActorState(
       agenda.clock = Math.min(agenda.escalation.length, Math.max(0, agenda.clock) + 1);
     }
     applyNpcStateEffects(next, decision.actorId, decision.stateEffects);
+    if (binding.durationTurns > 1) {
+      actor.activeAction = {
+        actionId: binding.actionId,
+        remainingTurns: binding.durationTurns - 1,
+        score: decision.score,
+      };
+    }
   }
   return next;
 }
@@ -389,6 +518,7 @@ export function applyNpcDecisionEffectsWithAudit(
   const next = { ...situationValues };
   const rejectedEffects: RejectedNpcDecisionEffect[] = [];
   for (const decision of decisions) {
+    if (decision.outcome === 'blocked') continue;
     for (const [key, delta] of Object.entries(decision.effects)) {
       // Registry 装载时会严格拒绝越界；这里面对旧档快照选择降级跳过，避免整回合硬崩。
       if (!whitelist.has(key)) {

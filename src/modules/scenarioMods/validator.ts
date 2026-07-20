@@ -717,6 +717,21 @@ function validateNpcDecisionCore(
     } else if (binding.durationTurns < 1) {
       add(`${bindingPath}.durationTurns`, 'invalid_range', 'durationTurns must be at least 1.');
     }
+    if (binding.interaction !== undefined && !isRecord(binding.interaction)) {
+      add(`${bindingPath}.interaction`, 'invalid_type', 'interaction must be an object.');
+    } else if (isRecord(binding.interaction)) {
+      validateId(binding.interaction.domain, `${bindingPath}.interaction.domain`, add);
+      if (!['advance', 'defend'].includes(String(binding.interaction.stance))) {
+        add(`${bindingPath}.interaction.stance`, 'invalid_enum', 'interaction stance must be advance or defend.');
+      }
+      optionalNumber(binding.interaction.power, `${bindingPath}.interaction.power`, add);
+      validateIdArray(binding.interaction.counters, `${bindingPath}.interaction.counters`, add);
+      for (const actionId of Array.isArray(binding.interaction.counters) ? binding.interaction.counters : []) {
+        if (typeof actionId === 'string' && !knownActions.has(actionId)) {
+          add(`${bindingPath}.interaction.counters`, 'unknown_action', `Unknown counter action "${actionId}".`);
+        }
+      }
+    }
     for (const numericGroup of ['requirements', 'costs']) {
       if (binding[numericGroup] !== undefined && !isRecord(binding[numericGroup])) {
         add(`${bindingPath}.${numericGroup}`, 'invalid_type', `${numericGroup} must be an object.`);

@@ -198,10 +198,14 @@ test('s01_05 deterministic core derives four distinct actions with explainable s
   assert.equal(actorState[0].agendas[0].clock, 3, 'agenda clock caps at its escalation ladder');
   assert.equal(actorState[1].resources.intelligence, 4);
   const nextRound = decideNpcActions(core, changed, actorState);
+  assert.equal(nextRound.decisions[0].phase, 'completed');
+  assert.equal(nextRound.decisions[0].actionId, 'secure_palace_access');
+  const completedState = applyNpcDecisionActorState(core, actorState, nextRound.decisions);
+  const followingRound = decideNpcActions(core, changed, completedState);
   assert.equal(
-    nextRound.decisions[0].candidates.find(item => item.actionId === 'secure_palace_access').eliminatedReason,
+    followingRound.decisions[0].candidates.find(item => item.actionId === 'secure_palace_access').eliminatedReason,
     'cooldown:1',
-    'durationTurns must prevent immediate repeat',
+    'completed multi-turn action must not restart immediately',
   );
   assert.deepEqual(applyNpcDecisionEffects(core, changed, [{
     ...dong, effects: { globalPopulation: -1 },

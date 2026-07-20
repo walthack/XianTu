@@ -120,6 +120,7 @@
 - [~] **第二轮 P1 · 人物未来/故事机会（台账 #26，G1 通过、G2 待验）**：`s01_05` 确定性内核、回执/权限链与场外归因已完成；两轮二审问题均已修复。验收现拆为 G1/G2：G1 以 `npm run test:g1:npc` 从同一 `inputHash=7681bd8e` fixture 无网络重放 R3→R1→R2，三线均在 worldTurn 10 正确结算，canonGuard、runtime、回执/权限、局势、hidden、重载与幂等全绿；G2 单独负责真实模型演出、泄漏、数字认识论、行动选项和玩家可读性。**规格=`docs/R2-10-NPC-DECISION-CORE-SPEC-2026-07-19.md`，验收=`docs/R2-10B-NPC-DECISION-CORE-TRUE-DEVICE-ACCEPTANCE-2026-07-19.md`。G1 已解锁燕歌 s01_06–08 的隔离数据扩写；G2 前不得合并部署、共享服外测或把本项翻 `[x]`。**
 - [~] **R2-10C · 世界时间与跨事件扩量（2026-07-20）**：`canon_anchor/window/emergent` 时间合同、资格相对时钟、硬截止和“发生／公开／玩家获知”三时刻已进入 schema/runtime/validator；未获知场外事实不进 prompt/UI/编年史。`s01_06–08` 已形成护持冲突、军中承接、秘密知情三种结构并通过无 LLM 跨事件 G1；硬截止不受 stall/steering 冻结，场外不授权限，`s01_08` 无硬截止且不伪造知识。报告=`docs/R2-10C-WORLD-TIMELINE-AND-CROSS-EVENT-G1-2026-07-20.md`。**下一门：完整态度／knowledge／effects 反馈环；之后才做行动冲突、反制和生命周期。**
 - [x] **R2-10D · 态度／knowledge／effects 反馈环 G1（2026-07-20）**：知识条目 id 成为行动资格，少维度态度成为阈值／效用，`stateEffects` 白名单结算资源、态度与知识；跨事件只继承态度和知识。`s01_06` 攻守、`s01_08` 机密核验、`s01_05→07` 贾文和退场承接均通过确定性、JSON 重载与防泄漏回归。报告=`docs/R2-10D-NPC-FEEDBACK-LOOP-G1-2026-07-20.md`。**下一门：行动冲突、反制和多回合生命周期。**
+- [x] **R2-10E · 行动冲突、反制与多回合生命周期 G1（2026-07-20）**：持续行动进入可存档 `activeAction`，只在 started 落一次 effects；同域相反 stance／显式 counter 由本地分数裁定，败方不落反馈，更强反制可中断在途行动。`s01_06` 攻守/封路冲突与 `s01_07–08` 生命周期已通过确定性和 JSON 重载回归。报告=`docs/R2-10E-NPC-CONFLICT-AND-LIFECYCLE-G1-2026-07-20.md`。**下一门：地区／势力／人物分层唤醒。**
 
 ### 世界/NPC 引擎设计参照系（2026-07-19 用户拍板，实现指引）
 

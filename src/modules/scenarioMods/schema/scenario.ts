@@ -177,6 +177,12 @@ export interface ScenarioNpcDecisionActor {
   allowedActionIds: string[];
   /** 运行时字段：行动在持续期内不可被重复裁定；正典配置可省略。 */
   actionCooldowns?: Record<string, number>;
+  /** 运行时字段：durationTurns>1 的行动在后续世界行动轮继续推进。 */
+  activeAction?: {
+    actionId: string;
+    remainingTurns: number;
+    score: number;
+  };
   /** 每个数值字段的正典依据；键为 identity.rank/personality.* 等相对路径。 */
   evidence: Record<string, string>;
 }
@@ -213,6 +219,13 @@ export interface ScenarioNpcDecisionActionBinding {
   canonTags?: string[];
   visibility: ScenarioNpcDecisionVisibility;
   durationTurns: number;
+  /** 同一 domain 中相反 stance 的行动由本地内核确定性解决冲突。 */
+  interaction?: {
+    domain: string;
+    stance: 'advance' | 'defend';
+    power?: number;
+    counters?: string[];
+  };
 }
 
 export interface ScenarioNpcDecisionCore {

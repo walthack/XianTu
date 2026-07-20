@@ -6183,6 +6183,14 @@
                       }
                     }
                   ]
+                },
+                "interaction": {
+                  "domain": "royal_guard",
+                  "stance": "defend",
+                  "power": 5,
+                  "counters": [
+                    "sabotage_agenda"
+                  ]
                 }
               },
               {
@@ -6230,7 +6238,15 @@
                 "requiresKnowledge": [
                   "knowledge.lyg.s01_06.03",
                   "knowledge.lyg.s01_06.safe_route_prepared"
-                ]
+                ],
+                "interaction": {
+                  "domain": "evacuation_route",
+                  "stance": "defend",
+                  "power": 3,
+                  "counters": [
+                    "block_road"
+                  ]
+                }
               },
               {
                 "actionId": "open_safe_route",
@@ -6260,7 +6276,15 @@
                 ],
                 "requiresKnowledge": [
                   "knowledge.lyg.s01_06.05"
-                ]
+                ],
+                "interaction": {
+                  "domain": "evacuation_route",
+                  "stance": "defend",
+                  "power": 2,
+                  "counters": [
+                    "block_road"
+                  ]
+                }
               },
               {
                 "actionId": "sabotage_agenda",
@@ -6327,6 +6351,14 @@
                         "respect": 2
                       }
                     }
+                  ]
+                },
+                "interaction": {
+                  "domain": "royal_guard",
+                  "stance": "advance",
+                  "power": 3,
+                  "counters": [
+                    "protect_principal"
                   ]
                 }
               },
@@ -6402,7 +6434,16 @@
                 "requiresKnowledge": [
                   "knowledge.lyg.s01_06.04",
                   "knowledge.lyg.s01_06.guard_pattern_observed"
-                ]
+                ],
+                "interaction": {
+                  "domain": "evacuation_route",
+                  "stance": "advance",
+                  "power": 4,
+                  "counters": [
+                    "escort_witness",
+                    "open_safe_route"
+                  ]
+                }
               }
             ],
             "maxVisibleActions": 2,
@@ -6794,6 +6835,12 @@
                       }
                     }
                   ]
+                },
+                "interaction": {
+                  "domain": "liangzhou_succession",
+                  "stance": "defend",
+                  "power": 4,
+                  "counters": []
                 }
               },
               {
@@ -6935,6 +6982,12 @@
                       }
                     }
                   ]
+                },
+                "interaction": {
+                  "domain": "liangzhou_succession",
+                  "stance": "defend",
+                  "power": 5,
+                  "counters": []
                 }
               },
               {
@@ -6972,7 +7025,13 @@
                 ],
                 "requiresKnowledge": [
                   "knowledge.lyg.s01_07.05"
-                ]
+                ],
+                "interaction": {
+                  "domain": "border_logistics",
+                  "stance": "defend",
+                  "power": 3,
+                  "counters": []
+                }
               },
               {
                 "actionId": "prepare_fallback_route",
@@ -7009,7 +7068,13 @@
                 ],
                 "requiresKnowledge": [
                   "knowledge.lyg.s01_07.02"
-                ]
+                ],
+                "interaction": {
+                  "domain": "border_logistics",
+                  "stance": "advance",
+                  "power": 2,
+                  "counters": []
+                }
               }
             ],
             "maxVisibleActions": 2,
@@ -7421,7 +7486,13 @@
                 "requiresKnowledge": [
                   "knowledge.lyg.s01_08.02",
                   "knowledge.lyg.s01_08.source_verified"
-                ]
+                ],
+                "interaction": {
+                  "domain": "secret_source",
+                  "stance": "advance",
+                  "power": 3,
+                  "counters": []
+                }
               },
               {
                 "actionId": "conceal_evidence",
@@ -7476,6 +7547,12 @@
                       }
                     }
                   ]
+                },
+                "interaction": {
+                  "domain": "secret_source",
+                  "stance": "defend",
+                  "power": 4,
+                  "counters": []
                 }
               }
             ],

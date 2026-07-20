@@ -61,12 +61,20 @@ test('knowledge gates candidates and state effects unlock later actions without 
   const jian = round06.decisions.find(item => item.actorId === 'liuchao.character.jian_yu_ji');
   assert.match(guo.candidates.find(item => item.actionId === 'escort_witness').eliminatedReason, /^knowledge:/);
   assert.match(jian.candidates.find(item => item.actionId === 'block_road').eliminatedReason, /^knowledge:/);
+  assert.equal(guo.outcome, 'succeeded');
+  assert.equal(jian.outcome, 'blocked');
   const state06 = applyNpcDecisionActorState(s06, s06.actors, round06.decisions);
   const next06 = decideNpcActions(s06, s06.situation.initialValues, state06);
-  assert.equal(next06.decisions.find(item => item.actorId === guo.actorId)
+  const afterLifecycle = applyNpcDecisionActorState(s06, state06, next06.decisions);
+  const selectable06 = decideNpcActions(s06, s06.situation.initialValues, afterLifecycle);
+  assert.equal(selectable06.decisions.find(item => item.actorId === guo.actorId)
     .candidates.find(item => item.actionId === 'escort_witness').eligible, true);
-  assert.equal(next06.decisions.find(item => item.actorId === jian.actorId)
-    .candidates.find(item => item.actionId === 'block_road').eligible, true);
+  assert.equal(
+    state06.find(item => item.characterId === jian.actorId).knowledge
+      .includes('knowledge.lyg.s01_06.guard_pattern_observed'),
+    false,
+    'blocked action must not apply its knowledge effect',
+  );
 
   const s08 = coreOf(stage, 'lyg.event.s01_08');
   const round08 = decideNpcActions(s08);

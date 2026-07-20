@@ -134,3 +134,13 @@ LLM 只接收最终结果渲染，例：
 - 决策回执只向 LLM 投影行动者实际已知事实，并附参与本次效用的态度值；后台词典存在不等于角色知情。
 
 首批闭环覆盖 `s01_06` 的攻守知识、`s01_08` 的秘密核验链，以及 `s01_05 → s01_07` 贾文和退场次序的跨事件继承。G1 报告：`docs/R2-10D-NPC-FEEDBACK-LOOP-G1-2026-07-20.md`。
+
+## 11. R2-10E 行动冲突、反制与生命周期（2026-07-20）
+
+- `durationTurns>1` 的行动进入 `activeAction`，经历 `started/continuing/completed`；成本与 effects 只在开始时结算一次；
+- 行动以 `interaction.domain + stance + power/counters` 声明冲突，不在 LLM 文案中猜测谁压过谁；
+- 同域相反 stance 或显式 counter 以“已解释效用分 + power”确定性裁定，平分使用稳定 id；
+- 败方标记 `blocked`，不落局势、资源、态度或知识 effects，也不启动／继续生命周期；
+- 反制可以中断在途行动，回执必须包含冲突域、对手与双方强度；结果随存档和输入哈希重放。
+
+首批冲突为 `s01_06` 郭解护持对剑玉姬破坏、护送路线对封路；`s01_07/08` 验证持续行动不会重复落账。G1 报告：`docs/R2-10E-NPC-CONFLICT-AND-LIFECYCLE-G1-2026-07-20.md`。
