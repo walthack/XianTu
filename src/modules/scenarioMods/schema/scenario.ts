@@ -300,6 +300,23 @@ export interface ScenarioStoryOpportunity {
   };
   /** 未追踪卡在出现后的确定性世界回合寿命；追踪后沿用全局介入上限。 */
   expiresAfterTurns?: number;
+  /**
+   * 玩家亲历路线的确定性完成合同。每次成功结算的玩家回合最多推进一个 step；
+   * 只读取玩家输入，不读取 LLM 正文，因此模型无权把“写到了”冒充“做到了”。
+   */
+  completionContract?: {
+    kind: 'player_action_sequence';
+    steps: Array<{
+      id: string;
+      label: string;
+      /** 至少命中一项；未声明时只检查 matchAll。 */
+      matchAny?: string[];
+      /** 必须全部命中；未声明时只检查 matchAny。 */
+      matchAll?: string[];
+      /** 任一否定/撤回词命中即不推进该步。 */
+      rejectIf?: string[];
+    }>;
+  };
 }
 
 export interface ScenarioWorldActorContract {

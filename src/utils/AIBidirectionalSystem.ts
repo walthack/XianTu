@@ -28,7 +28,11 @@ import { composeShortTermMemoryEntry, sanitizePersistedMemoryEntry } from '@/uti
 import { filterActionOptionsByPov } from '@/utils/actionOptionsPovGuard';
 import type { APIUsageType } from '@/stores/apiManagementStore';
 import { buildScenarioCanonPrompt } from '@/modules/scenarioMods/canonGuard';
-import { advanceScenarioRuntime, STEERING_DIVERGENCE_COOLDOWN } from '@/modules/scenarioMods/runtime';
+import {
+  advanceScenarioRuntime,
+  recordStoryOpportunityPlayerAction,
+  STEERING_DIVERGENCE_COOLDOWN,
+} from '@/modules/scenarioMods/runtime';
 import { applyMilestoneRewards } from '@/modules/scenarioMods/milestoneRewards';
 import { buildScenarioStoryPrompt, createScenarioPromptState } from '@/modules/scenarioMods/storyContext';
 import { stripNarrativeEntityTypeConflicts, stripNarrativeUnintroducedCharacters } from '@/modules/scenarioMods/characterResolver';
@@ -2663,6 +2667,18 @@ ${step1Text}
       }
     } catch (error) {
       console.warn('[事件对账] 跳过（异常）:', error);
+    }
+
+    // 机会卡亲历合同只读取玩家本人本轮提交的行动。正文与 tavern_commands 无论写得多像
+    // “完成”，都不能推进合同；一次成功响应最多推进一个步骤，done 由 runtime 独占写入。
+    const opportunityProgress = recordStoryOpportunityPlayerAction(saveData, options?.userAction || '');
+    if (opportunityProgress.progressed) {
+      changes.push({
+        key: `世界.状态.剧本模组.actorEngine.opportunityStates.${opportunityProgress.opportunityId}`,
+        action: opportunityProgress.completed ? 'opportunity_completed' : 'opportunity_progressed',
+        oldValue: undefined,
+        newValue: opportunityProgress.stepId,
+      });
     }
 
     const scenarioResult = advanceScenarioRuntime(saveData);

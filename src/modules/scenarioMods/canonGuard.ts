@@ -28,6 +28,9 @@ interface ScenarioRuntimeState {
     axisBeat?: string;
     relatedCharacterIds?: string[];
     completion?: Array<{ path?: string; operator?: string; value?: unknown }>;
+    worldActor?: {
+      opportunities?: Array<{ completionContract?: { kind?: string } }>;
+    };
   }>;
   completedEventIds?: string[];
   opening?: {
@@ -358,6 +361,11 @@ function findScenarioFlagViolation(runtime: ScenarioRuntimeState, command: Comma
   if (namespace === 'event') {
     const resolved = findScenarioEventForCompletionFlag(runtime, flagPath);
     if (resolved.error || !resolved.event) return resolved.error || `未知剧本事件完成标记：flags.${flagPath}`;
+    if (resolved.event.worldActor?.opportunities?.some(opportunity =>
+      opportunity.completionContract?.kind === 'player_action_sequence'
+    )) {
+      return `事件 ${resolved.event.id} 的完成标记由机会卡确定性合同与本地引擎独占写入`;
+    }
     const allowedIds = getScenarioEventIdsAllowedForCompletion(runtime);
     if (allowedIds.size === 0) return `当前没有可完成的剧本事件：${resolved.event.id}`;
     if (!allowedIds.has(resolved.event.id)) {

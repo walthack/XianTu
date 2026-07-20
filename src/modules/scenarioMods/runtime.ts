@@ -90,6 +90,16 @@ export interface ScenarioOpportunityState {
   surfacedAtTurn: number;
   trackedAtTurn?: number;
   resolvedAtTurn?: number;
+  /** 确定性亲历合同已完成的 step 数；每个成功玩家回合最多 +1。 */
+  completionStepIndex?: number;
+  /** 防止同一回合/同一动作因重试或重复调用推进多步。 */
+  lastCompletionActionKey?: string;
+  /** 一轮内即使以不同文本重复调用，也只能有一次有效进度。 */
+  lastCompletionProgressAtTurn?: number;
+  /** 全部 step 满足后，由 advanceScenarioRuntime 消费并写事件 done。 */
+  completionReadyAtTurn?: number;
+  /** 合同热更审计键；变化时旧步骤进度不能套到新合同。 */
+  completionContractHash?: string;
 }
 
 export interface ScenarioEventTimelineState {
@@ -653,11 +663,144 @@ export function trackStoryOpportunity(
   } else {
     state.trackedAtTurn = opportunityState.trackedAtTurn ?? state.trackedAtTurn;
   }
+  reconcileOpportunityCompletionContract(opportunityState, opportunity);
   if (!state.activeAgendaId) {
     state.activeAgendaId = anchor.worldActor.agendas?.[0]?.id;
     state.surfacedAgendaIds = state.activeAgendaId ? [state.activeAgendaId] : [];
   }
   return { ok: true, actionText: opportunity.actionText };
+}
+
+function normalizeOpportunityAction(value: string): string {
+  return value.normalize('NFKC').toLowerCase().replace(/\s+/g, '');
+}
+
+function stableOpportunityContract(value: unknown): string {
+  if (Array.isArray(value)) return `[${value.map(stableOpportunityContract).join(',')}]`;
+  if (value && typeof value === 'object') {
+    return `{${Object.entries(value as Record<string, unknown>)
+      .sort(([left], [right]) => left < right ? -1 : left > right ? 1 : 0)
+      .map(([key, item]) => `${key}:${stableOpportunityContract(item)}`)
+      .join(',')}}`;
+  }
+  return JSON.stringify(value);
+}
+
+function opportunityCompletionContractHash(opportunity: ScenarioStoryOpportunity): string | undefined {
+  if (!opportunity.completionContract) return undefined;
+  let result = 2166136261;
+  for (const char of stableOpportunityContract(opportunity.completionContract)) {
+    result ^= char.charCodeAt(0);
+    result = Math.imul(result, 16777619);
+  }
+  return (result >>> 0).toString(16).padStart(8, '0');
+}
+
+function reconcileOpportunityCompletionContract(
+  state: ScenarioOpportunityState,
+  opportunity: ScenarioStoryOpportunity,
+): void {
+  const nextHash = opportunityCompletionContractHash(opportunity);
+  if (!nextHash) return;
+  if (state.completionContractHash && state.completionContractHash !== nextHash) {
+    state.completionStepIndex = 0;
+    state.lastCompletionActionKey = undefined;
+    state.lastCompletionProgressAtTurn = undefined;
+    state.completionReadyAtTurn = undefined;
+  }
+  state.completionContractHash = nextHash;
+}
+
+function opportunityStepMatches(
+  action: string,
+  step: NonNullable<ScenarioStoryOpportunity['completionContract']>['steps'][number],
+): boolean {
+  const normalized = normalizeOpportunityAction(action);
+  const any = (step.matchAny || []).map(normalizeOpportunityAction);
+  const all = (step.matchAll || []).map(normalizeOpportunityAction);
+  const rejected = (step.rejectIf || []).map(normalizeOpportunityAction);
+  if (rejected.some(item => normalized.includes(item))) return false;
+  if (any.length > 0 && !any.some(item => normalized.includes(item))) return false;
+  if (all.length > 0 && !all.every(item => normalized.includes(item))) return false;
+  return any.length > 0 || all.length > 0;
+}
+
+/**
+ * 在一次 AI 回合成功返回后记录玩家本人的行动证据。
+ *
+ * 该函数不读 LLM 正文、命令或评价；一次调用最多推进一个 step。全部满足后只标记
+ * ready，事件完成 flag 仍由下一次 advanceScenarioRuntime 在引擎事务内独占写入。
+ */
+export function recordStoryOpportunityPlayerAction(
+  saveData: SaveData,
+  playerAction: string,
+): { progressed: boolean; completed: boolean; opportunityId?: string; stepId?: string } {
+  const runtime = getRuntime(saveData);
+  if (!runtime || typeof playerAction !== 'string' || !playerAction.trim()) {
+    return { progressed: false, completed: false };
+  }
+  syncActorEngine(runtime);
+  const state = ensureActorEngine(runtime);
+  const anchor = getNarrativeAnchorEvent(runtime);
+  const opportunity = findOpportunity(anchor || undefined, state.trackedOpportunityId);
+  const contract = opportunity?.completionContract;
+  const opportunityState = opportunity && state.opportunityStates?.[opportunity.id];
+  if (!opportunity || !contract || opportunityState?.status !== 'tracked') {
+    return { progressed: false, completed: false };
+  }
+  reconcileOpportunityCompletionContract(opportunityState, opportunity);
+
+  const turn = Math.max(0, Number(runtime.worldTurn) || 0);
+  const normalizedAction = normalizeOpportunityAction(playerAction);
+  const actionKey = `${turn}:${normalizedAction}`;
+  if (
+    opportunityState.lastCompletionActionKey === actionKey
+    || opportunityState.lastCompletionProgressAtTurn === turn
+  ) {
+    return {
+      progressed: false,
+      completed: opportunityState.completionReadyAtTurn !== undefined,
+      opportunityId: opportunity.id,
+    };
+  }
+  opportunityState.lastCompletionActionKey = actionKey;
+
+  const index = Math.max(0, Number(opportunityState.completionStepIndex) || 0);
+  const step = contract.steps[index];
+  if (!step || !opportunityStepMatches(playerAction, step)) {
+    return {
+      progressed: false,
+      completed: opportunityState.completionReadyAtTurn !== undefined,
+      opportunityId: opportunity.id,
+    };
+  }
+
+  opportunityState.completionStepIndex = index + 1;
+  opportunityState.lastCompletionProgressAtTurn = turn;
+  const completed = opportunityState.completionStepIndex >= contract.steps.length;
+  if (completed) opportunityState.completionReadyAtTurn = turn;
+  return { progressed: true, completed, opportunityId: opportunity.id, stepId: step.id };
+}
+
+function settleReadyOpportunityCompletionFlags(runtime: RuntimeState): void {
+  const state = runtime.actorEngine;
+  if (!state?.trackedOpportunityId) return;
+  const anchor = getNarrativeAnchorEvent(runtime);
+  const opportunity = findOpportunity(anchor || undefined, state.trackedOpportunityId);
+  const opportunityState = opportunity && state.opportunityStates?.[opportunity.id];
+  if (
+    !opportunity?.completionContract
+    || opportunityState?.status !== 'tracked'
+    || opportunityState.completionReadyAtTurn === undefined
+  ) return;
+  const completion = anchor?.completion || [];
+  if (
+    completion.length !== 1
+    || !completion[0].path.startsWith('flags.')
+    || completion[0].operator !== 'eq'
+    || completion[0].value !== true
+  ) return;
+  runtime.flags[completion[0].path.slice('flags.'.length)] = true;
 }
 
 function readPath(root: unknown, path: string[]): unknown {
@@ -899,7 +1042,16 @@ function resolveOffscreenWorldEvents(runtime: RuntimeState, transitions: Scenari
     const due = owner?.timeline?.deadlineTurns !== undefined
       ? eventTimelineDeadlineDue(runtime, owner)
       : effectiveStall >= resolution.afterStallTurns;
-    if (!due || runtime.flags[resolution.flagKey] === true || hasTrackedIntervention) continue;
+    const trackedOpportunity = findOpportunity(owner, runtime.actorEngine?.trackedOpportunityId);
+    const trackedOpportunityState = trackedOpportunity
+      ? runtime.actorEngine?.opportunityStates?.[trackedOpportunity.id]
+      : undefined;
+    const ownerReadyByContract = Boolean(
+      owner?.id === runtime.actorEngine?.anchorEventId
+      && trackedOpportunity?.completionContract
+      && trackedOpportunityState?.completionReadyAtTurn !== undefined,
+    );
+    if (!due || runtime.flags[resolution.flagKey] === true || hasTrackedIntervention || ownerReadyByContract) continue;
     // 数据增量会把一个关卡拆成多个场外合同；只允许当前已经激活的世界事件启动结算，
     // 否则同一 stall 阈值会把整关未来事件一次烧完。多事件战争合同仍由首个活跃节点启动整组。
     if (!knownIds.some(id => runtime.activeEventIds.includes(id))) continue;
@@ -1204,6 +1356,7 @@ export function advanceScenarioRuntime(saveData: SaveData): {
   reconcileSaveWithRegistry(next, runtime as RuntimeState & { modId?: string });
   projectBottomLinesToNpcs(next);
   normalizeRuntimeFlags(runtime);
+  settleReadyOpportunityCompletionFlags(runtime);
 
   runtime.chapters = Array.isArray(runtime.chapters) ? runtime.chapters : [];
   runtime.events = Array.isArray(runtime.events) ? runtime.events : [];

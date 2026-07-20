@@ -50,7 +50,12 @@ interface StoryRuntime {
     activeAgendaId?: string;
     surfacedAgendaIds?: string[];
     trackedOpportunityId?: string;
-    opportunityStates?: Record<string, { status: string; surfacedAtTurn: number }>;
+    opportunityStates?: Record<string, {
+      status: string;
+      surfacedAtTurn: number;
+      completionStepIndex?: number;
+      completionReadyAtTurn?: number;
+    }>;
     entitlements?: Array<{ key: string; label: string }>;
     decisions?: Array<{
       id: string;
@@ -231,8 +236,14 @@ function formatWorldActorContract(runtime: StoryRuntime, anchor: ScenarioModEven
   const actorLine = decisionLine || (agenda
     ? `${nameOf(agenda.characterId)}正在谋求“${agenda.goal}”；下一步=${agenda.nextAction}；玩家可见征兆=${agenda.visibleSignal}；玩家不介入时=${agenda.offscreenAction}。隐藏目标不可原样念成旁白，只能通过行动和征兆让玩家推断。`
     : '');
+  const opportunityState = opportunity ? state?.opportunityStates?.[opportunity.id] : undefined;
+  const completionStepIndex = Math.max(0, opportunityState?.completionStepIndex || 0);
+  const completionStep = opportunity?.completionContract?.steps[completionStepIndex];
+  const completionInstruction = opportunity?.completionContract
+    ? ` 本地引擎进度=${Math.min(completionStepIndex, opportunity.completionContract.steps.length)}/${opportunity.completionContract.steps.length}${completionStep ? `；当前只需演出“${completionStep.label}”的行动与反馈` : '；已满足合同，等待本地引擎结算'}。严禁输出或建议写入本事件 done；LLM 正文与命令均不是完成证据。`
+    : '';
   const opportunityLine = opportunity
-    ? `【玩家已追踪机会·本轮最高优先级】${opportunity.title}：${opportunity.nextStep}。风险=${opportunity.stakes}。必须先回应玩家的介入并让其亲自行动；不得替玩家完成，不得提前授予“${opportunity.rewardLabel}”。`
+    ? `【玩家已追踪机会·本轮最高优先级】${opportunity.title}：${opportunity.nextStep}。风险=${opportunity.stakes}。必须先回应玩家的介入并让其亲自行动；不得替玩家完成，不得提前授予“${opportunity.rewardLabel}”。${completionInstruction}`
     : availableOpportunities.length
       ? `【可选介入窗口】${availableOpportunities.map(item => `${item.title}（为什么是现在：${item.whyNow}；下一步：${item.nextStep}；风险：${item.stakes}）`).join('；')}。只把窗口自然演出来，不得替玩家选择；玩家忽略也要让世界继续。`
       : '【介入窗口】本轮没有已经触发的机会卡；不得提前展示尚未满足条件的机会。';

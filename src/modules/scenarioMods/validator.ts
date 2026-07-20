@@ -345,6 +345,51 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
             ) {
               add(`${opportunityPath}.expiresAfterTurns`, 'invalid_range', 'expiresAfterTurns must be an integer from 1 to 20.');
             }
+            if (opportunity.completionContract !== undefined) {
+              const contractPath = `${opportunityPath}.completionContract`;
+              if (!isRecord(opportunity.completionContract)) {
+                add(contractPath, 'invalid_type', 'completionContract must be an object.');
+              } else {
+                const contract = opportunity.completionContract;
+                if (contract.kind !== 'player_action_sequence') {
+                  add(`${contractPath}.kind`, 'invalid_enum', 'completionContract.kind must be player_action_sequence.');
+                }
+                if (!Array.isArray(contract.steps) || contract.steps.length < 1 || contract.steps.length > 8) {
+                  add(`${contractPath}.steps`, 'invalid_range', 'completionContract.steps must contain 1 to 8 steps.');
+                } else {
+                  const stepIds = new Set<string>();
+                  forEachRecord(contract.steps, `${contractPath}.steps`, (step, stepPath) => {
+                    if (validateId(step.id, `${stepPath}.id`, add)) {
+                      if (stepIds.has(step.id)) add(`${stepPath}.id`, 'duplicate_id', `Duplicate completion step "${step.id}".`);
+                      stepIds.add(step.id);
+                    }
+                    requireString(step.label, `${stepPath}.label`, add);
+                    validateStringArray(step.matchAny, `${stepPath}.matchAny`, add);
+                    validateStringArray(step.matchAll, `${stepPath}.matchAll`, add);
+                    validateStringArray(step.rejectIf, `${stepPath}.rejectIf`, add);
+                    const hasAny = Array.isArray(step.matchAny) && step.matchAny.length > 0;
+                    const hasAll = Array.isArray(step.matchAll) && step.matchAll.length > 0;
+                    if (!hasAny && !hasAll) {
+                      add(stepPath, 'empty_matcher', 'A completion step needs matchAny or matchAll evidence.');
+                    }
+                  });
+                }
+                const completion = Array.isArray(entity.completion) ? entity.completion : [];
+                const standardEngineFlag = completion.length === 1
+                  && isRecord(completion[0])
+                  && typeof completion[0].path === 'string'
+                  && completion[0].path.startsWith('flags.')
+                  && completion[0].operator === 'eq'
+                  && completion[0].value === true;
+                if (!standardEngineFlag) {
+                  add(
+                    contractPath,
+                    'unsupported_completion',
+                    'A deterministic opportunity requires exactly one flags.* = true event completion condition.',
+                  );
+                }
+              }
+            }
             if (opportunity.trigger !== undefined && !isRecord(opportunity.trigger)) {
               add(`${opportunityPath}.trigger`, 'invalid_type', 'opportunity.trigger must be an object.');
             } else if (isRecord(opportunity.trigger)) {

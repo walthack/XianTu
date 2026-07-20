@@ -12,14 +12,24 @@ const ROUTES = {
   R1: {
     opportunityId: 'opportunity.lyg.s01_05.first_edict',
     entitlement: 'permission.lyg.jia_wenhe.exchange_judgement',
+    actions: [
+      '我前往昭阳宫，亲自介入新帝诏令。',
+      '我明确优先选择安民，另外两项交由贾文和排序。',
+      '我公开支持这项选择并承担站队后果。',
+    ],
   },
   R2: {
     opportunityId: 'opportunity.lyg.s01_05.court_entry',
     entitlement: 'permission.lyg.huo_zimeng.trusted_intelligence',
+    actions: [
+      '我向霍子孟出示证据，证明定陶王安全。',
+      '我协调北军与凉州军，划出一条不拔刀的入宫路线。',
+    ],
   },
   R3: {
     opportunityId: null,
     entitlement: null,
+    actions: [],
   },
 };
 
@@ -103,16 +113,15 @@ function assertRoundInvariants(runtime, route, snapshots) {
   }
 }
 
-async function applyAcceptedCompletion(save, guardScenarioModCommands) {
+function assertLlmCannotClaimCompletion(save, guardScenarioModCommands) {
   const command = {
     action: 'set',
     key: '世界.状态.剧本模组.flags.event.s01_05.done',
     value: true,
   };
   const guarded = guardScenarioModCommands(save, [command]);
-  assert.deepEqual(guarded.rejected, [], 'G1 player-completion signal must pass the production canon guard');
-  assert.deepEqual(guarded.accepted, [command]);
-  setNested(save, command.key, command.value);
+  assert.deepEqual(guarded.accepted, []);
+  assert.equal(guarded.rejected.length, 1, 'LLM must not own a deterministic opportunity completion flag');
 }
 
 async function replayRoute(route, fixture, deps) {
@@ -149,12 +158,17 @@ async function replayRoute(route, fixture, deps) {
       assertRoundInvariants(runtimeOf(save), route, snapshots);
     }
   } else {
-    while (runtimeOf(save).worldTurn < 9) {
+    assertLlmCannotClaimCompletion(save, deps.guardScenarioModCommands);
+    for (const [index, action] of contract.actions.entries()) {
+      const recorded = deps.recordStoryOpportunityPlayerAction(save, action);
+      assert.equal(recorded.progressed, true, `${route}: step ${index + 1} must be engine-recognized`);
+      assert.equal(recorded.completed, index === contract.actions.length - 1);
       save = deps.advanceScenarioRuntime(save).saveData;
-      assertRoundInvariants(runtimeOf(save), route, snapshots);
+      if (index < contract.actions.length - 1) {
+        assert.equal(runtimeOf(save).completedEventIds.includes('lyg.event.s01_05'), false);
+      }
     }
-    await applyAcceptedCompletion(save, deps.guardScenarioModCommands);
-    save = deps.advanceScenarioRuntime(save).saveData;
+    while (runtimeOf(save).worldTurn < 10) save = deps.advanceScenarioRuntime(save).saveData;
   }
 
   const runtime = runtimeOf(save);
@@ -207,10 +221,15 @@ async function replayRoute(route, fixture, deps) {
 test('G1 replays R3/R1/R2 from one fixture without any LLM or network dependency', async () => {
   const stage = JSON.parse(await readFile(stageUrl, 'utf8'));
   const fixture = baseFixture(stage);
-  const { advanceScenarioRuntime, trackStoryOpportunity } =
+  const { advanceScenarioRuntime, trackStoryOpportunity, recordStoryOpportunityPlayerAction } =
     await loadTs('../src/modules/scenarioMods/runtime.ts');
   const { guardScenarioModCommands } = await loadTs('../src/modules/scenarioMods/canonGuard.ts');
-  const deps = { advanceScenarioRuntime, trackStoryOpportunity, guardScenarioModCommands };
+  const deps = {
+    advanceScenarioRuntime,
+    trackStoryOpportunity,
+    recordStoryOpportunityPlayerAction,
+    guardScenarioModCommands,
+  };
 
   const results = [];
   for (const route of ['R3', 'R1', 'R2']) {

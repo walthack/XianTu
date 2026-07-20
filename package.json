@@ -24,7 +24,7 @@
   "watch": "webpack --mode development --watch",
   "serve": "webpack-dev-server --mode development",
   "test": "node --test tests/*.test.mjs",
-    "test:g1:npc": "node --test tests/r2_10b_g1_replay.test.mjs tests/r2_10c_g1_cross_event.test.mjs tests/r2_10d_feedback_loop.test.mjs tests/r2_10e_conflict_lifecycle.test.mjs tests/r2_10f_layered_wake.test.mjs tests/r2_10g_opportunity_memory.test.mjs tests/r2_10h_cross_book_scale.test.mjs tests/r2_10_review_closure.test.mjs tests/r2_10j_config_migration_state.test.mjs tests/r2_10j_legacy_timeline_backfill.test.mjs",
+    "test:g1:npc": "node --test tests/r2_10b_g1_replay.test.mjs tests/r2_10c_g1_cross_event.test.mjs tests/r2_10d_feedback_loop.test.mjs tests/r2_10e_conflict_lifecycle.test.mjs tests/r2_10f_layered_wake.test.mjs tests/r2_10g_opportunity_memory.test.mjs tests/r2_10h_cross_book_scale.test.mjs tests/r2_10_review_closure.test.mjs tests/r2_10j_config_migration_state.test.mjs tests/r2_10j_legacy_timeline_backfill.test.mjs tests/r2_11_deterministic_opportunity_completion.test.mjs",
   "mod:validate": "node scripts/validate-scenario-mod.mjs",
   "if:validate": "node scripts/validate-if-branches.mjs",
   "canon:validate": "node scripts/validate-canon-decisions.mjs",

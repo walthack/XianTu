@@ -5830,6 +5830,58 @@
               "actionText": "我追踪“新帝第一道诏令”：前往昭阳宫，在安民、选材、定都三项草案中明确优先保下一项，并亲自承担站队后果。",
               "rewardKey": "permission.lyg.jia_wenhe.exchange_judgement",
               "rewardLabel": "贾文和·可交换判断与首轮谋议入口",
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "steps": [
+                  {
+                    "id": "enter_zhaoyang_hall",
+                    "label": "亲自进入昭阳宫介入诏令",
+                    "matchAny": [
+                      "昭阳宫",
+                      "入宫",
+                      "宫门"
+                    ],
+                    "rejectIf": [
+                      "放弃",
+                      "取消追踪",
+                      "不再介入",
+                      "不去",
+                      "拒绝入宫"
+                    ]
+                  },
+                  {
+                    "id": "choose_edict_priority",
+                    "label": "明确安民、选材或定都中的优先项",
+                    "matchAny": [
+                      "安民",
+                      "选材",
+                      "定都"
+                    ],
+                    "rejectIf": [
+                      "都不选",
+                      "不选",
+                      "不该选",
+                      "拒绝选择",
+                      "放弃"
+                    ]
+                  },
+                  {
+                    "id": "accept_public_alignment",
+                    "label": "公开承担站队后果",
+                    "matchAny": [
+                      "承担",
+                      "站队",
+                      "公开支持",
+                      "后果"
+                    ],
+                    "rejectIf": [
+                      "不承担",
+                      "拒绝站队",
+                      "退出"
+                    ]
+                  }
+                ]
+              },
               "trigger": {
                 "actorIds": [
                   "liuchao.character.jia_wenhe"
@@ -5855,6 +5907,46 @@
               "actionText": "我追踪“让朝廷进入昭阳宫”：向霍子孟证明定陶王安全，并协调一条北军与凉州军都不拔刀的入宫路线。",
               "rewardKey": "permission.lyg.huo_zimeng.trusted_intelligence",
               "rewardLabel": "霍子孟·可信军情交换与政治背书",
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "steps": [
+                  {
+                    "id": "prove_emperor_safety",
+                    "label": "向霍子孟证明定陶王安全",
+                    "matchAll": [
+                      "定陶王",
+                      "安全"
+                    ],
+                    "rejectIf": [
+                      "无法保证",
+                      "不安全",
+                      "不能证明",
+                      "拒绝保证",
+                      "放弃",
+                      "取消追踪"
+                    ]
+                  },
+                  {
+                    "id": "coordinate_court_route",
+                    "label": "协调北军与凉州军的不拔刀入宫路线",
+                    "matchAll": [
+                      "北军",
+                      "凉州军"
+                    ],
+                    "matchAny": [
+                      "路线",
+                      "入宫",
+                      "通行",
+                      "不拔刀"
+                    ],
+                    "rejectIf": [
+                      "开战",
+                      "拔刀强闯",
+                      "放弃"
+                    ]
+                  }
+                ]
+              },
               "trigger": {
                 "actorIds": [
                   "liuchao.character.huo_zi_meng"
