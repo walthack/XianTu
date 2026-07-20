@@ -121,6 +121,7 @@ export interface ScenarioWorldActorAgenda {
 export type ScenarioNpcDecisionVisibility = 'public' | 'rumor' | 'hidden';
 export type ScenarioNpcDecisionResource = 'influence' | 'wealth' | 'troops' | 'intelligence';
 export type ScenarioNpcKnowledgeAccess = 'public' | 'restricted' | 'secret';
+export type ScenarioNpcWakeTier = 'local_critical' | 'faction' | 'offscreen_critical' | 'minor' | 'group';
 
 export interface ScenarioNpcKnowledgeFact {
   text: string;
@@ -175,6 +176,13 @@ export interface ScenarioNpcDecisionActor {
   knowledge: string[];
   agendas: ScenarioNpcDecisionAgenda[];
   allowedActionIds: string[];
+  /** 无配置时兼容旧 core：每轮唤醒；新扩量必须声明分层预算。 */
+  wake?: {
+    tier: ScenarioNpcWakeTier;
+    cadenceTurns?: 2 | 3 | 4 | 5;
+    locationIds?: string[];
+    factionIds?: string[];
+  };
   /** 运行时字段：行动在持续期内不可被重复裁定；正典配置可省略。 */
   actionCooldowns?: Record<string, number>;
   /** 运行时字段：durationTurns>1 的行动在后续世界行动轮继续推进。 */

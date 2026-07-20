@@ -314,7 +314,14 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
             validateStringArray(agenda.forbiddenOutcomes, `${agendaPath}.forbiddenOutcomes`, add);
           });
           if (entity.worldActor.decisionCore !== undefined) {
-            validateNpcDecisionCore(entity.worldActor.decisionCore, `${actorPath}.decisionCore`, characterIds, add);
+            validateNpcDecisionCore(
+              entity.worldActor.decisionCore,
+              `${actorPath}.decisionCore`,
+              characterIds,
+              factionIds,
+              locationIds,
+              add,
+            );
           }
           if (!Array.isArray(entity.worldActor.opportunities) || entity.worldActor.opportunities.length === 0) {
             add(`${actorPath}.opportunities`, 'required_array', 'worldActor.opportunities must contain at least one opportunity.');
@@ -515,6 +522,8 @@ function validateNpcDecisionCore(
   value: unknown,
   path: string,
   characterIds: Set<string>,
+  factionIds: Set<string>,
+  locationIds: Set<string>,
   add: AddIssue,
 ): void {
   if (!isRecord(value)) {
@@ -890,6 +899,43 @@ function validateNpcDecisionCore(
     validateIdArray(actor.allowedActionIds, `${actorPath}.allowedActionIds`, add);
     for (const actionId of Array.isArray(actor.allowedActionIds) ? actor.allowedActionIds : []) {
       if (typeof actionId === 'string' && !boundActions.has(actionId)) add(`${actorPath}.allowedActionIds`, 'unbound_action', `Allowed action "${actionId}" has no stage binding.`);
+    }
+    if (actor.wake !== undefined && !isRecord(actor.wake)) {
+      add(`${actorPath}.wake`, 'invalid_type', 'actor.wake must be an object.');
+    } else if (isRecord(actor.wake)) {
+      const tiers = ['local_critical', 'faction', 'offscreen_critical', 'minor', 'group'];
+      if (!tiers.includes(String(actor.wake.tier))) {
+        add(`${actorPath}.wake.tier`, 'invalid_enum', 'wake tier must be local_critical, faction, offscreen_critical, minor, or group.');
+      }
+      if (
+        actor.wake.cadenceTurns !== undefined
+        && (
+          typeof actor.wake.cadenceTurns !== 'number'
+          || !Number.isInteger(actor.wake.cadenceTurns)
+          || actor.wake.cadenceTurns < 2
+          || actor.wake.cadenceTurns > 5
+        )
+      ) {
+        add(`${actorPath}.wake.cadenceTurns`, 'invalid_range', 'wake cadenceTurns must be an integer from 2 to 5.');
+      }
+      if (
+        ['faction', 'group'].includes(String(actor.wake.tier))
+        && actor.wake.cadenceTurns === undefined
+      ) {
+        add(`${actorPath}.wake.cadenceTurns`, 'required_number', 'faction and group wake tiers require cadenceTurns.');
+      }
+      validateIdArray(actor.wake.locationIds, `${actorPath}.wake.locationIds`, add);
+      for (const locationId of Array.isArray(actor.wake.locationIds) ? actor.wake.locationIds : []) {
+        if (typeof locationId === 'string' && !locationIds.has(locationId)) {
+          add(`${actorPath}.wake.locationIds`, 'unknown_reference', `Unknown wake location "${locationId}".`);
+        }
+      }
+      validateIdArray(actor.wake.factionIds, `${actorPath}.wake.factionIds`, add);
+      for (const factionId of Array.isArray(actor.wake.factionIds) ? actor.wake.factionIds : []) {
+        if (typeof factionId === 'string' && !factionIds.has(factionId)) {
+          add(`${actorPath}.wake.factionIds`, 'unknown_reference', `Unknown wake faction "${factionId}".`);
+        }
+      }
     }
     forEachRecord(actor.agendas, `${actorPath}.agendas`, (agenda, agendaPath) => {
       validateId(agenda.id, `${agendaPath}.id`, add);

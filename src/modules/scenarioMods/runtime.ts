@@ -16,6 +16,8 @@ import {
   npcDecisionConfigHash,
   selectVisibleNpcDecisionIds,
   type NpcDecisionReceipt,
+  type NpcWakeAudit,
+  type NpcWakeContext,
   type RejectedNpcDecisionEffect,
 } from './npcDecisionCore';
 import { recordOffscreenDivergence, type ScenarioDivergence } from './divergenceLedger';
@@ -90,6 +92,8 @@ export interface ScenarioActorEngineState {
   decisionConfigHash?: string;
   decisions?: NpcDecisionReceipt[];
   visibleDecisionIds?: string[];
+  /** 本轮每名 actor 的唤醒/休眠原因；用于预算审计，不进入叙事真值。 */
+  wakeAudit?: NpcWakeAudit[];
   situationValues?: Record<string, number>;
   npcStates?: ScenarioNpcDecisionActor[];
   decisionRound?: number;
@@ -270,6 +274,7 @@ function syncActorEngine(runtime: RuntimeState): void {
     state.decisionConfigHash = undefined;
     state.decisions = undefined;
     state.visibleDecisionIds = undefined;
+    state.wakeAudit = undefined;
     state.situationValues = undefined;
     state.npcStates = undefined;
     state.decisionRound = undefined;
@@ -277,6 +282,20 @@ function syncActorEngine(runtime: RuntimeState): void {
 
   const contract = anchor?.worldActor;
   if (!anchor || !contract) return;
+  const wakeContext = (round: number, majorEvent = false): NpcWakeContext => {
+    const tracked = findOpportunity(anchor, state.trackedOpportunityId);
+    return {
+      round,
+      currentLocationId: anchor.locationId,
+      presentCharacterIds: anchor.relatedCharacterIds,
+      affectedFactionIds: [...new Set([
+        ...(anchor.relatedFactionIds || []),
+        ...(contract.pressure.factionIds || []),
+      ])],
+      namedCharacterIds: tracked?.characterIds,
+      majorEvent,
+    };
+  };
   const configHash = contract.decisionCore ? npcDecisionConfigHash(contract.decisionCore) : undefined;
   if (
     state.anchorEventId === anchor.id
@@ -301,10 +320,16 @@ function syncActorEngine(runtime: RuntimeState): void {
     }
     state.npcStates = hydrateNpcActors(contract.decisionCore, state.actorMemory);
     state.situationValues = { ...contract.decisionCore.situation.initialValues };
-    const round = decideNpcActions(contract.decisionCore, state.situationValues, state.npcStates);
+    const round = decideNpcActions(
+      contract.decisionCore,
+      state.situationValues,
+      state.npcStates,
+      wakeContext(0, true),
+    );
     state.decisionInputHash = round.inputHash;
     state.decisionConfigHash = configHash;
     state.decisions = round.decisions;
+    state.wakeAudit = round.wakeAudit;
     state.visibleDecisionIds = selectVisibleNpcDecisionIds(round.decisions, contract.decisionCore.maxVisibleActions);
     state.decisionRound = 0;
     state.lastHandledWorldPushTurn = undefined;
@@ -316,10 +341,16 @@ function syncActorEngine(runtime: RuntimeState): void {
     state.surfacedAgendaIds = state.activeAgendaId ? [state.activeAgendaId] : [];
     if (contract.decisionCore) {
       state.npcStates = hydrateNpcActors(contract.decisionCore, state.actorMemory);
-      const round = decideNpcActions(contract.decisionCore, contract.decisionCore.situation.initialValues, state.npcStates);
+      const round = decideNpcActions(
+        contract.decisionCore,
+        contract.decisionCore.situation.initialValues,
+        state.npcStates,
+        wakeContext(0, true),
+      );
       state.decisionInputHash = round.inputHash;
       state.decisionConfigHash = configHash;
       state.decisions = round.decisions;
+      state.wakeAudit = round.wakeAudit;
       state.visibleDecisionIds = selectVisibleNpcDecisionIds(round.decisions, contract.decisionCore.maxVisibleActions);
       state.situationValues = { ...contract.decisionCore.situation.initialValues };
       state.decisionRound = 0;
@@ -333,9 +364,15 @@ function syncActorEngine(runtime: RuntimeState): void {
   if (pushTurn !== undefined && state.lastHandledWorldPushTurn !== pushTurn && contract.decisionCore) {
     const situation = state.situationValues || { ...contract.decisionCore.situation.initialValues };
     const npcStates = state.npcStates || hydrateNpcActors(contract.decisionCore, state.actorMemory);
-    const round = decideNpcActions(contract.decisionCore, situation, npcStates);
+    const round = decideNpcActions(
+      contract.decisionCore,
+      situation,
+      npcStates,
+      wakeContext(state.decisionRound || 0),
+    );
     state.decisionInputHash = round.inputHash;
     state.decisions = round.decisions;
+    state.wakeAudit = round.wakeAudit;
     state.visibleDecisionIds = selectVisibleNpcDecisionIds(round.decisions, contract.decisionCore.maxVisibleActions);
     const effectApplication = applyNpcDecisionEffectsWithAudit(contract.decisionCore, situation, round.decisions);
     state.situationValues = effectApplication.situationValues;

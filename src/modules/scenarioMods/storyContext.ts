@@ -66,6 +66,7 @@ interface StoryRuntime {
       offscreenAction: string;
     }>;
     visibleDecisionIds?: string[];
+    wakeAudit?: Array<{ actorId: string; awake: boolean; reason: string }>;
   };
   divergences?: ScenarioDivergence[];
   introducedCharacterIds?: string[];
@@ -243,7 +244,7 @@ function formatWorldActorContract(runtime: StoryRuntime, anchor: ScenarioModEven
   const timelineLine = anchor.timeline
     ? `\n- 事件时钟=${anchor.timeline.kind}；资格后第 ${timelineAge} 回合；最早=${anchor.timeline.notBeforeTurns}；截止=${anchor.timeline.deadlineTurns ?? '无硬截止'}。截止只由程序结算，LLM 不得自行提前宣告发生。`
     : '';
-  return `【世界演员合同·${contract.pressure.canonPolicy}】压力=${contract.pressure.summary}（范围=${contract.pressure.scope}，强度=${contract.pressure.intensity}）。${actionLine}\n- ${actorLine}\n- ${opportunityLine}\n- 决策阶段已结束，禁止重选行动或修改结算；只可依据 knownFacts 渲染，mustNotInvent 任一项均不得补造。${guardLine}\n- forbiddenBefore=${forbiddenBefore.join('|')}。${timelineLine}\n- 正典边界：只改变过程、关系入口与行为权限；不得改写“${anchor.name}”的既定结果，不得提前演出后续事件或秘密。`;
+  return `【世界演员合同·${contract.pressure.canonPolicy}】压力=${contract.pressure.summary}（范围=${contract.pressure.scope}，强度=${contract.pressure.intensity}）。${actionLine}\n- ${actorLine}\n- ${opportunityLine}\n- 决策阶段已结束，禁止重选行动或修改结算；只可依据 knownFacts 渲染，mustNotInvent 任一项均不得补造。本轮未唤醒角色不得擅自追加主动行动。${guardLine}\n- forbiddenBefore=${forbiddenBefore.join('|')}。${timelineLine}\n- 正典边界：只改变过程、关系入口与行为权限；不得改写“${anchor.name}”的既定结果，不得提前演出后续事件或秘密。`;
 }
 
 function formatList(values: string[] | undefined, maxItems = 4, maxLen = 48): string {

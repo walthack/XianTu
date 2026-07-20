@@ -70,6 +70,36 @@ export interface NpcDecisionReceipt {
 export interface NpcDecisionRound {
   inputHash: string;
   decisions: NpcDecisionReceipt[];
+  wakeAudit: NpcWakeAudit[];
+}
+
+export interface NpcWakeContext {
+  round: number;
+  currentLocationId?: string;
+  presentCharacterIds?: string[];
+  affectedFactionIds?: string[];
+  namedCharacterIds?: string[];
+  majorEvent?: boolean;
+}
+
+export interface NpcWakeAudit {
+  actorId: string;
+  awake: boolean;
+  reason:
+    | 'no_context'
+    | 'legacy_always'
+    | 'active_action'
+    | 'local_presence'
+    | 'local_location'
+    | 'faction_cadence'
+    | 'offscreen_major_event'
+    | 'offscreen_escalation'
+    | 'offscreen_cadence'
+    | 'minor_presence'
+    | 'minor_named'
+    | 'minor_faction'
+    | 'group_faction_cadence'
+    | 'sleeping';
 }
 
 export interface RejectedNpcDecisionEffect {
@@ -84,7 +114,7 @@ export interface NpcDecisionEffectApplication {
   rejectedEffects: RejectedNpcDecisionEffect[];
 }
 
-export const NPC_ACTION_LIBRARY_VERSION = 'r2-10e.1';
+export const NPC_ACTION_LIBRARY_VERSION = 'r2-10f.1';
 
 // 通用行动词表保持小而可复用；stage 只绑定其中适用项及白名单 effects。
 // 32 项满足首批 30–50 的规格边界，未绑定的行动不会进入该 stage 候选池。
@@ -145,6 +175,49 @@ function hash(value: unknown): string {
 
 export function npcDecisionConfigHash(core: ScenarioNpcDecisionCore): string {
   return hash({ libraryVersion: NPC_ACTION_LIBRARY_VERSION, core });
+}
+
+/** 分层唤醒只决定“本轮是否计算”，不改动角色状态或正典结果。 */
+export function evaluateNpcWake(
+  actor: ScenarioNpcDecisionActor,
+  context?: NpcWakeContext,
+): Omit<NpcWakeAudit, 'actorId'> {
+  if (!context) return { awake: true, reason: 'no_context' };
+  if (actor.activeAction) return { awake: true, reason: 'active_action' };
+  const wake = actor.wake;
+  if (!wake) return { awake: true, reason: 'legacy_always' };
+  const present = new Set(context.presentCharacterIds || []);
+  const affectedFactions = new Set(context.affectedFactionIds || []);
+  const named = new Set(context.namedCharacterIds || []);
+  const actorFactionIds = new Set([actor.identity.factionId, ...(wake.factionIds || [])]);
+  const factionAffected = [...actorFactionIds].some(id => affectedFactions.has(id));
+  const cadenceDue = (wake.cadenceTurns || 3) > 0
+    && context.round % (wake.cadenceTurns || 3) === 0;
+
+  if (wake.tier === 'local_critical') {
+    if (present.has(actor.characterId)) return { awake: true, reason: 'local_presence' };
+    if (
+      context.currentLocationId
+      && (wake.locationIds || []).includes(context.currentLocationId)
+    ) return { awake: true, reason: 'local_location' };
+  } else if (wake.tier === 'faction') {
+    if (cadenceDue) return { awake: true, reason: 'faction_cadence' };
+  } else if (wake.tier === 'offscreen_critical') {
+    if (context.majorEvent) return { awake: true, reason: 'offscreen_major_event' };
+    const escalationDue = actor.agendas.some(agenda =>
+      agenda.escalation.length > 0
+      && agenda.clock >= agenda.escalation.length - 1
+      && context.round === agenda.clock);
+    if (escalationDue) return { awake: true, reason: 'offscreen_escalation' };
+    if (cadenceDue) return { awake: true, reason: 'offscreen_cadence' };
+  } else if (wake.tier === 'minor') {
+    if (present.has(actor.characterId)) return { awake: true, reason: 'minor_presence' };
+    if (named.has(actor.characterId)) return { awake: true, reason: 'minor_named' };
+    if (factionAffected) return { awake: true, reason: 'minor_faction' };
+  } else if (wake.tier === 'group' && factionAffected && cadenceDue) {
+    return { awake: true, reason: 'group_faction_cadence' };
+  }
+  return { awake: false, reason: 'sleeping' };
 }
 
 function dot(values: Record<string, number>, weights: Record<string, number> | undefined): number {
@@ -368,10 +441,15 @@ export function decideNpcActions(
   core: ScenarioNpcDecisionCore,
   situationValues: Record<string, number> = core.situation.initialValues,
   actors: ScenarioNpcDecisionActor[] = core.actors,
+  wakeContext?: NpcWakeContext,
 ): NpcDecisionRound {
   const forbidden = new Set(core.canonPolicy.forbiddenBefore);
   const decisions: NpcDecisionReceipt[] = [];
+  const wakeAudit: NpcWakeAudit[] = [];
   for (const actor of actors) {
+    const wake = evaluateNpcWake(actor, wakeContext);
+    wakeAudit.push({ actorId: actor.characterId, ...wake });
+    if (!wake.awake) continue;
     if (actor.activeAction) {
       const binding = core.actionBindings.find(item =>
         item.actionId === actor.activeAction!.actionId
@@ -418,8 +496,10 @@ export function decideNpcActions(
       situationValues,
       actionBindings: core.actionBindings,
       canonPolicy: core.canonPolicy,
+      wakeContext,
     }),
     decisions: resolveNpcActionConflicts(core, decisions),
+    wakeAudit,
   };
 }
 

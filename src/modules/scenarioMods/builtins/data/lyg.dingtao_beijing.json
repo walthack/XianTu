@@ -6042,6 +6042,12 @@
                   "agendas.agenda.lyg.s01_06.guo_jie.clock": "yange.3.1 与裁定 #95：郭解以布衣大侠身份保护定陶王，游侠网络可承接护持但不能夺位。",
                   "relationships.liuchao.character.jian_yu_ji.hostility": "郭解明确面对阻断拥立与危及定陶王的敌对高手。",
                   "relationships.liuchao.character.jian_yu_ji.respect": "郭解明确面对阻断拥立与危及定陶王的敌对高手。"
+                },
+                "wake": {
+                  "tier": "local_critical",
+                  "factionIds": [
+                    "liuchao.faction.x6d397ffc7e"
+                  ]
                 }
               },
               {
@@ -6112,6 +6118,13 @@
                   "agendas.agenda.lyg.s01_06.jian_yu_ji.clock": "yange.3.1：剑玉姬亲自出剑重创郭解；人物卡支持其谨慎、控制与隐蔽行动取向。",
                   "relationships.liuchao.character.guo_jie.hostility": "剑玉姬将郭解视为当前行动的主要阻碍。",
                   "relationships.liuchao.character.guo_jie.respect": "剑玉姬将郭解视为当前行动的主要阻碍。"
+                },
+                "wake": {
+                  "tier": "offscreen_critical",
+                  "cadenceTurns": 3,
+                  "factionIds": [
+                    "liuchao.faction.wu_zong"
+                  ]
                 }
               }
             ],
@@ -6710,6 +6723,12 @@
                   "agendas.agenda.lyg.s01_07.dong_zhuo.clock": "yange.3.2 高光合同：董卓以军人方式送别、留下胡骑与边地剧变军情，不以哀号收场。",
                   "relationships.liuchao.character.jia_wenhe.trust": "董卓倚重贾文和安排凉州旧部退场。",
                   "relationships.liuchao.character.jia_wenhe.obligation": "董卓倚重贾文和安排凉州旧部退场。"
+                },
+                "wake": {
+                  "tier": "local_critical",
+                  "factionIds": [
+                    "liuchao.faction.liangzhou_army"
+                  ]
                 }
               },
               {
@@ -6780,6 +6799,13 @@
                   "agendas.agenda.lyg.s01_07.jia_wenhe.clock": "裁定 #95 与 yange.3.2：贾文和送别旧主后必须收束凉州旧部，董卓生还 IF 中同样不得回京争权。",
                   "relationships.liuchao.character.dong_zhuo.trust": "贾文和承担董卓身后凉州旧部的收束责任。",
                   "relationships.liuchao.character.dong_zhuo.obligation": "贾文和承担董卓身后凉州旧部的收束责任。"
+                },
+                "wake": {
+                  "tier": "faction",
+                  "cadenceTurns": 3,
+                  "factionIds": [
+                    "liuchao.faction.liangzhou_army"
+                  ]
                 }
               }
             ],
@@ -7369,6 +7395,12 @@
                   "agendas.agenda.lyg.s01_08.ruan_xiangning.clock": "yange.8.2 与裁定 #108-109：阮香凝可向程宗扬揭露盛姬关联，其他未获知人物不得自动继承秘密。",
                   "relationships.liuchao.character.cheng_zongyang.trust": "阮香凝愿意向程宗扬递出有限线索，但仍控制黑魔海机密的知情范围。",
                   "relationships.liuchao.character.cheng_zongyang.caution": "阮香凝愿意向程宗扬递出有限线索，但仍控制黑魔海机密的知情范围。"
+                },
+                "wake": {
+                  "tier": "local_critical",
+                  "factionIds": [
+                    "liuchao.faction.cheng_shi_shang_hui"
+                  ]
                 }
               }
             ],
