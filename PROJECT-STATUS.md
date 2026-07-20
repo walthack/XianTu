@@ -1,7 +1,7 @@
 # 仙途 (XianTu) · 项目总体状况与并行分工文档
 
 > 面向「新加入的 agent」。读完这一篇即可独立认领一个模块开工。
-> 最后更新：2026-07-20（R2-10M G2 复验：门禁修复验收通过，33 轮零降级零泄漏；新发现「模型不发剧本完成指令」阻断待排查；R2-10B 仍为 `[~]`。）
+> 最后更新：2026-07-20（R2-10M G2 复验：门禁修复验收通过，33 轮零降级零泄漏；`done` 真值写入权仍在叙事层，已升格为架构项并在 §2.3 界定权威边界；R2-10B 仍为 `[~]`。）
 
 > **多 agent 协作基线（用户裁定）**：本文件是本项目的共享进度、分工、交付与 Git 汇总权威；开始认领、完成交付或改变阶段状态时先读后更新。根目录 `CHANGELOG.md` 属原 repo 历史，不记录本协作线的状态。
 
@@ -73,7 +73,60 @@ epub 原文
 
 18 关卡 Mod 每个自包含、可单独导入游戏 `/scenario-mods`。角色丰富度靠一串确定性脚本叠加投影（外貌/性格/六司/灵根/境界/技能/物品/约束/关系/势力关系），全部「补空不覆盖」+ 时间门控（晚期内容不进早期关卡），每步备份 `{book}/stages-pre-*-backup/`。
 
-### 2.3 应用（**关键：Webpack 不是 Vite**）
+### 2.3 世界引擎 / 叙事层权威边界（**用户定的方向，改动前必读**）
+
+**原则**：确定性调度决定「发生什么」，LLM 只负责「怎么讲」。
+
+**最终目标**：让 380 个事件**都不再依赖 LLM 直接掌握世界真值**。
+注意这不等于「让所有事件都自主场外跑完」——玩家亲历仍然要靠玩家玩出来，目标只是**真值的写入权归引擎**。
+
+#### 已经收归引擎的（LLM 禁写，`src/utils/commandValidator.ts` FORBIDDEN_PATHS）
+
+```
+世界.状态.剧本模组.{worldTurn, worldPush, actorEngine, eventTimeline,
+                    offscreenResolvedEventIds, chronicle, divergences, steeringCooldown}
+角色.身份.称号            ← 里程碑奖励，只能由 milestoneRewards 授予
+```
+
+引擎能在**零 LLM 参与**下推进世界，已由真机证明（2026-07-20，R3 不介入 11 轮）：
+`s01_05/s01_06/s01_07` 三个事件的硬截止到点、场外结算落账、回执生成、零权限授予全部由引擎完成，
+三者 `done` 始终为 `false`、不进 `completedEventIds`，用独立标记 `…offscreen_resolved` 记账——
+既推进了世界，又没有把这三拍伪记成玩家亲历。NPC 冲突裁定（`resolveNpcActionConflicts`）同理，
+结果只进回执与 effects，从不碰 `done`。
+
+#### 唯一的例外：`flags.event.*.done`
+
+它同样是世界真值（直接决定 `completedEventIds` → 回执 → 权限），却**仍由 LLM 直接写入**。
+
+`canonGuard.findScenarioFlagViolation` 管的是**资格**不是**属实**：
+只能 `set`、只能写 `true`、路径须为 `flags.<event|chapter>.<id>.done`、事件须唯一可解析、
+且必须落在 `getScenarioEventIdsAllowedForCompletion` 内（不得越级完成非当前章节/活跃事件）。
+在这些边界内，**模型宣称完成即为完成，引擎无独立核实手段**。
+
+380 个事件的 completion 条件全部是 done 标志形态（364 个 `flags.<id>.done` + 16 个 `flags.event.<id>_done` 变体），
+引擎可计算的 0 个。
+
+#### 实证代价（2026-07-20 G2 复验）
+
+同一引擎、同一基准 `inputHash=397471a3`、同一批玩家输入，只换主叙事模型：
+
+| 主叙事模型 | R1 诏令 / R2 入宫 |
+|---|---|
+| `deepseek/deepseek-v3.2` | 首轮即 `done=true`，各得唯一权限 |
+| `MiniMax-M2.7-highspeed` | 7 轮内**发出剧本完成指令 0 条**（全程 30 条指令无一涉及剧本），机会卡到期作废，零权限 |
+
+引擎每一步都正确执行既定合同，但玩家「认真选了一条路」的意图静默归零——
+因为世界真值挂在模型的自觉性上。
+
+#### 目标形态
+
+把 LLM 从**写真值**降级为**提交证据**：叙事层报告玩家做了什么 → 引擎按完成合同独立裁定 →
+引擎自己写 `done`，该路径进入 FORBIDDEN_PATHS。
+
+**开工前须知**：这是架构项，不是 G2 遗留缺陷。相关背景与实证见
+`docs/R2-10M-G2-REVERIFY-2026-07-20.md`。改动 `done` 写入路径前先与用户确认设计方案。
+
+### 2.4 应用（**关键：Webpack 不是 Vite**）
 
 - `src/env.d.ts` 引 webpack-env；ts-loader/vue-loader；`build = webpack --mode production`。内置聚合用 `require.context`，**不能**用 `import.meta.glob`。
 - 18 个成品 Mod 已**内置**进 app（`src/modules/scenarioMods/builtins/`），启动播种进库（默认 `enabled:false`），用户无需手动导入。
