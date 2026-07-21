@@ -140,6 +140,7 @@
   **结果反馈纵切**：`s01_09` 的 success／partial 已通过白名单合同写入 NPC 态度、双方知识与长期经历；态度钳位、知识幂等、12 条长期记忆淘汰与装载期引用校验均有回归，LLM 仍只演出。报告=`docs/R2-11F-OUTCOME-FEEDBACK-G1-2026-07-21.md`。
   **失败重试纵切**：事件动作支持 `attempt / prepare` 与事件内 preparation key；failure 不结算、同轮动作互斥、准备跨存档但不跨合同，准备完成后才开放重试。`s01_09` 的“贸然失败→核对程序→重新宣旨”三回合路径已自动化。报告=`docs/R2-11G-FAILURE-PREPARATION-RETRY-G1-2026-07-21.md`。
   **跨书扩量纵切**：清羽左武军复盘采用无截止 persistent emergent，云龙伊水押运采用五回合 window；两书两步动作均由引擎完成，复用各自局势值、NPC 多回合生命周期、分层唤醒、唯一权限与长期经历。覆盖 5/380→7/380。报告=`docs/R2-11H-CROSS-BOOK-COMPLETION-SCALE-G1-2026-07-21.md`。
+  **二审阻断关闭**：`local_condition` 在绝对截止同回合完成时新增合同 hash+ready 优先权，不再被场外结算覆盖；两书补真实 sleeping/skip/byte-replay 用例，修正文档证据强度。报告=`docs/R2-11I-DEADLINE-OWNERSHIP-AND-WAKE-REVERIFY-2026-07-21.md`。
 
 ### 世界/NPC 引擎设计参照系（2026-07-19 用户拍板，实现指引）
 

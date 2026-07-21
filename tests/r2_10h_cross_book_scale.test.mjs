@@ -120,6 +120,32 @@ test('Qingyu and Yunlong reuse one deterministic core for different event struct
   }
 });
 
+test('cross-book wake budgets really skip absent actors and replay identically', async () => {
+  const { decideNpcActions } = await loadTs('../src/modules/scenarioMods/npcDecisionCore.ts');
+  for (const item of cases) {
+    const stage = JSON.parse(await readFile(new URL(`../src/modules/scenarioMods/builtins/data/${item.file}`, import.meta.url), 'utf8'));
+    const event = stage.scenario.events.find(candidate => candidate.id === item.eventId);
+    const core = event.worldActor.decisionCore;
+    const sleepingContext = {
+      round: 1,
+      presentCharacterIds: [],
+      affectedFactionIds: [],
+      namedCharacterIds: [],
+      majorEvent: false,
+    };
+    const skipped = decideNpcActions(core, core.situation.initialValues, core.actors, sleepingContext);
+    const replay = decideNpcActions(
+      JSON.parse(JSON.stringify(core)),
+      JSON.parse(JSON.stringify(core.situation.initialValues)),
+      JSON.parse(JSON.stringify(core.actors)),
+      JSON.parse(JSON.stringify(sleepingContext)),
+    );
+    assertByteIdentical(JSON.stringify(replay), JSON.stringify(skipped), `${item.eventId} sleeping replay diverged`);
+    assert.equal(skipped.wakeAudit.every(audit => !audit.awake && audit.reason === 'sleeping'), true);
+    assert.deepEqual(skipped.decisions, []);
+  }
+});
+
 test('cross-book runtime remains byte-identical through JSON reload across multiple rounds', async () => {
   const { advanceScenarioRuntime } = await loadTs('../src/modules/scenarioMods/runtime.ts');
   for (const item of cases) {

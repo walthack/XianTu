@@ -1485,7 +1485,19 @@ function resolveOffscreenWorldEvents(runtime: RuntimeState, transitions: Scenari
       && trackedOpportunity?.completionContract
       && trackedOpportunityState?.completionReadyAtTurn !== undefined,
     );
-    if (!due || runtime.flags[resolution.flagKey] === true || hasTrackedIntervention || ownerReadyByContract) continue;
+    const localActionState = owner ? runtime.eventActionStates?.[owner.id] : undefined;
+    const ownerReadyByLocalContract = Boolean(
+      owner?.playerCompletionContract?.kind === 'local_condition'
+      && localActionState?.contractHash === stableContractHash(owner.playerCompletionContract)
+      && localActionState.readyAtTurn !== undefined,
+    );
+    if (
+      !due
+      || runtime.flags[resolution.flagKey] === true
+      || hasTrackedIntervention
+      || ownerReadyByContract
+      || ownerReadyByLocalContract
+    ) continue;
     // 数据增量会把一个关卡拆成多个场外合同；只允许当前已经激活的世界事件启动结算，
     // 否则同一 stall 阈值会把整关未来事件一次烧完。多事件战争合同仍由首个活跃节点启动整组。
     if (!knownIds.some(id => runtime.activeEventIds.includes(id))) continue;

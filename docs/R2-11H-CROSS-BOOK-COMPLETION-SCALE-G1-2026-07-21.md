@@ -23,7 +23,7 @@
 ## 联合验收
 
 - 两书 decision core 在 JSON 往返与多轮 runtime 后逐字节一致。
-- 分层唤醒审计覆盖 faction cadence、local/minor presence 与在途行动；休眠预算不影响确定性。
+- 运行态覆盖 faction cadence、local/minor presence 与在途行动；另以两书角色均不在场、未被点名、势力未受影响的上下文，实测全部进入 `sleeping`、不产生决策，JSON 重放仍逐字节一致。
 - 两书 NPC 行动保留各自 `durationTurns=2` 的生命周期，玩家推进动作与 NPC 世界行动互不冒充。
 - 亲历结算只授一次书内权限，只落一次 participated 回执。
 - 相关 NPC 获得带 `player:participated` 的长期经历；场外路线仍为零权限。

@@ -167,6 +167,34 @@ test('ignoring a non-opportunity event reaches its absolute cutoff and settles o
   assert.equal(runtime.eventTimeline[EVENT_ID].outcome, 'offscreen');
 });
 
+test('a local-condition success on the exact deadline beats offscreen settlement', async () => {
+  const stage = JSON.parse(await readFile(stageUrl, 'utf8'));
+  const {
+    advanceScenarioRuntime,
+    getCurrentStoryEventActions,
+    recordStoryEventStructuredAction,
+  } = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  let save = advanceScenarioRuntime(fixture(stage, 6)).saveData;
+  while (runtimeOf(save).worldTurn < 6) save = advanceScenarioRuntime(save).saveData;
+  assert.equal(runtimeOf(save).offscreenResolvedEventIds.includes(EVENT_ID), false);
+  const action = getCurrentStoryEventActions(save).find(item => item.actionId === 'deliver_empress_decree');
+  const result = recordStoryEventStructuredAction(save, action);
+  assert.deepEqual(
+    { outcome: result.outcome, completed: result.completed },
+    { outcome: 'success', completed: true },
+  );
+
+  save = advanceScenarioRuntime(JSON.parse(JSON.stringify(save))).saveData;
+  const runtime = runtimeOf(save);
+  assert.equal(runtime.completedEventIds.includes(EVENT_ID), true);
+  assert.equal(runtime.offscreenResolvedEventIds.includes(EVENT_ID), false);
+  assert.equal(runtime.eventTimeline[EVENT_ID].outcome, 'participated');
+  assert.notEqual(runtime.flags['world.lyg.s01_09.offscreen_resolved'], true);
+  const lvzhi = runtime.actorEngine.actorMemory['liuchao.character.lv_zhi'];
+  assert.equal(lvzhi.relationships['liuchao.character.cheng_zongyang'].trust, 6);
+  assert.equal(lvzhi.episodes.some(item => item.tags.includes('player_accountability')), true);
+});
+
 test('event action rejects a stale contract and LLM completion writes', async () => {
   const stage = JSON.parse(await readFile(stageUrl, 'utf8'));
   const {
