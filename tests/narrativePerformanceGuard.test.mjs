@@ -135,6 +135,21 @@ test('real combined prompt rejects authoritative military quantities without blo
   );
   assert.equal(validateNarrativePerformance('北军已有三百人驻守要道。', '继续', scenarioPrompt).valid, false);
   assert.equal(
+    validateNarrativePerformance('请金车骑卸甲解兵，独身入殿——你我三人当面说清。', '继续', scenarioPrompt).valid,
+    true,
+    'military words elsewhere in the sentence must not turn 你我三人 into troop strength',
+  );
+  assert.equal(
+    validateNarrativePerformance('你我各退一步，划定入宫路线。', '继续', scenarioPrompt).valid,
+    true,
+    'the idiom 各退一步 is not a military distance',
+  );
+  assert.equal(
+    validateNarrativePerformance('甲士各退三步，在宫门外重新布防。', '继续', scenarioPrompt).valid,
+    false,
+    'a literal measured retreat in a military context remains guarded',
+  );
+  assert.equal(
     validateNarrativePerformance('太后如今每一步都需借力。', '继续', scenarioPrompt).valid,
     true,
   );

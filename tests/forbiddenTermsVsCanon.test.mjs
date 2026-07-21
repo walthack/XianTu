@@ -55,6 +55,19 @@ test('adjudicated known names are allowed while their unrevealed propositions re
     true,
     'an explicit player suspicion must not be mistaken for confirmed world truth',
   );
+  for (const suspicion of [
+    '还是说，阮香凝便是那位传闻中的凝玉姬？',
+    '程宗扬压下心中对阮香凝身份的揣测——若她真是凝玉姬，此事便说得通。',
+    '程宗扬疑心阮香凝莫不是凝玉姬。',
+    '阮香凝恐怕就是凝玉姬。',
+    '阮香凝八成就是凝玉姬。',
+  ]) {
+    assert.equal(
+      validateNarrativePerformance(suspicion, '继续', guardPrompt(s05Guard)).valid,
+      true,
+      `a natural suspicion form must remain a character claim: ${suspicion}`,
+    );
+  }
   const confirmedIdentity = validateNarrativePerformance(
     '阮香凝莫非就是凝玉姬？霍子孟随后查明此事属实。',
     '继续',
@@ -62,6 +75,11 @@ test('adjudicated known names are allowed while their unrevealed propositions re
   );
   assert.equal(confirmedIdentity.valid, false, 'an adjacent confirmation must settle the hypothesis back into a violation');
   assert.match(confirmedIdentity.issues.join('；'), /受保护人物的后续状态/);
+  assert.equal(
+    validateNarrativePerformance('阮香凝恐怕就是凝玉姬，霍子孟却证实此言无误。', '继续', guardPrompt(s05Guard)).valid,
+    false,
+    'a confirmation in the same sentence must override hypothetical wording',
+  );
   assert.equal(
     validateNarrativePerformance('吕冀理应为旧事接受问罪。', '继续', guardPrompt(s05Guard)).valid,
     true,

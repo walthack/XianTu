@@ -33,6 +33,7 @@ const QUANTITY_CLAIM_SOURCE = /探子|斥候|军报|来报|使者|消息|号称|
 const UNVERIFIED_QUANTITY_CONTEXT = /号称|声称|据报|传闻|据说|未核实|未经核实|尚待核实|无法证实|真假难辨/;
 const AUTHORITATIVE_QUANTITY_CONTEXT = /确有|确认|查明|已经核实|确切|实有/;
 const HYPOTHETICAL_CONTEXT = /莫非|是否|会不会|难道|假若|倘若|若有|有无(?!数)|有没有|并无|没有|未见|不曾/;
+const ASSOCIATION_HYPOTHETICAL_CONTEXT = /莫非|莫不是|是否|会不会|会否|难道|假若|倘若|若有|疑心|怀疑|揣测|猜想|猜测|疑似|还是说|难保|恐怕|多半|八成|若[^。！？\n]{0,6}(?:真是|就是|确是)/;
 const CONFIRMING_CONTEXT = /确有|果然|原来|证实|查明|确认|实有|的确|属实/;
 const CONTEXTUAL_FORBIDDEN_TERMS = new Set(['暗道', '伏兵', '暗桩', '魂丹']);
 const INVENTION_GUARDS: Array<{ marker: RegExp; violation: RegExp; issue: string }> = [
@@ -88,9 +89,13 @@ function sentenceHasUnauthorizedQuantity(sentence: string, scenarioPrompt: strin
     && UNVERIFIED_QUANTITY_CONTEXT.test(sentence)
     && !AUTHORITATIVE_QUANTITY_CONTEXT.test(sentence)
   ) return false;
+  // “各退一步”表示双方让步；即使同句谈到入宫路线，也不是军事距离。
+  const distanceText = sentence.replace(/各(?:自)?退一(?:小)?步/g, '');
+  // “你我三人”是在列谈话参与者；不能被同句较早出现的军职／卸甲语汇污染成兵力。
+  const headcountText = sentence.replace(/(?:你我|我等|我们)[二两三四五六七八九十]人/g, '');
   return DIRECT_MILITARY_QUANTITY.test(sentence)
-    || MILITARY_HEADCOUNT.test(sentence)
-    || (DISTANCE_QUANTITY.test(sentence) && DISTANCE_CONTEXT.test(sentence))
+    || MILITARY_HEADCOUNT.test(headcountText)
+    || (DISTANCE_QUANTITY.test(distanceText) && DISTANCE_CONTEXT.test(distanceText))
     || (WARD_DISTANCE_QUANTITY.test(sentence) && MILITARY_WARD_CONTEXT.test(sentence))
     || (RATIO_QUANTITY.test(sentence) && RATIO_CONTEXT.test(sentence));
 }
@@ -130,7 +135,7 @@ function leakedForbiddenAssociation(
             if (!rule.allowHypothetical) return true;
             const sentenceIndex = narrative.slice(0, predicateAt).split(/[。！？\n]/).length - 1;
             const sentence = sentences[sentenceIndex] || '';
-            if (!HYPOTHETICAL_CONTEXT.test(sentence)) return true;
+            if (!ASSOCIATION_HYPOTHETICAL_CONTEXT.test(sentence)) return true;
             if (CONFIRMING_CONTEXT.test(sentence) || CONFIRMING_CONTEXT.test(sentences[sentenceIndex + 1] || '')) {
               return true;
             }
