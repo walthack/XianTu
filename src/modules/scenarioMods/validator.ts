@@ -230,6 +230,63 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
       validateIdArray(entity.relatedFactionIds, `${entity.__path}.relatedFactionIds`, add);
       optionalId(entity.locationId, `${entity.__path}.locationId`, add);
       optionalString(entity.objective, `${entity.__path}.objective`, add);
+      if (entity.playerCompletionContract !== undefined) {
+        const contractPath = `${entity.__path}.playerCompletionContract`;
+        if (!isRecord(entity.playerCompletionContract)) {
+          add(contractPath, 'invalid_type', 'playerCompletionContract must be an object.');
+        } else {
+          const contract = entity.playerCompletionContract;
+          if (contract.kind !== 'local_condition') {
+            add(`${contractPath}.kind`, 'invalid_enum', 'playerCompletionContract.kind must be local_condition.');
+          }
+          if (
+            !Array.isArray(contract.settleOn)
+            || contract.settleOn.length < 1
+            || contract.settleOn.some(outcome => !['success', 'partial'].includes(String(outcome)))
+          ) {
+            add(`${contractPath}.settleOn`, 'invalid_enum', 'settleOn must contain success and/or partial.');
+          }
+          if (!Array.isArray(contract.actions) || contract.actions.length < 1 || contract.actions.length > 8) {
+            add(`${contractPath}.actions`, 'invalid_range', 'playerCompletionContract.actions must contain 1 to 8 actions.');
+          } else {
+            const actionIds = new Set<string>();
+            forEachRecord(contract.actions, `${contractPath}.actions`, (action, actionPath) => {
+              if (validateId(action.id, `${actionPath}.id`, add)) {
+                if (actionIds.has(action.id)) add(`${actionPath}.id`, 'duplicate_id', `Duplicate event action "${action.id}".`);
+                actionIds.add(action.id);
+              }
+              requireString(action.label, `${actionPath}.label`, add);
+              requireString(action.actionText, `${actionPath}.actionText`, add);
+              if (action.timeCost !== 1) add(`${actionPath}.timeCost`, 'invalid_value', 'Structured event actions currently require timeCost=1.');
+              if (!Array.isArray(action.successWhen) || action.successWhen.length < 1) {
+                add(`${actionPath}.successWhen`, 'required_array', 'A local condition action needs at least one success condition.');
+              } else {
+                validateConditions(action.successWhen, `${actionPath}.successWhen`, add);
+              }
+              if (!['partial', 'failure'].includes(String(action.unmetOutcome))) {
+                add(`${actionPath}.unmetOutcome`, 'invalid_enum', 'unmetOutcome must be partial or failure.');
+              }
+              if (!isRecord(action.outcomeText)) {
+                add(`${actionPath}.outcomeText`, 'required_object', 'outcomeText must declare all three outcomes.');
+              } else {
+                for (const outcome of ['success', 'partial', 'failure']) {
+                  requireString(action.outcomeText[outcome], `${actionPath}.outcomeText.${outcome}`, add);
+                }
+              }
+            });
+          }
+          const completion = Array.isArray(entity.completion) ? entity.completion : [];
+          const standardEngineFlag = completion.length === 1
+            && isRecord(completion[0])
+            && typeof completion[0].path === 'string'
+            && completion[0].path.startsWith('flags.')
+            && completion[0].operator === 'eq'
+            && completion[0].value === true;
+          if (!standardEngineFlag) {
+            add(contractPath, 'unsupported_completion', 'A local event contract requires exactly one flags.* = true event completion condition.');
+          }
+        }
+      }
       if (entity.timeline !== undefined) {
         const timelinePath = `${entity.__path}.timeline`;
         if (!isRecord(entity.timeline)) {

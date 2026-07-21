@@ -133,14 +133,14 @@
             <FormattedText :text="currentNarrative.content" />
           </div>
 
-          <div v-if="opportunityActionOptions.length" class="action-options opportunity-action-options">
+          <div v-if="scenarioEngineActionOptions.length" class="action-options opportunity-action-options">
             <button
-              v-for="option in opportunityActionOptions"
-              :key="`${option.contractHash}:${option.stepId}:${option.actionId}`"
-              @click="selectOpportunityAction(option)"
+              v-for="option in scenarioEngineActionOptions"
+              :key="`${option.contractHash}:${option.source}:${'stepId' in option ? option.stepId : option.eventId}:${option.actionId}`"
+              @click="selectScenarioEngineAction(option)"
               class="action-option-btn opportunity-action-btn"
             >
-              {{ option.label }} · 耗时 {{ option.timeCost }} 回合
+              {{ option.label }} · 耗时 {{ option.timeCost }} 回合<template v-if="'remainingTurns' in option && option.remainingTurns !== undefined"> · 剩余 {{ option.remainingTurns }} 次重要行动</template>
             </button>
           </div>
 
@@ -438,7 +438,9 @@ import {
 import { buildLocalJudgementPreflight, composeJudgementAction } from '@/utils/judgementPreflight';
 import { getNarrativeTurn } from '@/utils/actionGate';
 import {
+  getCurrentStoryEventActions,
   getTrackedStoryOpportunityActions,
+  type ScenarioEventActionSelection,
   type ScenarioOpportunityActionSelection,
 } from '@/modules/scenarioMods/runtime';
 import type {  CharacterProfile } from '@/types/game';
@@ -701,10 +703,11 @@ const gameStateStore = useGameStateStore();
 const isTavernEnvFlag = isTavernEnv();
 const enhancedActionQueue = EnhancedActionQueueManager.getInstance();
 const bidirectionalSystem = AIBidirectionalSystem;
-const selectedOpportunityAction = ref<ScenarioOpportunityActionSelection | null>(null);
-const opportunityActionOptions = computed(() => {
+type ScenarioEngineActionSelection = ScenarioOpportunityActionSelection | ScenarioEventActionSelection;
+const selectedScenarioEngineAction = ref<ScenarioEngineActionSelection | null>(null);
+const scenarioEngineActionOptions = computed<ScenarioEngineActionSelection[]>(() => {
   const save = gameStateStore.toSaveData();
-  return save ? getTrackedStoryOpportunityActions(save) : [];
+  return save ? [...getTrackedStoryOpportunityActions(save), ...getCurrentStoryEventActions(save)] : [];
 });
 
 const isOnlineTraveling = computed(() => {
@@ -1514,7 +1517,7 @@ const selectActionOption = (option: string) => {
   if (!trimmed) return;
 
   lastSelectedActionOption.value = trimmed;
-  selectedOpportunityAction.value = null;
+  selectedScenarioEngineAction.value = null;
   inputText.value = trimmed;
 
   nextTick(() => {
@@ -1523,8 +1526,8 @@ const selectActionOption = (option: string) => {
   });
 };
 
-const selectOpportunityAction = (option: ScenarioOpportunityActionSelection) => {
-  selectedOpportunityAction.value = option;
+const selectScenarioEngineAction = (option: ScenarioEngineActionSelection) => {
+  selectedScenarioEngineAction.value = option;
   lastSelectedActionOption.value = option.actionText;
   inputText.value = option.actionText;
   nextTick(() => {
@@ -1621,6 +1624,13 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
     finalUserMessage = actionQueueText ? `<行动趋向>${actionQueueText}</行动趋向>
 ` : '';
   }
+  if (
+    selectedScenarioEngineAction.value?.source === 'event_engine'
+    && selectedScenarioEngineAction.value.actionText === userMessage
+  ) {
+    const result = selectedScenarioEngineAction.value;
+    finalUserMessage += `\n【本地事件判定已预结算】事件=${result.eventId}；动作=${result.actionId}；结果=${result.expectedOutcome}；既定反馈=${result.outcomeText}。只演出该既定结果，不得另行判定、升级结果或写入事件完成标记。\n`;
+  }
   if (execution?.resolution) {
     const result = execution.resolution;
     const localDamageApplied = result.kind === 'combat' && result.appliedEffects.some(effect => effect.key === '角色.属性.气血.当前');
@@ -1669,8 +1679,10 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
         useStreaming: useStreaming.value,
         shouldAbort: () => !uiStore.isAIProcessing || aiResetToken !== resetSnapshot,
       };
-      if (selectedOpportunityAction.value?.actionText === userMessage) {
-        options.opportunityAction = { ...selectedOpportunityAction.value };
+      if (selectedScenarioEngineAction.value?.actionText === userMessage) {
+        const selected = { ...selectedScenarioEngineAction.value };
+        if (selected.source === 'opportunity_engine') options.opportunityAction = selected;
+        else options.eventAction = selected;
       }
 
       // 酒馆环境：流式通过事件系统处理（STREAM_TOKEN_RECEIVED_INCREMENTALLY）

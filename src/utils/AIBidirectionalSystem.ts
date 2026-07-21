@@ -30,9 +30,11 @@ import type { APIUsageType } from '@/stores/apiManagementStore';
 import { buildScenarioCanonPrompt } from '@/modules/scenarioMods/canonGuard';
 import {
   advanceScenarioRuntime,
+  recordStoryEventStructuredAction,
   recordStoryOpportunityPlayerAction,
   recordStoryOpportunityStructuredAction,
   STEERING_DIVERGENCE_COOLDOWN,
+  type ScenarioEventActionSelection,
   type ScenarioOpportunityActionSelection,
 } from '@/modules/scenarioMods/runtime';
 import { applyMilestoneRewards } from '@/modules/scenarioMods/milestoneRewards';
@@ -144,6 +146,8 @@ export interface ProcessOptions {
   shouldAbort?: () => boolean;
   /** 由本地机会合同生成的推进动作；成功响应后才消费。 */
   opportunityAction?: ScenarioOpportunityActionSelection;
+  /** 由非机会卡事件合同生成的本地判定动作；成功响应后才消费。 */
+  eventAction?: ScenarioEventActionSelection;
 }
 
 /**
@@ -1428,6 +1432,7 @@ ${missingItems.length > 0 ? `【上次结构化输出缺失】
         {
           userAction: (userMessage && String(userMessage).trim()) || '继续当前活动',
           opportunityAction: options?.opportunityAction,
+          eventAction: options?.eventAction,
         }
       );
       if (options?.onStateChange) {
@@ -2099,6 +2104,7 @@ ${step1Text}
        */
       userAction?: string;
       opportunityAction?: ScenarioOpportunityActionSelection;
+      eventAction?: ScenarioEventActionSelection;
     }
   ): Promise<{ saveData: SaveData; stateChanges: StateChangeLog; onlineLogPosted: boolean }> {
     const abortRequested = () => shouldAbort?.() ?? false;
@@ -2111,6 +2117,19 @@ ${step1Text}
     const repairedData = repairSaveData(currentSaveData);
     let saveData = cloneDeep(repairedData);
     const changes: StateChange[] = [];
+    // 非机会卡的本地判定在任何模型命令执行前结算；模型只能演出调用前已确定的结果，
+    // 不能先改属性再反向影响本轮 success/partial/failure。
+    const eventProgress = options?.eventAction
+      ? recordStoryEventStructuredAction(saveData, options.eventAction)
+      : undefined;
+    if (eventProgress?.attempted) {
+      changes.push({
+        key: `世界.状态.剧本模组.eventActionStates.${eventProgress.eventId}`,
+        action: eventProgress.completed ? 'event_action_completed' : 'event_action_attempted',
+        oldValue: undefined,
+        newValue: { actionId: eventProgress.actionId, outcome: eventProgress.outcome },
+      });
+    }
 
     const behavior = {
       appendNarrativeHistory: options?.appendNarrativeHistory !== false,
@@ -2690,7 +2709,6 @@ ${step1Text}
         newValue: opportunityProgress.stepId,
       });
     }
-
     const scenarioResult = advanceScenarioRuntime(saveData);
     saveData = scenarioResult.saveData;
     const runtimeAfterAdvance = (saveData as any)?.世界?.状态?.剧本模组;

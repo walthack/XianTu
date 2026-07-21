@@ -90,6 +90,30 @@ export interface ScenarioModEvent {
   offscreenResolution?: ScenarioModEventOffscreenResolution;
   /** 当前承重拍的世界演员纵切；数据通用、按事件显式启用。 */
   worldActor?: ScenarioWorldActorContract;
+  /** 无机会卡事件的本地完成合同；动作身份与判定结果均由引擎持有。 */
+  playerCompletionContract?: ScenarioPlayerCompletionContract;
+}
+
+export type ScenarioPlayerCompletionOutcome = 'success' | 'partial' | 'failure';
+
+export interface ScenarioPlayerCompletionContract {
+  kind: 'local_condition';
+  /** 哪些本地判定结果足以完成该事件；failure 默认只能重试或等待场外截止。 */
+  settleOn: Array<Exclude<ScenarioPlayerCompletionOutcome, 'failure'>>;
+  actions: Array<{
+    id: string;
+    label: string;
+    actionText: string;
+    timeCost: 1;
+    /** 全部条件满足为 success，否则按 unmetOutcome 结算；不读取 LLM 正文。 */
+    successWhen: ScenarioCondition[];
+    unmetOutcome: 'partial' | 'failure';
+    outcomeText: {
+      success: string;
+      partial: string;
+      failure: string;
+    };
+  }>;
 }
 
 export type ScenarioModEventTimelineKind = 'canon_anchor' | 'window' | 'emergent';

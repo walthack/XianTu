@@ -136,6 +136,7 @@
   **下一门**：先实现追踪/执行分离、引擎固定推进选项、可见步骤与剩余窗口、绝对截止的 `partial` 收束；再选择非机会卡事件验证判定结果或地点/时间型合同，不能把关键词匹配机械复制到其余 376 个事件。设计=`docs/R2-11-OPPORTUNITY-ACTION-UX-DESIGN-2026-07-20.md`，首纵切=`docs/R2-11-OPTION1-DETERMINISTIC-OPPORTUNITY-COMPLETION-2026-07-20.md`，跨事件 G1=`docs/R2-11B-CROSS-EVENT-DETERMINISTIC-COMPLETION-G1-2026-07-21.md`。
   **结构化执行纵切**：`s01_05` 已完成追踪／执行分离，本地推进按钮携带稳定动作身份、时间成本与合同哈希，具体政策选择可重放；LLM 选项与自由输入不再是主要完成证据。报告=`docs/R2-11C-STRUCTURED-OPPORTUNITY-ACTIONS-G1-2026-07-21.md`。
   **跨事件收束纵切**：结构化动作已扩至 `s01_06–08`，右栏显示当前步骤和剩余窗口；有截止事件按 `participated / partial / offscreen` 确定性收束，partial 不授完整权限，无截止 `s01_08` 明示可自行安排。报告=`docs/R2-11D-CROSS-EVENT-ACTIONS-AND-PARTIAL-G1-2026-07-21.md`。
+  **非机会卡判定纵切**：`s01_09` 以事件级 `local_condition` 合同提供固定动作，按行动前存档判 success／partial，LLM 只演出；不介入则六回合截止场外收束。下一批接 outcome effects 和失败后准备／重试。报告=`docs/R2-11E-NON-OPPORTUNITY-LOCAL-COMPLETION-G1-2026-07-21.md`。
 
 ### 世界/NPC 引擎设计参照系（2026-07-19 用户拍板，实现指引）
 

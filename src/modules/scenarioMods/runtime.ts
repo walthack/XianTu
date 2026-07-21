@@ -8,6 +8,7 @@ import type {
   ScenarioModEvent,
   ScenarioNpcDecisionActor,
   ScenarioNpcMemoryEpisode,
+  ScenarioPlayerCompletionOutcome,
   ScenarioPlayerKnowledgeFact,
   ScenarioStoryOpportunity,
 } from './schema';
@@ -117,6 +118,34 @@ export interface ScenarioOpportunityActionSelection {
   contractHash: string;
 }
 
+export interface ScenarioEventActionAttempt {
+  actionId: string;
+  outcome: ScenarioPlayerCompletionOutcome;
+  attemptedAtTurn: number;
+  detail: string;
+}
+
+export interface ScenarioEventActionState {
+  contractHash: string;
+  lastAttemptAtTurn?: number;
+  lastOutcome?: ScenarioPlayerCompletionOutcome;
+  readyAtTurn?: number;
+  attempts: ScenarioEventActionAttempt[];
+}
+
+export interface ScenarioEventActionSelection {
+  source: 'event_engine';
+  eventId: string;
+  actionId: string;
+  label: string;
+  actionText: string;
+  timeCost: 1;
+  contractHash: string;
+  expectedOutcome: ScenarioPlayerCompletionOutcome;
+  outcomeText: string;
+  remainingTurns?: number;
+}
+
 export interface ScenarioEventTimelineState {
   eligibleAtTurn: number;
   activatedAtTurn?: number;
@@ -179,6 +208,8 @@ export interface RuntimeState extends ScenarioProgressState {
   chronicle?: ScenarioChronicleEntry[];
   /** 玩家认知与世界真值、NPC 知识分账；旧档可缺省。 */
   playerKnowledge?: Record<string, ScenarioPlayerKnowledgeFact>;
+  /** 非机会卡事件的本地尝试、判定与完成状态。 */
+  eventActionStates?: Record<string, ScenarioEventActionState>;
   canon?: {
     characters?: Array<{ id: string; name: string; profile?: { memories?: string[] } }>;
     factions?: Array<{ id: string; name: string }>;
@@ -751,6 +782,106 @@ function opportunityCompletionContractHash(opportunity: ScenarioStoryOpportunity
   return (result >>> 0).toString(16).padStart(8, '0');
 }
 
+function stableContractHash(contract: unknown): string {
+  let result = 2166136261;
+  for (const char of stableOpportunityContract(contract)) {
+    result ^= char.charCodeAt(0);
+    result = Math.imul(result, 16777619);
+  }
+  return (result >>> 0).toString(16).padStart(8, '0');
+}
+
+function reconcileEventActionContract(runtime: RuntimeState, event: ScenarioModEvent): ScenarioEventActionState | undefined {
+  const contract = event.playerCompletionContract;
+  if (!contract) return undefined;
+  runtime.eventActionStates ||= {};
+  const contractHash = stableContractHash(contract);
+  const current = runtime.eventActionStates[event.id];
+  if (!current || current.contractHash !== contractHash) {
+    runtime.eventActionStates[event.id] = { contractHash, attempts: [] };
+  }
+  return runtime.eventActionStates[event.id];
+}
+
+/** 当前非机会卡承重事件的本地动作；按钮身份来自事件合同，不来自 LLM。 */
+export function getCurrentStoryEventActions(saveData: SaveData): ScenarioEventActionSelection[] {
+  const runtime = getRuntime(saveData);
+  if (!runtime) return [];
+  const event = getNarrativeAnchorEvent(runtime);
+  const contract = event?.playerCompletionContract;
+  if (!event || !contract) return [];
+  const state = reconcileEventActionContract(runtime, event);
+  if (!state || state.readyAtTurn !== undefined) return [];
+  const timeline = eventTimelineState(runtime, event.id);
+  const remainingTurns = event.timeline?.deadlineTurns !== undefined && timeline
+    ? Math.max(0, timeline.eligibleAtTurn + event.timeline.deadlineTurns - (Number(runtime.worldTurn) || 0))
+    : undefined;
+  return contract.actions.map(action => {
+    const expectedOutcome: ScenarioPlayerCompletionOutcome = conditionsMatch(action.successWhen, saveData, runtime)
+      ? 'success'
+      : action.unmetOutcome;
+    return {
+      source: 'event_engine',
+      eventId: event.id,
+      actionId: action.id,
+      label: `【主线判定】${action.label}`,
+      actionText: action.actionText,
+      timeCost: action.timeCost,
+      contractHash: state.contractHash,
+      expectedOutcome,
+      outcomeText: action.outcomeText[expectedOutcome],
+      ...(remainingTurns !== undefined ? { remainingTurns } : {}),
+    };
+  });
+}
+
+/**
+ * 在成功 AI 回合后消费一次非机会卡事件动作，并只依据存档状态执行本地判定。
+ * LLM 正文、命令和自报结果均不参与 success/partial/failure 裁定。
+ */
+export function recordStoryEventStructuredAction(
+  saveData: SaveData,
+  selection: ScenarioEventActionSelection,
+): { attempted: boolean; completed: boolean; eventId?: string; actionId?: string; outcome?: ScenarioPlayerCompletionOutcome; reason?: string } {
+  const runtime = getRuntime(saveData);
+  if (!runtime || selection?.source !== 'event_engine') {
+    return { attempted: false, completed: false, reason: 'invalid_selection' };
+  }
+  const event = getNarrativeAnchorEvent(runtime);
+  const contract = event?.playerCompletionContract;
+  if (!event || !contract || event.id !== selection.eventId) {
+    return { attempted: false, completed: false, reason: 'stale_event' };
+  }
+  const state = reconcileEventActionContract(runtime, event);
+  if (!state || state.contractHash !== selection.contractHash) {
+    return { attempted: false, completed: false, eventId: event.id, reason: 'stale_contract' };
+  }
+  const action = contract.actions.find(item => item.id === selection.actionId);
+  if (!action || action.timeCost !== selection.timeCost || action.actionText !== selection.actionText) {
+    return { attempted: false, completed: false, eventId: event.id, reason: 'stale_action' };
+  }
+  const turn = Math.max(0, Number(runtime.worldTurn) || 0);
+  if (state.readyAtTurn !== undefined) {
+    return { attempted: false, completed: true, eventId: event.id, reason: 'already_completed' };
+  }
+  if (state.lastAttemptAtTurn === turn) {
+    return { attempted: false, completed: false, eventId: event.id, reason: 'already_attempted' };
+  }
+  const success = conditionsMatch(action.successWhen, saveData, runtime);
+  const outcome: ScenarioPlayerCompletionOutcome = success ? 'success' : action.unmetOutcome;
+  const detail = action.outcomeText[outcome];
+  if (selection.expectedOutcome !== outcome || selection.outcomeText !== detail) {
+    return { attempted: false, completed: false, eventId: event.id, reason: 'stale_condition' };
+  }
+  state.lastAttemptAtTurn = turn;
+  state.lastOutcome = outcome;
+  state.attempts.push({ actionId: action.id, outcome, attemptedAtTurn: turn, detail });
+  state.attempts = state.attempts.slice(-8);
+  const completed = outcome !== 'failure' && contract.settleOn.includes(outcome);
+  if (completed) state.readyAtTurn = turn;
+  return { attempted: true, completed, eventId: event.id, actionId: action.id, outcome };
+}
+
 function reconcileOpportunityCompletionContract(
   state: ScenarioOpportunityState,
   opportunity: ScenarioStoryOpportunity,
@@ -922,6 +1053,20 @@ function settleReadyOpportunityCompletionFlags(runtime: RuntimeState): void {
     && !eventTimelineDeadlineDue(runtime, anchor || undefined)
   ) return;
   const completion = anchor?.completion || [];
+  if (
+    completion.length !== 1
+    || !completion[0].path.startsWith('flags.')
+    || completion[0].operator !== 'eq'
+    || completion[0].value !== true
+  ) return;
+  runtime.flags[completion[0].path.slice('flags.'.length)] = true;
+}
+
+function settleReadyEventActionCompletionFlags(runtime: RuntimeState): void {
+  const anchor = getNarrativeAnchorEvent(runtime);
+  const state = anchor && runtime.eventActionStates?.[anchor.id];
+  if (!anchor?.playerCompletionContract || state?.readyAtTurn === undefined) return;
+  const completion = anchor.completion || [];
   if (
     completion.length !== 1
     || !completion[0].path.startsWith('flags.')
@@ -1559,6 +1704,7 @@ export function advanceScenarioRuntime(saveData: SaveData): {
   projectBottomLinesToNpcs(next);
   normalizeRuntimeFlags(runtime);
   settleReadyOpportunityCompletionFlags(runtime);
+  settleReadyEventActionCompletionFlags(runtime);
 
   runtime.chapters = Array.isArray(runtime.chapters) ? runtime.chapters : [];
   runtime.events = Array.isArray(runtime.events) ? runtime.events : [];
@@ -1571,6 +1717,9 @@ export function advanceScenarioRuntime(saveData: SaveData): {
     : {};
   runtime.playerKnowledge = runtime.playerKnowledge && typeof runtime.playerKnowledge === 'object'
     ? runtime.playerKnowledge
+    : {};
+  runtime.eventActionStates = runtime.eventActionStates && typeof runtime.eventActionStates === 'object'
+    ? runtime.eventActionStates
     : {};
   const transitions: ScenarioRuntimeTransition[] = [];
   const railProfile = getCanonRailProfile(runtime);

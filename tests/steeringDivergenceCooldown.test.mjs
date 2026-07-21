@@ -187,6 +187,7 @@ test('世界时钟与事件时间线由引擎独占，LLM 不能伪造发生或�
     '世界.状态.剧本模组.actorEngine.entitlements',
     '世界.状态.剧本模组.eventTimeline.lyg.event.s01_08.playerLearnedAtTurn',
     '世界.状态.剧本模组.playerKnowledge.knowledge.player.event.lyg.event.s01_08',
+    '世界.状态.剧本模组.eventActionStates.lyg.event.s01_09.lastOutcome',
     '世界.状态.剧本模组.offscreenResolvedEventIds',
     '世界.状态.剧本模组.chronicle',
   ]) {

@@ -540,7 +540,10 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
         const railLine = contract
           ? `【Canon Rail·默认正典】本拍必须达成：${contract.mustReach}\n  允许补足：${contract.allowedElaboration}\n${forbiddenLine}  禁止：不得以 void、替代结局、提前跳拍或新增 IF 分支改写此结果；只有用户显式进入 IF 支线时才可改写正典走向。\n  `
           : '';
-        return `- ${event.name}（事件ID：${event.id}）：${event.description}\n  ${axisLine ? `${axisLine}\n  ` : ''}${highlightLine}${railLine}相关正典：${context || '无'}\n  完成条件：${formatConditions(event.completion)}\n  完成写入键（事件达成时原样 set true）：${formatCompletionWriteKeys(event.completion)}`;
+        const localContractLine = event.playerCompletionContract
+          ? `  【本地事件合同】玩家动作与 success/partial/failure 均由程序判定；你只演出系统提供的既定结果。严禁写入本事件完成键，正文与命令都不是完成证据。\n`
+          : `  完成写入键（事件达成时原样 set true）：${formatCompletionWriteKeys(event.completion)}`;
+        return `- ${event.name}（事件ID：${event.id}）：${event.description}\n  ${axisLine ? `${axisLine}\n  ` : ''}${highlightLine}${railLine}相关正典：${context || '无'}\n  完成条件：${formatConditions(event.completion)}\n${localContractLine}`;
       }).join('\n')
     : '- 当前没有已触发事件，不要提前引入未触发事件。';
 

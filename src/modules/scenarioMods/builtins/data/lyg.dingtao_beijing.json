@@ -8194,7 +8194,54 @@
         "axisSeq": 985,
         "axisAnchor": "六朝燕歌行·#13·恶报",
         "axisBeat": "程宗扬奉懿旨至永巷赐死吕冀，其妻孙寿发配为奴。",
-        "objective": "前往永巷赐死吕冀"
+        "objective": "前往永巷赐死吕冀",
+        "playerCompletionContract": {
+          "kind": "local_condition",
+          "settleOn": [
+            "success",
+            "partial"
+          ],
+          "actions": [
+            {
+              "id": "deliver_empress_decree",
+              "label": "持懿旨前往永巷主持处置",
+              "actionText": "我持太后懿旨前往永巷，当众宣读处置并承担执行责任。",
+              "timeCost": 1,
+              "successWhen": [
+                {
+                  "path": "角色.身份.先天六司.魅力",
+                  "operator": "gte",
+                  "value": 5
+                }
+              ],
+              "unmetOutcome": "partial",
+              "outcomeText": {
+                "success": "处置程序被完整主持，朝廷对懿旨的权威没有产生额外疑义。",
+                "partial": "处置仍按正典发生，但主持过程留下了礼法与声望层面的政治余波。",
+                "failure": "本次尝试未能进入正式处置程序，可以调整准备后重试。"
+              }
+            }
+          ]
+        },
+        "timeline": {
+          "kind": "canon_anchor",
+          "notBeforeTurns": 0,
+          "deadlineTurns": 6,
+          "reveal": {
+            "publicAfterTurns": 0,
+            "playerKnowledge": "immediate"
+          }
+        },
+        "offscreenResolution": {
+          "id": "offscreen.lyg.s01_09.lv_ji_sentence",
+          "afterStallTurns": 6,
+          "flagKey": "world.lyg.s01_09.offscreen_resolved",
+          "resolvedEventIds": [
+            "lyg.event.s01_09"
+          ],
+          "worldDelta": "你未在时限内前往永巷；太后懿旨仍由宫中官署执行，吕冀伏诛，孙寿被发配为奴。",
+          "evidence": "引擎按绝对事件截止结算吕冀处置，不伪记为玩家亲历。"
+        }
       },
       {
         "id": "lyg.event.debut_lvzhi",
