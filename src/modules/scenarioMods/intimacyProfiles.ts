@@ -5,15 +5,20 @@
  * 内容源：character-canon/intimacy-profiles-draft.md（人工审定工作稿；本模块只是其运行时投影）
  * 相关裁定：#111 凤凰宝典处子边界 / #112 云如瑶逆转限房事层面 / #6 #43 成人内容边界
  *
- * 四道门（全部通过才注入，任一不过返回空串）：
+ * 两道门（都通过才注入，任一不过返回空串）：
  *   1. 名单门：只有 INTIMACY_PROFILES 里的角色才有档案；留白角色（苏妲己收编弧线、剑玉姬）不入本模块。
- *   2. 成人门：saveData 的 nsfwMode 必须为 true。
- *   3. 年龄门：按当前游戏年 − registry birthYear 计算，未满 ADULT_AGE 一律不注入（硬门禁，合规红线）。
- *   4. 场景门：仅亲密场景注入；判定宁漏不误（见 INTIMATE_SCENE_RE 注释）。
+ *   2. 场景门：仅亲密场景注入；判定宁漏不误（见 INTIMATE_SCENE_RE 注释）。
  * 通过后再按好感度分层揭示 tiers——档案不是一次性倾倒，随关系深入逐层显现。
+ * 素材给到之后，**写不写、写到什么程度由 LLM 按场面判断**，本模块不代它决定。
+ *
+ * 【刻意不做的两道门】（2026-07-21 用户裁定，避免后人"补全"）：
+ *   - 年龄门：合规保证在上游——名单只收录经 R1-3 合规终审确认的成年角色
+ *     （裁定 #6 涉性女角≥18、#98 云如瑶 16→18），正典数据层另有年龄门禁；
+ *     曾实现的运行时现算依赖 stage 投影的 birthYear，缺字段会静默不注入，是自找的失败源。
+ *   - 成人门（nsfwMode）：本作为成人向自用/内测项目（裁定 #43 成人描写不做自动处理），
+ *     该开关默认即 true，拿它管"要不要写"属多余一层。
+ *     ⚠️ 若将来转公开发行，本模块是 R1-3 已登记的「角色档案层 NSFW 门控」的作用面之一。
  */
-
-export const ADULT_AGE = 18;
 
 /** 好感分层阈值：与 storyContext 的底线门控同风格，低层近乎公开、高层需长期关系。 */
 const TIER_FAVOR = { shallow: 20, deep: 55, bonded: 80 } as const;
@@ -356,14 +361,10 @@ export const INTIMACY_PROFILES: IntimacyProfile[] = [
 ];
 
 export interface IntimacyContext {
-  /** 系统.配置.nsfwMode */
-  nsfwMode: boolean;
-  /** 当前场景文本（玩家输入 + 在场信息），用于亲密场景判定 */
+  /** 当前场景文本（玩家本轮输入），用于亲密场景判定 */
   sceneText: string;
   /** 该角色当前好感度 */
   favor: number;
-  /** 该角色当前年龄；无法确定时传 undefined —— 年龄门会因此拒绝注入 */
-  age?: number;
 }
 
 export function isIntimateScene(text: string): boolean {
@@ -375,15 +376,13 @@ export function findIntimacyProfile(name: string): IntimacyProfile | undefined {
 }
 
 /**
- * 生成注入片段；四道门任一不过返回空串。
+ * 生成注入片段；两道门任一不过返回空串。
  * 标签刻意低显著度（R2-9 教训：醒目标题会被模型照抄进正文），
  * 且已同时登记进 textSanitizer 的**检测**与**清洗**两份清单。
  */
 export function formatIntimacyProfile(name: string, context: IntimacyContext): string {
   const profile = findIntimacyProfile(name);
   if (!profile) return '';
-  if (!context.nsfwMode) return '';
-  if (typeof context.age !== 'number' || !Number.isFinite(context.age) || context.age < ADULT_AGE) return '';
   if (!isIntimateScene(context.sceneText)) return '';
 
   const favor = Number.isFinite(context.favor) ? context.favor : 0;

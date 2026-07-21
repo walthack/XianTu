@@ -5,9 +5,9 @@ import { loadTs } from './loadTs.mjs';
 
 const modPromise = loadTs('../src/modules/scenarioMods/intimacyProfiles.ts');
 
-const BASE = { nsfwMode: true, sceneText: '他俯身亲吻她', favor: 100, age: 24 };
+const BASE = { sceneText: '他俯身亲吻她', favor: 100 };
 
-test('四道门：名单/成人/年龄/场景任一不过都不注入', async () => {
+test('两道门：名单/场景任一不过都不注入', async () => {
   const { formatIntimacyProfile } = await modPromise;
 
   // 通过基线
@@ -17,14 +17,6 @@ test('四道门：名单/成人/年龄/场景任一不过都不注入', async ()
   assert.equal(formatIntimacyProfile('霍子孟', BASE), '');
   assert.equal(formatIntimacyProfile('苏妲己', BASE), '', '苏妲己收编弧线留白，不得入运行时');
   assert.equal(formatIntimacyProfile('剑玉姬', BASE), '', '剑玉姬亲密线未开启，不得入运行时');
-
-  // 成人门
-  assert.equal(formatIntimacyProfile('凝羽', { ...BASE, nsfwMode: false }), '');
-
-  // 年龄门（合规红线）：未成年、年龄缺失、非数字一律拒绝
-  assert.equal(formatIntimacyProfile('凝羽', { ...BASE, age: 17 }), '');
-  assert.equal(formatIntimacyProfile('凝羽', { ...BASE, age: undefined }), '');
-  assert.equal(formatIntimacyProfile('凝羽', { ...BASE, age: Number.NaN }), '');
 
   // 场景门：普通场景不注入
   assert.equal(formatIntimacyProfile('凝羽', { ...BASE, sceneText: '两人在堂上议事' }), '');
@@ -65,6 +57,12 @@ test('裁定 #111/#112/#114 的正典边界已进入 hardLimits', async () => {
   const biji = formatIntimacyProfile('碧姬', BASE);
   assert.match(biji, /母女同场亲密是硬禁/);
   assert.match(biji, /生还/);
+});
+
+test('年龄/成人开关不再参与门控（裁定：合规保证在上游名单与正典数据层）', async () => {
+  const { formatIntimacyProfile } = await modPromise;
+  // 传入历史字段不应改变行为——门控只剩名单与场景
+  assert.ok(formatIntimacyProfile('凝羽', { ...BASE, nsfwMode: false, age: 12 }).includes('内部亲密演出要求'));
 });
 
 test('注入标签同时登记进泄漏检测与清洗两份清单', async () => {

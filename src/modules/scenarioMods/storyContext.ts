@@ -345,7 +345,7 @@ function formatFocusedCharacter(
   character: ScenarioModCharacter,
   runtime: StoryRuntime,
   favByName?: Map<string, { fav: number; label: string }>,
-  intimacyGate?: { nsfwMode: boolean; sceneText: string; currentYear?: number },
+  intimacyGate?: { sceneText: string },
 ): string {
   const profile = character.profile || {};
   const lines: string[] = [`- ${character.name}（${[character.gender, character.role, character.realm].filter(Boolean).join('；') || '正典人物'}）`];
@@ -418,18 +418,11 @@ function formatFocusedCharacter(
     runtime.canon?.characters || [],
   );
   if (relation) lines.push(`  关系：${relation}`);
-  // 亲密档案（R3-8B）：四道门都在 formatIntimacyProfile 内部执行，此处只负责喂参数。
-  // 年龄由「当前游戏年 − registry birthYear」现算；算不出即 undefined，年龄门会因此拒绝注入。
+  // 亲密档案（R3-8B）：名单门与场景门都在 formatIntimacyProfile 内部执行，此处只负责喂参数。
   if (intimacyGate) {
-    const birthYear = (profile as { birthYear?: number }).birthYear;
-    const age = typeof birthYear === 'number' && typeof intimacyGate.currentYear === 'number'
-      ? intimacyGate.currentYear - birthYear
-      : undefined;
     const intimacy = formatIntimacyProfile(character.name, {
-      nsfwMode: intimacyGate.nsfwMode,
       sceneText: intimacyGate.sceneText,
       favor: fav,
-      age,
     });
     if (intimacy) lines.push(`  ${intimacy}`);
   }
@@ -447,7 +440,7 @@ function reputationTier(value: number): string {
   return '籍籍无名';
 }
 
-function buildFocusedCharacterPrompt(runtime: StoryRuntime, activeEvents: ScenarioModEvent[], contextText = '', favByName?: Map<string, { fav: number; label: string }>, intimacyGate?: { nsfwMode: boolean; sceneText: string; currentYear?: number }): string {
+function buildFocusedCharacterPrompt(runtime: StoryRuntime, activeEvents: ScenarioModEvent[], contextText = '', favByName?: Map<string, { fav: number; label: string }>, intimacyGate?: { sceneText: string }): string {
   const characters = runtime.canon?.characters || [];
   if (!characters.length) return '';
   const focusedIds = new Set<string>();
@@ -643,12 +636,8 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
   const focusContext = sameLocationList.length
     ? `${contextText}\n【在场】${sameLocationList.slice(0, 12).join('、')}`
     : contextText;
-  // 亲密档案门控参数：成人开关取自存档配置，场景判定只看玩家本轮输入（不含在场名单，避免误判）
-  const intimacyGate = {
-    nsfwMode: (saveData as any)?.系统?.配置?.nsfwMode === true,
-    sceneText: contextText,
-    currentYear: Number((saveData as any)?.元数据?.时间?.年) || undefined,
-  };
+  // 亲密档案门控参数：场景判定只看玩家本轮输入（不含在场名单，避免误判）
+  const intimacyGate = { sceneText: contextText };
   const focusedCharacterSection = buildFocusedCharacterPrompt(runtime, activeEvents, focusContext, favByName, intimacyGate);
   const introducedIds = new Set(collectIntroducedCharacterIds(runtime));
   const introducedNames = new Set<string>(
