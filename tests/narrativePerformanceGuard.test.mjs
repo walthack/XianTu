@@ -134,6 +134,19 @@ test('real combined prompt rejects authoritative military quantities without blo
     'a following confirmation sentence cannot launder a contextual forbidden term',
   );
   assert.equal(validateNarrativePerformance('北军已有三百人驻守要道。', '继续', scenarioPrompt).valid, false);
+  for (const militaryStrength of [
+    '车驾周围，三百凉州军精锐已整装列队。',
+    '凉州军三百精锐铁甲铿锵，护卫在外围。',
+    '凉州军三百精锐外围警戒。',
+    '四十七人已在宫门列队。',
+    '亲卫十人卸刃入殿。',
+  ]) {
+    assert.equal(
+      validateNarrativePerformance(militaryStrength, '继续', scenarioPrompt).valid,
+      false,
+      `a concrete military headcount must remain guarded: ${militaryStrength}`,
+    );
+  }
   assert.equal(
     validateNarrativePerformance('请金车骑卸甲解兵，独身入殿——你我三人当面说清。', '继续', scenarioPrompt).valid,
     true,

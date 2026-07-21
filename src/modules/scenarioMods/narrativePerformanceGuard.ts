@@ -15,10 +15,12 @@ const DECISION_SCENE = /情报|敌情|局势|侦察|探子|计划|打算|安排|
 const ACTIVE_PLAN = /我已|我让|我命|我先|我会|已经安排|你现在|你只需|先[^。！？]{0,24}再|退路|后手|备用|若[^。！？]{0,24}便/;
 const HARD_ISSUE_PREFIX = '硬门禁：';
 const QUANTITY_NUMBER = String.raw`(?:\d+(?:\.\d+)?|[零〇一二三四五六七八九十百千万两]+)`;
-const DIRECT_MILITARY_QUANTITY = new RegExp(`${QUANTITY_NUMBER}\\s*(?:骑|兵|军士|甲士|部众|校尉|亲兵|家兵|营)`);
+const DIRECT_MILITARY_QUANTITY = new RegExp(
+  `${QUANTITY_NUMBER}\\s*(?:骑|兵|骑兵|军士|甲士|部众|校尉|亲兵|亲卫|家兵|营|精锐|部曲|人马|兵马|北军|凉州军|禁军|守军|援军)`,
+);
 const MILITARY_HEADCOUNT = new RegExp(
-  `(?:军|兵|骑|甲士|北军|凉州军)[^。！？\\n]{0,12}${QUANTITY_NUMBER}\\s*(?:名|人|队)`
-  + `|${QUANTITY_NUMBER}\\s*(?:名|人|队)[^。！？\\n]{0,12}(?:驻守|列阵|持兵|披甲|围宫|攻城|骑兵|甲士|军士)`,
+  `(?:军|兵|骑|甲士|亲卫|北军|凉州军)[^。！？\\n]{0,12}${QUANTITY_NUMBER}\\s*(?:名|人|队|精锐|部曲|人马|兵马)`
+  + `|${QUANTITY_NUMBER}\\s*(?:名|人|队)[^。！？\\n]{0,12}(?:驻守|列阵|列队|持兵|披甲|卸刃|围宫|攻城|骑兵|甲士|军士)`,
 );
 const DISTANCE_QUANTITY = new RegExp(`${QUANTITY_NUMBER}\\s*(?:步|尺|里)`);
 const WARD_DISTANCE_QUANTITY = new RegExp(`${QUANTITY_NUMBER}\\s*坊`);
