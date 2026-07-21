@@ -1,12 +1,12 @@
 {
   "schema": "xiantu.character-registry.v1",
-  "version": "cr-2026-07-21-aa6f4bd5d7a3fb36",
-  "sourceHash": "aa6f4bd5d7a3fb36",
+  "version": "cr-2026-07-21-b33c81e46f1ff07f",
+  "sourceHash": "b33c81e46f1ff07f",
   "sourceGeneratedAt": "2026-06-30T12:50:33.965Z",
-  "generatedAt": "2026-07-21T13:14:21.924Z",
+  "generatedAt": "2026-07-21T14:35:11.784Z",
   "stats": {
-    "total": 305,
-    "stagePresent": 250,
+    "total": 308,
+    "stagePresent": 253,
     "canonOnly": 55,
     "collisionsMerged": 0
   },
@@ -42426,6 +42426,131 @@
       "embedText": "刘建 ｜ 圣上(汉) ｜ 叛军首领/伪天子 ｜ 江都王国(太子)、刘建集团(首领)、黑魔海(被扶植者) ｜ 登场于未明确 ｜ 猖狂自大、野心勃勃、心狠手辣、果决善断 ｜ 敌对关系 ｜ 对程宗扬的称呼 / 被他人称呼 别名/称谓：圣上(汉) ｜ 与剑玉姬翻脸；纠集人马造反；攻占白虎门与玄武门；下诏百余道以坐实天子之位"
     },
     {
+      "id": "lyl.character.liu_zijun",
+      "canonicalName": "刘子骏",
+      "aliases": [],
+      "gender": "男",
+      "books": [
+        "yunlong"
+      ],
+      "tier": "次要",
+      "stagePresence": true,
+      "staticProfile": {
+        "identitySummary": "中垒校尉（刘氏宗亲）",
+        "personality": [
+          "急进轻率"
+        ],
+        "appearance": "",
+        "speechStyle": "",
+        "principles": [],
+        "goals": [],
+        "weaknesses": [],
+        "signatureAbilities": [],
+        "relationToProtagonist": [
+          "长秋宫守卫战中的攻方将领"
+        ],
+        "formsOfAddress": [],
+        "joining": [],
+        "keyEvents": [
+          "率七百名中垒军投奔刘建，强攻南宫、进逼长秋宫三十六级台阶",
+          "轻车突进永安宫劝太后移宫，被射声军射杀"
+        ],
+        "ending": [
+          "永安宫前被射声军射杀，太后下令连其家人一并厚葬"
+        ],
+        "affiliations": [
+          {
+            "faction": "汉国朝廷",
+            "role": "中垒校尉"
+          },
+          {
+            "faction": "刘建集团",
+            "role": "投靠校尉"
+          }
+        ],
+        "debutLocation": {
+          "location": "洛都南宫",
+          "locator": "lyl.luoyang_coup",
+          "scene": "率中垒军投刘建，强攻南宫"
+        }
+      },
+      "region": "汉国",
+      "phaseIdentities": [],
+      "review": {
+        "approved": false,
+        "reviewed": true,
+        "flags": [
+          "stage-canon-gap-recovered"
+        ],
+        "conflicts": [],
+        "note": "结构化缺卡审计补建；仅采用已入库关卡正典，不外推原作未载事实"
+      },
+      "embedText": "刘子骏 ｜ 中垒校尉（刘氏宗亲） ｜ 【汉国人物】 ｜ 汉国朝廷(中垒校尉)、刘建集团(投靠校尉) ｜ 登场于洛都南宫 ｜ 急进轻率 ｜ 长秋宫守卫战中的攻方将领 ｜ 率七百名中垒军投奔刘建，强攻南宫、进逼长秋宫三十六级台阶；轻车突进永安宫劝太后移宫，被射声军射杀"
+    },
+    {
+      "id": "lyl.character.lv_ji_changshui",
+      "canonicalName": "吕戟",
+      "aliases": [],
+      "gender": "男",
+      "books": [
+        "yunlong"
+      ],
+      "tier": "次要",
+      "stagePresence": true,
+      "staticProfile": {
+        "identitySummary": "长水校尉（吕氏族人，太后吕雉之侄）",
+        "personality": [
+          "狂妄",
+          "贪杯误事"
+        ],
+        "appearance": "",
+        "speechStyle": "",
+        "principles": [],
+        "goals": [],
+        "weaknesses": [],
+        "signatureAbilities": [],
+        "relationToProtagonist": [
+          "率长水军入长秋宫接收后妃，被蔡敬仲击毙"
+        ],
+        "formsOfAddress": [],
+        "joining": [],
+        "keyEvents": [
+          "宿醉方醒妄言诛九族，被吕雉斥为蠢才",
+          "率宣曲长水军入长秋宫接收后妃、调戏林婕妤，被蔡敬仲一掌击毙"
+        ],
+        "ending": [
+          "长秋宫被蔡敬仲击毙"
+        ],
+        "affiliations": [
+          {
+            "faction": "吕氏集团",
+            "role": "族人"
+          },
+          {
+            "faction": "汉国朝廷",
+            "role": "长水校尉"
+          }
+        ],
+        "debutLocation": {
+          "location": "洛都永安宫",
+          "locator": "lyl.luoyang_coup",
+          "scene": "永安宫御前宿醉妄言，后率长水军入长秋宫"
+        }
+      },
+      "region": "汉国",
+      "phaseIdentities": [],
+      "review": {
+        "approved": false,
+        "reviewed": true,
+        "flags": [
+          "stage-canon-gap-recovered"
+        ],
+        "conflicts": [],
+        "note": "结构化缺卡审计补建；仅采用已入库关卡正典，不外推原作未载事实"
+      },
+      "embedText": "吕戟 ｜ 长水校尉（吕氏族人，太后吕雉之侄） ｜ 【汉国人物】 ｜ 吕氏集团(族人)、汉国朝廷(长水校尉) ｜ 登场于洛都永安宫 ｜ 狂妄、贪杯误事 ｜ 率长水军入长秋宫接收后妃，被蔡敬仲击毙 ｜ 宿醉方醒妄言诛九族，被吕雉斥为蠢才；率宣曲长水军入长秋宫接收后妃、调戏林婕妤，被蔡敬仲一掌击毙"
+    },
+    {
       "id": "lyl.character.lv_jujun",
       "canonicalName": "吕巨君",
       "aliases": [],
@@ -43304,6 +43429,66 @@
         ]
       },
       "embedText": "闻清语 ｜ 闻姨 ｜ 黑魔海(汉国主事) ｜ 登场于上清观下山山路 ｜ 冷静果断、行事狠辣、心思缜密、略有傲气 ｜ 对立，曾与程宗扬和齐羽仙等人对敌 ｜ 被称'闻姨'；对程宗扬部下称'殇侯座下的吴使者' ｜ 第8章 与淖方成交接玉盒，打开澄心棠；第8章 被义姁突袭时用指环挡刀；第585章 现身擒获赵合德；第585章 与齐羽仙；西门狗贼等人一同出现在程宗扬面前"
+    },
+    {
+      "id": "lyl.character.zuo_huan",
+      "canonicalName": "左悺",
+      "aliases": [],
+      "gender": "男",
+      "books": [
+        "yunlong"
+      ],
+      "tier": "次要",
+      "stagePresence": true,
+      "staticProfile": {
+        "identitySummary": "中常侍（内臣/宦官）",
+        "personality": [
+          "胆小怕事",
+          "急于自保"
+        ],
+        "appearance": "",
+        "speechStyle": "",
+        "principles": [],
+        "goals": [],
+        "weaknesses": [],
+        "signatureAbilities": [],
+        "relationToProtagonist": [
+          "被程宗扬一行从玉堂前殿救出"
+        ],
+        "formsOfAddress": [],
+        "joining": [],
+        "keyEvents": [
+          "洛都政变中被吕氏擒拿关押，受审时赌咒发誓自证",
+          "程宗扬、云丹琉斩铁镣将其救出",
+          "长秋宫守卫战中被蔡敬仲拖到阵前、推入敌阵，下落不明"
+        ],
+        "ending": [
+          "长秋宫守卫战中被推入敌阵，下落不明"
+        ],
+        "affiliations": [
+          {
+            "faction": "宦官集团",
+            "role": "中常侍"
+          }
+        ],
+        "debutLocation": {
+          "location": "洛都南宫玉堂前殿",
+          "locator": "lyl.luoyang_coup",
+          "scene": "政变中被吕氏擒拿关押于玉堂前殿，经程宗扬一行救出"
+        }
+      },
+      "region": "汉国",
+      "phaseIdentities": [],
+      "review": {
+        "approved": false,
+        "reviewed": true,
+        "flags": [
+          "stage-canon-gap-recovered"
+        ],
+        "conflicts": [],
+        "note": "结构化缺卡审计补建；仅采用已入库关卡正典，不外推原作未载事实"
+      },
+      "embedText": "左悺 ｜ 中常侍（内臣/宦官） ｜ 【汉国人物】 ｜ 宦官集团(中常侍) ｜ 登场于洛都南宫玉堂前殿 ｜ 胆小怕事、急于自保 ｜ 被程宗扬一行从玉堂前殿救出 ｜ 洛都政变中被吕氏擒拿关押，受审时赌咒发誓自证；程宗扬、云丹琉斩铁镣将其救出；长秋宫守卫战中被蔡敬仲拖到阵前、推入敌阵，下落不明"
     }
   ]
 }
