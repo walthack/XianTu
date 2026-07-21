@@ -191,7 +191,7 @@ export function formatDivergencePrompt(divergences: ScenarioDivergence[] | undef
   return `【本世界线分歧·已经发生的事实】\n${recent.map(item => {
     const states = item.characterStates.map(s => `${s.characterId}=${s.status}`).join('、');
     const consequence = item.branchId === 'lcq.if_xiaozi_spares_mother'
-      ? '小紫不得被写成已弑母；她或同行者必须当场决定如何处置仍活着的碧姬（看守、送离或交由可信者照料），并承接这项决定的余波。'
+      ? '小紫不得被写成已弑母；她或同行者必须当场决定如何处置仍活着的碧姬（看守、送离或交由可信者照料），并承接这项决定的余波。小紫的内核不因此改变，仍然心狠手辣，不得写成放下、转善或与碧姬和解；碧姬不悔改不感恩，只会依附当前最强的庇护者。'
       : item.branchId === 'lcq.if_sudaji_slain_mochou'
         ? '苏妲己已死，不得让她继续出手追杀；后续应处理黑魔海遗留网络与权力真空，且星月湖战争仍会发生。'
         : item.branchId === 'lyg.if_guojie_longrest'

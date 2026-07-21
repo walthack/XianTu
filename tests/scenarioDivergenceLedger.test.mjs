@@ -55,6 +55,9 @@ test('碧姬明确生还才激活小紫未弑母 IF，并要求处置余波', as
   assert.equal(runtime.flags['character.bi_ji.status'], 'alive');
   assert.match(formatDivergencePrompt(runtime.divergences), /不得被写成已弑母/);
   assert.match(formatDivergencePrompt(runtime.divergences), /处置仍活着的碧姬/);
+  // 裁定 #114：未弑母只改处境不改内核——小紫不得被写软，碧姬不得写成悔悟和解。
+  assert.match(formatDivergencePrompt(runtime.divergences), /仍然心狠手辣/);
+  assert.match(formatDivergencePrompt(runtime.divergences), /不悔改不感恩/);
 });
 
 test('碧姬缺席等其他 void 原因不误激活未弑母 IF', async () => {
