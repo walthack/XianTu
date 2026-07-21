@@ -143,6 +143,7 @@
   **二审阻断关闭**：`local_condition` 在绝对截止同回合完成时新增合同 hash+ready 优先权，不再被场外结算覆盖；两书补真实 sleeping/skip/byte-replay 用例，修正文档证据强度。报告=`docs/R2-11I-DEADLINE-OWNERSHIP-AND-WAKE-REVERIFY-2026-07-21.md`。
   **明确目标批量迁移**：新增 `objective_action`，对 267 个有明确 objective、唯一标准完成键、无多拍 evidence、非隔离关的事件生成固定主线动作；三书数量 122/59/86，总覆盖 274/380。八个隔离关严格排除。报告=`docs/R2-11J-OBJECTIVE-ACTION-BULK-MIGRATION-2026-07-21.md`。
   **非隔离特殊事件迁移**：21 个登场展示、10 个人工目标、3 个三步高光完成合同化；active 非关键事件的动作选择与 ready 落账路径同步补齐。覆盖 308/380，余下 72 个全属八个来源／顺序隔离关，须先完成原文重建。报告=`docs/R2-11K-SPECIAL-EVENT-CONTRACTS-2026-07-21.md`。
+  **日终暂停／后续交接**：当前由用户先做真机测试，生产代码停止在 `97c46dd` 后；剩余八个隔离关交给 Claude 逐关重建来源与顺序，禁止直接套用批量迁移或自动回接默认 Rail。交接=`docs/R2-11L-DAY-END-TEST-AND-CLAUDE-HANDOFF-2026-07-21.md`。
 
 ### 世界/NPC 引擎设计参照系（2026-07-19 用户拍板，实现指引）
 
