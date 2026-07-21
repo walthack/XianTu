@@ -5,6 +5,7 @@ import { getCanonRailContract, getCanonRailProfile } from './canonRail';
 import { narrativeVariantReplacesCanonRail, resolveScenarioEventNarrative } from './eventNarrativeView';
 import { formatDivergencePrompt, type ScenarioDivergence } from './divergenceLedger';
 import { findRegistryIdentitiesByContext, getRegistrySpeechStyle } from './characterResolver';
+import { formatIntimacyProfile } from './intimacyProfiles';
 import { formatVoiceCard } from './voiceCards';
 
 import type {
@@ -344,6 +345,7 @@ function formatFocusedCharacter(
   character: ScenarioModCharacter,
   runtime: StoryRuntime,
   favByName?: Map<string, { fav: number; label: string }>,
+  intimacyGate?: { nsfwMode: boolean; sceneText: string; currentYear?: number },
 ): string {
   const profile = character.profile || {};
   const lines: string[] = [`- ${character.name}（${[character.gender, character.role, character.realm].filter(Boolean).join('；') || '正典人物'}）`];
@@ -416,6 +418,21 @@ function formatFocusedCharacter(
     runtime.canon?.characters || [],
   );
   if (relation) lines.push(`  关系：${relation}`);
+  // 亲密档案（R3-8B）：四道门都在 formatIntimacyProfile 内部执行，此处只负责喂参数。
+  // 年龄由「当前游戏年 − registry birthYear」现算；算不出即 undefined，年龄门会因此拒绝注入。
+  if (intimacyGate) {
+    const birthYear = (profile as { birthYear?: number }).birthYear;
+    const age = typeof birthYear === 'number' && typeof intimacyGate.currentYear === 'number'
+      ? intimacyGate.currentYear - birthYear
+      : undefined;
+    const intimacy = formatIntimacyProfile(character.name, {
+      nsfwMode: intimacyGate.nsfwMode,
+      sceneText: intimacyGate.sceneText,
+      favor: fav,
+      age,
+    });
+    if (intimacy) lines.push(`  ${intimacy}`);
+  }
   return lines.join('\n');
 }
 
@@ -430,7 +447,7 @@ function reputationTier(value: number): string {
   return '籍籍无名';
 }
 
-function buildFocusedCharacterPrompt(runtime: StoryRuntime, activeEvents: ScenarioModEvent[], contextText = '', favByName?: Map<string, { fav: number; label: string }>): string {
+function buildFocusedCharacterPrompt(runtime: StoryRuntime, activeEvents: ScenarioModEvent[], contextText = '', favByName?: Map<string, { fav: number; label: string }>, intimacyGate?: { nsfwMode: boolean; sceneText: string; currentYear?: number }): string {
   const characters = runtime.canon?.characters || [];
   if (!characters.length) return '';
   const focusedIds = new Set<string>();
@@ -460,7 +477,7 @@ function buildFocusedCharacterPrompt(runtime: StoryRuntime, activeEvents: Scenar
   }
   if (!focusedCharacters.length) return '';
   return `## 当前相关人物正典约束（防 OOC）
-${focusedCharacters.map(character => formatFocusedCharacter(character, runtime, favByName)).join('\n')}
+${focusedCharacters.map(character => formatFocusedCharacter(character, runtime, favByName, intimacyGate)).join('\n')}
 
 【人物正典优先级】：
 1. 上述身份、关系、性格、谈吐/底线/目标、以及【身世】【情节】等正典备注是硬约束；不得改写、否定或让角色无因突变。
@@ -626,7 +643,13 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
   const focusContext = sameLocationList.length
     ? `${contextText}\n【在场】${sameLocationList.slice(0, 12).join('、')}`
     : contextText;
-  const focusedCharacterSection = buildFocusedCharacterPrompt(runtime, activeEvents, focusContext, favByName);
+  // 亲密档案门控参数：成人开关取自存档配置，场景判定只看玩家本轮输入（不含在场名单，避免误判）
+  const intimacyGate = {
+    nsfwMode: (saveData as any)?.系统?.配置?.nsfwMode === true,
+    sceneText: contextText,
+    currentYear: Number((saveData as any)?.元数据?.时间?.年) || undefined,
+  };
+  const focusedCharacterSection = buildFocusedCharacterPrompt(runtime, activeEvents, focusContext, favByName, intimacyGate);
   const introducedIds = new Set(collectIntroducedCharacterIds(runtime));
   const introducedNames = new Set<string>(
     [...introducedIds].map(id => characters.find(character => character.id === id)?.name).filter((name): name is string => !!name),
