@@ -1,20 +1,31 @@
 #!/usr/bin/env node
 
-// R2-11N：修复 lyl.luoyang_coup 人物投影（43e4380 来源重建未触及人物层）。
+// R2-11N/O：修复 lyl.luoyang_coup 人物投影（43e4380 来源重建未触及人物层）。
 //
 // 依据 EPUB 第 66 集《两宫交兵》逐章核对（0359-0371，章序与 yunlong/source-index.json 一致）：
 // - 逐拍校准八个事件的 relatedCharacterIds：只收该拍映射章内实际在场并行动的人物；
-//   仅被提及、未出场者不挂（点名目标如桓郁除外规则不启用——他从未出场，故不挂）。
+//   仅被提及、未出场者不挂（桓郁从未出场，故不挂）。
 // - s06_04b 移除误挂的班超：《赏格》（0369）一章班超仅被场外提及（"让班超准备了一批钱铢"），
 //   本人未出场。班超在 s06_02（0366《侠义》通商里议事）确在场，保留。
 // - 缺失的真实参与者按时间门控补入 canon.characters（本关 275-288 时区内登场，补空不覆盖）。
-// - 左悺／刘子骏／吕戟三人无总卡，按 R2-10L「stage-canon-gap-recovered」先例补最小卡，
-//   只采用本次原文核对坐实的事实，不外推外貌、台词与未知关系。
 //
-// 幂等：可重复运行。备份：yunlong/stages-pre-r2-11n-charfix-backup/ +
-// character-cards-v3.json.pre-r2-11n.bak。
+// R2-11O 修订（用户裁定）：跨关复制整个角色条目会把后期身份/经历/外貌带进早期时间线
+// （如金蜜镝的凉州军阵外貌、中行说的「内宅总管」、齐羽仙的「玉姬」race），
+// 改为**本关最小字段白名单投影**——条目只含：
+//   id / name / description / role / gender / affiliations / locationId / profile{origin(, notes)}
+// description、affiliations、locationId 一律按本关时区人工撰写或裁剪；
+// 静态档案（appearance/personality/attributes/spiritRoot/talents）不写入 stage，
+// 由 canon:build 卡投影与运行时 registry（character-registry.json）还原。
+// 境界（realm）、技能/物品引用属进度量，一律不写。
+//
+// 左悺／刘子骏／吕戟三人无总卡，按 R2-10L「stage-canon-gap-recovered」先例补最小卡，
+// 只采用本次原文核对坐实的事实，不外推外貌、台词与未知关系。
+//
+// 幂等且自修复：同 id 条目先删后写，可重复运行。
+// 备份永不覆盖原始快照：stages-pre-r2-11n-charfix-backup/ 与
+// character-cards-v3.json.pre-r2-11n.bak 只在不存在时创建。
 
-import { cp, readFile, rm, writeFile } from 'node:fs/promises';
+import { cp, readFile, writeFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 
@@ -83,138 +94,163 @@ const RELATED = {
   ],
 };
 
-// ─── canon.characters 补入（11 人；模板条目来自同时区/邻近关，仅调整时敏字段）──
-// copyFrom: [stage 文件, 角色名]；overrides 覆盖时敏字段；dropRealm 用于跨书模板（境界是进度量，不回搬）。
+// ─── canon.characters 补入（11 人，本关最小字段白名单）─────────────────────
+// 白名单：id / name / description / role / gender / affiliations / locationId / profile{origin(, notes)}。
+// description 与 affiliations 按本关时区撰写；origin 取总卡 identitySummary 中本时区已成立的部分。
 const CHARACTER_ADDITIONS = [
   {
     id: 'liuchao.character.ao_run',
-    copyFrom: ['yunlong/stages/lyl.lin_an_black_sea.json', '敖润'],
-    overrides: { locationId: 'lyl.location.changqiu_palace' },
+    name: '敖润',
+    description: '敖润虽然身材短小、貌不惊人，坐在那里总是一副臊眉耷眼的样子，但性情粗豪豪爽、心直口快，是程宗扬麾下最重情重义的铁杆兄弟。',
+    role: '护卫',
+    gender: '男',
+    affiliations: [
+      { factionId: 'liuchao.faction.pan_jiang_cheng', category: 'organization', role: '护卫' },
+      { factionId: 'liuchao.faction.xue_sun', category: 'organization', role: '团员' },
+      { factionId: 'liuchao.faction.x2d33e1eaf9', category: 'organization', role: '队员' },
+    ],
+    locationId: 'lyl.location.changqiu_palace',
+    profile: { origin: '护卫头领' },
   },
   {
     id: 'liuchao.character.qi_yu_xian',
-    copyFrom: ['yange/stages/lyg.mijing_rumen.json', '齐羽仙'],
-    dropRealm: true,
-    overrides: {
-      description: '齐羽仙是黑魔海巫宗仙姬、剑玉姬麾下执行者，雪肤玉颜、心如机括；洛都政变中她以黑衣面纱之身随刘建军中运筹，又奉剑玉姬之命与程宗扬彻夜谈判。',
-      role: '次要反派',
-      locationId: 'liuchao.location.luoyang',
-    },
+    name: '齐羽仙',
+    description: '齐羽仙是黑魔海巫宗仙姬、剑玉姬麾下执行者，雪肤玉颜、心如机括；洛都政变中她以黑衣面纱之身随刘建军中运筹，又奉剑玉姬之命与程宗扬彻夜谈判。',
+    role: '次要反派',
+    gender: '女',
+    affiliations: [
+      { factionId: 'liuchao.faction.wu_zong', category: 'sect', role: '门人' },
+      { factionId: 'liuchao.faction.hei_mo_hai', category: 'organization', role: '执行者/仙姬近侍' },
+    ],
+    locationId: 'liuchao.location.luoyang',
+    profile: { origin: '黑魔海巫宗仙姬，剑玉姬麾下执行者' },
   },
   {
     id: 'liuchao.character.jin_mi_di',
-    copyFrom: ['yange/stages/lyg.mijing_rumen.json', '金蜜镝'],
-    dropRealm: true,
-    overrides: {
-      description: '金蜜镝是车骑将军，匈奴浑邪王血脉的社稷重臣；天子暴毙当夜他光脚乘驭马驰入宫，探得鼻息后当场呕血，随后率期门武士护佐皇后退守长秋宫。',
-      role: '车骑将军',
-      locationId: 'lyl.location.zhaoyang_palace',
-    },
+    name: '金蜜镝',
+    description: '金蜜镝是车骑将军，匈奴浑邪王血脉的社稷重臣；天子暴毙当夜他光脚乘驭马驰入宫，探得鼻息后当场呕血，随后率期门武士护佐皇后退守长秋宫。',
+    role: '车骑将军',
+    gender: '男',
+    affiliations: [
+      { factionId: 'liuchao.faction.han_guo_chao_ting', category: 'military', role: '车骑将军' },
+    ],
+    locationId: 'lyl.location.zhaoyang_palace',
+    profile: { origin: '汉国社稷之臣，与霍子孟齐名并列朝廷栋梁' },
   },
   {
     id: 'liuchao.character.xu_huang',
-    copyFrom: ['yunlong/stages/lyl.luoyang_cloud_secret.json', '徐璜'],
-    overrides: { locationId: 'lyl.location.changqiu_palace' },
+    name: '徐璜',
+    description: '徐璜身为中常侍，总是满脸堆欢地赔着笑脸，但那圆滑奉承底下藏着贪婪的心机，稍有不顺便脸色铁青，易怒却又不失谨慎，是个善变的盟友。',
+    role: '盟友',
+    gender: '男',
+    affiliations: [
+      { factionId: 'liuchao.faction.han_guo_chao_ting', category: 'state', role: '中常侍' },
+      { factionId: 'lyg.faction.eunuch_group', category: 'organization', role: '成员' },
+    ],
+    locationId: 'lyl.location.changqiu_palace',
+    profile: { origin: '内臣/宦官/天子家奴' },
   },
   {
     id: 'liuchao.character.tang_heng',
-    copyFrom: ['yunlong/stages/lyl.taiquan_core_conflict.json', '唐衡'],
-    overrides: { locationId: 'lyl.location.changqiu_palace' },
+    name: '唐衡',
+    description: '唐衡是中常侍，阴沉隐忍、善于察言观色；洛都政变中与徐璜、左悺同被吕氏擒拿关押，经程宗扬一行斩镣救出。',
+    role: '中常侍（内臣/宦官）',
+    gender: '男',
+    affiliations: [
+      { factionId: 'liuchao.faction.han_guo_chao_ting', category: 'state', role: '中常侍（金珰右貂）' },
+      { factionId: 'lyg.faction.eunuch_group', category: 'organization', role: '天子心腹' },
+    ],
+    locationId: 'lyl.location.changqiu_palace',
+    profile: { origin: '中常侍（内臣/宦官）' },
   },
   {
     id: 'liuchao.character.zhong_hangyue',
-    copyFrom: ['yange/stages/lyg.mijing_rumen.json', '中行说'],
-    dropRealm: true,
-    overrides: {
-      description: '中行说是天子近侍的中常侍，下巴光溜溜，一脸桀骜不驯的傲气；天子暴毙后他持刀劫持吕冀逼问先帝死因，随后随刘建突围出宫。',
-      role: '中常侍（天子近侍）',
-      // 时间门控：本时区尚无「程宗扬内宅总管」身份（那是第三本的事），只留汉国朝廷。
-      affiliations: [
-        { factionId: 'liuchao.faction.han_guo_chao_ting', category: 'state', role: '中常侍/天子近侍' },
-      ],
-      locationId: 'liuchao.location.luoyang',
-    },
+    name: '中行说',
+    description: '中行说是天子近侍的中常侍，下巴光溜溜，一脸桀骜不驯的傲气；天子暴毙后他持刀劫持吕冀逼问先帝死因，随后随刘建突围出宫。',
+    role: '中常侍（天子近侍）',
+    gender: '男',
+    // 时间门控：本时区他尚未投奔程宗扬，「内宅总管」是燕歌行时区身份，
+    // 由 scripts/project-affiliations-to-stages.mjs 的排除表防止投影回灌。
+    affiliations: [
+      { factionId: 'liuchao.faction.han_guo_chao_ting', category: 'state', role: '中常侍/天子近侍' },
+    ],
+    locationId: 'liuchao.location.luoyang',
+    profile: { origin: '太监' },
   },
   {
     id: 'liuchao.character.gao_zhishang',
-    copyFrom: ['yunlong/stages/lyl.luoyang_cloud_secret.json', '高智商'],
-    overrides: {
-      // 本关无 lyl.faction.pengyi 等势力条目，只留程宗扬势力；技能/物品引用本关不存在，一并去掉。
-      affiliations: [
-        { factionId: 'liuchao.faction.x2d33e1eaf9', category: 'organization', role: '徒弟/随从' },
-      ],
-      locationId: 'liuchao.location.luoyang',
-      skillIds: [],
-      itemIds: [],
-    },
+    name: '高智商',
+    description: '矮胖圆脸、瘸着腿的宋国太尉之子，师从程宗扬，自诩聪明绝顶，靠一张巧嘴四处应酬，可惜藏不住心事，一激就跳脚，带着几分天真的傲气。',
+    role: '弟子',
+    gender: '男',
+    affiliations: [
+      { factionId: 'liuchao.faction.x2d33e1eaf9', category: 'organization', role: '徒弟/随从' },
+    ],
+    locationId: 'liuchao.location.luoyang',
+    profile: { origin: '宋国太尉高俅义子（人称高衙内），拜程宗扬为师' },
   },
   {
     id: 'liuchao.character.wu_san_gui',
-    copyFrom: ['yange/stages/lyg.mijing_rumen.json', '吴三桂'],
-    dropRealm: true,
-    overrides: {
-      description: '吴三桂是殇侯指派跟随程宗扬的护卫，沉默如铁；洛都政变中他领二十名好手随程宗扬潜入宫城，又率武士突阵剖开中垒军的方阵。',
-      role: '护卫',
-      locationId: 'lyl.location.changqiu_palace',
-    },
+    name: '吴三桂',
+    description: '吴三桂是殇侯指派跟随程宗扬的护卫，沉默如铁；洛都政变中他领二十名好手随程宗扬潜入宫城，又率武士突阵剖开中垒军的方阵。',
+    role: '护卫',
+    gender: '男',
+    affiliations: [
+      { factionId: 'liuchao.faction.x8b538653d9', category: 'organization', role: '部属' },
+      { factionId: 'liuchao.faction.cheng_shi_shang_hui', category: 'organization', role: '随从（殇侯指派协助程宗扬）' },
+      { factionId: 'liuchao.faction.x2d33e1eaf9', category: 'organization', role: '护卫/随从' },
+      { factionId: 'liuchao.faction.xing_yue_hu', category: 'military', role: '中尉连长' },
+    ],
+    locationId: 'lyl.location.changqiu_palace',
+    profile: { origin: '殇侯麾下将领，后受命跟随程宗扬' },
   },
-  // —— 三人无模板，按 R2-10L 最小条目新建 ——
   {
     id: 'lyl.character.zuo_huan',
-    entry: {
-      id: 'lyl.character.zuo_huan',
-      name: '左悺',
-      description: '左悺是中常侍之一，洛都政变中被吕氏擒拿关押，受审时赌咒发誓自证；经程宗扬一行从玉堂前殿救出后惊魂未定，长秋宫守卫战中被蔡敬仲拖到阵前、推入敌阵后下落不明。',
-      role: '中常侍',
-      gender: '男',
-      affiliations: [
-        { factionId: 'liuchao.faction.han_guo_chao_ting', category: 'state', role: '中常侍' },
-        { factionId: 'lyg.faction.eunuch_group', category: 'organization', role: '成员' },
-      ],
-      locationId: 'lyl.location.changqiu_palace',
-      profile: {
-        origin: '中常侍（内臣/宦官）',
-        notes: ['【主轴】洛都政变中被擒，程宗扬一行斩镣救出；长秋宫守卫战被推入敌阵，下落不明。'],
-      },
+    name: '左悺',
+    description: '左悺是中常侍之一，洛都政变中被吕氏擒拿关押，受审时赌咒发誓自证；经程宗扬一行从玉堂前殿救出后惊魂未定，长秋宫守卫战中被蔡敬仲拖到阵前、推入敌阵后下落不明。',
+    role: '中常侍',
+    gender: '男',
+    affiliations: [
+      { factionId: 'liuchao.faction.han_guo_chao_ting', category: 'state', role: '中常侍' },
+      { factionId: 'lyg.faction.eunuch_group', category: 'organization', role: '成员' },
+    ],
+    locationId: 'lyl.location.changqiu_palace',
+    profile: {
+      origin: '中常侍（内臣/宦官）',
+      notes: ['【主轴】洛都政变中被擒，程宗扬一行斩镣救出；长秋宫守卫战被推入敌阵，下落不明。'],
     },
   },
   {
     id: 'lyl.character.liu_zijun',
-    entry: {
-      id: 'lyl.character.liu_zijun',
-      name: '刘子骏',
-      description: '刘子骏是刘氏宗亲出身的中垒校尉，率七百名中垒军投奔刘建，强攻南宫、进逼长秋宫三十六级台阶；后轻车突进永安宫劝太后移宫，被射声军射杀。',
-      role: '中垒校尉',
-      gender: '男',
-      affiliations: [
-        { factionId: 'liuchao.faction.han_guo_chao_ting', category: 'military', role: '中垒校尉' },
-        { factionId: 'lyl.faction.liu_jian', category: 'organization', role: '投靠校尉' },
-      ],
-      locationId: 'liuchao.location.luoyang',
-      profile: {
-        origin: '中垒校尉（刘氏宗亲）',
-        notes: ['【主轴】率中垒军投刘建，攻南宫、逼长秋宫；永安宫前被射声军射杀，太后下令连其家人一并厚葬。'],
-      },
+    name: '刘子骏',
+    description: '刘子骏是刘氏宗亲出身的中垒校尉，率七百名中垒军投奔刘建，强攻南宫、进逼长秋宫三十六级台阶；后轻车突进永安宫劝太后移宫，被射声军射杀。',
+    role: '中垒校尉',
+    gender: '男',
+    affiliations: [
+      { factionId: 'liuchao.faction.han_guo_chao_ting', category: 'military', role: '中垒校尉' },
+      { factionId: 'lyl.faction.liu_jian', category: 'organization', role: '投靠校尉' },
+    ],
+    locationId: 'liuchao.location.luoyang',
+    profile: {
+      origin: '中垒校尉（刘氏宗亲）',
+      notes: ['【主轴】率中垒军投刘建，攻南宫、逼长秋宫；永安宫前被射声军射杀，太后下令连其家人一并厚葬。'],
     },
   },
   {
-    // 吕冀已占 liuchao.character.lv_ji；flag slug 取末段，故以官职消歧，避免两人状态折叠。
+    // 吕冀已占 liuchao.character.lv_ji；flag slug 取 id 末段，故以官职消歧，避免两人状态折叠。
     id: 'lyl.character.lv_ji_changshui',
-    entry: {
-      id: 'lyl.character.lv_ji_changshui',
-      name: '吕戟',
-      description: '吕戟是太后吕雉的侄儿、长水校尉，宿醉方醒便妄言诛人九族；率宣曲长水军入长秋宫接收后妃、调戏林婕妤，被蔡敬仲一掌击毙。',
-      role: '长水校尉',
-      gender: '男',
-      affiliations: [
-        { factionId: 'lyl.faction.lyu_clan', category: 'clan', role: '吕氏族人' },
-        { factionId: 'liuchao.faction.han_guo_chao_ting', category: 'military', role: '长水校尉' },
-      ],
-      locationId: 'lyl.location.weiyang_palace',
-      profile: {
-        origin: '长水校尉（吕氏族人，称太后吕雉为姑母）',
-        notes: ['【主轴】率长水军入长秋宫接收后妃，被蔡敬仲击毙。'],
-      },
+    name: '吕戟',
+    description: '吕戟是太后吕雉的侄儿、长水校尉，宿醉方醒便妄言诛人九族；率宣曲长水军入长秋宫接收后妃、调戏林婕妤，被蔡敬仲一掌击毙。',
+    role: '长水校尉',
+    gender: '男',
+    affiliations: [
+      { factionId: 'lyl.faction.lyu_clan', category: 'clan', role: '吕氏族人' },
+      { factionId: 'liuchao.faction.han_guo_chao_ting', category: 'military', role: '长水校尉' },
+    ],
+    locationId: 'lyl.location.weiyang_palace',
+    profile: {
+      origin: '长水校尉（吕氏族人，称太后吕雉为姑母）',
+      notes: ['【主轴】率长水军入长秋宫接收后妃，被蔡敬仲击毙。'],
     },
   },
 ];
@@ -336,41 +372,18 @@ const CARD_ADDITIONS = [
   },
 ];
 
-// ─── 备份 ───
+// ─── 备份（永不覆盖原始快照：只在不存在时创建）──
 const backupDir = join(gen, 'yunlong/stages-pre-r2-11n-charfix-backup');
-if (existsSync(backupDir)) await rm(backupDir, { recursive: true });
-await cp(join(gen, 'yunlong/stages'), backupDir, { recursive: true });
-await writeFile(`${cardsPath}.pre-r2-11n.bak`, await readFile(cardsPath, 'utf8'));
+const backupCreated = !existsSync(backupDir);
+if (backupCreated) await cp(join(gen, 'yunlong/stages'), backupDir, { recursive: true });
+const cardsBackupCreated = !existsSync(`${cardsPath}.pre-r2-11n.bak`);
+if (cardsBackupCreated) await writeFile(`${cardsPath}.pre-r2-11n.bak`, await readFile(cardsPath, 'utf8'));
 
-// ─── stage：补人物 + 校准 relatedCharacterIds ───
+// ─── stage：白名单补人物（同 id 先删后写，自修复）+ 校准 relatedCharacterIds ───
 const stage = JSON.parse(await readFile(stagePath, 'utf8'));
-const characters = stage.canon.characters;
-const have = new Set(characters.map(c => c.id));
-
-const added = [];
-for (const addition of CHARACTER_ADDITIONS) {
-  if (have.has(addition.id)) continue;
-  let entry;
-  if (addition.entry) {
-    entry = structuredClone(addition.entry);
-  } else {
-    const [templateFile, templateName] = addition.copyFrom;
-    const templateStage = JSON.parse(await readFile(join(gen, templateFile), 'utf8'));
-    const template = templateStage.canon.characters.find(c => c.name === templateName);
-    if (!template) throw new Error(`模板角色缺失：${templateFile} / ${templateName}`);
-    entry = structuredClone(template);
-    if (addition.dropRealm) delete entry.realm;
-  }
-  if (addition.overrides) {
-    for (const [key, value] of Object.entries(addition.overrides)) {
-      if (Array.isArray(value) && value.length === 0) delete entry[key];
-      else entry[key] = value;
-    }
-  }
-  characters.push(entry);
-  have.add(entry.id);
-  added.push(entry.id);
-}
+const additionIds = new Set(CHARACTER_ADDITIONS.map(c => c.id));
+const kept = stage.canon.characters.filter(c => !additionIds.has(c.id));
+stage.canon.characters = [...kept, ...CHARACTER_ADDITIONS.map(c => structuredClone(c))];
 
 const relChanged = [];
 for (const event of stage.scenario.events) {
@@ -383,7 +396,7 @@ for (const event of stage.scenario.events) {
 }
 await writeFile(stagePath, `${JSON.stringify(stage, null, 2)}\n`);
 
-// ─── 总卡：补三张最小卡 ───
+// ─── 总卡：补三张最小卡（已存在则跳过，不覆盖）──
 const cardsDoc = JSON.parse(await readFile(cardsPath, 'utf8'));
 const covered = new Set(cardsDoc.characters.map(c => c.canonicalName));
 const cardsAdded = [];
@@ -395,8 +408,10 @@ for (const card of CARD_ADDITIONS) {
 await writeFile(cardsPath, `${JSON.stringify(cardsDoc, null, 2)}\n`);
 
 console.log(JSON.stringify({
-  backupDir: existsSync(backupDir),
-  charactersAdded: added,
+  backupCreated,
+  backupPreserved: !backupCreated,
+  cardsBackupCreated,
+  charactersUpserted: [...additionIds],
   relatedCalibrated: relChanged,
   cardsAdded,
 }, null, 2));

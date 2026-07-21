@@ -3632,9 +3632,8 @@
         "id": "liuchao.character.ao_run",
         "name": "敖润",
         "description": "敖润虽然身材短小、貌不惊人，坐在那里总是一副臊眉耷眼的样子，但性情粗豪豪爽、心直口快，是程宗扬麾下最重情重义的铁杆兄弟。",
-        "role": "下属",
+        "role": "护卫",
         "gender": "男",
-        "realm": "筑基",
         "affiliations": [
           {
             "factionId": "liuchao.faction.pan_jiang_cheng",
@@ -3653,37 +3652,14 @@
           }
         ],
         "locationId": "lyl.location.changqiu_palace",
-        "skillIds": [],
-        "techniqueIds": [],
-        "itemIds": [],
         "profile": {
-          "attributes": {
-            "rootBone": 7,
-            "spirituality": 7,
-            "comprehension": 7,
-            "fortune": 9,
-            "charm": 8,
-            "temperament": 7
-          },
-          "spiritRoot": {
-            "name": "土灵根",
-            "tier": "玄品",
-            "description": "厚土沉凝如山，承载万物，修炼者如地脉巍峨，擅长防御与镇压之法。"
-          },
-          "talents": [
-            {
-              "name": "多宝童子",
-              "description": "袖口是秘境，指尖藏乾坤，他咧嘴一笑便从七窍飞出法宝雨，砸得敌人抱头鼠窜。"
-            }
-          ],
-          "appearance": "身材短小，貌不惊人，背脊挺直，坐姿中规中矩。",
+          "origin": "护卫头领",
           "personality": [
             "重情义",
             "粗豪",
             "喜欢吹牛",
             "武艺扎实"
-          ],
-          "origin": "护卫头领"
+          ]
         }
       },
       {
@@ -3706,37 +3682,12 @@
         ],
         "locationId": "liuchao.location.luoyang",
         "profile": {
-          "attributes": {
-            "rootBone": 8,
-            "spirituality": 7,
-            "comprehension": 7,
-            "fortune": 6,
-            "charm": 9,
-            "temperament": 7
-          },
-          "spiritRoot": {
-            "name": "水灵根",
-            "tier": "地品",
-            "description": "碧波流转似镜，化柔为刚，修炼者如深海暗流，善于滋养与封锁万物。"
-          },
-          "talents": [
-            {
-              "name": "顶级魅力",
-              "description": "气息如蜜糖诱捕心神，他走过的地方，连石头都想献上膝盖，跪求成为脚下砖。"
-            }
-          ],
-          "appearance": "细腰长腿，雪肤花貌，眉目如画，玉体白美，丰挺雪乳，殷红乳头，玉蚌嫩穴。",
+          "origin": "黑魔海巫宗仙姬，剑玉姬麾下执行者",
           "personality": [
             "高傲清冷",
             "魔门仙子光环",
             "智计上乘",
             "武功上乘（约六级通幽境）"
-          ],
-          "race": "黑魔海玉姬之一",
-          "origin": "黑魔海巫宗仙姬/大将，偏执行者与高级外交/间谍，剑玉姬下属",
-          "notes": [
-            "【性癖】斯德哥尔摩式臣服；嘴上高傲；肉体行动极温顺依赖的傲娇/受虐反差",
-            "【身体】清冷仙躯；身材高挑骨肉匀称；被李辅国榨干精血后呈唇裂血枯的病态凌虐美"
           ]
         }
       },
@@ -3755,27 +3706,7 @@
         ],
         "locationId": "lyl.location.zhaoyang_palace",
         "profile": {
-          "attributes": {
-            "rootBone": 8,
-            "spirituality": 6,
-            "comprehension": 6,
-            "fortune": 6,
-            "charm": 7,
-            "temperament": 7
-          },
-          "spiritRoot": {
-            "name": "火灵根",
-            "tier": "地品",
-            "description": "赤焰翻涌如龙，焚尽八荒，修炼者若烈阳骄阳，主狂暴与毁灭之道。"
-          },
-          "talents": [
-            {
-              "name": "剑骨天成",
-              "description": "脊梁是剑胚，血管淌剑意，他呼吸间骨骼铮鸣，随手一挥便切开空间如斩蚯蚓。"
-            }
-          ],
-          "appearance": "白发，身披麻衣，头戴白布，解下兵刃徒步行至凉州军中，向定陶王叩首施礼。",
-          "origin": "汉国洛都社稷之臣/异族权臣(历史原型金日磾，匈奴浑邪王之子)，与霍子孟齐名并列朝廷栋梁",
+          "origin": "汉国社稷之臣，与霍子孟齐名并列朝廷栋梁",
           "personality": [
             "因异族出身平时低调避嫌",
             "极有原则",
@@ -3790,7 +3721,6 @@
         "description": "徐璜身为中常侍，总是满脸堆欢地赔着笑脸，但那圆滑奉承底下藏着贪婪的心机，稍有不顺便脸色铁青，易怒却又不失谨慎，是个善变的盟友。",
         "role": "盟友",
         "gender": "男",
-        "realm": "筑基",
         "affiliations": [
           {
             "factionId": "liuchao.faction.han_guo_chao_ting",
@@ -3800,63 +3730,27 @@
           {
             "factionId": "lyg.faction.eunuch_group",
             "category": "organization",
-            "role": "阉党成员"
+            "role": "成员"
           }
         ],
         "locationId": "lyl.location.changqiu_palace",
         "profile": {
-          "attributes": {
-            "rootBone": 8,
-            "spirituality": 8,
-            "comprehension": 10,
-            "fortune": 7,
-            "charm": 7,
-            "temperament": 6
-          },
-          "spiritRoot": {
-            "name": "水灵根",
-            "tier": "地品",
-            "description": "碧波流转似镜，化柔为刚，修炼者如深海暗流，善于滋养与封锁万物。"
-          },
-          "talents": [
-            {
-              "name": "神识过人",
-              "description": "意识铺开如蛛网，方圆千里每粒尘埃的震颤都逃不过，敌人抬脚就被预判三百年。"
-            }
-          ],
-          "appearance": "眼圈发黑，声音又尖又细，有阴沉脸色时神情可怖，神态可谄媚堆笑",
+          "origin": "内臣/宦官/天子家奴",
           "personality": [
             "阴冷",
             "谄媚",
             "贪婪",
             "心机深沉",
             "善于察言观色"
-          ],
-          "origin": "内臣/宦官/天子家奴",
-          "notes": [
-            "【身体】声音又尖又细（宦官体征）"
           ]
         }
       },
       {
         "id": "liuchao.character.tang_heng",
         "name": "唐衡",
+        "description": "唐衡是中常侍，阴沉隐忍、善于察言观色；洛都政变中与徐璜、左悺同被吕氏擒拿关押，经程宗扬一行斩镣救出。",
         "role": "中常侍（内臣/宦官）",
         "gender": "男",
-        "profile": {
-          "personality": [
-            "阴沉隐忍",
-            "善于察言观色",
-            "较为仗义（相对其他宦官）",
-            "谨慎"
-          ],
-          "appearance": "未明确描述，仅有与其他内臣并列的群体印象。",
-          "race": "人族",
-          "origin": "中常侍（内臣/宦官）",
-          "notes": [
-            "【身体】宦官（阉人）"
-          ]
-        },
         "affiliations": [
           {
             "factionId": "liuchao.faction.han_guo_chao_ting",
@@ -3869,56 +3763,40 @@
             "role": "天子心腹"
           }
         ],
-        "locationId": "lyl.location.changqiu_palace"
+        "locationId": "lyl.location.changqiu_palace",
+        "profile": {
+          "origin": "中常侍（内臣/宦官）",
+          "personality": [
+            "阴沉隐忍",
+            "善于察言观色",
+            "较为仗义（相对其他宦官）",
+            "谨慎"
+          ]
+        }
       },
       {
         "id": "liuchao.character.zhong_hangyue",
         "name": "中行说",
-        "role": "中常侍（天子近侍）",
         "description": "中行说是天子近侍的中常侍，下巴光溜溜，一脸桀骜不驯的傲气；天子暴毙后他持刀劫持吕冀逼问先帝死因，随后随刘建突围出宫。",
-        "profile": {
-          "attributes": {
-            "rootBone": 8,
-            "spirituality": 7,
-            "comprehension": 9,
-            "fortune": 8,
-            "charm": 6,
-            "temperament": 6
-          },
-          "spiritRoot": {
-            "name": "虚空灵根",
-            "tier": "地品",
-            "description": "虚空裂痕吞次元，无踪无影，修炼者如黑洞凝望，主穿梭与湮灭之道。"
-          },
-          "talents": [
-            {
-              "name": "过目不忘",
-              "description": "瞳孔是刻录镜，每次眨眼就烙印宇宙法则，他看书如吃饭，记忆在脑海筑起书山。"
-            }
-          ],
-          "appearance": "下巴光溜溜，一脸桀骜不驯的傲气",
-          "personality": [
-            "阴狠",
-            "毒舌",
-            "傲气",
-            "忠诚"
-          ],
-          "origin": "太监"
-        },
+        "role": "中常侍（天子近侍）",
         "gender": "男",
         "affiliations": [
           {
             "factionId": "liuchao.faction.han_guo_chao_ting",
             "category": "state",
             "role": "中常侍/天子近侍"
-          },
-          {
-            "factionId": "liuchao.faction.x2d33e1eaf9",
-            "category": "organization",
-            "role": "内宅总管"
           }
         ],
-        "locationId": "liuchao.location.luoyang"
+        "locationId": "liuchao.location.luoyang",
+        "profile": {
+          "origin": "太监",
+          "personality": [
+            "阴狠",
+            "毒舌",
+            "傲气",
+            "忠诚"
+          ]
+        }
       },
       {
         "id": "liuchao.character.gao_zhishang",
@@ -3926,7 +3804,6 @@
         "description": "矮胖圆脸、瘸着腿的宋国太尉之子，师从程宗扬，自诩聪明绝顶，靠一张巧嘴四处应酬，可惜藏不住心事，一激就跳脚，带着几分天真的傲气。",
         "role": "弟子",
         "gender": "男",
-        "realm": "凡人",
         "affiliations": [
           {
             "factionId": "liuchao.faction.x2d33e1eaf9",
@@ -3946,26 +3823,7 @@
         ],
         "locationId": "liuchao.location.luoyang",
         "profile": {
-          "attributes": {
-            "rootBone": 7,
-            "spirituality": 6,
-            "comprehension": 8,
-            "fortune": 7,
-            "charm": 8,
-            "temperament": 6
-          },
-          "spiritRoot": {
-            "name": "木灵根",
-            "tier": "地品",
-            "description": "苍藤缠天而生，生机盎然，修炼者似古树盘根，专精复苏与束缚之术。"
-          },
-          "talents": [
-            {
-              "name": "神识过人",
-              "description": "意识铺开如蛛网，方圆千里每粒尘埃的震颤都逃不过，敌人抬脚就被预判三百年。"
-            }
-          ],
-          "appearance": "胖乎乎圆脸，脸颊擦伤结痂，略显凶狠。",
+          "origin": "宋国太尉高俅义子（人称高衙内），拜程宗扬为师",
           "personality": [
             "圆滑世故",
             "滑头",
@@ -3973,8 +3831,7 @@
             "忠诚",
             "爱吹牛",
             "易冲动"
-          ],
-          "origin": "弟子"
+          ]
         }
       },
       {
@@ -3984,11 +3841,6 @@
         "role": "护卫",
         "gender": "男",
         "affiliations": [
-          {
-            "factionId": "liuchao.faction.xing_yue_hu",
-            "category": "military",
-            "role": "军士"
-          },
           {
             "factionId": "liuchao.faction.x8b538653d9",
             "category": "organization",
@@ -4003,44 +3855,21 @@
             "factionId": "liuchao.faction.x2d33e1eaf9",
             "category": "organization",
             "role": "护卫/随从"
+          },
+          {
+            "factionId": "liuchao.faction.xing_yue_hu",
+            "category": "military",
+            "role": "中尉连长"
           }
         ],
         "locationId": "lyl.location.changqiu_palace",
         "profile": {
-          "attributes": {
-            "rootBone": 9,
-            "spirituality": 6,
-            "comprehension": 6,
-            "fortune": 8,
-            "charm": 9,
-            "temperament": 7
-          },
-          "spiritRoot": {
-            "name": "混沌灵根",
-            "tier": "地品",
-            "description": "鸿蒙未分混元一，演化万象，修炼者若天地初开，专精融合与创生之术。"
-          },
-          "talents": [
-            {
-              "name": "剑骨天成",
-              "description": "脊梁是剑胚，血管淌剑意，他呼吸间骨骼铮鸣，随手一挥便切开空间如斩蚯蚓。"
-            }
-          ],
           "origin": "殇侯麾下将领，后受命跟随程宗扬",
           "personality": [
             "果敢干练",
             "剽悍好胜",
             "忠直耿介",
             "豪爽"
-          ],
-          "appearance": "身材强壮，但腰背微微佝偻，在猛士如林的精锐中并不起眼。神情剽悍。",
-          "notes": [
-            "【势力】殇侯旧部、黑魔海毒宗出身（字长伯）"
-          ],
-          "memories": [
-            "吴三桂率领护卫骑兵冲击州府兵步兵阵，击破其阵列但自身伤亡惨重，被迫退回木垒；随后州府兵骑兵突袭木垒，程宗扬重伤仍击退敌军。",
-            "云丹琉从湖中跃出，一刀斩断御舟，与古冥隐激烈交手，后秦桧和吴三桂出手救下晋帝与太后，古冥隐败逃。",
-            "殇侯把秦桧、吴三桂等手下交给程宗扬差遣。秦桧恭敬改称程宗扬\"主公\"：\"能协助主公行事，是我等的福分。\"自此成为程宗扬身边第一智囊。"
           ]
         }
       },

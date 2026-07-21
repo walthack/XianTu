@@ -135,3 +135,35 @@ test('added participants keep unique flag slugs and canonical card coverage', as
     assert.equal(covered.has(name), true, `${name} missing from character registry`);
   }
 });
+
+test('added participants carry only this-stage minimal fields and zero future-stage leaks', async () => {
+  const document = await stage();
+  const cast = new Map(document.canon.characters.map(character => [character.id, character]));
+  // 本关最小字段白名单（R2-11O）：静态档案由 canon:build 卡投影与运行时 registry 还原，
+  // stage 条目不写 appearance/attributes/spiritRoot/talents/race；realm 与技能/物品引用是进度量，禁写。
+  const ALLOWED_TOP = new Set(['id', 'name', 'description', 'role', 'gender', 'affiliations', 'locationId', 'profile']);
+  const ALLOWED_PROFILE = new Set(['origin', 'personality', 'notes']); // personality 只许来自总卡投影
+  // 后期身份/经历/外貌标记：中行说「内宅总管」（燕歌行时区）、金蜜镝凉州军阵披麻叩首（第三本）、
+  // 齐羽仙「玉姬之一」关联（裁定 #108 机密；「剑玉姬」为已登场人物名，不在此列）等一律不得出现在本关条目。
+  const FUTURE_MARKERS = ['内宅总管', '凉州军', '定陶王叩首', '谈判代表', '玉姬之一', '毒宗联络人', '辅政大臣'];
+  for (const [id, name] of Object.entries(ADDED_CHARACTERS)) {
+    const entry = cast.get(id);
+    assert.ok(entry, `${id} (${name}) missing`);
+    for (const key of Object.keys(entry)) {
+      assert.ok(ALLOWED_TOP.has(key), `${id} (${name}) has non-whitelist field: ${key}`);
+    }
+    for (const key of Object.keys(entry.profile || {})) {
+      assert.ok(ALLOWED_PROFILE.has(key), `${id} (${name}) has non-whitelist profile field: ${key}`);
+    }
+    const blob = JSON.stringify(entry);
+    for (const marker of FUTURE_MARKERS) {
+      assert.equal(blob.includes(marker), false, `${id} (${name}) leaks future-stage content: ${marker}`);
+    }
+  }
+  // 归属投影的时间门控排除必须生效：中行说在本关不得挂程宗扬势力（内宅总管是燕歌行时区身份）。
+  const zhong = cast.get('liuchao.character.zhong_hangyue');
+  assert.deepEqual(
+    (zhong.affiliations || []).map(a => a.factionId),
+    ['liuchao.faction.han_guo_chao_ting'],
+  );
+});

@@ -47,9 +47,21 @@ function facOf(name) {
   const rec = { id: slug(name), category: guessCat(name) }; minted.set(name, rec); return rec;
 }
 
+// 时间门控排除（R2-11O）：卡 staticProfile.affiliations 是跨书静态身份，
+// 机械并入早期关卡会把晚期身份带进早期时间线。以下逐条人工裁定排除，
+// 键 = stageId，值 = "角色id:势力id" 对。新增排除须附原文/裁定依据。
+const AFFILIATION_TIME_GATE_EXCLUSIONS = new Map([
+  // 中行说在 lyl.luoyang_coup（云龙吟源 275-288）尚未投奔程宗扬——本关他只以
+  // 天子近侍身份劫持吕冀、随刘建突围；「内宅总管」是燕歌行时区身份，不得投影进本关。
+  ['lyl.luoyang_coup', new Set([
+    'liuchao.character.zhong_hangyue:liuchao.faction.x2d33e1eaf9',
+  ])],
+]);
+
 let projWrites = 0, facDefsAdded = 0, charsTouched = 0, stagesTouched = 0;
 for (const { p, m } of stages) {
   let stageChanged = false;
+  const stageExclusions = AFFILIATION_TIME_GATE_EXCLUSIONS.get(m.manifest?.id);
   const facById = new Set((m.canon.factions || []).map(f => f.id));
   for (const c of m.canon.characters || []) {
     const list = affByName.get(c.name); if (!list) continue;
@@ -59,6 +71,7 @@ for (const { p, m } of stages) {
     for (const a of list) {
       if (!a.faction) continue;
       const { id, category } = facOf(a.faction);
+      if (stageExclusions?.has(`${c.id}:${id}`)) continue;
       if (seen.has(id)) continue; seen.add(id);
       existing.push({ factionId: id, category, role: a.role || '成员' });
       projWrites++; added = true;
