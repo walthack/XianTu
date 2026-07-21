@@ -151,6 +151,46 @@ test('R2-11 action matching rejects explicit refusal and negative safety claims'
   );
 });
 
+test('R2-11 structured engine actions survive model changes and reject stale selections', async () => {
+  const stage = JSON.parse(await readFile(stageUrl, 'utf8'));
+  const {
+    advanceScenarioRuntime,
+    getTrackedStoryOpportunityActions,
+    recordStoryOpportunityStructuredAction,
+    trackStoryOpportunity,
+  } = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  let save = advanceScenarioRuntime(fixture(stage)).saveData;
+  assert.equal(trackStoryOpportunity(save, OPPORTUNITY_ID).ok, true);
+
+  const first = getTrackedStoryOpportunityActions(save);
+  assert.equal(first.length, 1);
+  assert.equal(first[0].source, 'opportunity_engine');
+  assert.equal(first[0].stepId, 'enter_zhaoyang_hall');
+  assert.equal(first[0].timeCost, 1);
+  assert.equal(recordStoryOpportunityStructuredAction(save, first[0]).progressed, true);
+  assert.equal(recordStoryOpportunityStructuredAction(save, first[0]).reason, 'already_progressed');
+
+  save = advanceScenarioRuntime(JSON.parse(JSON.stringify(save))).saveData;
+  const priorities = getTrackedStoryOpportunityActions(save);
+  assert.deepEqual(priorities.map(item => item.actionId), [
+    'prioritize_relief',
+    'prioritize_talent',
+    'prioritize_capital',
+  ]);
+  assert.equal(
+    recordStoryOpportunityStructuredAction(save, first[0]).reason,
+    'stale_step',
+    'an old button cannot advance a newer step',
+  );
+  assert.equal(recordStoryOpportunityStructuredAction(save, priorities[1]).progressed, true);
+  assert.equal(
+    runtimeOf(save).actorEngine.opportunityStates[OPPORTUNITY_ID]
+      .completionChoices.choose_edict_priority,
+    'prioritize_talent',
+    'the concrete policy choice must be replayable state, not prose only',
+  );
+});
+
 test('R2-11 validator rejects ambiguous or non-settleable opportunity completion contracts', async () => {
   const stage = JSON.parse(await readFile(stageUrl, 'utf8'));
   const { validateScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
@@ -173,6 +213,13 @@ test('R2-11 validator rejects ambiguous or non-settleable opportunity completion
   });
   assert.equal(
     validateScenarioMod(unsupportedCompletion).issues.some(item => item.code === 'unsupported_completion'),
+    true,
+  );
+
+  const badTimeCost = structuredClone(stage);
+  opportunityOf(badTimeCost).completionContract.steps[0].actions[0].timeCost = 2;
+  assert.equal(
+    validateScenarioMod(badTimeCost).issues.some(item => item.code === 'invalid_value'),
     true,
   );
 });

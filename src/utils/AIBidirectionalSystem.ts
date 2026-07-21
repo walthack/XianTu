@@ -31,7 +31,9 @@ import { buildScenarioCanonPrompt } from '@/modules/scenarioMods/canonGuard';
 import {
   advanceScenarioRuntime,
   recordStoryOpportunityPlayerAction,
+  recordStoryOpportunityStructuredAction,
   STEERING_DIVERGENCE_COOLDOWN,
+  type ScenarioOpportunityActionSelection,
 } from '@/modules/scenarioMods/runtime';
 import { applyMilestoneRewards } from '@/modules/scenarioMods/milestoneRewards';
 import { buildScenarioStoryPrompt, createScenarioPromptState } from '@/modules/scenarioMods/storyContext';
@@ -140,6 +142,8 @@ export interface ProcessOptions {
   generateMode?: 'generate' | 'generateRaw'; // 生成模式：generate（标准）或 generateRaw（纯净）
   splitResponseGeneration?: boolean;
   shouldAbort?: () => boolean;
+  /** 由本地机会合同生成的推进动作；成功响应后才消费。 */
+  opportunityAction?: ScenarioOpportunityActionSelection;
 }
 
 /**
@@ -1421,7 +1425,10 @@ ${missingItems.length > 0 ? `【上次结构化输出缺失】
         dataForProcessing as SaveData,
         false,
         options?.shouldAbort,
-        { userAction: (userMessage && String(userMessage).trim()) || '继续当前活动' }
+        {
+          userAction: (userMessage && String(userMessage).trim()) || '继续当前活动',
+          opportunityAction: options?.opportunityAction,
+        }
       );
       if (options?.onStateChange) {
         options.onStateChange(updatedSaveData as unknown as PlainObject);
@@ -2091,6 +2098,7 @@ ${step1Text}
        * 本轮用户动作。用于窄触发的确定性补账，例如“查看/调查某物品”后同步物品描述。
        */
       userAction?: string;
+      opportunityAction?: ScenarioOpportunityActionSelection;
     }
   ): Promise<{ saveData: SaveData; stateChanges: StateChangeLog; onlineLogPosted: boolean }> {
     const abortRequested = () => shouldAbort?.() ?? false;
@@ -2671,7 +2679,9 @@ ${step1Text}
 
     // 机会卡亲历合同只读取玩家本人本轮提交的行动。正文与 tavern_commands 无论写得多像
     // “完成”，都不能推进合同；一次成功响应最多推进一个步骤，done 由 runtime 独占写入。
-    const opportunityProgress = recordStoryOpportunityPlayerAction(saveData, options?.userAction || '');
+    const opportunityProgress = options?.opportunityAction
+      ? recordStoryOpportunityStructuredAction(saveData, options.opportunityAction)
+      : recordStoryOpportunityPlayerAction(saveData, options?.userAction || '');
     if (opportunityProgress.progressed) {
       changes.push({
         key: `世界.状态.剧本模组.actorEngine.opportunityStates.${opportunityProgress.opportunityId}`,

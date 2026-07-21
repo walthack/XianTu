@@ -134,6 +134,7 @@
   **目标形态**：LLM 从**写真值**降级为**提交证据**——叙事层报告玩家做了什么 → 引擎按完成合同独立裁定 → 引擎自行写 `done`，该路径进入 FORBIDDEN_PATHS。
   **已选方案**：①机会卡确定性完成合同，作为后续通用 completion 规则的前身。②③保留为非机会卡事件的后续迁移工具，不在本纵切混做。
   **下一门**：先实现追踪/执行分离、引擎固定推进选项、可见步骤与剩余窗口、绝对截止的 `partial` 收束；再选择非机会卡事件验证判定结果或地点/时间型合同，不能把关键词匹配机械复制到其余 376 个事件。设计=`docs/R2-11-OPPORTUNITY-ACTION-UX-DESIGN-2026-07-20.md`，首纵切=`docs/R2-11-OPTION1-DETERMINISTIC-OPPORTUNITY-COMPLETION-2026-07-20.md`，跨事件 G1=`docs/R2-11B-CROSS-EVENT-DETERMINISTIC-COMPLETION-G1-2026-07-21.md`。
+  **结构化执行纵切**：`s01_05` 已完成追踪／执行分离，本地推进按钮携带稳定动作身份、时间成本与合同哈希，具体政策选择可重放；LLM 选项与自由输入不再是主要完成证据。报告=`docs/R2-11C-STRUCTURED-OPPORTUNITY-ACTIONS-G1-2026-07-21.md`。
 
 ### 世界/NPC 引擎设计参照系（2026-07-19 用户拍板，实现指引）
 

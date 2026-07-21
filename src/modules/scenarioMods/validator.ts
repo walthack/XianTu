@@ -407,6 +407,20 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
                       stepIds.add(step.id);
                     }
                     requireString(step.label, `${stepPath}.label`, add);
+                    if (step.actions !== undefined && !Array.isArray(step.actions)) {
+                      add(`${stepPath}.actions`, 'invalid_type', 'completion step actions must be an array.');
+                    } else if (Array.isArray(step.actions)) {
+                      const actionIds = new Set<string>();
+                      forEachRecord(step.actions, `${stepPath}.actions`, (action, actionPath) => {
+                        if (validateId(action.id, `${actionPath}.id`, add)) {
+                          if (actionIds.has(action.id)) add(`${actionPath}.id`, 'duplicate_id', `Duplicate step action "${action.id}".`);
+                          actionIds.add(action.id);
+                        }
+                        requireString(action.label, `${actionPath}.label`, add);
+                        requireString(action.actionText, `${actionPath}.actionText`, add);
+                        if (action.timeCost !== 1) add(`${actionPath}.timeCost`, 'invalid_value', 'R2-11 structured actions currently require timeCost=1.');
+                      });
+                    }
                     validateStringArray(step.matchAny, `${stepPath}.matchAny`, add);
                     validateStringArray(step.matchAll, `${stepPath}.matchAll`, add);
                     validateStringArray(step.rejectIf, `${stepPath}.rejectIf`, add);

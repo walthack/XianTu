@@ -331,7 +331,6 @@ import { LOCAL_TALENTS } from '@/data/creationData';
 import DetailModal from '@/components/common/DetailModal.vue';
 import StatusDetailCard from './components/StatusDetailCard.vue';
 import { useGameStateStore } from '@/stores/gameStateStore';
-import { useActionQueueStore } from '@/stores/actionQueueStore';
 import { useUIStore } from '@/stores/uiStore';
 import type { StatusEffect } from '@/types/game.d.ts';
 import { formatRealmWithStage } from '@/utils/realmUtils';
@@ -345,7 +344,6 @@ const { t } = useI18n();
 
 
 const gameStateStore = useGameStateStore();
-const actionQueueStore = useActionQueueStore();
 const uiStore = useUIStore();
 
 // 数据加载状态
@@ -446,11 +444,6 @@ const trackOpportunity = async (opportunityId: string) => {
     const result = trackStoryOpportunity(save, opportunityId);
     if (!result.ok) throw new Error(result.reason || '当前机会已失效');
     gameStateStore.loadFromSaveData(save);
-    actionQueueStore.addAction({
-      type: 'custom',
-      itemName: opportunityId,
-      description: result.actionText,
-    });
     await gameStateStore.saveGame();
   } catch (error) {
     stageSwitchError.value = String((error as Error)?.message || error);

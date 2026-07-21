@@ -133,6 +133,17 @@
             <FormattedText :text="currentNarrative.content" />
           </div>
 
+          <div v-if="opportunityActionOptions.length" class="action-options opportunity-action-options">
+            <button
+              v-for="option in opportunityActionOptions"
+              :key="`${option.contractHash}:${option.stepId}:${option.actionId}`"
+              @click="selectOpportunityAction(option)"
+              class="action-option-btn opportunity-action-btn"
+            >
+              {{ option.label }} · 耗时 {{ option.timeCost }} 回合
+            </button>
+          </div>
+
           <!-- 行动选项 -->
           <div v-if="uiStore.enableActionOptions && currentNarrative.actionOptions?.length" class="action-options">
             <button
@@ -426,6 +437,10 @@ import {
 } from '@/utils/judgementEngine';
 import { buildLocalJudgementPreflight, composeJudgementAction } from '@/utils/judgementPreflight';
 import { getNarrativeTurn } from '@/utils/actionGate';
+import {
+  getTrackedStoryOpportunityActions,
+  type ScenarioOpportunityActionSelection,
+} from '@/modules/scenarioMods/runtime';
 import type {  CharacterProfile } from '@/types/game';
 import type { GM_Response } from '@/types/AIGameMaster'; // AIGameMaster.d.ts 仍然需要保留
 
@@ -686,6 +701,11 @@ const gameStateStore = useGameStateStore();
 const isTavernEnvFlag = isTavernEnv();
 const enhancedActionQueue = EnhancedActionQueueManager.getInstance();
 const bidirectionalSystem = AIBidirectionalSystem;
+const selectedOpportunityAction = ref<ScenarioOpportunityActionSelection | null>(null);
+const opportunityActionOptions = computed(() => {
+  const save = gameStateStore.toSaveData();
+  return save ? getTrackedStoryOpportunityActions(save) : [];
+});
 
 const isOnlineTraveling = computed(() => {
   const online = gameStateStore.onlineState as any;
@@ -1494,8 +1514,19 @@ const selectActionOption = (option: string) => {
   if (!trimmed) return;
 
   lastSelectedActionOption.value = trimmed;
+  selectedOpportunityAction.value = null;
   inputText.value = trimmed;
 
+  nextTick(() => {
+    inputRef.value?.focus?.();
+    adjustTextareaHeight();
+  });
+};
+
+const selectOpportunityAction = (option: ScenarioOpportunityActionSelection) => {
+  selectedOpportunityAction.value = option;
+  lastSelectedActionOption.value = option.actionText;
+  inputText.value = option.actionText;
   nextTick(() => {
     inputRef.value?.focus?.();
     adjustTextareaHeight();
@@ -1638,6 +1669,9 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
         useStreaming: useStreaming.value,
         shouldAbort: () => !uiStore.isAIProcessing || aiResetToken !== resetSnapshot,
       };
+      if (selectedOpportunityAction.value?.actionText === userMessage) {
+        options.opportunityAction = { ...selectedOpportunityAction.value };
+      }
 
       // 酒馆环境：流式通过事件系统处理（STREAM_TOKEN_RECEIVED_INCREMENTALLY）
       // 非酒馆环境（网页版自定义API）：需要设置 onStreamChunk 才能实时渲染

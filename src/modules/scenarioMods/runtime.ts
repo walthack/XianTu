@@ -102,6 +102,19 @@ export interface ScenarioOpportunityState {
   completionReadyAtTurn?: number;
   /** 合同热更审计键；变化时旧步骤进度不能套到新合同。 */
   completionContractHash?: string;
+  /** 每一步实际选择的结构化动作；供后续态度、局势与编年史确定性消费。 */
+  completionChoices?: Record<string, string>;
+}
+
+export interface ScenarioOpportunityActionSelection {
+  source: 'opportunity_engine';
+  opportunityId: string;
+  stepId: string;
+  actionId: string;
+  label: string;
+  actionText: string;
+  timeCost: 1;
+  contractHash: string;
 }
 
 export interface ScenarioEventTimelineState {
@@ -726,8 +739,77 @@ function reconcileOpportunityCompletionContract(
     state.lastCompletionActionKey = undefined;
     state.lastCompletionProgressAtTurn = undefined;
     state.completionReadyAtTurn = undefined;
+    state.completionChoices = {};
   }
   state.completionContractHash = nextHash;
+}
+
+/** 当前步骤的结构化推进动作；只由本地合同生成，不依赖 LLM action_options。 */
+export function getTrackedStoryOpportunityActions(saveData: SaveData): ScenarioOpportunityActionSelection[] {
+  const runtime = getRuntime(saveData);
+  const state = runtime?.actorEngine;
+  if (!runtime || !state?.trackedOpportunityId) return [];
+  const anchor = getNarrativeAnchorEvent(runtime);
+  const opportunity = findOpportunity(anchor || undefined, state.trackedOpportunityId);
+  const opportunityState = opportunity && state.opportunityStates?.[opportunity.id];
+  const contract = opportunity?.completionContract;
+  if (!opportunity || !contract || opportunityState?.status !== 'tracked') return [];
+  reconcileOpportunityCompletionContract(opportunityState, opportunity);
+  const stepIndex = Math.max(0, Number(opportunityState.completionStepIndex) || 0);
+  const step = contract.steps[stepIndex];
+  const contractHash = opportunityState.completionContractHash;
+  if (!step?.actions?.length || !contractHash) return [];
+  return step.actions.map(action => ({
+    source: 'opportunity_engine',
+    opportunityId: opportunity.id,
+    stepId: step.id,
+    actionId: action.id,
+    label: `【推进·${stepIndex + 1}/${contract.steps.length}】${action.label}`,
+    actionText: action.actionText,
+    timeCost: action.timeCost,
+    contractHash,
+  }));
+}
+
+/** 成功 AI 回合后消费结构化动作；过期、跨步骤或热更前选项一律拒绝。 */
+export function recordStoryOpportunityStructuredAction(
+  saveData: SaveData,
+  selection: ScenarioOpportunityActionSelection,
+): { progressed: boolean; completed: boolean; opportunityId?: string; stepId?: string; reason?: string } {
+  const runtime = getRuntime(saveData);
+  const state = runtime?.actorEngine;
+  if (!runtime || !state || selection?.source !== 'opportunity_engine') {
+    return { progressed: false, completed: false, reason: 'invalid_selection' };
+  }
+  const anchor = getNarrativeAnchorEvent(runtime);
+  const opportunity = findOpportunity(anchor || undefined, state.trackedOpportunityId);
+  const opportunityState = opportunity && state.opportunityStates?.[opportunity.id];
+  const contract = opportunity?.completionContract;
+  if (!opportunity || !contract || opportunity.id !== selection.opportunityId || opportunityState?.status !== 'tracked') {
+    return { progressed: false, completed: false, reason: 'stale_opportunity' };
+  }
+  reconcileOpportunityCompletionContract(opportunityState, opportunity);
+  if (opportunityState.completionContractHash !== selection.contractHash) {
+    return { progressed: false, completed: false, opportunityId: opportunity.id, reason: 'stale_contract' };
+  }
+  const turn = Math.max(0, Number(runtime.worldTurn) || 0);
+  if (opportunityState.lastCompletionProgressAtTurn === turn) {
+    return { progressed: false, completed: opportunityState.completionReadyAtTurn !== undefined, opportunityId: opportunity.id, reason: 'already_progressed' };
+  }
+  const index = Math.max(0, Number(opportunityState.completionStepIndex) || 0);
+  const step = contract.steps[index];
+  const action = step?.actions?.find(item => item.id === selection.actionId);
+  if (!step || step.id !== selection.stepId || !action || action.timeCost !== selection.timeCost) {
+    return { progressed: false, completed: false, opportunityId: opportunity.id, reason: 'stale_step' };
+  }
+  opportunityState.completionStepIndex = index + 1;
+  opportunityState.lastCompletionProgressAtTurn = turn;
+  opportunityState.lastCompletionActionKey = `${turn}:structured:${selection.actionId}`;
+  opportunityState.completionChoices ||= {};
+  opportunityState.completionChoices[step.id] = action.id;
+  const completed = opportunityState.completionStepIndex >= contract.steps.length;
+  if (completed) opportunityState.completionReadyAtTurn = turn;
+  return { progressed: true, completed, opportunityId: opportunity.id, stepId: step.id };
 }
 
 function opportunityStepMatches(

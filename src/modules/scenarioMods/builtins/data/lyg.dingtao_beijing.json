@@ -5884,6 +5884,14 @@
                   {
                     "id": "enter_zhaoyang_hall",
                     "label": "亲自进入昭阳宫介入诏令",
+                    "actions": [
+                      {
+                        "id": "enter_hall_in_person",
+                        "label": "亲自进入昭阳宫介入诏令",
+                        "actionText": "我亲自前往昭阳宫，进入殿中介入新帝第一道诏令。",
+                        "timeCost": 1
+                      }
+                    ],
                     "matchAny": [
                       "昭阳宫",
                       "入宫",
@@ -5900,6 +5908,26 @@
                   {
                     "id": "choose_edict_priority",
                     "label": "明确安民、选材或定都中的优先项",
+                    "actions": [
+                      {
+                        "id": "prioritize_relief",
+                        "label": "优先安民",
+                        "actionText": "我明确主张先保安民草案，并说明愿意为此承担责任。",
+                        "timeCost": 1
+                      },
+                      {
+                        "id": "prioritize_talent",
+                        "label": "优先选材",
+                        "actionText": "我明确主张先保选材草案，并说明愿意为此承担责任。",
+                        "timeCost": 1
+                      },
+                      {
+                        "id": "prioritize_capital",
+                        "label": "优先定都",
+                        "actionText": "我明确主张先保定都草案，并说明愿意为此承担责任。",
+                        "timeCost": 1
+                      }
+                    ],
                     "matchAny": [
                       "安民",
                       "选材",
@@ -5916,6 +5944,14 @@
                   {
                     "id": "accept_public_alignment",
                     "label": "公开承担站队后果",
+                    "actions": [
+                      {
+                        "id": "accept_alignment_publicly",
+                        "label": "公开承担站队后果",
+                        "actionText": "我当殿公开表态支持这项优先次序，并承担由此带来的站队后果。",
+                        "timeCost": 1
+                      }
+                    ],
                     "matchAny": [
                       "承担",
                       "站队",
@@ -5961,6 +5997,14 @@
                   {
                     "id": "prove_emperor_safety",
                     "label": "向霍子孟证明定陶王安全",
+                    "actions": [
+                      {
+                        "id": "submit_safety_evidence",
+                        "label": "提交定陶王安全依据",
+                        "actionText": "我向霍子孟逐项提交定陶王安全无虞的可核验依据。",
+                        "timeCost": 1
+                      }
+                    ],
                     "matchAll": [
                       "定陶王",
                       "安全"
@@ -5977,6 +6021,14 @@
                   {
                     "id": "coordinate_court_route",
                     "label": "协调北军与凉州军的不拔刀入宫路线",
+                    "actions": [
+                      {
+                        "id": "coordinate_disarmed_route",
+                        "label": "协调不拔刀的入宫路线",
+                        "actionText": "我召集北军与凉州军的联络人，确定双方不拔刀的入宫通行次序。",
+                        "timeCost": 1
+                      }
+                    ],
                     "matchAll": [
                       "北军",
                       "凉州军"

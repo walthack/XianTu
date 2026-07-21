@@ -332,6 +332,13 @@ export interface ScenarioStoryOpportunity {
     steps: Array<{
       id: string;
       label: string;
+      /** 引擎声明的确定性推进动作；文本匹配仅保留为自由输入兼容层。 */
+      actions?: Array<{
+        id: string;
+        label: string;
+        actionText: string;
+        timeCost: 1;
+      }>;
       /** 至少命中一项；未声明时只检查 matchAll。 */
       matchAny?: string[];
       /** 必须全部命中；未声明时只检查 matchAny。 */
