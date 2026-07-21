@@ -125,6 +125,19 @@ test('real combined prompt rejects authoritative military quantities without blo
   );
   assert.equal(validateNarrativePerformance('殿内无一人出声。', '继续', scenarioPrompt).valid, true);
   assert.equal(validateNarrativePerformance('两人对视一眼。', '继续', scenarioPrompt).valid, true);
+  for (const ordinaryPeoplePhrase of [
+    '两人马不停蹄赶到宫门前。',
+    '三人马不停蹄，连夜赶路。',
+    '两人马上就到宫门。',
+    '两人马车已在门外候着。',
+    '他二人马前谢罪。',
+  ]) {
+    assert.equal(
+      validateNarrativePerformance(ordinaryPeoplePhrase, '继续', scenarioPrompt).valid,
+      true,
+      `ordinary N人 + 马… phrasing must not be segmented as a troop unit: ${ordinaryPeoplePhrase}`,
+    );
+  }
   assert.equal(validateNarrativePerformance('一队宫女鱼贯而入。', '继续', scenarioPrompt).valid, true);
   assert.equal(validateNarrativePerformance('一名宫女走到宫门前送诏书。', '继续', scenarioPrompt).valid, true);
   assert.equal(validateNarrativePerformance('他心想莫非有伏兵。', '继续', scenarioPrompt).valid, true);

@@ -16,7 +16,7 @@ const ACTIVE_PLAN = /我已|我让|我命|我先|我会|已经安排|你现在|�
 const HARD_ISSUE_PREFIX = '硬门禁：';
 const QUANTITY_NUMBER = String.raw`(?:\d+(?:\.\d+)?|[零〇一二三四五六七八九十百千万两]+)`;
 const DIRECT_MILITARY_QUANTITY = new RegExp(
-  `${QUANTITY_NUMBER}\\s*(?:骑|兵|骑兵|军士|甲士|部众|校尉|亲兵|亲卫|家兵|营|精锐|部曲|人马|兵马|北军|凉州军|禁军|守军|援军)`,
+  `${QUANTITY_NUMBER}\\s*(?:骑|兵|骑兵|军士|甲士|部众|校尉|亲兵|亲卫|家兵|营|精锐|部曲|人马(?!上|车|不停蹄|前|后)|兵马|北军|凉州军|禁军|守军|援军)`,
 );
 const MILITARY_HEADCOUNT = new RegExp(
   `(?:军|兵|骑|甲士|亲卫|北军|凉州军)[^。！？\\n]{0,12}${QUANTITY_NUMBER}\\s*(?:名|人|队|精锐|部曲|人马|兵马)`
