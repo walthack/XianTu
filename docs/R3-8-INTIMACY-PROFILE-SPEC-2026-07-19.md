@@ -73,7 +73,15 @@
 | 17 | 泉玉姬 | 政治礼物·顺从带刺（**收货时处子边界**；兴奋时蹦新罗语） | canon 厚 |
 | 18 | 剑玉姬 | 博弈对手（不能受伤体质；亲密线全 authored，18 人中证据最薄） | authored 为主 |
 
-草稿工作文件=`mod-kit/generated/deepseek-v4-flash/character-canon/intimacy-profiles-draft.md`；先出 4 人校准样稿（潘金莲/凝羽/乐明珠/云如瑶，覆盖 canon 厚/章节引用/边界型/authored 缺口四种形态）过用户格式审定，再批量其余 14 人。
+草稿工作文件=`mod-kit/generated/deepseek-v4-flash/character-canon/intimacy-profiles-draft.md`。
+
+**起草进度（2026-07-21）：18/18 全部完成，无数据缺口。**
+- 校准批 4 人（潘金莲/凝羽/乐明珠/云如瑶）已经用户修订审定，产出裁定 #111（凤凰宝典处子边界）与 #112（云如瑶逆转限房事层面）。
+- 其余 14 人已按同一模子起草，附**原型互斥总表**（六组，盲测即验此表）。
+- 数据缺口已补：蛇夫人 physical 从 `yange.appearance-draft.json` 回捞（registry 抽取遗漏）；剑玉姬从占位升为完整档案（appearance-draft 材料含"驻颜不老/古潭之眼/幻术隐匿真身"，远厚于 registry 一行）。
+- 苏妲己 revealTiers 已对齐收编弧线三幕（裁定 #113，`docs/R3-3-SUDAJI-TAMING-ARC-2026-07-21.md`）。
+
+**余下 2 项属用户拍板、非数据缺口**：碧姬生还 if 线的深化方向；剑玉姬亲密线是否开启（默认关闭，建议若开走"两个不可能休战的人之间的临时休战"，不走收编型以免与苏妲己撞型）。
 
 1. 用户圈选首批名单 → 2. 每人档案起草（canon 证据优先，authored 补缺）→ 3. 用户逐人审定 → 4. validator 年龄门禁 + 注入门控 + 泄漏清单登记落地 → 5. 盲测验收（§3）→ 6. 真机亲密场景对照（同情境不同角色各一段）。
 
