@@ -250,6 +250,8 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
             add(`${contractPath}.actions`, 'invalid_range', 'playerCompletionContract.actions must contain 1 to 8 actions.');
           } else {
             const actionIds = new Set<string>();
+            const grantedPreparationIds = new Set<string>();
+            const requiredPreparationRefs: Array<{ key: string; path: string }> = [];
             forEachRecord(contract.actions, `${contractPath}.actions`, (action, actionPath) => {
               if (validateId(action.id, `${actionPath}.id`, add)) {
                 if (actionIds.has(action.id)) add(`${actionPath}.id`, 'duplicate_id', `Duplicate event action "${action.id}".`);
@@ -258,6 +260,30 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
               requireString(action.label, `${actionPath}.label`, add);
               requireString(action.actionText, `${actionPath}.actionText`, add);
               if (action.timeCost !== 1) add(`${actionPath}.timeCost`, 'invalid_value', 'Structured event actions currently require timeCost=1.');
+              if (action.kind !== undefined && !['attempt', 'prepare'].includes(String(action.kind))) {
+                add(`${actionPath}.kind`, 'invalid_enum', 'Event action kind must be attempt or prepare.');
+              }
+              if (action.requiresPreparation !== undefined) {
+                validateIdArray(action.requiresPreparation, `${actionPath}.requiresPreparation`, add);
+                for (const key of Array.isArray(action.requiresPreparation) ? action.requiresPreparation : []) {
+                  if (typeof key === 'string') requiredPreparationRefs.push({ key, path: `${actionPath}.requiresPreparation` });
+                }
+              }
+              if (action.grantsPreparation !== undefined) {
+                if (validateId(action.grantsPreparation, `${actionPath}.grantsPreparation`, add)) {
+                  const key = String(action.grantsPreparation);
+                  if (grantedPreparationIds.has(key)) {
+                    add(`${actionPath}.grantsPreparation`, 'duplicate_id', `Duplicate preparation key "${key}".`);
+                  }
+                  grantedPreparationIds.add(key);
+                }
+              }
+              if (action.kind === 'prepare' && typeof action.grantsPreparation !== 'string') {
+                add(`${actionPath}.grantsPreparation`, 'required', 'A prepare action must grant a preparation key.');
+              }
+              if (action.kind !== 'prepare' && action.grantsPreparation !== undefined) {
+                add(`${actionPath}.grantsPreparation`, 'invalid_value', 'Only prepare actions may grant preparation.');
+              }
               if (!Array.isArray(action.successWhen) || action.successWhen.length < 1) {
                 add(`${actionPath}.successWhen`, 'required_array', 'A local condition action needs at least one success condition.');
               } else {
@@ -339,6 +365,11 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
                 }
               }
             });
+            for (const reference of requiredPreparationRefs) {
+              if (!grantedPreparationIds.has(reference.key)) {
+                add(reference.path, 'unknown_reference', `Unknown preparation key "${reference.key}".`);
+              }
+            }
           }
           const completion = Array.isArray(entity.completion) ? entity.completion : [];
           const standardEngineFlag = completion.length === 1

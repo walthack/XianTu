@@ -8,6 +8,7 @@ import type {
   ScenarioModEvent,
   ScenarioNpcDecisionActor,
   ScenarioNpcMemoryEpisode,
+  ScenarioPlayerCompletionContract,
   ScenarioPlayerCompletionEffects,
   ScenarioPlayerCompletionOutcome,
   ScenarioPlayerKnowledgeFact,
@@ -131,6 +132,10 @@ export interface ScenarioEventActionState {
   lastAttemptAtTurn?: number;
   lastOutcome?: ScenarioPlayerCompletionOutcome;
   readyAtTurn?: number;
+  /** 不因审计数组截断而回退的尝试序号。 */
+  attemptCount?: number;
+  /** 仅在当前事件合同内有效；合同热更或换事件不会继承。 */
+  preparations?: string[];
   attempts: ScenarioEventActionAttempt[];
 }
 
@@ -799,9 +804,18 @@ function reconcileEventActionContract(runtime: RuntimeState, event: ScenarioModE
   const contractHash = stableContractHash(contract);
   const current = runtime.eventActionStates[event.id];
   if (!current || current.contractHash !== contractHash) {
-    runtime.eventActionStates[event.id] = { contractHash, attempts: [] };
+    runtime.eventActionStates[event.id] = { contractHash, attemptCount: 0, preparations: [], attempts: [] };
   }
   return runtime.eventActionStates[event.id];
+}
+
+function eventActionAvailable(
+  action: ScenarioPlayerCompletionContract['actions'][number],
+  state: ScenarioEventActionState,
+): boolean {
+  const preparations = new Set(state.preparations || []);
+  if (action.kind === 'prepare' && action.grantsPreparation && preparations.has(action.grantsPreparation)) return false;
+  return (action.requiresPreparation || []).every(item => preparations.has(item));
 }
 
 function ensureActorMemoryEntry(state: ScenarioActorEngineState, actorId: string, turn: number): ScenarioActorMemory {
@@ -881,7 +895,7 @@ export function getCurrentStoryEventActions(saveData: SaveData): ScenarioEventAc
   const remainingTurns = event.timeline?.deadlineTurns !== undefined && timeline
     ? Math.max(0, timeline.eligibleAtTurn + event.timeline.deadlineTurns - (Number(runtime.worldTurn) || 0))
     : undefined;
-  return contract.actions.map(action => {
+  return contract.actions.filter(action => eventActionAvailable(action, state)).map(action => {
     const expectedOutcome: ScenarioPlayerCompletionOutcome = conditionsMatch(action.successWhen, saveData, runtime)
       ? 'success'
       : action.unmetOutcome;
@@ -925,6 +939,9 @@ export function recordStoryEventStructuredAction(
   if (!action || action.timeCost !== selection.timeCost || action.actionText !== selection.actionText) {
     return { attempted: false, completed: false, eventId: event.id, reason: 'stale_action' };
   }
+  if (!eventActionAvailable(action, state)) {
+    return { attempted: false, completed: false, eventId: event.id, reason: 'action_unavailable' };
+  }
   const turn = Math.max(0, Number(runtime.worldTurn) || 0);
   if (state.readyAtTurn !== undefined) {
     return { attempted: false, completed: true, eventId: event.id, reason: 'already_completed' };
@@ -940,11 +957,15 @@ export function recordStoryEventStructuredAction(
   }
   state.lastAttemptAtTurn = turn;
   state.lastOutcome = outcome;
-  const attemptNumber = state.attempts.length + 1;
+  const attemptNumber = Math.max(0, Number(state.attemptCount) || 0) + 1;
+  state.attemptCount = attemptNumber;
   state.attempts.push({ actionId: action.id, outcome, attemptedAtTurn: turn, detail });
   state.attempts = state.attempts.slice(-8);
+  if (action.kind === 'prepare' && outcome === 'success' && action.grantsPreparation) {
+    state.preparations = [...new Set([...(state.preparations || []), action.grantsPreparation])].sort();
+  }
   applyStoryEventOutcomeEffects(runtime, event, action.id, outcome, action.outcomeEffects?.[outcome], attemptNumber);
-  const completed = outcome !== 'failure' && contract.settleOn.includes(outcome);
+  const completed = action.kind !== 'prepare' && outcome !== 'failure' && contract.settleOn.includes(outcome);
   if (completed) state.readyAtTurn = turn;
   return { attempted: true, completed, eventId: event.id, actionId: action.id, outcome };
 }

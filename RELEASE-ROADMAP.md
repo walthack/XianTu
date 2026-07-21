@@ -138,6 +138,7 @@
   **跨事件收束纵切**：结构化动作已扩至 `s01_06–08`，右栏显示当前步骤和剩余窗口；有截止事件按 `participated / partial / offscreen` 确定性收束，partial 不授完整权限，无截止 `s01_08` 明示可自行安排。报告=`docs/R2-11D-CROSS-EVENT-ACTIONS-AND-PARTIAL-G1-2026-07-21.md`。
   **非机会卡判定纵切**：`s01_09` 以事件级 `local_condition` 合同提供固定动作，按行动前存档判 success／partial，LLM 只演出；不介入则六回合截止场外收束。下一批接 outcome effects 和失败后准备／重试。报告=`docs/R2-11E-NON-OPPORTUNITY-LOCAL-COMPLETION-G1-2026-07-21.md`。
   **结果反馈纵切**：`s01_09` 的 success／partial 已通过白名单合同写入 NPC 态度、双方知识与长期经历；态度钳位、知识幂等、12 条长期记忆淘汰与装载期引用校验均有回归，LLM 仍只演出。报告=`docs/R2-11F-OUTCOME-FEEDBACK-G1-2026-07-21.md`。
+  **失败重试纵切**：事件动作支持 `attempt / prepare` 与事件内 preparation key；failure 不结算、同轮动作互斥、准备跨存档但不跨合同，准备完成后才开放重试。`s01_09` 的“贸然失败→核对程序→重新宣旨”三回合路径已自动化。报告=`docs/R2-11G-FAILURE-PREPARATION-RETRY-G1-2026-07-21.md`。
 
 ### 世界/NPC 引擎设计参照系（2026-07-19 用户拍板，实现指引）
 

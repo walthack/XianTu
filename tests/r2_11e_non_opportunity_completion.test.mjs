@@ -58,7 +58,7 @@ test('non-opportunity event exposes a stable engine action and settles a success
   } = await loadTs('../src/modules/scenarioMods/runtime.ts');
   let save = advanceScenarioRuntime(fixture(stage, 6)).saveData;
   const actions = getCurrentStoryEventActions(save);
-  assert.equal(actions.length, 1);
+  assert.equal(actions.length, 3);
   assert.equal(actions[0].source, 'event_engine');
   assert.equal(actions[0].eventId, EVENT_ID);
 
@@ -103,6 +103,54 @@ test('an unmet local condition records partial participation without blocking th
   assert.equal(lvzhi.knowledge.includes('knowledge.lyg.s01_09.procedure_left_controversy'), true);
   assert.equal(lvzhi.episodes.some(item => item.tags.includes('political_cost')), true);
   assert.equal(runtime.playerKnowledge['knowledge.player.lyg.s01_09.procedure_controversy'].predicate, 'procedure_left_political_cost');
+});
+
+test('a failed attempt can be prepared and retried across JSON reloads without settling early', async () => {
+  const stage = JSON.parse(await readFile(stageUrl, 'utf8'));
+  const {
+    advanceScenarioRuntime,
+    getCurrentStoryEventActions,
+    recordStoryEventStructuredAction,
+  } = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  let save = advanceScenarioRuntime(fixture(stage, 3)).saveData;
+  let actions = getCurrentStoryEventActions(save);
+  assert.equal(actions.some(item => item.actionId === 'deliver_empress_decree_prepared'), false);
+  const risky = actions.find(item => item.actionId === 'demand_immediate_compliance');
+  const prepareSameTurn = actions.find(item => item.actionId === 'verify_palace_registers');
+  assert.equal(recordStoryEventStructuredAction(save, risky).outcome, 'failure');
+  assert.equal(recordStoryEventStructuredAction(save, prepareSameTurn).reason, 'already_attempted');
+  assert.equal(runtimeOf(save).eventActionStates[EVENT_ID].readyAtTurn, undefined);
+
+  save = advanceScenarioRuntime(JSON.parse(JSON.stringify(save))).saveData;
+  actions = getCurrentStoryEventActions(save);
+  const prepare = actions.find(item => item.actionId === 'verify_palace_registers');
+  const preparedBefore = actions.find(item => item.actionId === 'deliver_empress_decree_prepared');
+  assert.equal(preparedBefore, undefined);
+  const preparationResult = recordStoryEventStructuredAction(save, prepare);
+  assert.deepEqual(
+    { outcome: preparationResult.outcome, completed: preparationResult.completed },
+    { outcome: 'success', completed: false },
+  );
+  assert.deepEqual(runtimeOf(save).eventActionStates[EVENT_ID].preparations, ['court_protocol_ready']);
+
+  save = advanceScenarioRuntime(JSON.parse(JSON.stringify(save))).saveData;
+  actions = getCurrentStoryEventActions(save);
+  assert.equal(actions.some(item => item.actionId === 'verify_palace_registers'), false);
+  const prepared = actions.find(item => item.actionId === 'deliver_empress_decree_prepared');
+  const retry = recordStoryEventStructuredAction(save, prepared);
+  assert.deepEqual(
+    { outcome: retry.outcome, completed: retry.completed },
+    { outcome: 'success', completed: true },
+  );
+  save = advanceScenarioRuntime(JSON.parse(JSON.stringify(save))).saveData;
+  const runtime = runtimeOf(save);
+  const state = runtime.eventActionStates[EVENT_ID];
+  assert.equal(runtime.completedEventIds.includes(EVENT_ID), true);
+  assert.equal(state.attemptCount, 3);
+  assert.deepEqual(state.attempts.map(item => item.outcome), ['failure', 'success', 'success']);
+  const lvzhi = runtime.actorEngine.actorMemory['liuchao.character.lv_zhi'];
+  assert.equal(lvzhi.relationships['liuchao.character.cheng_zongyang'].trust, 1);
+  assert.equal(lvzhi.episodes.some(item => item.tags.includes('prepared_retry')), true);
 });
 
 test('ignoring a non-opportunity event reaches its absolute cutoff and settles offscreen', async () => {
@@ -165,4 +213,13 @@ test('validator rejects a local event contract without a deterministic condition
   const issues = validateScenarioMod(invalidEffects).issues;
   assert.equal(issues.some(item => item.path.endsWith('.delta') && item.code === 'invalid_range'), true);
   assert.equal(issues.some(item => item.path.endsWith('.actorIds') && item.code === 'unknown_reference'), true);
+
+  const invalidLifecycle = JSON.parse(await readFile(stageUrl, 'utf8'));
+  const actions = invalidLifecycle.scenario.events.find(item => item.id === EVENT_ID)
+    .playerCompletionContract.actions;
+  actions.find(item => item.id === 'deliver_empress_decree_prepared').requiresPreparation = ['missing_preparation'];
+  delete actions.find(item => item.id === 'verify_palace_registers').grantsPreparation;
+  const lifecycleIssues = validateScenarioMod(invalidLifecycle).issues;
+  assert.equal(lifecycleIssues.some(item => item.path.endsWith('.grantsPreparation') && item.code === 'required'), true);
+  assert.equal(lifecycleIssues.some(item => item.path.endsWith('.requiresPreparation') && item.code === 'unknown_reference'), true);
 });

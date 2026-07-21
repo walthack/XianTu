@@ -8302,6 +8302,171 @@
                   ]
                 }
               }
+            },
+            {
+              "id": "demand_immediate_compliance",
+              "label": "不经礼官核对直接宣旨",
+              "actionText": "我不等礼官核对名册，立即持懿旨进入永巷，要求当值官吏当场奉行。",
+              "timeCost": 1,
+              "successWhen": [
+                {
+                  "path": "角色.身份.先天六司.魅力",
+                  "operator": "gte",
+                  "value": 8
+                }
+              ],
+              "unmetOutcome": "failure",
+              "outcomeText": {
+                "success": "你以足够威望压住礼官疑虑，处置程序立即启动。",
+                "partial": "直接施压只换来有限服从，程序仍留争议。",
+                "failure": "礼官拒绝在名册与印信未核对前开门；本次未进入正式程序，可以先做准备再重试。"
+              },
+              "outcomeEffects": {
+                "failure": {
+                  "relationships": [
+                    {
+                      "actorId": "liuchao.character.lv_zhi",
+                      "targetCharacterId": "liuchao.character.cheng_zongyang",
+                      "dimension": "trust",
+                      "delta": -3
+                    }
+                  ],
+                  "npcKnowledge": [
+                    {
+                      "actorIds": [
+                        "liuchao.character.lv_zhi"
+                      ],
+                      "factId": "knowledge.lyg.s01_09.player_rushed_procedure"
+                    }
+                  ],
+                  "memories": [
+                    {
+                      "actorIds": [
+                        "liuchao.character.lv_zhi"
+                      ],
+                      "summary": "程宗扬未经核对便试图推动永巷懿旨，被礼官挡回后需要重新准备",
+                      "tags": [
+                        "court_procedure",
+                        "failed_attempt",
+                        "retry_open"
+                      ],
+                      "salience": 78
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "id": "verify_palace_registers",
+              "label": "核对永巷名册与懿旨印信",
+              "actionText": "我先请当值礼官逐项核对永巷名册、懿旨印信和公开见证次序。",
+              "timeCost": 1,
+              "kind": "prepare",
+              "grantsPreparation": "court_protocol_ready",
+              "successWhen": [
+                {
+                  "path": "flags.event.s01_08.done",
+                  "operator": "eq",
+                  "value": true
+                }
+              ],
+              "unmetOutcome": "failure",
+              "outcomeText": {
+                "success": "名册、印信与见证次序已经核清；这项准备会保留到本事件收束。",
+                "partial": "只核清了部分程序，尚不足以形成正式准备。",
+                "failure": "当前材料不足，未形成可用于重试的程序准备。"
+              },
+              "outcomeEffects": {
+                "success": {
+                  "npcKnowledge": [
+                    {
+                      "actorIds": [
+                        "liuchao.character.lv_zhi"
+                      ],
+                      "factId": "knowledge.lyg.s01_09.player_verified_protocol"
+                    }
+                  ],
+                  "memories": [
+                    {
+                      "actorIds": [
+                        "liuchao.character.lv_zhi"
+                      ],
+                      "summary": "程宗扬在重试前主动核对永巷名册、懿旨印信与见证次序",
+                      "tags": [
+                        "court_procedure",
+                        "preparation",
+                        "retry_open"
+                      ],
+                      "salience": 82
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "id": "deliver_empress_decree_prepared",
+              "label": "按核定程序重新宣旨",
+              "actionText": "名册与印信已经核清，我按核定次序重新进入永巷宣读懿旨。",
+              "timeCost": 1,
+              "requiresPreparation": [
+                "court_protocol_ready"
+              ],
+              "successWhen": [
+                {
+                  "path": "角色.身份.先天六司.魅力",
+                  "operator": "gte",
+                  "value": 3
+                }
+              ],
+              "unmetOutcome": "failure",
+              "outcomeText": {
+                "success": "既有准备消除了程序争议，重试正式完成处置。",
+                "partial": "准备降低了争议，但仍留下部分政治代价。",
+                "failure": "即使完成准备，本次主持仍未达到正式处置要求，可以继续调整后重试。"
+              },
+              "outcomeEffects": {
+                "success": {
+                  "relationships": [
+                    {
+                      "actorId": "liuchao.character.lv_zhi",
+                      "targetCharacterId": "liuchao.character.cheng_zongyang",
+                      "dimension": "trust",
+                      "delta": 4
+                    }
+                  ],
+                  "npcKnowledge": [
+                    {
+                      "actorIds": [
+                        "liuchao.character.lv_zhi"
+                      ],
+                      "factId": "knowledge.lyg.s01_09.player_recovered_procedure"
+                    }
+                  ],
+                  "playerKnowledge": [
+                    {
+                      "factId": "knowledge.player.lyg.s01_09.procedure_witnessed",
+                      "subjectId": "lyg.event.s01_09",
+                      "predicate": "witnessed_formal_procedure",
+                      "status": "confirmed",
+                      "disclosureScope": "player"
+                    }
+                  ],
+                  "memories": [
+                    {
+                      "actorIds": [
+                        "liuchao.character.lv_zhi"
+                      ],
+                      "summary": "程宗扬在首次受阻后补齐程序准备，并成功重新主持永巷懿旨",
+                      "tags": [
+                        "court_procedure",
+                        "prepared_retry",
+                        "player_accountability"
+                      ],
+                      "salience": 94
+                    }
+                  ]
+                }
+              }
             }
           ]
         },

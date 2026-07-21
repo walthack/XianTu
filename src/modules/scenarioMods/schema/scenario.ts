@@ -105,6 +105,12 @@ export interface ScenarioPlayerCompletionContract {
     label: string;
     actionText: string;
     timeCost: 1;
+    /** prepare 只改变本事件的准备态，不直接完成事件；缺省为 attempt。 */
+    kind?: 'attempt' | 'prepare';
+    /** attempt 仅在所列准备全部完成后可见、可执行。 */
+    requiresPreparation?: string[];
+    /** prepare 成功时授予的事件内准备标记。 */
+    grantsPreparation?: string;
     /** 全部条件满足为 success，否则按 unmetOutcome 结算；不读取 LLM 正文。 */
     successWhen: ScenarioCondition[];
     unmetOutcome: 'partial' | 'failure';
