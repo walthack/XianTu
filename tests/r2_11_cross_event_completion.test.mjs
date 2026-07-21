@@ -163,6 +163,77 @@ test('s01_08 persistent completion route cannot expire into an engine-owned dead
   assert.equal(runtimeOf(save).completedEventIds.includes(eventId), true);
 });
 
+test('s01_06–08 expose deterministic engine actions and persist concrete handoff choices', async () => {
+  const stage = JSON.parse(await readFile(stageUrl, 'utf8'));
+  const {
+    advanceScenarioRuntime,
+    getTrackedStoryOpportunityActions,
+    recordStoryOpportunityStructuredAction,
+    trackStoryOpportunity,
+  } = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  const cases = [
+    {
+      eventId: 'lyg.event.s01_06',
+      opportunityId: 'opportunity.lyg.s01_06.royal_escape',
+      actions: ['confirm_hidden_route', 'escort_emperor_personally', 'handoff_and_accept_guardianship'],
+    },
+    {
+      eventId: 'lyg.event.s01_07',
+      opportunityId: 'opportunity.lyg.s01_07.border_warning',
+      actions: ['verify_border_report_source', 'mark_report_unverified', 'handoff_to_new_court'],
+    },
+    {
+      eventId: 'lyg.event.s01_08',
+      opportunityId: 'opportunity.lyg.s01_08.verify_shengji',
+      actions: ['speak_with_ruan_privately', 'separate_known_and_inferred'],
+    },
+  ];
+  for (const item of cases) {
+    let save = advanceScenarioRuntime(fixture(stage, item.eventId)).saveData;
+    assert.equal(trackStoryOpportunity(save, item.opportunityId).ok, true);
+    for (const expectedActionId of item.actions) {
+      const options = getTrackedStoryOpportunityActions(save);
+      const selected = options.find(option => option.actionId === expectedActionId);
+      assert.ok(selected, `${item.eventId} must expose ${expectedActionId}`);
+      assert.equal(recordStoryOpportunityStructuredAction(save, selected).progressed, true);
+      save = advanceScenarioRuntime(JSON.parse(JSON.stringify(save))).saveData;
+    }
+    const choices = runtimeOf(save).actorEngine.opportunityStates[item.opportunityId].completionChoices;
+    assert.equal(Object.values(choices).at(-1), item.actions.at(-1));
+  }
+});
+
+test('deadline preserves partial participation without granting the full entitlement', async () => {
+  const stage = JSON.parse(await readFile(stageUrl, 'utf8'));
+  const eventId = 'lyg.event.s01_06';
+  const opportunityId = 'opportunity.lyg.s01_06.royal_escape';
+  const {
+    advanceScenarioRuntime,
+    getTrackedStoryOpportunityActions,
+    recordStoryOpportunityStructuredAction,
+    trackStoryOpportunity,
+  } = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  let save = advanceScenarioRuntime(fixture(stage, eventId)).saveData;
+  assert.equal(trackStoryOpportunity(save, opportunityId).ok, true);
+  const first = getTrackedStoryOpportunityActions(save)[0];
+  assert.equal(recordStoryOpportunityStructuredAction(save, first).progressed, true);
+
+  for (let guard = 0; guard < 12 && !runtimeOf(save).offscreenResolvedEventIds.includes(eventId); guard++) {
+    save = advanceScenarioRuntime(save).saveData;
+  }
+  save = advanceScenarioRuntime(JSON.parse(JSON.stringify(save))).saveData;
+  const runtime = runtimeOf(save);
+  const receipt = runtime.actorEngine.receipts.find(item =>
+    item.opportunityId === opportunityId && item.outcome === 'partial');
+  assert.ok(receipt, 'one completed step must settle as partial instead of offscreen absence');
+  assert.match(receipt.detail, /1\/3/);
+  assert.equal(runtime.actorEngine.opportunityStates[opportunityId].status, 'partial');
+  assert.equal(runtime.actorEngine.entitlements.some(item =>
+    item.key === 'permission.lyg.guo_jie.youxia_dispatch'), false);
+  assert.equal(runtime.completedEventIds.includes(eventId), false);
+  assert.equal(runtime.offscreenResolvedEventIds.includes(eventId), true);
+});
+
 test('timeline settlement validates deadlines and all migrated events reject LLM done writes', async () => {
   const stage = JSON.parse(await readFile(stageUrl, 'utf8'));
   const { validateScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');

@@ -251,6 +251,12 @@
             <div class="actor-card-title">{{ card.title }}</div>
             <div class="actor-card-line"><span>现在</span>{{ card.whyNow }}</div>
             <div class="actor-card-line"><span>下一步</span>{{ card.nextStep }}</div>
+            <div v-if="card.progressTotal" class="actor-card-line">
+              <span>进度</span>{{ card.progressCurrent }}/{{ card.progressTotal }}<template v-if="card.currentStep"> · {{ card.currentStep }}</template>
+            </div>
+            <div v-if="card.windowText" class="actor-card-line" :class="{ 'actor-window-tight': card.windowTight }">
+              <span>时间</span>{{ card.windowText }}
+            </div>
             <div class="actor-card-line"><span>可能获得</span>{{ card.rewardPreview }}</div>
             <div class="actor-card-risk">风险：{{ card.stakes }}</div>
             <button
@@ -263,7 +269,7 @@
           </div>
           <div v-if="actorView.opportunities.length" class="actor-ignore">{{ t('也可暂不介入；世界会继续推进，不会伪记为你亲历。') }}</div>
           <div v-for="receipt in actorView.receipts" :key="receipt.id" class="actor-receipt">
-            {{ receipt.outcome === 'participated' ? '✓' : '◇' }} {{ receipt.title }}：{{ receipt.detail }}
+            {{ receipt.outcome === 'participated' ? '✓' : receipt.outcome === 'partial' ? '◐' : '◇' }} {{ receipt.title }}：{{ receipt.detail }}
           </div>
           <div v-for="permission in actorView.entitlements" :key="permission.key" class="actor-permission">
             已解锁：{{ permission.label }}
@@ -335,7 +341,11 @@ import { useUIStore } from '@/stores/uiStore';
 import type { StatusEffect } from '@/types/game.d.ts';
 import { formatRealmWithStage } from '@/utils/realmUtils';
 import { calculateAgeFromBirthdate } from '@/utils/lifespanCalculator';
-import { getNarrativeAnchorEvent, trackStoryOpportunity } from '@/modules/scenarioMods/runtime';
+import {
+  getNarrativeAnchorEvent,
+  trackStoryOpportunity,
+  TRACKED_OPPORTUNITY_MAX_TURNS,
+} from '@/modules/scenarioMods/runtime';
 import { resolveScenarioEventNarrative } from '@/modules/scenarioMods/eventNarrativeView';
 import { returnToCanonAnchor } from '@/modules/scenarioMods/divergenceControl';
 import { useI18n } from '@/i18n';
@@ -427,6 +437,46 @@ const actorView = computed(() => {
         .filter((item: any) =>
           !engine.opportunityStates
           || ['available', 'tracked'].includes(String(engine.opportunityStates[item.id]?.status || '')))
+        .map((item: any) => {
+          const opportunityState = engine.opportunityStates?.[item.id] || {};
+          const contractSteps = item.completionContract?.steps || [];
+          const progressCurrent = Math.max(0, Number(opportunityState.completionStepIndex) || 0);
+          const remainingSteps = Math.max(0, contractSteps.length - progressCurrent);
+          const currentStep = contractSteps[progressCurrent]?.label || '';
+          const turn = Math.max(0, Number(rt.worldTurn) || 0);
+          const timelineState = rt.eventTimeline?.[anchor?.id];
+          const deadlineTurns = Number(anchor?.timeline?.deadlineTurns);
+          const deadlineRemaining = Number.isFinite(deadlineTurns) && timelineState
+            ? Math.max(0, Number(timelineState.eligibleAtTurn) + deadlineTurns - turn)
+            : undefined;
+          const persistent = item.completionContract?.expiry === 'persistent';
+          const trackedRemaining = !persistent && opportunityState.status === 'tracked'
+            && opportunityState.trackedAtTurn !== undefined
+            ? Math.max(0, TRACKED_OPPORTUNITY_MAX_TURNS - (turn - Number(opportunityState.trackedAtTurn)))
+            : undefined;
+          const availableRemaining = !persistent && opportunityState.status === 'available'
+            && item.expiresAfterTurns !== undefined
+            ? Math.max(0, Number(item.expiresAfterTurns) - (turn - Number(opportunityState.surfacedAtTurn || turn)))
+            : undefined;
+          const candidates = [deadlineRemaining, trackedRemaining, availableRemaining]
+            .filter((value): value is number => value !== undefined);
+          const remainingTurns = candidates.length ? Math.min(...candidates) : undefined;
+          const windowText = remainingTurns === undefined
+            ? (persistent ? '无硬截止，可自行安排' : '')
+            : remainingTurns <= 0
+              ? '窗口已到截止'
+              : remainingTurns === 1
+                ? '最后 1 次重要行动'
+                : `预计还可进行 ${remainingTurns} 次重要行动${remainingTurns < remainingSteps ? '，已不足以完整兑现' : ''}`;
+          return {
+            ...item,
+            progressCurrent,
+            progressTotal: contractSteps.length,
+            currentStep,
+            windowText,
+            windowTight: remainingTurns !== undefined && remainingTurns <= Math.max(1, remainingSteps),
+          };
+        })
         .slice(0, 2)
       : [],
     trackedId: engine.anchorEventId === anchor?.id ? String(engine.trackedOpportunityId || '') : '',

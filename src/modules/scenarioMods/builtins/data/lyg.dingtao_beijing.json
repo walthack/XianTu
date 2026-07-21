@@ -6781,6 +6781,14 @@
                   {
                     "id": "confirm_escape_route",
                     "label": "与郭解确认不经正门的接应路线",
+                    "actions": [
+                      {
+                        "id": "confirm_hidden_route",
+                        "label": "与郭解确认接应路线",
+                        "actionText": "我与郭解逐段确认不经正门的宫道与接应路线。",
+                        "timeCost": 1
+                      }
+                    ],
                     "matchAny": [
                       "确认宫道",
                       "确认退路",
@@ -6798,6 +6806,14 @@
                   {
                     "id": "escort_emperor",
                     "label": "亲自护送定陶王脱离刺杀压力",
+                    "actions": [
+                      {
+                        "id": "escort_emperor_personally",
+                        "label": "亲自护送定陶王",
+                        "actionText": "我亲自护送定陶王沿确认过的宫道撤离刺杀压力。",
+                        "timeCost": 1
+                      }
+                    ],
                     "matchAll": [
                       "定陶王"
                     ],
@@ -6817,6 +6833,14 @@
                   {
                     "id": "handoff_guardianship",
                     "label": "把新君交给下一段接应并承担后续护持",
+                    "actions": [
+                      {
+                        "id": "handoff_and_accept_guardianship",
+                        "label": "完成交接并承担护持",
+                        "actionText": "我把新君交给下一段接应者，并明确接下后续护持责任。",
+                        "timeCost": 1
+                      }
+                    ],
                     "matchAny": [
                       "交给接应",
                       "交到接应",
@@ -7518,6 +7542,14 @@
                   {
                     "id": "verify_border_source",
                     "label": "核对边警的消息来源",
+                    "actions": [
+                      {
+                        "id": "verify_border_report_source",
+                        "label": "核对边警来源",
+                        "actionText": "我逐项核对边警军情的消息来源与转递链。",
+                        "timeCost": 1
+                      }
+                    ],
                     "matchAny": [
                       "核对边警",
                       "核对军情",
@@ -7536,6 +7568,14 @@
                   {
                     "id": "preserve_uncertainty",
                     "label": "明确边警仍未经完全核实",
+                    "actions": [
+                      {
+                        "id": "mark_report_unverified",
+                        "label": "标明军情尚未核实",
+                        "actionText": "我明确标注这份边警仍未经完全核实，只能作为待核验军情传递。",
+                        "timeCost": 1
+                      }
+                    ],
                     "matchAny": [
                       "未核实",
                       "未经核实",
@@ -7555,6 +7595,20 @@
                   {
                     "id": "handoff_border_contact",
                     "label": "把边警交给可持续运作的联络线",
+                    "actions": [
+                      {
+                        "id": "handoff_to_new_court",
+                        "label": "交给新朝军情线",
+                        "actionText": "我把边警交给新朝可持续运作的军情联络线，并承担后续核验责任。",
+                        "timeCost": 1
+                      },
+                      {
+                        "id": "handoff_to_jia_wenhe",
+                        "label": "交给贾文和联络线",
+                        "actionText": "我把边警交给贾文和保留的联络线，并承担后续核验责任。",
+                        "timeCost": 1
+                      }
+                    ],
                     "matchAny": [
                       "交给新朝",
                       "交给贾文和",
@@ -8050,6 +8104,14 @@
                   {
                     "id": "speak_in_private",
                     "label": "与阮香凝单独核验盛姬线索",
+                    "actions": [
+                      {
+                        "id": "speak_with_ruan_privately",
+                        "label": "与阮香凝私下核验",
+                        "actionText": "我避开旁人，与阮香凝私下核验盛姬留下的线索。",
+                        "timeCost": 1
+                      }
+                    ],
                     "matchAll": [
                       "阮香凝"
                     ],
@@ -8071,6 +8133,14 @@
                   {
                     "id": "separate_fact_from_inference",
                     "label": "区分亲知事实、定陶王反应与待核验推断",
+                    "actions": [
+                      {
+                        "id": "separate_known_and_inferred",
+                        "label": "逐项区分事实与推断",
+                        "actionText": "我请阮香凝逐项区分她的亲知事实、定陶王的反应与仍待核验的推断。",
+                        "timeCost": 1
+                      }
+                    ],
                     "matchAll": [
                       "亲知",
                       "推断"

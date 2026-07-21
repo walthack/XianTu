@@ -56,7 +56,7 @@ export interface ScenarioActorReceipt {
   opportunityId?: string;
   title: string;
   detail: string;
-  outcome: 'participated' | 'offscreen';
+  outcome: 'participated' | 'partial' | 'offscreen';
   resolvedAtTurn: number;
 }
 
@@ -88,7 +88,7 @@ export interface ScenarioActorMemory {
 }
 
 export interface ScenarioOpportunityState {
-  status: 'available' | 'tracked' | 'expired' | 'participated' | 'offscreen';
+  status: 'available' | 'tracked' | 'expired' | 'participated' | 'partial' | 'offscreen';
   surfacedAtTurn: number;
   trackedAtTurn?: number;
   resolvedAtTurn?: number;
@@ -437,6 +437,15 @@ function recordDecisionEpisodes(
   }
 }
 
+function hasPartialOpportunityProgress(
+  state: ScenarioOpportunityState | undefined,
+  opportunity: ScenarioStoryOpportunity | undefined,
+): boolean {
+  const completedSteps = Math.max(0, Number(state?.completionStepIndex) || 0);
+  const totalSteps = opportunity?.completionContract?.steps.length || 0;
+  return completedSteps > 0 && completedSteps < totalSteps && state?.completionReadyAtTurn === undefined;
+}
+
 function syncActorEngine(runtime: RuntimeState): void {
   const state = ensureActorEngine(runtime);
   const anchor = getNarrativeAnchorEvent(runtime);
@@ -446,8 +455,13 @@ function syncActorEngine(runtime: RuntimeState): void {
 
   if (state.anchorEventId && state.anchorEventId !== anchor?.id) {
     persistNpcMemory(runtime, state);
-    const opportunity = findOpportunity(previousAnchor, state.trackedOpportunityId);
     const offscreen = runtime.offscreenResolvedEventIds?.includes(state.anchorEventId);
+    const trackedOpportunity = findOpportunity(previousAnchor, state.trackedOpportunityId);
+    const partialOpportunity = offscreen
+      ? previousAnchor?.worldActor?.opportunities.find(item =>
+        hasPartialOpportunityProgress(state.opportunityStates?.[item.id], item))
+      : undefined;
+    const opportunity = trackedOpportunity || partialOpportunity;
     if (offscreen && !opportunity) {
       const receiptId = `actor.receipt.${state.anchorEventId}.offscreen`;
       if (!state.receipts.some(item => item.id === receiptId)) {
@@ -463,18 +477,26 @@ function syncActorEngine(runtime: RuntimeState): void {
     }
     if (opportunity) {
       const participated = runtime.completedEventIds.includes(state.anchorEventId);
-      const resolution = participated ? 'participated' : 'offscreen';
-      const receiptId = `actor.receipt.${state.anchorEventId}.${opportunity.id}.${participated ? 'participated' : 'offscreen'}`;
+      const opportunityState = state.opportunityStates?.[opportunity.id];
+      const partial = Boolean(offscreen && !participated && hasPartialOpportunityProgress(opportunityState, opportunity));
+      const resolution: ScenarioActorReceipt['outcome'] = participated
+        ? 'participated'
+        : partial ? 'partial' : 'offscreen';
+      const receiptId = `actor.receipt.${state.anchorEventId}.${opportunity.id}.${resolution}`;
       if ((participated || offscreen) && !state.receipts.some(item => item.id === receiptId)) {
         state.receipts.push({
           id: receiptId,
           anchorEventId: state.anchorEventId,
           opportunityId: opportunity.id,
-          title: participated ? `已兑现：${opportunity.title}` : `世界已推进：${opportunity.title}`,
+          title: participated
+            ? `已兑现：${opportunity.title}`
+            : partial ? `部分参与：${opportunity.title}` : `世界已推进：${opportunity.title}`,
           detail: participated
             ? `你亲历完成当前承重拍，获得行为权限：${opportunity.rewardLabel}`
-            : '该机会随世界场外推进而关闭；未伪记为玩家亲历，也未授予权限。',
-          outcome: participated ? 'participated' : 'offscreen',
+            : partial
+              ? `你完成了 ${Math.max(0, Number(opportunityState?.completionStepIndex) || 0)}/${opportunity.completionContract?.steps.length || 0} 个有效步骤；局部参与被保留，但完整权限未授予。`
+              : '该机会随世界场外推进而关闭；未伪记为玩家亲历，也未授予权限。',
+          outcome: resolution,
           resolvedAtTurn: settledTurn(runtime),
         });
       }
@@ -486,7 +508,6 @@ function syncActorEngine(runtime: RuntimeState): void {
           earnedAtTurn: settledTurn(runtime),
         });
       }
-      const opportunityState = state.opportunityStates?.[opportunity.id];
       if (opportunityState && (participated || offscreen)) {
         opportunityState.status = resolution;
         opportunityState.resolvedAtTurn = settledTurn(runtime);
@@ -497,13 +518,15 @@ function syncActorEngine(runtime: RuntimeState): void {
           eventId: state.anchorEventId,
           summary: participated
             ? `玩家介入并兑现“${opportunity.title}”`
-            : `玩家未介入，“${opportunity.title}”由世界场外推进`,
+            : partial
+              ? `玩家部分介入“${opportunity.title}”，其余由世界场外推进`
+              : `玩家未介入，“${opportunity.title}”由世界场外推进`,
           tags: [
             `event:${state.anchorEventId}`,
             `opportunity:${opportunity.id}`,
             `player:${resolution}`,
           ],
-          salience: participated ? 100 : 70,
+          salience: participated ? 100 : partial ? 85 : 70,
           occurredAtTurn: settledTurn(runtime),
         });
       }
