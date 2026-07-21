@@ -99,6 +99,11 @@ test('future death variants are rejected through the data-driven stage guard', a
     true,
     'association guard must require subject/predicate proximity',
   );
+  assert.equal(
+    validateNarrativePerformance('郭解莫非已经心生死志？', '继续', scenarioPrompt).valid,
+    false,
+    'future-death associations do not opt into hypothetical claims',
+  );
 });
 
 test('real combined prompt rejects authoritative military quantities without blocking civilian counts or hypotheses', async () => {

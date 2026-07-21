@@ -51,6 +51,18 @@ test('adjudicated known names are allowed while their unrevealed propositions re
 
   const s05Guard = eventCore(stage, 'lyg.event.s01_05').narrativeGuard;
   assert.equal(
+    validateNarrativePerformance('阮香凝莫非就是凝玉姬？', '继续', guardPrompt(s05Guard)).valid,
+    true,
+    'an explicit player suspicion must not be mistaken for confirmed world truth',
+  );
+  const confirmedIdentity = validateNarrativePerformance(
+    '阮香凝莫非就是凝玉姬？霍子孟随后查明此事属实。',
+    '继续',
+    guardPrompt(s05Guard),
+  );
+  assert.equal(confirmedIdentity.valid, false, 'an adjacent confirmation must settle the hypothesis back into a violation');
+  assert.match(confirmedIdentity.issues.join('；'), /受保护人物的后续状态/);
+  assert.equal(
     validateNarrativePerformance('吕冀理应为旧事接受问罪。', '继续', guardPrompt(s05Guard)).valid,
     true,
     'an opinion about accountability is not the protected future outcome',

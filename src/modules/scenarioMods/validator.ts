@@ -748,6 +748,7 @@ function validateNpcDecisionCore(
             }
             validateStringArray(rawRule.subjects, `${rulePath}.subjects`, add);
             validateStringArray(rawRule.predicates, `${rulePath}.predicates`, add);
+            optionalBoolean(rawRule.allowHypothetical, `${rulePath}.allowHypothetical`, add);
             if (!Array.isArray(rawRule.subjects) || rawRule.subjects.length === 0) {
               add(`${rulePath}.subjects`, 'required_array', 'Forbidden association requires at least one subject.');
             }

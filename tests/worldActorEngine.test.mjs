@@ -113,6 +113,12 @@ test('decision-core validator rejects ambiguous bindings, coercive limits, and b
     validateScenarioMod(brokenAssociation).issues.some(item => item.path.endsWith('maxDistance')),
     true,
   );
+  const invalidHypotheticalPolicy = structuredClone(source);
+  coreOf(invalidHypotheticalPolicy).narrativeGuard.forbiddenAssociations[0].allowHypothetical = 'yes';
+  assert.equal(
+    validateScenarioMod(invalidHypotheticalPolicy).issues.some(item => item.path.endsWith('allowHypothetical')),
+    true,
+  );
 
   const unknownKnowledge = structuredClone(source);
   coreOf(unknownKnowledge).actionBindings[0].requiresKnowledge.push('knowledge.lyg.missing');

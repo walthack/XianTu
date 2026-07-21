@@ -62,6 +62,7 @@ interface ForbiddenAssociation {
   subjects: string[];
   predicates: string[];
   maxDistance?: number;
+  allowHypothetical?: boolean;
 }
 
 function parseForbiddenAssociations(scenarioPrompt: string): ForbiddenAssociation[] {
@@ -118,13 +119,21 @@ function leakedForbiddenAssociation(
   narrative: string,
   associations: ForbiddenAssociation[],
 ): ForbiddenAssociation | undefined {
+  const sentences = narrative.split(/[。！？\n]/);
   return associations.find(rule => {
     const maxDistance = Number.isInteger(rule.maxDistance) ? rule.maxDistance! : 48;
     return rule.subjects.some(subject => {
       for (let subjectAt = narrative.indexOf(subject); subjectAt >= 0; subjectAt = narrative.indexOf(subject, subjectAt + subject.length)) {
         if (rule.predicates.some(predicate => {
           for (let predicateAt = narrative.indexOf(predicate); predicateAt >= 0; predicateAt = narrative.indexOf(predicate, predicateAt + predicate.length)) {
-            if (Math.abs(predicateAt - subjectAt) <= maxDistance) return true;
+            if (Math.abs(predicateAt - subjectAt) > maxDistance) continue;
+            if (!rule.allowHypothetical) return true;
+            const sentenceIndex = narrative.slice(0, predicateAt).split(/[。！？\n]/).length - 1;
+            const sentence = sentences[sentenceIndex] || '';
+            if (!HYPOTHETICAL_CONTEXT.test(sentence)) return true;
+            if (CONFIRMING_CONTEXT.test(sentence) || CONFIRMING_CONTEXT.test(sentences[sentenceIndex + 1] || '')) {
+              return true;
+            }
           }
           return false;
         })) return true;

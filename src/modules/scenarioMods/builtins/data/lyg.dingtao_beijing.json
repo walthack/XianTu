@@ -5812,7 +5812,8 @@
                     "隶属黑魔海",
                     "出身黑魔海"
                   ],
-                  "maxDistance": 48
+                  "maxDistance": 48,
+                  "allowHypothetical": true
                 }
               ],
               "rejectConcreteQuantities": true,
@@ -6647,7 +6648,8 @@
                     "隶属黑魔海",
                     "出身黑魔海"
                   ],
-                  "maxDistance": 48
+                  "maxDistance": 48,
+                  "allowHypothetical": true
                 }
               ]
             },
@@ -7320,7 +7322,8 @@
                     "隶属黑魔海",
                     "出身黑魔海"
                   ],
-                  "maxDistance": 48
+                  "maxDistance": 48,
+                  "allowHypothetical": true
                 }
               ],
               "rejectConcreteQuantities": true,

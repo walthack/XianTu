@@ -290,6 +290,8 @@ export interface ScenarioNpcDecisionCore {
       subjects: string[];
       predicates: string[];
       maxDistance?: number;
+      /** 允许角色提出未坐实的怀疑；本句或紧邻下句确认时仍拦截。 */
+      allowHypothetical?: boolean;
     }>;
     rejectConcreteQuantities?: boolean;
     /** 允许“某来源声称 + 明示未核实”的数字；它只是传闻，不会写回局势真值。 */
