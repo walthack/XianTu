@@ -896,14 +896,14 @@ export function getCurrentStoryEventActions(saveData: SaveData): ScenarioEventAc
     ? Math.max(0, timeline.eligibleAtTurn + event.timeline.deadlineTurns - (Number(runtime.worldTurn) || 0))
     : undefined;
   return contract.actions.filter(action => eventActionAvailable(action, state)).map(action => {
-    const expectedOutcome: ScenarioPlayerCompletionOutcome = conditionsMatch(action.successWhen, saveData, runtime)
+    const expectedOutcome: ScenarioPlayerCompletionOutcome = contract.kind === 'objective_action'
       ? 'success'
-      : action.unmetOutcome;
+      : conditionsMatch(action.successWhen, saveData, runtime) ? 'success' : action.unmetOutcome || 'failure';
     return {
       source: 'event_engine',
       eventId: event.id,
       actionId: action.id,
-      label: `【主线判定】${action.label}`,
+      label: `${contract.kind === 'objective_action' ? '【主线推进】' : '【主线判定】'}${action.label}`,
       actionText: action.actionText,
       timeCost: action.timeCost,
       contractHash: state.contractHash,
@@ -949,8 +949,8 @@ export function recordStoryEventStructuredAction(
   if (state.lastAttemptAtTurn === turn) {
     return { attempted: false, completed: false, eventId: event.id, reason: 'already_attempted' };
   }
-  const success = conditionsMatch(action.successWhen, saveData, runtime);
-  const outcome: ScenarioPlayerCompletionOutcome = success ? 'success' : action.unmetOutcome;
+  const success = contract.kind === 'objective_action' || conditionsMatch(action.successWhen, saveData, runtime);
+  const outcome: ScenarioPlayerCompletionOutcome = success ? 'success' : action.unmetOutcome || 'failure';
   const detail = action.outcomeText[outcome];
   if (selection.expectedOutcome !== outcome || selection.outcomeText !== detail) {
     return { attempted: false, completed: false, eventId: event.id, reason: 'stale_condition' };
@@ -1487,7 +1487,7 @@ function resolveOffscreenWorldEvents(runtime: RuntimeState, transitions: Scenari
     );
     const localActionState = owner ? runtime.eventActionStates?.[owner.id] : undefined;
     const ownerReadyByLocalContract = Boolean(
-      owner?.playerCompletionContract?.kind === 'local_condition'
+      owner?.playerCompletionContract
       && localActionState?.contractHash === stableContractHash(owner.playerCompletionContract)
       && localActionState.readyAtTurn !== undefined,
     );

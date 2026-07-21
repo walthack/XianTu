@@ -5900,7 +5900,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "在蚁穴中寻找出路"
+        "objective": "在蚁穴中寻找出路",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在蚁穴中寻找出路",
+              "actionText": "我按当前主线目标行动：在蚁穴中寻找出路",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在蚁穴中寻找出路”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyl.event.taiquan_afterfall_02_beat",
@@ -5921,7 +5940,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "前往下水道救人"
+        "objective": "前往下水道救人",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "前往下水道救人",
+              "actionText": "我按当前主线目标行动：前往下水道救人",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“前往下水道救人”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyl.event.taiquan_afterfall_03_beat",
@@ -5942,7 +5980,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "前往魔墟寻找宝物"
+        "objective": "前往魔墟寻找宝物",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "前往魔墟寻找宝物",
+              "actionText": "我按当前主线目标行动：前往魔墟寻找宝物",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“前往魔墟寻找宝物”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyl.event.taiquan_afterfall_04_beat",
@@ -5963,7 +6020,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "与莫如霖对质"
+        "objective": "与莫如霖对质",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "与莫如霖对质",
+              "actionText": "我按当前主线目标行动：与莫如霖对质",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“与莫如霖对质”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyl.event.taiquan_afterfall_05_beat",
@@ -5984,7 +6060,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "探索人类居住区"
+        "objective": "探索人类居住区",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "探索人类居住区",
+              "actionText": "我按当前主线目标行动：探索人类居住区",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“探索人类居住区”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyl.event.taiquan_afterfall_06_beat",
@@ -6005,7 +6100,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "登门提亲带走云如瑶"
+        "objective": "登门提亲带走云如瑶",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "登门提亲带走云如瑶",
+              "actionText": "我按当前主线目标行动：登门提亲带走云如瑶",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“登门提亲带走云如瑶”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyl.event.taiquan_afterfall_07_beat",
@@ -6026,7 +6140,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "前往洛都查明风波"
+        "objective": "前往洛都查明风波",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "前往洛都查明风波",
+              "actionText": "我按当前主线目标行动：前往洛都查明风波",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“前往洛都查明风波”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyl.event.taiquan_afterfall_08_beat",
@@ -6047,7 +6180,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "与冯子都结交探听渠道"
+        "objective": "与冯子都结交探听渠道",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "与冯子都结交探听渠道",
+              "actionText": "我按当前主线目标行动：与冯子都结交探听渠道",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“与冯子都结交探听渠道”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyl.event.taiquan_afterfall_09_beat",
@@ -6068,7 +6220,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "通过徐璜求见赵飞燕"
+        "objective": "通过徐璜求见赵飞燕",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "通过徐璜求见赵飞燕",
+              "actionText": "我按当前主线目标行动：通过徐璜求见赵飞燕",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“通过徐璜求见赵飞燕”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyl.event.taiquan_afterfall_10_beat",
@@ -6089,7 +6260,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "前往襄城君府探查"
+        "objective": "前往襄城君府探查",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "前往襄城君府探查",
+              "actionText": "我按当前主线目标行动：前往襄城君府探查",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“前往襄城君府探查”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       }
     ]
   },

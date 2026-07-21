@@ -2416,7 +2416,26 @@
         "axisSeq": 75,
         "axisAnchor": "六朝清羽记·#51·第49章·暗计",
         "axisBeat": "苏荔向程宗扬和武二郎透露花苗与红苗联合，利用送亲之名深入鬼王峒刺杀鬼巫王的秘密计划。",
-        "objective": "探查鬼王峒送亲队内情"
+        "objective": "探查鬼王峒送亲队内情",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "探查鬼王峒送亲队内情",
+              "actionText": "我按当前主线目标行动：探查鬼王峒送亲队内情",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“探查鬼王峒送亲队内情”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s04_02",
@@ -2461,6 +2480,25 @@
           ],
           "worldDelta": "鬼王峒武士已发动袭击，队伍的路线与戒备被迫改变；玩家仍可介入战后追踪或救援。",
           "evidence": "R2-9 世界引力合同：鬼王峒武士袭击属于不依赖玩家领取任务才会发生的世界事件；仅在该节点已激活且长期停滞时结算。"
+        },
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "协助武二郎击退鬼王峒武士",
+              "actionText": "我按当前主线目标行动：协助武二郎击退鬼王峒武士",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“协助武二郎击退鬼王峒武士”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
         }
       },
       {
@@ -2493,7 +2531,26 @@
         "axisSeq": 73,
         "axisAnchor": "六朝清羽记·#50·第48章·窥情",
         "axisBeat": "程宗扬得知乐明珠是光明观堂弟子，她自告奋勇作为新娘前往鬼王峒，目的是刺杀鬼巫王为民除害。",
-        "objective": "随乐明珠前往鬼王峒"
+        "objective": "随乐明珠前往鬼王峒",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "随乐明珠前往鬼王峒",
+              "actionText": "我按当前主线目标行动：随乐明珠前往鬼王峒",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“随乐明珠前往鬼王峒”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s04_04",
@@ -2534,6 +2591,25 @@
           ],
           "worldDelta": "发蛊事件仍然发生，受害者与蛊毒威胁进入队伍现实；你只能从处置后果而非倒带事件开始介入。",
           "evidence": "R2-9 世界引力合同：发蛊事件属于不依赖玩家领取任务才会发生的世界事件；仅在该节点已激活且长期停滞时结算。"
+        },
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "查明夜晚发丝袭击事件",
+              "actionText": "我按当前主线目标行动：查明夜晚发丝袭击事件",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“查明夜晚发丝袭击事件”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
         }
       },
       {
@@ -2614,7 +2690,26 @@
         "axisSeq": 83,
         "axisAnchor": "六朝清羽记·#56·第54章·穿山",
         "axisBeat": "程宗扬发现凝羽因麻古成瘾而痛苦，向乐明珠请求解毒，乐明珠应允协助但缺乏经验。",
-        "objective": "请求乐明珠为凝羽解毒"
+        "objective": "请求乐明珠为凝羽解毒",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "请求乐明珠为凝羽解毒",
+              "actionText": "我按当前主线目标行动：请求乐明珠为凝羽解毒",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“请求乐明珠为凝羽解毒”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s04_07",
@@ -2647,7 +2742,26 @@
         "axisSeq": 86,
         "axisAnchor": "六朝清羽记·#57·第55章·白夷",
         "axisBeat": "白夷族长突然改变交易方式，要求云氏商会在十日内支付五万银铢现款，而非以货易货。",
-        "objective": "与白夷族长交涉现款支付"
+        "objective": "与白夷族长交涉现款支付",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "与白夷族长交涉现款支付",
+              "actionText": "我按当前主线目标行动：与白夷族长交涉现款支付",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“与白夷族长交涉现款支付”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       }
     ]
   },

@@ -5032,7 +5032,26 @@
         "axisSeq": 1066,
         "axisAnchor": "六朝燕歌行·#54·灞桥",
         "axisBeat": "众人赶在宵禁前入住长安宣平坊宅院，石超设宴接风，谈及吕奉先在长安惹事。",
-        "objective": "前往宣平坊宅院赴宴"
+        "objective": "前往宣平坊宅院赴宴",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "前往宣平坊宅院赴宴",
+              "actionText": "我按当前主线目标行动：前往宣平坊宅院赴宴",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“前往宣平坊宅院赴宴”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.s03_02",
@@ -5063,7 +5082,26 @@
         "axisSeq": 1067,
         "axisAnchor": "六朝燕歌行·#55·深谊",
         "axisBeat": "程宗扬在长安宅邸与故交祁远重逢，谈及江州近况并饮酒卧谈至清晨。",
-        "objective": "在长安宅邸与祁远叙旧"
+        "objective": "在长安宅邸与祁远叙旧",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在长安宅邸与祁远叙旧",
+              "actionText": "我按当前主线目标行动：在长安宅邸与祁远叙旧",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在长安宅邸与祁远叙旧”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.s03_03",
@@ -5108,6 +5146,25 @@
           ],
           "worldDelta": "泼寒胡戏照常举行并演变为杨玉环的街头冲突，长安市井已经留下围观、流言与官面反应。",
           "evidence": "R2-9 世界引力合同：泼寒胡戏与杨玉环飙车斗殴属于不依赖玩家领取任务才会发生的世界事件；仅在该节点已激活且长期停滞时结算。"
+        },
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "观看泼寒胡戏，留意杨玉环",
+              "actionText": "我按当前主线目标行动：观看泼寒胡戏，留意杨玉环",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“观看泼寒胡戏，留意杨玉环”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
         }
       },
       {
@@ -5140,7 +5197,26 @@
         "axisSeq": 1069,
         "axisAnchor": "六朝燕歌行·#56·胡戏",
         "axisBeat": "潘金莲戴双重面纱提滴血长剑在街头为杨玉环警戒，被程宗扬用口哨和手势戏弄而羞恼。",
-        "objective": "在长安街头留意潘金莲"
+        "objective": "在长安街头留意潘金莲",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在长安街头留意潘金莲",
+              "actionText": "我按当前主线目标行动：在长安街头留意潘金莲",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在长安街头留意潘金莲”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.s03_05",
@@ -5169,7 +5245,26 @@
         "axisSeq": 1070,
         "axisAnchor": "六朝燕歌行·#57·公主",
         "axisBeat": "袁天罡目睹杨玉环街头霸王行径后大受打击，自述底层穿越者艰难及保持童身获得预知能力，程宗扬安抚之。",
-        "objective": "安抚袁天罡，了解其经历"
+        "objective": "安抚袁天罡，了解其经历",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "安抚袁天罡，了解其经历",
+              "actionText": "我按当前主线目标行动：安抚袁天罡，了解其经历",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“安抚袁天罡，了解其经历”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.s03_06",
@@ -5201,7 +5296,26 @@
         "axisSeq": 1071,
         "axisAnchor": "六朝燕歌行·#57·公主",
         "axisBeat": "贾文和汇报杨玉环公开资料，程宗扬与袁天罡推测其在皇位更迭中发挥关键作用且背后可能与岳飞有关。",
-        "objective": "查探杨玉环背景资料"
+        "objective": "查探杨玉环背景资料",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "查探杨玉环背景资料",
+              "actionText": "我按当前主线目标行动：查探杨玉环背景资料",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“查探杨玉环背景资料”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.s03_07",
@@ -5231,7 +5345,26 @@
         "axisSeq": 1088,
         "axisAnchor": "六朝燕歌行·#65·第665章·家世",
         "axisBeat": "在紫云楼顶层，程宗扬向杨玉环展示手电筒，并通过回答关于云如瑶的问题通过考验。",
-        "objective": "前往紫云楼会见杨玉环"
+        "objective": "前往紫云楼会见杨玉环",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "前往紫云楼会见杨玉环",
+              "actionText": "我按当前主线目标行动：前往紫云楼会见杨玉环",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“前往紫云楼会见杨玉环”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.s03_08",
@@ -5263,7 +5396,26 @@
         "axisSeq": 1089,
         "axisAnchor": "六朝燕歌行·#66·第666章·试题",
         "axisBeat": "小紫和吕雉在大雁塔内被十方丛林僧人围困，小紫以铸铁炸弹和威胁毁坏玉佛与僧人对峙。",
-        "objective": "解救被困大雁塔的小紫与吕雉"
+        "objective": "解救被困大雁塔的小紫与吕雉",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "解救被困大雁塔的小紫与吕雉",
+              "actionText": "我按当前主线目标行动：解救被困大雁塔的小紫与吕雉",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“解救被困大雁塔的小紫与吕雉”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.s03_09",
@@ -5301,7 +5453,26 @@
         "axisSeq": 1090,
         "axisAnchor": "六朝燕歌行·#67·第667章·题名",
         "axisBeat": "程宗扬夜访大慈恩寺，从碑刻中发现白行简等名字，怀疑其为穿越者；小紫炸开禁制逃出后，程宗扬以汉使身份救走她。",
-        "objective": "夜访大慈恩寺查探碑刻"
+        "objective": "夜访大慈恩寺查探碑刻",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "夜访大慈恩寺查探碑刻",
+              "actionText": "我按当前主线目标行动：夜访大慈恩寺查探碑刻",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“夜访大慈恩寺查探碑刻”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.debut_shefuren",

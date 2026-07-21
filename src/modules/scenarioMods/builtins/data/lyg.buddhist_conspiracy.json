@@ -5812,7 +5812,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "前往仇士良家门前调查刺杀现场"
+        "objective": "前往仇士良家门前调查刺杀现场",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "前往仇士良家门前调查刺杀现场",
+              "actionText": "我按当前主线目标行动：前往仇士良家门前调查刺杀现场",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“前往仇士良家门前调查刺杀现场”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.buddhist_conspiracy_02_beat",
@@ -5833,7 +5852,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "前往渭水寻找被掳走的小紫"
+        "objective": "前往渭水寻找被掳走的小紫",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "前往渭水寻找被掳走的小紫",
+              "actionText": "我按当前主线目标行动：前往渭水寻找被掳走的小紫",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“前往渭水寻找被掳走的小紫”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.buddhist_conspiracy_03_beat",
@@ -5854,7 +5892,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "在十方丛林应对僧众围杀"
+        "objective": "在十方丛林应对僧众围杀",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在十方丛林应对僧众围杀",
+              "actionText": "我按当前主线目标行动：在十方丛林应对僧众围杀",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在十方丛林应对僧众围杀”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.buddhist_conspiracy_lore_nuclear_treaty",
@@ -5892,7 +5949,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "在兴唐寺火海中斩杀龙宸杀手"
+        "objective": "在兴唐寺火海中斩杀龙宸杀手",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在兴唐寺火海中斩杀龙宸杀手",
+              "actionText": "我按当前主线目标行动：在兴唐寺火海中斩杀龙宸杀手",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在兴唐寺火海中斩杀龙宸杀手”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.buddhist_conspiracy_05_beat",
@@ -5913,7 +5989,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "拦截龙宸翼火蛇，救下惊理"
+        "objective": "拦截龙宸翼火蛇，救下惊理",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "拦截龙宸翼火蛇，救下惊理",
+              "actionText": "我按当前主线目标行动：拦截龙宸翼火蛇，救下惊理",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“拦截龙宸翼火蛇，救下惊理”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.buddhist_conspiracy_06_beat",
@@ -5934,7 +6029,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "进入大雁塔，破解佛咒幻境"
+        "objective": "进入大雁塔，破解佛咒幻境",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "进入大雁塔，破解佛咒幻境",
+              "actionText": "我按当前主线目标行动：进入大雁塔，破解佛咒幻境",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“进入大雁塔，破解佛咒幻境”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.buddhist_conspiracy_07_beat",
@@ -5955,7 +6069,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "部署计策，先取田令孜"
+        "objective": "部署计策，先取田令孜",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "部署计策，先取田令孜",
+              "actionText": "我按当前主线目标行动：部署计策，先取田令孜",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“部署计策，先取田令孜”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.buddhist_conspiracy_08_beat",
@@ -5976,7 +6109,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "在程宅应对窥基的假诏逼问"
+        "objective": "在程宅应对窥基的假诏逼问",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在程宅应对窥基的假诏逼问",
+              "actionText": "我按当前主线目标行动：在程宅应对窥基的假诏逼问",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在程宅应对窥基的假诏逼问”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.buddhist_conspiracy_09_beat",
@@ -5997,7 +6149,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "在程宅揭穿窥基伪造法旨"
+        "objective": "在程宅揭穿窥基伪造法旨",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在程宅揭穿窥基伪造法旨",
+              "actionText": "我按当前主线目标行动：在程宅揭穿窥基伪造法旨",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在程宅揭穿窥基伪造法旨”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.buddhist_conspiracy_10_beat",
@@ -6018,7 +6189,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "在程宅应对窥基弃佛入魔"
+        "objective": "在程宅应对窥基弃佛入魔",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在程宅应对窥基弃佛入魔",
+              "actionText": "我按当前主线目标行动：在程宅应对窥基弃佛入魔",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在程宅应对窥基弃佛入魔”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.buddhist_conspiracy_11_beat",
@@ -6039,7 +6229,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "在大明宫躲避神策军屠杀"
+        "objective": "在大明宫躲避神策军屠杀",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在大明宫躲避神策军屠杀",
+              "actionText": "我按当前主线目标行动：在大明宫躲避神策军屠杀",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在大明宫躲避神策军屠杀”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       }
     ]
   },

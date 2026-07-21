@@ -4214,7 +4214,26 @@
           "liuchao.faction.gui_wang_dong"
         ],
         "locationId": "liuchao.location.biyu",
-        "objective": "向碧奴追问小紫的过往"
+        "objective": "向碧奴追问小紫的过往",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "向碧奴追问小紫的过往",
+              "actionText": "我按当前主线目标行动：向碧奴追问小紫的过往",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“向碧奴追问小紫的过往”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s05b_02_xiaozi_exposed",
@@ -4250,7 +4269,26 @@
           "liuchao.faction.gui_wang_dong"
         ],
         "locationId": "liuchao.location.biyu",
-        "objective": "质问小紫，揭穿其控制手段"
+        "objective": "质问小紫，揭穿其控制手段",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "质问小紫，揭穿其控制手段",
+              "actionText": "我按当前主线目标行动：质问小紫，揭穿其控制手段",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“质问小紫，揭穿其控制手段”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s05b_03_saan_secret_path",
@@ -4287,7 +4325,26 @@
           "liuchao.faction.hong_miao"
         ],
         "locationId": "liuchao.location.gui_wang_dong",
-        "objective": "从萨安处获取鬼王宫密道"
+        "objective": "从萨安处获取鬼王宫密道",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "从萨安处获取鬼王宫密道",
+              "actionText": "我按当前主线目标行动：从萨安处获取鬼王宫密道",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“从萨安处获取鬼王宫密道”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s05b_04_enter_ghost_palace",
@@ -4324,7 +4381,26 @@
           "liuchao.faction.gui_wang_dong"
         ],
         "locationId": "liuchao.location.gui_wang_gong",
-        "objective": "潜入鬼王宫，寻找乐明珠"
+        "objective": "潜入鬼王宫，寻找乐明珠",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "潜入鬼王宫，寻找乐明珠",
+              "actionText": "我按当前主线目标行动：潜入鬼王宫，寻找乐明珠",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“潜入鬼王宫，寻找乐明珠”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s05b_05a_meet_ghost_king",
@@ -4358,7 +4434,26 @@
           "liuchao.faction.gui_wang_dong"
         ],
         "locationId": "liuchao.location.gui_wang_gong",
-        "objective": "在鬼王宫面见鬼巫王"
+        "objective": "在鬼王宫面见鬼巫王",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在鬼王宫面见鬼巫王",
+              "actionText": "我按当前主线目标行动：在鬼王宫面见鬼巫王",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在鬼王宫面见鬼巫王”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s05b_05b_ideology_duel_and_defeat",
@@ -4392,7 +4487,26 @@
           "liuchao.faction.gui_wang_dong"
         ],
         "locationId": "liuchao.location.gui_wang_gong",
-        "objective": "与鬼巫王交锋，设法脱身"
+        "objective": "与鬼巫王交锋，设法脱身",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "与鬼巫王交锋，设法脱身",
+              "actionText": "我按当前主线目标行动：与鬼巫王交锋，设法脱身",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“与鬼巫王交锋，设法脱身”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s05b_06_breakout_and_reunion",
@@ -4429,7 +4543,26 @@
           "liuchao.faction.gui_wang_dong"
         ],
         "locationId": "liuchao.location.gui_wang_gong",
-        "objective": "在鬼王宫突围，与乐明珠会合"
+        "objective": "在鬼王宫突围，与乐明珠会合",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在鬼王宫突围，与乐明珠会合",
+              "actionText": "我按当前主线目标行动：在鬼王宫突围，与乐明珠会合",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在鬼王宫突围，与乐明珠会合”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s05b_07_xiaozi_trap",
@@ -4464,7 +4597,26 @@
           "liuchao.faction.gui_wang_dong"
         ],
         "locationId": "liuchao.location.gui_wang_gong.jingshen_tai",
-        "objective": "前往深井，营救乐明珠"
+        "objective": "前往深井，营救乐明珠",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "前往深井，营救乐明珠",
+              "actionText": "我按当前主线目标行动：前往深井，营救乐明珠",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“前往深井，营救乐明珠”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s05b_08a_rescue_suli",
@@ -4499,7 +4651,26 @@
           "liuchao.faction.gui_wang_dong"
         ],
         "locationId": "liuchao.location.gui_wang_gong.jingshen_tai",
-        "objective": "进入深井平台，解救苏荔"
+        "objective": "进入深井平台，解救苏荔",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "进入深井平台，解救苏荔",
+              "actionText": "我按当前主线目标行动：进入深井平台，解救苏荔",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“进入深井平台，解救苏荔”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s05b_08b_altar_corpse_fight_and_danchen",
@@ -4536,7 +4707,26 @@
           "liuchao.faction.gui_wang_dong"
         ],
         "locationId": "liuchao.location.gui_wang_gong.jingshen_tai",
-        "objective": "在祭台对抗尸鬼，寻找突围机会"
+        "objective": "在祭台对抗尸鬼，寻找突围机会",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在祭台对抗尸鬼，寻找突围机会",
+              "actionText": "我按当前主线目标行动：在祭台对抗尸鬼，寻找突围机会",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在祭台对抗尸鬼，寻找突围机会”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s05b_09_temporary_pact_with_xiaozi",
@@ -4573,7 +4763,26 @@
           "liuchao.faction.hei_mo_hai"
         ],
         "locationId": "liuchao.location.gui_wang_gong",
-        "objective": "与小紫达成临时协定"
+        "objective": "与小紫达成临时协定",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "与小紫达成临时协定",
+              "actionText": "我按当前主线目标行动：与小紫达成临时协定",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“与小紫达成临时协定”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s05b_10_slave_revolt_and_phoenix_change",
@@ -4613,7 +4822,26 @@
           "liuchao.faction.guang_ming_guan_tang"
         ],
         "locationId": "liuchao.location.gui_wang_gong",
-        "objective": "在鬼王宫策动奴隶倒戈"
+        "objective": "在鬼王宫策动奴隶倒戈",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在鬼王宫策动奴隶倒戈",
+              "actionText": "我按当前主线目标行动：在鬼王宫策动奴隶倒戈",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在鬼王宫策动奴隶倒戈”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.debut_lemingzhu",

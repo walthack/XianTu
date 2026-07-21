@@ -367,8 +367,8 @@ function findScenarioFlagViolation(runtime: ScenarioRuntimeState, command: Comma
     )) {
       return `事件 ${resolved.event.id} 的完成标记由机会卡确定性合同与本地引擎独占写入`;
     }
-    if (resolved.event.playerCompletionContract?.kind === 'local_condition') {
-      return `事件 ${resolved.event.id} 的完成标记由非机会卡本地判定合同与引擎独占写入`;
+    if (['local_condition', 'objective_action'].includes(resolved.event.playerCompletionContract?.kind || '')) {
+      return `事件 ${resolved.event.id} 的完成标记由非机会卡确定性合同与引擎独占写入`;
     }
     const allowedIds = getScenarioEventIdsAllowedForCompletion(runtime);
     if (allowedIds.size === 0) return `当前没有可完成的剧本事件：${resolved.event.id}`;

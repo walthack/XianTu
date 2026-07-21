@@ -219,7 +219,7 @@ test('event action rejects a stale contract and LLM completion writes', async ()
   };
   const guarded = guardScenarioModCommands(save, [command]);
   assert.deepEqual(guarded.accepted, []);
-  assert.match(guarded.rejected[0].reason, /本地判定合同/);
+  assert.match(guarded.rejected[0].reason, /确定性合同/);
 });
 
 test('validator rejects a local event contract without a deterministic condition', async () => {

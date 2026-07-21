@@ -4161,7 +4161,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "鹰愁峪突围"
+        "objective": "鹰愁峪突围",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "鹰愁峪突围",
+              "actionText": "我按当前主线目标行动：鹰愁峪突围",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“鹰愁峪突围”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s08_02_wood_fort",
@@ -4182,7 +4201,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "在木垒坚守"
+        "objective": "在木垒坚守",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在木垒坚守",
+              "actionText": "我按当前主线目标行动：在木垒坚守",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在木垒坚守”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s08_03_beifu_rescue",
@@ -4203,7 +4241,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "在木垒与北府兵会合"
+        "objective": "在木垒与北府兵会合",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在木垒与北府兵会合",
+              "actionText": "我按当前主线目标行动：在木垒与北府兵会合",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在木垒与北府兵会合”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s08_04_sudaji_enters",
@@ -4224,7 +4281,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "在庭院迎接苏妲己"
+        "objective": "在庭院迎接苏妲己",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在庭院迎接苏妲己",
+              "actionText": "我按当前主线目标行动：在庭院迎接苏妲己",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在庭院迎接苏妲己”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s08_05_breakthrough",
@@ -4245,7 +4321,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "在庭院突破修为"
+        "objective": "在庭院突破修为",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在庭院突破修为",
+              "actionText": "我按当前主线目标行动：在庭院突破修为",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在庭院突破修为”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s08_06_pursuit_repelled",
@@ -4283,7 +4378,26 @@
           "liuchao.character.cheng_zongyang",
           "liuchao.character.xiao_zi"
         ],
-        "objective": "在庭院外与萧遥逸会合"
+        "objective": "在庭院外与萧遥逸会合",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在庭院外与萧遥逸会合",
+              "actionText": "我按当前主线目标行动：在庭院外与萧遥逸会合",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在庭院外与萧遥逸会合”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s08_07_palace_ninja",
@@ -4304,7 +4418,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "在宫室应对东瀛忍者"
+        "objective": "在宫室应对东瀛忍者",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在宫室应对东瀛忍者",
+              "actionText": "我按当前主线目标行动：在宫室应对东瀛忍者",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在宫室应对东瀛忍者”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s08_08_gumingyin_plot",
@@ -4325,7 +4458,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "在宫中识破古冥隐阴谋"
+        "objective": "在宫中识破古冥隐阴谋",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在宫中识破古冥隐阴谋",
+              "actionText": "我按当前主线目标行动：在宫中识破古冥隐阴谋",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在宫中识破古冥隐阴谋”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s08_09_zhaoming_night",
@@ -4346,7 +4498,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "在昭明宫刑室与古冥隐对峙"
+        "objective": "在昭明宫刑室与古冥隐对峙",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在昭明宫刑室与古冥隐对峙",
+              "actionText": "我按当前主线目标行动：在昭明宫刑室与古冥隐对峙",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在昭明宫刑室与古冥隐对峙”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s08_10_xuanwu_rescue",
@@ -4367,7 +4538,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "在玄武湖保护晋帝"
+        "objective": "在玄武湖保护晋帝",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在玄武湖保护晋帝",
+              "actionText": "我按当前主线目标行动：在玄武湖保护晋帝",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在玄武湖保护晋帝”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s08_debut_xiaoyaoyi",

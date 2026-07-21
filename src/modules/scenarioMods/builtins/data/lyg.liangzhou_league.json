@@ -5792,7 +5792,26 @@
         "axisSeq": 1203,
         "axisAnchor": "六朝燕歌行·#133·第五章 以武争盟",
         "axisBeat": "程宗扬向杨玉环询问离魂症信息，告知小紫可能患病，杨玉环回忆岳帅提及类似病症，警告勿外传。",
-        "objective": "向杨玉环打听离魂症线索"
+        "objective": "向杨玉环打听离魂症线索",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "向杨玉环打听离魂症线索",
+              "actionText": "我按当前主线目标行动：向杨玉环打听离魂症线索",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“向杨玉环打听离魂症线索”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.s06_02",
@@ -5833,7 +5852,26 @@
         "axisSeq": 1204,
         "axisAnchor": "六朝燕歌行·#133·第五章 以武争盟",
         "axisBeat": "铁中宝提议擂台赛定凉州盟盟主，铁马堂首轮三战两胜进八强，周飞三家全胜，下一场对阵丹霞宗实力悬殊。",
-        "objective": "观看凉州盟比武，准备下一场"
+        "objective": "观看凉州盟比武，准备下一场",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "观看凉州盟比武，准备下一场",
+              "actionText": "我按当前主线目标行动：观看凉州盟比武，准备下一场",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“观看凉州盟比武，准备下一场”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.s06_03",
@@ -5863,7 +5901,26 @@
         "axisSeq": 1205,
         "axisAnchor": "六朝燕歌行·#134·第六章 暗夜惊魂",
         "axisBeat": "阮香琳受程宗扬托从渭水乘船返舞都为如瑶报信，程宗扬派星月湖兄弟及泉玉姬暗中护送。",
-        "objective": "安排阮香琳乘船返回舞都"
+        "objective": "安排阮香琳乘船返回舞都",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "安排阮香琳乘船返回舞都",
+              "actionText": "我按当前主线目标行动：安排阮香琳乘船返回舞都",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“安排阮香琳乘船返回舞都”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.s06_04",
@@ -5891,7 +5948,26 @@
         "axisSeq": 1206,
         "axisAnchor": "六朝燕歌行·#134·第六章 暗夜惊魂",
         "axisBeat": "仇士良派张承业接管右神策军、杨家兄弟接管左神策军，怀疑田令孜与佛门、藩镇合谋杀王守澄。",
-        "objective": "调查仇士良夺取神策军兵权内幕"
+        "objective": "调查仇士良夺取神策军兵权内幕",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "调查仇士良夺取神策军兵权内幕",
+              "actionText": "我按当前主线目标行动：调查仇士良夺取神策军兵权内幕",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“调查仇士良夺取神策军兵权内幕”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.s06_05",
@@ -5920,7 +5996,26 @@
         "axisSeq": 1207,
         "axisAnchor": "六朝燕歌行·#134·第六章 暗夜惊魂",
         "axisBeat": "徐君房与袁天罡在护国天王寺施展招魂术，王守澄鬼魂附体揭出凶手可能为三首六臂者、持刀矢者、持拂尘者、持木鱼者，鬼魂暴走后被压制。",
-        "objective": "前往护国天王寺，协助招魂仪式"
+        "objective": "前往护国天王寺，协助招魂仪式",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "前往护国天王寺，协助招魂仪式",
+              "actionText": "我按当前主线目标行动：前往护国天王寺，协助招魂仪式",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“前往护国天王寺，协助招魂仪式”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.s06_06",
@@ -5947,7 +6042,26 @@
         "axisSeq": 1208,
         "axisAnchor": "六朝燕歌行·#135·第七章 紫气氤氲",
         "axisBeat": "王守澄鬼魂提及拂尘、木鱼及藩镇、内侍、佛门三要素，仇士良推断田令孜是幕后主使并准备反攻。",
-        "objective": "追查田令孜与王守澄之死的关系"
+        "objective": "追查田令孜与王守澄之死的关系",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "追查田令孜与王守澄之死的关系",
+              "actionText": "我按当前主线目标行动：追查田令孜与王守澄之死的关系",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“追查田令孜与王守澄之死的关系”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.s06_07",
@@ -5976,7 +6090,26 @@
         "axisSeq": 1209,
         "axisAnchor": "六朝燕歌行·#135·第七章 紫气氤氲",
         "axisBeat": "小紫吸收墨枫林死气后压不住修为需晋级五级，计划去渭水水下闭关十二时辰，程宗扬同意并让惊理同行。",
-        "objective": "护送小紫到渭水水下闭关"
+        "objective": "护送小紫到渭水水下闭关",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "护送小紫到渭水水下闭关",
+              "actionText": "我按当前主线目标行动：护送小紫到渭水水下闭关",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“护送小紫到渭水水下闭关”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.s06_08",
@@ -6006,7 +6139,26 @@
         "axisSeq": 1210,
         "axisAnchor": "六朝燕歌行·#136·留仙来客",
         "axisBeat": "程宗扬与白霓裳调情，召吕雉演示后庭侍奉以安抚白霓裳恐惧，吕雉顺从配合后程宗扬离开。",
-        "objective": "安抚白霓裳，处理内宅事务"
+        "objective": "安抚白霓裳，处理内宅事务",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "安抚白霓裳，处理内宅事务",
+              "actionText": "我按当前主线目标行动：安抚白霓裳，处理内宅事务",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“安抚白霓裳，处理内宅事务”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.s06_09",
@@ -6034,7 +6186,26 @@
         "axisSeq": 1216,
         "axisAnchor": "六朝燕歌行·#138·比武夺亲",
         "axisBeat": "程宗扬因小紫、蛇奴、罂奴无消息焦躁独守前院，内宅警报铃声骤然响起。",
-        "objective": "赶往内宅，查明警报原因"
+        "objective": "赶往内宅，查明警报原因",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "赶往内宅，查明警报原因",
+              "actionText": "我按当前主线目标行动：赶往内宅，查明警报原因",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“赶往内宅，查明警报原因”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       }
     ],
     "chapters": [

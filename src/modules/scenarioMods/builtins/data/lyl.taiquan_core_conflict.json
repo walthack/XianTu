@@ -4079,7 +4079,26 @@
         "axisSeq": 667,
         "axisAnchor": "六朝云龙吟·#101·魔墟",
         "axisBeat": "程宗扬和虞白樱在蚁穴中，程宗扬被触肢咬伤，虞白樱为其吸出淫毒。",
-        "objective": "在蚁穴中寻找出口"
+        "objective": "在蚁穴中寻找出口",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在蚁穴中寻找出口",
+              "actionText": "我按当前主线目标行动：在蚁穴中寻找出口",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在蚁穴中寻找出口”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyl.event.yu_baiying_truce",
@@ -4101,7 +4120,26 @@
         "axisSeq": 666,
         "axisAnchor": "六朝云龙吟·#100·未来",
         "axisBeat": "虞白樱在魔墟中被行淫兽捕获，程宗扬救出她。",
-        "objective": "前往魔墟救出虞白樱"
+        "objective": "前往魔墟救出虞白樱",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "前往魔墟救出虞白樱",
+              "actionText": "我按当前主线目标行动：前往魔墟救出虞白樱",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“前往魔墟救出虞白樱”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyl.event.yin_fulan_aid",

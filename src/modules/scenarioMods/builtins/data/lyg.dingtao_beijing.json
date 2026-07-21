@@ -4649,6 +4649,25 @@
           ],
           "worldDelta": "秦桧已斩杀刘建，洛都政变的第一枚棋子落下；你只能承接由此扩散的追捕与朝局震荡。",
           "evidence": "R2-9 世界引力合同：秦桧斩刘建属于不依赖玩家领取任务才会发生的世界事件；仅在该节点已激活且长期停滞时结算。"
+        },
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "前往永安宫参与平叛",
+              "actionText": "我按当前主线目标行动：前往永安宫参与平叛",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“前往永安宫参与平叛”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
         }
       },
       {
@@ -4698,6 +4717,25 @@
           ],
           "worldDelta": "贾文和已劫持定陶王，帝统争夺进入不可逆的新阶段；各方开始围绕王驾采取行动。",
           "evidence": "R2-9 世界引力合同：贾文和劫持定陶王属于不依赖玩家领取任务才会发生的世界事件；仅在该节点已激活且长期停滞时结算。"
+        },
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在洛都救出定陶王",
+              "actionText": "我按当前主线目标行动：在洛都救出定陶王",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在洛都救出定陶王”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
         }
       },
       {
@@ -4746,6 +4784,25 @@
           ],
           "worldDelta": "董卓已经挟定陶王离开洛都，凉州军与朝廷势力的空间位置随之改变。",
           "evidence": "R2-9 世界引力合同：董卓挟持定陶王出洛都属于不依赖玩家领取任务才会发生的世界事件；仅在该节点已激活且长期停滞时结算。"
+        },
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "随定陶王队伍出洛都",
+              "actionText": "我按当前主线目标行动：随定陶王队伍出洛都",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“随定陶王队伍出洛都”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
         }
       },
       {
@@ -4790,6 +4847,25 @@
           ],
           "worldDelta": "霍子孟已经与吕雉接触并交换朝局判断，长秋宫一方不再停在原地等待玩家。",
           "evidence": "R2-9 世界引力合同：霍子孟见吕雉属于不依赖玩家领取任务才会发生的世界事件；仅在该节点已激活且长期停滞时结算。"
+        },
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "前往长秋宫拜见吕雉",
+              "actionText": "我按当前主线目标行动：前往长秋宫拜见吕雉",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“前往长秋宫拜见吕雉”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
         }
       },
       {

@@ -5877,7 +5877,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "前往便门瓦牡丹棚打探情报"
+        "objective": "前往便门瓦牡丹棚打探情报",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "前往便门瓦牡丹棚打探情报",
+              "actionText": "我按当前主线目标行动：前往便门瓦牡丹棚打探情报",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“前往便门瓦牡丹棚打探情报”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyl.event.lin_an_bridge_02_beat",
@@ -5898,7 +5917,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "去小瀛洲保护李师师"
+        "objective": "去小瀛洲保护李师师",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "去小瀛洲保护李师师",
+              "actionText": "我按当前主线目标行动：去小瀛洲保护李师师",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“去小瀛洲保护李师师”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyl.event.lin_an_bridge_03_beat",
@@ -5919,7 +5957,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "拜访鲁智深"
+        "objective": "拜访鲁智深",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "拜访鲁智深",
+              "actionText": "我按当前主线目标行动：拜访鲁智深",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“拜访鲁智深”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyl.event.lin_an_bridge_04_beat",
@@ -5940,7 +5997,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "去明庆寺与鲁智深林冲会面"
+        "objective": "去明庆寺与鲁智深林冲会面",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "去明庆寺与鲁智深林冲会面",
+              "actionText": "我按当前主线目标行动：去明庆寺与鲁智深林冲会面",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“去明庆寺与鲁智深林冲会面”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyl.event.debut_yundanliu",

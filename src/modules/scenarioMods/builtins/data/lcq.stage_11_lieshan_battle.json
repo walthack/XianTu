@@ -4176,6 +4176,25 @@
           ],
           "worldDelta": "你未赴烈山，星月湖与宋军的战争仍自行推进；前锋伤亡更重，江州提前戒严，粮线告急的战报送到了你面前。",
           "evidence": "引擎按星月湖战争脊柱结算玩家缺席后的战报与余波。"
+        },
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "前往烈山，侦察捧日军",
+              "actionText": "我按当前主线目标行动：前往烈山，侦察捧日军",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“前往烈山，侦察捧日军”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
         }
       },
       {
@@ -4197,7 +4216,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "前往江州，查看水泥城防"
+        "objective": "前往江州，查看水泥城防",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "前往江州，查看水泥城防",
+              "actionText": "我按当前主线目标行动：前往江州，查看水泥城防",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“前往江州，查看水泥城防”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s11_03_protect_yueshuang",
@@ -4220,7 +4258,26 @@
           "liuchao.character.xiao_zi",
           "liuchao.character.meng_fei_qing"
         ],
-        "objective": "率部赴三川口，保护月霜"
+        "objective": "率部赴三川口，保护月霜",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "率部赴三川口，保护月霜",
+              "actionText": "我按当前主线目标行动：率部赴三川口，保护月霜",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“率部赴三川口，保护月霜”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s11_04_xingyue_appears",
@@ -4243,7 +4300,26 @@
           "liuchao.character.xiao_zi",
           "liuchao.character.meng_fei_qing"
         ],
-        "objective": "在雪原对峙星月湖军"
+        "objective": "在雪原对峙星月湖军",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在雪原对峙星月湖军",
+              "actionText": "我按当前主线目标行动：在雪原对峙星月湖军",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在雪原对峙星月湖军”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s11_05_wangtao_breaks",
@@ -4266,7 +4342,26 @@
           "liuchao.character.xiao_zi",
           "liuchao.character.meng_fei_qing"
         ],
-        "objective": "抵挡王韬的焚天斧攻势"
+        "objective": "抵挡王韬的焚天斧攻势",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "抵挡王韬的焚天斧攻势",
+              "actionText": "我按当前主线目标行动：抵挡王韬的焚天斧攻势",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“抵挡王韬的焚天斧攻势”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s11_06_snow_battle",
@@ -4289,7 +4384,26 @@
           "liuchao.character.xiao_zi",
           "liuchao.character.meng_fei_qing"
         ],
-        "objective": "在三川口雪原与宋军激战"
+        "objective": "在三川口雪原与宋军激战",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在三川口雪原与宋军激战",
+              "actionText": "我按当前主线目标行动：在三川口雪原与宋军激战",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在三川口雪原与宋军激战”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s11_07_camp_falls",
@@ -4312,7 +4426,26 @@
           "liuchao.character.xiao_zi",
           "liuchao.character.meng_fei_qing"
         ],
-        "objective": "防守中军大营，抵御雷诀"
+        "objective": "防守中军大营，抵御雷诀",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "防守中军大营，抵御雷诀",
+              "actionText": "我按当前主线目标行动：防守中军大营，抵御雷诀",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“防守中军大营，抵御雷诀”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s11_08_jiangzhou_lockdown",
@@ -4333,7 +4466,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "前往江州，协助城防戒严"
+        "objective": "前往江州，协助城防戒严",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "前往江州，协助城防戒严",
+              "actionText": "我按当前主线目标行动：前往江州，协助城防戒严",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“前往江州，协助城防戒严”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s11_09_grain_plan",
@@ -4354,7 +4506,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "从筠州布行暗桩切入，实施粮战"
+        "objective": "从筠州布行暗桩切入，实施粮战",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "从筠州布行暗桩切入，实施粮战",
+              "actionText": "我按当前主线目标行动：从筠州布行暗桩切入，实施粮战",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“从筠州布行暗桩切入，实施粮战”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s11_10_sanchuankou_defeat",
@@ -4375,7 +4546,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "在三川口抵御西夏军围攻"
+        "objective": "在三川口抵御西夏军围攻",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在三川口抵御西夏军围攻",
+              "actionText": "我按当前主线目标行动：在三川口抵御西夏军围攻",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在三川口抵御西夏军围攻”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       }
     ]
   },

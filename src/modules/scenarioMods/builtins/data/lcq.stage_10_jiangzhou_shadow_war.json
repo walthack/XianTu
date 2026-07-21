@@ -4157,7 +4157,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "前往江州城，探查贾师宪的军令部署"
+        "objective": "前往江州城，探查贾师宪的军令部署",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "前往江州城，探查贾师宪的军令部署",
+              "actionText": "我按当前主线目标行动：前往江州城，探查贾师宪的军令部署",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“前往江州城，探查贾师宪的军令部署”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s10_02_yeying_pass",
@@ -4178,7 +4197,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "抵达夜影关，改走陆路前往晴州"
+        "objective": "抵达夜影关，改走陆路前往晴州",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "抵达夜影关，改走陆路前往晴州",
+              "actionText": "我按当前主线目标行动：抵达夜影关，改走陆路前往晴州",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“抵达夜影关，改走陆路前往晴州”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s10_03_ninja_trace",
@@ -4199,7 +4237,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "在雪隼佣兵团驻地，追查东瀛女忍者行踪"
+        "objective": "在雪隼佣兵团驻地，追查东瀛女忍者行踪",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在雪隼佣兵团驻地，追查东瀛女忍者行踪",
+              "actionText": "我按当前主线目标行动：在雪隼佣兵团驻地，追查东瀛女忍者行踪",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在雪隼佣兵团驻地，追查东瀛女忍者行踪”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s10_04_left_army_review",
@@ -4725,7 +4782,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "找陶弘敏借十万金铢军资"
+        "objective": "找陶弘敏借十万金铢军资",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "找陶弘敏借十万金铢军资",
+              "actionText": "我按当前主线目标行动：找陶弘敏借十万金铢军资",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“找陶弘敏借十万金铢军资”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s10_06_ruined_temple",
@@ -4746,7 +4822,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "夜探破道观，跟踪可疑人物"
+        "objective": "夜探破道观，跟踪可疑人物",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "夜探破道观，跟踪可疑人物",
+              "actionText": "我按当前主线目标行动：夜探破道观，跟踪可疑人物",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“夜探破道观，跟踪可疑人物”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s10_07_preemptive_strike",
@@ -4767,7 +4862,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "计划先发制人打击黑魔海"
+        "objective": "计划先发制人打击黑魔海",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "计划先发制人打击黑魔海",
+              "actionText": "我按当前主线目标行动：计划先发制人打击黑魔海",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“计划先发制人打击黑魔海”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s10_08_lair_reversal",
@@ -4790,7 +4904,26 @@
           "liuchao.character.xiao_zi",
           "liuchao.character.meng_fei_qing"
         ],
-        "objective": "在星月湖洞穴对抗黑魔海袭击"
+        "objective": "在星月湖洞穴对抗黑魔海袭击",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在星月湖洞穴对抗黑魔海袭击",
+              "actionText": "我按当前主线目标行动：在星月湖洞穴对抗黑魔海袭击",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在星月湖洞穴对抗黑魔海袭击”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s10_09_yin_yang_fish",
@@ -4811,7 +4944,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "前往马王巷七海客栈寻找阴阳鱼"
+        "objective": "前往马王巷七海客栈寻找阴阳鱼",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "前往马王巷七海客栈寻找阴阳鱼",
+              "actionText": "我按当前主线目标行动：前往马王巷七海客栈寻找阴阳鱼",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“前往马王巷七海客栈寻找阴阳鱼”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s10_10_xiaozi_crisis",
@@ -4833,7 +4985,26 @@
           "liuchao.character.cheng_zongyang",
           "liuchao.character.xiao_zi"
         ],
-        "objective": "在兰汤馆阻止小紫吸血行为"
+        "objective": "在兰汤馆阻止小紫吸血行为",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在兰汤馆阻止小紫吸血行为",
+              "actionText": "我按当前主线目标行动：在兰汤馆阻止小紫吸血行为",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在兰汤馆阻止小紫吸血行为”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       }
     ]
   },

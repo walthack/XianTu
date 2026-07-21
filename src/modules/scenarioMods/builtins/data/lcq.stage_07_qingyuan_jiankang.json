@@ -4161,7 +4161,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "向萧遥逸询问左武军覆灭详情"
+        "objective": "向萧遥逸询问左武军覆灭详情",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "向萧遥逸询问左武军覆灭详情",
+              "actionText": "我按当前主线目标行动：向萧遥逸询问左武军覆灭详情",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“向萧遥逸询问左武军覆灭详情”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s07_02_kill_wu",
@@ -4182,7 +4201,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "在清远斩杀吴行德救卓云君"
+        "objective": "在清远斩杀吴行德救卓云君",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在清远斩杀吴行德救卓云君",
+              "actionText": "我按当前主线目标行动：在清远斩杀吴行德救卓云君",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在清远斩杀吴行德救卓云君”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s07_03_xiaozi_appears",
@@ -4220,7 +4258,26 @@
           "liuchao.character.cheng_zongyang",
           "liuchao.character.xiao_zi"
         ],
-        "objective": "协助小紫制服卓云君"
+        "objective": "协助小紫制服卓云君",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "协助小紫制服卓云君",
+              "actionText": "我按当前主线目标行动：协助小紫制服卓云君",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“协助小紫制服卓云君”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s07_04_zhuo_subdued",
@@ -4242,7 +4299,26 @@
           "liuchao.character.cheng_zongyang",
           "liuchao.character.xiao_zi"
         ],
-        "objective": "配合小紫控制卓云君"
+        "objective": "配合小紫控制卓云君",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "配合小紫控制卓云君",
+              "actionText": "我按当前主线目标行动：配合小紫控制卓云君",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“配合小紫控制卓云君”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s07_05_eight_steeds_informed",
@@ -4295,7 +4371,26 @@
             "axisBeat": "不得确认谢艺死亡或安全，不得把他写成已生还。孟非卿须当场作出两项彼此牵制的具体安排：分出人手追查谢艺下落，并护住或改换星月湖与鬼王峒之间可能泄露的联络线；玩家可选择参与其中一项，另一项仍作为持续压力存在。",
             "objective": "协助搜寻谢艺踪迹，或守住星月湖被黑魔海窥伺的联络线"
           }
-        ]
+        ],
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "向孟非卿报告谢艺之死",
+              "actionText": "我按当前主线目标行动：向孟非卿报告谢艺之死",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“向孟非卿报告谢艺之死”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s07_06_water_assassins",
@@ -4316,7 +4411,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "在舟上击杀水鬼刺客"
+        "objective": "在舟上击杀水鬼刺客",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在舟上击杀水鬼刺客",
+              "actionText": "我按当前主线目标行动：在舟上击杀水鬼刺客",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在舟上击杀水鬼刺客”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s07_07_dragon_hall",
@@ -4337,7 +4451,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "夜探神龙殿查探异状"
+        "objective": "夜探神龙殿查探异状",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "夜探神龙殿查探异状",
+              "actionText": "我按当前主线目标行动：夜探神龙殿查探异状",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“夜探神龙殿查探异状”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s07_08_palace_escape",
@@ -4358,7 +4491,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "在皇宫与云丹琉交手后逃生"
+        "objective": "在皇宫与云丹琉交手后逃生",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在皇宫与云丹琉交手后逃生",
+              "actionText": "我按当前主线目标行动：在皇宫与云丹琉交手后逃生",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在皇宫与云丹琉交手后逃生”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s07_09_hengtang_ambush",
@@ -4379,7 +4531,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "在横塘设局迫使卓云君屈服"
+        "objective": "在横塘设局迫使卓云君屈服",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在横塘设局迫使卓云君屈服",
+              "actionText": "我按当前主线目标行动：在横塘设局迫使卓云君屈服",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在横塘设局迫使卓云君屈服”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s07_10_dragon_fang",
@@ -4400,7 +4571,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "向萧遥逸查证内奸线索"
+        "objective": "向萧遥逸查证内奸线索",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "向萧遥逸查证内奸线索",
+              "actionText": "我按当前主线目标行动：向萧遥逸查证内奸线索",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“向萧遥逸查证内奸线索”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s07_debut_qinhui",

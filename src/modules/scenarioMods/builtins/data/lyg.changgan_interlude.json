@@ -5787,7 +5787,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "拜访李药师，获取令箭"
+        "objective": "拜访李药师，获取令箭",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "拜访李药师，获取令箭",
+              "actionText": "我按当前主线目标行动：拜访李药师，获取令箭",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“拜访李药师，获取令箭”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.changgan_interlude_02_beat",
@@ -5808,7 +5827,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "在马厩救出廖群玉，追问百衲衣线索"
+        "objective": "在马厩救出廖群玉，追问百衲衣线索",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在马厩救出廖群玉，追问百衲衣线索",
+              "actionText": "我按当前主线目标行动：在马厩救出廖群玉，追问百衲衣线索",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在马厩救出廖群玉，追问百衲衣线索”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.changgan_interlude_03_beat",
@@ -5829,7 +5867,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "面见唐皇，应对昭南索赔"
+        "objective": "面见唐皇，应对昭南索赔",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "面见唐皇，应对昭南索赔",
+              "actionText": "我按当前主线目标行动：面见唐皇，应对昭南索赔",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“面见唐皇，应对昭南索赔”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.changgan_interlude_04_beat",
@@ -5850,7 +5907,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "与昭南卿士谈判，力保张亢"
+        "objective": "与昭南卿士谈判，力保张亢",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "与昭南卿士谈判，力保张亢",
+              "actionText": "我按当前主线目标行动：与昭南卿士谈判，力保张亢",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“与昭南卿士谈判，力保张亢”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.changgan_interlude_05_beat",
@@ -5871,7 +5947,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "回应杨玉环试探，化解宗室疑问"
+        "objective": "回应杨玉环试探，化解宗室疑问",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "回应杨玉环试探，化解宗室疑问",
+              "actionText": "我按当前主线目标行动：回应杨玉环试探，化解宗室疑问",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“回应杨玉环试探，化解宗室疑问”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.changgan_interlude_06_beat",
@@ -5892,7 +5987,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "探查十方丛林密谋，防备刺杀"
+        "objective": "探查十方丛林密谋，防备刺杀",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "探查十方丛林密谋，防备刺杀",
+              "actionText": "我按当前主线目标行动：探查十方丛林密谋，防备刺杀",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“探查十方丛林密谋，防备刺杀”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.changgan_interlude_07_beat",
@@ -5913,7 +6027,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "探望赵飞燕，提出舞都会社"
+        "objective": "探望赵飞燕，提出舞都会社",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "探望赵飞燕，提出舞都会社",
+              "actionText": "我按当前主线目标行动：探望赵飞燕，提出舞都会社",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“探望赵飞燕，提出舞都会社”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.changgan_interlude_08_beat",
@@ -5934,7 +6067,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "以吕雉为饵，引诱十方丛林"
+        "objective": "以吕雉为饵，引诱十方丛林",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "以吕雉为饵，引诱十方丛林",
+              "actionText": "我按当前主线目标行动：以吕雉为饵，引诱十方丛林",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“以吕雉为饵，引诱十方丛林”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.changgan_interlude_09_beat",
@@ -5955,7 +6107,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "返程途中，迎战黑衣人伏击"
+        "objective": "返程途中，迎战黑衣人伏击",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "返程途中，迎战黑衣人伏击",
+              "actionText": "我按当前主线目标行动：返程途中，迎战黑衣人伏击",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“返程途中，迎战黑衣人伏击”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.changgan_interlude_10_beat",
@@ -5976,7 +6147,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "救出白霓裳，击杀王守澄"
+        "objective": "救出白霓裳，击杀王守澄",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "救出白霓裳，击杀王守澄",
+              "actionText": "我按当前主线目标行动：救出白霓裳，击杀王守澄",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“救出白霓裳，击杀王守澄”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.debut_daiqisi",

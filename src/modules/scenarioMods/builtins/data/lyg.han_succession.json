@@ -5715,7 +5715,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "前往帝陵，追上巫宗"
+        "objective": "前往帝陵，追上巫宗",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "前往帝陵，追上巫宗",
+              "actionText": "我按当前主线目标行动：前往帝陵，追上巫宗",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“前往帝陵，追上巫宗”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.han_succession_02_beat",
@@ -5736,7 +5755,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "在帝陵调查赵氏父兄下落"
+        "objective": "在帝陵调查赵氏父兄下落",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在帝陵调查赵氏父兄下落",
+              "actionText": "我按当前主线目标行动：在帝陵调查赵氏父兄下落",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在帝陵调查赵氏父兄下落”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.han_succession_03_beat",
@@ -5757,7 +5795,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "在程府询问吕雉来意"
+        "objective": "在程府询问吕雉来意",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在程府询问吕雉来意",
+              "actionText": "我按当前主线目标行动：在程府询问吕雉来意",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在程府询问吕雉来意”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.han_succession_04_beat",
@@ -5778,7 +5835,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "转告程宗扬拥立阴谋内容"
+        "objective": "转告程宗扬拥立阴谋内容",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "转告程宗扬拥立阴谋内容",
+              "actionText": "我按当前主线目标行动：转告程宗扬拥立阴谋内容",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“转告程宗扬拥立阴谋内容”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.han_succession_05_beat",
@@ -5799,7 +5875,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "向赵合德询问蛇夫人计划"
+        "objective": "向赵合德询问蛇夫人计划",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "向赵合德询问蛇夫人计划",
+              "actionText": "我按当前主线目标行动：向赵合德询问蛇夫人计划",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“向赵合德询问蛇夫人计划”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.han_succession_06_beat",
@@ -5820,7 +5915,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "在长秋宫加速登基事宜"
+        "objective": "在长秋宫加速登基事宜",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在长秋宫加速登基事宜",
+              "actionText": "我按当前主线目标行动：在长秋宫加速登基事宜",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在长秋宫加速登基事宜”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.han_succession_07_beat",
@@ -5841,7 +5955,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "从密道夜入长秋宫"
+        "objective": "从密道夜入长秋宫",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "从密道夜入长秋宫",
+              "actionText": "我按当前主线目标行动：从密道夜入长秋宫",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“从密道夜入长秋宫”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.han_succession_08_beat",
@@ -5862,7 +5995,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "在登基大典助程宗扬行功"
+        "objective": "在登基大典助程宗扬行功",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在登基大典助程宗扬行功",
+              "actionText": "我按当前主线目标行动：在登基大典助程宗扬行功",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在登基大典助程宗扬行功”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.han_succession_09_beat",
@@ -5883,7 +6035,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "在登基典仪中突破通幽境"
+        "objective": "在登基典仪中突破通幽境",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在登基典仪中突破通幽境",
+              "actionText": "我按当前主线目标行动：在登基典仪中突破通幽境",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在登基典仪中突破通幽境”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.han_succession_10_beat",
@@ -5904,7 +6075,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "审问汪臻关于白员外传说"
+        "objective": "审问汪臻关于白员外传说",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "审问汪臻关于白员外传说",
+              "actionText": "我按当前主线目标行动：审问汪臻关于白员外传说",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“审问汪臻关于白员外传说”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.dengji_yuzuo_yinhuan",

@@ -5900,7 +5900,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "在翠微园处理伤员与善后"
+        "objective": "在翠微园处理伤员与善后",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在翠微园处理伤员与善后",
+              "actionText": "我按当前主线目标行动：在翠微园处理伤员与善后",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在翠微园处理伤员与善后”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyl.event.taiquan_sacred_fruit_02",
@@ -5921,7 +5940,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "在翠微园花厅商议撤军条件"
+        "objective": "在翠微园花厅商议撤军条件",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在翠微园花厅商议撤军条件",
+              "actionText": "我按当前主线目标行动：在翠微园花厅商议撤军条件",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在翠微园花厅商议撤军条件”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyl.event.taiquan_sacred_fruit_03",
@@ -5942,7 +5980,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "与高俅密谈，探查身世之谜"
+        "objective": "与高俅密谈，探查身世之谜",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "与高俅密谈，探查身世之谜",
+              "actionText": "我按当前主线目标行动：与高俅密谈，探查身世之谜",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“与高俅密谈，探查身世之谜”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyl.event.taiquan_sacred_fruit_04",
@@ -5963,7 +6020,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "前往云涛观迷楼探索机关"
+        "objective": "前往云涛观迷楼探索机关",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "前往云涛观迷楼探索机关",
+              "actionText": "我按当前主线目标行动：前往云涛观迷楼探索机关",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“前往云涛观迷楼探索机关”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyl.event.taiquan_sacred_fruit_05",
@@ -5984,7 +6060,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "在迷楼中寻找太泉钥匙线索"
+        "objective": "在迷楼中寻找太泉钥匙线索",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在迷楼中寻找太泉钥匙线索",
+              "actionText": "我按当前主线目标行动：在迷楼中寻找太泉钥匙线索",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在迷楼中寻找太泉钥匙线索”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyl.event.taiquan_sacred_fruit_06",
@@ -6005,7 +6100,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "参加盘江程氏股东大会"
+        "objective": "参加盘江程氏股东大会",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "参加盘江程氏股东大会",
+              "actionText": "我按当前主线目标行动：参加盘江程氏股东大会",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“参加盘江程氏股东大会”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyl.event.taiquan_sacred_fruit_07",
@@ -6026,7 +6140,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "在苍澜镇采购装备物资"
+        "objective": "在苍澜镇采购装备物资",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在苍澜镇采购装备物资",
+              "actionText": "我按当前主线目标行动：在苍澜镇采购装备物资",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在苍澜镇采购装备物资”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyl.event.taiquan_sacred_fruit_08",
@@ -6047,7 +6180,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "在苍澜镇应对殇侯与君雄飞冲突"
+        "objective": "在苍澜镇应对殇侯与君雄飞冲突",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在苍澜镇应对殇侯与君雄飞冲突",
+              "actionText": "我按当前主线目标行动：在苍澜镇应对殇侯与君雄飞冲突",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在苍澜镇应对殇侯与君雄飞冲突”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyl.event.taiquan_sacred_fruit_09",
@@ -6068,7 +6220,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "在酒店解决下毒乱战"
+        "objective": "在酒店解决下毒乱战",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在酒店解决下毒乱战",
+              "actionText": "我按当前主线目标行动：在酒店解决下毒乱战",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在酒店解决下毒乱战”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyl.event.taiquan_sacred_fruit_10",
@@ -6089,7 +6260,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "前往火山口争夺赤阳圣果"
+        "objective": "前往火山口争夺赤阳圣果",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "前往火山口争夺赤阳圣果",
+              "actionText": "我按当前主线目标行动：前往火山口争夺赤阳圣果",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“前往火山口争夺赤阳圣果”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       }
     ]
   },

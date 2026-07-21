@@ -5818,7 +5818,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "前往内侍省探听职权变动详情"
+        "objective": "前往内侍省探听职权变动详情",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "前往内侍省探听职权变动详情",
+              "actionText": "我按当前主线目标行动：前往内侍省探听职权变动详情",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“前往内侍省探听职权变动详情”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.shituolin_endgame_02_beat",
@@ -5839,7 +5858,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "赶往独柳树刑场查看行刑情况"
+        "objective": "赶往独柳树刑场查看行刑情况",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "赶往独柳树刑场查看行刑情况",
+              "actionText": "我按当前主线目标行动：赶往独柳树刑场查看行刑情况",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“赶往独柳树刑场查看行刑情况”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.shituolin_endgame_03_beat",
@@ -5860,7 +5898,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "去善果寺询问高阳坟墓方位"
+        "objective": "去善果寺询问高阳坟墓方位",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "去善果寺询问高阳坟墓方位",
+              "actionText": "我按当前主线目标行动：去善果寺询问高阳坟墓方位",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“去善果寺询问高阳坟墓方位”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.shituolin_endgame_04_beat",
@@ -5881,7 +5938,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "前往尸陀林主现身处探查"
+        "objective": "前往尸陀林主现身处探查",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "前往尸陀林主现身处探查",
+              "actionText": "我按当前主线目标行动：前往尸陀林主现身处探查",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“前往尸陀林主现身处探查”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.shituolin_endgame_05_beat",
@@ -5902,7 +5978,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "与众人合力消灭窥基魔身"
+        "objective": "与众人合力消灭窥基魔身",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "与众人合力消灭窥基魔身",
+              "actionText": "我按当前主线目标行动：与众人合力消灭窥基魔身",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“与众人合力消灭窥基魔身”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.shituolin_endgame_06_beat",
@@ -5923,7 +6018,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "前往皇宫确认江王入宫之事"
+        "objective": "前往皇宫确认江王入宫之事",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "前往皇宫确认江王入宫之事",
+              "actionText": "我按当前主线目标行动：前往皇宫确认江王入宫之事",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“前往皇宫确认江王入宫之事”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.shituolin_endgame_07_beat",
@@ -5944,7 +6058,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "调查太液池黑雾来源"
+        "objective": "调查太液池黑雾来源",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "调查太液池黑雾来源",
+              "actionText": "我按当前主线目标行动：调查太液池黑雾来源",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“调查太液池黑雾来源”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.shituolin_endgame_08_beat",
@@ -5965,7 +6098,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "探查婆娑宝树培育地点"
+        "objective": "探查婆娑宝树培育地点",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "探查婆娑宝树培育地点",
+              "actionText": "我按当前主线目标行动：探查婆娑宝树培育地点",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“探查婆娑宝树培育地点”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.shituolin_endgame_09_beat",
@@ -5986,7 +6138,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "前往大明宫参与讨逆行动"
+        "objective": "前往大明宫参与讨逆行动",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "前往大明宫参与讨逆行动",
+              "actionText": "我按当前主线目标行动：前往大明宫参与讨逆行动",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“前往大明宫参与讨逆行动”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.shituolin_endgame_10_beat",
@@ -6007,7 +6178,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "在莲座前迎战李辅国"
+        "objective": "在莲座前迎战李辅国",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在莲座前迎战李辅国",
+              "actionText": "我按当前主线目标行动：在莲座前迎战李辅国",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在莲座前迎战李辅国”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.shituolin_endgame_11_beat",
@@ -6028,7 +6218,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "设法逃出浮屠塔困局"
+        "objective": "设法逃出浮屠塔困局",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "设法逃出浮屠塔困局",
+              "actionText": "我按当前主线目标行动：设法逃出浮屠塔困局",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“设法逃出浮屠塔困局”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.shituolin_endgame_12_beat",
@@ -6049,7 +6258,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "联手斩断李辅国肉身"
+        "objective": "联手斩断李辅国肉身",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "联手斩断李辅国肉身",
+              "actionText": "我按当前主线目标行动：联手斩断李辅国肉身",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“联手斩断李辅国肉身”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.shituolin_endgame_13_beat",
@@ -6070,7 +6298,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "阻止太皇太后被夺舍"
+        "objective": "阻止太皇太后被夺舍",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "阻止太皇太后被夺舍",
+              "actionText": "我按当前主线目标行动：阻止太皇太后被夺舍",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“阻止太皇太后被夺舍”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.shituolin_endgame_14_beat",
@@ -6091,7 +6338,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "搜查宫中找五肉五甘露"
+        "objective": "搜查宫中找五肉五甘露",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "搜查宫中找五肉五甘露",
+              "actionText": "我按当前主线目标行动：搜查宫中找五肉五甘露",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“搜查宫中找五肉五甘露”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.shituolin_endgame_15_beat",
@@ -6112,7 +6378,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "在庵堂审讯齐羽仙查旧怨"
+        "objective": "在庵堂审讯齐羽仙查旧怨",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在庵堂审讯齐羽仙查旧怨",
+              "actionText": "我按当前主线目标行动：在庵堂审讯齐羽仙查旧怨",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在庵堂审讯齐羽仙查旧怨”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       }
     ]
   },

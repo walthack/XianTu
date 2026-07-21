@@ -5923,7 +5923,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "前往吕冀营帐查探情况"
+        "objective": "前往吕冀营帐查探情况",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "前往吕冀营帐查探情况",
+              "actionText": "我按当前主线目标行动：前往吕冀营帐查探情况",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“前往吕冀营帐查探情况”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyl.event.han_palace_endgame_02_beat",
@@ -5944,7 +5963,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "随左武军进入皇宫"
+        "objective": "随左武军进入皇宫",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "随左武军进入皇宫",
+              "actionText": "我按当前主线目标行动：随左武军进入皇宫",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“随左武军进入皇宫”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyl.event.han_palace_endgame_03_beat",
@@ -5965,7 +6003,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "前往含光殿营救昭仪"
+        "objective": "前往含光殿营救昭仪",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "前往含光殿营救昭仪",
+              "actionText": "我按当前主线目标行动：前往含光殿营救昭仪",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“前往含光殿营救昭仪”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyl.event.han_palace_endgame_04_beat",
@@ -5986,7 +6043,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "通过复道撤离皇宫"
+        "objective": "通过复道撤离皇宫",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "通过复道撤离皇宫",
+              "actionText": "我按当前主线目标行动：通过复道撤离皇宫",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“通过复道撤离皇宫”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyl.event.han_palace_endgame_05_beat",
@@ -6007,7 +6083,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "赶往平朔殿阻止吕巨君"
+        "objective": "赶往平朔殿阻止吕巨君",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "赶往平朔殿阻止吕巨君",
+              "actionText": "我按当前主线目标行动：赶往平朔殿阻止吕巨君",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“赶往平朔殿阻止吕巨君”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyl.event.han_palace_endgame_06_beat",
@@ -6028,7 +6123,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "到定陶王府救出刘建"
+        "objective": "到定陶王府救出刘建",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "到定陶王府救出刘建",
+              "actionText": "我按当前主线目标行动：到定陶王府救出刘建",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“到定陶王府救出刘建”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyl.event.han_palace_endgame_07_beat",
@@ -6049,7 +6163,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "前往秘境入口处"
+        "objective": "前往秘境入口处",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "前往秘境入口处",
+              "actionText": "我按当前主线目标行动：前往秘境入口处",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“前往秘境入口处”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyl.event.han_palace_endgame_08_beat",
@@ -6070,7 +6203,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "前往洛都津门拦截董卓"
+        "objective": "前往洛都津门拦截董卓",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "前往洛都津门拦截董卓",
+              "actionText": "我按当前主线目标行动：前往洛都津门拦截董卓",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“前往洛都津门拦截董卓”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyl.event.han_palace_endgame_09_beat",
@@ -6091,7 +6243,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "带兵攻入永安宫"
+        "objective": "带兵攻入永安宫",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "带兵攻入永安宫",
+              "actionText": "我按当前主线目标行动：带兵攻入永安宫",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“带兵攻入永安宫”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyl.event.han_palace_endgame_10_beat",
@@ -6112,7 +6283,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "到阙楼斩杀刘建"
+        "objective": "到阙楼斩杀刘建",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "到阙楼斩杀刘建",
+              "actionText": "我按当前主线目标行动：到阙楼斩杀刘建",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“到阙楼斩杀刘建”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       }
     ]
   },

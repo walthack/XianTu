@@ -2854,6 +2854,25 @@
           ],
           "worldDelta": "江州宋军主力已经溃退，残军、伤员与失守道路涌向后方；战局不会因玩家缺席冻结。",
           "evidence": "R2-9 世界引力合同：江州宋军大溃与退军属于不依赖玩家领取任务才会发生的世界事件；仅在该节点已激活且长期停滞时结算。"
+        },
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "前往江州协助撤退",
+              "actionText": "我按当前主线目标行动：前往江州协助撤退",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“前往江州协助撤退”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
         }
       },
       {
@@ -2886,7 +2905,26 @@
         "axisSeq": 552,
         "axisAnchor": "六朝云龙吟·#1·坠美",
         "axisBeat": "程宗扬乘船离江州赴临安，途中遇谢幼度与鱼长老对峙，谢幼度退敌。",
-        "objective": "乘船前往临安"
+        "objective": "乘船前往临安",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "乘船前往临安",
+              "actionText": "我按当前主线目标行动：乘船前往临安",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“乘船前往临安”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyl.event.s01_03",
@@ -2934,6 +2972,25 @@
           ],
           "worldDelta": "王团练部众已经袭击荆溪村寨，村民伤亡与逃难成为玩家赶到后必须面对的后果。",
           "evidence": "R2-9 世界引力合同：荆溪村寨被屠属于不依赖玩家领取任务才会发生的世界事件；仅在该节点已激活且长期停滞时结算。"
+        },
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "赶往荆溪村寨救援",
+              "actionText": "我按当前主线目标行动：赶往荆溪村寨救援",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“赶往荆溪村寨救援”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
         }
       },
       {
@@ -2964,7 +3021,26 @@
         "axisSeq": 554,
         "axisAnchor": "六朝云龙吟·#3·上钩",
         "axisBeat": "程宗扬以昭南人名义与滕甫交易三十万石粮食，每石九百铜铢，滕甫挪用军费支付。",
-        "objective": "在江州与滕甫交易粮食"
+        "objective": "在江州与滕甫交易粮食",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在江州与滕甫交易粮食",
+              "actionText": "我按当前主线目标行动：在江州与滕甫交易粮食",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在江州与滕甫交易粮食”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyl.event.s01_05",
@@ -2993,7 +3069,26 @@
         "axisSeq": 555,
         "axisAnchor": "六朝云龙吟·#3·上钩",
         "axisBeat": "程宗扬以五千石粮食诱王团练以劣米换新粮，导致常平仓失火，王团练被查。",
-        "objective": "在常平仓设局诱王团练"
+        "objective": "在常平仓设局诱王团练",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在常平仓设局诱王团练",
+              "actionText": "我按当前主线目标行动：在常平仓设局诱王团练",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在常平仓设局诱王团练”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyl.event.debut_zhuoyunjun",

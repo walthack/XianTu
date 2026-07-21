@@ -2307,7 +2307,26 @@
         "axisSeq": 20,
         "axisAnchor": "六朝清羽记·#10·第9章·传功",
         "axisBeat": "王哲托付程宗扬三件事：保管锦囊、修为达六阳后前往太泉古阵祭祀、守护岳帅后人月霜。",
-        "objective": "前往王哲处，获取锦囊并接受托付"
+        "objective": "前往王哲处，获取锦囊并接受托付",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "前往王哲处，获取锦囊并接受托付",
+              "actionText": "我按当前主线目标行动：前往王哲处，获取锦囊并接受托付",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“前往王哲处，获取锦囊并接受托付”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s02_02",
@@ -2402,6 +2421,25 @@
           ],
           "worldDelta": "秦军随后卷入罗马军团战事，军情、俘虏与道路封锁成为玩家缺席后的既成事实。",
           "evidence": "R2-9 世界引力合同：秦军与罗马军团交战属于不依赖玩家领取任务才会发生的世界事件；仅在该节点已激活且长期停滞时结算。"
+        },
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在秦军与罗马军的交战中求生并观察战局",
+              "actionText": "我按当前主线目标行动：在秦军与罗马军的交战中求生并观察战局",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在秦军与罗马军的交战中求生并观察战局”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
         }
       },
       {
@@ -2431,7 +2469,26 @@
         "axisSeq": 31,
         "axisAnchor": "六朝清羽记·#17·第15章·冤屈",
         "axisBeat": "程宗扬被戈龙和孙疤脸误认为是逃跑的奴隶，遭到暴打和烙刑，被强制烙印奴隶印记。",
-        "objective": "在五原城中避免被误抓为奴隶"
+        "objective": "在五原城中避免被误抓为奴隶",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在五原城中避免被误抓为奴隶",
+              "actionText": "我按当前主线目标行动：在五原城中避免被误抓为奴隶",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在五原城中避免被误抓为奴隶”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s02_05",
@@ -2459,7 +2516,26 @@
         "axisSeq": 33,
         "axisAnchor": "六朝清羽记·#19·第17章·圈套",
         "axisBeat": "程宗扬被故意放出牢房后遭戈龙伏击，被迫杀死孙疤脸并试图反抗。",
-        "objective": "在五原城牢房外应对戈龙伏击"
+        "objective": "在五原城牢房外应对戈龙伏击",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在五原城牢房外应对戈龙伏击",
+              "actionText": "我按当前主线目标行动：在五原城牢房外应对戈龙伏击",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在五原城牢房外应对戈龙伏击”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s02_06",
@@ -2488,7 +2564,26 @@
         "axisSeq": 35,
         "axisAnchor": "六朝清羽记·#20·第18章·妲己",
         "axisBeat": "程宗扬识破商馆女主人苏妲己的伪装，揭露其外淫内端的实质，苏妲己下令处死男奴，并囚禁程宗扬逼问霓龙丝情报。",
-        "objective": "在商馆揭穿苏妲己伪装，脱身"
+        "objective": "在商馆揭穿苏妲己伪装，脱身",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在商馆揭穿苏妲己伪装，脱身",
+              "actionText": "我按当前主线目标行动：在商馆揭穿苏妲己伪装，脱身",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在商馆揭穿苏妲己伪装，脱身”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       }
     ],
     "chapters": [

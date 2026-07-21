@@ -97,7 +97,8 @@ export interface ScenarioModEvent {
 export type ScenarioPlayerCompletionOutcome = 'success' | 'partial' | 'failure';
 
 export interface ScenarioPlayerCompletionContract {
-  kind: 'local_condition';
+  /** objective_action 由玩家点击引擎声明动作即成功；local_condition 还会读取本地状态判定。 */
+  kind: 'local_condition' | 'objective_action';
   /** 哪些本地判定结果足以完成该事件；failure 默认只能重试或等待场外截止。 */
   settleOn: Array<Exclude<ScenarioPlayerCompletionOutcome, 'failure'>>;
   actions: Array<{
@@ -112,8 +113,8 @@ export interface ScenarioPlayerCompletionContract {
     /** prepare 成功时授予的事件内准备标记。 */
     grantsPreparation?: string;
     /** 全部条件满足为 success，否则按 unmetOutcome 结算；不读取 LLM 正文。 */
-    successWhen: ScenarioCondition[];
-    unmetOutcome: 'partial' | 'failure';
+    successWhen?: ScenarioCondition[];
+    unmetOutcome?: 'partial' | 'failure';
     outcomeText: {
       success: string;
       partial: string;

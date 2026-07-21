@@ -5900,7 +5900,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "前往梵天寺"
+        "objective": "前往梵天寺",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "前往梵天寺",
+              "actionText": "我按当前主线目标行动：前往梵天寺",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“前往梵天寺”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyl.event.xiaoyingzhou_blacksea_trap_02_beat",
@@ -5921,7 +5940,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "前往江州与蔺采泉交易"
+        "objective": "前往江州与蔺采泉交易",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "前往江州与蔺采泉交易",
+              "actionText": "我按当前主线目标行动：前往江州与蔺采泉交易",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“前往江州与蔺采泉交易”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyl.event.xiaoyingzhou_blacksea_trap_03_beat",
@@ -5942,7 +5980,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "前往江州营救林冲"
+        "objective": "前往江州营救林冲",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "前往江州营救林冲",
+              "actionText": "我按当前主线目标行动：前往江州营救林冲",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“前往江州营救林冲”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyl.event.xiaoyingzhou_blacksea_trap_04_beat",
@@ -5963,7 +6020,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "前往野猪林"
+        "objective": "前往野猪林",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "前往野猪林",
+              "actionText": "我按当前主线目标行动：前往野猪林",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“前往野猪林”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyl.event.xiaoyingzhou_blacksea_trap_05_beat",
@@ -5984,7 +6060,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "在野猪林防范静善"
+        "objective": "在野猪林防范静善",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在野猪林防范静善",
+              "actionText": "我按当前主线目标行动：在野猪林防范静善",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在野猪林防范静善”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyl.event.xiaoyingzhou_blacksea_trap_06_beat",
@@ -6005,7 +6100,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "潜入明庆寺观音殿"
+        "objective": "潜入明庆寺观音殿",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "潜入明庆寺观音殿",
+              "actionText": "我按当前主线目标行动：潜入明庆寺观音殿",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“潜入明庆寺观音殿”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyl.event.xiaoyingzhou_blacksea_trap_07_beat",
@@ -6026,7 +6140,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "在太医局调查医档"
+        "objective": "在太医局调查医档",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在太医局调查医档",
+              "actionText": "我按当前主线目标行动：在太医局调查医档",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在太医局调查医档”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyl.event.xiaoyingzhou_blacksea_trap_08_beat",
@@ -6047,7 +6180,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "前往小瀛洲"
+        "objective": "前往小瀛洲",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "前往小瀛洲",
+              "actionText": "我按当前主线目标行动：前往小瀛洲",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“前往小瀛洲”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyl.event.xiaoyingzhou_blacksea_trap_09_beat",
@@ -6068,7 +6220,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "前往保宁寺放生池"
+        "objective": "前往保宁寺放生池",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "前往保宁寺放生池",
+              "actionText": "我按当前主线目标行动：前往保宁寺放生池",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“前往保宁寺放生池”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyl.event.xiaoyingzhou_blacksea_trap_10_beat",
@@ -6089,7 +6260,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "在保宁寺突围"
+        "objective": "在保宁寺突围",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在保宁寺突围",
+              "actionText": "我按当前主线目标行动：在保宁寺突围",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在保宁寺突围”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       }
     ]
   },

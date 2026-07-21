@@ -5686,7 +5686,26 @@
         "axisSeq": 989,
         "axisAnchor": "六朝燕歌行·#15·魂归",
         "axisBeat": "程率众为郭解送葬，立郭靖为义子继承舞阳侯。",
-        "objective": "在舞阳侯府为郭解送葬"
+        "objective": "在舞阳侯府为郭解送葬",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在舞阳侯府为郭解送葬",
+              "actionText": "我按当前主线目标行动：在舞阳侯府为郭解送葬",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在舞阳侯府为郭解送葬”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.s02_02",
@@ -5715,7 +5734,26 @@
         "axisSeq": 990,
         "axisAnchor": "六朝燕歌行·#15·魂归",
         "axisBeat": "赵飞燕秘境脱身后中毒昏迷，程用自身血液输血。",
-        "objective": "在洛都救治中毒昏迷的赵飞燕"
+        "objective": "在洛都救治中毒昏迷的赵飞燕",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在洛都救治中毒昏迷的赵飞燕",
+              "actionText": "我按当前主线目标行动：在洛都救治中毒昏迷的赵飞燕",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在洛都救治中毒昏迷的赵飞燕”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.s02_03",
@@ -5751,7 +5789,26 @@
         "axisSeq": 991,
         "axisAnchor": "六朝燕歌行·#16·血脉",
         "axisBeat": "程割腕输血救赵飞燕，赵醒封程舞阳侯；吕雉被命侍寝后晕厥，谣言称程为武帝嫡脉，程阳亢需处子化解。",
-        "objective": "在程府为赵飞燕输血疗伤"
+        "objective": "在程府为赵飞燕输血疗伤",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在程府为赵飞燕输血疗伤",
+              "actionText": "我按当前主线目标行动：在程府为赵飞燕输血疗伤",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在程府为赵飞燕输血疗伤”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.s02_04",
@@ -5783,7 +5840,26 @@
         "axisSeq": 992,
         "axisAnchor": "六朝燕歌行·#16·血脉",
         "axisBeat": "云丹琉闯入质问婚事，程想起与云如瑶婚期已误。",
-        "objective": "在洛都应对云丹琉的婚事质问"
+        "objective": "在洛都应对云丹琉的婚事质问",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在洛都应对云丹琉的婚事质问",
+              "actionText": "我按当前主线目标行动：在洛都应对云丹琉的婚事质问",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在洛都应对云丹琉的婚事质问”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.s02_05",
@@ -5819,7 +5895,26 @@
         "axisSeq": 993,
         "axisAnchor": "六朝燕歌行·#17·求媒",
         "axisBeat": "程在洛都迎云苍峰，商议婚礼、纸钞财政，云承诺支援十万金铢。",
-        "objective": "在洛都与云苍峰商议婚礼和财政"
+        "objective": "在洛都与云苍峰商议婚礼和财政",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在洛都与云苍峰商议婚礼和财政",
+              "actionText": "我按当前主线目标行动：在洛都与云苍峰商议婚礼和财政",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在洛都与云苍峰商议婚礼和财政”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.s02_06",
@@ -5851,7 +5946,26 @@
         "axisSeq": 994,
         "axisAnchor": "六朝燕歌行·#17·求媒",
         "axisBeat": "程以皇后指名请霍子孟做媒，霍应允并同意国丧期间办喜事。",
-        "objective": "在洛都请霍子孟做媒证婚"
+        "objective": "在洛都请霍子孟做媒证婚",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在洛都请霍子孟做媒证婚",
+              "actionText": "我按当前主线目标行动：在洛都请霍子孟做媒证婚",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在洛都请霍子孟做媒证婚”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.s02_07",
@@ -5885,7 +5999,26 @@
         "axisSeq": 995,
         "axisAnchor": "六朝燕歌行·#18·许亲",
         "axisBeat": "程探视金蜜镝，金假装重伤避嫌；程借成亲威胁改帝统，金默许。",
-        "objective": "在洛都探视金蜜镝谈帝统"
+        "objective": "在洛都探视金蜜镝谈帝统",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在洛都探视金蜜镝谈帝统",
+              "actionText": "我按当前主线目标行动：在洛都探视金蜜镝谈帝统",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在洛都探视金蜜镝谈帝统”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.s02_08",
@@ -5927,7 +6060,26 @@
         "axisSeq": 996,
         "axisAnchor": "六朝燕歌行·#18·许亲",
         "axisBeat": "程在长秋宫召集旧部分配监控秘境入口，自率侍奴探胶西邸。",
-        "objective": "在胶西邸安排武帝秘境探索"
+        "objective": "在胶西邸安排武帝秘境探索",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在胶西邸安排武帝秘境探索",
+              "actionText": "我按当前主线目标行动：在胶西邸安排武帝秘境探索",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在胶西邸安排武帝秘境探索”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.s02_09",
@@ -5961,7 +6113,26 @@
         "axisSeq": 1006,
         "axisAnchor": "六朝燕歌行·#24·笑颜",
         "axisBeat": "程拜武帝像后星光化游龙绕身，众人震惊误认有帝王血脉。",
-        "objective": "在武帝像前观察真龙异象"
+        "objective": "在武帝像前观察真龙异象",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在武帝像前观察真龙异象",
+              "actionText": "我按当前主线目标行动：在武帝像前观察真龙异象",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在武帝像前观察真龙异象”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.yangwuhou_rumor",

@@ -4175,7 +4175,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "与武二郎商议明晚夺镜计划"
+        "objective": "与武二郎商议明晚夺镜计划",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "与武二郎商议明晚夺镜计划",
+              "actionText": "我按当前主线目标行动：与武二郎商议明晚夺镜计划",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“与武二郎商议明晚夺镜计划”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s04b_lingfei_baiyi_crisis_02",
@@ -4196,7 +4215,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "在鸦人营地救出乐明珠"
+        "objective": "在鸦人营地救出乐明珠",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在鸦人营地救出乐明珠",
+              "actionText": "我按当前主线目标行动：在鸦人营地救出乐明珠",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在鸦人营地救出乐明珠”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s04b_lingfei_baiyi_crisis_03",
@@ -4217,7 +4255,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "趁机斩杀鸦人首领"
+        "objective": "趁机斩杀鸦人首领",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "趁机斩杀鸦人首领",
+              "actionText": "我按当前主线目标行动：趁机斩杀鸦人首领",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“趁机斩杀鸦人首领”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s04b_lingfei_baiyi_crisis_04",
@@ -4238,7 +4295,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "送羊皮纸至云苍峰鉴定"
+        "objective": "送羊皮纸至云苍峰鉴定",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "送羊皮纸至云苍峰鉴定",
+              "actionText": "我按当前主线目标行动：送羊皮纸至云苍峰鉴定",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“送羊皮纸至云苍峰鉴定”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s04b_lingfei_baiyi_crisis_05",
@@ -4259,7 +4335,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "前往白夷祭坛寻找灵飞镜"
+        "objective": "前往白夷祭坛寻找灵飞镜",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "前往白夷祭坛寻找灵飞镜",
+              "actionText": "我按当前主线目标行动：前往白夷祭坛寻找灵飞镜",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“前往白夷祭坛寻找灵飞镜”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s04b_lingfei_baiyi_crisis_06",
@@ -4280,7 +4375,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "与花苗族长商议联手之事"
+        "objective": "与花苗族长商议联手之事",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "与花苗族长商议联手之事",
+              "actionText": "我按当前主线目标行动：与花苗族长商议联手之事",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“与花苗族长商议联手之事”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s04b_lingfei_baiyi_crisis_07",
@@ -4301,7 +4415,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "用水镜传讯联系苏妲己"
+        "objective": "用水镜传讯联系苏妲己",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "用水镜传讯联系苏妲己",
+              "actionText": "我按当前主线目标行动：用水镜传讯联系苏妲己",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“用水镜传讯联系苏妲己”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s04b_lingfei_baiyi_crisis_08",
@@ -4322,7 +4455,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "用灵飞镜查探白夷阴谋"
+        "objective": "用灵飞镜查探白夷阴谋",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "用灵飞镜查探白夷阴谋",
+              "actionText": "我按当前主线目标行动：用灵飞镜查探白夷阴谋",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“用灵飞镜查探白夷阴谋”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s04b_lingfei_baiyi_crisis_09",
@@ -4343,7 +4495,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "观察白夷族长变动"
+        "objective": "观察白夷族长变动",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "观察白夷族长变动",
+              "actionText": "我按当前主线目标行动：观察白夷族长变动",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“观察白夷族长变动”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s04b_lingfei_baiyi_crisis_10",
@@ -4364,7 +4535,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "追入地宫甬道躲避陷阱"
+        "objective": "追入地宫甬道躲避陷阱",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "追入地宫甬道躲避陷阱",
+              "actionText": "我按当前主线目标行动：追入地宫甬道躲避陷阱",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“追入地宫甬道躲避陷阱”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s04b_lingfei_baiyi_crisis_11",
@@ -4385,7 +4575,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "在战场应对血虎攻击"
+        "objective": "在战场应对血虎攻击",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在战场应对血虎攻击",
+              "actionText": "我按当前主线目标行动：在战场应对血虎攻击",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在战场应对血虎攻击”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s04b_lingfei_baiyi_crisis_12",
@@ -4406,7 +4615,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "协助凝羽突袭鬼王峒使者"
+        "objective": "协助凝羽突袭鬼王峒使者",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "协助凝羽突袭鬼王峒使者",
+              "actionText": "我按当前主线目标行动：协助凝羽突袭鬼王峒使者",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“协助凝羽突袭鬼王峒使者”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s04b_lingfei_baiyi_crisis_13",
@@ -4427,7 +4655,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "潜入地宫查明碧宛下落"
+        "objective": "潜入地宫查明碧宛下落",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "潜入地宫查明碧宛下落",
+              "actionText": "我按当前主线目标行动：潜入地宫查明碧宛下落",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“潜入地宫查明碧宛下落”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s04b_lingfei_baiyi_crisis_14",
@@ -4448,7 +4695,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "与商队商议前往碧鲮族"
+        "objective": "与商队商议前往碧鲮族",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "与商队商议前往碧鲮族",
+              "actionText": "我按当前主线目标行动：与商队商议前往碧鲮族",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“与商队商议前往碧鲮族”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s04b_lingfei_baiyi_crisis_15",
@@ -4469,7 +4735,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "质问谢艺关于阿夕异常"
+        "objective": "质问谢艺关于阿夕异常",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "质问谢艺关于阿夕异常",
+              "actionText": "我按当前主线目标行动：质问谢艺关于阿夕异常",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“质问谢艺关于阿夕异常”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s04b_lingfei_baiyi_crisis_16",
@@ -4490,7 +4775,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "向云苍峰打听岳帅旧闻"
+        "objective": "向云苍峰打听岳帅旧闻",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "向云苍峰打听岳帅旧闻",
+              "actionText": "我按当前主线目标行动：向云苍峰打听岳帅旧闻",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“向云苍峰打听岳帅旧闻”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s04b_lingfei_baiyi_crisis_17",
@@ -4511,7 +4815,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "在湿热盆地躲避鳄鱼袭击"
+        "objective": "在湿热盆地躲避鳄鱼袭击",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在湿热盆地躲避鳄鱼袭击",
+              "actionText": "我按当前主线目标行动：在湿热盆地躲避鳄鱼袭击",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在湿热盆地躲避鳄鱼袭击”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s04b_lingfei_baiyi_crisis_18",
@@ -4532,7 +4855,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "与谢艺讨论制造技术"
+        "objective": "与谢艺讨论制造技术",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "与谢艺讨论制造技术",
+              "actionText": "我按当前主线目标行动：与谢艺讨论制造技术",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“与谢艺讨论制造技术”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s04b_lingfei_baiyi_crisis_19",
@@ -4553,7 +4895,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "前往云苍峰"
+        "objective": "前往云苍峰",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "前往云苍峰",
+              "actionText": "我按当前主线目标行动：前往云苍峰",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“前往云苍峰”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       }
     ]
   },

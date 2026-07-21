@@ -1982,7 +1982,26 @@
         "axisSeq": 1,
         "axisAnchor": "六朝清羽记·#1·第1集·太乙真宗",
         "axisBeat": "程宗扬与段强乘坐飞机时被紫色雷电击中，两人从现代世界消失。",
-        "objective": "寻找穿越后的降落地点"
+        "objective": "寻找穿越后的降落地点",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "寻找穿越后的降落地点",
+              "actionText": "我按当前主线目标行动：寻找穿越后的降落地点",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“寻找穿越后的降落地点”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s01_02",
@@ -2021,6 +2040,25 @@
           ],
           "worldDelta": "段强仍在草原遭半兽人箭袭身亡；这场袭击没有因你缺席而停下，幸存者与战场痕迹成为后来者能接触到的后果。",
           "evidence": "R2-9 世界引力合同：段强被射杀属于不依赖玩家领取任务才会发生的世界事件；仅在该节点已激活且长期停滞时结算。"
+        },
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "避开半兽人袭击",
+              "actionText": "我按当前主线目标行动：避开半兽人袭击",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“避开半兽人袭击”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
         }
       },
       {
@@ -2054,7 +2092,26 @@
         "axisSeq": 8,
         "axisAnchor": "六朝清羽记·#5·第4章·生死",
         "axisBeat": "程宗扬被半兽人围攻，卓云君施展烈火法术救下他和月霜，太乙真宗四位教御及其弟子现身并全歼兽蛮武士。",
-        "objective": "获取卓云君救助"
+        "objective": "获取卓云君救助",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "获取卓云君救助",
+              "actionText": "我按当前主线目标行动：获取卓云君救助",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“获取卓云君救助”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s01_04",
@@ -2099,6 +2156,25 @@
           ],
           "worldDelta": "太乙真宗已介入草原战局并带走伤员；你错过了最初接触，只能从留下的人证与去向继续追赶。",
           "evidence": "R2-9 世界引力合同：太乙真宗介入属于不依赖玩家领取任务才会发生的世界事件；仅在该节点已激活且长期停滞时结算。"
+        },
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "加入太乙真宗阵营",
+              "actionText": "我按当前主线目标行动：加入太乙真宗阵营",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“加入太乙真宗阵营”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
         }
       },
       {
@@ -2132,7 +2208,26 @@
         "axisSeq": 19,
         "axisAnchor": "六朝清羽记·#10·第9章·传功",
         "axisBeat": "王哲耗费真气为程宗扬筑基疗伤，传授九阳神功口诀，程宗扬以自创文字记录口诀。",
-        "objective": "见王哲学习九阳神功"
+        "objective": "见王哲学习九阳神功",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "见王哲学习九阳神功",
+              "actionText": "我按当前主线目标行动：见王哲学习九阳神功",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“见王哲学习九阳神功”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s01_06",
@@ -2163,7 +2258,26 @@
         "axisSeq": 18,
         "axisAnchor": "六朝清羽记·#9·第8章·治伤",
         "axisBeat": "程宗扬在真阳驱使下强行与月霜发生关系，意外通过性交将真阳传入月霜体内，压制并化解了她的寒毒。",
-        "objective": "与月霜解除寒毒危机"
+        "objective": "与月霜解除寒毒危机",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "与月霜解除寒毒危机",
+              "actionText": "我按当前主线目标行动：与月霜解除寒毒危机",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“与月霜解除寒毒危机”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.debut_yueshuang",

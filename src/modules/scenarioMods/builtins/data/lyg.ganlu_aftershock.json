@@ -5783,7 +5783,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "前往大慈恩寺会见释特昧普"
+        "objective": "前往大慈恩寺会见释特昧普",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "前往大慈恩寺会见释特昧普",
+              "actionText": "我按当前主线目标行动：前往大慈恩寺会见释特昧普",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“前往大慈恩寺会见释特昧普”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.ganlu_aftershock_02_beat",
@@ -5804,7 +5823,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "入大明宫蓬莱秘阁探听虚实"
+        "objective": "入大明宫蓬莱秘阁探听虚实",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "入大明宫蓬莱秘阁探听虚实",
+              "actionText": "我按当前主线目标行动：入大明宫蓬莱秘阁探听虚实",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“入大明宫蓬莱秘阁探听虚实”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.ganlu_aftershock_03_beat",
@@ -5825,7 +5863,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "调查长安城内劫掠事件"
+        "objective": "调查长安城内劫掠事件",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "调查长安城内劫掠事件",
+              "actionText": "我按当前主线目标行动：调查长安城内劫掠事件",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“调查长安城内劫掠事件”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.ganlu_aftershock_04_beat",
@@ -5846,7 +5903,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "听取李训在秘阁的供词"
+        "objective": "听取李训在秘阁的供词",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "听取李训在秘阁的供词",
+              "actionText": "我按当前主线目标行动：听取李训在秘阁的供词",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“听取李训在秘阁的供词”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.ganlu_aftershock_05_beat",
@@ -5867,7 +5943,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "旁观蓬莱秘阁的审判"
+        "objective": "旁观蓬莱秘阁的审判",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "旁观蓬莱秘阁的审判",
+              "actionText": "我按当前主线目标行动：旁观蓬莱秘阁的审判",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“旁观蓬莱秘阁的审判”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.ganlu_aftershock_06_beat",
@@ -5888,7 +5983,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "思考贾文和杀李昂的建议"
+        "objective": "思考贾文和杀李昂的建议",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "思考贾文和杀李昂的建议",
+              "actionText": "我按当前主线目标行动：思考贾文和杀李昂的建议",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“思考贾文和杀李昂的建议”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.ganlu_aftershock_07_beat",
@@ -5909,7 +6023,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "前往曲江苑精舍查看情况"
+        "objective": "前往曲江苑精舍查看情况",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "前往曲江苑精舍查看情况",
+              "actionText": "我按当前主线目标行动：前往曲江苑精舍查看情况",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“前往曲江苑精舍查看情况”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.ganlu_aftershock_08_beat",
@@ -5930,7 +6063,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "随仇士良回宫探明状况"
+        "objective": "随仇士良回宫探明状况",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "随仇士良回宫探明状况",
+              "actionText": "我按当前主线目标行动：随仇士良回宫探明状况",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“随仇士良回宫探明状况”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.ganlu_aftershock_09_beat",
@@ -5951,7 +6103,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "向罗令询问惨案详情"
+        "objective": "向罗令询问惨案详情",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "向罗令询问惨案详情",
+              "actionText": "我按当前主线目标行动：向罗令询问惨案详情",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“向罗令询问惨案详情”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       }
     ]
   },

@@ -4128,7 +4128,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "去蛇彝领地，防备毒袭"
+        "objective": "去蛇彝领地，防备毒袭",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "去蛇彝领地，防备毒袭",
+              "actionText": "我按当前主线目标行动：去蛇彝领地，防备毒袭",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“去蛇彝领地，防备毒袭”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s03b_snake_flower_bridge_02",
@@ -4149,7 +4168,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "搜查蛇彝长屋，查清尸体来源"
+        "objective": "搜查蛇彝长屋，查清尸体来源",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "搜查蛇彝长屋，查清尸体来源",
+              "actionText": "我按当前主线目标行动：搜查蛇彝长屋，查清尸体来源",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“搜查蛇彝长屋，查清尸体来源”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s03b_snake_flower_bridge_03",
@@ -4170,7 +4208,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "调查鬼王峒血符，确认真凶"
+        "objective": "调查鬼王峒血符，确认真凶",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "调查鬼王峒血符，确认真凶",
+              "actionText": "我按当前主线目标行动：调查鬼王峒血符，确认真凶",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“调查鬼王峒血符，确认真凶”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s03b_snake_flower_bridge_04",
@@ -4191,7 +4248,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "与云苍峰商队同行，前往白夷族"
+        "objective": "与云苍峰商队同行，前往白夷族",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "与云苍峰商队同行，前往白夷族",
+              "actionText": "我按当前主线目标行动：与云苍峰商队同行，前往白夷族",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“与云苍峰商队同行，前往白夷族”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s03b_snake_flower_bridge_05",
@@ -4212,7 +4288,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "攀爬万古巨藤，到达崖顶"
+        "objective": "攀爬万古巨藤，到达崖顶",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "攀爬万古巨藤，到达崖顶",
+              "actionText": "我按当前主线目标行动：攀爬万古巨藤，到达崖顶",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“攀爬万古巨藤，到达崖顶”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s03b_snake_flower_bridge_06",
@@ -4233,7 +4328,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "求助花苗族长，脱离困境"
+        "objective": "求助花苗族长，脱离困境",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "求助花苗族长，脱离困境",
+              "actionText": "我按当前主线目标行动：求助花苗族长，脱离困境",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“求助花苗族长，脱离困境”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s03b_snake_flower_bridge_07",
@@ -4254,7 +4368,26 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "前往熊耳铺，探查贡物详情"
+        "objective": "前往熊耳铺，探查贡物详情",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "前往熊耳铺，探查贡物详情",
+              "actionText": "我按当前主线目标行动：前往熊耳铺，探查贡物详情",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“前往熊耳铺，探查贡物详情”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
       }
     ]
   },

@@ -236,8 +236,8 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
           add(contractPath, 'invalid_type', 'playerCompletionContract must be an object.');
         } else {
           const contract = entity.playerCompletionContract;
-          if (contract.kind !== 'local_condition') {
-            add(`${contractPath}.kind`, 'invalid_enum', 'playerCompletionContract.kind must be local_condition.');
+          if (!['local_condition', 'objective_action'].includes(String(contract.kind))) {
+            add(`${contractPath}.kind`, 'invalid_enum', 'playerCompletionContract.kind must be local_condition or objective_action.');
           }
           if (
             !Array.isArray(contract.settleOn)
@@ -284,13 +284,22 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
               if (action.kind !== 'prepare' && action.grantsPreparation !== undefined) {
                 add(`${actionPath}.grantsPreparation`, 'invalid_value', 'Only prepare actions may grant preparation.');
               }
-              if (!Array.isArray(action.successWhen) || action.successWhen.length < 1) {
-                add(`${actionPath}.successWhen`, 'required_array', 'A local condition action needs at least one success condition.');
+              if (contract.kind === 'local_condition') {
+                if (!Array.isArray(action.successWhen) || action.successWhen.length < 1) {
+                  add(`${actionPath}.successWhen`, 'required_array', 'A local condition action needs at least one success condition.');
+                } else {
+                  validateConditions(action.successWhen, `${actionPath}.successWhen`, add);
+                }
+                if (!['partial', 'failure'].includes(String(action.unmetOutcome))) {
+                  add(`${actionPath}.unmetOutcome`, 'invalid_enum', 'unmetOutcome must be partial or failure.');
+                }
               } else {
-                validateConditions(action.successWhen, `${actionPath}.successWhen`, add);
-              }
-              if (!['partial', 'failure'].includes(String(action.unmetOutcome))) {
-                add(`${actionPath}.unmetOutcome`, 'invalid_enum', 'unmetOutcome must be partial or failure.');
+                if (action.successWhen !== undefined) {
+                  add(`${actionPath}.successWhen`, 'forbidden', 'objective_action must not declare successWhen.');
+                }
+                if (action.unmetOutcome !== undefined) {
+                  add(`${actionPath}.unmetOutcome`, 'forbidden', 'objective_action must not declare unmetOutcome.');
+                }
               }
               if (!isRecord(action.outcomeText)) {
                 add(`${actionPath}.outcomeText`, 'required_object', 'outcomeText must declare all three outcomes.');
