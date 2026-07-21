@@ -7740,8 +7740,59 @@
           "liuchao.faction.cheng_shi_shang_hui"
         ],
         "axisBeat": "半预制高光：班超必须以“排闼—羊腿砸案—刀尖挑肉逼吉策吃下”三拍强行夺走场面，再用九门出入记录证明威吓不是莽撞而是有备而来。众商贾服软后立刻收锋，平静替田荣谋一份可做的差事，形成霹雳手段与留人余地的反差。不得把班超写成只会动粗，也不得让秦桧或程宗扬抢走这一场的主导权。",
-        "objective": "见证班超压服商贾并为田荣留下出路",
-        "critical": false
+        "objective": "完整见证班超以霹雳手段镇场并为田荣留下退路",
+        "critical": false,
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "hold_banchao_entrance",
+              "label": "让班超以羊腿砸案夺回场面",
+              "actionText": "我不抢班超的主导，让他排闼而入、以羊腿砸案并用刀尖挑肉逼吉策回应。",
+              "timeCost": 1,
+              "kind": "prepare",
+              "grantsPreparation": "sequence_step_1",
+              "outcomeText": {
+                "success": "你已完成“让班超以羊腿砸案夺回场面”的当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该展示动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该展示动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              }
+            },
+            {
+              "id": "hear_nine_gate_evidence",
+              "label": "听完九门出入记录的证据",
+              "actionText": "我继续听班超逐条点出九门出入记录，确认他的威吓建立在准备与证据上。",
+              "timeCost": 1,
+              "kind": "prepare",
+              "grantsPreparation": "sequence_step_2",
+              "requiresPreparation": [
+                "sequence_step_1"
+              ],
+              "outcomeText": {
+                "success": "你已完成“听完九门出入记录的证据”的当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该展示动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该展示动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              }
+            },
+            {
+              "id": "witness_tianrong_exit",
+              "label": "见证班超替田荣安排差事",
+              "actionText": "众商贾服软后，我见证班超收锋，为田荣安排一份差事，保留这场镇压的收束余地。",
+              "timeCost": 1,
+              "requiresPreparation": [
+                "sequence_step_2"
+              ],
+              "outcomeText": {
+                "success": "你已完成“见证班超替田荣安排差事”的当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该展示动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该展示动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.s01_08",
@@ -8583,7 +8634,27 @@
           "liuchao.character.huo_zi_meng",
           "liuchao.character.cheng_zongyang"
         ],
-        "critical": false
+        "critical": false,
+        "objective": "留在现场完成“凤辇临朝”的首次接触",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_curated_event",
+              "label": "留在现场完成“凤辇临朝”的首次接触",
+              "actionText": "我留在现场观察并回应，完成“凤辇临朝”的首次接触。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成“留在现场完成“凤辇临朝”的首次接触”的当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该展示动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该展示动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.lvzhi_zhenjiu",
@@ -8601,7 +8672,27 @@
           "liuchao.character.lv_zhi",
           "liuchao.character.lv_ji"
         ],
-        "critical": false
+        "critical": false,
+        "objective": "见证吕雉亲裁诸吕并承接政局变化",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_curated_event",
+              "label": "见证吕雉亲裁诸吕并承接政局变化",
+              "actionText": "我按当前事件目标行动：见证吕雉亲裁诸吕并承接政局变化",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成“见证吕雉亲裁诸吕并承接政局变化”的当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该展示动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该展示动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.debut_chengguang",
@@ -8618,7 +8709,27 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_guang"
         ],
-        "critical": false
+        "critical": false,
+        "objective": "留在现场完成“成光·招牌登场”的首次接触",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_curated_event",
+              "label": "留在现场完成“成光·招牌登场”的首次接触",
+              "actionText": "我留在现场观察并回应，完成“成光·招牌登场”的首次接触。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成“留在现场完成“成光·招牌登场”的首次接触”的当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该展示动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该展示动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.debut_qiyuxian",
@@ -8635,7 +8746,27 @@
         "relatedCharacterIds": [
           "liuchao.character.qi_yu_xian"
         ],
-        "critical": false
+        "critical": false,
+        "objective": "留在现场完成“齐羽仙·招牌登场”的首次接触",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_curated_event",
+              "label": "留在现场完成“齐羽仙·招牌登场”的首次接触",
+              "actionText": "我留在现场观察并回应，完成“齐羽仙·招牌登场”的首次接触。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成“留在现场完成“齐羽仙·招牌登场”的首次接触”的当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该展示动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该展示动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.debut_jiawenhe",
@@ -8652,7 +8783,27 @@
         "relatedCharacterIds": [
           "liuchao.character.jia_wenhe"
         ],
-        "critical": false
+        "critical": false,
+        "objective": "留在现场完成“贾文和·招牌登场”的首次接触",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_curated_event",
+              "label": "留在现场完成“贾文和·招牌登场”的首次接触",
+              "actionText": "我留在现场观察并回应，完成“贾文和·招牌登场”的首次接触。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成“留在现场完成“贾文和·招牌登场”的首次接触”的当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该展示动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该展示动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              }
+            }
+          ]
+        }
       }
     ],
     "chapters": [

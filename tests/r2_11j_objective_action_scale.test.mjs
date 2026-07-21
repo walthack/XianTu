@@ -29,10 +29,9 @@ function setNested(root, path, value) {
 }
 
 function fixture(stage, event) {
-  const index = stage.scenario.events.findIndex(item => item.id === event.id);
-  const prior = stage.scenario.events.slice(0, index);
+  const others = stage.scenario.events.filter(item => item.id !== event.id);
   const flags = structuredClone(stage.scenario.initialFlags);
-  for (const item of prior) {
+  for (const item of others) {
     for (const completion of item.completion || []) {
       if (completion.operator === 'eq' && completion.value === true && completion.path.startsWith('flags.')) {
         setNested(flags, completion.path.slice('flags.'.length), true);
@@ -56,7 +55,7 @@ function fixture(stage, event) {
           events: structuredClone(stage.scenario.events),
           flags,
           activeEventIds: [event.id],
-          completedEventIds: prior.map(item => item.id),
+          completedEventIds: others.map(item => item.id),
           completedChapterIds: [],
           offscreenResolvedEventIds: [],
           chronicle: [],
@@ -72,25 +71,42 @@ function fixture(stage, event) {
 
 const runtimeOf = save => save.世界.状态.剧本模组;
 
-test('safe objective-action migration covers 267 events and leaves isolated or complex events untouched', async () => {
+function singleEventFixture(stage, event) {
+  const save = fixture(stage, event);
+  const runtime = runtimeOf(save);
+  runtime.chapters = [{ id: 'test.chapter', title: '测试章节', summary: '', eventIds: [event.id] }];
+  runtime.currentChapterId = 'test.chapter';
+  runtime.events = [structuredClone(event)];
+  runtime.completedEventIds = [];
+  runtime.activeEventIds = [event.id];
+  const completion = event.completion[0];
+  runtime.flags[completion.path.slice('flags.'.length)] = false;
+  setNested(runtime.flags, completion.path.slice('flags.'.length), false);
+  return save;
+}
+
+test('objective-action migrations cover 301 events while preserving the 267-event mechanical boundary', async () => {
   const allStages = await stages();
   const allEvents = allStages.flatMap(stage => stage.scenario.events.map(event => ({ stage, event })));
   const objectiveActions = allEvents.filter(({ event }) => event.playerCompletionContract?.kind === 'objective_action');
+  const mechanicallyMigrated = objectiveActions.filter(({ event }) =>
+    event.playerCompletionContract.actions[0].id === 'advance_declared_objective');
   const covered = allEvents.filter(({ event }) => event.playerCompletionContract
     || event.worldActor?.opportunities?.some(opportunity => opportunity.completionContract));
   assert.equal(allEvents.length, 380);
-  assert.equal(objectiveActions.length, 267);
-  assert.equal(covered.length, 274);
+  assert.equal(objectiveActions.length, 301);
+  assert.equal(mechanicallyMigrated.length, 267);
+  assert.equal(covered.length, 308);
   assert.deepEqual(
     Object.fromEntries(['lcq.', 'lyl.', 'lyg.'].map(prefix => [
       prefix,
-      objectiveActions.filter(({ event }) => event.id.startsWith(prefix)).length,
+      mechanicallyMigrated.filter(({ event }) => event.id.startsWith(prefix)).length,
     ])),
     { 'lcq.': 122, 'lyl.': 59, 'lyg.': 86 },
   );
   assert.equal(objectiveActions.some(({ stage }) => isolatedStageIds.has(stage.manifest.id)), false);
-  assert.equal(objectiveActions.some(({ event }) => event.completionEvidence?.length), false);
-  assert.equal(objectiveActions.every(({ event }) => event.playerCompletionContract.actions[0].label === event.objective), true);
+  assert.equal(mechanicallyMigrated.some(({ event }) => event.completionEvidence?.length), false);
+  assert.equal(mechanicallyMigrated.every(({ event }) => event.playerCompletionContract.actions[0].label === event.objective), true);
 });
 
 test('one migrated objective action per book completes only through the engine and replays byte-identically', async () => {
@@ -107,7 +123,7 @@ test('one migrated objective action per book completes only through the engine a
       event.id.startsWith(prefix) && event.playerCompletionContract?.kind === 'objective_action'));
     const event = stage.scenario.events.find(item =>
       item.id.startsWith(prefix) && item.playerCompletionContract?.kind === 'objective_action');
-    let save = advanceScenarioRuntime(fixture(stage, event)).saveData;
+    let save = advanceScenarioRuntime(singleEventFixture(stage, event)).saveData;
     const action = getCurrentStoryEventActions(save)[0];
     assert.equal(action.actionId, 'advance_declared_objective');
     assert.equal(action.expectedOutcome, 'success');
@@ -133,5 +149,39 @@ test('one migrated objective action per book completes only through the engine a
     save = left;
     assert.equal(runtimeOf(save).completedEventIds.includes(event.id), true);
     assert.equal(runtimeOf(save).offscreenResolvedEventIds.includes(event.id), false);
+  }
+});
+
+test('three curated highlights require all declared steps across JSON reloads', async () => {
+  const allStages = await stages();
+  const {
+    advanceScenarioRuntime,
+    getCurrentStoryEventActions,
+    recordStoryEventStructuredAction,
+  } = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  for (const eventId of ['lcq.event.s02_02', 'lcq.event.s04_05', 'lyg.event.highlight_banchao_lamb_leg']) {
+    const stage = allStages.find(candidate => candidate.scenario.events.some(event => event.id === eventId));
+    const event = stage.scenario.events.find(item => item.id === eventId);
+    assert.equal(event.playerCompletionContract.actions.length, 3);
+    let save = advanceScenarioRuntime(singleEventFixture(stage, event)).saveData;
+    for (let step = 0; step < 3; step++) {
+      const actions = getCurrentStoryEventActions(save);
+      assert.equal(actions.length, 1, JSON.stringify({
+        eventId,
+        step,
+        activeEventIds: runtimeOf(save).activeEventIds,
+        completedEventIds: runtimeOf(save).completedEventIds,
+        state: runtimeOf(save).eventActionStates?.[eventId],
+      }));
+      assert.equal(actions[0].actionId, event.playerCompletionContract.actions[step].id, `${eventId} step ${step + 1}`);
+      const result = recordStoryEventStructuredAction(save, actions[0]);
+      assert.equal(result.outcome, 'success');
+      assert.equal(result.completed, step === 2);
+      save = advanceScenarioRuntime(JSON.parse(JSON.stringify(save))).saveData;
+    }
+    const runtime = runtimeOf(save);
+    assert.equal(runtime.completedEventIds.includes(eventId), true);
+    assert.equal(runtime.eventActionStates[eventId].attemptCount, 3);
+    assert.deepEqual(runtime.eventActionStates[eventId].preparations, ['sequence_step_1', 'sequence_step_2']);
   }
 });

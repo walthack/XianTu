@@ -2649,7 +2649,7 @@
           "洪水吞没",
           "他是我哥"
         ],
-        "objective": "在山洪中救助落水军士",
+        "objective": "完整经历易虎救人、受创、被洪水吞没与易彪送别",
         "offscreenResolution": {
           "id": "offscreen.r2_9.lcq_event_s04_05",
           "afterStallTurns": 9,
@@ -2659,6 +2659,57 @@
           ],
           "worldDelta": "旱洪席卷去路，易虎之死已成为队伍共同经历；灾后失散、哀恸与道路中断继续影响众人。",
           "evidence": "R2-9 世界引力合同：旱洪与易虎之死属于不依赖玩家领取任务才会发生的世界事件；仅在该节点已激活且长期停滞时结算。"
+        },
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "respond_to_flash_flood",
+              "label": "应对山洪并见证易虎先救两人",
+              "actionText": "我应对骤发山洪，先确认易虎救起易彪与年轻军士的次序。",
+              "timeCost": 1,
+              "kind": "prepare",
+              "grantsPreparation": "sequence_step_1",
+              "outcomeText": {
+                "success": "你已完成“应对山洪并见证易虎先救两人”的当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该展示动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该展示动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              }
+            },
+            {
+              "id": "witness_yihu_last_stand",
+              "label": "见证千斤坠与巨石重创",
+              "actionText": "我留在现场见证易虎以千斤坠硬扛洪峰，继而被巨石正中胸口并遭洪水吞没。",
+              "timeCost": 1,
+              "kind": "prepare",
+              "grantsPreparation": "sequence_step_2",
+              "requiresPreparation": [
+                "sequence_step_1"
+              ],
+              "outcomeText": {
+                "success": "你已完成“见证千斤坠与巨石重创”的当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该展示动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该展示动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              }
+            },
+            {
+              "id": "stay_for_yibiao_farewell",
+              "label": "陪易彪完成岸边送别",
+              "actionText": "洪峰退去后，我陪易彪留在岸边，确认他的认兄与磕头送别。",
+              "timeCost": 1,
+              "requiresPreparation": [
+                "sequence_step_2"
+              ],
+              "outcomeText": {
+                "success": "你已完成“陪易彪完成岸边送别”的当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该展示动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该展示动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              }
+            }
+          ]
         }
       },
       {

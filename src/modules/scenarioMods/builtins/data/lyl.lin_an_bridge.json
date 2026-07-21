@@ -6033,7 +6033,27 @@
         "relatedCharacterIds": [
           "liuchao.character.yun_dan_liu"
         ],
-        "critical": false
+        "critical": false,
+        "objective": "留在现场完成“云丹琉·招牌登场”的首次接触",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_curated_event",
+              "label": "留在现场完成“云丹琉·招牌登场”的首次接触",
+              "actionText": "我留在现场观察并回应，完成“云丹琉·招牌登场”的首次接触。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成“留在现场完成“云丹琉·招牌登场”的首次接触”的当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该展示动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该展示动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyl.event.debut_yunruyao",
@@ -6050,7 +6070,27 @@
         "relatedCharacterIds": [
           "liuchao.character.yun_ru_yao"
         ],
-        "critical": false
+        "critical": false,
+        "objective": "留在现场完成“云如瑶·招牌登场”的首次接触",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_curated_event",
+              "label": "留在现场完成“云如瑶·招牌登场”的首次接触",
+              "actionText": "我留在现场观察并回应，完成“云如瑶·招牌登场”的首次接触。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成“留在现场完成“云如瑶·招牌登场”的首次接触”的当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该展示动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该展示动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyl.event.debut_zhaohede",
@@ -6067,7 +6107,27 @@
         "relatedCharacterIds": [
           "liuchao.character.zhao_he_de"
         ],
-        "critical": false
+        "critical": false,
+        "objective": "留在现场完成“赵合德·招牌登场”的首次接触",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_curated_event",
+              "label": "留在现场完成“赵合德·招牌登场”的首次接触",
+              "actionText": "我留在现场观察并回应，完成“赵合德·招牌登场”的首次接触。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成“留在现场完成“赵合德·招牌登场”的首次接触”的当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该展示动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该展示动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyl.event.debut_yinfulan",
@@ -6084,7 +6144,27 @@
         "relatedCharacterIds": [
           "liuchao.character.yin_fulan"
         ],
-        "critical": false
+        "critical": false,
+        "objective": "留在现场完成“尹馥兰·招牌登场”的首次接触",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_curated_event",
+              "label": "留在现场完成“尹馥兰·招牌登场”的首次接触",
+              "actionText": "我留在现场观察并回应，完成“尹馥兰·招牌登场”的首次接触。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成“留在现场完成“尹馥兰·招牌登场”的首次接触”的当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该展示动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该展示动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyl.event.debut_jingli",
@@ -6101,7 +6181,27 @@
         "relatedCharacterIds": [
           "liuchao.character.jing_li"
         ],
-        "critical": false
+        "critical": false,
+        "objective": "留在现场完成“惊理·招牌登场”的首次接触",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_curated_event",
+              "label": "留在现场完成“惊理·招牌登场”的首次接触",
+              "actionText": "我留在现场观察并回应，完成“惊理·招牌登场”的首次接触。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成“留在现场完成“惊理·招牌登场”的首次接触”的当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该展示动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该展示动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyl.event.debut_jianyuji",
@@ -6118,7 +6218,27 @@
         "relatedCharacterIds": [
           "liuchao.character.jian_yu_ji"
         ],
-        "critical": false
+        "critical": false,
+        "objective": "留在现场完成“剑玉姬·招牌登场”的首次接触",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_curated_event",
+              "label": "留在现场完成“剑玉姬·招牌登场”的首次接触",
+              "actionText": "我留在现场观察并回应，完成“剑玉姬·招牌登场”的首次接触。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成“留在现场完成“剑玉姬·招牌登场”的首次接触”的当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该展示动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该展示动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              }
+            }
+          ]
+        }
       }
     ]
   },

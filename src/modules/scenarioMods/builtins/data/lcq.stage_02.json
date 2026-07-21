@@ -2372,7 +2372,7 @@
           "阿伽门侬",
           "焦土"
         ],
-        "objective": "在左武军战场，观察王哲的行动",
+        "objective": "完整见证左武军覆灭与王哲殉军的三段因果",
         "offscreenResolution": {
           "id": "offscreen.r2_9.lcq_event_s02_02",
           "afterStallTurns": 7,
@@ -2382,6 +2382,57 @@
           ],
           "worldDelta": "左武军与罗马军团的战事自行爆发，前线死伤与溃兵已经改变五原周边局势。",
           "evidence": "R2-9 世界引力合同：左武军与罗马军团大战属于不依赖玩家领取任务才会发生的世界事件；仅在该节点已激活且长期停滞时结算。"
+        },
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "hold_left_army_line",
+              "label": "守住左武军覆灭的前因视角",
+              "actionText": "我留在战局视角内，先确认左武军在多方围攻下伤亡殆尽及军械尽毁的前因。",
+              "timeCost": 1,
+              "kind": "prepare",
+              "grantsPreparation": "sequence_step_1",
+              "outcomeText": {
+                "success": "你已完成“守住左武军覆灭的前因视角”的当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该展示动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该展示动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              }
+            },
+            {
+              "id": "witness_wang_zhe_nine_suns",
+              "label": "见证王哲九阳合一",
+              "actionText": "我继续见证王哲脱甲悬空、九阳依次点亮并合一如日轮，不让旁人抢走这次收束。",
+              "timeCost": 1,
+              "kind": "prepare",
+              "grantsPreparation": "sequence_step_2",
+              "requiresPreparation": [
+                "sequence_step_1"
+              ],
+              "outcomeText": {
+                "success": "你已完成“见证王哲九阳合一”的当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该展示动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该展示动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              }
+            },
+            {
+              "id": "record_battlefield_aftermath",
+              "label": "确认焦土余波与殉军结果",
+              "actionText": "我确认毁灭性光球坠地后的焦土余波，把王哲殉军与左武军覆灭完整落账。",
+              "timeCost": 1,
+              "requiresPreparation": [
+                "sequence_step_2"
+              ],
+              "outcomeText": {
+                "success": "你已完成“确认焦土余波与殉军结果”的当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该展示动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该展示动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              }
+            }
+          ]
         }
       },
       {

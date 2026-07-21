@@ -4158,7 +4158,27 @@
         ],
         "locationId": "lyl.location.taiquan_core",
         "axisId": null,
-        "axisMethod": "reviewed-no-anchor"
+        "axisMethod": "reviewed-no-anchor",
+        "objective": "接受尹馥兰援手并确认后续安排",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_curated_event",
+              "label": "接受尹馥兰援手并确认后续安排",
+              "actionText": "我按当前事件目标行动：接受尹馥兰援手并确认后续安排",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成“接受尹馥兰援手并确认后续安排”的当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该展示动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该展示动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyl.event.plan_counterattack",
@@ -4177,7 +4197,27 @@
         ],
         "locationId": "lyl.location.taiquan_core",
         "axisId": null,
-        "axisMethod": "reviewed-no-anchor"
+        "axisMethod": "reviewed-no-anchor",
+        "objective": "与同伴确定下一步反制计划",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_curated_event",
+              "label": "与同伴确定下一步反制计划",
+              "actionText": "我按当前事件目标行动：与同伴确定下一步反制计划",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成“与同伴确定下一步反制计划”的当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该展示动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该展示动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyl.event.pan_jinlian_ambush",
@@ -4202,7 +4242,27 @@
         ],
         "locationId": "lyl.location.taiquan_core",
         "axisId": null,
-        "axisMethod": "reviewed-no-anchor"
+        "axisMethod": "reviewed-no-anchor",
+        "objective": "应对潘金莲发动的伏击",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_curated_event",
+              "label": "应对潘金莲发动的伏击",
+              "actionText": "我按当前事件目标行动：应对潘金莲发动的伏击",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成“应对潘金莲发动的伏击”的当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该展示动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该展示动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyl.event.yin_yang_counter",
@@ -4228,7 +4288,27 @@
         ],
         "locationId": "lyl.location.taiquan_core",
         "axisId": null,
-        "axisMethod": "reviewed-no-anchor"
+        "axisMethod": "reviewed-no-anchor",
+        "objective": "利用阴阳鱼线索抵御追击",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_curated_event",
+              "label": "利用阴阳鱼线索抵御追击",
+              "actionText": "我按当前事件目标行动：利用阴阳鱼线索抵御追击",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成“利用阴阳鱼线索抵御追击”的当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该展示动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该展示动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyl.event.decide_yin_fulan_fate",
@@ -4247,7 +4327,27 @@
         ],
         "locationId": "lyl.location.taiquan_core",
         "axisId": null,
-        "axisMethod": "reviewed-no-anchor"
+        "axisMethod": "reviewed-no-anchor",
+        "objective": "处理尹馥兰去留与当前局势余波",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_curated_event",
+              "label": "处理尹馥兰去留与当前局势余波",
+              "actionText": "我按当前事件目标行动：处理尹馥兰去留与当前局势余波",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成“处理尹馥兰去留与当前局势余波”的当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该展示动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该展示动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              }
+            }
+          ]
+        }
       }
     ]
   },

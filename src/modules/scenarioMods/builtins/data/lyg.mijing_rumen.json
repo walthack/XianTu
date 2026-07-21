@@ -6151,7 +6151,27 @@
           "liuchao.character.xiao_zi",
           "liuchao.character.qin_hui"
         ],
-        "critical": false
+        "critical": false,
+        "objective": "查明《阳武侯小史》流言的来源与影响",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_curated_event",
+              "label": "查明《阳武侯小史》流言的来源与影响",
+              "actionText": "我按当前事件目标行动：查明《阳武侯小史》流言的来源与影响",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成“查明《阳武侯小史》流言的来源与影响”的当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该展示动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该展示动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              }
+            }
+          ]
+        }
       }
     ]
   },

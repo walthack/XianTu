@@ -809,6 +809,19 @@ function reconcileEventActionContract(runtime: RuntimeState, event: ScenarioModE
   return runtime.eventActionStates[event.id];
 }
 
+function getCurrentPlayerCompletionEvent(runtime: RuntimeState): ScenarioModEvent | undefined {
+  const anchor = getNarrativeAnchorEvent(runtime);
+  if (anchor?.playerCompletionContract) return anchor;
+  return runtime.activeEventIds
+    .map(id => runtime.events.find(event => event.id === id))
+    .filter((event): event is ScenarioModEvent => Boolean(
+      event?.playerCompletionContract && !isEventSettled(runtime, event.id),
+    ))
+    .sort((left, right) =>
+      (left.axisSeq ?? Number.MAX_SAFE_INTEGER) - (right.axisSeq ?? Number.MAX_SAFE_INTEGER)
+      || (left.id < right.id ? -1 : left.id > right.id ? 1 : 0))[0];
+}
+
 function eventActionAvailable(
   action: ScenarioPlayerCompletionContract['actions'][number],
   state: ScenarioEventActionState,
@@ -886,7 +899,7 @@ function applyStoryEventOutcomeEffects(
 export function getCurrentStoryEventActions(saveData: SaveData): ScenarioEventActionSelection[] {
   const runtime = getRuntime(saveData);
   if (!runtime) return [];
-  const event = getNarrativeAnchorEvent(runtime);
+  const event = getCurrentPlayerCompletionEvent(runtime);
   const contract = event?.playerCompletionContract;
   if (!event || !contract) return [];
   const state = reconcileEventActionContract(runtime, event);
@@ -926,7 +939,7 @@ export function recordStoryEventStructuredAction(
   if (!runtime || selection?.source !== 'event_engine') {
     return { attempted: false, completed: false, reason: 'invalid_selection' };
   }
-  const event = getNarrativeAnchorEvent(runtime);
+  const event = getCurrentPlayerCompletionEvent(runtime);
   const contract = event?.playerCompletionContract;
   if (!event || !contract || event.id !== selection.eventId) {
     return { attempted: false, completed: false, reason: 'stale_event' };
@@ -1151,17 +1164,19 @@ function settleReadyOpportunityCompletionFlags(runtime: RuntimeState): void {
 }
 
 function settleReadyEventActionCompletionFlags(runtime: RuntimeState): void {
-  const anchor = getNarrativeAnchorEvent(runtime);
-  const state = anchor && runtime.eventActionStates?.[anchor.id];
-  if (!anchor?.playerCompletionContract || state?.readyAtTurn === undefined) return;
-  const completion = anchor.completion || [];
-  if (
-    completion.length !== 1
-    || !completion[0].path.startsWith('flags.')
-    || completion[0].operator !== 'eq'
-    || completion[0].value !== true
-  ) return;
-  runtime.flags[completion[0].path.slice('flags.'.length)] = true;
+  for (const eventId of runtime.activeEventIds) {
+    const event = runtime.events.find(item => item.id === eventId);
+    const state = event && runtime.eventActionStates?.[event.id];
+    if (!event?.playerCompletionContract || state?.readyAtTurn === undefined) continue;
+    const completion = event.completion || [];
+    if (
+      completion.length !== 1
+      || !completion[0].path.startsWith('flags.')
+      || completion[0].operator !== 'eq'
+      || completion[0].value !== true
+    ) continue;
+    runtime.flags[completion[0].path.slice('flags.'.length)] = true;
+  }
 }
 
 function readPath(root: unknown, path: string[]): unknown {

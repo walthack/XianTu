@@ -4609,7 +4609,27 @@
           "liuchao.character.shang_zhen_yu",
           "liuchao.character.cheng_zongyang"
         ],
-        "critical": false
+        "critical": false,
+        "objective": "留在现场完成“秦桧初登场”的首次接触",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_curated_event",
+              "label": "留在现场完成“秦桧初登场”的首次接触",
+              "actionText": "我留在现场观察并回应，完成“秦桧初登场”的首次接触。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成“留在现场完成“秦桧初登场”的首次接触”的当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该展示动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该展示动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s07_qinhui_join",
@@ -4629,7 +4649,27 @@
           "liuchao.character.cheng_zongyang",
           "liuchao.character.wu_san_gui"
         ],
-        "critical": false
+        "critical": false,
+        "objective": "确认秦桧归入麾下后的职责与约束",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_curated_event",
+              "label": "确认秦桧归入麾下后的职责与约束",
+              "actionText": "我按当前事件目标行动：确认秦桧归入麾下后的职责与约束",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成“确认秦桧归入麾下后的职责与约束”的当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该展示动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该展示动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              }
+            }
+          ]
+        }
       }
     ]
   },

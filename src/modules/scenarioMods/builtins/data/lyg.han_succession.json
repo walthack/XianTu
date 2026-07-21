@@ -6112,7 +6112,27 @@
           "liuchao.character.zhao_feiyan",
           "liuchao.character.cheng_zongyang"
         ],
-        "critical": false
+        "critical": false,
+        "objective": "完成登基大典后的私密余波",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_curated_event",
+              "label": "完成登基大典后的私密余波",
+              "actionText": "我按当前事件目标行动：完成登基大典后的私密余波",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成“完成登基大典后的私密余波”的当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该展示动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该展示动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.debut_yangyuhuan",
@@ -6129,7 +6149,27 @@
         "relatedCharacterIds": [
           "liuchao.character.yang_yuhuan"
         ],
-        "critical": false
+        "critical": false,
+        "objective": "留在现场完成“杨玉环·招牌登场”的首次接触",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_curated_event",
+              "label": "留在现场完成“杨玉环·招牌登场”的首次接触",
+              "actionText": "我留在现场观察并回应，完成“杨玉环·招牌登场”的首次接触。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成“留在现场完成“杨玉环·招牌登场”的首次接触”的当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该展示动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该展示动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.debut_quanyuji",
@@ -6146,7 +6186,27 @@
         "relatedCharacterIds": [
           "liuchao.character.quan_yu_ji"
         ],
-        "critical": false
+        "critical": false,
+        "objective": "留在现场完成“泉玉姬·招牌登场”的首次接触",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_curated_event",
+              "label": "留在现场完成“泉玉姬·招牌登场”的首次接触",
+              "actionText": "我留在现场观察并回应，完成“泉玉姬·招牌登场”的首次接触。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成“留在现场完成“泉玉姬·招牌登场”的首次接触”的当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该展示动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该展示动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.debut_bainichang",
@@ -6163,7 +6223,27 @@
         "relatedCharacterIds": [
           "liuchao.character.bai_nichang"
         ],
-        "critical": false
+        "critical": false,
+        "objective": "留在现场完成“白霓裳·招牌登场”的首次接触",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_curated_event",
+              "label": "留在现场完成“白霓裳·招牌登场”的首次接触",
+              "actionText": "我留在现场观察并回应，完成“白霓裳·招牌登场”的首次接触。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成“留在现场完成“白霓裳·招牌登场”的首次接触”的当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该展示动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该展示动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              }
+            }
+          ]
+        }
       }
     ]
   },

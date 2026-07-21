@@ -5928,7 +5928,27 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "critical": false
+        "critical": false,
+        "objective": "听取并核对“核武不扩散条约”的来历",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_curated_event",
+              "label": "听取并核对“核武不扩散条约”的来历",
+              "actionText": "我按当前事件目标行动：听取并核对“核武不扩散条约”的来历",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成“听取并核对“核武不扩散条约”的来历”的当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该展示动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该展示动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              }
+            }
+          ]
+        }
       },
       {
         "id": "lyg.event.buddhist_conspiracy_04_beat",
