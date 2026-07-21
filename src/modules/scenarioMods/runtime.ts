@@ -8,6 +8,7 @@ import type {
   ScenarioModEvent,
   ScenarioNpcDecisionActor,
   ScenarioNpcMemoryEpisode,
+  ScenarioPlayerCompletionEffects,
   ScenarioPlayerCompletionOutcome,
   ScenarioPlayerKnowledgeFact,
   ScenarioStoryOpportunity,
@@ -803,6 +804,70 @@ function reconcileEventActionContract(runtime: RuntimeState, event: ScenarioModE
   return runtime.eventActionStates[event.id];
 }
 
+function ensureActorMemoryEntry(state: ScenarioActorEngineState, actorId: string, turn: number): ScenarioActorMemory {
+  const memory = state.actorMemory ||= {};
+  const entry = memory[actorId] ||= {
+    relationships: {},
+    knowledge: [],
+    episodes: [],
+    updatedAtTurn: turn,
+  };
+  entry.relationships = entry.relationships && typeof entry.relationships === 'object' ? entry.relationships : {};
+  entry.knowledge = Array.isArray(entry.knowledge) ? entry.knowledge : [];
+  entry.episodes = Array.isArray(entry.episodes) ? entry.episodes : [];
+  return entry;
+}
+
+function applyStoryEventOutcomeEffects(
+  runtime: RuntimeState,
+  event: ScenarioModEvent,
+  actionId: string,
+  outcome: ScenarioPlayerCompletionOutcome,
+  effects: ScenarioPlayerCompletionEffects | undefined,
+  attemptNumber: number,
+): void {
+  if (!effects) return;
+  const turn = Math.max(0, Number(runtime.worldTurn) || 0);
+  const actorState = ensureActorEngine(runtime);
+  for (const relationship of effects.relationships || []) {
+    const actor = ensureActorMemoryEntry(actorState, relationship.actorId, turn);
+    const target = actor.relationships[relationship.targetCharacterId] ||= {};
+    target[relationship.dimension] = Math.min(100, Math.max(-100,
+      (Number(target[relationship.dimension]) || 0) + relationship.delta));
+    actor.updatedAtTurn = turn;
+  }
+  for (const knowledge of effects.npcKnowledge || []) {
+    for (const actorId of knowledge.actorIds) {
+      const actor = ensureActorMemoryEntry(actorState, actorId, turn);
+      actor.knowledge = [...new Set([...actor.knowledge, knowledge.factId])].sort();
+      actor.updatedAtTurn = turn;
+    }
+  }
+  runtime.playerKnowledge ||= {};
+  for (const knowledge of effects.playerKnowledge || []) {
+    runtime.playerKnowledge[knowledge.factId] ||= {
+      ...structuredClone(knowledge),
+      learnedAtTurn: turn,
+      sourceEventId: event.id,
+    };
+  }
+  for (const [index, memory] of (effects.memories || []).entries()) {
+    addNpcMemoryEpisodes(actorState, memory.actorIds, {
+      id: `memory.${event.id}.${actionId}.${outcome}.${attemptNumber}.${index}`,
+      eventId: event.id,
+      summary: memory.summary,
+      tags: [...new Set([
+        `event:${event.id}`,
+        `action:${actionId}`,
+        `outcome:${outcome}`,
+        ...memory.tags,
+      ])].sort(),
+      salience: memory.salience,
+      occurredAtTurn: turn,
+    });
+  }
+}
+
 /** 当前非机会卡承重事件的本地动作；按钮身份来自事件合同，不来自 LLM。 */
 export function getCurrentStoryEventActions(saveData: SaveData): ScenarioEventActionSelection[] {
   const runtime = getRuntime(saveData);
@@ -875,8 +940,10 @@ export function recordStoryEventStructuredAction(
   }
   state.lastAttemptAtTurn = turn;
   state.lastOutcome = outcome;
+  const attemptNumber = state.attempts.length + 1;
   state.attempts.push({ actionId: action.id, outcome, attemptedAtTurn: turn, detail });
   state.attempts = state.attempts.slice(-8);
+  applyStoryEventOutcomeEffects(runtime, event, action.id, outcome, action.outcomeEffects?.[outcome], attemptNumber);
   const completed = outcome !== 'failure' && contract.settleOn.includes(outcome);
   if (completed) state.readyAtTurn = turn;
   return { attempted: true, completed, eventId: event.id, actionId: action.id, outcome };

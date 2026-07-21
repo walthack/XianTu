@@ -113,6 +113,35 @@ export interface ScenarioPlayerCompletionContract {
       partial: string;
       failure: string;
     };
+    /** 本地 outcome 的确定性反馈；不得写任意世界路径。 */
+    outcomeEffects?: Partial<Record<ScenarioPlayerCompletionOutcome, ScenarioPlayerCompletionEffects>>;
+  }>;
+}
+
+export interface ScenarioPlayerCompletionEffects {
+  relationships?: Array<{
+    actorId: string;
+    targetCharacterId: string;
+    dimension: string;
+    delta: number;
+  }>;
+  npcKnowledge?: Array<{
+    actorIds: string[];
+    factId: string;
+  }>;
+  playerKnowledge?: Array<{
+    factId: string;
+    subjectId: string;
+    predicate: string;
+    objectId?: string;
+    status: ScenarioPlayerKnowledgeStatus;
+    disclosureScope: ScenarioPlayerKnowledgeScope;
+  }>;
+  memories?: Array<{
+    actorIds: string[];
+    summary: string;
+    tags: string[];
+    salience: number;
   }>;
 }
 

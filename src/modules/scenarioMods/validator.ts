@@ -273,6 +273,71 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
                   requireString(action.outcomeText[outcome], `${actionPath}.outcomeText.${outcome}`, add);
                 }
               }
+              if (action.outcomeEffects !== undefined) {
+                if (!isRecord(action.outcomeEffects)) {
+                  add(`${actionPath}.outcomeEffects`, 'invalid_type', 'outcomeEffects must be an object.');
+                } else {
+                  for (const [outcome, rawEffects] of Object.entries(action.outcomeEffects)) {
+                    const effectsPath = `${actionPath}.outcomeEffects.${outcome}`;
+                    if (!['success', 'partial', 'failure'].includes(outcome)) {
+                      add(effectsPath, 'invalid_enum', `Unknown outcome effect "${outcome}".`);
+                      continue;
+                    }
+                    if (!isRecord(rawEffects)) {
+                      add(effectsPath, 'invalid_type', 'Outcome effects must be an object.');
+                      continue;
+                    }
+                    forEachRecord(rawEffects.relationships, `${effectsPath}.relationships`, (relationship, relationshipPath) => {
+                      for (const field of ['actorId', 'targetCharacterId']) {
+                        if (validateId(relationship[field], `${relationshipPath}.${field}`, add)
+                          && !characterIds.has(String(relationship[field]))) {
+                          add(`${relationshipPath}.${field}`, 'unknown_reference', `Unknown character "${relationship[field]}".`);
+                        }
+                      }
+                      requireString(relationship.dimension, `${relationshipPath}.dimension`, add);
+                      if (typeof relationship.delta !== 'number' || !Number.isFinite(relationship.delta)
+                        || relationship.delta < -100 || relationship.delta > 100) {
+                        add(`${relationshipPath}.delta`, 'invalid_range', 'Relationship delta must be within -100..100.');
+                      }
+                    });
+                    forEachRecord(rawEffects.npcKnowledge, `${effectsPath}.npcKnowledge`, (knowledge, knowledgePath) => {
+                      validateIdArray(knowledge.actorIds, `${knowledgePath}.actorIds`, add);
+                      for (const actorId of Array.isArray(knowledge.actorIds) ? knowledge.actorIds : []) {
+                        if (typeof actorId === 'string' && !characterIds.has(actorId)) {
+                          add(`${knowledgePath}.actorIds`, 'unknown_reference', `Unknown character "${actorId}".`);
+                        }
+                      }
+                      validateId(knowledge.factId, `${knowledgePath}.factId`, add);
+                    });
+                    forEachRecord(rawEffects.playerKnowledge, `${effectsPath}.playerKnowledge`, (knowledge, knowledgePath) => {
+                      validateId(knowledge.factId, `${knowledgePath}.factId`, add);
+                      validateId(knowledge.subjectId, `${knowledgePath}.subjectId`, add);
+                      requireString(knowledge.predicate, `${knowledgePath}.predicate`, add);
+                      optionalId(knowledge.objectId, `${knowledgePath}.objectId`, add);
+                      if (!['confirmed', 'rumor'].includes(String(knowledge.status))) {
+                        add(`${knowledgePath}.status`, 'invalid_enum', 'Player knowledge status must be confirmed or rumor.');
+                      }
+                      if (!['player', 'public'].includes(String(knowledge.disclosureScope))) {
+                        add(`${knowledgePath}.disclosureScope`, 'invalid_enum', 'disclosureScope must be player or public.');
+                      }
+                    });
+                    forEachRecord(rawEffects.memories, `${effectsPath}.memories`, (memory, memoryPath) => {
+                      validateIdArray(memory.actorIds, `${memoryPath}.actorIds`, add);
+                      for (const actorId of Array.isArray(memory.actorIds) ? memory.actorIds : []) {
+                        if (typeof actorId === 'string' && !characterIds.has(actorId)) {
+                          add(`${memoryPath}.actorIds`, 'unknown_reference', `Unknown character "${actorId}".`);
+                        }
+                      }
+                      requireString(memory.summary, `${memoryPath}.summary`, add);
+                      validateStringArray(memory.tags, `${memoryPath}.tags`, add);
+                      if (typeof memory.salience !== 'number' || !Number.isFinite(memory.salience)
+                        || memory.salience < 1 || memory.salience > 100) {
+                        add(`${memoryPath}.salience`, 'invalid_range', 'Memory salience must be within 1..100.');
+                      }
+                    });
+                  }
+                }
+              }
             });
           }
           const completion = Array.isArray(entity.completion) ? entity.completion : [];

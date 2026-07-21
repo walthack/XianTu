@@ -73,6 +73,11 @@ test('non-opportunity event exposes a stable engine action and settles a success
   assert.equal(runtime.offscreenResolvedEventIds.includes(EVENT_ID), false);
   assert.equal(runtime.flags['event.s01_09.done'], true);
   assert.equal(runtime.eventActionStates[EVENT_ID].attempts[0].outcome, 'success');
+  const lvzhi = runtime.actorEngine.actorMemory['liuchao.character.lv_zhi'];
+  assert.equal(lvzhi.relationships['liuchao.character.cheng_zongyang'].trust, 6);
+  assert.equal(lvzhi.knowledge.includes('knowledge.lyg.s01_09.decree_carried_cleanly'), true);
+  assert.equal(lvzhi.episodes.some(item => item.tags.includes('player_accountability')), true);
+  assert.equal(runtime.playerKnowledge['knowledge.player.lyg.s01_09.procedure_witnessed'].status, 'confirmed');
 });
 
 test('an unmet local condition records partial participation without blocking the canon event', async () => {
@@ -92,6 +97,12 @@ test('an unmet local condition records partial participation without blocking th
   assert.equal(state.lastOutcome, 'partial');
   assert.match(state.attempts[0].detail, /政治余波/);
   assert.equal(runtimeOf(save).completedEventIds.includes(EVENT_ID), true);
+  const runtime = runtimeOf(save);
+  const lvzhi = runtime.actorEngine.actorMemory['liuchao.character.lv_zhi'];
+  assert.equal(lvzhi.relationships['liuchao.character.cheng_zongyang'].trust, -2);
+  assert.equal(lvzhi.knowledge.includes('knowledge.lyg.s01_09.procedure_left_controversy'), true);
+  assert.equal(lvzhi.episodes.some(item => item.tags.includes('political_cost')), true);
+  assert.equal(runtime.playerKnowledge['knowledge.player.lyg.s01_09.procedure_controversy'].predicate, 'procedure_left_political_cost');
 });
 
 test('ignoring a non-opportunity event reaches its absolute cutoff and settles offscreen', async () => {
@@ -145,4 +156,13 @@ test('validator rejects a local event contract without a deterministic condition
       && item.path.endsWith('successWhen')),
     true,
   );
+
+  const invalidEffects = JSON.parse(await readFile(stageUrl, 'utf8'));
+  const effects = invalidEffects.scenario.events.find(item => item.id === EVENT_ID)
+    .playerCompletionContract.actions[0].outcomeEffects.success;
+  effects.relationships[0].delta = 101;
+  effects.memories[0].actorIds = ['missing.actor'];
+  const issues = validateScenarioMod(invalidEffects).issues;
+  assert.equal(issues.some(item => item.path.endsWith('.delta') && item.code === 'invalid_range'), true);
+  assert.equal(issues.some(item => item.path.endsWith('.actorIds') && item.code === 'unknown_reference'), true);
 });

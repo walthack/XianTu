@@ -8219,6 +8219,88 @@
                 "success": "处置程序被完整主持，朝廷对懿旨的权威没有产生额外疑义。",
                 "partial": "处置仍按正典发生，但主持过程留下了礼法与声望层面的政治余波。",
                 "failure": "本次尝试未能进入正式处置程序，可以调整准备后重试。"
+              },
+              "outcomeEffects": {
+                "success": {
+                  "relationships": [
+                    {
+                      "actorId": "liuchao.character.lv_zhi",
+                      "targetCharacterId": "liuchao.character.cheng_zongyang",
+                      "dimension": "trust",
+                      "delta": 6
+                    }
+                  ],
+                  "npcKnowledge": [
+                    {
+                      "actorIds": [
+                        "liuchao.character.lv_zhi"
+                      ],
+                      "factId": "knowledge.lyg.s01_09.decree_carried_cleanly"
+                    }
+                  ],
+                  "playerKnowledge": [
+                    {
+                      "factId": "knowledge.player.lyg.s01_09.procedure_witnessed",
+                      "subjectId": "lyg.event.s01_09",
+                      "predicate": "witnessed_formal_procedure",
+                      "status": "confirmed",
+                      "disclosureScope": "player"
+                    }
+                  ],
+                  "memories": [
+                    {
+                      "actorIds": [
+                        "liuchao.character.lv_zhi"
+                      ],
+                      "summary": "程宗扬完整主持永巷懿旨处置，承担了公开执行责任",
+                      "tags": [
+                        "court_procedure",
+                        "player_accountability"
+                      ],
+                      "salience": 90
+                    }
+                  ]
+                },
+                "partial": {
+                  "relationships": [
+                    {
+                      "actorId": "liuchao.character.lv_zhi",
+                      "targetCharacterId": "liuchao.character.cheng_zongyang",
+                      "dimension": "trust",
+                      "delta": -2
+                    }
+                  ],
+                  "npcKnowledge": [
+                    {
+                      "actorIds": [
+                        "liuchao.character.lv_zhi"
+                      ],
+                      "factId": "knowledge.lyg.s01_09.procedure_left_controversy"
+                    }
+                  ],
+                  "playerKnowledge": [
+                    {
+                      "factId": "knowledge.player.lyg.s01_09.procedure_controversy",
+                      "subjectId": "lyg.event.s01_09",
+                      "predicate": "procedure_left_political_cost",
+                      "status": "confirmed",
+                      "disclosureScope": "player"
+                    }
+                  ],
+                  "memories": [
+                    {
+                      "actorIds": [
+                        "liuchao.character.lv_zhi"
+                      ],
+                      "summary": "程宗扬执行永巷懿旨时留下礼法争议，处置虽成但需要承接政治余波",
+                      "tags": [
+                        "court_procedure",
+                        "political_cost"
+                      ],
+                      "salience": 85
+                    }
+                  ]
+                }
               }
             }
           ]
