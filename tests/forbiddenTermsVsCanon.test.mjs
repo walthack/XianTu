@@ -50,6 +50,18 @@ test('adjudicated known names are allowed while their unrevealed propositions re
   }
 
   const s05Guard = eventCore(stage, 'lyg.event.s01_05').narrativeGuard;
+  const pronounIdentityLeak = `阮香凝站在阶下。${'宫灯依次亮起，殿中众人各自避开目光。'.repeat(3)}霍子孟忽然对她说道：“你是黑魔海玉姬之一——凝玉姬。”`;
+  const pronounIdentityResult = validateNarrativePerformance(
+    pronounIdentityLeak,
+    '继续',
+    guardPrompt(s05Guard),
+  );
+  assert.equal(pronounIdentityResult.valid, false, 'pronoun coreference must not bypass the hidden identity guard');
+  assert.match(
+    pronounIdentityResult.issues.join('；'),
+    /阶段禁词“(?:黑魔海玉姬|凝玉姬)”/,
+    'the unique hidden title must be guarded independently of subject proximity',
+  );
   assert.equal(
     validateNarrativePerformance('吕冀理应为旧事接受问罪。', '继续', guardPrompt(s05Guard)).valid,
     true,
@@ -120,7 +132,12 @@ test('minimal player knowledge ledger survives initialization and is projected i
   const prompt = buildScenarioStoryPrompt(save);
   assert.match(prompt, /玩家知识账本=.*阮香凝\.known\[confirmed\/player@0\]/);
   assert.match(prompt, /黑魔海\.known\[confirmed\/player@0\]/);
-  assert.doesNotMatch(prompt, /renderGuard\.forbiddenTerms=[^；]*(?:阮香凝|吕冀|黑魔海)/);
+  const renderedForbiddenTerms = prompt.match(/renderGuard\.forbiddenTerms=([^；]*)/)?.[1].split('|') || [];
+  for (const knownName of ['阮香凝', '吕冀', '黑魔海']) {
+    assert.equal(renderedForbiddenTerms.includes(knownName), false, `${knownName} must not remain an exact forbidden term`);
+  }
+  assert.equal(renderedForbiddenTerms.includes('凝玉姬'), true);
+  assert.equal(renderedForbiddenTerms.includes('黑魔海玉姬'), true);
   assert.match(prompt, /renderGuard\.forbiddenAssociations=.*阮香凝.*凝玉姬/);
   assert.match(prompt, /涉及军务、护卫或路线时，只写职责、通行、次序、联络和可见动作/);
 });
