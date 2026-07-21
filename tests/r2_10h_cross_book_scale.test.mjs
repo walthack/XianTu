@@ -17,6 +17,8 @@ const cases = [
     expectedActions: ['audit_resources', 'gather_intelligence'],
     actorIds: ['liuchao.character.meng_fei_qing', 'liuchao.character.xiao_zi'],
     timelineKind: 'emergent',
+    completionActionIds: ['audit_supply_records', 'split_supply_route'],
+    rewardKey: 'permission.lcq.xingyue.logistics_review',
   },
   {
     file: 'lyl.luoyang_cloud_secret.json',
@@ -26,6 +28,8 @@ const cases = [
     expectedActions: ['open_safe_route', 'protect_principal'],
     actorIds: ['liuchao.character.yun_cang_feng', 'liuchao.character.yun_dan_liu'],
     timelineKind: 'window',
+    completionActionIds: ['escort_wounded', 'open_segmented_route'],
+    rewardKey: 'permission.lyl.yun_convoy.emergency_route',
   },
 ];
 
@@ -142,6 +146,46 @@ test('cross-book opportunity triggers surface without LLM and retain book-local 
     assert.deepEqual(Object.keys(engine.situationValues).sort(), item.situationKeys);
     assert.equal(engine.decisions.every(decision => decision.memories.length === 0), true);
     assert.deepEqual(engine.npcStates.map(actor => actor.characterId).sort(), item.actorIds.sort());
+  }
+});
+
+test('cross-book opportunities complete through engine actions and preserve wake, lifecycle and memory evidence', async () => {
+  const {
+    advanceScenarioRuntime,
+    getTrackedStoryOpportunityActions,
+    recordStoryOpportunityStructuredAction,
+    trackStoryOpportunity,
+  } = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  for (const item of cases) {
+    const stage = JSON.parse(await readFile(new URL(`../src/modules/scenarioMods/builtins/data/${item.file}`, import.meta.url), 'utf8'));
+    let save = advanceScenarioRuntime(fixture(stage, item.eventId)).saveData;
+    assert.equal(trackStoryOpportunity(save, item.opportunityId).ok, true);
+    let actions = getTrackedStoryOpportunityActions(save);
+    const first = actions.find(action => action.actionId === item.completionActionIds[0]);
+    assert.ok(first);
+    assert.equal(recordStoryOpportunityStructuredAction(save, first).progressed, true);
+    assert.equal(recordStoryOpportunityStructuredAction(save, first).reason, 'already_progressed');
+
+    save = advanceScenarioRuntime(JSON.parse(JSON.stringify(save))).saveData;
+    const during = runtimeOf(save).actorEngine;
+    assert.equal(during.wakeAudit.every(audit => audit.awake), true);
+    assert.equal(during.decisions.every(decision => decision.durationTurns === 2), true);
+    actions = getTrackedStoryOpportunityActions(save);
+    const second = actions.find(action => action.actionId === item.completionActionIds[1]);
+    assert.ok(second);
+    assert.equal(recordStoryOpportunityStructuredAction(save, second).completed, true);
+
+    save = advanceScenarioRuntime(JSON.parse(JSON.stringify(save))).saveData;
+    const runtime = runtimeOf(save);
+    assert.equal(runtime.completedEventIds.includes(item.eventId), true);
+    assert.equal(runtime.offscreenResolvedEventIds.includes(item.eventId), false);
+    assert.equal(runtime.actorEngine.entitlements.filter(entry => entry.key === item.rewardKey).length, 1);
+    assert.equal(runtime.actorEngine.receipts.some(receipt =>
+      receipt.anchorEventId === item.eventId && receipt.outcome === 'participated'), true);
+    for (const actorId of item.actorIds) {
+      const episodes = runtime.actorEngine.actorMemory[actorId]?.episodes || [];
+      assert.equal(episodes.some(episode => episode.tags.includes('player:participated')), true);
+    }
   }
 });
 

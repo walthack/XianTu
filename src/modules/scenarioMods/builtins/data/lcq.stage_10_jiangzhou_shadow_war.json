@@ -4643,7 +4643,65 @@
                   "gather_intelligence"
                 ]
               },
-              "expiresAfterTurns": 4
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "settlement": "immediate",
+                "expiry": "persistent",
+                "steps": [
+                  {
+                    "id": "verify_supply_gap",
+                    "label": "核清一处可验证断点",
+                    "actions": [
+                      {
+                        "id": "audit_supply_records",
+                        "label": "与孟非卿逐段核对补给记录",
+                        "actionText": "我与孟非卿逐段核对补给记录，只标出已有证据支持的断点，不先指认真凶。",
+                        "timeCost": 1
+                      },
+                      {
+                        "id": "trace_contact_chain",
+                        "label": "同小紫复核军机接触链",
+                        "actionText": "我同小紫复核军机接触链，把事实、传闻与尚待验证的怀疑分开登记。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "核对补给记录",
+                      "复核军机接触链"
+                    ],
+                    "rejectIf": [
+                      "真凶已经确定",
+                      "无需核验"
+                    ]
+                  },
+                  {
+                    "id": "close_verified_gap",
+                    "label": "建立可复核的替代方案",
+                    "actions": [
+                      {
+                        "id": "split_supply_route",
+                        "label": "拆分单线补给与保管",
+                        "actionText": "我按已核清的断点拆分单线补给与账册保管，并留下可复核的交接记录。",
+                        "timeCost": 1
+                      },
+                      {
+                        "id": "compartmentalize_reports",
+                        "label": "分层递送军机回报",
+                        "actionText": "我把军机回报改为分层递送，只让每个接触点掌握完成职责所需的部分。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "拆分单线补给",
+                      "分层递送"
+                    ],
+                    "rejectIf": [
+                      "公开全部军机",
+                      "沿用原路"
+                    ]
+                  }
+                ]
+              }
             }
           ]
         }
