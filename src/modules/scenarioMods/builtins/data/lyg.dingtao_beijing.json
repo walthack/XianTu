@@ -5760,8 +5760,6 @@
             "narrativeGuard": {
               "forbiddenTerms": [
                 "盛姬",
-                "凝玉姬",
-                "黑魔海玉姬",
                 "暗道",
                 "伏兵",
                 "暗桩",
@@ -6621,8 +6619,6 @@
             "narrativeGuard": {
               "forbiddenTerms": [
                 "盛姬",
-                "凝玉姬",
-                "黑魔海玉姬",
                 "董卓之死"
               ],
               "rejectConcreteQuantities": true,
@@ -7309,8 +7305,6 @@
             "narrativeGuard": {
               "forbiddenTerms": [
                 "盛姬",
-                "凝玉姬",
-                "黑魔海玉姬",
                 "吕冀赐死"
               ],
               "forbiddenAssociations": [
