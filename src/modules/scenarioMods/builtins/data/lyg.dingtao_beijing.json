@@ -6721,7 +6721,66 @@
                   "open_safe_route"
                 ]
               },
-              "expiresAfterTurns": 3
+              "expiresAfterTurns": 3,
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "settlement": "timeline_deadline",
+                "steps": [
+                  {
+                    "id": "confirm_escape_route",
+                    "label": "与郭解确认不经正门的接应路线",
+                    "matchAny": [
+                      "确认宫道",
+                      "确认退路",
+                      "护送路线",
+                      "接应路线",
+                      "撤离路线"
+                    ],
+                    "rejectIf": [
+                      "放弃",
+                      "不再介入",
+                      "取消追踪",
+                      "不必护送"
+                    ]
+                  },
+                  {
+                    "id": "escort_emperor",
+                    "label": "亲自护送定陶王脱离刺杀压力",
+                    "matchAll": [
+                      "定陶王"
+                    ],
+                    "matchAny": [
+                      "护送",
+                      "护住",
+                      "转移",
+                      "撤离",
+                      "接应"
+                    ],
+                    "rejectIf": [
+                      "不护送",
+                      "交给刺客",
+                      "放弃"
+                    ]
+                  },
+                  {
+                    "id": "handoff_guardianship",
+                    "label": "把新君交给下一段接应并承担后续护持",
+                    "matchAny": [
+                      "交给接应",
+                      "交到接应",
+                      "完成交接",
+                      "接住新君",
+                      "承担护持",
+                      "接下托付"
+                    ],
+                    "rejectIf": [
+                      "拒绝交接",
+                      "不承担",
+                      "放弃"
+                    ]
+                  }
+                ]
+              }
             }
           ]
         }
@@ -7399,7 +7458,68 @@
                   "withdraw_force"
                 ]
               },
-              "expiresAfterTurns": 3
+              "expiresAfterTurns": 3,
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "settlement": "timeline_deadline",
+                "steps": [
+                  {
+                    "id": "verify_border_source",
+                    "label": "核对边警的消息来源",
+                    "matchAny": [
+                      "核对边警",
+                      "核对军情",
+                      "核对边报",
+                      "查验边报",
+                      "确认来源",
+                      "消息来源"
+                    ],
+                    "rejectIf": [
+                      "不核对",
+                      "拒绝查验",
+                      "放弃",
+                      "取消追踪"
+                    ]
+                  },
+                  {
+                    "id": "preserve_uncertainty",
+                    "label": "明确边警仍未经完全核实",
+                    "matchAny": [
+                      "未核实",
+                      "未经核实",
+                      "不确定",
+                      "待核验",
+                      "不能坐实",
+                      "只是传闻",
+                      "真假难辨"
+                    ],
+                    "rejectIf": [
+                      "已经坐实",
+                      "确定入侵",
+                      "无需核验",
+                      "放弃"
+                    ]
+                  },
+                  {
+                    "id": "handoff_border_contact",
+                    "label": "把边警交给可持续运作的联络线",
+                    "matchAny": [
+                      "交给新朝",
+                      "交给贾文和",
+                      "联络线",
+                      "持续传递",
+                      "接下边警",
+                      "承担责任"
+                    ],
+                    "rejectIf": [
+                      "截断消息",
+                      "不再传递",
+                      "拒绝承担",
+                      "放弃"
+                    ]
+                  }
+                ]
+              }
             }
           ]
         }
@@ -7871,7 +7991,53 @@
                   "gather_intelligence"
                 ]
               },
-              "expiresAfterTurns": 4
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "expiry": "persistent",
+                "steps": [
+                  {
+                    "id": "speak_in_private",
+                    "label": "与阮香凝单独核验盛姬线索",
+                    "matchAll": [
+                      "阮香凝"
+                    ],
+                    "matchAny": [
+                      "单独交谈",
+                      "私下交谈",
+                      "单独核验",
+                      "私下核验",
+                      "避开旁人",
+                      "密谈"
+                    ],
+                    "rejectIf": [
+                      "当众逼问",
+                      "公开审问",
+                      "放弃",
+                      "取消追踪"
+                    ]
+                  },
+                  {
+                    "id": "separate_fact_from_inference",
+                    "label": "区分亲知事实、定陶王反应与待核验推断",
+                    "matchAll": [
+                      "亲知",
+                      "推断"
+                    ],
+                    "matchAny": [
+                      "定陶王",
+                      "待核验",
+                      "知情边界",
+                      "逐项区分"
+                    ],
+                    "rejectIf": [
+                      "无需区分",
+                      "全部坐实",
+                      "公开散布",
+                      "放弃"
+                    ]
+                  }
+                ]
+              }
             }
           ]
         }

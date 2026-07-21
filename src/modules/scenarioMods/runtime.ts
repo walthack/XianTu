@@ -374,9 +374,10 @@ function refreshOpportunityStates(
       states[opportunity.id] = { status: 'available', surfacedAtTurn: turn };
       continue;
     }
-    const trackedExpired = current?.trackedAtTurn !== undefined
+    const persistent = opportunity.completionContract?.expiry === 'persistent';
+    const trackedExpired = !persistent && current?.trackedAtTurn !== undefined
       && turn - current.trackedAtTurn >= TRACKED_OPPORTUNITY_MAX_TURNS;
-    const untrackedExpired = current?.status === 'available'
+    const untrackedExpired = !persistent && current?.status === 'available'
       && current.trackedAtTurn === undefined
       && opportunity.expiresAfterTurns !== undefined
       && turn - current.surfacedAtTurn >= opportunity.expiresAfterTurns;
@@ -810,6 +811,10 @@ function settleReadyOpportunityCompletionFlags(runtime: RuntimeState): void {
     !opportunity?.completionContract
     || opportunityState?.status !== 'tracked'
     || opportunityState.completionReadyAtTurn === undefined
+  ) return;
+  if (
+    opportunity.completionContract.settlement === 'timeline_deadline'
+    && !eventTimelineDeadlineDue(runtime, anchor || undefined)
   ) return;
   const completion = anchor?.completion || [];
   if (

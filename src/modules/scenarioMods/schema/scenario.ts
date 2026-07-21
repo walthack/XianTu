@@ -325,6 +325,10 @@ export interface ScenarioStoryOpportunity {
    */
   completionContract?: {
     kind: 'player_action_sequence';
+    /** immediate 默认在步骤完成后落账；timeline_deadline 等事件硬截止到达才坐实结果。 */
+    settlement?: 'immediate' | 'timeline_deadline';
+    /** persistent 用于无截止且不得场外完成的事件，避免唯一引擎完成入口过期后永久卡轴。 */
+    expiry?: 'standard' | 'persistent';
     steps: Array<{
       id: string;
       label: string;

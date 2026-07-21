@@ -382,6 +382,21 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
                 if (contract.kind !== 'player_action_sequence') {
                   add(`${contractPath}.kind`, 'invalid_enum', 'completionContract.kind must be player_action_sequence.');
                 }
+                if (contract.settlement !== undefined && !['immediate', 'timeline_deadline'].includes(String(contract.settlement))) {
+                  add(`${contractPath}.settlement`, 'invalid_enum', 'completionContract.settlement must be immediate or timeline_deadline.');
+                }
+                if (contract.expiry !== undefined && !['standard', 'persistent'].includes(String(contract.expiry))) {
+                  add(`${contractPath}.expiry`, 'invalid_enum', 'completionContract.expiry must be standard or persistent.');
+                }
+                if (contract.expiry === 'persistent' && opportunity.expiresAfterTurns !== undefined) {
+                  add(`${contractPath}.expiry`, 'conflicting_expiry', 'persistent completion contracts cannot declare expiresAfterTurns.');
+                }
+                if (
+                  contract.settlement === 'timeline_deadline'
+                  && (!isRecord(entity.timeline) || typeof entity.timeline.deadlineTurns !== 'number')
+                ) {
+                  add(`${contractPath}.settlement`, 'missing_deadline', 'timeline_deadline settlement requires event.timeline.deadlineTurns.');
+                }
                 if (!Array.isArray(contract.steps) || contract.steps.length < 1 || contract.steps.length > 8) {
                   add(`${contractPath}.steps`, 'invalid_range', 'completionContract.steps must contain 1 to 8 steps.');
                 } else {
