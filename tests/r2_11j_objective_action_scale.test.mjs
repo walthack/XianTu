@@ -16,6 +16,15 @@ const isolatedStageIds = new Set([
   'lyl.taiquan_expedition',
 ]);
 
+/**
+ * 已按交接档流程逐拍重建来源、并经人工裁定的隔离关。
+ * 只有列入此集的关才允许带完成合同；其余隔离关必须保持零合同，直到来源重建完成。
+ * 重建产物见 `docs/R2-11M-*`。列入此集不等于解除隔离——默认 Canon Rail 仍然跳过这些关。
+ */
+const sourceRebuiltStageIds = new Set([
+  'lyl.luoyang_coup',
+]);
+
 async function stages() {
   const files = (await readdir(dataUrl)).filter(file => file.endsWith('.json')).sort();
   return Promise.all(files.map(async file => JSON.parse(await readFile(new URL(file, dataUrl), 'utf8'))));
@@ -85,7 +94,7 @@ function singleEventFixture(stage, event) {
   return save;
 }
 
-test('objective-action migrations cover 301 events while preserving the 267-event mechanical boundary', async () => {
+test('objective-action migrations cover 309 events while preserving the 267-event mechanical boundary', async () => {
   const allStages = await stages();
   const allEvents = allStages.flatMap(stage => stage.scenario.events.map(event => ({ stage, event })));
   const objectiveActions = allEvents.filter(({ event }) => event.playerCompletionContract?.kind === 'objective_action');
@@ -93,10 +102,11 @@ test('objective-action migrations cover 301 events while preserving the 267-even
     event.playerCompletionContract.actions[0].id === 'advance_declared_objective');
   const covered = allEvents.filter(({ event }) => event.playerCompletionContract
     || event.worldActor?.opportunities?.some(opportunity => opportunity.completionContract));
-  assert.equal(allEvents.length, 380);
-  assert.equal(objectiveActions.length, 301);
+  // +1 event / +8 contracts = R2-11M 洛都政变逐拍来源重建（补源 286《赏格》缺拍）。
+  assert.equal(allEvents.length, 381);
+  assert.equal(objectiveActions.length, 309);
   assert.equal(mechanicallyMigrated.length, 267);
-  assert.equal(covered.length, 308);
+  assert.equal(covered.length, 316);
   assert.deepEqual(
     Object.fromEntries(['lcq.', 'lyl.', 'lyg.'].map(prefix => [
       prefix,
@@ -104,7 +114,13 @@ test('objective-action migrations cover 301 events while preserving the 267-even
     ])),
     { 'lcq.': 122, 'lyl.': 59, 'lyg.': 86 },
   );
-  assert.equal(objectiveActions.some(({ stage }) => isolatedStageIds.has(stage.manifest.id)), false);
+  // 隔离关只挡机械迁移：批量脚本不得把旧自由稿目标自动合法化（裁定 #61/#62）。
+  // 逐拍重建过来源的隔离关（R2-11M 起）可以有人工撰写的合同，但永远不能是 advance_declared_objective。
+  assert.equal(mechanicallyMigrated.some(({ stage }) => isolatedStageIds.has(stage.manifest.id)), false);
+  const contractedIsolatedStageIds = new Set(covered
+    .map(({ stage }) => stage.manifest.id)
+    .filter(stageId => isolatedStageIds.has(stageId)));
+  assert.deepEqual([...contractedIsolatedStageIds].sort(), [...sourceRebuiltStageIds].sort());
   assert.equal(mechanicallyMigrated.some(({ event }) => event.completionEvidence?.length), false);
   assert.equal(mechanicallyMigrated.every(({ event }) => event.playerCompletionContract.actions[0].label === event.objective), true);
 });

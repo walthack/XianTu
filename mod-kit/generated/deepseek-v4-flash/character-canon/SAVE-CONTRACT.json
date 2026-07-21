@@ -1948,6 +1948,7 @@
         "lyl.event.s06_02",
         "lyl.event.s06_03",
         "lyl.event.s06_04",
+        "lyl.event.s06_04b",
         "lyl.event.s06_05",
         "lyl.event.s06_06"
       ],
@@ -1977,6 +1978,9 @@
         ],
         "lyl.event.s06_06": [
           "flags.event.s06_06.done"
+        ],
+        "lyl.event.s06_04b": [
+          "flags.event.s06_04b.done"
         ]
       }
     },
