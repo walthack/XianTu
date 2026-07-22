@@ -23,6 +23,8 @@ test('manual input, suggested action wording, and queued operations share the ex
     ['拔剑斩向守卫', 'combat'],
     ['暗中偷袭守卫', 'combat'],
     ['挥拳打向对方', 'combat'],
+    ['他打了守卫一拳', 'combat'],
+    ['我打出一掌', 'combat'],
     ['朝他射出一箭', 'combat'],
     ['打晕守卫', 'combat'],
     ['下毒害他', 'combat'],
@@ -47,7 +49,9 @@ test('manual input, suggested action wording, and queued operations share the ex
   const suggestedAction = '游说守将打开城门';
   assert.equal(buildLocalJudgementPreflight(composeJudgementAction(suggestedAction, ''), save, 3)?.kind, 'social');
   assert.equal(buildLocalJudgementPreflight(composeJudgementAction('', '【操作】盗取守卫腰牌'), save, 3)?.kind, 'stealth');
-  assert.equal(buildLocalJudgementPreflight('我与店家闲聊近况', save, 3), null);
+  for (const safeAction of ['我与店家闲聊近况', '他打了个哈欠', '我先打了个招呼', '打出一张牌', '抢夺先机']) {
+    assert.equal(buildLocalJudgementPreflight(safeAction, save, 3), null, safeAction);
+  }
 });
 
 test('active Canon Rail events use process-only policy while explicit rewrites require IF', async () => {

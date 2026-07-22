@@ -26,6 +26,7 @@ test('split and shared prompt routes forbid model rolls and require new risks to
   const coreRules = coreModule.NARRATIVE_PURITY_RULES;
   const businessRules = [
     businessModule.JUDGMENT_TRACEABILITY_RULES,
+    businessModule.DIFFICULTY_ENHANCEMENT_RULES,
     businessModule.COMBAT_ALCHEMY_RISK_RULES,
   ].join('\n');
   assert.match(splitPrompt, /NARRATIVE_PURITY_RULES/);
@@ -38,7 +39,8 @@ test('split and shared prompt routes forbid model rolls and require new risks to
   assert.doesNotMatch(coreRules, /系统判定〖〗/);
   assert.match(coreRules, /判定由本地引擎独占/);
   assert.match(businessRules, /判定风险演绎边界/);
-  assert.doesNotMatch(businessRules, /越阶判定:每差一级判定-20|炼丹炼器难度:凡20/);
+  assert.doesNotMatch(businessRules, /简单\(日常\):70-90%|越阶判定:每差一级判定-20|炼丹炼器难度:凡20/);
+  assert.match(businessRules, /行动门控由本地判定引擎创建和维护/);
   assert.match(pipeline, /stripLegacyJudgementMarkers\(textContent\)/);
   assert.match(pipeline, /stripLegacyJudgementMarkers\([\s\S]*response\.mid_term_memory/);
   assert.match(pipeline, /本回合无本地判定回执/);
