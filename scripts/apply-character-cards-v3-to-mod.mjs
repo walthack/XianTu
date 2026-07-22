@@ -25,6 +25,18 @@ const force = process.argv.includes('--force');
 // 卡片是跨书静态档案；个别早期关卡只出现未揭示身份的称谓，不能按 alias
 // 自动补全真实身份与稳定画像。新增条目须在 CANON-DECISIONS.md 留原文依据。
 const CARD_TIME_GATE_EXCLUSIONS = new Map([
+  // R2-11R：本关从鬼王峒决战前一直跨到殇侯揭面。全局卡混有星月湖大营、
+  // 盘江程氏、后期紫妈妈、凝羽功法真相等未来阶段信息；13 名演员均使用
+  // 重建脚本内的开场安全最小投影，由事件本身按序揭露后续事实。
+  ['lcq.stage_06', new Set([
+    'liuchao.character.cheng_zongyang', 'liuchao.character.le_mingzhu',
+    'liuchao.character.xie_yi', 'liuchao.character.wu_er_lang',
+    'liuchao.character.ning_yu', 'liuchao.character.su_li',
+    'liuchao.character.xiao_zi', 'liuchao.character.gui_wu_wang',
+    'liuchao.character.dragon_god', 'lcq.character.np006',
+    'liuchao.character.yun_cang_feng', 'liuchao.character.bi_ji',
+    'liuchao.character.shang_zhen_yu',
+  ])],
   ['lyl.lin_an_black_sea', new Set([
     'liuchao.character.ruan_xiang_ning',
   ])],

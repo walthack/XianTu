@@ -69,6 +69,16 @@ const AFFILIATION_CHARACTER_TIME_GATE_EXCLUSIONS = new Map([
 // R2-11P 来源重建已逐人裁定本关可见 affiliations；全局静态卡包含后续加入关系，
 // 本关演员一律以 stage 内手写集合为准，禁止构建期再次扩写。
 const AFFILIATION_STAGE_LOCKS = new Map([
+  // R2-11R 已按第112章开场可知状态逐人收口；全局静态归属含后期身份，整关锁定。
+  ['lcq.stage_06', new Set([
+    'liuchao.character.cheng_zongyang', 'liuchao.character.le_mingzhu',
+    'liuchao.character.xie_yi', 'liuchao.character.wu_er_lang',
+    'liuchao.character.ning_yu', 'liuchao.character.su_li',
+    'liuchao.character.xiao_zi', 'liuchao.character.gui_wu_wang',
+    'liuchao.character.dragon_god', 'lcq.character.np006',
+    'liuchao.character.yun_cang_feng', 'liuchao.character.bi_ji',
+    'liuchao.character.shang_zhen_yu',
+  ])],
   ['lyl.lin_an_black_sea', new Set([
     'liuchao.character.cheng_zongyang', 'liuchao.character.qin_hui',
     'liuchao.character.yu_zi_yuan', 'liuchao.character.lin_chong',

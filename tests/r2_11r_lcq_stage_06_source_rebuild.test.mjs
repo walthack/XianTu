@@ -14,6 +14,15 @@ const SOURCE_ORDER = [
   'lcq.event.s06_05',
   'lcq.event.s06_06',
 ];
+const TIME_GATED_IDS = [
+  'liuchao.character.cheng_zongyang', 'liuchao.character.le_mingzhu',
+  'liuchao.character.xie_yi', 'liuchao.character.wu_er_lang',
+  'liuchao.character.ning_yu', 'liuchao.character.su_li',
+  'liuchao.character.xiao_zi', 'liuchao.character.gui_wu_wang',
+  'liuchao.character.dragon_god', 'lcq.character.np006',
+  'liuchao.character.yun_cang_feng', 'liuchao.character.bi_ji',
+  'liuchao.character.shang_zhen_yu',
+];
 
 const stage = async () => JSON.parse(await readFile(stageUrl, 'utf8'));
 const runtimeOf = save => save.世界.状态.剧本模组;
@@ -86,6 +95,49 @@ test('cast, locations and factions close exactly over the rebuilt stage', async 
   const ids = new Set(document.canon.characters.map(character => character.id));
   assert.equal(ids.has('liuchao.character.xiao_yao_yi'), false);
   assert.equal(ids.has('liuchao.character.zhuo_yunjun'), false);
+
+  const expectedAffiliations = new Map([
+    ['liuchao.character.cheng_zongyang', []],
+    ['liuchao.character.le_mingzhu', ['liuchao.faction.guang_ming_guan_tang']],
+    ['liuchao.character.xie_yi', ['liuchao.faction.xing_yue_hu']],
+    ['liuchao.character.wu_er_lang', ['liuchao.faction.bai_wu', 'liuchao.faction.bai_hu_shang_guan']],
+    ['liuchao.character.ning_yu', ['liuchao.faction.bai_hu_shang_guan']],
+    ['liuchao.character.su_li', ['liuchao.faction.hua_miao']],
+    ['liuchao.character.xiao_zi', ['liuchao.faction.gui_wang_dong']],
+    ['liuchao.character.gui_wu_wang', ['liuchao.faction.gui_wang_dong']],
+    ['liuchao.character.dragon_god', []],
+    ['lcq.character.np006', ['liuchao.faction.gui_wang_dong']],
+    ['liuchao.character.yun_cang_feng', ['liuchao.faction.yun_shi_shang_hui']],
+    ['liuchao.character.bi_ji', ['liuchao.faction.biyu', 'liuchao.faction.gui_wang_dong']],
+    ['liuchao.character.shang_zhen_yu', ['liuchao.faction.x8b538653d9']],
+  ]);
+  for (const character of document.canon.characters) {
+    assert.deepEqual(character.affiliations.map(item => item.factionId), expectedAffiliations.get(character.id), character.id);
+    assert.deepEqual(Object.keys(character.profile), ['origin'], character.id);
+    for (const field of ['realm', 'skillIds', 'techniqueIds', 'itemIds']) assert.equal(field in character, false, `${character.id}:${field}`);
+  }
+});
+
+test('build-time cards, runtime registry and focused prompt all preserve opening-safe projections', async () => {
+  const document = await stage();
+  const { resolveScenarioCharacters } = await loadTs('../src/modules/scenarioMods/characterResolver.ts');
+  for (const id of TIME_GATED_IDS) {
+    const character = structuredClone(document.canon.characters.find(item => item.id === id));
+    const before = structuredClone(character);
+    assert.equal(resolveScenarioCharacters([character], STAGE_ID), 0, id);
+    assert.deepEqual(character, before, id);
+  }
+
+  const { advanceScenarioRuntime } = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  const { buildScenarioStoryPrompt } = await loadTs('../src/modules/scenarioMods/storyContext.ts');
+  const save = advanceScenarioRuntime(freshFixture(document)).saveData;
+  const prompt = buildScenarioStoryPrompt(save, '我观察凝羽与小紫的反应');
+  const focused = prompt.match(/## 当前相关人物正典约束（防 OOC）[\s\S]*?(?=\n【人物正典优先级】)/)?.[0] || '';
+  assert.match(focused, /凝羽/);
+  assert.match(focused, /小紫/);
+  for (const marker of ['盘江程氏', '星月湖大营', '少校', '龙雕弓', '御姬奴', '凝奴', '太一经', '毒宗唯一嫡传', '紫妈妈', '后宫', '拜殇侯为师']) {
+    assert.equal(focused.includes(marker), false, marker);
+  }
 });
 
 test('six hand-authored contracts replay the full canonical rail deterministically', async () => {

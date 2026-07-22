@@ -123,16 +123,43 @@ const ALLOWED_AFFILIATIONS = new Map([
   ['liuchao.character.cheng_zongyang', []],
   ['liuchao.character.xie_yi', ['liuchao.faction.xing_yue_hu']],
   ['liuchao.character.wu_er_lang', ['liuchao.faction.bai_wu', 'liuchao.faction.bai_hu_shang_guan']],
-  ['liuchao.character.ning_yu', ['liuchao.faction.bai_hu_shang_guan', 'liuchao.faction.x2d33e1eaf9']],
+  ['liuchao.character.ning_yu', ['liuchao.faction.bai_hu_shang_guan']],
   ['liuchao.character.le_mingzhu', ['liuchao.faction.guang_ming_guan_tang']],
   ['liuchao.character.su_li', ['liuchao.faction.hua_miao']],
-  ['liuchao.character.xiao_zi', ['liuchao.faction.gui_wang_dong', 'liuchao.faction.xing_yue_hu']],
-  ['liuchao.character.gui_wu_wang', ['liuchao.faction.gui_wang_dong', 'liuchao.faction.hei_mo_hai']],
+  ['liuchao.character.xiao_zi', ['liuchao.faction.gui_wang_dong']],
+  ['liuchao.character.gui_wu_wang', ['liuchao.faction.gui_wang_dong']],
   ['liuchao.character.dragon_god', []],
   ['liuchao.character.yun_cang_feng', ['liuchao.faction.yun_shi_shang_hui']],
   ['lcq.character.np006', ['liuchao.faction.gui_wang_dong']],
-  ['liuchao.character.bi_ji', ['liuchao.faction.biyu', 'liuchao.faction.gui_wang_dong', 'liuchao.faction.xing_yue_hu']],
+  ['liuchao.character.bi_ji', ['liuchao.faction.biyu', 'liuchao.faction.gui_wang_dong']],
   ['liuchao.character.shang_zhen_yu', ['liuchao.faction.x8b538653d9']],
+]);
+
+const minimalCharacter = (id, name, description, role, gender, origin) => ({
+  id, name, description, role, gender,
+  affiliations: [],
+  locationId: id === 'liuchao.character.shang_zhen_yu'
+    ? 'liuchao.location.south_wild_valley'
+    : 'liuchao.location.gui_wang_dong',
+  profile: { origin },
+});
+
+// Stage canon 从 opening 即进入 prompt，因此一律采用第112章开场已经可知的最小卡；
+// 托孤、弑母、朱老头真身与解蛊等事实只能由对应事件按序揭露。
+const MINIMAL_CHARACTERS = new Map([
+  ['liuchao.character.cheng_zongyang', minimalCharacter('liuchao.character.cheng_zongyang', '程宗扬', '来自现代世界、随白湖商馆进入南荒的商队成员。', '主角', '男', '现代来客；此时正与乐明珠困在龙神双角附近。')],
+  ['liuchao.character.le_mingzhu', minimalCharacter('liuchao.character.le_mingzhu', '乐明珠', '光明观堂弟子，随程宗扬一同落到龙神附近。', '光明观堂弟子', '女', '随程宗扬参与鬼王峒决战。')],
+  ['liuchao.character.xie_yi', minimalCharacter('liuchao.character.xie_yi', '谢艺', '自称星月湖谢艺的刀客，正与鬼巫王和龙神交战。', '星月湖刀客', '男', '星月湖成员，商队同行者。')],
+  ['liuchao.character.wu_er_lang', minimalCharacter('liuchao.character.wu_er_lang', '武二郎', '白武族勇士，商队此行的重要战力。', '白武族勇士', '男', '白武族人，随商队进入鬼王峒。')],
+  ['liuchao.character.ning_yu', minimalCharacter('liuchao.character.ning_yu', '凝羽', '白湖商馆女护卫，外冷少言，正参与围猎龙神。', '商队护卫', '女', '白湖商馆护卫；更深功法来历尚未揭露。')],
+  ['liuchao.character.su_li', minimalCharacter('liuchao.character.su_li', '苏荔', '花苗族长，以弓箭和蝎尾参与围猎龙神。', '花苗族长', '女', '花苗族长。')],
+  ['liuchao.character.xiao_zi', minimalCharacter('liuchao.character.xiao_zi', '小紫', '一路同行的少女，常以天真无知的姿态示人。', '同行少女', '女', '暂随商队行动；身世与真实立场须由本关事件揭露。')],
+  ['liuchao.character.gui_wu_wang', minimalCharacter('liuchao.character.gui_wu_wang', '鬼巫王', '鬼王峒首领，以苍龙星阵唤醒龙神并谋求合体。', '鬼王峒首领', '男', '鬼王峒首领。')],
+  ['liuchao.character.dragon_god', minimalCharacter('liuchao.character.dragon_god', '龙神', '沉睡在鬼王峒深井中的巨龙，已被苍龙星阵唤醒。', '龙神', '未知', '鬼王峒地下沉睡的巨龙。')],
+  ['lcq.character.np006', minimalCharacter('lcq.character.np006', '阁罗', '鬼王峒主事者，发现受骗后仍返回攻击龙神。', '鬼王峒主事者', '男', '替鬼巫王处理峒务。')],
+  ['liuchao.character.yun_cang_feng', minimalCharacter('liuchao.character.yun_cang_feng', '云苍峰', '云氏商会执事，与白湖商队共同经历鬼王峒之战。', '云氏商会执事', '男', '云氏商会执事。')],
+  ['liuchao.character.bi_ji', minimalCharacter('liuchao.character.bi_ji', '碧姬', '从鬼王峒废墟逃出的碧鲮族女子。', '碧鲮族女子', '女', '碧鲮族人；她与小紫的关系须到对质事件才揭露。')],
+  ['liuchao.character.shang_zhen_yu', minimalCharacter('liuchao.character.shang_zhen_yu', '殇侯', '居于南荒隐秘村落的年长主人。', '村落主人', '男', '其与朱老头的关系须到会面事件才揭露。')],
 ]);
 
 async function main() {
@@ -163,10 +190,11 @@ async function main() {
     ...EVENTS.flatMap(event => event.relatedCharacterIds),
   ]);
   const characterPool = new Map(document.canon.characters.map(character => [character.id, character]));
-  document.canon.characters = [...requiredCharacterIds].map(id => structuredClone(characterPool.get(id))).map(character => {
+  document.canon.characters = [...requiredCharacterIds].map(id => structuredClone(MINIMAL_CHARACTERS.get(id) || characterPool.get(id))).map(character => {
     if (!character) throw new Error('required character missing');
     const allowed = new Set(ALLOWED_AFFILIATIONS.get(character.id) || []);
-    character.affiliations = (character.affiliations || []).filter(item => allowed.has(item.factionId));
+    const sourceAffiliations = characterPool.get(character.id)?.affiliations || character.affiliations || [];
+    character.affiliations = structuredClone(sourceAffiliations).filter(item => allowed.has(item.factionId));
     character.locationId = ['liuchao.character.shang_zhen_yu'].includes(character.id)
       ? 'liuchao.location.south_wild_valley'
       : 'liuchao.location.gui_wang_dong';

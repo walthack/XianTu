@@ -29,6 +29,15 @@ const quarantinedSourceConflictStageIds = new Set([
   'lyl.lin_an_black_sea',
   'lyl.luoyang_coup',
 ]);
+// 事件完成顺序通常服从 source-axis；但 lcq.stage_06 的谢艺纵切必须同时满足：
+// ①裁定 #90 冻结 s06_03→qingyu.116.1；②可玩链在龙神坠亡(s06_02)后才收束谢艺托付。
+// 因而该关未来解除隔离时必须使用人工事件链，不能重新按 axis seq 210/211 排序。
+const sourceOrderOverrides = new Map([
+  ['lcq.stage_06', [
+    'lcq.event.s06_01', 'lcq.event.s06_02', 'lcq.event.s06_03',
+    'lcq.event.s06_04', 'lcq.event.s06_05', 'lcq.event.s06_06',
+  ]],
+]);
 const isCritical = event => event.critical !== undefined ? event.critical === true
   : event.axisMethod !== 'reviewed-no-anchor' && event.axisId !== null
     && Boolean(event.axisBeat || event.axisId || typeof event.axisSeq === 'number');
@@ -50,11 +59,20 @@ for (const file of readdirSync(stagesDir).filter(file => file.endsWith('.json'))
   const mod = JSON.parse(await readFile(join(stagesDir, file), 'utf8'));
   const stageId = mod.manifest?.id;
   if (!stageId || manualStageIds.has(stageId)) continue;
+  const sourceOrderOverride = sourceOrderOverrides.get(stageId);
+  if (sourceOrderOverride) {
+    const criticalIds = (mod.scenario?.events || []).filter(isCritical).map(event => event.id);
+    if (JSON.stringify(criticalIds) !== JSON.stringify(sourceOrderOverride)) {
+      throw new Error(`${stageId} source-order override no longer matches critical event ids; re-audit before Canon Rail generation.`);
+    }
+  }
   if (quarantinedSourceConflictStageIds.has(stageId)) continue;
   const review = reviews.get(stageId) || {};
   const reviewed = new Map((review.events || []).filter(item => item?.id).map(item => [item.id, item]));
   const originalOrder = new Map((mod.scenario?.events || []).map((event, index) => [event.id, index]));
+  const overriddenOrder = new Map((sourceOrderOverride || []).map((eventId, index) => [eventId, index]));
   const events = (mod.scenario?.events || []).filter(isCritical).slice().sort((a, b) => {
+    if (sourceOrderOverride) return (overriddenOrder.get(a.id) ?? Infinity) - (overriddenOrder.get(b.id) ?? Infinity);
     const aSeq = axisById.get(a.axisId)?.seq ?? a.axisSeq ?? Infinity;
     const bSeq = axisById.get(b.axisId)?.seq ?? b.axisSeq ?? Infinity;
     return aSeq - bSeq || (originalOrder.get(a.id) ?? 0) - (originalOrder.get(b.id) ?? 0);
