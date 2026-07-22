@@ -2,6 +2,7 @@
 
 > 面向「新加入的 agent」。读完这一篇即可独立认领一个模块开工。
 > 最后更新：2026-07-22（R2-11X：**37 关、396/396 确定性合同与 10 张精选机会卡已完成工程收口，最终 Claude 二审无 P0/P1**。全局回归逐一证明 396 个事件都有唯一完成所有者、LLM 直写 396/396 被拒；389 个 objective、1 个 local condition、6 个机会合同事件，8 个来源重建关共 88 个事件仍全部 quarantine。二审指出的机会卡生命周期 P2 已由后续提交 `0755a6e` 补成真实 trigger→追踪→两步结构化推进→JSON 重载→唯一回执重放，`npm test` 488/488；37 个 builtin 亦通过本地 UI 加载冒烟。最新产物=`docs/R2-11X-GLOBAL-CONTRACT-CLOSEOUT-2026-07-22.md`。）
+> Roadmap 清账（2026-07-22）：R2-10B/C/K/M 的历史中间态已按后续 G2 与 R2-11 证据关闭；旧并行分工表已替换为当前六类可认领模块，Canon TODO 的已完成／部分完成／真实未完成项亦已重新归类并同步 NAS。
 
 > **多 agent 协作基线（用户裁定）**：本文件是本项目的共享进度、分工、交付与 Git 汇总权威；开始认领、完成交付或改变阶段状态时先读后更新。根目录 `CHANGELOG.md` 属原 repo 历史，不记录本协作线的状态。
 
@@ -223,15 +224,15 @@ UI显示进度、剩余窗口与时间成本，截止按 `participated / partial
 - ✅ **R2-9 控制协议正文泄漏已修（2026-07-19，台账 #27）**：真机捕获 `【贾文和·高智行为硬合同】`、`【世界留钩】正文结尾必须……` 与孤立反引号。共享 R2-9 双路由规则现明确禁止复述内部协议；角色级合同去掉高回显标题；生成门禁把已知 prompt echo 判为可重试失败；流式展示与最终叙事/记忆入库共用窄范围清洗兜底，保留实际世界动静、正常环境与 NPC 心理标记。Claude 二审 job=`claude-2026-07-19T09-04-41-536Z-f2bd8809` 的补洞见下一条。
 - 🛠️ **R2-9 协议泄漏 Claude P0 补洞（2026-07-19）**：二审任务超时但已登记 10 条发现；4 个 P0 已修：`splitInitStep1` 接回共享 R2-9 护栏并在开局 Step1 检测/重试协议泄漏；联机兜底日志与模型服务器日志统一清洗；补齐“可选介入窗口/角色表演卡”两类漏网标签；旧 `系统.历史.叙事` 回读清洗并防继续导出污染。剩余 P1/P2（loading 原始分片短闪、标签单一事实源、末次降级依赖兜底、流式半标签短闪、合法截断反引号碰撞）已留台账 #27，待后续批次。Claude 补丁级复审（2026-07-19）：方向与实现确认可交付；新增一条具体 P1＝检测清单比清洗清单宽（世界演员合同/世界回合/机会追踪/承重角色保护/Canon Rail 只检测不清洗），末次降级稿清洗后未复检泄漏即接受，建议清洗后复检一次并与"标签单一事实源"一并收口。
 - 📐 **亲密档案层立项（2026-07-19，R3-8B，用户拍板）**：动机＝亲密关系女性角色差异化不足。intimacyProfile 挂角色人工正典档案、走表演卡谱系（storyContext 注入），**不进 NPC 决策内核**；四纪律＝①年龄硬门禁（validator 执法接 `canon:build`，按实际年龄非外貌原型）②亲密场景+成人开启双条件注入、标签低显著度且同步登记检测+清洗两份清单 ③揭示层级接好感阶段做解锁玩法 ④来源双轨（canon 有据直用 / authored 经用户审定），首批仅 6–12 名亲密线主要女角。**待用户圈选首批名单后起草**；验收＝去名字盲测能认出是谁。规格=`docs/R3-8-INTIMACY-PROFILE-SPEC-2026-07-19.md`。
-- 🧪 **R2-10B 两轮二审修复完成，G1 通过、G2 待验（2026-07-19，Codex）**：验收正式拆为两门。G1 用同一 `inputHash=7681bd8e` fixture 无网络重放 R3→R1→R2，三线均在 worldTurn 10 结算；R3 唯一 offscreen 回执且零权限，R1/R2 各唯一 participated 回执与对应权限，生产 canonGuard、runtime、局势白名单、hidden、跨锚清理、JSON 重载及幂等全过，命令=`npm run test:g1:npc`。G2 负责真实模型演出、泄漏、数字认识论、行动选项和玩家可读性，尚待当前版本真机重放。数量/生死/跨句门禁、追踪旧档、effect/config 迁移审计等两轮二审项均已闭环。**R2-10B 仍为 `[~]`；G1 已解锁 `s01_06–08` 隔离数据扩写，G2 前不得合并部署、共享服外测或总量铺开。** 报告=`docs/R2-10B-NPC-DECISION-CORE-TRUE-DEVICE-ACCEPTANCE-2026-07-19.md`。
+- 🧪 **R2-10B 中间检查点：G1 通过（2026-07-19，后续 G2 已于 2026-07-21 关闭）**：同一 `inputHash=7681bd8e` fixture 无网络重放 R3→R1→R2，三线均在 worldTurn 10 正确结算；当时遗留的真实模型 G2 已由下方“R2-10B G2 真机验收关闭”完成，不再是当前待办。报告=`docs/R2-10B-NPC-DECISION-CORE-TRUE-DEVICE-ACCEPTANCE-2026-07-19.md`。
 - 🧭 **R2-10C 世界时间合同 + `s01_06–08` 跨事件 G1 通过（2026-07-20，Codex）**：事件分 `canon_anchor/window/emergent`，以首次结构资格为零点执行 `notBefore/deadline`；发生、公开、玩家获知分别留痕，未获知场外事实从 prompt、世界线面板和编年史隐藏。`s01_06` 资格后 1 回合激活/第 6 回合截止，`s01_07` 当轮激活/第 5 回合截止，两者消息延迟 1 回合；`s01_08` 为无硬截止的秘密对话，worldTurn 20 仍不会伪造玩家已知。三事件各有独立决策核、局势白名单和机会，跨事件存档/hidden/零场外授权全绿。**下一批：态度→knowledge→effects 完整反馈环，再做冲突/反制/多回合生命周期。** 报告=`docs/R2-10C-WORLD-TIMELINE-AND-CROSS-EVENT-G1-2026-07-20.md`。
 - ✅ **R2-10D 态度／知识／effects 反馈环 G1 通过（2026-07-20，Codex）**：`knowledgeFacts/requiresKnowledge` 在评分前执法角色知情边界；少维度 `-100..100` 态度进入阈值与归一化效用；`stateEffects` 只改变事件局部资源、当前承重角色态度和已声明知识。跨事件 `actorMemory` 仅继承态度与知识，资源仍局部初始化。统一二审后补齐 validator 对初值／阈值／关系 effect 的范围强制及旧档运行时钳位。`s01_06` 攻守知识解锁后续行动、`s01_08` 核验链不泄黑魔海机密、`s01_05→07` 贾文和退场次序经 JSON 重载改变候选集均已自动验证。报告=`docs/R2-10D-NPC-FEEDBACK-LOOP-G1-2026-07-20.md`。
 - ✅ **R2-10E 行动冲突／反制／多回合生命周期 G1 通过（2026-07-20，Codex）**：`durationTurns` 已成为存档内 `activeAction`，严格经历 started/continuing/completed 且 effects 只落一次；同域相反 stance 或显式 counter 由效用分+power 本地裁定，败方 effects/知识/态度和生命周期不落账，更强反制可中断在途行动。统一二审后改为全局稳定强度顺序裁定，`blocked` 败方立即退出本轮，不能继续阻断第三方。`s01_06` 郭解护持 vs 剑玉姬破坏和护送 vs 封路为首批冲突，`s01_07/08` 验证协同行动与秘密来源生命周期。报告=`docs/R2-10E-NPC-CONFLICT-AND-LIFECYCLE-G1-2026-07-20.md`。
 - ✅ **R2-10F 地区／势力／人物分层唤醒 G1 通过（2026-07-20，Codex）**：决策核现按 local-critical/faction/offscreen-critical/minor/group 五档预算唤醒；当前地点、在场人物、受影响势力、追踪点名、重大事件与 cadence 是确定性输入，`wakeAudit` 逐 actor 留因。在途行动优先唤醒；休眠 actor 不结算、不泄露。`s01_06–08` 数据及旧 core 兼容均已回归。**下一批：机会卡与长期 NPC 记忆。** 报告=`docs/R2-10F-LAYERED-WAKE-G1-2026-07-20.md`。
 - ✅ **R2-10G 机会卡与长期 NPC 记忆 G1 通过（2026-07-20，Codex）**：机会由 actor/action/knowledge 确定性触发并完整记录出现、追踪、过期、参与或场外状态；UI/prompt 只显示当前可用卡。统一二审后，卡片首次追踪时间不可由切换刷新，六回合到点后 `tracked` 显式转 `expired` 并拒绝重追。NPC 的行动、冲突与玩家介入形成显著度封顶 12 条的长期经历，JSON 重载和跨事件保留；相关标签进入后续候选评分及回执。报告=`docs/R2-10G-OPPORTUNITY-AND-NPC-MEMORY-G1-2026-07-20.md`。
 - ✅ **R2-10H 跨书异构扩量 G1 通过、统一二审已收口（2026-07-20，Codex）**：清羽 `lcq.s10_04` 用势力级 emergent 复盘补给/军机断点，云龙 `lyl.s05_09` 用本地级 window 调度押运遇劫；两书复用同一决策、唤醒、机会和记忆内核但独立声明局势与不变量。二审后验收改为真实 JSON 往返、连续三轮生产 runtime、整份存档字节串／哈希一致；清羽与云龙均独立断言零授权。评分对象按稳定 key 遍历，可选上下文按 JSON 语义归一，同一 inputHash 不再受插入顺序影响。**世界/NPC 引擎 G1 路线与统一二审均已收口；既有 G2/共享外测门禁不变。** 报告=`docs/R2-10H-CROSS-BOOK-SCALE-G1-2026-07-20.md`，二审收口=`docs/R2-10I-SECOND-REVIEW-CLOSURE-2026-07-20.md`。
-- 🛠️ **R2-10K G2 误杀与角色卡覆盖已修（2026-07-20，Codex）**：商贸“抽／折／增三成”和坊市路线不再被军事数量门禁误杀，军税／兵力／军事距离反例仍拦；疑问语境补 `有无(?!数)|有没有`；`s01_05` 允许已知组织名“黑魔海”，仍保护未揭露“盛姬”及其关联。三书结构化角色卡审计发现萨安／朱诺／弥骨连续 9 关存在但总卡漏失，已补最小卡并新增硬回归，305 张总卡、250 名 stage 出场角色、结构化缺口 0；另列 19 名跨 batch 高置信补卡候选，盛姬不再作为孤立个案抢建。`canon:build` 37 关、390/390 测试全绿，NAS 正典镜像已单向同步。报告=`docs/R2-10L-MISSING-LOAD-BEARING-CHARACTER-AUDIT-2026-07-20.md`。**仍待同源三路线 G2 真机重跑，R2-10B 保持 `[~]`。**
-- 🛠️ **R2-10B 玩家知情账本 V1（2026-07-21，裁定 #121）**：把既有“未核实数字可叙述但不得写回世界真值”推广为显式 `playerKnowledge` 状态，V1 仅含 `confirmed/rumor`、`player/public`、`learnedAtTurn/sourceEventId`；与世界真值和 NPC 知识分账，LLM 写路径已封禁。证据只来自主角档案记忆、当前开场、已完成且玩家已获知事件与引擎确定性揭露；canon 仅作名字词典/审计嫌疑，关系边完全不参与。燕歌纵切移除 6 个已知实体裸名禁词，阮香凝秘密身份与吕冀未来结局改关联级保护；审计脚本固定为只报告不失败。**R2-11 方案①真机合同已通过；R2-10B 仍保持 `[~]`，须用同一 fixture 重跑 33 回合确认误杀归零。**
+- ✅ **R2-10K G2 误杀与角色卡覆盖修复（2026-07-20；后续复验已关闭）**：商贸比例／坊市路线误杀、疑问语境及已知组织名边界均修复；萨安／朱诺／弥骨三张硬缺卡已补。后续同源三路线 G2 已通过；19 名高置信补卡候选仅保留为内容质量队列。报告=`docs/R2-10L-MISSING-LOAD-BEARING-CHARACTER-AUDIT-2026-07-20.md`。
+- ✅ **R2-10B 玩家知情账本 V1（2026-07-21，裁定 #121）**：显式 `playerKnowledge` 已与世界真值、NPC 知识分账，LLM 写路径封禁；随后同一 fixture 的 33 回合 G2 已确认已知姓名误杀归零，本项关闭。
 - ✅ **R2-10B G2 真机验收关闭（2026-07-21，Codex + Claude）**：同源 R1/R2/R3 共 33 轮全部落定，参与合同、唯一权限／回执、R3 机会卡到期场外及引擎独占 `done` 均通过；已知姓名误杀为 0。角色怀疑 13/13 放行、身份坐实 8/8 拦截，“你我三人”与“各退一步”各 3/3 放行；新增五类兵力数量原句 5/5 拦截，四类普通人数／语义句及近邻变体 8/8 放行，关联、兵力、距离回归带 13/13。最终修复 `N人 + 马上／马车／马不停蹄／马前后` 的中文分词回归并纳入自动化；该项不再追加真机轮次。**R2-10B 已由 `[~]` 翻为 `[x]`，后续低频门禁措辞记已知项，不阻塞世界引擎架构主线。**
 - 🛠️ **R2-11C 结构化机会推进动作 G1（2026-07-21，Codex）**：`s01_05` 已实现追踪／执行分离，追踪不再把整条路线塞进行动队列；主界面由本地合同固定插入带 `opportunityId/stepId/actionId/timeCost/contractHash` 的推进按钮，成功回合后才结算。安民／选材／定都的真实选择进入 `completionChoices`，旧按钮跨步骤、过期与合同热更均拒绝；自由文本继续作为兼容入口。下一步扩 `s01_06–08` 并补剩余窗口与 `partial` 收束。报告=`docs/R2-11C-STRUCTURED-OPPORTUNITY-ACTIONS-G1-2026-07-21.md`。
 - ✅ **R2-11D 跨事件结构化动作与 partial 收束 G1（2026-07-21，Codex）**：结构化按钮已贯穿 `s01_05–08`；`s01_06` 护送交接、`s01_07` 未核实边警与两种联络线、`s01_08` 私密知识核验均不依赖 LLM 选项或关键词推进。右栏显示步骤进度与剩余重要行动次数；绝对截止按 `participated / partial / offscreen` 三分，partial 保留有效步骤、选择和 NPC 经历但不授完整权限。跨事件测试已并入 `test:g1:npc`。下一门转入本地判定型步骤与非机会卡 completion，不再机械扩关键词序列。报告=`docs/R2-11D-CROSS-EVENT-ACTIONS-AND-PARTIAL-G1-2026-07-21.md`。
@@ -289,45 +290,38 @@ node scripts/validate-if-branches.mjs             # if 线（若动到 if/spine�
 
 ---
 
-## 5. 并行分工：可独立认领的模块
+## 5. 当前可认领模块（2026-07-22 清账后）
 
-> 下面每个模块尽量**互不冲突**（动的文件集分开）。**唯一全局耦合点 = qingyu 全本重抽**（模块 B）会位移 qingyu 的 seq/锚点 —— 所有依赖 qingyu 主轴 seq 的工作（if 线锚点、主轴对齐）应在 B 落库前后协调，别同时改 qingyu 锚点。
+> 历史 qingyu 全本重抽、IF 校验接门、R2-10 G2 与 R2-11 已全部收口，不再作为新 agent 待办。以下按当前优先级排序。
 
-### A. 角色数据深度补全 ⭐ 推荐首选，独立性最高
-- **缺口**：~130 次要角色 `description` 未小说化；~20 男性外貌薄/无；多数角色 `memories` 仅 qingyu 8 人有；per-stage `currentAppearance`/`currentThought` 多缺。
-- **可干**：扩 `regenerate-main-descriptions.mjs` / `extract-appearance-from-epub.mjs` 覆盖到次要角色；补 memories。
-- **冲突面**：改的是各关 `canon.characters[].profile` 字段（补空不覆盖），不动主轴/if 线 → 与 C/D/E 并行安全。
-- **铁律**：性格优先级 = 用户 OVERRIDES > 人物卡 > 原文抽取；**别拿 description blurb 当性格源**（会加暗黑滤镜）。改人设改 `consolidate-personality-drafts.mjs` 的 OVERRIDES。
+### A. 发测前门禁 ⭐ 当前首选
+- **可见掷骰单一权威**：退役无本地回执的 LLM `〔判定〕`，统一 preflight→确认→掷骰→回执；覆盖三入口与刷新／重试。
+- **结构化响应／记忆总结真机复测**：验证总结失败不破坏成功正文，失败路径保持零副作用。
+- **发布对象裁定**：小圈子内测可直接进入发测；公开发布另需角色档案层 NSFW 门控。
 
-### B. qingyu 全本重抽（地基，需协调）
-- 跑 `reextract-qingyu.mjs` → 重建 qingyu 主轴段 → seq 重编号 → `reanchor-spines.mjs` / `reanchor-if-branches.mjs` 重映射锚点。
-- **认领者必须独占 qingyu 主轴/锚点**，完成前通知其他模块暂停动 qingyu seq。后两本 yunlong/yange 不受影响。
+### B. 单机化清理
+- 按 R2-7 删除账号／登录、在线状态、联机游历、创意工坊、云账号 UI／路由／死代码。
+- 保留本地 `save-storage`、`cloudDataSync` 与 devserver 存档链；单独分支、可回滚。
 
-### C. if 线 / 分支系统
-- 14 条已成型（qingyu4/yunlong5/yange5；`if-branches-sample/` + `character-canon/{book}.if-branches.json`）。
-- **可干**：把 `validate-if-branches.mjs` 接进门禁 runner；if schema 接 `attitudeToProtagonist`（翻转处子/破身时态度同步翻）；性别置换轴（genderswap，纯沙盒 if 层永不进 canon，样章已起 `qingyu.if-genderswap.SAMPLE.json`）；云龙/燕歌各再扩几条。
-- **冲突面**：动 `if-branches/` + spine + schema，不动关卡 mod profile → 与 A 并行安全；但 anchor 依赖 qingyu seq，需与 B 协调。
+### C. 角色与势力数据质量
+- 合并后的角色卡／描述二审队列：11 个阶段身份转折优先，再去重抽查约 25 张重点卡。
+- 主要角色 affiliation 噪声抽查、148 人窄范围富化重扫、19 名高置信补卡候选。
+- 势力 additions 剩余二验、友通期等人工复核、里程碑奖励落点。
 
-### D. 态度建模 + 约束体检收尾
-- 扩 `model-attitude-from-epub.mjs` 跑 yunlong+yange（~15 条处子/破身约束）。
-- 6 条约束破戒后果原文确认（`constraints-audit.md` 列表）。
-- 产物入 `character-canon/*.character-constraints-draft.json` → 投影 profile.notes。与 A 共享角色文件，注意先后顺序（都补空不覆盖，错开角色集即可）。
+### D. 地点、记忆与写实系统
+- 常驻地点／`locationId` 补档与更深地点风貌扫描；现有地点检索纵切已可用。
+- 全局花名册／分层私有知情 B；R2-6 的跨关记忆 A 已完成。
+- 技能完整效果表、跨国移动约束、商店／掉落国别选源与经济平衡。
 
-### E. 立绘 / 头像
-- 数据地基已在（schema/validator/运行时）。EPUB 官方插图已抽 96 张（`character-canon/portraits/`，覆盖 ~50 角色）—— **有官图直接用，没官图的才生成**。
-- **可干**：E-M2 上传/存储（IndexedDB + `img:<key>` 解析）；E-M3 立绘展示区；E-M4 AI 生成（主力引擎 = GPT via Codex 免费但慢；付费快速 = grok/gemini-3-pro-image）。
-- **内容红线**：未成年/孩童化角色拒绝任何性化立绘；外貌字段取 `*.appearance-draft.json` 的 `appearance`+`bodyFeatures`，**别取** `character-descriptions.json`（有损摘要丢身材）。`portrait-risk-audit.json`：113 SAFE / 10 HIGH。
-- **冲突面**：app 前端（`src/`）+ portraits 数据，与 A/C/D（数据层）几乎不冲突。
+### E. 表现层与内容扩量（须先看小圈子反馈）
+- 五条枢纽高光与两张 Voice Card 做外部对照；通过后再定 242 条高光批量、立绘槽和 top 20–30 表演卡。
+- 立绘先做 SAFE manifest + resolver + 6–10 位主要角色消费闭环；已有官方插图优先。
+- 亲密档案层等待用户圈选首批 6–12 名，继续执行年龄与双条件注入硬门禁。
 
-### F. 燕歌行续写新 canon（最大未来项，**设计层已定稿**）
-- **结局蓝图 v2 已定稿=真值源**（`character-canon/ENDING-BLUEPRINT.md`，裁定 #69/#80-89）：三幕脊椎（人→组织→系统逐幕升维）、六国收束、终战=对抗自动策展系统、岳氏全谱/续写"毕业生"终幕；剧透血缘已落**关系密档层**（`RELATIONSHIPS-SECRET.md`，方案 A，不进可见关系网）。启动钩子仍 = #1017 李辅国魂魄占郭氏躯体。
-- **待执行**：141 个空 ending 回填 + if 顶层分岔锚点定义 + 新承重脊柱/新角色（canon 新造）/新地区（扩 shared-atlas）。
-- **独立 milestone（未做）**：运行时"知情 NPC 主动行动"注入引擎（按知情图谱分层可见 / per-stage 解锁），把密档血缘受控注入给该知情的 NPC。
-- **难点**：无原文可抽 → 须「多模型协同创作」；独立性高但工作量最大、需用户深度参与方向。
-
-### G. 应用侧功能 / 游戏内渲染
-- 势力对外关系（factionRelationships）数据已在 worldInfo，但**游戏 UI 可能未渲染** → 游戏侧 Vue 工作。
-- 是 `src/` 前端范畴，与数据层并行安全。
+### F. 燕歌续作与远期沙盒
+- 先做第一幕“长安驱魂局”可玩纵切，再决定 141 ending 回填广度。
+- 关系密档知情注入 B/C 与续作纵切一并设计；无原文部分走多模型协同创作。
+- 地区沙盒／平行选国保持远期 overlay，不写回正典。
 
 ---
 
@@ -342,9 +336,9 @@ node scripts/validate-if-branches.mjs             # if 线（若动到 if/spine�
 
 ## 7. 给新 agent 的最短上手路径
 
-1. `cd` 进真实工作目录（§1），`git log --oneline -5` 确认在 `d6a3323` 一脉。
-2. 读 `character-canon/CORE-DOCS-ROADMAP.md`（带 ✅ 的逐项进度）+ 本文 §5 选一个模块。
+1. `cd` 进真实工作目录（§1），`git status --short` 与 `git log --oneline -5` 确认当前分支／工作区；不要依赖历史固定提交号判断基线。
+2. 读仓库根 `RELEASE-ROADMAP.md`、本文顶端最新状态与 §5；涉及正典数据时再读 `character-canon/CORE-DOCS-ROADMAP.md`／`TODO-待完成.md`。
 3. 跑一遍 §4 门禁确认基线绿。
-4. 认领模块前，若涉及 qingyu 主轴/锚点，先与模块 B 认领者对齐。
+4. 认领模块前检查当前分支与他人改动；涉及 canon、核心 prompt 或冻结 ID 时先读裁定簿与 `SAVE-CONTRACT.json`，不得覆盖受保护字段。
 5. 改完 → 门禁全过 → 同步内置/NAS → 重启服 → （必要时）Chrome MCP 连 Windows live 验证。
 ```
