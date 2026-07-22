@@ -69,6 +69,25 @@ const AFFILIATION_CHARACTER_TIME_GATE_EXCLUSIONS = new Map([
 // R2-11P 来源重建已逐人裁定本关可见 affiliations；全局静态卡包含后续加入关系，
 // 本关演员一律以 stage 内手写集合为准，禁止构建期再次扩写。
 const AFFILIATION_STAGE_LOCKS = new Map([
+  // R2-11U：source69–84 的 15 名演员已由重建脚本按时点收口，静态归属不得回灌。
+  ['lyg.shixiang_ambush', new Set([
+    'liuchao.character.cheng_zongyang', 'liuchao.character.yang_yuhuan',
+    'liuchao.character.xiao_zi', 'liuchao.character.pan_jinlian',
+    'lyg.character.shi_temeipu', 'liuchao.character.fei_niao_ying_zi',
+    'lyg.character.np031', 'lyg.character.kuiji', 'lyg.character.guan_hai',
+    'lyg.character.np041', 'liuchao.character.li_ang', 'liuchao.character.xu_junfang',
+    'liuchao.character.yi_xin', 'liuchao.character.cheng_guang', 'liuchao.character.xin_yong',
+  ])],
+  // R2-11V：source127–132 的 14 名演员已按甘露前夜时点收口，禁止后期归属回灌。
+  ['lyg.ganlu_bian', new Set([
+    'liuchao.character.cheng_zongyang', 'liuchao.character.li_ang',
+    'liuchao.character.yang_yuhuan', 'lyg.character.li_jinxiang',
+    'liuchao.character.zhou_fei', 'liuchao.character.fei_niao_ying_zi',
+    'liuchao.character.li_fuguo', 'lyg.character.yu_chaoen',
+    'lyg.character.chou_shiliang', 'liuchao.character.tian_ling_zi',
+    'liuchao.character.jia_wenhe', 'liuchao.character.xiao_zi',
+    'liuchao.character.bai_nichang', 'liuchao.character.lv_zhi',
+  ])],
   // R2-11T 已按第74章开场可知状态逐人收口；后期商号、黑魔海与主角势力归属不得回灌。
   ['lcq.stage_05', new Set([
     'liuchao.character.cheng_zongyang', 'liuchao.character.le_mingzhu',

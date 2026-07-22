@@ -1,13 +1,13 @@
 {
   "schema": "xiantu.character-registry.v1",
-  "version": "cr-2026-07-22-87b738ccc481b981",
-  "sourceHash": "87b738ccc481b981",
+  "version": "cr-2026-07-22-2be508b362e7f276",
+  "sourceHash": "2be508b362e7f276",
   "sourceGeneratedAt": "2026-06-30T12:50:33.965Z",
-  "generatedAt": "2026-07-22T09:41:13.672Z",
+  "generatedAt": "2026-07-22T09:51:07.127Z",
   "stats": {
     "total": 308,
-    "stagePresent": 220,
-    "canonOnly": 88,
+    "stagePresent": 217,
+    "canonOnly": 91,
     "collisionsMerged": 0
   },
   "characters": [
@@ -1431,6 +1431,107 @@
       "embedText": "邳忌 ｜ 平亭侯世子 ｜ 平亭侯府(世子) ｜ 登场于平亭侯府 ｜ 角色卡未找到明确同名/别名；需要判断是新角色还是并入现有角色。"
     },
     {
+      "id": "canon.character.38068abbd7",
+      "canonicalName": "独孤谓",
+      "aliases": [],
+      "gender": "男",
+      "books": [
+        "yange"
+      ],
+      "tier": "主要",
+      "stagePresence": false,
+      "staticProfile": {
+        "identitySummary": "京兆府法曹参军",
+        "personality": [
+          "俊美爱美",
+          "冲动好奇",
+          "胆小怕事中带点勇气"
+        ],
+        "appearance": "剑眉朗目，唇红齿白，人称独孤郎，长安城有名的美男子，被打得鼻青脸肿仍不损帅哥形象",
+        "speechStyle": "直率，偶带粗口（如‘阉狗，又狠又坏’）",
+        "principles": [
+          "不主动出卖同僚，宁背黑锅也不供出上峰",
+          "公务执行中不计个人体面，苦活累活甘愿承受",
+          "危急时保护同伴而非独自脱身"
+        ],
+        "goals": [
+          "办案尽职，保命自保"
+        ],
+        "weaknesses": [
+          "易被美色/形势迷惑，冲动易被利用"
+        ],
+        "signatureAbilities": [],
+        "relationToProtagonist": [
+          "相识，非亲密同伴或后宫"
+        ],
+        "formsOfAddress": [
+          "程侯 / 独孤郎"
+        ],
+        "joining": [],
+        "keyEvents": [
+          "被程宗扬打残（鼻青脸肿）",
+          "与泉玉姬互换任务调查剐面案",
+          "被抓住捆绑审问"
+        ],
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "京兆府",
+            "role": "法曹参军"
+          },
+          {
+            "faction": "刑部六扇门",
+            "role": "六扇门得力干将"
+          }
+        ],
+        "birthYear": 190,
+        "debutLocation": {
+          "location": "王忠嗣与段文楚商议监控程侯之策，段文楚提及法曹参军独孤谓",
+          "locator": "六朝燕歌行/0077章 段文楚与王忠嗣议事",
+          "scene": "他人对话中被提及为六扇门出身的法曹参军，负责监视程宗扬一行动态；唐国京兆府法曹参军，六扇门借调官员，专司盯梢舞阳程侯"
+        }
+      },
+      "phaseIdentities": [
+        {
+          "scope": "stage-projection",
+          "stageId": "lyg.ganlu_bian",
+          "book": "yange",
+          "seqLo": 1191,
+          "seqHi": 1209,
+          "identity": "京兆府法曹参军",
+          "role": "京兆府法曹参军",
+          "description": "京兆府法曹参军独孤谓，剑眉朗目却青肿未褪，被鱼朝恩反复审讯王守澄案，宛如被摧折的兰芝玉树，仍难掩俊美。",
+          "notes": [
+            "【关系】相识，非亲密同伴或后宫",
+            "【目标】办案尽职，保命自保"
+          ],
+          "status": "stage-current"
+        },
+        {
+          "scope": "stage-projection",
+          "stageId": "lyg.shixiang_ambush",
+          "book": "yange",
+          "seqLo": 1092,
+          "seqHi": 1115,
+          "identity": "京兆府法曹参军",
+          "role": "程宗扬护卫、六扇门捕头（同僚关系）",
+          "description": "京兆府法曹参军独孤谓，剑眉朗目却青肿未褪，被鱼朝恩反复审讯王守澄案，宛如被摧折的兰芝玉树，仍难掩俊美。",
+          "notes": [
+            "【关系】相识，非亲密同伴或后宫",
+            "【目标】办案尽职，保命自保"
+          ],
+          "status": "stage-current"
+        }
+      ],
+      "review": {
+        "approved": false,
+        "reviewed": true,
+        "flags": [],
+        "conflicts": []
+      },
+      "embedText": "独孤谓 ｜ 京兆府法曹参军 ｜ 京兆府(法曹参军)、刑部六扇门(六扇门得力干将) ｜ 登场于王忠嗣与段文楚商议监控程侯之策，段文楚提及法曹参军独孤谓 ｜ 俊美爱美、冲动好奇、胆小怕事中带点勇气 ｜ 相识，非亲密同伴或后宫 ｜ 程侯 / 独孤郎 ｜ 被程宗扬打残（鼻青脸肿）；与泉玉姬互换任务调查剐面案；被抓住捆绑审问"
+    },
+    {
       "id": "canon.character.3c47a9ac0b",
       "canonicalName": "萧五",
       "aliases": [],
@@ -2817,6 +2918,97 @@
         "conflicts": []
       },
       "embedText": "虚日鼠 ｜ 北方玄武七宿之一 ｜ 龙宸(杀手（北方玄武七宿成员）) ｜ 凶狠、坚韧、擅长偷袭 ｜ 敌对，后被程宗扬击杀 ｜ 被程宗扬贴身斩断右臂；握住假手雷被炸成碎片而死"
+    },
+    {
+      "id": "canon.character.7589a9a371",
+      "canonicalName": "韩玉",
+      "aliases": [],
+      "gender": "男",
+      "books": [
+        "yunlong",
+        "yange"
+      ],
+      "tier": "主要",
+      "stagePresence": false,
+      "staticProfile": {
+        "identitySummary": "星月湖大营退役中尉/鹏翼社成员/程宗扬的部下",
+        "personality": [
+          "心细如发",
+          "忠诚可靠",
+          "配合默契"
+        ],
+        "appearance": "商贾打扮，方脸短髭",
+        "speechStyle": "简洁直接，如“程上校，先吃点东西”",
+        "principles": [
+          "忠诚于程宗扬，不背叛"
+        ],
+        "goals": [
+          "辅助程宗扬完成任务，维护其安全"
+        ],
+        "weaknesses": [
+          "无明确原文支撑"
+        ],
+        "signatureAbilities": [
+          "刀法（强攻破招，一刀斩杀）"
+        ],
+        "relationToProtagonist": [
+          "程宗扬的部下/铁杆心腹"
+        ],
+        "formsOfAddress": [
+          "程宗扬称其为“韩玉”；被他人称“韩玉”"
+        ],
+        "joining": [
+          "自程宗扬到汉国起一直跟随，鞍马劳顿，出生入死（第3章 共醉）"
+        ],
+        "keyEvents": [
+          "协助程宗扬联络鹏翼社",
+          "参与多次战斗和护卫",
+          "被胡人斩杀，头颅被挂"
+        ],
+        "ending": [
+          "被胡人斩杀，头颅被程宗扬抢回（第8章 命悬一线）"
+        ],
+        "affiliations": [
+          {
+            "faction": "星月湖",
+            "role": "直属营上士"
+          },
+          {
+            "faction": "程宗扬势力",
+            "role": "亲信下属/护卫"
+          }
+        ],
+        "debutLocation": {
+          "location": "西湖小瀛洲",
+          "locator": "六朝云龙吟/0081.html",
+          "scene": "星月湖大营易彪中尉下达伏击任务，称呼\"上士韩玉\"，韩玉应声\"到！\"，领命带领二班在岛中湖设伏。"
+        },
+        "birthYear": 190
+      },
+      "phaseIdentities": [
+        {
+          "scope": "stage-projection",
+          "stageId": "lyg.ganlu_bian",
+          "book": "yange",
+          "seqLo": 1191,
+          "seqHi": 1209,
+          "identity": "星月湖大营退役中尉/鹏翼社成员/程宗扬的部下",
+          "role": "心腹护卫",
+          "description": "程宗扬的心腹护卫韩玉，正与敖润等人挖掘地道，泥土沾身却眼神锐利。",
+          "notes": [
+            "【关系】程宗扬的部下/铁杆心腹",
+            "【目标】辅助程宗扬完成任务，维护其安全"
+          ],
+          "status": "stage-current"
+        }
+      ],
+      "review": {
+        "approved": false,
+        "reviewed": true,
+        "flags": [],
+        "conflicts": []
+      },
+      "embedText": "韩玉 ｜ 星月湖大营退役中尉/鹏翼社成员/程宗扬的部下 ｜ 星月湖(直属营上士)、程宗扬势力(亲信下属/护卫) ｜ 登场于西湖小瀛洲 ｜ 心细如发、忠诚可靠、配合默契 ｜ 程宗扬的部下/铁杆心腹 ｜ 程宗扬称其为“韩玉”；被他人称“韩玉” ｜ 协助程宗扬联络鹏翼社；参与多次战斗和护卫；被胡人斩杀，头颅被挂"
     },
     {
       "id": "canon.character.76603f3e4b",
@@ -4856,6 +5048,89 @@
         "note": "角色卡未找到明确同名/别名；需要判断是新角色还是并入现有角色。\n用户裁定：批准。"
       },
       "embedText": "赤凫 ｜ 巫宗高手 ｜ 黑魔海(九御) ｜ 登场于山间 ｜ 角色卡未找到明确同名/别名；需要判断是新角色还是并入现有角色。 用户裁定：批准。"
+    },
+    {
+      "id": "canon.character.bc5fcc1459",
+      "canonicalName": "罗立言",
+      "aliases": [],
+      "gender": "男",
+      "books": [
+        "yange"
+      ],
+      "tier": "主要",
+      "stagePresence": false,
+      "staticProfile": {
+        "identitySummary": "京兆府少尹、权知府事",
+        "personality": [
+          "急躁易怒",
+          "谨慎多疑",
+          "有官场心机，知道轻重"
+        ],
+        "appearance": "",
+        "speechStyle": "急躁、官腔较重，话中带刺（冷哼一声‘是真看不出来，还是不敢说？’）；也有官场上的圆滑推诿。",
+        "principles": [
+          "为求自保，可能规避风险",
+          "不吐露真相"
+        ],
+        "goals": [
+          "查清王守澄被杀案以树立威信，同时明哲保身，避免卷入宦官与朝臣的冲突。"
+        ],
+        "weaknesses": [
+          "刚上任威信未立、案发后恐惧被宦官报复，不敢深入查探、容易被更强势的同僚（如长史）推卸责任"
+        ],
+        "signatureAbilities": [],
+        "relationToProtagonist": [
+          "尚未在此节选中与程宗扬产生直接互动"
+        ],
+        "formsOfAddress": [],
+        "joining": [],
+        "keyEvents": [
+          "接任京兆府少尹权知府事，到杏园勘查王守澄遇害案现场",
+          "与下属法曹",
+          "仵作梳理线索，发现车辙足迹和尸检结果",
+          "与右金吾卫长史暗中推诿，长史暗示此案牵涉宦官后，罗立言惊惧逃避责任"
+        ],
+        "ending": [
+          "被仇士良列入李训一党，在甘露之变中定为逆臣（由仇士良指控），最终命运未见此节选交代。"
+        ],
+        "affiliations": [
+          {
+            "faction": "唐国朝廷",
+            "role": "京兆府少尹"
+          }
+        ],
+        "debutLocation": {
+          "location": "通善坊杏园",
+          "locator": "0166.html",
+          "scene": "刚刚接任京兆府少尹、权知府事的罗立言闻讯王守澄被杀，立即带着属下隶卒及长安、万年两县官员赶到凶案现场"
+        },
+        "birthYear": 190
+      },
+      "region": "唐国",
+      "phaseIdentities": [
+        {
+          "scope": "stage-projection",
+          "stageId": "lyg.ganlu_bian",
+          "book": "yange",
+          "seqLo": 1191,
+          "seqHi": 1209,
+          "identity": "京兆府少尹、权知府事",
+          "role": "京兆府少尹",
+          "description": "罗立言身为京兆府少尹权知府事，暗中参与诛宦密谋，手握京兆府千余隶卒，等待着关键时刻的号令。",
+          "notes": [
+            "【关系】尚未在此节选中与程宗扬产生直接互动",
+            "【目标】查清王守澄被杀案以树立威信，同时明哲保身，避免卷入宦官与朝臣的冲突。"
+          ],
+          "status": "stage-current"
+        }
+      ],
+      "review": {
+        "approved": false,
+        "reviewed": true,
+        "flags": [],
+        "conflicts": []
+      },
+      "embedText": "罗立言 ｜ 京兆府少尹、权知府事 ｜ 【唐国人物】 ｜ 唐国朝廷(京兆府少尹) ｜ 登场于通善坊杏园 ｜ 急躁易怒、谨慎多疑、有官场心机，知道轻重 ｜ 尚未在此节选中与程宗扬产生直接互动 ｜ 接任京兆府少尹权知府事，到杏园勘查王守澄遇害案现场；与下属法曹；仵作梳理线索，发现车辙足迹和尸检结果；与右金吾卫长史暗中推诿，长史暗示此案牵涉宦官后，罗立言惊惧逃避责任"
     },
     {
       "id": "canon.character.bd207652c4",
@@ -14319,97 +14594,6 @@
         "conflicts": []
       },
       "embedText": "韩定国 ｜ 军人/将领 ｜ 【汉国人物】 ｜ 黑魔海(成员)、汉国朝廷(建威将军) ｜ 登场于洛都 ｜ 深居简出、小心谨慎、凶狠果断 ｜ 敌对（程宗扬受雇刺杀韩定国） ｜ 韩定国在亭中赴宴时遭到刺杀；韩定国与程宗扬在断崖激战；韩定国殒命"
-    },
-    {
-      "id": "liuchao.character.han_yu",
-      "canonicalName": "韩玉",
-      "aliases": [],
-      "gender": "男",
-      "books": [
-        "yunlong",
-        "yange"
-      ],
-      "tier": "主要",
-      "stagePresence": true,
-      "staticProfile": {
-        "identitySummary": "星月湖大营退役中尉/鹏翼社成员/程宗扬的部下",
-        "personality": [
-          "心细如发",
-          "忠诚可靠",
-          "配合默契"
-        ],
-        "appearance": "商贾打扮，方脸短髭",
-        "speechStyle": "简洁直接，如“程上校，先吃点东西”",
-        "principles": [
-          "忠诚于程宗扬，不背叛"
-        ],
-        "goals": [
-          "辅助程宗扬完成任务，维护其安全"
-        ],
-        "weaknesses": [
-          "无明确原文支撑"
-        ],
-        "signatureAbilities": [
-          "刀法（强攻破招，一刀斩杀）"
-        ],
-        "relationToProtagonist": [
-          "程宗扬的部下/铁杆心腹"
-        ],
-        "formsOfAddress": [
-          "程宗扬称其为“韩玉”；被他人称“韩玉”"
-        ],
-        "joining": [
-          "自程宗扬到汉国起一直跟随，鞍马劳顿，出生入死（第3章 共醉）"
-        ],
-        "keyEvents": [
-          "协助程宗扬联络鹏翼社",
-          "参与多次战斗和护卫",
-          "被胡人斩杀，头颅被挂"
-        ],
-        "ending": [
-          "被胡人斩杀，头颅被程宗扬抢回（第8章 命悬一线）"
-        ],
-        "affiliations": [
-          {
-            "faction": "星月湖",
-            "role": "直属营上士"
-          },
-          {
-            "faction": "程宗扬势力",
-            "role": "亲信下属/护卫"
-          }
-        ],
-        "debutLocation": {
-          "location": "西湖小瀛洲",
-          "locator": "六朝云龙吟/0081.html",
-          "scene": "星月湖大营易彪中尉下达伏击任务，称呼\"上士韩玉\"，韩玉应声\"到！\"，领命带领二班在岛中湖设伏。"
-        },
-        "birthYear": 190
-      },
-      "phaseIdentities": [
-        {
-          "scope": "stage-projection",
-          "stageId": "lyg.ganlu_bian",
-          "book": "yange",
-          "seqLo": 1191,
-          "seqHi": 1209,
-          "identity": "星月湖大营退役中尉/鹏翼社成员/程宗扬的部下",
-          "role": "心腹护卫",
-          "description": "程宗扬的心腹护卫韩玉，正与敖润等人挖掘地道，泥土沾身却眼神锐利。",
-          "notes": [
-            "【关系】程宗扬的部下/铁杆心腹",
-            "【目标】辅助程宗扬完成任务，维护其安全"
-          ],
-          "status": "stage-current"
-        }
-      ],
-      "review": {
-        "approved": false,
-        "reviewed": true,
-        "flags": [],
-        "conflicts": []
-      },
-      "embedText": "韩玉 ｜ 星月湖大营退役中尉/鹏翼社成员/程宗扬的部下 ｜ 星月湖(直属营上士)、程宗扬势力(亲信下属/护卫) ｜ 登场于西湖小瀛洲 ｜ 心细如发、忠诚可靠、配合默契 ｜ 程宗扬的部下/铁杆心腹 ｜ 程宗扬称其为“韩玉”；被他人称“韩玉” ｜ 协助程宗扬联络鹏翼社；参与多次战斗和护卫；被胡人斩杀，头颅被挂"
     },
     {
       "id": "liuchao.character.he_yilian",
@@ -39518,107 +39702,6 @@
       "embedText": "仇士良 ｜ 【唐国人物】 ｜ 唐国朝廷(南安郡公、知内侍省事、左神策军左护军中尉、左街功德使)、宦官集团(四贵之一) ｜ 登场于未明确（宫中） ｜ 决战·与鱼弘志在大明宫紫宸殿：仇士良闻讯赶来，质问其子被扣事→鱼弘志亮出数十枚兵符炫耀→仇士良发现左神策军鱼符被夺→仇士良拔刀怒骂皇帝背叛；转折：鱼符竟被太真公主夺走，仇士良暂时保住性命；平局；左神策军鱼符被第三方夺走，双方僵持"
     },
     {
-      "id": "lyg.character.dugu_wei",
-      "canonicalName": "独孤谓",
-      "aliases": [],
-      "gender": "男",
-      "books": [
-        "yange"
-      ],
-      "tier": "主要",
-      "stagePresence": true,
-      "staticProfile": {
-        "identitySummary": "京兆府法曹参军",
-        "personality": [
-          "俊美爱美",
-          "冲动好奇",
-          "胆小怕事中带点勇气"
-        ],
-        "appearance": "剑眉朗目，唇红齿白，人称独孤郎，长安城有名的美男子，被打得鼻青脸肿仍不损帅哥形象",
-        "speechStyle": "直率，偶带粗口（如‘阉狗，又狠又坏’）",
-        "principles": [
-          "不主动出卖同僚，宁背黑锅也不供出上峰",
-          "公务执行中不计个人体面，苦活累活甘愿承受",
-          "危急时保护同伴而非独自脱身"
-        ],
-        "goals": [
-          "办案尽职，保命自保"
-        ],
-        "weaknesses": [
-          "易被美色/形势迷惑，冲动易被利用"
-        ],
-        "signatureAbilities": [],
-        "relationToProtagonist": [
-          "相识，非亲密同伴或后宫"
-        ],
-        "formsOfAddress": [
-          "程侯 / 独孤郎"
-        ],
-        "joining": [],
-        "keyEvents": [
-          "被程宗扬打残（鼻青脸肿）",
-          "与泉玉姬互换任务调查剐面案",
-          "被抓住捆绑审问"
-        ],
-        "ending": [],
-        "affiliations": [
-          {
-            "faction": "京兆府",
-            "role": "法曹参军"
-          },
-          {
-            "faction": "刑部六扇门",
-            "role": "六扇门得力干将"
-          }
-        ],
-        "birthYear": 190,
-        "debutLocation": {
-          "location": "王忠嗣与段文楚商议监控程侯之策，段文楚提及法曹参军独孤谓",
-          "locator": "六朝燕歌行/0077章 段文楚与王忠嗣议事",
-          "scene": "他人对话中被提及为六扇门出身的法曹参军，负责监视程宗扬一行动态；唐国京兆府法曹参军，六扇门借调官员，专司盯梢舞阳程侯"
-        }
-      },
-      "phaseIdentities": [
-        {
-          "scope": "stage-projection",
-          "stageId": "lyg.ganlu_bian",
-          "book": "yange",
-          "seqLo": 1191,
-          "seqHi": 1209,
-          "identity": "京兆府法曹参军",
-          "role": "京兆府法曹参军",
-          "description": "京兆府法曹参军独孤谓，剑眉朗目却青肿未褪，被鱼朝恩反复审讯王守澄案，宛如被摧折的兰芝玉树，仍难掩俊美。",
-          "notes": [
-            "【关系】相识，非亲密同伴或后宫",
-            "【目标】办案尽职，保命自保"
-          ],
-          "status": "stage-current"
-        },
-        {
-          "scope": "stage-projection",
-          "stageId": "lyg.shixiang_ambush",
-          "book": "yange",
-          "seqLo": 1092,
-          "seqHi": 1115,
-          "identity": "京兆府法曹参军",
-          "role": "程宗扬护卫、六扇门捕头（同僚关系）",
-          "description": "京兆府法曹参军独孤谓，剑眉朗目却青肿未褪，被鱼朝恩反复审讯王守澄案，宛如被摧折的兰芝玉树，仍难掩俊美。",
-          "notes": [
-            "【关系】相识，非亲密同伴或后宫",
-            "【目标】办案尽职，保命自保"
-          ],
-          "status": "stage-current"
-        }
-      ],
-      "review": {
-        "approved": false,
-        "reviewed": true,
-        "flags": [],
-        "conflicts": []
-      },
-      "embedText": "独孤谓 ｜ 京兆府法曹参军 ｜ 京兆府(法曹参军)、刑部六扇门(六扇门得力干将) ｜ 登场于王忠嗣与段文楚商议监控程侯之策，段文楚提及法曹参军独孤谓 ｜ 俊美爱美、冲动好奇、胆小怕事中带点勇气 ｜ 相识，非亲密同伴或后宫 ｜ 程侯 / 独孤郎 ｜ 被程宗扬打残（鼻青脸肿）；与泉玉姬互换任务调查剐面案；被抓住捆绑审问"
-    },
-    {
       "id": "lyg.character.guan_hai",
       "canonicalName": "观海",
       "aliases": [],
@@ -40151,89 +40234,6 @@
         ]
       },
       "embedText": "李药师 ｜ 卫公 ｜ 卫国公，天策府（皇图天策府）掌军人物 ｜ 【宋国人物】 ｜ 皇图天策府(卫公/府主) ｜ 登场于唐都长安永嘉坊皇图天策府 ｜ 坚毅如钢、淡泊、刚直、谨慎、有原则 ｜ 程宗扬前往拜会的资深军将/长辈，二人有交集但未明确为从属或亲密关系。程宗扬曾以束修之礼拜会，称其为卫国公。 ｜ 对程宗扬：称'程侯'（程侯华服玉带）；被他人称呼：卫国公、李药师、老师（被薛礼、谢小子等门生或晚辈称'老师'）、老夫。 别名/称谓：卫公 ｜ 在紫宸殿前用笏板拍击窦文场，且在禁中大開殺戒，孤身持戟随江王从容离去。；曾与程宗扬谈论江王义气，认为自己不会骗程宗扬，但对江王是否会屠戮兄弟有保留。；程宗扬奉拜帖行束修之礼拜会卫国公，李药师让程宗扬去见杨玉环时提及自己名字。；曾与岳鹏举（岳帅）有旧，似乎因此与杨玉环有联系。；李药师麾下有薛礼；谢无奕等门生/部将，学生们随意在他抽屉里摸蜜饯。"
-    },
-    {
-      "id": "lyg.character.lu_liyan",
-      "canonicalName": "罗立言",
-      "aliases": [],
-      "gender": "男",
-      "books": [
-        "yange"
-      ],
-      "tier": "主要",
-      "stagePresence": true,
-      "staticProfile": {
-        "identitySummary": "京兆府少尹、权知府事",
-        "personality": [
-          "急躁易怒",
-          "谨慎多疑",
-          "有官场心机，知道轻重"
-        ],
-        "appearance": "",
-        "speechStyle": "急躁、官腔较重，话中带刺（冷哼一声‘是真看不出来，还是不敢说？’）；也有官场上的圆滑推诿。",
-        "principles": [
-          "为求自保，可能规避风险",
-          "不吐露真相"
-        ],
-        "goals": [
-          "查清王守澄被杀案以树立威信，同时明哲保身，避免卷入宦官与朝臣的冲突。"
-        ],
-        "weaknesses": [
-          "刚上任威信未立、案发后恐惧被宦官报复，不敢深入查探、容易被更强势的同僚（如长史）推卸责任"
-        ],
-        "signatureAbilities": [],
-        "relationToProtagonist": [
-          "尚未在此节选中与程宗扬产生直接互动"
-        ],
-        "formsOfAddress": [],
-        "joining": [],
-        "keyEvents": [
-          "接任京兆府少尹权知府事，到杏园勘查王守澄遇害案现场",
-          "与下属法曹",
-          "仵作梳理线索，发现车辙足迹和尸检结果",
-          "与右金吾卫长史暗中推诿，长史暗示此案牵涉宦官后，罗立言惊惧逃避责任"
-        ],
-        "ending": [
-          "被仇士良列入李训一党，在甘露之变中定为逆臣（由仇士良指控），最终命运未见此节选交代。"
-        ],
-        "affiliations": [
-          {
-            "faction": "唐国朝廷",
-            "role": "京兆府少尹"
-          }
-        ],
-        "debutLocation": {
-          "location": "通善坊杏园",
-          "locator": "0166.html",
-          "scene": "刚刚接任京兆府少尹、权知府事的罗立言闻讯王守澄被杀，立即带着属下隶卒及长安、万年两县官员赶到凶案现场"
-        },
-        "birthYear": 190
-      },
-      "region": "唐国",
-      "phaseIdentities": [
-        {
-          "scope": "stage-projection",
-          "stageId": "lyg.ganlu_bian",
-          "book": "yange",
-          "seqLo": 1191,
-          "seqHi": 1209,
-          "identity": "京兆府少尹、权知府事",
-          "role": "京兆府少尹",
-          "description": "罗立言身为京兆府少尹权知府事，暗中参与诛宦密谋，手握京兆府千余隶卒，等待着关键时刻的号令。",
-          "notes": [
-            "【关系】尚未在此节选中与程宗扬产生直接互动",
-            "【目标】查清王守澄被杀案以树立威信，同时明哲保身，避免卷入宦官与朝臣的冲突。"
-          ],
-          "status": "stage-current"
-        }
-      ],
-      "review": {
-        "approved": false,
-        "reviewed": true,
-        "flags": [],
-        "conflicts": []
-      },
-      "embedText": "罗立言 ｜ 京兆府少尹、权知府事 ｜ 【唐国人物】 ｜ 唐国朝廷(京兆府少尹) ｜ 登场于通善坊杏园 ｜ 急躁易怒、谨慎多疑、有官场心机，知道轻重 ｜ 尚未在此节选中与程宗扬产生直接互动 ｜ 接任京兆府少尹权知府事，到杏园勘查王守澄遇害案现场；与下属法曹；仵作梳理线索，发现车辙足迹和尸检结果；与右金吾卫长史暗中推诿，长史暗示此案牵涉宦官后，罗立言惊惧逃避责任"
     },
     {
       "id": "lyg.character.np008",

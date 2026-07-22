@@ -135,104 +135,6 @@
           "油滑处世",
           "信永热衷赚钱和扩张寺产僧众"
         ]
-      },
-      {
-        "id": "liuchao.faction.pan_jiang_cheng",
-        "name": "盘江程氏",
-        "description": "盘江程氏（家族）——简介待补，源自角色归属富化自动补录。",
-        "type": "家族",
-        "features": []
-      },
-      {
-        "id": "liuchao.faction.tai_yi_zhen_zong",
-        "name": "太乙真宗",
-        "description": "太乙真宗（宗门）——简介待补，源自角色归属富化自动补录。",
-        "type": "宗门",
-        "features": []
-      },
-      {
-        "id": "liuchao.faction.x0d71c824e7",
-        "name": "阳钧宗",
-        "description": "阳钧宗（宗门）——简介待补，源自角色归属富化自动补录。",
-        "type": "宗门",
-        "features": []
-      },
-      {
-        "id": "liuchao.faction.xcd42487992",
-        "name": "乾贞道",
-        "description": "乾贞道（组织）——简介待补，源自角色归属富化自动补录。",
-        "type": "组织",
-        "features": []
-      },
-      {
-        "id": "liuchao.faction.x6c70e576ef",
-        "name": "长青宗",
-        "description": "长青宗（宗门）——简介待补，源自角色归属富化自动补录。",
-        "type": "宗门",
-        "features": []
-      },
-      {
-        "id": "liuchao.faction.yao_chi_zong",
-        "name": "瑶池宗",
-        "description": "瑶池宗（宗门）——简介待补，源自角色归属富化自动补录。",
-        "type": "宗门",
-        "features": []
-      },
-      {
-        "id": "liuchao.faction.xing_yue_hu",
-        "name": "星月湖",
-        "description": "星月湖（组织）——简介待补，源自角色归属富化自动补录。",
-        "type": "组织",
-        "features": []
-      },
-      {
-        "id": "liuchao.faction.x78a6c9fdd3",
-        "name": "大孚灵鹫寺",
-        "description": "大孚灵鹫寺（宗门）——简介待补，源自角色归属富化自动补录。",
-        "type": "宗门",
-        "features": []
-      },
-      {
-        "id": "liuchao.faction.xd616f98403",
-        "name": "密宗（蕃密）",
-        "description": "密宗（蕃密）（组织）——简介待补，源自角色归属富化自动补录。",
-        "type": "组织",
-        "features": []
-      },
-      {
-        "id": "liuchao.faction.x6a73c1298c",
-        "name": "飞鸟家族",
-        "description": "飞鸟家族（家族）——简介待补，源自角色归属富化自动补录。",
-        "type": "家族",
-        "features": []
-      },
-      {
-        "id": "liuchao.faction.xee838e498d",
-        "name": "魏博",
-        "description": "魏博（势力）——简介待补，源自角色归属富化自动补录。",
-        "type": "势力",
-        "features": []
-      },
-      {
-        "id": "liuchao.faction.han_guo_chao_ting",
-        "name": "汉国朝廷",
-        "description": "汉国朝廷（势力）——简介待补，源自角色归属富化自动补录。",
-        "type": "势力",
-        "features": []
-      },
-      {
-        "id": "liuchao.faction.x2fc3ef553f",
-        "name": "江都王国",
-        "description": "江都王国（势力）——简介待补，源自角色归属富化自动补录。",
-        "type": "势力",
-        "features": []
-      },
-      {
-        "id": "liuchao.faction.x7e9612ce76",
-        "name": "唐国佛门理事会",
-        "description": "唐国佛门理事会（组织）——简介待补，源自角色归属富化自动补录。",
-        "type": "组织",
-        "features": []
       }
     ],
     "locations": [
@@ -326,169 +228,56 @@
         "id": "liuchao.character.cheng_zongyang",
         "name": "程宗扬",
         "description": "汉国舞阳侯与使节，刚被十方丛林列为佛门公敌。",
-        "role": "主角",
+        "role": "汉使",
         "gender": "男",
-        "affiliations": [
-          {
-            "factionId": "liuchao.faction.pan_jiang_cheng",
-            "category": "clan",
-            "role": "少主/大少爷"
-          }
-        ],
+        "affiliations": [],
         "locationId": "lyg.location.xuanping_fang",
         "profile": {
-          "origin": "现代来客。",
-          "personality": [
-            "拥有现代知识体系；水泥、拉链、纸钞、现代器物等概念来自其穿越者认知",
-            "现代人，拥有六朝人物没有的知识（纸钞体系，现代性玩具），好色",
-            "冲动",
-            "偶尔愧疚",
-            "有支配欲"
-          ]
+          "origin": "现代来客。"
         }
       },
       {
         "id": "liuchao.character.yang_yuhuan",
         "name": "杨玉环",
         "description": "唐国镇国大长公主，向程宗扬提供宫廷与北司情报。",
-        "role": "公主、盟友",
+        "role": "镇国大长公主",
         "gender": "女",
-        "affiliations": [
-          {
-            "factionId": "liuchao.faction.tang_guo_chao_ting",
-            "category": "state",
-            "role": "镇国公主/太真妃子"
-          },
-          {
-            "factionId": "liuchao.faction.tai_yi_zhen_zong",
-            "category": "sect",
-            "role": "钦命授箓传道（名义）"
-          },
-          {
-            "factionId": "liuchao.faction.x0d71c824e7",
-            "category": "sect",
-            "role": "钦命授箓传道（名义）"
-          },
-          {
-            "factionId": "liuchao.faction.xcd42487992",
-            "category": "organization",
-            "role": "钦命授箓传道（名义）"
-          },
-          {
-            "factionId": "liuchao.faction.x6c70e576ef",
-            "category": "sect",
-            "role": "钦命授箓传道（名义）"
-          },
-          {
-            "factionId": "liuchao.faction.yao_chi_zong",
-            "category": "sect",
-            "role": "钦命授箓传道（名义）"
-          },
-          {
-            "factionId": "liuchao.faction.guang_ming_guan_tang",
-            "category": "organization",
-            "role": "挂名弟子"
-          }
-        ],
+        "affiliations": [],
         "locationId": "lyg.location.ziyun_lou",
         "profile": {
-          "origin": "唐国宗室。",
-          "personality": [
-            "古灵精怪",
-            "野性难驯",
-            "拉皮条女王",
-            "叛逆狠辣",
-            "对礼教权势毫无敬畏",
-            "吃醋狠辣决绝",
-            "嘴强王者纸老虎（嘴上狂野、真上就尖叫逃走）",
-            "有贼心没贼胆——对性事充满好奇，但男主真要亲/上手就立马逃走"
-          ]
+          "origin": "唐国宗室。"
         }
       },
       {
         "id": "liuchao.character.xiao_zi",
         "name": "小紫",
         "description": "程宗扬的未婚妻与行动搭档，擅长毒术、机关与隐蔽侦察。",
-        "role": "未婚妻、助手",
+        "role": "行动搭档",
         "gender": "女",
-        "affiliations": [
-          {
-            "factionId": "liuchao.faction.hei_mo_hai",
-            "category": "organization",
-            "role": "毒宗唯一嫡传"
-          },
-          {
-            "factionId": "liuchao.faction.xing_yue_hu",
-            "category": "organization",
-            "role": "岳帅遗孤"
-          }
-        ],
+        "affiliations": [],
         "locationId": "lyg.location.xuanping_fang",
         "profile": {
-          "origin": "岳帅遗孤、黑魔海毒宗传人；此时身份已揭露。",
-          "personality": [
-            "白切黑病娇",
-            "初识程宗扬时以痴呆、天真、反常无知的形象接近，曾出现用开水浇花等伪装行为",
-            "表面天真烂漫娇憨黏人",
-            "实则心狠手辣城府极深",
-            "视人命如草芥",
-            "智商碾压全场",
-            "喜欢亲手调教、收服违抗程宗扬的女性敌人（种奴印/驯服）"
-          ]
+          "origin": "岳帅遗孤、黑魔海毒宗传人；此时身份已揭露。"
         }
       },
       {
         "id": "liuchao.character.pan_jinlian",
         "name": "潘金莲",
         "description": "光明观堂鹤羽剑姬，正与程宗扬彼此试探。",
-        "role": "光明观堂高阶医女，鹤羽剑姬，乐明珠的亲师姐",
+        "role": "鹤羽剑姬",
         "gender": "女",
-        "affiliations": [
-          {
-            "factionId": "liuchao.faction.guang_ming_guan_tang",
-            "category": "organization",
-            "role": "内堂弟子"
-          }
-        ],
+        "affiliations": [],
         "profile": {
-          "origin": "光明观堂弟子。",
-          "personality": [
-            "性格刚烈",
-            "极重同门情谊",
-            "外表狐媚易被误认浪女",
-            "实则冰清玉洁",
-            "被开发后藏于心底的受虐性幻想"
-          ]
+          "origin": "光明观堂弟子。"
         }
       },
       {
         "id": "lyg.character.shi_temeipu",
         "name": "释特昧普",
         "description": "以强制灌顶扩张势力的蕃密领袖。",
-        "role": "蕃密领袖、敌对NPC",
+        "role": "青龙寺蕃密首领",
         "gender": "男",
-        "affiliations": [
-          {
-            "factionId": "liuchao.faction.shi_fang_cong_lin",
-            "category": "sect",
-            "role": "佛门代言人、金身法王"
-          },
-          {
-            "factionId": "liuchao.faction.x78a6c9fdd3",
-            "category": "sect",
-            "role": "首座"
-          },
-          {
-            "factionId": "liuchao.faction.xd616f98403",
-            "category": "organization",
-            "role": "密宗之王"
-          },
-          {
-            "factionId": "liuchao.faction.tang_guo_chao_ting",
-            "category": "state",
-            "role": "左街僧录"
-          }
-        ],
+        "affiliations": [],
         "locationId": "lyg.location.qinglongsi",
         "profile": {
           "origin": "大孚灵鹫寺首座。"
@@ -498,29 +287,12 @@
         "id": "liuchao.character.fei_niao_ying_zi",
         "name": "飞鸟萤子",
         "description": "受黑魔海线索牵引进入长安的东瀛女忍。",
-        "role": "忍者刺客、俘虏",
+        "role": "女忍刺客",
         "gender": "女",
-        "affiliations": [
-          {
-            "factionId": "liuchao.faction.hei_mo_hai",
-            "category": "organization",
-            "role": "自荐客卿（非正式聘请）"
-          },
-          {
-            "factionId": "liuchao.faction.x6a73c1298c",
-            "category": "clan",
-            "role": "忍者"
-          }
-        ],
+        "affiliations": [],
         "locationId": "lyg.location.shuixiang_lou",
         "profile": {
-          "origin": "东瀛忍者。",
-          "personality": [
-            "冷漠",
-            "沉默寡言",
-            "隐忍",
-            "敬畏强者"
-          ]
+          "origin": "东瀛忍者。"
         }
       },
       {
@@ -529,100 +301,46 @@
         "description": "负责使节礼仪并登门补救失礼的鸿胪寺少卿。",
         "role": "鸿胪寺少卿",
         "gender": "男",
-        "affiliations": [
-          {
-            "factionId": "liuchao.faction.tang_guo_chao_ting",
-            "category": "state",
-            "role": "鸿胪寺少卿"
-          }
-        ],
+        "affiliations": [],
         "locationId": "lyg.location.xuanping_fang",
         "profile": {
-          "origin": "唐国官员。",
-          "personality": [
-            "正直",
-            "胆小",
-            "冷静",
-            "无奈"
-          ]
+          "origin": "唐国官员。"
         }
       },
       {
         "id": "lyg.character.kuiji",
         "name": "窥基",
         "description": "大慈恩寺主持，奉十方丛林法旨敌视程宗扬。",
-        "role": "大慈恩寺主持、主要敌对NPC",
+        "role": "大慈恩寺主持",
         "gender": "男",
-        "affiliations": [
-          {
-            "factionId": "lyg.faction.daciensi",
-            "category": "sect",
-            "role": "大师兄"
-          }
-        ],
+        "affiliations": [],
         "locationId": "lyg.location.daciensi",
         "profile": {
-          "origin": "十方丛林高层僧侣。",
-          "personality": [
-            "孤傲",
-            "凶狞",
-            "阴沉",
-            "心狠手辣"
-          ]
+          "origin": "十方丛林高层僧侣。"
         }
       },
       {
         "id": "lyg.character.guan_hai",
         "name": "观海",
         "description": "追随释特昧普演法并执行灌顶的密宗僧人。",
-        "role": "密宗僧人、敌对NPC",
+        "role": "密宗僧人",
         "gender": "男",
-        "affiliations": [
-          {
-            "factionId": "liuchao.faction.shi_fang_cong_lin",
-            "category": "sect",
-            "role": "密宗僧人/释特昧普师弟"
-          },
-          {
-            "factionId": "lyg.faction.qinglongsi",
-            "category": "sect",
-            "role": "获准演法的密宗客僧（非本寺僧）"
-          }
-        ],
+        "affiliations": [],
         "locationId": "lyg.location.qinglongsi",
         "profile": {
-          "origin": "释特昧普同门。",
-          "personality": [
-            "阴鸷",
-            "城府深",
-            "表面慈悲",
-            "手段狠辣",
-            "善于伪装"
-          ]
+          "origin": "释特昧普同门。"
         }
       },
       {
         "id": "lyg.character.np041",
         "name": "乐从训",
         "description": "受邀观看红莲演法的唐廷军政人物。",
-        "role": "魏博牙兵少将军",
+        "role": "唐廷军政人物",
         "gender": "男",
-        "affiliations": [
-          {
-            "factionId": "liuchao.faction.xee838e498d",
-            "category": "state",
-            "role": "六州都指挥使"
-          }
-        ],
+        "affiliations": [],
         "locationId": "lyg.location.daciensi",
         "profile": {
-          "origin": "唐国人物。",
-          "personality": [
-            "暴躁",
-            "暴戾",
-            "贪婪",
-            "欺软怕硬"
-          ]
+          "origin": "唐国人物。"
         }
       },
       {
@@ -631,137 +349,57 @@
         "description": "受宦官掣肘但仍试图约束佛门的唐国皇帝。",
         "role": "唐皇",
         "gender": "男",
-        "affiliations": [
-          {
-            "factionId": "liuchao.faction.tang_guo_chao_ting",
-            "category": "state",
-            "role": "皇帝"
-          }
-        ],
+        "affiliations": [],
         "locationId": "lyg.location.daming_palace",
         "profile": {
-          "origin": "唐国皇帝。",
-          "personality": [
-            "隐忍",
-            "愤怒",
-            "无力",
-            "屈辱"
-          ]
+          "origin": "唐国皇帝。"
         }
       },
       {
         "id": "liuchao.character.xu_junfang",
         "name": "徐君房",
         "description": "在元正朝会展示地球仪并自称秦国使者的异人。",
-        "role": "秦国正使",
+        "role": "自称秦使的异人",
         "gender": "男",
         "affiliations": [],
         "locationId": "lyg.location.daming_palace",
         "profile": {
-          "origin": "来历待核。",
-          "personality": [
-            "油滑机变",
-            "胆小惜命",
-            "熟悉太泉古阵门道",
-            "遇险时会求助程宗扬",
-            "张扬爱演",
-            "胆小易惊",
-            "爱抱怨撒娇",
-            "谨慎圆滑"
-          ]
+          "origin": "来历待核。"
         }
       },
       {
         "id": "liuchao.character.yi_xin",
         "name": "义姁",
         "description": "光明观堂医者，在太子误伤后负责紧急救治。",
-        "role": "逃走的奴婢",
+        "role": "医者",
         "gender": "女",
-        "affiliations": [
-          {
-            "factionId": "liuchao.faction.han_guo_chao_ting",
-            "category": "state",
-            "role": "太后身边女医"
-          },
-          {
-            "factionId": "liuchao.faction.guang_ming_guan_tang",
-            "category": "organization",
-            "role": "医女/女神医"
-          }
-        ],
+        "affiliations": [],
         "locationId": "lyg.location.daming_palace",
         "profile": {
-          "origin": "光明观堂弟子。",
-          "personality": [
-            "冷傲",
-            "板着脸",
-            "隐藏市侩",
-            "坚忍",
-            "专业敬业",
-            "心机"
-          ]
+          "origin": "光明观堂弟子。"
         }
       },
       {
         "id": "liuchao.character.cheng_guang",
         "name": "成光",
         "description": "随程宗扬居于水香楼并一同接触毒方的侍从。",
-        "role": "太子妃、程宗扬的鼎炉、侍奴",
+        "role": "内宅侍从",
         "gender": "女",
-        "affiliations": [
-          {
-            "factionId": "liuchao.faction.x2fc3ef553f",
-            "category": "state",
-            "role": "太子妃"
-          },
-          {
-            "factionId": "liuchao.faction.han_guo_chao_ting",
-            "category": "state",
-            "role": "皇后"
-          }
-        ],
+        "affiliations": [],
         "locationId": "lyg.location.shuixiang_lou",
         "profile": {
-          "origin": "已被程宗扬收编。",
-          "personality": [
-            "懦弱胆小",
-            "逆来顺受",
-            "极惧程宗扬+小紫",
-            "绝对听话乖巧"
-          ]
+          "origin": "已被程宗扬收编。"
         }
       },
       {
         "id": "liuchao.character.xin_yong",
         "name": "信永",
         "description": "熟悉十方丛林内情、愿向程宗扬示警的娑梵寺僧人。",
-        "role": "盟友、情报提供者",
+        "role": "情报提供者",
         "gender": "男",
-        "affiliations": [
-          {
-            "factionId": "liuchao.faction.suo_fan_si",
-            "category": "sect",
-            "role": "首席方丈"
-          },
-          {
-            "factionId": "liuchao.faction.shi_fang_cong_lin",
-            "category": "sect",
-            "role": "名誉主持（挂名）"
-          },
-          {
-            "factionId": "liuchao.faction.x7e9612ce76",
-            "category": "organization",
-            "role": "总理事"
-          }
-        ],
+        "affiliations": [],
         "profile": {
-          "origin": "娑梵寺僧人。",
-          "personality": [
-            "圆滑世故",
-            "胆小怕事",
-            "贪财",
-            "虚张声势"
-          ]
+          "origin": "娑梵寺僧人。"
         }
       }
     ],

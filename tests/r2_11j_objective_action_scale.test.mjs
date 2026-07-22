@@ -29,6 +29,7 @@ const sourceRebuiltStageIds = new Set([
   'lyl.luoyang_coup',
   'lyl.taiquan_expedition',
   'lyg.shixiang_ambush',
+  'lyg.ganlu_bian',
 ]);
 
 async function stages() {
@@ -100,7 +101,7 @@ function singleEventFixture(stage, event) {
   return save;
 }
 
-test('objective-action migrations cover 379 events while preserving the 267-event mechanical boundary', async () => {
+test('objective-action migrations cover 389 events while preserving the 267-event mechanical boundary', async () => {
   const allStages = await stages();
   const allEvents = allStages.flatMap(stage => stage.scenario.events.map(event => ({ stage, event })));
   const objectiveActions = allEvents.filter(({ event }) => event.playerCompletionContract?.kind === 'objective_action');
@@ -110,11 +111,11 @@ test('objective-action migrations cover 379 events while preserving the 267-even
     || event.worldActor?.opportunities?.some(opportunity => opportunity.completionContract));
   // +1 event / +8 contracts = R2-11M；+15 = R2-11P；+5 = R2-11Q；+6 = R2-11R；
   // +3 events / +13 contracts = R2-11S；+7 events / +17 contracts = R2-11T（二审补 s05_16）；
-  // +5 events / +14 contracts = R2-11U。
+  // +5 events / +14 contracts = R2-11U；+10 contracts = R2-11V。
   assert.equal(allEvents.length, 396);
-  assert.equal(objectiveActions.length, 379);
+  assert.equal(objectiveActions.length, 389);
   assert.equal(mechanicallyMigrated.length, 267);
-  assert.equal(covered.length, 386);
+  assert.equal(covered.length, 396);
   assert.deepEqual(
     Object.fromEntries(['lcq.', 'lyl.', 'lyg.'].map(prefix => [
       prefix,
