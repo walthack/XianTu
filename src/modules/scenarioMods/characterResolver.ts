@@ -20,6 +20,14 @@ interface RegistryPhase {
   role?: string;
   status?: string;
   forbidden?: string[];
+  relationToProtagonist?: string[] | string;
+  formsOfAddress?: string[] | string;
+  goals?: string[] | string;
+  weaknesses?: string[] | string;
+  joining?: string[] | string;
+  keyEvents?: string[];
+  ending?: string[] | string;
+  hideCanonicalAlias?: boolean;
 }
 interface RegistryStaticProfile {
   identitySummary?: string;
@@ -82,6 +90,15 @@ function stagePhase(entry: RegistryEntry, stageId: string): RegistryPhase | unde
 function relationshipPhases(entry: RegistryEntry): RegistryPhase[] {
   return asArray(entry.phaseIdentities).filter(p => p.scope === 'relationship-chain' || p.scope === 'identity-chain');
 }
+function phaseProfileValue<K extends keyof RegistryStaticProfile>(
+  profile: RegistryStaticProfile,
+  currentPhase: RegistryPhase | undefined,
+  key: K,
+): RegistryStaticProfile[K] {
+  return currentPhase && Object.prototype.hasOwnProperty.call(currentPhase, key)
+    ? currentPhase[key as keyof RegistryPhase] as RegistryStaticProfile[K]
+    : profile[key];
+}
 // 关卡所属书序：lcq(清羽)=0 / lyl(云龙)=1 / lyg(燕歌)=2；未知前缀视为最末（全量注入历程）
 function stageBookRank(stageId: string): number {
   if (stageId.startsWith('lcq.')) return 0;
@@ -105,20 +122,23 @@ function buildNotes(entry: RegistryEntry, currentPhase: RegistryPhase | undefine
     }
   }
   if (typeof profile.birthYear === 'number') add('生辰', `约纪元${profile.birthYear}年生（防误算：这是出生年，非年龄）`);
-  add('关系', profile.relationToProtagonist);
-  add('称呼', profile.formsOfAddress);
+  add('关系', phaseProfileValue(profile, currentPhase, 'relationToProtagonist'));
+  add('称呼', phaseProfileValue(profile, currentPhase, 'formsOfAddress'));
   add('谈吐', profile.speechStyle);
   add('底线', profile.principles);
-  add('目标', profile.goals);
-  add('软肋', profile.weaknesses);
+  add('目标', phaseProfileValue(profile, currentPhase, 'goals'));
+  add('软肋', phaseProfileValue(profile, currentPhase, 'weaknesses'));
   add('绝技', profile.signatureAbilities);
-  add('入伙', profile.joining);
-  add('情节', asArray(profile.keyEvents).slice(0, 8));
-  add('结局', profile.ending);
-  for (const phase of relationshipPhases(entry)) {
-    const line = [phase.seq, phase.identity, phase.status ? `status=${phase.status}` : ''].filter(Boolean).join('：');
-    add('阶段身份', line, 520);
-    if (phase.forbidden?.length) add('本阶段禁用', `${phase.seq}：${phase.forbidden.join('、')}`, 360);
+  add('入伙', phaseProfileValue(profile, currentPhase, 'joining'));
+  add('情节', asArray(phaseProfileValue(profile, currentPhase, 'keyEvents')).slice(0, 8));
+  add('结局', phaseProfileValue(profile, currentPhase, 'ending'));
+  // 有明确关卡投影时，只注入该关开场身份；完整关系链包含未来分支，不能进游戏提示词。
+  if (!currentPhase) {
+    for (const phase of relationshipPhases(entry)) {
+      const line = [phase.seq, phase.identity, phase.status ? `status=${phase.status}` : ''].filter(Boolean).join('：');
+      add('阶段身份', line, 520);
+      if (phase.forbidden?.length) add('本阶段禁用', `${phase.seq}：${phase.forbidden.join('、')}`, 360);
+    }
   }
   if (currentPhase) {
     add('阶段身份', `当前关卡 ${currentPhase.stageId}：${currentPhase.identity || currentPhase.role || ''}`, 520);
@@ -126,7 +146,9 @@ function buildNotes(entry: RegistryEntry, currentPhase: RegistryPhase | undefine
   }
   // review.humanNotes / followUps 是内部维护记录（含日期/"扫描抓了…"等工程语），不进游戏
   // （曾泄漏到人物面板与 LLM 提示词）。别名合并信息对 LLM 有用且不尴尬，保留。
-  add('人工正典', entry.review?.aliasMerged?.map(alias => `${alias} 已并入 ${entry.canonicalName}`));
+  if (!currentPhase?.hideCanonicalAlias) {
+    add('人工正典', entry.review?.aliasMerged?.map(alias => `${alias} 已并入 ${entry.canonicalName}`));
+  }
   return unique(notes);
 }
 
@@ -166,6 +188,12 @@ const CARD_TIME_GATE_EXCLUSIONS: Record<string, Set<string>> = {
     'liuchao.character.shang_zhen_yu',
   ]),
   'lyl.lin_an_black_sea': new Set([
+    'liuchao.character.ruan_xiang_ning',
+  ]),
+  'lyl.lin_an_bridge': new Set([
+    'liuchao.character.ruan_xiang_ning',
+  ]),
+  'lyl.xiaoyingzhou_blacksea_trap': new Set([
     'liuchao.character.ruan_xiang_ning',
   ]),
   'lyl.taiquan_expedition': new Set([

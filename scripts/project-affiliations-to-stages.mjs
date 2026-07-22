@@ -64,6 +64,13 @@ const AFFILIATION_CHARACTER_TIME_GATE_EXCLUSIONS = new Map([
   ['lyl.lin_an_black_sea', new Set([
     'liuchao.character.ruan_xiang_ning',
   ])],
+  // source9–11 仍只到“林娘子疑云”，继续封锁全局卡中的黑魔海与后宫归属。
+  ['lyl.lin_an_bridge', new Set([
+    'liuchao.character.ruan_xiang_ning',
+  ])],
+  ['lyl.xiaoyingzhou_blacksea_trap', new Set([
+    'liuchao.character.ruan_xiang_ning',
+  ])],
 ]);
 
 // R2-11P 来源重建已逐人裁定本关可见 affiliations；全局静态卡包含后续加入关系，

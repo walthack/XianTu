@@ -79,6 +79,14 @@ const CARD_TIME_GATE_EXCLUSIONS = new Map([
   ['lyl.lin_an_black_sea', new Set([
     'liuchao.character.ruan_xiang_ning',
   ])],
+  // R2-12：临安桥接 source9–11 仍只出现林娘子疑云，真实姓名、黑魔海身份与后宫关系未揭示。
+  ['lyl.lin_an_bridge', new Set([
+    'liuchao.character.ruan_xiang_ning',
+  ])],
+  // R2-12：小瀛洲关开场在 source15；真实身份到 source20、关系转折到 source23 才发生。
+  ['lyl.xiaoyingzhou_blacksea_trap', new Set([
+    'liuchao.character.ruan_xiang_ning',
+  ])],
   // R2-11Q（源 12–14）：这五人均使用本关时点的最小投影。全局卡含后续身份、
   // 关系或结局，构建期不得覆盖本关刚揭开的威远/林家/太尉府信息。
   ['lyl.taiquan_expedition', new Set([
@@ -141,6 +149,12 @@ function relationshipPhases(card) {
   return asArray(card.phaseIdentities).filter(phase => phase.scope === 'relationship-chain' || phase.scope === 'identity-chain');
 }
 
+function phaseProfileValue(profile, currentPhase, key) {
+  return currentPhase && Object.prototype.hasOwnProperty.call(currentPhase, key)
+    ? currentPhase[key]
+    : profile[key];
+}
+
 function stageBookRank(stageId) {
   if (String(stageId).startsWith('lcq.')) return 0;
   if (String(stageId).startsWith('lyl.')) return 1;
@@ -164,25 +178,29 @@ function buildNotes(card, currentPhase, stageId = '') {
     }
   }
   if (typeof profile.birthYear === 'number') add('生辰', `约纪元${profile.birthYear}年生（防误算：这是出生年，非年龄）`);
-  add('关系', profile.relationToProtagonist);
-  add('称呼', profile.formsOfAddress);
+  add('关系', phaseProfileValue(profile, currentPhase, 'relationToProtagonist'));
+  add('称呼', phaseProfileValue(profile, currentPhase, 'formsOfAddress'));
   add('谈吐', profile.speechStyle);
   add('底线', profile.principles);
-  add('目标', profile.goals);
-  add('软肋', profile.weaknesses);
+  add('目标', phaseProfileValue(profile, currentPhase, 'goals'));
+  add('软肋', phaseProfileValue(profile, currentPhase, 'weaknesses'));
   add('绝技', profile.signatureAbilities);
-  add('入伙', profile.joining);
-  add('情节', asArray(profile.keyEvents).slice(0, 8));
-  add('结局', profile.ending);
+  add('入伙', phaseProfileValue(profile, currentPhase, 'joining'));
+  add('情节', asArray(phaseProfileValue(profile, currentPhase, 'keyEvents')).slice(0, 8));
+  add('结局', phaseProfileValue(profile, currentPhase, 'ending'));
 
-  for (const phase of relationshipPhases(card)) {
-    const line = [
-      phase.seq,
-      phase.identity,
-      phase.status ? `status=${phase.status}` : '',
-    ].filter(Boolean).join('：');
-    add('阶段身份', line, 520);
-    if (phase.forbidden?.length) add('本阶段禁用', `${phase.seq}：${phase.forbidden.join('、')}`, 360);
+  // 有明确关卡投影时，只注入开场身份。把完整关系链（尤其“转折后”分支）
+  // 塞进每一关既会泄漏未来，也会与当前关系互相冲突。
+  if (!currentPhase) {
+    for (const phase of relationshipPhases(card)) {
+      const line = [
+        phase.seq,
+        phase.identity,
+        phase.status ? `status=${phase.status}` : '',
+      ].filter(Boolean).join('：');
+      add('阶段身份', line, 520);
+      if (phase.forbidden?.length) add('本阶段禁用', `${phase.seq}：${phase.forbidden.join('、')}`, 360);
+    }
   }
 
   if (currentPhase) {
@@ -191,7 +209,9 @@ function buildNotes(card, currentPhase, stageId = '') {
   }
 
   add('人工正典', card.review?.humanNotes);
-  add('人工正典', card.review?.aliasMerged?.map(alias => `${alias} 已并入 ${card.canonicalName}`));
+  if (!currentPhase?.hideCanonicalAlias) {
+    add('人工正典', card.review?.aliasMerged?.map(alias => `${alias} 已并入 ${card.canonicalName}`));
+  }
   add('人工正典', card.review?.followUps);
 
   return unique(notes);

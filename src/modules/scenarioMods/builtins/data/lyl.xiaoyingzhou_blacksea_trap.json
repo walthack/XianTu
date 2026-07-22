@@ -2684,67 +2684,24 @@
       },
       {
         "id": "liuchao.character.ruan_xiang_ning",
-        "name": "阮香凝",
-        "role": "程宗扬的侍妾",
-        "description": "阮香凝身材娇小，肤色白腻如雪，面容姣丽，常带娴淑神情。她身为程宗扬的下属与伴侣，虽伤势初愈，却以温柔细腻、善于珠算的性子，默默打理着琐事，护幼慈爱，外柔内韧。",
-        "skillIds": [
-          "lyl.skill.np098",
-          "lyl.skill.np099"
-        ],
-        "profile": {
-          "attributes": {
-            "rootBone": 8,
-            "spirituality": 8,
-            "comprehension": 6,
-            "fortune": 8,
-            "charm": 8,
-            "temperament": 7
-          },
-          "spiritRoot": {
-            "name": "木灵根",
-            "tier": "地品",
-            "description": "苍藤缠天而生，生机盎然，修炼者似古树盘根，专精复苏与束缚之术。"
-          },
-          "talents": [
-            {
-              "name": "顶级魅力",
-              "description": "气息如蜜糖诱捕心神，他走过的地方，连石头都想献上膝盖，跪求成为脚下砖。"
-            },
-            {
-              "name": "瞑寂术",
-              "description": "阮香凝的专属异能。"
-            }
-          ],
-          "appearance": "身材娇小，丰腴白腻，纤腰圆臀，肌肤白腻如雪，玉乳浑圆，雪臀高耸，双腿修长笔直，宛如羊脂白玉，穿高跟鞋时更显秀美挺直",
-          "personality": [
-            "表里两面",
-            "表面极温柔贤惠、细致入微(做汤会耐心剥净核桃仁苦皮，连程宗扬都叹林冲有福)",
-            "实为黑魔海高阶妖女、城府深沉",
-            "为组织利用丈夫毫无愧色"
-          ],
-          "race": "黑魔海玉姬之一",
-          "origin": "黑魔海玉姬之一（凝玉姬·绝世鼎炉），高阶妖女/潜伏人员；伪装成林冲之妻潜伏宋国，利用其安保机构/禁军身份刺探情报、掩护黑魔海行动",
-          "notes": [
-            "【真相】林冲始终不知妻子真实身份；其\"温柔贤惠\"是潜伏伪装，真身是黑魔海高层。",
-            "【备注】林冲始终不知妻子真实身份；其\"温柔贤惠\"是潜伏伪装，真身是黑魔海高层。",
-            "【性癖】绝世鼎炉之一，顺从；配合；暴露（如被扒开臀肉展露性器）",
-            "【身体】蜜穴被开苞；阴毛湿透；阴唇充血；蜜穴张开的肉孔；多次高潮"
-          ]
-        },
-        "realm": "筑基",
+        "name": "林娘子",
+        "role": "林冲之妻（开场真实来历尚未揭示）",
+        "description": "林冲之妻，举止温婉；真实姓名、阵营与未来关系只可随本关事件推进揭露。",
         "gender": "女",
         "affiliations": [
-          {
-            "factionId": "liuchao.faction.hei_mo_hai",
-            "category": "organization",
-            "role": "疑似御姬/成员"
-          },
           {
             "factionId": "lyg.faction.song_state",
             "category": "organization",
             "role": "禁军教头林冲之妻"
           }
-        ]
+        ],
+        "profile": {
+          "origin": "林冲之妻，开场真实来历尚未揭示",
+          "personality": [
+            "温柔贤惠",
+            "细致谨慎"
+          ]
+        }
       },
       {
         "id": "liuchao.character.cai_jingzhong",
