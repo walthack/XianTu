@@ -25,6 +25,29 @@ async function loadAllStages() {
   return Promise.all(files.map(async name => JSON.parse(await readFile(new URL(name, dataUrl), 'utf8'))));
 }
 
+function singleEventFixture(stage, event) {
+  return {
+    角色: { 身份: { 名字: 'R2-11W机会卡验收' }, 位置: { 描述: '当前事件地点' }, 属性: { 声望: 0 } },
+    社交: { 关系: {}, 记忆: { 短期记忆: [], 中期记忆: [], 长期记忆: [], 隐式中期记忆: [] } },
+    系统: { 扩展: {}, 历史: { 叙事: [] } },
+    世界: { 信息: { 世界名称: stage.world.name, 地点信息: [], 势力信息: [] }, 状态: { 剧本模组: {
+      modId: stage.manifest.id,
+      currentChapterId: 'test.chapter',
+      chapters: [{ id: 'test.chapter', title: '测试章节', summary: '', eventIds: [event.id] }],
+      events: [structuredClone(event)],
+      flags: structuredClone(stage.scenario.initialFlags),
+      activeEventIds: [event.id],
+      completedEventIds: [],
+      completedChapterIds: [],
+      offscreenResolvedEventIds: [],
+      chronicle: [],
+      stallTurns: 0,
+      worldTurn: 0,
+      canon: structuredClone(stage.canon),
+    } } },
+  };
+}
+
 test('curated opportunity inventory grows from seven to ten without mechanical event-card parity', async () => {
   const stages = await loadAllStages();
   const opportunities = stages.flatMap(stage => stage.scenario.events.flatMap(event =>
@@ -61,6 +84,20 @@ test('each new card is bound to a real deterministic actor decision and a struct
   }
 });
 
+test('production runtime actually surfaces all three new cards from their default NPC decisions', async () => {
+  const stages = await loadAllStages();
+  const { advanceScenarioRuntime } = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  for (const [opportunityId, expected] of EXPECTED) {
+    const stage = stages.find(item => item.manifest.id === expected.stageId);
+    const event = stage.scenario.events.find(item => item.id === expected.eventId);
+    const save = advanceScenarioRuntime(singleEventFixture(stage, event)).saveData;
+    const engine = save.世界.状态.剧本模组.actorEngine;
+    assert.equal(engine.opportunityStates[opportunityId].status, 'available', opportunityId);
+    assert.equal(engine.decisions.some(decision => decision.actorId === expected.actorId
+      && decision.actionId === expected.selectedActionId), true, opportunityId);
+  }
+});
+
 test('all builtins remain schema-valid after curated card expansion', async () => {
   const stages = await loadAllStages();
   const { validateScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
@@ -69,4 +106,3 @@ test('all builtins remain schema-valid after curated card expansion', async () =
     assert.deepEqual(result.issues, [], `${stage.manifest.id}: ${JSON.stringify(result.issues)}`);
   }
 });
-

@@ -127,13 +127,13 @@
 - [x] **R2-10J · 配置迁移演员状态承接（2026-07-20，Claude 三审）**：`ScenarioActorMemory` 补 `resources`／`actionCooldowns`／`activeAction`／`agendaClocks` 并按 `runtimeAnchorEventId` 归属承接。此前 decisionCore 每次发版改动都会让进行中存档走 `hydrateNpcActors` 重建，静默退还已花资源、清空败方冷却、回退议程时钟并中断在途多回合行动；三书 6 处 core 均受影响。跨事件仍只继承态度／知识／经历（R2-10C 合同不变），迁移后失去绑定的在途行动显式作废并落一轮冷却。旧档时间线 `stallTurns` 回推补齐特征化回归。反例=`tests/r2_10j_config_migration_state.test.mjs`、`tests/r2_10j_legacy_timeline_backfill.test.mjs`，已并入 `npm run test:g1:npc`。
 - [~] **R2-10K · G2 真机首轮与修复（2026-07-20，Claude→Codex）**：`s01_05` 三路线真机状态层全通过，文本层确认是门禁过严而非真实泄漏。现已收紧军事比例语境、区分坊市路线与军事驻扎、补 `有无(?!数)|有没有`，并从本关绝对禁词移除玩家已知的“黑魔海”；军事数量与“盛姬”未揭露关联仍受保护。角色卡问题扩为三书结构化审计，补回萨安／朱诺／弥骨三张硬缺卡并以测试锁死，另留 19 名高置信抽取层补卡队列，未把盛姬个案直接转正。`canon:build` 37 关、390/390 测试全绿。交接=`docs/R2-10K-G2-TRUE-DEVICE-FINDINGS-2026-07-20.md`，审计=`docs/R2-10L-MISSING-LOAD-BEARING-CHARACTER-AUDIT-2026-07-20.md`。**仍须重跑三路线；R2-10B 保持 `[~]`。**
 - [~] **R2-10M · G2 三路线真机复验（2026-07-20，Claude）**：门禁修复**验收通过**——三路线 33 轮真实正文，降级罐头 0（修复前 25%）、`[叙事硬门禁]` 信号 0、正文与行动选项硬违规 0；首轮必炸的市集输入正常产出，「七里坊」这类旧误杀高危形态正确放行。R3 附带真机验到 R2-10C 两个 `canon_anchor` 硬截止（三事件依次场外、零权限）。**另修一处二审漏放**（`c1312ac`）：比例语境改按主语判定，`凉州军折损三成`／`城中抽丁三成`／`守军减了三成` 三条同义表述此前全部逃逸。**并发现新阻断**：主叙事换 MiniMax-M2.7-highspeed 后，模型全程 30 条指令中发出剧本完成指令 **0 条**，两条介入路线机会卡必然到期作废（deepseek-v3.2 下首轮即完成并授权）——引擎与门禁均无过错。复核后定性为**架构项**：`flags.event.*.done` 是最后一块仍由 LLM 直接写入的世界真值（`commandValidator` 已把 worldTurn/actorEngine/eventTimeline/chronicle/divergences 等全部收归引擎，仅此一处例外；`canonGuard` 只执法"有无资格宣称"不执法"是否属实"），全库 380 个事件的 completion 条件均为 done 标志形态、引擎可计算的 0 个。目标是让 LLM 从**写真值**降级为**提交证据**，非让事件都自主场外跑完。权威边界界定见 `PROJECT-STATUS.md` §2.3，候选方案三条待用户选型。模型差异只是显影剂，不是肇事者；已立为 **R2-11** 独立架构项。另查明应用不发任何 reasoning 参数、MiniMax 默认开启且关不掉，非 highspeed 档位因思维链吃满 max_tokens 产出零正文。报告=`docs/R2-10M-G2-REVERIFY-2026-07-20.md`。**R2-10B 保持 `[~]`。**
-- [~] **R2-11 · 事件真值写入权收归引擎（2026-07-21，已扩至 308/380）**
-  **目标**：让 380 个事件都不再依赖 LLM 直接掌握世界真值。**不是**让事件都自主场外跑完——玩家亲历仍要靠玩家玩出来，收的只是**真值写入权**。
-  **现状**：方案①已落 `s01_05–08`。机会卡声明 `player_action_sequence`，每次成功玩家回合最多推进一步；程序只读取玩家输入，不读取 LLM 正文/命令。`s01_05/08` 满足步骤后立即结算；`s01_06/07` 用 `timeline_deadline` 把“玩家已参与”与“正典死亡已发生”分开，必须等绝对截止才写 `done`；无截止且不得场外完成的 `s01_08` 用 `persistent` 保留唯一完成入口。`canonGuard` 拒绝模型直写，旧事件对账不得跨越；JSON 重载、场外竞争、回执/权限幂等均有回归。故当前为 **4/380 个事件具备可计算亲历完成合同，376 个仍沿用旧路径**。
+- [~] **R2-11 · 事件真值写入权收归引擎（2026-07-22，工程覆盖 396/396，二审收口中）**
+  **目标**：让当前 396 个事件都不再依赖 LLM 直接掌握世界真值。**不是**让事件都自主场外跑完——玩家亲历仍要靠玩家玩出来，收的只是**真值写入权**。
+  **现状**：389 个 `objective_action`、1 个 `local_condition`、6 个机会卡合同事件已覆盖全部 396 个事件；其中 267 个结构明确事件为受限机械迁移，122 个特殊／来源重建事件为人工合同。`canonGuard` 拒绝模型直写，旧事件对账不得跨越；JSON 重载、场外竞争、回执/权限幂等与八个隔离关整关重放均有回归。8 个来源重建关共 88 个事件继续 quarantine，不因合同化自动回接默认 Rail。
   **代价实证**：同一引擎同一基准同一输入，仅换主叙事模型，两条介入路线的玩家意图即静默归零（见 R2-10M）。
   **目标形态**：LLM 从**写真值**降级为**提交证据**——叙事层报告玩家做了什么 → 引擎按完成合同独立裁定 → 引擎自行写 `done`，该路径进入 FORBIDDEN_PATHS。
   **已选方案**：①机会卡确定性完成合同，作为后续通用 completion 规则的前身。②③保留为非机会卡事件的后续迁移工具，不在本纵切混做。
-  **下一门**：先实现追踪/执行分离、引擎固定推进选项、可见步骤与剩余窗口、绝对截止的 `partial` 收束；再选择非机会卡事件验证判定结果或地点/时间型合同，不能把关键词匹配机械复制到其余 376 个事件。设计=`docs/R2-11-OPPORTUNITY-ACTION-UX-DESIGN-2026-07-20.md`，首纵切=`docs/R2-11-OPTION1-DETERMINISTIC-OPPORTUNITY-COMPLETION-2026-07-20.md`，跨事件 G1=`docs/R2-11B-CROSS-EVENT-DETERMINISTIC-COMPLETION-G1-2026-07-21.md`。
+  **下一门**：完成甘露关与精选机会卡二审，随后对三张新增机会做真机追踪／两步推进／重载回执冒烟。设计=`docs/R2-11-OPPORTUNITY-ACTION-UX-DESIGN-2026-07-20.md`，全局收口=`docs/R2-11X-GLOBAL-CONTRACT-CLOSEOUT-2026-07-22.md`。
   **结构化执行纵切**：`s01_05` 已完成追踪／执行分离，本地推进按钮携带稳定动作身份、时间成本与合同哈希，具体政策选择可重放；LLM 选项与自由输入不再是主要完成证据。报告=`docs/R2-11C-STRUCTURED-OPPORTUNITY-ACTIONS-G1-2026-07-21.md`。
   **跨事件收束纵切**：结构化动作已扩至 `s01_06–08`，右栏显示当前步骤和剩余窗口；有截止事件按 `participated / partial / offscreen` 确定性收束，partial 不授完整权限，无截止 `s01_08` 明示可自行安排。报告=`docs/R2-11D-CROSS-EVENT-ACTIONS-AND-PARTIAL-G1-2026-07-21.md`。
   **非机会卡判定纵切**：`s01_09` 以事件级 `local_condition` 合同提供固定动作，按行动前存档判 success／partial，LLM 只演出；不介入则六回合截止场外收束。下一批接 outcome effects 和失败后准备／重试。报告=`docs/R2-11E-NON-OPPORTUNITY-LOCAL-COMPLETION-G1-2026-07-21.md`。
@@ -143,6 +143,7 @@
   **二审阻断关闭**：`local_condition` 在绝对截止同回合完成时新增合同 hash+ready 优先权，不再被场外结算覆盖；两书补真实 sleeping/skip/byte-replay 用例，修正文档证据强度。报告=`docs/R2-11I-DEADLINE-OWNERSHIP-AND-WAKE-REVERIFY-2026-07-21.md`。
   **明确目标批量迁移**：新增 `objective_action`，对 267 个有明确 objective、唯一标准完成键、无多拍 evidence、非隔离关的事件生成固定主线动作；三书数量 122/59/86，总覆盖 274/380。八个隔离关严格排除。报告=`docs/R2-11J-OBJECTIVE-ACTION-BULK-MIGRATION-2026-07-21.md`。
   **非隔离特殊事件迁移**：21 个登场展示、10 个人工目标、3 个三步高光完成合同化；active 非关键事件的动作选择与 ready 落账路径同步补齐。覆盖 308/380，余下 72 个全属八个来源／顺序隔离关，须先完成原文重建。报告=`docs/R2-11K-SPECIAL-EVENT-CONTRACTS-2026-07-21.md`。
+  **隔离关来源重建与全局收口**：八个隔离关逐关回原文重建，保留冻结 ID／completion path 并落人工合同，事件总数随必要 append-only 补拍增至 396；现覆盖 396/396，quarantine 不变。精选机会卡 7→10，仍只在已有决策核的承重锚点人工扩写。报告=`docs/R2-11X-GLOBAL-CONTRACT-CLOSEOUT-2026-07-22.md`。
   **日终暂停／后续交接**：当前由用户先做真机测试，生产代码停止在 `97c46dd` 后；剩余八个隔离关交给 Claude 逐关重建来源与顺序，禁止直接套用批量迁移或自动回接默认 Rail。交接=`docs/R2-11L-DAY-END-TEST-AND-CLAUDE-HANDOFF-2026-07-21.md`。
 
 ### 世界/NPC 引擎设计参照系（2026-07-19 用户拍板，实现指引）
