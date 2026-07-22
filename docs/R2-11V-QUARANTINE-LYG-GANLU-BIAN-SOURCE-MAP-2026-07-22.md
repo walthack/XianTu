@@ -40,6 +40,8 @@
 
 ## 门禁与验证
 
+- Claude 二审 P1 已修：冻结 chapter completion path 不动，按实际 eventIds 重写章节标题／摘要；`release_jingnian` 所在章节现在明确写“权宦追凶”，下一章只写甘露搅局与小紫问法，避免 UI／prompt 稳定错帧。
+- P3 单记：gitignored 的 `lyg.ganlu_bian.sources.md` 仍是 source135 旧边界构建参考，不被 runtime、测试或发布产物读取；后续若重做来源文档生成链再统一清理。
 - 十拍人工双步 `objective_action`，机械动作 `advance_declared_objective` 永久禁入。
 - 4 个冻结 chapter 保留，按新顺序重新分组；空档可完成全部十拍并跨 JSON 往返幂等。
 - 14 名演员只保留本时点最小身份；技能、功法、物品、境界、content access、静态 affiliations 与派生关系不回灌。

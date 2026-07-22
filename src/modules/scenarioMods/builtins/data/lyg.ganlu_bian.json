@@ -444,8 +444,8 @@
       },
       {
         "id": "lyg.chapter.manipulation",
-        "title": "程宅阴谋与阳禄门院",
-        "summary": "厘清广源行控制、周飞合谋、黎锦香潜入与飞鸟萤子掌握的东瀛线索。",
+        "title": "广源行阴谋与权宦追凶",
+        "summary": "厘清广源行控制、周飞合谋与飞鸟萤子的东瀛线索，并在博陆王府确认权宦追凶分工。",
         "activation": [
           {
             "path": "flags.event.li_jinxiang_meeting_done",
@@ -480,8 +480,8 @@
       },
       {
         "id": "lyg.chapter.power_gathering",
-        "title": "权宦追凶与甘露搅局",
-        "summary": "掌握权宦追凶分工，汇总甘露局势并采纳释放番僧的搅局计。",
+        "title": "甘露搅局与小紫问法",
+        "summary": "汇总甘露局势并采纳释放番僧的搅局计，再承接小紫向白霓裳核对强开气海的代价。",
         "activation": [
           {
             "path": "flags.event.soul_summoning_done",

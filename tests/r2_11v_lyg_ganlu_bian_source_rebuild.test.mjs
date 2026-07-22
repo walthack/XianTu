@@ -61,6 +61,18 @@ test('opening owns the source126 plot but leaks none of the playable source127�
   }
 });
 
+test('chapter framing matches every event exposed to the UI and narration prompt', async () => {
+  const document = await stage();
+  const manipulation = document.scenario.chapters.find(item => item.id === 'lyg.chapter.manipulation');
+  const powerGathering = document.scenario.chapters.find(item => item.id === 'lyg.chapter.power_gathering');
+  assert.equal(manipulation.eventIds.includes('lyg.event.release_jingnian'), true);
+  assert.match(`${manipulation.title}${manipulation.summary}`, /权宦追凶/);
+  assert.deepEqual(powerGathering.eventIds, ['lyg.event.su_sha_identified', 'lyg.event.xiao_zi_departure']);
+  assert.match(`${powerGathering.title}${powerGathering.summary}`, /甘露搅局/);
+  assert.match(`${powerGathering.title}${powerGathering.summary}`, /小紫.*问法|强开气海/);
+  assert.equal(`${powerGathering.title}${powerGathering.summary}`.includes('权宦追凶'), false);
+});
+
 test('fourteen stage actors remain minimal and affiliation locked', async () => {
   const document = await stage();
   const required = new Set([
