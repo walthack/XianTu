@@ -69,6 +69,16 @@ const AFFILIATION_CHARACTER_TIME_GATE_EXCLUSIONS = new Map([
 // R2-11P 来源重建已逐人裁定本关可见 affiliations；全局静态卡包含后续加入关系，
 // 本关演员一律以 stage 内手写集合为准，禁止构建期再次扩写。
 const AFFILIATION_STAGE_LOCKS = new Map([
+  // R2-11T 已按第74章开场可知状态逐人收口；后期商号、黑魔海与主角势力归属不得回灌。
+  ['lcq.stage_05', new Set([
+    'liuchao.character.cheng_zongyang', 'liuchao.character.le_mingzhu',
+    'liuchao.character.xiao_zi', 'liuchao.character.xie_yi',
+    'liuchao.character.yun_cang_feng', 'liuchao.character.ning_yu',
+    'liuchao.character.wu_er_lang', 'liuchao.character.su_li',
+    'liuchao.character.qi_yuan', 'lcq.character.np004',
+    'lcq.character.np006', 'liuchao.character.bi_ji',
+    'liuchao.character.a_xi', 'liuchao.character.dan_chen',
+  ])],
   // R2-11S 已按第18章开场逐人收口；后期商号、黑魔海与星月湖归属不得回灌。
   ['lcq.stage_03', new Set([
     'liuchao.character.cheng_zongyang', 'liuchao.character.su_daji',

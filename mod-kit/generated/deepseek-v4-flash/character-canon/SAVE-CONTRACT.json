@@ -356,11 +356,17 @@
         "lcq.event.s05_06",
         "lcq.event.s05_07",
         "lcq.event.s05_08",
-        "lcq.event.s05_09"
+        "lcq.event.s05_09",
+        "lcq.event.s05_10",
+        "lcq.event.s05_11",
+        "lcq.event.s05_12",
+        "lcq.event.s05_13",
+        "lcq.event.s05_14",
+        "lcq.event.s05_15"
       ],
       "chapterFlagPaths": {
         "lcq.chapter.stage_05": [
-          "flags.event.s05_09.done"
+          "flags.event.s05_15.done"
         ]
       },
       "eventFlagPaths": {
@@ -390,6 +396,24 @@
         ],
         "lcq.event.s05_09": [
           "flags.event.s05_09.done"
+        ],
+        "lcq.event.s05_10": [
+          "flags.event.s05_10.done"
+        ],
+        "lcq.event.s05_11": [
+          "flags.event.s05_11.done"
+        ],
+        "lcq.event.s05_12": [
+          "flags.event.s05_12.done"
+        ],
+        "lcq.event.s05_13": [
+          "flags.event.s05_13.done"
+        ],
+        "lcq.event.s05_14": [
+          "flags.event.s05_14.done"
+        ],
+        "lcq.event.s05_15": [
+          "flags.event.s05_15.done"
         ],
         "lcq.event.debut_xiaozi": [
           "flags.event.debut_xiaozi.done"

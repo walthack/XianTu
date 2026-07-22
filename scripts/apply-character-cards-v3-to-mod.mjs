@@ -25,6 +25,17 @@ const force = process.argv.includes('--force');
 // 卡片是跨书静态档案；个别早期关卡只出现未揭示身份的称谓，不能按 alias
 // 自动补全真实身份与稳定画像。新增条目须在 CANON-DECISIONS.md 留原文依据。
 const CARD_TIME_GATE_EXCLUSIONS = new Map([
+  // R2-11T：本关开场停在第73章大潮之后。全局卡含后期程氏商会、紫妈妈、
+  // 凝羽/碧姬真相等信息；14 名演员均使用第74–92章时点最小投影。
+  ['lcq.stage_05', new Set([
+    'liuchao.character.cheng_zongyang', 'liuchao.character.le_mingzhu',
+    'liuchao.character.xiao_zi', 'liuchao.character.xie_yi',
+    'liuchao.character.yun_cang_feng', 'liuchao.character.ning_yu',
+    'liuchao.character.wu_er_lang', 'liuchao.character.su_li',
+    'liuchao.character.qi_yuan', 'lcq.character.np004',
+    'lcq.character.np006', 'liuchao.character.bi_ji',
+    'liuchao.character.a_xi', 'liuchao.character.dan_chen',
+  ])],
   // R2-11S：本关开场在第18章中段，九名演员的全局卡均含南荒后段或跨书信息；
   // 使用重建脚本内的时点最小投影，由事件按第18–36章顺序逐步揭露。
   ['lcq.stage_03', new Set([

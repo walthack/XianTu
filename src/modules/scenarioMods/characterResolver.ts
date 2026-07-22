@@ -140,6 +140,15 @@ for (const entry of (registryJson as { characters: RegistryEntry[] }).characters
 // 与构建期 apply-character-cards-v3-to-mod.mjs 同步：早期关卡里的未揭示称谓
 // 不得因 alias 命中全局 registry 而在新档物化时补出未来身份或画像。
 const CARD_TIME_GATE_EXCLUSIONS: Record<string, Set<string>> = {
+  'lcq.stage_05': new Set([
+    'liuchao.character.cheng_zongyang', 'liuchao.character.le_mingzhu',
+    'liuchao.character.xiao_zi', 'liuchao.character.xie_yi',
+    'liuchao.character.yun_cang_feng', 'liuchao.character.ning_yu',
+    'liuchao.character.wu_er_lang', 'liuchao.character.su_li',
+    'liuchao.character.qi_yuan', 'lcq.character.np004',
+    'lcq.character.np006', 'liuchao.character.bi_ji',
+    'liuchao.character.a_xi', 'liuchao.character.dan_chen',
+  ]),
   'lcq.stage_03': new Set([
     'liuchao.character.cheng_zongyang', 'liuchao.character.su_daji',
     'liuchao.character.ning_yu', 'liuchao.character.a_jiman_bana',
