@@ -1700,7 +1700,7 @@
         "id": "liuchao.character.sun_shou",
         "name": "孙寿",
         "description": "她表面柔婉乖巧，实则骄纵歹毒，作为程宗扬内宅侍婢，常以温顺姿态掩藏心计。",
-        "role": "关键人物",
+        "role": "吕氏外戚女眷",
         "gender": "女",
         "realm": "金丹",
         "affiliations": [
@@ -1742,19 +1742,15 @@
             }
           ],
           "personality": [
-            "上位时骄横歹毒",
+            "骄横",
             "贪婪虚荣",
             "心狠手辣",
-            "毫无风骨欺软怕硬",
-            "落难后卑微自称\"犯妇\"摇尾乞怜"
+            "欺软怕硬",
+            "善于趋利避害"
           ],
           "race": "狐族",
           "origin": "犯妇/原为世家女眷",
-          "appearance": "白腻圆润的玉乳，白美丰臀，腰臀曲线完美，肌肤白如牛乳，胸前双乳又白又大，乳头穿银环挂银铃",
-          "notes": [
-            "【性癖】暴露；受虐；群交；肛交；舔食精液",
-            "【身体】乳头穿银环；阴蒂被揉弄；蜜穴被银棒插弄"
-          ]
+          "appearance": "衣饰华贵，保持襄城君的世家女眷仪态。"
         }
       },
       {
@@ -1784,11 +1780,6 @@
             "factionId": "liuchao.faction.han_guo_chao_ting",
             "category": "state",
             "role": "昭仪（天子刘骜下诏入宫）"
-          },
-          {
-            "factionId": "liuchao.faction.x2d33e1eaf9",
-            "category": "organization",
-            "role": "内眷/妾室"
           }
         ],
         "locationId": "lyl.location.shangshenguan",
@@ -1817,17 +1808,11 @@
           ],
           "appearance": "雪肤花貌，肌肤雪嫩，胸乳和腰臀曲线饱满，娇嫩中有着丰艳的韵致；一对鲜妍明媚的姐妹花，与赵飞燕容貌身段七八分相似，但各擅风情；玉乳略大一圈，乳头更加挺翘；红唇湿湿，脸上带着柔婉而天真的媚意。",
           "personality": [
-            "妖艳主动",
-            "冷静城府深",
-            "\"拉皮条\"天才",
-            "无道德包袱",
-            "深知姐妹一体不嫉妒"
+            "温柔羞怯",
+            "天真单纯",
+            "斯文有礼"
           ],
-          "origin": "汉国昭仪/赵飞燕之妹",
-          "notes": [
-            "【性癖】主动勾引献身；精房中媚术；享三人行；\"坑姐\"专业户：扯姐红绫逼皇后看；达姐妹双飞",
-            "【身体】丰满多汁；肌肤凝脂；\"出浴不濡\"水魄之躯（水珠不沾肤）"
-          ]
+          "origin": "汉国昭仪/赵飞燕之妹"
         }
       },
       {
@@ -2654,11 +2639,10 @@
             }
           ],
           "personality": [
-            "泼辣刁蛮",
-            "好胜心极强",
-            "风风火火",
-            "一言不合拔剑",
-            "张扬的世家小辣妹"
+            "泼辣果断",
+            "好胜",
+            "重视云氏家族",
+            "行动直接"
           ],
           "notes": [
             "【门规约束】云丹琉是云氏成员，需遵守云氏家族规矩，不得随意与程宗扬公开私情"
@@ -2790,15 +2774,12 @@
           ],
           "appearance": "丰满、成熟泼辣，容貌与李师师有八分相似，修眉如画，目如秋水，身量比李师师略高，身材丰润，肌肤白腻，臀部浑圆肥大，腰身纤细，双腿修长，整体曲线动人，艳光照人。",
           "personality": [
-            "市侩（愿意献出女儿换取利益）",
-            "有着江湖儿女的大方与豪爽，前期对主角敌意戒备",
-            "\"咬牙隐忍却无法抗拒\"的傲娇熟女反差"
+            "精明爽快",
+            "市侩现实",
+            "重视家业与女儿安危",
+            "前期对程宗扬戒备"
           ],
-          "origin": "阮香凝的妹妹",
-          "notes": [
-            "【性癖】臣服性行为；公开/群体性交；姐妹共侍；被调教",
-            "【身体】阴唇充血胀开，蜜穴张开肉孔，淫水四溢；乳头深红；臀部浑圆肥大，腰身纤细；玉腿修长白滑；成熟丰腴，蜜肉敏感；春药作用下极易动情"
-          ]
+          "origin": "阮香凝的妹妹"
         },
         "realm": "筑基",
         "gender": "女",
@@ -2961,7 +2942,7 @@
       {
         "id": "liuchao.character.lv_zhi",
         "name": "吕雉",
-        "role": "汉国太后（失势）",
+        "role": "汉国太后与吕氏权力核心",
         "description": "这位昔年威震朝堂的汉国太后，如今沦为他人掌中玩物，却依旧挺直腰背，眸如刀锋，冷厉中透着不屈。她雪白丰腴的肌肤上烙着屈辱的玺印，宫装华服难掩眼底的不甘与高傲，仿佛即便身处泥淖，也要用那份老谋深算的权谋心性，在绝境中谋取一线生机。",
         "profile": {
           "attributes": {
@@ -2989,15 +2970,13 @@
           ],
           "appearance": "发如乌云，肤如白瓷，胸前酥乳丰挺，细腰丰臀，玉腿修长圆润，玉脸高贵美艳",
           "personality": [
-            "平时冷静、威严、隐忍但不卑微",
-            "入主角后宫团后顺从、隐忍、羞耻感强"
+            "冷静",
+            "威严",
+            "隐忍但不卑微",
+            "善于权谋"
           ],
           "race": "羽族",
-          "origin": "吕太后；表面贪权妖后，实为给被佛道围剿的飞羽族谋生路",
-          "notes": [
-            "【性癖】程宗扬已疯狂开发其后庭；处女元阴留作高潮\"开封\"的筹码；被支配",
-            "【身体】处女蜜穴（未破）；肛门被破；敏感乳头；阴蒂敏感"
-          ]
+          "origin": "吕太后；表面贪权妖后，实为给被佛道围剿的飞羽族谋生路"
         },
         "realm": "筑基",
         "gender": "女",
@@ -3295,20 +3274,17 @@
         "id": "liuchao.character.yin_fulan",
         "name": "尹馥兰",
         "gender": "女",
-        "role": "娼妓",
+        "role": "受制的青叶教掌教夫人",
         "description": "尹馥兰曾是青叶教的掌教夫人，如今却沦为程氏内宅的侍奴，她那娇艳含嗔的脸上总带着怯懦的顺从，生怕行差踏错便招来责罚——毕竟，她早已献出一魂一魄，只能以鼎炉之身战战兢兢地侍奉主人。",
         "profile": {
-          "appearance": "丰腴熟美，肌肤雪白，身高腿长，玉乳饱满，臀部肥美白艳，乳头穿银环挂银铃，肉感十足，充满熟艳风情。",
+          "appearance": "丰腴熟美，仍带昔日掌教夫人的仪态。",
           "notes": [
-            "【誓约约束】被都卢难旦妖铃收服后献出一魂一魄，需以鼎炉侍奉主人，保持雌伏之礼。",
-            "【性癖】臣服；受虐；暴露；肛交；乳环",
-            "【身体】乳头穿孔挂银铃；蜜穴被干出血（模拟落红）；身高腿长；乳房饱满"
+            "【誓约约束】被都卢难旦妖铃收服后献出一魂一魄，需以鼎炉侍奉主人，保持雌伏之礼。"
           ],
           "personality": [
-            "顺从",
-            "讨好",
-            "淫荡",
-            "臣服"
+            "世故",
+            "善于察言观色",
+            "处境受制时谨慎自保"
           ],
           "origin": "掌教夫人（后沦为性奴）"
         },
@@ -3369,11 +3345,7 @@
             "被调教成极度缺安全感",
             "唯恐被抛弃的温顺内眷"
           ],
-          "origin": "洛帮帮主",
-          "notes": [
-            "【性癖】服从；肛交；暴露；群交；施虐/受虐倾向",
-            "【身体】蜜穴湿润；容易高潮；肛口紧致；臀部浑圆肥美"
-          ]
+          "origin": "洛帮帮主"
         },
         "affiliations": [
           {
@@ -3951,11 +3923,6 @@
         "favorability": 10
       },
       {
-        "characterId": "liuchao.character.ruan_xiang_ning",
-        "relation": "控制/利用",
-        "favorability": 5
-      },
-      {
         "characterId": "liuchao.character.ruan_xiang_lin",
         "relation": "夫妾",
         "favorability": 50
@@ -4067,13 +4034,6 @@
         "toCharacterId": "liuchao.character.si_ming_xin",
         "relation": "兄弟",
         "score": 80,
-        "direction": "bidirectional"
-      },
-      {
-        "fromCharacterId": "liuchao.character.ruan_xiang_lin",
-        "toCharacterId": "liuchao.character.ruan_xiang_ning",
-        "relation": "姐妹",
-        "score": 60,
         "direction": "bidirectional"
       },
       {
@@ -4241,17 +4201,6 @@
       },
       {
         "fromCharacterId": "liuchao.character.xiao_zi",
-        "toCharacterId": "liuchao.character.ruan_xiang_ning",
-        "relation": "同门",
-        "score": 30,
-        "direction": "bidirectional",
-        "tags": [
-          "同门",
-          "同势力派生"
-        ]
-      },
-      {
-        "fromCharacterId": "liuchao.character.xiao_zi",
         "toCharacterId": "liuchao.character.jian_yu_ji",
         "relation": "同门",
         "score": 30,
@@ -4318,17 +4267,6 @@
       },
       {
         "fromCharacterId": "lyl.character.wen_qingyu",
-        "toCharacterId": "liuchao.character.ruan_xiang_ning",
-        "relation": "同门",
-        "score": 30,
-        "direction": "bidirectional",
-        "tags": [
-          "同门",
-          "同势力派生"
-        ]
-      },
-      {
-        "fromCharacterId": "lyl.character.wen_qingyu",
         "toCharacterId": "liuchao.character.jian_yu_ji",
         "relation": "同门",
         "score": 30,
@@ -4384,17 +4322,6 @@
       },
       {
         "fromCharacterId": "liuchao.character.shang_zhen_yu",
-        "toCharacterId": "liuchao.character.ruan_xiang_ning",
-        "relation": "同门",
-        "score": 30,
-        "direction": "bidirectional",
-        "tags": [
-          "同门",
-          "同势力派生"
-        ]
-      },
-      {
-        "fromCharacterId": "liuchao.character.shang_zhen_yu",
         "toCharacterId": "liuchao.character.jian_yu_ji",
         "relation": "同门",
         "score": 30,
@@ -4439,17 +4366,6 @@
       },
       {
         "fromCharacterId": "liuchao.character.zhuo_yunjun",
-        "toCharacterId": "liuchao.character.ruan_xiang_ning",
-        "relation": "同门",
-        "score": 30,
-        "direction": "bidirectional",
-        "tags": [
-          "同门",
-          "同势力派生"
-        ]
-      },
-      {
-        "fromCharacterId": "liuchao.character.zhuo_yunjun",
         "toCharacterId": "liuchao.character.jian_yu_ji",
         "relation": "同门",
         "score": 30,
@@ -4483,17 +4399,6 @@
       },
       {
         "fromCharacterId": "liuchao.character.qin_hui",
-        "toCharacterId": "liuchao.character.ruan_xiang_ning",
-        "relation": "同门",
-        "score": 30,
-        "direction": "bidirectional",
-        "tags": [
-          "同门",
-          "同势力派生"
-        ]
-      },
-      {
-        "fromCharacterId": "liuchao.character.qin_hui",
         "toCharacterId": "liuchao.character.jian_yu_ji",
         "relation": "同门",
         "score": 30,
@@ -4516,39 +4421,6 @@
       },
       {
         "fromCharacterId": "liuchao.character.qin_hui",
-        "toCharacterId": "liuchao.character.ning_yu",
-        "relation": "同门",
-        "score": 30,
-        "direction": "bidirectional",
-        "tags": [
-          "同门",
-          "同势力派生"
-        ]
-      },
-      {
-        "fromCharacterId": "liuchao.character.ruan_xiang_ning",
-        "toCharacterId": "liuchao.character.jian_yu_ji",
-        "relation": "同门",
-        "score": 30,
-        "direction": "bidirectional",
-        "tags": [
-          "同门",
-          "同势力派生"
-        ]
-      },
-      {
-        "fromCharacterId": "liuchao.character.ruan_xiang_ning",
-        "toCharacterId": "lyl.character.liu_jian",
-        "relation": "同门",
-        "score": 30,
-        "direction": "bidirectional",
-        "tags": [
-          "同门",
-          "同势力派生"
-        ]
-      },
-      {
-        "fromCharacterId": "liuchao.character.ruan_xiang_ning",
         "toCharacterId": "liuchao.character.ning_yu",
         "relation": "同门",
         "score": 30,

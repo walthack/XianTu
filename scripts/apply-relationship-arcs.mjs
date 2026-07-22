@@ -12,6 +12,10 @@ const canonDir = join(gen, 'character-canon');
 const dryRun = process.argv.includes('--dry-run');
 const books = ['qingyu', 'yunlong', 'yange'];
 const PLAYER_NAME = '程宗扬';
+const RELATIONSHIP_TIME_GATE_CHARACTERS = new Map([
+  ['lyl.lin_an_bridge', new Set(['liuchao.character.ruan_xiang_ning'])],
+  ['lyl.xiaoyingzhou_blacksea_trap', new Set(['liuchao.character.ruan_xiang_ning'])],
+]);
 const deParen = s => s.replace(/[（(][^）)]*[）)]/g, '').split(/[·•・]/)[0].trim();
 async function readJson(p) { return JSON.parse(await readFile(p, 'utf8')); }
 
@@ -48,6 +52,8 @@ async function run() {
         if (!state) continue;
         const aId = resolveId(entry.m, p.a), bId = resolveId(entry.m, p.b);
         if (!aId || !bId || aId === bId) continue;
+        const gated = RELATIONSHIP_TIME_GATE_CHARACTERS.get(s.id);
+        if (gated?.has(aId) || gated?.has(bId)) continue;
         const m = entry.m; m.canon = m.canon || {};
         const playerId = m.canon.playerCharacterId;
         const aPlayer = p.a === PLAYER_NAME || aId === playerId, bPlayer = p.b === PLAYER_NAME || bId === playerId;

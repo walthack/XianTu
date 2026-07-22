@@ -51,10 +51,29 @@ function facOf(name) {
 // 机械并入早期关卡会把晚期身份带进早期时间线。以下逐条人工裁定排除，
 // 键 = stageId，值 = "角色id:势力id" 对。新增排除须附原文/裁定依据。
 const AFFILIATION_TIME_GATE_EXCLUSIONS = new Map([
+  ['lyl.lin_an_bridge', new Set([
+    'liuchao.character.zhao_he_de:liuchao.faction.x2d33e1eaf9',
+  ])],
+  ['lyl.xiaoyingzhou_blacksea_trap', new Set([
+    'liuchao.character.zhao_he_de:liuchao.faction.x2d33e1eaf9',
+  ])],
+  ['lyl.taiquan_sacred_fruit', new Set([
+    'liuchao.character.zhao_he_de:liuchao.faction.x2d33e1eaf9',
+  ])],
+  ['lyl.taiquan_core_conflict', new Set([
+    'liuchao.character.zhao_he_de:liuchao.faction.x2d33e1eaf9',
+  ])],
+  ['lyl.taiquan_afterfall', new Set([
+    'liuchao.character.zhao_he_de:liuchao.faction.x2d33e1eaf9',
+  ])],
+  ['lyl.luoyang_cloud_secret', new Set([
+    'liuchao.character.zhao_he_de:liuchao.faction.x2d33e1eaf9',
+  ])],
   // 中行说在 lyl.luoyang_coup（云龙吟源 275-288）尚未投奔程宗扬——本关他只以
   // 天子近侍身份劫持吕冀、随刘建突围；「内宅总管」是燕歌行时区身份，不得投影进本关。
   ['lyl.luoyang_coup', new Set([
     'liuchao.character.zhong_hangyue:liuchao.faction.x2d33e1eaf9',
+    'liuchao.character.zhao_he_de:liuchao.faction.x2d33e1eaf9',
   ])],
 ]);
 

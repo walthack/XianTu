@@ -12,6 +12,10 @@ const bridgeUrl = new URL(
   '../mod-kit/generated/deepseek-v4-flash/yunlong/stages/lyl.lin_an_bridge.json',
   import.meta.url,
 );
+const builtinEarlyUrl = new URL(
+  '../src/modules/scenarioMods/builtins/data/lcq.stage_03b_snake_flower_bridge.json',
+  import.meta.url,
+);
 
 function relation(notes) {
   return notes?.find(note => note.startsWith('【关系】')) || '';
@@ -44,6 +48,44 @@ test('R2-12 phase audit resolves the eleven-item queue without stale stage proje
   assert.equal(earlyRuan.role, '林冲之妻（开场真实来历尚未揭示）');
   assert.deepEqual(Object.keys(earlyRuan).sort(), ['affiliations', 'description', 'gender', 'id', 'name', 'profile', 'role']);
   assert.doesNotMatch(JSON.stringify(earlyRuan), /阮香凝|凝玉姬|黑魔海|侍妾|后宫/);
+  assert.ok(!bridge.canon.playerRelationships.some(
+    item => item.characterId === 'liuchao.character.ruan_xiang_ning',
+  ), 'unrevealed 林娘子 must not have a player relationship');
+  assert.ok(!bridge.canon.relationships.some(
+    item => item.fromCharacterId === 'liuchao.character.ruan_xiang_ning'
+      || item.toCharacterId === 'liuchao.character.ruan_xiang_ning',
+  ), 'unrevealed 林娘子 must not have relationship edges');
+
+  for (const name of ['云丹琉', '赵合德']) {
+    assert.ok(byName.get(name).phaseIdentities.some(
+      phase => phase.scope === 'stage-projection' && phase.stageId === 'lyl.taiquan_core_conflict',
+    ), `${name} must cover the stage between sacred-fruit and afterfall`);
+  }
+
+  for (const stageId of [
+    'lyl.lin_an_bridge', 'lyl.xiaoyingzhou_blacksea_trap',
+    'lyl.taiquan_sacred_fruit', 'lyl.taiquan_core_conflict',
+    'lyl.taiquan_afterfall', 'lyl.luoyang_cloud_secret', 'lyl.luoyang_coup',
+  ]) {
+    const stage = JSON.parse(await readFile(new URL(
+      `../mod-kit/generated/deepseek-v4-flash/yunlong/stages/${stageId}.json`,
+      import.meta.url,
+    ), 'utf8'));
+    const zhao = stage.canon.characters.find(item => item.id === 'liuchao.character.zhao_he_de');
+    if (!zhao) continue;
+    assert.ok(!(zhao.affiliations || []).some(
+      affiliation => affiliation.factionId === 'liuchao.faction.x2d33e1eaf9',
+    ), `${stageId} must not pre-project Zhao Hede as protagonist household`);
+  }
+
+  const earlyBuiltin = JSON.parse(await readFile(builtinEarlyUrl, 'utf8'));
+  for (const name of ['潘金莲', '阿夕']) {
+    const actor = earlyBuiltin.canon.characters.find(item => item.name === name);
+    assert.ok(actor, `${name} must exist in early builtin`);
+    assert.ok(!(actor.profile?.notes || []).some(
+      note => note.startsWith('【性癖】') || note.startsWith('【身体】'),
+    ), `${name} future adult extraction notes must be gated from the early stage`);
+  }
 });
 
 test('R2-12 runtime materialization uses stage-opening relations and withholds future branches', async () => {
@@ -58,8 +100,10 @@ test('R2-12 runtime materialization uses stage-opening relations and withholds f
   assert.match(relation(cloudYun), /尚未.*后宫/);
   assert.ok(!cloudYun.some(note => note.includes('唯一以掠夺者姿态')));
   assert.ok(!cloudYun.some(note => note.includes('欲醉起')));
+  assert.match(relation(resolve('云丹琉', 'lyl.taiquan_core_conflict')), /尚未.*后宫/);
   assert.match(relation(resolve('云丹琉', 'lyl.luoyang_coup')), /后宫/);
 
+  assert.match(relation(resolve('赵合德', 'lyl.taiquan_core_conflict')), /尚未.*妾室/);
   assert.match(relation(resolve('赵合德', 'lyl.luoyang_coup')), /尚未.*妾室/);
   assert.match(relation(resolve('赵合德', 'lyl.han_palace_endgame')), /妾室\/情人/);
 

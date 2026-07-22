@@ -1,9 +1,9 @@
 {
   "schema": "xiantu.character-registry.v1",
-  "version": "cr-2026-07-22-fde1ee0edaac5d4d",
-  "sourceHash": "fde1ee0edaac5d4d",
+  "version": "cr-2026-07-22-2a35c766b9b3fb69",
+  "sourceHash": "2a35c766b9b3fb69",
   "sourceGeneratedAt": "2026-06-30T12:50:33.965Z",
-  "generatedAt": "2026-07-22T14:32:21.338Z",
+  "generatedAt": "2026-07-22T14:54:55.682Z",
   "stats": {
     "total": 308,
     "stagePresent": 217,
@@ -8538,6 +8538,10 @@
           "ending": [],
           "forbidden": [
             "不得提前称为程宗扬的女奴、内宅成员"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
           ]
         },
         {
@@ -8564,6 +8568,10 @@
           "ending": [],
           "forbidden": [
             "不得提前称为程宗扬的女奴、内宅成员"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
           ]
         },
         {
@@ -8590,6 +8598,10 @@
           "ending": [],
           "forbidden": [
             "不得提前称为程宗扬的女奴、内宅成员"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
           ]
         },
         {
@@ -8616,6 +8628,10 @@
           "ending": [],
           "forbidden": [
             "不得提前称为程宗扬的女奴、内宅成员"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
           ]
         },
         {
@@ -8812,10 +8828,25 @@
           "role": "唐国公主",
           "description": "",
           "notes": [
-            "【关系】性奴/情妇",
-            "【目标】身不由己，被迫顺从"
+            "【关系】唐国公主、李昂胞妹；本关开场尚未被程宗扬收入内宅"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "唐国公主、李昂胞妹；本关开场尚未被程宗扬收入内宅"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "第1297序关系转折前不得称为程宗扬情妇、侍奴或后宫成员"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -8827,10 +8858,25 @@
           "role": "唐国公主",
           "description": "",
           "notes": [
-            "【关系】性奴/情妇",
-            "【目标】身不由己，被迫顺从"
+            "【关系】唐国公主、李昂胞妹；本关开场尚未被程宗扬收入内宅"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "唐国公主、李昂胞妹；本关开场尚未被程宗扬收入内宅"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "第1297序关系转折前不得称为程宗扬情妇、侍奴或后宫成员"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -8842,10 +8888,25 @@
           "role": "唐国公主",
           "description": "",
           "notes": [
-            "【关系】性奴/情妇",
-            "【目标】身不由己，被迫顺从"
+            "【关系】唐国公主、李昂胞妹；本关开场尚未被程宗扬收入内宅"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "唐国公主、李昂胞妹；本关开场尚未被程宗扬收入内宅"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "第1297序关系转折前不得称为程宗扬情妇、侍奴或后宫成员"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -8857,10 +8918,25 @@
           "role": "唐国公主",
           "description": "",
           "notes": [
-            "【关系】性奴/情妇",
-            "【目标】身不由己，被迫顺从"
+            "【关系】唐国公主、李昂胞妹；本关开场尚未被程宗扬收入内宅"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "唐国公主、李昂胞妹；本关开场尚未被程宗扬收入内宅"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "第1297序关系转折前不得称为程宗扬情妇、侍奴或后宫成员"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -8872,10 +8948,25 @@
           "role": "唐国公主",
           "description": "",
           "notes": [
-            "【关系】性奴/情妇",
-            "【目标】身不由己，被迫顺从"
+            "【关系】唐国公主、李昂胞妹；本关开场尚未被程宗扬收入内宅"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "唐国公主、李昂胞妹；本关开场尚未被程宗扬收入内宅"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "第1297序关系转折前不得称为程宗扬情妇、侍奴或后宫成员"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -8898,7 +8989,7 @@
         "reviewed": false,
         "flags": [
           "needs-second-review",
-          "female-relationship-phase-needed"
+          "relationship-phase-resolved"
         ],
         "conflicts": [],
         "aliasApplied": [
@@ -8906,6 +8997,9 @@
         ],
         "aliasReviewNote": [
           "alias-unification approved"
+        ],
+        "humanNotes": [
+          "2026-07-22：R2-12 第二批按原文时间轴完成当前逐关开场关系投影；关内发生的转折不得回灌至开场。"
         ]
       },
       "embedText": "安乐公主 ｜ 李裹儿 安乐 ｜ 唐国公主，李昂嫡亲胞妹 ｜ 【唐国人物】 ｜ 唐国朝廷(公主（唐皇李昂胞妹）) ｜ 登场于大明宫东内苑 ｜ 娇弱、羞怯、温顺 ｜ 性奴/情妇 ｜ 别名/称谓：李裹儿 ｜ 唐国公主，李昂嫡亲胞妹；禁止提前称为后宫、侍妾、情人或程宗扬阵营成员；关系转折后，可按原文写入程宗扬阵营/被收编 ｜ 被程宗扬发现并夺去元红；与杨氏、萧氏一同被裸裎观赏；在程宗扬面前哭泣求饶；被潘金莲扶起并露出后颈小符"
@@ -10312,14 +10406,39 @@
           "book": "yange",
           "seqLo": 948,
           "seqHi": 997,
-          "identity": "汉国底层家奴（帝党眼中钉），吕氏垮台沦阶下囚被收编圈禁",
-          "role": "太子妃、程宗扬的鼎炉、侍奴",
-          "description": "昔日风光无限的太子妃，如今沦为程宗扬的鼎炉与侍奴，依旧不改傲慢骄纵的性子，却总透着一股傻里傻气的幸灾乐祸。",
+          "identity": "江都王太子妃、吕氏案阶下囚",
+          "role": "吕氏案阶下囚",
+          "description": "刘建败亡后，成光以江都王太子妃身份沦为阶下囚；本关开场尚未被程宗扬收编。",
           "notes": [
-            "【关系】性奴/最顺手无心理负担的泄欲玩物",
-            "【目标】获得主人的宠爱和关注，享受被支配的愉悦。"
+            "【关系】吕氏案阶下囚；本关开场尚未被程宗扬收编为侍奴或鼎炉"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "吕氏案阶下囚；本关开场尚未被程宗扬收编为侍奴或鼎炉"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "第965序关系转折前不得称为程宗扬侍奴或鼎炉"
+          ],
+          "appearance": "云髻修眉，丹唇皓齿，面容娇艳。",
+          "personality": [
+            "懦弱胆小",
+            "逆来顺受",
+            "在阶下囚处境中以自保为先"
+          ],
+          "speechStyle": "处境受制时谨慎低声，避免激怒掌权者",
+          "principles": [
+            "以保全性命与身份为先"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -10341,7 +10460,7 @@
         "approved": true,
         "reviewed": true,
         "flags": [
-          "female-relationship-phase-needed"
+          "relationship-phase-resolved"
         ],
         "conflicts": [],
         "aliasApplied": [
@@ -10352,7 +10471,8 @@
           "alias-unification approved"
         ],
         "humanNotes": [
-          "【魂丹】玉姬皆有魂丹；献出魂丹后永远不能背叛主人；主人窍阴穴中的魂影与其魂魄相连，可互相感应。"
+          "【魂丹】玉姬皆有魂丹；献出魂丹后永远不能背叛主人；主人窍阴穴中的魂影与其魂魄相连，可互相感应。",
+          "2026-07-22：R2-12 第二批按原文时间轴完成当前逐关开场关系投影；关内发生的转折不得回灌至开场。"
         ]
       },
       "embedText": "成光 ｜ 贱婢 江都王太子妃 ｜ 黑魔海玉姬之一·光玉姬（潜伏，掩护身份江都王太子妃/宫女）；吕氏垮台后沦阶下囚被程宗扬收编圈禁 ｜ 【汉国人物】 ｜ 江都王国(太子妃)、汉国朝廷(皇后) ｜ 登场于阙楼 ｜ 懦弱胆小、逆来顺受、极惧程宗扬+小紫、绝对听话乖巧 ｜ 性奴/最顺手无心理负担的泄欲玩物 ｜ 老爷/主人；成光 别名/称谓：贱婢 别名/称谓：江都王太子妃 ｜ 黑魔海玉姬之一·光玉姬，潜伏于吕氏/唐廷（掩护身份江都王太子妃/宫女）的敌方潜伏身份；禁止提前称为后宫、侍妾、情人或程宗扬阵营成员；吕氏垮台后沦阶下囚，被程宗扬收编圈禁 ｜ 给\"被称凝奴的凝羽\"送药的乖巧助手；与孙寿一同被收，将尊严踩脚底极力迎合"
@@ -14724,6 +14844,10 @@
           "forbidden": [
             "不得写成何进之女",
             "不得提前写成程宗扬内宅成员"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
           ]
         },
         {
@@ -14751,6 +14875,10 @@
           "forbidden": [
             "不得写成何进之女",
             "不得提前写成程宗扬内宅成员"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
           ]
         },
         {
@@ -14778,6 +14906,10 @@
           "forbidden": [
             "不得写成何进之女",
             "不得提前写成程宗扬内宅成员"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
           ]
         },
         {
@@ -14805,6 +14937,10 @@
           "forbidden": [
             "不得写成何进之女",
             "不得提前写成程宗扬内宅成员"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
           ]
         },
         {
@@ -14832,6 +14968,10 @@
           "forbidden": [
             "不得写成何进之女",
             "不得提前写成程宗扬内宅成员"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
           ]
         },
         {
@@ -14859,6 +14999,10 @@
           "forbidden": [
             "不得写成何进之女",
             "不得提前写成程宗扬内宅成员"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
           ]
         },
         {
@@ -14886,6 +15030,10 @@
           "forbidden": [
             "不得写成何进之女",
             "不得提前写成程宗扬内宅成员"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
           ]
         },
         {
@@ -14913,6 +15061,10 @@
           "forbidden": [
             "不得写成何进之女",
             "不得提前写成程宗扬内宅成员"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
           ]
         }
       ],
@@ -16944,18 +17096,6 @@
           "status": "allowed-after-turning-point"
         },
         {
-          "scope": "relationship-chain",
-          "seq": "转折前",
-          "identity": "原阵营/中立/敌对身份，禁止提前称为后宫、侍妾、情人或程宗扬阵营成员",
-          "status": "forbid-final-state-before-turning-point"
-        },
-        {
-          "scope": "relationship-chain",
-          "seq": "关系转折后",
-          "identity": "按原文转折事件后，才可写入程宗扬阵营/后宫/侍妾/情人等关系身份",
-          "status": "allowed-after-turning-point"
-        },
-        {
           "scope": "stage-projection",
           "stageId": "lyg.shixiang_ambush",
           "book": "yange",
@@ -17081,9 +17221,12 @@
         "reviewed": true,
         "flags": [
           "duplicate-merged",
-          "female-relationship-phase-needed"
+          "relationship-phase-resolved"
         ],
-        "conflicts": []
+        "conflicts": [],
+        "humanNotes": [
+          "2026-07-22：R2-12 第二批按原文时间轴完成当前逐关开场关系投影；关内发生的转折不得回灌至开场。"
+        ]
       },
       "embedText": "惊理 ｜ 原龙宸杀手，后期成为侍奴（程宗扬的奴婢） ｜ 龙宸(原杀手（行刺小紫失败被擒后脱离）)、小紫势力(被擒后收为侍奴)、瑶池宗(弃徒) ｜ 登场于刘娥所在密室 ｜ 柔媚、冷厉、危险、善于挑弄 ｜ 程宗扬的性奴/后宫成员 ｜ 对程宗扬称“主子”；被他人称“惊理” ｜ 原阵营/中立/敌对身份，禁止提前称为后宫、侍妾、情人或程宗扬阵营成员；按原文转折事件后，才可写入程宗扬阵营/后宫/侍妾/情人等关系身份 ｜ 与蛇夫人一同挑弄卓云君；回忆被主子插入后庭；赌骰时参与色情表演；战斗中使用娥眉刺"
     },
@@ -20757,13 +20900,36 @@
           "seqLo": 948,
           "seqHi": 997,
           "identity": "吕太后；表面贪权妖后，实为给被佛道围剿的飞羽族谋生路",
-          "role": "太后",
-          "description": "这位昔年威震朝堂的汉国太后，如今沦为他人掌中玩物，却依旧挺直腰背，眸如刀锋，冷厉中透着不屈。她雪白丰腴的肌肤上烙着屈辱的玺印，宫装华服难掩眼底的不甘与高傲，仿佛即便身处泥淖，也要用那份老谋深算的权谋心性，在绝境中谋取一线生机。",
+          "role": "汉国太后与吕氏权力核心",
+          "description": "汉国太后吕雉仍以吕氏与飞羽族存续为先，在朝局中与程宗扬既对立又有交易空间。",
           "notes": [
-            "【关系】性奴、奴婢",
+            "【关系】汉国吕氏权力核心；本关开场尚未向程宗扬委身或确立从属关系",
             "【谈吐】敌对/太后身份时自称哀家或我，语气冷静威严；与主角确定从属关系后自称奴婢，语气柔媚、卑微。"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "汉国吕氏权力核心；本关开场尚未向程宗扬委身或确立从属关系"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "第1019序关系转折前不得称为程宗扬奴婢或后宫成员"
+          ],
+          "personality": [
+            "冷静",
+            "威严",
+            "隐忍但不卑微",
+            "善于权谋"
+          ],
+          "speechStyle": "自称哀家或我，语气冷静威严",
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -20802,13 +20968,36 @@
           "seqLo": 1013,
           "seqHi": 1065,
           "identity": "吕太后；表面贪权妖后，实为给被佛道围剿的飞羽族谋生路",
-          "role": "原汉国太后，现为程宗扬性奴婢",
-          "description": "这位昔年威震朝堂的汉国太后，如今沦为他人掌中玩物，却依旧挺直腰背，眸如刀锋，冷厉中透着不屈。她雪白丰腴的肌肤上烙着屈辱的玺印，宫装华服难掩眼底的不甘与高傲，仿佛即便身处泥淖，也要用那份老谋深算的权谋心性，在绝境中谋取一线生机。",
+          "role": "汉国太后与吕氏权力核心",
+          "description": "汉国太后吕雉仍以吕氏与飞羽族存续为先，在朝局中与程宗扬既对立又有交易空间。",
           "notes": [
-            "【关系】性奴、奴婢",
+            "【关系】汉国吕氏权力核心；本关开场尚未向程宗扬委身或确立从属关系",
             "【谈吐】敌对/太后身份时自称哀家或我，语气冷静威严；与主角确定从属关系后自称奴婢，语气柔媚、卑微。"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "汉国吕氏权力核心；本关开场尚未向程宗扬委身或确立从属关系"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "第1019序关系转折前不得称为程宗扬奴婢或后宫成员"
+          ],
+          "personality": [
+            "冷静",
+            "威严",
+            "隐忍但不卑微",
+            "善于权谋"
+          ],
+          "speechStyle": "自称哀家或我，语气冷静威严",
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -20832,13 +21021,36 @@
           "seqLo": 986,
           "seqHi": 1012,
           "identity": "吕太后；表面贪权妖后，实为给被佛道围剿的飞羽族谋生路",
-          "role": "关键人物",
-          "description": "这位昔年威震朝堂的汉国太后，如今沦为他人掌中玩物，却依旧挺直腰背，眸如刀锋，冷厉中透着不屈。她雪白丰腴的肌肤上烙着屈辱的玺印，宫装华服难掩眼底的不甘与高傲，仿佛即便身处泥淖，也要用那份老谋深算的权谋心性，在绝境中谋取一线生机。",
+          "role": "汉国太后与吕氏权力核心",
+          "description": "汉国太后吕雉仍以吕氏与飞羽族存续为先，在朝局中与程宗扬既对立又有交易空间。",
           "notes": [
-            "【关系】性奴、奴婢",
+            "【关系】汉国吕氏权力核心；本关开场尚未向程宗扬委身或确立从属关系",
             "【谈吐】敌对/太后身份时自称哀家或我，语气冷静威严；与主角确定从属关系后自称奴婢，语气柔媚、卑微。"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "汉国吕氏权力核心；本关开场尚未向程宗扬委身或确立从属关系"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "第1019序关系转折前不得称为程宗扬奴婢或后宫成员"
+          ],
+          "personality": [
+            "冷静",
+            "威严",
+            "隐忍但不卑微",
+            "善于权谋"
+          ],
+          "speechStyle": "自称哀家或我，语气冷静威严",
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -20877,13 +21089,36 @@
           "seqLo": 900,
           "seqHi": 947,
           "identity": "吕太后；表面贪权妖后，实为给被佛道围剿的飞羽族谋生路",
-          "role": "汉国太后（失势）",
-          "description": "这位昔年威震朝堂的汉国太后，如今沦为他人掌中玩物，却依旧挺直腰背，眸如刀锋，冷厉中透着不屈。她雪白丰腴的肌肤上烙着屈辱的玺印，宫装华服难掩眼底的不甘与高傲，仿佛即便身处泥淖，也要用那份老谋深算的权谋心性，在绝境中谋取一线生机。",
+          "role": "汉国太后与吕氏权力核心",
+          "description": "汉国太后吕雉仍以吕氏与飞羽族存续为先，在朝局中与程宗扬既对立又有交易空间。",
           "notes": [
-            "【关系】性奴、奴婢",
+            "【关系】汉国吕氏权力核心；本关开场尚未向程宗扬委身或确立从属关系",
             "【谈吐】敌对/太后身份时自称哀家或我，语气冷静威严；与主角确定从属关系后自称奴婢，语气柔媚、卑微。"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "汉国吕氏权力核心；本关开场尚未向程宗扬委身或确立从属关系"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "第1019序关系转折前不得称为程宗扬奴婢或后宫成员"
+          ],
+          "personality": [
+            "冷静",
+            "威严",
+            "隐忍但不卑微",
+            "善于权谋"
+          ],
+          "speechStyle": "自称哀家或我，语气冷静威严",
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -20892,13 +21127,36 @@
           "seqLo": 559,
           "seqHi": 562,
           "identity": "吕太后；表面贪权妖后，实为给被佛道围剿的飞羽族谋生路",
-          "role": "汉国太后（失势）",
-          "description": "这位昔年威震朝堂的汉国太后，如今沦为他人掌中玩物，却依旧挺直腰背，眸如刀锋，冷厉中透着不屈。她雪白丰腴的肌肤上烙着屈辱的玺印，宫装华服难掩眼底的不甘与高傲，仿佛即便身处泥淖，也要用那份老谋深算的权谋心性，在绝境中谋取一线生机。",
+          "role": "汉国太后与吕氏权力核心",
+          "description": "汉国太后吕雉仍以吕氏与飞羽族存续为先，在朝局中与程宗扬既对立又有交易空间。",
           "notes": [
-            "【关系】性奴、奴婢",
+            "【关系】汉国吕氏权力核心；本关开场尚未向程宗扬委身或确立从属关系",
             "【谈吐】敌对/太后身份时自称哀家或我，语气冷静威严；与主角确定从属关系后自称奴婢，语气柔媚、卑微。"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "汉国吕氏权力核心；本关开场尚未向程宗扬委身或确立从属关系"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "第1019序关系转折前不得称为程宗扬奴婢或后宫成员"
+          ],
+          "personality": [
+            "冷静",
+            "威严",
+            "隐忍但不卑微",
+            "善于权谋"
+          ],
+          "speechStyle": "自称哀家或我，语气冷静威严",
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -20907,13 +21165,36 @@
           "seqLo": 777,
           "seqHi": 884,
           "identity": "吕太后；表面贪权妖后，实为给被佛道围剿的飞羽族谋生路",
-          "role": "汉国太后（失势）",
-          "description": "这位昔年威震朝堂的汉国太后，如今沦为他人掌中玩物，却依旧挺直腰背，眸如刀锋，冷厉中透着不屈。她雪白丰腴的肌肤上烙着屈辱的玺印，宫装华服难掩眼底的不甘与高傲，仿佛即便身处泥淖，也要用那份老谋深算的权谋心性，在绝境中谋取一线生机。",
+          "role": "汉国太后与吕氏权力核心",
+          "description": "汉国太后吕雉仍以吕氏与飞羽族存续为先，在朝局中与程宗扬既对立又有交易空间。",
           "notes": [
-            "【关系】性奴、奴婢",
+            "【关系】汉国吕氏权力核心；本关开场尚未向程宗扬委身或确立从属关系",
             "【谈吐】敌对/太后身份时自称哀家或我，语气冷静威严；与主角确定从属关系后自称奴婢，语气柔媚、卑微。"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "汉国吕氏权力核心；本关开场尚未向程宗扬委身或确立从属关系"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "第1019序关系转折前不得称为程宗扬奴婢或后宫成员"
+          ],
+          "personality": [
+            "冷静",
+            "威严",
+            "隐忍但不卑微",
+            "善于权谋"
+          ],
+          "speechStyle": "自称哀家或我，语气冷静威严",
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -20922,13 +21203,36 @@
           "seqLo": 885,
           "seqHi": 899,
           "identity": "吕太后；表面贪权妖后，实为给被佛道围剿的飞羽族谋生路",
-          "role": "太后",
-          "description": "这位昔年威震朝堂的汉国太后，如今沦为他人掌中玩物，却依旧挺直腰背，眸如刀锋，冷厉中透着不屈。她雪白丰腴的肌肤上烙着屈辱的玺印，宫装华服难掩眼底的不甘与高傲，仿佛即便身处泥淖，也要用那份老谋深算的权谋心性，在绝境中谋取一线生机。",
+          "role": "汉国太后与吕氏权力核心",
+          "description": "汉国太后吕雉仍以吕氏与飞羽族存续为先，在朝局中与程宗扬既对立又有交易空间。",
           "notes": [
-            "【关系】性奴、奴婢",
+            "【关系】汉国吕氏权力核心；本关开场尚未向程宗扬委身或确立从属关系",
             "【谈吐】敌对/太后身份时自称哀家或我，语气冷静威严；与主角确定从属关系后自称奴婢，语气柔媚、卑微。"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "汉国吕氏权力核心；本关开场尚未向程宗扬委身或确立从属关系"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "第1019序关系转折前不得称为程宗扬奴婢或后宫成员"
+          ],
+          "personality": [
+            "冷静",
+            "威严",
+            "隐忍但不卑微",
+            "善于权谋"
+          ],
+          "speechStyle": "自称哀家或我，语气冷静威严",
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -20937,13 +21241,36 @@
           "seqLo": 668,
           "seqHi": 776,
           "identity": "吕太后；表面贪权妖后，实为给被佛道围剿的飞羽族谋生路",
-          "role": "汉国太后（失势）",
-          "description": "这位昔年威震朝堂的汉国太后，如今沦为他人掌中玩物，却依旧挺直腰背，眸如刀锋，冷厉中透着不屈。她雪白丰腴的肌肤上烙着屈辱的玺印，宫装华服难掩眼底的不甘与高傲，仿佛即便身处泥淖，也要用那份老谋深算的权谋心性，在绝境中谋取一线生机。",
+          "role": "汉国太后与吕氏权力核心",
+          "description": "汉国太后吕雉仍以吕氏与飞羽族存续为先，在朝局中与程宗扬既对立又有交易空间。",
           "notes": [
-            "【关系】性奴、奴婢",
+            "【关系】汉国吕氏权力核心；本关开场尚未向程宗扬委身或确立从属关系",
             "【谈吐】敌对/太后身份时自称哀家或我，语气冷静威严；与主角确定从属关系后自称奴婢，语气柔媚、卑微。"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "汉国吕氏权力核心；本关开场尚未向程宗扬委身或确立从属关系"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "第1019序关系转折前不得称为程宗扬奴婢或后宫成员"
+          ],
+          "personality": [
+            "冷静",
+            "威严",
+            "隐忍但不卑微",
+            "善于权谋"
+          ],
+          "speechStyle": "自称哀家或我，语气冷静威严",
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -20952,13 +21279,36 @@
           "seqLo": 616,
           "seqHi": 664,
           "identity": "吕太后；表面贪权妖后，实为给被佛道围剿的飞羽族谋生路",
-          "role": "汉国太后（失势）",
-          "description": "这位昔年威震朝堂的汉国太后，如今沦为他人掌中玩物，却依旧挺直腰背，眸如刀锋，冷厉中透着不屈。她雪白丰腴的肌肤上烙着屈辱的玺印，宫装华服难掩眼底的不甘与高傲，仿佛即便身处泥淖，也要用那份老谋深算的权谋心性，在绝境中谋取一线生机。",
+          "role": "汉国太后与吕氏权力核心",
+          "description": "汉国太后吕雉仍以吕氏与飞羽族存续为先，在朝局中与程宗扬既对立又有交易空间。",
           "notes": [
-            "【关系】性奴、奴婢",
+            "【关系】汉国吕氏权力核心；本关开场尚未向程宗扬委身或确立从属关系",
             "【谈吐】敌对/太后身份时自称哀家或我，语气冷静威严；与主角确定从属关系后自称奴婢，语气柔媚、卑微。"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "汉国吕氏权力核心；本关开场尚未向程宗扬委身或确立从属关系"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "第1019序关系转折前不得称为程宗扬奴婢或后宫成员"
+          ],
+          "personality": [
+            "冷静",
+            "威严",
+            "隐忍但不卑微",
+            "善于权谋"
+          ],
+          "speechStyle": "自称哀家或我，语气冷静威严",
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -20967,20 +21317,43 @@
           "seqLo": 567,
           "seqHi": 615,
           "identity": "吕太后；表面贪权妖后，实为给被佛道围剿的飞羽族谋生路",
-          "role": "汉国太后（失势）",
-          "description": "这位昔年威震朝堂的汉国太后，如今沦为他人掌中玩物，却依旧挺直腰背，眸如刀锋，冷厉中透着不屈。她雪白丰腴的肌肤上烙着屈辱的玺印，宫装华服难掩眼底的不甘与高傲，仿佛即便身处泥淖，也要用那份老谋深算的权谋心性，在绝境中谋取一线生机。",
+          "role": "汉国太后与吕氏权力核心",
+          "description": "汉国太后吕雉仍以吕氏与飞羽族存续为先，在朝局中与程宗扬既对立又有交易空间。",
           "notes": [
-            "【关系】性奴、奴婢",
+            "【关系】汉国吕氏权力核心；本关开场尚未向程宗扬委身或确立从属关系",
             "【谈吐】敌对/太后身份时自称哀家或我，语气冷静威严；与主角确定从属关系后自称奴婢，语气柔媚、卑微。"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "汉国吕氏权力核心；本关开场尚未向程宗扬委身或确立从属关系"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "第1019序关系转折前不得称为程宗扬奴婢或后宫成员"
+          ],
+          "personality": [
+            "冷静",
+            "威严",
+            "隐忍但不卑微",
+            "善于权谋"
+          ],
+          "speechStyle": "自称哀家或我，语气冷静威严",
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         }
       ],
       "review": {
         "approved": true,
         "reviewed": true,
         "flags": [
-          "female-relationship-phase-needed"
+          "relationship-phase-resolved"
         ],
         "conflicts": [],
         "aliasApplied": [
@@ -20990,7 +21363,10 @@
         "aliasReviewNote": [
           "裸称谓已自动限定为 汉国"
         ],
-        "humanNotes": "2026-07-04 太皇太后(汉)=吕雉晋位后位阶(非独立角色),用户原文核定「太后吕雉晋太皇太后,迁居长信宫」。"
+        "humanNotes": [
+          "2026-07-04 太皇太后(汉)=吕雉晋位后位阶(非独立角色),用户原文核定「太后吕雉晋太皇太后,迁居长信宫」。",
+          "2026-07-22：R2-12 第二批按原文时间轴完成当前逐关开场关系投影；关内发生的转折不得回灌至开场。"
+        ]
       },
       "embedText": "吕雉 ｜ 太后(汉) 伪太后(汉) 太皇太后(汉) ｜ 吕太后；表面贪权妖后，实为给被佛道围剿的飞羽族谋生路 ｜ 【汉国人物】 ｜ 汉国朝廷(太后)、吕氏外戚集团(核心人物/领袖) ｜ 登场于永安宫 ｜ 平时冷静、威严、隐忍但不卑微、入主角后宫团后顺从、隐忍、羞耻感强 ｜ 性奴、奴婢 ｜ 和主角敌对时称程公子；和主角委身后称主子；被他人称吕雉、皇后/太后。 别名/称谓：太后(汉) 别名/称谓：伪太后(汉) 太皇太后(汉)——晋位后的最高尊称，长信宫，仅汉国语境 ｜ 原阵营/中立/敌对身份，禁止提前称为后宫、侍妾、情人或程宗扬阵营成员；按原文转折事件后，才可写入程宗扬阵营/后宫/侍妾/情人等关系身份 ｜ 剧情：政治死敌→佛门(十方丛林)清洗飞羽族+黑魔海抛弃→绝境向程宗扬求庇→抗佛同盟→委身；暗修高阶处女功法(采补长生术)，保持处女之身作秘密武器/博弈筹码；贸然采补会被反噬吸干；位阶三迁（燕歌行天子登基）：皇后→太后→太皇太后，晋太皇太后诏由中常侍徐璜宣读、迁居长信宫（程宗扬提议其暂不迁宫、永安宫周围筑高墙）"
     },
@@ -22790,6 +23166,10 @@
           "forbidden": [
             "不得提前称为程宗扬后宫或效忠者",
             "不得改变元红保留的人工裁定"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
           ]
         },
         {
@@ -22817,6 +23197,10 @@
           "forbidden": [
             "不得提前称为程宗扬后宫或效忠者",
             "不得改变元红保留的人工裁定"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
           ]
         },
         {
@@ -22844,6 +23228,10 @@
           "forbidden": [
             "不得提前称为程宗扬后宫或效忠者",
             "不得改变元红保留的人工裁定"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
           ]
         },
         {
@@ -22871,6 +23259,10 @@
           "forbidden": [
             "不得提前称为程宗扬后宫或效忠者",
             "不得改变元红保留的人工裁定"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
           ]
         },
         {
@@ -22898,6 +23290,10 @@
           "forbidden": [
             "不得提前称为程宗扬后宫或效忠者",
             "不得改变元红保留的人工裁定"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
           ]
         },
         {
@@ -22925,6 +23321,10 @@
           "forbidden": [
             "不得提前称为程宗扬后宫或效忠者",
             "不得改变元红保留的人工裁定"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
           ]
         },
         {
@@ -22952,6 +23352,10 @@
           "forbidden": [
             "不得提前称为程宗扬后宫或效忠者",
             "不得改变元红保留的人工裁定"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
           ]
         },
         {
@@ -22979,6 +23383,10 @@
           "forbidden": [
             "不得提前称为程宗扬后宫或效忠者",
             "不得改变元红保留的人工裁定"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
           ]
         },
         {
@@ -23006,6 +23414,10 @@
           "forbidden": [
             "不得提前称为程宗扬后宫或效忠者",
             "不得改变元红保留的人工裁定"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
           ]
         },
         {
@@ -23033,6 +23445,10 @@
           "forbidden": [
             "不得提前称为程宗扬后宫或效忠者",
             "不得改变元红保留的人工裁定"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
           ]
         },
         {
@@ -23075,6 +23491,10 @@
           "forbidden": [
             "不得提前称为程宗扬后宫或效忠者",
             "不得改变元红保留的人工裁定"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
           ]
         },
         {
@@ -23102,6 +23522,10 @@
           "forbidden": [
             "不得提前称为程宗扬后宫或效忠者",
             "不得改变元红保留的人工裁定"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
           ]
         },
         {
@@ -23159,6 +23583,10 @@
           "forbidden": [
             "不得提前称为程宗扬后宫或效忠者",
             "不得改变元红保留的人工裁定"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
           ]
         },
         {
@@ -23216,6 +23644,10 @@
           "forbidden": [
             "不得提前称为程宗扬后宫或效忠者",
             "不得改变元红保留的人工裁定"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
           ]
         },
         {
@@ -23243,6 +23675,10 @@
           "forbidden": [
             "不得提前称为程宗扬后宫或效忠者",
             "不得改变元红保留的人工裁定"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
           ]
         }
       ],
@@ -23361,10 +23797,25 @@
           "role": "圣教成员/毒宗联络人",
           "description": "齐羽仙身姿婀娜，雪肤玉颜，是圣教隐匿最深的毒宗联络人；她表面柔弱如柳，实则心如机括，阴险深沉，以惊人的忍耐力在敌阵中织就一张无人察觉的毒网。",
           "notes": [
-            "【关系】曾借仙姬许可加入程宗扬阵营当双面间谍，被小紫看穿反制；后被程宗扬收服",
-            "【目标】执行黑魔海布局；前期高傲、后期落难被收服，反差强烈"
+            "【关系】黑魔海巫宗执行者；当前投影均早于关系转折，与程宗扬保持合作、戒备或敌对"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "黑魔海巫宗执行者；当前投影均早于关系转折，与程宗扬保持合作、戒备或敌对"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "第1380序关系转折前不得称为已被程宗扬收服"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -23376,10 +23827,25 @@
           "role": "次要反派",
           "description": "齐羽仙身姿婀娜，雪肤玉颜，是圣教隐匿最深的毒宗联络人；她表面柔弱如柳，实则心如机括，阴险深沉，以惊人的忍耐力在敌阵中织就一张无人察觉的毒网。",
           "notes": [
-            "【关系】曾借仙姬许可加入程宗扬阵营当双面间谍，被小紫看穿反制；后被程宗扬收服",
-            "【目标】执行黑魔海布局；前期高傲、后期落难被收服，反差强烈"
+            "【关系】黑魔海巫宗执行者；当前投影均早于关系转折，与程宗扬保持合作、戒备或敌对"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "黑魔海巫宗执行者；当前投影均早于关系转折，与程宗扬保持合作、戒备或敌对"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "第1380序关系转折前不得称为已被程宗扬收服"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -23391,19 +23857,37 @@
           "role": "圣教成员/毒宗联络人",
           "description": "齐羽仙身姿婀娜，雪肤玉颜，是圣教隐匿最深的毒宗联络人；她表面柔弱如柳，实则心如机括，阴险深沉，以惊人的忍耐力在敌阵中织就一张无人察觉的毒网。",
           "notes": [
-            "【关系】曾借仙姬许可加入程宗扬阵营当双面间谍，被小紫看穿反制；后被程宗扬收服",
-            "【目标】执行黑魔海布局；前期高傲、后期落难被收服，反差强烈"
+            "【关系】黑魔海巫宗执行者；当前投影均早于关系转折，与程宗扬保持合作、戒备或敌对"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "黑魔海巫宗执行者；当前投影均早于关系转折，与程宗扬保持合作、戒备或敌对"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "第1380序关系转折前不得称为已被程宗扬收服"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         }
       ],
       "review": {
         "approved": true,
         "reviewed": true,
         "flags": [
-          "female-relationship-phase-needed"
+          "relationship-phase-resolved"
         ],
-        "conflicts": []
+        "conflicts": [],
+        "humanNotes": [
+          "2026-07-22：R2-12 第二批按原文时间轴完成当前逐关开场关系投影；关内发生的转折不得回灌至开场。"
+        ]
       },
       "embedText": "齐羽仙 ｜ 黑魔海巫宗仙姬/大将，偏执行者与高级外交/间谍，剑玉姬下属 ｜ 黑魔海(执行者/仙姬近侍)、巫宗(门下) ｜ 登场于翠微园 ｜ 高傲清冷、魔门仙子光环、智计上乘、武功上乘（约六级通幽境） ｜ 曾借仙姬许可加入程宗扬阵营当双面间谍，被小紫看穿反制；后被程宗扬收服 ｜ 被程宗扬称为“齐姊儿”；他人称“齐羽仙”。 ｜ 原阵营/中立/敌对身份，禁止提前称为后宫、侍妾、情人或程宗扬阵营成员；按原文转折事件后，才可写入程宗扬阵营/后宫/侍妾/情人等关系身份 ｜ 燕歌行后期代表黑魔海与十方丛林（佛门）及程宗扬权谋拉锯；计谋屡被同样妖孽的小紫看穿压制"
     },
@@ -25196,18 +25680,6 @@
           "status": "allowed-after-turning-point"
         },
         {
-          "scope": "relationship-chain",
-          "seq": "转折前",
-          "identity": "原阵营/中立/敌对身份，禁止提前称为后宫、侍妾、情人或程宗扬阵营成员",
-          "status": "forbid-final-state-before-turning-point"
-        },
-        {
-          "scope": "relationship-chain",
-          "seq": "关系转折后",
-          "identity": "按原文转折事件后，才可写入程宗扬阵营/后宫/侍妾/情人等关系身份",
-          "status": "allowed-after-turning-point"
-        },
-        {
           "scope": "stage-projection",
           "stageId": "lyg.buddhist_conspiracy",
           "book": "yange",
@@ -25352,10 +25824,31 @@
           "role": "镖局夫人",
           "description": "阮香琳是个人精似的美艳妇人，眉眼与女儿李师师八分肖似，却添了三分市井的圆滑与泼辣。她操持起家业来精明果断，嘴上从不饶人，几句俏皮话便能揽客又抬价，可若有人想打她女儿的主意，那原本含笑的双眸立刻便淬上尖刺，定要讨回个公道才罢。",
           "notes": [
-            "【关系】后宫；姐姐委身、汉国崩溃后命运崩塌，被一同收入后宫",
-            "【目标】市侩，取悦权贵以换取庇护与利益；追求肉体的快感与刺激。"
+            "【关系】威远镖局镖头夫人、李师师义母；本关开场尚未归入程宗扬后宫"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "威远镖局镖头夫人、李师师义母；本关开场尚未归入程宗扬后宫"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "第641序关系转折前不得称为程宗扬后宫成员"
+          ],
+          "personality": [
+            "精明爽快",
+            "市侩现实",
+            "重视家业与女儿安危",
+            "前期对程宗扬戒备"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -25367,10 +25860,31 @@
           "role": "李师师母亲、前官宦妻",
           "description": "阮香琳是个人精似的美艳妇人，眉眼与女儿李师师八分肖似，却添了三分市井的圆滑与泼辣。她操持起家业来精明果断，嘴上从不饶人，几句俏皮话便能揽客又抬价，可若有人想打她女儿的主意，那原本含笑的双眸立刻便淬上尖刺，定要讨回个公道才罢。",
           "notes": [
-            "【关系】后宫；姐姐委身、汉国崩溃后命运崩塌，被一同收入后宫",
-            "【目标】市侩，取悦权贵以换取庇护与利益；追求肉体的快感与刺激。"
+            "【关系】威远镖局镖头夫人、李师师义母；本关开场尚未归入程宗扬后宫"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "威远镖局镖头夫人、李师师义母；本关开场尚未归入程宗扬后宫"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "第641序关系转折前不得称为程宗扬后宫成员"
+          ],
+          "personality": [
+            "精明爽快",
+            "市侩现实",
+            "重视家业与女儿安危",
+            "前期对程宗扬戒备"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -25412,10 +25926,31 @@
           "role": "李师师之母",
           "description": "阮香琳是个人精似的美艳妇人，眉眼与女儿李师师八分肖似，却添了三分市井的圆滑与泼辣。她操持起家业来精明果断，嘴上从不饶人，几句俏皮话便能揽客又抬价，可若有人想打她女儿的主意，那原本含笑的双眸立刻便淬上尖刺，定要讨回个公道才罢。",
           "notes": [
-            "【关系】后宫；姐姐委身、汉国崩溃后命运崩塌，被一同收入后宫",
-            "【目标】市侩，取悦权贵以换取庇护与利益；追求肉体的快感与刺激。"
+            "【关系】威远镖局镖头夫人、李师师义母；本关开场尚未归入程宗扬后宫"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "威远镖局镖头夫人、李师师义母；本关开场尚未归入程宗扬后宫"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "第641序关系转折前不得称为程宗扬后宫成员"
+          ],
+          "personality": [
+            "精明爽快",
+            "市侩现实",
+            "重视家业与女儿安危",
+            "前期对程宗扬戒备"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -25427,10 +25962,31 @@
           "role": "李师师母亲、前官宦妻",
           "description": "阮香琳是个人精似的美艳妇人，眉眼与女儿李师师八分肖似，却添了三分市井的圆滑与泼辣。她操持起家业来精明果断，嘴上从不饶人，几句俏皮话便能揽客又抬价，可若有人想打她女儿的主意，那原本含笑的双眸立刻便淬上尖刺，定要讨回个公道才罢。",
           "notes": [
-            "【关系】后宫；姐姐委身、汉国崩溃后命运崩塌，被一同收入后宫",
-            "【目标】市侩，取悦权贵以换取庇护与利益；追求肉体的快感与刺激。"
+            "【关系】威远镖局镖头夫人、李师师义母；本关开场尚未归入程宗扬后宫"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "威远镖局镖头夫人、李师师义母；本关开场尚未归入程宗扬后宫"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "第641序关系转折前不得称为程宗扬后宫成员"
+          ],
+          "personality": [
+            "精明爽快",
+            "市侩现实",
+            "重视家业与女儿安危",
+            "前期对程宗扬戒备"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -25442,10 +25998,31 @@
           "role": "李师师母亲、前官宦妻",
           "description": "阮香琳是个人精似的美艳妇人，眉眼与女儿李师师八分肖似，却添了三分市井的圆滑与泼辣。她操持起家业来精明果断，嘴上从不饶人，几句俏皮话便能揽客又抬价，可若有人想打她女儿的主意，那原本含笑的双眸立刻便淬上尖刺，定要讨回个公道才罢。",
           "notes": [
-            "【关系】后宫；姐姐委身、汉国崩溃后命运崩塌，被一同收入后宫",
-            "【目标】市侩，取悦权贵以换取庇护与利益；追求肉体的快感与刺激。"
+            "【关系】威远镖局镖头夫人、李师师义母；本关开场尚未归入程宗扬后宫"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "威远镖局镖头夫人、李师师义母；本关开场尚未归入程宗扬后宫"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "第641序关系转折前不得称为程宗扬后宫成员"
+          ],
+          "personality": [
+            "精明爽快",
+            "市侩现实",
+            "重视家业与女儿安危",
+            "前期对程宗扬戒备"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         }
       ],
       "review": {
@@ -25453,9 +26030,12 @@
         "reviewed": true,
         "flags": [
           "duplicate-merged",
-          "female-relationship-phase-needed"
+          "relationship-phase-resolved"
         ],
-        "conflicts": []
+        "conflicts": [],
+        "humanNotes": [
+          "2026-07-22：R2-12 第二批按原文时间轴完成当前逐关开场关系投影；关内发生的转折不得回灌至开场。"
+        ]
       },
       "embedText": "阮香琳 ｜ 阮香凝的妹妹，李师师的义母 ｜ 【宋国人物】 ｜ 威远镖局(镖头夫人)、林州小碧潭(弟子) ｜ 登场于威远镖局（临安） ｜ 市侩（愿意献出女儿换取利益）、有着江湖儿女的大方与豪爽，前期对主角敌意戒备、\"咬牙隐忍却无法抗拒\"的傲娇熟女反差 ｜ 后宫；姐姐委身、汉国崩溃后命运崩塌，被一同收入后宫 ｜ 程宗扬称其‘阮女侠’；被他人称‘夫人’、‘阮女侠’；自称‘奴家’、‘妾身’。 ｜ 原阵营/中立/敌对身份，禁止提前称为后宫、侍妾、情人或程宗扬阵营成员；按原文转折事件后，才可写入程宗扬阵营/后宫/侍妾/情人等关系身份 ｜ 被陆谦；高衙内等人调教，沦为太尉府的淫乐工具；与妹妹阮香凝一同参与性游戏，姐妹共侍；被程宗扬多次肏弄；被罂粟女调教并提到其淫浪模样"
     },
@@ -25618,7 +26198,11 @@
             "不得提前揭示真实姓名、真实阵营或未来关系",
             "正式关系转折前不得写成程宗扬侍妾或后宫成员"
           ],
-          "hideCanonicalAlias": true
+          "hideCanonicalAlias": true,
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -25646,7 +26230,11 @@
             "不得提前揭示真实姓名、真实阵营或未来关系",
             "正式关系转折前不得写成程宗扬侍妾或后宫成员"
           ],
-          "hideCanonicalAlias": true
+          "hideCanonicalAlias": true,
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -25704,7 +26292,11 @@
             "不得提前揭示真实姓名、真实阵营或未来关系",
             "正式关系转折前不得写成程宗扬侍妾或后宫成员"
           ],
-          "hideCanonicalAlias": true
+          "hideCanonicalAlias": true,
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -25747,7 +26339,11 @@
             "不得提前揭示真实姓名、真实阵营或未来关系",
             "正式关系转折前不得写成程宗扬侍妾或后宫成员"
           ],
-          "hideCanonicalAlias": true
+          "hideCanonicalAlias": true,
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         }
       ],
       "review": {
@@ -28060,14 +28656,42 @@
           "book": "yunlong",
           "seqLo": 559,
           "seqHi": 562,
-          "identity": "犯妇/原为世家女眷",
-          "role": "关键人物",
-          "description": "她表面柔婉乖巧，实则骄纵歹毒，作为程宗扬内宅侍婢，常以温顺姿态掩藏心计。",
+          "identity": "襄城君、吕冀之妻",
+          "role": "吕氏外戚女眷",
+          "description": "襄城君孙寿出身吕氏外戚集团，骄横而善于趋利避害；本关开场尚未成为程宗扬内宅成员。",
           "notes": [
-            "【关系】程宗扬的性奴/妾室",
-            "【目标】取悦主人，获得庇护"
+            "【关系】吕氏外戚女眷；本关开场尚未被程宗扬收编为妾室或侍奴"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "吕氏外戚女眷；本关开场尚未被程宗扬收编为妾室或侍奴"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "第776序受制前不得称为程宗扬妾室、侍奴或内宅成员"
+          ],
+          "appearance": "衣饰华贵，保持襄城君的世家女眷仪态。",
+          "personality": [
+            "骄横",
+            "贪婪虚荣",
+            "心狠手辣",
+            "欺软怕硬",
+            "善于趋利避害"
+          ],
+          "speechStyle": "以襄城君身份说话，骄矜而强势",
+          "principles": [
+            "维护自身与吕氏外戚利益",
+            "趋利避害"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -28090,14 +28714,42 @@
           "book": "yunlong",
           "seqLo": 668,
           "seqHi": 776,
-          "identity": "犯妇/原为世家女眷",
-          "role": "关键人物",
-          "description": "她表面柔婉乖巧，实则骄纵歹毒，作为程宗扬内宅侍婢，常以温顺姿态掩藏心计。",
+          "identity": "襄城君、吕冀之妻",
+          "role": "吕氏外戚女眷",
+          "description": "襄城君孙寿出身吕氏外戚集团，骄横而善于趋利避害；本关开场尚未成为程宗扬内宅成员。",
           "notes": [
-            "【关系】程宗扬的性奴/妾室",
-            "【目标】取悦主人，获得庇护"
+            "【关系】吕氏外戚女眷；本关开场尚未被程宗扬收编为妾室或侍奴"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "吕氏外戚女眷；本关开场尚未被程宗扬收编为妾室或侍奴"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "第776序受制前不得称为程宗扬妾室、侍奴或内宅成员"
+          ],
+          "appearance": "衣饰华贵，保持襄城君的世家女眷仪态。",
+          "personality": [
+            "骄横",
+            "贪婪虚荣",
+            "心狠手辣",
+            "欺软怕硬",
+            "善于趋利避害"
+          ],
+          "speechStyle": "以襄城君身份说话，骄矜而强势",
+          "principles": [
+            "维护自身与吕氏外戚利益",
+            "趋利避害"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -28105,14 +28757,42 @@
           "book": "yunlong",
           "seqLo": 616,
           "seqHi": 664,
-          "identity": "犯妇/原为世家女眷",
-          "role": "关键人物",
-          "description": "她表面柔婉乖巧，实则骄纵歹毒，作为程宗扬内宅侍婢，常以温顺姿态掩藏心计。",
+          "identity": "襄城君、吕冀之妻",
+          "role": "吕氏外戚女眷",
+          "description": "襄城君孙寿出身吕氏外戚集团，骄横而善于趋利避害；本关开场尚未成为程宗扬内宅成员。",
           "notes": [
-            "【关系】程宗扬的性奴/妾室",
-            "【目标】取悦主人，获得庇护"
+            "【关系】吕氏外戚女眷；本关开场尚未被程宗扬收编为妾室或侍奴"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "吕氏外戚女眷；本关开场尚未被程宗扬收编为妾室或侍奴"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "第776序受制前不得称为程宗扬妾室、侍奴或内宅成员"
+          ],
+          "appearance": "衣饰华贵，保持襄城君的世家女眷仪态。",
+          "personality": [
+            "骄横",
+            "贪婪虚荣",
+            "心狠手辣",
+            "欺软怕硬",
+            "善于趋利避害"
+          ],
+          "speechStyle": "以襄城君身份说话，骄矜而强势",
+          "principles": [
+            "维护自身与吕氏外戚利益",
+            "趋利避害"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -28120,21 +28800,49 @@
           "book": "yunlong",
           "seqLo": 567,
           "seqHi": 615,
-          "identity": "犯妇/原为世家女眷",
-          "role": "关键人物",
-          "description": "她表面柔婉乖巧，实则骄纵歹毒，作为程宗扬内宅侍婢，常以温顺姿态掩藏心计。",
+          "identity": "襄城君、吕冀之妻",
+          "role": "吕氏外戚女眷",
+          "description": "襄城君孙寿出身吕氏外戚集团，骄横而善于趋利避害；本关开场尚未成为程宗扬内宅成员。",
           "notes": [
-            "【关系】程宗扬的性奴/妾室",
-            "【目标】取悦主人，获得庇护"
+            "【关系】吕氏外戚女眷；本关开场尚未被程宗扬收编为妾室或侍奴"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "吕氏外戚女眷；本关开场尚未被程宗扬收编为妾室或侍奴"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "第776序受制前不得称为程宗扬妾室、侍奴或内宅成员"
+          ],
+          "appearance": "衣饰华贵，保持襄城君的世家女眷仪态。",
+          "personality": [
+            "骄横",
+            "贪婪虚荣",
+            "心狠手辣",
+            "欺软怕硬",
+            "善于趋利避害"
+          ],
+          "speechStyle": "以襄城君身份说话，骄矜而强势",
+          "principles": [
+            "维护自身与吕氏外戚利益",
+            "趋利避害"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         }
       ],
       "review": {
         "approved": true,
         "reviewed": true,
         "flags": [
-          "female-relationship-phase-needed"
+          "relationship-phase-resolved"
         ],
         "conflicts": [],
         "aliasApplied": [
@@ -28142,6 +28850,9 @@
         ],
         "aliasReviewNote": [
           "alias-unification approved"
+        ],
+        "humanNotes": [
+          "2026-07-22：R2-12 第二批按原文时间轴完成当前逐关开场关系投影；关内发生的转折不得回灌至开场。"
         ]
       },
       "embedText": "孙寿 ｜ 襄城君 ｜ 犯妇/原为世家女眷 ｜ 【汉国人物】 ｜ 汉国朝廷(襄城君（封号）)、吕氏外戚集团(襄邑侯吕冀之妻) ｜ 登场于洛都 ｜ 上位时骄横歹毒、贪婪虚荣、心狠手辣、毫无风骨欺软怕硬、落难后卑微自称\"犯妇\"摇尾乞怜 ｜ 程宗扬的性奴/妾室 ｜ 对程宗扬称‘老公’、‘夫君大人’；被称‘孙寿’、‘寿儿’ 别名/称谓：襄城君 ｜ 原阵营/中立/敌对身份，禁止提前称为后宫、侍妾、情人或程宗扬阵营成员；按原文转折事件后，才可写入程宗扬阵营/后宫/侍妾/情人等关系身份 ｜ 发明愁眉/啼妆/堕马髻/折腰步引领洛阳贵妇审美；吕氏倒台沦死囚，交程宗扬+阮香琳审讯，成最下贱审讯禁脔/泄欲工具；狐女无法作鼎炉(采元红无助修行)，纯感官玩物"
@@ -30989,19 +31700,37 @@
           "role": "女族长",
           "description": "荆溪女族长相雅，娇小身躯裹着素衣，眉间锁着哀愁——那是村寨覆灭前最后的宁静。",
           "notes": [
-            "【关系】程宗扬的女奴/性伴侣，称其主人",
-            "【目标】为族人报仇并延续部族"
+            "【关系】荆溪族女子；本关开场与程宗扬尚未相识，关系须由关内救援与投靠事件推进"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "荆溪族女子；本关开场与程宗扬尚未相识，关系须由关内救援与投靠事件推进"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "第553序相遇前不得称程宗扬为主人或写成其女奴、伴侣"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         }
       ],
       "review": {
         "approved": false,
         "reviewed": true,
         "flags": [
-          "female-relationship-phase-needed"
+          "relationship-phase-resolved"
         ],
-        "conflicts": []
+        "conflicts": [],
+        "humanNotes": [
+          "2026-07-22：R2-12 第二批按原文时间轴完成当前逐关开场关系投影；关内发生的转折不得回灌至开场。"
+        ]
       },
       "embedText": "相雅 ｜ 荆溪族女子 ｜ 荆溪人(族人/麻黩之妻)、程宗扬势力(护卫/成员) ｜ 登场于浮凌江 ｜ 温柔、体贴、刚烈、忠诚 ｜ 程宗扬的女奴/性伴侣，称其主人 ｜ 主人/程商人（对程宗扬），相雅/雅儿（被称呼） ｜ 原阵营/中立/敌对身份，禁止提前称为后宫、侍妾、情人或程宗扬阵营成员；按原文转折事件后，才可写入程宗扬阵营/后宫/侍妾/情人等关系身份 ｜ 第2章灭族，丈夫被杀，自身被凌辱，程宗扬救下；第3章带领族人投靠程宗扬，请求报仇；第4章单膝跪地效忠；第5章与程宗扬多次性交，血誓"
     },
@@ -31296,6 +32025,10 @@
           "ending": [],
           "forbidden": [
             "不得提前称为程宗扬阵营成员或从属"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
           ]
         },
         {
@@ -31322,6 +32055,10 @@
           "ending": [],
           "forbidden": [
             "不得提前称为程宗扬阵营成员或从属"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
           ]
         },
         {
@@ -31348,6 +32085,10 @@
           "ending": [],
           "forbidden": [
             "不得提前称为程宗扬阵营成员或从属"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
           ]
         },
         {
@@ -31374,6 +32115,10 @@
           "ending": [],
           "forbidden": [
             "不得提前称为程宗扬阵营成员或从属"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
           ]
         },
         {
@@ -31400,6 +32145,10 @@
           "ending": [],
           "forbidden": [
             "不得提前称为程宗扬阵营成员或从属"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
           ]
         },
         {
@@ -31426,6 +32175,10 @@
           "ending": [],
           "forbidden": [
             "不得提前称为程宗扬阵营成员或从属"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
           ]
         }
       ],
@@ -31897,31 +32650,41 @@
           "status": "allowed-after-turning-point"
         },
         {
-          "scope": "relationship-chain",
-          "seq": "转折前",
-          "identity": "原阵营/中立/敌对身份，禁止提前称为后宫、侍妾、情人或程宗扬阵营成员",
-          "status": "forbid-final-state-before-turning-point"
-        },
-        {
-          "scope": "relationship-chain",
-          "seq": "关系转折后",
-          "identity": "按原文转折事件后，才可写入程宗扬阵营/后宫/侍妾/情人等关系身份",
-          "status": "allowed-after-turning-point"
-        },
-        {
           "scope": "stage-projection",
           "stageId": "lcq.stage_03b_snake_flower_bridge",
           "book": "qingyu",
           "seqLo": 61,
           "seqHi": 67,
           "identity": "碧鲮族",
-          "role": "关键人物",
-          "description": "身为程宗扬的助手，小紫素来以娇俏灵动的紫衫丽人之姿示人，肤白如乳、玉脸精致皎洁，但那双星眸深处暗藏的算计与城府，却让各房后宫皆被她不动声色地收服；她善使毒与机关虫蚁，总是一脸天真无辜地靠近你，唇角微弯时，银环穿透的胸乳间银铃轻响，温柔如水的目光下却已悄然布下天罗地网。",
+          "role": "同行的神秘少女",
+          "description": "来历成谜的少女，表面天真娇憨，实际心思敏锐；她与程宗扬正在由同行逐步建立信任。",
           "notes": [
-            "【关系】女主角，主角后宫之首；对天下绝对冷酷算计，唯独对程宗扬病娇般倾注占有与爱；享受作幕后黑手为其铺路、同时在精神与智商上绝对压制他",
+            "【关系】同行伙伴；本关开场尚未与程宗扬确立后宫或正宫关系",
             "【备注】阶段性表现规则：清羽早期刚认识程宗扬时，小紫以痴呆、天真、反常无知的形象接近，典型表现包括尝试用开水浇花；此阶段不得直接演成全知全能的后期紫妈妈。鬼王宫/小紫暴露线之后，才逐步显出残忍、伪装、操控、城府，以及她对岳鹏举身份线的特殊反应。和主角没有发生确实的插入关系，保留元红，偶尔会用嘴和手让主角发泄。对此觉得亏欠主角，所以对主角的性癖很包容，喜欢观察并调教其他后宫成员，尤其是卓云君。"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "同行伙伴；本关开场尚未与程宗扬确立后宫或正宫关系"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "第229序关系确认前不得称为程宗扬后宫之首或正宫"
+          ],
+          "personality": [
+            "表面天真娇憨",
+            "观察敏锐",
+            "真实心思尚未完全显露",
+            "会保护认下的同行者"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -31930,13 +32693,35 @@
           "seqLo": 88,
           "seqHi": 122,
           "identity": "碧鲮族",
-          "role": "关键人物",
-          "description": "身为程宗扬的助手，小紫素来以娇俏灵动的紫衫丽人之姿示人，肤白如乳、玉脸精致皎洁，但那双星眸深处暗藏的算计与城府，却让各房后宫皆被她不动声色地收服；她善使毒与机关虫蚁，总是一脸天真无辜地靠近你，唇角微弯时，银环穿透的胸乳间银铃轻响，温柔如水的目光下却已悄然布下天罗地网。",
+          "role": "同行的神秘少女",
+          "description": "来历成谜的少女，表面天真娇憨，实际心思敏锐；她与程宗扬正在由同行逐步建立信任。",
           "notes": [
-            "【关系】女主角，主角后宫之首；对天下绝对冷酷算计，唯独对程宗扬病娇般倾注占有与爱；享受作幕后黑手为其铺路、同时在精神与智商上绝对压制他",
+            "【关系】同行伙伴；本关开场尚未与程宗扬确立后宫或正宫关系",
             "【备注】阶段性表现规则：清羽早期刚认识程宗扬时，小紫以痴呆、天真、反常无知的形象接近，典型表现包括尝试用开水浇花；此阶段不得直接演成全知全能的后期紫妈妈。鬼王宫/小紫暴露线之后，才逐步显出残忍、伪装、操控、城府，以及她对岳鹏举身份线的特殊反应。和主角没有发生确实的插入关系，保留元红，偶尔会用嘴和手让主角发泄。对此觉得亏欠主角，所以对主角的性癖很包容，喜欢观察并调教其他后宫成员，尤其是卓云君。"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "同行伙伴；本关开场尚未与程宗扬确立后宫或正宫关系"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "第229序关系确认前不得称为程宗扬后宫之首或正宫"
+          ],
+          "personality": [
+            "表面天真娇憨",
+            "观察敏锐",
+            "真实心思尚未完全显露",
+            "会保护认下的同行者"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -31945,13 +32730,35 @@
           "seqLo": 123,
           "seqHi": 162,
           "identity": "碧鲮族",
-          "role": "关键人物",
-          "description": "身为程宗扬的助手，小紫素来以娇俏灵动的紫衫丽人之姿示人，肤白如乳、玉脸精致皎洁，但那双星眸深处暗藏的算计与城府，却让各房后宫皆被她不动声色地收服；她善使毒与机关虫蚁，总是一脸天真无辜地靠近你，唇角微弯时，银环穿透的胸乳间银铃轻响，温柔如水的目光下却已悄然布下天罗地网。",
+          "role": "同行的神秘少女",
+          "description": "来历成谜的少女，表面天真娇憨，实际心思敏锐；她与程宗扬正在由同行逐步建立信任。",
           "notes": [
-            "【关系】女主角，主角后宫之首；对天下绝对冷酷算计，唯独对程宗扬病娇般倾注占有与爱；享受作幕后黑手为其铺路、同时在精神与智商上绝对压制他",
+            "【关系】同行伙伴；本关开场尚未与程宗扬确立后宫或正宫关系",
             "【备注】阶段性表现规则：清羽早期刚认识程宗扬时，小紫以痴呆、天真、反常无知的形象接近，典型表现包括尝试用开水浇花；此阶段不得直接演成全知全能的后期紫妈妈。鬼王宫/小紫暴露线之后，才逐步显出残忍、伪装、操控、城府，以及她对岳鹏举身份线的特殊反应。和主角没有发生确实的插入关系，保留元红，偶尔会用嘴和手让主角发泄。对此觉得亏欠主角，所以对主角的性癖很包容，喜欢观察并调教其他后宫成员，尤其是卓云君。"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "同行伙伴；本关开场尚未与程宗扬确立后宫或正宫关系"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "第229序关系确认前不得称为程宗扬后宫之首或正宫"
+          ],
+          "personality": [
+            "表面天真娇憨",
+            "观察敏锐",
+            "真实心思尚未完全显露",
+            "会保护认下的同行者"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -31960,13 +32767,35 @@
           "seqLo": 163,
           "seqHi": 195,
           "identity": "碧鲮族",
-          "role": "关键人物",
-          "description": "身为程宗扬的助手，小紫素来以娇俏灵动的紫衫丽人之姿示人，肤白如乳、玉脸精致皎洁，但那双星眸深处暗藏的算计与城府，却让各房后宫皆被她不动声色地收服；她善使毒与机关虫蚁，总是一脸天真无辜地靠近你，唇角微弯时，银环穿透的胸乳间银铃轻响，温柔如水的目光下却已悄然布下天罗地网。",
+          "role": "同行的神秘少女",
+          "description": "来历成谜的少女，表面天真娇憨，实际心思敏锐；她与程宗扬正在由同行逐步建立信任。",
           "notes": [
-            "【关系】女主角，主角后宫之首；对天下绝对冷酷算计，唯独对程宗扬病娇般倾注占有与爱；享受作幕后黑手为其铺路、同时在精神与智商上绝对压制他",
+            "【关系】同行伙伴；本关开场尚未与程宗扬确立后宫或正宫关系",
             "【备注】阶段性表现规则：清羽早期刚认识程宗扬时，小紫以痴呆、天真、反常无知的形象接近，典型表现包括尝试用开水浇花；此阶段不得直接演成全知全能的后期紫妈妈。鬼王宫/小紫暴露线之后，才逐步显出残忍、伪装、操控、城府，以及她对岳鹏举身份线的特殊反应。和主角没有发生确实的插入关系，保留元红，偶尔会用嘴和手让主角发泄。对此觉得亏欠主角，所以对主角的性癖很包容，喜欢观察并调教其他后宫成员，尤其是卓云君。"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "同行伙伴；本关开场尚未与程宗扬确立后宫或正宫关系"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "第229序关系确认前不得称为程宗扬后宫之首或正宫"
+          ],
+          "personality": [
+            "表面天真娇憨",
+            "观察敏锐",
+            "真实心思尚未完全显露",
+            "会保护认下的同行者"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -31975,13 +32804,35 @@
           "seqLo": 196,
           "seqHi": 231,
           "identity": "碧鲮族",
-          "role": "少女",
-          "description": "身为程宗扬的助手，小紫素来以娇俏灵动的紫衫丽人之姿示人，肤白如乳、玉脸精致皎洁，但那双星眸深处暗藏的算计与城府，却让各房后宫皆被她不动声色地收服；她善使毒与机关虫蚁，总是一脸天真无辜地靠近你，唇角微弯时，银环穿透的胸乳间银铃轻响，温柔如水的目光下却已悄然布下天罗地网。",
+          "role": "同行的神秘少女",
+          "description": "来历成谜的少女，表面天真娇憨，实际心思敏锐；她与程宗扬正在由同行逐步建立信任。",
           "notes": [
-            "【关系】女主角，主角后宫之首；对天下绝对冷酷算计，唯独对程宗扬病娇般倾注占有与爱；享受作幕后黑手为其铺路、同时在精神与智商上绝对压制他",
+            "【关系】同行伙伴；本关开场尚未与程宗扬确立后宫或正宫关系",
             "【备注】阶段性表现规则：清羽早期刚认识程宗扬时，小紫以痴呆、天真、反常无知的形象接近，典型表现包括尝试用开水浇花；此阶段不得直接演成全知全能的后期紫妈妈。鬼王宫/小紫暴露线之后，才逐步显出残忍、伪装、操控、城府，以及她对岳鹏举身份线的特殊反应。和主角没有发生确实的插入关系，保留元红，偶尔会用嘴和手让主角发泄。对此觉得亏欠主角，所以对主角的性癖很包容，喜欢观察并调教其他后宫成员，尤其是卓云君。"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "同行伙伴；本关开场尚未与程宗扬确立后宫或正宫关系"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "第229序关系确认前不得称为程宗扬后宫之首或正宫"
+          ],
+          "personality": [
+            "表面天真娇憨",
+            "观察敏锐",
+            "真实心思尚未完全显露",
+            "会保护认下的同行者"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -32410,7 +33261,7 @@
         "flags": [
           "duplicate-merged",
           "stage-identity-varies",
-          "female-relationship-phase-needed"
+          "relationship-phase-resolved"
         ],
         "conflicts": [],
         "aliasApplied": [
@@ -32420,7 +33271,10 @@
         "aliasReviewNote": [
           "alias-unification approved"
         ],
-        "humanNotes": "2026-07-04 底线修正(用户): 扫描抓了入队前敌对期嗜血,实际入队后从不真正伤害主角,只恶作剧;对敌狠辣对自己人例外。"
+        "humanNotes": [
+          "2026-07-04 底线修正(用户): 扫描抓了入队前敌对期嗜血,实际入队后从不真正伤害主角,只恶作剧;对敌狠辣对自己人例外。",
+          "2026-07-22：R2-12 第二批按原文时间轴完成当前逐关开场关系投影；关内发生的转折不得回灌至开场。"
+        ]
       },
       "embedText": "小紫 ｜ 紫妈妈 紫丫头 ｜ 黑魔海毒宗唯一嫡传（幼时托庇殇侯门下，由殇侯亲自指定）；全书女主角、智商天花板；男主后宫正宫；系星月湖之主岳帅与碧鲮族碧姬之女（岳帅遗孤） ｜ 黑魔海(毒宗唯一嫡传)、星月湖(岳帅遗孤) ｜ 登场于南荒 ｜ 白切黑病娇、初识程宗扬时以痴呆、天真、反常无知的形象接近，曾出现用开水浇花等伪装行为、表面天真烂漫娇憨黏人、实则心狠手辣城府极深、视人命如草芥、智商碾压全场、喜欢亲手调教、收服违抗程宗扬的女性敌人（种奴印/驯服） ｜ 女主角，主角后宫之首；对天下绝对冷酷算计，唯独对程宗扬病娇般倾注占有与爱；享受作幕后黑手为其铺路、同时在精神与智商上绝对压制他 ｜ 对程宗扬称呼：'程头儿'；被他人称呼：'小紫'，后宫佳丽尊称'紫妈妈' 别名/称谓：紫丫头 ｜ 原阵营/中立/敌对身份，禁止提前称为后宫、侍妾、情人或程宗扬阵营成员；按原文转折事件后，才可写入程宗扬阵营/后宫/侍妾/情人等关系身份 ｜ 师承殇侯（黑魔海/殇侯门毒宗头目），是殇侯的徒弟；黑魔海毒宗嫡传，幕后操盘"
     },
@@ -33711,6 +34565,10 @@
           "ending": [],
           "forbidden": [
             "第284章事件前不得写成侍妾或已有性关系"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
           ]
         },
         {
@@ -33737,6 +34595,10 @@
           "ending": [],
           "forbidden": [
             "第284章事件前不得写成侍妾或已有性关系"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
           ]
         },
         {
@@ -33763,6 +34625,10 @@
           "ending": [],
           "forbidden": [
             "第284章事件前不得写成侍妾或已有性关系"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
           ]
         },
         {
@@ -33789,6 +34655,10 @@
           "ending": [],
           "forbidden": [
             "第284章事件前不得写成侍妾或已有性关系"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
           ]
         },
         {
@@ -33815,6 +34685,10 @@
           "ending": [],
           "forbidden": [
             "第284章事件前不得写成侍妾或已有性关系"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
           ]
         },
         {
@@ -33841,6 +34715,10 @@
           "ending": [],
           "forbidden": [
             "第284章事件前不得写成侍妾或已有性关系"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
           ]
         },
         {
@@ -33867,6 +34745,10 @@
           "ending": [],
           "forbidden": [
             "第284章事件前不得写成侍妾或已有性关系"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
           ]
         },
         {
@@ -33893,6 +34775,10 @@
           "ending": [],
           "forbidden": [
             "第284章事件前不得写成侍妾或已有性关系"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
           ]
         },
         {
@@ -33919,6 +34805,10 @@
           "ending": [],
           "forbidden": [
             "第284章事件前不得写成侍妾或已有性关系"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
           ]
         },
         {
@@ -33945,6 +34835,10 @@
           "ending": [],
           "forbidden": [
             "第284章事件前不得写成侍妾或已有性关系"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
           ]
         },
         {
@@ -34117,15 +35011,30 @@
           "book": "yange",
           "seqLo": 1217,
           "seqHi": 1280,
-          "identity": "太真公主/镇国大长公主；程宗扬的伴侣/后宫成员",
+          "identity": "太真公主、镇国大长公主",
           "role": "次要人物",
           "description": "她是镇国大长公主，生得丰腴美艳，却总是一副懒洋洋的模样，开口便是暴躁易怒的嚣张话语，行事间带着不容置疑的固执与冷静。",
           "notes": [
-            "【体质约束】元阴之体，需保持处子之身方能克制邪术或用于特定条件（如以杀窥基换取献身）。（破坏后果：失去处子之身会丧失元阴之体的克制邪术效果；若与程宗扬发生关系前未履行杀窥基的承诺，则承诺失效。）",
-            "【关系】后宫；古灵精怪、主动挑衅又会被程宗扬压制，最终成为究极尤物。",
-            "【目标】享受与程宗扬的亲密关系，追求美与愉悦"
+            "【关系】唐国太真公主；与程宗扬互相试探并结为盟友，现有时间轴尚未确立后宫关系",
+            "【体质约束】元阴之体，需保持处子之身方能克制邪术或用于特定条件（如以杀窥基换取献身）。（破坏后果：失去处子之身会丧失元阴之体的克制邪术效果；若与程宗扬发生关系前未履行杀窥基的承诺，则承诺失效。）"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "唐国太真公主；与程宗扬互相试探并结为盟友，现有时间轴尚未确立后宫关系"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "现有正典时间轴截至第1399序，不得提前称为程宗扬伴侣或后宫成员"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -34133,15 +35042,30 @@
           "book": "yange",
           "seqLo": 1066,
           "seqHi": 1091,
-          "identity": "太真公主/镇国大长公主；程宗扬的伴侣/后宫成员",
+          "identity": "太真公主、镇国大长公主",
           "role": "公主",
           "description": "她是镇国大长公主，生得丰腴美艳，却总是一副懒洋洋的模样，开口便是暴躁易怒的嚣张话语，行事间带着不容置疑的固执与冷静。",
           "notes": [
-            "【体质约束】元阴之体，需保持处子之身方能克制邪术或用于特定条件（如以杀窥基换取献身）。（破坏后果：失去处子之身会丧失元阴之体的克制邪术效果；若与程宗扬发生关系前未履行杀窥基的承诺，则承诺失效。）",
-            "【关系】后宫；古灵精怪、主动挑衅又会被程宗扬压制，最终成为究极尤物。",
-            "【目标】享受与程宗扬的亲密关系，追求美与愉悦"
+            "【关系】唐国太真公主；与程宗扬互相试探并结为盟友，现有时间轴尚未确立后宫关系",
+            "【体质约束】元阴之体，需保持处子之身方能克制邪术或用于特定条件（如以杀窥基换取献身）。（破坏后果：失去处子之身会丧失元阴之体的克制邪术效果；若与程宗扬发生关系前未履行杀窥基的承诺，则承诺失效。）"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "唐国太真公主；与程宗扬互相试探并结为盟友，现有时间轴尚未确立后宫关系"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "现有正典时间轴截至第1399序，不得提前称为程宗扬伴侣或后宫成员"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -34149,15 +35073,30 @@
           "book": "yange",
           "seqLo": 1116,
           "seqHi": 1190,
-          "identity": "太真公主/镇国大长公主；程宗扬的伴侣/后宫成员",
+          "identity": "太真公主、镇国大长公主",
           "role": "次要人物",
           "description": "她是镇国大长公主，生得丰腴美艳，却总是一副懒洋洋的模样，开口便是暴躁易怒的嚣张话语，行事间带着不容置疑的固执与冷静。",
           "notes": [
-            "【体质约束】元阴之体，需保持处子之身方能克制邪术或用于特定条件（如以杀窥基换取献身）。（破坏后果：失去处子之身会丧失元阴之体的克制邪术效果；若与程宗扬发生关系前未履行杀窥基的承诺，则承诺失效。）",
-            "【关系】后宫；古灵精怪、主动挑衅又会被程宗扬压制，最终成为究极尤物。",
-            "【目标】享受与程宗扬的亲密关系，追求美与愉悦"
+            "【关系】唐国太真公主；与程宗扬互相试探并结为盟友，现有时间轴尚未确立后宫关系",
+            "【体质约束】元阴之体，需保持处子之身方能克制邪术或用于特定条件（如以杀窥基换取献身）。（破坏后果：失去处子之身会丧失元阴之体的克制邪术效果；若与程宗扬发生关系前未履行杀窥基的承诺，则承诺失效。）"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "唐国太真公主；与程宗扬互相试探并结为盟友，现有时间轴尚未确立后宫关系"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "现有正典时间轴截至第1399序，不得提前称为程宗扬伴侣或后宫成员"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -34165,15 +35104,30 @@
           "book": "yange",
           "seqLo": 1281,
           "seqHi": 1320,
-          "identity": "太真公主/镇国大长公主；程宗扬的伴侣/后宫成员",
+          "identity": "太真公主、镇国大长公主",
           "role": "次要人物",
           "description": "她是镇国大长公主，生得丰腴美艳，却总是一副懒洋洋的模样，开口便是暴躁易怒的嚣张话语，行事间带着不容置疑的固执与冷静。",
           "notes": [
-            "【体质约束】元阴之体，需保持处子之身方能克制邪术或用于特定条件（如以杀窥基换取献身）。（破坏后果：失去处子之身会丧失元阴之体的克制邪术效果；若与程宗扬发生关系前未履行杀窥基的承诺，则承诺失效。）",
-            "【关系】后宫；古灵精怪、主动挑衅又会被程宗扬压制，最终成为究极尤物。",
-            "【目标】享受与程宗扬的亲密关系，追求美与愉悦"
+            "【关系】唐国太真公主；与程宗扬互相试探并结为盟友，现有时间轴尚未确立后宫关系",
+            "【体质约束】元阴之体，需保持处子之身方能克制邪术或用于特定条件（如以杀窥基换取献身）。（破坏后果：失去处子之身会丧失元阴之体的克制邪术效果；若与程宗扬发生关系前未履行杀窥基的承诺，则承诺失效。）"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "唐国太真公主；与程宗扬互相试探并结为盟友，现有时间轴尚未确立后宫关系"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "现有正典时间轴截至第1399序，不得提前称为程宗扬伴侣或后宫成员"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -34181,15 +35135,30 @@
           "book": "yange",
           "seqLo": 1191,
           "seqHi": 1209,
-          "identity": "太真公主/镇国大长公主；程宗扬的伴侣/后宫成员",
+          "identity": "太真公主、镇国大长公主",
           "role": "镇国大长公主",
           "description": "她是镇国大长公主，生得丰腴美艳，却总是一副懒洋洋的模样，开口便是暴躁易怒的嚣张话语，行事间带着不容置疑的固执与冷静。",
           "notes": [
-            "【体质约束】元阴之体，需保持处子之身方能克制邪术或用于特定条件（如以杀窥基换取献身）。（破坏后果：失去处子之身会丧失元阴之体的克制邪术效果；若与程宗扬发生关系前未履行杀窥基的承诺，则承诺失效。）",
-            "【关系】后宫；古灵精怪、主动挑衅又会被程宗扬压制，最终成为究极尤物。",
-            "【目标】享受与程宗扬的亲密关系，追求美与愉悦"
+            "【关系】唐国太真公主；与程宗扬互相试探并结为盟友，现有时间轴尚未确立后宫关系",
+            "【体质约束】元阴之体，需保持处子之身方能克制邪术或用于特定条件（如以杀窥基换取献身）。（破坏后果：失去处子之身会丧失元阴之体的克制邪术效果；若与程宗扬发生关系前未履行杀窥基的承诺，则承诺失效。）"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "唐国太真公主；与程宗扬互相试探并结为盟友，现有时间轴尚未确立后宫关系"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "现有正典时间轴截至第1399序，不得提前称为程宗扬伴侣或后宫成员"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -34197,15 +35166,30 @@
           "book": "yange",
           "seqLo": 1013,
           "seqHi": 1065,
-          "identity": "太真公主/镇国大长公主；程宗扬的伴侣/后宫成员",
+          "identity": "太真公主、镇国大长公主",
           "role": "次要人物",
           "description": "她是镇国大长公主，生得丰腴美艳，却总是一副懒洋洋的模样，开口便是暴躁易怒的嚣张话语，行事间带着不容置疑的固执与冷静。",
           "notes": [
-            "【体质约束】元阴之体，需保持处子之身方能克制邪术或用于特定条件（如以杀窥基换取献身）。（破坏后果：失去处子之身会丧失元阴之体的克制邪术效果；若与程宗扬发生关系前未履行杀窥基的承诺，则承诺失效。）",
-            "【关系】后宫；古灵精怪、主动挑衅又会被程宗扬压制，最终成为究极尤物。",
-            "【目标】享受与程宗扬的亲密关系，追求美与愉悦"
+            "【关系】唐国太真公主；与程宗扬互相试探并结为盟友，现有时间轴尚未确立后宫关系",
+            "【体质约束】元阴之体，需保持处子之身方能克制邪术或用于特定条件（如以杀窥基换取献身）。（破坏后果：失去处子之身会丧失元阴之体的克制邪术效果；若与程宗扬发生关系前未履行杀窥基的承诺，则承诺失效。）"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "唐国太真公主；与程宗扬互相试探并结为盟友，现有时间轴尚未确立后宫关系"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "现有正典时间轴截至第1399序，不得提前称为程宗扬伴侣或后宫成员"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -34213,15 +35197,30 @@
           "book": "yange",
           "seqLo": 1203,
           "seqHi": 1216,
-          "identity": "太真公主/镇国大长公主；程宗扬的伴侣/后宫成员",
+          "identity": "太真公主、镇国大长公主",
           "role": "次要人物",
           "description": "她是镇国大长公主，生得丰腴美艳，却总是一副懒洋洋的模样，开口便是暴躁易怒的嚣张话语，行事间带着不容置疑的固执与冷静。",
           "notes": [
-            "【体质约束】元阴之体，需保持处子之身方能克制邪术或用于特定条件（如以杀窥基换取献身）。（破坏后果：失去处子之身会丧失元阴之体的克制邪术效果；若与程宗扬发生关系前未履行杀窥基的承诺，则承诺失效。）",
-            "【关系】后宫；古灵精怪、主动挑衅又会被程宗扬压制，最终成为究极尤物。",
-            "【目标】享受与程宗扬的亲密关系，追求美与愉悦"
+            "【关系】唐国太真公主；与程宗扬互相试探并结为盟友，现有时间轴尚未确立后宫关系",
+            "【体质约束】元阴之体，需保持处子之身方能克制邪术或用于特定条件（如以杀窥基换取献身）。（破坏后果：失去处子之身会丧失元阴之体的克制邪术效果；若与程宗扬发生关系前未履行杀窥基的承诺，则承诺失效。）"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "唐国太真公主；与程宗扬互相试探并结为盟友，现有时间轴尚未确立后宫关系"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "现有正典时间轴截至第1399序，不得提前称为程宗扬伴侣或后宫成员"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -34229,15 +35228,30 @@
           "book": "yange",
           "seqLo": 1321,
           "seqHi": 1399,
-          "identity": "太真公主/镇国大长公主；程宗扬的伴侣/后宫成员",
+          "identity": "太真公主、镇国大长公主",
           "role": "次要人物",
           "description": "她是镇国大长公主，生得丰腴美艳，却总是一副懒洋洋的模样，开口便是暴躁易怒的嚣张话语，行事间带着不容置疑的固执与冷静。",
           "notes": [
-            "【体质约束】元阴之体，需保持处子之身方能克制邪术或用于特定条件（如以杀窥基换取献身）。（破坏后果：失去处子之身会丧失元阴之体的克制邪术效果；若与程宗扬发生关系前未履行杀窥基的承诺，则承诺失效。）",
-            "【关系】后宫；古灵精怪、主动挑衅又会被程宗扬压制，最终成为究极尤物。",
-            "【目标】享受与程宗扬的亲密关系，追求美与愉悦"
+            "【关系】唐国太真公主；与程宗扬互相试探并结为盟友，现有时间轴尚未确立后宫关系",
+            "【体质约束】元阴之体，需保持处子之身方能克制邪术或用于特定条件（如以杀窥基换取献身）。（破坏后果：失去处子之身会丧失元阴之体的克制邪术效果；若与程宗扬发生关系前未履行杀窥基的承诺，则承诺失效。）"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "唐国太真公主；与程宗扬互相试探并结为盟友，现有时间轴尚未确立后宫关系"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "现有正典时间轴截至第1399序，不得提前称为程宗扬伴侣或后宫成员"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -34245,22 +35259,37 @@
           "book": "yange",
           "seqLo": 1092,
           "seqHi": 1115,
-          "identity": "太真公主/镇国大长公主；程宗扬的伴侣/后宫成员",
+          "identity": "太真公主、镇国大长公主",
           "role": "公主、盟友",
           "description": "她是镇国大长公主，生得丰腴美艳，却总是一副懒洋洋的模样，开口便是暴躁易怒的嚣张话语，行事间带着不容置疑的固执与冷静。",
           "notes": [
-            "【体质约束】元阴之体，需保持处子之身方能克制邪术或用于特定条件（如以杀窥基换取献身）。（破坏后果：失去处子之身会丧失元阴之体的克制邪术效果；若与程宗扬发生关系前未履行杀窥基的承诺，则承诺失效。）",
-            "【关系】后宫；古灵精怪、主动挑衅又会被程宗扬压制，最终成为究极尤物。",
-            "【目标】享受与程宗扬的亲密关系，追求美与愉悦"
+            "【关系】唐国太真公主；与程宗扬互相试探并结为盟友，现有时间轴尚未确立后宫关系",
+            "【体质约束】元阴之体，需保持处子之身方能克制邪术或用于特定条件（如以杀窥基换取献身）。（破坏后果：失去处子之身会丧失元阴之体的克制邪术效果；若与程宗扬发生关系前未履行杀窥基的承诺，则承诺失效。）"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "唐国太真公主；与程宗扬互相试探并结为盟友，现有时间轴尚未确立后宫关系"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "现有正典时间轴截至第1399序，不得提前称为程宗扬伴侣或后宫成员"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         }
       ],
       "review": {
         "approved": true,
         "reviewed": true,
         "flags": [
-          "female-relationship-phase-needed"
+          "relationship-phase-resolved"
         ],
         "conflicts": [],
         "aliasApplied": [
@@ -34272,6 +35301,9 @@
         "aliasReviewNote": [
           "alias-unification approved",
           "主角对其昵称"
+        ],
+        "humanNotes": [
+          "2026-07-22：R2-12 第二批按原文时间轴完成当前逐关开场关系投影；关内发生的转折不得回灌至开场。"
         ]
       },
       "embedText": "杨玉环 ｜ 本公子 太真 太真公主 杨妞儿 ｜ 太真公主/镇国大长公主；程宗扬的伴侣/后宫成员（此世设定非唐国杨妃杨艳） ｜ 【唐国人物】 ｜ 唐国朝廷(镇国公主/太真妃子)、太乙真宗(钦命授箓传道（名义）)、阳钧宗(钦命授箓传道（名义）)、乾贞道(钦命授箓传道（名义）)、长青宗(钦命授箓传道（名义）)、瑶池宗(钦命授箓传道（名义）)、光明观堂(挂名弟子) ｜ 登场于长安街头 ｜ 古灵精怪、野性难驯、拉皮条女王、叛逆狠辣、对礼教权势毫无敬畏、吃醋狠辣决绝、嘴强王者纸老虎（嘴上狂野、真上就尖叫逃走）、有贼心没贼胆——对性事充满好奇，但男主真要亲/上手就立马逃走 ｜ 后宫；古灵精怪、主动挑衅又会被程宗扬压制，最终成为究极尤物。 ｜ 对程宗扬称程宗扬/程侯爷；被他人称呼：杨玉环、杨妞儿、杨大美女 别名/称谓：本公子 别名/称谓：太真 别名/称谓：太真公主 ｜ 原阵营/中立/敌对身份，禁止提前称为后宫、侍妾、情人或程宗扬阵营成员；按原文转折事件后，才可写入程宗扬阵营/后宫/侍妾/情人等关系身份 ｜ 升级究极尤物"
@@ -34735,14 +35767,39 @@
           "book": "yunlong",
           "seqLo": 559,
           "seqHi": 562,
-          "identity": "掌教夫人（后沦为性奴）",
-          "role": "娼妓",
-          "description": "尹馥兰曾是青叶教的掌教夫人，如今却沦为程氏内宅的侍奴，她那娇艳含嗔的脸上总带着怯懦的顺从，生怕行差踏错便招来责罚——毕竟，她早已献出一魂一魄，只能以鼎炉之身战战兢兢地侍奉主人。",
+          "identity": "原青叶教掌教夫人，现受制于程氏阵营",
+          "role": "受制的青叶教掌教夫人",
+          "description": "尹馥兰原为青叶教掌教夫人，眼下处境受制，但本关开场尚未与程宗扬确立姬妾或侍奴关系。",
           "notes": [
-            "【关系】程宗扬的姬妾/性奴（兰奴）",
-            "【目标】取悦主人，巩固在奴妾中的地位。"
+            "【关系】受制于程氏阵营；本关开场尚未成为程宗扬姬妾或侍奴"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "受制于程氏阵营；本关开场尚未成为程宗扬姬妾或侍奴"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "第707序关系转折前不得称为兰奴、姬妾或性奴"
+          ],
+          "appearance": "丰腴熟美，仍带昔日掌教夫人的仪态。",
+          "personality": [
+            "世故",
+            "善于察言观色",
+            "处境受制时谨慎自保"
+          ],
+          "principles": [
+            "先求自保",
+            "不轻易放弃旧身份带来的体面"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -34765,14 +35822,39 @@
           "book": "yunlong",
           "seqLo": 668,
           "seqHi": 776,
-          "identity": "掌教夫人（后沦为性奴）",
-          "role": "娼妓",
-          "description": "尹馥兰曾是青叶教的掌教夫人，如今却沦为程氏内宅的侍奴，她那娇艳含嗔的脸上总带着怯懦的顺从，生怕行差踏错便招来责罚——毕竟，她早已献出一魂一魄，只能以鼎炉之身战战兢兢地侍奉主人。",
+          "identity": "原青叶教掌教夫人，现受制于程氏阵营",
+          "role": "受制的青叶教掌教夫人",
+          "description": "尹馥兰原为青叶教掌教夫人，眼下处境受制，但本关开场尚未与程宗扬确立姬妾或侍奴关系。",
           "notes": [
-            "【关系】程宗扬的姬妾/性奴（兰奴）",
-            "【目标】取悦主人，巩固在奴妾中的地位。"
+            "【关系】受制于程氏阵营；本关开场尚未成为程宗扬姬妾或侍奴"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "受制于程氏阵营；本关开场尚未成为程宗扬姬妾或侍奴"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "第707序关系转折前不得称为兰奴、姬妾或性奴"
+          ],
+          "appearance": "丰腴熟美，仍带昔日掌教夫人的仪态。",
+          "personality": [
+            "世故",
+            "善于察言观色",
+            "处境受制时谨慎自保"
+          ],
+          "principles": [
+            "先求自保",
+            "不轻易放弃旧身份带来的体面"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -34780,14 +35862,39 @@
           "book": "yunlong",
           "seqLo": 665,
           "seqHi": 667,
-          "identity": "掌教夫人（后沦为性奴）",
-          "role": "盟友",
-          "description": "尹馥兰曾是青叶教的掌教夫人，如今却沦为程氏内宅的侍奴，她那娇艳含嗔的脸上总带着怯懦的顺从，生怕行差踏错便招来责罚——毕竟，她早已献出一魂一魄，只能以鼎炉之身战战兢兢地侍奉主人。",
+          "identity": "原青叶教掌教夫人，现受制于程氏阵营",
+          "role": "受制的青叶教掌教夫人",
+          "description": "尹馥兰原为青叶教掌教夫人，眼下处境受制，但本关开场尚未与程宗扬确立姬妾或侍奴关系。",
           "notes": [
-            "【关系】程宗扬的姬妾/性奴（兰奴）",
-            "【目标】取悦主人，巩固在奴妾中的地位。"
+            "【关系】受制于程氏阵营；本关开场尚未成为程宗扬姬妾或侍奴"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "受制于程氏阵营；本关开场尚未成为程宗扬姬妾或侍奴"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "第707序关系转折前不得称为兰奴、姬妾或性奴"
+          ],
+          "appearance": "丰腴熟美，仍带昔日掌教夫人的仪态。",
+          "personality": [
+            "世故",
+            "善于察言观色",
+            "处境受制时谨慎自保"
+          ],
+          "principles": [
+            "先求自保",
+            "不轻易放弃旧身份带来的体面"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -34795,14 +35902,39 @@
           "book": "yunlong",
           "seqLo": 616,
           "seqHi": 664,
-          "identity": "掌教夫人（后沦为性奴）",
-          "role": "娼妓",
-          "description": "尹馥兰曾是青叶教的掌教夫人，如今却沦为程氏内宅的侍奴，她那娇艳含嗔的脸上总带着怯懦的顺从，生怕行差踏错便招来责罚——毕竟，她早已献出一魂一魄，只能以鼎炉之身战战兢兢地侍奉主人。",
+          "identity": "原青叶教掌教夫人，现受制于程氏阵营",
+          "role": "受制的青叶教掌教夫人",
+          "description": "尹馥兰原为青叶教掌教夫人，眼下处境受制，但本关开场尚未与程宗扬确立姬妾或侍奴关系。",
           "notes": [
-            "【关系】程宗扬的姬妾/性奴（兰奴）",
-            "【目标】取悦主人，巩固在奴妾中的地位。"
+            "【关系】受制于程氏阵营；本关开场尚未成为程宗扬姬妾或侍奴"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "受制于程氏阵营；本关开场尚未成为程宗扬姬妾或侍奴"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "第707序关系转折前不得称为兰奴、姬妾或性奴"
+          ],
+          "appearance": "丰腴熟美，仍带昔日掌教夫人的仪态。",
+          "personality": [
+            "世故",
+            "善于察言观色",
+            "处境受制时谨慎自保"
+          ],
+          "principles": [
+            "先求自保",
+            "不轻易放弃旧身份带来的体面"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -34810,21 +35942,46 @@
           "book": "yunlong",
           "seqLo": 567,
           "seqHi": 615,
-          "identity": "掌教夫人（后沦为性奴）",
-          "role": "娼妓",
-          "description": "尹馥兰曾是青叶教的掌教夫人，如今却沦为程氏内宅的侍奴，她那娇艳含嗔的脸上总带着怯懦的顺从，生怕行差踏错便招来责罚——毕竟，她早已献出一魂一魄，只能以鼎炉之身战战兢兢地侍奉主人。",
+          "identity": "原青叶教掌教夫人，现受制于程氏阵营",
+          "role": "受制的青叶教掌教夫人",
+          "description": "尹馥兰原为青叶教掌教夫人，眼下处境受制，但本关开场尚未与程宗扬确立姬妾或侍奴关系。",
           "notes": [
-            "【关系】程宗扬的姬妾/性奴（兰奴）",
-            "【目标】取悦主人，巩固在奴妾中的地位。"
+            "【关系】受制于程氏阵营；本关开场尚未成为程宗扬姬妾或侍奴"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "受制于程氏阵营；本关开场尚未成为程宗扬姬妾或侍奴"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "第707序关系转折前不得称为兰奴、姬妾或性奴"
+          ],
+          "appearance": "丰腴熟美，仍带昔日掌教夫人的仪态。",
+          "personality": [
+            "世故",
+            "善于察言观色",
+            "处境受制时谨慎自保"
+          ],
+          "principles": [
+            "先求自保",
+            "不轻易放弃旧身份带来的体面"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         }
       ],
       "review": {
         "approved": true,
         "reviewed": true,
         "flags": [
-          "female-relationship-phase-needed"
+          "relationship-phase-resolved"
         ],
         "conflicts": [],
         "aliasApplied": [
@@ -34834,6 +35991,9 @@
         ],
         "aliasReviewNote": [
           "alias-unification approved"
+        ],
+        "humanNotes": [
+          "2026-07-22：R2-12 第二批按原文时间轴完成当前逐关开场关系投影；关内发生的转折不得回灌至开场。"
         ]
       },
       "embedText": "尹馥兰 ｜ 兰姑 兰奴 掌教夫人 ｜ 掌教夫人（后沦为性奴） ｜ 【晋国人物】 ｜ 程宗扬势力(侍女/侍奴)、苏妲己势力(教曲师娘（兰姑）) ｜ 登场于建康·长干里 ｜ 顺从、讨好、淫荡、臣服 ｜ 程宗扬的姬妾/性奴（兰奴） ｜ 对程宗扬称呼：主人（隐含）；被他人称呼：尹馥兰、兰奴 别名/称谓：兰姑 别名/称谓：掌教夫人 ｜ 原阵营/中立/敌对身份，禁止提前称为后宫、侍妾、情人或程宗扬阵营成员；按原文转折事件后，才可写入程宗扬阵营/后宫/侍妾/情人等关系身份 ｜ 被蛇夫人用假阳具调教并学习服侍；与成光一起被程宗扬轮流发泄；被程宗扬干至蜜穴落红，状若惨烈；乳头穿孔挂银铃，被主人玩弄；殷勤为主人洗沐擦脚，媚态讨好"
@@ -35043,9 +36203,12 @@
         "flags": [
           "duplicate-merged",
           "needs-second-review",
-          "female-relationship-phase-needed"
+          "relationship-phase-resolved"
         ],
-        "conflicts": []
+        "conflicts": [],
+        "humanNotes": [
+          "2026-07-22：R2-12 第二批按原文时间轴完成当前逐关开场关系投影；关内发生的转折不得回灌至开场。"
+        ]
       },
       "embedText": "罂粟女 ｜ 程宗扬的侍奴 ｜ 【宋国人物】 ｜ 小紫势力(侍奴) ｜ 登场于江州城 ｜ 妖媚、阴狠、嗜血、服从、大胆、主动、善于调情、对程宗扬忠诚、有管理能力（摘去发钗等） ｜ 侍奴，隶属程宗扬的后宫/队伍；程宗扬后宫/侍妾 ｜ 对程宗扬称‘主人’或‘老爷’；被他人称‘罂粟女’ 罂粟女/妾（未明确写出其对程宗扬的特定称呼） ｜ 婢女/紫夫人调教人员；禁止提前称为后宫、侍妾、情人或程宗扬阵营成员；被小紫抓获调教后，可按原文写入程宗扬后宫/侍妾 ｜ 第5章：吞下主人精液后禁制解除，神情愈发娇媚；第5章：参与调教赛玉坠，手段狠辣；第5章：用柳叶眉刀战斗，露出嗜血笑意；第8章：与蛇夫人等群交，动作阴狠（扒开阮香琳屁眼儿啐口水）；与程宗扬一起沐浴并伺候；与惊理交换眼色，议论仇尊者来访（作嫁）"
     },
@@ -35150,6 +36313,10 @@
           "ending": [],
           "forbidden": [
             "不得提前写成程宗扬后宫成员"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
           ]
         }
       ],
@@ -36584,7 +37751,7 @@
           "seqHi": 562,
           "identity": "云如瑶亲侄女，云世商会家主侄女/女骑士",
           "role": "云如瑶亲侄女，云世商会家主侄女/女骑士",
-          "description": "云如瑶的亲侄女。泼辣刁蛮、好胜张扬的世家小辣妹，习武身手矫健；少数在床笫间争主动的狂野女骑士。",
+          "description": "云氏女骑士，泼辣果断、好胜张扬，重视家族责任；本关开场尚未与程宗扬确立伴侣关系。",
           "notes": [
             "【关系】云氏女骑士；本关开场尚未与程宗扬确立伴侣或后宫关系"
           ],
@@ -36600,6 +37767,16 @@
           "ending": [],
           "forbidden": [
             "“欲醉”事件前不得写成程宗扬后宫或伴侣"
+          ],
+          "personality": [
+            "泼辣果断",
+            "好胜",
+            "重视云氏家族",
+            "行动直接"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
           ]
         },
         {
@@ -36610,7 +37787,7 @@
           "seqHi": 884,
           "identity": "云如瑶亲侄女，云世商会家主侄女/女骑士",
           "role": "云如瑶亲侄女，云世商会家主侄女/女骑士",
-          "description": "云如瑶的亲侄女。泼辣刁蛮、好胜张扬的世家小辣妹，习武身手矫健；少数在床笫间争主动的狂野女骑士。",
+          "description": "云氏女骑士，泼辣果断、好胜张扬，重视家族责任；本关开场尚未与程宗扬确立伴侣关系。",
           "notes": [
             "【关系】云氏女骑士；本关开场尚未与程宗扬确立伴侣或后宫关系"
           ],
@@ -36626,6 +37803,16 @@
           "ending": [],
           "forbidden": [
             "“欲醉”事件前不得写成程宗扬后宫或伴侣"
+          ],
+          "personality": [
+            "泼辣果断",
+            "好胜",
+            "重视云氏家族",
+            "行动直接"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
           ]
         },
         {
@@ -36650,7 +37837,7 @@
           "seqHi": 776,
           "identity": "云如瑶亲侄女，云世商会家主侄女/女骑士",
           "role": "云如瑶亲侄女，云世商会家主侄女/女骑士",
-          "description": "云如瑶的亲侄女。泼辣刁蛮、好胜张扬的世家小辣妹，习武身手矫健；少数在床笫间争主动的狂野女骑士。",
+          "description": "云氏女骑士，泼辣果断、好胜张扬，重视家族责任；本关开场尚未与程宗扬确立伴侣关系。",
           "notes": [
             "【关系】云氏女骑士；本关开场尚未与程宗扬确立伴侣或后宫关系"
           ],
@@ -36666,6 +37853,16 @@
           "ending": [],
           "forbidden": [
             "“欲醉”事件前不得写成程宗扬后宫或伴侣"
+          ],
+          "personality": [
+            "泼辣果断",
+            "好胜",
+            "重视云氏家族",
+            "行动直接"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
           ]
         },
         {
@@ -36676,7 +37873,7 @@
           "seqHi": 664,
           "identity": "云如瑶亲侄女，云世商会家主侄女/女骑士",
           "role": "云如瑶亲侄女，云世商会家主侄女/女骑士",
-          "description": "云如瑶的亲侄女。泼辣刁蛮、好胜张扬的世家小辣妹，习武身手矫健；少数在床笫间争主动的狂野女骑士。",
+          "description": "云氏女骑士，泼辣果断、好胜张扬，重视家族责任；本关开场尚未与程宗扬确立伴侣关系。",
           "notes": [
             "【关系】云氏女骑士；本关开场尚未与程宗扬确立伴侣或后宫关系"
           ],
@@ -36692,6 +37889,16 @@
           "ending": [],
           "forbidden": [
             "“欲醉”事件前不得写成程宗扬后宫或伴侣"
+          ],
+          "personality": [
+            "泼辣果断",
+            "好胜",
+            "重视云氏家族",
+            "行动直接"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
           ]
         },
         {
@@ -36702,7 +37909,7 @@
           "seqHi": 615,
           "identity": "云如瑶亲侄女，云世商会家主侄女/女骑士",
           "role": "云如瑶亲侄女，云世商会家主侄女/女骑士",
-          "description": "云如瑶的亲侄女。泼辣刁蛮、好胜张扬的世家小辣妹，习武身手矫健；少数在床笫间争主动的狂野女骑士。",
+          "description": "云氏女骑士，泼辣果断、好胜张扬，重视家族责任；本关开场尚未与程宗扬确立伴侣关系。",
           "notes": [
             "【关系】云氏女骑士；本关开场尚未与程宗扬确立伴侣或后宫关系"
           ],
@@ -36718,6 +37925,52 @@
           "ending": [],
           "forbidden": [
             "“欲醉”事件前不得写成程宗扬后宫或伴侣"
+          ],
+          "personality": [
+            "泼辣果断",
+            "好胜",
+            "重视云氏家族",
+            "行动直接"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
+        },
+        {
+          "scope": "stage-projection",
+          "stageId": "lyl.taiquan_core_conflict",
+          "book": "yunlong",
+          "seqLo": 665,
+          "seqHi": 667,
+          "identity": "云如瑶亲侄女，云世商会家主侄女/女骑士",
+          "role": "云如瑶亲侄女，云世商会家主侄女/女骑士",
+          "description": "云氏女骑士，泼辣果断、好胜张扬，重视家族责任；本关开场尚未与程宗扬确立伴侣关系。",
+          "notes": [
+            "【关系】云氏女骑士；本关开场尚未与程宗扬确立伴侣或后宫关系"
+          ],
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "云氏女骑士；本关开场尚未与程宗扬确立伴侣或后宫关系"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "“欲醉”事件前不得写成程宗扬后宫或伴侣"
+          ],
+          "personality": [
+            "泼辣果断",
+            "好胜",
+            "重视云氏家族",
+            "行动直接"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
           ]
         }
       ],
@@ -36936,9 +38189,12 @@
         "approved": true,
         "reviewed": true,
         "flags": [
-          "female-relationship-phase-needed"
+          "relationship-phase-resolved"
         ],
-        "conflicts": []
+        "conflicts": [],
+        "humanNotes": [
+          "2026-07-22：R2-12 第二批按原文时间轴完成当前逐关开场关系投影；关内发生的转折不得回灌至开场。"
+        ]
       },
       "embedText": "云如瑶 ｜ 云世商会家主幼妹（\"姑姑\"，辈分高但年纪轻） ｜ 云氏商会(庶出小姐)、程宗扬势力(妻室) ｜ 登场于云府 ｜ 温婉内敛、极矜持知书达理、名门商豪大家闺秀、面对主角带豪门女子的羞赧不知所措 ｜ 后宫；宋国商战中被程宗扬金融+无赖攻势攻破心防收入后宫 ｜ 原阵营/中立/敌对身份，禁止提前称为后宫、侍妾、情人或程宗扬阵营成员；按原文转折事件后，才可写入程宗扬阵营/后宫/侍妾/情人等关系身份 ｜ 程宗扬纯阳龙气一举洗净其极寒阴毒慢性病根，致两性性癖180度逆转"
     },
@@ -38487,7 +39743,7 @@
           "seqHi": 562,
           "identity": "汉国昭仪/赵飞燕之妹",
           "role": "汉国昭仪/赵飞燕之妹",
-          "description": "赵合德生就一副绝色容颜，肌肤白腻如玉、丰姿弱骨，宛如一朵含露娇莲。她天性温柔羞怯，天真单纯，说话时总带着斯文有礼的语调，但凡心绪波动便会脸红到耳根，那副娇美温婉的模样，正是飞燕之妹、程宗扬身边最惹人怜惜的情妇。",
+          "description": "汉国昭仪赵合德，赵飞燕之妹，性情温柔羞怯；本关开场尚未与程宗扬确立妾室或情人关系。",
           "notes": [
             "【关系】汉国昭仪、赵飞燕之妹；本关开场尚未与程宗扬确立妾室或情人关系"
           ],
@@ -38504,6 +39760,15 @@
           "forbidden": [
             "“弑君”事件前不得写成程宗扬妾室或情人",
             "不得把友通期当作真赵合德"
+          ],
+          "personality": [
+            "温柔羞怯",
+            "天真单纯",
+            "斯文有礼"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
           ]
         },
         {
@@ -38514,7 +39779,7 @@
           "seqHi": 884,
           "identity": "汉国昭仪/赵飞燕之妹",
           "role": "汉国昭仪/赵飞燕之妹",
-          "description": "赵合德生就一副绝色容颜，肌肤白腻如玉、丰姿弱骨，宛如一朵含露娇莲。她天性温柔羞怯，天真单纯，说话时总带着斯文有礼的语调，但凡心绪波动便会脸红到耳根，那副娇美温婉的模样，正是飞燕之妹、程宗扬身边最惹人怜惜的情妇。",
+          "description": "汉国昭仪赵合德，赵飞燕之妹，性情温柔羞怯；本关开场尚未与程宗扬确立妾室或情人关系。",
           "notes": [
             "【关系】汉国昭仪、赵飞燕之妹；本关开场尚未与程宗扬确立妾室或情人关系"
           ],
@@ -38531,6 +39796,15 @@
           "forbidden": [
             "“弑君”事件前不得写成程宗扬妾室或情人",
             "不得把友通期当作真赵合德"
+          ],
+          "personality": [
+            "温柔羞怯",
+            "天真单纯",
+            "斯文有礼"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
           ]
         },
         {
@@ -38541,7 +39815,7 @@
           "seqHi": 899,
           "identity": "汉国昭仪/赵飞燕之妹",
           "role": "汉国昭仪/赵飞燕之妹",
-          "description": "赵合德生就一副绝色容颜，肌肤白腻如玉、丰姿弱骨，宛如一朵含露娇莲。她天性温柔羞怯，天真单纯，说话时总带着斯文有礼的语调，但凡心绪波动便会脸红到耳根，那副娇美温婉的模样，正是飞燕之妹、程宗扬身边最惹人怜惜的情妇。",
+          "description": "汉国昭仪赵合德，赵飞燕之妹，性情温柔羞怯；本关开场尚未与程宗扬确立妾室或情人关系。",
           "notes": [
             "【关系】汉国昭仪、赵飞燕之妹；本关开场尚未与程宗扬确立妾室或情人关系"
           ],
@@ -38558,6 +39832,15 @@
           "forbidden": [
             "“弑君”事件前不得写成程宗扬妾室或情人",
             "不得把友通期当作真赵合德"
+          ],
+          "personality": [
+            "温柔羞怯",
+            "天真单纯",
+            "斯文有礼"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
           ]
         },
         {
@@ -38568,7 +39851,7 @@
           "seqHi": 776,
           "identity": "汉国昭仪/赵飞燕之妹",
           "role": "汉国昭仪/赵飞燕之妹",
-          "description": "赵合德生就一副绝色容颜，肌肤白腻如玉、丰姿弱骨，宛如一朵含露娇莲。她天性温柔羞怯，天真单纯，说话时总带着斯文有礼的语调，但凡心绪波动便会脸红到耳根，那副娇美温婉的模样，正是飞燕之妹、程宗扬身边最惹人怜惜的情妇。",
+          "description": "汉国昭仪赵合德，赵飞燕之妹，性情温柔羞怯；本关开场尚未与程宗扬确立妾室或情人关系。",
           "notes": [
             "【关系】汉国昭仪、赵飞燕之妹；本关开场尚未与程宗扬确立妾室或情人关系"
           ],
@@ -38585,6 +39868,15 @@
           "forbidden": [
             "“弑君”事件前不得写成程宗扬妾室或情人",
             "不得把友通期当作真赵合德"
+          ],
+          "personality": [
+            "温柔羞怯",
+            "天真单纯",
+            "斯文有礼"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
           ]
         },
         {
@@ -38595,7 +39887,7 @@
           "seqHi": 664,
           "identity": "汉国昭仪/赵飞燕之妹",
           "role": "汉国昭仪/赵飞燕之妹",
-          "description": "赵合德生就一副绝色容颜，肌肤白腻如玉、丰姿弱骨，宛如一朵含露娇莲。她天性温柔羞怯，天真单纯，说话时总带着斯文有礼的语调，但凡心绪波动便会脸红到耳根，那副娇美温婉的模样，正是飞燕之妹、程宗扬身边最惹人怜惜的情妇。",
+          "description": "汉国昭仪赵合德，赵飞燕之妹，性情温柔羞怯；本关开场尚未与程宗扬确立妾室或情人关系。",
           "notes": [
             "【关系】汉国昭仪、赵飞燕之妹；本关开场尚未与程宗扬确立妾室或情人关系"
           ],
@@ -38612,6 +39904,15 @@
           "forbidden": [
             "“弑君”事件前不得写成程宗扬妾室或情人",
             "不得把友通期当作真赵合德"
+          ],
+          "personality": [
+            "温柔羞怯",
+            "天真单纯",
+            "斯文有礼"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
           ]
         },
         {
@@ -38622,7 +39923,7 @@
           "seqHi": 615,
           "identity": "汉国昭仪/赵飞燕之妹",
           "role": "汉国昭仪/赵飞燕之妹",
-          "description": "赵合德生就一副绝色容颜，肌肤白腻如玉、丰姿弱骨，宛如一朵含露娇莲。她天性温柔羞怯，天真单纯，说话时总带着斯文有礼的语调，但凡心绪波动便会脸红到耳根，那副娇美温婉的模样，正是飞燕之妹、程宗扬身边最惹人怜惜的情妇。",
+          "description": "汉国昭仪赵合德，赵飞燕之妹，性情温柔羞怯；本关开场尚未与程宗扬确立妾室或情人关系。",
           "notes": [
             "【关系】汉国昭仪、赵飞燕之妹；本关开场尚未与程宗扬确立妾室或情人关系"
           ],
@@ -38639,6 +39940,51 @@
           "forbidden": [
             "“弑君”事件前不得写成程宗扬妾室或情人",
             "不得把友通期当作真赵合德"
+          ],
+          "personality": [
+            "温柔羞怯",
+            "天真单纯",
+            "斯文有礼"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
+        },
+        {
+          "scope": "stage-projection",
+          "stageId": "lyl.taiquan_core_conflict",
+          "book": "yunlong",
+          "seqLo": 665,
+          "seqHi": 667,
+          "identity": "汉国昭仪/赵飞燕之妹",
+          "role": "汉国昭仪/赵飞燕之妹",
+          "description": "汉国昭仪赵合德，赵飞燕之妹，性情温柔羞怯；本关开场尚未与程宗扬确立妾室或情人关系。",
+          "notes": [
+            "【关系】汉国昭仪、赵飞燕之妹；本关开场尚未与程宗扬确立妾室或情人关系"
+          ],
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "汉国昭仪、赵飞燕之妹；本关开场尚未与程宗扬确立妾室或情人关系"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "“弑君”事件前不得写成程宗扬妾室或情人",
+            "不得把友通期当作真赵合德"
+          ],
+          "personality": [
+            "温柔羞怯",
+            "天真单纯",
+            "斯文有礼"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
           ]
         }
       ],
@@ -39432,31 +40778,45 @@
           "status": "allowed-after-turning-point"
         },
         {
-          "scope": "relationship-chain",
-          "seq": "转折前",
-          "identity": "原阵营/中立/敌对身份，禁止提前称为后宫、侍妾、情人或程宗扬阵营成员",
-          "status": "forbid-final-state-before-turning-point"
-        },
-        {
-          "scope": "relationship-chain",
-          "seq": "关系转折后",
-          "identity": "按原文转折事件后，才可写入程宗扬阵营/后宫/侍妾/情人等关系身份",
-          "status": "allowed-after-turning-point"
-        },
-        {
           "scope": "stage-projection",
           "stageId": "lcq.stage_01",
           "book": "qingyu",
           "seqLo": 1,
           "seqHi": 36,
-          "identity": "太乙真宗\"御教\"仙姑（地位极高）；名义夫为大汉太尉常炜（天狐族，常以药物邪术折磨她）",
-          "role": "教御/侍奴",
-          "description": "教御卓云君生得一张美艳面孔，惯于察言观色，在宗门间左右逢源，处事老练圆滑，实则心思缜密，步步为营。",
+          "identity": "太乙真宗御教仙姑",
+          "role": "太乙真宗教御",
+          "description": "太乙真宗御教卓云君，修为高深且重视宗门身份；本关开场仍有自己的立场，尚未受制于程宗扬阵营。",
           "notes": [
-            "【关系】后宫，贪恋男主的同情；被程宗扬+小紫设计生擒、小紫亲手残忍破处后身心终极堕落；白天排挤李师师找平衡、黑夜主动跪求蹂躏",
-            "【目标】取悦主人，获得主人宠爱"
+            "【关系】太乙真宗教御；与程宗扬立场多有冲突，尚未被擒或归入其阵营"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "太乙真宗教御；与程宗扬立场多有冲突，尚未被擒或归入其阵营"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "第243序被擒前不得称为侍奴、后宫或程宗扬内宅成员"
+          ],
+          "personality": [
+            "高傲端庄",
+            "重视宗门身份",
+            "虚荣且强撑尊严",
+            "处事谨慎"
+          ],
+          "speechStyle": "端庄克制，以太乙真宗教御身份说话",
+          "signatureAbilities": [
+            "太乙真宗火系术法",
+            "太乙真宗房中修炼法门"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -39464,14 +40824,40 @@
           "book": "qingyu",
           "seqLo": 61,
           "seqHi": 67,
-          "identity": "太乙真宗\"御教\"仙姑（地位极高）；名义夫为大汉太尉常炜（天狐族，常以药物邪术折磨她）",
-          "role": "教御/侍奴",
-          "description": "教御卓云君生得一张美艳面孔，惯于察言观色，在宗门间左右逢源，处事老练圆滑，实则心思缜密，步步为营。",
+          "identity": "太乙真宗御教仙姑",
+          "role": "太乙真宗教御",
+          "description": "太乙真宗御教卓云君，修为高深且重视宗门身份；本关开场仍有自己的立场，尚未受制于程宗扬阵营。",
           "notes": [
-            "【关系】后宫，贪恋男主的同情；被程宗扬+小紫设计生擒、小紫亲手残忍破处后身心终极堕落；白天排挤李师师找平衡、黑夜主动跪求蹂躏",
-            "【目标】取悦主人，获得主人宠爱"
+            "【关系】太乙真宗教御；与程宗扬立场多有冲突，尚未被擒或归入其阵营"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "太乙真宗教御；与程宗扬立场多有冲突，尚未被擒或归入其阵营"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "第243序被擒前不得称为侍奴、后宫或程宗扬内宅成员"
+          ],
+          "personality": [
+            "高傲端庄",
+            "重视宗门身份",
+            "虚荣且强撑尊严",
+            "处事谨慎"
+          ],
+          "speechStyle": "端庄克制，以太乙真宗教御身份说话",
+          "signatureAbilities": [
+            "太乙真宗火系术法",
+            "太乙真宗房中修炼法门"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -39479,14 +40865,40 @@
           "book": "qingyu",
           "seqLo": 88,
           "seqHi": 122,
-          "identity": "太乙真宗\"御教\"仙姑（地位极高）；名义夫为大汉太尉常炜（天狐族，常以药物邪术折磨她）",
-          "role": "教御/侍奴",
-          "description": "教御卓云君生得一张美艳面孔，惯于察言观色，在宗门间左右逢源，处事老练圆滑，实则心思缜密，步步为营。",
+          "identity": "太乙真宗御教仙姑",
+          "role": "太乙真宗教御",
+          "description": "太乙真宗御教卓云君，修为高深且重视宗门身份；本关开场仍有自己的立场，尚未受制于程宗扬阵营。",
           "notes": [
-            "【关系】后宫，贪恋男主的同情；被程宗扬+小紫设计生擒、小紫亲手残忍破处后身心终极堕落；白天排挤李师师找平衡、黑夜主动跪求蹂躏",
-            "【目标】取悦主人，获得主人宠爱"
+            "【关系】太乙真宗教御；与程宗扬立场多有冲突，尚未被擒或归入其阵营"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "太乙真宗教御；与程宗扬立场多有冲突，尚未被擒或归入其阵营"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "第243序被擒前不得称为侍奴、后宫或程宗扬内宅成员"
+          ],
+          "personality": [
+            "高傲端庄",
+            "重视宗门身份",
+            "虚荣且强撑尊严",
+            "处事谨慎"
+          ],
+          "speechStyle": "端庄克制，以太乙真宗教御身份说话",
+          "signatureAbilities": [
+            "太乙真宗火系术法",
+            "太乙真宗房中修炼法门"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -39494,14 +40906,40 @@
           "book": "qingyu",
           "seqLo": 163,
           "seqHi": 195,
-          "identity": "太乙真宗\"御教\"仙姑（地位极高）；名义夫为大汉太尉常炜（天狐族，常以药物邪术折磨她）",
-          "role": "教御/侍奴",
-          "description": "教御卓云君生得一张美艳面孔，惯于察言观色，在宗门间左右逢源，处事老练圆滑，实则心思缜密，步步为营。",
+          "identity": "太乙真宗御教仙姑",
+          "role": "太乙真宗教御",
+          "description": "太乙真宗御教卓云君，修为高深且重视宗门身份；本关开场仍有自己的立场，尚未受制于程宗扬阵营。",
           "notes": [
-            "【关系】后宫，贪恋男主的同情；被程宗扬+小紫设计生擒、小紫亲手残忍破处后身心终极堕落；白天排挤李师师找平衡、黑夜主动跪求蹂躏",
-            "【目标】取悦主人，获得主人宠爱"
+            "【关系】太乙真宗教御；与程宗扬立场多有冲突，尚未被擒或归入其阵营"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "太乙真宗教御；与程宗扬立场多有冲突，尚未被擒或归入其阵营"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "第243序被擒前不得称为侍奴、后宫或程宗扬内宅成员"
+          ],
+          "personality": [
+            "高傲端庄",
+            "重视宗门身份",
+            "虚荣且强撑尊严",
+            "处事谨慎"
+          ],
+          "speechStyle": "端庄克制，以太乙真宗教御身份说话",
+          "signatureAbilities": [
+            "太乙真宗火系术法",
+            "太乙真宗房中修炼法门"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -39509,14 +40947,40 @@
           "book": "qingyu",
           "seqLo": 196,
           "seqHi": 231,
-          "identity": "太乙真宗\"御教\"仙姑（地位极高）；名义夫为大汉太尉常炜（天狐族，常以药物邪术折磨她）",
-          "role": "教御/侍奴",
-          "description": "教御卓云君生得一张美艳面孔，惯于察言观色，在宗门间左右逢源，处事老练圆滑，实则心思缜密，步步为营。",
+          "identity": "太乙真宗御教仙姑",
+          "role": "太乙真宗教御",
+          "description": "太乙真宗御教卓云君，修为高深且重视宗门身份；本关开场仍有自己的立场，尚未受制于程宗扬阵营。",
           "notes": [
-            "【关系】后宫，贪恋男主的同情；被程宗扬+小紫设计生擒、小紫亲手残忍破处后身心终极堕落；白天排挤李师师找平衡、黑夜主动跪求蹂躏",
-            "【目标】取悦主人，获得主人宠爱"
+            "【关系】太乙真宗教御；与程宗扬立场多有冲突，尚未被擒或归入其阵营"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "太乙真宗教御；与程宗扬立场多有冲突，尚未被擒或归入其阵营"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "第243序被擒前不得称为侍奴、后宫或程宗扬内宅成员"
+          ],
+          "personality": [
+            "高傲端庄",
+            "重视宗门身份",
+            "虚荣且强撑尊严",
+            "处事谨慎"
+          ],
+          "speechStyle": "端庄克制，以太乙真宗教御身份说话",
+          "signatureAbilities": [
+            "太乙真宗火系术法",
+            "太乙真宗房中修炼法门"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -39524,14 +40988,40 @@
           "book": "qingyu",
           "seqLo": 232,
           "seqHi": 278,
-          "identity": "太乙真宗\"御教\"仙姑（地位极高）；名义夫为大汉太尉常炜（天狐族，常以药物邪术折磨她）",
-          "role": "教御/侍奴",
-          "description": "教御卓云君生得一张美艳面孔，惯于察言观色，在宗门间左右逢源，处事老练圆滑，实则心思缜密，步步为营。",
+          "identity": "太乙真宗御教仙姑",
+          "role": "太乙真宗教御",
+          "description": "太乙真宗御教卓云君，修为高深且重视宗门身份；本关开场仍有自己的立场，尚未受制于程宗扬阵营。",
           "notes": [
-            "【关系】后宫，贪恋男主的同情；被程宗扬+小紫设计生擒、小紫亲手残忍破处后身心终极堕落；白天排挤李师师找平衡、黑夜主动跪求蹂躏",
-            "【目标】取悦主人，获得主人宠爱"
+            "【关系】太乙真宗教御；与程宗扬立场多有冲突，尚未被擒或归入其阵营"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "太乙真宗教御；与程宗扬立场多有冲突，尚未被擒或归入其阵营"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "第243序被擒前不得称为侍奴、后宫或程宗扬内宅成员"
+          ],
+          "personality": [
+            "高傲端庄",
+            "重视宗门身份",
+            "虚荣且强撑尊严",
+            "处事谨慎"
+          ],
+          "speechStyle": "端庄克制，以太乙真宗教御身份说话",
+          "signatureAbilities": [
+            "太乙真宗火系术法",
+            "太乙真宗房中修炼法门"
+          ],
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -39809,7 +41299,7 @@
         "reviewed": true,
         "flags": [
           "duplicate-merged",
-          "female-relationship-phase-needed"
+          "relationship-phase-resolved"
         ],
         "conflicts": [],
         "aliasApplied": [
@@ -39819,7 +41309,8 @@
           "alias-unification approved"
         ],
         "humanNotes": [
-          "【鼎炉·太一经双修】鼎炉=双修中作修炼载体的女性；男方真气经其阴脉行一周天返丹田而更纯粹、可大进修为。鼎炉分五行(金木水火土)与品级(仙品>珍品>…，得一即珍品)。代价：鼎炉积杂气致自身修为受限；男方修炼不当遭阴气反噬(非残即死)。"
+          "【鼎炉·太一经双修】鼎炉=双修中作修炼载体的女性；男方真气经其阴脉行一周天返丹田而更纯粹、可大进修为。鼎炉分五行(金木水火土)与品级(仙品>珍品>…，得一即珍品)。代价：鼎炉积杂气致自身修为受限；男方修炼不当遭阴气反噬(非残即死)。",
+          "2026-07-22：R2-12 第二批按原文时间轴完成当前逐关开场关系投影；关内发生的转折不得回灌至开场。"
         ]
       },
       "embedText": "卓云君 ｜ 卓奴 ｜ 太乙真宗\"御教仙姑\"（太乙真宗六大教御之一）；名义夫为大汉太尉常炜（天狐族，常以药物邪术折磨她）；程宗扬内宅修为最高的侍婢，上等仙品鼎炉（仙品美穴），助其双修化解死气 ｜ 太乙真宗(教御)、程宗扬势力(侍奴) ｜ 登场于草原（太乙真宗营地附近） ｜ 白天高洁端庄仙姑、虚荣强撑尊严、黑夜自称\"奴婢\"的母狗双重人格、常年被太尉折磨出受虐底子 ｜ 后宫，贪恋男主的同情；被程宗扬+小紫设计生擒、小紫亲手残忍破处后身心终极堕落；白天排挤李师师找平衡、黑夜主动跪求蹂躏 ｜ 主人 / 卓美人儿、卓云君、卓奴、卓贱人 ｜ 原阵营/中立/敌对身份，禁止提前称为后宫、侍妾、情人或程宗扬阵营成员；按原文转折事件后，才可写入程宗扬阵营/后宫/侍妾/情人等关系身份 ｜ 【一部·#5】太乙真宗御教(王母)，以烈火法术救下被半兽人围攻的程宗扬与月霜；【一部·#133内斗】清远玄真观与死敌齐放鹤五行内斗；两败俱伤；齐放鹤被吴行德偷袭杀死，程宗扬斩吴行德救下她；【一部末·#134云落】小紫现身制服重伤的她；藏匿清远娼窠，小紫用玉笙残酷破处"
@@ -41386,10 +42877,31 @@
           "role": "女道士/鱼朝恩侄女",
           "description": "女道士鱼玄机，鱼朝恩之侄女，一袭道袍难掩风流，在长安城中悄然编织着自己的网。",
           "notes": [
-            "【关系】程宗扬的性奴/淫奴",
-            "【目标】在血藤威胁下被迫献出处子之身"
+            "【关系】咸宜观女冠、鱼朝恩族人；当前投影均早于关系转折，与程宗扬尚无从属关系"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "咸宜观女冠、鱼朝恩族人；当前投影均早于关系转折，与程宗扬尚无从属关系"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "第1381序关系转折前不得称为程宗扬侍奴或后宫成员"
+          ],
+          "personality": [
+            "美艳才女",
+            "善于权衡利害",
+            "谨慎维护自身靠山"
+          ],
+          "speechStyle": "才女式含蓄措辞，面对权势时谨慎周旋",
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -41401,19 +42913,43 @@
           "role": "女道士/鱼朝恩侄女",
           "description": "女道士鱼玄机，鱼朝恩之侄女，一袭道袍难掩风流，在长安城中悄然编织着自己的网。",
           "notes": [
-            "【关系】程宗扬的性奴/淫奴",
-            "【目标】在血藤威胁下被迫献出处子之身"
+            "【关系】咸宜观女冠、鱼朝恩族人；当前投影均早于关系转折，与程宗扬尚无从属关系"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "relationToProtagonist": [
+            "咸宜观女冠、鱼朝恩族人；当前投影均早于关系转折，与程宗扬尚无从属关系"
+          ],
+          "formsOfAddress": [],
+          "goals": [],
+          "weaknesses": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "forbidden": [
+            "第1381序关系转折前不得称为程宗扬侍奴或后宫成员"
+          ],
+          "personality": [
+            "美艳才女",
+            "善于权衡利害",
+            "谨慎维护自身靠山"
+          ],
+          "speechStyle": "才女式含蓄措辞，面对权势时谨慎周旋",
+          "blockedStageNotePrefixes": [
+            "【性癖】",
+            "【身体】"
+          ]
         }
       ],
       "review": {
         "approved": false,
         "reviewed": true,
         "flags": [
-          "female-relationship-phase-needed"
+          "relationship-phase-resolved"
         ],
-        "conflicts": []
+        "conflicts": [],
+        "humanNotes": [
+          "2026-07-22：R2-12 第二批按原文时间轴完成当前逐关开场关系投影；关内发生的转折不得回灌至开场。"
+        ]
       },
       "embedText": "鱼玄机 ｜ 女冠（道姑） ｜ 【宋国人物】 ｜ 瑶池宗(女冠/女道士)、咸宜观(女冠) ｜ 登场于永宁坊外长安街头 ｜ 美艳、才女、含羞带怯、屈辱顺从 ｜ 程宗扬的性奴/淫奴 ｜ 对程宗扬称“程叔叔”；被他人称“鱼玄机”“鱼才女”“大侄女” ｜ 原阵营/中立/敌对身份，禁止提前称为后宫、侍妾、情人或程宗扬阵营成员；按原文转折事件后，才可写入程宗扬阵营/后宫/侍妾/情人等关系身份 ｜ 在血藤威胁下以屈辱姿势献出处子之身；被程宗扬开苞破处；被迫掰开阴唇展示阴窍；鱼朝恩族人，黑魔海毒宗"
     },
@@ -42091,7 +43627,7 @@
         "approved": true,
         "reviewed": true,
         "flags": [
-          "female-relationship-phase-needed"
+          "relationship-phase-resolved"
         ],
         "conflicts": [],
         "aliasApplied": [
@@ -42099,6 +43635,9 @@
         ],
         "aliasReviewNote": [
           "alias-unification approved"
+        ],
+        "humanNotes": [
+          "2026-07-22：R2-12 第二批按原文时间轴完成当前逐关开场关系投影；关内发生的转折不得回灌至开场。"
         ]
       },
       "embedText": "蛇夫人 ｜ 蛇奴 ｜ 黑魔海成员，被收入主角后宫后负责内廷管理、暗中情报、药物调配及特殊\"房事\"教学 ｜ 小紫势力(侍奴)、程宗扬势力(奴婢/侍奴)、云氏商会(贴身奴婢) ｜ 登场于某处卧室内（通过窥视孔所见） ｜ 妩媚放荡、精明、擅察言观色、\"甩锅\"与见风使舵娴熟、对程宗扬绝对忠诚 ｜ 心腹/后宫；常奉命保护、调教、安抚程宗扬身边的其他女性 ｜ 别名蛇奴（役名） ｜ 原阵营/中立/敌对身份，禁止提前称为后宫、侍妾、情人或程宗扬阵营成员；按原文转折事件后，才可写入程宗扬阵营/后宫/侍妾/情人等关系身份 ｜ 原替黑魔海调教姁奴+开店做老鸨/情报贩子；黑魔海内斗中如履薄冰；审时度势带姁奴+秘药财富投奔崛起的程宗扬，名义做生意/当管家；其麾下\"姁奴\"后来成为程宗扬的私人情报团队：平时作端茶倒水的漂亮丫鬟，暗中替主角刺探情报"

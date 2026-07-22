@@ -13,6 +13,10 @@ const gen = join(root, 'mod-kit/generated/deepseek-v4-flash');
 const CAT_TAG = { sect: '同门', clan: '同族', military: '同袍' };
 const TYPE_TO_CAT = { 宗门: 'sect', 门派: 'sect', 家族: 'clan', 军队: 'military' };
 const catOf = (fa) => fa.category || TYPE_TO_CAT[fa.type] || null;
+const RELATIONSHIP_TIME_GATE_CHARACTERS = new Map([
+  ['lyl.lin_an_bridge', new Set(['liuchao.character.ruan_xiang_ning'])],
+  ['lyl.xiaoyingzhou_blacksea_trap', new Set(['liuchao.character.ruan_xiang_ning'])],
+]);
 
 // 卡：每角色 sect 归属数（仪式性过滤）
 const cards = JSON.parse(fs.readFileSync(join(gen, 'character-canon/character-cards-v3.json'), 'utf8'));
@@ -31,6 +35,7 @@ for (const b of ['qingyu', 'yunlong', 'yange']) { const dir = join(gen, b, 'stag
 
 let added = 0, stagesTouched = 0; const perTag = {}; const sample = [];
 for (const { p, m } of stages) {
+  const gatedCharacters = RELATIONSHIP_TIME_GATE_CHARACTERS.get(m.manifest.id);
   const facCat = new Map((m.canon.factions || []).map(fa => [fa.id, catOf(fa)]));
   const idName = new Map((m.canon.characters || []).map(c => [c.id, c.name]));
   // 已有边(无向)
@@ -40,6 +45,7 @@ for (const { p, m } of stages) {
   const SERVANT = /奴婢|奴|仆|婢|家丁|护卫|客卿|门客|家将|随从|扈从|护院|丫头|家仆|部曲/;
   const byFac = {};
   for (const c of m.canon.characters || []) for (const a of c.affiliations || []) {
+    if (gatedCharacters?.has(c.id)) continue;
     const cat = facCat.get(a.factionId); if (!cat || !CAT_TAG[cat]) continue;
     if (cat === 'sect' && (sectCount.get(idName.get(c.id)) || 0) >= 3) continue; // 仪式性挂籍排除
     if (cat === 'clan' && SERVANT.test(a.role || '')) continue; // 家族仆从不算血亲同族

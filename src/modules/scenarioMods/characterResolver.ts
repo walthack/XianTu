@@ -20,14 +20,20 @@ interface RegistryPhase {
   role?: string;
   status?: string;
   forbidden?: string[];
+  appearance?: string;
+  personality?: string[];
   relationToProtagonist?: string[] | string;
   formsOfAddress?: string[] | string;
+  speechStyle?: string[] | string;
+  principles?: string[] | string;
   goals?: string[] | string;
   weaknesses?: string[] | string;
+  signatureAbilities?: string[] | string;
   joining?: string[] | string;
   keyEvents?: string[];
   ending?: string[] | string;
   hideCanonicalAlias?: boolean;
+  blockedStageNotePrefixes?: string[];
 }
 interface RegistryStaticProfile {
   identitySummary?: string;
@@ -124,11 +130,11 @@ function buildNotes(entry: RegistryEntry, currentPhase: RegistryPhase | undefine
   if (typeof profile.birthYear === 'number') add('生辰', `约纪元${profile.birthYear}年生（防误算：这是出生年，非年龄）`);
   add('关系', phaseProfileValue(profile, currentPhase, 'relationToProtagonist'));
   add('称呼', phaseProfileValue(profile, currentPhase, 'formsOfAddress'));
-  add('谈吐', profile.speechStyle);
-  add('底线', profile.principles);
+  add('谈吐', phaseProfileValue(profile, currentPhase, 'speechStyle'));
+  add('底线', phaseProfileValue(profile, currentPhase, 'principles'));
   add('目标', phaseProfileValue(profile, currentPhase, 'goals'));
   add('软肋', phaseProfileValue(profile, currentPhase, 'weaknesses'));
-  add('绝技', profile.signatureAbilities);
+  add('绝技', phaseProfileValue(profile, currentPhase, 'signatureAbilities'));
   add('入伙', phaseProfileValue(profile, currentPhase, 'joining'));
   add('情节', asArray(phaseProfileValue(profile, currentPhase, 'keyEvents')).slice(0, 8));
   add('结局', phaseProfileValue(profile, currentPhase, 'ending'));
@@ -223,14 +229,23 @@ function resolveOne(character: any, stageId: string): boolean {
   if (entry.gender && (!character.gender || character.gender === '未知')) character.gender = entry.gender;
   if (currentPhase?.role) character.role = currentPhase.role;
   if (origin && !profile.origin) profile.origin = origin;
-  if (staticProfile.appearance && !profile.appearance) profile.appearance = staticProfile.appearance;
+  if (currentPhase && Object.prototype.hasOwnProperty.call(currentPhase, 'appearance')) {
+    if (currentPhase.appearance) profile.appearance = currentPhase.appearance;
+    else delete profile.appearance;
+  } else if (staticProfile.appearance && !profile.appearance) {
+    profile.appearance = staticProfile.appearance;
+  }
   // race：正典权威（种族形态基准/族裔文化规则按它匹配）——registry 有值则覆盖，
   // 抽取期默认的"人族"曾让兽蛮/碧鲮/羽族角色全部丢失族裔（青面兽被写成人类壮汉的病根）。
   if (staticProfile.race && (!profile.race || profile.race === '人族')) profile.race = staticProfile.race;
-  const personality = unique(asArray(staticProfile.personality));
+  const personality = unique(asArray(phaseProfileValue(staticProfile, currentPhase, 'personality')));
   if (personality.length) profile.personality = personality;
 
-  const keptNotes = asArray<string>(profile.notes).filter(note => !DERIVED_TAGS.some(tag => String(note).startsWith(tag)));
+  const blockedPrefixes = asArray(currentPhase?.blockedStageNotePrefixes);
+  const keptNotes = asArray<string>(profile.notes).filter(note =>
+    !DERIVED_TAGS.some(tag => String(note).startsWith(tag))
+    && !blockedPrefixes.some(prefix => String(note).startsWith(prefix)),
+  );
   profile.notes = [...keptNotes, ...buildNotes(entry, currentPhase, stageId)];
   character.profile = profile;
   return true;

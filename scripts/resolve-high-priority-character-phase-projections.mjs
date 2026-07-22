@@ -70,8 +70,10 @@ const PRE = {
     stages: new Set([
       'lyl.lin_an_bridge', 'lyl.xiaoyingzhou_blacksea_trap',
       'lyl.taiquan_sacred_fruit', 'lyl.taiquan_afterfall',
-      'lyl.luoyang_cloud_secret',
+      'lyl.taiquan_core_conflict', 'lyl.luoyang_cloud_secret',
     ]),
+    description: '云氏女骑士，泼辣果断、好胜张扬，重视家族责任；本关开场尚未与程宗扬确立伴侣关系。',
+    personality: ['泼辣果断', '好胜', '重视云氏家族', '行动直接'],
     relation: '云氏女骑士；本关开场尚未与程宗扬确立伴侣或后宫关系',
     forbidden: ['“欲醉”事件前不得写成程宗扬后宫或伴侣'],
   },
@@ -79,8 +81,10 @@ const PRE = {
     stages: new Set([
       'lyl.lin_an_bridge', 'lyl.xiaoyingzhou_blacksea_trap',
       'lyl.taiquan_sacred_fruit', 'lyl.taiquan_afterfall',
-      'lyl.luoyang_cloud_secret', 'lyl.luoyang_coup',
+      'lyl.taiquan_core_conflict', 'lyl.luoyang_cloud_secret', 'lyl.luoyang_coup',
     ]),
+    description: '汉国昭仪赵合德，赵飞燕之妹，性情温柔羞怯；本关开场尚未与程宗扬确立妾室或情人关系。',
+    personality: ['温柔羞怯', '天真单纯', '斯文有礼'],
     relation: '汉国昭仪、赵飞燕之妹；本关开场尚未与程宗扬确立妾室或情人关系',
     forbidden: ['“弑君”事件前不得写成程宗扬妾室或情人', '不得把友通期当作真赵合德'],
   },
@@ -117,18 +121,35 @@ function appendHumanNote(review, note) {
 }
 
 function resolveCard(card) {
-  let changed = 0;
+  const before = JSON.stringify(card);
   const stale = REMOVE_STALE.get(card.canonicalName);
   if (stale) {
-    const before = card.phaseIdentities?.length || 0;
     card.phaseIdentities = (card.phaseIdentities || []).filter(
       phase => !(phase.scope === 'stage-projection' && stale.has(phase.stageId)),
     );
-    changed += before - card.phaseIdentities.length;
   }
 
   const rule = PRE[card.canonicalName];
   if (rule) {
+    if (['云丹琉', '赵合德'].includes(card.canonicalName)) {
+      const coreId = 'lyl.taiquan_core_conflict';
+      const exists = (card.phaseIdentities || []).some(
+        phase => phase.scope === 'stage-projection' && phase.stageId === coreId,
+      );
+      if (!exists) {
+        const template = (card.phaseIdentities || []).find(
+          phase => phase.scope === 'stage-projection' && phase.stageId === 'lyl.taiquan_sacred_fruit',
+        );
+        if (template) {
+          card.phaseIdentities.push({
+            ...structuredClone(template),
+            stageId: coreId,
+            seqLo: 665,
+            seqHi: 667,
+          });
+        }
+      }
+    }
     for (const phase of card.phaseIdentities || []) {
       if (phase.scope !== 'stage-projection') continue;
       const isPre = rule.stages === 'all' || rule.stages.has(phase.stageId);
@@ -136,7 +157,9 @@ function resolveCard(card) {
       if (rule.identity) phase.identity = rule.identity;
       if (rule.role) phase.role = rule.role;
       if (rule.description) phase.description = rule.description;
+      if (rule.personality) phase.personality = rule.personality;
       if (rule.hideCanonicalAlias) phase.hideCanonicalAlias = true;
+      phase.blockedStageNotePrefixes = ['【性癖】', '【身体】'];
       phase.relationToProtagonist = [rule.relation];
       phase.formsOfAddress = [];
       phase.goals = [];
@@ -149,7 +172,6 @@ function resolveCard(card) {
         note => !INTERNAL_NOTE_TAGS.some(tag => String(note).startsWith(tag)),
       );
       phase.notes.unshift(`【关系】${rule.relation}`);
-      changed += 1;
     }
   }
 
@@ -164,7 +186,7 @@ function resolveCard(card) {
       '2026-07-22：已按人工核定转折点完成逐关开场关系投影；转折发生在关内时以关卡开场身份为准，由事件推进后再改变。',
     );
   }
-  return changed;
+  return before !== JSON.stringify(card) ? 1 : 0;
 }
 
 const summaries = [];
@@ -180,6 +202,7 @@ for (const file of files) {
 for (const stageFile of ['lyl.lin_an_bridge.json', 'lyl.xiaoyingzhou_blacksea_trap.json']) {
   const stagePath = resolve(canonDir, `../yunlong/stages/${stageFile}`);
   const stage = JSON.parse(await readFile(stagePath, 'utf8'));
+  const beforeStage = JSON.stringify(stage);
   const actors = stage.canon?.characters || [];
   const actorIndex = actors.findIndex(actor => actor.id === 'liuchao.character.ruan_xiang_ning');
   if (actorIndex < 0) continue;
@@ -196,7 +219,15 @@ for (const stageFile of ['lyl.lin_an_bridge.json', 'lyl.xiaoyingzhou_blacksea_tr
       personality: ['温柔贤惠', '细致谨慎'],
     },
   };
-  if (apply) {
+  const hiddenId = 'liuchao.character.ruan_xiang_ning';
+  stage.canon.playerRelationships = (stage.canon.playerRelationships || []).filter(
+    relation => relation.characterId !== hiddenId,
+  );
+  stage.canon.relationships = (stage.canon.relationships || []).filter(
+    relation => relation.fromCharacterId !== hiddenId && relation.toCharacterId !== hiddenId,
+  );
+  const changed = beforeStage !== JSON.stringify(stage);
+  if (apply && changed) {
     try {
       await copyFile(stagePath, `${stagePath}.pre-r2-12.bak`, constants.COPYFILE_EXCL);
     } catch (error) {
@@ -204,7 +235,30 @@ for (const stageFile of ['lyl.lin_an_bridge.json', 'lyl.xiaoyingzhou_blacksea_tr
     }
     await writeFile(stagePath, `${JSON.stringify(stage, null, 2)}\n`);
   }
-  summaries.push({ file: `yunlong/stages/${stageFile}`, changed: 1 });
+  summaries.push({ file: `yunlong/stages/${stageFile}`, changed: changed ? 1 : 0 });
+}
+
+const protagonistFactionId = 'liuchao.faction.x2d33e1eaf9';
+for (const stageId of PRE.赵合德.stages) {
+  const stagePath = resolve(canonDir, `../yunlong/stages/${stageId}.json`);
+  let stage;
+  try {
+    stage = JSON.parse(await readFile(stagePath, 'utf8'));
+  } catch (error) {
+    if (error?.code === 'ENOENT') continue;
+    throw error;
+  }
+  const actor = (stage.canon?.characters || []).find(
+    item => item.id === 'liuchao.character.zhao_he_de',
+  );
+  if (!actor) continue;
+  const before = JSON.stringify(actor.affiliations || []);
+  actor.affiliations = (actor.affiliations || []).filter(
+    affiliation => affiliation.factionId !== protagonistFactionId,
+  );
+  const changed = before !== JSON.stringify(actor.affiliations);
+  if (apply && changed) await writeFile(stagePath, `${JSON.stringify(stage, null, 2)}\n`);
+  summaries.push({ file: `yunlong/stages/${stageId}.json#赵合德归属`, changed: changed ? 1 : 0 });
 }
 
 console.log(JSON.stringify({ mode: apply ? 'apply' : 'dry-run', summaries }, null, 2));
