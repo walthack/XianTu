@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 // R2-11T：按 EPUB《六朝清羽记》第74–92章重建 lcq.stage_05。
-// 保留十个冻结 event id；为原稿遗漏的第85–92章过渡 append-only 补六拍。
+// 保留十个冻结 event id；为原稿遗漏的关键转折与第85–92章过渡 append-only 补七拍。
 // 本脚本只纠正来源、顺序、投影和人工完成合同，不解除默认线隔离。
 
 import { cp, mkdir, readFile, writeFile } from 'node:fs/promises';
@@ -120,6 +120,20 @@ const EVENTS = [
     actions: [
       action('inspect_blacktongue_death', '记录黑舌死亡疑点', '我检查黑舌被蚌壳困住溺死的现场，只记录可见痕迹，不先指定凶手。', { kind: 'prepare', grantsPreparation: 'blacktongue_clue_logged' }),
       action('meet_xiaozi_as_biyu_girl', '回应小紫初次现身', '我把小紫当作刚遇见的碧鲮少女回应，保留她的天真表象与来历疑点。', { requiresPreparation: ['blacktongue_clue_logged'] }),
+    ],
+  },
+  {
+    id: 'lcq.event.s05_16', name: '斩杀蛇傀解救碧鲮族',
+    description: '鬼王峒蛇傀下令焚烧碧鲮族村寨，程宗扬率商队突袭并斩杀蛇傀及随从，使受制的碧鲮族人暂时脱离鬼王峒控制。',
+    objective: '阻止蛇傀焚烧村寨，并解除鬼王峒对碧鲮族的现场控制',
+    locationId: 'liuchao.location.biyu_village',
+    relatedCharacterIds: ['liuchao.character.cheng_zongyang', 'liuchao.character.xiao_zi', 'lcq.character.np004', 'liuchao.character.wu_er_lang'],
+    relatedFactionIds: ['liuchao.faction.biyu', 'liuchao.faction.gui_wang_dong', 'liuchao.faction.yun_shi_shang_hui'],
+    axisId: 'qingyu.82.2', axisSeq: 139, axisAnchor: '六朝清羽记·#82·第80章·前路',
+    axisBeat: '鬼王峒蛇傀下令焚烧碧鲮族，程宗扬率众突袭斩杀蛇傀及随从，使碧鲮族暂时脱离控制。', axisMethod: 'source-rebuilt-append-only-review-fix',
+    actions: [
+      action('interrupt_snake_puppet_order', '打断蛇傀焚村命令', '蛇傀下令纵火时，我立即召集能够作战的人，从其随从与火源之间切入。', { kind: 'prepare', grantsPreparation: 'snake_puppet_assault_opened' }),
+      action('defeat_snake_puppet_group', '斩杀蛇傀解救族人', '我配合商队突袭斩杀蛇傀及其随从，确认碧鲮族人已摆脱现场控制。', { requiresPreparation: ['snake_puppet_assault_opened'] }),
     ],
   },
   {
@@ -254,7 +268,7 @@ const FROZEN_IDS = new Set([
   'lcq.event.debut_xiaozi',
   ...Array.from({ length: 9 }, (_, index) => `lcq.event.s05_${String(index + 1).padStart(2, '0')}`),
 ]);
-const APPENDED_IDS = new Set(Array.from({ length: 6 }, (_, index) => `lcq.event.s05_${String(index + 10).padStart(2, '0')}`));
+const APPENDED_IDS = new Set(Array.from({ length: 7 }, (_, index) => `lcq.event.s05_${String(index + 10).padStart(2, '0')}`));
 const ALLOWED_AFFILIATIONS = new Map([
   ['liuchao.character.cheng_zongyang', ['liuchao.faction.bai_hu_shang_guan']],
   ['liuchao.character.le_mingzhu', ['liuchao.faction.guang_ming_guan_tang']],

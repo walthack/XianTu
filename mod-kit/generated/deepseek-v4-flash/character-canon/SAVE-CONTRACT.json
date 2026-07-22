@@ -362,7 +362,8 @@
         "lcq.event.s05_12",
         "lcq.event.s05_13",
         "lcq.event.s05_14",
-        "lcq.event.s05_15"
+        "lcq.event.s05_15",
+        "lcq.event.s05_16"
       ],
       "chapterFlagPaths": {
         "lcq.chapter.stage_05": [
@@ -414,6 +415,9 @@
         ],
         "lcq.event.s05_15": [
           "flags.event.s05_15.done"
+        ],
+        "lcq.event.s05_16": [
+          "flags.event.s05_16.done"
         ],
         "lcq.event.debut_xiaozi": [
           "flags.event.debut_xiaozi.done"

@@ -540,6 +540,7 @@
       "event.s05_04.done": false,
       "event.s05_06.done": false,
       "event.debut_xiaozi.done": false,
+      "event.s05_16.done": false,
       "event.s05_08.done": false,
       "event.s05_05.done": false,
       "event.s05_09.done": false,
@@ -577,6 +578,7 @@
           "lcq.event.s05_04",
           "lcq.event.s05_06",
           "lcq.event.debut_xiaozi",
+          "lcq.event.s05_16",
           "lcq.event.s05_08",
           "lcq.event.s05_05",
           "lcq.event.s05_09",
@@ -1082,6 +1084,79 @@
         }
       },
       {
+        "id": "lcq.event.s05_16",
+        "name": "斩杀蛇傀解救碧鲮族",
+        "description": "鬼王峒蛇傀下令焚烧碧鲮族村寨，程宗扬率商队突袭并斩杀蛇傀及随从，使受制的碧鲮族人暂时脱离鬼王峒控制。",
+        "objective": "阻止蛇傀焚烧村寨，并解除鬼王峒对碧鲮族的现场控制",
+        "locationId": "liuchao.location.biyu_village",
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.xiao_zi",
+          "lcq.character.np004",
+          "liuchao.character.wu_er_lang"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.biyu",
+          "liuchao.faction.gui_wang_dong",
+          "liuchao.faction.yun_shi_shang_hui"
+        ],
+        "axisId": "qingyu.82.2",
+        "axisSeq": 139,
+        "axisAnchor": "六朝清羽记·#82·第80章·前路",
+        "axisBeat": "鬼王峒蛇傀下令焚烧碧鲮族，程宗扬率众突袭斩杀蛇傀及随从，使碧鲮族暂时脱离控制。",
+        "axisMethod": "source-rebuilt-append-only-review-fix",
+        "critical": true,
+        "conditions": [
+          {
+            "path": "flags.event.debut_xiaozi.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.s05_16.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "interrupt_snake_puppet_order",
+              "label": "打断蛇傀焚村命令",
+              "actionText": "蛇傀下令纵火时，我立即召集能够作战的人，从其随从与火源之间切入。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "snake_puppet_assault_opened"
+            },
+            {
+              "id": "defeat_snake_puppet_group",
+              "label": "斩杀蛇傀解救族人",
+              "actionText": "我配合商队突袭斩杀蛇傀及其随从，确认碧鲮族人已摆脱现场控制。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "snake_puppet_assault_opened"
+              ]
+            }
+          ]
+        }
+      },
+      {
         "id": "lcq.event.s05_08",
         "name": "古道废墟迎击鬼战士",
         "description": "程宗扬追赶夺走朱狐冠的猴子后与商队失散，小紫带路抵达远古废墟；众人发现鬼脸标记并在易彪组织下迎击来袭的鬼王峒战士。",
@@ -1104,7 +1179,7 @@
         "critical": true,
         "conditions": [
           {
-            "path": "flags.event.debut_xiaozi.done",
+            "path": "flags.event.s05_16.done",
             "operator": "eq",
             "value": true
           }

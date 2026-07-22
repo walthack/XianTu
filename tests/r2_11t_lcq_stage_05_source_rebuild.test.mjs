@@ -10,7 +10,7 @@ const STAGE_ID = 'lcq.stage_05';
 const SOURCE_ORDER = [
   'lcq.event.s05_01', 'lcq.event.s05_02', 'lcq.event.s05_03',
   'lcq.event.s05_07', 'lcq.event.s05_04', 'lcq.event.s05_06',
-  'lcq.event.debut_xiaozi', 'lcq.event.s05_08', 'lcq.event.s05_05',
+  'lcq.event.debut_xiaozi', 'lcq.event.s05_16', 'lcq.event.s05_08', 'lcq.event.s05_05',
   'lcq.event.s05_09', 'lcq.event.s05_10', 'lcq.event.s05_11',
   'lcq.event.s05_12', 'lcq.event.s05_13', 'lcq.event.s05_14', 'lcq.event.s05_15',
 ];
@@ -46,7 +46,7 @@ function freshFixture(document) {
   };
 }
 
-test('frozen ids and six append-only transitions follow source 76–94 without duplicate axes', async () => {
+test('frozen ids and seven append-only transitions follow source 76–94 without duplicate axes', async () => {
   const document = await stage();
   assert.deepEqual(document.scenario.events.map(event => event.id), SOURCE_ORDER);
   assert.deepEqual(document.scenario.chapters[0].eventIds, SOURCE_ORDER);
@@ -58,6 +58,7 @@ test('frozen ids and six append-only transitions follow source 76–94 without d
     ['lcq.event.s05_04', 'qingyu.80.3', 134],
     ['lcq.event.s05_06', 'qingyu.81.3', 137],
     ['lcq.event.debut_xiaozi', undefined, undefined],
+    ['lcq.event.s05_16', 'qingyu.82.2', 139],
     ['lcq.event.s05_08', 'qingyu.84.2', 143],
     ['lcq.event.s05_05', 'qingyu.85.2', 145],
     ['lcq.event.s05_09', 'qingyu.86.2', 147],
@@ -137,7 +138,7 @@ test('build-time and runtime gates preserve all fourteen stage-time projections'
   }
 });
 
-test('sixteen hand-authored contracts replay through the whole chapter and survive JSON reload', async () => {
+test('seventeen hand-authored contracts replay through the whole chapter and survive JSON reload', async () => {
   const document = await stage();
   for (const event of document.scenario.events) {
     assert.equal(event.playerCompletionContract?.kind, 'objective_action', event.id);
@@ -165,7 +166,7 @@ test('sixteen hand-authored contracts replay through the whole chapter and survi
 
 test('append-only ids are registered while the rebuilt stage remains quarantined', async () => {
   const saveContract = JSON.parse(await readFile(saveContractUrl, 'utf8')).stages[STAGE_ID];
-  for (const id of Array.from({ length: 6 }, (_, index) => `lcq.event.s05_${String(index + 10).padStart(2, '0')}`)) {
+  for (const id of Array.from({ length: 7 }, (_, index) => `lcq.event.s05_${String(index + 10).padStart(2, '0')}`)) {
     assert.equal(saveContract.eventIds.includes(id), true, id);
     assert.deepEqual(saveContract.eventFlagPaths[id], [`flags.event.${id.split('.').at(-1)}.done`], id);
   }
