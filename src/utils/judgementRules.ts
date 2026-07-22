@@ -76,5 +76,14 @@ export function formatTurnJudgementPrompt(data: TurnJudgementData): string {
 
 /** P0 仅观测旧正文标签，绝不把模型声称的结果写回存档。 */
 export function extractLegacyJudgementMarkers(text: string): string[] {
-  return [...text.matchAll(/〔([^〕]*(?:判定值|难度)[^〕]*)〕/g)].map(match => match[1]);
+  return [...text.matchAll(/[〔〖]([^〕〗]*(?:骰点|判定值|最终值|总值|难度)[^〕〗]*)[〕〗]/g)].map(match => match[1]);
+}
+
+/** Legacy model-authored rolls are never authoritative and must not reach UI or memory as receipts. */
+export function stripLegacyJudgementMarkers(text: string): string {
+  return text
+    .replace(/[〔〖][^〕〗]*(?:骰点|判定值|最终值|总值|难度)[^〕〗]*[〕〗]/g, '')
+    .replace(/[ \t]+\n/g, '\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
 }

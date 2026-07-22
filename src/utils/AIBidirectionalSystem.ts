@@ -42,9 +42,8 @@ import { buildScenarioStoryPrompt, createScenarioPromptState } from '@/modules/s
 import { stripNarrativeEntityTypeConflicts, stripNarrativeUnintroducedCharacters } from '@/modules/scenarioMods/characterResolver';
 import { buildActionGatePrompt, getNarrativeTurn, pruneExpiredActionGates } from '@/utils/actionGate';
 import {
-  calculateTurnJudgementData,
   extractLegacyJudgementMarkers,
-  formatTurnJudgementPrompt,
+  stripLegacyJudgementMarkers,
 } from '@/utils/judgementRules';
 import { reconcileNarrativeState } from '@/utils/narrativeStateReconciler';
 import { runProgressAudit, shouldRunAudit } from '@/services/progressAuditService';
@@ -53,6 +52,11 @@ import { detectNarratedPlayerDamage } from '@/utils/narratedDamage';
 import { validateModelCommandPipeline } from '@/utils/modelCommandPipeline';
 import { recoverUnmarkedPlayerZeroHealth } from '@/utils/playerVitalGuard';
 import { runBoundedAuxiliaryTask } from '@/utils/boundedAuxiliaryTask';
+import {
+  queueIsolatedMemorySummary,
+  remainingMemoriesAfterSummary,
+  shouldQueueAutomaticMemorySummary,
+} from '@/utils/backgroundMemorySummary';
 import { mergeDeferredReconcileResult } from '@/modules/scenarioMods/deferredReconcileMerge';
 import {
   detectNarratedInventoryGainEntries,
@@ -722,16 +726,9 @@ class AIBidirectionalSystemClass {
         coreStatusSummary += `\n- 天赋: ${formatTalentsForPrompt(character.天赋)}`;
       }
 
-      if (userMessage.includes('【本地判定已结算】')) {
-        coreStatusSummary += '\n\n# 本回合判定数据\n本回合已有本地判定结算；只可演出用户消息中给出的既定骰点、总值与结果，不得重新计算或掷骰。';
-      } else {
-        const judgementData = calculateTurnJudgementData(
-          character?.先天六司,
-          character?.后天六司,
-          stateForAI.角色?.位置,
-        );
-        coreStatusSummary += `\n\n${formatTurnJudgementPrompt(judgementData)}`;
-      }
+      coreStatusSummary += userMessage.includes('【本地判定已结算】')
+        ? '\n\n# 本回合本地判定回执\n只可演出用户消息中同一判定ID给出的既定骰点、总值、结果与已写入效果；不得重新计算、掷骰或输出判定卡。'
+        : '\n\n# 本回合无本地判定回执\n禁止计算或输出骰点、判定值、难度与成败；新生风险必须停在玩家选择行动之前。';
       // --- 结束 ---
 
       // 🔥 构建精简版存档数据（用于叙事判定，减少token消耗）
@@ -2154,12 +2151,9 @@ ${step1Text}
     const legacyJudgementMarkers = extractLegacyJudgementMarkers(textContent);
     if (legacyJudgementMarkers.length) {
       console.debug('[判定 P0] 观察到 legacy 正文判定标签（不作为状态事实）:', legacyJudgementMarkers);
-      if (options?.userAction?.includes('【本地判定已结算】')) {
-        // Confirmed actions have one source of truth: the persisted local
-        // resolution. A model-produced legacy marker must not contradict it in
-        // the UI or enter the next narrative-memory window.
-        textContent = textContent.replace(/〔(?:战斗|修炼|炼制|探索|社交|逃脱|潜行|谋略):[^〕]*〕/g, '').trim();
-      }
+      // Model-authored rolls never become UI receipts or memory facts. The local
+      // engine already persists the only authoritative resolution and effects.
+      textContent = stripLegacyJudgementMarkers(textContent);
     }
     // canonGuard 过去只校验 JSON 指令；正文里的“人变剑/马/功法”会直接污染记忆并被下一轮放大。
     // 仅在严格剧本存档启用低误伤的实体类型拦截，留下冲突日志便于追查。
@@ -2170,7 +2164,9 @@ ${step1Text}
         textContent = narrativeGuard.text;
       }
     }
-    let midTermContent = sanitizeAITextForDisplay(response.mid_term_memory || '').trim();
+    let midTermContent = stripLegacyJudgementMarkers(
+      sanitizeAITextForDisplay(response.mid_term_memory || '').trim(),
+    );
     if ((saveData as any)?.世界?.状态?.剧本模组?.modId) {
       const introduced = introducedScenarioCharacterNames(saveData);
       const guardText = stripNarrativeUnintroducedCharacters(textContent, introduced);
@@ -2270,15 +2266,11 @@ ${step1Text}
     // 🔥 叙事历史存储在IndexedDB中，不限制条数
     // 叙事历史只用于UI显示和导出小说，不需要发送给AI（已在第122行移除）
 
-    // 检查是否达到自动总结阈值，如果达到则“异步”触发，不阻塞当前游戏循环
+    // 这里只记录触发意图；主叙事状态提交后才启动辅助总结，避免旧快照竞态。
+    let shouldAutoSummarize = false;
     try {
       const memorySettings = JSON.parse(localStorage.getItem('memory-settings') || '{}');
-      const midTermTrigger = memorySettings.midTermTrigger ?? 25; // 默认25
-      if ((saveData as any).社交?.记忆?.中期记忆 && (saveData as any).社交.记忆.中期记忆.length >= midTermTrigger) {
-        this.triggerMemorySummary().catch(error => {
-          console.error('[AI双向系统] 自动记忆总结在后台失败:', error);
-        });
-      }
+      shouldAutoSummarize = shouldQueueAutomaticMemorySummary(saveData, memorySettings);
     } catch (error) {
       console.warn('[AI双向系统] 检查自动总结阈值时出错:', error);
     }
@@ -2797,6 +2789,12 @@ ${step1Text}
     if (!isInitialization) {
       const gameStateStore = useGameStateStore();
       gameStateStore.loadFromSaveData(saveData);
+      if (shouldAutoSummarize) {
+        queueIsolatedMemorySummary(
+          () => this.triggerMemorySummary(),
+          error => console.error('[AI双向系统] 自动记忆总结在后台失败:', error),
+        );
+      }
     }
 
     return { saveData, stateChanges: stateChangesLog, onlineLogPosted };
@@ -3028,8 +3026,15 @@ ${saveDataJson}`;
         gameStateStore.memory = { 短期记忆: [], 中期记忆: [], 长期记忆: [], 隐式中期记忆: [] };
       }
 
+      const remainingCurrentMemories = remainingMemoriesAfterSummary(
+        gameStateStore.memory.中期记忆,
+        memoriesToSummarize,
+      );
+      if (!remainingCurrentMemories) {
+        throw new Error('总结期间中期记忆前缀已变化，已放弃本次提交以避免覆盖新正文');
+      }
       gameStateStore.memory.长期记忆.push(newLongTermMemory);
-      gameStateStore.memory.中期记忆 = memoriesToKeep;
+      gameStateStore.memory.中期记忆 = remainingCurrentMemories;
 
       // 🔥 同步到长期检索索引（如果启用）
       try {
@@ -3045,7 +3050,7 @@ ${saveDataJson}`;
       // 7. 保存到存档
       await characterStore.saveCurrentGame();
 
-      console.log(`[AI双向系统] ✅ 总结完成：${numToSummarize}条中期记忆 -> 1条长期记忆。保留 ${memoriesToKeep.length} 条。`);
+      console.log(`[AI双向系统] ✅ 总结完成：${numToSummarize}条中期记忆 -> 1条长期记忆。保留 ${remainingCurrentMemories.length} 条。`);
       toast.success(`成功总结 ${numToSummarize} 条记忆！`, { id: 'memory-summary' });
 
     } catch (error) {

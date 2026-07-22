@@ -167,7 +167,7 @@
     <!-- 输入区域 -->
     <div class="input-section">
       <section v-if="pendingJudgement" class="judgement-preflight-card">
-        <div class="judgement-preflight-title">行动判定 · {{ pendingJudgement.kind }}</div>
+        <div class="judgement-preflight-title">行动判定（尚未掷骰） · {{ pendingJudgement.kind }}</div>
         <div class="judgement-preflight-action">{{ pendingJudgement.actionText }}</div>
         <p>{{ pendingJudgement.whyNow }}</p>
         <div class="judgement-preflight-factors">
@@ -182,7 +182,7 @@
           <template v-if="pendingJudgement.stakes.criticalFailure">　大失败：{{ pendingJudgement.stakes.criticalFailure }}</template>
         </small>
         <div class="judgement-preflight-actions">
-          <button @click="executePendingJudgement" :disabled="isAIProcessing || pendingJudgement.canonPolicy === 'if_only'">执行判定</button>
+          <button @click="executePendingJudgement" :disabled="isAIProcessing || pendingJudgement.canonPolicy === 'if_only'">确认并掷骰</button>
           <button v-if="showJudgementTestControls" class="test-great-success-button" @click="executePendingJudgement('great_success')" :disabled="isAIProcessing || pendingJudgement.canonPolicy === 'if_only'">大成功（测试）</button>
           <button @click="changePendingJudgement" :disabled="isAIProcessing">换一种做法</button>
           <button @click="cancelPendingJudgement" :disabled="isAIProcessing">撤回</button>
@@ -1635,7 +1635,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
     const result = execution.resolution;
     const localDamageApplied = result.kind === 'combat' && result.appliedEffects.some(effect => effect.key === '角色.属性.气血.当前');
     const effectSummary = result.appliedEffects.map(describeJudgementEffect).join('；') || '无';
-    finalUserMessage += `\n【本地判定已结算】类型=${result.kind}；骰点=${result.roll}；总值=${result.total}；难度=${result.difficulty.value}；结果=${result.outcome}；正典策略=${result.canonPolicy}；已写入=${effectSummary}${localDamageApplied ? '；本地战斗伤害已结算=true' : ''}。只叙述该既定结果和已写入状态，不得另行掷骰、改写数字、杜撰额外状态效果或写入系统.扩展.判定；若策略为 route_process_only，不得直接完成、void 或改写活动正典事件。\n`;
+    finalUserMessage += `\n【本地判定已结算】判定ID=${result.id}；类型=${result.kind}；骰点=${result.roll}；总值=${result.total}；难度=${result.difficulty.value}；结果=${result.outcome}；正典策略=${result.canonPolicy}；已写入=${effectSummary}${localDamageApplied ? '；本地战斗伤害已结算=true' : ''}。只叙述该既定结果和已写入状态，不得另行掷骰、改写数字、杜撰额外状态效果或写入系统.扩展.判定；若策略为 route_process_only，不得直接完成、void 或改写活动正典事件。\n`;
   }
   console.log('[前端] 最终发送 finalUserMessage:', finalUserMessage);
 

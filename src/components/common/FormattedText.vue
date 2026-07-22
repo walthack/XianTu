@@ -698,13 +698,18 @@ const parsedText = computed(() => {
     const markedContent = processedText.slice(nextMarker.contentStart, nextMarker.contentEnd)
     if (markedContent.trim()) {
       if (nextMarker.type === 'judgement') {
-        const judgement = parseJudgementMarkedContent(markedContent)
-        if (judgement) {
-          parts.push({ type: 'judgement-card', content: judgement })
+        if (/(?:骰点|判定值|最终值|总值|难度)/.test(markedContent)) {
+          console.warn('[判定 P0] 旧叙事判定仅作迁移说明，不渲染为系统回执:', markedContent)
+          parts.push({ type: 'normal', content: `（旧叙事描述，不计入系统：${markedContent}）` })
         } else {
-          const wrapStart = nextMarker.wrapStart ?? '〔'
-          const wrapEnd = nextMarker.wrapEnd ?? '〕'
-          parts.push({ type: 'normal', content: `${wrapStart}${markedContent}${wrapEnd}` })
+          const judgement = parseJudgementMarkedContent(markedContent)
+          if (judgement) {
+            parts.push({ type: 'judgement-card', content: judgement })
+          } else {
+            const wrapStart = nextMarker.wrapStart ?? '〔'
+            const wrapEnd = nextMarker.wrapEnd ?? '〕'
+            parts.push({ type: 'normal', content: `${wrapStart}${markedContent}${wrapEnd}` })
+          }
         }
       } else {
         parts.push({

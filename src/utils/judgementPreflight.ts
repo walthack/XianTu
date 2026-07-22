@@ -9,14 +9,15 @@ import { calculateTurnJudgementData } from './judgementRules';
 import { getCanonRailContract, getCanonRailProfile } from '@/modules/scenarioMods/canonRail';
 import { getNarrativeAnchorEvent } from '@/modules/scenarioMods/runtime';
 
-const KEYWORDS: Array<[JudgementKind, RegExp]> = [
-  ['combat', /攻击|出手|斩|杀|斗法|交手|战斗|迎战/],
-  ['escape', /逃|撤退|脱身|突围/],
-  ['stealth', /潜入|潜行|偷|窃|暗杀|躲过/],
-  ['explore', /探索|搜查|探查|翻越|闯入|调查/],
-  ['craft', /炼丹|炼器|制符|布阵|炼制/],
-  ['cultivate', /突破|闭关|修炼|冲关|双修|调息|疗伤/],
-  ['social', /说服|威胁|交涉|谈判|收服|招揽/],
+const RISK_RULES: Array<[JudgementKind, RegExp]> = [
+  ['combat', /攻击|出手|斩杀|刺杀|搏杀|斗法|交手|战斗|迎战|应战|反击|格挡|挡住|阻击|拦住|制服|擒拿|对决|(?:斩|砍|刺|杀|击|射)(?:向|了|死|伤|中|退|倒|那|这|他|她|它|敌|贼|妖|守卫|对手)/],
+  ['escape', /逃跑|逃走|逃离|逃出去|跑掉|撤退|脱身|突围|甩开|摆脱|冲出包围|避开追兵/],
+  ['stealth', /潜入|潜行|隐匿|藏身|敛息|偷窃|偷走|盗取|顺走|暗杀|躲过|瞒过守卫|避开守卫/],
+  ['craft', /炼丹|炼器|制符|布阵|炼制|锻造|打造|配药|制药|制作(?:丹药|法器|符箓|阵盘)/],
+  ['cultivate', /突破|冲击境界|冲关|闭关|修炼|运功|双修|调息|疗伤|疗愈|修复经脉/],
+  ['social', /说服|劝说|劝服|游说|劝他|劝她|威胁|交涉|谈判|讨价还价|收服|招揽|请求放行/],
+  ['scheme', /欺骗|骗(?:过|他|她|取|到)|撒谎|说谎|伪装|冒充|设局|布局|策反|栽赃|蒙混过关/],
+  ['explore', /探索|搜查|搜索|搜寻|探查|调查|侦察|勘察|追踪|查验|检查伤势|翻越|闯入|寻找(?:暗门|机关|线索|入口)/],
 ];
 const EXPLICIT_IF_INTENT = /收服|招揽|结盟|策反|纳入后宫|纳妾|改写命运|救下.*不死|提前杀死/;
 
@@ -136,7 +137,7 @@ export function buildLocalJudgementPreflight(
       canonPolicy: 'if_only', sourceEventId: contract.eventId, createdAtTurn: currentTurn,
     });
   }
-  const matched = KEYWORDS.find(([, matcher]) => matcher.test(normalized));
+  const matched = RISK_RULES.find(([, matcher]) => matcher.test(normalized));
   if (!matched) return null;
   const [kind] = matched;
   const data = calculateTurnJudgementData(

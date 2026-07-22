@@ -15,6 +15,31 @@ test('preflight only proposes cards for explicit risky actions', async () => {
   assert.equal(buildLocalJudgementPreflight(queuedAction, save, 1).kind, 'cultivate');
 });
 
+test('manual input, suggested action wording, and queued operations share the expanded risk classifier', async () => {
+  const { buildLocalJudgementPreflight, composeJudgementAction } = await loadTs('../src/utils/judgementPreflight.ts');
+  const save = { 角色: { 身份: { 先天六司: {}, 后天六司: {} }, 位置: { 灵气浓度: 50 } } };
+  const cases = [
+    ['挡住追兵', 'combat'],
+    ['拔剑斩向守卫', 'combat'],
+    ['试着劝他放我们过去', 'social'],
+    ['我想骗过门房', 'scheme'],
+    ['搜索暗室里的机关', 'explore'],
+    ['伪装成送货人潜入府邸', 'stealth'],
+    ['趁乱偷走腰牌', 'stealth'],
+    ['锻造一柄法器', 'craft'],
+    ['冲击境界', 'cultivate'],
+    ['甩开身后的追踪者', 'escape'],
+  ];
+  for (const [action, kind] of cases) {
+    assert.equal(buildLocalJudgementPreflight(action, save, 3)?.kind, kind, action);
+  }
+
+  const suggestedAction = '游说守将打开城门';
+  assert.equal(buildLocalJudgementPreflight(composeJudgementAction(suggestedAction, ''), save, 3)?.kind, 'social');
+  assert.equal(buildLocalJudgementPreflight(composeJudgementAction('', '【操作】盗取守卫腰牌'), save, 3)?.kind, 'stealth');
+  assert.equal(buildLocalJudgementPreflight('我与店家闲聊近况', save, 3), null);
+});
+
 test('active Canon Rail events use process-only policy while explicit rewrites require IF', async () => {
   const { buildLocalJudgementPreflight } = await loadTs('../src/utils/judgementPreflight.ts');
   const save = { 世界: { 状态: { 剧本模组: { modId: 'lcq.stage_01', activeEventIds: ['lcq.event.s01_04'] } } } };
