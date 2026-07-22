@@ -131,10 +131,16 @@ test('build-time cards, runtime registry and focused prompt all preserve opening
   const { advanceScenarioRuntime } = await loadTs('../src/modules/scenarioMods/runtime.ts');
   const { buildScenarioStoryPrompt } = await loadTs('../src/modules/scenarioMods/storyContext.ts');
   const save = advanceScenarioRuntime(freshFixture(document)).saveData;
-  const prompt = buildScenarioStoryPrompt(save, '我观察凝羽与小紫的反应');
-  const focused = prompt.match(/## 当前相关人物正典约束（防 OOC）[\s\S]*?(?=\n【人物正典优先级】)/)?.[0] || '';
-  assert.match(focused, /凝羽/);
-  assert.match(focused, /小紫/);
+  const focusOf = query => buildScenarioStoryPrompt(save, query)
+    .match(/## 当前相关人物正典约束（防 OOC）[\s\S]*?(?=\n【人物正典优先级】)/)?.[0] || '';
+  // 单次 prompt 的 focused actor 有预算上限；用两个独立查询覆盖全部 13 人。
+  const focused = [
+    focusOf('我观察程宗扬、乐明珠、谢艺、武二郎、凝羽、苏荔与小紫'),
+    focusOf('我观察鬼巫王、龙神、阁罗、云苍峰、碧姬与殇侯'),
+  ].join('\n');
+  for (const name of ['程宗扬', '乐明珠', '谢艺', '武二郎', '凝羽', '苏荔', '小紫', '鬼巫王', '龙神', '阁罗', '云苍峰', '碧姬', '殇侯']) {
+    assert.match(focused, new RegExp(name), name);
+  }
   for (const marker of ['盘江程氏', '星月湖大营', '少校', '龙雕弓', '御姬奴', '凝奴', '太一经', '毒宗唯一嫡传', '紫妈妈', '后宫', '拜殇侯为师']) {
     assert.equal(focused.includes(marker), false, marker);
   }

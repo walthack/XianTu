@@ -3,14 +3,14 @@
   "version": 1,
   "manifest": {
     "id": "lcq.stage_03",
-    "name": "六朝清羽记·第18章·妲己",
+    "name": "六朝清羽记·白湖赌局至蛇彝村",
     "version": "1.0.0",
     "author": "DeepSeek V4 Flash + XianTu Mod Kit",
-    "description": "程宗扬与苏妲己在赌局中因性玩具演示引发冲突，凝羽被药物控制，程宗扬被迫签下卖身契。",
+    "description": "Strict 模式，按《六朝清羽记》第18–36章重建：南荒之约、赌局、冰蛊、武二郎入队、险路与抵达蛇彝村。",
     "axisVersion": "rebuild-2026-06-28",
     "axisOrder": 2,
-    "axisSeqLo": 35,
-    "axisSeqHi": 60,
+    "axisSeqLo": 36,
+    "axisSeqHi": 59,
     "eventIdContract": "append-only-frozen",
     "prevStageId": "lcq.stage_02",
     "prevStageName": "六朝清羽记·第9章·传功",
@@ -19,8 +19,8 @@
   },
   "world": {
     "name": "六朝",
-    "era": "白湖商馆时期",
-    "background": "程宗扬穿越至六朝，经历左武军覆灭后流落五原城，被白湖商馆主人苏妲己控制。本阶段核心矛盾为程宗扬与苏妲己在赌局中的冲突，以及凝羽被药物控制后的后续影响。",
+    "era": "白湖商馆至南荒初行",
+    "background": "程宗扬已被苏妲己识破并扣在白湖商馆，正以霓龙丝线索争取活命。三个月期限、赌局结果、冰蛊、武二郎同行与蛇彝村异常均尚未落账。",
     "specialRules": [
       "核心专名不得改写",
       "生死根为程宗扬唯一异能",
@@ -81,33 +81,6 @@
             "y": 5200
           }
         ]
-      },
-      {
-        "id": "liuchao.continent.taiquan",
-        "name": "太泉古阵",
-        "description": "宋国以南的神秘古遗迹，传说中的太泉古阵所在。",
-        "bounds": [
-          {
-            "x": 6400,
-            "y": 6600
-          },
-          {
-            "x": 9800,
-            "y": 6600
-          },
-          {
-            "x": 9800,
-            "y": 9600
-          },
-          {
-            "x": 6400,
-            "y": 9600
-          },
-          {
-            "x": 6400,
-            "y": 6600
-          }
-        ]
       }
     ],
     "map": {
@@ -129,105 +102,22 @@
       {
         "id": "liuchao.faction.bai_hu_shang_guan",
         "name": "白湖商馆",
-        "description": "五原城最大的商馆，主营奴隶贸易和青楼产业，主人苏妲己。",
+        "description": "五原城商馆，程宗扬所属。",
         "type": "商馆",
-        "headquartersLocationId": "liuchao.location.mingzhou",
-        "territory": [
-          {
-            "x": 8800,
-            "y": 6300
-          },
-          {
-            "x": 9000,
-            "y": 6300
-          },
-          {
-            "x": 9000,
-            "y": 6500
-          },
-          {
-            "x": 8800,
-            "y": 6500
-          },
-          {
-            "x": 8800,
-            "y": 6300
-          }
-        ],
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.bai_wu",
+        "name": "白武族",
+        "description": "武二郎所属部族。",
+        "type": "部族",
         "features": []
       },
       {
         "id": "liuchao.faction.tai_yi_zhen_zong",
         "name": "太乙真宗",
-        "description": "六朝第一教派，掌教王哲已死，教内教御争夺掌教之位。",
+        "description": "太乙真宗（宗门）——简介待补，源自角色归属富化自动补录。",
         "type": "宗门",
-        "headquartersLocationId": "liuchao.location.baihu_shang_guan",
-        "territory": [
-          {
-            "x": 4900,
-            "y": 4900
-          },
-          {
-            "x": 5100,
-            "y": 4900
-          },
-          {
-            "x": 5100,
-            "y": 5100
-          },
-          {
-            "x": 4900,
-            "y": 5100
-          },
-          {
-            "x": 4900,
-            "y": 4900
-          }
-        ],
-        "features": []
-      },
-      {
-        "id": "liuchao.faction.guang_ming_guan_tang",
-        "name": "光明观堂",
-        "headquartersLocationId": "liuchao.location.mingzhou",
-        "type": "宗门",
-        "description": "道门观堂，在南荒和唐国长安均有据点。",
-        "territory": [
-          {
-            "x": 8800,
-            "y": 6300
-          },
-          {
-            "x": 9000,
-            "y": 6300
-          },
-          {
-            "x": 9000,
-            "y": 6500
-          },
-          {
-            "x": 8800,
-            "y": 6500
-          },
-          {
-            "x": 8800,
-            "y": 6300
-          }
-        ],
-        "features": []
-      },
-      {
-        "id": "liuchao.faction.pan_jiang_cheng",
-        "name": "盘江程氏",
-        "description": "盘江程氏（家族）——简介待补，源自角色归属富化自动补录。",
-        "type": "家族",
-        "features": []
-      },
-      {
-        "id": "liuchao.faction.x2d33e1eaf9",
-        "name": "程宗扬势力",
-        "description": "程宗扬势力（组织）——简介待补，源自角色归属富化自动补录。",
-        "type": "组织",
         "features": []
       },
       {
@@ -235,64 +125,6 @@
         "name": "云氏商会",
         "description": "云氏商会（组织）——简介待补，源自角色归属富化自动补录。",
         "type": "组织",
-        "features": []
-      },
-      {
-        "id": "liuchao.faction.hei_mo_hai",
-        "name": "黑魔海",
-        "description": "黑魔海（组织）——简介待补，源自角色归属富化自动补录。",
-        "type": "组织",
-        "features": []
-      },
-      {
-        "id": "lcq.faction.left_guard",
-        "name": "左武军",
-        "description": "隶属左武卫大将军王哲，受朝廷/天子调遣，但朝廷奸臣作梗、拖欠粮饷；六朝联军野战军；第一军团辖天武（秦军方阵）、天策（唐军陌刀）、天霁（宋军神臂弓）三营，总兵力万余；主将：王哲（最高统帅/师帅）、韩庚（天武营主将）、文泽（帅帐参谋）；六朝精锐联合，在王哲麾下从无败绩，以寡敌众全歼罗马六军团，断粮月余仍死战不退。",
-        "type": "军队",
-        "features": [],
-        "polity": "大汉/六朝",
-        "region": "跨国（草原域外作战）"
-      },
-      {
-        "id": "liuchao.faction.xing_yue_hu",
-        "name": "星月湖",
-        "description": "星月湖（组织）——简介待补，源自角色归属富化自动补录。",
-        "type": "组织",
-        "features": []
-      },
-      {
-        "id": "liuchao.faction.xbc4c7579e9",
-        "name": "耽摩",
-        "description": "耽摩（组织）——简介待补，源自角色归属富化自动补录。",
-        "type": "组织",
-        "features": []
-      },
-      {
-        "id": "liuchao.faction.xf699398f15",
-        "name": "五原城",
-        "description": "五原城（组织）——简介待补，源自角色归属富化自动补录。",
-        "type": "组织",
-        "features": []
-      },
-      {
-        "id": "lyg.faction.song_state",
-        "name": "宋国",
-        "description": "宋国（组织）——简介待补，源自角色归属富化自动补录。",
-        "type": "组织",
-        "features": []
-      },
-      {
-        "id": "liuchao.faction.xue_sun",
-        "name": "雪隼佣兵团",
-        "description": "佣兵团（晴州铜狮巷雇佣兵组织）；总部/据点：晴州铜狮巷；目标：公平、正义、责任和勇气；核心：团长薛延山,副团长石之隼,副队长月霜,副队长敖润；架构：团长-副团长-副队长-佣兵（如老张、冯源等）；手段：；人物：敖润,冯源,老张,赵队长（上尉）,徐队长（上尉）；与程宗扬：程宗扬因月霜关系与雪隼佣兵团结交，曾利用供奉身份设计黑魔海阴谋，后委托雪隼佣兵团运送物品至晴州波斯商会，与副团长石之隼、副队长敖润等有直接互动。；关键事件：月霜加入雪隼佣兵团任副队长,雪隼佣兵团受广阳城官府委托对抗劫匪,雪隼佣兵团遭黑魔海卷入，月霜身份被泉玉姬利用，导致六扇门和雪隼佣兵团被一网打尽,黑魔海阴谋中雪隼佣兵团被重创,程宗扬在晴州与雪隼佣兵团合作，石之隼亲自带队执行任务。",
-        "type": "组织",
-        "features": []
-      },
-      {
-        "id": "liuchao.faction.x8b538653d9",
-        "name": "殇侯势力",
-        "description": "黑魔海毒宗旗下的一个分支——殇侯（鸩羽殇侯·殇振羽）的私人班底，成员忠心于殇侯个人而非毒宗建制，**不等同于毒宗**。背景：黑魔海分巫、毒二宗且向来不睦（巫宗之主=秘御天王，外堂总执事=剑玉姬），两宗曾有内斗。核心成员：秦桧（门客二十余年，习毒宗绝学惊魔指）、石敬瑭（近卫/代理人）、仇雍；小紫幼时托庇殇侯门下，被殇侯指定为毒宗嫡传。",
-        "type": "宗门分支",
         "features": []
       }
     ],
@@ -311,46 +143,6 @@
         "features": []
       },
       {
-        "id": "liuchao.location.chai_fang",
-        "name": "柴房",
-        "description": "白湖商馆偏院柴房，程宗扬被安排在此居住。",
-        "type": "城池",
-        "continentId": "liuchao.continent.zhongzhou",
-        "factionId": "liuchao.faction.bai_hu_shang_guan",
-        "coordinates": {
-          "x": 881,
-          "y": 4366
-        },
-        "features": []
-      },
-      {
-        "id": "liuchao.location.jia_shan_yan_dong",
-        "name": "假山岩洞",
-        "description": "白湖商馆废弃假山下的岩洞，凝羽药物后遗时在此自慰。",
-        "type": "城池",
-        "continentId": "liuchao.continent.zhongzhou",
-        "factionId": "liuchao.faction.bai_hu_shang_guan",
-        "coordinates": {
-          "x": 881,
-          "y": 4366
-        },
-        "features": []
-      },
-      {
-        "id": "liuchao.location.long_chi",
-        "name": "龙池",
-        "description": "太乙真宗宗门所在地，位于中州龙脉之上。 太乙真宗道观所在，山门巍峨，云雾缭绕，为六朝道教第一大宗的主坛所在。（民俗：道教圣地，讲究清修炼丹，弟子遍布六朝各地，掌教就职典礼庄严肃穆。） 太乙真宗圣地，龙阙山所在地，掌教就职大典举行地，山势险峻（民俗：道教圣地，太乙真宗总坛所在，九阳神功传承之地）",
-        "type": "城池",
-        "continentId": "liuchao.continent.zhongzhou",
-        "factionId": "liuchao.faction.tai_yi_zhen_zong",
-        "coordinates": {
-          "x": 881,
-          "y": 4366
-        },
-        "features": [],
-        "region": "宋国"
-      },
-      {
         "id": "liuchao.location.wuyuan",
         "name": "五原城",
         "continentId": "liuchao.continent.zhongzhou",
@@ -364,674 +156,26 @@
         "region": "塞外"
       },
       {
-        "id": "liuchao.location.mingzhou",
-        "name": "明州",
-        "continentId": "liuchao.continent.zhongzhou",
-        "type": "城池",
-        "description": "宋国沿海州城，光明观堂据点所在。 东南沿海港城，光明观堂医宗所在，城中曾发瘟疫，街巷萧条，港口帆船往来，有大湖水域。（民俗：光明观堂以医术闻名，弟子多习医道，救死扶伤，受民众敬重。）",
+        "id": "lcq.location.nanhuang_route",
+        "name": "南荒商路",
+        "description": "从五原经紫溪、雨林与黑石滩深入南荒的商路。",
+        "type": "野外",
+        "continentId": "liuchao.continent.nanhuang",
         "coordinates": {
-          "x": 8925,
-          "y": 6374
-        },
-        "features": [],
-        "region": "宋国"
-      },
-      {
-        "id": "liuchao.location.jiankang",
-        "name": "建康",
-        "continentId": "liuchao.continent.zhongzhou",
-        "type": "城池",
-        "description": "晋国都城，六朝世界的政治中心之一。 六朝金粉地，金陵帝王州。繁华街市豪门宅邸，云氏等商贾世家汇聚，商业鼎盛，富甲一方。 长江南岸重镇，台城宫阙壮丽，秦淮河畔烟火万家（民俗：六朝故都，风流文雅，士人尚清谈，寺院道观遍布）",
-        "coordinates": {
-          "x": 3380,
-          "y": 5992
-        },
-        "features": [],
-        "region": "晋国"
-      },
-      {
-        "id": "liuchao.location.luoyang",
-        "name": "洛都",
-        "continentId": "liuchao.continent.zhongzhou",
-        "type": "城池",
-        "description": "汉国都城，位于中州腹地。 汉国京师，宫殿巍峨，琼玉阙楼耸立，国宾驿馆宏伟大气，宫廷戒备森严，天子仪仗威严（民俗：皇家仪仗森严，权贵云集，各方势力暗流涌动） 宫阙巍峨，殿宇连绵，铜驼大街宽绰，两侧里坊规整，晨昏鼓声号令全城（民俗：士族好清谈，宫宴豪奢成风，婚丧仪礼繁复，禁婚二十七月）",
-        "coordinates": {
-          "x": 6838,
-          "y": 3577
-        },
-        "features": [],
-        "region": "汉国"
-      },
-      {
-        "id": "liuchao.location.changan",
-        "name": "长安",
-        "continentId": "liuchao.continent.zhongzhou",
-        "type": "城池",
-        "description": "唐国都城，六朝最大城市。 六朝蹴鞠圣地，唐室大明宫巍峨，城门巍峨，常有鞠社云集，设皇图天策府邸，街市热闹。（民俗：蹴鞠之风极盛，山岳正赛年年在此举办，六朝三十二支鞠社竞逐，是唐国最热闘的体育盛事。）",
-        "coordinates": {
-          "x": 3159,
-          "y": 2767
-        },
-        "features": [],
-        "region": "唐国"
-      },
-      {
-        "id": "liuchao.location.linan",
-        "name": "临安",
-        "continentId": "liuchao.continent.zhongzhou",
-        "type": "城池",
-        "description": "宋国都城，江南繁华之地。 江南水乡名城，西湖烟柳繁华，蹴鞠相扑盛行，权贵聚集，市井热闹非凡。（民俗：山岳正赛为六朝顶级蹴鞠盛会，女子相扑大赛热闹开擂，鞠社文化蔚然成风。） 江南水乡，市桥繁华，街巷窄长多河渠，酒楼茶肆林立（民俗：商贾云集，物产丰饶，丝织业盛，宋女婉约好文墨）",
-        "coordinates": {
-          "x": 7466,
-          "y": 6532
-        },
-        "features": [],
-        "region": "宋国"
-      },
-      {
-        "id": "liuchao.location.jiangzhou",
-        "name": "江州",
-        "continentId": "liuchao.continent.zhongzhou",
-        "type": "城池",
-        "description": "星月湖大营所在地，宋国边境重要城市。 长江南岸的战略要冲，城墙坚固，营寨密布，城郊有金明寨等驻军设施，城内已开设书院，商贾初兴，战火余烬未散。（民俗：晋、宋势力交汇之地，兵家必争，世家子弟图谋变革，欲建平等新秩序；商业萌芽，商会经营渐起。） 南陲边城，山势险峻，星月湖大营隐于其间，数千义士驻守（民俗：民风彪悍，尚武敢战，程侯领地，商旅往来频繁）",
-        "coordinates": {
-          "x": 4956,
-          "y": 6735
-        },
-        "features": [],
-        "region": "宋国"
-      },
-      {
-        "id": "liuchao.location.junzhou",
-        "name": "筠州",
-        "continentId": "liuchao.continent.zhongzhou",
-        "type": "城池",
-        "description": "宋国州城，王团练驻地，程宗扬运粮之处。 宋国西部商业重镇，浮凌江畔船来船往，粮铺商号林立，官府设常平仓储粮，军需供应繁忙。（民俗：商业气息浓厚，粮商与军政勾连，走私商路通达昭南。） 程宗扬施粥济民之地，仓廪开棚，平价粜粮，民生有所恢复（民俗：曾有程宗扬开棚施粥、平价粜粮之善政，数万民众受惠）",
-        "coordinates": {
-          "x": 5656,
-          "y": 6822
-        },
-        "features": [],
-        "region": "宋国"
-      },
-      {
-        "id": "liuchao.location.guangyang",
-        "name": "广阳",
-        "continentId": "liuchao.continent.zhongzhou",
-        "type": "城池",
-        "description": "晋国-汉国边境重镇。 江南水乡要冲，广阳渠连接大江云水，商船往来频繁，沿岸街市繁华，赌场酒楼错落其间。（民俗：商贾汇聚，江湖势力活跃，云氏等大商族在此经营水道贸易，黑魔海亦设赌坊为据点。）",
-        "coordinates": {
-          "x": 4456,
-          "y": 5668
-        },
-        "features": [],
-        "region": "宋国"
-      },
-      {
-        "id": "liuchao.location.qingzhou",
-        "name": "晴州",
-        "continentId": "liuchao.continent.zhongzhou",
-        "type": "城池",
-        "description": "星月湖据点之一。 商贾云集的运河港埠，粮铺船行林立，鞠社热闹，商会势力盘根错节，南北货物汇聚之地。（民俗：蹴鞠之风盛行，商人重利轻义，慈幼院济贫，光明观堂弟子曾在此施医布善。） 沿海城市，泊陵鱼氏与黑魔海曾在此联手",
-        "coordinates": {
-          "x": 5400,
-          "y": 6000
-        },
-        "features": [],
-        "region": "海上"
-      },
-      {
-        "id": "liuchao.location.ningzhou",
-        "name": "宁州",
-        "continentId": "liuchao.continent.zhongzhou",
-        "type": "城池",
-        "description": "北府兵驻地。 江畔山城，水师驻防，州城临江而建，西连大江山岭，与江州唇齿相依。（民俗：萧氏经营军镇，水师强盛，民风尚武，州城自治不问朝廷。） 宋境内地，消息传到此处，星月湖大营招募新丁（民俗：大量丁壮闻讯要求入营，民风彪悍，愿为佣兵）",
-        "coordinates": {
-          "x": 4656,
-          "y": 6437
-        },
-        "features": [],
-        "region": "晋国"
-      },
-      {
-        "id": "liuchao.location.jinmingzhai",
-        "name": "金明寨",
-        "continentId": "liuchao.continent.zhongzhou",
-        "type": "城池",
-        "description": "宋军大营，位于烈山附近。 江州城东南十五里的村寨旧址，宋军掘土垒墙、设壕为营，成为进攻江州的军事基地，辎重营曾遭焚烧。 宋军大营所在，捧日军右厢石元孙麾下诸将驻扎，营帐连绵（民俗：右厢都指挥使石元孙驻军于此，备有巢车、轒輼等攻城器械）",
-        "coordinates": {
-          "x": 5050,
-          "y": 6550
-        },
-        "features": [],
-        "region": "宋国"
-      },
-      {
-        "id": "liuchao.location.haoshuichuan",
-        "name": "好水川",
-        "continentId": "liuchao.continent.zhongzhou",
-        "type": "城池",
-        "description": "烈山附近峡谷，大型战场。 山谷丘陵地带，荒凉旷野，宋夏两军交战之地，有山岗可俯瞰战场。 宋军败绩之地，战场荒凉，遗骸未收，士气低落之地（民俗：军事地名，龙卫左厢军曾在此惨败，主将任福战死）",
-        "coordinates": {
-          "x": 5104,
-          "y": 6476
-        },
-        "features": [],
-        "region": "宋国"
-      },
-      {
-        "id": "liuchao.location.jingxi",
-        "name": "荆溪村寨",
-        "continentId": "liuchao.continent.zhongzhou",
-        "type": "城池",
-        "description": "荆溪人聚居地，位于筠州附近山区。 山间村寨，存粮充裕戒备森严，兼具仓储与防御功能，临江而近筠州，水路可通粮运。（民俗：作为临时粮仓重地，外人出入盘查严格，与官府关系密切。）",
-        "coordinates": {
-          "x": 5600,
+          "x": 4200,
           "y": 6900
         },
-        "features": [],
-        "region": "宋国"
+        "features": []
       },
       {
-        "id": "liuchao.location.wudu",
-        "name": "舞都",
-        "continentId": "liuchao.continent.zhongzhou",
-        "type": "城池",
-        "description": "汉国境内的一座都邑。 首阳山下的晋国封邑，侯府深院，画舫往来，世家公子云集，纨绔声色犬马之地。（民俗：权贵奢靡成风，侯门子弟以豢养风虎、海东青等珍禽异兽为风尚，社交宴饮无度。） 南方边陲重镇，程侯规划取此地经营，图谋霸业（民俗：偏远之地，民风淳朴，亟待开发）",
-        "coordinates": {
-          "x": 6114,
-          "y": 3929
-        },
-        "features": [],
-        "region": "汉国"
-      },
-      {
-        "id": "liuchao.location.yong",
-        "name": "上庸",
-        "continentId": "liuchao.continent.zhongzhou",
-        "type": "城池",
-        "description": "唐国与汉国之间的城池。",
-        "coordinates": {
-          "x": 5176,
-          "y": 3978
-        },
-        "features": [],
-        "region": "秦国"
-      },
-      {
-        "id": "liuchao.location.yongzhou",
-        "name": "永州",
-        "continentId": "liuchao.continent.zhongzhou",
-        "type": "城池",
-        "description": "汉国-唐国交界附近的城市。",
-        "coordinates": {
-          "x": 4220,
-          "y": 4242
-        },
-        "features": [],
-        "region": "唐国"
-      },
-      {
-        "id": "liuchao.location.baijun",
-        "name": "巴郡",
-        "continentId": "liuchao.continent.zhongzhou",
-        "type": "城池",
-        "description": "汉国、唐国交界处的郡城。",
-        "coordinates": {
-          "x": 4763,
-          "y": 3063
-        },
-        "features": [],
-        "region": "秦国"
-      },
-      {
-        "id": "liuchao.location.dantu",
-        "name": "丹徒",
-        "continentId": "liuchao.continent.zhongzhou",
-        "type": "城池",
-        "description": "晋国-宋国水路交通要地。",
-        "coordinates": {
-          "x": 8875,
-          "y": 4854
-        },
-        "features": [],
-        "region": "汉国"
-      },
-      {
-        "id": "liuchao.location.longchuan",
-        "name": "龙川",
-        "continentId": "liuchao.continent.zhongzhou",
-        "type": "城池",
-        "description": "宋国城市。 江湖术士聚集的边陲小镇，酒旗招展，街巷间多有占卜测字摊位，市井嘈杂而鱼龙混杂。（民俗：民间信奉铁口神算，术士在此地颇受欢迎，算命测字成为当地常见的营生。）",
-        "coordinates": {
-          "x": 7908,
-          "y": 6819
-        },
-        "features": [],
-        "region": "宋国"
-      },
-      {
-        "id": "liuchao.location.nanjun",
-        "name": "南郡",
-        "continentId": "liuchao.continent.zhongzhou",
-        "type": "城池",
-        "description": "汉国南部郡城。",
-        "coordinates": {
-          "x": 6876,
-          "y": 5276
-        },
-        "features": [],
-        "region": "汉国"
-      },
-      {
-        "id": "liuchao.location.chenzhou",
-        "name": "辰州",
-        "continentId": "liuchao.continent.zhongzhou",
-        "type": "城池",
-        "description": "汉国-唐国边境城市。",
-        "coordinates": {
-          "x": 4704,
-          "y": 5011
-        },
-        "features": [],
-        "region": "唐国"
-      },
-      {
-        "id": "liuchao.location.liangzhou",
-        "name": "凉州",
-        "continentId": "liuchao.continent.zhongzhou",
-        "type": "城池",
-        "description": "唐国西北边境州城，凉州盟据点。 边塞荒凉，帐篷散落，门派营地零星分布，沙尘漫天，武人往来频繁（民俗：边塞各派结盟自保，凉州盟统领四堂八会，丹霞宗为本地盟主，门派势力根深蒂固） 铁马堂等帮会势力组成凉州盟，驰骋而来（民俗：凉州人士豪侠，结盟闯阵）",
-        "coordinates": {
-          "x": 1430,
-          "y": 2767
-        },
-        "features": [],
-        "region": "唐国"
-      },
-      {
-        "id": "liuchao.location.boling",
-        "name": "泊陵",
-        "continentId": "liuchao.continent.zhongzhou",
-        "type": "城池",
-        "description": "宋国沿海城市，鱼氏势力据点。 海岸岛礁中的楼船停泊处，山崖上有鱼氏伏击要塞，湖泊与海路交汇的险峻水域（民俗：海上岛民世家，以毒术和阴险报复闻名江湖，族中高手擅长用毒伏击） 泊陵鱼氏所在，濒海地区，与黑魔海有往来（民俗：鱼氏家族，掌握阴阳鱼等秘宝）",
-        "coordinates": {
-          "x": 9592,
-          "y": 6706
-        },
-        "features": [],
-        "region": "海上"
-      },
-      {
-        "id": "liuchao.location.yiyang",
-        "name": "夷陵",
-        "continentId": "liuchao.continent.zhongzhou",
-        "type": "城池",
-        "description": "宋国城市，长江沿岸。 江南丘陵商业城镇，长江沿岸水陆要冲，白湖商馆据点所在，商旅繁忙，钱庄林立，客栈酒肆遍布街巷。（民俗：白湖商馆醉月楼分号遍布，商贾云集消息灵通，以商贸和情报网络闻名，黑白两道均有往来。） 入山前最后一个城镇，马匹在此换成走骡",
-        "coordinates": {
-          "x": 7068,
-          "y": 7423
-        },
-        "features": [],
-        "region": "宋国"
-      },
-      {
-        "id": "liuchao.location.cuizhi",
-        "name": "翠枝港",
-        "continentId": "liuchao.continent.zhongzhou",
-        "type": "城池",
-        "description": "宋国沿海港口。",
-        "coordinates": {
-          "x": 9515,
-          "y": 5001
-        },
-        "features": [],
-        "region": "唐国"
-      },
-      {
-        "id": "liuchao.location.lie",
-        "name": "烈",
-        "continentId": "liuchao.continent.zhongzhou",
-        "type": "城池",
-        "description": "宋国-晋国交界的山脉区域。 险峻山地间一条狭窄山道蜿蜒而过，两侧山势陡峭难行，冬季积雪封路，宋军步阵在此难以展开。 金明寨附近区域，宋军右厢主力驻扎，前军应已接近此地（民俗：宋军行军至此，主力部队集结区域）",
-        "coordinates": {
-          "x": 5390,
-          "y": 6472
-        },
-        "features": [],
-        "region": "宋国"
-      },
-      {
-        "id": "liuchao.location.nanzhao",
-        "name": "昭南",
+        "id": "lcq.location.sheyi_village",
+        "name": "蛇彝村",
+        "description": "南荒蛇彝人村寨；商队抵达时无灯火、无人应答，真实情况尚未查明。",
+        "type": "村寨",
         "continentId": "liuchao.continent.nanhuang",
-        "type": "城池",
-        "description": "南荒区域的重要城市，六朝清羽记结尾与云龙吟中多次出现。 南方国度，都城麟趾城，地产巨木用于建筑，水系连通大江云水，婚俗保留古风。（民俗：妻媵制盛行，诸侯可一聘九女；沐羽城等地有昭南人受雇充当佣兵；建筑用巨木由昭南输出。） 六朝之一，都城为麟趾城，境内有帝丘、昆吾等地名。",
         "coordinates": {
-          "x": 4916,
-          "y": 7778
-        },
-        "features": [],
-        "region": "昭南"
-      },
-      {
-        "id": "liuchao.location.diqiu",
-        "name": "帝丘",
-        "continentId": "liuchao.continent.nanhuang",
-        "type": "城池",
-        "description": "南荒-中州交界处的重要城镇。 昭南境内地名，位于麟趾城附近。",
-        "coordinates": {
-          "x": 6096,
-          "y": 7831
-        },
-        "features": [],
-        "region": "昭南"
-      },
-      {
-        "id": "liuchao.location.kunwu",
-        "name": "昆吾",
-        "continentId": "liuchao.continent.nanhuang",
-        "type": "城池",
-        "description": "南荒区域的重要城镇。 昭南南方重镇，城中有制刀工匠，相传以昆吾刀裁取霓龙丝，气候湿热，多云霞幻象。（民俗：昆吾刀锋利著称，相传可裁取霞光化为霓丝，为当地神秘特产。） 昭南境内地名，与帝丘之间夹杂着夭鸿、火渎等地名。",
-        "coordinates": {
-          "x": 4840,
-          "y": 7546
-        },
-        "features": [],
-        "region": "昭南"
-      },
-      {
-        "id": "liuchao.location.xiongerpu",
-        "name": "熊耳铺",
-        "continentId": "liuchao.continent.nanhuang",
-        "type": "城池",
-        "description": "南荒入口处的村寨，程宗扬在此选向导。 南荒湿热，商旅歇脚的驿站小镇，夜间赶路凭眼力辨途，店铺灯火昏暗。（民俗：南荒人夜行不点火把，全凭眼力走夜路，速度反比白天更快。）",
-        "coordinates": {
-          "x": 1623,
-          "y": 7612
-        },
-        "features": [],
-        "region": "南荒"
-      },
-      {
-        "id": "liuchao.location.guiwangdong",
-        "name": "鬼王峒",
-        "continentId": "liuchao.continent.nanhuang",
-        "type": "洞府",
-        "description": "南荒鬼王峒势力的核心洞窟。 深幽不见底的地堑，古老遗迹与荒圮乱石交织，闷热潮湿的密林中仅见奴隶，鲜有人马。（民俗：鬼巫王主导的隐秘势力，与碧鲮人有生意往来，设驿馆接待外来者。） 鬼地方，日夜难分。",
-        "coordinates": {
-          "x": 1641,
-          "y": 8690
-        },
-        "features": [],
-        "region": "南荒"
-      },
-      {
-        "id": "liuchao.location.baiyi",
-        "name": "白夷族",
-        "continentId": "liuchao.continent.nanhuang",
-        "type": "城池",
-        "description": "南荒白夷族聚居地。 南荒丛林深处的部族聚居地，设有隐秘地宫，当地出产湖珠手串等南荒特产，有自己的武装力量与鬼王峒抗衡。 盘江以南的富庶山谷，纯白岩石门楼，香花遍路，女子娇美。（民俗：出产珍稀之物，女性地位较高，盛装迎接贵客。）",
-        "coordinates": {
-          "x": 1818,
-          "y": 8118
-        },
-        "features": [],
-        "region": "南荒"
-      },
-      {
-        "id": "liuchao.location.biyu",
-        "name": "碧鲮族",
-        "continentId": "liuchao.continent.nanhuang",
-        "type": "城池",
-        "description": "南荒沿海碧鲮族聚居地。 濒海而居的部族村寨，以渔获腌制和珊瑚采集为生，夜间篝火烤肉，空气中弥漫海产腥鲜与草药气息。（民俗：擅长潜水捕捞，族中女子常以海产交换陆上物资，有将俘虏献予鬼巫王的传统。） 碧蓝海湾，白沙滩平缓，椰林婆娑，海产丰饶。（民俗：渔业为生，曾出美女供鬼巫王玩乐。）",
-        "coordinates": {
-          "x": 1824,
-          "y": 8592
-        },
-        "features": [],
-        "region": "南荒"
-      },
-      {
-        "id": "liuchao.location.liuligu",
-        "name": "琉璃谷",
-        "continentId": "liuchao.continent.nanhuang",
-        "type": "城池",
-        "description": "南荒区域山谷。 琉璃化的山谷，阳光下七彩纷呈，景色瑰丽绝美，为南荒胜境。",
-        "coordinates": {
-          "x": 1165,
-          "y": 8791
-        },
-        "features": [],
-        "region": "南荒"
-      },
-      {
-        "id": "liuchao.location.shenmu",
-        "name": "神木",
-        "continentId": "liuchao.continent.nanhuang",
-        "type": "城池",
-        "description": "南荒区域重要地标。 巍峨神木如万仞之峰，枝干广袤需五日方至半腰，根节如群山层叠，云霞缭绕触手可及，树巅隐于天际不可望",
-        "coordinates": {
-          "x": 1341,
-          "y": 9521
-        },
-        "features": [],
-        "region": "南荒"
-      },
-      {
-        "id": "liuchao.location.haishanghuahuan",
-        "name": "海棠花環",
-        "continentId": "liuchao.continent.nanhuang",
-        "type": "险地",
-        "description": "南荒极南端的环状区域。",
-        "coordinates": {
-          "x": 3241,
-          "y": 9915
-        },
-        "features": [],
-        "region": "海上"
-      },
-      {
-        "id": "liuchao.location.canglan",
-        "name": "苍澜镇",
-        "continentId": "liuchao.continent.taiquan",
-        "type": "城池",
-        "description": "太泉古阵入口附近的镇子。 浮玉山脚下的荒芜集镇，四野红土不毛，唯镇周有零星草木，镇外常年雾气弥漫（雾瘴），进出太泉古阵的旅客在此落脚。（民俗：无本地出产，粮价百倍于外；兵器极廉，窝头换刀非神话；镇上弱肉强食，外来者须管住嘴少打听。）",
-        "coordinates": {
-          "x": 7500,
-          "y": 9000
-        },
-        "features": [],
-        "region": "太泉"
-      },
-      {
-        "id": "liuchao.location.taiquan",
-        "name": "太泉古阵",
-        "continentId": "liuchao.continent.taiquan",
-        "type": "秘境",
-        "description": "远古遗迹，太泉古阵入口。 古阵空间结构违背常识，头顶可见星空，西部有赤红巨石，残存焦黑树木与灰烬，黑暗无光处有魇狼出没（民俗：阵法设有灵性机关，需特定修为（六阳境）方可进入，藏有赤阳圣果等珍贵之物） 上古遗迹实为另一个时代的造物：金铁构筑的廊道厅堂、长明不灭的\"夜明珠\"、显影人像的\"光影幻璧\"、轻韧透亮的\"琉璃纸\"、不用牛马自行奔走的\"铁车\"残骸，六朝人以自身语汇敬畏称之。（民俗：入阵者以\"仙家遗泽\"解读诸般造物并各自命名；唯穿越者能认出真身，认知差微妙有趣。）",
-        "coordinates": {
-          "x": 7573,
-          "y": 9083
-        },
-        "features": [],
-        "region": "太泉"
-      },
-      {
-        "id": "liuchao.location.bailuojiang",
-        "name": "白龍江",
-        "continentId": "liuchao.continent.nanhuang",
-        "type": "城池",
-        "description": "南荒-中州交界的重要河流。 大江支流，河水蜿蜒向西汇入滔滔江水。",
-        "coordinates": {
-          "x": 1905,
-          "y": 7162
-        },
-        "features": [],
-        "region": "宋国"
-      },
-      {
-        "id": "liuchao.location.xianyang",
-        "name": "咸阳",
-        "type": "城池",
-        "description": "秦国国都，渭水之滨的雄城。",
-        "coordinates": {
-          "x": 5189,
-          "y": 1911
-        },
-        "features": []
-      },
-      {
-        "id": "liuchao.location.yongcheng",
-        "name": "雍",
-        "type": "城池",
-        "description": "秦国故都，岐山东麓的古邑。",
-        "coordinates": {
-          "x": 4805,
-          "y": 1728
-        },
-        "features": []
-      },
-      {
-        "id": "liuchao.location.lintao",
-        "name": "临洮",
-        "type": "城池",
-        "description": "秦国西北边城。",
-        "coordinates": {
-          "x": 4421,
-          "y": 941
-        },
-        "features": []
-      },
-      {
-        "id": "liuchao.location.shangjun",
-        "name": "上郡",
-        "type": "城池",
-        "description": "秦国北疆重镇。",
-        "coordinates": {
-          "x": 5422,
-          "y": 932
-        },
-        "features": []
-      },
-      {
-        "id": "liuchao.location.hanguguan",
-        "name": "函谷关",
-        "type": "城池",
-        "description": "秦国东出之咽喉雄关，扼守通往汉境的孔道。",
-        "coordinates": {
-          "x": 5750,
-          "y": 2432
-        },
-        "features": []
-      },
-      {
-        "id": "liuchao.location.hongmen",
-        "name": "鸿门",
-        "type": "城池",
-        "description": "咸阳东郊之地。",
-        "coordinates": {
-          "x": 5483,
-          "y": 2132
-        },
-        "features": []
-      },
-      {
-        "id": "liuchao.location.qishan",
-        "name": "歧山",
-        "type": "城池",
-        "description": "秦国西界山脉。",
-        "coordinates": {
-          "x": 4589,
-          "y": 2148
-        },
-        "features": []
-      },
-      {
-        "id": "liuchao.location.zhuoguang",
-        "name": "涿光",
-        "type": "城池",
-        "description": "秦国极北关隘，出关即皋落氏、勾龙氏诸部草原。",
-        "coordinates": {
-          "x": 4803,
-          "y": 584
-        },
-        "features": []
-      },
-      {
-        "id": "liuchao.location.qingyuan_jin",
-        "name": "清远",
-        "type": "城池",
-        "description": "晋国北境城邑。",
-        "coordinates": {
-          "x": 3167,
-          "y": 5628
-        },
-        "features": []
-      },
-      {
-        "id": "liuchao.location.rongzhou",
-        "name": "容州",
-        "type": "城池",
-        "description": "晋国北部州城。",
-        "coordinates": {
-          "x": 3685,
-          "y": 5654
-        },
-        "features": []
-      },
-      {
-        "id": "liuchao.location.hezhou",
-        "name": "和州",
-        "type": "城池",
-        "description": "晋国腹地州城。",
-        "coordinates": {
-          "x": 3031,
-          "y": 6216
-        },
-        "features": []
-      },
-      {
-        "id": "liuchao.location.linchuan",
-        "name": "临川",
-        "type": "城池",
-        "description": "晋国东部州城，临川王封地。",
-        "coordinates": {
-          "x": 4090,
-          "y": 6122
-        },
-        "features": []
-      },
-      {
-        "id": "liuchao.location.jingzhou_jin",
-        "name": "竞州",
-        "type": "城池",
-        "description": "晋国西陲州城。",
-        "coordinates": {
-          "x": 2188,
-          "y": 6465
-        },
-        "features": []
-      },
-      {
-        "id": "liuchao.location.zhuyajun",
-        "name": "珠崖郡",
-        "type": "城池",
-        "description": "晋国西南滨海之郡。",
-        "coordinates": {
-          "x": 2713,
-          "y": 7296
-        },
-        "features": []
-      },
-      {
-        "id": "liuchao.location.yongzhou_jin",
-        "name": "邕州",
-        "type": "城池",
-        "description": "晋国南部州城。",
-        "coordinates": {
-          "x": 4178,
-          "y": 6999
+          "x": 4650,
+          "y": 7350
         },
         "features": []
       }
@@ -1040,372 +184,8 @@
       {
         "id": "liuchao.character.cheng_zongyang",
         "name": "程宗扬",
-        "description": "现代穿越者",
-        "role": "主角",
-        "gender": "男",
-        "realm": "凡人",
-        "affiliations": [
-          {
-            "factionId": "liuchao.faction.bai_hu_shang_guan",
-            "category": "organization",
-            "role": "奴隶"
-          },
-          {
-            "factionId": "liuchao.faction.pan_jiang_cheng",
-            "category": "clan",
-            "role": "少主/大少爷"
-          }
-        ],
-        "locationId": "liuchao.location.chai_fang",
-        "skillIds": [
-          "liuchao.skill.death_root",
-          "lcq.skill.np001",
-          "lcq.skill.np003",
-          "lcq.skill.np004"
-        ],
-        "techniqueIds": [
-          "liuchao.technique.jiuyang_shen_gong"
-        ],
-        "itemIds": [
-          "liuchao.item.massage_stick",
-          "liuchao.item.drug_bottle",
-          "lcq.item.np002",
-          "lcq.item.np005"
-        ],
-        "profile": {
-          "appearance": "下巴有胡茬",
-          "personality": [
-            "拥有现代知识体系；水泥、拉链、纸钞、现代器物等概念来自其穿越者认知",
-            "现代人，拥有六朝人物没有的知识（纸钞体系，现代性玩具），好色",
-            "冲动",
-            "偶尔愧疚",
-            "有支配欲"
-          ],
-          "race": "人类",
-          "origin": "现代穿越者",
-          "talents": [
-            {
-              "name": "天命主角",
-              "description": "灾难收束为踏脚石，机缘如雨点砸来，他站在风暴眼笑看命运齿轮碾碎所有敌人。"
-            },
-            {
-              "name": "生死根",
-              "description": "程宗扬的专属异能。"
-            }
-          ],
-          "attributes": {
-            "rootBone": 8,
-            "spirituality": 9,
-            "comprehension": 10,
-            "fortune": 9,
-            "charm": 8,
-            "temperament": 10
-          },
-          "memories": [
-            "在蛇彝人村寨",
-            "与阿姬曼交易"
-          ],
-          "spiritRoot": {
-            "name": "变异灵根",
-            "tier": "天品",
-            "description": "灵根异变破常理，潜力无穷，修炼者似逆命而行，主颠覆与意外之变。"
-          },
-          "notes": [
-            "【性癖】喜爱后庭性交；喜爱使用性玩具；有轻微支配施虐倾向；喜爱处女；喜爱成熟美妇"
-          ]
-        }
-      },
-      {
-        "id": "liuchao.character.su_daji",
-        "name": "苏妲己",
-        "description": "她是妖族中最为冶艳的祸水，慵懒一笑间便能让仙门覆灭，贪婪的舌尖舔过唇角，仿佛连天命都能吞噬。",
-        "role": "关键反派",
-        "gender": "女",
-        "realm": "炼虚",
-        "affiliations": [
-          {
-            "factionId": "liuchao.faction.bai_hu_shang_guan",
-            "category": "organization",
-            "role": "主人"
-          }
-        ],
-        "locationId": "liuchao.location.baihu_shang_guan",
-        "skillIds": [
-          "lcq.skill.np006"
-        ],
-        "techniqueIds": [],
-        "itemIds": [
-          "liuchao.item.massage_stick"
-        ],
-        "profile": {
-          "appearance": "全书妖艳天花板；身材丰腴熟透，一颦一笑勾魂摄魄；眼神仿佛看穿男人皮囊、直刺灵魂深处的渴望",
-          "personality": [
-            "病态魅惑(侵蚀灵魂)",
-            "极高智商",
-            "近乎病态的掌控欲",
-            "喜怒无常",
-            "狠辣狡诈多疑与天真融合",
-            "视馆下男宠如掌中玩物毫不怜惜"
-          ],
-          "race": "狐族",
-          "origin": "白湖商馆主人",
-          "attributes": {
-            "rootBone": 6,
-            "spirituality": 5,
-            "comprehension": 6,
-            "fortune": 8,
-            "charm": 8,
-            "temperament": 7
-          },
-          "spiritRoot": {
-            "name": "冰灵根",
-            "tier": "玄品",
-            "description": "寒冰凝霜封天地，冷冽彻骨，修炼者若雪域冰峰，主冻结与净化之能。"
-          },
-          "talents": [
-            {
-              "name": "多宝童子",
-              "description": "袖口是秘境，指尖藏乾坤，他咧嘴一笑便从七窍飞出法宝雨，砸得敌人抱头鼠窜。"
-            },
-            {
-              "name": "冰蛊",
-              "description": "苏妲己的专属异能。"
-            }
-          ],
-          "notes": [
-            "【性癖】被现代性玩具（按摩棒）插入；在男性面前展示下体；被支配；后庭性爱；口交",
-            "【身体】擅在两性中占据主动；喜折磨玩弄男人自尊；被征服后转为臣服"
-          ]
-        }
-      },
-      {
-        "id": "liuchao.character.ning_yu",
-        "name": "凝羽",
-        "description": "商队中那位雪肤乌发的女护卫，神色永远冷若冰霜，只在挥剑时才会让人注意到她肩头若隐若现的淡红月牙印记——没人知道她身怀太一经末技的玄妙功法，更无人敢触碰那冷艳外表下隐藏的忠诚与锋芒。",
-        "role": "侍卫长",
-        "gender": "女",
-        "realm": "练气",
-        "affiliations": [
-          {
-            "factionId": "liuchao.faction.bai_hu_shang_guan",
-            "category": "organization",
-            "role": "侍卫长"
-          },
-          {
-            "factionId": "liuchao.faction.x2d33e1eaf9",
-            "category": "organization",
-            "role": "商队成员/护卫"
-          },
-          {
-            "factionId": "liuchao.faction.hei_mo_hai",
-            "category": "organization",
-            "role": "御姬奴（凝奴）"
-          }
-        ],
-        "locationId": "liuchao.location.jia_shan_yan_dong",
-        "skillIds": [
-          "liuchao.skill.moon_manipulation",
-          "lcq.skill.np004"
-        ],
-        "techniqueIds": [
-          "liuchao.technique.dual_cultivation"
-        ],
-        "itemIds": [
-          "liuchao.item.curved_sword"
-        ],
-        "profile": {
-          "appearance": "身材高挑，乌黑长发披肩；修长光洁美腿、丰满挺拔乳房；玉体白皙晶莹如羊脂白玉；阴户精巧如初春桃叶；肩头一枚淡红月牙状痕迹；",
-          "personality": [
-            "高冷御姐",
-            "外冷内媚(冰火交融)",
-            "口是心非",
-            "不擅表温情",
-            "以冷酷伪装情感与欲望"
-          ],
-          "race": "羽族",
-          "origin": "穹羽族后裔",
-          "talents": [
-            {
-              "name": "剑骨天成",
-              "description": "脊梁是剑胚，血管淌剑意，他呼吸间骨骼铮鸣，随手一挥便切开空间如斩蚯蚓。"
-            },
-            {
-              "name": "月光盾",
-              "description": "凝羽的专属异能。"
-            }
-          ],
-          "attributes": {
-            "rootBone": 9,
-            "spirituality": 7,
-            "comprehension": 6,
-            "fortune": 7,
-            "charm": 6,
-            "temperament": 6
-          },
-          "spiritRoot": {
-            "name": "暗灵根",
-            "tier": "玄品",
-            "description": "幽暗如渊噬光明，诡谲难测，修炼者似永夜降临，专精隐匿与吞噬之术。"
-          },
-          "notes": [
-            "【功法约束】凝羽所习的太一经末技可能与双修功法相关，性行为须符合双修功法要求",
-            "【身体】嘴上拒绝肉体却顺从；晶莹敏感圣躯；肩头淡红月牙痕"
-          ]
-        }
-      },
-      {
-        "id": "liuchao.character.a_jiman_bana",
-        "name": "阿姬曼·芭娜",
-        "description": "阿姬曼·芭娜，天竺舞姬，身量格外娇小，头顶只及程宗扬下颏，窄肩玉坠般光滑，纤美腰肢如蛇滑动——被赎买释放后，她如一片落叶飘离五原城，只留空气中一丝异域香痕。",
-        "role": "前女奴",
-        "gender": "女",
-        "realm": "凡人",
-        "affiliations": [
-          {
-            "factionId": "liuchao.faction.bai_hu_shang_guan",
-            "category": "organization",
-            "role": "奴隶（舞姬）"
-          },
-          {
-            "factionId": "liuchao.faction.x2d33e1eaf9",
-            "category": "organization",
-            "role": "侍妾/婢女"
-          },
-          {
-            "factionId": "liuchao.faction.xbc4c7579e9",
-            "category": "organization",
-            "role": "公主（与哥哥实叉难陀重逢后居于耽摩）"
-          }
-        ],
-        "locationId": "liuchao.location.baihu_shang_guan",
-        "skillIds": [
-          "liuchao.skill.dance"
-        ],
-        "techniqueIds": [],
-        "itemIds": [],
-        "profile": {
-          "attributes": {
-            "rootBone": 5,
-            "spirituality": 5,
-            "comprehension": 5,
-            "fortune": 4,
-            "charm": 8,
-            "temperament": 5
-          },
-          "spiritRoot": {
-            "name": "水灵根",
-            "tier": "黄品",
-            "description": "碧波流转似镜，化柔为刚，修炼者如深海暗流，善于滋养与封锁万物。"
-          },
-          "talents": [
-            {
-              "name": "顶级魅力",
-              "description": "气息如蜜糖诱捕心神，他走过的地方，连石头都想献上膝盖，跪求成为脚下砖。"
-            }
-          ],
-          "appearance": "天竺-波斯混血高级贵族长相，象牙/浅小麦色细腻肌肤，五官深邃眼眸如夜空，极具异国诱惑；王妃出身的丰腴成熟妇人韵味，身段高挑前凸后凹、长期跳异国舞腰肢柔韧；常着天竺纱丽、华丽金银珠玉，自带西域神秘香气",
-          "notes": [
-            "【备注】if线：放弃离开主动留下，在五原城与丝绸之路商会据点以政治眼光与管理才能为程宗扬打理西域天量财富与秘密商道，成后方最稳固商业支柱之一"
-          ],
-          "origin": "莫卧儿帝国王妃，落难被俘沦为奴隶拍卖",
-          "personality": [
-            "高贵坚韧",
-            "蕙质兰心",
-            "聪慧知性(极具商业与政治头脑)",
-            "知恩图报"
-          ]
-        }
-      },
-      {
-        "id": "liuchao.character.yun_cang_feng",
-        "name": "云苍峰",
-        "role": "商人/盟友",
-        "description": "这位云如瑶的兄长，在商界摸爬滚打多年的领袖人物，永远腰佩玉饰、衣着整洁，生着一张与云秀峰肖似却总挂着阴沉或豪迈自信神色的脸。他为人豪爽热情，说话向来直言不讳，可那份沉稳严谨和精明务实，又让人不敢小觑他偶尔爆发的火爆脾气。",
-        "profile": {
-          "attributes": {
-            "rootBone": 6,
-            "spirituality": 8,
-            "comprehension": 10,
-            "fortune": 9,
-            "charm": 7,
-            "temperament": 6
-          },
-          "spiritRoot": {
-            "name": "火灵根",
-            "tier": "地品",
-            "description": "赤焰翻涌如龙，焚尽八荒，修炼者若烈阳骄阳，主狂暴与毁灭之道。"
-          },
-          "talents": [
-            {
-              "name": "神识过人",
-              "description": "意识铺开如蛛网，方圆千里每粒尘埃的震颤都逃不过，敌人抬脚就被预判三百年。"
-            }
-          ],
-          "appearance": "文士打扮，气度儒雅",
-          "personality": [
-            "沉稳",
-            "老练",
-            "果断",
-            "有威严",
-            "重情义",
-            "精明"
-          ],
-          "origin": "云氏家族（南荒势力）"
-        },
-        "realm": "练气",
-        "gender": "男",
-        "affiliations": [
-          {
-            "factionId": "liuchao.faction.yun_shi_shang_hui",
-            "category": "organization",
-            "role": "执事"
-          }
-        ]
-      },
-      {
-        "id": "liuchao.character.wu_er_lang",
-        "name": "武二郎",
-        "role": "商队成员",
-        "description": "武二郎是商队里出了名的凶神，虎背熊腰、面带悍气，虽然好吃懒做却又粗中有细，争强好胜却对兄弟重情仗义。",
-        "profile": {
-          "appearance": "身材魁梧，虎背熊腰，平时则眉开眼笑，桃花眼勾人，满是胸毛, 胸毛虬曲、发怒时/运功时会显露金色虎斑",
-          "personality": [
-            "粗犷威猛",
-            "直率暴躁",
-            "重情重义",
-            "主角武功启蒙，刚猛不失机智"
-          ],
-          "race": "人类",
-          "origin": "白武族族人",
-          "talents": [
-            {
-              "name": "剑骨天成",
-              "description": "脊梁是剑胚，血管淌剑意，他呼吸间骨骼铮鸣，随手一挥便切开空间如斩蚯蚓。"
-            }
-          ],
-          "attributes": {
-            "rootBone": 9,
-            "spirituality": 6,
-            "comprehension": 5,
-            "fortune": 9,
-            "charm": 6,
-            "temperament": 5
-          },
-          "spiritRoot": {
-            "name": "火灵根",
-            "tier": "玄品",
-            "description": "赤焰翻涌如龙，焚尽八荒，修炼者若烈阳骄阳，主狂暴与毁灭之道。"
-          },
-          "notes": [
-            "【性癖】享受粗犷交合姿势",
-            "【身体】粗阳威猛；胸毛虬曲；金色虎斑"
-          ]
-        },
-        "skillIds": [
-          "lcq.skill.np001",
-          "lcq.skill.np003"
-        ],
-        "realm": "练气",
+        "description": "来自现代世界、刚被苏妲己识破并扣在白湖商馆的年轻人。",
+        "role": "被扣押的异乡人",
         "gender": "男",
         "affiliations": [
           {
@@ -1413,397 +193,185 @@
             "category": "organization",
             "role": "成员"
           }
-        ]
+        ],
+        "locationId": "liuchao.location.baihu_shang_guan",
+        "profile": {
+          "origin": "现代来客；正以霓龙丝线索争取活命。"
+        }
       },
       {
-        "id": "liuchao.character.xie_yi",
-        "name": "谢艺",
-        "role": "星月湖卫士",
-        "description": "星月湖畔的沉默卫士，一身风尘仆仆的朴素衣衫下藏着不露锋芒的聪慧，言语虽少却总以温和态度让人如沐春风。他心中怀着对自己使命的骄傲，每一步都踏在湖光月影之间，守护着这片天地不为人知的秘密。",
+        "id": "liuchao.character.su_daji",
+        "name": "苏妲己",
+        "description": "白湖商馆女主人，善于以交易、契约和控制手段驱使他人。",
+        "role": "白湖商馆主人",
+        "gender": "女",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.bai_hu_shang_guan",
+            "category": "organization",
+            "role": "成员"
+          }
+        ],
+        "locationId": "liuchao.location.baihu_shang_guan",
         "profile": {
-          "attributes": {
-            "rootBone": 8,
-            "spirituality": 6,
-            "comprehension": 8,
-            "fortune": 7,
-            "charm": 7,
-            "temperament": 6
-          },
-          "spiritRoot": {
-            "name": "火灵根",
-            "tier": "地品",
-            "description": "赤焰翻涌如龙，焚尽八荒，修炼者若烈阳骄阳，主狂暴与毁灭之道。"
-          },
-          "talents": [
-            {
-              "name": "天生神力",
-              "description": "骨骼是精铁浇筑，肌肉藏龙象之力，他捏碎空间如捏鸡蛋，真仙看了都缩脖子。"
-            }
-          ],
-          "appearance": "风尘仆仆，朴素装扮",
-          "personality": [
-            "温和从容",
-            "彬彬有礼",
-            "沉稳"
-          ],
-          "origin": "星月湖八骏之一，岳帅部属"
-        },
-        "realm": "化神",
+          "origin": "五原白湖商馆主人。"
+        }
+      },
+      {
+        "id": "liuchao.character.ning_yu",
+        "name": "凝羽",
+        "description": "白湖商馆侍卫长，寡言冷峻，奉苏妲己命令看守程宗扬。",
+        "role": "商馆侍卫长",
+        "gender": "女",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.bai_hu_shang_guan",
+            "category": "organization",
+            "role": "成员"
+          }
+        ],
+        "locationId": "liuchao.location.baihu_shang_guan",
+        "profile": {
+          "origin": "白湖商馆护卫；更深来历尚未揭露。"
+        }
+      },
+      {
+        "id": "liuchao.character.a_jiman_bana",
+        "name": "阿姬曼·芭娜",
+        "description": "来自天竺的年轻舞姬，此时仍受白湖商馆奴契约束。",
+        "role": "商馆舞姬",
+        "gender": "女",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.bai_hu_shang_guan",
+            "category": "organization",
+            "role": "成员"
+          }
+        ],
+        "locationId": "liuchao.location.baihu_shang_guan",
+        "profile": {
+          "origin": "来自天竺，现为白湖商馆奴隶。"
+        }
+      },
+      {
+        "id": "liuchao.character.qi_yuan",
+        "name": "祁远",
+        "description": "熟悉商路与南荒风险的白湖商馆老伙计。",
+        "role": "商队管事",
         "gender": "男",
         "affiliations": [
           {
-            "factionId": "liuchao.faction.xing_yue_hu",
+            "factionId": "liuchao.faction.bai_hu_shang_guan",
             "category": "organization",
-            "role": "八骏·龙骥/岳帅部属"
+            "role": "成员"
           }
-        ]
+        ],
+        "locationId": "liuchao.location.baihu_shang_guan",
+        "profile": {
+          "origin": "白湖商馆伙计，负责南荒商队事务。"
+        }
+      },
+      {
+        "id": "liuchao.character.wu_er_lang",
+        "name": "武二郎",
+        "description": "自称白武族排行第二的勇士，武力强横而重视自己亲口作出的承诺。",
+        "role": "白武族勇士",
+        "gender": "男",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.bai_hu_shang_guan",
+            "category": "organization",
+            "role": "成员"
+          },
+          {
+            "factionId": "liuchao.faction.bai_wu",
+            "category": "organization",
+            "role": "成员"
+          }
+        ],
+        "locationId": "liuchao.location.wuyuan",
+        "profile": {
+          "origin": "被送入白湖商馆采石场。"
+        }
       },
       {
         "id": "liuchao.character.xi_men_qing",
         "name": "西门庆",
-        "role": "配角",
+        "description": "五原城中行事阔绰、来历复杂的男子，与武二郎有旧怨。",
+        "role": "五原人物",
         "gender": "男",
+        "affiliations": [],
+        "locationId": "liuchao.location.wuyuan",
         "profile": {
-          "personality": [
-            "好色风流",
-            "善于品鉴",
-            "口才伶俐",
-            "圆滑世故",
-            "表面温文尔雅",
-            "城府深",
-            "好色",
-            "善于算计",
-            "好整以暇"
-          ],
-          "appearance": "生有一双勾人的桃花眼，相貌俊雅，玉树临风，风流倜傥。；身材中等，脸色青暗，常带春风般的笑容，衣着华贵，腰间挂满香囊玉佩，举止浪荡。",
-          "race": "人族",
-          "notes": [
-            "【性癖】喜好从后入式开苞；偏好言语挑逗与抚摸"
-          ],
-          "origin": "配角"
-        },
-        "realm": "元婴",
-        "affiliations": [
-          {
-            "factionId": "liuchao.faction.hei_mo_hai",
-            "category": "organization",
-            "role": "弟子"
-          },
-          {
-            "factionId": "liuchao.faction.xf699398f15",
-            "category": "organization",
-            "role": "富商/生药铺东主"
-          },
-          {
-            "factionId": "lyg.faction.song_state",
-            "category": "organization",
-            "role": "提点刑狱司副提刑（纳捐得官，未实授，从六品）"
-          }
-        ]
+          "origin": "五原城人物；更深归属尚未揭露。"
+        }
       },
       {
-        "id": "liuchao.character.zhuo_yunjun",
-        "name": "卓云君",
-        "role": "正典人物",
-        "gender": "女",
-        "skillIds": [],
-        "techniqueIds": [],
-        "itemIds": [],
-        "profile": {
-          "personality": [
-            "白天高洁端庄仙姑",
-            "虚荣强撑尊严",
-            "黑夜自称\"奴婢\"的母狗双重人格",
-            "常年被太尉折磨出受虐底子"
-          ]
-        },
-        "realm": "化神",
+        "id": "liuchao.character.yun_cang_feng",
+        "name": "云苍峰",
+        "description": "云氏商会执事，在黑石滩与白湖商队合力渡河。",
+        "role": "云氏商会执事",
+        "gender": "男",
         "affiliations": [
           {
-            "factionId": "liuchao.faction.tai_yi_zhen_zong",
-            "category": "sect",
-            "role": "教御"
-          },
-          {
-            "factionId": "liuchao.faction.hei_mo_hai",
+            "factionId": "liuchao.faction.yun_shi_shang_hui",
             "category": "organization",
-            "role": "奴婢"
-          },
-          {
-            "factionId": "liuchao.faction.pan_jiang_cheng",
-            "category": "clan",
-            "role": "奴婢"
-          },
-          {
-            "factionId": "liuchao.faction.x2d33e1eaf9",
-            "category": "organization",
-            "role": "侍奴"
+            "role": "成员"
           }
-        ]
+        ],
+        "profile": {
+          "origin": "云氏商会执事。"
+        }
       },
       {
-        "id": "lcq.character.yue_shuang",
-        "name": "月霜",
-        "role": "正典人物",
-        "gender": "女",
-        "skillIds": [],
-        "techniqueIds": [],
-        "itemIds": [],
+        "id": "liuchao.character.xie_yi",
+        "name": "谢艺",
+        "description": "随云氏商队南行的刀客，自称是写书人，真实军旅来历尚未证实。",
+        "role": "同行刀客",
+        "gender": "男",
+        "affiliations": [],
         "profile": {
-          "personality": [
-            "极度傲娇自以为是的\"圣母纸老虎\"",
-            "自私虚伪",
-            "行事双标（濒死要救命恩人心头血作药引）",
-            "智商与江湖经验匮乏",
-            "推卸责任的受害者心态",
-            "复杂亲缘认同（嘴拒认岳帅是父",
-            "却以\"八骏新主人\"自居）"
-          ]
-        },
-        "realm": "元婴",
-        "affiliations": [
-          {
-            "factionId": "liuchao.faction.tai_yi_zhen_zong",
-            "category": "organization",
-            "role": "王哲门下（九阳神功传承）"
-          },
-          {
-            "factionId": "lcq.faction.left_guard",
-            "category": "organization",
-            "role": "成员（王哲军中）"
-          },
-          {
-            "factionId": "liuchao.faction.xing_yue_hu",
-            "category": "organization",
-            "role": "岳帅遗孤"
-          }
-        ]
+          "origin": "随云氏商队南行；身份仍是同行者的推测。"
+        }
       }
     ],
     "playerRelationships": [
       {
         "characterId": "liuchao.character.su_daji",
-        "relation": "主人与奴隶（被程宗扬征服）",
-        "favorability": 40,
-        "memories": [
-          "被下冰蛊控制",
-          "被迫签卖身契"
-        ]
+        "relation": "扣押者",
+        "favorability": -45
       },
       {
         "characterId": "liuchao.character.ning_yu",
-        "relation": "性伴侣/合作",
-        "favorability": 20,
-        "memories": [
-          "在赌局中被迫演示性玩具",
-          "在假山岩洞中发生关系"
-        ]
+        "relation": "看守者",
+        "favorability": -5
       },
       {
         "characterId": "liuchao.character.a_jiman_bana",
-        "relation": "仇人/设局者",
-        "favorability": -60,
-        "memories": [
-          "赎买并释放"
-        ]
-      },
-      {
-        "characterId": "liuchao.character.wu_er_lang",
-        "relation": "雇主与雇员",
-        "favorability": 25
-      },
-      {
-        "characterId": "liuchao.character.yun_cang_feng",
-        "relation": "合作",
-        "favorability": 35
-      },
-      {
-        "characterId": "liuchao.character.xie_yi",
-        "relation": "朋友",
-        "favorability": 42
+        "relation": "曾参与诱捕的舞姬",
+        "favorability": -20
       }
     ],
     "relationships": [
       {
         "fromCharacterId": "liuchao.character.su_daji",
         "toCharacterId": "liuchao.character.ning_yu",
-        "relation": "主人与侍卫",
-        "score": -20,
-        "direction": "directed",
-        "tags": [
-          "控制",
-          "监视"
-        ]
-      },
-      {
-        "fromCharacterId": "liuchao.character.a_jiman_bana",
-        "toCharacterId": "liuchao.character.su_daji",
-        "relation": "主人",
-        "score": 25,
-        "direction": "bidirectional"
-      },
-      {
-        "fromCharacterId": "liuchao.character.xie_yi",
-        "toCharacterId": "liuchao.character.yun_cang_feng",
-        "relation": "同行",
-        "score": 5,
-        "direction": "bidirectional"
-      },
-      {
-        "fromCharacterId": "liuchao.character.ning_yu",
-        "toCharacterId": "liuchao.character.wu_er_lang",
-        "relation": "同事",
-        "score": 5,
-        "direction": "bidirectional"
-      },
-      {
-        "fromCharacterId": "liuchao.character.zhuo_yunjun",
-        "toCharacterId": "lcq.character.yue_shuang",
-        "relation": "同门",
+        "relation": "主人与侍卫长",
         "score": 30,
-        "direction": "bidirectional",
-        "tags": [
-          "同门",
-          "同势力派生"
-        ]
+        "direction": "directed"
       }
-    ]
+    ],
+    "factionRelationships": []
   },
   "content": {
-    "skills": [
-      {
-        "id": "liuchao.skill.death_root",
-        "name": "生死根",
-        "description": "程宗扬将死气化为生机的异能，能加速植物生长和伤口愈合。",
-        "type": "异能",
-        "effects": [
-          "感应死亡气息",
-          "转化死气为生机"
-        ]
-      },
-      {
-        "id": "liuchao.skill.moon_manipulation",
-        "name": "月光操纵",
-        "description": "穹羽族天生能力，可操纵月光。",
-        "type": "种族天赋",
-        "effects": [
-          "月光凝形",
-          "冰霜附着"
-        ]
-      },
-      {
-        "id": "liuchao.skill.dance",
-        "name": "舞技",
-        "description": "天竺舞姬的舞蹈技能。",
-        "type": "技艺",
-        "effects": [
-          "魅惑",
-          "柔韧"
-        ]
-      },
-      {
-        "id": "lcq.skill.np001",
-        "name": "九阳神功",
-        "description": "太乙真宗核心功法，王哲传程宗扬口诀。"
-      },
-      {
-        "id": "lcq.skill.np003",
-        "name": "五虎断门刀",
-        "description": "武二郎的刀法，未传授给程宗扬"
-      },
-      {
-        "id": "lcq.skill.np004",
-        "name": "双修功法",
-        "description": "凝羽与程宗扬通过性交交换真气"
-      },
-      {
-        "id": "lcq.skill.np006",
-        "name": "冰蛊",
-        "description": "苏妲己对程宗扬下的蛊毒，用于控制"
-      }
-    ],
-    "techniques": [
-      {
-        "id": "liuchao.technique.jiuyang_shen_gong",
-        "name": "九阳神功",
-        "description": "太乙真宗核心功法，王哲传程宗扬口诀。",
-        "grade": "神品",
-        "skillIds": [
-          "liuchao.skill.death_root"
-        ],
-        "techniqueEffects": {
-          "修炼速度加成": 0.56,
-          "属性加成": {
-            "悟性": 7,
-            "灵性": 4
-          }
-        }
-      },
-      {
-        "id": "liuchao.technique.dual_cultivation",
-        "name": "双修功法",
-        "description": "凝羽与程宗扬通过性交交换真气的功法。",
-        "grade": "凡品",
-        "skillIds": [
-          "liuchao.skill.moon_manipulation"
-        ],
-        "techniqueEffects": {
-          "修炼速度加成": 0.08,
-          "属性加成": {
-            "悟性": 1,
-            "灵性": 1
-          }
-        }
-      }
-    ],
-    "items": [
-      {
-        "id": "liuchao.item.massage_stick",
-        "name": "按摩棒",
-        "description": "程宗扬从现代带来的性玩具，后被苏妲己占有。",
-        "type": "other",
-        "grade": "中品"
-      },
-      {
-        "id": "liuchao.item.drug_bottle",
-        "name": "药瓶",
-        "description": "装有摇头丸和麻古的药瓶，用于控制凝羽。",
-        "type": "consumable",
-        "grade": "凡品"
-      },
-      {
-        "id": "liuchao.item.curved_sword",
-        "name": "弯刀",
-        "description": "凝羽的武器。",
-        "type": "weapon",
-        "grade": "凡品",
-        "attributeBonus": {
-          "气血上限": 15,
-          "后天六司": {
-            "根骨": 2
-          }
-        }
-      },
-      {
-        "id": "lcq.item.np002",
-        "name": "拉链",
-        "type": "other",
-        "description": "程宗扬从现代世界带来的拉链，被文泽视为珍贵物品。",
-        "grade": "仙品"
-      },
-      {
-        "id": "lcq.item.np005",
-        "name": "麻古",
-        "type": "consumable",
-        "description": "段强留下的催情药，被程宗扬用于凝羽",
-        "grade": "中品"
-      }
-    ]
+    "skills": [],
+    "techniques": [],
+    "items": []
   },
   "scenario": {
     "opening": {
-      "text": "程宗扬被苏妲己下冰蛊控制，被迫签下卖身契成为白湖商馆奴隶。凝羽因药物后遗在假山岩洞中自慰，程宗扬发现后再次与其发生关系。玩家需在赌局后应对苏妲己的控制，并处理与凝羽的关系。",
-      "playerRole": "白湖商馆奴隶",
+      "text": "苏妲己已经识破你的来历并把你扣在白湖商馆。她正追问霓龙丝的产地；你只有手中的现代知识和一个尚未兑现的线索，必须先谈出活路。",
+      "playerRole": "被白湖商馆扣押的异乡人",
       "playerCharacterId": "liuchao.character.cheng_zongyang",
       "creationPreset": {
         "characterName": "程宗扬",
@@ -1842,9 +410,8 @@
         },
         "locked": true
       },
-      "locationId": "liuchao.location.chai_fang",
+      "locationId": "liuchao.location.baihu_shang_guan",
       "featuredCharacterIds": [
-        "liuchao.character.cheng_zongyang",
         "liuchao.character.su_daji",
         "liuchao.character.ning_yu"
       ]
@@ -1853,6 +420,7 @@
       "chapter.lcq.stage_03.started": true,
       "chapter.lcq.stage_03.done": false,
       "event.s03_01.done": false,
+      "event.debut_ningyu.done": false,
       "event.s03_02.done": false,
       "event.s03_03.done": false,
       "event.s03_04.done": false,
@@ -1861,13 +429,15 @@
       "event.s03_07.done": false,
       "event.s03_08.done": false,
       "event.s03_09.done": false,
-      "event.debut_ningyu.done": false
+      "event.s03_10.done": false,
+      "event.s03_11.done": false,
+      "event.s03_12.done": false
     },
     "chapters": [
       {
         "id": "lcq.chapter.stage_03",
-        "title": "第19章·赌局",
-        "summary": "第19章·赌局：程宗扬见苏妲己 … 程宗扬与凝羽双修",
+        "title": "第18–36章·白湖商馆至蛇彝村",
+        "summary": "程宗扬从苏妲己手中谈得活路，却在赌局与冰蛊下成为商馆奴隶；他组织队伍进入南荒，经历铁索桥、紫溪与黑石滩，最终抵达异常寂静的蛇彝村。",
         "activation": [
           {
             "path": "flags.chapter.lcq.stage_03.started",
@@ -1877,13 +447,14 @@
         ],
         "completion": [
           {
-            "path": "flags.event.s03_09.done",
+            "path": "flags.event.s03_12.done",
             "operator": "eq",
             "value": true
           }
         ],
         "eventIds": [
           "lcq.event.s03_01",
+          "lcq.event.debut_ningyu",
           "lcq.event.s03_02",
           "lcq.event.s03_03",
           "lcq.event.s03_04",
@@ -1892,15 +463,33 @@
           "lcq.event.s03_07",
           "lcq.event.s03_08",
           "lcq.event.s03_09",
-          "lcq.event.debut_ningyu"
+          "lcq.event.s03_10",
+          "lcq.event.s03_11",
+          "lcq.event.s03_12"
         ]
       }
     ],
     "events": [
       {
         "id": "lcq.event.s03_01",
-        "name": "程宗扬见苏妲己",
-        "description": "程宗扬被带到白湖商馆主人苏妲己面前，通过观察识破其伪装，并达成交易。",
+        "name": "与苏妲己订下南荒之约",
+        "description": "程宗扬被苏妲己识破并囚禁后，以霓龙丝线索自保；双方约定三个月内赴南荒寻找霓龙丝，程宗扬颈后的奴隶烙印也被确认。",
+        "objective": "以霓龙丝线索保住性命，并听清三个月南荒之约",
+        "locationId": "liuchao.location.baihu_shang_guan",
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.su_daji",
+          "liuchao.character.ning_yu"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.bai_hu_shang_guan"
+        ],
+        "axisId": "qingyu.20.2",
+        "axisSeq": 36,
+        "axisAnchor": "六朝清羽记·#20·第18章·妲己",
+        "axisBeat": "程宗扬谎称掌握霓龙丝产地，与苏妲己约定三个月内前往南荒采集霓龙丝；其颈后奴隶烙印被确认。",
+        "axisMethod": "source-rebuilt",
+        "critical": true,
         "conditions": [
           {
             "path": "flags.chapter.lcq.stage_03.started",
@@ -1915,6 +504,49 @@
             "value": true
           }
         ],
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "offer_nylon_clue",
+              "label": "以霓龙丝线索自保",
+              "actionText": "我不与苏妲己硬拼，明确以自己掌握的霓龙丝线索换取活命和行动期限。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "nylon_bargain_opened"
+            },
+            {
+              "id": "accept_three_month_terms",
+              "label": "听清三个月期限",
+              "actionText": "我确认三个月内赴南荒寻找霓龙丝的条件、失败代价和颈后烙印现状，把约定记清。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "nylon_bargain_opened"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.debut_ningyu",
+        "name": "凝羽奉命进入赌局",
+        "critical": false,
+        "description": "苏妲己命侍卫长凝羽参与新奇物品的演示。凝羽仍以冷峻、服从命令的商馆护卫身份出现；她的隐秘来历与后续经历尚未揭露。",
+        "objective": "认清凝羽在赌局中的处境并当面回应",
+        "locationId": "liuchao.location.baihu_shang_guan",
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang",
           "liuchao.character.su_daji",
@@ -1923,20 +555,80 @@
         "relatedFactionIds": [
           "liuchao.faction.bai_hu_shang_guan"
         ],
-        "locationId": "liuchao.location.baihu_shang_guan",
-        "axisId": "qingyu.20.1",
-        "axisSeq": 35,
-        "axisAnchor": "六朝清羽记·#20·第18章·妲己",
-        "axisBeat": "程宗扬识破商馆女主人苏妲己的伪装，揭露其外淫内端的实质，苏妲己下令处死男奴，并囚禁程宗扬逼问霓龙丝情报。",
-        "objective": "在商馆揭穿苏妲己的伪装"
-      },
-      {
-        "id": "lcq.event.s03_02",
-        "name": "程宗扬与凝羽赌约及性玩具演示",
-        "description": "程宗扬在苏妲己面前用按摩棒和药物（摇头丸、麻古）对凝羽进行性玩具演示，导致凝羽失控并高潮，最终程宗扬输掉赌约，被迫签下卖身契成为奴隶。",
+        "axisMethod": "reviewed-no-anchor",
         "conditions": [
           {
             "path": "flags.event.s03_01.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.debut_ningyu.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "observe_ningyu_position",
+              "label": "观察凝羽的处境",
+              "actionText": "我先观察凝羽是在苏妲己命令下进入演示，不把她后续身份或关系提前当成已知事实。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "ningyu_debut_seen"
+            },
+            {
+              "id": "respond_to_ningyu_presence",
+              "label": "当面回应凝羽",
+              "actionText": "我承认凝羽此刻是商馆侍卫长，并以眼前行为回应她，不借登场事件预写未来经历。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "ningyu_debut_seen"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.s03_02",
+        "name": "赌局落败签下卖身契",
+        "description": "程宗扬与苏妲己以凝羽参与的演示设赌；苏妲己暗中加速刻香，程宗扬落败，最终签下终身卖身契。",
+        "objective": "完成赌局，并面对苏妲己作弊后的卖身结果",
+        "locationId": "liuchao.location.baihu_shang_guan",
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.su_daji",
+          "liuchao.character.ning_yu"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.bai_hu_shang_guan"
+        ],
+        "axisId": "qingyu.21.1",
+        "axisSeq": 37,
+        "axisAnchor": "六朝清羽记·#21·第19章·赌局",
+        "axisBeat": "程宗扬与苏妲己赌约；苏妲己作弊加速刻香，程宗扬落败，被迫签署卖身契。",
+        "axisMethod": "source-rebuilt",
+        "critical": true,
+        "conditions": [
+          {
+            "path": "flags.event.debut_ningyu.done",
             "operator": "eq",
             "value": true
           }
@@ -1948,25 +640,61 @@
             "value": true
           }
         ],
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "confirm_wager_terms",
+              "label": "确认赌局条件",
+              "actionText": "我当面确认赌局时限、胜负条件与双方赌注，不让规则在叙述中被偷换。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "wager_terms_seen"
+            },
+            {
+              "id": "face_rigged_wager_result",
+              "label": "面对作弊后的结果",
+              "actionText": "刻香异常加速、赌局被判落败后，我认清苏妲己做局并完成卖身契这一正典结果。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "wager_terms_seen"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.s03_03",
+        "name": "以新奇器物向苏妲己索酬",
+        "description": "苏妲己因不会处置按摩棒而求助；程宗扬借机与她谈判，答应取出器物并预支六十金铢。",
+        "objective": "在帮助苏妲己取出器物前谈定六十金铢报酬",
+        "locationId": "liuchao.location.baihu_shang_guan",
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang",
-          "liuchao.character.su_daji",
-          "liuchao.character.ning_yu"
+          "liuchao.character.su_daji"
         ],
         "relatedFactionIds": [
           "liuchao.faction.bai_hu_shang_guan"
         ],
-        "locationId": "liuchao.location.baihu_shang_guan",
-        "axisId": "qingyu.21.1",
-        "axisSeq": 37,
-        "axisAnchor": "六朝清羽记·#21·第19章·赌局",
-        "axisBeat": "程宗扬与苏妲己赌约，试图用药物和按摩棒使凝羽高潮，但苏妲己作弊加速刻香，程宗扬落败，被迫签署卖身契成为奴隶。",
-        "objective": "与苏妲己赌约拯救凝羽"
-      },
-      {
-        "id": "lcq.event.s03_03",
-        "name": "苏妲己求助程宗扬破解按摩棒",
-        "description": "苏妲己因按摩棒卡在体内无法取出，求助程宗扬，程宗扬以60金铢为条件，通过射精方法解除按摩棒。",
+        "axisId": "qingyu.23.1",
+        "axisSeq": 38,
+        "axisAnchor": "六朝清羽记·#23·第21章·戏弄",
+        "axisBeat": "程宗扬利用按摩棒戏弄苏妲己，最终答应帮她取出，并预支六十金铢工钱。",
+        "axisMethod": "source-rebuilt",
+        "critical": true,
         "conditions": [
           {
             "path": "flags.event.s03_02.done",
@@ -1981,25 +709,62 @@
             "value": true
           }
         ],
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "negotiate_device_payment",
+              "label": "谈定预支报酬",
+              "actionText": "我利用自己懂得器物用法的优势，先与苏妲己谈定六十金铢预支。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "device_payment_agreed"
+            },
+            {
+              "id": "remove_device_after_payment",
+              "label": "收款后取出器物",
+              "actionText": "报酬到手后，我按约帮助苏妲己取出器物，不把这拍扩写成关系逆转。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "device_payment_agreed"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.s03_04",
+        "name": "赎买并释放阿姬曼",
+        "description": "程宗扬用五十金铢买下阿姬曼，随后撕毁身契还她自由；阿姬曼因曾参与设局而不肯立刻离开。逃离路线又被商馆侍卫封锁。",
+        "objective": "取得阿姬曼身契、当面撕毁，并应对被封锁的出城路线",
+        "locationId": "liuchao.location.wuyuan",
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang",
-          "liuchao.character.su_daji",
+          "liuchao.character.a_jiman_bana",
           "liuchao.character.ning_yu"
         ],
         "relatedFactionIds": [
           "liuchao.faction.bai_hu_shang_guan"
         ],
-        "locationId": "liuchao.location.baihu_shang_guan",
-        "axisId": "qingyu.23.1",
-        "axisSeq": 38,
-        "axisAnchor": "六朝清羽记·#23·第21章·戏弄",
-        "axisBeat": "程宗扬利用按摩棒戏弄苏妲己，最终答应帮她取出，并预支六十金铢工钱。",
-        "objective": "帮苏妲己取出按摩棒"
-      },
-      {
-        "id": "lcq.event.s03_04",
-        "name": "程宗扬赎买阿姬曼并释放",
-        "description": "程宗扬用苏妲己的60金铢赎买阿姬曼，撕毁身契，但阿姬曼拒绝离开，最终被苏妲己发现并下冰蛊。",
+        "axisId": "qingyu.25.1",
+        "axisSeq": 40,
+        "axisAnchor": "六朝清羽记·#25·第23章·赎身",
+        "axisBeat": "程宗扬用五十金铢买下阿姬曼并撕毁身契还她自由；阿姬曼因曾出卖他而拒绝离开。",
+        "axisMethod": "source-rebuilt",
+        "critical": true,
         "conditions": [
           {
             "path": "flags.event.s03_03.done",
@@ -2014,25 +779,63 @@
             "value": true
           }
         ],
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "buy_ajiman_contract",
+              "label": "取得阿姬曼身契",
+              "actionText": "我用五十金铢取得阿姬曼的身契，先确认契据与她本人都已离开卖方控制。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "ajiman_contract_acquired"
+            },
+            {
+              "id": "free_ajiman_and_change_route",
+              "label": "撕毁身契并改变路线",
+              "actionText": "我当面撕毁身契还阿姬曼自由；发现商馆侍卫封锁岔路后，立即改变路线避开搜查。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "ajiman_contract_acquired"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.s03_05",
+        "name": "苏妲己以冰蛊逼迫南行",
+        "description": "苏妲己把冰蛊藏在酸梅汤的冰块中，迫使程宗扬为她前往南荒；程宗扬必须在无法立刻解蛊的现实下组织车马、护卫与奴隶。",
+        "objective": "确认冰蛊约束，并在两日内组织南荒队伍",
+        "locationId": "liuchao.location.baihu_shang_guan",
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang",
-          "liuchao.character.a_jiman_bana",
-          "liuchao.character.ning_yu"
+          "liuchao.character.su_daji",
+          "liuchao.character.ning_yu",
+          "liuchao.character.qi_yuan"
         ],
         "relatedFactionIds": [
           "liuchao.faction.bai_hu_shang_guan"
         ],
-        "locationId": "liuchao.location.wuyuan",
-        "axisId": "qingyu.25.1",
-        "axisSeq": 40,
-        "axisAnchor": "六朝清羽记·#25·第23章·赎身",
-        "axisBeat": "程宗扬用五十枚金铢买下天竺舞姬阿姬曼，并撕毁身契还她自由，但阿姬曼因出卖过程宗扬而拒绝离开。",
-        "objective": "在商馆赎买阿姬曼并释放"
-      },
-      {
-        "id": "lcq.event.s03_05",
-        "name": "苏妲己对程宗扬下冰蛊",
-        "description": "苏妲己以冰蛊控制程宗扬，迫使其前往南荒寻找霓龙丝。",
+        "axisId": "qingyu.26.1",
+        "axisSeq": 42,
+        "axisAnchor": "六朝清羽记·#26·第24章·诡计",
+        "axisBeat": "苏妲己在酸梅汤中下冰蛊，威胁程宗扬必须前往南荒办事，否则蛊发身亡。",
+        "axisMethod": "source-rebuilt",
+        "critical": true,
         "conditions": [
           {
             "path": "flags.event.s03_04.done",
@@ -2047,25 +850,63 @@
             "value": true
           }
         ],
-        "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang",
-          "liuchao.character.su_daji",
-          "liuchao.character.ning_yu"
-        ],
-        "relatedFactionIds": [
-          "liuchao.faction.bai_hu_shang_guan"
-        ],
-        "locationId": "liuchao.location.baihu_shang_guan",
-        "axisId": "qingyu.26.1",
-        "axisSeq": 42,
-        "axisAnchor": "六朝清羽记·#26·第24章·诡计",
-        "axisBeat": "苏妲己在酸梅汤中下冰蛊，威胁程宗扬必须前往南荒办事，否则蛊发身亡。",
-        "objective": "寻找解冰蛊的方法"
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "confirm_ice_gu_constraint",
+              "label": "确认冰蛊约束",
+              "actionText": "我从冰块与身体反应确认苏妲己已经下蛊，听清她以南荒任务换取暂不发作的条件。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "ice_gu_constraint_known"
+            },
+            {
+              "id": "organize_southbound_caravan",
+              "label": "组织南荒队伍",
+              "actionText": "我与祁远按两日期限筹备车马、钱帛、护卫和奴隶，接受必须先南行的现实。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "ice_gu_constraint_known"
+              ]
+            }
+          ]
+        }
       },
       {
         "id": "lcq.event.s03_06",
-        "name": "武二郎加入商队及遇袭",
-        "description": "武二郎加入程宗扬的南荒队伍，但途中遭泊陵鱼氏刺客袭击，武二郎中毒，被神秘女子（潘金莲）所救。",
+        "name": "武二郎被迫加入南荒队伍",
+        "description": "苏妲己先解开武二郎镣铐准备重用；武二郎行凶后遭全城搜捕，只得返回商馆，最终以极低报酬答应随程宗扬南行。",
+        "objective": "利用武二郎无路可退的处境，取得他随队南行的明确承诺",
+        "locationId": "liuchao.location.baihu_shang_guan",
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.wu_er_lang",
+          "liuchao.character.ning_yu"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.bai_hu_shang_guan",
+          "liuchao.faction.bai_wu"
+        ],
+        "axisId": "qingyu.31.2",
+        "axisSeq": 47,
+        "axisAnchor": "六朝清羽记·#31·第29章·伏虎",
+        "axisBeat": "武二郎因满城围捕被迫返回，程宗扬趁机压价，迫其明确答应同行南荒。",
+        "axisMethod": "source-rebuilt",
+        "critical": true,
         "conditions": [
           {
             "path": "flags.event.s03_05.done",
@@ -2080,36 +921,63 @@
             "value": true
           }
         ],
-        "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang",
-          "liuchao.character.ning_yu",
-          "liuchao.character.wu_er_lang"
-        ],
-        "relatedFactionIds": [
-          "liuchao.faction.bai_hu_shang_guan"
-        ],
-        "locationId": "liuchao.location.wuyuan",
-        "axisId": "qingyu.32.1",
-        "axisMethod": "deepseek",
-        "axisSeq": 49,
-        "axisAnchor": "六朝清羽记·#32·第30章·险路",
-        "axisBeat": "武二郎因伤口中毒濒死，程宗扬试图用自身血液救治但无效，凝羽协助疗伤。",
-        "objective": "在商队救治武二郎",
-        "offscreenResolution": {
-          "id": "offscreen.r2_9.lcq_event_s03_06",
-          "afterStallTurns": 8,
-          "flagKey": "world.r2_9.lcq_event_s03_06.offscreen_resolved",
-          "resolvedEventIds": [
-            "lcq.event.s03_06"
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
           ],
-          "worldDelta": "商队仍遭袭击，武二郎因此卷入队伍；你未在场的交锋以伤员、戒备和同行关系留下余波。",
-          "evidence": "R2-9 世界引力合同：武二郎加入商队及遇袭属于不依赖玩家领取任务才会发生的世界事件；仅在该节点已激活且长期停滞时结算。"
+          "actions": [
+            {
+              "id": "hear_wuerlang_refusal",
+              "label": "听清武二郎从未应诺",
+              "actionText": "我让武二郎把先前条件说清，承认他此前只要求解镣，并未真正答应同行。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "wuerlang_position_known"
+            },
+            {
+              "id": "secure_wuerlang_commitment",
+              "label": "取得明确同行承诺",
+              "actionText": "武二郎因满城搜捕返回后，我重新谈定报酬，取得他随队南行的明确承诺。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "wuerlang_position_known"
+              ]
+            }
+          ]
         }
       },
       {
         "id": "lcq.event.s03_07",
-        "name": "程宗扬与西门庆相识",
-        "description": "程宗扬在醉月楼与西门庆相识，并得知其与潘金莲、武二郎的恩怨。",
+        "name": "铁索桥遇袭",
+        "description": "武二郎带伤中毒，凝羽参与救治；商队随后通过铁索桥时遭不明敌人抢占桥头，队伍陷入进退两难。",
+        "objective": "稳定武二郎伤势，并带队突破铁索桥伏击",
+        "locationId": "lcq.location.nanhuang_route",
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.wu_er_lang",
+          "liuchao.character.ning_yu",
+          "liuchao.character.qi_yuan"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.bai_hu_shang_guan"
+        ],
+        "axisId": "qingyu.32.2",
+        "axisSeq": 50,
+        "axisAnchor": "六朝清羽记·#32·第30章·险路",
+        "axisBeat": "武二郎中毒受伤后，商队过铁索桥又遭不明敌人偷袭，桥头被控制，队伍陷入险境。",
+        "axisMethod": "source-rebuilt",
+        "critical": true,
         "conditions": [
           {
             "path": "flags.event.s03_06.done",
@@ -2124,24 +992,62 @@
             "value": true
           }
         ],
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "stabilize_wuerlang_wound",
+              "label": "稳定武二郎伤势",
+              "actionText": "我与凝羽先处理武二郎中毒的伤口，承认自己的血并不能直接救治他。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "wuerlang_stabilized"
+            },
+            {
+              "id": "cross_ambushed_rope_bridge",
+              "label": "应对铁索桥伏击",
+              "actionText": "桥头遭袭后，我组织商队护住伤员与货物，配合前锋摆脱进退两难的桥面。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "wuerlang_stabilized"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.s03_08",
+        "name": "劝住武二郎继续南行",
+        "description": "武二郎确认自己在醉月楼误杀鱼家客人后暴怒，想返回五原找西门庆报复；程宗扬劝他先完成南荒行程。",
+        "objective": "阻止武二郎折返五原，并让商队继续南行",
+        "locationId": "lcq.location.nanhuang_route",
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang",
-          "liuchao.character.ning_yu",
+          "liuchao.character.wu_er_lang",
           "liuchao.character.xi_men_qing"
         ],
         "relatedFactionIds": [
-          "liuchao.faction.bai_hu_shang_guan"
+          "liuchao.faction.bai_wu"
         ],
         "axisId": "qingyu.33.1",
         "axisSeq": 51,
         "axisAnchor": "六朝清羽记·#33·第31章·双刀",
-        "axisBeat": "武二郎在得知自己在醉月楼误杀鱼家客人后暴怒，欲返回五原找西门庆算账，但被程宗扬劝住，继续前往南荒。",
-        "objective": "劝住武二郎继续南荒之行"
-      },
-      {
-        "id": "lcq.event.s03_08",
-        "name": "商队启程南荒",
-        "description": "程宗扬、武二郎、凝羽、祁远等人启程前往南荒。",
+        "axisBeat": "武二郎得知误杀鱼家客人后欲返回五原找西门庆算账，被程宗扬劝住并继续南行。",
+        "axisMethod": "source-rebuilt",
+        "critical": true,
         "conditions": [
           {
             "path": "flags.event.s03_07.done",
@@ -2156,25 +1062,63 @@
             "value": true
           }
         ],
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "hear_wuerlang_revenge",
+              "label": "听清武二郎折返理由",
+              "actionText": "我先让武二郎说明醉月楼误杀与西门庆隐瞒的因果，不把他的怒意写成无端失控。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "wuerlang_revenge_understood"
+            },
+            {
+              "id": "keep_caravan_southbound",
+              "label": "劝住武二郎继续南行",
+              "actionText": "我以眼下路程、伤势和同行承诺劝住武二郎，先让整支商队继续往南荒走。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "wuerlang_revenge_understood"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.s03_09",
+        "name": "凝羽提出弑主并揭开寒气",
+        "description": "凝羽私下要求程宗扬与她合作杀死苏妲己；两人随后运功时，程宗扬发现凝羽体内有西门庆留下的阴寒之气，并听她讲述两人旧事。",
+        "objective": "回应凝羽的弑主提议，并探明她体内阴寒之气的来源",
+        "locationId": "lcq.location.nanhuang_route",
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang",
           "liuchao.character.ning_yu",
-          "liuchao.character.wu_er_lang"
+          "liuchao.character.su_daji",
+          "liuchao.character.xi_men_qing"
         ],
         "relatedFactionIds": [
           "liuchao.faction.bai_hu_shang_guan"
         ],
-        "locationId": "liuchao.location.wuyuan",
-        "axisId": "qingyu.33.1",
-        "axisSeq": 51,
-        "axisAnchor": "六朝清羽记·#33·第31章·双刀",
-        "axisBeat": "武二郎在得知自己在醉月楼误杀鱼家客人后暴怒，欲返回五原找西门庆算账，但被程宗扬劝住，继续前往南荒。",
-        "objective": "跟随商队前往南荒"
-      },
-      {
-        "id": "lcq.event.s03_09",
-        "name": "程宗扬与凝羽双修",
-        "description": "程宗扬与凝羽在蛇彝人空屋中双修，并得知凝羽与西门庆的过往。",
+        "axisId": "qingyu.35.1",
+        "axisSeq": 53,
+        "axisAnchor": "六朝清羽记·#35·第33章·武请",
+        "axisBeat": "凝羽提出合作除掉苏妲己；程宗扬与她运功后发现其体内阴寒之气，并得知与西门庆旧事有关。",
+        "axisMethod": "source-rebuilt",
+        "critical": true,
         "conditions": [
           {
             "path": "flags.event.s03_08.done",
@@ -2189,35 +1133,259 @@
             "value": true
           }
         ],
-        "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang",
-          "liuchao.character.ning_yu"
-        ],
-        "relatedFactionIds": [
-          "liuchao.faction.bai_hu_shang_guan"
-        ],
-        "axisId": "qingyu.35.1",
-        "axisSeq": 53,
-        "axisAnchor": "六朝清羽记·#35·第33章·武请",
-        "axisBeat": "程宗扬与凝羽双修后，发现凝羽体内有西门庆留下的阴寒之气，并得知她曾被西门庆当作鼎炉调教，两人述说隐秘关系。",
-        "objective": "与凝羽双修探查体内寒气"
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "answer_ningyu_kill_proposal",
+              "label": "回应凝羽的弑主提议",
+              "actionText": "我让凝羽把合作杀死苏妲己的条件和代价说清，再明确回应，不把尚未执行的提议写成既成事实。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "ningyu_proposal_answered"
+            },
+            {
+              "id": "trace_ningyu_cold_qi",
+              "label": "探明凝羽体内寒气",
+              "actionText": "我与凝羽共同运功，确认她体内阴寒之气与西门庆旧事有关，并听她亲口说明已知经过。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "ningyu_proposal_answered"
+              ]
+            }
+          ]
+        }
       },
       {
-        "id": "lcq.event.debut_ningyu",
-        "name": "凝羽·招牌登场",
-        "description": "怡春院（苏妲己商馆）厅内（随主人苏妲己召唤，与数名女侍卫一同涌进厅内，执行处决男奴之令） 初始身份：苏妲己的女侍卫长（贴身护卫）。随后：教授·刀法与内功心法；双修·倾身传授功法。",
-        "conditions": [],
-        "completion": [
+        "id": "lcq.event.s03_10",
+        "name": "太乙真宗拦截紫溪船队",
+        "description": "太乙真宗门人先在五原试探掌教遗命，后又在紫溪拦住白湖商馆船只，指名要求程宗扬前往龙池；冲突中祁远被推落水。",
+        "objective": "在紫溪现身交涉，并把落水的祁远救回船队",
+        "locationId": "lcq.location.nanhuang_route",
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.ning_yu",
+          "liuchao.character.qi_yuan"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.bai_hu_shang_guan",
+          "liuchao.faction.tai_yi_zhen_zong"
+        ],
+        "axisId": "qingyu.35.2",
+        "axisSeq": 54,
+        "axisAnchor": "六朝清羽记·#35·第33章·武请",
+        "axisBeat": "太乙真宗门人在紫溪拦截白湖商馆船只，指名要程宗扬去龙池；程宗扬被迫出面，祁远落水。",
+        "axisMethod": "source-rebuilt-append-only",
+        "critical": true,
+        "conditions": [
           {
-            "path": "flags.event.debut_ningyu.done",
+            "path": "flags.event.s03_09.done",
             "operator": "eq",
             "value": true
           }
         ],
-        "relatedCharacterIds": [
-          "liuchao.character.ning_yu"
+        "completion": [
+          {
+            "path": "flags.event.s03_10.done",
+            "operator": "eq",
+            "value": true
+          }
         ],
-        "critical": false
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "face_taiyi_interception",
+              "label": "现身回应太乙拦船",
+              "actionText": "我在对方指名后现身船头，承认太乙真宗追问掌教遗命与龙池之事，同时拒绝让他们直接接管商队。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "taiyi_interception_faced"
+            },
+            {
+              "id": "recover_qiyuan_from_river",
+              "label": "救回落水的祁远",
+              "actionText": "冲突中祁远被推落水后，我立即组织船上人手把他救回，并让船队脱离拦截。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "taiyi_interception_faced"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.s03_11",
+        "name": "雨林恶兆与黑石滩渡河",
+        "description": "商队在雨林遭青藤蛇袭击，又被暴雨山洪阻在黑石滩；白湖与云氏两队合力渡河后一度迷失，最终依靠凝羽在岸边点燃的火堆找到方向。",
+        "objective": "承受雨林伤亡，并依凝羽火光带两支商队渡过黑石滩",
+        "locationId": "lcq.location.nanhuang_route",
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.ning_yu",
+          "liuchao.character.wu_er_lang",
+          "liuchao.character.qi_yuan",
+          "liuchao.character.yun_cang_feng"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.bai_hu_shang_guan",
+          "liuchao.faction.yun_shi_shang_hui"
+        ],
+        "axisId": "qingyu.37.2",
+        "axisSeq": 58,
+        "axisAnchor": "六朝清羽记·#37·第35章·渡河",
+        "axisBeat": "商队经历青藤蛇与山洪后合力渡河，一度迷失方向；凝羽在岸边点火指引，帮助两支商队成功渡过黑石滩。",
+        "axisMethod": "source-rebuilt-append-only",
+        "critical": true,
+        "conditions": [
+          {
+            "path": "flags.event.s03_10.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.s03_11.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "respond_to_jungle_and_flood",
+              "label": "应对雨林伤亡与山洪",
+              "actionText": "青藤蛇造成伤亡、山洪淹没路标后，我先收拢两队人员货物，与云氏商队商定共同渡河。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "blackstone_crossing_ready"
+            },
+            {
+              "id": "follow_ningyu_fire_across",
+              "label": "依凝羽火光完成渡河",
+              "actionText": "队伍在河中迷失后，我以凝羽岸边火光校正方向，带白湖与云氏两支商队完成渡河。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "blackstone_crossing_ready"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.s03_12",
+        "name": "抵达寂静的蛇彝村",
+        "description": "商队抵达蛇彝人村寨，却发现全村无灯火也无人声。程宗扬与祁远在空村中谈起同行的谢艺，只能从其举止推测他可能有北方军旅经历。",
+        "objective": "在不预写灭村真相的前提下进入蛇彝村并安置商队",
+        "locationId": "lcq.location.sheyi_village",
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.ning_yu",
+          "liuchao.character.wu_er_lang",
+          "liuchao.character.qi_yuan",
+          "liuchao.character.yun_cang_feng",
+          "liuchao.character.xie_yi"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.bai_hu_shang_guan",
+          "liuchao.faction.yun_shi_shang_hui"
+        ],
+        "axisId": "qingyu.38.1",
+        "axisSeq": 59,
+        "axisAnchor": "六朝清羽记·#38·第36章·蛇村",
+        "axisBeat": "商队抵达无灯火、无人声的蛇彝村；程宗扬与祁远只对谢艺的北方军旅来历作出推测。",
+        "axisMethod": "source-rebuilt-append-only",
+        "critical": true,
+        "conditions": [
+          {
+            "path": "flags.event.s03_11.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.s03_12.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "survey_silent_sheyi_village",
+              "label": "查明村寨异常寂静",
+              "actionText": "我带人从外围确认蛇彝村没有灯火和回应，只记录眼前异常，不提前宣告下一章才揭开的灭村真相。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "silent_village_surveyed"
+            },
+            {
+              "id": "secure_caravan_in_village",
+              "label": "安置商队并保留谢艺疑云",
+              "actionText": "我在空村中安排警戒与宿处；与祁远谈起谢艺时，只保留他可能有北方军旅经历的推测。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "silent_village_surveyed"
+              ]
+            }
+          ]
+        }
       }
     ]
   },
@@ -2231,55 +1399,6 @@
       "content.techniques.*.name",
       "content.items.*.name"
     ],
-    "contentAccess": [
-      {
-        "contentId": "liuchao.skill.death_root",
-        "policy": "exclusive",
-        "allowedCharacterIds": [
-          "liuchao.character.cheng_zongyang"
-        ],
-        "playerAllowed": false
-      },
-      {
-        "contentId": "liuchao.technique.jiuyang_shen_gong",
-        "policy": "restricted",
-        "allowedCharacterIds": [
-          "liuchao.character.cheng_zongyang"
-        ],
-        "playerAllowed": false
-      },
-      {
-        "contentId": "lcq.skill.np001",
-        "policy": "exclusive",
-        "allowedCharacterIds": [
-          "liuchao.character.cheng_zongyang"
-        ],
-        "playerAllowed": false
-      },
-      {
-        "contentId": "lcq.skill.np003",
-        "policy": "exclusive",
-        "allowedCharacterIds": [
-          "liuchao.character.wu_er_lang"
-        ],
-        "playerAllowed": false
-      },
-      {
-        "contentId": "lcq.skill.np006",
-        "policy": "exclusive",
-        "allowedCharacterIds": [
-          "liuchao.character.su_daji"
-        ],
-        "playerAllowed": false
-      },
-      {
-        "contentId": "lcq.item.np002",
-        "policy": "exclusive",
-        "allowedCharacterIds": [
-          "liuchao.character.cheng_zongyang"
-        ],
-        "playerAllowed": false
-      }
-    ]
+    "contentAccess": []
   }
 }

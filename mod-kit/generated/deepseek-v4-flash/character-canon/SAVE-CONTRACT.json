@@ -100,11 +100,14 @@
         "lcq.event.s03_06",
         "lcq.event.s03_07",
         "lcq.event.s03_08",
-        "lcq.event.s03_09"
+        "lcq.event.s03_09",
+        "lcq.event.s03_10",
+        "lcq.event.s03_11",
+        "lcq.event.s03_12"
       ],
       "chapterFlagPaths": {
         "lcq.chapter.stage_03": [
-          "flags.event.s03_09.done"
+          "flags.event.s03_12.done"
         ]
       },
       "eventFlagPaths": {
@@ -137,6 +140,15 @@
         ],
         "lcq.event.debut_ningyu": [
           "flags.event.debut_ningyu.done"
+        ],
+        "lcq.event.s03_10": [
+          "flags.event.s03_10.done"
+        ],
+        "lcq.event.s03_11": [
+          "flags.event.s03_11.done"
+        ],
+        "lcq.event.s03_12": [
+          "flags.event.s03_12.done"
         ]
       }
     },

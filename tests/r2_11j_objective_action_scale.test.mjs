@@ -22,6 +22,7 @@ const isolatedStageIds = new Set([
  * 重建产物见 `docs/R2-11M-*`。列入此集不等于解除隔离——默认 Canon Rail 仍然跳过这些关。
  */
 const sourceRebuiltStageIds = new Set([
+  'lcq.stage_03',
   'lcq.stage_06',
   'lyl.lin_an_black_sea',
   'lyl.luoyang_coup',
@@ -97,7 +98,7 @@ function singleEventFixture(stage, event) {
   return save;
 }
 
-test('objective-action migrations cover 335 events while preserving the 267-event mechanical boundary', async () => {
+test('objective-action migrations cover 348 events while preserving the 267-event mechanical boundary', async () => {
   const allStages = await stages();
   const allEvents = allStages.flatMap(stage => stage.scenario.events.map(event => ({ stage, event })));
   const objectiveActions = allEvents.filter(({ event }) => event.playerCompletionContract?.kind === 'objective_action');
@@ -105,11 +106,12 @@ test('objective-action migrations cover 335 events while preserving the 267-even
     event.playerCompletionContract.actions[0].id === 'advance_declared_objective');
   const covered = allEvents.filter(({ event }) => event.playerCompletionContract
     || event.worldActor?.opportunities?.some(opportunity => opportunity.completionContract));
-  // +1 event / +8 contracts = R2-11M；+15 = R2-11P；+5 = R2-11Q；+6 = R2-11R。
-  assert.equal(allEvents.length, 381);
-  assert.equal(objectiveActions.length, 335);
+  // +1 event / +8 contracts = R2-11M；+15 = R2-11P；+5 = R2-11Q；+6 = R2-11R；
+  // +3 events / +13 contracts = R2-11S。
+  assert.equal(allEvents.length, 384);
+  assert.equal(objectiveActions.length, 348);
   assert.equal(mechanicallyMigrated.length, 267);
-  assert.equal(covered.length, 342);
+  assert.equal(covered.length, 355);
   assert.deepEqual(
     Object.fromEntries(['lcq.', 'lyl.', 'lyg.'].map(prefix => [
       prefix,
