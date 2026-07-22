@@ -23,8 +23,9 @@
 - 每张新卡的 trigger 必须命中本事件真实 `decisionCore.actionBindings`。
 - 默认局势下至少存在一项真实入选的 NPC 决策可触发新卡。
 - 每张卡使用两步结构化行动合同，`timeCost=1`；全 builtin 继续通过 schema validator。
+- 回归以完整关卡默认状态执行真实 runtime：先由默认 NPC 决策浮出卡片，再追踪、执行两步动作，并在每一步之间 JSON 重载；三张卡均只产生一份 participated 回执与一份权限授予，不产生 offscreen 竞争结算。
+- 燕歌卡使用 `timeline_deadline`，两步完成后只进入 ready，董卓退场事实仍须等正典截止，不允许机会卡提前坐实。
 
 ## 非阻断观察
 
 - R2-11U Claude 二审 P3：`lyg.shixiang_ambush` opening 以未经证实的传话略微预告首拍调查由头。它没有预写结果、flag 或后续来源事实，暂留作叙事钩子；未来若统一收紧 opening 到“连首拍由头也不透露”，再专项改写。
-

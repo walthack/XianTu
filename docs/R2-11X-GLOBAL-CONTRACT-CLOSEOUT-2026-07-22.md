@@ -27,14 +27,25 @@
 ## 自动证据
 
 - `tests/r2_11j_objective_action_scale.test.mjs`：396 总事件、389 objective、267 机械边界、396 covered、隔离关不得机械迁移。
-- `tests/r2_11w_curated_opportunity_cards.test.mjs`：10 张精选卡、真实 actor/action trigger、默认决策可达、全 builtin schema 通过。
+- `tests/r2_11w_curated_opportunity_cards.test.mjs`：10 张精选卡、真实 actor/action trigger、默认决策可达；三张新增卡均从完整关卡默认状态真实浮出，经过追踪、两步结构化动作与逐步 JSON 重载后结算唯一 participated 回执。燕歌 timeline-deadline 卡另证明不会提前结算董卓退场。
 - `tests/r2_11x_global_contract_closeout.test.mjs`：逐一验证 396 个事件都有唯一确定性完成所有者，且 LLM 对每个事件的直接完成写入均被拒绝。
 - 八个来源重建关分别具备空档整章／整关重放、冻结 ID 与 completion path、quarantine 保留回归。
-- `npm run canon:build`：37 关、482 测试全绿。
+- `npm run canon:build`：37 关、487 测试全绿；最终 `npm test` 488/488。
 - `npm run validate:all` 与 `npm run build`：全绿，production webpack 成功。
+- 本地开发版 `127.0.0.1:8091` 只读 UI 冒烟：首页正常进入剧本模组页，37 个 builtin 全部完成加载，重建后的甘露关标题、摘要与四章结构可见；无应用错误。
+
+## 非阻断观察
+
+- UI 冒烟仍会输出既有 Vue Router 警告：命名路由 `Sect` 的空路径子路由未命名。未影响本轮首页／剧本模组加载，不属于事件合同或内容扩写阻断项；后续路由整理批次再处理。
+- Claude 最终二审 P3：`character-registry.json` 的文件尾换行会在手工提交与 `canon:build` 重生成之间翻转，内容与统计不变；后续统一生成器格式时处理。
+
+## 最终二审
+
+- 审查范围 `9e988ee..f063b2a`，结论无 P0/P1；甘露章节标题修复、三张机会卡正典边界、396/396 全局合同与隔离边界均通过。
+- 二审唯一 P2 是该范围末端的机会卡测试只证明 `available`，未证明完整生命周期。后续提交 `0755a6e` 已补齐三卡真实 runtime 的追踪、两步推进、逐步 JSON 重载、唯一回执与燕歌截止不抢跑，关闭该项。
+- 二审在旧范围干净 worktree 观察到 487/487；`0755a6e` 新增一条生命周期用例后，当前全量为 488/488，两者是提交范围差异而非测试统计矛盾。
 
 ## 发布前剩余门禁
 
-1. 收完 `lyg.ganlu_bian` 与本次机会卡提交的 Claude 只读二审；P0/P1 修复，P3 单记。
-2. 选择三条新增机会各做一次真机追踪／两步推进／重载回执冒烟，重点看玩家可读性，不再验证真值所有权本身。
-3. 8 个隔离关保持不发布到默认 Rail，后续解除须另立审核点。
+1. R2-11 工程与二审门禁已完成；下一轮真实模型真机只需抽查三张新增机会的文案可读性，不再验证真值所有权本身。
+2. 8 个隔离关保持不发布到默认 Rail，后续解除须另立审核点。
