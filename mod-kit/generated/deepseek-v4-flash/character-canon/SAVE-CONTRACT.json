@@ -1638,6 +1638,11 @@
         "lyg.event.investigate_te_master",
         "lyg.event.lure_pan_jinlian",
         "lyg.event.raid_qinglongsi",
+        "lyg.event.shixiang_s10",
+        "lyg.event.shixiang_s11",
+        "lyg.event.shixiang_s12",
+        "lyg.event.shixiang_s13",
+        "lyg.event.shixiang_s14",
         "lyg.event.track_dagger_attacker"
       ],
       "chapterFlagPaths": {
@@ -1650,7 +1655,9 @@
         "lyg.chapter.resolve": [
           "flags.chapter.resolve.done"
         ],
-        "lyg.chapter.final_move": []
+        "lyg.chapter.final_move": [
+          "flags.event.capture_feiniao.done"
+        ]
       },
       "eventFlagPaths": {
         "lyg.event.ambush_at_shuixiang": [
@@ -1679,6 +1686,21 @@
         ],
         "lyg.event.final_showdown": [
           "flags.event.final_showdown.triggered"
+        ],
+        "lyg.event.shixiang_s10": [
+          "flags.event.shixiang_s10.done"
+        ],
+        "lyg.event.shixiang_s11": [
+          "flags.event.shixiang_s11.done"
+        ],
+        "lyg.event.shixiang_s12": [
+          "flags.event.shixiang_s12.done"
+        ],
+        "lyg.event.shixiang_s13": [
+          "flags.event.shixiang_s13.done"
+        ],
+        "lyg.event.shixiang_s14": [
+          "flags.event.shixiang_s14.done"
         ]
       }
     },
