@@ -22,6 +22,14 @@ const books = ['qingyu', 'yunlong', 'yange'];
 const dryRun = process.argv.includes('--dry-run');
 const force = process.argv.includes('--force');
 
+// 卡片是跨书静态档案；个别早期关卡只出现未揭示身份的称谓，不能按 alias
+// 自动补全真实身份与稳定画像。新增条目须在 CANON-DECISIONS.md 留原文依据。
+const CARD_TIME_GATE_EXCLUSIONS = new Map([
+  ['lyl.lin_an_black_sea', new Set([
+    'liuchao.character.ruan_xiang_ning',
+  ])],
+]);
+
 const DERIVED_TAGS = [
   '【历程】', '【生辰】',
   '【关系】',
@@ -186,6 +194,7 @@ for (const book of books) {
     let changed = false;
 
     for (const character of mod.canon?.characters || []) {
+      if (CARD_TIME_GATE_EXCLUSIONS.get(stageId)?.has(character.id)) continue;
       const card = byName.get(character.name);
       if (!card) {
         missing.set(character.name, (missing.get(character.name) || 0) + 1);

@@ -4,7 +4,7 @@
 // 输出到 SHIPPED（非 gitignored）位置：src/modules/scenarioMods/builtins/character-registry.json
 // 设计见 character-canon/CHARACTER-RAG-DESIGN.md；吸收 Codex 评审：id 必须映射 stage 角色 id、
 // embedText 富化(name+aliases+identitySummary+personality+relationToProtagonist+formsOfAddress+phase+keyEvents)、
-// 强制 collision 检查、canon-only 显式标记、metadata 带 sourceHash/model 无关。
+// 强制 collision 检查、canon-only 显式标记、metadata 带 materialized sourceHash/model 无关。
 // 用法：node scripts/build-character-registry.mjs
 
 import { readFileSync, writeFileSync, readdirSync } from 'node:fs';
@@ -28,7 +28,6 @@ for (const b of books) {
 }
 
 const raw = readFileSync(cardsPath, 'utf8');
-const sourceHash = createHash('sha256').update(raw).digest('hex').slice(0, 16);
 const src = JSON.parse(raw);
 const cards = src.characters;
 if (!Array.isArray(cards)) throw new Error('character-cards-v3.json 结构异常：characters 非数组');
@@ -119,6 +118,11 @@ const entries = [...byId.values()].sort((a, b) => a.id.localeCompare(b.id));
 // 3) 校验
 const idSet = new Set(entries.map(e => e.id));
 if (idSet.size !== entries.length) throw new Error('注册表存在重复 id（不应发生）');
+
+// RAG 以 sourceHash 判断是否重建本地向量。注册表 ID/stagePresence 不只取决于角色卡，
+// 也取决于当前 stage 演员集合；只哈希 raw cards 会在演员移出关卡后留下旧向量 ID。
+// 哈希最终稳定排序的 entries，覆盖角色卡内容、stage ID 映射和 embedText 的全部变化。
+const sourceHash = createHash('sha256').update(JSON.stringify(entries)).digest('hex').slice(0, 16);
 
 const registry = {
   schema: 'xiantu.character-registry.v1',

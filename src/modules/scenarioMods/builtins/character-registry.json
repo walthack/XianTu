@@ -1,13 +1,13 @@
 {
   "schema": "xiantu.character-registry.v1",
-  "version": "cr-2026-07-21-b33c81e46f1ff07f",
-  "sourceHash": "b33c81e46f1ff07f",
+  "version": "cr-2026-07-22-892f2fb3f7f69ea4",
+  "sourceHash": "892f2fb3f7f69ea4",
   "sourceGeneratedAt": "2026-06-30T12:50:33.965Z",
-  "generatedAt": "2026-07-21T14:35:11.784Z",
+  "generatedAt": "2026-07-22T02:29:39.399Z",
   "stats": {
     "total": 308,
-    "stagePresent": 253,
-    "canonOnly": 55,
+    "stagePresent": 245,
+    "canonOnly": 63,
     "collisionsMerged": 0
   },
   "characters": [
@@ -1042,6 +1042,83 @@
       "embedText": "杨艳 ｜ 杨贤妃 ｜ 杨艳（疑似宗室） ｜ 【唐国人物】 ｜ 唐国朝廷(杨贤妃/六宫之主)、舞阳侯府(奴婢/内宅成员) ｜ 登场于蓬莱秘阁 ｜ 别名/称谓：杨贤妃 ｜ 唐国贤妃, 又称杨妃."
     },
     {
+      "id": "canon.character.4e7f730e2e",
+      "canonicalName": "沮渠二世",
+      "aliases": [],
+      "gender": "男",
+      "books": [
+        "qingyu",
+        "yunlong",
+        "yange"
+      ],
+      "tier": "次要",
+      "stagePresence": false,
+      "staticProfile": {
+        "identitySummary": "大孚灵鹫寺僧侣、道上有名的疤和尚、吕氏门下死士（假冒身份）",
+        "personality": [
+          "沉默寡言",
+          "坚忍",
+          "年老病重",
+          "威望极高",
+          "曾被传言挟持",
+          "正统一方"
+        ],
+        "appearance": "面具后布满伤疤的面孔，眼角一道伤口将眼睑斜着切成两半，血红的眼睑往外翻卷，无法闭合",
+        "speechStyle": "",
+        "principles": [
+          "维护摩法宗正统法统不容外道染指",
+          "以十方丛林共主身份统御诸寺",
+          "认可灵尊转世身份并愿以礼相待"
+        ],
+        "goals": [],
+        "weaknesses": [],
+        "signatureAbilities": [],
+        "relationToProtagonist": [],
+        "formsOfAddress": [],
+        "joining": [],
+        "keyEvents": [],
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "十方丛林",
+            "role": "丛林领袖/共主"
+          },
+          {
+            "faction": "大孚灵鹫寺",
+            "role": "住持/摩法宗宗主"
+          }
+        ],
+        "debutLocation": {
+          "location": "汉国深宫（狱墙附近）",
+          "locator": "《六朝云龙吟》第390章",
+          "scene": "程宗扬在汉国深宫中听到卢景提及大孚灵鹫寺时，脑中闪过包括'沮渠二世'在内的一系列名字，得知其与十方丛林、不拾一世大师有关联"
+        }
+      },
+      "phaseIdentities": [
+        {
+          "scope": "stage-projection",
+          "stageId": "lyl.lin_an_black_sea",
+          "book": "yunlong",
+          "seqLo": 556,
+          "seqHi": 558,
+          "identity": "大孚灵鹫寺主持、十方丛林领袖、大德高僧",
+          "role": "大孚灵鹫寺主持、十方丛林领袖、大德高僧",
+          "description": "",
+          "notes": [],
+          "status": "stage-current"
+        }
+      ],
+      "review": {
+        "approved": false,
+        "reviewed": false,
+        "flags": [
+          "duplicate-merged"
+        ],
+        "conflicts": []
+      },
+      "embedText": "沮渠二世 ｜ 大孚灵鹫寺僧侣、道上有名的疤和尚、吕氏门下死士（假冒身份） ｜ 十方丛林(丛林领袖/共主)、大孚灵鹫寺(住持/摩法宗宗主) ｜ 登场于汉国深宫（狱墙附近） ｜ 沉默寡言、坚忍、年老病重、威望极高、曾被传言挟持、正统一方"
+    },
+    {
       "id": "canon.character.526e7db525",
       "canonicalName": "不拾一世",
       "aliases": [
@@ -1056,7 +1133,7 @@
         "yange"
       ],
       "tier": "次要",
-      "stagePresence": true,
+      "stagePresence": false,
       "staticProfile": {
         "identitySummary": "穿越者（袈裟遗书自述）；十方丛林缔造者、大孚灵鹫寺前任方丈，被佛门尊为大有功德的高僧；已圆寂，其转世之争贯穿燕歌佛门线",
         "personality": [],
@@ -1534,6 +1611,71 @@
       "embedText": "张承业 ｜ 神策军将/义子 ｜ 宦官集团(内侍/鱼朝恩义子)、禁军(右神策军统领) ｜ 登场于西内苑（宫中某处） ｜ 角色卡未找到明确同名/别名；需要判断是新角色还是并入现有角色。"
     },
     {
+      "id": "canon.character.6d6066e669",
+      "canonicalName": "法海",
+      "aliases": [],
+      "gender": "男",
+      "books": [
+        "qingyu",
+        "yunlong",
+        "yange"
+      ],
+      "tier": "次要",
+      "stagePresence": false,
+      "staticProfile": {
+        "identitySummary": "金山寺大师",
+        "personality": [
+          "佛法高深"
+        ],
+        "appearance": "",
+        "speechStyle": "",
+        "principles": [],
+        "goals": [],
+        "weaknesses": [],
+        "signatureAbilities": [],
+        "relationToProtagonist": [],
+        "formsOfAddress": [
+          "法海大师",
+          "法海老和尚"
+        ],
+        "joining": [],
+        "keyEvents": [
+          "调停白素贞与许仙决战",
+          "白素贞与小青皈依金山寺门下"
+        ],
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "十方丛林",
+            "role": "金山寺大师"
+          }
+        ]
+      },
+      "phaseIdentities": [
+        {
+          "scope": "stage-projection",
+          "stageId": "lyl.lin_an_black_sea",
+          "book": "yunlong",
+          "seqLo": 556,
+          "seqHi": 558,
+          "identity": "金山寺大师",
+          "role": "配角",
+          "description": "",
+          "notes": [],
+          "status": "stage-current"
+        }
+      ],
+      "review": {
+        "approved": false,
+        "reviewed": false,
+        "flags": [
+          "duplicate-merged"
+        ],
+        "conflicts": []
+      },
+      "embedText": "法海 ｜ 金山寺大师 ｜ 十方丛林(金山寺大师) ｜ 佛法高深 ｜ 法海大师 法海老和尚 ｜ 调停白素贞与许仙决战；白素贞与小青皈依金山寺门下"
+    },
+    {
       "id": "canon.character.71a9e8c63c",
       "canonicalName": "虚日鼠",
       "aliases": [],
@@ -1646,6 +1788,92 @@
         "note": "角色卡未找到明确同名/别名；需要判断是新角色还是并入现有角色。"
       },
       "embedText": "刘彭祖 ｜ 诸侯 ｜ 【汉国人物】 ｜ 汉国朝廷(赵王（诸侯王）) ｜ 登场于光明观堂 ｜ 角色卡未找到明确同名/别名；需要判断是新角色还是并入现有角色。"
+    },
+    {
+      "id": "canon.character.7718ae444a",
+      "canonicalName": "李寅臣",
+      "aliases": [],
+      "gender": "男",
+      "books": [
+        "yunlong"
+      ],
+      "tier": "主要",
+      "stagePresence": false,
+      "staticProfile": {
+        "identitySummary": "威远镖局总镖头",
+        "personality": [
+          "精明",
+          "市侩",
+          "软骨头",
+          "见风使舵"
+        ],
+        "appearance": "四五十岁年纪，头发稀疏，眼中透出一丝精明，颇有些市侩气，头发花白一半",
+        "speechStyle": "犹豫、改口、讨好",
+        "principles": [
+          "舍不得女儿被卖，但最终屈服于权势"
+        ],
+        "goals": [
+          "巴结高衙内、太尉府，贪图镖费以维持镖局"
+        ],
+        "weaknesses": [
+          "修为不高，靠巴结官府和宗门；被太尉府小衙内吃定"
+        ],
+        "signatureAbilities": [
+          "无"
+        ],
+        "relationToProtagonist": [
+          "程宗扬的岳父（阮香琳之夫）"
+        ],
+        "formsOfAddress": [
+          "李总镖头、李寅臣"
+        ],
+        "joining": [
+          "非程宗扬队伍成员或后宫"
+        ],
+        "keyEvents": [
+          "接太尉府失镖生意，导致镖师全灭",
+          "被高衙内等人算计，妻子阮香琳被纳为妾室并守贞"
+        ],
+        "ending": [
+          "空"
+        ],
+        "affiliations": [
+          {
+            "faction": "威远镖局",
+            "role": "总镖头"
+          }
+        ],
+        "debutLocation": {
+          "location": "教钦坊威远镖局",
+          "locator": "0011.html",
+          "scene": "李师师从马车上下来进入威远镖局，门前镖师对她十分熟稔，纷纷起身叉手施礼，李师师略点头便匆匆进了镖局"
+        },
+        "birthYear": 175
+      },
+      "phaseIdentities": [
+        {
+          "scope": "stage-projection",
+          "stageId": "lyl.lin_an_black_sea",
+          "book": "yunlong",
+          "seqLo": 556,
+          "seqHi": 558,
+          "identity": "威远镖局总镖头",
+          "role": "总镖头",
+          "description": "四五十岁的总镖头，头上花白稀疏的发丝透着岁月的风霜，精明市侩的眼神里淌着商人的算计——可当李师师唤他爹时，那副身躯里也会涌出几分走南闯北的铁骨。",
+          "notes": [
+            "【关系】程宗扬的岳父（阮香琳之夫）",
+            "【目标】巴结高衙内、太尉府，贪图镖费以维持镖局"
+          ],
+          "status": "stage-current"
+        }
+      ],
+      "review": {
+        "approved": false,
+        "reviewed": true,
+        "flags": [],
+        "conflicts": []
+      },
+      "embedText": "李寅臣 ｜ 威远镖局总镖头 ｜ 威远镖局(总镖头) ｜ 登场于教钦坊威远镖局 ｜ 精明、市侩、软骨头、见风使舵 ｜ 程宗扬的岳父（阮香琳之夫） ｜ 李总镖头、李寅臣 ｜ 接太尉府失镖生意，导致镖师全灭；被高衙内等人算计，妻子阮香琳被纳为妾室并守贞"
     },
     {
       "id": "canon.character.7830fa3c26",
@@ -2025,6 +2253,108 @@
       "embedText": "青䝙"
     },
     {
+      "id": "canon.character.8da99e7c5f",
+      "canonicalName": "高俅",
+      "aliases": [
+        "高枢问"
+      ],
+      "gender": "男",
+      "books": [
+        "yunlong",
+        "yange"
+      ],
+      "tier": "主要",
+      "stagePresence": false,
+      "staticProfile": {
+        "identitySummary": "当朝太尉/宋国权臣",
+        "personality": [
+          "城府深沉",
+          "老奸巨猾",
+          "心智深沉",
+          "善于权谋",
+          "重情义（对先代宋主）"
+        ],
+        "appearance": "穿着太尉冠带，看上去比苏佳朴老成，眼角的皱纹细密，眼神锐利之极，不再是那个独自看球的寂寞商人，而是位高权重、城府深沉的当朝太尉。",
+        "speechStyle": "重臣口吻，也有暴躁失态时（如对程宗扬披头盖脸痛骂），与程宗扬私下相处时会有球迷般的热情和随意。",
+        "principles": [
+          "对先代宋主的托付尽心尽力，不惜开罪当代宋主也要了结丑闻"
+        ],
+        "goals": [
+          "掌控军权，巩固权势，与程宗扬有秘密合作。"
+        ],
+        "weaknesses": [
+          "对鞠赛（足球）痴迷，会因此失态、对美色（如媚娘）有显见的失态反应"
+        ],
+        "signatureAbilities": [
+          "军权/禁军"
+        ],
+        "relationToProtagonist": [
+          "秘密合作者、同盟，程宗扬是其心腹/合作对象（高俅真实底细只有程宗扬知道）"
+        ],
+        "formsOfAddress": [
+          "程宗扬称其“苏爷”（苏佳朴）或“太尉”；被他人称呼为“高太尉”“高俅”",
+          "别名/称谓：高枢问"
+        ],
+        "joining": [],
+        "keyEvents": [
+          "以苏佳朴身份与程宗扬交往，真实身份是当朝太尉",
+          "与程宗扬密室对谈，连秦桧也蒙在鼓里",
+          "一同看鞠赛打赌，程宗扬赌输裸奔",
+          "因程宗扬提及媚娘而大怒",
+          "推荐禁军将领成为股东，换取金铢",
+          "被御史参奏但札子无下文"
+        ],
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "太尉府",
+            "role": "太尉"
+          },
+          {
+            "faction": "宋国",
+            "role": "太尉/军界要员"
+          }
+        ],
+        "debutLocation": {
+          "location": "临安翠云楼",
+          "locator": "第4集/第0030.html",
+          "scene": "高衙内因屠龙刀之事与高俅争执，高俅被干儿子气得七窍生烟，举起戒尺要教训他"
+        },
+        "birthYear": 165
+      },
+      "region": "宋国",
+      "phaseIdentities": [
+        {
+          "scope": "stage-projection",
+          "stageId": "lyl.lin_an_black_sea",
+          "book": "yunlong",
+          "seqLo": 556,
+          "seqHi": 558,
+          "identity": "当朝太尉/宋国权臣",
+          "role": "太尉",
+          "description": "京城太尉高俅，体型肥胖却端着一副威严面孔，城府之深令人难以揣测，贪婪之手伸向每一寸可攫取的利益，喜怒不形于色，谨慎多疑的性子让他在朝堂之上步步为营。",
+          "notes": [
+            "【关系】秘密合作者、同盟，程宗扬是其心腹/合作对象（高俅真实底细只有程宗扬知道）",
+            "【目标】掌控军权，巩固权势，与程宗扬有秘密合作。"
+          ],
+          "status": "stage-current"
+        }
+      ],
+      "review": {
+        "approved": true,
+        "reviewed": true,
+        "flags": [],
+        "conflicts": [],
+        "aliasApplied": [
+          "高枢问"
+        ],
+        "aliasReviewNote": [
+          "alias-unification approved"
+        ]
+      },
+      "embedText": "高俅 ｜ 高枢问 ｜ 当朝太尉/宋国权臣 ｜ 【宋国人物】 ｜ 太尉府(太尉)、宋国(太尉/军界要员) ｜ 登场于临安翠云楼 ｜ 城府深沉、老奸巨猾、心智深沉、善于权谋、重情义（对先代宋主） ｜ 秘密合作者、同盟，程宗扬是其心腹/合作对象（高俅真实底细只有程宗扬知道） ｜ 程宗扬称其“苏爷”（苏佳朴）或“太尉”；被他人称呼为“高太尉”“高俅” 别名/称谓：高枢问 ｜ 以苏佳朴身份与程宗扬交往，真实身份是当朝太尉；与程宗扬密室对谈，连秦桧也蒙在鼓里；一同看鞠赛打赌，程宗扬赌输裸奔；因程宗扬提及媚娘而大怒；推荐禁军将领成为股东，换取金铢；被御史参奏但札子无下文"
+    },
+    {
       "id": "canon.character.90f9d5c8a9",
       "canonicalName": "饿死的大魔头",
       "aliases": [],
@@ -2196,6 +2526,57 @@
         "note": "角色卡未找到明确同名/别名；需要判断是新角色还是并入现有角色。"
       },
       "embedText": "徐敖 ｜ 叛军首领 ｜ 【晋国人物】 ｜ 晋国(镇东将军徐度之子)、石头城州府兵(叛将（擅调军士）) ｜ 登场于司空府 ｜ 角色卡未找到明确同名/别名；需要判断是新角色还是并入现有角色。；决战·与程宗扬、萧遥逸等九家护卫在鹰愁峪：吴三桂单骑搦战，刺落敌骑→张少煌射杀敌旗手，挫锐气→程宗扬设三道防线，边战边退→州府兵强攻突破最后防线；转折：程宗扬临危不惧组织护卫抵抗，利用地形和弓弩拖延敌军近一个时辰；徐敖暴怒急躁却无法速胜；徐敖伏击失败，未能全歼目标。程宗扬等人依托山丘营垒僵持，伤亡十余人后稳住阵脚"
+    },
+    {
+      "id": "canon.character.96776c538c",
+      "canonicalName": "小豹女",
+      "aliases": [],
+      "gender": "女",
+      "books": [
+        "qingyu",
+        "yunlong",
+        "yange"
+      ],
+      "tier": "次要",
+      "stagePresence": false,
+      "staticProfile": {
+        "identitySummary": "",
+        "personality": [],
+        "appearance": "",
+        "speechStyle": "",
+        "principles": [],
+        "goals": [],
+        "weaknesses": [],
+        "signatureAbilities": [],
+        "relationToProtagonist": [],
+        "formsOfAddress": [],
+        "joining": [],
+        "keyEvents": [],
+        "ending": []
+      },
+      "phaseIdentities": [
+        {
+          "scope": "stage-projection",
+          "stageId": "lyl.lin_an_black_sea",
+          "book": "yunlong",
+          "seqLo": 556,
+          "seqHi": 558,
+          "identity": "配角",
+          "role": "配角",
+          "description": "",
+          "notes": [],
+          "status": "stage-current"
+        }
+      ],
+      "review": {
+        "approved": false,
+        "reviewed": false,
+        "flags": [
+          "duplicate-merged"
+        ],
+        "conflicts": []
+      },
+      "embedText": "小豹女"
     },
     {
       "id": "canon.character.97c0d3c718",
@@ -2896,6 +3277,148 @@
         "note": "角色卡未找到明确同名/别名；需要判断是新角色还是并入现有角色。\n用户裁定：批准。"
       },
       "embedText": "鬼金羊 ｜ 龙宸杀手 ｜ 龙宸(朱雀七宿成员) ｜ 登场于大宁坊某祭堂 ｜ 角色卡未找到明确同名/别名；需要判断是新角色还是并入现有角色。 用户裁定：批准。"
+    },
+    {
+      "id": "canon.character.c31d8c326e",
+      "canonicalName": "枯僧",
+      "aliases": [],
+      "gender": "男",
+      "books": [
+        "qingyu",
+        "yunlong",
+        "yange"
+      ],
+      "tier": "次要",
+      "stagePresence": false,
+      "staticProfile": {
+        "identitySummary": "",
+        "personality": [],
+        "appearance": "",
+        "speechStyle": "",
+        "principles": [],
+        "goals": [],
+        "weaknesses": [],
+        "signatureAbilities": [],
+        "relationToProtagonist": [],
+        "formsOfAddress": [],
+        "joining": [],
+        "keyEvents": [],
+        "ending": []
+      },
+      "phaseIdentities": [
+        {
+          "scope": "stage-projection",
+          "stageId": "lyl.lin_an_black_sea",
+          "book": "yunlong",
+          "seqLo": 556,
+          "seqHi": 558,
+          "identity": "配角",
+          "role": "配角",
+          "description": "",
+          "notes": [],
+          "status": "stage-current"
+        }
+      ],
+      "review": {
+        "approved": false,
+        "reviewed": false,
+        "flags": [
+          "duplicate-merged"
+        ],
+        "conflicts": []
+      },
+      "embedText": "枯僧"
+    },
+    {
+      "id": "canon.character.c640720c88",
+      "canonicalName": "游婵",
+      "aliases": [],
+      "gender": "女",
+      "books": [
+        "qingyu",
+        "yunlong"
+      ],
+      "tier": "主要",
+      "stagePresence": false,
+      "staticProfile": {
+        "identitySummary": "黑魔海成员/晴州分舵",
+        "personality": [
+          "媚态横生",
+          "放浪",
+          "善于逢迎",
+          "对剑玉姬忠诚"
+        ],
+        "appearance": "身材纤柔，腰肢不盈一握，丰满的臀部浑圆肥翘，在白色丝绸长裙里柔柔扭动，显露出诱人的曲线。长发散乱时露出一截雪白玉臂。",
+        "speechStyle": "媚声、娇喘细细、自称奴婢、爱抛媚眼",
+        "principles": [
+          "服从黑魔海指令"
+        ],
+        "goals": [
+          "完成黑魔海任务、获得上忍欢好"
+        ],
+        "weaknesses": [
+          "对剑玉姬的信任根深蒂固，易成弃子"
+        ],
+        "signatureAbilities": [],
+        "relationToProtagonist": [
+          "与程宗扬有多次交合，曾误认其为飞鸟熊藏"
+        ],
+        "formsOfAddress": [
+          "自称奴婢，被称游婵"
+        ],
+        "joining": [],
+        "keyEvents": [
+          "被程宗扬从黑魔海手中保护",
+          "发现自己是剑玉姬的弃子",
+          "与程宗扬多次交合"
+        ],
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "黑魔海",
+            "role": "小香主（专管联络）"
+          },
+          {
+            "faction": "广阳赌坊",
+            "role": "坊主"
+          }
+        ],
+        "debutLocation": {
+          "location": "广阳城边赌坊",
+          "locator": "chapter249",
+          "scene": "程宗扬从计好口中得知赌坊坊主是姓游的女子，名叫游婵，三年前被剑玉姬收服，现为黑魔海小香主。"
+        },
+        "storyAge": {
+          "value": "二十五六岁",
+          "basis": "她二十五六岁年纪，梳着一个流苏髻，穿着杏红的衫子，打扮妖冶。"
+        },
+        "birthYear": 195
+      },
+      "region": "宋国",
+      "phaseIdentities": [
+        {
+          "scope": "stage-projection",
+          "stageId": "lyl.lin_an_black_sea",
+          "book": "yunlong",
+          "seqLo": 556,
+          "seqHi": 558,
+          "identity": "黑魔海成员/晴州分舵",
+          "role": "黑魔海暗桩",
+          "description": "纤腰丰臀、长发如瀑，赌坊老板娘游婵的薄衫下藏着雪白的臂与腿，她笑盈盈地掷出骰子——黑魔海的暗桩，总在醉生梦死间锁住你的命脉。",
+          "notes": [
+            "【关系】与程宗扬有多次交合，曾误认其为飞鸟熊藏",
+            "【目标】完成黑魔海任务、获得上忍欢好"
+          ],
+          "status": "stage-current"
+        }
+      ],
+      "review": {
+        "approved": false,
+        "reviewed": true,
+        "flags": [],
+        "conflicts": []
+      },
+      "embedText": "游婵 ｜ 黑魔海成员/晴州分舵 ｜ 【宋国人物】 ｜ 黑魔海(小香主（专管联络）)、广阳赌坊(坊主) ｜ 登场于广阳城边赌坊 ｜ 媚态横生、放浪、善于逢迎、对剑玉姬忠诚 ｜ 与程宗扬有多次交合，曾误认其为飞鸟熊藏 ｜ 自称奴婢，被称游婵 ｜ 被程宗扬从黑魔海手中保护；发现自己是剑玉姬的弃子；与程宗扬多次交合"
     },
     {
       "id": "canon.character.caa231dd92",
@@ -9549,71 +10072,6 @@
       "embedText": "龙神 ｜ 南荒巨兽/神祇 ｜ 【南荒人物】 ｜ 登场于鬼王峒地下 ｜ 冷漠、凶恶、恶毒、精力旺盛 ｜ 敌对 ｜ 龙神 ｜ 与鬼巫王合体，反将鬼巫王吞噬；被谢艺破入胸口伤及心脉；被程宗扬等人围猎击杀"
     },
     {
-      "id": "liuchao.character.fa_hai",
-      "canonicalName": "法海",
-      "aliases": [],
-      "gender": "男",
-      "books": [
-        "qingyu",
-        "yunlong",
-        "yange"
-      ],
-      "tier": "次要",
-      "stagePresence": true,
-      "staticProfile": {
-        "identitySummary": "金山寺大师",
-        "personality": [
-          "佛法高深"
-        ],
-        "appearance": "",
-        "speechStyle": "",
-        "principles": [],
-        "goals": [],
-        "weaknesses": [],
-        "signatureAbilities": [],
-        "relationToProtagonist": [],
-        "formsOfAddress": [
-          "法海大师",
-          "法海老和尚"
-        ],
-        "joining": [],
-        "keyEvents": [
-          "调停白素贞与许仙决战",
-          "白素贞与小青皈依金山寺门下"
-        ],
-        "ending": [],
-        "affiliations": [
-          {
-            "faction": "十方丛林",
-            "role": "金山寺大师"
-          }
-        ]
-      },
-      "phaseIdentities": [
-        {
-          "scope": "stage-projection",
-          "stageId": "lyl.lin_an_black_sea",
-          "book": "yunlong",
-          "seqLo": 556,
-          "seqHi": 558,
-          "identity": "金山寺大师",
-          "role": "配角",
-          "description": "",
-          "notes": [],
-          "status": "stage-current"
-        }
-      ],
-      "review": {
-        "approved": false,
-        "reviewed": false,
-        "flags": [
-          "duplicate-merged"
-        ],
-        "conflicts": []
-      },
-      "embedText": "法海 ｜ 金山寺大师 ｜ 十方丛林(金山寺大师) ｜ 佛法高深 ｜ 法海大师 法海老和尚 ｜ 调停白素贞与许仙决战；白素贞与小青皈依金山寺门下"
-    },
-    {
       "id": "liuchao.character.fei_niao_ying_zi",
       "canonicalName": "飞鸟萤子",
       "aliases": [],
@@ -10342,108 +10800,6 @@
         "conflicts": []
       },
       "embedText": "高力士 ｜ 太监/内侍 ｜ 宦官集团(太监)、舞阳侯府(杨玉环门下太监/侍从) ｜ 阴狠、狡猾、得力 ｜ 敌对 ｜ 对程宗扬：未直接称呼；被他人称呼：高力士 ｜ 奉杨玉环之命偷袭程宗扬，被其扯断白绫；被杨玉环吩咐收好纸张；被程宗扬反制时狼狈万分"
-    },
-    {
-      "id": "liuchao.character.gao_qiu",
-      "canonicalName": "高俅",
-      "aliases": [
-        "高枢问"
-      ],
-      "gender": "男",
-      "books": [
-        "yunlong",
-        "yange"
-      ],
-      "tier": "主要",
-      "stagePresence": true,
-      "staticProfile": {
-        "identitySummary": "当朝太尉/宋国权臣",
-        "personality": [
-          "城府深沉",
-          "老奸巨猾",
-          "心智深沉",
-          "善于权谋",
-          "重情义（对先代宋主）"
-        ],
-        "appearance": "穿着太尉冠带，看上去比苏佳朴老成，眼角的皱纹细密，眼神锐利之极，不再是那个独自看球的寂寞商人，而是位高权重、城府深沉的当朝太尉。",
-        "speechStyle": "重臣口吻，也有暴躁失态时（如对程宗扬披头盖脸痛骂），与程宗扬私下相处时会有球迷般的热情和随意。",
-        "principles": [
-          "对先代宋主的托付尽心尽力，不惜开罪当代宋主也要了结丑闻"
-        ],
-        "goals": [
-          "掌控军权，巩固权势，与程宗扬有秘密合作。"
-        ],
-        "weaknesses": [
-          "对鞠赛（足球）痴迷，会因此失态、对美色（如媚娘）有显见的失态反应"
-        ],
-        "signatureAbilities": [
-          "军权/禁军"
-        ],
-        "relationToProtagonist": [
-          "秘密合作者、同盟，程宗扬是其心腹/合作对象（高俅真实底细只有程宗扬知道）"
-        ],
-        "formsOfAddress": [
-          "程宗扬称其“苏爷”（苏佳朴）或“太尉”；被他人称呼为“高太尉”“高俅”",
-          "别名/称谓：高枢问"
-        ],
-        "joining": [],
-        "keyEvents": [
-          "以苏佳朴身份与程宗扬交往，真实身份是当朝太尉",
-          "与程宗扬密室对谈，连秦桧也蒙在鼓里",
-          "一同看鞠赛打赌，程宗扬赌输裸奔",
-          "因程宗扬提及媚娘而大怒",
-          "推荐禁军将领成为股东，换取金铢",
-          "被御史参奏但札子无下文"
-        ],
-        "ending": [],
-        "affiliations": [
-          {
-            "faction": "太尉府",
-            "role": "太尉"
-          },
-          {
-            "faction": "宋国",
-            "role": "太尉/军界要员"
-          }
-        ],
-        "debutLocation": {
-          "location": "临安翠云楼",
-          "locator": "第4集/第0030.html",
-          "scene": "高衙内因屠龙刀之事与高俅争执，高俅被干儿子气得七窍生烟，举起戒尺要教训他"
-        },
-        "birthYear": 165
-      },
-      "region": "宋国",
-      "phaseIdentities": [
-        {
-          "scope": "stage-projection",
-          "stageId": "lyl.lin_an_black_sea",
-          "book": "yunlong",
-          "seqLo": 556,
-          "seqHi": 558,
-          "identity": "当朝太尉/宋国权臣",
-          "role": "太尉",
-          "description": "京城太尉高俅，体型肥胖却端着一副威严面孔，城府之深令人难以揣测，贪婪之手伸向每一寸可攫取的利益，喜怒不形于色，谨慎多疑的性子让他在朝堂之上步步为营。",
-          "notes": [
-            "【关系】秘密合作者、同盟，程宗扬是其心腹/合作对象（高俅真实底细只有程宗扬知道）",
-            "【目标】掌控军权，巩固权势，与程宗扬有秘密合作。"
-          ],
-          "status": "stage-current"
-        }
-      ],
-      "review": {
-        "approved": true,
-        "reviewed": true,
-        "flags": [],
-        "conflicts": [],
-        "aliasApplied": [
-          "高枢问"
-        ],
-        "aliasReviewNote": [
-          "alias-unification approved"
-        ]
-      },
-      "embedText": "高俅 ｜ 高枢问 ｜ 当朝太尉/宋国权臣 ｜ 【宋国人物】 ｜ 太尉府(太尉)、宋国(太尉/军界要员) ｜ 登场于临安翠云楼 ｜ 城府深沉、老奸巨猾、心智深沉、善于权谋、重情义（对先代宋主） ｜ 秘密合作者、同盟，程宗扬是其心腹/合作对象（高俅真实底细只有程宗扬知道） ｜ 程宗扬称其“苏爷”（苏佳朴）或“太尉”；被他人称呼为“高太尉”“高俅” 别名/称谓：高枢问 ｜ 以苏佳朴身份与程宗扬交往，真实身份是当朝太尉；与程宗扬密室对谈，连秦桧也蒙在鼓里；一同看鞠赛打赌，程宗扬赌输裸奔；因程宗扬提及媚娘而大怒；推荐禁军将领成为股东，换取金铢；被御史参奏但札子无下文"
     },
     {
       "id": "liuchao.character.gao_zhishang",
@@ -14782,134 +15138,6 @@
       "embedText": "剧孟 ｜ 大侠 ｜ 【汉国人物】 ｜ 汉国游侠(游侠/大侠)、戾太子余孽(被囚禁的残余势力成员)、郭解旧部(江湖旧识) ｜ 登场于洛都 ｜ 侠义豪爽、豁达坚韧、真性情、刚硬 ｜ 程宗扬救助并照料剧孟，二人是朋友/恩人关系 ｜ 程宗扬称其为“剧大侠”，他人亦称呼“剧大侠” ｜ 被囚禁折磨，失去双腿，被挖一眼；程宗扬、卢景等人救出；养伤期间学习腹语、戴银面具；亲手斩杀仇人（平城君）后昏迷"
     },
     {
-      "id": "liuchao.character.ju_qu_er_shi",
-      "canonicalName": "沮渠二世",
-      "aliases": [],
-      "gender": "男",
-      "books": [
-        "qingyu",
-        "yunlong",
-        "yange"
-      ],
-      "tier": "次要",
-      "stagePresence": true,
-      "staticProfile": {
-        "identitySummary": "大孚灵鹫寺僧侣、道上有名的疤和尚、吕氏门下死士（假冒身份）",
-        "personality": [
-          "沉默寡言",
-          "坚忍",
-          "年老病重",
-          "威望极高",
-          "曾被传言挟持",
-          "正统一方"
-        ],
-        "appearance": "面具后布满伤疤的面孔，眼角一道伤口将眼睑斜着切成两半，血红的眼睑往外翻卷，无法闭合",
-        "speechStyle": "",
-        "principles": [
-          "维护摩法宗正统法统不容外道染指",
-          "以十方丛林共主身份统御诸寺",
-          "认可灵尊转世身份并愿以礼相待"
-        ],
-        "goals": [],
-        "weaknesses": [],
-        "signatureAbilities": [],
-        "relationToProtagonist": [],
-        "formsOfAddress": [],
-        "joining": [],
-        "keyEvents": [],
-        "ending": [],
-        "affiliations": [
-          {
-            "faction": "十方丛林",
-            "role": "丛林领袖/共主"
-          },
-          {
-            "faction": "大孚灵鹫寺",
-            "role": "住持/摩法宗宗主"
-          }
-        ],
-        "debutLocation": {
-          "location": "汉国深宫（狱墙附近）",
-          "locator": "《六朝云龙吟》第390章",
-          "scene": "程宗扬在汉国深宫中听到卢景提及大孚灵鹫寺时，脑中闪过包括'沮渠二世'在内的一系列名字，得知其与十方丛林、不拾一世大师有关联"
-        }
-      },
-      "phaseIdentities": [
-        {
-          "scope": "stage-projection",
-          "stageId": "lyl.lin_an_black_sea",
-          "book": "yunlong",
-          "seqLo": 556,
-          "seqHi": 558,
-          "identity": "大孚灵鹫寺主持、十方丛林领袖、大德高僧",
-          "role": "大孚灵鹫寺主持、十方丛林领袖、大德高僧",
-          "description": "",
-          "notes": [],
-          "status": "stage-current"
-        }
-      ],
-      "review": {
-        "approved": false,
-        "reviewed": false,
-        "flags": [
-          "duplicate-merged"
-        ],
-        "conflicts": []
-      },
-      "embedText": "沮渠二世 ｜ 大孚灵鹫寺僧侣、道上有名的疤和尚、吕氏门下死士（假冒身份） ｜ 十方丛林(丛林领袖/共主)、大孚灵鹫寺(住持/摩法宗宗主) ｜ 登场于汉国深宫（狱墙附近） ｜ 沉默寡言、坚忍、年老病重、威望极高、曾被传言挟持、正统一方"
-    },
-    {
-      "id": "liuchao.character.ku_seng",
-      "canonicalName": "枯僧",
-      "aliases": [],
-      "gender": "男",
-      "books": [
-        "qingyu",
-        "yunlong",
-        "yange"
-      ],
-      "tier": "次要",
-      "stagePresence": true,
-      "staticProfile": {
-        "identitySummary": "",
-        "personality": [],
-        "appearance": "",
-        "speechStyle": "",
-        "principles": [],
-        "goals": [],
-        "weaknesses": [],
-        "signatureAbilities": [],
-        "relationToProtagonist": [],
-        "formsOfAddress": [],
-        "joining": [],
-        "keyEvents": [],
-        "ending": []
-      },
-      "phaseIdentities": [
-        {
-          "scope": "stage-projection",
-          "stageId": "lyl.lin_an_black_sea",
-          "book": "yunlong",
-          "seqLo": 556,
-          "seqHi": 558,
-          "identity": "配角",
-          "role": "配角",
-          "description": "",
-          "notes": [],
-          "status": "stage-current"
-        }
-      ],
-      "review": {
-        "approved": false,
-        "reviewed": false,
-        "flags": [
-          "duplicate-merged"
-        ],
-        "conflicts": []
-      },
-      "embedText": "枯僧"
-    },
-    {
       "id": "liuchao.character.kuang_zhong_yu",
       "canonicalName": "匡仲玉",
       "aliases": [],
@@ -16169,92 +16397,6 @@
         ]
       },
       "embedText": "李怡 ｜ 光王 ｜ 光王 ｜ 【唐国人物】 ｜ 唐国朝廷(亲王（光王）) ｜ 登场于承天门 ｜ 懦弱、内敛、谨慎、忧惧 ｜ 被救助者，朋友 ｜ 对程宗扬称呼：程侯 别名/称谓：光王 ｜ 被暗算踹下马受伤；躲藏在娑梵寺；得到程宗扬的帮助；元正朝会上出丑"
-    },
-    {
-      "id": "liuchao.character.li_yin_chen",
-      "canonicalName": "李寅臣",
-      "aliases": [],
-      "gender": "男",
-      "books": [
-        "yunlong"
-      ],
-      "tier": "主要",
-      "stagePresence": true,
-      "staticProfile": {
-        "identitySummary": "威远镖局总镖头",
-        "personality": [
-          "精明",
-          "市侩",
-          "软骨头",
-          "见风使舵"
-        ],
-        "appearance": "四五十岁年纪，头发稀疏，眼中透出一丝精明，颇有些市侩气，头发花白一半",
-        "speechStyle": "犹豫、改口、讨好",
-        "principles": [
-          "舍不得女儿被卖，但最终屈服于权势"
-        ],
-        "goals": [
-          "巴结高衙内、太尉府，贪图镖费以维持镖局"
-        ],
-        "weaknesses": [
-          "修为不高，靠巴结官府和宗门；被太尉府小衙内吃定"
-        ],
-        "signatureAbilities": [
-          "无"
-        ],
-        "relationToProtagonist": [
-          "程宗扬的岳父（阮香琳之夫）"
-        ],
-        "formsOfAddress": [
-          "李总镖头、李寅臣"
-        ],
-        "joining": [
-          "非程宗扬队伍成员或后宫"
-        ],
-        "keyEvents": [
-          "接太尉府失镖生意，导致镖师全灭",
-          "被高衙内等人算计，妻子阮香琳被纳为妾室并守贞"
-        ],
-        "ending": [
-          "空"
-        ],
-        "affiliations": [
-          {
-            "faction": "威远镖局",
-            "role": "总镖头"
-          }
-        ],
-        "debutLocation": {
-          "location": "教钦坊威远镖局",
-          "locator": "0011.html",
-          "scene": "李师师从马车上下来进入威远镖局，门前镖师对她十分熟稔，纷纷起身叉手施礼，李师师略点头便匆匆进了镖局"
-        },
-        "birthYear": 175
-      },
-      "phaseIdentities": [
-        {
-          "scope": "stage-projection",
-          "stageId": "lyl.lin_an_black_sea",
-          "book": "yunlong",
-          "seqLo": 556,
-          "seqHi": 558,
-          "identity": "威远镖局总镖头",
-          "role": "总镖头",
-          "description": "四五十岁的总镖头，头上花白稀疏的发丝透着岁月的风霜，精明市侩的眼神里淌着商人的算计——可当李师师唤他爹时，那副身躯里也会涌出几分走南闯北的铁骨。",
-          "notes": [
-            "【关系】程宗扬的岳父（阮香琳之夫）",
-            "【目标】巴结高衙内、太尉府，贪图镖费以维持镖局"
-          ],
-          "status": "stage-current"
-        }
-      ],
-      "review": {
-        "approved": false,
-        "reviewed": true,
-        "flags": [],
-        "conflicts": []
-      },
-      "embedText": "李寅臣 ｜ 威远镖局总镖头 ｜ 威远镖局(总镖头) ｜ 登场于教钦坊威远镖局 ｜ 精明、市侩、软骨头、见风使舵 ｜ 程宗扬的岳父（阮香琳之夫） ｜ 李总镖头、李寅臣 ｜ 接太尉府失镖生意，导致镖师全灭；被高衙内等人算计，妻子阮香琳被纳为妾室并守贞"
     },
     {
       "id": "liuchao.character.liang_fu_ren",
@@ -29764,57 +29906,6 @@
       "embedText": "相雅 ｜ 荆溪族女子 ｜ 荆溪人(族人/麻黩之妻)、程宗扬势力(护卫/成员) ｜ 登场于浮凌江 ｜ 温柔、体贴、刚烈、忠诚 ｜ 程宗扬的女奴/性伴侣，称其主人 ｜ 主人/程商人（对程宗扬），相雅/雅儿（被称呼） ｜ 原阵营/中立/敌对身份，禁止提前称为后宫、侍妾、情人或程宗扬阵营成员；按原文转折事件后，才可写入程宗扬阵营/后宫/侍妾/情人等关系身份 ｜ 第2章灭族，丈夫被杀，自身被凌辱，程宗扬救下；第3章带领族人投靠程宗扬，请求报仇；第4章单膝跪地效忠；第5章与程宗扬多次性交，血誓"
     },
     {
-      "id": "liuchao.character.xiao_bao_nv",
-      "canonicalName": "小豹女",
-      "aliases": [],
-      "gender": "女",
-      "books": [
-        "qingyu",
-        "yunlong",
-        "yange"
-      ],
-      "tier": "次要",
-      "stagePresence": true,
-      "staticProfile": {
-        "identitySummary": "",
-        "personality": [],
-        "appearance": "",
-        "speechStyle": "",
-        "principles": [],
-        "goals": [],
-        "weaknesses": [],
-        "signatureAbilities": [],
-        "relationToProtagonist": [],
-        "formsOfAddress": [],
-        "joining": [],
-        "keyEvents": [],
-        "ending": []
-      },
-      "phaseIdentities": [
-        {
-          "scope": "stage-projection",
-          "stageId": "lyl.lin_an_black_sea",
-          "book": "yunlong",
-          "seqLo": 556,
-          "seqHi": 558,
-          "identity": "配角",
-          "role": "配角",
-          "description": "",
-          "notes": [],
-          "status": "stage-current"
-        }
-      ],
-      "review": {
-        "approved": false,
-        "reviewed": false,
-        "flags": [
-          "duplicate-merged"
-        ],
-        "conflicts": []
-      },
-      "embedText": "小豹女"
-    },
-    {
       "id": "liuchao.character.xiao_huan",
       "canonicalName": "小环",
       "aliases": [],
@@ -33897,97 +33988,6 @@
         "conflicts": []
       },
       "embedText": "罂粟女 ｜ 程宗扬的侍奴 ｜ 【宋国人物】 ｜ 小紫势力(侍奴) ｜ 登场于江州城 ｜ 妖媚、阴狠、嗜血、服从、大胆、主动、善于调情、对程宗扬忠诚、有管理能力（摘去发钗等） ｜ 侍奴，隶属程宗扬的后宫/队伍；程宗扬后宫/侍妾 ｜ 对程宗扬称‘主人’或‘老爷’；被他人称‘罂粟女’ 罂粟女/妾（未明确写出其对程宗扬的特定称呼） ｜ 婢女/紫夫人调教人员；禁止提前称为后宫、侍妾、情人或程宗扬阵营成员；被小紫抓获调教后，可按原文写入程宗扬后宫/侍妾 ｜ 第5章：吞下主人精液后禁制解除，神情愈发娇媚；第5章：参与调教赛玉坠，手段狠辣；第5章：用柳叶眉刀战斗，露出嗜血笑意；第8章：与蛇夫人等群交，动作阴狠（扒开阮香琳屁眼儿啐口水）；与程宗扬一起沐浴并伺候；与惊理交换眼色，议论仇尊者来访（作嫁）"
-    },
-    {
-      "id": "liuchao.character.you_chan",
-      "canonicalName": "游婵",
-      "aliases": [],
-      "gender": "女",
-      "books": [
-        "qingyu",
-        "yunlong"
-      ],
-      "tier": "主要",
-      "stagePresence": true,
-      "staticProfile": {
-        "identitySummary": "黑魔海成员/晴州分舵",
-        "personality": [
-          "媚态横生",
-          "放浪",
-          "善于逢迎",
-          "对剑玉姬忠诚"
-        ],
-        "appearance": "身材纤柔，腰肢不盈一握，丰满的臀部浑圆肥翘，在白色丝绸长裙里柔柔扭动，显露出诱人的曲线。长发散乱时露出一截雪白玉臂。",
-        "speechStyle": "媚声、娇喘细细、自称奴婢、爱抛媚眼",
-        "principles": [
-          "服从黑魔海指令"
-        ],
-        "goals": [
-          "完成黑魔海任务、获得上忍欢好"
-        ],
-        "weaknesses": [
-          "对剑玉姬的信任根深蒂固，易成弃子"
-        ],
-        "signatureAbilities": [],
-        "relationToProtagonist": [
-          "与程宗扬有多次交合，曾误认其为飞鸟熊藏"
-        ],
-        "formsOfAddress": [
-          "自称奴婢，被称游婵"
-        ],
-        "joining": [],
-        "keyEvents": [
-          "被程宗扬从黑魔海手中保护",
-          "发现自己是剑玉姬的弃子",
-          "与程宗扬多次交合"
-        ],
-        "ending": [],
-        "affiliations": [
-          {
-            "faction": "黑魔海",
-            "role": "小香主（专管联络）"
-          },
-          {
-            "faction": "广阳赌坊",
-            "role": "坊主"
-          }
-        ],
-        "debutLocation": {
-          "location": "广阳城边赌坊",
-          "locator": "chapter249",
-          "scene": "程宗扬从计好口中得知赌坊坊主是姓游的女子，名叫游婵，三年前被剑玉姬收服，现为黑魔海小香主。"
-        },
-        "storyAge": {
-          "value": "二十五六岁",
-          "basis": "她二十五六岁年纪，梳着一个流苏髻，穿着杏红的衫子，打扮妖冶。"
-        },
-        "birthYear": 195
-      },
-      "region": "宋国",
-      "phaseIdentities": [
-        {
-          "scope": "stage-projection",
-          "stageId": "lyl.lin_an_black_sea",
-          "book": "yunlong",
-          "seqLo": 556,
-          "seqHi": 558,
-          "identity": "黑魔海成员/晴州分舵",
-          "role": "黑魔海暗桩",
-          "description": "纤腰丰臀、长发如瀑，赌坊老板娘游婵的薄衫下藏着雪白的臂与腿，她笑盈盈地掷出骰子——黑魔海的暗桩，总在醉生梦死间锁住你的命脉。",
-          "notes": [
-            "【关系】与程宗扬有多次交合，曾误认其为飞鸟熊藏",
-            "【目标】完成黑魔海任务、获得上忍欢好"
-          ],
-          "status": "stage-current"
-        }
-      ],
-      "review": {
-        "approved": false,
-        "reviewed": true,
-        "flags": [],
-        "conflicts": []
-      },
-      "embedText": "游婵 ｜ 黑魔海成员/晴州分舵 ｜ 【宋国人物】 ｜ 黑魔海(小香主（专管联络）)、广阳赌坊(坊主) ｜ 登场于广阳城边赌坊 ｜ 媚态横生、放浪、善于逢迎、对剑玉姬忠诚 ｜ 与程宗扬有多次交合，曾误认其为飞鸟熊藏 ｜ 自称奴婢，被称游婵 ｜ 被程宗扬从黑魔海手中保护；发现自己是剑玉姬的弃子；与程宗扬多次交合"
     },
     {
       "id": "liuchao.character.yu_bai_ying",

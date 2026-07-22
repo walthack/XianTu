@@ -22,6 +22,7 @@ const isolatedStageIds = new Set([
  * 重建产物见 `docs/R2-11M-*`。列入此集不等于解除隔离——默认 Canon Rail 仍然跳过这些关。
  */
 const sourceRebuiltStageIds = new Set([
+  'lyl.lin_an_black_sea',
   'lyl.luoyang_coup',
 ]);
 
@@ -94,7 +95,7 @@ function singleEventFixture(stage, event) {
   return save;
 }
 
-test('objective-action migrations cover 309 events while preserving the 267-event mechanical boundary', async () => {
+test('objective-action migrations cover 324 events while preserving the 267-event mechanical boundary', async () => {
   const allStages = await stages();
   const allEvents = allStages.flatMap(stage => stage.scenario.events.map(event => ({ stage, event })));
   const objectiveActions = allEvents.filter(({ event }) => event.playerCompletionContract?.kind === 'objective_action');
@@ -102,11 +103,11 @@ test('objective-action migrations cover 309 events while preserving the 267-even
     event.playerCompletionContract.actions[0].id === 'advance_declared_objective');
   const covered = allEvents.filter(({ event }) => event.playerCompletionContract
     || event.worldActor?.opportunities?.some(opportunity => opportunity.completionContract));
-  // +1 event / +8 contracts = R2-11M 洛都政变逐拍来源重建（补源 286《赏格》缺拍）。
+  // +1 event / +8 contracts = R2-11M 洛都政变；+15 contracts = R2-11P 临安第 6–8 章来源重建。
   assert.equal(allEvents.length, 381);
-  assert.equal(objectiveActions.length, 309);
+  assert.equal(objectiveActions.length, 324);
   assert.equal(mechanicallyMigrated.length, 267);
-  assert.equal(covered.length, 316);
+  assert.equal(covered.length, 331);
   assert.deepEqual(
     Object.fromEntries(['lcq.', 'lyl.', 'lyg.'].map(prefix => [
       prefix,

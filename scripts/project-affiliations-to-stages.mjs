@@ -58,12 +58,38 @@ const AFFILIATION_TIME_GATE_EXCLUSIONS = new Map([
   ])],
 ]);
 
+// 第 7–8 章只称“凝姨”；她与黑魔海、林冲的关系均在本关之后才揭示，
+// 因而这里按角色整体封锁静态 affiliations，而不是追着未来卡片逐项列举。
+const AFFILIATION_CHARACTER_TIME_GATE_EXCLUSIONS = new Map([
+  ['lyl.lin_an_black_sea', new Set([
+    'liuchao.character.ruan_xiang_ning',
+  ])],
+]);
+
+// R2-11P 来源重建已逐人裁定本关可见 affiliations；全局静态卡包含后续加入关系，
+// 本关演员一律以 stage 内手写集合为准，禁止构建期再次扩写。
+const AFFILIATION_STAGE_LOCKS = new Map([
+  ['lyl.lin_an_black_sea', new Set([
+    'liuchao.character.cheng_zongyang', 'liuchao.character.qin_hui',
+    'liuchao.character.yu_zi_yuan', 'liuchao.character.lin_chong',
+    'liuchao.character.li_shi_shi', 'liuchao.character.lu_zhi_shen',
+    'liuchao.character.xue_yan_shan', 'liuchao.character.lin_qing_pu',
+    'liuchao.character.ao_run', 'liuchao.character.feng_yuan',
+    'liuchao.character.qing_mian_shou', 'liuchao.character.ruan_xiang_ning',
+    'liuchao.character.gao_zhishang', 'liuchao.character.lu_qian',
+    'liuchao.character.xiao_zi',
+  ])],
+]);
+
 let projWrites = 0, facDefsAdded = 0, charsTouched = 0, stagesTouched = 0;
 for (const { p, m } of stages) {
   let stageChanged = false;
   const stageExclusions = AFFILIATION_TIME_GATE_EXCLUSIONS.get(m.manifest?.id);
+  const characterExclusions = AFFILIATION_CHARACTER_TIME_GATE_EXCLUSIONS.get(m.manifest?.id);
+  const stageLocks = AFFILIATION_STAGE_LOCKS.get(m.manifest?.id);
   const facById = new Set((m.canon.factions || []).map(f => f.id));
   for (const c of m.canon.characters || []) {
+    if (characterExclusions?.has(c.id) || stageLocks?.has(c.id)) continue;
     const list = affByName.get(c.name); if (!list) continue;
     const existing = c.affiliations || [];
     const seen = new Set(existing.map(a => a.factionId));

@@ -81,7 +81,6 @@ interface RuntimeEventLike {
 const HIGHLIGHT_EVIDENCE_FALLBACK: Record<string, string[]> = {
   // 旧存档快照没有新增 completionEvidence 字段；冻结 ID 下保留一次兼容映射。
   'lyg.event.highlight_banchao_lamb_leg': ['羊腿', '刀尖', '吉策', '九门出入记录', '田荣', '差事'],
-  'lyl.event.mingqingsi_encounter': ['高衙内', '阮香凝', '林冲', '拳头', '水镜'],
 };
 
 const HIGHLIGHT_NON_OCCURRENCE_PREFIX = '(?:打算|准备|试图|设法|计划|将要|正要|欲要|尚未|还未|未曾|没能)';

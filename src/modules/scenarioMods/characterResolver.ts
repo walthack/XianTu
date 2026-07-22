@@ -137,11 +137,20 @@ for (const entry of (registryJson as { characters: RegistryEntry[] }).characters
   for (const alias of entry.aliases || []) if (!byName.has(alias)) byName.set(alias, entry);
 }
 
+// 与构建期 apply-character-cards-v3-to-mod.mjs 同步：早期关卡里的未揭示称谓
+// 不得因 alias 命中全局 registry 而在新档物化时补出未来身份或画像。
+const CARD_TIME_GATE_EXCLUSIONS: Record<string, Set<string>> = {
+  'lyl.lin_an_black_sea': new Set([
+    'liuchao.character.ruan_xiang_ning',
+  ]),
+};
+
 /**
  * 用注册表把一个精简角色还原为完整角色（原地修改 character.profile）。
  * 已经带完整 profile 的旧档角色也安全：force 覆盖为正典静态档，动态字段保留。
  */
 function resolveOne(character: any, stageId: string): boolean {
+  if (CARD_TIME_GATE_EXCLUSIONS[stageId]?.has(character?.id)) return false;
   const entry = byName.get(character?.name);
   if (!entry) return false;
   const profile = character.profile || {};
