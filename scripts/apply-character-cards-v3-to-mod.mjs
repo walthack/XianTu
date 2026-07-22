@@ -28,6 +28,15 @@ const CARD_TIME_GATE_EXCLUSIONS = new Map([
   ['lyl.lin_an_black_sea', new Set([
     'liuchao.character.ruan_xiang_ning',
   ])],
+  // R2-11Q（源 12–14）：这五人均使用本关时点的最小投影。全局卡含后续身份、
+  // 关系或结局，构建期不得覆盖本关刚揭开的威远/林家/太尉府信息。
+  ['lyl.taiquan_expedition', new Set([
+    'canon.character.7718ae444a',
+    'liuchao.character.ruan_xiang_lin',
+    'liuchao.character.ruan_xiang_ning',
+    'liuchao.character.gao_zhishang',
+    'liuchao.character.lu_qian',
+  ])],
 ]);
 
 const DERIVED_TAGS = [

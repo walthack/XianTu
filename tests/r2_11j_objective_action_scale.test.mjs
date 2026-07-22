@@ -24,6 +24,7 @@ const isolatedStageIds = new Set([
 const sourceRebuiltStageIds = new Set([
   'lyl.lin_an_black_sea',
   'lyl.luoyang_coup',
+  'lyl.taiquan_expedition',
 ]);
 
 async function stages() {
@@ -95,7 +96,7 @@ function singleEventFixture(stage, event) {
   return save;
 }
 
-test('objective-action migrations cover 324 events while preserving the 267-event mechanical boundary', async () => {
+test('objective-action migrations cover 329 events while preserving the 267-event mechanical boundary', async () => {
   const allStages = await stages();
   const allEvents = allStages.flatMap(stage => stage.scenario.events.map(event => ({ stage, event })));
   const objectiveActions = allEvents.filter(({ event }) => event.playerCompletionContract?.kind === 'objective_action');
@@ -103,11 +104,11 @@ test('objective-action migrations cover 324 events while preserving the 267-even
     event.playerCompletionContract.actions[0].id === 'advance_declared_objective');
   const covered = allEvents.filter(({ event }) => event.playerCompletionContract
     || event.worldActor?.opportunities?.some(opportunity => opportunity.completionContract));
-  // +1 event / +8 contracts = R2-11M 洛都政变；+15 contracts = R2-11P 临安第 6–8 章来源重建。
+  // +1 event / +8 contracts = R2-11M；+15 = R2-11P；+5 = R2-11Q 临安第 12–14 章。
   assert.equal(allEvents.length, 381);
-  assert.equal(objectiveActions.length, 324);
+  assert.equal(objectiveActions.length, 329);
   assert.equal(mechanicallyMigrated.length, 267);
-  assert.equal(covered.length, 331);
+  assert.equal(covered.length, 336);
   assert.deepEqual(
     Object.fromEntries(['lcq.', 'lyl.', 'lyg.'].map(prefix => [
       prefix,

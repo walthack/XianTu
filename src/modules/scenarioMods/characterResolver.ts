@@ -143,6 +143,13 @@ const CARD_TIME_GATE_EXCLUSIONS: Record<string, Set<string>> = {
   'lyl.lin_an_black_sea': new Set([
     'liuchao.character.ruan_xiang_ning',
   ]),
+  'lyl.taiquan_expedition': new Set([
+    'canon.character.7718ae444a',
+    'liuchao.character.ruan_xiang_lin',
+    'liuchao.character.ruan_xiang_ning',
+    'liuchao.character.gao_zhishang',
+    'liuchao.character.lu_qian',
+  ]),
 };
 
 /**

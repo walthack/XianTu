@@ -1,16 +1,102 @@
 {
   "schema": "xiantu.character-registry.v1",
-  "version": "cr-2026-07-22-892f2fb3f7f69ea4",
-  "sourceHash": "892f2fb3f7f69ea4",
+  "version": "cr-2026-07-22-0f2dfbf9edf2cee4",
+  "sourceHash": "0f2dfbf9edf2cee4",
   "sourceGeneratedAt": "2026-06-30T12:50:33.965Z",
-  "generatedAt": "2026-07-22T02:29:39.399Z",
+  "generatedAt": "2026-07-22T02:42:35.405Z",
   "stats": {
     "total": 308,
-    "stagePresent": 245,
-    "canonOnly": 63,
+    "stagePresent": 235,
+    "canonOnly": 73,
     "collisionsMerged": 0
   },
   "characters": [
+    {
+      "id": "canon.character.16cd30ae70",
+      "canonicalName": "惠远",
+      "aliases": [],
+      "gender": "男",
+      "books": [
+        "yunlong"
+      ],
+      "tier": "次要",
+      "stagePresence": false,
+      "staticProfile": {
+        "identitySummary": "佛光寺僧人",
+        "personality": [
+          "善良",
+          "天真",
+          "易惊慌"
+        ],
+        "appearance": "小和尚，光头，僧衣",
+        "speechStyle": "文绉绉，常念佛号，如“阿弥陀佛”“施主切莫打诳语”",
+        "principles": [
+          "不伤无辜",
+          "见女子裸露会避嫌"
+        ],
+        "goals": [
+          "随队探索太泉古阵，生存"
+        ],
+        "weaknesses": [
+          "实力弱，易受伤，心软"
+        ],
+        "signatureAbilities": [
+          "方便铲",
+          "日月铲"
+        ],
+        "relationToProtagonist": [
+          "同伴"
+        ],
+        "formsOfAddress": [
+          "小和尚 / 惠远"
+        ],
+        "joining": [],
+        "keyEvents": [
+          "第2章被玻璃碎片刺伤肺叶",
+          "第5章带伤用日月铲替程宗扬挡招",
+          "第4章被交给佛光寺同门照料"
+        ],
+        "ending": [
+          "被交给佛光寺的人，后有无同门照料不明"
+        ],
+        "affiliations": [
+          {
+            "faction": "十方丛林",
+            "role": "僧人"
+          }
+        ],
+        "debutLocation": {
+          "location": "太泉古阵",
+          "locator": "六朝云龙吟/0130.html",
+          "scene": "惠远与师兄被守阵力士攻击，师兄死亡后他抱着尸体痛哭，左彤芝询问其来历时，他自述是佛光寺弟子，五日前与师兄同至太泉古阵"
+        }
+      },
+      "region": "太泉",
+      "phaseIdentities": [
+        {
+          "scope": "stage-projection",
+          "stageId": "lyl.taiquan_expedition",
+          "book": "yunlong",
+          "seqLo": 563,
+          "seqHi": 566,
+          "identity": "佛光寺僧人",
+          "role": "佛光寺僧人",
+          "description": "",
+          "notes": [
+            "【关系】同伴",
+            "【目标】随队探索太泉古阵，生存"
+          ],
+          "status": "stage-current"
+        }
+      ],
+      "review": {
+        "approved": false,
+        "reviewed": false,
+        "flags": [],
+        "conflicts": []
+      },
+      "embedText": "惠远 ｜ 佛光寺僧人 ｜ 【太泉人物】 ｜ 十方丛林(僧人) ｜ 登场于太泉古阵 ｜ 善良、天真、易惊慌 ｜ 同伴 ｜ 小和尚 / 惠远 ｜ 第2章被玻璃碎片刺伤肺叶；第5章带伤用日月铲替程宗扬挡招；第4章被交给佛光寺同门照料"
+    },
     {
       "id": "canon.character.1bb48e9afc",
       "canonicalName": "齐放鹤",
@@ -455,6 +541,212 @@
         "conflicts": []
       },
       "embedText": "墨狼 ｜ 九御之一，黑魔海教尊培养的杀手 ｜ 黑魔海(九御之一·墨狼（王处仲处暗藏）)、王处仲势力(暗藏杀手) ｜ 登场于鹰愁峪 ｜ 凶悍、沉默寡言、忠诚 ｜ 敌对；敌对（玄武湖一战黑魔海投入） ｜ 程宗扬称其“墨狼”；他人称呼“墨狼” ｜ 劫持徐敖（第159章）；江上破敌，劈断拍杆，破坏楼船（第178章）；与萧遥逸激战（第178章）；被程宗扬认出眼神（第178章）；被确认是九御之一（第227章）；玄武湖一战中作为黑魔海内堂人手参战"
+    },
+    {
+      "id": "canon.character.252ab2efbe",
+      "canonicalName": "黄氏",
+      "aliases": [
+        "黄莺",
+        "黄莺怜",
+        "梁夫人"
+      ],
+      "gender": "女",
+      "books": [
+        "yunlong",
+        "yange"
+      ],
+      "tier": "次要",
+      "stagePresence": false,
+      "staticProfile": {
+        "identitySummary": "临安篇人物，原名黄莺；云龙吟临安篇第4集第6章登场，满头珠翠、衣饰华美，跪求于李师师脚边的妇人；实为唐国梁节度使梁师都之妻、梁公子之母（世称梁夫人）",
+        "personality": [
+          "妩媚",
+          "淫荡",
+          "善于讨好",
+          "有城府",
+          "为财势甘愿献身"
+        ],
+        "appearance": "美妇，雪肤红唇，玉脸含媚，双乳高耸，腰肢纤软，臀部丰腴肥翘，阴部水灵",
+        "speechStyle": "娇声媚语，自称奴婢，常以讨好语气说话",
+        "principles": [
+          "为保全家族甘愿自我牺牲",
+          "以丈夫和家族利益为最高准则",
+          "在权势面前彻底放下自尊"
+        ],
+        "goals": [
+          "图谋程宗扬的钱财权势，借以改善自身处境"
+        ],
+        "weaknesses": [
+          "对药物有一定依赖性",
+          "贪恋权势财货"
+        ],
+        "signatureAbilities": [],
+        "relationToProtagonist": [
+          "性伴侣/奴婢，程宗扬的主仆兼情色对象"
+        ],
+        "formsOfAddress": [
+          "程爷、公子、主人",
+          "梁夫人（因夫梁师都得称）"
+        ],
+        "joining": [],
+        "keyEvents": [
+          "梁师都之子得罪程宗扬，梁师都为保官位竟拿妻子当赔罪礼物（\"这一世还是一般嘴脸，竟拿自家老婆当赔罪的礼物\"）；黄莺怜为保全家周全，向程宗扬献身、献上粮行求庇护",
+          "在程宗扬面前主动献身并展示淫态",
+          "为讨好程宗扬而主动清洗身体并灌肠",
+          "服用程宗扬给的药物后产生强烈生理反应",
+          "求程宗扬救自己，并献上粮行"
+        ],
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "通源行",
+            "role": "女眷/家眷"
+          }
+        ],
+        "debutLocation": {
+          "location": "翠微园",
+          "locator": "六朝云龙吟/0069.html",
+          "scene": "自称梁夫人，半夜来访，被程宗扬要求在门外脱光爬进来，出场时满脸泪痕哀求程宗扬救命。"
+        },
+        "storyAge": {
+          "value": "32",
+          "basis": "黄氏讪讪道：'奴婢三十有二。'"
+        },
+        "birthYear": 188
+      },
+      "phaseIdentities": [
+        {
+          "scope": "relationship-chain",
+          "seq": "六朝云龙吟临安篇第六集末尾前",
+          "identity": "临安篇配角，禁止提前写作程宗扬阵营成员",
+          "status": "forbid-final-state-before-turning-point",
+          "source": "human-review-v3"
+        },
+        {
+          "scope": "relationship-chain",
+          "seq": "六朝云龙吟临安篇第六集末尾-第七集开头",
+          "identity": "与程宗扬发生关系转折，之后按原文写入程宗扬阵营/从属关系",
+          "status": "allowed-after-turning-point",
+          "source": "human-review-v3"
+        },
+        {
+          "scope": "stage-projection",
+          "stageId": "lyl.taiquan_expedition",
+          "book": "yunlong",
+          "seqLo": 563,
+          "seqHi": 566,
+          "identity": "临安篇人物，原名黄莺（李师师身边妇人）",
+          "role": "临安篇配角",
+          "description": "",
+          "notes": [
+            "【关系】性伴侣/奴婢，程宗扬的主仆兼情色对象",
+            "【目标】图谋程宗扬的钱财权势，借以改善自身处境"
+          ],
+          "status": "stage-current"
+        }
+      ],
+      "review": {
+        "approved": false,
+        "reviewed": true,
+        "flags": [
+          "female-relationship-phase-needed"
+        ],
+        "conflicts": [],
+        "humanReviewed": true,
+        "humanNotes": "人工批注：六朝云龙吟临安篇第六集末尾至第七集开头有关系转折描写。 2026-07-04 二审补: 黄氏=黄莺怜=梁师都之妻,补赔罪来龙去脉(用户批准)。"
+      },
+      "embedText": "黄氏 ｜ 黄莺 黄莺怜 梁夫人 ｜ 临安篇人物，原名黄莺；云龙吟临安篇第4集第6章登场，满头珠翠、衣饰华美，跪求于李师师脚边的妇人；实为唐国梁节度使梁师都之妻、梁公子之母（世称梁夫人） ｜ 通源行(女眷/家眷) ｜ 登场于翠微园 ｜ 妩媚、淫荡、善于讨好、有城府、为财势甘愿献身 ｜ 性伴侣/奴婢，程宗扬的主仆兼情色对象 ｜ 程爷、公子、主人 梁夫人（因夫梁师都得称） ｜ 临安篇配角，禁止提前写作程宗扬阵营成员；与程宗扬发生关系转折，之后按原文写入程宗扬阵营/从属关系 ｜ 梁师都之子得罪程宗扬，梁师都为保官位竟拿妻子当赔罪礼物（\"这一世还是一般嘴脸，竟拿自家老婆当赔罪的礼物\"）；黄莺怜为保全家周全，向程宗扬献身、献上粮行求庇护；在程宗扬面前主动献身并展示淫态；为讨好程宗扬而主动清洗身体并灌肠；服用程宗扬给的药物后产生强烈生理反应；求程宗扬救自己，并献上粮行"
+    },
+    {
+      "id": "canon.character.2a4df37bfa",
+      "canonicalName": "宋主",
+      "aliases": [],
+      "gender": "男",
+      "books": [
+        "qingyu",
+        "yunlong",
+        "yange"
+      ],
+      "tier": "主要",
+      "stagePresence": false,
+      "staticProfile": {
+        "identitySummary": "宋国皇帝",
+        "personality": [
+          "年轻",
+          "狠辣",
+          "听信忠言",
+          "有决断",
+          "翻脸不认人"
+        ],
+        "appearance": "长得好一张小白脸，唇红齿白、面如冠玉，看上去倒挺俊俏，只多了两撇清秀的小胡子，颇有英主之气",
+        "speechStyle": "冷冷地说话，常以“朕”自称",
+        "principles": [
+          "绝不容忍拒草诏书",
+          "回护时仍可改换脸色必欲除之而后快"
+        ],
+        "goals": [
+          "权衡和战之议、发行纸币以解财政困境"
+        ],
+        "weaknesses": [
+          "年轻冲动，易受臣下影响；身世秘密是致命软肋"
+        ],
+        "signatureAbilities": [],
+        "relationToProtagonist": [
+          "君主与臣子（客卿）"
+        ],
+        "formsOfAddress": [
+          "宋主 / 被程宗扬等人尊称‘宋主’"
+        ],
+        "joining": [],
+        "keyEvents": [
+          "不杀王禹玉但依法严惩",
+          "发行纸币缓解军饷",
+          "信任贾师宪却也能在博弈后接纳韩节夫等",
+          "身世秘密被黑魔海掌握"
+        ],
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "宋国",
+            "role": "君主"
+          }
+        ],
+        "debutLocation": {
+          "location": "筠州",
+          "locator": "0008.html",
+          "scene": "滕甫因挪用军费购买粮食被有司论罪，宋主特旨下诏不问，后此札子被收入《六朝名臣奏议》"
+        },
+        "storyAge": {
+          "value": "七八岁",
+          "basis": "原文：'宋主不过是个七八岁的小儿'"
+        },
+        "birthYear": 205
+      },
+      "region": "宋国",
+      "phaseIdentities": [
+        {
+          "scope": "stage-projection",
+          "stageId": "lyl.taiquan_expedition",
+          "book": "yunlong",
+          "seqLo": 563,
+          "seqHi": 566,
+          "identity": "宋国皇帝",
+          "role": "宋国皇帝",
+          "description": "",
+          "notes": [
+            "【关系】君主与臣子（客卿）",
+            "【目标】权衡和战之议、发行纸币以解财政困境"
+          ],
+          "status": "stage-current"
+        }
+      ],
+      "review": {
+        "approved": false,
+        "reviewed": false,
+        "flags": [],
+        "conflicts": []
+      },
+      "embedText": "宋主 ｜ 宋国皇帝 ｜ 【宋国人物】 ｜ 宋国(君主) ｜ 登场于筠州 ｜ 年轻、狠辣、听信忠言、有决断、翻脸不认人 ｜ 君主与臣子（客卿） ｜ 宋主 / 被程宗扬等人尊称‘宋主’ ｜ 不杀王禹玉但依法严惩；发行纸币缓解军饷；信任贾师宪却也能在博弈后接纳韩节夫等；身世秘密被黑魔海掌握"
     },
     {
       "id": "canon.character.2cf90450c5",
@@ -1119,6 +1411,92 @@
       "embedText": "沮渠二世 ｜ 大孚灵鹫寺僧侣、道上有名的疤和尚、吕氏门下死士（假冒身份） ｜ 十方丛林(丛林领袖/共主)、大孚灵鹫寺(住持/摩法宗宗主) ｜ 登场于汉国深宫（狱墙附近） ｜ 沉默寡言、坚忍、年老病重、威望极高、曾被传言挟持、正统一方"
     },
     {
+      "id": "canon.character.523920f51c",
+      "canonicalName": "郭槐",
+      "aliases": [],
+      "gender": "男",
+      "books": [
+        "yunlong"
+      ],
+      "tier": "次要",
+      "stagePresence": false,
+      "staticProfile": {
+        "identitySummary": "太监，大貂珰，太皇太后贴身太监",
+        "personality": [
+          "木讷",
+          "忠心",
+          "阴险",
+          "隐忍"
+        ],
+        "appearance": "佝偻腰背，萧索白发，木讷神情，如枯朽树枝般瘦弱",
+        "speechStyle": "说话慢吞吞，声音尖细",
+        "principles": [
+          "效忠太皇太后，奉旨行事，不打折扣",
+          "护主安危，不容外人威胁主子安全",
+          "同侪间有竞争，但关键时刻会援手"
+        ],
+        "goals": [
+          "效忠太皇太后，完成其命令"
+        ],
+        "weaknesses": [
+          "年老体衰，受伤后难以自保"
+        ],
+        "signatureAbilities": [
+          "荡星鞭"
+        ],
+        "relationToProtagonist": [],
+        "formsOfAddress": [],
+        "joining": [],
+        "keyEvents": [
+          "与剑玉姬交手，被刺穿肩头",
+          "保护太皇太后数十年",
+          "被太皇太后打发出去"
+        ],
+        "ending": [
+          "被太皇太后打发出去，生死未卜"
+        ],
+        "affiliations": [
+          {
+            "faction": "汉国朝廷",
+            "role": "大貂珰（宦官）"
+          },
+          {
+            "faction": "宦官集团",
+            "role": "太皇太后刘娥身边最宠信的太监"
+          }
+        ],
+        "debutLocation": {
+          "location": "明庆寺（观音殿）",
+          "locator": "六朝云龙吟/第79章",
+          "scene": "太皇太后出行龙华盛会驾临明庆寺，郭槐作为大貂珰随行伺候，被太皇太后称为'小郭子'"
+        }
+      },
+      "region": "汉国",
+      "phaseIdentities": [
+        {
+          "scope": "stage-projection",
+          "stageId": "lyl.taiquan_expedition",
+          "book": "yunlong",
+          "seqLo": 563,
+          "seqHi": 566,
+          "identity": "太监，大貂珰，太皇太后贴身太监",
+          "role": "太监",
+          "description": "",
+          "notes": [
+            "【目标】效忠太皇太后，完成其命令"
+          ],
+          "status": "stage-current"
+        }
+      ],
+      "review": {
+        "approved": false,
+        "reviewed": false,
+        "flags": [],
+        "conflicts": []
+      },
+      "embedText": "郭槐 ｜ 太监，大貂珰，太皇太后贴身太监 ｜ 【汉国人物】 ｜ 汉国朝廷(大貂珰（宦官）)、宦官集团(太皇太后刘娥身边最宠信的太监) ｜ 登场于明庆寺（观音殿） ｜ 木讷、忠心、阴险、隐忍 ｜ 与剑玉姬交手，被刺穿肩头；保护太皇太后数十年；被太皇太后打发出去"
+    },
+    {
       "id": "canon.character.526e7db525",
       "canonicalName": "不拾一世",
       "aliases": [
@@ -1676,6 +2054,93 @@
       "embedText": "法海 ｜ 金山寺大师 ｜ 十方丛林(金山寺大师) ｜ 佛法高深 ｜ 法海大师 法海老和尚 ｜ 调停白素贞与许仙决战；白素贞与小青皈依金山寺门下"
     },
     {
+      "id": "canon.character.6ec7e21839",
+      "canonicalName": "朱殷",
+      "aliases": [],
+      "gender": "女",
+      "books": [
+        "yunlong",
+        "yange"
+      ],
+      "tier": "次要",
+      "stagePresence": false,
+      "staticProfile": {
+        "identitySummary": "瑶池宗奉琼仙子",
+        "personality": [
+          "矜持骄傲（曾经）",
+          "羞耻顺从",
+          "感激"
+        ],
+        "appearance": "玉雕般的面孔，乌亮的秀发，修长的玉颈，光洁的香肩玉背，丰挺饱满的雪乳，浑圆肥翘的美臀，肌肤白腻如羊脂白玉",
+        "speechStyle": "文雅、羞涩",
+        "principles": [
+          "重视尊严和贞洁（被迫屈服后仍存羞耻）",
+          "坚守报恩之心"
+        ],
+        "goals": [
+          "为报程宗扬的救助之恩而委身，渴望脱离困境"
+        ],
+        "weaknesses": [
+          "对雾障的恐惧；失去修为后无力反抗"
+        ],
+        "signatureAbilities": [],
+        "relationToProtagonist": [
+          "凌辱对象→报恩对象→临时性伴侣"
+        ],
+        "formsOfAddress": [
+          "对程宗扬无直接称呼；被他人称为奉琼仙子、朱仙子、朱殷"
+        ],
+        "joining": [],
+        "keyEvents": [
+          "被废去修为",
+          "遭众人凌辱",
+          "为报恩侍奉程宗扬",
+          "被程宗扬戏弄"
+        ],
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "瑶池宗",
+            "role": "奉琼仙子（三仙子之一）"
+          },
+          {
+            "faction": "小紫势力",
+            "role": "奴婢"
+          }
+        ],
+        "debutLocation": {
+          "location": "太泉古阵（苍澜附近）",
+          "locator": "六朝云龙吟·0122.html",
+          "scene": "萧遥逸向程宗扬等人介绍楼上住客时提及瑶池宗来人，其中一位身份特殊的是瑶池宗三仙子中的奉琼仙子朱殷，提到他们今晚也要前往太泉。"
+        }
+      },
+      "region": "太泉",
+      "phaseIdentities": [
+        {
+          "scope": "stage-projection",
+          "stageId": "lyl.taiquan_expedition",
+          "book": "yunlong",
+          "seqLo": 563,
+          "seqHi": 566,
+          "identity": "瑶池宗奉琼仙子",
+          "role": "瑶池宗奉琼仙子",
+          "description": "",
+          "notes": [
+            "【关系】凌辱对象→报恩对象→临时性伴侣",
+            "【目标】为报程宗扬的救助之恩而委身，渴望脱离困境"
+          ],
+          "status": "stage-current"
+        }
+      ],
+      "review": {
+        "approved": false,
+        "reviewed": false,
+        "flags": [],
+        "conflicts": []
+      },
+      "embedText": "朱殷 ｜ 瑶池宗奉琼仙子 ｜ 【太泉人物】 ｜ 瑶池宗(奉琼仙子（三仙子之一）)、小紫势力(奴婢) ｜ 登场于太泉古阵（苍澜附近） ｜ 矜持骄傲（曾经）、羞耻顺从、感激 ｜ 凌辱对象→报恩对象→临时性伴侣 ｜ 对程宗扬无直接称呼；被他人称为奉琼仙子、朱仙子、朱殷 ｜ 被废去修为；遭众人凌辱；为报恩侍奉程宗扬；被程宗扬戏弄"
+    },
+    {
       "id": "canon.character.71a9e8c63c",
       "canonicalName": "虚日鼠",
       "aliases": [],
@@ -1798,7 +2263,7 @@
         "yunlong"
       ],
       "tier": "主要",
-      "stagePresence": false,
+      "stagePresence": true,
       "staticProfile": {
         "identitySummary": "威远镖局总镖头",
         "personality": [
@@ -2018,6 +2483,97 @@
       "embedText": "尹思元 ｜ 乾贞道门下 ｜ 乾贞道 ｜ 登场于太泉 ｜ 好色、阴狠、贪婪、狡诈 ｜ 敌对，被主角程宗扬所杀；敌对关系（被主角亲手击杀） ｜ 尹思元 ｜ 在太泉古阵盯上太乙真宗，拉拢神霄宗黑吃黑；重伤后意图侵犯朱殷，被程宗扬用长刀钉死；在第8章被程宗扬亲手干掉"
     },
     {
+      "id": "canon.character.80c48524ad",
+      "canonicalName": "贾师宪",
+      "aliases": [],
+      "gender": "男",
+      "books": [
+        "qingyu",
+        "yunlong",
+        "yange"
+      ],
+      "tier": "次要",
+      "stagePresence": false,
+      "staticProfile": {
+        "identitySummary": "宋国太师 / 权臣 / 贾党领袖",
+        "personality": [
+          "精明务实",
+          "城府极深",
+          "善于权谋",
+          "看重利益",
+          "临危不乱",
+          "威严"
+        ],
+        "appearance": "富家翁悠闲派头，眼神犀利异常",
+        "speechStyle": "直接务实",
+        "principles": [
+          "维持自身权势与财政稳定",
+          "不轻易被道德约束"
+        ],
+        "goals": [
+          "通过发行纸币、借贷、预征商税等方式解决朝廷财政危机，同时巩固自身政治地位并获取利益"
+        ],
+        "weaknesses": [
+          "对纸币发行依赖程宗扬的钱庄；朝中反对派（王禹玉等）的威胁；宋主猜忌"
+        ],
+        "signatureAbilities": [
+          "政治手腕",
+          "财政手段（借贷、发行纸币）"
+        ],
+        "relationToProtagonist": [
+          "利益合作伙伴"
+        ],
+        "formsOfAddress": [
+          "程员外 / 被别人称为：老贾、贾太师、贾师宪"
+        ],
+        "joining": [],
+        "keyEvents": [
+          "与程宗扬合作发行纸币",
+          "从晴州借一百万金铢军饷",
+          "主导拆毁武穆王府开发",
+          "击垮王禹玉一党",
+          "在朝会主战面临户部账目质询"
+        ],
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "宋国",
+            "role": "太师兼平章军国重事"
+          }
+        ],
+        "debutLocation": {
+          "location": "江州",
+          "locator": "chapter255",
+          "scene": "卢景向程宗扬介绍宋军大举集结，贾师宪铁了心要打一场，程宗扬询问贾师宪是哪位，卢景回答是宋国太师兼领平章军国重事"
+        }
+      },
+      "region": "宋国",
+      "phaseIdentities": [
+        {
+          "scope": "stage-projection",
+          "stageId": "lyl.taiquan_expedition",
+          "book": "yunlong",
+          "seqLo": 563,
+          "seqHi": 566,
+          "identity": "宋国太师 / 权臣 / 贾党领袖",
+          "role": "宋国太师 / 权臣 / 贾党领袖",
+          "description": "",
+          "notes": [
+            "【关系】利益合作伙伴",
+            "【目标】通过发行纸币、借贷、预征商税等方式解决朝廷财政危机，同时巩固自身政治地位并获取利益"
+          ],
+          "status": "stage-current"
+        }
+      ],
+      "review": {
+        "approved": false,
+        "reviewed": false,
+        "flags": [],
+        "conflicts": []
+      },
+      "embedText": "贾师宪 ｜ 宋国太师 / 权臣 / 贾党领袖 ｜ 【宋国人物】 ｜ 宋国(太师兼平章军国重事) ｜ 登场于江州 ｜ 精明务实、城府极深、善于权谋、看重利益、临危不乱、威严 ｜ 利益合作伙伴 ｜ 程员外 / 被别人称为：老贾、贾太师、贾师宪 ｜ 与程宗扬合作发行纸币；从晴州借一百万金铢军饷；主导拆毁武穆王府开发；击垮王禹玉一党；在朝会主战面临户部账目质询"
+    },
+    {
       "id": "canon.character.83e108d676",
       "canonicalName": "沈黄经",
       "aliases": [],
@@ -2092,6 +2648,91 @@
         "conflicts": []
       },
       "embedText": "沈黄经 ｜ 阳钧宗宗主/六大宗门之一 ｜ 【太泉人物】 ｜ 阳钧宗(道长) ｜ 登场于太泉古阵某层库房 ｜ 谨慎、迟疑不决、较为克制、宽厚长者、有德望 ｜ 非程宗扬阵营；与程宗扬在太泉古阵事件中有交集，受其牵连被瑶池宗指控；道门前辈，印象良好的熟人 ｜ 对程宗扬称呼“程公子”/被称呼为“沈黄经” 沈黄经/对程宗扬无特定称呼 ｜ 太泉古阵探险中身负重伤（胸口被铁丝刺穿）；被瑶池宗奉琼仙子暗算，后指认瑶池宗为凶手；怀疑与朱殷同中诅咒；曾参与审讯徐君房；在太泉中了诅咒；被困在苍澜无法脱身"
+    },
+    {
+      "id": "canon.character.846aca5887",
+      "canonicalName": "孙天羽",
+      "aliases": [],
+      "gender": "男",
+      "books": [
+        "yunlong"
+      ],
+      "tier": "次要",
+      "stagePresence": false,
+      "staticProfile": {
+        "identitySummary": "刑部抽调至皇城司的官差",
+        "personality": [
+          "油滑机变",
+          "欺软怕硬",
+          "善于钻营",
+          "为达目的能屈能伸"
+        ],
+        "appearance": "两眼像死鱼一样翻白",
+        "speechStyle": "赔笑、奉承、见风使舵",
+        "principles": [
+          "无底线，为活命可认贼作父"
+        ],
+        "goals": [
+          "在皇城司升官发财"
+        ],
+        "weaknesses": [
+          "贪生怕死，修为不高"
+        ],
+        "signatureAbilities": [
+          "腰牌",
+          "钻地/潜行隐匿之术"
+        ],
+        "relationToProtagonist": [
+          "下属/眼线（后被程宗扬收服）"
+        ],
+        "formsOfAddress": [
+          "对程宗扬：叔叔/爹爹；被他人称呼：官差/姓孙的"
+        ],
+        "joining": [
+          "第4章乱战中被程宗扬擒获，为活命当场认爹，成为程宗扬安插在皇城司的内线"
+        ],
+        "keyEvents": [
+          "第2章秘闻：蒙眼堵耳潜伏偷窥，以野猪制造骚乱逃生",
+          "第4章乱战：被青面兽掐脖几乎毙命，亮腰牌求饶，后跪认程宗扬为父",
+          "第5章王氏：登门向程宗扬请安，汇报情报"
+        ],
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "皇城司",
+            "role": "指挥"
+          }
+        ],
+        "debutLocation": {
+          "location": "野猪林",
+          "locator": "六朝云龙吟/0055.html 秘闻 第2章（林中场景出现）/0057.html 乱战 第4章（正式被挖出对话）",
+          "scene": "作为皇城司官差随队追杀林冲，利用野猪和钻入落叶下泥土中躲避追踪，后被程宗扬从地下挖出，亮出腰牌表明皇城司身份。"
+        }
+      },
+      "phaseIdentities": [
+        {
+          "scope": "stage-projection",
+          "stageId": "lyl.taiquan_expedition",
+          "book": "yunlong",
+          "seqLo": 563,
+          "seqHi": 566,
+          "identity": "刑部抽调至皇城司的官差",
+          "role": "刑部抽调至皇城司的官差",
+          "description": "",
+          "notes": [
+            "【关系】下属/眼线（后被程宗扬收服）",
+            "【目标】在皇城司升官发财"
+          ],
+          "status": "stage-current"
+        }
+      ],
+      "review": {
+        "approved": false,
+        "reviewed": false,
+        "flags": [],
+        "conflicts": []
+      },
+      "embedText": "孙天羽 ｜ 刑部抽调至皇城司的官差 ｜ 皇城司(指挥) ｜ 登场于野猪林 ｜ 油滑机变、欺软怕硬、善于钻营、为达目的能屈能伸 ｜ 下属/眼线（后被程宗扬收服） ｜ 对程宗扬：叔叔/爹爹；被他人称呼：官差/姓孙的 ｜ 第2章秘闻：蒙眼堵耳潜伏偷窥，以野猪制造骚乱逃生；第4章乱战：被青面兽掐脖几乎毙命，亮腰牌求饶，后跪认程宗扬为父；第5章王氏：登门向程宗扬请安，汇报情报"
     },
     {
       "id": "canon.character.8507fde74e",
@@ -2653,6 +3294,79 @@
       "embedText": "柳淳风 ｜ 乾贞道高手 ｜ 【南荒人物】 ｜ 神霄宗(道人) ｜ 登场于苍澜镇附近林中 ｜ 看似正义凛然实则冷酷 ｜ 敌对 ｜ 柳兄（尹思元称）/ 柳淳风 ｜ 与尹思元一起伏击太乙真宗众人；追杀小紫不知所踪；最终身死"
     },
     {
+      "id": "canon.character.9daa9afd8e",
+      "canonicalName": "宁素",
+      "aliases": [],
+      "gender": "女",
+      "books": [
+        "yunlong"
+      ],
+      "tier": "次要",
+      "stagePresence": false,
+      "staticProfile": {
+        "identitySummary": "",
+        "personality": [
+          "顺从",
+          "软弱",
+          "可怜"
+        ],
+        "appearance": "被宋三舔舐脸颊、扯裤子，顺从抬臀任由抚弄，被虞紫薇玉杖穿过肩头受伤。",
+        "speechStyle": "",
+        "principles": [],
+        "goals": [
+          "依附他人求生，师傅死后几乎自尽。"
+        ],
+        "weaknesses": [
+          "孤身一人，无自保能力"
+        ],
+        "signatureAbilities": [],
+        "relationToProtagonist": [
+          "程宗扬对其有恻隐之心，但并非亲密关系。"
+        ],
+        "formsOfAddress": [],
+        "joining": [
+          "师傅死后，被萧遥逸和程宗扬带入队伍同行。"
+        ],
+        "keyEvents": [
+          "被宋三猥亵并被程宗扬目睹",
+          "师傅死于黑疯子等人之手",
+          "被虞紫薇碧玉杖打伤",
+          "跟随萧遥逸和程宗扬离开"
+        ],
+        "ending": [],
+        "debutLocation": {
+          "location": "太泉古阵内废墟大厦",
+          "locator": "六朝云龙吟/0130.html",
+          "scene": "程宗扬询问她身份时，宋三代为回答她叫宁素，是那位女侠（其师傅）的徒弟"
+        }
+      },
+      "region": "太泉",
+      "phaseIdentities": [
+        {
+          "scope": "stage-projection",
+          "stageId": "lyl.taiquan_expedition",
+          "book": "yunlong",
+          "seqLo": 563,
+          "seqHi": 566,
+          "identity": "配角",
+          "role": "配角",
+          "description": "",
+          "notes": [
+            "【关系】程宗扬对其有恻隐之心，但并非亲密关系。",
+            "【目标】依附他人求生，师傅死后几乎自尽。"
+          ],
+          "status": "stage-current"
+        }
+      ],
+      "review": {
+        "approved": false,
+        "reviewed": false,
+        "flags": [],
+        "conflicts": []
+      },
+      "embedText": "宁素 ｜ 【太泉人物】 ｜ 登场于太泉古阵内废墟大厦 ｜ 顺从、软弱、可怜 ｜ 程宗扬对其有恻隐之心，但并非亲密关系。 ｜ 被宋三猥亵并被程宗扬目睹；师傅死于黑疯子等人之手；被虞紫薇碧玉杖打伤；跟随萧遥逸和程宗扬离开"
+    },
+    {
       "id": "canon.character.9ec36f3055",
       "canonicalName": "牛木獬",
       "aliases": [],
@@ -2873,6 +3587,112 @@
         "conflicts": []
       },
       "embedText": "光头大汉 ｜ 云家手下/水手 ｜ 云氏商会(云家船队水手/护卫) ｜ 登场于湖上（水战场） ｜ 鲁莽、狂暴 ｜ 敌人 ｜ 被电梯陷阱引诱，冲入电梯井坠落死亡"
+    },
+    {
+      "id": "canon.character.ab756c526e",
+      "canonicalName": "刘娥",
+      "aliases": [
+        "太皇太后(宋)",
+        "刘太后",
+        "宋太皇太后",
+        "太皇太后"
+      ],
+      "gender": "女",
+      "books": [
+        "yunlong",
+        "yange"
+      ],
+      "tier": "主要",
+      "stagePresence": false,
+      "staticProfile": {
+        "identitySummary": "宋国太皇太后/后期受制于程宗扬阵营；宋主长辈（程宗扬称姨娘），与贾师宪(贾似道)同族，曾受其游说干预朝局",
+        "personality": [
+          "受虐倾向",
+          "淫荡",
+          "顺从",
+          "妩媚"
+        ],
+        "appearance": "徐娘半老，熟艳美妇，白花花的臀肉，臀沟有粉艳的桃花谷，乳房略微下垂但丰满，乳头紫胀",
+        "speechStyle": "柔媚，自称‘奴婢’",
+        "principles": [
+          "强调妇德贞洁：女子从一而终，失身再嫁须守贞节",
+          "维护外甥利益：凡事以程宗扬家族为先，纳妾须清白入门",
+          "讲究礼法规矩：新人入门须行献茶等礼数，方算正式进门"
+        ],
+        "goals": [],
+        "weaknesses": [
+          "受虐倾向"
+        ],
+        "signatureAbilities": [],
+        "relationToProtagonist": [
+          "侍奴/性奴"
+        ],
+        "formsOfAddress": [
+          "刘娥、娥奴"
+        ],
+        "joining": [],
+        "keyEvents": [
+          "被侍奴以假阳具奸弄",
+          "被程宗扬干入",
+          "被展示桃花谷",
+          "自称奴婢完成指令"
+        ],
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "宋国",
+            "role": "太皇太后"
+          }
+        ],
+        "debutLocation": {
+          "location": "云涛观偏殿",
+          "locator": "六朝云龙吟/0100.html",
+          "scene": "程宗扬带阮香琳拜见刘娥，刘娥以富贵人家打扮出现，称阮香琳为‘丫头’。"
+        },
+        "birthYear": 157
+      },
+      "region": "宋国",
+      "phaseIdentities": [
+        {
+          "scope": "relationship-chain",
+          "seq": "转折前",
+          "identity": "宋国太皇太后，禁止提前写作程宗扬阵营或从属关系",
+          "status": "forbid-final-state-before-turning-point",
+          "source": "human-review-v3"
+        },
+        {
+          "scope": "relationship-chain",
+          "seq": "六朝云龙吟太泉古阵篇第11集",
+          "identity": "进入受制阶段，之后可写作程宗扬阵营从属",
+          "status": "allowed-after-turning-point",
+          "source": "human-review-v3"
+        },
+        {
+          "scope": "stage-projection",
+          "stageId": "lyl.taiquan_expedition",
+          "book": "yunlong",
+          "seqLo": 563,
+          "seqHi": 566,
+          "identity": "宋国太皇太后/后期受制于程宗扬阵营",
+          "role": "宋国太皇太后/后期受制于程宗扬阵营",
+          "description": "",
+          "notes": [
+            "【关系】侍奴/性奴"
+          ],
+          "status": "stage-current"
+        }
+      ],
+      "review": {
+        "approved": false,
+        "reviewed": true,
+        "flags": [
+          "female-relationship-phase-needed"
+        ],
+        "conflicts": [],
+        "humanReviewed": true,
+        "humanNotes": "人工批注：转折承接六朝清羽记；六朝云龙吟太泉古阵篇第11集进入受制阶段；转折前身份为宋国太皇太后。 2026-07-04 二审: 刘娥=太皇太后(宋)(同一人),并入重复卡「太皇太后(宋)」;更正本session裁定#49的匿名描述。"
+      },
+      "embedText": "刘娥 ｜ 太皇太后(宋) 刘太后 宋太皇太后 太皇太后 ｜ 宋国太皇太后/后期受制于程宗扬阵营；宋主长辈（程宗扬称姨娘），与贾师宪(贾似道)同族，曾受其游说干预朝局 ｜ 【宋国人物】 ｜ 宋国(太皇太后) ｜ 登场于云涛观偏殿 ｜ 受虐倾向、淫荡、顺从、妩媚 ｜ 侍奴/性奴 ｜ 刘娥、娥奴 ｜ 宋国太皇太后，禁止提前写作程宗扬阵营或从属关系；进入受制阶段，之后可写作程宗扬阵营从属 ｜ 被侍奴以假阳具奸弄；被程宗扬干入；被展示桃花谷；自称奴婢完成指令"
     },
     {
       "id": "canon.character.afe5070a50",
@@ -3539,6 +4359,77 @@
       "embedText": "郭氏 ｜ 太皇太后(唐) 太皇太后郭氏 ｜ 太皇太后 ｜ 【唐国人物】 ｜ 唐国朝廷(太皇太后) ｜ 登场于曲江苑 ｜ 别名/称谓：太皇太后(唐) ｜ 用户裁定：唐国篇郭氏称谓限定为太皇太后(唐)，避免与其他国家/阶段的太皇太后误合并。"
     },
     {
+      "id": "canon.character.ccb02cf3ed",
+      "canonicalName": "宋三",
+      "aliases": [],
+      "gender": "男",
+      "books": [
+        "yunlong"
+      ],
+      "tier": "次要",
+      "stagePresence": false,
+      "staticProfile": {
+        "identitySummary": "外姓人（青叶教）",
+        "personality": [
+          "奸滑",
+          "阴狠",
+          "淫邪"
+        ],
+        "appearance": "",
+        "speechStyle": "嘿嘿笑，语气粗鄙，带有淫邪",
+        "principles": [
+          "拿了钱就要把事情办好，绝不白拿人钱不办事",
+          "苍澜镇是弱肉强食之地，外来人想活命只能老实听话"
+        ],
+        "goals": [],
+        "weaknesses": [],
+        "signatureAbilities": [],
+        "relationToProtagonist": [
+          "敌对（程宗扬认出其为青叶教训话者）"
+        ],
+        "formsOfAddress": [
+          "宋三"
+        ],
+        "joining": [],
+        "keyEvents": [
+          "参与凌辱朱殷（奉琼仙子）",
+          "在镜子中与宁素同睡并探其裙下",
+          "在青叶教主莫爷处调教尹馥兰",
+          "被程宗扬认出"
+        ],
+        "ending": [],
+        "debutLocation": {
+          "location": "太泉古阵内某大厦",
+          "locator": "第0130章/门牌",
+          "scene": "程宗扬劈开大床，宋三与一名少女从床下钻出，语无伦次地自报名姓求饶，称自己是苍澜人，被雇来当向导的。"
+        }
+      },
+      "region": "太泉",
+      "phaseIdentities": [
+        {
+          "scope": "stage-projection",
+          "stageId": "lyl.taiquan_expedition",
+          "book": "yunlong",
+          "seqLo": 563,
+          "seqHi": 566,
+          "identity": "外姓人（青叶教）",
+          "role": "外姓人（青叶教）",
+          "description": "",
+          "notes": [
+            "【关系】敌对（程宗扬认出其为青叶教训话者）"
+          ],
+          "status": "stage-current"
+        }
+      ],
+      "review": {
+        "approved": false,
+        "reviewed": false,
+        "flags": [],
+        "conflicts": []
+      },
+      "embedText": "宋三 ｜ 外姓人（青叶教） ｜ 【太泉人物】 ｜ 登场于太泉古阵内某大厦 ｜ 奸滑、阴狠、淫邪 ｜ 敌对（程宗扬认出其为青叶教训话者） ｜ 宋三 ｜ 参与凌辱朱殷（奉琼仙子）；在镜子中与宁素同睡并探其裙下；在青叶教主莫爷处调教尹馥兰；被程宗扬认出"
+    },
+    {
       "id": "canon.character.ccd9ad66ad",
       "canonicalName": "刀疤大汉",
       "aliases": [],
@@ -3898,6 +4789,106 @@
         "conflicts": []
       },
       "embedText": "女土蝠 ｜ 龙宸北方玄武七宿之一 ｜ 龙宸(玄武七宿杀手) ｜ 登场于芦苇间/河岸 ｜ 嗜血、冷漠、狠辣 ｜ 敌对 ｜ 女土蝠 ｜ 参与围攻程宗扬与云丹琉；用噬血蛭击中云丹琉脚踝；被程宗扬用手雷惊吓；被云丹琉以长刀斩杀"
+    },
+    {
+      "id": "canon.character.ee6a1a217a",
+      "canonicalName": "梁夫人",
+      "aliases": [],
+      "gender": "女",
+      "books": [
+        "yunlong"
+      ],
+      "tier": "次要",
+      "stagePresence": false,
+      "staticProfile": {
+        "identitySummary": "梁师都的夫人，后为程宗扬的侍妾/性奴",
+        "personality": [
+          "妖媚",
+          "淫浪",
+          "软弱",
+          "屈服"
+        ],
+        "appearance": "桃脸杏腮，体态妖娆，徐娘半老的熟艳美妇，白生生肉体，雪团般圆臀",
+        "speechStyle": "娇声，自称奴婢，语气卑微",
+        "principles": [
+          "惧灭族之罪，不敢反抗"
+        ],
+        "goals": [
+          "求取秘药以缓解毒瘾，获得满足感"
+        ],
+        "weaknesses": [
+          "被握有与异族交通的证据",
+          "对秘药成瘾"
+        ],
+        "signatureAbilities": [],
+        "relationToProtagonist": [
+          "程宗扬的性奴/侍妾"
+        ],
+        "formsOfAddress": [
+          "对程宗扬称“程爷”或“你”，被称“梁夫人”或“黄氏”"
+        ],
+        "joining": [],
+        "keyEvents": [
+          "被铁怪物袭击险些勒死",
+          "被迫服食秘药成瘾",
+          "被侍奴公开调教淫弄",
+          "与阮香凝等共侍一夫"
+        ],
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "通源行",
+            "role": "东家夫人"
+          },
+          {
+            "faction": "梁氏家族",
+            "role": "官眷"
+          }
+        ],
+        "debutLocation": {
+          "location": "翠微园水榭",
+          "locator": "第47章",
+          "scene": "程宗扬抬手唤道'梁夫人'，黄莺怜在场观其与阮香凝行房事"
+        }
+      },
+      "phaseIdentities": [
+        {
+          "scope": "relationship-chain",
+          "seq": "转折前",
+          "identity": "原阵营/中立/敌对身份，禁止提前称为后宫、侍妾、情人或程宗扬阵营成员",
+          "status": "forbid-final-state-before-turning-point"
+        },
+        {
+          "scope": "relationship-chain",
+          "seq": "关系转折后",
+          "identity": "按原文转折事件后，才可写入程宗扬阵营/后宫/侍妾/情人等关系身份",
+          "status": "allowed-after-turning-point"
+        },
+        {
+          "scope": "stage-projection",
+          "stageId": "lyl.taiquan_expedition",
+          "book": "yunlong",
+          "seqLo": 563,
+          "seqHi": 566,
+          "identity": "梁师都的夫人，后为程宗扬的侍妾/性奴",
+          "role": "梁师都的夫人",
+          "description": "",
+          "notes": [
+            "【关系】程宗扬的性奴/侍妾",
+            "【目标】求取秘药以缓解毒瘾，获得满足感"
+          ],
+          "status": "stage-current"
+        }
+      ],
+      "review": {
+        "approved": false,
+        "reviewed": false,
+        "flags": [
+          "female-relationship-phase-needed"
+        ],
+        "conflicts": []
+      },
+      "embedText": "梁夫人 ｜ 梁师都的夫人，后为程宗扬的侍妾/性奴 ｜ 通源行(东家夫人)、梁氏家族(官眷) ｜ 登场于翠微园水榭 ｜ 妖媚、淫浪、软弱、屈服 ｜ 程宗扬的性奴/侍妾 ｜ 对程宗扬称“程爷”或“你”，被称“梁夫人”或“黄氏” ｜ 原阵营/中立/敌对身份，禁止提前称为后宫、侍妾、情人或程宗扬阵营成员；按原文转折事件后，才可写入程宗扬阵营/后宫/侍妾/情人等关系身份 ｜ 被铁怪物袭击险些勒死；被迫服食秘药成瘾；被侍奴公开调教淫弄；与阮香凝等共侍一夫"
     },
     {
       "id": "canon.character.f30f0e5545",
@@ -11576,92 +12567,6 @@
       "embedText": "鬼巫王 ｜ 南荒鬼王峒的统治者。与黑魔海仅为合作-利用关系（本人并非黑魔海信众），妄图借黑魔海之力奴役南荒诸部族、实现自己的「大同」理想；在鬼王峒中与程宗扬等人激烈交锋。其部族出自大地深处（受蛇彝之害几近灭绝，得龙神庇护而存）——征服是他挽救族人与\"终结南荒互噬\"的救世方案 ｜ 【南荒人物】 ｜ 黑魔海(合作-利用关系（非信众，各取所需）)、鬼王峒(统治者) ｜ 登场于南荒鬼王峒区域 ｜ 残忍、淫邪、控制欲强、傲慢、疯狂、极骄傲——\"也许会歪曲事实，但绝不屑于说谎\"（程宗扬判语）、雄辩滔滔，自视为南荒的救世主、亢奋时苍白脸颊泛起红晕 ｜ 敌人，程宗扬的对抗对象 ｜ 鬼巫王大人（被他人称呼），鬼巫王 ｜ 以武力征服南荒诸部、掳部众为奴（每隔几日便有新部族被押到峒中），借献祭\"龙神新娘\"维系权威；命花苗族送阿依苏荔一行为\"新娘\"入峒；小紫被阁罗等作为献给他的新娘养成；出关后布苍龙星阵：小紫借谢艺掩护弹出细针毁其箕宿最后一星，功败垂成、流血甚多；重新聚血成阵唤龙，与龙神合体——却是为他人作嫁：\"不是鬼巫王合龙神的体，而是龙神合了鬼巫王\"；调教女奴（碧奴、丹宸等）用于交合与舞蹈；鬼王峒身世（自述）：祖先来自大地深处，\"用牙齿和利角开凿岩石，在冰冷的地下生存，吞食青苔，喝着地下的硫磺水\"——地底而出的部族，饱受饥饿病痛与蛇彝人威胁"
     },
     {
-      "id": "liuchao.character.guo_huai",
-      "canonicalName": "郭槐",
-      "aliases": [],
-      "gender": "男",
-      "books": [
-        "yunlong"
-      ],
-      "tier": "次要",
-      "stagePresence": true,
-      "staticProfile": {
-        "identitySummary": "太监，大貂珰，太皇太后贴身太监",
-        "personality": [
-          "木讷",
-          "忠心",
-          "阴险",
-          "隐忍"
-        ],
-        "appearance": "佝偻腰背，萧索白发，木讷神情，如枯朽树枝般瘦弱",
-        "speechStyle": "说话慢吞吞，声音尖细",
-        "principles": [
-          "效忠太皇太后，奉旨行事，不打折扣",
-          "护主安危，不容外人威胁主子安全",
-          "同侪间有竞争，但关键时刻会援手"
-        ],
-        "goals": [
-          "效忠太皇太后，完成其命令"
-        ],
-        "weaknesses": [
-          "年老体衰，受伤后难以自保"
-        ],
-        "signatureAbilities": [
-          "荡星鞭"
-        ],
-        "relationToProtagonist": [],
-        "formsOfAddress": [],
-        "joining": [],
-        "keyEvents": [
-          "与剑玉姬交手，被刺穿肩头",
-          "保护太皇太后数十年",
-          "被太皇太后打发出去"
-        ],
-        "ending": [
-          "被太皇太后打发出去，生死未卜"
-        ],
-        "affiliations": [
-          {
-            "faction": "汉国朝廷",
-            "role": "大貂珰（宦官）"
-          },
-          {
-            "faction": "宦官集团",
-            "role": "太皇太后刘娥身边最宠信的太监"
-          }
-        ],
-        "debutLocation": {
-          "location": "明庆寺（观音殿）",
-          "locator": "六朝云龙吟/第79章",
-          "scene": "太皇太后出行龙华盛会驾临明庆寺，郭槐作为大貂珰随行伺候，被太皇太后称为'小郭子'"
-        }
-      },
-      "region": "汉国",
-      "phaseIdentities": [
-        {
-          "scope": "stage-projection",
-          "stageId": "lyl.taiquan_expedition",
-          "book": "yunlong",
-          "seqLo": 563,
-          "seqHi": 566,
-          "identity": "太监，大貂珰，太皇太后贴身太监",
-          "role": "太监",
-          "description": "",
-          "notes": [
-            "【目标】效忠太皇太后，完成其命令"
-          ],
-          "status": "stage-current"
-        }
-      ],
-      "review": {
-        "approved": false,
-        "reviewed": false,
-        "flags": [],
-        "conflicts": []
-      },
-      "embedText": "郭槐 ｜ 太监，大貂珰，太皇太后贴身太监 ｜ 【汉国人物】 ｜ 汉国朝廷(大貂珰（宦官）)、宦官集团(太皇太后刘娥身边最宠信的太监) ｜ 登场于明庆寺（观音殿） ｜ 木讷、忠心、阴险、隐忍 ｜ 与剑玉姬交手，被刺穿肩头；保护太皇太后数十年；被太皇太后打发出去"
-    },
-    {
       "id": "liuchao.character.guo_jie",
       "canonicalName": "郭解",
       "aliases": [],
@@ -12862,207 +13767,6 @@
       "embedText": "桓郁 ｜ 胡骑校尉→卫尉→卫将军 ｜ 【汉国人物】 ｜ 汉国朝廷(胡骑校尉)、卫尉军(卫将军、卫尉) ｜ 登场于池阳（北邙以西） ｜ 谨慎、识时务 ｜ 长秋宫阵营的同僚 ｜ 原为胡骑校尉，闭营观望；被班超斩杀使者裹胁，遂交出虎符投靠长秋宫；被任命为卫尉，后晋卫将军；参与洛都之变后庆功宴"
     },
     {
-      "id": "liuchao.character.huang_shi",
-      "canonicalName": "黄氏",
-      "aliases": [
-        "黄莺",
-        "黄莺怜",
-        "梁夫人"
-      ],
-      "gender": "女",
-      "books": [
-        "yunlong",
-        "yange"
-      ],
-      "tier": "次要",
-      "stagePresence": true,
-      "staticProfile": {
-        "identitySummary": "临安篇人物，原名黄莺；云龙吟临安篇第4集第6章登场，满头珠翠、衣饰华美，跪求于李师师脚边的妇人；实为唐国梁节度使梁师都之妻、梁公子之母（世称梁夫人）",
-        "personality": [
-          "妩媚",
-          "淫荡",
-          "善于讨好",
-          "有城府",
-          "为财势甘愿献身"
-        ],
-        "appearance": "美妇，雪肤红唇，玉脸含媚，双乳高耸，腰肢纤软，臀部丰腴肥翘，阴部水灵",
-        "speechStyle": "娇声媚语，自称奴婢，常以讨好语气说话",
-        "principles": [
-          "为保全家族甘愿自我牺牲",
-          "以丈夫和家族利益为最高准则",
-          "在权势面前彻底放下自尊"
-        ],
-        "goals": [
-          "图谋程宗扬的钱财权势，借以改善自身处境"
-        ],
-        "weaknesses": [
-          "对药物有一定依赖性",
-          "贪恋权势财货"
-        ],
-        "signatureAbilities": [],
-        "relationToProtagonist": [
-          "性伴侣/奴婢，程宗扬的主仆兼情色对象"
-        ],
-        "formsOfAddress": [
-          "程爷、公子、主人",
-          "梁夫人（因夫梁师都得称）"
-        ],
-        "joining": [],
-        "keyEvents": [
-          "梁师都之子得罪程宗扬，梁师都为保官位竟拿妻子当赔罪礼物（\"这一世还是一般嘴脸，竟拿自家老婆当赔罪的礼物\"）；黄莺怜为保全家周全，向程宗扬献身、献上粮行求庇护",
-          "在程宗扬面前主动献身并展示淫态",
-          "为讨好程宗扬而主动清洗身体并灌肠",
-          "服用程宗扬给的药物后产生强烈生理反应",
-          "求程宗扬救自己，并献上粮行"
-        ],
-        "ending": [],
-        "affiliations": [
-          {
-            "faction": "通源行",
-            "role": "女眷/家眷"
-          }
-        ],
-        "debutLocation": {
-          "location": "翠微园",
-          "locator": "六朝云龙吟/0069.html",
-          "scene": "自称梁夫人，半夜来访，被程宗扬要求在门外脱光爬进来，出场时满脸泪痕哀求程宗扬救命。"
-        },
-        "storyAge": {
-          "value": "32",
-          "basis": "黄氏讪讪道：'奴婢三十有二。'"
-        },
-        "birthYear": 188
-      },
-      "phaseIdentities": [
-        {
-          "scope": "relationship-chain",
-          "seq": "六朝云龙吟临安篇第六集末尾前",
-          "identity": "临安篇配角，禁止提前写作程宗扬阵营成员",
-          "status": "forbid-final-state-before-turning-point",
-          "source": "human-review-v3"
-        },
-        {
-          "scope": "relationship-chain",
-          "seq": "六朝云龙吟临安篇第六集末尾-第七集开头",
-          "identity": "与程宗扬发生关系转折，之后按原文写入程宗扬阵营/从属关系",
-          "status": "allowed-after-turning-point",
-          "source": "human-review-v3"
-        },
-        {
-          "scope": "stage-projection",
-          "stageId": "lyl.taiquan_expedition",
-          "book": "yunlong",
-          "seqLo": 563,
-          "seqHi": 566,
-          "identity": "临安篇人物，原名黄莺（李师师身边妇人）",
-          "role": "临安篇配角",
-          "description": "",
-          "notes": [
-            "【关系】性伴侣/奴婢，程宗扬的主仆兼情色对象",
-            "【目标】图谋程宗扬的钱财权势，借以改善自身处境"
-          ],
-          "status": "stage-current"
-        }
-      ],
-      "review": {
-        "approved": false,
-        "reviewed": true,
-        "flags": [
-          "female-relationship-phase-needed"
-        ],
-        "conflicts": [],
-        "humanReviewed": true,
-        "humanNotes": "人工批注：六朝云龙吟临安篇第六集末尾至第七集开头有关系转折描写。 2026-07-04 二审补: 黄氏=黄莺怜=梁师都之妻,补赔罪来龙去脉(用户批准)。"
-      },
-      "embedText": "黄氏 ｜ 黄莺 黄莺怜 梁夫人 ｜ 临安篇人物，原名黄莺；云龙吟临安篇第4集第6章登场，满头珠翠、衣饰华美，跪求于李师师脚边的妇人；实为唐国梁节度使梁师都之妻、梁公子之母（世称梁夫人） ｜ 通源行(女眷/家眷) ｜ 登场于翠微园 ｜ 妩媚、淫荡、善于讨好、有城府、为财势甘愿献身 ｜ 性伴侣/奴婢，程宗扬的主仆兼情色对象 ｜ 程爷、公子、主人 梁夫人（因夫梁师都得称） ｜ 临安篇配角，禁止提前写作程宗扬阵营成员；与程宗扬发生关系转折，之后按原文写入程宗扬阵营/从属关系 ｜ 梁师都之子得罪程宗扬，梁师都为保官位竟拿妻子当赔罪礼物（\"这一世还是一般嘴脸，竟拿自家老婆当赔罪的礼物\"）；黄莺怜为保全家周全，向程宗扬献身、献上粮行求庇护；在程宗扬面前主动献身并展示淫态；为讨好程宗扬而主动清洗身体并灌肠；服用程宗扬给的药物后产生强烈生理反应；求程宗扬救自己，并献上粮行"
-    },
-    {
-      "id": "liuchao.character.hui_yuan",
-      "canonicalName": "惠远",
-      "aliases": [],
-      "gender": "男",
-      "books": [
-        "yunlong"
-      ],
-      "tier": "次要",
-      "stagePresence": true,
-      "staticProfile": {
-        "identitySummary": "佛光寺僧人",
-        "personality": [
-          "善良",
-          "天真",
-          "易惊慌"
-        ],
-        "appearance": "小和尚，光头，僧衣",
-        "speechStyle": "文绉绉，常念佛号，如“阿弥陀佛”“施主切莫打诳语”",
-        "principles": [
-          "不伤无辜",
-          "见女子裸露会避嫌"
-        ],
-        "goals": [
-          "随队探索太泉古阵，生存"
-        ],
-        "weaknesses": [
-          "实力弱，易受伤，心软"
-        ],
-        "signatureAbilities": [
-          "方便铲",
-          "日月铲"
-        ],
-        "relationToProtagonist": [
-          "同伴"
-        ],
-        "formsOfAddress": [
-          "小和尚 / 惠远"
-        ],
-        "joining": [],
-        "keyEvents": [
-          "第2章被玻璃碎片刺伤肺叶",
-          "第5章带伤用日月铲替程宗扬挡招",
-          "第4章被交给佛光寺同门照料"
-        ],
-        "ending": [
-          "被交给佛光寺的人，后有无同门照料不明"
-        ],
-        "affiliations": [
-          {
-            "faction": "十方丛林",
-            "role": "僧人"
-          }
-        ],
-        "debutLocation": {
-          "location": "太泉古阵",
-          "locator": "六朝云龙吟/0130.html",
-          "scene": "惠远与师兄被守阵力士攻击，师兄死亡后他抱着尸体痛哭，左彤芝询问其来历时，他自述是佛光寺弟子，五日前与师兄同至太泉古阵"
-        }
-      },
-      "region": "太泉",
-      "phaseIdentities": [
-        {
-          "scope": "stage-projection",
-          "stageId": "lyl.taiquan_expedition",
-          "book": "yunlong",
-          "seqLo": 563,
-          "seqHi": 566,
-          "identity": "佛光寺僧人",
-          "role": "佛光寺僧人",
-          "description": "",
-          "notes": [
-            "【关系】同伴",
-            "【目标】随队探索太泉古阵，生存"
-          ],
-          "status": "stage-current"
-        }
-      ],
-      "review": {
-        "approved": false,
-        "reviewed": false,
-        "flags": [],
-        "conflicts": []
-      },
-      "embedText": "惠远 ｜ 佛光寺僧人 ｜ 【太泉人物】 ｜ 十方丛林(僧人) ｜ 登场于太泉古阵 ｜ 善良、天真、易惊慌 ｜ 同伴 ｜ 小和尚 / 惠远 ｜ 第2章被玻璃碎片刺伤肺叶；第5章带伤用日月铲替程宗扬挡招；第4章被交给佛光寺同门照料"
-    },
-    {
       "id": "liuchao.character.huo_qu_bing",
       "canonicalName": "霍去病",
       "aliases": [],
@@ -13346,97 +14050,6 @@
         "conflicts": []
       },
       "embedText": "霍子孟 ｜ 霍光 霍大将军 ｜ 汉国大司马大将军，世家豪族代表 ｜ 【汉国人物】 ｜ 汉国朝廷(大将军)、霍氏外戚集团(外戚首领) ｜ 登场于永安宫 ｜ 老谋深算、城府深、爽快毒舌、务实、不拘小节 ｜ 政敌/合作者，程宗扬代表帝室刘询与之周旋 ｜ 对程宗扬称“你”“后生”，被称“大将军” ｜ 与程宗扬谈判纸钞流通；与金蜜镝联手迅速稳住局势；认为程宗扬背后是帝室刘询"
-    },
-    {
-      "id": "liuchao.character.jia_shi_xian",
-      "canonicalName": "贾师宪",
-      "aliases": [],
-      "gender": "男",
-      "books": [
-        "qingyu",
-        "yunlong",
-        "yange"
-      ],
-      "tier": "次要",
-      "stagePresence": true,
-      "staticProfile": {
-        "identitySummary": "宋国太师 / 权臣 / 贾党领袖",
-        "personality": [
-          "精明务实",
-          "城府极深",
-          "善于权谋",
-          "看重利益",
-          "临危不乱",
-          "威严"
-        ],
-        "appearance": "富家翁悠闲派头，眼神犀利异常",
-        "speechStyle": "直接务实",
-        "principles": [
-          "维持自身权势与财政稳定",
-          "不轻易被道德约束"
-        ],
-        "goals": [
-          "通过发行纸币、借贷、预征商税等方式解决朝廷财政危机，同时巩固自身政治地位并获取利益"
-        ],
-        "weaknesses": [
-          "对纸币发行依赖程宗扬的钱庄；朝中反对派（王禹玉等）的威胁；宋主猜忌"
-        ],
-        "signatureAbilities": [
-          "政治手腕",
-          "财政手段（借贷、发行纸币）"
-        ],
-        "relationToProtagonist": [
-          "利益合作伙伴"
-        ],
-        "formsOfAddress": [
-          "程员外 / 被别人称为：老贾、贾太师、贾师宪"
-        ],
-        "joining": [],
-        "keyEvents": [
-          "与程宗扬合作发行纸币",
-          "从晴州借一百万金铢军饷",
-          "主导拆毁武穆王府开发",
-          "击垮王禹玉一党",
-          "在朝会主战面临户部账目质询"
-        ],
-        "ending": [],
-        "affiliations": [
-          {
-            "faction": "宋国",
-            "role": "太师兼平章军国重事"
-          }
-        ],
-        "debutLocation": {
-          "location": "江州",
-          "locator": "chapter255",
-          "scene": "卢景向程宗扬介绍宋军大举集结，贾师宪铁了心要打一场，程宗扬询问贾师宪是哪位，卢景回答是宋国太师兼领平章军国重事"
-        }
-      },
-      "region": "宋国",
-      "phaseIdentities": [
-        {
-          "scope": "stage-projection",
-          "stageId": "lyl.taiquan_expedition",
-          "book": "yunlong",
-          "seqLo": 563,
-          "seqHi": 566,
-          "identity": "宋国太师 / 权臣 / 贾党领袖",
-          "role": "宋国太师 / 权臣 / 贾党领袖",
-          "description": "",
-          "notes": [
-            "【关系】利益合作伙伴",
-            "【目标】通过发行纸币、借贷、预征商税等方式解决朝廷财政危机，同时巩固自身政治地位并获取利益"
-          ],
-          "status": "stage-current"
-        }
-      ],
-      "review": {
-        "approved": false,
-        "reviewed": false,
-        "flags": [],
-        "conflicts": []
-      },
-      "embedText": "贾师宪 ｜ 宋国太师 / 权臣 / 贾党领袖 ｜ 【宋国人物】 ｜ 宋国(太师兼平章军国重事) ｜ 登场于江州 ｜ 精明务实、城府极深、善于权谋、看重利益、临危不乱、威严 ｜ 利益合作伙伴 ｜ 程员外 / 被别人称为：老贾、贾太师、贾师宪 ｜ 与程宗扬合作发行纸币；从晴州借一百万金铢军饷；主导拆毁武穆王府开发；击垮王禹玉一党；在朝会主战面临户部账目质询"
     },
     {
       "id": "liuchao.character.jia_wenhe",
@@ -16399,106 +17012,6 @@
       "embedText": "李怡 ｜ 光王 ｜ 光王 ｜ 【唐国人物】 ｜ 唐国朝廷(亲王（光王）) ｜ 登场于承天门 ｜ 懦弱、内敛、谨慎、忧惧 ｜ 被救助者，朋友 ｜ 对程宗扬称呼：程侯 别名/称谓：光王 ｜ 被暗算踹下马受伤；躲藏在娑梵寺；得到程宗扬的帮助；元正朝会上出丑"
     },
     {
-      "id": "liuchao.character.liang_fu_ren",
-      "canonicalName": "梁夫人",
-      "aliases": [],
-      "gender": "女",
-      "books": [
-        "yunlong"
-      ],
-      "tier": "次要",
-      "stagePresence": true,
-      "staticProfile": {
-        "identitySummary": "梁师都的夫人，后为程宗扬的侍妾/性奴",
-        "personality": [
-          "妖媚",
-          "淫浪",
-          "软弱",
-          "屈服"
-        ],
-        "appearance": "桃脸杏腮，体态妖娆，徐娘半老的熟艳美妇，白生生肉体，雪团般圆臀",
-        "speechStyle": "娇声，自称奴婢，语气卑微",
-        "principles": [
-          "惧灭族之罪，不敢反抗"
-        ],
-        "goals": [
-          "求取秘药以缓解毒瘾，获得满足感"
-        ],
-        "weaknesses": [
-          "被握有与异族交通的证据",
-          "对秘药成瘾"
-        ],
-        "signatureAbilities": [],
-        "relationToProtagonist": [
-          "程宗扬的性奴/侍妾"
-        ],
-        "formsOfAddress": [
-          "对程宗扬称“程爷”或“你”，被称“梁夫人”或“黄氏”"
-        ],
-        "joining": [],
-        "keyEvents": [
-          "被铁怪物袭击险些勒死",
-          "被迫服食秘药成瘾",
-          "被侍奴公开调教淫弄",
-          "与阮香凝等共侍一夫"
-        ],
-        "ending": [],
-        "affiliations": [
-          {
-            "faction": "通源行",
-            "role": "东家夫人"
-          },
-          {
-            "faction": "梁氏家族",
-            "role": "官眷"
-          }
-        ],
-        "debutLocation": {
-          "location": "翠微园水榭",
-          "locator": "第47章",
-          "scene": "程宗扬抬手唤道'梁夫人'，黄莺怜在场观其与阮香凝行房事"
-        }
-      },
-      "phaseIdentities": [
-        {
-          "scope": "relationship-chain",
-          "seq": "转折前",
-          "identity": "原阵营/中立/敌对身份，禁止提前称为后宫、侍妾、情人或程宗扬阵营成员",
-          "status": "forbid-final-state-before-turning-point"
-        },
-        {
-          "scope": "relationship-chain",
-          "seq": "关系转折后",
-          "identity": "按原文转折事件后，才可写入程宗扬阵营/后宫/侍妾/情人等关系身份",
-          "status": "allowed-after-turning-point"
-        },
-        {
-          "scope": "stage-projection",
-          "stageId": "lyl.taiquan_expedition",
-          "book": "yunlong",
-          "seqLo": 563,
-          "seqHi": 566,
-          "identity": "梁师都的夫人，后为程宗扬的侍妾/性奴",
-          "role": "梁师都的夫人",
-          "description": "",
-          "notes": [
-            "【关系】程宗扬的性奴/侍妾",
-            "【目标】求取秘药以缓解毒瘾，获得满足感"
-          ],
-          "status": "stage-current"
-        }
-      ],
-      "review": {
-        "approved": false,
-        "reviewed": false,
-        "flags": [
-          "female-relationship-phase-needed"
-        ],
-        "conflicts": []
-      },
-      "embedText": "梁夫人 ｜ 梁师都的夫人，后为程宗扬的侍妾/性奴 ｜ 通源行(东家夫人)、梁氏家族(官眷) ｜ 登场于翠微园水榭 ｜ 妖媚、淫浪、软弱、屈服 ｜ 程宗扬的性奴/侍妾 ｜ 对程宗扬称“程爷”或“你”，被称“梁夫人”或“黄氏” ｜ 原阵营/中立/敌对身份，禁止提前称为后宫、侍妾、情人或程宗扬阵营成员；按原文转折事件后，才可写入程宗扬阵营/后宫/侍妾/情人等关系身份 ｜ 被铁怪物袭击险些勒死；被迫服食秘药成瘾；被侍奴公开调教淫弄；与阮香凝等共侍一夫"
-    },
-    {
       "id": "liuchao.character.liao_fu",
       "canonicalName": "廖扶",
       "aliases": [],
@@ -17439,112 +17952,6 @@
         "conflicts": []
       },
       "embedText": "刘骜 ｜ 汉国天子 ｜ 【汉国人物】 ｜ 汉国朝廷(天子) ｜ 登场于鬼市 ｜ 程宗扬曾是刘骜之臣，刘骜死后程宗扬处理其后事 ｜ 天子（原文他人称呼） / 对程宗扬的称呼无 ｜ 刘骜暴死，被吕冀弑君，各方合谋隐瞒；刘骜死后程宗扬主持其风光大葬；刘骜的子嗣（友通期所怀）留在舞都"
-    },
-    {
-      "id": "liuchao.character.liu_e",
-      "canonicalName": "刘娥",
-      "aliases": [
-        "太皇太后(宋)",
-        "刘太后",
-        "宋太皇太后",
-        "太皇太后"
-      ],
-      "gender": "女",
-      "books": [
-        "yunlong",
-        "yange"
-      ],
-      "tier": "主要",
-      "stagePresence": true,
-      "staticProfile": {
-        "identitySummary": "宋国太皇太后/后期受制于程宗扬阵营；宋主长辈（程宗扬称姨娘），与贾师宪(贾似道)同族，曾受其游说干预朝局",
-        "personality": [
-          "受虐倾向",
-          "淫荡",
-          "顺从",
-          "妩媚"
-        ],
-        "appearance": "徐娘半老，熟艳美妇，白花花的臀肉，臀沟有粉艳的桃花谷，乳房略微下垂但丰满，乳头紫胀",
-        "speechStyle": "柔媚，自称‘奴婢’",
-        "principles": [
-          "强调妇德贞洁：女子从一而终，失身再嫁须守贞节",
-          "维护外甥利益：凡事以程宗扬家族为先，纳妾须清白入门",
-          "讲究礼法规矩：新人入门须行献茶等礼数，方算正式进门"
-        ],
-        "goals": [],
-        "weaknesses": [
-          "受虐倾向"
-        ],
-        "signatureAbilities": [],
-        "relationToProtagonist": [
-          "侍奴/性奴"
-        ],
-        "formsOfAddress": [
-          "刘娥、娥奴"
-        ],
-        "joining": [],
-        "keyEvents": [
-          "被侍奴以假阳具奸弄",
-          "被程宗扬干入",
-          "被展示桃花谷",
-          "自称奴婢完成指令"
-        ],
-        "ending": [],
-        "affiliations": [
-          {
-            "faction": "宋国",
-            "role": "太皇太后"
-          }
-        ],
-        "debutLocation": {
-          "location": "云涛观偏殿",
-          "locator": "六朝云龙吟/0100.html",
-          "scene": "程宗扬带阮香琳拜见刘娥，刘娥以富贵人家打扮出现，称阮香琳为‘丫头’。"
-        },
-        "birthYear": 157
-      },
-      "region": "宋国",
-      "phaseIdentities": [
-        {
-          "scope": "relationship-chain",
-          "seq": "转折前",
-          "identity": "宋国太皇太后，禁止提前写作程宗扬阵营或从属关系",
-          "status": "forbid-final-state-before-turning-point",
-          "source": "human-review-v3"
-        },
-        {
-          "scope": "relationship-chain",
-          "seq": "六朝云龙吟太泉古阵篇第11集",
-          "identity": "进入受制阶段，之后可写作程宗扬阵营从属",
-          "status": "allowed-after-turning-point",
-          "source": "human-review-v3"
-        },
-        {
-          "scope": "stage-projection",
-          "stageId": "lyl.taiquan_expedition",
-          "book": "yunlong",
-          "seqLo": 563,
-          "seqHi": 566,
-          "identity": "宋国太皇太后/后期受制于程宗扬阵营",
-          "role": "宋国太皇太后/后期受制于程宗扬阵营",
-          "description": "",
-          "notes": [
-            "【关系】侍奴/性奴"
-          ],
-          "status": "stage-current"
-        }
-      ],
-      "review": {
-        "approved": false,
-        "reviewed": true,
-        "flags": [
-          "female-relationship-phase-needed"
-        ],
-        "conflicts": [],
-        "humanReviewed": true,
-        "humanNotes": "人工批注：转折承接六朝清羽记；六朝云龙吟太泉古阵篇第11集进入受制阶段；转折前身份为宋国太皇太后。 2026-07-04 二审: 刘娥=太皇太后(宋)(同一人),并入重复卡「太皇太后(宋)」;更正本session裁定#49的匿名描述。"
-      },
-      "embedText": "刘娥 ｜ 太皇太后(宋) 刘太后 宋太皇太后 太皇太后 ｜ 宋国太皇太后/后期受制于程宗扬阵营；宋主长辈（程宗扬称姨娘），与贾师宪(贾似道)同族，曾受其游说干预朝局 ｜ 【宋国人物】 ｜ 宋国(太皇太后) ｜ 登场于云涛观偏殿 ｜ 受虐倾向、淫荡、顺从、妩媚 ｜ 侍奴/性奴 ｜ 刘娥、娥奴 ｜ 宋国太皇太后，禁止提前写作程宗扬阵营或从属关系；进入受制阶段，之后可写作程宗扬阵营从属 ｜ 被侍奴以假阳具奸弄；被程宗扬干入；被展示桃花谷；自称奴婢完成指令"
     },
     {
       "id": "liuchao.character.liu_xin",
@@ -20324,79 +20731,6 @@
         "conflicts": []
       },
       "embedText": "南霁云 ｜ 天策府将领 ｜ 【唐国人物】 ｜ 唐国朝廷(末将/护卫) ｜ 登场于宣平坊（程宗扬车队旁） ｜ 勇悍绝伦、刚猛剽厉、忠心耿耿、沉默寡言 ｜ 程宗扬的护卫/手下 ｜ 对程宗扬称其名/不明确；被他人称南八 ｜ 第3章伏击战中斩杀多名黑衣人；第6章与窥基交手，被气势压制；第8章宅邸被攻时率护卫声威大振"
-    },
-    {
-      "id": "liuchao.character.ning_su",
-      "canonicalName": "宁素",
-      "aliases": [],
-      "gender": "女",
-      "books": [
-        "yunlong"
-      ],
-      "tier": "次要",
-      "stagePresence": true,
-      "staticProfile": {
-        "identitySummary": "",
-        "personality": [
-          "顺从",
-          "软弱",
-          "可怜"
-        ],
-        "appearance": "被宋三舔舐脸颊、扯裤子，顺从抬臀任由抚弄，被虞紫薇玉杖穿过肩头受伤。",
-        "speechStyle": "",
-        "principles": [],
-        "goals": [
-          "依附他人求生，师傅死后几乎自尽。"
-        ],
-        "weaknesses": [
-          "孤身一人，无自保能力"
-        ],
-        "signatureAbilities": [],
-        "relationToProtagonist": [
-          "程宗扬对其有恻隐之心，但并非亲密关系。"
-        ],
-        "formsOfAddress": [],
-        "joining": [
-          "师傅死后，被萧遥逸和程宗扬带入队伍同行。"
-        ],
-        "keyEvents": [
-          "被宋三猥亵并被程宗扬目睹",
-          "师傅死于黑疯子等人之手",
-          "被虞紫薇碧玉杖打伤",
-          "跟随萧遥逸和程宗扬离开"
-        ],
-        "ending": [],
-        "debutLocation": {
-          "location": "太泉古阵内废墟大厦",
-          "locator": "六朝云龙吟/0130.html",
-          "scene": "程宗扬询问她身份时，宋三代为回答她叫宁素，是那位女侠（其师傅）的徒弟"
-        }
-      },
-      "region": "太泉",
-      "phaseIdentities": [
-        {
-          "scope": "stage-projection",
-          "stageId": "lyl.taiquan_expedition",
-          "book": "yunlong",
-          "seqLo": 563,
-          "seqHi": 566,
-          "identity": "配角",
-          "role": "配角",
-          "description": "",
-          "notes": [
-            "【关系】程宗扬对其有恻隐之心，但并非亲密关系。",
-            "【目标】依附他人求生，师傅死后几乎自尽。"
-          ],
-          "status": "stage-current"
-        }
-      ],
-      "review": {
-        "approved": false,
-        "reviewed": false,
-        "flags": [],
-        "conflicts": []
-      },
-      "embedText": "宁素 ｜ 【太泉人物】 ｜ 登场于太泉古阵内废墟大厦 ｜ 顺从、软弱、可怜 ｜ 程宗扬对其有恻隐之心，但并非亲密关系。 ｜ 被宋三猥亵并被程宗扬目睹；师傅死于黑疯子等人之手；被虞紫薇碧玉杖打伤；跟随萧遥逸和程宗扬离开"
     },
     {
       "id": "liuchao.character.ning_yu",
@@ -25369,168 +25703,6 @@
       "embedText": "斯明信 ｜ 幻驹 ｜ 岳帅旧部/秘境探索者，星月湖八骏之一，岳帅部属 ｜ 【宋国人物】 ｜ 星月湖(八兄弟排行第四/二营营长/中校) ｜ 登场于江州战场 ｜ 阴冷、沉默寡言、冷酷、手段狠辣 ｜ 岳帅旧部，程宗扬的协助者 ｜ 四哥/斯明信 ｜ 大开杀戒后神情冷漠；用牛耳尖刀精细切羊肉；与卢景商议岳帅青梅竹马之事；带路协助程宗扬离开秘境；被赵充国拉着拼酒；接过郭靖时面色柔和"
     },
     {
-      "id": "liuchao.character.song_san",
-      "canonicalName": "宋三",
-      "aliases": [],
-      "gender": "男",
-      "books": [
-        "yunlong"
-      ],
-      "tier": "次要",
-      "stagePresence": true,
-      "staticProfile": {
-        "identitySummary": "外姓人（青叶教）",
-        "personality": [
-          "奸滑",
-          "阴狠",
-          "淫邪"
-        ],
-        "appearance": "",
-        "speechStyle": "嘿嘿笑，语气粗鄙，带有淫邪",
-        "principles": [
-          "拿了钱就要把事情办好，绝不白拿人钱不办事",
-          "苍澜镇是弱肉强食之地，外来人想活命只能老实听话"
-        ],
-        "goals": [],
-        "weaknesses": [],
-        "signatureAbilities": [],
-        "relationToProtagonist": [
-          "敌对（程宗扬认出其为青叶教训话者）"
-        ],
-        "formsOfAddress": [
-          "宋三"
-        ],
-        "joining": [],
-        "keyEvents": [
-          "参与凌辱朱殷（奉琼仙子）",
-          "在镜子中与宁素同睡并探其裙下",
-          "在青叶教主莫爷处调教尹馥兰",
-          "被程宗扬认出"
-        ],
-        "ending": [],
-        "debutLocation": {
-          "location": "太泉古阵内某大厦",
-          "locator": "第0130章/门牌",
-          "scene": "程宗扬劈开大床，宋三与一名少女从床下钻出，语无伦次地自报名姓求饶，称自己是苍澜人，被雇来当向导的。"
-        }
-      },
-      "region": "太泉",
-      "phaseIdentities": [
-        {
-          "scope": "stage-projection",
-          "stageId": "lyl.taiquan_expedition",
-          "book": "yunlong",
-          "seqLo": 563,
-          "seqHi": 566,
-          "identity": "外姓人（青叶教）",
-          "role": "外姓人（青叶教）",
-          "description": "",
-          "notes": [
-            "【关系】敌对（程宗扬认出其为青叶教训话者）"
-          ],
-          "status": "stage-current"
-        }
-      ],
-      "review": {
-        "approved": false,
-        "reviewed": false,
-        "flags": [],
-        "conflicts": []
-      },
-      "embedText": "宋三 ｜ 外姓人（青叶教） ｜ 【太泉人物】 ｜ 登场于太泉古阵内某大厦 ｜ 奸滑、阴狠、淫邪 ｜ 敌对（程宗扬认出其为青叶教训话者） ｜ 宋三 ｜ 参与凌辱朱殷（奉琼仙子）；在镜子中与宁素同睡并探其裙下；在青叶教主莫爷处调教尹馥兰；被程宗扬认出"
-    },
-    {
-      "id": "liuchao.character.song_zhu",
-      "canonicalName": "宋主",
-      "aliases": [],
-      "gender": "男",
-      "books": [
-        "qingyu",
-        "yunlong",
-        "yange"
-      ],
-      "tier": "主要",
-      "stagePresence": true,
-      "staticProfile": {
-        "identitySummary": "宋国皇帝",
-        "personality": [
-          "年轻",
-          "狠辣",
-          "听信忠言",
-          "有决断",
-          "翻脸不认人"
-        ],
-        "appearance": "长得好一张小白脸，唇红齿白、面如冠玉，看上去倒挺俊俏，只多了两撇清秀的小胡子，颇有英主之气",
-        "speechStyle": "冷冷地说话，常以“朕”自称",
-        "principles": [
-          "绝不容忍拒草诏书",
-          "回护时仍可改换脸色必欲除之而后快"
-        ],
-        "goals": [
-          "权衡和战之议、发行纸币以解财政困境"
-        ],
-        "weaknesses": [
-          "年轻冲动，易受臣下影响；身世秘密是致命软肋"
-        ],
-        "signatureAbilities": [],
-        "relationToProtagonist": [
-          "君主与臣子（客卿）"
-        ],
-        "formsOfAddress": [
-          "宋主 / 被程宗扬等人尊称‘宋主’"
-        ],
-        "joining": [],
-        "keyEvents": [
-          "不杀王禹玉但依法严惩",
-          "发行纸币缓解军饷",
-          "信任贾师宪却也能在博弈后接纳韩节夫等",
-          "身世秘密被黑魔海掌握"
-        ],
-        "ending": [],
-        "affiliations": [
-          {
-            "faction": "宋国",
-            "role": "君主"
-          }
-        ],
-        "debutLocation": {
-          "location": "筠州",
-          "locator": "0008.html",
-          "scene": "滕甫因挪用军费购买粮食被有司论罪，宋主特旨下诏不问，后此札子被收入《六朝名臣奏议》"
-        },
-        "storyAge": {
-          "value": "七八岁",
-          "basis": "原文：'宋主不过是个七八岁的小儿'"
-        },
-        "birthYear": 205
-      },
-      "region": "宋国",
-      "phaseIdentities": [
-        {
-          "scope": "stage-projection",
-          "stageId": "lyl.taiquan_expedition",
-          "book": "yunlong",
-          "seqLo": 563,
-          "seqHi": 566,
-          "identity": "宋国皇帝",
-          "role": "宋国皇帝",
-          "description": "",
-          "notes": [
-            "【关系】君主与臣子（客卿）",
-            "【目标】权衡和战之议、发行纸币以解财政困境"
-          ],
-          "status": "stage-current"
-        }
-      ],
-      "review": {
-        "approved": false,
-        "reviewed": false,
-        "flags": [],
-        "conflicts": []
-      },
-      "embedText": "宋主 ｜ 宋国皇帝 ｜ 【宋国人物】 ｜ 宋国(君主) ｜ 登场于筠州 ｜ 年轻、狠辣、听信忠言、有决断、翻脸不认人 ｜ 君主与臣子（客卿） ｜ 宋主 / 被程宗扬等人尊称‘宋主’ ｜ 不杀王禹玉但依法严惩；发行纸币缓解军饷；信任贾师宪却也能在博弈后接纳韩节夫等；身世秘密被黑魔海掌握"
-    },
-    {
       "id": "liuchao.character.su_daji",
       "canonicalName": "苏妲己",
       "aliases": [],
@@ -26628,91 +26800,6 @@
         ]
       },
       "embedText": "孙寿 ｜ 襄城君 ｜ 犯妇/原为世家女眷 ｜ 【汉国人物】 ｜ 汉国朝廷(襄城君（封号）)、吕氏外戚集团(襄邑侯吕冀之妻) ｜ 登场于洛都 ｜ 上位时骄横歹毒、贪婪虚荣、心狠手辣、毫无风骨欺软怕硬、落难后卑微自称\"犯妇\"摇尾乞怜 ｜ 程宗扬的性奴/妾室 ｜ 对程宗扬称‘老公’、‘夫君大人’；被称‘孙寿’、‘寿儿’ 别名/称谓：襄城君 ｜ 原阵营/中立/敌对身份，禁止提前称为后宫、侍妾、情人或程宗扬阵营成员；按原文转折事件后，才可写入程宗扬阵营/后宫/侍妾/情人等关系身份 ｜ 发明愁眉/啼妆/堕马髻/折腰步引领洛阳贵妇审美；吕氏倒台沦死囚，交程宗扬+阮香琳审讯，成最下贱审讯禁脔/泄欲工具；狐女无法作鼎炉(采元红无助修行)，纯感官玩物"
-    },
-    {
-      "id": "liuchao.character.sun_tian_yu",
-      "canonicalName": "孙天羽",
-      "aliases": [],
-      "gender": "男",
-      "books": [
-        "yunlong"
-      ],
-      "tier": "次要",
-      "stagePresence": true,
-      "staticProfile": {
-        "identitySummary": "刑部抽调至皇城司的官差",
-        "personality": [
-          "油滑机变",
-          "欺软怕硬",
-          "善于钻营",
-          "为达目的能屈能伸"
-        ],
-        "appearance": "两眼像死鱼一样翻白",
-        "speechStyle": "赔笑、奉承、见风使舵",
-        "principles": [
-          "无底线，为活命可认贼作父"
-        ],
-        "goals": [
-          "在皇城司升官发财"
-        ],
-        "weaknesses": [
-          "贪生怕死，修为不高"
-        ],
-        "signatureAbilities": [
-          "腰牌",
-          "钻地/潜行隐匿之术"
-        ],
-        "relationToProtagonist": [
-          "下属/眼线（后被程宗扬收服）"
-        ],
-        "formsOfAddress": [
-          "对程宗扬：叔叔/爹爹；被他人称呼：官差/姓孙的"
-        ],
-        "joining": [
-          "第4章乱战中被程宗扬擒获，为活命当场认爹，成为程宗扬安插在皇城司的内线"
-        ],
-        "keyEvents": [
-          "第2章秘闻：蒙眼堵耳潜伏偷窥，以野猪制造骚乱逃生",
-          "第4章乱战：被青面兽掐脖几乎毙命，亮腰牌求饶，后跪认程宗扬为父",
-          "第5章王氏：登门向程宗扬请安，汇报情报"
-        ],
-        "ending": [],
-        "affiliations": [
-          {
-            "faction": "皇城司",
-            "role": "指挥"
-          }
-        ],
-        "debutLocation": {
-          "location": "野猪林",
-          "locator": "六朝云龙吟/0055.html 秘闻 第2章（林中场景出现）/0057.html 乱战 第4章（正式被挖出对话）",
-          "scene": "作为皇城司官差随队追杀林冲，利用野猪和钻入落叶下泥土中躲避追踪，后被程宗扬从地下挖出，亮出腰牌表明皇城司身份。"
-        }
-      },
-      "phaseIdentities": [
-        {
-          "scope": "stage-projection",
-          "stageId": "lyl.taiquan_expedition",
-          "book": "yunlong",
-          "seqLo": 563,
-          "seqHi": 566,
-          "identity": "刑部抽调至皇城司的官差",
-          "role": "刑部抽调至皇城司的官差",
-          "description": "",
-          "notes": [
-            "【关系】下属/眼线（后被程宗扬收服）",
-            "【目标】在皇城司升官发财"
-          ],
-          "status": "stage-current"
-        }
-      ],
-      "review": {
-        "approved": false,
-        "reviewed": false,
-        "flags": [],
-        "conflicts": []
-      },
-      "embedText": "孙天羽 ｜ 刑部抽调至皇城司的官差 ｜ 皇城司(指挥) ｜ 登场于野猪林 ｜ 油滑机变、欺软怕硬、善于钻营、为达目的能屈能伸 ｜ 下属/眼线（后被程宗扬收服） ｜ 对程宗扬：叔叔/爹爹；被他人称呼：官差/姓孙的 ｜ 第2章秘闻：蒙眼堵耳潜伏偷窥，以野猪制造骚乱逃生；第4章乱战：被青面兽掐脖几乎毙命，亮腰牌求饶，后跪认程宗扬为父；第5章王氏：登门向程宗扬请安，汇报情报"
     },
     {
       "id": "liuchao.character.suo_yuan_li",
@@ -38191,93 +38278,6 @@
         "conflicts": []
       },
       "embedText": "周飞 ｜ 【太泉人物】 ｜ 周族(少主)、凉州盟(盟主候选人)、窥基势力(盟友)、广源行(合作者) ｜ 登场于太泉古阵 ｜ 孤傲、易怒、爱面子、贪慕名利 ｜ 被主角夺妻的丈夫，后因利益妥协 ｜ 被黎锦香和杨玉环设计，将妻子献给程宗扬；在狐妖事件中被迷住，表现不堪；升官后得意忘形"
-    },
-    {
-      "id": "liuchao.character.zhu_yin",
-      "canonicalName": "朱殷",
-      "aliases": [],
-      "gender": "女",
-      "books": [
-        "yunlong",
-        "yange"
-      ],
-      "tier": "次要",
-      "stagePresence": true,
-      "staticProfile": {
-        "identitySummary": "瑶池宗奉琼仙子",
-        "personality": [
-          "矜持骄傲（曾经）",
-          "羞耻顺从",
-          "感激"
-        ],
-        "appearance": "玉雕般的面孔，乌亮的秀发，修长的玉颈，光洁的香肩玉背，丰挺饱满的雪乳，浑圆肥翘的美臀，肌肤白腻如羊脂白玉",
-        "speechStyle": "文雅、羞涩",
-        "principles": [
-          "重视尊严和贞洁（被迫屈服后仍存羞耻）",
-          "坚守报恩之心"
-        ],
-        "goals": [
-          "为报程宗扬的救助之恩而委身，渴望脱离困境"
-        ],
-        "weaknesses": [
-          "对雾障的恐惧；失去修为后无力反抗"
-        ],
-        "signatureAbilities": [],
-        "relationToProtagonist": [
-          "凌辱对象→报恩对象→临时性伴侣"
-        ],
-        "formsOfAddress": [
-          "对程宗扬无直接称呼；被他人称为奉琼仙子、朱仙子、朱殷"
-        ],
-        "joining": [],
-        "keyEvents": [
-          "被废去修为",
-          "遭众人凌辱",
-          "为报恩侍奉程宗扬",
-          "被程宗扬戏弄"
-        ],
-        "ending": [],
-        "affiliations": [
-          {
-            "faction": "瑶池宗",
-            "role": "奉琼仙子（三仙子之一）"
-          },
-          {
-            "faction": "小紫势力",
-            "role": "奴婢"
-          }
-        ],
-        "debutLocation": {
-          "location": "太泉古阵（苍澜附近）",
-          "locator": "六朝云龙吟·0122.html",
-          "scene": "萧遥逸向程宗扬等人介绍楼上住客时提及瑶池宗来人，其中一位身份特殊的是瑶池宗三仙子中的奉琼仙子朱殷，提到他们今晚也要前往太泉。"
-        }
-      },
-      "region": "太泉",
-      "phaseIdentities": [
-        {
-          "scope": "stage-projection",
-          "stageId": "lyl.taiquan_expedition",
-          "book": "yunlong",
-          "seqLo": 563,
-          "seqHi": 566,
-          "identity": "瑶池宗奉琼仙子",
-          "role": "瑶池宗奉琼仙子",
-          "description": "",
-          "notes": [
-            "【关系】凌辱对象→报恩对象→临时性伴侣",
-            "【目标】为报程宗扬的救助之恩而委身，渴望脱离困境"
-          ],
-          "status": "stage-current"
-        }
-      ],
-      "review": {
-        "approved": false,
-        "reviewed": false,
-        "flags": [],
-        "conflicts": []
-      },
-      "embedText": "朱殷 ｜ 瑶池宗奉琼仙子 ｜ 【太泉人物】 ｜ 瑶池宗(奉琼仙子（三仙子之一）)、小紫势力(奴婢) ｜ 登场于太泉古阵（苍澜附近） ｜ 矜持骄傲（曾经）、羞耻顺从、感激 ｜ 凌辱对象→报恩对象→临时性伴侣 ｜ 对程宗扬无直接称呼；被他人称为奉琼仙子、朱仙子、朱殷 ｜ 被废去修为；遭众人凌辱；为报恩侍奉程宗扬；被程宗扬戏弄"
     },
     {
       "id": "liuchao.character.zhuo_yunjun",

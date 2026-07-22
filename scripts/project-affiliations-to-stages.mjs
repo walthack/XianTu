@@ -79,6 +79,16 @@ const AFFILIATION_STAGE_LOCKS = new Map([
     'liuchao.character.gao_zhishang', 'liuchao.character.lu_qian',
     'liuchao.character.xiao_zi',
   ])],
+  // R2-11Q 已按第 12–14 章逐人收口；静态卡包含后续入伙/组织关系，整关锁定。
+  ['lyl.taiquan_expedition', new Set([
+    'liuchao.character.cheng_zongyang', 'liuchao.character.qin_hui',
+    'liuchao.character.yu_zi_yuan', 'liuchao.character.lin_qing_pu',
+    'liuchao.character.li_shi_shi', 'liuchao.character.lin_chong',
+    'canon.character.7718ae444a', 'liuchao.character.ruan_xiang_lin',
+    'liuchao.character.lu_zhi_shen', 'liuchao.character.ao_run',
+    'liuchao.character.qing_mian_shou', 'liuchao.character.ruan_xiang_ning',
+    'liuchao.character.gao_zhishang', 'liuchao.character.lu_qian',
+  ])],
 ]);
 
 let projWrites = 0, facDefsAdded = 0, charsTouched = 0, stagesTouched = 0;
