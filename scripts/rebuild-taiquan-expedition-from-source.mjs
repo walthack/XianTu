@@ -63,7 +63,7 @@ const EVENTS = [
     description: '程宗扬在司营巷旁观灰衣人向林冲兜售屠龙刀，判断这是高衙内布下的圈套。两名刺客随后以藏剑竹杖袭击鲁智深，林冲拔刀相助，两人合力击退刺客。',
     objective: '旁观林冲买刀并确认伏击结果，不贸然打断高衙内的布局',
     locationId: 'liuchao.location.linan_city',
-    relatedCharacterIds: ['liuchao.character.cheng_zongyang', 'liuchao.character.lin_chong', 'liuchao.character.lu_zhi_shen'],
+    relatedCharacterIds: ['liuchao.character.cheng_zongyang', 'liuchao.character.qin_hui', 'liuchao.character.lin_chong', 'liuchao.character.lu_zhi_shen'],
     relatedFactionIds: [],
     axisId: 'yunlong.13.1', axisSeq: 564, axisAnchor: '六朝云龙吟·#13·宝刀',
     axisBeat: '林冲在巷中买下屠龙刀，随后遭遇刺客，鲁智深与林冲击退刺客。', axisMethod: 'source-rebuilt',

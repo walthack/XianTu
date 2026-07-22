@@ -1167,6 +1167,7 @@
         "locationId": "liuchao.location.linan_city",
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang",
+          "liuchao.character.qin_hui",
           "liuchao.character.lin_chong",
           "liuchao.character.lu_zhi_shen"
         ],

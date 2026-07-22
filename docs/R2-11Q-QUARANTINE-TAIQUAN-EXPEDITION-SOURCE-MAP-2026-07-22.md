@@ -34,6 +34,7 @@
 - 覆盖从 `331/381` 增至 `336/381`；剩余五个隔离关共 45 个事件。
 - `npm run canon:build`：450 tests、37 关 schema 与 381 event ID 契约全绿；`npm run validate:all`、production build 全绿。
 - 首次全量 schema 检查发现复用演员携带的技能／功法／物品引用未同步定义，以及旧小紫 `contentAccess` 残片；重建脚本现按演员引用闭合 content 并过滤访问规则，回归后通过。
+- Claude 二审无 P0/P1；P2 补回屠龙刀伏击现场参与判断的秦桧。P3 单独记录：惠远误挂本关阶段投影是父提交历史遗留，当前不在演员闭包、无运行时泄漏；registry/manifest 大 diff 是 stagePresence 翻转后的机械重生成。
 
 产物：
 
