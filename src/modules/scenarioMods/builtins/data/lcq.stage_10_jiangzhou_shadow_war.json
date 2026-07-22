@@ -4759,6 +4759,81 @@
                   }
                 ]
               }
+            },
+            {
+              "id": "opportunity.lcq.s10_04.counterintelligence_probe",
+              "title": "让小紫试一条假消息",
+              "characterIds": [
+                "liuchao.character.xiao_zi"
+              ],
+              "whyNow": "军机接触链仍有漏洞，但直接点名嫌疑人只会让真正的泄露路径立刻潜伏。",
+              "nextStep": "协助小紫把无害军情拆成不同版本，分别递给有限接触点并记录传播去向。",
+              "stakes": "试探若失控会损害内部信任；任何版本都不得包含足以伤害江州备战的真实机密。",
+              "rewardPreview": "取得一次调用星月湖错位消息试探与传播链复核的权限。",
+              "futureHint": "下一次军机异常时，小紫会允许你查验哪条消息曾从哪个接触点流出。",
+              "actionText": "我追踪“让小紫试一条假消息”：只使用无害的错位信息建立对照，并按传播路径复核接触链，不提前指认真凶。",
+              "rewardKey": "permission.lcq.xiaozi.counterintelligence_probe",
+              "rewardLabel": "小紫·错位消息试探与传播链复核",
+              "trigger": {
+                "actorIds": [
+                  "liuchao.character.xiao_zi"
+                ],
+                "actionIds": [
+                  "gather_intelligence",
+                  "test_loyalty"
+                ]
+              },
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "settlement": "immediate",
+                "expiry": "persistent",
+                "steps": [
+                  {
+                    "id": "seed_harmless_variants",
+                    "label": "分别递出无害的错位消息",
+                    "actions": [
+                      {
+                        "id": "seed_harmless_message_variants",
+                        "label": "布置无害消息对照",
+                        "actionText": "我同小紫把一条不影响真实军务的消息改成几个可辨版本，分别交给有限接触点，并登记每个版本的去向。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "无害的消息",
+                      "可辨版本",
+                      "登记每个版本"
+                    ],
+                    "rejectIf": [
+                      "泄露真实军机",
+                      "公开全部军务",
+                      "已经坐实真凶"
+                    ]
+                  },
+                  {
+                    "id": "compare_propagation_paths",
+                    "label": "复核消息传播路径",
+                    "actions": [
+                      {
+                        "id": "compare_message_propagation",
+                        "label": "比对传播链",
+                        "actionText": "我只比对各版本实际出现的位置与转递次序，把异常接触点列为待复核对象，不把试探结果冒充定罪证据。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "比对各版本",
+                      "转递次序",
+                      "待复核对象"
+                    ],
+                    "rejectIf": [
+                      "直接定罪",
+                      "真凶已经确定",
+                      "无需复核"
+                    ]
+                  }
+                ]
+              }
             }
           ]
         }

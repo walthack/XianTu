@@ -7702,6 +7702,82 @@
                   }
                 ]
               }
+            },
+            {
+              "id": "opportunity.lyg.s01_07.withdrawal_logistics",
+              "title": "让凉州旧部退得出去",
+              "characterIds": [
+                "liuchao.character.jia_wenhe"
+              ],
+              "whyNow": "旧部已有退场次序，但没有独立补给与有限联络，撤离很快会重新变成洛都兵变或边地失控。",
+              "nextStep": "把宫城军需与撤离军需分账，并为退往边地的旧部保留一条受限补给联络。",
+              "stakes": "补给若重新绑定宫城权力，会让退场变成挟持；切断过急又可能逼出哗变。",
+              "rewardPreview": "取得一次向贾文和协调凉州旧部撤离后勤与备用联络的权限。",
+              "futureHint": "凉州旧部离开洛都后，贾文和会把最先出现的补给断点交给你核对。",
+              "actionText": "我追踪“让凉州旧部退得出去”：将撤离后勤与宫城争权切开，只保留维持秩序所需的有限补给和备用联络。",
+              "rewardKey": "permission.lyg.jia_wenhe.withdrawal_logistics",
+              "rewardLabel": "贾文和·凉州旧部撤离后勤协调",
+              "trigger": {
+                "actorIds": [
+                  "liuchao.character.jia_wenhe"
+                ],
+                "actionIds": [
+                  "reserve_supplies",
+                  "prepare_fallback_route"
+                ]
+              },
+              "expiresAfterTurns": 3,
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "settlement": "timeline_deadline",
+                "expiry": "standard",
+                "steps": [
+                  {
+                    "id": "separate_withdrawal_supplies",
+                    "label": "把撤离军需与宫城权力分账",
+                    "actions": [
+                      {
+                        "id": "separate_military_handoff_inventory",
+                        "label": "拆分撤离军需账",
+                        "actionText": "我同贾文和把凉州旧部撤离所需的军需单独封签，明确不得用这批补给交换入宫或继续争权。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "军需单独封签",
+                      "不得用这批补给",
+                      "撤离所需"
+                    ],
+                    "rejectIf": [
+                      "继续入宫争权",
+                      "挟持新帝",
+                      "接管新朝"
+                    ]
+                  },
+                  {
+                    "id": "open_limited_resupply_contact",
+                    "label": "保留有限补给与退路联络",
+                    "actions": [
+                      {
+                        "id": "establish_limited_resupply_contact",
+                        "label": "建立受限后勤联络",
+                        "actionText": "我建立一条只报告补给断点与撤离受阻的受限联络，不传未经核实的开战消息，也不替旧部保留宫城指挥权。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "只报告补给断点",
+                      "撤离受阻",
+                      "受限联络"
+                    ],
+                    "rejectIf": [
+                      "确定胡骑入侵",
+                      "保留宫城指挥权",
+                      "董卓继续掌权"
+                    ]
+                  }
+                ]
+              }
             }
           ]
         }
