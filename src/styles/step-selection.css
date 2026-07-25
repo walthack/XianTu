@@ -22,7 +22,7 @@
 .step-left-panel {
   display: flex;
   flex-direction: column;
-  background: rgba(30, 41, 59, 0.5);
+  background: rgba(30, 34, 40, 0.5);
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 12px;
   overflow: hidden;
@@ -34,7 +34,7 @@
   gap: 0.5rem;
   padding: 0.75rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  background: rgba(30, 41, 59, 0.3);
+  background: rgba(30, 34, 40, 0.3);
   justify-content: flex-end;
 }
 
@@ -42,8 +42,8 @@
   padding: 0.5rem 1rem;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
-  background: rgba(30, 41, 59, 0.6);
-  color: #cbd5e1;
+  background: rgba(30, 34, 40, 0.6);
+  color: #c4bdad;
   cursor: pointer;
   transition: all 0.25s ease;
   font-size: 0.85rem;
@@ -53,9 +53,9 @@
 }
 
 .step-action-btn:hover {
-  background: rgba(51, 65, 85, 0.8);
-  border-color: rgba(147, 197, 253, 0.3);
-  color: #f1f5f9;
+  background: rgba(61, 58, 53, 0.8);
+  border-color: rgba(166, 198, 218, 0.3);
+  color: #ece7dc;
 }
 
 /* 列表容器 */
@@ -64,7 +64,7 @@
   overflow-y: auto;
   padding: 0.5rem;
   scrollbar-width: thin;
-  scrollbar-color: rgba(147, 197, 253, 0.3) transparent;
+  scrollbar-color: rgba(166, 198, 218, 0.3) transparent;
 }
 
 .step-list-container::-webkit-scrollbar {
@@ -76,12 +76,12 @@
 }
 
 .step-list-container::-webkit-scrollbar-thumb {
-  background: rgba(147, 197, 253, 0.3);
+  background: rgba(166, 198, 218, 0.3);
   border-radius: 3px;
 }
 
 .step-list-container::-webkit-scrollbar-thumb:hover {
-  background: rgba(147, 197, 253, 0.5);
+  background: rgba(166, 198, 218, 0.5);
 }
 
 /* ========== 选项卡样式 ========== */
@@ -95,20 +95,20 @@
   cursor: pointer;
   transition: all 0.25s ease;
   border: 1px solid transparent;
-  background: rgba(30, 41, 59, 0.4);
+  background: rgba(30, 34, 40, 0.4);
   position: relative;
 }
 
 .step-item:hover {
-  background: rgba(51, 65, 85, 0.6);
-  border-color: rgba(147, 197, 253, 0.2);
+  background: rgba(61, 58, 53, 0.6);
+  border-color: rgba(166, 198, 218, 0.2);
 }
 
 .step-item.selected {
   background: rgba(30, 58, 138, 0.4);
-  border-color: rgba(147, 197, 253, 0.4);
+  border-color: rgba(166, 198, 218, 0.4);
   box-shadow:
-    0 0 0 1px rgba(147, 197, 253, 0.1),
+    0 0 0 1px rgba(166, 198, 218, 0.1),
     inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
@@ -118,7 +118,7 @@
 }
 
 .step-item.disabled:hover {
-  background: rgba(30, 41, 59, 0.4);
+  background: rgba(30, 34, 40, 0.4);
   border-color: transparent;
 }
 
@@ -132,16 +132,16 @@
 
 .step-item-name {
   font-weight: 500;
-  color: #f1f5f9;
+  color: #ece7dc;
   font-size: 0.95rem;
 }
 
 .step-item.selected .step-item-name {
-  color: #bfdbfe;
+  color: #c7d9e2;
 }
 
 .step-item-cost {
-  color: #93c5fd;
+  color: #a6c6da;
   font-size: 0.85rem;
   font-weight: 500;
 }
@@ -163,7 +163,7 @@
 .step-item-btn {
   background: none;
   border: none;
-  color: #64748b;
+  color: #7c776c;
   cursor: pointer;
   padding: 0.35rem;
   border-radius: 4px;
@@ -174,25 +174,25 @@
 }
 
 .step-item-btn:hover {
-  color: #93c5fd;
-  background: rgba(147, 197, 253, 0.1);
+  color: #a6c6da;
+  background: rgba(166, 198, 218, 0.1);
 }
 
 .step-item-btn.danger:hover {
-  color: #f87171;
-  background: rgba(248, 113, 113, 0.1);
+  color: #cd6f5f;
+  background: rgba(205, 111, 95, 0.1);
 }
 
 /* 分隔线 */
 .step-divider {
   height: 1px;
-  background: linear-gradient(to right, transparent, rgba(147, 197, 253, 0.2), transparent);
+  background: linear-gradient(to right, transparent, rgba(166, 198, 218, 0.2), transparent);
   margin: 0.5rem 0;
 }
 
 /* ========== 右侧详情面板 ========== */
 .step-details-container {
-  background: rgba(30, 41, 59, 0.5);
+  background: rgba(30, 34, 40, 0.5);
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 12px;
   padding: 1.5rem;
@@ -212,13 +212,13 @@
   margin: 0 0 1rem 0;
   font-size: 1.5rem;
   font-weight: 600;
-  color: #93c5fd;
-  text-shadow: 0 0 20px rgba(147, 197, 253, 0.3);
+  color: #a6c6da;
+  text-shadow: 0 0 20px rgba(166, 198, 218, 0.3);
 }
 
 .step-details-subtitle {
   font-style: italic;
-  color: #fbbf24;
+  color: #d5aa4a;
   margin-bottom: 1rem;
   font-size: 0.9rem;
 }
@@ -230,7 +230,7 @@
   padding-right: 0.5rem;
   min-height: 0;
   scrollbar-width: thin;
-  scrollbar-color: rgba(147, 197, 253, 0.3) transparent;
+  scrollbar-color: rgba(166, 198, 218, 0.3) transparent;
 }
 
 .step-details-scroll::-webkit-scrollbar {
@@ -242,20 +242,20 @@
 }
 
 .step-details-scroll::-webkit-scrollbar-thumb {
-  background: rgba(147, 197, 253, 0.3);
+  background: rgba(166, 198, 218, 0.3);
   border-radius: 3px;
 }
 
 .step-details-scroll p {
   margin: 0;
   white-space: pre-wrap;
-  color: #94a3b8;
+  color: #a09a8d;
 }
 
 .step-details-footer {
   text-align: right;
   font-weight: 600;
-  color: #fbbf24;
+  color: #d5aa4a;
   padding-top: 1rem;
   margin-top: 1rem;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
@@ -268,7 +268,7 @@
   align-items: center;
   height: 100%;
   font-size: 1.1rem;
-  color: #64748b;
+  color: #7c776c;
   font-style: italic;
   text-align: center;
   padding: 2rem;
@@ -282,7 +282,7 @@
   align-items: center;
   height: 100%;
   font-size: 1.1rem;
-  color: #94a3b8;
+  color: #a09a8d;
 }
 
 .step-empty {
@@ -292,7 +292,7 @@
   justify-content: center;
   height: 200px;
   text-align: center;
-  color: #64748b;
+  color: #7c776c;
 }
 
 .step-empty-icon {
@@ -320,20 +320,20 @@
 }
 
 [data-theme="light"] .step-top-actions {
-  background: rgba(241, 245, 249, 0.8);
+  background: rgba(236, 231, 220, 0.8);
   border-color: rgba(0, 0, 0, 0.06);
 }
 
 [data-theme="light"] .step-action-btn {
   background: rgba(255, 255, 255, 0.8);
   border-color: rgba(0, 0, 0, 0.1);
-  color: #475569;
+  color: #56534b;
 }
 
 [data-theme="light"] .step-action-btn:hover {
-  background: rgba(241, 245, 249, 0.95);
-  border-color: rgba(59, 130, 246, 0.3);
-  color: #1e293b;
+  background: rgba(236, 231, 220, 0.95);
+  border-color: rgba(76, 135, 173, 0.3);
+  color: #1e2228;
 }
 
 [data-theme="light"] .step-item {
@@ -341,37 +341,37 @@
 }
 
 [data-theme="light"] .step-item:hover {
-  background: rgba(241, 245, 249, 0.95);
-  border-color: rgba(59, 130, 246, 0.2);
+  background: rgba(236, 231, 220, 0.95);
+  border-color: rgba(76, 135, 173, 0.2);
 }
 
 [data-theme="light"] .step-item.selected {
   background: rgba(219, 234, 254, 0.8);
-  border-color: rgba(59, 130, 246, 0.4);
+  border-color: rgba(76, 135, 173, 0.4);
 }
 
 [data-theme="light"] .step-item-name {
-  color: #1e293b;
+  color: #1e2228;
 }
 
 [data-theme="light"] .step-item.selected .step-item-name {
-  color: #1e40af;
+  color: #27506b;
 }
 
 [data-theme="light"] .step-item-cost {
-  color: #3b82f6;
+  color: #4c87ad;
 }
 
 [data-theme="light"] .step-details-title {
-  color: #2563eb;
+  color: #3a6c8c;
 }
 
 [data-theme="light"] .step-details-scroll p {
-  color: #475569;
+  color: #56534b;
 }
 
 [data-theme="light"] .step-placeholder {
-  color: #94a3b8;
+  color: #a09a8d;
 }
 
 /* ========== 响应式适配 ========== */

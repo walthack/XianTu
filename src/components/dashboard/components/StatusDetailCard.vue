@@ -62,11 +62,11 @@ const strengthLevel = computed(() => {
 
 const strengthColor = computed(() => {
   const strength = props.effect.强度 || 0;
-  if (strength >= 80) return '#ef4444';
-  if (strength >= 60) return '#f59e0b';
-  if (strength >= 40) return '#3b82f6';
-  if (strength >= 20) return '#10b981';
-  return '#6b7280';
+  if (strength >= 80) return '#c34b3c';
+  if (strength >= 60) return '#c69431';
+  if (strength >= 40) return '#4c87ad';
+  if (strength >= 20) return '#4f9b7e';
+  return '#78736a';
 });
 
 const durationDisplay = computed(() => {
@@ -104,15 +104,15 @@ const formatGenerationTime = (time: GameTime) => {
   border-radius: 10px;
   border: 1px solid;
   align-self: flex-start;
-  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
+  box-shadow: 0 6px 18px rgba(18, 21, 26, 0.08);
 }
 .card-header.buff {
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.18), rgba(16, 185, 129, 0.08));
-  border-color: rgba(16, 185, 129, 0.35);
+  background: linear-gradient(135deg, rgba(79, 155, 126, 0.18), rgba(79, 155, 126, 0.08));
+  border-color: rgba(79, 155, 126, 0.35);
 }
 .card-header.debuff {
-  background: linear-gradient(135deg, rgba(239, 68, 68, 0.18), rgba(239, 68, 68, 0.08));
-  border-color: rgba(239, 68, 68, 0.35);
+  background: linear-gradient(135deg, rgba(195, 75, 60, 0.18), rgba(195, 75, 60, 0.08));
+  border-color: rgba(195, 75, 60, 0.35);
 }
 
 .type-icon {
@@ -124,15 +124,15 @@ const formatGenerationTime = (time: GameTime) => {
   justify-content: center;
   font-size: 0.9rem;
   font-weight: 700;
-  background: rgba(15, 23, 42, 0.08);
+  background: rgba(18, 21, 26, 0.08);
 }
 
 .type-text {
   font-size: 0.85rem;
   font-weight: 600;
 }
-.card-header.buff .type-text { color: #10b981; }
-.card-header.debuff .type-text { color: #ef4444; }
+.card-header.buff .type-text { color: #4f9b7e; }
+.card-header.debuff .type-text { color: #c34b3c; }
 
 .card-body {
   display: flex;
@@ -142,15 +142,15 @@ const formatGenerationTime = (time: GameTime) => {
 
 .description {
   padding: 0.75rem 0.9rem;
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.04), rgba(15, 23, 42, 0.02));
+  background: linear-gradient(135deg, rgba(18, 21, 26, 0.04), rgba(18, 21, 26, 0.02));
   border-radius: 10px;
   border: 1px solid var(--color-border);
   border-left: 3px solid;
   line-height: 1.5;
   color: var(--color-text);
 }
-.description.buff-border { border-color: #10b981; }
-.description.debuff-border { border-color: #ef4444; }
+.description.buff-border { border-color: #4f9b7e; }
+.description.debuff-border { border-color: #c34b3c; }
 
 .details-grid {
   display: grid;
@@ -160,7 +160,7 @@ const formatGenerationTime = (time: GameTime) => {
 
 .detail-item {
   padding: 0.7rem 0.8rem;
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.02), rgba(15, 23, 42, 0.01));
+  background: linear-gradient(135deg, rgba(18, 21, 26, 0.02), rgba(18, 21, 26, 0.01));
   border-radius: 10px;
   border: 1px solid rgba(148, 163, 184, 0.2);
   display: flex;
@@ -193,7 +193,7 @@ const formatGenerationTime = (time: GameTime) => {
 
 .strength-bar {
   height: 6px;
-  background: rgba(15, 23, 42, 0.08);
+  background: rgba(18, 21, 26, 0.08);
   border-radius: 999px;
   overflow: hidden;
 }

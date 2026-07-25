@@ -201,6 +201,19 @@
 
           <div class="setting-item">
             <div class="setting-info">
+              <label class="setting-name">{{ t('屏蔽模板化主线推进按钮') }}</label>
+              <span class="setting-desc">{{ t('隐藏「我按当前主线目标行动：…」这类复述式按钮，改由你自由行动推进主线（系统在后台对账追认）。分步演出的高光拍与主线判定不受影响；关闭事件对账时本设置自动失效') }}</span>
+            </div>
+            <div class="setting-control">
+              <label class="setting-switch">
+                <input type="checkbox" v-model="uiStore.hideTemplatedMainlineActions" />
+                <span class="switch-slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
               <label class="setting-name">{{ t('境界分层地图') }}</label>
               <span class="setting-desc">{{ t('按角色境界分别记录世界地图，旧存档开启后将自动迁移') }}</span>
             </div>
@@ -995,19 +1008,19 @@ onMounted(() => {
 }
 
 .action-btn:hover {
-  background: #f1f5f9;
-  border-color: #94a3b8;
+  background: #ece7dc;
+  border-color: #a09a8d;
 }
 
 .action-btn.primary {
-  background: #3b82f6;
-  border-color: #3b82f6;
+  background: #4c87ad;
+  border-color: #4c87ad;
   color: white;
 }
 
 .action-btn.primary:hover {
-  background: #2563eb;
-  border-color: #2563eb;
+  background: #3a6c8c;
+  border-color: #3a6c8c;
 }
 
 /* 设置容器 */
@@ -1123,18 +1136,18 @@ onMounted(() => {
 /* 控件样式 */
 .setting-select {
   padding: 0.5rem 0.75rem;
-  border: 1px solid #d1d5db;
+  border: 1px solid #c9c3b6;
   border-radius: 0.375rem;
   background: white;
-  color: #374151;
+  color: #3c3934;
   font-size: 0.875rem;
   min-width: 80px;
 }
 
 .setting-select:focus {
   outline: none;
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+  border-color: #4c87ad;
+  box-shadow: 0 0 0 2px rgba(76, 135, 173, 0.1);
 }
 
 .range-container {
@@ -1150,21 +1163,21 @@ onMounted(() => {
 .range-value {
   font-size: 0.875rem;
   font-weight: 500;
-  color: #374151;
+  color: #3c3934;
   min-width: 40px;
 }
 
 /* 下拉选择框样式 */
 .setting-select {
   padding: 0.5rem 2rem 0.5rem 0.75rem;
-  border: 1px solid #d1d5db;
+  border: 1px solid #c9c3b6;
   border-radius: 8px;
   background-color: white;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23374151' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 0.75rem center;
   background-size: 12px;
-  color: #374151;
+  color: #3c3934;
   font-size: 0.875rem;
   cursor: pointer;
   transition: border-color 0.2s ease;
@@ -1173,24 +1186,24 @@ onMounted(() => {
 }
 
 .setting-select:hover {
-  border-color: #94a3b8;
+  border-color: #a09a8d;
 }
 
 .setting-select:focus {
   outline: none;
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  border-color: #4c87ad;
+  box-shadow: 0 0 0 3px rgba(76, 135, 173, 0.1);
 }
 
 [data-theme='dark'] .setting-select {
-  background-color: #374151;
-  border-color: #4b5563;
-  color: #e5e7eb;
+  background-color: #3c3934;
+  border-color: #4e4b45;
+  color: #e2dccf;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23e5e7eb' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
 }
 
 [data-theme='dark'] .setting-select:hover {
-  border-color: #6b7280;
+  border-color: #78736a;
 }
 
 /* 开关样式 */
@@ -1214,7 +1227,7 @@ onMounted(() => {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #cbd5e1;
+  background-color: #c4bdad;
   transition: 0.2s;
   border-radius: 24px;
 }
@@ -1232,7 +1245,7 @@ onMounted(() => {
 }
 
 input:checked + .switch-slider {
-  background-color: #3b82f6;
+  background-color: #4c87ad;
 }
 
 input:checked + .switch-slider:before {
@@ -1253,10 +1266,10 @@ input:checked + .switch-slider:before {
 .setting-textarea {
   width: 100%;
   padding: 0.5rem;
-  border: 1px solid #d1d5db;
+  border: 1px solid #c9c3b6;
   border-radius: 6px;
   background: white;
-  color: #374151;
+  color: #3c3934;
   font-size: 0.875rem;
   font-family: inherit;
   resize: vertical;
@@ -1265,22 +1278,22 @@ input:checked + .switch-slider:before {
 
 .setting-textarea:focus {
   outline: none;
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  border-color: #4c87ad;
+  box-shadow: 0 0 0 3px rgba(76, 135, 173, 0.1);
 }
 
 .setting-textarea::placeholder {
-  color: #9ca3af;
+  color: #a29c90;
 }
 
 [data-theme='dark'] .setting-textarea {
-  background: #374151;
-  border-color: #4b5563;
-  color: #e5e7eb;
+  background: #3c3934;
+  border-color: #4e4b45;
+  color: #e2dccf;
 }
 
 [data-theme='dark'] .setting-textarea::placeholder {
-  color: #6b7280;
+  color: #78736a;
 }
 
 /* 工具按钮 */
@@ -1289,10 +1302,10 @@ input:checked + .switch-slider:before {
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 0.75rem;
-  border: 1px solid #d1d5db;
+  border: 1px solid #c9c3b6;
   border-radius: 0.375rem;
   background: white;
-  color: #374151;
+  color: #3c3934;
   cursor: pointer;
   transition: all 0.2s ease;
   font-size: 0.875rem;
@@ -1300,7 +1313,7 @@ input:checked + .switch-slider:before {
 
 .utility-btn:hover {
   background: #f9fafb;
-  border-color: #9ca3af;
+  border-color: #a29c90;
 }
 
 /* 响应式设计 */
@@ -1358,46 +1371,46 @@ input:checked + .switch-slider:before {
 
 [data-theme='dark'] .panel-header,
 [data-theme='dark'] .settings-section {
-  background: #1e293b;
-  border-color: #475569;
+  background: #1e2228;
+  border-color: #56534b;
 }
 
 [data-theme='dark'] .section-header {
-  background: #334155;
-  border-bottom-color: #475569;
+  background: #3d3a35;
+  border-bottom-color: #56534b;
 }
 
 [data-theme='dark'] .panel-title,
 [data-theme='dark'] .section-title,
 [data-theme='dark'] .setting-name {
-  color: #f1f5f9;
+  color: #ece7dc;
 }
 
 [data-theme='dark'] .settings-subtitle,
 [data-theme='dark'] .setting-desc {
-  color: #94a3b8;
+  color: #a09a8d;
 }
 
 [data-theme='dark'] .setting-item:hover {
-  background: #334155;
+  background: #3d3a35;
 }
 
 [data-theme='dark'] .action-btn,
 [data-theme='dark'] .setting-select,
 [data-theme='dark'] .utility-btn {
-  background: #374151;
-  border-color: #4b5563;
-  color: #e5e7eb;
+  background: #3c3934;
+  border-color: #4e4b45;
+  color: #e2dccf;
 }
 
 [data-theme='dark'] .action-btn:hover,
 [data-theme='dark'] .utility-btn:hover {
-  background: #4b5563;
-  border-color: #6b7280;
+  background: #4e4b45;
+  border-color: #78736a;
 }
 
 [data-theme='dark'] .switch-slider {
-  background-color: #4b5563;
+  background-color: #4e4b45;
 }
 
 /* 授权验证相关样式 */
@@ -1427,13 +1440,13 @@ input:checked + .switch-slider:before {
 
 .auth-status.verified {
   background: #d1fae5;
-  color: #059669;
+  color: #3f8268;
   border: 1px solid #a7f3d0;
 }
 
 .auth-status.unverified {
-  background: #fee2e2;
-  color: #dc2626;
+  background: #e6d5cf;
+  color: #a83a2c;
   border: 1px solid #fecaca;
 }
 
@@ -1444,26 +1457,26 @@ input:checked + .switch-slider:before {
 }
 
 .utility-btn.primary:hover {
-  background: var(--color-primary-dark, #2563eb);
-  border-color: var(--color-primary-dark, #2563eb);
+  background: var(--color-primary-dark, #3a6c8c);
+  border-color: var(--color-primary-dark, #3a6c8c);
 }
 
 [data-theme='dark'] .form-input-inline {
-  background: #334155;
-  border-color: #475569;
-  color: #e5e7eb;
+  background: #3d3a35;
+  border-color: #56534b;
+  color: #e2dccf;
 }
 
 [data-theme='dark'] .auth-status.verified {
   background: rgba(5, 150, 105, 0.2);
-  color: #6ee7b7;
+  color: #8fc0a6;
   border-color: rgba(5, 150, 105, 0.3);
 }
 
 [data-theme='dark'] .auth-status.unverified {
-  background: rgba(220, 38, 38, 0.2);
-  color: #fca5a5;
-  border-color: rgba(220, 38, 38, 0.3);
+  background: rgba(168, 58, 44, 0.2);
+  color: #d49a90;
+  border-color: rgba(168, 58, 44, 0.3);
 }
 
 /* 加载脉冲动画 */

@@ -33,14 +33,15 @@ withDefaults(defineProps<{
 
 <style scoped>
 .scenario-preset {
-  height: 100%;
+  /* 内容少的锁定步（如仙缘初定）不再被拉满整屏留下大片空白，条目多时仍受限于容器并内部滚动 */
+  max-height: 100%;
   display: flex;
   flex-direction: column;
   gap: 1rem;
   padding: 2rem;
   color: var(--color-text);
-  background: rgba(20, 29, 45, 0.72);
-  border: 1px solid rgba(240, 195, 106, 0.28);
+  background: rgba(22, 25, 29, 0.72);
+  border: 1px solid rgba(216, 180, 115, 0.28);
   border-radius: 8px;
 }
 
@@ -49,7 +50,7 @@ withDefaults(defineProps<{
   align-items: flex-start;
   justify-content: space-between;
   gap: 1rem;
-  color: #f0c36a;
+  color: #d8b473;
 }
 
 .preset-source {
@@ -84,7 +85,7 @@ h2 {
   gap: 0.4rem;
   padding: 0.9rem 1rem;
   background: rgba(255, 255, 255, 0.035);
-  border-left: 2px solid rgba(240, 195, 106, 0.6);
+  border-left: 2px solid rgba(216, 180, 115, 0.6);
 }
 
 .preset-entry span {
@@ -95,7 +96,7 @@ h2 {
 
 .preset-status {
   margin-top: auto;
-  color: rgba(240, 195, 106, 0.76);
+  color: rgba(216, 180, 115, 0.76);
   font-size: 0.82rem;
 }
 </style>

@@ -413,6 +413,7 @@ import { useI18n } from '@/i18n';
 import { useCharacterStore } from '@/stores/characterStore';
 import { useActionQueueStore } from '@/stores/actionQueueStore';
 import { useUIStore } from '@/stores/uiStore';
+import { useAPIManagementStore } from '@/stores/apiManagementStore';
 import { panelBus } from '@/utils/panelBus';
 import { chatBus, type ChatBusPayload } from '@/utils/chatBus';
 import { EnhancedActionQueueManager } from '@/utils/enhancedActionQueue';
@@ -698,6 +699,7 @@ const router = useRouter();
 const characterStore = useCharacterStore();
 const actionQueue = useActionQueueStore();
 const uiStore = useUIStore();
+const apiManagementStore = useAPIManagementStore();
 let aiResetToken = 0;
 const gameStateStore = useGameStateStore();
 const isTavernEnvFlag = isTavernEnv();
@@ -705,9 +707,20 @@ const enhancedActionQueue = EnhancedActionQueueManager.getInstance();
 const bidirectionalSystem = AIBidirectionalSystem;
 type ScenarioEngineActionSelection = ScenarioOpportunityActionSelection | ScenarioEventActionSelection;
 const selectedScenarioEngineAction = ref<ScenarioEngineActionSelection | null>(null);
+// 屏蔽模板化推进按钮要靠事件对账兜底落账；对账被关掉时必须把按钮放回来，
+// 否则这些事件既没有按钮结算、也没有对账追认 = 主线卡死。
+const hideTemplatedMainlineActions = computed(() =>
+  uiStore.hideTemplatedMainlineActions && apiManagementStore.isFunctionEnabled('event_reconcile'),
+);
 const scenarioEngineActionOptions = computed<ScenarioEngineActionSelection[]>(() => {
   const save = gameStateStore.toSaveData();
-  return save ? [...getTrackedStoryOpportunityActions(save), ...getCurrentStoryEventActions(save)] : [];
+  if (!save) return [];
+  return [
+    ...getTrackedStoryOpportunityActions(save),
+    ...getCurrentStoryEventActions(save, {
+      hideTemplatedObjectiveActions: hideTemplatedMainlineActions.value,
+    }),
+  ];
 });
 
 const isOnlineTraveling = computed(() => {
@@ -2377,7 +2390,7 @@ const syncGameState = async () => {
   position: absolute;
   top: -6px;
   right: -6px;
-  background: #3b82f6;
+  background: #4c87ad;
   color: white;
   font-size: 11px;
   font-weight: 700;
@@ -2622,16 +2635,16 @@ const syncGameState = async () => {
 
 /* 深色主题适配 */
 [data-theme="dark"] .command-log-modal {
-  background: #1e293b;
-  border-color: #475569;
+  background: #1e2228;
+  border-color: #56534b;
 }
 [data-theme="dark"] .command-log-header {
-  background: linear-gradient(135deg, #334155 0%, #1e293b 100%);
-  border-color: #475569;
+  background: linear-gradient(135deg, #3d3a35 0%, #1e2228 100%);
+  border-color: #56534b;
 }
 [data-theme="dark"] .command-item {
-  background: #334155;
-  border-color: #475569;
+  background: #3d3a35;
+  border-color: #56534b;
 }
 [data-theme="dark"] .command-item:hover {
   border-color: var(--color-primary);
@@ -2659,8 +2672,8 @@ const syncGameState = async () => {
 /* 短期记忆区域 */
 .memory-section {
   padding: 12px 20px;
-  background: linear-gradient(135deg, #fefbff 0%, #f8fafc 100%);
-  border-bottom: 1px solid #e2e8f0;
+  background: linear-gradient(135deg, #fefbff 0%, #f2eee4 100%);
+  border-bottom: 1px solid #ddd7c9;
   position: relative;
   z-index: 20;
   flex-shrink: 0;
@@ -2676,7 +2689,7 @@ const syncGameState = async () => {
 }
 
 .memory-header:hover {
-  background: rgba(99, 102, 241, 0.05);
+  background: rgba(111, 127, 168, 0.05);
   border-radius: 6px;
   margin: -4px;
   padding: 8px 4px;
@@ -2685,11 +2698,11 @@ const syncGameState = async () => {
 .memory-title {
   font-size: 0.85rem;
   font-weight: 600;
-  color: #6366f1;
+  color: #6f7fa8;
 }
 
 .memory-icon {
-  color: #94a3b8;
+  color: #a09a8d;
   transition: transform 0.2s ease;
 }
 
@@ -2700,7 +2713,7 @@ const syncGameState = async () => {
   left: 0;
   right: 0;
   background: var(--color-surface);
-  border: 1px solid #e2e8f0;
+  border: 1px solid #ddd7c9;
   border-top: none;
   border-radius: 0 0 12px 12px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
@@ -2715,12 +2728,12 @@ const syncGameState = async () => {
 
 .memory-item {
   font-size: 0.85rem;
-  color: #374151;
+  color: #3c3934;
   margin-bottom: 12px;
   padding: 12px 16px;
-  background: rgba(99, 102, 241, 0.05);
+  background: rgba(111, 127, 168, 0.05);
   border-radius: 8px;
-  border-left: 3px solid #6366f1;
+  border-left: 3px solid #6f7fa8;
   line-height: 1.5;
 }
 
@@ -2730,7 +2743,7 @@ const syncGameState = async () => {
 
 .no-memory {
   font-size: 0.9rem;
-  color: #9ca3af;
+  color: #a29c90;
   font-style: italic;
   text-align: center;
   padding: 20px;
@@ -2756,7 +2769,7 @@ const syncGameState = async () => {
 .thinking-section {
   margin: 12px 16px;
   background: linear-gradient(135deg, #fef3c7 0%, #fef9c3 100%);
-  border: 1px solid #fcd34d;
+  border: 1px solid #dfc06f;
   border-radius: 10px;
   overflow: hidden;
   flex-shrink: 0; /* 防止被挤压 */
@@ -2773,11 +2786,11 @@ const syncGameState = async () => {
 }
 
 .thinking-header:hover {
-  background: rgba(251, 191, 36, 0.15);
+  background: rgba(213, 170, 74, 0.15);
 }
 
 .thinking-icon {
-  color: #d97706;
+  color: #a97528;
   flex-shrink: 0;
 }
 
@@ -2795,14 +2808,14 @@ const syncGameState = async () => {
 }
 
 .thinking-badge.streaming {
-  color: #b45309;
-  background: rgba(251, 191, 36, 0.3);
+  color: #8c5f22;
+  background: rgba(213, 170, 74, 0.3);
   animation: pulse 1.5s ease-in-out infinite;
 }
 
 .thinking-badge.completed {
-  color: #166534;
-  background: rgba(34, 197, 94, 0.2);
+  color: #3d5f43;
+  background: rgba(95, 155, 106, 0.2);
   animation: none;
 }
 
@@ -2812,13 +2825,13 @@ const syncGameState = async () => {
 }
 
 .expand-icon {
-  color: #b45309;
+  color: #8c5f22;
   flex-shrink: 0;
 }
 
 .thinking-content {
   padding: 12px 14px;
-  border-top: 1px solid rgba(251, 191, 36, 0.3);
+  border-top: 1px solid rgba(213, 170, 74, 0.3);
   font-size: 0.85rem;
   color: #78350f;
   line-height: 1.6;
@@ -2912,7 +2925,8 @@ const syncGameState = async () => {
   line-height: 1.8;
   color: var(--color-text);
   font-size: var(--base-font-size, 1rem);
-  max-width: 100%;
+  /* 中文舒适阅读约 40 字/行；原先铺满 738px ≈ 46 字/行偏宽 */
+  max-width: 40em;
   word-wrap: break-word;
   overflow-wrap: break-word;
   word-break: break-word;
@@ -2945,7 +2959,7 @@ const syncGameState = async () => {
 
 /* 深色主题下 content-area 背景与内部一致 */
 [data-theme="dark"] .content-area {
-  background-color: #1E293B !important;
+  background-color: #1e2228 !important;
 }
 
 /* WebKit滚动条样式 */
@@ -2984,12 +2998,12 @@ const syncGameState = async () => {
 /* AI处理状态指示器（生成时显示在顶部） */
 .ai-processing-indicator {
   width: 100%;
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%);
-  border: 1px solid rgba(99, 102, 241, 0.2);
+  background: linear-gradient(135deg, rgba(111, 127, 168, 0.1) 0%, rgba(76, 135, 173, 0.05) 100%);
+  border: 1px solid rgba(111, 127, 168, 0.2);
   border-radius: 8px;
   padding: 12px 16px;
   margin-bottom: 16px;
-  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.1);
+  box-shadow: 0 2px 8px rgba(111, 127, 168, 0.1);
   flex-shrink: 0; /* 防止被挤压 */
   box-sizing: border-box;
 }
@@ -3108,7 +3122,7 @@ const syncGameState = async () => {
   position: relative;
   display: flex;
   align-items: stretch; /* 让内部元素垂直拉伸 */
-  border: 1px solid #d1d5db;
+  border: 1px solid #c9c3b6;
   border-radius: 8px;
   background: var(--color-surface);
   transition: all 0.2s ease;
@@ -3118,8 +3132,8 @@ const syncGameState = async () => {
 }
 
 .input-container:focus-within {
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  border-color: #4c87ad;
+  box-shadow: 0 0 0 3px rgba(76, 135, 173, 0.1);
 }
 
 .input-container:has(.game-input:disabled) {
@@ -3189,7 +3203,7 @@ const syncGameState = async () => {
   color: var(--color-text-secondary);
   white-space: nowrap;
   padding: 4px 12px;
-  border-left: 1px solid #e5e7eb;
+  border-left: 1px solid #e2dccf;
   margin-left: 8px;
   cursor: pointer;
   user-select: none;
@@ -3228,7 +3242,7 @@ const syncGameState = async () => {
   gap: 8px;
   margin-top: 16px;
   padding-top: 16px;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid #e2dccf;
   margin-bottom: 16px;
 }
 
@@ -3283,7 +3297,7 @@ const syncGameState = async () => {
 .narrative-meta {
   margin-bottom: 12px;
   padding-bottom: 8px;
-  border-bottom: 1px solid #f3f4f6;
+  border-bottom: 1px solid #efeade;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -3314,9 +3328,9 @@ const syncGameState = async () => {
 }
 
 .header-action-btn.event-btn {
-  background: rgba(99, 102, 241, 0.10);
-  border: 1px solid rgba(99, 102, 241, 0.20);
-  color: rgba(99, 102, 241, 0.95);
+  background: rgba(111, 127, 168, 0.10);
+  border: 1px solid rgba(111, 127, 168, 0.20);
+  color: rgba(111, 127, 168, 0.95);
   cursor: pointer;
   padding: 6px;
   border-radius: 50%;
@@ -3327,8 +3341,8 @@ const syncGameState = async () => {
 }
 
 .header-action-btn.event-btn:hover {
-  background: rgba(99, 102, 241, 0.16);
-  border-color: rgba(99, 102, 241, 0.35);
+  background: rgba(111, 127, 168, 0.16);
+  border-color: rgba(111, 127, 168, 0.35);
 }
 
 .traveling-badge {
@@ -3345,20 +3359,20 @@ const syncGameState = async () => {
 }
 
 [data-theme="dark"] .header-action-btn.event-btn {
-  background: rgba(99, 102, 241, 0.16);
-  border-color: rgba(99, 102, 241, 0.25);
+  background: rgba(111, 127, 168, 0.16);
+  border-color: rgba(111, 127, 168, 0.25);
   color: rgba(165, 180, 252, 0.95);
 }
 
 [data-theme="dark"] .traveling-badge {
-  color: rgba(251, 146, 60, 0.95);
-  background: rgba(251, 146, 60, 0.16);
-  border-color: rgba(251, 146, 60, 0.28);
+  color: rgba(198, 128, 76, 0.95);
+  background: rgba(198, 128, 76, 0.16);
+  border-color: rgba(198, 128, 76, 0.28);
 }
 
 .narrative-time {
   font-size: 0.8rem;
-  color: #6b7280;
+  color: #78736a;
   font-weight: 500;
 }
 
@@ -3368,7 +3382,7 @@ const syncGameState = async () => {
   align-items: center;
   gap: 6px;
   padding: 6px 12px;
-  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  background: linear-gradient(135deg, #4c87ad, #2e5878);
   color: white;
   border: none;
   border-radius: 20px;
@@ -3376,7 +3390,7 @@ const syncGameState = async () => {
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 2px 8px rgba(76, 135, 173, 0.3);
   position: relative;
   overflow: hidden;
 }
@@ -3394,8 +3408,8 @@ const syncGameState = async () => {
 
 .variable-updates-toggle:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4);
-  background: linear-gradient(135deg, #2563eb, #1e40af);
+  box-shadow: 0 4px 16px rgba(76, 135, 173, 0.4);
+  background: linear-gradient(135deg, #3a6c8c, #27506b);
 }
 
 .variable-updates-toggle:hover::before {
@@ -3403,20 +3417,20 @@ const syncGameState = async () => {
 }
 
 .variable-updates-toggle.active {
-  background: linear-gradient(135deg, #10b981, #059669);
-  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+  background: linear-gradient(135deg, #4f9b7e, #3f8268);
+  box-shadow: 0 2px 8px rgba(79, 155, 126, 0.3);
 }
 
 .variable-updates-toggle.disabled {
   opacity: 0.5;
   cursor: not-allowed;
-  background: linear-gradient(135deg, #9ca3af, #6b7280);
+  background: linear-gradient(135deg, #a29c90, #78736a);
   box-shadow: 0 2px 8px rgba(156, 163, 175, 0.3);
 }
 
 .variable-updates-toggle.disabled:hover {
   transform: none;
-  background: linear-gradient(135deg, #9ca3af, #6b7280);
+  background: linear-gradient(135deg, #a29c90, #78736a);
   box-shadow: 0 2px 8px rgba(156, 163, 175, 0.3);
 }
 
@@ -3498,7 +3512,7 @@ const syncGameState = async () => {
   justify-content: space-between;
   align-items: center;
   padding: 16px 20px;
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  background: linear-gradient(135deg, #f2eee4 0%, #ddd7c9 100%);
   border-bottom: 1px solid var(--color-border);
 }
 
@@ -3542,7 +3556,7 @@ const syncGameState = async () => {
   align-items: center;
   justify-content: center;
   height: 100%;
-  color: #9ca3af;
+  color: #a29c90;
   font-style: italic;
   font-size: 0.9rem;
 }
@@ -3550,8 +3564,8 @@ const syncGameState = async () => {
 /* 动作队列显示区域 */
 .action-queue-display {
   margin-bottom: 12px;
-  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-  border: 1px solid #e2e8f0;
+  background: linear-gradient(135deg, #f2eee4 0%, #ece7dc 100%);
+  border: 1px solid #ddd7c9;
   border-radius: 8px;
   padding: 12px;
 }
@@ -3566,13 +3580,13 @@ const syncGameState = async () => {
 .queue-title {
   font-size: 0.85rem;
   font-weight: 600;
-  color: #6366f1;
+  color: #6f7fa8;
 }
 
 .clear-queue-btn {
   background: transparent;
   border: none;
-  color: #9ca3af;
+  color: #a29c90;
   cursor: pointer;
   padding: 4px;
   border-radius: 4px;
@@ -3580,8 +3594,8 @@ const syncGameState = async () => {
 }
 
 .clear-queue-btn:hover {
-  background: rgba(239, 68, 68, 0.1);
-  color: #ef4444;
+  background: rgba(195, 75, 60, 0.1);
+  color: #c34b3c;
 }
 
 .queue-actions {
@@ -3597,15 +3611,15 @@ const syncGameState = async () => {
   align-items: center;
   justify-content: space-between;
   padding: 8px 12px;
-  background: rgba(99, 102, 241, 0.05);
-  border: 1px solid rgba(99, 102, 241, 0.1);
+  background: rgba(111, 127, 168, 0.05);
+  border: 1px solid rgba(111, 127, 168, 0.1);
   border-radius: 6px;
   font-size: 0.85rem;
 }
 
 .action-text {
   flex: 1;
-  color: #374151;
+  color: #3c3934;
   line-height: 1.4;
   margin-right: 8px;
 }
@@ -3631,7 +3645,7 @@ const syncGameState = async () => {
 .remove-action-btn {
   background: transparent;
   border: none;
-  color: #9ca3af;
+  color: #a29c90;
   cursor: pointer;
   padding: 2px 6px;
   border-radius: 4px;
@@ -3642,14 +3656,14 @@ const syncGameState = async () => {
 }
 
 .remove-action-btn:hover {
-  background: rgba(239, 68, 68, 0.1);
-  color: #ef4444;
+  background: rgba(195, 75, 60, 0.1);
+  color: #c34b3c;
 }
 
 .input-section {
   padding: 16px 20px 20px 20px; /* 进一步增加底部内边距 */
-  border-top: 1px solid #e2e8f0;
-  background: #f8fafc;
+  border-top: 1px solid #ddd7c9;
+  background: #f2eee4;
   box-sizing: border-box;
   flex-shrink: 0;
 }
@@ -3666,7 +3680,7 @@ const syncGameState = async () => {
   /* 这些样式现在由 .input-container 处理 */
   font-size: 0.9rem;
   line-height: 1.4;
-  color: #374151;
+  color: #3c3934;
   resize: none;
   /* 移除固定高度，改为自动调整 */
   /* min-height: 44px; */
@@ -3679,23 +3693,23 @@ const syncGameState = async () => {
 /* 移除原来的 focus 样式，现在由容器处理 */
 /* .game-input:focus {
   outline: none;
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  border-color: #4c87ad;
+  box-shadow: 0 0 0 3px rgba(76, 135, 173, 0.1);
 } */
 
 .game-input:disabled {
   /* background: #f9fafb; */
-  color: #9ca3af;
+  color: #a29c90;
   cursor: not-allowed;
 }
 
 .game-input::placeholder {
-  color: #9ca3af;
+  color: #a29c90;
 }
 
 .send-button {
   width: 42px;
-  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  background: linear-gradient(135deg, #4c87ad, #3a6c8c);
   color: white;
   border: none;
   border-radius: 10px;
@@ -3707,19 +3721,19 @@ const syncGameState = async () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 6px rgba(59, 130, 246, 0.25);
+  box-shadow: 0 2px 6px rgba(76, 135, 173, 0.25);
   margin-left: 8px;
 }
 
 .send-button:hover:not(:disabled) {
-  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  background: linear-gradient(135deg, #3a6c8c, #2e5878);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+  box-shadow: 0 4px 12px rgba(76, 135, 173, 0.4);
 }
 
 .send-button:disabled {
-  background: #d1d5db;
-  color: #9ca3af;
+  background: #c9c3b6;
+  color: #a29c90;
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
@@ -3746,45 +3760,45 @@ const syncGameState = async () => {
 /* 叙述内容深色主题 */
 [data-theme="dark"] .narrative-content {
   background: var(--color-background);
-  color: #e2e8f0;
+  color: #ddd7c9;
 }
 
 [data-theme="dark"] .narrative-meta {
-  border-bottom-color: #374151;
+  border-bottom-color: #3c3934;
 }
 
 [data-theme="dark"] .narrative-time {
-  color: #94a3b8;
+  color: #a09a8d;
 }
 
 /* 深色主题 - 变量更新按钮 */
 [data-theme="dark"] .variable-updates-toggle {
-  background: linear-gradient(135deg, #3b82f6, #1e3a8a);
-  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+  background: linear-gradient(135deg, #4c87ad, #1e3a8a);
+  box-shadow: 0 2px 8px rgba(76, 135, 173, 0.4);
 }
 
 [data-theme="dark"] .variable-updates-toggle:hover {
-  background: linear-gradient(135deg, #2563eb, #1e40af);
-  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.5);
+  background: linear-gradient(135deg, #3a6c8c, #27506b);
+  box-shadow: 0 4px 16px rgba(76, 135, 173, 0.5);
 }
 
 [data-theme="dark"] .variable-updates-toggle.active {
-  background: linear-gradient(135deg, #10b981, #065f46);
-  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);
+  background: linear-gradient(135deg, #4f9b7e, #065f46);
+  box-shadow: 0 2px 8px rgba(79, 155, 126, 0.4);
 }
 
 [data-theme="dark"] .variable-updates-toggle.active:hover {
-  background: linear-gradient(135deg, #059669, #047857);
-  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.5);
+  background: linear-gradient(135deg, #3f8268, #047857);
+  box-shadow: 0 4px 16px rgba(79, 155, 126, 0.5);
 }
 
 [data-theme="dark"] .variable-updates-toggle.disabled {
-  background: linear-gradient(135deg, #4b5563, #374151);
+  background: linear-gradient(135deg, #4e4b45, #3c3934);
   box-shadow: 0 2px 8px rgba(75, 85, 99, 0.4);
 }
 
 [data-theme="dark"] .variable-updates-toggle.disabled:hover {
-  background: linear-gradient(135deg, #4b5563, #374151);
+  background: linear-gradient(135deg, #4e4b45, #3c3934);
   box-shadow: 0 2px 8px rgba(75, 85, 99, 0.4);
 }
 
@@ -3793,35 +3807,40 @@ const syncGameState = async () => {
 }
 
 [data-theme="dark"] .variable-updates-modal {
-  background: #1e293b;
-  border-color: #475569;
+  background: #1e2228;
+  border-color: #56534b;
 }
 
 [data-theme="dark"] .variable-updates-modal .updates-header {
-  background: linear-gradient(135deg, #334155 0%, #475569 100%);
-  border-color: #475569;
+  background: linear-gradient(135deg, #3d3a35 0%, #56534b 100%);
+  border-color: #56534b;
 }
 
 [data-theme="dark"] .variable-updates-modal .updates-header h4 {
-  color: #e2e8f0;
+  color: #ddd7c9;
 }
 
 [data-theme="dark"] .close-updates-btn {
-  color: #94a3b8;
+  color: #a09a8d;
 }
 
 [data-theme="dark"] .close-updates-btn:hover {
-  background: #475569;
-  color: #e2e8f0;
+  background: #56534b;
+  color: #ddd7c9;
 }
 
 [data-theme="dark"] .empty-narrative {
-  color: #6b7280;
+  color: #78736a;
 }
 
 /* 确保深色主题下当前叙述区域背景一致 */
 [data-theme="dark"] .current-narrative {
-  background-color: #1E293B !important;
+  background-color: #1e2228 !important;
+}
+
+/* 暗色下石青按钮是中间调，白字只有 2.5:1；改用墨字约 6.8:1 */
+[data-theme="dark"] .action-option-btn {
+  color: #1a1d21;
 }
 
 /* 深色主题 - 流式输出内容 */
@@ -3831,7 +3850,7 @@ const syncGameState = async () => {
 }
 
 [data-theme="dark"] .streaming-text {
-  color: #e2e8f0;
+  color: #ddd7c9;
 }
 
 
@@ -3851,76 +3870,76 @@ const syncGameState = async () => {
 }
 
 [data-theme="dark"] .narrative-content {
-  background: #1E293B !important;
+  background: #1e2228 !important;
 }
 
 [data-theme="dark"] .input-section {
-  background: #334155;
-  border-top-color: #475569;
+  background: #3d3a35;
+  border-top-color: #56534b;
 }
 
 [data-theme="dark"] .game-input {
-  /* background: #1e293b; - 现在由容器处理 */
-  /* border-color: #475569; - 现在由容器处理 */
-  color: #e2e8f0;
+  /* background: #1e2228; - 现在由容器处理 */
+  /* border-color: #56534b; - 现在由容器处理 */
+  color: #ddd7c9;
 }
 
 /* 移除重复的深色主题 focus 样式 */
 /* [data-theme="dark"] .game-input:focus {
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+  border-color: #4c87ad;
+  box-shadow: 0 0 0 3px rgba(76, 135, 173, 0.2);
 } */
 
 [data-theme="dark"] .game-input:disabled {
-  /* background: #0f172a; - 现在由容器处理 */
-  color: #64748b;
+  /* background: #12151a; - 现在由容器处理 */
+  color: #7c776c;
 }
 
 [data-theme="dark"] .game-input::placeholder {
-  color: #64748b;
+  color: #7c776c;
 }
 
 [data-theme="dark"] .send-button {
-  background: #3b82f6;
+  background: #4c87ad;
 }
 
 [data-theme="dark"] .send-button:hover:not(:disabled) {
-  background: #2563eb;
+  background: #3a6c8c;
 }
 
 [data-theme="dark"] .send-button:disabled {
-  background: #374151;
-  color: #64748b;
+  background: #3c3934;
+  color: #7c776c;
 }
 
 /* 短期记忆深色主题 */
 [data-theme="dark"] .memory-section {
-  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-  border-color: #475569;
+  background: linear-gradient(135deg, #1e2228 0%, #3d3a35 100%);
+  border-color: #56534b;
 }
 
 [data-theme="dark"] .memory-header:hover {
-  background: rgba(99, 102, 241, 0.1);
+  background: rgba(111, 127, 168, 0.1);
 }
 
 [data-theme="dark"] .memory-title {
-  color: #818cf8;
+  color: #8b95b8;
 }
 
 [data-theme="dark"] .memory-icon {
-  color: #64748b;
+  color: #7c776c;
 }
 
 [data-theme="dark"] .memory-dropdown {
-  background: #1e293b;
-  border-color: #475569;
+  background: #1e2228;
+  border-color: #56534b;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
 [data-theme="dark"] .memory-item {
   background: rgba(129, 140, 248, 0.1);
-  border-left-color: #818cf8;
-  color: #e2e8f0;
+  border-left-color: #8b95b8;
+  color: #ddd7c9;
 }
 
 /* 思维链深色主题 */
@@ -3930,104 +3949,104 @@ const syncGameState = async () => {
 }
 
 [data-theme="dark"] .thinking-header:hover {
-  background: rgba(251, 191, 36, 0.1);
+  background: rgba(213, 170, 74, 0.1);
 }
 
 [data-theme="dark"] .thinking-icon {
-  color: #fbbf24;
+  color: #d5aa4a;
 }
 
 [data-theme="dark"] .thinking-title {
-  color: #fcd34d;
+  color: #dfc06f;
 }
 
 [data-theme="dark"] .thinking-badge.streaming {
-  color: #fcd34d;
-  background: rgba(251, 191, 36, 0.2);
+  color: #dfc06f;
+  background: rgba(213, 170, 74, 0.2);
 }
 
 [data-theme="dark"] .thinking-badge.completed {
-  color: #86efac;
-  background: rgba(34, 197, 94, 0.15);
+  color: #9dc5a3;
+  background: rgba(95, 155, 106, 0.15);
 }
 
 [data-theme="dark"] .expand-icon {
-  color: #fbbf24;
+  color: #d5aa4a;
 }
 
 [data-theme="dark"] .thinking-content {
   background: rgba(0, 0, 0, 0.2);
-  border-top-color: rgba(251, 191, 36, 0.2);
+  border-top-color: rgba(213, 170, 74, 0.2);
   color: #fef3c7;
 }
 
 /* 等待覆盖层深色主题 - 更新为AI处理显示样式 */
 [data-theme="dark"] .streaming-meta {
-  border-bottom-color: #374151;
+  border-bottom-color: #3c3934;
 }
 
 [data-theme="dark"] .streaming-indicator {
-  color: #60a5fa;
+  color: #78a8c6;
 }
 
 [data-theme="dark"] .streaming-dot {
-  background: #60a5fa;
+  background: #78a8c6;
 }
 
 [data-theme="dark"] .thinking-dots .dot {
-  background: #60a5fa;
+  background: #78a8c6;
 }
 
 [data-theme="dark"] .waiting-text {
-  color: #94a3b8;
+  color: #a09a8d;
 }
 
 /* 输入框右侧流式传输选项深色主题 - 更新为内部样式 */
 [data-theme="dark"] .input-container {
-  background: #1e293b;
-  border-color: #475569;
+  background: #1e2228;
+  border-color: #56534b;
 }
 
 [data-theme="dark"] .input-container:focus-within {
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+  border-color: #4c87ad;
+  box-shadow: 0 0 0 3px rgba(76, 135, 173, 0.2);
 }
 
 [data-theme="dark"] .input-container:has(.game-input:disabled) {
-  background: #0f172a;
+  background: #12151a;
 }
 
 [data-theme="dark"] .stream-toggle-inside {
-  color: #94a3b8;
-  border-left-color: #475569;
+  color: #a09a8d;
+  border-left-color: #56534b;
 }
 
 [data-theme="dark"] .stream-toggle-inside:hover {
-  color: #e2e8f0;
+  color: #ddd7c9;
 }
 
 /* 行动选择器按钮 */
 .action-selector-btn {
   width: 44px;
   min-height: 32px; /* 减小最小高度以匹配输入框 */
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
+  background: #f2eee4;
+  border: 1px solid #ddd7c9;
   border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: all 0.2s ease;
-  color: #6366f1;
+  color: #6f7fa8;
   align-self: stretch; /* 垂直拉伸以匹配容器高度 */
   flex-shrink: 0;
 }
 
 .action-selector-btn:hover:not(:disabled) {
-  background: #f1f5f9;
-  border-color: #6366f1;
+  background: #ece7dc;
+  border-color: #6f7fa8;
   transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.15);
+  box-shadow: 0 2px 8px rgba(111, 127, 168, 0.15);
 }
 
 .action-selector-btn:disabled {
@@ -4072,11 +4091,11 @@ const syncGameState = async () => {
 .modal-header,
 .config-header {
   padding: 16px 20px;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e2dccf;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: var(--color-primary, #3b82f6);
+  background: var(--color-primary, #4c87ad);
 }
 
 .modal-header h3,
@@ -4119,7 +4138,7 @@ const syncGameState = async () => {
   align-items: center;
   gap: 6px;
   padding: 12px 8px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid #e2dccf;
   border-radius: 8px;
   background: var(--color-surface);
   cursor: pointer;
@@ -4129,30 +4148,30 @@ const syncGameState = async () => {
 }
 
 .quick-action-btn:hover {
-  border-color: #3b82f6;
-  background: #f8fafc;
+  border-color: #4c87ad;
+  background: #f2eee4;
   transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15);
+  box-shadow: 0 2px 8px rgba(76, 135, 173, 0.15);
 }
 
 .quick-action-btn.cultivation {
-  border-color: rgba(34, 197, 94, 0.2);
-  background: rgba(34, 197, 94, 0.03);
+  border-color: rgba(95, 155, 106, 0.2);
+  background: rgba(95, 155, 106, 0.03);
 }
 
 .quick-action-btn.cultivation:hover {
-  border-color: #22c55e;
-  background: rgba(34, 197, 94, 0.08);
+  border-color: #5f9b6a;
+  background: rgba(95, 155, 106, 0.08);
 }
 
 .quick-action-btn.exploration {
-  border-color: rgba(59, 130, 246, 0.2);
-  background: rgba(59, 130, 246, 0.03);
+  border-color: rgba(76, 135, 173, 0.2);
+  background: rgba(76, 135, 173, 0.03);
 }
 
 .quick-action-btn.exploration:hover {
-  border-color: #3b82f6;
-  background: rgba(59, 130, 246, 0.08);
+  border-color: #4c87ad;
+  background: rgba(76, 135, 173, 0.08);
 }
 
 .quick-action-btn.social {
@@ -4171,7 +4190,7 @@ const syncGameState = async () => {
 }
 
 .quick-action-btn.other:hover {
-  border-color: #9ca3af;
+  border-color: #a29c90;
   background: rgba(156, 163, 175, 0.08);
 }
 
@@ -4182,7 +4201,7 @@ const syncGameState = async () => {
 
 .action-text {
   font-weight: 500;
-  color: #374151;
+  color: #3c3934;
   text-align: center;
   line-height: 1.2;
 }
@@ -4194,7 +4213,7 @@ const syncGameState = async () => {
 
 .action-description {
   margin: 0 0 20px 0;
-  color: #6b7280;
+  color: #78736a;
   line-height: 1.5;
 }
 
@@ -4210,7 +4229,7 @@ const syncGameState = async () => {
   display: block;
   margin-bottom: 8px;
   font-weight: 500;
-  color: #374151;
+  color: #3c3934;
   font-size: 0.875rem;
 }
 
@@ -4222,7 +4241,7 @@ const syncGameState = async () => {
 
 .time-btn {
   padding: 8px 16px;
-  border: 1px solid #d1d5db;
+  border: 1px solid #c9c3b6;
   border-radius: 6px;
   background: var(--color-surface);
   cursor: pointer;
@@ -4231,12 +4250,12 @@ const syncGameState = async () => {
 }
 
 .time-btn:hover {
-  border-color: #3b82f6;
+  border-color: #4c87ad;
 }
 
 .time-btn.active {
-  border-color: #3b82f6;
-  background: #3b82f6;
+  border-color: #4c87ad;
+  background: #4c87ad;
   color: white;
 }
 
@@ -4250,7 +4269,7 @@ const syncGameState = async () => {
 .time-input {
   width: 80px;
   padding: 6px 10px;
-  border: 1px solid #d1d5db;
+  border: 1px solid #c9c3b6;
   border-radius: 4px;
   font-size: 0.875rem;
 }
@@ -4266,15 +4285,15 @@ const syncGameState = async () => {
   align-items: center;
   gap: 8px;
   padding: 8px 12px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid #e2dccf;
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .option-item:hover {
-  border-color: #3b82f6;
-  background: #f8fafc;
+  border-color: #4c87ad;
+  background: #f2eee4;
 }
 
 .option-item input[type="radio"] {
@@ -4283,7 +4302,7 @@ const syncGameState = async () => {
 
 .config-actions {
   padding: 20px;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid #e2dccf;
   display: flex;
   gap: 12px;
   justify-content: flex-end;
@@ -4300,48 +4319,48 @@ const syncGameState = async () => {
 }
 
 .cancel-btn {
-  border: 1px solid #d1d5db;
+  border: 1px solid #c9c3b6;
   background: var(--color-surface);
-  color: #6b7280;
+  color: #78736a;
 }
 
 .cancel-btn:hover {
   background: #f9fafb;
-  border-color: #9ca3af;
+  border-color: #a29c90;
 }
 
 .confirm-btn {
-  border: 1px solid #3b82f6;
-  background: #3b82f6;
+  border: 1px solid #4c87ad;
+  background: #4c87ad;
   color: white;
 }
 
 .confirm-btn:hover {
-  background: #2563eb;
-  border-color: #2563eb;
+  background: #3a6c8c;
+  border-color: #3a6c8c;
 }
 
 /* 深色主题适配 */
 [data-theme="dark"] .action-selector-btn {
-  background: #374151;
-  border-color: #4b5563;
-  color: #d1d5db;
+  background: #3c3934;
+  border-color: #4e4b45;
+  color: #c9c3b6;
 }
 
 [data-theme="dark"] .action-selector-btn:hover:not(:disabled) {
-  background: #4b5563;
-  border-color: #6b7280;
+  background: #4e4b45;
+  border-color: #78736a;
 }
 
 [data-theme="dark"] .action-modal,
 [data-theme="dark"] .action-config-modal {
-  background: #1f2937;
+  background: #212429;
 }
 
 [data-theme="dark"] .modal-header,
 [data-theme="dark"] .config-header,
 [data-theme="dark"] .config-actions {
-  border-color: #374151;
+  border-color: #3c3934;
 }
 
 [data-theme="dark"] .modal-header h3,
@@ -4353,65 +4372,65 @@ const syncGameState = async () => {
 }
 
 [data-theme="dark"] .close-btn {
-  background: #374151;
-  color: #d1d5db;
+  background: #3c3934;
+  color: #c9c3b6;
 }
 
 [data-theme="dark"] .close-btn:hover {
-  background: #4b5563;
+  background: #4e4b45;
   color: #f9fafb;
 }
 
 [data-theme="dark"] .action-btn {
-  background: #374151;
-  border-color: #4b5563;
+  background: #3c3934;
+  border-color: #4e4b45;
 }
 
 [data-theme="dark"] .action-btn:hover {
-  border-color: #3b82f6;
-  background: #1f2937;
+  border-color: #4c87ad;
+  background: #212429;
 }
 
 [data-theme="dark"] .time-btn,
 [data-theme="dark"] .option-item {
-  background: #374151;
-  border-color: #4b5563;
-  color: #d1d5db;
+  background: #3c3934;
+  border-color: #4e4b45;
+  color: #c9c3b6;
 }
 
 [data-theme="dark"] .time-input {
-  background: #374151;
-  border-color: #4b5563;
+  background: #3c3934;
+  border-color: #4e4b45;
   color: #f9fafb;
 }
 
 [data-theme="dark"] .cancel-btn {
-  background: #374151;
-  border-color: #4b5563;
-  color: #d1d5db;
+  background: #3c3934;
+  border-color: #4e4b45;
+  color: #c9c3b6;
 }
 
 [data-theme="dark"] .cancel-btn:hover {
-  background: #4b5563;
+  background: #4e4b45;
 }
 
 /* 深色主题动作队列样式 */
 [data-theme="dark"] .action-queue-display {
-  background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
-  border-color: #4b5563;
+  background: linear-gradient(135deg, #3c3934 0%, #212429 100%);
+  border-color: #4e4b45;
 }
 
 [data-theme="dark"] .queue-title {
-  color: #818cf8;
+  color: #8b95b8;
 }
 
 [data-theme="dark"] .clear-queue-btn {
-  color: #9ca3af;
+  color: #a29c90;
 }
 
 [data-theme="dark"] .clear-queue-btn:hover {
-  background: rgba(239, 68, 68, 0.2);
-  color: #f87171;
+  background: rgba(195, 75, 60, 0.2);
+  color: #cd6f5f;
 }
 
 [data-theme="dark"] .queue-action-item {
@@ -4420,20 +4439,20 @@ const syncGameState = async () => {
 }
 
 [data-theme="dark"] .action-text {
-  color: #e5e7eb;
+  color: #e2dccf;
 }
 
 [data-theme="dark"] .remove-action-btn {
-  color: #9ca3af;
+  color: #a29c90;
 }
 
 [data-theme="dark"] .remove-action-btn:hover {
-  background: rgba(239, 68, 68, 0.2);
-  color: #f87171;
+  background: rgba(195, 75, 60, 0.2);
+  color: #cd6f5f;
 }
 
 [data-theme="dark"] .action-controls {
-  color: #d1d5db;
+  color: #c9c3b6;
 }
 
 [data-theme="dark"] .undo-indicator {
@@ -4455,9 +4474,9 @@ const syncGameState = async () => {
 
 /* 深色主题下的变更描述 */
 [data-theme="dark"] .change-description {
-  background: #334155;
-  color: #e2e8f0;
-  border-left-color: #60a5fa;
+  background: #3d3a35;
+  color: #ddd7c9;
+  border-left-color: #78a8c6;
 }
 
 /* 空状态样式 */
@@ -4496,7 +4515,7 @@ const syncGameState = async () => {
   gap: 8px;
   padding: 8px;
   flex-wrap: wrap;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e2dccf;
   background: #f9fafb;
 }
 
@@ -4506,12 +4525,12 @@ const syncGameState = async () => {
   height: 60px;
   border-radius: 6px;
   overflow: hidden;
-  border: 2px solid #e5e7eb;
+  border: 2px solid #e2dccf;
   transition: all 0.2s ease;
 }
 
 .image-preview-item:hover {
-  border-color: #3b82f6;
+  border-color: #4c87ad;
   transform: scale(1.05);
 }
 
@@ -4528,7 +4547,7 @@ const syncGameState = async () => {
   width: 20px;
   height: 20px;
   padding: 0;
-  background: rgba(239, 68, 68, 0.9);
+  background: rgba(195, 75, 60, 0.9);
   border: none;
   border-radius: 50%;
   color: white;
@@ -4545,62 +4564,62 @@ const syncGameState = async () => {
 }
 
 .remove-image-btn:hover {
-  background: rgba(220, 38, 38, 1);
+  background: rgba(168, 58, 44, 1);
   transform: scale(1.1);
 }
 
 /* 图片上传按钮特殊样式 */
 .image-upload-btn svg {
-  color: #10b981;
+  color: #4f9b7e;
 }
 
 .image-upload-btn:hover:not(:disabled) svg {
-  color: #059669;
+  color: #3f8268;
 }
 
 /* 深色主题图片预览样式 */
 [data-theme="dark"] .image-preview-container {
-  background: #0f172a;
-  border-bottom-color: #475569;
+  background: #12151a;
+  border-bottom-color: #56534b;
 }
 
 [data-theme="dark"] .image-preview-item {
-  border-color: #475569;
+  border-color: #56534b;
 }
 
 [data-theme="dark"] .image-preview-item:hover {
-  border-color: #3b82f6;
+  border-color: #4c87ad;
 }
 
 /* 最新消息text样式 */
 .latest-message-text {
   margin-top: 20px;
   padding: 16px;
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
-  border-left: 4px solid #818cf8;
+  background: #f2eee4;
+  border: 1px solid #ddd7c9;
+  border-left: 4px solid #8b95b8;
   border-radius: 8px;
   font-size: 0.9rem;
-  color: #475569;
+  color: #56534b;
   line-height: 1.7;
 }
 
 .latest-text-header {
   font-weight: 600;
-  color: #6366f1;
+  color: #6f7fa8;
   margin-bottom: 8px;
   font-size: 0.85rem;
 }
 
 [data-theme="dark"] .latest-message-text {
-  background: #334155;
-  border-color: #4b5563;
-  border-left-color: #818cf8;
-  color: #cbd5e1;
+  background: #3d3a35;
+  border-color: #4e4b45;
+  border-left-color: #8b95b8;
+  color: #c4bdad;
 }
 
 [data-theme="dark"] .latest-text-header {
-  color: #a5b4fc;
+  color: #aab3cc;
 }
 
 /* Cultivation Panel */
@@ -4619,7 +4638,7 @@ const syncGameState = async () => {
 }
 
 .cultivation-panel {
-  background: linear-gradient(145deg, #f9fafb, #f3f4f6);
+  background: linear-gradient(145deg, #f9fafb, #efeade);
   border-radius: 16px;
   width: 90%;
   max-width: 800px;
@@ -4632,7 +4651,7 @@ const syncGameState = async () => {
 
 .cultivation-panel .panel-header {
   padding: 16px 24px;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e2dccf;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -4642,7 +4661,7 @@ const syncGameState = async () => {
   margin: 0;
   font-size: 1.25rem;
   font-weight: 700;
-  color: #1f2937;
+  color: #212429;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -4659,7 +4678,7 @@ const syncGameState = async () => {
   background: white;
   border-radius: 12px;
   padding: 20px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid #e2dccf;
   display: flex;
   flex-direction: column;
   transition: all 0.3s ease;
@@ -4670,7 +4689,7 @@ const syncGameState = async () => {
 .cultivation-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
-  border-color: #a5b4fc;
+  border-color: #aab3cc;
 }
 
 .cultivation-card .card-header {
@@ -4681,22 +4700,22 @@ const syncGameState = async () => {
 }
 
 .cultivation-card .card-icon {
-  color: #6366f1;
+  color: #6f7fa8;
 }
-.cultivation-zap .card-icon { color: #f59e0b; }
-.cultivation-shield .card-icon { color: #3b82f6; }
-.cultivation-braincircuit .card-icon { color: #8b5cf6; }
+.cultivation-zap .card-icon { color: #c69431; }
+.cultivation-shield .card-icon { color: #4c87ad; }
+.cultivation-braincircuit .card-icon { color: #8a6fa8; }
 
 .cultivation-card .card-title {
   margin: 0;
   font-size: 1.1rem;
   font-weight: 600;
-  color: #111827;
+  color: #14171b;
 }
 
 .cultivation-card .card-description {
   font-size: 0.85rem;
-  color: #4b5563;
+  color: #4e4b45;
   line-height: 1.6;
   flex-grow: 1;
   margin: 0 0 16px 0;
@@ -4709,7 +4728,7 @@ const syncGameState = async () => {
 .cultivation-card .config-label {
   font-size: 0.8rem;
   font-weight: 500;
-  color: #6b7280;
+  color: #78736a;
   margin-bottom: 8px;
   display: block;
 }
@@ -4725,7 +4744,7 @@ const syncGameState = async () => {
   appearance: none;
   width: 100%;
   height: 6px;
-  background: #e5e7eb;
+  background: #e2dccf;
   border-radius: 3px;
   outline: none;
   opacity: 0.7;
@@ -4739,14 +4758,14 @@ const syncGameState = async () => {
   appearance: none;
   width: 16px;
   height: 16px;
-  background: #6366f1;
+  background: #6f7fa8;
   cursor: pointer;
   border-radius: 50%;
 }
 .cultivation-card .time-slider::-moz-range-thumb {
   width: 16px;
   height: 16px;
-  background: #6366f1;
+  background: #6f7fa8;
   cursor: pointer;
   border-radius: 50%;
 }
@@ -4754,7 +4773,7 @@ const syncGameState = async () => {
 .cultivation-card .time-display {
   font-size: 0.9rem;
   font-weight: 600;
-  color: #1f2937;
+  color: #212429;
   min-width: 50px;
   text-align: right;
 }
@@ -4764,7 +4783,7 @@ const syncGameState = async () => {
   padding: 10px;
   border: none;
   border-radius: 8px;
-  background: #4f46e5;
+  background: #5a5f8f;
   color: white;
   font-weight: 600;
   cursor: pointer;
@@ -4776,45 +4795,45 @@ const syncGameState = async () => {
   box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3);
 }
 
-.cultivation-zap .start-cultivation-btn { background: #f59e0b; }
-.cultivation-zap .start-cultivation-btn:hover { background: #d97706; box-shadow: 0 4px 10px rgba(245, 158, 11, 0.3); }
-.cultivation-shield .start-cultivation-btn { background: #3b82f6; }
-.cultivation-shield .start-cultivation-btn:hover { background: #2563eb; box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3); }
-.cultivation-braincircuit .start-cultivation-btn { background: #8b5cf6; }
-.cultivation-braincircuit .start-cultivation-btn:hover { background: #7c3aed; box-shadow: 0 4px 10px rgba(139, 92, 246, 0.3); }
+.cultivation-zap .start-cultivation-btn { background: #c69431; }
+.cultivation-zap .start-cultivation-btn:hover { background: #a97528; box-shadow: 0 4px 10px rgba(198, 148, 49, 0.3); }
+.cultivation-shield .start-cultivation-btn { background: #4c87ad; }
+.cultivation-shield .start-cultivation-btn:hover { background: #3a6c8c; box-shadow: 0 4px 10px rgba(76, 135, 173, 0.3); }
+.cultivation-braincircuit .start-cultivation-btn { background: #8a6fa8; }
+.cultivation-braincircuit .start-cultivation-btn:hover { background: #70518f; box-shadow: 0 4px 10px rgba(138, 111, 168, 0.3); }
 
 /* Dark theme for cultivation panel */
 [data-theme="dark"] .cultivation-panel {
-  background: linear-gradient(145deg, #1f2937, #111827);
-  border-color: #374151;
+  background: linear-gradient(145deg, #212429, #14171b);
+  border-color: #3c3934;
 }
 [data-theme="dark"] .cultivation-panel .panel-header {
-  border-color: #374151;
+  border-color: #3c3934;
 }
 [data-theme="dark"] .cultivation-panel .panel-header h3 {
-  color: #f3f4f6;
+  color: #efeade;
 }
 [data-theme="dark"] .cultivation-card {
-  background: #1f2937;
-  border-color: #374151;
+  background: #212429;
+  border-color: #3c3934;
 }
 [data-theme="dark"] .cultivation-card:hover {
-  border-color: #a5b4fc;
+  border-color: #aab3cc;
 }
 [data-theme="dark"] .cultivation-card .card-title {
   color: #f9fafb;
 }
 [data-theme="dark"] .cultivation-card .card-description {
-  color: #9ca3af;
+  color: #a29c90;
 }
 [data-theme="dark"] .cultivation-card .config-label {
-  color: #9ca3af;
+  color: #a29c90;
 }
 [data-theme="dark"] .cultivation-card .time-slider {
-  background: #4b5563;
+  background: #4e4b45;
 }
 [data-theme="dark"] .cultivation-card .time-display {
-  color: #f3f4f6;
+  color: #efeade;
 }
 
 

@@ -1605,18 +1605,18 @@ const addTestMediumTermMemory = async () => {
 /* 导出区域样式 */
 .export-section {
   padding: 1.25rem 1.5rem;
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(37, 99, 235, 0.08) 100%);
-  border: 1.5px solid rgba(59, 130, 246, 0.15);
+  background: linear-gradient(135deg, rgba(76, 135, 173, 0.05) 0%, rgba(37, 99, 235, 0.08) 100%);
+  border: 1.5px solid rgba(76, 135, 173, 0.15);
   border-radius: 14px;
   display: flex;
   align-items: center;
   gap: 1.25rem;
   backdrop-filter: blur(10px);
-  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.08);
+  box-shadow: 0 2px 8px rgba(76, 135, 173, 0.08);
 }
 
 .export-btn-main {
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  background: linear-gradient(135deg, #4c87ad 0%, #3a6c8c 100%);
   color: white;
   border: none;
   padding: 0.75rem 1.5rem;
@@ -1626,14 +1626,14 @@ const addTestMediumTermMemory = async () => {
   font-weight: 600;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   white-space: nowrap;
-  box-shadow: 0 4px 14px rgba(59, 130, 246, 0.25);
+  box-shadow: 0 4px 14px rgba(76, 135, 173, 0.25);
   letter-spacing: 0.3px;
 }
 
 .export-btn-main:hover {
-  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  background: linear-gradient(135deg, #3a6c8c 0%, #2e5878 100%);
   transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.35);
+  box-shadow: 0 8px 20px rgba(76, 135, 173, 0.35);
 }
 
 .export-hint {
@@ -1684,9 +1684,9 @@ const addTestMediumTermMemory = async () => {
   max-width: 150px;
   margin: 0;
   padding: 0.7rem 1.2rem;
-  border: 1.5px solid rgba(100, 116, 139, 0.2);
+  border: 1.5px solid rgba(124, 119, 108, 0.2);
   background: rgba(255, 255, 255, 0.95);
-  color: #475569;
+  color: #56534b;
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
@@ -1704,18 +1704,18 @@ const addTestMediumTermMemory = async () => {
 }
 
 .filter-tab:hover {
-  background: rgba(241, 245, 249, 1);
-  border-color: rgba(59, 130, 246, 0.35);
-  color: #1e293b;
+  background: rgba(236, 231, 220, 1);
+  border-color: rgba(76, 135, 173, 0.35);
+  color: #1e2228;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
 }
 
 .filter-tab.active {
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  background: linear-gradient(135deg, #4c87ad 0%, #3a6c8c 100%);
   border-color: transparent;
   color: white;
-  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4);
+  box-shadow: 0 4px 16px rgba(76, 135, 173, 0.4);
   transform: translateY(-1px);
 }
 
@@ -1732,8 +1732,8 @@ const addTestMediumTermMemory = async () => {
 }
 
 .filter-tab .tab-count {
-  background: rgba(100, 116, 139, 0.12);
-  color: #64748b;
+  background: rgba(124, 119, 108, 0.12);
+  color: #7c776c;
   padding: 0.2rem 0.5rem;
   border-radius: 8px;
   font-size: 0.75rem;
@@ -1801,7 +1801,7 @@ const addTestMediumTermMemory = async () => {
 }
 
 .export-btn {
-  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  background: linear-gradient(135deg, #4c87ad, #3a6c8c);
   color: white;
   border: none;
   padding: 0.4rem 0.8rem;
@@ -1815,13 +1815,13 @@ const addTestMediumTermMemory = async () => {
 }
 
 .export-btn:hover {
-  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  background: linear-gradient(135deg, #3a6c8c, #2e5878);
   transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 2px 8px rgba(76, 135, 173, 0.3);
 }
 
 .test-btn {
-  background: linear-gradient(135deg, #10b981, #059669);
+  background: linear-gradient(135deg, #4f9b7e, #3f8268);
   color: white;
   border: none;
   padding: 0.4rem 0.8rem;
@@ -1834,9 +1834,9 @@ const addTestMediumTermMemory = async () => {
 }
 
 .test-btn:hover {
-  background: linear-gradient(135deg, #059669, #047857);
+  background: linear-gradient(135deg, #3f8268, #047857);
   transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+  box-shadow: 0 2px 8px rgba(79, 155, 126, 0.3);
 }
 
 .settings-title {
@@ -2118,11 +2118,11 @@ const addTestMediumTermMemory = async () => {
 
 .settings-toggle-btn:hover,
 .settings-toggle-btn.active {
-  background: rgba(59, 130, 246, 0.12);
-  border-color: rgba(59, 130, 246, 0.5);
-  color: #3b82f6;
+  background: rgba(76, 135, 173, 0.12);
+  border-color: rgba(76, 135, 173, 0.5);
+  color: #4c87ad;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+  box-shadow: 0 4px 12px rgba(76, 135, 173, 0.2);
 }
 
 /* 记忆卡片特定样式 */
@@ -2154,9 +2154,9 @@ const addTestMediumTermMemory = async () => {
 
 .memory-card:hover {
   background: var(--color-surface-light);
-  border-color: rgba(59, 130, 246, 0.35);
+  border-color: rgba(76, 135, 173, 0.35);
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(59, 130, 246, 0.12);
+  box-shadow: 0 6px 16px rgba(76, 135, 173, 0.12);
 }
 
 .memory-header {
@@ -2187,8 +2187,8 @@ const addTestMediumTermMemory = async () => {
 
 .delete-memory-btn:hover {
   opacity: 1;
-  background: rgba(220, 38, 38, 0.1);
-  border-color: #dc2626;
+  background: rgba(168, 58, 44, 0.1);
+  border-color: #a83a2c;
   transform: scale(1.1);
 }
 
@@ -2490,9 +2490,9 @@ const addTestMediumTermMemory = async () => {
 
 .page-btn:hover:not(:disabled) {
   background: var(--color-surface-light);
-  border-color: rgba(59, 130, 246, 0.5);
+  border-color: rgba(76, 135, 173, 0.5);
   transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(59, 130, 246, 0.15);
+  box-shadow: 0 4px 10px rgba(76, 135, 173, 0.15);
 }
 
 .page-btn:disabled {
@@ -2523,12 +2523,12 @@ const addTestMediumTermMemory = async () => {
 
 .jump-input:focus {
   outline: none;
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+  border-color: #4c87ad;
+  box-shadow: 0 0 0 3px rgba(76, 135, 173, 0.15);
 }
 
 .jump-btn {
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  background: linear-gradient(135deg, #4c87ad 0%, #3a6c8c 100%);
   color: white;
   border: none;
   border-radius: 8px;
@@ -2538,14 +2538,14 @@ const addTestMediumTermMemory = async () => {
   font-weight: 600;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   white-space: nowrap;
-  box-shadow: 0 2px 6px rgba(59, 130, 246, 0.2);
+  box-shadow: 0 2px 6px rgba(76, 135, 173, 0.2);
   letter-spacing: 0.3px;
 }
 
 .jump-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 14px rgba(59, 130, 246, 0.3);
-  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  box-shadow: 0 6px 14px rgba(76, 135, 173, 0.3);
+  background: linear-gradient(135deg, #3a6c8c 0%, #2e5878 100%);
 }
 
 .vector-toolbar {
@@ -2611,7 +2611,7 @@ const addTestMediumTermMemory = async () => {
 .api-select:focus {
   outline: none;
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+  box-shadow: 0 0 0 2px rgba(76, 135, 173, 0.1);
 }
 
 .status-dot {
@@ -2619,12 +2619,12 @@ const addTestMediumTermMemory = async () => {
   height: 10px;
   border-radius: 999px;
   background: var(--color-warning);
-  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
+  box-shadow: 0 0 0 3px rgba(198, 148, 49, 0.15);
 }
 
 .status-dot.enabled {
   background: var(--color-success);
-  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.15);
+  box-shadow: 0 0 0 3px rgba(95, 155, 106, 0.15);
 }
 
 .vector-actions {
@@ -2749,8 +2749,8 @@ const addTestMediumTermMemory = async () => {
   font-size: 0.8rem;
   padding: 0.15rem 0.45rem;
   border-radius: 8px;
-  background: rgba(59, 130, 246, 0.12);
-  border: 1px solid rgba(59, 130, 246, 0.2);
+  background: rgba(76, 135, 173, 0.12);
+  border: 1px solid rgba(76, 135, 173, 0.2);
   color: var(--color-text);
 }
 
@@ -2785,78 +2785,78 @@ const addTestMediumTermMemory = async () => {
 /* ========== 亮色主题适配 ========== */
 [data-theme="light"] .filter-tab {
   background: rgba(255, 255, 255, 0.9);
-  border-color: rgba(59, 130, 246, 0.2);
-  color: #475569;
+  border-color: rgba(76, 135, 173, 0.2);
+  color: #56534b;
 }
 
 [data-theme="light"] .filter-tab:hover {
-  background: rgba(241, 245, 249, 0.95);
-  border-color: rgba(59, 130, 246, 0.4);
-  color: #1e293b;
+  background: rgba(236, 231, 220, 0.95);
+  border-color: rgba(76, 135, 173, 0.4);
+  color: #1e2228;
 }
 
 [data-theme="light"] .filter-tab.active {
-  background: linear-gradient(135deg, #3b82f6, #2563eb);
-  border-color: #3b82f6;
+  background: linear-gradient(135deg, #4c87ad, #3a6c8c);
+  border-color: #4c87ad;
   color: white;
 }
 
 [data-theme="light"] .settings-toggle-btn {
   background: rgba(255, 255, 255, 0.9);
-  border-color: rgba(59, 130, 246, 0.2);
-  color: #475569;
+  border-color: rgba(76, 135, 173, 0.2);
+  color: #56534b;
 }
 
 [data-theme="light"] .settings-toggle-btn:hover,
 [data-theme="light"] .settings-toggle-btn.active {
-  background: rgba(59, 130, 246, 0.1);
-  border-color: #3b82f6;
-  color: #2563eb;
+  background: rgba(76, 135, 173, 0.1);
+  border-color: #4c87ad;
+  color: #3a6c8c;
 }
 
 [data-theme="light"] .memory-card {
   background: rgba(255, 255, 255, 0.9);
-  border-color: rgba(59, 130, 246, 0.15);
+  border-color: rgba(76, 135, 173, 0.15);
 }
 
 [data-theme="light"] .memory-card:hover {
-  border-color: rgba(59, 130, 246, 0.3);
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1);
+  border-color: rgba(76, 135, 173, 0.3);
+  box-shadow: 0 4px 12px rgba(76, 135, 173, 0.1);
 }
 
 [data-theme="light"] .export-btn-main {
-  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  background: linear-gradient(135deg, #4c87ad, #3a6c8c);
   color: white;
 }
 
 [data-theme="light"] .export-btn-main:hover {
-  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  background: linear-gradient(135deg, #3a6c8c, #2e5878);
 }
 
 /* ========== 深色主题适配 ========== */
 [data-theme="dark"] .filter-tab {
-  background: rgba(30, 41, 59, 0.9);
-  border-color: rgba(59, 130, 246, 0.3);
-  color: #cbd5e1;
+  background: rgba(30, 34, 40, 0.9);
+  border-color: rgba(76, 135, 173, 0.3);
+  color: #c4bdad;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
 [data-theme="dark"] .filter-tab:hover {
-  background: rgba(51, 65, 85, 0.95);
-  border-color: rgba(59, 130, 246, 0.5);
-  color: #f1f5f9;
+  background: rgba(61, 58, 53, 0.95);
+  border-color: rgba(76, 135, 173, 0.5);
+  color: #ece7dc;
 }
 
 [data-theme="dark"] .filter-tab.active {
-  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  background: linear-gradient(135deg, #4c87ad, #3a6c8c);
   border-color: transparent;
   color: white;
-  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4);
+  box-shadow: 0 4px 16px rgba(76, 135, 173, 0.4);
 }
 
 [data-theme="dark"] .filter-tab .tab-count {
-  background: rgba(59, 130, 246, 0.25);
-  color: #93c5fd;
+  background: rgba(76, 135, 173, 0.25);
+  color: #a6c6da;
 }
 
 [data-theme="dark"] .filter-tab.active .tab-count {
@@ -2865,85 +2865,85 @@ const addTestMediumTermMemory = async () => {
 }
 
 [data-theme="dark"] .settings-toggle-btn {
-  background: rgba(30, 41, 59, 0.9);
-  border-color: rgba(59, 130, 246, 0.3);
-  color: #94a3b8;
+  background: rgba(30, 34, 40, 0.9);
+  border-color: rgba(76, 135, 173, 0.3);
+  color: #a09a8d;
 }
 
 [data-theme="dark"] .settings-toggle-btn:hover,
 [data-theme="dark"] .settings-toggle-btn.active {
-  background: rgba(59, 130, 246, 0.2);
-  border-color: #3b82f6;
-  color: #93c5fd;
+  background: rgba(76, 135, 173, 0.2);
+  border-color: #4c87ad;
+  color: #a6c6da;
 }
 
 [data-theme="dark"] .memory-card {
-  background: rgba(30, 41, 59, 0.9);
-  border-color: rgba(59, 130, 246, 0.2);
+  background: rgba(30, 34, 40, 0.9);
+  border-color: rgba(76, 135, 173, 0.2);
 }
 
 [data-theme="dark"] .memory-card:hover {
-  border-color: rgba(59, 130, 246, 0.4);
-  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.15);
+  border-color: rgba(76, 135, 173, 0.4);
+  box-shadow: 0 4px 16px rgba(76, 135, 173, 0.15);
 }
 
 [data-theme="dark"] .export-section {
-  background: rgba(30, 41, 59, 0.7);
-  border-color: rgba(59, 130, 246, 0.2);
+  background: rgba(30, 34, 40, 0.7);
+  border-color: rgba(76, 135, 173, 0.2);
 }
 
 [data-theme="dark"] .export-btn-main {
-  background: linear-gradient(135deg, #3b82f6, #2563eb);
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  background: linear-gradient(135deg, #4c87ad, #3a6c8c);
+  box-shadow: 0 4px 12px rgba(76, 135, 173, 0.3);
 }
 
 [data-theme="dark"] .export-btn-main:hover {
-  background: linear-gradient(135deg, #2563eb, #1d4ed8);
-  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+  background: linear-gradient(135deg, #3a6c8c, #2e5878);
+  box-shadow: 0 6px 20px rgba(76, 135, 173, 0.4);
 }
 
 [data-theme="dark"] .pagination-controls {
-  background: rgba(30, 41, 59, 0.7);
-  border-color: rgba(59, 130, 246, 0.2);
+  background: rgba(30, 34, 40, 0.7);
+  border-color: rgba(76, 135, 173, 0.2);
 }
 
 [data-theme="dark"] .page-btn {
-  background: rgba(51, 65, 85, 0.9);
-  border-color: rgba(59, 130, 246, 0.3);
-  color: #e2e8f0;
+  background: rgba(61, 58, 53, 0.9);
+  border-color: rgba(76, 135, 173, 0.3);
+  color: #ddd7c9;
 }
 
 [data-theme="dark"] .page-btn:hover:not(:disabled) {
-  background: rgba(59, 130, 246, 0.2);
-  border-color: #3b82f6;
+  background: rgba(76, 135, 173, 0.2);
+  border-color: #4c87ad;
 }
 
 [data-theme="dark"] .jump-input {
-  background: rgba(30, 41, 59, 0.9);
-  border-color: rgba(59, 130, 246, 0.3);
-  color: #e2e8f0;
+  background: rgba(30, 34, 40, 0.9);
+  border-color: rgba(76, 135, 173, 0.3);
+  color: #ddd7c9;
 }
 
 [data-theme="dark"] .jump-btn {
-  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  background: linear-gradient(135deg, #4c87ad, #3a6c8c);
 }
 
 [data-theme="dark"] .settings-section {
-  background: rgba(30, 41, 59, 0.95);
-  border-color: rgba(59, 130, 246, 0.2);
+  background: rgba(30, 34, 40, 0.95);
+  border-color: rgba(76, 135, 173, 0.2);
 }
 
 [data-theme="dark"] .settings-header {
-  border-bottom-color: rgba(59, 130, 246, 0.2);
+  border-bottom-color: rgba(76, 135, 173, 0.2);
 }
 
 [data-theme="dark"] .vector-card {
-  background: rgba(30, 41, 59, 0.9);
-  border-color: rgba(59, 130, 246, 0.2);
+  background: rgba(30, 34, 40, 0.9);
+  border-color: rgba(76, 135, 173, 0.2);
 }
 
 [data-theme="dark"] .vector-stats {
-  background: rgba(30, 41, 59, 0.9);
-  border-color: rgba(59, 130, 246, 0.2);
+  background: rgba(30, 34, 40, 0.9);
+  border-color: rgba(76, 135, 173, 0.2);
 }
 </style>

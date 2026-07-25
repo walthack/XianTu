@@ -338,7 +338,7 @@ async function handleAdd(npc: UnmappedNpc) {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.8), rgba(109, 40, 217, 0.6));
+  background: linear-gradient(135deg, rgba(138, 111, 168, 0.8), rgba(109, 40, 217, 0.6));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -388,8 +388,8 @@ async function handleAdd(npc: UnmappedNpc) {
 .btn-add {
   flex: 1;
   padding: 6px 10px;
-  background: rgba(139, 92, 246, 0.15);
-  border: 1px solid rgba(139, 92, 246, 0.4);
+  background: rgba(138, 111, 168, 0.15);
+  border: 1px solid rgba(138, 111, 168, 0.4);
   border-radius: 6px;
   color: rgba(167, 139, 250, 0.95);
   font-size: 12px;
@@ -398,8 +398,8 @@ async function handleAdd(npc: UnmappedNpc) {
   text-align: left;
 }
 .btn-add:hover {
-  background: rgba(139, 92, 246, 0.28);
-  border-color: rgba(139, 92, 246, 0.7);
+  background: rgba(138, 111, 168, 0.28);
+  border-color: rgba(138, 111, 168, 0.7);
 }
 
 .btn-loading {

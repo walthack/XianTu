@@ -240,6 +240,15 @@ export interface RuntimeState extends ScenarioProgressState {
     branchSummary: string;
     requestedAtTurn: number;
   };
+  /** 上一拍刚结算的主线节点；供下一轮叙事先接住再进新拍，消费一次即清。 */
+  lastSettledBeat?: {
+    eventId: string;
+    name: string;
+    beat: string;
+    locationId?: string;
+    characterIds?: string[];
+    settledAtTurn: number;
+  };
 }
 
 export function createInitialPlayerKnowledge(
@@ -895,8 +904,34 @@ function applyStoryEventOutcomeEffects(
   }
 }
 
-/** 当前非机会卡承重事件的本地动作；按钮身份来自事件合同，不来自 LLM。 */
-export function getCurrentStoryEventActions(saveData: SaveData): ScenarioEventActionSelection[] {
+/** 模板化推进按钮的固定前缀：文案只把 objective 复述一遍，读起来像一句机器传送指令。 */
+export const TEMPLATED_OBJECTIVE_ACTION_PREFIX = '我按当前主线目标行动：';
+
+/**
+ * 模板化单动作推进拍：actionText 只是 objective 的复述，且本合同没有分步演出链。
+ * 点这类按钮＝直接向叙事模型提交一句传送指令，跨拍衔接必然生硬（上一拍还在岸边送别，
+ * 下一拍按钮已经是给凝羽解毒）。屏蔽后事件回落到「玩家自由行动 + 事件对账追认」：
+ * 事件完成只看 completion flag（见 advanceScenarioRuntime），对账候选链也不排除本地合同
+ * 事件（见 eventReconcileService.buildChainCandidates），因此主线不会因此卡死。
+ * 带 prepare 链的半预制高光是逐拍演出合同，不在屏蔽范围内。
+ */
+function isTemplatedObjectiveAction(
+  contract: ScenarioPlayerCompletionContract,
+  action: ScenarioPlayerCompletionContract['actions'][number],
+): boolean {
+  if (contract.kind !== 'objective_action') return false;
+  if (contract.actions.some(item => item.kind === 'prepare')) return false;
+  return String(action.actionText || '').startsWith(TEMPLATED_OBJECTIVE_ACTION_PREFIX);
+}
+
+/**
+ * 当前非机会卡承重事件的本地动作；按钮身份来自事件合同，不来自 LLM。
+ * hideTemplatedObjectiveActions 默认关：模块保持既有行为，由 UI 层按玩家设置传入。
+ */
+export function getCurrentStoryEventActions(
+  saveData: SaveData,
+  options?: { hideTemplatedObjectiveActions?: boolean },
+): ScenarioEventActionSelection[] {
   const runtime = getRuntime(saveData);
   if (!runtime) return [];
   const event = getCurrentPlayerCompletionEvent(runtime);
@@ -908,7 +943,11 @@ export function getCurrentStoryEventActions(saveData: SaveData): ScenarioEventAc
   const remainingTurns = event.timeline?.deadlineTurns !== undefined && timeline
     ? Math.max(0, timeline.eligibleAtTurn + event.timeline.deadlineTurns - (Number(runtime.worldTurn) || 0))
     : undefined;
-  return contract.actions.filter(action => eventActionAvailable(action, state)).map(action => {
+  const hideTemplated = options?.hideTemplatedObjectiveActions === true;
+  return contract.actions.filter(action =>
+    eventActionAvailable(action, state)
+    && !(hideTemplated && isTemplatedObjectiveAction(contract, action)),
+  ).map(action => {
     const expectedOutcome: ScenarioPlayerCompletionOutcome = contract.kind === 'objective_action'
       ? 'success'
       : conditionsMatch(action.successWhen, saveData, runtime) ? 'success' : action.unmetOutcome || 'failure';
@@ -1539,6 +1578,31 @@ function appendChronicleEntry(
   chronicle.push({ ...entry, sequence: chronicle.length + 1 });
 }
 
+/**
+ * 记下本轮刚结算的主线拍点，供下一轮叙事先接住上一拍再进入新拍。
+ * 挂在 event_completed 汇总处而不是按钮结算处：按钮结算与事件对账补落 flag 最终都走
+ * 同一条完成路径，两种推进方式都能拿到交接合同（屏蔽模板按钮后尤其重要）。
+ */
+function recordSettledBeatHandoff(runtime: RuntimeState, transitions: ScenarioRuntimeTransition[]): void {
+  const completed = transitions
+    .filter(transition => transition.type === 'event_completed')
+    .map(transition => runtime.events.find(item => item.id === transition.id))
+    .filter((event): event is ScenarioModEvent => Boolean(event));
+  if (!completed.length) return;
+  // 同轮多拍落账时取链序最后一拍：玩家眼下停在那儿。
+  const event = completed
+    .slice()
+    .sort((left, right) => (left.axisSeq ?? -Infinity) - (right.axisSeq ?? -Infinity))[completed.length - 1];
+  runtime.lastSettledBeat = {
+    eventId: event.id,
+    name: event.name,
+    beat: String(event.axisBeat || event.description || '').slice(0, 160),
+    ...(event.locationId ? { locationId: event.locationId } : {}),
+    ...(event.relatedCharacterIds?.length ? { characterIds: event.relatedCharacterIds.slice(0, 6) } : {}),
+    settledAtTurn: Math.max(0, Number(runtime.worldTurn) || 0),
+  };
+}
+
 function recordChronicleTransitions(runtime: RuntimeState, transitions: ScenarioRuntimeTransition[]): void {
   for (const transition of transitions) {
     if (transition.type === 'event_completed') {
@@ -1977,6 +2041,7 @@ export function advanceScenarioRuntime(saveData: SaveData): {
   updateDivergenceControl(next, progressed);
   syncActorEngine(runtime);
   refreshEventTimelineRevelations(runtime, transitions);
+  recordSettledBeatHandoff(runtime, transitions);
   recordChronicleTransitions(runtime, transitions);
 
   return { saveData: next, transitions };

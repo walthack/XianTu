@@ -32,7 +32,10 @@
           >
             <BookMarked :size="15" />
             <span>{{ entry.mod.manifest.name }}</span>
-            <span class="scenario-mode">{{ entry.mod.rules.mode === 'strict' ? 'Strict' : 'Expand' }}</span>
+            <span
+              class="scenario-mode"
+              :title="entry.mod.rules.mode === 'strict' ? '严格遵循原著正典走向' : '允许在正典之外自由扩写'"
+            >{{ entry.mod.rules.mode === 'strict' ? '严格' : '扩写' }}</span>
           </button>
         </div>
 
@@ -564,7 +567,7 @@ const editInitialData = computed(() => {
   align-items: center;
   height: 100%;
   font-size: 1.1rem;
-  color: #94a3b8;
+  color: #a09a8d;
   font-style: italic;
   letter-spacing: 0.1em;
 }
@@ -581,8 +584,8 @@ const editInitialData = computed(() => {
 .left-panel {
   display: flex;
   flex-direction: column;
-  background: rgba(30, 41, 59, 0.5);
-  border: 1px solid rgba(147, 197, 253, 0.12);
+  background: rgba(30, 34, 40, 0.5);
+  border: 1px solid rgba(166, 198, 218, 0.12);
   border-radius: 16px;
   overflow: hidden;
   position: relative;
@@ -595,7 +598,7 @@ const editInitialData = computed(() => {
   left: 0;
   right: 0;
   height: 60px;
-  background: linear-gradient(to bottom, rgba(147, 197, 253, 0.05), transparent);
+  background: linear-gradient(to bottom, rgba(166, 198, 218, 0.05), transparent);
   pointer-events: none;
 }
 
@@ -605,7 +608,7 @@ const editInitialData = computed(() => {
   gap: 0.5rem;
   padding: 0.75rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  background: rgba(30, 41, 59, 0.3);
+  background: rgba(30, 34, 40, 0.3);
   justify-content: center;
 }
 
@@ -613,8 +616,8 @@ const editInitialData = computed(() => {
   padding: 0.5rem 1rem;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
-  background: rgba(30, 41, 59, 0.6);
-  color: #cbd5e1;
+  background: rgba(30, 34, 40, 0.6);
+  color: #c4bdad;
   cursor: pointer;
   transition: all 0.25s ease;
   font-size: 0.85rem;
@@ -624,9 +627,9 @@ const editInitialData = computed(() => {
 }
 
 .top-actions-container .action-item:hover {
-  background: rgba(51, 65, 85, 0.8);
-  border-color: rgba(147, 197, 253, 0.3);
-  color: #f1f5f9;
+  background: rgba(61, 58, 53, 0.8);
+  border-color: rgba(166, 198, 218, 0.3);
+  color: #ece7dc;
 }
 
 .list-container {
@@ -634,7 +637,7 @@ const editInitialData = computed(() => {
   overflow-y: auto;
   padding: 0.6rem;
   scrollbar-width: thin;
-  scrollbar-color: rgba(147, 197, 253, 0.3) transparent;
+  scrollbar-color: rgba(166, 198, 218, 0.3) transparent;
 }
 
 .list-container::-webkit-scrollbar {
@@ -646,12 +649,12 @@ const editInitialData = computed(() => {
 }
 
 .list-container::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, rgba(147, 197, 253, 0.4), rgba(59, 130, 246, 0.3));
+  background: linear-gradient(180deg, rgba(166, 198, 218, 0.4), rgba(76, 135, 173, 0.3));
   border-radius: 3px;
 }
 
 .list-container::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, rgba(147, 197, 253, 0.6), rgba(59, 130, 246, 0.5));
+  background: linear-gradient(180deg, rgba(166, 198, 218, 0.6), rgba(76, 135, 173, 0.5));
 }
 
 /* ========== 世界选项卡 - 4.0 风格 ========== */
@@ -665,18 +668,18 @@ const editInitialData = computed(() => {
   cursor: pointer;
   transition: all 0.25s ease;
   border: 1px solid transparent;
-  background: rgba(30, 41, 59, 0.5);
+  background: rgba(30, 34, 40, 0.5);
 }
 
 .list-item:hover {
-  background: rgba(51, 65, 85, 0.7);
-  border-color: rgba(147, 197, 253, 0.25);
+  background: rgba(61, 58, 53, 0.7);
+  border-color: rgba(166, 198, 218, 0.25);
 }
 
 .list-item.selected {
-  background: linear-gradient(135deg, rgba(30, 58, 138, 0.5) 0%, rgba(30, 41, 59, 0.6) 100%);
-  border-color: rgba(147, 197, 253, 0.4);
-  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15);
+  background: linear-gradient(135deg, rgba(30, 58, 138, 0.5) 0%, rgba(30, 34, 40, 0.6) 100%);
+  border-color: rgba(166, 198, 218, 0.4);
+  box-shadow: 0 2px 8px rgba(76, 135, 173, 0.15);
 }
 
 .item-content {
@@ -689,14 +692,14 @@ const editInitialData = computed(() => {
 .item-name {
   flex-grow: 1;
   font-weight: 500;
-  color: #f1f5f9;
+  color: #ece7dc;
   letter-spacing: 0.05em;
   transition: color 0.3s ease;
 }
 
 .list-item.selected .item-name {
-  color: #bfdbfe;
-  text-shadow: 0 0 12px rgba(147, 197, 253, 0.4);
+  color: #c7d9e2;
+  text-shadow: 0 0 12px rgba(166, 198, 218, 0.4);
 }
 
 /* 按钮组容器 */
@@ -716,7 +719,7 @@ const editInitialData = computed(() => {
 .edit-btn, .delete-btn {
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.15);
-  color: #94a3b8;
+  color: #a09a8d;
   cursor: pointer;
   padding: 0.4rem;
   border-radius: 6px;
@@ -727,21 +730,21 @@ const editInitialData = computed(() => {
 }
 
 .edit-btn:hover {
-  color: #93c5fd;
-  background: rgba(147, 197, 253, 0.15);
-  border-color: rgba(147, 197, 253, 0.3);
+  color: #a6c6da;
+  background: rgba(166, 198, 218, 0.15);
+  border-color: rgba(166, 198, 218, 0.3);
 }
 
 .delete-btn:hover {
-  color: #f87171;
-  background: rgba(248, 113, 113, 0.15);
-  border-color: rgba(248, 113, 113, 0.3);
+  color: #cd6f5f;
+  background: rgba(205, 111, 95, 0.15);
+  border-color: rgba(205, 111, 95, 0.3);
 }
 
 /* ========== 右侧详情面板 - 4.0 风格 ========== */
 .details-container {
-  background: rgba(30, 41, 59, 0.5);
-  border: 1px solid rgba(147, 197, 253, 0.12);
+  background: rgba(30, 34, 40, 0.5);
+  border: 1px solid rgba(166, 198, 218, 0.12);
   border-radius: 16px;
   padding: 1.75rem;
   display: flex;
@@ -758,7 +761,7 @@ const editInitialData = computed(() => {
   left: 0;
   right: 0;
   height: 80px;
-  background: radial-gradient(ellipse at 50% 0%, rgba(147, 197, 253, 0.08) 0%, transparent 70%);
+  background: radial-gradient(ellipse at 50% 0%, rgba(166, 198, 218, 0.08) 0%, transparent 70%);
   pointer-events: none;
 }
 
@@ -784,7 +787,7 @@ const editInitialData = computed(() => {
   margin: 0;
   font-size: 1.6rem;
   font-weight: 600;
-  color: #93c5fd;
+  color: #a6c6da;
   letter-spacing: 0.1em;
 }
 
@@ -793,36 +796,36 @@ const editInitialData = computed(() => {
   align-items: center;
   gap: 8px;
   padding: 0.55rem 0.9rem;
-  border: 1px solid rgba(147, 197, 253, 0.2);
+  border: 1px solid rgba(166, 198, 218, 0.2);
   border-radius: 10px;
-  background: linear-gradient(135deg, rgba(30, 41, 59, 0.7) 0%, rgba(51, 65, 85, 0.5) 100%);
-  color: #cbd5e1;
+  background: linear-gradient(135deg, rgba(30, 34, 40, 0.7) 0%, rgba(61, 58, 53, 0.5) 100%);
+  color: #c4bdad;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   font-size: 0.85rem;
 }
 
 .map-settings-btn:hover {
-  background: linear-gradient(135deg, rgba(51, 65, 85, 0.9) 0%, rgba(71, 85, 105, 0.7) 100%);
-  border-color: rgba(147, 197, 253, 0.4);
-  color: #f1f5f9;
+  background: linear-gradient(135deg, rgba(61, 58, 53, 0.9) 0%, rgba(71, 85, 105, 0.7) 100%);
+  border-color: rgba(166, 198, 218, 0.4);
+  color: #ece7dc;
   transform: translateY(-1px);
 }
 
 .world-details h2 {
   margin-top: 0;
-  color: #93c5fd;
+  color: #a6c6da;
   flex-shrink: 0;
 }
 
 .world-details .era {
   font-style: italic;
-  color: #fbbf24;
+  color: #d5aa4a;
   margin-bottom: 1.25rem;
   flex-shrink: 0;
   font-size: 0.95rem;
   letter-spacing: 0.05em;
-  text-shadow: 0 0 12px rgba(251, 191, 36, 0.3);
+  text-shadow: 0 0 12px rgba(213, 170, 74, 0.3);
 }
 
 .description-scroll {
@@ -832,7 +835,7 @@ const editInitialData = computed(() => {
   padding-right: 0.5rem;
   min-height: 0;
   scrollbar-width: thin;
-  scrollbar-color: rgba(147, 197, 253, 0.3) transparent;
+  scrollbar-color: rgba(166, 198, 218, 0.3) transparent;
 }
 
 .description-scroll::-webkit-scrollbar {
@@ -844,24 +847,24 @@ const editInitialData = computed(() => {
 }
 
 .description-scroll::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, rgba(147, 197, 253, 0.4), rgba(59, 130, 246, 0.3));
+  background: linear-gradient(180deg, rgba(166, 198, 218, 0.4), rgba(76, 135, 173, 0.3));
   border-radius: 3px;
 }
 
 .description-scroll p {
   margin: 0;
   white-space: pre-wrap;
-  color: #94a3b8;
+  color: #a09a8d;
   font-size: 0.95rem;
 }
 
 /* ========== 地图生成选项 - 4.0 风格 ========== */
 .map-options {
   margin-top: 1rem;
-  border: 1px solid rgba(147, 197, 253, 0.2);
+  border: 1px solid rgba(166, 198, 218, 0.2);
   border-radius: 12px;
   padding: 1.25rem;
-  background: linear-gradient(135deg, rgba(30, 41, 59, 0.5) 0%, rgba(51, 65, 85, 0.3) 100%);
+  background: linear-gradient(135deg, rgba(30, 34, 40, 0.5) 0%, rgba(61, 58, 53, 0.3) 100%);
   flex: 1 1 auto;
   overflow: auto;
 }
@@ -870,8 +873,8 @@ const editInitialData = computed(() => {
 .continents-only-section {
   margin-bottom: 1.25rem;
   padding: 1rem;
-  background: rgba(147, 197, 253, 0.08);
-  border: 1px solid rgba(147, 197, 253, 0.2);
+  background: rgba(166, 198, 218, 0.08);
+  border: 1px solid rgba(166, 198, 218, 0.2);
   border-radius: 10px;
 }
 
@@ -879,15 +882,15 @@ const editInitialData = computed(() => {
 .difficulty-section {
   margin-bottom: 1.25rem;
   padding: 1rem;
-  background: rgba(251, 191, 36, 0.08);
-  border: 1px solid rgba(251, 191, 36, 0.2);
+  background: rgba(213, 170, 74, 0.08);
+  border: 1px solid rgba(213, 170, 74, 0.2);
   border-radius: 10px;
 }
 
 .difficulty-label {
   font-size: 0.95rem;
   font-weight: 600;
-  color: #fbbf24;
+  color: #d5aa4a;
   margin-bottom: 0.75rem;
   letter-spacing: 0.05em;
 }
@@ -904,20 +907,20 @@ const editInitialData = computed(() => {
   padding: 0.6rem 0.9rem;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
-  background: rgba(30, 41, 59, 0.5);
+  background: rgba(30, 34, 40, 0.5);
   cursor: pointer;
   transition: all 0.25s ease;
 }
 
 .difficulty-option:hover {
-  background: rgba(51, 65, 85, 0.7);
-  border-color: rgba(251, 191, 36, 0.35);
+  background: rgba(61, 58, 53, 0.7);
+  border-color: rgba(213, 170, 74, 0.35);
 }
 
 .difficulty-option.selected {
-  background: rgba(251, 191, 36, 0.18);
-  border-color: rgba(251, 191, 36, 0.5);
-  box-shadow: 0 0 16px rgba(251, 191, 36, 0.15);
+  background: rgba(213, 170, 74, 0.18);
+  border-color: rgba(213, 170, 74, 0.5);
+  box-shadow: 0 0 16px rgba(213, 170, 74, 0.15);
 }
 
 .difficulty-radio {
@@ -927,17 +930,17 @@ const editInitialData = computed(() => {
 .difficulty-name {
   font-size: 0.9rem;
   font-weight: 600;
-  color: #f1f5f9;
+  color: #ece7dc;
 }
 
 .difficulty-option.selected .difficulty-name {
-  color: #fbbf24;
-  text-shadow: 0 0 8px rgba(251, 191, 36, 0.4);
+  color: #d5aa4a;
+  text-shadow: 0 0 8px rgba(213, 170, 74, 0.4);
 }
 
 .difficulty-desc {
   font-size: 0.72rem;
-  color: #94a3b8;
+  color: #a09a8d;
   margin-top: 0.25rem;
 }
 
@@ -953,20 +956,20 @@ const editInitialData = computed(() => {
   width: 20px;
   height: 20px;
   cursor: pointer;
-  accent-color: #93c5fd;
+  accent-color: #a6c6da;
 }
 
 .toggle-label {
   font-size: 0.95rem;
   font-weight: 600;
-  color: #93c5fd;
+  color: #a6c6da;
   letter-spacing: 0.03em;
 }
 
 .toggle-hint {
   margin-top: 0.6rem;
   font-size: 0.78rem;
-  color: #94a3b8;
+  color: #a09a8d;
   line-height: 1.5;
   padding-left: 1.7rem;
 }
@@ -977,8 +980,8 @@ const editInitialData = computed(() => {
   gap: 0.85rem;
   padding: 0.9rem;
   margin-bottom: 1.25rem;
-  background: rgba(251, 191, 36, 0.12);
-  border: 1px solid rgba(251, 191, 36, 0.3);
+  background: rgba(213, 170, 74, 0.12);
+  border: 1px solid rgba(213, 170, 74, 0.3);
   border-radius: 10px;
 }
 
@@ -995,29 +998,29 @@ const editInitialData = computed(() => {
   font-weight: 600;
   font-size: 0.95rem;
   margin-bottom: 0.3rem;
-  color: #fbbf24;
+  color: #d5aa4a;
 }
 
 .warning-desc {
   font-size: 0.82rem;
-  color: #94a3b8;
+  color: #a09a8d;
   line-height: 1.5;
 }
 
 .option-item input.config-risky {
-  border-color: rgba(251, 191, 36, 0.5);
-  background-color: rgba(251, 191, 36, 0.08);
+  border-color: rgba(213, 170, 74, 0.5);
+  background-color: rgba(213, 170, 74, 0.08);
 }
 
 .config-hint {
   font-size: 0.72rem;
-  color: #64748b;
+  color: #7c776c;
   margin-top: 0.25rem;
 }
 
 .map-options-header {
   font-weight: 600;
-  color: #93c5fd;
+  color: #a6c6da;
   margin-bottom: 1rem;
   font-size: 1rem;
   letter-spacing: 0.05em;
@@ -1037,25 +1040,25 @@ const editInitialData = computed(() => {
 
 .option-label {
   font-size: 0.82rem;
-  color: #94a3b8;
+  color: #a09a8d;
   letter-spacing: 0.03em;
 }
 
 .option-item input {
   width: 100%;
   padding: 0.55rem 0.7rem;
-  border: 1px solid rgba(147, 197, 253, 0.15);
+  border: 1px solid rgba(166, 198, 218, 0.15);
   border-radius: 8px;
-  background: rgba(30, 41, 59, 0.7);
-  color: #f1f5f9;
+  background: rgba(30, 34, 40, 0.7);
+  color: #ece7dc;
   font-size: 0.88rem;
   transition: all 0.25s ease;
 }
 
 .option-item input:focus {
   outline: none;
-  border-color: rgba(147, 197, 253, 0.5);
-  box-shadow: 0 0 12px rgba(147, 197, 253, 0.15);
+  border-color: rgba(166, 198, 218, 0.5);
+  box-shadow: 0 0 12px rgba(166, 198, 218, 0.15);
 }
 
 .option-item input:disabled {
@@ -1071,10 +1074,10 @@ const editInitialData = computed(() => {
 
 .opt-btn {
   padding: 0.55rem 1.1rem;
-  border: 1px solid rgba(147, 197, 253, 0.2);
+  border: 1px solid rgba(166, 198, 218, 0.2);
   border-radius: 8px;
-  background: linear-gradient(135deg, rgba(30, 41, 59, 0.7) 0%, rgba(51, 65, 85, 0.5) 100%);
-  color: #cbd5e1;
+  background: linear-gradient(135deg, rgba(30, 34, 40, 0.7) 0%, rgba(61, 58, 53, 0.5) 100%);
+  color: #c4bdad;
   cursor: pointer;
   transition: all 0.25s ease;
   font-size: 0.85rem;
@@ -1082,9 +1085,9 @@ const editInitialData = computed(() => {
 }
 
 .opt-btn:hover {
-  background: linear-gradient(135deg, rgba(51, 65, 85, 0.9) 0%, rgba(71, 85, 105, 0.7) 100%);
-  border-color: rgba(147, 197, 253, 0.4);
-  color: #f1f5f9;
+  background: linear-gradient(135deg, rgba(61, 58, 53, 0.9) 0%, rgba(71, 85, 105, 0.7) 100%);
+  border-color: rgba(166, 198, 218, 0.4);
+  color: #ece7dc;
   transform: translateY(-1px);
 }
 
@@ -1096,7 +1099,7 @@ const editInitialData = computed(() => {
   justify-content: center;
   height: 200px;
   text-align: center;
-  color: #64748b;
+  color: #7c776c;
 }
 
 .no-worlds-icon {
@@ -1108,7 +1111,7 @@ const editInitialData = computed(() => {
 .no-worlds-text {
   font-size: 1.05rem;
   margin-bottom: 0.6rem;
-  color: #94a3b8;
+  color: #a09a8d;
   letter-spacing: 0.05em;
 }
 
@@ -1122,29 +1125,29 @@ const editInitialData = computed(() => {
 [data-theme="light"] .left-panel,
 [data-theme="light"] .details-container {
   background: rgba(248, 250, 252, 0.85);
-  border-color: rgba(59, 130, 246, 0.15);
+  border-color: rgba(76, 135, 173, 0.15);
 }
 
 [data-theme="light"] .left-panel::before,
 [data-theme="light"] .details-container::before {
-  background: radial-gradient(ellipse at 50% 0%, rgba(59, 130, 246, 0.08) 0%, transparent 70%);
+  background: radial-gradient(ellipse at 50% 0%, rgba(76, 135, 173, 0.08) 0%, transparent 70%);
 }
 
 [data-theme="light"] .top-actions-container {
-  background: rgba(241, 245, 249, 0.85);
-  border-color: rgba(59, 130, 246, 0.1);
+  background: rgba(236, 231, 220, 0.85);
+  border-color: rgba(76, 135, 173, 0.1);
 }
 
 [data-theme="light"] .top-actions-container .action-item {
   background: rgba(255, 255, 255, 0.8);
-  border-color: rgba(59, 130, 246, 0.3);
-  color: #2563eb;
+  border-color: rgba(76, 135, 173, 0.3);
+  color: #3a6c8c;
 }
 
 [data-theme="light"] .top-actions-container .action-item:hover {
-  background: rgba(59, 130, 246, 0.1);
-  border-color: #3b82f6;
-  color: #1e40af;
+  background: rgba(76, 135, 173, 0.1);
+  border-color: #4c87ad;
+  color: #27506b;
 }
 
 [data-theme="light"] .list-item {
@@ -1152,78 +1155,78 @@ const editInitialData = computed(() => {
 }
 
 [data-theme="light"] .list-item:hover {
-  background: rgba(241, 245, 249, 0.95);
-  border-color: rgba(59, 130, 246, 0.25);
+  background: rgba(236, 231, 220, 0.95);
+  border-color: rgba(76, 135, 173, 0.25);
 }
 
 [data-theme="light"] .list-item.selected {
-  background: linear-gradient(135deg, rgba(219, 234, 254, 0.9) 0%, rgba(241, 245, 249, 0.95) 100%);
-  border-color: rgba(59, 130, 246, 0.4);
+  background: linear-gradient(135deg, rgba(219, 234, 254, 0.9) 0%, rgba(236, 231, 220, 0.95) 100%);
+  border-color: rgba(76, 135, 173, 0.4);
 }
 
 [data-theme="light"] .list-item::before {
-  background: linear-gradient(180deg, rgba(59, 130, 246, 0.6), rgba(37, 99, 235, 0.4));
+  background: linear-gradient(180deg, rgba(76, 135, 173, 0.6), rgba(37, 99, 235, 0.4));
 }
 
 [data-theme="light"] .item-name {
-  color: #1e293b;
+  color: #1e2228;
 }
 
 [data-theme="light"] .list-item.selected .item-name {
-  color: #1e40af;
+  color: #27506b;
   text-shadow: none;
 }
 
 [data-theme="light"] .details-title,
 [data-theme="light"] .world-details h2 {
-  color: #2563eb;
+  color: #3a6c8c;
   text-shadow: none;
 }
 
 [data-theme="light"] .description-scroll p {
-  color: #475569;
+  color: #56534b;
 }
 
 [data-theme="light"] .map-options {
-  background: linear-gradient(135deg, rgba(241, 245, 249, 0.9) 0%, rgba(255, 255, 255, 0.8) 100%);
-  border-color: rgba(59, 130, 246, 0.2);
+  background: linear-gradient(135deg, rgba(236, 231, 220, 0.9) 0%, rgba(255, 255, 255, 0.8) 100%);
+  border-color: rgba(76, 135, 173, 0.2);
 }
 
 [data-theme="light"] .option-item input {
   background: rgba(255, 255, 255, 0.9);
-  border-color: rgba(59, 130, 246, 0.15);
-  color: #1e293b;
+  border-color: rgba(76, 135, 173, 0.15);
+  color: #1e2228;
 }
 
 [data-theme="light"] .opt-btn {
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.8) 100%);
-  border-color: rgba(59, 130, 246, 0.15);
-  color: #475569;
+  border-color: rgba(76, 135, 173, 0.15);
+  color: #56534b;
 }
 
 [data-theme="light"] .opt-btn:hover {
-  background: linear-gradient(135deg, rgba(241, 245, 249, 1) 0%, rgba(255, 255, 255, 1) 100%);
-  border-color: rgba(59, 130, 246, 0.4);
+  background: linear-gradient(135deg, rgba(236, 231, 220, 1) 0%, rgba(255, 255, 255, 1) 100%);
+  border-color: rgba(76, 135, 173, 0.4);
 }
 
 /* 亮色主题下的编辑/删除按钮 */
 [data-theme="light"] .edit-btn,
 [data-theme="light"] .delete-btn {
-  background: rgba(241, 245, 249, 0.8);
-  border: 1px solid rgba(59, 130, 246, 0.15);
-  color: #475569;
+  background: rgba(236, 231, 220, 0.8);
+  border: 1px solid rgba(76, 135, 173, 0.15);
+  color: #56534b;
 }
 
 [data-theme="light"] .edit-btn:hover {
-  color: #2563eb;
-  background: rgba(59, 130, 246, 0.1);
-  border-color: rgba(59, 130, 246, 0.3);
+  color: #3a6c8c;
+  background: rgba(76, 135, 173, 0.1);
+  border-color: rgba(76, 135, 173, 0.3);
 }
 
 [data-theme="light"] .delete-btn:hover {
-  color: #dc2626;
-  background: rgba(239, 68, 68, 0.1);
-  border-color: rgba(239, 68, 68, 0.3);
+  color: #a83a2c;
+  background: rgba(195, 75, 60, 0.1);
+  border-color: rgba(195, 75, 60, 0.3);
 }
 
 .action-name {

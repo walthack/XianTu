@@ -1761,7 +1761,8 @@ ${step1Text}
           const attemptStartedAt = Date.now();
           try {
             if (attempt > 1) {
-              const reason = lastStep2Error ? `（上次失败：${lastStep2Error.slice(0, 80)}）` : '';
+              // 玩家可见文案不带内部字段名，技术细节留在遥测日志与下方修复提示里
+              const reason = lastStep2Error ? '（上次输出未通过格式校验）' : '';
               options?.onProgressUpdate?.(`分步生成：第2步重试…${reason}`);
             }
             const step2Response = await generateOnce({
@@ -1807,7 +1808,7 @@ ${step1Text}
               outcome: 'failed',
               reason: lastStep2Error.slice(0, 160),
             });
-            options?.onProgressUpdate?.(`分步生成：第2步解析失败，准备重试（${lastStep2Error.slice(0, 100)}）`);
+            options?.onProgressUpdate?.('分步生成：第2步解析失败，准备重试…');
             console.warn(`[分步生成-开局] 第2步第${attempt}次失败:`, e);
           }
         }
@@ -2114,6 +2115,12 @@ ${step1Text}
     const repairedData = repairSaveData(currentSaveData);
     let saveData = cloneDeep(repairedData);
     const changes: StateChange[] = [];
+    // 跨拍交接合同只服务一轮正文：本轮 prompt 已经带过它，先清除再让 advance 写入本轮新落账的拍点，
+    // 否则同一段"先接住上一拍"会连着几轮反复注入。
+    {
+      const runtimeBeforeAdvance = (saveData as any)?.世界?.状态?.剧本模组;
+      if (runtimeBeforeAdvance?.lastSettledBeat) delete runtimeBeforeAdvance.lastSettledBeat;
+    }
     // 非机会卡的本地判定在任何模型命令执行前结算；模型只能演出调用前已确定的结果，
     // 不能先改属性再反向影响本轮 success/partial/failure。
     const eventProgress = options?.eventAction

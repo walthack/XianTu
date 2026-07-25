@@ -1329,9 +1329,9 @@ const handleImport = () => {
   background: color-mix(in srgb, var(--color-surface) 80%, var(--color-border));
 }
 
-.cloud-sync-status.synced { color: #22c55e; }
-.cloud-sync-status.syncing { color: #3b82f6; }
-.cloud-sync-status.failed { color: #f59e0b; }
+.cloud-sync-status.synced { color: #5f9b6a; }
+.cloud-sync-status.syncing { color: #4c87ad; }
+.cloud-sync-status.failed { color: #c69431; }
 
 .onboarding-card {
   display: flex;
@@ -1339,14 +1339,14 @@ const handleImport = () => {
   justify-content: space-between;
   gap: 1rem;
   padding: 1rem;
-  border: 1px solid color-mix(in srgb, #f59e0b 55%, var(--color-border));
+  border: 1px solid color-mix(in srgb, #c69431 55%, var(--color-border));
   border-radius: 0.75rem;
-  background: color-mix(in srgb, #f59e0b 8%, var(--color-surface));
+  background: color-mix(in srgb, #c69431 8%, var(--color-surface));
 }
 
 .onboarding-card.ready {
-  border-color: color-mix(in srgb, #22c55e 45%, var(--color-border));
-  background: color-mix(in srgb, #22c55e 7%, var(--color-surface));
+  border-color: color-mix(in srgb, #5f9b6a 45%, var(--color-border));
+  background: color-mix(in srgb, #5f9b6a 7%, var(--color-surface));
 }
 
 .onboarding-copy {
@@ -1368,7 +1368,7 @@ const handleImport = () => {
   border-radius: 0.5rem;
   padding: 0.55rem 0.8rem;
   color: white;
-  background: #3b82f6;
+  background: #4c87ad;
   cursor: pointer;
 }
 
@@ -1470,7 +1470,7 @@ const handleImport = () => {
   margin: 0;
   font-size: 1rem;
   font-weight: 600;
-  color: var(--color-text, #1e293b);
+  color: var(--color-text, #1e2228);
 }
 
 /* 流水线提示 */
@@ -1489,19 +1489,19 @@ const handleImport = () => {
 
 .hint-content {
   font-size: 0.8rem;
-  color: var(--color-text-secondary, #64748b);
+  color: var(--color-text-secondary, #7c776c);
   line-height: 1.5;
 }
 
 .hint-content strong {
-  color: var(--color-text, #1e293b);
+  color: var(--color-text, #1e2228);
 }
 
 .hint-example {
   display: inline-block;
   margin-top: 0.25rem;
   font-size: 0.75rem;
-  color: var(--color-text-muted, #94a3b8);
+  color: var(--color-text-muted, #a09a8d);
   font-style: italic;
 }
 
@@ -1523,13 +1523,13 @@ const handleImport = () => {
 .mode-badge.tavern {
   background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
   color: #92400e;
-  border: 1px solid #f59e0b;
+  border: 1px solid #c69431;
 }
 
 .mode-badge.web {
-  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
-  color: #1e40af;
-  border: 1px solid #3b82f6;
+  background: linear-gradient(135deg, #dde7eb 0%, #c7d9e2 100%);
+  color: #27506b;
+  border: 1px solid #4c87ad;
 }
 
 /* 模式说明 */
@@ -1541,11 +1541,11 @@ const handleImport = () => {
 }
 
 .mode-hint.tavern {
-  background: linear-gradient(135deg, rgba(251, 191, 36, 0.1), rgba(245, 158, 11, 0.08));
+  background: linear-gradient(135deg, rgba(213, 170, 74, 0.1), rgba(198, 148, 49, 0.08));
 }
 
 .mode-hint.web {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(37, 99, 235, 0.08));
+  background: linear-gradient(135deg, rgba(76, 135, 173, 0.1), rgba(37, 99, 235, 0.08));
 }
 
 .mode-hint .hint-content em {
@@ -1588,8 +1588,8 @@ const handleImport = () => {
 }
 
 .api-card.default {
-  border-color: #3b82f6;
-  background: linear-gradient(135deg, #eff6ff 0%, #ffffff 100%);
+  border-color: #4c87ad;
+  background: linear-gradient(135deg, #eaf0f2 0%, #ffffff 100%);
 }
 
 .api-card-header {
@@ -1626,7 +1626,7 @@ const handleImport = () => {
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, #cbd5e1 0%, #94a3b8 100%);
+  background: linear-gradient(135deg, #c4bdad 0%, #a09a8d 100%);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   border-radius: 28px;
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -1646,8 +1646,8 @@ const handleImport = () => {
 }
 
 .card-toggle input:checked + .toggle-slider {
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-  box-shadow: 0 0 8px rgba(59, 130, 246, 0.4);
+  background: linear-gradient(135deg, #4c87ad 0%, #3a6c8c 100%);
+  box-shadow: 0 0 8px rgba(76, 135, 173, 0.4);
 }
 
 .card-toggle input:checked + .toggle-slider:before {
@@ -1685,7 +1685,7 @@ const handleImport = () => {
 .api-provider.tavern-tag {
   background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
   color: #92400e;
-  border: 1px solid #f59e0b;
+  border: 1px solid #c69431;
   font-weight: 500;
 }
 
@@ -1775,11 +1775,11 @@ const handleImport = () => {
 }
 
 .detail-value.success {
-  color: #059669;
+  color: #3f8268;
 }
 
 .detail-value.fail {
-  color: #dc2626;
+  color: #a83a2c;
 }
 
 .detail-value.unknown {
@@ -1800,7 +1800,7 @@ const handleImport = () => {
   width: 16px;
   height: 16px;
   cursor: pointer;
-  accent-color: #3b82f6;
+  accent-color: #4c87ad;
 }
 
 .thinking-toggle {
@@ -1817,7 +1817,7 @@ const handleImport = () => {
   width: 16px;
   height: 16px;
   cursor: pointer;
-  accent-color: #f59e0b;
+  accent-color: #c69431;
 }
 
 .thinking-toggle span {
@@ -1893,14 +1893,14 @@ const handleImport = () => {
   gap: 0.75rem;
   padding: 0.875rem 1rem;
   margin: 0.75rem 0.5rem;
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(37, 99, 235, 0.05));
-  border: 1px solid rgba(59, 130, 246, 0.2);
+  background: linear-gradient(135deg, rgba(76, 135, 173, 0.08), rgba(37, 99, 235, 0.05));
+  border: 1px solid rgba(76, 135, 173, 0.2);
   border-radius: 0.5rem;
 }
 
 .auto-split-hint.warn {
-  background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(251, 191, 36, 0.06));
-  border-color: rgba(245, 158, 11, 0.28);
+  background: linear-gradient(135deg, rgba(198, 148, 49, 0.12), rgba(213, 170, 74, 0.06));
+  border-color: rgba(198, 148, 49, 0.28);
 }
 
 .auto-split-hint.warn .hint-text {
@@ -1918,7 +1918,7 @@ const handleImport = () => {
 .auto-split-hint .hint-text {
   flex: 1;
   font-size: 0.875rem;
-  color: #1e40af;
+  color: #27506b;
   line-height: 1.5;
 }
 
@@ -1971,12 +1971,12 @@ const handleImport = () => {
   align-items: center;
   margin-left: 0.5rem;
   padding: 0.125rem 0.4rem;
-  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
-  color: #1e40af;
+  background: linear-gradient(135deg, #dde7eb 0%, #c7d9e2 100%);
+  color: #27506b;
   font-size: 0.65rem;
   font-weight: 600;
   border-radius: 0.5rem;
-  border: 1px solid #93c5fd;
+  border: 1px solid #a6c6da;
 }
 
 .setting-info {
@@ -1998,7 +1998,7 @@ const handleImport = () => {
 
 /* 酒馆模式锁定状态 */
 .setting-item.tavern-locked {
-  background: linear-gradient(135deg, rgba(251, 191, 36, 0.08), rgba(245, 158, 11, 0.05));
+  background: linear-gradient(135deg, rgba(213, 170, 74, 0.08), rgba(198, 148, 49, 0.05));
   border-radius: 0.5rem;
 }
 
@@ -2012,7 +2012,7 @@ const handleImport = () => {
   font-size: 0.7rem;
   font-weight: 500;
   border-radius: 0.75rem;
-  border: 1px solid #f59e0b;
+  border: 1px solid #c69431;
 }
 
 .locked-text {
@@ -2074,13 +2074,13 @@ const handleImport = () => {
 .setting-select.disabled-hint {
   opacity: 0.5;
   cursor: not-allowed;
-  background-color: #f3f4f6;
+  background-color: #efeade;
 }
 
 .setting-select:disabled {
   opacity: 0.5;
   cursor: not-allowed;
-  background-color: #f3f4f6;
+  background-color: #efeade;
 }
 
 /* 数字输入框样式 */
@@ -2133,7 +2133,7 @@ const handleImport = () => {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #cbd5e1;
+  background-color: #c4bdad;
   transition: 0.2s;
   border-radius: 24px;
 }
@@ -2228,7 +2228,7 @@ input:checked + .switch-slider:before {
 .form-group label {
   display: block;
   font-weight: 500;
-  color: #374151;
+  color: #3c3934;
   margin-bottom: 0.5rem;
 }
 
@@ -2266,28 +2266,28 @@ input:checked + .switch-slider:before {
   gap: 0.5rem;
   cursor: pointer;
   font-weight: 500;
-  color: #374151;
+  color: #3c3934;
 }
 
 .form-checkbox {
   width: 1.25rem;
   height: 1.25rem;
   cursor: pointer;
-  accent-color: #3b82f6;
+  accent-color: #4c87ad;
 }
 
 .form-hint {
   margin-top: 0.5rem;
   padding: 0.75rem;
-  background: #f3f4f6;
+  background: #efeade;
   border-radius: 0.5rem;
   font-size: 0.8125rem;
-  color: #6b7280;
+  color: #78736a;
   line-height: 1.5;
 }
 
 .hint-warning {
-  color: #d97706;
+  color: #a97528;
   font-weight: 500;
 }
 
@@ -2477,13 +2477,13 @@ input:checked + .switch-slider:before {
 
 [data-theme='dark'] .panel-header,
 [data-theme='dark'] .settings-section {
-  background: #1e293b;
-  border-color: #475569;
+  background: #1e2228;
+  border-color: #56534b;
 }
 
 [data-theme='dark'] .section-header {
-  background: #334155;
-  border-bottom-color: #475569;
+  background: #3d3a35;
+  border-bottom-color: #56534b;
 }
 
 [data-theme='dark'] .panel-title,
@@ -2491,110 +2491,110 @@ input:checked + .switch-slider:before {
 [data-theme='dark'] .setting-name,
 [data-theme='dark'] .api-name,
 [data-theme='dark'] .group-title {
-  color: #f1f5f9;
+  color: #ece7dc;
 }
 
 [data-theme='dark'] .settings-subtitle,
 [data-theme='dark'] .setting-desc,
 [data-theme='dark'] .detail-label,
 [data-theme='dark'] .group-desc {
-  color: #94a3b8;
+  color: #a09a8d;
 }
 
 [data-theme='dark'] .api-card {
-  background: #334155;
-  border-color: #475569;
+  background: #3d3a35;
+  border-color: #56534b;
 }
 
 [data-theme='dark'] .api-card-header {
-  background: #1e293b;
-  border-bottom-color: #475569;
+  background: #1e2228;
+  border-bottom-color: #56534b;
 }
 
 [data-theme='dark'] .setting-item:hover,
 [data-theme='dark'] .api-card:hover {
-  background: #334155;
+  background: #3d3a35;
 }
 
 [data-theme='dark'] .action-btn,
 [data-theme='dark'] .setting-select,
 [data-theme='dark'] .form-input,
 [data-theme='dark'] .form-select {
-  background: #374151;
-  border-color: #4b5563;
-  color: #e5e7eb;
+  background: #3c3934;
+  border-color: #4e4b45;
+  color: #e2dccf;
 }
 
 [data-theme='dark'] .form-group label {
-  color: #e2e8f0;
+  color: #ddd7c9;
 }
 
 [data-theme='dark'] .modal-content {
-  background: #1e293b;
+  background: #1e2228;
 }
 
 [data-theme='dark'] .modal-header {
-  border-bottom-color: #475569;
+  border-bottom-color: #56534b;
 }
 
 [data-theme='dark'] .modal-header h3 {
-  color: #f1f5f9;
+  color: #ece7dc;
 }
 
 [data-theme='dark'] .modal-footer {
-  border-top-color: #475569;
+  border-top-color: #56534b;
 }
 
 [data-theme='dark'] .api-provider {
-  background: #475569;
-  color: #e5e7eb;
+  background: #56534b;
+  color: #e2dccf;
 }
 
 [data-theme='dark'] .api-provider.tavern-tag {
   background: linear-gradient(135deg, #78350f 0%, #92400e 100%);
   color: #fef3c7;
-  border-color: #b45309;
+  border-color: #8c5f22;
 }
 
 [data-theme='dark'] .tavern-api-hint .hint-text {
-  color: #fcd34d;
+  color: #dfc06f;
 }
 
 [data-theme='dark'] .model-tag {
-  background: #475569;
-  border-color: #4b5563;
-  color: #e5e7eb;
+  background: #56534b;
+  border-color: #4e4b45;
+  color: #e2dccf;
 }
 
 [data-theme='dark'] .model-dropdown {
-  background: #374151;
-  border-color: #4b5563;
+  background: #3c3934;
+  border-color: #4e4b45;
 }
 
 [data-theme='dark'] .model-dropdown-item {
-  color: #e5e7eb;
+  color: #e2dccf;
 }
 
 [data-theme='dark'] .model-dropdown-item:hover {
-  background: #4b5563;
+  background: #4e4b45;
 }
 
 [data-theme='dark'] .model-dropdown-item.active {
-  background: #1e40af;
-  color: #93c5fd;
+  background: #27506b;
+  color: #a6c6da;
 }
 
 /* 深色主题 - 模式标识 */
 [data-theme='dark'] .mode-badge.tavern {
   background: linear-gradient(135deg, #78350f 0%, #92400e 100%);
   color: #fef3c7;
-  border-color: #b45309;
+  border-color: #8c5f22;
 }
 
 [data-theme='dark'] .mode-badge.web {
-  background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
-  color: #dbeafe;
-  border-color: #2563eb;
+  background: linear-gradient(135deg, #1e3a8a 0%, #27506b 100%);
+  color: #dde7eb;
+  border-color: #3a6c8c;
 }
 
 [data-theme='dark'] .mode-hint.tavern {
@@ -2606,7 +2606,7 @@ input:checked + .switch-slider:before {
 }
 
 [data-theme='dark'] .mode-hint .hint-content em {
-  color: #fca5a5;
+  color: #d49a90;
 }
 
 /* 深色主题 - 锁定状态 */
@@ -2617,12 +2617,12 @@ input:checked + .switch-slider:before {
 [data-theme='dark'] .locked-badge {
   background: linear-gradient(135deg, #78350f 0%, #92400e 100%);
   color: #fef3c7;
-  border-color: #b45309;
+  border-color: #8c5f22;
 }
 
 [data-theme='dark'] .locked-text {
-  background: #334155;
-  border-color: #475569;
-  color: #94a3b8;
+  background: #3d3a35;
+  border-color: #56534b;
+  color: #a09a8d;
 }
 </style>

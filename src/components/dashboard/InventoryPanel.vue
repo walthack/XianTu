@@ -1821,45 +1821,45 @@ const refreshFromTavern = async () => {
 
 /* 品级颜色样式 */
 .grade-display.grade-broken {
-  background: #6b7280;
+  background: #78736a;
   color: white;
-  border-color: #6b7280;
+  border-color: #78736a;
 }
 
 .grade-display.grade-low {
-  background: #10b981; /* 绿色 - 下品 */
+  background: #4f9b7e; /* 绿色 - 下品 */
   color: white;
-  border-color: #10b981;
+  border-color: #4f9b7e;
 }
 
 .grade-display.grade-mid {
-  background: #3b82f6; /* 蓝色 - 中品 */
+  background: #4c87ad; /* 蓝色 - 中品 */
   color: white;
-  border-color: #3b82f6;
+  border-color: #4c87ad;
 }
 
 .grade-display.grade-high {
-  background: #8b5cf6; /* 紫色 - 上品 */
+  background: #8a6fa8; /* 紫色 - 上品 */
   color: white;
-  border-color: #8b5cf6;
+  border-color: #8a6fa8;
 }
 
 .grade-display.grade-perfect {
-  background: #f59e0b; /* 金色 - 极品 */
+  background: #c69431; /* 金色 - 极品 */
   color: white;
-  border-color: #f59e0b;
+  border-color: #c69431;
 }
 
 .grade-display.grade-unknown {
-  background: #9ca3af;
+  background: #a29c90;
   color: white;
-  border-color: #9ca3af;
+  border-color: #a29c90;
 }
 
 .grade-display.grade-custom {
-  background: linear-gradient(135deg, #06b6d4, #a855f7);
+  background: linear-gradient(135deg, #4f97ab, #9668b0);
   color: white;
-  border-color: #06b6d4;
+  border-color: #4f97ab;
 }
 
 .modal-description {
@@ -2228,67 +2228,67 @@ const refreshFromTavern = async () => {
 
 /* 品级样式 - 简化版本 */
 .grade-broken {
-  background: #6b7280;
+  background: #78736a;
   color: white;
 }
 
 .grade-low {
-  background: #10b981; /* 绿色 - 下品 */
+  background: #4f9b7e; /* 绿色 - 下品 */
   color: white;
 }
 
 .grade-mid {
-  background: #3b82f6; /* 蓝色 - 中品 */
+  background: #4c87ad; /* 蓝色 - 中品 */
   color: white;
 }
 
 .grade-high {
-  background: #8b5cf6; /* 紫色 - 上品 */
+  background: #8a6fa8; /* 紫色 - 上品 */
   color: white;
 }
 
 .grade-perfect {
-  background: #f59e0b; /* 金色 - 极品 */
+  background: #c69431; /* 金色 - 极品 */
   color: white;
 }
 
 .grade-unknown {
-  background: #9ca3af;
+  background: #a29c90;
   color: white;
 }
 
 .grade-custom {
-  background: linear-gradient(135deg, #06b6d4, #a855f7);
+  background: linear-gradient(135deg, #4f97ab, #9668b0);
   color: white;
 }
 
 /* 灵石品质样式 - 颜色递增 */
 .grade-common {
-  background: linear-gradient(135deg, #9ca3af, #6b7280);
-  border-color: #9ca3af;
+  background: linear-gradient(135deg, #a29c90, #78736a);
+  border-color: #a29c90;
   color: white;
   box-shadow: 0 2px 8px rgba(156, 163, 175, 0.3);
 }
 
 .grade-rare {
-  background: linear-gradient(135deg, #3b82f6, #2563eb);
-  border-color: #3b82f6;
+  background: linear-gradient(135deg, #4c87ad, #3a6c8c);
+  border-color: #4c87ad;
   color: white;
-  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+  box-shadow: 0 2px 8px rgba(76, 135, 173, 0.4);
 }
 
 .grade-epic {
-  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
-  border-color: #8b5cf6;
+  background: linear-gradient(135deg, #8a6fa8, #70518f);
+  border-color: #8a6fa8;
   color: white;
-  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.4);
+  box-shadow: 0 2px 8px rgba(138, 111, 168, 0.4);
 }
 
 .grade-legend {
-  background: linear-gradient(135deg, #f59e0b, #d97706);
-  border-color: #f59e0b;
+  background: linear-gradient(135deg, #c69431, #a97528);
+  border-color: #c69431;
   color: white;
-  box-shadow: 0 2px 12px rgba(245, 158, 11, 0.5);
+  box-shadow: 0 2px 12px rgba(198, 148, 49, 0.5);
 }
 
 /* 桌面端详情侧边栏 */
@@ -2463,23 +2463,23 @@ const refreshFromTavern = async () => {
 }
 
 .currency-card.grade-common::before {
-  background: linear-gradient(90deg, #9ca3af, #6b7280);
+  background: linear-gradient(90deg, #a29c90, #78736a);
 }
 
 .currency-card.grade-rare::before {
-  background: linear-gradient(90deg, #3b82f6, #2563eb);
+  background: linear-gradient(90deg, #4c87ad, #3a6c8c);
 }
 
 .currency-card.grade-epic::before {
-  background: linear-gradient(90deg, #8b5cf6, #7c3aed);
+  background: linear-gradient(90deg, #8a6fa8, #70518f);
 }
 
 .currency-card.grade-legend::before {
-  background: linear-gradient(90deg, #f59e0b, #d97706);
+  background: linear-gradient(90deg, #c69431, #a97528);
 }
 
 .currency-card.grade-money::before {
-  background: linear-gradient(90deg, #22c55e, #16a34a);
+  background: linear-gradient(90deg, #5f9b6a, #4e8557);
 }
 
 .currency-card:hover {
@@ -2505,23 +2505,23 @@ const refreshFromTavern = async () => {
 
 /* 灵石图标颜色 */
 .icon-grade-common {
-  color: #9ca3af;
+  color: #a29c90;
 }
 
 .icon-grade-rare {
-  color: #3b82f6;
+  color: #4c87ad;
 }
 
 .icon-grade-epic {
-  color: #8b5cf6;
+  color: #8a6fa8;
 }
 
 .icon-grade-legend {
-  color: #f59e0b;
+  color: #c69431;
 }
 
 .icon-grade-money {
-  color: #22c55e;
+  color: #5f9b6a;
 }
 
 .currency-info {
@@ -2562,9 +2562,9 @@ const refreshFromTavern = async () => {
 }
 
 .currency-delete-btn:hover {
-  border-color: #ef4444;
-  color: #ef4444;
-  background: rgba(239, 68, 68, 0.08);
+  border-color: #c34b3c;
+  color: #c34b3c;
+  background: rgba(195, 75, 60, 0.08);
 }
 
 .currency-delete-btn:active {
@@ -2838,9 +2838,9 @@ const refreshFromTavern = async () => {
 .text-quality-神,
 .text-quality-神阶 {
   color: white !important;
-  background: linear-gradient(135deg, #dc2626, #b91c1c) !important;
-  border: 1px solid #dc2626 !important;
-  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3) !important;
+  background: linear-gradient(135deg, #a83a2c, #8e2f24) !important;
+  border: 1px solid #a83a2c !important;
+  box-shadow: 0 2px 8px rgba(168, 58, 44, 0.3) !important;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5) !important;
   padding: 2px 6px !important;
   border-radius: 4px !important;
@@ -2866,9 +2866,9 @@ const refreshFromTavern = async () => {
 .text-quality-天,
 .text-quality-天阶 {
   color: white !important;
-  background: linear-gradient(135deg, #3b82f6, #2563eb) !important;
-  border: 1px solid #3b82f6 !important;
-  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3) !important;
+  background: linear-gradient(135deg, #4c87ad, #3a6c8c) !important;
+  border: 1px solid #4c87ad !important;
+  box-shadow: 0 2px 8px rgba(76, 135, 173, 0.3) !important;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5) !important;
   padding: 2px 6px !important;
   border-radius: 4px !important;
@@ -2880,9 +2880,9 @@ const refreshFromTavern = async () => {
 .text-quality-地,
 .text-quality-地阶 {
   color: white !important;
-  background: linear-gradient(135deg, #f59e0b, #d97706) !important;
-  border: 1px solid #f59e0b !important;
-  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3) !important;
+  background: linear-gradient(135deg, #c69431, #a97528) !important;
+  border: 1px solid #c69431 !important;
+  box-shadow: 0 2px 8px rgba(198, 148, 49, 0.3) !important;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5) !important;
   padding: 2px 6px !important;
   border-radius: 4px !important;
@@ -2894,9 +2894,9 @@ const refreshFromTavern = async () => {
 .text-quality-玄,
 .text-quality-玄阶 {
   color: white !important;
-  background: linear-gradient(135deg, #8b5cf6, #7c3aed) !important;
-  border: 1px solid #8b5cf6 !important;
-  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3) !important;
+  background: linear-gradient(135deg, #8a6fa8, #70518f) !important;
+  border: 1px solid #8a6fa8 !important;
+  box-shadow: 0 2px 8px rgba(138, 111, 168, 0.3) !important;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5) !important;
   padding: 2px 6px !important;
   border-radius: 4px !important;
@@ -2908,8 +2908,8 @@ const refreshFromTavern = async () => {
 .text-quality-黄,
 .text-quality-黄阶 {
   color: white !important;
-  background: linear-gradient(135deg, #eab308, #ca8a04) !important;
-  border: 1px solid #eab308 !important;
+  background: linear-gradient(135deg, #bd9a2e, #ca8a04) !important;
+  border: 1px solid #bd9a2e !important;
   box-shadow: 0 2px 8px rgba(234, 179, 8, 0.3) !important;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5) !important;
   padding: 2px 6px !important;
@@ -2922,8 +2922,8 @@ const refreshFromTavern = async () => {
 .text-quality-凡,
 .text-quality-凡阶 {
   color: white !important;
-  background: linear-gradient(135deg, #6b7280, #4b5563) !important;
-  border: 1px solid #6b7280 !important;
+  background: linear-gradient(135deg, #78736a, #4e4b45) !important;
+  border: 1px solid #78736a !important;
   box-shadow: 0 2px 8px rgba(107, 114, 128, 0.3) !important;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5) !important;
   padding: 2px 6px !important;
@@ -2934,7 +2934,7 @@ const refreshFromTavern = async () => {
 
 /* 边框样式也需要修复 */
 .border-quality-神 {
-  border-color: #dc2626 !important;
+  border-color: #a83a2c !important;
 }
 
 .border-quality-仙 {
@@ -2942,43 +2942,43 @@ const refreshFromTavern = async () => {
 }
 
 .border-quality-天 {
-  border-color: #3b82f6 !important;
+  border-color: #4c87ad !important;
 }
 
 .border-quality-地 {
-  border-color: #f59e0b !important;
+  border-color: #c69431 !important;
 }
 
 .border-quality-玄 {
-  border-color: #8b5cf6 !important;
+  border-color: #8a6fa8 !important;
 }
 
 .border-quality-凡 {
-  border-color: #6b7280 !important;
+  border-color: #78736a !important;
 }
 
 .border-quality-凡 {
-  border-color: #6b7280 !important;
+  border-color: #78736a !important;
 }
 
 /* 自定义品质样式 - 使用渐变彩虹色 */
 .border-quality-custom {
-  border-color: #06b6d4 !important;
+  border-color: #4f97ab !important;
   border-width: 2px !important;
 }
 
 .text-quality-custom {
-  color: #06b6d4 !important;
+  color: #4f97ab !important;
   font-weight: bold;
 }
 
 .card-quality-custom {
-  background: linear-gradient(135deg, rgba(6, 182, 212, 0.1), rgba(168, 85, 247, 0.1)) !important;
-  border-color: #06b6d4 !important;
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.1), rgba(150, 104, 176, 0.1)) !important;
+  border-color: #4f97ab !important;
 }
 
 .badge-quality-custom {
-  background: linear-gradient(135deg, #06b6d4, #a855f7) !important;
+  background: linear-gradient(135deg, #4f97ab, #9668b0) !important;
   color: white !important;
 }
 
@@ -3123,8 +3123,8 @@ const refreshFromTavern = async () => {
   height: 28px;
   border-radius: 8px;
   border: none;
-  background: rgba(239, 68, 68, 0.1);
-  color: #ef4444;
+  background: rgba(195, 75, 60, 0.1);
+  color: #c34b3c;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -3133,7 +3133,7 @@ const refreshFromTavern = async () => {
 }
 
 .slot-unequip-btn:hover {
-  background: #ef4444;
+  background: #c34b3c;
   color: white;
   transform: scale(1.1);
 }
@@ -3173,7 +3173,7 @@ const refreshFromTavern = async () => {
   pointer-events: none;
 }
 
-.icon-glow.q-凡-glow { background: #808080; }
+.icon-glow.q-凡-glow { background: #807b72; }
 .icon-glow.q-黄-glow { background: #daa520; }
 .icon-glow.q-玄-glow { background: #9370db; }
 .icon-glow.q-地-glow { background: #00ced1; }
@@ -3219,7 +3219,7 @@ const refreshFromTavern = async () => {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
-.quality-badge.q-凡-badge { background: linear-gradient(135deg, #808080, #696969); }
+.quality-badge.q-凡-badge { background: linear-gradient(135deg, #807b72, #696969); }
 .quality-badge.q-黄-badge { background: linear-gradient(135deg, #daa520, #b8860b); }
 .quality-badge.q-玄-badge { background: linear-gradient(135deg, #9370db, #8a2be2); }
 .quality-badge.q-地-badge { background: linear-gradient(135deg, #00ced1, #20b2aa); }
@@ -3283,8 +3283,8 @@ const refreshFromTavern = async () => {
 }
 
 .effect-section.special {
-  background: linear-gradient(135deg, rgba(168, 85, 247, 0.08), rgba(168, 85, 247, 0.02));
-  border-color: rgba(168, 85, 247, 0.2);
+  background: linear-gradient(135deg, rgba(150, 104, 176, 0.08), rgba(150, 104, 176, 0.02));
+  border-color: rgba(150, 104, 176, 0.2);
 }
 
 .effect-label {
@@ -3308,8 +3308,8 @@ const refreshFromTavern = async () => {
 }
 
 .effect-dot.special {
-  background: #a855f7;
-  box-shadow: 0 0 8px rgba(168, 85, 247, 0.6);
+  background: #9668b0;
+  box-shadow: 0 0 8px rgba(150, 104, 176, 0.6);
 }
 
 .effect-content {
@@ -3352,7 +3352,7 @@ const refreshFromTavern = async () => {
 }
 
 /* 品质边框颜色 */
-.q-凡-border { border-color: #808080; }
+.q-凡-border { border-color: #807b72; }
 .q-黄-border { border-color: #daa520; }
 .q-玄-border { border-color: #9370db; }
 .q-地-border { border-color: #00ced1; }
@@ -3361,7 +3361,7 @@ const refreshFromTavern = async () => {
 .q-神-border { border-color: #9932cc; }
 
 /* 品质文字颜色 */
-.q-凡-text { color: #808080; }
+.q-凡-text { color: #807b72; }
 .q-黄-text { color: #daa520; }
 .q-玄-text { color: #9370db; }
 .q-地-text { color: #00ced1; }
@@ -3372,7 +3372,7 @@ const refreshFromTavern = async () => {
 /* 品级样式 */
 .item-grade {
   border-radius: 5px;
-  border: 2px solid #9ca3af;
+  border: 2px solid #a29c90;
 }
 
 .item-type-text {

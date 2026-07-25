@@ -285,11 +285,11 @@ watch(() => props.visible, (newVal) => {
   background: linear-gradient(135deg, rgba(var(--color-primary-rgb), 0.1), rgba(var(--color-accent-rgb), 0.1));
 }
 
-.technique-icon.quality-神 { background: linear-gradient(135deg, rgba(220, 38, 38, 0.2), rgba(248, 113, 113, 0.2)); }
-.technique-icon.quality-仙 { background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(251, 191, 36, 0.2)); }
-.technique-icon.quality-天 { background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(192, 132, 252, 0.2)); }
-.technique-icon.quality-地 { background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(96, 165, 250, 0.2)); }
-.technique-icon.quality-玄 { background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(52, 211, 153, 0.2)); }
+.technique-icon.quality-神 { background: linear-gradient(135deg, rgba(168, 58, 44, 0.2), rgba(205, 111, 95, 0.2)); }
+.technique-icon.quality-仙 { background: linear-gradient(135deg, rgba(198, 148, 49, 0.2), rgba(213, 170, 74, 0.2)); }
+.technique-icon.quality-天 { background: linear-gradient(135deg, rgba(150, 104, 176, 0.2), rgba(192, 132, 252, 0.2)); }
+.technique-icon.quality-地 { background: linear-gradient(135deg, rgba(76, 135, 173, 0.2), rgba(120, 168, 198, 0.2)); }
+.technique-icon.quality-玄 { background: linear-gradient(135deg, rgba(79, 155, 126, 0.2), rgba(52, 211, 153, 0.2)); }
 .technique-icon.quality-黄 { background: linear-gradient(135deg, rgba(250, 204, 21, 0.2), rgba(253, 224, 71, 0.2)); }
 
 .technique-details {
@@ -303,12 +303,12 @@ watch(() => props.visible, (newVal) => {
   color: var(--color-text);
 }
 
-.technique-name.quality-神 { color: #dc2626; }
-.technique-name.quality-仙 { color: #f59e0b; }
-.technique-name.quality-天 { color: #a855f7; }
-.technique-name.quality-地 { color: #3b82f6; }
-.technique-name.quality-玄 { color: #10b981; }
-.technique-name.quality-黄 { color: #facc15; }
+.technique-name.quality-神 { color: #a83a2c; }
+.technique-name.quality-仙 { color: #c69431; }
+.technique-name.quality-天 { color: #9668b0; }
+.technique-name.quality-地 { color: #4c87ad; }
+.technique-name.quality-玄 { color: #4f9b7e; }
+.technique-name.quality-黄 { color: #d3b03c; }
 
 .technique-quality {
   font-size: 0.9rem;

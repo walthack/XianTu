@@ -232,7 +232,7 @@ const later = () => {
 }
 
 .migration-actions .primary {
-  background: linear-gradient(135deg, #22c55e, #16a34a);
+  background: linear-gradient(135deg, #5f9b6a, #4e8557);
   color: white;
 }
 

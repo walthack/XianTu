@@ -511,14 +511,19 @@ ${selectionsSummary}${scenarioOpening}${scenarioCanonPrompt ? `\n\n${scenarioCan
   console.log(`[初始化] 可用地点数量:`, worldContext.availableLocations?.length || 0);
 
   let fullStreamingText = '';
+  const escapeHtml = (raw: string) =>
+    raw.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   const onStreamChunk = (chunk: string) => {
     fullStreamingText += chunk;
     // 只显示最后300个字符，避免遮挡loading界面
     const displayWindow = fullStreamingText.length > 300
       ? '...' + fullStreamingText.slice(-300)
       : fullStreamingText;
-    // 使用 pre-wrap 样式保持换行
-    uiStore.updateLoadingText(`${loadingHeaderHtml}<br/><br/><div style="text-align: left; font-size: 0.9em; opacity: 0.8; white-space: pre-wrap;">${displayWindow}</div>`);
+    // 流里的 \n 是 JSON 字面转义序列，不转换会把反斜杠直接显示给玩家；先转义 HTML 再还原换行，配合 pre-wrap 呈现
+    const preview = escapeHtml(displayWindow).replace(/\\r\\n|\\n|\\r/g, '\n');
+    uiStore.updateLoadingText(
+      `${loadingHeaderHtml}<br/><br/><div style="max-width: 42em; margin: 0 auto; text-align: left; font-size: 0.85em; line-height: 1.8; color: rgba(255, 255, 255, 0.66); text-shadow: none; white-space: pre-wrap; word-break: break-word;">${preview}</div>`
+    );
   };
 
   const initialMessageResponse = await robustAICall(

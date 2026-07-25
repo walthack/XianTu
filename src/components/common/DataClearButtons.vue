@@ -8,7 +8,7 @@
         :disabled="!hasCustomData"
         title="清除自定义和AI生成的数据"
       >
-        <span class="clear-icon">🗑️</span>
+        <Trash2 class="clear-icon" :size="14" />
         <span class="clear-text">清除自定义</span>
       </button>
 
@@ -30,6 +30,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
+import { Trash2 } from 'lucide-vue-next';
 import { useUIStore } from '@/stores/uiStore';
 import { useCharacterCreationStore } from '../../stores/characterCreationStore';
 import { toast } from '../../utils/toast';

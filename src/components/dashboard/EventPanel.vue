@@ -978,7 +978,7 @@ onMounted(() => {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #cbd5e1;
+  background-color: #c4bdad;
   transition: 0.2s;
   border-radius: 24px;
 }
@@ -1077,7 +1077,7 @@ input:checked + .toggle-slider:before {
 
 .event-delete-btn:hover {
   color: var(--color-error);
-  background: rgba(239, 68, 68, 0.08);
+  background: rgba(195, 75, 60, 0.08);
 }
 
 .event-type {
@@ -1126,13 +1126,13 @@ input:checked + .toggle-slider:before {
 }
 
 .meta-tag.level-轻微 {
-  background: rgba(34, 197, 94, 0.15);
-  color: #22c55e;
+  background: rgba(95, 155, 106, 0.15);
+  color: #5f9b6a;
 }
 
 .meta-tag.level-中等 {
   background: rgba(234, 179, 8, 0.15);
-  color: #eab308;
+  color: #bd9a2e;
 }
 
 .meta-tag.level-重大 {
@@ -1141,18 +1141,18 @@ input:checked + .toggle-slider:before {
 }
 
 .meta-tag.level-灾难 {
-  background: rgba(239, 68, 68, 0.15);
-  color: #ef4444;
+  background: rgba(195, 75, 60, 0.15);
+  color: #c34b3c;
 }
 
 .meta-tag.scope {
-  background: rgba(59, 130, 246, 0.12);
-  color: #3b82f6;
+  background: rgba(76, 135, 173, 0.12);
+  color: #4c87ad;
 }
 
 .meta-tag.source {
-  background: rgba(139, 92, 246, 0.12);
-  color: #8b5cf6;
+  background: rgba(138, 111, 168, 0.12);
+  color: #8a6fa8;
 }
 
 /* 相关人物/势力 */

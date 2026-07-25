@@ -163,13 +163,13 @@ const offsetStyle = computed(() => {
 }
 
 :deep(.action-menu-item.is-danger) {
-  border-color: rgba(239, 68, 68, 0.25);
+  border-color: rgba(195, 75, 60, 0.25);
   color: var(--color-error);
 }
 
 :deep(.action-menu-item.is-danger:hover) {
   border-color: var(--color-error);
-  background: rgba(239, 68, 68, 0.1);
+  background: rgba(195, 75, 60, 0.1);
 }
 
 .pos-bottom-right .menu {

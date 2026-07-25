@@ -288,9 +288,9 @@ const goToTab = (name: string) => {
   color: var(--color-primary);
 }
 .role-pill.member {
-  border-color: rgba(34, 197, 94, 0.30);
-  background: rgba(34, 197, 94, 0.10);
-  color: #166534;
+  border-color: rgba(95, 155, 106, 0.30);
+  background: rgba(95, 155, 106, 0.10);
+  color: #3d5f43;
 }
 .role-pill.none {
   border-color: rgba(var(--color-border-rgb), 0.5);

@@ -944,46 +944,46 @@ const getReputationClass = (): string => {
 }
 
 .progress-fill.cultivation {
-  background: linear-gradient(90deg, #8b5cf6, #a78bfa);
+  background: linear-gradient(90deg, #8a6fa8, #a189bd);
 }
 
 /* 境界进度条 - 冲刺状态（90-99%）黄色 */
 .progress-fill.cultivation.realm-sprint {
-  background: linear-gradient(90deg, #f59e0b, #fbbf24);
-  box-shadow: 0 0 8px rgba(245, 158, 11, 0.4);
+  background: linear-gradient(90deg, #c69431, #d5aa4a);
+  box-shadow: 0 0 8px rgba(198, 148, 49, 0.4);
 }
 
 /* 境界进度条 - 突破状态（100%）红色 */
 .progress-fill.cultivation.realm-breakthrough {
-  background: linear-gradient(90deg, #ef4444, #f87171);
-  box-shadow: 0 0 12px rgba(239, 68, 68, 0.5);
+  background: linear-gradient(90deg, #c34b3c, #cd6f5f);
+  box-shadow: 0 0 12px rgba(195, 75, 60, 0.5);
   animation: breakthrough-pulse 1.5s ease-in-out infinite;
 }
 
 @keyframes breakthrough-pulse {
   0%, 100% {
-    box-shadow: 0 0 8px rgba(239, 68, 68, 0.4);
+    box-shadow: 0 0 8px rgba(195, 75, 60, 0.4);
   }
   50% {
-    box-shadow: 0 0 16px rgba(239, 68, 68, 0.7);
+    box-shadow: 0 0 16px rgba(195, 75, 60, 0.7);
   }
 }
 
 /* 进度文本颜色变化 */
 .progress-text.realm-sprint {
-  color: #f59e0b;
+  color: #c69431;
   font-weight: 600;
 }
 
 .progress-text.realm-breakthrough {
-  color: #ef4444;
+  color: #c34b3c;
   font-weight: 700;
 }
 
 /* 突破和冲刺提示 */
 .breakthrough-hint {
   font-size: 0.6rem;
-  color: #ef4444;
+  color: #c34b3c;
   font-weight: 700;
   margin-left: 4px;
   animation: hint-blink 1s ease-in-out infinite;
@@ -991,7 +991,7 @@ const getReputationClass = (): string => {
 
 .sprint-hint {
   font-size: 0.6rem;
-  color: #f59e0b;
+  color: #c69431;
   font-weight: 600;
   margin-left: 4px;
 }
@@ -1155,33 +1155,33 @@ const getReputationClass = (): string => {
 
 /* 属性品质颜色 */
 .quality-purple .attr-quality {
-  background: #8b5cf6;
+  background: #8a6fa8;
   color: white;
-  border-color: #8b5cf6;
+  border-color: #8a6fa8;
 }
 
 .quality-orange .attr-quality {
-  background: #f59e0b;
+  background: #c69431;
   color: white;
-  border-color: #f59e0b;
+  border-color: #c69431;
 }
 
 .quality-blue .attr-quality {
-  background: #3b82f6;
+  background: #4c87ad;
   color: white;
-  border-color: #3b82f6;
+  border-color: #4c87ad;
 }
 
 .quality-green .attr-quality {
-  background: #10b981;
+  background: #4f9b7e;
   color: white;
-  border-color: #10b981;
+  border-color: #4f9b7e;
 }
 
 .quality-gray .attr-quality {
-  background: #6b7280;
+  background: #78736a;
   color: white;
-  border-color: #6b7280;
+  border-color: #78736a;
 }
 
 /* 灵根和声望信息 */
@@ -1349,7 +1349,8 @@ const getReputationClass = (): string => {
 .tag-intensity {
   font-size: 0.65rem;
   background: rgba(var(--color-warning-rgb), 0.8);
-  color: var(--color-text);
+  /* 藤黄底上用墨字：原来跟正文同色只有 1.8:1 */
+  color: #1a1d21;
   padding: 1px 4px;
   border-radius: 8px;
   font-weight: 600;
@@ -1456,27 +1457,27 @@ const getReputationClass = (): string => {
 
 /* 正面声望 */
 .reputation-minor {
-  color: #10b981;
-  background: rgba(16, 185, 129, 0.1);
-  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: #4f9b7e;
+  background: rgba(79, 155, 126, 0.1);
+  border: 1px solid rgba(79, 155, 126, 0.3);
 }
 
 .reputation-known {
-  color: #3b82f6;
-  background: rgba(59, 130, 246, 0.1);
-  border: 1px solid rgba(59, 130, 246, 0.3);
+  color: #4c87ad;
+  background: rgba(76, 135, 173, 0.1);
+  border: 1px solid rgba(76, 135, 173, 0.3);
 }
 
 .reputation-notable {
-  color: #8b5cf6;
-  background: rgba(139, 92, 246, 0.1);
-  border: 1px solid rgba(139, 92, 246, 0.3);
+  color: #8a6fa8;
+  background: rgba(138, 111, 168, 0.1);
+  border: 1px solid rgba(138, 111, 168, 0.3);
 }
 
 .reputation-renowned {
-  color: #f59e0b;
-  background: rgba(245, 158, 11, 0.1);
-  border: 1px solid rgba(245, 158, 11, 0.3);
+  color: #c69431;
+  background: rgba(198, 148, 49, 0.1);
+  border: 1px solid rgba(198, 148, 49, 0.3);
 }
 
 .reputation-famous {
@@ -1486,39 +1487,39 @@ const getReputationClass = (): string => {
 }
 
 .reputation-legendary {
-  color: #dc2626;
-  background: linear-gradient(135deg, rgba(220, 38, 38, 0.2), rgba(239, 68, 68, 0.1));
-  border: 1px solid rgba(220, 38, 38, 0.4);
-  box-shadow: 0 0 8px rgba(220, 38, 38, 0.3);
+  color: #a83a2c;
+  background: linear-gradient(135deg, rgba(168, 58, 44, 0.2), rgba(195, 75, 60, 0.1));
+  border: 1px solid rgba(168, 58, 44, 0.4);
+  box-shadow: 0 0 8px rgba(168, 58, 44, 0.3);
 }
 
 /* 负面声望（恶名） */
 .reputation-evil-minor {
-  color: #6b7280;
+  color: #78736a;
   background: rgba(107, 114, 128, 0.1);
   border: 1px solid rgba(107, 114, 128, 0.3);
 }
 
 .reputation-evil-low {
-  color: #ef4444;
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #c34b3c;
+  background: rgba(195, 75, 60, 0.1);
+  border: 1px solid rgba(195, 75, 60, 0.3);
 }
 
 .reputation-evil-medium {
-  color: #dc2626;
-  background: rgba(220, 38, 38, 0.1);
-  border: 1px solid rgba(220, 38, 38, 0.3);
+  color: #a83a2c;
+  background: rgba(168, 58, 44, 0.1);
+  border: 1px solid rgba(168, 58, 44, 0.3);
 }
 
 .reputation-evil-high {
-  color: #991b1b;
+  color: #7a2b22;
   background: rgba(153, 27, 27, 0.1);
   border: 1px solid rgba(153, 27, 27, 0.3);
 }
 
 .reputation-evil-legendary {
-  color: #7f1d1d;
+  color: #6b2a22;
   background: linear-gradient(135deg, rgba(127, 29, 29, 0.2), rgba(153, 27, 27, 0.1));
   border: 1px solid rgba(127, 29, 29, 0.4);
   box-shadow: 0 0 8px rgba(127, 29, 29, 0.4);
@@ -1741,15 +1742,15 @@ const getReputationClass = (): string => {
 }
 
 .status-effect.buff {
-  background: linear-gradient(135deg, #10b981, #059669);
+  background: linear-gradient(135deg, #4f9b7e, #3f8268);
   color: white;
-  box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2);
+  box-shadow: 0 2px 4px rgba(79, 155, 126, 0.2);
 }
 
 .status-effect.debuff {
-  background: linear-gradient(135deg, #ef4444, #dc2626);
+  background: linear-gradient(135deg, #c34b3c, #a83a2c);
   color: white;
-  box-shadow: 0 2px 4px rgba(239, 68, 68, 0.2);
+  box-shadow: 0 2px 4px rgba(195, 75, 60, 0.2);
 }
 
 .status-effect:hover {

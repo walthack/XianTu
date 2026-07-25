@@ -169,7 +169,7 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   color: var(--color-text);
-  background: rgba(30, 41, 59, 0.5);
+  background: rgba(30, 34, 40, 0.5);
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 12px;
   padding: 1.5rem;
@@ -181,28 +181,28 @@ onMounted(() => {
   align-items: center;
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
-  border-bottom: 1px solid rgba(147, 197, 253, 0.2);
+  border-bottom: 1px solid rgba(166, 198, 218, 0.2);
 }
 
 .points-display .negative {
-  color: #f87171 !important;
+  color: #cd6f5f !important;
 }
 
 h2 {
   margin: 0;
-  color: #93c5fd;
+  color: #a6c6da;
   font-size: 1.5rem;
-  text-shadow: 0 0 20px rgba(147, 197, 253, 0.3);
+  text-shadow: 0 0 20px rgba(166, 198, 218, 0.3);
 }
 
 .points-display {
   font-size: 1.2rem;
-  color: #94a3b8;
+  color: #a09a8d;
 }
 
 .points-display span {
   font-weight: 600;
-  color: #fbbf24;
+  color: #d5aa4a;
   font-size: 1.5rem;
 }
 
@@ -210,12 +210,12 @@ h2 {
   overflow-y: auto;
   flex-grow: 1;
   scrollbar-width: thin;
-  scrollbar-color: rgba(147, 197, 253, 0.3) transparent;
+  scrollbar-color: rgba(166, 198, 218, 0.3) transparent;
 }
 
 .attributes-list::-webkit-scrollbar { width: 6px; }
 .attributes-list::-webkit-scrollbar-track { background: transparent; }
-.attributes-list::-webkit-scrollbar-thumb { background: rgba(147, 197, 253, 0.3); border-radius: 3px; }
+.attributes-list::-webkit-scrollbar-thumb { background: rgba(166, 198, 218, 0.3); border-radius: 3px; }
 
 .attribute-item {
   display: flex;
@@ -224,14 +224,14 @@ h2 {
   padding: 1rem 0.5rem;
   margin-bottom: 0.5rem;
   border-radius: 8px;
-  background: rgba(30, 41, 59, 0.4);
+  background: rgba(30, 34, 40, 0.4);
   border: 1px solid transparent;
   transition: all 0.25s ease;
 }
 
 .attribute-item:hover {
-  background: rgba(51, 65, 85, 0.6);
-  border-color: rgba(147, 197, 253, 0.2);
+  background: rgba(61, 58, 53, 0.6);
+  border-color: rgba(166, 198, 218, 0.2);
 }
 
 .attribute-item:last-child {
@@ -245,12 +245,12 @@ h2 {
 .attribute-name {
   font-size: 1.1rem;
   font-weight: 500;
-  color: #93c5fd;
+  color: #a6c6da;
 }
 
 .attribute-desc {
   font-size: 0.85rem;
-  color: #94a3b8;
+  color: #a09a8d;
   margin: 0.3rem 0 0 0;
   line-height: 1.4;
 }
@@ -265,9 +265,9 @@ h2 {
   width: 35px;
   height: 35px;
   border-radius: 50%;
-  background: rgba(30, 41, 59, 0.6);
-  border: 1px solid rgba(147, 197, 253, 0.3);
-  color: #93c5fd;
+  background: rgba(30, 34, 40, 0.6);
+  border: 1px solid rgba(166, 198, 218, 0.3);
+  color: #a6c6da;
   font-size: 1.5rem;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -277,18 +277,18 @@ h2 {
 }
 
 .attribute-controls button:hover:not(:disabled) {
-  background: rgba(59, 130, 246, 0.3);
-  border-color: #93c5fd;
-  color: #bfdbfe;
+  background: rgba(76, 135, 173, 0.3);
+  border-color: #a6c6da;
+  color: #c7d9e2;
 }
 
 .attribute-controls button:disabled,
 .attribute-controls button.disabled {
   opacity: 0.4;
   cursor: not-allowed;
-  background: rgba(30, 41, 59, 0.3);
+  background: rgba(30, 34, 40, 0.3);
   border-color: rgba(255, 255, 255, 0.06);
-  color: #64748b;
+  color: #7c776c;
 }
 
 .attribute-value {
@@ -296,7 +296,7 @@ h2 {
   font-weight: 600;
   min-width: 30px;
   text-align: center;
-  color: #f1f5f9;
+  color: #ece7dc;
 }
 
 .actions {
@@ -309,38 +309,38 @@ h2 {
 
 .actions button {
   padding: 0.5rem 1.5rem;
-  border: 1px solid rgba(147, 197, 253, 0.3);
-  background: rgba(30, 41, 59, 0.6);
-  color: #f1f5f9;
+  border: 1px solid rgba(166, 198, 218, 0.3);
+  background: rgba(30, 34, 40, 0.6);
+  color: #ece7dc;
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.25s ease;
 }
 
 .actions button:hover {
-  background: rgba(51, 65, 85, 0.8);
-  border-color: rgba(147, 197, 253, 0.5);
+  background: rgba(61, 58, 53, 0.8);
+  border-color: rgba(166, 198, 218, 0.5);
 }
 
 .actions .btn-secondary {
   border-color: rgba(148, 163, 184, 0.4);
-  color: #94a3b8;
+  color: #a09a8d;
 }
 
 .actions .btn-secondary:hover {
   background: rgba(148, 163, 184, 0.2);
-  border-color: #94a3b8;
-  color: #f1f5f9;
+  border-color: #a09a8d;
+  color: #ece7dc;
 }
 
 .actions .btn-warning {
-  border-color: rgba(251, 191, 36, 0.4);
-  color: #fbbf24;
+  border-color: rgba(213, 170, 74, 0.4);
+  color: #d5aa4a;
 }
 
 .actions .btn-warning:hover {
-  background: rgba(251, 191, 36, 0.2);
-  border-color: #fbbf24;
+  background: rgba(213, 170, 74, 0.2);
+  border-color: #d5aa4a;
   color: #fef3c7;
 }
 
@@ -542,19 +542,19 @@ h2 {
 }
 
 [data-theme="light"] .header {
-  border-bottom-color: rgba(59, 130, 246, 0.2);
+  border-bottom-color: rgba(76, 135, 173, 0.2);
 }
 
 [data-theme="light"] h2 {
-  color: #2563eb;
+  color: #3a6c8c;
 }
 
 [data-theme="light"] .points-display {
-  color: #475569;
+  color: #56534b;
 }
 
 [data-theme="light"] .points-display span {
-  color: #d97706;
+  color: #a97528;
 }
 
 [data-theme="light"] .attribute-item {
@@ -562,41 +562,41 @@ h2 {
 }
 
 [data-theme="light"] .attribute-item:hover {
-  background: rgba(241, 245, 249, 0.95);
-  border-color: rgba(59, 130, 246, 0.2);
+  background: rgba(236, 231, 220, 0.95);
+  border-color: rgba(76, 135, 173, 0.2);
 }
 
 [data-theme="light"] .attribute-name {
-  color: #2563eb;
+  color: #3a6c8c;
 }
 
 [data-theme="light"] .attribute-desc {
-  color: #475569;
+  color: #56534b;
 }
 
 [data-theme="light"] .attribute-value {
-  color: #1e293b;
+  color: #1e2228;
 }
 
 [data-theme="light"] .attribute-controls button {
   background: rgba(255, 255, 255, 0.8);
-  border-color: rgba(59, 130, 246, 0.3);
-  color: #2563eb;
+  border-color: rgba(76, 135, 173, 0.3);
+  color: #3a6c8c;
 }
 
 [data-theme="light"] .attribute-controls button:hover:not(:disabled) {
-  background: rgba(59, 130, 246, 0.1);
-  border-color: #3b82f6;
+  background: rgba(76, 135, 173, 0.1);
+  border-color: #4c87ad;
 }
 
 [data-theme="light"] .actions button {
   background: rgba(255, 255, 255, 0.8);
-  border-color: rgba(59, 130, 246, 0.3);
-  color: #1e293b;
+  border-color: rgba(76, 135, 173, 0.3);
+  color: #1e2228;
 }
 
 [data-theme="light"] .actions button:hover {
-  background: rgba(241, 245, 249, 0.95);
-  border-color: rgba(59, 130, 246, 0.5);
+  background: rgba(236, 231, 220, 0.95);
+  border-color: rgba(76, 135, 173, 0.5);
 }
 </style>

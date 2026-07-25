@@ -1001,8 +1001,8 @@ const requestJoinSect = (sect: WorldFaction) => {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
   padding: 0.1rem 0.35rem;
   border-radius: 6px;
-  background: rgba(99, 102, 241, 0.12);
-  border: 1px solid rgba(99, 102, 241, 0.2);
+  background: rgba(111, 127, 168, 0.12);
+  border: 1px solid rgba(111, 127, 168, 0.2);
 }
 
 .sect-list-content {
@@ -1023,19 +1023,19 @@ const requestJoinSect = (sect: WorldFaction) => {
 }
 
 .sect-card:hover {
-  border-color: #9333ea;
-  box-shadow: 0 2px 8px rgba(147, 51, 234, 0.1);
+  border-color: #7c5296;
+  box-shadow: 0 2px 8px rgba(124, 82, 150, 0.1);
   transform: translateY(-1px);
 }
 
 .sect-card.selected {
-  background: linear-gradient(135deg, rgba(147, 51, 234, 0.1), rgba(168, 85, 247, 0.1));
-  border-color: #9333ea;
-  box-shadow: 0 4px 12px rgba(147, 51, 234, 0.15);
+  background: linear-gradient(135deg, rgba(124, 82, 150, 0.1), rgba(150, 104, 176, 0.1));
+  border-color: #7c5296;
+  box-shadow: 0 4px 12px rgba(124, 82, 150, 0.15);
 }
 
 .sect-card.can-join {
-  border-left: 3px solid #22c55e;
+  border-left: 3px solid #5f9b6a;
 }
 
 .sect-icon {
@@ -1060,10 +1060,10 @@ const requestJoinSect = (sect: WorldFaction) => {
   color: white;
 }
 
-.level-一流 { background: #ef4444; }
-.level-二流 { background: #f59e0b; }
-.level-三流 { background: #3b82f6; }
-.level-末流 { background: #6b7280; }
+.level-一流 { background: #c34b3c; }
+.level-二流 { background: #c69431; }
+.level-三流 { background: #4c87ad; }
+.level-末流 { background: #78736a; }
 
 .sect-info {
   flex: 1;
@@ -1082,8 +1082,8 @@ const requestJoinSect = (sect: WorldFaction) => {
 }
 
 .sect-type {
-  background: rgba(147, 51, 234, 0.1);
-  color: #9333ea;
+  background: rgba(124, 82, 150, 0.1);
+  color: #7c5296;
   padding: 2px 8px;
   border-radius: 12px;
   font-size: 0.75rem;
@@ -1099,8 +1099,8 @@ const requestJoinSect = (sect: WorldFaction) => {
 }
 
 .member-count {
-  background: rgba(59, 130, 246, 0.1);
-  color: #3b82f6;
+  background: rgba(76, 135, 173, 0.1);
+  color: #4c87ad;
   padding: 2px 6px;
   border-radius: 3px;
   font-weight: 500;
@@ -1112,7 +1112,7 @@ const requestJoinSect = (sect: WorldFaction) => {
 
 .sect-card.selected .arrow-icon {
   transform: rotate(90deg);
-  color: #9333ea;
+  color: #7c5296;
 }
 
 .sect-detail {
@@ -1143,9 +1143,9 @@ const requestJoinSect = (sect: WorldFaction) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #9333ea, #7c3aed);
+  background: linear-gradient(135deg, #7c5296, #70518f);
   flex-shrink: 0;
-  box-shadow: 0 4px 16px rgba(147, 51, 234, 0.3);
+  box-shadow: 0 4px 16px rgba(124, 82, 150, 0.3);
 }
 
 .sect-emoji-large {
@@ -1182,17 +1182,17 @@ const requestJoinSect = (sect: WorldFaction) => {
   gap: 0.4rem;
   padding: 0.45rem 0.6rem;
   border-radius: 8px;
-  border: 1px solid rgba(239, 68, 68, 0.35);
-  background: rgba(239, 68, 68, 0.06);
-  color: #ef4444;
+  border: 1px solid rgba(195, 75, 60, 0.35);
+  background: rgba(195, 75, 60, 0.06);
+  color: #c34b3c;
   font-size: 0.8rem;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .danger-btn:hover {
-  border-color: rgba(239, 68, 68, 0.55);
-  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(195, 75, 60, 0.55);
+  background: rgba(195, 75, 60, 0.1);
 }
 
 .danger-btn:disabled {
@@ -1207,14 +1207,14 @@ const requestJoinSect = (sect: WorldFaction) => {
   font-weight: 500;
 }
 
-.type-badge.type-righteous { background: rgba(59, 130, 246, 0.1); color: #3b82f6; }
-.type-badge.type-demonic { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
-.type-badge.type-neutral { background: rgba(107, 114, 128, 0.1); color: #6b7280; }
-.type-badge.type-merchant { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
-.type-badge.type-family { background: rgba(34, 197, 94, 0.1); color: #22c55e; }
-.type-badge.type-alliance { background: rgba(168, 85, 247, 0.1); color: #a855f7; }
+.type-badge.type-righteous { background: rgba(76, 135, 173, 0.1); color: #4c87ad; }
+.type-badge.type-demonic { background: rgba(195, 75, 60, 0.1); color: #c34b3c; }
+.type-badge.type-neutral { background: rgba(107, 114, 128, 0.1); color: #78736a; }
+.type-badge.type-merchant { background: rgba(198, 148, 49, 0.1); color: #c69431; }
+.type-badge.type-family { background: rgba(95, 155, 106, 0.1); color: #5f9b6a; }
+.type-badge.type-alliance { background: rgba(150, 104, 176, 0.1); color: #9668b0; }
 
-.level-badge { background: rgba(168, 85, 247, 0.1); color: #a855f7; }
+.level-badge { background: rgba(150, 104, 176, 0.1); color: #9668b0; }
 
 .detail-body {
   display: flex;
@@ -1306,13 +1306,13 @@ const requestJoinSect = (sect: WorldFaction) => {
 }
 
 .specialty-tag {
-  background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(147, 51, 234, 0.1));
-  color: #9333ea;
+  background: linear-gradient(135deg, rgba(150, 104, 176, 0.1), rgba(124, 82, 150, 0.1));
+  color: #7c5296;
   padding: 0.25rem 0.75rem;
   border-radius: 12px;
   font-size: 0.75rem;
   font-weight: 500;
-  border: 1px solid rgba(147, 51, 234, 0.2);
+  border: 1px solid rgba(124, 82, 150, 0.2);
 }
 
 .member-overview {
@@ -1330,7 +1330,7 @@ const requestJoinSect = (sect: WorldFaction) => {
 .total-number {
   font-size: 2rem;
   font-weight: 700;
-  color: #9333ea;
+  color: #7c5296;
 }
 
 .total-label {
@@ -1377,13 +1377,13 @@ const requestJoinSect = (sect: WorldFaction) => {
 
 .realm-fill {
   height: 100%;
-  background: linear-gradient(90deg, #9333ea, #7c3aed);
+  background: linear-gradient(90deg, #7c5296, #70518f);
   transition: width 0.3s ease;
 }
 
 .position-fill {
   height: 100%;
-  background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+  background: linear-gradient(90deg, #4c87ad, #2e5878);
   transition: width 0.3s ease;
 }
 
@@ -1432,47 +1432,47 @@ const requestJoinSect = (sect: WorldFaction) => {
 }
 
 .reputation-legendary {
-  color: #f59e0b;
+  color: #c69431;
 }
 .reputation-legendary .reputation-level {
-  background: rgba(245, 158, 11, 0.1);
-  color: #f59e0b;
-  border: 1px solid rgba(245, 158, 11, 0.2);
+  background: rgba(198, 148, 49, 0.1);
+  color: #c69431;
+  border: 1px solid rgba(198, 148, 49, 0.2);
 }
 
 .reputation-excellent {
-  color: #8b5cf6;
+  color: #8a6fa8;
 }
 .reputation-excellent .reputation-level {
-  background: rgba(139, 92, 246, 0.1);
-  color: #8b5cf6;
-  border: 1px solid rgba(139, 92, 246, 0.2);
+  background: rgba(138, 111, 168, 0.1);
+  color: #8a6fa8;
+  border: 1px solid rgba(138, 111, 168, 0.2);
 }
 
 .reputation-good {
-  color: #3b82f6;
+  color: #4c87ad;
 }
 .reputation-good .reputation-level {
-  background: rgba(59, 130, 246, 0.1);
-  color: #3b82f6;
-  border: 1px solid rgba(59, 130, 246, 0.2);
+  background: rgba(76, 135, 173, 0.1);
+  color: #4c87ad;
+  border: 1px solid rgba(76, 135, 173, 0.2);
 }
 
 .reputation-fair {
-  color: #22c55e;
+  color: #5f9b6a;
 }
 .reputation-fair .reputation-level {
-  background: rgba(34, 197, 94, 0.1);
-  color: #22c55e;
-  border: 1px solid rgba(34, 197, 94, 0.2);
+  background: rgba(95, 155, 106, 0.1);
+  color: #5f9b6a;
+  border: 1px solid rgba(95, 155, 106, 0.2);
 }
 
 .reputation-low {
-  color: #6b7280;
+  color: #78736a;
 }
 .reputation-low .reputation-level {
   background: rgba(107, 114, 128, 0.1);
-  color: #6b7280;
+  color: #78736a;
   border: 1px solid rgba(107, 114, 128, 0.2);
 }
 
@@ -1502,7 +1502,7 @@ const requestJoinSect = (sect: WorldFaction) => {
 }
 
 .requirement-icon {
-  color: #22c55e;
+  color: #5f9b6a;
 }
 
 .requirement-text {
@@ -1540,7 +1540,7 @@ const requestJoinSect = (sect: WorldFaction) => {
 }
 
 .benefit-icon {
-  color: #3b82f6;
+  color: #4c87ad;
 }
 
 .benefit-text {
@@ -1557,7 +1557,7 @@ const requestJoinSect = (sect: WorldFaction) => {
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 1.5rem;
-  background: linear-gradient(135deg, #22c55e, #16a34a);
+  background: linear-gradient(135deg, #5f9b6a, #4e8557);
   border: none;
   border-radius: 8px;
   color: white;
@@ -1569,7 +1569,7 @@ const requestJoinSect = (sect: WorldFaction) => {
 
 .join-btn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+  box-shadow: 0 4px 12px rgba(95, 155, 106, 0.3);
 }
 
 .current-member-info {
@@ -1593,7 +1593,7 @@ const requestJoinSect = (sect: WorldFaction) => {
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 0.75rem;
-  background: linear-gradient(135deg, #ef4444, #dc2626);
+  background: linear-gradient(135deg, #c34b3c, #a83a2c);
   border: none;
   border-radius: 6px;
   color: white;
@@ -1605,7 +1605,7 @@ const requestJoinSect = (sect: WorldFaction) => {
 
 .leave-btn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+  box-shadow: 0 4px 12px rgba(195, 75, 60, 0.3);
 }
 
 .status-item {
@@ -1627,15 +1627,15 @@ const requestJoinSect = (sect: WorldFaction) => {
 }
 
 .status-value.position {
-  color: #9333ea;
+  color: #7c5296;
 }
 
 .status-value.contribution {
-  color: #f59e0b;
+  color: #c69431;
 }
 
 .status-value.reputation {
-  color: #3b82f6;
+  color: #4c87ad;
 }
 
 .sect-actions {
@@ -1676,8 +1676,8 @@ const requestJoinSect = (sect: WorldFaction) => {
 }
 
 .sect-action-btn:hover {
-  border-color: #9333ea;
-  background: rgba(147, 51, 234, 0.05);
+  border-color: #7c5296;
+  background: rgba(124, 82, 150, 0.05);
 }
 
 .no-selection {
@@ -1903,68 +1903,68 @@ const requestJoinSect = (sect: WorldFaction) => {
 }
 
 .power-legendary {
-  color: #dc2626 !important;
-  border-color: rgba(220, 38, 38, 0.3) !important;
-  background: linear-gradient(135deg, rgba(220, 38, 38, 0.1), rgba(239, 68, 68, 0.05)) !important;
+  color: #a83a2c !important;
+  border-color: rgba(168, 58, 44, 0.3) !important;
+  background: linear-gradient(135deg, rgba(168, 58, 44, 0.1), rgba(195, 75, 60, 0.05)) !important;
 }
 .power-legendary .power-level {
-  background: rgba(220, 38, 38, 0.1);
-  color: #dc2626;
-  border: 1px solid rgba(220, 38, 38, 0.2);
+  background: rgba(168, 58, 44, 0.1);
+  color: #a83a2c;
+  border: 1px solid rgba(168, 58, 44, 0.2);
 }
 
 .power-supreme {
-  color: #7c3aed !important;
+  color: #70518f !important;
   border-color: rgba(124, 58, 237, 0.3) !important;
-  background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(139, 92, 246, 0.05)) !important;
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(138, 111, 168, 0.05)) !important;
 }
 .power-supreme .power-level {
   background: rgba(124, 58, 237, 0.1);
-  color: #7c3aed;
+  color: #70518f;
   border: 1px solid rgba(124, 58, 237, 0.2);
 }
 
 .power-strong {
-  color: #2563eb !important;
+  color: #3a6c8c !important;
   border-color: rgba(37, 99, 235, 0.3) !important;
-  background: linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(59, 130, 246, 0.05)) !important;
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(76, 135, 173, 0.05)) !important;
 }
 .power-strong .power-level {
   background: rgba(37, 99, 235, 0.1);
-  color: #2563eb;
+  color: #3a6c8c;
   border: 1px solid rgba(37, 99, 235, 0.2);
 }
 
 .power-good {
-  color: #059669 !important;
+  color: #3f8268 !important;
   border-color: rgba(5, 150, 105, 0.3) !important;
-  background: linear-gradient(135deg, rgba(5, 150, 105, 0.1), rgba(16, 185, 129, 0.05)) !important;
+  background: linear-gradient(135deg, rgba(5, 150, 105, 0.1), rgba(79, 155, 126, 0.05)) !important;
 }
 .power-good .power-level {
   background: rgba(5, 150, 105, 0.1);
-  color: #059669;
+  color: #3f8268;
   border: 1px solid rgba(5, 150, 105, 0.2);
 }
 
 .power-average {
-  color: #d97706 !important;
-  border-color: rgba(217, 119, 6, 0.3) !important;
-  background: linear-gradient(135deg, rgba(217, 119, 6, 0.1), rgba(245, 158, 11, 0.05)) !important;
+  color: #a97528 !important;
+  border-color: rgba(169, 117, 40, 0.3) !important;
+  background: linear-gradient(135deg, rgba(169, 117, 40, 0.1), rgba(198, 148, 49, 0.05)) !important;
 }
 .power-average .power-level {
-  background: rgba(217, 119, 6, 0.1);
-  color: #d97706;
-  border: 1px solid rgba(217, 119, 6, 0.2);
+  background: rgba(169, 117, 40, 0.1);
+  color: #a97528;
+  border: 1px solid rgba(169, 117, 40, 0.2);
 }
 
 .power-weak {
-  color: #6b7280 !important;
+  color: #78736a !important;
   border-color: rgba(107, 114, 128, 0.3) !important;
   background: linear-gradient(135deg, rgba(107, 114, 128, 0.1), rgba(156, 163, 175, 0.05)) !important;
 }
 .power-weak .power-level {
   background: rgba(107, 114, 128, 0.1);
-  color: #6b7280;
+  color: #78736a;
   border: 1px solid rgba(107, 114, 128, 0.2);
 }
 
@@ -1998,13 +1998,13 @@ const requestJoinSect = (sect: WorldFaction) => {
 }
 
 .area-tag {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(37, 99, 235, 0.1));
-  color: #3b82f6;
+  background: linear-gradient(135deg, rgba(76, 135, 173, 0.1), rgba(37, 99, 235, 0.1));
+  color: #4c87ad;
   padding: 0.25rem 0.5rem;
   border-radius: 6px;
   font-size: 0.75rem;
   font-weight: 500;
-  border: 1px solid rgba(59, 130, 246, 0.2);
+  border: 1px solid rgba(76, 135, 173, 0.2);
 }
 
 .strategic-value {
@@ -2029,7 +2029,7 @@ const requestJoinSect = (sect: WorldFaction) => {
 
 .value-fill {
   height: 100%;
-  background: linear-gradient(90deg, #22c55e, #16a34a);
+  background: linear-gradient(90deg, #5f9b6a, #4e8557);
   transition: width 0.3s ease;
 }
 

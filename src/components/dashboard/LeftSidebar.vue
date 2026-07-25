@@ -656,23 +656,23 @@ const exitToMenu = async () => {
   font-family: monospace;
   font-size: 0.75rem;
   font-weight: 600;
-  color: #67e8f9;
+  color: #8cc3d1;
   padding: 0.25rem 0.6rem;
-  background: linear-gradient(135deg, rgba(34, 211, 238, 0.12) 0%, rgba(56, 189, 248, 0.08) 100%);
-  border: 1px solid rgba(34, 211, 238, 0.35);
+  background: linear-gradient(135deg, rgba(111, 178, 198, 0.12) 0%, rgba(56, 189, 248, 0.08) 100%);
+  border: 1px solid rgba(111, 178, 198, 0.35);
   border-radius: 10px;
   display: inline-block;
   letter-spacing: 0.5px;
-  text-shadow: 0 0 8px rgba(34, 211, 238, 0.5);
-  box-shadow: 0 0 12px rgba(34, 211, 238, 0.15);
+  text-shadow: 0 0 8px rgba(111, 178, 198, 0.5);
+  box-shadow: 0 0 12px rgba(111, 178, 198, 0.15);
   transition: all 0.3s ease;
 }
 
 .app-version:hover {
   color: #a5f3fc;
-  border-color: rgba(34, 211, 238, 0.5);
-  box-shadow: 0 0 16px rgba(34, 211, 238, 0.25);
-  text-shadow: 0 0 12px rgba(34, 211, 238, 0.7);
+  border-color: rgba(111, 178, 198, 0.5);
+  box-shadow: 0 0 16px rgba(111, 178, 198, 0.25);
+  text-shadow: 0 0 12px rgba(111, 178, 198, 0.7);
 }
 
 .sidebar-title {
@@ -882,41 +882,41 @@ const exitToMenu = async () => {
 
 /* 分类颜色主题 */
 .function-btn.primary .btn-icon {
-  background: rgba(59, 130, 246, 0.08);
-  color: rgb(59, 130, 246);
+  background: rgba(76, 135, 173, 0.08);
+  color: rgb(76, 135, 173);
 }
 
 .function-btn.primary:hover .btn-icon {
-  background: rgba(59, 130, 246, 0.12);
+  background: rgba(76, 135, 173, 0.12);
 }
 
 .function-btn.secondary .btn-icon {
-  background: rgba(16, 185, 129, 0.08);
-  color: rgb(16, 185, 129);
+  background: rgba(79, 155, 126, 0.08);
+  color: rgb(79, 155, 126);
 }
 
 .function-btn.secondary:hover .btn-icon {
-  background: rgba(16, 185, 129, 0.12);
+  background: rgba(79, 155, 126, 0.12);
 }
 
 /* 修炼系统 - 金色 */
 .function-btn.cultivation .btn-icon {
-  background: rgba(245, 158, 11, 0.08);
-  color: rgb(245, 158, 11);
+  background: rgba(198, 148, 49, 0.08);
+  color: rgb(198, 148, 49);
 }
 
 .function-btn.cultivation:hover .btn-icon {
-  background: rgba(245, 158, 11, 0.12);
+  background: rgba(198, 148, 49, 0.12);
 }
 
 /* 任务探索 - 紫色 */
 .function-btn.quest .btn-icon {
-  background: rgba(139, 92, 246, 0.08);
-  color: rgb(139, 92, 246);
+  background: rgba(138, 111, 168, 0.08);
+  color: rgb(138, 111, 168);
 }
 
 .function-btn.quest:hover .btn-icon {
-  background: rgba(139, 92, 246, 0.12);
+  background: rgba(138, 111, 168, 0.12);
 }
 
 .function-btn.system .btn-icon {
@@ -964,13 +964,13 @@ const exitToMenu = async () => {
 
 /* 退出按钮特殊样式 */
 .exit-btn {
-  border-color: rgba(239, 68, 68, 0.3);
-  background: rgba(239, 68, 68, 0.04);
+  border-color: rgba(195, 75, 60, 0.3);
+  background: rgba(195, 75, 60, 0.04);
 }
 
 .exit-btn:hover {
-  background: rgba(239, 68, 68, 0.08);
-  border-color: rgba(239, 68, 68, 0.4);
+  background: rgba(195, 75, 60, 0.08);
+  border-color: rgba(195, 75, 60, 0.4);
 }
 
 .exit-btn .btn-text {
@@ -978,34 +978,34 @@ const exitToMenu = async () => {
 }
 
 .exit-btn .btn-desc {
-  color: rgba(239, 68, 68, 0.6);
+  color: rgba(195, 75, 60, 0.6);
 }
 
 .exit-btn .btn-icon {
-  background: rgba(239, 68, 68, 0.08);
+  background: rgba(195, 75, 60, 0.08);
   color: var(--color-error);
 }
 
 .exit-btn:hover .btn-icon {
-  background: rgba(239, 68, 68, 0.12);
+  background: rgba(195, 75, 60, 0.12);
 }
 
 /* 管理员按钮样式 */
 .function-btn.admin .btn-icon {
-  background: rgba(245, 158, 11, 0.08);
-  color: rgb(245, 158, 11);
+  background: rgba(198, 148, 49, 0.08);
+  color: rgb(198, 148, 49);
 }
 
 .function-btn.admin:hover .btn-icon {
-  background: rgba(245, 158, 11, 0.12);
+  background: rgba(198, 148, 49, 0.12);
 }
 
 .function-btn.admin .btn-text {
-  color: rgb(245, 158, 11);
+  color: rgb(198, 148, 49);
 }
 
 .function-btn.admin .btn-desc {
-  color: rgba(245, 158, 11, 0.6);
+  color: rgba(198, 148, 49, 0.6);
 }
 
 /* 深色主题无需额外适配：已统一使用主题变量 */

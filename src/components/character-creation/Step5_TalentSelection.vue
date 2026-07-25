@@ -397,7 +397,7 @@ const editInitialData = computed(() => {
   align-items: center;
   height: 100%;
   font-size: 1.1rem;
-  color: #94a3b8;
+  color: #a09a8d;
   font-style: italic;
 }
 
@@ -413,7 +413,7 @@ const editInitialData = computed(() => {
 .talent-left-panel {
   display: flex;
   flex-direction: column;
-  background: rgba(30, 41, 59, 0.5);
+  background: rgba(30, 34, 40, 0.5);
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 12px;
   overflow: hidden;
@@ -425,7 +425,7 @@ const editInitialData = computed(() => {
   gap: 0.5rem;
   padding: 0.75rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  background: rgba(30, 41, 59, 0.3);
+  background: rgba(30, 34, 40, 0.3);
   justify-content: center;
 }
 
@@ -433,8 +433,8 @@ const editInitialData = computed(() => {
   padding: 0.5rem 1rem;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
-  background: rgba(30, 41, 59, 0.6);
-  color: #cbd5e1;
+  background: rgba(30, 34, 40, 0.6);
+  color: #c4bdad;
   cursor: pointer;
   transition: all 0.25s ease;
   font-size: 0.85rem;
@@ -444,27 +444,27 @@ const editInitialData = computed(() => {
 }
 
 .top-actions-container .action-item:hover {
-  background: rgba(51, 65, 85, 0.8);
-  border-color: rgba(147, 197, 253, 0.3);
-  color: #f1f5f9;
+  background: rgba(61, 58, 53, 0.8);
+  border-color: rgba(166, 198, 218, 0.3);
+  color: #ece7dc;
 }
 
 /* 亮色主题顶部按钮 */
 [data-theme="light"] .top-actions-container {
-  background: rgba(241, 245, 249, 0.6);
-  border-bottom-color: rgba(59, 130, 246, 0.15);
+  background: rgba(236, 231, 220, 0.6);
+  border-bottom-color: rgba(76, 135, 173, 0.15);
 }
 
 [data-theme="light"] .top-actions-container .action-item {
   background: rgba(255, 255, 255, 0.8);
-  border-color: rgba(59, 130, 246, 0.3);
-  color: #2563eb;
+  border-color: rgba(76, 135, 173, 0.3);
+  color: #3a6c8c;
 }
 
 [data-theme="light"] .top-actions-container .action-item:hover {
-  background: rgba(59, 130, 246, 0.1);
-  border-color: #3b82f6;
-  color: #1e40af;
+  background: rgba(76, 135, 173, 0.1);
+  border-color: #4c87ad;
+  color: #27506b;
 }
 
 .talent-list-container {
@@ -472,13 +472,13 @@ const editInitialData = computed(() => {
   overflow-y: auto;
   padding: 0.5rem;
   scrollbar-width: thin;
-  scrollbar-color: rgba(147, 197, 253, 0.3) transparent;
+  scrollbar-color: rgba(166, 198, 218, 0.3) transparent;
 }
 
 .talent-list-container::-webkit-scrollbar { width: 6px; }
 .talent-list-container::-webkit-scrollbar-track { background: transparent; }
-.talent-list-container::-webkit-scrollbar-thumb { background: rgba(147, 197, 253, 0.3); border-radius: 3px; }
-.talent-list-container::-webkit-scrollbar-thumb:hover { background: rgba(147, 197, 253, 0.5); }
+.talent-list-container::-webkit-scrollbar-thumb { background: rgba(166, 198, 218, 0.3); border-radius: 3px; }
+.talent-list-container::-webkit-scrollbar-thumb:hover { background: rgba(166, 198, 218, 0.5); }
 
 /* ========== 选项卡样式 ========== */
 .talent-item {
@@ -491,7 +491,7 @@ const editInitialData = computed(() => {
   cursor: pointer;
   transition: all 0.25s ease;
   border: 1px solid transparent;
-  background: rgba(30, 41, 59, 0.4);
+  background: rgba(30, 34, 40, 0.4);
 }
 
 .item-content {
@@ -526,7 +526,7 @@ const editInitialData = computed(() => {
 .edit-btn, .delete-btn {
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.15);
-  color: #94a3b8;
+  color: #a09a8d;
   cursor: pointer;
   padding: 0.35rem;
   border-radius: 4px;
@@ -537,33 +537,33 @@ const editInitialData = computed(() => {
 }
 
 .edit-btn:hover {
-  color: #93c5fd;
-  background: rgba(147, 197, 253, 0.1);
+  color: #a6c6da;
+  background: rgba(166, 198, 218, 0.1);
 }
 
 .delete-btn:hover {
-  color: #f87171;
-  background: rgba(248, 113, 113, 0.1);
+  color: #cd6f5f;
+  background: rgba(205, 111, 95, 0.1);
 }
 
 .talent-item:hover {
-  background: rgba(51, 65, 85, 0.6);
-  border-color: rgba(147, 197, 253, 0.2);
+  background: rgba(61, 58, 53, 0.6);
+  border-color: rgba(166, 198, 218, 0.2);
 }
 
 .talent-item.selected {
   background: rgba(30, 58, 138, 0.4);
-  border-color: rgba(147, 197, 253, 0.4);
-  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15);
+  border-color: rgba(166, 198, 218, 0.4);
+  box-shadow: 0 2px 8px rgba(76, 135, 173, 0.15);
 }
 
 .talent-name {
   font-weight: 500;
-  color: #f1f5f9;
+  color: #ece7dc;
 }
 
 .talent-item.selected .talent-name {
-  color: #bfdbfe;
+  color: #c7d9e2;
 }
 
 .single-actions-container {
@@ -605,7 +605,7 @@ const editInitialData = computed(() => {
 
 /* ========== 右侧详情面板 ========== */
 .talent-details-container {
-  background: rgba(30, 41, 59, 0.5);
+  background: rgba(30, 34, 40, 0.5);
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 12px;
   padding: 1.5rem;
@@ -623,10 +623,10 @@ const editInitialData = computed(() => {
 
 .talent-details h2 {
   margin: 0 0 1rem 0;
-  color: #93c5fd;
+  color: #a6c6da;
   flex-shrink: 0;
   font-size: 1.5rem;
-  text-shadow: 0 0 20px rgba(147, 197, 253, 0.3);
+  text-shadow: 0 0 20px rgba(166, 198, 218, 0.3);
 }
 
 .description-scroll {
@@ -636,18 +636,18 @@ const editInitialData = computed(() => {
   margin-bottom: 1rem;
   padding-right: 0.5rem;
   scrollbar-width: thin;
-  scrollbar-color: rgba(147, 197, 253, 0.3) transparent;
+  scrollbar-color: rgba(166, 198, 218, 0.3) transparent;
 }
 
 .description-scroll p {
   margin: 0;
   white-space: pre-wrap;
-  color: #94a3b8;
+  color: #a09a8d;
 }
 
 .description-scroll::-webkit-scrollbar { width: 6px; }
 .description-scroll::-webkit-scrollbar-track { background: transparent; }
-.description-scroll::-webkit-scrollbar-thumb { background: rgba(147, 197, 253, 0.3); border-radius: 3px; }
+.description-scroll::-webkit-scrollbar-thumb { background: rgba(166, 198, 218, 0.3); border-radius: 3px; }
 
 /* 响应式适配 - 手机端优化 */
 @media (max-width: 1200px) {
@@ -910,48 +910,48 @@ const editInitialData = computed(() => {
 }
 
 [data-theme="light"] .talent-item:hover {
-  background: rgba(241, 245, 249, 0.95);
-  border-color: rgba(59, 130, 246, 0.2);
+  background: rgba(236, 231, 220, 0.95);
+  border-color: rgba(76, 135, 173, 0.2);
 }
 
 [data-theme="light"] .talent-item.selected {
   background: rgba(219, 234, 254, 0.8);
-  border-color: rgba(59, 130, 246, 0.4);
+  border-color: rgba(76, 135, 173, 0.4);
 }
 
 [data-theme="light"] .talent-name {
-  color: #1e293b;
+  color: #1e2228;
 }
 
 [data-theme="light"] .talent-item.selected .talent-name {
-  color: #1e40af;
+  color: #27506b;
 }
 
 [data-theme="light"] .talent-details h2 {
-  color: #2563eb;
+  color: #3a6c8c;
 }
 
 [data-theme="light"] .description-scroll p {
-  color: #475569;
+  color: #56534b;
 }
 
 /* 亮色主题下的编辑/删除按钮 */
 [data-theme="light"] .edit-btn,
 [data-theme="light"] .delete-btn {
-  background: rgba(241, 245, 249, 0.8);
-  border: 1px solid rgba(59, 130, 246, 0.15);
-  color: #475569;
+  background: rgba(236, 231, 220, 0.8);
+  border: 1px solid rgba(76, 135, 173, 0.15);
+  color: #56534b;
 }
 
 [data-theme="light"] .edit-btn:hover {
-  color: #2563eb;
-  background: rgba(59, 130, 246, 0.1);
-  border-color: rgba(59, 130, 246, 0.3);
+  color: #3a6c8c;
+  background: rgba(76, 135, 173, 0.1);
+  border-color: rgba(76, 135, 173, 0.3);
 }
 
 [data-theme="light"] .delete-btn:hover {
-  color: #dc2626;
-  background: rgba(239, 68, 68, 0.1);
-  border-color: rgba(239, 68, 68, 0.3);
+  color: #a83a2c;
+  background: rgba(195, 75, 60, 0.1);
+  border-color: rgba(195, 75, 60, 0.3);
 }
 </style>

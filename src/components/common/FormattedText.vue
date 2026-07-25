@@ -795,28 +795,30 @@ const parseDetailSource = (detail: string) => {
   padding-bottom: 1.5rem;
 }
 
-/* 环境描写 - 青色 */
+/* 正文强调色只保留两族：冷(石青)=环境/心理，暖(藤黄/赭石)=对话/引用，其余靠字重与斜体区分 */
+
+/* 环境描写 - 石青 */
 .text-environment {
-  color: #0891b2;
+  color: #3d7d90;
   font-weight: 500;
 }
 
-/* 心理描写 - 紫色 */
+/* 心理描写 - 石青偏灰 + 斜体 */
 .text-psychology {
-  color: #7c3aed;
+  color: #4e6f80;
   font-style: italic;
   font-weight: 500;
 }
 
-/* 对话 - 橙色加粗 */
+/* 对话 - 藤黄加粗 */
 .text-dialogue {
-  color: #d97706;
+  color: #a97528;
   font-weight: 700;
 }
 
-/* 引用/独白 - 橙色斜体加粗 */
+/* 引用/独白 - 赭石斜体加粗 */
 .text-quote {
-  color: rgb(254 125 0);
+  color: #8c5f34;
   font-style: italic;
   font-weight: 700;
 }
@@ -826,18 +828,17 @@ const parseDetailSource = (detail: string) => {
   color: var(--color-text, #1a1a1a);
 }
 
-/* Markdown 粗体 - 低调的强调，使用微妙的颜色和字重 */
+/* Markdown 粗体 - 只用字重强调，不再另开一个近白色 */
 .text-bold {
   font-weight: 600;
-  color: #2c3e50;
+  color: var(--color-text);
   letter-spacing: 0.01em;
 }
 
-/* Markdown 斜体 - 优雅的倾斜，略微透明 */
+/* Markdown 斜体 */
 .text-italic {
   font-style: italic;
-  opacity: 0.92;
-  color: #34495e;
+  color: var(--color-text-secondary);
 }
 
 /* 判定卡片样式 - 清爽版 */
@@ -862,38 +863,38 @@ const parseDetailSource = (detail: string) => {
 
 /* 成功状态 */
 .judgement-card.is-success {
-  border-left: 4px solid #10b981;
-  background: rgba(16, 185, 129, 0.05); /* 极淡的绿色背景 */
-  --card-color: #10b981;
+  border-left: 4px solid #4f9b7e;
+  background: rgba(79, 155, 126, 0.05); /* 极淡的绿色背景 */
+  --card-color: #4f9b7e;
 }
 
 .judgement-card.is-great-success {
-  border-left: 4px solid #f59e0b;
-  background: rgba(245, 158, 11, 0.05);
-  --card-color: #f59e0b;
+  border-left: 4px solid #c69431;
+  background: rgba(198, 148, 49, 0.05);
+  --card-color: #c69431;
 }
 
 /* 失败状态 */
 .judgement-card.is-failure {
-  border-left: 4px solid #ef4444;
-  background: rgba(239, 68, 68, 0.05);
-  --card-color: #ef4444;
+  border-left: 4px solid #c34b3c;
+  background: rgba(195, 75, 60, 0.05);
+  --card-color: #c34b3c;
 }
 
 .judgement-card.is-great-failure {
-  border-left: 4px solid #a855f7;
-  background: rgba(168, 85, 247, 0.05);
-  --card-color: #a855f7;
+  border-left: 4px solid #9668b0;
+  background: rgba(150, 104, 176, 0.05);
+  --card-color: #9668b0;
 }
 
 @keyframes pulse-success {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.4); }
-  50% { box-shadow: 0 0 0 8px rgba(251, 191, 36, 0); }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(213, 170, 74, 0.4); }
+  50% { box-shadow: 0 0 0 8px rgba(213, 170, 74, 0); }
 }
 
 @keyframes pulse-failure {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.4); }
-  50% { box-shadow: 0 0 0 8px rgba(168, 85, 247, 0); }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(150, 104, 176, 0.4); }
+  50% { box-shadow: 0 0 0 8px rgba(150, 104, 176, 0); }
 }
 
 /* 图标区域 */
@@ -906,8 +907,8 @@ const parseDetailSource = (detail: string) => {
   justify-content: center;
   background: white;
   border-radius: 12px;
-  border: 2px solid var(--card-color, #6366f1);
-  color: var(--card-color, #6366f1);
+  border: 2px solid var(--card-color, #6f7fa8);
+  color: var(--card-color, #6f7fa8);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
@@ -930,14 +931,14 @@ const parseDetailSource = (detail: string) => {
 .judgement-title {
   font-size: 1.125rem;
   font-weight: 700;
-  color: #1e293b;
+  color: #1e2228;
   letter-spacing: -0.01em;
   opacity: 1;
 }
 
 /* 标题渐变色 - 根据结果 */
 .judgement-title.title-perfect {
-  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
+  background: linear-gradient(135deg, #d5aa4a 0%, #c69431 50%, #a97528 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -945,7 +946,7 @@ const parseDetailSource = (detail: string) => {
 }
 
 .judgement-title.title-great-success {
-  background: linear-gradient(135deg, #34d399 0%, #10b981 50%, #059669 100%);
+  background: linear-gradient(135deg, #34d399 0%, #4f9b7e 50%, #3f8268 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -953,7 +954,7 @@ const parseDetailSource = (detail: string) => {
 }
 
 .judgement-title.title-success {
-  background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 50%, #2563eb 100%);
+  background: linear-gradient(135deg, #78a8c6 0%, #4c87ad 50%, #3a6c8c 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -961,7 +962,7 @@ const parseDetailSource = (detail: string) => {
 }
 
 .judgement-title.title-failure {
-  background: linear-gradient(135deg, #f87171 0%, #ef4444 50%, #dc2626 100%);
+  background: linear-gradient(135deg, #cd6f5f 0%, #c34b3c 50%, #a83a2c 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -969,7 +970,7 @@ const parseDetailSource = (detail: string) => {
 }
 
 .judgement-title.title-great-failure {
-  background: linear-gradient(135deg, #c084fc 0%, #a855f7 50%, #9333ea 100%);
+  background: linear-gradient(135deg, #b294c6 0%, #9668b0 50%, #7c5296 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -980,7 +981,7 @@ const parseDetailSource = (detail: string) => {
   display: inline-flex;
   align-items: center;
   padding: 0.375rem 0.875rem;
-  background: var(--card-color, #6366f1);
+  background: var(--card-color, #6f7fa8);
   color: white;
   border-radius: 20px;
   font-size: 0.875rem;
@@ -1004,7 +1005,7 @@ const parseDetailSource = (detail: string) => {
   padding: 0.5rem 0.875rem;
   background: white;
   border-radius: 10px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #ddd7c9;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
   min-width: fit-content;
 }
@@ -1021,12 +1022,12 @@ const parseDetailSource = (detail: string) => {
 
 .lucky-item.lucky-positive {
   background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-  border-color: #86efac;
+  border-color: #9dc5a3;
 }
 
 .lucky-item.lucky-negative {
-  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
-  border-color: #fca5a5;
+  background: linear-gradient(135deg, #fef2f2 0%, #e6d5cf 100%);
+  border-color: #d49a90;
 }
 
 .lucky-value {
@@ -1034,23 +1035,23 @@ const parseDetailSource = (detail: string) => {
 }
 
 .lucky-positive .lucky-value {
-  color: #16a34a;
+  color: #4e8557;
 }
 
 .lucky-negative .lucky-value {
-  color: #dc2626;
+  color: #a83a2c;
 }
 
 .details-list {
   width: 100%;
   margin-top: 0.5rem;
   padding-top: 0.5rem;
-  border-top: 1px solid #e2e8f0;
+  border-top: 1px solid #ddd7c9;
 }
 
 .detail-item {
   font-size: 0.875rem;
-  color: #64748b;
+  color: #7c776c;
   padding: 0.25rem 0;
   display: flex;
   align-items: center;
@@ -1059,23 +1060,23 @@ const parseDetailSource = (detail: string) => {
 
 .detail-item::before {
   content: '•';
-  color: #94a3b8;
+  color: #a09a8d;
 }
 
 .detail-label {
   font-weight: 600;
-  color: #475569;
+  color: #56534b;
 }
 
 .detail-value {
   font-weight: 700;
-  color: #1e293b;
+  color: #1e2228;
   min-width: 2rem;
 }
 
 .detail-source {
   font-size: 0.75rem;
-  color: #94a3b8;
+  color: #a09a8d;
   font-style: italic;
 }
 
@@ -1094,7 +1095,7 @@ const parseDetailSource = (detail: string) => {
 .stat-label {
   font-size: 0.75rem;
   font-weight: 500;
-  color: #64748b;
+  color: #7c776c;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -1102,7 +1103,7 @@ const parseDetailSource = (detail: string) => {
 .stat-value {
   font-size: 1.125rem;
   font-weight: 700;
-  color: #1e293b;
+  color: #1e2228;
 }
 
 .dice-roll, .attribute-check {
@@ -1139,8 +1140,8 @@ const parseDetailSource = (detail: string) => {
 }
 
 .dice-roll .value {
-  color: #6366f1;
-  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #6f7fa8;
+  background: linear-gradient(135deg, #6f7fa8, #8a6fa8);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -1148,40 +1149,39 @@ const parseDetailSource = (detail: string) => {
 
 /* 深色主题适配 */
 [data-theme="dark"] .text-normal {
-  color: var(--color-text, #f7f7f5);
+  color: var(--color-text, #e8e3d8);
 }
 
 [data-theme="dark"] .text-environment {
-  color: #22d3ee;
+  color: #7fb0c4; /* 石青亮 */
 }
 
 [data-theme="dark"] .text-psychology {
-  color: #a78bfa;
+  color: #9fb4c2; /* 同族偏灰，靠斜体区分 */
 }
 
 [data-theme="dark"] .text-dialogue {
-  color: #fb923c;
+  color: #cfa85c; /* 藤黄 */
 }
 
 [data-theme="dark"] .text-quote {
-  color: rgb(254 125 0);
+  color: #b98a5a; /* 赭石 */
 }
 
 [data-theme="dark"] .text-bold {
   font-weight: 600;
-  color: #e2e8f0;
+  color: var(--color-text);
   letter-spacing: 0.01em;
 }
 
 [data-theme="dark"] .text-italic {
   font-style: italic;
-  opacity: 0.88;
-  color: #cbd5e1;
+  color: var(--color-text-secondary);
 }
 
 [data-theme="dark"] .judgement-card {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.02) 0%, var(--color-background, rgb(30, 41, 59)) 100%);
-  border-color: var(--color-border, rgba(173, 216, 230, 0.5));
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.02) 0%, var(--color-background, rgb(30, 34, 40)) 100%);
+  border-color: var(--color-border, rgba(208, 201, 184, 0.5));
 }
 
 [data-theme="dark"] .card-header {
@@ -1190,39 +1190,39 @@ const parseDetailSource = (detail: string) => {
 
 /* 深色主题标题渐变色 */
 [data-theme="dark"] .judgement-title {
-  color: #f1f5f9;
+  color: #ece7dc;
 }
 
 [data-theme="dark"] .judgement-title.title-perfect {
-  background: linear-gradient(135deg, #fcd34d 0%, #fbbf24 50%, #f59e0b 100%);
+  background: linear-gradient(135deg, #dfc06f 0%, #d5aa4a 50%, #c69431 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 [data-theme="dark"] .judgement-title.title-great-success {
-  background: linear-gradient(135deg, #6ee7b7 0%, #34d399 50%, #10b981 100%);
+  background: linear-gradient(135deg, #8fc0a6 0%, #34d399 50%, #4f9b7e 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 [data-theme="dark"] .judgement-title.title-success {
-  background: linear-gradient(135deg, #93c5fd 0%, #60a5fa 50%, #3b82f6 100%);
+  background: linear-gradient(135deg, #a6c6da 0%, #78a8c6 50%, #4c87ad 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 [data-theme="dark"] .judgement-title.title-failure {
-  background: linear-gradient(135deg, #fca5a5 0%, #f87171 50%, #ef4444 100%);
+  background: linear-gradient(135deg, #d49a90 0%, #cd6f5f 50%, #c34b3c 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 [data-theme="dark"] .judgement-title.title-great-failure {
-  background: linear-gradient(135deg, #d8b4fe 0%, #c084fc 50%, #a855f7 100%);
+  background: linear-gradient(135deg, #d8b4fe 0%, #b294c6 50%, #9668b0 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -1231,8 +1231,8 @@ const parseDetailSource = (detail: string) => {
 [data-theme="dark"] .result-text,
 [data-theme="dark"] .dice-roll,
 [data-theme="dark"] .attribute-check {
-  background: var(--color-surface-light, #414868);
-  border-color: var(--color-border, rgba(173, 216, 230, 0.5));
+  background: var(--color-surface-light, #3a3d45);
+  border-color: var(--color-border, rgba(208, 201, 184, 0.5));
 }
 
 [data-theme="dark"] .dice-roll .label,
@@ -1259,17 +1259,17 @@ const parseDetailSource = (detail: string) => {
   height: 28px;
   padding: 0;
   background: rgba(255, 255, 255, 0.8);
-  border: 1px solid #e2e8f0;
+  border: 1px solid #ddd7c9;
   border-radius: 50%;
   cursor: pointer;
   transition: all 0.2s ease;
-  color: #64748b;
+  color: #7c776c;
 }
 
 .help-btn:hover {
   background: white;
-  border-color: var(--card-color, #6366f1);
-  color: var(--card-color, #6366f1);
+  border-color: var(--card-color, #6f7fa8);
+  color: var(--card-color, #6f7fa8);
   transform: scale(1.1);
 }
 
@@ -1326,8 +1326,8 @@ const parseDetailSource = (detail: string) => {
   align-items: center;
   justify-content: space-between;
   padding: 1.5rem;
-  border-bottom: 1px solid #e2e8f0;
-  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border-bottom: 1px solid #ddd7c9;
+  background: linear-gradient(135deg, #f2eee4 0%, #ece7dc 100%);
 }
 
 .help-modal-header h3 {
@@ -1345,17 +1345,17 @@ const parseDetailSource = (detail: string) => {
   height: 32px;
   padding: 0;
   background: white;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #ddd7c9;
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
-  color: #64748b;
+  color: #7c776c;
 }
 
 .close-btn:hover {
-  background: #fee2e2;
-  border-color: #ef4444;
-  color: #ef4444;
+  background: #e6d5cf;
+  border-color: #c34b3c;
+  color: #c34b3c;
 }
 
 .help-modal-content {
@@ -1398,7 +1398,7 @@ const parseDetailSource = (detail: string) => {
 .formula-box {
   padding: 1rem;
   background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-  border-left: 4px solid #f59e0b;
+  border-left: 4px solid #c69431;
   border-radius: 8px;
   margin-bottom: 0.75rem;
   font-size: 0.875rem;
@@ -1429,27 +1429,27 @@ const parseDetailSource = (detail: string) => {
 
 .result-item.perfect {
   background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
-  border-color: #fbbf24;
+  border-color: #d5aa4a;
 }
 
 .result-item.great-success {
   background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-  border-color: #86efac;
+  border-color: #9dc5a3;
 }
 
 .result-item.success {
-  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
-  border-color: #93c5fd;
+  background: linear-gradient(135deg, #eaf0f2 0%, #dde7eb 100%);
+  border-color: #a6c6da;
 }
 
 .result-item.failure {
-  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
-  border-color: #fca5a5;
+  background: linear-gradient(135deg, #fef2f2 0%, #e6d5cf 100%);
+  border-color: #d49a90;
 }
 
 .result-item.critical-failure {
   background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
-  border-color: #c084fc;
+  border-color: #b294c6;
 }
 
 .result-label {
@@ -1482,21 +1482,21 @@ const parseDetailSource = (detail: string) => {
 }
 
 /* 仅在标签上应用颜色 */
-.result-item.perfect .result-label { color: #f59e0b; }
-.result-item.great-success .result-label { color: #10b981; }
-.result-item.success .result-label { color: #10b981; }
-.result-item.failure .result-label { color: #ef4444; }
-.result-item.critical-failure .result-label { color: #a855f7; }
+.result-item.perfect .result-label { color: #c69431; }
+.result-item.great-success .result-label { color: #4f9b7e; }
+.result-item.success .result-label { color: #4f9b7e; }
+.result-item.failure .result-label { color: #c34b3c; }
+.result-item.critical-failure .result-label { color: #9668b0; }
 
 .formula-note {
   padding: 0.75rem 1rem;
-  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
-  border-left: 4px solid #3b82f6;
+  background: linear-gradient(135deg, #eaf0f2 0%, #dde7eb 100%);
+  border-left: 4px solid #4c87ad;
   border-radius: 8px;
   margin-bottom: 0.75rem;
   font-size: 0.875rem;
   line-height: 1.6;
-  color: #1e40af;
+  color: #27506b;
 }
 
 .formula-note strong {
@@ -1507,7 +1507,7 @@ const parseDetailSource = (detail: string) => {
 .tips-list {
   margin: 0;
   padding-left: 1.25rem;
-  color: #475569;
+  color: #56534b;
   line-height: 1.8;
 }
 
@@ -1526,15 +1526,15 @@ const parseDetailSource = (detail: string) => {
   flex-direction: column;
   gap: 0.25rem;
   padding: 0.75rem;
-  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  background: linear-gradient(135deg, #f2eee4 0%, #ece7dc 100%);
   border-radius: 8px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #ddd7c9;
 }
 
 .type-name {
   font-weight: 600;
   font-size: 0.875rem;
-  color: #1e293b;
+  color: #1e2228;
 }
 
 .type-attrs {
@@ -1551,9 +1551,9 @@ const parseDetailSource = (detail: string) => {
 
 .attr-card {
   padding: 0.75rem;
-  background: linear-gradient(135deg, #fefefe 0%, #f8fafc 100%);
+  background: linear-gradient(135deg, #fefefe 0%, #f2eee4 100%);
   border-radius: 10px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #ddd7c9;
 }
 
 .attr-header {
@@ -1570,7 +1570,7 @@ const parseDetailSource = (detail: string) => {
 .attr-name {
   font-weight: 600;
   font-size: 0.875rem;
-  color: #1e293b;
+  color: #1e2228;
 }
 
 .attr-card p {
@@ -1582,7 +1582,7 @@ const parseDetailSource = (detail: string) => {
 
 /* 深色主题适配 */
 [data-theme="dark"] .help-modal {
-  background: var(--color-surface, #1e293b);
+  background: var(--color-surface, #1e2228);
   color: var(--color-text, #f7f7f5);
 }
 
@@ -1598,38 +1598,38 @@ const parseDetailSource = (detail: string) => {
 
 [data-theme="dark"] .help-section ol,
 [data-theme="dark"] .tips-list {
-  color: var(--color-text-secondary, #94a3b8);
+  color: var(--color-text-secondary, #a09a8d);
 }
 
 /* -- 深色主题适配 -- */
 /* 仅调整标签颜色以适应深色背景 */
-[data-theme="dark"] .result-item.perfect .result-label { color: #fcd34d; }
-[data-theme="dark"] .result-item.great-success .result-label { color: #86efac; }
-[data-theme="dark"] .result-item.success .result-label { color: #93c5fd; }
-[data-theme="dark"] .result-item.failure .result-label { color: #fca5a5; }
+[data-theme="dark"] .result-item.perfect .result-label { color: #dfc06f; }
+[data-theme="dark"] .result-item.great-success .result-label { color: #9dc5a3; }
+[data-theme="dark"] .result-item.success .result-label { color: #a6c6da; }
+[data-theme="dark"] .result-item.failure .result-label { color: #d49a90; }
 [data-theme="dark"] .result-item.critical-failure .result-label { color: #d8b4fe; }
 
 [data-theme="dark"] .close-btn {
   background: rgba(255, 255, 255, 0.05);
   border-color: var(--color-border, rgba(255, 255, 255, 0.1));
-  color: var(--color-text-secondary, #94a3b8);
+  color: var(--color-text-secondary, #a09a8d);
 }
 
 [data-theme="dark"] .close-btn:hover {
-  background: rgba(239, 68, 68, 0.2);
-  border-color: #ef4444;
+  background: rgba(195, 75, 60, 0.2);
+  border-color: #c34b3c;
 }
 
 [data-theme="dark"] .help-btn {
   background: rgba(255, 255, 255, 0.05);
   border-color: var(--color-border, rgba(255, 255, 255, 0.1));
-  color: var(--color-text-secondary, #94a3b8);
+  color: var(--color-text-secondary, #a09a8d);
 }
 
 [data-theme="dark"] .help-btn:hover {
   background: rgba(255, 255, 255, 0.1);
-  border-color: var(--card-color, #6366f1);
-  color: var(--card-color, #6366f1);
+  border-color: var(--card-color, #6f7fa8);
+  color: var(--card-color, #6f7fa8);
 }
 
 [data-theme="dark"] .type-item {
@@ -1642,7 +1642,7 @@ const parseDetailSource = (detail: string) => {
 }
 
 [data-theme="dark"] .type-attrs {
-  color: var(--color-text-secondary, #94a3b8);
+  color: var(--color-text-secondary, #a09a8d);
 }
 
 [data-theme="dark"] .attr-card {
@@ -1655,47 +1655,47 @@ const parseDetailSource = (detail: string) => {
 }
 
 [data-theme="dark"] .attr-card p {
-  color: var(--color-text-secondary, #94a3b8);
+  color: var(--color-text-secondary, #a09a8d);
 }
 
 [data-theme="dark"] .formula-box {
-  background: linear-gradient(135deg, rgba(251, 191, 36, 0.15) 0%, rgba(245, 158, 11, 0.1) 100%);
-  border-left-color: #f59e0b;
-  color: #fbbf24;
+  background: linear-gradient(135deg, rgba(213, 170, 74, 0.15) 0%, rgba(198, 148, 49, 0.1) 100%);
+  border-left-color: #c69431;
+  color: #d5aa4a;
 }
 
 [data-theme="dark"] .formula-box strong {
-  color: #fcd34d;
+  color: #dfc06f;
 }
 
 /* 深色主题幸运点样式 */
 [data-theme="dark"] .lucky-item.lucky-positive {
-  background: linear-gradient(135deg, rgba(22, 163, 74, 0.15) 0%, rgba(34, 197, 94, 0.1) 100%);
+  background: linear-gradient(135deg, rgba(22, 163, 74, 0.15) 0%, rgba(95, 155, 106, 0.1) 100%);
   border-color: rgba(134, 239, 172, 0.5);
 }
 
 [data-theme="dark"] .lucky-item.lucky-negative {
-  background: linear-gradient(135deg, rgba(220, 38, 38, 0.15) 0%, rgba(239, 68, 68, 0.1) 100%);
+  background: linear-gradient(135deg, rgba(168, 58, 44, 0.15) 0%, rgba(195, 75, 60, 0.1) 100%);
   border-color: rgba(252, 165, 165, 0.5);
 }
 
 [data-theme="dark"] .lucky-positive .lucky-value {
-  color: #4ade80;
+  color: #7cb187;
 }
 
 [data-theme="dark"] .lucky-negative .lucky-value {
-  color: #f87171;
+  color: #cd6f5f;
 }
 
 [data-theme="dark"] .detail-label {
-  color: #94a3b8;
+  color: #a09a8d;
 }
 
 [data-theme="dark"] .detail-value {
-  color: #f1f5f9;
+  color: #ece7dc;
 }
 
 [data-theme="dark"] .detail-source {
-  color: #64748b;
+  color: #7c776c;
 }
 </style>

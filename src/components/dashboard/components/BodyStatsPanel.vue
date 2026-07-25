@@ -353,8 +353,8 @@ const lifespanPercent = computed(() => {
 
 /* 寿元特殊样式 */
 .lifespan-section {
-  background: linear-gradient(135deg, rgba(34, 211, 238, 0.1) 0%, rgba(56, 189, 248, 0.05) 100%);
-  border-color: rgba(34, 211, 238, 0.25);
+  background: linear-gradient(135deg, rgba(111, 178, 198, 0.1) 0%, rgba(56, 189, 248, 0.05) 100%);
+  border-color: rgba(111, 178, 198, 0.25);
 }
 
 /* 区块标题 */
@@ -405,8 +405,8 @@ const lifespanPercent = computed(() => {
 .lifespan-current {
   font-size: 1.8rem;
   font-weight: 800;
-  color: #22d3ee;
-  text-shadow: 0 0 10px rgba(34, 211, 238, 0.3);
+  color: #6fb2c6;
+  text-shadow: 0 0 10px rgba(111, 178, 198, 0.3);
 }
 
 .lifespan-divider {
@@ -437,20 +437,20 @@ const lifespanPercent = computed(() => {
 
 .lifespan-fill {
   height: 100%;
-  background: linear-gradient(90deg, #22d3ee, #38bdf8);
+  background: linear-gradient(90deg, #6fb2c6, #6aa9c2);
   border-radius: 5px;
   transition: width 0.5s ease;
-  box-shadow: 0 0 10px rgba(34, 211, 238, 0.4);
+  box-shadow: 0 0 10px rgba(111, 178, 198, 0.4);
 }
 
 .lifespan-fill.warning {
-  background: linear-gradient(90deg, #fbbf24, #f59e0b);
-  box-shadow: 0 0 10px rgba(251, 191, 36, 0.4);
+  background: linear-gradient(90deg, #d5aa4a, #c69431);
+  box-shadow: 0 0 10px rgba(213, 170, 74, 0.4);
 }
 
 .lifespan-fill.danger {
-  background: linear-gradient(90deg, #f87171, #ef4444);
-  box-shadow: 0 0 10px rgba(248, 113, 113, 0.4);
+  background: linear-gradient(90deg, #cd6f5f, #c34b3c);
+  box-shadow: 0 0 10px rgba(205, 111, 95, 0.4);
 }
 
 .lifespan-hint {
@@ -654,17 +654,17 @@ const lifespanPercent = computed(() => {
 
 .point-tag {
   padding: 0.4rem 0.8rem;
-  background: rgba(239, 68, 68, 0.1);
-  color: #f87171;
-  border: 1px solid rgba(239, 68, 68, 0.25);
+  background: rgba(195, 75, 60, 0.1);
+  color: #cd6f5f;
+  border: 1px solid rgba(195, 75, 60, 0.25);
   border-radius: 999px;
   font-size: 0.85rem;
   transition: all 0.2s;
 }
 
 .point-tag:hover {
-  background: rgba(239, 68, 68, 0.15);
-  border-color: rgba(239, 68, 68, 0.35);
+  background: rgba(195, 75, 60, 0.15);
+  border-color: rgba(195, 75, 60, 0.35);
 }
 
 /* 开发度列表 */

@@ -737,14 +737,14 @@ const filteredInventoryTechniques = computed(() => {
 }
 
 .action-btn.danger {
-  background: rgba(239, 68, 68, 0.1);
-  border-color: rgba(239, 68, 68, 0.3);
-  color: #ef4444;
+  background: rgba(195, 75, 60, 0.1);
+  border-color: rgba(195, 75, 60, 0.3);
+  color: #c34b3c;
 }
 
 .action-btn.danger:hover {
-  background: rgba(239, 68, 68, 0.2);
-  border-color: #ef4444;
+  background: rgba(195, 75, 60, 0.2);
+  border-color: #c34b3c;
 }
 
 /* 修炼统计 */
@@ -1035,36 +1035,36 @@ const filteredInventoryTechniques = computed(() => {
 }
 
 /* 品质文本 */
-.text-quality-仙 { color: #f59e0b; }
-.text-quality-神 { color: #ef4444; }
-.text-quality-圣 { color: #a855f7; }
-.text-quality-道 { color: #3b82f6; }
-.text-quality-天 { color: #22c55e; }
-.text-quality-地 { color: #06b6d4; }
-.text-quality-玄 { color: #8b5cf6; }
-.text-quality-黄 { color: #eab308; }
+.text-quality-仙 { color: #c69431; }
+.text-quality-神 { color: #c34b3c; }
+.text-quality-圣 { color: #9668b0; }
+.text-quality-道 { color: #4c87ad; }
+.text-quality-天 { color: #5f9b6a; }
+.text-quality-地 { color: #4f97ab; }
+.text-quality-玄 { color: #8a6fa8; }
+.text-quality-黄 { color: #bd9a2e; }
 .text-quality-凡 { color: var(--color-text-secondary); }
 
 /* 品质边框 */
-.border-quality-仙 { border-color: rgba(245, 158, 11, 0.4); }
-.border-quality-神 { border-color: rgba(239, 68, 68, 0.4); }
-.border-quality-圣 { border-color: rgba(168, 85, 247, 0.4); }
-.border-quality-道 { border-color: rgba(59, 130, 246, 0.4); }
-.border-quality-天 { border-color: rgba(34, 197, 94, 0.4); }
+.border-quality-仙 { border-color: rgba(198, 148, 49, 0.4); }
+.border-quality-神 { border-color: rgba(195, 75, 60, 0.4); }
+.border-quality-圣 { border-color: rgba(150, 104, 176, 0.4); }
+.border-quality-道 { border-color: rgba(76, 135, 173, 0.4); }
+.border-quality-天 { border-color: rgba(95, 155, 106, 0.4); }
 .border-quality-地 { border-color: rgba(6, 182, 212, 0.4); }
-.border-quality-玄 { border-color: rgba(139, 92, 246, 0.4); }
+.border-quality-玄 { border-color: rgba(138, 111, 168, 0.4); }
 .border-quality-黄 { border-color: rgba(234, 179, 8, 0.4); }
 .border-quality-凡 { border-color: var(--color-border); }
 
 /* 品质背景 */
-.bg-quality-仙 { background: rgba(245, 158, 11, 0.15); color: #f59e0b; }
-.bg-quality-神 { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
-.bg-quality-圣 { background: rgba(168, 85, 247, 0.15); color: #a855f7; }
-.bg-quality-道 { background: rgba(59, 130, 246, 0.15); color: #3b82f6; }
-.bg-quality-天 { background: rgba(34, 197, 94, 0.15); color: #22c55e; }
-.bg-quality-地 { background: rgba(6, 182, 212, 0.15); color: #06b6d4; }
-.bg-quality-玄 { background: rgba(139, 92, 246, 0.15); color: #8b5cf6; }
-.bg-quality-黄 { background: rgba(234, 179, 8, 0.15); color: #eab308; }
+.bg-quality-仙 { background: rgba(198, 148, 49, 0.15); color: #c69431; }
+.bg-quality-神 { background: rgba(195, 75, 60, 0.15); color: #c34b3c; }
+.bg-quality-圣 { background: rgba(150, 104, 176, 0.15); color: #9668b0; }
+.bg-quality-道 { background: rgba(76, 135, 173, 0.15); color: #4c87ad; }
+.bg-quality-天 { background: rgba(95, 155, 106, 0.15); color: #5f9b6a; }
+.bg-quality-地 { background: rgba(6, 182, 212, 0.15); color: #4f97ab; }
+.bg-quality-玄 { background: rgba(138, 111, 168, 0.15); color: #8a6fa8; }
+.bg-quality-黄 { background: rgba(234, 179, 8, 0.15); color: #bd9a2e; }
 .bg-quality-凡 { background: rgba(var(--color-primary-rgb), 0.1); }
 
 /* 功法库网格 */

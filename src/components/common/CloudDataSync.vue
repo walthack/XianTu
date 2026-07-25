@@ -6,15 +6,16 @@
     :disabled="isDisabled || isSyncing"
     :title="getSyncButtonTooltip()"
   >
-    <span class="sync-icon" v-if="isSyncing">⏳</span>
-    <span class="sync-icon" v-else-if="hasSynced">✅</span>
-    <span class="sync-icon" v-else>☁️</span>
+    <LoaderCircle v-if="isSyncing" class="sync-icon spinning" :size="14" />
+    <Check v-else-if="hasSynced" class="sync-icon" :size="14" />
+    <CloudDownload v-else class="sync-icon" :size="14" />
     <span class="sync-text">{{ getSyncButtonText() }}</span>
   </button>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { Check, CloudDownload, LoaderCircle } from 'lucide-vue-next';
 import { toast } from '../../utils/toast';
 import { useCharacterCreationStore } from '../../stores/characterCreationStore';
 import { useUIStore } from '../../stores/uiStore';
@@ -137,6 +138,10 @@ async function handleSyncCloudData() {
 .sync-icon {
   font-size: 1em;
   flex-shrink: 0;
+}
+
+.sync-icon.spinning {
+  animation: spin-left 1s linear infinite;
 }
 
 /* 已同步状态样式 */

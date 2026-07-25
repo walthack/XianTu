@@ -583,7 +583,7 @@ const comprehendFromNature = () => {
 }
 
 .stats-icon.enlightened {
-  background: linear-gradient(135deg, rgba(130, 163, 245, 0.2), rgba(192, 202, 245, 0.2));
+  background: linear-gradient(135deg, rgba(138, 169, 192, 0.2), rgba(192, 202, 245, 0.2));
   color: var(--color-primary);
 }
 
@@ -799,7 +799,7 @@ const comprehendFromNature = () => {
   justify-content: center;
   width: 32px;
   height: 32px;
-  background: linear-gradient(135deg, rgba(130, 163, 245, 0.15), rgba(192, 202, 245, 0.15));
+  background: linear-gradient(135deg, rgba(138, 169, 192, 0.15), rgba(192, 202, 245, 0.15));
   border-radius: 8px;
   color: var(--color-primary);
 }
@@ -921,12 +921,12 @@ const comprehendFromNature = () => {
 }
 
 .dao-action-btn.breakthrough {
-  border-color: #f59e0b;
-  color: #f59e0b;
+  border-color: #c69431;
+  color: #c69431;
 }
 
 .dao-action-btn.breakthrough:hover {
-  background: #f59e0b;
+  background: #c69431;
   color: white;
 }
 
@@ -979,7 +979,7 @@ const comprehendFromNature = () => {
   justify-content: center;
   width: 44px;
   height: 44px;
-  background: linear-gradient(135deg, rgba(130, 163, 245, 0.2), rgba(192, 202, 245, 0.2));
+  background: linear-gradient(135deg, rgba(138, 169, 192, 0.2), rgba(192, 202, 245, 0.2));
   border-radius: 10px;
   color: var(--color-primary);
 }
@@ -1140,10 +1140,10 @@ const comprehendFromNature = () => {
 .breakthrough-guide {
   margin-bottom: 16px;
   padding: 14px;
-  background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(251, 191, 36, 0.05));
-  border: 1px solid rgba(245, 158, 11, 0.3);
+  background: linear-gradient(135deg, rgba(198, 148, 49, 0.1), rgba(213, 170, 74, 0.05));
+  border: 1px solid rgba(198, 148, 49, 0.3);
   border-radius: 10px;
-  border-left: 4px solid #f59e0b;
+  border-left: 4px solid #c69431;
 }
 
 .guide-header {
@@ -1153,7 +1153,7 @@ const comprehendFromNature = () => {
   margin-bottom: 10px;
   font-size: 0.9rem;
   font-weight: 600;
-  color: #f59e0b;
+  color: #c69431;
 }
 
 .guide-content {
@@ -1187,7 +1187,7 @@ const comprehendFromNature = () => {
   align-items: center;
   justify-content: space-between;
   padding: 10px 12px;
-  background: rgba(245, 158, 11, 0.1);
+  background: rgba(198, 148, 49, 0.1);
   border-radius: 8px;
   margin-top: 6px;
 }
@@ -1201,7 +1201,7 @@ const comprehendFromNature = () => {
 .chance-value {
   font-size: 1.1rem;
   font-weight: 700;
-  color: #f59e0b;
+  color: #c69431;
 }
 
 .detail-actions {
@@ -1368,8 +1368,8 @@ const comprehendFromNature = () => {
 }
 
 .action-btn.warning {
-  background: #f59e0b;
-  border-color: #f59e0b;
+  background: #c69431;
+  border-color: #c69431;
   color: white;
 }
 

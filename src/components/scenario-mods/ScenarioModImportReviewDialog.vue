@@ -24,7 +24,10 @@
           <section class="review-section summary-section">
             <div class="summary-main">
               <div class="title-line">
-                <span class="mode-badge">{{ review.mod.rules.mode === 'strict' ? 'Strict' : 'Expand' }}</span>
+                <span
+                  class="mode-badge"
+                  :title="review.mod.rules.mode === 'strict' ? '严格遵循原著正典走向' : '允许在正典之外自由扩写'"
+                >{{ review.mod.rules.mode === 'strict' ? '严格' : '扩写' }}</span>
                 <span>{{ review.mod.manifest.id }}</span>
                 <span>v{{ review.mod.manifest.version }}</span>
               </div>

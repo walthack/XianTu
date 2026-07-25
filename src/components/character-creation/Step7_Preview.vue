@@ -4,7 +4,7 @@
     <p class="subtitle">{{ $t('请确认你的选择，此为踏入仙途的最后一步。') }}</p>
     <p v-if="store.scenarioCreationPreset" class="preset-notice">窥天算命 · 剧本正典身份</p>
 
-    <div class="preview-grid">
+    <div class="preview-grid" :class="{ locked: presetLocked }">
       <!-- Character Name -->
       <div class="preview-item name-item">
         <label for="characterName">{{ $t('道号:') }}</label>
@@ -290,27 +290,27 @@ const validateAge = () => {
   box-sizing: border-box;
   overflow-y: auto;
   scrollbar-width: thin;
-  scrollbar-color: rgba(147, 197, 253, 0.3) transparent;
+  scrollbar-color: rgba(166, 198, 218, 0.3) transparent;
 }
 
 .preview-container::-webkit-scrollbar { width: 6px; }
 .preview-container::-webkit-scrollbar-track { background: transparent; }
-.preview-container::-webkit-scrollbar-thumb { background: rgba(147, 197, 253, 0.3); border-radius: 3px; }
+.preview-container::-webkit-scrollbar-thumb { background: rgba(166, 198, 218, 0.3); border-radius: 3px; }
 
 /* 标题 */
 .title {
   text-align: center;
-  color: #93c5fd;
+  color: #a6c6da;
   margin: 0 0 0.5rem 0;
   font-family: var(--font-family-serif);
   font-size: 2rem;
   font-weight: 600;
-  text-shadow: 0 0 20px rgba(147, 197, 253, 0.3);
+  text-shadow: 0 0 20px rgba(166, 198, 218, 0.3);
 }
 
 .subtitle {
   text-align: center;
-  color: #94a3b8;
+  color: #a09a8d;
   margin: 0 0 2rem 0;
   font-size: 1rem;
   font-style: italic;
@@ -325,7 +325,7 @@ const validateAge = () => {
 
 /* 基础卡片样式 */
 .preview-item {
-  background: rgba(30, 41, 59, 0.5);
+  background: rgba(30, 34, 40, 0.5);
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 12px;
   padding: 1.5rem;
@@ -336,14 +336,14 @@ const validateAge = () => {
 }
 
 .preview-item:hover {
-  background: rgba(30, 41, 59, 0.7);
-  border-color: rgba(147, 197, 253, 0.2);
+  background: rgba(30, 34, 40, 0.7);
+  border-color: rgba(166, 198, 218, 0.2);
 }
 
 .preview-item h3 {
   margin: 0;
-  color: #93c5fd;
-  border-bottom: 1px solid rgba(147, 197, 253, 0.2);
+  color: #a6c6da;
+  border-bottom: 1px solid rgba(166, 198, 218, 0.2);
   padding-bottom: 0.5rem;
   font-size: 1.1rem;
   font-weight: 600;
@@ -352,7 +352,7 @@ const validateAge = () => {
 .preview-item p {
   margin: 0;
   font-size: 1rem;
-  color: #f1f5f9;
+  color: #ece7dc;
   line-height: 1.5;
 }
 
@@ -360,19 +360,19 @@ const validateAge = () => {
   margin: 0;
   font-size: 1.1rem;
   font-weight: 600;
-  color: #bfdbfe;
+  color: #c7d9e2;
 }
 
 .item-description {
   font-size: 0.9rem !important;
-  color: #94a3b8 !important;
+  color: #a09a8d !important;
   margin-top: 0.5rem !important;
 }
 
 .talents-item li .item-description {
   margin-top: 0.25rem !important;
   padding-left: 0.5rem;
-  border-left: 2px solid rgba(147, 197, 253, 0.3);
+  border-left: 2px solid rgba(166, 198, 218, 0.3);
 }
 
 /* 名字输入 */
@@ -384,21 +384,40 @@ const validateAge = () => {
   .name-item, .race-item {
     grid-column: 1 / -1;
   }
+
+  /* 剧本锁定时道号/种族不可编辑，不必再各占一整行 */
+  .preview-grid.locked .name-item,
+  .preview-grid.locked .race-item {
+    grid-column: auto;
+  }
+}
+
+/* 锁定值按静态文本呈现，避免长得像能输入的空框 */
+.preview-grid.locked .name-item input:disabled,
+.preview-grid.locked .input-field input:disabled {
+  background: transparent;
+  border: none;
+  border-bottom: 1px dashed rgba(166, 198, 218, 0.28);
+  border-radius: 0;
+  padding-left: 0;
+  padding-right: 0;
+  cursor: default;
+  opacity: 1;
 }
 
 .name-item label {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #93c5fd;
+  color: #a6c6da;
   margin-bottom: 0.5rem;
   display: block;
 }
 
 .name-item input, .input-field input {
   width: 100%;
-  background: rgba(30, 41, 59, 0.6);
-  border: 1px solid rgba(147, 197, 253, 0.3);
-  color: #f1f5f9;
+  background: rgba(30, 34, 40, 0.6);
+  border: 1px solid rgba(166, 198, 218, 0.3);
+  color: #ece7dc;
   padding: 0.75rem;
   border-radius: 8px;
   font-size: 1rem;
@@ -407,32 +426,32 @@ const validateAge = () => {
 }
 
 .input-field input {
-  background: rgba(30, 41, 59, 0.4);
+  background: rgba(30, 34, 40, 0.4);
 }
 
 .name-item input:focus, .input-field input:focus {
   outline: none;
-  border-color: #93c5fd;
-  box-shadow: 0 0 0 2px rgba(147, 197, 253, 0.1);
+  border-color: #a6c6da;
+  box-shadow: 0 0 0 2px rgba(166, 198, 218, 0.1);
 }
 
 /* 只读输入框样式 */
 .readonly-input {
-  background: rgba(30, 41, 59, 0.3) !important;
+  background: rgba(30, 34, 40, 0.3) !important;
   cursor: not-allowed !important;
   opacity: 0.7;
   user-select: none;
 }
 
 .readonly-input:focus {
-  border-color: rgba(147, 197, 253, 0.2) !important;
+  border-color: rgba(166, 198, 218, 0.2) !important;
   box-shadow: none !important;
 }
 
 /* 名字提示文字 */
 .name-hint {
   font-size: 0.85rem;
-  color: #94a3b8;
+  color: #a09a8d;
   margin-top: 0.5rem;
   display: block;
 }
@@ -452,22 +471,22 @@ const validateAge = () => {
   font-size: 1rem;
   padding: 0.5rem 0.75rem;
   border-radius: 8px;
-  color: #f1f5f9;
-  background: rgba(30, 41, 59, 0.4);
+  color: #ece7dc;
+  background: rgba(30, 34, 40, 0.4);
   border: 1px solid transparent;
   transition: all 0.25s ease;
 }
 
 .gender-label:hover {
-  background: rgba(51, 65, 85, 0.6);
-  border-color: rgba(147, 197, 253, 0.2);
+  background: rgba(61, 58, 53, 0.6);
+  border-color: rgba(166, 198, 218, 0.2);
 }
 
 .gender-label input[type="radio"] {
   width: 16px;
   height: 16px;
   margin: 0;
-  accent-color: #93c5fd;
+  accent-color: #a6c6da;
 }
 
 /* 开局模式选择 */
@@ -563,9 +582,9 @@ const validateAge = () => {
 .age-btn {
   width: 32px;
   height: 32px;
-  border: 1px solid rgba(147, 197, 253, 0.3);
-  background: rgba(30, 41, 59, 0.6);
-  color: #93c5fd;
+  border: 1px solid rgba(166, 198, 218, 0.3);
+  background: rgba(30, 34, 40, 0.6);
+  color: #a6c6da;
   border-radius: 8px;
   cursor: pointer;
   font-size: 1rem;
@@ -577,9 +596,9 @@ const validateAge = () => {
 }
 
 .age-btn:hover:not(:disabled) {
-  background: rgba(59, 130, 246, 0.3);
-  border-color: #93c5fd;
-  color: #bfdbfe;
+  background: rgba(76, 135, 173, 0.3);
+  border-color: #a6c6da;
+  color: #c7d9e2;
 }
 
 .age-btn:disabled {
@@ -590,7 +609,7 @@ const validateAge = () => {
 .age-display {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #f1f5f9;
+  color: #ece7dc;
   min-width: 60px;
   text-align: center;
 }
@@ -598,10 +617,10 @@ const validateAge = () => {
 .age-input {
   width: 80px;
   padding: 0.5rem;
-  border: 1px solid rgba(147, 197, 253, 0.3);
+  border: 1px solid rgba(166, 198, 218, 0.3);
   border-radius: 8px;
-  background: rgba(30, 41, 59, 0.6);
-  color: #f1f5f9;
+  background: rgba(30, 34, 40, 0.6);
+  color: #ece7dc;
   font-size: 1.1rem;
   font-weight: 600;
   text-align: center;
@@ -610,8 +629,8 @@ const validateAge = () => {
 
 .age-input:focus {
   outline: none;
-  border-color: #93c5fd;
-  box-shadow: 0 0 0 2px rgba(147, 197, 253, 0.1);
+  border-color: #a6c6da;
+  box-shadow: 0 0 0 2px rgba(166, 198, 218, 0.1);
 }
 
 .age-input::-webkit-inner-spin-button,
@@ -626,7 +645,7 @@ const validateAge = () => {
 
 .age-unit {
   font-size: 1rem;
-  color: #94a3b8;
+  color: #a09a8d;
   font-weight: 500;
 }
 
@@ -640,35 +659,35 @@ const validateAge = () => {
 .preview-item li {
   margin-bottom: 0.75rem;
   padding: 0.75rem;
-  background: rgba(30, 41, 59, 0.4);
+  background: rgba(30, 34, 40, 0.4);
   border-radius: 8px;
-  color: #f1f5f9;
+  color: #ece7dc;
   line-height: 1.4;
   border: 1px solid transparent;
   transition: all 0.25s ease;
 }
 
 .preview-item li:hover {
-  background: rgba(51, 65, 85, 0.5);
-  border-color: rgba(147, 197, 253, 0.15);
+  background: rgba(61, 58, 53, 0.5);
+  border-color: rgba(166, 198, 218, 0.15);
 }
 
 .preview-item li strong {
   display: block;
   margin-bottom: 0.25rem;
-  color: #93c5fd;
+  color: #a6c6da;
 }
 
 /* 云端信息 */
 .cloud-info-item {
   text-align: center;
-  background: rgba(30, 41, 59, 0.3);
-  border: 1px dashed rgba(147, 197, 253, 0.3);
+  background: rgba(30, 34, 40, 0.3);
+  border: 1px dashed rgba(166, 198, 218, 0.3);
 }
 
 .cloud-info-text {
   font-size: 0.95rem;
-  color: #94a3b8;
+  color: #a09a8d;
   line-height: 1.6;
   font-style: italic;
 }
@@ -710,89 +729,89 @@ const validateAge = () => {
 }
 
 [data-theme="light"] .preview-item:hover {
-  background: rgba(241, 245, 249, 0.95);
-  border-color: rgba(59, 130, 246, 0.2);
+  background: rgba(236, 231, 220, 0.95);
+  border-color: rgba(76, 135, 173, 0.2);
 }
 
 [data-theme="light"] .preview-item h3 {
-  color: #2563eb;
-  border-bottom-color: rgba(59, 130, 246, 0.2);
+  color: #3a6c8c;
+  border-bottom-color: rgba(76, 135, 173, 0.2);
 }
 
 [data-theme="light"] .preview-item h4 {
-  color: #1e40af;
+  color: #27506b;
 }
 
 [data-theme="light"] .preview-item p {
-  color: #1e293b;
+  color: #1e2228;
 }
 
 [data-theme="light"] .title {
-  color: #2563eb;
+  color: #3a6c8c;
 }
 
 [data-theme="light"] .subtitle {
-  color: #475569;
+  color: #56534b;
 }
 
 [data-theme="light"] .name-item label {
-  color: #2563eb;
+  color: #3a6c8c;
 }
 
 [data-theme="light"] .name-item input,
 [data-theme="light"] .input-field input {
   background: rgba(255, 255, 255, 0.8);
-  border-color: rgba(59, 130, 246, 0.3);
-  color: #1e293b;
+  border-color: rgba(76, 135, 173, 0.3);
+  color: #1e2228;
 }
 
 [data-theme="light"] .gender-label {
   background: rgba(255, 255, 255, 0.6);
-  color: #1e293b;
+  color: #1e2228;
 }
 
 [data-theme="light"] .gender-label:hover {
-  background: rgba(241, 245, 249, 0.95);
-  border-color: rgba(59, 130, 246, 0.2);
+  background: rgba(236, 231, 220, 0.95);
+  border-color: rgba(76, 135, 173, 0.2);
 }
 
 [data-theme="light"] .age-btn {
   background: rgba(255, 255, 255, 0.8);
-  border-color: rgba(59, 130, 246, 0.3);
-  color: #2563eb;
+  border-color: rgba(76, 135, 173, 0.3);
+  color: #3a6c8c;
 }
 
 [data-theme="light"] .age-btn:hover:not(:disabled) {
-  background: rgba(59, 130, 246, 0.1);
-  border-color: #3b82f6;
+  background: rgba(76, 135, 173, 0.1);
+  border-color: #4c87ad;
 }
 
 [data-theme="light"] .age-input {
   background: rgba(255, 255, 255, 0.8);
-  border-color: rgba(59, 130, 246, 0.3);
-  color: #1e293b;
+  border-color: rgba(76, 135, 173, 0.3);
+  color: #1e2228;
 }
 
 [data-theme="light"] .preview-item li {
   background: rgba(255, 255, 255, 0.6);
-  color: #1e293b;
+  color: #1e2228;
 }
 
 [data-theme="light"] .preview-item li:hover {
-  background: rgba(241, 245, 249, 0.95);
+  background: rgba(236, 231, 220, 0.95);
 }
 
 [data-theme="light"] .preview-item li strong {
-  color: #2563eb;
+  color: #3a6c8c;
 }
 
 [data-theme="light"] .cloud-info-item {
   background: rgba(248, 250, 252, 0.6);
-  border-color: rgba(59, 130, 246, 0.3);
+  border-color: rgba(76, 135, 173, 0.3);
 }
 
 [data-theme="light"] .cloud-info-text {
-  color: #475569;
+  color: #56534b;
 }
 
 @media (max-width: 480px) {

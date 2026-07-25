@@ -431,9 +431,9 @@ function downloadJSON(data: any, filename: string) {
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 1rem;
-  background: rgba(251, 191, 36, 0.15);
-  border-bottom: 1px solid rgba(251, 191, 36, 0.3);
-  color: #fbbf24;
+  background: rgba(213, 170, 74, 0.15);
+  border-bottom: 1px solid rgba(213, 170, 74, 0.3);
+  color: #d5aa4a;
 }
 
 .online-mode-warning .warning-icon {
@@ -581,13 +581,13 @@ function downloadJSON(data: any, filename: string) {
 }
 
 .action-btn-compact.danger {
-  background: #dc2626;
+  background: #a83a2c;
   color: white;
-  border-color: #dc2626;
+  border-color: #a83a2c;
 }
 
 .action-btn-compact.danger:hover {
-  background: #b91c1c;
+  background: #8e2f24;
 }
 
 .prompt-list {
@@ -863,18 +863,18 @@ function downloadJSON(data: any, filename: string) {
 }
 
 .weight-input.weight-high {
-  background: rgba(239, 68, 68, 0.2);
-  color: #ef4444;
+  background: rgba(195, 75, 60, 0.2);
+  color: #c34b3c;
 }
 
 .weight-input.weight-medium {
   background: rgba(234, 179, 8, 0.2);
-  color: #eab308;
+  color: #bd9a2e;
 }
 
 .weight-input.weight-low {
-  background: rgba(34, 197, 94, 0.2);
-  color: #22c55e;
+  background: rgba(95, 155, 106, 0.2);
+  color: #5f9b6a;
 }
 
 .prompt-content {

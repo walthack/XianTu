@@ -1328,11 +1328,11 @@ const actionQueue = useActionQueueStore();
   const getGraphEdgeColor = (e: RelationshipMatrixEdge): string => {
     const score = typeof e.score === 'number' ? e.score : 0;
     if (score >= 60) return 'rgba(236, 72, 153, 0.55)'; // 亲密/粉
-    if (score >= 20) return 'rgba(34, 197, 94, 0.55)'; // 友好/绿
-    if (score <= -40) return 'rgba(239, 68, 68, 0.55)'; // 敌对/红
-    if (score < 0) return 'rgba(245, 158, 11, 0.55)'; // 不佳/橙
+    if (score >= 20) return 'rgba(95, 155, 106, 0.55)'; // 友好/绿
+    if (score <= -40) return 'rgba(195, 75, 60, 0.55)'; // 敌对/红
+    if (score < 0) return 'rgba(198, 148, 49, 0.55)'; // 不佳/橙
     const rel = String(e.relation ?? '');
-    if (rel.includes('仇') || rel.includes('敌')) return 'rgba(239, 68, 68, 0.55)';
+    if (rel.includes('仇') || rel.includes('敌')) return 'rgba(195, 75, 60, 0.55)';
     return 'rgba(107, 114, 128, 0.45)';
   };
 
@@ -2787,7 +2787,7 @@ const confirmDeleteNpc = (person: NpcProfile) => {
 }
 
 .raw-act-btn.reset {
-  color: var(--color-warning, #d97706);
+  color: var(--color-warning, #a97528);
 }
 
 .raw-edit-area {
@@ -2811,7 +2811,7 @@ const confirmDeleteNpc = (person: NpcProfile) => {
 
 .raw-err {
   margin: 0.5rem 0 0;
-  color: var(--color-danger, #dc2626);
+  color: var(--color-danger, #a83a2c);
   font-size: 0.8rem;
 }
 
@@ -2886,14 +2886,14 @@ const confirmDeleteNpc = (person: NpcProfile) => {
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(147, 51, 234, 0.1));
+  background: linear-gradient(135deg, rgba(76, 135, 173, 0.1), rgba(124, 82, 150, 0.1));
   opacity: 0;
   transition: opacity 0.3s ease;
 }
 
 .view-tab:hover {
   color: var(--color-text);
-  border-color: rgba(59, 130, 246, 0.3);
+  border-color: rgba(76, 135, 173, 0.3);
   background: var(--color-surface);
   transform: translateY(-1px);
 }
@@ -2905,8 +2905,8 @@ const confirmDeleteNpc = (person: NpcProfile) => {
 .view-tab.active {
   color: white;
   border-color: var(--color-primary);
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  background: linear-gradient(135deg, #4c87ad, #8a6fa8);
+  box-shadow: 0 4px 12px rgba(76, 135, 173, 0.3);
   transform: translateY(-1px);
 }
 
@@ -2957,7 +2957,7 @@ const confirmDeleteNpc = (person: NpcProfile) => {
 .relationship-graph {
   flex: 1;
   min-height: 0;
-  background: radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.03) 0%, var(--color-surface) 100%);
+  background: radial-gradient(circle at 50% 50%, rgba(76, 135, 173, 0.03) 0%, var(--color-surface) 100%);
   border-top: 1px solid var(--color-border);
   position: relative;
 }
@@ -2967,8 +2967,8 @@ const confirmDeleteNpc = (person: NpcProfile) => {
   height: 100%;
   touch-action: none;
   background: linear-gradient(135deg,
-    rgba(59, 130, 246, 0.02) 0%,
-    rgba(147, 51, 234, 0.02) 50%,
+    rgba(76, 135, 173, 0.02) 0%,
+    rgba(124, 82, 150, 0.02) 50%,
     rgba(236, 72, 153, 0.02) 100%);
 }
 
@@ -2976,12 +2976,12 @@ const confirmDeleteNpc = (person: NpcProfile) => {
   stroke-linecap: round;
   stroke-linejoin: round;
   transition: all 0.3s ease;
-  filter: drop-shadow(0 0 2px rgba(59, 130, 246, 0.2));
+  filter: drop-shadow(0 0 2px rgba(76, 135, 173, 0.2));
 }
 
 .graph-edge:hover {
   stroke-width: 3 !important;
-  filter: drop-shadow(0 0 4px rgba(59, 130, 246, 0.4));
+  filter: drop-shadow(0 0 4px rgba(76, 135, 173, 0.4));
 }
 
 .graph-node {
@@ -2991,39 +2991,39 @@ const confirmDeleteNpc = (person: NpcProfile) => {
 
 .graph-node:hover .graph-node-dot {
   transform: scale(1.15);
-  filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.6));
+  filter: drop-shadow(0 0 8px rgba(76, 135, 173, 0.6));
 }
 
 .graph-node-dot {
-  fill: rgba(59, 130, 246, 0.15);
-  stroke: rgba(59, 130, 246, 0.8);
+  fill: rgba(76, 135, 173, 0.15);
+  stroke: rgba(76, 135, 173, 0.8);
   stroke-width: 2.5;
   transition: all 0.3s ease;
-  filter: drop-shadow(0 2px 4px rgba(59, 130, 246, 0.3));
+  filter: drop-shadow(0 2px 4px rgba(76, 135, 173, 0.3));
 }
 
 .graph-node-dot.player {
-  fill: rgba(147, 51, 234, 0.25);
-  stroke: rgba(147, 51, 234, 1);
+  fill: rgba(124, 82, 150, 0.25);
+  stroke: rgba(124, 82, 150, 1);
   stroke-width: 3.5;
-  filter: drop-shadow(0 0 12px rgba(147, 51, 234, 0.6));
+  filter: drop-shadow(0 0 12px rgba(124, 82, 150, 0.6));
   animation: pulse-player 2s ease-in-out infinite;
 }
 
 @keyframes pulse-player {
   0%, 100% {
-    filter: drop-shadow(0 0 12px rgba(147, 51, 234, 0.6));
+    filter: drop-shadow(0 0 12px rgba(124, 82, 150, 0.6));
   }
   50% {
-    filter: drop-shadow(0 0 20px rgba(147, 51, 234, 0.8));
+    filter: drop-shadow(0 0 20px rgba(124, 82, 150, 0.8));
   }
 }
 
 .graph-node-dot.selected {
-  fill: rgba(34, 197, 94, 0.25);
-  stroke: rgba(34, 197, 94, 1);
+  fill: rgba(95, 155, 106, 0.25);
+  stroke: rgba(95, 155, 106, 1);
   stroke-width: 3;
-  filter: drop-shadow(0 0 10px rgba(34, 197, 94, 0.6));
+  filter: drop-shadow(0 0 10px rgba(95, 155, 106, 0.6));
   animation: pulse-selected 1.5s ease-in-out infinite;
 }
 
@@ -3060,20 +3060,20 @@ const confirmDeleteNpc = (person: NpcProfile) => {
   border-right: 1px solid var(--color-border);
   display: flex;
   flex-direction: column;
-  background: linear-gradient(180deg, rgba(59, 130, 246, 0.02) 0%, transparent 100%);
+  background: linear-gradient(180deg, rgba(76, 135, 173, 0.02) 0%, transparent 100%);
 }
 
 .list-header {
   padding: 1.25rem;
   border-bottom: 2px solid var(--color-border);
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), rgba(147, 51, 234, 0.05));
+  background: linear-gradient(135deg, rgba(76, 135, 173, 0.05), rgba(124, 82, 150, 0.05));
 }
 
 .panel-title {
   margin: 0 0 1rem 0;
   font-size: 1.35rem;
   font-weight: 800;
-  background: linear-gradient(135deg, #3b82f6, #9333ea);
+  background: linear-gradient(135deg, #4c87ad, #7c5296);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -3094,7 +3094,7 @@ const confirmDeleteNpc = (person: NpcProfile) => {
 
 .search-bar:focus-within {
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  box-shadow: 0 0 0 3px rgba(76, 135, 173, 0.1);
   background: var(--color-surface);
 }
 
@@ -3165,7 +3165,7 @@ const confirmDeleteNpc = (person: NpcProfile) => {
   display: flex;
   align-items: center;
   padding: 0.85rem;
-  background: linear-gradient(135deg, var(--color-background) 0%, rgba(59, 130, 246, 0.02) 100%);
+  background: linear-gradient(135deg, var(--color-background) 0%, rgba(76, 135, 173, 0.02) 100%);
   border: 2px solid var(--color-border);
   border-radius: 12px;
   cursor: pointer;
@@ -3181,7 +3181,7 @@ const confirmDeleteNpc = (person: NpcProfile) => {
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), rgba(147, 51, 234, 0.05));
+  background: linear-gradient(135deg, rgba(76, 135, 173, 0.05), rgba(124, 82, 150, 0.05));
   opacity: 0;
   transition: opacity 0.3s ease;
   pointer-events: none;
@@ -3189,7 +3189,7 @@ const confirmDeleteNpc = (person: NpcProfile) => {
 
 .person-card:hover {
   border-color: var(--color-primary);
-  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.15), 0 2px 8px rgba(59, 130, 246, 0.1);
+  box-shadow: 0 4px 16px rgba(76, 135, 173, 0.15), 0 2px 8px rgba(76, 135, 173, 0.1);
   transform: translateY(-2px);
 }
 
@@ -3198,9 +3198,9 @@ const confirmDeleteNpc = (person: NpcProfile) => {
 }
 
 .person-card.selected {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.12), rgba(147, 51, 234, 0.12));
+  background: linear-gradient(135deg, rgba(76, 135, 173, 0.12), rgba(124, 82, 150, 0.12));
   border-color: var(--color-primary);
-  box-shadow: 0 4px 20px rgba(59, 130, 246, 0.25), 0 0 0 3px rgba(59, 130, 246, 0.1);
+  box-shadow: 0 4px 20px rgba(76, 135, 173, 0.25), 0 0 0 3px rgba(76, 135, 173, 0.1);
   transform: translateY(-2px);
 }
 
@@ -3219,8 +3219,8 @@ const confirmDeleteNpc = (person: NpcProfile) => {
   color: white;
   margin-right: 0.85rem;
   flex-shrink: 0;
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  background: linear-gradient(135deg, #4c87ad, #8a6fa8);
+  box-shadow: 0 4px 12px rgba(76, 135, 173, 0.3);
   transition: all 0.3s ease;
   position: relative;
   z-index: 1;
@@ -3228,21 +3228,21 @@ const confirmDeleteNpc = (person: NpcProfile) => {
 
 .person-card:hover .person-avatar {
   transform: scale(1.08);
-  box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+  box-shadow: 0 6px 16px rgba(76, 135, 173, 0.4);
 }
 
 .person-card.selected .person-avatar {
-  background: linear-gradient(135deg, #22c55e, #10b981);
-  box-shadow: 0 6px 16px rgba(34, 197, 94, 0.4);
+  background: linear-gradient(135deg, #5f9b6a, #4f9b7e);
+  box-shadow: 0 6px 16px rgba(95, 155, 106, 0.4);
   animation: avatar-pulse 2s ease-in-out infinite;
 }
 
 @keyframes avatar-pulse {
   0%, 100% {
-    box-shadow: 0 6px 16px rgba(34, 197, 94, 0.4);
+    box-shadow: 0 6px 16px rgba(95, 155, 106, 0.4);
   }
   50% {
-    box-shadow: 0 8px 24px rgba(34, 197, 94, 0.6);
+    box-shadow: 0 8px 24px rgba(95, 155, 106, 0.6);
   }
 }
 
@@ -3280,19 +3280,19 @@ const confirmDeleteNpc = (person: NpcProfile) => {
 }
 
 .relationship-type {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.12), rgba(147, 51, 234, 0.12));
+  background: linear-gradient(135deg, rgba(76, 135, 173, 0.12), rgba(124, 82, 150, 0.12));
   color: var(--color-primary);
   padding: 3px 10px;
   border-radius: 14px;
   font-size: 0.75rem;
   font-weight: 600;
-  border: 1px solid rgba(59, 130, 246, 0.2);
+  border: 1px solid rgba(76, 135, 173, 0.2);
   transition: all 0.3s ease;
 }
 
 .person-card:hover .relationship-type {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.18), rgba(147, 51, 234, 0.18));
-  border-color: rgba(59, 130, 246, 0.3);
+  background: linear-gradient(135deg, rgba(76, 135, 173, 0.18), rgba(124, 82, 150, 0.18));
+  border-color: rgba(76, 135, 173, 0.3);
 }
 
 .attention-toggle {
@@ -3314,8 +3314,8 @@ const confirmDeleteNpc = (person: NpcProfile) => {
 }
 
 .attention-toggle:hover {
-  background: rgba(59, 130, 246, 0.1);
-  border-color: rgba(59, 130, 246, 0.3);
+  background: rgba(76, 135, 173, 0.1);
+  border-color: rgba(76, 135, 173, 0.3);
   transform: scale(1.1);
 }
 
@@ -3324,19 +3324,19 @@ const confirmDeleteNpc = (person: NpcProfile) => {
 }
 
 .attention-icon.active {
-  color: #22c55e;
+  color: #5f9b6a;
 }
 
 .attention-icon.inactive {
-  color: #9ca3af;
+  color: #a29c90;
 }
 
 .attention-toggle:hover .attention-icon.inactive {
-  color: #3b82f6;
+  color: #4c87ad;
 }
 
 .attention-toggle:hover .attention-icon.active {
-  color: #16a34a;
+  color: #4e8557;
 }
 
 .person-realm {
@@ -3363,7 +3363,7 @@ const confirmDeleteNpc = (person: NpcProfile) => {
 .intimacy-bar {
   flex: 1;
   height: 6px;
-  background: rgba(59, 130, 246, 0.12);
+  background: rgba(76, 135, 173, 0.12);
   border-radius: 3px;
   overflow: hidden;
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
@@ -3377,23 +3377,23 @@ const confirmDeleteNpc = (person: NpcProfile) => {
 }
 
 .intimacy-high {
-  background: linear-gradient(90deg, #22c55e, #16a34a);
-  box-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
+  background: linear-gradient(90deg, #5f9b6a, #4e8557);
+  box-shadow: 0 0 10px rgba(95, 155, 106, 0.5);
 }
 .intimacy-good {
-  background: linear-gradient(90deg, #3b82f6, #1d4ed8);
-  box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+  background: linear-gradient(90deg, #4c87ad, #2e5878);
+  box-shadow: 0 0 10px rgba(76, 135, 173, 0.5);
 }
 .intimacy-medium {
-  background: linear-gradient(90deg, #8b5cf6, #7c3aed);
-  box-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+  background: linear-gradient(90deg, #8a6fa8, #70518f);
+  box-shadow: 0 0 10px rgba(138, 111, 168, 0.5);
 }
 .intimacy-low {
-  background: linear-gradient(90deg, #f59e0b, #d97706);
-  box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+  background: linear-gradient(90deg, #c69431, #a97528);
+  box-shadow: 0 0 10px rgba(198, 148, 49, 0.5);
 }
 .intimacy-neutral {
-  background: linear-gradient(90deg, #6b7280, #4b5563);
+  background: linear-gradient(90deg, #78736a, #4e4b45);
   box-shadow: 0 0 8px rgba(107, 114, 128, 0.4);
 }
 .intimacy-dislike {
@@ -3401,12 +3401,12 @@ const confirmDeleteNpc = (person: NpcProfile) => {
   box-shadow: 0 0 10px rgba(249, 115, 22, 0.5);
 }
 .intimacy-hostile {
-  background: linear-gradient(90deg, #dc2626, #b91c1c);
-  box-shadow: 0 0 10px rgba(220, 38, 38, 0.5);
+  background: linear-gradient(90deg, #a83a2c, #8e2f24);
+  box-shadow: 0 0 10px rgba(168, 58, 44, 0.5);
 }
 .intimacy-enemy {
-  background: linear-gradient(90deg, #ef4444, #dc2626);
-  box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+  background: linear-gradient(90deg, #c34b3c, #a83a2c);
+  box-shadow: 0 0 10px rgba(195, 75, 60, 0.5);
 }
 
 .intimacy-value {
@@ -3433,8 +3433,8 @@ const confirmDeleteNpc = (person: NpcProfile) => {
   justify-content: space-between;
   padding: 2px 6px;
   border-radius: 6px;
-  background: rgba(59, 130, 246, 0.06);
-  border: 1px solid rgba(59, 130, 246, 0.08);
+  background: rgba(76, 135, 173, 0.06);
+  border: 1px solid rgba(76, 135, 173, 0.08);
 }
 
 .npc-core-label {
@@ -3484,9 +3484,9 @@ const confirmDeleteNpc = (person: NpcProfile) => {
   font-weight: 600;
   color: white;
   font-size: 1.5rem;
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  background: linear-gradient(135deg, #4c87ad, #8a6fa8);
   flex-shrink: 0;
-  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 4px 16px rgba(76, 135, 173, 0.3);
 }
 
 .detail-info {
@@ -3519,20 +3519,20 @@ const confirmDeleteNpc = (person: NpcProfile) => {
 }
 
 .relationship-badge {
-  background: rgba(59, 130, 246, 0.1);
+  background: rgba(76, 135, 173, 0.1);
   color: var(--color-primary);
 }
 
 .race-badge {
-  background: rgba(34, 197, 94, 0.1);
-  color: #22c55e;
-  border: 1px solid rgba(34, 197, 94, 0.3);
+  background: rgba(95, 155, 106, 0.1);
+  color: #5f9b6a;
+  border: 1px solid rgba(95, 155, 106, 0.3);
 }
 
 .faction-badge {
-  background: rgba(168, 85, 247, 0.1);
-  color: #a855f7;
-  border: 1px solid rgba(168, 85, 247, 0.3);
+  background: rgba(150, 104, 176, 0.1);
+  color: #9668b0;
+  border: 1px solid rgba(150, 104, 176, 0.3);
 }
 
 .detail-body {
@@ -3631,23 +3631,23 @@ const confirmDeleteNpc = (person: NpcProfile) => {
 }
 
 .npc-vital-bar.red-bar {
-  background: linear-gradient(90deg, #ef4444, #f87171);
-  box-shadow: 0 0 8px rgba(239, 68, 68, 0.4);
+  background: linear-gradient(90deg, #c34b3c, #cd6f5f);
+  box-shadow: 0 0 8px rgba(195, 75, 60, 0.4);
 }
 
 .npc-vital-bar.blue-bar {
-  background: linear-gradient(90deg, #3b82f6, #60a5fa);
-  box-shadow: 0 0 8px rgba(59, 130, 246, 0.4);
+  background: linear-gradient(90deg, #4c87ad, #78a8c6);
+  box-shadow: 0 0 8px rgba(76, 135, 173, 0.4);
 }
 
 .npc-vital-bar.gold-bar {
-  background: linear-gradient(90deg, #f59e0b, #fbbf24);
-  box-shadow: 0 0 8px rgba(245, 158, 11, 0.4);
+  background: linear-gradient(90deg, #c69431, #d5aa4a);
+  box-shadow: 0 0 8px rgba(198, 148, 49, 0.4);
 }
 
 .npc-vital-bar.purple-bar {
-  background: linear-gradient(90deg, #a855f7, #c084fc);
-  box-shadow: 0 0 8px rgba(168, 85, 247, 0.4);
+  background: linear-gradient(90deg, #9668b0, #b294c6);
+  box-shadow: 0 0 8px rgba(150, 104, 176, 0.4);
 }
 
 
@@ -3692,8 +3692,8 @@ const confirmDeleteNpc = (person: NpcProfile) => {
 .summary-mode-hint {
   margin-top: 0.75rem;
   padding: 0.5rem 0.75rem;
-  background: rgba(59, 130, 246, 0.08);
-  border-left: 3px solid #3b82f6;
+  background: rgba(76, 135, 173, 0.08);
+  border-left: 3px solid #4c87ad;
   border-radius: 4px;
   font-size: 0.75rem;
   color: var(--color-text-secondary);
@@ -3714,7 +3714,7 @@ const confirmDeleteNpc = (person: NpcProfile) => {
 .memory-count {
   font-size: 0.75rem;
   color: var(--color-text-secondary);
-  background: rgba(59, 130, 246, 0.1);
+  background: rgba(76, 135, 173, 0.1);
   padding: 0.25rem 0.5rem;
   border-radius: 12px;
   font-weight: 500;
@@ -3730,7 +3730,7 @@ const confirmDeleteNpc = (person: NpcProfile) => {
   display: flex;
   align-items: center;
   gap: 0.25rem;
-  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  background: linear-gradient(135deg, #4c87ad, #3a6c8c);
   color: white;
   border: none;
   padding: 0.375rem 0.75rem;
@@ -3743,9 +3743,9 @@ const confirmDeleteNpc = (person: NpcProfile) => {
 }
 
 .download-memory-btn:hover {
-  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  background: linear-gradient(135deg, #3a6c8c, #2e5878);
   transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 2px 8px rgba(76, 135, 173, 0.3);
 }
 
 .summarize-controls {
@@ -3768,15 +3768,15 @@ const confirmDeleteNpc = (person: NpcProfile) => {
 
 .summarize-input:focus {
   outline: none;
-  border-color: #8b5cf6;
-  box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.1);
+  border-color: #8a6fa8;
+  box-shadow: 0 0 0 2px rgba(138, 111, 168, 0.1);
 }
 
 .summarize-btn {
   display: flex;
   align-items: center;
   gap: 0.25rem;
-  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  background: linear-gradient(135deg, #8a6fa8, #70518f);
   color: white;
   border: none;
   padding: 0.375rem 0.75rem;
@@ -3789,9 +3789,9 @@ const confirmDeleteNpc = (person: NpcProfile) => {
 }
 
 .summarize-btn:hover:not(:disabled) {
-  background: linear-gradient(135deg, #7c3aed, #6d28d9);
+  background: linear-gradient(135deg, #70518f, #5f4780);
   transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+  box-shadow: 0 2px 8px rgba(138, 111, 168, 0.3);
 }
 
 .summarize-btn:disabled {
@@ -3811,9 +3811,9 @@ const confirmDeleteNpc = (person: NpcProfile) => {
   display: flex;
   gap: 0.75rem;
   padding: 0.75rem;
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.05), rgba(124, 58, 237, 0.05));
+  background: linear-gradient(135deg, rgba(138, 111, 168, 0.05), rgba(124, 58, 237, 0.05));
   border-radius: 8px;
-  border-left: 3px solid #8b5cf6;
+  border-left: 3px solid #8a6fa8;
 }
 
 .summary-icon {
@@ -3896,11 +3896,11 @@ const confirmDeleteNpc = (person: NpcProfile) => {
 .page-input:focus {
   outline: none;
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+  box-shadow: 0 0 0 2px rgba(76, 135, 173, 0.1);
 }
 
 .jump-btn {
-  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  background: linear-gradient(135deg, #4c87ad, #3a6c8c);
   color: white;
   border: none;
   padding: 0.375rem 0.75rem;
@@ -3913,14 +3913,14 @@ const confirmDeleteNpc = (person: NpcProfile) => {
 }
 
 .jump-btn:hover {
-  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  background: linear-gradient(135deg, #3a6c8c, #2e5878);
   transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 2px 8px rgba(76, 135, 173, 0.3);
 }
 
 .memory-summary-section {
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.08), rgba(124, 58, 237, 0.08));
-  border-left: 4px solid #8b5cf6;
+  background: linear-gradient(135deg, rgba(138, 111, 168, 0.08), rgba(124, 58, 237, 0.08));
+  border-left: 4px solid #8a6fa8;
 }
 
 .memory-item {
@@ -3970,20 +3970,20 @@ const confirmDeleteNpc = (person: NpcProfile) => {
   background: var(--color-background);
 }
 .memory-btn.edit {
-  color: #2563eb;
-  border-color: #bfdbfe;
+  color: #3a6c8c;
+  border-color: #c7d9e2;
 }
 .memory-btn.delete {
-  color: #dc2626;
+  color: #a83a2c;
   border-color: #fecaca;
 }
 
 /* 简化：外貌描述样式 */
 .appearance-description {
   padding: 1rem;
-  background: rgba(147, 51, 234, 0.05);
+  background: rgba(124, 82, 150, 0.05);
   border-radius: 8px;
-  border-left: 3px solid #9333ea;
+  border-left: 3px solid #7c5296;
 }
 
 .description-text {
@@ -4008,13 +4008,13 @@ const confirmDeleteNpc = (person: NpcProfile) => {
 }
 
 .talent-tag {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(37, 99, 235, 0.1));
-  color: #3b82f6;
+  background: linear-gradient(135deg, rgba(76, 135, 173, 0.1), rgba(37, 99, 235, 0.1));
+  color: #4c87ad;
   padding: 0.25rem 0.5rem;
   border-radius: 6px;
   font-size: 0.75rem;
   font-weight: 500;
-  border: 1px solid rgba(59, 130, 246, 0.2);
+  border: 1px solid rgba(76, 135, 173, 0.2);
 }
 
 .attributes-grid {
@@ -4071,19 +4071,19 @@ const confirmDeleteNpc = (person: NpcProfile) => {
 }
 
 .npc-item-card.quality-凡 {
-  border-left: 3px solid #6b7280;
+  border-left: 3px solid #78736a;
 }
 
 .npc-item-card.quality-黄 {
-  border-left: 3px solid #f59e0b;
+  border-left: 3px solid #c69431;
 }
 
 .npc-item-card.quality-玄 {
-  border-left: 3px solid #8b5cf6;
+  border-left: 3px solid #8a6fa8;
 }
 
 .npc-item-card.quality-地 {
-  border-left: 3px solid #06b6d4;
+  border-left: 3px solid #4f97ab;
 }
 
 .npc-item-card.quality-天 {
@@ -4091,13 +4091,13 @@ const confirmDeleteNpc = (person: NpcProfile) => {
 }
 
 .npc-item-card.quality-仙 {
-  border-left: 3px solid #f59e0b;
-  box-shadow: 0 0 10px rgba(245, 158, 11, 0.3);
+  border-left: 3px solid #c69431;
+  box-shadow: 0 0 10px rgba(198, 148, 49, 0.3);
 }
 
 .npc-item-card.quality-神 {
-  border-left: 3px solid #9333ea;
-  box-shadow: 0 0 15px rgba(147, 51, 234, 0.4);
+  border-left: 3px solid #7c5296;
+  box-shadow: 0 0 15px rgba(124, 82, 150, 0.4);
 }
 
 .item-header {
@@ -4163,7 +4163,7 @@ const confirmDeleteNpc = (person: NpcProfile) => {
   display: flex;
   align-items: center;
   gap: 0.25rem;
-  background: linear-gradient(135deg, #059669, #047857);
+  background: linear-gradient(135deg, #3f8268, #047857);
   color: white;
   border: none;
   padding: 0.375rem 0.75rem;
@@ -4188,7 +4188,7 @@ const confirmDeleteNpc = (person: NpcProfile) => {
   display: flex;
   align-items: center;
   gap: 0.25rem;
-  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  background: linear-gradient(135deg, #4c87ad, #3a6c8c);
   color: white;
   border: none;
   padding: 0.375rem 0.75rem;
@@ -4200,9 +4200,9 @@ const confirmDeleteNpc = (person: NpcProfile) => {
 }
 
 .request-btn:hover {
-  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  background: linear-gradient(135deg, #3a6c8c, #2e5878);
   transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 2px 8px rgba(76, 135, 173, 0.3);
 }
 
 .request-btn:active {
@@ -4213,7 +4213,7 @@ const confirmDeleteNpc = (person: NpcProfile) => {
   display: flex;
   align-items: center;
   gap: 0.25rem;
-  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  background: linear-gradient(135deg, #a83a2c, #8e2f24);
   color: white;
   border: none;
   padding: 0.375rem 0.75rem;
@@ -4225,9 +4225,9 @@ const confirmDeleteNpc = (person: NpcProfile) => {
 }
 
 .steal-btn:hover {
-  background: linear-gradient(135deg, #b91c1c, #991b1b);
+  background: linear-gradient(135deg, #8e2f24, #7a2b22);
   transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);
+  box-shadow: 0 2px 8px rgba(168, 58, 44, 0.3);
 }
 
 .steal-btn:active {
@@ -4360,12 +4360,12 @@ const confirmDeleteNpc = (person: NpcProfile) => {
 
 .status-正常 {
   background: rgba(107, 114, 128, 0.2);
-  color: #6b7280;
+  color: #78736a;
 }
 
 .status-微湿 {
-  background: rgba(59, 130, 246, 0.2);
-  color: #3b82f6;
+  background: rgba(76, 135, 173, 0.2);
+  color: #4c87ad;
 }
 
 .status-发情 {
@@ -4374,13 +4374,13 @@ const confirmDeleteNpc = (person: NpcProfile) => {
 }
 
 .status-高潮 {
-  background: rgba(220, 38, 38, 0.2);
-  color: #dc2626;
+  background: rgba(168, 58, 44, 0.2);
+  color: #a83a2c;
 }
 
 .status-贤者时间 {
-  background: rgba(139, 92, 246, 0.2);
-  color: #8b5cf6;
+  background: rgba(138, 111, 168, 0.2);
+  color: #8a6fa8;
 }
 
 .fetish-tag {
@@ -4487,10 +4487,10 @@ const confirmDeleteNpc = (person: NpcProfile) => {
 
 /* 实时状态高亮区域（通用）*/
 .highlight-section {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), rgba(147, 51, 234, 0.05));
+  background: linear-gradient(135deg, rgba(76, 135, 173, 0.05), rgba(124, 82, 150, 0.05));
   border-radius: 8px;
   padding: 1rem;
-  border: 1px solid rgba(59, 130, 246, 0.15);
+  border: 1px solid rgba(76, 135, 173, 0.15);
 }
 
 .realtime-status {
@@ -4538,7 +4538,7 @@ const confirmDeleteNpc = (person: NpcProfile) => {
 }
 
 .desire-fill {
-  background: linear-gradient(90deg, #f59e0b, #dc2626);
+  background: linear-gradient(90deg, #c69431, #a83a2c);
 }
 
 .mini-label {
@@ -4688,11 +4688,11 @@ const confirmDeleteNpc = (person: NpcProfile) => {
 }
 
 .stat-bar-fill.sensitivity {
-  background: linear-gradient(90deg, #f59e0b, #ec4899);
+  background: linear-gradient(90deg, #c69431, #ec4899);
 }
 
 .stat-bar-fill.development {
-  background: linear-gradient(90deg, #8b5cf6, #ec4899);
+  background: linear-gradient(90deg, #8a6fa8, #ec4899);
 }
 
 .stat-value {
@@ -4706,9 +4706,9 @@ const confirmDeleteNpc = (person: NpcProfile) => {
 /* 体液状态 */
 .fluid-status {
   padding: 0.75rem;
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(236, 72, 153, 0.08));
+  background: linear-gradient(135deg, rgba(76, 135, 173, 0.08), rgba(236, 72, 153, 0.08));
   border-radius: 6px;
-  border-left: 3px solid #3b82f6;
+  border-left: 3px solid #4c87ad;
   font-size: 0.85rem;
   color: var(--color-text);
   font-style: italic;
@@ -4716,19 +4716,19 @@ const confirmDeleteNpc = (person: NpcProfile) => {
 
 /* 特殊体质标签 */
 .special-trait-tag {
-  background: linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(236, 72, 153, 0.15));
-  color: #a855f7;
+  background: linear-gradient(135deg, rgba(150, 104, 176, 0.15), rgba(236, 72, 153, 0.15));
+  color: #9668b0;
   padding: 0.25rem 0.5rem;
   border-radius: 6px;
   font-size: 0.75rem;
   font-weight: 500;
-  border: 1px solid rgba(168, 85, 247, 0.3);
+  border: 1px solid rgba(150, 104, 176, 0.3);
 }
 
 /* ========== 人格底线样式 ========== */
 .personality-section {
-  background: linear-gradient(135deg, rgba(239, 68, 68, 0.08), rgba(249, 115, 22, 0.08));
-  border-left: 4px solid #ef4444;
+  background: linear-gradient(135deg, rgba(195, 75, 60, 0.08), rgba(249, 115, 22, 0.08));
+  border-left: 4px solid #c34b3c;
 }
 
 .personality-bottomlines {
@@ -4742,23 +4742,23 @@ const confirmDeleteNpc = (person: NpcProfile) => {
 }
 
 .bottomline-tag {
-  background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(249, 115, 22, 0.15));
-  color: #ef4444;
+  background: linear-gradient(135deg, rgba(195, 75, 60, 0.15), rgba(249, 115, 22, 0.15));
+  color: #c34b3c;
   padding: 0.4rem 0.75rem;
   border-radius: 8px;
   font-size: 0.85rem;
   font-weight: 600;
-  border: 1.5px solid rgba(239, 68, 68, 0.4);
+  border: 1.5px solid rgba(195, 75, 60, 0.4);
   display: inline-flex;
   align-items: center;
-  box-shadow: 0 2px 4px rgba(239, 68, 68, 0.1);
+  box-shadow: 0 2px 4px rgba(195, 75, 60, 0.1);
   transition: all 0.2s ease;
 }
 
 .bottomline-tag:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(239, 68, 68, 0.2);
-  border-color: rgba(239, 68, 68, 0.6);
+  box-shadow: 0 4px 8px rgba(195, 75, 60, 0.2);
+  border-color: rgba(195, 75, 60, 0.6);
 }
 
 .bottomline-empty {
@@ -4772,15 +4772,15 @@ const confirmDeleteNpc = (person: NpcProfile) => {
   display: flex;
   align-items: flex-start;
   gap: 0.5rem;
-  background: rgba(239, 68, 68, 0.1);
+  background: rgba(195, 75, 60, 0.1);
   padding: 0.75rem;
   border-radius: 8px;
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  border: 1px solid rgba(195, 75, 60, 0.3);
 }
 
 .warning-icon {
   font-size: 1.1rem;
-  color: #f59e0b;
+  color: #c69431;
   flex-shrink: 0;
   animation: pulse 2s infinite;
 }
@@ -4798,7 +4798,7 @@ const confirmDeleteNpc = (person: NpcProfile) => {
 }
 
 .warning-text {
-  color: #dc2626;
+  color: #a83a2c;
   font-size: 0.8rem;
   line-height: 1.4;
   font-weight: 500;
@@ -4839,11 +4839,11 @@ const confirmDeleteNpc = (person: NpcProfile) => {
 }
 
 .tab-btn.active {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(147, 51, 234, 0.1));
+  background: linear-gradient(135deg, rgba(76, 135, 173, 0.1), rgba(124, 82, 150, 0.1));
   border-color: var(--color-primary);
   color: var(--color-primary);
   font-weight: 600;
-  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
+  box-shadow: 0 2px 8px rgba(76, 135, 173, 0.2);
 }
 
 .tab-btn.active::after {
@@ -4885,7 +4885,7 @@ const confirmDeleteNpc = (person: NpcProfile) => {
 }
 
 .info-item-row:hover {
-  background: rgba(59, 130, 246, 0.03);
+  background: rgba(76, 135, 173, 0.03);
 }
 
 .info-item-row .info-label {
@@ -4913,7 +4913,7 @@ const confirmDeleteNpc = (person: NpcProfile) => {
 
 .npc-memory-item {
   background: linear-gradient(135deg, rgba(234, 179, 8, 0.05), rgba(249, 115, 22, 0.05));
-  border-left: 3px solid #eab308;
+  border-left: 3px solid #bd9a2e;
   border-radius: 4px;
   padding: 10px 12px;
   transition: all 0.2s ease;
@@ -4939,8 +4939,8 @@ const confirmDeleteNpc = (person: NpcProfile) => {
 }
 
 .npc-attr-group {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), rgba(147, 51, 234, 0.05));
-  border: 1px solid rgba(59, 130, 246, 0.15);
+  background: linear-gradient(135deg, rgba(76, 135, 173, 0.05), rgba(124, 82, 150, 0.05));
+  border: 1px solid rgba(76, 135, 173, 0.15);
   border-radius: 8px;
   padding: 10px;
 }
@@ -4972,16 +4972,16 @@ const confirmDeleteNpc = (person: NpcProfile) => {
 
 .npc-attr-item:hover {
   background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(59, 130, 246, 0.3);
+  border-color: rgba(76, 135, 173, 0.3);
   transform: translateY(-2px);
 }
 
 .npc-attr-item.final {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.12), rgba(147, 51, 234, 0.12));
+  background: linear-gradient(135deg, rgba(76, 135, 173, 0.12), rgba(124, 82, 150, 0.12));
 }
 
 .npc-attr-item.final:hover {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(147, 51, 234, 0.2));
+  background: linear-gradient(135deg, rgba(76, 135, 173, 0.2), rgba(124, 82, 150, 0.2));
 }
 
 .npc-attr-label {
@@ -5005,9 +5005,9 @@ const confirmDeleteNpc = (person: NpcProfile) => {
 }
 
 .delete-npc-btn {
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.3);
-  color: #ef4444;
+  background: rgba(195, 75, 60, 0.1);
+  border: 1px solid rgba(195, 75, 60, 0.3);
+  color: #c34b3c;
   border-radius: 50%;
   width: 30px;
   height: 30px;
@@ -5020,9 +5020,9 @@ const confirmDeleteNpc = (person: NpcProfile) => {
 }
 
 .delete-npc-btn:hover {
-  background: rgba(239, 68, 68, 0.2);
-  border-color: #ef4444;
-  color: #ef4444;
+  background: rgba(195, 75, 60, 0.2);
+  border-color: #c34b3c;
+  color: #c34b3c;
   transform: scale(1.1);
 }
 
@@ -5048,28 +5048,28 @@ const confirmDeleteNpc = (person: NpcProfile) => {
 }
 
 .action-btn.download-btn {
-  background: rgba(59, 130, 246, 0.1);
-  border-color: rgba(59, 130, 246, 0.3);
-  color: #3b82f6;
+  background: rgba(76, 135, 173, 0.1);
+  border-color: rgba(76, 135, 173, 0.3);
+  color: #4c87ad;
 }
 
 .action-btn.download-btn:hover {
-  background: rgba(59, 130, 246, 0.2);
-  border-color: #3b82f6;
-  color: #3b82f6;
+  background: rgba(76, 135, 173, 0.2);
+  border-color: #4c87ad;
+  color: #4c87ad;
   transform: scale(1.1);
 }
 
 .action-btn.export-btn {
-  background: rgba(16, 185, 129, 0.1);
-  border-color: rgba(16, 185, 129, 0.3);
-  color: #10b981;
+  background: rgba(79, 155, 126, 0.1);
+  border-color: rgba(79, 155, 126, 0.3);
+  color: #4f9b7e;
 }
 
 .action-btn.export-btn:hover {
-  background: rgba(16, 185, 129, 0.2);
-  border-color: #10b981;
-  color: #10b981;
+  background: rgba(79, 155, 126, 0.2);
+  border-color: #4f9b7e;
+  color: #4f9b7e;
   transform: scale(1.1);
 }
 
@@ -5093,7 +5093,7 @@ const confirmDeleteNpc = (person: NpcProfile) => {
   transition: all 0.2s ease;
   background: rgba(156, 163, 175, 0.1);
   border: 1px solid rgba(156, 163, 175, 0.2);
-  color: #9ca3af;
+  color: #a29c90;
   padding: 0;
   outline: none;
   position: relative;
@@ -5102,9 +5102,9 @@ const confirmDeleteNpc = (person: NpcProfile) => {
 }
 
 .delete-btn-card:hover {
-  background: rgba(239, 68, 68, 0.1);
-  border-color: #ef4444;
-  color: #ef4444;
+  background: rgba(195, 75, 60, 0.1);
+  border-color: #c34b3c;
+  color: #c34b3c;
   transform: scale(1.1);
 }
 

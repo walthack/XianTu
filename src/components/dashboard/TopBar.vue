@@ -163,7 +163,7 @@ onMounted(() => {
   padding: 0 16px;
   box-sizing: border-box;
   background: var(--color-surface, #f8f9fa);
-  border-bottom: 1px solid var(--color-border, #e2e8f0);
+  border-bottom: 1px solid var(--color-border, #ddd7c9);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   position: sticky;
   top: 0;
@@ -250,8 +250,8 @@ onMounted(() => {
   align-items: center;
   gap: 6px;
   padding: 4px 10px;
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(147, 197, 253, 0.12) 100%);
-  border: 1px solid rgba(59, 130, 246, 0.25);
+  background: linear-gradient(135deg, rgba(76, 135, 173, 0.08) 0%, rgba(166, 198, 218, 0.12) 100%);
+  border: 1px solid rgba(76, 135, 173, 0.25);
   border-radius: 12px;
   margin-left: 8px;
   position: relative;
@@ -261,8 +261,8 @@ onMounted(() => {
 
 .spirit-density:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
-  border-color: rgba(59, 130, 246, 0.4);
+  box-shadow: 0 4px 12px rgba(76, 135, 173, 0.2);
+  border-color: rgba(76, 135, 173, 0.4);
 }
 
 .spirit-icon-wrapper {
@@ -276,18 +276,18 @@ onMounted(() => {
 
 .spirit-icon {
   font-size: 0.9rem;
-  color: #3b82f6;
+  color: #4c87ad;
   position: relative;
   z-index: 2;
   animation: spirit-pulse 2s ease-in-out infinite;
-  filter: drop-shadow(0 0 3px rgba(59, 130, 246, 0.6));
+  filter: drop-shadow(0 0 3px rgba(76, 135, 173, 0.6));
 }
 
 .spirit-glow {
   position: absolute;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle, rgba(59, 130, 246, 0.4) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(76, 135, 173, 0.4) 0%, transparent 70%);
   border-radius: 50%;
   animation: spirit-glow-pulse 2s ease-in-out infinite;
 }
@@ -295,7 +295,7 @@ onMounted(() => {
 .spirit-label {
   font-size: 0.7rem;
   font-weight: 600;
-  color: #1e40af;
+  color: #27506b;
   letter-spacing: 0.5px;
   text-transform: uppercase;
 }
@@ -303,7 +303,7 @@ onMounted(() => {
 .spirit-value {
   font-size: 0.85rem;
   font-weight: 700;
-  color: #1e40af;
+  color: #27506b;
   font-family: 'Courier New', monospace;
   min-width: 24px;
   text-align: right;
@@ -315,7 +315,7 @@ onMounted(() => {
   left: 0;
   right: 0;
   height: 3px;
-  background: rgba(59, 130, 246, 0.15);
+  background: rgba(76, 135, 173, 0.15);
   overflow: hidden;
 }
 
@@ -324,60 +324,60 @@ onMounted(() => {
   left: 0;
   top: 0;
   height: 100%;
-  background: linear-gradient(90deg, #3b82f6 0%, #60a5fa 100%);
+  background: linear-gradient(90deg, #4c87ad 0%, #78a8c6 100%);
   transition: width 0.5s ease;
-  box-shadow: 0 0 8px rgba(59, 130, 246, 0.6);
+  box-shadow: 0 0 8px rgba(76, 135, 173, 0.6);
 }
 
 /* 灵气浓度等级样式 */
 .spirit-density.density-very-high {
-  background: linear-gradient(135deg, rgba(168, 85, 247, 0.12) 0%, rgba(192, 132, 252, 0.16) 100%);
-  border-color: rgba(168, 85, 247, 0.35);
+  background: linear-gradient(135deg, rgba(150, 104, 176, 0.12) 0%, rgba(192, 132, 252, 0.16) 100%);
+  border-color: rgba(150, 104, 176, 0.35);
 }
 
 .spirit-density.density-very-high .spirit-icon,
 .spirit-density.density-very-high .spirit-label,
 .spirit-density.density-very-high .spirit-value {
-  color: #7c3aed;
+  color: #70518f;
 }
 
 .spirit-density.density-very-high .spirit-bar-fill {
-  background: linear-gradient(90deg, #7c3aed 0%, #a78bfa 100%);
+  background: linear-gradient(90deg, #70518f 0%, #a189bd 100%);
   box-shadow: 0 0 10px rgba(124, 58, 237, 0.8);
 }
 
 .spirit-density.density-very-high .spirit-glow {
-  background: radial-gradient(circle, rgba(168, 85, 247, 0.5) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(150, 104, 176, 0.5) 0%, transparent 70%);
 }
 
 .spirit-density.density-high {
-  background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(74, 222, 128, 0.14) 100%);
-  border-color: rgba(34, 197, 94, 0.3);
+  background: linear-gradient(135deg, rgba(95, 155, 106, 0.1) 0%, rgba(74, 222, 128, 0.14) 100%);
+  border-color: rgba(95, 155, 106, 0.3);
 }
 
 .spirit-density.density-high .spirit-icon,
 .spirit-density.density-high .spirit-label,
 .spirit-density.density-high .spirit-value {
-  color: #15803d;
+  color: #456f4c;
 }
 
 .spirit-density.density-high .spirit-bar-fill {
-  background: linear-gradient(90deg, #22c55e 0%, #4ade80 100%);
-  box-shadow: 0 0 8px rgba(34, 197, 94, 0.7);
+  background: linear-gradient(90deg, #5f9b6a 0%, #7cb187 100%);
+  box-shadow: 0 0 8px rgba(95, 155, 106, 0.7);
 }
 
 .spirit-density.density-high .spirit-glow {
-  background: radial-gradient(circle, rgba(34, 197, 94, 0.4) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(95, 155, 106, 0.4) 0%, transparent 70%);
 }
 
 .spirit-density.density-medium {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(147, 197, 253, 0.12) 100%);
-  border-color: rgba(59, 130, 246, 0.25);
+  background: linear-gradient(135deg, rgba(76, 135, 173, 0.08) 0%, rgba(166, 198, 218, 0.12) 100%);
+  border-color: rgba(76, 135, 173, 0.25);
 }
 
 .spirit-density.density-low {
-  background: linear-gradient(135deg, rgba(251, 146, 60, 0.08) 0%, rgba(253, 186, 116, 0.12) 100%);
-  border-color: rgba(251, 146, 60, 0.25);
+  background: linear-gradient(135deg, rgba(198, 128, 76, 0.08) 0%, rgba(253, 186, 116, 0.12) 100%);
+  border-color: rgba(198, 128, 76, 0.25);
 }
 
 .spirit-density.density-low .spirit-icon,
@@ -392,27 +392,27 @@ onMounted(() => {
 }
 
 .spirit-density.density-low .spirit-glow {
-  background: radial-gradient(circle, rgba(251, 146, 60, 0.3) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(198, 128, 76, 0.3) 0%, transparent 70%);
 }
 
 .spirit-density.density-very-low {
-  background: linear-gradient(135deg, rgba(239, 68, 68, 0.08) 0%, rgba(248, 113, 113, 0.12) 100%);
-  border-color: rgba(239, 68, 68, 0.25);
+  background: linear-gradient(135deg, rgba(195, 75, 60, 0.08) 0%, rgba(205, 111, 95, 0.12) 100%);
+  border-color: rgba(195, 75, 60, 0.25);
 }
 
 .spirit-density.density-very-low .spirit-icon,
 .spirit-density.density-very-low .spirit-label,
 .spirit-density.density-very-low .spirit-value {
-  color: #b91c1c;
+  color: #8e2f24;
 }
 
 .spirit-density.density-very-low .spirit-bar-fill {
-  background: linear-gradient(90deg, #dc2626 0%, #ef4444 100%);
-  box-shadow: 0 0 6px rgba(220, 38, 38, 0.6);
+  background: linear-gradient(90deg, #a83a2c 0%, #c34b3c 100%);
+  box-shadow: 0 0 6px rgba(168, 58, 44, 0.6);
 }
 
 .spirit-density.density-very-low .spirit-glow {
-  background: radial-gradient(circle, rgba(239, 68, 68, 0.3) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(195, 75, 60, 0.3) 0%, transparent 70%);
 }
 
 @keyframes spirit-pulse {
@@ -646,31 +646,31 @@ onMounted(() => {
 
 /* 深色主题 */
 [data-theme='dark'] .top-bar {
-  background: #1e293b;
-  border-bottom-color: #334155;
+  background: #1e2228;
+  border-bottom-color: #3d3a35;
 }
 
 [data-theme='dark'] .game-title {
-  color: #f1f5f9;
+  color: #ece7dc;
 }
 
 [data-theme='dark'] .character-quick-info {
-  background: #334155;
-  border-color: #475569;
+  background: #3d3a35;
+  border-color: #56534b;
 }
 
 [data-theme='dark'] .character-name {
-  color: #e2e8f0;
+  color: #ddd7c9;
 }
 
 [data-theme='dark'] .character-realm {
   background: rgba(167, 139, 250, 0.2);
-  color: #a78bfa;
+  color: #a189bd;
 }
 
 [data-theme='dark'] .location-time-info {
-  background: #334155;
-  border-color: #475569;
+  background: #3d3a35;
+  border-color: #56534b;
 }
 
 [data-theme='dark'] .location-text {
@@ -678,39 +678,39 @@ onMounted(() => {
 }
 
 [data-theme='dark'] .spirit-density {
-  background: linear-gradient(135deg, rgba(96, 165, 250, 0.15) 0%, rgba(147, 197, 253, 0.2) 100%);
-  border-color: rgba(96, 165, 250, 0.3);
+  background: linear-gradient(135deg, rgba(120, 168, 198, 0.15) 0%, rgba(166, 198, 218, 0.2) 100%);
+  border-color: rgba(120, 168, 198, 0.3);
 }
 
 [data-theme='dark'] .spirit-density:hover {
-  box-shadow: 0 4px 12px rgba(96, 165, 250, 0.3);
-  border-color: rgba(96, 165, 250, 0.5);
+  box-shadow: 0 4px 12px rgba(120, 168, 198, 0.3);
+  border-color: rgba(120, 168, 198, 0.5);
 }
 
 [data-theme='dark'] .spirit-icon {
-  color: #60a5fa;
-  filter: drop-shadow(0 0 4px rgba(96, 165, 250, 0.7));
+  color: #78a8c6;
+  filter: drop-shadow(0 0 4px rgba(120, 168, 198, 0.7));
 }
 
 [data-theme='dark'] .spirit-glow {
-  background: radial-gradient(circle, rgba(96, 165, 250, 0.5) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(120, 168, 198, 0.5) 0%, transparent 70%);
 }
 
 [data-theme='dark'] .spirit-label {
-  color: #93c5fd;
+  color: #a6c6da;
 }
 
 [data-theme='dark'] .spirit-value {
-  color: #dbeafe;
+  color: #dde7eb;
 }
 
 [data-theme='dark'] .spirit-bar {
-  background: rgba(96, 165, 250, 0.2);
+  background: rgba(120, 168, 198, 0.2);
 }
 
 [data-theme='dark'] .spirit-bar-fill {
-  background: linear-gradient(90deg, #60a5fa 0%, #93c5fd 100%);
-  box-shadow: 0 0 10px rgba(96, 165, 250, 0.8);
+  background: linear-gradient(90deg, #78a8c6 0%, #a6c6da 100%);
+  box-shadow: 0 0 10px rgba(120, 168, 198, 0.8);
 }
 
 /* Dark theme - density levels */
@@ -721,7 +721,7 @@ onMounted(() => {
 
 [data-theme='dark'] .spirit-density.density-very-high .spirit-icon,
 [data-theme='dark'] .spirit-density.density-very-high .spirit-label {
-  color: #c084fc;
+  color: #b294c6;
 }
 
 [data-theme='dark'] .spirit-density.density-very-high .spirit-value {
@@ -729,8 +729,8 @@ onMounted(() => {
 }
 
 [data-theme='dark'] .spirit-density.density-very-high .spirit-bar-fill {
-  background: linear-gradient(90deg, #a78bfa 0%, #c084fc 100%);
-  box-shadow: 0 0 12px rgba(168, 85, 247, 0.9);
+  background: linear-gradient(90deg, #a189bd 0%, #b294c6 100%);
+  box-shadow: 0 0 12px rgba(150, 104, 176, 0.9);
 }
 
 [data-theme='dark'] .spirit-density.density-very-high .spirit-glow {
@@ -744,7 +744,7 @@ onMounted(() => {
 
 [data-theme='dark'] .spirit-density.density-high .spirit-icon,
 [data-theme='dark'] .spirit-density.density-high .spirit-label {
-  color: #4ade80;
+  color: #7cb187;
 }
 
 [data-theme='dark'] .spirit-density.density-high .spirit-value {
@@ -752,7 +752,7 @@ onMounted(() => {
 }
 
 [data-theme='dark'] .spirit-density.density-high .spirit-bar-fill {
-  background: linear-gradient(90deg, #34d399 0%, #6ee7b7 100%);
+  background: linear-gradient(90deg, #34d399 0%, #8fc0a6 100%);
   box-shadow: 0 0 10px rgba(52, 211, 153, 0.8);
 }
 
@@ -761,8 +761,8 @@ onMounted(() => {
 }
 
 [data-theme='dark'] .spirit-density.density-low {
-  background: linear-gradient(135deg, rgba(251, 146, 60, 0.12) 0%, rgba(253, 186, 116, 0.18) 100%);
-  border-color: rgba(251, 146, 60, 0.3);
+  background: linear-gradient(135deg, rgba(198, 128, 76, 0.12) 0%, rgba(253, 186, 116, 0.18) 100%);
+  border-color: rgba(198, 128, 76, 0.3);
 }
 
 [data-theme='dark'] .spirit-density.density-low .spirit-icon,
@@ -780,17 +780,17 @@ onMounted(() => {
 }
 
 [data-theme='dark'] .spirit-density.density-low .spirit-glow {
-  background: radial-gradient(circle, rgba(251, 146, 60, 0.4) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(198, 128, 76, 0.4) 0%, transparent 70%);
 }
 
 [data-theme='dark'] .spirit-density.density-very-low {
-  background: linear-gradient(135deg, rgba(248, 113, 113, 0.12) 0%, rgba(252, 165, 165, 0.18) 100%);
-  border-color: rgba(248, 113, 113, 0.3);
+  background: linear-gradient(135deg, rgba(205, 111, 95, 0.12) 0%, rgba(252, 165, 165, 0.18) 100%);
+  border-color: rgba(205, 111, 95, 0.3);
 }
 
 [data-theme='dark'] .spirit-density.density-very-low .spirit-icon,
 [data-theme='dark'] .spirit-density.density-very-low .spirit-label {
-  color: #f87171;
+  color: #cd6f5f;
 }
 
 [data-theme='dark'] .spirit-density.density-very-low .spirit-value {
@@ -798,31 +798,31 @@ onMounted(() => {
 }
 
 [data-theme='dark'] .spirit-density.density-very-low .spirit-bar-fill {
-  background: linear-gradient(90deg, #ef4444 0%, #f87171 100%);
-  box-shadow: 0 0 8px rgba(239, 68, 68, 0.7);
+  background: linear-gradient(90deg, #c34b3c 0%, #cd6f5f 100%);
+  box-shadow: 0 0 8px rgba(195, 75, 60, 0.7);
 }
 
 [data-theme='dark'] .spirit-density.density-very-low .spirit-glow {
-  background: radial-gradient(circle, rgba(248, 113, 113, 0.4) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(205, 111, 95, 0.4) 0%, transparent 70%);
 }
 
 [data-theme='dark'] .separator {
-  color: #64748b;
+  color: #7c776c;
 }
 
 [data-theme='dark'] .time-value {
-  color: #cbd5e1;
+  color: #c4bdad;
 }
 
 [data-theme='dark'] .fullscreen-btn {
   background: transparent;
-  border-color: #475569;
-  color: #94a3b8;
+  border-color: #56534b;
+  color: #a09a8d;
 }
 
 [data-theme='dark'] .fullscreen-btn:hover {
-  background: #334155;
-  border-color: #64748b;
-  color: #e2e8f0;
+  background: #3d3a35;
+  border-color: #7c776c;
+  color: #ddd7c9;
 }
 </style>

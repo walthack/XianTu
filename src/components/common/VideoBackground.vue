@@ -138,7 +138,7 @@ const onError = () => {}
   overflow: hidden;
   z-index: -10;
   pointer-events: none;
-  background-color: #1a1b26; /* 简单的暗色背景作为备用 */
+  background-color: #15181c; /* 简单的暗色背景作为备用 */
 }
 
 .video-background {

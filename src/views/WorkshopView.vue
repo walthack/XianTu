@@ -1015,8 +1015,8 @@ const submitUpload = async () => {
   padding: 1.25rem 1.5rem 1rem;
   border-bottom: 1px solid var(--color-border);
   background: linear-gradient(180deg,
-    rgba(147, 197, 253, 0.08) 0%,
-    rgba(147, 197, 253, 0.02) 50%,
+    rgba(166, 198, 218, 0.08) 0%,
+    rgba(166, 198, 218, 0.02) 50%,
     transparent 100%
   );
 }
@@ -1024,7 +1024,7 @@ const submitUpload = async () => {
 .header-bg {
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(147, 197, 253, 0.1) 0%, transparent 70%);
+  background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(166, 198, 218, 0.1) 0%, transparent 70%);
   pointer-events: none;
 }
 
@@ -1053,8 +1053,8 @@ const submitUpload = async () => {
   align-items: center;
   justify-content: center;
   border-radius: 10px;
-  background: linear-gradient(135deg, rgba(147, 197, 253, 0.2) 0%, rgba(147, 197, 253, 0.1) 100%);
-  border: 1px solid rgba(147, 197, 253, 0.3);
+  background: linear-gradient(135deg, rgba(166, 198, 218, 0.2) 0%, rgba(166, 198, 218, 0.1) 100%);
+  border: 1px solid rgba(166, 198, 218, 0.3);
   color: var(--color-primary);
 }
 
@@ -1082,15 +1082,15 @@ const submitUpload = async () => {
 }
 
 .auth-pill.ok {
-  border-color: rgba(16, 185, 129, 0.4);
-  background: rgba(16, 185, 129, 0.08);
-  color: #10b981;
+  border-color: rgba(79, 155, 126, 0.4);
+  background: rgba(79, 155, 126, 0.08);
+  color: #4f9b7e;
 }
 
 .auth-pill.warn {
-  border-color: rgba(251, 191, 36, 0.4);
-  background: rgba(251, 191, 36, 0.08);
-  color: #f59e0b;
+  border-color: rgba(213, 170, 74, 0.4);
+  background: rgba(213, 170, 74, 0.08);
+  color: #c69431;
 }
 
 .pill-link {
@@ -1107,7 +1107,7 @@ const submitUpload = async () => {
 }
 
 .pill-link:hover {
-  background: rgba(147, 197, 253, 0.15);
+  background: rgba(166, 198, 218, 0.15);
 }
 
 .subtitle {
@@ -1155,12 +1155,12 @@ const submitUpload = async () => {
 
 .tab:hover {
   color: var(--color-text);
-  background: rgba(147, 197, 253, 0.05);
+  background: rgba(166, 198, 218, 0.05);
 }
 
 .tab.active {
   background: var(--color-surface);
-  border-color: rgba(147, 197, 253, 0.3);
+  border-color: rgba(166, 198, 218, 0.3);
   color: var(--color-primary);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
@@ -1172,7 +1172,7 @@ const submitUpload = async () => {
   min-height: 0;
   padding: 0 1.5rem;
   scrollbar-width: thin;
-  scrollbar-color: rgba(147, 197, 253, 0.3) transparent;
+  scrollbar-color: rgba(166, 198, 218, 0.3) transparent;
 }
 
 .scroll-content::-webkit-scrollbar {
@@ -1184,12 +1184,12 @@ const submitUpload = async () => {
 }
 
 .scroll-content::-webkit-scrollbar-thumb {
-  background: rgba(147, 197, 253, 0.25);
+  background: rgba(166, 198, 218, 0.25);
   border-radius: 3px;
 }
 
 .scroll-content::-webkit-scrollbar-thumb:hover {
-  background: rgba(147, 197, 253, 0.4);
+  background: rgba(166, 198, 218, 0.4);
 }
 
 /* Filters */
@@ -1242,8 +1242,8 @@ const submitUpload = async () => {
   margin-top: 0.75rem;
   padding: 0.6rem 0.9rem;
   border-radius: 10px;
-  background: rgba(147, 197, 253, 0.06);
-  border: 1px solid rgba(147, 197, 253, 0.15);
+  background: rgba(166, 198, 218, 0.06);
+  border: 1px solid rgba(166, 198, 218, 0.15);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1360,7 +1360,7 @@ select.input option {
 }
 
 .item-card:hover {
-  border-color: rgba(147, 197, 253, 0.5);
+  border-color: rgba(166, 198, 218, 0.5);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   transform: translateY(-2px);
 }
@@ -1380,10 +1380,10 @@ select.input option {
   font-size: 0.68rem;
   font-weight: 500;
   color: var(--color-primary);
-  border: 1px solid rgba(147, 197, 253, 0.3);
+  border: 1px solid rgba(166, 198, 218, 0.3);
   padding: 0.2rem 0.5rem;
   border-radius: 999px;
-  background: rgba(147, 197, 253, 0.08);
+  background: rgba(166, 198, 218, 0.08);
   white-space: nowrap;
 }
 
@@ -1403,7 +1403,7 @@ select.input option {
 }
 
 .stat-item.downloads {
-  color: #10b981;
+  color: #4f9b7e;
 }
 
 .stat-value {
@@ -1519,24 +1519,24 @@ select.input option {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, rgba(147, 197, 253, 0.15) 0%, rgba(147, 197, 253, 0.08) 100%);
-  border-color: rgba(147, 197, 253, 0.4);
+  background: linear-gradient(135deg, rgba(166, 198, 218, 0.15) 0%, rgba(166, 198, 218, 0.08) 100%);
+  border-color: rgba(166, 198, 218, 0.4);
   color: var(--color-primary);
 }
 
 .btn-primary:hover {
-  background: linear-gradient(135deg, rgba(147, 197, 253, 0.25) 0%, rgba(147, 197, 253, 0.15) 100%);
-  border-color: rgba(147, 197, 253, 0.5);
+  background: linear-gradient(135deg, rgba(166, 198, 218, 0.25) 0%, rgba(166, 198, 218, 0.15) 100%);
+  border-color: rgba(166, 198, 218, 0.5);
 }
 
 .btn.danger {
-  border-color: rgba(239, 68, 68, 0.3);
-  background: rgba(239, 68, 68, 0.08);
-  color: #ef4444;
+  border-color: rgba(195, 75, 60, 0.3);
+  background: rgba(195, 75, 60, 0.08);
+  color: #c34b3c;
 }
 
 .btn.danger:hover {
-  background: rgba(239, 68, 68, 0.15);
+  background: rgba(195, 75, 60, 0.15);
 }
 
 /* Pagination */
@@ -1613,7 +1613,7 @@ select.input option {
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
-  color: #10b981;
+  color: #4f9b7e;
   font-size: 0.8rem;
 }
 
@@ -1687,7 +1687,7 @@ select.input option {
   justify-content: space-between;
   padding: 0.9rem 1rem;
   border-bottom: 1px solid var(--color-border);
-  background: linear-gradient(180deg, rgba(147, 197, 253, 0.05) 0%, transparent 100%);
+  background: linear-gradient(180deg, rgba(166, 198, 218, 0.05) 0%, transparent 100%);
 }
 
 .modal-header h3 {
@@ -1807,7 +1807,7 @@ select.input option {
 }
 
 .downloads-value {
-  color: #10b981;
+  color: #4f9b7e;
   font-weight: 600;
 }
 

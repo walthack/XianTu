@@ -472,9 +472,9 @@ ${existingNames.join('，') || '（无）'}
   display: flex;
   gap: 1.5rem;
   padding: 0.75rem 1rem;
-  background: linear-gradient(135deg, rgba(147, 51, 234, 0.1), rgba(168, 85, 247, 0.05));
+  background: linear-gradient(135deg, rgba(124, 82, 150, 0.1), rgba(150, 104, 176, 0.05));
   border-radius: 8px;
-  border: 1px solid rgba(147, 51, 234, 0.2);
+  border: 1px solid rgba(124, 82, 150, 0.2);
   flex-shrink: 0;
 }
 
@@ -490,9 +490,9 @@ ${existingNames.join('，') || '（无）'}
   gap: 0.4rem;
   padding: 0.45rem 0.7rem;
   border-radius: 8px;
-  border: 1px solid rgba(147, 51, 234, 0.25);
-  background: rgba(147, 51, 234, 0.08);
-  color: #9333ea;
+  border: 1px solid rgba(124, 82, 150, 0.25);
+  background: rgba(124, 82, 150, 0.08);
+  color: #7c5296;
   font-size: 0.8rem;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -500,8 +500,8 @@ ${existingNames.join('，') || '（无）'}
 }
 
 .gen-btn:hover:not(:disabled) {
-  border-color: rgba(147, 51, 234, 0.45);
-  background: rgba(147, 51, 234, 0.12);
+  border-color: rgba(124, 82, 150, 0.45);
+  background: rgba(124, 82, 150, 0.12);
 }
 
 .gen-btn:disabled {
@@ -535,11 +535,11 @@ ${existingNames.join('，') || '（无）'}
 }
 
 .info-value.position {
-  color: #9333ea;
+  color: #7c5296;
 }
 
 .info-value.contribution {
-  color: #f59e0b;
+  color: #c69431;
 }
 
 .library-floors {
@@ -565,7 +565,7 @@ ${existingNames.join('，') || '（无）'}
 }
 
 .floor-section.expanded {
-  border-color: rgba(147, 51, 234, 0.3);
+  border-color: rgba(124, 82, 150, 0.3);
 }
 
 .floor-header {
@@ -640,17 +640,17 @@ ${existingNames.join('，') || '（无）'}
   gap: 0.5rem;
   padding: 0.55rem 0.95rem;
   border-radius: 8px;
-  border: 1px solid rgba(147, 51, 234, 0.25);
-  background: rgba(147, 51, 234, 0.08);
-  color: #9333ea;
+  border: 1px solid rgba(124, 82, 150, 0.25);
+  background: rgba(124, 82, 150, 0.08);
+  color: #7c5296;
   font-size: 0.85rem;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .ask-btn:hover:not(:disabled) {
-  border-color: rgba(147, 51, 234, 0.45);
-  background: rgba(147, 51, 234, 0.12);
+  border-color: rgba(124, 82, 150, 0.45);
+  background: rgba(124, 82, 150, 0.12);
 }
 
 .ask-btn:disabled {
@@ -678,12 +678,12 @@ ${existingNames.join('，') || '（无）'}
 }
 
 .technique-card.can-afford {
-  border-color: rgba(34, 197, 94, 0.3);
+  border-color: rgba(95, 155, 106, 0.3);
 }
 
 .technique-card.owned {
   opacity: 0.7;
-  border-color: rgba(147, 51, 234, 0.3);
+  border-color: rgba(124, 82, 150, 0.3);
 }
 
 .tech-header {
@@ -705,11 +705,11 @@ ${existingNames.join('，') || '（无）'}
   font-weight: 500;
 }
 
-.quality-common { background: rgba(156, 163, 175, 0.2); color: #6b7280; }
-.quality-yellow { background: rgba(245, 158, 11, 0.2); color: #f59e0b; }
-.quality-xuan { background: rgba(139, 92, 246, 0.2); color: #8b5cf6; }
-.quality-earth { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
-.quality-heaven { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+.quality-common { background: rgba(156, 163, 175, 0.2); color: #78736a; }
+.quality-yellow { background: rgba(198, 148, 49, 0.2); color: #c69431; }
+.quality-xuan { background: rgba(138, 111, 168, 0.2); color: #8a6fa8; }
+.quality-earth { background: rgba(76, 135, 173, 0.2); color: #4c87ad; }
+.quality-heaven { background: rgba(195, 75, 60, 0.2); color: #c34b3c; }
 
 .tech-desc {
   font-size: 0.8rem;
@@ -729,13 +729,13 @@ ${existingNames.join('，') || '（无）'}
   align-items: center;
   gap: 0.25rem;
   font-size: 0.8rem;
-  color: #f59e0b;
+  color: #c69431;
   font-weight: 500;
 }
 
 .learn-btn {
   padding: 0.35rem 0.75rem;
-  background: linear-gradient(135deg, #22c55e, #16a34a);
+  background: linear-gradient(135deg, #5f9b6a, #4e8557);
   border: none;
   border-radius: 4px;
   color: white;
@@ -747,17 +747,17 @@ ${existingNames.join('，') || '（无）'}
 
 .learn-btn:hover:not(:disabled) {
   transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(34, 197, 94, 0.3);
+  box-shadow: 0 2px 8px rgba(95, 155, 106, 0.3);
 }
 
 .learn-btn:disabled {
-  background: #6b7280;
+  background: #78736a;
   cursor: not-allowed;
 }
 
 .owned-badge {
   font-size: 0.75rem;
-  color: #9333ea;
+  color: #7c5296;
   font-weight: 500;
 }
 
@@ -766,10 +766,10 @@ ${existingNames.join('，') || '（无）'}
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 0.75rem;
-  background: rgba(59, 130, 246, 0.1);
+  background: rgba(76, 135, 173, 0.1);
   border-radius: 6px;
   font-size: 0.75rem;
-  color: #3b82f6;
+  color: #4c87ad;
   flex-shrink: 0;
 }
 

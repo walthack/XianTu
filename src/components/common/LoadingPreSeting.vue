@@ -7,9 +7,9 @@
       :disabled="isLoading"
       :title="getButtonTooltip()"
     >
-      <span class="sync-icon" v-if="isLoading">⏳</span>
-      <span class="sync-icon" v-else-if="hasLoaded">✅</span>
-      <span class="sync-icon" v-else>📂</span>
+      <LoaderCircle v-if="isLoading" class="sync-icon spinning" :size="14" />
+      <Check v-else-if="hasLoaded" class="sync-icon" :size="14" />
+      <FolderOpen v-else class="sync-icon" :size="14" />
       <span class="sync-text">{{ getButtonText() }}</span>
     </button>
 
@@ -24,6 +24,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { Check, FolderOpen, LoaderCircle } from 'lucide-vue-next';
 import { toast } from '../../utils/toast';
 import PresetLoadModal from './PresetLoadModal.vue';
 
@@ -139,6 +140,10 @@ async function handlePresetSelect(preset: any) {
 .sync-icon {
   font-size: 1em;
   flex-shrink: 0;
+}
+
+.sync-icon.spinning {
+  animation: spin-left 1s linear infinite;
 }
 
 /* 已同步状态样式 */

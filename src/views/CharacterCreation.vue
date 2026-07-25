@@ -786,7 +786,7 @@ async function onLoadCompleted(result: { success: boolean; message: string; pres
   max-width: 1200px;
   height: 92vh;
   max-height: 92vh;
-  background: rgba(15, 23, 42, 0.75);
+  background: rgba(18, 21, 26, 0.75);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 16px;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
@@ -813,14 +813,16 @@ async function onLoadCompleted(result: { success: boolean; message: string; pres
   margin-bottom: 1rem;
   flex-wrap: wrap;
   gap: 0.75rem;
+  /* 让出右上角浮动功能按钮（ActionMenu：48px + 24px 边距），否则"清除自定义"右段被压住点不到 */
+  padding-right: 3.5rem;
 }
 
 .mode-indicator {
   font-size: 0.75rem;
-  color: #fbbf24;
+  color: #d5aa4a;
   padding: 0.25rem 0.75rem;
-  background: rgba(251, 191, 36, 0.1);
-  border: 1px solid rgba(251, 191, 36, 0.25);
+  background: rgba(213, 170, 74, 0.1);
+  border: 1px solid rgba(213, 170, 74, 0.25);
   border-radius: 4px;
   font-weight: 500;
   letter-spacing: 0.05em;
@@ -869,34 +871,34 @@ async function onLoadCompleted(result: { success: boolean; message: string; pres
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: rgba(30, 41, 59, 0.8);
+  background: rgba(30, 34, 40, 0.8);
   border: 2px solid rgba(255, 255, 255, 0.1);
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 0.9rem;
   font-weight: 600;
-  color: #94a3b8;
+  color: #a09a8d;
   transition: all 0.3s ease;
 }
 
 .step.active .step-circle {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.8), rgba(37, 99, 235, 0.9));
+  background: linear-gradient(135deg, rgba(76, 135, 173, 0.8), rgba(37, 99, 235, 0.9));
   color: #ffffff;
-  border-color: rgba(96, 165, 250, 0.5);
-  box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+  border-color: rgba(120, 168, 198, 0.5);
+  box-shadow: 0 0 20px rgba(76, 135, 173, 0.4);
 }
 
 .step-label {
   margin-top: 0.5rem;
   font-size: 0.7rem;
-  color: #64748b;
+  color: #7c776c;
   text-align: center;
   letter-spacing: 0.05em;
 }
 
 .step.active .step-label {
-  color: #f1f5f9;
+  color: #ece7dc;
   font-weight: 500;
 }
 
@@ -910,7 +912,7 @@ async function onLoadCompleted(result: { success: boolean; message: string; pres
   border-top: 1px solid rgba(255, 255, 255, 0.06);
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   scrollbar-width: thin;
-  scrollbar-color: rgba(147, 197, 253, 0.3) transparent;
+  scrollbar-color: rgba(166, 198, 218, 0.3) transparent;
 }
 
 .step-content::-webkit-scrollbar {
@@ -922,12 +924,12 @@ async function onLoadCompleted(result: { success: boolean; message: string; pres
 }
 
 .step-content::-webkit-scrollbar-thumb {
-  background: rgba(147, 197, 253, 0.3);
+  background: rgba(166, 198, 218, 0.3);
   border-radius: 3px;
 }
 
 .step-content::-webkit-scrollbar-thumb:hover {
-  background: rgba(147, 197, 253, 0.5);
+  background: rgba(166, 198, 218, 0.5);
 }
 
 /* ========== 导航按钮 ========== */
@@ -955,24 +957,24 @@ async function onLoadCompleted(result: { success: boolean; message: string; pres
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 1rem;
-  background: rgba(30, 41, 59, 0.6);
+  background: rgba(30, 34, 40, 0.6);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 8px;
 }
 
 .points-label {
-  color: #94a3b8;
+  color: #a09a8d;
   font-size: 0.85rem;
 }
 
 .points-value {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #93c5fd;
+  color: #a6c6da;
 }
 
 .points-value.low {
-  color: #f87171;
+  color: #cd6f5f;
   animation: pulse 1s ease-in-out infinite;
 }
 
@@ -988,28 +990,28 @@ async function onLoadCompleted(result: { success: boolean; message: string; pres
 }
 
 [data-theme="light"] .mode-indicator {
-  color: #d97706;
-  background: rgba(251, 191, 36, 0.15);
-  border-color: rgba(251, 191, 36, 0.3);
+  color: #a97528;
+  background: rgba(213, 170, 74, 0.15);
+  border-color: rgba(213, 170, 74, 0.3);
 }
 
 [data-theme="light"] .step-circle {
   background: rgba(248, 250, 252, 0.8);
   border-color: rgba(0, 0, 0, 0.1);
-  color: #64748b;
+  color: #7c776c;
 }
 
 [data-theme="light"] .step.active .step-circle {
-  background: linear-gradient(135deg, #3b82f6, #2563eb);
-  border-color: rgba(59, 130, 246, 0.5);
+  background: linear-gradient(135deg, #4c87ad, #3a6c8c);
+  border-color: rgba(76, 135, 173, 0.5);
 }
 
 [data-theme="light"] .step-label {
-  color: #94a3b8;
+  color: #a09a8d;
 }
 
 [data-theme="light"] .step.active .step-label {
-  color: #1e293b;
+  color: #1e2228;
 }
 
 [data-theme="light"] .step-content {
@@ -1022,11 +1024,11 @@ async function onLoadCompleted(result: { success: boolean; message: string; pres
 }
 
 [data-theme="light"] .points-label {
-  color: #64748b;
+  color: #7c776c;
 }
 
 [data-theme="light"] .points-value {
-  color: #3b82f6;
+  color: #4c87ad;
 }
 
 /* ========== 平板适配 ========== */
@@ -1101,6 +1103,9 @@ async function onLoadCompleted(result: { success: boolean; message: string; pres
     flex-direction: column;
     align-items: stretch;
     gap: 0.5rem;
+    /* 竖排时改为上方留白避让浮动按钮 */
+    padding-right: 0;
+    padding-top: 3.25rem;
   }
 
   .mode-indicator {

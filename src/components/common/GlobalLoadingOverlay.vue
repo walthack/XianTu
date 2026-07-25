@@ -58,6 +58,10 @@ const uiStore = useUIStore();
   font-size: 1.2rem;
   font-weight: 500;
   text-shadow: 0 0 10px rgba(var(--color-primary-rgb), 0.5);
+  /* 流式预览会注入长文本，不限宽会满屏铺开 */
+  max-width: min(46em, 88vw);
+  margin: 0 auto;
+  text-align: center;
 }
 
 .fade-enter-active,

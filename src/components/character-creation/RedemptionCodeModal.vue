@@ -234,9 +234,9 @@ const submitPrompt = () => {
   max-height: 80vh;
   overflow-y: auto;
   background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-  border: 2px solid rgba(139, 92, 246, 0.3);
+  border: 2px solid rgba(138, 111, 168, 0.3);
   border-radius: 16px;
-  box-shadow: 0 20px 60px rgba(139, 92, 246, 0.2);
+  box-shadow: 0 20px 60px rgba(138, 111, 168, 0.2);
   animation: slideIn 0.3s ease-out;
 }
 
@@ -246,12 +246,12 @@ const submitPrompt = () => {
 
 .modal-title {
   margin-top: 0;
-  color: #e2e8f0;
+  color: #ddd7c9;
   text-align: center;
   margin-bottom: 0.5rem;
   font-size: 1.2rem;
   font-weight: 600;
-  background: linear-gradient(135deg, #a855f7, #8b5cf6);
+  background: linear-gradient(135deg, #9668b0, #8a6fa8);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -259,7 +259,7 @@ const submitPrompt = () => {
 
 .modal-subtitle {
   text-align: center;
-  color: #94a3b8;
+  color: #a09a8d;
   margin-bottom: 1.5rem;
   font-size: 0.9rem;
   line-height: 1.4;
@@ -273,9 +273,9 @@ const submitPrompt = () => {
   width: 100%;
   padding: 12px 16px;
   background: rgba(0, 0, 0, 0.3);
-  border: 2px solid rgba(139, 92, 246, 0.2);
+  border: 2px solid rgba(138, 111, 168, 0.2);
   border-radius: 8px;
-  color: #e2e8f0;
+  color: #ddd7c9;
   font-size: 1rem;
   box-sizing: border-box;
   text-align: center;
@@ -284,12 +284,12 @@ const submitPrompt = () => {
 
 .code-input:focus {
   outline: none;
-  border-color: rgba(139, 92, 246, 0.5);
-  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+  border-color: rgba(138, 111, 168, 0.5);
+  box-shadow: 0 0 0 3px rgba(138, 111, 168, 0.1);
 }
 
 .code-input::placeholder {
-  color: #64748b;
+  color: #7c776c;
 }
 
 .prompt-section {
@@ -300,7 +300,7 @@ const submitPrompt = () => {
   display: block;
   font-size: 0.9rem;
   font-weight: 600;
-  color: #e2e8f0;
+  color: #ddd7c9;
   margin-bottom: 8px;
 }
 
@@ -308,9 +308,9 @@ const submitPrompt = () => {
   width: 100%;
   padding: 12px;
   background: rgba(0, 0, 0, 0.3);
-  border: 2px solid rgba(139, 92, 246, 0.2);
+  border: 2px solid rgba(138, 111, 168, 0.2);
   border-radius: 8px;
-  color: #e2e8f0;
+  color: #ddd7c9;
   font-size: 0.9rem;
   line-height: 1.4;
   resize: vertical;
@@ -322,18 +322,18 @@ const submitPrompt = () => {
 
 .prompt-input:focus {
   outline: none;
-  border-color: rgba(139, 92, 246, 0.5);
-  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+  border-color: rgba(138, 111, 168, 0.5);
+  box-shadow: 0 0 0 3px rgba(138, 111, 168, 0.1);
 }
 
 .prompt-input::placeholder {
-  color: #64748b;
+  color: #7c776c;
 }
 
 .char-count {
   text-align: right;
   font-size: 0.7rem;
-  color: #64748b;
+  color: #7c776c;
   margin-top: 4px;
 }
 
@@ -344,7 +344,7 @@ const submitPrompt = () => {
 .suggestions-title {
   font-size: 0.85rem;
   font-weight: 600;
-  color: #cbd5e1;
+  color: #c4bdad;
   margin-bottom: 12px;
 }
 
@@ -356,10 +356,10 @@ const submitPrompt = () => {
 
 .suggestion-button {
   padding: 8px 12px;
-  background: rgba(139, 92, 246, 0.1);
-  border: 1px solid rgba(139, 92, 246, 0.3);
+  background: rgba(138, 111, 168, 0.1);
+  border: 1px solid rgba(138, 111, 168, 0.3);
   border-radius: 6px;
-  color: #cbd5e1;
+  color: #c4bdad;
   font-size: 0.8rem;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -368,14 +368,14 @@ const submitPrompt = () => {
 }
 
 .suggestion-button:hover {
-  background: rgba(139, 92, 246, 0.2);
-  border-color: rgba(139, 92, 246, 0.5);
-  color: #e2e8f0;
+  background: rgba(138, 111, 168, 0.2);
+  border-color: rgba(138, 111, 168, 0.5);
+  color: #ddd7c9;
   transform: translateY(-1px);
 }
 
 .error-message {
-  color: #ef4444;
+  color: #c34b3c;
   text-align: center;
   margin-bottom: 1rem;
   min-height: 1.2em;
@@ -397,13 +397,13 @@ const submitPrompt = () => {
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
-  background: linear-gradient(135deg, #8b5cf6, #a855f7);
+  background: linear-gradient(135deg, #8a6fa8, #9668b0);
   color: white;
 }
 
 .btn:hover:not(:disabled) {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+  box-shadow: 0 4px 12px rgba(138, 111, 168, 0.3);
 }
 
 .btn:disabled {
@@ -414,13 +414,13 @@ const submitPrompt = () => {
 }
 
 .btn-secondary {
-  background: rgba(100, 116, 139, 0.2);
-  color: #cbd5e1;
+  background: rgba(124, 119, 108, 0.2);
+  color: #c4bdad;
 }
 
 .btn-secondary:hover {
-  background: rgba(100, 116, 139, 0.3);
-  color: #e2e8f0;
+  background: rgba(124, 119, 108, 0.3);
+  color: #ddd7c9;
 }
 
 @keyframes fadeIn {
@@ -441,19 +441,19 @@ const submitPrompt = () => {
 
 /* 深色主题适配 */
 [data-theme="dark"] .modal-dialog {
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-  border-color: rgba(139, 92, 246, 0.4);
+  background: linear-gradient(135deg, #12151a 0%, #1e2228 100%);
+  border-color: rgba(138, 111, 168, 0.4);
 }
 
 [data-theme="dark"] .code-input,
 [data-theme="dark"] .prompt-input {
   background: rgba(0, 0, 0, 0.5);
-  border-color: rgba(139, 92, 246, 0.3);
+  border-color: rgba(138, 111, 168, 0.3);
 }
 
 [data-theme="dark"] .suggestion-button {
-  background: rgba(139, 92, 246, 0.15);
-  border-color: rgba(139, 92, 246, 0.4);
+  background: rgba(138, 111, 168, 0.15);
+  border-color: rgba(138, 111, 168, 0.4);
 }
 
 @media (max-width: 480px) {

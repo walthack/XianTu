@@ -711,8 +711,8 @@ ${JSON.stringify(sectProfile).slice(0, 600)}
 
 /* 我的宗门身份卡片 - 紧凑版 */
 .my-sect-identity {
-  border: 1px solid rgba(147, 51, 234, 0.25);
-  background: linear-gradient(135deg, rgba(147, 51, 234, 0.08), rgba(168, 85, 247, 0.03));
+  border: 1px solid rgba(124, 82, 150, 0.25);
+  background: linear-gradient(135deg, rgba(124, 82, 150, 0.08), rgba(150, 104, 176, 0.03));
   border-radius: 8px;
   padding: 8px 10px;
   flex-shrink: 0;
@@ -724,10 +724,10 @@ ${JSON.stringify(sectProfile).slice(0, 600)}
   gap: 6px;
   font-weight: 700;
   font-size: 0.85rem;
-  color: #9333ea;
+  color: #7c5296;
   margin-bottom: 8px;
   padding-bottom: 6px;
-  border-bottom: 1px solid rgba(147, 51, 234, 0.15);
+  border-bottom: 1px solid rgba(124, 82, 150, 0.15);
 }
 
 .identity-content {
@@ -763,9 +763,9 @@ ${JSON.stringify(sectProfile).slice(0, 600)}
 }
 
 .stat-value.sect-name { color: var(--color-text); }
-.stat-value.position { color: #9333ea; }
-.stat-value.contribution { color: #f59e0b; }
-.stat-value.reputation { color: #3b82f6; }
+.stat-value.position { color: #7c5296; }
+.stat-value.contribution { color: #c69431; }
+.stat-value.reputation { color: #4c87ad; }
 .stat-value.join-date { color: var(--color-text-secondary); font-size: 0.72rem; }
 
 .identity-actions {
@@ -789,9 +789,9 @@ ${JSON.stringify(sectProfile).slice(0, 600)}
 }
 
 .quick-action-btn:hover {
-  border-color: rgba(59, 130, 246, 0.4);
-  background: rgba(59, 130, 246, 0.08);
-  color: #3b82f6;
+  border-color: rgba(76, 135, 173, 0.4);
+  background: rgba(76, 135, 173, 0.08);
+  color: #4c87ad;
 }
 
 .leave-sect-btn {
@@ -800,9 +800,9 @@ ${JSON.stringify(sectProfile).slice(0, 600)}
   gap: 4px;
   padding: 4px 8px;
   background: transparent;
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  border: 1px solid rgba(195, 75, 60, 0.3);
   border-radius: 4px;
-  color: #ef4444;
+  color: #c34b3c;
   font-size: 0.72rem;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -810,8 +810,8 @@ ${JSON.stringify(sectProfile).slice(0, 600)}
 }
 
 .leave-sect-btn:hover {
-  background: rgba(239, 68, 68, 0.1);
-  border-color: rgba(239, 68, 68, 0.5);
+  background: rgba(195, 75, 60, 0.1);
+  border-color: rgba(195, 75, 60, 0.5);
 }
 
 .leadership-card {
@@ -858,8 +858,8 @@ ${JSON.stringify(sectProfile).slice(0, 600)}
 }
 
 .leader-item.primary {
-  border-color: rgba(168, 85, 247, 0.35);
-  background: rgba(168, 85, 247, 0.06);
+  border-color: rgba(150, 104, 176, 0.35);
+  background: rgba(150, 104, 176, 0.06);
 }
 
 .leader-item .role {
@@ -880,7 +880,7 @@ ${JSON.stringify(sectProfile).slice(0, 600)}
 .leader-item .link {
   border: none;
   background: transparent;
-  color: #9333ea;
+  color: #7c5296;
   cursor: pointer;
   font-size: 0.72rem;
   padding: 0;
@@ -902,9 +902,9 @@ ${JSON.stringify(sectProfile).slice(0, 600)}
 }
 
 .position-leader {
-  background: rgba(168, 85, 247, 0.12);
-  border-color: rgba(168, 85, 247, 0.35);
-  color: #a855f7;
+  background: rgba(150, 104, 176, 0.12);
+  border-color: rgba(150, 104, 176, 0.35);
+  color: #9668b0;
 }
 
 .info-item {
@@ -924,7 +924,7 @@ ${JSON.stringify(sectProfile).slice(0, 600)}
 }
 
 .info-value.sect-name { color: var(--color-text); }
-.info-value.position { color: #9333ea; }
+.info-value.position { color: #7c5296; }
 
 .member-tabs {
   display: flex;
@@ -940,9 +940,9 @@ ${JSON.stringify(sectProfile).slice(0, 600)}
   gap: 4px;
   padding: 4px 8px;
   background: transparent;
-  border: 1px solid rgba(59, 130, 246, 0.3);
+  border: 1px solid rgba(76, 135, 173, 0.3);
   border-radius: 4px;
-  color: #3b82f6;
+  color: #4c87ad;
   font-size: 0.72rem;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -950,8 +950,8 @@ ${JSON.stringify(sectProfile).slice(0, 600)}
 }
 
 .tab-regen-btn:hover:not(:disabled) {
-  background: rgba(59, 130, 246, 0.08);
-  border-color: rgba(59, 130, 246, 0.5);
+  background: rgba(76, 135, 173, 0.08);
+  border-color: rgba(76, 135, 173, 0.5);
 }
 
 .tab-regen-btn:disabled {
@@ -975,18 +975,18 @@ ${JSON.stringify(sectProfile).slice(0, 600)}
 }
 
 .tab-btn:hover {
-  border-color: rgba(59, 130, 246, 0.3);
+  border-color: rgba(76, 135, 173, 0.3);
   color: var(--color-text);
 }
 
 .tab-btn.active {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(37, 99, 235, 0.05));
-  border-color: rgba(59, 130, 246, 0.4);
-  color: #3b82f6;
+  background: linear-gradient(135deg, rgba(76, 135, 173, 0.1), rgba(37, 99, 235, 0.05));
+  border-color: rgba(76, 135, 173, 0.4);
+  color: #4c87ad;
 }
 
 .count-badge {
-  background: #3b82f6;
+  background: #4c87ad;
   color: white;
   font-size: 0.65rem;
   padding: 0 0.3rem;
@@ -1029,7 +1029,7 @@ ${JSON.stringify(sectProfile).slice(0, 600)}
   align-items: center;
   gap: 0.4rem;
   padding: 0.5rem 0.8rem;
-  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  background: linear-gradient(135deg, #4c87ad, #3a6c8c);
   border: none;
   border-radius: 5px;
   color: white;
@@ -1040,7 +1040,7 @@ ${JSON.stringify(sectProfile).slice(0, 600)}
 
 .ask-btn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 4px 12px rgba(76, 135, 173, 0.3);
 }
 
 .members {
@@ -1062,7 +1062,7 @@ ${JSON.stringify(sectProfile).slice(0, 600)}
 }
 
 .member-card:hover {
-  border-color: rgba(59, 130, 246, 0.3);
+  border-color: rgba(76, 135, 173, 0.3);
   background: var(--color-surface);
 }
 
@@ -1074,8 +1074,8 @@ ${JSON.stringify(sectProfile).slice(0, 600)}
 
 .evolve-btn {
   background: transparent;
-  border: 1px solid rgba(59, 130, 246, 0.3);
-  color: #3b82f6;
+  border: 1px solid rgba(76, 135, 173, 0.3);
+  color: #4c87ad;
   cursor: pointer;
   padding: 4px 8px;
   border-radius: 4px;
@@ -1094,8 +1094,8 @@ ${JSON.stringify(sectProfile).slice(0, 600)}
 
 .evolve-btn:hover:not(:disabled) {
   opacity: 1 !important;
-  color: #3b82f6;
-  background: rgba(59, 130, 246, 0.1);
+  color: #4c87ad;
+  background: rgba(76, 135, 173, 0.1);
 }
 
 .evolve-btn:disabled {
@@ -1109,8 +1109,8 @@ ${JSON.stringify(sectProfile).slice(0, 600)}
 }
 
 .member-card.is-self {
-  border-color: rgba(147, 51, 234, 0.3);
-  background: linear-gradient(135deg, rgba(147, 51, 234, 0.05), rgba(168, 85, 247, 0.02));
+  border-color: rgba(124, 82, 150, 0.3);
+  background: linear-gradient(135deg, rgba(124, 82, 150, 0.05), rgba(150, 104, 176, 0.02));
 }
 
 .member-avatar {
@@ -1118,7 +1118,7 @@ ${JSON.stringify(sectProfile).slice(0, 600)}
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #9333ea, #7c3aed);
+  background: linear-gradient(135deg, #7c5296, #70518f);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1146,7 +1146,7 @@ ${JSON.stringify(sectProfile).slice(0, 600)}
 }
 
 .gender-badge.male {
-  background: #3b82f6;
+  background: #4c87ad;
   color: white;
 }
 
@@ -1180,10 +1180,10 @@ ${JSON.stringify(sectProfile).slice(0, 600)}
   font-weight: 500;
 }
 
-.position-elder { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
-.position-true { background: rgba(139, 92, 246, 0.1); color: #8b5cf6; }
-.position-inner { background: rgba(59, 130, 246, 0.1); color: #3b82f6; }
-.position-outer { background: rgba(107, 114, 128, 0.1); color: #6b7280; }
+.position-elder { background: rgba(195, 75, 60, 0.1); color: #c34b3c; }
+.position-true { background: rgba(138, 111, 168, 0.1); color: #8a6fa8; }
+.position-inner { background: rgba(76, 135, 173, 0.1); color: #4c87ad; }
+.position-outer { background: rgba(107, 114, 128, 0.1); color: #78736a; }
 
 .member-details {
   display: flex;
@@ -1198,14 +1198,14 @@ ${JSON.stringify(sectProfile).slice(0, 600)}
   color: var(--color-text-secondary);
 }
 
-.detail-item.realm { color: #8b5cf6; }
+.detail-item.realm { color: #8a6fa8; }
 
 .relation-best { color: #ec4899 !important; }
-.relation-good { color: #f59e0b !important; }
-.relation-friendly { color: #22c55e !important; }
+.relation-good { color: #c69431 !important; }
+.relation-friendly { color: #5f9b6a !important; }
 .relation-normal { color: var(--color-text-secondary) !important; }
-.relation-cold { color: #6b7280 !important; }
-.relation-hostile { color: #ef4444 !important; }
+.relation-cold { color: #78736a !important; }
+.relation-hostile { color: #c34b3c !important; }
 
 .arrow-icon {
   color: var(--color-text-secondary);
@@ -1251,15 +1251,15 @@ ${JSON.stringify(sectProfile).slice(0, 600)}
 }
 
 .action-btn:hover {
-  border-color: rgba(59, 130, 246, 0.3);
-  background: rgba(59, 130, 246, 0.05);
-  color: #3b82f6;
+  border-color: rgba(76, 135, 173, 0.3);
+  background: rgba(76, 135, 173, 0.05);
+  color: #4c87ad;
 }
 
 a.leader-item .realm {
   font-size: 0.72rem;
-  color: #8b5cf6;
-  background: rgba(139, 92, 246, 0.1);
+  color: #8a6fa8;
+  background: rgba(138, 111, 168, 0.1);
   padding: 2px 6px;
   border-radius: 4px;
 }
@@ -1286,10 +1286,10 @@ a.leader-item .realm {
   align-items: center;
   gap: 0.4rem;
   padding: 4px 8px;
-  background: rgba(59, 130, 246, 0.1);
+  background: rgba(76, 135, 173, 0.1);
   border-radius: 4px;
   font-size: 0.7rem;
-  color: #3b82f6;
+  color: #4c87ad;
   flex-shrink: 0;
 }
 </style>

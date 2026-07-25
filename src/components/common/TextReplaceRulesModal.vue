@@ -230,9 +230,9 @@ const save = () => {
   overflow: hidden;
   border-radius: 14px;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(15, 23, 42, 0.92);
+  background: rgba(18, 21, 26, 0.92);
   box-shadow: 0 25px 60px rgba(0, 0, 0, 0.55);
-  color: #e2e8f0;
+  color: #ddd7c9;
   display: flex;
   flex-direction: column;
 }
@@ -259,8 +259,8 @@ const save = () => {
 
 .icon-btn {
   border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(30, 41, 59, 0.55);
-  color: #e2e8f0;
+  background: rgba(30, 34, 40, 0.55);
+  color: #ddd7c9;
   width: 34px;
   height: 34px;
   border-radius: 10px;
@@ -302,7 +302,7 @@ const save = () => {
 
 .rule-item {
   border: 1px solid rgba(255, 255, 255, 0.10);
-  background: rgba(30, 41, 59, 0.40);
+  background: rgba(30, 34, 40, 0.40);
   border-radius: 12px;
   padding: 10px 10px;
   cursor: pointer;
@@ -311,8 +311,8 @@ const save = () => {
 }
 
 .rule-item.active {
-  border-color: rgba(147, 197, 253, 0.28);
-  background: rgba(51, 65, 85, 0.45);
+  border-color: rgba(166, 198, 218, 0.28);
+  background: rgba(61, 58, 53, 0.45);
 }
 
 .rule-row {
@@ -326,8 +326,8 @@ const save = () => {
   font-size: 0.75rem;
   padding: 2px 8px;
   border-radius: 999px;
-  border: 1px solid rgba(34, 197, 94, 0.30);
-  color: rgba(34, 197, 94, 0.95);
+  border: 1px solid rgba(95, 155, 106, 0.30);
+  color: rgba(95, 155, 106, 0.95);
 }
 
 .rule-badge.off {
@@ -342,7 +342,7 @@ const save = () => {
 
 .rule-pattern {
   font-size: 0.9rem;
-  color: #e2e8f0;
+  color: #ddd7c9;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -390,8 +390,8 @@ const save = () => {
   width: 220px;
   border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(30, 41, 59, 0.55);
-  color: #e2e8f0;
+  background: rgba(30, 34, 40, 0.55);
+  color: #ddd7c9;
   padding: 10px 12px;
 }
 
@@ -399,8 +399,8 @@ const save = () => {
   width: 100%;
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(30, 41, 59, 0.40);
-  color: #e2e8f0;
+  background: rgba(30, 34, 40, 0.40);
+  color: #ddd7c9;
   padding: 10px 12px;
   resize: vertical;
 }
@@ -415,7 +415,7 @@ const save = () => {
   padding: 1px 6px;
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 6px;
-  background: rgba(30, 41, 59, 0.6);
+  background: rgba(30, 34, 40, 0.6);
 }
 
 .options {
@@ -439,7 +439,7 @@ const save = () => {
 .error {
   padding: 10px 12px;
   border-radius: 12px;
-  border: 1px solid rgba(239, 68, 68, 0.25);
+  border: 1px solid rgba(195, 75, 60, 0.25);
   background: rgba(127, 29, 29, 0.25);
   color: rgba(254, 202, 202, 0.95);
 }
@@ -460,15 +460,15 @@ const save = () => {
 
 .btn {
   border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(30, 41, 59, 0.55);
-  color: #e2e8f0;
+  background: rgba(30, 34, 40, 0.55);
+  color: #ddd7c9;
   padding: 10px 12px;
   border-radius: 12px;
   cursor: pointer;
 }
 
 .btn:hover {
-  background: rgba(51, 65, 85, 0.75);
+  background: rgba(61, 58, 53, 0.75);
 }
 
 .btn:disabled {
@@ -477,16 +477,16 @@ const save = () => {
 }
 
 .btn-secondary {
-  background: rgba(30, 41, 59, 0.40);
+  background: rgba(30, 34, 40, 0.40);
 }
 
 .btn-danger {
-  border-color: rgba(239, 68, 68, 0.25);
+  border-color: rgba(195, 75, 60, 0.25);
 }
 
 .btn-danger:hover {
   background: rgba(127, 29, 29, 0.35);
-  border-color: rgba(239, 68, 68, 0.45);
+  border-color: rgba(195, 75, 60, 0.45);
 }
 
 .empty {

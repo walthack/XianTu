@@ -842,9 +842,9 @@ ${JSON.stringify(stageReports).slice(0, 3500)}
   align-items: flex-start;
   padding: 10px 12px;
   border-radius: 12px;
-  border: 1px solid rgba(251, 191, 36, 0.35);
-  background: rgba(251, 191, 36, 0.08);
-  color: #b45309;
+  border: 1px solid rgba(213, 170, 74, 0.35);
+  background: rgba(213, 170, 74, 0.08);
+  color: #8c5f22;
 }
 
 .notice-body {
@@ -981,15 +981,15 @@ ${JSON.stringify(stageReports).slice(0, 3500)}
 }
 
 .btn.primary {
-  border-color: rgba(59, 130, 246, 0.35);
-  background: rgba(59, 130, 246, 0.08);
-  color: #3b82f6;
+  border-color: rgba(76, 135, 173, 0.35);
+  background: rgba(76, 135, 173, 0.08);
+  color: #4c87ad;
 }
 
 .btn.danger {
-  border-color: rgba(239, 68, 68, 0.35);
-  background: rgba(239, 68, 68, 0.10);
-  color: #ef4444;
+  border-color: rgba(195, 75, 60, 0.35);
+  background: rgba(195, 75, 60, 0.10);
+  color: #c34b3c;
 }
 
 .btn:disabled {
@@ -1045,15 +1045,15 @@ ${JSON.stringify(stageReports).slice(0, 3500)}
 }
 
 .v.ok {
-  color: #22c55e;
+  color: #5f9b6a;
 }
 
 .v.bad {
-  color: #ef4444;
+  color: #c34b3c;
 }
 
 .v.warn {
-  color: #f59e0b;
+  color: #c69431;
 }
 
 .v.mid {
@@ -1079,15 +1079,15 @@ ${JSON.stringify(stageReports).slice(0, 3500)}
 }
 
 .badge.blue {
-  color: rgba(59, 130, 246, 0.95);
-  border-color: rgba(59, 130, 246, 0.30);
-  background: rgba(59, 130, 246, 0.08);
+  color: rgba(76, 135, 173, 0.95);
+  border-color: rgba(76, 135, 173, 0.30);
+  background: rgba(76, 135, 173, 0.08);
 }
 
 .badge.red {
-  color: rgba(239, 68, 68, 0.95);
-  border-color: rgba(239, 68, 68, 0.30);
-  background: rgba(239, 68, 68, 0.08);
+  color: rgba(195, 75, 60, 0.95);
+  border-color: rgba(195, 75, 60, 0.30);
+  background: rgba(195, 75, 60, 0.08);
 }
 
 .details {
@@ -1179,15 +1179,15 @@ ${JSON.stringify(stageReports).slice(0, 3500)}
 }
 
 .stage-pill.active {
-  color: rgba(59, 130, 246, 0.95);
-  border-color: rgba(59, 130, 246, 0.30);
-  background: rgba(59, 130, 246, 0.08);
+  color: rgba(76, 135, 173, 0.95);
+  border-color: rgba(76, 135, 173, 0.30);
+  background: rgba(76, 135, 173, 0.08);
 }
 
 .stage-pill.done {
-  color: rgba(34, 197, 94, 0.95);
-  border-color: rgba(34, 197, 94, 0.30);
-  background: rgba(34, 197, 94, 0.08);
+  color: rgba(95, 155, 106, 0.95);
+  border-color: rgba(95, 155, 106, 0.30);
+  background: rgba(95, 155, 106, 0.08);
 }
 
 .log-list {
@@ -1218,8 +1218,8 @@ ${JSON.stringify(stageReports).slice(0, 3500)}
 
 .ai-summary {
   margin-top: 10px;
-  border: 1px solid rgba(168, 85, 247, 0.25);
-  background: rgba(168, 85, 247, 0.06);
+  border: 1px solid rgba(150, 104, 176, 0.25);
+  background: rgba(150, 104, 176, 0.06);
   border-radius: 12px;
   padding: 10px;
 }
@@ -1227,7 +1227,7 @@ ${JSON.stringify(stageReports).slice(0, 3500)}
 .ai-title {
   font-weight: 900;
   margin-bottom: 8px;
-  color: rgba(168, 85, 247, 0.95);
+  color: rgba(150, 104, 176, 0.95);
 }
 
 .ai-text {

@@ -444,7 +444,7 @@ watch(() => props.editingItem, (newItem) => {
 .error-message {
   margin-top: 0.5rem;
   padding: 0.5rem;
-  background: rgba(239, 68, 68, 0.1);
+  background: rgba(195, 75, 60, 0.1);
   border: 1px solid var(--color-danger);
   border-radius: 4px;
   color: var(--color-danger);

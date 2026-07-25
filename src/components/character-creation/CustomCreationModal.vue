@@ -395,7 +395,7 @@ input[type="color"] {
 }
 
 .remove-btn:hover {
-  background: #dc2626;
+  background: #a83a2c;
   transform: scale(1.1);
 }
 

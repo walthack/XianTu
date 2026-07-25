@@ -70,7 +70,7 @@
           <div class="size-list">
             <div v-for="item in getTopLargestVariables()" :key="item.key" class="size-item">
               <span style="font-family: monospace; font-size: 0.8rem;">{{ item.key }}</span>
-              <span :style="{ color: item.size > 50000 ? '#ef4444' : item.size > 10000 ? '#f59e0b' : 'inherit' }">
+              <span :style="{ color: item.size > 50000 ? '#c34b3c' : item.size > 10000 ? '#c69431' : 'inherit' }">
                 {{ formatBytes(item.size) }}
               </span>
             </div>
@@ -218,23 +218,23 @@ const getTopLargestVariables = () => {
 }
 
 .stat-icon.core {
-  background: rgba(59, 130, 246, 0.1);
-  color: #3b82f6;
+  background: rgba(76, 135, 173, 0.1);
+  color: #4c87ad;
 }
 
 .stat-icon.global {
-  background: rgba(34, 197, 94, 0.1);
-  color: #22c55e;
+  background: rgba(95, 155, 106, 0.1);
+  color: #5f9b6a;
 }
 
 .stat-icon.memory {
-  background: rgba(168, 85, 247, 0.1);
-  color: #a855f7;
+  background: rgba(150, 104, 176, 0.1);
+  color: #9668b0;
 }
 
 .stat-icon.world {
-  background: rgba(245, 158, 11, 0.1);
-  color: #f59e0b;
+  background: rgba(198, 148, 49, 0.1);
+  color: #c69431;
 }
 
 .stat-info {

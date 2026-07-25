@@ -979,8 +979,8 @@ watch(route, (newRoute, oldRoute) => {
 
 .help-warning {
   padding: 0.75rem;
-  background: rgba(251, 191, 36, 0.1);
-  border: 1px solid rgba(251, 191, 36, 0.3);
+  background: rgba(213, 170, 74, 0.1);
+  border: 1px solid rgba(213, 170, 74, 0.3);
   border-radius: 8px;
   font-size: 0.85rem;
   color: var(--color-text);
@@ -988,7 +988,7 @@ watch(route, (newRoute, oldRoute) => {
 }
 
 .help-warning strong {
-  color: #ef4444;
+  color: #c34b3c;
 }
 
 .help-section h3 {
@@ -1175,8 +1175,8 @@ watch(route, (newRoute, oldRoute) => {
   align-items: center;
   gap: 1.25rem;
   padding: 1.5rem;
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(139, 92, 246, 0.05) 100%);
-  border: 2px solid rgba(99, 102, 241, 0.2);
+  background: linear-gradient(135deg, rgba(111, 127, 168, 0.08) 0%, rgba(138, 111, 168, 0.05) 100%);
+  border: 2px solid rgba(111, 127, 168, 0.2);
   border-radius: 20px;
   text-decoration: none;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -1188,7 +1188,7 @@ watch(route, (newRoute, oldRoute) => {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, transparent 100%);
+  background: linear-gradient(135deg, rgba(111, 127, 168, 0.1) 0%, transparent 100%);
   opacity: 0;
   transition: opacity 0.3s ease;
 }
@@ -1198,10 +1198,10 @@ watch(route, (newRoute, oldRoute) => {
 }
 
 .official-intro-card:hover {
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(139, 92, 246, 0.1) 100%);
-  border-color: rgba(99, 102, 241, 0.4);
+  background: linear-gradient(135deg, rgba(111, 127, 168, 0.15) 0%, rgba(138, 111, 168, 0.1) 100%);
+  border-color: rgba(111, 127, 168, 0.4);
   transform: translateY(-4px);
-  box-shadow: 0 12px 32px rgba(99, 102, 241, 0.3),
+  box-shadow: 0 12px 32px rgba(111, 127, 168, 0.3),
               0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
@@ -1209,20 +1209,20 @@ watch(route, (newRoute, oldRoute) => {
   width: 64px;
   height: 64px;
   border-radius: 16px;
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(139, 92, 246, 0.15) 100%);
+  background: linear-gradient(135deg, rgba(111, 127, 168, 0.2) 0%, rgba(138, 111, 168, 0.15) 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #6366f1;
+  color: #6f7fa8;
   flex-shrink: 0;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2),
+  box-shadow: 0 4px 12px rgba(111, 127, 168, 0.2),
               inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .official-intro-card:hover .intro-icon-wrapper {
   transform: scale(1.15) rotate(-5deg);
-  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.35),
+  box-shadow: 0 8px 20px rgba(111, 127, 168, 0.35),
               inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
@@ -1261,13 +1261,13 @@ watch(route, (newRoute, oldRoute) => {
   align-items: center;
   gap: 0.875rem;
   padding: 1.25rem 1.5rem;
-  background: linear-gradient(135deg, rgba(251, 191, 36, 0.12) 0%, rgba(245, 158, 11, 0.08) 100%);
-  border: 2px solid rgba(251, 191, 36, 0.3);
-  border-left: 4px solid #f59e0b;
+  background: linear-gradient(135deg, rgba(213, 170, 74, 0.12) 0%, rgba(198, 148, 49, 0.08) 100%);
+  border: 2px solid rgba(213, 170, 74, 0.3);
+  border-left: 4px solid #c69431;
   border-radius: 16px;
   font-size: 0.9rem;
   color: var(--color-text);
-  box-shadow: 0 2px 12px rgba(251, 191, 36, 0.15);
+  box-shadow: 0 2px 12px rgba(213, 170, 74, 0.15);
   backdrop-filter: blur(8px);
 }
 
@@ -1277,7 +1277,7 @@ watch(route, (newRoute, oldRoute) => {
 }
 
 .warning-banner strong {
-  color: #dc2626;
+  color: #a83a2c;
   font-weight: 800;
 }
 
@@ -1291,9 +1291,9 @@ watch(route, (newRoute, oldRoute) => {
 }
 
 .info-card:hover {
-  border-color: rgba(99, 102, 241, 0.35);
+  border-color: rgba(111, 127, 168, 0.35);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1),
-              0 0 0 1px rgba(99, 102, 241, 0.1);
+              0 0 0 1px rgba(111, 127, 168, 0.1);
   transform: translateY(-2px);
 }
 
@@ -1346,7 +1346,7 @@ watch(route, (newRoute, oldRoute) => {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, transparent 100%);
+  background: linear-gradient(135deg, rgba(111, 127, 168, 0.05) 0%, transparent 100%);
   opacity: 0;
   transition: opacity 0.3s ease;
 }
@@ -1356,10 +1356,10 @@ watch(route, (newRoute, oldRoute) => {
 }
 
 .feature-item:hover {
-  border-color: rgba(99, 102, 241, 0.4);
+  border-color: rgba(111, 127, 168, 0.4);
   background: var(--color-surface);
   transform: translateY(-3px);
-  box-shadow: 0 6px 16px rgba(99, 102, 241, 0.15),
+  box-shadow: 0 6px 16px rgba(111, 127, 168, 0.15),
               0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
@@ -1429,7 +1429,7 @@ watch(route, (newRoute, oldRoute) => {
 }
 
 .github-link {
-  color: #6366f1;
+  color: #6f7fa8;
   text-decoration: none;
   font-size: 0.875rem;
   font-weight: 600;
@@ -1437,38 +1437,38 @@ watch(route, (newRoute, oldRoute) => {
 }
 
 .github-link:hover {
-  color: #8b5cf6;
+  color: #8a6fa8;
   text-decoration: underline;
 }
 
 /* 深色主题适配 */
 [data-theme='dark'] .game-info-header {
-  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #c026d3 100%);
+  background: linear-gradient(135deg, #5a5f8f 0%, #70518f 50%, #c026d3 100%);
 }
 
 [data-theme='dark'] .warning-banner {
-  background: linear-gradient(135deg, rgba(251, 191, 36, 0.15) 0%, rgba(245, 158, 11, 0.1) 100%);
-  border-color: rgba(251, 191, 36, 0.35);
-  border-left-color: #f59e0b;
+  background: linear-gradient(135deg, rgba(213, 170, 74, 0.15) 0%, rgba(198, 148, 49, 0.1) 100%);
+  border-color: rgba(213, 170, 74, 0.35);
+  border-left-color: #c69431;
 }
 
 [data-theme='dark'] .warning-banner strong {
-  color: #fca5a5;
+  color: #d49a90;
 }
 
 [data-theme='dark'] .official-intro-card {
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(139, 92, 246, 0.08) 100%);
-  border-color: rgba(99, 102, 241, 0.25);
+  background: linear-gradient(135deg, rgba(111, 127, 168, 0.12) 0%, rgba(138, 111, 168, 0.08) 100%);
+  border-color: rgba(111, 127, 168, 0.25);
 }
 
 [data-theme='dark'] .official-intro-card:hover {
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(139, 92, 246, 0.15) 100%);
-  border-color: rgba(99, 102, 241, 0.45);
+  background: linear-gradient(135deg, rgba(111, 127, 168, 0.2) 0%, rgba(138, 111, 168, 0.15) 100%);
+  border-color: rgba(111, 127, 168, 0.45);
 }
 
 [data-theme='dark'] .intro-icon-wrapper {
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.25) 0%, rgba(139, 92, 246, 0.2) 100%);
-  color: #818cf8;
+  background: linear-gradient(135deg, rgba(111, 127, 168, 0.25) 0%, rgba(138, 111, 168, 0.2) 100%);
+  color: #8b95b8;
 }
 
 /* 滚动条美化 */

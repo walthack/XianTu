@@ -51,7 +51,7 @@ const closeModal = () => {
 }
 
 .modal-container {
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.06), rgba(15, 23, 42, 0.02)) , var(--color-surface);
+  background: linear-gradient(135deg, rgba(18, 21, 26, 0.06), rgba(18, 21, 26, 0.02)) , var(--color-surface);
   border-radius: 12px;
   border: 1px solid var(--color-border);
   box-shadow: 0 16px 40px rgba(0,0,0,0.35);
@@ -75,7 +75,7 @@ const closeModal = () => {
   align-items: center;
   padding: 1rem 1.5rem;
   border-bottom: 1px solid var(--color-border);
-  background: linear-gradient(135deg, rgba(37, 99, 235, 0.08), rgba(59, 130, 246, 0.02));
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.08), rgba(76, 135, 173, 0.02));
 }
 
 .modal-title {
@@ -90,7 +90,7 @@ const closeModal = () => {
   align-items: center;
   gap: 6px;
   padding: 6px 12px;
-  background: rgba(15, 23, 42, 0.06);
+  background: rgba(18, 21, 26, 0.06);
   border: 1px solid var(--color-border);
   border-radius: 6px;
   cursor: pointer;

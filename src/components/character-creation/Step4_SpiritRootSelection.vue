@@ -247,17 +247,17 @@ const customSpirit = reactive({
 
 // 灵根类型配置
 const spiritRootTypes = [
-  { key: 'fire', name: '火', icon: '🔥', color: '#ef4444', desc: '烈火焚天，爆发力强' },
-  { key: 'water', name: '水', icon: '💧', color: '#3b82f6', desc: '水流不息，绵延悠长' },
-  { key: 'wood', name: '木', icon: '🌿', color: '#10b981', desc: '生机盎然，治愈修复' },
-  { key: 'metal', name: '金', icon: '⚔️', color: '#f59e0b', desc: '锋锐无匹，切金断玉' },
-  { key: 'earth', name: '土', icon: '🗿', color: '#8b5cf6', desc: '厚德载物，防御超群' },
-  { key: 'wind', name: '风', icon: '💨', color: '#06b6d4', desc: '风驰电掣，身法如神' },
-  { key: 'thunder', name: '雷', icon: '⚡', color: '#eab308', desc: '雷霆万钧，毁天灭地' },
-  { key: 'ice', name: '冰', icon: '❄️', color: '#0ea5e9', desc: '冰霜刺骨，万物凋零' },
+  { key: 'fire', name: '火', icon: '🔥', color: '#c34b3c', desc: '烈火焚天，爆发力强' },
+  { key: 'water', name: '水', icon: '💧', color: '#4c87ad', desc: '水流不息，绵延悠长' },
+  { key: 'wood', name: '木', icon: '🌿', color: '#4f9b7e', desc: '生机盎然，治愈修复' },
+  { key: 'metal', name: '金', icon: '⚔️', color: '#c69431', desc: '锋锐无匹，切金断玉' },
+  { key: 'earth', name: '土', icon: '🗿', color: '#8a6fa8', desc: '厚德载物，防御超群' },
+  { key: 'wind', name: '风', icon: '💨', color: '#4f97ab', desc: '风驰电掣，身法如神' },
+  { key: 'thunder', name: '雷', icon: '⚡', color: '#bd9a2e', desc: '雷霆万钧，毁天灭地' },
+  { key: 'ice', name: '冰', icon: '❄️', color: '#4a92ad', desc: '冰霜刺骨，万物凋零' },
   { key: 'light', name: '光', icon: '☀️', color: '#f97316', desc: '光明普照，净化邪恶' },
-  { key: 'dark', name: '暗', icon: '🌑', color: '#6b7280', desc: '幽暗深邃，诡异莫测' },
-  { key: 'space', name: '空间', icon: '🌀', color: '#7c3aed', desc: '虚空挪移，空间掌控' },
+  { key: 'dark', name: '暗', icon: '🌑', color: '#78736a', desc: '幽暗深邃，诡异莫测' },
+  { key: 'space', name: '空间', icon: '🌀', color: '#70518f', desc: '虚空挪移，空间掌控' },
   { key: 'time', name: '时间', icon: '⏰', color: '#ec4899', desc: '时光流转，逆转乾坤' }
 ]
 
@@ -693,7 +693,7 @@ const editInitialData = computed(() => {
   align-items: center;
   height: 100%;
   font-size: 1.1rem;
-  color: #94a3b8;
+  color: #a09a8d;
   font-style: italic;
 }
 
@@ -709,7 +709,7 @@ const editInitialData = computed(() => {
 .spirit-root-left-panel {
   display: flex;
   flex-direction: column;
-  background: rgba(30, 41, 59, 0.5);
+  background: rgba(30, 34, 40, 0.5);
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 12px;
   overflow: hidden;
@@ -729,13 +729,13 @@ const editInitialData = computed(() => {
   padding: 0.5rem;
   min-height: 0;
   scrollbar-width: thin;
-  scrollbar-color: rgba(147, 197, 253, 0.3) transparent;
+  scrollbar-color: rgba(166, 198, 218, 0.3) transparent;
 }
 
 .spirit-root-list-container::-webkit-scrollbar { width: 6px; }
 .spirit-root-list-container::-webkit-scrollbar-track { background: transparent; }
-.spirit-root-list-container::-webkit-scrollbar-thumb { background: rgba(147, 197, 253, 0.3); border-radius: 3px; }
-.spirit-root-list-container::-webkit-scrollbar-thumb:hover { background: rgba(147, 197, 253, 0.5); }
+.spirit-root-list-container::-webkit-scrollbar-thumb { background: rgba(166, 198, 218, 0.3); border-radius: 3px; }
+.spirit-root-list-container::-webkit-scrollbar-thumb:hover { background: rgba(166, 198, 218, 0.5); }
 
 /* ========== 选项卡样式 ========== */
 .spirit-root-item {
@@ -748,7 +748,7 @@ const editInitialData = computed(() => {
   cursor: pointer;
   transition: all 0.25s ease;
   border: 1px solid transparent;
-  background: rgba(30, 41, 59, 0.4);
+  background: rgba(30, 34, 40, 0.4);
 }
 
 .item-content {
@@ -775,7 +775,7 @@ const editInitialData = computed(() => {
 .edit-btn, .delete-btn {
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.15);
-  color: #94a3b8;
+  color: #a09a8d;
   cursor: pointer;
   padding: 0.35rem;
   border-radius: 4px;
@@ -786,13 +786,13 @@ const editInitialData = computed(() => {
 }
 
 .edit-btn:hover {
-  color: #93c5fd;
-  background: rgba(147, 197, 253, 0.1);
+  color: #a6c6da;
+  background: rgba(166, 198, 218, 0.1);
 }
 
 .delete-btn:hover {
-  color: #f87171;
-  background: rgba(248, 113, 113, 0.1);
+  color: #cd6f5f;
+  background: rgba(205, 111, 95, 0.1);
 }
 
 .spirit-root-name-container {
@@ -813,56 +813,56 @@ const editInitialData = computed(() => {
 }
 
 .spirit-root-tier.tier-下品 {
-  background: linear-gradient(135deg, #8B5CF6, #A78BFA);
+  background: linear-gradient(135deg, #8a6fa8, #a189bd);
   color: white;
 }
 
 .spirit-root-tier.tier-中品 {
-  background: linear-gradient(135deg, #3B82F6, #60A5FA);
+  background: linear-gradient(135deg, #4c87ad, #78a8c6);
   color: white;
 }
 
 .spirit-root-tier.tier-上品 {
-  background: linear-gradient(135deg, #10B981, #34D399);
+  background: linear-gradient(135deg, #4f9b7e, #34D399);
   color: white;
 }
 
 .spirit-root-tier.tier-极品 {
-  background: linear-gradient(135deg, #F59E0B, #FBBF24);
+  background: linear-gradient(135deg, #c69431, #d5aa4a);
   color: white;
 }
 
 .spirit-root-tier.tier-天品 {
-  background: linear-gradient(135deg, #EF4444, #F87171);
+  background: linear-gradient(135deg, #c34b3c, #cd6f5f);
   color: white;
 }
 
 .spirit-root-tier.tier-神品 {
-  background: linear-gradient(135deg, #DC2626, #F87171);
+  background: linear-gradient(135deg, #a83a2c, #cd6f5f);
   color: white;
 }
 
 .spirit-root-tier.tier-特殊 {
-  background: linear-gradient(135deg, #7C3AED, #A78BFA);
+  background: linear-gradient(135deg, #70518f, #a189bd);
   color: white;
-  border: 1px solid #A78BFA;
+  border: 1px solid #a189bd;
 }
 
 .spirit-root-tier.tier-凡品 {
   background: rgba(156, 163, 175, 0.2);
-  color: #6B7280;
-  border: 1px solid #9CA3AF;
+  color: #78736a;
+  border: 1px solid #a29c90;
 }
 
 .spirit-root-item:hover {
-  background: rgba(51, 65, 85, 0.6);
-  border-color: rgba(147, 197, 253, 0.2);
+  background: rgba(61, 58, 53, 0.6);
+  border-color: rgba(166, 198, 218, 0.2);
 }
 
 .spirit-root-item.selected {
   background: rgba(30, 58, 138, 0.4);
-  border-color: rgba(147, 197, 253, 0.4);
-  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15);
+  border-color: rgba(166, 198, 218, 0.4);
+  box-shadow: 0 2px 8px rgba(76, 135, 173, 0.15);
 }
 
 .spirit-root-item.disabled {
@@ -871,28 +871,28 @@ const editInitialData = computed(() => {
 }
 
 .spirit-root-item.disabled:hover {
-  background: rgba(30, 41, 59, 0.4);
+  background: rgba(30, 34, 40, 0.4);
   border-color: transparent;
 }
 
 .spirit-root-name {
   font-weight: 500;
-  color: #f1f5f9;
+  color: #ece7dc;
 }
 
 .spirit-root-item.selected .spirit-root-name {
-  color: #bfdbfe;
+  color: #c7d9e2;
 }
 
 .spirit-root-cost {
-  color: #fbbf24;
+  color: #d5aa4a;
   font-size: 0.85rem;
   font-weight: 500;
 }
 
 .divider {
   height: 1px;
-  background: linear-gradient(to right, transparent, rgba(147, 197, 253, 0.2), transparent);
+  background: linear-gradient(to right, transparent, rgba(166, 198, 218, 0.2), transparent);
   margin: 0.5rem 0;
 }
 
@@ -935,7 +935,7 @@ const editInitialData = computed(() => {
 
 /* ========== 右侧详情面板 ========== */
 .spirit-root-details-container {
-  background: rgba(30, 41, 59, 0.5);
+  background: rgba(30, 34, 40, 0.5);
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 12px;
   padding: 1.5rem;
@@ -953,10 +953,10 @@ const editInitialData = computed(() => {
 
 .spirit-root-details h2 {
   margin: 0 0 1rem 0;
-  color: #93c5fd;
+  color: #a6c6da;
   flex-shrink: 0;
   font-size: 1.5rem;
-  text-shadow: 0 0 20px rgba(147, 197, 253, 0.3);
+  text-shadow: 0 0 20px rgba(166, 198, 218, 0.3);
 }
 
 .description-scroll {
@@ -966,23 +966,23 @@ const editInitialData = computed(() => {
   padding-right: 0.5rem;
   min-height: 0;
   scrollbar-width: thin;
-  scrollbar-color: rgba(147, 197, 253, 0.3) transparent;
+  scrollbar-color: rgba(166, 198, 218, 0.3) transparent;
 }
 
 .description-scroll p {
   margin: 0;
   white-space: pre-wrap;
-  color: #94a3b8;
+  color: #a09a8d;
 }
 
 .description-scroll::-webkit-scrollbar { width: 6px; }
 .description-scroll::-webkit-scrollbar-track { background: transparent; }
-.description-scroll::-webkit-scrollbar-thumb { background: rgba(147, 197, 253, 0.3); border-radius: 3px; }
+.description-scroll::-webkit-scrollbar-thumb { background: rgba(166, 198, 218, 0.3); border-radius: 3px; }
 
 .cost-display {
   text-align: right;
   font-weight: 600;
-  color: #fbbf24;
+  color: #d5aa4a;
   flex-shrink: 0;
   margin-top: 1rem;
 }
@@ -1280,7 +1280,7 @@ const editInitialData = computed(() => {
   gap: 0.5rem;
   padding: 0.75rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  background: rgba(30, 41, 59, 0.3);
+  background: rgba(30, 34, 40, 0.3);
   justify-content: center;
 }
 
@@ -1288,8 +1288,8 @@ const editInitialData = computed(() => {
   padding: 0.5rem 1rem;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
-  background: rgba(30, 41, 59, 0.6);
-  color: #cbd5e1;
+  background: rgba(30, 34, 40, 0.6);
+  color: #c4bdad;
   cursor: pointer;
   transition: all 0.25s ease;
   font-size: 0.85rem;
@@ -1299,27 +1299,27 @@ const editInitialData = computed(() => {
 }
 
 .top-actions-container .action-item:hover {
-  background: rgba(51, 65, 85, 0.8);
-  border-color: rgba(147, 197, 253, 0.3);
-  color: #f1f5f9;
+  background: rgba(61, 58, 53, 0.8);
+  border-color: rgba(166, 198, 218, 0.3);
+  color: #ece7dc;
 }
 
 /* 亮色主题顶部按钮 */
 [data-theme="light"] .top-actions-container {
-  background: rgba(241, 245, 249, 0.6);
-  border-bottom-color: rgba(59, 130, 246, 0.15);
+  background: rgba(236, 231, 220, 0.6);
+  border-bottom-color: rgba(76, 135, 173, 0.15);
 }
 
 [data-theme="light"] .top-actions-container .action-item {
   background: rgba(255, 255, 255, 0.8);
-  border-color: rgba(59, 130, 246, 0.3);
-  color: #2563eb;
+  border-color: rgba(76, 135, 173, 0.3);
+  color: #3a6c8c;
 }
 
 [data-theme="light"] .top-actions-container .action-item:hover {
-  background: rgba(59, 130, 246, 0.1);
-  border-color: #3b82f6;
-  color: #1e40af;
+  background: rgba(76, 135, 173, 0.1);
+  border-color: #4c87ad;
+  color: #27506b;
 }
 
 /* 选择模式标签页 */
@@ -1446,23 +1446,23 @@ const editInitialData = computed(() => {
 }
 
 .tier-button.tier-common {
-  border-color: #9CA3AF;
+  border-color: #a29c90;
 }
 
 .tier-button.tier-low {
-  border-color: #8B5CF6;
+  border-color: #8a6fa8;
 }
 
 .tier-button.tier-middle {
-  border-color: #3B82F6;
+  border-color: #4c87ad;
 }
 
 .tier-button.tier-high {
-  border-color: #10B981;
+  border-color: #4f9b7e;
 }
 
 .tier-button.tier-supreme {
-  border-color: #F59E0B;
+  border-color: #c69431;
 }
 
 .tier-button.tier-heaven {
@@ -1470,11 +1470,11 @@ const editInitialData = computed(() => {
 }
 
 .tier-button.tier-divine {
-  border-color: #DC2626;
+  border-color: #a83a2c;
 }
 
 .tier-button.tier-special {
-  border-color: #7C3AED;
+  border-color: #70518f;
 }
 
 .tier-name {
@@ -1570,7 +1570,7 @@ const editInitialData = computed(() => {
 }
 
 /* 兼容新等级名称"仙品" */
-.spirit-root-tier.tier-仙品 { background: linear-gradient(135deg, #EF4444, #F87171); color: white; }
+.spirit-root-tier.tier-仙品 { background: linear-gradient(135deg, #c34b3c, #cd6f5f); color: white; }
 
 /* ========== 亮色主题适配 ========== */
 [data-theme="light"] .spirit-root-left-panel,
@@ -1584,48 +1584,48 @@ const editInitialData = computed(() => {
 }
 
 [data-theme="light"] .spirit-root-item:hover {
-  background: rgba(241, 245, 249, 0.95);
-  border-color: rgba(59, 130, 246, 0.2);
+  background: rgba(236, 231, 220, 0.95);
+  border-color: rgba(76, 135, 173, 0.2);
 }
 
 [data-theme="light"] .spirit-root-item.selected {
   background: rgba(219, 234, 254, 0.8);
-  border-color: rgba(59, 130, 246, 0.4);
+  border-color: rgba(76, 135, 173, 0.4);
 }
 
 [data-theme="light"] .spirit-root-name {
-  color: #1e293b;
+  color: #1e2228;
 }
 
 [data-theme="light"] .spirit-root-item.selected .spirit-root-name {
-  color: #1e40af;
+  color: #27506b;
 }
 
 [data-theme="light"] .spirit-root-details h2 {
-  color: #2563eb;
+  color: #3a6c8c;
 }
 
 [data-theme="light"] .description-scroll p {
-  color: #475569;
+  color: #56534b;
 }
 
 /* 亮色主题下的编辑/删除按钮 */
 [data-theme="light"] .edit-btn,
 [data-theme="light"] .delete-btn {
-  background: rgba(241, 245, 249, 0.8);
-  border: 1px solid rgba(59, 130, 246, 0.15);
-  color: #475569;
+  background: rgba(236, 231, 220, 0.8);
+  border: 1px solid rgba(76, 135, 173, 0.15);
+  color: #56534b;
 }
 
 [data-theme="light"] .edit-btn:hover {
-  color: #2563eb;
-  background: rgba(59, 130, 246, 0.1);
-  border-color: rgba(59, 130, 246, 0.3);
+  color: #3a6c8c;
+  background: rgba(76, 135, 173, 0.1);
+  border-color: rgba(76, 135, 173, 0.3);
 }
 
 [data-theme="light"] .delete-btn:hover {
-  color: #dc2626;
-  background: rgba(239, 68, 68, 0.1);
-  border-color: rgba(239, 68, 68, 0.3);
+  color: #a83a2c;
+  background: rgba(195, 75, 60, 0.1);
+  border-color: rgba(195, 75, 60, 0.3);
 }
 </style>

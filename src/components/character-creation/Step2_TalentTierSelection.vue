@@ -160,7 +160,7 @@ const customTierFields = [
   { key: 'description', label: '天资描述', type: 'textarea', placeholder: '描述此天资的特点...' },
   { key: 'total_points', label: '天道点', type: 'number', placeholder: '例如：20' },
   { key: 'rarity', label: '稀有度', type: 'number', placeholder: '1-10，数值越高越稀有' },
-  { key: 'color', label: '辉光颜色', type: 'color', placeholder: '例如：#808080' },
+  { key: 'color', label: '辉光颜色', type: 'color', placeholder: '例如：#807b72' },
 ] as const
 
 function validateCustomTier(data: Partial<CustomTierData>) {
@@ -183,7 +183,7 @@ async function handleCustomSubmit(data: CustomTierData) {
     description: data.description,
     total_points: parseInt(data.total_points, 10) || 10,
     rarity: parseInt(data.rarity, 10) || 1,
-    color: data.color || '#808080',
+    color: data.color || '#807b72',
   }
   
   try {
@@ -242,7 +242,7 @@ async function handleAIPromptSubmit(userPrompt: string) {
       name: parsedTier.name || parsedTier.名称 || '未命名天资',
       description: parsedTier.description || parsedTier.描述 || parsedTier.说明 || '',
       total_points: parsedTier.total_points || parsedTier.总点数 || parsedTier.点数 || 10,
-      color: parsedTier.color || parsedTier.颜色 || '#808080',
+      color: parsedTier.color || parsedTier.颜色 || '#807b72',
       rarity: parsedTier.rarity || parsedTier.稀有度 || 1,
       source: 'local'
     };
@@ -295,7 +295,7 @@ async function handleEditSubmit(data: CustomTierData) {
     description: data.description,
     total_points: parseInt(data.total_points, 10) || 10,
     rarity: parseInt(data.rarity, 10) || 1,
-    color: data.color || '#808080'
+    color: data.color || '#807b72'
   };
 
   try {
@@ -343,7 +343,7 @@ const editInitialData = computed(() => {
   align-items: center;
   height: 100%;
   font-size: 1.1rem;
-  color: #94a3b8;
+  color: #a09a8d;
   font-style: italic;
 }
 
@@ -359,7 +359,7 @@ const editInitialData = computed(() => {
 .tier-left-panel {
   display: flex;
   flex-direction: column;
-  background: rgba(30, 41, 59, 0.5);
+  background: rgba(30, 34, 40, 0.5);
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 12px;
   overflow: hidden;
@@ -371,7 +371,7 @@ const editInitialData = computed(() => {
   gap: 0.5rem;
   padding: 0.75rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  background: rgba(30, 41, 59, 0.3);
+  background: rgba(30, 34, 40, 0.3);
   justify-content: center;
 }
 
@@ -379,8 +379,8 @@ const editInitialData = computed(() => {
   padding: 0.5rem 1rem;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
-  background: rgba(30, 41, 59, 0.6);
-  color: #cbd5e1;
+  background: rgba(30, 34, 40, 0.6);
+  color: #c4bdad;
   cursor: pointer;
   transition: all 0.25s ease;
   font-size: 0.85rem;
@@ -390,9 +390,9 @@ const editInitialData = computed(() => {
 }
 
 .top-actions-container .action-item:hover {
-  background: rgba(51, 65, 85, 0.8);
-  border-color: rgba(147, 197, 253, 0.3);
-  color: #f1f5f9;
+  background: rgba(61, 58, 53, 0.8);
+  border-color: rgba(166, 198, 218, 0.3);
+  color: #ece7dc;
 }
 
 .tiers-list-container {
@@ -400,13 +400,13 @@ const editInitialData = computed(() => {
   overflow-y: auto;
   padding: 0.5rem;
   scrollbar-width: thin;
-  scrollbar-color: rgba(147, 197, 253, 0.3) transparent;
+  scrollbar-color: rgba(166, 198, 218, 0.3) transparent;
 }
 
 .tiers-list-container::-webkit-scrollbar { width: 6px; }
 .tiers-list-container::-webkit-scrollbar-track { background: transparent; }
-.tiers-list-container::-webkit-scrollbar-thumb { background: rgba(147, 197, 253, 0.3); border-radius: 3px; }
-.tiers-list-container::-webkit-scrollbar-thumb:hover { background: rgba(147, 197, 253, 0.5); }
+.tiers-list-container::-webkit-scrollbar-thumb { background: rgba(166, 198, 218, 0.3); border-radius: 3px; }
+.tiers-list-container::-webkit-scrollbar-thumb:hover { background: rgba(166, 198, 218, 0.5); }
 
 /* ========== 选项卡样式（带天资辉光） ========== */
 .tier-item {
@@ -419,7 +419,7 @@ const editInitialData = computed(() => {
   cursor: pointer;
   transition: all 0.25s ease;
   border: 1px solid transparent;
-  background: rgba(30, 41, 59, 0.4);
+  background: rgba(30, 34, 40, 0.4);
 }
 
 .tier-item:hover {
@@ -442,12 +442,12 @@ const editInitialData = computed(() => {
 
 .tier-name {
   font-weight: 600;
-  color: var(--tier-glow-color, #f1f5f9);
+  color: var(--tier-glow-color, #ece7dc);
   text-shadow: 0 0 10px rgba(var(--tier-glow-color-rgb, 147, 197, 253), 0.3);
 }
 
 .tier-points {
-  color: #fbbf24;
+  color: #d5aa4a;
   font-weight: 500;
   font-size: 0.9rem;
 }
@@ -469,7 +469,7 @@ const editInitialData = computed(() => {
 .edit-btn, .delete-btn {
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.15);
-  color: #94a3b8;
+  color: #a09a8d;
   cursor: pointer;
   padding: 0.35rem;
   border-radius: 4px;
@@ -480,15 +480,15 @@ const editInitialData = computed(() => {
 }
 
 .edit-btn:hover {
-  color: #93c5fd;
-  background: rgba(147, 197, 253, 0.15);
-  border-color: rgba(147, 197, 253, 0.3);
+  color: #a6c6da;
+  background: rgba(166, 198, 218, 0.15);
+  border-color: rgba(166, 198, 218, 0.3);
 }
 
 .delete-btn:hover {
-  color: #f87171;
-  background: rgba(248, 113, 113, 0.15);
-  border-color: rgba(248, 113, 113, 0.3);
+  color: #cd6f5f;
+  background: rgba(205, 111, 95, 0.15);
+  border-color: rgba(205, 111, 95, 0.3);
 }
 
 .action-name {
@@ -497,7 +497,7 @@ const editInitialData = computed(() => {
 
 /* ========== 右侧详情面板 ========== */
 .tier-details-container {
-  background: rgba(30, 41, 59, 0.5);
+  background: rgba(30, 34, 40, 0.5);
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 12px;
   padding: 1.5rem;
@@ -528,23 +528,23 @@ const editInitialData = computed(() => {
   padding-right: 0.5rem;
   min-height: 0;
   scrollbar-width: thin;
-  scrollbar-color: rgba(147, 197, 253, 0.3) transparent;
+  scrollbar-color: rgba(166, 198, 218, 0.3) transparent;
 }
 
 .description-scroll::-webkit-scrollbar { width: 6px; }
 .description-scroll::-webkit-scrollbar-track { background: transparent; }
-.description-scroll::-webkit-scrollbar-thumb { background: rgba(147, 197, 253, 0.3); border-radius: 3px; }
+.description-scroll::-webkit-scrollbar-thumb { background: rgba(166, 198, 218, 0.3); border-radius: 3px; }
 
 .description-scroll p {
   margin: 0;
   white-space: pre-wrap;
-  color: #94a3b8;
+  color: #a09a8d;
 }
 
 .points-display {
   text-align: center;
   font-weight: 600;
-  color: #fbbf24;
+  color: #d5aa4a;
   font-size: 1.2rem;
   padding-top: 1rem;
   margin-top: 1rem;
@@ -560,20 +560,20 @@ const editInitialData = computed(() => {
 }
 
 [data-theme="light"] .top-actions-container {
-  background: rgba(241, 245, 249, 0.8);
+  background: rgba(236, 231, 220, 0.8);
   border-color: rgba(0, 0, 0, 0.06);
 }
 
 [data-theme="light"] .top-actions-container .action-item {
   background: rgba(255, 255, 255, 0.8);
-  border-color: rgba(59, 130, 246, 0.3);
-  color: #2563eb;
+  border-color: rgba(76, 135, 173, 0.3);
+  color: #3a6c8c;
 }
 
 [data-theme="light"] .top-actions-container .action-item:hover {
-  background: rgba(59, 130, 246, 0.1);
-  border-color: #3b82f6;
-  color: #1e40af;
+  background: rgba(76, 135, 173, 0.1);
+  border-color: #4c87ad;
+  color: #27506b;
 }
 
 [data-theme="light"] .tier-item {
@@ -581,7 +581,7 @@ const editInitialData = computed(() => {
 }
 
 [data-theme="light"] .description-scroll p {
-  color: #475569;
+  color: #56534b;
 }
 
 [data-theme="light"] .points-display {
@@ -591,21 +591,21 @@ const editInitialData = computed(() => {
 /* 亮色主题下的编辑/删除按钮 */
 [data-theme="light"] .edit-btn,
 [data-theme="light"] .delete-btn {
-  background: rgba(241, 245, 249, 0.8);
-  border: 1px solid rgba(59, 130, 246, 0.15);
-  color: #475569;
+  background: rgba(236, 231, 220, 0.8);
+  border: 1px solid rgba(76, 135, 173, 0.15);
+  color: #56534b;
 }
 
 [data-theme="light"] .edit-btn:hover {
-  color: #2563eb;
-  background: rgba(59, 130, 246, 0.1);
-  border-color: rgba(59, 130, 246, 0.3);
+  color: #3a6c8c;
+  background: rgba(76, 135, 173, 0.1);
+  border-color: rgba(76, 135, 173, 0.3);
 }
 
 [data-theme="light"] .delete-btn:hover {
-  color: #dc2626;
-  background: rgba(239, 68, 68, 0.1);
-  border-color: rgba(239, 68, 68, 0.3);
+  color: #a83a2c;
+  background: rgba(195, 75, 60, 0.1);
+  border-color: rgba(195, 75, 60, 0.3);
 }
 
 /* 响应式适配 - 手机端优化 */

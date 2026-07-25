@@ -187,7 +187,7 @@ watch([sessionId, targetWorldId], () => {
   justify-content: space-between;
   gap: 12px;
   padding: 10px 12px;
-  border: 1px solid var(--color-border, #e2e8f0);
+  border: 1px solid var(--color-border, #ddd7c9);
   border-radius: 12px;
   background: var(--color-surface, #fff);
 }
@@ -202,11 +202,11 @@ watch([sessionId, targetWorldId], () => {
 
 .title-text {
   font-weight: 700;
-  color: var(--color-text, #111827);
+  color: var(--color-text, #14171b);
 }
 
 .meta {
-  color: var(--color-text-muted, #6b7280);
+  color: var(--color-text-muted, #78736a);
   font-size: 0.85rem;
 }
 
@@ -216,9 +216,9 @@ watch([sessionId, targetWorldId], () => {
 }
 
 .tool-btn {
-  border: 1px solid var(--color-border, #e2e8f0);
+  border: 1px solid var(--color-border, #ddd7c9);
   background: var(--color-surface, #fff);
-  color: var(--color-text, #111827);
+  color: var(--color-text, #14171b);
   padding: 6px 10px;
   border-radius: 10px;
   cursor: pointer;
@@ -233,19 +233,19 @@ watch([sessionId, targetWorldId], () => {
   display: flex;
   align-items: center;
   gap: 6px;
-  background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+  background: linear-gradient(135deg, #4c87ad 0%, #78a8c6 100%);
   color: white;
   border: none;
   font-weight: 500;
 }
 
 .tool-btn.graphic-btn:hover {
-  background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+  background: linear-gradient(135deg, #3a6c8c 0%, #4c87ad 100%);
 }
 
 .empty-state {
   flex: 1;
-  border: 1px dashed var(--color-border, #e2e8f0);
+  border: 1px dashed var(--color-border, #ddd7c9);
   border-radius: 12px;
   background: var(--color-surface, #fff);
   padding: 18px;
@@ -257,11 +257,11 @@ watch([sessionId, targetWorldId], () => {
 
 .empty-title {
   font-weight: 700;
-  color: var(--color-text, #111827);
+  color: var(--color-text, #14171b);
 }
 
 .empty-hint {
-  color: var(--color-text-muted, #6b7280);
+  color: var(--color-text-muted, #78736a);
   font-size: 0.9rem;
 }
 
@@ -277,11 +277,11 @@ watch([sessionId, targetWorldId], () => {
 .error-state {
   padding: 24px;
   text-align: center;
-  color: var(--color-text-muted, #6b7280);
+  color: var(--color-text-muted, #78736a);
 }
 
 .error-state {
-  color: #dc2626;
+  color: #a83a2c;
 }
 
 .world-info-container {
@@ -294,7 +294,7 @@ watch([sessionId, targetWorldId], () => {
 }
 
 .info-section {
-  border: 1px solid var(--color-border, #e2e8f0);
+  border: 1px solid var(--color-border, #ddd7c9);
   border-radius: 12px;
   background: var(--color-surface, #fff);
   padding: 14px;
@@ -302,7 +302,7 @@ watch([sessionId, targetWorldId], () => {
 
 .section-title {
   font-weight: 700;
-  color: var(--color-text, #111827);
+  color: var(--color-text, #14171b);
   margin-bottom: 10px;
   font-size: 0.95rem;
 }
@@ -316,16 +316,16 @@ watch([sessionId, targetWorldId], () => {
 
 .info-item {
   font-size: 0.9rem;
-  color: var(--color-text, #111827);
+  color: var(--color-text, #14171b);
 }
 
 .info-item .label {
-  color: var(--color-text-muted, #6b7280);
+  color: var(--color-text-muted, #78736a);
 }
 
 .info-desc {
   font-size: 0.85rem;
-  color: var(--color-text-muted, #6b7280);
+  color: var(--color-text-muted, #78736a);
   line-height: 1.5;
 }
 
@@ -337,25 +337,25 @@ watch([sessionId, targetWorldId], () => {
 
 .list-item {
   padding: 10px 12px;
-  border: 1px solid var(--color-border, #e2e8f0);
+  border: 1px solid var(--color-border, #ddd7c9);
   border-radius: 8px;
   background: var(--color-background, rgba(0, 0, 0, 0.2));
 }
 
 .item-name {
   font-weight: 600;
-  color: var(--color-text, #111827);
+  color: var(--color-text, #14171b);
   margin-bottom: 4px;
 }
 
 .item-meta {
   font-size: 0.8rem;
-  color: var(--color-text-muted, #6b7280);
+  color: var(--color-text-muted, #78736a);
 }
 
 .item-desc {
   font-size: 0.85rem;
-  color: var(--color-text-muted, #6b7280);
+  color: var(--color-text-muted, #78736a);
   margin-top: 4px;
   line-height: 1.4;
 }

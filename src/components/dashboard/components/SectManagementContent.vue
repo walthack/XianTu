@@ -381,9 +381,9 @@ ${JSON.stringify(management.value).slice(0, 1200)}
 }
 
 .btn.primary {
-  border-color: rgba(59, 130, 246, 0.35);
-  background: rgba(59, 130, 246, 0.08);
-  color: #3b82f6;
+  border-color: rgba(76, 135, 173, 0.35);
+  background: rgba(76, 135, 173, 0.08);
+  color: #4c87ad;
 }
 
 .btn:hover:not(:disabled) {

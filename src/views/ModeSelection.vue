@@ -31,8 +31,13 @@
           <!-- 单机模式 -->
           <div
             class="gate-card"
+            role="button"
+            tabindex="0"
+            :aria-pressed="selectedMode === 'single'"
             :class="{ selected: selectedMode === 'single' }"
             @click="selectPath('single')"
+            @keydown.enter.prevent="selectPath('single')"
+            @keydown.space.prevent="selectPath('single')"
           >
             <div class="gate-icon">
               <div class="icon-bg"></div>
@@ -55,8 +60,14 @@
           <!-- 联机模式 -->
           <div
             class="gate-card"
+            role="button"
+            :tabindex="backendReady ? 0 : -1"
+            :aria-pressed="selectedMode === 'cloud'"
+            :aria-disabled="!backendReady"
             :class="{ selected: selectedMode === 'cloud', disabled: !backendReady }"
             @click="selectPath('cloud')"
+            @keydown.enter.prevent="selectPath('cloud')"
+            @keydown.space.prevent="selectPath('cloud')"
           >
             <div class="gate-icon">
               <div class="icon-bg"></div>
@@ -224,20 +235,20 @@ const openScenarioMods = () => {
 
 <style scoped>
   .header-title{
-  background: linear-gradient(135deg, #60a5fa 0%, #818cf8 50%, #a78bfa 100%);
+  background: linear-gradient(135deg, #78a8c6 0%, #8b95b8 50%, #a189bd 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 8px rgba(96, 165, 250, 0.6)) drop-shadow(0 0 12px rgba(129, 140, 248, 0.4));
+  filter: drop-shadow(0 0 8px rgba(120, 168, 198, 0.6)) drop-shadow(0 0 12px rgba(129, 140, 248, 0.4));
   animation: glow-pulse 3s ease-in-out infinite;
   }
 
 @keyframes glow-pulse {
   0%, 100% {
-    filter: drop-shadow(0 0 8px rgba(96, 165, 250, 0.6)) drop-shadow(0 0 12px rgba(129, 140, 248, 0.4));
+    filter: drop-shadow(0 0 8px rgba(120, 168, 198, 0.6)) drop-shadow(0 0 12px rgba(129, 140, 248, 0.4));
   }
   50% {
-    filter: drop-shadow(0 0 12px rgba(96, 165, 250, 0.8)) drop-shadow(0 0 18px rgba(129, 140, 248, 0.5));
+    filter: drop-shadow(0 0 12px rgba(120, 168, 198, 0.8)) drop-shadow(0 0 18px rgba(129, 140, 248, 0.5));
   }
 }
 /* 容器 - 可滚动 */
@@ -259,16 +270,16 @@ const openScenarioMods = () => {
 
 /* 主内容区 */
 .selection-content {
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.92) 0%, rgba(30, 41, 59, 0.88) 100%);
+  background: linear-gradient(135deg, rgba(18, 21, 26, 0.92) 0%, rgba(30, 34, 40, 0.88) 100%);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   border-radius: 28px;
   padding: 3rem 3.5rem;
-  border: 1px solid rgba(147, 197, 253, 0.18);
+  border: 1px solid rgba(166, 198, 218, 0.18);
   box-shadow:
     0 24px 48px -12px rgba(0, 0, 0, 0.6),
-    0 0 0 1px rgba(96, 165, 250, 0.1) inset,
-    0 8px 32px rgba(96, 165, 250, 0.08);
+    0 0 0 1px rgba(120, 168, 198, 0.1) inset,
+    0 8px 32px rgba(120, 168, 198, 0.08);
   max-width: 820px;
   width: 100%;
   display: flex;
@@ -281,32 +292,32 @@ const openScenarioMods = () => {
 }
 
 .selection-content:hover {
-  border-color: rgba(147, 197, 253, 0.25);
+  border-color: rgba(166, 198, 218, 0.25);
   box-shadow:
     0 32px 64px -16px rgba(0, 0, 0, 0.7),
-    0 0 0 1px rgba(96, 165, 250, 0.15) inset,
-    0 12px 48px rgba(96, 165, 250, 0.12);
+    0 0 0 1px rgba(120, 168, 198, 0.15) inset,
+    0 12px 48px rgba(120, 168, 198, 0.12);
 }
 
 /* 版本号 - 青蓝色发光 */
 .version-tag {
   font-size: 0.75rem;
   font-weight: 600;
-  color: #67e8f9;
+  color: #8cc3d1;
   padding: 0.25rem 0.6rem;
-  background: linear-gradient(135deg, rgba(34, 211, 238, 0.12) 0%, rgba(56, 189, 248, 0.08) 100%);
-  border: 1px solid rgba(34, 211, 238, 0.35);
+  background: linear-gradient(135deg, rgba(111, 178, 198, 0.12) 0%, rgba(56, 189, 248, 0.08) 100%);
+  border: 1px solid rgba(111, 178, 198, 0.35);
   border-radius: 6px;
-  text-shadow: 0 0 8px rgba(34, 211, 238, 0.5);
-  box-shadow: 0 0 12px rgba(34, 211, 238, 0.15);
+  text-shadow: 0 0 8px rgba(111, 178, 198, 0.5);
+  box-shadow: 0 0 12px rgba(111, 178, 198, 0.15);
   transition: all 0.3s ease;
 }
 
 .version-tag:hover {
   color: #a5f3fc;
-  border-color: rgba(34, 211, 238, 0.5);
-  box-shadow: 0 0 16px rgba(34, 211, 238, 0.25);
-  text-shadow: 0 0 12px rgba(34, 211, 238, 0.7);
+  border-color: rgba(111, 178, 198, 0.5);
+  box-shadow: 0 0 16px rgba(111, 178, 198, 0.25);
+  text-shadow: 0 0 12px rgba(111, 178, 198, 0.7);
 }
 
 /* 右上角信息 */
@@ -330,15 +341,15 @@ const openScenarioMods = () => {
 }
 
 .status-indicator.online {
-  background: rgba(34, 197, 94, 0.12);
-  border: 1px solid rgba(34, 197, 94, 0.3);
-  color: #4ade80;
+  background: rgba(95, 155, 106, 0.12);
+  border: 1px solid rgba(95, 155, 106, 0.3);
+  color: #7cb187;
 }
 
 .status-indicator.offline {
-  background: rgba(248, 113, 113, 0.1);
-  border: 1px solid rgba(248, 113, 113, 0.25);
-  color: #fca5a5;
+  background: rgba(205, 111, 95, 0.1);
+  border: 1px solid rgba(205, 111, 95, 0.25);
+  color: #d49a90;
 }
 
 .status-dot {
@@ -362,15 +373,15 @@ const openScenarioMods = () => {
   font-size: 3.5rem;
   font-weight: 400;
   letter-spacing: 0.5em;
-  color: #f8fafc;
+  color: #f2eee4;
   margin: 0;
-  text-shadow: 0 0 40px rgba(147, 197, 253, 0.3);
+  text-shadow: 0 0 40px rgba(166, 198, 218, 0.3);
 }
 
 .sub-title {
   padding: 0.5rem;
   font-size: 1.1rem;
-  color: #94a3b8;
+  color: #a09a8d;
   letter-spacing: 0.15em;
   margin: 0;
 }
@@ -392,14 +403,14 @@ const openScenarioMods = () => {
 .section-header .line {
   width: 60px;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(147, 197, 253, 0.4), transparent);
+  background: linear-gradient(90deg, transparent, rgba(166, 198, 218, 0.4), transparent);
 }
 
 .section-header .text {
   padding: 0.5rem;
   font-family: var(--font-family-serif);
   font-size: 1rem;
-  color: #64748b;
+  color: var(--color-text-muted);
   letter-spacing: 0.2em;
 }
 
@@ -411,6 +422,11 @@ const openScenarioMods = () => {
 }
 
 /* 卡片 - 水墨画风格 */
+.gate-card:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 3px;
+}
+
 .gate-card {
   flex: 1;
   display: flex;
@@ -420,8 +436,8 @@ const openScenarioMods = () => {
   background:
     radial-gradient(ellipse 800px 600px at 30% 20%, rgba(255, 255, 255, 0.02) 0%, transparent 50%),
     radial-gradient(ellipse 600px 800px at 70% 80%, rgba(0, 0, 0, 0.3) 0%, transparent 50%),
-    linear-gradient(135deg, rgba(30, 41, 59, 0.4) 0%, rgba(15, 23, 42, 0.6) 100%);
-  border: 1px solid rgba(100, 116, 139, 0.2);
+    linear-gradient(135deg, rgba(30, 34, 40, 0.4) 0%, rgba(18, 21, 26, 0.6) 100%);
+  border: 1px solid rgba(124, 119, 108, 0.2);
   border-radius: 16px;
   cursor: pointer;
   position: relative;
@@ -451,7 +467,7 @@ const openScenarioMods = () => {
   background:
     radial-gradient(ellipse 800px 600px at 30% 20%, rgba(255, 255, 255, 0.04) 0%, transparent 50%),
     radial-gradient(ellipse 600px 800px at 70% 80%, rgba(0, 0, 0, 0.35) 0%, transparent 50%),
-    linear-gradient(135deg, rgba(30, 41, 59, 0.5) 0%, rgba(15, 23, 42, 0.7) 100%);
+    linear-gradient(135deg, rgba(30, 34, 40, 0.5) 0%, rgba(18, 21, 26, 0.7) 100%);
   border-color: rgba(148, 163, 184, 0.3);
   transform: translateY(-2px);
   box-shadow:
@@ -465,12 +481,12 @@ const openScenarioMods = () => {
 
 .gate-card.selected {
   background:
-    radial-gradient(ellipse at center, rgba(96, 165, 250, 0.08) 0%, transparent 60%),
-    linear-gradient(135deg, rgba(30, 58, 138, 0.35) 0%, rgba(30, 41, 59, 0.5) 100%);
-  border-color: rgba(147, 197, 253, 0.3);
+    radial-gradient(ellipse at center, rgba(120, 168, 198, 0.08) 0%, transparent 60%),
+    linear-gradient(135deg, rgba(30, 58, 138, 0.35) 0%, rgba(30, 34, 40, 0.5) 100%);
+  border-color: rgba(166, 198, 218, 0.3);
   box-shadow:
-    0 8px 32px rgba(59, 130, 246, 0.15),
-    inset 0 0 30px rgba(96, 165, 250, 0.05);
+    0 8px 32px rgba(76, 135, 173, 0.15),
+    inset 0 0 30px rgba(120, 168, 198, 0.05);
 }
 
 .gate-card.disabled {
@@ -480,7 +496,7 @@ const openScenarioMods = () => {
 
 .gate-card.disabled:hover {
   transform: none;
-  background: rgba(30, 41, 59, 0.5);
+  background: rgba(30, 34, 40, 0.5);
   border-color: rgba(255, 255, 255, 0.06);
 }
 
@@ -489,7 +505,7 @@ const openScenarioMods = () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #93c5fd;
+  color: #a6c6da;
   flex-shrink: 0;
   position: relative;
   width: 72px;
@@ -499,8 +515,8 @@ const openScenarioMods = () => {
 .icon-bg {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(147, 197, 253, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%);
-  border: 1px solid rgba(147, 197, 253, 0.15);
+  background: linear-gradient(135deg, rgba(166, 198, 218, 0.1) 0%, rgba(76, 135, 173, 0.05) 100%);
+  border: 1px solid rgba(166, 198, 218, 0.15);
   border-radius: 16px;
 }
 
@@ -511,13 +527,13 @@ const openScenarioMods = () => {
 
 .gate-card:hover .gate-icon,
 .gate-card.selected .gate-icon {
-  color: #bfdbfe;
+  color: #c7d9e2;
 }
 
 .gate-card:hover .icon-bg,
 .gate-card.selected .icon-bg {
-  background: linear-gradient(135deg, rgba(147, 197, 253, 0.15) 0%, rgba(59, 130, 246, 0.08) 100%);
-  border-color: rgba(147, 197, 253, 0.25);
+  background: linear-gradient(135deg, rgba(166, 198, 218, 0.15) 0%, rgba(76, 135, 173, 0.08) 100%);
+  border-color: rgba(166, 198, 218, 0.25);
 }
 
 /* 卡片信息 */
@@ -531,19 +547,19 @@ const openScenarioMods = () => {
   font-size: 1.35rem;
   font-weight: 400;
   margin: 0 0 0.35rem 0;
-  color: #f1f5f9;
+  color: #ece7dc;
   letter-spacing: 0.1em;
 }
 
 .gate-desc {
   font-size: 0.9rem;
-  color: #94a3b8;
+  color: #a09a8d;
   margin: 0 0 0.4rem 0;
 }
 
 .gate-detail {
   font-size: 0.8rem;
-  color: #64748b;
+  color: var(--color-text-muted);
   margin: 0 0 0.75rem 0;
   line-height: 1.4;
 }
@@ -561,9 +577,9 @@ const openScenarioMods = () => {
 
 /* 本地存储 - 琥珀色 */
 .tag-local {
-  color: #fbbf24;
-  background: rgba(251, 191, 36, 0.12);
-  border: 1px solid rgba(251, 191, 36, 0.25);
+  color: #d5aa4a;
+  background: rgba(213, 170, 74, 0.12);
+  border: 1px solid rgba(213, 170, 74, 0.25);
 }
 
 /* 离线可用 - 青色 */
@@ -575,14 +591,14 @@ const openScenarioMods = () => {
 
 /* 云端同步 - 蓝色 */
 .tag-cloud {
-  color: #60a5fa;
-  background: rgba(96, 165, 250, 0.12);
-  border: 1px solid rgba(96, 165, 250, 0.25);
+  color: #78a8c6;
+  background: rgba(120, 168, 198, 0.12);
+  border: 1px solid rgba(120, 168, 198, 0.25);
 }
 
 /* 数据安全 - 绿色 */
 .tag-secure {
-  color: #4ade80;
+  color: #7cb187;
   background: rgba(74, 222, 128, 0.1);
   border: 1px solid rgba(74, 222, 128, 0.25);
 }
@@ -595,19 +611,19 @@ const openScenarioMods = () => {
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background: rgba(34, 197, 94, 0.2);
-  border: 1px solid rgba(34, 197, 94, 0.4);
+  background: rgba(95, 155, 106, 0.2);
+  border: 1px solid rgba(95, 155, 106, 0.4);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #4ade80;
+  color: #7cb187;
 }
 
 /* 禁用遮罩 */
 .disabled-mask {
   position: absolute;
   inset: 0;
-  background: rgba(15, 23, 42, 0.75);
+  background: rgba(18, 21, 26, 0.75);
   backdrop-filter: blur(2px);
   border-radius: 16px;
   display: flex;
@@ -615,7 +631,7 @@ const openScenarioMods = () => {
   align-items: center;
   justify-content: center;
   gap: 0.4rem;
-  color: #94a3b8;
+  color: #a09a8d;
   font-size: 0.8rem;
 }
 
@@ -649,36 +665,36 @@ button {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  background: linear-gradient(135deg, #4c87ad 0%, #3a6c8c 100%);
   color: #fff;
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 4px 12px rgba(76, 135, 173, 0.3);
 }
 
 .btn-primary:hover {
-  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+  box-shadow: 0 6px 20px rgba(76, 135, 173, 0.4);
   transform: translateY(-1px);
 }
 
 .btn-secondary {
-  background: rgba(51, 65, 85, 0.6);
+  background: rgba(61, 58, 53, 0.6);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  color: #cbd5e1;
+  color: #c4bdad;
 }
 
 .btn-secondary:hover {
-  background: rgba(51, 65, 85, 0.8);
-  border-color: rgba(147, 197, 253, 0.2);
+  background: rgba(61, 58, 53, 0.8);
+  border-color: rgba(166, 198, 218, 0.2);
 }
 
 .btn-ghost {
   background: transparent;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  color: #94a3b8;
+  color: #a09a8d;
 }
 
 .btn-ghost:hover {
-  background: rgba(51, 65, 85, 0.4);
-  color: #e2e8f0;
+  background: rgba(61, 58, 53, 0.4);
+  color: #ddd7c9;
 }
 
 /* 过渡动画 */
@@ -696,17 +712,17 @@ button {
 /* 亮色主题 */
 [data-theme="light"] .selection-content {
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.92) 100%);
-  border-color: rgba(59, 130, 246, 0.15);
+  border-color: rgba(76, 135, 173, 0.15);
   box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.12);
 }
 
 [data-theme="light"] .main-title {
-  color: #1e293b;
+  color: #1e2228;
   text-shadow: none;
 }
 
 [data-theme="light"] .sub-title {
-  color: #64748b;
+  color: #7c776c;
 }
 
 [data-theme="light"] .gate-card {
@@ -720,39 +736,39 @@ button {
 }
 
 [data-theme="light"] .gate-title {
-  color: #1e293b;
+  color: #1e2228;
 }
 
 [data-theme="light"] .gate-icon {
-  color: #3b82f6;
+  color: #4c87ad;
 }
 
 [data-theme="light"] .icon-bg {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(37, 99, 235, 0.04) 100%);
-  border-color: rgba(59, 130, 246, 0.15);
+  background: linear-gradient(135deg, rgba(76, 135, 173, 0.08) 0%, rgba(37, 99, 235, 0.04) 100%);
+  border-color: rgba(76, 135, 173, 0.15);
 }
 
 [data-theme="light"] .gate-detail {
-  color: #94a3b8;
+  color: #a09a8d;
 }
 
 [data-theme="light"] .btn-secondary {
   background: rgba(248, 250, 252, 0.9);
   border-color: rgba(0, 0, 0, 0.08);
-  color: #475569;
+  color: #56534b;
 }
 
 [data-theme="light"] .btn-ghost {
-  color: #64748b;
+  color: #7c776c;
   border-color: rgba(0, 0, 0, 0.08);
 }
 
 [data-theme="light"] .version-tag {
-  color: #0891b2;
-  background: linear-gradient(135deg, rgba(34, 211, 238, 0.15) 0%, rgba(56, 189, 248, 0.1) 100%);
-  border-color: rgba(34, 211, 238, 0.35);
+  color: #3d7d90;
+  background: linear-gradient(135deg, rgba(111, 178, 198, 0.15) 0%, rgba(56, 189, 248, 0.1) 100%);
+  border-color: rgba(111, 178, 198, 0.35);
   text-shadow: none;
-  box-shadow: 0 0 8px rgba(34, 211, 238, 0.1);
+  box-shadow: 0 0 8px rgba(111, 178, 198, 0.1);
 }
 
 /* 响应式 */

@@ -15,56 +15,56 @@
   --color-surface-light: #e6e3dc; /* 更柔和的浅灰 */
   /* Derived/interactive states (light) */
   --color-surface-hover: #f2efe9; /* 悬浮时的柔和色 */
-  --color-primary: #1e4a9a; /* 更深的主色调 */
-  --color-primary-rgb: 30, 74, 154;
-  --color-primary-hover: #163d82;
-  --color-primary-active: #0f2f6a;
+  --color-primary: #2f5c85; /* 石青(深) */
+  --color-primary-rgb: 47, 92, 133;
+  --color-primary-hover: #27506b;
+  --color-primary-active: #1f4159;
   /* Lighten variant used by some components */
-  --color-primary-light: rgba(30, 74, 154, 0.15);
-  --color-accent: #2e8b57; /* 翠玉绿 - 修仙风格 */
-  --color-accent-hover: #267349;
-  --color-accent-light: rgba(46, 139, 87, 0.18);
+  --color-primary-light: rgba(47, 92, 133, 0.15);
+  --color-accent: #3f7a55; /* 石绿 */
+  --color-accent-hover: #35684a;
+  --color-accent-light: rgba(79, 138, 99, 0.18);
   --color-text: #1a1a1a;
   --color-text-secondary: #4a4a4a; /* 更深，提高对比度 */
   --color-text-muted: #5a5a5a; /* 更深，提高对比度 */
   --color-white-soft: #f1eee7; /* 柔和的白色 */
   --color-border: rgba(0, 0, 0, 0.12); /* 更柔和的边框 */
   --color-border-hover: rgba(0, 0, 0, 0.25);
-  --color-success: #2e8b32; /* 更深的绿色，提高可读性 */
-  --color-success-hover: #267529;
-  --color-warning: #e68a00; /* 更深的橙色 */
-  --color-warning-hover: #cc7a00;
-  --color-error: #dc2626; /* 更深的红色 */
-  --color-error-hover: #c22050;
-  --color-info: #2196f3;
-  --color-info-hover: #1e88e5;
+  --color-success: #4f8a55; /* 更深的绿色，提高可读性 */
+  --color-success-hover: #44754a;
+  --color-warning: #b1741d; /* 更深的橙色 */
+  --color-warning-hover: #9c6519;
+  --color-error: #a83a2c; /* 朱砂(深) */
+  --color-error-hover: #8e2f24;
+  --color-info: #4a8bad;
+  --color-info-hover: #3f7c9c;
   /* Keep danger alias for components that expect it */
   --color-danger: var(--color-error);
-  --color-danger-hover: #e53935;
+  --color-danger-hover: #b4453a;
   /* Generic hover background alias used in components */
   --color-hover: var(--color-surface-hover);
   /* Code block background used in data views */
-  --color-code-bg: #0f172a0f; /* subtle deep slate with opacity */
+  --color-code-bg: #12151a0f; /* subtle deep slate with opacity */
   /* Global scrollbar tokens (light) – hide track, show only thumb */
   --scrollbar-track-color: transparent;
   --scrollbar-thumb-color: rgba(0, 0, 0, 0.28);
   --scrollbar-thumb-hover-color: rgba(0, 0, 0, 0.4);
 
-  /* Vital colors (light theme) */
-  --vital-health: #ff2929;   /* 气血/健康（与 --color-error 保持一致） */
-  --vital-lingqi: #3b82f6;   /* 灵气(统一蓝) */
-  --vital-spirit: #ffeb00;   /* 神识(金色) */
-  --vital-lifespan: #c253ff; /* 寿元(紫色) */
+  /* Vital colors (light theme) —— 矿物色 */
+  --vital-health: #a83a2c;   /* 气血(朱砂，与 --color-error 保持一致) */
+  --vital-lingqi: #3a6c8c;   /* 灵气(石青) */
+  --vital-spirit: #a97b1d;   /* 神识(藤黄) */
+  --vital-lifespan: #7c5296; /* 寿元(紫檀) */
 
   /* Derived RGB triplets for rgba() usage (light) */
   --color-background-rgb: 235, 232, 225;
   --color-surface-rgb: 248, 246, 243;
-  --color-accent-rgb: 46, 139, 87;
+  --color-accent-rgb: 63, 122, 85;
   --color-border-rgb: 0, 0, 0;
-  --color-success-rgb: 46, 139, 50;
-  --color-warning-rgb: 230, 138, 0;
-  --color-error-rgb: 220, 38, 38;
-  --color-info-rgb: 33, 150, 243;
+  --color-success-rgb: 79, 138, 85;
+  --color-warning-rgb: 177, 116, 29;
+  --color-error-rgb: 168, 58, 44;
+  --color-info-rgb: 74, 139, 173;
 
   /* UI缩放变量 */
   --ui-scale: 1;
@@ -80,59 +80,60 @@
 /* --- 暗色主题灵脉: "松烟玄墨" (通过 data-theme 属性激活) --- */
 :root[data-theme='dark'] {
   /* --- Dark Theme Colors --- */
-  --color-background: rgb(30, 41, 59);
-  --color-background-transparent: rgba(26, 27, 38, 0.85);
-  --color-surface: #232e40;
-  --color-surface-transparent: rgba(41, 51, 72, 0.6);
-  --color-surface-light: #414868;
+  --color-background: rgb(26, 29, 33); /* 松烟底 */
+  --color-background-transparent: rgba(26, 29, 33, 0.85);
+  --color-surface: #22262b;
+  --color-surface-transparent: rgba(34, 38, 43, 0.6);
+  --color-surface-light: #32373d;
   /* Derived/interactive states (dark) */
-  --color-surface-hover: #33415f;
-  --color-primary: #82a3f5;
-  --color-primary-rgb: 130, 163, 245;
-  --color-primary-hover: #6f93f2;
-  --color-primary-active: #597ee6;
-  --color-primary-light: rgba(130, 163, 245, 0.18);
-  --color-accent: #7dd3a0; /* 翠玉绿 - 暗色主题 */
-  --color-accent-hover: #6bc48e;
-  --color-accent-light: rgba(125, 211, 160, 0.15);
-  --color-text: #f7f7f5; /* 柔和的暖白色，不那么刺眼 */
-  --color-text-secondary: #d0d0d0;
-  --color-text-muted: #b9b9b9; /* 增强对比度 */
-  --color-white-soft: #f7f7f5; /* 暗色主题下的柔和白色 */
-  --color-border: rgba(173, 216, 230, 0.5);
-  --color-border-hover: rgba(173, 216, 230, 0.8);
-  --color-success: #9ece6a;
-  --color-success-hover: #88b85b;
-  --color-warning: #ffd500;
-  --color-warning-hover: #e6c200;
-  --color-error: #ff2f49; /* 暗色下更红一些 */
-  --color-error-hover: #e64470;
-  --color-info: #77cdfe;
-  --color-info-hover: #66bff4;
+  --color-surface-hover: #2b3036;
+  --color-primary: #7fa8c4; /* 石青 */
+  --color-primary-rgb: 127, 168, 196;
+  --color-primary-hover: #6f9ab8;
+  --color-primary-active: #5e8aa8;
+  --color-primary-light: rgba(127, 168, 196, 0.18);
+  --color-accent: #7fae8c; /* 石绿 */
+  --color-accent-hover: #6f9d7c;
+  --color-accent-light: rgba(127, 174, 140, 0.15);
+  --color-text: #e8e3d8; /* 宣纸暖白 */
+  --color-text-secondary: #bdb7a8;
+  --color-text-muted: #9d9788;
+  --color-white-soft: #e8e3d8;
+  /* 墨线：原来是 0.5 透明度的亮蓝描边，导致每张卡片都像发光边框 */
+  --color-border: rgba(232, 227, 216, 0.16);
+  --color-border-hover: rgba(232, 227, 216, 0.32);
+  --color-success: #7ea87f;
+  --color-success-hover: #6d9670;
+  --color-warning: #d0a63f; /* 藤黄 */
+  --color-warning-hover: #b8912f;
+  --color-error: #c65042; /* 朱砂 */
+  --color-error-hover: #ae4034;
+  --color-info: #7fa8c4;
+  --color-info-hover: #6f9ab8;
   --color-danger: var(--color-error);
-  --color-danger-hover: #e66a81;
+  --color-danger-hover: #ae4034;
   --color-hover: var(--color-surface-hover);
-  --color-code-bg: rgba(20, 26, 43, 0.6);
+  --color-code-bg: rgba(18, 20, 24, 0.6);
   /* Global scrollbar tokens (dark) – hide track, show only thumb */
   --scrollbar-track-color: transparent;
   --scrollbar-thumb-color: rgba(255, 255, 255, 0.35);
   --scrollbar-thumb-hover-color: rgba(255, 255, 255, 0.5);
 
-  /* Vital colors (dark theme) */
-  --vital-health: #ff2f49;   /* 气血/健康（暗色，与 --color-error 保持一致） */
-  --vital-lingqi: #3b82f6;   /* 灵气(统一蓝) */
-  --vital-spirit: #ffeb00;   /* 神识(金色) */
-  --vital-lifespan: #c253ff; /* 寿元(紫色) */
+  /* Vital colors (dark theme) —— 矿物色，避开荧光纯色 */
+  --vital-health: #c65042;   /* 气血(朱砂，与 --color-error 保持一致) */
+  --vital-lingqi: #6f9ec4;   /* 灵气(石青) */
+  --vital-spirit: #d0a63f;   /* 神识(藤黄) */
+  --vital-lifespan: #9a7fb0; /* 寿元(紫檀) */
 
   /* Derived RGB triplets for rgba() usage (dark) */
-  --color-background-rgb: 26, 27, 38;
-  --color-surface-rgb: 41, 51, 72;
-  --color-accent-rgb: 125, 211, 160;
-  --color-border-rgb: 173, 216, 230;
-  --color-success-rgb: 158, 206, 106;
-  --color-warning-rgb: 255, 213, 0;
-  --color-error-rgb: 255, 47, 73;
-  --color-info-rgb: 119, 205, 254;
+  --color-background-rgb: 26, 29, 33;
+  --color-surface-rgb: 34, 38, 43;
+  --color-accent-rgb: 127, 174, 140;
+  --color-border-rgb: 232, 227, 216;
+  --color-success-rgb: 126, 168, 127;
+  --color-warning-rgb: 208, 166, 63;
+  --color-error-rgb: 198, 80, 66;
+  --color-info-rgb: 127, 168, 196;
 }
 
 html[data-lang='en'] {
@@ -758,14 +759,14 @@ html[data-lang='en'] .mastered-desc {
 /* 暗色主题适配 */
 [data-theme="dark"] .theme-toggle,
 [data-theme="dark"] .fullscreen-toggle {
-  background: rgba(41, 51, 72, 0.9);
-  --color: #82A3F5;
+  background: rgba(34, 38, 43, 0.9);
+  --color: #8aa9c0;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 [data-theme="dark"] .theme-toggle:hover,
 [data-theme="dark"] .fullscreen-toggle:hover {
-  background: rgba(41, 51, 72, 0.95);
+  background: rgba(34, 38, 43, 0.95);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
 }
 

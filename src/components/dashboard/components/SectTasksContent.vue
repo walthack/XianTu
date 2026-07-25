@@ -550,7 +550,7 @@ ${existingNames.join('，') || '（无）'}
   border-radius: 8px;
   border: 1px solid rgba(14, 116, 144, 0.25);
   background: rgba(14, 116, 144, 0.08);
-  color: #0e7490;
+  color: #386e80;
   font-size: 0.8rem;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -600,7 +600,7 @@ ${existingNames.join('，') || '（无）'}
 }
 
 .info-value.position { color: #0f766e; }
-.info-value.contribution { color: #0e7490; font-size: 1.1rem; }
+.info-value.contribution { color: #386e80; font-size: 1.1rem; }
 
 .task-filters {
   left: 4px;
@@ -631,7 +631,7 @@ ${existingNames.join('，') || '（无）'}
 .filter-btn.active {
   background: linear-gradient(135deg, rgba(14, 116, 144, 0.12), rgba(14, 116, 144, 0.05));
   border-color: rgba(14, 116, 144, 0.4);
-  color: #0e7490;
+  color: #386e80;
 }
 
 .task-list {
@@ -667,7 +667,7 @@ ${existingNames.join('，') || '（无）'}
   align-items: center;
   gap: 0.5rem;
   padding: 0.6rem 1rem;
-  background: linear-gradient(135deg, #0e7490, #0891b2);
+  background: linear-gradient(135deg, #386e80, #3d7d90);
   border: none;
   border-radius: 6px;
   color: white;
@@ -697,7 +697,7 @@ ${existingNames.join('，') || '（无）'}
 
 .task-card.available { border-color: rgba(14, 116, 144, 0.25); }
 .task-card.in-progress { border-color: rgba(234, 179, 8, 0.35); }
-.task-card.completed { border-color: rgba(34, 197, 94, 0.35); opacity: 0.75; }
+.task-card.completed { border-color: rgba(95, 155, 106, 0.35); opacity: 0.75; }
 
 .task-header {
   display: flex;
@@ -729,10 +729,10 @@ ${existingNames.join('，') || '（无）'}
   font-weight: 500;
 }
 
-.diff-low { background: rgba(34, 197, 94, 0.18); color: #16a34a; }
-.diff-mid { background: rgba(14, 116, 144, 0.18); color: #0e7490; }
+.diff-low { background: rgba(95, 155, 106, 0.18); color: #4e8557; }
+.diff-mid { background: rgba(14, 116, 144, 0.18); color: #386e80; }
 .diff-high { background: rgba(249, 115, 22, 0.18); color: #ea580c; }
-.diff-extreme { background: rgba(239, 68, 68, 0.18); color: #dc2626; }
+.diff-extreme { background: rgba(195, 75, 60, 0.18); color: #a83a2c; }
 
 .task-status {
   font-size: 0.7rem;
@@ -741,9 +741,9 @@ ${existingNames.join('，') || '（无）'}
   border: 1px solid transparent;
 }
 
-.task-status.available { color: #0e7490; border-color: rgba(14, 116, 144, 0.3); }
-.task-status.in-progress { color: #d97706; border-color: rgba(217, 119, 6, 0.4); }
-.task-status.completed { color: #16a34a; border-color: rgba(22, 163, 74, 0.4); }
+.task-status.available { color: #386e80; border-color: rgba(14, 116, 144, 0.3); }
+.task-status.in-progress { color: #a97528; border-color: rgba(169, 117, 40, 0.4); }
+.task-status.completed { color: #4e8557; border-color: rgba(22, 163, 74, 0.4); }
 
 .task-desc {
   font-size: 0.75rem;
@@ -783,21 +783,21 @@ ${existingNames.join('，') || '（无）'}
   transition: all 0.2s ease;
 }
 
-.task-btn.primary { background: rgba(14, 116, 144, 0.12); color: #0e7490; border: 1px solid rgba(14, 116, 144, 0.3); }
+.task-btn.primary { background: rgba(14, 116, 144, 0.12); color: #386e80; border: 1px solid rgba(14, 116, 144, 0.3); }
 .task-btn.primary:hover { background: rgba(14, 116, 144, 0.2); }
-.task-btn.success { background: rgba(22, 163, 74, 0.12); color: #16a34a; border: 1px solid rgba(22, 163, 74, 0.3); }
+.task-btn.success { background: rgba(22, 163, 74, 0.12); color: #4e8557; border: 1px solid rgba(22, 163, 74, 0.3); }
 .task-btn.success:hover { background: rgba(22, 163, 74, 0.2); }
 .task-btn.ghost { background: transparent; color: var(--color-text-secondary); border: 1px dashed rgba(148, 163, 184, 0.6); }
 
 .task-done {
   font-size: 0.75rem;
-  color: #16a34a;
+  color: #4e8557;
   font-weight: 600;
 }
 
 .task-in-progress {
   font-size: 0.75rem;
-  color: #d97706;
+  color: #a97528;
   font-weight: 600;
 }
 
@@ -809,6 +809,6 @@ ${existingNames.join('，') || '（无）'}
   background: rgba(14, 116, 144, 0.08);
   border-radius: 6px;
   font-size: 0.75rem;
-  color: #0e7490;
+  color: #386e80;
 }
 </style>

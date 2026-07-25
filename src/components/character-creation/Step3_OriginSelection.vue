@@ -539,7 +539,7 @@ const activeCost = computed(() => {
   align-items: center;
   height: 100%;
   font-size: 1.1rem;
-  color: #94a3b8;
+  color: #a09a8d;
   font-style: italic;
 }
 
@@ -555,7 +555,7 @@ const activeCost = computed(() => {
 .origin-left-panel {
   display: flex;
   flex-direction: column;
-  background: rgba(30, 41, 59, 0.5);
+  background: rgba(30, 34, 40, 0.5);
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 12px;
   overflow: hidden;
@@ -566,13 +566,13 @@ const activeCost = computed(() => {
   overflow-y: auto;
   padding: 0.5rem;
   scrollbar-width: thin;
-  scrollbar-color: rgba(147, 197, 253, 0.3) transparent;
+  scrollbar-color: rgba(166, 198, 218, 0.3) transparent;
 }
 
 .origin-list-container::-webkit-scrollbar { width: 6px; }
 .origin-list-container::-webkit-scrollbar-track { background: transparent; }
-.origin-list-container::-webkit-scrollbar-thumb { background: rgba(147, 197, 253, 0.3); border-radius: 3px; }
-.origin-list-container::-webkit-scrollbar-thumb:hover { background: rgba(147, 197, 253, 0.5); }
+.origin-list-container::-webkit-scrollbar-thumb { background: rgba(166, 198, 218, 0.3); border-radius: 3px; }
+.origin-list-container::-webkit-scrollbar-thumb:hover { background: rgba(166, 198, 218, 0.5); }
 
 /* ========== 选项卡样式 ========== */
 .origin-item {
@@ -585,18 +585,18 @@ const activeCost = computed(() => {
   cursor: pointer;
   transition: all 0.25s ease;
   border: 1px solid transparent;
-  background: rgba(30, 41, 59, 0.4);
+  background: rgba(30, 34, 40, 0.4);
 }
 
 .origin-item:hover {
-  background: rgba(51, 65, 85, 0.6);
-  border-color: rgba(147, 197, 253, 0.2);
+  background: rgba(61, 58, 53, 0.6);
+  border-color: rgba(166, 198, 218, 0.2);
 }
 
 .origin-item.selected {
   background: rgba(30, 58, 138, 0.4);
-  border-color: rgba(147, 197, 253, 0.4);
-  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15);
+  border-color: rgba(166, 198, 218, 0.4);
+  box-shadow: 0 2px 8px rgba(76, 135, 173, 0.15);
 }
 
 .origin-item.disabled {
@@ -605,7 +605,7 @@ const activeCost = computed(() => {
 }
 
 .origin-item.disabled:hover {
-  background: rgba(30, 41, 59, 0.4);
+  background: rgba(30, 34, 40, 0.4);
   border-color: transparent;
 }
 
@@ -618,15 +618,15 @@ const activeCost = computed(() => {
 
 .origin-name {
   font-weight: 500;
-  color: #f1f5f9;
+  color: #ece7dc;
 }
 
 .origin-item.selected .origin-name {
-  color: #bfdbfe;
+  color: #c7d9e2;
 }
 
 .origin-cost {
-  color: #fbbf24;
+  color: #d5aa4a;
   font-size: 0.85rem;
   font-weight: 500;
 }
@@ -648,7 +648,7 @@ const activeCost = computed(() => {
 .edit-btn, .delete-btn {
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.15);
-  color: #94a3b8;
+  color: #a09a8d;
   cursor: pointer;
   padding: 0.35rem;
   border-radius: 4px;
@@ -659,18 +659,18 @@ const activeCost = computed(() => {
 }
 
 .edit-btn:hover {
-  color: #93c5fd;
-  background: rgba(147, 197, 253, 0.1);
+  color: #a6c6da;
+  background: rgba(166, 198, 218, 0.1);
 }
 
 .delete-btn:hover {
-  color: #f87171;
-  background: rgba(248, 113, 113, 0.1);
+  color: #cd6f5f;
+  background: rgba(205, 111, 95, 0.1);
 }
 
 .divider {
   height: 1px;
-  background: linear-gradient(to right, transparent, rgba(147, 197, 253, 0.2), transparent);
+  background: linear-gradient(to right, transparent, rgba(166, 198, 218, 0.2), transparent);
   margin: 0.5rem 0;
 }
 
@@ -680,7 +680,7 @@ const activeCost = computed(() => {
 
 /* ========== 右侧详情面板 ========== */
 .origin-details-container {
-  background: rgba(30, 41, 59, 0.5);
+  background: rgba(30, 34, 40, 0.5);
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 12px;
   padding: 1.5rem;
@@ -698,10 +698,10 @@ const activeCost = computed(() => {
 
 .origin-details h2 {
   margin: 0 0 1rem 0;
-  color: #93c5fd;
+  color: #a6c6da;
   flex-shrink: 0;
   font-size: 1.5rem;
-  text-shadow: 0 0 20px rgba(147, 197, 253, 0.3);
+  text-shadow: 0 0 20px rgba(166, 198, 218, 0.3);
 }
 
 .description-scroll {
@@ -711,23 +711,23 @@ const activeCost = computed(() => {
   margin-bottom: 1rem;
   padding-right: 0.5rem;
   scrollbar-width: thin;
-  scrollbar-color: rgba(147, 197, 253, 0.3) transparent;
+  scrollbar-color: rgba(166, 198, 218, 0.3) transparent;
 }
 
 .description-scroll::-webkit-scrollbar { width: 6px; }
 .description-scroll::-webkit-scrollbar-track { background: transparent; }
-.description-scroll::-webkit-scrollbar-thumb { background: rgba(147, 197, 253, 0.3); border-radius: 3px; }
+.description-scroll::-webkit-scrollbar-thumb { background: rgba(166, 198, 218, 0.3); border-radius: 3px; }
 
 .description-scroll p {
   margin: 0;
   white-space: pre-wrap;
-  color: #94a3b8;
+  color: #a09a8d;
 }
 
 .cost-display {
   text-align: right;
   font-weight: 600;
-  color: #fbbf24;
+  color: #d5aa4a;
   flex-shrink: 0;
 }
 
@@ -743,29 +743,29 @@ const activeCost = computed(() => {
 }
 
 [data-theme="light"] .origin-item:hover {
-  background: rgba(241, 245, 249, 0.95);
-  border-color: rgba(59, 130, 246, 0.2);
+  background: rgba(236, 231, 220, 0.95);
+  border-color: rgba(76, 135, 173, 0.2);
 }
 
 [data-theme="light"] .origin-item.selected {
   background: rgba(219, 234, 254, 0.8);
-  border-color: rgba(59, 130, 246, 0.4);
+  border-color: rgba(76, 135, 173, 0.4);
 }
 
 [data-theme="light"] .origin-name {
-  color: #1e293b;
+  color: #1e2228;
 }
 
 [data-theme="light"] .origin-item.selected .origin-name {
-  color: #1e40af;
+  color: #27506b;
 }
 
 [data-theme="light"] .origin-details h2 {
-  color: #2563eb;
+  color: #3a6c8c;
 }
 
 [data-theme="light"] .description-scroll p {
-  color: #475569;
+  color: #56534b;
 }
 
 /* 响应式适配 - 手机端优化 */
@@ -982,7 +982,7 @@ const activeCost = computed(() => {
   gap: 0.5rem;
   padding: 0.75rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  background: rgba(30, 41, 59, 0.3);
+  background: rgba(30, 34, 40, 0.3);
   justify-content: center;
 }
 
@@ -990,8 +990,8 @@ const activeCost = computed(() => {
   padding: 0.5rem 1rem;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
-  background: rgba(30, 41, 59, 0.6);
-  color: #cbd5e1;
+  background: rgba(30, 34, 40, 0.6);
+  color: #c4bdad;
   cursor: pointer;
   transition: all 0.25s ease;
   font-size: 0.85rem;
@@ -1001,27 +1001,27 @@ const activeCost = computed(() => {
 }
 
 .top-actions-container .action-item:hover {
-  background: rgba(51, 65, 85, 0.8);
-  border-color: rgba(147, 197, 253, 0.3);
-  color: #f1f5f9;
+  background: rgba(61, 58, 53, 0.8);
+  border-color: rgba(166, 198, 218, 0.3);
+  color: #ece7dc;
 }
 
 /* 亮色主题顶部按钮 */
 [data-theme="light"] .top-actions-container {
-  background: rgba(241, 245, 249, 0.6);
-  border-bottom-color: rgba(59, 130, 246, 0.15);
+  background: rgba(236, 231, 220, 0.6);
+  border-bottom-color: rgba(76, 135, 173, 0.15);
 }
 
 [data-theme="light"] .top-actions-container .action-item {
   background: rgba(255, 255, 255, 0.8);
-  border-color: rgba(59, 130, 246, 0.3);
-  color: #2563eb;
+  border-color: rgba(76, 135, 173, 0.3);
+  color: #3a6c8c;
 }
 
 [data-theme="light"] .top-actions-container .action-item:hover {
-  background: rgba(59, 130, 246, 0.1);
-  border-color: #3b82f6;
-  color: #1e40af;
+  background: rgba(76, 135, 173, 0.1);
+  border-color: #4c87ad;
+  color: #27506b;
 }
 
 @media (max-width: 360px) {
@@ -1091,20 +1091,20 @@ const activeCost = computed(() => {
 /* 亮色主题下的编辑/删除按钮 */
 [data-theme="light"] .edit-btn,
 [data-theme="light"] .delete-btn {
-  background: rgba(241, 245, 249, 0.8);
-  border: 1px solid rgba(59, 130, 246, 0.15);
-  color: #475569;
+  background: rgba(236, 231, 220, 0.8);
+  border: 1px solid rgba(76, 135, 173, 0.15);
+  color: #56534b;
 }
 
 [data-theme="light"] .edit-btn:hover {
-  color: #2563eb;
-  background: rgba(59, 130, 246, 0.1);
-  border-color: rgba(59, 130, 246, 0.3);
+  color: #3a6c8c;
+  background: rgba(76, 135, 173, 0.1);
+  border-color: rgba(76, 135, 173, 0.3);
 }
 
 [data-theme="light"] .delete-btn:hover {
-  color: #dc2626;
-  background: rgba(239, 68, 68, 0.1);
-  border-color: rgba(239, 68, 68, 0.3);
+  color: #a83a2c;
+  background: rgba(195, 75, 60, 0.1);
+  border-color: rgba(195, 75, 60, 0.3);
 }
 </style>

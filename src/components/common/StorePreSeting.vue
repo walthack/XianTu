@@ -7,9 +7,9 @@
       :disabled="isStoring || !isEnabled"
       :title="getButtonTooltip()"
     >
-      <span class="sync-icon" v-if="isStoring">⏳</span>
-      <span class="sync-icon" v-else-if="hasStored">✅</span>
-      <span class="sync-icon" v-else>💾</span>
+      <LoaderCircle v-if="isStoring" class="sync-icon spinning" :size="14" />
+      <Check v-else-if="hasStored" class="sync-icon" :size="14" />
+      <Save v-else class="sync-icon" :size="14" />
       <span class="sync-text">{{ getButtonText() }}</span>
     </button>
 
@@ -25,6 +25,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { Check, LoaderCircle, Save } from 'lucide-vue-next';
 import { toast } from '../../utils/toast';
 import PresetSaveModal from './PresetSaveModal.vue';
 import { useI18n } from '../../i18n';
@@ -145,6 +146,10 @@ async function handleSavePreset(data: { presetName: string; presetDescription: s
 .sync-icon {
   font-size: 1em;
   flex-shrink: 0;
+}
+
+.sync-icon.spinning {
+  animation: spin-left 1s linear infinite;
 }
 
 /* 已同步状态样式 */

@@ -175,13 +175,13 @@ onMounted(async () => {
 }
 
 .status.ok {
-  border-color: rgba(34, 197, 94, 0.4);
-  color: #22c55e;
+  border-color: rgba(95, 155, 106, 0.4);
+  color: #5f9b6a;
 }
 
 .status.warn {
-  border-color: rgba(251, 191, 36, 0.4);
-  color: #fbbf24;
+  border-color: rgba(213, 170, 74, 0.4);
+  color: #d5aa4a;
 }
 
 .subtitle {
@@ -279,13 +279,13 @@ onMounted(async () => {
 }
 
 .btn.danger {
-  border-color: rgba(239, 68, 68, 0.4);
-  background: rgba(239, 68, 68, 0.12);
-  color: #ef4444;
+  border-color: rgba(195, 75, 60, 0.4);
+  background: rgba(195, 75, 60, 0.12);
+  color: #c34b3c;
 }
 
 .btn.danger:hover {
-  background: rgba(239, 68, 68, 0.18);
+  background: rgba(195, 75, 60, 0.18);
 }
 
 .loading {

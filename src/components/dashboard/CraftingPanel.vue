@@ -1194,7 +1194,7 @@ function tryParseJson(text: string): any | null {
 }
 
 .slot-remove:hover {
-  background: rgba(239, 68, 68, 0.08);
+  background: rgba(195, 75, 60, 0.08);
   color: var(--color-error);
 }
 

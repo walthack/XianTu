@@ -2406,9 +2406,9 @@ canvas:active {
   width: 28px;
   height: 28px;
   border: none;
-  background: rgba(239, 68, 68, 0.1);
+  background: rgba(195, 75, 60, 0.1);
   cursor: pointer;
-  color: #ef4444;
+  color: #c34b3c;
   font-size: 1.4rem;
   border-radius: 6px;
   transition: all 0.2s ease;
@@ -2419,8 +2419,8 @@ canvas:active {
 }
 
 .close-btn:hover {
-  background: rgba(220, 38, 38, 0.2);
-  color: #dc2626;
+  background: rgba(168, 58, 44, 0.2);
+  color: #a83a2c;
   transform: scale(1.1);
 }
 
@@ -2482,17 +2482,17 @@ canvas:active {
 }
 
 .relation-friendly {
-  color: #10b981;
+  color: #4f9b7e;
   font-weight: 700;
 }
 
 .relation-hostile {
-  color: #ef4444;
+  color: #c34b3c;
   font-weight: 700;
 }
 
 .relation-neutral {
-  color: #6b7280;
+  color: #78736a;
   font-weight: 600;
 }
 
@@ -2540,9 +2540,9 @@ canvas:active {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #3b82f6, #60a5fa);
+  background: linear-gradient(135deg, #4c87ad, #78a8c6);
   border-radius: 50%;
-  box-shadow: 0 8px 24px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 8px 24px rgba(76, 135, 173, 0.3);
 }
 
 .map-icon {
@@ -2575,7 +2575,7 @@ canvas:active {
   display: block;
   font-size: 0.9rem;
   font-weight: 600;
-  color: #475569;
+  color: #56534b;
   margin-bottom: 0.75rem;
 }
 
@@ -2627,7 +2627,7 @@ canvas:active {
   align-items: center;
   gap: 0.75rem;
   padding: 1rem 2rem;
-  background: linear-gradient(135deg, #3b82f6, #60a5fa);
+  background: linear-gradient(135deg, #4c87ad, #78a8c6);
   color: white;
   border: none;
   border-radius: 12px;
@@ -2635,13 +2635,13 @@ canvas:active {
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 4px 16px rgba(76, 135, 173, 0.3);
 }
 
 .initialize-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(59, 130, 246, 0.4);
-  background: linear-gradient(135deg, #2563eb, #3b82f6);
+  box-shadow: 0 8px 24px rgba(76, 135, 173, 0.4);
+  background: linear-gradient(135deg, #3a6c8c, #4c87ad);
 }
 
 .initialize-btn:active {
@@ -2657,8 +2657,8 @@ canvas:active {
   width: 60px;
   height: 60px;
   margin: 0 auto 1.5rem;
-  border: 4px solid rgba(59, 130, 246, 0.2);
-  border-top-color: #3b82f6;
+  border: 4px solid rgba(76, 135, 173, 0.2);
+  border-top-color: #4c87ad;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -2806,16 +2806,16 @@ canvas:active {
 }
 
 .legend-icon.special {
-  color: #6B7280;
+  color: #78736a;
 }
 
 .legend-icon.player {
-  color: #3b82f6;
+  color: #4c87ad;
   animation: pulse-player 2s ease-in-out infinite;
 }
 
 .legend-icon.npc {
-  color: #8b5cf6;
+  color: #8a6fa8;
 }
 
 @keyframes pulse-player {
@@ -2900,7 +2900,7 @@ canvas:active {
   align-items: center;
   gap: 8px;
   padding: 8px 12px;
-  background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+  background: linear-gradient(135deg, #4c87ad 0%, #78a8c6 100%);
   border: none;
   border-radius: 8px;
   color: white;
@@ -2908,12 +2908,12 @@ canvas:active {
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 2px 8px rgba(76, 135, 173, 0.3);
 }
 
 .action-btn:hover:not(:disabled) {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+  box-shadow: 0 4px 12px rgba(76, 135, 173, 0.4);
 }
 
 .action-btn:active:not(:disabled) {
@@ -2926,12 +2926,12 @@ canvas:active {
 }
 
 .action-btn.text-mode-btn {
-  background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
-  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+  background: linear-gradient(135deg, #8a6fa8 0%, #a189bd 100%);
+  box-shadow: 0 2px 8px rgba(138, 111, 168, 0.3);
 }
 
 .action-btn.text-mode-btn:hover:not(:disabled) {
-  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+  box-shadow: 0 4px 12px rgba(138, 111, 168, 0.4);
 }
 
 /* 追加生成弹窗 */
@@ -2946,8 +2946,8 @@ canvas:active {
 }
 
 .generate-modal {
-  background: #1e293b;
-  border: 1px solid rgba(59, 130, 246, 0.3);
+  background: #1e2228;
+  border: 1px solid rgba(76, 135, 173, 0.3);
   border-radius: 12px;
   width: 320px;
   max-width: 90vw;
@@ -2958,13 +2958,13 @@ canvas:active {
   justify-content: space-between;
   align-items: center;
   padding: 16px;
-  border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+  border-bottom: 1px solid rgba(76, 135, 173, 0.2);
 }
 
 .modal-header h3 {
   margin: 0;
   font-size: 16px;
-  color: #e2e8f0;
+  color: #ddd7c9;
 }
 
 .modal-body {
@@ -2984,7 +2984,7 @@ canvas:active {
   display: flex;
   align-items: center;
   gap: 6px;
-  color: #e2e8f0;
+  color: #ddd7c9;
   font-size: 14px;
   flex: 1;
 }
@@ -2992,10 +2992,10 @@ canvas:active {
 .count-input {
   width: 50px;
   padding: 4px 8px;
-  background: rgba(15, 23, 42, 0.8);
-  border: 1px solid rgba(59, 130, 246, 0.3);
+  background: rgba(18, 21, 26, 0.8);
+  border: 1px solid rgba(76, 135, 173, 0.3);
   border-radius: 4px;
-  color: #e2e8f0;
+  color: #ddd7c9;
   font-size: 14px;
   text-align: center;
 }
@@ -3005,7 +3005,7 @@ canvas:active {
 }
 
 .count-label {
-  color: #94a3b8;
+  color: #a09a8d;
   font-size: 12px;
 }
 
@@ -3014,7 +3014,7 @@ canvas:active {
   justify-content: flex-end;
   gap: 8px;
   padding: 16px;
-  border-top: 1px solid rgba(59, 130, 246, 0.2);
+  border-top: 1px solid rgba(76, 135, 173, 0.2);
 }
 
 .cancel-btn, .confirm-btn {
@@ -3028,7 +3028,7 @@ canvas:active {
 .cancel-btn {
   background: transparent;
   border: 1px solid rgba(148, 163, 184, 0.3);
-  color: #94a3b8;
+  color: #a09a8d;
 }
 
 .cancel-btn:hover {
@@ -3036,13 +3036,13 @@ canvas:active {
 }
 
 .confirm-btn {
-  background: rgba(59, 130, 246, 0.8);
+  background: rgba(76, 135, 173, 0.8);
   border: none;
   color: white;
 }
 
 .confirm-btn:hover:not(:disabled) {
-  background: rgba(59, 130, 246, 1);
+  background: rgba(76, 135, 173, 1);
 }
 
 .confirm-btn:disabled {

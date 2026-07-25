@@ -450,9 +450,9 @@ ${existingNames.join('，') || '（无）'}
   display: flex;
   gap: 1.5rem;
   padding: 0.75rem 1rem;
-  background: linear-gradient(135deg, rgba(147, 51, 234, 0.1), rgba(168, 85, 247, 0.05));
+  background: linear-gradient(135deg, rgba(124, 82, 150, 0.1), rgba(150, 104, 176, 0.05));
   border-radius: 8px;
-  border: 1px solid rgba(147, 51, 234, 0.2);
+  border: 1px solid rgba(124, 82, 150, 0.2);
 }
 
 .info-actions {
@@ -467,9 +467,9 @@ ${existingNames.join('，') || '（无）'}
   gap: 0.4rem;
   padding: 0.45rem 0.7rem;
   border-radius: 8px;
-  border: 1px solid rgba(245, 158, 11, 0.25);
-  background: rgba(245, 158, 11, 0.08);
-  color: #f59e0b;
+  border: 1px solid rgba(198, 148, 49, 0.25);
+  background: rgba(198, 148, 49, 0.08);
+  color: #c69431;
   font-size: 0.8rem;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -477,8 +477,8 @@ ${existingNames.join('，') || '（无）'}
 }
 
 .gen-btn:hover:not(:disabled) {
-  border-color: rgba(245, 158, 11, 0.45);
-  background: rgba(245, 158, 11, 0.12);
+  border-color: rgba(198, 148, 49, 0.45);
+  background: rgba(198, 148, 49, 0.12);
 }
 
 .gen-btn:disabled {
@@ -503,9 +503,9 @@ ${existingNames.join('，') || '（无）'}
 
 .info-item.highlight {
   padding: 0.25rem 0.75rem;
-  background: rgba(245, 158, 11, 0.1);
+  background: rgba(198, 148, 49, 0.1);
   border-radius: 6px;
-  border: 1px solid rgba(245, 158, 11, 0.2);
+  border: 1px solid rgba(198, 148, 49, 0.2);
 }
 
 .info-label {
@@ -518,8 +518,8 @@ ${existingNames.join('，') || '（无）'}
   font-size: 0.9rem;
 }
 
-.info-value.position { color: #9333ea; }
-.info-value.contribution { color: #f59e0b; font-size: 1.1rem; }
+.info-value.position { color: #7c5296; }
+.info-value.contribution { color: #c69431; font-size: 1.1rem; }
 
 .exchange-tabs {
   left: 4px;
@@ -543,14 +543,14 @@ ${existingNames.join('，') || '（无）'}
 }
 
 .tab-btn:hover {
-  border-color: rgba(245, 158, 11, 0.3);
+  border-color: rgba(198, 148, 49, 0.3);
   color: var(--color-text);
 }
 
 .tab-btn.active {
-  background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(217, 119, 6, 0.05));
-  border-color: rgba(245, 158, 11, 0.4);
-  color: #f59e0b;
+  background: linear-gradient(135deg, rgba(198, 148, 49, 0.1), rgba(169, 117, 40, 0.05));
+  border-color: rgba(198, 148, 49, 0.4);
+  color: #c69431;
 }
 
 .exchange-list {
@@ -586,7 +586,7 @@ ${existingNames.join('，') || '（无）'}
   align-items: center;
   gap: 0.5rem;
   padding: 0.6rem 1rem;
-  background: linear-gradient(135deg, #f59e0b, #d97706);
+  background: linear-gradient(135deg, #c69431, #a97528);
   border: none;
   border-radius: 6px;
   color: white;
@@ -597,7 +597,7 @@ ${existingNames.join('，') || '（无）'}
 
 .ask-btn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+  box-shadow: 0 4px 12px rgba(198, 148, 49, 0.3);
 }
 
 .items-grid {
@@ -615,11 +615,11 @@ ${existingNames.join('，') || '（无）'}
 }
 
 .item-card:hover {
-  border-color: rgba(245, 158, 11, 0.3);
+  border-color: rgba(198, 148, 49, 0.3);
 }
 
 .item-card.can-afford {
-  border-color: rgba(34, 197, 94, 0.3);
+  border-color: rgba(95, 155, 106, 0.3);
 }
 
 .item-card.out-of-stock {
@@ -657,11 +657,11 @@ ${existingNames.join('，') || '（无）'}
   width: fit-content;
 }
 
-.quality-common { background: rgba(156, 163, 175, 0.2); color: #6b7280; }
-.quality-yellow { background: rgba(245, 158, 11, 0.2); color: #f59e0b; }
-.quality-xuan { background: rgba(139, 92, 246, 0.2); color: #8b5cf6; }
-.quality-earth { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
-.quality-heaven { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+.quality-common { background: rgba(156, 163, 175, 0.2); color: #78736a; }
+.quality-yellow { background: rgba(198, 148, 49, 0.2); color: #c69431; }
+.quality-xuan { background: rgba(138, 111, 168, 0.2); color: #8a6fa8; }
+.quality-earth { background: rgba(76, 135, 173, 0.2); color: #4c87ad; }
+.quality-heaven { background: rgba(195, 75, 60, 0.2); color: #c34b3c; }
 
 .item-desc {
   font-size: 0.75rem;
@@ -683,7 +683,7 @@ ${existingNames.join('，') || '（无）'}
   gap: 0.25rem;
   font-size: 0.85rem;
   font-weight: 600;
-  color: #f59e0b;
+  color: #c69431;
 }
 
 .item-stock {
@@ -701,7 +701,7 @@ ${existingNames.join('，') || '（无）'}
   justify-content: center;
   gap: 0.35rem;
   padding: 0.5rem;
-  background: linear-gradient(135deg, #f59e0b, #d97706);
+  background: linear-gradient(135deg, #c69431, #a97528);
   border: none;
   border-radius: 5px;
   color: white;
@@ -713,11 +713,11 @@ ${existingNames.join('，') || '（无）'}
 
 .exchange-btn:hover:not(:disabled) {
   transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+  box-shadow: 0 2px 8px rgba(198, 148, 49, 0.3);
 }
 
 .exchange-btn:disabled {
-  background: #6b7280;
+  background: #78736a;
   cursor: not-allowed;
 }
 
@@ -734,9 +734,9 @@ ${existingNames.join('，') || '（无）'}
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 0.75rem;
-  background: rgba(59, 130, 246, 0.1);
+  background: rgba(76, 135, 173, 0.1);
   border-radius: 6px;
   font-size: 0.75rem;
-  color: #3b82f6;
+  color: #4c87ad;
 }
 </style>
