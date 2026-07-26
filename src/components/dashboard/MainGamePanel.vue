@@ -133,15 +133,18 @@
             <FormattedText :text="currentNarrative.content" />
           </div>
 
-          <div v-if="scenarioEngineActionOptions.length" class="action-options opportunity-action-options">
+          <div v-if="scenarioEngineActionOptions.length" class="action-options engine-action-options">
             <button
               v-for="option in scenarioEngineActionOptions"
               :key="`${option.contractHash}:${option.source}:${'stepId' in option ? option.stepId : option.eventId}:${option.actionId}`"
               @click="selectScenarioEngineAction(option)"
-              class="action-option-btn opportunity-action-btn"
+              class="action-option-btn engine-action-btn"
+              :disabled="isAIProcessing"
             >
+              <span class="engine-action-badge">{{ option.source === 'event_engine' ? t('主线') : t('机会') }}</span>
               {{ option.label }} · 耗时 {{ option.timeCost }} 回合<template v-if="'remainingTurns' in option && option.remainingTurns !== undefined"> · 剩余 {{ option.remainingTurns }} 次重要行动</template>
             </button>
+            <div class="engine-action-hint">{{ t('点按填入，可修改后发送') }}</div>
           </div>
 
           <div v-if="stageDepartureOffer" class="action-options opportunity-action-options">
@@ -155,7 +158,13 @@
           </div>
 
           <!-- 行动选项 -->
-          <div v-if="uiStore.enableActionOptions && currentNarrative.actionOptions?.length" class="action-options">
+          <div
+            v-if="uiStore.enableActionOptions && currentNarrative.actionOptions?.length && scenarioEngineActionOptions.length"
+            class="other-action-label"
+          >
+            {{ t('其他行动') }}
+          </div>
+          <div v-if="uiStore.enableActionOptions && currentNarrative.actionOptions?.length" class="action-options secondary-action-options">
             <button
               v-for="(option, index) in currentNarrative.actionOptions"
               :key="index"
@@ -451,6 +460,7 @@ import {
   getCurrentStoryEventActions,
   getStageDepartureOffer,
   getTrackedStoryOpportunityActions,
+  hasPendingStoryBeatHandoff,
   type ScenarioEventActionSelection,
   type ScenarioOpportunityActionSelection,
 } from '@/modules/scenarioMods/runtime';
@@ -718,7 +728,11 @@ type ScenarioEngineActionSelection = ScenarioOpportunityActionSelection | Scenar
 const selectedScenarioEngineAction = ref<ScenarioEngineActionSelection | null>(null);
 const scenarioEngineActionOptions = computed<ScenarioEngineActionSelection[]>(() => {
   const save = gameStateStore.toSaveData();
-  return save ? [...getTrackedStoryOpportunityActions(save), ...getCurrentStoryEventActions(save)] : [];
+  if (!save) return [];
+  return [
+    ...getTrackedStoryOpportunityActions(save),
+    ...(hasPendingStoryBeatHandoff(save) ? [] : getCurrentStoryEventActions(save)),
+  ];
 });
 const stageDepartureOffer = computed(() => {
   const save = gameStateStore.toSaveData();
@@ -1562,8 +1576,9 @@ const selectActionOption = (option: string) => {
 
 const selectScenarioEngineAction = (option: ScenarioEngineActionSelection) => {
   selectedScenarioEngineAction.value = option;
-  lastSelectedActionOption.value = option.actionText;
-  inputText.value = option.actionText;
+  const playerLine = option.source === 'event_engine' ? option.playerLine : option.actionText;
+  lastSelectedActionOption.value = playerLine;
+  inputText.value = playerLine;
   nextTick(() => {
     inputRef.value?.focus?.();
     adjustTextareaHeight();
@@ -1660,7 +1675,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
   }
   if (
     selectedScenarioEngineAction.value?.source === 'event_engine'
-    && selectedScenarioEngineAction.value.actionText === userMessage
+    && selectedScenarioEngineAction.value.playerLine === userMessage
   ) {
     const result = selectedScenarioEngineAction.value;
     finalUserMessage += `\n【本地事件判定已预结算】事件=${result.eventId}；动作=${result.actionId}；结果=${result.expectedOutcome}；既定反馈=${result.outcomeText}。只演出该既定结果，不得另行判定、升级结果或写入事件完成标记。\n`;
@@ -1713,7 +1728,10 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
         useStreaming: useStreaming.value,
         shouldAbort: () => !uiStore.isAIProcessing || aiResetToken !== resetSnapshot,
       };
-      if (selectedScenarioEngineAction.value?.actionText === userMessage) {
+      const selectedPlayerLine = selectedScenarioEngineAction.value?.source === 'event_engine'
+        ? selectedScenarioEngineAction.value.playerLine
+        : selectedScenarioEngineAction.value?.actionText;
+      if (selectedScenarioEngineAction.value && selectedPlayerLine === userMessage) {
         const selected = { ...selectedScenarioEngineAction.value };
         if (selected.source === 'opportunity_engine') options.opportunityAction = selected;
         else options.eventAction = selected;
@@ -3289,6 +3307,60 @@ const syncGameState = async () => {
   box-shadow: 0 4px 12px rgba(var(--color-primary-rgb), 0.4);
 }
 
+.engine-action-options {
+  border-top-color: var(--color-primary);
+}
+
+.engine-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-left: 4px solid var(--color-accent);
+  font-weight: 650;
+  text-align: left;
+}
+
+.engine-action-badge {
+  flex: 0 0 auto;
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.22);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.engine-action-hint {
+  width: 100%;
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+}
+
+.other-action-label {
+  margin-top: 14px;
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+}
+
+.secondary-action-options {
+  margin-top: 6px;
+  padding-top: 8px;
+}
+
+.secondary-action-options .action-option-btn {
+  background: transparent;
+  color: var(--color-primary);
+  border: 1px solid var(--color-border);
+  font-weight: 400;
+}
+
+.secondary-action-options .action-option-btn:hover {
+  background: rgba(var(--color-primary-rgb), 0.08);
+  border-color: var(--color-primary);
+  box-shadow: none;
+}
+
 /* 绘图按钮 */
 .header-action-btn.image-gen-btn {
   background: transparent;
@@ -3862,6 +3934,10 @@ const syncGameState = async () => {
 /* 暗色下石青按钮是中间调，白字只有 2.5:1；改用墨字约 6.8:1 */
 [data-theme="dark"] .action-option-btn {
   color: #1a1d21;
+}
+
+[data-theme="dark"] .secondary-action-options .action-option-btn {
+  color: var(--color-text);
 }
 
 /* 深色主题 - 流式输出内容 */

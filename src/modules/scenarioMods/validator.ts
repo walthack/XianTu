@@ -230,6 +230,14 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
       validateIdArray(entity.relatedFactionIds, `${entity.__path}.relatedFactionIds`, add);
       optionalId(entity.locationId, `${entity.__path}.locationId`, add);
       optionalString(entity.objective, `${entity.__path}.objective`, add);
+      if (entity.presentation !== undefined) {
+        if (!isRecord(entity.presentation)) {
+          add(`${entity.__path}.presentation`, 'invalid_type', 'presentation must be an object.');
+        } else {
+          optionalString(entity.presentation.targetLabel, `${entity.__path}.presentation.targetLabel`, add);
+          optionalString(entity.presentation.playerLine, `${entity.__path}.presentation.playerLine`, add);
+        }
+      }
       if (entity.playerCompletionContract !== undefined) {
         const contractPath = `${entity.__path}.playerCompletionContract`;
         if (!isRecord(entity.playerCompletionContract)) {

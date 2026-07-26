@@ -1,6 +1,6 @@
 import type { SaveData } from '@/types/game';
 import { formatEarnedTitles } from './milestoneRewards';
-import { getNarrativeAnchorEvent } from './runtime';
+import { getCurrentContractStep, getNarrativeAnchorEvent } from './runtime';
 import { getCanonRailContract, getCanonRailProfile } from './canonRail';
 import { narrativeVariantReplacesCanonRail, resolveScenarioEventNarrative } from './eventNarrativeView';
 import { formatDivergencePrompt, type ScenarioDivergence } from './divergenceLedger';
@@ -509,6 +509,7 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
   const anchor = getNarrativeAnchorEvent(runtime as any);
   const optionalEvents = selectContextualOptionalEvents(runtime, anchor, contextText);
   const canonRail = getCanonRailProfile(runtime as any);
+  const currentContractStep = getCurrentContractStep(saveData);
   const activeEvents = [...(anchor ? [anchor] : []), ...optionalEvents];
   const activeIds = new Set(activeEvents.map(event => event.id));
   const characters = runtime.canon?.characters || [];
@@ -541,8 +542,19 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
           namesForIds(event.locationId ? [event.locationId] : [], locations),
         ].filter(Boolean).join('；');
         const axisLine = formatAxisBeat(event);
+        const contractStep = currentContractStep?.eventId === event.id && currentContractStep.sequential
+          ? currentContractStep
+          : undefined;
+        const remainingStepText = contractStep?.remainingLabels.length
+          ? contractStep.remainingLabels.join('；')
+          : '无';
+        const stepLine = contractStep
+          ? `【本拍分步·第 ${contractStep.index}/${contractStep.total} 步】本轮只演到「${contractStep.action.label}」为止：${contractStep.action.actionText}。不得演出后续步骤（${remainingStepText}），它们由玩家在后续回合逐拍触发。\n  `
+          : '';
         const highlightLine = /^半预制高光[：:]/.test((event.axisBeat || '').trim())
-          ? '【高光演出硬合同】主轴拍点中的动作、顺序、反差与收束必须逐项完整呈现，不得摘要、并拍或漏拍；全部演完后才可写完成键。\n  '
+          ? contractStep
+            ? `【高光演出硬合同】主轴拍点跨 ${contractStep.total} 个回合逐步呈现；本轮只完整呈现第 ${contractStep.index} 步，不得摘要或跳步，也不得提前演出后续步。\n  `
+            : '【高光演出硬合同】主轴拍点中的动作、顺序、反差与收束必须逐项完整呈现，不得摘要、并拍或漏拍；全部演完后才可写完成键。\n  '
           : '';
         // 分歧文案已经替代原事件结果时，旧 Canon Rail 合同（例如“谢艺之死”）
         // 不得继续注入并与分歧事实打架；分歧 variant 的 axisBeat 就是本拍合同。
@@ -553,12 +565,14 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
           ? `  本拍特定禁止改写：${contract.forbiddenInCanon.join('；')}。\n`
           : '';
         const railLine = contract
-          ? `【Canon Rail·默认正典】本拍必须达成：${contract.mustReach}\n  允许补足：${contract.allowedElaboration}\n${forbiddenLine}  禁止：不得以 void、替代结局、提前跳拍或新增 IF 分支改写此结果；只有用户显式进入 IF 支线时才可改写正典走向。\n  `
+          ? contractStep
+            ? `【Canon Rail·默认正典】以下是本拍跨多轮必须达成的完整结果（不是本轮要求）：${contract.mustReach}\n  本轮只推进到第 ${contractStep.index}/${contractStep.total} 步「${contractStep.action.label}」。允许补足：${contract.allowedElaboration}\n${forbiddenLine}  禁止：不得以 void、替代结局、提前跳拍或新增 IF 分支改写此结果；只有用户显式进入 IF 支线时才可改写正典走向。\n  `
+            : `【Canon Rail·默认正典】本拍必须达成：${contract.mustReach}\n  允许补足：${contract.allowedElaboration}\n${forbiddenLine}  禁止：不得以 void、替代结局、提前跳拍或新增 IF 分支改写此结果；只有用户显式进入 IF 支线时才可改写正典走向。\n  `
           : '';
         const localContractLine = event.playerCompletionContract
           ? `  【本地事件合同】玩家动作与 success/partial/failure 均由程序判定；你只演出系统提供的既定结果。严禁写入本事件完成键，正文与命令都不是完成证据。\n`
           : `  完成写入键（事件达成时原样 set true）：${formatCompletionWriteKeys(event.completion)}`;
-        return `- ${event.name}（事件ID：${event.id}）：${event.description}\n  ${axisLine ? `${axisLine}\n  ` : ''}${highlightLine}${railLine}相关正典：${context || '无'}\n  完成条件：${formatConditions(event.completion)}\n${localContractLine}`;
+        return `- ${event.name}（事件ID：${event.id}）：${event.description}\n  ${axisLine ? `${axisLine}\n  ` : ''}${stepLine}${highlightLine}${railLine}相关正典：${context || '无'}\n  完成条件：${formatConditions(event.completion)}\n${localContractLine}`;
       }).join('\n')
     : '- 当前没有已触发事件，不要提前引入未触发事件。';
 

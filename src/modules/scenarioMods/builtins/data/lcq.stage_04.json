@@ -2742,6 +2742,10 @@
         "axisAnchor": "六朝清羽记·#56·第54章·穿山",
         "axisBeat": "程宗扬发现凝羽因麻古成瘾而痛苦，向乐明珠请求解毒，乐明珠应允协助但缺乏经验。",
         "objective": "请求乐明珠为凝羽解毒",
+        "presentation": {
+          "targetLabel": "乐明珠",
+          "playerLine": "我请乐明珠替凝羽解毒。"
+        },
         "playerCompletionContract": {
           "kind": "objective_action",
           "settleOn": [

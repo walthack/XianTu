@@ -145,6 +145,8 @@ export interface ScenarioEventActionSelection {
   actionId: string;
   label: string;
   actionText: string;
+  /** 玩家看到并可编辑的自然句；本地判定仍校验 actionText。 */
+  playerLine: string;
   timeCost: 1;
   contractHash: string;
   expectedOutcome: ScenarioPlayerCompletionOutcome;
@@ -152,14 +154,29 @@ export interface ScenarioEventActionSelection {
   remainingTurns?: number;
   /** 纯展示层派生；不进入 completion contract 或 contractHash。 */
   interaction: ScenarioInteractionAffordance;
+  stepIndex?: number;
+  stepTotal?: number;
 }
 
 export type ScenarioInteractionVerb = 'observe' | 'talk' | 'act' | 'use' | 'rest' | 'move' | 'attack';
 
 export interface ScenarioInteractionAffordance {
   verb: ScenarioInteractionVerb;
-  targetLabel: string;
+  targetLabel?: string;
   targetId?: string;
+}
+
+export interface ScenarioContractStep {
+  eventId: string;
+  index: number;
+  total: number;
+  action: {
+    id: string;
+    label: string;
+    actionText: string;
+  };
+  remainingLabels: string[];
+  sequential: boolean;
 }
 
 export interface ScenarioStageDepartureOffer {
@@ -851,6 +868,54 @@ function eventActionAvailable(
   return (action.requiresPreparation || []).every(item => preparations.has(item));
 }
 
+function isLinearStepContract(contract: ScenarioPlayerCompletionContract): boolean {
+  if (contract.actions.length < 2) return false;
+  return contract.actions.every((action, index) => {
+    if (index === 0) return action.kind === 'prepare' && Boolean(action.grantsPreparation);
+    const previousKey = contract.actions[index - 1]?.grantsPreparation;
+    if (!previousKey || !(action.requiresPreparation || []).includes(previousKey)) return false;
+    return index === contract.actions.length - 1
+      || (action.kind === 'prepare' && Boolean(action.grantsPreparation));
+  });
+}
+
+function currentContractStep(runtime: RuntimeState): ScenarioContractStep | undefined {
+  const event = getCurrentPlayerCompletionEvent(runtime);
+  const contract = event?.playerCompletionContract;
+  if (!event || !contract) return undefined;
+  const state = reconcileEventActionContract(runtime, event);
+  if (!state || state.readyAtTurn !== undefined) return undefined;
+  const action = contract.actions.find(item => eventActionAvailable(item, state));
+  if (!action) return undefined;
+  const actionIndex = contract.actions.indexOf(action);
+  return {
+    eventId: event.id,
+    index: actionIndex + 1,
+    total: contract.actions.length,
+    action: {
+      id: action.id,
+      label: action.label,
+      actionText: action.actionText,
+    },
+    remainingLabels: contract.actions.slice(actionIndex + 1).map(item => item.label),
+    sequential: isLinearStepContract(contract),
+  };
+}
+
+/** 当前事件合同的可用步骤；只读合同身份，不以 LLM 正文推断进度。 */
+export function getCurrentContractStep(saveData: SaveData): ScenarioContractStep | undefined {
+  const runtime = getRuntime(saveData);
+  return runtime ? currentContractStep(runtime) : undefined;
+}
+
+/** 上一拍尚待下一轮正文承接时，UI 暂缓展示下一拍按钮；自由输入不受影响。 */
+export function hasPendingStoryBeatHandoff(saveData: SaveData): boolean {
+  const runtime = getRuntime(saveData);
+  const handoff = runtime?.lastSettledBeat;
+  if (!runtime || !handoff) return false;
+  return Math.max(0, Number(runtime.worldTurn) || 0) - handoff.settledAtTurn <= 1;
+}
+
 function ensureActorMemoryEntry(state: ScenarioActorEngineState, actorId: string, turn: number): ScenarioActorMemory {
   const memory = state.actorMemory ||= {};
   const entry = memory[actorId] ||= {
@@ -926,11 +991,14 @@ const INTERACTION_VERB_LABELS: Record<ScenarioInteractionVerb, string> = {
 };
 
 function deriveInteractionVerb(text: string): ScenarioInteractionVerb {
-  if (/(?:击退|迎战|攻击|袭击|斩杀|搏杀|交锋|制伏|制服)/u.test(text)) return 'attack';
+  if (
+    !/(?:躲避|避开|规避|防备|不被)/u.test(text)
+    && /(?:击退|迎战|攻击|斩杀|搏杀|交锋|制伏|制服)/u.test(text)
+  ) return 'attack';
   if (/(?:使用|服用|取出|祭出|装备|交付).{0,10}(?:道具|药|丹|符|器|物|信|令)/u.test(text)) return 'use';
   if (/(?:前往|赶往|赶赴|动身|启程|进入|离开|随.{0,8}前往)/u.test(text)) return 'move';
   if (/(?:请求|询问|交谈|对话|商议|交涉|说服|劝说|告知|陪.{0,8}送别)/u.test(text)) return 'talk';
-  if (/(?:观察|察看|查看|留意|见证|确认|调查|探查|打量)/u.test(text)) return 'observe';
+  if (/(?:观察|察看|查看|留意|见证|确认|调查|探查|打量|查明|查清|识别|辨认)/u.test(text)) return 'observe';
   if (/(?:休息|休整|修炼|调息|疗伤|打坐)/u.test(text)) return 'rest';
   return 'act';
 }
@@ -954,11 +1022,25 @@ function deriveInteraction(
     ? label.match(/陪(.{2,6}?)(?:完成|送别|交谈|$)/u)?.[1]
       || label.match(/请求(.{2,6}?)(?:为|替|诊治|救治|$)/u)?.[1]
     : undefined;
+  const explicitTarget = event.presentation?.targetLabel?.trim();
+  const eventName = String(event.name || '').trim();
+  const fallbackTarget = eventName.length > 0 && eventName.length <= 10 ? eventName : undefined;
   return {
     verb,
-    targetLabel: target?.name || textualTarget || event.objective || label,
+    targetLabel: explicitTarget || target?.name || textualTarget || fallbackTarget,
     ...(target ? { targetId: target.id } : {}),
   };
+}
+
+function derivePlayerLine(event: ScenarioModEvent, actionText: string): string {
+  const explicitLine = event.presentation?.playerLine?.trim();
+  if (explicitLine) return explicitLine;
+  const templatedPrefix = '我按当前主线目标行动：';
+  if (actionText.startsWith(templatedPrefix)) {
+    const objective = actionText.slice(templatedPrefix.length).trim();
+    return objective ? `我${objective}` : actionText;
+  }
+  return actionText;
 }
 
 /** 当前非机会卡承重事件的本地动作；按钮身份来自事件合同，不来自 LLM。 */
@@ -974,22 +1056,35 @@ export function getCurrentStoryEventActions(saveData: SaveData): ScenarioEventAc
   const remainingTurns = event.timeline?.deadlineTurns !== undefined && timeline
     ? Math.max(0, timeline.eligibleAtTurn + event.timeline.deadlineTurns - (Number(runtime.worldTurn) || 0))
     : undefined;
+  const contractStep = currentContractStep(runtime);
   return contract.actions.filter(action => eventActionAvailable(action, state)).map(action => {
     const expectedOutcome: ScenarioPlayerCompletionOutcome = contract.kind === 'objective_action'
       ? 'success'
       : conditionsMatch(action.successWhen, saveData, runtime) ? 'success' : action.unmetOutcome || 'failure';
     const interaction = deriveInteraction(runtime, event, action.label, action.actionText);
+    const isCurrentSequentialStep = Boolean(
+      contractStep?.sequential
+      && contractStep.eventId === event.id
+      && contractStep.action.id === action.id,
+    );
+    const targetSuffix = interaction.targetLabel ? ` · ${interaction.targetLabel}` : '';
+    const stepSuffix = isCurrentSequentialStep ? `（第 ${contractStep!.index}/${contractStep!.total} 步）` : '';
     return {
       source: 'event_engine',
       eventId: event.id,
       actionId: action.id,
-      label: `${INTERACTION_VERB_LABELS[interaction.verb]} · ${interaction.targetLabel}`,
+      label: `${INTERACTION_VERB_LABELS[interaction.verb]}${targetSuffix}${stepSuffix}`,
       actionText: action.actionText,
+      playerLine: derivePlayerLine(event, action.actionText),
       timeCost: action.timeCost,
       contractHash: state.contractHash,
       expectedOutcome,
       outcomeText: action.outcomeText[expectedOutcome],
       interaction,
+      ...(isCurrentSequentialStep ? {
+        stepIndex: contractStep!.index,
+        stepTotal: contractStep!.total,
+      } : {}),
       ...(remainingTurns !== undefined ? { remainingTurns } : {}),
     };
   });

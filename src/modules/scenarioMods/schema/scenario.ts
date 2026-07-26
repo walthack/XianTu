@@ -83,6 +83,13 @@ export interface ScenarioModEvent {
   relatedFactionIds?: string[];
   locationId?: string;
   objective?: string;
+  /** 纯展示层覆写；不得放进 playerCompletionContract，以免改变合同哈希和进行中准备态。 */
+  presentation?: {
+    /** 固定动词按钮的短目标；缺省时由当前人物或事件短名派生。 */
+    targetLabel?: string;
+    /** 点击确定性按钮后预填的玩家视角自然句；不替代 actionText 判定载荷。 */
+    playerLine?: string;
+  };
   /** 程序层事件时钟；相对“事件首次具备结构条件”的世界回合计时。 */
   timeline?: ScenarioModEventTimeline;
   narrativeVariants?: ScenarioModEventNarrativeVariant[];

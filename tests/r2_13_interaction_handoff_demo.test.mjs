@@ -62,21 +62,35 @@ test('fixed verbs are presentation-only and carry the flood farewell into the Ni
   const stage = JSON.parse(await readFile(stageUrl, 'utf8'));
   const {
     advanceScenarioRuntime,
+    getCurrentContractStep,
     getCurrentStoryEventActions,
+    hasPendingStoryBeatHandoff,
     recordStoryEventStructuredAction,
   } = await loadTs('../src/modules/scenarioMods/runtime.ts');
   const { buildScenarioStoryPrompt } = await loadTs('../src/modules/scenarioMods/storyContext.ts');
 
   let save = advanceScenarioRuntime(fixture(stage)).saveData;
   const expectedFloodLabels = [
-    '观察 · 易虎',
-    '观察 · 易虎',
-    '交谈 · 易彪',
+    '观察 · 易虎（第 1/3 步）',
+    '观察 · 易虎（第 2/3 步）',
+    '交谈 · 易彪（第 3/3 步）',
   ];
-  for (const expectedLabel of expectedFloodLabels) {
+  for (const [index, expectedLabel] of expectedFloodLabels.entries()) {
     const [action] = getCurrentStoryEventActions(save);
     assert.equal(action.label, expectedLabel);
+    assert.equal(action.stepIndex, index + 1);
+    assert.equal(action.stepTotal, 3);
     assert.doesNotMatch(action.label, /主线推进|主线判定/);
+    const step = getCurrentContractStep(save);
+    assert.equal(step.index, index + 1);
+    assert.equal(step.total, 3);
+    assert.equal(step.action.id, action.actionId);
+    const prompt = buildScenarioStoryPrompt(save);
+    assert.match(prompt, new RegExp(`本拍分步·第 ${index + 1}/3 步`));
+    assert.match(prompt, new RegExp(`本轮只完整呈现第 ${index + 1} 步`));
+    if (index === 0) {
+      assert.match(prompt, /不得演出后续步骤（见证千斤坠与巨石重创；陪易彪完成岸边送别）/);
+    }
     assert.equal(recordStoryEventStructuredAction(save, action).outcome, 'success');
     save = advanceScenarioRuntime(JSON.parse(JSON.stringify(save))).saveData;
   }
@@ -88,9 +102,12 @@ test('fixed verbs are presentation-only and carry the flood farewell into the Ni
     eventId: FLOOD_EVENT_ID,
     settledAtTurn: runtime.worldTurn,
   });
+  assert.equal(hasPendingStoryBeatHandoff(save), true);
 
   const [detoxAction] = getCurrentStoryEventActions(save);
   assert.equal(detoxAction.label, '交谈 · 乐明珠');
+  assert.equal(detoxAction.playerLine, '我请乐明珠替凝羽解毒。');
+  assert.equal(detoxAction.actionText, '我按当前主线目标行动：请求乐明珠为凝羽解毒');
   assert.equal(detoxAction.interaction.verb, 'talk');
   assert.equal(detoxAction.actionId, 'advance_declared_objective');
   assert.match(buildScenarioStoryPrompt(save), /跨拍承接·只演出不改真值/);
@@ -104,6 +121,7 @@ test('fixed verbs are presentation-only and carry the flood farewell into the Ni
 
 test('handoff is decorative, fresh for one turn, and never created by offscreen-only settlement', async () => {
   const stage = JSON.parse(await readFile(stageUrl, 'utf8'));
+  const { hasPendingStoryBeatHandoff } = await loadTs('../src/modules/scenarioMods/runtime.ts');
   const { buildScenarioStoryPrompt } = await loadTs('../src/modules/scenarioMods/storyContext.ts');
   const save = fixture(stage);
   const runtime = runtimeOf(save);
@@ -111,6 +129,7 @@ test('handoff is decorative, fresh for one turn, and never created by offscreen-
   runtime.lastSettledBeat = { eventId: FLOOD_EVENT_ID, settledAtTurn: 2 };
   runtime.worldTurn = 4;
   assert.doesNotMatch(buildScenarioStoryPrompt(save), /跨拍承接·只演出不改真值/);
+  assert.equal(hasPendingStoryBeatHandoff(save), false);
 
   delete runtime.lastSettledBeat;
   runtime.offscreenResolvedEventIds = [FLOOD_EVENT_ID];
@@ -153,6 +172,19 @@ test('fixed verb derivation never changes the stored completion contract', async
   assert.equal(after, before);
 });
 
+test('real Canon Rail prompt treats later steps as a multi-round result, not a current-turn demand', async () => {
+  const stage = JSON.parse(await readFile(stageUrl, 'utf8'));
+  const { advanceScenarioRuntime } = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  const { buildScenarioStoryPrompt } = await loadTs('../src/modules/scenarioMods/storyContext.ts');
+  const save = fixture(stage);
+  runtimeOf(save).modId = stage.manifest.id;
+  const advanced = advanceScenarioRuntime(save).saveData;
+  const prompt = buildScenarioStoryPrompt(advanced);
+  assert.match(prompt, /以下是本拍跨多轮必须达成的完整结果（不是本轮要求）/);
+  assert.match(prompt, /本轮只推进到第 1\/3 步/);
+  assert.doesNotMatch(prompt, /主轴拍点中的动作、顺序、反差与收束必须逐项完整呈现/);
+});
+
 test('presentation router exposes the fixed verb vocabulary without changing deterministic payloads', async () => {
   const stage = JSON.parse(await readFile(stageUrl, 'utf8'));
   const { advanceScenarioRuntime, getCurrentStoryEventActions } =
@@ -165,6 +197,8 @@ test('presentation router exposes the fixed verb vocabulary without changing det
     ['随乐明珠前往鬼王峒', '我随乐明珠前往鬼王峒。', 'move'],
     ['原地调息疗伤', '我原地调息疗伤。', 'rest'],
     ['处理眼前事务', '我处理眼前事务。', 'act'],
+    ['查明夜晚发丝袭击事件', '我查明夜晚发丝袭击事件。', 'observe'],
+    ['躲避鳄鱼袭击', '我躲避鳄鱼袭击。', 'act'],
   ];
   for (const [label, actionText, expectedVerb] of samples) {
     const save = fixture(stage);
@@ -183,4 +217,47 @@ test('presentation router exposes the fixed verb vocabulary without changing det
     assert.equal(selection.actionId, 'demo_action');
     assert.equal(selection.actionText, actionText);
   }
+});
+
+test('target fallback never echoes a long objective and event presentation stays outside the contract hash', async () => {
+  const stage = JSON.parse(await readFile(stageUrl, 'utf8'));
+  const { advanceScenarioRuntime, getCurrentStoryEventActions } =
+    await loadTs('../src/modules/scenarioMods/runtime.ts');
+  const save = fixture(stage);
+  const runtime = runtimeOf(save);
+  const event = runtime.events.find(item => item.id === FLOOD_EVENT_ID);
+  event.name = '这是一个超过十个汉字而不适合作为按钮目标的事件名称';
+  event.objective = '在不预写灭村真相的前提下进入蛇彝村并安置商队';
+  event.relatedCharacterIds = [];
+  event.playerCompletionContract.actions = [{
+    id: 'demo_action',
+    label: '处理眼前事务',
+    actionText: '我处理眼前事务。',
+    timeCost: 1,
+    outcomeText: { success: '成功', partial: '部分', failure: '失败' },
+  }];
+  let advanced = advanceScenarioRuntime(save).saveData;
+  let [selection] = getCurrentStoryEventActions(advanced);
+  assert.equal(selection.label, '行动');
+  assert.doesNotMatch(selection.label, /灭村|蛇彝村|安置商队/);
+
+  const eventAfter = runtimeOf(advanced).events.find(item => item.id === FLOOD_EVENT_ID);
+  const contractBefore = JSON.stringify(eventAfter.playerCompletionContract);
+  eventAfter.presentation = { targetLabel: '蛇彝村', playerLine: '我先安置商队。' };
+  selection = getCurrentStoryEventActions(advanced)[0];
+  assert.equal(selection.label, '行动 · 蛇彝村');
+  assert.equal(selection.playerLine, '我先安置商队。');
+  assert.equal(JSON.stringify(eventAfter.playerCompletionContract), contractBefore);
+});
+
+test('validator accepts event-level presentation and rejects non-string display fields', async () => {
+  const stage = JSON.parse(await readFile(stageUrl, 'utf8'));
+  const { validateScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
+  assert.equal(validateScenarioMod(stage).valid, true);
+  const invalid = structuredClone(stage);
+  invalid.scenario.events.find(event => event.id === DETOX_EVENT_ID).presentation = { playerLine: 42 };
+  const result = validateScenarioMod(invalid);
+  assert.equal(result.valid, false);
+  assert.equal(result.issues.some(issue =>
+    issue.path.endsWith('.presentation.playerLine')), true);
 });
