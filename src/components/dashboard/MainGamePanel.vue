@@ -2925,8 +2925,8 @@ const syncGameState = async () => {
   line-height: 1.8;
   color: var(--color-text);
   font-size: var(--base-font-size, 1rem);
-  /* 中文舒适阅读约 40 字/行；原先铺满 738px ≈ 46 字/行偏宽 */
-  max-width: 40em;
+  /* 跟随主区宽度铺满：曾试过钉死 40em，宽屏下右侧会空出几百像素 */
+  max-width: 100%;
   word-wrap: break-word;
   overflow-wrap: break-word;
   word-break: break-word;
