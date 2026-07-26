@@ -152,7 +152,9 @@ test('one migrated objective action per book completes only through the engine a
     const action = getCurrentStoryEventActions(save)[0];
     assert.equal(action.actionId, 'advance_declared_objective');
     assert.equal(action.expectedOutcome, 'success');
-    assert.match(action.label, /^【主线推进】/);
+    assert.doesNotMatch(action.label, /主线推进|主线判定/);
+    assert.equal(typeof action.interaction?.verb, 'string');
+    assert.equal(typeof action.interaction?.targetLabel, 'string');
 
     const completionPath = event.completion[0].path;
     const guarded = guardScenarioModCommands(save, [{

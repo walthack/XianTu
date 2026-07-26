@@ -1,0 +1,186 @@
+import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
+import test from 'node:test';
+
+import { loadTs } from './loadTs.mjs';
+
+const stageUrl = new URL('../src/modules/scenarioMods/builtins/data/lcq.stage_04.json', import.meta.url);
+const FLOOD_EVENT_ID = 'lcq.event.s04_05';
+const DETOX_EVENT_ID = 'lcq.event.s04_06';
+
+const runtimeOf = save => save.世界.状态.剧本模组;
+
+function fixture(stage) {
+  const events = stage.scenario.events
+    .filter(event => [FLOOD_EVENT_ID, DETOX_EVENT_ID].includes(event.id))
+    .map(event => structuredClone(event));
+  return {
+    角色: {
+      身份: { 名字: '固定动词 Demo' },
+      位置: { 描述: '南荒山涧' },
+      属性: { 声望: 0 },
+    },
+    社交: { 关系: {}, 记忆: { 短期记忆: [], 中期记忆: [], 长期记忆: [], 隐式中期记忆: [] } },
+    系统: { 扩展: {}, 历史: { 叙事: [] } },
+    世界: {
+      信息: { 世界名称: stage.world.name, 地点信息: [], 势力信息: [] },
+      状态: {
+        剧本模组: {
+          // Demo 关闭全局 Canon Rail profile，只验证这两个事件的本地依赖链。
+          modId: 'demo.lcq.stage_04',
+          modName: stage.manifest.name,
+          currentChapterId: 'demo.chapter',
+          chapters: [{
+            id: 'demo.chapter',
+            title: '洪灾余波',
+            summary: '',
+            eventIds: [FLOOD_EVENT_ID, DETOX_EVENT_ID],
+          }],
+          events,
+          flags: {
+            ...structuredClone(stage.scenario.initialFlags),
+            'event.s04_04.done': true,
+            'event.s04_05.done': false,
+            'event.s04_06.done': false,
+          },
+          activeEventIds: [FLOOD_EVENT_ID],
+          completedEventIds: [],
+          completedChapterIds: [],
+          offscreenResolvedEventIds: [],
+          chronicle: [],
+          stallTurns: 0,
+          worldTurn: 0,
+          nextStageId: stage.manifest.nextStageId,
+          canon: structuredClone(stage.canon),
+        },
+      },
+    },
+  };
+}
+
+test('fixed verbs are presentation-only and carry the flood farewell into the Ningyu detox beat', async () => {
+  const stage = JSON.parse(await readFile(stageUrl, 'utf8'));
+  const {
+    advanceScenarioRuntime,
+    getCurrentStoryEventActions,
+    recordStoryEventStructuredAction,
+  } = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  const { buildScenarioStoryPrompt } = await loadTs('../src/modules/scenarioMods/storyContext.ts');
+
+  let save = advanceScenarioRuntime(fixture(stage)).saveData;
+  const expectedFloodLabels = [
+    '观察 · 易虎',
+    '观察 · 易虎',
+    '交谈 · 易彪',
+  ];
+  for (const expectedLabel of expectedFloodLabels) {
+    const [action] = getCurrentStoryEventActions(save);
+    assert.equal(action.label, expectedLabel);
+    assert.doesNotMatch(action.label, /主线推进|主线判定/);
+    assert.equal(recordStoryEventStructuredAction(save, action).outcome, 'success');
+    save = advanceScenarioRuntime(JSON.parse(JSON.stringify(save))).saveData;
+  }
+
+  const runtime = runtimeOf(save);
+  assert.equal(runtime.completedEventIds.includes(FLOOD_EVENT_ID), true);
+  assert.equal(runtime.activeEventIds.includes(DETOX_EVENT_ID), true);
+  assert.deepEqual(runtime.lastSettledBeat, {
+    eventId: FLOOD_EVENT_ID,
+    settledAtTurn: runtime.worldTurn,
+  });
+
+  const [detoxAction] = getCurrentStoryEventActions(save);
+  assert.equal(detoxAction.label, '交谈 · 乐明珠');
+  assert.equal(detoxAction.interaction.verb, 'talk');
+  assert.equal(detoxAction.actionId, 'advance_declared_objective');
+  assert.match(buildScenarioStoryPrompt(save), /跨拍承接·只演出不改真值/);
+  assert.match(buildScenarioStoryPrompt(save), /旱洪与易虎之死/);
+  assert.match(buildScenarioStoryPrompt(save), /请求乐明珠为凝羽解毒/);
+
+  assert.equal(recordStoryEventStructuredAction(save, detoxAction).completed, true);
+  save = advanceScenarioRuntime(JSON.parse(JSON.stringify(save))).saveData;
+  assert.equal(runtimeOf(save).completedEventIds.includes(DETOX_EVENT_ID), true);
+});
+
+test('handoff is decorative, fresh for one turn, and never created by offscreen-only settlement', async () => {
+  const stage = JSON.parse(await readFile(stageUrl, 'utf8'));
+  const { buildScenarioStoryPrompt } = await loadTs('../src/modules/scenarioMods/storyContext.ts');
+  const save = fixture(stage);
+  const runtime = runtimeOf(save);
+  runtime.activeEventIds = [DETOX_EVENT_ID];
+  runtime.lastSettledBeat = { eventId: FLOOD_EVENT_ID, settledAtTurn: 2 };
+  runtime.worldTurn = 4;
+  assert.doesNotMatch(buildScenarioStoryPrompt(save), /跨拍承接·只演出不改真值/);
+
+  delete runtime.lastSettledBeat;
+  runtime.offscreenResolvedEventIds = [FLOOD_EVENT_ID];
+  runtime.activeEventIds = [DETOX_EVENT_ID];
+  assert.equal(runtime.lastSettledBeat, undefined);
+});
+
+test('stage departure offer is a persistent direct command gated by the engine-owned ready id', async () => {
+  const stage = JSON.parse(await readFile(stageUrl, 'utf8'));
+  const { getStageDepartureOffer } = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  const save = fixture(stage);
+  const runtime = runtimeOf(save);
+  assert.equal(getStageDepartureOffer(save), null);
+
+  runtime.nextStageReadyId = runtime.nextStageId;
+  const offer = getStageDepartureOffer(save);
+  assert.deepEqual(offer, {
+    nextStageId: runtime.nextStageId,
+    label: '收拾行装，继续旅程',
+  });
+  runtime.worldTurn += 20;
+  assert.deepEqual(getStageDepartureOffer(JSON.parse(JSON.stringify(save))), offer);
+
+  runtime.nextStageReadyId = 'stale.stage';
+  assert.equal(getStageDepartureOffer(save), null);
+});
+
+test('fixed verb derivation never changes the stored completion contract', async () => {
+  const stage = JSON.parse(await readFile(stageUrl, 'utf8'));
+  const { advanceScenarioRuntime, getCurrentStoryEventActions } =
+    await loadTs('../src/modules/scenarioMods/runtime.ts');
+  const before = JSON.stringify(stage.scenario.events
+    .filter(event => [FLOOD_EVENT_ID, DETOX_EVENT_ID].includes(event.id))
+    .map(event => event.playerCompletionContract));
+  const save = advanceScenarioRuntime(fixture(stage)).saveData;
+  assert.equal(getCurrentStoryEventActions(save)[0].interaction.verb, 'observe');
+  const after = JSON.stringify(stage.scenario.events
+    .filter(event => [FLOOD_EVENT_ID, DETOX_EVENT_ID].includes(event.id))
+    .map(event => event.playerCompletionContract));
+  assert.equal(after, before);
+});
+
+test('presentation router exposes the fixed verb vocabulary without changing deterministic payloads', async () => {
+  const stage = JSON.parse(await readFile(stageUrl, 'utf8'));
+  const { advanceScenarioRuntime, getCurrentStoryEventActions } =
+    await loadTs('../src/modules/scenarioMods/runtime.ts');
+  const samples = [
+    ['观察营门动静', '我观察营门动静。', 'observe'],
+    ['请求乐明珠诊治', '我请求乐明珠诊治凝羽。', 'talk'],
+    ['击退鬼王峒武士', '我协助武二郎击退鬼王峒武士。', 'attack'],
+    ['使用解毒丹', '我取出解毒丹交给乐明珠。', 'use'],
+    ['随乐明珠前往鬼王峒', '我随乐明珠前往鬼王峒。', 'move'],
+    ['原地调息疗伤', '我原地调息疗伤。', 'rest'],
+    ['处理眼前事务', '我处理眼前事务。', 'act'],
+  ];
+  for (const [label, actionText, expectedVerb] of samples) {
+    const save = fixture(stage);
+    const runtime = runtimeOf(save);
+    const event = runtime.events.find(item => item.id === FLOOD_EVENT_ID);
+    event.playerCompletionContract.actions = [{
+      id: 'demo_action',
+      label,
+      actionText,
+      timeCost: 1,
+      outcomeText: { success: '成功', partial: '部分', failure: '失败' },
+    }];
+    const advanced = advanceScenarioRuntime(save).saveData;
+    const [selection] = getCurrentStoryEventActions(advanced);
+    assert.equal(selection.interaction.verb, expectedVerb);
+    assert.equal(selection.actionId, 'demo_action');
+    assert.equal(selection.actionText, actionText);
+  }
+});

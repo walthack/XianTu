@@ -215,7 +215,7 @@
             <div v-if="questMain.cleared" class="quest-cleared">✅ {{ t('本关剧情已完成') }}</div>
             <template v-if="questMain.next">
               <div class="quest-next">{{ t('此地诸事已暂告一段落。若已准备好，可顺势启程。') }}</div>
-              <button class="quest-next-btn" :disabled="stageSwitching" @click="goNextStage">
+              <button class="quest-next-btn" :disabled="stageSwitching || uiStore.isAIProcessing" @click="goNextStage">
                 {{ stageSwitching ? t('启程中…') : t('▶ 启程') }}
               </button>
               <div v-if="stageSwitchError" class="quest-error">{{ stageSwitchError }}</div>
@@ -401,7 +401,18 @@ const questMain = computed(() => {
   if (!chapter && !events.length && !next && !stalled) return null;
   const signal = rt.divergenceSignal;
   const canReturn = signal?.level === 'medium' || signal?.level === 'high' || stalled;
-  return { chapter: chapter ? `章节：${chapter.title || chapter.id}` : '', events, moreCount, cleared, next, stalled, stallCount: stallTurns, signal, canReturn };
+  return {
+    chapter: chapter ? `章节：${chapter.title || chapter.id}` : '',
+    events,
+    moreCount,
+    cleared,
+    next,
+    nextStageId: ready ? String(rt.nextStageReadyId) : '',
+    stalled,
+    stallCount: stallTurns,
+    signal,
+    canReturn,
+  };
 });
 const actorView = computed(() => {
   const rt: any = (gameStateStore.worldState as any)?.剧本模组;
@@ -506,7 +517,7 @@ const goNextStage = async () => {
   stageSwitching.value = true;
   stageSwitchError.value = '';
   try {
-    const result = await gameStateStore.transitionToNextStage();
+    const result = await gameStateStore.transitionToNextStage(questMain.value?.nextStageId || undefined);
     if (!result.ok) stageSwitchError.value = result.reason || '切换失败';
   } catch (error) {
     stageSwitchError.value = String((error as Error)?.message || error);

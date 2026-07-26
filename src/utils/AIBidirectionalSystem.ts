@@ -2115,12 +2115,11 @@ ${step1Text}
     const repairedData = repairSaveData(currentSaveData);
     let saveData = cloneDeep(repairedData);
     const changes: StateChange[] = [];
-    // 跨拍交接合同只服务一轮正文：本轮 prompt 已经带过它，先清除再让 advance 写入本轮新落账的拍点，
-    // 否则同一段"先接住上一拍"会连着几轮反复注入。
-    {
-      const runtimeBeforeAdvance = (saveData as any)?.世界?.状态?.剧本模组;
-      if (runtimeBeforeAdvance?.lastSettledBeat) delete runtimeBeforeAdvance.lastSettledBeat;
-    }
+    const startingRuntime = (currentSaveData as any)?.世界?.状态?.剧本模组;
+    const startingModId = typeof startingRuntime?.modId === 'string' ? startingRuntime.modId : '';
+    const handoffEventIdBefore = typeof (saveData as any)?.世界?.状态?.剧本模组?.lastSettledBeat?.eventId === 'string'
+      ? String((saveData as any).世界.状态.剧本模组.lastSettledBeat.eventId)
+      : '';
     // 非机会卡的本地判定在任何模型命令执行前结算；模型只能演出调用前已确定的结果，
     // 不能先改属性再反向影响本轮 success/partial/failure。
     const eventProgress = options?.eventAction
@@ -2654,6 +2653,7 @@ ${step1Text}
         const activeAtLaunch = characterStore.rootState.当前激活存档
           ? { ...characterStore.rootState.当前激活存档 }
           : null;
+        const modIdAtLaunch = String((baselineSaveData as any)?.世界?.状态?.剧本模组?.modId || '');
 
         // 事件对账负责主线 flag/分歧账本，不能丢弃；但也不能让二次 LLM 锁住正文、输入和主存档。
         // 在隔离副本继续执行，完成后做三方合并并二次落盘。
@@ -2674,6 +2674,11 @@ ${step1Text}
             }
             const currentSave = useGameStateStore().toSaveData();
             if (!currentSave) return;
+            const currentModId = String((currentSave as any)?.世界?.状态?.剧本模组?.modId || '');
+            if (modIdAtLaunch && currentModId && currentModId !== modIdAtLaunch) {
+              console.warn('[事件对账] 后台结果到达时关卡已切换，安全丢弃');
+              return;
+            }
             const merged = mergeDeferredReconcileResult(currentSave, baselineSaveData, isolatedSaveData);
             if (merged) {
               const advanced = advanceScenarioRuntime(currentSave);
@@ -2711,6 +2716,13 @@ ${step1Text}
     const scenarioResult = advanceScenarioRuntime(saveData);
     saveData = scenarioResult.saveData;
     const runtimeAfterAdvance = (saveData as any)?.世界?.状态?.剧本模组;
+    if (
+      textContent
+      && handoffEventIdBefore
+      && runtimeAfterAdvance?.lastSettledBeat?.eventId === handoffEventIdBefore
+    ) {
+      delete runtimeAfterAdvance.lastSettledBeat;
+    }
     if (runtimeAfterAdvance?.returnBridge && textContent) {
       // 桥接合同只消费一次；世界线账本已永久保留玩家的斩线选择。
       delete runtimeAfterAdvance.returnBridge;
@@ -2795,7 +2807,14 @@ ${step1Text}
 
     if (!isInitialization) {
       const gameStateStore = useGameStateStore();
-      gameStateStore.loadFromSaveData(saveData);
+      const liveModId = String((gameStateStore.worldState as any)?.剧本模组?.modId || '');
+      if (startingModId && liveModId && liveModId !== startingModId) {
+        console.warn(`[AI双向系统] 关卡已从 ${startingModId} 切换为 ${liveModId}，丢弃旧关回合提交`);
+        const liveSave = gameStateStore.toSaveData();
+        if (liveSave) saveData = liveSave;
+      } else {
+        gameStateStore.loadFromSaveData(saveData);
+      }
       if (shouldAutoSummarize) {
         queueIsolatedMemorySummary(
           () => this.triggerMemorySummary(),

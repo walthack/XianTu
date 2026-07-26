@@ -172,6 +172,8 @@ interface GameState {
   conversationAutoSaveEnabled: boolean; // 是否启用对话后自动存档
 }
 
+let stageTransitionInFlight = false;
+
 export const useGameStateStore = defineStore('gameState', {
   state: (): GameState => ({
     saveMeta: null,
@@ -261,16 +263,28 @@ export const useGameStateStore = defineStore('gameState', {
      * 将当前 Pinia Store 中的游戏状态保存到 IndexedDB
      */
     /** 进入下一关（消费 stage_ready）：切换剧本关卡并保留玩家/NPC 累积状态，随后落盘。 */
-    async transitionToNextStage(): Promise<{ ok: boolean; reason?: string; toName?: string }> {
-      const save = this.toSaveData();
-      if (!save) return { ok: false, reason: '存档数据不完整' };
-      const { transitionToNextScenarioStage } = await import('@/modules/scenarioMods/strictInitializer');
-      const result = transitionToNextScenarioStage(save);
-      if (!result.ok) return { ok: false, reason: result.reason };
-      this.loadFromSaveData(result.saveData);
-      await this.saveGame();
-      console.info(`[剧本切关] ${result.from} → ${result.to}（${result.toName || ''}）`);
-      return { ok: true, toName: result.toName };
+    async transitionToNextStage(expectedStageId?: string): Promise<{ ok: boolean; reason?: string; toName?: string }> {
+      if (stageTransitionInFlight) return { ok: false, reason: '启程正在进行，请勿重复操作' };
+      stageTransitionInFlight = true;
+      try {
+        const { useUIStore } = await import('./uiStore');
+        if (useUIStore().isAIProcessing) return { ok: false, reason: '请等待本轮叙事结束后再启程' };
+        const save = this.toSaveData();
+        if (!save) return { ok: false, reason: '存档数据不完整' };
+        const runtime = (save as any)?.世界?.状态?.剧本模组;
+        if (expectedStageId && runtime?.nextStageReadyId !== expectedStageId) {
+          return { ok: false, reason: '启程目标已经变化，请重新确认' };
+        }
+        const { transitionToNextScenarioStage } = await import('@/modules/scenarioMods/strictInitializer');
+        const result = transitionToNextScenarioStage(save);
+        if (!result.ok) return { ok: false, reason: result.reason };
+        this.loadFromSaveData(result.saveData);
+        await this.saveGame();
+        console.info(`[剧本切关] ${result.from} → ${result.to}（${result.toName || ''}）`);
+        return { ok: true, toName: result.toName };
+      } finally {
+        stageTransitionInFlight = false;
+      }
     },
 
     async saveGame() {

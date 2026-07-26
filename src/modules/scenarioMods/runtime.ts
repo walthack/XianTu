@@ -150,6 +150,21 @@ export interface ScenarioEventActionSelection {
   expectedOutcome: ScenarioPlayerCompletionOutcome;
   outcomeText: string;
   remainingTurns?: number;
+  /** 纯展示层派生；不进入 completion contract 或 contractHash。 */
+  interaction: ScenarioInteractionAffordance;
+}
+
+export type ScenarioInteractionVerb = 'observe' | 'talk' | 'act' | 'use' | 'rest' | 'move' | 'attack';
+
+export interface ScenarioInteractionAffordance {
+  verb: ScenarioInteractionVerb;
+  targetLabel: string;
+  targetId?: string;
+}
+
+export interface ScenarioStageDepartureOffer {
+  nextStageId: string;
+  label: string;
 }
 
 export interface ScenarioEventTimelineState {
@@ -240,13 +255,9 @@ export interface RuntimeState extends ScenarioProgressState {
     branchSummary: string;
     requestedAtTurn: number;
   };
-  /** 上一拍刚结算的主线节点；供下一轮叙事先接住再进新拍，消费一次即清。 */
+  /** 玩家亲历的上一拍；只为下一轮叙事过渡，不参与事件激活或完成门控。 */
   lastSettledBeat?: {
     eventId: string;
-    name: string;
-    beat: string;
-    locationId?: string;
-    characterIds?: string[];
     settledAtTurn: number;
   };
 }
@@ -904,34 +915,54 @@ function applyStoryEventOutcomeEffects(
   }
 }
 
-/** 模板化推进按钮的固定前缀：文案只把 objective 复述一遍，读起来像一句机器传送指令。 */
-export const TEMPLATED_OBJECTIVE_ACTION_PREFIX = '我按当前主线目标行动：';
+const INTERACTION_VERB_LABELS: Record<ScenarioInteractionVerb, string> = {
+  observe: '观察',
+  talk: '交谈',
+  act: '行动',
+  use: '使用',
+  rest: '修整',
+  move: '前往',
+  attack: '攻击',
+};
 
-/**
- * 模板化单动作推进拍：actionText 只是 objective 的复述，且本合同没有分步演出链。
- * 点这类按钮＝直接向叙事模型提交一句传送指令，跨拍衔接必然生硬（上一拍还在岸边送别，
- * 下一拍按钮已经是给凝羽解毒）。屏蔽后事件回落到「玩家自由行动 + 事件对账追认」：
- * 事件完成只看 completion flag（见 advanceScenarioRuntime），对账候选链也不排除本地合同
- * 事件（见 eventReconcileService.buildChainCandidates），因此主线不会因此卡死。
- * 带 prepare 链的半预制高光是逐拍演出合同，不在屏蔽范围内。
- */
-function isTemplatedObjectiveAction(
-  contract: ScenarioPlayerCompletionContract,
-  action: ScenarioPlayerCompletionContract['actions'][number],
-): boolean {
-  if (contract.kind !== 'objective_action') return false;
-  if (contract.actions.some(item => item.kind === 'prepare')) return false;
-  return String(action.actionText || '').startsWith(TEMPLATED_OBJECTIVE_ACTION_PREFIX);
+function deriveInteractionVerb(text: string): ScenarioInteractionVerb {
+  if (/(?:击退|迎战|攻击|袭击|斩杀|搏杀|交锋|制伏|制服)/u.test(text)) return 'attack';
+  if (/(?:使用|服用|取出|祭出|装备|交付).{0,10}(?:道具|药|丹|符|器|物|信|令)/u.test(text)) return 'use';
+  if (/(?:前往|赶往|赶赴|动身|启程|进入|离开|随.{0,8}前往)/u.test(text)) return 'move';
+  if (/(?:请求|询问|交谈|对话|商议|交涉|说服|劝说|告知|陪.{0,8}送别)/u.test(text)) return 'talk';
+  if (/(?:观察|察看|查看|留意|见证|确认|调查|探查|打量)/u.test(text)) return 'observe';
+  if (/(?:休息|休整|修炼|调息|疗伤|打坐)/u.test(text)) return 'rest';
+  return 'act';
 }
 
-/**
- * 当前非机会卡承重事件的本地动作；按钮身份来自事件合同，不来自 LLM。
- * hideTemplatedObjectiveActions 默认关：模块保持既有行为，由 UI 层按玩家设置传入。
- */
-export function getCurrentStoryEventActions(
-  saveData: SaveData,
-  options?: { hideTemplatedObjectiveActions?: boolean },
-): ScenarioEventActionSelection[] {
+function deriveInteraction(
+  runtime: RuntimeState,
+  event: ScenarioModEvent,
+  label: string,
+  actionText: string,
+): ScenarioInteractionAffordance {
+  const text = `${label}\n${actionText}`;
+  const verb = deriveInteractionVerb(text);
+  const candidates = (runtime.canon?.characters || [])
+    .filter(character => character?.id && character?.name && text.includes(character.name))
+    .sort((left, right) =>
+      text.indexOf(left.name) - text.indexOf(right.name)
+      || right.name.length - left.name.length
+      || (left.id < right.id ? -1 : left.id > right.id ? 1 : 0));
+  const target = candidates[0];
+  const textualTarget = verb === 'talk'
+    ? label.match(/陪(.{2,6}?)(?:完成|送别|交谈|$)/u)?.[1]
+      || label.match(/请求(.{2,6}?)(?:为|替|诊治|救治|$)/u)?.[1]
+    : undefined;
+  return {
+    verb,
+    targetLabel: target?.name || textualTarget || event.objective || label,
+    ...(target ? { targetId: target.id } : {}),
+  };
+}
+
+/** 当前非机会卡承重事件的本地动作；按钮身份来自事件合同，不来自 LLM。 */
+export function getCurrentStoryEventActions(saveData: SaveData): ScenarioEventActionSelection[] {
   const runtime = getRuntime(saveData);
   if (!runtime) return [];
   const event = getCurrentPlayerCompletionEvent(runtime);
@@ -943,27 +974,38 @@ export function getCurrentStoryEventActions(
   const remainingTurns = event.timeline?.deadlineTurns !== undefined && timeline
     ? Math.max(0, timeline.eligibleAtTurn + event.timeline.deadlineTurns - (Number(runtime.worldTurn) || 0))
     : undefined;
-  const hideTemplated = options?.hideTemplatedObjectiveActions === true;
-  return contract.actions.filter(action =>
-    eventActionAvailable(action, state)
-    && !(hideTemplated && isTemplatedObjectiveAction(contract, action)),
-  ).map(action => {
+  return contract.actions.filter(action => eventActionAvailable(action, state)).map(action => {
     const expectedOutcome: ScenarioPlayerCompletionOutcome = contract.kind === 'objective_action'
       ? 'success'
       : conditionsMatch(action.successWhen, saveData, runtime) ? 'success' : action.unmetOutcome || 'failure';
+    const interaction = deriveInteraction(runtime, event, action.label, action.actionText);
     return {
       source: 'event_engine',
       eventId: event.id,
       actionId: action.id,
-      label: `${contract.kind === 'objective_action' ? '【主线推进】' : '【主线判定】'}${action.label}`,
+      label: `${INTERACTION_VERB_LABELS[interaction.verb]} · ${interaction.targetLabel}`,
       actionText: action.actionText,
       timeCost: action.timeCost,
       contractHash: state.contractHash,
       expectedOutcome,
       outcomeText: action.outcomeText[expectedOutcome],
+      interaction,
       ...(remainingTurns !== undefined ? { remainingTurns } : {}),
     };
   });
+}
+
+/** 跨关启程是直接命令，不属于事件动作，也不消耗叙事回合。 */
+export function getStageDepartureOffer(saveData: SaveData): ScenarioStageDepartureOffer | null {
+  const runtime = getRuntime(saveData);
+  if (
+    !runtime?.nextStageId
+    || runtime.nextStageReadyId !== runtime.nextStageId
+  ) return null;
+  return {
+    nextStageId: runtime.nextStageId,
+    label: '收拾行装，继续旅程',
+  };
 }
 
 /**
@@ -1578,27 +1620,22 @@ function appendChronicleEntry(
   chronicle.push({ ...entry, sequence: chronicle.length + 1 });
 }
 
-/**
- * 记下本轮刚结算的主线拍点，供下一轮叙事先接住上一拍再进入新拍。
- * 挂在 event_completed 汇总处而不是按钮结算处：按钮结算与事件对账补落 flag 最终都走
- * 同一条完成路径，两种推进方式都能拿到交接合同（屏蔽模板按钮后尤其重要）。
- */
 function recordSettledBeatHandoff(runtime: RuntimeState, transitions: ScenarioRuntimeTransition[]): void {
   const completed = transitions
     .filter(transition => transition.type === 'event_completed')
     .map(transition => runtime.events.find(item => item.id === transition.id))
-    .filter((event): event is ScenarioModEvent => Boolean(event));
-  if (!completed.length) return;
-  // 同轮多拍落账时取链序最后一拍：玩家眼下停在那儿。
-  const event = completed
-    .slice()
-    .sort((left, right) => (left.axisSeq ?? -Infinity) - (right.axisSeq ?? -Infinity))[completed.length - 1];
+    .filter((event): event is ScenarioModEvent => {
+      if (!event?.playerCompletionContract) return false;
+      if (runtime.eventTimeline?.[event.id]?.outcome === 'offscreen') return false;
+      return runtime.eventActionStates?.[event.id]?.readyAtTurn !== undefined;
+    })
+    .sort((left, right) =>
+      (left.axisSeq ?? Number.NEGATIVE_INFINITY) - (right.axisSeq ?? Number.NEGATIVE_INFINITY)
+      || (left.id < right.id ? -1 : left.id > right.id ? 1 : 0));
+  const event = completed.at(-1);
+  if (!event) return;
   runtime.lastSettledBeat = {
     eventId: event.id,
-    name: event.name,
-    beat: String(event.axisBeat || event.description || '').slice(0, 160),
-    ...(event.locationId ? { locationId: event.locationId } : {}),
-    ...(event.relatedCharacterIds?.length ? { characterIds: event.relatedCharacterIds.slice(0, 6) } : {}),
     settledAtTurn: Math.max(0, Number(runtime.worldTurn) || 0),
   };
 }

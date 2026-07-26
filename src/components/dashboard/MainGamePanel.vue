@@ -144,6 +144,16 @@
             </button>
           </div>
 
+          <div v-if="stageDepartureOffer" class="action-options opportunity-action-options">
+            <button
+              class="action-option-btn opportunity-action-btn"
+              :disabled="isAIProcessing || stageDeparturePending"
+              @click="departToNextStage"
+            >
+              {{ stageDeparturePending ? t('启程中…') : stageDepartureOffer.label }}
+            </button>
+          </div>
+
           <!-- 行动选项 -->
           <div v-if="uiStore.enableActionOptions && currentNarrative.actionOptions?.length" class="action-options">
             <button
@@ -413,7 +423,6 @@ import { useI18n } from '@/i18n';
 import { useCharacterStore } from '@/stores/characterStore';
 import { useActionQueueStore } from '@/stores/actionQueueStore';
 import { useUIStore } from '@/stores/uiStore';
-import { useAPIManagementStore } from '@/stores/apiManagementStore';
 import { panelBus } from '@/utils/panelBus';
 import { chatBus, type ChatBusPayload } from '@/utils/chatBus';
 import { EnhancedActionQueueManager } from '@/utils/enhancedActionQueue';
@@ -440,6 +449,7 @@ import { buildLocalJudgementPreflight, composeJudgementAction } from '@/utils/ju
 import { getNarrativeTurn } from '@/utils/actionGate';
 import {
   getCurrentStoryEventActions,
+  getStageDepartureOffer,
   getTrackedStoryOpportunityActions,
   type ScenarioEventActionSelection,
   type ScenarioOpportunityActionSelection,
@@ -699,7 +709,6 @@ const router = useRouter();
 const characterStore = useCharacterStore();
 const actionQueue = useActionQueueStore();
 const uiStore = useUIStore();
-const apiManagementStore = useAPIManagementStore();
 let aiResetToken = 0;
 const gameStateStore = useGameStateStore();
 const isTavernEnvFlag = isTavernEnv();
@@ -707,21 +716,15 @@ const enhancedActionQueue = EnhancedActionQueueManager.getInstance();
 const bidirectionalSystem = AIBidirectionalSystem;
 type ScenarioEngineActionSelection = ScenarioOpportunityActionSelection | ScenarioEventActionSelection;
 const selectedScenarioEngineAction = ref<ScenarioEngineActionSelection | null>(null);
-// 屏蔽模板化推进按钮要靠事件对账兜底落账；对账被关掉时必须把按钮放回来，
-// 否则这些事件既没有按钮结算、也没有对账追认 = 主线卡死。
-const hideTemplatedMainlineActions = computed(() =>
-  uiStore.hideTemplatedMainlineActions && apiManagementStore.isFunctionEnabled('event_reconcile'),
-);
 const scenarioEngineActionOptions = computed<ScenarioEngineActionSelection[]>(() => {
   const save = gameStateStore.toSaveData();
-  if (!save) return [];
-  return [
-    ...getTrackedStoryOpportunityActions(save),
-    ...getCurrentStoryEventActions(save, {
-      hideTemplatedObjectiveActions: hideTemplatedMainlineActions.value,
-    }),
-  ];
+  return save ? [...getTrackedStoryOpportunityActions(save), ...getCurrentStoryEventActions(save)] : [];
 });
+const stageDepartureOffer = computed(() => {
+  const save = gameStateStore.toSaveData();
+  return save ? getStageDepartureOffer(save) : null;
+});
+const stageDeparturePending = ref(false);
 
 const isOnlineTraveling = computed(() => {
   const online = gameStateStore.onlineState as any;
@@ -743,6 +746,24 @@ const travelingTooltip = computed(() => {
 
 const openEventsPanel = () => {
   router.push('/game/events');
+};
+
+const departToNextStage = async () => {
+  const offer = stageDepartureOffer.value;
+  if (!offer || stageDeparturePending.value || isAIProcessing.value) return;
+  stageDeparturePending.value = true;
+  try {
+    const result = await gameStateStore.transitionToNextStage(offer.nextStageId);
+    if (!result.ok) {
+      toast.warning(result.reason || '此刻还不能启程');
+      return;
+    }
+    toast.success(result.toName ? `已启程：${result.toName}` : '已启程');
+  } catch (error) {
+    toast.error(String((error as Error)?.message || error));
+  } finally {
+    stageDeparturePending.value = false;
+  }
 };
 
 // 流式输出状态

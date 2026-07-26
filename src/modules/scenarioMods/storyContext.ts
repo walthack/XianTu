@@ -39,13 +39,9 @@ interface StoryRuntime {
   completedChapterIds: string[];
   completedEventIds: string[];
   worldTurn?: number;
-  /** 上一拍刚结算的主线节点（引擎写入，消费一次即清）；用于跨拍过渡。 */
+  /** 玩家亲历的上一拍；只用于下一轮跨拍承接。 */
   lastSettledBeat?: {
     eventId: string;
-    name: string;
-    beat: string;
-    locationId?: string;
-    characterIds?: string[];
     settledAtTurn: number;
   };
   eventTimeline?: Record<string, {
@@ -757,15 +753,20 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
   const returnBridgeLine = returnBridge
     ? `【玩家已主动斩线回轨·本轮最高优先级】玩家选择结束衍生支线“${returnBridge.branchSummary}”。保留它已经造成的关系与后果，但立即用章节转场、来信、人物提议或局势变化把镜头接回“${returnBridge.anchorObjective}”。不得继续扩建旧支线，不得写成梦境或清空经历；本轮必须让玩家抵达该承重节点的可行动入口。`
     : '';
-  // 跨拍交接合同（引擎写入、消费一次即清）。此前"当前事件"一换就是硬切：prompt 里没有
-  // 任何字段告诉模型上一拍刚发生过什么，镜头从洪水岸边直接跳到病榻前。即兴目标早有
-  // "最近完成待回报"的回报合同，主线拍点一直缺这一环。
   const settledBeat = runtime.lastSettledBeat;
-  const settledBeatLine = settledBeat && settledBeat.eventId !== anchor?.id
+  const settledEvent = settledBeat
+    && Math.max(0, Number(runtime.worldTurn) || 0) - settledBeat.settledAtTurn <= 1
+    ? runtime.events.find(event => event.id === settledBeat.eventId)
+    : undefined;
+  const settledBeatLine = settledEvent && settledEvent.id !== anchor?.id
     ? (() => {
-        const where = namesForIds(settledBeat.locationId ? [settledBeat.locationId] : [], locations);
-        const who = namesForIds(settledBeat.characterIds || [], characters);
-        return `【上一拍已完成·本轮先接住再往下走】玩家刚完成主线节点「${settledBeat.name}」${where ? `（${where}）` : ''}${who ? `，同场人物：${who}` : ''}。\n本轮正文必须先把玩家从这一拍的收尾带出来再进入当前事件：交代其间的时间流逝与位移、同场人物的去向或反应，让“为什么此刻会去做当前这件事”有可感的因果。\n禁止重演或复述上一拍的过程（它已经演完了），禁止开场就跳到当前事件的高潮；过渡交代完，再给出当前事件此刻可采取的行动入口。`;
+        const fromWhere = namesForIds(settledEvent.locationId ? [settledEvent.locationId] : [], locations);
+        const toWhere = namesForIds(anchor?.locationId ? [anchor.locationId] : [], locations);
+        const destination = anchor?.objective || anchor?.name || '当前事件';
+        const movement = fromWhere && toWhere && fromWhere !== toWhere
+          ? `镜头需要从“${fromWhere}”自然转到“${toWhere}”`
+          : '若需时间流逝或短距离位移，用人物行动与环境变化自然交代';
+        return `【跨拍承接·只演出不改真值】上一拍「${settledEvent.name}」刚由玩家亲历完成；当前入口是“${destination}”。本轮先用一小段余波接住上一拍，再通过同伴反应、环境异样或新出现的需求引到当前入口；${movement}。不得复演上一拍，不得开场直达当前事件高潮；资料未声明具体时长时不得编造精确日期或距离。`;
       })()
     : '';
   const worldPush = (runtime as any).worldPush;

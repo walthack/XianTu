@@ -73,6 +73,7 @@ interface RuntimeEventLike {
   completionEvidence?: unknown;
   critical?: unknown;
   relatedCharacterIds?: unknown;
+  playerCompletionContract?: unknown;
   worldActor?: {
     opportunities?: Array<{ completionContract?: { kind?: unknown } }>;
   };
@@ -191,13 +192,13 @@ export function buildChainCandidates(runtime: {
       const sb = typeof b.e.axisSeq === 'number' ? b.e.axisSeq as number : Infinity;
       return sa - sb;
     });
-  // 已迁移到机会卡完成合同的事件是权威边界：它本身不能交给 LLM 对账，
+  // 已迁移到本地完成合同的事件是权威边界：它本身不能交给 LLM 对账，
   // 它之后的事件也不能跨过该边界提前进入候选链。等本地引擎完成该事件后，
   // completed/flag 过滤会自然移除边界，旧事件才继续沿用原对账兜底。
   const engineOwnedBoundary = ordered.findIndex(({ e }) =>
-    e.worldActor?.opportunities?.some(opportunity =>
-      opportunity.completionContract?.kind === 'player_action_sequence'
-    ),
+    Boolean(e.playerCompletionContract)
+    || e.worldActor?.opportunities?.some(opportunity =>
+      opportunity.completionContract?.kind === 'player_action_sequence'),
   );
   const list = (engineOwnedBoundary >= 0 ? ordered.slice(0, engineOwnedBoundary) : ordered)
     .slice(0, CHAIN_EXPOSE_LIMIT);

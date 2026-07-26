@@ -201,19 +201,6 @@
 
           <div class="setting-item">
             <div class="setting-info">
-              <label class="setting-name">{{ t('屏蔽模板化主线推进按钮') }}</label>
-              <span class="setting-desc">{{ t('隐藏「我按当前主线目标行动：…」这类复述式按钮，改由你自由行动推进主线（系统在后台对账追认）。分步演出的高光拍与主线判定不受影响；关闭事件对账时本设置自动失效') }}</span>
-            </div>
-            <div class="setting-control">
-              <label class="setting-switch">
-                <input type="checkbox" v-model="uiStore.hideTemplatedMainlineActions" />
-                <span class="switch-slider"></span>
-              </label>
-            </div>
-          </div>
-
-          <div class="setting-item">
-            <div class="setting-info">
               <label class="setting-name">{{ t('境界分层地图') }}</label>
               <span class="setting-desc">{{ t('按角色境界分别记录世界地图，旧存档开启后将自动迁移') }}</span>
             </div>

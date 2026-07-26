@@ -202,6 +202,28 @@ test('buildChainCandidates：排除已完成/已 done，按 axisSeq 排序，截
   assert.equal(out[0].flagKey, 'event.a.done');
 });
 
+test('buildChainCandidates：玩家本地完成合同也是 LLM 对账不可跨越的权威边界', async () => {
+  const { buildChainCandidates } = await modPromise;
+  const mk = (id, seq, extra = {}) => ({
+    id,
+    name: id,
+    axisSeq: seq,
+    axisBeat: `beat-${id}`,
+    completion: [{ path: `flags.event.${id}.done`, operator: 'eq', value: true }],
+    ...extra,
+  });
+  const runtime = {
+    events: [
+      mk('legacy-before', 1),
+      mk('engine-owned', 2, { playerCompletionContract: { kind: 'objective_action' } }),
+      mk('legacy-after', 3),
+    ],
+    completedEventIds: [],
+    flags: {},
+  };
+  assert.deepEqual(buildChainCandidates(runtime).map(item => item.id), ['legacy-before']);
+});
+
 test('event completionEvidence overrides the shorter Canon Rail fallback for mainline highlights', async () => {
   const { buildChainCandidates } = await modPromise;
   const runtime = {

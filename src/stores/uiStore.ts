@@ -101,12 +101,6 @@ export const useUIStore = defineStore('ui', () => {
   // 🔥 [流式传输设置] 控制是否启用流式传输（全局持久化）
   const useStreaming = ref(localStorage.getItem('useStreaming') !== 'false'); // 默认开启
 
-  // 🎬 [模板化主线推进按钮] 屏蔽「我按当前主线目标行动：…」这类模板按钮（默认屏蔽）。
-  // 这类按钮把 objective 原样复述成一句传送指令，跨拍衔接必然生硬；屏蔽后主线靠玩家自由
-  // 行动 + 事件对账追认推进。带分步演出链的高光拍与【主线判定】不受影响。
-  // 依赖事件对账兜底，故对账关闭时由调用方强制放回按钮（见 MainGamePanel）。
-  const hideTemplatedMainlineActions = ref(localStorage.getItem('hideTemplatedMainlineActions') !== 'false');
-
   // 🔥 [后端状态管理] 统一管理后端连接状态
   const backendStatus = ref({
     configured: isBackendConfigured(),
@@ -477,15 +471,6 @@ export const useUIStore = defineStore('ui', () => {
       set: (val) => {
         useStreaming.value = val;
         localStorage.setItem('useStreaming', String(val));
-      }
-    }),
-
-    // 🎬 [模板化主线推进按钮] 暴露屏蔽开关（全局持久化）
-    hideTemplatedMainlineActions: computed({
-      get: () => hideTemplatedMainlineActions.value,
-      set: (val) => {
-        hideTemplatedMainlineActions.value = val;
-        localStorage.setItem('hideTemplatedMainlineActions', String(val));
       }
     }),
 
