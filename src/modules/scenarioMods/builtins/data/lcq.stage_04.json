@@ -2650,6 +2650,23 @@
           "他是我哥"
         ],
         "objective": "完整经历易虎救人、受创、被洪水吞没与易彪送别",
+        "presentation": {
+          "stepGuardTerms": {
+            "respond_to_flash_flood": [
+              "千斤坠",
+              "巨石正中",
+              "洪水吞没",
+              "他是我哥",
+              "认兄",
+              "磕头"
+            ],
+            "witness_yihu_last_stand": [
+              "他是我哥",
+              "认兄",
+              "磕头"
+            ]
+          }
+        },
         "offscreenResolution": {
           "id": "offscreen.r2_9.lcq_event_s04_05",
           "afterStallTurns": 9,

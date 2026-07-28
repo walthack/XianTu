@@ -1,6 +1,6 @@
 import type { SaveData } from '@/types/game';
 import { formatEarnedTitles } from './milestoneRewards';
-import { getCurrentContractStep, getNarrativeAnchorEvent } from './runtime';
+import { getCurrentContractStep, getCurrentStoryEventActions, getNarrativeAnchorEvent } from './runtime';
 import { getCanonRailContract, getCanonRailProfile } from './canonRail';
 import { narrativeVariantReplacesCanonRail, resolveScenarioEventNarrative } from './eventNarrativeView';
 import { formatDivergencePrompt, type ScenarioDivergence } from './divergenceLedger';
@@ -43,6 +43,8 @@ interface StoryRuntime {
   lastSettledBeat?: {
     eventId: string;
     settledAtTurn: number;
+    targetEventId?: string;
+    bridgedAtTurn?: number;
   };
   eventTimeline?: Record<string, {
     eligibleAtTurn: number;
@@ -548,8 +550,13 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
         const remainingStepText = contractStep?.remainingLabels.length
           ? contractStep.remainingLabels.join('；')
           : '无';
+        const currentStepText = contractStep?.action.actionText.replace(/[。！？]+$/u, '') || '';
+        const reservedTerms = contractStep?.reservedFutureTerms || [];
+        const reservedLine = reservedTerms.length
+          ? `【后续步骤保留内容】以下词所指的动作、台词或结果本轮尚未发生：${reservedTerms.join('｜')}。即使只作一句预告、回忆错置或旁白概括也不得出现；普通环境描写不等于保留结果，只有真正演出这些动作／台词／结果才算违规。\n  renderGuard.reservedFutureTerms=${reservedTerms.join('|')}\n  `
+          : '';
         const stepLine = contractStep
-          ? `【本拍分步·第 ${contractStep.index}/${contractStep.total} 步】本轮只演到「${contractStep.action.label}」为止：${contractStep.action.actionText}。不得演出后续步骤（${remainingStepText}），它们由玩家在后续回合逐拍触发。\n  `
+          ? `【本拍分步·第 ${contractStep.index}/${contractStep.total} 步】本轮只演到「${contractStep.action.label}」为止：${currentStepText}。不得演出后续步骤（${remainingStepText}），它们由玩家在后续回合逐拍触发。\n  ${reservedLine}`
           : '';
         const highlightLine = /^半预制高光[：:]/.test((event.axisBeat || '').trim())
           ? contractStep
@@ -768,11 +775,21 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
     ? `【玩家已主动斩线回轨·本轮最高优先级】玩家选择结束衍生支线“${returnBridge.branchSummary}”。保留它已经造成的关系与后果，但立即用章节转场、来信、人物提议或局势变化把镜头接回“${returnBridge.anchorObjective}”。不得继续扩建旧支线，不得写成梦境或清空经历；本轮必须让玩家抵达该承重节点的可行动入口。`
     : '';
   const settledBeat = runtime.lastSettledBeat;
-  const settledEvent = settledBeat
-    && Math.max(0, Number(runtime.worldTurn) || 0) - settledBeat.settledAtTurn <= 1
-    ? runtime.events.find(event => event.id === settledBeat.eventId)
-    : undefined;
-  const settledBeatLine = settledEvent && settledEvent.id !== anchor?.id
+  const settledEvent = settledBeat ? runtime.events.find(event => event.id === settledBeat.eventId) : undefined;
+  const hasLocalEventReceipt = Boolean(
+    anchor?.id
+    && contextText.includes('【本地事件判定已预结算】')
+    && contextText.includes(`事件=${anchor.id}`),
+  );
+  const currentEventActionTriggered = settledBeat?.bridgedAtTurn !== undefined
+    && hasLocalEventReceipt
+    && getCurrentStoryEventActions(saveData).some(action =>
+      Boolean(action.playerLine && contextText.includes(action.playerLine))
+      || Boolean(action.actionText && contextText.includes(action.actionText)))
+    ? true
+    : false;
+  const handoffTargetsAnchor = !settledBeat?.targetEventId || settledBeat.targetEventId === anchor?.id;
+  const settledBeatLine = settledEvent && settledEvent.id !== anchor?.id && handoffTargetsAnchor
     ? (() => {
         const fromWhere = namesForIds(settledEvent.locationId ? [settledEvent.locationId] : [], locations);
         const toWhere = namesForIds(anchor?.locationId ? [anchor.locationId] : [], locations);
@@ -780,7 +797,13 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
         const movement = fromWhere && toWhere && fromWhere !== toWhere
           ? `镜头需要从“${fromWhere}”自然转到“${toWhere}”`
           : '若需时间流逝或短距离位移，用人物行动与环境变化自然交代';
-        return `【跨拍承接·只演出不改真值】上一拍「${settledEvent.name}」刚由玩家亲历完成；当前入口是“${destination}”。本轮先用一小段余波接住上一拍，再通过同伴反应、环境异样或新出现的需求引到当前入口；${movement}。不得复演上一拍，不得开场直达当前事件高潮；资料未声明具体时长时不得编造精确日期或距离。`;
+        if (settledBeat?.bridgedAtTurn === undefined) {
+          return `【跨拍承接·余波铺垫，不改真值】上一拍「${settledEvent.name}」刚由玩家亲历完成；当前入口是“${destination}”。本轮先用一小段余波接住上一拍，再通过同伴反应、环境异样或新出现的需求铺到当前入口附近；${movement}。不得复演上一拍，不得直接完成当前事件；资料未声明具体时长时不得编造精确日期或距离。`;
+        }
+        if (currentEventActionTriggered) {
+          return `【跨拍承接·入口已由玩家触发，不改真值】上一拍「${settledEvent.name}」的余波已经铺垫；玩家本轮明确采取当前事件动作“${destination}”。必须用眼前人物状态、同伴反应或新需求把余波自然接到这次动作，再演出本地判定给定的结果；不得把两拍写成无因果关系的硬切，也不得复演上一拍。`;
+        }
+        return '';
       })()
     : '';
   const worldPush = (runtime as any).worldPush;

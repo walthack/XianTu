@@ -343,6 +343,7 @@ import { formatRealmWithStage } from '@/utils/realmUtils';
 import { calculateAgeFromBirthdate } from '@/utils/lifespanCalculator';
 import {
   getNarrativeAnchorEvent,
+  hasPendingStoryBeatHandoff,
   trackStoryOpportunity,
   TRACKED_OPPORTUNITY_MAX_TURNS,
 } from '@/modules/scenarioMods/runtime';
@@ -385,7 +386,8 @@ const questMain = computed(() => {
   const chapter = (rt.chapters || []).find((c: any) => c.id === rt.currentChapterId);
   // 与主叙事/flag guard 共用同一个运行时锚点，避免 UI 单独从 activeEventIds 选出资料事件。
   const anchor = getNarrativeAnchorEvent(rt);
-  const activeEvents = anchor ? [anchor] : [];
+  const save = gameStateStore.toSaveData();
+  const activeEvents = anchor && !(save && hasPendingStoryBeatHandoff(save)) ? [anchor] : [];
   const events = activeEvents.slice(0, 1).map((e: any) => {
     const view = resolveScenarioEventNarrative(e, rt.flags || {}, rt.divergences);
     return view.objective || view.name;

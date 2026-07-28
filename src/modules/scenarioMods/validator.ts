@@ -236,6 +236,27 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
         } else {
           optionalString(entity.presentation.targetLabel, `${entity.__path}.presentation.targetLabel`, add);
           optionalString(entity.presentation.playerLine, `${entity.__path}.presentation.playerLine`, add);
+          if (entity.presentation.stepGuardTerms !== undefined) {
+            const guardPath = `${entity.__path}.presentation.stepGuardTerms`;
+            if (!isRecord(entity.presentation.stepGuardTerms)) {
+              add(guardPath, 'invalid_type', 'stepGuardTerms must be an object keyed by action id.');
+            } else {
+              const actionIds = new Set(
+                isRecord(entity.playerCompletionContract) && Array.isArray(entity.playerCompletionContract.actions)
+                  ? entity.playerCompletionContract.actions
+                    .filter(isRecord)
+                    .map(action => action.id)
+                    .filter((id): id is string => typeof id === 'string')
+                  : [],
+              );
+              for (const [actionId, terms] of Object.entries(entity.presentation.stepGuardTerms)) {
+                validateStringArray(terms, `${guardPath}.${actionId}`, add);
+                if (!actionIds.has(actionId)) {
+                  add(`${guardPath}.${actionId}`, 'invalid_reference', 'stepGuardTerms key must reference an action in playerCompletionContract.');
+                }
+              }
+            }
+          }
         }
       }
       if (entity.playerCompletionContract !== undefined) {

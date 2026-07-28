@@ -29,6 +29,7 @@ import { filterActionOptionsByPov } from '@/utils/actionOptionsPovGuard';
 import type { APIUsageType } from '@/stores/apiManagementStore';
 import { buildScenarioCanonPrompt } from '@/modules/scenarioMods/canonGuard';
 import {
+  acknowledgeStoryBeatHandoff,
   advanceScenarioRuntime,
   recordStoryEventStructuredAction,
   recordStoryOpportunityPlayerAction,
@@ -2721,7 +2722,11 @@ ${step1Text}
       && handoffEventIdBefore
       && runtimeAfterAdvance?.lastSettledBeat?.eventId === handoffEventIdBefore
     ) {
-      delete runtimeAfterAdvance.lastSettledBeat;
+      acknowledgeStoryBeatHandoff(
+        saveData,
+        handoffEventIdBefore,
+        eventProgress?.attempted ? eventProgress.eventId : undefined,
+      );
     }
     if (runtimeAfterAdvance?.returnBridge && textContent) {
       // 桥接合同只消费一次；世界线账本已永久保留玩家的斩线选择。

@@ -61,6 +61,12 @@ function parseForbiddenTerms(scenarioPrompt: string): string[] {
   return match[1].split('|').map(item => item.trim()).filter(Boolean);
 }
 
+function parseReservedFutureTerms(scenarioPrompt: string): string[] {
+  const match = scenarioPrompt.match(/renderGuard\.reservedFutureTerms=([^；。\n]*)/);
+  if (!match?.[1]) return [];
+  return match[1].split('|').map(item => item.trim()).filter(Boolean);
+}
+
 interface ForbiddenAssociation {
   subjects: string[];
   predicates: string[];
@@ -151,7 +157,7 @@ function leakedForbiddenAssociation(
 }
 
 export function requiresNarrativeBuffering(scenarioPrompt: string): boolean {
-  return /mustNotInvent=|renderGuard\.(?:forbiddenTerms|forbiddenAssociations|rejectConcreteQuantities)=/.test(scenarioPrompt);
+  return /mustNotInvent=|renderGuard\.(?:forbiddenTerms|forbiddenAssociations|rejectConcreteQuantities|reservedFutureTerms)=/.test(scenarioPrompt);
 }
 
 export function safeNarrativeFallback(): string {
@@ -185,6 +191,11 @@ export function validateNarrativePerformance(
   if (leakedAssociation) {
     issues.push(`${HARD_ISSUE_PREFIX}正文提前演出受保护人物的后续状态`);
   }
+  const reservedFutureTerm = parseReservedFutureTerms(scenarioPrompt)
+    .find(term => narrative.includes(term));
+  if (reservedFutureTerm) {
+    issues.push(`${HARD_ISSUE_PREFIX}正文提前演出后续步骤保留内容“${reservedFutureTerm}”`);
+  }
   if (concreteQuantityViolation(narrative, scenarioPrompt)) {
     issues.push(`${HARD_ISSUE_PREFIX}正文补造了具体兵力数字、军事距离或比例`);
   }
@@ -200,7 +211,7 @@ export function validateNarrativePerformance(
 }
 
 export function performanceRetryInstruction(issues: string[]): string {
-  return `上稿未通过内部检查：${issues.join('；')}。这段检查说明只供重写时使用，严禁复述到正文。保留已接地事实，整段重写；必须让被点名角色亲口说出或亲自实施一个具体可行动方案（含先手、后手、代价或退出条件之一），随后把选择留给玩家。不得让主角代为分析/下令，不得新增存档与正典没有的兵力、伤亡、人物或事件。涉及军务、护卫或路线时，改写为不带数字的职责、通行、次序、联络和可见动作，不得补人数、距离或比例；命中的禁词或秘密关联改用已经公开的表象承接，不得换一种肯定说法再次坐实。`;
+  return `上稿未通过内部检查：${issues.join('；')}。这段检查说明只供重写时使用，严禁复述到正文。保留已接地事实，整段重写；不得提前演出被标为后续步骤保留内容的动作、台词或结果。必须让被点名角色亲口说出或亲自实施一个具体可行动方案（含先手、后手、代价或退出条件之一），随后把选择留给玩家。不得让主角代为分析/下令，不得新增存档与正典没有的兵力、伤亡、人物或事件。涉及军务、护卫或路线时，改写为不带数字的职责、通行、次序、联络和可见动作，不得补人数、距离或比例；命中的禁词或秘密关联改用已经公开的表象承接，不得换一种肯定说法再次坐实。`;
 }
 
 /**

@@ -5,6 +5,8 @@ import test from 'node:test';
 import { loadTs } from './loadTs.mjs';
 
 const stageUrl = new URL('../src/modules/scenarioMods/builtins/data/lcq.stage_04.json', import.meta.url);
+const mainPanelUrl = new URL('../src/components/dashboard/MainGamePanel.vue', import.meta.url);
+const rightSidebarUrl = new URL('../src/components/dashboard/RightSidebar.vue', import.meta.url);
 const FLOOD_EVENT_ID = 'lcq.event.s04_05';
 const DETOX_EVENT_ID = 'lcq.event.s04_06';
 
@@ -61,6 +63,7 @@ function fixture(stage) {
 test('fixed verbs are presentation-only and carry the flood farewell into the Ningyu detox beat', async () => {
   const stage = JSON.parse(await readFile(stageUrl, 'utf8'));
   const {
+    acknowledgeStoryBeatHandoff,
     advanceScenarioRuntime,
     getCurrentContractStep,
     getCurrentStoryEventActions,
@@ -68,6 +71,8 @@ test('fixed verbs are presentation-only and carry the flood farewell into the Ni
     recordStoryEventStructuredAction,
   } = await loadTs('../src/modules/scenarioMods/runtime.ts');
   const { buildScenarioStoryPrompt } = await loadTs('../src/modules/scenarioMods/storyContext.ts');
+  const { validateNarrativePerformance } =
+    await loadTs('../src/modules/scenarioMods/narrativePerformanceGuard.ts');
 
   let save = advanceScenarioRuntime(fixture(stage)).saveData;
   const expectedFloodLabels = [
@@ -90,6 +95,12 @@ test('fixed verbs are presentation-only and carry the flood farewell into the Ni
     assert.match(prompt, new RegExp(`本轮只完整呈现第 ${index + 1} 步`));
     if (index === 0) {
       assert.match(prompt, /不得演出后续步骤（见证千斤坠与巨石重创；陪易彪完成岸边送别）/);
+      assert.match(prompt, /renderGuard\.reservedFutureTerms=千斤坠\|巨石正中\|洪水吞没\|他是我哥\|认兄\|磕头/);
+      assert.equal(validateNarrativePerformance('易虎骤然使出千斤坠。', '继续', prompt).valid, false);
+      assert.equal(validateNarrativePerformance('洪流裹挟着巨石和断木。', '继续', prompt).valid, true);
+    }
+    if (index === 1) {
+      assert.equal(validateNarrativePerformance('易彪跪在岸边磕头。', '继续', prompt).valid, false);
     }
     assert.equal(recordStoryEventStructuredAction(save, action).outcome, 'success');
     save = advanceScenarioRuntime(JSON.parse(JSON.stringify(save))).saveData;
@@ -101,6 +112,7 @@ test('fixed verbs are presentation-only and carry the flood farewell into the Ni
   assert.deepEqual(runtime.lastSettledBeat, {
     eventId: FLOOD_EVENT_ID,
     settledAtTurn: runtime.worldTurn,
+    targetEventId: DETOX_EVENT_ID,
   });
   assert.equal(hasPendingStoryBeatHandoff(save), true);
 
@@ -110,28 +122,57 @@ test('fixed verbs are presentation-only and carry the flood farewell into the Ni
   assert.equal(detoxAction.actionText, '我按当前主线目标行动：请求乐明珠为凝羽解毒');
   assert.equal(detoxAction.interaction.verb, 'talk');
   assert.equal(detoxAction.actionId, 'advance_declared_objective');
-  assert.match(buildScenarioStoryPrompt(save), /跨拍承接·只演出不改真值/);
+  assert.match(buildScenarioStoryPrompt(save), /跨拍承接·余波铺垫，不改真值/);
   assert.match(buildScenarioStoryPrompt(save), /旱洪与易虎之死/);
   assert.match(buildScenarioStoryPrompt(save), /请求乐明珠为凝羽解毒/);
+  assert.equal(acknowledgeStoryBeatHandoff(save, FLOOD_EVENT_ID), 'bridged');
+  assert.equal(hasPendingStoryBeatHandoff(save), false);
+  assert.doesNotMatch(buildScenarioStoryPrompt(save), /跨拍承接/);
+  assert.match(
+    buildScenarioStoryPrompt(
+      save,
+      `玩家输入：${detoxAction.playerLine}\n【本地事件判定已预结算】事件=${DETOX_EVENT_ID}；动作=${detoxAction.actionId}`,
+    ),
+    /跨拍承接·入口已由玩家触发，不改真值/,
+  );
 
   assert.equal(recordStoryEventStructuredAction(save, detoxAction).completed, true);
   save = advanceScenarioRuntime(JSON.parse(JSON.stringify(save))).saveData;
   assert.equal(runtimeOf(save).completedEventIds.includes(DETOX_EVENT_ID), true);
 });
 
-test('handoff is decorative, fresh for one turn, and never created by offscreen-only settlement', async () => {
+test('handoff hides the next beat only through the first bridge and persists until its action is triggered', async () => {
   const stage = JSON.parse(await readFile(stageUrl, 'utf8'));
-  const { hasPendingStoryBeatHandoff } = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  const { acknowledgeStoryBeatHandoff, hasPendingStoryBeatHandoff } =
+    await loadTs('../src/modules/scenarioMods/runtime.ts');
   const { buildScenarioStoryPrompt } = await loadTs('../src/modules/scenarioMods/storyContext.ts');
   const save = fixture(stage);
   const runtime = runtimeOf(save);
   runtime.activeEventIds = [DETOX_EVENT_ID];
-  runtime.lastSettledBeat = { eventId: FLOOD_EVENT_ID, settledAtTurn: 2 };
+  runtime.lastSettledBeat = {
+    eventId: FLOOD_EVENT_ID,
+    settledAtTurn: 2,
+    targetEventId: DETOX_EVENT_ID,
+  };
   runtime.worldTurn = 4;
-  assert.doesNotMatch(buildScenarioStoryPrompt(save), /跨拍承接·只演出不改真值/);
-  assert.equal(hasPendingStoryBeatHandoff(save), false);
+  assert.match(buildScenarioStoryPrompt(save), /跨拍承接·余波铺垫，不改真值/);
+  assert.equal(hasPendingStoryBeatHandoff(save), true);
 
-  delete runtime.lastSettledBeat;
+  assert.equal(acknowledgeStoryBeatHandoff(save, FLOOD_EVENT_ID), 'bridged');
+  assert.equal(hasPendingStoryBeatHandoff(save), false);
+  assert.equal(runtime.lastSettledBeat.bridgedAtTurn, 4);
+  assert.doesNotMatch(buildScenarioStoryPrompt(save), /跨拍承接/);
+  assert.doesNotMatch(buildScenarioStoryPrompt(save, '我请乐明珠替凝羽解毒。'), /入口已由玩家触发/);
+  assert.match(
+    buildScenarioStoryPrompt(
+      save,
+      `我请乐明珠替凝羽解毒。\n【本地事件判定已预结算】事件=${DETOX_EVENT_ID}；动作=advance_declared_objective`,
+    ),
+    /跨拍承接·入口已由玩家触发，不改真值/,
+  );
+  assert.equal(acknowledgeStoryBeatHandoff(save, FLOOD_EVENT_ID, DETOX_EVENT_ID), 'consumed');
+  assert.equal(runtime.lastSettledBeat, undefined);
+
   runtime.offscreenResolvedEventIds = [FLOOD_EVENT_ID];
   runtime.activeEventIds = [DETOX_EVENT_ID];
   assert.equal(runtime.lastSettledBeat, undefined);
@@ -260,4 +301,27 @@ test('validator accepts event-level presentation and rejects non-string display 
   assert.equal(result.valid, false);
   assert.equal(result.issues.some(issue =>
     issue.path.endsWith('.presentation.playerLine')), true);
+
+  const invalidGuard = structuredClone(stage);
+  invalidGuard.scenario.events.find(event => event.id === DETOX_EVENT_ID).presentation.stepGuardTerms = {
+    missing_action: ['未来结果'],
+  };
+  const guardResult = validateScenarioMod(invalidGuard);
+  assert.equal(guardResult.valid, false);
+  assert.equal(guardResult.issues.some(issue =>
+    issue.path.endsWith('.presentation.stepGuardTerms.missing_action')
+    && issue.code === 'invalid_reference'), true);
+});
+
+test('the handoff window hides both next-beat surfaces and successful sends clear the editable line', async () => {
+  const [mainPanel, rightSidebar] = await Promise.all([
+    readFile(mainPanelUrl, 'utf8'),
+    readFile(rightSidebarUrl, 'utf8'),
+  ]);
+  assert.match(mainPanel, /hasPendingStoryBeatHandoff\(save\) \? \[\] : getCurrentStoryEventActions\(save\)/);
+  assert.match(rightSidebar, /anchor && !\(save && hasPendingStoryBeatHandoff\(save\)\) \? \[anchor\] : \[\]/);
+  assert.match(
+    mainPanel,
+    /if \(!hasError && aiResponse\) \{[\s\S]{0,300}inputText\.value = '';[\s\S]{0,200}selectedScenarioEngineAction\.value = null;/,
+  );
 });

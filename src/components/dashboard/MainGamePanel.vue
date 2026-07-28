@@ -1934,6 +1934,12 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
       toast.success('天机重现');
       // 清空已发送的图片
       clearImages();
+      inputText.value = '';
+      lastSelectedActionOption.value = null;
+      selectedScenarioEngineAction.value = null;
+      nextTick(() => {
+        adjustTextareaHeight();
+      });
     }
 
     // 🔥 统一清除AI处理状态（成功路径）

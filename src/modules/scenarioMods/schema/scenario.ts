@@ -89,6 +89,11 @@ export interface ScenarioModEvent {
     targetLabel?: string;
     /** 点击确定性按钮后预填的玩家视角自然句；不替代 actionText 判定载荷。 */
     playerLine?: string;
+    /**
+     * 当前动作完成前不得提前演出的后续高光词；键为当前 actionId。
+     * 只用于渲染门禁，不进入 playerCompletionContract 或合同哈希。
+     */
+    stepGuardTerms?: Record<string, string[]>;
   };
   /** 程序层事件时钟；相对“事件首次具备结构条件”的世界回合计时。 */
   timeline?: ScenarioModEventTimeline;

@@ -176,6 +176,7 @@ export interface ScenarioContractStep {
     actionText: string;
   };
   remainingLabels: string[];
+  reservedFutureTerms: string[];
   sequential: boolean;
 }
 
@@ -276,6 +277,10 @@ export interface RuntimeState extends ScenarioProgressState {
   lastSettledBeat?: {
     eventId: string;
     settledAtTurn: number;
+    /** 完成上一拍后由引擎确定的下一拍；只用于承接身份，不参与激活。 */
+    targetEventId?: string;
+    /** 首个余波回合已经呈现；按钮可恢复，但承接身份保留到目标动作触发。 */
+    bridgedAtTurn?: number;
   };
 }
 
@@ -898,6 +903,7 @@ function currentContractStep(runtime: RuntimeState): ScenarioContractStep | unde
       actionText: action.actionText,
     },
     remainingLabels: contract.actions.slice(actionIndex + 1).map(item => item.label),
+    reservedFutureTerms: event.presentation?.stepGuardTerms?.[action.id] || [],
     sequential: isLinearStepContract(contract),
   };
 }
@@ -913,7 +919,32 @@ export function hasPendingStoryBeatHandoff(saveData: SaveData): boolean {
   const runtime = getRuntime(saveData);
   const handoff = runtime?.lastSettledBeat;
   if (!runtime || !handoff) return false;
-  return Math.max(0, Number(runtime.worldTurn) || 0) - handoff.settledAtTurn <= 1;
+  const anchor = getNarrativeAnchorEvent(runtime);
+  if (handoff.targetEventId && anchor?.id !== handoff.targetEventId) return false;
+  return handoff.bridgedAtTurn === undefined;
+}
+
+/**
+ * 成功正文对跨拍状态的唯一消费入口：
+ * 首个自由余波回合只标记“已铺垫”，目标事件动作真正触发后才清除。
+ */
+export function acknowledgeStoryBeatHandoff(
+  saveData: SaveData,
+  fromEventId: string,
+  triggeredEventId?: string,
+): 'none' | 'bridged' | 'consumed' {
+  const runtime = getRuntime(saveData);
+  const handoff = runtime?.lastSettledBeat;
+  if (!runtime || !handoff || handoff.eventId !== fromEventId) return 'none';
+  if (triggeredEventId && (!handoff.targetEventId || handoff.targetEventId === triggeredEventId)) {
+    delete runtime.lastSettledBeat;
+    return 'consumed';
+  }
+  if (handoff.bridgedAtTurn === undefined) {
+    handoff.bridgedAtTurn = Math.max(0, Number(runtime.worldTurn) || 0);
+    return 'bridged';
+  }
+  return 'none';
 }
 
 function ensureActorMemoryEntry(state: ScenarioActorEngineState, actorId: string, turn: number): ScenarioActorMemory {
@@ -1732,6 +1763,10 @@ function recordSettledBeatHandoff(runtime: RuntimeState, transitions: ScenarioRu
   runtime.lastSettledBeat = {
     eventId: event.id,
     settledAtTurn: Math.max(0, Number(runtime.worldTurn) || 0),
+    ...(() => {
+      const target = getNarrativeAnchorEvent(runtime);
+      return target && target.id !== event.id ? { targetEventId: target.id } : {};
+    })(),
   };
 }
 
