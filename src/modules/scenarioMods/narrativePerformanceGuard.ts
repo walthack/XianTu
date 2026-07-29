@@ -34,6 +34,14 @@ const RATIO_CONTEXT = new RegExp(`${RATIO_FISCAL_CONTEXT.source}|${MILITARY_WARD
 const QUANTITY_CLAIM_SOURCE = /探子|斥候|军报|来报|使者|消息|号称|声称|自称|据报|传闻|据说/;
 const UNVERIFIED_QUANTITY_CONTEXT = /号称|声称|据报|传闻|据说|未核实|未经核实|尚待核实|无法证实|真假难辨/;
 const AUTHORITATIVE_QUANTITY_CONTEXT = /确有|确认|查明|已经核实|确切|实有/;
+const CASUALTY_QUANTITY = new RegExp(
+  `(?:死|死亡|阵亡|战殁|伤|受伤|重伤|轻伤|失踪|失散)[^。！？\\n]{0,10}${QUANTITY_NUMBER}\\s*(?:人|名|个|员|伙计|军士|弟兄|同伴)`
+  + `|${QUANTITY_NUMBER}\\s*(?:人|名|个|员|伙计|军士|弟兄|同伴)[^。！？\\n]{0,10}(?:死|死亡|阵亡|战殁|伤|受伤|重伤|轻伤|失踪|失散)`,
+);
+const MATERIAL_LOSS_QUANTITY = new RegExp(
+  `(?:损失|损毁|毁|冲翻|冲走|泡烂|沉没|遗失|丢失|跑了|死了|伤了|受惊)[^。！？\\n]{0,12}${QUANTITY_NUMBER}\\s*(?:辆|匹|艘|箱|担|车|船|骡|马)`
+  + `|${QUANTITY_NUMBER}\\s*(?:辆|匹|艘|箱|担|车|船|骡|马)[^。！？\\n]{0,12}(?:损失|损毁|毁|冲翻|冲走|泡烂|沉没|遗失|丢失|跑了|死了|伤了|受惊)`,
+);
 const HYPOTHETICAL_CONTEXT = /莫非|是否|会不会|难道|假若|倘若|若有|有无(?!数)|有没有|并无|没有|未见|不曾/;
 const ASSOCIATION_HYPOTHETICAL_CONTEXT = /莫非|莫不是|是否|会不会|会否|难道|假若|倘若|若有|疑心|怀疑|揣测|猜想|猜测|疑似|还是说|难保|恐怕|多半|八成|若[^。！？\n]{0,6}(?:真是|就是|确是)/;
 const CONFIRMING_CONTEXT = /确有|果然|原来|证实|查明|确认|实有|的确|属实/;
@@ -93,9 +101,7 @@ function parseForbiddenAssociations(scenarioPrompt: string): ForbiddenAssociatio
 function sentenceHasUnauthorizedQuantity(sentence: string, scenarioPrompt: string): boolean {
   if (
     /renderGuard\.allowUnverifiedQuantities=true/.test(scenarioPrompt)
-    && QUANTITY_CLAIM_SOURCE.test(sentence)
-    && UNVERIFIED_QUANTITY_CONTEXT.test(sentence)
-    && !AUTHORITATIVE_QUANTITY_CONTEXT.test(sentence)
+    && hasExplicitUnverifiedQuantityContext(sentence)
   ) return false;
   // “各退一步”表示双方让步；即使同句谈到入宫路线，也不是军事距离。
   const distanceText = sentence.replace(/各(?:自)?退一(?:小)?步/g, '');
@@ -108,12 +114,26 @@ function sentenceHasUnauthorizedQuantity(sentence: string, scenarioPrompt: strin
     || (RATIO_QUANTITY.test(sentence) && RATIO_CONTEXT.test(sentence));
 }
 
+function hasExplicitUnverifiedQuantityContext(sentence: string): boolean {
+  return QUANTITY_CLAIM_SOURCE.test(sentence)
+    && UNVERIFIED_QUANTITY_CONTEXT.test(sentence)
+    && !AUTHORITATIVE_QUANTITY_CONTEXT.test(sentence);
+}
+
 function concreteQuantityViolation(narrative: string, scenarioPrompt: string): boolean {
   const guarded = /renderGuard\.rejectConcreteQuantities=true/.test(scenarioPrompt)
     || /mustNotInvent=[^。\n]*具体兵力数字/.test(scenarioPrompt);
   if (!guarded) return false;
   return narrative.split(/[。！？\n]/).some(sentence =>
     sentenceHasUnauthorizedQuantity(sentence, scenarioPrompt)
+  );
+}
+
+function ungroundedHandoffLossViolation(narrative: string, scenarioPrompt: string): boolean {
+  if (!/renderGuard\.rejectUngroundedHandoffLosses=true/.test(scenarioPrompt)) return false;
+  return narrative.split(/[。！？\n]/).some(sentence =>
+    !hasExplicitUnverifiedQuantityContext(sentence)
+    && (CASUALTY_QUANTITY.test(sentence) || MATERIAL_LOSS_QUANTITY.test(sentence))
   );
 }
 
@@ -157,7 +177,7 @@ function leakedForbiddenAssociation(
 }
 
 export function requiresNarrativeBuffering(scenarioPrompt: string): boolean {
-  return /mustNotInvent=|renderGuard\.(?:forbiddenTerms|forbiddenAssociations|rejectConcreteQuantities|reservedFutureTerms)=/.test(scenarioPrompt);
+  return /mustNotInvent=|renderGuard\.(?:forbiddenTerms|forbiddenAssociations|rejectConcreteQuantities|reservedFutureTerms|rejectUngroundedHandoffLosses)=/.test(scenarioPrompt);
 }
 
 export function safeNarrativeFallback(): string {
@@ -199,6 +219,9 @@ export function validateNarrativePerformance(
   if (concreteQuantityViolation(narrative, scenarioPrompt)) {
     issues.push(`${HARD_ISSUE_PREFIX}正文补造了具体兵力数字、军事距离或比例`);
   }
+  if (ungroundedHandoffLossViolation(narrative, scenarioPrompt)) {
+    issues.push(`${HARD_ISSUE_PREFIX}跨拍正文补造了无来源的精确伤亡或财货损失`);
+  }
   if (!DECISION_SCENE.test(userInput)) return { valid: issues.length === 0, issues };
   for (const name of ['小紫', '贾文和']) {
     if (!scenarioPrompt.includes(`【${name}·角色表演卡`) || !narrative.includes(name)) continue;
@@ -211,7 +234,7 @@ export function validateNarrativePerformance(
 }
 
 export function performanceRetryInstruction(issues: string[]): string {
-  return `上稿未通过内部检查：${issues.join('；')}。这段检查说明只供重写时使用，严禁复述到正文。保留已接地事实，整段重写；不得提前演出被标为后续步骤保留内容的动作、台词或结果。必须让被点名角色亲口说出或亲自实施一个具体可行动方案（含先手、后手、代价或退出条件之一），随后把选择留给玩家。不得让主角代为分析/下令，不得新增存档与正典没有的兵力、伤亡、人物或事件。涉及军务、护卫或路线时，改写为不带数字的职责、通行、次序、联络和可见动作，不得补人数、距离或比例；命中的禁词或秘密关联改用已经公开的表象承接，不得换一种肯定说法再次坐实。`;
+  return `上稿未通过内部检查：${issues.join('；')}。这段检查说明只供重写时使用，严禁复述到正文。保留已接地事实，整段重写；不得提前演出被标为后续步骤保留内容的动作、台词或结果。必须让被点名角色亲口说出或亲自实施一个具体可行动方案（含先手、后手、代价或退出条件之一），随后把选择留给玩家。不得让主角代为分析/下令，不得新增存档与正典没有的兵力、伤亡、人物或事件。跨拍余波没有结构化损失回执时，伤亡、伤者、财货、车船与牲畜损失只写定性结果或“仍待清点”，不得补精确数量。涉及军务、护卫或路线时，改写为不带数字的职责、通行、次序、联络和可见动作，不得补人数、距离或比例；命中的禁词或秘密关联改用已经公开的表象承接，不得换一种肯定说法再次坐实。`;
 }
 
 /**

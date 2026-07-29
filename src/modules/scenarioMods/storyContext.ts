@@ -797,11 +797,12 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
         const movement = fromWhere && toWhere && fromWhere !== toWhere
           ? `镜头需要从“${fromWhere}”自然转到“${toWhere}”`
           : '若需时间流逝或短距离位移，用人物行动与环境变化自然交代';
+        const lossGroundingBoundary = 'renderGuard.rejectUngroundedHandoffLosses=true。当前没有结构化损失回执：不得为伤亡、伤者、失踪者、财货、车船或牲畜损失补造精确数量；只可使用“仍待清点”“有人受伤”“部分货物受损”等定性表述。带明确消息来源且明确标为未核实的角色传闻可以保留，但不得当成事实或写回世界状态。';
         if (settledBeat?.bridgedAtTurn === undefined) {
-          return `【跨拍承接·余波铺垫，不改真值】上一拍「${settledEvent.name}」刚由玩家亲历完成；当前入口是“${destination}”。本轮先用一小段余波接住上一拍，再通过同伴反应、环境异样或新出现的需求铺到当前入口附近；${movement}。不得复演上一拍，不得直接完成当前事件；资料未声明具体时长时不得编造精确日期或距离。`;
+          return `【跨拍承接·余波铺垫，不改真值】上一拍「${settledEvent.name}」刚由玩家亲历完成；当前入口是“${destination}”。本轮先用一小段余波接住上一拍，再通过同伴反应、环境异样或新出现的需求铺到当前入口附近；${movement}。不得复演上一拍，不得直接完成当前事件；资料未声明具体时长时不得编造精确日期或距离。${lossGroundingBoundary}`;
         }
         if (currentEventActionTriggered) {
-          return `【跨拍承接·入口已由玩家触发，不改真值】上一拍「${settledEvent.name}」的余波已经铺垫；玩家本轮明确采取当前事件动作“${destination}”。必须用眼前人物状态、同伴反应或新需求把余波自然接到这次动作，再演出本地判定给定的结果；不得把两拍写成无因果关系的硬切，也不得复演上一拍。`;
+          return `【跨拍承接·入口已由玩家触发，不改真值】上一拍「${settledEvent.name}」的余波已经铺垫；玩家本轮明确采取当前事件动作“${destination}”。必须用眼前人物状态、同伴反应或新需求把余波自然接到这次动作，再演出本地判定给定的结果；不得把两拍写成无因果关系的硬切，也不得复演上一拍。${lossGroundingBoundary}`;
         }
         return '';
       })()

@@ -266,6 +266,70 @@ test('unverified military numbers require explicit stage authorization and attri
   );
 });
 
+test('handoff loss guard blocks invented exact losses without policing ordinary counts or sourced rumors', async () => {
+  const {
+    decideNarrativePerformanceAttempt,
+    requiresNarrativeBuffering,
+    validateNarrativePerformance,
+  } = await loadTs('../src/modules/scenarioMods/narrativePerformanceGuard.ts');
+  const scenarioPrompt = 'renderGuard.rejectUngroundedHandoffLosses=true。';
+  assert.equal(requiresNarrativeBuffering(scenarioPrompt), true);
+
+  for (const narrative of [
+    '云苍峰道：“死了三个伙计，加上易虎，共四人。”',
+    '伤了七个，其中两个伤在腿上。',
+    '三辆车被水冲翻了。',
+    '骡子惊了两匹，跑了一匹。',
+  ]) {
+    const result = validateNarrativePerformance(narrative, '继续', scenarioPrompt);
+    assert.equal(result.valid, false, narrative);
+    assert.match(result.issues.join('；'), /无来源的精确伤亡或财货损失/);
+  }
+
+  for (const narrative of [
+    '伤亡和货损仍待清点，几名伤者正由同伴照料。',
+    '两人扶着凝羽走到乐明珠身旁。',
+    '三辆车继续沿山道前行。',
+    '探子据报伤了七人，但这份消息尚待核实。',
+  ]) {
+    assert.equal(
+      validateNarrativePerformance(narrative, '继续', scenarioPrompt).valid,
+      true,
+      narrative,
+    );
+  }
+
+  const first = decideNarrativePerformanceAttempt(
+    '云苍峰说死了三个伙计。',
+    '继续',
+    scenarioPrompt,
+    1,
+    2,
+  );
+  assert.equal(first.shouldRetry, true);
+  assert.equal(first.narrative, '');
+  assert.match(first.retryInstruction, /仍待清点/);
+  const final = decideNarrativePerformanceAttempt(
+    '云苍峰说死了三个伙计。',
+    '继续',
+    scenarioPrompt,
+    2,
+    2,
+  );
+  assert.equal(final.shouldRetry, false);
+  assert.doesNotMatch(final.narrative, /三个伙计/);
+
+  assert.equal(
+    validateNarrativePerformance(
+      '探子据报伤了七名军士，但这份消息尚待核实。',
+      '继续',
+      `${scenarioPrompt}renderGuard.rejectConcreteQuantities=true；renderGuard.allowUnverifiedQuantities=false。`,
+    ).valid,
+    false,
+    'handoff rumor permission must not weaken a stage that explicitly rejects unverified military quantities',
+  );
+});
+
 test('hard render violations are buffered and replaced locally if the final retry still fails', async () => {
   const {
     decideNarrativePerformanceAttempt,

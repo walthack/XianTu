@@ -123,6 +123,8 @@ test('fixed verbs are presentation-only and carry the flood farewell into the Ni
   assert.equal(detoxAction.interaction.verb, 'talk');
   assert.equal(detoxAction.actionId, 'advance_declared_objective');
   assert.match(buildScenarioStoryPrompt(save), /跨拍承接·余波铺垫，不改真值/);
+  assert.match(buildScenarioStoryPrompt(save), /renderGuard\.rejectUngroundedHandoffLosses=true/);
+  assert.match(buildScenarioStoryPrompt(save), /当前没有结构化损失回执/);
   assert.match(buildScenarioStoryPrompt(save), /旱洪与易虎之死/);
   assert.match(buildScenarioStoryPrompt(save), /请求乐明珠为凝羽解毒/);
   assert.equal(acknowledgeStoryBeatHandoff(save, FLOOD_EVENT_ID), 'bridged');
@@ -134,6 +136,13 @@ test('fixed verbs are presentation-only and carry the flood farewell into the Ni
       `玩家输入：${detoxAction.playerLine}\n【本地事件判定已预结算】事件=${DETOX_EVENT_ID}；动作=${detoxAction.actionId}`,
     ),
     /跨拍承接·入口已由玩家触发，不改真值/,
+  );
+  assert.match(
+    buildScenarioStoryPrompt(
+      save,
+      `玩家输入：${detoxAction.playerLine}\n【本地事件判定已预结算】事件=${DETOX_EVENT_ID}；动作=${detoxAction.actionId}`,
+    ),
+    /renderGuard\.rejectUngroundedHandoffLosses=true/,
   );
 
   assert.equal(recordStoryEventStructuredAction(save, detoxAction).completed, true);
