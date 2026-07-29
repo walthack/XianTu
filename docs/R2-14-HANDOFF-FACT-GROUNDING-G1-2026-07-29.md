@@ -59,10 +59,10 @@ Claude 真机任务 `claude-2026-07-29T04-02-46-892Z-b92a8e3d` 在 HEAD `7085123
 
 修复不扩大承接窗口，也不把安全门禁常驻到普通叙事：
 
-1. 新增 `validateProcessedAIResponse()`，只校验已经落账响应的必要展示字段与状态字段类型；
-2. `mid_term_memory` 依照 `GM_Response` 既有合同继续为可选；为空时沿用落账层的正文摘要兜底；
-3. 已经完成 `processGmResponse()` 的响应不再仅因中期记忆为空而重新执行玩家行动；
-4. 文本为空、`mid_term_memory` 类型错误或 `tavern_commands` 非数组仍判无效；
+1. `processGmResponse()` 成功后给响应写入客户端 `transactionCommitted=true`，明确区分“生成失败、尚未落账”与“事务已经提交”；
+2. 已提交响应只校验可展示正文，`mid_term_memory` 依照 `GM_Response` 既有合同继续为可选，空值沿用落账层的正文摘要兜底；
+3. 已提交响应不再因任何模型附带字段而重新执行玩家行动；
+4. 生成失败或尚未落账的响应仍要求非空 `mid_term_memory`，继续走既有结构重试，不削弱 R2-1 失败恢复；
 5. 不改变跨拍生命周期、事件合同、世界时钟或门禁语义。
 
 定向回归 25/25、全量测试 514/514、`type-check` 与 production build 已通过。状态保持 `[~]`，只需复跑同一个余波自由行动，验收：

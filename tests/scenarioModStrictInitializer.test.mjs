@@ -255,6 +255,9 @@ test('stage transition preserves accumulated NPC relations and switches runtime'
   assert.equal(newRt.chronicle.length, 2, '编年史事件与切关记录跨关保留');
   assert.equal(newRt.chronicle[1].type, 'stage');
   assert.equal(newRt.playerKnowledge['knowledge.player.entity.test'].status, 'rumor', '玩家知识账本跨关保留');
+  assert.equal(newRt.stageEntryPresentation.fromStageId, mod.manifest.id, '切关记录旧关身份');
+  assert.equal(newRt.stageEntryPresentation.toStageId, nextMod.manifest.id, '切关记录新关身份');
+  assert.equal(newRt.stageEntryPresentation.text, nextMod.scenario.opening.text, '主阅读面只使用目标关 opening');
   assert.notEqual(newRt.flags['event.s06_03.done'], true, '旧关 done 进度不得污染新关');
   const npc = result.saveData.社交.关系['程宗扬'];
   assert.equal(npc.好感度, 77, '好感度跨关保留');

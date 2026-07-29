@@ -318,5 +318,16 @@ export function transitionToNextScenarioStage(saveData: SaveData, modsOverride?:
   Object.assign(newRuntime.flags, inheritedWorldlineFlags);
   // 立即推进一轮：激活新关首章/首批事件
   const advanced = advanceScenarioRuntime(next);
+  const advancedRuntime = (advanced.saveData as any)?.世界?.状态?.剧本模组;
+  if (advancedRuntime) {
+    advancedRuntime.stageEntryPresentation = {
+      fromStageId: String(rt.modId),
+      ...(rt.modName ? { fromStageName: String(rt.modName) } : {}),
+      toStageId: targetId,
+      ...(mod.manifest.name ? { toStageName: mod.manifest.name } : {}),
+      enteredAtTurn: Math.max(0, Number(advancedRuntime.worldTurn) || 0),
+      text: String(mod.scenario.opening.text || '').trim(),
+    };
+  }
   return { saveData: advanced.saveData, ok: true, from: rt.modId, to: targetId, toName: mod.manifest.name };
 }

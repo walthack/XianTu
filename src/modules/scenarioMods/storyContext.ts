@@ -39,6 +39,14 @@ interface StoryRuntime {
   completedChapterIds: string[];
   completedEventIds: string[];
   worldTurn?: number;
+  stageEntryPresentation?: {
+    fromStageId: string;
+    fromStageName?: string;
+    toStageId: string;
+    toStageName?: string;
+    enteredAtTurn: number;
+    text: string;
+  };
   /** 玩家亲历的上一拍；只用于下一轮跨拍承接。 */
   lastSettledBeat?: {
     eventId: string;
@@ -774,6 +782,10 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
   const returnBridgeLine = returnBridge
     ? `【玩家已主动斩线回轨·本轮最高优先级】玩家选择结束衍生支线“${returnBridge.branchSummary}”。保留它已经造成的关系与后果，但立即用章节转场、来信、人物提议或局势变化把镜头接回“${returnBridge.anchorObjective}”。不得继续扩建旧支线，不得写成梦境或清空经历；本轮必须让玩家抵达该承重节点的可行动入口。`
     : '';
+  const stageEntry = runtime.stageEntryPresentation;
+  const stageEntryLine = stageEntry?.toStageId === runtime.modId && stageEntry.text?.trim()
+    ? `【跨关落点·只演出不改真值】玩家已经完成上一段行程并进入本关。主阅读面当前显示的权威开场是：“${stageEntry.text.trim()}”。本轮必须从这个落点和当前事件继续，用眼前人物动作或环境变化接入玩家本次行动；不得复演上一关收束，不得把关卡名、内部 ID 或“切关”机制写进正文。`
+    : '';
   const settledBeat = runtime.lastSettledBeat;
   const settledEvent = settledBeat ? runtime.events.find(event => event.id === settledBeat.eventId) : undefined;
   const hasLocalEventReceipt = Boolean(
@@ -848,7 +860,7 @@ ${nextSection}
 ## 剧情标记
 ${JSON.stringify(runtime.flags || {})}
 
-${focusedCharacterSection ? `${focusedCharacterSection}\n\n` : ''}${globalIdentitySection ? `${globalIdentitySection}\n\n` : ''}${loadBearingLine ? `${loadBearingLine}\n\n` : ''}${divergenceLine ? `${divergenceLine}\n\n` : ''}${settledBeatLine ? `${settledBeatLine}\n\n` : ''}${returnBridgeLine ? `${returnBridgeLine}\n\n` : ''}${divergenceControlLine ? `${divergenceControlLine}\n\n` : ''}${worldActorLine ? `${worldActorLine}\n\n` : ''}${worldPushLine ? `${worldPushLine}\n\n` : ''}${steeringLine ? `${steeringLine}\n\n` : ''}${reputationLine}\n\n${relationLine ? `${relationLine}\n\n` : ''}${completedGoalLine ? `${completedGoalLine}\n\n` : ''}${improvLine}\n\n【正典叙事事实约束】：
+${focusedCharacterSection ? `${focusedCharacterSection}\n\n` : ''}${globalIdentitySection ? `${globalIdentitySection}\n\n` : ''}${loadBearingLine ? `${loadBearingLine}\n\n` : ''}${divergenceLine ? `${divergenceLine}\n\n` : ''}${stageEntryLine ? `${stageEntryLine}\n\n` : ''}${settledBeatLine ? `${settledBeatLine}\n\n` : ''}${returnBridgeLine ? `${returnBridgeLine}\n\n` : ''}${divergenceControlLine ? `${divergenceControlLine}\n\n` : ''}${worldActorLine ? `${worldActorLine}\n\n` : ''}${worldPushLine ? `${worldPushLine}\n\n` : ''}${steeringLine ? `${steeringLine}\n\n` : ''}${reputationLine}\n\n${relationLine ? `${relationLine}\n\n` : ''}${completedGoalLine ? `${completedGoalLine}\n\n` : ''}${improvLine}\n\n【正典叙事事实约束】：
 1. 已知人物的姓名、别名、身份、物种、势力、亲属与政治关系均是事实字段：不得把人物写成兵器、坐骑、功法、物品或新角色；不得把称号、别名拆成另一个实体。
 2. 人物之间的血缘、主从、婚配、同党、结盟、仇怨，只有上文正典人物档案或当前事件明确写出时才可断言。没有依据时只能写“尚未可知/传闻待证”，绝不可因同姓、官职、阵营或历史常识擅自补关系。
 3. 叙事正文也必须遵守上述正典；这不是仅约束 tavern_commands 的规则。若玩家要求与正典矛盾的事实，明确说明冲突并以正典版本续写。

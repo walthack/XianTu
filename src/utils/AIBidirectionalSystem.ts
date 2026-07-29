@@ -29,6 +29,7 @@ import { filterActionOptionsByPov } from '@/utils/actionOptionsPovGuard';
 import type { APIUsageType } from '@/stores/apiManagementStore';
 import { buildScenarioCanonPrompt } from '@/modules/scenarioMods/canonGuard';
 import {
+  acknowledgeStageEntryPresentation,
   acknowledgeStoryBeatHandoff,
   advanceScenarioRuntime,
   recordStoryEventStructuredAction,
@@ -1433,6 +1434,10 @@ ${missingItems.length > 0 ? `【上次结构化输出缺失】
           eventAction: options?.eventAction,
         }
       );
+      // 从这里返回的响应已经完成本地状态事务。UI 只能展示，不能再因可选字段
+      // 缺失而把同一玩家输入送回 processPlayerAction。
+      gmResponse.stateChanges = stateChanges;
+      gmResponse.transactionCommitted = true;
       if (options?.onStateChange) {
         options.onStateChange(updatedSaveData as unknown as PlainObject);
       }
@@ -2118,6 +2123,9 @@ ${step1Text}
     const changes: StateChange[] = [];
     const startingRuntime = (currentSaveData as any)?.世界?.状态?.剧本模组;
     const startingModId = typeof startingRuntime?.modId === 'string' ? startingRuntime.modId : '';
+    const stageEntryTargetBefore = typeof startingRuntime?.stageEntryPresentation?.toStageId === 'string'
+      ? String(startingRuntime.stageEntryPresentation.toStageId)
+      : '';
     const handoffEventIdBefore = typeof (saveData as any)?.世界?.状态?.剧本模组?.lastSettledBeat?.eventId === 'string'
       ? String((saveData as any).世界.状态.剧本模组.lastSettledBeat.eventId)
       : '';
@@ -2717,6 +2725,13 @@ ${step1Text}
     const scenarioResult = advanceScenarioRuntime(saveData);
     saveData = scenarioResult.saveData;
     const runtimeAfterAdvance = (saveData as any)?.世界?.状态?.剧本模组;
+    if (
+      textContent
+      && stageEntryTargetBefore
+      && runtimeAfterAdvance?.modId === stageEntryTargetBefore
+    ) {
+      acknowledgeStageEntryPresentation(saveData, stageEntryTargetBefore);
+    }
     if (
       textContent
       && handoffEventIdBefore

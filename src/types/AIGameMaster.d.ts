@@ -216,6 +216,8 @@ export interface GM_Response {
     details?: any;
   };
   stateChanges?: import('./game').StateChangeLog;
+  /** 客户端内部标记：本响应已经执行并提交过状态事务，展示层不得再次重放玩家行动。 */
+  transactionCommitted?: boolean;
   system_messages?: string[];
   /** 行动选项（必填，3-5个选项） */
   action_options: string[];

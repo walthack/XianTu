@@ -1,6 +1,7 @@
 export interface ProcessedAIResponseValidation {
   isValid: boolean;
   errors: string[];
+  transactionCommitted: boolean;
 }
 
 /**
@@ -15,21 +16,25 @@ export function validateProcessedAIResponse(response: unknown): ProcessedAIRespo
 
   if (!response) {
     errors.push('AI响应为空');
-    return { isValid: false, errors };
+    return { isValid: false, errors, transactionCommitted: false };
   }
 
   const value = response as Record<string, unknown>;
+  const transactionCommitted = value.transactionCommitted === true;
   if (!value.text || typeof value.text !== 'string') {
     errors.push('缺少有效的text字段');
   }
 
-  if (value.mid_term_memory !== undefined && typeof value.mid_term_memory !== 'string') {
-    errors.push('mid_term_memory字段必须是字符串');
+  // 生成失败发生在状态事务之前，仍沿用旧的结构重试；一旦事务已经提交，
+  // 展示层只检查可展示正文，绝不能因模型附带字段再执行同一玩家行动。
+  if (!transactionCommitted) {
+    if (typeof value.mid_term_memory !== 'string' || value.mid_term_memory.trim().length === 0) {
+      errors.push('缺少必要的mid_term_memory字段（中期记忆总结）');
+    }
+    if (value.tavern_commands !== undefined && !Array.isArray(value.tavern_commands)) {
+      errors.push('tavern_commands字段必须是数组');
+    }
   }
 
-  if (value.tavern_commands !== undefined && !Array.isArray(value.tavern_commands)) {
-    errors.push('tavern_commands字段必须是数组');
-  }
-
-  return { isValid: errors.length === 0, errors };
+  return { isValid: errors.length === 0, errors, transactionCommitted };
 }

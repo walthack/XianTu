@@ -79,9 +79,16 @@
         </div>
 
         <!-- 上一次的叙述内容（非生成时显示） -->
-        <div v-else-if="currentNarrative" class="narrative-content">
+        <div
+          v-else-if="currentNarrative"
+          class="narrative-content"
+          :class="{ 'stage-entry-narrative': currentNarrative.type === 'stage_entry' }"
+        >
           <div class="narrative-meta">
-            <span class="narrative-time">{{ currentNarrative.time }}</span>
+            <div class="narrative-heading">
+              <span class="narrative-time">{{ currentNarrative.time }}</span>
+              <span v-if="currentNarrative.type === 'stage_entry'" class="stage-entry-badge">旅途新章</span>
+            </div>
             <div class="meta-buttons">
               <!-- 快照回退按钮 -->
               <button
@@ -459,6 +466,7 @@ import { buildLocalJudgementPreflight, composeJudgementAction } from '@/utils/ju
 import { getNarrativeTurn } from '@/utils/actionGate';
 import {
   getCurrentStoryEventActions,
+  getStageEntryPresentation,
   getStageDepartureOffer,
   getTrackedStoryOpportunityActions,
   hasPendingStoryBeatHandoff,
@@ -857,6 +865,20 @@ const currentNarrative = computed(() => {
   const narrativeHistory = gameStateStore.narrativeHistory;
   const shortTermMemory = gameStateStore.memory?.短期记忆;
   const currentTimeString = formatCurrentTime();
+  const save = gameStateStore.toSaveData();
+  const stageEntry = save ? getStageEntryPresentation(save) : null;
+
+  // 切关后先显示目标关 opening，避免旧关最后一段正文继续占据主阅读面，
+  // 同时右栏与确定性动作已经属于新关。首个新关正文落账后该展示态自动消费。
+  if (stageEntry) {
+    return {
+      type: 'stage_entry',
+      content: stageEntry.text,
+      time: currentTimeString,
+      stateChanges: { changes: [] },
+      actionOptions: []
+    };
+  }
 
   // 优先从短期记忆获取文本内容
   let content = '';
@@ -3236,6 +3258,31 @@ const syncGameState = async () => {
   color: var(--color-text);
   font-size: 0.95rem;
   background: var(--color-surface); /* 确保叙述内容区域背景一致 */
+}
+
+.stage-entry-narrative {
+  padding: 18px 20px;
+  border-left: 4px solid rgba(var(--color-primary-rgb), 0.72);
+  background:
+    linear-gradient(90deg, rgba(var(--color-primary-rgb), 0.08), transparent 42%),
+    var(--color-surface);
+}
+
+.narrative-heading {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.stage-entry-badge {
+  padding: 2px 9px;
+  border: 1px solid rgba(var(--color-primary-rgb), 0.28);
+  border-radius: 999px;
+  color: var(--color-primary);
+  background: rgba(var(--color-primary-rgb), 0.08);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
 }
 
 .action-options {

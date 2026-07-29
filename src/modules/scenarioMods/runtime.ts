@@ -185,6 +185,16 @@ export interface ScenarioStageDepartureOffer {
   label: string;
 }
 
+export interface ScenarioStageEntryPresentation {
+  fromStageId: string;
+  fromStageName?: string;
+  toStageId: string;
+  toStageName?: string;
+  enteredAtTurn: number;
+  /** 只取目标关 opening；不从旧正文或 LLM 反推新事实。 */
+  text: string;
+}
+
 export interface ScenarioEventTimelineState {
   eligibleAtTurn: number;
   activatedAtTurn?: number;
@@ -273,6 +283,11 @@ export interface RuntimeState extends ScenarioProgressState {
     branchSummary: string;
     requestedAtTurn: number;
   };
+  /**
+   * 确定性切关后的主阅读面落点。首个新关 AI 正文成功落账前持续存在，
+   * 只负责避免“旧关正文 + 新关任务”的错层，不参与事件完成或世界真值写入。
+   */
+  stageEntryPresentation?: ScenarioStageEntryPresentation;
   /** 玩家亲历的上一拍；只为下一轮叙事过渡，不参与事件激活或完成门控。 */
   lastSettledBeat?: {
     eventId: string;
@@ -1132,6 +1147,28 @@ export function getStageDepartureOffer(saveData: SaveData): ScenarioStageDepartu
     nextStageId: runtime.nextStageId,
     label: '收拾行装，继续旅程',
   };
+}
+
+/** 切关后尚未被首个新关正文消费的确定性阅读面落点。 */
+export function getStageEntryPresentation(saveData: SaveData): ScenarioStageEntryPresentation | null {
+  const runtime = getRuntime(saveData);
+  const entry = runtime?.stageEntryPresentation;
+  if (
+    !runtime?.modId
+    || !entry
+    || entry.toStageId !== runtime.modId
+    || typeof entry.text !== 'string'
+    || !entry.text.trim()
+  ) return null;
+  return structuredClone(entry);
+}
+
+/** 首个新关正文成功落账后消费展示态；旧关或重复响应不能误清。 */
+export function acknowledgeStageEntryPresentation(saveData: SaveData, toStageId: string): boolean {
+  const runtime = getRuntime(saveData);
+  if (!runtime?.stageEntryPresentation || runtime.stageEntryPresentation.toStageId !== toStageId) return false;
+  delete runtime.stageEntryPresentation;
+  return true;
 }
 
 /**
