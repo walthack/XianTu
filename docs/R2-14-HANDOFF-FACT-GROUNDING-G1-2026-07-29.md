@@ -71,3 +71,17 @@ Claude 真机任务 `claude-2026-07-29T04-02-46-892Z-b92a8e3d` 在 HEAD `7085123
 - 单次玩家行动只推进一个 scenario world turn；
 - 最终 DOM／叙事历史仅含安全正文或通过门禁的重写稿；
 - `s04_06` 不完成、合同 hash 与上一拍身份不被污染。
+
+## 第二次 G2：环境未落定
+
+Claude 真机任务 `claude-2026-07-29T13-07-39-647Z-f97caad0` 在 HEAD `adccbf5` 上按同源基准建立独立临时槽，只执行一个余波自由行动。结论为 **NOT PROVEN**，不能据此翻绿或判代码失败：
+
+- 运行前已核实 `worldTurn=8`、叙事 7 条、`lastSettledBeat` 未 bridged、`s04_06 completed=false`、输入框可用；
+- 真实出站 prompt 已带跨拍余波和 `renderGuard.rejectUngroundedHandoffLosses=true`；
+- DeepSeek 主调用持续 10 分钟未返回，随后只启动了“尚未落账”路径允许的结构重试；
+- 30 分钟真机任务总预算到期时，存档仍为 `worldTurn=8`、叙事 7 条、承接未消费，没有任何已提交状态事务，因此没有重现旧版的 `8→10` 双推进，也无法证明修复后的落账路径；
+- source guard 通过，主工作树前后均干净；临时存档槽和独立 Chrome 已清理。
+
+证据目录：`/Users/clawbot/.claude/scratch/r2-14-adccbf5-g2/`。其中 `net/T1_free.llm.json` 保存真实请求，`runtime/T1_free.pre.json`、`runtime/T1_free.post.json` 与最终存档证明零状态提交。
+
+后续复验应直接复用本次基准和探针，并选择响应正常的已配置正文 API；无需再花时间重建前置。R2-14 保持 `[~]`。
