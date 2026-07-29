@@ -441,6 +441,7 @@ import { toast } from '@/utils/toast';
 import { calculateAgeFromBirthdate } from '@/utils/lifespanCalculator';
 import { aiService } from '@/services/aiService';
 import { extractTextFromJsonResponse, extractStreamingNarrativeText } from '@/utils/textSanitizer';
+import { validateProcessedAIResponse } from '@/utils/processedAIResponseValidation';
 import FormattedText from '@/components/common/FormattedText.vue';
 import { useGameStateStore } from '@/stores/gameStateStore';
 import { getSnapshots } from '@/utils/snapshotManager';
@@ -1344,50 +1345,6 @@ const recentMemories = computed(() => {
   return [];
 });
 
-// AI响应结构验证
-const validateAIResponse = (response: unknown): { isValid: boolean; errors: string[] } => {
-  const errors: string[] = [];
-
-  if (!response) {
-    errors.push('AI响应为空');
-    return { isValid: false, errors };
-  }
-
-  // 类型断言，确保response是对象
-  const resp = response as Record<string, unknown>;
-
-  // 检查基本结构
-  if (!resp.text || typeof resp.text !== 'string') {
-    errors.push('缺少有效的text字段');
-  }
-
-  // 检查mid_term_memory字段（必须）
-  if (!resp.mid_term_memory || typeof resp.mid_term_memory !== 'string') {
-    errors.push('缺少必要的mid_term_memory字段（中期记忆总结）');
-  } else if (resp.mid_term_memory.trim().length === 0) {
-    errors.push('mid_term_memory字段不能为空');
-  }
-
-  // 检查tavern_commands字段（可选）
-  if (resp.tavern_commands) {
-    if (!Array.isArray(resp.tavern_commands)) {
-      errors.push('tavern_commands字段必须是数组');
-    } else {
-      // 基本结构检查仅做告警，避免阻塞响应
-      resp.tavern_commands.forEach((cmd: unknown, index: number) => {
-        const command = cmd as Record<string, unknown>;
-        if (!cmd || typeof cmd !== 'object') {
-          console.warn(`[AI响应校验] tavern_commands[${index}]不是有效对象`);
-        } else if (!command.action || !command.key) {
-          console.warn(`[AI响应校验] tavern_commands[${index}]缺少必要字段(action/key)`);
-        }
-      });
-    }
-  }
-
-  return { isValid: errors.length === 0, errors };
-};
-
 const isCanceledError = (error: unknown): boolean => {
   if (!error) return false;
   if (error instanceof DOMException && error.name === 'AbortError') return true;
@@ -1484,7 +1441,7 @@ const retryAIResponse = async (
       }
 
       if (aiResponse) {
-        const validation = validateAIResponse(aiResponse);
+        const validation = validateProcessedAIResponse(aiResponse);
         if (validation.isValid) {
           console.log(`[AI响应重试] 第${attempt}次尝试成功`);
           return aiResponse;
@@ -1774,7 +1731,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
 
       // 验证AI响应结构
       if (aiResponse) {
-        const validation = validateAIResponse(aiResponse);
+        const validation = validateProcessedAIResponse(aiResponse);
         if (!validation.isValid) {
           console.warn('[AI响应验证] 结构验证失败:', validation.errors);
           toast.warning('AI响应格式不正确，正在重试...');
