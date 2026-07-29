@@ -270,8 +270,26 @@ test('adds grounded cross-turn goals without inventing npc-specific follow-ups',
   assert.equal(changes.length, 1);
   assert.deepEqual(saveData.系统.扩展.任务追踪.即兴目标, [
     { 标题: '寻找安全落脚点' },
-    { 标题: '查清碧奴玉牌与星月湖船队、龙骥君的关联' },
+    { 标题: '查清碧姬玉牌与星月湖船队、龙骥君的关联' },
   ]);
+});
+
+test('matches the jade token thread under all three of Biji\'s names', async () => {
+  const { reconcileNarrativeState } = await modPromise;
+  // 本名碧宛／通称碧姬／鬼王峒蔑称碧奴 都可能出现在正文里（裁定 #11/#141）
+  for (const name of ['碧宛', '碧姬', '碧奴']) {
+    const saveData = baseSaveData();
+    saveData.系统 = { 扩展: { 任务追踪: { 即兴目标: [] } } };
+    reconcileNarrativeState({
+      saveDataBefore: structuredClone(saveData),
+      saveData,
+      text: `${name}玉牌与星月湖船队再次共鸣，众人决定追查它与龙骥君的关联。`,
+      commands: [],
+    });
+    assert.deepEqual(saveData.系统.扩展.任务追踪.即兴目标, [
+      { 标题: '查清碧姬玉牌与星月湖船队、龙骥君的关联' },
+    ], `「${name}玉牌」应命中同一条线索目标`);
+  }
 });
 
 test('does not create improvised goals for local housekeeping', async () => {

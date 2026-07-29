@@ -413,7 +413,7 @@ export const GENERATED_CANON_RAIL_PROFILES: CanonRailProfile[] = [
     "contracts": [
       {
         "eventId": "lcq.event.s05b_01_binu_reveals_xiaozi",
-        "mustReach": "程宗扬从碧奴处得知小紫曾自荐为鬼巫王奴仆，结合过往事件怀疑小紫并非白痴，怒斥谢艺知情不报。",
+        "mustReach": "程宗扬从碧姬处得知小紫曾自荐为鬼巫王奴仆，结合过往事件怀疑小紫并非白痴，怒斥谢艺知情不报。",
         "completionEvidence": [],
         "forbiddenInCanon": [
           "改写本拍原著结果",

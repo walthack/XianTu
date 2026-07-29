@@ -455,9 +455,10 @@ export function reconcileImprovisedGoalsFromNarrative(input: NarrativeReconcileI
   const onlyHousekeeping = LOCAL_HOUSEKEEPING_RE.test(compactText) &&
     !/追查|查清|线索|共鸣|撤离|离开|启程|北上|安置|同行|恢复人身/.test(compactText);
   if (!onlyHousekeeping && !NEGATED_PURSUIT_RE.test(compactText)) {
-    const hasBinuThread = /碧奴玉牌|星月湖船队|龙骥君/.test(compactText) && /追查|查清|线索|共鸣|关联/.test(compactText);
+    // 玉牌主人有三个名字（本名碧宛／通称碧姬／鬼王峒蔑称碧奴，见裁定 #11/#141），三者都要能匹配上
+    const hasBinuThread = /碧[姬宛奴]玉牌|星月湖船队|龙骥君/.test(compactText) && /追查|查清|线索|共鸣|关联/.test(compactText);
     if (hasBinuThread) {
-      addGoal(nextGoals, '查清碧奴玉牌与星月湖船队、龙骥君的关联');
+      addGoal(nextGoals, '查清碧姬玉牌与星月湖船队、龙骥君的关联');
     }
 
     const hasEvacuation = /撤离|离开|启程|北上|登车|乘车/.test(compactText) &&
