@@ -35,15 +35,17 @@ const TRUE_FORM_RE = /狐尾|蝎尾|蛇尾|龙尾|狐皮|兽耳|尖耳|耳廓略
 const HAIR_COLOR_RE = /(乌亮|乌黑|乌|青丝|墨黑|漆黑|纯黑|黑|亚麻金|金色|金|银白|银灰|银|白|栗棕|棕黑|深棕|棕红|棕|栗|玫瑰粉|紫粉|紫黑|薰衣草紫|紫|靛|蓝黑|青|灰|赤|褐|红棕|酒红|橄榄棕|孔雀蓝绿|粉)[色]?(?:的)?(?=发|长发|短发|直发|卷发|鬈发|秀发|头发)/;
 const NORMALIZE_HAIR = { 乌亮: '乌黑', 乌: '乌黑', 青丝: '乌黑' };
 
-// 同人重复条目（分层后才暴露：同一人的 identity 被拆成两半）。合并规则显式列出以便追溯。
-const MERGES = [
-  { keep: '苏荔', drop: '阿依苏荔', identityFrom: '苏荔', defaultFrom: '苏荔',
-    note: '已并入官图条目「阿依苏荔」（裁定 #142：canon 的「常着红裙如火」「大腿黑色刺青」与官图红裙+藤纹刺青吻合，确认同一人）。identity 取原文（蝎尾真身、身高超一米九），标记取并集；两套装束可能是同一身衣服的不同视角，暂并存待人工确认。' },
-  { keep: '剑玉姬', drop: '剑玉姬（云龙吟版）', identityFrom: '剑玉姬（云龙吟版）', defaultFrom: '剑玉姬（云龙吟版）',
-    note: '两版官图造型互斥但都合正典——原文「未曾遮面，却只见其风采，未见其面容」（巫宗障眼法术），故 identity 本身不定形。default 取云龙吟版（赛璐璐，合定版画风）；燕歌行版（蓝黑短发+白仙裙+金凤冠，写实厚涂）作变体。' },
-];
-// 疑似同人但真名不同，属身份链问题，只标记不合并
-const FLAG_PAIRS = [['朱老头（刘询/殇振羽）', '朱老头（刘谋）']];
+// 同人重复条目用 registry 的别名表做权威归一，不靠字符串相似度猜。
+// 手工比对只找到 3 组，还漏了「定陶王=刘欣」「阮香凝=凝姨」，并把殇侯那组看成只有两条朱老头
+// ——实际是三条（殇侯 + 朱老头（刘谋）+ 朱老头（刘询/殇振羽））。名字毫不相似，字符串法无解。
+// 合并偏好：identity 默认取官图（视觉权威），下表可指定改取原文；marks/trueForm 一律取并集。
+const MERGE_PREFS = {
+  苏荔: { identityFrom: '苏荔', defaultFrom: '苏荔',
+    note: '官图条目「阿依苏荔」已并入（裁定 #142）。identity 取原文（蝎尾真身、身高超一米九）；两套装束可能是同一身衣服的不同视角，暂并存待人工确认。' },
+  剑玉姬: { identityFrom: '剑玉姬（云龙吟版）', defaultFrom: '剑玉姬（云龙吟版）',
+    note: '两版官图造型互斥但都合正典——原文「未曾遮面，却只见其风采，未见其面容」（巫宗障眼法术），故 identity 本身不定形。default 取云龙吟版（赛璐璐，合定版画风）。' },
+  殇侯: { note: '朱老头即殇侯（用户裁定 + 原文云龙吟 0402 名链：北寺狱囚徒刘病已→太学生刘次卿→游侠儿刘谋→阳武侯刘询→鸩羽殇侯殇振羽，0264「你说老头啊！他叫刘谋？」）。清羽记 ch82 朱老头称殇振羽为「老爷子」并劝人别打听，是其隐藏身份的桥段，不可当作两人的证据。' },
+};
 
 // 裁定 #142 的逐条例外：这几处官图偏离原文，identity 必须按原文覆盖。
 // 只写进 notes 是不够的——裁定落到文档层不等于落到结构化字段，出图脚本读的是字段。
@@ -178,36 +180,65 @@ for (const c of src.characters) {
     readiness: readiness(c.visual) });
 }
 
-let rows = [...flat.values()].map(convert);
-const byName = new Map(rows.map(r => [r.name, r]));
+const converted = [...flat.values()].map(convert);
 
-// 合并同人条目：identity 取指定来源，marks/trueForm 取并集，另一条的装束降为待绑定变体
-for (const m of MERGES) {
-  const keep = byName.get(m.keep); const drop = byName.get(m.drop);
-  if (!keep || !drop) { console.error(`  跳过合并（缺条目）：${m.keep} / ${m.drop}`); continue; }
-  const srcRow = byName.get(m.identityFrom) || keep;
-  const other = srcRow === keep ? drop : keep;
-  const idn = { ...srcRow.identity };
-  for (const k of ['marks', 'trueForm']) {
-    idn[k] = [...new Set([...srcRow.identity[k], ...other.identity[k]])];
-  }
-  for (const k of ['eyes', 'face', 'build', 'hair']) if (!idn[k]) idn[k] = other.identity[k] || '';
-  // hairColor 不跨条目补：宁可留空，也不要和 hair 原句矛盾
-  keep.identity = idn;
-  const first = (byName.get(m.defaultFrom) || keep).outfits;
-  const second = (byName.get(m.defaultFrom) === keep ? drop : keep).outfits;
-  keep.outfits = [...first, ...second].map((o, i) => ({ ...o,
-    id: i === 0 ? 'default' : `variant-${i}`, scope: i === 0 ? 'default' : 'unassigned' }));
-  if (keep.provenance !== drop.provenance) keep.provenance = `${keep.provenance}+${drop.provenance}`;
-  keep.book = keep.book || drop.book;
-  for (const k of ['evidence', 'sourceChapters']) if (drop[k] && !keep[k]) keep[k] = drop[k];
-  keep.notes = `${keep.notes ? `${keep.notes} ` : ''}${m.note}`;
-  keep.mergedFrom = [m.keep, m.drop];
-  keep.readiness = readiness({ ...keep.identity, ...(keep.outfits[0] || {}) });
-  rows = rows.filter(r => r.name !== m.drop);
-  byName.delete(m.drop);
-  console.error(`  合并 ${m.drop} → ${m.keep}（${keep.outfits.length} 套装束）`);
+// 用 registry 的 canonicalName + aliases 做权威归一
+const reg = JSON.parse(await readFile(join(root, 'src/modules/scenarioMods/builtins/character-registry.json'), 'utf8'));
+const canonOf = new Map();
+for (const c of reg.characters) {
+  canonOf.set(c.canonicalName, c.canonicalName);
+  for (const a of c.aliases || []) if (!canonOf.has(a)) canonOf.set(a, c.canonicalName);
 }
+const resolveName = n => canonOf.get(n) || canonOf.get(n.replace(/[（(].*?[）)]/g, '').trim()) || n;
+
+const groups = new Map();
+for (const r of converted) {
+  const k = resolveName(r.name);
+  if (!groups.has(k)) groups.set(k, []);
+  groups.get(k).push(r);
+}
+
+let rows = [];
+const unresolved = [];
+for (const [canonName, group] of groups) {
+  if (!canonOf.has(canonName)) unresolved.push(canonName);
+  if (group.length === 1) {
+    const r = group[0];
+    if (r.name !== canonName) r.aliasOf = r.name;
+    r.name = canonName;
+    rows.push(r);
+    continue;
+  }
+  const pref = MERGE_PREFS[canonName] || {};
+  const pick = n => group.find(r => r.name === n);
+  // identity 默认取官图（视觉权威），可由 identityFrom 改取指定条目
+  const idSrc = pick(pref.identityFrom) || group.find(r => r.provenance === 'official-illustration') || group[0];
+  const others = group.filter(r => r !== idSrc);
+  const identity = { ...idSrc.identity };
+  for (const k of ['marks', 'trueForm']) identity[k] = [...new Set(group.flatMap(r => r.identity[k]))];
+  for (const k of ['eyes', 'face', 'build', 'hair']) {
+    if (!identity[k]) identity[k] = others.map(r => r.identity[k]).find(Boolean) || '';
+  }
+  // hairColor 不跨条目补：宁可留空，也不要和 hair 原句矛盾
+  const defaultSrc = pick(pref.defaultFrom) || idSrc;
+  const outfits = [defaultSrc, ...group.filter(r => r !== defaultSrc)]
+    .flatMap(r => r.outfits)
+    .map((o, i) => ({ ...o, id: i === 0 ? 'default' : `variant-${i}`, scope: i === 0 ? 'default' : 'unassigned' }));
+  rows.push({
+    name: canonName,
+    provenance: [...new Set(group.map(r => r.provenance))].join('+'),
+    book: group.map(r => r.book).find(Boolean),
+    identity,
+    outfits,
+    readiness: readiness({ ...identity, ...(outfits[0] || {}) }),
+    notes: [...group.map(r => r.notes).filter(Boolean), pref.note].filter(Boolean).join(' '),
+    mergedFrom: group.map(r => r.name),
+    evidence: group.map(r => r.evidence).find(Boolean),
+    sourceChapters: group.map(r => r.sourceChapters).find(Boolean),
+  });
+  console.error(`  归一 ${canonName} ← ${group.map(r => r.name).join(' + ')}（${outfits.length} 套装束）`);
+}
+const byName = new Map(rows.map(r => [r.name, r]));
 // 裁定 #142 的例外落到 identity 字段（不只落 notes）
 for (const [name, ov] of Object.entries(CANON_OVERRIDES)) {
   const r = byName.get(name);
@@ -219,14 +250,11 @@ for (const [name, ov] of Object.entries(CANON_OVERRIDES)) {
   console.error(`  canon 覆盖 ${name}：${Object.keys(fields).join('/')}${marks ? '+marks' : ''}`);
 }
 
-// 疑似同人、真名不同：只标记
-for (const [a, b] of FLAG_PAIRS) {
-  for (const [x, y] of [[a, b], [b, a]]) {
-    const r = byName.get(x); if (!r) continue;
-    r.notes = `${r.notes ? `${r.notes} ` : ''}⚠️ 与「${y}」疑似同一角色（两条都写「花白头发忽长忽短／浓黑长发」「身体一挺陡然长高尺许」的变形特征），但括号内真名不同，属身份链问题而非立绘问题，**未合并，待正典裁定**。`;
-  }
-}
 rows.sort((a, b) => a.name.localeCompare(b.name, 'zh'));
+if (unresolved.length) {
+  console.error(`\n⚠️ 未登记进 registry 的条目名 ${unresolved.length} 个（无法参与别名归一，重复风险）：`);
+  console.error(`   ${unresolved.join('、')}`);
+}
 
 const doc = {
   purpose: '立绘生成的单一数据源：官图反向回填 + 原文可画维度补抽，合并后按 identity / outfits 分层',
