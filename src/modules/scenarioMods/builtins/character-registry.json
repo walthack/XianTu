@@ -1,9 +1,9 @@
 {
   "schema": "xiantu.character-registry.v1",
-  "version": "cr-2026-07-29-df2e7dad06869c1e",
-  "sourceHash": "df2e7dad06869c1e",
+  "version": "cr-2026-07-30-445b5ea0ba87a7c2",
+  "sourceHash": "445b5ea0ba87a7c2",
   "sourceGeneratedAt": "2026-06-30T12:50:33.965Z",
-  "generatedAt": "2026-07-29T23:36:24.489Z",
+  "generatedAt": "2026-07-30T12:03:44.609Z",
   "stats": {
     "total": 308,
     "stagePresent": 217,
@@ -27852,7 +27852,9 @@
     {
       "id": "liuchao.character.su_li",
       "canonicalName": "苏荔",
-      "aliases": [],
+      "aliases": [
+        "阿依苏荔"
+      ],
       "gender": "女",
       "books": [
         "qingyu",
@@ -27861,7 +27863,7 @@
       "tier": "主要",
       "stagePresence": true,
       "staticProfile": {
-        "identitySummary": "花苗族长",
+        "identitySummary": "花苗族长；正式名「阿依苏荔」",
         "personality": [
           "美艳",
           "顺从",
@@ -27882,7 +27884,10 @@
           "银白色蝎尾"
         ],
         "relationToProtagonist": [],
-        "formsOfAddress": [],
+        "formsOfAddress": [
+          "日常简称「苏荔」（全书 816 次），敬称「苏荔族长」（43 次）",
+          "「阿依苏荔」是其正式全名（19 次），只用于正式与仪式场合：自我介绍（「我是花苗族的阿依苏荔」）、祷词（「花苗的阿依苏荔路过这里」）、敌方正式称呼、郑重称谓（「阿依苏荔族长」）；**不可拆**——「阿依」在原文中从不单独出现、也从不与其他人名连用，不是花苗通用敬称前缀"
+        ],
         "joining": [],
         "keyEvents": [
           "与武二郎交合",
@@ -28078,9 +28083,12 @@
         "approved": true,
         "reviewed": true,
         "flags": [],
-        "conflicts": []
+        "conflicts": [],
+        "aliasReviewNote": [
+          "2026-07-30 原文核实（清羽记 ch104/105 等）：「阿依苏荔」为整体正式名而非「阿依+苏荔」可分结构；官图封面标注用的是正式名，故与 appearance 库的简称条目对不上（与碧宛/碧姬/碧奴同类问题）。"
+        ]
       },
-      "embedText": "苏荔 ｜ 花苗族长 ｜ 花苗(族长) ｜ 登场于南荒某地 ｜ 美艳、顺从、富有情欲 ｜ 与武二郎交合；被阴煞奸淫；被小紫用紫鳞鞭凌虐；用蝎尾杀死巫师"
+      "embedText": "苏荔 ｜ 阿依苏荔 ｜ 花苗族长；正式名「阿依苏荔」 ｜ 花苗(族长) ｜ 登场于南荒某地 ｜ 美艳、顺从、富有情欲 ｜ 日常简称「苏荔」（全书 816 次），敬称「苏荔族长」（43 次） 「阿依苏荔」是其正式全名（19 次），只用于正式与仪式场合：自我介绍（「我是花苗族的阿依苏荔」）、祷词（「花苗的阿依苏荔路过这里」）、敌方正式称呼、郑重称谓（「阿依苏荔族长」）；**不可拆**——「阿依」在原文中从不单独出现、也从不与其他人名连用，不是花苗通用敬称前缀 ｜ 与武二郎交合；被阴煞奸淫；被小紫用紫鳞鞭凌虐；用蝎尾杀死巫师"
     },
     {
       "id": "liuchao.character.su_xiao",
