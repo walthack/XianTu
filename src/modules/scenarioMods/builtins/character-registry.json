@@ -1,13 +1,13 @@
 {
   "schema": "xiantu.character-registry.v1",
-  "version": "cr-2026-07-30-445b5ea0ba87a7c2",
-  "sourceHash": "445b5ea0ba87a7c2",
+  "version": "cr-2026-07-30-a855cc8cb7f0bfb5",
+  "sourceHash": "a855cc8cb7f0bfb5",
   "sourceGeneratedAt": "2026-06-30T12:50:33.965Z",
-  "generatedAt": "2026-07-30T12:03:44.609Z",
+  "generatedAt": "2026-07-30T12:58:16.332Z",
   "stats": {
-    "total": 308,
+    "total": 315,
     "stagePresent": 217,
-    "canonOnly": 91,
+    "canonOnly": 98,
     "collisionsMerged": 0
   },
   "characters": [
@@ -364,6 +364,63 @@
         "conflicts": []
       },
       "embedText": "蒲海云 ｜ 大宋泉州市舶司官员/异域胡商 ｜ 【昭南人物】 ｜ 广源行(商人/行商)、昭南(行商者) ｜ 登场于天佛阁（娑梵寺下院） ｜ 文质彬彬、圆滑世故、刻意迎合、胆大心细、包藏机心 ｜ 相识的后辈/合作伙伴 ｜ 对程宗扬：侯爷/程侯 / 被他人称呼：蒲兄/蒲海云 ｜ 以独孤谓为中介结识程宗扬；献异域处女欲送程宗扬；营救独孤谓并以此邀功；与九爷等人密谋结交索推事"
+    },
+    {
+      "id": "canon.character.15b71fd1c8",
+      "canonicalName": "樨夫人",
+      "aliases": [],
+      "gender": "女",
+      "books": [
+        "qingyu"
+      ],
+      "tier": "次要",
+      "stagePresence": false,
+      "staticProfile": {
+        "personality": [],
+        "speechStyle": "",
+        "principles": [],
+        "goals": [],
+        "weaknesses": [],
+        "signatureAbilities": [],
+        "relationToProtagonist": [
+          "在白夷族时因受制于人而顺从程宗扬"
+        ],
+        "formsOfAddress": [],
+        "joining": [],
+        "keyEvents": [
+          "白夷族遭鬼王峒使者控制，作为族长夫人被胁迫役使",
+          "程宗扬后来据此推断鬼王峒以药物与幻觉控制诸族"
+        ],
+        "ending": [],
+        "identitySummary": "白夷族长夫人；鬼王峒使者控制白夷时被其胁迫役使，后受程宗扬影响",
+        "appearance": "紫红（酒红）色大波浪长卷发，蓬松垂散；红色眼眸，眼神妩媚；艳丽的成熟面孔，唇色淡红；成熟丰满；米白底浅黄印花的轻薄单衣（半褪、宽松），内里可见黄绿色织圆纹的裙料；绿珠金质长耳坠",
+        "affiliations": [
+          {
+            "faction": "白夷族",
+            "role": "族长夫人"
+          }
+        ],
+        "debutLocation": {
+          "location": "白夷族",
+          "locator": "六朝清羽记·第119章前后",
+          "scene": "白夷族受鬼王峒使者控制期间"
+        }
+      },
+      "region": "南荒",
+      "phaseIdentities": [],
+      "review": {
+        "approved": false,
+        "reviewed": true,
+        "flags": [
+          "portrait-canon-gap-recovered"
+        ],
+        "conflicts": [],
+        "note": "立绘管线缺卡审计补建（2026-07-30）：该角色有官方插图但 canon 无角色卡，故无法参与别名归一。仅采原文明载事实，不外推原作未载内容。",
+        "humanNotes": [
+          "原文依据：使者尖声大笑……在这位白夷族长夫人湿淋淋的蜜穴中肆意搅弄起来（ch78）"
+        ]
+      },
+      "embedText": "樨夫人 ｜ 白夷族长夫人；鬼王峒使者控制白夷时被其胁迫役使，后受程宗扬影响 ｜ 【南荒人物】 ｜ 白夷族(族长夫人) ｜ 登场于白夷族 ｜ 在白夷族时因受制于人而顺从程宗扬 ｜ 白夷族遭鬼王峒使者控制，作为族长夫人被胁迫役使；程宗扬后来据此推断鬼王峒以药物与幻觉控制诸族"
     },
     {
       "id": "canon.character.16cd30ae70",
@@ -1956,6 +2013,64 @@
       "embedText": "杨艳 ｜ 杨贤妃 ｜ 杨艳（疑似宗室） ｜ 【唐国人物】 ｜ 唐国朝廷(杨贤妃/六宫之主)、舞阳侯府(奴婢/内宅成员) ｜ 登场于蓬莱秘阁 ｜ 别名/称谓：杨贤妃 ｜ 唐国贤妃, 又称杨妃."
     },
     {
+      "id": "canon.character.4e519b8f03",
+      "canonicalName": "文泽",
+      "aliases": [],
+      "gender": "男",
+      "books": [
+        "qingyu",
+        "yunlong"
+      ],
+      "tier": "次要",
+      "stagePresence": false,
+      "staticProfile": {
+        "personality": [],
+        "speechStyle": "",
+        "principles": [],
+        "goals": [],
+        "weaknesses": [],
+        "signatureAbilities": [],
+        "relationToProtagonist": [
+          "军中参军，程宗扬初入军营时替他挡下月霜的马鞭"
+        ],
+        "formsOfAddress": [],
+        "joining": [],
+        "keyEvents": [
+          "程宗扬与月霜冲突时出面调停，称其为「军中客人」",
+          "大战中向王哲汇报天武营损失七成、箭矢消耗十二万支等军情",
+          "曾向人提及黛姬雪娜是拜火教的女祭司"
+        ],
+        "ending": [],
+        "identitySummary": "王哲（太乙真宗掌教）帐下参军；文士，随军参谋，多次为程宗扬调停",
+        "appearance": "文士打扮，头上戴着细长的高冠，系紧高冠，理好衣物",
+        "affiliations": [
+          {
+            "faction": "太乙真宗",
+            "role": "参军"
+          }
+        ],
+        "debutLocation": {
+          "location": "星月湖军营",
+          "locator": "六朝清羽记·第10章",
+          "scene": "程宗扬与月霜起冲突时出面拦阻"
+        }
+      },
+      "phaseIdentities": [],
+      "review": {
+        "approved": false,
+        "reviewed": true,
+        "flags": [
+          "portrait-canon-gap-recovered"
+        ],
+        "conflicts": [],
+        "note": "立绘管线缺卡审计补建（2026-07-30）：该角色有官方插图但 canon 无角色卡，故无法参与别名归一。仅采原文明载事实，不外推原作未载内容。",
+        "humanNotes": [
+          "原文依据：文泽连忙拦住月霜，「程兄是军中客人，虽然志向不同，也不能挥鞭相向」（ch10）；文泽仍是一身文士打扮，头上戴着细长的高冠（ch12）"
+        ]
+      },
+      "embedText": "文泽 ｜ 王哲（太乙真宗掌教）帐下参军；文士，随军参谋，多次为程宗扬调停 ｜ 太乙真宗(参军) ｜ 登场于星月湖军营 ｜ 军中参军，程宗扬初入军营时替他挡下月霜的马鞭 ｜ 程宗扬与月霜冲突时出面调停，称其为「军中客人」；大战中向王哲汇报天武营损失七成、箭矢消耗十二万支等军情；曾向人提及黛姬雪娜是拜火教的女祭司"
+    },
+    {
       "id": "canon.character.4e7f730e2e",
       "canonicalName": "沮渠二世",
       "aliases": [],
@@ -3292,6 +3407,63 @@
       "embedText": "吴行德 ｜ 太乙真宗弟子 ｜ 【晋国人物】 ｜ 太乙真宗(弟子（蔺采泉门下）) ｜ 登场于清远玄真观 ｜ 角色卡未找到明确同名/别名；需要判断是新角色还是并入现有角色。"
     },
     {
+      "id": "canon.character.7ba7ded095",
+      "canonicalName": "小桃红",
+      "aliases": [],
+      "gender": "女",
+      "books": [
+        "yunlong",
+        "yange"
+      ],
+      "tier": "次要",
+      "stagePresence": false,
+      "staticProfile": {
+        "personality": [],
+        "speechStyle": "",
+        "principles": [],
+        "goals": [],
+        "weaknesses": [],
+        "signatureAbilities": [],
+        "relationToProtagonist": [
+          "游冶台中试图借程宗扬一行人为依仗以求赎身"
+        ],
+        "formsOfAddress": [],
+        "joining": [],
+        "keyEvents": [
+          "因在楼里与人争吵被罂粟女教训规矩",
+          "试图引诱少年客人为其赎身未成"
+        ],
+        "ending": [],
+        "identitySummary": "游冶台妓女；「小桃红」是瑶夫人给她起的新名字，一心想赎身脱离苦海",
+        "appearance": "深棕红色头发，梳成左右两个丸子髻并系浅绿色发带，另垂一条麻花辫；琥珀褐色大眼，眼型圆润；少女圆脸，唇小色淡，神情娇怯；少女身形（不作强调）；粉橘色织金缠枝纹襦裙，胸前与领口缀白色蕾丝花边与小排扣，内衬薄荷绿衬裙与荷叶边，束绿色腰带；颈间小金铃项圈、脚踝金扣配绿边环饰",
+        "affiliations": [
+          {
+            "faction": "游冶台",
+            "role": "妓女"
+          }
+        ],
+        "debutLocation": {
+          "location": "游冶台",
+          "locator": "六朝云龙吟·0201",
+          "scene": "楼中争吵被罂粟女管束"
+        }
+      },
+      "phaseIdentities": [],
+      "review": {
+        "approved": false,
+        "reviewed": true,
+        "flags": [
+          "portrait-canon-gap-recovered"
+        ],
+        "conflicts": [],
+        "note": "立绘管线缺卡审计补建（2026-07-30）：该角色有官方插图但 canon 无角色卡，故无法参与别名归一。仅采原文明载事实，不外推原作未载内容。",
+        "humanNotes": [
+          "原文依据：「小桃红？」罂粟女笑道：「是瑶夫人给她起的新名字。」（0203）"
+        ]
+      },
+      "embedText": "小桃红 ｜ 游冶台妓女；「小桃红」是瑶夫人给她起的新名字，一心想赎身脱离苦海 ｜ 游冶台(妓女) ｜ 登场于游冶台 ｜ 游冶台中试图借程宗扬一行人为依仗以求赎身 ｜ 因在楼里与人争吵被罂粟女教训规矩；试图引诱少年客人为其赎身未成"
+    },
+    {
       "id": "canon.character.7cc75f4781",
       "canonicalName": "尹思元",
       "aliases": [],
@@ -3466,6 +3638,112 @@
         "conflicts": []
       },
       "embedText": "贾师宪 ｜ 宋国太师 / 权臣 / 贾党领袖 ｜ 【宋国人物】 ｜ 宋国(太师兼平章军国重事) ｜ 登场于江州 ｜ 精明务实、城府极深、善于权谋、看重利益、临危不乱、威严 ｜ 利益合作伙伴 ｜ 程员外 / 被别人称为：老贾、贾太师、贾师宪 ｜ 与程宗扬合作发行纸币；从晴州借一百万金铢军饷；主导拆毁武穆王府开发；击垮王禹玉一党；在朝会主战面临户部账目质询"
+    },
+    {
+      "id": "canon.character.81be8593ee",
+      "canonicalName": "娄蒙",
+      "aliases": [],
+      "gender": "男",
+      "books": [
+        "qingyu"
+      ],
+      "tier": "次要",
+      "stagePresence": false,
+      "staticProfile": {
+        "personality": [],
+        "speechStyle": "",
+        "principles": [],
+        "goals": [],
+        "weaknesses": [],
+        "signatureAbilities": [],
+        "relationToProtagonist": [
+          "花苗—红苗结盟一方，与苏荔同阵营"
+        ],
+        "formsOfAddress": [],
+        "joining": [],
+        "keyEvents": [
+          "红苗与花苗因血缘相近、同受鬼王峒威胁而结盟，娄蒙夫妻是关键",
+          "在鬼王峒受巫师控制，嘶吼「杀了我」后被木杖击昏"
+        ],
+        "ending": [],
+        "identitySummary": "红苗族长之子、红苗未来的继承人；妻子丹宸（婚前是苏荔闺中密友），红苗与花苗结盟的关键",
+        "appearance": "额头刺青",
+        "affiliations": [
+          {
+            "faction": "红苗",
+            "role": "族长之子／继承人"
+          }
+        ],
+        "debutLocation": {
+          "location": "鬼王峒",
+          "locator": "六朝清羽记·第114章",
+          "scene": "额头刺青的红苗汉子单膝跪地，受鬼角巫师念诵控制"
+        }
+      },
+      "region": "南荒",
+      "phaseIdentities": [],
+      "review": {
+        "approved": false,
+        "reviewed": true,
+        "flags": [
+          "portrait-canon-gap-recovered"
+        ],
+        "conflicts": [],
+        "note": "立绘管线缺卡审计补建（2026-07-30）：该角色有官方插图但 canon 无角色卡，故无法参与别名归一。仅采原文明载事实，不外推原作未载内容。",
+        "humanNotes": [
+          "原文依据：娄蒙是红苗族长的儿子，也是红苗未来的继承人……娄蒙的妻子丹宸未嫁前是苏荔的闺中密友（ch114）"
+        ]
+      },
+      "embedText": "娄蒙 ｜ 红苗族长之子、红苗未来的继承人；妻子丹宸（婚前是苏荔闺中密友），红苗与花苗结盟的关键 ｜ 【南荒人物】 ｜ 红苗(族长之子／继承人) ｜ 登场于鬼王峒 ｜ 花苗—红苗结盟一方，与苏荔同阵营 ｜ 红苗与花苗因血缘相近、同受鬼王峒威胁而结盟，娄蒙夫妻是关键；在鬼王峒受巫师控制，嘶吼「杀了我」后被木杖击昏"
+    },
+    {
+      "id": "canon.character.81d313b84d",
+      "canonicalName": "李十二娘",
+      "aliases": [],
+      "gender": "女",
+      "books": [
+        "yange"
+      ],
+      "tier": "次要",
+      "stagePresence": false,
+      "staticProfile": {
+        "personality": [],
+        "speechStyle": "",
+        "principles": [],
+        "goals": [],
+        "weaknesses": [],
+        "signatureAbilities": [],
+        "relationToProtagonist": [],
+        "formsOfAddress": [],
+        "joining": [],
+        "keyEvents": [
+          "宫宴上乐官以其剑舞替换甘泉舞",
+          "绛王李悟持真剑与其对舞并同声高歌「耀如羿射九日落」"
+        ],
+        "ending": [],
+        "identitySummary": "剑舞名家；承公孙大娘剑器之艳名，宫宴上以剑舞代甘泉舞，曾与绛王李悟对舞",
+        "appearance": "墨黑长发，绾高髻并留飘散鬓丝，戴粉红折扇形华冠、金步摇与额前珠饰；细长凤眼，黑瞳，低垂含笑；秀丽鹅蛋脸，唇小色红，神情沉静；修长；桃红色剑舞舞裙：大袖如层叠花瓣、袖缘缀金饰与珠串，束腰配金色浮雕腰饰，颈系粉红领巾；金步摇、珠链、金色腰环",
+        "affiliations": [],
+        "debutLocation": {
+          "location": "宫宴",
+          "locator": "六朝燕歌行·0134",
+          "scene": "乐官以李十二娘的剑舞替换甘泉舞"
+        }
+      },
+      "phaseIdentities": [],
+      "review": {
+        "approved": false,
+        "reviewed": true,
+        "flags": [
+          "portrait-canon-gap-recovered"
+        ],
+        "conflicts": [],
+        "note": "立绘管线缺卡审计补建（2026-07-30）：该角色有官方插图但 canon 无角色卡，故无法参与别名归一。仅采原文明载事实，不外推原作未载内容。",
+        "humanNotes": [
+          "原文依据：乐官笑道：「本来是该跳甘泉舞的，趁着诸位王爷高兴，换成李十二娘的剑舞。」（0134）"
+        ]
+      },
+      "embedText": "李十二娘 ｜ 剑舞名家；承公孙大娘剑器之艳名，宫宴上以剑舞代甘泉舞，曾与绛王李悟对舞 ｜ 登场于宫宴 ｜ 宫宴上乐官以其剑舞替换甘泉舞；绛王李悟持真剑与其对舞并同声高歌「耀如羿射九日落」"
     },
     {
       "id": "canon.character.83e108d676",
@@ -4772,6 +5050,60 @@
       "embedText": "刘娥 ｜ 太皇太后(宋) 刘太后 宋太皇太后 太皇太后 ｜ 宋国太皇太后/后期受制于程宗扬阵营；宋主长辈（程宗扬称姨娘），与贾师宪(贾似道)同族，曾受其游说干预朝局 ｜ 【宋国人物】 ｜ 宋国(太皇太后) ｜ 登场于云涛观偏殿 ｜ 受虐倾向、淫荡、顺从、妩媚 ｜ 侍奴/性奴 ｜ 刘娥、娥奴 ｜ 宋国太皇太后，禁止提前写作程宗扬阵营或从属关系；进入受制阶段，之后可写作程宗扬阵营从属 ｜ 被侍奴以假阳具奸弄；被程宗扬干入；被展示桃花谷；自称奴婢完成指令"
     },
     {
+      "id": "canon.character.ad2b156b4d",
+      "canonicalName": "董媛",
+      "aliases": [],
+      "gender": "女",
+      "books": [
+        "yunlong"
+      ],
+      "tier": "次要",
+      "stagePresence": false,
+      "staticProfile": {
+        "personality": [],
+        "speechStyle": "",
+        "principles": [],
+        "goals": [],
+        "weaknesses": [],
+        "signatureAbilities": [],
+        "relationToProtagonist": [],
+        "formsOfAddress": [],
+        "joining": [],
+        "keyEvents": [
+          "华服受召入殿拜见侯爷，自称「贱奴昭仪董媛」"
+        ],
+        "ending": [],
+        "identitySummary": "汉宫昭仪；自称「贱奴昭仪董媛」，侯爷（殇侯）座前的宫嫔",
+        "appearance": "墨黑长发，戴极华丽的金冠——两侧展开大幅金色翼状/角状饰片，嵌绿宝石，额前垂珠链；褐红色眼，眼下红妆，笑意张扬；艳丽的鹅蛋脸，唇色红；丰满；蓝紫与青绿色锯齿几何纹的织锦长袍（宽袖、敞怀露出胸腹）；金璎珞胸链缀绿宝石心形坠与金铃、紫色细绳缠身、金指环",
+        "affiliations": [
+          {
+            "faction": "汉国宫廷",
+            "role": "昭仪"
+          }
+        ],
+        "debutLocation": {
+          "location": "汉宫殿中",
+          "locator": "六朝云龙吟·0235",
+          "scene": "被内侍带进殿中拜见侯爷"
+        }
+      },
+      "region": "汉国",
+      "phaseIdentities": [],
+      "review": {
+        "approved": false,
+        "reviewed": true,
+        "flags": [
+          "portrait-canon-gap-recovered"
+        ],
+        "conflicts": [],
+        "note": "立绘管线缺卡审计补建（2026-07-30）：该角色有官方插图但 canon 无角色卡，故无法参与别名归一。仅采原文明载事实，不外推原作未载内容。",
+        "humanNotes": [
+          "原文依据：「贱奴昭仪董媛拜见侯爷。侯爷万福。」（0235）"
+        ]
+      },
+      "embedText": "董媛 ｜ 汉宫昭仪；自称「贱奴昭仪董媛」，侯爷（殇侯）座前的宫嫔 ｜ 【汉国人物】 ｜ 汉国宫廷(昭仪) ｜ 登场于汉宫殿中 ｜ 华服受召入殿拜见侯爷，自称「贱奴昭仪董媛」"
+    },
+    {
       "id": "canon.character.afe5070a50",
       "canonicalName": "朱安世",
       "aliases": [],
@@ -6050,6 +6382,62 @@
         "conflicts": []
       },
       "embedText": "淖夫人 ｜ 太后乳母，太后亲信 ｜ 【汉国人物】 ｜ 吕氏外戚集团(太后乳母)、汉国朝廷(太后近侍) ｜ 登场于山路 ｜ 冷静、警觉、心狠 ｜ 敌对（太后一方） ｜ 淖夫人 / 淖方成 ｜ 与太后互换身份助太后脱身；以毒血雾袭击闻清语；防备黑魔海暗藏手段"
+    },
+    {
+      "id": "canon.character.d9c55fd65a",
+      "canonicalName": "达古的孪生妻子",
+      "aliases": [],
+      "gender": "女",
+      "books": [
+        "qingyu"
+      ],
+      "tier": "次要",
+      "stagePresence": false,
+      "staticProfile": {
+        "personality": [],
+        "speechStyle": "",
+        "principles": [],
+        "goals": [],
+        "weaknesses": [],
+        "signatureAbilities": [],
+        "relationToProtagonist": [
+          "鬼王峒中阁罗掌控下的奴隶"
+        ],
+        "formsOfAddress": [],
+        "joining": [],
+        "keyEvents": [
+          "达古死讯传来后，阁罗第一件事即闯入达古家中接管一切并将其掳为奴"
+        ],
+        "ending": [],
+        "identitySummary": "达古最宠爱的妻子，一对孪生姐妹（身段面容分毫不差）；达古死后被阁罗掳为奴",
+        "appearance": "深棕色卷发，绾髻，戴金色螺旋兽角状头冠；深色细长眼，眼下有点状纹面/雀斑；两人容貌几乎相同（孪生），艳丽成熟；丰满；紫色与金色织纹的露肩襦裙，配青绿蓝色腰饰与金色织带，下着黑色网纹长袜；金臂环、圆环耳坠、绿宝石戒指",
+        "affiliations": [
+          {
+            "faction": "鬼王峒",
+            "role": "奴隶"
+          }
+        ],
+        "debutLocation": {
+          "location": "鬼王峒·达古家",
+          "locator": "六朝清羽记·第108章",
+          "scene": "阁罗接管达古家产后将其带出"
+        }
+      },
+      "region": "南荒",
+      "phaseIdentities": [],
+      "review": {
+        "approved": false,
+        "reviewed": true,
+        "flags": [
+          "portrait-canon-gap-recovered"
+        ],
+        "conflicts": [],
+        "note": "立绘管线缺卡审计补建（2026-07-30）：该角色有官方插图但 canon 无角色卡，故无法参与别名归一。仅采原文明载事实，不外推原作未载内容。",
+        "humanNotes": [
+          "原文依据：达古的妻子是一对孪生的姐妹花，她们无论身段面容，都如同一个模子里刻出来的一样，分毫不差（ch108）。**正文中未给出姓名**，「达古的孪生妻子」是官方插图页的标注称法"
+        ]
+      },
+      "embedText": "达古的孪生妻子 ｜ 达古最宠爱的妻子，一对孪生姐妹（身段面容分毫不差）；达古死后被阁罗掳为奴 ｜ 【南荒人物】 ｜ 鬼王峒(奴隶) ｜ 登场于鬼王峒·达古家 ｜ 鬼王峒中阁罗掌控下的奴隶 ｜ 达古死讯传来后，阁罗第一件事即闯入达古家中接管一切并将其掳为奴"
     },
     {
       "id": "canon.character.de573fc5b2",
