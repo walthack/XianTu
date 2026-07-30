@@ -54,6 +54,51 @@ function deriveRegion(c) {
   return '';
 }
 
+// 立绘分层数据（portrait-visual-master.json）注入 staticProfile：
+//   visualIdentity —— 换装换不掉的体貌（发色/瞳色/五官/体型 + 永久标记 + 真身特征）
+//   visualOutfits  —— 可变装束，scope=default 为常态，stage:<id> 供按关卡取
+// 分层的用处在 storyContext 规则 4：它要求换装时「保留刺青、饰物、发式等族裔特征」，
+// 但此前没有数据说明哪些属于「不能换掉的」，只能靠 race 字段和常识猜。
+let VISUAL = {};
+try {
+  const doc = JSON.parse(readFileSync(join(gen, 'character-canon/portrait-visual-master.json'), 'utf8'));
+  for (const c of doc.characters || []) VISUAL[c.name] = c;
+} catch { /* 无立绘数据则跳过 */ }
+let visualInjected = 0;
+function withVisualLayers(c) {
+  const sp = { ...(c.staticProfile || {}) };
+  // 立绘数据里的条目名可能是带括号的全称（「孙寿（襄城君）」），而卡用简称，
+  // 故按 canonicalName → 别名 → 去括号 依次查，否则狐尾这类特征会静默丢失。
+  const bare = s => String(s).replace(/[（(].*?[）)]/g, '').trim();
+  const v = VISUAL[c.canonicalName]
+    || (c.aliases || []).map(a => VISUAL[a]).find(Boolean)
+    || Object.values(VISUAL).find(x => bare(x.name) === bare(c.canonicalName));
+  if (!v) return sp;
+  const id = v.identity || {};
+  const identity = {
+    hairColor: id.hairColor || undefined,
+    hair: id.hair || undefined,
+    eyes: id.eyes || undefined,
+    face: id.face || undefined,
+    build: id.build || undefined,
+    marks: (id.marks || []).length ? id.marks : undefined,
+    // trueForm 是身份秘密（苏妲己=九尾妖狐、孙寿平时「化身藏形」隐去狐尾），
+    // 单独存放，由 resolver 加门控措辞后注入，绝不与常态体貌混为一谈。
+    trueForm: (id.trueForm || []).length ? id.trueForm : undefined,
+    canonOverride: id.canonOverride || undefined,
+  };
+  if (Object.values(identity).some(x => x !== undefined)) sp.visualIdentity = identity;
+  const outfits = (v.outfits || []).filter(o => o.outfit).map(o => ({
+    id: o.id, label: o.label || undefined, scope: o.scope,
+    outfit: o.outfit, accessories: o.accessories || undefined,
+    palette: (o.palette || []).length ? o.palette : undefined,
+    props: o.props || undefined,
+  }));
+  if (outfits.length) sp.visualOutfits = outfits;
+  if (sp.visualIdentity || sp.visualOutfits) visualInjected += 1;
+  return sp;
+}
+
 function buildEmbedText(c) {
   const sp = c.staticProfile || {};
   const parts = [
@@ -93,7 +138,7 @@ for (const c of cards) {
     books: c.books || [],
     tier: c.tier,
     stagePresence,
-    staticProfile: c.staticProfile || {},
+    staticProfile: withVisualLayers(c),
     region: deriveRegion(c) || undefined,
     phaseIdentities: c.phaseIdentities || [],
     review: c.review || undefined,
@@ -143,6 +188,7 @@ writeFileSync(outPath, JSON.stringify(registry, null, 2));
 console.log('=== character-registry 生成完成 ===');
 console.log('输出:', outPath.replace(root + '/', ''));
 console.log('条目:', entries.length, '| stage 出场:', registry.stats.stagePresent, '| canon-only:', registry.stats.canonOnly, '| 撞卡合并:', collisions.length);
+console.log('立绘分层注入:', visualInjected, '人（visualIdentity / visualOutfits）');
 console.log('撞卡:', collisions.map(c => `${c.id}(留 ${c.kept} / 并 ${c.folded})`).join(' ; '));
 console.log('文件大小:', Math.round(JSON.stringify(registry).length / 1024) + 'KB');
 console.log('embedText 样例(小紫):', (entries.find(e => e.canonicalName === '小紫') || {}).embedText?.slice(0, 160));

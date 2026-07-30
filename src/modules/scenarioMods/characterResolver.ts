@@ -35,9 +35,33 @@ interface RegistryPhase {
   hideCanonicalAlias?: boolean;
   blockedStageNotePrefixes?: string[];
 }
+/** 换装换不掉的体貌；与 visualOutfits 成对，见 portrait-visual-master.json 的分层说明 */
+interface VisualIdentity {
+  hairColor?: string;
+  hair?: string;
+  eyes?: string;
+  face?: string;
+  build?: string;
+  marks?: string[];
+  /** 真身特征（狐尾/蝎尾/龙鳞）：属身份秘密，注入时必须带门控，见 buildNotes */
+  trueForm?: string[];
+  canonOverride?: string;
+}
+interface VisualOutfit {
+  id: string;
+  label?: string;
+  /** default | stage:<stageId> | phase:<label> | unassigned */
+  scope: string;
+  outfit: string;
+  accessories?: string;
+  palette?: string[];
+  props?: string;
+}
 interface RegistryStaticProfile {
   identitySummary?: string;
   appearance?: string;
+  visualIdentity?: VisualIdentity;
+  visualOutfits?: VisualOutfit[];
   race?: string;
   personality?: string[];
   relationToProtagonist?: string[] | string;
@@ -69,6 +93,7 @@ const DERIVED_TAGS = [
   '【历程】', '【生辰】',
   '【关系】', '【称呼】', '【谈吐】', '【底线】', '【目标】', '【软肋】', '【绝技】',
   '【入伙】', '【情节】', '【结局】', '【阶段身份】', '【本阶段禁用】', '【人工正典】',
+  '【体貌】', '【装束】', '【真身特征】',
 ];
 
 function asArray<T>(value: T | T[] | undefined | null): T[] {
@@ -113,6 +138,15 @@ function stageBookRank(stageId: string): number {
   return 99;
 }
 
+/**
+ * 选出该关卡应穿的那套装束：绑定到本关的优先，否则回落到常态那套。
+ * 独立导出是为了可单测，也供将来的出图脚本按同一规则取装束。
+ */
+export function pickOutfitForStage(outfits: VisualOutfit[] | undefined, stageId: string): VisualOutfit | undefined {
+  if (!Array.isArray(outfits) || !outfits.length) return undefined;
+  return outfits.find(o => o.scope === `stage:${stageId}`) || outfits.find(o => o.scope === 'default');
+}
+
 function buildNotes(entry: RegistryEntry, currentPhase: RegistryPhase | undefined, stageId = ''): string[] {
   const profile = entry.staticProfile || {};
   const notes: string[] = [];
@@ -120,6 +154,29 @@ function buildNotes(entry: RegistryEntry, currentPhase: RegistryPhase | undefine
     const values = unique(asArray(value as unknown[])).map(item => compact(item, max));
     if (values.length) notes.push(`【${tag}】${values.join('；')}`);
   };
+  // 体貌与装束分层：服装随场景更换，体貌不变。分开注入是为了让 storyContext 规则 4
+  // （换装须取其族裔样式、并保留刺青饰物发式）有据可依，而不是靠 race 字段猜。
+  const vi = profile.visualIdentity;
+  if (vi) {
+    const body = [vi.hair, vi.eyes, vi.face, vi.build, ...(vi.marks || [])].filter(Boolean);
+    if (body.length) add('体貌', `${body.join('；')}——换装不改变这些特征`, 420);
+  }
+  const outfits = profile.visualOutfits || [];
+  if (outfits.length) {
+    const worn = pickOutfitForStage(outfits, stageId);
+    if (worn) {
+      const parts = [worn.outfit, worn.accessories, (worn.palette || []).join('／'), worn.props].filter(Boolean);
+      const label = worn.label ? `（${worn.label}）` : '';
+      add('装束', `${label}${parts.join('；')}——此为当前常态装束，可随场景更换`, 420);
+    }
+  }
+  // 真身特征单独注入并带门控：狐尾/蝎尾这类是身份秘密，且原文中平时以「化身藏形」隐去。
+  // 不能与常态体貌混写，否则 LLM 会当作人人可见的外观直接写进正文（storyContext 规则 5 管这个）。
+  if (vi?.trueForm?.length) {
+    add('真身特征', `${vi.trueForm.join('；')}——仅在其显露真身时可见，平时隐去；`
+      + '场内人物是否知情按【人物真身】规则判断，不得作为既知前提', 320);
+  }
+
   // 跨本历程：只注入早于当前关卡所属书的经历（跨本长期记忆·方案A；不含本书/后书防剧透）
   const rank = stageBookRank(stageId);
   for (const mem of asArray(profile.crossStageMemories)) {

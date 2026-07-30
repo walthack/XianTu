@@ -67,7 +67,7 @@ function splitOutfits(text) {
   const t = String(text || '').trim();
   if (!t) return [];
   // 形式一：「甲（战装）：… ；乙（常服）：…」
-  const labeled = [...t.matchAll(/([甲乙丙丁])(?:（([^）]*)）)?[：:]\s*([^；;]+)/g)];
+  const labeled = [...t.matchAll(/([甲乙丙丁][一二三四]?)(?:（([^）]*)）)?[：:]\s*([^；;]+)/g)];
   if (labeled.length >= 2) {
     return labeled.map(m => ({ label: m[2] || `装束${m[1]}`, outfit: m[3].trim() }));
   }
@@ -84,7 +84,7 @@ function pickMarks(visual) {
   const trueForm = [];
   const scan = (field, value) => {
     for (const seg of String(value || '').split(/[；;。]/)) {
-      const s = seg.trim().replace(/^\*\*|\*\*$/g, '');
+      const s = seg.trim().replace(/\*\*/g, '');
       if (!s) continue;
       // 先看是不是真身/标记，再用装束词排除：「鳞片胸甲」含甲 → 装束，不是真身
       const isTrue = TRUE_FORM_RE.test(s);
@@ -101,19 +101,32 @@ function pickMarks(visual) {
   return { marks, trueForm };
 }
 
+// 已提取到 identity 的片段必须从可变层里删掉，否则真身特征会绕过门控：
+// 苏妲己的狐尾一度同时存在于 identity.trueForm 和 outfits[].props，
+// 而 props 是当作常态装束注入 prompt 的 —— 九尾狐身份会就这样泄出去。
+function stripExtracted(text, extracted) {
+  let s = String(text || '').replace(/\*\*/g, '');
+  for (const frag of extracted) {
+    const bare = frag.replace(/\*\*/g, '').trim();
+    if (bare) s = s.split(bare).join('');
+  }
+  return s.replace(/^[；;，,、\s]+|[；;，,、\s]+$/g, '').replace(/[；;]\s*[；;]/g, '；');
+}
+
 function convert(row) {
   const v = row.visual || {};
   const { marks, trueForm } = pickMarks(v);
+  const extracted = [...marks, ...trueForm].map(m => m.text);
   // 取捕获组而非整个匹配：整匹配会把 lookahead 前的「色」「的」一起带进来（曾得到「乌亮的」）
   const rawColor = (String(v.hair || '').match(HAIR_COLOR_RE) || [])[1] || '';
   const hairColor = NORMALIZE_HAIR[rawColor] || rawColor;
 
   const identity = {
     hairColor,
-    hair: v.hair || '',            // 默认发式（outfits 里同名字段仅在该套不同时覆盖）
-    eyes: v.eyes || '',
-    face: v.face || '',
-    build: v.build || '',
+    hair: stripExtracted(v.hair, extracted),
+    eyes: stripExtracted(v.eyes, extracted),
+    face: stripExtracted(v.face, extracted),      // 「额头刺青」等已进 marks，不在 face 里重复
+    build: stripExtracted(v.build, extracted),
     marks: marks.map(m => m.text),
     trueForm: trueForm.map(m => m.text),
   };
@@ -123,11 +136,11 @@ function convert(row) {
     id: i === 0 ? 'default' : `variant-${i}`,
     label: p.label,
     scope: i === 0 ? 'default' : 'unassigned',   // 变体待人工绑定到 stage / phase
-    outfit: p.outfit,
+    outfit: stripExtracted(p.outfit, extracted),
     // 配饰与配色暂随主套；变体各自的配饰原文里通常没分开写，不猜
-    accessories: i === 0 ? (v.accessories || '') : '',
+    accessories: i === 0 ? stripExtracted(v.accessories, extracted) : '',
     palette: i === 0 ? (v.palette || []) : [],
-    props: i === 0 ? (v.poseProps || '') : '',
+    props: i === 0 ? stripExtracted(v.poseProps, extracted) : '',
     provenance: row.provenance,
     sourceImages: i === 0 ? (row.sourceImages || undefined) : undefined,
   })).filter(o => o.outfit);

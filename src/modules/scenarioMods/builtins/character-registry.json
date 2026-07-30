@@ -1,9 +1,9 @@
 {
   "schema": "xiantu.character-registry.v1",
-  "version": "cr-2026-07-30-a855cc8cb7f0bfb5",
-  "sourceHash": "a855cc8cb7f0bfb5",
+  "version": "cr-2026-07-30-6f3a5d006e77c613",
+  "sourceHash": "6f3a5d006e77c613",
   "sourceGeneratedAt": "2026-06-30T12:50:33.965Z",
-  "generatedAt": "2026-07-30T12:58:16.332Z",
+  "generatedAt": "2026-07-30T13:22:18.420Z",
   "stats": {
     "total": 315,
     "stagePresent": 217,
@@ -404,7 +404,28 @@
           "location": "白夷族",
           "locator": "六朝清羽记·第119章前后",
           "scene": "白夷族受鬼王峒使者控制期间"
-        }
+        },
+        "visualIdentity": {
+          "hair": "紫红（酒红）色大波浪长卷发，蓬松垂散",
+          "eyes": "红色眼眸，眼神妩媚",
+          "face": "艳丽的成熟面孔，唇色淡红",
+          "build": "成熟丰满"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "米白底浅黄印花的轻薄单衣（半褪、宽松），内里可见黄绿色织圆纹的裙料",
+            "accessories": "绿珠金质长耳坠",
+            "palette": [
+              "酒红",
+              "米白",
+              "浅黄",
+              "黄绿"
+            ],
+            "props": "卧于窗下（情色场景）"
+          }
+        ]
       },
       "region": "南荒",
       "phaseIdentities": [],
@@ -1105,7 +1126,29 @@
           "value": "32",
           "basis": "黄氏讪讪道：'奴婢三十有二。'"
         },
-        "birthYear": 188
+        "birthYear": 188,
+        "visualIdentity": {
+          "hairColor": "金色",
+          "hair": "橄榄棕色短卷发，绾成低髻，插金色发簪",
+          "eyes": "褐绿色眼，眼神慵懒",
+          "face": "成熟妩媚的面孔，唇色淡红",
+          "build": "丰满成熟"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "（官图为情色场景）可见红色织带式装束配金色十字扣，白色蕾丝花纹长筒袜",
+            "accessories": "金手镯与臂环、耳坠",
+            "palette": [
+              "朱红",
+              "素白",
+              "赤金",
+              "橄榄棕"
+            ],
+            "props": "波斯风帘幕、青花执壶的富丽室内"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -1534,7 +1577,26 @@
           "location": "王忠嗣与段文楚商议监控程侯之策，段文楚提及法曹参军独孤谓",
           "locator": "六朝燕歌行/0077章 段文楚与王忠嗣议事",
           "scene": "他人对话中被提及为六扇门出身的法曹参军，负责监视程宗扬一行动态；唐国京兆府法曹参军，六扇门借调官员，专司盯梢舞阳程侯"
-        }
+        },
+        "visualIdentity": {
+          "eyes": "蓝色眼眸",
+          "face": "剑眉朗目，唇红齿白，人称美男子"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "锦衣绣服；大氅；半旧布衣；官服（朱紫）；靴子（半圆形靴底，掌心大小，靴筒前屈）",
+            "accessories": "缀花边黑色丝巾（覆面重纱）；金冠；幞头；纱帽；黑巾（蒙面）；胡琴",
+            "palette": [
+              "蓝",
+              "金",
+              "黑",
+              "朱紫"
+            ],
+            "props": "常携胡琴；戴金冠；蒙面时只露一只眼"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -2053,7 +2115,14 @@
           "location": "星月湖军营",
           "locator": "六朝清羽记·第10章",
           "scene": "程宗扬与月霜起冲突时出面拦阻"
-        }
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "文士打扮，头上戴着细长的高冠，系紧高冠，理好衣物"
+          }
+        ]
       },
       "phaseIdentities": [],
       "review": {
@@ -2933,7 +3002,28 @@
           "location": "太泉古阵（苍澜附近）",
           "locator": "六朝云龙吟·0122.html",
           "scene": "萧遥逸向程宗扬等人介绍楼上住客时提及瑶池宗来人，其中一位身份特殊的是瑶池宗三仙子中的奉琼仙子朱殷，提到他们今晚也要前往太泉。"
-        }
+        },
+        "visualIdentity": {
+          "hairColor": "黑",
+          "hair": "墨绿泛黑的头发，绾成低髻，插一支金色小簪，碎发垂落",
+          "eyes": "褐绿色眼，含泪",
+          "face": "清秀成熟的长脸，唇色淡红，神情哀凄",
+          "build": "纤细"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "橙红色薄质单衣（半褪、无内衬），赤足",
+            "accessories": "金色小发簪",
+            "palette": [
+              "橙红",
+              "墨绿",
+              "金"
+            ],
+            "props": "牢狱铁栏与锁链场景（囚禁状态）"
+          }
+        ]
       },
       "region": "太泉",
       "phaseIdentities": [
@@ -3225,7 +3315,12 @@
           "locator": "0011.html",
           "scene": "李师师从马车上下来进入威远镖局，门前镖师对她十分熟稔，纷纷起身叉手施礼，李师师略点头便匆匆进了镖局"
         },
-        "birthYear": 175
+        "birthYear": 175,
+        "visualIdentity": {
+          "hair": "头发稀疏",
+          "eyes": "眼中透出一丝精明",
+          "face": "四五十岁年纪，颇有些市侩气"
+        }
       },
       "phaseIdentities": [
         {
@@ -3446,7 +3541,29 @@
           "location": "游冶台",
           "locator": "六朝云龙吟·0201",
           "scene": "楼中争吵被罂粟女管束"
-        }
+        },
+        "visualIdentity": {
+          "hairColor": "棕红",
+          "hair": "深棕红色头发，梳成左右两个丸子髻并系浅绿色发带，另垂一条麻花辫",
+          "eyes": "琥珀褐色大眼，眼型圆润",
+          "face": "少女圆脸，唇小色淡，神情娇怯",
+          "build": "少女身形（不作强调）"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "粉橘色织金缠枝纹襦裙，胸前与领口缀白色蕾丝花边与小排扣，内衬薄荷绿衬裙与荷叶边，束绿色腰带",
+            "accessories": "颈间小金铃项圈、脚踝金扣配绿边环饰",
+            "palette": [
+              "粉橘",
+              "薄荷绿",
+              "米白",
+              "金"
+            ],
+            "props": "花卉与软枕背景"
+          }
+        ]
       },
       "phaseIdentities": [],
       "review": {
@@ -3678,6 +3795,11 @@
           "location": "鬼王峒",
           "locator": "六朝清羽记·第114章",
           "scene": "额头刺青的红苗汉子单膝跪地，受鬼角巫师念诵控制"
+        },
+        "visualIdentity": {
+          "marks": [
+            "额头刺青"
+          ]
         }
       },
       "region": "南荒",
@@ -3728,7 +3850,29 @@
           "location": "宫宴",
           "locator": "六朝燕歌行·0134",
           "scene": "乐官以李十二娘的剑舞替换甘泉舞"
-        }
+        },
+        "visualIdentity": {
+          "hairColor": "墨黑",
+          "hair": "墨黑长发，绾高髻并留飘散鬓丝，戴粉红折扇形华冠、金步摇与额前珠饰",
+          "eyes": "细长凤眼，黑瞳，低垂含笑",
+          "face": "秀丽鹅蛋脸，唇小色红，神情沉静",
+          "build": "修长"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "桃红色剑舞舞裙：大袖如层叠花瓣、袖缘缀金饰与珠串，束腰配金色浮雕腰饰，颈系粉红领巾",
+            "accessories": "金步摇、珠链、金色腰环",
+            "palette": [
+              "桃红",
+              "洋红",
+              "墨黑",
+              "赤金"
+            ],
+            "props": "手持金蓝缠枝纹长剑，作剑舞姿态，花瓣纷飞"
+          }
+        ]
       },
       "phaseIdentities": [],
       "review": {
@@ -4011,7 +4155,29 @@
           "location": "塌方地洞，被困数个时辰",
           "locator": "六朝云龙吟/六朝云龙吟/0153.html，第148章前后",
           "scene": "与萧遥逸一同困于水泥墙夹缝间，以面纱遮脸的神秘少女；身份不明的蒙面少女（后自述为铁勒族公主）"
-        }
+        },
+        "visualIdentity": {
+          "hairColor": "红棕",
+          "hair": "红棕色长发，两侧垂长发束，戴织带式发箍配金色垂穗",
+          "eyes": "金褐色大眼，笑意爽朗",
+          "face": "健康明朗的少女面孔，唇色粉",
+          "build": "健美"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "橙红色苗彝风织锦长袍：宽袖，袖口与下摆织蓝、黄、红几何纹样，束织锦腰带，下摆开衩露腿",
+            "accessories": "两枚大金圆盘胸饰、腰间垂蓝红色流苏排饰、金腕饰与腿环、耳坠",
+            "palette": [
+              "橙红",
+              "明黄",
+              "湖蓝",
+              "赤金"
+            ],
+            "props": "手持长弓与箭（猎手），草原与飞鸟背景"
+          }
+        ]
       },
       "phaseIdentities": [],
       "review": {
@@ -5085,7 +5251,29 @@
           "location": "汉宫殿中",
           "locator": "六朝云龙吟·0235",
           "scene": "被内侍带进殿中拜见侯爷"
-        }
+        },
+        "visualIdentity": {
+          "hairColor": "墨黑",
+          "hair": "墨黑长发，戴极华丽的金冠——两侧展开大幅金色翼状/角状饰片，嵌绿宝石，额前垂珠链",
+          "eyes": "褐红色眼，眼下红妆，笑意张扬",
+          "face": "艳丽的鹅蛋脸，唇色红",
+          "build": "丰满"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "蓝紫与青绿色锯齿几何纹的织锦长袍（宽袖、敞怀露出胸腹）",
+            "accessories": "金璎珞胸链缀绿宝石心形坠与金铃、紫色细绳缠身、金指环",
+            "palette": [
+              "蓝紫",
+              "青绿",
+              "明黄",
+              "赤金"
+            ],
+            "props": "紫色蓟花背景，跪坐姿"
+          }
+        ]
       },
       "region": "汉国",
       "phaseIdentities": [],
@@ -5413,7 +5601,22 @@
           "locator": "0166.html",
           "scene": "刚刚接任京兆府少尹、权知府事的罗立言闻讯王守澄被杀，立即带着属下隶卒及长安、万年两县官员赶到凶案现场"
         },
-        "birthYear": 190
+        "birthYear": 190,
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "紫袍，犀角腰带，玉叶鸣佩，金鱼袋，香囊，荷包，官靴",
+            "accessories": "犀角腰带（腰间），玉叶鸣佩（腰间），金鱼袋（腰间），香囊（腰间），荷包（腰间）",
+            "palette": [
+              "紫",
+              "玉色",
+              "金",
+              "犀角色",
+              "黑（官靴）"
+            ]
+          }
+        ]
       },
       "region": "唐国",
       "phaseIdentities": [
@@ -5878,7 +6081,23 @@
           "value": "二十五六岁",
           "basis": "她二十五六岁年纪，梳着一个流苏髻，穿着杏红的衫子，打扮妖冶。"
         },
-        "birthYear": 195
+        "birthYear": 195,
+        "visualIdentity": {
+          "hair": "长发散乱",
+          "face": "脸色苍白"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "一只衣袖被刀锋划破",
+            "accessories": "包头的布巾",
+            "palette": [
+              "白",
+              "黑"
+            ]
+          }
+        ]
       },
       "region": "宋国",
       "phaseIdentities": [
@@ -6421,7 +6640,29 @@
           "location": "鬼王峒·达古家",
           "locator": "六朝清羽记·第108章",
           "scene": "阁罗接管达古家产后将其带出"
-        }
+        },
+        "visualIdentity": {
+          "hairColor": "深棕",
+          "hair": "深棕色卷发，绾髻，戴金色螺旋兽角状头冠",
+          "eyes": "深色细长眼，眼下有点状纹面/雀斑",
+          "face": "两人容貌几乎相同（孪生），艳丽成熟",
+          "build": "丰满"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "紫色与金色织纹的露肩襦裙，配青绿蓝色腰饰与金色织带，下着黑色网纹长袜",
+            "accessories": "金臂环、圆环耳坠、绿宝石戒指",
+            "palette": [
+              "紫",
+              "赤金",
+              "青绿",
+              "黑"
+            ],
+            "props": "双人成对出现，红色飘带与枯枝背景（情色场景）"
+          }
+        ]
       },
       "region": "南荒",
       "phaseIdentities": [],
@@ -6927,7 +7168,18 @@
           "locator": "chapter265.html（第二十二集）",
           "scene": "在晴州偶遇程宗扬与秦桧后，于临安悦生堂正式与程宗扬会面，自报家门"
         },
-        "birthYear": 180
+        "birthYear": 180,
+        "visualIdentity": {
+          "face": "留胡须"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "棉布长袍（半旧不新）",
+            "props": "捋胡须；坐于客厅等候"
+          }
+        ]
       },
       "region": "宋国",
       "phaseIdentities": [
@@ -7158,7 +7410,27 @@
           "locator": "chapter12.html",
           "scene": "罗马将领从军团中驰出，近卫骑士上前用生涩语调喝道\"罗马联军统帅，阿伽门侬！\"，随后阿伽门侬与韩庚对峙并展开阵前对话"
         },
-        "birthYear": 180
+        "birthYear": 180,
+        "visualIdentity": {
+          "hairColor": "金色",
+          "hair": "金色鬈发，披到肩后",
+          "eyes": "蓝色眼眸",
+          "face": "傲慢，浓密胡须，脸颊肌肉抽动"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "金甲（金黄色甲胄），金黄细密锁甲，腰间佩带短剑，黄金头盔",
+            "accessories": "高卢式四角马鞍（四个高翘犄角夹住腰臀）",
+            "palette": [
+              "金黄",
+              "金色",
+              "蓝"
+            ],
+            "props": "骑马，一手提缰绳"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -7242,7 +7514,30 @@
           "location": "草原战场",
           "locator": "chapter17.html",
           "scene": "手提韩庚滴血的头颅出现在血腥战场，傲然挺起丰颀娇躯，如噬血魔女般现身"
-        }
+        },
+        "visualIdentity": {
+          "hairColor": "金",
+          "hair": "金黄色美发（原文「女祭司金黄的美发」）",
+          "eyes": "碧蓝色眼眸，神情冷漠",
+          "face": "轮廓深邃的异域面孔，唇色红",
+          "build": "高挑健美",
+          "canonOverride": "裁定 #142：原文 ch17 金发碧眼+黑色罩帽、ch272 拜火教女祭司；官图的棕金发/绿眼/紫甲弓手不采"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "女战士装束：紫色胸甲与深紫护腰、深灰金属护手与肩甲（缀尖齿状装饰），紫色系带短裤",
+            "accessories": "成套金色臂环与腕环（多层叠戴）、大金圈耳环、金色手镯",
+            "palette": [
+              "紫",
+              "深灰",
+              "赤金",
+              "棕金"
+            ],
+            "props": "手持长弓，星空/极光背景"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -7422,7 +7717,22 @@
           "locator": "chapter12.html",
           "scene": "左武军天武营战车疾驰至战场中央，韩庚立于车上，身边竖着赤红长戟，向罗马军团自报家门"
         },
-        "birthYear": 190
+        "birthYear": 190,
+        "visualIdentity": {
+          "face": "面容冷峻，剑眉",
+          "build": "高大魁梧"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "袍袖（袍服）",
+            "palette": [
+              "赤红"
+            ],
+            "props": "赤红长戟"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -8546,7 +8856,39 @@
             "text": "亲历：程宗扬与月霜初遇（与程宗扬）；太乙真宗介入（与程宗扬、蔺采泉、商乐轩）；左武军与罗马军团大战（与王哲、韩庚、阿伽门侬）；程宗扬与月霜逃亡（与程宗扬）"
           }
         ],
-        "birthYear": 200
+        "birthYear": 200,
+        "visualIdentity": {
+          "hairColor": "乌黑",
+          "hair": "一头青丝（乌黑长发），高扎马尾并系红色发带；寒毒发作时发丝带细霜、眉眼间泛青",
+          "eyes": "紫色眼眸；月霜-2 中疑为异色瞳（左绿右紫），眉形英气",
+          "face": "清秀鹅蛋脸，唇色淡，神情坚毅",
+          "build": "高挑",
+          "canonOverride": "裁定 #142：canon evidence 有「一头青丝」，官图的栗棕发是画师上色"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "label": "战损",
+            "scope": "default",
+            "outfit": "银白胸甲+暗红破损露肩衣袖、灰蓝腰带、紫与古铜腰甲护腿、玫红绳结流苏",
+            "accessories": "红色围巾/领巾、红色绳结长流苏、金铜甲片扣件",
+            "palette": [
+              "银白",
+              "暗红",
+              "灰蓝",
+              "紫",
+              "古铜金",
+              "栗棕"
+            ],
+            "props": "手持金柄长剑；樱花树下 / 荒野岩地"
+          },
+          {
+            "id": "variant-1",
+            "label": "装束甲二",
+            "scope": "unassigned",
+            "outfit": "灰蓝色露肩短外衣、酒红抹胸缀粉色玫瑰饰、褐色皮腰甲、赭黄长靴配玫红护足"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -8707,7 +9049,10 @@
           "scene": "程宗扬在河滩遭遇兽蛮老者阿合马，阿合马认出程宗扬后怒而厮杀，被哈迷蚩呼唤制止，二兽以兽蛮人结义兄弟礼仪相认"
         },
         "race": "兽蛮人",
-        "birthYear": 162
+        "birthYear": 162,
+        "visualIdentity": {
+          "face": "兽牙，血盆大口，宽大的嘴唇"
+        }
       },
       "phaseIdentities": [
         {
@@ -8797,7 +9142,29 @@
           "locator": "六朝清羽记chapter21",
           "scene": "程宗扬被囚于地牢时，红褐色头发的天竺少女阿姬曼在地牢中出现，主动与他攀谈，透露自己是被买来的奴隶"
         },
-        "birthYear": 202
+        "birthYear": 202,
+        "visualIdentity": {
+          "hairColor": "棕",
+          "hair": "棕色长发（挑染浅色），戴金色额饰珠链与粉红色头巾/薄纱",
+          "eyes": "蓝绿色眼",
+          "face": "异域少女面孔，唇色粉",
+          "build": "（HIGH 风险角色，按红线不作身材描述）"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "（官图为露骨场景，仅可见紫色系带装与红色长绸披帛）",
+            "accessories": "金璎珞项链嵌蓝宝石、金臂环、金手镯、金色额链",
+            "palette": [
+              "粉红",
+              "朱红",
+              "赤金",
+              "蓝宝"
+            ],
+            "props": "花瓣飞舞背景"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -8885,7 +9252,28 @@
           "location": "花苗族寨中，选贡仪式",
           "locator": "六朝清羽记/chapter54.html",
           "scene": "作为花苗族选出的贡物之一，与阿葭一同被选定献予鬼王峒巫王；花苗族少女、献给鬼巫王的贡品"
-        }
+        },
+        "visualIdentity": {
+          "hairColor": "墨黑",
+          "hair": "墨黑色头发，编成多条细辫垂于脑后，辫上缀彩色珠子与织带饰片（异族发式）",
+          "eyes": "褐色眼，眼型细长",
+          "face": "清秀的少女面孔，唇色淡",
+          "build": "（HIGH 风险角色，按红线不作身材描述）"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "米黄色薄纱裹身衣，系粉色织花长带",
+            "accessories": "辫饰珠串、金脚镯、耳坠",
+            "palette": [
+              "米黄",
+              "粉",
+              "墨黑"
+            ],
+            "props": "夜晚池畔、新月与白花背景"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -9448,7 +9836,10 @@
           "locator": "第248章",
           "scene": "敖润在山路宿营处拿出铜制酒壶与程宗扬分享，自报姓名，豪爽地邀请程宗扬喝酒驱寒"
         },
-        "birthYear": 170
+        "birthYear": 170,
+        "visualIdentity": {
+          "build": "粗壮"
+        }
       },
       "region": "宋国",
       "phaseIdentities": [
@@ -9601,7 +9992,24 @@
           "locator": "六朝云龙吟/0088.html",
           "scene": "在与太乙真宗米远志的战斗中，八臂魔僧以八臂形态现身，双手各执法器与米远志激战，被米远志认出并喝破名号"
         },
-        "birthYear": 155
+        "birthYear": 155,
+        "visualIdentity": {
+          "hairColor": "白",
+          "hair": "白发",
+          "face": "木讷的神情",
+          "build": "佝偻"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "布帽",
+            "palette": [
+              "白",
+              "淡金"
+            ]
+          }
+        ]
       },
       "region": "宋国",
       "phaseIdentities": [
@@ -9695,7 +10103,29 @@
           "locator": "第0133章",
           "scene": "赵归真请过程宗扬后，一个头戴玉叶花冠、白衣胜雪的女子轻烟般踏入室内，程宗扬认出她便是瑶池宗的奉玦仙子白霓裳"
         },
-        "birthYear": 190
+        "birthYear": 190,
+        "visualIdentity": {
+          "hairColor": "白",
+          "hair": "深棕色长直发，顶部束半月形白玉发冠并系白色发带，簪白色小花",
+          "eyes": "深褐色眼，眼神清冷坚定",
+          "face": "清丽立体的鹅蛋脸，唇色淡粉",
+          "build": "修长清瘦"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "素白广袖长袍，衣缘织淡金云纹，内衬白色抹胸，衣袂飘扬",
+            "accessories": "白玉半月冠、白色发带、珍珠耳坠",
+            "palette": [
+              "素白",
+              "淡金",
+              "深棕",
+              "天蓝"
+            ],
+            "props": "手持青灰色宽刃长剑，春日花枝与蓝天背景"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -10096,7 +10526,29 @@
           "scene": "程宗扬终于见到了让谢艺念兹在兹的女人——碧姬。但，情况似乎不是他所想象的那样……"
         },
         "race": "碧鲮族",
-        "birthYear": 186
+        "birthYear": 186,
+        "visualIdentity": {
+          "hairColor": "墨黑",
+          "hair": "墨黑色长发，高绾并编辫垂落，戴金色发冠、珠链与红色缨穗",
+          "eyes": "翠绿色眼，眼尾上挑",
+          "face": "妩媚的鹅蛋脸，额心金色花钿，唇色橘红，含笑",
+          "build": "丰满柔美"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "黄绿色印花薄纱舞装（露腰的胸衣与开衩长裙），纱料轻透飘动",
+            "accessories": "金臂钏（嵌红宝）、金璎珞与红宝石胸坠、金腰链与垂珠、金镯、金色长指甲，赤足",
+            "palette": [
+              "黄绿",
+              "赤金",
+              "朱红",
+              "墨黑"
+            ],
+            "props": "腾空起舞姿态，蓝色水/烟雾背景"
+          }
+        ]
       },
       "region": "南荒",
       "phaseIdentities": [
@@ -10390,7 +10842,26 @@
             "text": "亲历：长秋宫守卫战（与程宗扬、刘建、苍鹭）；剑玉姬与程宗扬谈判（与剑玉姬、程宗扬）"
           }
         ],
-        "birthYear": 190
+        "birthYear": 190,
+        "visualIdentity": {
+          "hair": "束发",
+          "face": "面孔蜡黄（伪装）/ 苍白如吸血鬼 / 死白肤色 / 唇上有小胡子（真或假）"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "粉色锦袍 / 绣花靴子（镶珍珠）",
+            "accessories": "束发金冠（金冠） / 墨镜 / 折扇 / 貂蝉冠（内侍冠）",
+            "palette": [
+              "粉",
+              "金",
+              "白",
+              "黄"
+            ],
+            "props": "戴墨镜 / 手持折扇 / 坐步辇"
+          }
+        ]
       },
       "region": "汉国",
       "phaseIdentities": [
@@ -10758,7 +11229,29 @@
           "locator": "六朝燕歌行/chapter0003.html",
           "scene": "刘建败亡后，成光作为建逆之妻被江充擒下，狼狈不堪地出现在吴三桂面前"
         },
-        "birthYear": 170
+        "birthYear": 170,
+        "visualIdentity": {
+          "hairColor": "紫黑",
+          "hair": "紫黑色长发，顶部编盘成髻，戴金色龙形发冠，簪粉色花枝与粉色流苏长坠",
+          "eyes": "湖蓝色大眼，眼型圆亮",
+          "face": "清丽少女面孔，额心贴红色花钿，唇色粉",
+          "build": "纤细"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "青绿色织花的舞装（抹胸式短衣与短裙，下缘缀金珠流苏），外披粉紫色薄纱披帛（织暗花）",
+            "accessories": "蓝金臂环、蓝珠手串、金色腿链、圆形蓝宝石胸饰",
+            "palette": [
+              "青绿",
+              "粉紫",
+              "赤金",
+              "湖蓝"
+            ],
+            "props": "坐于纱帘窗前，抬手起舞姿态"
+          }
+        ]
       },
       "region": "汉国",
       "phaseIdentities": [
@@ -12343,7 +12836,13 @@
           "locator": "chapter114",
           "scene": "在红苗人聚居的洞窟深处，被苏荔发现正与狗头鬼仆进行巫术仪式，原是苏荔闺中密友、娄蒙之妻"
         },
-        "birthYear": 190
+        "birthYear": 190,
+        "visualIdentity": {
+          "hair": "长发",
+          "eyes": "秀美的眼睛",
+          "face": "美丽的面孔",
+          "build": "高挑"
+        }
       },
       "region": "南荒",
       "phaseIdentities": [
@@ -12976,7 +13475,24 @@
           "location": "洛都城门",
           "locator": "六朝云龙吟/0406.html",
           "scene": "凉州军入城，一个身披铁甲的胖子靠在战车上现身，被称为破虏将军董卓"
-        }
+        },
+        "visualIdentity": {
+          "face": "剑髯怒张，浓密的剑髯，脸上的肥肉",
+          "build": "肥胖（像只肉球）"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "身披大氅，外罩赤袍，里面穿着金光灿灿的锁子甲，腰侧悬着铁胎雕弓，下面挂着两只盛满羽箭的箭壶，腰带上别着四支月牙短戟，背后缚着一对重斧，铁甲",
+            "palette": [
+              "赤",
+              "金",
+              "黑"
+            ],
+            "props": "短戟、铁胎雕弓、羽箭、月牙短戟、重斧"
+          }
+        ]
       },
       "region": "汉国",
       "phaseIdentities": [
@@ -13278,7 +13794,13 @@
           "locator": "第0114章",
           "scene": "作为女刺客潜入水香楼行刺程宗扬，失手被擒后被关押审讯"
         },
-        "birthYear": 190
+        "birthYear": 190,
+        "visualIdentity": {
+          "hair": "齐耳短发",
+          "eyes": "无神的眸子，灰沉沉没有一丝光彩",
+          "face": "脸色白净",
+          "build": "纤小"
+        }
       },
       "phaseIdentities": [
         {
@@ -13506,6 +14028,9 @@
           "location": "野外营地",
           "locator": "六朝清羽记/chapter248",
           "scene": "冯源在营地施展火法想点燃柴堆，却不慎将旁边的新帐篷烧着，引发众人哄笑。敖润介绍他是平山宗的法师，法术蹩脚但聊胜于无。"
+        },
+        "visualIdentity": {
+          "face": "胡须烧掉一大半；人中上多了一根银针；脸熏得黑黑的；浮现出一抹朱砂色；脸色发青"
         }
       },
       "phaseIdentities": [
@@ -13958,7 +14483,11 @@
           "value": "18",
           "basis": "游戏成年化调整为18（用户裁定；原文描写:十六）"
         },
-        "birthYear": 202
+        "birthYear": 202,
+        "visualIdentity": {
+          "face": "胖乎乎的圆脸，脸颊有巴掌大结痂伤口",
+          "build": "胖硕"
+        }
       },
       "phaseIdentities": [
         {
@@ -14477,7 +15006,30 @@
           "locator": "chapter102",
           "scene": "小紫提及阁罗拿来的棉帕是给鬼巫王大人的礼物，透露其作为鬼王峒统治者接受各族献祭的身份"
         },
-        "birthYear": 170
+        "birthYear": 170,
+        "visualIdentity": {
+          "hair": "披散的长发，被斩断后披散下来；虬曲的长发无风而起，仿佛无数细小的毒蛇",
+          "eyes": "幽深的黑眸，犹如深潭",
+          "face": "苍白的面孔，透出暗紫的血色；毫无血色的面孔",
+          "trueForm": [
+            "苍白的皮肤浮现出龙鳞般细密的纹路"
+          ]
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "黑色铠甲（金属般乌亮而深邃），宽大的黑色斗篷",
+            "accessories": "头顶一只金色的鬼角（从披散的长发中伸出）",
+            "palette": [
+              "黑",
+              "暗紫",
+              "金",
+              "血红"
+            ],
+            "props": "手持巨斧；周身旋转的星阵（血泊般的红光，东宫苍龙七宿盘绕）"
+          }
+        ]
       },
       "region": "南荒",
       "phaseIdentities": [
@@ -14710,7 +15262,24 @@
             "text": "亲历：程宗扬安排退路与联络（与程宗扬、云丹琉、秦桧）"
           }
         ],
-        "birthYear": 190
+        "birthYear": 190,
+        "visualIdentity": {
+          "face": "相貌平平，脸上微露朱砂之色",
+          "build": "身材远称不上魁梧"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "灰扑扑的粗布衣裳，半旧的青布裹头，腰间插着一柄短刀，脚上穿草鞋",
+            "accessories": "半旧的青布裹头（头上），短刀（腰间）",
+            "palette": [
+              "灰",
+              "青"
+            ],
+            "props": "步履从容，如履平地；抱拳；眉头紧锁"
+          }
+        ]
       },
       "region": "汉国",
       "phaseIdentities": [
@@ -14901,7 +15470,10 @@
           "value": "约2-3岁",
           "basis": "郭靖在葬礼上被抱在怀中，口齿不清，尚为幼童；与定陶王年龄相近，定陶王被认为‘年龄尚幼，再大两岁就不好说了’"
         },
-        "birthYear": 218
+        "birthYear": 218,
+        "visualIdentity": {
+          "face": "小脸却是红扑扑的"
+        }
       },
       "region": "汉国",
       "phaseIdentities": [
@@ -15015,7 +15587,23 @@
           "scene": "随祁远抵达临安，青面兽向程宗扬介绍这位族中术者，声称其为“吾族最伟大的术者”。"
         },
         "race": "兽蛮人",
-        "birthYear": 170
+        "birthYear": 170,
+        "visualIdentity": {
+          "eyes": "独目",
+          "face": "干瘦",
+          "build": "矮（比程宗扬高出半个头）"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "羊皮袍",
+            "accessories": "一只耳朵上挂着巨大的铜环，上面挂满尖利的兽牙",
+            "palette": [
+              "羊皮袍色（原文未明确）"
+            ]
+          }
+        ]
       },
       "region": "宋国",
       "phaseIdentities": [
@@ -15192,7 +15780,24 @@
           "locator": "六朝云龙吟/0140章",
           "scene": "众人在太泉古阵洞口前聚集，她被许英杰询问意见后，以大当家身份示意等待许二当家出阵再作计较。"
         },
-        "birthYear": 170
+        "birthYear": 170,
+        "visualIdentity": {
+          "hair": "长发盘在脑后",
+          "face": "玉脸艳光照人；娇艳的面孔",
+          "build": "高挑"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "黑色套装（西式衣领，内衬雪白衬衫）；套裙；透明黑丝网袜；高跟皮鞋；纯黑色镂空吊带裙",
+            "palette": [
+              "黑",
+              "白",
+              "透明"
+            ]
+          }
+        ]
       },
       "region": "太泉",
       "phaseIdentities": [
@@ -15859,7 +16464,24 @@
           "locator": "六朝云龙吟/0374.html",
           "scene": "敖润奉命前往池阳胡骑大营传诏，桓郁正襟危坐于中军帐内，内着铁甲外穿儒袍，额头扎白布为天子戴孝，接待刘建派来的使者何武。"
         },
-        "birthYear": 180
+        "birthYear": 180,
+        "visualIdentity": {
+          "face": "脸色在火光映照下时明时暗"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "内着铁甲，外穿儒袍",
+            "accessories": "头盔放在一边，额头上扎了一条白布",
+            "palette": [
+              "铁甲色",
+              "儒袍色",
+              "白布色"
+            ],
+            "props": "双手握拳按在膝上，正襟危坐"
+          }
+        ]
       },
       "region": "汉国",
       "phaseIdentities": [
@@ -16129,7 +16751,23 @@
           "locator": "第3章",
           "scene": "随着一声断喝，一直不见踪影的大将军霍子孟闪亮登场，身披大氅、外罩赤袍、内穿锁子甲，跨白马徐徐驶来，厉声喝问董卓"
         },
-        "birthYear": 180
+        "birthYear": 180,
+        "visualIdentity": {
+          "face": "老脸，千锤百炼；容光焕发；有胡须"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "身披大氅，外罩赤袍，里面穿着一身金光灿灿的锁子甲",
+            "accessories": "金冠",
+            "palette": [
+              "赤",
+              "金"
+            ],
+            "props": "跨白马；执杯；抚胡须；免冠叩首"
+          }
+        ]
       },
       "region": "汉国",
       "phaseIdentities": [
@@ -16481,7 +17119,41 @@
             "text": "亲历：剑玉姬与程宗扬谈判（与程宗扬、蔡敬仲）"
           }
         ],
-        "birthYear": 190
+        "birthYear": 190,
+        "visualIdentity": {
+          "hair": "墨紫黑色超长直发，头顶戴金色花冠与黄色缎带，额前垂金色额饰",
+          "eyes": "琥珀色眼，眼尾细长，神情凌厉",
+          "face": "艳丽面孔，红唇，眉心朱砂点",
+          "build": "成熟丰满"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "金色甲片式战舞装（胸甲与腰裙由镂空金片、云雷纹片构成），金色臂铠与腿甲，粉橘色长绸腰带在身后打大结垂地",
+            "accessories": "翠绿宝石项圈、金臂环、金铃垂饰",
+            "palette": [
+              "赤金",
+              "墨紫",
+              "粉橘",
+              "翠绿"
+            ],
+            "props": "手持黄绿色流光长剑，背景为持长枪的蒙面武僧群"
+          },
+          {
+            "id": "variant-1",
+            "scope": "unassigned",
+            "outfit": "白色广袖交领仙裙，衣襟与袖口织白/金云纹暗花，层叠轻纱曳地",
+            "accessories": "华丽金冠（凤鸟与花枝造型、嵌红宝）、金质长流苏耳坠、金色璎珞项圈",
+            "palette": [
+              "素白",
+              "赤金",
+              "蓝黑",
+              "靛蓝"
+            ],
+            "props": "手持金螭纹柄长剑，背景为巨龙虚影"
+          }
+        ]
       },
       "region": "汉国",
       "phaseIdentities": [
@@ -17071,7 +17743,24 @@
           "locator": "《六朝燕歌行》第0003.html 第1章「退败」",
           "scene": "程宗扬与秦桧等人平叛后，金蜜镝走马上前，接过刘建首级，仔细看过后摘下天子冕旒，将头颅高高举起示众"
         },
-        "birthYear": 170
+        "birthYear": 170,
+        "visualIdentity": {
+          "hairColor": "白",
+          "hair": "白发"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "麻衣",
+            "accessories": "金冠",
+            "palette": [
+              "白",
+              "金"
+            ],
+            "props": "解下兵刃"
+          }
+        ]
       },
       "region": "汉国",
       "phaseIdentities": [
@@ -17185,7 +17874,25 @@
           "scene": "金兀术作为兽蛮首领，在被武二郎揍后，于程宗扬审问时挺胸报名"
         },
         "race": "兽蛮人",
-        "birthYear": 170
+        "birthYear": 170,
+        "visualIdentity": {
+          "eyes": "金色的瞳孔",
+          "face": "面目可憎；兽脸；面目可憎",
+          "build": "魁梧"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "皮甲；牛皮制成的肩甲",
+            "accessories": "一只耳朵上挂着巨大的铜环，上面挂满尖利的兽牙",
+            "palette": [
+              "金",
+              "皮甲色"
+            ],
+            "props": "赤手抓住军汉面门；蜷伏在松枝上；兽爪撕破锦衣；肌肉鼓起；重锤般攻击"
+          }
+        ]
       },
       "region": "宋国",
       "phaseIdentities": [
@@ -17291,7 +17998,18 @@
           "location": "大慈恩寺侧门",
           "locator": "六朝燕歌行/0093.html",
           "scene": "江王李炎深夜到访大慈恩寺，净空以中年僧人身份从侧门快步迎出，合什拜见"
-        }
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "黄色僧衣",
+            "palette": [
+              "黄"
+            ],
+            "props": "盘膝合什诵经；双手拔出插在地上的长矛"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -17471,7 +18189,27 @@
             "text": "亲历：黑鸦使者现身（与程宗扬）"
           }
         ],
-        "birthYear": 192
+        "birthYear": 192,
+        "visualIdentity": {
+          "hair": "亚麻金色超长直发（发量极大、垂过身长），额前碎发",
+          "eyes": "金褐色眼，眼型细长上挑，眼神魅惑",
+          "face": "艳丽的成熟面孔，唇色红润，笑意妖冶",
+          "build": "丰满高挑"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "黑色紧身连体衣，通身绘朱红色火焰/藤蔓纹样，立领，配黑色长手套（同款火焰纹）",
+            "accessories": "黑色立领扣饰",
+            "palette": [
+              "纯黑",
+              "朱红",
+              "亚麻金"
+            ],
+            "props": "双臂上举姿态，背景为黄绿色荆棘藤蔓"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -18059,7 +18797,30 @@
             "text": "亲历：乐明珠身份揭露（与程宗扬）；凝羽毒瘾发作（与程宗扬、凝羽）；商队与龙神激战（与程宗扬、谢艺、武二郎）；小紫弑母（与小紫、程宗扬、碧姬）"
           }
         ],
-        "birthYear": 202
+        "birthYear": 202,
+        "visualIdentity": {
+          "hairColor": "栗棕",
+          "hair": "栗棕色长发，头顶两侧扎起双马尾/双环，发尾微卷，红色发带系蝴蝶结；另一版为黑发挑染金棕的披散长发+侧盘发髻",
+          "eyes": "大而圆的深褐色眼，眼型明亮活泼；另一版为金褐色瞳",
+          "face": "少女面孔，圆润脸型，笑口露齿，表情开朗",
+          "build": "少女身形（按内容红线不作身材强调）"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "天蓝色短外衫（半褪露肩、袖口宽），内穿橙红色抹胸襦裙、白色回纹织带滚边，褐色宽腰封束腰，粉红色系带在腰前打结垂长带，下着藏蓝色裤裙、白色足袋配木屐",
+            "accessories": "红珠手绳、粉色长丝带绑于手腕、颈间小珠串；另一版为黑色皮革束带配金环金铃（情色场景专用，非常态装束）",
+            "palette": [
+              "天蓝",
+              "橙红",
+              "藏蓝",
+              "粉红",
+              "栗棕"
+            ],
+            "props": "跃动姿态，花瓣飞舞背景"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -18311,7 +19072,25 @@
           "value": "二十六",
           "basis": "李昂比李炎大五岁，如今也不过二十六岁"
         },
-        "birthYear": 194
+        "birthYear": 194,
+        "visualIdentity": {
+          "eyes": "瞳孔收缩，几乎只剩惨白眼白；眼珠血管突起",
+          "face": "面容扭曲；脸色时青时白、铁青、惨白；嘴唇干裂；黑眼圈"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "玄衣纁裳；龙袍；幞头",
+            "accessories": "冕旒；带剑服佩；长绶；舄靴镶金饰；金冠",
+            "palette": [
+              "玄",
+              "纁",
+              "金"
+            ],
+            "props": "手指哆嗦摘下幞头解开发髻；靠在舆中；攥着袍袖"
+          }
+        ]
       },
       "region": "唐国",
       "phaseIdentities": [
@@ -18446,7 +19225,30 @@
           "locator": "六朝燕歌行/0105.html",
           "scene": "唐国元正大朝会上，以御座右前方紫袍宦官身份，手持玉柄拂尘指挥朝仪，宣读'再拜''起''拜'等号令，主持朝会进行"
         },
-        "birthYear": 155
+        "birthYear": 155,
+        "visualIdentity": {
+          "hairColor": "白",
+          "hair": "头发花白，白发萧然，零乱的白发，头顶一束白发箭矢般竖起",
+          "eyes": "双目似闭非闭，双目如同电光直射而过",
+          "face": "面相犹如一个老婆婆，皮肉松弛，一只鹰鼻使他面相平添了几分阴鸷，面容苍老",
+          "build": "枯瘦"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "紫袍，腰悬金鱼袋；锦袍犀带；僧衣（被劲气震碎，有破洞）",
+            "accessories": "金钗、玉簪、明珠、宝镯、玉佩、香囊（至少七处同时绽放玄光）；青玉簪（一分为二，中间弹出一根发丝般的细长银链）；铁胆/铁球（手中转动）",
+            "palette": [
+              "紫",
+              "金",
+              "青",
+              "白",
+              "黑"
+            ],
+            "props": "一手转着两枚铁胆/铁球，双目似闭非闭；合什顶礼；盘膝而坐，左手放在胸前，右手扬起，手指结成法印"
+          }
+        ]
       },
       "region": "唐国",
       "phaseIdentities": [
@@ -18706,7 +19508,28 @@
           "locator": "第2集/第28章",
           "scene": "程宗扬登门拜访林冲，委托林冲派人去请李师师小姐，欲邀其往凤凰岭一游。"
         },
-        "birthYear": 202
+        "birthYear": 202,
+        "visualIdentity": {
+          "hair": "浅棕带灰粉调的长发，半挽髻，戴粉色牡丹绢花与金簪（垂红色流苏）",
+          "eyes": "湖蓝色大眼，眼神温柔",
+          "face": "清丽甜美的鹅蛋脸，唇色粉，浅笑",
+          "build": "匀称纤细"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "粉红底织金凤纹的交领襦裙，明黄金织领缘、袖缘与宽腰封，金色抹胸，橙红色长系带垂落，内衬白裙",
+            "accessories": "金红流苏发簪、红宝石胸扣、耳坠",
+            "palette": [
+              "粉红",
+              "明黄",
+              "金",
+              "橙红"
+            ],
+            "props": "倚坐朱红栏窗前"
+          }
+        ]
       },
       "region": "宋国",
       "phaseIdentities": [
@@ -18818,7 +19641,25 @@
           "location": "紫云楼",
           "locator": "第0091章",
           "scene": "在元正大朝会的紫云楼议事大殿中，绿衣少年李植自报家门时提及父亲李训为翰林学士、同平章事宰相，李训正式进入众人视野"
-        }
+        },
+        "visualIdentity": {
+          "face": "脸色紫涨/又青又白/惊惶"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "绿袍（初时）/紫袍（显贵时）/布衣（苍头打扮）",
+            "accessories": "金带（高官时）/乌纱幞头（官服时）/半旧布巾（苍头时）/毡帽（遮面时）",
+            "palette": [
+              "绿",
+              "紫",
+              "金",
+              "青白"
+            ],
+            "props": "骑马/伏马狂奔/跪倒/吐血"
+          }
+        ]
       },
       "region": "唐国",
       "phaseIdentities": [
@@ -18973,7 +19814,18 @@
           "location": "王显召集的豪门宴席上",
           "locator": "六朝燕歌行/六朝燕歌行 第9册/第0091章",
           "scene": "与程宗扬一同现身，身着沾满灰土的乌衣，旁若无人地当众豪饮，随后自报家门；江王——唐皇敬宗第四子，今上李昂之弟，皇室亲王"
-        }
+        },
+        "visualIdentity": {
+          "face": "年轻英锐的面孔，眉头紧锁，神情凝重，有帝王威仪"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "帝王冠冕（衮服冠冕）",
+            "props": "按膝腰背挺直；执匕持觥；骑马用马鞭敲靴筒；按毡帽遮风雪"
+          }
+        ]
       },
       "region": "唐国",
       "phaseIdentities": [
@@ -19398,7 +20250,10 @@
           "locator": "六朝清羽记/chapter157.html",
           "scene": "云苍峰带林清浦来访，程宗扬衣冠不整坐在书房，林清浦穿法衣踏进书房施礼问候，自我介绍\"清浦见过公子\""
         },
-        "birthYear": 190
+        "birthYear": 190,
+        "visualIdentity": {
+          "face": "年纪甚轻，时不时会脸红"
+        }
       },
       "region": "晋国",
       "phaseIdentities": [
@@ -19723,7 +20578,25 @@
           "locator": "0265.html",
           "scene": "刘骜蒙面出现在鬼市，嘲笑一个用一颗水玛瑙冒充玉佩、敢开价五百银铢的骗子，随即命令两名期门武士上前殴打对方"
         },
-        "birthYear": 198
+        "birthYear": 198,
+        "visualIdentity": {
+          "hair": "挽髻，以簪固定",
+          "face": "唇上有乌黑胡须，两撇帅气小胡子"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "玄衣（黑色便袍/劲装），皮质弁冠，大氅",
+            "accessories": "簪子，天子剑，玉制扳指（右手拇指）",
+            "palette": [
+              "玄色（黑）",
+              "乌黑",
+              "朱红"
+            ],
+            "props": "一手扶天子剑，一手抹胡须"
+          }
+        ]
       },
       "region": "汉国",
       "phaseIdentities": [
@@ -19918,7 +20791,11 @@
           "value": "约3-5岁",
           "basis": "原文称其为'一介稚子''小儿幼嫩的脖颈'，吕雉斥其为'三岁小儿'，啼哭叫'姆娘'，显系幼童"
         },
-        "birthYear": 217
+        "birthYear": 217,
+        "visualIdentity": {
+          "eyes": "乌亮的眼睛",
+          "build": "小娃娃/孺子稚儿"
+        }
       },
       "region": "汉国",
       "phaseIdentities": [
@@ -20341,7 +21218,14 @@
           "locator": "六朝云龙吟/0006.html",
           "scene": "在江州之战后，与斯明信联手火烧金明寨宋军粮草，展现星月湖八骏之一的行动。"
         },
-        "birthYear": 190
+        "birthYear": 190,
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "破衣裳"
+          }
+        ]
       },
       "region": "宋国",
       "phaseIdentities": [
@@ -20538,7 +21422,21 @@
           "value": "约30",
           "basis": "三十来岁"
         },
-        "birthYear": 190
+        "birthYear": 190,
+        "visualIdentity": {
+          "face": "脸盘较窄、双眉低垂，气量略显狭小",
+          "marks": [
+            "额角有伤疤"
+          ]
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "武官服",
+            "props": "单刀"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -20791,7 +21689,27 @@
             "text": "亲历：吕奉先单骑破阵（与刘建、苍鹭）"
           }
         ],
-        "birthYear": 202
+        "birthYear": 202,
+        "visualIdentity": {
+          "hair": "武士巾（替代紫金冠）",
+          "face": "玉面朱唇，粉面朱唇，俊脸",
+          "build": "雄姿英发"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "白衣箭袖；内穿铠甲、外披青衫；金甲（剥到腰下）",
+            "accessories": "紫金冠（骚包，但已换成武士巾）；金冠；银戟；方天画戟；赤兔马",
+            "palette": [
+              "白",
+              "青",
+              "金",
+              "赤"
+            ],
+            "props": "手持银戟/方天画戟，跨赤兔马"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -21003,7 +21921,25 @@
             "text": "亲历：吕氏调动汉军围杀（与程宗扬、吕不疑）；天子暴毙消息传遍洛都（与刘建）；刘建攻占南宫与武库（与刘建）"
           }
         ],
-        "birthYear": 190
+        "birthYear": 190,
+        "visualIdentity": {
+          "face": "皮肤黧黑；脸上有横肉",
+          "build": "高大"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "靛蓝衣袍（衣摆打褶，一角掖到腋下）；麻冠麻衣（治丧时）；七梁冠；大氅（曾甩开）；锦袍（仅他人提及，非本人穿着）",
+            "accessories": "头上包一圈厚白布（越裳国装扮？但原文描述为‘汉子’，非吕冀本人，故不采用）；七梁冠（头戴）",
+            "palette": [
+              "靛蓝",
+              "白",
+              "麻色"
+            ],
+            "props": "坐车（腰背挺直，双手抚膝）；甩大氅；靠在墙壁"
+          }
+        ]
       },
       "region": "汉国",
       "phaseIdentities": [
@@ -21223,7 +22159,40 @@
           "scene": "太后吕雉着黑色长衣高据座上，与刘骜（汉帝）商议赵王谋逆之事，命赵王赐自尽，太子以下尽数贬为庶人。"
         },
         "race": "飞羽族（羽翼纯黑）",
-        "birthYear": 183
+        "birthYear": 183,
+        "visualIdentity": {
+          "hairColor": "紫黑",
+          "hair": "紫黑色长发，高绾盘髻并留长鬓垂肩；髻上插蓝色花簇、金步摇与金钗，额前垂珠链",
+          "eyes": "蓝绿色眼（燕歌行版），眼型细长高贵；清羽记版为褐色",
+          "face": "高贵精致的瓜子脸，正红唇，神情倨傲",
+          "build": "娇小（canon 记约一米五）而丰满，反差明显",
+          "trueForm": [
+            "燕歌行版背后有巨大黑白双翼"
+          ]
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "label": "常态",
+            "scope": "default",
+            "outfit": "华服：紫色抹胸配蓝紫织金襦裙、裙缘织绿底金云纹，外披青绿色薄纱披帛（缀碎花）",
+            "accessories": "嵌红宝金冠与珠帘、金璎珞项圈、蓝宝石金臂钏与腕饰、金链腰饰与腿环、金铃流苏",
+            "palette": [
+              "紫黑",
+              "蓝紫",
+              "青绿",
+              "赤金",
+              "宝蓝"
+            ],
+            "props": "室内屏风、宫灯背景"
+          },
+          {
+            "id": "variant-1",
+            "label": "变体1",
+            "scope": "unassigned",
+            "outfit": "蓝紫腰封系大蝴蝶结、青绿轻纱曳地"
+          }
+        ]
       },
       "region": "汉国",
       "phaseIdentities": [
@@ -22206,7 +23175,30 @@
           "location": "晴州",
           "locator": "第232章·花火 (chapter284.html)",
           "scene": "小紫唤上泉玉姬和梦娘一同前往兰汤馆，文中介绍她是从黑魔海捡来的失忆女子，阿梦是小紫给她起的名字"
-        }
+        },
+        "visualIdentity": {
+          "hairColor": "红棕",
+          "hair": "栗红棕色头发，绾成高盘髻，戴金冠、金花簪与扇形金步摇，两张官图造型一致",
+          "eyes": "黄绿色眼，画金色眼妆，眼尾上挑",
+          "face": "艳丽成熟的鹅蛋脸，额心花钿，唇色玫红，笑意自信",
+          "build": "丰满成熟"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "玫红与紫红织团花的广袖长袍（紫色对襟、袖缘织花），内衬玫红抹胸，束粉蓝/青绿色宽腰封，系明黄色缎带打大结，垂绿玉佩与紫色流苏",
+            "accessories": "金璎珞项链与红宝坠、金耳坠（扇形与流苏）、金镯、金色长指甲",
+            "palette": [
+              "玫红",
+              "紫红",
+              "青绿",
+              "明黄",
+              "赤金"
+            ],
+            "props": "倚门/回眸姿态，朱漆梁柱背景"
+          }
+        ]
       },
       "region": "海上",
       "phaseIdentities": [
@@ -22860,7 +23852,34 @@
           "scene": "在某处（疑为青楼或风月场所），与西门大官人相遇，被其以深情目光注视，凝羽冷漠回应其问候。"
         },
         "race": "羽族·穹羽族（能操月光；族中唯一无翼者）",
-        "birthYear": 196
+        "birthYear": 196,
+        "visualIdentity": {
+          "hairColor": "乌黑",
+          "hair": "乌亮的乌黑长发，散披及背，额前碎发",
+          "eyes": "紫色眼眸，眼神冷静上挑",
+          "face": "轮廓清晰的鹅蛋脸，唇色偏暗红，神情沉静",
+          "build": "高挑修长",
+          "marks": [
+            "肩头有一个淡红的月牙状痕迹（清羽记 ch26）"
+          ],
+          "canonOverride": "裁定 #142：原文 ch26「乌亮的发丝」「在她肩头，有一个淡红的月牙状痕迹」，官图作栗棕发且无月牙痕"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "异域女武者装束：赭红/暗棕皮质紧身胸衣，缀橙色宝石与金色铆钉，橄榄绿布条缠绕上臂与小腿（绑腿式护具）",
+            "accessories": "宽大金色项圈（凯尔特/回纹浮雕）、金色长串耳坠",
+            "palette": [
+              "赭红",
+              "橄榄绿",
+              "古金",
+              "深棕",
+              "紫"
+            ],
+            "props": "手持宽刃弯刀（黑刃、黄色火焰纹、金护手），花丛背景"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -23515,7 +24534,36 @@
           "locator": "chapter261.html",
           "scene": "房门推开半边，潘金莲穿素白衣衫戴口罩，在舱内为陌生婴儿诊脉，展现医者仁心的白衣仙子形象"
         },
-        "birthYear": 198
+        "birthYear": 198,
+        "visualIdentity": {
+          "hair": "酒红/玫红色头发，高扎单马尾，以金色冠簪固定，马尾长垂过腰",
+          "eyes": "紫红色眼，眼型细长媚气",
+          "face": "艳丽的瓜子脸，唇色红，笑意妖冶",
+          "build": "丰满高挑"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "label": "战装",
+            "scope": "default",
+            "outfit": "正红色缠带式紧身衣与红色缠腿绑带，缀金色饰片与莲花形金扣，外罩红绿印花薄纱裙",
+            "accessories": "金冠簪、金璎珞项链（莲花坠）、金臂环、金链、金色长指甲",
+            "palette": [
+              "正红",
+              "酒红",
+              "赤金",
+              "米白",
+              "紫"
+            ],
+            "props": "金色锁链缠绕背景（战斗/束缚场景）；莲花纹样是其反复出现的符号"
+          },
+          {
+            "id": "variant-1",
+            "label": "常服",
+            "scope": "unassigned",
+            "outfit": "米白浅黄印花外衫配紫色衣缘，金色莲花腰饰与明黄系带"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -24163,7 +25211,29 @@
           "value": "18",
           "basis": "游戏成年化调整为18（用户裁定；原文描写:约十六七）"
         },
-        "birthYear": 202
+        "birthYear": 202,
+        "visualIdentity": {
+          "hairColor": "紫粉",
+          "hair": "紫粉色长发，高扎马尾并以金饰束起",
+          "eyes": "金褐色眼，眼型细长，神情冷傲",
+          "face": "艳丽的鹅蛋脸，唇色红",
+          "build": "高挑丰满"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "黑色和服式外衣（露肩、朱红滚边、肩部有青色纹章），内穿白色束胸配朱红交叉系带，束红色腰带，黑色长手套与黑红配色腿环",
+            "accessories": "大金圈耳环、金色腰扣",
+            "palette": [
+              "黑",
+              "朱红",
+              "素白",
+              "紫粉"
+            ],
+            "props": "肩扛紫柄长刀（女剑客/忍者风）"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -24353,7 +25423,21 @@
           }
         ],
         "race": "碧鲮族",
-        "birthYear": 175
+        "birthYear": 175,
+        "visualIdentity": {
+          "face": "脸色腊黄（第654章·灞桥）；脸色熬得又青又黄（第698章·押注）"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "锦衣华服（第654章·灞桥）",
+            "palette": [
+              "黄",
+              "青"
+            ]
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -25321,7 +26405,24 @@
           }
         ],
         "race": "兽蛮人",
-        "birthYear": 192
+        "birthYear": 192,
+        "visualIdentity": {
+          "face": "青涩面孔，刚冒出胡须；鼻梁折断，脸上滴血，淌在尖锐獠牙上，面目凶恶狰狞",
+          "build": "魁梧（兽蛮武士，四肢并用跳跃如猛兽）"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "大氅（掀开时从怀里推出妇人）；牛皮肩甲（被枯木妖兽撕碎）",
+            "accessories": "银制面具（泛金属冷漠光泽）",
+            "palette": [
+              "银",
+              "牛皮色"
+            ],
+            "props": "狼牙棒；长枪（枪头包黑布套）；头套"
+          }
+        ]
       },
       "region": "宋国",
       "phaseIdentities": [
@@ -26054,7 +27155,32 @@
           "locator": "第19章",
           "scene": "程宗扬到威远镖局委托押运象牙业务时，阮香琳以镖头夫人身份出面询问镖费，表现出精明爽快的一面。"
         },
-        "birthYear": 182
+        "birthYear": 182,
+        "visualIdentity": {
+          "hairColor": "棕黑",
+          "hair": "深棕黑色长发，高扎马尾，戴金簪与蓝白方形发饰，长发垂地",
+          "eyes": "金褐色眼，眼型细长",
+          "face": "艳丽的鹅蛋脸，唇色红",
+          "build": "丰满",
+          "trueForm": [
+            "耳廓略尖"
+          ]
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "金色织花抹胸，外披薄荷绿/青绿底、粉紫莲花纹的宽袖长袍（半褪露肩）",
+            "accessories": "金项链与金坠、金色发簪",
+            "palette": [
+              "薄荷绿",
+              "粉紫",
+              "金",
+              "深棕"
+            ],
+            "props": "红色飘带缠绕背景（情色场景）"
+          }
+        ]
       },
       "region": "宋国",
       "phaseIdentities": [
@@ -26515,7 +27641,29 @@
             "text": "亲历：威远危机加剧（与李师师、高衙内、陆谦）"
           }
         ],
-        "birthYear": 193
+        "birthYear": 193,
+        "visualIdentity": {
+          "hairColor": "紫黑",
+          "hair": "紫黑色长发，高绾成髻，戴银金色扇形华冠与垂珠帘，鬓边垂长发丝",
+          "eyes": "金褐色眼，眼神温婉",
+          "face": "秀丽的鹅蛋脸，唇色粉红，浅笑",
+          "build": "匀称"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "玫红色抹胸内衬，外披蓝紫色织花广袖罩衫，下着青蓝色裙裤，手持青绿色薄纱巾",
+            "accessories": "金珠项链嵌绿松石、金耳坠、金冠垂珠",
+            "palette": [
+              "蓝紫",
+              "玫红",
+              "青蓝",
+              "银金"
+            ],
+            "props": "坐于窗下，旁置刺绣绷架与盆景（闺阁/女红场景）"
+          }
+        ]
       },
       "region": "宋国",
       "phaseIdentities": [
@@ -26873,7 +28021,41 @@
           "location": "五原城",
           "locator": "第147章",
           "scene": "程宗扬被叶媪引至一处宅院，竹帘后传来啜茶声，殇侯以冷峭威严的声音现身相见"
-        }
+        },
+        "visualIdentity": {
+          "hair": "束发高冠",
+          "eyes": "看似平常的眸子却仿佛藏着一对锋利的钩子；目光扫来，眼睛仿佛被刺了一下",
+          "face": "胡须（山羊胡/翘胡须），胡须下有一颗珍珠",
+          "build": "佝偻（常态）/ 肩背一挺后高挑"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "黑色华服，广袖博带；或破旧葛袍；或宽袍大袖，玉冠华带",
+            "accessories": "指上翠戒（碧绿）；腰间玉带；束发高冠；玉冠",
+            "palette": [
+              "黑",
+              "翠绿",
+              "碧绿"
+            ],
+            "props": "常持茶盏、紫砂壶、竹匙；或执鬼羽剑；或手扶玉带"
+          },
+          {
+            "id": "variant-1",
+            "scope": "unassigned",
+            "outfit": "破旧衣衫；半旧道袍；白袍；灰袍；浴袍；羊皮袍；新裤子新鞋；破帽；破鞋",
+            "accessories": "头箍；脏兮兮的手帕（冒充方巾）；金冠（有时掉落）；裤腰带；竹杖（顶端有“铁口神算”长幅）；金属管；禁魂鬼偶；赤绶",
+            "palette": [
+              "白",
+              "灰",
+              "黑",
+              "金",
+              "红"
+            ],
+            "props": "骑驴；拢着手；蹲在池子边；背着手贴墙根蹲；头塞裤裆"
+          }
+        ]
       },
       "region": "塞外",
       "phaseIdentities": [
@@ -27260,7 +28442,28 @@
           "locator": "chapter315.html",
           "scene": "在沐羽城施药分发丹药的活动中，一只玉手拨开肩舆白纱，露出卓云君的仙子面容，申婉盈随后让门人将肩舆抬回并闭门。"
         },
-        "birthYear": 202
+        "birthYear": 202,
+        "visualIdentity": {
+          "hairColor": "棕",
+          "hair": "棕色头发，梳成左右两个丸子髻并系橙色发带",
+          "eyes": "湖蓝色大眼，眼神明快",
+          "face": "少女圆脸，笑容开朗露齿",
+          "build": "少女身形"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "道门风短装：粉白色上衣，袖口与领口镶白色绒毛边，肩部缀黑白太极阴阳鱼纹圆牌，束橙色腰封，下着粉色荷叶边短裙",
+            "accessories": "太极阴阳肩牌（门派标识）、橙色发带",
+            "palette": [
+              "粉白",
+              "橙",
+              "黑白（太极）"
+            ],
+            "props": "庭院栏杆、丹药盘与铜炉（炼丹/道门场景）"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -27998,7 +29201,10 @@
           "locator": "六朝清羽记 chapter326",
           "scene": "幻驹斯明信以阴森可怖的杀手形象登场，被捕头桑怿追捕多年，身穿黑色军服如地狱来的盖世太保般出现在宋军营前对峙"
         },
-        "birthYear": 188
+        "birthYear": 188,
+        "visualIdentity": {
+          "face": "僵尸脸，脸色阴沉，面无表情"
+        }
       },
       "region": "宋国",
       "phaseIdentities": [
@@ -28179,7 +29385,32 @@
           "locator": "chapter199.html",
           "scene": "苏妲己卧在软榻上杀死一名男子后，询问被掳走的祁远的下落，吩咐手下查找建康的织坊商会。"
         },
-        "birthYear": 184
+        "birthYear": 184,
+        "visualIdentity": {
+          "hair": "墨黑泛紫的超长直发，垂地，侧发以橙色珠串与金花簪束起",
+          "eyes": "琥珀褐色眼，眼型媚长，眼波蛊惑",
+          "face": "瓜子脸，唇色红润，笑意妖冶",
+          "build": "高挑丰满，腰细臀圆",
+          "trueForm": [
+            "身后有蓬松白色狐尾（九尾狐身份标志）"
+          ]
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "粉色织金花纹抹胸，外披暗紫红色露肩长袍，下束青绿色腰裙",
+            "accessories": "金璎珞项链嵌红宝石长坠、长珠串耳坠、金腿环、绿宝石金戒",
+            "palette": [
+              "暗紫红",
+              "粉",
+              "青绿",
+              "赤金",
+              "墨黑"
+            ],
+            "props": "牡丹背景"
+          }
+        ]
       },
       "region": "晋国",
       "phaseIdentities": [
@@ -28295,7 +29526,49 @@
           "locator": "chapter51.html",
           "scene": "花苗女子苏荔与商队相遇，自我介绍说自己是花苗的族长阿依苏荔，并引导众人攀绳上崖顶。"
         },
-        "birthYear": 192
+        "birthYear": 192,
+        "visualIdentity": {
+          "hairColor": "乌黑",
+          "hair": "乌亮的长发，随意挽了一把，几缕零乱的发丝贴在脸颊上；发髻微微松开，髻侧有红花；发丝被吹散时曾用钗子当箭矢",
+          "eyes": "凤目，明艳，波光转动",
+          "face": "娇艳，白皙的肌肤宛如牛乳，光洁的额",
+          "build": "高挑（身高超过一米九），修长，健美",
+          "marks": [
+            "大腿与上臂有褐色曼海蒂式藤纹刺青"
+          ],
+          "trueForm": [
+            "蝎尾（可变形，银亮透明蝎甲）"
+          ]
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "火红鲜亮的褶裙（红裙），用一支金色的圆钩系着；肩头披着月白色长披肩，用一口金环扣住，环上嵌黑色大珠；束胸的红巾；脚踝有银铃；有时赤足",
+            "accessories": "额上戴一串晶莹的珠链；髻侧戴一朵红花；钗子（曾用作箭矢）；脚踝银铃；金色圆钩（系裙用）",
+            "palette": [
+              "火红",
+              "月白",
+              "乌亮",
+              "银亮",
+              "金色"
+            ],
+            "props": "弯弓（曾用钗子当箭矢）；脚踝银铃；金色圆钩"
+          },
+          {
+            "id": "variant-1",
+            "scope": "unassigned",
+            "outfit": "朱红色缠带式上衣（金色滚边，斜向缠绕），下着红色开衩长裙",
+            "accessories": "金珠链头饰、金臂环与手镯数只、青绿珠串、腰间挂兽首纹皮袋",
+            "palette": [
+              "朱红",
+              "赤金",
+              "青绿",
+              "黑棕"
+            ],
+            "props": "手持藤蔓"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -28958,7 +30231,40 @@
           "locator": "第二十三集",
           "scene": "程宗扬与高智商在洛都长街上，目睹一名文士被从襄城君府（与襄邑侯府隔街相望的宅邸）赶出，府门阙楼华奢，奴仆呵斥献画者认清是襄城君而非襄邑侯的府邸。"
         },
-        "birthYear": 186
+        "birthYear": 186,
+        "visualIdentity": {
+          "hairColor": "深棕",
+          "hair": "深棕色长发，绾成偏侧双髻，簪大朵红花与青绿/金色花钿发簪，鬓发卷曲垂落",
+          "eyes": "紫色大眼，眼下带红晕妆，眼波含春",
+          "face": "妖媚娇艳的圆润脸型，唇色艳红，常带媚笑（另一版含泪妆）",
+          "build": "丰满高挑",
+          "trueForm": [
+            "身后有一条蓬松白色狐尾（重要视觉标志）"
+          ]
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "label": "常态",
+            "scope": "default",
+            "outfit": "浅紫色织金鲤鱼纹广袖长衫（常半褪露肩），配粉色系带",
+            "accessories": "青绿色美甲、金腿链、珍珠手串",
+            "palette": [
+              "浅紫",
+              "朱红",
+              "金",
+              "粉",
+              "青绿"
+            ],
+            "props": "木桶沐浴/帐中场景"
+          },
+          {
+            "id": "variant-1",
+            "label": "变体1",
+            "scope": "unassigned",
+            "outfit": "朱红底金牡丹纹的紧身裹衣配金滚边"
+          }
+        ]
       },
       "region": "汉国",
       "phaseIdentities": [
@@ -29466,7 +30772,22 @@
           "value": "约三十余岁",
           "basis": "三四十岁的男子（晴州陶五风流多金）"
         },
-        "birthYear": 190
+        "birthYear": 190,
+        "visualIdentity": {
+          "face": "脸色略显苍白"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "皮制贴身护甲，表面遍布符纹，微闪暗蓝色幽光，只护胸背要害，大半个膀子露着",
+            "accessories": "一把折扇",
+            "palette": [
+              "暗蓝"
+            ],
+            "props": "用折扇抵住下巴"
+          }
+        ]
       },
       "region": "海上",
       "phaseIdentities": [
@@ -29690,6 +31011,9 @@
           "location": "唐国朝廷（宫殿）",
           "locator": "六朝燕歌行/0095.html、0105.html",
           "scene": "先在杨玉环介绍唐国权宦时被提及；后在元旦朝贺大典上首次正式现身，以八字眉、面容瘦削之貌掌管政事的右枢密使身份上前跪拜接诏、宣读圣旨"
+        },
+        "visualIdentity": {
+          "face": "八字眉、面容瘦削"
         }
       },
       "region": "唐国",
@@ -30459,7 +31783,10 @@
           "locator": "六朝清羽记/chapter310.html",
           "scene": "程宗扬与孙益轩在筠州商议用王团练的名义购买铺面，孙益轩介绍王团练是筠州本地人，管着筠州乡兵，胆子大敢捞钱"
         },
-        "birthYear": 173
+        "birthYear": 173,
+        "visualIdentity": {
+          "face": "脸上肉抖，胡须上有白沫，面容扭曲"
+        }
       },
       "region": "宋国",
       "phaseIdentities": [
@@ -32074,7 +33401,24 @@
           "locator": "chapter311",
           "scene": "程宗扬在江上与麻黩、相雅的独木舟相遇，相雅主动开口问程宗扬是不是筠州的商人"
         },
-        "birthYear": 200
+        "birthYear": 200,
+        "visualIdentity": {
+          "eyes": "美目",
+          "face": "白皙的面孔",
+          "build": "娇小"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "猛玛长毛编织的粗糙长衣",
+            "accessories": "鼻孔中间被穿上一根草绳",
+            "palette": [
+              "白",
+              "棕"
+            ]
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -32290,7 +33634,31 @@
           "value": "18",
           "basis": "游戏成年化调整为18（用户裁定；原文描写:十六岁）"
         },
-        "birthYear": 202
+        "birthYear": 202,
+        "visualIdentity": {
+          "hairColor": "紫",
+          "hair": "银灰泛紫的头发，编成一条粗麻花辫绕过头侧垂至腰",
+          "eyes": "翠绿色眼；左眼戴蓝色蝶形眼罩/面饰",
+          "face": "少女面孔，吐舌的调皮表情",
+          "build": "（HIGH 风险角色，按红线不作身材描述）",
+          "marks": [
+            "黑色铆钉颈环、金链腰饰垂小铃、腹部玫瑰刺青"
+          ]
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "红色皮革战斗装（缀黑金星形徽记与铆钉），配红色长手套与红色高筒靴",
+            "palette": [
+              "正红",
+              "银灰紫",
+              "黑",
+              "金"
+            ],
+            "props": "倚靠大树，绿叶阳光背景"
+          }
+        ]
       },
       "region": "塞外",
       "phaseIdentities": [
@@ -33033,7 +34401,29 @@
           }
         ],
         "race": "碧鲮族混血（岳帅×碧姬之女；非鲛人，鲛人为碧鲮死敌）",
-        "birthYear": 202
+        "birthYear": 202,
+        "visualIdentity": {
+          "hair": "纯黑色超长直发，中分，发量极多、垂至腿弯",
+          "eyes": "淡紫色大眼，睫毛长，眼神明亮",
+          "face": "少女圆脸，唇小，笑容灿烂",
+          "build": "（HIGH 风险角色，按红线不作身材描述）"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "苗疆式对襟短衣：玫红/桃红底，袖口与衣缘织蓝绿与明黄回纹几何织带，束青蓝色织花宽腰带，下着粉色长裙，脚穿白色布袜",
+            "accessories": "（常态图中未见明显首饰）",
+            "palette": [
+              "玫红",
+              "青蓝",
+              "明黄",
+              "纯黑",
+              "粉"
+            ],
+            "props": "—"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -34010,7 +35400,10 @@
           "value": "约23岁",
           "basis": "chapter189载其在府中十年零两个月；chapter225载十年前入皇图天策府时年仅十三岁，据此推算"
         },
-        "birthYear": 197
+        "birthYear": 197,
+        "visualIdentity": {
+          "face": "俊美"
+        }
       },
       "region": "晋国",
       "phaseIdentities": [
@@ -34108,7 +35501,23 @@
           "locator": "《六朝云龙吟》0135章",
           "scene": "众修士争夺赤阳圣果时，一个肥头大耳、油光满面的和尚排众而出，用油腔滑调的佛号自我介绍，主动献出小还丹为伤者疗伤，并提议佛道两门各分一颗赤阳圣果。"
         },
-        "birthYear": 178
+        "birthYear": 178,
+        "visualIdentity": {
+          "face": "肥头大耳，红光满面，浓眉大眼",
+          "build": "魁梧（胖）"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "土黄僧袍，披大红袈裟",
+            "palette": [
+              "土黄",
+              "大红"
+            ],
+            "props": "盘膝而坐，面前放木凳（充几案，铺纸笔，放算盘）；或一手叉腰腆肚子，另一手指人"
+          }
+        ]
       },
       "region": "唐国",
       "phaseIdentities": [
@@ -34210,7 +35619,24 @@
           "locator": "六朝云龙吟/0233章",
           "scene": "冯子都向程宗扬、高智商透露徐璜身份时出场，被介绍为天子最亲信的内臣"
         },
-        "birthYear": 190
+        "birthYear": 190,
+        "visualIdentity": {
+          "face": "唇角留的胡须漆黑如墨"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "黑色玄衣，宽大袖垂至脚边，内着紧身箭袖；头戴惠文冠，冠上正中佩蝉形金珰，右侧垂乌亮貂尾（貂珰冠饰）；冠侧簪毛笔；腰带弯钩上佩错金书刀",
+            "accessories": "冠侧簪毛笔；腰带弯钩佩错金书刀",
+            "palette": [
+              "黑",
+              "金",
+              "乌"
+            ],
+            "props": "步履匆忙/矫健敏捷"
+          }
+        ]
       },
       "region": "汉国",
       "phaseIdentities": [
@@ -35388,7 +36814,28 @@
           "value": "约二十四岁",
           "basis": "程宗扬推算：岳帅失踪第二年，距今十七、十八年，杨玉环如今差不多是二十四岁"
         },
-        "birthYear": 196
+        "birthYear": 196,
+        "visualIdentity": {
+          "hair": "棕色大波浪长卷发，半挽，戴蓝色羽饰发簪与白玉簪、垂蓝色羽毛长坠",
+          "eyes": "深褐色眼，眼型柔媚，眼神慵懒",
+          "face": "丰润的鹅蛋脸，唇色红润",
+          "build": "丰腴成熟"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "米白广袖唐式长衫，衣缘与长绦为宝蓝色，内衬黑金织云纹，腰束白玉嵌银雕花腰甲，下裙开高衩",
+            "accessories": "蓝羽发饰、银白腰甲雕花、金色垂饰、佩长剑与蓝穗",
+            "palette": [
+              "米白",
+              "宝蓝",
+              "黑金",
+              "棕"
+            ],
+            "props": "手扶佩剑，石榴/山茶花树与花瓣飞舞背景"
+          }
+        ]
       },
       "region": "唐国",
       "phaseIdentities": [
@@ -35771,7 +37218,24 @@
           "locator": "chapter45.html",
           "scene": "云苍峰命易彪、易虎下水探路，两名大汉应诺跳入水中"
         },
-        "birthYear": 192
+        "birthYear": 192,
+        "visualIdentity": {
+          "hair": "挽着一个发髻，用一根竹簪插着",
+          "face": "满脸落腮胡子/满面虬髯",
+          "build": "魁梧"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "淡青色的法袍",
+            "accessories": "竹簪",
+            "palette": [
+              "淡青色"
+            ],
+            "props": "背后一杆尖枪从不离身"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -35865,7 +37329,11 @@
           "locator": "六朝云龙吟0224",
           "scene": "太后吕雉在永安宫大殿内与众人议事时，点名命身边女医义姁去探望患病的大司马霍子孟"
         },
-        "birthYear": 190
+        "birthYear": 190,
+        "visualIdentity": {
+          "hair": "秀发散在枕上",
+          "face": "脸色雪白"
+        }
       },
       "region": "汉国",
       "phaseIdentities": [
@@ -36114,7 +37582,28 @@
             "role": "教曲师娘（兰姑）"
           }
         ],
-        "birthYear": 170
+        "birthYear": 170,
+        "visualIdentity": {
+          "hair": "孔雀蓝绿色长卷发，一侧编成长麻花辫、辫尾系金色大流苏穗",
+          "eyes": "绿色眼，眼妆浓，眼尾上挑",
+          "face": "艳丽的成熟面孔，红唇大笑，神情张扬",
+          "build": "高挑丰满"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "橙红色皮革制服式装束：交叉束带上衣、同色短裙，配黑色长手套与黑色过膝长靴",
+            "accessories": "橙红色小圆帽（军帽式）、金色六芒星腰扣、金链与铆钉腕带、金穗垂饰",
+            "palette": [
+              "橙红",
+              "孔雀蓝绿",
+              "黑",
+              "金"
+            ],
+            "props": "手执长柄刑具/斧钺，背景为铁链与刑具（刑房/拷问室）"
+          }
+        ]
       },
       "region": "晋国",
       "phaseIdentities": [
@@ -36472,7 +37961,32 @@
             "role": "侍奴"
           }
         ],
-        "birthYear": 190
+        "birthYear": 190,
+        "visualIdentity": {
+          "hairColor": "深棕",
+          "hair": "深棕色头发，绾成松髻，簪明黄与桃红色罂粟花及金簪，鬓发卷曲垂落",
+          "eyes": "湖蓝色眼，眼神慵懒",
+          "face": "艳丽的成熟面孔，唇色橘红",
+          "build": "成熟丰满",
+          "marks": [
+            "背部有大幅橙红罂粟花刺青（贯穿背脊，最关键的身份标志）"
+          ]
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "黄绿色薄纱裹裙（低腰、以红色细带系结），上身仅披纱",
+            "accessories": "金项圈、蓝绿宝石手镯数只、金臂环",
+            "palette": [
+              "黄绿",
+              "橙红",
+              "明黄",
+              "赤金"
+            ],
+            "props": "罂粟花海背景"
+          }
+        ]
       },
       "region": "宋国",
       "phaseIdentities": [
@@ -36671,7 +38185,37 @@
           "locator": "六朝清羽记/chapter273",
           "scene": "虞白樱追杀月霜，与程宗扬、秋少君相遇，自报姓名后以断月弦欲杀秋少君，声称自己是杀手"
         },
-        "birthYear": 192
+        "birthYear": 192,
+        "visualIdentity": {
+          "hairColor": "银白",
+          "hair": "银白色长发高扎马尾（云龙吟版，与 canon「银发如丝」一致）；清羽记双人图中两姐妹均为墨黑长发编辫",
+          "eyes": "湖蓝色大眼（云龙吟版）",
+          "face": "艳丽的少女面孔",
+          "build": "曲线饱满"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "label": "装束甲",
+            "scope": "default",
+            "outfit": "青绿与紫色几何纹缠带式装束+紫色龙首护腿",
+            "accessories": "金三角坠、紫珠垂饰；双人图为金铜色高冠（缀珊瑚枝状装饰）与灰色薄纱、耳坠",
+            "palette": [
+              "银白",
+              "青绿",
+              "紫",
+              "金",
+              "深棕"
+            ],
+            "props": "持青绿色玉质长兵（玉戈）；触手怪物 / 冰晶背景"
+          },
+          {
+            "id": "variant-1",
+            "label": "双人图",
+            "scope": "unassigned",
+            "outfit": "深棕紫底金纹的紧身战衣，配金纹护臂、护腿与短裤"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -37115,7 +38659,28 @@
           "location": "室内",
           "locator": "六朝清羽记/chapter274.html",
           "scene": "与姐姐虞白樱追杀岳贼之女月霜时，被小紫询问姓名，自报家门并召唤骷髅攻击月霜"
-        }
+        },
+        "visualIdentity": {
+          "hairColor": "墨黑",
+          "hair": "墨黑长发，编辫盘绕，戴金铜色高冠（缀珊瑚枝状装饰）并垂灰色薄纱",
+          "eyes": "深色细长凤眼，眼妆浓",
+          "face": "艳丽的鹅蛋脸，唇色红",
+          "build": "丰满"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "深棕紫底金色回纹的紧身战衣，配金纹护臂、护腿与短裤",
+            "accessories": "金冠、橙色耳坠、红珠项链",
+            "palette": [
+              "深棕紫",
+              "赤金",
+              "橄榄绿"
+            ],
+            "props": "与虞白樱成对出现（姐妹装束同款），持青绿玉戈"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -37347,7 +38912,22 @@
           "locator": "第0010章",
           "scene": "程宗扬出行临安，由俞子元领头，带领三名星月湖的老弟兄负责车马护送任务"
         },
-        "birthYear": 190
+        "birthYear": 190,
+        "visualIdentity": {
+          "face": "商人面孔；苍白面孔"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "华丽的丝袍（可翻面变成灰扑扑的长衣）；绛紫色绸袍（原文为程宗扬穿着，非俞子元）",
+            "palette": [
+              "绛紫",
+              "灰"
+            ],
+            "props": "持刀；伏在树丛中；赶车；半靠在软榻上"
+          }
+        ]
       },
       "region": "宋国",
       "phaseIdentities": [
@@ -37671,7 +39251,23 @@
             "text": "亲历：云苍峰商议买官与铜矿（与程宗扬）；云氏金铢押运遇劫（与程宗扬、云丹琉）"
           }
         ],
-        "birthYear": 168
+        "birthYear": 168,
+        "visualIdentity": {
+          "face": "面带沧桑"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "棉袍（普普通通）、布鞋、布袜",
+            "accessories": "腰间悬玉佩（龙睛玉佩，可调动数万金铢，曾用于放出法阵）",
+            "palette": [
+              "棉袍本色（未明确）",
+              "玉佩（未明确）"
+            ],
+            "props": "负手、整衣冠、插门闩、击碎玉佩、画押按手印、歪倒座椅、帽子丢在一旁、从袖中取皮囊"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -38082,7 +39678,29 @@
             "text": "亲历：云氏金铢押运遇劫（与程宗扬、云苍峰）；程宗扬安排退路与联络（与程宗扬、秦桧、班超）"
           }
         ],
-        "birthYear": 202
+        "birthYear": 202,
+        "visualIdentity": {
+          "hair": "玫瑰粉/紫粉色中长发，高扎单马尾并用橙红发圈分段束起，鬓发垂颊",
+          "eyes": "灰绿色眼，眼神锐利带笑",
+          "face": "成熟明艳的鹅蛋脸，唇色偏橘，常带挑衅笑意",
+          "build": "高挑丰满的成熟女性体型"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "女武者装束：银白/青铜鳞片胸甲与腰甲，护肩带十字（X形）铆印，白色布缠护臂与金属臂环，深紫色斗篷内衬朱红、边缘缀红色流苏，白底蓝纹短裤",
+            "accessories": "金色腰带扣与垂饰、橙色贝壳形腰饰、长金色指甲",
+            "palette": [
+              "玫瑰粉",
+              "深紫",
+              "朱红",
+              "银白",
+              "古铜金"
+            ],
+            "props": "手持黑刃金护手的巨大弯刀（战刀），战斗姿态"
+          }
+        ]
       },
       "region": "晋国",
       "phaseIdentities": [
@@ -38456,7 +40074,36 @@
         "storyAge": {
           "value": "18",
           "basis": "用户裁定(2026-07-14)：云如瑶年龄接近或超过云丹琉(18,原文二九年华)，取≥18下限=18；原扫描值16(birthYear 204)系误抽，且违反裁定#6涉性女角≥18。重扫不得下调"
-        }
+        },
+        "visualIdentity": {
+          "hair": "墨黑泛紫的极长直发，鬓侧各以金褐色缎带系蝴蝶结分股，头顶戴翠绿蝉形/花形发簪",
+          "eyes": "黄绿色（青碧）大眼，眼尾微垂，神情天真",
+          "face": "清秀少女面孔，唇小色淡，笑时露齿",
+          "build": "少女身形（按内容红线不作身材强调）"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "label": "常态",
+            "scope": "default",
+            "outfit": "淡蓝与月白的交领襦裙，衣缘织蓝白波纹，外披白色厚毛领（狐裘）罩衫，胸前系朱红色细带蝴蝶结，暗紫色宽腰封垂红色珠串流苏",
+            "accessories": "翠绿玉镯数只、白底云纹宽护腕、朱红胸带",
+            "palette": [
+              "淡蓝",
+              "月白",
+              "朱红",
+              "翠绿",
+              "暗紫"
+            ],
+            "props": "竹叶/花卉背景，慵懒卧姿"
+          },
+          {
+            "id": "variant-1",
+            "label": "变体1",
+            "scope": "unassigned",
+            "outfit": "米白长裙配深红毛边斗篷"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -39478,7 +41125,22 @@
           "locator": "第360章",
           "scene": "一群黑衣内侍涌 入紧闭的宫门，张恽以尖细的声音自报身份为\"中黄门张恽\"，向友通期昭仪禀报中行说等人图谋篡逆已被拿下"
         },
-        "birthYear": 190
+        "birthYear": 190,
+        "visualIdentity": {
+          "hair": "长发，束为丧髻，用麻布条交叉束发，细竹笄挽住，粗布包发"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "麻衣（丧服）",
+            "accessories": "麻布条（寸许宽，从额前交叉绕过）、细竹笄、粗布",
+            "palette": [
+              "麻布本色",
+              "粗布色"
+            ]
+          }
+        ]
       },
       "region": "汉国",
       "phaseIdentities": [
@@ -39600,7 +41262,30 @@
           "locator": "六朝燕歌行/0003.html",
           "scene": "程宗扬与贾文和对峙期间提及赵飞燕陷身秘境，提及其为支撑病体而出面的皇后殿下"
         },
-        "birthYear": 183
+        "birthYear": 183,
+        "visualIdentity": {
+          "hairColor": "紫黑",
+          "hair": "深紫黑色长发，侧绾垂髻，戴金色凤形发簪与红宝流苏",
+          "eyes": "琥珀褐色眼，眼型媚长",
+          "face": "艳丽的鹅蛋脸，唇色红，笑意飞扬",
+          "build": "轻盈丰满"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "橙红与金色织云纹的舞衣（斜襟半褪、露背），配黄绿色薄纱长披帛",
+            "accessories": "金腰链缀红宝与紫色流苏、金镯数只、金色舞鞋、耳坠",
+            "palette": [
+              "橙红",
+              "明黄",
+              "黄绿",
+              "赤金",
+              "紫黑"
+            ],
+            "props": "腾空起舞姿态（呼应「飞燕善舞」），飘带环绕"
+          }
+        ]
       },
       "region": "汉国",
       "phaseIdentities": [
@@ -39863,7 +41548,23 @@
           "value": "约四十",
           "basis": "年约四旬"
         },
-        "birthYear": 180
+        "birthYear": 180,
+        "visualIdentity": {
+          "eyes": "双目神采湛然",
+          "face": "年约四旬，留着三绺长髯"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "青色的道袍",
+            "accessories": "头戴玉冠",
+            "palette": [
+              "青色"
+            ],
+            "props": "身边浮着一颗鸡蛋大的青色珠子，围着他缓缓转动，珠体散发出青蒙蒙的微光"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -39966,7 +41667,28 @@
             "text": "亲历：程宗扬与赵合德商议替代入宫（与程宗扬）"
           }
         ],
-        "birthYear": 202
+        "birthYear": 202,
+        "visualIdentity": {
+          "hair": "薰衣草紫色超长直发，顶部绾小髻，戴金色凤形冠簪与垂穗",
+          "eyes": "粉紫色大眼，眼神温顺",
+          "face": "清秀少女面孔，唇色粉，浅笑",
+          "build": "（HIGH 风险角色，按红线不作身材描述）"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "粉色襦裙配青蓝色内衬与抹胸，衣缘织金色回纹带，露肩广袖",
+            "accessories": "金璎珞项链、金腕镯、金腰饰嵌绿松石与垂坠",
+            "palette": [
+              "粉",
+              "青蓝",
+              "薰衣草紫",
+              "赤金"
+            ],
+            "props": "跪坐合十，室内瓶花与竹帘背景"
+          }
+        ]
       },
       "region": "汉国",
       "phaseIdentities": [
@@ -40469,7 +42191,23 @@
           "locator": "六朝云龙吟·第368章",
           "scene": "刘建家奴闯宫作乱时，一名面上带着刀疤的大汉从殿中迈步出来，双手握着近六尺的斩马刀，将闯入者凌空斩杀，展现出百战之士的凶悍气势。"
         },
-        "birthYear": 192
+        "birthYear": 192,
+        "visualIdentity": {
+          "eyes": "牛眼",
+          "face": "一脸憨厚、一脸晦气、红着眼睛、眼圈乏红、怒发冲冠、一脸恍然大悟",
+          "build": "魁梧"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "大氅（武士氅）、白布短褂、腰间长短兵刃",
+            "palette": [
+              "白"
+            ],
+            "props": "大马金刀坐、拍案而起、挥镢头汗下如雨、一手扶人一手拔刀"
+          }
+        ]
       },
       "region": "汉国",
       "phaseIdentities": [
@@ -40574,7 +42312,23 @@
           "location": "大明宫",
           "locator": "第0094章",
           "scene": "李昂传郑注、李训觐见，郑注正式出场"
-        }
+        },
+        "visualIdentity": {
+          "eyes": "瞳孔中灰扑扑的，没有一丝光亮",
+          "face": "刚剃了胡须，下巴多了几道伤痕，铁青的脸上扑了粉，就像蒙了层白霜一样，面色怪异"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "内侍的服色",
+            "palette": [
+              "铁青",
+              "白"
+            ],
+            "props": "负手立在一扇屏风前"
+          }
+        ]
       },
       "region": "唐国",
       "phaseIdentities": [
@@ -40814,7 +42568,20 @@
           "locator": "六朝云龙吟/0253.html",
           "scene": "赵飞燕与程宗扬对话时，中行说作为天子近侍宦者插嘴干涉，态度傲慢，打断对话并质问程宗扬身份。"
         },
-        "birthYear": 190
+        "birthYear": 190,
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "黑衣、貂帽、貂尾冠、垂耳冠、黑袍",
+            "accessories": "貂尾冠、垂耳冠、貂帽、金灿灿的长颈仙鹤酒壶、镶嵌宝石的金杯",
+            "palette": [
+              "黑",
+              "金"
+            ],
+            "props": "常持酒壶与金杯；跨黑马；骈指喝骂"
+          }
+        ]
       },
       "region": "汉国",
       "phaseIdentities": [
@@ -41161,7 +42928,30 @@
             "text": "亲历：太乙真宗介入（与程宗扬、蔺采泉、商乐轩）"
           }
         ],
-        "birthYear": 187
+        "birthYear": 187,
+        "visualIdentity": {
+          "hairColor": "栗棕",
+          "hair": "栗棕色长发，高绾成松髻并簪黄色小花与金步摇，余发垂至腰际",
+          "eyes": "琥珀褐色大眼，眼下带薄红晕染",
+          "face": "娇媚圆润的鹅蛋脸，唇色橘红，笑意慵懒",
+          "build": "丰满玲珑的成熟女性"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "杏橙色轻纱襦裙半褪，外罩月白与青蓝织金花纹的宽袖罩衫，腰间束蓝金织带（缀青绿宝石方饰），下配黑色长筒袜",
+            "accessories": "金镯与青玉手环、手持翠玉嵌绿宝石的长发簪",
+            "palette": [
+              "杏橙",
+              "青蓝",
+              "月白",
+              "赤金",
+              "黑"
+            ],
+            "props": "坐于木椅，牡丹与纱帘背景"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -42029,7 +43819,21 @@
           "value": "二十余岁",
           "basis": "武二往人群中一看，半个脸熟的都没撞上，倒是中间一个女子，二十余岁年纪，穿着橙黄的衫子，臂上绕着七彩丝带，容貌颇为艳丽"
         },
-        "birthYear": 200
+        "birthYear": 200,
+        "visualIdentity": {
+          "eyes": "媚艳的双眼"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "一袭黑衣",
+            "palette": [
+              "黑"
+            ],
+            "props": "雁翎刀"
+          }
+        ]
       },
       "region": "太泉",
       "phaseIdentities": [
@@ -42179,7 +43983,29 @@
           "locator": "六朝燕歌行/0095.html",
           "scene": "杨玉环向程宗扬介绍宫中有太监在查他底细时提及仇士良有五个儿子，还在皇帝面前替儿子讨封。"
         },
-        "birthYear": 190
+        "birthYear": 190,
+        "visualIdentity": {
+          "hairColor": "白",
+          "hair": "披头散发，额角一缕发丝散落，又枯又白；鬓上多了几缕白发",
+          "eyes": "双目满是血丝；眼睛瞪得铜铃一样",
+          "face": "浓眉大眼，肤色苍黑；脸上骄横的肥肉垮下；面饼脸，大红嘴唇",
+          "build": "胖（一胖一瘦，面饼脸）"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "紫袍（紫色袍服），貂蝉冠（貂冠），手持玉笏，腰带镶嵌蓝田玉",
+            "accessories": "貂蝉冠（貂冠），玉笏，腰带（镶嵌蓝田玉）",
+            "palette": [
+              "紫",
+              "白",
+              "黑",
+              "红"
+            ],
+            "props": "手持玉笏，一手扶腰带，一手甩大袖，昂首阔步；提着一人多长的陌刀"
+          }
+        ]
       },
       "region": "唐国",
       "phaseIdentities": [
@@ -42341,7 +44167,20 @@
           "locator": "六朝燕歌行/0102.html",
           "scene": "窥基断喝'观海！你们密宗尽可去青龙、兴善二寺演法，何必来我大慈恩寺！'，观海笑着回应后起身告辞"
         },
-        "birthYear": 178
+        "birthYear": 178,
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "白袍；大红袈裟",
+            "accessories": "念珠",
+            "palette": [
+              "白",
+              "红"
+            ],
+            "props": "盘膝端坐，手持念珠，合什"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -42438,7 +44277,29 @@
           "locator": "六朝燕歌行/0087.html",
           "scene": "袁天罡等人骑马途中，窥基坐着三车法师的车队（载经卷、美人、婢女）出行，程宗扬目睹这位大慈恩寺高僧边看书边搂着娇娃的放诞举止"
         },
-        "birthYear": 172
+        "birthYear": 172,
+        "visualIdentity": {
+          "hair": "暗青色头颅，原文未明确发式发色",
+          "eyes": "眼白与瞳孔混为一体，血汁般殷红；眉心间血肉模糊的眼睛露出血红眼珠",
+          "face": "半张脸剥落，失去眼睑的眼球裸露；颧骨侧方有箭伤，镞首穿过脸颊从耳后穿出",
+          "build": "魁伟"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "紫毫貂裘（奢华，毛绒绒兜帽翻在肩后）；御赐紫袍袈裟；金光闪闪的明光铠（护心铜镜，甲片波浪形）；肋下被刺穿的紫色袈裟；僧袍（被魔气侵蚀一空）",
+            "accessories": "七宝法冠（冠侧飘带）；五只骷髅组成的法冠；满头珠翠：凤钗、玉簪、花钿、云篦、金步摇；黄金环扣；金刚杵；金轮；禅杖；玉镯（金色符箓）",
+            "palette": [
+              "紫",
+              "金",
+              "暗青",
+              "血红",
+              "黑"
+            ],
+            "props": "盘膝坐车；左手握禅杖；僧袍一张飞出一只金轮；金刚杵从袖中飞出"
+          }
+        ]
       },
       "region": "宋国",
       "phaseIdentities": [
@@ -42547,7 +44408,25 @@
           "value": "约18",
           "basis": "\"你今年十八岁了吧？可怜见的，令尊被岳贼打伤时你才一岁多...\""
         },
-        "birthYear": 202
+        "birthYear": 202,
+        "visualIdentity": {
+          "hair": "长发",
+          "eyes": "漆黑",
+          "face": "如花娇靥，雪白面颊"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "斗篷、外衣、贴身小衣、亵裤",
+            "accessories": "芙蓉冠、簪子、玉佩",
+            "palette": [
+              "黑",
+              "白",
+              "红"
+            ]
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -42761,7 +44640,27 @@
           "value": "约五十",
           "basis": "年约五旬"
         },
-        "birthYear": 170
+        "birthYear": 170,
+        "visualIdentity": {
+          "face": "年约五旬，身材魁伟，颌下长须墨染般黑亮，没有丝毫杂色，神情淡淡的，却给人一种坚毅如钢的感觉",
+          "build": "魁伟"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "半旧的青衫（外穿）；内穿铁黑色战甲/玄甲/玄黑色的铁甲；紫袍（有时外穿）；银甲儒袍（平常穿着）",
+            "accessories": "袍角掖在腰间；手握笏板；持戟；长剑化为银白色弹丸；回赐弓、矢、刀、剑以及袍服一套",
+            "palette": [
+              "青",
+              "紫",
+              "铁黑",
+              "玄黑",
+              "银白"
+            ],
+            "props": "负手；盘膝垂目入定；孤身持戟；袍袖一挥；微微躬身"
+          }
+        ]
       },
       "region": "宋国",
       "phaseIdentities": [
@@ -43250,7 +45149,29 @@
           "locator": "第663章·故婢（第7章）/0086.html",
           "scene": "鱼玄机与好友黎锦香夜游乐游原归来，戴纱笠、芙蓉冠出行，偶遇神策军巡逻和六扇门捕头泉玉姬，摘下兜帽自我介绍"
         },
-        "birthYear": 202
+        "birthYear": 202,
+        "visualIdentity": {
+          "hairColor": "深棕",
+          "hair": "深棕色长发，高束飘扬，戴金蓝色发簪与白色莲花簪",
+          "eyes": "褐色眼，眼型细长上挑，神情自信",
+          "face": "秀美的鹅蛋脸，唇色红",
+          "build": "丰满高挑"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "宝蓝色交叉系带短襦（束胸式），配金红色宽腰封与金色浮雕腰扣，下着蓝色织花短裙与白色纱裙",
+            "accessories": "金蓝臂钏、金腕镯、红色流苏腰佩、耳坠",
+            "palette": [
+              "宝蓝",
+              "赤金",
+              "朱红",
+              "素白"
+            ],
+            "props": "反手持蓝金纹长剑（女剑客造型）"
+          }
+        ]
       },
       "region": "宋国",
       "phaseIdentities": [
@@ -43655,7 +45576,27 @@
           "locator": "六朝燕歌行/0147.html",
           "scene": "程宗扬在此佛堂中救出被十方丛林高僧用秘法禁锢、仅嘴巴能动的黛绮丝，黛绮丝恢复神智后自称波斯贵族、摩尼教善母，并向程宗扬宣誓效忠"
         },
-        "birthYear": 190
+        "birthYear": 190,
+        "visualIdentity": {
+          "hair": "金色长卷发，蓬松飘扬",
+          "eyes": "湖蓝色眼",
+          "face": "深邃的西方面孔，唇色淡",
+          "build": "高挑"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "白色半透明纱裙（缠绕式）",
+            "accessories": "（未见）",
+            "palette": [
+              "金",
+              "素白",
+              "冰蓝"
+            ],
+            "props": "深蓝海水/冰蓝背景"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -43978,7 +45919,29 @@
           "locator": "六朝云龙吟第0108章",
           "scene": "作为黑衣侍奴出场，手持长鞭审问阮香凝，自称原本姓佘，江湖人称蛇夫人"
         },
-        "birthYear": 188
+        "birthYear": 188,
+        "visualIdentity": {
+          "hairColor": "紫",
+          "hair": "银灰泛紫的长发，高绾盘髻，簪蓝紫色莲花与金步摇、金珠链",
+          "eyes": "细长凤眼，眼周绘蓝绿色花钿妆（自眼尾延伸至颊）",
+          "face": "冷艳成熟的长脸，唇色艳红",
+          "build": "成熟修长"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "黄底青蓝回纹织锦的宽幅襦裙（露肩），白色内裙，紫色织银几何纹长带，腿部束深紫吊带式腿环",
+            "accessories": "金项圈嵌蓝宝、莲花形长耳坠、金臂钏",
+            "palette": [
+              "明黄",
+              "青蓝",
+              "银紫",
+              "赤金"
+            ],
+            "props": "身旁盘有一条青绿色巨蛇（身份标志）"
+          }
+        ]
       },
       "phaseIdentities": [
         {
@@ -44098,7 +46061,22 @@
           "locator": "chapter166",
           "scene": "云苍峰设宴，席间向程宗扬介绍宾客名单，提及金谷石家的少主石超也将出席。"
         },
-        "birthYear": 190
+        "birthYear": 190,
+        "visualIdentity": {
+          "face": "脸色腊黄，胖脸，眼圈发红",
+          "build": "胖（胖脸、脸上肥肉直颤）"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "锦衣华服",
+            "palette": [
+              "黄（脸色腊黄）",
+              "锦衣华服（未指定具体颜色）"
+            ]
+          }
+        ]
       },
       "region": "晋国",
       "phaseIdentities": [
@@ -44293,7 +46271,10 @@
           "locator": "六朝云龙吟·第118回",
           "scene": "铁中宝带铁马堂劲装大汉占据营地，声称已被铁马堂占领，要求程宗扬换地方，自称铁马堂副堂主。"
         },
-        "birthYear": 190
+        "birthYear": 190,
+        "visualIdentity": {
+          "face": "一张瘦长脸，却偏偏贴了一副浓髯虬张的大胡子，几乎能盖住整张面孔"
+        }
       },
       "region": "南荒",
       "phaseIdentities": [
@@ -44476,7 +46457,21 @@
           "location": "长安皇城，右千牛卫府",
           "locator": "六朝燕歌行/0077.html",
           "scene": "段文楚与李药师议事时插话，此时他鼻青脸肿、手臂缠绷带；李药师（卫公）麾下将领"
-        }
+        },
+        "visualIdentity": {
+          "face": "满脸须髯",
+          "build": "魁梧"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "褂子",
+            "palette": [
+              "乌青"
+            ]
+          }
+        ]
       },
       "region": "宋国",
       "phaseIdentities": [
@@ -44654,7 +46649,27 @@
           "locator": "第0086章",
           "scene": "鱼玄机向泉玉姬解释自己与黎锦香耽搁时辰，请叔父鱼朝恩派神策军护送，侧面提及这位权倾朝野的宦官叔父专领神策军、权势显赫。"
         },
-        "birthYear": 160
+        "birthYear": 160,
+        "visualIdentity": {
+          "hairColor": "白",
+          "hair": "花白头发，束发",
+          "face": "老迈面孔",
+          "build": "肥胖"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "羽衣高冠（羽衣）、紫袍（紫袍宦官）、黄衫（黄衫内侍）",
+            "accessories": "貂蝉冠、金鱼袋（腰间）",
+            "palette": [
+              "花白",
+              "紫",
+              "黄",
+              "金"
+            ]
+          }
+        ]
       },
       "region": "唐国",
       "phaseIdentities": [
@@ -45223,7 +47238,27 @@
           "locator": "第27集",
           "scene": "程宗扬等人在戾太子墓旁遭遇袭击，一名被死士背着的年轻蒙面男子从铁面人背上下来，自称吕巨君，忝居射声校尉一职"
         },
-        "birthYear": 198
+        "birthYear": 198,
+        "visualIdentity": {
+          "hairColor": "黑",
+          "hair": "一夜之间黑发转白，脱落大半，以布巾绕头",
+          "face": "其貌不扬"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "甲胄",
+            "accessories": "却敌冠（险些掉落）；布巾（绕在头上）",
+            "palette": [
+              "黑",
+              "白",
+              "赭",
+              "金"
+            ],
+            "props": "带甲胄跪地；挥手；以布巾绕头"
+          }
+        ]
       },
       "region": "汉国",
       "phaseIdentities": [
@@ -45659,7 +47694,22 @@
           "locator": "六朝云龙吟/0198.html",
           "scene": "被程宗扬从水中救出后自报家门，程宗扬称其为太守"
         },
-        "birthYear": 190
+        "birthYear": 190,
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "宽袍长带（太守府内）；官服（含太守银印、青白红三色相间的绶带，系于腰间）",
+            "accessories": "太守银印（原系腰间，后失而复得）；青白红三色相间的绶带（系于革囊上）；革囊",
+            "palette": [
+              "青",
+              "白",
+              "红",
+              "银"
+            ],
+            "props": "随身携带官印、绶带、革囊"
+          }
+        ]
       },
       "region": "汉国",
       "phaseIdentities": [
@@ -45770,7 +47820,26 @@
             "role": "内眷（期夫人）"
           }
         ],
-        "birthYear": 202
+        "birthYear": 202,
+        "visualIdentity": {
+          "hair": "亮紫色超长直发，前额一缕挑高，戴金色花枝簪与金链额饰",
+          "eyes": "（图中侧脸，瞳色不明）",
+          "face": "侧脸秀气，唇色淡红",
+          "build": "（不采）"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "（该图为全裸情色场景，无服装信息可采）",
+            "accessories": "金色花簪、金色额链、红绳",
+            "palette": [
+              "亮紫",
+              "赤金"
+            ],
+            "props": "（情色场景，不作立绘参考）"
+          }
+        ]
       },
       "region": "汉国",
       "phaseIdentities": [
@@ -45947,7 +48016,21 @@
           "value": "约四十",
           "basis": "原文：那女子年约四十，皮肤仍然白皙光滑，但眼角已经有着细密的鱼尾纹"
         },
-        "birthYear": 180
+        "birthYear": 180,
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "翠袖",
+            "accessories": "髻上簪子（银簪）、鬓角火红木芙蓉、指环",
+            "palette": [
+              "翠",
+              "银",
+              "火红"
+            ],
+            "props": "从袖中抽丝帕、扶鬓角木芙蓉、拔簪划动"
+          }
+        ]
       },
       "phaseIdentities": [
         {
