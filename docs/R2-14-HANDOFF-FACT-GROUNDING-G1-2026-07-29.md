@@ -1,4 +1,4 @@
-# R2-14 跨拍叙事事实接地 G1
+# R2-14 跨拍叙事事实接地 G1 + G2
 
 日期：2026-07-29
 
@@ -84,4 +84,28 @@ Claude 真机任务 `claude-2026-07-29T13-07-39-647Z-f97caad0` 在 HEAD `adccbf5
 
 证据目录：`/Users/clawbot/.claude/scratch/r2-14-adccbf5-g2/`。其中 `net/T1_free.llm.json` 保存真实请求，`runtime/T1_free.pre.json`、`runtime/T1_free.post.json` 与最终存档证明零状态提交。
 
-后续复验应直接复用本次基准和探针，并选择响应正常的已配置正文 API；无需再花时间重建前置。R2-14 保持 `[~]`。
+后续复验直接复用本次基准和探针，不再重建前置。
+
+## 最终 G2：受控回合 + Codex 重载续验
+
+HEAD `c74d371` 上的受控真实回合补齐了第二次任务未能取得的已提交事务证据：
+
+- DeepSeek 主请求的首稿补造无来源精确损失，门禁命中；
+- DeepSeek 定向重写稿改为定性损失并安全落账，可选 `mid_term_memory` 为空没有触发玩家动作重放；
+- 随后的 MiniMax 请求属于事务已经提交后的辅助审计，prompt 明确标记为当前即兴目标，不是 `retryAIResponse()`；
+- 单次玩家动作只令 `worldTurn 8→9`、叙事 7→8；最终新增安全正文仅一条，`lastSettledBeat.bridgedAtTurn=9`，`s04_06.done=false`。
+
+Codex 随后使用应用正式 UI 完成两次连续重载续验：
+
+1. 从“续前世因缘”进入同一角色与同一临时槽；
+2. 两次载入均只看到一条相同的最新安全正文，输入框可用、无生成中状态，当前任务仍为“请求乐明珠为凝羽解毒”；
+3. 两次载入前后存档 SHA-256 均为 `8adc1c6662773ddd02b1606f1b5831647f8d08f90ca9aada29438d9578e2882f`；
+4. 存档内已有一处 `伤七人` 来自复验前基准，前后计数均为 1；本轮没有新增精确损失；
+5. 用户原始 `active_save.json` 与 `characters.json` 已逐字节恢复，临时槽移入证据目录，浏览器测试页关闭，Git 源码工作树恢复干净。
+
+Codex 续验证据：
+
+- 机器可读结论：`/Users/clawbot/.claude/scratch/r2-14-codex-reload-c74d371/assertion-summary.json`
+- 完成态临时存档：`/Users/clawbot/.claude/scratch/r2-14-codex-reload-c74d371/savedata_char_1784738715254_R2-14-CODEX-RELOAD.completed-evidence.json`
+
+最终裁定：门禁、事务单次提交与重载持久性均有真实链路证据，R2-14 G2 通过，状态翻为 `[x]`。
