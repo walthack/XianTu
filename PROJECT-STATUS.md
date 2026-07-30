@@ -1,7 +1,8 @@
 # 仙途 (XianTu) · 项目总体状况与并行分工文档
 
 > 面向「新加入的 agent」。读完这一篇即可独立认领一个模块开工。
-> 最后更新：2026-07-30（**R2-15 跨关主阅读面落点 G1 + G2 已关闭**：HEAD `8ac5eb5` 真机证明确定性启程 0 次 LLM，目标关 `opening.text`、右栏任务与固定动作同步切换并可重载；首个新关真实 prompt 带跨关承接边界。受控 SSE 单请求提交后 `worldTurn 1→2`、一次性展示态消费、合同仅初始化／推进一次，二次刷新仍显示最新正文且不发 LLM；续验源码守卫通过、临时槽和 Chrome 已清理。R2-14 仍因外部模型未返回保持 `[~]`。报告=`docs/R2-15-CROSS-STAGE-ENTRY-G1-2026-07-29.md`。）
+> 最后更新：2026-07-30（**立绘外观数据线：从零建成单一数据源并投影进运行时**，提交 `6b69325`→`cbf1e98`。①**官图反向回填**：EPUB 官方插图 93 张逐张人工识读，产出 49 人的可画维度（发型/服装/配色/配饰），此前 48 个有官图角色里 18 个在 appearance 库查无此人、服饰维度缺 12/30、配饰缺 25/30。②**原文补抽**：新脚本 `scripts/extract-portrait-visual-from-epub.mjs` 覆盖 84 个无官图角色——根因是旧抽取器的检索权重表身体词 21 个 vs 服饰词仅 5 个，`3×kwCount` 让情色段落占满 top40，模型根本看不到穿着句；新表分层加权（服装 6／配饰 5／发型 5／颜色 4／面容 3／体型 1／纯身体性征 0）后服饰覆盖 41%→68%，污染 0。③**分层**：`portrait-visual-master.json` v2（127 人，ready 65／partial 39／insufficient 23）拆 `identity`（发色/五官/体型＋永久标记＋真身特征，换装不变）与 `outfits[]`（服装/配饰/配色/器物/该套发式，scope=default｜stage:<id>｜unassigned）。④**投影进运行时**：118 人经 registry `staticProfile.visualIdentity/visualOutfits` 进 `characterResolver`，出【体貌】【装束】【真身特征】三条派生 note，第三条带可见性＋知情双门控。**⑤ 新增裁定 #141／#142**（碧姬名链＋蔑称补执行到数据层；图文冲突一律回原文裁定）。⑥ 补 7 张缺失角色卡（registry 308→315）。⑦ 美术方向改向 **PC-98 大像素立绘**（暂记不展开，前置是先定全局 16 色调色板）。验证：`type-check`／`npm test` 524 全绿（新增 6）／`canon:validate`／37 关 `mod:validate` 全 PASS。报告=`docs/PORTRAIT-VISUAL-DATA-2026-07-30.md`。）
+> 上一次更新：2026-07-30（**R2-15 跨关主阅读面落点 G1 + G2 已关闭**：HEAD `8ac5eb5` 真机证明确定性启程 0 次 LLM，目标关 `opening.text`、右栏任务与固定动作同步切换并可重载；首个新关真实 prompt 带跨关承接边界。受控 SSE 单请求提交后 `worldTurn 1→2`、一次性展示态消费、合同仅初始化／推进一次，二次刷新仍显示最新正文且不发 LLM；续验源码守卫通过、临时槽和 Chrome 已清理。R2-14 仍因外部模型未返回保持 `[~]`。报告=`docs/R2-15-CROSS-STAGE-ENTRY-G1-2026-07-29.md`。）
 > 上一次更新：2026-07-25（**UI 视觉优化一轮（模块 E 表现层）**：创建/加载/模式选择 6 项定点缺陷已修；主阅读面列宽 738→640px（40 汉字/行）、正文色 7→4 种；整体色板从 Tailwind 默认换为"六朝水墨"矿物色（石青/石绿/藤黄/朱砂/紫檀/宣纸/松烟），token 层重写 + 硬编码色批量收敛 2945 处，残留 Tailwind 主色 grep 计数 0。`type-check` 干净、`npm test` 504 全绿、8091 全流程实测（暗色+亮色）。**新写 UI 请用 `var(--color-*)`，别再引入 `#3b82f6/#f59e0b/#ef4444/#94a3b8` 这类 Tailwind 字面量**。已知残留：暗色下朱砂危险色文字 3.3–3.5:1、紫檀境界徽章 3.68:1（饱和朱砂在近黑底上到不了 4.5:1，需另开"文字浅调"token，未擅自加）。）
 > 上一次更新：2026-07-22（R2-12 第二批：高风险前 25 张角色卡已完成证据分层，16 张确定性收口、9 张记录／待取证；12 张按原文序号修正开场投影，4 张关闭陈旧关系旗标，4 组完全重复关系链去重。第一批 Claude 二审发现的 4 个 P0 已修：原始成人 notes、赵合德归属、林娘子关系数组、太泉核心冲突漏关；P1 测试面已扩展，构建期未执行的重复 notes 实现已删除。当前完整 `canon:build` 501/501、37 关全绿，待合并提交后二审本轮总差异。报告=`docs/R2-12-CHARACTER-PHASE-QUALITY-2026-07-22.md`、`docs/R2-12-TOP25-CHARACTER-QUALITY-2026-07-22.md`。）
 > Roadmap 清账（2026-07-22）：R2-10B/C/K/M 的历史中间态已按后续 G2 与 R2-11 证据关闭；旧并行分工表已替换为当前六类可认领模块，Canon TODO 的已完成／部分完成／真实未完成项亦已重新归类并同步 NAS。
@@ -27,7 +28,7 @@
 | 生成内容根 | `mod-kit/generated/deepseek-v4-flash/`（`qingyu/ yunlong/ yange/ shared-atlas/ character-canon/`）|
 | 脚本（167 个 .mjs） | `scripts/` |
 | 核心文档 roadmap | `mod-kit/generated/deepseek-v4-flash/character-canon/CORE-DOCS-ROADMAP.md` |
-| **正典裁定簿（改 canon/prompt 前必读）** | `…/character-canon/CANON-DECISIONS.md`（96 条人工裁定 + 执法标记）|
+| **正典裁定簿（改 canon/prompt 前必读）** | `…/character-canon/CANON-DECISIONS.md`（142 条人工裁定 + 执法标记）|
 | 续写总纲 / 剧透血缘密档 | `…/character-canon/ENDING-BLUEPRINT.md` v2（真值源）+ `RELATIONSHIPS-SECRET.md`（关系密档层，裁定 #89）|
 | 默认线正典轨道设计 | `…/character-canon/DEFAULT-CANON-RAIL-DESIGN.md` |
 | 对外发布 roadmap（发布门禁/发布后深耕） | `RELEASE-ROADMAP.md`（仓库根，2026-07-07 立档） |
@@ -285,7 +286,7 @@ UI显示进度、剩余窗口与时间成本，截止按 `participated / partial
 
 - D5 yange extraction 索引错位（纯展示位偏移，标记不修）。
 - D2 阮香琳/蛇夫人/蛇奴 拆分、D3 尹馥兰/兰姑（身份层遗留，原文证据不足待人工裁定）。
-- 6 条约束破戒后果需原文确认（碧奴/林娘子/虞紫薇/白仙儿/襄城君/孙寿）。
+- 6 条约束破戒后果需原文确认（碧姬/林娘子/虞紫薇/白仙儿/孙寿——原列「碧奴」是鬼王峒蔑称、「襄城君」与「孙寿」是同一人，均已按裁定 #141／#142 归并）。
 
 ---
 
@@ -332,7 +333,7 @@ node scripts/validate-if-branches.mjs             # if 线（若动到 if/spine�
 
 ### E. 表现层与内容扩量（须先看小圈子反馈）
 - 五条枢纽高光与两张 Voice Card 做外部对照；通过后再定 242 条高光批量、立绘槽和 top 20–30 表演卡。
-- 立绘先做 SAFE manifest + resolver + 6–10 位主要角色消费闭环；已有官方插图优先。
+- 立绘**外观数据已就绪**（2026-07-30）：单一数据源 `character-canon/portrait-visual-master.json`（127 人，identity/outfits 分层，ready 65／partial 39／insufficient 23），已投影进运行时 118 人。剩下的是资产侧：SAFE manifest + 展示 resolver + 6–10 位主要角色消费闭环；已有官方插图优先。**出图前必须先定全局 16 色调色板**（美术方向已改向 PC-98 大像素立绘）。
 - 亲密档案层等待用户圈选首批 6–12 名，继续执行年龄与双条件注入硬门禁。
 
 ### F. 燕歌续作与远期沙盒
