@@ -421,6 +421,55 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
           }
         }
       }
+      if (entity.narrativeFactReceipts !== undefined) {
+        const receiptsPath = `${entity.__path}.narrativeFactReceipts`;
+        if (!Array.isArray(entity.narrativeFactReceipts)) {
+          add(receiptsPath, 'invalid_type', 'narrativeFactReceipts must be an array.');
+        } else {
+          const contract = isRecord(entity.playerCompletionContract)
+            ? entity.playerCompletionContract
+            : undefined;
+          const contractActions = contract && Array.isArray(contract.actions)
+            ? contract.actions.filter(isRecord)
+            : [];
+          const actionIds = new Set(
+            contractActions.map(action => action.id).filter((id): id is string => typeof id === 'string'),
+          );
+          const receiptIds = new Set<string>();
+          forEachRecord(entity.narrativeFactReceipts, receiptsPath, (receipt, receiptPath) => {
+            if (validateId(receipt.id, `${receiptPath}.id`, add)) {
+              const id = String(receipt.id);
+              if (receiptIds.has(id)) add(`${receiptPath}.id`, 'duplicate_id', `Duplicate narrative fact receipt "${id}".`);
+              receiptIds.add(id);
+            }
+            if (validateId(receipt.actionId, `${receiptPath}.actionId`, add)
+              && !actionIds.has(String(receipt.actionId))) {
+              add(`${receiptPath}.actionId`, 'unknown_reference', `Unknown event action "${receipt.actionId}".`);
+            }
+            if (!['success', 'partial', 'failure'].includes(String(receipt.outcome))) {
+              add(`${receiptPath}.outcome`, 'invalid_enum', 'Narrative fact outcome must be success, partial, or failure.');
+            }
+            if (receipt.category !== 'loss') {
+              add(`${receiptPath}.category`, 'invalid_enum', 'Narrative fact category currently supports only loss.');
+            }
+            const boundAction = contractActions.find(action => action.id === receipt.actionId);
+            const settleOn = contract && Array.isArray(contract.settleOn) ? contract.settleOn : [];
+            if (
+              boundAction
+              && (boundAction.kind === 'prepare' || !settleOn.includes(receipt.outcome))
+            ) {
+              add(receiptPath, 'non_settling_binding', 'Narrative fact receipts must bind to an event-settling action and outcome.');
+            }
+            requireString(receipt.claim, `${receiptPath}.claim`, add);
+            if (
+              typeof receipt.claim === 'string'
+              && (receipt.claim.length > 120 || /[；。！？\n\r]|renderGuard\./u.test(receipt.claim))
+            ) {
+              add(`${receiptPath}.claim`, 'invalid_value', 'Narrative fact claim must be a short single clause without control markers or sentence punctuation.');
+            }
+          });
+        }
+      }
       if (entity.timeline !== undefined) {
         const timelinePath = `${entity.__path}.timeline`;
         if (!isRecord(entity.timeline)) {

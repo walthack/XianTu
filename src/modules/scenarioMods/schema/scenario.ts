@@ -50,6 +50,21 @@ export interface ScenarioModCreationPreset {
 
 export type ScenarioPlayerKnowledgeStatus = 'confirmed' | 'rumor';
 export type ScenarioPlayerKnowledgeScope = 'player' | 'public';
+export type ScenarioPlayerCompletionOutcome = 'success' | 'partial' | 'failure';
+
+/**
+ * 本地事件完成后才可进入叙事层的精确事实回执。
+ * 该声明位于 completion contract 之外，避免展示事实增量重置进行中的合同进度；
+ * 运行时仍须同时匹配 actionId + outcome 并完成事件，不能仅凭数据存在提前注入。
+ */
+export interface ScenarioNarrativeFactReceipt {
+  id: string;
+  actionId: string;
+  outcome: ScenarioPlayerCompletionOutcome;
+  category: 'loss';
+  /** 允许渲染层逐字引用的最小事实，不含句末标点或内部控制语汇。 */
+  claim: string;
+}
 
 /** 玩家认知账本的最小事实；与世界真值、NPC knowledgeFacts 分开存储。 */
 export interface ScenarioPlayerKnowledgeFact {
@@ -102,11 +117,11 @@ export interface ScenarioModEvent {
   offscreenResolution?: ScenarioModEventOffscreenResolution;
   /** 当前承重拍的世界演员纵切；数据通用、按事件显式启用。 */
   worldActor?: ScenarioWorldActorContract;
+  /** 与本地动作及 outcome 绑定的权威叙事事实；完成前不得进入 prompt。 */
+  narrativeFactReceipts?: ScenarioNarrativeFactReceipt[];
   /** 无机会卡事件的本地完成合同；动作身份与判定结果均由引擎持有。 */
   playerCompletionContract?: ScenarioPlayerCompletionContract;
 }
-
-export type ScenarioPlayerCompletionOutcome = 'success' | 'partial' | 'failure';
 
 export interface ScenarioPlayerCompletionContract {
   /** objective_action 由玩家点击引擎声明动作即成功；local_condition 还会读取本地状态判定。 */

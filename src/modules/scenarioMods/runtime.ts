@@ -6,6 +6,7 @@ import type {
   ScenarioMod,
   ScenarioModChapter,
   ScenarioModEvent,
+  ScenarioNarrativeFactReceipt,
   ScenarioNpcDecisionActor,
   ScenarioNpcMemoryEpisode,
   ScenarioPlayerCompletionContract,
@@ -125,6 +126,8 @@ export interface ScenarioEventActionAttempt {
   outcome: ScenarioPlayerCompletionOutcome;
   attemptedAtTurn: number;
   detail: string;
+  /** 本次本地动作与 outcome 精确匹配的事实快照；合同／模组热更后也不反推改写。 */
+  factReceipts?: ScenarioNarrativeFactReceipt[];
 }
 
 export interface ScenarioEventActionState {
@@ -296,6 +299,8 @@ export interface RuntimeState extends ScenarioProgressState {
     targetEventId?: string;
     /** 首个余波回合已经呈现；按钮可恢复，但承接身份保留到目标动作触发。 */
     bridgedAtTurn?: number;
+    /** 完成动作当时由引擎快照的精确事实；只供下一拍渲染，不参与完成判定。 */
+    factReceipts?: ScenarioNarrativeFactReceipt[];
   };
 }
 
@@ -1216,7 +1221,16 @@ export function recordStoryEventStructuredAction(
   state.lastOutcome = outcome;
   const attemptNumber = Math.max(0, Number(state.attemptCount) || 0) + 1;
   state.attemptCount = attemptNumber;
-  state.attempts.push({ actionId: action.id, outcome, attemptedAtTurn: turn, detail });
+  const factReceipts = (event.narrativeFactReceipts || [])
+    .filter(receipt => receipt.actionId === action.id && receipt.outcome === outcome)
+    .map(receipt => structuredClone(receipt));
+  state.attempts.push({
+    actionId: action.id,
+    outcome,
+    attemptedAtTurn: turn,
+    detail,
+    ...(factReceipts.length ? { factReceipts } : {}),
+  });
   state.attempts = state.attempts.slice(-8);
   if (action.kind === 'prepare' && outcome === 'success' && action.grantsPreparation) {
     state.preparations = [...new Set([...(state.preparations || []), action.grantsPreparation])].sort();
@@ -1797,9 +1811,16 @@ function recordSettledBeatHandoff(runtime: RuntimeState, transitions: ScenarioRu
       || (left.id < right.id ? -1 : left.id > right.id ? 1 : 0));
   const event = completed.at(-1);
   if (!event) return;
+  const actionState = runtime.eventActionStates?.[event.id];
+  const settledAttempt = [...(actionState?.attempts || [])]
+    .reverse()
+    .find(attempt => attempt.attemptedAtTurn === actionState?.readyAtTurn);
   runtime.lastSettledBeat = {
     eventId: event.id,
     settledAtTurn: Math.max(0, Number(runtime.worldTurn) || 0),
+    ...(settledAttempt?.factReceipts?.length
+      ? { factReceipts: structuredClone(settledAttempt.factReceipts) }
+      : {}),
     ...(() => {
       const target = getNarrativeAnchorEvent(runtime);
       return target && target.id !== event.id ? { targetEventId: target.id } : {};

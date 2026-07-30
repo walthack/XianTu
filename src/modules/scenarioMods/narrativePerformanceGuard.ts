@@ -35,8 +35,9 @@ const QUANTITY_CLAIM_SOURCE = /探子|斥候|军报|来报|使者|消息|号称|
 const UNVERIFIED_QUANTITY_CONTEXT = /号称|声称|据报|传闻|据说|未核实|未经核实|尚待核实|无法证实|真假难辨/;
 const AUTHORITATIVE_QUANTITY_CONTEXT = /确有|确认|查明|已经核实|确切|实有/;
 const CASUALTY_QUANTITY = new RegExp(
-  `(?:死|死亡|阵亡|战殁|伤|受伤|重伤|轻伤|失踪|失散)[^。！？\\n]{0,10}${QUANTITY_NUMBER}\\s*(?:人|名|个|员|伙计|军士|弟兄|同伴)`
-  + `|${QUANTITY_NUMBER}\\s*(?:人|名|个|员|伙计|军士|弟兄|同伴)[^。！？\\n]{0,10}(?:死|死亡|阵亡|战殁|伤|受伤|重伤|轻伤|失踪|失散)`,
+  `(?:死|死亡|阵亡|战殁|击杀|杀死|被杀|毙命|伤|受伤|重伤|轻伤|失踪|失散)[^。！？\\n]{0,10}${QUANTITY_NUMBER}\\s*(?:人|名|个|员|伙计|军士|弟兄|同伴|武士)`
+  + `|${QUANTITY_NUMBER}\\s*(?:人|名|个|员|伙计|军士|弟兄|同伴|武士)[^。！？\\n]{0,10}(?:死|死亡|阵亡|战殁|击杀|杀死|被杀|毙命|伤|受伤|重伤|轻伤|失踪|失散)`
+  + `|${QUANTITY_NUMBER}\\s*具\\s*(?:尸体|尸首|遗体)`,
 );
 const MATERIAL_LOSS_QUANTITY = new RegExp(
   `(?:损失|损毁|毁|冲翻|冲走|泡烂|沉没|遗失|丢失|跑了|死了|伤了|受惊)[^。！？\\n]{0,12}${QUANTITY_NUMBER}\\s*(?:辆|匹|艘|箱|担|车|船|骡|马)`
@@ -73,6 +74,23 @@ function parseReservedFutureTerms(scenarioPrompt: string): string[] {
   const match = scenarioPrompt.match(/renderGuard\.reservedFutureTerms=([^；。\n]*)/);
   if (!match?.[1]) return [];
   return match[1].split('|').map(item => item.trim()).filter(Boolean);
+}
+
+function parseGroundedHandoffLossClaims(scenarioPrompt: string): string[] {
+  const marker = 'renderGuard.groundedHandoffLossClaims=';
+  const start = scenarioPrompt.indexOf(marker);
+  if (start < 0) return [];
+  const valueStart = start + marker.length;
+  const end = scenarioPrompt.indexOf('；', valueStart);
+  if (end < 0) return [];
+  try {
+    const parsed = JSON.parse(scenarioPrompt.slice(valueStart, end));
+    return Array.isArray(parsed)
+      ? parsed.filter((claim): claim is string => typeof claim === 'string' && Boolean(claim.trim()))
+      : [];
+  } catch {
+    return [];
+  }
 }
 
 interface ForbiddenAssociation {
@@ -131,10 +149,16 @@ function concreteQuantityViolation(narrative: string, scenarioPrompt: string): b
 
 function ungroundedHandoffLossViolation(narrative: string, scenarioPrompt: string): boolean {
   if (!/renderGuard\.rejectUngroundedHandoffLosses=true/.test(scenarioPrompt)) return false;
-  return narrative.split(/[。！？\n]/).some(sentence =>
-    !hasExplicitUnverifiedQuantityContext(sentence)
-    && (CASUALTY_QUANTITY.test(sentence) || MATERIAL_LOSS_QUANTITY.test(sentence))
-  );
+  const groundedClaims = parseGroundedHandoffLossClaims(scenarioPrompt);
+  return narrative.split(/[。！？\n]/).some(sentence => {
+    if (hasExplicitUnverifiedQuantityContext(sentence)) return false;
+    const ungroundedRemainder = groundedClaims.reduce(
+      (remainder, claim) => remainder.split(claim).join(''),
+      sentence,
+    );
+    return CASUALTY_QUANTITY.test(ungroundedRemainder)
+      || MATERIAL_LOSS_QUANTITY.test(ungroundedRemainder);
+  });
 }
 
 function leakedForbiddenTerm(narrative: string, terms: string[]): string | undefined {

@@ -2471,6 +2471,15 @@
         "axisAnchor": "六朝清羽记·#48·第46章·幻真",
         "axisBeat": "商队与花苗人遭遇鬼王峒武士袭击，武二郎以双刀斩杀多名武士，扭转战局。",
         "objective": "协助武二郎击退鬼王峒武士",
+        "narrativeFactReceipts": [
+          {
+            "id": "fact.lcq.s04_02.nine_warriors_killed",
+            "actionId": "advance_declared_objective",
+            "outcome": "success",
+            "category": "loss",
+            "claim": "武二郎与苏荔联手击杀九名鬼王峒武士"
+          }
+        ],
         "offscreenResolution": {
           "id": "offscreen.r2_9.lcq_event_s04_02",
           "afterStallTurns": 7,

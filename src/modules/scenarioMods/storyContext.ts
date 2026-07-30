@@ -17,6 +17,7 @@ import type {
   ScenarioModLocation,
   ScenarioModOpening,
   ScenarioModPlayerRelationship,
+  ScenarioNarrativeFactReceipt,
 } from './schema';
 
 interface StoryRuntime {
@@ -53,7 +54,15 @@ interface StoryRuntime {
     settledAtTurn: number;
     targetEventId?: string;
     bridgedAtTurn?: number;
+    factReceipts?: ScenarioNarrativeFactReceipt[];
   };
+  eventActionStates?: Record<string, {
+    attempts: Array<{
+      factReceipts?: ScenarioNarrativeFactReceipt[];
+      [key: string]: unknown;
+    }>;
+    [key: string]: unknown;
+  }>;
   eventTimeline?: Record<string, {
     eligibleAtTurn: number;
     activatedAtTurn?: number;
@@ -507,7 +516,17 @@ export function createScenarioPromptState<T extends SaveData>(saveData: T): T {
   runtime.introducedCharacterIds = collectIntroducedCharacterIds(runtime);
   runtime.chapters = runtime.chapters.filter(chapter => chapter.id === runtime.currentChapterId);
   const anchor = getNarrativeAnchorEvent(runtime as any);
-  runtime.events = anchor ? [anchor] : [];
+  // 未结算的事实回执不能借“当前事件原始数据”提前泄进通用状态 JSON；
+  // 只有 runtime.lastSettledBeat 中由引擎快照的回执，才会经下方显式门禁进入 prompt。
+  runtime.events = anchor
+    ? [{ ...anchor, narrativeFactReceipts: undefined }]
+    : [];
+  for (const state of Object.values(runtime.eventActionStates || {})) {
+    state.attempts = (state.attempts || []).map(attempt => ({
+      ...attempt,
+      factReceipts: undefined,
+    }));
+  }
   return promptState;
 }
 
@@ -809,7 +828,13 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
         const movement = fromWhere && toWhere && fromWhere !== toWhere
           ? `镜头需要从“${fromWhere}”自然转到“${toWhere}”`
           : '若需时间流逝或短距离位移，用人物行动与环境变化自然交代';
-        const lossGroundingBoundary = 'renderGuard.rejectUngroundedHandoffLosses=true。当前没有结构化损失回执：不得为伤亡、伤者、失踪者、财货、车船或牲畜损失补造精确数量；只可使用“仍待清点”“有人受伤”“部分货物受损”等定性表述。带明确消息来源且明确标为未核实的角色传闻可以保留，但不得当成事实或写回世界状态。';
+        const groundedLossClaims = (settledBeat?.factReceipts || [])
+          .filter(receipt => receipt.category === 'loss')
+          .map(receipt => receipt.claim);
+        const groundedLossBoundary = groundedLossClaims.length
+          ? `引擎已经落账的精确损失事实仅限以下逐字声明：${groundedLossClaims.join('｜')}。如需使用精确数量，必须原样引用其中一条，不得改换主语、数量或结果，也不得顺带补充其他损失。renderGuard.groundedHandoffLossClaims=${JSON.stringify(groundedLossClaims)}；`
+          : '当前没有结构化损失回执：';
+        const lossGroundingBoundary = `renderGuard.rejectUngroundedHandoffLosses=true。${groundedLossBoundary}不得为回执之外的伤亡、伤者、失踪者、财货、车船或牲畜损失补造精确数量；其余只可使用“仍待清点”“有人受伤”“部分货物受损”等定性表述。带明确消息来源且明确标为未核实的角色传闻可以保留，但不得当成事实或写回世界状态。`;
         if (settledBeat?.bridgedAtTurn === undefined) {
           return `【跨拍承接·余波铺垫，不改真值】上一拍「${settledEvent.name}」刚由玩家亲历完成；当前入口是“${destination}”。本轮先用一小段余波接住上一拍，再通过同伴反应、环境异样或新出现的需求铺到当前入口附近；${movement}。不得复演上一拍，不得直接完成当前事件；资料未声明具体时长时不得编造精确日期或距离。${lossGroundingBoundary}`;
         }
