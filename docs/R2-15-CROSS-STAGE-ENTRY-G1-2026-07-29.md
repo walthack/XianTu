@@ -1,6 +1,6 @@
-# R2-15 跨关主阅读面落点 G1
+# R2-15 跨关主阅读面落点 G1 + G2
 
-日期：2026-07-29
+日期：2026-07-29；G2 关闭：2026-07-30
 
 ## 问题
 
@@ -63,3 +63,37 @@ G1 已通过：
 3. 刷新重载后仍是该 opening；
 4. 执行一个新关确定性动作，出站 prompt 含跨关落点约束；
 5. 正文落账后 opening 展示态被消费，事件合同与进度正常推进。
+
+## G2 结果
+
+G2 已通过，纵切为 `lcq.stage_04 → lcq.stage_04b_lingfei_baiyi_crisis`。验收在
+HEAD `8ac5eb5` 使用独立临时槽与受控、schema-valid 的 SSE 响应完成：
+
+- 启程前主阅读面仍是旧关末段，主区存在确定性启程命令；
+- 点击启程产生 0 次 LLM 请求，`modId` 切到目标关，主阅读面逐字显示目标关
+  `opening.text` 与“旅途新章”徽章；右栏目标和固定动作同步属于目标关；
+- `stageEntryPresentation` 正确记录 from/to、进入回合与 opening；切关前后的叙事历史和短期记忆
+  逐字不变，刷新重载后 opening 仍占据主阅读面；
+- 首个目标关固定动作的真实出站 prompt 含
+  `【跨关落点·只演出不改真值】`、精确 opening 与“不得复演上一关收束”，该指令块不暴露内部
+  stage id；
+- 仅 1 次 chat-completion 请求被匹配并返回受控 SSE，0 次结构重试；响应成功提交后
+  `worldTurn 1→2`，`stageEntryPresentation` 被消费，主阅读面显示新正文，输入保持可用；
+- 事件动作状态只初始化一次：`contractHash=ef18441a`、`attemptCount=1`、
+  `lastOutcome=success`，没有重复正文或重复落账；
+- 再次刷新后 `worldTurn=2`、展示态仍不存在、合同状态与最新正文均保持，刷新产生 0 次 LLM 请求。
+
+两段证据来自：
+
+- `claude-2026-07-30T07-49-49-040Z-f41f50d8`：完成 1–5，外层 30 分钟超时前已留存切关、
+  重载和真实 prompt；重启构建产生的 11 个 builtin 非语义漂移经逐文件审计后精确恢复；
+- `claude-2026-07-30T10-44-03-549Z-a45f571e`：完成 6–8；Claude 在写最终摘要前触及
+  15 分钟外层超时，但运行时、UI、网络、存档和最终重载证据均已落盘，Codex 据此生成
+  `assertion-summary.json`；本次 `sourceGuardPassed=true`，最终 Git 工作树干净。
+
+证据目录：
+
+- `/Users/clawbot/.claude/scratch/r2-15-stage-entry-g2-rerun-8ac5eb5/`
+- `/Users/clawbot/.claude/scratch/r2-15-stage-entry-g2-cont-8ac5eb5/`
+
+临时槽与临时 Chrome profile 已清理，请求头已脱敏。R2-15 可以关闭。
