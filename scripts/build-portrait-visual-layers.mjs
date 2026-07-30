@@ -1,0 +1,272 @@
+#!/usr/bin/env node
+
+// 把立绘外观数据拆成两层，因为服装会随场景更换而身体特征不会：
+//   identity —— 一人一份，跨场景不变：发色、瞳色、肤色、五官、体型档位，
+//               以及**永久标记**（刺青/疤/胎记/月牙痕）与**真身特征**（狐尾/蝎尾/鳞/尖耳）。
+//               后两类必须留在不变层：它们带情节含义，裁定 #142 与 storyContext
+//               第 5 条【人物真身】都要用，换装不能把它们换掉。
+//   outfits[] —— 一人多套，可变：服装形制、配饰、配色、随身器物，以及**跟着装束变的发式**
+//               （发色不变、束法会变：吕雉盘髻+步摇 / 月霜高马尾 / 苏荔随意挽起）。
+//               scope=default 的那套是立绘定妆用；stage:<id> / phase:<label> 供叙事按场景取。
+//
+// 输入 portrait-visual-master.json（官图回填 + 原文补抽的合并产物），原地升级为 v2 分层结构。
+// 拆分只做保守的文本切分，不做 NLP 推断：识别不了多套就保持单套，原句一律不丢。
+//
+// 用法：node scripts/build-portrait-visual-layers.mjs [--dry]
+
+import { readFile, writeFile } from 'node:fs/promises';
+import { join, resolve } from 'node:path';
+
+const root = resolve(import.meta.dirname, '..');
+const masterPath = join(root, 'mod-kit/generated/deepseek-v4-flash/character-canon/portrait-visual-master.json');
+const DRY = process.argv.includes('--dry');
+
+// 装束/兵器/器物词。真身与标记的判定必须先排除它们：
+// 单字正则会把「鳞片胸甲」「翼状饰片」「羽衣高冠」「月牙短戟」「翼钩」乃至书名
+// 「清羽记」全判成真身特征——收紧前实测 14 个 trueForm 里 8 个是误判。
+const GEAR_RE = /甲|盔|冠|饰|簪|钗|剑|刀|戟|斧|弓|箭|钩|扇|袍|衣|衫|裙|靴|带|壶|镜|笏/;
+// 永久标记：跨场景不变，且多半带情节含义
+const MARK_RE = /刺青|纹身|伤?疤|胎记|痕迹|印记|烙印|咬痕|月牙状/;
+// 真身特征：种族/妖身，属于身份而非装束。一律要求具体部位或共现语境，不用裸单字。
+const TRUE_FORM_RE = /狐尾|蝎尾|蛇尾|龙尾|狐皮|兽耳|尖耳|耳廓略尖|龙鳞|鳞纹|化身藏形|现出真身|本相|(?:身后|臀后|背后|腰间)[^，。]{0,8}(?:尾巴|双翼)/;
+// 「乌亮」「青丝」都是黑发的古语写法，漏了会让 hairColor 空掉（苏荔一度被从另一条补成「棕色」，
+// 与原文「乌亮的长发」矛盾）。故 hairColor 只从本条 hair 抽，抽不到就留空，绝不跨条目补。
+// 「乌亮的长发」中间有「的」，lookahead 不放过它就抽不到颜色（苏荔一度空值）
+const HAIR_COLOR_RE = /(乌亮|乌黑|乌|青丝|墨黑|漆黑|纯黑|黑|亚麻金|金色|金|银白|银灰|银|白|栗棕|棕黑|深棕|棕红|棕|栗|玫瑰粉|紫粉|紫黑|薰衣草紫|紫|靛|蓝黑|青|灰|赤|褐|红棕|酒红|橄榄棕|孔雀蓝绿|粉)[色]?(?:的)?(?=发|长发|短发|直发|卷发|鬈发|秀发|头发)/;
+const NORMALIZE_HAIR = { 乌亮: '乌黑', 乌: '乌黑', 青丝: '乌黑' };
+
+// 同人重复条目（分层后才暴露：同一人的 identity 被拆成两半）。合并规则显式列出以便追溯。
+const MERGES = [
+  { keep: '苏荔', drop: '阿依苏荔', identityFrom: '苏荔', defaultFrom: '苏荔',
+    note: '已并入官图条目「阿依苏荔」（裁定 #142：canon 的「常着红裙如火」「大腿黑色刺青」与官图红裙+藤纹刺青吻合，确认同一人）。identity 取原文（蝎尾真身、身高超一米九），标记取并集；两套装束可能是同一身衣服的不同视角，暂并存待人工确认。' },
+  { keep: '剑玉姬', drop: '剑玉姬（云龙吟版）', identityFrom: '剑玉姬（云龙吟版）', defaultFrom: '剑玉姬（云龙吟版）',
+    note: '两版官图造型互斥但都合正典——原文「未曾遮面，却只见其风采，未见其面容」（巫宗障眼法术），故 identity 本身不定形。default 取云龙吟版（赛璐璐，合定版画风）；燕歌行版（蓝黑短发+白仙裙+金凤冠，写实厚涂）作变体。' },
+];
+// 疑似同人但真名不同，属身份链问题，只标记不合并
+const FLAG_PAIRS = [['朱老头（刘询/殇振羽）', '朱老头（刘谋）']];
+
+// 裁定 #142 的逐条例外：这几处官图偏离原文，identity 必须按原文覆盖。
+// 只写进 notes 是不够的——裁定落到文档层不等于落到结构化字段，出图脚本读的是字段。
+const CANON_OVERRIDES = {
+  月霜: { hairColor: '乌黑',
+    hair: '一头青丝（乌黑长发），高扎马尾并系红色发带；寒毒发作时发丝带细霜、眉眼间泛青',
+    why: '裁定 #142：canon evidence 有「一头青丝」，官图的栗棕发是画师上色' },
+  凝羽: { hairColor: '乌黑',
+    hair: '乌亮的乌黑长发，散披及背，额前碎发',
+    marks: ['肩头有一个淡红的月牙状痕迹（清羽记 ch26）'],
+    why: '裁定 #142：原文 ch26「乌亮的发丝」「在她肩头，有一个淡红的月牙状痕迹」，官图作栗棕发且无月牙痕' },
+  黛姬雪娜: { hairColor: '金',
+    hair: '金黄色美发（原文「女祭司金黄的美发」）',
+    eyes: '碧蓝色眼眸，神情冷漠',
+    why: '裁定 #142：原文 ch17 金发碧眼+黑色罩帽、ch272 拜火教女祭司；官图的棕金发/绿眼/紫甲弓手不采' },
+};
+
+function splitOutfits(text) {
+  const t = String(text || '').trim();
+  if (!t) return [];
+  // 形式一：「甲（战装）：… ；乙（常服）：…」
+  const labeled = [...t.matchAll(/([甲乙丙丁])(?:（([^）]*)）)?[：:]\s*([^；;]+)/g)];
+  if (labeled.length >= 2) {
+    return labeled.map(m => ({ label: m[2] || `装束${m[1]}`, outfit: m[3].trim() }));
+  }
+  // 形式二：「…；另一版为…」/「…，另一版为…」
+  const alt = t.split(/[；;，,]?\s*(?:另一版为|另一版是|另一版|另有一套)\s*/);
+  if (alt.length >= 2) {
+    return alt.filter(Boolean).map((s, i) => ({ label: i === 0 ? '常态' : `变体${i}`, outfit: s.replace(/^[；;，,]\s*/, '').trim() }));
+  }
+  return [{ label: '', outfit: t }];
+}
+
+function pickMarks(visual) {
+  const marks = [];
+  const trueForm = [];
+  const scan = (field, value) => {
+    for (const seg of String(value || '').split(/[；;。]/)) {
+      const s = seg.trim().replace(/^\*\*|\*\*$/g, '');
+      if (!s) continue;
+      // 先看是不是真身/标记，再用装束词排除：「鳞片胸甲」含甲 → 装束，不是真身
+      const isTrue = TRUE_FORM_RE.test(s);
+      const isMark = MARK_RE.test(s);
+      if (!isTrue && !isMark) continue;
+      // 狐尾/蝎尾这类明确部位词即使句中同时提到甲胄也仍是真身，只排除仅靠弱线索命中的
+      const strongTrue = /狐尾|蝎尾|蛇尾|龙尾|狐皮|兽耳|尖耳|耳廓略尖|龙鳞|鳞纹|化身藏形|现出真身/.test(s);
+      if (GEAR_RE.test(s) && !strongTrue && !/刺青|纹身|胎记|烙印|咬痕/.test(s)) continue;
+      if (isTrue) trueForm.push({ text: s, from: field });
+      else marks.push({ text: s, from: field });
+    }
+  };
+  for (const f of ['face', 'accessories', 'poseProps', 'outfit', 'build', 'hair']) scan(f, visual[f]);
+  return { marks, trueForm };
+}
+
+function convert(row) {
+  const v = row.visual || {};
+  const { marks, trueForm } = pickMarks(v);
+  // 取捕获组而非整个匹配：整匹配会把 lookahead 前的「色」「的」一起带进来（曾得到「乌亮的」）
+  const rawColor = (String(v.hair || '').match(HAIR_COLOR_RE) || [])[1] || '';
+  const hairColor = NORMALIZE_HAIR[rawColor] || rawColor;
+
+  const identity = {
+    hairColor,
+    hair: v.hair || '',            // 默认发式（outfits 里同名字段仅在该套不同时覆盖）
+    eyes: v.eyes || '',
+    face: v.face || '',
+    build: v.build || '',
+    marks: marks.map(m => m.text),
+    trueForm: trueForm.map(m => m.text),
+  };
+
+  const parts = splitOutfits(v.outfit);
+  const outfits = parts.map((p, i) => ({
+    id: i === 0 ? 'default' : `variant-${i}`,
+    label: p.label,
+    scope: i === 0 ? 'default' : 'unassigned',   // 变体待人工绑定到 stage / phase
+    outfit: p.outfit,
+    // 配饰与配色暂随主套；变体各自的配饰原文里通常没分开写，不猜
+    accessories: i === 0 ? (v.accessories || '') : '',
+    palette: i === 0 ? (v.palette || []) : [],
+    props: i === 0 ? (v.poseProps || '') : '',
+    provenance: row.provenance,
+    sourceImages: i === 0 ? (row.sourceImages || undefined) : undefined,
+  })).filter(o => o.outfit);
+
+  return {
+    name: row.name,
+    provenance: row.provenance,
+    book: row.book,
+    identity,
+    outfits,
+    readiness: row.readiness,
+    notes: row.notes || '',
+    styleNote: row.styleNote || undefined,
+    evidence: row.evidence,
+    sourceChapters: row.sourceChapters,
+    sourceTextVisual: row.sourceTextVisual,   // 官图角色的原文补充，留档
+  };
+}
+
+// 始终从两个源文件重建（幂等）：原地升级 master 的话，v2 结构里已无 visual 字段，重跑就废了。
+const canonDir = join(root, 'mod-kit/generated/deepseek-v4-flash/character-canon');
+const off = JSON.parse(await readFile(join(canonDir, 'portrait-visual-appearance.json'), 'utf8'));
+const src = JSON.parse(await readFile(join(canonDir, 'portrait-visual-from-source.json'), 'utf8'));
+
+function has(v, k) {
+  const x = (v || {})[k];
+  const s = Array.isArray(x) ? x.filter(i => String(i).trim()).join('') : String(x ?? '');
+  return Boolean(s.trim()) && !s.includes('无法辨识') && !s.startsWith('（未见') && !s.startsWith('（不采');
+}
+function readiness(v) {
+  if (!v) return 'insufficient';
+  const core = ['hair', 'outfit'].filter(k => has(v, k)).length;
+  const aux = ['accessories', 'palette', 'face', 'eyes'].filter(k => has(v, k)).length;
+  if (core === 2 && aux >= 2) return 'ready';
+  if (core >= 1 && aux >= 1) return 'partial';
+  return 'insufficient';
+}
+
+const flat = new Map();
+for (const c of off.characters) {
+  flat.set(c.name, { name: c.name, provenance: 'official-illustration', sourceImages: c.sourceImages,
+    visual: c.visual || {}, notes: c.notes || '', styleNote: (c.visual || {}).styleNote,
+    readiness: readiness(c.visual) });
+}
+for (const c of src.characters) {
+  if (flat.has(c.name)) { flat.get(c.name).sourceTextVisual = c.visual; continue; }
+  flat.set(c.name, { name: c.name, provenance: 'source-text', book: c.book, visual: c.visual,
+    evidence: c.evidence, sourceChapters: c.sourceChapters,
+    notes: c.note || (c.coverage === 'none' ? '原文可画信息不足，按用户裁定标记跳过、不补设计稿' : ''),
+    readiness: readiness(c.visual) });
+}
+
+let rows = [...flat.values()].map(convert);
+const byName = new Map(rows.map(r => [r.name, r]));
+
+// 合并同人条目：identity 取指定来源，marks/trueForm 取并集，另一条的装束降为待绑定变体
+for (const m of MERGES) {
+  const keep = byName.get(m.keep); const drop = byName.get(m.drop);
+  if (!keep || !drop) { console.error(`  跳过合并（缺条目）：${m.keep} / ${m.drop}`); continue; }
+  const srcRow = byName.get(m.identityFrom) || keep;
+  const other = srcRow === keep ? drop : keep;
+  const idn = { ...srcRow.identity };
+  for (const k of ['marks', 'trueForm']) {
+    idn[k] = [...new Set([...srcRow.identity[k], ...other.identity[k]])];
+  }
+  for (const k of ['eyes', 'face', 'build', 'hair']) if (!idn[k]) idn[k] = other.identity[k] || '';
+  // hairColor 不跨条目补：宁可留空，也不要和 hair 原句矛盾
+  keep.identity = idn;
+  const first = (byName.get(m.defaultFrom) || keep).outfits;
+  const second = (byName.get(m.defaultFrom) === keep ? drop : keep).outfits;
+  keep.outfits = [...first, ...second].map((o, i) => ({ ...o,
+    id: i === 0 ? 'default' : `variant-${i}`, scope: i === 0 ? 'default' : 'unassigned' }));
+  if (keep.provenance !== drop.provenance) keep.provenance = `${keep.provenance}+${drop.provenance}`;
+  keep.book = keep.book || drop.book;
+  for (const k of ['evidence', 'sourceChapters']) if (drop[k] && !keep[k]) keep[k] = drop[k];
+  keep.notes = `${keep.notes ? `${keep.notes} ` : ''}${m.note}`;
+  keep.mergedFrom = [m.keep, m.drop];
+  keep.readiness = readiness({ ...keep.identity, ...(keep.outfits[0] || {}) });
+  rows = rows.filter(r => r.name !== m.drop);
+  byName.delete(m.drop);
+  console.error(`  合并 ${m.drop} → ${m.keep}（${keep.outfits.length} 套装束）`);
+}
+// 裁定 #142 的例外落到 identity 字段（不只落 notes）
+for (const [name, ov] of Object.entries(CANON_OVERRIDES)) {
+  const r = byName.get(name);
+  if (!r) { console.error(`  跳过 canon 覆盖（缺条目）：${name}`); continue; }
+  const { why, marks, ...fields } = ov;
+  Object.assign(r.identity, fields);
+  if (marks) r.identity.marks = [...new Set([...r.identity.marks, ...marks])];
+  r.identity.canonOverride = why;
+  console.error(`  canon 覆盖 ${name}：${Object.keys(fields).join('/')}${marks ? '+marks' : ''}`);
+}
+
+// 疑似同人、真名不同：只标记
+for (const [a, b] of FLAG_PAIRS) {
+  for (const [x, y] of [[a, b], [b, a]]) {
+    const r = byName.get(x); if (!r) continue;
+    r.notes = `${r.notes ? `${r.notes} ` : ''}⚠️ 与「${y}」疑似同一角色（两条都写「花白头发忽长忽短／浓黑长发」「身体一挺陡然长高尺许」的变形特征），但括号内真名不同，属身份链问题而非立绘问题，**未合并，待正典裁定**。`;
+  }
+}
+rows.sort((a, b) => a.name.localeCompare(b.name, 'zh'));
+
+const doc = {
+  purpose: '立绘生成的单一数据源：官图反向回填 + 原文可画维度补抽，合并后按 identity / outfits 分层',
+  precedence: '有官图者以官图为准，但裁定 #142 逐条例外（凝羽发色与肩头月牙痕、黛姬雪娜金发碧眼女祭司以原文 canon 为准）；带情节含义的特征须回原文核实',
+  styleBaseline: '扁平二次元/赛璐璐全身立绘（用户 2026-06-29 定版）。燕歌行系官图为写实厚涂、李十二娘为水彩，只作外观信息源不作画风参考；剑玉姬定妆取云龙吟版',
+  readinessRule: 'ready=发型与服装齐全且至少 2 项辅助维度；partial=二者之一齐全；insufficient=不足以出图',
+  stats: {},
+};
+
+const byReadiness = {};
+for (const r of rows) byReadiness[r.readiness] = (byReadiness[r.readiness] || 0) + 1;
+const byProvenance = {};
+for (const r of rows) byProvenance[r.provenance] = (byProvenance[r.provenance] || 0) + 1;
+const stats = {
+  total: rows.length,
+  byProvenance,
+  byReadiness,
+  withMultipleOutfits: rows.filter(r => r.outfits.length > 1).length,
+  unassignedVariants: rows.reduce((n, r) => n + r.outfits.filter(o => o.scope === 'unassigned').length, 0),
+  withMarks: rows.filter(r => r.identity.marks.length).length,
+  withTrueForm: rows.filter(r => r.identity.trueForm.length).length,
+  hairColorResolved: rows.filter(r => r.identity.hairColor).length,
+};
+
+const out = {
+  ...doc,
+  schema: 'xiantu.portrait-visual-master.v2',
+  layering: {
+    identity: '跨场景不变：发色/瞳色/五官/体型档位 + marks（永久标记）+ trueForm（真身特征）。换装不得改动这一层。',
+    outfits: '可变，一人多套：scope=default 供立绘定妆；stage:<stageId> / phase:<label> 供叙事按场景取；unassigned=已识别出的变体但尚未绑定场景，待人工指派。',
+    hairRule: '发色属 identity，束法随装束——outfits[].hairStyle 仅在该套发式与 identity.hair 不同时填写并覆盖。',
+  },
+  stats: { ...doc.stats, layers: stats },
+  characters: rows,
+};
+
+if (DRY) {
+  console.error('[dry-run] 不写盘');
+} else {
+  await writeFile(masterPath, `${JSON.stringify(out, null, 1)}\n`);
+}
+console.error('分层统计:', JSON.stringify(stats, null, 1));
+console.error('多套装束角色:', rows.filter(r => r.outfits.length > 1).map(r => r.name).join('、') || '（无）');
