@@ -9,6 +9,7 @@ import type {
   ScenarioNarrativeFactReceipt,
   ScenarioNpcDecisionActor,
   ScenarioNpcMemoryEpisode,
+  ScenarioNpcPrivateKnowledgeFact,
   ScenarioPlayerCompletionContract,
   ScenarioPlayerCompletionEffects,
   ScenarioPlayerCompletionOutcome,
@@ -38,6 +39,7 @@ export interface ScenarioProgressState {
   activeEventIds: string[];
   completedEventIds: string[];
   playerKnowledge?: Record<string, ScenarioPlayerKnowledgeFact>;
+  npcPrivateKnowledge?: Record<string, ScenarioNpcPrivateKnowledgeFact>;
 }
 
 export interface ScenarioRuntimeTransition {
@@ -260,6 +262,8 @@ export interface RuntimeState extends ScenarioProgressState {
   chronicle?: ScenarioChronicleEntry[];
   /** 玩家认知与世界真值、NPC 知识分账；旧档可缺省。 */
   playerKnowledge?: Record<string, ScenarioPlayerKnowledgeFact>;
+  /** 密档知情图谱；不进普通关系网，且必须从通用 prompt state 剥离。 */
+  npcPrivateKnowledge?: Record<string, ScenarioNpcPrivateKnowledgeFact>;
   /** 非机会卡事件的本地尝试、判定与完成状态。 */
   eventActionStates?: Record<string, ScenarioEventActionState>;
   canon?: {
@@ -310,6 +314,19 @@ export function createInitialPlayerKnowledge(
   return Object.fromEntries((mod.scenario.initialPlayerKnowledge || []).map(fact => [
     fact.factId,
     { ...structuredClone(fact), learnedAtTurn: 0 },
+  ]));
+}
+
+export function createInitialNpcPrivateKnowledge(
+  mod: ScenarioMod,
+): Record<string, ScenarioNpcPrivateKnowledgeFact> {
+  return Object.fromEntries((mod.scenario.initialNpcPrivateKnowledge || []).map(fact => [
+    fact.factId,
+    {
+      ...structuredClone(fact),
+      learnedAtTurn: 0,
+      sourceStageId: mod.manifest.id,
+    },
   ]));
 }
 
@@ -1939,6 +1956,7 @@ export function createScenarioProgress(mod: ScenarioMod): ScenarioProgressState 
     activeEventIds: [],
     completedEventIds,
     playerKnowledge: createInitialPlayerKnowledge(mod),
+    npcPrivateKnowledge: createInitialNpcPrivateKnowledge(mod),
   };
 }
 
@@ -2021,11 +2039,19 @@ function getReconcileDeps(): { version: string; resolve: (c: unknown[] | undefin
 function reconcileSaveWithRegistry(saveData: SaveData, runtime: RuntimeState & { modId?: string; reconciledRegistryVersion?: string; canon?: { characters?: unknown[] } }): void {
   const deps = getReconcileDeps();
   if (!deps) return;
+  const modId = String((runtime as { modId?: string }).modId || '');
+  const mod = deps.mods.find(item => item.manifest?.id === modId);
+  // 新增显式知情声明必须能补进已存在的关卡存档；只补缺失 factId，不覆盖玩家
+  // 游玩过程中已经携带的来源/轮次，也不因热更删除而静默擦除历史。
+  if (mod) {
+    const ledger = runtime.npcPrivateKnowledge ||= {};
+    for (const [factId, fact] of Object.entries(createInitialNpcPrivateKnowledge(mod))) {
+      ledger[factId] ||= fact;
+    }
+  }
   if (runtime.reconciledRegistryVersion === deps.version) return;
   try {
-    const modId = String((runtime as { modId?: string }).modId || '');
     deps.resolve((runtime as { canon?: { characters?: any[] } }).canon?.characters, modId);
-    const mod = deps.mods.find(item => item.manifest?.id === modId);
     const worldInfo = readPath(saveData, ['世界', '信息']) as Record<string, unknown> | undefined;
     const saveLocations = worldInfo?.地点信息;
     if (mod && Array.isArray(saveLocations)) {
@@ -2121,6 +2147,9 @@ export function advanceScenarioRuntime(saveData: SaveData): {
     : {};
   runtime.playerKnowledge = runtime.playerKnowledge && typeof runtime.playerKnowledge === 'object'
     ? runtime.playerKnowledge
+    : {};
+  runtime.npcPrivateKnowledge = runtime.npcPrivateKnowledge && typeof runtime.npcPrivateKnowledge === 'object'
+    ? runtime.npcPrivateKnowledge
     : {};
   runtime.eventActionStates = runtime.eventActionStates && typeof runtime.eventActionStates === 'object'
     ? runtime.eventActionStates

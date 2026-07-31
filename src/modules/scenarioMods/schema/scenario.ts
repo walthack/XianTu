@@ -80,6 +80,38 @@ export interface ScenarioPlayerKnowledgeFact {
 
 export type ScenarioInitialPlayerKnowledgeFact = Omit<ScenarioPlayerKnowledgeFact, 'learnedAtTurn'>;
 
+export interface ScenarioPrivateKnowledgeAssociationGuard {
+  subjects: string[];
+  predicates: string[];
+  maxDistance?: number;
+  allowHypothetical?: boolean;
+}
+
+/**
+ * 角色私有知情的最小声明。它不进入普通关系网，也不直接进入通用状态 prompt；
+ * 渲染层只向 holder 定向提供 behaviorCue，玩家已确认同一语义事实后才可提供 claim。
+ */
+export interface ScenarioInitialNpcPrivateKnowledgeFact {
+  factId: string;
+  holderCharacterIds: string[];
+  subjectId: string;
+  predicate: string;
+  objectId?: string;
+  status: ScenarioPlayerKnowledgeStatus;
+  /** 世界真值文本；玩家未获知时不得注入叙事 prompt。 */
+  claim: string;
+  /** 不含秘密答案的角色行为提示。 */
+  behaviorCue: string;
+  evidence: string;
+  sourceEventId?: string;
+  forbiddenAssociations?: ScenarioPrivateKnowledgeAssociationGuard[];
+}
+
+export interface ScenarioNpcPrivateKnowledgeFact extends ScenarioInitialNpcPrivateKnowledgeFact {
+  learnedAtTurn: number;
+  sourceStageId: string;
+}
+
 export interface ScenarioModEvent {
   id: string;
   name: string;
@@ -478,6 +510,8 @@ export interface ScenarioModScenario {
   initialFlags?: Record<string, ScenarioFlagValue>;
   /** 仅为有明确证据的纵切显式声明；旧事件不要求批量回填。 */
   initialPlayerKnowledge?: ScenarioInitialPlayerKnowledgeFact[];
+  /** 仅为有明确知情图谱证据的纵切声明；不要求旧事件批量回填。 */
+  initialNpcPrivateKnowledge?: ScenarioInitialNpcPrivateKnowledgeFact[];
   chapters?: ScenarioModChapter[];
   events?: ScenarioModEvent[];
 }

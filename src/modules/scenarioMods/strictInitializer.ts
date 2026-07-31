@@ -282,6 +282,9 @@ export function transitionToNextScenarioStage(saveData: SaveData, modsOverride?:
   const playerKnowledgeSnapshot = structuredClone(
     rt.playerKnowledge && typeof rt.playerKnowledge === 'object' ? rt.playerKnowledge : {},
   );
+  const npcPrivateKnowledgeSnapshot = structuredClone(
+    rt.npcPrivateKnowledge && typeof rt.npcPrivateKnowledge === 'object' ? rt.npcPrivateKnowledge : {},
+  );
   if (!chronicleSnapshot.some((item: any) => item?.id === `chronicle.stage.${rt.modId}.${targetId}`)) {
     chronicleSnapshot.push({
       id: `chronicle.stage.${rt.modId}.${targetId}`,
@@ -314,6 +317,10 @@ export function transitionToNextScenarioStage(saveData: SaveData, modsOverride?:
   newRuntime.playerKnowledge = {
     ...(newRuntime.playerKnowledge || {}),
     ...playerKnowledgeSnapshot,
+  };
+  newRuntime.npcPrivateKnowledge = {
+    ...(newRuntime.npcPrivateKnowledge || {}),
+    ...npcPrivateKnowledgeSnapshot,
   };
   Object.assign(newRuntime.flags, inheritedWorldlineFlags);
   // 立即推进一轮：激活新关首章/首批事件

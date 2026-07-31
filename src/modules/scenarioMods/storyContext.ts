@@ -18,6 +18,8 @@ import type {
   ScenarioModOpening,
   ScenarioModPlayerRelationship,
   ScenarioNarrativeFactReceipt,
+  ScenarioNpcPrivateKnowledgeFact,
+  ScenarioPrivateKnowledgeAssociationGuard,
 } from './schema';
 
 interface StoryRuntime {
@@ -80,6 +82,7 @@ interface StoryRuntime {
     learnedAtTurn: number;
     sourceEventId?: string;
   }>;
+  npcPrivateKnowledge?: Record<string, ScenarioNpcPrivateKnowledgeFact>;
   actorEngine?: {
     anchorEventId?: string;
     activeAgendaId?: string;
@@ -361,6 +364,57 @@ function shouldRevealBottomLine(fav: number, label: string): boolean {
   return fav >= BOTTOMLINE_REVEAL_FAVOR || ALLY_RELATION.test(label || '');
 }
 
+function playerKnowsPrivateFact(runtime: StoryRuntime, fact: ScenarioNpcPrivateKnowledgeFact): boolean {
+  return Object.values(runtime.playerKnowledge || {}).some(known =>
+    known.status === 'confirmed'
+    && known.subjectId === fact.subjectId
+    && known.predicate === fact.predicate
+    && (known.objectId || '') === (fact.objectId || '')
+  );
+}
+
+function privateFactRelevantToStage(runtime: StoryRuntime, fact: ScenarioNpcPrivateKnowledgeFact): boolean {
+  const entityIds = new Set([
+    ...(runtime.canon?.characters || []).map(character => character.id),
+    ...(runtime.canon?.factions || []).map(faction => faction.id),
+  ]);
+  return entityIds.has(fact.subjectId)
+    && fact.holderCharacterIds.some(holderId => entityIds.has(holderId));
+}
+
+function privateKnowledgeForHolder(
+  runtime: StoryRuntime,
+  characterId: string,
+): ScenarioNpcPrivateKnowledgeFact[] {
+  return Object.values(runtime.npcPrivateKnowledge || {})
+    .filter(fact => privateFactRelevantToStage(runtime, fact) && fact.holderCharacterIds.includes(characterId))
+    .sort((a, b) => a.learnedAtTurn - b.learnedAtTurn
+      || (a.factId < b.factId ? -1 : a.factId > b.factId ? 1 : 0))
+    .slice(0, 4);
+}
+
+function buildNpcPrivateKnowledgeGuard(runtime: StoryRuntime): string {
+  const associations = Object.values(runtime.npcPrivateKnowledge || {})
+    .filter(fact => privateFactRelevantToStage(runtime, fact) && !playerKnowsPrivateFact(runtime, fact))
+    .flatMap(fact => fact.forbiddenAssociations || []);
+  if (!associations.length) return '';
+  const unique = new Map<string, ScenarioPrivateKnowledgeAssociationGuard>();
+  for (const association of associations) {
+    const normalized = {
+      ...association,
+      subjects: [...association.subjects].sort(),
+      predicates: [...association.predicates].sort(),
+    };
+    unique.set(JSON.stringify(normalized), normalized);
+  }
+  const guarded = [...unique.values()].sort((a, b) => {
+    const left = JSON.stringify(a);
+    const right = JSON.stringify(b);
+    return left < right ? -1 : left > right ? 1 : 0;
+  });
+  return `【NPC 私有知情隔离·引擎账本】以下关联尚未进入玩家确认知识；只有被逐人注入行为提示的知情者可据此保持动机与反应，但正文不得替玩家坐实答案，也不得让其他人物继承知情。renderGuard.forbiddenAssociations=${JSON.stringify(guarded)}；renderGuard.npcPrivateKnowledge=true。`;
+}
+
 const CHARACTER_SECRET_KNOWLEDGE_BOUNDARIES: Readonly<Record<string, string>> = {
   阮香凝: '“凝玉姬”、黑魔海玉姬/高层、潜伏暗桩等均属黑魔海内部机密。除黑魔海内部知情者、程宗扬以及当前存档/近期正文已明确获知者外，所有其他人物（吕雉、霍子孟仅为例）都不得先知式识别、说出内部称号或拿秘密真身作为既知前提审问；可以依据亲眼所见的施术、伤势、言行矛盾等可见异常保持怀疑并盘问来历。若此前已明确向某人公开，该人物后续应延续知情，未在场或未被告知者不得自动继承。阮香凝本人主动公开由她承担选择与反应；程宗扬向外披露则属于玩家泄密决策，必须有玩家明确授权并呈现可信的政治风险或关系后果，不得替玩家把机密当普通履历介绍。',
 };
@@ -434,6 +488,24 @@ function formatFocusedCharacter(
   const secretKnowledgeBoundary = CHARACTER_SECRET_KNOWLEDGE_BOUNDARIES[character.name];
   if (secretKnowledgeBoundary) {
     lines.push(`  【机密身份·知情边界】${secretKnowledgeBoundary}`);
+  }
+  const privateFacts = privateKnowledgeForHolder(runtime, character.id);
+  for (const fact of privateFacts) {
+    if (playerKnowsPrivateFact(runtime, fact)) {
+      const atomicDisclosureGuard = JSON.stringify([{
+        holderName: character.name,
+        claim: fact.claim,
+        relatedTerms: [...new Set((fact.forbiddenAssociations || []).flatMap(rule => [
+          ...rule.subjects,
+          ...rule.predicates,
+        ]))].sort(),
+      }]);
+      lines.push(fact.status === 'rumor'
+        ? `  【角色私有知情·玩家已确认该传闻存在·原子边界】${fact.claim}；该角色只作未核实传闻掌握，不得将其坐实为自己的确证。此 claim 就是该条传闻允许表达的全部内容；若当前可见正典、已落账回执或其他已注入知识没有另给证据，不得补写其成因、时长、地点、经历、来源、相处细节、第三方传闻或其他关系。玩家明确要求核对有证据事实时，必须逐字复述 claim，超出部分只回答不知道／没有证据。renderGuard.atomicPrivateClaims=${atomicDisclosureGuard}；renderGuard.atomicPrivateClaim=true。`
+        : `  【角色私有知情·玩家已确认·原子事实】${fact.claim}；此 claim 就是该条私有知识的全部已证内容。该角色可据此行动或按原意复述；若当前可见正典、已落账回执或其他已注入知识没有另给证据，不得补写其成因、时长、地点、经历、来源、相处细节、第三方传闻或其他关系；被追问超出范围时，应明确表示不知道或没有证据。玩家明确要求核对有证据事实时，必须逐字复述 claim，超出部分只回答不知道／没有证据。renderGuard.atomicPrivateClaims=${atomicDisclosureGuard}；renderGuard.atomicPrivateClaim=true。`);
+    } else {
+      lines.push(`  【角色私有知情·玩家尚未确认】${fact.behaviorCue}；只按此调整该角色的动机、回避与可见行动，不得直接复述或坐实后台答案，不得把知情传播给未声明人物。`);
+    }
   }
   const relation = formatCharacterRelationship(
     character,
@@ -527,6 +599,9 @@ export function createScenarioPromptState<T extends SaveData>(saveData: T): T {
       factReceipts: undefined,
     }));
   }
+  // 私有知情账本含世界真值 claim。通用状态 JSON 必须完全剥离；只有下方按当前
+  // 聚焦角色定向编译的最小行为提示可以进入主叙事 prompt。
+  delete runtime.npcPrivateKnowledge;
   return promptState;
 }
 
@@ -692,6 +767,7 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
   // 亲密档案门控参数：场景判定只看玩家本轮输入（不含在场名单，避免误判）
   const intimacyGate = { sceneText: contextText };
   const focusedCharacterSection = buildFocusedCharacterPrompt(runtime, activeEvents, focusContext, favByName, intimacyGate);
+  const npcPrivateKnowledgeGuard = buildNpcPrivateKnowledgeGuard(runtime);
   const introducedIds = new Set(collectIntroducedCharacterIds(runtime));
   const introducedNames = new Set<string>(
     [...introducedIds].map(id => characters.find(character => character.id === id)?.name).filter((name): name is string => !!name),
@@ -885,7 +961,7 @@ ${nextSection}
 ## 剧情标记
 ${JSON.stringify(runtime.flags || {})}
 
-${focusedCharacterSection ? `${focusedCharacterSection}\n\n` : ''}${globalIdentitySection ? `${globalIdentitySection}\n\n` : ''}${loadBearingLine ? `${loadBearingLine}\n\n` : ''}${divergenceLine ? `${divergenceLine}\n\n` : ''}${stageEntryLine ? `${stageEntryLine}\n\n` : ''}${settledBeatLine ? `${settledBeatLine}\n\n` : ''}${returnBridgeLine ? `${returnBridgeLine}\n\n` : ''}${divergenceControlLine ? `${divergenceControlLine}\n\n` : ''}${worldActorLine ? `${worldActorLine}\n\n` : ''}${worldPushLine ? `${worldPushLine}\n\n` : ''}${steeringLine ? `${steeringLine}\n\n` : ''}${reputationLine}\n\n${relationLine ? `${relationLine}\n\n` : ''}${completedGoalLine ? `${completedGoalLine}\n\n` : ''}${improvLine}\n\n【正典叙事事实约束】：
+${focusedCharacterSection ? `${focusedCharacterSection}\n\n` : ''}${npcPrivateKnowledgeGuard ? `${npcPrivateKnowledgeGuard}\n\n` : ''}${globalIdentitySection ? `${globalIdentitySection}\n\n` : ''}${loadBearingLine ? `${loadBearingLine}\n\n` : ''}${divergenceLine ? `${divergenceLine}\n\n` : ''}${stageEntryLine ? `${stageEntryLine}\n\n` : ''}${settledBeatLine ? `${settledBeatLine}\n\n` : ''}${returnBridgeLine ? `${returnBridgeLine}\n\n` : ''}${divergenceControlLine ? `${divergenceControlLine}\n\n` : ''}${worldActorLine ? `${worldActorLine}\n\n` : ''}${worldPushLine ? `${worldPushLine}\n\n` : ''}${steeringLine ? `${steeringLine}\n\n` : ''}${reputationLine}\n\n${relationLine ? `${relationLine}\n\n` : ''}${completedGoalLine ? `${completedGoalLine}\n\n` : ''}${improvLine}\n\n【正典叙事事实约束】：
 1. 已知人物的姓名、别名、身份、物种、势力、亲属与政治关系均是事实字段：不得把人物写成兵器、坐骑、功法、物品或新角色；不得把称号、别名拆成另一个实体。
 2. 人物之间的血缘、主从、婚配、同党、结盟、仇怨，只有上文正典人物档案或当前事件明确写出时才可断言。没有依据时只能写“尚未可知/传闻待证”，绝不可因同姓、官职、阵营或历史常识擅自补关系。
 3. 叙事正文也必须遵守上述正典；这不是仅约束 tavern_commands 的规则。若玩家要求与正典矛盾的事实，明确说明冲突并以正典版本续写。

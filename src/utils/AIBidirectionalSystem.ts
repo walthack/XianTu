@@ -74,6 +74,7 @@ import {
   performanceRetryInstruction,
   requiresNarrativeBuffering,
   safeNarrativeFallback,
+  safeNarrativeFallbackForContext,
   validateNarrativePerformance,
 } from '@/modules/scenarioMods/narrativePerformanceGuard';
 
@@ -1360,7 +1361,7 @@ ${missingItems.length > 0 ? `【上次结构化输出缺失】
           );
           const finalPerformance = validateNarrativePerformance(gmResponse.text || '', finalUserInput, scenarioStoryPrompt);
           if (hasHardNarrativeViolation(finalPerformance)) {
-            gmResponse.text = safeNarrativeFallback();
+            gmResponse.text = safeNarrativeFallbackForContext(finalUserInput, scenarioStoryPrompt);
             gmResponse.mid_term_memory = '';
             gmResponse.tavern_commands = [];
             gmResponse.action_options = [];
@@ -1378,7 +1379,7 @@ ${missingItems.length > 0 ? `【上次结构化输出缺失】
         gmResponse.text = await this.optimizeText(gmResponse.text, options?.onProgressUpdate);
         const finalPerformance = validateNarrativePerformance(gmResponse.text, finalUserInput, scenarioStoryPrompt);
         if (hasHardNarrativeViolation(finalPerformance)) {
-          gmResponse.text = safeNarrativeFallback();
+          gmResponse.text = safeNarrativeFallbackForContext(finalUserInput, scenarioStoryPrompt);
           gmResponse.mid_term_memory = '';
           gmResponse.tavern_commands = [];
           gmResponse.action_options = [];

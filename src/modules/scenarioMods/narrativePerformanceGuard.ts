@@ -100,20 +100,82 @@ interface ForbiddenAssociation {
   allowHypothetical?: boolean;
 }
 
+interface AtomicPrivateClaim {
+  holderName: string;
+  claim: string;
+  relatedTerms?: string[];
+}
+
 function parseForbiddenAssociations(scenarioPrompt: string): ForbiddenAssociation[] {
   const marker = 'renderGuard.forbiddenAssociations=';
-  const start = scenarioPrompt.indexOf(marker);
-  if (start < 0) return [];
-  const valueStart = start + marker.length;
-  const end = scenarioPrompt.indexOf('；renderGuard.', valueStart);
-  if (end < 0) return [];
-  try {
-    const parsed = JSON.parse(scenarioPrompt.slice(valueStart, end));
-    return Array.isArray(parsed) ? parsed : [];
-  } catch {
-    // 配置装载时由 validator 拒绝；渲染门禁遇到损坏提示词时保持保守但不中断回合。
-    return [];
+  const associations: ForbiddenAssociation[] = [];
+  let searchFrom = 0;
+  while (searchFrom < scenarioPrompt.length) {
+    const start = scenarioPrompt.indexOf(marker, searchFrom);
+    if (start < 0) break;
+    const valueStart = start + marker.length;
+    const end = scenarioPrompt.indexOf('；renderGuard.', valueStart);
+    if (end < 0) break;
+    try {
+      const parsed = JSON.parse(scenarioPrompt.slice(valueStart, end));
+      if (Array.isArray(parsed)) associations.push(...parsed);
+    } catch {
+      // 配置装载时由 validator 拒绝；渲染门禁遇到损坏提示词时保持保守但不中断回合。
+    }
+    searchFrom = end + 1;
   }
+  return associations;
+}
+
+function parseAtomicPrivateClaims(scenarioPrompt: string): AtomicPrivateClaim[] {
+  const marker = 'renderGuard.atomicPrivateClaims=';
+  const claims: AtomicPrivateClaim[] = [];
+  let searchFrom = 0;
+  while (searchFrom < scenarioPrompt.length) {
+    const start = scenarioPrompt.indexOf(marker, searchFrom);
+    if (start < 0) break;
+    const valueStart = start + marker.length;
+    const end = scenarioPrompt.indexOf('；renderGuard.', valueStart);
+    if (end < 0) break;
+    try {
+      const parsed = JSON.parse(scenarioPrompt.slice(valueStart, end));
+      if (Array.isArray(parsed)) claims.push(...parsed);
+    } catch {
+      // 配置由聚焦提示词编译器生成；损坏时不让解析异常中断整个叙事回合。
+    }
+    searchFrom = end + 1;
+  }
+  return claims.filter(item =>
+    typeof item?.holderName === 'string'
+    && Boolean(item.holderName.trim())
+    && typeof item?.claim === 'string'
+    && Boolean(item.claim.trim())
+  );
+}
+
+const ATOMIC_FACT_AUDIT_REQUEST = /只说|仅说|确定知道|亲自知道|有证据|没有证据|复核|核对|确认事实/;
+const ATOMIC_FACT_UNCERTAINTY = /不知道|不知情|不清楚|无从得知|没有证据|无证据|不能确认|无法确认|说不上来|未曾得知|仅此|就这些/;
+const ATOMIC_FACT_DETAIL = /亲眼|我曾|我见|见过|当年|那时|曾经|后来|之后|出事|覆灭|散了|失踪|死了|住了|待了|跟着|带回|送来|贡品|端茶|研墨|穿(?:着|的是)|站在|帘(?:子)?后|议事|有人说|据说/;
+
+function atomicPrivateClaimViolation(
+  narrative: string,
+  userInput: string,
+  claims: AtomicPrivateClaim[],
+): string | undefined {
+  if (!ATOMIC_FACT_AUDIT_REQUEST.test(userInput)) return undefined;
+  return claims.find(contract => userInput.includes(contract.holderName) && !narrative.includes(contract.claim))
+    ? '核对私有事实时未逐字复述账本原子 claim'
+    : claims.find(contract => {
+        if (!userInput.includes(contract.holderName)) return false;
+        const remainder = narrative.split(contract.claim).join('');
+        const relatedTerms = (contract.relatedTerms || []).filter(Boolean);
+        return remainder.split(/[。！？\n]/).some(sentence => {
+          if (!ATOMIC_FACT_DETAIL.test(sentence) || ATOMIC_FACT_UNCERTAINTY.test(sentence)) return false;
+          return /她|他|其/.test(sentence) || relatedTerms.some(term => sentence.includes(term));
+        });
+      })
+      ? '核对私有事实时补写了原子 claim 之外的无来源经历或背景'
+      : undefined;
 }
 
 function sentenceHasUnauthorizedQuantity(sentence: string, scenarioPrompt: string): boolean {
@@ -201,11 +263,20 @@ function leakedForbiddenAssociation(
 }
 
 export function requiresNarrativeBuffering(scenarioPrompt: string): boolean {
-  return /mustNotInvent=|renderGuard\.(?:forbiddenTerms|forbiddenAssociations|rejectConcreteQuantities|reservedFutureTerms|rejectUngroundedHandoffLosses)=/.test(scenarioPrompt);
+  return /mustNotInvent=|renderGuard\.(?:forbiddenTerms|forbiddenAssociations|rejectConcreteQuantities|reservedFutureTerms|rejectUngroundedHandoffLosses|atomicPrivateClaims)=/.test(scenarioPrompt);
 }
 
 export function safeNarrativeFallback(): string {
   return '本轮只呈现已经确认的公开动静，未出现新的可核实细节。你先前的行动仍然有效，世界会依照既定事实继续推进。';
+}
+
+export function safeNarrativeFallbackForContext(userInput: string, scenarioPrompt: string): string {
+  if (!ATOMIC_FACT_AUDIT_REQUEST.test(userInput)) return safeNarrativeFallback();
+  const contract = parseAtomicPrivateClaims(scenarioPrompt)
+    .find(item => userInput.includes(item.holderName));
+  return contract
+    ? `${contract.holderName}只复核已经确认的事实：“${contract.claim}”其余背景没有证据，无法确认。`
+    : safeNarrativeFallback();
 }
 
 export function hasHardNarrativeViolation(check: NarrativePerformanceCheck): boolean {
@@ -246,6 +317,12 @@ export function validateNarrativePerformance(
   if (ungroundedHandoffLossViolation(narrative, scenarioPrompt)) {
     issues.push(`${HARD_ISSUE_PREFIX}跨拍正文补造了无来源的精确伤亡或财货损失`);
   }
+  const atomicClaimIssue = atomicPrivateClaimViolation(
+    narrative,
+    userInput,
+    parseAtomicPrivateClaims(scenarioPrompt),
+  );
+  if (atomicClaimIssue) issues.push(`${HARD_ISSUE_PREFIX}${atomicClaimIssue}`);
   if (!DECISION_SCENE.test(userInput)) return { valid: issues.length === 0, issues };
   for (const name of ['小紫', '贾文和']) {
     if (!scenarioPrompt.includes(`【${name}·角色表演卡`) || !narrative.includes(name)) continue;
@@ -258,7 +335,7 @@ export function validateNarrativePerformance(
 }
 
 export function performanceRetryInstruction(issues: string[]): string {
-  return `上稿未通过内部检查：${issues.join('；')}。这段检查说明只供重写时使用，严禁复述到正文。保留已接地事实，整段重写；不得提前演出被标为后续步骤保留内容的动作、台词或结果。必须让被点名角色亲口说出或亲自实施一个具体可行动方案（含先手、后手、代价或退出条件之一），随后把选择留给玩家。不得让主角代为分析/下令，不得新增存档与正典没有的兵力、伤亡、人物或事件。跨拍余波没有结构化损失回执时，伤亡、伤者、财货、车船与牲畜损失只写定性结果或“仍待清点”，不得补精确数量。涉及军务、护卫或路线时，改写为不带数字的职责、通行、次序、联络和可见动作，不得补人数、距离或比例；命中的禁词或秘密关联改用已经公开的表象承接，不得换一种肯定说法再次坐实。`;
+  return `上稿未通过内部检查：${issues.join('；')}。这段检查说明只供重写时使用，严禁复述到正文。保留已接地事实，整段重写；不得提前演出被标为后续步骤保留内容的动作、台词或结果。若提示词给出 atomicPrivateClaims 且玩家明确要求核对有证据事实，必须逐字复述其中 claim；除此之外只可回答不知道／没有证据，不得补写回忆、见闻、服饰、时长、地点、来源或传闻。必须让被点名角色亲口说出或亲自实施一个具体可行动方案（含先手、后手、代价或退出条件之一），随后把选择留给玩家。不得让主角代为分析/下令，不得新增存档与正典没有的兵力、伤亡、人物或事件。跨拍余波没有结构化损失回执时，伤亡、伤者、财货、车船与牲畜损失只写定性结果或“仍待清点”，不得补精确数量。涉及军务、护卫或路线时，改写为不带数字的职责、通行、次序、联络和可见动作，不得补人数、距离或比例；命中的禁词或秘密关联改用已经公开的表象承接，不得换一种肯定说法再次坐实。`;
 }
 
 /**
@@ -279,7 +356,11 @@ export function decideNarrativePerformanceAttempt(
   const shouldRetry = !performance.valid && attempt < maxAttempts;
   return {
     ...performance,
-    narrative: shouldRetry ? '' : (hasHardViolation ? safeNarrativeFallback() : narrative),
+    narrative: shouldRetry
+      ? ''
+      : (hasHardViolation
+          ? safeNarrativeFallbackForContext(userInput, scenarioPrompt)
+          : narrative),
     shouldRetry,
     retryInstruction: performance.valid ? '' : performanceRetryInstruction(performance.issues),
   };

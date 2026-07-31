@@ -123,6 +123,7 @@ const FORBIDDEN_PATHS: string[] = [
   '世界.状态.剧本模组.actorEngine',
   '世界.状态.剧本模组.eventTimeline',
   '世界.状态.剧本模组.playerKnowledge',
+  '世界.状态.剧本模组.npcPrivateKnowledge',
   '世界.状态.剧本模组.eventActionStates',
   '世界.状态.剧本模组.offscreenResolvedEventIds',
   '世界.状态.剧本模组.chronicle',

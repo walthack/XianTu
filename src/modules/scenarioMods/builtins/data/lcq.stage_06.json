@@ -536,6 +536,37 @@
       "event.s06_05.done": false,
       "event.s06_06.done": false
     },
+    "initialNpcPrivateKnowledge": [
+      {
+        "factId": "knowledge.npc.qingyu.biji_xingyuehu_identity",
+        "holderCharacterIds": [
+          "liuchao.character.xie_yi"
+        ],
+        "subjectId": "liuchao.character.bi_ji",
+        "predicate": "xingyuehu_old_identity",
+        "status": "confirmed",
+        "claim": "碧姬就是星月湖旧部称作“碧宛”的岳帅姬妾。",
+        "behaviorCue": "谢艺寻找碧姬并非泛泛寻人；他对目标的旧称与旧日来历有确定把握。玩家尚未确认前，只通过辨认、克制的称呼与保护性行动体现知情，不替玩家说破完整身份链",
+        "evidence": "RELATIONSHIPS-SECRET.md §2；CANON-DECISIONS #81/#141；清羽记 ch82/ch95",
+        "forbiddenAssociations": [
+          {
+            "subjects": [
+              "碧姬",
+              "碧宛",
+              "西施"
+            ],
+            "predicates": [
+              "碧宛",
+              "西施",
+              "岳帅妻妾",
+              "岳帅姬妾"
+            ],
+            "maxDistance": 72,
+            "allowHypothetical": true
+          }
+        ]
+      }
+    ],
     "events": [
       {
         "id": "lcq.event.s06_01",

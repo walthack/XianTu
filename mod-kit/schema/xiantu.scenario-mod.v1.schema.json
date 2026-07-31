@@ -436,6 +436,52 @@
       },
       "additionalProperties": false
     },
+    "initialPlayerKnowledgeFact": {
+      "type": "object",
+      "required": ["factId", "subjectId", "predicate", "status", "disclosureScope"],
+      "properties": {
+        "factId": { "$ref": "#/$defs/id" },
+        "subjectId": { "$ref": "#/$defs/id" },
+        "predicate": { "$ref": "#/$defs/nonEmptyString" },
+        "objectId": { "$ref": "#/$defs/id" },
+        "status": { "enum": ["confirmed", "rumor"] },
+        "disclosureScope": { "enum": ["player", "public"] },
+        "sourceEventId": { "$ref": "#/$defs/id" }
+      },
+      "additionalProperties": false
+    },
+    "privateKnowledgeAssociationGuard": {
+      "type": "object",
+      "required": ["subjects", "predicates"],
+      "properties": {
+        "subjects": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/nonEmptyString" } },
+        "predicates": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/nonEmptyString" } },
+        "maxDistance": { "type": "integer", "minimum": 1, "maximum": 256 },
+        "allowHypothetical": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "initialNpcPrivateKnowledgeFact": {
+      "type": "object",
+      "required": ["factId", "holderCharacterIds", "subjectId", "predicate", "status", "claim", "behaviorCue", "evidence"],
+      "properties": {
+        "factId": { "$ref": "#/$defs/id" },
+        "holderCharacterIds": { "$ref": "#/$defs/idArray" },
+        "subjectId": { "$ref": "#/$defs/id" },
+        "predicate": { "$ref": "#/$defs/nonEmptyString" },
+        "objectId": { "$ref": "#/$defs/id" },
+        "status": { "enum": ["confirmed", "rumor"] },
+        "claim": { "$ref": "#/$defs/nonEmptyString" },
+        "behaviorCue": { "$ref": "#/$defs/nonEmptyString" },
+        "evidence": { "$ref": "#/$defs/nonEmptyString" },
+        "sourceEventId": { "$ref": "#/$defs/id" },
+        "forbiddenAssociations": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/privateKnowledgeAssociationGuard" }
+        }
+      },
+      "additionalProperties": false
+    },
     "scenario": {
       "type": "object",
       "required": ["opening"],
@@ -445,6 +491,14 @@
           "type": "object",
           "propertyNames": { "$ref": "#/$defs/id" },
           "additionalProperties": { "$ref": "#/$defs/flagValue" }
+        },
+        "initialPlayerKnowledge": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/initialPlayerKnowledgeFact" }
+        },
+        "initialNpcPrivateKnowledge": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/initialNpcPrivateKnowledgeFact" }
         },
         "chapters": { "type": "array", "items": { "$ref": "#/$defs/chapter" } },
         "events": { "type": "array", "items": { "$ref": "#/$defs/event" } }

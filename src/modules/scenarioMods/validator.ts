@@ -215,6 +215,70 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
         });
       }
     }
+    if (scenario.initialNpcPrivateKnowledge !== undefined) {
+      if (!Array.isArray(scenario.initialNpcPrivateKnowledge)) {
+        add('scenario.initialNpcPrivateKnowledge', 'invalid_type', 'initialNpcPrivateKnowledge must be an array.');
+      } else {
+        const factIds = new Set<string>();
+        scenario.initialNpcPrivateKnowledge.forEach((rawFact, index) => {
+          const path = `scenario.initialNpcPrivateKnowledge[${index}]`;
+          if (!isRecord(rawFact)) {
+            add(path, 'invalid_type', `${path} must be an object.`);
+            return;
+          }
+          if (validateId(rawFact.factId, `${path}.factId`, add)) {
+            if (factIds.has(rawFact.factId)) add(`${path}.factId`, 'duplicate_id', `Duplicate NPC private knowledge fact "${rawFact.factId}".`);
+            factIds.add(rawFact.factId);
+          }
+          validateIdArray(rawFact.holderCharacterIds, `${path}.holderCharacterIds`, add);
+          if (!Array.isArray(rawFact.holderCharacterIds) || rawFact.holderCharacterIds.length === 0) {
+            add(`${path}.holderCharacterIds`, 'required_array', 'NPC private knowledge requires at least one holder.');
+          } else if (new Set(rawFact.holderCharacterIds).size !== rawFact.holderCharacterIds.length) {
+            add(`${path}.holderCharacterIds`, 'duplicate_id', 'holderCharacterIds must be unique.');
+          }
+          validateId(rawFact.subjectId, `${path}.subjectId`, add);
+          requireString(rawFact.predicate, `${path}.predicate`, add);
+          optionalId(rawFact.objectId, `${path}.objectId`, add);
+          requireString(rawFact.claim, `${path}.claim`, add);
+          requireString(rawFact.behaviorCue, `${path}.behaviorCue`, add);
+          requireString(rawFact.evidence, `${path}.evidence`, add);
+          optionalId(rawFact.sourceEventId, `${path}.sourceEventId`, add);
+          if (rawFact.status !== 'confirmed' && rawFact.status !== 'rumor') {
+            add(`${path}.status`, 'invalid_enum', 'status must be confirmed or rumor.');
+          }
+          if (rawFact.forbiddenAssociations !== undefined) {
+            if (!Array.isArray(rawFact.forbiddenAssociations)) {
+              add(`${path}.forbiddenAssociations`, 'invalid_type', 'forbiddenAssociations must be an array.');
+            } else {
+              rawFact.forbiddenAssociations.forEach((rawRule, ruleIndex) => {
+                const rulePath = `${path}.forbiddenAssociations[${ruleIndex}]`;
+                if (!isRecord(rawRule)) {
+                  add(rulePath, 'invalid_type', 'Forbidden association must be an object.');
+                  return;
+                }
+                validateStringArray(rawRule.subjects, `${rulePath}.subjects`, add);
+                validateStringArray(rawRule.predicates, `${rulePath}.predicates`, add);
+                optionalBoolean(rawRule.allowHypothetical, `${rulePath}.allowHypothetical`, add);
+                if (!Array.isArray(rawRule.subjects) || rawRule.subjects.length === 0) {
+                  add(`${rulePath}.subjects`, 'required_array', 'Forbidden association requires at least one subject.');
+                }
+                if (!Array.isArray(rawRule.predicates) || rawRule.predicates.length === 0) {
+                  add(`${rulePath}.predicates`, 'required_array', 'Forbidden association requires at least one predicate.');
+                }
+                if (rawRule.maxDistance !== undefined && (
+                  typeof rawRule.maxDistance !== 'number'
+                  || !Number.isInteger(rawRule.maxDistance)
+                  || rawRule.maxDistance < 1
+                  || rawRule.maxDistance > 256
+                )) {
+                  add(`${rulePath}.maxDistance`, 'invalid_range', 'maxDistance must be an integer from 1 to 256.');
+                }
+              });
+            }
+          }
+        });
+      }
+    }
     validateEntityArray(scenario.events, 'scenario.events', eventIds, add, entity => {
       requireString(entity.description, `${entity.__path}.description`, add);
       optionalStringOrNull(entity.axisId, `${entity.__path}.axisId`, add);
@@ -858,6 +922,19 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
       checkRef(fact.subjectId, subjectIds, `${path}.subjectId`, 'knowledge subject', add);
       checkRef(fact.objectId, new Set([...characterIds, ...factionIds]), `${path}.objectId`, 'knowledge object', add);
       checkRef(fact.sourceEventId, eventIds, `${path}.sourceEventId`, 'event', add);
+    });
+    forEachRecord(scenario.initialNpcPrivateKnowledge, 'scenario.initialNpcPrivateKnowledge', (fact, path) => {
+      checkRefs(fact.holderCharacterIds, characterIds, `${path}.holderCharacterIds`, 'character', add);
+      checkRef(fact.subjectId, new Set([...characterIds, ...factionIds]), `${path}.subjectId`, 'knowledge subject', add);
+      checkRef(fact.objectId, new Set([...characterIds, ...factionIds]), `${path}.objectId`, 'knowledge object', add);
+      checkRef(fact.sourceEventId, eventIds, `${path}.sourceEventId`, 'event', add);
+      if (isRecord(scenario.opening) && typeof scenario.opening.playerCharacterId === 'string') {
+        for (const holderId of Array.isArray(fact.holderCharacterIds) ? fact.holderCharacterIds : []) {
+          if (holderId === scenario.opening.playerCharacterId) {
+            add(`${path}.holderCharacterIds`, 'invalid_holder', 'The player character belongs in playerKnowledge, not NPC private knowledge.');
+          }
+        }
+      }
     });
     forEachRecord(scenario.events, 'scenario.events', (entity, path) => {
       checkRefs(entity.relatedCharacterIds, characterIds, `${path}.relatedCharacterIds`, 'character', add);
