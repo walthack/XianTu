@@ -330,6 +330,16 @@ export function createInitialNpcPrivateKnowledge(
   ]));
 }
 
+function syncNpcPrivateKnowledgeUnlocks(runtime: RuntimeState): void {
+  const completed = new Set(runtime.completedEventIds || []);
+  for (const fact of Object.values(runtime.npcPrivateKnowledge || {})) {
+    if (!fact.unlockAfterEventId || fact.unlockedAtTurn !== undefined) continue;
+    if (completed.has(fact.unlockAfterEventId)) {
+      fact.unlockedAtTurn = Math.max(0, Number(runtime.worldTurn) || 0);
+    }
+  }
+}
+
 function ensureActorEngine(runtime: RuntimeState): ScenarioActorEngineState {
   const state = runtime.actorEngine || {
     surfacedAgendaIds: [],
@@ -2199,6 +2209,7 @@ export function advanceScenarioRuntime(saveData: SaveData): {
 
   // 事件落账后立即派生本章完成 flag，保证后续章节 activation 能在同一轮生效。
   settleCompletedChapterFlags(runtime);
+  syncNpcPrivateKnowledgeUnlocks(runtime);
 
   const railStageComplete = Boolean(railProfile
     && railProfile.orderedEventIds.every(id => isEventSettled(runtime, id)));

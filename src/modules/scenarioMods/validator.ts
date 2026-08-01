@@ -243,6 +243,7 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
           requireString(rawFact.behaviorCue, `${path}.behaviorCue`, add);
           requireString(rawFact.evidence, `${path}.evidence`, add);
           optionalId(rawFact.sourceEventId, `${path}.sourceEventId`, add);
+          optionalId(rawFact.unlockAfterEventId, `${path}.unlockAfterEventId`, add);
           if (rawFact.status !== 'confirmed' && rawFact.status !== 'rumor') {
             add(`${path}.status`, 'invalid_enum', 'status must be confirmed or rumor.');
           }
@@ -928,6 +929,7 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
       checkRef(fact.subjectId, new Set([...characterIds, ...factionIds]), `${path}.subjectId`, 'knowledge subject', add);
       checkRef(fact.objectId, new Set([...characterIds, ...factionIds]), `${path}.objectId`, 'knowledge object', add);
       checkRef(fact.sourceEventId, eventIds, `${path}.sourceEventId`, 'event', add);
+      checkRef(fact.unlockAfterEventId, eventIds, `${path}.unlockAfterEventId`, 'event', add);
       if (isRecord(scenario.opening) && typeof scenario.opening.playerCharacterId === 'string') {
         for (const holderId of Array.isArray(fact.holderCharacterIds) ? fact.holderCharacterIds : []) {
           if (holderId === scenario.opening.playerCharacterId) {

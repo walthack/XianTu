@@ -178,6 +178,16 @@ function atomicPrivateClaimViolation(
       : undefined;
 }
 
+function withoutAuthorizedAtomicClaims(
+  narrative: string,
+  userInput: string,
+  claims: AtomicPrivateClaim[],
+): string {
+  return claims
+    .filter(contract => userInput.includes(contract.holderName))
+    .reduce((remainder, contract) => remainder.split(contract.claim).join(''), narrative);
+}
+
 function sentenceHasUnauthorizedQuantity(sentence: string, scenarioPrompt: string): boolean {
   if (
     /renderGuard\.allowUnverifiedQuantities=true/.test(scenarioPrompt)
@@ -302,7 +312,12 @@ export function validateNarrativePerformance(
   if (leakedTerm) {
     issues.push(`${HARD_ISSUE_PREFIX}正文命中阶段禁词“${leakedTerm}”`);
   }
-  const leakedAssociation = leakedForbiddenAssociation(narrative, parseForbiddenAssociations(scenarioPrompt));
+  const atomicPrivateClaims = parseAtomicPrivateClaims(scenarioPrompt);
+  const associationAuditText = withoutAuthorizedAtomicClaims(narrative, userInput, atomicPrivateClaims);
+  const leakedAssociation = leakedForbiddenAssociation(
+    associationAuditText,
+    parseForbiddenAssociations(scenarioPrompt),
+  );
   if (leakedAssociation) {
     issues.push(`${HARD_ISSUE_PREFIX}正文提前演出受保护人物的后续状态`);
   }
@@ -320,7 +335,7 @@ export function validateNarrativePerformance(
   const atomicClaimIssue = atomicPrivateClaimViolation(
     narrative,
     userInput,
-    parseAtomicPrivateClaims(scenarioPrompt),
+    atomicPrivateClaims,
   );
   if (atomicClaimIssue) issues.push(`${HARD_ISSUE_PREFIX}${atomicClaimIssue}`);
   if (!DECISION_SCENE.test(userInput)) return { valid: issues.length === 0, issues };

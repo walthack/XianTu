@@ -104,12 +104,15 @@ export interface ScenarioInitialNpcPrivateKnowledgeFact {
   behaviorCue: string;
   evidence: string;
   sourceEventId?: string;
+  /** 同关事件完成前保持休眠；解锁轮次写入运行时并随跨关继承。 */
+  unlockAfterEventId?: string;
   forbiddenAssociations?: ScenarioPrivateKnowledgeAssociationGuard[];
 }
 
 export interface ScenarioNpcPrivateKnowledgeFact extends ScenarioInitialNpcPrivateKnowledgeFact {
   learnedAtTurn: number;
   sourceStageId: string;
+  unlockedAtTurn?: number;
 }
 
 export interface ScenarioModEvent {

@@ -1644,6 +1644,60 @@
       "event.black_sea_approach.done": false,
       "event.final_preparations.done": false
     },
+    "initialPlayerKnowledge": [
+      {
+        "factId": "knowledge.player.yunlong.gao_zhishang_yueshuai_paternity_rumor",
+        "subjectId": "liuchao.character.gao_zhishang",
+        "predicate": "rumored_yueshuai_paternity",
+        "status": "rumor",
+        "disclosureScope": "player"
+      }
+    ],
+    "initialNpcPrivateKnowledge": [
+      {
+        "factId": "knowledge.npc.yunlong.gao_zhishang_yueshuai_paternity_rumor",
+        "holderCharacterIds": [
+          "liuchao.character.ruan_xiang_ning"
+        ],
+        "subjectId": "liuchao.character.gao_zhishang",
+        "predicate": "rumored_yueshuai_paternity",
+        "status": "rumor",
+        "claim": "高智商曾在瞑寂梦话中说，生父被干爹称作“岳帅”；这只是梦话线索，不能据此确认血缘。",
+        "behaviorCue": "凝姨记得高智商梦话里有一条身世疑点，但她只把它当作待复核线索，不会据此认定血缘或向无关人物传播",
+        "evidence": "ENDING-BLUEPRINT.md §7；CANON-DECISIONS #82；云龙吟《瞑寂》梦话原句",
+        "forbiddenAssociations": [
+          {
+            "subjects": [
+              "高智商",
+              "高衙内"
+            ],
+            "predicates": [
+              "岳帅之子",
+              "岳鹏举之子",
+              "岳帅私生子",
+              "生父是岳帅"
+            ],
+            "maxDistance": 72,
+            "allowHypothetical": true
+          },
+          {
+            "subjects": [
+              "高俅",
+              "高智商",
+              "高衙内"
+            ],
+            "predicates": [
+              "生父",
+              "亲生父亲",
+              "亲爹",
+              "亲生儿子"
+            ],
+            "maxDistance": 48,
+            "allowHypothetical": true
+          }
+        ]
+      }
+    ],
     "chapters": [
       {
         "id": "liuchao.chapter.arrival",

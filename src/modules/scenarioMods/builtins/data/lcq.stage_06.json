@@ -565,6 +565,64 @@
             "allowHypothetical": true
           }
         ]
+      },
+      {
+        "factId": "knowledge.npc.qingyu.xiaozi_biji_mother",
+        "holderCharacterIds": [
+          "liuchao.character.xiao_zi"
+        ],
+        "subjectId": "liuchao.character.bi_ji",
+        "predicate": "mother_of",
+        "objectId": "liuchao.character.xiao_zi",
+        "status": "confirmed",
+        "claim": "碧姬是小紫的生母。",
+        "behaviorCue": "小紫面对碧姬时带着早已积压的私人旧恨；在玩家尚未确认母女关系前，只让这种针对性通过回避、冷意与行动选择显现，不先说破称谓",
+        "evidence": "RELATIONSHIPS-SECRET.md §1/§2；CANON-DECISIONS #81/#82；清羽记 ch118 母女对质",
+        "forbiddenAssociations": [
+          {
+            "subjects": [
+              "小紫",
+              "碧姬"
+            ],
+            "predicates": [
+              "生母",
+              "母亲",
+              "母女",
+              "亲女"
+            ],
+            "maxDistance": 64,
+            "allowHypothetical": true
+          }
+        ]
+      },
+      {
+        "factId": "knowledge.npc.qingyu.biji_xiaozi_daughter",
+        "holderCharacterIds": [
+          "liuchao.character.bi_ji"
+        ],
+        "subjectId": "liuchao.character.xiao_zi",
+        "predicate": "daughter_of",
+        "objectId": "liuchao.character.bi_ji",
+        "status": "confirmed",
+        "claim": "小紫是碧姬的亲生女儿。",
+        "behaviorCue": "碧姬认得小紫与自己的私人亲缘，却不会主动向旁人解释；玩家尚未确认前，只允许她在回避、依附与面对小紫的反应中体现这份知情",
+        "evidence": "RELATIONSHIPS-SECRET.md §1/§2；CANON-DECISIONS #81/#82；清羽记 ch118 母女对质",
+        "forbiddenAssociations": [
+          {
+            "subjects": [
+              "小紫",
+              "碧姬"
+            ],
+            "predicates": [
+              "亲生女儿",
+              "女儿",
+              "母女",
+              "生母"
+            ],
+            "maxDistance": 64,
+            "allowHypothetical": true
+          }
+        ]
       }
     ],
     "events": [
@@ -853,7 +911,29 @@
               },
               "requiresPreparation": [
                 "mother_daughter_confrontation_seen"
-              ]
+              ],
+              "outcomeEffects": {
+                "success": {
+                  "playerKnowledge": [
+                    {
+                      "factId": "knowledge.player.qingyu.xiaozi_biji_mother",
+                      "subjectId": "liuchao.character.bi_ji",
+                      "predicate": "mother_of",
+                      "objectId": "liuchao.character.xiao_zi",
+                      "status": "confirmed",
+                      "disclosureScope": "player"
+                    },
+                    {
+                      "factId": "knowledge.player.qingyu.biji_xiaozi_daughter",
+                      "subjectId": "liuchao.character.xiao_zi",
+                      "predicate": "daughter_of",
+                      "objectId": "liuchao.character.bi_ji",
+                      "status": "confirmed",
+                      "disclosureScope": "player"
+                    }
+                  ]
+                }
+              }
             }
           ]
         }

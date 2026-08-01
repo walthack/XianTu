@@ -44,6 +44,10 @@ test('split and shared prompt routes forbid model rolls and require new risks to
   assert.match(pipeline, /stripLegacyJudgementMarkers\(textContent\)/);
   assert.match(pipeline, /stripLegacyJudgementMarkers\([\s\S]*response\.mid_term_memory/);
   assert.match(pipeline, /本回合无本地判定回执/);
+
+  const dormantCultivationRules = businessModule.CULTIVATION_SPEED_RULES;
+  assert.match(dormantCultivationRules, /难度、骰点、成功率、成败及机械后果只服从【本地判定已结算】回执/);
+  assert.doesNotMatch(dormantCultivationRules, /成功率计算|基础成功率|突破失败叙事|〔突破:失败/);
 });
 
 test('legacy stored markers are explicitly downgraded instead of rendered as authoritative cards', async () => {

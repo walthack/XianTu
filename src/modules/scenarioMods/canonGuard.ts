@@ -10,6 +10,7 @@ import type {
   ScenarioModLocation,
   ScenarioModSkill,
   ScenarioModTechnique,
+  ScenarioNpcPrivateKnowledgeFact,
 } from './schema';
 
 interface ScenarioRuntimeState {
@@ -34,6 +35,7 @@ interface ScenarioRuntimeState {
     };
   }>;
   completedEventIds?: string[];
+  npcPrivateKnowledge?: Record<string, ScenarioNpcPrivateKnowledgeFact>;
   opening?: {
     playerCharacterId?: string;
   };
@@ -480,10 +482,41 @@ function serializeCommandValue(command: unknown): string {
   }
 }
 
+/**
+ * 私有知情只能留在引擎账本或玩家已获知后的叙事/记忆中，不能被模型反写进
+ * `社交.关系`。关系对象会进入通用状态 prompt；一旦落账，后续任意 NPC 都会
+ * 间接继承该秘密，绕过 holder 隔离。
+ */
+function findNpcPrivateKnowledgeRelationViolation(
+  runtime: ScenarioRuntimeState,
+  command: CommandLike,
+  key: string,
+): string | null {
+  if (!(key === '社交.关系' || key.startsWith('社交.关系.'))) return null;
+  const haystack = `${key}\n${serializeCommandValue(command)}`;
+  for (const fact of Object.values(runtime.npcPrivateKnowledge || {})) {
+    for (const association of fact.forbiddenAssociations || []) {
+      const maxDistance = Number.isInteger(association.maxDistance) ? association.maxDistance! : 48;
+      for (const subject of association.subjects) {
+        for (let subjectAt = haystack.indexOf(subject); subjectAt >= 0; subjectAt = haystack.indexOf(subject, subjectAt + subject.length)) {
+          for (const predicate of association.predicates) {
+            for (let predicateAt = haystack.indexOf(predicate); predicateAt >= 0; predicateAt = haystack.indexOf(predicate, predicateAt + predicate.length)) {
+              if (Math.abs(predicateAt - subjectAt) <= maxDistance) {
+                return `NPC 私有知情不得反写普通关系状态：${fact.factId}`;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  return null;
+}
+
 export function guardScenarioModCommands(saveData: SaveData, commands: unknown[]): ScenarioCommandGuardResult {
   const runtime = getRuntimeState(saveData);
   const protectedPaths = compileScenarioProtectedPaths(saveData);
-  if (!runtime || protectedPaths.length === 0) return { accepted: [...commands], rejected: [] };
+  if (!runtime) return { accepted: [...commands], rejected: [] };
 
   const railAheadNames = collectRailAheadCharacterNames(runtime);
   const accepted: unknown[] = [];
@@ -522,12 +555,18 @@ export function guardScenarioModCommands(saveData: SaveData, commands: unknown[]
       }
     }
     const protectedPath = key && protectedPaths.find(path => pathsIntersect(key, path));
+    const privateKnowledgeRelationViolation = key
+      ? findNpcPrivateKnowledgeRelationViolation(runtime, command as CommandLike, key)
+      : null;
     const accessViolation = key ? findContentAccessViolation(runtime, command as CommandLike, key) : null;
     const affiliationViolation = key
       ? findCharacterAffiliationViolation(runtime, command as CommandLike, key) || findSectMembershipViolation(runtime, command as CommandLike, key)
       : null;
-    if (scenarioFlagViolation || accessViolation || affiliationViolation) {
-      rejected.push({ command, reason: scenarioFlagViolation || accessViolation || affiliationViolation || '' });
+    if (scenarioFlagViolation || privateKnowledgeRelationViolation || accessViolation || affiliationViolation) {
+      rejected.push({
+        command,
+        reason: scenarioFlagViolation || privateKnowledgeRelationViolation || accessViolation || affiliationViolation || '',
+      });
     } else if (protectedPath && !isAllowedFlagUpdate) {
       rejected.push({
         command,

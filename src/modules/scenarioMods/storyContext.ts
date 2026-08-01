@@ -366,11 +366,17 @@ function shouldRevealBottomLine(fav: number, label: string): boolean {
 
 function playerKnowsPrivateFact(runtime: StoryRuntime, fact: ScenarioNpcPrivateKnowledgeFact): boolean {
   return Object.values(runtime.playerKnowledge || {}).some(known =>
-    known.status === 'confirmed'
+    (fact.status === 'rumor' ? known.status === 'rumor' || known.status === 'confirmed' : known.status === 'confirmed')
     && known.subjectId === fact.subjectId
     && known.predicate === fact.predicate
     && (known.objectId || '') === (fact.objectId || '')
   );
+}
+
+function privateFactUnlocked(runtime: StoryRuntime, fact: ScenarioNpcPrivateKnowledgeFact): boolean {
+  return !fact.unlockAfterEventId
+    || fact.unlockedAtTurn !== undefined
+    || (runtime.completedEventIds || []).includes(fact.unlockAfterEventId);
 }
 
 function privateFactRelevantToStage(runtime: StoryRuntime, fact: ScenarioNpcPrivateKnowledgeFact): boolean {
@@ -387,7 +393,9 @@ function privateKnowledgeForHolder(
   characterId: string,
 ): ScenarioNpcPrivateKnowledgeFact[] {
   return Object.values(runtime.npcPrivateKnowledge || {})
-    .filter(fact => privateFactRelevantToStage(runtime, fact) && fact.holderCharacterIds.includes(characterId))
+    .filter(fact => privateFactUnlocked(runtime, fact)
+      && privateFactRelevantToStage(runtime, fact)
+      && fact.holderCharacterIds.includes(characterId))
     .sort((a, b) => a.learnedAtTurn - b.learnedAtTurn
       || (a.factId < b.factId ? -1 : a.factId > b.factId ? 1 : 0))
     .slice(0, 4);
@@ -395,7 +403,9 @@ function privateKnowledgeForHolder(
 
 function buildNpcPrivateKnowledgeGuard(runtime: StoryRuntime): string {
   const associations = Object.values(runtime.npcPrivateKnowledge || {})
-    .filter(fact => privateFactRelevantToStage(runtime, fact) && !playerKnowsPrivateFact(runtime, fact))
+    .filter(fact => privateFactUnlocked(runtime, fact)
+      && privateFactRelevantToStage(runtime, fact)
+      && (fact.status === 'rumor' || !playerKnowsPrivateFact(runtime, fact)))
     .flatMap(fact => fact.forbiddenAssociations || []);
   if (!associations.length) return '';
   const unique = new Map<string, ScenarioPrivateKnowledgeAssociationGuard>();
@@ -412,7 +422,7 @@ function buildNpcPrivateKnowledgeGuard(runtime: StoryRuntime): string {
     const right = JSON.stringify(b);
     return left < right ? -1 : left > right ? 1 : 0;
   });
-  return `【NPC 私有知情隔离·引擎账本】以下关联尚未进入玩家确认知识；只有被逐人注入行为提示的知情者可据此保持动机与反应，但正文不得替玩家坐实答案，也不得让其他人物继承知情。renderGuard.forbiddenAssociations=${JSON.stringify(guarded)}；renderGuard.npcPrivateKnowledge=true。`;
+  return `【NPC 私有知情隔离·引擎账本】以下关联仍未成为已确认世界事实；即使玩家知道某条传闻存在，也不得把传闻升级为事实。只有被逐人注入行为提示的知情者可据此保持动机与反应，但正文不得替玩家坐实答案，也不得让其他人物继承知情。renderGuard.forbiddenAssociations=${JSON.stringify(guarded)}；renderGuard.npcPrivateKnowledge=true。`;
 }
 
 const CHARACTER_SECRET_KNOWLEDGE_BOUNDARIES: Readonly<Record<string, string>> = {
