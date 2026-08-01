@@ -10,7 +10,9 @@ import khoomeiUrl from '@/assets/music/05-battle-matouqin-khoomei.mp3';
 import battleWuxiaUrl from '@/assets/music/05-battle-wuxia.mp3';
 import nihonUrl from '@/assets/music/05-battle-nihon.mp3';
 import battlePipaUrl from '@/assets/music/05-battle-pipa.mp3';
+import battleHuoxiaTightUrl from '@/assets/music/20-battle-huoxia-tight.mp3';
 import climaxUrl from '@/assets/music/07-climax-juezhan-vocal.mp3';
+import climaxHuoxiaUrl from '@/assets/music/19-climax-huoxia-final-v2.mp3';
 import horrorUrl from '@/assets/music/06-horror-moying.mp3';
 import emotionUrl from '@/assets/music/08-emotion-matouqin.mp3';
 import aspireUrl from '@/assets/music/09-aspire-zhuangzhi.mp3';
@@ -63,10 +65,12 @@ export const MUSIC_TRACKS: Record<MusicMood, MusicTrack[]> = {
     { id: 'battle', title: '斗法·国风交响', url: battleUrl },
     { id: 'battle', title: '斗法·马头琴', url: battleMatouqinUrl },
     { id: 'battle', title: '斗法·快节奏武侠', url: battleWuxiaUrl },
+    { id: 'battle', title: '斗法·紧凑高昂(国乐摇滚)', url: battleHuoxiaTightUrl },
   ],
   horror: [{ id: 'horror', title: '魔影·尸氛', url: horrorUrl }],
   climax: [
     { id: 'climax', title: '决战·惊变', url: climaxUrl },
+    { id: 'climax', title: '决战·终局(国乐摇滚)', url: climaxHuoxiaUrl },
     { id: 'climax', title: '决战·呼麦万马', url: khoomeiUrl },
     { id: 'climax', title: '决战·马头琴弧', url: arcTightUrl },
   ],
