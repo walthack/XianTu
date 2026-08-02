@@ -1,9 +1,6 @@
 import type { SaveData } from '@/types/game';
 import { getNarrativeAnchorEvent } from './runtime';
-import {
-  expandPrivateKnowledgeAssociations,
-  privateFactNeedsAssociationGuard,
-} from './privateKnowledgeGuard';
+import { expandPrivateKnowledgeAssociations } from './privateKnowledgeGuard';
 
 import type {
   ScenarioContentAccessRule,
@@ -15,7 +12,6 @@ import type {
   ScenarioModSkill,
   ScenarioModTechnique,
   ScenarioNpcPrivateKnowledgeFact,
-  ScenarioPlayerKnowledgeFact,
 } from './schema';
 
 interface ScenarioRuntimeState {
@@ -40,7 +36,6 @@ interface ScenarioRuntimeState {
     };
   }>;
   completedEventIds?: string[];
-  playerKnowledge?: Record<string, ScenarioPlayerKnowledgeFact>;
   npcPrivateKnowledge?: Record<string, ScenarioNpcPrivateKnowledgeFact>;
   opening?: {
     playerCharacterId?: string;
@@ -501,7 +496,6 @@ function findNpcPrivateKnowledgeRelationViolation(
   if (!(key === '社交.关系' || key.startsWith('社交.关系.'))) return null;
   const haystack = `${key}\n${serializeCommandValue(command)}`;
   for (const fact of Object.values(runtime.npcPrivateKnowledge || {})) {
-    if (!privateFactNeedsAssociationGuard(runtime.playerKnowledge, fact)) continue;
     for (const association of expandPrivateKnowledgeAssociations(fact)) {
       const maxDistance = Number.isInteger(association.maxDistance) ? association.maxDistance! : 48;
       for (const subject of association.subjects) {

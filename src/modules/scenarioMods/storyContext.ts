@@ -9,7 +9,7 @@ import { formatIntimacyProfile } from './intimacyProfiles';
 import {
   expandPrivateKnowledgeAssociations,
   playerKnowsPrivateFact,
-  privateFactNeedsAssociationGuard,
+  privateFactNeedsNarrativeAssociationGuard,
 } from './privateKnowledgeGuard';
 import { formatVoiceCard } from './voiceCards';
 
@@ -401,7 +401,7 @@ function buildNpcPrivateKnowledgeGuard(runtime: StoryRuntime): string {
   const associations = Object.values(runtime.npcPrivateKnowledge || {})
     .filter(fact => privateFactUnlocked(runtime, fact)
       && privateFactRelevantToStage(runtime, fact)
-      && privateFactNeedsAssociationGuard(runtime.playerKnowledge, fact))
+      && privateFactNeedsNarrativeAssociationGuard(runtime.playerKnowledge, fact))
     .flatMap(expandPrivateKnowledgeAssociations);
   if (!associations.length) return '';
   const unique = new Map<string, ScenarioPrivateKnowledgeAssociationGuard>();

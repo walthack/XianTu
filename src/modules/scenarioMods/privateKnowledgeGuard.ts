@@ -34,8 +34,8 @@ export function playerKnowsPrivateFact(
   );
 }
 
-/** confirmed 在玩家确认后退休；rumor 即使已听说也持续防止被坐实。 */
-export function privateFactNeedsAssociationGuard(
+/** 仅用于正文披露：confirmed 在玩家确认后退休；rumor 即使已听说也持续防止被坐实。 */
+export function privateFactNeedsNarrativeAssociationGuard(
   playerKnowledge: PlayerKnowledgeLedger,
   fact: ScenarioNpcPrivateKnowledgeFact,
 ): boolean {
@@ -44,7 +44,8 @@ export function privateFactNeedsAssociationGuard(
 
 /**
  * 数据中的 subjects 可保留额外语义称呼，但安全边界至少覆盖事实两端角色在
- * registry 登记的规范名与全部别名。正文和命令门禁共用这一编译结果。
+ * registry 登记的规范名与全部别名。正文和命令门禁只共用这一编译结果；
+ * 是否允许写入则按各自信任边界单独判定。
  */
 export function expandPrivateKnowledgeAssociations(
   fact: ScenarioNpcPrivateKnowledgeFact,

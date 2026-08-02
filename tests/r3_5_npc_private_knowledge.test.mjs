@@ -479,13 +479,16 @@ test('LLM commands cannot write the private knowledge ledger', async () => {
   assert.match(result.errors.join('\n'), /禁止|不可|保护|操作/);
 });
 
-test('LLM commands cannot reverse-write private facts into ordinary relationships', async () => {
+test('confirmed facts can be narrated by their holder but never persisted into ordinary relationships', async () => {
   const { parseScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
   const {
     applyStrictScenarioInitializationToSave,
     buildStrictScenarioInitialization,
   } = await loadTs('../src/modules/scenarioMods/strictInitializer.ts');
   const { guardScenarioModCommands } = await loadTs('../src/modules/scenarioMods/canonGuard.ts');
+  const { buildScenarioStoryPrompt } = await loadTs('../src/modules/scenarioMods/storyContext.ts');
+  const { validateNarrativePerformance } =
+    await loadTs('../src/modules/scenarioMods/narrativePerformanceGuard.ts');
   const mod = parseScenarioMod(JSON.parse(await readFile(stage06Url, 'utf8')));
   const save = applyStrictScenarioInitializationToSave(
     baseSave(),
@@ -539,9 +542,25 @@ test('LLM commands cannot reverse-write private facts into ordinary relationship
       learnedAtTurn: 4,
     },
   };
+  runtime.activeEventIds = [];
+  runtime.opening.featuredCharacterIds = [];
+  const confirmedPrompt = buildScenarioStoryPrompt(save, '我请碧姬只复核她有证据确认的母女事实。');
+  assert.equal(
+    validateNarrativePerformance(
+      `碧姬答道：“${DAUGHTER_CLAIM}除此之外，没有证据。”`,
+      '我请碧姬只复核她有证据确认的母女事实。',
+      confirmedPrompt,
+    ).valid,
+    true,
+    'confirmed knowledge retires only the holder-scoped narrative association guard',
+  );
   const revealedResult = guardScenarioModCommands(save, [commands[0], commands[2]]);
-  assert.deepEqual(revealedResult.accepted, [commands[0], commands[2]]);
-  assert.deepEqual(revealedResult.rejected, []);
+  assert.deepEqual(revealedResult.accepted, []);
+  assert.deepEqual(revealedResult.rejected.map(item => item.command), [commands[0], commands[2]]);
+  assert.ok(
+    revealedResult.rejected.every(item => /私有知情.*普通关系/.test(item.reason)),
+    'player confirmation allows holder-scoped narration, never global relationship persistence',
+  );
 });
 
 test('narrative guard enforces every independently compiled association block', async () => {
