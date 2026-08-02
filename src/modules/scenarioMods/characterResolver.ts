@@ -215,9 +215,11 @@ function buildNotes(entry: RegistryEntry, currentPhase: RegistryPhase | undefine
   return unique(notes);
 }
 
-// name/alias -> registry entry
+// stable id / name / alias -> registry entry
+const byId = new Map<string, RegistryEntry>();
 const byName = new Map<string, RegistryEntry>();
 for (const entry of (registryJson as { characters: RegistryEntry[] }).characters || []) {
+  byId.set(entry.id, entry);
   byName.set(entry.canonicalName, entry);
   for (const alias of entry.aliases || []) if (!byName.has(alias)) byName.set(alias, entry);
 }
@@ -341,6 +343,15 @@ export function getRegistryIdentity(name: string): { canonicalName: string; alia
     aliases: unique(entry.aliases || []),
     identity: compact(entry.staticProfile?.identitySummary || '', 180),
   };
+}
+
+/**
+ * ID 驱动的安全门禁统一从 registry 展开规范名与全部已裁定别名，避免作者手抄
+ * subjects 时漏掉旧名、蔑称或阶段称谓。
+ */
+export function getRegistryNamesById(characterId: string): string[] {
+  const entry = byId.get(characterId);
+  return entry ? unique([entry.canonicalName, ...(entry.aliases || [])]) : [];
 }
 
 /** 供当前人物提示词补回稳定谈吐；不携带阶段剧情，只用于避免角色被泛化为同一类口吻。 */

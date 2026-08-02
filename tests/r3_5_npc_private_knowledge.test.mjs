@@ -7,6 +7,7 @@ import { loadTs } from './loadTs.mjs';
 const stage05Url = new URL('../mod-kit/generated/deepseek-v4-flash/qingyu/stages/lcq.stage_05.json', import.meta.url);
 const stage06Url = new URL('../mod-kit/generated/deepseek-v4-flash/qingyu/stages/lcq.stage_06.json', import.meta.url);
 const linAnUrl = new URL('../mod-kit/generated/deepseek-v4-flash/yunlong/stages/lyl.lin_an_black_sea.json', import.meta.url);
+const registryUrl = new URL('../src/modules/scenarioMods/builtins/character-registry.json', import.meta.url);
 const FACT_ID = 'knowledge.npc.qingyu.biji_xingyuehu_identity';
 const CLAIM = '碧姬就是星月湖旧部称作“碧宛”的岳帅姬妾。';
 const CUE = '谢艺寻找碧姬并非泛泛寻人';
@@ -88,6 +89,115 @@ test('different holders stay dormant until the declared event and then receive d
   assert.doesNotMatch(bijiPrompt, new RegExp(DAUGHTER_CLAIM));
 });
 
+test('registry aliases close private-association guards even when facts only list canonical names', async () => {
+  const { parseScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
+  const {
+    applyStrictScenarioInitializationToSave,
+    buildStrictScenarioInitialization,
+  } = await loadTs('../src/modules/scenarioMods/strictInitializer.ts');
+  const { advanceScenarioRuntime } = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  const { buildScenarioStoryPrompt } = await loadTs('../src/modules/scenarioMods/storyContext.ts');
+  const { validateNarrativePerformance } =
+    await loadTs('../src/modules/scenarioMods/narrativePerformanceGuard.ts');
+  const { expandPrivateKnowledgeAssociations } =
+    await loadTs('../src/modules/scenarioMods/privateKnowledgeGuard.ts');
+
+  const mod = parseScenarioMod(JSON.parse(await readFile(stage05Url, 'utf8')));
+  let save = applyStrictScenarioInitializationToSave(
+    baseSave(),
+    buildStrictScenarioInitialization(mod, '2026-08-01T00:00:00.000Z'),
+  );
+  let runtime = save.世界.状态.剧本模组;
+  runtime.completedEventIds.push('lcq.event.s05_13');
+  runtime.worldTurn = 6;
+  save = advanceScenarioRuntime(save).saveData;
+  runtime = save.世界.状态.剧本模组;
+
+  for (const factId of [MOTHER_FACT_ID, DAUGHTER_FACT_ID]) {
+    runtime.npcPrivateKnowledge[factId].forbiddenAssociations[0].subjects = ['小紫', '碧姬'];
+    const [expanded] = expandPrivateKnowledgeAssociations(runtime.npcPrivateKnowledge[factId]);
+    assert.deepEqual(
+      new Set(expanded.subjects),
+      new Set(['小紫', '紫妈妈', '紫丫头', '碧姬', '碧宛', '碧奴']),
+      factId,
+    );
+  }
+
+  runtime.activeEventIds = [];
+  runtime.opening.featuredCharacterIds = [];
+  const prompt = buildScenarioStoryPrompt(save, '我分别观察紫丫头与碧奴。');
+  for (const narrative of [
+    '紫丫头猛然醒悟，碧奴竟然是自己的母亲。',
+    '紫妈妈已经确认碧宛就是自己的生母。',
+  ]) {
+    assert.equal(validateNarrativePerformance(narrative, '继续', prompt).valid, false, narrative);
+  }
+});
+
+test('every registered alias and predicate pair is rejected through narrative and command channels', async () => {
+  const { validateNarrativePerformance } =
+    await loadTs('../src/modules/scenarioMods/narrativePerformanceGuard.ts');
+  const { guardScenarioModCommands } = await loadTs('../src/modules/scenarioMods/canonGuard.ts');
+  const { expandPrivateKnowledgeAssociations } =
+    await loadTs('../src/modules/scenarioMods/privateKnowledgeGuard.ts');
+  const rawStages = await Promise.all([stage05Url, stage06Url, linAnUrl].map(async url =>
+    JSON.parse(await readFile(url, 'utf8'))
+  ));
+  const registry = JSON.parse(await readFile(registryUrl, 'utf8'));
+  const expectedNamesById = new Map(registry.characters.map(character => [
+    character.id,
+    [character.canonicalName, ...(character.aliases || [])],
+  ]));
+
+  const facts = new Map();
+  for (const raw of rawStages) {
+    for (const fact of raw.scenario.initialNpcPrivateKnowledge || []) {
+      facts.set(fact.factId, {
+        ...fact,
+        learnedAtTurn: 0,
+        sourceStageId: raw.manifest.id,
+      });
+    }
+  }
+
+  for (const fact of facts.values()) {
+    const associations = expandPrivateKnowledgeAssociations(fact);
+    const expectedRegistryNames = new Set([
+      ...(expectedNamesById.get(fact.subjectId) || []),
+      ...(expectedNamesById.get(fact.objectId) || []),
+    ]);
+    const prompt = `renderGuard.forbiddenAssociations=${JSON.stringify(associations)}；renderGuard.npcPrivateKnowledge=true。`;
+    for (const association of associations) {
+      const expectedSubjects = new Set([...association.subjects, ...expectedRegistryNames]);
+      assert.deepEqual(new Set(association.subjects), expectedSubjects, `${fact.factId}: registry alias closure`);
+      for (const subject of expectedSubjects) {
+        for (const predicate of association.predicates) {
+          const narrative = `${subject}已经确认${predicate}。`;
+          assert.equal(
+            validateNarrativePerformance(narrative, '继续', prompt).valid,
+            false,
+            `${fact.factId}: ${subject} × ${predicate}`,
+          );
+          const command = {
+            action: 'set',
+            key: `社交.关系.${subject}.当前内心想法`,
+            value: narrative,
+          };
+          const commandSave = baseSave();
+          commandSave.世界.状态.剧本模组 = {
+            modId: 'test.private-knowledge-alias-matrix',
+            mode: 'strict',
+            npcPrivateKnowledge: { [fact.factId]: fact },
+          };
+          const guarded = guardScenarioModCommands(commandSave, [command]);
+          assert.deepEqual(guarded.accepted, [], `${fact.factId}: command accepted ${subject} × ${predicate}`);
+          assert.deepEqual(guarded.rejected.map(item => item.command), [command]);
+        }
+      }
+    }
+  }
+});
+
 test('rumor knowledge opens for its holder without being promoted to confirmed truth', async () => {
   const { parseScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
   const {
@@ -98,6 +208,7 @@ test('rumor knowledge opens for its holder without being promoted to confirmed t
     await loadTs('../src/modules/scenarioMods/storyContext.ts');
   const { validateNarrativePerformance } =
     await loadTs('../src/modules/scenarioMods/narrativePerformanceGuard.ts');
+  const { guardScenarioModCommands } = await loadTs('../src/modules/scenarioMods/canonGuard.ts');
 
   const mod = parseScenarioMod(JSON.parse(await readFile(linAnUrl, 'utf8')));
   const save = applyStrictScenarioInitializationToSave(
@@ -164,6 +275,14 @@ test('rumor knowledge opens for its holder without being promoted to confirmed t
     ).valid,
     false,
   );
+  const rumorRelation = {
+    action: 'set',
+    key: '社交.关系.高衙内.当前内心想法',
+    value: '高公子已经确认自己的生父就是岳帅。',
+  };
+  const rumorGuard = guardScenarioModCommands(save, [rumorRelation]);
+  assert.deepEqual(rumorGuard.accepted, []);
+  assert.deepEqual(rumorGuard.rejected.map(item => item.command), [rumorRelation]);
 
   delete runtime.playerKnowledge['knowledge.player.yunlong.gao_zhishang_yueshuai_paternity_rumor'];
   const unrevealedPrompt = buildScenarioStoryPrompt(save, '我去找凝姨谈谈。');
@@ -372,6 +491,10 @@ test('LLM commands cannot reverse-write private facts into ordinary relationship
     baseSave(),
     buildStrictScenarioInitialization(mod, '2026-08-01T00:00:00.000Z'),
   );
+  const runtime = save.世界.状态.剧本模组;
+  for (const factId of [MOTHER_FACT_ID, DAUGHTER_FACT_ID]) {
+    runtime.npcPrivateKnowledge[factId].forbiddenAssociations[0].subjects = ['小紫', '碧姬'];
+  }
   const commands = [
     {
       action: 'set',
@@ -385,8 +508,8 @@ test('LLM commands cannot reverse-write private facts into ordinary relationship
     },
     {
       action: 'set',
-      key: '社交.关系.碧姬',
-      value: { 名字: '碧姬', 当前内心想法: '小紫是自己的亲生女儿。' },
+      key: '社交.关系.碧奴',
+      value: { 名字: '碧奴', 当前内心想法: '紫丫头是自己的亲生女儿。' },
     },
   ];
 
@@ -395,6 +518,30 @@ test('LLM commands cannot reverse-write private facts into ordinary relationship
   assert.deepEqual(result.accepted, [commands[1]]);
   assert.deepEqual(result.rejected.map(item => item.command), [commands[0], commands[2]]);
   assert.ok(result.rejected.every(item => /私有知情.*普通关系/.test(item.reason)));
+
+  runtime.playerKnowledge = {
+    'knowledge.player.qingyu.xiaozi_biji_mother': {
+      factId: 'knowledge.player.qingyu.xiaozi_biji_mother',
+      subjectId: 'liuchao.character.bi_ji',
+      predicate: 'mother_of',
+      objectId: 'liuchao.character.xiao_zi',
+      status: 'confirmed',
+      disclosureScope: 'player',
+      learnedAtTurn: 4,
+    },
+    'knowledge.player.qingyu.biji_xiaozi_daughter': {
+      factId: 'knowledge.player.qingyu.biji_xiaozi_daughter',
+      subjectId: 'liuchao.character.xiao_zi',
+      predicate: 'daughter_of',
+      objectId: 'liuchao.character.bi_ji',
+      status: 'confirmed',
+      disclosureScope: 'player',
+      learnedAtTurn: 4,
+    },
+  };
+  const revealedResult = guardScenarioModCommands(save, [commands[0], commands[2]]);
+  assert.deepEqual(revealedResult.accepted, [commands[0], commands[2]]);
+  assert.deepEqual(revealedResult.rejected, []);
 });
 
 test('narrative guard enforces every independently compiled association block', async () => {

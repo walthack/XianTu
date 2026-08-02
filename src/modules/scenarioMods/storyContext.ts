@@ -6,6 +6,11 @@ import { narrativeVariantReplacesCanonRail, resolveScenarioEventNarrative } from
 import { formatDivergencePrompt, type ScenarioDivergence } from './divergenceLedger';
 import { findRegistryIdentitiesByContext, getRegistrySpeechStyle } from './characterResolver';
 import { formatIntimacyProfile } from './intimacyProfiles';
+import {
+  expandPrivateKnowledgeAssociations,
+  playerKnowsPrivateFact,
+  privateFactNeedsAssociationGuard,
+} from './privateKnowledgeGuard';
 import { formatVoiceCard } from './voiceCards';
 
 import type {
@@ -364,15 +369,6 @@ function shouldRevealBottomLine(fav: number, label: string): boolean {
   return fav >= BOTTOMLINE_REVEAL_FAVOR || ALLY_RELATION.test(label || '');
 }
 
-function playerKnowsPrivateFact(runtime: StoryRuntime, fact: ScenarioNpcPrivateKnowledgeFact): boolean {
-  return Object.values(runtime.playerKnowledge || {}).some(known =>
-    (fact.status === 'rumor' ? known.status === 'rumor' || known.status === 'confirmed' : known.status === 'confirmed')
-    && known.subjectId === fact.subjectId
-    && known.predicate === fact.predicate
-    && (known.objectId || '') === (fact.objectId || '')
-  );
-}
-
 function privateFactUnlocked(runtime: StoryRuntime, fact: ScenarioNpcPrivateKnowledgeFact): boolean {
   return !fact.unlockAfterEventId
     || fact.unlockedAtTurn !== undefined
@@ -405,8 +401,8 @@ function buildNpcPrivateKnowledgeGuard(runtime: StoryRuntime): string {
   const associations = Object.values(runtime.npcPrivateKnowledge || {})
     .filter(fact => privateFactUnlocked(runtime, fact)
       && privateFactRelevantToStage(runtime, fact)
-      && (fact.status === 'rumor' || !playerKnowsPrivateFact(runtime, fact)))
-    .flatMap(fact => fact.forbiddenAssociations || []);
+      && privateFactNeedsAssociationGuard(runtime.playerKnowledge, fact))
+    .flatMap(expandPrivateKnowledgeAssociations);
   if (!associations.length) return '';
   const unique = new Map<string, ScenarioPrivateKnowledgeAssociationGuard>();
   for (const association of associations) {
@@ -501,11 +497,12 @@ function formatFocusedCharacter(
   }
   const privateFacts = privateKnowledgeForHolder(runtime, character.id);
   for (const fact of privateFacts) {
-    if (playerKnowsPrivateFact(runtime, fact)) {
+    if (playerKnowsPrivateFact(runtime.playerKnowledge, fact)) {
+      const expandedAssociations = expandPrivateKnowledgeAssociations(fact);
       const atomicDisclosureGuard = JSON.stringify([{
         holderName: character.name,
         claim: fact.claim,
-        relatedTerms: [...new Set((fact.forbiddenAssociations || []).flatMap(rule => [
+        relatedTerms: [...new Set(expandedAssociations.flatMap(rule => [
           ...rule.subjects,
           ...rule.predicates,
         ]))].sort(),
