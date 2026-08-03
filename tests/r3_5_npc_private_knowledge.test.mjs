@@ -504,6 +504,15 @@ test('private truth is stripped from generic state and only its holder gets a sa
     ).valid,
     true,
   );
+  assert.equal(
+    validateNarrativePerformance(
+      `谢艺答道：“${PATERNITY_CLAIM}除此之外，没有证据。”`,
+      '我请谢艺复核他知道的全部事实，先说小紫的生父。',
+      paternityPrompt,
+    ).valid,
+    false,
+    'an all-facts request must not be narrowed by an incidental topic term',
+  );
 });
 
 test('the private ledger survives JSON reload and stage transition without duplication', async () => {

@@ -154,6 +154,7 @@ function parseAtomicPrivateClaims(scenarioPrompt: string): AtomicPrivateClaim[] 
 }
 
 const ATOMIC_FACT_AUDIT_REQUEST = /只说|仅说|确定知道|亲自知道|有证据|没有证据|复核|核对|确认事实/;
+const ATOMIC_FACT_AUDIT_ALL = /全部|所有|哪些|逐条|每条|都说|都讲|知道的事实/;
 const ATOMIC_FACT_UNCERTAINTY = /不知道|不知情|不清楚|无从得知|没有证据|无证据|不能确认|无法确认|说不上来|未曾得知|仅此|就这些/;
 const ATOMIC_FACT_DETAIL = /亲眼|我曾|我见|见过|当年|那时|曾经|后来|之后|出事|覆灭|散了|失踪|死了|住了|待了|跟着|带回|送来|贡品|端茶|研墨|穿(?:着|的是)|站在|帘(?:子)?后|议事|有人说|据说/;
 
@@ -162,6 +163,7 @@ function atomicClaimsForAuditInput(
   claims: AtomicPrivateClaim[],
 ): AtomicPrivateClaim[] {
   const holderClaims = claims.filter(contract => userInput.includes(contract.holderName));
+  if (ATOMIC_FACT_AUDIT_ALL.test(userInput)) return holderClaims;
   const topicMatches = holderClaims.filter(contract =>
     (contract.relatedTerms || []).some(term => term && userInput.includes(term))
   );
