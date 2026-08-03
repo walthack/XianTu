@@ -4,6 +4,7 @@ import {
   type ScenarioCondition,
   type ScenarioMod,
 } from './schema';
+import { getRegistryNamesById } from './characterResolver';
 import { NPC_ACTION_LIBRARY } from './npcDecisionCore';
 
 export interface ScenarioModValidationIssue {
@@ -927,7 +928,14 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
     forEachRecord(scenario.initialNpcPrivateKnowledge, 'scenario.initialNpcPrivateKnowledge', (fact, path) => {
       checkRefs(fact.holderCharacterIds, characterIds, `${path}.holderCharacterIds`, 'character', add);
       checkRef(fact.subjectId, new Set([...characterIds, ...factionIds]), `${path}.subjectId`, 'knowledge subject', add);
-      checkRef(fact.objectId, new Set([...characterIds, ...factionIds]), `${path}.objectId`, 'knowledge object', add);
+      const localKnowledgeObjectIds = new Set([...characterIds, ...factionIds]);
+      if (
+        typeof fact.objectId === 'string'
+        && !localKnowledgeObjectIds.has(fact.objectId)
+        && getRegistryNamesById(fact.objectId).length === 0
+      ) {
+        add(`${path}.objectId`, 'missing_reference', `Unknown knowledge object id "${fact.objectId}".`);
+      }
       checkRef(fact.sourceEventId, eventIds, `${path}.sourceEventId`, 'event', add);
       checkRef(fact.unlockAfterEventId, eventIds, `${path}.unlockAfterEventId`, 'event', add);
       if (isRecord(scenario.opening) && typeof scenario.opening.playerCharacterId === 'string') {

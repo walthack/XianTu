@@ -157,16 +157,28 @@ const ATOMIC_FACT_AUDIT_REQUEST = /只说|仅说|确定知道|亲自知道|有�
 const ATOMIC_FACT_UNCERTAINTY = /不知道|不知情|不清楚|无从得知|没有证据|无证据|不能确认|无法确认|说不上来|未曾得知|仅此|就这些/;
 const ATOMIC_FACT_DETAIL = /亲眼|我曾|我见|见过|当年|那时|曾经|后来|之后|出事|覆灭|散了|失踪|死了|住了|待了|跟着|带回|送来|贡品|端茶|研墨|穿(?:着|的是)|站在|帘(?:子)?后|议事|有人说|据说/;
 
+function atomicClaimsForAuditInput(
+  userInput: string,
+  claims: AtomicPrivateClaim[],
+): AtomicPrivateClaim[] {
+  const holderClaims = claims.filter(contract => userInput.includes(contract.holderName));
+  const topicMatches = holderClaims.filter(contract =>
+    (contract.relatedTerms || []).some(term => term && userInput.includes(term))
+  );
+  // 点名具体人物/关系时只核对同主题 claim；泛问 holder “知道哪些事实”时仍核对全部。
+  return topicMatches.length ? topicMatches : holderClaims;
+}
+
 function atomicPrivateClaimViolation(
   narrative: string,
   userInput: string,
   claims: AtomicPrivateClaim[],
 ): string | undefined {
   if (!ATOMIC_FACT_AUDIT_REQUEST.test(userInput)) return undefined;
-  return claims.find(contract => userInput.includes(contract.holderName) && !narrative.includes(contract.claim))
+  const auditedClaims = atomicClaimsForAuditInput(userInput, claims);
+  return auditedClaims.find(contract => !narrative.includes(contract.claim))
     ? '核对私有事实时未逐字复述账本原子 claim'
-    : claims.find(contract => {
-        if (!userInput.includes(contract.holderName)) return false;
+    : auditedClaims.find(contract => {
         const remainder = narrative.split(contract.claim).join('');
         const relatedTerms = (contract.relatedTerms || []).filter(Boolean);
         return remainder.split(/[。！？\n]/).some(sentence => {

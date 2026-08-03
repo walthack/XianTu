@@ -11,6 +11,9 @@ const registryUrl = new URL('../src/modules/scenarioMods/builtins/character-regi
 const FACT_ID = 'knowledge.npc.qingyu.biji_xingyuehu_identity';
 const CLAIM = '碧姬就是星月湖旧部称作“碧宛”的岳帅姬妾。';
 const CUE = '谢艺寻找碧姬并非泛泛寻人';
+const PATERNITY_FACT_ID = 'knowledge.npc.qingyu.xiaozi_yueshuai_father';
+const PATERNITY_CLAIM = '小紫是岳帅的亲生女儿。';
+const PATERNITY_CUE = '谢艺对小紫未公开的父系来历有确定把握';
 const MOTHER_FACT_ID = 'knowledge.npc.qingyu.xiaozi_biji_mother';
 const DAUGHTER_FACT_ID = 'knowledge.npc.qingyu.biji_xiaozi_daughter';
 const MOTHER_CLAIM = '碧姬是小紫的生母。';
@@ -41,10 +44,24 @@ test('validator accepts the explicit private fact and rejects unknown or player 
   assert.equal(validateScenarioMod(playerHeld).issues.some(issue => issue.code === 'invalid_holder'), true);
 
   const unknownUnlock = structuredClone(raw);
-  unknownUnlock.scenario.initialNpcPrivateKnowledge[1].unlockAfterEventId = 'lcq.event.not_there';
+  const motherFact = unknownUnlock.scenario.initialNpcPrivateKnowledge
+    .find(fact => fact.factId === MOTHER_FACT_ID);
+  motherFact.unlockAfterEventId = 'lcq.event.not_there';
   assert.equal(validateScenarioMod(unknownUnlock).issues.some(issue =>
     issue.path.endsWith('unlockAfterEventId') && issue.code === 'missing_reference'
   ), true);
+
+  const registryOnlyObject = raw.scenario.initialNpcPrivateKnowledge
+    .find(fact => fact.factId === PATERNITY_FACT_ID);
+  assert.equal(registryOnlyObject.objectId, 'canon.character.a33134d511');
+  assert.equal(raw.canon.characters.some(character => character.id === registryOnlyObject.objectId), false);
+
+  const unknownObject = structuredClone(raw);
+  unknownObject.scenario.initialNpcPrivateKnowledge
+    .find(fact => fact.factId === PATERNITY_FACT_ID).objectId = 'canon.character.not_registered';
+  assert.equal(validateScenarioMod(unknownObject).issues.some(issue =>
+    issue.path.endsWith('objectId') && issue.code === 'missing_reference'
+  ), true, 'a private object may be registry-only but may not be an unknown id');
 });
 
 test('different holders stay dormant until the declared event and then receive distinct cues', async () => {
@@ -346,12 +363,15 @@ test('private truth is stripped from generic state and only its holder gets a sa
   );
   const runtime = save.世界.状态.剧本模组;
   assert.equal(runtime.npcPrivateKnowledge[FACT_ID].claim, CLAIM);
+  assert.equal(runtime.npcPrivateKnowledge[PATERNITY_FACT_ID].claim, PATERNITY_CLAIM);
   const promptStateText = JSON.stringify(createScenarioPromptState(save));
-  assert.doesNotMatch(promptStateText, /npcPrivateKnowledge|岳帅姬妾|碧宛/);
+  assert.doesNotMatch(promptStateText, /npcPrivateKnowledge|岳帅姬妾|碧宛|小紫是岳帅的亲生女儿/);
 
   const holderPrompt = buildScenarioStoryPrompt(save, '我去找谢艺谈谈。');
   assert.match(holderPrompt, new RegExp(CUE));
+  assert.match(holderPrompt, new RegExp(PATERNITY_CUE));
   assert.doesNotMatch(holderPrompt, new RegExp(CLAIM));
+  assert.doesNotMatch(holderPrompt, new RegExp(PATERNITY_CLAIM));
   assert.match(holderPrompt, /renderGuard\.npcPrivateKnowledge=true/);
   assert.equal(
     validateNarrativePerformance('碧姬果然就是西施，是岳帅姬妾。', '继续', holderPrompt).valid,
@@ -366,7 +386,9 @@ test('private truth is stripped from generic state and only its holder gets a sa
 
   const unrelatedPrompt = buildScenarioStoryPrompt(save, '我去找云苍峰谈谈。');
   assert.doesNotMatch(unrelatedPrompt, new RegExp(CUE), 'non-holders receive no private behavior cue');
+  assert.doesNotMatch(unrelatedPrompt, new RegExp(PATERNITY_CUE));
   assert.doesNotMatch(unrelatedPrompt, new RegExp(CLAIM));
+  assert.doesNotMatch(unrelatedPrompt, new RegExp(PATERNITY_CLAIM));
 
   runtime.activeEventIds = ['lcq.event.s05_13'];
   const [probe] = getCurrentStoryEventActions(save);
@@ -387,7 +409,9 @@ test('private truth is stripped from generic state and only its holder gets a sa
   assert.match(revealedPrompt, /此 claim 就是该条私有知识的全部已证内容/);
   assert.match(revealedPrompt, /不得补写其成因、时长、地点、经历、来源、相处细节、第三方传闻或其他关系/);
   assert.match(revealedPrompt, /renderGuard\.atomicPrivateClaims=/);
-  assert.doesNotMatch(revealedPrompt, /renderGuard\.npcPrivateKnowledge=true/);
+  assert.match(revealedPrompt, /renderGuard\.npcPrivateKnowledge=true/,
+    'the separate unrevealed paternity edge must remain guarded');
+  assert.doesNotMatch(revealedPrompt, new RegExp(PATERNITY_CLAIM));
 
   const auditInput = '我请谢艺复核，只说他有证据确定知道的事实。';
   assert.equal(
@@ -434,6 +458,52 @@ test('private truth is stripped from generic state and only its holder gets a sa
     /原子事实|全部已证内容|atomicPrivateClaims/,
     'the disclosure boundary is holder-scoped just like the private claim',
   );
+
+  runtime.playerKnowledge['knowledge.player.qingyu.xiaozi_yueshuai_father'] = {
+    factId: 'knowledge.player.qingyu.xiaozi_yueshuai_father',
+    subjectId: 'liuchao.character.xiao_zi',
+    predicate: 'biological_daughter_of',
+    objectId: 'canon.character.a33134d511',
+    status: 'confirmed',
+    disclosureScope: 'player',
+    learnedAtTurn: runtime.worldTurn,
+  };
+  const paternityPrompt = buildScenarioStoryPrompt(save, '我请谢艺只复核小紫的生父事实。');
+  assert.match(paternityPrompt, new RegExp(PATERNITY_CLAIM));
+  assert.match(paternityPrompt, /角色私有知情·玩家已确认·原子事实/);
+  const paternityCheck = validateNarrativePerformance(
+    `谢艺答道：“${PATERNITY_CLAIM}除此之外，没有证据。”`,
+    '我请谢艺只复核小紫的生父事实。',
+    paternityPrompt,
+  );
+  assert.equal(paternityCheck.valid, true, paternityCheck.issues.join('\n'));
+  assert.equal(
+    validateNarrativePerformance(
+      `谢艺答道：“${CLAIM}除此之外，没有证据。”`,
+      '我请谢艺只复核小紫的生父事实。',
+      paternityPrompt,
+    ).valid,
+    false,
+    'a topic-specific audit must require the matching claim rather than another fact held by the same NPC',
+  );
+  const genericAuditInput = '我请谢艺复核他确定知道的事实。';
+  assert.equal(
+    validateNarrativePerformance(
+      `谢艺答道：“${PATERNITY_CLAIM}除此之外，没有证据。”`,
+      genericAuditInput,
+      paternityPrompt,
+    ).valid,
+    false,
+    'a generic holder audit still requires every confirmed private claim in scope',
+  );
+  assert.equal(
+    validateNarrativePerformance(
+      `谢艺答道：“${CLAIM}${PATERNITY_CLAIM}除此之外，没有证据。”`,
+      genericAuditInput,
+      paternityPrompt,
+    ).valid,
+    true,
+  );
 });
 
 test('the private ledger survives JSON reload and stage transition without duplication', async () => {
@@ -453,6 +523,7 @@ test('the private ledger survives JSON reload and stage transition without dupli
   save = JSON.parse(JSON.stringify(save));
   const runtime = save.世界.状态.剧本模组;
   runtime.npcPrivateKnowledge[FACT_ID].learnedAtTurn = 4;
+  runtime.npcPrivateKnowledge[PATERNITY_FACT_ID].learnedAtTurn = 3;
   runtime.npcPrivateKnowledge[MOTHER_FACT_ID].unlockedAtTurn = 5;
   runtime.npcPrivateKnowledge[DAUGHTER_FACT_ID].unlockedAtTurn = 5;
   runtime.nextStageId = nextMod.manifest.id;
@@ -461,9 +532,11 @@ test('the private ledger survives JSON reload and stage transition without dupli
   const transitioned = transitionToNextScenarioStage(save, [nextMod]);
   assert.equal(transitioned.ok, true, transitioned.reason);
   const ledger = transitioned.saveData.世界.状态.剧本模组.npcPrivateKnowledge;
-  assert.deepEqual(Object.keys(ledger), [FACT_ID, MOTHER_FACT_ID, DAUGHTER_FACT_ID]);
+  assert.deepEqual(Object.keys(ledger), [FACT_ID, PATERNITY_FACT_ID, MOTHER_FACT_ID, DAUGHTER_FACT_ID]);
   assert.equal(ledger[FACT_ID].learnedAtTurn, 4, 'the accumulated record wins over the target-stage seed');
   assert.equal(ledger[FACT_ID].sourceStageId, oldMod.manifest.id);
+  assert.equal(ledger[PATERNITY_FACT_ID].learnedAtTurn, 3);
+  assert.equal(ledger[PATERNITY_FACT_ID].sourceStageId, oldMod.manifest.id);
   assert.equal(ledger[MOTHER_FACT_ID].unlockedAtTurn, 5);
   assert.equal(ledger[DAUGHTER_FACT_ID].unlockedAtTurn, 5);
 });

@@ -582,6 +582,36 @@
         ]
       },
       {
+        "factId": "knowledge.npc.qingyu.xiaozi_yueshuai_father",
+        "holderCharacterIds": [
+          "liuchao.character.xie_yi"
+        ],
+        "subjectId": "liuchao.character.xiao_zi",
+        "predicate": "biological_daughter_of",
+        "objectId": "canon.character.a33134d511",
+        "status": "confirmed",
+        "claim": "小紫是岳帅的亲生女儿。",
+        "behaviorCue": "谢艺对小紫未公开的父系来历有确定把握，却不能替她公开；玩家尚未确认前，只允许他以寻找、保护与对生父话题的克制回避体现知情，不说出父亲身份",
+        "evidence": "RELATIONSHIPS-SECRET.md §1；CANON-DECISIONS #81/#82；星月湖派谢艺在南荒寻找小紫",
+        "forbiddenAssociations": [
+          {
+            "subjects": [
+              "小紫",
+              "岳帅"
+            ],
+            "predicates": [
+              "亲生女儿",
+              "亲女",
+              "父女",
+              "生父",
+              "亲生父亲"
+            ],
+            "maxDistance": 72,
+            "allowHypothetical": true
+          }
+        ]
+      },
+      {
         "factId": "knowledge.npc.qingyu.xiaozi_biji_mother",
         "holderCharacterIds": [
           "liuchao.character.xiao_zi"
