@@ -25,6 +25,9 @@ import { detectLegacySaveData, isSaveDataV3, migrateSaveDataToLatest, extractSav
 import { validateSaveDataV3 } from '@/utils/saveValidationV3';
 import { executeValidatedRepairCommands } from '@/utils/repairCommandPipeline';
 import { useGameStateStore } from '@/stores/gameStateStore';
+import {
+  migrateLegacyOnlineCacheToSingle,
+} from '@/utils/legacyOnlineSaveMigration';
 import SaveMigrationModal from '@/components/dashboard/components/SaveMigrationModal.vue';
 import type { World} from '@/types';
 import type { TavernCommand as ValidatedTavernCommand } from '@/types/AIGameMaster';
@@ -151,7 +154,6 @@ export const useCharacterStore = defineStore('characterV3', () => {
 
       // 🔥 3. 兼容性迁移：将旧版本的存档结构迁移到新结构
       let needsSave = false;
-      const asyncMigrations: Promise<void>[] = [];
       Object.entries(rootState.value.角色列表).forEach(([charId, profile]) => {
         const anyProfile = profile as any;
         const roleNameForLog = anyProfile.角色?.名字 || anyProfile.角色基础信息?.名字 || charId;
@@ -169,45 +171,13 @@ export const useCharacterStore = defineStore('characterV3', () => {
           needsSave = true;
         }
 
-        // 3.0.2 修复联机槽位 key：存档 → 云端修行
-        if (anyProfile.模式 === '联机' && anyProfile.存档列表?.['存档'] && !anyProfile.存档列表?.['云端修行']) {
-          anyProfile.存档列表['云端修行'] = { ...(anyProfile.存档列表['存档'] as any), 存档名: '云端修行' };
-          delete anyProfile.存档列表['存档'];
-          needsSave = true;
-        }
-        // 3.1 迁移联机模式：profile.存档 → profile.存档列表['云端修行']
-        if (profile.模式 === '联机' && profile.存档 && !profile.存档列表?.['云端修行']) {
-          debug.log('角色商店', `🔄 迁移联机角色「${roleNameForLog}」的存档结构`);
-
-          // 初始化存档列表（如果不存在）
-          if (!profile.存档列表) {
-            profile.存档列表 = {};
-          }
-
-          // 访问废弃字段用于迁移
-          // 将旧的 profile.存档 迁移到 profile.存档列表['云端修行']
-          profile.存档列表['云端修行'] = {
-            ...profile.存档,
-            存档名: '云端修行',
-          };
-
-          // 添加"上次对话"槽位（如果不存在）
-          if (!profile.存档列表['上次对话']) {
-            profile.存档列表['上次对话'] = {
-              存档名: '上次对话',
-              保存时间: null,
-              存档数据: null
-            };
-          }
-
-          // 删除废弃字段
-          delete profile.存档;
-          needsSave = true;
-
-          debug.log('角色商店', `✅ 角色「${roleNameForLog}」存档结构迁移完成`);
+        // 单机化后，旧联机 profile/key 只允许由显式复制迁移读取；启动阶段不得改名、删除或补写别名。
+        if (anyProfile.模式 === '联机') {
+          debug.log('角色商店', `保留旧联机角色「${roleNameForLog}」的原存档结构，等待用户显式复制迁移`);
+          return;
         }
 
-        // 3.2 迁移单机模式：兼容3.7.8版本的旧存档结构
+        // 3.1 迁移单机模式：兼容3.7.8版本的旧存档结构
         if (profile.模式 === '单机' && profile.存档 && (!profile.存档列表 || Object.keys(profile.存档列表).length === 0)) {
           debug.log('角色商店', `🔄 迁移单机角色「${roleNameForLog}」的旧版本存档结构`);
 
@@ -241,8 +211,8 @@ export const useCharacterStore = defineStore('characterV3', () => {
           debug.log('角色商店', `✅ 角色「${roleNameForLog}」旧版本存档结构迁移完成`);
         }
 
-        // 3.3 确保所有角色都有必要的存档槽位
-        if (profile.存档列表 && !profile.存档列表['上次对话']) {
+        // 3.2 确保单机角色都有必要的存档槽位
+        if (profile.模式 === '单机' && profile.存档列表 && !profile.存档列表['上次对话']) {
           profile.存档列表['上次对话'] = {
             存档名: '上次对话',
             保存时间: null,
@@ -260,41 +230,7 @@ export const useCharacterStore = defineStore('characterV3', () => {
           needsSave = true;
         }
 
-        // 3.3.1 联机存档名修正
-        if (profile.模式 === '联机' && profile.存档列表?.['云端修行']?.存档名 !== '云端修行') {
-          profile.存档列表['云端修行'].存档名 = '云端修行';
-          needsSave = true;
-        }
-
-        // 3.4 迁移激活存档槽位 key（联机：存档 → 云端修行）
-        if (rootState.value.当前激活存档?.角色ID === charId && profile.模式 === '联机') {
-          if (rootState.value.当前激活存档.存档槽位 === '存档') {
-            rootState.value.当前激活存档.存档槽位 = '云端修行';
-            needsSave = true;
-          }
-        }
-
-        // 3.5 迁移联机 SaveData 键（IDB：savedata_{charId}_存档 → savedata_{charId}_云端修行）
-        if (profile.模式 === '联机') {
-          asyncMigrations.push((async () => {
-            const newDataKey = `savedata_${charId}_云端修行`;
-            const oldDataKey = `savedata_${charId}_存档`;
-            const existingNew = await storage.loadFromIndexedDB(newDataKey);
-            if (!existingNew) {
-              const existingOld = await storage.loadFromIndexedDB(oldDataKey);
-              if (existingOld) {
-                await storage.saveSaveData(charId, '云端修行', existingOld as any);
-                debug.log('角色商店', `? 已迁移联机存档数据键：${oldDataKey} → ${newDataKey}`);
-              }
-            }
-          })());
-        }
       });
-
-      // 等待异步迁移（例如联机存档键迁移）完成
-      if (asyncMigrations.length > 0) {
-        await Promise.all(asyncMigrations);
-      }
 
       // 如果有迁移，保存到存储
       if (needsSave) {
@@ -2638,6 +2574,34 @@ const loadSaveData = async (characterId: string, saveSlot: string): Promise<Save
   return saveData;
 };
 
+/**
+ * 将旧联机角色的本机缓存复制为新的单机角色。
+ * 来源只读 IndexedDB，不会校验 token 或从联机服务器补拉；来源角色与旧 key 均保留。
+ */
+const migrateLegacyOnlineCharacterToSingle = async (sourceCharacterId: string): Promise<{
+  targetCharacterId: string;
+  created: boolean;
+}> => {
+  return migrateLegacyOnlineCacheToSingle({
+    profiles: rootState.value.角色列表,
+    sourceCharacterId,
+    loadLocalSave: storage.loadLocalSaveData,
+    normalizeSave: (cachedSave) => {
+      const migratedSave = (isSaveDataV3(cachedSave)
+        ? cloneDeep(cachedSave)
+        : migrateSaveDataToLatest(cachedSave).migrated) as SaveData;
+      const validation = validateSaveDataV3(migratedSave as any);
+      if (!validation.isValid) {
+        throw new Error(`本地缓存结构不合法（${validation.errors[0] || '未知原因'}）`);
+      }
+      return migratedSave;
+    },
+    saveTarget: (targetCharacterId, slotId, migratedSave) =>
+      storage.saveSaveData(targetCharacterId, slotId, migratedSave),
+    commitProfiles: commitMetadataToStorage,
+  });
+};
+
   /**
    * [新增] 按需加载指定角色的所有存档数据
    * @param charId 要加载存档的角色ID
@@ -2854,6 +2818,7 @@ return {
   unequipTechnique,
   importCharacter, // 新增：导入角色
   loadSaveData,
+  migrateLegacyOnlineCharacterToSingle,
   loadCharacterSaves, // 新增：按需加载存档
 };
 });

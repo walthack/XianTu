@@ -372,7 +372,14 @@
               <div class="login-prompt">
                 <div class="login-icon">📦</div>
                 <h3>旧联机角色已保留</h3>
-                <p>单机化期间不会连接服务器或改写该角色；后续批次会提供保留本地缓存的迁移入口。</p>
+                <p>不会连接服务器或改写该角色；可将本机已有缓存复制成新的单机角色。</p>
+                <button
+                  class="btn-login"
+                  :disabled="migratingOnlineCharacterId === selectedCharId"
+                  @click="handleMigrateOnlineCharacter(selectedCharId!)"
+                >
+                  {{ migratingOnlineCharacterId === selectedCharId ? '正在复制本地缓存…' : '复制为单机角色' }}
+                </button>
               </div>
             </div>
           </section>
@@ -514,6 +521,7 @@ const fileInput = ref<HTMLInputElement | null>(null);
 const isCharacterPanelOpen = ref(false);
 const loading = ref(false);
 const isLoadingSaves = ref(false); // 新增：用于控制存档加载状态
+const migratingOnlineCharacterId = ref<string | null>(null);
 const importMode = ref<'character' | 'saves'>('character');
 const showLegacyMigrationModal = ref(false);
 const legacyMigrationStandalone = ref(false);
@@ -776,6 +784,27 @@ const handleSelect = async (charId: string, slotKey: string, hasData: boolean) =
       }
     );
   }
+};
+
+const handleMigrateOnlineCharacter = (sourceCharacterId: string) => {
+  const sourceName = characterStore.rootState.角色列表[sourceCharacterId]?.角色?.名字 || sourceCharacterId;
+  showConfirm(
+    '复制为单机角色',
+    `只读取【${sourceName}】在本机已有的缓存并创建一个新单机副本；原联机角色和旧存档键不会删除。是否继续？`,
+    async () => {
+      migratingOnlineCharacterId.value = sourceCharacterId;
+      try {
+        const result = await characterStore.migrateLegacyOnlineCharacterToSingle(sourceCharacterId);
+        toast.success(result.created ? '单机副本已创建，原联机数据保持不变' : '已找到原有单机副本，没有重复创建');
+        await selectCharacter(result.targetCharacterId);
+      } catch (error) {
+        console.error('[CharacterManagement] 旧联机缓存迁移失败:', error);
+        toast.error(error instanceof Error ? error.message : '复制本地缓存失败');
+      } finally {
+        migratingOnlineCharacterId.value = null;
+      }
+    },
+  );
 };
 
 const handleDeleteCharacter = (charId: string) => {

@@ -1149,6 +1149,14 @@ export interface CharacterBaseInfo extends AIMetadata {
 
 export interface CharacterProfile {
   模式: '单机' | '联机';
+  /** 旧联机角色本地缓存复制出的单机副本；用于幂等重试，不代表已删除来源数据。 */
+  本地迁移信息?: {
+    版本: 1;
+    来源模式: '联机';
+    来源角色ID: string;
+    来源存档槽位: '云端修行' | '存档';
+    迁移时间: string;
+  };
   // 角色身份（静态信息，用于列表展示/导出）
   角色: CharacterBaseInfo;
   // 🔥 统一结构：单机和联机都使用存档列表

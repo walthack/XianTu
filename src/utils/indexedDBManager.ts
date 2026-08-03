@@ -498,6 +498,76 @@ export async function saveSaveData(
  * @param slotId 存档槽位ID
  * @returns SaveData 或 null（如果不存在）
  */
+async function loadLocalSaveDataRecord(
+  characterId: string,
+  slotId: string
+): Promise<SaveData | null> {
+  const key = `${SAVEDATA_KEY_PREFIX}${characterId}_${slotId}`;
+  const db = await openDatabase();
+
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction([STORE_NAME], 'readonly');
+    const objectStore = transaction.objectStore(STORE_NAME);
+    const request = objectStore.get(key);
+
+    request.onsuccess = () => {
+      const result = request.result;
+      if (result && result.data) {
+        console.log(`【乾坤宝库-IDB】SaveData 已加载 (${characterId}/${slotId})`);
+        resolve(result.data as SaveData);
+      } else {
+        // 兼容：联机存档槽位历史上使用过 “存档” / “云端修行” 两种 key。
+        // 本地迁移只能读取 IndexedDB，绝不通过这里回源联机服务器。
+        const alias =
+          slotId === '云端修行' ? '存档' :
+          slotId === '存档' ? '云端修行' :
+          null;
+
+        if (!alias) {
+          console.warn(`【乾坤宝库-IDB】SaveData 不存在 (${characterId}/${slotId})`);
+          resolve(null);
+          return;
+        }
+
+        const aliasKey = `${SAVEDATA_KEY_PREFIX}${characterId}_${alias}`;
+        const aliasReq = objectStore.get(aliasKey);
+        aliasReq.onsuccess = () => {
+          const aliasResult = aliasReq.result;
+          if (aliasResult && aliasResult.data) {
+            console.warn(`【乾坤宝库-IDB】SaveData 未命中(${slotId})，回退命中(${alias}) (${characterId}/${slotId})`);
+            resolve(aliasResult.data as SaveData);
+          } else {
+            console.warn(`【乾坤宝库-IDB】SaveData 不存在 (${characterId}/${slotId})`);
+            resolve(null);
+          }
+        };
+        aliasReq.onerror = () => {
+          console.error('【乾坤宝库-IDB】加载 SaveData 失败(别名):', aliasReq.error);
+          reject(aliasReq.error);
+        };
+      }
+    };
+
+    request.onerror = () => {
+      console.error('【乾坤宝库-IDB】加载 SaveData 失败:', request.error);
+      reject(request.error);
+    };
+  });
+}
+
+/** 仅读取本机 IndexedDB；旧联机缓存迁移不得触发远端回源。 */
+export async function loadLocalSaveData(
+  characterId: string,
+  slotId: string
+): Promise<SaveData | null> {
+  try {
+    return await loadLocalSaveDataRecord(characterId, slotId);
+  } catch (error) {
+    console.error('【乾坤宝库-IDB】加载本地 SaveData 时出错:', error);
+    return null;
+  }
+}
+
 export async function loadSaveData(
   characterId: string,
   slotId: string
@@ -509,58 +579,7 @@ export async function loadSaveData(
       console.log(`【乾坤宝库-远程】SaveData 已加载 (${characterId}/${slotId})`);
       return remoteData;
     }
-
-    const db = await openDatabase();
-
-    return new Promise((resolve, reject) => {
-      const transaction = db.transaction([STORE_NAME], 'readonly');
-      const objectStore = transaction.objectStore(STORE_NAME);
-      const request = objectStore.get(key);
-
-      request.onsuccess = () => {
-        const result = request.result;
-        if (result && result.data) {
-          console.log(`【乾坤宝库-IDB】SaveData 已加载 (${characterId}/${slotId})`);
-          resolve(result.data as SaveData);
-        } else {
-          // 兼容：联机存档槽位历史上使用过 “存档” / “云端修行” 两种 key
-          // - v3.7.x 常见：存档
-          // - v4.0+ 常见：云端修行
-          const alias =
-            slotId === '云端修行' ? '存档' :
-            slotId === '存档' ? '云端修行' :
-            null;
-
-          if (!alias) {
-            console.warn(`【乾坤宝库-IDB】SaveData 不存在 (${characterId}/${slotId})`);
-            resolve(null);
-            return;
-          }
-
-          const aliasKey = `${SAVEDATA_KEY_PREFIX}${characterId}_${alias}`;
-          const aliasReq = objectStore.get(aliasKey);
-          aliasReq.onsuccess = () => {
-            const aliasResult = aliasReq.result;
-            if (aliasResult && aliasResult.data) {
-              console.warn(`【乾坤宝库-IDB】SaveData 未命中(${slotId})，回退命中(${alias}) (${characterId}/${slotId})`);
-              resolve(aliasResult.data as SaveData);
-            } else {
-              console.warn(`【乾坤宝库-IDB】SaveData 不存在 (${characterId}/${slotId})`);
-              resolve(null);
-            }
-          };
-          aliasReq.onerror = () => {
-            console.error('【乾坤宝库-IDB】加载 SaveData 失败(别名):', aliasReq.error);
-            reject(aliasReq.error);
-          };
-        }
-      };
-
-      request.onerror = () => {
-        console.error('【乾坤宝库-IDB】加载 SaveData 失败:', request.error);
-        reject(request.error);
-      };
-    });
+    return await loadLocalSaveDataRecord(characterId, slotId);
   } catch (error) {
     console.error('【乾坤宝库-IDB】加载 SaveData 时出错:', error);
     return null;
