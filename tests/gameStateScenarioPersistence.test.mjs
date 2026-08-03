@@ -77,7 +77,13 @@ test('game state load and save preserves scenario runtime metadata', async () =>
         剧本模组: { modId: scenarioRuntime.modId, modVersion: scenarioRuntime.modVersion, mode: 'strict' },
         _reconcileDebug: { ran: true, rawSnippet: 'legacy diagnostic' },
       },
-      联机: { 模式: '单机', 只读路径: [] },
+      联机: {
+        模式: '联机',
+        房间ID: 'legacy-room',
+        玩家ID: 'legacy-player',
+        穿越目标: { 世界ID: 9 },
+        只读路径: ['世界', '角色'],
+      },
     },
   };
 
@@ -96,4 +102,14 @@ test('game state load and save preserves scenario runtime metadata', async () =>
     ['贾文和展开绢图。'],
   );
   assert.equal('_reconcileDebug' in exported.系统.扩展, false);
+  assert.deepEqual(exported.系统.联机, {
+    模式: '单机',
+    房间ID: null,
+    玩家ID: null,
+    只读路径: ['世界'],
+    世界曝光: false,
+    冲突策略: '服务器',
+  });
+  assert.equal(exported.角色.位置.x, 5000);
+  assert.equal(exported.角色.位置.y, 5000);
 });

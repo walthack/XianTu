@@ -32,33 +32,27 @@
             <line x1="12" y1="15" x2="12" y2="3"></line>
           </svg>
         </button>
-        <button class="action-btn-compact" @click="importPrompts" title="导入" :disabled="isOnlineMode">
+        <button class="action-btn-compact" @click="importPrompts" title="导入">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
             <polyline points="17 8 12 3 7 8"></polyline>
             <line x1="12" y1="3" x2="12" y2="15"></line>
           </svg>
         </button>
-        <button class="action-btn-compact primary" @click="saveAll" title="保存全部" :disabled="isOnlineMode">
+        <button class="action-btn-compact primary" @click="saveAll" title="保存全部">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
             <polyline points="17 21 17 13 7 13 7 21"></polyline>
             <polyline points="7 3 7 8 15 8"></polyline>
           </svg>
         </button>
-        <button class="action-btn-compact danger" @click="resetAllPrompts" title="重置全部" :disabled="isOnlineMode">
+        <button class="action-btn-compact danger" @click="resetAllPrompts" title="重置全部">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
             <path d="M3 3v5h5"></path>
           </svg>
         </button>
       </div>
-    </div>
-
-    <!-- 联机模式警告 -->
-    <div v-if="isOnlineMode" class="online-mode-warning">
-      <span class="warning-icon">🔒</span>
-      <span class="warning-text">联机模式下提示词仅供查看，无法编辑</span>
     </div>
 
     <div class="prompt-list">
@@ -113,7 +107,6 @@
                     :value="prompt.weight"
                     min="1"
                     max="10"
-                    :disabled="isOnlineMode"
                     @change="updateWeight(prompt.key, Number(($event.target as HTMLInputElement).value))"
                     @click.stop
                   />
@@ -138,13 +131,11 @@
                 @input="markModified(prompt.key)"
                 rows="20"
                 class="prompt-textarea"
-                :disabled="isOnlineMode"
-                :class="{ 'readonly-mode': isOnlineMode }"
               ></textarea>
               <div class="prompt-actions">
-                <button class="btn-small" @click="resetPrompt(prompt.key)" :disabled="isOnlineMode">重置为默认</button>
+                <button class="btn-small" @click="resetPrompt(prompt.key)">重置为默认</button>
                 <button class="btn-small" @click="exportSingle(prompt.key)">导出此项</button>
-                <button class="btn-small btn-primary" @click="saveSingle(prompt.key)" :disabled="isOnlineMode">保存修改</button>
+                <button class="btn-small btn-primary" @click="saveSingle(prompt.key)">保存修改</button>
               </div>
             </div>
           </div>
@@ -159,16 +150,9 @@ import { ref, computed, onMounted, watch } from 'vue';
 import { promptStorage, type PromptItem, type PromptsByCategory } from '@/services/promptStorage';
 import { toast } from '@/utils/toast';
 import { createDadBundle, unwrapDadBundle } from '@/utils/dadBundle';
-import { useCharacterStore } from '@/stores/characterStore';
 import { useGameStateStore } from '@/stores/gameStateStore';
 
-const characterStore = useCharacterStore();
 const gameStateStore = useGameStateStore();
-
-// 检测是否为联机模式
-const isOnlineMode = computed(() => {
-  return characterStore.activeCharacterProfile?.模式 === '联机';
-});
 
 // 检测是否开启分步生成
 const isSplitGeneration = computed(() => {
@@ -217,7 +201,6 @@ onMounted(async () => {
 
 async function loadPrompts() {
   promptsByCategory.value = await promptStorage.loadByCategory({
-    isOnlineMode: isOnlineMode.value,
     isSplitGeneration: isSplitGeneration.value,
     isEventSystemEnabled: isEventSystemEnabled.value
   });
@@ -423,33 +406,6 @@ function downloadJSON(data: any, filename: string) {
   flex-direction: column;
   height: 100%;
   background: var(--color-background);
-}
-
-/* 联机模式警告样式 */
-.online-mode-warning {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1rem;
-  background: rgba(213, 170, 74, 0.15);
-  border-bottom: 1px solid rgba(213, 170, 74, 0.3);
-  color: #d5aa4a;
-}
-
-.online-mode-warning .warning-icon {
-  font-size: 1rem;
-}
-
-.online-mode-warning .warning-text {
-  font-size: 0.85rem;
-  font-weight: 500;
-}
-
-/* 只读模式样式 */
-.prompt-textarea.readonly-mode {
-  opacity: 0.7;
-  cursor: not-allowed;
-  background: var(--color-surface-disabled, rgba(100, 100, 100, 0.1));
 }
 
 .btn-small:disabled,

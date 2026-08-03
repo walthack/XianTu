@@ -174,10 +174,19 @@ interface GameState {
 
 let stageTransitionInFlight = false;
 
+const buildSinglePlayerRuntimeState = () => ({
+  模式: '单机' as const,
+  房间ID: null,
+  玩家ID: null,
+  只读路径: ['世界'],
+  世界曝光: false,
+  冲突策略: '服务器',
+});
+
 export const useGameStateStore = defineStore('gameState', {
   state: (): GameState => ({
     saveMeta: null,
-    onlineState: null,
+    onlineState: buildSinglePlayerRuntimeState(),
     userSettings: null,
 
     character: null,
@@ -323,9 +332,9 @@ export const useGameStateStore = defineStore('gameState', {
 
       const deepCopy = <T>(value: T): T => JSON.parse(JSON.stringify(value));
 
-      // V3 保存的元数据/联机/设置也读入到 store（用于后续保存回写）
+      // 单机版保留 V3 联机字段的 schema 形状，但不恢复旧联机会话运行态。
       this.saveMeta = v3?.元数据 ? deepCopy(v3.元数据) : null;
-      this.onlineState = v3?.系统?.联机 ? deepCopy(v3.系统.联机) : null;
+      this.onlineState = buildSinglePlayerRuntimeState();
       this.userSettings = v3?.系统?.设置 ? deepCopy(v3.系统.设置) : null;
       const normalizeQualitySuffix = (obj: any, field: string) => {
         if (!obj || typeof obj !== 'object') return;
@@ -348,10 +357,6 @@ export const useGameStateStore = defineStore('gameState', {
       const character: CharacterBaseInfo | null = v3?.角色?.身份 ? deepCopy(v3.角色.身份) : null;
       const attributes: PlayerAttributes | null = v3?.角色?.属性 ? deepCopy(v3.角色.属性) : null;
       const location: PlayerLocation | null = v3?.角色?.位置 ? deepCopy(v3.角色.位置) : null;
-      if (location && (this.onlineState as any)?.模式 === '联机') {
-        delete (location as any).x;
-        delete (location as any).y;
-      }
       const inventory: Inventory | null = v3?.角色?.背包 ? deepCopy(v3.角色.背包) : null;
       const equipment: Equipment | null = v3?.角色?.装备 ? deepCopy(v3.角色.装备) : null;
       const relationships: Record<string, NpcProfile> | null = v3?.社交?.关系 ? deepCopy(v3.社交.关系) : null;
@@ -521,7 +526,7 @@ export const useGameStateStore = defineStore('gameState', {
      * @returns 完整的存档数据
      */
     toSaveData(): SaveData | null {
-      // 🔥 详细的数据检查和日志输出，帮助诊断联机模式下的问题
+      // 详细的数据检查和日志输出，帮助诊断不完整存档。
       const missingFields: string[] = [];
       if (!this.character) missingFields.push('character');
       if (!this.attributes) missingFields.push('attributes');
@@ -534,7 +539,6 @@ export const useGameStateStore = defineStore('gameState', {
 
       if (missingFields.length > 0) {
         console.error('[gameStateStore.toSaveData] 存档数据不完整，缺少以下字段:', missingFields.join(', '));
-        console.error('[gameStateStore.toSaveData] 联机状态:', this.onlineState);
         console.error('[gameStateStore.toSaveData] 游戏是否已加载:', this.isGameLoaded);
         return null;
       }
@@ -593,14 +597,8 @@ export const useGameStateStore = defineStore('gameState', {
           conversationAutoSaveEnabled: this.conversationAutoSaveEnabled,
         };
 
-      const online =
-        this.onlineState ?? { 模式: '单机', 房间ID: null, 玩家ID: null, 只读路径: ['世界'], 世界曝光: false, 冲突策略: '服务器' };
-
+      const online = buildSinglePlayerRuntimeState();
       const location = deepCopy(this.location);
-      if (location && (online as any)?.模式 === '联机') {
-        delete (location as any).x;
-        delete (location as any).y;
-      }
 
       const body = (() => {
         const baseBody: Record<string, any> =
@@ -745,7 +743,7 @@ export const useGameStateStore = defineStore('gameState', {
      */
     resetState() {
       this.saveMeta = null;
-      this.onlineState = null;
+      this.onlineState = buildSinglePlayerRuntimeState();
       this.userSettings = null;
       this.character = null;
       this.attributes = null;

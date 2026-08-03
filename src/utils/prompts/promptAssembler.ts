@@ -12,7 +12,7 @@ export { SAVE_DATA_STRUCTURE as DATA_STRUCTURE_DEFINITIONS };
  * 所有提示词都通过 getPrompt() 获取，支持用户自定义
  * @param activePrompts - 一个包含了当前需要激活的prompt模块名称的数组
  * @param customActionPrompt - 自定义行动选项提示词（可选）
- * @param gameState - 游戏状态（可选，用于检测联机穿越状态）
+ * @param gameState - 游戏状态（可选，用于读取运行时设置）
  * @returns {Promise<string>} - 拼接好的完整prompt字符串
  */
 export async function assembleSystemPrompt(
@@ -95,42 +95,6 @@ export async function assembleSystemPrompt(
         '- 当 nsfwMode=false 或 性别不匹配 时，禁止生成私密信息'
       ].join('\n')
     );
-  }
-
-  // 🌐 检测联机穿越状态，自动注入穿越场景提示词
-  const onlineState = gameState?.系统?.联机 || gameState?.onlineState;
-  const isTraveling = onlineState?.模式 === '联机' && onlineState?.房间ID && onlineState?.穿越目标;
-
-  if (isTraveling) {
-    // 注入联机基础规则
-    const onlineModeRules = (await getPrompt('onlineModeRules')).trim();
-    if (onlineModeRules) {
-      promptSections.push(onlineModeRules);
-    }
-
-    // 注入穿越场景理解提示词（核心）
-    const onlineTravelContext = (await getPrompt('onlineTravelContext')).trim();
-    if (onlineTravelContext) {
-      promptSections.push(onlineTravelContext);
-    }
-
-    // 注入世界同步规则
-    const onlineWorldSync = (await getPrompt('onlineWorldSync')).trim();
-    if (onlineWorldSync) {
-      promptSections.push(onlineWorldSync);
-    }
-
-    // 注入玩家交互规则
-    const onlineInteraction = (await getPrompt('onlineInteraction')).trim();
-    if (onlineInteraction) {
-      promptSections.push(onlineInteraction);
-    }
-
-    // 注入“用指令上报联机日志”的规则（让AI主动生成上报命令）
-    const onlineServerLogCommand = (await getPrompt('onlineServerLogCommand')).trim();
-    if (onlineServerLogCommand) {
-      promptSections.push(onlineServerLogCommand);
-    }
   }
 
   const normalizedSections = promptSections

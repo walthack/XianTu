@@ -1,7 +1,8 @@
 # 仙途 (XianTu) · 项目总体状况与并行分工文档
 
 > 面向「新加入的 agent」。读完这一篇即可独立认领一个模块开工。
-> 最后更新：2026-08-03（**单机化清理 G2：旧联机本地缓存可恢复迁移已实现，待提交后二审**：G1 提交=`ae68e96`；Claude 二审 job `claude-2026-08-03T14-38-53-261Z-80985737` 总体 PASS、P0 无。其 P1 指出启动兼容层仍会自动规范化旧联机 profile/key，现已并入 G2 修复为联机专属结构立即跳过；P2（G1 回归偏静态）与 P3（用户仍可二次确认删除旧联机角色）按用户要求仅记技术债。角色管理页现提供显式“复制为单机角色”：来源只读本机 IndexedDB，兼容 `云端修行/存档` 旧 key，不校验 token、不联网补拉；目标为带来源标记的新单机角色与 `存档1`，重复执行复用同一副本，ID 冲突安全。写入失败可重试，原联机角色、旧存档 key 与缓存元数据不删除；新副本进入普通单机存档链。新增 7 条迁移协议回归；`type-check`、37 关 `canon:build`、549/549 串行全量测试与 `build:single` 全绿。下一批在 G2 二审闭环后删除无引用联机死代码。）
+> 最后更新：2026-08-03（**单机化清理 G3：联机死代码与运行态已收口，门禁通过、待提交后二审**：G2 提交=`66de7d1`，Claude job `claude-2026-08-03T14-55-45-994Z-7267f5bf` PASS、P0/P1 无，P2/P3 按用户要求只登记；本地审计另发现迁移副本会继承 `系统.联机` 运行态，已以 `bb88a4a` 修复为只归一目标副本、来源不变。G3 删除 13 个旧 view/panel/service/API 共 6,120 行叶节点，拆除联机 prompt、AI 穿越／离线代理注入与提示词只读条件，game-state 读写固定为单机运行态并保留位置坐标；清理无调用的联机 i18n。旧 profile、IndexedDB key、V3 schema、`cloudDataSync`、API 管理与 devserver/save-storage 链保留。`type-check`、37 关 `canon:build`、551/551 测试、`build:single` 与 bundle 字符串审计全绿；报告=`docs/SINGLE-PLAYER-DEAD-CODE-G3-2026-08-03.md`。）
+> 上一次更新：2026-08-03（**单机化清理 G2：旧联机本地缓存可恢复迁移已实现并二审 PASS**：G1 提交=`ae68e96`；G2 提交=`66de7d1`。角色管理页提供显式“复制为单机角色”：来源只读本机 IndexedDB，兼容 `云端修行/存档` 旧 key，不校验 token、不联网补拉；目标为带来源标记的新单机角色与 `存档1`，重复执行复用同一副本，ID 冲突安全。写入失败可重试，原联机角色、旧存档 key 与缓存元数据不删除；新副本进入普通单机存档链。报告=`docs/SINGLE-PLAYER-LEGACY-MIGRATION-G2-2026-08-03.md`。）
 > 上一次更新：2026-08-03（**单机化清理 G1：公共入口与运行时联机副作用已收口**：主页固定单机，新角色强制 `单机/存档1`；登录、账号中心、创意工坊、联机游历及未知旧路由均不可达；应用在线心跳、卸载 beacon、穿越日志补发/AI 上报、联机地图标记和主阅读面穿越态已移除。旧联机角色不删除、不联网、不预加载也不允许导入覆盖，先只读保留；本地 IndexedDB 存档、API 管理、`cloudDataSync` 与 devserver 链不动。新增 4 条单机壳/SFC 回归；`type-check`、37 关 `canon:build`、542/542 串行全量测试与 `build:single` 全绿。首次并行 `npm test` 的 Node runner 反序列化异常已由原失败文件 11/11 + 串行 542/542 证明为瞬时基础设施故障。报告=`docs/SINGLE-PLAYER-CLEANUP-G1-2026-08-03.md`。）
 > 上一次更新：2026-08-03（**R3-5 命令门禁真机闭环 + 小紫父系单边扩量 G1/G2 二审完成**：真机 job `claude-2026-08-03T00-17-22-363Z-18507b54` 22/22 PASS；扩量提交 `016b381`、`83c3fe4`，`canon:build` 37 关、538/538 全绿。Claude 二审 job `claude-2026-08-03T00-55-22-791Z-0012ab70` 总体 PASS、无 P0/P1；用户决定 P2/P3 仅记技术债：主题窄化可能放松同 holder 其他 claim 的细节防编造、词表外全量表达可能漏答，以及 holder 字面命中/schema 注释/behaviorCue 自动校验三项观察。本轮不修。密档余项经可行性审计，暂无同时满足“命名 holder + holder/subject 同关 + 非待定证据”的新边，停止为凑量扩张。）
 > 上一次更新：2026-08-02（**R3-5 第二轮 Claude 聚焦复审 P0 已修并经第三轮复审确认无 P0/P1/P2/P3**：job `claude-2026-08-02T12-15-39-089Z-ce802d53` 确认 #148 的 registry 别名闭包有效，但发现把 confirmed 退休同时用于正文与 `社交.关系` 命令会让秘密永久进入全局共享状态，绕过 holder 隔离并允许无证据扩写。裁定 #149 已更正为“共享别名编译器、不共享披露生命周期”：confirmed 后仅聚焦 holder 正文门禁退休，普通关系结构化写入不论玩家知情与否均永久拒绝；未来公开晋升只能由确定性事件 effect 完成。共享 helper 已改为 narrative-only 命名，回归已证明 confirmed 后正文允许而同内容结构化写入仍拒绝；`npm run canon:build` 37 关、538/538 测试全绿。第三轮 job `claude-2026-08-02T13-07-41-917Z-83a66ffa` 无分级问题。）
@@ -335,7 +336,8 @@ node scripts/validate-if-branches.mjs             # if 线（若动到 if/spine�
 ### B. 单机化清理
 - 🛠️ **G1 公共入口与运行时副作用已完成**：主页固定单机；登录／账号／创意工坊／联机游历路由与入口删除；在线心跳、穿越日志、联机地图/正文状态移除；旧联机角色只读保留，不触网。
 - 🛠️ **G2 旧联机本地缓存可恢复迁移已完成**：只读本机 `云端修行/存档` 缓存，显式复制为带来源标记的新单机副本；幂等、冲突安全、失败可重试，来源角色和旧 key 不删。报告=`docs/SINGLE-PLAYER-LEGACY-MIGRATION-G2-2026-08-03.md`。
-- **下一批**：待 G1/G2 独立二审闭环后，删除已无引用的联机 view/service/API/prompt/i18n 死代码；删除前先用引用图与生产 bundle 证明不可达，仍不得删除旧 IndexedDB key 或云端缓存元数据。
+- 🛠️ **G3 联机死代码与运行态收口已实现**：引用图与旧生产 bundle 先证明 6,120 行叶节点不可达，再删除 view/panel/service/API；仍在 bundle 的联机 prompt、AI 穿越／离线代理注入与无调用 i18n 已移除。game-state 固定单机态，旧 schema/key/来源数据不动。报告=`docs/SINGLE-PLAYER-DEAD-CODE-G3-2026-08-03.md`。
+- **下一批**：逐函数删除创角 store、角色 store 和 Save/GameVariable/Sect 中已无入口的旧联机条件分支；保留单机获取云端创建素材的 `cloudDataSync`，不得删除旧 IndexedDB key 或云端缓存元数据。
 - 保留本地 `save-storage`、`cloudDataSync` 与 devserver 存档链；单独分支、可回滚。
 
 ### C. 角色与势力数据质量

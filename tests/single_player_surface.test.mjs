@@ -52,6 +52,44 @@ test('gameplay surfaces no longer expose travel state or network side effects', 
   assert.equal(fs.existsSync(path.join(root, 'src/utils/cloudDataSync.ts')), true);
 });
 
+test('retired online leaves and prompt injection are absent while compatibility storage remains', () => {
+  const retiredFiles = [
+    'src/views/LoginView.vue',
+    'src/views/AccountCenter.vue',
+    'src/views/WorkshopView.vue',
+    'src/components/dashboard/OnlineTravelPanel.vue',
+    'src/components/dashboard/OnlineTravelMapPanel.vue',
+    'src/services/onlineTravel.ts',
+    'src/services/presence.ts',
+    'src/services/onlineLogQueue.ts',
+    'src/services/online/travelNoteQueue.ts',
+    'src/services/workshop.ts',
+    'src/services/api/onlineTravel.ts',
+    'src/services/api/presence.ts',
+    'src/services/api/workshop.ts',
+  ];
+  for (const relative of retiredFiles) {
+    assert.equal(fs.existsSync(path.join(root, relative)), false, `${relative} should stay deleted`);
+  }
+
+  const defaults = read('src/services/prompts/defaultPrompts.ts');
+  const assembler = read('src/utils/prompts/promptAssembler.ts');
+  const bidirectional = read('src/utils/AIBidirectionalSystem.ts');
+  const gameState = read('src/stores/gameStateStore.ts');
+  const apiIndex = read('src/services/api/index.ts');
+
+  assert.doesNotMatch(defaults, /onlineModeRules|onlineTravelContext|onlineWorldSync|onlineServerLogCommand|category: 'online'/);
+  assert.doesNotMatch(assembler, /onlineModeRules|onlineTravelContext|onlineWorldSync|onlineServerLogCommand|isTraveling/);
+  assert.doesNotMatch(bidirectional, /联机穿越 - 入侵者身份|离线玩家代理|travelStatusPrompt|onlineSessionId/);
+  assert.match(bidirectional, /单机版忽略旧 prompt 或旧存档残留的联机日志命令/);
+  assert.match(gameState, /this\.onlineState = buildSinglePlayerRuntimeState\(\)/);
+  assert.doesNotMatch(apiIndex, /onlineTravel|presence|workshop/);
+
+  assert.equal(fs.existsSync(path.join(root, 'src/utils/indexedDBManager.ts')), true);
+  assert.equal(fs.existsSync(path.join(root, 'src/utils/cloudDataSync.ts')), true);
+  assert.equal(fs.existsSync(path.join(root, 'src/services/api/cloudData.ts')), true);
+});
+
 test('edited Vue single-player surfaces compile as SFCs', () => {
   const files = [
     'src/App.vue',
@@ -61,6 +99,7 @@ test('edited Vue single-player surfaces compile as SFCs', () => {
     'src/components/dashboard/WorldMapRoute.vue',
     'src/components/dashboard/GameMapPanel.vue',
     'src/components/dashboard/MainGamePanel.vue',
+    'src/components/dashboard/PromptManagementPanel.vue',
   ];
 
   for (const relative of files) {

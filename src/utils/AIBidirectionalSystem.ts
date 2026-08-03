@@ -577,17 +577,6 @@ class AIBidirectionalSystemClass {
     }
 
     if (!saveData) {
-      // 🔥 特殊处理联机模式：检查是否是联机模式导致的数据不完整
-      const onlineState = gameStateStore.onlineState as any;
-      if (onlineState?.模式 === '联机') {
-        // 联机模式下数据不完整,给出更详细的错误信息
-        console.error('[AI双向系统-联机模式] 游戏数据不完整，无法进行AI推演');
-        console.error('[AI双向系统-联机模式] 请确保：');
-        console.error('  1. 已经成功穿越到目标世界');
-        console.error('  2. 角色数据已正确加载');
-        console.error('  3. 世界数据已从服务器同步');
-        throw new Error('联机模式下游戏数据不完整，无法进行AI推演。请返回主世界或重新穿越。');
-      }
       throw new Error('无法获取存档数据，请确保角色已加载');
     }
 
@@ -763,74 +752,6 @@ class AIBidirectionalSystemClass {
       const scenarioStoryPrompt = buildScenarioStoryPrompt(v3 as SaveData, focusContextText);
       const actionGatePrompt = buildActionGatePrompt(saveData, getNarrativeTurn(saveData));
 
-      // 🌐 构建穿越状态提示（直接写入主提示词，确保AI一定能看到）
-      const onlineState = stateForAI?.系统?.联机;
-      const travelTargetForPrompt = onlineState?.穿越目标;
-      let travelStatusPrompt = '';
-      if (onlineState?.模式 === '联机' && onlineState?.房间ID) {
-        const ownerName = travelTargetForPrompt?.主人用户名 || '世界主人';
-        const worldName = stateForAI?.世界?.信息?.世界名称 || '异世界';
-        const ownerProfile = travelTargetForPrompt?.世界主人档案;
-        const ownerCharName = ownerProfile?.名字 || ownerName;
-        const playerLocation = stateForAI?.角色?.位置;
-        const ownerLocation = travelTargetForPrompt?.世界主人位置;
-        const offlinePrompt = travelTargetForPrompt?.离线代理提示词;
-
-        // 构建世界主人详细信息
-        let ownerDetailInfo = `- 名字：${ownerCharName}`;
-        if (ownerProfile?.境界) ownerDetailInfo += `\n- 境界：${ownerProfile.境界}`;
-        if (ownerProfile?.门派) ownerDetailInfo += `\n- 门派：${ownerProfile.门派}`;
-        if (ownerProfile?.性别) ownerDetailInfo += `\n- 性别：${ownerProfile.性别}`;
-        if (ownerProfile?.种族) ownerDetailInfo += `\n- 种族：${ownerProfile.种族}`;
-        if (ownerProfile?.气血) ownerDetailInfo += `\n- 气血：${JSON.stringify(ownerProfile.气血)}`;
-        if (ownerProfile?.灵气) ownerDetailInfo += `\n- 灵气：${JSON.stringify(ownerProfile.灵气)}`;
-        if (ownerProfile?.神识) ownerDetailInfo += `\n- 神识：${JSON.stringify(ownerProfile.神识)}`;
-        if (ownerLocation) {
-          const ox = ownerLocation.x ?? ownerLocation.坐标?.x;
-          const oy = ownerLocation.y ?? ownerLocation.坐标?.y;
-          if (ox != null && oy != null) {
-            ownerDetailInfo += `\n- 位置坐标：(${ox}, ${oy})`;
-          }
-          if (ownerLocation.描述) ownerDetailInfo += `\n- 位置描述：${ownerLocation.描述}`;
-        }
-
-        travelStatusPrompt = `
-# ⚠️⚠️⚠️ 【极重要：联机穿越状态 - 必读】⚠️⚠️⚠️
-
-## 当前状态
-玩家已经**穿越时空**，来到了「${ownerName}」的世界「${worldName}」。
-这是一个**完全陌生的异世界**，不是玩家原来的世界！
-
-## 世界主人详细信息（用于AI代理）
-${ownerDetailInfo}
-${offlinePrompt ? `\n### 世界主人性格/行为提示词\n${offlinePrompt}` : ''}
-
-## 玩家当前位置
-- 位置描述：${playerLocation?.描述 || '未知'}
-- 坐标：(${playerLocation?.x ?? '未知'}, ${playerLocation?.y ?? '未知'})
-
-## 🎯 世界主人是真实存在的角色（极重要！）
-世界主人「${ownerCharName}」是这个世界中**真实存在的修士/角色**，玩家可以：
-- **寻找世界主人**：根据上述位置信息，玩家可以前往寻找
-- **与世界主人互动**：对话、切磋、交易、结交等
-- **遭遇世界主人**：在世界主人所在位置附近活动时可能偶遇
-
-## AI代理规则（当玩家遇到或寻找世界主人时）
-你需要**代理扮演**世界主人「${ownerCharName}」这个角色：
-- 使用世界主人的属性值进行战斗/切磋判定
-- 根据性格提示词决定世界主人的行为和态度
-- 世界主人对入侵者（玩家）的态度取决于性格，可能友好、中立或敌对
-- 世界主人有自己的日常活动（修炼、巡视、采药等），不会一直待在原地
-
-## 核心规则（必须遵守）
-1. **所有NPC都不认识玩家** - 玩家是外来者
-2. **不要使用原世界的任何设定** - 当前世界信息已完全切换
-3. **NPC初始态度**：警惕/好奇/中立（取决于NPC性格）
-4. **描述要体现陌生感** - 玩家对这个世界一无所知
-5. **世界主人可被找到** - 玩家想寻找世界主人时，引导其前往世界主人位置
-`;
-      }
-
       const focusedNpcPrompt = this.buildFocusedNpcPrompt(stateForAI);
 
       const systemPrompt = `
@@ -838,7 +759,6 @@ ${assembledPrompt}
 ${scenarioCanonPrompt ? `\n${scenarioCanonPrompt}\n` : ''}
 ${scenarioStoryPrompt ? `\n${scenarioStoryPrompt}\n` : ''}
 ${actionGatePrompt ? `\n${actionGatePrompt}\n` : ''}
-${travelStatusPrompt}
 ${coreStatusSummary}
 ${vectorMemorySection ? `\n${vectorMemorySection}\n` : ''}
 ${narrativeRagSection ? `\n${narrativeRagSection}\n` : ''}
@@ -874,89 +794,6 @@ ${stateJsonString}
         injects.push({
           content: `# 【最近事件】\n${memoryToSend.join('\n')}。根据这刚刚发生的文本事件，合理生成下一次文本信息，要保证衔接流畅、不断层，符合上文的文本信息`,
           role: 'assistant',
-          depth: 2,
-          position: 'in_chat',
-        });
-      }
-
-      // 🌐 添加离线代理提示词（穿越到其他玩家世界时）
-      const travelTarget = stateForAI?.系统?.联机?.穿越目标;
-
-      // 🌐 联机穿越：注入"穿越场景"提示，确保叙事从对方世界续写
-      const onlineSessionId = stateForAI?.系统?.联机?.房间ID;
-      if (onlineSessionId && travelTarget?.世界ID) {
-        const ownerName = travelTarget?.主人用户名 || '世界主人';
-        const ownerLoc = travelTarget?.世界主人位置?.描述 || '';
-        const ownerProfile = travelTarget?.世界主人档案;
-        const entryHint = ownerLoc ? `\n- 世界主人「${ownerName}」当前位置：${ownerLoc}（可以前往寻找）` : '';
-
-        // 构建世界主人信息
-        let ownerInfoText = '';
-        if (ownerProfile) {
-          const parts = [];
-          if (ownerProfile.名字) parts.push(`名字：${ownerProfile.名字}`);
-          if (ownerProfile.境界) parts.push(`境界：${ownerProfile.境界}`);
-          if (ownerProfile.种族) parts.push(`种族：${ownerProfile.种族}`);
-          if (parts.length > 0) {
-            ownerInfoText = `\n- 世界主人基本信息：${parts.join('，')}`;
-          }
-        }
-
-        injects.push({
-          content: `# 【联机穿越 - 入侵者身份】
-你当前处于联机穿越/入侵状态（会话ID：${onlineSessionId}），已进入「${ownerName}」的世界。
-
-## ⚠️ 核心设定：你是入侵者
-- 你通过神秘的空间裂隙/虚空通道穿越到了这个世界
-- 这是**别人的世界**，不是你的主世界
-- 世界主人「${ownerName}」是这个世界的主人，**真实存在于世界中**${ownerInfoText}${entryHint}
-
-## 🎯 世界主人可以被找到！
-- 世界主人「${ownerName}」是一个**真实存在的角色**，不是虚无的概念
-- 玩家可以**主动寻找**世界主人，前往其所在位置
-- 当玩家表示想找世界主人时，**引导玩家前往世界主人的位置**
-- 遇到世界主人时，由你（AI）代理扮演世界主人与玩家互动
-
-## 🎭 NPC反应规则（重要！）
-1. **所有NPC都不认识你**：你对他们来说是完全陌生的外来者
-2. **凭空出现会引起注意**：
-   - 如果你出现在有NPC的地方，他们会**惊讶/警惕**
-   - 修士会感知到空间波动，凡人会觉得你"不知从哪冒出来的"
-   - 高境界修士可能会察觉你身上的"异界气息"
-3. **NPC内心戏要充足**：
-   - 描写NPC看到陌生人突然出现时的心理活动
-   - 根据NPC性格决定反应：警惕、好奇、敌意、友善等
-4. **不要假设任何既有关系**：
-   - 不要继承世界主人与NPC的好感度或互动历史
-   - 你需要从零开始与这个世界的NPC建立关系
-
-## 📝 叙事要求
-- 体现"异乡人"的陌生感和新鲜感
-- 描写你对这个陌生世界的观察和感受
-- NPC的反应要自然合理，符合"突然看到陌生人"的情境
-- 如果是首次穿越，要描写穿越的过程（空间扭曲、虚空通道等）`,
-          role: 'system',
-          depth: 3,
-          position: 'in_chat',
-        });
-      }
-
-      if (travelTarget?.离线代理提示词) {
-        const ownerInfo = travelTarget.角色信息;
-        let agentPrompt = `# 【离线玩家代理】\n你正在扮演另一位玩家的角色。`;
-        if (ownerInfo) {
-          agentPrompt += `\n该角色信息：`;
-          if (ownerInfo.name) agentPrompt += `\n- 名称：${ownerInfo.name}`;
-          if (ownerInfo.cultivation_level) agentPrompt += `\n- 境界：${ownerInfo.cultivation_level}`;
-          if (ownerInfo.sect) agentPrompt += `\n- 宗门：${ownerInfo.sect}`;
-          if (ownerInfo.personality) agentPrompt += `\n- 性格：${ownerInfo.personality}`;
-        }
-        agentPrompt += `\n\n该玩家设定的行为指南：\n${travelTarget.离线代理提示词}`;
-        agentPrompt += `\n\n请根据以上设定来扮演这位离线玩家的角色，与当前玩家互动。`;
-
-        injects.push({
-          content: agentPrompt,
-          role: 'system',
           depth: 2,
           position: 'in_chat',
         });
@@ -2678,38 +2515,36 @@ ${step1Text}
     // 🔥 宗门兜底：若 AI 已生成“玩家创建/担任宗主”的宗门势力，但没初始化社交.宗门成员信息，
     // 则自动补全加入状态，让后续宗门系统（成员/藏经阁/任务等）可直接使用。
     try {
-      if (!(saveData as any).系统?.联机 || (saveData as any).系统?.联机?.模式 !== '联机') {
-        const currentSectName = String((saveData as any)?.社交?.宗门?.成员信息?.宗门名称 || '').trim();
-        if (!currentSectName) {
-          const playerName = String((saveData as any)?.角色?.身份?.名字 || '').trim();
-          const factions = (saveData as any)?.世界?.信息?.势力信息;
+      const currentSectName = String((saveData as any)?.社交?.宗门?.成员信息?.宗门名称 || '').trim();
+      if (!currentSectName) {
+        const playerName = String((saveData as any)?.角色?.身份?.名字 || '').trim();
+        const factions = (saveData as any)?.世界?.信息?.势力信息;
 
-          if (playerName && Array.isArray(factions)) {
-            const matchLeader = (f: any): boolean => {
-              const leader =
-                (typeof f?.领导层?.宗主 === 'string' ? f.领导层.宗主 : '') ||
-                (typeof f?.leadership?.宗主 === 'string' ? f.leadership.宗主 : '') ||
-                (typeof f?.宗主 === 'string' ? f.宗主 : '');
-              return typeof leader === 'string' && leader.trim() === playerName;
+        if (playerName && Array.isArray(factions)) {
+          const matchLeader = (f: any): boolean => {
+            const leader =
+              (typeof f?.领导层?.宗主 === 'string' ? f.领导层.宗主 : '') ||
+              (typeof f?.leadership?.宗主 === 'string' ? f.leadership.宗主 : '') ||
+              (typeof f?.宗主 === 'string' ? f.宗主 : '');
+            return typeof leader === 'string' && leader.trim() === playerName;
+          };
+
+          const ownedSect = factions.find(matchLeader);
+          if (ownedSect && typeof ownedSect === 'object' && typeof ownedSect.名称 === 'string' && ownedSect.名称.trim()) {
+            const { createJoinedSectState } = await import('@/utils/sectSystemFactory');
+            const { sectSystem, memberInfo } = createJoinedSectState(ownedSect, { nowIso: new Date().toISOString() });
+
+            // 玩家创建宗门：默认给最高职位（避免“创建了宗门但自己只是外门弟子”的违和感）
+            memberInfo.职位 = '宗主';
+            memberInfo.贡献 = Math.max(0, Number(memberInfo.贡献 || 0));
+
+            if (!(saveData as any).社交) (saveData as any).社交 = {};
+            (saveData as any).社交.宗门 = {
+              ...(sectSystem as any),
+              成员信息: memberInfo,
             };
 
-            const ownedSect = factions.find(matchLeader);
-            if (ownedSect && typeof ownedSect === 'object' && typeof ownedSect.名称 === 'string' && ownedSect.名称.trim()) {
-              const { createJoinedSectState } = await import('@/utils/sectSystemFactory');
-              const { sectSystem, memberInfo } = createJoinedSectState(ownedSect, { nowIso: new Date().toISOString() });
-
-              // 玩家创建宗门：默认给最高职位（避免“创建了宗门但自己只是外门弟子”的违和感）
-              memberInfo.职位 = '宗主';
-              memberInfo.贡献 = Math.max(0, Number(memberInfo.贡献 || 0));
-
-              if (!(saveData as any).社交) (saveData as any).社交 = {};
-              (saveData as any).社交.宗门 = {
-                ...(sectSystem as any),
-                成员信息: memberInfo,
-              };
-
-              console.log(`[AI双向系统] 已自动初始化宗门系统：${ownedSect.名称}（玩家=宗主）`);
-            }
+            console.log(`[AI双向系统] 已自动初始化宗门系统：${ownedSect.名称}（玩家=宗主）`);
           }
         }
       }
