@@ -6,6 +6,28 @@ export type LegacyOnlineSlotKey = '云端修行' | '存档';
 
 const cloneJson = <T>(value: T): T => JSON.parse(JSON.stringify(value)) as T;
 
+/**
+ * 迁移副本只继承玩法数据，不继承旧联机会话。
+ * 来源存档保持只读；仅把即将写入新单机角色的深拷贝归一为单机运行态。
+ */
+export function normalizeLegacyOnlineSaveForSingle(saveData: SaveData): SaveData {
+  const normalized = cloneJson(saveData) as SaveData & {
+    系统?: Record<string, unknown> & { 联机?: Record<string, unknown> };
+  };
+  if (!normalized.系统 || typeof normalized.系统 !== 'object') {
+    throw new Error('迁移后的 V3 存档缺少系统数据');
+  }
+  normalized.系统.联机 = {
+    模式: '单机',
+    房间ID: null,
+    玩家ID: null,
+    只读路径: ['世界'],
+    世界曝光: false,
+    冲突策略: '服务器',
+  };
+  return normalized;
+}
+
 export function findLegacyOnlineMigrationTarget(
   profiles: Record<string, CharacterProfile>,
   sourceCharacterId: string,

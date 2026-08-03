@@ -72,6 +72,39 @@ test('migration profile creates a playable single slot without mutating or copyi
   assert.notEqual(migrated.存档列表.存档1.存档数据, saveData);
 });
 
+test('migration strips legacy online runtime state only from the destination copy', async () => {
+  const { normalizeLegacyOnlineSaveForSingle } = await migrationModule;
+  const sourceSave = {
+    元数据: { 版本号: 3 },
+    系统: {
+      联机: {
+        模式: '联机',
+        房间ID: 'room-legacy',
+        玩家ID: 'player-legacy',
+        穿越目标: { 世界ID: 99, 主人用户名: '旧世界主人' },
+        服务器日志: [{ note: '旧日志' }],
+        只读路径: ['世界', '角色'],
+      },
+    },
+  };
+  const sourceBefore = structuredClone(sourceSave);
+
+  const normalized = normalizeLegacyOnlineSaveForSingle(sourceSave);
+
+  assert.deepEqual(sourceSave, sourceBefore);
+  assert.notEqual(normalized, sourceSave);
+  assert.deepEqual(normalized.系统.联机, {
+    模式: '单机',
+    房间ID: null,
+    玩家ID: null,
+    只读路径: ['世界'],
+    世界曝光: false,
+    冲突策略: '服务器',
+  });
+  assert.equal('穿越目标' in normalized.系统.联机, false);
+  assert.equal('服务器日志' in normalized.系统.联机, false);
+});
+
 test('migration orchestration writes save before metadata and preserves the source', async () => {
   const { migrateLegacyOnlineCacheToSingle } = await migrationModule;
   const source = sourceProfile();

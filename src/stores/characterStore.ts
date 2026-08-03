@@ -27,6 +27,7 @@ import { executeValidatedRepairCommands } from '@/utils/repairCommandPipeline';
 import { useGameStateStore } from '@/stores/gameStateStore';
 import {
   migrateLegacyOnlineCacheToSingle,
+  normalizeLegacyOnlineSaveForSingle,
 } from '@/utils/legacyOnlineSaveMigration';
 import SaveMigrationModal from '@/components/dashboard/components/SaveMigrationModal.vue';
 import type { World} from '@/types';
@@ -2590,11 +2591,12 @@ const migrateLegacyOnlineCharacterToSingle = async (sourceCharacterId: string): 
       const migratedSave = (isSaveDataV3(cachedSave)
         ? cloneDeep(cachedSave)
         : migrateSaveDataToLatest(cachedSave).migrated) as SaveData;
-      const validation = validateSaveDataV3(migratedSave as any);
+      const singleSave = normalizeLegacyOnlineSaveForSingle(migratedSave);
+      const validation = validateSaveDataV3(singleSave as any);
       if (!validation.isValid) {
         throw new Error(`本地缓存结构不合法（${validation.errors[0] || '未知原因'}）`);
       }
-      return migratedSave;
+      return singleSave;
     },
     saveTarget: (targetCharacterId, slotId, migratedSave) =>
       storage.saveSaveData(targetCharacterId, slotId, migratedSave),
