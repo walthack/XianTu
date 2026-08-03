@@ -16,11 +16,7 @@
       <div class="spirit-root-left-panel">
         <!-- 顶部功能按钮 -->
         <div class="top-actions-container">
-          <button
-            v-if="store.isLocalCreation"
-            @click="isAdvancedCustomVisible = true"
-            class="action-item shimmer-on-hover"
-          >
+          <button @click="isAdvancedCustomVisible = true" class="action-item shimmer-on-hover">
             <span class="action-name">{{ $t('高级自定义') }}</span>
           </button>
           <button
@@ -82,7 +78,7 @@
                 </div>
                 <span class="spirit-root-cost">{{ root.talent_cost }} {{ $t('点') }}</span>
               </div>
-              <div v-if="root.source === 'cloud' && store.isLocalCreation" class="action-buttons">
+              <div v-if="root.source === 'cloud'" class="action-buttons">
                 <button @click.stop="openEditModal(root)" class="edit-btn" title="编辑此项">
                   <Edit :size="14" />
                 </button>
@@ -229,7 +225,6 @@ import { SPIRIT_ROOT_ITEM_GENERATION_PROMPT } from '../../utils/prompts/tasks/ga
 import { parseJsonFromText } from '@/utils/jsonExtract'
 import ScenarioCreationPresetPanel from './ScenarioCreationPresetPanel.vue'
 
-const emit = defineEmits(['ai-generate'])
 const store = useCharacterCreationStore()
 // UI状态
 const activeSpiritRoot = ref<SpiritRoot | 'random' | null>(null)
@@ -274,15 +269,7 @@ const spiritRootTiers = [
 ]
 
 const filteredSpiritRoots = computed(() => {
-  if (store.isLocalCreation) {
-    return store.creationData.spiritRoots.filter(root => 
-      root.source === 'local' || root.source === 'cloud'
-    );
-  } else {
-    return store.creationData.spiritRoots.filter(root => 
-      root.source === 'cloud'
-    );
-  }
+  return store.creationData.spiritRoots.filter(root => root.source === 'local' || root.source === 'cloud');
 });
 
 // 高级自定义字段 - 使用动态列表格式
@@ -428,11 +415,7 @@ function handleSelectRandom() {
 }
 
 function handleAIGenerate() {
-  if (store.isLocalCreation) {
-    isAIPromptModalVisible.value = true;
-  } else {
-    emit('ai-generate')
-  }
+  isAIPromptModalVisible.value = true;
 }
 
 async function handleAIPromptSubmit(userPrompt: string) {

@@ -16,7 +16,6 @@
         <!-- 顶部功能按钮 -->
         <div class="top-actions-container">
           <button
-            v-if="store.isLocalCreation"
             @click="isCustomModalVisible = true"
             class="action-item shimmer-on-hover"
           >
@@ -41,7 +40,7 @@
               <span class="tier-name">{{ tier.name }}</span>
               <span class="tier-points">{{ tier.total_points }} {{ $t('点') }}</span>
             </div>
-            <div v-if="tier.source === 'cloud' && store.isLocalCreation" class="action-buttons">
+            <div v-if="tier.source === 'cloud'" class="action-buttons">
               <button @click.stop="openEditModal(tier)" class="edit-btn" :title="$t('编辑此项')">
                 <Edit :size="14" />
               </button>
@@ -119,7 +118,6 @@ interface CustomTierData {
   color: string
 }
 
-const emit = defineEmits(['ai-generate'])
 const store = useCharacterCreationStore()
 const activeTier = ref<TalentTier | null>(null) // For hover details view - 仿照天赋选择
 const isCustomModalVisible = ref(false)
@@ -130,28 +128,10 @@ const editingTier = ref<TalentTier | null>(null)
 const filteredTalentTiers = computed(() => {
   const allTiers = store.creationData.talentTiers;
   console.log("【天资选择】所有天资数据:", allTiers);
-  console.log("【天资选择】当前模式:", store.isLocalCreation ? '本地' : '联机');
   console.log("【天资选择】数据明细:", allTiers.map(t => ({ name: t.name, source: t.source, id: t.id })));
-  
-  if (store.isLocalCreation) {
-    // 单机模式显示本地数据和云端同步的数据
-    const availableTiers = allTiers.filter(tier =>
-      tier.source === 'local' || tier.source === 'cloud'
-    );
-    console.log("【天资选择】单机模式可用天资列表:", availableTiers);
-    return availableTiers.sort((a, b) => a.total_points - b.total_points);
-  } else {
-    // 联机模式显示所有数据，包括本地数据作为后备
-    const availableTiers = allTiers.length > 0 ? allTiers : [];
-    console.log("【天资选择】联机模式天资列表:", availableTiers);
-    console.log("【天资选择】联机模式天资数量:", availableTiers.length);
-    
-    if (availableTiers.length === 0) {
-      console.warn("【天资选择】警告：联机模式下没有找到任何天资数据！");
-    }
-    
-    return availableTiers.sort((a, b) => a.total_points - b.total_points);
-  }
+  const availableTiers = allTiers.filter(tier => tier.source === 'local' || tier.source === 'cloud');
+  console.log("【天资选择】单机模式可用天资列表:", availableTiers);
+  return availableTiers.sort((a, b) => a.total_points - b.total_points);
 });
 
 // 根据 types/index.ts 中的 TalentTier 接口定义字段
@@ -199,11 +179,7 @@ async function handleCustomSubmit(data: CustomTierData) {
 }
 
 function handleAIGenerate() {
-  if (store.isLocalCreation) {
-    isAIPromptModalVisible.value = true;
-  } else {
-    emit('ai-generate')
-  }
+  isAIPromptModalVisible.value = true;
 }
 
 async function handleAIPromptSubmit(userPrompt: string) {

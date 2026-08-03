@@ -23,7 +23,7 @@ test('new sessions are single-player and legacy online profiles stay read-only',
 
   assert.match(modeSelection, /emit\('start-creation', 'single'\)/);
   assert.doesNotMatch(modeSelection, /联机共修|verifyStoredToken|backendReady|go-to-login/);
-  assert.match(app, /creationStore\.setMode\('single'\)/);
+  assert.doesNotMatch(app, /creationStore\.setMode|startCloudCreation/);
   assert.match(app, /mode:\s*'单机' as const/);
   assert.match(app, /const slotKey = '存档1'/);
   assert.doesNotMatch(app, /heartbeatPresence|endTravelBeacon|openWorkshop|openAccountCenter/);
@@ -33,6 +33,21 @@ test('new sessions are single-player and legacy online profiles stay read-only',
   assert.match(characters, /if \(profile\?\.模式 === '联机'\) continue/);
   assert.match(characters, /selectedCharacter\.value\.模式 !== '单机'/);
   assert.doesNotMatch(characters, /verifyStoredToken|isBackendConfigured|router\.push\('\/login'\)/);
+});
+
+test('character creation has one local session mode while explicit cloud material sync remains', () => {
+  const view = read('src/views/CharacterCreation.vue');
+  const store = read('src/stores/characterCreationStore.ts');
+  const preview = read('src/components/character-creation/Step7_Preview.vue');
+
+  assert.match(view, /mode:\s*'单机' as const/);
+  assert.match(view, /<CloudDataSync/);
+  assert.doesNotMatch(view, /联机模式|RedemptionCodeModal|verifyStoredToken|executeCloudAiGeneration|isLocalCreation/);
+
+  assert.match(store, /async function fetchAllCloudData\(\)/);
+  assert.match(store, /fetchWorlds\(\)[\s\S]*fetchTalentTiers\(\)[\s\S]*fetchOrigins\(\)/);
+  assert.doesNotMatch(store, /startCloudCreation|toggleLocalCreation|currentMode:\s*'single'\s*\|\s*'cloud'|联机模式 token/);
+  assert.doesNotMatch(preview, /isLocalCreation|联机模式下/);
 });
 
 test('gameplay surfaces no longer expose travel state or network side effects', () => {
@@ -95,6 +110,13 @@ test('edited Vue single-player surfaces compile as SFCs', () => {
     'src/App.vue',
     'src/views/ModeSelection.vue',
     'src/components/character-creation/CharacterManagement.vue',
+    'src/views/CharacterCreation.vue',
+    'src/components/character-creation/Step1_WorldSelection.vue',
+    'src/components/character-creation/Step2_TalentTierSelection.vue',
+    'src/components/character-creation/Step3_OriginSelection.vue',
+    'src/components/character-creation/Step4_SpiritRootSelection.vue',
+    'src/components/character-creation/Step5_TalentSelection.vue',
+    'src/components/character-creation/Step7_Preview.vue',
     'src/components/dashboard/LeftSidebar.vue',
     'src/components/dashboard/WorldMapRoute.vue',
     'src/components/dashboard/GameMapPanel.vue',

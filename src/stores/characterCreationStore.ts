@@ -84,7 +84,6 @@ function isDADCustomData(data: unknown): data is DADCustomData {
 
 export const useCharacterCreationStore = defineStore('characterCreation', () => {
   // --- STATE ---
-  const mode = ref<'single' | 'cloud'>('single');
   const isLoading = ref(false);
   const error = ref<string | null>(null);
   
@@ -114,7 +113,6 @@ export const useCharacterCreationStore = defineStore('characterCreation', () => 
     selected_talent_ids: [],
   });
   const currentStep = ref(1);
-  const isLocalCreation = ref(true);
   const initialGameMessage = ref<string | null>(null);
   const selectedScenarioMod = ref<ScenarioMod | null>(null);
   const useStreamingStart = ref(true); // 开局是否使用流式传输（默认启用）
@@ -445,11 +443,9 @@ export const useCharacterCreationStore = defineStore('characterCreation', () => 
     };
   }
 
-  async function initializeStore(currentMode: 'single' | 'cloud') {
+  async function initializeStore() {
     isLoading.value = true;
     error.value = null;
-    mode.value = currentMode;
-    isLocalCreation.value = (currentMode === 'single'); // 同步设置 isLocalCreation
 
     // 初始化时获取用户名字
     try {
@@ -462,8 +458,7 @@ export const useCharacterCreationStore = defineStore('characterCreation', () => 
     }
 
     try {
-      if (currentMode === 'single') {
-        console.log("【创世神殿】初始化单机模式，加载本地数据和自定义数据！");
+      console.log("【创世神殿】初始化单机模式，加载本地数据和自定义数据！");
         
         // 加载本地预设数据
         const localWorlds = LOCAL_WORLDS.map(w => ({ ...w, source: 'local' as DataSource }));
@@ -510,69 +505,6 @@ export const useCharacterCreationStore = defineStore('characterCreation', () => 
         creationData.value.origins = merge(localOrigins, savedCloudOrigins);
         creationData.value.spiritRoots = merge(localSpiritRoots, savedCloudSpiritRoots);
         creationData.value.talents = merge(localTalents, savedCloudTalents);
-      } else {
-        console.log("【创世神殿】初始化联机模式，从后端获取云端数据！");
-
-        // 联机模式：主动从后端请求数据
-        const { isBackendConfigured } = await import('@/services/backendConfig');
-        const { verifyStoredToken } = await import('@/services/request');
-
-        if (isBackendConfigured()) {
-          // 验证 token 有效性
-          const tokenValid = await verifyStoredToken();
-          if (!tokenValid) {
-            console.warn("【创世神殿】联机模式 token 无效，回退到本地数据");
-            creationData.value.worlds = LOCAL_WORLDS.map(w => ({ ...w, source: 'local' as DataSource }));
-            creationData.value.talentTiers = LOCAL_TALENT_TIERS.map(t => ({ ...t, source: 'local' as DataSource }));
-            creationData.value.origins = LOCAL_ORIGINS.map(o => ({ ...o, source: 'local' as DataSource }));
-            creationData.value.spiritRoots = LOCAL_SPIRIT_ROOTS.map(s => ({ ...s, source: 'local' as DataSource }));
-            creationData.value.talents = LOCAL_TALENTS.map(t => ({ ...t, source: 'local' as DataSource }));
-            error.value = "联机模式需要先登录";
-          } else {
-            try {
-              console.log("【创世神殿】后端已配置且 token 有效，开始请求云端数据...");
-              const [cloudWorlds, cloudTalentTiers, cloudOrigins, cloudSpiritRoots, cloudTalents] = await Promise.all([
-                fetchWorlds(),
-                fetchTalentTiers(),
-                fetchOrigins(),
-                fetchSpiritRoots(),
-                fetchTalents()
-              ]);
-
-              console.log("【创世神殿】成功获取云端数据:", {
-                worlds: cloudWorlds.length,
-                talentTiers: cloudTalentTiers.length,
-                origins: cloudOrigins.length,
-                spiritRoots: cloudSpiritRoots.length,
-                talents: cloudTalents.length
-              });
-
-              // 标记为云端数据
-              creationData.value.worlds = cloudWorlds.map(w => ({...w, source: 'cloud' as DataSource}));
-              creationData.value.talentTiers = cloudTalentTiers.map(t => ({...t, source: 'cloud' as DataSource}));
-              creationData.value.origins = cloudOrigins.map(o => ({...o, source: 'cloud' as DataSource}));
-              creationData.value.spiritRoots = cloudSpiritRoots.map(s => ({...s, source: 'cloud' as DataSource}));
-              creationData.value.talents = cloudTalents.map(t => ({...t, source: 'cloud' as DataSource}));
-
-            } catch (fetchError) {
-              console.error("【创世神殿】获取云端数据失败，回退到本地数据:", fetchError);
-              // 回退到本地数据
-              creationData.value.worlds = LOCAL_WORLDS.map(w => ({ ...w, source: 'local' as DataSource }));
-              creationData.value.talentTiers = LOCAL_TALENT_TIERS.map(t => ({ ...t, source: 'local' as DataSource }));
-              creationData.value.origins = LOCAL_ORIGINS.map(o => ({ ...o, source: 'local' as DataSource }));
-              creationData.value.spiritRoots = LOCAL_SPIRIT_ROOTS.map(s => ({ ...s, source: 'local' as DataSource }));
-              creationData.value.talents = LOCAL_TALENTS.map(t => ({ ...t, source: 'local' as DataSource }));
-            }
-          }
-        } else {
-          console.warn("【创世神殿】后端未配置，使用本地数据！");
-          creationData.value.worlds = LOCAL_WORLDS.map(w => ({ ...w, source: 'local' as DataSource }));
-          creationData.value.talentTiers = LOCAL_TALENT_TIERS.map(t => ({ ...t, source: 'local' as DataSource }));
-          creationData.value.origins = LOCAL_ORIGINS.map(o => ({ ...o, source: 'local' as DataSource }));
-          creationData.value.spiritRoots = LOCAL_SPIRIT_ROOTS.map(s => ({ ...s, source: 'local' as DataSource }));
-          creationData.value.talents = LOCAL_TALENTS.map(t => ({ ...t, source: 'local' as DataSource }));
-        }
-      }
     } catch (e) {
       console.error("加载数据失败:", e);
       error.value = "加载数据失败";
@@ -1012,17 +944,14 @@ export const useCharacterCreationStore = defineStore('characterCreation', () => 
   function nextStep() { if (currentStep.value < TOTAL_STEPS) currentStep.value++; }
   function prevStep() { if (currentStep.value > 1) currentStep.value--; }
   function goToStep(step: number) { if (step >= 1 && step <= TOTAL_STEPS) currentStep.value = step; }
-  function setMode(newMode: 'single' | 'cloud') { mode.value = newMode; isLocalCreation.value = (newMode === 'single'); }
-  function toggleLocalCreation() { isLocalCreation.value = !isLocalCreation.value; }
   function setInitialGameMessage(message: string) { initialGameMessage.value = message; }
   
   // 设置世界生成配置
   function setWorldGenerationConfig(config: Partial<typeof worldGenerationConfig.value>) {
     worldGenerationConfig.value = { ...worldGenerationConfig.value, ...config };
   }
-  async function resetOnExit() { await resetCharacter(); mode.value = 'single'; isLocalCreation.value = true; }
-  async function startLocalCreation() { await resetCharacter(); isLocalCreation.value = true; mode.value = 'single'; }
-  async function startCloudCreation() { await resetCharacter(); isLocalCreation.value = false; mode.value = 'cloud'; }
+  async function resetOnExit() { await resetCharacter(); }
+  async function startLocalCreation() { await resetCharacter(); }
 
   // ========== 创建流程状态管理函数 ==========
   function startCreation() {
@@ -1059,7 +988,7 @@ export const useCharacterCreationStore = defineStore('characterCreation', () => 
   }
 
   return {
-    mode, isLoading, error, creationData, characterPayload, currentStep, isLocalCreation, initialGameMessage, selectedScenarioMod, scenarioCreationPreset, worldGenerationConfig, useStreamingStart, generateMode, splitResponseGeneration,
+    isLoading, error, creationData, characterPayload, currentStep, initialGameMessage, selectedScenarioMod, scenarioCreationPreset, worldGenerationConfig, useStreamingStart, generateMode, splitResponseGeneration,
     // 创建流程状态
     isCreating, creationPhase, creationError,
     gameDifficulty, currentDifficultyPrompt, // 难度配置
@@ -1068,8 +997,8 @@ export const useCharacterCreationStore = defineStore('characterCreation', () => 
     removeWorld, removeTalentTier, removeOrigin, removeSpiritRoot, removeTalent, // 导出删除函数
     updateWorld, updateTalentTier, updateOrigin, updateSpiritRoot, updateTalent, getItemById, // 导出编辑函数
     selectWorld, selectScenarioMod, selectTalentTier, selectOrigin, selectSpiritRoot, toggleTalent, setAttribute,
-    resetCharacter, nextStep, prevStep, goToStep, setMode, toggleLocalCreation, setInitialGameMessage, setWorldGenerationConfig,
-    resetOnExit, startLocalCreation, startCloudCreation, persistCustomData,
+    resetCharacter, nextStep, prevStep, goToStep, setInitialGameMessage, setWorldGenerationConfig,
+    resetOnExit, startLocalCreation, persistCustomData,
     setAIGeneratedSpiritRoot,
     setAIGeneratedOrigin,
     // 创建流程状态管理函数

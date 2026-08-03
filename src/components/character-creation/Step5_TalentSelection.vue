@@ -17,7 +17,6 @@
         <!-- 顶部功能按钮 -->
         <div class="top-actions-container">
           <button
-            v-if="store.isLocalCreation"
             @click="isCustomModalVisible = true"
             class="action-item shimmer-on-hover"
           >
@@ -43,7 +42,7 @@
               <span class="talent-name">{{ talent.name }}</span>
               <span class="talent-cost">{{ talent.talent_cost || 0 }}{{ $t('点') }}</span>
             </div>
-            <div v-if="(talent.source === 'cloud' || talent.source === 'local') && store.isLocalCreation" class="action-buttons">
+            <div v-if="talent.source === 'cloud' || talent.source === 'local'" class="action-buttons">
               <button @click.stop="openEditModal(talent)" class="edit-btn" :title="$t('编辑此项')">
                 <Edit :size="14" />
               </button>
@@ -109,7 +108,6 @@ import { TALENT_ITEM_GENERATION_PROMPT } from '../../utils/prompts/tasks/gameEle
 import { parseJsonFromText } from '@/utils/jsonExtract'
 import ScenarioCreationPresetPanel from './ScenarioCreationPresetPanel.vue'
 
-const emit = defineEmits(['ai-generate'])
 const store = useCharacterCreationStore()
 const activeTalent = ref<Talent | null>(null) // For details view on hover/click
 const isCustomModalVisible = ref(false)
@@ -120,26 +118,9 @@ const editingTalent = ref<Talent | null>(null)
 const filteredTalents = computed(() => {
   const allTalents = store.creationData.talents;
   console.log("【天赋选择】所有天赋数据:", allTalents.length, "个");
-  console.log("【天赋选择】当前模式:", store.isLocalCreation ? '本地' : '联机');
-  
-  if (store.isLocalCreation) {
-    // 单机模式显示本地数据和云端同步的数据
-    const availableTalents = allTalents.filter(talent => 
-      talent.source === 'local' || talent.source === 'cloud'
-    );
-    console.log("【天赋选择】单机模式可用天赋数量:", availableTalents.length);
-    return availableTalents;
-  } else {
-    // 联机模式显示所有数据，包括本地数据作为后备
-    const availableTalents = allTalents.length > 0 ? allTalents : [];
-    console.log("【天赋选择】联机模式天赋数量:", availableTalents.length);
-    
-    if (availableTalents.length === 0) {
-      console.warn("【天赋选择】警告：联机模式下没有找到任何天赋数据！");
-    }
-    
-    return availableTalents;
-  }
+  const availableTalents = allTalents.filter(talent => talent.source === 'local' || talent.source === 'cloud');
+  console.log("【天赋选择】单机模式可用天赋数量:", availableTalents.length);
+  return availableTalents;
 });
 
 // 自定义天赋字段 - 支持简单描述和结构化格式
@@ -253,12 +234,7 @@ function handleToggleTalent(talent: Talent) {
 }
 
 function handleAIGenerate() {
-  if (store.isLocalCreation) {
-    // 打开AI推演输入弹窗
-    isAIPromptModalVisible.value = true;
-  } else {
-    emit('ai-generate');
-  }
+  isAIPromptModalVisible.value = true;
 }
 
 async function handleAIPromptSubmit(userPrompt: string) {

@@ -16,7 +16,6 @@
         <!-- 顶部功能按钮 -->
         <div class="top-actions-container">
           <button
-            v-if="store.isLocalCreation"
             @click="isCustomModalVisible = true"
             class="action-item shimmer-on-hover"
           >
@@ -53,7 +52,7 @@
               <span class="origin-name">{{ origin.name }}</span>
               <span class="origin-cost">{{ origin.talent_cost }} {{ $t('点') }}</span>
             </div>
-            <div v-if="origin.source === 'cloud' && store.isLocalCreation" class="action-buttons">
+            <div v-if="origin.source === 'cloud'" class="action-buttons">
               <button @click.stop="openEditModal(origin)" class="edit-btn" :title="$t('编辑此项')">
                 <Edit :size="14" />
               </button>
@@ -120,7 +119,6 @@ import { ORIGIN_ITEM_GENERATION_PROMPT } from '../../utils/prompts/tasks/gameEle
 import { parseJsonFromText } from '@/utils/jsonExtract'
 import ScenarioCreationPresetPanel from './ScenarioCreationPresetPanel.vue'
 
-const emit = defineEmits(['ai-generate'])
 const store = useCharacterCreationStore()
 const activeOrigin = ref<Origin | 'random' | null>(null) // For hover details view - 仿照天赋选择
 const isCustomModalVisible = ref(false)
@@ -131,32 +129,9 @@ const editingOrigin = ref<Origin | null>(null)
 const filteredOrigins = computed(() => {
   const allOrigins = store.creationData.origins;
   console.log("【出身选择】所有出身数据:", allOrigins);
-  console.log("【出身选择】当前模式:", store.isLocalCreation ? '本地' : '联机');
-
-  if (store.isLocalCreation) {
-    // 单机模式显示本地数据和云端同步的数据
-    const availableOrigins = allOrigins.filter(origin =>
-      origin.source === 'local' || origin.source === 'cloud'
-    );
-    console.log("【出身选择】单机模式可用出身列表:", availableOrigins);
-    return availableOrigins;
-  } else {
-    const cloudOrigins = allOrigins.filter(origin =>
-      origin.source === 'cloud'
-    );
-    console.log("【出身选择】联机模式出身列表:", cloudOrigins);
-    console.log("【出身选择】云端出身数量:", cloudOrigins.length);
-
-    if (cloudOrigins.length === 0) {
-      console.warn("【出身选择】警告：联机模式下没有找到云端出身数据！");
-      console.log("【出身选择】所有出身的source分布:", allOrigins.reduce((acc: Record<string, number>, o) => {
-        acc[o.source] = (acc[o.source] || 0) + 1;
-        return acc;
-      }, {}));
-    }
-
-    return cloudOrigins;
-  }
+  const availableOrigins = allOrigins.filter(origin => origin.source === 'local' || origin.source === 'cloud');
+  console.log("【出身选择】单机模式可用出身列表:", availableOrigins);
+  return availableOrigins;
 });
 
 // 先天属性选项 - 出身影响的是先天属性
@@ -296,15 +271,11 @@ async function handleCustomSubmit(data: CustomOriginData) {
 }
 
 function handleAIGenerate() {
-  if (store.isLocalCreation) {
-    if (!store.selectedWorld) {
-      toast.error('请先选择一方大千世界，方可推演出身。');
-      return;
-    }
-    isAIPromptModalVisible.value = true;
-  } else {
-    emit('ai-generate')
+  if (!store.selectedWorld) {
+    toast.error('请先选择一方大千世界，方可推演出身。');
+    return;
   }
+  isAIPromptModalVisible.value = true;
 }
 
 async function handleAIPromptSubmit(userPrompt: string) {

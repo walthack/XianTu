@@ -151,7 +151,7 @@
       </div>
 
       <!-- Attributes -->
-      <div v-if="props.isLocalCreation" class="preview-item attributes-item">
+      <div class="preview-item attributes-item">
         <h3>{{ $t('先天六司') }}</h3>
         <ul>
           <li>{{ $t('根骨') }}: {{ store.attributes.root_bone }}</li>
@@ -163,13 +163,6 @@
         </ul>
       </div>
 
-      <!-- Cloud Mode Placeholder -->
-      <div v-else class="preview-item cloud-info-item">
-        <h3>{{ $t('命格天定') }}</h3>
-        <p class="cloud-info-text">
-          {{ $t('联机模式下，角色的初始命格将由所选世界的天道法则在云端生成，以确保公平与平衡。') }}
-        </p>
-      </div>
     </div>
   </div>
 </template>
@@ -180,10 +173,6 @@ import { useCharacterCreationStore } from '../../stores/characterCreationStore'
 
 const store = useCharacterCreationStore()
 const presetLocked = computed(() => Boolean(store.scenarioCreationPreset && store.scenarioCreationPreset.locked !== false))
-
-const props = defineProps<{
-  isLocalCreation: boolean
-}>()
 
 // 从酒馆获取当前Persona名字（只在名字为空时获取，避免重试时覆盖）
 onMounted(async () => {

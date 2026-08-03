@@ -8,11 +8,7 @@
       <div class="left-panel">
         <!-- 顶部功能按钮 -->
         <div class="top-actions-container">
-          <button
-            v-if="store.isLocalCreation"
-            @click="isCustomModalVisible = true"
-            class="action-item shimmer-on-hover"
-          >
+          <button @click="isCustomModalVisible = true" class="action-item shimmer-on-hover">
             <span class="action-name">{{ $t('自定义世界') }}</span>
           </button>
           <button @click="handleAIGenerate" class="action-item shimmer-on-hover">
@@ -20,7 +16,7 @@
           </button>
         </div>
 
-        <div v-if="store.isLocalCreation && enabledMods.length" class="scenario-mods">
+        <div v-if="enabledMods.length" class="scenario-mods">
           <div class="scenario-mods-label">剧本模组</div>
           <button
             v-for="entry in enabledMods"
@@ -43,10 +39,7 @@
           <div v-if="worldsList.length === 0" class="no-worlds-message">
             <div class="no-worlds-icon">🌌</div>
             <div class="no-worlds-text">
-              {{ store.isLocalCreation ? $t('暂无本地世界数据') : $t('暂无云端世界数据') }}
-            </div>
-            <div v-if="!store.isLocalCreation" class="no-worlds-hint">
-              {{ $t('请检查网络连接或联系管理员') }}
+              {{ $t('暂无本地世界数据') }}
             </div>
           </div>
           <div v-else
@@ -60,7 +53,7 @@
             <div class="item-content">
               <span class="item-name">{{ world.name }}</span>
             </div>
-            <div v-if="world.source === 'cloud' && store.isLocalCreation" class="action-buttons">
+            <div v-if="world.source === 'cloud'" class="action-buttons">
               <button @click.stop="openEditModal(world)" class="edit-btn" :title="$t('编辑此项')">
                 <Edit :size="14" />
               </button>
@@ -247,7 +240,6 @@ import { WORLD_ITEM_GENERATION_PROMPT } from '../../utils/prompts/tasks/gameElem
 import { parseJsonFromText } from '@/utils/jsonExtract';
 import { scenarioModManager, type StoredScenarioMod } from '@/modules/scenarioMods/manager';
 
-const emit = defineEmits(['ai-generate']);
 const store = useCharacterCreationStore();
 const activeWorld = ref<World | null>(null); // For hover details view - 仿照天赋选择
 const isCustomModalVisible = ref(false);
@@ -316,33 +308,9 @@ watch(worldConfig, (newConfig) => {
 const worldsList = computed(() => {
   const allWorlds = store.creationData.worlds;
   console.log("【世界选择】所有世界数据:", allWorlds);
-  console.log("【世界选择】当前模式:", store.isLocalCreation ? '本地' : '联机');
-
-  if (store.isLocalCreation) {
-    // 单机模式显示本地数据和云端同步的数据
-    const availableWorlds = allWorlds.filter(world =>
-      world.source === 'local' || world.source === 'cloud'
-    );
-    console.log("【世界选择】单机模式可用世界列表:", availableWorlds);
-    return availableWorlds;
-  } else {
-    // 联机模式：优先显示云端数据，如果没有则回退到本地数据
-    const cloudWorlds = allWorlds.filter(world =>
-      world.source === 'cloud'
-    );
-    console.log("【世界选择】联机模式云端世界列表:", cloudWorlds);
-    console.log("【世界选择】云端世界数量:", cloudWorlds.length);
-
-    if (cloudWorlds.length === 0) {
-      console.warn("【世界选择】警告：联机模式下没有云端世界数据，回退到本地数据！");
-      // 回退显示本地数据
-      const localWorlds = allWorlds.filter(world => world.source === 'local');
-      console.log("【世界选择】回退使用本地世界:", localWorlds);
-      return localWorlds;
-    }
-
-    return cloudWorlds;
-  }
+  const availableWorlds = allWorlds.filter(world => world.source === 'local' || world.source === 'cloud');
+  console.log("【世界选择】单机模式可用世界列表:", availableWorlds);
+  return availableWorlds;
 });
 
 // 根据 types/index.ts 中的 World 接口定义字段
@@ -385,11 +353,7 @@ async function handleCustomSubmit(data: any) {
 }
 
 function handleAIGenerate() {
-  if (store.isLocalCreation) {
-    isAIPromptModalVisible.value = true;
-  } else {
-    emit('ai-generate');
-  }
+  isAIPromptModalVisible.value = true;
 }
 
 async function handleAIPromptSubmit(userPrompt: string) {

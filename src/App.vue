@@ -367,7 +367,6 @@ watch([activeScenarioChapterId, activeScenarioEvents, latestAiNarrative], ([chap
 // --- 事件处理器 ---
 const handleStartCreation = async () => {
   try {
-    creationStore.setMode('single');
     switchView('CharacterCreation');
   } catch (error) {
     console.error("Failed to initialize creation data:", error);

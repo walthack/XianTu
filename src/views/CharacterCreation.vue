@@ -7,11 +7,11 @@
         <div class="header-top">
           <!-- 左侧：模式指示 -->
           <div class="mode-indicator">
-            {{ store.isLocalCreation ? $t('单机模式') : $t('联机模式') }}
+            {{ $t('单机模式') }}
           </div>
 
-          <!-- 右侧：云端同步按钮（仅单机模式显示） -->
-          <div v-if="store.isLocalCreation" class="cloud-sync-container">
+          <!-- 右侧：单机素材与预设工具 -->
+          <div class="cloud-sync-container">
             <CloudDataSync @sync-completed="onSyncCompleted" variant="compact" size="small" />
             <StorePreSeting
               variant="compact"
@@ -43,36 +43,13 @@
       <div class="step-content">
         <transition name="fade-step" mode="out-in">
           <div :key="store.currentStep" class="step-wrapper">
-            <Step1_WorldSelection
-              v-if="store.currentStep === 1"
-              ref="step1Ref"
-              @ai-generate="handleAIGenerateClick"
-            />
-            <Step2_TalentTierSelection
-              v-else-if="store.currentStep === 2"
-              ref="step2Ref"
-              @ai-generate="handleAIGenerateClick"
-            />
-            <Step3_OriginSelection
-              v-else-if="store.currentStep === 3"
-              ref="step3Ref"
-              @ai-generate="handleAIGenerateClick"
-            />
-            <Step4_SpiritRootSelection
-              v-else-if="store.currentStep === 4"
-              ref="step4Ref"
-              @ai-generate="handleAIGenerateClick"
-            />
-            <Step5_TalentSelection
-              v-else-if="store.currentStep === 5"
-              ref="step5Ref"
-              @ai-generate="handleAIGenerateClick"
-            />
+            <Step1_WorldSelection v-if="store.currentStep === 1" />
+            <Step2_TalentTierSelection v-else-if="store.currentStep === 2" />
+            <Step3_OriginSelection v-else-if="store.currentStep === 3" />
+            <Step4_SpiritRootSelection v-else-if="store.currentStep === 4" />
+            <Step5_TalentSelection v-else-if="store.currentStep === 5" />
             <Step6_AttributeAllocation v-else-if="store.currentStep === 6" />
-            <Step7_Preview
-              v-else-if="store.currentStep === 7"
-              :is-local-creation="store.isLocalCreation"
-            />
+            <Step7_Preview v-else-if="store.currentStep === 7" />
           </div>
         </transition>
       </div>
@@ -112,16 +89,6 @@
       </div>
     </div>
 
-    <!-- 仙缘信物按钮 - 只在联机模式下点击AI推演时显示 -->
-
-    <RedemptionCodeModal
-      :visible="isCodeModalVisible"
-      :type="currentAIType"
-      title="使用仙缘信物"
-      @close="isCodeModalVisible = false"
-      @submit="handleCodeSubmit"
-    />
-
     <!-- AI生成等待由全局toast处理 -->
   </div>
 </template>
@@ -140,12 +107,9 @@ import Step4_SpiritRootSelection from '../components/character-creation/Step4_Sp
 import Step5_TalentSelection from '../components/character-creation/Step5_TalentSelection.vue'
 import Step6_AttributeAllocation from '../components/character-creation/Step6_AttributeAllocation.vue'
 import Step7_Preview from '../components/character-creation/Step7_Preview.vue'
-import RedemptionCodeModal from '../components/character-creation/RedemptionCodeModal.vue'
-import { request, verifyStoredToken } from '../services/request'
 import { toast } from '../utils/toast'
-import { ref, onMounted, onUnmounted, computed, nextTick } from 'vue';
+import { onMounted, onUnmounted, computed, nextTick } from 'vue';
 import { getCurrentCharacterName } from '../utils/tavern';
-import { isBackendConfigured } from '@/services/backendConfig';
 import { useI18n } from '../i18n';
 import type { CharacterPreset } from '@/utils/presetManager';
 
@@ -159,9 +123,7 @@ const emit = defineEmits<{
 }>()
 const store = useCharacterCreationStore();
 const { t } = useI18n();
-const isCodeModalVisible = ref(false)
 // 使用 store 中的 isCreating 状态，不再使用本地 ref
-const currentAIType = ref<'world' | 'talent_tier' | 'origin' | 'spirit_root' | 'talent'>('world')
 
 type PresetGender = NonNullable<CharacterPreset['data']['gender']>;
 
@@ -172,11 +134,10 @@ function normalizeGender(value: unknown): CharacterPreset['data']['gender'] {
 
 onMounted(async () => {
   // 1. 初始化创世神殿（确保数据已加载）
-  // 单机模式也需要获取云端数据作为备选
-  console.log('【角色创建】当前模式:', store.isLocalCreation ? '单机' : '联机');
+  console.log('【角色创建】当前模式: 单机');
 
-  // 2. 初始化创世神殿，确保本地和云端数据都加载
-  await store.initializeStore(store.isLocalCreation ? 'single' : 'cloud');
+  // 2. 加载本地预设与用户已同步到 IndexedDB 的创角素材
+  await store.initializeStore();
 
   // 检查是否需要补充云端数据（检查总数据量而不是source标记）
   const totalWorlds = store.creationData.worlds.length;
@@ -186,17 +147,6 @@ onMounted(async () => {
   console.log('- 总世界数量:', totalWorlds);
   console.log('- 总天赋数量:', totalTalents);
 
-  // 在联机模式下，如果数据量明显不足（小于等于本地数据量），尝试获取云端数据
-  if (!store.isLocalCreation && (totalWorlds <= 3 || totalTalents <= 5)) {
-    console.log('【角色创建】联机模式下数据量不足，尝试获取云端数据...');
-
-    await store.fetchAllCloudData();
-
-    console.log('【角色创建】云端数据获取完成，最终数据量:');
-    console.log('- 总世界数量:', store.creationData.worlds.length);
-    console.log('- 总天赋数量:', store.creationData.talents.length);
-  }
-
   // 2. 获取角色名字 - 自动从酒馆获取，无需用户输入
   try {
     const tavernCharacterName = await getCurrentCharacterName();
@@ -205,156 +155,17 @@ onMounted(async () => {
       store.characterPayload.character_name = tavernCharacterName;
     } else {
       console.log('【角色创建】无法获取酒馆角色卡名字，使用默认值');
-      store.characterPayload.character_name = store.isLocalCreation ? '无名者' : '修士';
+      store.characterPayload.character_name = '无名者';
     }
   } catch (error) {
     console.error('【角色创建】获取角色名字时出错:', error);
-    store.characterPayload.character_name = store.isLocalCreation ? '无名者' : '修士';
+    store.characterPayload.character_name = '无名者';
   }
 });
 
 onUnmounted(() => {
   store.resetOnExit();
 });
-
-// 此函数只处理联机模式的AI生成（需要消耗信物）
-async function executeCloudAiGeneration(code: string, userPrompt?: string) {
-  let type = ''
-  switch (store.currentStep) {
-    case 1: type = 'world'; break
-    case 2: type = 'talent_tier'; break
-    case 3: type = 'origin'; break
-    case 4: type = 'spirit_root'; break
-    case 5: type = 'talent'; break
-    default:
-      toast.error('当前步骤不支持AI生成！')
-      return
-  }
-
-  store.startCreation();
-  const toastId = `cloud-ai-generate-${type}`;
-  const initialMessage = userPrompt ? '基于你的心愿推演玄妙...' : '天机推演中...';
-  toast.loading(initialMessage, { id: toastId });
-
-  try {
-    // 1. 验证兑换码 (可选，后端会做最终验证)
-    toast.loading('正在验证仙缘信物...', { id: toastId });
-    try {
-      // 后端返回完整的 RedemptionCode 对象，验证成功说明可用
-      await request<{ id: number; code: string; times_used: number; max_uses: number }>(`/api/v1/redemption/validate/${code}`, { method: 'POST' });
-      // 如果请求成功，说明兑换码有效且未过期/未用完
-    } catch (error: unknown) {
-      // 后端会返回具体错误信息（404=不存在，400=已用完/已过期）
-      const message = error instanceof Error ? error.message : '仙缘信物验证失败';
-      toast.error(message, { id: toastId });
-      store.resetCreationState();
-      return;
-    }
-
-    // 2. 前端调用AI生成
-    toast.loading('已连接天机阁，正在推演...', { id: toastId });
-
-    // 构建AI提示词
-    const typeNameMap: Record<string, string> = {
-      'world': '世界背景',
-      'talent_tier': '天资等级',
-      'origin': '出身背景',
-      'spirit_root': '灵根',
-      'talent': '天赋'
-    };
-    const typeName = typeNameMap[type] || type;
-    const prompt = userPrompt || `请为修仙游戏生成一个${typeName}选项，包含name、description等字段，返回JSON格式`;
-
-    // 使用前端aiService生成内容
-    const { aiService } = await import('@/services/aiService');
-    const aiResponse = await aiService.generate({
-      ordered_prompts: [
-        { role: 'system', content: `你是一个修仙游戏内容生成器。请根据用户要求生成${typeName}内容，返回有效的JSON对象。` },
-        { role: 'user', content: prompt }
-      ],
-      usageType: 'main'
-    });
-
-    if (!aiResponse) {
-      toast.error('天机阁未能推演出结果', { id: toastId });
-      store.resetCreationState();
-      return;
-    }
-
-    // 解析AI生成的内容
-    let generatedContent;
-    try {
-      // 尝试从响应中提取JSON
-      const jsonMatch = aiResponse.match(/\{[\s\S]*\}/);
-      if (jsonMatch) {
-        generatedContent = JSON.parse(jsonMatch[0]);
-      } else {
-        throw new Error('未找到有效JSON');
-      }
-    } catch {
-      toast.error('天机推演结果格式异常', { id: toastId });
-      store.resetCreationState();
-      return;
-    }
-
-    // 3. 保存到云端并消耗兑换码
-    toast.loading('正在记录天机...', { id: toastId });
-
-    const saveResponse = await request<{ message: string; saved_id: number }>('/api/v1/ai/save', {
-      method: 'POST',
-      body: JSON.stringify({
-        code: code,
-        type: type,
-        content: generatedContent
-      }),
-    });
-
-    if (saveResponse) {
-      toast.success(`天机已定！${saveResponse.message}`, { id: toastId });
-      // 刷新数据以显示新生成的内容
-      await store.fetchAllCloudData();
-    } else {
-      toast.error('记录天机失败', { id: toastId });
-    }
-  } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : '未知错误';
-    if (message.includes('兑换码') || message.includes('信物')) {
-      toast.error(message, { id: toastId });
-    } else if (message.includes('登录')) {
-      toast.error('身份验证失败，请重新登录！', { id: toastId });
-    } else {
-      toast.error('天机紊乱：' + message, { id: toastId });
-    }
-  } finally {
-    store.resetCreationState();
-    // 确保toast在非成功路径也被关闭
-    setTimeout(() => toast.hide(toastId), 3000);
-  }
-}
-
-// 父组件的AI生成处理器，只响应来自子组件的"联机"请求
-function handleAIGenerateClick() {
-  // 根据当前步骤设置AI推演类型
-  const typeMap = {
-    1: 'world' as const,
-    2: 'talent_tier' as const,
-    3: 'origin' as const,
-    4: 'spirit_root' as const,
-    5: 'talent' as const
-  };
-
-  currentAIType.value = typeMap[store.currentStep as keyof typeof typeMap] || 'world';
-
-  if (!store.isLocalCreation) {
-    isCodeModalVisible.value = true
-  }
-  // 本地模式的点击事件由子组件自行处理，此处无需操作
-}
-
-// 暴露给步骤组件调用
-defineExpose({
-  handleAIGenerateClick,
-})
 
 const stepLabels = computed(() => [
   t('诸天问道'),
@@ -446,30 +257,6 @@ async function handleNext(event?: Event) {
   }
 }
 
-const step1Ref = ref<InstanceType<typeof Step1_WorldSelection> | null>(null)
-const step2Ref = ref<InstanceType<typeof Step2_TalentTierSelection> | null>(null)
-const step3Ref = ref<InstanceType<typeof Step3_OriginSelection> | null>(null)
-const step4Ref = ref<InstanceType<typeof Step4_SpiritRootSelection> | null>(null)
-const step5Ref = ref<InstanceType<typeof Step5_TalentSelection> | null>(null)
-
-// 处理仙缘信物提交 (仅联机模式)
-async function handleCodeSubmit(data: { code: string; prompt?: string }) {
-  const token = localStorage.getItem('access_token')
-  if (!token) {
-    toast.error('身份凭证缺失，请先登录再使用信物。')
-    isCodeModalVisible.value = false
-    return
-  }
-
-  if (!data.code || data.code.trim().length < 6) {
-    toast.error('请输入有效的仙缘信物！')
-    return
-  }
-
-  isCodeModalVisible.value = false
-  await executeCloudAiGeneration(data.code, data.prompt)
-}
-
 async function createCharacter() {
   console.log('[DEBUG] createCharacter 开始执行');
   console.log('[DEBUG] store.isCreating:', store.isCreating);
@@ -507,20 +294,6 @@ async function createCharacter() {
 
   // 进入创建流程后锁定按钮，防止重复点击/重复请求
   store.startCreation();
-
-  if (!store.isLocalCreation) {
-    if (!isBackendConfigured()) {
-      toast.error('联机模式需要先配置后端服务器地址');
-      store.resetCreationState();
-      return;
-    }
-    const tokenOk = await verifyStoredToken();
-    if (!tokenOk) {
-      toast.error('联机模式需要先登录');
-      store.resetCreationState();
-      return;
-    }
-  }
 
   console.log('[DEBUG] 数据校验通过，开始创建角色');
 
@@ -576,7 +349,7 @@ async function createCharacter() {
         charm: store.attributes.charm,
         temperament: store.attributes.temperament,
       },
-      mode: (store.isLocalCreation ? '单机' : '联机') as '单机' | '联机',
+      mode: '单机' as const,
       age: store.characterPayload.current_age,
       gender: store.characterPayload.gender,
       race: store.characterPayload.race, // 🔥 添加种族字段
