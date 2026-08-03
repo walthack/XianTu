@@ -251,7 +251,7 @@
     <!-- 地图图例 -->
     <div class="map-legend" :class="{ collapsed: legendCollapsed }">
       <div class="legend-header" @click="legendCollapsed = !legendCollapsed">
-        <div class="legend-title">{{ worldName }}图例{{ props.isOnline ? '（联机）' : '' }}</div>
+        <div class="legend-title">{{ worldName }}图例</div>
         <button class="legend-toggle">
           <ChevronUp v-if="!legendCollapsed" :size="16" />
           <ChevronDown v-if="legendCollapsed" :size="16" />
@@ -324,13 +324,6 @@
           <Plus :size="14" />
           <span>追加生成</span>
         </button>
-        <button
-          @click="emit('toggle-text-mode')"
-          class="action-btn text-mode-btn"
-        >
-          <FileText :size="14" />
-          <span>文字模式</span>
-        </button>
       </div>
     </div>
 
@@ -390,7 +383,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, computed, watch } from 'vue';
-import { Mountain, Building2, Store, Sparkles, Gem, AlertTriangle, Zap, User, Users, ChevronUp, ChevronDown, Plus, FileText, Menu } from 'lucide-vue-next';
+import { Mountain, Building2, Store, Sparkles, Gem, AlertTriangle, Zap, User, Users, ChevronUp, ChevronDown, Plus, Menu } from 'lucide-vue-next';
 import { GameMapManager } from '@/utils/gameMapManager';
 import { normalizeLocationsData, normalizeContinentBounds } from '@/utils/coordinateConverter';
 import { useGameStateStore } from '@/stores/gameStateStore';
@@ -405,16 +398,6 @@ import RegionMapPanel from './RegionMapPanel.vue';
 import { generateRegionMap, mergeCanonBuildingsIntoRegion, type RegionNpcLocationHint } from '@/utils/worldGeneration/regionMapGenerator';
 import UnmappedLocationsPanel from './UnmappedLocationsPanel.vue';
 import type { UnmappedNpc } from './UnmappedLocationsPanel.vue';
-
-// Props
-const props = defineProps<{
-  isOnline?: boolean;
-}>();
-
-// Emits
-const emit = defineEmits<{
-  (e: 'toggle-text-mode'): void;
-}>();
 
 const gameStateStore = useGameStateStore();
 const canvasRef = ref<HTMLCanvasElement | null>(null);
@@ -1363,51 +1346,6 @@ watch(
   { deep: true }
 );
 
-// 监听联机状态，显示被入侵用户（世界主人）的位置
-watch(
-  () => {
-    const online = gameStateStore.onlineState as any;
-    return {
-      isOnline: props.isOnline,
-      ownerLocation: online?.穿越目标?.世界主人位置,
-      ownerName: online?.穿越目标?.世界主人档案?.名字 || online?.穿越目标?.主人用户名
-    };
-  },
-  ({ isOnline, ownerLocation, ownerName }) => {
-    if (!mapManager.value) return;
-
-    console.log('[地图] 联机状态变化:', { isOnline, ownerLocation, ownerName });
-
-    if (isOnline && ownerLocation) {
-      // 尝试从不同格式中提取坐标
-      let x = ownerLocation.x ?? ownerLocation.坐标?.x ?? ownerLocation.coordinates?.x;
-      let y = ownerLocation.y ?? ownerLocation.坐标?.y ?? ownerLocation.coordinates?.y;
-
-      // 如果坐标缺失，根据地图配置生成一个默认位置（地图中心偏移）
-      if (!Number.isFinite(x) || !Number.isFinite(y)) {
-        console.warn('[地图] 世界主人位置坐标缺失，使用默认位置:', ownerLocation);
-        const mapConfig = mapRenderConfig.value;
-        // 使用描述的哈希值来生成一个相对固定的位置（避免每次刷新都变化）
-        const desc = ownerLocation.描述 || ownerLocation.description || '未知';
-        const hash = desc.split('').reduce((a: number, c: string) => a + c.charCodeAt(0), 0);
-        x = mapConfig.width * 0.3 + (hash % 100) * (mapConfig.width * 0.004);
-        y = mapConfig.height * 0.3 + ((hash * 7) % 100) * (mapConfig.height * 0.004);
-      }
-
-      if (Number.isFinite(x) && Number.isFinite(y)) {
-        mapManager.value.updateOtherPlayerPosition({ x, y }, ownerName || '世界主人');
-        console.log('[地图] 显示世界主人位置:', { x, y, ownerName });
-      } else {
-        mapManager.value.updateOtherPlayerPosition(null);
-      }
-    } else {
-      // 非联机模式或没有位置信息时清除其他玩家标记
-      mapManager.value.updateOtherPlayerPosition(null);
-    }
-  },
-  { deep: true, immediate: true }
-);
-
 watch(
   () => mapSizeKey.value,
   (next, prev) => {
@@ -2007,31 +1945,6 @@ const loadMapData = async (options?: { silent?: boolean; reset?: boolean }) => {
       if (npcs.length > 0) {
         mapManager.value?.updateNPCPositions(npcs);
         console.log(`[Map] Updated ${npcs.length} NPC positions`);
-      }
-    }
-
-    if (props.isOnline) {
-      const online = gameStateStore.onlineState as any;
-      const ownerLocation = online?.穿越目标?.世界主人位置;
-      const ownerName = online?.穿越目标?.世界主人档案?.名字 || online?.穿越目标?.主人用户名;
-
-      console.log('[地图] loadMapData 检查世界主人位置:', { isOnline: props.isOnline, ownerLocation, ownerName });
-
-      if (ownerLocation) {
-        let x = ownerLocation.x ?? ownerLocation.坐标?.x ?? ownerLocation.coordinates?.x;
-        let y = ownerLocation.y ?? ownerLocation.坐标?.y ?? ownerLocation.coordinates?.y;
-
-        if (!Number.isFinite(x) || !Number.isFinite(y)) {
-          const desc = ownerLocation.描述 || ownerLocation.description || '未知';
-          const hash = desc.split('').reduce((a: number, c: string) => a + c.charCodeAt(0), 0);
-          x = mapConfig.width * 0.3 + (hash % 100) * (mapConfig.width * 0.004);
-          y = mapConfig.height * 0.3 + ((hash * 7) % 100) * (mapConfig.height * 0.004);
-        }
-
-        if (Number.isFinite(x) && Number.isFinite(y)) {
-          mapManager.value?.updateOtherPlayerPosition({ x, y }, ownerName || '世界主人');
-          console.log('[地图] 已更新世界主人位置:', { x, y, ownerName });
-        }
       }
     }
 

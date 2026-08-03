@@ -27,7 +27,6 @@ import './utils/consolePatch'
 import './modules/scenarioMods/builtins/register'
 import { migrateData } from './utils/indexedDBManager'
 import { useI18n } from './i18n'
-import { flushPendingTravelNotes } from '@/services/onlineLogQueue'
 import { useAPIManagementStore } from '@/stores/apiManagementStore'
 
 async function initializeApp() {
@@ -59,11 +58,7 @@ async function initializeApp() {
 
   void useAPIManagementStore().loadFromStorage();
 
-  // 尝试补发联机穿越日志（网络波动/短暂掉线时的兜底）
-  void flushPendingTravelNotes();
-
   console.log('【应用启动】✅ Vue应用已成功挂载');
 }
 
 initializeApp();
-

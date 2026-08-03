@@ -6,10 +6,7 @@
 import { createRouter, createMemoryHistory } from 'vue-router';
 import ModeSelection from '../views/ModeSelection.vue';
 import CharacterCreation from '../views/CharacterCreation.vue';
-import LoginView from '../views/LoginView.vue';
-import WorkshopView from '../views/WorkshopView.vue';
 import GameView from '../views/GameView.vue';
-import AccountCenter from '../views/AccountCenter.vue';
 import ScenarioModManagerView from '../views/ScenarioModManagerView.vue';
 
 // 创建一个包装组件来传递fullscreen属性
@@ -61,7 +58,6 @@ import SectManagementContent from '../components/dashboard/components/SectManage
 import SectWarContent from '../components/dashboard/components/SectWarContent.vue';
 import GameVariablePanel from '../components/dashboard/GameVariablePanel.vue';
 import PromptManagementPanel from '../components/dashboard/PromptManagementPanel.vue';
-import OnlineTravelPanel from '../components/dashboard/OnlineTravelPanel.vue';
 import APIManagementPanel from '../components/dashboard/APIManagementPanel.vue';
 
 const routes = [
@@ -74,21 +70,6 @@ const routes = [
     path: '/creation',
     name: 'CharacterCreation',
     component: CharacterCreation,
-  },
-  {
-    path: '/login',
-    name: 'Login',
-    component: LoginView,
-  },
-  {
-    path: '/workshop',
-    name: 'Workshop',
-    component: WorkshopView,
-  },
-  {
-    path: '/account',
-    name: 'AccountCenter',
-    component: AccountCenter,
   },
   {
     path: '/scenario-mods',
@@ -223,11 +204,6 @@ const routes = [
         component: PromptManagementPanel,
       },
       {
-        path: 'travel',
-        name: 'Travel',
-        component: OnlineTravelPanel,
-      },
-      {
         path: 'api-management',
         name: 'APIManagement',
         component: APIManagementPanel,
@@ -238,6 +214,10 @@ const routes = [
     path: '/management',
     name: 'CharacterManagement',
     component: FullscreenCharacterManagement,
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    redirect: '/',
   },
 ];
 

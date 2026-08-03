@@ -105,16 +105,6 @@
             <ChevronRight :size="14" class="btn-arrow" />
           </button>
 
-          <button class="function-btn quest" v-if="isOnlineMode" @click="handleOnlinePlay">
-            <div class="btn-icon">
-              <Globe :size="18" />
-            </div>
-            <div class="btn-content">
-              <span class="btn-text">{{ t('穿越') }}</span>
-              <span class="btn-desc">{{ t('进入他人世界') }}</span>
-            </div>
-            <ChevronRight :size="14" class="btn-arrow" />
-          </button>
         </div>
       </div>
 
@@ -174,7 +164,7 @@
             <ChevronRight :size="14" class="btn-arrow" />
           </button>
 
-          <button class="function-btn system" v-if="!isOnlineMode" @click="handleGameVariables">
+          <button class="function-btn system" @click="handleGameVariables">
             <div class="btn-icon">
               <Database :size="18" />
             </div>
@@ -214,17 +204,6 @@
             <div class="btn-content">
               <span class="btn-text">{{ t('系统设置') }}</span>
               <span class="btn-desc">{{ t('偏好设置') }}</span>
-            </div>
-            <ChevronRight :size="14" class="btn-arrow" />
-          </button>
-
-          <button v-if="isAdmin" class="function-btn admin" @click="handleBackendAdmin">
-            <div class="btn-icon">
-              <Shield :size="18" />
-            </div>
-            <div class="btn-content">
-              <span class="btn-text">{{ t('仙官后台') }}</span>
-              <span class="btn-desc">{{ t('管理员控制台') }}</span>
             </div>
             <ChevronRight :size="14" class="btn-arrow" />
           </button>
@@ -283,12 +262,11 @@
 <script setup lang="ts">
 import { computed, ref, onMounted, onUnmounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { Package, User, Users, BookOpen, Zap, Brain, Map, Globe, Save, Settings, LogOut, Compass, Home, Bell, ChevronRight, Database, Clock, FileText, Plug, LayoutGrid, Heart, Shield, Hammer } from 'lucide-vue-next';
+import { Package, User, Users, BookOpen, Zap, Brain, Map, Save, Settings, LogOut, Home, Bell, ChevronRight, Database, Clock, FileText, Plug, LayoutGrid, Heart, Hammer } from 'lucide-vue-next';
 import { useCharacterStore } from '@/stores/characterStore';
 import { toast } from '@/utils/toast';
 import { useUIStore } from '@/stores/uiStore';
 import { useI18n } from '@/i18n';
-import { isBackendConfigured, fetchBackendVersion } from '@/services/backendConfig';
 
 const router = useRouter();
 const characterStore = useCharacterStore();
@@ -296,13 +274,8 @@ const uiStore = useUIStore();
 const { t, currentLanguage } = useI18n();
 
 // 版本号相关
-const backendReady = ref(false);
 const showSponsorModal = ref(false);
-const backendVersion = ref<string | null>(null);
-
-const displayVersion = computed(() => (
-  backendReady.value ? (backendVersion.value ?? '同步中') : APP_VERSION
-));
+const displayVersion = APP_VERSION;
 
 // 实时北京时间
 const currentRealTime = ref('');
@@ -319,18 +292,9 @@ const updateRealTime = () => {
   currentRealTime.value = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 };
 
-onMounted(async () => {
+onMounted(() => {
   updateRealTime();
   timeInterval = window.setInterval(updateRealTime, 1000);
-
-  // 获取后端版本
-  if (isBackendConfigured()) {
-    const version = await fetchBackendVersion();
-    if (version) {
-      backendReady.value = true;
-      backendVersion.value = version;
-    }
-  }
 });
 
 onUnmounted(() => {
@@ -341,8 +305,6 @@ onUnmounted(() => {
 
 // 使用 store 的 getters 获取数据
 const activeCharacter = computed(() => characterStore.activeCharacterProfile);
-const isOnlineMode = computed(() => activeCharacter.value?.模式 === '联机');
-const isAdmin = computed(() => localStorage.getItem('is_admin') === 'true');
 
 const handleSaveGame = async () => {
   router.push('/game/save');
@@ -388,10 +350,6 @@ const handleWorldMap = () => {
   router.push('/game/world-map');
 };
 
-const handleOnlinePlay = () => {
-  router.push('/game/travel');
-};
-
 const handlePrompts = () => {
   router.push('/game/prompts');
 };
@@ -406,10 +364,6 @@ const handleAPIManagement = () => {
 
 const handleGameVariables = () => {
   router.push('/game/game-variables');
-};
-
-const handleBackendAdmin = () => {
-  router.push('/game/backend-admin');
 };
 
 const handleBackToMenu = () => {

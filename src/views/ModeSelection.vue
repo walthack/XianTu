@@ -6,9 +6,9 @@
     <div class="selection-content">
       <!-- 右上角信息 -->
       <div class="top-info">
-        <div class="status-indicator" :class="backendReady ? 'online' : 'offline'">
+        <div class="status-indicator offline">
           <span class="status-dot"></span>
-          <span>{{ backendReady ? $t('已连接') : $t('离线') }}</span>
+          <span>{{ $t('单机模式') }}</span>
         </div>
         <div class="version-tag">V{{ displayVersion }}</div>
       </div>
@@ -27,18 +27,8 @@
           <span class="line"></span>
         </div>
 
-        <div class="gate-container">
-          <!-- 单机模式 -->
-          <div
-            class="gate-card"
-            role="button"
-            tabindex="0"
-            :aria-pressed="selectedMode === 'single'"
-            :class="{ selected: selectedMode === 'single' }"
-            @click="selectPath('single')"
-            @keydown.enter.prevent="selectPath('single')"
-            @keydown.space.prevent="selectPath('single')"
-          >
+        <div class="gate-container single-player-only">
+          <div class="gate-card selected" aria-label="单机模式">
             <div class="gate-icon">
               <div class="icon-bg"></div>
               <User :size="36" :stroke-width="1.5" />
@@ -52,42 +42,8 @@
                 <span class="tag-offline">{{ $t('离线可用') }}</span>
               </div>
             </div>
-            <div v-if="selectedMode === 'single'" class="check-mark">
+            <div class="check-mark">
               <Check :size="18" />
-            </div>
-          </div>
-
-          <!-- 联机模式 -->
-          <div
-            class="gate-card"
-            role="button"
-            :tabindex="backendReady ? 0 : -1"
-            :aria-pressed="selectedMode === 'cloud'"
-            :aria-disabled="!backendReady"
-            :class="{ selected: selectedMode === 'cloud', disabled: !backendReady }"
-            @click="selectPath('cloud')"
-            @keydown.enter.prevent="selectPath('cloud')"
-            @keydown.space.prevent="selectPath('cloud')"
-          >
-            <div class="gate-icon">
-              <div class="icon-bg"></div>
-              <Users :size="36" :stroke-width="1.5" />
-            </div>
-            <div class="gate-info">
-              <h2 class="gate-title">{{ $t('联机共修') }}</h2>
-              <p class="gate-desc">{{ backendReady ? $t('道友相伴 · 共证大道') : $t('仙门未启 · 暂不可入') }}</p>
-              <p class="gate-detail">{{ $t('云端存档，多端同步，与道友共闯仙途') }}</p>
-              <div class="gate-tags">
-                <span class="tag-cloud">{{ $t('云端同步') }}</span>
-                <span class="tag-secure">{{ $t('数据安全') }}</span>
-              </div>
-            </div>
-            <div v-if="selectedMode === 'cloud'" class="check-mark">
-              <Check :size="18" />
-            </div>
-            <div v-if="!backendReady" class="disabled-mask">
-              <Lock :size="20" />
-              <span>{{ $t('未启用') }}</span>
             </div>
           </div>
         </div>
@@ -95,22 +51,16 @@
 
       <!-- 操作按钮 -->
       <div class="actions-section">
-        <transition name="fade-up">
-          <div v-if="selectedMode" class="action-group">
-            <button class="btn-primary" @click="startNewGame">
-              <Sparkles :size="18" />
-              <span>{{ $t('初入仙途') }}</span>
-            </button>
-            <button class="btn-secondary" @click="enterCharacterSelection">
-              <History :size="18" />
-              <span>{{ $t('续前世因缘') }}</span>
-            </button>
-          </div>
-        </transition>
-        <button v-if="!selectedMode" class="btn-ghost" @click="enterCharacterSelection">
-          <History :size="18" />
-          <span>{{ $t('续前世因缘') }}</span>
-        </button>
+        <div class="action-group">
+          <button class="btn-primary" @click="startNewGame">
+            <Sparkles :size="18" />
+            <span>{{ $t('初入仙途') }}</span>
+          </button>
+          <button class="btn-secondary" @click="enterCharacterSelection">
+            <History :size="18" />
+            <span>{{ $t('续前世因缘') }}</span>
+          </button>
+        </div>
         <button class="btn-ghost" @click="openScenarioMods">
           <Library :size="18" />
           <span>剧本模组</span>
@@ -121,107 +71,21 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
-import { useI18n } from '@/i18n';
 import VideoBackground from '@/components/common/VideoBackground.vue';
-import { Sparkles, History, User, Users, Check, Lock, Library } from 'lucide-vue-next';
+import { Sparkles, History, User, Check, Library } from 'lucide-vue-next';
 import { useRouter } from 'vue-router';
-import { useUIStore } from '@/stores/uiStore';
-import { isBackendConfigured, fetchBackendVersion } from '@/services/backendConfig';
-import { verifyStoredToken } from '@/services/request';
 
-const selectedMode = ref<'single' | 'cloud' | null>(null);
-const backendReady = ref(false);
-const backendVersion = ref<string | null>(null);
-
-const { t } = useI18n();
-
-const displayVersion = computed(() => (
-  backendReady.value ? (backendVersion.value ?? t('同步中')) : APP_VERSION
-));
-
-onMounted(async () => {
-  // 真正检测后端连接状态，而不是只检查配置
-  if (isBackendConfigured()) {
-    const version = await fetchBackendVersion();
-    if (version) {
-      backendReady.value = true;
-      backendVersion.value = version;
-    }
-  }
-});
+const displayVersion = APP_VERSION;
 
 const emit = defineEmits<{
-  (e: 'start-creation', mode: 'single' | 'cloud'): void;
+  (e: 'start-creation', mode: 'single'): void;
   (e: 'show-character-list'): void;
-  (e: 'go-to-login'): void;
 }>();
 
-const uiStore = useUIStore();
 const router = useRouter();
 
-// 检查是否已登录
-const _isLoggedIn = () => {
-  const token = localStorage.getItem('access_token');
-  return !!token;
-};
-
-const selectPath = async (mode: 'single' | 'cloud') => {
-  if (mode === 'cloud' && !backendReady.value) {
-    uiStore.showRetryDialog({
-      title: t('联机未启用'),
-      message: t('未配置后端服务器，无法使用联机共修与登录功能。请先选择"单机闯关"。'),
-      confirmText: t('知道了'),
-      cancelText: t('取消'),
-      onConfirm: () => {},
-      onCancel: () => {}
-    });
-    return;
-  }
-
-  // 联机模式：验证 token 有效性
-  if (mode === 'cloud') {
-    const token = localStorage.getItem('access_token');
-    if (token) {
-      const isValid = await verifyStoredToken();
-      if (!isValid) {
-        // token 无效，清除并提示重新登录
-        localStorage.removeItem('access_token');
-        localStorage.removeItem('username');
-        console.log('[ModeSelection] Token 无效，已清除');
-      }
-    }
-  }
-
-  if (selectedMode.value === mode) {
-    selectedMode.value = null;
-  } else {
-    selectedMode.value = mode;
-  }
-};
-
-const startNewGame = async () => {
-  if (!selectedMode.value) return;
-
-  // 联机模式需要先登录并验证 token 有效性
-  if (selectedMode.value === 'cloud') {
-    const isValid = await verifyStoredToken();
-    if (!isValid) {
-      uiStore.showRetryDialog({
-        title: t('请先登录'),
-        message: t('联机共修需要先登录账号，是否前往登录？'),
-        confirmText: t('前往登录'),
-        cancelText: t('取消'),
-        onConfirm: () => {
-          emit('go-to-login');
-        },
-        onCancel: () => {}
-      });
-      return;
-    }
-  }
-
-  emit('start-creation', selectedMode.value);
+const startNewGame = () => {
+  emit('start-creation', 'single');
 };
 
 const enterCharacterSelection = async () => {

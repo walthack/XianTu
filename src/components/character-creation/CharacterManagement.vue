@@ -146,7 +146,7 @@
                 }}{{ $t('模式') }}
               </div>
             </div>
-            <div v-if="selectedCharacter" class="save-actions-buttons">
+            <div v-if="selectedCharacter?.模式 === '单机'" class="save-actions-buttons">
               <button
                 @click="importSaves"
                 class="btn-save-action import"
@@ -369,109 +369,10 @@
 
             <!-- 联机模式存档 -->
             <div v-else-if="selectedCharacter.模式 === '联机'" class="online-saves-container">
-              <div v-if="!isLoggedIn" class="login-prompt">
-                <div class="login-icon">🔐</div>
-                <h3>{{ $t('需要登录') }}</h3>
-                <p>{{ $t('请先登录以管理联机角色存档') }}</p>
-                <button @click="handleLogin" class="btn-login">{{ $t('登入道籍') }}</button>
-              </div>
-
-              <!-- 加载中状态 -->
-              <div v-else-if="isLoadingSaves" class="loading-saves">
-                <div class="loading-spinner">⏳</div>
-                <span>{{ $t('正在加载云端存档...') }}</span>
-              </div>
-
-              <div v-else-if="selectedCharacter.存档列表?.['云端修行']?.存档数据" class="online-save-card">
-                <div class="save-data">
-                  <div class="save-header">
-                    <h4 class="save-name">{{ $t('云端存档') }}</h4>
-                    <div class="save-badges">
-                      <span class="realm-badge">{{
-                        getRealmName(normalizeSaveDataV3(selectedCharacter.存档列表['云端修行'].存档数据)?.角色?.属性?.境界)
-                      }}</span>
-                      <span class="age-badge"
-                        >{{
-                          normalizeSaveDataV3(selectedCharacter.存档列表['云端修行'].存档数据)?.角色?.属性?.寿命?.当前 ?? 18
-                        }}岁</span
-                      >
-                    </div>
-                  </div>
-
-                  <div class="save-stats">
-                    <div class="stat-grid">
-                      <div class="stat">
-                        <span class="label">气血</span>
-                        <span class="value"
-                          >{{ normalizeSaveDataV3(selectedCharacter.存档列表['云端修行'].存档数据)?.角色?.属性?.气血?.当前 ?? 0 }}/{{
-                            normalizeSaveDataV3(selectedCharacter.存档列表['云端修行'].存档数据)?.角色?.属性?.气血?.上限 ?? 0
-                          }}</span
-                        >
-                      </div>
-                      <div class="stat">
-                        <span class="label">灵气</span>
-                        <span class="value"
-                          >{{ normalizeSaveDataV3(selectedCharacter.存档列表['云端修行'].存档数据)?.角色?.属性?.灵气?.当前 ?? 0 }}/{{
-                            normalizeSaveDataV3(selectedCharacter.存档列表['云端修行'].存档数据)?.角色?.属性?.灵气?.上限 ?? 0
-                          }}</span
-                        >
-                      </div>
-                      <div class="stat">
-                        <span class="label">神识</span>
-                        <span class="value"
-                          >{{ normalizeSaveDataV3(selectedCharacter.存档列表['云端修行'].存档数据)?.角色?.属性?.神识?.当前 ?? 0 }}/{{
-                            normalizeSaveDataV3(selectedCharacter.存档列表['云端修行'].存档数据)?.角色?.属性?.神识?.上限 ?? 0
-                          }}</span
-                        >
-                      </div>
-                      <div class="stat">
-                        <span class="label">声望</span>
-                        <span class="value">{{
-                          normalizeSaveDataV3(selectedCharacter.存档列表['云端修行'].存档数据)?.角色?.属性?.声望 ?? 0
-                        }}</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="save-footer">
-                    <span class="location">{{
-                      normalizeSaveDataV3(selectedCharacter.存档列表['云端修行'].存档数据)?.角色?.位置?.描述 || '初始地'
-                    }}</span>
-                    <div class="sync-info">
-                      <span
-                        class="sync-status"
-                        :class="{ synced: !selectedCharacter.存档列表['云端修行'].云端同步信息?.需要同步 }"
-                      >
-                        {{
-                          selectedCharacter.存档列表['云端修行'].云端同步信息?.需要同步
-                            ? $t('待同步')
-                            : $t('已同步')
-                        }}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div class="online-actions">
-                    <button @click="handleSelect(selectedCharId!, '云端修行', true)" class="btn-play">
-                      {{ $t('进入游戏') }}
-                    </button>
-                    <button v-if="selectedCharacter.存档列表['云端修行']?.云端同步信息?.需要同步" class="btn-sync">
-                      {{ $t('同步云端') }}
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <!-- 没有存档数据：显示开始游戏 -->
-              <div v-else class="online-save-card">
-                <div class="save-empty">
-                  <div class="empty-slot-icon">☁️</div>
-                  <span class="empty-text">{{ $t('尚未开始修行') }}</span>
-                  <p class="empty-hint">{{ $t('开始您的联机修仙之旅，存档将自动同步到云端') }}</p>
-                  <button @click="handleSelect(selectedCharId!, '云端修行', false)" class="btn-start">
-                    {{ $t('开始游戏') }}
-                  </button>
-                </div>
+              <div class="login-prompt">
+                <div class="login-icon">📦</div>
+                <h3>旧联机角色已保留</h3>
+                <p>单机化期间不会连接服务器或改写该角色；后续批次会提供保留本地缓存的迁移入口。</p>
               </div>
             </div>
           </section>
@@ -580,8 +481,6 @@ import { isSaveDataV3, migrateSaveDataToLatest } from '@/utils/saveMigration';
 import { validateSaveDataV3 } from '@/utils/saveValidationV3';
 import { createDadBundle, unwrapDadBundle } from '@/utils/dadBundle';
 import type { SaveDataV3 } from '@/types/saveSchemaV3';
-import { verifyStoredToken } from '@/services/request';
-import { isBackendConfigured } from '@/services/backendConfig';
 import { BUILTIN_SCENARIO_MODS } from '@/modules/scenarioMods/builtins';
 import {
   buildR20VAcceptancePack,
@@ -599,7 +498,6 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<{
   (e: 'back'): void;
-  (e: 'login'): void;
   (e: 'close'): void;
   (e: 'character-selected', character: CharacterProfile): void;
 }>();
@@ -608,8 +506,6 @@ const isFullscreen = computed(() => props.fullscreen);
 
 const router = useRouter();
 const characterStore = useCharacterStore();
-// 临时：管理面板不再校验登录状态，默认视为已登录
-const isLoggedIn = ref(true);
 const selectedCharId = ref<string | null>(null);
 const showDetailsModal = ref(false);
 const detailsCharacter = ref<CharacterProfile | null>(null);
@@ -716,6 +612,8 @@ onMounted(async () => {
 
   const characterIds = Object.keys(characterStore.rootState.角色列表);
   for (const charId of characterIds) {
+    const profile = characterStore.rootState.角色列表[charId];
+    if (profile?.模式 === '联机') continue;
     try {
       await characterStore.loadCharacterSaves(charId);
     } catch (error) {
@@ -744,11 +642,6 @@ const modalState = ref({
   onConfirm: (() => {}) as (() => void) | ((value: string) => void),
   onCancel: () => {}
 });
-
-// 暂停登录校验：避免进入"续前世因缘"时阻断
-// verifyStoredToken().then(result => {
-//   isLoggedIn.value = result;
-// });
 
 // 计算属性
 const allCharacterCount = computed(() => Object.keys(characterStore.rootState.角色列表).length);
@@ -789,6 +682,12 @@ const selectCharacter = async (charId: string) => {
   if (selectedCharId.value === charId) return;
 
   selectedCharId.value = charId;
+  const profile = characterStore.rootState.角色列表[charId];
+  if (profile?.模式 === '联机') {
+    isLoadingSaves.value = false;
+    if (isMobile.value) isCharacterPanelOpen.value = false;
+    return;
+  }
   isLoadingSaves.value = true;
 
   try {
@@ -829,14 +728,9 @@ const handleSelect = async (charId: string, slotKey: string, hasData: boolean) =
   console.log('选择存档:', charId, slotKey, hasData);
   const character = characterStore.rootState.角色列表[charId];
 
-  // 联机模式：先检测登录状态
-  if (character?.模式 === '联机' && isBackendConfigured()) {
-    const tokenValid = await verifyStoredToken();
-    if (!tokenValid) {
-      toast.warning('联机模式需要登录，正在跳转...');
-      router.push('/login');
-      return;
-    }
+  if (character?.模式 === '联机') {
+    toast.info('旧联机角色已只读保留，待下一批迁移为本地存档');
+    return;
   }
 
   if (hasData) {
@@ -1005,10 +899,6 @@ const handleClose = () => {
   } else {
     goBack();
   }
-};
-
-const handleLogin = () => {
-  emit('login');
 };
 
 const normalizeSaveDataV3 = (saveData: unknown): SaveDataV3 | null => {
@@ -1413,6 +1303,10 @@ const _exportSaves = async () => {
 const importSaves = () => {
   if (!selectedCharacter.value) {
     toast.error('请先选择一个角色以导入存档');
+    return;
+  }
+  if (selectedCharacter.value.模式 !== '单机') {
+    toast.error('旧联机角色只读保留，不能直接导入或覆盖存档');
     return;
   }
   importMode.value = 'saves';

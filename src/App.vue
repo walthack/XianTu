@@ -75,14 +75,6 @@
           <FileText :size="18" />
           <span>提示词管理</span>
         </button>
-        <button class="action-menu-item" :class="{ 'is-disabled': !backendReady }" @click="openWorkshop(close)">
-          <Store :size="18" />
-          <span>创意工坊</span>
-        </button>
-        <button class="action-menu-item" :class="{ 'is-disabled': !backendReady }" @click="openAccountCenter(close)">
-          <UserCircle :size="18" />
-          <span>账号中心</span>
-        </button>
         <button class="action-menu-item" @click="toggleTheme(); close()">
           <component :is="themeMode === 'dark' ? Sun : Moon" :size="18" />
           <span>{{ themeMode === 'dark' ? '切换亮色' : '切换暗色' }}</span>
@@ -108,11 +100,8 @@
         :is="Component"
         @start-creation="handleStartCreation"
         @show-character-list="handleShowCharacterList"
-        @go-to-login="handleGoToLogin"
         @back="handleBack"
         @creation-complete="handleCreationComplete"
-        @loggedIn="handleLoggedIn"
-        @login="handleGoToLogin"
         @show-help="showHelp"
       />
     </router-view>
@@ -230,7 +219,7 @@
 import { ref, onMounted, onUnmounted, computed, watchEffect, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import $ from 'jquery'; // 导入 jQuery
-import { BookOpen, X, Maximize2, Minimize2, Moon, Sun, Settings, Store, Globe, UserCircle, Heart, ArrowRight, Plug, FileText } from 'lucide-vue-next'; // 导入图标
+import { BookOpen, X, Maximize2, Minimize2, Moon, Sun, Settings, Globe, Heart, ArrowRight, Plug, FileText } from 'lucide-vue-next'; // 导入图标
 import ToastContainer from './components/common/ToastContainer.vue';
 import GlobalLoadingOverlay from './components/common/GlobalLoadingOverlay.vue';
 import RetryConfirmDialog from './components/common/RetryConfirmDialog.vue';
@@ -248,19 +237,13 @@ import { useUIStore } from './stores/uiStore';
 import { useGameStateStore } from './stores/gameStateStore';
 import { toast } from './utils/toast';
 import { getTavernHelper } from './utils/tavern'; // 添加导入
-import { fetchBackendVersion, isBackendConfigured } from '@/services/backendConfig';
-import { heartbeatPresenceSilent } from '@/services/presence';
-import { endTravelBeacon } from '@/services/onlineTravel';
 import { getFullscreenElement, requestFullscreen, exitFullscreen, explainFullscreenError } from './utils/fullscreen';
 import { MUSIC_SETTINGS_EVENT, musicEngine, readMusicSettings, type MusicSettings } from './utils/musicEngine';
 import { resolveMusicMoodForScenario, resolveMoodFromNarrative, pickTrackForMood, musicMoodRank, type MusicMood } from './utils/musicLibrary';
 import type { CharacterBaseInfo } from '@/types/game';
 import type { CharacterCreationPayload, Talent } from '@/types';
 
-const backendVersion = ref<string | null>(null);
-
 // --- 响应式状态定义 ---
-const isLoggedIn = ref(false);
 type ThemeMode = 'light' | 'dark';
 const normalizeTheme = (value: string | null): ThemeMode => {
   if (value === 'light' || value === 'dark') return value;
@@ -273,15 +256,12 @@ const showSettingsModal = ref(false);
 const showAPIModal = ref(false);
 const showSponsorModal = ref(false);
 const showPromptModal = ref(false);
-const backendReady = ref(isBackendConfigured());
-const displayVersion = computed(() => (
-  backendReady.value ? (backendVersion.value ?? '同步中') : APP_VERSION
-));
+const displayVersion = APP_VERSION;
 
 // --- 路由与视图管理 ---
 const router = useRouter();
 const route = useRoute();
-type ViewName = 'ModeSelection' | 'CharacterCreation' | 'Login' | 'CharacterManagement' | 'GameView';
+type ViewName = 'ModeSelection' | 'CharacterCreation' | 'CharacterManagement' | 'GameView';
 
 // 判断是否在游戏界面（包括所有游戏子路由）
 const isInGameView = computed(() => {
@@ -296,7 +276,6 @@ const switchView = (viewName: ViewName) => {
   const routeMap: Record<ViewName, string> = {
     ModeSelection: '/',
     CharacterCreation: '/creation',
-    Login: '/login',
     CharacterManagement: '/management',
     GameView: '/game',
   };
@@ -385,48 +364,11 @@ watch([activeScenarioChapterId, activeScenarioEvents, latestAiNarrative], ([chap
   musicEngine.setTrack(pickTrackForMood(mood));
 }, { immediate: true });
 
-// --- 联机在线心跳（进入联机存档即轮询，停掉=下线） ---
-const onlineHeartbeatTimer = ref<number | null>(null);
-const ONLINE_HEARTBEAT_INTERVAL = 15_000;
-const isOnlineSaveActive = computed(() => isInGameView.value && characterStore.activeCharacterProfile?.模式 === '联机');
-
-const stopOnlineHeartbeat = () => {
-  if (onlineHeartbeatTimer.value) {
-    clearInterval(onlineHeartbeatTimer.value);
-    onlineHeartbeatTimer.value = null;
-  }
-};
-
-const startOnlineHeartbeat = () => {
-  stopOnlineHeartbeat();
-  if (!backendReady.value) return;
-  if (!isOnlineSaveActive.value) return;
-  // 立即心跳一次，随后轮询
-  void heartbeatPresenceSilent();
-  onlineHeartbeatTimer.value = window.setInterval(() => {
-    void heartbeatPresenceSilent();
-  }, ONLINE_HEARTBEAT_INTERVAL);
-};
-
-watch([isOnlineSaveActive, backendReady], () => {
-  if (isOnlineSaveActive.value && backendReady.value) startOnlineHeartbeat();
-  else stopOnlineHeartbeat();
-});
-
 // --- 事件处理器 ---
-const handleStartCreation = async (mode: 'single' | 'cloud') => {
+const handleStartCreation = async () => {
   try {
-    // 全局封锁联机模式：未配置后端则禁止进入 cloud
-    if (mode === 'cloud' && !backendReady.value) {
-      toast.info('未配置后端服务器，联机共修不可用');
-      switchView('ModeSelection');
-      return;
-    }
-    const targetMode = mode === 'cloud' ? 'cloud' : 'single';
-    creationStore.setMode(targetMode);
-    if (true) {
-      switchView('CharacterCreation');
-    }
+    creationStore.setMode('single');
+    switchView('CharacterCreation');
   } catch (error) {
     console.error("Failed to initialize creation data:", error);
     toast.error("初始化创角数据失败，请稍后重试。");
@@ -442,37 +384,6 @@ const handleShowCharacterList = () => {
 const handleBack = () => {
   creationStore.resetCharacter();
   switchView('ModeSelection');
-};
-
-const handleLoggedIn = () => {
-  isLoggedIn.value = true;
-  switchView('ModeSelection');
-};
-
-const handleGoToLogin = () => {
-  if (!backendReady.value) {
-    toast.info('未配置后端服务器，登录不可用');
-    return;
-  }
-  switchView('Login');
-};
-
-const openWorkshop = (close: () => void) => {
-  if (!backendReady.value) {
-    toast.info('未配置后端服务器，创意工坊不可用');
-    return;
-  }
-  router.push('/workshop');
-  close();
-};
-
-const openAccountCenter = (close: () => void) => {
-  if (!backendReady.value) {
-    toast.info('未配置后端服务器，账号中心不可用');
-    return;
-  }
-  router.push('/account');
-  close();
 };
 
 const handleCreationComplete = async (rawPayload: CharacterCreationPayload) => {
@@ -562,7 +473,7 @@ const handleCreationComplete = async (rawPayload: CharacterCreationPayload) => {
         charId: charId, // 使用外层定义的charId
         baseInfo: baseInfo,
         world: rawPayload.world,
-        mode: rawPayload.mode as '单机' | '联机',
+        mode: '单机' as const,
         age: rawPayload.age,
       };
 
@@ -576,7 +487,7 @@ const handleCreationComplete = async (rawPayload: CharacterCreationPayload) => {
         throw new Error('严重错误：角色创建后无法在角色列表中找到！');
       }
 
-      const slotKey = profile.模式 === '单机' ? '存档1' : '云端修行';
+      const slotKey = '存档1';
       characterStore.rootState.当前激活存档 = { 角色ID: charId, 存档槽位: slotKey };
       await characterStore.commitMetadataToStorage();
 
@@ -716,12 +627,6 @@ onMounted(async () => {
   };
   window.addEventListener(MUSIC_SETTINGS_EVENT, handleMusicSettingsChanged);
 
-  if (backendReady.value) {
-    const fetchedVersion = await fetchBackendVersion();
-    if (fetchedVersion) {
-      backendVersion.value = fetchedVersion;
-    }
-  }
   // 0. 等待 characterStore 初始化完成（加载 IndexedDB 数据）
   console.log('[App] 等待 characterStore 初始化...');
   await characterStore.initializeStore();
@@ -820,26 +725,10 @@ onMounted(async () => {
     }
   }, 5 * 60 * 1000); // 5分钟
 
-  // 6. 页面关闭时尝试结束穿越会话
-  const handleBeforeUnload = () => {
-    // 检查是否有活跃的穿越会话
-    const onlineState = gameStateStore.onlineState as any;
-    const sessionId = onlineState?.房间ID;
-    if (sessionId && characterStore.activeCharacterProfile?.模式 === '联机') {
-      // 尝试结束穿越会话
-      endTravelBeacon(Number(sessionId));
-      console.log('[App] beforeunload: 尝试结束穿越会话', sessionId);
-    }
-  };
-  window.addEventListener('beforeunload', handleBeforeUnload);
-
   // 统一的清理逻辑
   onUnmounted(() => {
-    stopOnlineHeartbeat();
     // 清理定时保存定时器
     clearInterval(saveInterval);
-    // 清理 beforeunload 监听
-    window.removeEventListener('beforeunload', handleBeforeUnload);
     // 清理父窗口resize监听
     try {
       if (targetParentWindow) {

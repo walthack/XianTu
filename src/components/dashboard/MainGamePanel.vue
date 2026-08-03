@@ -109,12 +109,6 @@
                 <Bell :size="20" />
               </button>
 
-              <span
-                v-if="isOnlineTraveling"
-                class="traveling-badge"
-                :title="travelingTooltip"
-              >穿越中</span>
-
               <!-- 命令日志按钮 -->
               <button
                 @click="showStateChanges(currentNarrative.stateChanges)"
@@ -748,24 +742,6 @@ const stageDepartureOffer = computed(() => {
   return save ? getStageDepartureOffer(save) : null;
 });
 const stageDeparturePending = ref(false);
-
-const isOnlineTraveling = computed(() => {
-  const online = gameStateStore.onlineState as any;
-  return online?.模式 === '联机' && !!online?.房间ID;
-});
-
-const travelingTooltip = computed(() => {
-  if (!isOnlineTraveling.value) return '';
-  const online = gameStateStore.onlineState as any;
-  const sessionId = online?.房间ID ? String(online.房间ID) : '';
-  const owner = online?.穿越目标?.主人用户名 ? String(online.穿越目标.主人用户名) : '';
-  const worldId = online?.穿越目标?.世界ID != null ? String(online.穿越目标.世界ID) : '';
-  const parts = ['联机穿越中'];
-  if (owner) parts.push(`目标：${owner}`);
-  if (worldId) parts.push(`世界#${worldId}`);
-  if (sessionId) parts.push(`会话#${sessionId}`);
-  return parts.join(' · ');
-});
 
 const openEventsPanel = () => {
   router.push('/game/events');
