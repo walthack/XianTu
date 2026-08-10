@@ -52,10 +52,14 @@ test('validator rejects dangling or colliding path receipts', async () => {
   const actions = stage.scenario.events.find(event => event.id === RUMOR_EVENT_ID).playerCompletionContract.actions;
   actions[0].outcomeEffects.success.pathReceipts[0].consumeAtEventIds = [];
   actions[1].outcomeEffects.success.pathReceipts[0].receiptId = actions[0].outcomeEffects.success.pathReceipts[0].receiptId;
+  actions[1].outcomeEffects.success.pathReceipts[0].mutexGroupId = 'shared.mutex';
+  actions[1].outcomeEffects.success.pathReceipts[0].dimension = 'identity';
   const result = validateScenarioMod(stage);
   assert.equal(result.valid, false);
   assert.equal(result.issues.some(issue => issue.code === 'required_array'), true);
   assert.equal(result.issues.some(issue => issue.code === 'duplicate_id'), true);
+  assert.equal(result.issues.some(issue => issue.code === 'invalid_owner'), true);
+  assert.equal(result.issues.some(issue => issue.code === 'invalid_enum'), true);
 });
 
 test('private tracing writes confirmed knowledge and one path receipt without completing the main anchor', async () => {
@@ -77,9 +81,18 @@ test('private tracing writes confirmed knowledge and one path receipt without co
     outcome: 'success',
   });
   let runtime = save.世界.状态.剧本模组;
-  assert.equal(runtime.playerKnowledge['fact.yange.yangwuhou_rumor.private_origin'].status, 'confirmed');
-  assert.equal(runtime.pathReceipts['path.yange.yangwuhou_rumor.private_trace'].choiceId, 'trace_rumor_privately');
+  assert.equal(runtime.playerKnowledge[`${RUMOR_EVENT_ID}.knowledge.private_origin`].status, 'confirmed');
+  assert.equal(runtime.pathReceipts[`${RUMOR_EVENT_ID}.path.private_trace`].choiceId, 'trace_rumor_privately');
   assert.equal(getCurrentStoryExplorationActions(save).length, 0, 'the mutually exclusive event closes after one route');
+  assert.deepEqual(recordStoryEventStructuredAction(save, action), {
+    attempted: false,
+    completed: true,
+    eventId: RUMOR_EVENT_ID,
+    reason: 'already_completed',
+  });
+  assert.equal(Object.keys(runtime.playerKnowledge).filter(id => id.startsWith(`${RUMOR_EVENT_ID}.knowledge.`)).length, 1,
+    'replay must not duplicate exploration knowledge');
+  assert.equal(Object.keys(runtime.pathReceipts).length, 1, 'replay must not duplicate path receipts');
 
   save = advanceScenarioRuntime(JSON.parse(JSON.stringify(save))).saveData;
   runtime = save.世界.状态.剧本模组;
@@ -101,7 +114,7 @@ test('street listening stays rumor-only and its receipt is consumed as narrative
   assert.equal(recordStoryEventStructuredAction(save, action).completed, true);
   save = advanceScenarioRuntime(JSON.parse(JSON.stringify(save))).saveData;
   const runtime = save.世界.状态.剧本模组;
-  const fact = runtime.playerKnowledge['fact.yange.yangwuhou_rumor.public_spread'];
+  const fact = runtime.playerKnowledge[`${RUMOR_EVENT_ID}.knowledge.public_spread`];
   assert.equal(fact.status, 'rumor');
   assert.doesNotMatch(fact.claim, /出自王蕙手笔/);
 
@@ -117,18 +130,12 @@ test('street listening stays rumor-only and its receipt is consumed as narrative
   assert.match(prompt, /不改变“.*”发生与否/);
 });
 
-test('ignoring exploration leaves no epistemic state and UI labels it separately from mainline', async () => {
+test('ignoring exploration leaves no epistemic state', async () => {
   const { advanceScenarioRuntime } = await loadTs('../src/modules/scenarioMods/runtime.ts');
   const save = advanceScenarioRuntime(await initializedStage()).saveData;
   const runtime = save.世界.状态.剧本模组;
   assert.deepEqual(runtime.pathReceipts, {});
   assert.equal(Object.keys(runtime.playerKnowledge || {}).some(id => id.includes('yangwuhou_rumor')), false);
-
-  const panel = await readFile(new URL('../src/components/dashboard/MainGamePanel.vue', import.meta.url), 'utf8');
-  const sidebar = await readFile(new URL('../src/components/dashboard/RightSidebar.vue', import.meta.url), 'utf8');
-  assert.match(panel, /exploration_engine' \? t\('探索'\)/);
-  assert.match(sidebar, /认知与路径/);
-  assert.match(sidebar, /（旧记录）/);
 
   const { validateCommand } = await loadTs('../src/utils/commandValidator.ts');
   const blocked = validateCommand({

@@ -234,6 +234,18 @@ test('stage transition preserves accumulated NPC relations and switches runtime'
       sourceEventId: 'event.firstmeeting',
     },
   };
+  rt.pathReceipts = {
+    'event.firstmeeting.path.private': {
+      receiptId: 'event.firstmeeting.path.private',
+      sourceEventId: 'event.firstmeeting',
+      choiceId: 'ask_privately',
+      mutexGroupId: 'event.firstmeeting.mutex.method',
+      dimension: 'method',
+      label: '私下询问',
+      selectedAtTurn: 3,
+      consumeAtEventIds: ['liuchao.next.event'],
+    },
+  };
   rt.flags['event.s06_03.void'] = true;
   rt.flags['branch.lcq.if_xieyi_longrest.active'] = true;
   rt.flags['character.xie_yi.status'] = 'longrest';
@@ -243,6 +255,19 @@ test('stage transition preserves accumulated NPC relations and switches runtime'
   // 未就绪时拒绝
   const notReady = transitionToNextScenarioStage({ ...structuredClone(save), 世界: { ...save.世界, 状态: { 剧本模组: { ...rt, nextStageReadyId: null } } } }, [nextMod]);
   assert.equal(notReady.ok, false);
+
+  const collidingRaw = structuredClone(rawNext);
+  collidingRaw.scenario.initialPlayerKnowledge = [{
+    factId: 'knowledge.player.entity.test',
+    subjectId: rawNext.canon.characters[0].id,
+    predicate: 'different_target_stage_fact',
+    status: 'confirmed',
+    disclosureScope: 'player',
+  }];
+  const collision = transitionToNextScenarioStage(save, [parseScenarioMod(collidingRaw)]);
+  assert.equal(collision.ok, false);
+  assert.equal(collision.reason, '跨关玩家知识 ID 冲突：knowledge.player.entity.test');
+  assert.equal(collision.saveData, save, 'failed transition must return the untouched source save');
 
   const result = transitionToNextScenarioStage(save, [nextMod]);
   assert.equal(result.ok, true, result.reason);
@@ -255,6 +280,7 @@ test('stage transition preserves accumulated NPC relations and switches runtime'
   assert.equal(newRt.chronicle.length, 2, '编年史事件与切关记录跨关保留');
   assert.equal(newRt.chronicle[1].type, 'stage');
   assert.equal(newRt.playerKnowledge['knowledge.player.entity.test'].status, 'rumor', '玩家知识账本跨关保留');
+  assert.equal(newRt.pathReceipts['event.firstmeeting.path.private'].label, '私下询问', '路径回执跨关保留');
   assert.equal(newRt.stageEntryPresentation.fromStageId, mod.manifest.id, '切关记录旧关身份');
   assert.equal(newRt.stageEntryPresentation.toStageId, nextMod.manifest.id, '切关记录新关身份');
   assert.equal(newRt.stageEntryPresentation.text, nextMod.scenario.opening.text, '主阅读面只使用目标关 opening');

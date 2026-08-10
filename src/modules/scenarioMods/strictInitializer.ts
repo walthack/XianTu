@@ -243,6 +243,14 @@ export interface StageTransitionResult {
   toName?: string;
 }
 
+function findLedgerIdCollision(
+  fresh: Record<string, unknown> | undefined,
+  inherited: Record<string, unknown>,
+): string | undefined {
+  const freshIds = new Set(Object.keys(fresh || {}));
+  return Object.keys(inherited).find(id => freshIds.has(id));
+}
+
 /**
  * 把存档推进到下一关：换 世界.信息/剧本模组运行时/开场位置，
  * 但**保留**玩家全部状态与 NPC 累积关系（好感度/与玩家关系/记忆），并携带不在新关花名册的旧 NPC。
@@ -314,6 +322,14 @@ export function transitionToNextScenarioStage(saveData: SaveData, modsOverride?:
     }
   }
   const newRuntime = (next as any).世界.状态.剧本模组;
+  const knowledgeCollision = findLedgerIdCollision(newRuntime.playerKnowledge, playerKnowledgeSnapshot);
+  if (knowledgeCollision) {
+    return { saveData, ok: false, reason: `跨关玩家知识 ID 冲突：${knowledgeCollision}` };
+  }
+  const pathCollision = findLedgerIdCollision(newRuntime.pathReceipts, pathReceiptsSnapshot);
+  if (pathCollision) {
+    return { saveData, ok: false, reason: `跨关路径回执 ID 冲突：${pathCollision}` };
+  }
   newRuntime.reconciledRegistryVersion = rt.reconciledRegistryVersion;
   if (divergenceSnapshot.length) newRuntime.divergences = divergenceSnapshot;
   if (chronicleSnapshot.length) newRuntime.chronicle = chronicleSnapshot;

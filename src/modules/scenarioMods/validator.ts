@@ -476,8 +476,16 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
                       validateId(knowledge.factId, `${knowledgePath}.factId`, add);
                     });
                     forEachRecord(rawEffects.playerKnowledge, `${effectsPath}.playerKnowledge`, (knowledge, knowledgePath) => {
-                      validateId(knowledge.factId, `${knowledgePath}.factId`, add);
-                      optionalId(knowledge.propositionId, `${knowledgePath}.propositionId`, add);
+                      const factValid = validateId(knowledge.factId, `${knowledgePath}.factId`, add);
+                      const propositionValid = optionalId(knowledge.propositionId, `${knowledgePath}.propositionId`, add);
+                      if (entity.exploration !== undefined && factValid
+                        && !String(knowledge.factId).startsWith(`${entity.id}.knowledge.`)) {
+                        add(`${knowledgePath}.factId`, 'invalid_owner', 'Exploration knowledge IDs must be namespaced by the source event.');
+                      }
+                      if (entity.exploration !== undefined && propositionValid && knowledge.propositionId !== undefined
+                        && !String(knowledge.propositionId).startsWith(`${entity.id}.proposition.`)) {
+                        add(`${knowledgePath}.propositionId`, 'invalid_owner', 'Exploration proposition IDs must be namespaced by the source event.');
+                      }
                       validateId(knowledge.subjectId, `${knowledgePath}.subjectId`, add);
                       requireString(knowledge.predicate, `${knowledgePath}.predicate`, add);
                       optionalId(knowledge.objectId, `${knowledgePath}.objectId`, add);
@@ -511,8 +519,24 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
                           pathReceiptIds.add(receiptId);
                         }
                       }
-                      if (!['method', 'allegiance', 'identity', 'cost'].includes(String(receipt.dimension))) {
-                        add(`${receiptPath}.dimension`, 'invalid_enum', 'Path receipt dimension must be method, allegiance, identity, or cost.');
+                      if (entity.exploration !== undefined) {
+                        if (receipt.sourceEventId !== entity.id) {
+                          add(`${receiptPath}.sourceEventId`, 'invalid_owner', 'Exploration path receipts must reference their owning event.');
+                        }
+                        if (receipt.choiceId !== action.id) {
+                          add(`${receiptPath}.choiceId`, 'invalid_owner', 'Exploration path receipts must reference their owning action.');
+                        }
+                        if (typeof receipt.receiptId === 'string'
+                          && !receipt.receiptId.startsWith(`${entity.id}.path.`)) {
+                          add(`${receiptPath}.receiptId`, 'invalid_owner', 'Exploration receipt IDs must be namespaced by the source event.');
+                        }
+                        if (typeof receipt.mutexGroupId === 'string'
+                          && !receipt.mutexGroupId.startsWith(`${entity.id}.mutex.`)) {
+                          add(`${receiptPath}.mutexGroupId`, 'invalid_owner', 'Exploration mutex IDs must be namespaced by the source event.');
+                        }
+                      }
+                      if (!['position', 'allegiance', 'method', 'participation', 'route'].includes(String(receipt.dimension))) {
+                        add(`${receiptPath}.dimension`, 'invalid_enum', 'Path receipt dimension must be position, allegiance, method, participation, or route.');
                       }
                       requireString(receipt.label, `${receiptPath}.label`, add);
                       validateIdArray(receipt.consumeAtEventIds, `${receiptPath}.consumeAtEventIds`, add);

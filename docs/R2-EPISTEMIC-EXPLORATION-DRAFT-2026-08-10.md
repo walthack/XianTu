@@ -238,6 +238,7 @@ interface ScenarioPathReceipt {
 4. 只改变形容词、镜头远近或一句台词，不算结构性路径差异。
 5. receipt 可以在消费后保留为历史，但是否继续影响必须显式声明。
 6. `eventActionStates.preparations` 仍只服务事件内步骤，不扩义成跨事件 receipt。
+7. 探索产生的 `knowledge/proposition/path/mutex` ID 必须以全局 `event.id` 为命名空间；`sourceEventId` 与 `choiceId` 必须分别等于所属事件与动作。跨关账本合并遇到同 ID 一律拒绝转场，不得按展开顺序静默覆盖。
 
 ---
 
@@ -450,7 +451,7 @@ G1A 通过后再决定是否进入 G1B 私密身份纵切；不得因为一条�
 ### 13.2 单 Stage 职责
 
 - `primaryRole = investigate`
-- `secondaryRole = allegiance`
+- `secondaryRole = position`
 - 核心问题：这套“皇叔”说法从哪里来，洛都众人为什么愿意相信？
 - 正典不变量：程宗扬不是因这本小史而获得真实血统；`s02_01–09` 结果不变。
 
@@ -461,7 +462,7 @@ G1A 通过后再决定是否进入 G1B 私密身份纵切；不得因为一条�
 | 私下追问小紫 | confirmed：王蕙撰写小史，“皇叔”是街巷附会 | `method/private_trace` | 真龙异象出现时，玩家明确知道政治神话如何被加工 |
 | 先听街巷传抄 | rumor：洛都正在传播血统说，但尚未核清推动者 | `method/public_listen` | 真龙异象出现时，玩家只能观察传言如何自我强化，不得先知作者 |
 
-两条 receipt 共用 `mutexGroupId=lyg.yangwuhou_rumor.source_method`；任一动作成功即完成该可选事件，另一条不得再选。完全忽略时主线照常推进，认知抽屉不出现该命题。
+两条 receipt 共用 `mutexGroupId=lyg.event.yangwuhou_rumor.mutex.source_method`；所有探索产生的 knowledge/proposition/path/mutex ID 必须以所属全局事件 ID 为命名空间，跨关合并遇到同 ID 时 fail-closed，禁止静默覆盖。任一动作成功即完成该可选事件，另一条不得再选。完全忽略时主线照常推进，认知抽屉不出现该命题。
 
 ### 13.4 G1A 验收
 

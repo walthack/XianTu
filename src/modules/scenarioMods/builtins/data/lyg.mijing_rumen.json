@@ -5648,8 +5648,8 @@
           "lyg.event.s02_06",
           "lyg.event.s02_07",
           "lyg.event.s02_08",
-          "lyg.event.s02_09",
-          "lyg.event.yangwuhou_rumor"
+          "lyg.event.yangwuhou_rumor",
+          "lyg.event.s02_09"
         ]
       }
     ],
@@ -6173,8 +6173,8 @@
                 "success": {
                   "playerKnowledge": [
                     {
-                      "factId": "fact.yange.yangwuhou_rumor.private_origin",
-                      "propositionId": "proposition.yange.yangwuhou_rumor.origin",
+                      "factId": "lyg.event.yangwuhou_rumor.knowledge.private_origin",
+                      "propositionId": "lyg.event.yangwuhou_rumor.proposition.origin",
                       "subjectId": "lyg.event.yangwuhou_rumor",
                       "predicate": "rumor_origin",
                       "claim": "小紫指出《阳武侯小史》出自王蕙手笔；“皇叔”说是街巷附会，不是你的正典身份。",
@@ -6189,10 +6189,10 @@
                   ],
                   "pathReceipts": [
                     {
-                      "receiptId": "path.yange.yangwuhou_rumor.private_trace",
+                      "receiptId": "lyg.event.yangwuhou_rumor.path.private_trace",
                       "sourceEventId": "lyg.event.yangwuhou_rumor",
                       "choiceId": "trace_rumor_privately",
-                      "mutexGroupId": "lyg.yangwuhou_rumor.source_method",
+                      "mutexGroupId": "lyg.event.yangwuhou_rumor.mutex.source_method",
                       "dimension": "method",
                       "label": "私下追查小史来源",
                       "consumeAtEventIds": [
@@ -6217,8 +6217,8 @@
                 "success": {
                   "playerKnowledge": [
                     {
-                      "factId": "fact.yange.yangwuhou_rumor.public_spread",
-                      "propositionId": "proposition.yange.yangwuhou_rumor.origin",
+                      "factId": "lyg.event.yangwuhou_rumor.knowledge.public_spread",
+                      "propositionId": "lyg.event.yangwuhou_rumor.proposition.origin",
                       "subjectId": "lyg.event.yangwuhou_rumor",
                       "predicate": "rumor_origin",
                       "claim": "洛都街巷正在把《阳武侯小史》附会成“皇叔”血统故事；你尚未查清是谁推动了传抄。",
@@ -6232,10 +6232,10 @@
                   ],
                   "pathReceipts": [
                     {
-                      "receiptId": "path.yange.yangwuhou_rumor.public_listen",
+                      "receiptId": "lyg.event.yangwuhou_rumor.path.public_listen",
                       "sourceEventId": "lyg.event.yangwuhou_rumor",
                       "choiceId": "listen_to_street_rumor",
-                      "mutexGroupId": "lyg.yangwuhou_rumor.source_method",
+                      "mutexGroupId": "lyg.event.yangwuhou_rumor.mutex.source_method",
                       "dimension": "method",
                       "label": "街巷听风",
                       "consumeAtEventIds": [

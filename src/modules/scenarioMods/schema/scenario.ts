@@ -242,7 +242,7 @@ export interface ScenarioPathReceipt {
   sourceEventId: string;
   choiceId: string;
   mutexGroupId: string;
-  dimension: 'method' | 'allegiance' | 'identity' | 'cost';
+  dimension: 'position' | 'allegiance' | 'method' | 'participation' | 'route';
   label: string;
   selectedAtTurn: number;
   consumeAtEventIds: string[];

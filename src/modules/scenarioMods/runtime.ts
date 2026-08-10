@@ -1054,12 +1054,6 @@ function applyStoryEventOutcomeEffects(
   }
   runtime.pathReceipts ||= {};
   for (const receipt of effects.pathReceipts || []) {
-    const mutexConflict = Object.values(runtime.pathReceipts).some(existing =>
-      existing.sourceEventId === event.id
-      && existing.mutexGroupId === receipt.mutexGroupId
-      && existing.receiptId !== receipt.receiptId,
-    );
-    if (mutexConflict) continue;
     runtime.pathReceipts[receipt.receiptId] ||= {
       ...structuredClone(receipt),
       sourceEventId: event.id,
@@ -1290,7 +1284,7 @@ export function recordStoryEventStructuredAction(
     return { attempted: false, completed: false, reason: 'invalid_selection' };
   }
   const event = selection.source === 'exploration_engine'
-    ? runtime.events.find(item => item.id === selection.eventId && isAvailableExplorationEvent(runtime, item))
+    ? runtime.events.find(item => item.id === selection.eventId && item.exploration !== undefined)
     : getCurrentPlayerCompletionEvent(runtime);
   const contract = event?.playerCompletionContract;
   if (!event || !contract || event.id !== selection.eventId) {
@@ -1304,13 +1298,17 @@ export function recordStoryEventStructuredAction(
   if (!action || action.timeCost !== selection.timeCost || action.actionText !== selection.actionText) {
     return { attempted: false, completed: false, eventId: event.id, reason: 'stale_action' };
   }
+  if (state.readyAtTurn !== undefined) {
+    return { attempted: false, completed: true, eventId: event.id, reason: 'already_completed' };
+  }
+  const eventId = event.id;
+  if (selection.source === 'exploration_engine' && !isAvailableExplorationEvent(runtime, event)) {
+    return { attempted: false, completed: false, eventId, reason: 'stale_event' };
+  }
   if (!eventActionAvailable(action, state)) {
     return { attempted: false, completed: false, eventId: event.id, reason: 'action_unavailable' };
   }
   const turn = Math.max(0, Number(runtime.worldTurn) || 0);
-  if (state.readyAtTurn !== undefined) {
-    return { attempted: false, completed: true, eventId: event.id, reason: 'already_completed' };
-  }
   if (state.lastAttemptAtTurn === turn) {
     return { attempted: false, completed: false, eventId: event.id, reason: 'already_attempted' };
   }
