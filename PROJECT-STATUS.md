@@ -1,6 +1,7 @@
 # 仙途 (XianTu) · 项目总体状况与并行分工文档
 
 > 面向「新加入的 agent」。读完这一篇即可独立认领一个模块开工。
+> 最后更新：2026-08-10（**R2-17 认知探索与路径差异 G0 全局规格已起草，待 Claude 独立二审**：基于 37 Stage／396 事件全库盘点，将探索拆为信息未知与路径未知，定义七类 Stage 职责、知识来源／确认／证伪／利用生命周期、跨事件 `pathReceipt`、并行探索行动面、最小认知 UI、作者模板、validator 与 G1→G4 扩量门。首个候选纵切修正为 `lcq.stage_05→06`，母女关系不早于 `s06_04` confirmed；不追改已完成 R2-0V，不宣称零引擎改动，不全库裸灌。当前仅 G0 文档，schema/runtime/UI/stage 均未实施。规格=`docs/R2-EPISTEMIC-EXPLORATION-DRAFT-2026-08-10.md`。）
 > 最后更新：2026-08-03（**单机化清理 G4A：创角会话已固定为单机，门禁通过、待提交后二审**：G3 提交=`150731b`，Claude job `claude-2026-08-03T15-22-30-958Z-f47b8cdf` PASS、P0/P1 无，P2/P3 按用户要求只登记。G4A 移除云端角色会话模式、兑换码 AI 生成与各创角步骤的联机分支；创角 payload 固定 `单机`，本地自定义、剧本预制与 AI 推演保持可用。显式“获取云端素材”继续通过 `CloudDataSync`/`fetchAllCloudData` 保留，不恢复登录或联机角色会话。`type-check`、37 关 `canon:build`、552/552 测试与 `build:single` 全绿；报告=`docs/SINGLE-PLAYER-CREATION-G4A-2026-08-03.md`。）
 > 上一次更新：2026-08-03（**单机化清理 G3：联机死代码与运行态收口已提交并二审 PASS**：提交=`150731b`；删除 13 个旧 view/panel/service/API 共 6,120 行叶节点，拆除联机 prompt、AI 穿越／离线代理注入与提示词只读条件，game-state 读写固定为单机运行态并保留位置坐标。`type-check`、37 关 `canon:build`、551/551 测试、`build:single` 与 bundle 字符串审计全绿；报告=`docs/SINGLE-PLAYER-DEAD-CODE-G3-2026-08-03.md`。）
 > 上一次更新：2026-08-03（**单机化清理 G2：旧联机本地缓存可恢复迁移已实现并二审 PASS**：G1 提交=`ae68e96`；G2 提交=`66de7d1`。角色管理页提供显式“复制为单机角色”：来源只读本机 IndexedDB，兼容 `云端修行/存档` 旧 key，不校验 token、不联网补拉；目标为带来源标记的新单机角色与 `存档1`，重复执行复用同一副本，ID 冲突安全。写入失败可重试，原联机角色、旧存档 key 与缓存元数据不删除；新副本进入普通单机存档链。报告=`docs/SINGLE-PLAYER-LEGACY-MIGRATION-G2-2026-08-03.md`。）
