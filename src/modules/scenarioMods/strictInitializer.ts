@@ -282,6 +282,9 @@ export function transitionToNextScenarioStage(saveData: SaveData, modsOverride?:
   const playerKnowledgeSnapshot = structuredClone(
     rt.playerKnowledge && typeof rt.playerKnowledge === 'object' ? rt.playerKnowledge : {},
   );
+  const pathReceiptsSnapshot = structuredClone(
+    rt.pathReceipts && typeof rt.pathReceipts === 'object' ? rt.pathReceipts : {},
+  );
   const npcPrivateKnowledgeSnapshot = structuredClone(
     rt.npcPrivateKnowledge && typeof rt.npcPrivateKnowledge === 'object' ? rt.npcPrivateKnowledge : {},
   );
@@ -317,6 +320,10 @@ export function transitionToNextScenarioStage(saveData: SaveData, modsOverride?:
   newRuntime.playerKnowledge = {
     ...(newRuntime.playerKnowledge || {}),
     ...playerKnowledgeSnapshot,
+  };
+  newRuntime.pathReceipts = {
+    ...(newRuntime.pathReceipts || {}),
+    ...pathReceiptsSnapshot,
   };
   newRuntime.npcPrivateKnowledge = {
     ...(newRuntime.npcPrivateKnowledge || {}),

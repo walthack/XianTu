@@ -79,13 +79,31 @@ interface StoryRuntime {
   }>;
   playerKnowledge?: Record<string, {
     factId: string;
+    propositionId?: string;
     subjectId: string;
     predicate: string;
     objectId?: string;
+    claim?: string;
     status: 'confirmed' | 'rumor';
     disclosureScope: 'player' | 'public';
     learnedAtTurn: number;
     sourceEventId?: string;
+    source?: {
+      kind: 'observed' | 'npc_statement' | 'document' | 'public_rumor';
+      actorId?: string;
+      label: string;
+    };
+    supersedesFactIds?: string[];
+  }>;
+  pathReceipts?: Record<string, {
+    receiptId: string;
+    sourceEventId: string;
+    choiceId: string;
+    mutexGroupId: string;
+    dimension: string;
+    label: string;
+    selectedAtTurn: number;
+    consumeAtEventIds: string[];
   }>;
   npcPrivateKnowledge?: Record<string, ScenarioNpcPrivateKnowledgeFact>;
   actorEngine?: {
@@ -145,6 +163,39 @@ function getRuntime(saveData: SaveData): StoryRuntime | null {
   const record = value as Record<string, unknown>;
   if (typeof record.modId !== 'string') return null;
   return record as unknown as StoryRuntime;
+}
+
+function formatPlayerEpistemicContext(runtime: StoryRuntime, anchor: ScenarioModEvent | null): string {
+  const facts = Object.values(runtime.playerKnowledge || {});
+  const entityNames = new Map([
+    ...((runtime.canon?.characters || []).map(item => [item.id, item.name] as const)),
+    ...((runtime.canon?.factions || []).map(item => [item.id, item.name] as const)),
+  ]);
+  const superseded = new Set(facts.flatMap(fact => fact.supersedesFactIds || []));
+  const latestByProposition = new Map<string, (typeof facts)[number]>();
+  for (const fact of facts
+    .filter(item => !superseded.has(item.factId))
+    .sort((a, b) => a.learnedAtTurn - b.learnedAtTurn || (a.factId < b.factId ? -1 : 1))) {
+    latestByProposition.set(fact.propositionId || `legacy:${fact.factId}`, fact);
+  }
+  const activeFacts = [...latestByProposition.values()];
+  const knowledgeLine = activeFacts.length
+    ? `【玩家知识账本=${activeFacts.map(fact => {
+      const subject = entityNames.get(fact.subjectId) || fact.subjectId;
+      const object = fact.objectId ? entityNames.get(fact.objectId) || fact.objectId : '';
+      const claim = fact.claim?.trim()
+        || `${subject}.${fact.predicate}${object ? `=${object}` : ''}[${fact.status}/${fact.disclosureScope}@${fact.learnedAtTurn}]（旧记录）`;
+      const source = fact.source?.label || fact.sourceEventId || '来源未记载';
+      return `${claim}[${fact.status === 'confirmed' ? '已确认' : '未核实传闻'}；来源=${source}；第${fact.learnedAtTurn}回合]`;
+    }).join('；')}】只限玩家已知。confirmed 可作玩家已知事实；rumor 必须保留来源与不确定性，不得写回世界真值。`
+    : '';
+  const pathLine = anchor
+    ? Object.values(runtime.pathReceipts || {})
+      .filter(receipt => receipt.consumeAtEventIds?.includes(anchor.id))
+      .map(receipt => `【路径回执·本节点消费】玩家此前选择“${receipt.label}”（维度=${receipt.dimension}）。只改变本节点的站位、回应与叙述入口，不改变“${anchor.name}”发生与否。`)
+      .join('\n')
+    : '';
+  return [knowledgeLine, pathLine].filter(Boolean).join('\n');
 }
 
 function collectIntroducedCharacterIds(runtime: StoryRuntime): string[] {
@@ -308,13 +359,6 @@ function formatWorldActorContract(runtime: StoryRuntime, anchor: ScenarioModEven
   const guardLine = guard
     ? `\n- renderGuard.forbiddenTerms=${guardedTerms.join('|')}；renderGuard.forbiddenAssociations=${JSON.stringify(guard.forbiddenAssociations || [])}；renderGuard.rejectConcreteQuantities=${guard.rejectConcreteQuantities === true}；renderGuard.allowUnverifiedQuantities=${guard.allowUnverifiedQuantities === true}。未核实数字必须带明确消息来源与不确定性，只是角色主张，绝不等同或写回世界真值。${guard.rejectConcreteQuantities === true ? '涉及军务、护卫或路线时，只写职责、通行、次序、联络和可见动作；除非存档已明确给出，否则不得自行补人数、距离或比例。' : ''}该行是最终落稿硬门禁，命中时必须重写，不得展示违规草稿。`
     : '';
-  const knowledgeLine = playerKnowledge.length
-    ? `\n- 玩家知识账本=${playerKnowledge.map(fact => {
-      const subject = entityNames.get(fact.subjectId) || fact.subjectId;
-      const object = fact.objectId ? entityNames.get(fact.objectId) || fact.objectId : '';
-      return `${subject}.${fact.predicate}${object ? `=${object}` : ''}[${fact.status}/${fact.disclosureScope}@${fact.learnedAtTurn}]`;
-    }).join('；')}。confirmed 可作为玩家已知事实；rumor 只能按有来源的未核实说法叙述，绝不得写回世界真值。`
-    : '';
   const forbiddenBefore = contract.decisionCore?.canonPolicy.forbiddenBefore || [];
   const timelineState = runtime.eventTimeline?.[anchor.id];
   const timelineAge = timelineState
@@ -323,7 +367,7 @@ function formatWorldActorContract(runtime: StoryRuntime, anchor: ScenarioModEven
   const timelineLine = anchor.timeline
     ? `\n- 事件时钟=${anchor.timeline.kind}；资格后第 ${timelineAge} 回合；最早=${anchor.timeline.notBeforeTurns}；截止=${anchor.timeline.deadlineTurns ?? '无硬截止'}。截止只由程序结算，LLM 不得自行提前宣告发生。`
     : '';
-  return `【世界演员合同·${contract.pressure.canonPolicy}】压力=${contract.pressure.summary}（范围=${contract.pressure.scope}，强度=${contract.pressure.intensity}）。${actionLine}\n- ${actorLine}\n- ${opportunityLine}\n- 决策阶段已结束，禁止重选行动或修改结算；只可依据 knownFacts 渲染，mustNotInvent 任一项均不得补造。本轮未唤醒角色不得擅自追加主动行动。${knowledgeLine}${guardLine}\n- forbiddenBefore=${forbiddenBefore.join('|')}。${timelineLine}\n- 正典边界：只改变过程、关系入口与行为权限；不得改写“${anchor.name}”的既定结果，不得提前演出后续事件或秘密。`;
+  return `【世界演员合同·${contract.pressure.canonPolicy}】压力=${contract.pressure.summary}（范围=${contract.pressure.scope}，强度=${contract.pressure.intensity}）。${actionLine}\n- ${actorLine}\n- ${opportunityLine}\n- 决策阶段已结束，禁止重选行动或修改结算；只可依据 knownFacts 渲染，mustNotInvent 任一项均不得补造。本轮未唤醒角色不得擅自追加主动行动。${guardLine}\n- forbiddenBefore=${forbiddenBefore.join('|')}。${timelineLine}\n- 正典边界：只改变过程、关系入口与行为权限；不得改写“${anchor.name}”的既定结果，不得提前演出后续事件或秘密。`;
 }
 
 function formatList(values: string[] | undefined, maxItems = 4, maxLen = 48): string {
@@ -928,6 +972,7 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
       })()
     : '';
   const worldPush = (runtime as any).worldPush;
+  const epistemicLine = formatPlayerEpistemicContext(runtime, anchor);
   const worldActorLine = formatWorldActorContract(runtime, nearestCritical || anchor, Boolean(worldPush?.due));
   const worldPushLine = worldPush?.due && !worldActorLine
     ? `【世界回合·本轮世界必须行动】原因=${worldPush.reason}，强度=${worldPush.intensity}。本轮至少让一个已登场 NPC、当前活跃事件或正典势力主动采取具体行动，改变玩家眼前的选择或局势；失败意味着世界取得行动权。不得只给静态环境描写、泛泛情报或等玩家追问。`
@@ -968,7 +1013,7 @@ ${nextSection}
 ## 剧情标记
 ${JSON.stringify(runtime.flags || {})}
 
-${focusedCharacterSection ? `${focusedCharacterSection}\n\n` : ''}${npcPrivateKnowledgeGuard ? `${npcPrivateKnowledgeGuard}\n\n` : ''}${globalIdentitySection ? `${globalIdentitySection}\n\n` : ''}${loadBearingLine ? `${loadBearingLine}\n\n` : ''}${divergenceLine ? `${divergenceLine}\n\n` : ''}${stageEntryLine ? `${stageEntryLine}\n\n` : ''}${settledBeatLine ? `${settledBeatLine}\n\n` : ''}${returnBridgeLine ? `${returnBridgeLine}\n\n` : ''}${divergenceControlLine ? `${divergenceControlLine}\n\n` : ''}${worldActorLine ? `${worldActorLine}\n\n` : ''}${worldPushLine ? `${worldPushLine}\n\n` : ''}${steeringLine ? `${steeringLine}\n\n` : ''}${reputationLine}\n\n${relationLine ? `${relationLine}\n\n` : ''}${completedGoalLine ? `${completedGoalLine}\n\n` : ''}${improvLine}\n\n【正典叙事事实约束】：
+${focusedCharacterSection ? `${focusedCharacterSection}\n\n` : ''}${npcPrivateKnowledgeGuard ? `${npcPrivateKnowledgeGuard}\n\n` : ''}${globalIdentitySection ? `${globalIdentitySection}\n\n` : ''}${loadBearingLine ? `${loadBearingLine}\n\n` : ''}${divergenceLine ? `${divergenceLine}\n\n` : ''}${stageEntryLine ? `${stageEntryLine}\n\n` : ''}${settledBeatLine ? `${settledBeatLine}\n\n` : ''}${returnBridgeLine ? `${returnBridgeLine}\n\n` : ''}${divergenceControlLine ? `${divergenceControlLine}\n\n` : ''}${epistemicLine ? `${epistemicLine}\n\n` : ''}${worldActorLine ? `${worldActorLine}\n\n` : ''}${worldPushLine ? `${worldPushLine}\n\n` : ''}${steeringLine ? `${steeringLine}\n\n` : ''}${reputationLine}\n\n${relationLine ? `${relationLine}\n\n` : ''}${completedGoalLine ? `${completedGoalLine}\n\n` : ''}${improvLine}\n\n【正典叙事事实约束】：
 1. 已知人物的姓名、别名、身份、物种、势力、亲属与政治关系均是事实字段：不得把人物写成兵器、坐骑、功法、物品或新角色；不得把称号、别名拆成另一个实体。
 2. 人物之间的血缘、主从、婚配、同党、结盟、仇怨，只有上文正典人物档案或当前事件明确写出时才可断言。没有依据时只能写“尚未可知/传闻待证”，绝不可因同姓、官职、阵营或历史常识擅自补关系。
 3. 叙事正文也必须遵守上述正典；这不是仅约束 tavern_commands 的规则。若玩家要求与正典矛盾的事实，明确说明冲突并以正典版本续写。

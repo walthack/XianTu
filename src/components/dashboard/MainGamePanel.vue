@@ -142,7 +142,7 @@
               class="action-option-btn engine-action-btn"
               :disabled="isAIProcessing"
             >
-              <span class="engine-action-badge">{{ option.source === 'event_engine' ? t('主线') : t('机会') }}</span>
+              <span class="engine-action-badge">{{ option.source === 'event_engine' ? t('主线') : option.source === 'exploration_engine' ? t('探索') : t('机会') }}</span>
               {{ option.label }} · 耗时 {{ option.timeCost }} 回合<template v-if="'remainingTurns' in option && option.remainingTurns !== undefined"> · 剩余 {{ option.remainingTurns }} 次重要行动</template>
             </button>
             <div class="engine-action-hint">{{ t('点按填入，可修改后发送') }}</div>
@@ -460,6 +460,7 @@ import { buildLocalJudgementPreflight, composeJudgementAction } from '@/utils/ju
 import { getNarrativeTurn } from '@/utils/actionGate';
 import {
   getCurrentStoryEventActions,
+  getCurrentStoryExplorationActions,
   getStageEntryPresentation,
   getStageDepartureOffer,
   getTrackedStoryOpportunityActions,
@@ -733,8 +734,9 @@ const scenarioEngineActionOptions = computed<ScenarioEngineActionSelection[]>(()
   const save = gameStateStore.toSaveData();
   if (!save) return [];
   return [
-    ...getTrackedStoryOpportunityActions(save),
     ...(hasPendingStoryBeatHandoff(save) ? [] : getCurrentStoryEventActions(save)),
+    ...getCurrentStoryExplorationActions(save),
+    ...getTrackedStoryOpportunityActions(save),
   ];
 });
 const stageDepartureOffer = computed(() => {
@@ -1531,7 +1533,7 @@ const selectActionOption = (option: string) => {
 
 const selectScenarioEngineAction = (option: ScenarioEngineActionSelection) => {
   selectedScenarioEngineAction.value = option;
-  const playerLine = option.source === 'event_engine' ? option.playerLine : option.actionText;
+  const playerLine = option.source === 'opportunity_engine' ? option.actionText : option.playerLine;
   lastSelectedActionOption.value = playerLine;
   inputText.value = playerLine;
   nextTick(() => {
@@ -1629,7 +1631,8 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
 ` : '';
   }
   if (
-    selectedScenarioEngineAction.value?.source === 'event_engine'
+    selectedScenarioEngineAction.value
+    && selectedScenarioEngineAction.value.source !== 'opportunity_engine'
     && selectedScenarioEngineAction.value.playerLine === userMessage
   ) {
     const result = selectedScenarioEngineAction.value;
@@ -1683,9 +1686,11 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
         useStreaming: useStreaming.value,
         shouldAbort: () => !uiStore.isAIProcessing || aiResetToken !== resetSnapshot,
       };
-      const selectedPlayerLine = selectedScenarioEngineAction.value?.source === 'event_engine'
-        ? selectedScenarioEngineAction.value.playerLine
-        : selectedScenarioEngineAction.value?.actionText;
+      const selectedPlayerLine = !selectedScenarioEngineAction.value
+        ? undefined
+        : selectedScenarioEngineAction.value.source === 'opportunity_engine'
+          ? selectedScenarioEngineAction.value.actionText
+          : selectedScenarioEngineAction.value.playerLine;
       if (selectedScenarioEngineAction.value && selectedPlayerLine === userMessage) {
         const selected = { ...selectedScenarioEngineAction.value };
         if (selected.source === 'opportunity_engine') options.opportunityAction = selected;

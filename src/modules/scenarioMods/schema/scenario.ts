@@ -69,13 +69,24 @@ export interface ScenarioNarrativeFactReceipt {
 /** 玩家认知账本的最小事实；与世界真值、NPC knowledgeFacts 分开存储。 */
 export interface ScenarioPlayerKnowledgeFact {
   factId: string;
+  /** 同一命题的 rumor/confirmed 演进键；缺省表示旧版三元组记录。 */
+  propositionId?: string;
   subjectId: string;
   predicate: string;
   objectId?: string;
+  /** 玩家可直接阅读、prompt 可逐字采用的声明；旧档缺省时不得由 UI 猜写。 */
+  claim?: string;
   status: ScenarioPlayerKnowledgeStatus;
   disclosureScope: ScenarioPlayerKnowledgeScope;
   learnedAtTurn: number;
   sourceEventId?: string;
+  source?: {
+    kind: 'observed' | 'npc_statement' | 'document' | 'public_rumor';
+    actorId?: string;
+    label: string;
+  };
+  evidenceFactIds?: string[];
+  supersedesFactIds?: string[];
 }
 
 export type ScenarioInitialPlayerKnowledgeFact = Omit<ScenarioPlayerKnowledgeFact, 'learnedAtTurn'>;
@@ -156,6 +167,11 @@ export interface ScenarioModEvent {
   narrativeFactReceipts?: ScenarioNarrativeFactReceipt[];
   /** 无机会卡事件的本地完成合同；动作身份与判定结果均由引擎持有。 */
   playerCompletionContract?: ScenarioPlayerCompletionContract;
+  /** 显式允许 non-critical 事件与主线并列展示；未标记的资料事件保持不可操作。 */
+  exploration?: {
+    role: 'seed' | 'investigate' | 'position' | 'payoff';
+    secondaryRole?: 'seed' | 'investigate' | 'position' | 'payoff';
+  };
 }
 
 export interface ScenarioPlayerCompletionContract {
@@ -200,18 +216,37 @@ export interface ScenarioPlayerCompletionEffects {
   }>;
   playerKnowledge?: Array<{
     factId: string;
+    propositionId?: string;
     subjectId: string;
     predicate: string;
     objectId?: string;
+    claim?: string;
     status: ScenarioPlayerKnowledgeStatus;
     disclosureScope: ScenarioPlayerKnowledgeScope;
+    source?: ScenarioPlayerKnowledgeFact['source'];
+    evidenceFactIds?: string[];
+    supersedesFactIds?: string[];
   }>;
+  pathReceipts?: Array<Omit<ScenarioPathReceipt, 'selectedAtTurn'>>;
   memories?: Array<{
     actorIds: string[];
     summary: string;
     tags: string[];
     salience: number;
   }>;
+}
+
+/** 玩家如何抵达同一正典节点的路径回执；不改变节点发生与否。 */
+export interface ScenarioPathReceipt {
+  receiptId: string;
+  sourceEventId: string;
+  choiceId: string;
+  mutexGroupId: string;
+  dimension: 'method' | 'allegiance' | 'identity' | 'cost';
+  label: string;
+  selectedAtTurn: number;
+  consumeAtEventIds: string[];
+  expiresAfterEventId?: string;
 }
 
 export type ScenarioModEventTimelineKind = 'canon_anchor' | 'window' | 'emergent';

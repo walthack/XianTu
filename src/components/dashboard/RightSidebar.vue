@@ -228,6 +228,30 @@
         </div>
       </div>
 
+      <!-- 玩家认知与路径：只展示引擎已落账内容，不从叙事猜测事实 -->
+      <div v-if="cognitionEntries.length || pathEntries.length" class="collapsible-section quest-section">
+        <div class="section-header" @click="cognitionCollapsed = !cognitionCollapsed">
+          <h3 class="section-title">
+            <Brain :size="14" class="section-icon" />
+            <span>{{ t('认知与路径') }}</span>
+          </h3>
+          <button class="collapse-toggle" :class="{ 'collapsed': cognitionCollapsed }">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8 10l4-4H4l4 4z"/></svg>
+          </button>
+        </div>
+        <div v-show="!cognitionCollapsed" class="quest-body">
+          <div v-for="entry in cognitionEntries" :key="entry.id" class="quest-event">
+            <span class="quest-tag" :class="entry.confirmed ? 'quest-tag-main' : 'quest-tag-side'">{{ entry.confirmed ? t('已确认') : t('听说') }}</span>
+            {{ entry.claim }}
+            <div class="quest-more">{{ entry.source }} · 第 {{ entry.turn }} 回合</div>
+          </div>
+          <div v-for="entry in pathEntries" :key="entry.id" class="quest-event">
+            <span class="quest-mark-main">◇</span>{{ entry.label }}
+            <div class="quest-more">{{ t('路径记录') }} · {{ entry.dimension }} · 第 {{ entry.turn }} 回合</div>
+          </div>
+        </div>
+      </div>
+
       <!-- 世界演员：角色先行动，玩家可选择是否介入 -->
       <div v-if="actorView" class="collapsible-section quest-section actor-section">
         <div class="section-header" @click="actorCollapsed = !actorCollapsed">
@@ -372,6 +396,7 @@ const statusEffects = computed(() => {
 });
 
 const questCollapsed = ref(false);
+const cognitionCollapsed = ref(false);
 const worldlineCollapsed = ref(false);
 const chronicleCollapsed = ref(true);
 const actorCollapsed = ref(false);
@@ -379,6 +404,37 @@ const stageSwitching = ref(false);
 const stageSwitchError = ref('');
 const returningToCanon = ref(false);
 const trackingOpportunity = ref('');
+const cognitionEntries = computed(() => {
+  const rt: any = (gameStateStore.worldState as any)?.剧本模组;
+  const facts = rt?.playerKnowledge && typeof rt.playerKnowledge === 'object'
+    ? Object.values(rt.playerKnowledge) as any[]
+    : [];
+  return facts.sort((a, b) => Number(b.learnedAtTurn || 0) - Number(a.learnedAtTurn || 0))
+    .slice(0, 12)
+    .map(fact => ({
+      id: String(fact.factId),
+      confirmed: fact.status === 'confirmed',
+      claim: typeof fact.claim === 'string' && fact.claim.trim()
+        ? fact.claim
+        : `${fact.subjectId}.${fact.predicate}${fact.objectId ? `=${fact.objectId}` : ''}（旧记录）`,
+      source: String(fact.source?.label || fact.sourceEventId || '来源未记载'),
+      turn: Number(fact.learnedAtTurn || 0),
+    }));
+});
+const pathEntries = computed(() => {
+  const rt: any = (gameStateStore.worldState as any)?.剧本模组;
+  const receipts = rt?.pathReceipts && typeof rt.pathReceipts === 'object'
+    ? Object.values(rt.pathReceipts) as any[]
+    : [];
+  return receipts.sort((a, b) => Number(b.selectedAtTurn || 0) - Number(a.selectedAtTurn || 0))
+    .slice(0, 8)
+    .map(receipt => ({
+      id: String(receipt.receiptId),
+      label: String(receipt.label),
+      dimension: String(receipt.dimension),
+      turn: Number(receipt.selectedAtTurn || 0),
+    }));
+});
 // 剧情主线：章节/活跃事件/清关状态/下一关（确定性，读 worldState.剧本模组）
 const questMain = computed(() => {
   const rt: any = (gameStateStore.worldState as any)?.剧本模组;

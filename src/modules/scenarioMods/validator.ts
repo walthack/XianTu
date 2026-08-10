@@ -105,6 +105,7 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
   const itemIds = new Set<string>();
   const eventIds = new Set<string>();
   const chapterIds = new Set<string>();
+  const pathReceiptIds = new Set<string>();
 
   const canon = input.canon;
   if (canon !== undefined && !isRecord(canon)) {
@@ -203,10 +204,25 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
             if (factIds.has(rawFact.factId)) add(`${path}.factId`, 'duplicate_id', `Duplicate player knowledge fact "${rawFact.factId}".`);
             factIds.add(rawFact.factId);
           }
+          optionalId(rawFact.propositionId, `${path}.propositionId`, add);
           validateId(rawFact.subjectId, `${path}.subjectId`, add);
           requireString(rawFact.predicate, `${path}.predicate`, add);
           optionalId(rawFact.objectId, `${path}.objectId`, add);
+          optionalString(rawFact.claim, `${path}.claim`, add);
           optionalId(rawFact.sourceEventId, `${path}.sourceEventId`, add);
+          validateIdArray(rawFact.evidenceFactIds, `${path}.evidenceFactIds`, add);
+          validateIdArray(rawFact.supersedesFactIds, `${path}.supersedesFactIds`, add);
+          if (rawFact.source !== undefined) {
+            if (!isRecord(rawFact.source)) {
+              add(`${path}.source`, 'invalid_type', 'Knowledge source must be an object.');
+            } else {
+              if (!['observed', 'npc_statement', 'document', 'public_rumor'].includes(String(rawFact.source.kind))) {
+                add(`${path}.source.kind`, 'invalid_enum', 'Unknown player knowledge source kind.');
+              }
+              optionalId(rawFact.source.actorId, `${path}.source.actorId`, add);
+              requireString(rawFact.source.label, `${path}.source.label`, add);
+            }
+          }
           if (rawFact.status !== 'confirmed' && rawFact.status !== 'rumor') {
             add(`${path}.status`, 'invalid_enum', 'status must be confirmed or rumor.');
           }
@@ -322,6 +338,26 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
                 }
               }
             }
+          }
+        }
+      }
+      if (entity.exploration !== undefined) {
+        const explorationPath = `${entity.__path}.exploration`;
+        if (!isRecord(entity.exploration)) {
+          add(explorationPath, 'invalid_type', 'exploration must be an object.');
+        } else {
+          const roles = ['seed', 'investigate', 'position', 'payoff'];
+          if (!roles.includes(String(entity.exploration.role))) {
+            add(`${explorationPath}.role`, 'invalid_enum', 'Unknown exploration role.');
+          }
+          if (entity.exploration.secondaryRole !== undefined && !roles.includes(String(entity.exploration.secondaryRole))) {
+            add(`${explorationPath}.secondaryRole`, 'invalid_enum', 'Unknown secondary exploration role.');
+          }
+          if (entity.critical !== false) {
+            add(explorationPath, 'invalid_value', 'Exploration events must explicitly declare critical=false.');
+          }
+          if (!isRecord(entity.playerCompletionContract)) {
+            add(explorationPath, 'missing_contract', 'Exploration events require playerCompletionContract.');
           }
         }
       }
@@ -441,15 +477,49 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
                     });
                     forEachRecord(rawEffects.playerKnowledge, `${effectsPath}.playerKnowledge`, (knowledge, knowledgePath) => {
                       validateId(knowledge.factId, `${knowledgePath}.factId`, add);
+                      optionalId(knowledge.propositionId, `${knowledgePath}.propositionId`, add);
                       validateId(knowledge.subjectId, `${knowledgePath}.subjectId`, add);
                       requireString(knowledge.predicate, `${knowledgePath}.predicate`, add);
                       optionalId(knowledge.objectId, `${knowledgePath}.objectId`, add);
+                      optionalString(knowledge.claim, `${knowledgePath}.claim`, add);
+                      validateIdArray(knowledge.evidenceFactIds, `${knowledgePath}.evidenceFactIds`, add);
+                      validateIdArray(knowledge.supersedesFactIds, `${knowledgePath}.supersedesFactIds`, add);
+                      if (knowledge.source !== undefined) {
+                        if (!isRecord(knowledge.source)) {
+                          add(`${knowledgePath}.source`, 'invalid_type', 'Knowledge source must be an object.');
+                        } else {
+                          if (!['observed', 'npc_statement', 'document', 'public_rumor'].includes(String(knowledge.source.kind))) {
+                            add(`${knowledgePath}.source.kind`, 'invalid_enum', 'Unknown player knowledge source kind.');
+                          }
+                          optionalId(knowledge.source.actorId, `${knowledgePath}.source.actorId`, add);
+                          requireString(knowledge.source.label, `${knowledgePath}.source.label`, add);
+                        }
+                      }
                       if (!['confirmed', 'rumor'].includes(String(knowledge.status))) {
                         add(`${knowledgePath}.status`, 'invalid_enum', 'Player knowledge status must be confirmed or rumor.');
                       }
                       if (!['player', 'public'].includes(String(knowledge.disclosureScope))) {
                         add(`${knowledgePath}.disclosureScope`, 'invalid_enum', 'disclosureScope must be player or public.');
                       }
+                    });
+                    forEachRecord(rawEffects.pathReceipts, `${effectsPath}.pathReceipts`, (receipt, receiptPath) => {
+                      for (const field of ['receiptId', 'sourceEventId', 'choiceId', 'mutexGroupId']) {
+                        const valid = validateId(receipt[field], `${receiptPath}.${field}`, add);
+                        if (field === 'receiptId' && valid) {
+                          const receiptId = String(receipt[field]);
+                          if (pathReceiptIds.has(receiptId)) add(`${receiptPath}.${field}`, 'duplicate_id', `Duplicate path receipt "${receiptId}".`);
+                          pathReceiptIds.add(receiptId);
+                        }
+                      }
+                      if (!['method', 'allegiance', 'identity', 'cost'].includes(String(receipt.dimension))) {
+                        add(`${receiptPath}.dimension`, 'invalid_enum', 'Path receipt dimension must be method, allegiance, identity, or cost.');
+                      }
+                      requireString(receipt.label, `${receiptPath}.label`, add);
+                      validateIdArray(receipt.consumeAtEventIds, `${receiptPath}.consumeAtEventIds`, add);
+                      if (!Array.isArray(receipt.consumeAtEventIds) || receipt.consumeAtEventIds.length < 1) {
+                        add(`${receiptPath}.consumeAtEventIds`, 'required_array', 'Path receipt must declare at least one downstream consumer.');
+                      }
+                      optionalId(receipt.expiresAfterEventId, `${receiptPath}.expiresAfterEventId`, add);
                     });
                     forEachRecord(rawEffects.memories, `${effectsPath}.memories`, (memory, memoryPath) => {
                       validateIdArray(memory.actorIds, `${memoryPath}.actorIds`, add);
@@ -924,6 +994,7 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
       checkRef(fact.subjectId, subjectIds, `${path}.subjectId`, 'knowledge subject', add);
       checkRef(fact.objectId, new Set([...characterIds, ...factionIds]), `${path}.objectId`, 'knowledge object', add);
       checkRef(fact.sourceEventId, eventIds, `${path}.sourceEventId`, 'event', add);
+      if (isRecord(fact.source)) checkRef(fact.source.actorId, characterIds, `${path}.source.actorId`, 'character', add);
     });
     forEachRecord(scenario.initialNpcPrivateKnowledge, 'scenario.initialNpcPrivateKnowledge', (fact, path) => {
       checkRefs(fact.holderCharacterIds, characterIds, `${path}.holderCharacterIds`, 'character', add);
@@ -950,6 +1021,30 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
       checkRefs(entity.relatedCharacterIds, characterIds, `${path}.relatedCharacterIds`, 'character', add);
       checkRefs(entity.relatedFactionIds, factionIds, `${path}.relatedFactionIds`, 'faction', add);
       checkRef(entity.locationId, locationIds, `${path}.locationId`, 'location', add);
+      if (isRecord(entity.playerCompletionContract)) {
+        const actionIds = new Set(Array.isArray(entity.playerCompletionContract.actions)
+          ? entity.playerCompletionContract.actions.filter(isRecord).map(action => action.id).filter((id): id is string => typeof id === 'string')
+          : []);
+        forEachRecord(entity.playerCompletionContract.actions, `${path}.playerCompletionContract.actions`, (action, actionPath) => {
+          if (!isRecord(action.outcomeEffects)) return;
+          for (const [outcome, effects] of Object.entries(action.outcomeEffects)) {
+            if (!isRecord(effects)) continue;
+            forEachRecord(effects.playerKnowledge, `${actionPath}.outcomeEffects.${outcome}.playerKnowledge`, (fact, factPath) => {
+              checkRef(fact.subjectId, new Set([...characterIds, ...factionIds, ...eventIds]), `${factPath}.subjectId`, 'knowledge subject', add);
+              checkRef(fact.objectId, new Set([...characterIds, ...factionIds]), `${factPath}.objectId`, 'knowledge object', add);
+              if (isRecord(fact.source)) checkRef(fact.source.actorId, characterIds, `${factPath}.source.actorId`, 'character', add);
+            });
+            forEachRecord(effects.pathReceipts, `${actionPath}.outcomeEffects.${outcome}.pathReceipts`, (receipt, receiptPath) => {
+              if (receipt.sourceEventId !== entity.id) {
+                add(`${receiptPath}.sourceEventId`, 'invalid_reference', 'Path receipt sourceEventId must match its owning event.');
+              }
+              checkRef(receipt.choiceId, actionIds, `${receiptPath}.choiceId`, 'event action', add);
+              checkRefs(receipt.consumeAtEventIds, eventIds, `${receiptPath}.consumeAtEventIds`, 'event', add);
+              checkRef(receipt.expiresAfterEventId, eventIds, `${receiptPath}.expiresAfterEventId`, 'event', add);
+            });
+          }
+        });
+      }
       if (isRecord(entity.offscreenResolution)) {
         checkRefs(entity.offscreenResolution.resolvedEventIds, eventIds, `${path}.offscreenResolution.resolvedEventIds`, 'event', add);
       }

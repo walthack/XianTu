@@ -14,6 +14,7 @@ import type {
   ScenarioPlayerCompletionEffects,
   ScenarioPlayerCompletionOutcome,
   ScenarioPlayerKnowledgeFact,
+  ScenarioPathReceipt,
   ScenarioStoryOpportunity,
 } from './schema';
 import {
@@ -39,6 +40,7 @@ export interface ScenarioProgressState {
   activeEventIds: string[];
   completedEventIds: string[];
   playerKnowledge?: Record<string, ScenarioPlayerKnowledgeFact>;
+  pathReceipts?: Record<string, ScenarioPathReceipt>;
   npcPrivateKnowledge?: Record<string, ScenarioNpcPrivateKnowledgeFact>;
 }
 
@@ -145,7 +147,7 @@ export interface ScenarioEventActionState {
 }
 
 export interface ScenarioEventActionSelection {
-  source: 'event_engine';
+  source: 'event_engine' | 'exploration_engine';
   eventId: string;
   actionId: string;
   label: string;
@@ -262,6 +264,8 @@ export interface RuntimeState extends ScenarioProgressState {
   chronicle?: ScenarioChronicleEntry[];
   /** 玩家认知与世界真值、NPC 知识分账；旧档可缺省。 */
   playerKnowledge?: Record<string, ScenarioPlayerKnowledgeFact>;
+  /** 身份/立场/方法等路径选择；只影响后续叙事消费，不改正典事件完成条件。 */
+  pathReceipts?: Record<string, ScenarioPathReceipt>;
   /** 密档知情图谱；不进普通关系网，且必须从通用 prompt state 剥离。 */
   npcPrivateKnowledge?: Record<string, ScenarioNpcPrivateKnowledgeFact>;
   /** 非机会卡事件的本地尝试、判定与完成状态。 */
@@ -911,6 +915,13 @@ function getCurrentPlayerCompletionEvent(runtime: RuntimeState): ScenarioModEven
       || (left.id < right.id ? -1 : left.id > right.id ? 1 : 0))[0];
 }
 
+function isAvailableExplorationEvent(runtime: RuntimeState, event: ScenarioModEvent | undefined): event is ScenarioModEvent {
+  if (!event?.exploration || event.critical !== false || !event.playerCompletionContract) return false;
+  if (!runtime.activeEventIds.includes(event.id) || isEventSettled(runtime, event.id)) return false;
+  const chapter = runtime.chapters.find(item => item.id === runtime.currentChapterId);
+  return Boolean(chapter?.eventIds?.includes(event.id));
+}
+
 function eventActionAvailable(
   action: ScenarioPlayerCompletionContract['actions'][number],
   state: ScenarioEventActionState,
@@ -1041,6 +1052,21 @@ function applyStoryEventOutcomeEffects(
       sourceEventId: event.id,
     };
   }
+  runtime.pathReceipts ||= {};
+  for (const receipt of effects.pathReceipts || []) {
+    const mutexConflict = Object.values(runtime.pathReceipts).some(existing =>
+      existing.sourceEventId === event.id
+      && existing.mutexGroupId === receipt.mutexGroupId
+      && existing.receiptId !== receipt.receiptId,
+    );
+    if (mutexConflict) continue;
+    runtime.pathReceipts[receipt.receiptId] ||= {
+      ...structuredClone(receipt),
+      sourceEventId: event.id,
+      choiceId: actionId,
+      selectedAtTurn: turn,
+    };
+  }
   for (const [index, memory] of (effects.memories || []).entries()) {
     addNpcMemoryEpisodes(actorState, memory.actorIds, {
       id: `memory.${event.id}.${actionId}.${outcome}.${attemptNumber}.${index}`,
@@ -1056,6 +1082,18 @@ function applyStoryEventOutcomeEffects(
       occurredAtTurn: turn,
     });
   }
+}
+
+function hasPathReceiptConflict(
+  runtime: RuntimeState,
+  event: ScenarioModEvent,
+  effects: ScenarioPlayerCompletionEffects | undefined,
+): boolean {
+  return (effects?.pathReceipts || []).some(receipt => Object.values(runtime.pathReceipts || {}).some(existing =>
+    existing.sourceEventId === event.id
+    && existing.mutexGroupId === receipt.mutexGroupId
+    && existing.receiptId !== receipt.receiptId,
+  ));
 }
 
 const INTERACTION_VERB_LABELS: Record<ScenarioInteractionVerb, string> = {
@@ -1168,6 +1206,42 @@ export function getCurrentStoryEventActions(saveData: SaveData): ScenarioEventAc
   });
 }
 
+/** 当前章节显式开放的非承重探索动作；可忽略，且永远不能替代唯一主线锚点。 */
+export function getCurrentStoryExplorationActions(saveData: SaveData): ScenarioEventActionSelection[] {
+  const runtime = getRuntime(saveData);
+  if (!runtime) return [];
+  const anchorId = getNarrativeAnchorEvent(runtime)?.id;
+  return runtime.activeEventIds
+    .map(id => runtime.events.find(event => event.id === id))
+    .filter((event): event is ScenarioModEvent => isAvailableExplorationEvent(runtime, event) && event.id !== anchorId)
+    .sort((left, right) => left.id < right.id ? -1 : left.id > right.id ? 1 : 0)
+    .flatMap(event => {
+      const contract = event.playerCompletionContract!;
+      const state = reconcileEventActionContract(runtime, event);
+      if (!state || state.readyAtTurn !== undefined) return [];
+      return contract.actions.filter(action => eventActionAvailable(action, state)).map(action => {
+        const expectedOutcome: ScenarioPlayerCompletionOutcome = contract.kind === 'objective_action'
+          ? 'success'
+          : conditionsMatch(action.successWhen, saveData, runtime) ? 'success' : action.unmetOutcome || 'failure';
+        const interaction = deriveInteraction(runtime, event, action.label, action.actionText);
+        const targetSuffix = interaction.targetLabel ? ` · ${interaction.targetLabel}` : '';
+        return {
+          source: 'exploration_engine' as const,
+          eventId: event.id,
+          actionId: action.id,
+          label: `${INTERACTION_VERB_LABELS[interaction.verb]}${targetSuffix}`,
+          actionText: action.actionText,
+          playerLine: action.actionText,
+          timeCost: action.timeCost,
+          contractHash: state.contractHash,
+          expectedOutcome,
+          outcomeText: action.outcomeText[expectedOutcome],
+          interaction,
+        };
+      });
+    });
+}
+
 /** 跨关启程是直接命令，不属于事件动作，也不消耗叙事回合。 */
 export function getStageDepartureOffer(saveData: SaveData): ScenarioStageDepartureOffer | null {
   const runtime = getRuntime(saveData);
@@ -1212,10 +1286,12 @@ export function recordStoryEventStructuredAction(
   selection: ScenarioEventActionSelection,
 ): { attempted: boolean; completed: boolean; eventId?: string; actionId?: string; outcome?: ScenarioPlayerCompletionOutcome; reason?: string } {
   const runtime = getRuntime(saveData);
-  if (!runtime || selection?.source !== 'event_engine') {
+  if (!runtime || !['event_engine', 'exploration_engine'].includes(selection?.source)) {
     return { attempted: false, completed: false, reason: 'invalid_selection' };
   }
-  const event = getCurrentPlayerCompletionEvent(runtime);
+  const event = selection.source === 'exploration_engine'
+    ? runtime.events.find(item => item.id === selection.eventId && isAvailableExplorationEvent(runtime, item))
+    : getCurrentPlayerCompletionEvent(runtime);
   const contract = event?.playerCompletionContract;
   if (!event || !contract || event.id !== selection.eventId) {
     return { attempted: false, completed: false, reason: 'stale_event' };
@@ -1243,6 +1319,9 @@ export function recordStoryEventStructuredAction(
   const detail = action.outcomeText[outcome];
   if (selection.expectedOutcome !== outcome || selection.outcomeText !== detail) {
     return { attempted: false, completed: false, eventId: event.id, reason: 'stale_condition' };
+  }
+  if (hasPathReceiptConflict(runtime, event, action.outcomeEffects?.[outcome])) {
+    return { attempted: false, completed: false, eventId: event.id, reason: 'path_conflict' };
   }
   state.lastAttemptAtTurn = turn;
   state.lastOutcome = outcome;
@@ -1829,7 +1908,7 @@ function recordSettledBeatHandoff(runtime: RuntimeState, transitions: ScenarioRu
     .filter(transition => transition.type === 'event_completed')
     .map(transition => runtime.events.find(item => item.id === transition.id))
     .filter((event): event is ScenarioModEvent => {
-      if (!event?.playerCompletionContract) return false;
+      if (!event?.playerCompletionContract || event.exploration) return false;
       if (runtime.eventTimeline?.[event.id]?.outcome === 'offscreen') return false;
       return runtime.eventActionStates?.[event.id]?.readyAtTurn !== undefined;
     })
@@ -1966,6 +2045,7 @@ export function createScenarioProgress(mod: ScenarioMod): ScenarioProgressState 
     activeEventIds: [],
     completedEventIds,
     playerKnowledge: createInitialPlayerKnowledge(mod),
+    pathReceipts: {},
     npcPrivateKnowledge: createInitialNpcPrivateKnowledge(mod),
   };
 }
@@ -2157,6 +2237,9 @@ export function advanceScenarioRuntime(saveData: SaveData): {
     : {};
   runtime.playerKnowledge = runtime.playerKnowledge && typeof runtime.playerKnowledge === 'object'
     ? runtime.playerKnowledge
+    : {};
+  runtime.pathReceipts = runtime.pathReceipts && typeof runtime.pathReceipts === 'object'
+    ? runtime.pathReceipts
     : {};
   runtime.npcPrivateKnowledge = runtime.npcPrivateKnowledge && typeof runtime.npcPrivateKnowledge === 'object'
     ? runtime.npcPrivateKnowledge

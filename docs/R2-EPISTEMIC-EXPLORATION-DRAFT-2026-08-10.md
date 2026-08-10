@@ -1,8 +1,8 @@
-# R2-17 · 认知探索与路径差异全局规格（G0 草案）
+# R2-17 · 认知探索与路径差异全局规格
 
-> 状态：**全局设计草案，未实现，待独立二审**。
+> 状态：**G0 二审意见已合并；G1A 单 Stage 纵切已实现，自动门禁通过，待独立二审与真机**。
 > 适用范围：三书 37 个剧情 Stage 的审计、分型与后续小批量改造。
-> 首个参考纵切：`lcq.stage_05 → lcq.stage_06`，终点为 `lcq.event.s06_04`。
+> 首个实施纵切：`lyg.mijing_rumen` 的《阳武侯小史》流言；`lcq.stage_05 → lcq.stage_06` 保留为后续私密身份纵切。
 > 关联：`RELEASE-ROADMAP.md` R2-0、R2-10、R2-11；`docs/R2-0V-XIEYI-VERTICAL-SLICE.md`；R3-5 NPC 私有知情。
 
 ---
@@ -221,6 +221,7 @@ interface ScenarioPathReceipt {
   receiptId: string;
   sourceEventId: string;
   choiceId: string;
+  mutexGroupId: string;
   dimension: 'position' | 'allegiance' | 'method' | 'participation' | 'route';
   label: string;
   selectedAtTurn: number;
@@ -231,7 +232,7 @@ interface ScenarioPathReceipt {
 
 ### 6.2 规则
 
-1. 同一互斥选择组一次只能产生一个 receipt。
+1. 同一 `sourceEventId + mutexGroupId` 一次只能产生一个 receipt；validator 与运行时均不得靠 `dimension` 或标签猜互斥关系。
 2. receipt 必须声明下游消费点；validator 拒绝永久悬空的选择。
 3. 下游至少改变一项：可用动作、风险／成本、获得信息、NPC 具体行动、关系／警觉、目击范围。
 4. 只改变形容词、镜头远近或一句台词，不算结构性路径差异。
@@ -257,12 +258,15 @@ interface ScenarioPathReceipt {
 - 玩家忽略时不阻塞主线；若世界时钟使机会失效，必须显式过期而非僵尸残留。
 - 探索事件仍必须列入章节 `eventIds` 才可达；章节完成继续只统计 critical 链。
 
+G1A 不另造一套机会卡调度器。它复用现有 `playerCompletionContract` 的动作、hash、幂等尝试与 outcome effects，只新增“显式标记的 non-critical 探索事件可与唯一主线动作并列显示”的选择器和记录入口。现有世界演员机会卡继续负责带世界时钟、追踪和场外结算的介入；普通调查不需要 agenda／actor decision／track 生命周期。若 G2 证明探索也需要复杂窗口，再评估合并，而不是 G1A 预先复制整套机会卡引擎。
+
 ### 7.3 自由输入边界
 
 - 玩家可以自由输入调查或站位意图。
 - 只有匹配当前 exploration affordance 并经过本地确认的输入，才可写知识／receipt。
 - 未匹配时可获得普通叙事回应、拒绝、无结果观察或新的可选入口，但不能因 LLM 正文自报而升级知识。
 - 熟悉原著的玩家可以直接提出正确猜测；在角色尚无证据时，这仍只是玩家提案，不自动产生 confirmed 或解锁机制收益。
+- “读者知道、角色不知道”称为**读者元知识**，不写入 `playerKnowledge`。作者可以提供承认这种戏剧反讽的表达动作，但不得因此授予角色证据、confirmed 或机制收益。
 
 ---
 
@@ -290,6 +294,7 @@ interface ScenarioPathReceipt {
 - 所需引擎能力：现有 / exploration_engine / knowledge_v2 / path_receipt / UI
 - 原文／裁定依据：
 - 风险等级：普通 / personal / secret / top_secret
+- 读者元知识／戏剧反讽：无 / 可承认猜测但无机制收益 / 本关兑现
 ```
 
 ### 8.1 内容密度原则
@@ -324,6 +329,7 @@ interface ScenarioPathReceipt {
 - `我听说／我怀疑`：rumor。
 - `已排除`：refuted，可折叠。
 - 每条显示玩家可读 claim、来源标签、获得时间／阶段；不显示内部 ID、holder 清单、未获知答案或 blocked inference。
+- 旧档或旧 V1 事实缺少 `claim` 时，显示明确标记为“旧记录”的 `subjectId · predicate · objectId` 通用标签；这只是字段展示，不反推自然语言 claim，也不补造答案。
 - 同一 proposition 的升级以历史链展示，不静默覆盖旧来源。
 
 ### 9.2 安全
@@ -357,6 +363,8 @@ interface ScenarioPathReceipt {
 - 玩家原著提示、自由输入、模型 action option 和正文自报均不能落知识。
 - claim、source、path receipt JSON 往返和跨关保留稳定。
 - 旧存档热更只补声明资产，不覆盖已经获得、证伪或公开的历史。
+- 通用 prompt 只注入每个 `propositionId` 最新且未被 supersede 的记录；认知面板可查看完整历史链，避免 append-only 账本无限堆入模型上下文。
+- 私密关联门禁仍以 `subjectId + predicate + objectId` 及 registry 别名闭包为权威；`propositionId` 只负责认知链归组，不得成为绕过既有 guard 的第二套身份匹配。
 
 ### 10.3 纵切自动断言
 
@@ -397,19 +405,22 @@ interface ScenarioPathReceipt {
 ### G0 · 全局规格（本文件）
 
 - [x] 建立问题模型、全库基线、Stage 分型、数据目标、作者模板与验收口径。
-- [ ] Claude 独立二审无 P0/P1 后冻结 G1 边界。
+- [x] 合并两轮独立二审：补显式 `mutexGroupId`、旧档 claim 兜底、prompt 收敛、guard 匹配权威与读者元知识边界；G1 不再一次并行三条纵切。
 
-### G1 · 三类异构纵切
+### G1A · 单 Stage 最小纵切
 
-1. **私密身份／关系**：`lcq.stage_05 → stage_06`，验证 clue→confirmed→利用，不提前确认母女关系。
-2. **战斗／危机站位**：从三书选择一个证据清楚的高压事件，验证 path receipt 与相同战果下的不同目击／承接。
-3. **地点／世界谜团**：从太泉或同类地点选择一个资料充分段落，验证文书／环境／NPC 三类来源与证伪。
+只实施 `lyg.mijing_rumen` 的《阳武侯小史》流言：复用现有 non-critical 事件，验证并行探索动作、knowledge V2 最小字段、互斥 path receipt、认知抽屉和一次下游消费。暂不做 false rumor／refuted，不碰私密关系 guard，不新建完整机会卡调度器。
 
-G1 必须包含 exploration action 面、knowledge V2 最小字段、path receipt、认知抽屉和真机三槽；不得只做数据按钮。
+G1A 通过后再决定是否进入 G1B 私密身份纵切；不得因为一条公开流言跑通就宣称全局扩量条件满足。
+
+### G1B · 私密身份纵切
+
+`lcq.stage_05 = investigate`，`lcq.stage_06 = position + payoff`；验证 clue→confirmed→利用，不提前确认母女关系。只有 G1A 的并行动作、存档与 UI 合同稳定后才启动。
 
 ### G2 · 三书小批量
 
 - 每书各选 1–2 个不同类型 Stage。
+- 战斗／危机站位、地点／世界谜团和私密身份／关系至少各有一条通过后才可评估扩量。
 - 只人工编写有原文／裁定证据的 proposition、source、payoff。
 - 自动化、真机和独立二审无 P0/P1 后评估体验，不按数量开闸。
 
@@ -427,18 +438,52 @@ G1 必须包含 exploration action 面、knowledge V2 最小字段、path receip
 
 ---
 
-## 13. 首个参考纵切：`lcq.stage_05 → stage_06`
+## 13. G1A 实施纵切：`lyg.mijing_rumen`
+
+### 13.1 选择理由
+
+- 现有 `lyg.event.yangwuhou_rumor` 已是章节 `eventIds` 内的 non-critical 事件，不新增存档 ID。
+- 裁定 #3 已明确“皇叔”是《阳武侯小史》引发的舆论附会，不是程宗扬的正典身份；不会触碰密档或创造新事实。
+- Stage 内有九个承重拍，探索事件可被忽略而不阻塞主线，适合验证并行动作面。
+- `s02_09` 真龙异象会放大血统舆论，天然是路径回执的下游消费点。
+
+### 13.2 单 Stage 职责
+
+- `primaryRole = investigate`
+- `secondaryRole = allegiance`
+- 核心问题：这套“皇叔”说法从哪里来，洛都众人为什么愿意相信？
+- 正典不变量：程宗扬不是因这本小史而获得真实血统；`s02_01–09` 结果不变。
+
+### 13.3 互斥探索路径
+
+| 路径 | 玩家知识 | path receipt | `s02_09` 消费 |
+|---|---|---|---|
+| 私下追问小紫 | confirmed：王蕙撰写小史，“皇叔”是街巷附会 | `method/private_trace` | 真龙异象出现时，玩家明确知道政治神话如何被加工 |
+| 先听街巷传抄 | rumor：洛都正在传播血统说，但尚未核清推动者 | `method/public_listen` | 真龙异象出现时，玩家只能观察传言如何自我强化，不得先知作者 |
+
+两条 receipt 共用 `mutexGroupId=lyg.yangwuhou_rumor.source_method`；任一动作成功即完成该可选事件，另一条不得再选。完全忽略时主线照常推进，认知抽屉不出现该命题。
+
+### 13.4 G1A 验收
+
+1. 主线按钮与“探索”按钮并列，探索选择携带自身 `eventId + actionId + contractHash`，不能误结算当前 critical 锚点。
+2. 三槽（忽略／私下追源／街巷听风）保持相同 `s02_*` 主轴结果，但知识、receipt 与 `s02_09` prompt 合同不同。
+3. 认知抽屉显示 claim、状态与来源；旧 V1 知识显示“旧记录”字段标签，不反猜 claim。
+4. JSON 重载和跨关保留稳定；LLM 不能直接写 playerKnowledge/pathReceipts。
+
+---
+
+## 14. 后续私密参考纵切：`lcq.stage_05 → stage_06`
 
 本节仅作为全局规格的第一个候选实例，不代表已经批准实施。
 
-### 13.1 正典边界
+### 14.1 正典边界
 
 - `s05_13` 已有确定性动作 `identify_biji_in_person`，可确认碧姬的星月湖旧身份。
 - 小紫／碧姬母女关系按现行密档只能在 `s06_04` 亲历对质后 confirmed。
 - `s06_02` 龙神死亡、`s06_03` 谢艺结局、`s06_04` 碧姬结局均不因本纵切改变。
 - 不在 `s06_02` 完成后新增 `ask_xieyi`：下一正典拍就是谢艺遭雷击与托孤，不能制造普通询问时间缝隙。
 
-### 13.2 候选认知链
+### 14.2 候选认知链
 
 | 时点 | 可获知内容 | 最高状态 | 说明 |
 |---|---|---|---|
@@ -448,7 +493,7 @@ G1 必须包含 exploration action 面、knowledge V2 最小字段、path receip
 | `s06_04` | 碧姬与小紫是母女 | confirmed | 复用既有双向玩家知识 effect |
 | `s06_04` 后 | 玩家如何承接、隐瞒或向谁说明 | aftermath 候选 | 不改变碧姬死亡结果 |
 
-### 13.3 候选路径互斥组
+### 14.3 候选路径互斥组
 
 | 站位 | 近端差异 | 下游消费要求 |
 |---|---|---|
@@ -458,7 +503,7 @@ G1 必须包含 exploration action 面、knowledge V2 最小字段、path receip
 
 站位不能只改变正文措辞；G1 实施前必须为三条分别指定可测试的知识、行动、风险或 NPC 行为差异。
 
-### 13.4 明确否决旧草案中的实现
+### 14.4 明确否决旧草案中的实现
 
 - 不创建一个不进 `chapter.eventIds` 的 `s06_k1` 孤儿事件。
 - 不宣称并行探索可以零引擎改动。
@@ -468,7 +513,7 @@ G1 必须包含 exploration action 面、knowledge V2 最小字段、path receip
 
 ---
 
-## 14. G0 拍板结果
+## 15. G0 拍板结果
 
 1. **独立立项**：使用 `R2-17`；`R2-15`、`R2-16` 已被既有项目占用。
 2. **不改历史验收**：R2-0V 保持原记录；R2-17 使用独立的认知／路径验收。
@@ -476,3 +521,18 @@ G1 必须包含 exploration action 面、knowledge V2 最小字段、path receip
 4. **探索代价按情境设计**：礼貌询问不统一扣关系；侵入、对质、公开和互斥路径必须有真实代价或机会成本。
 5. **全库先审计后扩量**：37 Stage 全部分类，但只有证据与兑现闭合者进入实现队列。
 
+---
+
+## 16. G0 独立二审记录（2026-08-10）
+
+两轮 Claude 只读审查均无 P0。正文已合并以下冻结前意见，不再把审查附录当作第二份规格：
+
+- path receipt 使用显式 `mutexGroupId`。
+- 旧档缺 claim 时只显示字段标签，不反推自然语言答案。
+- append-only 知识在 prompt 中按 proposition 收敛；私密 guard 继续以三元组与 registry 别名闭包为权威。
+- G1 收缩为单 Stage G1A；战斗、地点谜团与私密身份拆到后续门。
+- `lcq.stage_05 = investigate`、`lcq.stage_06 = position + payoff`，不在 stage_06 虚造普通调查时隙。
+- 读者元知识作为作者横切项，不冒充角色 `playerKnowledge.confirmed`。
+- false rumor／refuted 推迟到 G2；G1A 只验证 rumor 或 confirmed 的确定性获得与消费。
+
+审查同时确认：全库计数、运行时单一主线动作面、孤儿 non-critical 事件不可达、`||=` 升级缺陷及 `lcq.stage_05→06` 正典时序均与当前代码／数据一致。
