@@ -10,6 +10,7 @@ import { createHash } from 'node:crypto';
 import { mkdir, readFile, readdir, writeFile, rm, copyFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { join, resolve } from 'node:path';
+import { expandWorldSimBaseline } from './expand-world-sim-baseline.mjs';
 
 const root = resolve(import.meta.dirname, '..');
 const gen = join(root, 'mod-kit', 'generated', 'deepseek-v4-flash');
@@ -17,6 +18,9 @@ const outDir = join(root, 'src', 'modules', 'scenarioMods', 'builtins', 'data');
 const books = ['qingyu', 'yunlong', 'yange'];
 
 async function run() {
+  // 只补缺失的 worldSimulation；已有人工纵切由生成器明确跳过，
+  // 这样标准 canon:build 在任意工作机上都不会把全 stage 可玩底座覆盖掉。
+  await expandWorldSimBaseline();
   if (existsSync(outDir)) await rm(outDir, { recursive: true });
   await mkdir(outDir, { recursive: true });
   const hash = createHash('sha256');

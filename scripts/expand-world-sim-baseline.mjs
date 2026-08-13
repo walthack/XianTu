@@ -82,7 +82,7 @@ function buildBaselineSituation(mod, event, characterIds) {
   };
 }
 
-async function main() {
+export async function expandWorldSimBaseline() {
   let updated = 0;
   let skipped = 0;
   let situations = 0;
@@ -113,9 +113,12 @@ async function main() {
     }
   }
   console.log(JSON.stringify({ updated, skipped, situations }, null, 2));
+  return { updated, skipped, situations };
 }
 
-main().catch(error => {
-  console.error(error);
-  process.exitCode = 1;
-});
+if (import.meta.url === `file://${process.argv[1]}`) {
+  expandWorldSimBaseline().catch(error => {
+    console.error(error);
+    process.exitCode = 1;
+  });
+}
