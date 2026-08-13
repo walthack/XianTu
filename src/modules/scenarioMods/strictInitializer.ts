@@ -1,6 +1,6 @@
 import type { PlayerLocation, SaveData, WorldInfo } from '@/types/game';
 
-import type { ScenarioMod } from './schema';
+import type { ScenarioMod, ScenarioStoryMode, ScenarioWorldSimulation } from './schema';
 import { buildExpandScenarioInitialization, type ExpandScenarioInitialization } from './expandInitializer';
 import { withNativeScenarioLocationType } from './locationTypes';
 import { advanceScenarioRuntime, createScenarioProgress, getInitialScenarioChapterId, type ScenarioProgressState } from './runtime';
@@ -37,6 +37,10 @@ export interface ScenarioModRuntimeState extends ScenarioProgressState {
     items: NonNullable<ScenarioMod['content']>['items'];
   };
   opening: ScenarioMod['scenario']['opening'];
+  /** 缺省即 canon_companion；只允许在新档初始化时显式写 world_sim。 */
+  storyMode?: ScenarioStoryMode;
+  worldSimulation?: ScenarioWorldSimulation;
+  worldSimulationState?: { actionReceipts: [] };
 }
 
 export interface StrictScenarioInitialization {
@@ -45,9 +49,14 @@ export interface StrictScenarioInitialization {
   initialLocation: PlayerLocation;
 }
 
+export interface StrictScenarioInitializationOptions {
+  storyMode?: ScenarioStoryMode;
+}
+
 export function buildStrictScenarioInitialization(
   mod: ScenarioMod,
   generatedAt = new Date().toISOString(),
+  options: StrictScenarioInitializationOptions = {},
 ): StrictScenarioInitialization {
   // Pinia exposes the selected Mod as a reactive Proxy. Normalize the JSON
   // contract before cloning nested values into the save runtime.
@@ -55,6 +64,10 @@ export function buildStrictScenarioInitialization(
 
   if (mod.rules.mode !== 'strict') {
     throw new Error(`Scenario Mod "${mod.manifest.id}" is not configured for strict initialization.`);
+  }
+  const storyMode = options.storyMode || 'canon_companion';
+  if (storyMode === 'world_sim' && !mod.scenario.worldSimulation) {
+    throw new Error(`Scenario Mod "${mod.manifest.id}" has no worldSimulation contract.`);
   }
 
   const continents = mod.world.continents || [];
@@ -166,6 +179,11 @@ export function buildStrictScenarioInitialization(
       items: structuredClone(mod.content?.items || []),
     },
     opening: structuredClone(mod.scenario.opening),
+    ...(storyMode === 'world_sim' ? {
+      storyMode,
+      worldSimulation: structuredClone(mod.scenario.worldSimulation!),
+      worldSimulationState: { actionReceipts: [] },
+    } : {}),
     ...createScenarioProgress(mod),
   };
 
@@ -205,6 +223,7 @@ export function applyStrictScenarioInitializationToSave(
       modName: initialization.runtimeState.modName,
       modVersion: initialization.runtimeState.modVersion,
       mode: initialization.runtimeState.mode,
+      ...(initialization.runtimeState.storyMode ? { storyMode: initialization.runtimeState.storyMode } : {}),
     },
   };
   return applyScenarioRelationshipsToSave(next, {
@@ -216,13 +235,14 @@ export function applyStrictScenarioInitializationToSave(
 export async function resolveInitialWorldInfo(
   scenarioMod: ScenarioMod | null,
   generateWorld: () => Promise<WorldInfo>,
+  strictOptions: StrictScenarioInitializationOptions = {},
 ): Promise<{
   worldInfo: WorldInfo;
   strictInitialization?: StrictScenarioInitialization;
   expandInitialization?: ExpandScenarioInitialization;
 }> {
   if (scenarioMod?.rules.mode === 'strict') {
-    const strictInitialization = buildStrictScenarioInitialization(scenarioMod);
+    const strictInitialization = buildStrictScenarioInitialization(scenarioMod, new Date().toISOString(), strictOptions);
     return { worldInfo: strictInitialization.worldInfo, strictInitialization };
   }
   const generatedWorld = await generateWorld();
@@ -322,6 +342,14 @@ export function transitionToNextScenarioStage(saveData: SaveData, modsOverride?:
     }
   }
   const newRuntime = (next as any).世界.状态.剧本模组;
+  if (rt.storyMode === 'world_sim') {
+    newRuntime.storyMode = 'world_sim';
+    (next as any).系统.扩展.剧本模组.storyMode = 'world_sim';
+    if (mod.scenario.worldSimulation) {
+      newRuntime.worldSimulation = structuredClone(mod.scenario.worldSimulation);
+      newRuntime.worldSimulationState = { actionReceipts: [] };
+    }
+  }
   const knowledgeCollision = findLedgerIdCollision(newRuntime.playerKnowledge, playerKnowledgeSnapshot);
   if (knowledgeCollision) {
     return { saveData, ok: false, reason: `跨关玩家知识 ID 冲突：${knowledgeCollision}` };

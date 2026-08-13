@@ -659,10 +659,9 @@ const exportSingleSave = async (save: SaveSlot) => {
       return;
     }
 
-    const { loadSaveData } = await import('@/utils/indexedDBManager');
     // 🔥 修复：使用 save.id 或 save.存档名 作为槽位键
     const slotKey = save.id || save.存档名;
-    const fullSaveData = await loadSaveData(characterId, slotKey);
+    const fullSaveData = await characterStore.loadSaveData(characterId, slotKey);
 
     if (!fullSaveData) {
       toast.error('无法加载存档数据');
@@ -734,14 +733,13 @@ const exportCharacter = async () => {
     }
 
     // 加载所有存档的完整数据
-    const { loadSaveData } = await import('@/utils/indexedDBManager');
     const savesWithFullData = await Promise.all(
       savesList.value
         .filter(save => save.存档名 !== '上次对话') // 🔥 过滤掉"上次对话"存档
         .map(async (save) => {
           // 🔥 修复：使用 save.id 或 save.存档名 作为槽位键
           const slotKey = save.id || save.存档名;
-          const fullData = await loadSaveData(characterId, slotKey);
+          const fullData = await characterStore.loadSaveData(characterId, slotKey);
           return {
             ...save,
             存档数据: fullData, // 统一字段名
@@ -823,10 +821,9 @@ const exportSaves = async () => {
     }
 
     // 修复：从 IndexedDB 加载每个存档的完整数据
-    const { loadSaveData } = await import('@/utils/indexedDBManager');
     const savesWithFullData = await Promise.all(
       savesList.value.map(async (save) => {
-        const fullData = await loadSaveData(characterId, save.存档名);
+        const fullData = await characterStore.loadSaveData(characterId, save.存档名);
         return {
           ...save,
           存档数据: fullData  // 使用与 CharacterManagement.vue 一致的字段名
@@ -958,10 +955,8 @@ const repairCurrentSave = async () => {
         }
 
         const slotKey = currentSave.value!.存档名;
-        const { loadSaveData, saveSaveData } = await import('@/utils/indexedDBManager');
-
         // 加载当前存档数据
-        const rawData = await loadSaveData(characterId, slotKey);
+        const rawData = await characterStore.loadSaveData(characterId, slotKey);
         if (!rawData) {
           throw new Error('无法加载存档数据');
         }
@@ -974,7 +969,10 @@ const repairCurrentSave = async () => {
         console.log('[存档修复] 修复后数据:', repairedData);
 
         // 保存修复后的数据
-        await saveSaveData(characterId, slotKey, repairedData);
+        const { saveSaveData } = await import('@/utils/indexedDBManager');
+        await saveSaveData(characterId, slotKey, repairedData, {
+          localOnly: characterStore.activeCharacterProfile?.隔离试玩信息?.localOnly === true,
+        });
 
         // 重新加载到游戏状态
         await characterStore.loadGameById(slotKey);

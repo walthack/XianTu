@@ -17,6 +17,7 @@ import type {
 interface ScenarioRuntimeState {
   modId: string;
   mode: 'strict' | 'expand';
+  storyMode?: 'canon_companion' | 'world_sim';
   lockedFields?: string[];
   contentAccess?: ScenarioContentAccessRule[];
   currentChapterId?: string | null;
@@ -342,6 +343,9 @@ function findScenarioEventForCompletionFlag(
 
 function findScenarioFlagViolation(runtime: ScenarioRuntimeState, command: CommandLike, key: string): string | null {
   if (!key.startsWith('世界.状态.剧本模组.flags.')) return null;
+  if (runtime.storyMode === 'world_sim') {
+    return '六朝世界模式的锚点、枢纽结果、人物状态与 IF 只能由本地引擎结算；LLM 不得写剧本 flags';
+  }
   if (command.action !== 'set') return '剧本进度 flags 只能用 set 写入';
 
   const flagPath = key.slice('世界.状态.剧本模组.flags.'.length);

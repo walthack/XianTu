@@ -188,7 +188,7 @@
       </div>
 
       <!-- 任务目标（剧情主线 + 即兴目标） -->
-      <div v-if="questMain || questGoals.length" class="collapsible-section quest-section">
+      <div v-if="!worldMode && (questMain || questGoals.length)" class="collapsible-section quest-section">
         <div class="section-header" @click="questCollapsed = !questCollapsed">
           <h3 class="section-title">
             <Clock :size="14" class="section-icon" />
@@ -239,7 +239,7 @@
         <div class="section-header" @click="actorCollapsed = !actorCollapsed">
           <h3 class="section-title">
             <Sparkles :size="14" class="section-icon gold" />
-            <span>{{ t('世界正在行动') }}</span>
+            <span>{{ worldMode ? t('当前局势') : t('世界正在行动') }}</span>
           </h3>
           <button class="collapse-toggle" :class="{ 'collapsed': actorCollapsed }">
             <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor">
@@ -253,6 +253,18 @@
             <span class="quest-mark-main">◆</span>
             <span><strong>{{ decision.actorName }}</strong>：{{ decision.signal }}</span>
           </div>
+          <div v-if="actorView.pendingDivergence" class="actor-card actor-pending-divergence">
+            <div class="actor-card-title">本地行动已触及世界线分叉</div>
+            <div class="actor-card-line"><span>变化</span>{{ actorView.pendingDivergence.worldDelta }}</div>
+            <div class="actor-card-risk">确认后将激活正式 IF；仍保留本段承重锚点。若默认结果已先行结算，确认会被拒绝。</div>
+            <button class="quest-next-btn" :disabled="worldDivergenceBusy" @click="confirmWorldDivergence">确认这条世界线</button>
+            <button class="quest-next-btn" :disabled="worldDivergenceBusy" @click="cancelWorldDivergence">保留默认未来</button>
+          </div>
+          <div v-for="intervention in actorView.interventions" :key="intervention.id" class="actor-card">
+            <div class="actor-card-title">可分叉介入 · {{ intervention.label }}</div>
+            <div class="actor-card-line"><span>门槛</span>本地 {{ intervention.kind === 'combat' ? '战斗' : '疗伤' }}判定；成功后仍须确认 IF</div>
+            <button class="quest-next-btn" @click="prefillWorldIntervention(intervention.actionText)">采用这项做法</button>
+          </div>
           <div v-for="card in actorView.opportunities" :key="card.id" class="actor-card">
             <div class="actor-card-title">{{ card.title }}</div>
             <div class="actor-card-line"><span>现在</span>{{ card.whyNow }}</div>
@@ -260,7 +272,7 @@
             <div v-if="card.progressTotal" class="actor-card-line">
               <span>进度</span>{{ card.progressCurrent }}/{{ card.progressTotal }}<template v-if="card.currentStep"> · {{ card.currentStep }}</template>
             </div>
-            <div v-if="card.windowText" class="actor-card-line" :class="{ 'actor-window-tight': card.windowTight }">
+            <div v-if="card.windowText && !worldMode" class="actor-card-line" :class="{ 'actor-window-tight': card.windowTight }">
               <span>时间</span>{{ card.windowText }}
             </div>
             <div class="actor-card-line"><span>可能获得</span>{{ card.rewardPreview }}</div>
@@ -279,6 +291,9 @@
           </div>
           <div v-for="permission in actorView.entitlements" :key="permission.key" class="actor-permission">
             已解锁：{{ permission.label }}
+          </div>
+          <div v-for="receipt in actorView.simulationReceipts" :key="receipt.id" class="actor-receipt">
+            ◇ 世界介入：{{ receipt.detail }}
           </div>
           <div v-if="stageSwitchError" class="quest-error">{{ stageSwitchError }}</div>
         </div>
@@ -349,11 +364,18 @@ import type { StatusEffect } from '@/types/game.d.ts';
 import { formatRealmWithStage } from '@/utils/realmUtils';
 import { calculateAgeFromBirthdate } from '@/utils/lifespanCalculator';
 import {
-  getNarrativeAnchorEvent,
+  getScenarioFocusEvent,
   hasPendingStoryBeatHandoff,
   trackStoryOpportunity,
   TRACKED_OPPORTUNITY_MAX_TURNS,
 } from '@/modules/scenarioMods/runtime';
+import {
+  cancelWorldSimulationDivergence,
+  confirmWorldSimulationDivergence,
+  getCurrentWorldSituation,
+  isWorldSimulationRuntime,
+} from '@/modules/scenarioMods/worldSimulation';
+import { prefillChat } from '@/utils/chatBus';
 import { resolveScenarioEventNarrative } from '@/modules/scenarioMods/eventNarrativeView';
 import { returnToCanonAnchor } from '@/modules/scenarioMods/divergenceControl';
 import { useI18n } from '@/i18n';
@@ -386,14 +408,16 @@ const stageSwitching = ref(false);
 const stageSwitchError = ref('');
 const returningToCanon = ref(false);
 const trackingOpportunity = ref('');
+const worldDivergenceBusy = ref(false);
 const epistemicRuntime = computed(() => (gameStateStore.worldState as any)?.剧本模组);
+const worldMode = computed(() => isWorldSimulationRuntime(epistemicRuntime.value));
 // 剧情主线：章节/活跃事件/清关状态/下一关（确定性，读 worldState.剧本模组）
 const questMain = computed(() => {
   const rt: any = (gameStateStore.worldState as any)?.剧本模组;
   if (!rt || typeof rt !== 'object') return null;
   const chapter = (rt.chapters || []).find((c: any) => c.id === rt.currentChapterId);
   // 与主叙事/flag guard 共用同一个运行时锚点，避免 UI 单独从 activeEventIds 选出资料事件。
-  const anchor = getNarrativeAnchorEvent(rt);
+  const anchor = getScenarioFocusEvent(rt);
   const save = gameStateStore.toSaveData();
   const activeEvents = anchor && !(save && hasPendingStoryBeatHandoff(save)) ? [anchor] : [];
   const events = activeEvents.slice(0, 1).map((e: any) => {
@@ -427,7 +451,7 @@ const questMain = computed(() => {
 const actorView = computed(() => {
   const rt: any = (gameStateStore.worldState as any)?.剧本模组;
   if (!rt || typeof rt !== 'object') return null;
-  const anchor: any = getNarrativeAnchorEvent(rt);
+  const anchor: any = getScenarioFocusEvent(rt);
   const contract = anchor?.worldActor;
   const engine = rt.actorEngine || {};
   const receipts = Array.isArray(engine.receipts) ? engine.receipts.slice(-3).reverse() : [];
@@ -450,9 +474,22 @@ const actorView = computed(() => {
       signal: String(agenda.visibleSignal || ''),
     });
   }
+  const situation = getCurrentWorldSituation(rt);
+  const situationOutcomes = new Set(situation?.outcomeIds || []);
+  const interventions = worldMode.value && !rt.worldSimulationState?.pendingDivergence
+    ? (rt.worldSimulation?.forkableOutcomes || [])
+      .filter((outcome: any) => situationOutcomes.has(outcome.id))
+      .flatMap((outcome: any) => (outcome.replacementBranches || []).map((branch: any) => branch.intervention))
+      .filter(Boolean)
+    : [];
   return {
     pressure: String(contract?.pressure?.summary || ''),
     decisions,
+    interventions,
+    pendingDivergence: rt.worldSimulationState?.pendingDivergence || null,
+    simulationReceipts: Array.isArray(rt.worldSimulationState?.actionReceipts)
+      ? rt.worldSimulationState.actionReceipts.slice(-3).reverse()
+      : [],
     opportunities: Array.isArray(contract?.opportunities)
       ? contract.opportunities
         .filter((item: any) =>
@@ -505,6 +542,41 @@ const actorView = computed(() => {
     entitlements,
   };
 });
+const prefillWorldIntervention = (actionText: string) => prefillChat(actionText, true);
+const confirmWorldDivergence = async () => {
+  if (worldDivergenceBusy.value) return;
+  worldDivergenceBusy.value = true;
+  stageSwitchError.value = '';
+  try {
+    const save = gameStateStore.toSaveData();
+    if (!save) throw new Error('存档数据不完整');
+    const result = confirmWorldSimulationDivergence(save);
+    if (!result.ok) throw new Error(result.reason || '世界线确认失败');
+    gameStateStore.loadFromSaveData(save);
+    await gameStateStore.saveGame();
+  } catch (error) {
+    stageSwitchError.value = String((error as Error)?.message || error);
+  } finally {
+    worldDivergenceBusy.value = false;
+  }
+};
+const cancelWorldDivergence = async () => {
+  if (worldDivergenceBusy.value) return;
+  worldDivergenceBusy.value = true;
+  stageSwitchError.value = '';
+  try {
+    const save = gameStateStore.toSaveData();
+    if (!save) throw new Error('存档数据不完整');
+    const result = cancelWorldSimulationDivergence(save);
+    if (!result.ok) throw new Error(result.reason || '世界线取消失败');
+    gameStateStore.loadFromSaveData(save);
+    await gameStateStore.saveGame();
+  } catch (error) {
+    stageSwitchError.value = String((error as Error)?.message || error);
+  } finally {
+    worldDivergenceBusy.value = false;
+  }
+};
 const trackOpportunity = async (opportunityId: string) => {
   if (trackingOpportunity.value) return;
   trackingOpportunity.value = opportunityId;
@@ -581,7 +653,22 @@ const worldlineEntries = computed(() => {
 const chronicleEntries = computed(() => {
   const rt: any = (gameStateStore.worldState as any)?.剧本模组;
   if (!Array.isArray(rt?.chronicle)) return [] as Array<{ id: string; mark: string; title: string; detail: string }>;
-  return rt.chronicle.slice(-8).reverse()
+  // 旧试玩档可能已经把同一 worldDelta 同时记为“来报”与“世界自行推进”。
+  // 展示层按正文去重，并优先保留符合玩家认知时点的事后消息条目。
+  const deduped = new Map<string, any>();
+  for (const item of rt.chronicle.slice(-16)) {
+    if (!item || typeof item.title !== 'string') continue;
+    const key = typeof item.detail === 'string' && item.detail.trim()
+      ? item.detail.trim()
+      : String(item.id || item.title);
+    const previous = deduped.get(key);
+    const isReport = item.id?.endsWith('.revealed') || item.title === '消息传来' || item.title === '来报' || /急报|密报|来报/.test(item.title);
+    const previousIsReport = previous && (previous.id?.endsWith('.revealed') || previous.title === '消息传来' || previous.title === '来报' || /急报|密报|来报/.test(previous.title));
+    if (!previous || (isReport && !previousIsReport)) deduped.set(key, item);
+  }
+  return [...deduped.values()]
+    .sort((left: any, right: any) => Number(right.sequence || 0) - Number(left.sequence || 0))
+    .slice(0, 8)
     .filter((item: any) => item && typeof item.title === 'string')
     .map((item: any, index: number) => ({
       id: String(item.id || `chronicle-${index}`),
@@ -2065,6 +2152,7 @@ const getReputationClass = (): string => {
 .actor-card-line { font-size: 11px; line-height: 1.5; opacity: 0.9; margin-top: 3px; }
 .actor-card-line > span { display: inline-block; min-width: 48px; opacity: 0.55; }
 .actor-card-risk { margin-top: 4px; font-size: 11px; line-height: 1.45; color: #d99a70; }
+.actor-window-tight { color: #e07a7a; font-weight: 700; opacity: 1; }
 .actor-ignore { font-size: 10px; line-height: 1.45; opacity: 0.5; text-align: center; }
 .actor-receipt { font-size: 11px; line-height: 1.5; color: #8fc98f; }
 .actor-permission { font-size: 11px; line-height: 1.5; padding: 5px 7px; border-radius: 4px; color: #e3c970; background: rgba(212,175,55,0.09); }

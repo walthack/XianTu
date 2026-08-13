@@ -1160,6 +1160,7 @@ export async function initializeCharacter(
     const resolvedWorld = await resolveInitialWorldInfo(
       creationStore.selectedScenarioMod,
       () => generateWorld(processedBaseInfo, world),
+      creationStore.scenarioStoryMode === 'world_sim' ? { storyMode: 'world_sim' } : undefined,
     );
     const { worldInfo, strictInitialization, expandInitialization } = resolvedWorld;
     if (!(initialSaveData as any).世界) (initialSaveData as any).世界 = { 信息: {}, 状态: {} };

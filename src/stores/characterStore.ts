@@ -43,6 +43,13 @@ interface CreationPayload {
   age: number; // 开局年龄
 }
 
+interface IsolatedPlaytestPayload {
+  characterId: string;
+  slotName: string;
+  markerKind: string;
+  saveData: SaveData;
+}
+
 // Tavern命令类型
 interface TavernCommand {
   action: string;
@@ -348,6 +355,7 @@ export const useCharacterStore = defineStore('characterV3', () => {
         }
       });
 
+      // 存储层会剔除隔离试玩元数据，并保留进入试玩前的远端活动指针。
       await storage.saveRootData(metadataRoot);
       debug.log('角色商店', '✅ 角色元数据已提交到存储');
 
@@ -723,6 +731,62 @@ export const useCharacterStore = defineStore('characterV3', () => {
   };
 
   /**
+   * 安装或重置一个由应用签名的隔离试玩角色。
+   * 固定 ID 只允许覆盖同 kind 的试玩档，绝不碰玩家自己创建的角色或其他存档。
+   */
+  const installIsolatedPlaytestCharacter = async (payload: IsolatedPlaytestPayload): Promise<void> => {
+    if (!initialized.value) await initializeStore();
+    const marker = payload.saveData?.系统?.扩展?.六朝世界试玩;
+    if (marker?.kind !== payload.markerKind || marker?.disposable !== true) {
+      throw new Error('拒绝安装没有隔离试玩签名的存档');
+    }
+    const validation = validateSaveDataV3(payload.saveData as any);
+    if (!validation.isValid) {
+      throw new Error(`试玩存档结构不合法（${validation.errors[0] || '未知原因'}）`);
+    }
+    const existing = rootState.value.角色列表[payload.characterId];
+    if (existing) {
+      if (existing.隔离试玩信息?.kind !== payload.markerKind) {
+        throw new Error('固定试玩角色 ID 已被其他角色占用，已拒绝覆盖');
+      }
+      const existingSave = await storage.loadLocalSaveData(payload.characterId, payload.slotName);
+      const existingKind = existingSave?.系统?.扩展?.六朝世界试玩?.kind;
+      if (existingKind !== payload.markerKind) {
+        throw new Error('固定试玩角色 ID 已被其他角色占用，已拒绝覆盖');
+      }
+    }
+
+    const now = new Date().toISOString();
+    const identity = cloneDeep(payload.saveData.角色.身份) as CharacterBaseInfo;
+    await storage.saveSaveData(payload.characterId, payload.slotName, cloneDeep(payload.saveData), { localOnly: true });
+    rootState.value.角色列表[payload.characterId] = {
+      模式: '单机',
+      角色: identity,
+      隔离试玩信息: {
+        kind: payload.markerKind,
+        localOnly: true,
+      },
+      存档列表: {
+        [payload.slotName]: {
+          存档名: payload.slotName,
+          保存时间: now,
+          最后保存时间: now,
+          角色名字: identity.名字,
+          境界: String(payload.saveData.角色?.属性?.境界?.名称 || '凡人'),
+          位置: String(payload.saveData.角色?.位置?.描述 || '长秋宫外'),
+          修为进度: Number(payload.saveData.角色?.属性?.境界?.当前进度 || 0),
+        },
+      },
+    };
+    rootState.value.当前激活存档 = {
+      角色ID: payload.characterId,
+      存档槽位: payload.slotName,
+    };
+    await commitMetadataToStorage();
+    useGameStateStore().loadFromSaveData(payload.saveData);
+  };
+
+  /**
    * 删除一个角色及其所有存档
    * @param charId 要删除的角色ID
    */
@@ -748,7 +812,9 @@ export const useCharacterStore = defineStore('characterV3', () => {
     // 🔥 [核心修复] 级联删除：清理 IndexedDB 中该角色的所有存档数据
     try {
       console.log('[角色商店-删除] 开始清理 IndexedDB 中的所有存档数据...');
-      const deletedCount = await storage.deleteAllSaveDataForCharacter(charId);
+      const deletedCount = await storage.deleteAllSaveDataForCharacter(charId, {
+        localOnly: rootState.value.角色列表[charId]?.隔离试玩信息?.localOnly === true,
+      });
       console.log(`[角色商店-删除] ✅ 已清理 ${deletedCount} 个存档记录`);
     } catch (error) {
       console.error('[角色商店-删除] 清理 IndexedDB 存档数据失败:', error);
@@ -868,7 +934,9 @@ export const useCharacterStore = defineStore('characterV3', () => {
         console.log('[14] 加载Key:', { 角色ID: charId, 存档槽位: slotKey })
         debug.log('角色商店', `存档数据不在内存中，从 IndexedDB 加载: ${charId}/${slotKey}`);
         try {
-          const saveData = await storage.loadSaveData(charId, slotKey);
+          const saveData = profile.隔离试玩信息?.localOnly
+            ? await storage.loadLocalSaveData(charId, slotKey)
+            : await storage.loadSaveData(charId, slotKey);
           if (saveData) {
             console.log('[15] 从IndexedDB加载的角色.背包.灵石数据:', (saveData as any).角色?.背包?.灵石)
             targetSlot.存档数据 = saveData;
@@ -901,7 +969,9 @@ export const useCharacterStore = defineStore('characterV3', () => {
                   try {
                     const original = targetSlot!.存档数据 as SaveData;
                     const backupSlot = `__backup__${slotKey}__${new Date().toISOString().replace(/[:.]/g, '-')}`;
-                    await storage.saveSaveData(charId, backupSlot, original);
+                    await storage.saveSaveData(charId, backupSlot, original, {
+                      localOnly: profile.隔离试玩信息?.localOnly === true,
+                    });
 
                     const { migrated, report } = migrateSaveDataToLatest(original);
                     const validation = validateSaveDataV3(migrated as any);
@@ -916,7 +986,9 @@ export const useCharacterStore = defineStore('characterV3', () => {
                       console.warn('[存档迁移] 迁移告警:', validation.warnings);
                     }
 
-                    await storage.saveSaveData(charId, slotKey, migrated as any);
+                    await storage.saveSaveData(charId, slotKey, migrated as any, {
+                      localOnly: profile.隔离试玩信息?.localOnly === true,
+                    });
                     targetSlot!.存档数据 = migrated as any;
                     debug.log('角色商店', `[存档迁移] ✅ 已写回 V3：${charId}/${slotKey}`);
                     resolve(true);
@@ -1044,7 +1116,9 @@ export const useCharacterStore = defineStore('characterV3', () => {
       debug.log('角色商店', '保存存档数据到 IndexedDB');
 
       // 直接将存档数据保存到 IndexedDB
-      await storage.saveSaveData(active.角色ID, active.存档槽位, currentSlot.存档数据);
+      await storage.saveSaveData(active.角色ID, active.存档槽位, currentSlot.存档数据, {
+        localOnly: profile.隔离试玩信息?.localOnly === true,
+      });
 
       // 🔥 保存后从内存中移除存档数据，保持与saveCurrentGame一致
       delete currentSlot.存档数据;
@@ -1077,7 +1151,9 @@ export const useCharacterStore = defineStore('characterV3', () => {
 
     try {
       // 🔥 新架构：从 IndexedDB 加载存档数据
-      const saveData = await storage.loadSaveData(active.角色ID, active.存档槽位);
+      const saveData = profile.隔离试玩信息?.localOnly
+        ? await storage.loadLocalSaveData(active.角色ID, active.存档槽位)
+        : await storage.loadSaveData(active.角色ID, active.存档槽位);
 
       if (!saveData) {
         debug.warn('角色商店', 'IndexedDB 中没有存档数据');
@@ -1366,7 +1442,9 @@ export const useCharacterStore = defineStore('characterV3', () => {
       })
 
       // 3. 🔥 核心变更：将巨大的SaveData独立保存到IndexedDB
-      await storage.saveSaveData(active.角色ID, active.存档槽位, currentSaveData);
+      await storage.saveSaveData(active.角色ID, active.存档槽位, currentSaveData, {
+        localOnly: profile.隔离试玩信息?.localOnly === true,
+      });
       console.log('[13] IndexedDB保存完成')
       debug.log('角色商店', `✅ 存档内容已保存到 IndexedDB (Key: ${active.角色ID}_${active.存档槽位})`);
 
@@ -1524,7 +1602,9 @@ export const useCharacterStore = defineStore('characterV3', () => {
     // 🔥 [核心修复] 从 IndexedDB 删除存档数据
     try {
       console.log(`[角色商店-删除存档] 从 IndexedDB 删除存档: ${charId}/${slotKey}`);
-      await storage.deleteSaveData(charId, slotKey);
+      await storage.deleteSaveData(charId, slotKey, {
+        localOnly: profile.隔离试玩信息?.localOnly === true,
+      });
       console.log('[角色商店-删除存档] ✅ IndexedDB 存档数据已删除');
     } catch (error) {
       console.error('[角色商店-删除存档] 删除 IndexedDB 存档数据失败:', error);
@@ -1659,7 +1739,9 @@ export const useCharacterStore = defineStore('characterV3', () => {
       profile.存档列表[saveName] = newSlot;
 
       // 🔥 新架构：将大的存档数据独立保存到 IndexedDB
-      await storage.saveSaveData(active.角色ID, saveName, currentSaveData);
+      await storage.saveSaveData(active.角色ID, saveName, currentSaveData, {
+        localOnly: profile.隔离试玩信息?.localOnly === true,
+      });
 
       // 3. 保存元数据到本地存储
       await commitMetadataToStorage();
@@ -1770,7 +1852,9 @@ export const useCharacterStore = defineStore('characterV3', () => {
       targetSlotList[slotName] = newSlotData;
 
       // 🔥 新架构：将大的存档数据独立保存
-      await storage.saveSaveData(active.角色ID, slotName, currentSaveData);
+      await storage.saveSaveData(active.角色ID, slotName, currentSaveData, {
+        localOnly: profile.隔离试玩信息?.localOnly === true,
+      });
 
       // 5. 保存到本地存储
       await commitMetadataToStorage();
@@ -1982,7 +2066,9 @@ export const useCharacterStore = defineStore('characterV3', () => {
         throw new Error(`存档结构不合法（${validation.errors[0] || '未知原因'}）`);
       }
 
-      await storage.saveSaveData(charId, importName, v3Data);
+      await storage.saveSaveData(charId, importName, v3Data, {
+        localOnly: profile.隔离试玩信息?.localOnly === true,
+      });
 
       const attrs = (v3Data as any)?.角色?.属性;
       const loc = (v3Data as any)?.角色?.位置;
@@ -2083,7 +2169,9 @@ export const useCharacterStore = defineStore('characterV3', () => {
     // 🔥 修复：如果"上次对话"存档槽位不存在或数据不在内存中，先从IndexedDB加载
     if (!lastConversationSlot || !lastConversationSlot.存档数据) {
       debug.log('角色商店', '从IndexedDB加载"上次对话"存档数据');
-      const loadedData = await storage.loadSaveData(active.角色ID, '上次对话');
+      const loadedData = profile.隔离试玩信息?.localOnly
+        ? await storage.loadLocalSaveData(active.角色ID, '上次对话')
+        : await storage.loadSaveData(active.角色ID, '上次对话');
       if (!loadedData) {
         throw new Error('没有可用于回滚的"上次对话"存档。请确保已启用"对话前自动备份"功能。');
       }
@@ -2140,7 +2228,9 @@ export const useCharacterStore = defineStore('characterV3', () => {
     triggerRef(rootState);
 
     // 2. 保存到IndexedDB
-    await storage.saveSaveData(active.角色ID, active.存档槽位, rolledBackData);
+    await storage.saveSaveData(active.角色ID, active.存档槽位, rolledBackData, {
+      localOnly: profile.隔离试玩信息?.localOnly === true,
+    });
     await commitMetadataToStorage();
 
     // 🔥 修复：同步到gameStateStore，确保UI立即更新
@@ -2519,7 +2609,9 @@ const importCharacter = async (profileData: CharacterProfile & { _导入存档�
 	          throw new Error(`导入角色失败：存档结构不合法（${validation.errors[0] || '未知原因'}）`);
 	        }
 
-	        await storage.saveSaveData(newCharId, finalSaveName, v3Data);
+	        await storage.saveSaveData(newCharId, finalSaveName, v3Data, {
+	          localOnly: profileData.隔离试玩信息?.localOnly === true,
+	        });
 
 	        const attrs = (v3Data as any)?.角色?.属性;
 	        const loc = (v3Data as any)?.角色?.位置;
@@ -2567,7 +2659,10 @@ const importCharacter = async (profileData: CharacterProfile & { _导入存档�
  */
 const loadSaveData = async (characterId: string, saveSlot: string): Promise<SaveData | null> => {
   console.log(`[CharacterStore] Loading save data for ${characterId} - ${saveSlot}`);
-  const saveData = await storage.loadSaveData(characterId, saveSlot);
+  const profile = rootState.value.角色列表[characterId];
+  const saveData = profile?.隔离试玩信息?.localOnly
+    ? await storage.loadLocalSaveData(characterId, saveSlot)
+    : await storage.loadSaveData(characterId, saveSlot);
   if (!saveData) {
     console.error(`[CharacterStore] Failed to load save data for ${characterId} - ${saveSlot}`);
     return null;
@@ -2691,7 +2786,9 @@ const migrateLegacyOnlineCharacterToSingle = async (sourceCharacterId: string): 
           const slot = profile.存档列表[slotKey];
           // 只加载没有存档数据的槽位（包括"上次对话"）
           if (slot && !slot.存档数据) {
-            const saveData = await storage.loadSaveData(charId, slotKey);
+            const saveData = profile.隔离试玩信息?.localOnly
+              ? await storage.loadLocalSaveData(charId, slotKey)
+              : await storage.loadSaveData(charId, slotKey);
             if (saveData) {
               slot.存档数据 = saveData;
               loadedCount++;
@@ -2791,6 +2888,7 @@ return {
   initializeStore, // 🔥 导出初始化函数
   reloadFromStorage,
   createNewCharacter,
+  installIsolatedPlaytestCharacter,
   deleteCharacter,
   deleteNpc, // 新增：删除NPC
   deleteSave,

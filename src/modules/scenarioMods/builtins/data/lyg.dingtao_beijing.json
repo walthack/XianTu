@@ -4579,6 +4579,276 @@
       "event.debut_qiyuxian.done": false,
       "event.debut_jiawenhe.done": false
     },
+    "worldSimulation": {
+      "version": 1,
+      "situations": [
+        {
+          "id": "world-sim.lyg.s01_05.enthronement",
+          "title": "新朝承认正在成形",
+          "summary": "凉州军的军事控制正在转成朝廷能够承认的新秩序；玩家可介入程序与站位，也可让世界自行完成拥立。",
+          "sourceEventId": "lyg.event.s01_05",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s01_05.done",
+                "operator": "eq",
+                "value": true
+              }
+            ],
+            [
+              {
+                "path": "flags.world.r2_9.lyg_event_s01_05.offscreen_resolved",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [
+            "anchor.lyg.dingtao_political_succession"
+          ]
+        },
+        {
+          "id": "world-sim.lyg.s01_06.assassination",
+          "title": "刺杀窗口已经打开",
+          "summary": "剑玉姬正在逼近，新君的退路与郭解的生死会在有限时间内结算；护住新君不等于自动救下郭解。",
+          "sourceEventId": "lyg.event.s01_06",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.world.r2_10.lyg_event_s01_06.occurred",
+                "operator": "eq",
+                "value": true
+              }
+            ],
+            [
+              {
+                "path": "flags.branch.lyg.if_guojie_longrest.active",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [
+            "anchor.lyg.dingtao_political_succession"
+          ],
+          "outcomeIds": [
+            "outcome.lyg.guo_jie"
+          ]
+        },
+        {
+          "id": "world-sim.lyg.s01_07.liangzhou_handoff",
+          "title": "凉州军的退场需要承接",
+          "summary": "董卓已无法久持，边警、旧部与补给必须交给贾文和及新朝可持续的联络线；董卓无论死生都须退出洛都争权。",
+          "sourceEventId": "lyg.event.s01_07",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.world.r2_10.lyg_event_s01_07.occurred",
+                "operator": "eq",
+                "value": true
+              }
+            ],
+            [
+              {
+                "path": "flags.branch.lyg.if_dongzhuo_longrest.active",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [
+            "anchor.lyg.dingtao_political_succession"
+          ],
+          "outcomeIds": [
+            "outcome.lyg.dong_zhuo"
+          ]
+        }
+      ],
+      "structuralAnchors": [
+        {
+          "id": "anchor.lyg.dingtao_political_succession",
+          "summary": "定陶王的政治继统已经成立且继续有效；不得提前并入后段完整登基大典。",
+          "sourceEventIds": [
+            "lyg.event.s01_05"
+          ],
+          "satisfiedWhenAny": [
+            [
+              {
+                "path": "flags.event.s01_05.done",
+                "operator": "eq",
+                "value": true
+              }
+            ],
+            [
+              {
+                "path": "flags.world.r2_9.lyg_event_s01_05.offscreen_resolved",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ]
+        }
+      ],
+      "forkableOutcomes": [
+        {
+          "id": "outcome.lyg.guo_jie",
+          "sourceEventId": "lyg.event.s01_06",
+          "defaultResolutionId": "offscreen.r2_10.lyg_event_s01_06",
+          "defaultWhen": [
+            {
+              "path": "flags.world.r2_10.lyg_event_s01_06.occurred",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "defaultSummary": "郭解护持新君时遭重创并伤重身亡，消息稍后公开。",
+          "replacementBranches": [
+            {
+              "branchId": "lyg.if_guojie_longrest",
+              "activeWhen": [
+                {
+                  "path": "flags.branch.lyg.if_guojie_longrest.active",
+                  "operator": "eq",
+                  "value": true
+                }
+              ],
+              "summary": "郭解重伤生还并长期休养，托孤转为受限辅政；程宗扬仍承担护持新君的责任。",
+              "intervention": {
+                "id": "intervention.lyg.save_guo_jie",
+                "label": "牵制剑玉姬并救下郭解",
+                "actionText": "我立即牵制剑玉姬，护住新君退路，并设法把重伤的郭解救离杀局。",
+                "kind": "combat",
+                "difficulty": "extreme",
+                "difficultyValue": 32,
+                "matchAny": [
+                  "救郭解",
+                  "救下郭解",
+                  "救离杀局",
+                  "救治郭解",
+                  "护住郭解",
+                  "牵制剑玉姬"
+                ],
+                "rejectIf": [
+                  "放弃郭解",
+                  "不救郭解",
+                  "任由郭解"
+                ],
+                "successOutcomes": [
+                  "success",
+                  "great_success",
+                  "perfect"
+                ],
+                "characterState": {
+                  "characterId": "liuchao.character.guo_jie",
+                  "status": "longrest"
+                },
+                "worldDelta": "郭解在刺杀中被救下，虽受重伤仍然生还并转入长期休养；新君继统及程宗扬的护持责任不变。",
+                "evidence": "裁定 #95/#154：郭解生还只能由世界模式本地干预判定成功并经玩家确认，正式承接 lyg.if_guojie_longrest。"
+              }
+            }
+          ],
+          "preserveAnchorIds": [
+            "anchor.lyg.dingtao_political_succession"
+          ]
+        },
+        {
+          "id": "outcome.lyg.dong_zhuo",
+          "sourceEventId": "lyg.event.s01_07",
+          "defaultResolutionId": "offscreen.r2_10.lyg_event_s01_07",
+          "defaultWhen": [
+            {
+              "path": "flags.world.r2_10.lyg_event_s01_07.occurred",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "defaultSummary": "董卓伤重辞世，边警与凉州旧部的处置落到贾文和肩上。",
+          "replacementBranches": [
+            {
+              "branchId": "lyg.if_dongzhuo_longrest",
+              "activeWhen": [
+                {
+                  "path": "flags.branch.lyg.if_dongzhuo_longrest.active",
+                  "operator": "eq",
+                  "value": true
+                }
+              ],
+              "summary": "董卓重伤生还并长期退场，不得回京争权；贾文和继续收束凉州旧部与边警。",
+              "intervention": {
+                "id": "intervention.lyg.save_dong_zhuo",
+                "label": "稳住董卓伤势并安排长期退场",
+                "actionText": "我用已经掌握的疗伤手段稳住董卓伤势，同时请贾文和立即接管旧部与边警，确保董卓不再回京争权。",
+                "kind": "cultivate",
+                "difficulty": "severe",
+                "difficultyValue": 28,
+                "matchAny": [
+                  "救董卓",
+                  "救下董卓",
+                  "救治董卓",
+                  "稳住董卓",
+                  "医治董卓",
+                  "董卓生还"
+                ],
+                "rejectIf": [
+                  "让董卓回京争权",
+                  "董卓继续掌权",
+                  "放弃董卓"
+                ],
+                "successOutcomes": [
+                  "success",
+                  "great_success",
+                  "perfect"
+                ],
+                "characterState": {
+                  "characterId": "liuchao.character.dong_zhuo",
+                  "status": "longrest"
+                },
+                "worldDelta": "董卓的伤势被稳住并转入长期休养，他退出洛都争权；贾文和接管凉州旧部与边警，定陶王继统不变。",
+                "evidence": "裁定 #95/#154：董卓生还只能由世界模式本地干预判定成功并经玩家确认，正式承接 lyg.if_dongzhuo_longrest。"
+              }
+            }
+          ],
+          "preserveAnchorIds": [
+            "anchor.lyg.dingtao_political_succession"
+          ]
+        }
+      ],
+      "referenceBeats": [
+        {
+          "id": "reference.lyg.s01_05.enthronement",
+          "sourceEventId": "lyg.event.s01_05",
+          "situationId": "world-sim.lyg.s01_06.assassination",
+          "availableWhen": [
+            {
+              "path": "flags.world.r2_9.lyg_event_s01_05.offscreen_resolved",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "summary": "董卓在昭阳宫拥立定陶王，贾文和提出大赦、选材、迁都等方案；玩家缺席时只可作为消息与余波，不补写玩家亲历。"
+        },
+        {
+          "id": "reference.lyg.s01_06.guo_jie_default",
+          "sourceEventId": "lyg.event.s01_06",
+          "situationId": "world-sim.lyg.s01_07.liangzhou_handoff",
+          "availableWhen": [
+            {
+              "path": "flags.world.r2_10.lyg_event_s01_06.occurred",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "invalidWhen": [
+            {
+              "path": "flags.branch.lyg.if_guojie_longrest.active",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "summary": "剑玉姬重创郭解、郭解临终托付新君；只有默认死亡已经结算且玩家确实在场时才可完整演出，否则只呈现公开消息或余波。"
+        }
+      ]
+    },
     "initialPlayerKnowledge": [
       {
         "factId": "knowledge.player.entity.ruan_xiang_ning",
@@ -6180,7 +6450,11 @@
           "deadlineTurns": 6,
           "reveal": {
             "publicAfterTurns": 1,
-            "playerKnowledge": "public_report"
+            "playerKnowledge": "public_report",
+            "presentation": {
+              "title": "宫中急报",
+              "text": "殿外忽然响起一阵急促而凌乱的脚步声。一名黄门扶着门框喘了口气，伏地禀道：郭解护持新君撤离时遭剑玉姬重创，宫中医官终究没能把人救回来。消息才从禁中放出，满殿一时无人作声。"
+            }
           }
         },
         "offscreenResolution": {
@@ -6981,7 +7255,11 @@
           "deadlineTurns": 5,
           "reveal": {
             "publicAfterTurns": 1,
-            "playerKnowledge": "public_report"
+            "playerKnowledge": "public_report",
+            "presentation": {
+              "title": "凉州密报",
+              "text": "一骑从宫门外赶来，马身尽是白沫。来人把封着凉州军印的短札交到案前：董卓伤势骤然转坏，已在贾文和身边辞世；临终留下的边地异动与旧部处置，如今全压在贾文和肩上。"
+            }
           }
         },
         "offscreenResolution": {

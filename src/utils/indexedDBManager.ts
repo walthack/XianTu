@@ -23,9 +23,15 @@ const SCENARIO_MOD_LIBRARY_KEY = 'scenario_mod_library_v1';
 const SAVEDATA_KEY_PREFIX = 'savedata_'; // savedata_{characterId}_{slotId}
 const REMOTE_STORE_PREFIX = '/api/v1/save-storage';
 
+interface StorageWriteOptions {
+  localOnly?: boolean;
+  remoteValue?: unknown;
+}
+
 // IndexedDB 实例缓存
 let dbInstance: IDBDatabase | null = null;
 let remoteStorageDisabledForSession = false;
+let lastRemoteRoot: LocalStorageRoot | null = null;
 
 function shouldUseRemoteStorage(): boolean {
   const enabled =
@@ -194,23 +200,8 @@ function getEmptyRoot(): LocalStorageRoot {
   };
 }
 
-/**
- * 从 IndexedDB 加载根数据
- */
-export async function loadRootData(): Promise<LocalStorageRoot> {
+async function loadLocalRootData(): Promise<LocalStorageRoot> {
   try {
-    const [remoteCharacters, remoteActiveSave] = await Promise.all([
-      loadRemoteRecord<Record<string, any>>(CHARACTERS_KEY),
-      loadRemoteRecord<any>(ACTIVE_SAVE_KEY),
-    ]);
-    if (remoteCharacters || remoteActiveSave) {
-      console.log('【乾坤宝库-远程】根数据已从远程仙途服务器加载');
-      return {
-        角色列表: remoteCharacters || {},
-        当前激活存档: remoteActiveSave || null,
-      };
-    }
-
     const db = await openDatabase();
     const transaction = db.transaction([STORE_NAME], 'readonly');
     const objectStore = transaction.objectStore(STORE_NAME);
@@ -254,11 +245,57 @@ export async function loadRootData(): Promise<LocalStorageRoot> {
 }
 
 /**
+ * 加载根数据。远程元数据仍是普通角色的权威来源，但会把明确标记为
+ * localOnly 的隔离试玩档从本机合并回来，避免刷新后试玩角色凭空消失。
+ */
+export async function loadRootData(): Promise<LocalStorageRoot> {
+  try {
+    const [[remoteCharacters, remoteActiveSave], localRoot] = await Promise.all([
+      Promise.all([
+        loadRemoteRecord<Record<string, any>>(CHARACTERS_KEY),
+        loadRemoteRecord<any>(ACTIVE_SAVE_KEY),
+      ]),
+      loadLocalRootData(),
+    ]);
+    if (!remoteCharacters && !remoteActiveSave) return localRoot;
+
+    lastRemoteRoot = {
+      角色列表: remoteCharacters || {},
+      当前激活存档: remoteActiveSave || null,
+    };
+
+    const isolatedLocalCharacters = Object.fromEntries(
+      Object.entries(localRoot.角色列表 || {}).filter(([, profile]: [string, any]) =>
+        profile?.隔离试玩信息?.localOnly === true,
+      ),
+    );
+    const localActiveId = localRoot.当前激活存档?.角色ID;
+    const activeSave = localActiveId
+      && isolatedLocalCharacters[localActiveId]
+      && !remoteCharacters?.[localActiveId]
+      ? localRoot.当前激活存档
+      : (remoteActiveSave || null);
+
+    console.log('【乾坤宝库-远程】根数据已加载，并合并本机隔离试玩档');
+    return {
+      // 极端固定-ID 冲突时让普通远端角色胜出；安装器随后会拒绝覆盖它。
+      角色列表: { ...isolatedLocalCharacters, ...(remoteCharacters || {}) },
+      当前激活存档: activeSave,
+    };
+  } catch (error) {
+    console.error('【乾坤宝库】合并根数据时出错，回退本机数据:', error);
+    return loadLocalRootData();
+  }
+}
+
+/**
  * 将根数据保存到 IndexedDB
  */
 // 辅助函数：保存单个键值对
-export async function saveData(key: string, data: any): Promise<boolean> {
-  const remoteSaved = await saveRemoteRecord(key, data);
+export async function saveData(key: string, data: any, options: StorageWriteOptions = {}): Promise<boolean> {
+  const remoteSaved = options.localOnly
+    ? false
+    : await saveRemoteRecord(key, options.remoteValue === undefined ? data : options.remoteValue);
   if (remoteSaved) {
     console.log(`【乾坤宝库-远程】数据已保存 (${key})`);
   }
@@ -277,10 +314,13 @@ export async function saveData(key: string, data: any): Promise<boolean> {
   });
 }
 
-export async function saveCharacters(characters: LocalStorageRoot['角色列表']): Promise<void> {
+export async function saveCharacters(
+  characters: LocalStorageRoot['角色列表'],
+  options: StorageWriteOptions = {},
+): Promise<void> {
   try {
     console.log('[IndexedDB-保存角色] 准备保存角色列表, 角色数:', Object.keys(characters).length);
-    await saveData(CHARACTERS_KEY, characters);
+    await saveData(CHARACTERS_KEY, characters, options);
     console.log('[IndexedDB-保存角色] ✅ 角色列表已保存到 IndexedDB');
   } catch (error) {
     console.error('[IndexedDB-保存角色] ❌ 保存角色列表失败:', error);
@@ -288,9 +328,12 @@ export async function saveCharacters(characters: LocalStorageRoot['角色列表'
   }
 }
 
-export async function saveActiveSave(activeSave: LocalStorageRoot['当前激活存档']): Promise<void> {
+export async function saveActiveSave(
+  activeSave: LocalStorageRoot['当前激活存档'],
+  options: StorageWriteOptions = {},
+): Promise<void> {
   try {
-    await saveData(ACTIVE_SAVE_KEY, activeSave);
+    await saveData(ACTIVE_SAVE_KEY, activeSave, options);
     console.log('【乾坤宝库-IDB】当前激活存档已保存');
   } catch (error) {
     console.error('【乾坤宝库-IDB】保存当前激活存档失败:', error);
@@ -298,16 +341,29 @@ export async function saveActiveSave(activeSave: LocalStorageRoot['当前激活�
   }
 }
 
-export async function saveRootData(root: LocalStorageRoot): Promise<void> {
+export async function saveRootData(root: LocalStorageRoot, options: { remoteRoot?: LocalStorageRoot } = {}): Promise<void> {
   try {
     console.log('[IndexedDB-保存] 开始保存根数据');
     console.log('[IndexedDB-保存] 角色列表键名:', Object.keys(root.角色列表));
     console.log('[IndexedDB-保存] 当前激活存档:', root.当前激活存档);
 
+    const remoteRoot = options.remoteRoot || (() => {
+      const sanitized = JSON.parse(JSON.stringify(root)) as LocalStorageRoot;
+      Object.entries(sanitized.角色列表).forEach(([characterId, profile]: [string, any]) => {
+        if (profile?.隔离试玩信息?.localOnly === true) delete sanitized.角色列表[characterId];
+      });
+      if (sanitized.当前激活存档 && !sanitized.角色列表[sanitized.当前激活存档.角色ID]) {
+        // 当前若是本机隔离试玩，远端仍保留进入试玩前自己的活动指针。
+        sanitized.当前激活存档 = lastRemoteRoot?.当前激活存档 || null;
+      }
+      return sanitized;
+    })();
+
     await Promise.all([
-      saveCharacters(root.角色列表),
-      saveActiveSave(root.当前激活存档),
+      saveCharacters(root.角色列表, { remoteValue: remoteRoot.角色列表 }),
+      saveActiveSave(root.当前激活存档, { remoteValue: remoteRoot.当前激活存档 }),
     ]);
+    lastRemoteRoot = JSON.parse(JSON.stringify(remoteRoot));
 
     console.log('[IndexedDB-保存] ✅ 根数据（分片）保存成功');
   } catch (error) {
@@ -474,11 +530,12 @@ export async function getStorageStats(): Promise<{ itemCount: number; estimatedS
 export async function saveSaveData(
   characterId: string,
   slotId: string,
-  saveDataContent: SaveData
+  saveDataContent: SaveData,
+  options: { localOnly?: boolean } = {},
 ): Promise<void> {
   try {
     const key = `${SAVEDATA_KEY_PREFIX}${characterId}_${slotId}`;
-    const remoteSaved = await saveData(key, saveDataContent);
+    const remoteSaved = await saveData(key, saveDataContent, { localOnly: options.localOnly });
     if (remoteSaved && slotId !== '上次对话') {
       toast.success(`存档【${slotId}】已保存到远程仙途服务器`, {
         id: `remote-save-${characterId}-${slotId}`,
@@ -593,11 +650,12 @@ export async function loadSaveData(
  */
 export async function deleteSaveData(
   characterId: string,
-  slotId: string
+  slotId: string,
+  options: { localOnly?: boolean } = {},
 ): Promise<void> {
   try {
     const key = `${SAVEDATA_KEY_PREFIX}${characterId}_${slotId}`;
-    await deleteRemoteRecord(key);
+    if (!options.localOnly) await deleteRemoteRecord(key);
 
     const db = await openDatabase();
 
@@ -627,11 +685,14 @@ export async function deleteSaveData(
  * @param characterId 角色ID
  * @returns 删除的记录数量
  */
-export async function deleteAllSaveDataForCharacter(characterId: string): Promise<number> {
+export async function deleteAllSaveDataForCharacter(
+  characterId: string,
+  options: { localOnly?: boolean } = {},
+): Promise<number> {
   try {
     const db = await openDatabase();
     const prefix = `${SAVEDATA_KEY_PREFIX}${characterId}_`;
-    await deleteRemoteRecordsByPrefix(prefix);
+    if (!options.localOnly) await deleteRemoteRecordsByPrefix(prefix);
     
     console.log(`【乾坤宝库-IDB】开始清理角色 ${characterId} 的所有存档...`);
     

@@ -208,7 +208,11 @@ test('event timeline validates windows, deadlines, reveal policy, and required r
     kind: 'canon_anchor',
     notBeforeTurns: 2,
     deadlineTurns: 6,
-    reveal: { publicAfterTurns: 1, playerKnowledge: 'public_report' },
+    reveal: {
+      publicAfterTurns: 1,
+      playerKnowledge: 'public_report',
+      presentation: { title: '宫中急报', text: '一名黄门带着急报赶到。' },
+    },
   };
   let result = validateScenarioMod(raw);
   assert.equal(result.valid, false);
@@ -224,6 +228,12 @@ test('event timeline validates windows, deadlines, reveal policy, and required r
   };
   result = validateScenarioMod(raw);
   assert.equal(result.valid, true, JSON.stringify(result.issues, null, 2));
+
+  event.timeline.reveal.presentation = { title: '', text: '' };
+  result = validateScenarioMod(raw);
+  assert.ok(result.issues.some(issue => issue.path.endsWith('.presentation.title')));
+  assert.ok(result.issues.some(issue => issue.path.endsWith('.presentation.text')));
+  event.timeline.reveal.presentation = { title: '宫中急报', text: '一名黄门带着急报赶到。' };
 
   event.timeline.deadlineTurns = 1;
   assert.ok(validateScenarioMod(raw).issues.some(issue => issue.path.endsWith('.deadlineTurns')));

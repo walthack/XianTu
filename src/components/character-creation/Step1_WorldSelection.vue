@@ -77,6 +77,46 @@
           </div>
           <p class="era">【{{ activeWorld.era || $t('时代未知') }}】</p>
 
+          <section
+            v-if="store.selectedScenarioMod?.rules.mode === 'strict' && store.selectedScenarioMod.scenario.worldSimulation"
+            class="story-mode-card"
+            data-testid="scenario-story-mode"
+          >
+            <div class="story-mode-heading">
+              <span>叙事方式</span>
+              <span v-if="store.scenarioStoryMode === 'world_sim'" class="demo-badge">实验 Demo</span>
+            </div>
+            <div class="story-mode-options" role="radiogroup" aria-label="叙事方式">
+              <button
+                type="button"
+                class="story-mode-option"
+                :class="{ selected: store.scenarioStoryMode === 'canon_companion' }"
+                role="radio"
+                :aria-checked="store.scenarioStoryMode === 'canon_companion'"
+                data-testid="story-mode-canon"
+                @click="store.setScenarioStoryMode('canon_companion')"
+              >
+                <strong>原著同行</strong>
+                <small>按承重剧情逐拍推进，兼容原有存档</small>
+              </button>
+              <button
+                type="button"
+                class="story-mode-option world-sim"
+                :class="{ selected: store.scenarioStoryMode === 'world_sim' }"
+                role="radio"
+                :aria-checked="store.scenarioStoryMode === 'world_sim'"
+                data-testid="story-mode-world-sim"
+                @click="store.setScenarioStoryMode('world_sim')"
+              >
+                <strong>六朝世界</strong>
+                <small>世界自行演化；只锁承重事实，人物命运可经本地判定改写</small>
+              </button>
+            </div>
+            <p class="story-mode-note">
+              只影响这个新档。默认死亡不会凭正文改写；成功介入仍须你确认正式 IF。
+            </p>
+          </section>
+
           <!-- 地图生成选项（移入右侧详情内，避免整体高度溢出） -->
           <div class="map-options" v-show="showMapOptions">
             <div class="map-options-header">{{ $t('世界规模配置') }}</div>
@@ -542,6 +582,80 @@ const editInitialData = computed(() => {
   gap: 1.5rem;
   height: 100%;
   overflow: hidden;
+}
+
+.story-mode-card {
+  margin: 0.8rem 0 0.35rem;
+  padding: 0.85rem;
+  border: 1px solid rgba(116, 184, 179, 0.28);
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(34, 62, 65, 0.32), rgba(30, 34, 40, 0.48));
+}
+
+.story-mode-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.65rem;
+  color: #d9e7e2;
+  font-size: 0.86rem;
+  letter-spacing: 0.08em;
+}
+
+.demo-badge {
+  padding: 0.18rem 0.45rem;
+  border: 1px solid rgba(116, 184, 179, 0.4);
+  border-radius: 999px;
+  color: #9cd4ca;
+  font-size: 0.66rem;
+  letter-spacing: 0.04em;
+}
+
+.story-mode-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+.story-mode-option {
+  display: flex;
+  flex-direction: column;
+  gap: 0.28rem;
+  min-width: 0;
+  padding: 0.68rem;
+  text-align: left;
+  color: #aaa69c;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 9px;
+  background: rgba(20, 23, 28, 0.54);
+  cursor: pointer;
+}
+
+.story-mode-option strong {
+  color: #d4d0c7;
+  font-size: 0.82rem;
+}
+
+.story-mode-option small {
+  line-height: 1.45;
+  font-size: 0.7rem;
+}
+
+.story-mode-option.selected {
+  border-color: rgba(166, 198, 218, 0.55);
+  box-shadow: 0 0 0 1px rgba(166, 198, 218, 0.12) inset;
+}
+
+.story-mode-option.world-sim.selected {
+  border-color: rgba(116, 184, 179, 0.72);
+  background: rgba(41, 83, 78, 0.38);
+}
+
+.story-mode-note {
+  margin: 0.6rem 0 0;
+  color: #8faaa4;
+  font-size: 0.7rem;
+  line-height: 1.55;
 }
 
 /* ========== 左侧面板 - 4.0 风格 ========== */

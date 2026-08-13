@@ -1091,8 +1091,6 @@ const exportCharacter = async (charId: string) => {
     }
 
     // 🔥 修复：从 IndexedDB 加载所有存档的完整数据
-    const { loadSaveData } = await import('@/utils/indexedDBManager');
-
     // 🔥 统一结构：单机和联机都使用存档列表，过滤掉"上次对话"
     const saveSlots = Object.values(character.存档列表 || {})
       .filter(save => save.存档名 !== '上次对话') as SaveSlot[];
@@ -1100,7 +1098,7 @@ const exportCharacter = async (charId: string) => {
     const savesWithFullData = await Promise.all(
       saveSlots.map(async (save) => {
         const slotKey = save.id || save.存档名;
-        const fullData = await loadSaveData(charId, slotKey);
+        const fullData = await characterStore.loadSaveData(charId, slotKey);
         if (!fullData) {
           console.warn(`[角色导出] 存档「${save.存档名}」数据为空，跳过`);
           return null;
@@ -1175,8 +1173,7 @@ const exportSingleSave = async (charId: string, slotKey: string, slot: SaveSlot)
   loading.value = true;
   try {
     // 从 IndexedDB 加载完整的存档数据
-    const { loadSaveData } = await import('@/utils/indexedDBManager');
-    const fullSaveDataRaw = await loadSaveData(charId, slotKey);
+    const fullSaveDataRaw = await characterStore.loadSaveData(charId, slotKey);
     const fullSaveData = isTavernEnv() ? (ensureSaveDataHasTavernNsfw(fullSaveDataRaw) as any) : fullSaveDataRaw;
 
     if (!fullSaveData) {
@@ -1257,10 +1254,9 @@ const _exportSaves = async () => {
     }
 
     // 🔥 修复：从 IndexedDB 加载每个存档的完整数据
-    const { loadSaveData } = await import('@/utils/indexedDBManager');
     const savesWithFullData = await Promise.all(
       saveSlots.map(async (save) => {
-        const fullData = await loadSaveData(charId, save.存档名);
+        const fullData = await characterStore.loadSaveData(charId, save.存档名);
         const patchedData = fullData && isTavernEnv() ? (ensureSaveDataHasTavernNsfw(fullData) as any) : fullData;
         return {
           ...save,

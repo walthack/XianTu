@@ -5,6 +5,7 @@ import {
   type ScenarioMod,
 } from './schema';
 import { getRegistryNamesById } from './characterResolver';
+import { resolveReconcileBranchId } from './divergenceLedger';
 import { NPC_ACTION_LIBRARY } from './npcDecisionCore';
 
 export interface ScenarioModValidationIssue {
@@ -682,6 +683,19 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
             } else if (entity.timeline.reveal.permissionKey !== undefined) {
               add(`${timelinePath}.reveal.permissionKey`, 'unexpected_value', 'permissionKey is only valid for permission knowledge.');
             }
+            const presentation = entity.timeline.reveal.presentation;
+            if (presentation !== undefined) {
+              if (!isRecord(presentation)) {
+                add(`${timelinePath}.reveal.presentation`, 'invalid_type', 'reveal presentation must be an object.');
+              } else {
+                if (typeof presentation.title !== 'string' || !presentation.title.trim()) {
+                  add(`${timelinePath}.reveal.presentation.title`, 'required_string', 'reveal presentation title is required.');
+                }
+                if (typeof presentation.text !== 'string' || !presentation.text.trim()) {
+                  add(`${timelinePath}.reveal.presentation.text`, 'required_string', 'reveal presentation text is required.');
+                }
+              }
+            }
           }
         }
       }
@@ -893,6 +907,154 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
       validateConditions(entity.completion, `${entity.__path}.completion`, add);
       validateIdArray(entity.eventIds, `${entity.__path}.eventIds`, add);
     }, false);
+    if (scenario.worldSimulation !== undefined) {
+      const wsPath = 'scenario.worldSimulation';
+      if (!isRecord(scenario.worldSimulation)) {
+        add(wsPath, 'invalid_type', 'worldSimulation must be an object.');
+      } else {
+        const ws = scenario.worldSimulation;
+        if (ws.version !== 1) add(`${wsPath}.version`, 'unsupported_version', 'worldSimulation.version must be 1.');
+        const situationIds = new Set<string>();
+        const anchorIds = new Set<string>();
+        const outcomeIds = new Set<string>();
+        const referenceIds = new Set<string>();
+        const collectId = (value: unknown, path: string, target: Set<string>) => {
+          if (!validateId(value, path, add)) return;
+          const id = String(value);
+          if (target.has(id)) add(path, 'duplicate_id', `Duplicate world simulation id "${id}".`);
+          target.add(id);
+        };
+        const validateWorldConditions = (value: unknown, path: string, required = false) => {
+          if (required && (!Array.isArray(value) || value.length < 1)) {
+            add(path, 'required_array', `${path} must contain at least one flags condition.`);
+          }
+          validateConditions(value, path, add);
+          if (!Array.isArray(value)) return;
+          value.forEach((condition, index) => {
+            if (isRecord(condition) && typeof condition.path === 'string' && !condition.path.startsWith('flags.')) {
+              add(`${path}[${index}].path`, 'invalid_path', 'World simulation conditions may only read flags.* engine state.');
+            }
+          });
+        };
+        const validateConditionGroups = (value: unknown, path: string) => {
+          if (!Array.isArray(value) || value.length < 1) {
+            add(path, 'required_array', `${path} must contain at least one condition group.`);
+            return;
+          }
+          value.forEach((group, index) => {
+            if (!Array.isArray(group) || group.length < 1) add(`${path}[${index}]`, 'required_array', 'Condition group cannot be empty.');
+            else validateWorldConditions(group, `${path}[${index}]`, true);
+          });
+        };
+        forEachRecord(ws.situations, `${wsPath}.situations`, (situation, path) => {
+          collectId(situation.id, `${path}.id`, situationIds);
+          requireString(situation.title, `${path}.title`, add);
+          requireString(situation.summary, `${path}.summary`, add);
+          if (validateId(situation.sourceEventId, `${path}.sourceEventId`, add)
+            && !eventIds.has(String(situation.sourceEventId))) {
+            add(`${path}.sourceEventId`, 'unknown_reference', `Unknown source event "${situation.sourceEventId}".`);
+          }
+          validateConditionGroups(situation.settledWhenAny, `${path}.settledWhenAny`);
+          validateIdArray(situation.anchorIds, `${path}.anchorIds`, add);
+          validateIdArray(situation.outcomeIds, `${path}.outcomeIds`, add);
+        });
+        forEachRecord(ws.structuralAnchors, `${wsPath}.structuralAnchors`, (anchor, path) => {
+          collectId(anchor.id, `${path}.id`, anchorIds);
+          requireString(anchor.summary, `${path}.summary`, add);
+          validateIdArray(anchor.sourceEventIds, `${path}.sourceEventIds`, add);
+          for (const eventId of Array.isArray(anchor.sourceEventIds) ? anchor.sourceEventIds : []) {
+            if (typeof eventId === 'string' && !eventIds.has(eventId)) add(`${path}.sourceEventIds`, 'unknown_reference', `Unknown source event "${eventId}".`);
+          }
+          validateConditionGroups(anchor.satisfiedWhenAny, `${path}.satisfiedWhenAny`);
+        });
+        forEachRecord(ws.forkableOutcomes, `${wsPath}.forkableOutcomes`, (outcome, path) => {
+          collectId(outcome.id, `${path}.id`, outcomeIds);
+          const sourceValid = validateId(outcome.sourceEventId, `${path}.sourceEventId`, add);
+          if (sourceValid && !eventIds.has(String(outcome.sourceEventId))) add(`${path}.sourceEventId`, 'unknown_reference', `Unknown source event "${outcome.sourceEventId}".`);
+          const resolutionValid = validateId(outcome.defaultResolutionId, `${path}.defaultResolutionId`, add);
+          if (sourceValid && resolutionValid && Array.isArray(scenario.events)) {
+            const sourceEvent = scenario.events.find(event => isRecord(event) && event.id === outcome.sourceEventId);
+            const resolution = isRecord(sourceEvent) && isRecord(sourceEvent.offscreenResolution)
+              ? sourceEvent.offscreenResolution
+              : undefined;
+            if (!resolution || resolution.id !== outcome.defaultResolutionId) {
+              add(`${path}.defaultResolutionId`, 'unknown_reference', 'Forkable defaultResolutionId must match the source event offscreenResolution.id.');
+            }
+          }
+          validateWorldConditions(outcome.defaultWhen, `${path}.defaultWhen`, true);
+          requireString(outcome.defaultSummary, `${path}.defaultSummary`, add);
+          validateIdArray(outcome.preserveAnchorIds, `${path}.preserveAnchorIds`, add);
+          if (!Array.isArray(outcome.replacementBranches) || outcome.replacementBranches.length < 1) {
+            add(`${path}.replacementBranches`, 'required_array', 'A forkable outcome needs at least one reviewed branch.');
+          }
+          forEachRecord(outcome.replacementBranches, `${path}.replacementBranches`, (branch, branchPath) => {
+            validateId(branch.branchId, `${branchPath}.branchId`, add);
+            validateWorldConditions(branch.activeWhen, `${branchPath}.activeWhen`, true);
+            requireString(branch.summary, `${branchPath}.summary`, add);
+            if (!isRecord(branch.intervention)) {
+              add(`${branchPath}.intervention`, 'required_object', 'A replacement branch needs a local intervention contract.');
+              return;
+            }
+            const intervention = branch.intervention;
+            validateId(intervention.id, `${branchPath}.intervention.id`, add);
+            requireString(intervention.label, `${branchPath}.intervention.label`, add);
+            requireString(intervention.actionText, `${branchPath}.intervention.actionText`, add);
+            if (!['combat', 'cultivate'].includes(String(intervention.kind))) add(`${branchPath}.intervention.kind`, 'invalid_enum', 'Intervention kind must be combat or cultivate.');
+            if (!['hard', 'severe', 'extreme'].includes(String(intervention.difficulty))) add(`${branchPath}.intervention.difficulty`, 'invalid_enum', 'Intervention difficulty must be hard, severe, or extreme.');
+            if (typeof intervention.difficultyValue !== 'number' || !Number.isFinite(intervention.difficultyValue) || intervention.difficultyValue < 1) add(`${branchPath}.intervention.difficultyValue`, 'invalid_range', 'Intervention difficultyValue must be positive.');
+            validateStringArray(intervention.matchAny, `${branchPath}.intervention.matchAny`, add);
+            validateStringArray(intervention.rejectIf, `${branchPath}.intervention.rejectIf`, add);
+            if (!Array.isArray(intervention.matchAny) || intervention.matchAny.length < 1) add(`${branchPath}.intervention.matchAny`, 'required_array', 'Intervention requires at least one local action matcher.');
+            if (!Array.isArray(intervention.successOutcomes) || intervention.successOutcomes.length < 1
+              || intervention.successOutcomes.some(value => !['success', 'great_success', 'perfect'].includes(String(value)))) {
+              add(`${branchPath}.intervention.successOutcomes`, 'invalid_enum', 'Intervention successOutcomes may only contain success, great_success, and perfect.');
+            }
+            if (!isRecord(intervention.characterState)) add(`${branchPath}.intervention.characterState`, 'required_object', 'Intervention requires a character state receipt.');
+            else {
+              if (validateId(intervention.characterState.characterId, `${branchPath}.intervention.characterState.characterId`, add)
+                && !characterIds.has(String(intervention.characterState.characterId))) add(`${branchPath}.intervention.characterState.characterId`, 'unknown_reference', `Unknown character "${intervention.characterState.characterId}".`);
+              if (!['alive', 'longrest', 'incapacitated'].includes(String(intervention.characterState.status))) add(`${branchPath}.intervention.characterState.status`, 'invalid_enum', 'Intervention character status is not branch-safe.');
+              if (
+                typeof outcome.sourceEventId === 'string'
+                && typeof branch.branchId === 'string'
+                && typeof intervention.characterState.characterId === 'string'
+                && typeof intervention.characterState.status === 'string'
+                && resolveReconcileBranchId({
+                  id: outcome.sourceEventId,
+                  verdict: 'void',
+                  evidence: 'validator',
+                  worldDelta: 'validator',
+                  characterStates: { [intervention.characterState.characterId]: intervention.characterState.status },
+                }) !== branch.branchId
+              ) {
+                add(`${branchPath}.branchId`, 'unknown_reference', 'Replacement branch is not backed by the existing deterministic IF registry for this event and character state.');
+              }
+            }
+            requireString(intervention.worldDelta, `${branchPath}.intervention.worldDelta`, add);
+            requireString(intervention.evidence, `${branchPath}.intervention.evidence`, add);
+          });
+        });
+        forEachRecord(ws.referenceBeats, `${wsPath}.referenceBeats`, (beat, path) => {
+          collectId(beat.id, `${path}.id`, referenceIds);
+          validateId(beat.sourceEventId, `${path}.sourceEventId`, add);
+          validateId(beat.situationId, `${path}.situationId`, add);
+          validateWorldConditions(beat.availableWhen, `${path}.availableWhen`, true);
+          validateWorldConditions(beat.invalidWhen, `${path}.invalidWhen`);
+          requireString(beat.summary, `${path}.summary`, add);
+        });
+        forEachRecord(ws.situations, `${wsPath}.situations`, (situation, path) => {
+          for (const id of Array.isArray(situation.anchorIds) ? situation.anchorIds : []) if (typeof id === 'string' && !anchorIds.has(id)) add(`${path}.anchorIds`, 'unknown_reference', `Unknown structural anchor "${id}".`);
+          for (const id of Array.isArray(situation.outcomeIds) ? situation.outcomeIds : []) if (typeof id === 'string' && !outcomeIds.has(id)) add(`${path}.outcomeIds`, 'unknown_reference', `Unknown forkable outcome "${id}".`);
+        });
+        forEachRecord(ws.forkableOutcomes, `${wsPath}.forkableOutcomes`, (outcome, path) => {
+          for (const id of Array.isArray(outcome.preserveAnchorIds) ? outcome.preserveAnchorIds : []) if (typeof id === 'string' && !anchorIds.has(id)) add(`${path}.preserveAnchorIds`, 'unknown_reference', `Unknown structural anchor "${id}".`);
+        });
+        forEachRecord(ws.referenceBeats, `${wsPath}.referenceBeats`, (beat, path) => {
+          if (typeof beat.sourceEventId === 'string' && !eventIds.has(beat.sourceEventId)) add(`${path}.sourceEventId`, 'unknown_reference', `Unknown source event "${beat.sourceEventId}".`);
+          if (typeof beat.situationId === 'string' && !situationIds.has(beat.situationId)) add(`${path}.situationId`, 'unknown_reference', `Unknown situation "${beat.situationId}".`);
+        });
+      }
+    }
   }
 
   const rules = input.rules;
@@ -901,6 +1063,9 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
   } else {
     if (rules.mode !== 'strict' && rules.mode !== 'expand') {
       add('rules.mode', 'invalid_enum', 'rules.mode must be strict or expand.');
+    }
+    if (rules.mode === 'expand' && isRecord(scenario) && scenario.worldSimulation !== undefined) {
+      add('scenario.worldSimulation', 'mode_mismatch', 'worldSimulation is only supported by strict scenario mods.');
     }
     if (rules.lockedFields !== undefined) {
       if (!Array.isArray(rules.lockedFields)) {

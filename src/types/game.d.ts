@@ -1149,6 +1149,11 @@ export interface CharacterBaseInfo extends AIMetadata {
 
 export interface CharacterProfile {
   模式: '单机' | '联机';
+  /** 仅保存在本机的可丢弃试玩角色；不得进入远程角色/存档同步。 */
+  隔离试玩信息?: {
+    kind: string;
+    localOnly: true;
+  };
   /** 旧联机角色本地缓存复制出的单机副本；用于幂等重试，不代表已删除来源数据。 */
   本地迁移信息?: {
     版本: 1;

@@ -16,6 +16,8 @@ import type {
   ScenarioPlayerKnowledgeFact,
   ScenarioPathReceipt,
   ScenarioStoryOpportunity,
+  ScenarioStoryMode,
+  ScenarioWorldSimulation,
 } from './schema';
 import {
   applyNpcDecisionEffectsWithAudit,
@@ -31,6 +33,10 @@ import {
 import { recordOffscreenDivergence, type ScenarioDivergence } from './divergenceLedger';
 import { getCanonRailOrder, getCanonRailProfile, isCanonRailChapter } from './canonRail';
 import { updateDivergenceControl, type DivergenceSignal, type WorldPushState } from './divergenceControl';
+import {
+  getWorldSimulationFocusEvent,
+  type WorldSimulationRuntimeState,
+} from './worldSimulation';
 
 
 export interface ScenarioProgressState {
@@ -249,6 +255,10 @@ export interface RuntimeState extends ScenarioProgressState {
   modId?: string;
   currentChapterId: string | null;
   flags: Record<string, ScenarioFlagValue>;
+  /** 缺省视为 canon_companion；world_sim 只由新档初始化显式写入。 */
+  storyMode?: ScenarioStoryMode;
+  worldSimulation?: ScenarioWorldSimulation;
+  worldSimulationState?: WorldSimulationRuntimeState;
   nextStageId?: string | null;
   nextStageReadyId?: string | null;
   /** 剧情停滞轮数：连续多少轮无事件/章节推进（供收束提示分档），推进即清零 */
@@ -578,7 +588,7 @@ function hasPartialOpportunityProgress(
 
 function syncActorEngine(runtime: RuntimeState): void {
   const state = ensureActorEngine(runtime);
-  const anchor = getNarrativeAnchorEvent(runtime);
+  const anchor = getScenarioFocusEvent(runtime);
   const previousAnchor = state.anchorEventId
     ? runtime.events.find(event => event.id === state.anchorEventId)
     : undefined;
@@ -821,7 +831,7 @@ export function trackStoryOpportunity(
 ): { ok: boolean; reason?: string; actionText?: string } {
   const runtime = getRuntime(saveData);
   if (!runtime) return { ok: false, reason: '当前存档没有严格剧本运行时' };
-  const anchor = getNarrativeAnchorEvent(runtime);
+  const anchor = getScenarioFocusEvent(runtime);
   const opportunity = findOpportunity(anchor || undefined, opportunityId);
   if (!anchor?.worldActor || !opportunity) return { ok: false, reason: '当前机会已失效' };
   // 先建立完整 round-0 决策态，再写玩家追踪意图，避免 track 提前占用 anchorId
@@ -903,7 +913,9 @@ function reconcileEventActionContract(runtime: RuntimeState, event: ScenarioModE
 }
 
 function getCurrentPlayerCompletionEvent(runtime: RuntimeState): ScenarioModEvent | undefined {
-  const anchor = getNarrativeAnchorEvent(runtime);
+  // 世界模式只借用事件的人物/场景素材，绝不开放 Canon Rail 的玩家完成合同。
+  if (runtime.storyMode === 'world_sim') return undefined;
+  const anchor = getScenarioFocusEvent(runtime);
   if (anchor?.playerCompletionContract) return anchor;
   return runtime.activeEventIds
     .map(id => runtime.events.find(event => event.id === id))
@@ -977,7 +989,7 @@ export function hasPendingStoryBeatHandoff(saveData: SaveData): boolean {
   const runtime = getRuntime(saveData);
   const handoff = runtime?.lastSettledBeat;
   if (!runtime || !handoff) return false;
-  const anchor = getNarrativeAnchorEvent(runtime);
+  const anchor = getScenarioFocusEvent(runtime);
   if (handoff.targetEventId && anchor?.id !== handoff.targetEventId) return false;
   return handoff.bridgedAtTurn === undefined;
 }
@@ -1203,7 +1215,7 @@ export function getCurrentStoryEventActions(saveData: SaveData): ScenarioEventAc
 /** 当前章节显式开放的非承重探索动作；可忽略，且永远不能替代唯一主线锚点。 */
 export function getCurrentStoryExplorationActions(saveData: SaveData): ScenarioEventActionSelection[] {
   const runtime = getRuntime(saveData);
-  if (!runtime) return [];
+  if (!runtime || runtime.storyMode === 'world_sim') return [];
   const anchorId = getNarrativeAnchorEvent(runtime)?.id;
   return runtime.activeEventIds
     .map(id => runtime.events.find(event => event.id === id))
@@ -1282,6 +1294,9 @@ export function recordStoryEventStructuredAction(
   const runtime = getRuntime(saveData);
   if (!runtime || !['event_engine', 'exploration_engine'].includes(selection?.source)) {
     return { attempted: false, completed: false, reason: 'invalid_selection' };
+  }
+  if (runtime.storyMode === 'world_sim') {
+    return { attempted: false, completed: false, reason: 'world_sim' };
   }
   const event = selection.source === 'exploration_engine'
     ? runtime.events.find(item => item.id === selection.eventId && item.exploration !== undefined)
@@ -1366,7 +1381,7 @@ export function getTrackedStoryOpportunityActions(saveData: SaveData): ScenarioO
   const runtime = getRuntime(saveData);
   const state = runtime?.actorEngine;
   if (!runtime || !state?.trackedOpportunityId) return [];
-  const anchor = getNarrativeAnchorEvent(runtime);
+  const anchor = getScenarioFocusEvent(runtime);
   const opportunity = findOpportunity(anchor || undefined, state.trackedOpportunityId);
   const opportunityState = opportunity && state.opportunityStates?.[opportunity.id];
   const contract = opportunity?.completionContract;
@@ -1398,7 +1413,7 @@ export function recordStoryOpportunityStructuredAction(
   if (!runtime || !state || selection?.source !== 'opportunity_engine') {
     return { progressed: false, completed: false, reason: 'invalid_selection' };
   }
-  const anchor = getNarrativeAnchorEvent(runtime);
+  const anchor = getScenarioFocusEvent(runtime);
   const opportunity = findOpportunity(anchor || undefined, state.trackedOpportunityId);
   const opportunityState = opportunity && state.opportunityStates?.[opportunity.id];
   const contract = opportunity?.completionContract;
@@ -1459,7 +1474,7 @@ export function recordStoryOpportunityPlayerAction(
   }
   syncActorEngine(runtime);
   const state = ensureActorEngine(runtime);
-  const anchor = getNarrativeAnchorEvent(runtime);
+  const anchor = getScenarioFocusEvent(runtime);
   const opportunity = findOpportunity(anchor || undefined, state.trackedOpportunityId);
   const contract = opportunity?.completionContract;
   const opportunityState = opportunity && state.opportunityStates?.[opportunity.id];
@@ -1503,7 +1518,7 @@ export function recordStoryOpportunityPlayerAction(
 function settleReadyOpportunityCompletionFlags(runtime: RuntimeState): void {
   const state = runtime.actorEngine;
   if (!state?.trackedOpportunityId) return;
-  const anchor = getNarrativeAnchorEvent(runtime);
+  const anchor = getScenarioFocusEvent(runtime);
   const opportunity = findOpportunity(anchor || undefined, state.trackedOpportunityId);
   const opportunityState = opportunity && state.opportunityStates?.[opportunity.id];
   if (
@@ -1830,11 +1845,17 @@ function resolveOffscreenWorldEvents(runtime: RuntimeState, transitions: Scenari
   for (const resolution of resolutions) {
     const knownIds = resolution.resolvedEventIds.filter(id => runtime.events.some(event => event.id === id));
     if (!knownIds.length) continue;
+    // 正式 IF 会把被替代的源事件写入统一 settlement registry。必须在检查期限前
+    // 跳过，否则“确认生还”和“下一轮默认死亡”会在 active 清理的竞态窗口并存。
+    // 多事件合同只结算仍未落账的成员：既不能重写已由玩家/IF 结算的成员，也不能因
+    // 其中一个成员已结算而永久遗留同组其余世界事件。
+    const unresolvedIds = knownIds.filter(id => !isEventSettled(runtime, id));
+    if (!unresolvedIds.length) continue;
     const owner = runtime.events.find(event => event.offscreenResolution?.id === resolution.id)
       || runtime.events.find(event => knownIds.includes(event.id));
     // worldActor 合同的玩家介入判定发生在当前轮，故需要预判本轮即将增加的 stall；
     // 旧世界事件合同沿用“已完整停滞轮数”语义，避免改变既有结算时点。
-    const actorDrivenResolution = knownIds.every(id =>
+    const actorDrivenResolution = unresolvedIds.every(id =>
       Boolean(runtime.events.find(event => event.id === id)?.worldActor),
     );
     const effectiveStall = (runtime.stallTurns || 0)
@@ -1877,16 +1898,16 @@ function resolveOffscreenWorldEvents(runtime: RuntimeState, transitions: Scenari
     ) continue;
     // 数据增量会把一个关卡拆成多个场外合同；只允许当前已经激活的世界事件启动结算，
     // 否则同一 stall 阈值会把整关未来事件一次烧完。多事件战争合同仍由首个活跃节点启动整组。
-    if (!knownIds.some(id => runtime.activeEventIds.includes(id))) continue;
+    if (!unresolvedIds.some(id => runtime.activeEventIds.includes(id))) continue;
     runtime.flags[resolution.flagKey] = true;
-    runtime.offscreenResolvedEventIds = [...new Set([...(runtime.offscreenResolvedEventIds || []), ...knownIds])];
-    runtime.activeEventIds = runtime.activeEventIds.filter(id => !knownIds.includes(id));
-    for (const eventId of knownIds) markEventTimelineOccurred(runtime, eventId, 'offscreen');
+    runtime.offscreenResolvedEventIds = [...new Set([...(runtime.offscreenResolvedEventIds || []), ...unresolvedIds])];
+    runtime.activeEventIds = runtime.activeEventIds.filter(id => !unresolvedIds.includes(id));
+    for (const eventId of unresolvedIds) markEventTimelineOccurred(runtime, eventId, 'offscreen');
     refreshEventTimelineRevelations(runtime, transitions);
     recordOffscreenDivergence(runtime, {
-      id: resolution.id, eventId: knownIds[0],
+      id: resolution.id, eventId: unresolvedIds[0],
       worldDelta: resolution.worldDelta, evidence: resolution.evidence,
-      revealed: knownIds.every(id => eventIsKnownToPlayer(runtime, id)),
+      revealed: unresolvedIds.every(id => eventIsKnownToPlayer(runtime, id)),
     });
     transitions.push({ type: 'world_event_resolved', id: resolution.id });
   }
@@ -1933,6 +1954,9 @@ function recordSettledBeatHandoff(runtime: RuntimeState, transitions: ScenarioRu
 }
 
 function recordChronicleTransitions(runtime: RuntimeState, transitions: ScenarioRuntimeTransition[]): void {
+  const revealedEventIds = new Set(
+    transitions.filter(item => item.type === 'event_revealed').map(item => item.id),
+  );
   for (const transition of transitions) {
     if (transition.type === 'event_completed') {
       if (!eventIsKnownToPlayer(runtime, transition.id)) continue;
@@ -1946,6 +1970,9 @@ function recordChronicleTransitions(runtime: RuntimeState, transitions: Scenario
     } else if (transition.type === 'world_event_resolved') {
       const divergence = runtime.divergences?.find(item => item.id === transition.id);
       if (divergence?.revealed === false) continue;
+      // 同一推进批次内玩家已经通过“消息传来”获知结果时，只留认识论正确的消息条目。
+      // 否则相同 worldDelta 会同时显示成“消息传来”与“世界自行推进”。
+      if (divergence?.eventId && revealedEventIds.has(divergence.eventId)) continue;
       appendChronicleEntry(runtime, {
         id: `chronicle.${runtime.modId || 'unknown'}.${transition.id}`,
         type: 'world', stageId: runtime.modId || '',
@@ -1956,10 +1983,11 @@ function recordChronicleTransitions(runtime: RuntimeState, transitions: Scenario
       const timeline = eventTimelineState(runtime, transition.id);
       if (timeline?.outcome === 'offscreen') {
         const divergence = runtime.divergences?.find(item => item.eventId === transition.id);
+        const presentation = event?.timeline?.reveal.presentation;
         appendChronicleEntry(runtime, {
           id: `chronicle.${runtime.modId || 'unknown'}.${divergence?.id || transition.id}.revealed`,
           type: 'world', stageId: runtime.modId || '',
-          title: '消息传来', detail: divergence?.worldDelta || event?.description || transition.id,
+          title: presentation?.title || '来报', detail: divergence?.worldDelta || event?.description || transition.id,
         });
       } else {
         appendChronicleEntry(runtime, {
@@ -2014,6 +2042,15 @@ export function getNarrativeAnchorEvent(runtime: Pick<RuntimeState, 'chapters' |
     .sort((a, b) => (railOrder.get(a.id) ?? Infinity) - (railOrder.get(b.id) ?? Infinity)
       || (a.axisSeq ?? Infinity) - (b.axisSeq ?? Infinity)
       || (order.get(a.id)! - order.get(b.id)!))[0] || null;
+}
+
+/**
+ * 当前叙事中心。同行线仍是唯一 Canon Rail；世界模式只读当前未结局势所引用的
+ * 既有事件资产。合同缺失、引用失效或局势耗尽时返回 null，不能静默复活 Rail 完成权。
+ */
+export function getScenarioFocusEvent(runtime: RuntimeState): ScenarioModEvent | null {
+  if (runtime.storyMode === 'world_sim') return getWorldSimulationFocusEvent(runtime as any) || null;
+  return getNarrativeAnchorEvent(runtime);
 }
 
 export function createScenarioProgress(mod: ScenarioMod): ScenarioProgressState {
@@ -2124,6 +2161,27 @@ function getReconcileDeps(): { version: string; resolve: (c: unknown[] | undefin
   } catch { return null; }
 }
 
+/**
+ * 旧档会把事件合同烘焙进 runtime。后续新增的知情表现若只存在于内置 Mod，旧档即使继续游玩也
+ * 只能回落到通用“消息传来”。这里只补缺失的表现元数据：不新增／改写 timeline 规则，
+ * 不覆盖已有 presentation，更不触碰事件、世界回合或玩家状态。
+ */
+export function backfillRuntimeEventRevealPresentations(
+  runtime: Pick<RuntimeState, 'events'>,
+  canonicalEvents: ScenarioModEvent[],
+): number {
+  const canonicalById = new Map(canonicalEvents.map(event => [event.id, event]));
+  let updated = 0;
+  for (const savedEvent of runtime.events || []) {
+    const savedReveal = savedEvent.timeline?.reveal;
+    const canonicalPresentation = canonicalById.get(savedEvent.id)?.timeline?.reveal?.presentation;
+    if (!savedReveal || savedReveal.presentation || !canonicalPresentation) continue;
+    savedReveal.presentation = structuredClone(canonicalPresentation);
+    updated += 1;
+  }
+  return updated;
+}
+
 function reconcileSaveWithRegistry(saveData: SaveData, runtime: RuntimeState & { modId?: string; reconciledRegistryVersion?: string; canon?: { characters?: unknown[] } }): void {
   const deps = getReconcileDeps();
   if (!deps) return;
@@ -2136,6 +2194,7 @@ function reconcileSaveWithRegistry(saveData: SaveData, runtime: RuntimeState & {
     for (const [factId, fact] of Object.entries(createInitialNpcPrivateKnowledge(mod))) {
       ledger[factId] ||= fact;
     }
+    backfillRuntimeEventRevealPresentations(runtime, mod.scenario.events || []);
   }
   if (runtime.reconciledRegistryVersion === deps.version) return;
   try {

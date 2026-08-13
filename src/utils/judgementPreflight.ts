@@ -8,6 +8,7 @@ import {
 import { calculateTurnJudgementData } from './judgementRules';
 import { getCanonRailContract, getCanonRailProfile } from '@/modules/scenarioMods/canonRail';
 import { getNarrativeAnchorEvent } from '@/modules/scenarioMods/runtime';
+import { findWorldSimulationIntervention } from '@/modules/scenarioMods/worldSimulation';
 
 const RISK_RULES: Array<[JudgementKind, RegExp]> = [
   ['combat', /攻击|出手|偷袭|斩杀|刺杀|搏杀|斗法|交手|战斗|迎战|应战|反击|格挡|挡住|阻击|拦住|制服|擒拿|对决|打晕|击晕|下毒|抢劫|抢夺(?!先机|时间|机会|话语权)|(?:斩|砍|刺|杀|击|射)(?:向|出|了|死|伤|中|退|倒|那|这|他|她|它|敌|贼|妖|守卫|对手)|打(?:向|死|伤|中|退|倒|那|这|他|她|它|敌|贼|妖|守卫|对手)|打了(?:他|她|它|敌人|守卫|对手)|打出(?:一|两|三|数)?(?:拳|掌|招|击)/],
@@ -128,8 +129,51 @@ export function buildLocalJudgementPreflight(
   const activeEventId = getNarrativeAnchorEvent(runtime || {})?.id
     || (Array.isArray(runtime?.activeEventIds) ? runtime.activeEventIds[0] : undefined);
   const contract = activeEventId ? getCanonRailContract(profile, activeEventId) : null;
+  const worldIntervention = findWorldSimulationIntervention(saveData, normalized);
+  if (worldIntervention) {
+    const { situation, outcome, branchId, intervention } = worldIntervention;
+    const kind = intervention.kind;
+    const data = calculateTurnJudgementData(
+      saveData?.角色?.身份?.先天六司,
+      saveData?.角色?.身份?.后天六司,
+      saveData?.角色?.位置,
+    );
+    return createJudgementProposal({
+      actionText: normalized,
+      kind,
+      target: intervention.characterState.characterId,
+      whyNow: `当前局势“${situation.title}”存在一次会改变默认枢纽结果的介入窗口。判定成功后仍须由玩家确认正式 IF。`,
+      difficulty: { band: intervention.difficulty, value: intervention.difficultyValue },
+      factors: [
+        ...stateFactors(kind, saveData),
+        ...scenarioSkillFactors(kind, normalized, saveData),
+        ...explicitTalentFactors(kind, normalized, saveData),
+        { label: '幸运', value: data.幸运点, source: 'condition' },
+        environmentFactorFor(kind, data),
+      ],
+      stakes: {
+        perfect: '达到替代默认结果的本地门槛，并保留额外余裕；仍须确认 IF。',
+        greatSuccess: '达到替代默认结果的本地门槛；仍须确认 IF。',
+        success: '达到替代默认结果的本地门槛；仍须确认 IF。',
+        partial: '只保住局部目标或争取到时间，不足以确认生还 IF。',
+        failure: '行动受阻，默认枢纽结果仍会按世界期限推进。',
+        criticalFailure: '行动失败并留下更重余波，默认枢纽结果不被替代。',
+      },
+      canonPolicy: 'route_process_only',
+      sourceEventId: outcome.sourceEventId,
+      authorityReceipt: {
+        kind: 'world_sim_intervention',
+        situationId: situation.id,
+        outcomeId: outcome.id,
+        sourceEventId: outcome.sourceEventId,
+        branchId,
+        interventionId: intervention.id,
+      },
+      createdAtTurn: currentTurn,
+    });
+  }
   // IF 改写是正典边界，不依赖“战斗/潜入”等普通风险词命中。
-  if (contract && EXPLICIT_IF_INTENT.test(normalized)) {
+  if (runtime?.storyMode !== 'world_sim' && contract && EXPLICIT_IF_INTENT.test(normalized)) {
     return createJudgementProposal({
       actionText: normalized, kind: 'scheme', whyNow: '此行动会改写活动正典拍，默认线必须先进入显式 IF。',
       difficulty: { band: 'extreme', value: 100 }, factors: [],
@@ -166,8 +210,8 @@ export function buildLocalJudgementPreflight(
       environmentFactorFor(kind, data),
     ],
     stakes,
-    canonPolicy: contract ? 'route_process_only' : 'free',
-    ...(contract ? { sourceEventId: contract.eventId } : {}),
+    canonPolicy: runtime?.storyMode !== 'world_sim' && contract ? 'route_process_only' : 'free',
+    ...(runtime?.storyMode !== 'world_sim' && contract ? { sourceEventId: contract.eventId } : {}),
     createdAtTurn: currentTurn,
   });
 }

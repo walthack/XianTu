@@ -1,5 +1,6 @@
 <template>
   <div class="main-game-panel">
+    <WorldSimulationPlaytestPanel />
     <!-- 短期记忆区域 -->
     <div class="memory-section" v-if="showMemorySection">
       <div class="memory-header" @click="toggleMemory">
@@ -311,18 +312,18 @@
             @blur="isInputFocused = false"
             @keydown="handleKeyDown"
             @input="handleInput"
-            :placeholder="hasActiveCharacter ? t('请输入您的选择或行动...') : t('请先选择角色...')"
+            :placeholder="playtestFinished ? '本次试玩已结束，请在上方提交反馈' : hasActiveCharacter ? t('请输入您的选择或行动...') : t('请先选择角色...')"
             class="game-input"
             ref="inputRef"
             rows="1"
             wrap="soft"
-            :disabled="!hasActiveCharacter || isAIProcessing"
+            :disabled="!hasActiveCharacter || isAIProcessing || playtestFinished"
           ></textarea>
         </div>
 
         <button
           @click="sendMessage"
-          :disabled="!inputText.trim() || isAIProcessing || !hasActiveCharacter"
+          :disabled="!inputText.trim() || isAIProcessing || !hasActiveCharacter || playtestFinished"
           class="send-button"
         >
           <Loader2 v-if="isAIProcessing" :size="16" class="animate-spin" />
@@ -444,6 +445,7 @@ import { aiService } from '@/services/aiService';
 import { extractTextFromJsonResponse, extractStreamingNarrativeText } from '@/utils/textSanitizer';
 import { validateProcessedAIResponse } from '@/utils/processedAIResponseValidation';
 import FormattedText from '@/components/common/FormattedText.vue';
+import WorldSimulationPlaytestPanel from '@/components/dashboard/WorldSimulationPlaytestPanel.vue';
 import { useGameStateStore } from '@/stores/gameStateStore';
 import { getSnapshots } from '@/utils/snapshotManager';
 import {
@@ -468,6 +470,12 @@ import {
   type ScenarioEventActionSelection,
   type ScenarioOpportunityActionSelection,
 } from '@/modules/scenarioMods/runtime';
+import {
+  getCurrentWorldSituation,
+  getWorldSimulationPresentationNotices,
+  settleWorldSimulationJudgement,
+} from '@/modules/scenarioMods/worldSimulation';
+import { WORLD_SIMULATION_PLAYTEST_KIND } from '@/modules/scenarioMods/worldSimulationPlaytest';
 import type {  CharacterProfile } from '@/types/game';
 import type { GM_Response } from '@/types/AIGameMaster'; // AIGameMaster.d.ts 仍然需要保留
 
@@ -725,6 +733,13 @@ const actionQueue = useActionQueueStore();
 const uiStore = useUIStore();
 let aiResetToken = 0;
 const gameStateStore = useGameStateStore();
+const playtestFinished = computed(() => {
+  const marker = (gameStateStore.systemExtensions as any)?.六朝世界试玩;
+  const runtime = (gameStateStore.worldState as any)?.剧本模组;
+  return marker?.kind === WORLD_SIMULATION_PLAYTEST_KIND
+    && runtime?.storyMode === 'world_sim'
+    && !getCurrentWorldSituation(runtime);
+});
 const isTavernEnvFlag = isTavernEnv();
 const enhancedActionQueue = EnhancedActionQueueManager.getInstance();
 const bidirectionalSystem = AIBidirectionalSystem;
@@ -872,9 +887,14 @@ const currentNarrative = computed(() => {
   // 从叙事历史获取actionOptions和stateChanges
   if (narrativeHistory && narrativeHistory.length > 0) {
     const latestNarrative = narrativeHistory[narrativeHistory.length - 1];
+    const runtime = (gameStateStore.worldState as any)?.剧本模组;
+    const notices = getWorldSimulationPresentationNotices(runtime, latestNarrative.stateChanges?.changes);
+    const noticeText = notices
+      .map(notice => notice.detail)
+      .join('\n\n');
     return {
       type: latestNarrative.type || 'narrative',
-      content: content || '...',
+      content: [content || '...', noticeText].filter(Boolean).join('\n\n'),
       time: currentTimeString,
       stateChanges: latestNarrative.stateChanges || { changes: [] },
       actionOptions: latestNarrative.actionOptions || []
@@ -1102,7 +1122,9 @@ const rollbackToSnapshot = async (snapshotId: string) => {
           if (slot) {
             slot.存档数据 = restored;
             const { saveSaveData } = await import('@/utils/indexedDBManager');
-            await saveSaveData(active.角色ID, active.存档槽位, restored);
+            await saveSaveData(active.角色ID, active.存档槽位, restored, {
+              localOnly: profile.隔离试玩信息?.localOnly === true,
+            });
           }
         }
 
@@ -1543,6 +1565,10 @@ const selectScenarioEngineAction = (option: ScenarioEngineActionSelection) => {
 };
 
 const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: JudgementResolution }) => {
+  if (playtestFinished.value) {
+    toast.info('本次试玩纵切已经结束，请先提交反馈');
+    return;
+  }
   const actionQueueText = actionQueue.getActionPrompt();
   const judgementAction = composeJudgementAction(inputText.value, actionQueueText);
   if (!judgementAction) return;
@@ -1971,7 +1997,15 @@ const executePendingJudgement = async (testOutcome?: JudgementOutcome) => {
     currentTurn: getNarrativeTurn(save),
     ...(testOutcome ? { testOutcome } : {}),
   });
+  const worldSimulationResult = settleWorldSimulationJudgement(save, resolution);
   await persistJudgementSave(save);
+  if (worldSimulationResult.pending) {
+    toast.info('本地判定已达到改写枢纽的门槛；请在右栏确认是否进入正式 IF 世界线');
+    return;
+  }
+  if (worldSimulationResult.expired) {
+    toast.warning('局势已先行结算，这次旧判定不能再改写世界结果');
+  }
   await sendMessage({ skipPreflight: true, resolution });
 };
 

@@ -116,6 +116,11 @@ function matchingBranch(input: ReconciledDivergenceInput): AutoBranchRule | unde
   });
 }
 
+/** 只读查询既有 IF registry；世界模式在落账前用它确认合同不会退化成无分支的普通 void。 */
+export function resolveReconcileBranchId(input: ReconciledDivergenceInput): string | undefined {
+  return matchingBranch(input)?.branchId;
+}
+
 function matchingConsequence(input: ReconciledDivergenceInput): AutoConsequenceRule | undefined {
   if (input.verdict !== 'void') return undefined;
   return AUTO_CONSEQUENCE_RULES.find(rule => {

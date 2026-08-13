@@ -67,6 +67,51 @@ test('星月湖战争在玩家长期缺席时由世界自行结算，不伪记�
   assert.ok(transitions.some(item => item.type === 'world_event_resolved'));
 });
 
+test('多事件场外合同只结算未落账成员，不覆盖同组已由玩家完成的事件', async () => {
+  const { advanceScenarioRuntime, OFFSCREEN_WORLD_EVENT_STALL_THRESHOLD } = await modPromise;
+  const participatedId = 'demo.event.participated';
+  const offscreenId = 'demo.event.offscreen';
+  const save = stalledSave(undefined);
+  const rt = save.世界.状态.剧本模组;
+  rt.modId = 'demo.partial_group';
+  rt.stallTurns = OFFSCREEN_WORLD_EVENT_STALL_THRESHOLD;
+  const resolution = {
+    id: 'offscreen.demo.partial_group',
+    afterStallTurns: OFFSCREEN_WORLD_EVENT_STALL_THRESHOLD,
+    flagKey: 'world.demo_partial_group.resolved',
+    resolvedEventIds: [participatedId, offscreenId],
+    worldDelta: '玩家参与了前段，余下战事由世界继续结算。',
+    evidence: '测试多事件部分落账合同',
+  };
+  const timeline = {
+    kind: 'canon_anchor',
+    notBeforeTurns: 0,
+    reveal: { playerKnowledge: 'immediate' },
+  };
+  rt.events = [
+    { id: participatedId, name: '玩家已参与', critical: true, timeline, offscreenResolution: resolution },
+    { id: offscreenId, name: '其余场外推进', critical: true, timeline },
+  ];
+  rt.activeEventIds = [offscreenId];
+  rt.completedEventIds = [participatedId];
+  rt.eventTimeline = {
+    [participatedId]: { eventId: participatedId, status: 'occurred', outcome: 'participated', occurredAtTurn: 1 },
+  };
+  rt.chapters = [{
+    id: 'c1',
+    eventIds: [participatedId, offscreenId],
+    completion: [{ path: 'flags.chapdone', operator: 'eq', value: true }],
+  }];
+
+  const { saveData } = advanceScenarioRuntime(save);
+  const resolved = saveData.世界.状态.剧本模组;
+  assert.equal(resolved.flags['world.demo_partial_group.resolved'], true);
+  assert.equal(resolved.offscreenResolvedEventIds.includes(participatedId), false);
+  assert.equal(resolved.offscreenResolvedEventIds.includes(offscreenId), true);
+  assert.equal(resolved.eventTimeline[participatedId].outcome, 'participated');
+  assert.equal(resolved.eventTimeline[offscreenId].outcome, 'offscreen');
+});
+
 test('星月湖战争未到缺席阈值时绝不自动结算', async () => {
   const { advanceScenarioRuntime, OFFSCREEN_WORLD_EVENT_STALL_THRESHOLD } = await modPromise;
   const save = stalledSave(undefined);

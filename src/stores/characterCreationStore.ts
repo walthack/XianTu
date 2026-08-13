@@ -9,7 +9,7 @@ import type {
   DADCustomData,
 } from '../types';
 import { aiService } from '@/services/aiService';
-import type { ScenarioMod } from '@/modules/scenarioMods/schema';
+import type { ScenarioMod, ScenarioStoryMode } from '@/modules/scenarioMods/schema';
 // Import the Tavern helper to interact with Tavern's variable system
 import { getTavernHelper, getCurrentCharacterName } from '../utils/tavern';
 import { fetchWorlds, fetchTalentTiers, fetchOrigins, fetchSpiritRoots, fetchTalents } from '../services/request';
@@ -115,6 +115,8 @@ export const useCharacterCreationStore = defineStore('characterCreation', () => 
   const currentStep = ref(1);
   const initialGameMessage = ref<string | null>(null);
   const selectedScenarioMod = ref<ScenarioMod | null>(null);
+  /** 新档叙事方式。旧档与未显式选择时始终保持原著同行模式。 */
+  const scenarioStoryMode = ref<ScenarioStoryMode>('canon_companion');
   const useStreamingStart = ref(true); // 开局是否使用流式传输（默认启用）
 
   // ========== 角色创建流程状态管理 ==========
@@ -848,10 +850,12 @@ export const useCharacterCreationStore = defineStore('characterCreation', () => 
   
   function selectWorld(worldId: number | '') {
     selectedScenarioMod.value = null;
+    scenarioStoryMode.value = 'canon_companion';
     characterPayload.value.world_id = worldId;
   }
   function selectScenarioMod(mod: ScenarioMod | null) {
     selectedScenarioMod.value = mod;
+    scenarioStoryMode.value = 'canon_companion';
     characterPayload.value.world_id = mod ? -1 : '';
     const preset = mod?.scenario.opening.creationPreset;
     if (preset) {
@@ -870,6 +874,15 @@ export const useCharacterCreationStore = defineStore('characterCreation', () => 
       characterPayload.value.charm = preset.attributes.charm;
       characterPayload.value.temperament = preset.attributes.temperament;
     }
+  }
+  function setScenarioStoryMode(mode: ScenarioStoryMode) {
+    if (mode === 'world_sim' && (
+      selectedScenarioMod.value?.rules.mode !== 'strict'
+      || !selectedScenarioMod.value.scenario.worldSimulation
+    )) {
+      throw new Error('当前剧本没有六朝世界运行合同');
+    }
+    scenarioStoryMode.value = mode;
   }
   function selectTalentTier(tierId: number | '') {
     characterPayload.value.talent_tier_id = tierId;
@@ -931,6 +944,7 @@ export const useCharacterCreationStore = defineStore('characterCreation', () => 
     const newPayload = await createEmptyPayload();
     characterPayload.value = newPayload;
     selectedScenarioMod.value = null;
+    scenarioStoryMode.value = 'canon_companion';
     currentStep.value = 1;
     // 重置世界生成配置为默认值
     worldGenerationConfig.value = {
@@ -988,7 +1002,7 @@ export const useCharacterCreationStore = defineStore('characterCreation', () => 
   }
 
   return {
-    isLoading, error, creationData, characterPayload, currentStep, initialGameMessage, selectedScenarioMod, scenarioCreationPreset, worldGenerationConfig, useStreamingStart, generateMode, splitResponseGeneration,
+    isLoading, error, creationData, characterPayload, currentStep, initialGameMessage, selectedScenarioMod, scenarioStoryMode, scenarioCreationPreset, worldGenerationConfig, useStreamingStart, generateMode, splitResponseGeneration,
     // 创建流程状态
     isCreating, creationPhase, creationError,
     gameDifficulty, currentDifficultyPrompt, // 难度配置
@@ -996,7 +1010,7 @@ export const useCharacterCreationStore = defineStore('characterCreation', () => 
     initializeStore, fetchCloudWorlds, fetchAllCloudData, addWorld, addTalentTier, addOrigin, addSpiritRoot, addTalent, addGeneratedData,
     removeWorld, removeTalentTier, removeOrigin, removeSpiritRoot, removeTalent, // 导出删除函数
     updateWorld, updateTalentTier, updateOrigin, updateSpiritRoot, updateTalent, getItemById, // 导出编辑函数
-    selectWorld, selectScenarioMod, selectTalentTier, selectOrigin, selectSpiritRoot, toggleTalent, setAttribute,
+    selectWorld, selectScenarioMod, setScenarioStoryMode, selectTalentTier, selectOrigin, selectSpiritRoot, toggleTalent, setAttribute,
     resetCharacter, nextStep, prevStep, goToStep, setInitialGameMessage, setWorldGenerationConfig,
     resetOnExit, startLocalCreation, persistCustomData,
     setAIGeneratedSpiritRoot,

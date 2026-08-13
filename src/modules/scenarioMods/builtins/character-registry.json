@@ -1,9 +1,9 @@
 {
   "schema": "xiantu.character-registry.v1",
-  "version": "cr-2026-08-10-6f3a5d006e77c613",
+  "version": "cr-2026-08-13-6f3a5d006e77c613",
   "sourceHash": "6f3a5d006e77c613",
   "sourceGeneratedAt": "2026-06-30T12:50:33.965Z",
-  "generatedAt": "2026-08-10T08:41:24.933Z",
+  "generatedAt": "2026-08-13T15:47:15.287Z",
   "stats": {
     "total": 315,
     "stagePresent": 217,

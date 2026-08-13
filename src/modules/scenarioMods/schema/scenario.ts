@@ -265,6 +265,11 @@ export interface ScenarioModEventTimeline {
     playerKnowledge: ScenarioModEventKnowledgePolicy;
     /** playerKnowledge=permission 时必须持有的世界演员权限。 */
     permissionKey?: string;
+    /** 事后通过世界内人物／渠道送达主阅读面；不参与发生、公开或知情判定。 */
+    presentation?: {
+      title: string;
+      text: string;
+    };
   };
 }
 
@@ -543,6 +548,75 @@ export interface ScenarioModChapter {
   eventIds?: string[];
 }
 
+export type ScenarioStoryMode = 'canon_companion' | 'world_sim';
+
+export interface ScenarioWorldSituation {
+  id: string;
+  title: string;
+  summary: string;
+  /** 复用既有事件的 NPC core、地点、人物和机会卡；不继承其逐拍完成权。 */
+  sourceEventId: string;
+  /** 任一条件组成立即表示该局势已经收束；组内为 AND，组间为 OR。 */
+  settledWhenAny: ScenarioCondition[][];
+  anchorIds?: string[];
+  outcomeIds?: string[];
+}
+
+export interface ScenarioStructuralAnchor {
+  id: string;
+  summary: string;
+  sourceEventIds: string[];
+  satisfiedWhenAny: ScenarioCondition[][];
+}
+
+export interface ScenarioWorldIntervention {
+  id: string;
+  label: string;
+  actionText: string;
+  kind: 'combat' | 'cultivate';
+  difficulty: 'hard' | 'severe' | 'extreme';
+  difficultyValue: number;
+  matchAny: string[];
+  rejectIf?: string[];
+  successOutcomes: Array<'success' | 'great_success' | 'perfect'>;
+  characterState: { characterId: string; status: 'alive' | 'longrest' | 'incapacitated' };
+  worldDelta: string;
+  evidence: string;
+}
+
+export interface ScenarioForkableOutcome {
+  id: string;
+  sourceEventId: string;
+  defaultResolutionId: string;
+  defaultWhen: ScenarioCondition[];
+  defaultSummary: string;
+  replacementBranches: Array<{
+    branchId: string;
+    activeWhen: ScenarioCondition[];
+    summary: string;
+    intervention: ScenarioWorldIntervention;
+  }>;
+  preserveAnchorIds: string[];
+}
+
+export interface ScenarioReferenceBeat {
+  id: string;
+  sourceEventId: string;
+  situationId: string;
+  /** 只有默认结果已经由本地引擎坐实时才可投影完整原著拍。 */
+  availableWhen: ScenarioCondition[];
+  invalidWhen?: ScenarioCondition[];
+  summary: string;
+}
+
+export interface ScenarioWorldSimulation {
+  version: 1;
+  situations: ScenarioWorldSituation[];
+  structuralAnchors: ScenarioStructuralAnchor[];
+  forkableOutcomes: ScenarioForkableOutcome[];
+  referenceBeats: ScenarioReferenceBeat[];
+}
+
 export interface ScenarioModScenario {
   opening: ScenarioModOpening;
   initialFlags?: Record<string, ScenarioFlagValue>;
@@ -552,4 +626,6 @@ export interface ScenarioModScenario {
   initialNpcPrivateKnowledge?: ScenarioInitialNpcPrivateKnowledgeFact[];
   chapters?: ScenarioModChapter[];
   events?: ScenarioModEvent[];
+  /** 实验性六朝世界模式合同；存在不等于启用，模式只能由新档初始化显式选择。 */
+  worldSimulation?: ScenarioWorldSimulation;
 }

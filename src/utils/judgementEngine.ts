@@ -1,5 +1,6 @@
 import { rollD20 } from './diceRoller';
 import { JUDGEMENT_STATE_PATH, type TurnJudgementData } from './judgementRules';
+import type { WorldSimulationAuthorityReceipt } from '@/modules/scenarioMods/worldSimulation';
 
 export type JudgementKind =
   | 'combat'
@@ -41,6 +42,8 @@ export interface JudgementProposal {
   };
   canonPolicy: JudgementCanonPolicy;
   sourceEventId?: string;
+  /** 仅由本地世界模式合同签发；玩家输入和 LLM 正文都不能自行构造真值。 */
+  authorityReceipt?: WorldSimulationAuthorityReceipt;
   createdAtTurn: number;
 }
 
@@ -122,6 +125,22 @@ function normalizeFactor(raw: unknown): JudgementFactor | null {
   return { label, value, source: source as JudgementFactor['source'] };
 }
 
+function normalizeAuthorityReceipt(raw: unknown): WorldSimulationAuthorityReceipt | undefined {
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return undefined;
+  const value = raw as Partial<WorldSimulationAuthorityReceipt>;
+  if (value.kind !== 'world_sim_intervention') return undefined;
+  const fields = ['situationId', 'outcomeId', 'sourceEventId', 'branchId', 'interventionId'] as const;
+  if (fields.some(field => !normalizeText(value[field]))) return undefined;
+  return {
+    kind: value.kind,
+    situationId: normalizeText(value.situationId),
+    outcomeId: normalizeText(value.outcomeId),
+    sourceEventId: normalizeText(value.sourceEventId),
+    branchId: normalizeText(value.branchId),
+    interventionId: normalizeText(value.interventionId),
+  };
+}
+
 function normalizeProposal(raw: unknown): JudgementProposal | null {
   if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return null;
   const value = raw as Partial<JudgementProposal>;
@@ -168,6 +187,9 @@ function normalizeProposal(raw: unknown): JudgementProposal | null {
     },
     canonPolicy,
     ...(normalizeText(value.sourceEventId) ? { sourceEventId: normalizeText(value.sourceEventId) } : {}),
+    ...(normalizeAuthorityReceipt(value.authorityReceipt)
+      ? { authorityReceipt: normalizeAuthorityReceipt(value.authorityReceipt) }
+      : {}),
     createdAtTurn: normalizeTurn(value.createdAtTurn),
   };
 }

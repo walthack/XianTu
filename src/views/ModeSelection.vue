@@ -65,6 +65,10 @@
           <Library :size="18" />
           <span>剧本模组</span>
         </button>
+        <button class="btn-ghost demo-entry" data-testid="open-world-sim-playtest" @click="openWorldSimulationPlaytest">
+          <Orbit :size="18" />
+          <span>六朝世界试玩</span>
+        </button>
       </div>
     </div>
   </div>
@@ -72,7 +76,7 @@
 
 <script setup lang="ts">
 import VideoBackground from '@/components/common/VideoBackground.vue';
-import { Sparkles, History, User, Check, Library } from 'lucide-vue-next';
+import { Sparkles, History, User, Check, Library, Orbit } from 'lucide-vue-next';
 import { useRouter } from 'vue-router';
 
 const displayVersion = APP_VERSION;
@@ -94,6 +98,10 @@ const enterCharacterSelection = async () => {
 
 const openScenarioMods = () => {
   router.push('/scenario-mods');
+};
+
+const openWorldSimulationPlaytest = () => {
+  router.push('/world-sim-playtest');
 };
 </script>
 
@@ -502,7 +510,9 @@ const openScenarioMods = () => {
 /* 操作按钮区域 */
 .actions-section {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
+  gap: 0.65rem;
   min-height: 52px;
   padding-bottom: 0.5rem;
 }
@@ -559,6 +569,11 @@ button {
 .btn-ghost:hover {
   background: rgba(61, 58, 53, 0.4);
   color: #ddd7c9;
+}
+
+.btn-ghost.demo-entry {
+  color: #91cec5;
+  border-color: rgba(121, 188, 178, 0.28);
 }
 
 /* 过渡动画 */

@@ -16,3 +16,11 @@
 
 - 提交只读二审时，必须通过 `/Users/clawbot/.codex/bin/claude-review-submit.mjs`，不得直接调用 `claude-async.mjs submit`。
 - 包装器会原子登记 `~/.codex/claude-review-watch.json`；本线程心跳只监控该 job，完成后主动回报并写入 `reported:true`，避免遗漏或重复回报。
+
+## Grok 4.6 Build 成人向内容委托
+
+- 对本项目中**已明确为成年角色**的成人化氛围、情欲张力、亲密关系表现、成人模式变体或相关内容审核，可以调用本机 Grok Build：`/Users/clawbot/.grok/bin/grok`，模型固定为 `grok-4.6`（实际后端可能显示 `grok-4.6-build`）。
+- 推荐以自包含提示词单次调用，写清工作目录、对象、正典依据、产出格式与只读要求；默认使用 `--single ... --model grok-4.6 --no-subagents --no-memory --disable-web-search --permission-mode plan`。制作类任务先让 Grok 输出草稿或补丁建议，由 Codex 审核后再落库，不允许 Grok 直接覆盖 canon 数据或核心 prompt。
+- 年龄不明、年龄存在冲突，或带 `AGE_PROTECTED` 的信息未核实时，禁止成人化处理；任何 `AGE_PROTECTED`、`AFF_PROTECTED`、`DEBUT_PROTECTED`、`USER_CANON` 字段仍以人工裁定为最高权威，不得被 Grok 输出覆盖。
+- 不委托或制作涉及未成年人的性内容、胁迫性性行为的色情化表达或性剥削内容。成人角色的产出仍须服从人物人格、阶段状态、知识权限、关系边界与世界事实，不能以“成人模式”为由绕开正典。
+- Grok 结果只作为外部草稿／第二意见，Codex 必须复核年龄、同意、正典一致性与内容边界；涉及 canon 或核心 prompt 的正式改动，仍须遵守裁定簿解锁、`npm run canon:build` 全绿及本文件的提交纪律。每次调用可能消耗用户的 Grok 额度或产生费用。

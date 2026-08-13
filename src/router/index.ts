@@ -8,6 +8,8 @@ import ModeSelection from '../views/ModeSelection.vue';
 import CharacterCreation from '../views/CharacterCreation.vue';
 import GameView from '../views/GameView.vue';
 import ScenarioModManagerView from '../views/ScenarioModManagerView.vue';
+import WorldSimulationDemoView from '../views/WorldSimulationDemoView.vue';
+import WorldSimulationPlaytestStartView from '../views/WorldSimulationPlaytestStartView.vue';
 
 // 创建一个包装组件来传递fullscreen属性
 import { h } from 'vue';
@@ -75,6 +77,16 @@ const routes = [
     path: '/scenario-mods',
     name: 'ScenarioMods',
     component: ScenarioModManagerView,
+  },
+  {
+    path: '/world-sim-playtest',
+    name: 'WorldSimulationPlaytest',
+    component: WorldSimulationPlaytestStartView,
+  },
+  {
+    path: '/world-sim-demo',
+    name: 'WorldSimulationDemo',
+    component: WorldSimulationDemoView,
   },
   {
     // 提示词管理 - 独立顶级路由，不需要加载游戏数据
