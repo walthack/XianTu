@@ -27,6 +27,7 @@ const WORLD_ACTOR_SCOPES = new Set(['world', 'state', 'region', 'faction', 'loca
 const WORLD_ACTOR_POLICIES = new Set(['process_only', 'local_state', 'divergence_allowed', 'if_only']);
 const EVENT_TIMELINE_KINDS = new Set(['canon_anchor', 'window', 'emergent']);
 const EVENT_KNOWLEDGE_POLICIES = new Set(['immediate', 'public_report', 'permission']);
+const WORLD_OMEN_TRANSMITTER_KINDS = new Set(['related_npc', 'companion', 'messenger', 'environment']);
 const FORBIDDEN_PATH_SEGMENTS = new Set(['__proto__', 'prototype', 'constructor']);
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -107,6 +108,7 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
   const eventIds = new Set<string>();
   const chapterIds = new Set<string>();
   const pathReceiptIds = new Set<string>();
+  const omenIds = new Set<string>();
 
   const canon = input.canon;
   if (canon !== undefined && !isRecord(canon)) {
@@ -696,6 +698,17 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
                 }
               }
             }
+            if (entity.timeline.omen !== undefined) {
+              validateWorldOmen(entity.timeline.omen, `${timelinePath}.omen`, add, characterIds, omenIds);
+              if (
+                isRecord(entity.timeline.omen)
+                && typeof deadline === 'number'
+                && typeof entity.timeline.omen.afterTurns === 'number'
+                && entity.timeline.omen.afterTurns >= deadline
+              ) {
+                add(`${timelinePath}.omen.afterTurns`, 'invalid_range', 'omen.afterTurns must precede deadlineTurns.');
+              }
+            }
           }
         }
       }
@@ -957,6 +970,29 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
           validateConditionGroups(situation.settledWhenAny, `${path}.settledWhenAny`);
           validateIdArray(situation.anchorIds, `${path}.anchorIds`, add);
           validateIdArray(situation.outcomeIds, `${path}.outcomeIds`, add);
+          if (situation.omen !== undefined) {
+            validateWorldOmen(situation.omen, `${path}.omen`, add, characterIds, omenIds);
+            if (isRecord(situation.omen) && typeof situation.omen.afterTurns === 'number') {
+              const sourceEvent = Array.isArray(scenario.events)
+                ? scenario.events.find(event => isRecord(event) && event.id === situation.sourceEventId)
+                : undefined;
+              const deadline = isRecord(sourceEvent) && isRecord(sourceEvent.timeline)
+                ? sourceEvent.timeline.deadlineTurns
+                : undefined;
+              const stallLimit = isRecord(sourceEvent) && isRecord(sourceEvent.offscreenResolution)
+                ? sourceEvent.offscreenResolution.afterStallTurns
+                : undefined;
+              if (typeof deadline === 'number' && situation.omen.afterTurns >= deadline) {
+                add(`${path}.omen.afterTurns`, 'invalid_range', 'omen.afterTurns must precede the source event deadlineTurns.');
+              } else if (
+                typeof deadline !== 'number'
+                && typeof stallLimit === 'number'
+                && situation.omen.afterTurns >= stallLimit
+              ) {
+                add(`${path}.omen.afterTurns`, 'invalid_range', 'omen.afterTurns must precede the source event afterStallTurns.');
+              }
+            }
+          }
         });
         forEachRecord(ws.structuralAnchors, `${wsPath}.structuralAnchors`, (anchor, path) => {
           collectId(anchor.id, `${path}.id`, anchorIds);
@@ -1718,6 +1754,75 @@ function validateNpcDecisionCore(
       validateStringArray(agenda.escalation, `${agendaPath}.escalation`, add);
       if (typeof agenda.id === 'string') requireEvidence(`agendas.${agenda.id}.clock`);
     });
+  });
+}
+
+function validateWorldOmen(
+  value: unknown,
+  path: string,
+  add: AddIssue,
+  characterIds: Set<string>,
+  omenIds?: Set<string>,
+): void {
+  if (!isRecord(value)) {
+    add(path, 'invalid_type', 'omen must be an object.');
+    return;
+  }
+  if (validateId(value.id, `${path}.id`, add) && omenIds) {
+    const omenId = String(value.id);
+    if (omenIds.has(omenId)) add(`${path}.id`, 'duplicate_id', `Duplicate omen id "${omenId}".`);
+    omenIds.add(omenId);
+  }
+  if (typeof value.afterTurns !== 'number' || !Number.isInteger(value.afterTurns) || value.afterTurns < 0) {
+    add(`${path}.afterTurns`, 'invalid_range', 'afterTurns must be a non-negative integer.');
+  }
+  if (!Array.isArray(value.observableFacts) || value.observableFacts.length < 1) {
+    add(`${path}.observableFacts`, 'required_array', 'omen requires at least one observable fact.');
+  } else {
+    validateStringArray(value.observableFacts, `${path}.observableFacts`, add);
+  }
+  requireString(value.environmentFallback, `${path}.environmentFallback`, add);
+  if (!isRecord(value.presentation)) {
+    add(`${path}.presentation`, 'required_object', 'omen presentation is required.');
+  } else {
+    if (typeof value.presentation.title !== 'string' || !value.presentation.title.trim()) {
+      add(`${path}.presentation.title`, 'required_string', 'omen presentation title is required.');
+    }
+    if (typeof value.presentation.text !== 'string' || !value.presentation.text.trim()) {
+      add(`${path}.presentation.text`, 'required_string', 'omen presentation text is required.');
+    }
+  }
+  const omenText = [
+    ...(Array.isArray(value.observableFacts) ? value.observableFacts : []),
+    value.environmentFallback,
+    isRecord(value.presentation) ? value.presentation.title : '',
+    isRecord(value.presentation) ? value.presentation.text : '',
+  ].filter(item => typeof item === 'string').join('｜');
+  if (/(机会卡|世界回合|最后\s*\d+\s*轮|剩余\s*\d+\s*回合|倒计时)/u.test(omenText)) {
+    add(`${path}.presentation.text`, 'meta_language', 'Omen text cannot use meta UI terms such as remaining turns or opportunity cards.');
+  }
+  if (/(将死|必死|终将(死亡|身亡|登基)|注定(死亡|身亡|登基)|必然(死亡|身亡|登基)|必定(死|登基|身亡)|一定(死|身亡|登基)|已经身亡|已经登基)/u.test(omenText)) {
+    add(`${path}.presentation.text`, 'spoiler_outcome', 'Omen text may only describe observable pressure, not a predetermined outcome.');
+  }
+  if (value.transmitters === undefined) return;
+  if (!Array.isArray(value.transmitters)) {
+    add(`${path}.transmitters`, 'invalid_type', 'transmitters must be an array.');
+    return;
+  }
+  value.transmitters.forEach((transmitter, index) => {
+    const transmitterPath = `${path}.transmitters[${index}]`;
+    if (!isRecord(transmitter)) {
+      add(transmitterPath, 'invalid_type', 'transmitter must be an object.');
+      return;
+    }
+    if (!WORLD_OMEN_TRANSMITTER_KINDS.has(String(transmitter.kind))) {
+      add(`${transmitterPath}.kind`, 'invalid_enum', 'transmitter kind must be related_npc, companion, messenger, or environment.');
+    }
+    if (transmitter.characterId !== undefined
+      && validateId(transmitter.characterId, `${transmitterPath}.characterId`, add)
+      && !characterIds.has(String(transmitter.characterId))) {
+      add(`${transmitterPath}.characterId`, 'unknown_reference', `Unknown character "${transmitter.characterId}".`);
+    }
   });
 }
 

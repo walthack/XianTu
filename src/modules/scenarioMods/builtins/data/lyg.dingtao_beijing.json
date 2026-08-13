@@ -4605,7 +4605,38 @@
           ],
           "anchorIds": [
             "anchor.lyg.dingtao_political_succession"
-          ]
+          ],
+          "omen": {
+            "id": "omen.lyg.s01_05.enthronement_accelerating",
+            "afterTurns": 3,
+            "observableFacts": [
+              "昭阳殿前正在核对诏令草稿",
+              "见证官已在廊下等候",
+              "仪仗正在集结",
+              "钟鼓正在试音"
+            ],
+            "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.huo_zi_meng"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.lv_zhi"
+              },
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "宫墙外忽然传来整理仪仗与试钟的响动，像是有人在赶着备礼，却还没有人敢说下一声鼓会不会真的响起来。",
+            "presentation": {
+              "title": "宫中备仪",
+              "text": "廊外忽然传来一阵整理仪仗的响动。有人隔着宫墙低声传话：昭阳殿前正在核对诏令草稿，见证官已在廊下等候，钟鼓也在试音。只是准备，还没人敢说下一声鼓会不会真的响起来。"
+            }
+          }
         },
         {
           "id": "world-sim.lyg.s01_06.assassination",
@@ -6454,6 +6485,39 @@
             "presentation": {
               "title": "宫中急报",
               "text": "殿外忽然响起一阵急促而凌乱的脚步声。一名黄门扶着门框喘了口气，伏地禀道：郭解护持新君撤离时遭剑玉姬重创，宫中医官终究没能把人救回来。消息才从禁中放出，满殿一时无人作声。"
+            }
+          },
+          "omen": {
+            "id": "omen.lyg.s01_06.guo_jie_crisis",
+            "afterTurns": 2,
+            "observableFacts": [
+              "昭阳宫方向宫门正在换防，灯火与口令都换了批次",
+              "郭解一侧的护送传讯没有按点回音",
+              "禁中外围像是有人在试探接近"
+            ],
+            "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.huo_zi_meng"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.lv_zhi"
+              },
+              {
+                "kind": "companion"
+              },
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处宫墙灯火改了方向，巡更脚步乱了一阵，又有人压低嗓子传话。",
+            "presentation": {
+              "title": "宫门异动",
+              "text": "外头忽然一阵乱步。有人隔着帘缝低声通传：昭阳宫门正在换防，护送链这半个时辰没有回音，禁中外围像是有人在试探逼近。局势在往紧处收，眼下这桩事若再拖下去，只怕来不及转去看一眼。"
             }
           }
         },

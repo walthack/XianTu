@@ -7,6 +7,7 @@ import type {
   ScenarioModEvent,
   ScenarioStructuralAnchor,
   ScenarioWorldIntervention,
+  ScenarioWorldOmen,
   ScenarioWorldSimulation,
   ScenarioWorldSituation,
 } from './schema';
@@ -55,6 +56,10 @@ export interface WorldSimulationRuntimeState {
   actionReceipts: WorldSimulationActionReceipt[];
   pendingDivergence?: PendingWorldSimulationDivergence;
   confirmedJudgementIds?: string[];
+  /** 已送达征兆的稳定 ID；只防重复演出，不构成知情账。 */
+  deliveredOmenIds?: string[];
+  /** 本轮刚送达、供主阅读面与下一轮叙事使用。 */
+  pendingOmenIds?: string[];
 }
 
 export interface WorldSimulationRuntime {
@@ -63,14 +68,23 @@ export interface WorldSimulationRuntime {
   worldSimulationState?: WorldSimulationRuntimeState;
   events: ScenarioModEvent[];
   flags: Record<string, unknown>;
+  completedEventIds?: string[];
   offscreenResolvedEventIds?: string[];
   divergences?: ScenarioDivergence[];
   worldTurn?: number;
+  stallTurns?: number;
+  canon?: { characters?: Array<{ id: string; name: string }> };
+  eventTimeline?: Record<string, {
+    eligibleAtTurn: number;
+    occurredAtTurn?: number;
+    outcome?: 'participated' | 'offscreen';
+  }>;
 }
 
 export interface WorldSimulationPresentationNotice {
-  kind: 'report';
+  kind: 'report' | 'omen';
   eventId: string;
+  omenId?: string;
   title: string;
   detail: string;
 }
@@ -119,9 +133,62 @@ export function getCurrentWorldSituation(runtime: WorldSimulationRuntime): Scena
   return runtime.worldSimulation.situations.find(situation => !anyGroupMatches(runtime, situation.settledWhenAny));
 }
 
+interface ResolvedWorldOmen {
+  omen: ScenarioWorldOmen;
+  eventId: string;
+  situationId?: string;
+}
+
+function eventAlreadySettled(runtime: WorldSimulationRuntime, eventId: string): boolean {
+  return (runtime.completedEventIds || []).includes(eventId)
+    || (runtime.offscreenResolvedEventIds || []).includes(eventId)
+    || runtime.eventTimeline?.[eventId]?.occurredAtTurn !== undefined;
+}
+
+function listDeclaredWorldOmens(runtime: WorldSimulationRuntime): ResolvedWorldOmen[] {
+  const items: ResolvedWorldOmen[] = [];
+  for (const situation of runtime.worldSimulation?.situations || []) {
+    if (situation.omen) items.push({ omen: situation.omen, eventId: situation.sourceEventId, situationId: situation.id });
+  }
+  for (const event of runtime.events || []) {
+    if (event.timeline?.omen) items.push({ omen: event.timeline.omen, eventId: event.id });
+  }
+  items.sort((left, right) => left.omen.id.localeCompare(right.omen.id));
+  return items;
+}
+
+export function findWorldOmen(
+  runtime: WorldSimulationRuntime | null | undefined,
+  omenId: string,
+): ResolvedWorldOmen | undefined {
+  if (!runtime || !omenId) return undefined;
+  return listDeclaredWorldOmens(runtime).find(item => item.omen.id === omenId);
+}
+
+function omenClockAge(runtime: WorldSimulationRuntime, eventId: string): number | undefined {
+  const event = runtime.events.find(item => item.id === eventId);
+  const timeline = runtime.eventTimeline?.[eventId];
+  if (event?.timeline) {
+    if (!timeline) return undefined;
+    return Math.max(0, (Number(runtime.worldTurn) || 0) - timeline.eligibleAtTurn);
+  }
+  return Math.max(0, Number(runtime.stallTurns) || 0);
+}
+
+function omenDue(runtime: WorldSimulationRuntime, item: ResolvedWorldOmen): boolean {
+  if (eventAlreadySettled(runtime, item.eventId)) return false;
+  if (item.situationId) {
+    const current = getCurrentWorldSituation(runtime);
+    if (!current || current.id !== item.situationId) return false;
+  }
+  const age = omenClockAge(runtime, item.eventId);
+  return age !== undefined && age >= item.omen.afterTurns;
+}
+
 /**
  * 把引擎转移翻译成主阅读面可见回执。world_event_resolved 本身绝不展示，只有
  * event_revealed 才能把场外结果写给玩家，避免右栏或正文先知式泄漏。
+ * event_omen 只送达未结算承重事件的软性征兆，不预告结局。
  */
 export function getWorldSimulationPresentationNotices(
   runtime: WorldSimulationRuntime | null | undefined,
@@ -135,6 +202,20 @@ export function getWorldSimulationPresentationNotices(
     .filter(change => change.id);
 
   for (const transition of transitions) {
+    if (transition.action === 'event_omen') {
+      const found = findWorldOmen(runtime, transition.id);
+      const detail = String(found?.omen.presentation.text || '').trim();
+      if (!found || !detail || seen.has(found.omen.id)) continue;
+      seen.add(found.omen.id);
+      notices.push({
+        kind: 'omen',
+        eventId: found.eventId,
+        omenId: found.omen.id,
+        title: found.omen.presentation.title,
+        detail,
+      });
+      continue;
+    }
     if (transition.action !== 'event_revealed') continue;
     const divergence = runtime.divergences?.find(item => item.eventId === transition.id);
     const event = runtime.events.find(item => item.id === transition.id);
@@ -149,6 +230,80 @@ export function getWorldSimulationPresentationNotices(
     notices.push({ kind: 'report', eventId: transition.id, title: presentation?.title || '来报', detail });
   }
   return notices;
+}
+
+/**
+ * 在世界结算之后检查事前征兆。已结算或本批即将过期的事件不补送；
+ * 只改 delivered/pending omen id，不写 flags、知情、分歧或关系。
+ */
+export function deliverDueWorldOmens(
+  runtime: WorldSimulationRuntime | null | undefined,
+  transitions: Array<{ type: string; id: string }>,
+): WorldSimulationPresentationNotice[] {
+  if (!runtime || !isWorldSimulationRuntime(runtime) || runtime.worldSimulation?.version !== 1) return [];
+  const state = ensureState(runtime);
+  state.pendingOmenIds = [];
+  const delivered = new Set(state.deliveredOmenIds || []);
+  const settledThisBatch = new Set<string>();
+  for (const transition of transitions) {
+    if (transition.type === 'event_completed') settledThisBatch.add(transition.id);
+    if (transition.type === 'world_event_resolved') {
+      for (const event of runtime.events) {
+        if (event.offscreenResolution?.id === transition.id) {
+          for (const resolvedId of event.offscreenResolution.resolvedEventIds || []) settledThisBatch.add(resolvedId);
+        }
+      }
+    }
+  }
+  const notices: WorldSimulationPresentationNotice[] = [];
+  for (const item of listDeclaredWorldOmens(runtime)) {
+    if (delivered.has(item.omen.id)) continue;
+    if (eventAlreadySettled(runtime, item.eventId) || settledThisBatch.has(item.eventId)) {
+      delivered.add(item.omen.id);
+      state.deliveredOmenIds = [...delivered];
+      continue;
+    }
+    if (!omenDue(runtime, item)) continue;
+    delivered.add(item.omen.id);
+    state.deliveredOmenIds = [...delivered];
+    state.pendingOmenIds.push(item.omen.id);
+    transitions.push({ type: 'event_omen', id: item.omen.id });
+    notices.push({
+      kind: 'omen',
+      eventId: item.eventId,
+      omenId: item.omen.id,
+      title: item.omen.presentation.title,
+      detail: item.omen.presentation.text,
+    });
+  }
+  return notices;
+}
+
+export function formatPendingWorldOmenPrompt(runtime: WorldSimulationRuntime): string {
+  const pending = runtime.worldSimulationState?.pendingOmenIds || [];
+  if (!pending.length || !isWorldSimulationRuntime(runtime)) return '';
+  const names = new Map((runtime.canon?.characters || []).map(item => [item.id, item.name]));
+  const lines = pending.flatMap(omenId => {
+    const found = findWorldOmen(runtime, omenId);
+    if (!found) return [];
+    const carriers = (found.omen.transmitters || []).map(item => {
+      const who = item.characterId ? (names.get(item.characterId) || item.characterId) : '';
+      if (item.kind === 'related_npc') return who ? `在场相关人物${who}` : '在场相关人物';
+      if (item.kind === 'companion') return who ? `同行伙伴${who}` : '同行伙伴';
+      if (item.kind === 'messenger') return who ? `可信使者${who}` : '可信使者';
+      return '环境异动';
+    });
+    const carrierLine = carriers.length
+      ? `候选传递者：${carriers.join('、')}。他们只知道这些可见动静，不是全知。`
+      : '用急报、异动、传讯或风声带出；不得让人物全知。';
+    return [
+      `- ${found.omen.presentation.text}可观察事实：${found.omen.observableFacts.join('；')}。${carrierLine}`
+      + `无人可传时用环境异动：${found.omen.environmentFallback}。`
+      + '玩家已经在上一拍收到这条征兆；接续当前场景时只承接人物反应或行动，不要逐字复述。'
+      + '软性可忽略；不得预告确定结局，不得替玩家决定去留，不得当成事件已完成，也不得据此写 flags、知情或 IF。',
+    ];
+  });
+  return lines.length ? `\n【剧情内征兆·仅演出】\n${lines.join('\n')}` : '';
 }
 
 export function getWorldSimulationFocusEvent(runtime: WorldSimulationRuntime): ScenarioModEvent | undefined {
@@ -395,5 +550,5 @@ export function formatWorldSimulationPrompt(runtime: WorldSimulationRuntime): st
   const anchorLine = currentAnchors.length
     ? `承重事实：${currentAnchors.map(anchor => `${anyGroupMatches(runtime, anchor.satisfiedWhenAny) ? '【已成立且必须保留】' : '【尚待世界成立】'}${anchor.summary}`).join('；')}\n`
     : '';
-  return `【六朝世界模式·本地真值】\n当前局势：${situation.title}——${situation.summary}\n${anchorLine}${outcomeLines.join('\n')}${reference ? `\n可用原著演出素材（结果已经成立后才可使用）：${reference.summary}` : ''}${receiptLine}${pendingLine}\n玩家可以介入或忽略；不得为了复演原著逐拍而替玩家行动，也不得由正文、猜测或 tavern_commands 写入锚点、死亡、生还、IF 或世界时钟。`;
+  return `【六朝世界模式·本地真值】\n当前局势：${situation.title}——${situation.summary}\n${anchorLine}${outcomeLines.join('\n')}${reference ? `\n可用原著演出素材（结果已经成立后才可使用）：${reference.summary}` : ''}${receiptLine}${pendingLine}${formatPendingWorldOmenPrompt(runtime)}\n玩家可以介入或忽略；不得为了复演原著逐拍而替玩家行动，也不得由正文、猜测或 tavern_commands 写入锚点、死亡、生还、IF 或世界时钟。`;
 }

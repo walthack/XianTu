@@ -251,6 +251,27 @@ export interface ScenarioPathReceipt {
 
 export type ScenarioModEventTimelineKind = 'canon_anchor' | 'window' | 'emergent';
 export type ScenarioModEventKnowledgePolicy = 'immediate' | 'public_report' | 'permission';
+export type ScenarioWorldOmenTransmitterKind = 'related_npc' | 'companion' | 'messenger' | 'environment';
+
+/** 承重事件结算前的剧情内征兆；只负责演出，不参与发生、公开、知情或 IF。 */
+export interface ScenarioWorldOmen {
+  id: string;
+  /** 相对事件资格时钟；无 timeline 时用当前局势 stallTurns。必须早于期限。 */
+  afterTurns: number;
+  /** 可观察事实；不得写成确定结局。 */
+  observableFacts: string[];
+  /** 候选传递者；引擎不按关系姿态挑选，也不让人物全知。 */
+  transmitters?: Array<{
+    kind: ScenarioWorldOmenTransmitterKind;
+    characterId?: string;
+  }>;
+  /** 无人可传时的环境异动。 */
+  environmentFallback: string;
+  presentation: {
+    title: string;
+    text: string;
+  };
+}
 
 export interface ScenarioModEventTimeline {
   kind: ScenarioModEventTimelineKind;
@@ -271,6 +292,8 @@ export interface ScenarioModEventTimeline {
       text: string;
     };
   };
+  /** 结算前一次性征兆；不参与期限、知情或合同哈希。 */
+  omen?: ScenarioWorldOmen;
 }
 
 export type ScenarioWorldActorCanonPolicy = 'process_only' | 'local_state' | 'divergence_allowed' | 'if_only';
@@ -560,6 +583,8 @@ export interface ScenarioWorldSituation {
   settledWhenAny: ScenarioCondition[][];
   anchorIds?: string[];
   outcomeIds?: string[];
+  /** 该局势收束前的一次性征兆；只演出，不改结算谓词。 */
+  omen?: ScenarioWorldOmen;
 }
 
 export interface ScenarioStructuralAnchor {

@@ -34,6 +34,7 @@ import { recordOffscreenDivergence, type ScenarioDivergence } from './divergence
 import { getCanonRailOrder, getCanonRailProfile, isCanonRailChapter } from './canonRail';
 import { updateDivergenceControl, type DivergenceSignal, type WorldPushState } from './divergenceControl';
 import {
+  deliverDueWorldOmens,
   getWorldSimulationFocusEvent,
   type WorldSimulationRuntimeState,
 } from './worldSimulation';
@@ -51,7 +52,7 @@ export interface ScenarioProgressState {
 }
 
 export interface ScenarioRuntimeTransition {
-  type: 'chapter_activated' | 'chapter_completed' | 'event_activated' | 'event_completed' | 'event_revealed' | 'stage_ready' | 'world_event_resolved';
+  type: 'chapter_activated' | 'chapter_completed' | 'event_activated' | 'event_completed' | 'event_revealed' | 'event_omen' | 'stage_ready' | 'world_event_resolved';
   id: string;
 }
 
@@ -1997,6 +1998,8 @@ function recordChronicleTransitions(runtime: RuntimeState, transitions: Scenario
           detail: event?.objective || event?.axisBeat || event?.description,
         });
       }
+    } else if (transition.type === 'event_omen') {
+      continue;
     }
   }
 }
@@ -2182,6 +2185,37 @@ export function backfillRuntimeEventRevealPresentations(
   return updated;
 }
 
+/**
+ * 旧档只补缺失的事前征兆合同。不改期限/知情规则，不把已结算事件倒带回放，
+ * 已结算事件只把对应 ID 记作过期，防止后续配置迁移倒带补播。
+ */
+export function backfillRuntimeWorldOmens(
+  runtime: Pick<RuntimeState, 'events' | 'worldSimulation'>,
+  canonicalEvents: ScenarioModEvent[],
+  canonicalWorldSimulation?: ScenarioWorldSimulation,
+): number {
+  let updated = 0;
+  const canonicalById = new Map(canonicalEvents.map(event => [event.id, event]));
+  for (const savedEvent of runtime.events || []) {
+    const savedTimeline = savedEvent.timeline;
+    const canonicalOmen = canonicalById.get(savedEvent.id)?.timeline?.omen;
+    if (!savedTimeline || savedTimeline.omen || !canonicalOmen) continue;
+    savedTimeline.omen = structuredClone(canonicalOmen);
+    updated += 1;
+  }
+  const savedSituations = runtime.worldSimulation?.situations;
+  if (savedSituations && canonicalWorldSimulation?.situations) {
+    const canonicalSituationById = new Map(canonicalWorldSimulation.situations.map(item => [item.id, item]));
+    for (const situation of savedSituations) {
+      const canonicalOmen = canonicalSituationById.get(situation.id)?.omen;
+      if (situation.omen || !canonicalOmen) continue;
+      situation.omen = structuredClone(canonicalOmen);
+      updated += 1;
+    }
+  }
+  return updated;
+}
+
 function reconcileSaveWithRegistry(saveData: SaveData, runtime: RuntimeState & { modId?: string; reconciledRegistryVersion?: string; canon?: { characters?: unknown[] } }): void {
   const deps = getReconcileDeps();
   if (!deps) return;
@@ -2195,6 +2229,7 @@ function reconcileSaveWithRegistry(saveData: SaveData, runtime: RuntimeState & {
       ledger[factId] ||= fact;
     }
     backfillRuntimeEventRevealPresentations(runtime, mod.scenario.events || []);
+    backfillRuntimeWorldOmens(runtime, mod.scenario.events || [], mod.scenario.worldSimulation);
   }
   if (runtime.reconciledRegistryVersion === deps.version) return;
   try {
@@ -2443,6 +2478,7 @@ export function advanceScenarioRuntime(saveData: SaveData): {
     runtime.steeringCooldown = steeringCooldown - 1;
   }
 
+  deliverDueWorldOmens(runtime, transitions);
   updateDivergenceControl(next, progressed);
   syncActorEngine(runtime);
   refreshEventTimelineRevelations(runtime, transitions);

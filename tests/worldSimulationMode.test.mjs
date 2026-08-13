@@ -418,6 +418,103 @@ test('validator rejects world contracts that read outside flags engine state or 
     issue.path.endsWith('defaultResolutionId') && issue.code === 'unknown_reference'), true);
 });
 
+test('dingtao world contract carries two unknown-outcome omens and the validator rejects a spoiling deadline', async () => {
+  const raw = await loadRawStage();
+  const { validateScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
+  const enthronement = raw.scenario.worldSimulation.situations.find(item => item.id === 'world-sim.lyg.s01_05.enthronement').omen;
+  const crisis = raw.scenario.events.find(item => item.id === 'lyg.event.s01_06').timeline.omen;
+  assert.equal(enthronement.id, 'omen.lyg.s01_05.enthronement_accelerating');
+  assert.equal(crisis.id, 'omen.lyg.s01_06.guo_jie_crisis');
+  const omenText = `${JSON.stringify(enthronement)}${JSON.stringify(crisis)}`;
+  assert.match(omenText, /宫门|换防|护送|仪仗|诏令|见证官|钟鼓/);
+  assert.doesNotMatch(omenText, /身亡|会死|必定登基|已经称帝|剑玉姬/);
+  assert.equal(validateScenarioMod(raw).valid, true);
+
+  const invalid = await loadRawStage();
+  invalid.scenario.events.find(item => item.id === 'lyg.event.s01_06').timeline.omen.afterTurns = 6;
+  assert.equal(validateScenarioMod(invalid).issues.some(issue =>
+    issue.path.endsWith('.omen.afterTurns') && issue.code === 'invalid_range'), true);
+  invalid.scenario.events.find(item => item.id === 'lyg.event.s01_06').timeline.omen = { id: 'omen.bad', afterTurns: 1 };
+  assert.equal(validateScenarioMod(invalid).issues.some(issue =>
+    issue.path.endsWith('.omen.presentation') && issue.code === 'required_object'), true);
+
+  const spoiler = await loadRawStage();
+  spoiler.scenario.events.find(item => item.id === 'lyg.event.s01_06').timeline.omen.presentation.text = '宫人断言郭解必死，剩余 2 回合。';
+  const spoilerIssues = validateScenarioMod(spoiler).issues;
+  assert.equal(spoilerIssues.some(issue => issue.code === 'spoiler_outcome'), true);
+  assert.equal(spoilerIssues.some(issue => issue.code === 'meta_language'), true);
+});
+
+test('dingtao enthronement omen fires once before settlement and writes no truth or knowledge', async () => {
+  const { advanceScenarioRuntime } = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  const { getWorldSimulationPresentationNotices, formatWorldSimulationPrompt } = await loadTs('../src/modules/scenarioMods/worldSimulation.ts');
+  let save = await buildSave('world_sim');
+  let due;
+  for (let turn = 0; turn < 6; turn += 1) {
+    const next = advanceScenarioRuntime(save);
+    if (next.transitions.some(item => item.type === 'event_omen')) {
+      due = next;
+      break;
+    }
+    save = next.saveData;
+    assert.equal(next.saveData.世界.状态.剧本模组.flags['world.r2_9.lyg_event_s01_05.offscreen_resolved'], undefined);
+  }
+  assert.ok(due, 'enthronement omen must fire before the default deadline');
+  const omenTransitions = due.transitions.filter(item => item.type === 'event_omen');
+  assert.deepEqual(omenTransitions.map(item => item.id), ['omen.lyg.s01_05.enthronement_accelerating']);
+  const runtime = due.saveData.世界.状态.剧本模组;
+  const notices = getWorldSimulationPresentationNotices(runtime, [
+    { action: 'event_omen', newValue: 'omen.lyg.s01_05.enthronement_accelerating' },
+  ]);
+  assert.equal(notices[0].kind, 'omen');
+  assert.match(notices[0].detail, /仪仗|诏令|见证官|钟鼓/);
+  assert.doesNotMatch(notices[0].detail, /必定登基|已经称帝/);
+  assert.match(formatWorldSimulationPrompt(runtime), /剧情内征兆·仅演出/);
+  assert.equal(runtime.flags['event.s01_05.done'], false);
+  assert.equal(runtime.flags['world.r2_9.lyg_event_s01_05.offscreen_resolved'], undefined);
+  assert.equal((runtime.divergences || []).length, 0);
+  assert.ok(!runtime.playerKnowledge || !Object.keys(runtime.playerKnowledge).some(id => id.includes('omen')));
+
+  const reloaded = JSON.parse(JSON.stringify(due.saveData));
+  const again = advanceScenarioRuntime(reloaded);
+  assert.equal(again.transitions.some(item => item.type === 'event_omen'), false);
+  assert.deepEqual(again.saveData.世界.状态.剧本模组.worldSimulationState.deliveredOmenIds, [
+    'omen.lyg.s01_05.enthronement_accelerating',
+  ]);
+});
+
+test('dingtao Guo Jie omen waits for the assassination window and is skipped if that batch already settled', async () => {
+  const { advanceScenarioRuntime } = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  const { getWorldSimulationPresentationNotices } = await loadTs('../src/modules/scenarioMods/worldSimulation.ts');
+  let save = await buildSave('world_sim');
+  const runtime = establishSuccession(save);
+  runtime.activeEventIds = ['lyg.event.s01_06'];
+  runtime.eventTimeline = { 'lyg.event.s01_06': { eligibleAtTurn: 4 } };
+  runtime.worldTurn = 5;
+  const before = advanceScenarioRuntime(save);
+  assert.equal(before.transitions.some(item => item.id === 'omen.lyg.s01_06.guo_jie_crisis'), false);
+
+  save = before.saveData;
+  save.世界.状态.剧本模组.worldTurn = 6;
+  const due = advanceScenarioRuntime(save);
+  assert.ok(due.transitions.some(item => item.type === 'event_omen' && item.id === 'omen.lyg.s01_06.guo_jie_crisis'));
+  const notices = getWorldSimulationPresentationNotices(due.saveData.世界.状态.剧本模组, [
+    { action: 'event_omen', newValue: 'omen.lyg.s01_06.guo_jie_crisis' },
+  ]);
+  assert.match(notices[0].detail, /换防|护送|逼近/);
+  assert.doesNotMatch(notices[0].detail, /身亡|会死|剑玉姬/);
+
+  const settled = await buildSave('world_sim');
+  const settledRuntime = establishSuccession(settled);
+  settledRuntime.activeEventIds = ['lyg.event.s01_06'];
+  settledRuntime.eventTimeline = { 'lyg.event.s01_06': { eligibleAtTurn: 0 } };
+  settledRuntime.worldTurn = 6;
+  const sameBatch = advanceScenarioRuntime(settled);
+  assert.equal(sameBatch.transitions.some(item => item.type === 'world_event_resolved'), true);
+  assert.equal(sameBatch.transitions.some(item => item.id === 'omen.lyg.s01_06.guo_jie_crisis'), false);
+  assert.ok(sameBatch.saveData.世界.状态.剧本模组.offscreenResolvedEventIds.includes('lyg.event.s01_06'));
+});
+
 test('validator rejects a worldSimulation contract on an expand mod', async () => {
   const { validateScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
   const raw = await loadRawStage();
