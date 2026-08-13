@@ -67,3 +67,19 @@ test('every baseline stage can initialize an explicit world_sim save', async () 
     assert.ok(initialization.runtimeState.worldSimulation.situations.length > 0, `${mod.manifest.id}: no playable situation`);
   }
 });
+
+test('a non-curated baseline stage can deliver an in-world omen through the production runtime helper', async () => {
+  const { buildStrictScenarioInitialization } = await loadTs('../src/modules/scenarioMods/strictInitializer.ts');
+  const { deliverDueWorldOmens } = await loadTs('../src/modules/scenarioMods/worldSimulation.ts');
+  const mods = await loadBuiltins();
+  const mod = mods.find(item => item.manifest.id === 'lyl.luoyang_cloud_secret');
+  const runtime = buildStrictScenarioInitialization(mod, '2026-08-14T00:00:00.000Z', { storyMode: 'world_sim' }).runtimeState;
+  runtime.stallTurns = 1;
+  const transitions = [];
+  const notices = deliverDueWorldOmens(runtime, transitions);
+  assert.ok(notices.length > 0);
+  assert.ok(transitions.some(item => item.type === 'event_omen'));
+  assert.ok(runtime.worldSimulationState.deliveredOmenIds.length > 0);
+  assert.equal(runtime.flags['world.omen.delivered'], undefined);
+  assert.equal(runtime.playerKnowledge?.omen, undefined);
+});
