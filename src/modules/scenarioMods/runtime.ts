@@ -2190,11 +2190,17 @@ export function backfillRuntimeEventRevealPresentations(
  * 已结算事件只把对应 ID 记作过期，防止后续配置迁移倒带补播。
  */
 export function backfillRuntimeWorldOmens(
-  runtime: Pick<RuntimeState, 'events' | 'worldSimulation'>,
+  runtime: Pick<RuntimeState, 'events' | 'worldSimulation' | 'storyMode'>,
   canonicalEvents: ScenarioModEvent[],
   canonicalWorldSimulation?: ScenarioWorldSimulation,
 ): number {
   let updated = 0;
+  // 全 stage baseline 发布前已经创建的 world_sim 旧档可能没有合同快照；
+  // 只对显式 world_sim 补入当前 stage 的合同，兼容模式绝不被升级。
+  if (runtime.storyMode === 'world_sim' && !runtime.worldSimulation && canonicalWorldSimulation) {
+    runtime.worldSimulation = structuredClone(canonicalWorldSimulation);
+    updated += canonicalWorldSimulation.situations?.length || 1;
+  }
   const canonicalById = new Map(canonicalEvents.map(event => [event.id, event]));
   for (const savedEvent of runtime.events || []) {
     const savedTimeline = savedEvent.timeline;

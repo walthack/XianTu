@@ -83,3 +83,14 @@ test('a non-curated baseline stage can deliver an in-world omen through the prod
   assert.equal(runtime.flags['world.omen.delivered'], undefined);
   assert.equal(runtime.playerKnowledge?.omen, undefined);
 });
+
+test('old explicit world_sim saves receive a newly shipped baseline contract without upgrading companion saves', async () => {
+  const { backfillRuntimeWorldOmens } = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  const mod = (await loadBuiltins()).find(item => item.manifest.id === 'lyl.luoyang_cloud_secret');
+  const worldOld = { storyMode: 'world_sim', events: structuredClone(mod.scenario.events) };
+  const companionOld = { storyMode: undefined, events: structuredClone(mod.scenario.events) };
+  assert.ok(backfillRuntimeWorldOmens(worldOld, worldOld.events, mod.scenario.worldSimulation) > 0);
+  assert.equal(worldOld.worldSimulation.version, 1);
+  assert.equal(backfillRuntimeWorldOmens(companionOld, companionOld.events, mod.scenario.worldSimulation), 0);
+  assert.equal(companionOld.worldSimulation, undefined);
+});
