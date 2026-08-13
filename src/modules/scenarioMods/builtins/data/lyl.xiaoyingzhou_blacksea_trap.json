@@ -6110,7 +6110,395 @@
           ]
         }
       }
-    ]
+    ],
+    "worldSimulation": {
+      "version": 1,
+      "situations": [
+        {
+          "id": "world-sim.baseline.lyl.xiaoyingzhou_blacksea_trap.lyl.event.xiaoyingzhou_blacksea_trap_01_beat",
+          "title": "局势中的途中遇袭",
+          "summary": "围绕“途中遇袭”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.xiaoyingzhou_blacksea_trap_01_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.xiaoyingzhou_blacksea_trap_01.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.xiaoyingzhou_blacksea_trap.lyl.event.xiaoyingzhou_blacksea_trap_01_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“途中遇袭”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“途中遇袭”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.xiaoyingzhou_blacksea_trap.lyl.event.xiaoyingzhou_blacksea_trap_02_beat",
+          "title": "局势中的九阳交换",
+          "summary": "围绕“九阳交换”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.xiaoyingzhou_blacksea_trap_02_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.xiaoyingzhou_blacksea_trap_02.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.xiaoyingzhou_blacksea_trap.lyl.event.xiaoyingzhou_blacksea_trap_02_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“九阳交换”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“九阳交换”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.xiaoyingzhou_blacksea_trap.lyl.event.xiaoyingzhou_blacksea_trap_03_beat",
+          "title": "局势中的林冲刺配",
+          "summary": "围绕“林冲刺配”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.xiaoyingzhou_blacksea_trap_03_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.xiaoyingzhou_blacksea_trap_03.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.xiaoyingzhou_blacksea_trap.lyl.event.xiaoyingzhou_blacksea_trap_03_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“林冲刺配”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“林冲刺配”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.xiaoyingzhou_blacksea_trap.lyl.event.xiaoyingzhou_blacksea_trap_04_beat",
+          "title": "局势中的野猪林乱战",
+          "summary": "围绕“野猪林乱战”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.xiaoyingzhou_blacksea_trap_04_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.xiaoyingzhou_blacksea_trap_04.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.xiaoyingzhou_blacksea_trap.lyl.event.xiaoyingzhou_blacksea_trap_04_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“野猪林乱战”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“野猪林乱战”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.xiaoyingzhou_blacksea_trap.lyl.event.xiaoyingzhou_blacksea_trap_05_beat",
+          "title": "局势中的静善夜袭",
+          "summary": "围绕“静善夜袭”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.xiaoyingzhou_blacksea_trap_05_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.xiaoyingzhou_blacksea_trap_05.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.xiaoyingzhou_blacksea_trap.lyl.event.xiaoyingzhou_blacksea_trap_05_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“静善夜袭”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“静善夜袭”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.xiaoyingzhou_blacksea_trap.lyl.event.xiaoyingzhou_blacksea_trap_06_beat",
+          "title": "局势中的明庆寺旧识",
+          "summary": "围绕“明庆寺旧识”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.xiaoyingzhou_blacksea_trap_06_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.xiaoyingzhou_blacksea_trap_06.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.xiaoyingzhou_blacksea_trap.lyl.event.xiaoyingzhou_blacksea_trap_06_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“明庆寺旧识”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“明庆寺旧识”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.xiaoyingzhou_blacksea_trap.lyl.event.xiaoyingzhou_blacksea_trap_07_beat",
+          "title": "局势中的剑玉姬落棋",
+          "summary": "围绕“剑玉姬落棋”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.xiaoyingzhou_blacksea_trap_07_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.xiaoyingzhou_blacksea_trap_07.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.xiaoyingzhou_blacksea_trap.lyl.event.xiaoyingzhou_blacksea_trap_07_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“剑玉姬落棋”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“剑玉姬落棋”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.xiaoyingzhou_blacksea_trap.lyl.event.xiaoyingzhou_blacksea_trap_08_beat",
+          "title": "局势中的小瀛洲杀局",
+          "summary": "围绕“小瀛洲杀局”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.xiaoyingzhou_blacksea_trap_08_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.xiaoyingzhou_blacksea_trap_08.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.xiaoyingzhou_blacksea_trap.lyl.event.xiaoyingzhou_blacksea_trap_08_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“小瀛洲杀局”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“小瀛洲杀局”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.xiaoyingzhou_blacksea_trap.lyl.event.xiaoyingzhou_blacksea_trap_09_beat",
+          "title": "局势中的剑玉姬真身",
+          "summary": "围绕“剑玉姬真身”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.xiaoyingzhou_blacksea_trap_09_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.xiaoyingzhou_blacksea_trap_09.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.xiaoyingzhou_blacksea_trap.lyl.event.xiaoyingzhou_blacksea_trap_09_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“剑玉姬真身”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“剑玉姬真身”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.xiaoyingzhou_blacksea_trap.lyl.event.xiaoyingzhou_blacksea_trap_10_beat",
+          "title": "局势中的八臂收束",
+          "summary": "围绕“八臂收束”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.xiaoyingzhou_blacksea_trap_10_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.xiaoyingzhou_blacksea_trap_10.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.xiaoyingzhou_blacksea_trap.lyl.event.xiaoyingzhou_blacksea_trap_10_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“八臂收束”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“八臂收束”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        }
+      ],
+      "structuralAnchors": [],
+      "forkableOutcomes": [],
+      "referenceBeats": []
+    }
   },
   "rules": {
     "mode": "strict",

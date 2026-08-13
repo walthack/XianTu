@@ -6235,7 +6235,395 @@
           ]
         }
       }
-    ]
+    ],
+    "worldSimulation": {
+      "version": 1,
+      "situations": [
+        {
+          "id": "world-sim.baseline.lyg.han_succession.lyg.event.han_succession_01_beat",
+          "title": "局势中的帝陵分兵",
+          "summary": "围绕“帝陵分兵”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.han_succession_01_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.han_succession_01.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.han_succession.lyg.event.han_succession_01_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“帝陵分兵”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“帝陵分兵”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.han_succession.lyg.event.han_succession_02_beat",
+          "title": "局势中的赵氏父兄失踪",
+          "summary": "围绕“赵氏父兄失踪”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.han_succession_02_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.han_succession_02.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.han_succession.lyg.event.han_succession_02_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“赵氏父兄失踪”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“赵氏父兄失踪”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.han_succession.lyg.event.han_succession_03_beat",
+          "title": "局势中的吕雉入府",
+          "summary": "围绕“吕雉入府”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.han_succession_03_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.han_succession_03.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.han_succession.lyg.event.han_succession_03_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“吕雉入府”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“吕雉入府”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.han_succession.lyg.event.han_succession_04_beat",
+          "title": "局势中的拥立阴谋",
+          "summary": "围绕“拥立阴谋”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.han_succession_04_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.han_succession_04.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.han_succession.lyg.event.han_succession_04_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“拥立阴谋”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“拥立阴谋”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.han_succession.lyg.event.han_succession_05_beat",
+          "title": "局势中的蛇夫人计划",
+          "summary": "围绕“蛇夫人计划”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.han_succession_05_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.han_succession_05.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.han_succession.lyg.event.han_succession_05_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“蛇夫人计划”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“蛇夫人计划”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.han_succession.lyg.event.han_succession_06_beat",
+          "title": "局势中的加速登基",
+          "summary": "围绕“加速登基”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.han_succession_06_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.han_succession_06.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.han_succession.lyg.event.han_succession_06_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“加速登基”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“加速登基”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.han_succession.lyg.event.han_succession_07_beat",
+          "title": "局势中的长秋宫夜入",
+          "summary": "围绕“长秋宫夜入”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.han_succession_07_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.han_succession_07.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.han_succession.lyg.event.han_succession_07_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“长秋宫夜入”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“长秋宫夜入”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.han_succession.lyg.event.han_succession_08_beat",
+          "title": "局势中的登基骤变",
+          "summary": "围绕“登基骤变”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.han_succession_08_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.han_succession_08.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.han_succession.lyg.event.han_succession_08_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“登基骤变”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“登基骤变”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.han_succession.lyg.event.han_succession_09_beat",
+          "title": "局势中的通幽突破",
+          "summary": "围绕“通幽突破”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.han_succession_09_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.han_succession_09.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.han_succession.lyg.event.han_succession_09_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“通幽突破”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“通幽突破”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.han_succession.lyg.event.han_succession_10_beat",
+          "title": "局势中的审问汪臻",
+          "summary": "围绕“审问汪臻”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.han_succession_10_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.han_succession_10.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.han_succession.lyg.event.han_succession_10_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“审问汪臻”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“审问汪臻”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        }
+      ],
+      "structuralAnchors": [],
+      "forkableOutcomes": [],
+      "referenceBeats": []
+    }
   },
   "rules": {
     "mode": "strict",

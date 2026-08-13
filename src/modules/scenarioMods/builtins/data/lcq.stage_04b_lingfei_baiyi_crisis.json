@@ -4898,7 +4898,737 @@
           ]
         }
       }
-    ]
+    ],
+    "worldSimulation": {
+      "version": 1,
+      "situations": [
+        {
+          "id": "world-sim.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_01",
+          "title": "局势中的夺镜计划",
+          "summary": "围绕“夺镜计划”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s04b_lingfei_baiyi_crisis_01",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s04b_lingfei_baiyi_crisis_01.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_01",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“夺镜计划”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“夺镜计划”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_02",
+          "title": "局势中的鸦人激战",
+          "summary": "围绕“鸦人激战”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s04b_lingfei_baiyi_crisis_02",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s04b_lingfei_baiyi_crisis_02.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_02",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“鸦人激战”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“鸦人激战”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_03",
+          "title": "局势中的斩杀鸦人",
+          "summary": "围绕“斩杀鸦人”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s04b_lingfei_baiyi_crisis_03",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s04b_lingfei_baiyi_crisis_03.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_03",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“斩杀鸦人”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“斩杀鸦人”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_04",
+          "title": "局势中的秘法传讯信",
+          "summary": "围绕“秘法传讯信”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s04b_lingfei_baiyi_crisis_04",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s04b_lingfei_baiyi_crisis_04.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_04",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“秘法传讯信”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“秘法传讯信”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_05",
+          "title": "局势中的取得灵飞镜",
+          "summary": "围绕“取得灵飞镜”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s04b_lingfei_baiyi_crisis_05",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s04b_lingfei_baiyi_crisis_05.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_05",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“取得灵飞镜”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“取得灵飞镜”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_06",
+          "title": "局势中的花白联手",
+          "summary": "围绕“花白联手”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s04b_lingfei_baiyi_crisis_06",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s04b_lingfei_baiyi_crisis_06.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_06",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“花白联手”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“花白联手”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_07",
+          "title": "局势中的水镜传讯苏妲己",
+          "summary": "围绕“水镜传讯苏妲己”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s04b_lingfei_baiyi_crisis_07",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s04b_lingfei_baiyi_crisis_07.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_07",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“水镜传讯苏妲己”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“水镜传讯苏妲己”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_08",
+          "title": "局势中的识破白夷阴谋",
+          "summary": "围绕“识破白夷阴谋”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s04b_lingfei_baiyi_crisis_08",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s04b_lingfei_baiyi_crisis_08.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_08",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“识破白夷阴谋”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“识破白夷阴谋”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_09",
+          "title": "局势中的白夷生变",
+          "summary": "围绕“白夷生变”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s04b_lingfei_baiyi_crisis_09",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s04b_lingfei_baiyi_crisis_09.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_09",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“白夷生变”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“白夷生变”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_10",
+          "title": "局势中的地宫陷阱",
+          "summary": "围绕“地宫陷阱”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s04b_lingfei_baiyi_crisis_10",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s04b_lingfei_baiyi_crisis_10.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_10",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“地宫陷阱”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“地宫陷阱”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_11",
+          "title": "局势中的血虎现身",
+          "summary": "围绕“血虎现身”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s04b_lingfei_baiyi_crisis_11",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s04b_lingfei_baiyi_crisis_11.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_11",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“血虎现身”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“血虎现身”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_12",
+          "title": "局势中的凝羽突袭",
+          "summary": "围绕“凝羽突袭”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s04b_lingfei_baiyi_crisis_12",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s04b_lingfei_baiyi_crisis_12.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_12",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“凝羽突袭”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“凝羽突袭”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_13",
+          "title": "局势中的谢艺杀使",
+          "summary": "围绕“谢艺杀使”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s04b_lingfei_baiyi_crisis_13",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s04b_lingfei_baiyi_crisis_13.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_13",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“谢艺杀使”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“谢艺杀使”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_14",
+          "title": "局势中的同往碧鲮",
+          "summary": "围绕“同往碧鲮”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s04b_lingfei_baiyi_crisis_14",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s04b_lingfei_baiyi_crisis_14.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_14",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“同往碧鲮”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“同往碧鲮”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_15",
+          "title": "局势中的阿夕暗潮",
+          "summary": "围绕“阿夕暗潮”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s04b_lingfei_baiyi_crisis_15",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s04b_lingfei_baiyi_crisis_15.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_15",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“阿夕暗潮”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“阿夕暗潮”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_16",
+          "title": "局势中的岳帅旧闻",
+          "summary": "围绕“岳帅旧闻”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s04b_lingfei_baiyi_crisis_16",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s04b_lingfei_baiyi_crisis_16.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_16",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“岳帅旧闻”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“岳帅旧闻”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_17",
+          "title": "局势中的鳄鱼险境",
+          "summary": "围绕“鳄鱼险境”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s04b_lingfei_baiyi_crisis_17",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s04b_lingfei_baiyi_crisis_17.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_17",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“鳄鱼险境”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“鳄鱼险境”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_18",
+          "title": "局势中的谢艺谈旧事",
+          "summary": "围绕“谢艺谈旧事”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s04b_lingfei_baiyi_crisis_18",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s04b_lingfei_baiyi_crisis_18.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_18",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“谢艺谈旧事”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“谢艺谈旧事”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_19",
+          "title": "局势中的大潮突至",
+          "summary": "围绕“大潮突至”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s04b_lingfei_baiyi_crisis_19",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s04b_lingfei_baiyi_crisis_19.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_19",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“大潮突至”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“大潮突至”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        }
+      ],
+      "structuralAnchors": [],
+      "forkableOutcomes": [],
+      "referenceBeats": []
+    }
   },
   "rules": {
     "mode": "strict",

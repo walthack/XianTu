@@ -6298,7 +6298,395 @@
           ]
         }
       }
-    ]
+    ],
+    "worldSimulation": {
+      "version": 1,
+      "situations": [
+        {
+          "id": "world-sim.baseline.lyl.han_palace_endgame.lyl.event.han_palace_endgame_01_beat",
+          "title": "局势中的吕冀重伤",
+          "summary": "围绕“吕冀重伤”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.han_palace_endgame_01_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.han_palace_endgame_01.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.han_palace_endgame.lyl.event.han_palace_endgame_01_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“吕冀重伤”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“吕冀重伤”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.han_palace_endgame.lyl.event.han_palace_endgame_02_beat",
+          "title": "局势中的左武军入宫",
+          "summary": "围绕“左武军入宫”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.han_palace_endgame_02_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.han_palace_endgame_02.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.han_palace_endgame.lyl.event.han_palace_endgame_02_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“左武军入宫”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“左武军入宫”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.han_palace_endgame.lyl.event.han_palace_endgame_03_beat",
+          "title": "局势中的含光殿救人",
+          "summary": "围绕“含光殿救人”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.han_palace_endgame_03_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.han_palace_endgame_03.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.han_palace_endgame.lyl.event.han_palace_endgame_03_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“含光殿救人”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“含光殿救人”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.han_palace_endgame.lyl.event.han_palace_endgame_04_beat",
+          "title": "局势中的复道遇伏",
+          "summary": "围绕“复道遇伏”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.han_palace_endgame_04_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.han_palace_endgame_04.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.han_palace_endgame.lyl.event.han_palace_endgame_04_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“复道遇伏”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“复道遇伏”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.han_palace_endgame.lyl.event.han_palace_endgame_05_beat",
+          "title": "局势中的吕巨君自焚",
+          "summary": "围绕“吕巨君自焚”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.han_palace_endgame_05_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.han_palace_endgame_05.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.han_palace_endgame.lyl.event.han_palace_endgame_05_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“吕巨君自焚”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“吕巨君自焚”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.han_palace_endgame.lyl.event.han_palace_endgame_06_beat",
+          "title": "局势中的定陶王得救",
+          "summary": "围绕“定陶王得救”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.han_palace_endgame_06_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.han_palace_endgame_06.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.han_palace_endgame.lyl.event.han_palace_endgame_06_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“定陶王得救”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“定陶王得救”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.han_palace_endgame.lyl.event.han_palace_endgame_07_beat",
+          "title": "局势中的秘境入口",
+          "summary": "围绕“秘境入口”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.han_palace_endgame_07_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.han_palace_endgame_07.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.han_palace_endgame.lyl.event.han_palace_endgame_07_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“秘境入口”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“秘境入口”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.han_palace_endgame.lyl.event.han_palace_endgame_08_beat",
+          "title": "局势中的董卓入京",
+          "summary": "围绕“董卓入京”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.han_palace_endgame_08_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.han_palace_endgame_08.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.han_palace_endgame.lyl.event.han_palace_endgame_08_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“董卓入京”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“董卓入京”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.han_palace_endgame.lyl.event.han_palace_endgame_09_beat",
+          "title": "局势中的永安宫攻入",
+          "summary": "围绕“永安宫攻入”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.han_palace_endgame_09_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.han_palace_endgame_09.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.han_palace_endgame.lyl.event.han_palace_endgame_09_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“永安宫攻入”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“永安宫攻入”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.han_palace_endgame.lyl.event.han_palace_endgame_10_beat",
+          "title": "局势中的秦桧斩逆",
+          "summary": "围绕“秦桧斩逆”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.han_palace_endgame_10_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.han_palace_endgame_10.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.han_palace_endgame.lyl.event.han_palace_endgame_10_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“秦桧斩逆”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“秦桧斩逆”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        }
+      ],
+      "structuralAnchors": [],
+      "forkableOutcomes": [],
+      "referenceBeats": []
+    }
   },
   "rules": {
     "mode": "strict",

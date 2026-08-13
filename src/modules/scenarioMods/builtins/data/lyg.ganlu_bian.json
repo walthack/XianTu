@@ -1232,7 +1232,395 @@
           ]
         }
       }
-    ]
+    ],
+    "worldSimulation": {
+      "version": 1,
+      "situations": [
+        {
+          "id": "world-sim.baseline.lyg.ganlu_bian.lyg.event.li_jinxiang_meeting",
+          "title": "局势中的接下李昂托付的闭门密令",
+          "summary": "围绕“接下李昂托付的闭门密令”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.li_jinxiang_meeting",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.li_jinxiang_meeting_done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.ganlu_bian.lyg.event.li_jinxiang_meeting",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“接下李昂托付的闭门密令”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“接下李昂托付的闭门密令”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.ganlu_bian.lyg.event.yang_yuhuan_report",
+          "title": "局势中的赴阳禄门院会见黎锦香",
+          "summary": "围绕“赴阳禄门院会见黎锦香”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.yang_yuhuan_report",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.yang_yuhuan_report_done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.ganlu_bian.lyg.event.yang_yuhuan_report",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“赴阳禄门院会见黎锦香”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“赴阳禄门院会见黎锦香”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.ganlu_bian.lyg.event.jia_wenhe_plan",
+          "title": "局势中的厘清广源行等级控制",
+          "summary": "围绕“厘清广源行等级控制”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.jia_wenhe_plan",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.jia_wenhe_plan_done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.ganlu_bian.lyg.event.jia_wenhe_plan",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“厘清广源行等级控制”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“厘清广源行等级控制”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.ganlu_bian.lyg.event.soul_summoning",
+          "title": "局势中的确认周飞与十方丛林合谋",
+          "summary": "围绕“确认周飞与十方丛林合谋”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.soul_summoning",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.soul_summoning_done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.ganlu_bian.lyg.event.soul_summoning",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“确认周飞与十方丛林合谋”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“确认周飞与十方丛林合谋”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.ganlu_bian.lyg.event.bai_nichang_defeat",
+          "title": "局势中的核对黎锦香潜入与劫俘经过",
+          "summary": "围绕“核对黎锦香潜入与劫俘经过”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.bai_nichang_defeat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.bai_nichang_defeat_done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.ganlu_bian.lyg.event.bai_nichang_defeat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“核对黎锦香潜入与劫俘经过”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“核对黎锦香潜入与劫俘经过”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.ganlu_bian.lyg.event.liangzhou_victory",
+          "title": "局势中的问出飞鸟家族与剑柄线索",
+          "summary": "围绕“问出飞鸟家族与剑柄线索”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.liangzhou_victory",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.liangzhou_victory_done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.ganlu_bian.lyg.event.liangzhou_victory",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“问出飞鸟家族与剑柄线索”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“问出飞鸟家族与剑柄线索”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.ganlu_bian.lyg.event.release_jingnian",
+          "title": "局势中的旁听博陆王府权宦追凶",
+          "summary": "围绕“旁听博陆王府权宦追凶”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.release_jingnian",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.qiankui_plan_foiled",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.ganlu_bian.lyg.event.release_jingnian",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“旁听博陆王府权宦追凶”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“旁听博陆王府权宦追凶”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.ganlu_bian.lyg.event.su_sha_identified",
+          "title": "局势中的汇总甘露局势并采纳搅局计",
+          "summary": "围绕“汇总甘露局势并采纳搅局计”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.su_sha_identified",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.su_sha_identified",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.ganlu_bian.lyg.event.su_sha_identified",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“汇总甘露局势并采纳搅局计”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“汇总甘露局势并采纳搅局计”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.ganlu_bian.lyg.event.xiao_zi_departure",
+          "title": "局势中的小紫询问瑶池宗修行法",
+          "summary": "围绕“小紫询问瑶池宗修行法”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.xiao_zi_departure",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.xiao_zi_departure_done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.ganlu_bian.lyg.event.xiao_zi_departure",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“小紫询问瑶池宗修行法”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“小紫询问瑶池宗修行法”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.ganlu_bian.lyg.event.ganlu_crisis_final",
+          "title": "局势中的见证程宅战榜张贴",
+          "summary": "围绕“见证程宅战榜张贴”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.ganlu_crisis_final",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.chapter.ganlu_crisis.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.ganlu_bian.lyg.event.ganlu_crisis_final",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“见证程宅战榜张贴”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“见证程宅战榜张贴”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        }
+      ],
+      "structuralAnchors": [],
+      "forkableOutcomes": [],
+      "referenceBeats": []
+    }
   },
   "rules": {
     "mode": "strict",

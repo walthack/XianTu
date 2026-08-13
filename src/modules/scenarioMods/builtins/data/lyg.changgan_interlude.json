@@ -6196,7 +6196,395 @@
           ]
         }
       }
-    ]
+    ],
+    "worldSimulation": {
+      "version": 1,
+      "situations": [
+        {
+          "id": "world-sim.baseline.lyg.changgan_interlude.lyg.event.changgan_interlude_01_beat",
+          "title": "局势中的拜访李药师",
+          "summary": "围绕“拜访李药师”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.changgan_interlude_01_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.changgan_interlude_01.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.changgan_interlude.lyg.event.changgan_interlude_01_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“拜访李药师”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“拜访李药师”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.changgan_interlude.lyg.event.changgan_interlude_02_beat",
+          "title": "局势中的百衲衣线索",
+          "summary": "围绕“百衲衣线索”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.changgan_interlude_02_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.changgan_interlude_02.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.changgan_interlude.lyg.event.changgan_interlude_02_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“百衲衣线索”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“百衲衣线索”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.changgan_interlude.lyg.event.changgan_interlude_03_beat",
+          "title": "局势中的昭南索赔",
+          "summary": "围绕“昭南索赔”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.changgan_interlude_03_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.changgan_interlude_03.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.changgan_interlude.lyg.event.changgan_interlude_03_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“昭南索赔”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“昭南索赔”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.changgan_interlude.lyg.event.changgan_interlude_04_beat",
+          "title": "局势中的密约谈崩",
+          "summary": "围绕“密约谈崩”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.changgan_interlude_04_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.changgan_interlude_04.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.changgan_interlude.lyg.event.changgan_interlude_04_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“密约谈崩”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“密约谈崩”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.changgan_interlude.lyg.event.changgan_interlude_05_beat",
+          "title": "局势中的宗室试探",
+          "summary": "围绕“宗室试探”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.changgan_interlude_05_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.changgan_interlude_05.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.changgan_interlude.lyg.event.changgan_interlude_05_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“宗室试探”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“宗室试探”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.changgan_interlude.lyg.event.changgan_interlude_06_beat",
+          "title": "局势中的十方丛林谋刺",
+          "summary": "围绕“十方丛林谋刺”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.changgan_interlude_06_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.changgan_interlude_06.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.changgan_interlude.lyg.event.changgan_interlude_06_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“十方丛林谋刺”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“十方丛林谋刺”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.changgan_interlude.lyg.event.changgan_interlude_07_beat",
+          "title": "局势中的赵飞燕病线",
+          "summary": "围绕“赵飞燕病线”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.changgan_interlude_07_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.changgan_interlude_07.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.changgan_interlude.lyg.event.changgan_interlude_07_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“赵飞燕病线”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“赵飞燕病线”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.changgan_interlude.lyg.event.changgan_interlude_08_beat",
+          "title": "局势中的以吕雉为饵",
+          "summary": "围绕“以吕雉为饵”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.changgan_interlude_08_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.changgan_interlude_08.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.changgan_interlude.lyg.event.changgan_interlude_08_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“以吕雉为饵”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“以吕雉为饵”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.changgan_interlude.lyg.event.changgan_interlude_09_beat",
+          "title": "局势中的返程伏击",
+          "summary": "围绕“返程伏击”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.changgan_interlude_09_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.changgan_interlude_09.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.changgan_interlude.lyg.event.changgan_interlude_09_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“返程伏击”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“返程伏击”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.changgan_interlude.lyg.event.changgan_interlude_10_beat",
+          "title": "局势中的救出白霓裳",
+          "summary": "围绕“救出白霓裳”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.changgan_interlude_10_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.changgan_interlude_10.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.changgan_interlude.lyg.event.changgan_interlude_10_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“救出白霓裳”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“救出白霓裳”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        }
+      ],
+      "structuralAnchors": [],
+      "forkableOutcomes": [],
+      "referenceBeats": []
+    }
   },
   "rules": {
     "mode": "strict",

@@ -2665,7 +2665,257 @@
           "lcq.event.s02_06"
         ]
       }
-    ]
+    ],
+    "worldSimulation": {
+      "version": 1,
+      "situations": [
+        {
+          "id": "world-sim.baseline.lcq.stage_02.lcq.event.s02_01",
+          "title": "局势中的王哲传功与托付",
+          "summary": "围绕“王哲传功与托付”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s02_01",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s02_01.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_02.lcq.event.s02_01",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“王哲传功与托付”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“王哲传功与托付”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_02.lcq.event.s02_02",
+          "title": "局势中的左武军与罗马军团大战",
+          "summary": "围绕“左武军与罗马军团大战”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s02_02",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s02_02.done",
+                "operator": "eq",
+                "value": true
+              }
+            ],
+            [
+              {
+                "path": "flags.world.r2_9.lcq_event_s02_02.offscreen_resolved",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_02.lcq.event.s02_02",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“左武军与罗马军团大战”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“左武军与罗马军团大战”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_02.lcq.event.s02_03",
+          "title": "局势中的秦军与罗马军团交战",
+          "summary": "围绕“秦军与罗马军团交战”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s02_03",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s02_03.done",
+                "operator": "eq",
+                "value": true
+              }
+            ],
+            [
+              {
+                "path": "flags.world.r2_9.lcq_event_s02_03.offscreen_resolved",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_02.lcq.event.s02_03",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“秦军与罗马军团交战”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“秦军与罗马军团交战”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_02.lcq.event.s02_04",
+          "title": "局势中的程宗扬在五原城被误抓为奴隶",
+          "summary": "围绕“程宗扬在五原城被误抓为奴隶”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s02_04",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s02_04.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_02.lcq.event.s02_04",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“程宗扬在五原城被误抓为奴隶”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“程宗扬在五原城被误抓为奴隶”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_02.lcq.event.s02_05",
+          "title": "局势中的程宗扬与阿姬曼·芭娜相遇",
+          "summary": "围绕“程宗扬与阿姬曼·芭娜相遇”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s02_05",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s02_05.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_02.lcq.event.s02_05",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“程宗扬与阿姬曼·芭娜相遇”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“程宗扬与阿姬曼·芭娜相遇”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_02.lcq.event.s02_06",
+          "title": "局势中的程宗扬见苏妲己",
+          "summary": "围绕“程宗扬见苏妲己”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s02_06",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s02_06.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_02.lcq.event.s02_06",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“程宗扬见苏妲己”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“程宗扬见苏妲己”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        }
+      ],
+      "structuralAnchors": [],
+      "forkableOutcomes": [],
+      "referenceBeats": []
+    }
   },
   "rules": {
     "mode": "strict",

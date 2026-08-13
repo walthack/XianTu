@@ -6231,7 +6231,357 @@
           "lyg.event.s06_09"
         ]
       }
-    ]
+    ],
+    "worldSimulation": {
+      "version": 1,
+      "situations": [
+        {
+          "id": "world-sim.baseline.lyg.liangzhou_league.lyg.event.s06_01",
+          "title": "局势中的程宗扬与杨玉环讨论离魂症和小紫的病情",
+          "summary": "围绕“程宗扬与杨玉环讨论离魂症和小紫的病情”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.s06_01",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s06_01.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.liangzhou_league.lyg.event.s06_01",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“程宗扬与杨玉环讨论离魂症和小紫的病情”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“程宗扬与杨玉环讨论离魂症和小紫的病情”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.liangzhou_league.lyg.event.s06_02",
+          "title": "局势中的凉州盟比武大赛进展",
+          "summary": "围绕“凉州盟比武大赛进展”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.s06_02",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s06_02.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.liangzhou_league.lyg.event.s06_02",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“凉州盟比武大赛进展”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“凉州盟比武大赛进展”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.liangzhou_league.lyg.event.s06_03",
+          "title": "局势中的阮香琳离开程宅返回舞都",
+          "summary": "围绕“阮香琳离开程宅返回舞都”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.s06_03",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s06_03.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.liangzhou_league.lyg.event.s06_03",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“阮香琳离开程宅返回舞都”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“阮香琳离开程宅返回舞都”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.liangzhou_league.lyg.event.s06_04",
+          "title": "局势中的仇士良夺取神策军兵权并怀疑田令孜",
+          "summary": "围绕“仇士良夺取神策军兵权并怀疑田令孜”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.s06_04",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s06_04.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.liangzhou_league.lyg.event.s06_04",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“仇士良夺取神策军兵权并怀疑田令孜”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“仇士良夺取神策军兵权并怀疑田令孜”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.liangzhou_league.lyg.event.s06_05",
+          "title": "局势中的袁天罡与徐君房实施招魂术，王守澄鬼魂显形",
+          "summary": "围绕“袁天罡与徐君房实施招魂术，王守澄鬼魂显形”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.s06_05",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s06_05.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.liangzhou_league.lyg.event.s06_05",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“袁天罡与徐君房实施招魂术，王守澄鬼魂显形”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“袁天罡与徐君房实施招魂术，王守澄鬼魂显形”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.liangzhou_league.lyg.event.s06_06",
+          "title": "局势中的仇士良从王守澄鬼魂口中推断凶手指向田令孜",
+          "summary": "围绕“仇士良从王守澄鬼魂口中推断凶手指向田令孜”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.s06_06",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s06_06.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.liangzhou_league.lyg.event.s06_06",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“仇士良从王守澄鬼魂口中推断凶手指向田令孜”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“仇士良从王守澄鬼魂口中推断凶手指向田令孜”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.liangzhou_league.lyg.event.s06_07",
+          "title": "局势中的小紫准备晋级五级",
+          "summary": "围绕“小紫准备晋级五级”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.s06_07",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s06_07.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.liangzhou_league.lyg.event.s06_07",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“小紫准备晋级五级”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“小紫准备晋级五级”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.liangzhou_league.lyg.event.s06_08",
+          "title": "局势中的程宗扬与白霓裳亲密并召吕雉侍寝",
+          "summary": "围绕“程宗扬与白霓裳亲密并召吕雉侍寝”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.s06_08",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s06_08.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.liangzhou_league.lyg.event.s06_08",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“程宗扬与白霓裳亲密并召吕雉侍寝”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“程宗扬与白霓裳亲密并召吕雉侍寝”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.liangzhou_league.lyg.event.s06_09",
+          "title": "局势中的程宗扬心焦小紫未归，内宅报警铃响",
+          "summary": "围绕“程宗扬心焦小紫未归，内宅报警铃响”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.s06_09",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s06_09.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.liangzhou_league.lyg.event.s06_09",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“程宗扬心焦小紫未归，内宅报警铃响”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“程宗扬心焦小紫未归，内宅报警铃响”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        }
+      ],
+      "structuralAnchors": [],
+      "forkableOutcomes": [],
+      "referenceBeats": []
+    }
   },
   "rules": {
     "mode": "strict",

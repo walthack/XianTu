@@ -4326,7 +4326,281 @@
           ]
         }
       }
-    ]
+    ],
+    "worldSimulation": {
+      "version": 1,
+      "situations": [
+        {
+          "id": "world-sim.baseline.lyl.taiquan_core_conflict.lyl.event.find_exit",
+          "title": "局势中的寻找出口",
+          "summary": "围绕“寻找出口”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.find_exit",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.chapter.escape_ant_hill.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.taiquan_core_conflict.lyl.event.find_exit",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“寻找出口”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“寻找出口”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.taiquan_core_conflict.lyl.event.yu_baiying_truce",
+          "title": "局势中的虞白樱的临时合作",
+          "summary": "围绕“虞白樱的临时合作”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.yu_baiying_truce",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.chapter.escape_ant_hill.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.taiquan_core_conflict.lyl.event.yu_baiying_truce",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“虞白樱的临时合作”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“虞白樱的临时合作”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.taiquan_core_conflict.lyl.event.yin_fulan_aid",
+          "title": "局势中的尹馥兰出手相助",
+          "summary": "围绕“尹馥兰出手相助”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.yin_fulan_aid",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.yin_fulan_aid.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.taiquan_core_conflict.lyl.event.yin_fulan_aid",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“尹馥兰出手相助”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“尹馥兰出手相助”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.taiquan_core_conflict.lyl.event.plan_counterattack",
+          "title": "局势中的制定反制计划",
+          "summary": "围绕“制定反制计划”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.plan_counterattack",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.chapter.meet_yin_fulan.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.taiquan_core_conflict.lyl.event.plan_counterattack",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“制定反制计划”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“制定反制计划”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.taiquan_core_conflict.lyl.event.pan_jinlian_ambush",
+          "title": "局势中的潘金莲的伏击",
+          "summary": "围绕“潘金莲的伏击”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.pan_jinlian_ambush",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.chapter.confront_pan_jinlian.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.taiquan_core_conflict.lyl.event.pan_jinlian_ambush",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“潘金莲的伏击”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“潘金莲的伏击”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.taiquan_core_conflict.lyl.event.yin_yang_counter",
+          "title": "局势中的阴阳鱼反击",
+          "summary": "围绕“阴阳鱼反击”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.yin_yang_counter",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.chapter.confront_pan_jinlian.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.taiquan_core_conflict.lyl.event.yin_yang_counter",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“阴阳鱼反击”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“阴阳鱼反击”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.taiquan_core_conflict.lyl.event.decide_yin_fulan_fate",
+          "title": "局势中的局势收尾",
+          "summary": "围绕“局势收尾”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.decide_yin_fulan_fate",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.chapter.aftermath.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.taiquan_core_conflict.lyl.event.decide_yin_fulan_fate",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“局势收尾”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“局势收尾”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        }
+      ],
+      "structuralAnchors": [],
+      "forkableOutcomes": [],
+      "referenceBeats": []
+    }
   },
   "rules": {
     "mode": "strict",

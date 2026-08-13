@@ -6116,7 +6116,357 @@
           ]
         }
       }
-    ]
+    ],
+    "worldSimulation": {
+      "version": 1,
+      "situations": [
+        {
+          "id": "world-sim.baseline.lyg.ganlu_aftershock.lyg.event.ganlu_aftershock_01_beat",
+          "title": "局势中的金身法王",
+          "summary": "围绕“金身法王”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.ganlu_aftershock_01_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.ganlu_aftershock_01.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.ganlu_aftershock.lyg.event.ganlu_aftershock_01_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“金身法王”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“金身法王”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.ganlu_aftershock.lyg.event.ganlu_aftershock_02_beat",
+          "title": "局势中的蓬莱秘阁",
+          "summary": "围绕“蓬莱秘阁”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.ganlu_aftershock_02_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.ganlu_aftershock_02.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.ganlu_aftershock.lyg.event.ganlu_aftershock_02_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“蓬莱秘阁”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“蓬莱秘阁”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.ganlu_aftershock.lyg.event.ganlu_aftershock_03_beat",
+          "title": "局势中的长安劫掠",
+          "summary": "围绕“长安劫掠”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.ganlu_aftershock_03_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.ganlu_aftershock_03.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.ganlu_aftershock.lyg.event.ganlu_aftershock_03_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“长安劫掠”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“长安劫掠”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.ganlu_aftershock.lyg.event.ganlu_aftershock_04_beat",
+          "title": "局势中的秘阁供词",
+          "summary": "围绕“秘阁供词”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.ganlu_aftershock_04_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.ganlu_aftershock_04.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.ganlu_aftershock.lyg.event.ganlu_aftershock_04_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“秘阁供词”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“秘阁供词”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.ganlu_aftershock.lyg.event.ganlu_aftershock_05_beat",
+          "title": "局势中的李辅国审判",
+          "summary": "围绕“李辅国审判”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.ganlu_aftershock_05_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.ganlu_aftershock_05.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.ganlu_aftershock.lyg.event.ganlu_aftershock_05_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“李辅国审判”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“李辅国审判”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.ganlu_aftershock.lyg.event.ganlu_aftershock_06_beat",
+          "title": "局势中的杀李昂议",
+          "summary": "围绕“杀李昂议”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.ganlu_aftershock_06_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.ganlu_aftershock_06.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.ganlu_aftershock.lyg.event.ganlu_aftershock_06_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“杀李昂议”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“杀李昂议”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.ganlu_aftershock.lyg.event.ganlu_aftershock_07_beat",
+          "title": "局势中的唐皇弑逆",
+          "summary": "围绕“唐皇弑逆”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.ganlu_aftershock_07_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.ganlu_aftershock_07.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.ganlu_aftershock.lyg.event.ganlu_aftershock_07_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“唐皇弑逆”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“唐皇弑逆”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.ganlu_aftershock.lyg.event.ganlu_aftershock_08_beat",
+          "title": "局势中的仇士良返宫",
+          "summary": "围绕“仇士良返宫”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.ganlu_aftershock_08_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.ganlu_aftershock_08.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.ganlu_aftershock.lyg.event.ganlu_aftershock_08_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“仇士良返宫”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“仇士良返宫”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.ganlu_aftershock.lyg.event.ganlu_aftershock_09_beat",
+          "title": "局势中的惨案传闻",
+          "summary": "围绕“惨案传闻”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.ganlu_aftershock_09_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.ganlu_aftershock_09.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.ganlu_aftershock.lyg.event.ganlu_aftershock_09_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“惨案传闻”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“惨案传闻”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        }
+      ],
+      "structuralAnchors": [],
+      "forkableOutcomes": [],
+      "referenceBeats": []
+    }
   },
   "rules": {
     "mode": "strict",

@@ -6085,7 +6085,309 @@
           "lyl.event.s06_06"
         ]
       }
-    ]
+    ],
+    "worldSimulation": {
+      "version": 1,
+      "situations": [
+        {
+          "id": "world-sim.baseline.lyl.luoyang_coup.lyl.event.s06_01",
+          "title": "局势中的天子暴毙消息传遍洛都",
+          "summary": "围绕“天子暴毙消息传遍洛都”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.s06_01",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s06_01.done",
+                "operator": "eq",
+                "value": true
+              }
+            ],
+            [
+              {
+                "path": "flags.world.r2_9.lyl_event_s06_01.offscreen_resolved",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.luoyang_coup.lyl.event.s06_01",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“天子暴毙消息传遍洛都”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“天子暴毙消息传遍洛都”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.luoyang_coup.lyl.event.s06_01b",
+          "title": "局势中的吕冀淫辱伪赵昭仪（友通期）",
+          "summary": "围绕“吕冀淫辱伪赵昭仪（友通期）”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.s06_01b",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s06_01b.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.luoyang_coup.lyl.event.s06_01b",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“吕冀淫辱伪赵昭仪（友通期）”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“吕冀淫辱伪赵昭仪（友通期）”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.luoyang_coup.lyl.event.s06_02",
+          "title": "局势中的程宗扬安排退路与联络",
+          "summary": "围绕“程宗扬安排退路与联络”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.s06_02",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s06_02.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.luoyang_coup.lyl.event.s06_02",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“程宗扬安排退路与联络”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“程宗扬安排退路与联络”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.luoyang_coup.lyl.event.s06_03",
+          "title": "局势中的刘建攻占南宫与武库",
+          "summary": "围绕“刘建攻占南宫与武库”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.s06_03",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s06_03.done",
+                "operator": "eq",
+                "value": true
+              }
+            ],
+            [
+              {
+                "path": "flags.world.r2_9.lyl_event_s06_03.offscreen_resolved",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.luoyang_coup.lyl.event.s06_03",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“刘建攻占南宫与武库”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“刘建攻占南宫与武库”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.luoyang_coup.lyl.event.s06_04",
+          "title": "局势中的长秋宫守卫战",
+          "summary": "围绕“长秋宫守卫战”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.s06_04",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s06_04.done",
+                "operator": "eq",
+                "value": true
+              }
+            ],
+            [
+              {
+                "path": "flags.world.r2_9.lyl_event_s06_04.offscreen_resolved",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.luoyang_coup.lyl.event.s06_04",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“长秋宫守卫战”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“长秋宫守卫战”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.luoyang_coup.lyl.event.s06_05",
+          "title": "局势中的剑玉姬与程宗扬谈判",
+          "summary": "围绕“剑玉姬与程宗扬谈判”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.s06_05",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s06_05.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.luoyang_coup.lyl.event.s06_05",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“剑玉姬与程宗扬谈判”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“剑玉姬与程宗扬谈判”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.luoyang_coup.lyl.event.s06_06",
+          "title": "局势中的吕奉先单骑破阵",
+          "summary": "围绕“吕奉先单骑破阵”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.s06_06",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s06_06.done",
+                "operator": "eq",
+                "value": true
+              }
+            ],
+            [
+              {
+                "path": "flags.world.r2_9.lyl_event_s06_06.offscreen_resolved",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.luoyang_coup.lyl.event.s06_06",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“吕奉先单骑破阵”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“吕奉先单骑破阵”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        }
+      ],
+      "structuralAnchors": [],
+      "forkableOutcomes": [],
+      "referenceBeats": []
+    }
   },
   "rules": {
     "mode": "strict",

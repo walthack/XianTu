@@ -6256,7 +6256,395 @@
           ]
         }
       }
-    ]
+    ],
+    "worldSimulation": {
+      "version": 1,
+      "situations": [
+        {
+          "id": "world-sim.baseline.lyl.taiquan_afterfall.lyl.event.taiquan_afterfall_01_beat",
+          "title": "局势中的蚁穴脱险",
+          "summary": "围绕“蚁穴脱险”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.taiquan_afterfall_01_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.taiquan_afterfall_01.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.taiquan_afterfall.lyl.event.taiquan_afterfall_01_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“蚁穴脱险”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“蚁穴脱险”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.taiquan_afterfall.lyl.event.taiquan_afterfall_02_beat",
+          "title": "局势中的下水道救人",
+          "summary": "围绕“下水道救人”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.taiquan_afterfall_02_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.taiquan_afterfall_02.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.taiquan_afterfall.lyl.event.taiquan_afterfall_02_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“下水道救人”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“下水道救人”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.taiquan_afterfall.lyl.event.taiquan_afterfall_03_beat",
+          "title": "局势中的魔墟夺宝",
+          "summary": "围绕“魔墟夺宝”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.taiquan_afterfall_03_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.taiquan_afterfall_03.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.taiquan_afterfall.lyl.event.taiquan_afterfall_03_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“魔墟夺宝”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“魔墟夺宝”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.taiquan_afterfall.lyl.event.taiquan_afterfall_04_beat",
+          "title": "局势中的莫氏对质",
+          "summary": "围绕“莫氏对质”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.taiquan_afterfall_04_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.taiquan_afterfall_04.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.taiquan_afterfall.lyl.event.taiquan_afterfall_04_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“莫氏对质”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“莫氏对质”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.taiquan_afterfall.lyl.event.taiquan_afterfall_05_beat",
+          "title": "局势中的太泉古阵",
+          "summary": "围绕“太泉古阵”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.taiquan_afterfall_05_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.taiquan_afterfall_05.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.taiquan_afterfall.lyl.event.taiquan_afterfall_05_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“太泉古阵”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“太泉古阵”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.taiquan_afterfall.lyl.event.taiquan_afterfall_06_beat",
+          "title": "局势中的云如瑶私奔",
+          "summary": "围绕“云如瑶私奔”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.taiquan_afterfall_06_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.taiquan_afterfall_06.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.taiquan_afterfall.lyl.event.taiquan_afterfall_06_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“云如瑶私奔”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“云如瑶私奔”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.taiquan_afterfall.lyl.event.taiquan_afterfall_07_beat",
+          "title": "局势中的洛都风波",
+          "summary": "围绕“洛都风波”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.taiquan_afterfall_07_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.taiquan_afterfall_07.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.taiquan_afterfall.lyl.event.taiquan_afterfall_07_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“洛都风波”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“洛都风波”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.taiquan_afterfall.lyl.event.taiquan_afterfall_08_beat",
+          "title": "局势中的卖官渠道",
+          "summary": "围绕“卖官渠道”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.taiquan_afterfall_08_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.taiquan_afterfall_08.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.taiquan_afterfall.lyl.event.taiquan_afterfall_08_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“卖官渠道”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“卖官渠道”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.taiquan_afterfall.lyl.event.taiquan_afterfall_09_beat",
+          "title": "局势中的赵飞燕召见",
+          "summary": "围绕“赵飞燕召见”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.taiquan_afterfall_09_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.taiquan_afterfall_09.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.taiquan_afterfall.lyl.event.taiquan_afterfall_09_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“赵飞燕召见”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“赵飞燕召见”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.taiquan_afterfall.lyl.event.taiquan_afterfall_10_beat",
+          "title": "局势中的襄城君受控",
+          "summary": "围绕“襄城君受控”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.taiquan_afterfall_10_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.taiquan_afterfall_10.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.taiquan_afterfall.lyl.event.taiquan_afterfall_10_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“襄城君受控”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“襄城君受控”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        }
+      ],
+      "structuralAnchors": [],
+      "forkableOutcomes": [],
+      "referenceBeats": []
+    }
   },
   "rules": {
     "mode": "strict",

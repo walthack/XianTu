@@ -2677,7 +2677,585 @@
           ]
         }
       }
-    ]
+    ],
+    "worldSimulation": {
+      "version": 1,
+      "situations": [
+        {
+          "id": "world-sim.baseline.lyl.lin_an_black_sea.lyl.event.debut_ruan_sisters",
+          "title": "局势中的抵达临安，拜祭谢艺",
+          "summary": "围绕“抵达临安，拜祭谢艺”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.debut_ruan_sisters",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.debut_ruan_sisters.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.lin_an_black_sea.lyl.event.debut_ruan_sisters",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“抵达临安，拜祭谢艺”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“抵达临安，拜祭谢艺”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.lin_an_black_sea.liuchao.event.wei_yuan_first_contact",
+          "title": "局势中的尾随李师师至威远镖局",
+          "summary": "围绕“尾随李师师至威远镖局”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "liuchao.event.wei_yuan_first_contact",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.wei_yuan_first_contact.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.lin_an_black_sea.liuchao.event.wei_yuan_first_contact",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“尾随李师师至威远镖局”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“尾随李师师至威远镖局”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.lin_an_black_sea.lyl.event.ruan_xiangning_secret",
+          "title": "局势中的查勘武穆王府",
+          "summary": "围绕“查勘武穆王府”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.ruan_xiangning_secret",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.ruan_xiangning_secret.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.lin_an_black_sea.lyl.event.ruan_xiangning_secret",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“查勘武穆王府”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“查勘武穆王府”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.lin_an_black_sea.liuchao.event.lin_chong_confront",
+          "title": "局势中的识破皇城司尾随",
+          "summary": "围绕“识破皇城司尾随”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "liuchao.event.lin_chong_confront",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.lin_chong_confront.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.lin_an_black_sea.liuchao.event.lin_chong_confront",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“识破皇城司尾随”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“识破皇城司尾随”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.lin_an_black_sea.lyl.event.mingqingsi_encounter",
+          "title": "局势中的明庆寺旁观林鲁初会",
+          "summary": "围绕“明庆寺旁观林鲁初会”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.mingqingsi_encounter",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.mingqingsi_encounter.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.lin_an_black_sea.lyl.event.mingqingsi_encounter",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“明庆寺旁观林鲁初会”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“明庆寺旁观林鲁初会”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.lin_an_black_sea.liuchao.event.gather_intel",
+          "title": "局势中的解读便门瓦接头字条",
+          "summary": "围绕“解读便门瓦接头字条”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "liuchao.event.gather_intel",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.gather_intel.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.lin_an_black_sea.liuchao.event.gather_intel",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“解读便门瓦接头字条”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“解读便门瓦接头字条”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.lin_an_black_sea.liuchao.event.factory_registration",
+          "title": "局势中的吏部报到，档案被调",
+          "summary": "围绕“吏部报到，档案被调”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "liuchao.event.factory_registration",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.factory_registration.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.lin_an_black_sea.liuchao.event.factory_registration",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“吏部报到，档案被调”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“吏部报到，档案被调”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.lin_an_black_sea.liuchao.event.xue_sun_meeting",
+          "title": "局势中的西湖农居会见薛延山",
+          "summary": "围绕“西湖农居会见薛延山”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "liuchao.event.xue_sun_meeting",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.xue_sun_meeting.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.lin_an_black_sea.liuchao.event.xue_sun_meeting",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“西湖农居会见薛延山”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“西湖农居会见薛延山”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.lin_an_black_sea.liuchao.event.cold_poison_mystery",
+          "title": "局势中的辨认薛延山寒毒",
+          "summary": "围绕“辨认薛延山寒毒”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "liuchao.event.cold_poison_mystery",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.cold_poison_mystery.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.lin_an_black_sea.liuchao.event.cold_poison_mystery",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“辨认薛延山寒毒”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“辨认薛延山寒毒”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.lin_an_black_sea.lyl.event.ruan_xianglin_scheme",
+          "title": "局势中的应李师师之邀登雷峰塔",
+          "summary": "围绕“应李师师之邀登雷峰塔”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.ruan_xianglin_scheme",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.ruan_xianglin_scheme.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.lin_an_black_sea.lyl.event.ruan_xianglin_scheme",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“应李师师之邀登雷峰塔”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“应李师师之邀登雷峰塔”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.lin_an_black_sea.liuchao.event.wei_yuan_crisis_deepen",
+          "title": "局势中的查明失镖勒索全貌",
+          "summary": "围绕“查明失镖勒索全貌”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "liuchao.event.wei_yuan_crisis_deepen",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.wei_yuan_crisis_deepen.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.lin_an_black_sea.liuchao.event.wei_yuan_crisis_deepen",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“查明失镖勒索全貌”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“查明失镖勒索全貌”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.lin_an_black_sea.liuchao.event.gao_yanei_showdown",
+          "title": "局势中的雷峰塔逼退高衙内",
+          "summary": "围绕“雷峰塔逼退高衙内”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "liuchao.event.gao_yanei_showdown",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.gao_yanei_showdown.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.lin_an_black_sea.liuchao.event.gao_yanei_showdown",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“雷峰塔逼退高衙内”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“雷峰塔逼退高衙内”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.lin_an_black_sea.liuchao.event.you_chan_meeting",
+          "title": "局势中的决定继续追查威远失镖",
+          "summary": "围绕“决定继续追查威远失镖”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "liuchao.event.you_chan_meeting",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.you_chan_meeting.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.lin_an_black_sea.liuchao.event.you_chan_meeting",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“决定继续追查威远失镖”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“决定继续追查威远失镖”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.lin_an_black_sea.liuchao.event.black_sea_approach",
+          "title": "局势中的江州铁傀儡场外拍",
+          "summary": "围绕“江州铁傀儡场外拍”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "liuchao.event.black_sea_approach",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.black_sea_approach.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.lin_an_black_sea.liuchao.event.black_sea_approach",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“江州铁傀儡场外拍”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“江州铁傀儡场外拍”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.lin_an_black_sea.liuchao.event.final_preparations",
+          "title": "局势中的经过叩天石，前往便门瓦",
+          "summary": "围绕“经过叩天石，前往便门瓦”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "liuchao.event.final_preparations",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.final_preparations.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.lin_an_black_sea.liuchao.event.final_preparations",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“经过叩天石，前往便门瓦”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“经过叩天石，前往便门瓦”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        }
+      ],
+      "structuralAnchors": [],
+      "forkableOutcomes": [],
+      "referenceBeats": []
+    }
   },
   "rules": {
     "mode": "strict",

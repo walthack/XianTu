@@ -4862,7 +4862,471 @@
           ]
         }
       }
-    ]
+    ],
+    "worldSimulation": {
+      "version": 1,
+      "situations": [
+        {
+          "id": "world-sim.baseline.lcq.stage_05b.lcq.event.s05b_01_binu_reveals_xiaozi",
+          "title": "局势中的小紫疑云",
+          "summary": "围绕“小紫疑云”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s05b_01_binu_reveals_xiaozi",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s05b_01.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_05b.lcq.event.s05b_01_binu_reveals_xiaozi",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“小紫疑云”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“小紫疑云”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_05b.lcq.event.s05b_02_xiaozi_exposed",
+          "title": "局势中的小紫暴露",
+          "summary": "围绕“小紫暴露”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s05b_02_xiaozi_exposed",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s05b_02.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_05b.lcq.event.s05b_02_xiaozi_exposed",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“小紫暴露”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“小紫暴露”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_05b.lcq.event.s05b_03_saan_secret_path",
+          "title": "局势中的萨安情报",
+          "summary": "围绕“萨安情报”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s05b_03_saan_secret_path",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s05b_03.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_05b.lcq.event.s05b_03_saan_secret_path",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“萨安情报”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“萨安情报”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_05b.lcq.event.s05b_04_enter_ghost_palace",
+          "title": "局势中的潜入鬼王宫",
+          "summary": "围绕“潜入鬼王宫”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s05b_04_enter_ghost_palace",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s05b_04.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_05b.lcq.event.s05b_04_enter_ghost_palace",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“潜入鬼王宫”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“潜入鬼王宫”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_05b.lcq.event.s05b_05a_meet_ghost_king",
+          "title": "局势中的初见鬼巫王",
+          "summary": "围绕“初见鬼巫王”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s05b_05a_meet_ghost_king",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s05b_05.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_05b.lcq.event.s05b_05a_meet_ghost_king",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“初见鬼巫王”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“初见鬼巫王”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_05b.lcq.event.s05b_05b_ideology_duel_and_defeat",
+          "title": "局势中的理念交锋与败退",
+          "summary": "围绕“理念交锋与败退”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s05b_05b_ideology_duel_and_defeat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s05b_06.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_05b.lcq.event.s05b_05b_ideology_duel_and_defeat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“理念交锋与败退”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“理念交锋与败退”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_05b.lcq.event.s05b_06_breakout_and_reunion",
+          "title": "局势中的突围与重逢",
+          "summary": "围绕“突围与重逢”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s05b_06_breakout_and_reunion",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s05b_07.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_05b.lcq.event.s05b_06_breakout_and_reunion",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“突围与重逢”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“突围与重逢”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_05b.lcq.event.s05b_07_xiaozi_trap",
+          "title": "局势中的小紫陷阱与深井",
+          "summary": "围绕“小紫陷阱与深井”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s05b_07_xiaozi_trap",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s05b_08.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_05b.lcq.event.s05b_07_xiaozi_trap",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“小紫陷阱与深井”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“小紫陷阱与深井”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_05b.lcq.event.s05b_08a_rescue_suli",
+          "title": "局势中的井底营救苏荔",
+          "summary": "围绕“井底营救苏荔”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s05b_08a_rescue_suli",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s05b_09.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_05b.lcq.event.s05b_08a_rescue_suli",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“井底营救苏荔”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“井底营救苏荔”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_05b.lcq.event.s05b_08b_altar_corpse_fight_and_danchen",
+          "title": "局势中的祭台尸鬼与丹宸",
+          "summary": "围绕“祭台尸鬼与丹宸”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s05b_08b_altar_corpse_fight_and_danchen",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s05b_10.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_05b.lcq.event.s05b_08b_altar_corpse_fight_and_danchen",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“祭台尸鬼与丹宸”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“祭台尸鬼与丹宸”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_05b.lcq.event.s05b_09_temporary_pact_with_xiaozi",
+          "title": "局势中的临时协定",
+          "summary": "围绕“临时协定”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s05b_09_temporary_pact_with_xiaozi",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s05b_11.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_05b.lcq.event.s05b_09_temporary_pact_with_xiaozi",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“临时协定”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“临时协定”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_05b.lcq.event.s05b_10_slave_revolt_and_phoenix_change",
+          "title": "局势中的倒戈与凤凰异变",
+          "summary": "围绕“倒戈与凤凰异变”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s05b_10_slave_revolt_and_phoenix_change",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s05b_12.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_05b.lcq.event.s05b_10_slave_revolt_and_phoenix_change",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“倒戈与凤凰异变”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“倒戈与凤凰异变”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        }
+      ],
+      "structuralAnchors": [],
+      "forkableOutcomes": [],
+      "referenceBeats": []
+    }
   },
   "rules": {
     "mode": "strict",

@@ -6262,7 +6262,433 @@
           ]
         }
       }
-    ]
+    ],
+    "worldSimulation": {
+      "version": 1,
+      "situations": [
+        {
+          "id": "world-sim.baseline.lyg.buddhist_conspiracy.lyg.event.buddhist_conspiracy_01_beat",
+          "title": "局势中的宦官嫁祸",
+          "summary": "围绕“宦官嫁祸”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.buddhist_conspiracy_01_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.buddhist_conspiracy_01.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.buddhist_conspiracy.lyg.event.buddhist_conspiracy_01_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“宦官嫁祸”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“宦官嫁祸”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.buddhist_conspiracy.lyg.event.buddhist_conspiracy_02_beat",
+          "title": "局势中的小紫失踪",
+          "summary": "围绕“小紫失踪”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.buddhist_conspiracy_02_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.buddhist_conspiracy_02.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.buddhist_conspiracy.lyg.event.buddhist_conspiracy_02_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“小紫失踪”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“小紫失踪”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.buddhist_conspiracy.lyg.event.buddhist_conspiracy_03_beat",
+          "title": "局势中的真经震慑",
+          "summary": "围绕“真经震慑”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.buddhist_conspiracy_03_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.buddhist_conspiracy_03.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.buddhist_conspiracy.lyg.event.buddhist_conspiracy_03_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“真经震慑”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“真经震慑”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.buddhist_conspiracy.lyg.event.buddhist_conspiracy_04_beat",
+          "title": "局势中的兴唐寺火遁",
+          "summary": "围绕“兴唐寺火遁”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.buddhist_conspiracy_04_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.buddhist_conspiracy_04.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.buddhist_conspiracy.lyg.event.buddhist_conspiracy_04_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“兴唐寺火遁”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“兴唐寺火遁”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.buddhist_conspiracy.lyg.event.buddhist_conspiracy_05_beat",
+          "title": "局势中的惊理争夺",
+          "summary": "围绕“惊理争夺”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.buddhist_conspiracy_05_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.buddhist_conspiracy_05.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.buddhist_conspiracy.lyg.event.buddhist_conspiracy_05_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“惊理争夺”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“惊理争夺”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.buddhist_conspiracy.lyg.event.buddhist_conspiracy_06_beat",
+          "title": "局势中的大雁塔佛咒",
+          "summary": "围绕“大雁塔佛咒”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.buddhist_conspiracy_06_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.buddhist_conspiracy_06.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.buddhist_conspiracy.lyg.event.buddhist_conspiracy_06_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“大雁塔佛咒”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“大雁塔佛咒”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.buddhist_conspiracy.lyg.event.buddhist_conspiracy_07_beat",
+          "title": "局势中的先取田令孜",
+          "summary": "围绕“先取田令孜”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.buddhist_conspiracy_07_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.buddhist_conspiracy_07.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.buddhist_conspiracy.lyg.event.buddhist_conspiracy_07_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“先取田令孜”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“先取田令孜”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.buddhist_conspiracy.lyg.event.buddhist_conspiracy_08_beat",
+          "title": "局势中的窥基伪诏",
+          "summary": "围绕“窥基伪诏”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.buddhist_conspiracy_08_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.buddhist_conspiracy_08.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.buddhist_conspiracy.lyg.event.buddhist_conspiracy_08_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“窥基伪诏”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“窥基伪诏”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.buddhist_conspiracy.lyg.event.buddhist_conspiracy_09_beat",
+          "title": "局势中的窥基众叛",
+          "summary": "围绕“窥基众叛”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.buddhist_conspiracy_09_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.buddhist_conspiracy_09.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.buddhist_conspiracy.lyg.event.buddhist_conspiracy_09_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“窥基众叛”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“窥基众叛”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.buddhist_conspiracy.lyg.event.buddhist_conspiracy_10_beat",
+          "title": "局势中的弃佛入魔",
+          "summary": "围绕“弃佛入魔”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.buddhist_conspiracy_10_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.buddhist_conspiracy_10.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.buddhist_conspiracy.lyg.event.buddhist_conspiracy_10_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“弃佛入魔”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“弃佛入魔”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.buddhist_conspiracy.lyg.event.buddhist_conspiracy_11_beat",
+          "title": "局势中的甘露变爆发",
+          "summary": "围绕“甘露变爆发”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.buddhist_conspiracy_11_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.buddhist_conspiracy_11.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.buddhist_conspiracy.lyg.event.buddhist_conspiracy_11_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“甘露变爆发”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“甘露变爆发”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        }
+      ],
+      "structuralAnchors": [],
+      "forkableOutcomes": [],
+      "referenceBeats": []
+    }
   },
   "rules": {
     "mode": "strict",

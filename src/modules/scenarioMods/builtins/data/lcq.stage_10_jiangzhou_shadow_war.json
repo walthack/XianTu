@@ -5073,7 +5073,395 @@
           ]
         }
       }
-    ]
+    ],
+    "worldSimulation": {
+      "version": 1,
+      "situations": [
+        {
+          "id": "world-sim.baseline.lcq.stage_10_jiangzhou_shadow_war.lcq.event.s10_01_jiangzhou_order",
+          "title": "局势中的攻江州令",
+          "summary": "围绕“攻江州令”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s10_01_jiangzhou_order",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s10_01.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_10_jiangzhou_shadow_war.lcq.event.s10_01_jiangzhou_order",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“攻江州令”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“攻江州令”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_10_jiangzhou_shadow_war.lcq.event.s10_02_yeying_pass",
+          "title": "局势中的夜影关封航",
+          "summary": "围绕“夜影关封航”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s10_02_yeying_pass",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s10_02.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_10_jiangzhou_shadow_war.lcq.event.s10_02_yeying_pass",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“夜影关封航”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“夜影关封航”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_10_jiangzhou_shadow_war.lcq.event.s10_03_ninja_trace",
+          "title": "局势中的东瀛忍者现踪",
+          "summary": "围绕“东瀛忍者现踪”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s10_03_ninja_trace",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s10_03.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_10_jiangzhou_shadow_war.lcq.event.s10_03_ninja_trace",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“东瀛忍者现踪”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“东瀛忍者现踪”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_10_jiangzhou_shadow_war.lcq.event.s10_04_left_army_review",
+          "title": "局势中的左武军复盘",
+          "summary": "围绕“左武军复盘”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s10_04_left_army_review",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s10_04.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_10_jiangzhou_shadow_war.lcq.event.s10_04_left_army_review",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“左武军复盘”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“左武军复盘”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_10_jiangzhou_shadow_war.lcq.event.s10_05_war_funds",
+          "title": "局势中的十万金铢军资",
+          "summary": "围绕“十万金铢军资”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s10_05_war_funds",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s10_05.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_10_jiangzhou_shadow_war.lcq.event.s10_05_war_funds",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“十万金铢军资”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“十万金铢军资”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_10_jiangzhou_shadow_war.lcq.event.s10_06_ruined_temple",
+          "title": "局势中的破道观线索",
+          "summary": "围绕“破道观线索”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s10_06_ruined_temple",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s10_06.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_10_jiangzhou_shadow_war.lcq.event.s10_06_ruined_temple",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“破道观线索”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“破道观线索”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_10_jiangzhou_shadow_war.lcq.event.s10_07_preemptive_strike",
+          "title": "局势中的先发制人",
+          "summary": "围绕“先发制人”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s10_07_preemptive_strike",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s10_07.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_10_jiangzhou_shadow_war.lcq.event.s10_07_preemptive_strike",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“先发制人”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“先发制人”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_10_jiangzhou_shadow_war.lcq.event.s10_08_lair_reversal",
+          "title": "局势中的巢穴逆转",
+          "summary": "围绕“巢穴逆转”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s10_08_lair_reversal",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s10_08.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_10_jiangzhou_shadow_war.lcq.event.s10_08_lair_reversal",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“巢穴逆转”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“巢穴逆转”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_10_jiangzhou_shadow_war.lcq.event.s10_09_yin_yang_fish",
+          "title": "局势中的阴阳鱼线索",
+          "summary": "围绕“阴阳鱼线索”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s10_09_yin_yang_fish",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s10_09.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_10_jiangzhou_shadow_war.lcq.event.s10_09_yin_yang_fish",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“阴阳鱼线索”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“阴阳鱼线索”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_10_jiangzhou_shadow_war.lcq.event.s10_10_xiaozi_crisis",
+          "title": "局势中的小紫危局",
+          "summary": "围绕“小紫危局”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s10_10_xiaozi_crisis",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s10_10.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_10_jiangzhou_shadow_war.lcq.event.s10_10_xiaozi_crisis",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“小紫危局”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“小紫危局”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        }
+      ],
+      "structuralAnchors": [],
+      "forkableOutcomes": [],
+      "referenceBeats": []
+    }
   },
   "rules": {
     "mode": "strict",

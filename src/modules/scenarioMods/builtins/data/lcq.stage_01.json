@@ -2344,7 +2344,257 @@
           "lcq.event.debut_yueshuang"
         ]
       }
-    ]
+    ],
+    "worldSimulation": {
+      "version": 1,
+      "situations": [
+        {
+          "id": "world-sim.baseline.lcq.stage_01.lcq.event.s01_01",
+          "title": "局势中的程宗扬与段强穿越",
+          "summary": "围绕“程宗扬与段强穿越”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s01_01",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s01_01.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_01.lcq.event.s01_01",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“程宗扬与段强穿越”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“程宗扬与段强穿越”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_01.lcq.event.s01_02",
+          "title": "局势中的段强被射杀",
+          "summary": "围绕“段强被射杀”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s01_02",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s01_02.done",
+                "operator": "eq",
+                "value": true
+              }
+            ],
+            [
+              {
+                "path": "flags.world.r2_9.lcq_event_s01_02.offscreen_resolved",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_01.lcq.event.s01_02",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“段强被射杀”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“段强被射杀”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_01.lcq.event.s01_03",
+          "title": "局势中的程宗扬与月霜初遇",
+          "summary": "围绕“程宗扬与月霜初遇”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s01_03",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s01_03.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_01.lcq.event.s01_03",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“程宗扬与月霜初遇”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“程宗扬与月霜初遇”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_01.lcq.event.s01_04",
+          "title": "局势中的太乙真宗介入",
+          "summary": "围绕“太乙真宗介入”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s01_04",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s01_04.done",
+                "operator": "eq",
+                "value": true
+              }
+            ],
+            [
+              {
+                "path": "flags.world.r2_9.lcq_event_s01_04.offscreen_resolved",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_01.lcq.event.s01_04",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“太乙真宗介入”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“太乙真宗介入”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_01.lcq.event.s01_05",
+          "title": "局势中的程宗扬见王哲",
+          "summary": "围绕“程宗扬见王哲”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s01_05",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s01_05.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_01.lcq.event.s01_05",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“程宗扬见王哲”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“程宗扬见王哲”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_01.lcq.event.s01_06",
+          "title": "局势中的月霜强取真阳",
+          "summary": "围绕“月霜强取真阳”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s01_06",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s01_06.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_01.lcq.event.s01_06",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“月霜强取真阳”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“月霜强取真阳”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        }
+      ],
+      "structuralAnchors": [],
+      "forkableOutcomes": [],
+      "referenceBeats": []
+    }
   },
   "rules": {
     "mode": "strict",

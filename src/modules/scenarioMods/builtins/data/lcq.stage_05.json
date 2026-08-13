@@ -1942,7 +1942,623 @@
           ]
         }
       }
-    ]
+    ],
+    "worldSimulation": {
+      "version": 1,
+      "situations": [
+        {
+          "id": "world-sim.baseline.lcq.stage_05.lcq.event.s05_01",
+          "title": "局势中的海神殿抵御鲛人",
+          "summary": "围绕“海神殿抵御鲛人”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s05_01",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s05_01.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_05.lcq.event.s05_01",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“海神殿抵御鲛人”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“海神殿抵御鲛人”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_05.lcq.event.s05_02",
+          "title": "局势中的拔除鱼叉救治乐明珠",
+          "summary": "围绕“拔除鱼叉救治乐明珠”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s05_02",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s05_02.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_05.lcq.event.s05_02",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“拔除鱼叉救治乐明珠”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“拔除鱼叉救治乐明珠”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_05.lcq.event.s05_03",
+          "title": "局势中的谢艺讲述碧鲮旧战",
+          "summary": "围绕“谢艺讲述碧鲮旧战”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s05_03",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s05_03.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_05.lcq.event.s05_03",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“谢艺讲述碧鲮旧战”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“谢艺讲述碧鲮旧战”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_05.lcq.event.s05_07",
+          "title": "局势中的失踪搜寻与鬼王峒使者抵达",
+          "summary": "围绕“失踪搜寻与鬼王峒使者抵达”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s05_07",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s05_07.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_05.lcq.event.s05_07",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“失踪搜寻与鬼王峒使者抵达”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“失踪搜寻与鬼王峒使者抵达”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_05.lcq.event.s05_04",
+          "title": "局势中的以兵器生意化解危机",
+          "summary": "围绕“以兵器生意化解危机”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s05_04",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s05_04.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_05.lcq.event.s05_04",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“以兵器生意化解危机”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“以兵器生意化解危机”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_05.lcq.event.s05_06",
+          "title": "局势中的查出鬼王峒眼线",
+          "summary": "围绕“查出鬼王峒眼线”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s05_06",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s05_06.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_05.lcq.event.s05_06",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“查出鬼王峒眼线”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“查出鬼王峒眼线”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_05.lcq.event.s05_16",
+          "title": "局势中的斩杀蛇傀解救碧鲮族",
+          "summary": "围绕“斩杀蛇傀解救碧鲮族”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s05_16",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s05_16.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_05.lcq.event.s05_16",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“斩杀蛇傀解救碧鲮族”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“斩杀蛇傀解救碧鲮族”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_05.lcq.event.s05_08",
+          "title": "局势中的古道废墟迎击鬼战士",
+          "summary": "围绕“古道废墟迎击鬼战士”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s05_08",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s05_08.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_05.lcq.event.s05_08",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“古道废墟迎击鬼战士”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“古道废墟迎击鬼战士”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_05.lcq.event.s05_05",
+          "title": "局势中的武二郎斩杀巫师达古",
+          "summary": "围绕“武二郎斩杀巫师达古”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s05_05",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s05_05.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_05.lcq.event.s05_05",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“武二郎斩杀巫师达古”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“武二郎斩杀巫师达古”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_05.lcq.event.s05_09",
+          "title": "局势中的一阳境逼退阴煞",
+          "summary": "围绕“一阳境逼退阴煞”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s05_09",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s05_09.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_05.lcq.event.s05_09",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“一阳境逼退阴煞”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“一阳境逼退阴煞”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_05.lcq.event.s05_10",
+          "title": "局势中的结成探查鬼王峒的同行约定",
+          "summary": "围绕“结成探查鬼王峒的同行约定”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s05_10",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s05_10.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_05.lcq.event.s05_10",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“结成探查鬼王峒的同行约定”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“结成探查鬼王峒的同行约定”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_05.lcq.event.s05_11",
+          "title": "局势中的随弥骨进入鬼王峒",
+          "summary": "围绕“随弥骨进入鬼王峒”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s05_11",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s05_11.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_05.lcq.event.s05_11",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“随弥骨进入鬼王峒”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“随弥骨进入鬼王峒”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_05.lcq.event.s05_12",
+          "title": "局势中的白纸信笺与达古死讯",
+          "summary": "围绕“白纸信笺与达古死讯”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s05_12",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s05_12.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_05.lcq.event.s05_12",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“白纸信笺与达古死讯”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“白纸信笺与达古死讯”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_05.lcq.event.s05_13",
+          "title": "局势中的阁罗召来碧姬",
+          "summary": "围绕“阁罗召来碧姬”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s05_13",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s05_13.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_05.lcq.event.s05_13",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“阁罗召来碧姬”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“阁罗召来碧姬”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_05.lcq.event.s05_14",
+          "title": "局势中的机关惊动后从山洞脱困",
+          "summary": "围绕“机关惊动后从山洞脱困”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s05_14",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s05_14.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_05.lcq.event.s05_14",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“机关惊动后从山洞脱困”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“机关惊动后从山洞脱困”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_05.lcq.event.s05_15",
+          "title": "局势中的确认红苗受控并护住苏荔",
+          "summary": "围绕“确认红苗受控并护住苏荔”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s05_15",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s05_15.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_05.lcq.event.s05_15",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“确认红苗受控并护住苏荔”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“确认红苗受控并护住苏荔”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        }
+      ],
+      "structuralAnchors": [],
+      "forkableOutcomes": [],
+      "referenceBeats": []
+    }
   },
   "rules": {
     "mode": "strict",

@@ -4627,7 +4627,395 @@
           ]
         }
       }
-    ]
+    ],
+    "worldSimulation": {
+      "version": 1,
+      "situations": [
+        {
+          "id": "world-sim.baseline.lcq.stage_08_jiankang_coup.lcq.event.s08_01_eagle_valley",
+          "title": "局势中的鹰愁峪入瓮",
+          "summary": "围绕“鹰愁峪入瓮”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s08_01_eagle_valley",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s08_01.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_08_jiankang_coup.lcq.event.s08_01_eagle_valley",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“鹰愁峪入瓮”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“鹰愁峪入瓮”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_08_jiankang_coup.lcq.event.s08_02_wood_fort",
+          "title": "局势中的木垒血战",
+          "summary": "围绕“木垒血战”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s08_02_wood_fort",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s08_02.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_08_jiankang_coup.lcq.event.s08_02_wood_fort",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“木垒血战”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“木垒血战”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_08_jiankang_coup.lcq.event.s08_03_beifu_rescue",
+          "title": "局势中的北府兵解围",
+          "summary": "围绕“北府兵解围”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s08_03_beifu_rescue",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s08_03.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_08_jiankang_coup.lcq.event.s08_03_beifu_rescue",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“北府兵解围”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“北府兵解围”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_08_jiankang_coup.lcq.event.s08_04_sudaji_enters",
+          "title": "局势中的苏妲己入局",
+          "summary": "围绕“苏妲己入局”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s08_04_sudaji_enters",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s08_04.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_08_jiankang_coup.lcq.event.s08_04_sudaji_enters",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“苏妲己入局”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“苏妲己入局”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_08_jiankang_coup.lcq.event.s08_05_breakthrough",
+          "title": "局势中的入微突破",
+          "summary": "围绕“入微突破”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s08_05_breakthrough",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s08_05.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_08_jiankang_coup.lcq.event.s08_05_breakthrough",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“入微突破”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“入微突破”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_08_jiankang_coup.lcq.event.s08_06_pursuit_repelled",
+          "title": "局势中的追杀暂退",
+          "summary": "围绕“追杀暂退”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s08_06_pursuit_repelled",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s08_06.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_08_jiankang_coup.lcq.event.s08_06_pursuit_repelled",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“追杀暂退”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“追杀暂退”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_08_jiankang_coup.lcq.event.s08_07_palace_ninja",
+          "title": "局势中的宫中忍影",
+          "summary": "围绕“宫中忍影”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s08_07_palace_ninja",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s08_07.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_08_jiankang_coup.lcq.event.s08_07_palace_ninja",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“宫中忍影”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“宫中忍影”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_08_jiankang_coup.lcq.event.s08_08_gumingyin_plot",
+          "title": "局势中的古冥隐毒计",
+          "summary": "围绕“古冥隐毒计”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s08_08_gumingyin_plot",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s08_08.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_08_jiankang_coup.lcq.event.s08_08_gumingyin_plot",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“古冥隐毒计”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“古冥隐毒计”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_08_jiankang_coup.lcq.event.s08_09_zhaoming_night",
+          "title": "局势中的昭明宫夜战",
+          "summary": "围绕“昭明宫夜战”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s08_09_zhaoming_night",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s08_09.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_08_jiankang_coup.lcq.event.s08_09_zhaoming_night",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“昭明宫夜战”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“昭明宫夜战”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_08_jiankang_coup.lcq.event.s08_10_xuanwu_rescue",
+          "title": "局势中的玄武湖救驾",
+          "summary": "围绕“玄武湖救驾”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s08_10_xuanwu_rescue",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s08_10.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_08_jiankang_coup.lcq.event.s08_10_xuanwu_rescue",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“玄武湖救驾”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“玄武湖救驾”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        }
+      ],
+      "structuralAnchors": [],
+      "forkableOutcomes": [],
+      "referenceBeats": []
+    }
   },
   "rules": {
     "mode": "strict",

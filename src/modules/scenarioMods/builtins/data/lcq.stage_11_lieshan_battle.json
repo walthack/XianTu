@@ -4559,7 +4559,402 @@
           ]
         }
       }
-    ]
+    ],
+    "worldSimulation": {
+      "version": 1,
+      "situations": [
+        {
+          "id": "world-sim.baseline.lcq.stage_11_lieshan_battle.lcq.event.s11_01_pengri_arrives",
+          "title": "局势中的捧日军抵烈山",
+          "summary": "围绕“捧日军抵烈山”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s11_01_pengri_arrives",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s11_01.done",
+                "operator": "eq",
+                "value": true
+              }
+            ],
+            [
+              {
+                "path": "flags.world.xingyuehu_war.offscreen_resolved",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_11_lieshan_battle.lcq.event.s11_01_pengri_arrives",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“捧日军抵烈山”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“捧日军抵烈山”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_11_lieshan_battle.lcq.event.s11_02_cement_fortress",
+          "title": "局势中的江州水泥坚城",
+          "summary": "围绕“江州水泥坚城”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s11_02_cement_fortress",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s11_02.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_11_lieshan_battle.lcq.event.s11_02_cement_fortress",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“江州水泥坚城”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“江州水泥坚城”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_11_lieshan_battle.lcq.event.s11_03_protect_yueshuang",
+          "title": "局势中的奉命护月霜",
+          "summary": "围绕“奉命护月霜”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s11_03_protect_yueshuang",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s11_03.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_11_lieshan_battle.lcq.event.s11_03_protect_yueshuang",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“奉命护月霜”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“奉命护月霜”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_11_lieshan_battle.lcq.event.s11_04_xingyue_appears",
+          "title": "局势中的星月湖现身",
+          "summary": "围绕“星月湖现身”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s11_04_xingyue_appears",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s11_04.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_11_lieshan_battle.lcq.event.s11_04_xingyue_appears",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“星月湖现身”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“星月湖现身”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_11_lieshan_battle.lcq.event.s11_05_wangtao_breaks",
+          "title": "局势中的王韬破阵",
+          "summary": "围绕“王韬破阵”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s11_05_wangtao_breaks",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s11_05.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_11_lieshan_battle.lcq.event.s11_05_wangtao_breaks",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“王韬破阵”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“王韬破阵”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_11_lieshan_battle.lcq.event.s11_06_snow_battle",
+          "title": "局势中的雪原鏖战",
+          "summary": "围绕“雪原鏖战”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s11_06_snow_battle",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s11_06.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_11_lieshan_battle.lcq.event.s11_06_snow_battle",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“雪原鏖战”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“雪原鏖战”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_11_lieshan_battle.lcq.event.s11_07_camp_falls",
+          "title": "局势中的中军陷落",
+          "summary": "围绕“中军陷落”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s11_07_camp_falls",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s11_07.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_11_lieshan_battle.lcq.event.s11_07_camp_falls",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“中军陷落”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“中军陷落”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_11_lieshan_battle.lcq.event.s11_08_jiangzhou_lockdown",
+          "title": "局势中的江州戒严",
+          "summary": "围绕“江州戒严”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s11_08_jiangzhou_lockdown",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s11_08.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_11_lieshan_battle.lcq.event.s11_08_jiangzhou_lockdown",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“江州戒严”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“江州戒严”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_11_lieshan_battle.lcq.event.s11_09_grain_plan",
+          "title": "局势中的粮战全盘",
+          "summary": "围绕“粮战全盘”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s11_09_grain_plan",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s11_09.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_11_lieshan_battle.lcq.event.s11_09_grain_plan",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“粮战全盘”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“粮战全盘”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_11_lieshan_battle.lcq.event.s11_10_sanchuankou_defeat",
+          "title": "局势中的三川口败局",
+          "summary": "围绕“三川口败局”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s11_10_sanchuankou_defeat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s11_10.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_11_lieshan_battle.lcq.event.s11_10_sanchuankou_defeat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“三川口败局”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“三川口败局”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        }
+      ],
+      "structuralAnchors": [],
+      "forkableOutcomes": [],
+      "referenceBeats": []
+    }
   },
   "rules": {
     "mode": "strict",

@@ -4918,7 +4918,699 @@
           ]
         }
       }
-    ]
+    ],
+    "worldSimulation": {
+      "version": 1,
+      "situations": [
+        {
+          "id": "world-sim.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_01_grain_route_blocked",
+          "title": "局势中的粮路受阻",
+          "summary": "围绕“粮路受阻”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s12_01_grain_route_blocked",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s12_01.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_01_grain_route_blocked",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“粮路受阻”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“粮路受阻”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_02_recognize_zhuo",
+          "title": "局势中的沐羽认出卓云君",
+          "summary": "围绕“沐羽认出卓云君”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s12_02_recognize_zhuo",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s12_02.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_02_recognize_zhuo",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“沐羽认出卓云君”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“沐羽认出卓云君”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_03_xiaozi_controls_zhuo",
+          "title": "局势中的小紫压制卓云君",
+          "summary": "围绕“小紫压制卓云君”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s12_03_xiaozi_controls_zhuo",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s12_03.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_03_xiaozi_controls_zhuo",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“小紫压制卓云君”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“小紫压制卓云君”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_04_river_granary",
+          "title": "局势中的江边设粮仓",
+          "summary": "围绕“江边设粮仓”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s12_04_river_granary",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s12_04.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_04_river_granary",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“江边设粮仓”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“江边设粮仓”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_05_granary_fire_plan",
+          "title": "局势中的常平仓火计",
+          "summary": "围绕“常平仓火计”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s12_05_granary_fire_plan",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s12_05.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_05_granary_fire_plan",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“常平仓火计”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“常平仓火计”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_06_dragon_guard_routs",
+          "title": "局势中的龙卫第一军溃败",
+          "summary": "围绕“龙卫第一军溃败”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s12_06_dragon_guard_routs",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s12_06.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_06_dragon_guard_routs",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“龙卫第一军溃败”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“龙卫第一军溃败”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_07_left_wing_raid",
+          "title": "局势中的突袭龙卫左厢",
+          "summary": "围绕“突袭龙卫左厢”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s12_07_left_wing_raid",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s12_07.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_07_left_wing_raid",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“突袭龙卫左厢”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“突袭龙卫左厢”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_08_dingchuan_raid",
+          "title": "局势中的定川寨奇袭",
+          "summary": "围绕“定川寨奇袭”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s12_08_dingchuan_raid",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s12_08.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_08_dingchuan_raid",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“定川寨奇袭”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“定川寨奇袭”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_09_ge_huaimin_killed",
+          "title": "局势中的葛怀敏伏诛",
+          "summary": "围绕“葛怀敏伏诛”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s12_09_ge_huaimin_killed",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s12_09.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_09_ge_huaimin_killed",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“葛怀敏伏诛”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“葛怀敏伏诛”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_10_rescue_xiao",
+          "title": "局势中的救下萧遥逸",
+          "summary": "围绕“救下萧遥逸”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s12_10_rescue_xiao",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s12_10.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_10_rescue_xiao",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“救下萧遥逸”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“救下萧遥逸”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_11_siege_begins",
+          "title": "局势中的江州全面攻城",
+          "summary": "围绕“江州全面攻城”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s12_11_siege_begins",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s12_11.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_11_siege_begins",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“江州全面攻城”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“江州全面攻城”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_12_gate_fire",
+          "title": "局势中的城门火攻",
+          "summary": "围绕“城门火攻”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s12_12_gate_fire",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s12_12.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_12_gate_fire",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“城门火攻”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“城门火攻”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_13_long_siege",
+          "title": "局势中的长期围困",
+          "summary": "围绕“长期围困”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s12_13_long_siege",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s12_13.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_13_long_siege",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“长期围困”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“长期围困”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_14_chenxing_appears",
+          "title": "局势中的辰星七妖现身",
+          "summary": "围绕“辰星七妖现身”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s12_14_chenxing_appears",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s12_14.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_14_chenxing_appears",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“辰星七妖现身”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“辰星七妖现身”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_15_capture_jingli",
+          "title": "局势中的擒获惊理",
+          "summary": "围绕“擒获惊理”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s12_15_capture_jingli",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s12_15.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_15_capture_jingli",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“擒获惊理”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“擒获惊理”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_16_corpse_poison",
+          "title": "局势中的殇侯尸毒破局",
+          "summary": "围绕“殇侯尸毒破局”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s12_16_corpse_poison",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s12_16.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_16_corpse_poison",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“殇侯尸毒破局”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“殇侯尸毒破局”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_17_shanghou_stays",
+          "title": "局势中的利聚留守",
+          "summary": "围绕“利聚留守”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s12_17_shanghou_stays",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s12_17.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_17_shanghou_stays",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“利聚留守”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“利聚留守”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_18_linan_grain_order",
+          "title": "局势中的临安粮战令",
+          "summary": "围绕“临安粮战令”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s12_18_linan_grain_order",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s12_18.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_18_linan_grain_order",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“临安粮战令”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“临安粮战令”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        }
+      ],
+      "structuralAnchors": [],
+      "forkableOutcomes": [],
+      "referenceBeats": []
+    }
   },
   "rules": {
     "mode": "strict",

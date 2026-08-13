@@ -1478,7 +1478,205 @@
           "liuchao.event.escape_taiquan"
         ]
       }
-    ]
+    ],
+    "worldSimulation": {
+      "version": 1,
+      "situations": [
+        {
+          "id": "world-sim.baseline.lyl.taiquan_expedition.liuchao.event.enter_taiquan",
+          "title": "局势中的接获江州三份军情",
+          "summary": "围绕“接获江州三份军情”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "liuchao.event.enter_taiquan",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.enter_taiquan.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.taiquan_expedition.liuchao.event.enter_taiquan",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“接获江州三份军情”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“接获江州三份军情”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.taiquan_expedition.liuchao.event.reconnoiter",
+          "title": "局势中的象牙为礼拜访威远镖局",
+          "summary": "围绕“象牙为礼拜访威远镖局”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "liuchao.event.reconnoiter",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.reconnoiter.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.taiquan_expedition.liuchao.event.reconnoiter",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“象牙为礼拜访威远镖局”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“象牙为礼拜访威远镖局”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.taiquan_expedition.liuchao.event.du_zong_raid",
+          "title": "局势中的司营巷旁观屠龙刀伏击",
+          "summary": "围绕“司营巷旁观屠龙刀伏击”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "liuchao.event.du_zong_raid",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.du_zong_raid.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.taiquan_expedition.liuchao.event.du_zong_raid",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“司营巷旁观屠龙刀伏击”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“司营巷旁观屠龙刀伏击”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.taiquan_expedition.liuchao.event.fruit_conflict",
+          "title": "局势中的林家识破凝姨秘密",
+          "summary": "围绕“林家识破凝姨秘密”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "liuchao.event.fruit_conflict",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.fruit_conflict.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.taiquan_expedition.liuchao.event.fruit_conflict",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“林家识破凝姨秘密”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“林家识破凝姨秘密”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.taiquan_expedition.liuchao.event.escape_taiquan",
+          "title": "局势中的潜入西湖别业窃听密谋",
+          "summary": "围绕“潜入西湖别业窃听密谋”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "liuchao.event.escape_taiquan",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.escape_taiquan.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.taiquan_expedition.liuchao.event.escape_taiquan",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“潜入西湖别业窃听密谋”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“潜入西湖别业窃听密谋”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        }
+      ],
+      "structuralAnchors": [],
+      "forkableOutcomes": [],
+      "referenceBeats": []
+    }
   },
   "rules": {
     "mode": "strict",

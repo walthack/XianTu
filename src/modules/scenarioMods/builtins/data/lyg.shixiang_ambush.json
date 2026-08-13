@@ -1591,7 +1591,547 @@
           "lyg.event.capture_feiniao"
         ]
       }
-    ]
+    ],
+    "worldSimulation": {
+      "version": 1,
+      "situations": [
+        {
+          "id": "world-sim.baseline.lyg.shixiang_ambush.lyg.event.shixiang_s10",
+          "title": "局势中的听取北司与佛门动向",
+          "summary": "围绕“听取北司与佛门动向”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.shixiang_s10",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.shixiang_s10.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.shixiang_ambush.lyg.event.shixiang_s10",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“听取北司与佛门动向”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“听取北司与佛门动向”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.shixiang_ambush.lyg.event.investigate_te_master",
+          "title": "局势中的潜入青龙寺查探特大师",
+          "summary": "围绕“潜入青龙寺查探特大师”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.investigate_te_master",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.investigate_te_master.triggered",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.shixiang_ambush.lyg.event.investigate_te_master",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“潜入青龙寺查探特大师”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“潜入青龙寺查探特大师”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.shixiang_ambush.lyg.event.shixiang_s11",
+          "title": "局势中的接受鸿胪寺补救安排",
+          "summary": "围绕“接受鸿胪寺补救安排”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.shixiang_s11",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.shixiang_s11.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.shixiang_ambush.lyg.event.shixiang_s11",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“接受鸿胪寺补救安排”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“接受鸿胪寺补救安排”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.shixiang_ambush.lyg.event.shixiang_s12",
+          "title": "局势中的见证慈恩寺红莲演法",
+          "summary": "围绕“见证慈恩寺红莲演法”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.shixiang_s12",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.shixiang_s12.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.shixiang_ambush.lyg.event.shixiang_s12",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“见证慈恩寺红莲演法”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“见证慈恩寺红莲演法”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.shixiang_ambush.lyg.event.shixiang_s13",
+          "title": "局势中的元正朝会辨认地球仪",
+          "summary": "围绕“元正朝会辨认地球仪”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.shixiang_s13",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.shixiang_s13.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.shixiang_ambush.lyg.event.shixiang_s13",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“元正朝会辨认地球仪”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“元正朝会辨认地球仪”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.shixiang_ambush.lyg.event.track_dagger_attacker",
+          "title": "局势中的追查宣平坊宦官命案",
+          "summary": "围绕“追查宣平坊宦官命案”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.track_dagger_attacker",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.track_dagger_attacker.triggered",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.shixiang_ambush.lyg.event.track_dagger_attacker",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“追查宣平坊宦官命案”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“追查宣平坊宦官命案”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.shixiang_ambush.lyg.event.shixiang_s14",
+          "title": "局势中的探查废弃兴庆宫",
+          "summary": "围绕“探查废弃兴庆宫”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.shixiang_s14",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.shixiang_s14.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.shixiang_ambush.lyg.event.shixiang_s14",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“探查废弃兴庆宫”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“探查废弃兴庆宫”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.shixiang_ambush.lyg.event.escape_or_counter",
+          "title": "局势中的处置太子误伤风波",
+          "summary": "围绕“处置太子误伤风波”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.escape_or_counter",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.escape_or_counter.triggered",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.shixiang_ambush.lyg.event.escape_or_counter",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“处置太子误伤风波”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“处置太子误伤风波”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.shixiang_ambush.lyg.event.lure_pan_jinlian",
+          "title": "局势中的迁入水香楼布置诱捕",
+          "summary": "围绕“迁入水香楼布置诱捕”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.lure_pan_jinlian",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.lure_pan_jinlian.triggered",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.shixiang_ambush.lyg.event.lure_pan_jinlian",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“迁入水香楼布置诱捕”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“迁入水香楼布置诱捕”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.shixiang_ambush.lyg.event.ambush_at_shuixiang",
+          "title": "局势中的识破毒方刺客",
+          "summary": "围绕“识破毒方刺客”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.ambush_at_shuixiang",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.ambush_at_shuixiang.triggered",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.shixiang_ambush.lyg.event.ambush_at_shuixiang",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“识破毒方刺客”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“识破毒方刺客”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.shixiang_ambush.lyg.event.final_showdown",
+          "title": "局势中的制止池畔混战并擒获女忍",
+          "summary": "围绕“制止池畔混战并擒获女忍”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.final_showdown",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.final_showdown.triggered",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.shixiang_ambush.lyg.event.final_showdown",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“制止池畔混战并擒获女忍”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“制止池畔混战并擒获女忍”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.shixiang_ambush.lyg.event.raid_qinglongsi",
+          "title": "局势中的爆破摩尼寺营救女师",
+          "summary": "围绕“爆破摩尼寺营救女师”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.raid_qinglongsi",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.raid_qinglongsi.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.shixiang_ambush.lyg.event.raid_qinglongsi",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“爆破摩尼寺营救女师”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“爆破摩尼寺营救女师”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.shixiang_ambush.lyg.event.forewarned_from_xinyong",
+          "title": "局势中的信永揭示蕃密邪径",
+          "summary": "围绕“信永揭示蕃密邪径”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.forewarned_from_xinyong",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.forewarned_from_xinyong.triggered",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.shixiang_ambush.lyg.event.forewarned_from_xinyong",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“信永揭示蕃密邪径”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“信永揭示蕃密邪径”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.shixiang_ambush.lyg.event.capture_feiniao",
+          "title": "局势中的审讯飞鸟萤子",
+          "summary": "围绕“审讯飞鸟萤子”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.capture_feiniao",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.capture_feiniao.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.shixiang_ambush.lyg.event.capture_feiniao",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“审讯飞鸟萤子”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“审讯飞鸟萤子”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        }
+      ],
+      "structuralAnchors": [],
+      "forkableOutcomes": [],
+      "referenceBeats": []
+    }
   },
   "rules": {
     "mode": "strict",

@@ -6069,7 +6069,167 @@
           ]
         }
       }
-    ]
+    ],
+    "worldSimulation": {
+      "version": 1,
+      "situations": [
+        {
+          "id": "world-sim.baseline.lyl.lin_an_bridge.lyl.event.lin_an_bridge_01_beat",
+          "title": "局势中的瓦棚情报",
+          "summary": "围绕“瓦棚情报”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.lin_an_bridge_01_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.lin_an_bridge_01.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.lin_an_bridge.lyl.event.lin_an_bridge_01_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“瓦棚情报”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“瓦棚情报”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.lin_an_bridge.lyl.event.lin_an_bridge_02_beat",
+          "title": "局势中的小瀛洲初遇",
+          "summary": "围绕“小瀛洲初遇”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.lin_an_bridge_02_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.lin_an_bridge_02.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.lin_an_bridge.lyl.event.lin_an_bridge_02_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“小瀛洲初遇”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“小瀛洲初遇”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.lin_an_bridge.lyl.event.lin_an_bridge_03_beat",
+          "title": "局势中的林娘子疑云",
+          "summary": "围绕“林娘子疑云”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.lin_an_bridge_03_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.lin_an_bridge_03.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.lin_an_bridge.lyl.event.lin_an_bridge_03_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“林娘子疑云”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“林娘子疑云”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.lin_an_bridge.lyl.event.lin_an_bridge_04_beat",
+          "title": "局势中的明庆寺相会",
+          "summary": "围绕“明庆寺相会”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.lin_an_bridge_04_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.lin_an_bridge_04.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.lin_an_bridge.lyl.event.lin_an_bridge_04_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“明庆寺相会”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“明庆寺相会”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        }
+      ],
+      "structuralAnchors": [],
+      "forkableOutcomes": [],
+      "referenceBeats": []
+    }
   },
   "rules": {
     "mode": "strict",

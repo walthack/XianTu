@@ -6253,7 +6253,395 @@
           ]
         }
       }
-    ]
+    ],
+    "worldSimulation": {
+      "version": 1,
+      "situations": [
+        {
+          "id": "world-sim.baseline.lyl.taiquan_sacred_fruit.lyl.event.taiquan_sacred_fruit_01",
+          "title": "局势中的小瀛洲战后",
+          "summary": "围绕“小瀛洲战后”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.taiquan_sacred_fruit_01",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.taiquan_sacred_fruit_01.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.taiquan_sacred_fruit.lyl.event.taiquan_sacred_fruit_01",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“小瀛洲战后”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“小瀛洲战后”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.taiquan_sacred_fruit.lyl.event.taiquan_sacred_fruit_02",
+          "title": "局势中的黑魔海撤出谈判",
+          "summary": "围绕“黑魔海撤出谈判”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.taiquan_sacred_fruit_02",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.taiquan_sacred_fruit_02.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.taiquan_sacred_fruit.lyl.event.taiquan_sacred_fruit_02",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“黑魔海撤出谈判”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“黑魔海撤出谈判”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.taiquan_sacred_fruit.lyl.event.taiquan_sacred_fruit_03",
+          "title": "局势中的高俅秘辛",
+          "summary": "围绕“高俅秘辛”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.taiquan_sacred_fruit_03",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.taiquan_sacred_fruit_03.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.taiquan_sacred_fruit.lyl.event.taiquan_sacred_fruit_03",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“高俅秘辛”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“高俅秘辛”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.taiquan_sacred_fruit.lyl.event.taiquan_sacred_fruit_04",
+          "title": "局势中的云涛观迷楼",
+          "summary": "围绕“云涛观迷楼”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.taiquan_sacred_fruit_04",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.taiquan_sacred_fruit_04.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.taiquan_sacred_fruit.lyl.event.taiquan_sacred_fruit_04",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“云涛观迷楼”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“云涛观迷楼”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.taiquan_sacred_fruit.lyl.event.taiquan_sacred_fruit_05",
+          "title": "局势中的太泉钥匙",
+          "summary": "围绕“太泉钥匙”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.taiquan_sacred_fruit_05",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.taiquan_sacred_fruit_05.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.taiquan_sacred_fruit.lyl.event.taiquan_sacred_fruit_05",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“太泉钥匙”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“太泉钥匙”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.taiquan_sacred_fruit.lyl.event.taiquan_sacred_fruit_06",
+          "title": "局势中的盘江股东大会",
+          "summary": "围绕“盘江股东大会”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.taiquan_sacred_fruit_06",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.taiquan_sacred_fruit_06.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.taiquan_sacred_fruit.lyl.event.taiquan_sacred_fruit_06",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“盘江股东大会”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“盘江股东大会”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.taiquan_sacred_fruit.lyl.event.taiquan_sacred_fruit_07",
+          "title": "局势中的抵达苍澜镇",
+          "summary": "围绕“抵达苍澜镇”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.taiquan_sacred_fruit_07",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.taiquan_sacred_fruit_07.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.taiquan_sacred_fruit.lyl.event.taiquan_sacred_fruit_07",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“抵达苍澜镇”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“抵达苍澜镇”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.taiquan_sacred_fruit.lyl.event.taiquan_sacred_fruit_08",
+          "title": "局势中的殇侯出手",
+          "summary": "围绕“殇侯出手”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.taiquan_sacred_fruit_08",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.taiquan_sacred_fruit_08.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.taiquan_sacred_fruit.lyl.event.taiquan_sacred_fruit_08",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“殇侯出手”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“殇侯出手”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.taiquan_sacred_fruit.lyl.event.taiquan_sacred_fruit_09",
+          "title": "局势中的酒店下毒乱战",
+          "summary": "围绕“酒店下毒乱战”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.taiquan_sacred_fruit_09",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.taiquan_sacred_fruit_09.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.taiquan_sacred_fruit.lyl.event.taiquan_sacred_fruit_09",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“酒店下毒乱战”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“酒店下毒乱战”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.taiquan_sacred_fruit.lyl.event.taiquan_sacred_fruit_10",
+          "title": "局势中的赤阳圣果争夺",
+          "summary": "围绕“赤阳圣果争夺”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.taiquan_sacred_fruit_10",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.taiquan_sacred_fruit_10.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.taiquan_sacred_fruit.lyl.event.taiquan_sacred_fruit_10",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“赤阳圣果争夺”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“赤阳圣果争夺”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        }
+      ],
+      "structuralAnchors": [],
+      "forkableOutcomes": [],
+      "referenceBeats": []
+    }
   },
   "rules": {
     "mode": "strict",

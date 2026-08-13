@@ -6394,7 +6394,585 @@
           ]
         }
       }
-    ]
+    ],
+    "worldSimulation": {
+      "version": 1,
+      "situations": [
+        {
+          "id": "world-sim.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_01_beat",
+          "title": "局势中的宦官再分权",
+          "summary": "围绕“宦官再分权”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.shituolin_endgame_01_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.shituolin_endgame_01.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_01_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“宦官再分权”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“宦官再分权”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_02_beat",
+          "title": "局势中的独柳树刑场",
+          "summary": "围绕“独柳树刑场”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.shituolin_endgame_02_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.shituolin_endgame_02.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_02_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“独柳树刑场”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“独柳树刑场”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_03_beat",
+          "title": "局势中的高阳疑冢",
+          "summary": "围绕“高阳疑冢”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.shituolin_endgame_03_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.shituolin_endgame_03.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_03_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“高阳疑冢”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“高阳疑冢”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_04_beat",
+          "title": "局势中的尸陀林主现身",
+          "summary": "围绕“尸陀林主现身”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.shituolin_endgame_04_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.shituolin_endgame_04.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_04_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“尸陀林主现身”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“尸陀林主现身”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_05_beat",
+          "title": "局势中的斩妖除魔",
+          "summary": "围绕“斩妖除魔”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.shituolin_endgame_05_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.shituolin_endgame_05.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_05_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“斩妖除魔”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“斩妖除魔”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_06_beat",
+          "title": "局势中的江王入宫",
+          "summary": "围绕“江王入宫”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.shituolin_endgame_06_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.shituolin_endgame_06.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_06_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“江王入宫”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“江王入宫”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_07_beat",
+          "title": "局势中的太液池黑雾",
+          "summary": "围绕“太液池黑雾”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.shituolin_endgame_07_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.shituolin_endgame_07.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_07_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“太液池黑雾”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“太液池黑雾”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_08_beat",
+          "title": "局势中的婆娑宝树",
+          "summary": "围绕“婆娑宝树”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.shituolin_endgame_08_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.shituolin_endgame_08.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_08_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“婆娑宝树”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“婆娑宝树”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_09_beat",
+          "title": "局势中的奉诏讨逆",
+          "summary": "围绕“奉诏讨逆”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.shituolin_endgame_09_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.shituolin_endgame_09.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_09_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“奉诏讨逆”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“奉诏讨逆”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_10_beat",
+          "title": "局势中的莲座交锋",
+          "summary": "围绕“莲座交锋”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.shituolin_endgame_10_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.shituolin_endgame_10.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_10_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“莲座交锋”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“莲座交锋”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_11_beat",
+          "title": "局势中的浮屠塔困局",
+          "summary": "围绕“浮屠塔困局”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.shituolin_endgame_11_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.shituolin_endgame_11.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_11_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“浮屠塔困局”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“浮屠塔困局”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_12_beat",
+          "title": "局势中的李辅国肉身败亡",
+          "summary": "围绕“李辅国肉身败亡”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.shituolin_endgame_12_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.shituolin_endgame_12.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_12_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“李辅国肉身败亡”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“李辅国肉身败亡”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_13_beat",
+          "title": "局势中的太皇太后返老",
+          "summary": "围绕“太皇太后返老”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.shituolin_endgame_13_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.shituolin_endgame_13.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_13_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“太皇太后返老”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“太皇太后返老”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_14_beat",
+          "title": "局势中的驱魂线索",
+          "summary": "围绕“驱魂线索”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.shituolin_endgame_14_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.shituolin_endgame_14.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_14_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“驱魂线索”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“驱魂线索”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_15_beat",
+          "title": "局势中的黑魔海旧怨开放口",
+          "summary": "围绕“黑魔海旧怨开放口”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.shituolin_endgame_15_beat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.shituolin_endgame_15.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_15_beat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“黑魔海旧怨开放口”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“黑魔海旧怨开放口”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        }
+      ],
+      "structuralAnchors": [],
+      "forkableOutcomes": [],
+      "referenceBeats": []
+    }
   },
   "rules": {
     "mode": "strict",

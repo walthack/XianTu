@@ -5537,7 +5537,364 @@
           "lyg.event.debut_shefuren"
         ]
       }
-    ]
+    ],
+    "worldSimulation": {
+      "version": 1,
+      "situations": [
+        {
+          "id": "world-sim.baseline.lyg.changgan_begins.lyg.event.s03_01",
+          "title": "局势中的入住长安宣平坊宅院",
+          "summary": "围绕“入住长安宣平坊宅院”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.s03_01",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s03_01.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.changgan_begins.lyg.event.s03_01",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“入住长安宣平坊宅院”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“入住长安宣平坊宅院”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.changgan_begins.lyg.event.s03_02",
+          "title": "局势中的程宗扬与祁远重逢叙旧",
+          "summary": "围绕“程宗扬与祁远重逢叙旧”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.s03_02",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s03_02.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.changgan_begins.lyg.event.s03_02",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“程宗扬与祁远重逢叙旧”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“程宗扬与祁远重逢叙旧”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.changgan_begins.lyg.event.s03_03",
+          "title": "局势中的泼寒胡戏与杨玉环飙车斗殴",
+          "summary": "围绕“泼寒胡戏与杨玉环飙车斗殴”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.s03_03",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s03_03.done",
+                "operator": "eq",
+                "value": true
+              }
+            ],
+            [
+              {
+                "path": "flags.world.r2_9.lyg_event_s03_03.offscreen_resolved",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.changgan_begins.lyg.event.s03_03",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“泼寒胡戏与杨玉环飙车斗殴”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“泼寒胡戏与杨玉环飙车斗殴”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.changgan_begins.lyg.event.s03_04",
+          "title": "局势中的潘金莲在长安出现",
+          "summary": "围绕“潘金莲在长安出现”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.s03_04",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s03_04.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.changgan_begins.lyg.event.s03_04",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“潘金莲在长安出现”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“潘金莲在长安出现”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.changgan_begins.lyg.event.s03_05",
+          "title": "局势中的袁天罡心态崩溃与道出经历",
+          "summary": "围绕“袁天罡心态崩溃与道出经历”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.s03_05",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s03_05.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.changgan_begins.lyg.event.s03_05",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“袁天罡心态崩溃与道出经历”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“袁天罡心态崩溃与道出经历”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.changgan_begins.lyg.event.s03_06",
+          "title": "局势中的贾文和调查杨玉环背景",
+          "summary": "围绕“贾文和调查杨玉环背景”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.s03_06",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s03_06.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.changgan_begins.lyg.event.s03_06",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“贾文和调查杨玉环背景”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“贾文和调查杨玉环背景”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.changgan_begins.lyg.event.s03_07",
+          "title": "局势中的程宗扬与杨玉环初次会面",
+          "summary": "围绕“程宗扬与杨玉环初次会面”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.s03_07",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s03_07.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.changgan_begins.lyg.event.s03_07",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“程宗扬与杨玉环初次会面”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“程宗扬与杨玉环初次会面”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.changgan_begins.lyg.event.s03_08",
+          "title": "局势中的小紫与吕雉被困大雁塔",
+          "summary": "围绕“小紫与吕雉被困大雁塔”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.s03_08",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s03_08.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.changgan_begins.lyg.event.s03_08",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“小紫与吕雉被困大雁塔”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“小紫与吕雉被困大雁塔”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.changgan_begins.lyg.event.s03_09",
+          "title": "局势中的程宗扬在紫云楼宴后夜访大慈恩寺",
+          "summary": "围绕“程宗扬在紫云楼宴后夜访大慈恩寺”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.s03_09",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s03_09.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.changgan_begins.lyg.event.s03_09",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“程宗扬在紫云楼宴后夜访大慈恩寺”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“程宗扬在紫云楼宴后夜访大慈恩寺”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        }
+      ],
+      "structuralAnchors": [],
+      "forkableOutcomes": [],
+      "referenceBeats": []
+    }
   },
   "rules": {
     "mode": "strict",

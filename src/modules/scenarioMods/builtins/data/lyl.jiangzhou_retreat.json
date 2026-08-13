@@ -3152,7 +3152,219 @@
           "lyl.event.debut_zhuoyunjun"
         ]
       }
-    ]
+    ],
+    "worldSimulation": {
+      "version": 1,
+      "situations": [
+        {
+          "id": "world-sim.baseline.lyl.jiangzhou_retreat.lyl.event.s01_01",
+          "title": "局势中的江州宋军大溃与退军",
+          "summary": "围绕“江州宋军大溃与退军”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.s01_01",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s01_01.done",
+                "operator": "eq",
+                "value": true
+              }
+            ],
+            [
+              {
+                "path": "flags.world.r2_9.lyl_event_s01_01.offscreen_resolved",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.jiangzhou_retreat.lyl.event.s01_01",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“江州宋军大溃与退军”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“江州宋军大溃与退军”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.jiangzhou_retreat.lyl.event.s01_02",
+          "title": "局势中的程宗扬离开江州赴临安",
+          "summary": "围绕“程宗扬离开江州赴临安”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.s01_02",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s01_02.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.jiangzhou_retreat.lyl.event.s01_02",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“程宗扬离开江州赴临安”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“程宗扬离开江州赴临安”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.jiangzhou_retreat.lyl.event.s01_03",
+          "title": "局势中的荆溪村寨被屠",
+          "summary": "围绕“荆溪村寨被屠”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.s01_03",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s01_03.done",
+                "operator": "eq",
+                "value": true
+              }
+            ],
+            [
+              {
+                "path": "flags.world.r2_9.lyl_event_s01_03.offscreen_resolved",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.jiangzhou_retreat.lyl.event.s01_03",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“荆溪村寨被屠”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“荆溪村寨被屠”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.jiangzhou_retreat.lyl.event.s01_04",
+          "title": "局势中的程宗扬与滕甫交易三十万石粮食",
+          "summary": "围绕“程宗扬与滕甫交易三十万石粮食”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.s01_04",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s01_04.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.jiangzhou_retreat.lyl.event.s01_04",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“程宗扬与滕甫交易三十万石粮食”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“程宗扬与滕甫交易三十万石粮食”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyl.jiangzhou_retreat.lyl.event.s01_05",
+          "title": "局势中的王团练上钩与常平仓失火",
+          "summary": "围绕“王团练上钩与常平仓失火”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyl.event.s01_05",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s01_05.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyl.jiangzhou_retreat.lyl.event.s01_05",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“王团练上钩与常平仓失火”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“王团练上钩与常平仓失火”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        }
+      ],
+      "structuralAnchors": [],
+      "forkableOutcomes": [],
+      "referenceBeats": []
+    }
   },
   "rules": {
     "mode": "strict",

@@ -6249,7 +6249,357 @@
           ]
         }
       }
-    ]
+    ],
+    "worldSimulation": {
+      "version": 1,
+      "situations": [
+        {
+          "id": "world-sim.baseline.lyg.mijing_rumen.lyg.event.s02_01",
+          "title": "局势中的郭解送葬",
+          "summary": "围绕“郭解送葬”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.s02_01",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s02_01.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.mijing_rumen.lyg.event.s02_01",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“郭解送葬”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“郭解送葬”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.mijing_rumen.lyg.event.s02_02",
+          "title": "局势中的赵飞燕中毒昏迷",
+          "summary": "围绕“赵飞燕中毒昏迷”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.s02_02",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s02_02.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.mijing_rumen.lyg.event.s02_02",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“赵飞燕中毒昏迷”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“赵飞燕中毒昏迷”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.mijing_rumen.lyg.event.s02_03",
+          "title": "局势中的程宗扬割腕输血救赵飞燕",
+          "summary": "围绕“程宗扬割腕输血救赵飞燕”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.s02_03",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s02_03.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.mijing_rumen.lyg.event.s02_03",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“程宗扬割腕输血救赵飞燕”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“程宗扬割腕输血救赵飞燕”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.mijing_rumen.lyg.event.s02_04",
+          "title": "局势中的云丹琉闯入质问婚事",
+          "summary": "围绕“云丹琉闯入质问婚事”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.s02_04",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s02_04.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.mijing_rumen.lyg.event.s02_04",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“云丹琉闯入质问婚事”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“云丹琉闯入质问婚事”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.mijing_rumen.lyg.event.s02_05",
+          "title": "局势中的程宗扬与云苍峰商议婚事与财政",
+          "summary": "围绕“程宗扬与云苍峰商议婚事与财政”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.s02_05",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s02_05.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.mijing_rumen.lyg.event.s02_05",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“程宗扬与云苍峰商议婚事与财政”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“程宗扬与云苍峰商议婚事与财政”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.mijing_rumen.lyg.event.s02_06",
+          "title": "局势中的程宗扬请霍子孟做媒",
+          "summary": "围绕“程宗扬请霍子孟做媒”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.s02_06",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s02_06.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.mijing_rumen.lyg.event.s02_06",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“程宗扬请霍子孟做媒”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“程宗扬请霍子孟做媒”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.mijing_rumen.lyg.event.s02_07",
+          "title": "局势中的程宗扬探视金蜜镝并谈论帝统",
+          "summary": "围绕“程宗扬探视金蜜镝并谈论帝统”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.s02_07",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s02_07.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.mijing_rumen.lyg.event.s02_07",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“程宗扬探视金蜜镝并谈论帝统”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“程宗扬探视金蜜镝并谈论帝统”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.mijing_rumen.lyg.event.s02_08",
+          "title": "局势中的程宗扬安排武帝秘境探索",
+          "summary": "围绕“程宗扬安排武帝秘境探索”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.s02_08",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s02_08.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.mijing_rumen.lyg.event.s02_08",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“程宗扬安排武帝秘境探索”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“程宗扬安排武帝秘境探索”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lyg.mijing_rumen.lyg.event.s02_09",
+          "title": "局势中的程宗扬在武帝像前引发真龙异象",
+          "summary": "围绕“程宗扬在武帝像前引发真龙异象”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lyg.event.s02_09",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s02_09.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lyg.mijing_rumen.lyg.event.s02_09",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“程宗扬在武帝像前引发真龙异象”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“程宗扬在武帝像前引发真龙异象”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        }
+      ],
+      "structuralAnchors": [],
+      "forkableOutcomes": [],
+      "referenceBeats": []
+    }
   },
   "rules": {
     "mode": "strict",

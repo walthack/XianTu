@@ -1387,7 +1387,471 @@
           ]
         }
       }
-    ]
+    ],
+    "worldSimulation": {
+      "version": 1,
+      "situations": [
+        {
+          "id": "world-sim.baseline.lcq.stage_03.lcq.event.s03_01",
+          "title": "局势中的与苏妲己订下南荒之约",
+          "summary": "围绕“与苏妲己订下南荒之约”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s03_01",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s03_01.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_03.lcq.event.s03_01",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“与苏妲己订下南荒之约”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“与苏妲己订下南荒之约”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_03.lcq.event.s03_02",
+          "title": "局势中的赌局落败签下卖身契",
+          "summary": "围绕“赌局落败签下卖身契”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s03_02",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s03_02.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_03.lcq.event.s03_02",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“赌局落败签下卖身契”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“赌局落败签下卖身契”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_03.lcq.event.s03_03",
+          "title": "局势中的以新奇器物向苏妲己索酬",
+          "summary": "围绕“以新奇器物向苏妲己索酬”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s03_03",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s03_03.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_03.lcq.event.s03_03",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“以新奇器物向苏妲己索酬”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“以新奇器物向苏妲己索酬”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_03.lcq.event.s03_04",
+          "title": "局势中的赎买并释放阿姬曼",
+          "summary": "围绕“赎买并释放阿姬曼”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s03_04",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s03_04.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_03.lcq.event.s03_04",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“赎买并释放阿姬曼”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“赎买并释放阿姬曼”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_03.lcq.event.s03_05",
+          "title": "局势中的苏妲己以冰蛊逼迫南行",
+          "summary": "围绕“苏妲己以冰蛊逼迫南行”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s03_05",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s03_05.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_03.lcq.event.s03_05",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“苏妲己以冰蛊逼迫南行”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“苏妲己以冰蛊逼迫南行”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_03.lcq.event.s03_06",
+          "title": "局势中的武二郎被迫加入南荒队伍",
+          "summary": "围绕“武二郎被迫加入南荒队伍”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s03_06",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s03_06.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_03.lcq.event.s03_06",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“武二郎被迫加入南荒队伍”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“武二郎被迫加入南荒队伍”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_03.lcq.event.s03_07",
+          "title": "局势中的铁索桥遇袭",
+          "summary": "围绕“铁索桥遇袭”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s03_07",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s03_07.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_03.lcq.event.s03_07",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“铁索桥遇袭”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“铁索桥遇袭”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_03.lcq.event.s03_08",
+          "title": "局势中的劝住武二郎继续南行",
+          "summary": "围绕“劝住武二郎继续南行”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s03_08",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s03_08.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_03.lcq.event.s03_08",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“劝住武二郎继续南行”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“劝住武二郎继续南行”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_03.lcq.event.s03_09",
+          "title": "局势中的凝羽提出弑主并揭开寒气",
+          "summary": "围绕“凝羽提出弑主并揭开寒气”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s03_09",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s03_09.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_03.lcq.event.s03_09",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“凝羽提出弑主并揭开寒气”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“凝羽提出弑主并揭开寒气”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_03.lcq.event.s03_10",
+          "title": "局势中的太乙真宗拦截紫溪船队",
+          "summary": "围绕“太乙真宗拦截紫溪船队”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s03_10",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s03_10.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_03.lcq.event.s03_10",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“太乙真宗拦截紫溪船队”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“太乙真宗拦截紫溪船队”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_03.lcq.event.s03_11",
+          "title": "局势中的雨林恶兆与黑石滩渡河",
+          "summary": "围绕“雨林恶兆与黑石滩渡河”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s03_11",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s03_11.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_03.lcq.event.s03_11",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“雨林恶兆与黑石滩渡河”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“雨林恶兆与黑石滩渡河”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_03.lcq.event.s03_12",
+          "title": "局势中的抵达寂静的蛇彝村",
+          "summary": "围绕“抵达寂静的蛇彝村”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s03_12",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s03_12.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_03.lcq.event.s03_12",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“抵达寂静的蛇彝村”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“抵达寂静的蛇彝村”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        }
+      ],
+      "structuralAnchors": [],
+      "forkableOutcomes": [],
+      "referenceBeats": []
+    }
   },
   "rules": {
     "mode": "strict",

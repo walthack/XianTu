@@ -4661,7 +4661,395 @@
           ]
         }
       }
-    ]
+    ],
+    "worldSimulation": {
+      "version": 1,
+      "situations": [
+        {
+          "id": "world-sim.baseline.lcq.stage_07_qingyuan_jiankang.lcq.event.s07_01_old_case",
+          "title": "局势中的同门旧案",
+          "summary": "围绕“同门旧案”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s07_01_old_case",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s07_01.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_07_qingyuan_jiankang.lcq.event.s07_01_old_case",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“同门旧案”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“同门旧案”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_07_qingyuan_jiankang.lcq.event.s07_02_kill_wu",
+          "title": "局势中的清远斩吴",
+          "summary": "围绕“清远斩吴”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s07_02_kill_wu",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s07_02.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_07_qingyuan_jiankang.lcq.event.s07_02_kill_wu",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“清远斩吴”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“清远斩吴”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_07_qingyuan_jiankang.lcq.event.s07_03_xiaozi_appears",
+          "title": "局势中的小紫现身",
+          "summary": "围绕“小紫现身”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s07_03_xiaozi_appears",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s07_03.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_07_qingyuan_jiankang.lcq.event.s07_03_xiaozi_appears",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“小紫现身”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“小紫现身”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_07_qingyuan_jiankang.lcq.event.s07_04_zhuo_subdued",
+          "title": "局势中的卓云君受制",
+          "summary": "围绕“卓云君受制”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s07_04_zhuo_subdued",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s07_04.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_07_qingyuan_jiankang.lcq.event.s07_04_zhuo_subdued",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“卓云君受制”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“卓云君受制”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_07_qingyuan_jiankang.lcq.event.s07_05_eight_steeds_informed",
+          "title": "局势中的八骏得讯",
+          "summary": "围绕“八骏得讯”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s07_05_eight_steeds_informed",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s07_05.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_07_qingyuan_jiankang.lcq.event.s07_05_eight_steeds_informed",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“八骏得讯”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“八骏得讯”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_07_qingyuan_jiankang.lcq.event.s07_06_water_assassins",
+          "title": "局势中的水鬼暗杀",
+          "summary": "围绕“水鬼暗杀”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s07_06_water_assassins",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s07_06.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_07_qingyuan_jiankang.lcq.event.s07_06_water_assassins",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“水鬼暗杀”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“水鬼暗杀”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_07_qingyuan_jiankang.lcq.event.s07_07_dragon_hall",
+          "title": "局势中的神龙殿夜探",
+          "summary": "围绕“神龙殿夜探”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s07_07_dragon_hall",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s07_07.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_07_qingyuan_jiankang.lcq.event.s07_07_dragon_hall",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“神龙殿夜探”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“神龙殿夜探”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_07_qingyuan_jiankang.lcq.event.s07_08_palace_escape",
+          "title": "局势中的宫险分逃",
+          "summary": "围绕“宫险分逃”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s07_08_palace_escape",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s07_08.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_07_qingyuan_jiankang.lcq.event.s07_08_palace_escape",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“宫险分逃”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“宫险分逃”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_07_qingyuan_jiankang.lcq.event.s07_09_hengtang_ambush",
+          "title": "局势中的横塘遇袭",
+          "summary": "围绕“横塘遇袭”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s07_09_hengtang_ambush",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s07_09.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_07_qingyuan_jiankang.lcq.event.s07_09_hengtang_ambush",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“横塘遇袭”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“横塘遇袭”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_07_qingyuan_jiankang.lcq.event.s07_10_dragon_fang",
+          "title": "局势中的龙牙杀机",
+          "summary": "围绕“龙牙杀机”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s07_10_dragon_fang",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s07_10.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_07_qingyuan_jiankang.lcq.event.s07_10_dragon_fang",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“龙牙杀机”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“龙牙杀机”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        }
+      ],
+      "structuralAnchors": [],
+      "forkableOutcomes": [],
+      "referenceBeats": []
+    }
   },
   "rules": {
     "mode": "strict",

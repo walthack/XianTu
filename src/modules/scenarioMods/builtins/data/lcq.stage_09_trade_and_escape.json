@@ -4565,7 +4565,395 @@
           ]
         }
       }
-    ]
+    ],
+    "worldSimulation": {
+      "version": 1,
+      "situations": [
+        {
+          "id": "world-sim.baseline.lcq.stage_09_trade_and_escape.lcq.event.s09_01_eight_steeds_leave",
+          "title": "局势中的八骏离建康",
+          "summary": "围绕“八骏离建康”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s09_01_eight_steeds_leave",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s09_01.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_09_trade_and_escape.lcq.event.s09_01_eight_steeds_leave",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“八骏离建康”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“八骏离建康”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_09_trade_and_escape.lcq.event.s09_02_yun_ruyao_faints",
+          "title": "局势中的云如瑶昏厥",
+          "summary": "围绕“云如瑶昏厥”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s09_02_yun_ruyao_faints",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s09_02.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_09_trade_and_escape.lcq.event.s09_02_yun_ruyao_faints",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“云如瑶昏厥”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“云如瑶昏厥”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_09_trade_and_escape.lcq.event.s09_03_xiaozi_wounded",
+          "title": "局势中的小紫重伤",
+          "summary": "围绕“小紫重伤”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s09_03_xiaozi_wounded",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s09_03.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_09_trade_and_escape.lcq.event.s09_03_xiaozi_wounded",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“小紫重伤”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“小紫重伤”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_09_trade_and_escape.lcq.event.s09_04_weaving_trade",
+          "title": "局势中的织坊换局",
+          "summary": "围绕“织坊换局”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s09_04_weaving_trade",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s09_04.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_09_trade_and_escape.lcq.event.s09_04_weaving_trade",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“织坊换局”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“织坊换局”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_09_trade_and_escape.lcq.event.s09_05_drain_escape",
+          "title": "局势中的排水沟沉江",
+          "summary": "围绕“排水沟沉江”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s09_05_drain_escape",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s09_05.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_09_trade_and_escape.lcq.event.s09_05_drain_escape",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“排水沟沉江”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“排水沟沉江”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_09_trade_and_escape.lcq.event.s09_06_blacksea_fracture",
+          "title": "局势中的黑魔海内隙",
+          "summary": "围绕“黑魔海内隙”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s09_06_blacksea_fracture",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s09_06.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_09_trade_and_escape.lcq.event.s09_06_blacksea_fracture",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“黑魔海内隙”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“黑魔海内隙”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_09_trade_and_escape.lcq.event.s09_07_feiniao_infiltration",
+          "title": "局势中的飞鸟潜伏",
+          "summary": "围绕“飞鸟潜伏”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s09_07_feiniao_infiltration",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s09_07.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_09_trade_and_escape.lcq.event.s09_07_feiniao_infiltration",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“飞鸟潜伏”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“飞鸟潜伏”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_09_trade_and_escape.lcq.event.s09_08_six_doors_confession",
+          "title": "局势中的六扇门供认",
+          "summary": "围绕“六扇门供认”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s09_08_six_doors_confession",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s09_08.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_09_trade_and_escape.lcq.event.s09_08_six_doors_confession",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“六扇门供认”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“六扇门供认”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_09_trade_and_escape.lcq.event.s09_09_jiangzhou_crisis",
+          "title": "局势中的江州危急",
+          "summary": "围绕“江州危急”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s09_09_jiangzhou_crisis",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s09_09.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_09_trade_and_escape.lcq.event.s09_09_jiangzhou_crisis",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“江州危急”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“江州危急”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_09_trade_and_escape.lcq.event.s09_10_separation",
+          "title": "局势中的失散收束",
+          "summary": "围绕“失散收束”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "sourceEventId": "lcq.event.s09_10_separation",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s09_10.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_09_trade_and_escape.lcq.event.s09_10_separation",
+            "afterTurns": 1,
+            "observableFacts": [
+              "围绕“失散收束”的安排正在被重新核对",
+              "相关人物、口信或行路次序出现了细小变化"
+            ],
+            "transmitters": [
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "presentation": {
+              "title": "风声有变",
+              "text": "有人低声提到“失散收束”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+            }
+          }
+        }
+      ],
+      "structuralAnchors": [],
+      "forkableOutcomes": [],
+      "referenceBeats": []
+    }
   },
   "rules": {
     "mode": "strict",
