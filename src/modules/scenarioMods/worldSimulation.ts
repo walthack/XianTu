@@ -60,6 +60,8 @@ export interface WorldSimulationRuntimeState {
   deliveredOmenIds?: string[];
   /** 本轮刚送达、供主阅读面与下一轮叙事使用。 */
   pendingOmenIds?: string[];
+  /** 各世界局势首次成为当前局势的世界回合；不受无关事件推进/停滞计数影响。 */
+  situationActivatedAtTurns?: Record<string, number>;
 }
 
 export interface WorldSimulationRuntime {
@@ -165,14 +167,20 @@ export function findWorldOmen(
   return listDeclaredWorldOmens(runtime).find(item => item.omen.id === omenId);
 }
 
-function omenClockAge(runtime: WorldSimulationRuntime, eventId: string): number | undefined {
+function omenClockAge(runtime: WorldSimulationRuntime, item: ResolvedWorldOmen): number | undefined {
+  const eventId = item.eventId;
   const event = runtime.events.find(item => item.id === eventId);
+  if (item.situationId) {
+    const activatedAtTurn = runtime.worldSimulationState?.situationActivatedAtTurns?.[item.situationId];
+    if (activatedAtTurn === undefined) return undefined;
+    return Math.max(0, (Number(runtime.worldTurn) || 0) - activatedAtTurn);
+  }
   const timeline = runtime.eventTimeline?.[eventId];
   if (event?.timeline) {
     if (!timeline) return undefined;
     return Math.max(0, (Number(runtime.worldTurn) || 0) - timeline.eligibleAtTurn);
   }
-  return Math.max(0, Number(runtime.stallTurns) || 0);
+  return undefined;
 }
 
 function omenDue(runtime: WorldSimulationRuntime, item: ResolvedWorldOmen): boolean {
@@ -181,7 +189,7 @@ function omenDue(runtime: WorldSimulationRuntime, item: ResolvedWorldOmen): bool
     const current = getCurrentWorldSituation(runtime);
     if (!current || current.id !== item.situationId) return false;
   }
-  const age = omenClockAge(runtime, item.eventId);
+  const age = omenClockAge(runtime, item);
   return age !== undefined && age >= item.omen.afterTurns;
 }
 
@@ -243,6 +251,13 @@ export function deliverDueWorldOmens(
   if (!runtime || !isWorldSimulationRuntime(runtime) || runtime.worldSimulation?.version !== 1) return [];
   const state = ensureState(runtime);
   state.pendingOmenIds = [];
+  const currentSituation = getCurrentWorldSituation(runtime);
+  if (currentSituation?.omen) {
+    state.situationActivatedAtTurns ||= {};
+    if (state.situationActivatedAtTurns[currentSituation.id] === undefined) {
+      state.situationActivatedAtTurns[currentSituation.id] = Math.max(0, Number(runtime.worldTurn) || 0);
+    }
+  }
   const delivered = new Set(state.deliveredOmenIds || []);
   const settledThisBatch = new Set<string>();
   for (const transition of transitions) {

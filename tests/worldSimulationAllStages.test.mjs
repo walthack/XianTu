@@ -74,7 +74,10 @@ test('a non-curated baseline stage can deliver an in-world omen through the prod
   const mods = await loadBuiltins();
   const mod = mods.find(item => item.manifest.id === 'lyl.luoyang_cloud_secret');
   const runtime = buildStrictScenarioInitialization(mod, '2026-08-14T00:00:00.000Z', { storyMode: 'world_sim' }).runtimeState;
-  runtime.stallTurns = 1;
+  runtime.worldTurn = 0;
+  runtime.stallTurns = 0;
+  assert.equal(deliverDueWorldOmens(runtime, []).length, 0);
+  runtime.worldTurn = 1;
   const transitions = [];
   const notices = deliverDueWorldOmens(runtime, transitions);
   assert.ok(notices.length > 0);
@@ -82,6 +85,24 @@ test('a non-curated baseline stage can deliver an in-world omen through the prod
   assert.ok(runtime.worldSimulationState.deliveredOmenIds.length > 0);
   assert.equal(runtime.flags['world.omen.delivered'], undefined);
   assert.equal(runtime.playerKnowledge?.omen, undefined);
+});
+
+test('baseline omen timing survives unrelated progress that resets global stall turns', async () => {
+  const { buildStrictScenarioInitialization } = await loadTs('../src/modules/scenarioMods/strictInitializer.ts');
+  const { deliverDueWorldOmens } = await loadTs('../src/modules/scenarioMods/worldSimulation.ts');
+  const mod = (await loadBuiltins()).find(item => item.manifest.id === 'lyl.luoyang_cloud_secret');
+  const runtime = buildStrictScenarioInitialization(mod, '2026-08-14T00:00:00.000Z', { storyMode: 'world_sim' }).runtimeState;
+  const firstSituation = runtime.worldSimulation.situations[0];
+  assert.ok(firstSituation.omen);
+  runtime.worldTurn = 0;
+  runtime.stallTurns = 1;
+  assert.equal(deliverDueWorldOmens(runtime, []).length, 0);
+  assert.equal(runtime.worldSimulationState.situationActivatedAtTurns[firstSituation.id], 0);
+  // 完成无关内容会把全局 stallTurns 清零；局势自己的时钟仍应继续走。
+  runtime.worldTurn = 1;
+  runtime.stallTurns = 0;
+  const notices = deliverDueWorldOmens(runtime, []);
+  assert.ok(notices.some(notice => notice.omenId === firstSituation.omen.id));
 });
 
 test('old explicit world_sim saves receive a newly shipped baseline contract without upgrading companion saves', async () => {
