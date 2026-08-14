@@ -2683,8 +2683,8 @@
       "situations": [
         {
           "id": "world-sim.baseline.lyl.lin_an_black_sea.lyl.event.debut_ruan_sisters",
-          "title": "局势中的抵达临安，拜祭谢艺",
-          "summary": "围绕“抵达临安，拜祭谢艺”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "风波亭后香案已备",
+          "summary": "钱塘门内到风波亭后的路被临时让开，祭席与随从位次都在挪动，临安落脚处却还没有定下来。",
           "sourceEventId": "lyl.event.debut_ruan_sisters",
           "settledWhenAny": [
             [
@@ -2701,10 +2701,19 @@
             "id": "omen.baseline.lyl.lin_an_black_sea.lyl.event.debut_ruan_sisters",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“抵达临安，拜祭谢艺”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "风波亭后已摆出拜祭谢艺的香案与清酒",
+              "俞子元带着星月湖军士在侧后整队行礼",
+              "秦桧等人各自敛容，尚未议定落脚"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.yu_zi_yuan"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.qin_hui"
+              },
               {
                 "kind": "messenger"
               },
@@ -2712,17 +2721,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "钱塘门内尘土未歇，亭后柏影里香烟初起，远处轿马仍在让道，一时说不清先安人还是先祭奠。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“抵达临安，拜祭谢艺”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "亭后香烟",
+              "text": "风波亭后香案已齐，俞子元带着星月湖军士在侧后立定。秦桧、林清浦、敖润、冯源各自敛容致意，落脚处的话却被压住。亭外轿马仍在让道，这一拜之后往哪安身，还没有人敢先开口。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.lin_an_black_sea.liuchao.event.wei_yuan_first_contact",
-          "title": "局势中的尾随李师师至威远镖局",
-          "summary": "围绕“尾随李师师至威远镖局”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "遮帘马车转入闹市",
+          "summary": "离开风波亭后，一辆遮帘马车匆匆入城，车上门帘只掀一线；威远镖局门口的岗哨也比平日更密。",
           "sourceEventId": "liuchao.event.wei_yuan_first_contact",
           "settledWhenAny": [
             [
@@ -2739,10 +2748,19 @@
             "id": "omen.baseline.lyl.lin_an_black_sea.liuchao.event.wei_yuan_first_contact",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“尾随李师师至威远镖局”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "遮帘马车自城门方向转入闹市，并未停步",
+              "车帘缝里露出的眉眼像极了旧识李师师",
+              "威远镖局门岗在清点腰牌，口风含糊"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.li_shi_shi"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.qin_hui"
+              },
               {
                 "kind": "messenger"
               },
@@ -2750,17 +2768,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "街口马蹄急促，镖局门楣下灯笼未全亮，巡街的人把闲人往两侧撵，却不肯说局里在等谁。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“尾随李师师至威远镖局”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "镖局灯未齐",
+              "text": "遮帘马车掠过风波亭外的长街，帘缝里那张脸像李师师，车却径直折向威远镖局。秦桧把折扇一顿，只说要去问总镖头家的籍册。门岗来回核腰牌，谁也不肯把返乡的事由说全。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.lin_an_black_sea.lyl.event.ruan_xiangning_secret",
-          "title": "局势中的查勘武穆王府",
-          "summary": "围绕“查勘武穆王府”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "武穆王府封条未启",
+          "summary": "被封的武穆王府外墙可辨屋脊方位，巷口换防比往日更勤，暗处目光一闪即收。",
           "sourceEventId": "lyl.event.ruan_xiangning_secret",
           "settledWhenAny": [
             [
@@ -2777,10 +2795,19 @@
             "id": "omen.baseline.lyl.lin_an_black_sea.lyl.event.ruan_xiangning_secret",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“查勘武穆王府”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "武穆王府封条未启，只能从外墙辨认屋脊",
+              "巷口岗哨换防加快，盘问比平日更短",
+              "暗处有目光一闪即收，不宜在墙根久停"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.qin_hui"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.qing_mian_shou"
+              },
               {
                 "kind": "messenger"
               },
@@ -2788,17 +2815,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "王府一带巷窄墙高，封泥气味混着潮土，远处更鼓刚过，墙根下连落叶都被扫得过分干净。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“查勘武穆王府”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "封府换岗",
+              "text": "武穆王府封条未启，秦桧只让人绕墙辨认屋脊方位。青面兽走在最外侧，俞子元盯着巷口换岗的脚步。暗梢的目光一闪就收，谁也没把里面的线索说破，只把脚步压得更轻。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.lin_an_black_sea.liuchao.event.lin_chong_confront",
-          "title": "局势中的识破皇城司尾随",
-          "summary": "围绕“识破皇城司尾随”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "铜镜里多了一道影",
+          "summary": "前往明庆寺的路上，后头衣色像皇城司的人影贴得更近；寺门香客仍在进出，尚未封路。",
           "sourceEventId": "liuchao.event.lin_chong_confront",
           "settledWhenAny": [
             [
@@ -2815,10 +2842,19 @@
             "id": "omen.baseline.lyl.lin_an_black_sea.liuchao.event.lin_chong_confront",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“识破皇城司尾随”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "秦桧铜镜里映出后头多出一道人影",
+              "俞子元压低声音，说那衣色像皇城司",
+              "明庆寺香客仍在进出，山门尚未加闩"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.qin_hui"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.yu_zi_yuan"
+              },
               {
                 "kind": "messenger"
               },
@@ -2826,17 +2862,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "官道旁柳荫里靴声忽近忽远，寺前香鼎青烟不断，有人把外地客的衣饰往更扎眼处整理，像是要改一改路人的看法。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“识破皇城司尾随”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "镜中尾随",
+              "text": "离开王府往明庆寺时，秦桧铜镜里后头多出一道影子。俞子元只说衣色像皇城司，并不拔刀。程宗扬把袖里银 ingots 换成更扎眼的外地富商打扮，寺门香客仍进进出出，还看不出对方要拦到哪一步。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.lin_an_black_sea.lyl.event.mingqingsi_encounter",
-          "title": "局势中的明庆寺旁观林鲁初会",
-          "summary": "围绕“明庆寺旁观林鲁初会”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "菜园里拔起垂杨",
+          "summary": "明庆寺菜园因花狗起了争执，鲁智深已把垂杨连根拔起，林冲从寺外走近，两边都还没通名。",
           "sourceEventId": "lyl.event.mingqingsi_encounter",
           "settledWhenAny": [
             [
@@ -2853,10 +2889,19 @@
             "id": "omen.baseline.lyl.lin_an_black_sea.lyl.event.mingqingsi_encounter",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“明庆寺旁观林鲁初会”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "菜园里花狗狂吠，佛心庵少女护着花枝",
+              "花和尚把一株垂杨连根拔起，土块乱溅",
+              "林冲从寺外走近，尚未开口通名"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.lu_zhi_shen"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.lin_chong"
+              },
               {
                 "kind": "messenger"
               },
@@ -2864,17 +2909,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "明庆寺菜畦湿土翻开，香客都停在篱外看热闹，谁也不敢先问这两条汉子要不要相识。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“明庆寺旁观林鲁初会”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "篱外初会",
+              "text": "明庆寺菜园里花狗乱吠，鲁智深已把垂杨连根拔起。林冲从寺外走近，两人隔着篱笆对上眼，通名的话还卡在喉间。秦桧把程宗扬往香客堆里一带，这边只宜旁观，不宜这时候上去攀交情。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.lin_an_black_sea.liuchao.event.gather_intel",
-          "title": "局势中的解读便门瓦接头字条",
-          "summary": "围绕“解读便门瓦接头字条”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "祈福字条指向便门瓦",
+          "summary": "保和坊案上摊开祈福榜抄回的字条，申时便门瓦的接头隐约可辨；冯源同时带回薛延山伤重求见的口信。",
           "sourceEventId": "liuchao.event.gather_intel",
           "settledWhenAny": [
             [
@@ -2891,10 +2936,19 @@
             "id": "omen.baseline.lyl.lin_an_black_sea.liuchao.event.gather_intel",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“解读便门瓦接头字条”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "祈福榜抄回的字条摊在保和坊案上",
+              "字间隐约指向二月十九申时便门瓦",
+              "冯源带回雪隼分舵口信，说薛延山伤重求见"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.feng_yuan"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.qin_hui"
+              },
               {
                 "kind": "messenger"
               },
@@ -2902,17 +2956,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "坊内灯火未歇，水镜残光还在碗底晃，门外有人来回传雪隼分舵的话，急，却说不清伤势从哪来。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“解读便门瓦接头字条”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "字条与口信",
+              "text": "保和坊案上那张祈福字条被程宗扬按住，二月十九申时、便门瓦几个字渐渐能读。冯源喘着进门，只说薛延山伤重，要在西湖农居见面。秦桧把两桩事并在一处，谁先回、谁先赴约，都还没有落锤。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.lin_an_black_sea.liuchao.event.factory_registration",
-          "title": "局势中的吏部报到，档案被调",
-          "summary": "围绕“吏部报到，档案被调”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "吏部册页被人抽走",
+          "summary": "工部屯田司客卿报到刚唱到盘江籍贯，林冲在廊上停步，刚填妥的出身档案被书吏抽去另核。",
           "sourceEventId": "liuchao.event.factory_registration",
           "settledWhenAny": [
             [
@@ -2929,10 +2983,19 @@
             "id": "omen.baseline.lyl.lin_an_black_sea.liuchao.event.factory_registration",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“吏部报到，档案被调”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "吏部门厅正在唱名办理工部客卿报到",
+              "林冲在廊上停步，目光落在籍贯册上",
+              "刚填妥的出身档案被书吏抽走另核"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.lin_chong"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.qin_hui"
+              },
               {
                 "kind": "messenger"
               },
@@ -2940,17 +3003,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "吏部廊上墨味混着靴声，案牍一叠叠被提起又放下，谁抽走哪一页，当面都只说一句核对。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“吏部报到，档案被调”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "籍册另核",
+              "text": "程宗扬以盘江籍贯在工部屯田司报到，墨迹未干，林冲已在廊上停住。书吏把刚填的出身档案抽走，只说另核。秦桧把折扇合上，并不争辩，籍册去向比唱名本身更让人胸口发紧。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.lin_an_black_sea.liuchao.event.xue_sun_meeting",
-          "title": "局势中的西湖农居会见薛延山",
-          "summary": "围绕“西湖农居会见薛延山”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "西湖农居药味浓重",
+          "summary": "敖润把人引进西湖农居，帘内药味压过湖风；廊下晾着雪隼腰牌与湿衣，伤者的话只说到太湖水匪。",
           "sourceEventId": "liuchao.event.xue_sun_meeting",
           "settledWhenAny": [
             [
@@ -2967,10 +3030,19 @@
             "id": "omen.baseline.lyl.lin_an_black_sea.liuchao.event.xue_sun_meeting",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“西湖农居会见薛延山”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "西湖农居帘内药味浓重，伤者呼吸浅促",
+              "敖润在门外拦闲人，只放自己人进去",
+              "廊下晾着雪隼腰牌与未干的衣甲"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.ao_run"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.xue_yan_shan"
+              },
               {
                 "kind": "messenger"
               },
@@ -2978,17 +3050,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "湖堤农居灯火压得很低，风里有血腥混着草药，远处偶尔传来点名，人数对不上，也没人敢高声问。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“西湖农居会见薛延山”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "农居托付",
+              "text": "敖润把闲人挡在西湖农居门外。帘内薛延山呼吸浅促，只说太湖上遭了水匪，雪隼的人散了。廊下腰牌和湿衣还在滴水，照管残部的话已经出口，答应不答应，屋里一时静得只剩药炉。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.lin_an_black_sea.liuchao.event.cold_poison_mystery",
-          "title": "局势中的辨认薛延山寒毒",
-          "summary": "围绕“辨认薛延山寒毒”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "腕脉寒得发青",
+          "summary": "薛延山腕脉寒青，药炉压不住冷意；案上备着一枚对照用的鬼牙，他只说夜里看不清来人面目。",
           "sourceEventId": "liuchao.event.cold_poison_mystery",
           "settledWhenAny": [
             [
@@ -3005,10 +3077,15 @@
             "id": "omen.baseline.lyl.lin_an_black_sea.liuchao.event.cold_poison_mystery",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“辨认薛延山寒毒”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "薛延山腕脉寒青，唇色近灰，药炉压不住",
+              "案上备着一枚供对照的鬼牙",
+              "他反复说遇袭夜里看不清来人面目"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.xue_yan_shan"
+              },
               {
                 "kind": "messenger"
               },
@@ -3016,17 +3093,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "农居内窗缝渗进湖上冷雾，铜盆里的热水片刻就结一层薄翳，谁也不敢把寒毒的来路说死。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“辨认薛延山寒毒”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "寒毒对照",
+              "text": "程宗扬按住薛延山的脉，腕上寒得发青，和旧日见过的冷毒气息隐约相近。鬼牙搁在灯下，薛延山摇头，只说夜里看不清来人。同源与否还没有落锤，屋里只剩药味和那一点说不出口的眼熟。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.lin_an_black_sea.lyl.event.ruan_xianglin_scheme",
-          "title": "局势中的应李师师之邀登雷峰塔",
-          "summary": "围绕“应李师师之邀登雷峰塔”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "湖堤上邀上雷峰塔",
+          "summary": "离开农居后，李师师与称作凝姨的美妇在湖堤停步，话锋转向雷峰塔，求助的意思压在游春的客套里。",
           "sourceEventId": "lyl.event.ruan_xianglin_scheme",
           "settledWhenAny": [
             [
@@ -3043,10 +3120,19 @@
             "id": "omen.baseline.lyl.lin_an_black_sea.lyl.event.ruan_xianglin_scheme",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“应李师师之邀登雷峰塔”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "李师师与一位称作凝姨的美妇在湖堤并肩停步",
+              "李师师望向雷峰塔，话里带着求助",
+              "塔院游人未散，山门尚未清场"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.li_shi_shi"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.ruan_xiang_ning"
+              },
               {
                 "kind": "messenger"
               },
@@ -3054,17 +3140,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "雷峰塔影斜在湖面上，游船的鼓声还在，堤上脂粉与湖风混在一处，听得出有人想借同游把难处说开。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“应李师师之邀登雷峰塔”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "塔影邀约",
+              "text": "湖堤上李师师叫身边美妇作凝姨，目光却钉在雷峰塔上。同游的邀请说得轻，底下那句求助压得很低。秦桧站在半步外不插话，塔院游人未散，这一邀是去是留，都还停在堤边风里。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.lin_an_black_sea.liuchao.event.wei_yuan_crisis_deepen",
-          "title": "局势中的查明失镖勒索全貌",
-          "summary": "围绕“查明失镖勒索全貌”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "失镖货册对上高衙内",
+          "summary": "俞子元带回的货册写着高衙内名号与御赐玉带，价值被说成十万贯；以免罪换人入太尉府的说法在门口互相打架。",
           "sourceEventId": "liuchao.event.wei_yuan_crisis_deepen",
           "settledWhenAny": [
             [
@@ -3081,10 +3167,19 @@
             "id": "omen.baseline.lyl.lin_an_black_sea.liuchao.event.wei_yuan_crisis_deepen",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“查明失镖勒索全貌”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "俞子元带回的失镖货册上写着高衙内名号",
+              "货单旁注御赐玉带，价值被说成十万贯",
+              "门口风传以免罪换人入太尉府，说法不一"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.yu_zi_yuan"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.li_shi_shi"
+              },
               {
                 "kind": "messenger"
               },
@@ -3092,17 +3187,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "镖局柜房灯火通明，算盘打了又停，门外闲话把太尉府和高衙内缠在一处，谁也不敢把条件说成定论。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“查明失镖勒索全貌”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "货册风闻",
+              "text": "俞子元把失镖货册摊开：高衙内、御赐玉带、十万贯，一项项写得刺眼。门外又有人说，以免于问罪换李师师进太尉府。李师师站在屏风后不说话，秦桧只看册页，勒索的全貌还停在风闻和墨迹之间。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.lin_an_black_sea.liuchao.event.gao_yanei_showdown",
-          "title": "局势中的雷峰塔逼退高衙内",
-          "summary": "围绕“雷峰塔逼退高衙内”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "塔下靴声点名要人",
+          "summary": "雷峰塔下层靴声杂乱，高衙内带着陆谦与十三太保拾级而上，点名要见李师师，塔窗内外都还没交手。",
           "sourceEventId": "liuchao.event.gao_yanei_showdown",
           "settledWhenAny": [
             [
@@ -3119,10 +3214,19 @@
             "id": "omen.baseline.lyl.lin_an_black_sea.liuchao.event.gao_yanei_showdown",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“雷峰塔逼退高衙内”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "塔下层靴声杂乱，十三太保腰牌晃过回廊",
+              "高衙内带着陆谦拾级而上，点名要见李师师",
+              "塔窗外有人按剑，两边都还没先动手"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.li_shi_shi"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.qin_hui"
+              },
               {
                 "kind": "messenger"
               },
@@ -3130,17 +3234,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "塔砖缝里风声发紧，游人已被往下头撵，栏杆外火把一排排亮起，像是要把人从塔上逼下来。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“雷峰塔逼退高衙内”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "塔上点名",
+              "text": "高衙内带着陆谦和十三太保踏上雷峰塔，点名要见李师师。李师师袖里力道先起，陆谦的手也伸过来。秦桧指风一紧，程宗扬挡在阶口。喝退还是撕破，都停在这一息之间，塔外火把已经围上来。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.lin_an_black_sea.liuchao.event.you_chan_meeting",
-          "title": "局势中的决定继续追查威远失镖",
-          "summary": "围绕“决定继续追查威远失镖”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "塔下轿影转出长街",
+          "summary": "高衙内一行轿影刚转出塔下长街，李师师道谢后先回镖局；秦桧把光明观堂不介入江湖恩怨的话只说到一半。",
           "sourceEventId": "liuchao.event.you_chan_meeting",
           "settledWhenAny": [
             [
@@ -3157,10 +3261,19 @@
             "id": "omen.baseline.lyl.lin_an_black_sea.liuchao.event.you_chan_meeting",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“决定继续追查威远失镖”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "高衙内一行的轿影刚从塔下转出长街",
+              "李师师敛衽道谢，转身先回威远镖局",
+              "秦桧提起光明观堂不管江湖恩怨，话未说完"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.qin_hui"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.li_shi_shi"
+              },
               {
                 "kind": "messenger"
               },
@@ -3168,17 +3281,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "塔院余火未熄，街口闲人又聚回来，失镖的事没人当众再提，却都在看这边还跟不跟下去。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“决定继续追查威远失镖”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "道谢之后",
+              "text": "高衙内的轿影转出长街，李师师致谢后先回镖局。秦桧把折扇打开又合上，只说光明观堂向来不介入江湖恩怨。失镖的线索还在城里，帮还是不帮，话停在塔下风里，并没有替谁做完决定。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.lin_an_black_sea.liuchao.event.black_sea_approach",
-          "title": "局势中的江州铁傀儡场外拍",
-          "summary": "围绕“江州铁傀儡场外拍”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "江州城外铁腥压营",
+          "summary": "江州城外铁腥压过军营炊烟，未完工的铁傀儡关节还在滴油；小紫与一名看不清面容的老者对视试验台。",
           "sourceEventId": "liuchao.event.black_sea_approach",
           "settledWhenAny": [
             [
@@ -3195,10 +3308,15 @@
             "id": "omen.baseline.lyl.lin_an_black_sea.liuchao.event.black_sea_approach",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“江州铁傀儡场外拍”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "江州城外铁腥气压过军营炊烟",
+              "一具未完工的铁傀儡关节还在滴油",
+              "小紫与一名面容未明的老者对视试验台"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.xiao_zi"
+              },
               {
                 "kind": "messenger"
               },
@@ -3206,17 +3324,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "城外荒坪灯火低垂，虎翼军的旗角在远处晃，铁件摩擦声一阵紧一阵，谁也不知道今夜试验要推到哪一步。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“江州铁傀儡场外拍”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "城外试验",
+              "text": "江州城外，小紫立在铁傀儡试验台边，对面老者面目看不真切。关节滴油，铁腥压过营炊。远处虎翼军的旗还在，龙睛一类的器物匣却已被挪到台角。场外这一幕与临安街头隔着江山，谁也还没看见傀儡真正迈步。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.lin_an_black_sea.liuchao.event.final_preparations",
-          "title": "局势中的经过叩天石，前往便门瓦",
-          "summary": "围绕“经过叩天石，前往便门瓦”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "叩天石上插着巨剑",
+          "summary": "御街朝天门内，王哲留在叩天石上的巨剑仍在；便门瓦方向已有人按申时清扫接头处，暗号约定近在眼前。",
           "sourceEventId": "liuchao.event.final_preparations",
           "settledWhenAny": [
             [
@@ -3233,10 +3351,15 @@
             "id": "omen.baseline.lyl.lin_an_black_sea.liuchao.event.final_preparations",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“经过叩天石，前往便门瓦”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "朝天门内叩天石上插着一柄巨剑",
+              "路人指认那是王哲留下的剑痕",
+              "便门瓦一带已有人按申时清扫空地"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.qin_hui"
+              },
               {
                 "kind": "messenger"
               },
@@ -3244,10 +3367,10 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "御街人潮把叩天石围成一圈，剑影压着市声；另一头便门瓦的巷口灯火稀疏，像在等一个对得上暗号的人。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“经过叩天石，前往便门瓦”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "石上剑影",
+              "text": "程宗扬经过朝天门，看见叩天石上那柄巨剑。秦桧把争霸和生意两句话并着说，并不催人驻足。便门瓦方向已有人按申时扫地，祈福字条上的接头还在前头，看剑的人尽可以再走两步，也可以就此折开。"
             }
           }
         }

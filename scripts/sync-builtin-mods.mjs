@@ -11,6 +11,7 @@ import { mkdir, readFile, readdir, writeFile, rm, copyFile } from 'node:fs/promi
 import { existsSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { expandWorldSimBaseline } from './expand-world-sim-baseline.mjs';
+import { applyTrackedWorldSimRefinements } from './world-sim-refinement-overlay.mjs';
 
 const root = resolve(import.meta.dirname, '..');
 const gen = join(root, 'mod-kit', 'generated', 'deepseek-v4-flash');
@@ -30,6 +31,7 @@ async function run() {
     for (const f of (await readdir(stageDir)).filter(n => n.endsWith('.json') && !n.endsWith('.uncertainties.json')).sort()) {
       const text = await readFile(join(stageDir, f), 'utf8');
       const mod = JSON.parse(text);
+      await applyTrackedWorldSimRefinements(mod);
       const id = mod.manifest?.id;
       if (!id) throw new Error(`${book}/${f} 缺 manifest.id`);
       const pretty = `${JSON.stringify(mod, null, 2)}\n`;

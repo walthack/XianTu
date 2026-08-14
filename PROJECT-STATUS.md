@@ -1,7 +1,8 @@
 # 仙途 (XianTu) · 项目总体状况与并行分工文档
 
 > 面向「新加入的 agent」。读完这一篇即可独立认领一个模块开工。
-> 当前认领：Codex（2026-08-14 六朝世界模式已完成全 37-stage world_sim baseline，可玩底座正在做全量门禁与 Claude 二审/真机验收；剧情承重仍以 Claude 逐关复核为收尾门。）
+> 当前认领：Codex（2026-08-14 六朝世界模式已完成全 37-stage world_sim baseline；清羽／云龙 26 stage、251 条征兆已完成 Grok 首稿与确定性合并，正在等待 Claude 剧情二审；燕歌精修另批处理。）
+> 最后更新：2026-08-14（**清羽／云龙 world-sim 征兆精修已进入二审门**：本机 Grok 4.6 Build 按 stage 读取事件、地点、相关人物卡，完成两书 26 关／251 条标题、当前压力、可观察事实、候选传递者、环境兜底与正文插段首稿；Codex 新增可缓存、可拒收、可重跑的批处理脚本与 tracked overlay，逐条锁定原 `stageId + situationId + sourceEventId`，不改事件、条件、时钟、锚点、IF 或结果。人物候选只允许事件既有 relatedCharacterIds，messenger／environment 永久兜底；251/251 映射测试、37 关 schema 与 `canon:build` 600/600 已绿。Grok 自审因只返回 placeholder 已拒收，不计验收证据；下一门为固定提交上的 Claude 剧情二审，关闭 P0/P1/P2 后方可宣称两书精修完成。裁定 #158。）
 > 最后更新：2026-08-14（**六朝世界模式全 37-stage baseline 已生成**：Grok Build 尝试执行但被本机 MCP 读取故障阻塞，Codex 依照同一合同边界收口为可重复脚本 `scripts/expand-world-sim-baseline.mjs`，为其余 36 个 stage 生成 357 个保守 situation/omen；定陶人工纵切原样保留。所有 37 个 builtin stage 均通过 validator，新增 all-stage 回归与既有 35 项 world-sim 聚焦测试全绿，`canon:validate`、`type-check`、37-stage mod validate 全绿。baseline 只保证可进入 `world_sim` 并继续游玩，不代表承重剧情已完成；Claude 逐关剧情／人物复核与真机验收仍是收尾门，裁定 #157。）
 > 最后更新：2026-08-14（**baseline 征兆计时 P1 已收口**：Claude 二审发现自动生成局势借用全局 `stallTurns`，无关推进清零后可能饿死征兆；`c4b7612` 改为每个 situation 记录独立激活世界回合，并新增无关推进回归。全量 `canon:build` 37 关／599 测试、`type-check`、`build:single` 全绿；真机验收仍在进行。）
 > 最后更新：2026-08-14（**固定提交真机窄复验完成**：Claude true-device job `claude-2026-08-13T18-03-03-070Z-c473b7b0` 在 `9a32dd1` 上 `sourceGuardPassed=true`、工作树干净；A 前置拥立征兆、A 刷新去重/无倒计时、C canon_companion 对照、D 旧 schema 回填均 PASS，B 郭解窗口在已有 B2 证据中正文已出现护送链异动，未再重复请求。唯一旧任务超时不作为最终证据；隔离 evidence 保存在 `.xiantu-server/g2-evidence/w1-omens-20260814/`。）

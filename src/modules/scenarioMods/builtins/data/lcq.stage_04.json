@@ -2850,8 +2850,8 @@
       "situations": [
         {
           "id": "world-sim.baseline.lcq.stage_04.lcq.event.s04_01",
-          "title": "局势中的向导朱八八与鬼王峒计划",
-          "summary": "围绕“向导朱八八与鬼王峒计划”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "朱八八被点名向导",
+          "summary": "熊耳铺上，向导人选忽然收紧，花苗送亲队的行止也多了遮掩。谁入峒、为何入峒，都还说不清。",
           "sourceEventId": "lcq.event.s04_01",
           "settledWhenAny": [
             [
@@ -2868,10 +2868,19 @@
             "id": "omen.baseline.lcq.stage_04.lcq.event.s04_01",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“向导朱八八与鬼王峒计划”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "程宗扬当众点了朱八八带路，秦桧、吴三桂被当场回绝",
+              "苏荔把程宗扬和武二郎叫到僻处，压低声音谈送亲队的走法",
+              "云苍峰让人重排商队与花苗的行路次序，不许闲人旁听"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.su_li"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.shang_zhen_yu"
+              },
               {
                 "kind": "messenger"
               },
@@ -2879,17 +2888,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "熊耳铺岔路口有人蹲着辨路，送亲队旗帜与商队货驮挤在一处，远处偶尔传来压低的苗语。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“向导朱八八与鬼王峒计划”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "向导已定",
+              "text": "熊耳铺的雾还没散尽，程宗扬已经当众点了朱八八。秦桧、吴三桂的名字刚出口就被压回去。苏荔随即把人拽到僻处，只说送亲队进峒的次序不能再按原样走。云苍峰在铺口重排货驮，谁也没把话说透。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_04.lcq.event.s04_02",
-          "title": "局势中的鬼王峒武士袭击",
-          "summary": "围绕“鬼王峒武士袭击”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "山涧雾中换防",
+          "summary": "南荒山涧浓雾压低，商队与花苗送亲队同时收紧队形。远处有陌生甲仗声，战端尚未落定。",
           "sourceEventId": "lcq.event.s04_02",
           "settledWhenAny": [
             [
@@ -2913,10 +2922,19 @@
             "id": "omen.baseline.lcq.stage_04.lcq.event.s04_02",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“鬼王峒武士袭击”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "浓雾里传来鬼王峒式甲仗摩擦与短促口令",
+              "凝羽把剑抽到半寸，肩头月牙印在雾里一闪",
+              "武二郎双刀出鞘，苏荔让花苗人靠拢货驮"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.wu_er_lang"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.ning_yu"
+              },
               {
                 "kind": "messenger"
               },
@@ -2924,17 +2942,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "山涧雾气贴着水面，卵石路被打湿，前后队看不清彼此，只有兵器与货箱的轮廓在晃。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“鬼王峒武士袭击”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "雾里甲仗",
+              "text": "南荒山涧的雾忽然贴地压来。货驮还没排完，前方已响起陌生甲仗与短促口令。凝羽剑出半寸，武二郎把双刀一横，苏荔挥手让花苗人贴着货箱收拢。谁先动手、能撑多久，雾里还看不见。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_04.lcq.event.s04_03",
-          "title": "局势中的乐明珠身份揭露",
-          "summary": "围绕“乐明珠身份揭露”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "凝羽伤势未明",
+          "summary": "交手余波未散，凝羽步履发沉，护卫与花苗人围着她争执走法。伤势深浅、还能不能走，都没有定论。",
           "sourceEventId": "lcq.event.s04_03",
           "settledWhenAny": [
             [
@@ -2951,8 +2969,9 @@
             "id": "omen.baseline.lcq.stage_04.lcq.event.s04_03",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“乐明珠身份揭露”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "凝羽肩甲有新裂口，呼吸比平时短促",
+              "武二郎守在她身侧，不许闲人靠近验伤",
+              "花苗人递来止血药草，气味辛烈，她没有立刻接"
             ],
             "transmitters": [
               {
@@ -2962,17 +2981,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "涧边雾气未散，断刃与湿泥混在一起，有人蹲着包扎，有人仍盯着雾深处。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“乐明珠身份揭露”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "剑未归鞘",
+              "text": "雾稍退时，凝羽肩甲裂开一条新口，步子比平时沉。武二郎挡在身侧，不许人乱摸伤口。花苗人递上止血药草，辛味冲鼻，她只看了一眼。商队还停在涧底，前面的路没有人敢先走。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_04.lcq.event.s04_04",
-          "title": "局势中的发蛊事件",
-          "summary": "围绕“发蛊事件”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "送亲队路线改口",
+          "summary": "花苗送亲旗帜仍在，可苏荔对入峒次序的说法前后不一。商队听得半截，不知这是护亲还是另有盘算。",
           "sourceEventId": "lcq.event.s04_04",
           "settledWhenAny": [
             [
@@ -2996,8 +3015,9 @@
             "id": "omen.baseline.lcq.stage_04.lcq.event.s04_04",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“发蛊事件”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "苏荔两次改口，送亲队入峒的先后与原先报备不同",
+              "红苗信物在她袖间一闪，随即被按回去",
+              "商队伙计听见“借道”和“探路”两种说法"
             ],
             "transmitters": [
               {
@@ -3007,17 +3027,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "送亲鼓歇了半拍，旗帜仍立着，队伍却迟迟不按原报备的次序动身。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“发蛊事件”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "旗未动人已改",
+              "text": "花苗送亲旗还立在原处，苏荔却把入峒先后又改了一遍。袖间红苗信物一闪即收。伙计这边听她说借道，那边又听人说是探路。云苍峰皱着眉看货驮，没有当场追问。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_04.lcq.event.s04_05",
-          "title": "局势中的旱洪与易虎之死",
-          "summary": "围绕“旱洪与易虎之死”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "谢仪查验货驮",
+          "summary": "袭击余波未平，谢仪绕着货箱查封记与缺角。账册对不上的地方被单独挑出，还没人敢下结论。",
           "sourceEventId": "lcq.event.s04_05",
           "settledWhenAny": [
             [
@@ -3041,8 +3061,9 @@
             "id": "omen.baseline.lcq.stage_04.lcq.event.s04_05",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“旱洪与易虎之死”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "谢仪按箱核封记，几只货箱的泥印被刮花",
+              "乐明珠跟着记缺角货号，笔尖停了两次",
+              "云苍峰要人把对不上的箱单独码开，不许混入正驮"
             ],
             "transmitters": [
               {
@@ -3052,17 +3073,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "货场灯火未齐，封泥碎屑落在箱沿，有人低声对号，有人把缺箱拖到侧边。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“旱洪与易虎之死”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "封记被刮",
+              "text": "谢仪绕着货驮核封记，几只箱的泥印明显被刮过。乐明珠跟着记缺角货号，笔尖停了两次。云苍峰只吩咐把对不上的箱单独码开。缺的是货还是被人动过手，此刻谁也说不死。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_04.lcq.event.s04_06",
-          "title": "局势中的凝羽毒瘾发作",
-          "summary": "围绕“凝羽毒瘾发作”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "山路夜哨加密",
+          "summary": "商队夜宿处加了两道哨。雾里有人影一闪即逝，口令对不上号，夜里还能不能安睡，没人打包票。",
           "sourceEventId": "lcq.event.s04_06",
           "settledWhenAny": [
             [
@@ -3079,8 +3100,9 @@
             "id": "omen.baseline.lcq.stage_04.lcq.event.s04_06",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“凝羽毒瘾发作”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "前哨把口令从一句改成两句，过哨要核对腰牌",
+              "远处火把明灭不定，不像本队的间距",
+              "武二郎在营外转了一圈，回来只说路湿、脚印杂"
             ],
             "transmitters": [
               {
@@ -3090,17 +3112,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "夜雾贴着营绳，火把间距忽疏忽密，远处偶尔有一声短哨，对不上本队的节拍。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“凝羽毒瘾发作”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "哨口加码",
+              "text": "夜宿处忽然加了两道哨，口令从一句改成两句，过卡还要亮腰牌。营外火把明灭的间距不像本队。武二郎转了一圈回来，只丢下一句：路湿，脚印杂。帐篷里的人听了，谁也没先睡下。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_04.lcq.event.s04_07",
-          "title": "局势中的白夷族到达",
-          "summary": "围绕“白夷族到达”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "白夷改口要现银",
+          "summary": "商队刚入白夷寨，欢迎酒未散，族长已把以货易货改口为限期现款。云苍峰脸色沉了，数目还在桌上。",
           "sourceEventId": "lcq.event.s04_07",
           "settledWhenAny": [
             [
@@ -3117,10 +3139,15 @@
             "id": "omen.baseline.lcq.stage_04.lcq.event.s04_07",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“白夷族到达”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "白夷族长当众改口，要十日內付五万银铢现款",
+              "云苍峰腰间玉饰被他捏得发白，没有立刻应承",
+              "账房把货单抽走，另铺开一张空白银契"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.yun_cang_feng"
+              },
               {
                 "kind": "messenger"
               },
@@ -3128,10 +3155,10 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "白夷寨鼓乐还在响，酒碗未撤，账案上却已换了银契纸，货单被抽到一边。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“白夷族到达”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "酒未冷账已改",
+              "text": "白夷寨的欢迎酒还热着，族长忽然把以货易货改成十日內五万银铢现款。云苍峰腰间玉饰被捏得发白，只让人把货单收起、银契铺上。程宗扬站在侧席，听见两边低声争的是期限，不是迎不迎客。"
             }
           }
         }

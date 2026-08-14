@@ -6304,8 +6304,8 @@
       "situations": [
         {
           "id": "world-sim.baseline.lyl.han_palace_endgame.lyl.event.han_palace_endgame_01_beat",
-          "title": "局势中的吕冀重伤",
-          "summary": "围绕“吕冀重伤”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "吕冀营帐风紧",
+          "summary": "吕冀帐前禁足加严，太后问责与商会金铢的传言对冲，内斗已露在明处，帐内究竟如何仍无人说死。",
           "sourceEventId": "lyl.event.han_palace_endgame_01_beat",
           "settledWhenAny": [
             [
@@ -6322,8 +6322,9 @@
             "id": "omen.baseline.lyl.han_palace_endgame.lyl.event.han_palace_endgame_01_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“吕冀重伤”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "吕冀营帐外加岗，医箱与血衣被匆匆抬入，帐帘不许掀开",
+              "太后使者入帐问责，提到晴州商会与刘建的金铢往来",
+              "帐外对刺伤人数、主使是谁各执一词"
             ],
             "transmitters": [
               {
@@ -6333,17 +6334,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "军营灯火比往日更密，帐角隐约有药气与压低的争执，卫士只拦人，不答问。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“吕冀重伤”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "帐前禁足",
+              "text": "吕冀那一侧忽然加了双岗，医箱进去，帐帘却死死压着。太后的人刚问过晴州商会与刘建的金铢，帐外又把刺伤说成两套互相打架的版本。风已经紧了，只是还没人敢把帐里的事说死。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.han_palace_endgame.lyl.event.han_palace_endgame_02_beat",
-          "title": "局势中的左武军入宫",
-          "summary": "围绕“左武军入宫”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "左武军临宫门",
+          "summary": "吕巨君把左武军与兽蛮队形往宫门收拢，甲仗异香混在一起，入宫令牌与随行名单仍在门口对不上。",
           "sourceEventId": "lyl.event.han_palace_endgame_02_beat",
           "settledWhenAny": [
             [
@@ -6360,8 +6361,9 @@
             "id": "omen.baseline.lyl.han_palace_endgame.lyl.event.han_palace_endgame_02_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“左武军入宫”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "宫门外左武军列阵换防，兽蛮随队，甲仗与兽皮气味一齐压近",
+              "吕巨君亲临点验，入宫次序被反复改写",
+              "队中有人影生疏，卫士对视却不敢点名"
             ],
             "transmitters": [
               {
@@ -6371,17 +6373,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "宫阙外蹄声与号令叠在一起，兽皮鼓与汉营金柝交错，门吏抱着名册来回跑。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“左武军入宫”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "军影压门",
+              "text": "左武军的旗已贴到宫门，兽蛮的皮甲夹在汉营队列里，气味都变了。吕巨君当场改入宫次序，门吏手里的名册对了又乱。队里有个生面孔一闪，卫士只把眼皮压下去，没人敢说今夜究竟进不进宫。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.han_palace_endgame.lyl.event.han_palace_endgame_03_beat",
-          "title": "局势中的含光殿救人",
-          "summary": "围绕“含光殿救人”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "含光殿封门",
+          "summary": "含光殿内外忽然换岗封路，昭仪所在与殿中生人去向对不上号，殿门开合全看一时口令。",
           "sourceEventId": "lyl.event.han_palace_endgame_03_beat",
           "settledWhenAny": [
             [
@@ -6398,8 +6400,9 @@
             "id": "omen.baseline.lyl.han_palace_endgame.lyl.event.han_palace_endgame_03_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“含光殿救人”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "含光殿侧门加闩，内侍说昭仪所在已被临时改迁",
+              "殿前出现兽蛮装束的生人，禁军对不上所属",
+              "两路口令互相顶牛，殿门开了一半又合上"
             ],
             "transmitters": [
               {
@@ -6409,17 +6412,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "殿角铜漏滴得发急，廊上脚步乱，灯影在门槛上来回切，谁也不肯先跨进去。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“含光殿救人”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "殿门锁乱",
+              "text": "含光殿侧门突然上闩，内侍把昭仪的去处说成两处。廊下一身兽蛮装束的人影停了停，禁军对不上他的牌。口令顶着口令，门槛开了一半又合上——殿里紧不紧，门外还没有定论。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.han_palace_endgame.lyl.event.han_palace_endgame_04_beat",
-          "title": "局势中的复道遇伏",
-          "summary": "围绕“复道遇伏”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "复道灯火异常",
+          "summary": "宫中复道临时改线，暗处多了伏兵式的脚印与烟囊，秦桧一带的人影来去太勤，通路是否仍通尚不清楚。",
           "sourceEventId": "lyl.event.han_palace_endgame_04_beat",
           "settledWhenAny": [
             [
@@ -6436,8 +6439,9 @@
             "id": "omen.baseline.lyl.han_palace_endgame.lyl.event.han_palace_endgame_04_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“复道遇伏”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "复道口临时改牌，原路被木障封死半截",
+              "墙根散着未点燃的烟囊与新踩乱的靴印",
+              "文士巾的人影在岔口出现又消失，只留下一句改道"
             ],
             "transmitters": [
               {
@@ -6447,17 +6451,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "夹墙里潮气带着药烟味，灯盏被挪了位置，远处有甲叶轻撞，听不出远近。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“复道遇伏”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "夹墙改道",
+              "text": "复道口的牌子被换掉，半截路用木障堵死。墙根躺着未燃的烟囊，靴印新鲜得还带着土。文士巾的人影在岔口点了一下又没了，只丢下一句改道。这条路还能不能走，夹墙自己不回答。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.han_palace_endgame.lyl.event.han_palace_endgame_05_beat",
-          "title": "局势中的吕巨君自焚",
-          "summary": "围绕“吕巨君自焚”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "平朔殿油火味",
+          "summary": "平朔殿内外堆起灯油与薪材，吕巨君与廖扶入殿后久不出，殿门加封，火气已压在梁上。",
           "sourceEventId": "lyl.event.han_palace_endgame_05_beat",
           "settledWhenAny": [
             [
@@ -6474,8 +6478,9 @@
             "id": "omen.baseline.lyl.han_palace_endgame.lyl.event.han_palace_endgame_05_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“吕巨君自焚”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "平朔殿阶下堆着灯油坛与新劈的薪，近侍不许靠近",
+              "吕巨君入殿，廖扶随侍，殿门从内落下门闩",
+              "殿缝里透出焦油气，卫士对是否举火说法不一"
             ],
             "transmitters": [
               {
@@ -6485,17 +6490,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "殿脊上的风把焦油味送出很远，阶下无人敢高声，只有坛口碰撞的闷响。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“吕巨君自焚”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "殿内燃气",
+              "text": "平朔殿阶下忽然多了油坛和薪垛，近侍把人往外推。吕巨君进了殿，廖扶跟着，门闩是从里面落下的。缝里冒出焦油气，卫士有的说是祭火，有的说是清殿。火还没见着，气已经先压过来了。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.han_palace_endgame.lyl.event.han_palace_endgame_06_beat",
-          "title": "局势中的定陶王得救",
-          "summary": "围绕“定陶王得救”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "定陶王府夜乱",
+          "summary": "定陶王府内外同时告急：赵氏姐妹去向不明，王府本尊失联，闻清语与云丹琉的行踪被说成两套。",
           "sourceEventId": "lyl.event.han_palace_endgame_06_beat",
           "settledWhenAny": [
             [
@@ -6512,8 +6517,9 @@
             "id": "omen.baseline.lyl.han_palace_endgame.lyl.event.han_palace_endgame_06_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“定陶王得救”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "定陶王府门灯尽灭，内院传出女子被挟走的脚步",
+              "王府中人找不到定陶王本人，守卫互指失职",
+              "闻清语与云丹琉的车影被报成相反方向"
             ],
             "transmitters": [
               {
@@ -6523,17 +6529,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "巷口车轮急转又刹住，王府墙上灯影乱晃，远处有人压着嗓子对暗号。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“定陶王得救”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "王府失灯",
+              "text": "定陶王府的门灯一盏盏灭了，内院脚步又急又乱，像有人把人往门外拖。守卫对不上定陶王人在哪，只互相推失职。闻清语与云丹琉的车，被两路探子指成完全相反的方向。夜还没过完，府里先空了一半。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.han_palace_endgame.lyl.event.han_palace_endgame_07_beat",
-          "title": "局势中的秘境入口",
-          "summary": "围绕“秘境入口”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "秘境光柱初现",
+          "summary": "吕雉一侧祭器齐备，比目鱼珠映出光柱雏形，盛姬被带到柱边，入口开不开仍看太后手势。",
           "sourceEventId": "lyl.event.han_palace_endgame_07_beat",
           "settledWhenAny": [
             [
@@ -6550,8 +6556,9 @@
             "id": "omen.baseline.lyl.han_palace_endgame.lyl.event.han_palace_endgame_07_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“秘境入口”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "祭台摆出比目鱼珠，地面光纹一圈圈扩开",
+              "小紫押着盛姬立在光柱边缘，近侍后退不敢近",
+              "吕雉只举手势，未宣入口是否开启"
             ],
             "transmitters": [
               {
@@ -6561,17 +6568,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "空地上的光比灯笼更白，尘土微微离地，四周人声忽然收成一片吸气。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“秘境入口”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "光纹开圈",
+              "text": "吕雉身前的比目鱼珠亮了一下，地上的光纹一圈圈往外爬。小紫把盛姬带到光柱边，近侍全退开。太后只抬了抬手，没说这光是门还是障。柱子立在那儿，谁先进去，谁都还没迈步。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.han_palace_endgame.lyl.event.han_palace_endgame_08_beat",
-          "title": "局势中的董卓入京",
-          "summary": "围绕“董卓入京”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "津门凉州尘起",
+          "summary": "洛都津门外来了自称奉大将军令的凉州军，虎符对不上，骑探往来被截，入京与否卡在闸口。",
           "sourceEventId": "lyl.event.han_palace_endgame_08_beat",
           "settledWhenAny": [
             [
@@ -6588,8 +6595,9 @@
             "id": "omen.baseline.lyl.han_palace_endgame.lyl.event.han_palace_endgame_08_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“董卓入京”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "津门外尘头大，凉州旗号自称奉大将军令入京",
+              "闸口验符，对方拿不出虎符，两边金柝对峙",
+              "城外骑探失联，回报被两套说法打断"
             ],
             "transmitters": [
               {
@@ -6599,17 +6607,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "河风把马汗与黄土吹进城门洞，闸板起一半又落下，吏员抱着空符匣不敢抬头。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“董卓入京”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "闸口无符",
+              "text": "洛都津门外尘头压过来，凉州旗自称奉大将军令入京。闸口要虎符，对面匣子是空的，金柝两边对敲。骑探出去的人没回来，回报被说成两套。闸板悬在半空，城门还没决定开还是关。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.han_palace_endgame.lyl.event.han_palace_endgame_09_beat",
-          "title": "局势中的永安宫攻入",
-          "summary": "围绕“永安宫攻入”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "永安宫外换防",
+          "summary": "金蜜镝部向永安宫收拢，宫门换防紊乱，刘建一侧的人影往阙楼收缩，宫墙里外都在抢位置。",
           "sourceEventId": "lyl.event.han_palace_endgame_09_beat",
           "settledWhenAny": [
             [
@@ -6626,8 +6634,9 @@
             "id": "omen.baseline.lyl.han_palace_endgame.lyl.event.han_palace_endgame_09_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“永安宫攻入”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "永安宫外金蜜镝旗号前移，原驻军被挤到侧廊",
+              "宫门两次改口令，内廷车仗往阙楼方向退去",
+              "墙上箭垛换人，两边都未放箭"
             ],
             "transmitters": [
               {
@@ -6637,17 +6646,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "宫墙根的灯一排排被吹斜，甲叶摩擦声从两头对逼，中间空出一条无人敢走的夹道。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“永安宫攻入”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "宫门改令",
+              "text": "金蜜镝的旗已经贴到永安宫墙根，原驻军被挤进侧廊。宫门口令改了两遍，内廷车仗一辆辆往阙楼收。箭垛上换了人，两边都把弦绷着，却还没人先放。墙里墙外都在抢位置，门还在中间。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.han_palace_endgame.lyl.event.han_palace_endgame_10_beat",
-          "title": "局势中的秦桧斩逆",
-          "summary": "围绕“秦桧斩逆”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "阙楼刀光未定",
+          "summary": "阙楼上下戒严，刘建去向被锁在楼中，秦桧一文士巾登梯，楼门开合之间尚看不出谁先落刀。",
           "sourceEventId": "lyl.event.han_palace_endgame_10_beat",
           "settledWhenAny": [
             [
@@ -6664,8 +6673,9 @@
             "id": "omen.baseline.lyl.han_palace_endgame.lyl.event.han_palace_endgame_10_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“秦桧斩逆”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "阙楼封梯，刘建的仪仗停在半层，不再下楼",
+              "秦桧文士巾登梯，袖里刀鞘轻轻磕了一下栏杆",
+              "楼上下口令对不上，近侍把“献俘”与“护驾”说成两套"
             ],
             "transmitters": [
               {
@@ -6675,10 +6685,10 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "楼檐风急，灯影在梯级上断续，远处金柝乱了一拍，随即又假装整齐。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“秦桧斩逆”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "梯口对令",
+              "text": "阙楼封了梯，刘建的仪仗停在半层不再动。秦桧仍是那身文士巾，登梯时袖里刀鞘轻轻磕了一下栏杆。楼上喊护驾，楼下有人说献俘，两套口令在梯口顶着。刀光还在鞘里，楼却已经静得不像往日。"
             }
           }
         }

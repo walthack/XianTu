@@ -1393,8 +1393,8 @@
       "situations": [
         {
           "id": "world-sim.baseline.lcq.stage_03.lcq.event.s03_01",
-          "title": "局势中的与苏妲己订下南荒之约",
-          "summary": "围绕“与苏妲己订下南荒之约”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "商馆里追问霓龙丝",
+          "summary": "苏妲己已识破来历，仍围着霓龙丝产地追问；颈后烙印被核对，南荒之约尚未落纸。",
           "sourceEventId": "lcq.event.s03_01",
           "settledWhenAny": [
             [
@@ -1411,10 +1411,19 @@
             "id": "omen.baseline.lcq.stage_03.lcq.event.s03_01",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“与苏妲己订下南荒之约”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "苏妲己把霓龙丝产地问得更细，账房也在翻旧货单",
+              "凝羽守在侧室门口，不许外人插话",
+              "程宗扬颈后烙印被灯下核对过一遍"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.su_daji"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.ning_yu"
+              },
               {
                 "kind": "messenger"
               },
@@ -1422,17 +1431,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "白湖商馆内室灯火未撤，账册摊开，门口甲靴来回，霓龙丝的产地被反复追问，却没人宣布下一步。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“与苏妲己订下南荒之约”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "产地未落纸",
+              "text": "苏妲己把霓龙丝问到货单和旧路，凝羽守住侧室，不许闲人靠近。程宗扬颈后的奴隶烙印刚被灯下核对过，南荒三个月的说法只在唇齿间转，还没有人签字画押。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_03.lcq.event.s03_02",
-          "title": "局势中的赌局落败签下卖身契",
-          "summary": "围绕“赌局落败签下卖身契”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "刻香赌约正在铺桌",
+          "summary": "厅里要设一场以凝羽作演示的赌约，刻香已备好；香速与契纸都还没定。",
           "sourceEventId": "lcq.event.s03_02",
           "settledWhenAny": [
             [
@@ -1449,10 +1458,19 @@
             "id": "omen.baseline.lcq.stage_03.lcq.event.s03_02",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“赌局落败签下卖身契”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "厅中摆出刻香与空白契纸，侍从按苏妲己示意布席",
+              "凝羽被点到场中作演示，神色未改",
+              "香座旁多了一只未启封的小匣，无人解释"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.su_daji"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.ning_yu"
+              },
               {
                 "kind": "messenger"
               },
@@ -1460,17 +1478,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "商馆正厅香灰未冷，桌面铺着未填的契纸，刻香已经点上，却没人说赌约以何为赢。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“赌局落败签下卖身契”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "香未燃尽",
+              "text": "正厅忽然布席，凝羽被点到场中作演示，刻香与空白契纸并排放着。香座旁多了一只未启封的小匣，苏妲己只笑不语。香往哪边烧，谁都还没落锤。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_03.lcq.event.s03_03",
-          "title": "局势中的以新奇器物向苏妲己索酬",
-          "summary": "围绕“以新奇器物向苏妲己索酬”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "内室为怪器争执",
+          "summary": "苏妲己为一件她处置不了的新奇器物烦躁；工钱数目在桌上摊开，还没人伸手。",
           "sourceEventId": "lcq.event.s03_03",
           "settledWhenAny": [
             [
@@ -1487,10 +1505,15 @@
             "id": "omen.baseline.lcq.stage_03.lcq.event.s03_03",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“以新奇器物向苏妲己索酬”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "内室屏风后传来器物轻响，苏妲己嗓音发紧",
+              "案上摊着未封的金铢，数目约六十",
+              "程宗扬被单独唤入，门外侍从退避"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.su_daji"
+              },
               {
                 "kind": "messenger"
               },
@@ -1498,17 +1521,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "内室帘幕密闭，案上金铢未封，屏风后有细碎器物声，女主人的吩咐断断续续，没人敢推门细看。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“以新奇器物向苏妲己索酬”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "金铢未封",
+              "text": "苏妲己把程宗扬单独唤进内室，屏风后那件她说不清的器物仍在轻响。案上摊着约六十金铢，未封口。她要人先谈清楚再动手，语气却比平日急。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_03.lcq.event.s03_04",
-          "title": "局势中的赎买并释放阿姬曼",
-          "summary": "围绕“赎买并释放阿姬曼”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "舞姬身契被翻出",
+          "summary": "阿姬曼的奴契从柜里取出，五十金铢的价码写在旁边；出城巷口已有甲士换岗。",
           "sourceEventId": "lcq.event.s03_04",
           "settledWhenAny": [
             [
@@ -1525,10 +1548,19 @@
             "id": "omen.baseline.lcq.stage_03.lcq.event.s03_04",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“赎买并释放阿姬曼”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "账房取出阿姬曼·芭娜的身契，旁注五十金铢",
+              "阿姬曼被带到廊上，不肯立刻收拾行装",
+              "五原城靠近商馆的巷口加了封路木栅"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.a_jiman_bana"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.ning_yu"
+              },
               {
                 "kind": "messenger"
               },
@@ -1536,17 +1568,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "账房灯下摊开一张天竺舞姬的身契，城门方向传来加岗的脚步。契纸可撕可留，巷口木栅却已经立上。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“赎买并释放阿姬曼”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "身契在灯下",
+              "text": "阿姬曼的身契被摊在账案上，旁注五十金铢。她立在廊上，目光躲闪，并不收拾包袱。凝羽那边已把靠近商馆的巷口加上木栅，出城的路忽然窄了一截。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_03.lcq.event.s03_05",
-          "title": "局势中的苏妲己以冰蛊逼迫南行",
-          "summary": "围绕“苏妲己以冰蛊逼迫南行”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "酸梅汤里多了冰",
+          "summary": "苏妲己赐下一盏带冰的酸梅汤，南荒车马的单子同时发到管事手里，时限压得很紧。",
           "sourceEventId": "lcq.event.s03_05",
           "settledWhenAny": [
             [
@@ -1563,10 +1595,19 @@
             "id": "omen.baseline.lcq.stage_03.lcq.event.s03_05",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“苏妲己以冰蛊逼迫南行”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "苏妲己亲自递上带冰块的酸梅汤，神色平静",
+              "祁远连夜核对南荒车马、护卫与奴隶名册",
+              "商馆传话：两日内须备齐出队之物"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.su_daji"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.qi_yuan"
+              },
               {
                 "kind": "messenger"
               },
@@ -1574,17 +1615,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "内厅酸梅汤尚未见底，院里已有人清点车辕与奴册。南行的吩咐来得突然，解不解开那杯里的东西，没人敢先说破。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“苏妲己以冰蛊逼迫南行”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "汤未凉透",
+              "text": "苏妲己把一盏加了冰块的酸梅汤推到面前，话却落到南荒。祁远已经连夜摊开车马与奴册，馆里传两日内备齐出队。汤里那点冰沉在盏底，没人当众揭开。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_03.lcq.event.s03_06",
-          "title": "局势中的武二郎被迫加入南荒队伍",
-          "summary": "围绕“武二郎被迫加入南荒队伍”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "城中搜捕逼回商馆",
+          "summary": "武二郎的镣铐刚被解开，城中又响起搜捕；他退回商馆院墙内，随队南行的价还没谈拢。",
           "sourceEventId": "lcq.event.s03_06",
           "settledWhenAny": [
             [
@@ -1601,10 +1642,19 @@
             "id": "omen.baseline.lcq.stage_03.lcq.event.s03_06",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“武二郎被迫加入南荒队伍”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "采石场一侧的镣铐被卸下，武二郎获准走动",
+              "五原街巷传出点名搜捕，商馆后门加岗",
+              "院内有人压低声音谈南行工钱，数目极薄"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.wu_er_lang"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.ning_yu"
+              },
               {
                 "kind": "messenger"
               },
@@ -1612,17 +1662,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "城中锣声一阵紧过一阵，商馆后门甲士加岗。刚卸镣的白武族勇士退回院墙阴影里，随不随队，还卡在一口价上。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“武二郎被迫加入南荒队伍”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "锣声入巷",
+              "text": "武二郎的镣铐刚卸，城巷里已响起点名搜捕。他退回商馆院墙内，凝羽把后门守死。有人把南行的工钱压到极薄，他握拳不语，还没有应声。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_03.lcq.event.s03_07",
-          "title": "局势中的铁索桥遇袭",
-          "summary": "围绕“铁索桥遇袭”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "南行名册连夜增改",
+          "summary": "南荒商队的名册、车马与口粮被连夜增改，出馆次序互相打架，谁押队尚未写死。",
           "sourceEventId": "lcq.event.s03_07",
           "settledWhenAny": [
             [
@@ -1639,10 +1689,19 @@
             "id": "omen.baseline.lcq.stage_03.lcq.event.s03_07",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“铁索桥遇袭”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "祁远把南荒名册改了两遍，护卫与奴隶栏对不上",
+              "车辕在馆门外排队，却迟迟不发第一辆",
+              "凝羽按苏妲己手谕核对接引人，并不解释去向"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.qi_yuan"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.ning_yu"
+              },
               {
                 "kind": "messenger"
               },
@@ -1650,17 +1709,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "馆门外车铃轻响，灯下名册被墨笔涂改。南行的架子已经支起来，第一辆车仍停在门槛外。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“铁索桥遇袭”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "名册涂改",
+              "text": "祁远灯下把南荒名册改了两遍，护卫栏和奴隶栏对不齐。车辕在门外排着，凝羽只按手谕核对接引人。第一辆车的辕绳握在谁手里，馆里还没有统一的说法。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_03.lcq.event.s03_08",
-          "title": "局势中的劝住武二郎继续南行",
-          "summary": "围绕“劝住武二郎继续南行”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "官道盘查忽然加密",
+          "summary": "出五原往南的官道增设盘查，商队夜宿次序被打乱，有人传是为了截某一支车队。",
           "sourceEventId": "lcq.event.s03_08",
           "settledWhenAny": [
             [
@@ -1677,8 +1736,9 @@
             "id": "omen.baseline.lcq.stage_03.lcq.event.s03_08",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“劝住武二郎继续南行”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "南向官道路口多了陌生甲士，过车要验货单",
+              "白湖商队被要求改宿，原定驿铺临时满员",
+              "口信互相矛盾：有的说查私货，有的说查人"
             ],
             "transmitters": [
               {
@@ -1688,17 +1748,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "南去官道的灯火比往日密，验单的声音隔着车篷传来。商队在路口停住，改宿的牌子已经挂上，缘由却对不上。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“劝住武二郎继续南行”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "路口验单",
+              "text": "南向官道忽然加密盘查，货单要验两遍。祁远接到改宿的牌子，原驿铺说已经满员。有人讲是查私货，有人讲是查人，车队只能在路口多停一夜。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_03.lcq.event.s03_09",
-          "title": "局势中的凝羽提出弑主并揭开寒气",
-          "summary": "围绕“凝羽提出弑主并揭开寒气”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "黑石滩水势不对",
+          "summary": "黑石滩渡口水位与往年不同，两岸缆桩被重新打过；云氏商队也在对岸等渡。",
           "sourceEventId": "lcq.event.s03_09",
           "settledWhenAny": [
             [
@@ -1715,8 +1775,9 @@
             "id": "omen.baseline.lcq.stage_03.lcq.event.s03_09",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“凝羽提出弑主并揭开寒气”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "黑石滩缆绳换了新桩，旧痕还泡在水里",
+              "对岸出现云氏商会的旗号，有人招手要合渡",
+              "祁远与云苍峰隔水对过话，语气谨慎"
             ],
             "transmitters": [
               {
@@ -1726,17 +1787,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "黑石滩水声比往日重，新打的缆桩还渗着湿泥。两岸车铃对响，合不合伙渡，船家只等两头点头。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“凝羽提出弑主并揭开寒气”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "两岸缆响",
+              "text": "黑石滩的旧缆还泡在水里，新桩已经打上。对岸云氏旗号招手，云苍峰隔水问能不能合渡。祁远应得很慢，船在急流里打转，谁先下缆还没定。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_03.lcq.event.s03_10",
-          "title": "局势中的太乙真宗拦截紫溪船队",
-          "summary": "围绕“太乙真宗拦截紫溪船队”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "夜营里多了一把刀",
+          "summary": "合渡之后夜营比肩扎下，一位自称写书人的刀客守在云氏一侧，目光不像文人。",
           "sourceEventId": "lcq.event.s03_10",
           "settledWhenAny": [
             [
@@ -1753,10 +1814,15 @@
             "id": "omen.baseline.lcq.stage_03.lcq.event.s03_10",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“太乙真宗拦截紫溪船队”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "云氏营火旁多了一名带刀的同行者，自称写书",
+              "谢艺守夜时握刀的手法很稳，与话本先生不像",
+              "程宗扬与祁远隔火看了他一眼，并未点破"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.qi_yuan"
+              },
               {
                 "kind": "messenger"
               },
@@ -1764,17 +1830,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "河滩夜营两堆火离得不远。刀客坐在云氏那一侧，话少，刀鞘抵着靴帮，火光里看不清他到底是哪路人。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“太乙真宗拦截紫溪船队”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "隔火看刀",
+              "text": "合渡后两营比肩，云氏火堆旁多了个自称写书的刀客。谢艺守夜时握刀极稳，不像捏笔的手。祁远只看了一眼，把话咽回去，夜风里没人追问来历。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_03.lcq.event.s03_11",
-          "title": "局势中的雨林恶兆与黑石滩渡河",
-          "summary": "围绕“雨林恶兆与黑石滩渡河”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "南荒林径传出空寨",
+          "summary": "前路向导把蛇彝人村寨说成近在半日，却又改口今夜不必进寨；林间鸟雀少得反常。",
           "sourceEventId": "lcq.event.s03_11",
           "settledWhenAny": [
             [
@@ -1791,10 +1857,19 @@
             "id": "omen.baseline.lcq.stage_03.lcq.event.s03_11",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“雨林恶兆与黑石滩渡河”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "向导把抵达蛇彝村的时辰改晚半日",
+              "林径上不见猎获与炊烟，脚印却新旧交错",
+              "武二郎闻了闻风，说林子里人气不对"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.wu_er_lang"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.qi_yuan"
+              },
               {
                 "kind": "messenger"
               },
@@ -1802,17 +1877,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "南荒林径潮气重，鸟雀少。向导把进寨的时辰往后挪，车铃被勒得更低，空寨的说法只在前队嘴里转了一圈。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“雨林恶兆与黑石滩渡河”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "林中人气薄",
+              "text": "前队把蛇彝村说成半日可到，随即又改口今夜不必进寨。林径上炊烟全无，脚印新旧交错。武二郎停步闻风，只丢下一句人气不对，商队仍在原地勒住车铃。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_03.lcq.event.s03_12",
-          "title": "局势中的抵达寂静的蛇彝村",
-          "summary": "围绕“抵达寂静的蛇彝村”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "蛇彝村没有灯火",
+          "summary": "商队已抵蛇彝村寨门口，寨里无灯也无人应；只能先在空巷里安置车马。",
           "sourceEventId": "lcq.event.s03_12",
           "settledWhenAny": [
             [
@@ -1829,10 +1904,19 @@
             "id": "omen.baseline.lcq.stage_03.lcq.event.s03_12",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“抵达寂静的蛇彝村”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "寨门半开，不见灯火，也没有人出来应声",
+              "院落里农具还在，灶灰却是冷的",
+              "祁远压低声音，只让先把车马停在巷口"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.qi_yuan"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.xie_yi"
+              },
               {
                 "kind": "messenger"
               },
@@ -1840,10 +1924,10 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "蛇彝村巷口死静，门板虚掩，连犬吠都没有。车铃被捂住，商队停在寨外，空屋里的真相还没人走进去看。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“抵达寂静的蛇彝村”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "空寨门半开",
+              "text": "商队停在蛇彝村门口，寨里没有一盏灯，也没有人应门。农具还靠在墙根，灶灰是冷的。祁远只吩咐先把车马安置在巷口，谢艺握刀站在侧后，谁也不先跨那道门槛。"
             }
           }
         }

@@ -2671,8 +2671,8 @@
       "situations": [
         {
           "id": "world-sim.baseline.lcq.stage_02.lcq.event.s02_01",
-          "title": "局势中的王哲传功与托付",
-          "summary": "围绕“王哲传功与托付”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "帅帐密召传功",
+          "summary": "帅帐里王哲面色发黯、腰背笔直，亲兵拦闲杂出入，案上锦囊与口诀册被单独收起，传功托付压得帐内发紧。",
           "sourceEventId": "lcq.event.s02_01",
           "settledWhenAny": [
             [
@@ -2689,10 +2689,15 @@
             "id": "omen.baseline.lcq.stage_02.lcq.event.s02_01",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“王哲传功与托付”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "王哲面色发黯、腰背如标枪，独留帐内静候",
+              "亲兵核对准入，闲杂不得近帅帐",
+              "案上锦囊与口诀册被单独封存"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "lcq.character.wang_zhe"
+              },
               {
                 "kind": "messenger"
               },
@@ -2700,17 +2705,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "帅帐门帘压低，点名换岗比平日更密，帐内灯火未灭，却听不见寻常议事的闲话。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“王哲传功与托付”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "帐中密召",
+              "text": "帅帐帘脚压得很低。王哲腰背仍如标枪，脸色却发黯，案上锦囊与口诀册被单独收起。亲兵只核对准入，不说去向。传功与托付压在帐内，还没落到谁肩上。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_02.lcq.event.s02_02",
-          "title": "局势中的左武军与罗马军团大战",
-          "summary": "围绕“左武军与罗马军团大战”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "联军压境换防",
+          "summary": "左武一线加紧换防，天霁营弩位被拖后，罗马与马其顿旗号交错压近，韩庚去向与帅帐号令对不上口。",
           "sourceEventId": "lcq.event.s02_02",
           "settledWhenAny": [
             [
@@ -2734,10 +2739,19 @@
             "id": "omen.baseline.lcq.stage_02.lcq.event.s02_02",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“左武军与罗马军团大战”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "罗马与马其顿旗号交错压近左武一线",
+              "天霁营弩位后撤，帅帐卫士牵走备用战马",
+              "韩庚营旗前移，口信与帅帐号令互相矛盾"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "lcq.character.wang_zhe"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "lcq.character.han_geng"
+              },
               {
                 "kind": "messenger"
               },
@@ -2745,17 +2759,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "远处鼓角断续，烟尘里旗号重叠，换防与毁械的动静交错，一时分不清哪一线先撑不住。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“左武军与罗马军团大战”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "旗号交错",
+              "text": "联军旗号在烟尘里重叠。天霁营弩位被拖后，帅帐卫士牵走备用战马。韩庚营旗前移，口信却与帅帐号令对不上。一线在加紧换防，胜负仍未落地。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_02.lcq.event.s02_03",
-          "title": "局势中的秦军与罗马军团交战",
-          "summary": "围绕“秦军与罗马军团交战”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "天武营阵前吃紧",
+          "summary": "天武营秦军方阵对上罗马第十二军团，弩手还在放矢，对面标枪已成排举起，右翼刺阵的影子压得很近。",
           "sourceEventId": "lcq.event.s02_03",
           "settledWhenAny": [
             [
@@ -2779,10 +2793,15 @@
             "id": "omen.baseline.lcq.stage_02.lcq.event.s02_03",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“秦军与罗马军团交战”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "天武营弩手连发，罗马第十二军团盾墙前压",
+              "对面标枪成排举起，尚未齐投",
+              "月霜在阵侧厉声催阵，右翼已被刺阵影子罩住"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "lcq.character.yue_shuang"
+              },
               {
                 "kind": "messenger"
               },
@@ -2790,17 +2809,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "阵前尘土扬起，弩弦与盾牌磕碰交错，标枪林立如雨前，方阵脚步已有些乱。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“秦军与罗马军团交战”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "标枪林立",
+              "text": "天武营弩矢还在飞，罗马第十二军团的盾墙已压近。标枪成排举起，右刺的影子贴上方阵侧翼。月霜在阵侧催阵，声音发紧。短兵尚未交接，阵脚却已发颤。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_02.lcq.event.s02_04",
-          "title": "局势中的程宗扬在五原城被误抓为奴隶",
-          "summary": "围绕“程宗扬在五原城被误抓为奴隶”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "五原城盘奴",
+          "summary": "五原城口白湖商馆的人拦路核身，烙铁与铁链搁在门边，逃奴画像与路人面目对不上，盘问比平日更密。",
           "sourceEventId": "lcq.event.s02_04",
           "settledWhenAny": [
             [
@@ -2817,8 +2836,8 @@
             "id": "omen.baseline.lcq.stage_02.lcq.event.s02_04",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“程宗扬在五原城被误抓为奴隶”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "城门口白湖商馆的人拦路核身、对照逃奴画像",
+              "门边搁着烙铁与铁链，过路人被反复比对"
             ],
             "transmitters": [
               {
@@ -2828,17 +2847,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "五原城门风里带着焦糊味，核身的队列拉长，画像、烙铁与铁链并置，过路人被反复喝令站住。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“程宗扬在五原城被误抓为奴隶”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "城门盘奴",
+              "text": "五原城门口，白湖商馆的人把逃奴画像按到过路人脸上比对。烙铁与铁链搁在门边，盘问一句比一句密。谁会被拖进去，此刻还说不准。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_02.lcq.event.s02_05",
-          "title": "局势中的程宗扬与阿姬曼·芭娜相遇",
-          "summary": "围绕“程宗扬与阿姬曼·芭娜相遇”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "地牢口信有诈",
+          "summary": "五原城牢房外传来放人的口信，过道灯火被故意留暗，脚步声一前一后，像有人在等开门。",
           "sourceEventId": "lcq.event.s02_05",
           "settledWhenAny": [
             [
@@ -2855,8 +2874,8 @@
             "id": "omen.baseline.lcq.stage_02.lcq.event.s02_05",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“程宗扬与阿姬曼·芭娜相遇”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "牢房外传来提前放人的口信，钥匙却未交到本人手里",
+              "过道灯火留暗，前后脚步声对不齐"
             ],
             "transmitters": [
               {
@@ -2866,17 +2885,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "地牢潮气里混着脂粉与铁锈味，铁门链响了一下又停住，过道尽头有人压低嗓子对暗号。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“程宗扬与阿姬曼·芭娜相遇”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "放人有诈",
+              "text": "牢房外忽然说要放人，钥匙却不交到本人手里。过道灯火留暗，前后脚步对不齐。铁门链响了一下又停住。出去是活路还是套，灯影里看不真切。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_02.lcq.event.s02_06",
-          "title": "局势中的程宗扬见苏妲己",
-          "summary": "围绕“程宗扬见苏妲己”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "商馆女主召见",
+          "summary": "白湖商馆女主人忽然召见外客，馆内男奴回避，护卫凝羽守在侧门，霓龙丝的名号在厅里被压低提起。",
           "sourceEventId": "lcq.event.s02_06",
           "settledWhenAny": [
             [
@@ -2893,10 +2912,19 @@
             "id": "omen.baseline.lcq.stage_02.lcq.event.s02_06",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“程宗扬见苏妲己”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "苏妲己以商馆女主身份召见，衣着华丽、笑意不达眼底",
+              "厅内男奴被喝令回避，霓龙丝的名号被压低追问",
+              "凝羽守在侧门，神色冷，未拦也未解释"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.su_daji"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.ning_yu"
+              },
               {
                 "kind": "messenger"
               },
@@ -2904,10 +2932,10 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "商馆厅柱缠着华彩，炉香过甜，侧门开合极轻，里面问话压得很低，外面只听得见男奴退步。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“程宗扬见苏妲己”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "厅中召见",
+              "text": "白湖商馆厅里炉香过甜。苏妲己衣着华丽，笑意不达眼底，男奴被喝令回避。霓龙丝三个字被压得很低。凝羽守在侧门，既不拦也不解释。召见已经开始，去向却未说破。"
             }
           }
         }

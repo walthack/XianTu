@@ -6116,8 +6116,8 @@
       "situations": [
         {
           "id": "world-sim.baseline.lyl.xiaoyingzhou_blacksea_trap.lyl.event.xiaoyingzhou_blacksea_trap_01_beat",
-          "title": "局势中的途中遇袭",
-          "summary": "围绕“途中遇袭”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "梵天寺路风紧",
+          "summary": "往梵天寺的官道被临时改线，禁军换防与拦车口令对不上，程宗扬与李师师的车仗已落进可疑空档。",
           "sourceEventId": "lyl.event.xiaoyingzhou_blacksea_trap_01_beat",
           "settledWhenAny": [
             [
@@ -6134,10 +6134,15 @@
             "id": "omen.baseline.lyl.xiaoyingzhou_blacksea_trap.lyl.event.xiaoyingzhou_blacksea_trap_01_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“途中遇袭”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "通往梵天寺的岔口被禁军临时封了一段，说是演练",
+              "车夫被改口令，先头探马迟迟不回信",
+              "俞子元压低嗓子让马车减速，两侧林荫里有甲叶轻响"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6145,17 +6150,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "官道尘土未散，路边驿卒把路牌翻过来，远处盔甲摩擦声一阵紧一阵松，没人敢说是护卫还是围堵。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“途中遇袭”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "岔路封了",
+              "text": "去梵天寺的那段官道忽然改了口令。禁军把岔口拦死，探马的旗号对不上，车轮轧过的辙印在林荫处断掉。程宗扬听见俞子元低声让车减速——两侧树影里有人在换位，还看不清是护道还是等车。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.xiaoyingzhou_blacksea_trap.lyl.event.xiaoyingzhou_blacksea_trap_02_beat",
-          "title": "局势中的九阳交换",
-          "summary": "围绕“九阳交换”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "江州条件到了",
+          "summary": "蔺采泉的口信把太乙真宗对江州的支持，绑在九阳神功渊源的一纸承认上，两边说法已经拧在一起。",
           "sourceEventId": "lyl.event.xiaoyingzhou_blacksea_trap_02_beat",
           "settledWhenAny": [
             [
@@ -6172,10 +6177,15 @@
             "id": "omen.baseline.lyl.xiaoyingzhou_blacksea_trap.lyl.event.xiaoyingzhou_blacksea_trap_02_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“九阳交换”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "太乙真宗来人只谈江州，不谈别的援助条款",
+              "口信里反复要程宗扬当众认下九阳神功出处",
+              "江州一线的回书与宗门信使所说的条件互相打架"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6183,17 +6193,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "驿馆里两封信摊开，一封写支援江州，一封只提功法渊源，火漆气味混着茶烟，没人敢先落笔。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“九阳交换”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "口信拧着",
+              "text": "蔺采泉的信使把茶盏一推，话说得很干净：太乙真宗可以给江州撑腰，但要程宗扬先认九阳神功出自谁。江州那边回书却把条件写得更软，两纸对不上。承认与否都还悬着，席上只剩这笔交易的气味。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.xiaoyingzhou_blacksea_trap.lyl.event.xiaoyingzhou_blacksea_trap_03_beat",
-          "title": "局势中的林冲刺配",
-          "summary": "围绕“林冲刺配”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "白虎堂后刺配",
+          "summary": "林冲持刀入白虎堂的风声已落到刺配文书上，江州路的枷锁与押解班次在换，营救窗口忽明忽暗。",
           "sourceEventId": "lyl.event.xiaoyingzhou_blacksea_trap_03_beat",
           "settledWhenAny": [
             [
@@ -6210,10 +6220,15 @@
             "id": "omen.baseline.lyl.xiaoyingzhou_blacksea_trap.lyl.event.xiaoyingzhou_blacksea_trap_03_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“林冲刺配”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "开封传来林冲白虎堂一案已转刺配江州",
+              "押解班次比寻常流配更密，路过驿站不停留",
+              "鲁智深那边只问江州道上何处能截，不提别的"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6221,17 +6236,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "案上刺配文书墨未干，枷环碰案的声音传到廊下，门外差役对江州路程各说一套。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“林冲刺配”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "枷声南去",
+              "text": "白虎堂的案子没在开封停住。刺配江州的文书已经盖印，押解班次比寻常流配更密，驿站只过水不歇人。鲁智深只问江州道上哪一段能截得住。林冲人还在枷里，营救只听见枷环南去的响。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.xiaoyingzhou_blacksea_trap.lyl.event.xiaoyingzhou_blacksea_trap_04_beat",
-          "title": "局势中的野猪林乱战",
-          "summary": "围绕“野猪林乱战”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "野猪林人满",
+          "summary": "野猪林里僧衣、官差与黑衣影子叠在同一条押解路上，袈裟与衣钵的风声比林冲本人更抢先。",
           "sourceEventId": "lyl.event.xiaoyingzhou_blacksea_trap_04_beat",
           "settledWhenAny": [
             [
@@ -6248,10 +6263,15 @@
             "id": "omen.baseline.lyl.xiaoyingzhou_blacksea_trap.lyl.event.xiaoyingzhou_blacksea_trap_04_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“野猪林乱战”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "野猪林路口同时出现官差旗号与僧众行脚",
+              "有人追问衣钵下落，说法与林冲押解路线缠在一起",
+              "皇城司与六扇门的腰牌在林缘交错亮过，随即收起"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6259,17 +6279,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "林雾里钟声与马嘶叠在一处，落叶上有新踩的靴印和僧鞋印，谁先动手还看不清。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“野猪林乱战”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "林里撞旗",
+              "text": "野猪林不再只是押解道。僧众行脚与官差旗号挤在同一段雾里，有人先问衣钵，后才问林冲。皇城司与六扇门的腰牌在林缘亮了一下又收掉。袈裟符文的风已经比刀更快，林子里还没人先出手。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.xiaoyingzhou_blacksea_trap.lyl.event.xiaoyingzhou_blacksea_trap_05_beat",
-          "title": "局势中的静善夜袭",
-          "summary": "围绕“静善夜袭”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "夜雾里找符",
+          "summary": "静善尼姑的行踪贴着袈裟符文转，野猪林宿营地外围的巡更被掐断，夜色比白天更挤。",
           "sourceEventId": "lyl.event.xiaoyingzhou_blacksea_trap_05_beat",
           "settledWhenAny": [
             [
@@ -6286,10 +6306,15 @@
             "id": "omen.baseline.lyl.xiaoyingzhou_blacksea_trap.lyl.event.xiaoyingzhou_blacksea_trap_05_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“静善夜袭”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "营外巡更少了一圈，脚印只到帐后便没了",
+              "有人看见尼姑装束在林缘停过，专问符文抄本",
+              "火药气味从行囊缝里漏出一点，随即被压住"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6297,17 +6322,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "帐外灯火被风压低，林鸟不叫，只余布鞋擦过湿叶的轻响，方向对不准。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“静善夜袭”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "帐后无更",
+              "text": "野猪林过夜的巡更少了一圈。帐后脚印到一半就断，林缘有尼姑装束停过，开口只问袈裟符文抄到了哪一行。行囊缝里漏出极淡的火药味，随即被人按灭。夜还没破，符文比人先被盯上。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.xiaoyingzhou_blacksea_trap.lyl.event.xiaoyingzhou_blacksea_trap_06_beat",
-          "title": "局势中的明庆寺旧识",
-          "summary": "围绕“明庆寺旧识”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "观音殿戒严",
+          "summary": "明庆寺观音殿今夜灯火异常，太皇太后与太后的法会把内外门禁收紧，藻井下多出一双眼睛。",
           "sourceEventId": "lyl.event.xiaoyingzhou_blacksea_trap_06_beat",
           "settledWhenAny": [
             [
@@ -6324,10 +6349,15 @@
             "id": "omen.baseline.lyl.xiaoyingzhou_blacksea_trap.lyl.event.xiaoyingzhou_blacksea_trap_06_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“明庆寺旧识”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "观音殿内外门禁比平日多两道，香客被拦在月台",
+              "郭槐与封德明在廊下换了暗记，不许闲人靠近藻井",
+              "殿中提及宫中旧物时，侍从眼神会往腕上扫"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6335,17 +6365,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "殿角沉香浓得发涩，藻井阴影里木纹发亮，廊下甲士的呼吸比钟声更齐。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“明庆寺旧识”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "殿灯收紧",
+              "text": "明庆寺观音殿今夜不纳闲香客。月台外多了两道门禁，郭槐与封德明在廊下换暗记，藻井方向不许人抬头。殿里说到宫中旧物，侍从的眼睛会往腕上扫一眼。太皇太后与太后的法会还没散，殿里已经不像做功课。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.xiaoyingzhou_blacksea_trap.lyl.event.xiaoyingzhou_blacksea_trap_07_beat",
-          "title": "局势中的剑玉姬落棋",
-          "summary": "围绕“剑玉姬落棋”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "太医局翻档",
+          "summary": "剑玉姬与西门庆把太医局医档摊开，刘太后用药与韦太后宫女的线索被并到同一页，黑魔海气味从纸缝里出来。",
           "sourceEventId": "lyl.event.xiaoyingzhou_blacksea_trap_07_beat",
           "settledWhenAny": [
             [
@@ -6362,10 +6392,15 @@
             "id": "omen.baseline.lyl.xiaoyingzhou_blacksea_trap.lyl.event.xiaoyingzhou_blacksea_trap_07_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“剑玉姬落棋”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "太医局值夜的柜子被提前开锁，药方册少了几页又补回",
+              "有人把刘太后用药与宫女名录对读，不敢出声",
+              "西门庆身边的宫女班次被临时调走，去向说法不一"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6373,17 +6408,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "药柜樟脑压过墨香，灯下纸页翻得太快，门外太医脚步停了两次又走开。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“剑玉姬落棋”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "药册对不上",
+              "text": "太医局值夜的柜子提前开了锁。剑玉姬把刘太后用药与宫女名录摊在同一灯下，西门庆只点头不说话。少了的药方页被补回去，墨色却新。宫女班次被临时抽走，去向两说。纸缝里已经有黑魔海临安布局的气味。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.xiaoyingzhou_blacksea_trap.lyl.event.xiaoyingzhou_blacksea_trap_08_beat",
-          "title": "局势中的小瀛洲杀局",
-          "summary": "围绕“小瀛洲杀局”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "洲上宴有刃",
+          "summary": "小瀛洲水面比岸上更忙，直属营与翻江会的船灯交错，西门庆、剑玉姬一线的席位被摆成对冲。",
           "sourceEventId": "lyl.event.xiaoyingzhou_blacksea_trap_08_beat",
           "settledWhenAny": [
             [
@@ -6400,10 +6435,15 @@
             "id": "omen.baseline.lyl.xiaoyingzhou_blacksea_trap.lyl.event.xiaoyingzhou_blacksea_trap_08_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“小瀛洲杀局”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "洲边夜泊比平日多出几艘无旗快船，吃水很深",
+              "席位图把西门庆与剑玉姬一线对上程宗扬一侧",
+              "水面上已有翻江会的号子，与岸上直属营口令对撞"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6411,17 +6451,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "湖风把酒香和铁锈一起送过来，灯影在涟漪里碎开，谁先靠岸还没有定数。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“小瀛洲杀局”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "船灯对冲",
+              "text": "小瀛洲今夜不像赏月。无旗快船吃水很深，席位图把西门庆、剑玉姬一线对上程宗扬一侧。翻江会的号子从水面过来，岸上直属营的口令顶回去。酒盏还没满，洲上已经摆成两军对坐的样子。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.xiaoyingzhou_blacksea_trap.lyl.event.xiaoyingzhou_blacksea_trap_09_beat",
-          "title": "局势中的剑玉姬真身",
-          "summary": "围绕“剑玉姬真身”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "放生池无影",
+          "summary": "保宁寺放生池水面反常地静，人过无影的说法与屠龙刀的寒意叠在一起，幻术和真身还分不清。",
           "sourceEventId": "lyl.event.xiaoyingzhou_blacksea_trap_09_beat",
           "settledWhenAny": [
             [
@@ -6438,10 +6478,15 @@
             "id": "omen.baseline.lyl.xiaoyingzhou_blacksea_trap.lyl.event.xiaoyingzhou_blacksea_trap_09_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“剑玉姬真身”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "放生池边石栏无露水，人影落不到水里",
+              "寺僧改口不让人靠近池心，理由前后矛盾",
+              "屠龙刀近水时刀脊发寒，远处有极轻的龙吟似的回声"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6449,17 +6494,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "池面平得像一面未开的镜，荷叶纹丝不动，廊铃却自己响了一下。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“剑玉姬真身”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "池面不应",
+              "text": "保宁寺放生池今晚不应人影。石栏干着，人过水面不起纹，寺僧拦着不让近池心，理由改了两回。屠龙刀靠近时刀脊发寒，廊铃无风自响，像极轻的龙吟。剑玉姬在不在水里，还没有人敢先踏下去。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.xiaoyingzhou_blacksea_trap.lyl.event.xiaoyingzhou_blacksea_trap_10_beat",
-          "title": "局势中的八臂收束",
-          "summary": "围绕“八臂收束”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "寺里高手叠至",
+          "summary": "保宁寺内外忽然挤满不相统属的高手：米远志奉命到场，老僧禅房有异响，撤退与突围的路同时被盯上。",
           "sourceEventId": "lyl.event.xiaoyingzhou_blacksea_trap_10_beat",
           "settledWhenAny": [
             [
@@ -6476,10 +6521,15 @@
             "id": "omen.baseline.lyl.xiaoyingzhou_blacksea_trap.lyl.event.xiaoyingzhou_blacksea_trap_10_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“八臂收束”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "米远志现身廊下，只称奉蔺采泉之命，不说打哪一边",
+              "已闭关的老僧禅房灯火又起，传出衣袂多重摩擦",
+              "蒙面人在侧门一带出没，屠龙刀与退路同时被人问价"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6487,10 +6537,10 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "钟楼方向脚步乱成几股，鞭梢破风与刀鸣交错，寺门开合不定，谁先退谁先补位都还没定。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“八臂收束”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "禅房灯再起",
+              "text": "保宁寺今夜不像收场。米远志在廊下只报蔺采泉的名，已闭关的老僧禅房重新亮灯，衣袂摩擦多出几层。侧门有蒙面人问屠龙刀，又问哪条路还能走。剑玉姬一线的人影在殿角聚了又散，杀局往哪边收，寺里谁也不先开口。"
             }
           }
         }

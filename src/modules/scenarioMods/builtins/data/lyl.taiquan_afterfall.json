@@ -6262,8 +6262,8 @@
       "situations": [
         {
           "id": "world-sim.baseline.lyl.taiquan_afterfall.lyl.event.taiquan_afterfall_01_beat",
-          "title": "局势中的蚁穴脱险",
-          "summary": "围绕“蚁穴脱险”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "蚁穴毒息发闷",
+          "summary": "蚁穴阵纹发闷、毒息黏衣，程宗扬与虞白樱的记号被潮气抹去，出路仍对不上。",
           "sourceEventId": "lyl.event.taiquan_afterfall_01_beat",
           "settledWhenAny": [
             [
@@ -6280,10 +6280,15 @@
             "id": "omen.baseline.lyl.taiquan_afterfall.lyl.event.taiquan_afterfall_01_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“蚁穴脱险”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "蚁穴内壁阵纹忽明忽暗，泥缝渗出黏热毒息",
+              "程宗扬与虞白樱改道试探，先前记号已被潮气抹去",
+              "出口方向风声断续，洞壁传来刮擦"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6291,17 +6296,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "蚁穴深处潮热发闷，阵纹忽明忽暗，泥缝渗出黏热气味，远处洞壁刮擦断续，一时分不清哪条缝能走出去。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“蚁穴脱险”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "穴中毒息",
+              "text": "蚁穴里阵纹忽然发闷，泥缝渗出黏热毒息，先前记号也被潮气抹去。程宗扬与虞白樱只得改道试探，出口的风声时有时无，眼下还说不清哪条缝能通出去。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.taiquan_afterfall.lyl.event.taiquan_afterfall_02_beat",
-          "title": "局势中的下水道救人",
-          "summary": "围绕“下水道救人”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "下水道口有拖痕",
+          "summary": "下水道口铁栅半开，湿阶拖痕未干，深处有压抑呼救，是谁被留在下面还对不上号。",
           "sourceEventId": "lyl.event.taiquan_afterfall_02_beat",
           "settledWhenAny": [
             [
@@ -6318,10 +6323,15 @@
             "id": "omen.baseline.lyl.taiquan_afterfall.lyl.event.taiquan_afterfall_02_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“下水道救人”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "下水道口铁栅半开，湿阶上两道新拖痕通向暗处",
+              "井壁挂着被扯落的衣角与未干水渍",
+              "深处传来压抑呼救，回声被流水搅碎"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6329,17 +6339,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "下水道口铁栅半开，湿阶上拖痕未干，井壁挂着被扯落的衣角。流水声里夹着断续呼救，一时分不清是谁被留在深处。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“下水道救人”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "井下拖痕",
+              "text": "下水道口铁栅半开，湿阶上两道新拖痕通向暗处，井壁还挂着被扯落的衣角。流水声里夹着压抑呼救，程宗扬听见回声被搅碎，只知有人被留在深处，尚未对上姓名。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.taiquan_afterfall.lyl.event.taiquan_afterfall_03_beat",
-          "title": "局势中的魔墟夺宝",
-          "summary": "围绕“魔墟夺宝”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "魔墟空匣起争",
+          "summary": "魔墟旧匣被翻开，玄秘贝不在原位，琉璃光晕引来几路探子，珠落谁手仍说不清。",
           "sourceEventId": "lyl.event.taiquan_afterfall_03_beat",
           "settledWhenAny": [
             [
@@ -6356,8 +6366,9 @@
             "id": "omen.baseline.lyl.taiquan_afterfall.lyl.event.taiquan_afterfall_03_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“魔墟夺宝”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "魔墟祭台空匣大开，匣底只余贝壳印痕",
+              "深处一闪琉璃光晕，几路人影同时改道",
+              "口信互相打架：有人说珠在东廊，有人说已易手"
             ],
             "transmitters": [
               {
@@ -6367,17 +6378,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "魔墟祭台空匣大开，匣底只余印痕。深处一闪琉璃光晕，几路人影同时改道，口信说法不一，一时分不清珠落谁手。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“魔墟夺宝”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "空匣光晕",
+              "text": "魔墟祭台空匣大开，匣底只余贝壳印痕。深处琉璃光晕一闪，几路人影同时改道，口信却互相打架：有人说珠在东廊，有人说已经易手，眼下还没人敢断。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.taiquan_afterfall.lyl.event.taiquan_afterfall_04_beat",
-          "title": "局势中的莫氏对质",
-          "summary": "围绕“莫氏对质”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "莫府旧账翻动",
+          "summary": "莫府内室连夜掌灯，碧姬旧匣与空珠盘摊上案几，对质的人还没坐定。",
           "sourceEventId": "lyl.event.taiquan_afterfall_04_beat",
           "settledWhenAny": [
             [
@@ -6394,10 +6405,15 @@
             "id": "omen.baseline.lyl.taiquan_afterfall.lyl.event.taiquan_afterfall_04_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“莫氏对质”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "莫府内室连夜掌灯，案上摊开碧姬旧匣与空珠盘",
+              "小紫一侧名刺被拦在中门，莫如霖一侧闭门不见客",
+              "廊下两拨下人说法相反：一说珠宝失踪，一说另有旧情"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6405,17 +6421,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "莫府内室连夜掌灯，案上摊着旧匣与空珠盘。中门拦着名刺，廊下两拨下人各执一词，一时分不清是旧账还是私情要翻出来。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“莫氏对质”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "旧匣空盘",
+              "text": "莫府内室连夜掌灯，案上摊开碧姬旧匣与空珠盘。小紫一侧的名刺被拦在中门，廊下下人各执一词：有人咬定珠宝失踪，有人只敢提旧日私情。对质还没坐定，账却翻到了明处。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.taiquan_afterfall.lyl.event.taiquan_afterfall_05_beat",
-          "title": "局势中的太泉古阵",
-          "summary": "围绕“太泉古阵”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "居住区灯火异样",
+          "summary": "人类居住区里灯火长廊与货柜残阵不像寻常里坊，程宗扬与小紫还在对照太泉古阵的走法。",
           "sourceEventId": "lyl.event.taiquan_afterfall_05_beat",
           "settledWhenAny": [
             [
@@ -6432,10 +6448,15 @@
             "id": "omen.baseline.lyl.taiquan_afterfall.lyl.event.taiquan_afterfall_05_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“太泉古阵”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "居住区深处灯火隔间连成一条，货柜残阵整齐得不像废墟",
+              "程宗扬认出若干器物形制近乎旧世市集，小紫只当它是阵眼",
+              "古阵纹路绕着这些厅堂走，像在护一层避难的壳"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6443,17 +6464,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "人类居住区灯火隔间连成一条，货柜残阵整齐得不像废墟。古阵纹路绕着厅堂走，一时分不清这是阵眼，还是给人藏身的壳。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“太泉古阵”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "灯火残阵",
+              "text": "人类居住区深处灯火隔间连成一条，货柜残阵整齐得不像废墟。程宗扬看着那些近乎旧世市集的形制，小紫仍按阵眼去摸。古阵纹路绕着厅堂走，像在护一层壳，眼下还说不清里面藏的是什么。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.taiquan_afterfall.lyl.event.taiquan_afterfall_06_beat",
-          "title": "局势中的云如瑶私奔",
-          "summary": "围绕“云如瑶私奔”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "云府退回名刺",
+          "summary": "程宗扬再递提亲名刺被退，门房点到身边女子身份未明，云府侧门加岗，人还在府中。",
           "sourceEventId": "lyl.event.taiquan_afterfall_06_beat",
           "settledWhenAny": [
             [
@@ -6470,10 +6491,15 @@
             "id": "omen.baseline.lyl.taiquan_afterfall.lyl.event.taiquan_afterfall_06_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“云如瑶私奔”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "云府门房把提亲名刺原封退回，只说此议再议",
+              "门房压低声音点到程宗扬身边女子身份未明",
+              "侧门加岗，云如瑶起居窗灯仍亮，车马却被拦在巷口"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6481,17 +6507,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "云府门房把提亲名刺原封退回，侧门加岗。窗灯仍亮，车马却被拦在巷口，一时分不清是拒亲还是另有变故。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“云如瑶私奔”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "名刺被退",
+              "text": "云府门房把提亲名刺原封退回，只说此议再议，又压低声音点到程宗扬身边女子身份未明。侧门加了岗，云如瑶起居窗灯仍亮，车马却被拦在巷口，眼下还走不成正门。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.taiquan_afterfall.lyl.event.taiquan_afterfall_07_beat",
-          "title": "局势中的洛都风波",
-          "summary": "围绕“洛都风波”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "洛都奏章乱传",
+          "summary": "洛都街巷传开宁成奏章抄件，平亭侯府门异常换防，邳宅灯火骤暗，说法互相打架。",
           "sourceEventId": "lyl.event.taiquan_afterfall_07_beat",
           "settledWhenAny": [
             [
@@ -6508,10 +6534,15 @@
             "id": "omen.baseline.lyl.taiquan_afterfall.lyl.event.taiquan_afterfall_07_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“洛都风波”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "坊间传抄宁成弹劾平亭侯的奏章片段，真伪不一",
+              "平亭侯府门换防加岗，外客名刺被压在门房",
+              "邳宅一带灯火骤暗，有人说抄家将至，有人说只是避风"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6519,17 +6550,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "洛都街巷传开奏章抄件，平亭侯府门换防加岗，邳宅灯火骤暗。有人说抄家将至，有人说只是避风，一时对不上哪边是实。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“洛都风波”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "奏章乱传",
+              "text": "洛都街巷传开宁成弹劾平亭侯的奏章抄件，真伪对不上。平亭侯府门忽然换防，外客名刺被压在门房；邳宅一带灯火又骤暗。有人说抄家将至，有人说只是避风，眼下还没人敢往实处说。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.taiquan_afterfall.lyl.event.taiquan_afterfall_08_beat",
-          "title": "局势中的卖官渠道",
-          "summary": "围绕“卖官渠道”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "西邸门风加密",
+          "summary": "冯子都席间有人出示软晶玉杯与纸式券卡，西邸门房换班更密，卖官口风仍对不齐。",
           "sourceEventId": "lyl.event.taiquan_afterfall_08_beat",
           "settledWhenAny": [
             [
@@ -6546,8 +6577,9 @@
             "id": "omen.baseline.lyl.taiquan_afterfall.lyl.event.taiquan_afterfall_08_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“卖官渠道”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "冯子都席上出现软晶玉杯与纸式券卡，宾客传看不定",
+              "西邸门房换班加密，名刺要过两道才肯递入",
+              "口风互相打架：有人提西邸卖官，有人只敢提徐璜近侍"
             ],
             "transmitters": [
               {
@@ -6557,17 +6589,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "冯子都席上有人传看软晶玉杯与纸式券卡，西邸门房换班更密。口风有的提卖官，有的只敢提近侍，一时分不清哪条路能走通。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“卖官渠道”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "席间券卡",
+              "text": "冯子都席上有人出示软晶玉杯与纸式券卡，宾客传看不定。西邸门房换班加密，名刺要过两道才肯递入。口风互相打架：有人提西邸卖官，有人只敢提徐璜近侍，眼下还对不齐。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.taiquan_afterfall.lyl.event.taiquan_afterfall_09_beat",
-          "title": "局势中的赵飞燕召见",
-          "summary": "围绕“赵飞燕召见”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "求子符入宫门",
+          "summary": "徐璜处收下太乙真宗求子符，符上附一截银链，宫门传话有召无召互相矛盾。",
           "sourceEventId": "lyl.event.taiquan_afterfall_09_beat",
           "settledWhenAny": [
             [
@@ -6584,10 +6616,15 @@
             "id": "omen.baseline.lyl.taiquan_afterfall.lyl.event.taiquan_afterfall_09_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“赵飞燕召见”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "徐璜门下收下求子仙符，符角系着一截银链",
+              "宫门传话前后不一：一拨说赵飞燕要见，一拨说改期",
+              "程宗扬被拦在外廷廊下，名刺未退也未放行"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6595,17 +6632,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "徐璜门下收下求子符，符角系着银链。宫门传话有召无召互相矛盾，外廷廊下名刺未退也未放行，一时分不清见得见不得。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“赵飞燕召见”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "符上银链",
+              "text": "徐璜门下收下太乙真宗求子仙符，符角系着一截银链。宫门传话前后不一：一拨说赵飞燕要见，一拨说改期。程宗扬被拦在外廷廊下，名刺未退也未放行，眼下还进不了内殿。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.taiquan_afterfall.lyl.event.taiquan_afterfall_10_beat",
-          "title": "局势中的襄城君受控",
-          "summary": "围绕“襄城君受控”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "襄城君府换防",
+          "summary": "襄城君府通往密室的廊灯提前熄灭，下人回避孙寿起居，韩定国相关口信被压住。",
           "sourceEventId": "lyl.event.taiquan_afterfall_10_beat",
           "settledWhenAny": [
             [
@@ -6622,10 +6659,15 @@
             "id": "omen.baseline.lyl.taiquan_afterfall.lyl.event.taiquan_afterfall_10_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“襄城君受控”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "襄城君府侧门换防，通往密室的廊灯被提前熄灭",
+              "下人回避孙寿起居，称君侯近日不见外客",
+              "韩定国相关口信在门房被压下，传言互相打架"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6633,10 +6675,10 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "襄城君府侧门忽然换防，通往密室的廊灯提前熄灭。下人回避孙寿起居，门房压住韩定国相关口信，一时分不清府中谁在作主。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“襄城君受控”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "密室换防",
+              "text": "襄城君府侧门忽然换防，通往密室的廊灯被提前熄灭。下人回避孙寿起居，门房又把韩定国相关口信压住不传。府中谁在作主还说不清，只是外客已被拦在廊外。"
             }
           }
         }

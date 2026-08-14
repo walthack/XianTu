@@ -4571,8 +4571,8 @@
       "situations": [
         {
           "id": "world-sim.baseline.lcq.stage_09_trade_and_escape.lcq.event.s09_01_eight_steeds_leave",
-          "title": "局势中的八骏离建康",
-          "summary": "围绕“八骏离建康”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "战后余波待复盘",
+          "summary": "建康战后利益未清，星月湖八骏去向与北府兵权变动同时传来，会面名单被提前排开。",
           "sourceEventId": "lcq.event.s09_01_eight_steeds_leave",
           "settledWhenAny": [
             [
@@ -4589,8 +4589,9 @@
             "id": "omen.baseline.lcq.stage_09_trade_and_escape.lcq.event.s09_01_eight_steeds_leave",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“八骏离建康”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "萧遥逸一侧传出约见帖，地点落在建康城内",
+              "口信并提八骏离湖、北府换权与黑魔海余波",
+              "复盘席上的座次与次序被临时改过一回"
             ],
             "transmitters": [
               {
@@ -4600,17 +4601,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "驿馆廊下灯火未歇，几封盖着北府与湖畔印记的信笺叠在一起，差役只说要等城中会面后再回话。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“八骏离建康”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "约见帖到",
+              "text": "战后余波尚未落定，萧遥逸的约见帖先落到建康。信上并提星月湖八骏离去、北府兵权易手，以及黑魔海那边的残响。座次改过一次，却没人说这场复盘会先谈哪一桩。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_09_trade_and_escape.lcq.event.s09_02_yun_ruyao_faints",
-          "title": "局势中的云如瑶昏厥",
-          "summary": "围绕“云如瑶昏厥”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "云氏案头起异",
+          "summary": "云如瑶翻看程宗扬带来的书册时停得过久，脸色忽变，侍女已去唤人，病因未明。",
           "sourceEventId": "lcq.event.s09_02_yun_ruyao_faints",
           "settledWhenAny": [
             [
@@ -4627,8 +4628,9 @@
             "id": "omen.baseline.lcq.stage_09_trade_and_escape.lcq.event.s09_02_yun_ruyao_faints",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“云如瑶昏厥”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "案上摊着外来书册，有一页被反复按住",
+              "云如瑶神色恍惚，额上见汗，话未说完",
+              "云府内院临时禁足，医箱被匆匆抬过回廊"
             ],
             "transmitters": [
               {
@@ -4638,17 +4640,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "云府内院 Curtain 放下，书页翻动声突然停住，随后是杯盏落地与急促脚步，门外只传出“小姐不适”四字。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“云如瑶昏厥”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "书页停住",
+              "text": "云如瑶翻到程宗扬带来的那叠书时忽然停住，指尖按在一页写得极密的私情描写上，神色先是茫然，随即发白。内院帘幕落下，医箱过廊，谁也说不清她只是受惊，还是另有旧疾被牵动。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_09_trade_and_escape.lcq.event.s09_03_xiaozi_wounded",
-          "title": "局势中的小紫重伤",
-          "summary": "围绕“小紫重伤”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "巡产路上风紧",
+          "summary": "产业巡视被临时加岗，苏妲己旧踪的传言与江岸封渡同时出现，随行次序被打乱。",
           "sourceEventId": "lcq.event.s09_03_xiaozi_wounded",
           "settledWhenAny": [
             [
@@ -4665,10 +4667,15 @@
             "id": "omen.baseline.lcq.stage_09_trade_and_escape.lcq.event.s09_03_xiaozi_wounded",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“小紫重伤”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "巡视产业的路线被改到临江货栈一带",
+              "暗桩回报苏妲己旧踪未散，口风互相打架",
+              "小紫收紧随行间距，江岸渡口忽然加岗"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.xiao_zi"
+              },
               {
                 "kind": "messenger"
               },
@@ -4676,17 +4683,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "货栈外灯笼被风吹得乱晃，江面 mult 有加岗的脚步，远处渡口铁链拖地，却听不清是防贼还是防旧仇。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“小紫重伤”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "江岸加岗",
+              "text": "巡视产业本是例行一遭，路线却被改到临江货栈。暗桩说苏妲己旧踪未散，说法彼此对不上。小紫把随行收得很近，渡口忽然加岗，铁链拖地，谁也说不清风是从哪一侧先紧起来的。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_09_trade_and_escape.lcq.event.s09_04_weaving_trade",
-          "title": "局势中的织坊换局",
-          "summary": "围绕“织坊换局”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "拉链坊归属生隙",
+          "summary": "拉链坊转交云家的风声传到织坊，小紫已上门问账，织机停了一角，交换条件尚未摊开。",
           "sourceEventId": "lcq.event.s09_04_weaving_trade",
           "settledWhenAny": [
             [
@@ -4703,10 +4710,15 @@
             "id": "omen.baseline.lcq.stage_09_trade_and_escape.lcq.event.s09_04_weaving_trade",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“织坊换局”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "织坊账册被抽走一摞，拉链坊名下多了云家印",
+              "小紫满面娇嗔地问归属，指节却扣得发白",
+              "机房一角停织，管事把交换草案藏在袖里"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.xiao_zi"
+              },
               {
                 "kind": "messenger"
               },
@@ -4714,17 +4726,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "织机声忽然缺了一角，账房灯火通明，门帘外传来银铃轻响与压低的问话，谁也不敢先说“转交”二字。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“织坊换局”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "坊契生隙",
+              "text": "拉链坊转交云家的风声刚落到织坊，账册就被抽走一摞。小紫仍是那副娇嗔问账的模样，指节却扣得发白。机房一角停了，管事把未写完的交换草案藏进袖里，谁也不敢先把条件摊到桌上。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_09_trade_and_escape.lcq.event.s09_05_drain_escape",
-          "title": "局势中的排水沟沉江",
-          "summary": "围绕“排水沟沉江”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "排水沟外有追影",
+          "summary": "城南排水沟口被临时封断，追骑灯火沿沟壁移动，沟内潮湿回声里听得出有人在找退路。",
           "sourceEventId": "lcq.event.s09_05_drain_escape",
           "settledWhenAny": [
             [
@@ -4741,8 +4753,9 @@
             "id": "omen.baseline.lcq.stage_09_trade_and_escape.lcq.event.s09_05_drain_escape",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“排水沟沉江”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "排水沟铁栅被从外侧扣上，水位比往日更高",
+              "沟壁灯火一明一灭，口令不像城防常规换岗",
+              "湿泥上有三人并走又折回的新鲜脚印"
             ],
             "transmitters": [
               {
@@ -4752,17 +4765,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "城南沟口潮气上涌，铁栅扣死，远处灯火贴着砖缝移动，水声盖过脚步，辨不清是搜捕还是封路。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“排水沟沉江”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "沟口封断",
+              "text": "城南排水沟的铁栅被从外侧扣死，水位比往日更高。灯火贴着沟壁一明一灭，口令也不像常规换岗。湿泥上有并走又折回的脚印，退路还在不在，眼下谁也不敢把话说死。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_09_trade_and_escape.lcq.event.s09_06_blacksea_fracture",
-          "title": "局势中的黑魔海内隙",
-          "summary": "围绕“黑魔海内隙”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "内堂香主失和",
+          "summary": "黑魔海内堂嫡传与外聘香主之间的差遣忽然对不上，小太监值房熄灯，门口多了两拨互不相让的人。",
           "sourceEventId": "lcq.event.s09_06_blacksea_fracture",
           "settledWhenAny": [
             [
@@ -4779,8 +4792,9 @@
             "id": "omen.baseline.lcq.stage_09_trade_and_escape.lcq.event.s09_06_blacksea_fracture",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“黑魔海内隙”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "内堂差签被撕去半截，外聘香主名下缺值",
+              "值房灯火骤灭，传话只说“计好顶撞了上头”",
+              "嫡传与外聘两拨人在廊下对峙，谁也不让路"
             ],
             "transmitters": [
               {
@@ -4790,17 +4804,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "内堂廊下香灰未扫，两拨人影隔门对峙，值房熄灯，风里只有压低的争执，听不清是家法还是私怨。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“黑魔海内隙”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "内堂对峙",
+              "text": "黑魔海内堂的差签撕去半截，外聘香主名下缺了一值。值房灯火骤灭，有人只说计好顶撞了上头。嫡传与外聘两拨人在廊下互不相让，裂痕已经露在门口，却还没人敢当众把话说破。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_09_trade_and_escape.lcq.event.s09_07_feiniao_infiltration",
-          "title": "局势中的飞鸟潜伏",
-          "summary": "围绕“飞鸟潜伏”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "飞鸟名下有暗账",
+          "summary": "广阳一侧把“飞鸟熊藏”编进夜巡名册，游婵处传来只言片语，脱身日程被压在未拆的密笺里。",
           "sourceEventId": "lcq.event.s09_07_feiniao_infiltration",
           "settledWhenAny": [
             [
@@ -4817,10 +4831,15 @@
             "id": "omen.baseline.lcq.stage_09_trade_and_escape.lcq.event.s09_07_feiniao_infiltration",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“飞鸟潜伏”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "夜巡名册多出飞鸟熊藏四字，口音被注为东瀛",
+              "游婵传话只谈广阳布点，不谈来路去处",
+              "回建康的水路被改签两次，密笺仍未拆封"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -4828,17 +4847,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "广阳驿壁上新贴的夜巡条被风掀起一角，“飞鸟”二字墨迹未干，邻桌有人用生硬吴语学东瀛口音，随即被喝止。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“飞鸟潜伏”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "名册添字",
+              "text": "广阳夜巡名册上多了“飞鸟熊藏”四字，旁注东瀛口音。游婵传来的话只点广阳布点，不提来路。回建康的水路改签两次，那封未拆的密笺压在案角，像随时能走，又像一时走不成。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_09_trade_and_escape.lcq.event.s09_08_six_doors_confession",
-          "title": "局势中的六扇门供认",
-          "summary": "围绕“六扇门供认”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "六扇门里口供松动",
+          "summary": "六扇门加审泉玉姬，供词牵到太湖盟、翻江会与月霜行踪，几份抄件互相打架，尚未定谳。",
           "sourceEventId": "lcq.event.s09_08_six_doors_confession",
           "settledWhenAny": [
             [
@@ -4855,8 +4874,9 @@
             "id": "omen.baseline.lcq.stage_09_trade_and_escape.lcq.event.s09_08_six_doors_confession",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“六扇门供认”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "夜审灯火通明，泉玉姬的供状被誊了三份",
+              "抄件分别写追捕太湖盟、翻江会，又点月霜",
+              "门吏对调哪一案优先意见不一，封条未落"
             ],
             "transmitters": [
               {
@@ -4866,17 +4886,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "六扇门后院灯火一夜未熄，笔尖刮纸声断续传来，廊下叠着未用的封条，谁也不敢先盖下去。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“六扇门供认”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "供状三份",
+              "text": "六扇门夜审未歇，泉玉姬的供状被誊成三份：一份写追捕太湖盟，一份写翻江会，又有一处点到月霜行踪。门吏为先办哪一案争执不下，封条还在廊下，谁也没敢先落印。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_09_trade_and_escape.lcq.event.s09_09_jiangzhou_crisis",
-          "title": "局势中的江州危急",
-          "summary": "围绕“江州危急”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "云水航道被封",
+          "summary": "回晴州的船上先收到云水航道封禁的口信，江州告急与六扇门内身份疑云叠在一起，去向未决。",
           "sourceEventId": "lcq.event.s09_09_jiangzhou_crisis",
           "settledWhenAny": [
             [
@@ -4893,10 +4913,15 @@
             "id": "omen.baseline.lcq.stage_09_trade_and_escape.lcq.event.s09_09_jiangzhou_crisis",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“江州危急”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "云水航道码头封索，商船改泊，税票停发",
+              "江州加急文书与六扇门旧档同时送到船头",
+              "泉玉姬身份说法互相矛盾，月霜一侧仍不信"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -4904,17 +4929,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "回晴州的跳板还搭着，码头铁索已经横过云水航道，船老大只肯说“江州来的加急压过了所有班期”。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“江州危急”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "航道封索",
+              "text": "回晴州的船还没离岸，云水航道先拉上了封索。江州加急与六扇门旧档一起砸到船头，有人口风改称泉玉姬来路不正，月霜一侧听了只摇头。航道封着，人却还站在跳板上，去向一时难决。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_09_trade_and_escape.lcq.event.s09_10_separation",
-          "title": "局势中的失散收束",
-          "summary": "围绕“失散收束”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "江州分手当场",
+          "summary": "江州城门口，卢景把交换任务与带走小紫捆在同一句话里，月霜去向失联，当场没有人松口。",
           "sourceEventId": "lcq.event.s09_10_separation",
           "settledWhenAny": [
             [
@@ -4931,10 +4956,15 @@
             "id": "omen.baseline.lcq.stage_09_trade_and_escape.lcq.event.s09_10_separation",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“失散收束”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "卢景放话：沾月霜便卸腿，同时要带走小紫",
+              "程宗扬只应交换差事，不让人把小紫从身边拉开",
+              "月霜一线口信中断，江州与黑魔海两头同时催人"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -4942,10 +4972,10 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "江州城门灯笼被风吹得来回撞，两拨差官隔着门槛对峙，一份交换文书摊开又合上，谁也不肯先签字。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“失散收束”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "门槛对峙",
+              "text": "江州城门下，卢景把交换差事与带走小紫说成一句话，又撂下沾月霜便卸腿的警告。程宗扬只应了差事，人却不松。月霜那边口信断了，江州与黑魔海两头同时催人，门槛上谁也没先签字。"
             }
           }
         }

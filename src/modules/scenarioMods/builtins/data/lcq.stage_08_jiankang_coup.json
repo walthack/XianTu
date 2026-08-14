@@ -4633,8 +4633,8 @@
       "situations": [
         {
           "id": "world-sim.baseline.lcq.stage_08_jiankang_coup.lcq.event.s08_01_eagle_valley",
-          "title": "局势中的鹰愁峪入瓮",
-          "summary": "围绕“鹰愁峪入瓮”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "鹰愁峪弩影",
+          "summary": "狩猎队伍已入峪口，两侧林影里传来异常整齐的弩机声，谷道像被悄悄收紧。",
           "sourceEventId": "lcq.event.s08_01_eagle_valley",
           "settledWhenAny": [
             [
@@ -4651,10 +4651,15 @@
             "id": "omen.baseline.lcq.stage_08_jiankang_coup.lcq.event.s08_01_eagle_valley",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“鹰愁峪入瓮”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "州府兵旗帜未按猎场惯例散开，而是压在峪口两侧",
+              "谷风里偶有弩弦绷紧的轻响，与寻常围猎不符",
+              "程宗扬察觉行猎次序被改，护卫被挤向谷心"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -4662,17 +4667,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "鹰愁峪两侧林木过密，回声发闷，远处偶尔传来甲叶相撞，却看不见人影。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“鹰愁峪入瓮”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "峪口收紧",
+              "text": "猎骑刚入鹰愁峪，两侧林影便不再像围猎那样松散。弩机被压在暗处，谷道越走越窄。程宗扬摸了摸下巴上的胡茬，没有立刻下令回头。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_08_jiankang_coup.lcq.event.s08_02_wood_fort",
-          "title": "局势中的木垒血战",
-          "summary": "围绕“木垒血战”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "木垒前阵脚乱",
+          "summary": "骑兵已冲过一次阵列，伤员退回木垒，对面步骑仍在重新合围。",
           "sourceEventId": "lcq.event.s08_02_wood_fort",
           "settledWhenAny": [
             [
@@ -4689,10 +4694,15 @@
             "id": "omen.baseline.lcq.stage_08_jiankang_coup.lcq.event.s08_02_wood_fort",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“木垒血战”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "吴三桂所部退回木垒，马匹喷白沫，阵列缺口未合",
+              "州府兵骑兵在垒外绕行，尘土比先前更近",
+              "木垒垛口堆着断矛，守军换防却无人报清敌向"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -4700,17 +4710,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "木垒外尘土反复扬起又落下，鼓点时密时疏，垒内伤号的喘息压过了猎号。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“木垒血战”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "垒门收紧",
+              "text": "冲阵的骑兵退回木垒时，阵列已经缺了一角。州府兵的马蹄在垒外绕圈，尘土一次比一次近。程宗扬靠着垛木，呼吸发沉，却还没人敢说这一轮会守到何时。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_08_jiankang_coup.lcq.event.s08_03_beifu_rescue",
-          "title": "局势中的北府兵解围",
-          "summary": "围绕“北府兵解围”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "禁军旗号可疑",
+          "summary": "木垒外忽然出现禁军旗号，步伐却不像宫中宿卫，解围与再围同样难辨。",
           "sourceEventId": "lcq.event.s08_03_beifu_rescue",
           "settledWhenAny": [
             [
@@ -4727,10 +4737,15 @@
             "id": "omen.baseline.lcq.stage_08_jiankang_coup.lcq.event.s08_03_beifu_rescue",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“北府兵解围”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "远处甲骑打着禁军旗号，队形却偏北府旧习",
+              "州府兵侧翼忽然乱了口令，有人喊来援有人喊再围",
+              "木垒内传令互相矛盾，会合点被说成两处"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -4738,17 +4753,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "烟尘里旗帜一闪即隐，鼓声与口令叠在一起，分不清是解围还是合围。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“北府兵解围”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "旗号难辨",
+              "text": "木垒外忽然闪出禁军旗号，甲叶却不像宿卫那般齐整。有人说是来援，有人说州府兵在换阵。程宗扬扶着垒木听了一会儿，会合点被报成了两处。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_08_jiankang_coup.lcq.event.s08_04_sudaji_enters",
-          "title": "局势中的苏妲己入局",
-          "summary": "围绕“苏妲己入局”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "庭院车辙直入",
+          "summary": "贵客车驾不经外门通报便压进庭院，阶下迎接的次序被临时打乱。",
           "sourceEventId": "lcq.event.s08_04_sudaji_enters",
           "settledWhenAny": [
             [
@@ -4765,10 +4780,15 @@
             "id": "omen.baseline.lcq.stage_08_jiankang_coup.lcq.event.s08_04_sudaji_enters",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“苏妲己入局”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "车轮直碾中庭青砖，门子来不及拦停",
+              "厅门被提前敞开，香炉却空着未添",
+              "程宗扬被唤至阶下，旁人不敢抬头看车帘"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -4776,17 +4796,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "庭院里车轴声压过鸟鸣，帘影一晃，阶前的人站位乱了半拍。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“苏妲己入局”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "车帘压阶",
+              "text": "车驾未在外门停稳，轮迹已压上中庭青砖。厅门大开，香炉却空着。程宗扬被唤到阶下，帘后的气压得满院无声，谁也说不清这一见会如何收场。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_08_jiankang_coup.lcq.event.s08_05_breakthrough",
-          "title": "局势中的入微突破",
-          "summary": "围绕“入微突破”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "丹田余震未平",
+          "summary": "庭院对峙未散，程宗扬丹田处余痛未止，珊瑚匕首贴腕，气机忽乱忽聚。",
           "sourceEventId": "lcq.event.s08_05_breakthrough",
           "settledWhenAny": [
             [
@@ -4803,10 +4823,15 @@
             "id": "omen.baseline.lcq.stage_08_jiankang_coup.lcq.event.s08_05_breakthrough",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“入微突破”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "程宗扬按住丹田，呼吸忽长忽短",
+              "腕侧珊瑚匕首微热，像被什么气息唤醒",
+              "对面气压未退，厅柱上漆皮细细开裂"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -4814,17 +4839,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "厅内热气与冷意交错，烛火歪斜，谁也不敢先迈过门槛。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“入微突破”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "经脉躁动",
+              "text": "丹田处余痛还在，一股反震的热意往经脉里钻。程宗扬拇指擦过珊瑚匕首的鞘口，厅柱漆皮细细开裂。对面气压未退，这一口气会往哪边走，谁也不敢先说。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_08_jiankang_coup.lcq.event.s08_06_pursuit_repelled",
-          "title": "局势中的追杀暂退",
-          "summary": "围绕“追杀暂退”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "庭外追杀未断",
+          "summary": "厅外脚步加快，追杀的气息贴着回廊，另有轻快的紫影与萧氏刀意同时靠近。",
           "sourceEventId": "lcq.event.s08_06_pursuit_repelled",
           "settledWhenAny": [
             [
@@ -4841,10 +4866,19 @@
             "id": "omen.baseline.lcq.stage_08_jiankang_coup.lcq.event.s08_06_pursuit_repelled",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“追杀暂退”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "回廊砖缝里余着未散的杀气，门扇半敞",
+              "小紫银铃极轻一响，却不在平时该在的位置",
+              "远处有人报萧遥逸的脚步近了，方向互相打架"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.xiao_zi"
+              },
               {
                 "kind": "messenger"
               },
@@ -4852,17 +4886,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "庭院外风突然变急，衣袂猎猎，追杀与救援的声息叠在同一条廊上。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“追杀暂退”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "廊上叠影",
+              "text": "厅门半敞，回廊里的杀气还没散尽。银铃极轻地响了一下，不在小紫平时该待的角落；同时又有人报萧遥逸近了。程宗扬踏出两步，追杀会不会被截断，此刻谁也说不准。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_08_jiankang_coup.lcq.event.s08_07_palace_ninja",
-          "title": "局势中的宫中忍影",
-          "summary": "围绕“宫中忍影”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "禁军甲里异音",
+          "summary": "宫室值守的禁军甲叶缝里露出异邦绳结，信札与剑柄的影子还只是传闻。",
           "sourceEventId": "lcq.event.s08_07_palace_ninja",
           "settledWhenAny": [
             [
@@ -4879,10 +4913,15 @@
             "id": "omen.baseline.lcq.stage_08_jiankang_coup.lcq.event.s08_07_palace_ninja",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“宫中忍影”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "当值禁军口音发硬，甲缝里露出异样绳结",
+              "宫室灯火忽然改道，有人把值房门反扣",
+              "传言禁军里混进了东瀛手法，说法却对不上"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -4890,17 +4929,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "宫廊灯影一截明一截暗，甲叶相撞的节奏与宿卫演练对不上号。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“宫中忍影”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "甲缝异结",
+              "text": "宫室里当值的禁军走得太静。甲叶缝里露出绳结，不像宿卫常备。灯火改道，值房门被反扣。程宗扬与萧遥逸对了一眼，信札与剑柄还只是廊下互相打架的传言。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_08_jiankang_coup.lcq.event.s08_08_gumingyin_plot",
-          "title": "局势中的古冥隐毒计",
-          "summary": "围绕“古冥隐毒计”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "太后移驾风紧",
+          "summary": "宫中忽然加紧太后与贵妃的护从，又有人把星月湖的名号往玄骐身上扣。",
           "sourceEventId": "lcq.event.s08_08_gumingyin_plot",
           "settledWhenAny": [
             [
@@ -4917,10 +4956,15 @@
             "id": "omen.baseline.lcq.stage_08_jiankang_coup.lcq.event.s08_08_gumingyin_plot",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“古冥隐毒计”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "太后、贵妃的仪仗被临时改道，护从加倍",
+              "有人把“第八骏玄骐”与萧遥逸并提，随即被喝止",
+              "程宗扬听见己方行踪被宫人复述，细节却错乱"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -4928,17 +4972,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "深宫灯火一夜三迁，口信从内侍手里传来传去，饵与刀都还藏在帘后。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“古冥隐毒计”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "饵已抬出",
+              "text": "太后与贵妃的仪仗忽然改道，护从加倍。有人把星月湖的玄骐和萧遥逸并提，话没说完就被喝住。程宗扬听着宫人复述己方行踪，细节错得厉害，却已足够让人脊背发凉。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_08_jiankang_coup.lcq.event.s08_09_zhaoming_night",
-          "title": "局势中的昭明宫夜战",
-          "summary": "围绕“昭明宫夜战”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "昭明宫刑门紧",
+          "summary": "昭明宫刑室灯火独明，小太监往来加锁，古冥隐的人影在门内停了很久。",
           "sourceEventId": "lcq.event.s08_09_zhaoming_night",
           "settledWhenAny": [
             [
@@ -4955,10 +4999,15 @@
             "id": "omen.baseline.lcq.stage_08_jiankang_coup.lcq.event.s08_09_zhaoming_night",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“昭明宫夜战”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "刑室门闩被从里面加上第二道，脚步凌乱",
+              "小太监来回传话，嗓音发紧，不敢报人名",
+              "廊下有人试门环，力道不像寻常内侍"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -4966,17 +5015,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "昭明宫这一角灯火过亮，刑具铁环偶尔相碰，夜风把血腥气送到隔壁殿角。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“昭明宫夜战”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "刑室试环",
+              "text": "昭明宫刑室的灯一夜未熄。门闩从里面又加了一道，小太监来回传话却不敢报人名。廊下有人试了试门环，力道不像内侍。程宗扬停在暗处，对峙会不会破门，此刻还没有声响。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_08_jiankang_coup.lcq.event.s08_10_xuanwu_rescue",
-          "title": "局势中的玄武湖救驾",
-          "summary": "围绕“玄武湖救驾”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "御舟夜泊异动",
+          "summary": "玄武湖上御舟偏航，水下有刀意掠过，岸上护驾人马却对不上同一条路线。",
           "sourceEventId": "lcq.event.s08_10_xuanwu_rescue",
           "settledWhenAny": [
             [
@@ -4993,10 +5042,15 @@
             "id": "omen.baseline.lcq.stage_08_jiankang_coup.lcq.event.s08_10_xuanwu_rescue",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“玄武湖救驾”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "御舟缆绳被收得过紧，舟身偏离旧航道",
+              "湖面忽然无风起纹，像有人贴着船底游过",
+              "秦桧、吴三桂的人马分两路靠岸，口令互相打架"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -5004,10 +5058,10 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "玄武湖夜雾贴水，桨声断续，远处甲叶与水响叠在一起，分不清护驾还是截驾。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“玄武湖救驾”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "湖上偏航",
+              "text": "御舟在玄武湖上偏了半箭之地，缆绳勒得发紧。无风的水面忽然起纹，像有刃贴着船底掠过。岸上秦桧与吴三桂的人马分两路靠拢，口令却对不齐。程宗扬望着雾，这一趟会护住谁，谁也不敢先喊。"
             }
           }
         }

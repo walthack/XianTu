@@ -4924,8 +4924,8 @@
       "situations": [
         {
           "id": "world-sim.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_01_grain_route_blocked",
-          "title": "局势中的粮路受阻",
-          "summary": "围绕“粮路受阻”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "浮凌江乱石封航",
+          "summary": "浮凌江下游乱石滩水势乱、船脚不敢过，粮船只能改靠岸，转运工钱被反复加码。",
           "sourceEventId": "lcq.event.s12_01_grain_route_blocked",
           "settledWhenAny": [
             [
@@ -4942,10 +4942,15 @@
             "id": "omen.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_01_grain_route_blocked",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“粮路受阻”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "乱石滩前粮船停桨，水手改用纤绳试探",
+              "岸上脚力报价一日三变，互不相让",
+              "程宗扬沿滩查看水纹，迟迟不下令开航"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -4953,17 +4958,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "乱石滩水声碎而急，空船搁在浅滩边，岸上脚力讨价还价，没人敢先把粮袋扛下去。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“粮路受阻”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "乱石挡粮",
+              "text": "浮凌江下游乱石露出水面，粮船到滩口便停。水手只肯用小艇试水，岸上脚力把价喊得一天比一天高。程宗扬蹲在滩边看水纹，还没说出下一条路。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_02_recognize_zhuo",
-          "title": "局势中的沐羽认出卓云君",
-          "summary": "围绕“沐羽认出卓云君”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "沐羽庆典认人",
+          "summary": "沐羽城新年庆典灯火正盛，程宗扬盯着台上云中仙子的眉眼，神色忽然沉下去。",
           "sourceEventId": "lcq.event.s12_02_recognize_zhuo",
           "settledWhenAny": [
             [
@@ -4980,10 +4985,15 @@
             "id": "omen.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_02_recognize_zhuo",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“沐羽认出卓云君”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "庆典台上云中仙子露面，宾客只顾喝彩",
+              "程宗扬看台上的目光停得过久",
+              "席间有人仍以仙号相称，无人改口"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -4991,17 +5001,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "沐羽城灯彩连成一片，鼓乐盖过私语。台上人被称作云中仙子，近处有人把酒杯捏得发紧。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“沐羽认出卓云君”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "台上熟影",
+              "text": "沐羽城新年庆典正到热闹处，云中仙子在台上回身一礼。程宗扬的酒停在半空，目光钉在那张脸上，却没有当场出声。周围仍按仙号敬酒，谁也没把话挑明。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_03_xiaozi_controls_zhuo",
-          "title": "局势中的小紫压制卓云君",
-          "summary": "围绕“小紫压制卓云君”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "紫衫压住场面",
+          "summary": "内室里小紫忽然现身，语气轻软，卓云君一侧的人却不敢再争席位。",
           "sourceEventId": "lcq.event.s12_03_xiaozi_controls_zhuo",
           "settledWhenAny": [
             [
@@ -5018,10 +5028,15 @@
             "id": "omen.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_03_xiaozi_controls_zhuo",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“小紫压制卓云君”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "小紫紫衫入室，笑着让众人让开",
+              "卓云君一侧的人退到灯影外，不再顶嘴",
+              "内室门帘放下，外面只听见极轻的吩咐"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.xiao_zi"
+              },
               {
                 "kind": "messenger"
               },
@@ -5029,17 +5044,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "内室灯火压得很低，紫衫裙裾掠过门槛。帘外脚步乱了一阵又静下来，谁也没敢再掀帘。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“小紫压制卓云君”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "帘内压场",
+              "text": "小紫笑着走进内室，像来讨糖似的唤人让座。卓云君一侧却先退了半步，帘子随即落下。外面只剩银铃声和极轻的吩咐，谁都没再听见顶撞。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_04_river_granary",
-          "title": "局势中的江边设粮仓",
-          "summary": "围绕“江边设粮仓”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "江边仓址议未定",
+          "summary": "知州衙里在谈江边另立粮仓，程记粮铺的名号已被写上草签，官仓私营的说法却互相打架。",
           "sourceEventId": "lcq.event.s12_04_river_granary",
           "settledWhenAny": [
             [
@@ -5056,10 +5071,15 @@
             "id": "omen.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_04_river_granary",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“江边设粮仓”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "滕知州案上摊着江边仓址草图",
+              "程记粮铺的名号出现在借用条上",
+              "官仓私营的说法与借用之说对不上"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -5067,17 +5087,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "衙门侧厅茶凉了仍没散。江边空地被人用石灰圈出几块，脚夫问该往哪边卸粮，没人给准话。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“江边设粮仓”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "江岸圈仓",
+              "text": "滕知州把江边仓址草图按在案上，程记粮铺的字号已经写进借用条。有人仍坚持官仓不得私营，有人只肯说暂借。程宗扬听着两边口径，江岸石灰线还没圈死。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_05_granary_fire_plan",
-          "title": "局势中的常平仓火计",
-          "summary": "围绕“常平仓火计”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "常平仓夜防加严",
+          "summary": "常平仓四周夜巡加密，火油、火折被清点后又被挪走，粮价议论与防火号令叠在一起。",
           "sourceEventId": "lcq.event.s12_05_granary_fire_plan",
           "settledWhenAny": [
             [
@@ -5094,10 +5114,15 @@
             "id": "omen.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_05_granary_fire_plan",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“常平仓火计”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "常平仓外加了双岗，火折不许私带",
+              "仓墙根有人反复丈量通风口",
+              "市井里粮价谣言与防火令同时传来"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -5105,17 +5130,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "常平仓屋脊压着夜色，更鼓比往日密。墙根有新踩的脚印，火油味若有若无，巡夜的人互不问原因。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“常平仓火计”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "仓边火气",
+              "text": "常平仓外忽然加了双岗，火折一律收缴。有人蹲在通风口边量尺寸，市井又把粮价和走水的话搅在一起。程宗扬路过仓墙，只看见灯火比昨夜亮了一圈。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_06_dragon_guard_routs",
-          "title": "局势中的龙卫第一军溃败",
-          "summary": "围绕“龙卫第一军溃败”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "龙卫一线号乱",
+          "summary": "龙卫第一军前线号角对不上，伤兵回流，桑怿所部与对岸交手的口信互相矛盾。",
           "sourceEventId": "lcq.event.s12_06_dragon_guard_routs",
           "settledWhenAny": [
             [
@@ -5132,10 +5157,15 @@
             "id": "omen.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_06_dragon_guard_routs",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“龙卫第一军溃败”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "前线号角乱了节拍，旗帜收得不齐",
+              "伤兵回流说寡不敌众，斥候说仍在咬住",
+              "孟非卿听报时只问缺口在哪一段"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.meng_fei_qing"
+              },
               {
                 "kind": "messenger"
               },
@@ -5143,17 +5173,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "远处鼓点断续，尘土里有旗帜斜拖。回流的伤兵说辞不一，营门口没人敢把“完了”两个字说死。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“龙卫第一军溃败”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "号角不对",
+              "text": "龙卫第一军方向的号角乱了节拍，旗帜收得参差。伤兵说桑怿那一线吃紧，斥候又说还在咬住。孟非卿只盯着缺口问了两句，没有宣布前线已经垮掉。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_07_left_wing_raid",
-          "title": "局势中的突袭龙卫左厢",
-          "summary": "围绕“突袭龙卫左厢”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "左厢营夜不宁",
+          "summary": "龙卫左厢营地灯火乱移，指挥旗被收进帐里，文官武将的传令对不上点。",
           "sourceEventId": "lcq.event.s12_07_left_wing_raid",
           "settledWhenAny": [
             [
@@ -5170,10 +5200,15 @@
             "id": "omen.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_07_left_wing_raid",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“突袭龙卫左厢”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "左厢营外夜鸟惊飞，马厩先乱",
+              "中军旗收进帐，传令兵找不着主官",
+              "有人看见文官披甲出帐，口令却对不上"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.meng_fei_qing"
+              },
               {
                 "kind": "messenger"
               },
@@ -5181,17 +5216,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "左厢方向火把东一块西一块，马嘶盖过更鼓。营门开了又关，谁在外头、谁在里头，一时说不清。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“突袭龙卫左厢”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "左厢灯乱",
+              "text": "龙卫左厢营地灯火忽然乱移，中军旗被收进帐里。传令兵在营道上来回找人，有文官披甲出帐，口令却对不上。孟非卿侧耳听了一阵，没有下令全营压上。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_08_dingchuan_raid",
-          "title": "局势中的定川寨奇袭",
-          "summary": "围绕“定川寨奇袭”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "定川寨夜议奇兵",
+          "summary": "星月湖大营灯火压低，孟非卿主持议事，定川寨方向的轻装编制被单独抽出来。",
           "sourceEventId": "lcq.event.s12_08_dingchuan_raid",
           "settledWhenAny": [
             [
@@ -5208,10 +5243,15 @@
             "id": "omen.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_08_dingchuan_raid",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“定川寨奇袭”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "孟非卿压低嗓门点定川寨的路径",
+              "轻装小队被单独抽出，不配重械",
+              "葛怀敏的旗号被钉在沙盘一侧"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.meng_fei_qing"
+              },
               {
                 "kind": "messenger"
               },
@@ -5219,17 +5259,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "大营中帐灯火只留一盏。沙盘上定川寨被反复戳点，帐外甲叶轻响，重车却没有出营。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“定川寨奇袭”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "夜点定川",
+              "text": "星月湖中帐只留一盏灯。孟非卿用手指点定川寨的路径，轻装小队被单独抽出，重械留在原处。沙盘一侧钉着葛怀敏的旗号，帐里没人把胜负说死。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_09_ge_huaimin_killed",
-          "title": "局势中的葛怀敏伏诛",
-          "summary": "围绕“葛怀敏伏诛”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "定川突围路不明",
+          "summary": "定川寨方向尘土大起，宋军旗帜乱移，寨外某段土路被星月湖人拦了又让。",
           "sourceEventId": "lcq.event.s12_09_ge_huaimin_killed",
           "settledWhenAny": [
             [
@@ -5246,10 +5286,15 @@
             "id": "omen.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_09_ge_huaimin_killed",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“葛怀敏伏诛”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "定川寨门开合不定，突围的说法互相打架",
+              "寨外土路有新翻的土痕，行人绕道",
+              "孟非卿亲自去看那段路，不许闲人近前"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.meng_fei_qing"
+              },
               {
                 "kind": "messenger"
               },
@@ -5257,17 +5302,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "定川寨外尘土悬着不散。土路被翻过一层，像有人夜里动过手脚。远处旗帜乱移，谁主谁从还对不上。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“葛怀敏伏诛”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "寨外翻土",
+              "text": "定川寨门开了又关，有人说要突围，有人说只是换防。寨外一段土路新翻过，行人被迫绕道。孟非卿亲自去看那条路，不许闲人近前，也没宣布主将下落。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_10_rescue_xiao",
-          "title": "局势中的救下萧遥逸",
-          "summary": "围绕“救下萧遥逸”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "萧遥逸去向不明",
+          "summary": "阵前有人传萧遥逸被大貂珰秦翰按住，程宗扬往那个方向赶，伤势与去向的说法对不上。",
           "sourceEventId": "lcq.event.s12_10_rescue_xiao",
           "settledWhenAny": [
             [
@@ -5284,10 +5329,15 @@
             "id": "omen.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_10_rescue_xiao",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“救下萧遥逸”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "阵前传萧遥逸被按住，未见押回营",
+              "程宗扬往烟尘里赶，甲衣未束齐",
+              "秦翰旗号忽近忽远，两边口信打架"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -5295,17 +5345,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "烟尘里旗号错位，有人喊名字，有人喊让开。地上有断裂的兵刃，看不出是谁留下的。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“救下萧遥逸”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "尘里夺人",
+              "text": "阵前忽然传萧遥逸被大貂珰秦翰按住，却没人看见押回营的队伍。程宗扬甲衣未束齐就往烟尘里赶。秦翰旗号忽近忽远，两边口信对不上，人还在不在，没人敢说死。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_11_siege_begins",
-          "title": "局势中的江州全面攻城",
-          "summary": "围绕“江州全面攻城”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "城外重械夜移",
+          "summary": "江州城外连夜传来车轴声，投石机、巢车、云梯的轮廓在火把里移动，守堞号令加密。",
           "sourceEventId": "lcq.event.s12_11_siege_begins",
           "settledWhenAny": [
             [
@@ -5322,10 +5372,15 @@
             "id": "omen.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_11_siege_begins",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“江州全面攻城”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "城外连夜车轴声不断，火把排成两列",
+              "投石机与云梯的轮廓在壕外停停走走",
+              "城头加岗，滚木礌石被重新码齐"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -5333,17 +5388,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "城垛外火把连成一条线，车轴碾地的声音一夜未停。守堞的人把滚木再码一遍，谁也不敢睡死。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“江州全面攻城”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "夜运攻具",
+              "text": "江州城外连夜响起车轴声，投石机、巢车和云梯的轮廓在火把里挪动。城头加了岗，滚木礌石被重新码齐。程宗扬上垛口看了一眼，城外还没正式擂鼓。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_12_gate_fire",
-          "title": "局势中的城门火攻",
-          "summary": "围绕“城门火攻”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "城门洞备油闸",
+          "summary": "江州城门洞内侧加了闸板，滚油锅被抬上女墙，冲车轮迹已到壕边。",
           "sourceEventId": "lcq.event.s12_12_gate_fire",
           "settledWhenAny": [
             [
@@ -5360,10 +5415,15 @@
             "id": "omen.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_12_gate_fire",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“城门火攻”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "门洞内侧新加闸板，门闩加了横木",
+              "女墙上滚油锅冒热气，不许闲人靠近",
+              "壕边出现冲车轮迹，尚未顶到门缝"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.meng_fei_qing"
+              },
               {
                 "kind": "messenger"
               },
@@ -5371,17 +5431,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "城门洞里潮气混着油味。闸板被反复试落，外面隐约有轮轴声，门缝外火把一闪一闪。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“城门火攻”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "门洞油热",
+              "text": "江州城门洞内侧新加了闸板，女墙上滚油锅已经冒热气。壕边能看见冲车轮迹，还没顶到门缝。孟非卿在门洞里试了一次落闸，没有下令开城对冲。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_13_long_siege",
-          "title": "局势中的长期围困",
-          "summary": "围绕“长期围困”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "土山与地声",
+          "summary": "宋军不再整日擂鼓，城外堆土成坡，城根下偶尔传来挖土回声，粮水被按日核计。",
           "sourceEventId": "lcq.event.s12_13_long_siege",
           "settledWhenAny": [
             [
@@ -5398,10 +5458,15 @@
             "id": "omen.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_13_long_siege",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“长期围困”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "城外土坡一日高一寸，不再强攻垛口",
+              "城根下夜里有挖土回声，方位对不齐",
+              "城内粮水按日核计，井边排队加长"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -5409,17 +5474,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "攻城鼓稀了，土腥味却重了。墙根贴耳能听见闷响，井边水桶磕碰，谁也不提还能撑多久。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“长期围困”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "围城改挖",
+              "text": "宋军不再整日擂鼓，城外土坡一日高一寸。夜里贴着城根能听见挖土的闷响，方位却对不齐。城内粮水开始按日核计，程宗扬在井边听着水桶磕碰，没人敢说围势已定。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_14_chenxing_appears",
-          "title": "局势中的辰星七妖现身",
-          "summary": "围绕“辰星七妖现身”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "城中刺客影乱",
+          "summary": "江州城内夜巷有陌生脚步，小紫腕上玉钏发凉，有人把辰星、龙宸的名号说得含糊。",
           "sourceEventId": "lcq.event.s12_14_chenxing_appears",
           "settledWhenAny": [
             [
@@ -5436,10 +5501,15 @@
             "id": "omen.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_14_chenxing_appears",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“辰星七妖现身”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "夜巷里连续两处更夫失声，灯被打灭",
+              "小紫按住腕钏，神色仍装得没事",
+              "墙上留下陌生符记，与军中号令不同"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.xiao_zi"
+              },
               {
                 "kind": "messenger"
               },
@@ -5447,17 +5517,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "巷口灯灭了一截，空气里有冷香和铁锈味。更夫的梆子停了两拍，远处有人压低嗓子念生僻的名号。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“辰星七妖现身”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "巷灯连灭",
+              "text": "江州城里连续两处巷灯被打灭，更夫的梆子停了拍。小紫按住腕上玉钏，脸上仍是没事人。墙上多了与军中号令不同的符记，辰星、龙宸的名号只在齿缝里转，没人认领。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_15_capture_jingli",
-          "title": "局势中的擒获惊理",
-          "summary": "围绕“擒获惊理”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "刺客名号对不齐",
+          "summary": "交手后的巷口留下铃响余音，有人被点出“惊理”这个称呼，人影却还在逃散。",
           "sourceEventId": "lcq.event.s12_15_capture_jingli",
           "settledWhenAny": [
             [
@@ -5474,10 +5544,15 @@
             "id": "omen.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_15_capture_jingli",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“擒获惊理”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "巷口余着铃响，四散的黑衣人脚步乱",
+              "有人低呼“惊理”，立刻被同伴拦住",
+              "小紫收起一只铃，目光盯着未散的烟"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.xiao_zi"
+              },
               {
                 "kind": "messenger"
               },
@@ -5485,17 +5560,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "巷砖上有抓挠的冷痕，铃音余在耳里。烟还没散尽，远处有人互相捂嘴，不让把名字再说第二遍。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“擒获惊理”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "铃后残影",
+              "text": "巷口还余着铃响，黑衣人脚步四散。有人脱口叫出“惊理”，立刻被同伴捂住。小紫把一只铃收回袖里，盯着未散的烟，没有说人已经到手。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_16_corpse_poison",
-          "title": "局势中的殇侯尸毒破局",
-          "summary": "围绕“殇侯尸毒破局”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "阵前尸气浮动",
+          "summary": "鸩羽殇侯所部方向飘来腐甜气味，宋军阵线换防频繁，有人捂鼻后退却仍站在旗下。",
           "sourceEventId": "lcq.event.s12_16_corpse_poison",
           "settledWhenAny": [
             [
@@ -5512,10 +5587,15 @@
             "id": "omen.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_16_corpse_poison",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“殇侯尸毒破局”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "阵前腐甜气味一阵阵，鸟雀不敢落",
+              "宋军旗下有人捂鼻换位，队形松了又收",
+              "殇侯近卫按兵不动，只把风向看了又看"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -5523,17 +5603,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "风从殇侯旗下吹来，带着腐甜。对面阵线换岗比往日密，没人愿意先踏过那道气味。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“殇侯尸毒破局”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "风里尸气",
+              "text": "鸩羽殇侯旗下吹来一阵腐甜，鸟雀不敢落。宋军旗下有人捂鼻换位，队形松了又被喝令收拢。程宗扬看见近卫仍按兵不动，只把风向看了又看。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_17_shanghou_stays",
-          "title": "局势中的利聚留守",
-          "summary": "围绕“利聚留守”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "殇侯行止未决",
+          "summary": "殇侯营中整装又卸甲，近卫军是否留守江州，账册与人情话同时摆上桌。",
           "sourceEventId": "lcq.event.s12_17_shanghou_stays",
           "settledWhenAny": [
             [
@@ -5550,10 +5630,15 @@
             "id": "omen.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_17_shanghou_stays",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“利聚留守”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "殇侯帐里摊着粮银账册，又摆着酒",
+              "近卫军有的打好行囊，有的又解开",
+              "程宗扬进出帐门两次，未带走回书"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -5561,17 +5646,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "殇侯营门开着一半。行囊码了一地，又有人解开绳扣。帐里酒香和算盘声搅在一起，没有升旗开拔。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“利聚留守”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "帐中留否",
+              "text": "殇侯帐里同时摊着粮银账册和酒盏。近卫军有人打好行囊，有人又把绳扣解开。程宗扬进出两次，手里没有带回书。营门半开，还看不出这支人马会不会留下。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_18_linan_grain_order",
-          "title": "局势中的临安粮战令",
-          "summary": "围绕“临安粮战令”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "水镜那头粮讯",
+          "summary": "程宗扬对着水镜低声交代筠州抛粮的事，和谈谣言与粮价口风同时往临安方向传。",
           "sourceEventId": "lcq.event.s12_18_linan_grain_order",
           "settledWhenAny": [
             [
@@ -5588,10 +5673,15 @@
             "id": "omen.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_18_linan_grain_order",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“临安粮战令”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "密室水镜起雾，程宗扬只对那头说话",
+              "筠州抛粮的条子写了又改，未盖印",
+              "市井开始传宋军要和谈，粮牙却不信"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -5599,10 +5689,10 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "密室帘垂着，水镜面上雾气未散。案上有改过的粮单，窗外已有人把和谈与粮价缠在一起说。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“临安粮战令”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "镜中粮令",
+              "text": "密室里水镜起了一层雾，程宗扬只对着那头压低声音。案上筠州抛粮的条子写了又改，印还没盖。窗外已有人把宋军和谈的话跟粮价缠在一起，牙行里却没人跟进。"
             }
           }
         }

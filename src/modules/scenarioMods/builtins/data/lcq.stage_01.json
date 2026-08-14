@@ -2350,8 +2350,8 @@
       "situations": [
         {
           "id": "world-sim.baseline.lcq.stage_01.lcq.event.s01_01",
-          "title": "局势中的程宗扬与段强穿越",
-          "summary": "围绕“程宗扬与段强穿越”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "紫电撕开客舱",
+          "summary": "客舱被紫雷劈开，失重里风带着草腥与金戈声。两人还分不清落点，云层下已见旗帜与兽影搅作一团。",
           "sourceEventId": "lcq.event.s01_01",
           "settledWhenAny": [
             [
@@ -2368,10 +2368,19 @@
             "id": "omen.baseline.lcq.stage_01.lcq.event.s01_01",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“程宗扬与段强穿越”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "舷窗外紫电连闪，舱壁发出焦糊味",
+              "段强死攥扶手，嘴里还念着穿越话本",
+              "云层下隐约有旗帜与人马厮杀"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "lcq.character.duan_qiang"
+              },
               {
                 "kind": "messenger"
               },
@@ -2379,17 +2388,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "舱内灯管炸裂，紫电从裂口灌入。失重中能听见远处金戈与兽吼混在风里，一时分不清会落向何处。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“程宗扬与段强穿越”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "紫电裂空",
+              "text": "紫雷从舷窗外劈进来，舱壁发烫发焦。段强死攥扶手，像要把幻想攥成真。失重里隐约听见旗角与兽吼，地面已不像人间。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_01.lcq.event.s01_02",
-          "title": "局势中的段强被射杀",
-          "summary": "围绕“段强被射杀”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "箭雨逼近颈侧",
+          "summary": "半兽人弓手从草浪后前压，段强步子乱了。箭羽擦过颈侧护甲，退路被蹄声封住。",
           "sourceEventId": "lcq.event.s01_02",
           "settledWhenAny": [
             [
@@ -2413,10 +2422,19 @@
             "id": "omen.baseline.lcq.stage_01.lcq.event.s01_02",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“段强被射杀”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "半兽人弓手从草浪后换阵前压",
+              "段强踉跄，颈侧护甲已被箭羽擦破",
+              "近处死亡气息骤然加重"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "lcq.character.duan_qiang"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -2424,17 +2442,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "箭矢擦着草尖掠过，蹄声从两侧收拢。魁梧同伴脚步发虚，风从颈侧刮过，像有人在瞄准那一线空隙。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“段强被射杀”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "箭雨压颈",
+              "text": "草浪后弓弦连响，半兽人换阵前压。段强高大却慌，颈侧护甲已被箭羽擦出血丝。退路被蹄声封死，下一箭落在谁身上还没人敢说。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_01.lcq.event.s01_03",
-          "title": "局势中的程宗扬与月霜初遇",
-          "summary": "围绕“程宗扬与月霜初遇”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "负伤骑士近身",
+          "summary": "乱阵里一名女扮男装的骑士被半兽人击伤，寒意从伤口渗出。近身时衣甲错位，两人僵在触碰的瞬间。",
           "sourceEventId": "lcq.event.s01_03",
           "settledWhenAny": [
             [
@@ -2451,10 +2469,19 @@
             "id": "omen.baseline.lcq.stage_01.lcq.event.s01_03",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“程宗扬与月霜初遇”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "女扮男装的骑士肩甲渗血，指尖发冷",
+              "半兽人从两侧包抄，近身距离缩短",
+              "衣甲被撞开一线，触感与外表不符"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "lcq.character.yue_shuang"
+              },
               {
                 "kind": "messenger"
               },
@@ -2462,17 +2489,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "烟尘里一名英气骑士踉跄后退，伤口透出不寻常寒意。半兽人斧影逼近，两人挤在同一掩体后，衣甲错位，气氛骤然紧绷。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“程宗扬与月霜初遇”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "负伤骑士",
+              "text": "女扮男装的骑士肩甲渗血，指尖冰凉。半兽人从两侧包抄，两人挤在掩体后，衣甲被撞开一线。她抬眼如刀，兽吼已经压到耳边。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_01.lcq.event.s01_04",
-          "title": "局势中的太乙真宗介入",
-          "summary": "围绕“太乙真宗介入”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "道门火光将近",
+          "summary": "兽蛮收圈时，远处升起烈火法光与道旗，四路人马朝这片草场压来，包围圈出现缝隙。",
           "sourceEventId": "lcq.event.s01_04",
           "settledWhenAny": [
             [
@@ -2496,10 +2523,19 @@
             "id": "omen.baseline.lcq.stage_01.lcq.event.s01_04",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“太乙真宗介入”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "草原远处升起赤色法光与道旗",
+              "半兽人阵列出现短暂迟疑与换防",
+              "有人高声报出太乙真宗教御名号"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.zhuo_yunjun"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.lin_cai_quan"
+              },
               {
                 "kind": "messenger"
               },
@@ -2507,17 +2543,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "兽吼正密，天边忽然亮起火光，道袍人影沿草脊铺开。半兽人阵脚一滞，谁先冲进这片杀场还看不清。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“太乙真宗介入”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "道火将近",
+              "text": "兽蛮收圈时，天边忽然燃起烈火法光，道旗猎猎。半兽人换防迟疑，有人报出太乙教御的名号。包围圈裂开一线，火光与兽吼谁先压过来，还没有定数。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_01.lcq.event.s01_05",
-          "title": "局势中的程宗扬见王哲",
-          "summary": "围绕“程宗扬见王哲”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "帅帐夜问起根",
+          "summary": "帅帐灯火未歇，王哲把程宗扬单独留下。来历与体内异动被一一追问，帐外亲兵已退到帷外。",
           "sourceEventId": "lcq.event.s01_05",
           "settledWhenAny": [
             [
@@ -2534,10 +2570,19 @@
             "id": "omen.baseline.lcq.stage_01.lcq.event.s01_05",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“程宗扬见王哲”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "王哲在帅帐独留程宗扬对坐",
+              "帐外亲兵被喝退，帷幕落下",
+              "王哲目光落在他胸口灵息异动处"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "lcq.character.wang_zhe"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -2545,17 +2590,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "帅帐灯芯爆了一下，掌教脸色微黯，腰背仍直如标枪。亲兵退到帐外，帐内只余对坐的两人与未说完的来历。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“程宗扬见王哲”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "帅帐夜问",
+              "text": "王哲把程宗扬单独留在帅帐，亲兵退到帷外。他脸色微黯，问的却是来历与体内那缕不像凡根的灵息。灯火稳着，谁也还没把话落到实处。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_01.lcq.event.s01_06",
-          "title": "局势中的月霜强取真阳",
-          "summary": "围绕“月霜强取真阳”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "寒毒催丹",
+          "summary": "月霜寒毒加重，她把丹药逼到程宗扬唇边。药力一入，真阳躁动，两人被逼到同一处帐帘后。",
           "sourceEventId": "lcq.event.s01_06",
           "settledWhenAny": [
             [
@@ -2572,10 +2617,19 @@
             "id": "omen.baseline.lcq.stage_01.lcq.event.s01_06",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“月霜强取真阳”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "月霜强按他下颌，丹香刺鼻",
+              "她周身寒意与他体内躁热同时加重",
+              "帐帘落下，退路被她堵住"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "lcq.character.yue_shuang"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -2583,10 +2637,10 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "帐帘落下，寒气与药香搅在一起。她把丹药递到他唇边，呼吸发颤却不肯松手，帐外脚步远了，帐内只剩对峙。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“月霜强取真阳”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "丹香逼近",
+              "text": "月霜寒得发抖，仍按住他的下颌，把丹药逼到唇边。药力一入，真阳躁热往上涌，她自己也退无可退。帐帘垂地，下一步是救人还是失控，谁都还没落地。"
             }
           }
         }

@@ -4904,8 +4904,8 @@
       "situations": [
         {
           "id": "world-sim.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_01",
-          "title": "局势中的夺镜计划",
-          "summary": "围绕“夺镜计划”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "明晚夺镜的对谈",
+          "summary": "程宗扬把明晚取灵飞镜的人手压到极低声，武二郎听着，走位和退路还没落定。",
           "sourceEventId": "lcq.event.s04b_lingfei_baiyi_crisis_01",
           "settledWhenAny": [
             [
@@ -4922,10 +4922,15 @@
             "id": "omen.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_01",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“夺镜计划”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "程宗扬找武二郎密谈明晚夺镜",
+              "夜行绳索与遮面布被摊开又收起",
+              "武二郎听完，走位仍改了两回"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -4933,17 +4938,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "火光边摊着夜行靴带和绳索，两个人影压着嗓子对时辰，退路图被改过。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“夺镜计划”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "夺镜对谈",
+              "text": "程宗扬把明晚取灵飞镜的事压到几乎听不见。武二郎坐着听，绳索和遮面布摊开又收，走位改了两回。外头仍能照常走动，只是夜行的次序已经不稳。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_02",
-          "title": "局势中的鸦人激战",
-          "summary": "围绕“鸦人激战”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "鸦营前的交手",
+          "summary": "乐明珠已经顶到鸦人营地前，兵器相撞，暗处另有人影挪位，营门仍封着。",
           "sourceEventId": "lcq.event.s04b_lingfei_baiyi_crisis_02",
           "settledWhenAny": [
             [
@@ -4960,10 +4965,15 @@
             "id": "omen.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_02",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“鸦人激战”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "乐明珠挺身挡在鸦人营地前",
+              "营内兵器相击，火把一阵乱晃",
+              "侧翼灌木里有人悄然挪位，未露脸"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -4971,17 +4981,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "鸦人营地火把乱晃，羽饰与兵器相撞，侧翼灌木轻响又静。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“鸦人激战”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "营前交手",
+              "text": "乐明珠已经顶到鸦人营地前。兵器刚撞上，火把乱晃，营里多出一阵短促的压制声。侧翼灌木里有人挪了位，却不现身。营门仍封着，里头谁占上风，隔着栅栏看不清。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_03",
-          "title": "局势中的斩杀鸦人",
-          "summary": "围绕“斩杀鸦人”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "首领背影露空",
+          "summary": "鸦人首领一时背对空档，程宗扬手已按上刀柄，营心里两处身影仍被围着。",
           "sourceEventId": "lcq.event.s04b_lingfei_baiyi_crisis_03",
           "settledWhenAny": [
             [
@@ -4998,10 +5008,15 @@
             "id": "omen.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_03",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“斩杀鸦人”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "鸦人首领得意间露出后背空档",
+              "程宗扬压低身形，手已按上刀柄",
+              "乐明珠与阿夕仍被围在营心一带"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -5009,17 +5024,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "营心火光一晃，首领背影空出一截，刀鞘轻响，围圈未散。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“斩杀鸦人”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "空档一闪",
+              "text": "鸦人首领一得意，后背空出一截。程宗扬压低身形，手已按上刀柄。营心里两处身影仍被围着，围圈未散。这一刀出不出得去，谁也还没看见血。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_04",
-          "title": "局势中的秘法传讯信",
-          "summary": "围绕“秘法传讯信”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "空白羊皮的异样",
+          "summary": "处理鸦人随身物时翻出一张空白羊皮，火光下墨痕隐现又灭，有人要把纸送去云苍峰。",
           "sourceEventId": "lcq.event.s04b_lingfei_baiyi_crisis_04",
           "settledWhenAny": [
             [
@@ -5036,10 +5051,15 @@
             "id": "omen.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_04",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“秘法传讯信”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "鸦人随身物里翻出一张空白羊皮",
+              "纸面在火光下隐现墨痕，随即又空",
+              "程宗扬与武二郎主张送纸去云苍峰"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -5047,17 +5067,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "火堆边摊开空白羊皮，墨痕一闪即灭，有人已经卷纸要走。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“秘法传讯信”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "空纸隐墨",
+              "text": "处理鸦人随身物时，一张空白羊皮被摊到火边。墨痕刚显又空。程宗扬与武二郎对视一眼，要把纸送去云苍峰辨认。纸上写没写过字、指向何处，眼下谁也说不准。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_05",
-          "title": "局势中的取得灵飞镜",
-          "summary": "围绕“取得灵飞镜”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "祭坛下的虚响",
+          "summary": "白夷祭坛石缝传出空洞回声，程宗扬试探踏板时脚下微沉，镜在不在仍看不见。",
           "sourceEventId": "lcq.event.s04b_lingfei_baiyi_crisis_05",
           "settledWhenAny": [
             [
@@ -5074,10 +5094,15 @@
             "id": "omen.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_05",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“取得灵飞镜”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "白夷祭坛石缝里传出空洞回声",
+              "程宗扬试探踏板，脚下有一瞬虚沉",
+              "武二郎绕到祭坛侧面盯着机关缝"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -5085,17 +5110,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "祭坛石缝漏风，踏板一按就虚，侧面有人按着刀柄盯缝。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“取得灵飞镜”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "坛下虚踏",
+              "text": "白夷祭坛石缝里漏出空洞回声。程宗扬试探踏板，脚下虚沉一瞬，武二郎已经绕到侧面盯着机关缝。传言灵飞镜藏在坛下，可洞口还没开，谁也没看见镜面。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_06",
-          "title": "局势中的花白联手",
-          "summary": "围绕“花白联手”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "花苗帐中的联手",
+          "summary": "云苍峰入帐与苏荔密谈对抗鬼王峒勒索，帐外只闻联手字眼，盟约成不成仍悬着。",
           "sourceEventId": "lcq.event.s04b_lingfei_baiyi_crisis_06",
           "settledWhenAny": [
             [
@@ -5112,10 +5137,15 @@
             "id": "omen.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_06",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“花白联手”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "云苍峰入花苗议事帐与苏荔密谈",
+              "帐外隐约听见联手抗峒的字眼",
+              "苏荔出帐时袖口见红，神色未定"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -5123,17 +5153,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "花苗议事帐灯火不散，帐帘一掀带出血腥气，门口卫士换过一轮。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“花白联手”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "帐中密议",
+              "text": "云苍峰进了花苗议事帐。帘后隐约听见与白夷联手、共抗鬼王峒勒索的字眼。苏荔出帐时袖口见红，神色却未落定。盟约签没签，帐外只闻血腥，看不见印。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_07",
-          "title": "局势中的水镜传讯苏妲己",
-          "summary": "围绕“水镜传讯苏妲己”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "水镜里的传讯",
+          "summary": "程宗扬借水镜要接通苏妲己，镜面只晃出半幅南荒影，警告听清几句还没定。",
           "sourceEventId": "lcq.event.s04b_lingfei_baiyi_crisis_07",
           "settledWhenAny": [
             [
@@ -5150,10 +5180,15 @@
             "id": "omen.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_07",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“水镜传讯苏妲己”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "程宗扬借水镜术要接通苏妲己",
+              "镜面晃出南荒与黑魔海一线的残影",
+              "传讯里隐约听到霓龙丝三字，随即断"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -5161,17 +5196,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "水镜光一闪一灭，镜沿还湿，对面嗓音只剩半句。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“水镜传讯苏妲己”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "镜中半句",
+              "text": "程宗扬借水镜要接通苏妲己。镜面只晃出南荒与黑魔海一线的残影，对面嗓音里隐约听到不要招惹、尽快寻霓龙丝，随即断了。回话落没落全，镜沿只剩水渍。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_08",
-          "title": "局势中的识破白夷阴谋",
-          "summary": "围绕“识破白夷阴谋”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "镜中白夷的异象",
+          "summary": "程宗扬以灵飞镜探白夷内寨，镜里樨夫人神色受制，鬼王峒旗影一闪，同伴还散在外头。",
           "sourceEventId": "lcq.event.s04b_lingfei_baiyi_crisis_08",
           "settledWhenAny": [
             [
@@ -5188,10 +5223,15 @@
             "id": "omen.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_08",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“识破白夷阴谋”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "程宗扬对着灵飞镜查探白夷内寨",
+              "镜中樨夫人神色受制，姿态不稳",
+              "远处闪过鬼王峒旗影，同伴尚未聚齐"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -5199,17 +5239,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "灵飞镜光一颤，内寨影像碎成几块，外头脚步声乱。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“识破白夷阴谋”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "镜中受制",
+              "text": "程宗扬对着灵飞镜查探白夷内寨。镜里樨夫人神色受制，姿态不稳，远处一闪鬼王峒旗影。同伴还散在外头。这是内变还是幻影，镜面没有给第二眼。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_09",
-          "title": "局势中的白夷生变",
-          "summary": "围绕“白夷生变”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "白夷寨里的换印",
+          "summary": "白夷寨门换防加快，族长大帐灯火一夜不灭，樨夫人出面传令，旧印还在不在互相打架。",
           "sourceEventId": "lcq.event.s04b_lingfei_baiyi_crisis_09",
           "settledWhenAny": [
             [
@@ -5226,10 +5266,15 @@
             "id": "omen.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_09",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“白夷生变”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "白夷寨门换防比平日更密",
+              "族长大帐灯火一夜不灭，卫士换生面孔",
+              "樨夫人出面传令，旧族长未见踪影"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -5237,17 +5282,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "白夷寨墙上火把挪位，大帐换了传令嗓音，旧印匣被抬进抬出。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“白夷生变”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "大帐换令",
+              "text": "白夷寨门换防比平日密。族长大帐灯一夜不灭，卫士换成生面孔，樨夫人出面传令，旧族长不见人。有人说只是祭期调动，有人说印已易手。隔着寨墙，听不真裂到哪一层。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_10",
-          "title": "局势中的地宫陷阱",
-          "summary": "围绕“地宫陷阱”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "地宫甬道的机关",
+          "summary": "追入地宫的甬道里机关齿响，木塔影里绑着花苗人，鬼武士甲片在暗处摩擦。",
           "sourceEventId": "lcq.event.s04b_lingfei_baiyi_crisis_10",
           "settledWhenAny": [
             [
@@ -5264,10 +5309,15 @@
             "id": "omen.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_10",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“地宫陷阱”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "地宫甬道深处传来机关齿响",
+              "远处木塔上隐约绑着花苗人影",
+              "甬道两侧甲片摩擦，像有鬼武士合围"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -5275,17 +5325,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "甬道潮气里齿轮轻响，木塔绳索吱呀，两侧甲片一下一下地擦。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“地宫陷阱”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "甬道齿响",
+              "text": "追入地宫的甬道里，机关齿轮一声接一声。远处木塔上隐约绑着花苗人影，两侧甲片摩擦，像有鬼武士在合围。路是诱饵还是生门，火把只照得见眼前三步。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_11",
-          "title": "局势中的血虎现身",
-          "summary": "围绕“血虎现身”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "血色虎影逼近",
+          "summary": "战场边现出被改过的虎形人影，直扑武二郎；易彪喊兄长的名字，对面没有回头。",
           "sourceEventId": "lcq.event.s04b_lingfei_baiyi_crisis_11",
           "settledWhenAny": [
             [
@@ -5302,10 +5352,15 @@
             "id": "omen.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_11",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“血虎现身”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "战场边现出带血色纹路的虎形人影",
+              "那影子直扑武二郎一侧",
+              "易彪连呼兄长，对面脚步不停"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -5313,17 +5368,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "尘土里血色纹路一闪，虎啸短促，有人喊名字，应声全无。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“血虎现身”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "虎影不回",
+              "text": "战场边现出带血色纹路的虎形人影，直扑武二郎一侧。易彪连呼兄长，对面脚步不停。那是不是易虎、还能不能停手，尘土里只剩短促的虎啸。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_12",
-          "title": "局势中的凝羽突袭",
-          "summary": "围绕“凝羽突袭”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "暗处凝羽的刃光",
+          "summary": "凝羽从暗处贴近鬼王峒使者，刃光一闪，巫师身边烟雾渐浓，毒性还辨不清。",
           "sourceEventId": "lcq.event.s04b_lingfei_baiyi_crisis_12",
           "settledWhenAny": [
             [
@@ -5340,10 +5395,15 @@
             "id": "omen.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_12",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“凝羽突袭”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "凝羽从暗处贴近鬼王峒使者",
+              "使者掌侧闪过刃光，巫师阵脚乱了",
+              "烟雾渐浓，带一股刺鼻药味"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -5351,17 +5411,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "暗处衣袂一掠，掌侧见血光，毒烟贴地蔓延，火把发暗。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“凝羽突袭”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "暗刃毒烟",
+              "text": "凝羽从暗处贴近鬼王峒使者。掌侧闪过刃光，巫师阵脚乱了，烟雾却越来越浓，带刺鼻药味。使者伤到哪、毒术散没散开，烟里看不清第二个人。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_13",
-          "title": "局势中的谢艺杀使",
-          "summary": "围绕“谢艺杀使”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "谢艺独入地宫",
+          "summary": "谢艺一个人进了地宫，沿途武士失联，他开口只问碧宛下落，殿里灯火一盏盏灭。",
           "sourceEventId": "lcq.event.s04b_lingfei_baiyi_crisis_13",
           "settledWhenAny": [
             [
@@ -5378,10 +5438,15 @@
             "id": "omen.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_13",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“谢艺杀使”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "谢艺独自走入地宫深处",
+              "沿途岗哨失联，甲胄倒在甬道边",
+              "他开口只问碧宛下落，无人应全"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -5389,17 +5454,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "地宫灯一盏盏暗下去，甬道边甲胄空倒，拷问声短促又停。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“谢艺杀使”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "独行问宛",
+              "text": "谢艺一个人进了地宫。沿途岗哨失联，甲胄倒在甬道边。他开口只问碧宛下落，应声不全，灯一盏盏灭。使者还在不在深处，商队外头只听见脚步，看不见刃。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_14",
-          "title": "局势中的同往碧鲮",
-          "summary": "围绕“同往碧鲮”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "商队里的分路",
+          "summary": "众人围坐商议去向，苏荔坚持往鬼王峒，武二郎反对，碧鲮族的名字被反复提起。",
           "sourceEventId": "lcq.event.s04b_lingfei_baiyi_crisis_14",
           "settledWhenAny": [
             [
@@ -5416,10 +5481,15 @@
             "id": "omen.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_14",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“同往碧鲮”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "商队围坐，地图上标着鬼王峒与碧鲮",
+              "苏荔坚持先闯鬼王峒",
+              "武二郎反对，有人提出先同往碧鲮"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -5427,17 +5497,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "帐里地图摊开，两处地名被反复点按，行装只打了一半。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“同往碧鲮”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "帐中分路",
+              "text": "商队围坐，地图上鬼王峒与碧鲮并排。苏荔坚持先闯峒口，武二郎反对，另有人提出先同往碧鲮再议。行装只打了一半，下一步往哪边，帐里还没落槌。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_15",
-          "title": "局势中的阿夕暗潮",
-          "summary": "围绕“阿夕暗潮”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "阿夕神色不对",
+          "summary": "程宗扬察觉阿夕神色异常，堵住谢艺追问；谢艺只说设计过接触，后半句压回舌底。",
           "sourceEventId": "lcq.event.s04b_lingfei_baiyi_crisis_15",
           "settledWhenAny": [
             [
@@ -5454,10 +5524,15 @@
             "id": "omen.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_15",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“阿夕暗潮”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "阿夕神色恍惚，应答对不上前后",
+              "程宗扬堵住谢艺，追问她的异常",
+              "谢艺承认设计过接触，后话收住"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -5465,17 +5540,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "廊下两人对立，阿夕立在灯影外，谢艺把后半句话咽回去。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“阿夕暗潮”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "追问未完",
+              "text": "程宗扬察觉阿夕神色恍惚，应答对不上前后，便堵住谢艺追问。谢艺承认设计过让他与阿葭接触，后半句压回舌底。灵飞镜还会在南荒撞上什么，他没有说完。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_16",
-          "title": "局势中的岳帅旧闻",
-          "summary": "围绕“岳帅旧闻”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "云苍峰说岳帅",
+          "summary": "程宗扬向云苍峰打听岳帅旧事，星月湖的名字被点到，谢艺要找的人只露出轮廓。",
           "sourceEventId": "lcq.event.s04b_lingfei_baiyi_crisis_16",
           "settledWhenAny": [
             [
@@ -5492,10 +5567,15 @@
             "id": "omen.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_16",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“岳帅旧闻”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "程宗扬向云苍峰打听岳帅生平",
+              "云苍峰提到星月湖一段旧渊源",
+              "谢艺要寻的女子身份只说了半句"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -5503,17 +5583,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "茶烟里旧年号被翻开，湖名落在纸边，后文被袖子盖住。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“岳帅旧闻”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "旧闻半页",
+              "text": "程宗扬向云苍峰打听岳帅生平。茶烟里翻到星月湖一段渊源，谢艺要寻的女子只露出轮廓。是不是岳帅身边旧人，云苍峰把后文用袖子盖住了。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_17",
-          "title": "局势中的鳄鱼险境",
-          "summary": "围绕“鳄鱼险境”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "湿热盆地的涟漪",
+          "summary": "湿热盆地水面无风也起涟漪，走骡不安，泥潭里有鳞甲一闪，龙睛玉还拴在鞍侧。",
           "sourceEventId": "lcq.event.s04b_lingfei_baiyi_crisis_17",
           "settledWhenAny": [
             [
@@ -5530,10 +5610,15 @@
             "id": "omen.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_17",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“鳄鱼险境”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "湿热盆地水面无风也起涟漪",
+              "一匹走骡后蹄陷泥，鞍侧龙睛玉晃着",
+              "苏荔已搭弓，祁远盯着泥潭不眨眼"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -5541,17 +5626,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "泥潭气泡接连升起，骡铃乱响，弓弦绷紧，鳞甲在浊水里一闪。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“鳄鱼险境”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "潭面无风",
+              "text": "湿热盆地水面无风也起涟漪。一匹走骡后蹄陷泥，鞍侧龙睛玉晃着。苏荔已搭弓，祁远盯着泥潭不眨眼。潭下是不是鳄鱼、玉会不会被拖走，浊水只给人看那一闪鳞甲。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_18",
-          "title": "局势中的谢艺谈旧事",
-          "summary": "围绕“谢艺谈旧事”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "谢艺的闲装口风",
+          "summary": "谢艺一身不合时地的闲装现身，先问玻璃窑温，又把话头压到岳帅旧事上。",
           "sourceEventId": "lcq.event.s04b_lingfei_baiyi_crisis_18",
           "settledWhenAny": [
             [
@@ -5568,10 +5653,15 @@
             "id": "omen.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_18",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“谢艺谈旧事”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "谢艺以一身不合时地的闲装出现",
+              "他先问玻璃窑温与配料，不像闲聊",
+              "话头压到岳帅晕血与遗腹女，随即收住"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -5579,17 +5669,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "廊下多出一个衣着刺眼的人，窑温数字和旧事只说半句就停。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“谢艺谈旧事”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "闲装半句",
+              "text": "谢艺一身不合时地的闲装站到廊下。他先问玻璃窑温和配料，不像闲聊；话头刚压到岳帅晕血、遗腹女，又自己收住。这些话要讲完还是只探一探，他看着程宗扬，没有把后半句放出来。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_19",
-          "title": "局势中的大潮突至",
-          "summary": "围绕“大潮突至”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "夜间潮声压楼",
+          "summary": "夜里潮声忽然压过竹楼，海水拍上板壁，程宗扬与凝羽被浪声逼到楼梯口。",
           "sourceEventId": "lcq.event.s04b_lingfei_baiyi_crisis_19",
           "settledWhenAny": [
             [
@@ -5606,10 +5696,15 @@
             "id": "omen.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_19",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“大潮突至”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "夜间潮声忽然压过竹楼板壁",
+              "海水拍上栏杆，楼下已经进水",
+              "程宗扬与凝羽被浪声逼到楼梯口"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -5617,10 +5712,10 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "竹楼板壁被浪拍响，楼下进水，楼梯口两个人影还没迈下最后一级。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“大潮突至”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "浪拍竹楼",
+              "text": "夜里潮声忽然压过竹楼。海水拍上栏杆，楼下已经进水，程宗扬与凝羽被浪声逼到楼梯口。楼会不会整座被吞，云苍峰在不在岸上，潮水只给人留这一息下楼的空档。"
             }
           }
         }

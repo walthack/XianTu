@@ -5079,8 +5079,8 @@
       "situations": [
         {
           "id": "world-sim.baseline.lcq.stage_10_jiangzhou_shadow_war.lcq.event.s10_01_jiangzhou_order",
-          "title": "局势中的攻江州令",
-          "summary": "围绕“攻江州令”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "江州军令压境",
+          "summary": "朝堂口信与上四军调动传闻同时涌来，江州方向的压力一夜之间变得具体。",
           "sourceEventId": "lcq.event.s10_01_jiangzhou_order",
           "settledWhenAny": [
             [
@@ -5097,10 +5097,15 @@
             "id": "omen.baseline.lcq.stage_10_jiangzhou_shadow_war.lcq.event.s10_01_jiangzhou_order",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“攻江州令”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "驿使连夜送入与江州清剿相关的军令抄件",
+              "有人说贾师宪已不理会王丞相回书",
+              "上四军旗帜被提前点验，行装朝江州一侧堆放"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -5108,17 +5113,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "辕门外灯火不歇，换防锣声比往日更密，江州二字在夜风里被反复提起。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“攻江州令”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "军令压城",
+              "text": "程宗扬听见驿馆门轴一夜响了数回。抄件上写着江州、岳鹏举余党，旁人又说贾师宪已把王丞相回书搁在一边。上四军旗帜被提前点验，行装堆向江州一侧，究竟会压成怎样的部署，此刻还没人敢说死。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_10_jiangzhou_shadow_war.lcq.event.s10_02_yeying_pass",
-          "title": "局势中的夜影关封航",
-          "summary": "围绕“夜影关封航”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "云水航道封禁",
+          "summary": "夜影关前云水航道被宋军拦断，舟楫停摆，陆路人马开始挤向关口。",
           "sourceEventId": "lcq.event.s10_02_yeying_pass",
           "settledWhenAny": [
             [
@@ -5135,10 +5140,15 @@
             "id": "omen.baseline.lcq.stage_10_jiangzhou_shadow_war.lcq.event.s10_02_yeying_pass",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“夜影关封航”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "云水航道口横起封锁索与巡船",
+              "夜影关码头货船被勒令停航待检",
+              "关前陆路车马骤增，脚夫在谈改道晴州"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -5146,17 +5156,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "江面巡灯光来回扫过，关口号角短促，岸上脚力与骡马挤作一团。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“夜影关封航”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "航道封死",
+              "text": "夜影关前，云水航道口横着封锁索，巡船来回拦人。码头货船被勒令停航待检，脚夫已在谈改走陆路去晴州。关前车马挤成一团，水路何时重开，谁也给不出准话。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_10_jiangzhou_shadow_war.lcq.event.s10_03_ninja_trace",
-          "title": "局势中的东瀛忍者现踪",
-          "summary": "围绕“东瀛忍者现踪”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "佣兵驻地异踪",
+          "summary": "雪隼驻地夜间失物与陌生足印同时出现，有人把痕迹往东瀛一路上猜。",
           "sourceEventId": "lcq.event.s10_03_ninja_trace",
           "settledWhenAny": [
             [
@@ -5173,10 +5183,15 @@
             "id": "omen.baseline.lcq.stage_10_jiangzhou_shadow_war.lcq.event.s10_03_ninja_trace",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“东瀛忍者现踪”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "雪隼佣兵团住处有翻箱与轻功落尘",
+              "月霜房外留下细刃刮痕与细小血点",
+              "石之隼对着异样足印沉吟，未下定论"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -5184,17 +5199,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "佣兵营灯火忽然加密，屋顶瓦片有细碎错位，院里人影来回核验脚印。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“东瀛忍者现踪”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "驻地异踪",
+              "text": "雪隼驻地夜里有人翻过箱笼，月霜房外留下细刃刮痕和几点血。石之隼对着异样足印沉吟，有人已把东瀛忍术挂在嘴边。来人去向不明，黑魔海暗线是否再起，院里还只敢把灯加亮。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_10_jiangzhou_shadow_war.lcq.event.s10_04_left_army_review",
-          "title": "局势中的左武军复盘",
-          "summary": "围绕“左武军复盘”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "左武军旧账翻起",
+          "summary": "王哲左武军覆灭的补给断口与军机走漏被重新摊开，江州前史压在案上。",
           "sourceEventId": "lcq.event.s10_04_left_army_review",
           "settledWhenAny": [
             [
@@ -5211,10 +5226,19 @@
             "id": "omen.baseline.lcq.stage_10_jiangzhou_shadow_war.lcq.event.s10_04_left_army_review",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“左武军复盘”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "孟非卿把左武军粮道断口图摊在灯下",
+              "有人重提军机外泄，金蜜镝之名被排除又被争议",
+              "程宗扬对着旧账沉默，追问比结论更多"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.meng_fei_qing"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -5222,17 +5246,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "营帐灯芯爆了两次，地图上江州一线被反复按住，帐外巡夜脚步忽然放轻。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“左武军复盘”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "旧账翻开",
+              "text": "孟非卿把左武军粮道断口图按在灯下，声线沉稳，却比平时更短。有人重提军机外泄，金蜜镝的名字刚被排除，又被旁人顶回来。程宗扬追问多于断言，江州前史像潮水一样漫上桌沿。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_10_jiangzhou_shadow_war.lcq.event.s10_05_war_funds",
-          "title": "局势中的十万金铢军资",
-          "summary": "围绕“十万金铢军资”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "军资缺口告急",
+          "summary": "孟非卿军资告急的风声传开，鹏翼社抵押与陶府借贷的盘算开始露头。",
           "sourceEventId": "lcq.event.s10_05_war_funds",
           "settledWhenAny": [
             [
@@ -5249,10 +5273,15 @@
             "id": "omen.baseline.lcq.stage_10_jiangzhou_shadow_war.lcq.event.s10_05_war_funds",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“十万金铢军资”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "星月湖账房连夜清点不足之数",
+              "陶弘敏处有人打听月息两分的大口借贷",
+              "鹏翼社契据被取出，云氏名号被当作幌子试探"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -5260,17 +5289,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "钱庄夜灯未熄，算盘声密得发躁，门外镖车空着，像在等一批还没谈妥的金铢。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“十万金铢军资”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "金铢告急",
+              "text": "星月湖账房连夜清点，缺口大得压住了嗓门。陶弘敏那边已有人打听月息两分的大口借贷，鹏翼社契据被取出，云氏名号被当作幌子试探。十万金铢会不会落袋，此刻还停在算盘上。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_10_jiangzhou_shadow_war.lcq.event.s10_06_ruined_temple",
-          "title": "局势中的破道观线索",
-          "summary": "围绕“破道观线索”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "破道观夜影",
+          "summary": "晴州夜里有可疑人影往破道观方向去，黑魔海介入的气味比白日更浓。",
           "sourceEventId": "lcq.event.s10_06_ruined_temple",
           "settledWhenAny": [
             [
@@ -5287,10 +5316,15 @@
             "id": "omen.baseline.lcq.stage_10_jiangzhou_shadow_war.lcq.event.s10_06_ruined_temple",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“破道观线索”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "破道观外新添香灰与未燃尽的符纸",
+              "有人影避开官道，专走荒径入观",
+              "程宗扬认出其中一个步态像林之澜旧部"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -5298,17 +5332,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "荒观瓦缝漏风，远处犬吠忽然止住，山门灯影一闪又灭。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“破道观线索”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "荒观夜影",
+              "text": "破道观外新添香灰和未燃尽的符纸，人影避开官道，专走荒径入观。程宗扬盯着其中一个步态，隐约像林之澜旧部元行健。黑魔海是否已伸进晴州，夜里只有脚印，没有答词。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_10_jiangzhou_shadow_war.lcq.event.s10_07_preemptive_strike",
-          "title": "局势中的先发制人",
-          "summary": "围绕“先发制人”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "先手议论渐起",
+          "summary": "保护月霜与切断江州后患被放在同一张桌上，先发制人的说法开始落地。",
           "sourceEventId": "lcq.event.s10_07_preemptive_strike",
           "settledWhenAny": [
             [
@@ -5325,10 +5359,15 @@
             "id": "omen.baseline.lcq.stage_10_jiangzhou_shadow_war.lcq.event.s10_07_preemptive_strike",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“先发制人”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "程宗扬连夜列出三条先打黑魔海的理由",
+              "月霜身边护卫被临时加密，却未改驻地",
+              "营中对先手与固守两说争执不下"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -5336,17 +5375,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "议事帐灯火通明，沙盘上黑魔海标记被挪来挪去，帐帘外刀环轻碰。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“先发制人”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "先手之议",
+              "text": "程宗扬把保护月霜、切断江州后患几条理由压在沙盘边，语气比平日更冲。月霜身边护卫加密了，驻地却没动。帐里先手与固守两说顶在一起，谁也还没把令旗推出去。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_10_jiangzhou_shadow_war.lcq.event.s10_08_lair_reversal",
-          "title": "局势中的巢穴逆转",
-          "summary": "围绕“巢穴逆转”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "洞穴杀机暗涌",
+          "summary": "星月湖洞穴里黑魔海气味渐浓，名单与毒网同时露头，对峙正在收紧。",
           "sourceEventId": "lcq.event.s10_08_lair_reversal",
           "settledWhenAny": [
             [
@@ -5363,10 +5402,19 @@
             "id": "omen.baseline.lcq.stage_10_jiangzhou_shadow_war.lcq.event.s10_08_lair_reversal",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“巢穴逆转”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "洞穴深处传来巫咒低吟与潮腥气",
+              "记士辛卯手边摊开疑似星月湖名册残页",
+              "湿岩上有人在试毒网，孟非卿前锋已压近"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.meng_fei_qing"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -5374,17 +5422,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "洞壁水珠成串落下，火把忽明忽暗，远处网索拖地，潮腥混着药气。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“巢穴逆转”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "洞中杀机",
+              "text": "洞穴深处潮腥混着巫咒，记士辛卯手边摊着疑似星月湖名册的残页。湿岩上有人在试毒网，孟非卿前锋已压近。对峙收得很紧，谁先失手，洞里还听不见定音。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_10_jiangzhou_shadow_war.lcq.event.s10_09_yin_yang_fish",
-          "title": "局势中的阴阳鱼线索",
-          "summary": "围绕“阴阳鱼线索”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "七海客栈暗语",
+          "summary": "马王巷七海客栈被反复提起，阴阳鱼的下落成了互相打架的口信。",
           "sourceEventId": "lcq.event.s10_09_yin_yang_fish",
           "settledWhenAny": [
             [
@@ -5401,10 +5449,15 @@
             "id": "omen.baseline.lcq.stage_10_jiangzhou_shadow_war.lcq.event.s10_09_yin_yang_fish",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“阴阳鱼线索”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "伤重的黑魔海中人咬着七海客栈四个字",
+              "马王巷客栈夜里加岗，厢房灯火对不上号簿",
+              "阴阳鱼之名在市井与洞口各传一版"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -5412,17 +5465,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "巷口酒旗湿透，客栈后门多了一道闩，远处有人把阴阳鱼三字压得很低。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“阴阳鱼线索”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "客栈暗语",
+              "text": "伤重的黑魔海中人把七海客栈几个字咬得很死，马王巷那家店夜里加了岗，厢房灯火却对不上号簿。阴阳鱼的下落在市井和洞口各传一版，哪一版能用，还没人敢拿命去试。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_10_jiangzhou_shadow_war.lcq.event.s10_10_xiaozi_crisis",
-          "title": "局势中的小紫危局",
-          "summary": "围绕“小紫危局”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "兰汤馆气息不对",
+          "summary": "小紫伤势未稳，兰汤馆里她对乐明珠靠得过近，异术的气味压过了水汽。",
           "sourceEventId": "lcq.event.s10_10_xiaozi_crisis",
           "settledWhenAny": [
             [
@@ -5439,10 +5492,19 @@
             "id": "omen.baseline.lcq.stage_10_jiangzhou_shadow_war.lcq.event.s10_10_xiaozi_crisis",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“小紫危局”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "小紫伤处未愈，眼神却比平日更黏更亮",
+              "兰汤馆暖阁里乐明珠被她轻轻引到近前",
+              "程宗扬察觉她喉间气息不对，已抬步过来"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.xiao_zi"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -5450,10 +5512,10 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "汤雾里药香发甜，屏风后银铃轻响，暖阁灯光忽然暗了一寸。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“小紫危局”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "汤馆异息",
+              "text": "兰汤馆暖阁里，小紫伤处未愈，却把乐明珠轻轻引到近前，眼神黏得不像养伤。程宗扬察觉她喉间气息不对，已抬步过来。水汽和药香搅在一起，这一步会拦住什么，帐帘还没被彻底掀开。"
             }
           }
         }

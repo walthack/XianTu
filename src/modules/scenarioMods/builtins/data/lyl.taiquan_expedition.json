@@ -1484,8 +1484,8 @@
       "situations": [
         {
           "id": "world-sim.baseline.lyl.taiquan_expedition.liuchao.event.enter_taiquan",
-          "title": "局势中的接获江州三份军情",
-          "summary": "围绕“接获江州三份军情”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "蜡丸三报压城",
+          "summary": "秦桧交来线人蜡丸，江州急报待核；林清浦水镜被阻，快马已在廊下整装。",
           "sourceEventId": "liuchao.event.enter_taiquan",
           "settledWhenAny": [
             [
@@ -1502,10 +1502,19 @@
             "id": "omen.baseline.lyl.taiquan_expedition.liuchao.event.enter_taiquan",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“接获江州三份军情”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "秦桧当面呈上蜡丸，三份急报都指向江州一线",
+              "林清浦试水镜时镜面发滞，称围城法阵隔断远讯",
+              "廊下快马已备，传讯口令改了两回"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.qin_hui"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.lin_qing_pu"
+              },
               {
                 "kind": "messenger"
               },
@@ -1513,17 +1522,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "临安宅院廊下拴着待发的快马，蜡封碎屑落在案上，水镜旁灯火晃得人眼酸，一时说不清该先核哪一份。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“接获江州三份军情”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "蜡丸未拆透",
+              "text": "秦桧把线人蜡丸摊在案上，三份急报都绕着江州打转。林清浦试了水镜，镜面发滞，只说围城法阵隔了远讯。廊下快马已备，口令却改过两回——急报要不要改走人力，此刻还对不齐。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.taiquan_expedition.liuchao.event.reconnoiter",
-          "title": "局势中的象牙为礼拜访威远镖局",
-          "summary": "围绕“象牙为礼拜访威远镖局”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "象牙压上镖局门",
+          "summary": "猛犸牙已装箱待作押镖之礼，威远镖局因失镖气氛紧绷，李寅臣夫妇隔墙争执不止。",
           "sourceEventId": "liuchao.event.reconnoiter",
           "settledWhenAny": [
             [
@@ -1540,10 +1549,19 @@
             "id": "omen.baseline.lyl.taiquan_expedition.liuchao.event.reconnoiter",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“象牙为礼拜访威远镖局”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "两根猛犸牙装箱封绳，名义是押镖委托",
+              "威远镖局门房见客时先问是否太尉府差遣",
+              "内院隐约传来夫妇争执，有人提到婚事与脱身"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.qin_hui"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.ruan_xiang_lin"
+              },
               {
                 "kind": "messenger"
               },
@@ -1551,17 +1569,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "临安镖局门楣下尘土未净，象牙箱绳结勒得很紧，内院帘后压着压着的争执声，听不清谁先松口。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“象牙为礼拜访威远镖局”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "镖门先紧后乱",
+              "text": "象牙箱已打好，秦桧只说这是登门试探的见面礼。威远镖局门房见客先问是不是太尉府的人。帘后李寅臣与阮香琳争执未歇，婚事、失镖、脱身搅在一处，谁也没把话说死。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.taiquan_expedition.liuchao.event.du_zong_raid",
-          "title": "局势中的司营巷旁观屠龙刀伏击",
-          "summary": "围绕“司营巷旁观屠龙刀伏击”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "司营巷里刀影",
+          "summary": "司营巷口出现兜售宝刀的灰衣人，林冲驻足观刀；巷深处有人试藏剑竹杖，路向变得不寻常。",
           "sourceEventId": "liuchao.event.du_zong_raid",
           "settledWhenAny": [
             [
@@ -1578,10 +1596,19 @@
             "id": "omen.baseline.lyl.taiquan_expedition.liuchao.event.du_zong_raid",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“司营巷旁观屠龙刀伏击”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "灰衣人在司营巷口亮出一柄自称屠龙刀的宝刀",
+              "林冲驻足问价，神色沉静却未离巷",
+              "巷角两支竹杖磕地发闷，内里似藏了刃"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.lin_chong"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.qin_hui"
+              },
               {
                 "kind": "messenger"
               },
@@ -1589,17 +1616,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "司营巷午后人声忽然稀了，刀鞘反光扫过墙根，竹杖点地的闷响与寻常货郎不同。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“司营巷旁观屠龙刀伏击”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "巷口刀价异",
+              "text": "司营巷口，灰衣人把一柄屠龙刀递到亮处讲价。林冲驻足细看，并未立刻走开。巷角两支竹杖磕地发闷，像藏了刃。秦桧只在远处折扇轻摇，说这路数不像单纯卖刀。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.taiquan_expedition.liuchao.event.fruit_conflict",
-          "title": "局势中的林家识破凝姨秘密",
-          "summary": "围绕“林家识破凝姨秘密”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "林府楼上凝姨",
+          "summary": "林家设席待客，李师师口中的凝姨即林娘子；近看举止与成婚多年的表象对不齐。",
           "sourceEventId": "liuchao.event.fruit_conflict",
           "settledWhenAny": [
             [
@@ -1616,10 +1643,19 @@
             "id": "omen.baseline.lyl.taiquan_expedition.liuchao.event.fruit_conflict",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“林家识破凝姨秘密”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "林冲设席，秦桧、敖润、青面兽随程宗扬入座",
+              "李师师称楼上那位为凝姨，正是林娘子阮香凝",
+              "席间她应对过于生疏，与多年主母的说法对不上"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.qin_hui"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.li_shi_shi"
+              },
               {
                 "kind": "messenger"
               },
@@ -1627,17 +1663,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "林府楼上帘影微动，酒盏碰撞很轻，称呼与礼数对不齐，宾客面上都装作没听见。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“林家识破凝姨秘密”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "席上称呼偏",
+              "text": "林家楼上设席，李师师口中的凝姨，便是林娘子阮香凝。近看她应对生疏，礼数与成婚多年的主母对不齐。秦桧只把杯沿转了半圈，并未点破——疑点还停在席面上。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.taiquan_expedition.liuchao.event.escape_taiquan",
-          "title": "局势中的潜入西湖别业窃听密谋",
-          "summary": "围绕“潜入西湖别业窃听密谋”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "西湖别业灯密",
+          "summary": "阮香琳往西湖一带去，俞子元远远跟着；临湖别业灯火比平日密，高衙内与陆谦似有夜谈。",
           "sourceEventId": "liuchao.event.escape_taiquan",
           "settledWhenAny": [
             [
@@ -1654,10 +1690,19 @@
             "id": "omen.baseline.lyl.taiquan_expedition.liuchao.event.escape_taiquan",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“潜入西湖别业窃听密谋”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "阮香琳出镖局后改走临湖小路，并未回府",
+              "俞子元远远跟着，丝袍下步点稳得不像闲逛",
+              "临湖别业多点了灯，廊上传出高衙内与陆谦的低语"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.yu_zi_yuan"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.ruan_xiang_lin"
+              },
               {
                 "kind": "messenger"
               },
@@ -1665,10 +1710,10 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "西湖岸边夜风带潮，别业灯火比平日密一圈，石径上只余一个女人的履声和远处稳而轻的跟踪步点。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“潜入西湖别业窃听密谋”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "别业灯太密",
+              "text": "阮香琳出了镖局，不回府，改走临湖小路。俞子元远远跟着，步点稳得不像闲逛。临湖别业多点了灯，廊上隐约是高衙内与陆谦的声音，夜谈内容还隔着一层窗纸。"
             }
           }
         }

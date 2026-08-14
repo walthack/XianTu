@@ -1149,8 +1149,8 @@
       "situations": [
         {
           "id": "world-sim.baseline.lcq.stage_06.lcq.event.s06_01",
-          "title": "局势中的鬼巫王反被龙神吞噬",
-          "summary": "围绕“鬼巫王反被龙神吞噬”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "星阵反扣其主",
+          "summary": "苍龙星阵越收越紧，祭品被龙神推开；鬼巫王仍朝龙身逼近，阵纹却像勒回他自己一侧。",
           "sourceEventId": "lcq.event.s06_01",
           "settledWhenAny": [
             [
@@ -1167,10 +1167,19 @@
             "id": "omen.baseline.lcq.stage_06.lcq.event.s06_01",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“鬼巫王反被龙神吞噬”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "龙神舌尖拨开祭品，并不按鬼巫王的口令贴合",
+              "星阵光圈收束，鬼角处石纹发出刺耳绷响",
+              "乐明珠贴在龙角边，只盯着阵纹究竟锁住了谁"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.le_mingzhu"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.gui_wu_wang"
+              },
               {
                 "kind": "messenger"
               },
@@ -1178,17 +1187,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "井口星光一圈圈收紧，热雾里混着祭品被掀落的腥甜，山壁随之轻轻发颤。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“鬼巫王反被龙神吞噬”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "阵反扣",
+              "text": "龙神已醒，祭品却被舌尖拨开，洒落井沿。星阵不往外扩，光圈反勒向鬼巫王一侧，他的鬼角在光里发颤。乐明珠贴着龙角，只说先看清这阵到底缚住了谁。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_06.lcq.event.s06_02",
-          "title": "局势中的众人合力杀死龙神",
-          "summary": "围绕“众人合力杀死龙神”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "井口围猎聚齐",
+          "summary": "峒内各路人马不再观望，弓、刀、蛊器同时对准已醒的龙神，攻势交错，胜负未分。",
           "sourceEventId": "lcq.event.s06_02",
           "settledWhenAny": [
             [
@@ -1205,10 +1214,19 @@
             "id": "omen.baseline.lcq.stage_06.lcq.event.s06_02",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“众人合力杀死龙神”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "苏荔拉满长弓，蝎尾自岩缝探出毒芒",
+              "凝羽与武二郎分据两侧，谢艺刀锋已近龙颈",
+              "小紫盯着龙颅一线，话只吐出半句便止住"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.xie_yi"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.su_li"
+              },
               {
                 "kind": "messenger"
               },
@@ -1216,17 +1234,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "井壁回荡龙息与兵器相撞的闷响，碎石不断从顶上簌簌落下，热雾被撕成一条条。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“众人合力杀死龙神”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "围猎起",
+              "text": "龙神在井中翻身，苏荔的箭、武二郎的力、凝羽的刃已经前后补上。谢艺贴着龙颈寻缝，小紫却只盯着颅顶某处，像看见了别人没看见的缝。这一轮还远未分出高低。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_06.lcq.event.s06_03",
-          "title": "局势中的谢艺伤重辞世",
-          "summary": "围绕“谢艺伤重辞世”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "雷火贯胸未决",
+          "summary": "谢艺贴近龙颈腹后，井顶被扯下一道闪电；他胸口焦裂，步子不稳，却仍握着刀。",
           "sourceEventId": "lcq.event.s06_03",
           "settledWhenAny": [
             [
@@ -1243,10 +1261,19 @@
             "id": "omen.baseline.lcq.stage_06.lcq.event.s06_03",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“谢艺伤重辞世”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "电光沿龙脊劈下，焦痕正落在贴颈腹的人影上",
+              "谢艺胸前衣甲焦裂，呼吸短促，刀柄没松",
+              "小紫在烟尘里喊他，声音发紧，却挨不近"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.xie_yi"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.xiao_zi"
+              },
               {
                 "kind": "messenger"
               },
@@ -1254,17 +1281,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "焦雷气味压过龙血，井壁被照得发白，随后又陷入滚烫的烟尘。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“谢艺伤重辞世”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "雷贯前胸",
+              "text": "谢艺刚贴进龙颈腹一线，井顶便被扯下一道白亮。烟散开时，他胸口衣甲裂开，人还立着，只是步子已经发飘。小紫在更低处喊他，中间隔着尚未冷却的龙息。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_06.lcq.event.s06_04",
-          "title": "局势中的小紫弑母",
-          "summary": "围绕“小紫弑母”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "废墟窄道对峙",
+          "summary": "战后废墟里，小紫拦住逃出的碧姬，往日的天真收得干干净净，窄道上一时谁也过不去。",
           "sourceEventId": "lcq.event.s06_04",
           "settledWhenAny": [
             [
@@ -1281,10 +1308,19 @@
             "id": "omen.baseline.lcq.stage_06.lcq.event.s06_04",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“小紫弑母”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "小紫横在废墟窄道，不让那名碧鲮女子过去",
+              "碧姬衣袂带伤，改口说自己只是路过",
+              "乐明珠远远看见这一幕，脚步不由一滞"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.xiao_zi"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.bi_ji"
+              },
               {
                 "kind": "messenger"
               },
@@ -1292,17 +1328,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "崩塌的峒道里尽是焦土与断石，风从裂口灌入，把两个人影钉在窄路上。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“小紫弑母”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "窄道相拦",
+              "text": "废墟烟还没散尽，小紫忽然收起那副什么都不懂的神气，横在窄道上挡住逃出来的碧姬。那女子后退、改口、想绕开，都被一步步逼回去。乐明珠在更远处看见，还来不及出声。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_06.lcq.event.s06_05",
-          "title": "局势中的朱老头显露殇侯身份",
-          "summary": "围绕“朱老头显露殇侯身份”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "谷径另有路记",
+          "summary": "峒外另有一条不起眼的山径被人做了记号，谷深处升起村落炊烟，主人只以殇侯相称。",
           "sourceEventId": "lcq.event.s06_05",
           "settledWhenAny": [
             [
@@ -1319,10 +1355,15 @@
             "id": "omen.baseline.lcq.stage_06.lcq.event.s06_05",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“朱老头显露殇侯身份”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "石壁上留着朱老头走过时不易察觉的路记",
+              "谷口有年长妇人张望，像在等人循径进来",
+              "村中静室已备席，门楣只称村落主人殇侯"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.shang_zhen_yu"
+              },
               {
                 "kind": "messenger"
               },
@@ -1330,17 +1371,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "南荒山谷雾气未散，一条窄径绕过乱石伸向炊烟，远处犬吠了两声又停住。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“朱老头显露殇侯身份”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "谷中引路",
+              "text": "出峒之后，乱石间多出一条几乎被草遮住的细径，壁上路记与朱老头先前的走法对得上。谷深处已有炊烟，门里只传出“殇侯在等”几个字，人影还隔着一层竹帘。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_06.lcq.event.s06_06",
-          "title": "局势中的殇侯解除程宗扬冰蛊",
-          "summary": "围绕“殇侯解除程宗扬冰蛊”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "寒蛊待人处置",
+          "summary": "静室里殇侯按住脉门辨认寒毒走向，只说要处置旧蛊，并未当场宣判已解或未解。",
           "sourceEventId": "lcq.event.s06_06",
           "settledWhenAny": [
             [
@@ -1357,10 +1398,15 @@
             "id": "omen.baseline.lcq.stage_06.lcq.event.s06_06",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“殇侯解除程宗扬冰蛊”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "腕间仍有间歇寒意往心口里钻",
+              "殇侯按上脉门，只说先处置身上旧蛊",
+              "案上备着针石符水，具体手法尚未出口"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.shang_zhen_yu"
+              },
               {
                 "kind": "messenger"
               },
@@ -1368,10 +1414,10 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "静室熏香压住山风，案上针石摆得齐整，窗外竹影一动不动。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“殇侯解除程宗扬冰蛊”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "脉上寒意",
+              "text": "殇侯并不先谈功法，只按住脉门，顺着那股往心里钻的寒意往下寻。案上针石与符水都已备好，他却只说旧蛊该处置了，解与未解，这会儿谁也还听不真切。"
             }
           }
         }

@@ -1,0 +1,5003 @@
+{
+  "version": 1,
+  "generatedAt": "2026-08-14T00:37:41.423Z",
+  "model": "grok-4.6-build",
+  "books": [
+    "qingyu",
+    "yunlong"
+  ],
+  "entries": [
+    {
+      "stageId": "lcq.stage_01",
+      "situationId": "world-sim.baseline.lcq.stage_01.lcq.event.s01_01",
+      "sourceEventId": "lcq.event.s01_01",
+      "title": "紫电撕开客舱",
+      "summary": "客舱被紫雷劈开，失重里风带着草腥与金戈声。两人还分不清落点，云层下已见旗帜与兽影搅作一团。",
+      "observableFacts": [
+        "舷窗外紫电连闪，舱壁发出焦糊味",
+        "段强死攥扶手，嘴里还念着穿越话本",
+        "云层下隐约有旗帜与人马厮杀"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang",
+        "lcq.character.duan_qiang"
+      ],
+      "environmentFallback": "舱内灯管炸裂，紫电从裂口灌入。失重中能听见远处金戈与兽吼混在风里，一时分不清会落向何处。",
+      "presentation": {
+        "title": "紫电裂空",
+        "text": "紫雷从舷窗外劈进来，舱壁发烫发焦。段强死攥扶手，像要把幻想攥成真。失重里隐约听见旗角与兽吼，地面已不像人间。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_01",
+      "situationId": "world-sim.baseline.lcq.stage_01.lcq.event.s01_02",
+      "sourceEventId": "lcq.event.s01_02",
+      "title": "箭雨逼近颈侧",
+      "summary": "半兽人弓手从草浪后前压，段强步子乱了。箭羽擦过颈侧护甲，退路被蹄声封住。",
+      "observableFacts": [
+        "半兽人弓手从草浪后换阵前压",
+        "段强踉跄，颈侧护甲已被箭羽擦破",
+        "近处死亡气息骤然加重"
+      ],
+      "preferredCharacterIds": [
+        "lcq.character.duan_qiang",
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "箭矢擦着草尖掠过，蹄声从两侧收拢。魁梧同伴脚步发虚，风从颈侧刮过，像有人在瞄准那一线空隙。",
+      "presentation": {
+        "title": "箭雨压颈",
+        "text": "草浪后弓弦连响，半兽人换阵前压。段强高大却慌，颈侧护甲已被箭羽擦出血丝。退路被蹄声封死，下一箭落在谁身上还没人敢说。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_01",
+      "situationId": "world-sim.baseline.lcq.stage_01.lcq.event.s01_03",
+      "sourceEventId": "lcq.event.s01_03",
+      "title": "负伤骑士近身",
+      "summary": "乱阵里一名女扮男装的骑士被半兽人击伤，寒意从伤口渗出。近身时衣甲错位，两人僵在触碰的瞬间。",
+      "observableFacts": [
+        "女扮男装的骑士肩甲渗血，指尖发冷",
+        "半兽人从两侧包抄，近身距离缩短",
+        "衣甲被撞开一线，触感与外表不符"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang",
+        "lcq.character.yue_shuang"
+      ],
+      "environmentFallback": "烟尘里一名英气骑士踉跄后退，伤口透出不寻常寒意。半兽人斧影逼近，两人挤在同一掩体后，衣甲错位，气氛骤然紧绷。",
+      "presentation": {
+        "title": "负伤骑士",
+        "text": "女扮男装的骑士肩甲渗血，指尖冰凉。半兽人从两侧包抄，两人挤在掩体后，衣甲被撞开一线。她抬眼如刀，兽吼已经压到耳边。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_01",
+      "situationId": "world-sim.baseline.lcq.stage_01.lcq.event.s01_04",
+      "sourceEventId": "lcq.event.s01_04",
+      "title": "道门火光将近",
+      "summary": "兽蛮收圈时，远处升起烈火法光与道旗，四路人马朝这片草场压来，包围圈出现缝隙。",
+      "observableFacts": [
+        "草原远处升起赤色法光与道旗",
+        "半兽人阵列出现短暂迟疑与换防",
+        "有人高声报出太乙真宗教御名号"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.zhuo_yunjun",
+        "liuchao.character.lin_cai_quan"
+      ],
+      "environmentFallback": "兽吼正密，天边忽然亮起火光，道袍人影沿草脊铺开。半兽人阵脚一滞，谁先冲进这片杀场还看不清。",
+      "presentation": {
+        "title": "道火将近",
+        "text": "兽蛮收圈时，天边忽然燃起烈火法光，道旗猎猎。半兽人换防迟疑，有人报出太乙教御的名号。包围圈裂开一线，火光与兽吼谁先压过来，还没有定数。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_01",
+      "situationId": "world-sim.baseline.lcq.stage_01.lcq.event.s01_05",
+      "sourceEventId": "lcq.event.s01_05",
+      "title": "帅帐夜问起根",
+      "summary": "帅帐灯火未歇，王哲把程宗扬单独留下。来历与体内异动被一一追问，帐外亲兵已退到帷外。",
+      "observableFacts": [
+        "王哲在帅帐独留程宗扬对坐",
+        "帐外亲兵被喝退，帷幕落下",
+        "王哲目光落在他胸口灵息异动处"
+      ],
+      "preferredCharacterIds": [
+        "lcq.character.wang_zhe",
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "帅帐灯芯爆了一下，掌教脸色微黯，腰背仍直如标枪。亲兵退到帐外，帐内只余对坐的两人与未说完的来历。",
+      "presentation": {
+        "title": "帅帐夜问",
+        "text": "王哲把程宗扬单独留在帅帐，亲兵退到帷外。他脸色微黯，问的却是来历与体内那缕不像凡根的灵息。灯火稳着，谁也还没把话落到实处。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_01",
+      "situationId": "world-sim.baseline.lcq.stage_01.lcq.event.s01_06",
+      "sourceEventId": "lcq.event.s01_06",
+      "title": "寒毒催丹",
+      "summary": "月霜寒毒加重，她把丹药逼到程宗扬唇边。药力一入，真阳躁动，两人被逼到同一处帐帘后。",
+      "observableFacts": [
+        "月霜强按他下颌，丹香刺鼻",
+        "她周身寒意与他体内躁热同时加重",
+        "帐帘落下，退路被她堵住"
+      ],
+      "preferredCharacterIds": [
+        "lcq.character.yue_shuang",
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "帐帘落下，寒气与药香搅在一起。她把丹药递到他唇边，呼吸发颤却不肯松手，帐外脚步远了，帐内只剩对峙。",
+      "presentation": {
+        "title": "丹香逼近",
+        "text": "月霜寒得发抖，仍按住他的下颌，把丹药逼到唇边。药力一入，真阳躁热往上涌，她自己也退无可退。帐帘垂地，下一步是救人还是失控，谁都还没落地。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_02",
+      "situationId": "world-sim.baseline.lcq.stage_02.lcq.event.s02_01",
+      "sourceEventId": "lcq.event.s02_01",
+      "title": "帅帐密召传功",
+      "summary": "帅帐里王哲面色发黯、腰背笔直，亲兵拦闲杂出入，案上锦囊与口诀册被单独收起，传功托付压得帐内发紧。",
+      "observableFacts": [
+        "王哲面色发黯、腰背如标枪，独留帐内静候",
+        "亲兵核对准入，闲杂不得近帅帐",
+        "案上锦囊与口诀册被单独封存"
+      ],
+      "preferredCharacterIds": [
+        "lcq.character.wang_zhe"
+      ],
+      "environmentFallback": "帅帐门帘压低，点名换岗比平日更密，帐内灯火未灭，却听不见寻常议事的闲话。",
+      "presentation": {
+        "title": "帐中密召",
+        "text": "帅帐帘脚压得很低。王哲腰背仍如标枪，脸色却发黯，案上锦囊与口诀册被单独收起。亲兵只核对准入，不说去向。传功与托付压在帐内，还没落到谁肩上。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_02",
+      "situationId": "world-sim.baseline.lcq.stage_02.lcq.event.s02_02",
+      "sourceEventId": "lcq.event.s02_02",
+      "title": "联军压境换防",
+      "summary": "左武一线加紧换防，天霁营弩位被拖后，罗马与马其顿旗号交错压近，韩庚去向与帅帐号令对不上口。",
+      "observableFacts": [
+        "罗马与马其顿旗号交错压近左武一线",
+        "天霁营弩位后撤，帅帐卫士牵走备用战马",
+        "韩庚营旗前移，口信与帅帐号令互相矛盾"
+      ],
+      "preferredCharacterIds": [
+        "lcq.character.wang_zhe",
+        "lcq.character.han_geng"
+      ],
+      "environmentFallback": "远处鼓角断续，烟尘里旗号重叠，换防与毁械的动静交错，一时分不清哪一线先撑不住。",
+      "presentation": {
+        "title": "旗号交错",
+        "text": "联军旗号在烟尘里重叠。天霁营弩位被拖后，帅帐卫士牵走备用战马。韩庚营旗前移，口信却与帅帐号令对不上。一线在加紧换防，胜负仍未落地。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_02",
+      "situationId": "world-sim.baseline.lcq.stage_02.lcq.event.s02_03",
+      "sourceEventId": "lcq.event.s02_03",
+      "title": "天武营阵前吃紧",
+      "summary": "天武营秦军方阵对上罗马第十二军团，弩手还在放矢，对面标枪已成排举起，右翼刺阵的影子压得很近。",
+      "observableFacts": [
+        "天武营弩手连发，罗马第十二军团盾墙前压",
+        "对面标枪成排举起，尚未齐投",
+        "月霜在阵侧厉声催阵，右翼已被刺阵影子罩住"
+      ],
+      "preferredCharacterIds": [
+        "lcq.character.yue_shuang"
+      ],
+      "environmentFallback": "阵前尘土扬起，弩弦与盾牌磕碰交错，标枪林立如雨前，方阵脚步已有些乱。",
+      "presentation": {
+        "title": "标枪林立",
+        "text": "天武营弩矢还在飞，罗马第十二军团的盾墙已压近。标枪成排举起，右刺的影子贴上方阵侧翼。月霜在阵侧催阵，声音发紧。短兵尚未交接，阵脚却已发颤。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_02",
+      "situationId": "world-sim.baseline.lcq.stage_02.lcq.event.s02_04",
+      "sourceEventId": "lcq.event.s02_04",
+      "title": "五原城盘奴",
+      "summary": "五原城口白湖商馆的人拦路核身，烙铁与铁链搁在门边，逃奴画像与路人面目对不上，盘问比平日更密。",
+      "observableFacts": [
+        "城门口白湖商馆的人拦路核身、对照逃奴画像",
+        "门边搁着烙铁与铁链，过路人被反复比对"
+      ],
+      "preferredCharacterIds": [],
+      "environmentFallback": "五原城门风里带着焦糊味，核身的队列拉长，画像、烙铁与铁链并置，过路人被反复喝令站住。",
+      "presentation": {
+        "title": "城门盘奴",
+        "text": "五原城门口，白湖商馆的人把逃奴画像按到过路人脸上比对。烙铁与铁链搁在门边，盘问一句比一句密。谁会被拖进去，此刻还说不准。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_02",
+      "situationId": "world-sim.baseline.lcq.stage_02.lcq.event.s02_05",
+      "sourceEventId": "lcq.event.s02_05",
+      "title": "地牢口信有诈",
+      "summary": "五原城牢房外传来放人的口信，过道灯火被故意留暗，脚步声一前一后，像有人在等开门。",
+      "observableFacts": [
+        "牢房外传来提前放人的口信，钥匙却未交到本人手里",
+        "过道灯火留暗，前后脚步声对不齐"
+      ],
+      "preferredCharacterIds": [],
+      "environmentFallback": "地牢潮气里混着脂粉与铁锈味，铁门链响了一下又停住，过道尽头有人压低嗓子对暗号。",
+      "presentation": {
+        "title": "放人有诈",
+        "text": "牢房外忽然说要放人，钥匙却不交到本人手里。过道灯火留暗，前后脚步对不齐。铁门链响了一下又停住。出去是活路还是套，灯影里看不真切。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_02",
+      "situationId": "world-sim.baseline.lcq.stage_02.lcq.event.s02_06",
+      "sourceEventId": "lcq.event.s02_06",
+      "title": "商馆女主召见",
+      "summary": "白湖商馆女主人忽然召见外客，馆内男奴回避，护卫凝羽守在侧门，霓龙丝的名号在厅里被压低提起。",
+      "observableFacts": [
+        "苏妲己以商馆女主身份召见，衣着华丽、笑意不达眼底",
+        "厅内男奴被喝令回避，霓龙丝的名号被压低追问",
+        "凝羽守在侧门，神色冷，未拦也未解释"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.su_daji",
+        "liuchao.character.ning_yu"
+      ],
+      "environmentFallback": "商馆厅柱缠着华彩，炉香过甜，侧门开合极轻，里面问话压得很低，外面只听得见男奴退步。",
+      "presentation": {
+        "title": "厅中召见",
+        "text": "白湖商馆厅里炉香过甜。苏妲己衣着华丽，笑意不达眼底，男奴被喝令回避。霓龙丝三个字被压得很低。凝羽守在侧门，既不拦也不解释。召见已经开始，去向却未说破。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_03",
+      "situationId": "world-sim.baseline.lcq.stage_03.lcq.event.s03_01",
+      "sourceEventId": "lcq.event.s03_01",
+      "title": "商馆里追问霓龙丝",
+      "summary": "苏妲己已识破来历，仍围着霓龙丝产地追问；颈后烙印被核对，南荒之约尚未落纸。",
+      "observableFacts": [
+        "苏妲己把霓龙丝产地问得更细，账房也在翻旧货单",
+        "凝羽守在侧室门口，不许外人插话",
+        "程宗扬颈后烙印被灯下核对过一遍"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.su_daji",
+        "liuchao.character.ning_yu"
+      ],
+      "environmentFallback": "白湖商馆内室灯火未撤，账册摊开，门口甲靴来回，霓龙丝的产地被反复追问，却没人宣布下一步。",
+      "presentation": {
+        "title": "产地未落纸",
+        "text": "苏妲己把霓龙丝问到货单和旧路，凝羽守住侧室，不许闲人靠近。程宗扬颈后的奴隶烙印刚被灯下核对过，南荒三个月的说法只在唇齿间转，还没有人签字画押。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_03",
+      "situationId": "world-sim.baseline.lcq.stage_03.lcq.event.s03_02",
+      "sourceEventId": "lcq.event.s03_02",
+      "title": "刻香赌约正在铺桌",
+      "summary": "厅里要设一场以凝羽作演示的赌约，刻香已备好；香速与契纸都还没定。",
+      "observableFacts": [
+        "厅中摆出刻香与空白契纸，侍从按苏妲己示意布席",
+        "凝羽被点到场中作演示，神色未改",
+        "香座旁多了一只未启封的小匣，无人解释"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.su_daji",
+        "liuchao.character.ning_yu"
+      ],
+      "environmentFallback": "商馆正厅香灰未冷，桌面铺着未填的契纸，刻香已经点上，却没人说赌约以何为赢。",
+      "presentation": {
+        "title": "香未燃尽",
+        "text": "正厅忽然布席，凝羽被点到场中作演示，刻香与空白契纸并排放着。香座旁多了一只未启封的小匣，苏妲己只笑不语。香往哪边烧，谁都还没落锤。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_03",
+      "situationId": "world-sim.baseline.lcq.stage_03.lcq.event.s03_03",
+      "sourceEventId": "lcq.event.s03_03",
+      "title": "内室为怪器争执",
+      "summary": "苏妲己为一件她处置不了的新奇器物烦躁；工钱数目在桌上摊开，还没人伸手。",
+      "observableFacts": [
+        "内室屏风后传来器物轻响，苏妲己嗓音发紧",
+        "案上摊着未封的金铢，数目约六十",
+        "程宗扬被单独唤入，门外侍从退避"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.su_daji"
+      ],
+      "environmentFallback": "内室帘幕密闭，案上金铢未封，屏风后有细碎器物声，女主人的吩咐断断续续，没人敢推门细看。",
+      "presentation": {
+        "title": "金铢未封",
+        "text": "苏妲己把程宗扬单独唤进内室，屏风后那件她说不清的器物仍在轻响。案上摊着约六十金铢，未封口。她要人先谈清楚再动手，语气却比平日急。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_03",
+      "situationId": "world-sim.baseline.lcq.stage_03.lcq.event.s03_04",
+      "sourceEventId": "lcq.event.s03_04",
+      "title": "舞姬身契被翻出",
+      "summary": "阿姬曼的奴契从柜里取出，五十金铢的价码写在旁边；出城巷口已有甲士换岗。",
+      "observableFacts": [
+        "账房取出阿姬曼·芭娜的身契，旁注五十金铢",
+        "阿姬曼被带到廊上，不肯立刻收拾行装",
+        "五原城靠近商馆的巷口加了封路木栅"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.a_jiman_bana",
+        "liuchao.character.ning_yu"
+      ],
+      "environmentFallback": "账房灯下摊开一张天竺舞姬的身契，城门方向传来加岗的脚步。契纸可撕可留，巷口木栅却已经立上。",
+      "presentation": {
+        "title": "身契在灯下",
+        "text": "阿姬曼的身契被摊在账案上，旁注五十金铢。她立在廊上，目光躲闪，并不收拾包袱。凝羽那边已把靠近商馆的巷口加上木栅，出城的路忽然窄了一截。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_03",
+      "situationId": "world-sim.baseline.lcq.stage_03.lcq.event.s03_05",
+      "sourceEventId": "lcq.event.s03_05",
+      "title": "酸梅汤里多了冰",
+      "summary": "苏妲己赐下一盏带冰的酸梅汤，南荒车马的单子同时发到管事手里，时限压得很紧。",
+      "observableFacts": [
+        "苏妲己亲自递上带冰块的酸梅汤，神色平静",
+        "祁远连夜核对南荒车马、护卫与奴隶名册",
+        "商馆传话：两日内须备齐出队之物"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.su_daji",
+        "liuchao.character.qi_yuan"
+      ],
+      "environmentFallback": "内厅酸梅汤尚未见底，院里已有人清点车辕与奴册。南行的吩咐来得突然，解不解开那杯里的东西，没人敢先说破。",
+      "presentation": {
+        "title": "汤未凉透",
+        "text": "苏妲己把一盏加了冰块的酸梅汤推到面前，话却落到南荒。祁远已经连夜摊开车马与奴册，馆里传两日内备齐出队。汤里那点冰沉在盏底，没人当众揭开。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_03",
+      "situationId": "world-sim.baseline.lcq.stage_03.lcq.event.s03_06",
+      "sourceEventId": "lcq.event.s03_06",
+      "title": "城中搜捕逼回商馆",
+      "summary": "武二郎的镣铐刚被解开，城中又响起搜捕；他退回商馆院墙内，随队南行的价还没谈拢。",
+      "observableFacts": [
+        "采石场一侧的镣铐被卸下，武二郎获准走动",
+        "五原街巷传出点名搜捕，商馆后门加岗",
+        "院内有人压低声音谈南行工钱，数目极薄"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.wu_er_lang",
+        "liuchao.character.ning_yu"
+      ],
+      "environmentFallback": "城中锣声一阵紧过一阵，商馆后门甲士加岗。刚卸镣的白武族勇士退回院墙阴影里，随不随队，还卡在一口价上。",
+      "presentation": {
+        "title": "锣声入巷",
+        "text": "武二郎的镣铐刚卸，城巷里已响起点名搜捕。他退回商馆院墙内，凝羽把后门守死。有人把南行的工钱压到极薄，他握拳不语，还没有应声。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_03",
+      "situationId": "world-sim.baseline.lcq.stage_03.lcq.event.s03_07",
+      "sourceEventId": "lcq.event.s03_07",
+      "title": "南行名册连夜增改",
+      "summary": "南荒商队的名册、车马与口粮被连夜增改，出馆次序互相打架，谁押队尚未写死。",
+      "observableFacts": [
+        "祁远把南荒名册改了两遍，护卫与奴隶栏对不上",
+        "车辕在馆门外排队，却迟迟不发第一辆",
+        "凝羽按苏妲己手谕核对接引人，并不解释去向"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.qi_yuan",
+        "liuchao.character.ning_yu"
+      ],
+      "environmentFallback": "馆门外车铃轻响，灯下名册被墨笔涂改。南行的架子已经支起来，第一辆车仍停在门槛外。",
+      "presentation": {
+        "title": "名册涂改",
+        "text": "祁远灯下把南荒名册改了两遍，护卫栏和奴隶栏对不齐。车辕在门外排着，凝羽只按手谕核对接引人。第一辆车的辕绳握在谁手里，馆里还没有统一的说法。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_03",
+      "situationId": "world-sim.baseline.lcq.stage_03.lcq.event.s03_08",
+      "sourceEventId": "lcq.event.s03_08",
+      "title": "官道盘查忽然加密",
+      "summary": "出五原往南的官道增设盘查，商队夜宿次序被打乱，有人传是为了截某一支车队。",
+      "observableFacts": [
+        "南向官道路口多了陌生甲士，过车要验货单",
+        "白湖商队被要求改宿，原定驿铺临时满员",
+        "口信互相矛盾：有的说查私货，有的说查人"
+      ],
+      "preferredCharacterIds": [],
+      "environmentFallback": "南去官道的灯火比往日密，验单的声音隔着车篷传来。商队在路口停住，改宿的牌子已经挂上，缘由却对不上。",
+      "presentation": {
+        "title": "路口验单",
+        "text": "南向官道忽然加密盘查，货单要验两遍。祁远接到改宿的牌子，原驿铺说已经满员。有人讲是查私货，有人讲是查人，车队只能在路口多停一夜。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_03",
+      "situationId": "world-sim.baseline.lcq.stage_03.lcq.event.s03_09",
+      "sourceEventId": "lcq.event.s03_09",
+      "title": "黑石滩水势不对",
+      "summary": "黑石滩渡口水位与往年不同，两岸缆桩被重新打过；云氏商队也在对岸等渡。",
+      "observableFacts": [
+        "黑石滩缆绳换了新桩，旧痕还泡在水里",
+        "对岸出现云氏商会的旗号，有人招手要合渡",
+        "祁远与云苍峰隔水对过话，语气谨慎"
+      ],
+      "preferredCharacterIds": [],
+      "environmentFallback": "黑石滩水声比往日重，新打的缆桩还渗着湿泥。两岸车铃对响，合不合伙渡，船家只等两头点头。",
+      "presentation": {
+        "title": "两岸缆响",
+        "text": "黑石滩的旧缆还泡在水里，新桩已经打上。对岸云氏旗号招手，云苍峰隔水问能不能合渡。祁远应得很慢，船在急流里打转，谁先下缆还没定。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_03",
+      "situationId": "world-sim.baseline.lcq.stage_03.lcq.event.s03_10",
+      "sourceEventId": "lcq.event.s03_10",
+      "title": "夜营里多了一把刀",
+      "summary": "合渡之后夜营比肩扎下，一位自称写书人的刀客守在云氏一侧，目光不像文人。",
+      "observableFacts": [
+        "云氏营火旁多了一名带刀的同行者，自称写书",
+        "谢艺守夜时握刀的手法很稳，与话本先生不像",
+        "程宗扬与祁远隔火看了他一眼，并未点破"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.qi_yuan"
+      ],
+      "environmentFallback": "河滩夜营两堆火离得不远。刀客坐在云氏那一侧，话少，刀鞘抵着靴帮，火光里看不清他到底是哪路人。",
+      "presentation": {
+        "title": "隔火看刀",
+        "text": "合渡后两营比肩，云氏火堆旁多了个自称写书的刀客。谢艺守夜时握刀极稳，不像捏笔的手。祁远只看了一眼，把话咽回去，夜风里没人追问来历。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_03",
+      "situationId": "world-sim.baseline.lcq.stage_03.lcq.event.s03_11",
+      "sourceEventId": "lcq.event.s03_11",
+      "title": "南荒林径传出空寨",
+      "summary": "前路向导把蛇彝人村寨说成近在半日，却又改口今夜不必进寨；林间鸟雀少得反常。",
+      "observableFacts": [
+        "向导把抵达蛇彝村的时辰改晚半日",
+        "林径上不见猎获与炊烟，脚印却新旧交错",
+        "武二郎闻了闻风，说林子里人气不对"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.wu_er_lang",
+        "liuchao.character.qi_yuan"
+      ],
+      "environmentFallback": "南荒林径潮气重，鸟雀少。向导把进寨的时辰往后挪，车铃被勒得更低，空寨的说法只在前队嘴里转了一圈。",
+      "presentation": {
+        "title": "林中人气薄",
+        "text": "前队把蛇彝村说成半日可到，随即又改口今夜不必进寨。林径上炊烟全无，脚印新旧交错。武二郎停步闻风，只丢下一句人气不对，商队仍在原地勒住车铃。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_03",
+      "situationId": "world-sim.baseline.lcq.stage_03.lcq.event.s03_12",
+      "sourceEventId": "lcq.event.s03_12",
+      "title": "蛇彝村没有灯火",
+      "summary": "商队已抵蛇彝村寨门口，寨里无灯也无人应；只能先在空巷里安置车马。",
+      "observableFacts": [
+        "寨门半开，不见灯火，也没有人出来应声",
+        "院落里农具还在，灶灰却是冷的",
+        "祁远压低声音，只让先把车马停在巷口"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.qi_yuan",
+        "liuchao.character.xie_yi"
+      ],
+      "environmentFallback": "蛇彝村巷口死静，门板虚掩，连犬吠都没有。车铃被捂住，商队停在寨外，空屋里的真相还没人走进去看。",
+      "presentation": {
+        "title": "空寨门半开",
+        "text": "商队停在蛇彝村门口，寨里没有一盏灯，也没有人应门。农具还靠在墙根，灶灰是冷的。祁远只吩咐先把车马安置在巷口，谢艺握刀站在侧后，谁也不先跨那道门槛。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_03b_snake_flower_bridge",
+      "situationId": "world-sim.baseline.lcq.stage_03b_snake_flower_bridge.lcq.event.s03b_snake_flower_bridge_01",
+      "sourceEventId": "lcq.event.s03b_snake_flower_bridge_01",
+      "title": "蛇彝地界风紧",
+      "summary": "通往蛇彝领地的林径忽然过分安静，草叶上有刺鼻药气，商队放慢脚步、改换探路次序。",
+      "observableFacts": [
+        "林间鸟虫声骤减，草叶带着刺鼻药气",
+        "探路人缩短间距，改走更高更干的土埂",
+        "程宗扬反复按刀，目光扫向藤蔓后的暗处"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "湿气里混着苦药味，落叶下隐约有细绳与竹签擦过的痕迹，前队脚步乱了一拍，却没人敢先断言林子里有什么。",
+      "presentation": {
+        "title": "药气入林",
+        "text": "蛇彝地界近了。草叶上的苦味贴着鼻腔，探路的人把间距收紧，专挑干硬土埂走。程宗扬按着刀柄，目光在藤蔓后停了停。风还在，人影却不见，只觉得林子把声音都吞掉了。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_03b_snake_flower_bridge",
+      "situationId": "world-sim.baseline.lcq.stage_03b_snake_flower_bridge.lcq.event.s03b_snake_flower_bridge_02",
+      "sourceEventId": "lcq.event.s03b_snake_flower_bridge_02",
+      "title": "长屋无人应门",
+      "summary": "蛇彝族长屋门户半敞、烟火已冷，门外泥土被反复踩乱，商队停在门槛外，不敢贸然进去。",
+      "observableFacts": [
+        "族长屋半敞，灶灰冷透，不见炊烟",
+        "门槛内外脚印杂乱，有拖拽与泼洒痕迹",
+        "有人捂住口鼻，只说屋里气味不对"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "寨中狗不叫、灶不响，长屋木门斜开一线，冷灰与腥气从门缝里渗出来。商队停在屋外，先查脚印，没人敢先迈进那道门槛。",
+      "presentation": {
+        "title": "冷灶敞门",
+        "text": "蛇彝族长屋的门虚掩着，灶灰是冷的。门槛内外脚印乱成一团，像有人进进出出，又像有东西被拖过。程宗扬在门外站住，先闻那股不对的气味。屋里静得过分，谁也还没看清里头究竟摆着什么。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_03b_snake_flower_bridge",
+      "situationId": "world-sim.baseline.lcq.stage_03b_snake_flower_bridge.lcq.event.s03b_snake_flower_bridge_03",
+      "sourceEventId": "lcq.event.s03b_snake_flower_bridge_03",
+      "title": "血符说法不一",
+      "summary": "屋内器物上现出暗红符痕，有人说是鬼王峒巫术，有人只认得出南荒仇杀记号，商队不敢久留。",
+      "observableFacts": [
+        "梁柱与地面有未干透的暗红符痕",
+        "口信里同时出现“巫术”与“仇杀”两种说法",
+        "随行的人互相看一眼，已在收拾要走的东西"
+      ],
+      "preferredCharacterIds": [],
+      "environmentFallback": "暗红符痕贴在梁柱与地面，气味腥而涩。有人把它叫作鬼王峒的记号，也有人只说南荒仇杀常留这种印。袋索已被提前收紧，去留还没人拍板。",
+      "presentation": {
+        "title": "符痕未干",
+        "text": "暗红符痕还没干透，贴在梁柱与地面上。有人压低声音说是鬼王峒的巫术，也有人只认它是南荒仇杀留下的记号。两种说法并排着，谁也没能一锤定音。袋索已经提前收紧，脚步却还停在原地。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_03b_snake_flower_bridge",
+      "situationId": "world-sim.baseline.lcq.stage_03b_snake_flower_bridge.lcq.event.s03b_snake_flower_bridge_04",
+      "sourceEventId": "lcq.event.s03b_snake_flower_bridge_04",
+      "title": "两队同望白夷",
+      "summary": "云氏商队与程宗扬一行在岔口滞留，口信都指向白夷族方向，是否并路仍未说死。",
+      "observableFacts": [
+        "云氏车仗与这边货驮停在同一岔口",
+        "两边探路的人都在打听白夷族的走法",
+        "程宗扬把霓龙丝的去向压在嘴边，尚未出口"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "两支商队的牲口并排饮水，地图在膝上摊开又合上。白夷族的路名被反复提起，并队的话只说到一半，没有人先把条件讲死。",
+      "presentation": {
+        "title": "岔口并辔",
+        "text": "云氏的车仗和这边的货驮停在同一岔口。探路的人来回打听白夷族怎么走，牲口喝着同一洼水。程宗扬把霓龙丝的去向按在舌底，话到唇边又收回。并路的意思已经散在风里，条款却还没落地。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_03b_snake_flower_bridge",
+      "situationId": "world-sim.baseline.lcq.stage_03b_snake_flower_bridge.lcq.event.s03b_snake_flower_bridge_05",
+      "sourceEventId": "lcq.event.s03b_snake_flower_bridge_05",
+      "title": "古藤吱呀作响",
+      "summary": "万古巨藤搭成的桥面发潮发滑，深处传来干裂的轻响，攀爬的人把间距拉开，却仍要往崖顶去。",
+      "observableFacts": [
+        "藤皮湿滑，手一握就渗出冷水",
+        "桥心深处传来细而干的裂响",
+        "前队放慢，后队抓住侧藤，不敢并排"
+      ],
+      "preferredCharacterIds": [],
+      "environmentFallback": "万古巨藤横在崖间，皮上凝着水珠，踩上去微微下沉。桥心偶尔弹出一声干裂，像老木在里头松扣。人还在往上爬，只是每一步都先试重量。",
+      "presentation": {
+        "title": "藤桥松扣",
+        "text": "万古巨藤搭成的桥面又潮又滑，手心刚握上去就沁出水来。桥心深处轻轻一响，像老筋在里头松了扣。前队把步子放慢，后队改抓两侧细藤。崖顶还在上头，脚底下那一层却已经不老实。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_03b_snake_flower_bridge",
+      "situationId": "world-sim.baseline.lcq.stage_03b_snake_flower_bridge.lcq.event.s03b_snake_flower_bridge_06",
+      "sourceEventId": "lcq.event.s03b_snake_flower_bridge_06",
+      "title": "崖上传来对歌",
+      "summary": "半崖之上忽然有花苗口音的歌声来回应答，人影在崖沿晃动，绳索垂下一段又停住。",
+      "observableFacts": [
+        "崖上传来花苗口音的对歌声",
+        "崖沿人影晃动，彩布与银饰一闪即收",
+        "粗绳垂下一截，末端在风里打转，尚未抛稳"
+      ],
+      "preferredCharacterIds": [],
+      "environmentFallback": "歌声贴着石壁折下来，字句听不真切，调子却是花苗对答。崖沿上银饰一闪，粗绳垂了一截又停住。底下的人仰着头，还不知道上头要收还是要放。",
+      "presentation": {
+        "title": "崖歌未落",
+        "text": "半崖上传来花苗口音的对歌，一问一答贴着石壁折下来。崖沿有人影晃过，彩布与银饰只闪一下。一根粗绳垂下一截，末端在风里打转，既没收回，也没抛稳。底下的人仰着头，只能先听那歌声落不落。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_03b_snake_flower_bridge",
+      "situationId": "world-sim.baseline.lcq.stage_03b_snake_flower_bridge.lcq.event.s03b_snake_flower_bridge_07",
+      "sourceEventId": "lcq.event.s03b_snake_flower_bridge_07",
+      "title": "送嫁路封半截",
+      "summary": "花苗寨中传出要备龙神新娘与贡物往熊耳铺的风声，鬼王峒的名号压得人不敢高声，行装却只备到一半。",
+      "observableFacts": [
+        "绣衣与贡箱被抬到寨门，又被喝令放下",
+        "口信里熊耳铺与鬼王峒的名号互相顶着",
+        "少女被叫去试装，旋即又被遣回屋内"
+      ],
+      "preferredCharacterIds": [],
+      "environmentFallback": "寨门内外脚步乱，绣衣与木箱抬起又放下。有人把熊耳铺和鬼王峒两个地名叠在同一句里，声音压得很低。送嫁的排场摆了一半，谁也不肯说这趟路到底走不走。",
+      "presentation": {
+        "title": "贡箱未发",
+        "text": "花苗寨里绣衣与贡箱抬到门口，又被喝令放下。熊耳铺和鬼王峒的名号挤在同一句口信里，谁先说谁就把声音压下去。有少女被叫去试装，旋即又被遣回屋。龙神新娘的名目已经传开，车仗却还停在寨门内。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_04",
+      "situationId": "world-sim.baseline.lcq.stage_04.lcq.event.s04_01",
+      "sourceEventId": "lcq.event.s04_01",
+      "title": "朱八八被点名向导",
+      "summary": "熊耳铺上，向导人选忽然收紧，花苗送亲队的行止也多了遮掩。谁入峒、为何入峒，都还说不清。",
+      "observableFacts": [
+        "程宗扬当众点了朱八八带路，秦桧、吴三桂被当场回绝",
+        "苏荔把程宗扬和武二郎叫到僻处，压低声音谈送亲队的走法",
+        "云苍峰让人重排商队与花苗的行路次序，不许闲人旁听"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.su_li",
+        "liuchao.character.shang_zhen_yu"
+      ],
+      "environmentFallback": "熊耳铺岔路口有人蹲着辨路，送亲队旗帜与商队货驮挤在一处，远处偶尔传来压低的苗语。",
+      "presentation": {
+        "title": "向导已定",
+        "text": "熊耳铺的雾还没散尽，程宗扬已经当众点了朱八八。秦桧、吴三桂的名字刚出口就被压回去。苏荔随即把人拽到僻处，只说送亲队进峒的次序不能再按原样走。云苍峰在铺口重排货驮，谁也没把话说透。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_04",
+      "situationId": "world-sim.baseline.lcq.stage_04.lcq.event.s04_02",
+      "sourceEventId": "lcq.event.s04_02",
+      "title": "山涧雾中换防",
+      "summary": "南荒山涧浓雾压低，商队与花苗送亲队同时收紧队形。远处有陌生甲仗声，战端尚未落定。",
+      "observableFacts": [
+        "浓雾里传来鬼王峒式甲仗摩擦与短促口令",
+        "凝羽把剑抽到半寸，肩头月牙印在雾里一闪",
+        "武二郎双刀出鞘，苏荔让花苗人靠拢货驮"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.wu_er_lang",
+        "liuchao.character.ning_yu"
+      ],
+      "environmentFallback": "山涧雾气贴着水面，卵石路被打湿，前后队看不清彼此，只有兵器与货箱的轮廓在晃。",
+      "presentation": {
+        "title": "雾里甲仗",
+        "text": "南荒山涧的雾忽然贴地压来。货驮还没排完，前方已响起陌生甲仗与短促口令。凝羽剑出半寸，武二郎把双刀一横，苏荔挥手让花苗人贴着货箱收拢。谁先动手、能撑多久，雾里还看不见。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_04",
+      "situationId": "world-sim.baseline.lcq.stage_04.lcq.event.s04_03",
+      "sourceEventId": "lcq.event.s04_03",
+      "title": "凝羽伤势未明",
+      "summary": "交手余波未散，凝羽步履发沉，护卫与花苗人围着她争执走法。伤势深浅、还能不能走，都没有定论。",
+      "observableFacts": [
+        "凝羽肩甲有新裂口，呼吸比平时短促",
+        "武二郎守在她身侧，不许闲人靠近验伤",
+        "花苗人递来止血药草，气味辛烈，她没有立刻接"
+      ],
+      "preferredCharacterIds": [],
+      "environmentFallback": "涧边雾气未散，断刃与湿泥混在一起，有人蹲着包扎，有人仍盯着雾深处。",
+      "presentation": {
+        "title": "剑未归鞘",
+        "text": "雾稍退时，凝羽肩甲裂开一条新口，步子比平时沉。武二郎挡在身侧，不许人乱摸伤口。花苗人递上止血药草，辛味冲鼻，她只看了一眼。商队还停在涧底，前面的路没有人敢先走。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_04",
+      "situationId": "world-sim.baseline.lcq.stage_04.lcq.event.s04_04",
+      "sourceEventId": "lcq.event.s04_04",
+      "title": "送亲队路线改口",
+      "summary": "花苗送亲旗帜仍在，可苏荔对入峒次序的说法前后不一。商队听得半截，不知这是护亲还是另有盘算。",
+      "observableFacts": [
+        "苏荔两次改口，送亲队入峒的先后与原先报备不同",
+        "红苗信物在她袖间一闪，随即被按回去",
+        "商队伙计听见“借道”和“探路”两种说法"
+      ],
+      "preferredCharacterIds": [],
+      "environmentFallback": "送亲鼓歇了半拍，旗帜仍立着，队伍却迟迟不按原报备的次序动身。",
+      "presentation": {
+        "title": "旗未动人已改",
+        "text": "花苗送亲旗还立在原处，苏荔却把入峒先后又改了一遍。袖间红苗信物一闪即收。伙计这边听她说借道，那边又听人说是探路。云苍峰皱着眉看货驮，没有当场追问。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_04",
+      "situationId": "world-sim.baseline.lcq.stage_04.lcq.event.s04_05",
+      "sourceEventId": "lcq.event.s04_05",
+      "title": "谢仪查验货驮",
+      "summary": "袭击余波未平，谢仪绕着货箱查封记与缺角。账册对不上的地方被单独挑出，还没人敢下结论。",
+      "observableFacts": [
+        "谢仪按箱核封记，几只货箱的泥印被刮花",
+        "乐明珠跟着记缺角货号，笔尖停了两次",
+        "云苍峰要人把对不上的箱单独码开，不许混入正驮"
+      ],
+      "preferredCharacterIds": [],
+      "environmentFallback": "货场灯火未齐，封泥碎屑落在箱沿，有人低声对号，有人把缺箱拖到侧边。",
+      "presentation": {
+        "title": "封记被刮",
+        "text": "谢仪绕着货驮核封记，几只箱的泥印明显被刮过。乐明珠跟着记缺角货号，笔尖停了两次。云苍峰只吩咐把对不上的箱单独码开。缺的是货还是被人动过手，此刻谁也说不死。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_04",
+      "situationId": "world-sim.baseline.lcq.stage_04.lcq.event.s04_06",
+      "sourceEventId": "lcq.event.s04_06",
+      "title": "山路夜哨加密",
+      "summary": "商队夜宿处加了两道哨。雾里有人影一闪即逝，口令对不上号，夜里还能不能安睡，没人打包票。",
+      "observableFacts": [
+        "前哨把口令从一句改成两句，过哨要核对腰牌",
+        "远处火把明灭不定，不像本队的间距",
+        "武二郎在营外转了一圈，回来只说路湿、脚印杂"
+      ],
+      "preferredCharacterIds": [],
+      "environmentFallback": "夜雾贴着营绳，火把间距忽疏忽密，远处偶尔有一声短哨，对不上本队的节拍。",
+      "presentation": {
+        "title": "哨口加码",
+        "text": "夜宿处忽然加了两道哨，口令从一句改成两句，过卡还要亮腰牌。营外火把明灭的间距不像本队。武二郎转了一圈回来，只丢下一句：路湿，脚印杂。帐篷里的人听了，谁也没先睡下。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_04",
+      "situationId": "world-sim.baseline.lcq.stage_04.lcq.event.s04_07",
+      "sourceEventId": "lcq.event.s04_07",
+      "title": "白夷改口要现银",
+      "summary": "商队刚入白夷寨，欢迎酒未散，族长已把以货易货改口为限期现款。云苍峰脸色沉了，数目还在桌上。",
+      "observableFacts": [
+        "白夷族长当众改口，要十日內付五万银铢现款",
+        "云苍峰腰间玉饰被他捏得发白，没有立刻应承",
+        "账房把货单抽走，另铺开一张空白银契"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.yun_cang_feng"
+      ],
+      "environmentFallback": "白夷寨鼓乐还在响，酒碗未撤，账案上却已换了银契纸，货单被抽到一边。",
+      "presentation": {
+        "title": "酒未冷账已改",
+        "text": "白夷寨的欢迎酒还热着，族长忽然把以货易货改成十日內五万银铢现款。云苍峰腰间玉饰被捏得发白，只让人把货单收起、银契铺上。程宗扬站在侧席，听见两边低声争的是期限，不是迎不迎客。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+      "situationId": "world-sim.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_01",
+      "sourceEventId": "lcq.event.s04b_lingfei_baiyi_crisis_01",
+      "title": "明晚夺镜的对谈",
+      "summary": "程宗扬把明晚取灵飞镜的人手压到极低声，武二郎听着，走位和退路还没落定。",
+      "observableFacts": [
+        "程宗扬找武二郎密谈明晚夺镜",
+        "夜行绳索与遮面布被摊开又收起",
+        "武二郎听完，走位仍改了两回"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "火光边摊着夜行靴带和绳索，两个人影压着嗓子对时辰，退路图被改过。",
+      "presentation": {
+        "title": "夺镜对谈",
+        "text": "程宗扬把明晚取灵飞镜的事压到几乎听不见。武二郎坐着听，绳索和遮面布摊开又收，走位改了两回。外头仍能照常走动，只是夜行的次序已经不稳。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+      "situationId": "world-sim.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_02",
+      "sourceEventId": "lcq.event.s04b_lingfei_baiyi_crisis_02",
+      "title": "鸦营前的交手",
+      "summary": "乐明珠已经顶到鸦人营地前，兵器相撞，暗处另有人影挪位，营门仍封着。",
+      "observableFacts": [
+        "乐明珠挺身挡在鸦人营地前",
+        "营内兵器相击，火把一阵乱晃",
+        "侧翼灌木里有人悄然挪位，未露脸"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "鸦人营地火把乱晃，羽饰与兵器相撞，侧翼灌木轻响又静。",
+      "presentation": {
+        "title": "营前交手",
+        "text": "乐明珠已经顶到鸦人营地前。兵器刚撞上，火把乱晃，营里多出一阵短促的压制声。侧翼灌木里有人挪了位，却不现身。营门仍封着，里头谁占上风，隔着栅栏看不清。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+      "situationId": "world-sim.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_03",
+      "sourceEventId": "lcq.event.s04b_lingfei_baiyi_crisis_03",
+      "title": "首领背影露空",
+      "summary": "鸦人首领一时背对空档，程宗扬手已按上刀柄，营心里两处身影仍被围着。",
+      "observableFacts": [
+        "鸦人首领得意间露出后背空档",
+        "程宗扬压低身形，手已按上刀柄",
+        "乐明珠与阿夕仍被围在营心一带"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "营心火光一晃，首领背影空出一截，刀鞘轻响，围圈未散。",
+      "presentation": {
+        "title": "空档一闪",
+        "text": "鸦人首领一得意，后背空出一截。程宗扬压低身形，手已按上刀柄。营心里两处身影仍被围着，围圈未散。这一刀出不出得去，谁也还没看见血。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+      "situationId": "world-sim.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_04",
+      "sourceEventId": "lcq.event.s04b_lingfei_baiyi_crisis_04",
+      "title": "空白羊皮的异样",
+      "summary": "处理鸦人随身物时翻出一张空白羊皮，火光下墨痕隐现又灭，有人要把纸送去云苍峰。",
+      "observableFacts": [
+        "鸦人随身物里翻出一张空白羊皮",
+        "纸面在火光下隐现墨痕，随即又空",
+        "程宗扬与武二郎主张送纸去云苍峰"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "火堆边摊开空白羊皮，墨痕一闪即灭，有人已经卷纸要走。",
+      "presentation": {
+        "title": "空纸隐墨",
+        "text": "处理鸦人随身物时，一张空白羊皮被摊到火边。墨痕刚显又空。程宗扬与武二郎对视一眼，要把纸送去云苍峰辨认。纸上写没写过字、指向何处，眼下谁也说不准。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+      "situationId": "world-sim.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_05",
+      "sourceEventId": "lcq.event.s04b_lingfei_baiyi_crisis_05",
+      "title": "祭坛下的虚响",
+      "summary": "白夷祭坛石缝传出空洞回声，程宗扬试探踏板时脚下微沉，镜在不在仍看不见。",
+      "observableFacts": [
+        "白夷祭坛石缝里传出空洞回声",
+        "程宗扬试探踏板，脚下有一瞬虚沉",
+        "武二郎绕到祭坛侧面盯着机关缝"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "祭坛石缝漏风，踏板一按就虚，侧面有人按着刀柄盯缝。",
+      "presentation": {
+        "title": "坛下虚踏",
+        "text": "白夷祭坛石缝里漏出空洞回声。程宗扬试探踏板，脚下虚沉一瞬，武二郎已经绕到侧面盯着机关缝。传言灵飞镜藏在坛下，可洞口还没开，谁也没看见镜面。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+      "situationId": "world-sim.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_06",
+      "sourceEventId": "lcq.event.s04b_lingfei_baiyi_crisis_06",
+      "title": "花苗帐中的联手",
+      "summary": "云苍峰入帐与苏荔密谈对抗鬼王峒勒索，帐外只闻联手字眼，盟约成不成仍悬着。",
+      "observableFacts": [
+        "云苍峰入花苗议事帐与苏荔密谈",
+        "帐外隐约听见联手抗峒的字眼",
+        "苏荔出帐时袖口见红，神色未定"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "花苗议事帐灯火不散，帐帘一掀带出血腥气，门口卫士换过一轮。",
+      "presentation": {
+        "title": "帐中密议",
+        "text": "云苍峰进了花苗议事帐。帘后隐约听见与白夷联手、共抗鬼王峒勒索的字眼。苏荔出帐时袖口见红，神色却未落定。盟约签没签，帐外只闻血腥，看不见印。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+      "situationId": "world-sim.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_07",
+      "sourceEventId": "lcq.event.s04b_lingfei_baiyi_crisis_07",
+      "title": "水镜里的传讯",
+      "summary": "程宗扬借水镜要接通苏妲己，镜面只晃出半幅南荒影，警告听清几句还没定。",
+      "observableFacts": [
+        "程宗扬借水镜术要接通苏妲己",
+        "镜面晃出南荒与黑魔海一线的残影",
+        "传讯里隐约听到霓龙丝三字，随即断"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "水镜光一闪一灭，镜沿还湿，对面嗓音只剩半句。",
+      "presentation": {
+        "title": "镜中半句",
+        "text": "程宗扬借水镜要接通苏妲己。镜面只晃出南荒与黑魔海一线的残影，对面嗓音里隐约听到不要招惹、尽快寻霓龙丝，随即断了。回话落没落全，镜沿只剩水渍。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+      "situationId": "world-sim.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_08",
+      "sourceEventId": "lcq.event.s04b_lingfei_baiyi_crisis_08",
+      "title": "镜中白夷的异象",
+      "summary": "程宗扬以灵飞镜探白夷内寨，镜里樨夫人神色受制，鬼王峒旗影一闪，同伴还散在外头。",
+      "observableFacts": [
+        "程宗扬对着灵飞镜查探白夷内寨",
+        "镜中樨夫人神色受制，姿态不稳",
+        "远处闪过鬼王峒旗影，同伴尚未聚齐"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "灵飞镜光一颤，内寨影像碎成几块，外头脚步声乱。",
+      "presentation": {
+        "title": "镜中受制",
+        "text": "程宗扬对着灵飞镜查探白夷内寨。镜里樨夫人神色受制，姿态不稳，远处一闪鬼王峒旗影。同伴还散在外头。这是内变还是幻影，镜面没有给第二眼。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+      "situationId": "world-sim.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_09",
+      "sourceEventId": "lcq.event.s04b_lingfei_baiyi_crisis_09",
+      "title": "白夷寨里的换印",
+      "summary": "白夷寨门换防加快，族长大帐灯火一夜不灭，樨夫人出面传令，旧印还在不在互相打架。",
+      "observableFacts": [
+        "白夷寨门换防比平日更密",
+        "族长大帐灯火一夜不灭，卫士换生面孔",
+        "樨夫人出面传令，旧族长未见踪影"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "白夷寨墙上火把挪位，大帐换了传令嗓音，旧印匣被抬进抬出。",
+      "presentation": {
+        "title": "大帐换令",
+        "text": "白夷寨门换防比平日密。族长大帐灯一夜不灭，卫士换成生面孔，樨夫人出面传令，旧族长不见人。有人说只是祭期调动，有人说印已易手。隔着寨墙，听不真裂到哪一层。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+      "situationId": "world-sim.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_10",
+      "sourceEventId": "lcq.event.s04b_lingfei_baiyi_crisis_10",
+      "title": "地宫甬道的机关",
+      "summary": "追入地宫的甬道里机关齿响，木塔影里绑着花苗人，鬼武士甲片在暗处摩擦。",
+      "observableFacts": [
+        "地宫甬道深处传来机关齿响",
+        "远处木塔上隐约绑着花苗人影",
+        "甬道两侧甲片摩擦，像有鬼武士合围"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "甬道潮气里齿轮轻响，木塔绳索吱呀，两侧甲片一下一下地擦。",
+      "presentation": {
+        "title": "甬道齿响",
+        "text": "追入地宫的甬道里，机关齿轮一声接一声。远处木塔上隐约绑着花苗人影，两侧甲片摩擦，像有鬼武士在合围。路是诱饵还是生门，火把只照得见眼前三步。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+      "situationId": "world-sim.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_11",
+      "sourceEventId": "lcq.event.s04b_lingfei_baiyi_crisis_11",
+      "title": "血色虎影逼近",
+      "summary": "战场边现出被改过的虎形人影，直扑武二郎；易彪喊兄长的名字，对面没有回头。",
+      "observableFacts": [
+        "战场边现出带血色纹路的虎形人影",
+        "那影子直扑武二郎一侧",
+        "易彪连呼兄长，对面脚步不停"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "尘土里血色纹路一闪，虎啸短促，有人喊名字，应声全无。",
+      "presentation": {
+        "title": "虎影不回",
+        "text": "战场边现出带血色纹路的虎形人影，直扑武二郎一侧。易彪连呼兄长，对面脚步不停。那是不是易虎、还能不能停手，尘土里只剩短促的虎啸。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+      "situationId": "world-sim.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_12",
+      "sourceEventId": "lcq.event.s04b_lingfei_baiyi_crisis_12",
+      "title": "暗处凝羽的刃光",
+      "summary": "凝羽从暗处贴近鬼王峒使者，刃光一闪，巫师身边烟雾渐浓，毒性还辨不清。",
+      "observableFacts": [
+        "凝羽从暗处贴近鬼王峒使者",
+        "使者掌侧闪过刃光，巫师阵脚乱了",
+        "烟雾渐浓，带一股刺鼻药味"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "暗处衣袂一掠，掌侧见血光，毒烟贴地蔓延，火把发暗。",
+      "presentation": {
+        "title": "暗刃毒烟",
+        "text": "凝羽从暗处贴近鬼王峒使者。掌侧闪过刃光，巫师阵脚乱了，烟雾却越来越浓，带刺鼻药味。使者伤到哪、毒术散没散开，烟里看不清第二个人。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+      "situationId": "world-sim.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_13",
+      "sourceEventId": "lcq.event.s04b_lingfei_baiyi_crisis_13",
+      "title": "谢艺独入地宫",
+      "summary": "谢艺一个人进了地宫，沿途武士失联，他开口只问碧宛下落，殿里灯火一盏盏灭。",
+      "observableFacts": [
+        "谢艺独自走入地宫深处",
+        "沿途岗哨失联，甲胄倒在甬道边",
+        "他开口只问碧宛下落，无人应全"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "地宫灯一盏盏暗下去，甬道边甲胄空倒，拷问声短促又停。",
+      "presentation": {
+        "title": "独行问宛",
+        "text": "谢艺一个人进了地宫。沿途岗哨失联，甲胄倒在甬道边。他开口只问碧宛下落，应声不全，灯一盏盏灭。使者还在不在深处，商队外头只听见脚步，看不见刃。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+      "situationId": "world-sim.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_14",
+      "sourceEventId": "lcq.event.s04b_lingfei_baiyi_crisis_14",
+      "title": "商队里的分路",
+      "summary": "众人围坐商议去向，苏荔坚持往鬼王峒，武二郎反对，碧鲮族的名字被反复提起。",
+      "observableFacts": [
+        "商队围坐，地图上标着鬼王峒与碧鲮",
+        "苏荔坚持先闯鬼王峒",
+        "武二郎反对，有人提出先同往碧鲮"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "帐里地图摊开，两处地名被反复点按，行装只打了一半。",
+      "presentation": {
+        "title": "帐中分路",
+        "text": "商队围坐，地图上鬼王峒与碧鲮并排。苏荔坚持先闯峒口，武二郎反对，另有人提出先同往碧鲮再议。行装只打了一半，下一步往哪边，帐里还没落槌。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+      "situationId": "world-sim.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_15",
+      "sourceEventId": "lcq.event.s04b_lingfei_baiyi_crisis_15",
+      "title": "阿夕神色不对",
+      "summary": "程宗扬察觉阿夕神色异常，堵住谢艺追问；谢艺只说设计过接触，后半句压回舌底。",
+      "observableFacts": [
+        "阿夕神色恍惚，应答对不上前后",
+        "程宗扬堵住谢艺，追问她的异常",
+        "谢艺承认设计过接触，后话收住"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "廊下两人对立，阿夕立在灯影外，谢艺把后半句话咽回去。",
+      "presentation": {
+        "title": "追问未完",
+        "text": "程宗扬察觉阿夕神色恍惚，应答对不上前后，便堵住谢艺追问。谢艺承认设计过让他与阿葭接触，后半句压回舌底。灵飞镜还会在南荒撞上什么，他没有说完。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+      "situationId": "world-sim.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_16",
+      "sourceEventId": "lcq.event.s04b_lingfei_baiyi_crisis_16",
+      "title": "云苍峰说岳帅",
+      "summary": "程宗扬向云苍峰打听岳帅旧事，星月湖的名字被点到，谢艺要找的人只露出轮廓。",
+      "observableFacts": [
+        "程宗扬向云苍峰打听岳帅生平",
+        "云苍峰提到星月湖一段旧渊源",
+        "谢艺要寻的女子身份只说了半句"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "茶烟里旧年号被翻开，湖名落在纸边，后文被袖子盖住。",
+      "presentation": {
+        "title": "旧闻半页",
+        "text": "程宗扬向云苍峰打听岳帅生平。茶烟里翻到星月湖一段渊源，谢艺要寻的女子只露出轮廓。是不是岳帅身边旧人，云苍峰把后文用袖子盖住了。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+      "situationId": "world-sim.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_17",
+      "sourceEventId": "lcq.event.s04b_lingfei_baiyi_crisis_17",
+      "title": "湿热盆地的涟漪",
+      "summary": "湿热盆地水面无风也起涟漪，走骡不安，泥潭里有鳞甲一闪，龙睛玉还拴在鞍侧。",
+      "observableFacts": [
+        "湿热盆地水面无风也起涟漪",
+        "一匹走骡后蹄陷泥，鞍侧龙睛玉晃着",
+        "苏荔已搭弓，祁远盯着泥潭不眨眼"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "泥潭气泡接连升起，骡铃乱响，弓弦绷紧，鳞甲在浊水里一闪。",
+      "presentation": {
+        "title": "潭面无风",
+        "text": "湿热盆地水面无风也起涟漪。一匹走骡后蹄陷泥，鞍侧龙睛玉晃着。苏荔已搭弓，祁远盯着泥潭不眨眼。潭下是不是鳄鱼、玉会不会被拖走，浊水只给人看那一闪鳞甲。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+      "situationId": "world-sim.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_18",
+      "sourceEventId": "lcq.event.s04b_lingfei_baiyi_crisis_18",
+      "title": "谢艺的闲装口风",
+      "summary": "谢艺一身不合时地的闲装现身，先问玻璃窑温，又把话头压到岳帅旧事上。",
+      "observableFacts": [
+        "谢艺以一身不合时地的闲装出现",
+        "他先问玻璃窑温与配料，不像闲聊",
+        "话头压到岳帅晕血与遗腹女，随即收住"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "廊下多出一个衣着刺眼的人，窑温数字和旧事只说半句就停。",
+      "presentation": {
+        "title": "闲装半句",
+        "text": "谢艺一身不合时地的闲装站到廊下。他先问玻璃窑温和配料，不像闲聊；话头刚压到岳帅晕血、遗腹女，又自己收住。这些话要讲完还是只探一探，他看着程宗扬，没有把后半句放出来。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+      "situationId": "world-sim.baseline.lcq.stage_04b_lingfei_baiyi_crisis.lcq.event.s04b_lingfei_baiyi_crisis_19",
+      "sourceEventId": "lcq.event.s04b_lingfei_baiyi_crisis_19",
+      "title": "夜间潮声压楼",
+      "summary": "夜里潮声忽然压过竹楼，海水拍上板壁，程宗扬与凝羽被浪声逼到楼梯口。",
+      "observableFacts": [
+        "夜间潮声忽然压过竹楼板壁",
+        "海水拍上栏杆，楼下已经进水",
+        "程宗扬与凝羽被浪声逼到楼梯口"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "竹楼板壁被浪拍响，楼下进水，楼梯口两个人影还没迈下最后一级。",
+      "presentation": {
+        "title": "浪拍竹楼",
+        "text": "夜里潮声忽然压过竹楼。海水拍上栏杆，楼下已经进水，程宗扬与凝羽被浪声逼到楼梯口。楼会不会整座被吞，云苍峰在不在岸上，潮水只给人留这一息下楼的空档。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_05",
+      "situationId": "world-sim.baseline.lcq.stage_05.lcq.event.s05_01",
+      "sourceEventId": "lcq.event.s05_01",
+      "title": "殿外水影逼近",
+      "summary": "潮退后的海神殿石像间仍困着人，殿外水影越来越近，乐明珠头上的朱狐冠在暗处发亮。",
+      "observableFacts": [
+        "废弃海神殿外潮水退去，石柱间水影成片逼近",
+        "乐明珠头戴的朱狐冠在潮气里格外醒目",
+        "退路被潮石堵住，手边只有刚取得的珊瑚匕首"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.le_mingzhu"
+      ],
+      "environmentFallback": "殿内只剩潮声回荡，石像缝隙渗着咸腥水雾，外面的拍水声一阵紧过一阵。",
+      "presentation": {
+        "title": "水影逼近",
+        "text": "乐明珠往石像后缩了缩，朱狐冠却仍从潮气里透出一点红。殿外水影贴着台阶起伏，拍打声越来越密，还看不清那些影子会不会立刻扑进来。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_05",
+      "situationId": "world-sim.baseline.lcq.stage_05.lcq.event.s05_02",
+      "sourceEventId": "lcq.event.s05_02",
+      "title": "鱼叉卡住伤口",
+      "summary": "殿外水声渐远，乐明珠仍被鱼叉卡住，衣襟洇开，呼吸发紧，谁也不敢贸然动手。",
+      "observableFacts": [
+        "乐明珠肩侧仍卡着鲛人留下的鱼叉",
+        "血顺着石缝往下淌，她咬牙不让人乱碰",
+        "殿内再无第二处干净包扎的地方"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.le_mingzhu"
+      ],
+      "environmentFallback": "潮腥未散，石台上只剩半截湿布和珊瑚刃，鱼叉柄随着她呼吸轻轻颤。",
+      "presentation": {
+        "title": "鱼叉未拔",
+        "text": "乐明珠靠着石座，鱼叉还嵌在肩侧，血把衣襟浸深了一圈。她不许人乱拔，又疼得说不全话。殿外水声远了，伤势却一点没有稳住。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_05",
+      "situationId": "world-sim.baseline.lcq.stage_05.lcq.event.s05_03",
+      "sourceEventId": "lcq.event.s05_03",
+      "title": "刀客寻入旧殿",
+      "summary": "海神殿外多了一串新靴印，谢艺带着海湾旧战的残讯进来，目光先落在朱狐冠上。",
+      "observableFacts": [
+        "谢艺从潮退后的石阶找到海神殿",
+        "他先问起碧鲮、鲛族旧战与朱狐冠来历",
+        "程宗扬听着，神色并未立刻放松"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.xie_yi"
+      ],
+      "environmentFallback": "殿门口潮泥上多了一串新靴印，刀鞘轻碰石壁，旧事像被潮气带了进来。",
+      "presentation": {
+        "title": "旧战入殿",
+        "text": "谢艺跨进潮腥未散的殿门，先看清乐明珠头上的朱狐冠，才压低声音谈起碧鲮、鲛族和岳帅旧事。话只开了个头，托付还没落到实处。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_05",
+      "situationId": "world-sim.baseline.lcq.stage_05.lcq.event.s05_07",
+      "sourceEventId": "lcq.event.s05_07",
+      "title": "海湾点名未齐",
+      "summary": "残余商队在海湾反复点名，祁远、石刚仍对不上人；阿夕神色发飘，远处尘土里隐有象步。",
+      "observableFacts": [
+        "商队反复清点，祁远与石刚仍对不上号",
+        "阿夕的应答慢半拍，目光不落在同伴身上",
+        "海湾外传来沉重象步与陌生号令"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.a_xi"
+      ],
+      "environmentFallback": "沙滩上脚印来回重叠，撤离的行囊又被放下，远处白影与铜铃声隐隐传来。",
+      "presentation": {
+        "title": "点名未齐",
+        "text": "阿夕被叫到时答得慢半拍，目光却不落在同伴身上。岸上还在找祁远和石刚，尘土那头却响起沉重象步。队伍一时不知该撤还是该停。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_05",
+      "situationId": "world-sim.baseline.lcq.stage_05.lcq.event.s05_04",
+      "sourceEventId": "lcq.event.s05_04",
+      "title": "兵器说辞将起",
+      "summary": "碧鲮寨里对商队来历的盘问转了口风，祁远开始把话往兵器成色和交货上引。",
+      "observableFacts": [
+        "碧鲮老者当众追问商队所携货物",
+        "祁远改口谈起军器成色与交货",
+        "阁罗听着，并未立刻给出态度"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.qi_yuan"
+      ],
+      "environmentFallback": "寨门内贡物与刀枪被分开堆放，议事棚里讨价还价的声音压过了押送的吆喝。",
+      "presentation": {
+        "title": "货单改口",
+        "text": "祁远被当众问住后，忽然把货单往兵器上拨，报出成色和回扣口风。阁罗坐在棚里听着，手指敲着象牙椅，还没说这笔买卖算不算数。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_05",
+      "situationId": "world-sim.baseline.lcq.stage_05.lcq.event.s05_06",
+      "sourceEventId": "lcq.event.s05_06",
+      "title": "军器闲话有耳",
+      "summary": "兵器谈完后，云苍峰把购置军器的用意压低再问；棚壁外有人影停得过久。",
+      "observableFacts": [
+        "云苍峰把军器用途的疑问压到极低",
+        "席间轻轻带过碧姬与小紫的名字",
+        "棚外廊柱后有呼吸声停了太久"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.yun_cang_feng"
+      ],
+      "environmentFallback": "议事棚竹帘未完全落下，廊外脚步停停走走，像有人贴着柱影听里面的话。",
+      "presentation": {
+        "title": "帘外有耳",
+        "text": "云苍峰把声音压到几乎只有对座听得见，问起鬼王峒买兵器究竟要对付谁。竹帘外廊柱边有人影停得过久，里面的话还没收住。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_05",
+      "situationId": "world-sim.baseline.lcq.stage_05.lcq.event.s05_16",
+      "sourceEventId": "lcq.event.s05_16",
+      "title": "村寨火令将下",
+      "summary": "碧鲮寨外火把加了倍，蛇傀随从开始泼油封路，村民被驱到空地，护卫暗中换位。",
+      "observableFacts": [
+        "寨口火把骤增，油坛被搬到茅檐下",
+        "蛇傀随从驱赶碧鲮族人聚到空地",
+        "商队护卫暗中调整了站位"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.wu_er_lang",
+        "lcq.character.np004"
+      ],
+      "environmentFallback": "茅屋顶被火光照得发白，空地上哭声被呵止，油味盖过了海风。",
+      "presentation": {
+        "title": "火把围寨",
+        "text": "武二郎看见油坛一坛坛靠上茅檐，蛇傀随从把人往空地赶。火把比先前密了一圈，还没有人点着第一间屋，队伍却已经悄悄换了站位。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_05",
+      "situationId": "world-sim.baseline.lcq.stage_05.lcq.event.s05_08",
+      "sourceEventId": "lcq.event.s05_08",
+      "title": "废墟现出鬼脸",
+      "summary": "小紫把失散的人带到龟纹古道废墟，石壁上的鬼脸印记与远处甲声同时出现。",
+      "observableFacts": [
+        "废墟石壁上现出新鲜的鬼脸营地标记",
+        "小紫认路时不再说笑，只指着深处",
+        "易彪让商队散开，盾牌往缺口处挪"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.xiao_zi",
+        "lcq.character.np004"
+      ],
+      "environmentFallback": "古道碎石上多了新靴印，残垣后甲叶轻响，鬼脸印记的颜料还没干透。",
+      "presentation": {
+        "title": "鬼脸印记",
+        "text": "小紫停在残垣下，指了指石壁上未干的鬼脸印记。易彪已经让人把盾牌往缺口挪，远处甲声一阵密过一阵，还没人看清来者人数。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_05",
+      "situationId": "world-sim.baseline.lcq.stage_05.lcq.event.s05_05",
+      "sourceEventId": "lcq.event.s05_05",
+      "title": "巫师压阵围来",
+      "summary": "废墟外鬼战士又添了一层，巫师达古在阵后摇铃，谈判的空隙越来越短。",
+      "observableFacts": [
+        "达古在阵后摇铃，鬼战士又逼近一排",
+        "易彪的防线被压得只剩废墟缺口",
+        "武二郎把五虎断门刀从布里抽了出来"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.wu_er_lang",
+        "lcq.character.np004"
+      ],
+      "environmentFallback": "废墟烟尘里铃声乱颤，盾牌被撞得发闷，阵后羽毛冠在暮色里一晃一晃。",
+      "presentation": {
+        "title": "铃声压阵",
+        "text": "达古的铃声一紧，前排鬼战士又往废墟缺口里挤。易彪还在喊着稳住，武二郎已经抽出那把断门刀，刀背贴着肩，还没跨出第一步。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_05",
+      "situationId": "world-sim.baseline.lcq.stage_05.lcq.event.s05_09",
+      "sourceEventId": "lcq.event.s05_09",
+      "title": "阴煞压上营地",
+      "summary": "花苗营地篝火发青，阴煞的冷雾贴地而来，苏荔与程宗扬被隔在营帐一侧。",
+      "observableFacts": [
+        "营帐外冷雾贴地，篝火颜色发青",
+        "苏荔被阴风隔在帐索这边，呼喊传不远",
+        "程宗扬丹田处真气乱撞，胸口发烫"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.su_li"
+      ],
+      "environmentFallback": "花苗营盘的铜铃乱响，帐布被阴风鼓起，远处哭喊夹着野兽般的嘶鸣。",
+      "presentation": {
+        "title": "青火阴雾",
+        "text": "苏荔抓住帐索，阴雾已经漫过脚面，篝火绿得不像人间火。程宗扬只觉得丹田里有东西往外顶，冷雾却还没退，帐外的嘶鸣一声接一声。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_05",
+      "situationId": "world-sim.baseline.lcq.stage_05.lcq.event.s05_10",
+      "sourceEventId": "lcq.event.s05_10",
+      "title": "旧伤与探路议",
+      "summary": "营地伤亡未清，谢艺带回旧伤复发的凝羽；云苍峰与苏荔同时提起探查鬼王峒。",
+      "observableFacts": [
+        "凝羽被安置在帐内，旧伤处绷带又渗了色",
+        "云苍峰提出以平等合作探查鬼王峒",
+        "苏荔同时说到红苗、黑獠的联络"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.yun_cang_feng",
+        "liuchao.character.su_li"
+      ],
+      "environmentFallback": "伤员帐外灯火通宵，三方的人分开坐着，地图在膝上摊开又合上。",
+      "presentation": {
+        "title": "三方同席",
+        "text": "谢艺把凝羽安顿进帐，云苍峰才把话头转到鬼王峒。苏荔也提起红苗那边的联络，三方都说只谈合作、不谈从属，条文却还没落成一句。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_05",
+      "situationId": "world-sim.baseline.lcq.stage_05.lcq.event.s05_11",
+      "sourceEventId": "lcq.event.s05_11",
+      "title": "峒口接待发僵",
+      "summary": "鬼王峒入口，接待者要单独带走苏荔，武二郎刀已离鞘半寸，云苍峰还在打圆场。",
+      "observableFacts": [
+        "峒口接待者伸手要单独领走苏荔",
+        "武二郎挡在她身前，刀离鞘半寸",
+        "洞窟深处灯火曲折，像没有直路"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.wu_er_lang",
+        "liuchao.character.su_li"
+      ],
+      "environmentFallback": "峒门石刻鬼脸滴着潮水，里面灯火一层套一层，奴隶区的铁链声隐约传出。",
+      "presentation": {
+        "title": "峒口对峙",
+        "text": "接待者伸手要领苏荔单独进去，武二郎一步横过去，刀已离鞘半寸。云苍峰和谢艺同时压住场面，峒口灯火弯成迷宫，还没人迈进第一层洞。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_05",
+      "situationId": "world-sim.baseline.lcq.stage_05.lcq.event.s05_12",
+      "sourceEventId": "lcq.event.s05_12",
+      "title": "白纸信笺摊开",
+      "summary": "白夷信笺展开仍是一张白纸，谢艺神色一沉；小紫望着阁罗，话到嘴边又咽回去。",
+      "observableFacts": [
+        "白夷族送来的信笺展开后仍是空白",
+        "谢艺盯着白纸，像在另想去处",
+        "小紫几次张口，目光却落在阁罗身上"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.xie_yi",
+        "liuchao.character.xiao_zi"
+      ],
+      "environmentFallback": "石厅灯火把白纸照得刺眼，座中笑语未停，有人已经把茶盏放得太重。",
+      "presentation": {
+        "title": "信上无字",
+        "text": "谢艺把信笺翻过来，正反都是空白。小紫坐在下首，几次把话送到唇边，又去看阁罗的脸色。厅里笑语还在，座上的人却都听清了那一声没说完的停顿。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_05",
+      "situationId": "world-sim.baseline.lcq.stage_05.lcq.event.s05_13",
+      "sourceEventId": "lcq.event.s05_13",
+      "title": "使者讳言召人",
+      "summary": "阁罗只肯展示峒中一部分实力，关键问句一律推开，随即命人去唤一位被称作“碧奴”的女子。",
+      "observableFacts": [
+        "阁罗谈实力时只亮出半扇石厅",
+        "问到如何辖制诸族，他一律岔开",
+        "侍从被打发去唤一位叫“碧奴”的人"
+      ],
+      "preferredCharacterIds": [
+        "lcq.character.np006"
+      ],
+      "environmentFallback": "石厅深处帷幕未开，铜环轻响，侍从的脚步消失在更里面的甬道。",
+      "presentation": {
+        "title": "半厅未开",
+        "text": "阁罗把话题停在半扇石厅里，问到辖制诸族的关节便笑着推开。他抬手让人去唤“碧奴”，帷幕后铜环一响，来人还没有露脸。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_05",
+      "situationId": "world-sim.baseline.lcq.stage_05.lcq.event.s05_14",
+      "sourceEventId": "lcq.event.s05_14",
+      "title": "石厅机关骤响",
+      "summary": "深处机关被触动，阁罗中断酒会起身；石厅一角岩缝错位，看守的队形乱了片刻。",
+      "observableFacts": [
+        "峒内深处传来机关齿轮与落石声",
+        "阁罗扔下酒盏，带着亲随赶去",
+        "岩壁近处石缝错开一线，潮气涌出"
+      ],
+      "preferredCharacterIds": [
+        "lcq.character.np006"
+      ],
+      "environmentFallback": "灯火晃动，石屑从顶上簌簌落下，看守互相喊着封口，脚步却对不齐。",
+      "presentation": {
+        "title": "机关骤响",
+        "text": "深处一声机括，阁罗的酒盏磕在案上，人已经往甬道里走。岩壁这边石缝错开一线，潮气涌出来，看守队形乱了半息，还没人重新封住那条缝。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_05",
+      "situationId": "world-sim.baseline.lcq.stage_05.lcq.event.s05_15",
+      "sourceEventId": "lcq.event.s05_15",
+      "title": "红苗目光发空",
+      "summary": "山洞里遇见的红苗盟友应答发空，丹宸眼神对不上人；转回石厅时，阁罗的手已经伸向苏荔。",
+      "observableFacts": [
+        "红苗数人站得整齐，问话却答非所问",
+        "丹宸目光发直，认不出同行的苏荔",
+        "阁罗回厅后要把苏荔单独留下"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.dan_chen",
+        "liuchao.character.su_li"
+      ],
+      "environmentFallback": "洞壁灯火把人脸照得发白，脚步齐得不像活人，石厅门口又响起阁罗的传召。",
+      "presentation": {
+        "title": "眼神发空",
+        "text": "苏荔唤了丹宸一声，对方只机械地点头，目光对不实。转出山洞，阁罗已经在厅口等着要单独留下她。程宗扬开口要见碧姬，话还悬在半空。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_05b",
+      "situationId": "world-sim.baseline.lcq.stage_05b.lcq.event.s05b_01_binu_reveals_xiaozi",
+      "sourceEventId": "lcq.event.s05b_01_binu_reveals_xiaozi",
+      "title": "碧姬避谈小紫",
+      "summary": "碧鲮族侧，碧姬见紫衫少女便收了笑意，母女旧隙被旁人闲话挑起，却无人把话说全。",
+      "observableFacts": [
+        "碧姬对紫衫少女只冷眼点头，不肯并肩落座",
+        "族中有人嘀咕她早年弃养，又立刻改口",
+        "谢艺留意程宗扬神色，并未打断旁人的闲谈"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.bi_ji",
+        "liuchao.character.xiao_zi"
+      ],
+      "environmentFallback": "碧鲮族廊外纱幔轻晃，舞姬歇处笑语忽然断了一截，远处鼓点仍按旧节拍敲着。",
+      "presentation": {
+        "title": "冷眼相看",
+        "text": "碧姬从紫衫少女身边走过，连招呼都懒得给全。廊外有人把“弃养”二字咬得很轻，又像怕惹祸似的改了口。空气里只剩一层说不清的生分。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_05b",
+      "situationId": "world-sim.baseline.lcq.stage_05b.lcq.event.s05b_02_xiaozi_exposed",
+      "sourceEventId": "lcq.event.s05b_02_xiaozi_exposed",
+      "title": "阿夕神色不对",
+      "summary": "花苗少女阿夕举止忽然滞涩，目光像被人牵着走；小紫仍笑得无辜，队里开始对不上口径。",
+      "observableFacts": [
+        "阿夕说话断断续续，手指无意识地抠着袖口",
+        "小紫凑近时她身子一僵，随即又换上任性的口吻",
+        "乐明珠反复确认她是否中暑，并未得到干脆答复"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.a_xi",
+        "liuchao.character.xiao_zi"
+      ],
+      "environmentFallback": "驻地灯火未乱，却有虫鸣忽然齐停一瞬；紫衫衣角掠过处，有人下意识把话咽回去。",
+      "presentation": {
+        "title": "笑意发僵",
+        "text": "阿夕应了一句半截的话，眼神却飘向别处。小紫仍旧一脸娇憨地挨过去，那一瞬僵硬很快被笑声盖住。旁人只觉得哪里不对，又说不出实据。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_05b",
+      "situationId": "world-sim.baseline.lcq.stage_05b.lcq.event.s05b_03_saan_secret_path",
+      "sourceEventId": "lcq.event.s05b_03_saan_secret_path",
+      "title": "红苗厨子失联",
+      "summary": "鬼王峒外围，红苗厨师萨安的行踪对不上灶间班次；谢艺压低声音核对后厨口令，密道之说只在传言里打架。",
+      "observableFacts": [
+        "灶间缺了一名红苗厨子，班次牌被人翻过",
+        "有人说他熟识宫后暗道，又有人骂那是吓破胆的胡话",
+        "谢艺把两套互相矛盾的口令抄在掌心里"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.xie_yi",
+        "lcq.character.saan"
+      ],
+      "environmentFallback": "峒口油烟与硫磺混在一起，更夫换岗比往日提早半炷香，远处石门开合声沉闷。",
+      "presentation": {
+        "title": "灶间缺人",
+        "text": "后厨班次牌被翻得卷边，红苗厨子萨安对不上岗。有人咬定他走过宫后暗道，有人只当他吓跑了。谢艺听完两套口令，只把纸片收进袖里。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_05b",
+      "situationId": "world-sim.baseline.lcq.stage_05b.lcq.event.s05b_04_enter_ghost_palace",
+      "sourceEventId": "lcq.event.s05b_04_enter_ghost_palace",
+      "title": "宫道上的紫痕",
+      "summary": "鬼王宫外廊换防匆忙，地面留下细碎虫壳与紫纱线头；乐明珠去向对不上队里报备。",
+      "observableFacts": [
+        "偏廊地面有碾碎的虫壳与一缕紫纱",
+        "武二郎摸到墙缝潮热，凝羽示意先别出声",
+        "内卫口令改了两遍，乐明珠的名字在花名册上空着"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.wu_er_lang",
+        "liuchao.character.ning_yu"
+      ],
+      "environmentFallback": "宫墙内岩浆气蒸得石面发烫，远处甲叶相撞，像有人把巡路次序临时打乱。",
+      "presentation": {
+        "title": "偏廊异迹",
+        "text": "偏廊潮热，碎虫壳黏着一缕紫纱。武二郎刚要开口，凝羽按住他手腕。内卫口令连改两遍，花名册上乐明珠那一格仍空着。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_05b",
+      "situationId": "world-sim.baseline.lcq.stage_05b.lcq.event.s05b_05a_meet_ghost_king",
+      "sourceEventId": "lcq.event.s05b_05a_meet_ghost_king",
+      "title": "岩浆结界加温",
+      "summary": "殿前岩浆结界比往日更亮，黑袍人影在热雾后演说南荒一统；丹宸蒙着眼侍立，无人敢走近。",
+      "observableFacts": [
+        "结界石纹发红，守卫把闲人拦在热雾外",
+        "黑袍人影嗓音平稳，反复提到族群存续",
+        "蒙眼红裙女子立在斧影旁，一动不动"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.gui_wu_wang",
+        "liuchao.character.dan_chen"
+      ],
+      "environmentFallback": "殿廊热浪一波波扑面，石缝里岩浆低鸣，远处鼓声被压成单一长音。",
+      "presentation": {
+        "title": "热雾演说",
+        "text": "岩浆结界把廊道烫得发亮。热雾后头，黑袍人影把“南荒一统”说得像既定功课。蒙眼的红裙女子立在斧影边，谁也没被放近一步。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_05b",
+      "situationId": "world-sim.baseline.lcq.stage_05b.lcq.event.s05b_05b_ideology_duel_and_defeat",
+      "sourceEventId": "lcq.event.s05b_05b_ideology_duel_and_defeat",
+      "title": "殿内杀意收紧",
+      "summary": "鬼巫王谈锋未歇，骨虎在丹宸脚边低吼；珊瑚匕首的寒意刚露一线，四面甲叶已悄悄合拢。",
+      "observableFacts": [
+        "鬼巫王话锋从政见落到近身距离",
+        "丹宸握着断斧，骨虎颈毛竖起",
+        "两侧卫士换位，把退路收成一条窄廊"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.gui_wu_wang",
+        "liuchao.character.dan_chen"
+      ],
+      "environmentFallback": "殿柱上的纹路被热气映得发颤，远处铁环相撞，像有人把围场一点点收小。",
+      "presentation": {
+        "title": "退路收窄",
+        "text": "鬼巫王仍在说，脚步却近了半尺。丹宸身侧骨虎低吼，两侧甲叶无声换位。退路只剩一条窄廊，谁先动手都还没定。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_05b",
+      "situationId": "world-sim.baseline.lcq.stage_05b.lcq.event.s05b_06_breakout_and_reunion",
+      "sourceEventId": "lcq.event.s05b_06_breakout_and_reunion",
+      "title": "宫内号令对不上",
+      "summary": "乐明珠的呼声从侧殿断续传来，谢艺重新编排退路；弥骨的追兵甲叶已在外廊换防。",
+      "observableFacts": [
+        "侧殿传来乐明珠压低的呼喊，随即被甲叶盖住",
+        "谢艺用手势改了退路，武二郎与凝羽分据两角",
+        "外廊点名声换成弥骨的调门，步距比巡更密"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.xie_yi",
+        "liuchao.character.le_mingzhu"
+      ],
+      "environmentFallback": "宫道灯火忽明忽暗，远处点名声乱了一拍，石阶上多了匆忙的湿脚印。",
+      "presentation": {
+        "title": "侧殿呼声",
+        "text": "侧殿里乐明珠的声音断了一截。谢艺只抬手改了退路，武二郎与凝羽各自卡住转角。外廊点名换成更密的步距，像网正在收口。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_05b",
+      "situationId": "world-sim.baseline.lcq.stage_05b.lcq.event.s05b_07_xiaozi_trap",
+      "sourceEventId": "lcq.event.s05b_07_xiaozi_trap",
+      "title": "深井方向封路",
+      "summary": "乐明珠再出现时已被人引向祭台一侧；小紫笑容无恙，阁罗的喝骂把通往深井的路封死半边。",
+      "observableFacts": [
+        "乐明珠衣角沾着井沿青苔，脚步发飘",
+        "小紫指着深井方向，语调仍旧软而急",
+        "阁罗在岔口吼人换防，半边石梯被拦绳封住"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.xiao_zi",
+        "lcq.character.np006"
+      ],
+      "environmentFallback": "井口阴风带着土腥，铁链轻撞井壁；远处喝骂与虫鸣搅在一处，方向难以辨清。",
+      "presentation": {
+        "title": "井沿青苔",
+        "text": "乐明珠衣角带着井沿青苔，脚步虚了一截。小紫仍软声指着深处，阁罗已在岔口把半边石梯拦起来。谁先下去，谁也没说死。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_05b",
+      "situationId": "world-sim.baseline.lcq.stage_05b.lcq.event.s05b_08a_rescue_suli",
+      "sourceEventId": "lcq.event.s05b_08a_rescue_suli",
+      "title": "井台银针反光",
+      "summary": "深井平台上苏荔被缚于祭桩，螺旋长针在灯火里一闪；小紫立在井沿，丹宸的脚步声从上层传来。",
+      "observableFacts": [
+        "苏荔红裙被绳索勒住，蝎尾被铁环扣着",
+        "祭桩旁一支螺旋长针反着冷光",
+        "上层石梯传来蒙眼女子的步履，不疾不徐"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.su_li",
+        "liuchao.character.xiao_zi"
+      ],
+      "environmentFallback": "井底潮气贴着石壁往上爬，灯火只照得半个平台；铁环偶尔一响，像有人在试松紧。",
+      "presentation": {
+        "title": "祭桩反光",
+        "text": "井台灯火只照半圈。苏荔被扣在祭桩上，螺旋长针冷光一闪。小紫立在井沿不说话，上层石梯已响起不疾不徐的步履。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_05b",
+      "situationId": "world-sim.baseline.lcq.stage_05b.lcq.event.s05b_08b_altar_corpse_fight_and_danchen",
+      "sourceEventId": "lcq.event.s05b_08b_altar_corpse_fight_and_danchen",
+      "title": "祭台尸气翻涌",
+      "summary": "鬼巫王抬手时祭台雾气变厚，女尸般的轮廓在雾中站直；丹宸握斧的手抖了一下，龙睛玉微微发热。",
+      "observableFacts": [
+        "雾中站起一具女尸轮廓，甲片上还留着旧族徽",
+        "丹宸蒙眼的丝带被风掀起一角，握斧发紧",
+        "腰间龙睛玉忽然温热，护罩纹路若隐若现"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.gui_wu_wang",
+        "liuchao.character.dan_chen"
+      ],
+      "environmentFallback": "祭台硫磺更重，雾气贴地打转；远处铁链拖地，像有什么被从石室里拖出来。",
+      "presentation": {
+        "title": "雾中轮廓",
+        "text": "雾气贴着祭台翻起来，一具带着旧族徽的女尸轮廓站直了。丹宸握斧的指节发白。龙睛玉忽然温热，护罩纹路只亮了一息。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_05b",
+      "situationId": "world-sim.baseline.lcq.stage_05b.lcq.event.s05b_09_temporary_pact_with_xiaozi",
+      "sourceEventId": "lcq.event.s05b_09_temporary_pact_with_xiaozi",
+      "title": "药效未退议和",
+      "summary": "鬼巫王的脚步声暂时远了；乐明珠呼吸发急，小紫听“岳鹏举”三字时眼神一滞，却未应承任何条件。",
+      "observableFacts": [
+        "殿外甲叶远去，热雾里只剩余震般的鼓点",
+        "乐明珠额汗未干，苏荔按住她手腕探脉",
+        "小紫听见旧名时手指停在袖里，没有立刻回话"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.xiao_zi",
+        "liuchao.character.le_mingzhu"
+      ],
+      "environmentFallback": "殿角灯火跳了两下，药香与硫磺混在一起；远处鼓点稀了，却没有完全停。",
+      "presentation": {
+        "title": "旧名一滞",
+        "text": "甲叶远了，乐明珠呼吸仍乱。苏荔按着她脉门不放。小紫听见那个旧名，手指在袖里停了一息，谁也没先把话说死。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_05b",
+      "situationId": "world-sim.baseline.lcq.stage_05b.lcq.event.s05b_10_slave_revolt_and_phoenix_change",
+      "sourceEventId": "lcq.event.s05b_10_slave_revolt_and_phoenix_change",
+      "title": "集会秩序松动",
+      "summary": "鬼王峒集会场上号令对不齐，小紫立处出现空档；奴隶锁链响成一片，乐明珠袖间火光乱跳。",
+      "observableFacts": [
+        "弥骨维持秩序的喝令被后排锁链声盖住",
+        "武二郎与谢艺分处两侧，奴隶班次被悄悄打乱",
+        "乐明珠指尖掠过一缕不属于灯火的暖光"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.xiao_zi",
+        "liuchao.character.wu_er_lang"
+      ],
+      "environmentFallback": "广场火把被风吹斜，点名声乱了拍；远处宫门未关严，热风从缝里灌出来。",
+      "presentation": {
+        "title": "锁链乱拍",
+        "text": "弥骨的喝令被锁链声盖住。武二郎与谢艺各占一侧，奴隶班次乱了一截。乐明珠袖间掠过不属于火把的暖光，小紫立处忽然空出半步。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_06",
+      "situationId": "world-sim.baseline.lcq.stage_06.lcq.event.s06_01",
+      "sourceEventId": "lcq.event.s06_01",
+      "title": "星阵反扣其主",
+      "summary": "苍龙星阵越收越紧，祭品被龙神推开；鬼巫王仍朝龙身逼近，阵纹却像勒回他自己一侧。",
+      "observableFacts": [
+        "龙神舌尖拨开祭品，并不按鬼巫王的口令贴合",
+        "星阵光圈收束，鬼角处石纹发出刺耳绷响",
+        "乐明珠贴在龙角边，只盯着阵纹究竟锁住了谁"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.le_mingzhu",
+        "liuchao.character.gui_wu_wang"
+      ],
+      "environmentFallback": "井口星光一圈圈收紧，热雾里混着祭品被掀落的腥甜，山壁随之轻轻发颤。",
+      "presentation": {
+        "title": "阵反扣",
+        "text": "龙神已醒，祭品却被舌尖拨开，洒落井沿。星阵不往外扩，光圈反勒向鬼巫王一侧，他的鬼角在光里发颤。乐明珠贴着龙角，只说先看清这阵到底缚住了谁。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_06",
+      "situationId": "world-sim.baseline.lcq.stage_06.lcq.event.s06_02",
+      "sourceEventId": "lcq.event.s06_02",
+      "title": "井口围猎聚齐",
+      "summary": "峒内各路人马不再观望，弓、刀、蛊器同时对准已醒的龙神，攻势交错，胜负未分。",
+      "observableFacts": [
+        "苏荔拉满长弓，蝎尾自岩缝探出毒芒",
+        "凝羽与武二郎分据两侧，谢艺刀锋已近龙颈",
+        "小紫盯着龙颅一线，话只吐出半句便止住"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.xie_yi",
+        "liuchao.character.su_li"
+      ],
+      "environmentFallback": "井壁回荡龙息与兵器相撞的闷响，碎石不断从顶上簌簌落下，热雾被撕成一条条。",
+      "presentation": {
+        "title": "围猎起",
+        "text": "龙神在井中翻身，苏荔的箭、武二郎的力、凝羽的刃已经前后补上。谢艺贴着龙颈寻缝，小紫却只盯着颅顶某处，像看见了别人没看见的缝。这一轮还远未分出高低。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_06",
+      "situationId": "world-sim.baseline.lcq.stage_06.lcq.event.s06_03",
+      "sourceEventId": "lcq.event.s06_03",
+      "title": "雷火贯胸未决",
+      "summary": "谢艺贴近龙颈腹后，井顶被扯下一道闪电；他胸口焦裂，步子不稳，却仍握着刀。",
+      "observableFacts": [
+        "电光沿龙脊劈下，焦痕正落在贴颈腹的人影上",
+        "谢艺胸前衣甲焦裂，呼吸短促，刀柄没松",
+        "小紫在烟尘里喊他，声音发紧，却挨不近"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.xie_yi",
+        "liuchao.character.xiao_zi"
+      ],
+      "environmentFallback": "焦雷气味压过龙血，井壁被照得发白，随后又陷入滚烫的烟尘。",
+      "presentation": {
+        "title": "雷贯前胸",
+        "text": "谢艺刚贴进龙颈腹一线，井顶便被扯下一道白亮。烟散开时，他胸口衣甲裂开，人还立着，只是步子已经发飘。小紫在更低处喊他，中间隔着尚未冷却的龙息。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_06",
+      "situationId": "world-sim.baseline.lcq.stage_06.lcq.event.s06_04",
+      "sourceEventId": "lcq.event.s06_04",
+      "title": "废墟窄道对峙",
+      "summary": "战后废墟里，小紫拦住逃出的碧姬，往日的天真收得干干净净，窄道上一时谁也过不去。",
+      "observableFacts": [
+        "小紫横在废墟窄道，不让那名碧鲮女子过去",
+        "碧姬衣袂带伤，改口说自己只是路过",
+        "乐明珠远远看见这一幕，脚步不由一滞"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.xiao_zi",
+        "liuchao.character.bi_ji"
+      ],
+      "environmentFallback": "崩塌的峒道里尽是焦土与断石，风从裂口灌入，把两个人影钉在窄路上。",
+      "presentation": {
+        "title": "窄道相拦",
+        "text": "废墟烟还没散尽，小紫忽然收起那副什么都不懂的神气，横在窄道上挡住逃出来的碧姬。那女子后退、改口、想绕开，都被一步步逼回去。乐明珠在更远处看见，还来不及出声。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_06",
+      "situationId": "world-sim.baseline.lcq.stage_06.lcq.event.s06_05",
+      "sourceEventId": "lcq.event.s06_05",
+      "title": "谷径另有路记",
+      "summary": "峒外另有一条不起眼的山径被人做了记号，谷深处升起村落炊烟，主人只以殇侯相称。",
+      "observableFacts": [
+        "石壁上留着朱老头走过时不易察觉的路记",
+        "谷口有年长妇人张望，像在等人循径进来",
+        "村中静室已备席，门楣只称村落主人殇侯"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.shang_zhen_yu"
+      ],
+      "environmentFallback": "南荒山谷雾气未散，一条窄径绕过乱石伸向炊烟，远处犬吠了两声又停住。",
+      "presentation": {
+        "title": "谷中引路",
+        "text": "出峒之后，乱石间多出一条几乎被草遮住的细径，壁上路记与朱老头先前的走法对得上。谷深处已有炊烟，门里只传出“殇侯在等”几个字，人影还隔着一层竹帘。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_06",
+      "situationId": "world-sim.baseline.lcq.stage_06.lcq.event.s06_06",
+      "sourceEventId": "lcq.event.s06_06",
+      "title": "寒蛊待人处置",
+      "summary": "静室里殇侯按住脉门辨认寒毒走向，只说要处置旧蛊，并未当场宣判已解或未解。",
+      "observableFacts": [
+        "腕间仍有间歇寒意往心口里钻",
+        "殇侯按上脉门，只说先处置身上旧蛊",
+        "案上备着针石符水，具体手法尚未出口"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.shang_zhen_yu"
+      ],
+      "environmentFallback": "静室熏香压住山风，案上针石摆得齐整，窗外竹影一动不动。",
+      "presentation": {
+        "title": "脉上寒意",
+        "text": "殇侯并不先谈功法，只按住脉门，顺着那股往心里钻的寒意往下寻。案上针石与符水都已备好，他却只说旧蛊该处置了，解与未解，这会儿谁也还听不真切。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_07_qingyuan_jiankang",
+      "situationId": "world-sim.baseline.lcq.stage_07_qingyuan_jiankang.lcq.event.s07_01_old_case",
+      "sourceEventId": "lcq.event.s07_01_old_case",
+      "title": "左武军旧案再提",
+      "summary": "入晋之后，萧遥逸谈及左武军覆灭与朝廷积弊时口风发紧，星月湖对岳帅旧事的说法也不再整齐。",
+      "observableFacts": [
+        "萧遥逸谈左武军覆灭时口风发紧，不像闲话",
+        "星月湖一线对岳帅旧事的说法彼此对不上",
+        "清远驿中有人压低声音改换行路次序"
+      ],
+      "preferredCharacterIds": [],
+      "environmentFallback": "清远馆驿灯火未歇，案卷与军籍被反复翻动，远处有人压着嗓子争论岳帅旧事，却没有人把话说死。",
+      "presentation": {
+        "title": "旧案压来",
+        "text": "萧遥逸把左武军覆灭与朝廷积弊一并摊开，话到岳帅处便顿住。星月湖来的口信彼此打架，清远驿里行路次序也被悄悄改过，这桩旧案会压向谁，眼前还看不明白。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_07_qingyuan_jiankang",
+      "situationId": "world-sim.baseline.lcq.stage_07_qingyuan_jiankang.lcq.event.s07_02_kill_wu",
+      "sourceEventId": "lcq.event.s07_02_kill_wu",
+      "title": "清远刀光将起",
+      "summary": "清远城中吴行德与卓云君一线忽然收紧，护卫换防、街巷封路，杀机与救人的空隙同时露了出来。",
+      "observableFacts": [
+        "吴行德身边护卫换班比平日更密",
+        "卓云君所在方向传出仓促呼喝",
+        "几条街巷临时封路，刀鞘相撞声断续传来"
+      ],
+      "preferredCharacterIds": [],
+      "environmentFallback": "清远城门内灯火乱晃，甲叶与刀鞘相撞，封路木障被临时抬出，却没人敢说今夜要落在谁身上。",
+      "presentation": {
+        "title": "清远收紧",
+        "text": "吴行德一行换防比白日更密，卓云君那边又传来仓促呼喝。几条街巷被木障堵住，刀鞘轻响却不见交手结果，清远今夜像被一只看不见的手捏紧。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_07_qingyuan_jiankang",
+      "situationId": "world-sim.baseline.lcq.stage_07_qingyuan_jiankang.lcq.event.s07_03_xiaozi_appears",
+      "sourceEventId": "lcq.event.s07_03_xiaozi_appears",
+      "title": "紫衫眼底变冷",
+      "summary": "小紫仍作娇憨，指上毒戒却被反复摩挲，伤重的卓云君身边空隙忽然变大，空气里的天真淡了一层。",
+      "observableFacts": [
+        "小紫笑意未改，指上毒戒却被反复摩挲",
+        "她袖中虫匣轻响，目光不再只作痴呆",
+        "重伤的卓云君身边护卫忽然散开一截"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.xiao_zi"
+      ],
+      "environmentFallback": "灯影里紫衫银铃轻响，空气中有一丝若有若无的药苦，近处脚步乱了一拍，却看不清是谁先动。",
+      "presentation": {
+        "title": "笑意收薄",
+        "text": "小紫仍挨着人说话，声线软得像往常，指上那枚毒戒却转个不停。袖中虫匣轻响，卓云君伤处附近的空隙忽然空出一截，像有人在等一个插手的瞬间。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_07_qingyuan_jiankang",
+      "situationId": "world-sim.baseline.lcq.stage_07_qingyuan_jiankang.lcq.event.s07_04_zhuo_subdued",
+      "sourceEventId": "lcq.event.s07_04_zhuo_subdued",
+      "title": "教御气势被压",
+      "summary": "卓云君伤后仍撑着教御架子，小紫却拿细针与药烟围着她转，主动权一点点从她手里往外滑。",
+      "observableFacts": [
+        "卓云君伤势未愈，呵斥却比先前短促",
+        "小紫以细针药烟围住她的坐处",
+        "太乙真宗一线口信改称她暂不宜见客"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.xiao_zi"
+      ],
+      "environmentFallback": "内室帘幕低垂，药烟与针匣气味混在一起，外头传话的人把嗓音压得很低，只说教御此刻不便见人。",
+      "presentation": {
+        "title": "帘后加压",
+        "text": "卓云君伤后仍想撑住教御的口气，话却越说越短。小紫把细针与药烟摆在她坐处周围，门外传话已改成暂不宜见客。她还能不能自己做主，旁人不敢断言。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_07_qingyuan_jiankang",
+      "situationId": "world-sim.baseline.lcq.stage_07_qingyuan_jiankang.lcq.event.s07_05_eight_steeds_informed",
+      "sourceEventId": "lcq.event.s07_05_eight_steeds_informed",
+      "title": "星月湖讯到营",
+      "summary": "孟非卿案前堆着新到的口信，谢艺与黑魔海的名字被反复对读，生药铺方向已有人整装待发。",
+      "observableFacts": [
+        "孟非卿把谢艺与黑魔海的口信对在一起",
+        "老四老五被点去查生药铺的行踪",
+        "营中兄弟情深的酒宴忽然改成密议"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.meng_fei_qing"
+      ],
+      "environmentFallback": "大营灯火通明，信使泥点子还没干，帅案上的口信被按住一角，远处马厩里已有人试鞍，却没人喊出要报谁的仇。",
+      "presentation": {
+        "title": "营门信到",
+        "text": "孟非卿把谢艺与黑魔海的名字对在同一张纸上，浓眉压得很低。老四老五已被点去生药铺一带探路，酒宴撤成密议，星月湖今夜的怒意还没有落地。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_07_qingyuan_jiankang",
+      "situationId": "world-sim.baseline.lcq.stage_07_qingyuan_jiankang.lcq.event.s07_06_water_assassins",
+      "sourceEventId": "lcq.event.s07_06_water_assassins",
+      "title": "舟侧水声异常",
+      "summary": "建康水面夜航时，舟侧水声乱了一拍，萧遥逸按刀而起，舱外黑影贴着舷板游过。",
+      "observableFacts": [
+        "舟侧水声乱拍，不像寻常夜潮",
+        "萧遥逸忽然按住刀柄，示意熄灯",
+        "舷下有贴水游动的黑影一闪即逝"
+      ],
+      "preferredCharacterIds": [],
+      "environmentFallback": "夜河雾重，桨声忽然停住，舷外水纹被什么东西割开又合上，舱里的人屏息听着，却还没看清来者是谁。",
+      "presentation": {
+        "title": "舷下水影",
+        "text": "夜舟刚驶入建康水面，舷外水声乱了一拍。萧遥逸按刀示意熄灯，黑影贴着船帮游过去，像水鬼试探，又像暗手在点人数，舱内一时谁也不敢先喊。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_07_qingyuan_jiankang",
+      "situationId": "world-sim.baseline.lcq.stage_07_qingyuan_jiankang.lcq.event.s07_07_dragon_hall",
+      "sourceEventId": "lcq.event.s07_07_dragon_hall",
+      "title": "神龙殿灯异常",
+      "summary": "宫城神龙殿方向禁足加严，舞乐却在子时仍未散，有人说殿内灯火只亮一层，像在遮什么。",
+      "observableFacts": [
+        "神龙殿外周卫换防比往日提前半个时辰",
+        "子时仍有舞乐，殿内却只透一层昏灯",
+        "内侍口信互相矛盾，有的说圣躬安寝"
+      ],
+      "preferredCharacterIds": [],
+      "environmentFallback": "宫墙内鼓漏错了一拍，神龙殿屋脊黑沉沉压着夜色，禁足木牌新钉，远处乐声细得不像朝会。",
+      "presentation": {
+        "title": "殿灯异状",
+        "text": "神龙殿外周卫提前换防，子时舞乐未歇，殿缝里却只漏出一层昏灯。内侍们有的说圣躬安寝，有的只摇头不语。夜色把那道门槛烘得很烫，却还没有人跨进去。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_07_qingyuan_jiankang",
+      "situationId": "world-sim.baseline.lcq.stage_07_qingyuan_jiankang.lcq.event.s07_08_palace_escape",
+      "sourceEventId": "lcq.event.s07_08_palace_escape",
+      "title": "宫道杀气分流",
+      "summary": "回程宫道忽然多出刀光与宦者灯笼，左右夹巷同时封死，分路撤离的手势被压得很低。",
+      "observableFacts": [
+        "回程夹巷两头同时落下拒马",
+        "宦者灯笼成排逼近，刀风先于人影",
+        "有人打分手势，准备拆开两条黑路"
+      ],
+      "preferredCharacterIds": [],
+      "environmentFallback": "宫墙转角灯笼乱晃，拒马木刺擦出白痕，远处有人压着嗓子报路，却分不清哪条巷子还能走出去。",
+      "presentation": {
+        "title": "夹巷封死",
+        "text": "回程夹巷两头同时落下拒马，宦者灯笼一排排逼近，刀风已贴着墙皮。有人只打了个分手势，两条黑影各自没入更深的宫道，谁先被咬住，此刻谁也说不准。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_07_qingyuan_jiankang",
+      "situationId": "world-sim.baseline.lcq.stage_07_qingyuan_jiankang.lcq.event.s07_09_hengtang_ambush",
+      "sourceEventId": "lcq.event.s07_09_hengtang_ambush",
+      "title": "横塘水面合围",
+      "summary": "横塘别墅临水一面忽然多出船影，弩机上弦声贴着芦苇传来，院内有人去摸密道门闩。",
+      "observableFacts": [
+        "临水码头船影合拢，号灯乱闪",
+        "芦苇丛里传来弩机上弦的轻响",
+        "别墅内墙根有人去试密道门闩"
+      ],
+      "preferredCharacterIds": [],
+      "environmentFallback": "横塘夜雾里桨声密了一层，弩机上弦的金属轻响贴着水面滑来，院中脚步慌乱，密道石缝里透出潮气。",
+      "presentation": {
+        "title": "船弩合岸",
+        "text": "横塘别墅临水一面船影合拢，号灯乱闪。芦苇里弩机上弦，院墙根已有人去试密道门闩。水面像被一只手捏住，这一击落不落得下来，屋里还没人敢赌。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_07_qingyuan_jiankang",
+      "situationId": "world-sim.baseline.lcq.stage_07_qingyuan_jiankang.lcq.event.s07_10_dragon_fang",
+      "sourceEventId": "lcq.event.s07_10_dragon_fang",
+      "title": "龙牙锥影浮动",
+      "summary": "建康权贵席间忽然忌谈龙牙锥，萧遥逸查内奸的口风收紧，拜火教的名号与王大将军旧事被对在一起。",
+      "observableFacts": [
+        "席间有人把龙牙锥三字咽回去不说",
+        "萧遥逸查内奸的名单被反复涂改",
+        "王大将军旧事与拜火教传言对不上"
+      ],
+      "preferredCharacterIds": [],
+      "environmentFallback": "建康夜宴散后廊下风冷，龙牙锥的匣影被人匆匆遮住，内奸二字只在唇边转一圈，没有人把话说死。",
+      "presentation": {
+        "title": "锥影压席",
+        "text": "席间刚有人提起龙牙锥，话头便被按住。萧遥逸案上的内奸名单涂了又改，王大将军战死的旧账与拜火教传言对在一起，却对不齐。更大的伏击像还在城外绕圈。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_08_jiankang_coup",
+      "situationId": "world-sim.baseline.lcq.stage_08_jiankang_coup.lcq.event.s08_01_eagle_valley",
+      "sourceEventId": "lcq.event.s08_01_eagle_valley",
+      "title": "鹰愁峪弩影",
+      "summary": "狩猎队伍已入峪口，两侧林影里传来异常整齐的弩机声，谷道像被悄悄收紧。",
+      "observableFacts": [
+        "州府兵旗帜未按猎场惯例散开，而是压在峪口两侧",
+        "谷风里偶有弩弦绷紧的轻响，与寻常围猎不符",
+        "程宗扬察觉行猎次序被改，护卫被挤向谷心"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "鹰愁峪两侧林木过密，回声发闷，远处偶尔传来甲叶相撞，却看不见人影。",
+      "presentation": {
+        "title": "峪口收紧",
+        "text": "猎骑刚入鹰愁峪，两侧林影便不再像围猎那样松散。弩机被压在暗处，谷道越走越窄。程宗扬摸了摸下巴上的胡茬，没有立刻下令回头。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_08_jiankang_coup",
+      "situationId": "world-sim.baseline.lcq.stage_08_jiankang_coup.lcq.event.s08_02_wood_fort",
+      "sourceEventId": "lcq.event.s08_02_wood_fort",
+      "title": "木垒前阵脚乱",
+      "summary": "骑兵已冲过一次阵列，伤员退回木垒，对面步骑仍在重新合围。",
+      "observableFacts": [
+        "吴三桂所部退回木垒，马匹喷白沫，阵列缺口未合",
+        "州府兵骑兵在垒外绕行，尘土比先前更近",
+        "木垒垛口堆着断矛，守军换防却无人报清敌向"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "木垒外尘土反复扬起又落下，鼓点时密时疏，垒内伤号的喘息压过了猎号。",
+      "presentation": {
+        "title": "垒门收紧",
+        "text": "冲阵的骑兵退回木垒时，阵列已经缺了一角。州府兵的马蹄在垒外绕圈，尘土一次比一次近。程宗扬靠着垛木，呼吸发沉，却还没人敢说这一轮会守到何时。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_08_jiankang_coup",
+      "situationId": "world-sim.baseline.lcq.stage_08_jiankang_coup.lcq.event.s08_03_beifu_rescue",
+      "sourceEventId": "lcq.event.s08_03_beifu_rescue",
+      "title": "禁军旗号可疑",
+      "summary": "木垒外忽然出现禁军旗号，步伐却不像宫中宿卫，解围与再围同样难辨。",
+      "observableFacts": [
+        "远处甲骑打着禁军旗号，队形却偏北府旧习",
+        "州府兵侧翼忽然乱了口令，有人喊来援有人喊再围",
+        "木垒内传令互相矛盾，会合点被说成两处"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "烟尘里旗帜一闪即隐，鼓声与口令叠在一起，分不清是解围还是合围。",
+      "presentation": {
+        "title": "旗号难辨",
+        "text": "木垒外忽然闪出禁军旗号，甲叶却不像宿卫那般齐整。有人说是来援，有人说州府兵在换阵。程宗扬扶着垒木听了一会儿，会合点被报成了两处。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_08_jiankang_coup",
+      "situationId": "world-sim.baseline.lcq.stage_08_jiankang_coup.lcq.event.s08_04_sudaji_enters",
+      "sourceEventId": "lcq.event.s08_04_sudaji_enters",
+      "title": "庭院车辙直入",
+      "summary": "贵客车驾不经外门通报便压进庭院，阶下迎接的次序被临时打乱。",
+      "observableFacts": [
+        "车轮直碾中庭青砖，门子来不及拦停",
+        "厅门被提前敞开，香炉却空着未添",
+        "程宗扬被唤至阶下，旁人不敢抬头看车帘"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "庭院里车轴声压过鸟鸣，帘影一晃，阶前的人站位乱了半拍。",
+      "presentation": {
+        "title": "车帘压阶",
+        "text": "车驾未在外门停稳，轮迹已压上中庭青砖。厅门大开，香炉却空着。程宗扬被唤到阶下，帘后的气压得满院无声，谁也说不清这一见会如何收场。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_08_jiankang_coup",
+      "situationId": "world-sim.baseline.lcq.stage_08_jiankang_coup.lcq.event.s08_05_breakthrough",
+      "sourceEventId": "lcq.event.s08_05_breakthrough",
+      "title": "丹田余震未平",
+      "summary": "庭院对峙未散，程宗扬丹田处余痛未止，珊瑚匕首贴腕，气机忽乱忽聚。",
+      "observableFacts": [
+        "程宗扬按住丹田，呼吸忽长忽短",
+        "腕侧珊瑚匕首微热，像被什么气息唤醒",
+        "对面气压未退，厅柱上漆皮细细开裂"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "厅内热气与冷意交错，烛火歪斜，谁也不敢先迈过门槛。",
+      "presentation": {
+        "title": "经脉躁动",
+        "text": "丹田处余痛还在，一股反震的热意往经脉里钻。程宗扬拇指擦过珊瑚匕首的鞘口，厅柱漆皮细细开裂。对面气压未退，这一口气会往哪边走，谁也不敢先说。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_08_jiankang_coup",
+      "situationId": "world-sim.baseline.lcq.stage_08_jiankang_coup.lcq.event.s08_06_pursuit_repelled",
+      "sourceEventId": "lcq.event.s08_06_pursuit_repelled",
+      "title": "庭外追杀未断",
+      "summary": "厅外脚步加快，追杀的气息贴着回廊，另有轻快的紫影与萧氏刀意同时靠近。",
+      "observableFacts": [
+        "回廊砖缝里余着未散的杀气，门扇半敞",
+        "小紫银铃极轻一响，却不在平时该在的位置",
+        "远处有人报萧遥逸的脚步近了，方向互相打架"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang",
+        "liuchao.character.xiao_zi"
+      ],
+      "environmentFallback": "庭院外风突然变急，衣袂猎猎，追杀与救援的声息叠在同一条廊上。",
+      "presentation": {
+        "title": "廊上叠影",
+        "text": "厅门半敞，回廊里的杀气还没散尽。银铃极轻地响了一下，不在小紫平时该待的角落；同时又有人报萧遥逸近了。程宗扬踏出两步，追杀会不会被截断，此刻谁也说不准。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_08_jiankang_coup",
+      "situationId": "world-sim.baseline.lcq.stage_08_jiankang_coup.lcq.event.s08_07_palace_ninja",
+      "sourceEventId": "lcq.event.s08_07_palace_ninja",
+      "title": "禁军甲里异音",
+      "summary": "宫室值守的禁军甲叶缝里露出异邦绳结，信札与剑柄的影子还只是传闻。",
+      "observableFacts": [
+        "当值禁军口音发硬，甲缝里露出异样绳结",
+        "宫室灯火忽然改道，有人把值房门反扣",
+        "传言禁军里混进了东瀛手法，说法却对不上"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "宫廊灯影一截明一截暗，甲叶相撞的节奏与宿卫演练对不上号。",
+      "presentation": {
+        "title": "甲缝异结",
+        "text": "宫室里当值的禁军走得太静。甲叶缝里露出绳结，不像宿卫常备。灯火改道，值房门被反扣。程宗扬与萧遥逸对了一眼，信札与剑柄还只是廊下互相打架的传言。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_08_jiankang_coup",
+      "situationId": "world-sim.baseline.lcq.stage_08_jiankang_coup.lcq.event.s08_08_gumingyin_plot",
+      "sourceEventId": "lcq.event.s08_08_gumingyin_plot",
+      "title": "太后移驾风紧",
+      "summary": "宫中忽然加紧太后与贵妃的护从，又有人把星月湖的名号往玄骐身上扣。",
+      "observableFacts": [
+        "太后、贵妃的仪仗被临时改道，护从加倍",
+        "有人把“第八骏玄骐”与萧遥逸并提，随即被喝止",
+        "程宗扬听见己方行踪被宫人复述，细节却错乱"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "深宫灯火一夜三迁，口信从内侍手里传来传去，饵与刀都还藏在帘后。",
+      "presentation": {
+        "title": "饵已抬出",
+        "text": "太后与贵妃的仪仗忽然改道，护从加倍。有人把星月湖的玄骐和萧遥逸并提，话没说完就被喝住。程宗扬听着宫人复述己方行踪，细节错得厉害，却已足够让人脊背发凉。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_08_jiankang_coup",
+      "situationId": "world-sim.baseline.lcq.stage_08_jiankang_coup.lcq.event.s08_09_zhaoming_night",
+      "sourceEventId": "lcq.event.s08_09_zhaoming_night",
+      "title": "昭明宫刑门紧",
+      "summary": "昭明宫刑室灯火独明，小太监往来加锁，古冥隐的人影在门内停了很久。",
+      "observableFacts": [
+        "刑室门闩被从里面加上第二道，脚步凌乱",
+        "小太监来回传话，嗓音发紧，不敢报人名",
+        "廊下有人试门环，力道不像寻常内侍"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "昭明宫这一角灯火过亮，刑具铁环偶尔相碰，夜风把血腥气送到隔壁殿角。",
+      "presentation": {
+        "title": "刑室试环",
+        "text": "昭明宫刑室的灯一夜未熄。门闩从里面又加了一道，小太监来回传话却不敢报人名。廊下有人试了试门环，力道不像内侍。程宗扬停在暗处，对峙会不会破门，此刻还没有声响。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_08_jiankang_coup",
+      "situationId": "world-sim.baseline.lcq.stage_08_jiankang_coup.lcq.event.s08_10_xuanwu_rescue",
+      "sourceEventId": "lcq.event.s08_10_xuanwu_rescue",
+      "title": "御舟夜泊异动",
+      "summary": "玄武湖上御舟偏航，水下有刀意掠过，岸上护驾人马却对不上同一条路线。",
+      "observableFacts": [
+        "御舟缆绳被收得过紧，舟身偏离旧航道",
+        "湖面忽然无风起纹，像有人贴着船底游过",
+        "秦桧、吴三桂的人马分两路靠岸，口令互相打架"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "玄武湖夜雾贴水，桨声断续，远处甲叶与水响叠在一起，分不清护驾还是截驾。",
+      "presentation": {
+        "title": "湖上偏航",
+        "text": "御舟在玄武湖上偏了半箭之地，缆绳勒得发紧。无风的水面忽然起纹，像有刃贴着船底掠过。岸上秦桧与吴三桂的人马分两路靠拢，口令却对不齐。程宗扬望着雾，这一趟会护住谁，谁也不敢先喊。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_09_trade_and_escape",
+      "situationId": "world-sim.baseline.lcq.stage_09_trade_and_escape.lcq.event.s09_01_eight_steeds_leave",
+      "sourceEventId": "lcq.event.s09_01_eight_steeds_leave",
+      "title": "战后余波待复盘",
+      "summary": "建康战后利益未清，星月湖八骏去向与北府兵权变动同时传来，会面名单被提前排开。",
+      "observableFacts": [
+        "萧遥逸一侧传出约见帖，地点落在建康城内",
+        "口信并提八骏离湖、北府换权与黑魔海余波",
+        "复盘席上的座次与次序被临时改过一回"
+      ],
+      "preferredCharacterIds": [],
+      "environmentFallback": "驿馆廊下灯火未歇，几封盖着北府与湖畔印记的信笺叠在一起，差役只说要等城中会面后再回话。",
+      "presentation": {
+        "title": "约见帖到",
+        "text": "战后余波尚未落定，萧遥逸的约见帖先落到建康。信上并提星月湖八骏离去、北府兵权易手，以及黑魔海那边的残响。座次改过一次，却没人说这场复盘会先谈哪一桩。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_09_trade_and_escape",
+      "situationId": "world-sim.baseline.lcq.stage_09_trade_and_escape.lcq.event.s09_02_yun_ruyao_faints",
+      "sourceEventId": "lcq.event.s09_02_yun_ruyao_faints",
+      "title": "云氏案头起异",
+      "summary": "云如瑶翻看程宗扬带来的书册时停得过久，脸色忽变，侍女已去唤人，病因未明。",
+      "observableFacts": [
+        "案上摊着外来书册，有一页被反复按住",
+        "云如瑶神色恍惚，额上见汗，话未说完",
+        "云府内院临时禁足，医箱被匆匆抬过回廊"
+      ],
+      "preferredCharacterIds": [],
+      "environmentFallback": "云府内院 Curtain 放下，书页翻动声突然停住，随后是杯盏落地与急促脚步，门外只传出“小姐不适”四字。",
+      "presentation": {
+        "title": "书页停住",
+        "text": "云如瑶翻到程宗扬带来的那叠书时忽然停住，指尖按在一页写得极密的私情描写上，神色先是茫然，随即发白。内院帘幕落下，医箱过廊，谁也说不清她只是受惊，还是另有旧疾被牵动。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_09_trade_and_escape",
+      "situationId": "world-sim.baseline.lcq.stage_09_trade_and_escape.lcq.event.s09_03_xiaozi_wounded",
+      "sourceEventId": "lcq.event.s09_03_xiaozi_wounded",
+      "title": "巡产路上风紧",
+      "summary": "产业巡视被临时加岗，苏妲己旧踪的传言与江岸封渡同时出现，随行次序被打乱。",
+      "observableFacts": [
+        "巡视产业的路线被改到临江货栈一带",
+        "暗桩回报苏妲己旧踪未散，口风互相打架",
+        "小紫收紧随行间距，江岸渡口忽然加岗"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.xiao_zi"
+      ],
+      "environmentFallback": "货栈外灯笼被风吹得乱晃，江面 mult 有加岗的脚步，远处渡口铁链拖地，却听不清是防贼还是防旧仇。",
+      "presentation": {
+        "title": "江岸加岗",
+        "text": "巡视产业本是例行一遭，路线却被改到临江货栈。暗桩说苏妲己旧踪未散，说法彼此对不上。小紫把随行收得很近，渡口忽然加岗，铁链拖地，谁也说不清风是从哪一侧先紧起来的。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_09_trade_and_escape",
+      "situationId": "world-sim.baseline.lcq.stage_09_trade_and_escape.lcq.event.s09_04_weaving_trade",
+      "sourceEventId": "lcq.event.s09_04_weaving_trade",
+      "title": "拉链坊归属生隙",
+      "summary": "拉链坊转交云家的风声传到织坊，小紫已上门问账，织机停了一角，交换条件尚未摊开。",
+      "observableFacts": [
+        "织坊账册被抽走一摞，拉链坊名下多了云家印",
+        "小紫满面娇嗔地问归属，指节却扣得发白",
+        "机房一角停织，管事把交换草案藏在袖里"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.xiao_zi"
+      ],
+      "environmentFallback": "织机声忽然缺了一角，账房灯火通明，门帘外传来银铃轻响与压低的问话，谁也不敢先说“转交”二字。",
+      "presentation": {
+        "title": "坊契生隙",
+        "text": "拉链坊转交云家的风声刚落到织坊，账册就被抽走一摞。小紫仍是那副娇嗔问账的模样，指节却扣得发白。机房一角停了，管事把未写完的交换草案藏进袖里，谁也不敢先把条件摊到桌上。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_09_trade_and_escape",
+      "situationId": "world-sim.baseline.lcq.stage_09_trade_and_escape.lcq.event.s09_05_drain_escape",
+      "sourceEventId": "lcq.event.s09_05_drain_escape",
+      "title": "排水沟外有追影",
+      "summary": "城南排水沟口被临时封断，追骑灯火沿沟壁移动，沟内潮湿回声里听得出有人在找退路。",
+      "observableFacts": [
+        "排水沟铁栅被从外侧扣上，水位比往日更高",
+        "沟壁灯火一明一灭，口令不像城防常规换岗",
+        "湿泥上有三人并走又折回的新鲜脚印"
+      ],
+      "preferredCharacterIds": [],
+      "environmentFallback": "城南沟口潮气上涌，铁栅扣死，远处灯火贴着砖缝移动，水声盖过脚步，辨不清是搜捕还是封路。",
+      "presentation": {
+        "title": "沟口封断",
+        "text": "城南排水沟的铁栅被从外侧扣死，水位比往日更高。灯火贴着沟壁一明一灭，口令也不像常规换岗。湿泥上有并走又折回的脚印，退路还在不在，眼下谁也不敢把话说死。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_09_trade_and_escape",
+      "situationId": "world-sim.baseline.lcq.stage_09_trade_and_escape.lcq.event.s09_06_blacksea_fracture",
+      "sourceEventId": "lcq.event.s09_06_blacksea_fracture",
+      "title": "内堂香主失和",
+      "summary": "黑魔海内堂嫡传与外聘香主之间的差遣忽然对不上，小太监值房熄灯，门口多了两拨互不相让的人。",
+      "observableFacts": [
+        "内堂差签被撕去半截，外聘香主名下缺值",
+        "值房灯火骤灭，传话只说“计好顶撞了上头”",
+        "嫡传与外聘两拨人在廊下对峙，谁也不让路"
+      ],
+      "preferredCharacterIds": [],
+      "environmentFallback": "内堂廊下香灰未扫，两拨人影隔门对峙，值房熄灯，风里只有压低的争执，听不清是家法还是私怨。",
+      "presentation": {
+        "title": "内堂对峙",
+        "text": "黑魔海内堂的差签撕去半截，外聘香主名下缺了一值。值房灯火骤灭，有人只说计好顶撞了上头。嫡传与外聘两拨人在廊下互不相让，裂痕已经露在门口，却还没人敢当众把话说破。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_09_trade_and_escape",
+      "situationId": "world-sim.baseline.lcq.stage_09_trade_and_escape.lcq.event.s09_07_feiniao_infiltration",
+      "sourceEventId": "lcq.event.s09_07_feiniao_infiltration",
+      "title": "飞鸟名下有暗账",
+      "summary": "广阳一侧把“飞鸟熊藏”编进夜巡名册，游婵处传来只言片语，脱身日程被压在未拆的密笺里。",
+      "observableFacts": [
+        "夜巡名册多出飞鸟熊藏四字，口音被注为东瀛",
+        "游婵传话只谈广阳布点，不谈来路去处",
+        "回建康的水路被改签两次，密笺仍未拆封"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "广阳驿壁上新贴的夜巡条被风掀起一角，“飞鸟”二字墨迹未干，邻桌有人用生硬吴语学东瀛口音，随即被喝止。",
+      "presentation": {
+        "title": "名册添字",
+        "text": "广阳夜巡名册上多了“飞鸟熊藏”四字，旁注东瀛口音。游婵传来的话只点广阳布点，不提来路。回建康的水路改签两次，那封未拆的密笺压在案角，像随时能走，又像一时走不成。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_09_trade_and_escape",
+      "situationId": "world-sim.baseline.lcq.stage_09_trade_and_escape.lcq.event.s09_08_six_doors_confession",
+      "sourceEventId": "lcq.event.s09_08_six_doors_confession",
+      "title": "六扇门里口供松动",
+      "summary": "六扇门加审泉玉姬，供词牵到太湖盟、翻江会与月霜行踪，几份抄件互相打架，尚未定谳。",
+      "observableFacts": [
+        "夜审灯火通明，泉玉姬的供状被誊了三份",
+        "抄件分别写追捕太湖盟、翻江会，又点月霜",
+        "门吏对调哪一案优先意见不一，封条未落"
+      ],
+      "preferredCharacterIds": [],
+      "environmentFallback": "六扇门后院灯火一夜未熄，笔尖刮纸声断续传来，廊下叠着未用的封条，谁也不敢先盖下去。",
+      "presentation": {
+        "title": "供状三份",
+        "text": "六扇门夜审未歇，泉玉姬的供状被誊成三份：一份写追捕太湖盟，一份写翻江会，又有一处点到月霜行踪。门吏为先办哪一案争执不下，封条还在廊下，谁也没敢先落印。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_09_trade_and_escape",
+      "situationId": "world-sim.baseline.lcq.stage_09_trade_and_escape.lcq.event.s09_09_jiangzhou_crisis",
+      "sourceEventId": "lcq.event.s09_09_jiangzhou_crisis",
+      "title": "云水航道被封",
+      "summary": "回晴州的船上先收到云水航道封禁的口信，江州告急与六扇门内身份疑云叠在一起，去向未决。",
+      "observableFacts": [
+        "云水航道码头封索，商船改泊，税票停发",
+        "江州加急文书与六扇门旧档同时送到船头",
+        "泉玉姬身份说法互相矛盾，月霜一侧仍不信"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "回晴州的跳板还搭着，码头铁索已经横过云水航道，船老大只肯说“江州来的加急压过了所有班期”。",
+      "presentation": {
+        "title": "航道封索",
+        "text": "回晴州的船还没离岸，云水航道先拉上了封索。江州加急与六扇门旧档一起砸到船头，有人口风改称泉玉姬来路不正，月霜一侧听了只摇头。航道封着，人却还站在跳板上，去向一时难决。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_09_trade_and_escape",
+      "situationId": "world-sim.baseline.lcq.stage_09_trade_and_escape.lcq.event.s09_10_separation",
+      "sourceEventId": "lcq.event.s09_10_separation",
+      "title": "江州分手当场",
+      "summary": "江州城门口，卢景把交换任务与带走小紫捆在同一句话里，月霜去向失联，当场没有人松口。",
+      "observableFacts": [
+        "卢景放话：沾月霜便卸腿，同时要带走小紫",
+        "程宗扬只应交换差事，不让人把小紫从身边拉开",
+        "月霜一线口信中断，江州与黑魔海两头同时催人"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "江州城门灯笼被风吹得来回撞，两拨差官隔着门槛对峙，一份交换文书摊开又合上，谁也不肯先签字。",
+      "presentation": {
+        "title": "门槛对峙",
+        "text": "江州城门下，卢景把交换差事与带走小紫说成一句话，又撂下沾月霜便卸腿的警告。程宗扬只应了差事，人却不松。月霜那边口信断了，江州与黑魔海两头同时催人，门槛上谁也没先签字。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_10_jiangzhou_shadow_war",
+      "situationId": "world-sim.baseline.lcq.stage_10_jiangzhou_shadow_war.lcq.event.s10_01_jiangzhou_order",
+      "sourceEventId": "lcq.event.s10_01_jiangzhou_order",
+      "title": "江州军令压境",
+      "summary": "朝堂口信与上四军调动传闻同时涌来，江州方向的压力一夜之间变得具体。",
+      "observableFacts": [
+        "驿使连夜送入与江州清剿相关的军令抄件",
+        "有人说贾师宪已不理会王丞相回书",
+        "上四军旗帜被提前点验，行装朝江州一侧堆放"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "辕门外灯火不歇，换防锣声比往日更密，江州二字在夜风里被反复提起。",
+      "presentation": {
+        "title": "军令压城",
+        "text": "程宗扬听见驿馆门轴一夜响了数回。抄件上写着江州、岳鹏举余党，旁人又说贾师宪已把王丞相回书搁在一边。上四军旗帜被提前点验，行装堆向江州一侧，究竟会压成怎样的部署，此刻还没人敢说死。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_10_jiangzhou_shadow_war",
+      "situationId": "world-sim.baseline.lcq.stage_10_jiangzhou_shadow_war.lcq.event.s10_02_yeying_pass",
+      "sourceEventId": "lcq.event.s10_02_yeying_pass",
+      "title": "云水航道封禁",
+      "summary": "夜影关前云水航道被宋军拦断，舟楫停摆，陆路人马开始挤向关口。",
+      "observableFacts": [
+        "云水航道口横起封锁索与巡船",
+        "夜影关码头货船被勒令停航待检",
+        "关前陆路车马骤增，脚夫在谈改道晴州"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "江面巡灯光来回扫过，关口号角短促，岸上脚力与骡马挤作一团。",
+      "presentation": {
+        "title": "航道封死",
+        "text": "夜影关前，云水航道口横着封锁索，巡船来回拦人。码头货船被勒令停航待检，脚夫已在谈改走陆路去晴州。关前车马挤成一团，水路何时重开，谁也给不出准话。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_10_jiangzhou_shadow_war",
+      "situationId": "world-sim.baseline.lcq.stage_10_jiangzhou_shadow_war.lcq.event.s10_03_ninja_trace",
+      "sourceEventId": "lcq.event.s10_03_ninja_trace",
+      "title": "佣兵驻地异踪",
+      "summary": "雪隼驻地夜间失物与陌生足印同时出现，有人把痕迹往东瀛一路上猜。",
+      "observableFacts": [
+        "雪隼佣兵团住处有翻箱与轻功落尘",
+        "月霜房外留下细刃刮痕与细小血点",
+        "石之隼对着异样足印沉吟，未下定论"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "佣兵营灯火忽然加密，屋顶瓦片有细碎错位，院里人影来回核验脚印。",
+      "presentation": {
+        "title": "驻地异踪",
+        "text": "雪隼驻地夜里有人翻过箱笼，月霜房外留下细刃刮痕和几点血。石之隼对着异样足印沉吟，有人已把东瀛忍术挂在嘴边。来人去向不明，黑魔海暗线是否再起，院里还只敢把灯加亮。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_10_jiangzhou_shadow_war",
+      "situationId": "world-sim.baseline.lcq.stage_10_jiangzhou_shadow_war.lcq.event.s10_04_left_army_review",
+      "sourceEventId": "lcq.event.s10_04_left_army_review",
+      "title": "左武军旧账翻起",
+      "summary": "王哲左武军覆灭的补给断口与军机走漏被重新摊开，江州前史压在案上。",
+      "observableFacts": [
+        "孟非卿把左武军粮道断口图摊在灯下",
+        "有人重提军机外泄，金蜜镝之名被排除又被争议",
+        "程宗扬对着旧账沉默，追问比结论更多"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.meng_fei_qing",
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "营帐灯芯爆了两次，地图上江州一线被反复按住，帐外巡夜脚步忽然放轻。",
+      "presentation": {
+        "title": "旧账翻开",
+        "text": "孟非卿把左武军粮道断口图按在灯下，声线沉稳，却比平时更短。有人重提军机外泄，金蜜镝的名字刚被排除，又被旁人顶回来。程宗扬追问多于断言，江州前史像潮水一样漫上桌沿。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_10_jiangzhou_shadow_war",
+      "situationId": "world-sim.baseline.lcq.stage_10_jiangzhou_shadow_war.lcq.event.s10_05_war_funds",
+      "sourceEventId": "lcq.event.s10_05_war_funds",
+      "title": "军资缺口告急",
+      "summary": "孟非卿军资告急的风声传开，鹏翼社抵押与陶府借贷的盘算开始露头。",
+      "observableFacts": [
+        "星月湖账房连夜清点不足之数",
+        "陶弘敏处有人打听月息两分的大口借贷",
+        "鹏翼社契据被取出，云氏名号被当作幌子试探"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "钱庄夜灯未熄，算盘声密得发躁，门外镖车空着，像在等一批还没谈妥的金铢。",
+      "presentation": {
+        "title": "金铢告急",
+        "text": "星月湖账房连夜清点，缺口大得压住了嗓门。陶弘敏那边已有人打听月息两分的大口借贷，鹏翼社契据被取出，云氏名号被当作幌子试探。十万金铢会不会落袋，此刻还停在算盘上。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_10_jiangzhou_shadow_war",
+      "situationId": "world-sim.baseline.lcq.stage_10_jiangzhou_shadow_war.lcq.event.s10_06_ruined_temple",
+      "sourceEventId": "lcq.event.s10_06_ruined_temple",
+      "title": "破道观夜影",
+      "summary": "晴州夜里有可疑人影往破道观方向去，黑魔海介入的气味比白日更浓。",
+      "observableFacts": [
+        "破道观外新添香灰与未燃尽的符纸",
+        "有人影避开官道，专走荒径入观",
+        "程宗扬认出其中一个步态像林之澜旧部"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "荒观瓦缝漏风，远处犬吠忽然止住，山门灯影一闪又灭。",
+      "presentation": {
+        "title": "荒观夜影",
+        "text": "破道观外新添香灰和未燃尽的符纸，人影避开官道，专走荒径入观。程宗扬盯着其中一个步态，隐约像林之澜旧部元行健。黑魔海是否已伸进晴州，夜里只有脚印，没有答词。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_10_jiangzhou_shadow_war",
+      "situationId": "world-sim.baseline.lcq.stage_10_jiangzhou_shadow_war.lcq.event.s10_07_preemptive_strike",
+      "sourceEventId": "lcq.event.s10_07_preemptive_strike",
+      "title": "先手议论渐起",
+      "summary": "保护月霜与切断江州后患被放在同一张桌上，先发制人的说法开始落地。",
+      "observableFacts": [
+        "程宗扬连夜列出三条先打黑魔海的理由",
+        "月霜身边护卫被临时加密，却未改驻地",
+        "营中对先手与固守两说争执不下"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "议事帐灯火通明，沙盘上黑魔海标记被挪来挪去，帐帘外刀环轻碰。",
+      "presentation": {
+        "title": "先手之议",
+        "text": "程宗扬把保护月霜、切断江州后患几条理由压在沙盘边，语气比平日更冲。月霜身边护卫加密了，驻地却没动。帐里先手与固守两说顶在一起，谁也还没把令旗推出去。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_10_jiangzhou_shadow_war",
+      "situationId": "world-sim.baseline.lcq.stage_10_jiangzhou_shadow_war.lcq.event.s10_08_lair_reversal",
+      "sourceEventId": "lcq.event.s10_08_lair_reversal",
+      "title": "洞穴杀机暗涌",
+      "summary": "星月湖洞穴里黑魔海气味渐浓，名单与毒网同时露头，对峙正在收紧。",
+      "observableFacts": [
+        "洞穴深处传来巫咒低吟与潮腥气",
+        "记士辛卯手边摊开疑似星月湖名册残页",
+        "湿岩上有人在试毒网，孟非卿前锋已压近"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.meng_fei_qing",
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "洞壁水珠成串落下，火把忽明忽暗，远处网索拖地，潮腥混着药气。",
+      "presentation": {
+        "title": "洞中杀机",
+        "text": "洞穴深处潮腥混着巫咒，记士辛卯手边摊着疑似星月湖名册的残页。湿岩上有人在试毒网，孟非卿前锋已压近。对峙收得很紧，谁先失手，洞里还听不见定音。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_10_jiangzhou_shadow_war",
+      "situationId": "world-sim.baseline.lcq.stage_10_jiangzhou_shadow_war.lcq.event.s10_09_yin_yang_fish",
+      "sourceEventId": "lcq.event.s10_09_yin_yang_fish",
+      "title": "七海客栈暗语",
+      "summary": "马王巷七海客栈被反复提起，阴阳鱼的下落成了互相打架的口信。",
+      "observableFacts": [
+        "伤重的黑魔海中人咬着七海客栈四个字",
+        "马王巷客栈夜里加岗，厢房灯火对不上号簿",
+        "阴阳鱼之名在市井与洞口各传一版"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "巷口酒旗湿透，客栈后门多了一道闩，远处有人把阴阳鱼三字压得很低。",
+      "presentation": {
+        "title": "客栈暗语",
+        "text": "伤重的黑魔海中人把七海客栈几个字咬得很死，马王巷那家店夜里加了岗，厢房灯火却对不上号簿。阴阳鱼的下落在市井和洞口各传一版，哪一版能用，还没人敢拿命去试。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_10_jiangzhou_shadow_war",
+      "situationId": "world-sim.baseline.lcq.stage_10_jiangzhou_shadow_war.lcq.event.s10_10_xiaozi_crisis",
+      "sourceEventId": "lcq.event.s10_10_xiaozi_crisis",
+      "title": "兰汤馆气息不对",
+      "summary": "小紫伤势未稳，兰汤馆里她对乐明珠靠得过近，异术的气味压过了水汽。",
+      "observableFacts": [
+        "小紫伤处未愈，眼神却比平日更黏更亮",
+        "兰汤馆暖阁里乐明珠被她轻轻引到近前",
+        "程宗扬察觉她喉间气息不对，已抬步过来"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.xiao_zi",
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "汤雾里药香发甜，屏风后银铃轻响，暖阁灯光忽然暗了一寸。",
+      "presentation": {
+        "title": "汤馆异息",
+        "text": "兰汤馆暖阁里，小紫伤处未愈，却把乐明珠轻轻引到近前，眼神黏得不像养伤。程宗扬察觉她喉间气息不对，已抬步过来。水汽和药香搅在一起，这一步会拦住什么，帐帘还没被彻底掀开。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_11_lieshan_battle",
+      "situationId": "world-sim.baseline.lcq.stage_11_lieshan_battle.lcq.event.s11_01_pengri_arrives",
+      "sourceEventId": "lcq.event.s11_01_pengri_arrives",
+      "title": "烈山下骑兵立营",
+      "summary": "烈山坡下出现成建制骑兵与先锋旗帜，有人正在为后续大军相地划营；三川口一线尚未交手，风口已收紧。",
+      "observableFacts": [
+        "斥候看见烈山坡下成列的骑兵旗帜与饮马沟",
+        "先锋旗号可辨刘宜孙、张亢部在转圈相地",
+        "立营木桩与斧锯声沿河谷往三川口拖长"
+      ],
+      "preferredCharacterIds": [],
+      "environmentFallback": "烈山风口马嘶此起彼伏，烟尘贴着河谷往三川口方向拖长，岗哨换得比平日更密，却没人敢断言大军何时合拢。",
+      "presentation": {
+        "title": "烈山下尘起",
+        "text": "河谷风里先送来马蹄，再送来立营的斧锯。坡下先锋旗转着圈相地，有人认出刘宜孙与张亢的部号。三川口还空着，空气已经发紧，去留都还来得及再看一眼。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_11_lieshan_battle",
+      "situationId": "world-sim.baseline.lcq.stage_11_lieshan_battle.lcq.event.s11_02_cement_fortress",
+      "sourceEventId": "lcq.event.s11_02_cement_fortress",
+      "title": "江州灰垣新起",
+      "summary": "江州城外连续竖起灰白新城与悬楼脚手架，萧遥逸一侧在安排验看；城防究竟能撑多久，当面还说不准。",
+      "observableFacts": [
+        "江州郊外连片灰白城垣与悬楼脚手架未撤",
+        "匠役按座清点新堡，口中报出将近一打的数目",
+        "萧遥逸处传出请人近前验看新城防的口信"
+      ],
+      "preferredCharacterIds": [],
+      "environmentFallback": "江州城外灰浆味混着潮气，脚手架在风里轻晃，新城垣棱角未磨圆，远处仍有人在搬石夯土，看不出验收会不会当场改口。",
+      "presentation": {
+        "title": "灰垣未干",
+        "text": "江州城外的灰白新垣还带着潮气，悬楼脚手架未拆尽。萧遥逸那边传话要人近前验看，匠役按座报数，口气发紧。这些新墙能不能改写江州的分量，此刻谁也不肯先拍板。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_11_lieshan_battle",
+      "situationId": "world-sim.baseline.lcq.stage_11_lieshan_battle.lcq.event.s11_03_protect_yueshuang",
+      "sourceEventId": "lcq.event.s11_03_protect_yueshuang",
+      "title": "孟帐点人赴口",
+      "summary": "孟非卿帐中加急点出一营与雪隼佣兵，去向指向烈山三川口与月霜身边；令箭已出，前线如何接令仍未落定。",
+      "observableFacts": [
+        "孟非卿帐外按册点出一营三十人及雪隼六百",
+        "口令写明赴烈山三川口，盯住月霜勿擅自冲锋",
+        "令箭与指挥权文书叠在帅案上，尚未当众宣读"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.meng_fei_qing"
+      ],
+      "environmentFallback": "大营辕门灯火提前亮起，甲仗与行囊被按队码开，传令兵在孟帐与校场间来回，谁也不敢大声问月霜此刻身在哪一线。",
+      "presentation": {
+        "title": "令箭未宣",
+        "text": "孟非卿帐外灯火提前亮起，一营与雪隼的名册被反复点过。口令指向烈山三川口，要人盯住月霜，别让她自己往前头冲。令箭还压在案上，帐里的人只是把甲胄再勒紧一寸。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_11_lieshan_battle",
+      "situationId": "world-sim.baseline.lcq.stage_11_lieshan_battle.lcq.event.s11_04_xingyue_appears",
+      "sourceEventId": "lcq.event.s11_04_xingyue_appears",
+      "title": "雪原下伏黑甲",
+      "summary": "雪原上出现整齐却未起身的黑影与压低的口令，星月湖中央军似在雪下埋伏；捧日前锋能否察觉，两边都还没先动手。",
+      "observableFacts": [
+        "雪面下露出一排排未抖落的黑色衣角",
+        "远处口令压得极低，像在对同一句口号练气",
+        "捧日前锋的斥候旗帜在雪线外停顿不前"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.meng_fei_qing"
+      ],
+      "environmentFallback": "三川口外的雪原静得过分，风一过便有细碎的甲片声，却看不见整队人马。远处黑影与雪色叠在一起，谁先出声都可能把两边同时惊醒。",
+      "presentation": {
+        "title": "雪下有人",
+        "text": "雪原静得不像有军。风过处，黑色衣角从雪面下轻轻掀起又伏回去，口令压成一口气。捧日前锋的旗在雪线外顿住。这一线会不会整队起身，此刻谁也不肯先喊破。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_11_lieshan_battle",
+      "situationId": "world-sim.baseline.lcq.stage_11_lieshan_battle.lcq.event.s11_05_wangtao_breaks",
+      "sourceEventId": "lcq.event.s11_05_wangtao_breaks",
+      "title": "前阵闻斧热",
+      "summary": "宋军前阵旗线发乱，有人高呼八骏王韬携巨斧突入；焦糊与热浪已到面前，防线会不会被撕开仍看不清。",
+      "observableFacts": [
+        "前阵旗线左右错位，盾墙出现不规则缺口",
+        "军中高呼王韬之名，并指认焚天斧的热浪",
+        "雪上留下焦黑斧痕，却不见人已穿透全阵"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.meng_fei_qing"
+      ],
+      "environmentFallback": "前阵鼓点忽然乱了半拍，热浪夹着焦糊味扑到雪面上。盾墙后的人把矛杆握得发白，谁也不敢说那道斧影已经过去，还是还在往里钻。",
+      "presentation": {
+        "title": "前阵旗乱",
+        "text": "前阵旗线忽然错开半步，焦糊味贴着雪面扑来。有人喊王韬，有人只看见巨斧带起的热浪。盾墙缺口还不大，够不够一个人撕开整列，站在第二排也说不准。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_11_lieshan_battle",
+      "situationId": "world-sim.baseline.lcq.stage_11_lieshan_battle.lcq.event.s11_06_snow_battle",
+      "sourceEventId": "lcq.event.s11_06_snow_battle",
+      "title": "三川口雪不退",
+      "summary": "星月湖四营与宋军铁甲营在三川口雪原对咬，两边都不见收兵旗；雪面已被踏烂，胜负却还压在下一波冲击里。",
+      "observableFacts": [
+        "三川口雪原上四营旗与铁甲营旗绞在一处",
+        "两边伤员后送，却看不见收兵的金鼓",
+        "雪面被踏成泥浆，矛林仍对着同一道坡"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.meng_fei_qing"
+      ],
+      "environmentFallback": "三川口的雪已经被踩成黑泥，号角断续相接，谁也不肯先把旗倒下去。远处两股甲光仍顶在同一道坡上，风里只有兵器相磕，没有退营的鼓点。",
+      "presentation": {
+        "title": "雪原不退",
+        "text": "三川口的雪被踏成泥浆，星月湖四营旗与铁甲营旗绞在一起。伤员往后抬，金鼓却不收。下一波还会不会顶上去，坡上的人只把矛杆再往前挪半寸。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_11_lieshan_battle",
+      "situationId": "world-sim.baseline.lcq.stage_11_lieshan_battle.lcq.event.s11_07_camp_falls",
+      "sourceEventId": "lcq.event.s11_07_camp_falls",
+      "title": "中军木栅发雷",
+      "summary": "宋军中军大纛附近雷光与焦烟骤起，御林军刀队已贴到木栅外；营门是否还能守住，帐里帐外说法不一。",
+      "observableFacts": [
+        "中军大纛被雷光燎出焦边，旗杆发颤",
+        "木栅外刀队列阵，靴声比平日换防更密",
+        "术者袍角在营外掠过，空气里有硫磺味"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.meng_fei_qing"
+      ],
+      "environmentFallback": "中军帐外的木栅被风吹得咯吱响，大纛焦边还在冒细烟。刀队的靴声贴着栅外走，谁也不敢大声问营门还能不能再撑过一阵雷。",
+      "presentation": {
+        "title": "大纛焦边",
+        "text": "中军大纛的边被燎焦，硫磺味贴着木栅钻进来。刀队已在栅外列开，靴声密得不像例行换防。营门会不会被下一道雷撕开，帐里只把水瓮和沙袋再往门口推。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_11_lieshan_battle",
+      "situationId": "world-sim.baseline.lcq.stage_11_lieshan_battle.lcq.event.s11_08_jiangzhou_lockdown",
+      "sourceEventId": "lcq.event.s11_08_jiangzhou_lockdown",
+      "title": "江州门钥加封",
+      "summary": "捧日右厢军越过烈山、抵近江州的口信前后不一，城门加闩、垛口加石；全城是否正式戒严，街面上已先紧了半寸。",
+      "observableFacts": [
+        "江州城门比往日早落闩，垛口连夜加石",
+        "过烈山来的驿卒说法互相打架，右厢军远近不一",
+        "街坊被勒令回坊，商铺只留后窗收货"
+      ],
+      "preferredCharacterIds": [],
+      "environmentFallback": "江州城楼灯火连成一线，门闩落下的声音比往日重。街上只剩搬石的脚步，谁也不敢问城外那支右厢军到底到了哪一座墩台。",
+      "presentation": {
+        "title": "城门早闩",
+        "text": "江州的城门比往日早落了一道闩，垛口上新石还带着土腥。驿卒把捧日右厢军说得忽远忽近，坊门却已经先关了。街上只剩搬石的人，没人拦你继续走路，只是路变窄了。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_11_lieshan_battle",
+      "situationId": "world-sim.baseline.lcq.stage_11_lieshan_battle.lcq.event.s11_09_grain_plan",
+      "sourceEventId": "lcq.event.s11_09_grain_plan",
+      "title": "筠州粮价暗涌",
+      "summary": "筠州布行暗桩往来加密，账面上金铢与晴州粮石的数目被反复改写；粮价会不会被硬抬上去，柜后还在压着声商量。",
+      "observableFacts": [
+        "筠州布行后柜加了两道门闩，暗桩进出更密",
+        "账页上金铢与粮石的数目被墨笔改过数次",
+        "晴州、宋境粮价的口信互相打架，每石报价不一"
+      ],
+      "preferredCharacterIds": [],
+      "environmentFallback": "布行后柜灯火隔着帘子发黄，算盘声压得很低。门外粮行的牌价写了又擦，谁也不肯把最后一笔金铢先拍到柜面上。",
+      "presentation": {
+        "title": "后柜改账",
+        "text": "筠州布行后柜多了两道闩，暗桩进出带起纸墨气。账页上金铢与粮石被改过几遍，晴州与宋境的报价还对不齐。柜后压着声商量，却没有人当街把价牌钉死。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_11_lieshan_battle",
+      "situationId": "world-sim.baseline.lcq.stage_11_lieshan_battle.lcq.event.s11_10_sanchuankou_defeat",
+      "sourceEventId": "lcq.event.s11_10_sanchuankou_defeat",
+      "title": "三川口后军失联",
+      "summary": "三川口外西夏旗帜成倍增密，前军与后军都监处的驿报对不上；刘平伤势传言矛盾，整线会不会崩开仍没有定说。",
+      "observableFacts": [
+        "西夏旗帜在三川口外层层加密，远近计数不一",
+        "后军都监黄德和处驿报中断，前军找不到接应",
+        "刘平伤重与无事的口信同一时辰先后进帐"
+      ],
+      "preferredCharacterIds": [],
+      "environmentFallback": "三川口的烟比旗还密，前军鼓点忽然空了一拍。后路的驿卒迟迟不回，帐外把两封互相打架的伤情帖子按在灯下，谁也不敢先当众宣读。",
+      "presentation": {
+        "title": "后路无驿",
+        "text": "三川口外的西夏旗加得太密，前军回头找后军都监的驿报，却对不上时辰。刘平伤重与无事的帖子同一盏灯下摊开。鼓点空了一拍，人还站在原地，没有人敢先说这线已经断了。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_12_jiangzhou_counterwar",
+      "situationId": "world-sim.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_01_grain_route_blocked",
+      "sourceEventId": "lcq.event.s12_01_grain_route_blocked",
+      "title": "浮凌江乱石封航",
+      "summary": "浮凌江下游乱石滩水势乱、船脚不敢过，粮船只能改靠岸，转运工钱被反复加码。",
+      "observableFacts": [
+        "乱石滩前粮船停桨，水手改用纤绳试探",
+        "岸上脚力报价一日三变，互不相让",
+        "程宗扬沿滩查看水纹，迟迟不下令开航"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "乱石滩水声碎而急，空船搁在浅滩边，岸上脚力讨价还价，没人敢先把粮袋扛下去。",
+      "presentation": {
+        "title": "乱石挡粮",
+        "text": "浮凌江下游乱石露出水面，粮船到滩口便停。水手只肯用小艇试水，岸上脚力把价喊得一天比一天高。程宗扬蹲在滩边看水纹，还没说出下一条路。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_12_jiangzhou_counterwar",
+      "situationId": "world-sim.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_02_recognize_zhuo",
+      "sourceEventId": "lcq.event.s12_02_recognize_zhuo",
+      "title": "沐羽庆典认人",
+      "summary": "沐羽城新年庆典灯火正盛，程宗扬盯着台上云中仙子的眉眼，神色忽然沉下去。",
+      "observableFacts": [
+        "庆典台上云中仙子露面，宾客只顾喝彩",
+        "程宗扬看台上的目光停得过久",
+        "席间有人仍以仙号相称，无人改口"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "沐羽城灯彩连成一片，鼓乐盖过私语。台上人被称作云中仙子，近处有人把酒杯捏得发紧。",
+      "presentation": {
+        "title": "台上熟影",
+        "text": "沐羽城新年庆典正到热闹处，云中仙子在台上回身一礼。程宗扬的酒停在半空，目光钉在那张脸上，却没有当场出声。周围仍按仙号敬酒，谁也没把话挑明。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_12_jiangzhou_counterwar",
+      "situationId": "world-sim.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_03_xiaozi_controls_zhuo",
+      "sourceEventId": "lcq.event.s12_03_xiaozi_controls_zhuo",
+      "title": "紫衫压住场面",
+      "summary": "内室里小紫忽然现身，语气轻软，卓云君一侧的人却不敢再争席位。",
+      "observableFacts": [
+        "小紫紫衫入室，笑着让众人让开",
+        "卓云君一侧的人退到灯影外，不再顶嘴",
+        "内室门帘放下，外面只听见极轻的吩咐"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.xiao_zi"
+      ],
+      "environmentFallback": "内室灯火压得很低，紫衫裙裾掠过门槛。帘外脚步乱了一阵又静下来，谁也没敢再掀帘。",
+      "presentation": {
+        "title": "帘内压场",
+        "text": "小紫笑着走进内室，像来讨糖似的唤人让座。卓云君一侧却先退了半步，帘子随即落下。外面只剩银铃声和极轻的吩咐，谁都没再听见顶撞。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_12_jiangzhou_counterwar",
+      "situationId": "world-sim.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_04_river_granary",
+      "sourceEventId": "lcq.event.s12_04_river_granary",
+      "title": "江边仓址议未定",
+      "summary": "知州衙里在谈江边另立粮仓，程记粮铺的名号已被写上草签，官仓私营的说法却互相打架。",
+      "observableFacts": [
+        "滕知州案上摊着江边仓址草图",
+        "程记粮铺的名号出现在借用条上",
+        "官仓私营的说法与借用之说对不上"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "衙门侧厅茶凉了仍没散。江边空地被人用石灰圈出几块，脚夫问该往哪边卸粮，没人给准话。",
+      "presentation": {
+        "title": "江岸圈仓",
+        "text": "滕知州把江边仓址草图按在案上，程记粮铺的字号已经写进借用条。有人仍坚持官仓不得私营，有人只肯说暂借。程宗扬听着两边口径，江岸石灰线还没圈死。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_12_jiangzhou_counterwar",
+      "situationId": "world-sim.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_05_granary_fire_plan",
+      "sourceEventId": "lcq.event.s12_05_granary_fire_plan",
+      "title": "常平仓夜防加严",
+      "summary": "常平仓四周夜巡加密，火油、火折被清点后又被挪走，粮价议论与防火号令叠在一起。",
+      "observableFacts": [
+        "常平仓外加了双岗，火折不许私带",
+        "仓墙根有人反复丈量通风口",
+        "市井里粮价谣言与防火令同时传来"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "常平仓屋脊压着夜色，更鼓比往日密。墙根有新踩的脚印，火油味若有若无，巡夜的人互不问原因。",
+      "presentation": {
+        "title": "仓边火气",
+        "text": "常平仓外忽然加了双岗，火折一律收缴。有人蹲在通风口边量尺寸，市井又把粮价和走水的话搅在一起。程宗扬路过仓墙，只看见灯火比昨夜亮了一圈。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_12_jiangzhou_counterwar",
+      "situationId": "world-sim.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_06_dragon_guard_routs",
+      "sourceEventId": "lcq.event.s12_06_dragon_guard_routs",
+      "title": "龙卫一线号乱",
+      "summary": "龙卫第一军前线号角对不上，伤兵回流，桑怿所部与对岸交手的口信互相矛盾。",
+      "observableFacts": [
+        "前线号角乱了节拍，旗帜收得不齐",
+        "伤兵回流说寡不敌众，斥候说仍在咬住",
+        "孟非卿听报时只问缺口在哪一段"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.meng_fei_qing"
+      ],
+      "environmentFallback": "远处鼓点断续，尘土里有旗帜斜拖。回流的伤兵说辞不一，营门口没人敢把“完了”两个字说死。",
+      "presentation": {
+        "title": "号角不对",
+        "text": "龙卫第一军方向的号角乱了节拍，旗帜收得参差。伤兵说桑怿那一线吃紧，斥候又说还在咬住。孟非卿只盯着缺口问了两句，没有宣布前线已经垮掉。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_12_jiangzhou_counterwar",
+      "situationId": "world-sim.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_07_left_wing_raid",
+      "sourceEventId": "lcq.event.s12_07_left_wing_raid",
+      "title": "左厢营夜不宁",
+      "summary": "龙卫左厢营地灯火乱移，指挥旗被收进帐里，文官武将的传令对不上点。",
+      "observableFacts": [
+        "左厢营外夜鸟惊飞，马厩先乱",
+        "中军旗收进帐，传令兵找不着主官",
+        "有人看见文官披甲出帐，口令却对不上"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.meng_fei_qing"
+      ],
+      "environmentFallback": "左厢方向火把东一块西一块，马嘶盖过更鼓。营门开了又关，谁在外头、谁在里头，一时说不清。",
+      "presentation": {
+        "title": "左厢灯乱",
+        "text": "龙卫左厢营地灯火忽然乱移，中军旗被收进帐里。传令兵在营道上来回找人，有文官披甲出帐，口令却对不上。孟非卿侧耳听了一阵，没有下令全营压上。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_12_jiangzhou_counterwar",
+      "situationId": "world-sim.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_08_dingchuan_raid",
+      "sourceEventId": "lcq.event.s12_08_dingchuan_raid",
+      "title": "定川寨夜议奇兵",
+      "summary": "星月湖大营灯火压低，孟非卿主持议事，定川寨方向的轻装编制被单独抽出来。",
+      "observableFacts": [
+        "孟非卿压低嗓门点定川寨的路径",
+        "轻装小队被单独抽出，不配重械",
+        "葛怀敏的旗号被钉在沙盘一侧"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.meng_fei_qing"
+      ],
+      "environmentFallback": "大营中帐灯火只留一盏。沙盘上定川寨被反复戳点，帐外甲叶轻响，重车却没有出营。",
+      "presentation": {
+        "title": "夜点定川",
+        "text": "星月湖中帐只留一盏灯。孟非卿用手指点定川寨的路径，轻装小队被单独抽出，重械留在原处。沙盘一侧钉着葛怀敏的旗号，帐里没人把胜负说死。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_12_jiangzhou_counterwar",
+      "situationId": "world-sim.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_09_ge_huaimin_killed",
+      "sourceEventId": "lcq.event.s12_09_ge_huaimin_killed",
+      "title": "定川突围路不明",
+      "summary": "定川寨方向尘土大起，宋军旗帜乱移，寨外某段土路被星月湖人拦了又让。",
+      "observableFacts": [
+        "定川寨门开合不定，突围的说法互相打架",
+        "寨外土路有新翻的土痕，行人绕道",
+        "孟非卿亲自去看那段路，不许闲人近前"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.meng_fei_qing"
+      ],
+      "environmentFallback": "定川寨外尘土悬着不散。土路被翻过一层，像有人夜里动过手脚。远处旗帜乱移，谁主谁从还对不上。",
+      "presentation": {
+        "title": "寨外翻土",
+        "text": "定川寨门开了又关，有人说要突围，有人说只是换防。寨外一段土路新翻过，行人被迫绕道。孟非卿亲自去看那条路，不许闲人近前，也没宣布主将下落。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_12_jiangzhou_counterwar",
+      "situationId": "world-sim.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_10_rescue_xiao",
+      "sourceEventId": "lcq.event.s12_10_rescue_xiao",
+      "title": "萧遥逸去向不明",
+      "summary": "阵前有人传萧遥逸被大貂珰秦翰按住，程宗扬往那个方向赶，伤势与去向的说法对不上。",
+      "observableFacts": [
+        "阵前传萧遥逸被按住，未见押回营",
+        "程宗扬往烟尘里赶，甲衣未束齐",
+        "秦翰旗号忽近忽远，两边口信打架"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "烟尘里旗号错位，有人喊名字，有人喊让开。地上有断裂的兵刃，看不出是谁留下的。",
+      "presentation": {
+        "title": "尘里夺人",
+        "text": "阵前忽然传萧遥逸被大貂珰秦翰按住，却没人看见押回营的队伍。程宗扬甲衣未束齐就往烟尘里赶。秦翰旗号忽近忽远，两边口信对不上，人还在不在，没人敢说死。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_12_jiangzhou_counterwar",
+      "situationId": "world-sim.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_11_siege_begins",
+      "sourceEventId": "lcq.event.s12_11_siege_begins",
+      "title": "城外重械夜移",
+      "summary": "江州城外连夜传来车轴声，投石机、巢车、云梯的轮廓在火把里移动，守堞号令加密。",
+      "observableFacts": [
+        "城外连夜车轴声不断，火把排成两列",
+        "投石机与云梯的轮廓在壕外停停走走",
+        "城头加岗，滚木礌石被重新码齐"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "城垛外火把连成一条线，车轴碾地的声音一夜未停。守堞的人把滚木再码一遍，谁也不敢睡死。",
+      "presentation": {
+        "title": "夜运攻具",
+        "text": "江州城外连夜响起车轴声，投石机、巢车和云梯的轮廓在火把里挪动。城头加了岗，滚木礌石被重新码齐。程宗扬上垛口看了一眼，城外还没正式擂鼓。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_12_jiangzhou_counterwar",
+      "situationId": "world-sim.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_12_gate_fire",
+      "sourceEventId": "lcq.event.s12_12_gate_fire",
+      "title": "城门洞备油闸",
+      "summary": "江州城门洞内侧加了闸板，滚油锅被抬上女墙，冲车轮迹已到壕边。",
+      "observableFacts": [
+        "门洞内侧新加闸板，门闩加了横木",
+        "女墙上滚油锅冒热气，不许闲人靠近",
+        "壕边出现冲车轮迹，尚未顶到门缝"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.meng_fei_qing"
+      ],
+      "environmentFallback": "城门洞里潮气混着油味。闸板被反复试落，外面隐约有轮轴声，门缝外火把一闪一闪。",
+      "presentation": {
+        "title": "门洞油热",
+        "text": "江州城门洞内侧新加了闸板，女墙上滚油锅已经冒热气。壕边能看见冲车轮迹，还没顶到门缝。孟非卿在门洞里试了一次落闸，没有下令开城对冲。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_12_jiangzhou_counterwar",
+      "situationId": "world-sim.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_13_long_siege",
+      "sourceEventId": "lcq.event.s12_13_long_siege",
+      "title": "土山与地声",
+      "summary": "宋军不再整日擂鼓，城外堆土成坡，城根下偶尔传来挖土回声，粮水被按日核计。",
+      "observableFacts": [
+        "城外土坡一日高一寸，不再强攻垛口",
+        "城根下夜里有挖土回声，方位对不齐",
+        "城内粮水按日核计，井边排队加长"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "攻城鼓稀了，土腥味却重了。墙根贴耳能听见闷响，井边水桶磕碰，谁也不提还能撑多久。",
+      "presentation": {
+        "title": "围城改挖",
+        "text": "宋军不再整日擂鼓，城外土坡一日高一寸。夜里贴着城根能听见挖土的闷响，方位却对不齐。城内粮水开始按日核计，程宗扬在井边听着水桶磕碰，没人敢说围势已定。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_12_jiangzhou_counterwar",
+      "situationId": "world-sim.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_14_chenxing_appears",
+      "sourceEventId": "lcq.event.s12_14_chenxing_appears",
+      "title": "城中刺客影乱",
+      "summary": "江州城内夜巷有陌生脚步，小紫腕上玉钏发凉，有人把辰星、龙宸的名号说得含糊。",
+      "observableFacts": [
+        "夜巷里连续两处更夫失声，灯被打灭",
+        "小紫按住腕钏，神色仍装得没事",
+        "墙上留下陌生符记，与军中号令不同"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.xiao_zi"
+      ],
+      "environmentFallback": "巷口灯灭了一截，空气里有冷香和铁锈味。更夫的梆子停了两拍，远处有人压低嗓子念生僻的名号。",
+      "presentation": {
+        "title": "巷灯连灭",
+        "text": "江州城里连续两处巷灯被打灭，更夫的梆子停了拍。小紫按住腕上玉钏，脸上仍是没事人。墙上多了与军中号令不同的符记，辰星、龙宸的名号只在齿缝里转，没人认领。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_12_jiangzhou_counterwar",
+      "situationId": "world-sim.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_15_capture_jingli",
+      "sourceEventId": "lcq.event.s12_15_capture_jingli",
+      "title": "刺客名号对不齐",
+      "summary": "交手后的巷口留下铃响余音，有人被点出“惊理”这个称呼，人影却还在逃散。",
+      "observableFacts": [
+        "巷口余着铃响，四散的黑衣人脚步乱",
+        "有人低呼“惊理”，立刻被同伴拦住",
+        "小紫收起一只铃，目光盯着未散的烟"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.xiao_zi"
+      ],
+      "environmentFallback": "巷砖上有抓挠的冷痕，铃音余在耳里。烟还没散尽，远处有人互相捂嘴，不让把名字再说第二遍。",
+      "presentation": {
+        "title": "铃后残影",
+        "text": "巷口还余着铃响，黑衣人脚步四散。有人脱口叫出“惊理”，立刻被同伴捂住。小紫把一只铃收回袖里，盯着未散的烟，没有说人已经到手。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_12_jiangzhou_counterwar",
+      "situationId": "world-sim.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_16_corpse_poison",
+      "sourceEventId": "lcq.event.s12_16_corpse_poison",
+      "title": "阵前尸气浮动",
+      "summary": "鸩羽殇侯所部方向飘来腐甜气味，宋军阵线换防频繁，有人捂鼻后退却仍站在旗下。",
+      "observableFacts": [
+        "阵前腐甜气味一阵阵，鸟雀不敢落",
+        "宋军旗下有人捂鼻换位，队形松了又收",
+        "殇侯近卫按兵不动，只把风向看了又看"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "风从殇侯旗下吹来，带着腐甜。对面阵线换岗比往日密，没人愿意先踏过那道气味。",
+      "presentation": {
+        "title": "风里尸气",
+        "text": "鸩羽殇侯旗下吹来一阵腐甜，鸟雀不敢落。宋军旗下有人捂鼻换位，队形松了又被喝令收拢。程宗扬看见近卫仍按兵不动，只把风向看了又看。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_12_jiangzhou_counterwar",
+      "situationId": "world-sim.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_17_shanghou_stays",
+      "sourceEventId": "lcq.event.s12_17_shanghou_stays",
+      "title": "殇侯行止未决",
+      "summary": "殇侯营中整装又卸甲，近卫军是否留守江州，账册与人情话同时摆上桌。",
+      "observableFacts": [
+        "殇侯帐里摊着粮银账册，又摆着酒",
+        "近卫军有的打好行囊，有的又解开",
+        "程宗扬进出帐门两次，未带走回书"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "殇侯营门开着一半。行囊码了一地，又有人解开绳扣。帐里酒香和算盘声搅在一起，没有升旗开拔。",
+      "presentation": {
+        "title": "帐中留否",
+        "text": "殇侯帐里同时摊着粮银账册和酒盏。近卫军有人打好行囊，有人又把绳扣解开。程宗扬进出两次，手里没有带回书。营门半开，还看不出这支人马会不会留下。"
+      }
+    },
+    {
+      "stageId": "lcq.stage_12_jiangzhou_counterwar",
+      "situationId": "world-sim.baseline.lcq.stage_12_jiangzhou_counterwar.lcq.event.s12_18_linan_grain_order",
+      "sourceEventId": "lcq.event.s12_18_linan_grain_order",
+      "title": "水镜那头粮讯",
+      "summary": "程宗扬对着水镜低声交代筠州抛粮的事，和谈谣言与粮价口风同时往临安方向传。",
+      "observableFacts": [
+        "密室水镜起雾，程宗扬只对那头说话",
+        "筠州抛粮的条子写了又改，未盖印",
+        "市井开始传宋军要和谈，粮牙却不信"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "密室帘垂着，水镜面上雾气未散。案上有改过的粮单，窗外已有人把和谈与粮价缠在一起说。",
+      "presentation": {
+        "title": "镜中粮令",
+        "text": "密室里水镜起了一层雾，程宗扬只对着那头压低声音。案上筠州抛粮的条子写了又改，印还没盖。窗外已有人把宋军和谈的话跟粮价缠在一起，牙行里却没人跟进。"
+      }
+    },
+    {
+      "stageId": "lyl.han_palace_endgame",
+      "situationId": "world-sim.baseline.lyl.han_palace_endgame.lyl.event.han_palace_endgame_01_beat",
+      "sourceEventId": "lyl.event.han_palace_endgame_01_beat",
+      "title": "吕冀营帐风紧",
+      "summary": "吕冀帐前禁足加严，太后问责与商会金铢的传言对冲，内斗已露在明处，帐内究竟如何仍无人说死。",
+      "observableFacts": [
+        "吕冀营帐外加岗，医箱与血衣被匆匆抬入，帐帘不许掀开",
+        "太后使者入帐问责，提到晴州商会与刘建的金铢往来",
+        "帐外对刺伤人数、主使是谁各执一词"
+      ],
+      "preferredCharacterIds": [],
+      "environmentFallback": "军营灯火比往日更密，帐角隐约有药气与压低的争执，卫士只拦人，不答问。",
+      "presentation": {
+        "title": "帐前禁足",
+        "text": "吕冀那一侧忽然加了双岗，医箱进去，帐帘却死死压着。太后的人刚问过晴州商会与刘建的金铢，帐外又把刺伤说成两套互相打架的版本。风已经紧了，只是还没人敢把帐里的事说死。"
+      }
+    },
+    {
+      "stageId": "lyl.han_palace_endgame",
+      "situationId": "world-sim.baseline.lyl.han_palace_endgame.lyl.event.han_palace_endgame_02_beat",
+      "sourceEventId": "lyl.event.han_palace_endgame_02_beat",
+      "title": "左武军临宫门",
+      "summary": "吕巨君把左武军与兽蛮队形往宫门收拢，甲仗异香混在一起，入宫令牌与随行名单仍在门口对不上。",
+      "observableFacts": [
+        "宫门外左武军列阵换防，兽蛮随队，甲仗与兽皮气味一齐压近",
+        "吕巨君亲临点验，入宫次序被反复改写",
+        "队中有人影生疏，卫士对视却不敢点名"
+      ],
+      "preferredCharacterIds": [],
+      "environmentFallback": "宫阙外蹄声与号令叠在一起，兽皮鼓与汉营金柝交错，门吏抱着名册来回跑。",
+      "presentation": {
+        "title": "军影压门",
+        "text": "左武军的旗已贴到宫门，兽蛮的皮甲夹在汉营队列里，气味都变了。吕巨君当场改入宫次序，门吏手里的名册对了又乱。队里有个生面孔一闪，卫士只把眼皮压下去，没人敢说今夜究竟进不进宫。"
+      }
+    },
+    {
+      "stageId": "lyl.han_palace_endgame",
+      "situationId": "world-sim.baseline.lyl.han_palace_endgame.lyl.event.han_palace_endgame_03_beat",
+      "sourceEventId": "lyl.event.han_palace_endgame_03_beat",
+      "title": "含光殿封门",
+      "summary": "含光殿内外忽然换岗封路，昭仪所在与殿中生人去向对不上号，殿门开合全看一时口令。",
+      "observableFacts": [
+        "含光殿侧门加闩，内侍说昭仪所在已被临时改迁",
+        "殿前出现兽蛮装束的生人，禁军对不上所属",
+        "两路口令互相顶牛，殿门开了一半又合上"
+      ],
+      "preferredCharacterIds": [],
+      "environmentFallback": "殿角铜漏滴得发急，廊上脚步乱，灯影在门槛上来回切，谁也不肯先跨进去。",
+      "presentation": {
+        "title": "殿门锁乱",
+        "text": "含光殿侧门突然上闩，内侍把昭仪的去处说成两处。廊下一身兽蛮装束的人影停了停，禁军对不上他的牌。口令顶着口令，门槛开了一半又合上——殿里紧不紧，门外还没有定论。"
+      }
+    },
+    {
+      "stageId": "lyl.han_palace_endgame",
+      "situationId": "world-sim.baseline.lyl.han_palace_endgame.lyl.event.han_palace_endgame_04_beat",
+      "sourceEventId": "lyl.event.han_palace_endgame_04_beat",
+      "title": "复道灯火异常",
+      "summary": "宫中复道临时改线，暗处多了伏兵式的脚印与烟囊，秦桧一带的人影来去太勤，通路是否仍通尚不清楚。",
+      "observableFacts": [
+        "复道口临时改牌，原路被木障封死半截",
+        "墙根散着未点燃的烟囊与新踩乱的靴印",
+        "文士巾的人影在岔口出现又消失，只留下一句改道"
+      ],
+      "preferredCharacterIds": [],
+      "environmentFallback": "夹墙里潮气带着药烟味，灯盏被挪了位置，远处有甲叶轻撞，听不出远近。",
+      "presentation": {
+        "title": "夹墙改道",
+        "text": "复道口的牌子被换掉，半截路用木障堵死。墙根躺着未燃的烟囊，靴印新鲜得还带着土。文士巾的人影在岔口点了一下又没了，只丢下一句改道。这条路还能不能走，夹墙自己不回答。"
+      }
+    },
+    {
+      "stageId": "lyl.han_palace_endgame",
+      "situationId": "world-sim.baseline.lyl.han_palace_endgame.lyl.event.han_palace_endgame_05_beat",
+      "sourceEventId": "lyl.event.han_palace_endgame_05_beat",
+      "title": "平朔殿油火味",
+      "summary": "平朔殿内外堆起灯油与薪材，吕巨君与廖扶入殿后久不出，殿门加封，火气已压在梁上。",
+      "observableFacts": [
+        "平朔殿阶下堆着灯油坛与新劈的薪，近侍不许靠近",
+        "吕巨君入殿，廖扶随侍，殿门从内落下门闩",
+        "殿缝里透出焦油气，卫士对是否举火说法不一"
+      ],
+      "preferredCharacterIds": [],
+      "environmentFallback": "殿脊上的风把焦油味送出很远，阶下无人敢高声，只有坛口碰撞的闷响。",
+      "presentation": {
+        "title": "殿内燃气",
+        "text": "平朔殿阶下忽然多了油坛和薪垛，近侍把人往外推。吕巨君进了殿，廖扶跟着，门闩是从里面落下的。缝里冒出焦油气，卫士有的说是祭火，有的说是清殿。火还没见着，气已经先压过来了。"
+      }
+    },
+    {
+      "stageId": "lyl.han_palace_endgame",
+      "situationId": "world-sim.baseline.lyl.han_palace_endgame.lyl.event.han_palace_endgame_06_beat",
+      "sourceEventId": "lyl.event.han_palace_endgame_06_beat",
+      "title": "定陶王府夜乱",
+      "summary": "定陶王府内外同时告急：赵氏姐妹去向不明，王府本尊失联，闻清语与云丹琉的行踪被说成两套。",
+      "observableFacts": [
+        "定陶王府门灯尽灭，内院传出女子被挟走的脚步",
+        "王府中人找不到定陶王本人，守卫互指失职",
+        "闻清语与云丹琉的车影被报成相反方向"
+      ],
+      "preferredCharacterIds": [],
+      "environmentFallback": "巷口车轮急转又刹住，王府墙上灯影乱晃，远处有人压着嗓子对暗号。",
+      "presentation": {
+        "title": "王府失灯",
+        "text": "定陶王府的门灯一盏盏灭了，内院脚步又急又乱，像有人把人往门外拖。守卫对不上定陶王人在哪，只互相推失职。闻清语与云丹琉的车，被两路探子指成完全相反的方向。夜还没过完，府里先空了一半。"
+      }
+    },
+    {
+      "stageId": "lyl.han_palace_endgame",
+      "situationId": "world-sim.baseline.lyl.han_palace_endgame.lyl.event.han_palace_endgame_07_beat",
+      "sourceEventId": "lyl.event.han_palace_endgame_07_beat",
+      "title": "秘境光柱初现",
+      "summary": "吕雉一侧祭器齐备，比目鱼珠映出光柱雏形，盛姬被带到柱边，入口开不开仍看太后手势。",
+      "observableFacts": [
+        "祭台摆出比目鱼珠，地面光纹一圈圈扩开",
+        "小紫押着盛姬立在光柱边缘，近侍后退不敢近",
+        "吕雉只举手势，未宣入口是否开启"
+      ],
+      "preferredCharacterIds": [],
+      "environmentFallback": "空地上的光比灯笼更白，尘土微微离地，四周人声忽然收成一片吸气。",
+      "presentation": {
+        "title": "光纹开圈",
+        "text": "吕雉身前的比目鱼珠亮了一下，地上的光纹一圈圈往外爬。小紫把盛姬带到光柱边，近侍全退开。太后只抬了抬手，没说这光是门还是障。柱子立在那儿，谁先进去，谁都还没迈步。"
+      }
+    },
+    {
+      "stageId": "lyl.han_palace_endgame",
+      "situationId": "world-sim.baseline.lyl.han_palace_endgame.lyl.event.han_palace_endgame_08_beat",
+      "sourceEventId": "lyl.event.han_palace_endgame_08_beat",
+      "title": "津门凉州尘起",
+      "summary": "洛都津门外来了自称奉大将军令的凉州军，虎符对不上，骑探往来被截，入京与否卡在闸口。",
+      "observableFacts": [
+        "津门外尘头大，凉州旗号自称奉大将军令入京",
+        "闸口验符，对方拿不出虎符，两边金柝对峙",
+        "城外骑探失联，回报被两套说法打断"
+      ],
+      "preferredCharacterIds": [],
+      "environmentFallback": "河风把马汗与黄土吹进城门洞，闸板起一半又落下，吏员抱着空符匣不敢抬头。",
+      "presentation": {
+        "title": "闸口无符",
+        "text": "洛都津门外尘头压过来，凉州旗自称奉大将军令入京。闸口要虎符，对面匣子是空的，金柝两边对敲。骑探出去的人没回来，回报被说成两套。闸板悬在半空，城门还没决定开还是关。"
+      }
+    },
+    {
+      "stageId": "lyl.han_palace_endgame",
+      "situationId": "world-sim.baseline.lyl.han_palace_endgame.lyl.event.han_palace_endgame_09_beat",
+      "sourceEventId": "lyl.event.han_palace_endgame_09_beat",
+      "title": "永安宫外换防",
+      "summary": "金蜜镝部向永安宫收拢，宫门换防紊乱，刘建一侧的人影往阙楼收缩，宫墙里外都在抢位置。",
+      "observableFacts": [
+        "永安宫外金蜜镝旗号前移，原驻军被挤到侧廊",
+        "宫门两次改口令，内廷车仗往阙楼方向退去",
+        "墙上箭垛换人，两边都未放箭"
+      ],
+      "preferredCharacterIds": [],
+      "environmentFallback": "宫墙根的灯一排排被吹斜，甲叶摩擦声从两头对逼，中间空出一条无人敢走的夹道。",
+      "presentation": {
+        "title": "宫门改令",
+        "text": "金蜜镝的旗已经贴到永安宫墙根，原驻军被挤进侧廊。宫门口令改了两遍，内廷车仗一辆辆往阙楼收。箭垛上换了人，两边都把弦绷着，却还没人先放。墙里墙外都在抢位置，门还在中间。"
+      }
+    },
+    {
+      "stageId": "lyl.han_palace_endgame",
+      "situationId": "world-sim.baseline.lyl.han_palace_endgame.lyl.event.han_palace_endgame_10_beat",
+      "sourceEventId": "lyl.event.han_palace_endgame_10_beat",
+      "title": "阙楼刀光未定",
+      "summary": "阙楼上下戒严，刘建去向被锁在楼中，秦桧一文士巾登梯，楼门开合之间尚看不出谁先落刀。",
+      "observableFacts": [
+        "阙楼封梯，刘建的仪仗停在半层，不再下楼",
+        "秦桧文士巾登梯，袖里刀鞘轻轻磕了一下栏杆",
+        "楼上下口令对不上，近侍把“献俘”与“护驾”说成两套"
+      ],
+      "preferredCharacterIds": [],
+      "environmentFallback": "楼檐风急，灯影在梯级上断续，远处金柝乱了一拍，随即又假装整齐。",
+      "presentation": {
+        "title": "梯口对令",
+        "text": "阙楼封了梯，刘建的仪仗停在半层不再动。秦桧仍是那身文士巾，登梯时袖里刀鞘轻轻磕了一下栏杆。楼上喊护驾，楼下有人说献俘，两套口令在梯口顶着。刀光还在鞘里，楼却已经静得不像往日。"
+      }
+    },
+    {
+      "stageId": "lyl.jiangzhou_retreat",
+      "situationId": "world-sim.baseline.lyl.jiangzhou_retreat.lyl.event.s01_01",
+      "sourceEventId": "lyl.event.s01_01",
+      "title": "金明寨退军风紧",
+      "summary": "金明寨外溃卒与空粮车交错，选锋营被单独点去断后，退路令旗来回改向。",
+      "observableFacts": [
+        "金明寨外溃卒与空粮车挤作一团",
+        "点名簿上选锋营被圈去断后",
+        "夏用和、秦翰的令旗来回改向"
+      ],
+      "preferredCharacterIds": [],
+      "environmentFallback": "寨门外甲仗散落，空粮袋被风掀起，远处号角断续，没人能说清下一道令会往哪边走。",
+      "presentation": {
+        "title": "金明退令",
+        "text": "金明寨外溃卒踩着空粮车辙，选锋营的旗号被单独点出，说是要断后。夏用和与秦翰的令旗来回改向，退路仍未排定。"
+      }
+    },
+    {
+      "stageId": "lyl.jiangzhou_retreat",
+      "situationId": "world-sim.baseline.lyl.jiangzhou_retreat.lyl.event.s01_02",
+      "sourceEventId": "lyl.event.s01_02",
+      "title": "江州码头备船",
+      "summary": "赴临安的船位与护航名单反复改口，江面巡哨加严，码头上剑未出鞘却已守住风向。",
+      "observableFacts": [
+        "赴临安的客船提前清舱验缆",
+        "谢幼度剑未出鞘，守在码头风向处",
+        "江面巡哨加严，口信说有人拦路"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.xie_youdu",
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "江州码头缆绳被重新盘紧，巡哨灯火沿江面错开，船工压低嗓子对航次，却说不清今夜能否开船。",
+      "presentation": {
+        "title": "临安航次",
+        "text": "江州码头上赴临安的客船提前清舱，谢幼度执剑未出鞘，只守在风向处。江面巡哨加严，口信只说到有人拦路，船期仍未钉死。"
+      }
+    },
+    {
+      "stageId": "lyl.jiangzhou_retreat",
+      "situationId": "world-sim.baseline.lyl.jiangzhou_retreat.lyl.event.s01_03",
+      "sourceEventId": "lyl.event.s01_03",
+      "title": "荆溪乡兵压寨",
+      "summary": "王团练乡兵朝荆溪村寨加急换防，寨口封路，妇孺被驱入内院，说法彼此打架。",
+      "observableFacts": [
+        "乡兵铁尺与火把朝荆溪寨口集结",
+        "相雅素衣立于寨门，令妇孺入内院",
+        "路人说王团练要清寨，说法互相打架"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.xiang_ya",
+        "liuchao.character.wang_tian_de"
+      ],
+      "environmentFallback": "荆溪寨外尘土扬起，铁尺与火把的影子在篱墙上晃，鸡犬惊散，远处哭喊与喝令叠在一起，分不清谁先动手。",
+      "presentation": {
+        "title": "寨口封路",
+        "text": "王团练的乡兵扛着铁尺火把压向荆溪寨口。相雅立在寨门，把妇孺往内院里赶。路上有人说要清寨，有人只说换防，两边对不上。"
+      }
+    },
+    {
+      "stageId": "lyl.jiangzhou_retreat",
+      "situationId": "world-sim.baseline.lyl.jiangzhou_retreat.lyl.event.s01_04",
+      "sourceEventId": "lyl.event.s01_04",
+      "title": "军费兑粮风声",
+      "summary": "筠州仓廪按昭南人名义试盘三十万石粮价，知州案头军费册被连夜抽走核对。",
+      "observableFacts": [
+        "粮行按每石九百铜铢试盘三十万石",
+        "滕甫两鬓见白，军费册被夜传",
+        "秦桧只问仓印是否齐备，不谈来路"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.teng_fu",
+        "liuchao.character.qin_hui"
+      ],
+      "environmentFallback": "筠州仓前斛斗摆开，算盘声密过脚步。公廨灯火未灭，军费册在案角翻开又合上，没人敢把价码说死。",
+      "presentation": {
+        "title": "仓前试盘",
+        "text": "筠州粮行按昭南人名义试盘三十万石，价码写着每石九百铜铢。滕甫案头军费册被连夜抽走，秦桧只问仓印齐不齐，不谈银从何处来。"
+      }
+    },
+    {
+      "stageId": "lyl.jiangzhou_retreat",
+      "situationId": "world-sim.baseline.lyl.jiangzhou_retreat.lyl.event.s01_05",
+      "sourceEventId": "lyl.event.s01_05",
+      "title": "常平仓换粮异动",
+      "summary": "五千石新粮被单独提出要兑给团练，侧廊米袋发潮，仓门夜禁与水缸忽然加严。",
+      "observableFacts": [
+        "五千石新粮被单独提出，说要兑给团练",
+        "侧廊米袋发潮发霉，与仓面新粮不符",
+        "常平仓夜禁加严，水缸被挪到仓门"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.wang_tian_de",
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "常平仓侧廊有陈米潮气，仓门水缸被挪近，夜禁锣比往日早半个时辰。仓吏互相使眼色，没人说火从哪起。",
+      "presentation": {
+        "title": "兑粮加岗",
+        "text": "常平仓里五千石新粮被单独提出，说是要兑给王团练。侧廊米袋发潮发霉，与仓面新粮对不上。夜禁提前，水缸堵在仓门口，火从哪来仍无人敢说。"
+      }
+    },
+    {
+      "stageId": "lyl.lin_an_black_sea",
+      "situationId": "world-sim.baseline.lyl.lin_an_black_sea.lyl.event.debut_ruan_sisters",
+      "sourceEventId": "lyl.event.debut_ruan_sisters",
+      "title": "风波亭后香案已备",
+      "summary": "钱塘门内到风波亭后的路被临时让开，祭席与随从位次都在挪动，临安落脚处却还没有定下来。",
+      "observableFacts": [
+        "风波亭后已摆出拜祭谢艺的香案与清酒",
+        "俞子元带着星月湖军士在侧后整队行礼",
+        "秦桧等人各自敛容，尚未议定落脚"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.yu_zi_yuan",
+        "liuchao.character.qin_hui"
+      ],
+      "environmentFallback": "钱塘门内尘土未歇，亭后柏影里香烟初起，远处轿马仍在让道，一时说不清先安人还是先祭奠。",
+      "presentation": {
+        "title": "亭后香烟",
+        "text": "风波亭后香案已齐，俞子元带着星月湖军士在侧后立定。秦桧、林清浦、敖润、冯源各自敛容致意，落脚处的话却被压住。亭外轿马仍在让道，这一拜之后往哪安身，还没有人敢先开口。"
+      }
+    },
+    {
+      "stageId": "lyl.lin_an_black_sea",
+      "situationId": "world-sim.baseline.lyl.lin_an_black_sea.liuchao.event.wei_yuan_first_contact",
+      "sourceEventId": "liuchao.event.wei_yuan_first_contact",
+      "title": "遮帘马车转入闹市",
+      "summary": "离开风波亭后，一辆遮帘马车匆匆入城，车上门帘只掀一线；威远镖局门口的岗哨也比平日更密。",
+      "observableFacts": [
+        "遮帘马车自城门方向转入闹市，并未停步",
+        "车帘缝里露出的眉眼像极了旧识李师师",
+        "威远镖局门岗在清点腰牌，口风含糊"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.li_shi_shi",
+        "liuchao.character.qin_hui"
+      ],
+      "environmentFallback": "街口马蹄急促，镖局门楣下灯笼未全亮，巡街的人把闲人往两侧撵，却不肯说局里在等谁。",
+      "presentation": {
+        "title": "镖局灯未齐",
+        "text": "遮帘马车掠过风波亭外的长街，帘缝里那张脸像李师师，车却径直折向威远镖局。秦桧把折扇一顿，只说要去问总镖头家的籍册。门岗来回核腰牌，谁也不肯把返乡的事由说全。"
+      }
+    },
+    {
+      "stageId": "lyl.lin_an_black_sea",
+      "situationId": "world-sim.baseline.lyl.lin_an_black_sea.lyl.event.ruan_xiangning_secret",
+      "sourceEventId": "lyl.event.ruan_xiangning_secret",
+      "title": "武穆王府封条未启",
+      "summary": "被封的武穆王府外墙可辨屋脊方位，巷口换防比往日更勤，暗处目光一闪即收。",
+      "observableFacts": [
+        "武穆王府封条未启，只能从外墙辨认屋脊",
+        "巷口岗哨换防加快，盘问比平日更短",
+        "暗处有目光一闪即收，不宜在墙根久停"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.qin_hui",
+        "liuchao.character.qing_mian_shou"
+      ],
+      "environmentFallback": "王府一带巷窄墙高，封泥气味混着潮土，远处更鼓刚过，墙根下连落叶都被扫得过分干净。",
+      "presentation": {
+        "title": "封府换岗",
+        "text": "武穆王府封条未启，秦桧只让人绕墙辨认屋脊方位。青面兽走在最外侧，俞子元盯着巷口换岗的脚步。暗梢的目光一闪就收，谁也没把里面的线索说破，只把脚步压得更轻。"
+      }
+    },
+    {
+      "stageId": "lyl.lin_an_black_sea",
+      "situationId": "world-sim.baseline.lyl.lin_an_black_sea.liuchao.event.lin_chong_confront",
+      "sourceEventId": "liuchao.event.lin_chong_confront",
+      "title": "铜镜里多了一道影",
+      "summary": "前往明庆寺的路上，后头衣色像皇城司的人影贴得更近；寺门香客仍在进出，尚未封路。",
+      "observableFacts": [
+        "秦桧铜镜里映出后头多出一道人影",
+        "俞子元压低声音，说那衣色像皇城司",
+        "明庆寺香客仍在进出，山门尚未加闩"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.qin_hui",
+        "liuchao.character.yu_zi_yuan"
+      ],
+      "environmentFallback": "官道旁柳荫里靴声忽近忽远，寺前香鼎青烟不断，有人把外地客的衣饰往更扎眼处整理，像是要改一改路人的看法。",
+      "presentation": {
+        "title": "镜中尾随",
+        "text": "离开王府往明庆寺时，秦桧铜镜里后头多出一道影子。俞子元只说衣色像皇城司，并不拔刀。程宗扬把袖里银 ingots 换成更扎眼的外地富商打扮，寺门香客仍进进出出，还看不出对方要拦到哪一步。"
+      }
+    },
+    {
+      "stageId": "lyl.lin_an_black_sea",
+      "situationId": "world-sim.baseline.lyl.lin_an_black_sea.lyl.event.mingqingsi_encounter",
+      "sourceEventId": "lyl.event.mingqingsi_encounter",
+      "title": "菜园里拔起垂杨",
+      "summary": "明庆寺菜园因花狗起了争执，鲁智深已把垂杨连根拔起，林冲从寺外走近，两边都还没通名。",
+      "observableFacts": [
+        "菜园里花狗狂吠，佛心庵少女护着花枝",
+        "花和尚把一株垂杨连根拔起，土块乱溅",
+        "林冲从寺外走近，尚未开口通名"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.lu_zhi_shen",
+        "liuchao.character.lin_chong"
+      ],
+      "environmentFallback": "明庆寺菜畦湿土翻开，香客都停在篱外看热闹，谁也不敢先问这两条汉子要不要相识。",
+      "presentation": {
+        "title": "篱外初会",
+        "text": "明庆寺菜园里花狗乱吠，鲁智深已把垂杨连根拔起。林冲从寺外走近，两人隔着篱笆对上眼，通名的话还卡在喉间。秦桧把程宗扬往香客堆里一带，这边只宜旁观，不宜这时候上去攀交情。"
+      }
+    },
+    {
+      "stageId": "lyl.lin_an_black_sea",
+      "situationId": "world-sim.baseline.lyl.lin_an_black_sea.liuchao.event.gather_intel",
+      "sourceEventId": "liuchao.event.gather_intel",
+      "title": "祈福字条指向便门瓦",
+      "summary": "保和坊案上摊开祈福榜抄回的字条，申时便门瓦的接头隐约可辨；冯源同时带回薛延山伤重求见的口信。",
+      "observableFacts": [
+        "祈福榜抄回的字条摊在保和坊案上",
+        "字间隐约指向二月十九申时便门瓦",
+        "冯源带回雪隼分舵口信，说薛延山伤重求见"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.feng_yuan",
+        "liuchao.character.qin_hui"
+      ],
+      "environmentFallback": "坊内灯火未歇，水镜残光还在碗底晃，门外有人来回传雪隼分舵的话，急，却说不清伤势从哪来。",
+      "presentation": {
+        "title": "字条与口信",
+        "text": "保和坊案上那张祈福字条被程宗扬按住，二月十九申时、便门瓦几个字渐渐能读。冯源喘着进门，只说薛延山伤重，要在西湖农居见面。秦桧把两桩事并在一处，谁先回、谁先赴约，都还没有落锤。"
+      }
+    },
+    {
+      "stageId": "lyl.lin_an_black_sea",
+      "situationId": "world-sim.baseline.lyl.lin_an_black_sea.liuchao.event.factory_registration",
+      "sourceEventId": "liuchao.event.factory_registration",
+      "title": "吏部册页被人抽走",
+      "summary": "工部屯田司客卿报到刚唱到盘江籍贯，林冲在廊上停步，刚填妥的出身档案被书吏抽去另核。",
+      "observableFacts": [
+        "吏部门厅正在唱名办理工部客卿报到",
+        "林冲在廊上停步，目光落在籍贯册上",
+        "刚填妥的出身档案被书吏抽走另核"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.lin_chong",
+        "liuchao.character.qin_hui"
+      ],
+      "environmentFallback": "吏部廊上墨味混着靴声，案牍一叠叠被提起又放下，谁抽走哪一页，当面都只说一句核对。",
+      "presentation": {
+        "title": "籍册另核",
+        "text": "程宗扬以盘江籍贯在工部屯田司报到，墨迹未干，林冲已在廊上停住。书吏把刚填的出身档案抽走，只说另核。秦桧把折扇合上，并不争辩，籍册去向比唱名本身更让人胸口发紧。"
+      }
+    },
+    {
+      "stageId": "lyl.lin_an_black_sea",
+      "situationId": "world-sim.baseline.lyl.lin_an_black_sea.liuchao.event.xue_sun_meeting",
+      "sourceEventId": "liuchao.event.xue_sun_meeting",
+      "title": "西湖农居药味浓重",
+      "summary": "敖润把人引进西湖农居，帘内药味压过湖风；廊下晾着雪隼腰牌与湿衣，伤者的话只说到太湖水匪。",
+      "observableFacts": [
+        "西湖农居帘内药味浓重，伤者呼吸浅促",
+        "敖润在门外拦闲人，只放自己人进去",
+        "廊下晾着雪隼腰牌与未干的衣甲"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.ao_run",
+        "liuchao.character.xue_yan_shan"
+      ],
+      "environmentFallback": "湖堤农居灯火压得很低，风里有血腥混着草药，远处偶尔传来点名，人数对不上，也没人敢高声问。",
+      "presentation": {
+        "title": "农居托付",
+        "text": "敖润把闲人挡在西湖农居门外。帘内薛延山呼吸浅促，只说太湖上遭了水匪，雪隼的人散了。廊下腰牌和湿衣还在滴水，照管残部的话已经出口，答应不答应，屋里一时静得只剩药炉。"
+      }
+    },
+    {
+      "stageId": "lyl.lin_an_black_sea",
+      "situationId": "world-sim.baseline.lyl.lin_an_black_sea.liuchao.event.cold_poison_mystery",
+      "sourceEventId": "liuchao.event.cold_poison_mystery",
+      "title": "腕脉寒得发青",
+      "summary": "薛延山腕脉寒青，药炉压不住冷意；案上备着一枚对照用的鬼牙，他只说夜里看不清来人面目。",
+      "observableFacts": [
+        "薛延山腕脉寒青，唇色近灰，药炉压不住",
+        "案上备着一枚供对照的鬼牙",
+        "他反复说遇袭夜里看不清来人面目"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.xue_yan_shan"
+      ],
+      "environmentFallback": "农居内窗缝渗进湖上冷雾，铜盆里的热水片刻就结一层薄翳，谁也不敢把寒毒的来路说死。",
+      "presentation": {
+        "title": "寒毒对照",
+        "text": "程宗扬按住薛延山的脉，腕上寒得发青，和旧日见过的冷毒气息隐约相近。鬼牙搁在灯下，薛延山摇头，只说夜里看不清来人。同源与否还没有落锤，屋里只剩药味和那一点说不出口的眼熟。"
+      }
+    },
+    {
+      "stageId": "lyl.lin_an_black_sea",
+      "situationId": "world-sim.baseline.lyl.lin_an_black_sea.lyl.event.ruan_xianglin_scheme",
+      "sourceEventId": "lyl.event.ruan_xianglin_scheme",
+      "title": "湖堤上邀上雷峰塔",
+      "summary": "离开农居后，李师师与称作凝姨的美妇在湖堤停步，话锋转向雷峰塔，求助的意思压在游春的客套里。",
+      "observableFacts": [
+        "李师师与一位称作凝姨的美妇在湖堤并肩停步",
+        "李师师望向雷峰塔，话里带着求助",
+        "塔院游人未散，山门尚未清场"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.li_shi_shi",
+        "liuchao.character.ruan_xiang_ning"
+      ],
+      "environmentFallback": "雷峰塔影斜在湖面上，游船的鼓声还在，堤上脂粉与湖风混在一处，听得出有人想借同游把难处说开。",
+      "presentation": {
+        "title": "塔影邀约",
+        "text": "湖堤上李师师叫身边美妇作凝姨，目光却钉在雷峰塔上。同游的邀请说得轻，底下那句求助压得很低。秦桧站在半步外不插话，塔院游人未散，这一邀是去是留，都还停在堤边风里。"
+      }
+    },
+    {
+      "stageId": "lyl.lin_an_black_sea",
+      "situationId": "world-sim.baseline.lyl.lin_an_black_sea.liuchao.event.wei_yuan_crisis_deepen",
+      "sourceEventId": "liuchao.event.wei_yuan_crisis_deepen",
+      "title": "失镖货册对上高衙内",
+      "summary": "俞子元带回的货册写着高衙内名号与御赐玉带，价值被说成十万贯；以免罪换人入太尉府的说法在门口互相打架。",
+      "observableFacts": [
+        "俞子元带回的失镖货册上写着高衙内名号",
+        "货单旁注御赐玉带，价值被说成十万贯",
+        "门口风传以免罪换人入太尉府，说法不一"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.yu_zi_yuan",
+        "liuchao.character.li_shi_shi"
+      ],
+      "environmentFallback": "镖局柜房灯火通明，算盘打了又停，门外闲话把太尉府和高衙内缠在一处，谁也不敢把条件说成定论。",
+      "presentation": {
+        "title": "货册风闻",
+        "text": "俞子元把失镖货册摊开：高衙内、御赐玉带、十万贯，一项项写得刺眼。门外又有人说，以免于问罪换李师师进太尉府。李师师站在屏风后不说话，秦桧只看册页，勒索的全貌还停在风闻和墨迹之间。"
+      }
+    },
+    {
+      "stageId": "lyl.lin_an_black_sea",
+      "situationId": "world-sim.baseline.lyl.lin_an_black_sea.liuchao.event.gao_yanei_showdown",
+      "sourceEventId": "liuchao.event.gao_yanei_showdown",
+      "title": "塔下靴声点名要人",
+      "summary": "雷峰塔下层靴声杂乱，高衙内带着陆谦与十三太保拾级而上，点名要见李师师，塔窗内外都还没交手。",
+      "observableFacts": [
+        "塔下层靴声杂乱，十三太保腰牌晃过回廊",
+        "高衙内带着陆谦拾级而上，点名要见李师师",
+        "塔窗外有人按剑，两边都还没先动手"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.li_shi_shi",
+        "liuchao.character.qin_hui"
+      ],
+      "environmentFallback": "塔砖缝里风声发紧，游人已被往下头撵，栏杆外火把一排排亮起，像是要把人从塔上逼下来。",
+      "presentation": {
+        "title": "塔上点名",
+        "text": "高衙内带着陆谦和十三太保踏上雷峰塔，点名要见李师师。李师师袖里力道先起，陆谦的手也伸过来。秦桧指风一紧，程宗扬挡在阶口。喝退还是撕破，都停在这一息之间，塔外火把已经围上来。"
+      }
+    },
+    {
+      "stageId": "lyl.lin_an_black_sea",
+      "situationId": "world-sim.baseline.lyl.lin_an_black_sea.liuchao.event.you_chan_meeting",
+      "sourceEventId": "liuchao.event.you_chan_meeting",
+      "title": "塔下轿影转出长街",
+      "summary": "高衙内一行轿影刚转出塔下长街，李师师道谢后先回镖局；秦桧把光明观堂不介入江湖恩怨的话只说到一半。",
+      "observableFacts": [
+        "高衙内一行的轿影刚从塔下转出长街",
+        "李师师敛衽道谢，转身先回威远镖局",
+        "秦桧提起光明观堂不管江湖恩怨，话未说完"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.qin_hui",
+        "liuchao.character.li_shi_shi"
+      ],
+      "environmentFallback": "塔院余火未熄，街口闲人又聚回来，失镖的事没人当众再提，却都在看这边还跟不跟下去。",
+      "presentation": {
+        "title": "道谢之后",
+        "text": "高衙内的轿影转出长街，李师师致谢后先回镖局。秦桧把折扇打开又合上，只说光明观堂向来不介入江湖恩怨。失镖的线索还在城里，帮还是不帮，话停在塔下风里，并没有替谁做完决定。"
+      }
+    },
+    {
+      "stageId": "lyl.lin_an_black_sea",
+      "situationId": "world-sim.baseline.lyl.lin_an_black_sea.liuchao.event.black_sea_approach",
+      "sourceEventId": "liuchao.event.black_sea_approach",
+      "title": "江州城外铁腥压营",
+      "summary": "江州城外铁腥压过军营炊烟，未完工的铁傀儡关节还在滴油；小紫与一名看不清面容的老者对视试验台。",
+      "observableFacts": [
+        "江州城外铁腥气压过军营炊烟",
+        "一具未完工的铁傀儡关节还在滴油",
+        "小紫与一名面容未明的老者对视试验台"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.xiao_zi"
+      ],
+      "environmentFallback": "城外荒坪灯火低垂，虎翼军的旗角在远处晃，铁件摩擦声一阵紧一阵，谁也不知道今夜试验要推到哪一步。",
+      "presentation": {
+        "title": "城外试验",
+        "text": "江州城外，小紫立在铁傀儡试验台边，对面老者面目看不真切。关节滴油，铁腥压过营炊。远处虎翼军的旗还在，龙睛一类的器物匣却已被挪到台角。场外这一幕与临安街头隔着江山，谁也还没看见傀儡真正迈步。"
+      }
+    },
+    {
+      "stageId": "lyl.lin_an_black_sea",
+      "situationId": "world-sim.baseline.lyl.lin_an_black_sea.liuchao.event.final_preparations",
+      "sourceEventId": "liuchao.event.final_preparations",
+      "title": "叩天石上插着巨剑",
+      "summary": "御街朝天门内，王哲留在叩天石上的巨剑仍在；便门瓦方向已有人按申时清扫接头处，暗号约定近在眼前。",
+      "observableFacts": [
+        "朝天门内叩天石上插着一柄巨剑",
+        "路人指认那是王哲留下的剑痕",
+        "便门瓦一带已有人按申时清扫空地"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.qin_hui"
+      ],
+      "environmentFallback": "御街人潮把叩天石围成一圈，剑影压着市声；另一头便门瓦的巷口灯火稀疏，像在等一个对得上暗号的人。",
+      "presentation": {
+        "title": "石上剑影",
+        "text": "程宗扬经过朝天门，看见叩天石上那柄巨剑。秦桧把争霸和生意两句话并着说，并不催人驻足。便门瓦方向已有人按申时扫地，祈福字条上的接头还在前头，看剑的人尽可以再走两步，也可以就此折开。"
+      }
+    },
+    {
+      "stageId": "lyl.lin_an_bridge",
+      "situationId": "world-sim.baseline.lyl.lin_an_bridge.lyl.event.lin_an_bridge_01_beat",
+      "sourceEventId": "lyl.event.lin_an_bridge_01_beat",
+      "title": "便门瓦棚风紧",
+      "summary": "便门瓦牡丹棚里茶客换桌、耳语压低，宋军部署与皇城司的闲话对不上号，线人影儿若有若无。",
+      "observableFacts": [
+        "瓦牡丹棚外多了几次短停的脚力，进棚只喝茶不点戏",
+        "棚里有人把宋军换防与贾府差遣说成两套互斥的版本",
+        "有人问皇城司名册时，邻座立刻改口谈花价"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "便门外瓦棚灯影晃动，茶盏碰撞压过说话声，棚帘一掀一落，听不清谁在对哪一路差遣较真。",
+      "presentation": {
+        "title": "棚下耳语",
+        "text": "便门瓦牡丹棚里茶气混着脂粉香，几桌把宋军动向和贾府差遣说得对不上。有人刚提皇城司名册，邻座便改口谈花价。程宗扬若路过，只能听见风声，摸不到那人把话往哪边递。"
+      }
+    },
+    {
+      "stageId": "lyl.lin_an_bridge",
+      "situationId": "world-sim.baseline.lyl.lin_an_bridge.lyl.event.lin_an_bridge_02_beat",
+      "sourceEventId": "lyl.event.lin_an_bridge_02_beat",
+      "title": "小瀛洲上人杂",
+      "summary": "小瀛洲画舫与岸边游客交叠，李师师一行的去向被打听得过勤，梁家恶少的呼喝已从对岸传过来。",
+      "observableFacts": [
+        "画舫码头有人反复问李师师今晚是否游洲",
+        "对岸传来梁府子弟呼朋引类、拦路让道的喝声",
+        "洲上侍从把贵客与市井游客的路径临时错开"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "小瀛洲水汽里混着丝竹与呵斥，画舫缆绳被反复收紧，岸边让路的人影一阵密、一阵散。",
+      "presentation": {
+        "title": "洲上喧声",
+        "text": "小瀛洲岸边有人连问李师师可还登舟，对岸梁府子弟的呼喝已经压过丝竹。侍从把贵客与市井游客的路径临时错开。程宗扬若在近处，只见水光人影搅在一处，尚未分出谁先动手。"
+      }
+    },
+    {
+      "stageId": "lyl.lin_an_bridge",
+      "situationId": "world-sim.baseline.lyl.lin_an_bridge.lyl.event.lin_an_bridge_03_beat",
+      "sourceEventId": "lyl.event.lin_an_bridge_03_beat",
+      "title": "禁军线口风乱",
+      "summary": "市井把林娘子的走动和禁军门禁绑在一起说，黑魔海的影儿只在传言里闪，有人已打听鲁智深在何处。",
+      "observableFacts": [
+        "茶摊上把林娘子出入与禁军换岗说成同一条线",
+        "黑魔海三字只在压低的口气里出现，立刻被岔开",
+        "有脚力打听城外哪座寺院还能见到鲁智深"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "临安巷口的茶摊把禁军门禁说得一阵紧一阵松，寺院方向的问讯比平日多，却没人敢把话说明。",
+      "presentation": {
+        "title": "门禁传言",
+        "text": "巷口把林娘子的行踪和禁军换岗缠在一处讲，黑魔海只被压低提起又立刻岔开。另有脚力打听哪座寺院还见得到鲁智深。话头悬着，谁也没把线头接到明处。"
+      }
+    },
+    {
+      "stageId": "lyl.lin_an_bridge",
+      "situationId": "world-sim.baseline.lyl.lin_an_bridge.lyl.event.lin_an_bridge_04_beat",
+      "sourceEventId": "lyl.event.lin_an_bridge_04_beat",
+      "title": "明庆寺酒气沉",
+      "summary": "明庆寺侧廊备了酒盏，鲁智深与林冲的名字被僧俗反复对上，林冲神色隐忍，寺外却另有人打探林娘子。",
+      "observableFacts": [
+        "寺侧禅房多摆了酒盏，不像寻常功课",
+        "僧俗对谈里把鲁智深与林冲的座位说得很近",
+        "寺门外有人打听林娘子近日可还出门"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "明庆寺钟声里夹着酒香，侧廊坐席未散，门外问讯的脚步停停走走，殿内却仍只闻低语。",
+      "presentation": {
+        "title": "寺侧酒盏",
+        "text": "明庆寺侧廊多摆了酒盏，僧俗把鲁智深与林冲的座位说得很近。林冲若在席间，神色隐忍，话不多。门外另有人打听林娘子可还出门。酒气未散，席上的分寸仍像一根绷着的弦。"
+      }
+    },
+    {
+      "stageId": "lyl.luoyang_cloud_secret",
+      "situationId": "world-sim.baseline.lyl.luoyang_cloud_secret.lyl.event.s05_01",
+      "sourceEventId": "lyl.event.s05_01",
+      "title": "西邸价码在议",
+      "summary": "云苍峰账房里矿册与买官价单分开摊开，西邸二千石和郡县小吏的数目被反复掂量，谈成与否仍看不透。",
+      "observableFacts": [
+        "云苍峰玉佩压着首阳山矿册，账房进出比平日更密",
+        "西邸二千石与郡县小吏的价码分写两纸，墨未干",
+        "门房拦闲人靠近窗下，只说今日议矿务"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.yun_cang_feng"
+      ],
+      "environmentFallback": "步广里外传来清点铜料与官牒匣的声响，账房灯火比往日更久，暂时听不清屋里把价说到哪一步。",
+      "presentation": {
+        "title": "矿册分纸",
+        "text": "云苍峰把首阳山矿册压在腰间玉佩下，又把西邸买官的价单翻过两遍。二千石与郡县小吏分成两摞，话只说到一半。院里仍可照常走动，只是账房窗下多了拦人的门房。"
+      }
+    },
+    {
+      "stageId": "lyl.luoyang_cloud_secret",
+      "situationId": "world-sim.baseline.lyl.luoyang_cloud_secret.lyl.event.s05_02",
+      "sourceEventId": "lyl.event.s05_02",
+      "title": "中常侍索名册",
+      "summary": "徐璜府里笑脸与黑脸交替，买官名册被当成筹码来回掂量，金铢是否出手、何时出手，说法并不一致。",
+      "observableFacts": [
+        "徐璜尖细嗓音催要名册，眼圈发黑却仍堆着笑",
+        "公孙弘、朱买臣等字样被内侍对过一遍",
+        "筹金期限被说成数日之内，前后口径不一"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.xu_huang"
+      ],
+      "environmentFallback": "宫门侧廊有内侍来回传匣，笑声与斥责交替，没人敢问匣里装的是名册还是空纸。",
+      "presentation": {
+        "title": "名册入内",
+        "text": "徐璜赔笑接过名册边角，尖细嗓音把金铢数目咬得很轻。公孙弘、朱买臣的名字被对过一遍，期限从七八日说到数日。廊下仍可过路，只是匣盖一开一合，谁也不敢说钱已备齐。"
+      }
+    },
+    {
+      "stageId": "lyl.luoyang_cloud_secret",
+      "situationId": "world-sim.baseline.lyl.luoyang_cloud_secret.lyl.event.s05_03",
+      "sourceEventId": "lyl.event.s05_03",
+      "title": "四营旗号改道",
+      "summary": "卫尉、屯骑等营旗同日偏转，山口镇设卡的传言互相打架，吕府侧门有甲片装箱，究竟校阅还是围猎，无人说死。",
+      "observableFacts": [
+        "卫尉、屯骑、越骑、长水旗号同日改道",
+        "山口镇驿卒回报路口临时设卡，过客被盘问",
+        "吕府侧门有死士甲片装箱，去向说法不一"
+      ],
+      "preferredCharacterIds": [
+        "lyl.character.lyu_buyi",
+        "liuchao.character.lv_ji"
+      ],
+      "environmentFallback": "城外校场鼓点乱了一拍，尘土里混着甲叶摩擦声，路人只看见旗号改道，听不清点的是哪一营。",
+      "presentation": {
+        "title": "山口设卡",
+        "text": "卫尉与屯骑的旗先偏了，越骑、长水随后跟上，山口镇那边忽然设卡。吕府侧门有人往车上塞甲片，有人说是校阅，有人说是围猎。城门仍开着，只是盘问比平日多了一句。"
+      }
+    },
+    {
+      "stageId": "lyl.luoyang_cloud_secret",
+      "situationId": "world-sim.baseline.lyl.luoyang_cloud_secret.lyl.event.s05_04",
+      "sourceEventId": "lyl.event.s05_04",
+      "title": "宅基微颤落灰",
+      "summary": "步广里程宅墙皮成片掉落，巷口出现不挂旗号的短刀客，高智商嘴上逞强，地下那一下轻颤却没人解释得清。",
+      "observableFacts": [
+        "院墙灰皮成片掉落，井沿出现新裂",
+        "巷口有不挂旗号的短刀客来回探路",
+        "高智商瘸腿绕院，嘴硬说只是风大"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.gao_zhishang"
+      ],
+      "environmentFallback": "宅基深处隐隐一颤，瓦砾轻响，门外脚步停停走走，像在数几进几出，暂时没有人报塌陷。",
+      "presentation": {
+        "title": "墙灰裂井",
+        "text": "高智商瘸着腿在廊下转圈，圆脸上还擦着旧伤，偏要说墙灰是风刮的。井沿新裂一道，巷口短刀客不挂旗号。宅里灯火还亮，只是地下偶尔发颤，谁也说不清会不会再震。"
+      }
+    },
+    {
+      "stageId": "lyl.luoyang_cloud_secret",
+      "situationId": "world-sim.baseline.lyl.luoyang_cloud_secret.lyl.event.s05_05",
+      "sourceEventId": "lyl.event.s05_05",
+      "title": "井下焦羽凉风",
+      "summary": "宅中地穴气口带出焦羽与冷风，惊理贴墙听声，黑影究竟是夜鸟还是另有来客，两种说法并存。",
+      "observableFacts": [
+        "地穴气口飘出焦黑细羽",
+        "惊理贴墙听地下气流，神色比平日更冷",
+        "有人说黑影掠过井口，有人只当夜鸟"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.jing_li"
+      ],
+      "environmentFallback": "井口与地穴缝里往外灌凉风，偶尔带一丝焦味，灯火被吹得侧斜，地面日常未停。",
+      "presentation": {
+        "title": "气口细羽",
+        "text": "惊理贴着地穴缝听了一会儿，捡起一片焦黑细羽，没有立刻喊人。井口凉风一阵紧似一阵，有人坚称见过黑影掠过，有人只当夜鸟。宅里差事照旧，只是地下不再安稳。"
+      }
+    },
+    {
+      "stageId": "lyl.luoyang_cloud_secret",
+      "situationId": "world-sim.baseline.lyl.luoyang_cloud_secret.lyl.event.s05_06",
+      "sourceEventId": "lyl.event.s05_06",
+      "title": "二鹅口谕未宣",
+      "summary": "徐璜带着天子口谕的影子试探入宫时辰，赵合德的名字与昭仪仪仗被轻轻提起，诏书并未当众宣读。",
+      "observableFacts": [
+        "徐璜尖声提起二鹅之象与入宫时辰",
+        "昭仪仪仗匣被提前擦拭，封条未拆",
+        "赵合德之名在内侍口中出现又被压住"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.xu_huang"
+      ],
+      "environmentFallback": "宫使铃铛在巷口停了一停，并未宣诏，只留下择日入内四个字的风声，行人仍可过巷。",
+      "presentation": {
+        "title": "仪仗未启",
+        "text": "徐璜赔笑走近，尖细嗓音里滚过二鹅二字，又把赵合德的名字吞回去半截。昭仪仪仗匣擦得发亮，封条仍在。巷口宫铃响过一回，没有人当众宣读。"
+      }
+    },
+    {
+      "stageId": "lyl.luoyang_cloud_secret",
+      "situationId": "world-sim.baseline.lyl.luoyang_cloud_secret.lyl.event.s05_07",
+      "sourceEventId": "lyl.event.s05_07",
+      "title": "乐津里问年貌",
+      "summary": "乐津里人市帘后有人打听能入宫禁的年貌，昭仪二字压得很低，买卖还停在比身量、退回席上这一步。",
+      "observableFacts": [
+        "人市牙人反复问可入宫禁的年貌",
+        "昭仪二字只在帘后齿缝里交换",
+        "几名女子被叫出比身量，又被退回席上"
+      ],
+      "preferredCharacterIds": [],
+      "environmentFallback": "乐津里人市帘影晃动，牙人压着嗓子谈入内的年貌，街上仍是平常买卖声，没有人当场拍板。",
+      "presentation": {
+        "title": "人市问貌",
+        "text": "乐津里人市帘后，牙人压低嗓子问能入宫禁的年貌，昭仪二字只在齿缝里转。有人被叫出来比身量，又被退回席上。市声未歇，只是问询比往日更绕，去留仍由自己。"
+      }
+    },
+    {
+      "stageId": "lyl.luoyang_cloud_secret",
+      "situationId": "world-sim.baseline.lyl.luoyang_cloud_secret.lyl.event.s05_08",
+      "sourceEventId": "lyl.event.s05_08",
+      "title": "合德追问去向",
+      "summary": "赵合德听闻入宫风声后耳根发红，连问名单是否已定、自己落何处，替代之计只被含糊说到一半。",
+      "observableFacts": [
+        "赵合德耳根发红，连问入宫名单是否已定",
+        "内室放下第二道帘，闲人被挡在廊外",
+        "另有人顶替的说法只说到一半便被打断"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.zhao_he_de"
+      ],
+      "environmentFallback": "内院脂粉未收，帘钩轻响，廊下人把脚步放得很轻，听不清屋里把后路说到哪一句。",
+      "presentation": {
+        "title": "帘后问计",
+        "text": "赵合德坐在第二道帘里，声气仍软，却把入宫名单问了两遍。有人只说到或可另寻一人顶上，下文被她自己的追问打断。廊下闲人已被挡住，屋里灯还亮着。"
+      }
+    },
+    {
+      "stageId": "lyl.luoyang_cloud_secret",
+      "situationId": "world-sim.baseline.lyl.luoyang_cloud_secret.lyl.event.s05_09",
+      "sourceEventId": "lyl.event.s05_09",
+      "title": "金车临伊改辙",
+      "summary": "云氏从舞都来的金铢车临近伊水忽然改道换岗，前哨半个时辰没有回音，封路与失联的说法互相打架。",
+      "observableFacts": [
+        "舞都来的金铢车在伊水前突然改辙",
+        "云丹琉披甲巡车，不许押役离队",
+        "前哨失联约半个时辰，对岸灯火说法不一"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.yun_cang_feng",
+        "liuchao.character.yun_dan_liu"
+      ],
+      "environmentFallback": "伊水雾里传来车轴与甲叶声，渡口有人拦路清点箱数，箱锁还在，没有人报平安。",
+      "presentation": {
+        "title": "雾里清点",
+        "text": "云苍峰把玉佩按在账册上不说话，云丹琉已披甲走到车头。舞都来的金铢箱临近伊水忽然改辙，前哨半个时辰没有回音。渡口有人拦路清点，箱锁还在，只是雾里脚步比车轮更密。"
+      }
+    },
+    {
+      "stageId": "lyl.luoyang_coup",
+      "situationId": "world-sim.baseline.lyl.luoyang_coup.lyl.event.s06_01",
+      "sourceEventId": "lyl.event.s06_01",
+      "title": "宫里丧讯对不上",
+      "summary": "昭阳一带灯火乱跳，天子无息与太医仍在入殿的说法互相打架，吕冀府上已有人连夜备素帷。",
+      "observableFacts": [
+        "宫门内外同时传开“天子无息”与“太医还在殿里”两套口信",
+        "襄邑侯府灯火通明，素帷、丧乐器具被连夜抬出",
+        "金蜜镝赤足驭马驰入宫门，神色铁青"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.jin_mi_di",
+        "liuchao.character.zhao_feiyan"
+      ],
+      "environmentFallback": "洛都夜风里混着丧乐试音和甲叶摩擦。宫道上的人影一会儿往昭阳，一会儿又被喝止换路，谁也说不准今夜该举哀还是该戒严。",
+      "presentation": {
+        "title": "丧讯对不上",
+        "text": "金蜜镝赤足驭马闯进宫门，未及下鞍便问天子鼻息。廊下有人说殿里已经没了声息，又有人说太医还在里头。西边吕冀府上素帷连夜抬出，中行说袖里刀柄露出一截，刘建一侧的口信却在说另有诏书要宣。"
+      }
+    },
+    {
+      "stageId": "lyl.luoyang_coup",
+      "situationId": "world-sim.baseline.lyl.luoyang_coup.lyl.event.s06_01b",
+      "sourceEventId": "lyl.event.s06_01b",
+      "title": "含光殿突然清场",
+      "summary": "昭仪所在殿阁被临时清人，吕冀带亲随入内，廊下只剩不敢抬头的内侍与一卷闲置的软索。",
+      "observableFacts": [
+        "含光殿廊下内侍被尽数喝退，只留张恽垂手立在柱影里",
+        "吕冀带着亲随径入昭仪所在，门外落了闩",
+        "廊下地上一卷软索未及收起，无人敢问用途"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.zhang_yun",
+        "liuchao.character.yi_xin"
+      ],
+      "environmentFallback": "含光殿一带忽然静得过分。殿门落闩后，只听得里头隐约有人低喝，廊柱阴影里内侍连呼吸都压着，不敢抬头去看那卷被丢在阶下的软索。",
+      "presentation": {
+        "title": "殿门落闩",
+        "text": "张恽弓着脊背立在廊柱影里，看吕冀带人进了昭仪所在的殿阁。门闩落下后，外头只剩一卷未及收起的软索。义姁从侧廊经过时板着脸，只丢下一句“今夜谁也别进去”。里头将发生什么，廊下没有人敢说破。"
+      }
+    },
+    {
+      "stageId": "lyl.luoyang_coup",
+      "situationId": "world-sim.baseline.lyl.luoyang_coup.lyl.event.s06_02",
+      "sourceEventId": "lyl.event.s06_02",
+      "title": "密道口灯火连夜",
+      "summary": "长秋宫密道口有人进出，秦桧按名册传召，鹏翼社与洛帮的人影在暗处聚齐，话只说到一半。",
+      "observableFacts": [
+        "密道口灯火一夜未熄，行装与名册被分开放在石案上",
+        "秦桧青衫折扇，按名单把人往暗处引",
+        "程郑、郭解先后到齐，却都压着嗓门不提去向"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.qin_hui",
+        "liuchao.character.yun_dan_liu"
+      ],
+      "environmentFallback": "长秋宫墙根下的密道口有脚步来回。灯火压得很低，只照见名册边角和几件未打包完的行装。远处宫墙外仍有厮杀声，这边却像在赶另一桩更隐秘的事。",
+      "presentation": {
+        "title": "密道传召",
+        "text": "秦桧在密道口按名册点人，笑意谦和，话却一句不说满。云丹琉仗剑守在拐角，不让闲人靠近。程郑与郭解先后摸进来，石案上分开放着行装和未写完的差遣条。定陶王三个字只在纸边露了一角，谁也没把后文念出声。"
+      }
+    },
+    {
+      "stageId": "lyl.luoyang_coup",
+      "situationId": "world-sim.baseline.lyl.luoyang_coup.lyl.event.s06_03",
+      "sourceEventId": "lyl.event.s06_03",
+      "title": "中垒军改道西行",
+      "summary": "崇德殿方向攻势受阻的传言刚起，中垒军与宗室家奴便改道西指昭阳；四门卫尉军同时收拢。",
+      "observableFacts": [
+        "中垒军与大批宗室家奴在崇德殿外停顿后改道西行",
+        "分守四门的卫尉军开始向昭阳宫方向集中",
+        "长秋宫内有人求皇后下诏，授金蜜镝暂掌宫禁"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cai_jingzhong",
+        "liuchao.character.jin_mi_di"
+      ],
+      "environmentFallback": "昭阳宫外尘土被马蹄搅起又落下。旗帜从崇德一侧折向西，四门方向的号角不再对答，只往一处收。宫墙这边听得见甲叶，却看不清对方到底要攻哪一道门。",
+      "presentation": {
+        "title": "旗帜西折",
+        "text": "蔡敬仲立在长秋宫墙头，大红折扇未展，只盯着崇德殿外那一阵停顿。中垒军裹着宗室家奴折向昭阳，四门卫尉军也开始往同一处收拢。金蜜镝已在请皇后用印。南宫与武库眼下还各自亮着灯，没有人敢说哪一座会先失守。"
+      }
+    },
+    {
+      "stageId": "lyl.luoyang_coup",
+      "situationId": "world-sim.baseline.lyl.luoyang_coup.lyl.event.s06_04",
+      "sourceEventId": "lyl.event.s06_04",
+      "title": "台阶上开始布人",
+      "summary": "武库方向火光与喊声交错，卫尉军往北宫退；蔡敬仲把内侍和期门武士压上长秋宫台阶。",
+      "observableFacts": [
+        "武库方向火光骤亮，虎贲旗号在烟尘里出没",
+        "卫尉军弃南宫建制，队形往北宫收拢",
+        "长秋宫三十六级台阶上，内侍与期门武士被分列布开"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cai_jingzhong",
+        "liuchao.character.lu_jing"
+      ],
+      "environmentFallback": "长秋宫台阶被火把照得发白。远处武库方向金属撞击一声接一声，近处只有靴底擦石级的声音。中垒军的旗在阶下晃了两晃，还没决定何时再上。",
+      "presentation": {
+        "title": "石级布防",
+        "text": "蔡敬仲把内侍和期门武士一排排压上三十六级石阶，熊皮大氅一动不动。卢景翻着白眼贴在柱后，报武库那边火光乱跳、卫尉军往北宫退。阶下中垒军的旗晃了两晃，刘建的位置有人故意压着不报死讯——此刻谁也不敢让那条命从棋盘上拿掉。"
+      }
+    },
+    {
+      "stageId": "lyl.luoyang_coup",
+      "situationId": "world-sim.baseline.lyl.luoyang_coup.lyl.event.s06_05",
+      "sourceEventId": "lyl.event.s06_05",
+      "title": "黑衣使者求见",
+      "summary": "剑玉姬的人入了长秋宫外廊，口信只说到“谈一谈”；蔡敬仲已把刘建旧事的卷宗压在袖里。",
+      "observableFacts": [
+        "黑衣面纱的使者在长秋宫外廊求见，不报兵事只说来谈",
+        "剑玉姬的名号随口信传入内殿，条件尚未摊开",
+        "蔡敬仲袖中多了一卷关于刘建旧迹的抄件"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.jian_yu_ji",
+        "liuchao.character.cai_jingzhong"
+      ],
+      "environmentFallback": "长秋宫外廊忽然安静下来。甲士被撤到两翼，中间空出一条只够两人并走的路。风里有一丝陌生的冷香，像有人把战场临时改成了议事处。",
+      "presentation": {
+        "title": "外廊来客",
+        "text": "剑玉姬的名号随黑衣使者送进内殿，话说得极缓，只提“成光”二字，其余都等对面开口。蔡敬仲脸色惨白，袖里却多了一卷刘建旧迹的抄件，随时能拍上案几。吴三桂把好手撤到两翼。这笔交易谈不谈得成，此刻谁也没有点头。"
+      }
+    },
+    {
+      "stageId": "lyl.luoyang_coup",
+      "situationId": "world-sim.baseline.lyl.luoyang_coup.lyl.event.s06_06",
+      "sourceEventId": "lyl.event.s06_06",
+      "title": "白衣小将出列",
+      "summary": "阿阁阵前吕氏一侧忽然让出一条窄道，白衣箭袖的少年将单骑出列；越骑司马的旗杆晃了一下。",
+      "observableFacts": [
+        "吕氏阵脚让出窄道，白衣箭袖的吕奉先单骑出列",
+        "越骑军司马的旗杆在对面晃动，队形微微后收",
+        "吕戟那边有人传话，要接赵皇后往北宫"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.lv_fengxian",
+        "liuchao.character.cai_jingzhong"
+      ],
+      "environmentFallback": "阿阁前的尘土被一匹马撕开。两边金鼓忽然对不上拍子，像有人把整场对峙按住了半息。北宫方向的灯火还在招手，长秋宫这边没人应。",
+      "presentation": {
+        "title": "阵前让道",
+        "text": "吕奉先白衣箭袖，单骑从吕氏阵脚让出的窄道里出来，金冠未正，人已到两军之间。对面越骑司马的旗杆晃了一下。蔡敬仲在墙上冷冷丢下一句：看住阿阁，别让人把赵皇后接去北宫。两边都还僵着，没有人先退。"
+      }
+    },
+    {
+      "stageId": "lyl.taiquan_afterfall",
+      "situationId": "world-sim.baseline.lyl.taiquan_afterfall.lyl.event.taiquan_afterfall_01_beat",
+      "sourceEventId": "lyl.event.taiquan_afterfall_01_beat",
+      "title": "蚁穴毒息发闷",
+      "summary": "蚁穴阵纹发闷、毒息黏衣，程宗扬与虞白樱的记号被潮气抹去，出路仍对不上。",
+      "observableFacts": [
+        "蚁穴内壁阵纹忽明忽暗，泥缝渗出黏热毒息",
+        "程宗扬与虞白樱改道试探，先前记号已被潮气抹去",
+        "出口方向风声断续，洞壁传来刮擦"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "蚁穴深处潮热发闷，阵纹忽明忽暗，泥缝渗出黏热气味，远处洞壁刮擦断续，一时分不清哪条缝能走出去。",
+      "presentation": {
+        "title": "穴中毒息",
+        "text": "蚁穴里阵纹忽然发闷，泥缝渗出黏热毒息，先前记号也被潮气抹去。程宗扬与虞白樱只得改道试探，出口的风声时有时无，眼下还说不清哪条缝能通出去。"
+      }
+    },
+    {
+      "stageId": "lyl.taiquan_afterfall",
+      "situationId": "world-sim.baseline.lyl.taiquan_afterfall.lyl.event.taiquan_afterfall_02_beat",
+      "sourceEventId": "lyl.event.taiquan_afterfall_02_beat",
+      "title": "下水道口有拖痕",
+      "summary": "下水道口铁栅半开，湿阶拖痕未干，深处有压抑呼救，是谁被留在下面还对不上号。",
+      "observableFacts": [
+        "下水道口铁栅半开，湿阶上两道新拖痕通向暗处",
+        "井壁挂着被扯落的衣角与未干水渍",
+        "深处传来压抑呼救，回声被流水搅碎"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "下水道口铁栅半开，湿阶上拖痕未干，井壁挂着被扯落的衣角。流水声里夹着断续呼救，一时分不清是谁被留在深处。",
+      "presentation": {
+        "title": "井下拖痕",
+        "text": "下水道口铁栅半开，湿阶上两道新拖痕通向暗处，井壁还挂着被扯落的衣角。流水声里夹着压抑呼救，程宗扬听见回声被搅碎，只知有人被留在深处，尚未对上姓名。"
+      }
+    },
+    {
+      "stageId": "lyl.taiquan_afterfall",
+      "situationId": "world-sim.baseline.lyl.taiquan_afterfall.lyl.event.taiquan_afterfall_03_beat",
+      "sourceEventId": "lyl.event.taiquan_afterfall_03_beat",
+      "title": "魔墟空匣起争",
+      "summary": "魔墟旧匣被翻开，玄秘贝不在原位，琉璃光晕引来几路探子，珠落谁手仍说不清。",
+      "observableFacts": [
+        "魔墟祭台空匣大开，匣底只余贝壳印痕",
+        "深处一闪琉璃光晕，几路人影同时改道",
+        "口信互相打架：有人说珠在东廊，有人说已易手"
+      ],
+      "preferredCharacterIds": [],
+      "environmentFallback": "魔墟祭台空匣大开，匣底只余印痕。深处一闪琉璃光晕，几路人影同时改道，口信说法不一，一时分不清珠落谁手。",
+      "presentation": {
+        "title": "空匣光晕",
+        "text": "魔墟祭台空匣大开，匣底只余贝壳印痕。深处琉璃光晕一闪，几路人影同时改道，口信却互相打架：有人说珠在东廊，有人说已经易手，眼下还没人敢断。"
+      }
+    },
+    {
+      "stageId": "lyl.taiquan_afterfall",
+      "situationId": "world-sim.baseline.lyl.taiquan_afterfall.lyl.event.taiquan_afterfall_04_beat",
+      "sourceEventId": "lyl.event.taiquan_afterfall_04_beat",
+      "title": "莫府旧账翻动",
+      "summary": "莫府内室连夜掌灯，碧姬旧匣与空珠盘摊上案几，对质的人还没坐定。",
+      "observableFacts": [
+        "莫府内室连夜掌灯，案上摊开碧姬旧匣与空珠盘",
+        "小紫一侧名刺被拦在中门，莫如霖一侧闭门不见客",
+        "廊下两拨下人说法相反：一说珠宝失踪，一说另有旧情"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "莫府内室连夜掌灯，案上摊着旧匣与空珠盘。中门拦着名刺，廊下两拨下人各执一词，一时分不清是旧账还是私情要翻出来。",
+      "presentation": {
+        "title": "旧匣空盘",
+        "text": "莫府内室连夜掌灯，案上摊开碧姬旧匣与空珠盘。小紫一侧的名刺被拦在中门，廊下下人各执一词：有人咬定珠宝失踪，有人只敢提旧日私情。对质还没坐定，账却翻到了明处。"
+      }
+    },
+    {
+      "stageId": "lyl.taiquan_afterfall",
+      "situationId": "world-sim.baseline.lyl.taiquan_afterfall.lyl.event.taiquan_afterfall_05_beat",
+      "sourceEventId": "lyl.event.taiquan_afterfall_05_beat",
+      "title": "居住区灯火异样",
+      "summary": "人类居住区里灯火长廊与货柜残阵不像寻常里坊，程宗扬与小紫还在对照太泉古阵的走法。",
+      "observableFacts": [
+        "居住区深处灯火隔间连成一条，货柜残阵整齐得不像废墟",
+        "程宗扬认出若干器物形制近乎旧世市集，小紫只当它是阵眼",
+        "古阵纹路绕着这些厅堂走，像在护一层避难的壳"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "人类居住区灯火隔间连成一条，货柜残阵整齐得不像废墟。古阵纹路绕着厅堂走，一时分不清这是阵眼，还是给人藏身的壳。",
+      "presentation": {
+        "title": "灯火残阵",
+        "text": "人类居住区深处灯火隔间连成一条，货柜残阵整齐得不像废墟。程宗扬看着那些近乎旧世市集的形制，小紫仍按阵眼去摸。古阵纹路绕着厅堂走，像在护一层壳，眼下还说不清里面藏的是什么。"
+      }
+    },
+    {
+      "stageId": "lyl.taiquan_afterfall",
+      "situationId": "world-sim.baseline.lyl.taiquan_afterfall.lyl.event.taiquan_afterfall_06_beat",
+      "sourceEventId": "lyl.event.taiquan_afterfall_06_beat",
+      "title": "云府退回名刺",
+      "summary": "程宗扬再递提亲名刺被退，门房点到身边女子身份未明，云府侧门加岗，人还在府中。",
+      "observableFacts": [
+        "云府门房把提亲名刺原封退回，只说此议再议",
+        "门房压低声音点到程宗扬身边女子身份未明",
+        "侧门加岗，云如瑶起居窗灯仍亮，车马却被拦在巷口"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "云府门房把提亲名刺原封退回，侧门加岗。窗灯仍亮，车马却被拦在巷口，一时分不清是拒亲还是另有变故。",
+      "presentation": {
+        "title": "名刺被退",
+        "text": "云府门房把提亲名刺原封退回，只说此议再议，又压低声音点到程宗扬身边女子身份未明。侧门加了岗，云如瑶起居窗灯仍亮，车马却被拦在巷口，眼下还走不成正门。"
+      }
+    },
+    {
+      "stageId": "lyl.taiquan_afterfall",
+      "situationId": "world-sim.baseline.lyl.taiquan_afterfall.lyl.event.taiquan_afterfall_07_beat",
+      "sourceEventId": "lyl.event.taiquan_afterfall_07_beat",
+      "title": "洛都奏章乱传",
+      "summary": "洛都街巷传开宁成奏章抄件，平亭侯府门异常换防，邳宅灯火骤暗，说法互相打架。",
+      "observableFacts": [
+        "坊间传抄宁成弹劾平亭侯的奏章片段，真伪不一",
+        "平亭侯府门换防加岗，外客名刺被压在门房",
+        "邳宅一带灯火骤暗，有人说抄家将至，有人说只是避风"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "洛都街巷传开奏章抄件，平亭侯府门换防加岗，邳宅灯火骤暗。有人说抄家将至，有人说只是避风，一时对不上哪边是实。",
+      "presentation": {
+        "title": "奏章乱传",
+        "text": "洛都街巷传开宁成弹劾平亭侯的奏章抄件，真伪对不上。平亭侯府门忽然换防，外客名刺被压在门房；邳宅一带灯火又骤暗。有人说抄家将至，有人说只是避风，眼下还没人敢往实处说。"
+      }
+    },
+    {
+      "stageId": "lyl.taiquan_afterfall",
+      "situationId": "world-sim.baseline.lyl.taiquan_afterfall.lyl.event.taiquan_afterfall_08_beat",
+      "sourceEventId": "lyl.event.taiquan_afterfall_08_beat",
+      "title": "西邸门风加密",
+      "summary": "冯子都席间有人出示软晶玉杯与纸式券卡，西邸门房换班更密，卖官口风仍对不齐。",
+      "observableFacts": [
+        "冯子都席上出现软晶玉杯与纸式券卡，宾客传看不定",
+        "西邸门房换班加密，名刺要过两道才肯递入",
+        "口风互相打架：有人提西邸卖官，有人只敢提徐璜近侍"
+      ],
+      "preferredCharacterIds": [],
+      "environmentFallback": "冯子都席上有人传看软晶玉杯与纸式券卡，西邸门房换班更密。口风有的提卖官，有的只敢提近侍，一时分不清哪条路能走通。",
+      "presentation": {
+        "title": "席间券卡",
+        "text": "冯子都席上有人出示软晶玉杯与纸式券卡，宾客传看不定。西邸门房换班加密，名刺要过两道才肯递入。口风互相打架：有人提西邸卖官，有人只敢提徐璜近侍，眼下还对不齐。"
+      }
+    },
+    {
+      "stageId": "lyl.taiquan_afterfall",
+      "situationId": "world-sim.baseline.lyl.taiquan_afterfall.lyl.event.taiquan_afterfall_09_beat",
+      "sourceEventId": "lyl.event.taiquan_afterfall_09_beat",
+      "title": "求子符入宫门",
+      "summary": "徐璜处收下太乙真宗求子符，符上附一截银链，宫门传话有召无召互相矛盾。",
+      "observableFacts": [
+        "徐璜门下收下求子仙符，符角系着一截银链",
+        "宫门传话前后不一：一拨说赵飞燕要见，一拨说改期",
+        "程宗扬被拦在外廷廊下，名刺未退也未放行"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "徐璜门下收下求子符，符角系着银链。宫门传话有召无召互相矛盾，外廷廊下名刺未退也未放行，一时分不清见得见不得。",
+      "presentation": {
+        "title": "符上银链",
+        "text": "徐璜门下收下太乙真宗求子仙符，符角系着一截银链。宫门传话前后不一：一拨说赵飞燕要见，一拨说改期。程宗扬被拦在外廷廊下，名刺未退也未放行，眼下还进不了内殿。"
+      }
+    },
+    {
+      "stageId": "lyl.taiquan_afterfall",
+      "situationId": "world-sim.baseline.lyl.taiquan_afterfall.lyl.event.taiquan_afterfall_10_beat",
+      "sourceEventId": "lyl.event.taiquan_afterfall_10_beat",
+      "title": "襄城君府换防",
+      "summary": "襄城君府通往密室的廊灯提前熄灭，下人回避孙寿起居，韩定国相关口信被压住。",
+      "observableFacts": [
+        "襄城君府侧门换防，通往密室的廊灯被提前熄灭",
+        "下人回避孙寿起居，称君侯近日不见外客",
+        "韩定国相关口信在门房被压下，传言互相打架"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "襄城君府侧门忽然换防，通往密室的廊灯提前熄灭。下人回避孙寿起居，门房压住韩定国相关口信，一时分不清府中谁在作主。",
+      "presentation": {
+        "title": "密室换防",
+        "text": "襄城君府侧门忽然换防，通往密室的廊灯被提前熄灭。下人回避孙寿起居，门房又把韩定国相关口信压住不传。府中谁在作主还说不清，只是外客已被拦在廊外。"
+      }
+    },
+    {
+      "stageId": "lyl.taiquan_core_conflict",
+      "situationId": "world-sim.baseline.lyl.taiquan_core_conflict.lyl.event.find_exit",
+      "sourceEventId": "lyl.event.find_exit",
+      "title": "迷窟出口难辨",
+      "summary": "蚁丘迷窟岔道回绕，出口方向互相矛盾；伤者难行，向导一时失神，行路次序被迫放慢。",
+      "observableFacts": [
+        "洞壁蚁道交错，气流从两三处裂隙轮流涌出",
+        "虞白樱脚踝承力不稳，步幅比先前更短",
+        "徐君房龟甲滑落膝边，口中仍念着路线却对不上眼前岔口"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.yu_bai_ying",
+        "liuchao.character.xu_junfang"
+      ],
+      "environmentFallback": "迷窟深处回声叠成几路风声，石缝里渗出潮气与蚁酸味，远处裂隙忽明忽暗，一时分不清哪条能通出去。",
+      "presentation": {
+        "title": "岔风不定",
+        "text": "蚁道在眼前分成几股，气流忽左忽右。虞白樱脚踝一软，只好扶壁缓行；徐君房摸着龟甲对岔口，嘴里报的方位却和脚下裂缝对不上。出口像近又远，只能先把眼前这一段走稳。"
+      }
+    },
+    {
+      "stageId": "lyl.taiquan_core_conflict",
+      "situationId": "world-sim.baseline.lyl.taiquan_core_conflict.lyl.event.yu_baiying_truce",
+      "sourceEventId": "lyl.event.yu_baiying_truce",
+      "title": "伤踝牵住杀意",
+      "summary": "虞白樱脚踝已伤，敌友界线未明，她一边戒备一边不得不借力，开口条件尚未落地。",
+      "observableFacts": [
+        "她银发玉冠仍在，却把重心压向未伤的一侧",
+        "目光扫过程宗扬时冷硬，落在自己脚踝上又收紧",
+        "唇边欲言又止，像在权衡开口会不会把自己卖死"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.yu_bai_ying"
+      ],
+      "environmentFallback": "迷窟地面湿滑，每一步都会牵动伤处。远处兽爪刮石的余响尚未散尽，近处只有她压抑的呼吸和短促的停顿。",
+      "presentation": {
+        "title": "借力未决",
+        "text": "虞白樱撑着石壁，脚踝不敢全落。她仍把人当未辨敌友的变数，可伤处一抽，杀意便不得不让路。她抬眼又垂下，话在齿间转了一圈，合作的条件还没说出口。"
+      }
+    },
+    {
+      "stageId": "lyl.taiquan_core_conflict",
+      "situationId": "world-sim.baseline.lyl.taiquan_core_conflict.lyl.event.yin_fulan_aid",
+      "sourceEventId": "lyl.event.yin_fulan_aid",
+      "title": "近处传来援讯",
+      "summary": "核心区边缘有人压低声音报潘金莲换防，尹馥兰与何漪莲的行踪交错出现，援手真假未明。",
+      "observableFacts": [
+        "尹馥兰立在阴影里，先报埋伏再看人脸色",
+        "何漪莲笑意不散，却把退路和会合点默默记清",
+        "两人口信对不上：一说要道已封，一说尚有缝可钻"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.yin_fulan",
+        "lyl.character.he_yilian"
+      ],
+      "environmentFallback": "核心区风声发紧，远处阵纹明灭不定。石廊拐角有人影一闪即收，像在等你走近，又像随时会改口离开。",
+      "presentation": {
+        "title": "口信相左",
+        "text": "刚出蚁丘一带，尹馥兰便压着嗓子说潘金莲在要道布了人。何漪莲跟在侧后，笑着把会合点又改了一遍。两人说的封路方位并不一致，援手伸到半途，还没人敢拍板跟不跟。"
+      }
+    },
+    {
+      "stageId": "lyl.taiquan_core_conflict",
+      "situationId": "world-sim.baseline.lyl.taiquan_core_conflict.lyl.event.plan_counterattack",
+      "sourceEventId": "lyl.event.plan_counterattack",
+      "title": "反制尚未落子",
+      "summary": "尹馥兰与何漪莲围着核心区地形低声争执，阴阳鱼只在丹田里发热，正面硬闯还是绕伏都未定。",
+      "observableFacts": [
+        "尹馥兰用指节在石上划出两条互相打架的路线",
+        "何漪莲把退路和伏点分开记，不肯先说押哪边",
+        "丹田里阴阳鱼发沉发热，却未给出可用的去向"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.yin_fulan",
+        "lyl.character.he_yilian"
+      ],
+      "environmentFallback": "核心区廊道回风带沙，阵纹在脚下明灭。远处换防脚步忽密忽疏，近处只有压低的争执和未合上的两套画线。",
+      "presentation": {
+        "title": "两线相争",
+        "text": "尹馥兰在石面上画出迎面与绕伏两条线，何漪莲只把退路圈实，不肯先押一边。阴阳鱼在腹中发热发沉，像有力可用，却还没人说清该把它对准哪条路。"
+      }
+    },
+    {
+      "stageId": "lyl.taiquan_core_conflict",
+      "situationId": "world-sim.baseline.lyl.taiquan_core_conflict.lyl.event.pan_jinlian_ambush",
+      "sourceEventId": "lyl.event.pan_jinlian_ambush",
+      "title": "要道换防封口",
+      "summary": "潘金莲仍在核心区搜捕，关键路口灯火与人影对调，封路与空岗的传言互相打架。",
+      "observableFacts": [
+        "白衣人影在要道灯火后一闪，口罩下声息极轻",
+        "原先可通的石廊被新布的符签和绊线拦住",
+        "远处口令对不上号，有人说空岗，有人说加哨"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.pan_jinlian"
+      ],
+      "environmentFallback": "核心区要道灯火错位，风里带着药香与剑气。石廊下新添的符签未干，脚步声时近时远，一时分不清是搜还是等。",
+      "presentation": {
+        "title": "要道改哨",
+        "text": "前方石廊被符签和绊线新拦了一截。灯火后掠过一抹白衣与薄纱口罩，声息压得很低。有人报空岗，有人报加哨，潘金莲的人到底卡在哪一口，眼前还对不上。"
+      }
+    },
+    {
+      "stageId": "lyl.taiquan_core_conflict",
+      "situationId": "world-sim.baseline.lyl.taiquan_core_conflict.lyl.event.yin_yang_counter",
+      "sourceEventId": "lyl.event.yin_yang_counter",
+      "title": "阴阳鱼发热沉",
+      "summary": "阴阳鱼在丹田里积力未放，潘金莲的追线未断，尹馥兰只敢点出配合的时机而不敢保证能翻盘。",
+      "observableFacts": [
+        "丹田阴阳鱼沉热一阵、凉一阵，与阵纹明灭同拍",
+        "潘金莲的搜线仍贴着廊道，未退也未合围",
+        "尹馥兰只说“等这一息”，手却停在半空不敢先动"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.yin_fulan",
+        "liuchao.character.pan_jinlian"
+      ],
+      "environmentFallback": "核心区阵纹忽亮忽暗，热息从石缝里顶上来。远处剑气擦墙而过，近处只有腹中那一点沉热，像要应、又还没应。",
+      "presentation": {
+        "title": "力在未放",
+        "text": "阴阳鱼在丹田里一阵沉热，与脚下阵纹同起同落。廊外白衣搜线未断，尹馥兰只抬手示意等这一息，指尖却悬着没落。力像到了喉口，往哪边吐，谁也还没开口。"
+      }
+    },
+    {
+      "stageId": "lyl.taiquan_core_conflict",
+      "situationId": "world-sim.baseline.lyl.taiquan_core_conflict.lyl.event.decide_yin_fulan_fate",
+      "sourceEventId": "lyl.event.decide_yin_fulan_fate",
+      "title": "余波未定去留",
+      "summary": "核心区喧声暂歇，尹馥兰察言观色不敢先请命，何漪莲把退路与依附一并掂量，去留都还悬着。",
+      "observableFacts": [
+        "尹馥兰敛袖立在侧后，目光跟着人走却不开口",
+        "何漪莲笑意发薄，反复清点身上可带走的信物",
+        "两人都不问潘金莲下落，只问下一站还认不认她们"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.yin_fulan",
+        "lyl.character.he_yilian"
+      ],
+      "environmentFallback": "核心区余风带着焦味与药香，灯火未全灭。人影在廊边停停走走，像在等一句收编，也像在等一句打发。",
+      "presentation": {
+        "title": "去留两难",
+        "text": "喧声落后，尹馥兰只把袖口敛紧，站在能看见脸色的地方。何漪莲仍带着笑，却把可带走的信物一件件摸过。没人敢问方才那一头落向何处，只等一句：接下来还要不要她们跟上。"
+      }
+    },
+    {
+      "stageId": "lyl.taiquan_expedition",
+      "situationId": "world-sim.baseline.lyl.taiquan_expedition.liuchao.event.enter_taiquan",
+      "sourceEventId": "liuchao.event.enter_taiquan",
+      "title": "蜡丸三报压城",
+      "summary": "秦桧交来线人蜡丸，江州急报待核；林清浦水镜被阻，快马已在廊下整装。",
+      "observableFacts": [
+        "秦桧当面呈上蜡丸，三份急报都指向江州一线",
+        "林清浦试水镜时镜面发滞，称围城法阵隔断远讯",
+        "廊下快马已备，传讯口令改了两回"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.qin_hui",
+        "liuchao.character.lin_qing_pu"
+      ],
+      "environmentFallback": "临安宅院廊下拴着待发的快马，蜡封碎屑落在案上，水镜旁灯火晃得人眼酸，一时说不清该先核哪一份。",
+      "presentation": {
+        "title": "蜡丸未拆透",
+        "text": "秦桧把线人蜡丸摊在案上，三份急报都绕着江州打转。林清浦试了水镜，镜面发滞，只说围城法阵隔了远讯。廊下快马已备，口令却改过两回——急报要不要改走人力，此刻还对不齐。"
+      }
+    },
+    {
+      "stageId": "lyl.taiquan_expedition",
+      "situationId": "world-sim.baseline.lyl.taiquan_expedition.liuchao.event.reconnoiter",
+      "sourceEventId": "liuchao.event.reconnoiter",
+      "title": "象牙压上镖局门",
+      "summary": "猛犸牙已装箱待作押镖之礼，威远镖局因失镖气氛紧绷，李寅臣夫妇隔墙争执不止。",
+      "observableFacts": [
+        "两根猛犸牙装箱封绳，名义是押镖委托",
+        "威远镖局门房见客时先问是否太尉府差遣",
+        "内院隐约传来夫妇争执，有人提到婚事与脱身"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.qin_hui",
+        "liuchao.character.ruan_xiang_lin"
+      ],
+      "environmentFallback": "临安镖局门楣下尘土未净，象牙箱绳结勒得很紧，内院帘后压着压着的争执声，听不清谁先松口。",
+      "presentation": {
+        "title": "镖门先紧后乱",
+        "text": "象牙箱已打好，秦桧只说这是登门试探的见面礼。威远镖局门房见客先问是不是太尉府的人。帘后李寅臣与阮香琳争执未歇，婚事、失镖、脱身搅在一处，谁也没把话说死。"
+      }
+    },
+    {
+      "stageId": "lyl.taiquan_expedition",
+      "situationId": "world-sim.baseline.lyl.taiquan_expedition.liuchao.event.du_zong_raid",
+      "sourceEventId": "liuchao.event.du_zong_raid",
+      "title": "司营巷里刀影",
+      "summary": "司营巷口出现兜售宝刀的灰衣人，林冲驻足观刀；巷深处有人试藏剑竹杖，路向变得不寻常。",
+      "observableFacts": [
+        "灰衣人在司营巷口亮出一柄自称屠龙刀的宝刀",
+        "林冲驻足问价，神色沉静却未离巷",
+        "巷角两支竹杖磕地发闷，内里似藏了刃"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.lin_chong",
+        "liuchao.character.qin_hui"
+      ],
+      "environmentFallback": "司营巷午后人声忽然稀了，刀鞘反光扫过墙根，竹杖点地的闷响与寻常货郎不同。",
+      "presentation": {
+        "title": "巷口刀价异",
+        "text": "司营巷口，灰衣人把一柄屠龙刀递到亮处讲价。林冲驻足细看，并未立刻走开。巷角两支竹杖磕地发闷，像藏了刃。秦桧只在远处折扇轻摇，说这路数不像单纯卖刀。"
+      }
+    },
+    {
+      "stageId": "lyl.taiquan_expedition",
+      "situationId": "world-sim.baseline.lyl.taiquan_expedition.liuchao.event.fruit_conflict",
+      "sourceEventId": "liuchao.event.fruit_conflict",
+      "title": "林府楼上凝姨",
+      "summary": "林家设席待客，李师师口中的凝姨即林娘子；近看举止与成婚多年的表象对不齐。",
+      "observableFacts": [
+        "林冲设席，秦桧、敖润、青面兽随程宗扬入座",
+        "李师师称楼上那位为凝姨，正是林娘子阮香凝",
+        "席间她应对过于生疏，与多年主母的说法对不上"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.qin_hui",
+        "liuchao.character.li_shi_shi"
+      ],
+      "environmentFallback": "林府楼上帘影微动，酒盏碰撞很轻，称呼与礼数对不齐，宾客面上都装作没听见。",
+      "presentation": {
+        "title": "席上称呼偏",
+        "text": "林家楼上设席，李师师口中的凝姨，便是林娘子阮香凝。近看她应对生疏，礼数与成婚多年的主母对不齐。秦桧只把杯沿转了半圈，并未点破——疑点还停在席面上。"
+      }
+    },
+    {
+      "stageId": "lyl.taiquan_expedition",
+      "situationId": "world-sim.baseline.lyl.taiquan_expedition.liuchao.event.escape_taiquan",
+      "sourceEventId": "liuchao.event.escape_taiquan",
+      "title": "西湖别业灯密",
+      "summary": "阮香琳往西湖一带去，俞子元远远跟着；临湖别业灯火比平日密，高衙内与陆谦似有夜谈。",
+      "observableFacts": [
+        "阮香琳出镖局后改走临湖小路，并未回府",
+        "俞子元远远跟着，丝袍下步点稳得不像闲逛",
+        "临湖别业多点了灯，廊上传出高衙内与陆谦的低语"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.yu_zi_yuan",
+        "liuchao.character.ruan_xiang_lin"
+      ],
+      "environmentFallback": "西湖岸边夜风带潮，别业灯火比平日密一圈，石径上只余一个女人的履声和远处稳而轻的跟踪步点。",
+      "presentation": {
+        "title": "别业灯太密",
+        "text": "阮香琳出了镖局，不回府，改走临湖小路。俞子元远远跟着，步点稳得不像闲逛。临湖别业多点了灯，廊上隐约是高衙内与陆谦的声音，夜谈内容还隔着一层窗纸。"
+      }
+    },
+    {
+      "stageId": "lyl.taiquan_sacred_fruit",
+      "situationId": "world-sim.baseline.lyl.taiquan_sacred_fruit.lyl.event.taiquan_sacred_fruit_01",
+      "sourceEventId": "lyl.event.taiquan_sacred_fruit_01",
+      "title": "翠微园里伤担未歇",
+      "summary": "小瀛洲撤回的人马挤满翠微园廊下，伤药与点名同时进行，缺员名单对不齐。",
+      "observableFacts": [
+        "翠微园正厅被改成临时伤铺，药气压过花香",
+        "直属营的旗帜收得凌乱，点名时有人不应",
+        "廊下对游婵去向说法不一，谁也不肯说死"
+      ],
+      "preferredCharacterIds": [],
+      "environmentFallback": "翠微园深处传来换水、撕布和压低嗓门的点名，门槛外泥印新旧叠在一起。",
+      "presentation": {
+        "title": "伤铺未散",
+        "text": "翠微园廊下横着未干的担架，李师师一系的人来回递药，直属营旗帜收得皱。有人问游婵可曾同回，回答却对不上。郭槐那边被冷淡打发出门，门里仍在补缺员。"
+      }
+    },
+    {
+      "stageId": "lyl.taiquan_sacred_fruit",
+      "situationId": "world-sim.baseline.lyl.taiquan_sacred_fruit.lyl.event.taiquan_sacred_fruit_02",
+      "sourceEventId": "lyl.event.taiquan_sacred_fruit_02",
+      "title": "花厅里撤军条款",
+      "summary": "翠微园花厅灯火未灭，黑魔海撤出宋境的条件被拆成数份，人手分头试探。",
+      "observableFacts": [
+        "花厅案上摊开几份措辞互相顶牛的撤军条陈",
+        "秦桧进出时笑容谦退，袖里却多一卷北地来笺",
+        "门口侍从被吩咐分头传话，不许同路同行"
+      ],
+      "preferredCharacterIds": [],
+      "environmentFallback": "花厅窗纸透出灯影，纸页翻动与压低的争执交替响起，院里候信的人换了一拨又一拨。",
+      "presentation": {
+        "title": "条款未合",
+        "text": "翠微园花厅里，撤出宋境的条件被拆得七零八落。秦桧仍带着那点谦虚笑意进出，北地来笺却压在袖底。门口已有人分头传话，谁也不肯先把口封死。"
+      }
+    },
+    {
+      "stageId": "lyl.taiquan_sacred_fruit",
+      "situationId": "world-sim.baseline.lyl.taiquan_sacred_fruit.lyl.event.taiquan_sacred_fruit_03",
+      "sourceEventId": "lyl.event.taiquan_sacred_fruit_03",
+      "title": "高俅约在僻处",
+      "summary": "高俅避开正厅，改在僻室见客，宫廷里关于宋主生母的旧话又被压低重提。",
+      "observableFacts": [
+        "高俅 encel? 侍从把闲人从侧廊清走，只留一间闭窗小室",
+        "宫里传来两套互相打架的身世说法，韦后名号夹在其中",
+        "程宗扬被约去密谈，帖上不写事由只写亥时"
+      ],
+      "preferredCharacterIds": [],
+      "environmentFallback": "侧廊灯火收得只剩一盏，窗纸外脚步特意绕开，室内偶有压低的宫廷旧称。",
+      "presentation": {
+        "title": "密帖亥时",
+        "text": "高俅那边把闲人从侧廊清净，只留一间闭窗小室。宫里关于宋主生母的旧话又冒出来，说法却彼此打架。一份不写事由的帖子约在亥时，门外仍可装作没看见。"
+      }
+    },
+    {
+      "stageId": "lyl.taiquan_sacred_fruit",
+      "situationId": "world-sim.baseline.lyl.taiquan_sacred_fruit.lyl.event.taiquan_sacred_fruit_04",
+      "sourceEventId": "lyl.event.taiquan_sacred_fruit_04",
+      "title": "云涛观门缝有风",
+      "summary": "陈琳领路往云涛观迷楼，楼里机关齿轮偶有轻响，有人影在夹层间一闪。",
+      "observableFacts": [
+        "云涛观迷楼底层的踏板被新扫过，灰尘却在缝里成线",
+        "陈琳把随从留在外廊，自己先试门槛机关",
+        "夹墙后有女子气息，像小紫一系的脂粉混着机油"
+      ],
+      "preferredCharacterIds": [],
+      "environmentFallback": "迷楼外廊风穿过暗格，齿轮轻咬一声又停住，灯影在回廊里折了两折。",
+      "presentation": {
+        "title": "迷楼轻响",
+        "text": "陈琳把人留在云涛观外廊，自己先试迷楼门槛。踏板新扫过，缝里灰尘却成线；夹墙后一闪脂粉气，像小紫一系的人藏在机关后。楼里齿轮咬了一下，又没再动。"
+      }
+    },
+    {
+      "stageId": "lyl.taiquan_sacred_fruit",
+      "situationId": "world-sim.baseline.lyl.taiquan_sacred_fruit.lyl.event.taiquan_sacred_fruit_05",
+      "sourceEventId": "lyl.event.taiquan_sacred_fruit_05",
+      "title": "迷楼里问起钥匙",
+      "summary": "小紫逼梦娘开口，岳鹏举旧事和太泉熊谷的数字在墙缝间被反复核校。",
+      "observableFacts": [
+        "梦娘被带到迷楼深处，说话时目光总往暗格上瞟",
+        "墙灰里隐约刻着一四七五，像方位又像口令",
+        "有人翻找旧钥孔，钥匙本身却未见影"
+      ],
+      "preferredCharacterIds": [],
+      "environmentFallback": "迷楼夹层里烛火发青，数字被用指甲一遍遍描过，钥孔周围的漆皮新被抠开。",
+      "presentation": {
+        "title": "数字未解",
+        "text": "小紫让梦娘在迷楼深处把话说明白。岳鹏举当年是否藏过钥匙，说法发虚；墙灰里一四七五几个字被反复描过，像太泉熊谷的口令。钥孔在，钥匙却还没露头。"
+      }
+    },
+    {
+      "stageId": "lyl.taiquan_sacred_fruit",
+      "situationId": "world-sim.baseline.lyl.taiquan_sacred_fruit.lyl.event.taiquan_sacred_fruit_06",
+      "sourceEventId": "lyl.event.taiquan_sacred_fruit_06",
+      "title": "程氏账房灯火通明",
+      "summary": "盘江程氏首次股东大会的坐席与票券连夜铺开，分红、增发和粮业主业吵成三摊。",
+      "observableFacts": [
+        "四月二十六的告示贴在账房外，墨迹未干",
+        "分红册与新股票样张分两案摊开，有人按印有人拒签",
+        "粮栈管事进进出出，说要把经营改成以粮为主"
+      ],
+      "preferredCharacterIds": [],
+      "environmentFallback": "账房灯火通夜，算盘与印泥味压过茶香，廊下候点名的股东把靴底蹭得发亮。",
+      "presentation": {
+        "title": "票券未定",
+        "text": "盘江程氏账房外贴着四月二十六的会告。分红册和股票样张分两案摊着，按印的与拒签的肩挨肩。粮栈管事反复进出，只说往后要以粮食作主业，其余条款还在桌上。"
+      }
+    },
+    {
+      "stageId": "lyl.taiquan_sacred_fruit",
+      "situationId": "world-sim.baseline.lyl.taiquan_sacred_fruit.lyl.event.taiquan_sacred_fruit_07",
+      "sourceEventId": "lyl.event.taiquan_sacred_fruit_07",
+      "title": "苍澜镇物价陡涨",
+      "summary": "入苍澜镇后衣甲兵器标价翻倍，店家把太泉方向的风险写进价签里。",
+      "observableFacts": [
+        "镇口货摊把冬衣与兵刃并排，价码比临安高出一截",
+        "店伙劝人多备厚裳，说往太泉去的路上风硬",
+        "客栈名册上短日里添了好几路生面孔"
+      ],
+      "preferredCharacterIds": [],
+      "environmentFallback": "苍澜镇街面硫磺味若有若无，店招被风掀起一角，价牌上的数字被人改过不止一次。",
+      "presentation": {
+        "title": "价签改过",
+        "text": "苍澜镇口把冬衣和兵刃摆在一处，价码比临安陡了一截。店伙只劝多备厚裳，说往太泉去的风硬。客栈名册上生面孔连日增加，谁先动身，街上还没有定论。"
+      }
+    },
+    {
+      "stageId": "lyl.taiquan_sacred_fruit",
+      "situationId": "world-sim.baseline.lyl.taiquan_sacred_fruit.lyl.event.taiquan_sacred_fruit_08",
+      "sourceEventId": "lyl.event.taiquan_sacred_fruit_08",
+      "title": "殇侯与君雄飞对峙",
+      "summary": "苍澜镇上两路强者气息对上，赤婴粉的气味在巷风里一闪即收，围观被清开。",
+      "observableFacts": [
+        "殇侯立在窄巷尽头，神色淡得像在等人自己先耗力",
+        "君雄飞一侧真元鼓荡，靴底石板已现细纹",
+        "有人闻见极淡的赤婴粉腥甜，随即被挥散"
+      ],
+      "preferredCharacterIds": [],
+      "environmentFallback": "巷口被无声让开，瓦上落灰微颤，两股气息顶着，谁先出手仍看不真切。",
+      "presentation": {
+        "title": "巷风发紧",
+        "text": "苍澜窄巷里，殇侯站得极稳，君雄飞一侧真元却鼓得石板起纹。极淡的赤婴粉腥甜在风里一闪就被挥开。围观的人退到巷口，这一手是试探还是死手，当面还分不清。"
+      }
+    },
+    {
+      "stageId": "lyl.taiquan_sacred_fruit",
+      "situationId": "world-sim.baseline.lyl.taiquan_sacred_fruit.lyl.event.taiquan_sacred_fruit_09",
+      "sourceEventId": "lyl.event.taiquan_sacred_fruit_09",
+      "title": "酒店酒味不对",
+      "summary": "酒店后厨与食案气味发涩，宋三一系盯着左彤芝座次，武二郎已把铁件收到手边。",
+      "observableFacts": [
+        "酒坛封泥被揭过，新倒的酒面上起细沫",
+        "活无常、死有分在廊下换过两次位置，正对左彤芝席",
+        "武二郎把一条铁轨模样的兵刃竖在桌脚，未拔出"
+      ],
+      "preferredCharacterIds": [],
+      "environmentFallback": "堂内笑闹忽高忽低，下水道铁箅被靴尖碰得轻响，后厨的人进出时故意不看客席。",
+      "presentation": {
+        "title": "封泥已动",
+        "text": "酒店里新揭的酒坛封泥不对味，细沫浮在盏沿。宋三那边和活无常、死有分换过位置，目光钉在左彤芝席上。武二郎只把铁轨模样的兵刃竖在桌脚，下水道铁箅被谁碰了一下。"
+      }
+    },
+    {
+      "stageId": "lyl.taiquan_sacred_fruit",
+      "situationId": "world-sim.baseline.lyl.taiquan_sacred_fruit.lyl.event.taiquan_sacred_fruit_10",
+      "sourceEventId": "lyl.event.taiquan_sacred_fruit_10",
+      "title": "火山口旗帜错杂",
+      "summary": "通往火山口的坡道被多派封了半幅，赤阳圣果将熟的热浪里，各家都在抢落脚处。",
+      "observableFacts": [
+        "火山口外几面不相属的旗帜插得过近，彼此不让路",
+        "地面有细微凹陷的新纹，热气从缝里往上顶",
+        "萧遥逸一系的人把守最内侧岩阶，却还没人动手夺果"
+      ],
+      "preferredCharacterIds": [],
+      "environmentFallback": "硫烟把旗帜轮廓烧得发糊，岩缝里热浪一阵紧一阵，坡道上的脚印朝一个方向叠着。",
+      "presentation": {
+        "title": "岩阶相持",
+        "text": "火山口外旗帜插得过近，谁也不肯把坡道让开。岩缝里热气顶出细纹，像地皮自己先松了。萧遥逸一系守着最内侧岩阶，赤阳圣果的热影在烟里一闪，还没有人先伸手。"
+      }
+    },
+    {
+      "stageId": "lyl.xiaoyingzhou_blacksea_trap",
+      "situationId": "world-sim.baseline.lyl.xiaoyingzhou_blacksea_trap.lyl.event.xiaoyingzhou_blacksea_trap_01_beat",
+      "sourceEventId": "lyl.event.xiaoyingzhou_blacksea_trap_01_beat",
+      "title": "梵天寺路风紧",
+      "summary": "往梵天寺的官道被临时改线，禁军换防与拦车口令对不上，程宗扬与李师师的车仗已落进可疑空档。",
+      "observableFacts": [
+        "通往梵天寺的岔口被禁军临时封了一段，说是演练",
+        "车夫被改口令，先头探马迟迟不回信",
+        "俞子元压低嗓子让马车减速，两侧林荫里有甲叶轻响"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "官道尘土未散，路边驿卒把路牌翻过来，远处盔甲摩擦声一阵紧一阵松，没人敢说是护卫还是围堵。",
+      "presentation": {
+        "title": "岔路封了",
+        "text": "去梵天寺的那段官道忽然改了口令。禁军把岔口拦死，探马的旗号对不上，车轮轧过的辙印在林荫处断掉。程宗扬听见俞子元低声让车减速——两侧树影里有人在换位，还看不清是护道还是等车。"
+      }
+    },
+    {
+      "stageId": "lyl.xiaoyingzhou_blacksea_trap",
+      "situationId": "world-sim.baseline.lyl.xiaoyingzhou_blacksea_trap.lyl.event.xiaoyingzhou_blacksea_trap_02_beat",
+      "sourceEventId": "lyl.event.xiaoyingzhou_blacksea_trap_02_beat",
+      "title": "江州条件到了",
+      "summary": "蔺采泉的口信把太乙真宗对江州的支持，绑在九阳神功渊源的一纸承认上，两边说法已经拧在一起。",
+      "observableFacts": [
+        "太乙真宗来人只谈江州，不谈别的援助条款",
+        "口信里反复要程宗扬当众认下九阳神功出处",
+        "江州一线的回书与宗门信使所说的条件互相打架"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "驿馆里两封信摊开，一封写支援江州，一封只提功法渊源，火漆气味混着茶烟，没人敢先落笔。",
+      "presentation": {
+        "title": "口信拧着",
+        "text": "蔺采泉的信使把茶盏一推，话说得很干净：太乙真宗可以给江州撑腰，但要程宗扬先认九阳神功出自谁。江州那边回书却把条件写得更软，两纸对不上。承认与否都还悬着，席上只剩这笔交易的气味。"
+      }
+    },
+    {
+      "stageId": "lyl.xiaoyingzhou_blacksea_trap",
+      "situationId": "world-sim.baseline.lyl.xiaoyingzhou_blacksea_trap.lyl.event.xiaoyingzhou_blacksea_trap_03_beat",
+      "sourceEventId": "lyl.event.xiaoyingzhou_blacksea_trap_03_beat",
+      "title": "白虎堂后刺配",
+      "summary": "林冲持刀入白虎堂的风声已落到刺配文书上，江州路的枷锁与押解班次在换，营救窗口忽明忽暗。",
+      "observableFacts": [
+        "开封传来林冲白虎堂一案已转刺配江州",
+        "押解班次比寻常流配更密，路过驿站不停留",
+        "鲁智深那边只问江州道上何处能截，不提别的"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "案上刺配文书墨未干，枷环碰案的声音传到廊下，门外差役对江州路程各说一套。",
+      "presentation": {
+        "title": "枷声南去",
+        "text": "白虎堂的案子没在开封停住。刺配江州的文书已经盖印，押解班次比寻常流配更密，驿站只过水不歇人。鲁智深只问江州道上哪一段能截得住。林冲人还在枷里，营救只听见枷环南去的响。"
+      }
+    },
+    {
+      "stageId": "lyl.xiaoyingzhou_blacksea_trap",
+      "situationId": "world-sim.baseline.lyl.xiaoyingzhou_blacksea_trap.lyl.event.xiaoyingzhou_blacksea_trap_04_beat",
+      "sourceEventId": "lyl.event.xiaoyingzhou_blacksea_trap_04_beat",
+      "title": "野猪林人满",
+      "summary": "野猪林里僧衣、官差与黑衣影子叠在同一条押解路上，袈裟与衣钵的风声比林冲本人更抢先。",
+      "observableFacts": [
+        "野猪林路口同时出现官差旗号与僧众行脚",
+        "有人追问衣钵下落，说法与林冲押解路线缠在一起",
+        "皇城司与六扇门的腰牌在林缘交错亮过，随即收起"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "林雾里钟声与马嘶叠在一处，落叶上有新踩的靴印和僧鞋印，谁先动手还看不清。",
+      "presentation": {
+        "title": "林里撞旗",
+        "text": "野猪林不再只是押解道。僧众行脚与官差旗号挤在同一段雾里，有人先问衣钵，后才问林冲。皇城司与六扇门的腰牌在林缘亮了一下又收掉。袈裟符文的风已经比刀更快，林子里还没人先出手。"
+      }
+    },
+    {
+      "stageId": "lyl.xiaoyingzhou_blacksea_trap",
+      "situationId": "world-sim.baseline.lyl.xiaoyingzhou_blacksea_trap.lyl.event.xiaoyingzhou_blacksea_trap_05_beat",
+      "sourceEventId": "lyl.event.xiaoyingzhou_blacksea_trap_05_beat",
+      "title": "夜雾里找符",
+      "summary": "静善尼姑的行踪贴着袈裟符文转，野猪林宿营地外围的巡更被掐断，夜色比白天更挤。",
+      "observableFacts": [
+        "营外巡更少了一圈，脚印只到帐后便没了",
+        "有人看见尼姑装束在林缘停过，专问符文抄本",
+        "火药气味从行囊缝里漏出一点，随即被压住"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "帐外灯火被风压低，林鸟不叫，只余布鞋擦过湿叶的轻响，方向对不准。",
+      "presentation": {
+        "title": "帐后无更",
+        "text": "野猪林过夜的巡更少了一圈。帐后脚印到一半就断，林缘有尼姑装束停过，开口只问袈裟符文抄到了哪一行。行囊缝里漏出极淡的火药味，随即被人按灭。夜还没破，符文比人先被盯上。"
+      }
+    },
+    {
+      "stageId": "lyl.xiaoyingzhou_blacksea_trap",
+      "situationId": "world-sim.baseline.lyl.xiaoyingzhou_blacksea_trap.lyl.event.xiaoyingzhou_blacksea_trap_06_beat",
+      "sourceEventId": "lyl.event.xiaoyingzhou_blacksea_trap_06_beat",
+      "title": "观音殿戒严",
+      "summary": "明庆寺观音殿今夜灯火异常，太皇太后与太后的法会把内外门禁收紧，藻井下多出一双眼睛。",
+      "observableFacts": [
+        "观音殿内外门禁比平日多两道，香客被拦在月台",
+        "郭槐与封德明在廊下换了暗记，不许闲人靠近藻井",
+        "殿中提及宫中旧物时，侍从眼神会往腕上扫"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "殿角沉香浓得发涩，藻井阴影里木纹发亮，廊下甲士的呼吸比钟声更齐。",
+      "presentation": {
+        "title": "殿灯收紧",
+        "text": "明庆寺观音殿今夜不纳闲香客。月台外多了两道门禁，郭槐与封德明在廊下换暗记，藻井方向不许人抬头。殿里说到宫中旧物，侍从的眼睛会往腕上扫一眼。太皇太后与太后的法会还没散，殿里已经不像做功课。"
+      }
+    },
+    {
+      "stageId": "lyl.xiaoyingzhou_blacksea_trap",
+      "situationId": "world-sim.baseline.lyl.xiaoyingzhou_blacksea_trap.lyl.event.xiaoyingzhou_blacksea_trap_07_beat",
+      "sourceEventId": "lyl.event.xiaoyingzhou_blacksea_trap_07_beat",
+      "title": "太医局翻档",
+      "summary": "剑玉姬与西门庆把太医局医档摊开，刘太后用药与韦太后宫女的线索被并到同一页，黑魔海气味从纸缝里出来。",
+      "observableFacts": [
+        "太医局值夜的柜子被提前开锁，药方册少了几页又补回",
+        "有人把刘太后用药与宫女名录对读，不敢出声",
+        "西门庆身边的宫女班次被临时调走，去向说法不一"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "药柜樟脑压过墨香，灯下纸页翻得太快，门外太医脚步停了两次又走开。",
+      "presentation": {
+        "title": "药册对不上",
+        "text": "太医局值夜的柜子提前开了锁。剑玉姬把刘太后用药与宫女名录摊在同一灯下，西门庆只点头不说话。少了的药方页被补回去，墨色却新。宫女班次被临时抽走，去向两说。纸缝里已经有黑魔海临安布局的气味。"
+      }
+    },
+    {
+      "stageId": "lyl.xiaoyingzhou_blacksea_trap",
+      "situationId": "world-sim.baseline.lyl.xiaoyingzhou_blacksea_trap.lyl.event.xiaoyingzhou_blacksea_trap_08_beat",
+      "sourceEventId": "lyl.event.xiaoyingzhou_blacksea_trap_08_beat",
+      "title": "洲上宴有刃",
+      "summary": "小瀛洲水面比岸上更忙，直属营与翻江会的船灯交错，西门庆、剑玉姬一线的席位被摆成对冲。",
+      "observableFacts": [
+        "洲边夜泊比平日多出几艘无旗快船，吃水很深",
+        "席位图把西门庆与剑玉姬一线对上程宗扬一侧",
+        "水面上已有翻江会的号子，与岸上直属营口令对撞"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "湖风把酒香和铁锈一起送过来，灯影在涟漪里碎开，谁先靠岸还没有定数。",
+      "presentation": {
+        "title": "船灯对冲",
+        "text": "小瀛洲今夜不像赏月。无旗快船吃水很深，席位图把西门庆、剑玉姬一线对上程宗扬一侧。翻江会的号子从水面过来，岸上直属营的口令顶回去。酒盏还没满，洲上已经摆成两军对坐的样子。"
+      }
+    },
+    {
+      "stageId": "lyl.xiaoyingzhou_blacksea_trap",
+      "situationId": "world-sim.baseline.lyl.xiaoyingzhou_blacksea_trap.lyl.event.xiaoyingzhou_blacksea_trap_09_beat",
+      "sourceEventId": "lyl.event.xiaoyingzhou_blacksea_trap_09_beat",
+      "title": "放生池无影",
+      "summary": "保宁寺放生池水面反常地静，人过无影的说法与屠龙刀的寒意叠在一起，幻术和真身还分不清。",
+      "observableFacts": [
+        "放生池边石栏无露水，人影落不到水里",
+        "寺僧改口不让人靠近池心，理由前后矛盾",
+        "屠龙刀近水时刀脊发寒，远处有极轻的龙吟似的回声"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "池面平得像一面未开的镜，荷叶纹丝不动，廊铃却自己响了一下。",
+      "presentation": {
+        "title": "池面不应",
+        "text": "保宁寺放生池今晚不应人影。石栏干着，人过水面不起纹，寺僧拦着不让近池心，理由改了两回。屠龙刀靠近时刀脊发寒，廊铃无风自响，像极轻的龙吟。剑玉姬在不在水里，还没有人敢先踏下去。"
+      }
+    },
+    {
+      "stageId": "lyl.xiaoyingzhou_blacksea_trap",
+      "situationId": "world-sim.baseline.lyl.xiaoyingzhou_blacksea_trap.lyl.event.xiaoyingzhou_blacksea_trap_10_beat",
+      "sourceEventId": "lyl.event.xiaoyingzhou_blacksea_trap_10_beat",
+      "title": "寺里高手叠至",
+      "summary": "保宁寺内外忽然挤满不相统属的高手：米远志奉命到场，老僧禅房有异响，撤退与突围的路同时被盯上。",
+      "observableFacts": [
+        "米远志现身廊下，只称奉蔺采泉之命，不说打哪一边",
+        "已闭关的老僧禅房灯火又起，传出衣袂多重摩擦",
+        "蒙面人在侧门一带出没，屠龙刀与退路同时被人问价"
+      ],
+      "preferredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "environmentFallback": "钟楼方向脚步乱成几股，鞭梢破风与刀鸣交错，寺门开合不定，谁先退谁先补位都还没定。",
+      "presentation": {
+        "title": "禅房灯再起",
+        "text": "保宁寺今夜不像收场。米远志在廊下只报蔺采泉的名，已闭关的老僧禅房重新亮灯，衣袂摩擦多出几层。侧门有蒙面人问屠龙刀，又问哪条路还能走。剑玉姬一线的人影在殿角聚了又散，杀局往哪边收，寺里谁也不先开口。"
+      }
+    }
+  ]
+}

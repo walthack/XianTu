@@ -4868,8 +4868,8 @@
       "situations": [
         {
           "id": "world-sim.baseline.lcq.stage_05b.lcq.event.s05b_01_binu_reveals_xiaozi",
-          "title": "局势中的小紫疑云",
-          "summary": "围绕“小紫疑云”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "碧姬避谈小紫",
+          "summary": "碧鲮族侧，碧姬见紫衫少女便收了笑意，母女旧隙被旁人闲话挑起，却无人把话说全。",
           "sourceEventId": "lcq.event.s05b_01_binu_reveals_xiaozi",
           "settledWhenAny": [
             [
@@ -4886,10 +4886,19 @@
             "id": "omen.baseline.lcq.stage_05b.lcq.event.s05b_01_binu_reveals_xiaozi",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“小紫疑云”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "碧姬对紫衫少女只冷眼点头，不肯并肩落座",
+              "族中有人嘀咕她早年弃养，又立刻改口",
+              "谢艺留意程宗扬神色，并未打断旁人的闲谈"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.bi_ji"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.xiao_zi"
+              },
               {
                 "kind": "messenger"
               },
@@ -4897,17 +4906,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "碧鲮族廊外纱幔轻晃，舞姬歇处笑语忽然断了一截，远处鼓点仍按旧节拍敲着。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“小紫疑云”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "冷眼相看",
+              "text": "碧姬从紫衫少女身边走过，连招呼都懒得给全。廊外有人把“弃养”二字咬得很轻，又像怕惹祸似的改了口。空气里只剩一层说不清的生分。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_05b.lcq.event.s05b_02_xiaozi_exposed",
-          "title": "局势中的小紫暴露",
-          "summary": "围绕“小紫暴露”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "阿夕神色不对",
+          "summary": "花苗少女阿夕举止忽然滞涩，目光像被人牵着走；小紫仍笑得无辜，队里开始对不上口径。",
           "sourceEventId": "lcq.event.s05b_02_xiaozi_exposed",
           "settledWhenAny": [
             [
@@ -4924,10 +4933,19 @@
             "id": "omen.baseline.lcq.stage_05b.lcq.event.s05b_02_xiaozi_exposed",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“小紫暴露”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "阿夕说话断断续续，手指无意识地抠着袖口",
+              "小紫凑近时她身子一僵，随即又换上任性的口吻",
+              "乐明珠反复确认她是否中暑，并未得到干脆答复"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.a_xi"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.xiao_zi"
+              },
               {
                 "kind": "messenger"
               },
@@ -4935,17 +4953,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "驻地灯火未乱，却有虫鸣忽然齐停一瞬；紫衫衣角掠过处，有人下意识把话咽回去。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“小紫暴露”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "笑意发僵",
+              "text": "阿夕应了一句半截的话，眼神却飘向别处。小紫仍旧一脸娇憨地挨过去，那一瞬僵硬很快被笑声盖住。旁人只觉得哪里不对，又说不出实据。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_05b.lcq.event.s05b_03_saan_secret_path",
-          "title": "局势中的萨安情报",
-          "summary": "围绕“萨安情报”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "红苗厨子失联",
+          "summary": "鬼王峒外围，红苗厨师萨安的行踪对不上灶间班次；谢艺压低声音核对后厨口令，密道之说只在传言里打架。",
           "sourceEventId": "lcq.event.s05b_03_saan_secret_path",
           "settledWhenAny": [
             [
@@ -4962,10 +4980,19 @@
             "id": "omen.baseline.lcq.stage_05b.lcq.event.s05b_03_saan_secret_path",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“萨安情报”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "灶间缺了一名红苗厨子，班次牌被人翻过",
+              "有人说他熟识宫后暗道，又有人骂那是吓破胆的胡话",
+              "谢艺把两套互相矛盾的口令抄在掌心里"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.xie_yi"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "lcq.character.saan"
+              },
               {
                 "kind": "messenger"
               },
@@ -4973,17 +5000,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "峒口油烟与硫磺混在一起，更夫换岗比往日提早半炷香，远处石门开合声沉闷。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“萨安情报”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "灶间缺人",
+              "text": "后厨班次牌被翻得卷边，红苗厨子萨安对不上岗。有人咬定他走过宫后暗道，有人只当他吓跑了。谢艺听完两套口令，只把纸片收进袖里。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_05b.lcq.event.s05b_04_enter_ghost_palace",
-          "title": "局势中的潜入鬼王宫",
-          "summary": "围绕“潜入鬼王宫”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "宫道上的紫痕",
+          "summary": "鬼王宫外廊换防匆忙，地面留下细碎虫壳与紫纱线头；乐明珠去向对不上队里报备。",
           "sourceEventId": "lcq.event.s05b_04_enter_ghost_palace",
           "settledWhenAny": [
             [
@@ -5000,10 +5027,19 @@
             "id": "omen.baseline.lcq.stage_05b.lcq.event.s05b_04_enter_ghost_palace",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“潜入鬼王宫”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "偏廊地面有碾碎的虫壳与一缕紫纱",
+              "武二郎摸到墙缝潮热，凝羽示意先别出声",
+              "内卫口令改了两遍，乐明珠的名字在花名册上空着"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.wu_er_lang"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.ning_yu"
+              },
               {
                 "kind": "messenger"
               },
@@ -5011,17 +5047,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "宫墙内岩浆气蒸得石面发烫，远处甲叶相撞，像有人把巡路次序临时打乱。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“潜入鬼王宫”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "偏廊异迹",
+              "text": "偏廊潮热，碎虫壳黏着一缕紫纱。武二郎刚要开口，凝羽按住他手腕。内卫口令连改两遍，花名册上乐明珠那一格仍空着。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_05b.lcq.event.s05b_05a_meet_ghost_king",
-          "title": "局势中的初见鬼巫王",
-          "summary": "围绕“初见鬼巫王”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "岩浆结界加温",
+          "summary": "殿前岩浆结界比往日更亮，黑袍人影在热雾后演说南荒一统；丹宸蒙着眼侍立，无人敢走近。",
           "sourceEventId": "lcq.event.s05b_05a_meet_ghost_king",
           "settledWhenAny": [
             [
@@ -5038,10 +5074,19 @@
             "id": "omen.baseline.lcq.stage_05b.lcq.event.s05b_05a_meet_ghost_king",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“初见鬼巫王”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "结界石纹发红，守卫把闲人拦在热雾外",
+              "黑袍人影嗓音平稳，反复提到族群存续",
+              "蒙眼红裙女子立在斧影旁，一动不动"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.gui_wu_wang"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.dan_chen"
+              },
               {
                 "kind": "messenger"
               },
@@ -5049,17 +5094,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "殿廊热浪一波波扑面，石缝里岩浆低鸣，远处鼓声被压成单一长音。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“初见鬼巫王”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "热雾演说",
+              "text": "岩浆结界把廊道烫得发亮。热雾后头，黑袍人影把“南荒一统”说得像既定功课。蒙眼的红裙女子立在斧影边，谁也没被放近一步。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_05b.lcq.event.s05b_05b_ideology_duel_and_defeat",
-          "title": "局势中的理念交锋与败退",
-          "summary": "围绕“理念交锋与败退”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "殿内杀意收紧",
+          "summary": "鬼巫王谈锋未歇，骨虎在丹宸脚边低吼；珊瑚匕首的寒意刚露一线，四面甲叶已悄悄合拢。",
           "sourceEventId": "lcq.event.s05b_05b_ideology_duel_and_defeat",
           "settledWhenAny": [
             [
@@ -5076,10 +5121,19 @@
             "id": "omen.baseline.lcq.stage_05b.lcq.event.s05b_05b_ideology_duel_and_defeat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“理念交锋与败退”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "鬼巫王话锋从政见落到近身距离",
+              "丹宸握着断斧，骨虎颈毛竖起",
+              "两侧卫士换位，把退路收成一条窄廊"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.gui_wu_wang"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.dan_chen"
+              },
               {
                 "kind": "messenger"
               },
@@ -5087,17 +5141,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "殿柱上的纹路被热气映得发颤，远处铁环相撞，像有人把围场一点点收小。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“理念交锋与败退”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "退路收窄",
+              "text": "鬼巫王仍在说，脚步却近了半尺。丹宸身侧骨虎低吼，两侧甲叶无声换位。退路只剩一条窄廊，谁先动手都还没定。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_05b.lcq.event.s05b_06_breakout_and_reunion",
-          "title": "局势中的突围与重逢",
-          "summary": "围绕“突围与重逢”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "宫内号令对不上",
+          "summary": "乐明珠的呼声从侧殿断续传来，谢艺重新编排退路；弥骨的追兵甲叶已在外廊换防。",
           "sourceEventId": "lcq.event.s05b_06_breakout_and_reunion",
           "settledWhenAny": [
             [
@@ -5114,10 +5168,19 @@
             "id": "omen.baseline.lcq.stage_05b.lcq.event.s05b_06_breakout_and_reunion",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“突围与重逢”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "侧殿传来乐明珠压低的呼喊，随即被甲叶盖住",
+              "谢艺用手势改了退路，武二郎与凝羽分据两角",
+              "外廊点名声换成弥骨的调门，步距比巡更密"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.xie_yi"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.le_mingzhu"
+              },
               {
                 "kind": "messenger"
               },
@@ -5125,17 +5188,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "宫道灯火忽明忽暗，远处点名声乱了一拍，石阶上多了匆忙的湿脚印。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“突围与重逢”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "侧殿呼声",
+              "text": "侧殿里乐明珠的声音断了一截。谢艺只抬手改了退路，武二郎与凝羽各自卡住转角。外廊点名换成更密的步距，像网正在收口。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_05b.lcq.event.s05b_07_xiaozi_trap",
-          "title": "局势中的小紫陷阱与深井",
-          "summary": "围绕“小紫陷阱与深井”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "深井方向封路",
+          "summary": "乐明珠再出现时已被人引向祭台一侧；小紫笑容无恙，阁罗的喝骂把通往深井的路封死半边。",
           "sourceEventId": "lcq.event.s05b_07_xiaozi_trap",
           "settledWhenAny": [
             [
@@ -5152,10 +5215,19 @@
             "id": "omen.baseline.lcq.stage_05b.lcq.event.s05b_07_xiaozi_trap",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“小紫陷阱与深井”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "乐明珠衣角沾着井沿青苔，脚步发飘",
+              "小紫指着深井方向，语调仍旧软而急",
+              "阁罗在岔口吼人换防，半边石梯被拦绳封住"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.xiao_zi"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "lcq.character.np006"
+              },
               {
                 "kind": "messenger"
               },
@@ -5163,17 +5235,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "井口阴风带着土腥，铁链轻撞井壁；远处喝骂与虫鸣搅在一处，方向难以辨清。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“小紫陷阱与深井”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "井沿青苔",
+              "text": "乐明珠衣角带着井沿青苔，脚步虚了一截。小紫仍软声指着深处，阁罗已在岔口把半边石梯拦起来。谁先下去，谁也没说死。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_05b.lcq.event.s05b_08a_rescue_suli",
-          "title": "局势中的井底营救苏荔",
-          "summary": "围绕“井底营救苏荔”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "井台银针反光",
+          "summary": "深井平台上苏荔被缚于祭桩，螺旋长针在灯火里一闪；小紫立在井沿，丹宸的脚步声从上层传来。",
           "sourceEventId": "lcq.event.s05b_08a_rescue_suli",
           "settledWhenAny": [
             [
@@ -5190,10 +5262,19 @@
             "id": "omen.baseline.lcq.stage_05b.lcq.event.s05b_08a_rescue_suli",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“井底营救苏荔”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "苏荔红裙被绳索勒住，蝎尾被铁环扣着",
+              "祭桩旁一支螺旋长针反着冷光",
+              "上层石梯传来蒙眼女子的步履，不疾不徐"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.su_li"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.xiao_zi"
+              },
               {
                 "kind": "messenger"
               },
@@ -5201,17 +5282,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "井底潮气贴着石壁往上爬，灯火只照得半个平台；铁环偶尔一响，像有人在试松紧。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“井底营救苏荔”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "祭桩反光",
+              "text": "井台灯火只照半圈。苏荔被扣在祭桩上，螺旋长针冷光一闪。小紫立在井沿不说话，上层石梯已响起不疾不徐的步履。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_05b.lcq.event.s05b_08b_altar_corpse_fight_and_danchen",
-          "title": "局势中的祭台尸鬼与丹宸",
-          "summary": "围绕“祭台尸鬼与丹宸”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "祭台尸气翻涌",
+          "summary": "鬼巫王抬手时祭台雾气变厚，女尸般的轮廓在雾中站直；丹宸握斧的手抖了一下，龙睛玉微微发热。",
           "sourceEventId": "lcq.event.s05b_08b_altar_corpse_fight_and_danchen",
           "settledWhenAny": [
             [
@@ -5228,10 +5309,19 @@
             "id": "omen.baseline.lcq.stage_05b.lcq.event.s05b_08b_altar_corpse_fight_and_danchen",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“祭台尸鬼与丹宸”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "雾中站起一具女尸轮廓，甲片上还留着旧族徽",
+              "丹宸蒙眼的丝带被风掀起一角，握斧发紧",
+              "腰间龙睛玉忽然温热，护罩纹路若隐若现"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.gui_wu_wang"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.dan_chen"
+              },
               {
                 "kind": "messenger"
               },
@@ -5239,17 +5329,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "祭台硫磺更重，雾气贴地打转；远处铁链拖地，像有什么被从石室里拖出来。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“祭台尸鬼与丹宸”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "雾中轮廓",
+              "text": "雾气贴着祭台翻起来，一具带着旧族徽的女尸轮廓站直了。丹宸握斧的指节发白。龙睛玉忽然温热，护罩纹路只亮了一息。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_05b.lcq.event.s05b_09_temporary_pact_with_xiaozi",
-          "title": "局势中的临时协定",
-          "summary": "围绕“临时协定”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "药效未退议和",
+          "summary": "鬼巫王的脚步声暂时远了；乐明珠呼吸发急，小紫听“岳鹏举”三字时眼神一滞，却未应承任何条件。",
           "sourceEventId": "lcq.event.s05b_09_temporary_pact_with_xiaozi",
           "settledWhenAny": [
             [
@@ -5266,10 +5356,19 @@
             "id": "omen.baseline.lcq.stage_05b.lcq.event.s05b_09_temporary_pact_with_xiaozi",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“临时协定”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "殿外甲叶远去，热雾里只剩余震般的鼓点",
+              "乐明珠额汗未干，苏荔按住她手腕探脉",
+              "小紫听见旧名时手指停在袖里，没有立刻回话"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.xiao_zi"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.le_mingzhu"
+              },
               {
                 "kind": "messenger"
               },
@@ -5277,17 +5376,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "殿角灯火跳了两下，药香与硫磺混在一起；远处鼓点稀了，却没有完全停。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“临时协定”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "旧名一滞",
+              "text": "甲叶远了，乐明珠呼吸仍乱。苏荔按着她脉门不放。小紫听见那个旧名，手指在袖里停了一息，谁也没先把话说死。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_05b.lcq.event.s05b_10_slave_revolt_and_phoenix_change",
-          "title": "局势中的倒戈与凤凰异变",
-          "summary": "围绕“倒戈与凤凰异变”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "集会秩序松动",
+          "summary": "鬼王峒集会场上号令对不齐，小紫立处出现空档；奴隶锁链响成一片，乐明珠袖间火光乱跳。",
           "sourceEventId": "lcq.event.s05b_10_slave_revolt_and_phoenix_change",
           "settledWhenAny": [
             [
@@ -5304,10 +5403,19 @@
             "id": "omen.baseline.lcq.stage_05b.lcq.event.s05b_10_slave_revolt_and_phoenix_change",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“倒戈与凤凰异变”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "弥骨维持秩序的喝令被后排锁链声盖住",
+              "武二郎与谢艺分处两侧，奴隶班次被悄悄打乱",
+              "乐明珠指尖掠过一缕不属于灯火的暖光"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.xiao_zi"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.wu_er_lang"
+              },
               {
                 "kind": "messenger"
               },
@@ -5315,10 +5423,10 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "广场火把被风吹斜，点名声乱了拍；远处宫门未关严，热风从缝里灌出来。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“倒戈与凤凰异变”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "锁链乱拍",
+              "text": "弥骨的喝令被锁链声盖住。武二郎与谢艺各占一侧，奴隶班次乱了一截。乐明珠袖间掠过不属于火把的暖光，小紫立处忽然空出半步。"
             }
           }
         }

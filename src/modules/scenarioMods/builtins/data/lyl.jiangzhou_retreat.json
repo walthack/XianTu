@@ -3158,8 +3158,8 @@
       "situations": [
         {
           "id": "world-sim.baseline.lyl.jiangzhou_retreat.lyl.event.s01_01",
-          "title": "局势中的江州宋军大溃与退军",
-          "summary": "围绕“江州宋军大溃与退军”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "金明寨退军风紧",
+          "summary": "金明寨外溃卒与空粮车交错，选锋营被单独点去断后，退路令旗来回改向。",
           "sourceEventId": "lyl.event.s01_01",
           "settledWhenAny": [
             [
@@ -3183,8 +3183,9 @@
             "id": "omen.baseline.lyl.jiangzhou_retreat.lyl.event.s01_01",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“江州宋军大溃与退军”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "金明寨外溃卒与空粮车挤作一团",
+              "点名簿上选锋营被圈去断后",
+              "夏用和、秦翰的令旗来回改向"
             ],
             "transmitters": [
               {
@@ -3194,17 +3195,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "寨门外甲仗散落，空粮袋被风掀起，远处号角断续，没人能说清下一道令会往哪边走。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“江州宋军大溃与退军”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "金明退令",
+              "text": "金明寨外溃卒踩着空粮车辙，选锋营的旗号被单独点出，说是要断后。夏用和与秦翰的令旗来回改向，退路仍未排定。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.jiangzhou_retreat.lyl.event.s01_02",
-          "title": "局势中的程宗扬离开江州赴临安",
-          "summary": "围绕“程宗扬离开江州赴临安”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "江州码头备船",
+          "summary": "赴临安的船位与护航名单反复改口，江面巡哨加严，码头上剑未出鞘却已守住风向。",
           "sourceEventId": "lyl.event.s01_02",
           "settledWhenAny": [
             [
@@ -3221,10 +3222,19 @@
             "id": "omen.baseline.lyl.jiangzhou_retreat.lyl.event.s01_02",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“程宗扬离开江州赴临安”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "赴临安的客船提前清舱验缆",
+              "谢幼度剑未出鞘，守在码头风向处",
+              "江面巡哨加严，口信说有人拦路"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.xie_youdu"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -3232,17 +3242,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "江州码头缆绳被重新盘紧，巡哨灯火沿江面错开，船工压低嗓子对航次，却说不清今夜能否开船。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“程宗扬离开江州赴临安”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "临安航次",
+              "text": "江州码头上赴临安的客船提前清舱，谢幼度执剑未出鞘，只守在风向处。江面巡哨加严，口信只说到有人拦路，船期仍未钉死。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.jiangzhou_retreat.lyl.event.s01_03",
-          "title": "局势中的荆溪村寨被屠",
-          "summary": "围绕“荆溪村寨被屠”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "荆溪乡兵压寨",
+          "summary": "王团练乡兵朝荆溪村寨加急换防，寨口封路，妇孺被驱入内院，说法彼此打架。",
           "sourceEventId": "lyl.event.s01_03",
           "settledWhenAny": [
             [
@@ -3266,10 +3276,19 @@
             "id": "omen.baseline.lyl.jiangzhou_retreat.lyl.event.s01_03",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“荆溪村寨被屠”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "乡兵铁尺与火把朝荆溪寨口集结",
+              "相雅素衣立于寨门，令妇孺入内院",
+              "路人说王团练要清寨，说法互相打架"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.xiang_ya"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.wang_tian_de"
+              },
               {
                 "kind": "messenger"
               },
@@ -3277,17 +3296,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "荆溪寨外尘土扬起，铁尺与火把的影子在篱墙上晃，鸡犬惊散，远处哭喊与喝令叠在一起，分不清谁先动手。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“荆溪村寨被屠”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "寨口封路",
+              "text": "王团练的乡兵扛着铁尺火把压向荆溪寨口。相雅立在寨门，把妇孺往内院里赶。路上有人说要清寨，有人只说换防，两边对不上。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.jiangzhou_retreat.lyl.event.s01_04",
-          "title": "局势中的程宗扬与滕甫交易三十万石粮食",
-          "summary": "围绕“程宗扬与滕甫交易三十万石粮食”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "军费兑粮风声",
+          "summary": "筠州仓廪按昭南人名义试盘三十万石粮价，知州案头军费册被连夜抽走核对。",
           "sourceEventId": "lyl.event.s01_04",
           "settledWhenAny": [
             [
@@ -3304,10 +3323,19 @@
             "id": "omen.baseline.lyl.jiangzhou_retreat.lyl.event.s01_04",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“程宗扬与滕甫交易三十万石粮食”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "粮行按每石九百铜铢试盘三十万石",
+              "滕甫两鬓见白，军费册被夜传",
+              "秦桧只问仓印是否齐备，不谈来路"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.teng_fu"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.qin_hui"
+              },
               {
                 "kind": "messenger"
               },
@@ -3315,17 +3343,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "筠州仓前斛斗摆开，算盘声密过脚步。公廨灯火未灭，军费册在案角翻开又合上，没人敢把价码说死。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“程宗扬与滕甫交易三十万石粮食”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "仓前试盘",
+              "text": "筠州粮行按昭南人名义试盘三十万石，价码写着每石九百铜铢。滕甫案头军费册被连夜抽走，秦桧只问仓印齐不齐，不谈银从何处来。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.jiangzhou_retreat.lyl.event.s01_05",
-          "title": "局势中的王团练上钩与常平仓失火",
-          "summary": "围绕“王团练上钩与常平仓失火”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "常平仓换粮异动",
+          "summary": "五千石新粮被单独提出要兑给团练，侧廊米袋发潮，仓门夜禁与水缸忽然加严。",
           "sourceEventId": "lyl.event.s01_05",
           "settledWhenAny": [
             [
@@ -3342,10 +3370,19 @@
             "id": "omen.baseline.lyl.jiangzhou_retreat.lyl.event.s01_05",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“王团练上钩与常平仓失火”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "五千石新粮被单独提出，说要兑给团练",
+              "侧廊米袋发潮发霉，与仓面新粮不符",
+              "常平仓夜禁加严，水缸被挪到仓门"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.wang_tian_de"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -3353,10 +3390,10 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "常平仓侧廊有陈米潮气，仓门水缸被挪近，夜禁锣比往日早半个时辰。仓吏互相使眼色，没人说火从哪起。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“王团练上钩与常平仓失火”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "兑粮加岗",
+              "text": "常平仓里五千石新粮被单独提出，说是要兑给王团练。侧廊米袋发潮发霉，与仓面新粮对不上。夜禁提前，水缸堵在仓门口，火从哪来仍无人敢说。"
             }
           }
         }

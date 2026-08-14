@@ -1948,8 +1948,8 @@
       "situations": [
         {
           "id": "world-sim.baseline.lcq.stage_05.lcq.event.s05_01",
-          "title": "局势中的海神殿抵御鲛人",
-          "summary": "围绕“海神殿抵御鲛人”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "殿外水影逼近",
+          "summary": "潮退后的海神殿石像间仍困着人，殿外水影越来越近，乐明珠头上的朱狐冠在暗处发亮。",
           "sourceEventId": "lcq.event.s05_01",
           "settledWhenAny": [
             [
@@ -1966,10 +1966,15 @@
             "id": "omen.baseline.lcq.stage_05.lcq.event.s05_01",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“海神殿抵御鲛人”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "废弃海神殿外潮水退去，石柱间水影成片逼近",
+              "乐明珠头戴的朱狐冠在潮气里格外醒目",
+              "退路被潮石堵住，手边只有刚取得的珊瑚匕首"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.le_mingzhu"
+              },
               {
                 "kind": "messenger"
               },
@@ -1977,17 +1982,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "殿内只剩潮声回荡，石像缝隙渗着咸腥水雾，外面的拍水声一阵紧过一阵。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“海神殿抵御鲛人”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "水影逼近",
+              "text": "乐明珠往石像后缩了缩，朱狐冠却仍从潮气里透出一点红。殿外水影贴着台阶起伏，拍打声越来越密，还看不清那些影子会不会立刻扑进来。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_05.lcq.event.s05_02",
-          "title": "局势中的拔除鱼叉救治乐明珠",
-          "summary": "围绕“拔除鱼叉救治乐明珠”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "鱼叉卡住伤口",
+          "summary": "殿外水声渐远，乐明珠仍被鱼叉卡住，衣襟洇开，呼吸发紧，谁也不敢贸然动手。",
           "sourceEventId": "lcq.event.s05_02",
           "settledWhenAny": [
             [
@@ -2004,10 +2009,15 @@
             "id": "omen.baseline.lcq.stage_05.lcq.event.s05_02",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“拔除鱼叉救治乐明珠”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "乐明珠肩侧仍卡着鲛人留下的鱼叉",
+              "血顺着石缝往下淌，她咬牙不让人乱碰",
+              "殿内再无第二处干净包扎的地方"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.le_mingzhu"
+              },
               {
                 "kind": "messenger"
               },
@@ -2015,17 +2025,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "潮腥未散，石台上只剩半截湿布和珊瑚刃，鱼叉柄随着她呼吸轻轻颤。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“拔除鱼叉救治乐明珠”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "鱼叉未拔",
+              "text": "乐明珠靠着石座，鱼叉还嵌在肩侧，血把衣襟浸深了一圈。她不许人乱拔，又疼得说不全话。殿外水声远了，伤势却一点没有稳住。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_05.lcq.event.s05_03",
-          "title": "局势中的谢艺讲述碧鲮旧战",
-          "summary": "围绕“谢艺讲述碧鲮旧战”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "刀客寻入旧殿",
+          "summary": "海神殿外多了一串新靴印，谢艺带着海湾旧战的残讯进来，目光先落在朱狐冠上。",
           "sourceEventId": "lcq.event.s05_03",
           "settledWhenAny": [
             [
@@ -2042,10 +2052,15 @@
             "id": "omen.baseline.lcq.stage_05.lcq.event.s05_03",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“谢艺讲述碧鲮旧战”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "谢艺从潮退后的石阶找到海神殿",
+              "他先问起碧鲮、鲛族旧战与朱狐冠来历",
+              "程宗扬听着，神色并未立刻放松"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.xie_yi"
+              },
               {
                 "kind": "messenger"
               },
@@ -2053,17 +2068,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "殿门口潮泥上多了一串新靴印，刀鞘轻碰石壁，旧事像被潮气带了进来。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“谢艺讲述碧鲮旧战”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "旧战入殿",
+              "text": "谢艺跨进潮腥未散的殿门，先看清乐明珠头上的朱狐冠，才压低声音谈起碧鲮、鲛族和岳帅旧事。话只开了个头，托付还没落到实处。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_05.lcq.event.s05_07",
-          "title": "局势中的失踪搜寻与鬼王峒使者抵达",
-          "summary": "围绕“失踪搜寻与鬼王峒使者抵达”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "海湾点名未齐",
+          "summary": "残余商队在海湾反复点名，祁远、石刚仍对不上人；阿夕神色发飘，远处尘土里隐有象步。",
           "sourceEventId": "lcq.event.s05_07",
           "settledWhenAny": [
             [
@@ -2080,10 +2095,15 @@
             "id": "omen.baseline.lcq.stage_05.lcq.event.s05_07",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“失踪搜寻与鬼王峒使者抵达”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "商队反复清点，祁远与石刚仍对不上号",
+              "阿夕的应答慢半拍，目光不落在同伴身上",
+              "海湾外传来沉重象步与陌生号令"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.a_xi"
+              },
               {
                 "kind": "messenger"
               },
@@ -2091,17 +2111,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "沙滩上脚印来回重叠，撤离的行囊又被放下，远处白影与铜铃声隐隐传来。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“失踪搜寻与鬼王峒使者抵达”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "点名未齐",
+              "text": "阿夕被叫到时答得慢半拍，目光却不落在同伴身上。岸上还在找祁远和石刚，尘土那头却响起沉重象步。队伍一时不知该撤还是该停。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_05.lcq.event.s05_04",
-          "title": "局势中的以兵器生意化解危机",
-          "summary": "围绕“以兵器生意化解危机”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "兵器说辞将起",
+          "summary": "碧鲮寨里对商队来历的盘问转了口风，祁远开始把话往兵器成色和交货上引。",
           "sourceEventId": "lcq.event.s05_04",
           "settledWhenAny": [
             [
@@ -2118,10 +2138,15 @@
             "id": "omen.baseline.lcq.stage_05.lcq.event.s05_04",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“以兵器生意化解危机”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "碧鲮老者当众追问商队所携货物",
+              "祁远改口谈起军器成色与交货",
+              "阁罗听着，并未立刻给出态度"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.qi_yuan"
+              },
               {
                 "kind": "messenger"
               },
@@ -2129,17 +2154,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "寨门内贡物与刀枪被分开堆放，议事棚里讨价还价的声音压过了押送的吆喝。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“以兵器生意化解危机”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "货单改口",
+              "text": "祁远被当众问住后，忽然把货单往兵器上拨，报出成色和回扣口风。阁罗坐在棚里听着，手指敲着象牙椅，还没说这笔买卖算不算数。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_05.lcq.event.s05_06",
-          "title": "局势中的查出鬼王峒眼线",
-          "summary": "围绕“查出鬼王峒眼线”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "军器闲话有耳",
+          "summary": "兵器谈完后，云苍峰把购置军器的用意压低再问；棚壁外有人影停得过久。",
           "sourceEventId": "lcq.event.s05_06",
           "settledWhenAny": [
             [
@@ -2156,10 +2181,15 @@
             "id": "omen.baseline.lcq.stage_05.lcq.event.s05_06",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“查出鬼王峒眼线”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "云苍峰把军器用途的疑问压到极低",
+              "席间轻轻带过碧姬与小紫的名字",
+              "棚外廊柱后有呼吸声停了太久"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.yun_cang_feng"
+              },
               {
                 "kind": "messenger"
               },
@@ -2167,17 +2197,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "议事棚竹帘未完全落下，廊外脚步停停走走，像有人贴着柱影听里面的话。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“查出鬼王峒眼线”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "帘外有耳",
+              "text": "云苍峰把声音压到几乎只有对座听得见，问起鬼王峒买兵器究竟要对付谁。竹帘外廊柱边有人影停得过久，里面的话还没收住。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_05.lcq.event.s05_16",
-          "title": "局势中的斩杀蛇傀解救碧鲮族",
-          "summary": "围绕“斩杀蛇傀解救碧鲮族”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "村寨火令将下",
+          "summary": "碧鲮寨外火把加了倍，蛇傀随从开始泼油封路，村民被驱到空地，护卫暗中换位。",
           "sourceEventId": "lcq.event.s05_16",
           "settledWhenAny": [
             [
@@ -2194,10 +2224,19 @@
             "id": "omen.baseline.lcq.stage_05.lcq.event.s05_16",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“斩杀蛇傀解救碧鲮族”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "寨口火把骤增，油坛被搬到茅檐下",
+              "蛇傀随从驱赶碧鲮族人聚到空地",
+              "商队护卫暗中调整了站位"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.wu_er_lang"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "lcq.character.np004"
+              },
               {
                 "kind": "messenger"
               },
@@ -2205,17 +2244,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "茅屋顶被火光照得发白，空地上哭声被呵止，油味盖过了海风。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“斩杀蛇傀解救碧鲮族”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "火把围寨",
+              "text": "武二郎看见油坛一坛坛靠上茅檐，蛇傀随从把人往空地赶。火把比先前密了一圈，还没有人点着第一间屋，队伍却已经悄悄换了站位。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_05.lcq.event.s05_08",
-          "title": "局势中的古道废墟迎击鬼战士",
-          "summary": "围绕“古道废墟迎击鬼战士”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "废墟现出鬼脸",
+          "summary": "小紫把失散的人带到龟纹古道废墟，石壁上的鬼脸印记与远处甲声同时出现。",
           "sourceEventId": "lcq.event.s05_08",
           "settledWhenAny": [
             [
@@ -2232,10 +2271,19 @@
             "id": "omen.baseline.lcq.stage_05.lcq.event.s05_08",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“古道废墟迎击鬼战士”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "废墟石壁上现出新鲜的鬼脸营地标记",
+              "小紫认路时不再说笑，只指着深处",
+              "易彪让商队散开，盾牌往缺口处挪"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.xiao_zi"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "lcq.character.np004"
+              },
               {
                 "kind": "messenger"
               },
@@ -2243,17 +2291,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "古道碎石上多了新靴印，残垣后甲叶轻响，鬼脸印记的颜料还没干透。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“古道废墟迎击鬼战士”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "鬼脸印记",
+              "text": "小紫停在残垣下，指了指石壁上未干的鬼脸印记。易彪已经让人把盾牌往缺口挪，远处甲声一阵密过一阵，还没人看清来者人数。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_05.lcq.event.s05_05",
-          "title": "局势中的武二郎斩杀巫师达古",
-          "summary": "围绕“武二郎斩杀巫师达古”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "巫师压阵围来",
+          "summary": "废墟外鬼战士又添了一层，巫师达古在阵后摇铃，谈判的空隙越来越短。",
           "sourceEventId": "lcq.event.s05_05",
           "settledWhenAny": [
             [
@@ -2270,10 +2318,19 @@
             "id": "omen.baseline.lcq.stage_05.lcq.event.s05_05",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“武二郎斩杀巫师达古”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "达古在阵后摇铃，鬼战士又逼近一排",
+              "易彪的防线被压得只剩废墟缺口",
+              "武二郎把五虎断门刀从布里抽了出来"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.wu_er_lang"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "lcq.character.np004"
+              },
               {
                 "kind": "messenger"
               },
@@ -2281,17 +2338,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "废墟烟尘里铃声乱颤，盾牌被撞得发闷，阵后羽毛冠在暮色里一晃一晃。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“武二郎斩杀巫师达古”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "铃声压阵",
+              "text": "达古的铃声一紧，前排鬼战士又往废墟缺口里挤。易彪还在喊着稳住，武二郎已经抽出那把断门刀，刀背贴着肩，还没跨出第一步。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_05.lcq.event.s05_09",
-          "title": "局势中的一阳境逼退阴煞",
-          "summary": "围绕“一阳境逼退阴煞”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "阴煞压上营地",
+          "summary": "花苗营地篝火发青，阴煞的冷雾贴地而来，苏荔与程宗扬被隔在营帐一侧。",
           "sourceEventId": "lcq.event.s05_09",
           "settledWhenAny": [
             [
@@ -2308,10 +2365,15 @@
             "id": "omen.baseline.lcq.stage_05.lcq.event.s05_09",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“一阳境逼退阴煞”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "营帐外冷雾贴地，篝火颜色发青",
+              "苏荔被阴风隔在帐索这边，呼喊传不远",
+              "程宗扬丹田处真气乱撞，胸口发烫"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.su_li"
+              },
               {
                 "kind": "messenger"
               },
@@ -2319,17 +2381,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "花苗营盘的铜铃乱响，帐布被阴风鼓起，远处哭喊夹着野兽般的嘶鸣。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“一阳境逼退阴煞”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "青火阴雾",
+              "text": "苏荔抓住帐索，阴雾已经漫过脚面，篝火绿得不像人间火。程宗扬只觉得丹田里有东西往外顶，冷雾却还没退，帐外的嘶鸣一声接一声。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_05.lcq.event.s05_10",
-          "title": "局势中的结成探查鬼王峒的同行约定",
-          "summary": "围绕“结成探查鬼王峒的同行约定”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "旧伤与探路议",
+          "summary": "营地伤亡未清，谢艺带回旧伤复发的凝羽；云苍峰与苏荔同时提起探查鬼王峒。",
           "sourceEventId": "lcq.event.s05_10",
           "settledWhenAny": [
             [
@@ -2346,10 +2408,19 @@
             "id": "omen.baseline.lcq.stage_05.lcq.event.s05_10",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“结成探查鬼王峒的同行约定”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "凝羽被安置在帐内，旧伤处绷带又渗了色",
+              "云苍峰提出以平等合作探查鬼王峒",
+              "苏荔同时说到红苗、黑獠的联络"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.yun_cang_feng"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.su_li"
+              },
               {
                 "kind": "messenger"
               },
@@ -2357,17 +2428,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "伤员帐外灯火通宵，三方的人分开坐着，地图在膝上摊开又合上。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“结成探查鬼王峒的同行约定”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "三方同席",
+              "text": "谢艺把凝羽安顿进帐，云苍峰才把话头转到鬼王峒。苏荔也提起红苗那边的联络，三方都说只谈合作、不谈从属，条文却还没落成一句。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_05.lcq.event.s05_11",
-          "title": "局势中的随弥骨进入鬼王峒",
-          "summary": "围绕“随弥骨进入鬼王峒”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "峒口接待发僵",
+          "summary": "鬼王峒入口，接待者要单独带走苏荔，武二郎刀已离鞘半寸，云苍峰还在打圆场。",
           "sourceEventId": "lcq.event.s05_11",
           "settledWhenAny": [
             [
@@ -2384,10 +2455,19 @@
             "id": "omen.baseline.lcq.stage_05.lcq.event.s05_11",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“随弥骨进入鬼王峒”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "峒口接待者伸手要单独领走苏荔",
+              "武二郎挡在她身前，刀离鞘半寸",
+              "洞窟深处灯火曲折，像没有直路"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.wu_er_lang"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.su_li"
+              },
               {
                 "kind": "messenger"
               },
@@ -2395,17 +2475,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "峒门石刻鬼脸滴着潮水，里面灯火一层套一层，奴隶区的铁链声隐约传出。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“随弥骨进入鬼王峒”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "峒口对峙",
+              "text": "接待者伸手要领苏荔单独进去，武二郎一步横过去，刀已离鞘半寸。云苍峰和谢艺同时压住场面，峒口灯火弯成迷宫，还没人迈进第一层洞。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_05.lcq.event.s05_12",
-          "title": "局势中的白纸信笺与达古死讯",
-          "summary": "围绕“白纸信笺与达古死讯”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "白纸信笺摊开",
+          "summary": "白夷信笺展开仍是一张白纸，谢艺神色一沉；小紫望着阁罗，话到嘴边又咽回去。",
           "sourceEventId": "lcq.event.s05_12",
           "settledWhenAny": [
             [
@@ -2422,10 +2502,19 @@
             "id": "omen.baseline.lcq.stage_05.lcq.event.s05_12",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“白纸信笺与达古死讯”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "白夷族送来的信笺展开后仍是空白",
+              "谢艺盯着白纸，像在另想去处",
+              "小紫几次张口，目光却落在阁罗身上"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.xie_yi"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.xiao_zi"
+              },
               {
                 "kind": "messenger"
               },
@@ -2433,17 +2522,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "石厅灯火把白纸照得刺眼，座中笑语未停，有人已经把茶盏放得太重。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“白纸信笺与达古死讯”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "信上无字",
+              "text": "谢艺把信笺翻过来，正反都是空白。小紫坐在下首，几次把话送到唇边，又去看阁罗的脸色。厅里笑语还在，座上的人却都听清了那一声没说完的停顿。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_05.lcq.event.s05_13",
-          "title": "局势中的阁罗召来碧姬",
-          "summary": "围绕“阁罗召来碧姬”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "使者讳言召人",
+          "summary": "阁罗只肯展示峒中一部分实力，关键问句一律推开，随即命人去唤一位被称作“碧奴”的女子。",
           "sourceEventId": "lcq.event.s05_13",
           "settledWhenAny": [
             [
@@ -2460,10 +2549,15 @@
             "id": "omen.baseline.lcq.stage_05.lcq.event.s05_13",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“阁罗召来碧姬”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "阁罗谈实力时只亮出半扇石厅",
+              "问到如何辖制诸族，他一律岔开",
+              "侍从被打发去唤一位叫“碧奴”的人"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "lcq.character.np006"
+              },
               {
                 "kind": "messenger"
               },
@@ -2471,17 +2565,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "石厅深处帷幕未开，铜环轻响，侍从的脚步消失在更里面的甬道。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“阁罗召来碧姬”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "半厅未开",
+              "text": "阁罗把话题停在半扇石厅里，问到辖制诸族的关节便笑着推开。他抬手让人去唤“碧奴”，帷幕后铜环一响，来人还没有露脸。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_05.lcq.event.s05_14",
-          "title": "局势中的机关惊动后从山洞脱困",
-          "summary": "围绕“机关惊动后从山洞脱困”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "石厅机关骤响",
+          "summary": "深处机关被触动，阁罗中断酒会起身；石厅一角岩缝错位，看守的队形乱了片刻。",
           "sourceEventId": "lcq.event.s05_14",
           "settledWhenAny": [
             [
@@ -2498,10 +2592,15 @@
             "id": "omen.baseline.lcq.stage_05.lcq.event.s05_14",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“机关惊动后从山洞脱困”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "峒内深处传来机关齿轮与落石声",
+              "阁罗扔下酒盏，带着亲随赶去",
+              "岩壁近处石缝错开一线，潮气涌出"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "lcq.character.np006"
+              },
               {
                 "kind": "messenger"
               },
@@ -2509,17 +2608,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "灯火晃动，石屑从顶上簌簌落下，看守互相喊着封口，脚步却对不齐。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“机关惊动后从山洞脱困”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "机关骤响",
+              "text": "深处一声机括，阁罗的酒盏磕在案上，人已经往甬道里走。岩壁这边石缝错开一线，潮气涌出来，看守队形乱了半息，还没人重新封住那条缝。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_05.lcq.event.s05_15",
-          "title": "局势中的确认红苗受控并护住苏荔",
-          "summary": "围绕“确认红苗受控并护住苏荔”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "红苗目光发空",
+          "summary": "山洞里遇见的红苗盟友应答发空，丹宸眼神对不上人；转回石厅时，阁罗的手已经伸向苏荔。",
           "sourceEventId": "lcq.event.s05_15",
           "settledWhenAny": [
             [
@@ -2536,10 +2635,19 @@
             "id": "omen.baseline.lcq.stage_05.lcq.event.s05_15",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“确认红苗受控并护住苏荔”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "红苗数人站得整齐，问话却答非所问",
+              "丹宸目光发直，认不出同行的苏荔",
+              "阁罗回厅后要把苏荔单独留下"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.dan_chen"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.su_li"
+              },
               {
                 "kind": "messenger"
               },
@@ -2547,10 +2655,10 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "洞壁灯火把人脸照得发白，脚步齐得不像活人，石厅门口又响起阁罗的传召。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“确认红苗受控并护住苏荔”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "眼神发空",
+              "text": "苏荔唤了丹宸一声，对方只机械地点头，目光对不实。转出山洞，阁罗已经在厅口等着要单独留下她。程宗扬开口要见碧姬，话还悬在半空。"
             }
           }
         }

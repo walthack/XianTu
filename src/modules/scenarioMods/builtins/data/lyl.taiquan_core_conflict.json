@@ -4332,8 +4332,8 @@
       "situations": [
         {
           "id": "world-sim.baseline.lyl.taiquan_core_conflict.lyl.event.find_exit",
-          "title": "局势中的寻找出口",
-          "summary": "围绕“寻找出口”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "迷窟出口难辨",
+          "summary": "蚁丘迷窟岔道回绕，出口方向互相矛盾；伤者难行，向导一时失神，行路次序被迫放慢。",
           "sourceEventId": "lyl.event.find_exit",
           "settledWhenAny": [
             [
@@ -4350,10 +4350,19 @@
             "id": "omen.baseline.lyl.taiquan_core_conflict.lyl.event.find_exit",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“寻找出口”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "洞壁蚁道交错，气流从两三处裂隙轮流涌出",
+              "虞白樱脚踝承力不稳，步幅比先前更短",
+              "徐君房龟甲滑落膝边，口中仍念着路线却对不上眼前岔口"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.yu_bai_ying"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.xu_junfang"
+              },
               {
                 "kind": "messenger"
               },
@@ -4361,17 +4370,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "迷窟深处回声叠成几路风声，石缝里渗出潮气与蚁酸味，远处裂隙忽明忽暗，一时分不清哪条能通出去。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“寻找出口”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "岔风不定",
+              "text": "蚁道在眼前分成几股，气流忽左忽右。虞白樱脚踝一软，只好扶壁缓行；徐君房摸着龟甲对岔口，嘴里报的方位却和脚下裂缝对不上。出口像近又远，只能先把眼前这一段走稳。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.taiquan_core_conflict.lyl.event.yu_baiying_truce",
-          "title": "局势中的虞白樱的临时合作",
-          "summary": "围绕“虞白樱的临时合作”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "伤踝牵住杀意",
+          "summary": "虞白樱脚踝已伤，敌友界线未明，她一边戒备一边不得不借力，开口条件尚未落地。",
           "sourceEventId": "lyl.event.yu_baiying_truce",
           "settledWhenAny": [
             [
@@ -4388,10 +4397,15 @@
             "id": "omen.baseline.lyl.taiquan_core_conflict.lyl.event.yu_baiying_truce",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“虞白樱的临时合作”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "她银发玉冠仍在，却把重心压向未伤的一侧",
+              "目光扫过程宗扬时冷硬，落在自己脚踝上又收紧",
+              "唇边欲言又止，像在权衡开口会不会把自己卖死"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.yu_bai_ying"
+              },
               {
                 "kind": "messenger"
               },
@@ -4399,17 +4413,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "迷窟地面湿滑，每一步都会牵动伤处。远处兽爪刮石的余响尚未散尽，近处只有她压抑的呼吸和短促的停顿。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“虞白樱的临时合作”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "借力未决",
+              "text": "虞白樱撑着石壁，脚踝不敢全落。她仍把人当未辨敌友的变数，可伤处一抽，杀意便不得不让路。她抬眼又垂下，话在齿间转了一圈，合作的条件还没说出口。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.taiquan_core_conflict.lyl.event.yin_fulan_aid",
-          "title": "局势中的尹馥兰出手相助",
-          "summary": "围绕“尹馥兰出手相助”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "近处传来援讯",
+          "summary": "核心区边缘有人压低声音报潘金莲换防，尹馥兰与何漪莲的行踪交错出现，援手真假未明。",
           "sourceEventId": "lyl.event.yin_fulan_aid",
           "settledWhenAny": [
             [
@@ -4426,10 +4440,19 @@
             "id": "omen.baseline.lyl.taiquan_core_conflict.lyl.event.yin_fulan_aid",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“尹馥兰出手相助”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "尹馥兰立在阴影里，先报埋伏再看人脸色",
+              "何漪莲笑意不散，却把退路和会合点默默记清",
+              "两人口信对不上：一说要道已封，一说尚有缝可钻"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.yin_fulan"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "lyl.character.he_yilian"
+              },
               {
                 "kind": "messenger"
               },
@@ -4437,17 +4460,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "核心区风声发紧，远处阵纹明灭不定。石廊拐角有人影一闪即收，像在等你走近，又像随时会改口离开。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“尹馥兰出手相助”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "口信相左",
+              "text": "刚出蚁丘一带，尹馥兰便压着嗓子说潘金莲在要道布了人。何漪莲跟在侧后，笑着把会合点又改了一遍。两人说的封路方位并不一致，援手伸到半途，还没人敢拍板跟不跟。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.taiquan_core_conflict.lyl.event.plan_counterattack",
-          "title": "局势中的制定反制计划",
-          "summary": "围绕“制定反制计划”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "反制尚未落子",
+          "summary": "尹馥兰与何漪莲围着核心区地形低声争执，阴阳鱼只在丹田里发热，正面硬闯还是绕伏都未定。",
           "sourceEventId": "lyl.event.plan_counterattack",
           "settledWhenAny": [
             [
@@ -4464,10 +4487,19 @@
             "id": "omen.baseline.lyl.taiquan_core_conflict.lyl.event.plan_counterattack",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“制定反制计划”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "尹馥兰用指节在石上划出两条互相打架的路线",
+              "何漪莲把退路和伏点分开记，不肯先说押哪边",
+              "丹田里阴阳鱼发沉发热，却未给出可用的去向"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.yin_fulan"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "lyl.character.he_yilian"
+              },
               {
                 "kind": "messenger"
               },
@@ -4475,17 +4507,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "核心区廊道回风带沙，阵纹在脚下明灭。远处换防脚步忽密忽疏，近处只有压低的争执和未合上的两套画线。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“制定反制计划”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "两线相争",
+              "text": "尹馥兰在石面上画出迎面与绕伏两条线，何漪莲只把退路圈实，不肯先押一边。阴阳鱼在腹中发热发沉，像有力可用，却还没人说清该把它对准哪条路。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.taiquan_core_conflict.lyl.event.pan_jinlian_ambush",
-          "title": "局势中的潘金莲的伏击",
-          "summary": "围绕“潘金莲的伏击”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "要道换防封口",
+          "summary": "潘金莲仍在核心区搜捕，关键路口灯火与人影对调，封路与空岗的传言互相打架。",
           "sourceEventId": "lyl.event.pan_jinlian_ambush",
           "settledWhenAny": [
             [
@@ -4502,10 +4534,15 @@
             "id": "omen.baseline.lyl.taiquan_core_conflict.lyl.event.pan_jinlian_ambush",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“潘金莲的伏击”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "白衣人影在要道灯火后一闪，口罩下声息极轻",
+              "原先可通的石廊被新布的符签和绊线拦住",
+              "远处口令对不上号，有人说空岗，有人说加哨"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.pan_jinlian"
+              },
               {
                 "kind": "messenger"
               },
@@ -4513,17 +4550,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "核心区要道灯火错位，风里带着药香与剑气。石廊下新添的符签未干，脚步声时近时远，一时分不清是搜还是等。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“潘金莲的伏击”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "要道改哨",
+              "text": "前方石廊被符签和绊线新拦了一截。灯火后掠过一抹白衣与薄纱口罩，声息压得很低。有人报空岗，有人报加哨，潘金莲的人到底卡在哪一口，眼前还对不上。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.taiquan_core_conflict.lyl.event.yin_yang_counter",
-          "title": "局势中的阴阳鱼反击",
-          "summary": "围绕“阴阳鱼反击”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "阴阳鱼发热沉",
+          "summary": "阴阳鱼在丹田里积力未放，潘金莲的追线未断，尹馥兰只敢点出配合的时机而不敢保证能翻盘。",
           "sourceEventId": "lyl.event.yin_yang_counter",
           "settledWhenAny": [
             [
@@ -4540,10 +4577,19 @@
             "id": "omen.baseline.lyl.taiquan_core_conflict.lyl.event.yin_yang_counter",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“阴阳鱼反击”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "丹田阴阳鱼沉热一阵、凉一阵，与阵纹明灭同拍",
+              "潘金莲的搜线仍贴着廊道，未退也未合围",
+              "尹馥兰只说“等这一息”，手却停在半空不敢先动"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.yin_fulan"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.pan_jinlian"
+              },
               {
                 "kind": "messenger"
               },
@@ -4551,17 +4597,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "核心区阵纹忽亮忽暗，热息从石缝里顶上来。远处剑气擦墙而过，近处只有腹中那一点沉热，像要应、又还没应。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“阴阳鱼反击”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "力在未放",
+              "text": "阴阳鱼在丹田里一阵沉热，与脚下阵纹同起同落。廊外白衣搜线未断，尹馥兰只抬手示意等这一息，指尖却悬着没落。力像到了喉口，往哪边吐，谁也还没开口。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.taiquan_core_conflict.lyl.event.decide_yin_fulan_fate",
-          "title": "局势中的局势收尾",
-          "summary": "围绕“局势收尾”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "余波未定去留",
+          "summary": "核心区喧声暂歇，尹馥兰察言观色不敢先请命，何漪莲把退路与依附一并掂量，去留都还悬着。",
           "sourceEventId": "lyl.event.decide_yin_fulan_fate",
           "settledWhenAny": [
             [
@@ -4578,10 +4624,19 @@
             "id": "omen.baseline.lyl.taiquan_core_conflict.lyl.event.decide_yin_fulan_fate",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“局势收尾”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "尹馥兰敛袖立在侧后，目光跟着人走却不开口",
+              "何漪莲笑意发薄，反复清点身上可带走的信物",
+              "两人都不问潘金莲下落，只问下一站还认不认她们"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.yin_fulan"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "lyl.character.he_yilian"
+              },
               {
                 "kind": "messenger"
               },
@@ -4589,10 +4644,10 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "核心区余风带着焦味与药香，灯火未全灭。人影在廊边停停走走，像在等一句收编，也像在等一句打发。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“局势收尾”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "去留两难",
+              "text": "喧声落后，尹馥兰只把袖口敛紧，站在能看见脸色的地方。何漪莲仍带着笑，却把可带走的信物一件件摸过。没人敢问方才那一头落向何处，只等一句：接下来还要不要她们跟上。"
             }
           }
         }

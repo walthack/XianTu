@@ -6,12 +6,61 @@ import test from 'node:test';
 import { loadTs } from './loadTs.mjs';
 
 const dataDir = new URL('../src/modules/scenarioMods/builtins/data/', import.meta.url);
+const refinementOverlay = new URL('../mod-kit/world-sim-refinements/qingyu-yunlong.json', import.meta.url);
 const forbiddenOmenText = /(机会卡|世界回合|最后\s*\d+\s*轮|剩余\s*\d+\s*回合|倒计时|将死|必死|终将(死亡|身亡|登基)|注定(死亡|身亡|登基)|必然(死亡|身亡|登基)|必定(死|登基|身亡)|一定(死|身亡|登基)|已经身亡|已经登基)/u;
+const baselineOmenText = /(安排正在重新核对|相关人物、口信或行路次序|还看不出事情会往哪边走|风声有变)/u;
 
 async function loadBuiltins() {
   const files = (await readdir(new URL(dataDir))).filter(file => file.endsWith('.json') && file !== 'manifest.json').sort();
   return Promise.all(files.map(async file => JSON.parse(await readFile(join(dataDir.pathname, file), 'utf8'))));
 }
+
+test('Qingyu and Yunlong ship the complete tracked world-sim refinement overlay', async () => {
+  const mods = await loadBuiltins();
+  const modsById = new Map(mods.map(mod => [mod.manifest.id, mod]));
+  const overlay = JSON.parse(await readFile(refinementOverlay, 'utf8'));
+  const targetMods = mods.filter(mod => mod.manifest.id.startsWith('lcq.') || mod.manifest.id.startsWith('lyl.'));
+  const baselineSituations = targetMods.flatMap(mod => mod.scenario.worldSimulation.situations)
+    .filter(situation => situation.id.startsWith('world-sim.baseline.'));
+
+  assert.deepEqual(overlay.books, ['qingyu', 'yunlong']);
+  assert.equal(targetMods.length, 26);
+  assert.equal(baselineSituations.length, 251);
+  assert.equal(overlay.entries.length, 251);
+  assert.equal(new Set(overlay.entries.map(entry => entry.situationId)).size, 251);
+
+  for (const entry of overlay.entries) {
+    const mod = modsById.get(entry.stageId);
+    assert.ok(mod, `unknown refinement stage ${entry.stageId}`);
+    const situation = mod.scenario.worldSimulation.situations.find(item => item.id === entry.situationId);
+    assert.ok(situation, `unknown refinement situation ${entry.situationId}`);
+    assert.equal(situation.sourceEventId, entry.sourceEventId, entry.situationId);
+    assert.equal(situation.title, entry.title, entry.situationId);
+    assert.equal(situation.summary, entry.summary, entry.situationId);
+    assert.deepEqual(situation.omen.observableFacts, entry.observableFacts, entry.situationId);
+    assert.equal(situation.omen.environmentFallback, entry.environmentFallback, entry.situationId);
+    assert.deepEqual(situation.omen.presentation, entry.presentation, entry.situationId);
+    assert.equal(baselineOmenText.test([
+      entry.title,
+      entry.summary,
+      ...entry.observableFacts,
+      entry.environmentFallback,
+      entry.presentation.title,
+      entry.presentation.text,
+    ].join('｜')), false, `${entry.situationId}: generic baseline wording remains`);
+
+    const sourceEvent = mod.scenario.events.find(event => event.id === entry.sourceEventId);
+    const allowedCharacters = new Set(sourceEvent?.relatedCharacterIds || []);
+    for (const characterId of entry.preferredCharacterIds) {
+      assert.equal(allowedCharacters.has(characterId), true, `${entry.situationId}: transmitter crosses the event knowledge boundary`);
+    }
+    assert.deepEqual(
+      situation.omen.transmitters.slice(-2).map(item => item.kind),
+      ['messenger', 'environment'],
+      `${entry.situationId}: fallback transmitters missing`,
+    );
+  }
+});
 
 test('all builtin stages expose a validated world-sim baseline without changing the companion default', async () => {
   const { validateScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');

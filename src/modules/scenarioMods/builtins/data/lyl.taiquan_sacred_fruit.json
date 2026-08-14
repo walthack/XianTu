@@ -6259,8 +6259,8 @@
       "situations": [
         {
           "id": "world-sim.baseline.lyl.taiquan_sacred_fruit.lyl.event.taiquan_sacred_fruit_01",
-          "title": "局势中的小瀛洲战后",
-          "summary": "围绕“小瀛洲战后”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "翠微园里伤担未歇",
+          "summary": "小瀛洲撤回的人马挤满翠微园廊下，伤药与点名同时进行，缺员名单对不齐。",
           "sourceEventId": "lyl.event.taiquan_sacred_fruit_01",
           "settledWhenAny": [
             [
@@ -6277,8 +6277,9 @@
             "id": "omen.baseline.lyl.taiquan_sacred_fruit.lyl.event.taiquan_sacred_fruit_01",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“小瀛洲战后”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "翠微园正厅被改成临时伤铺，药气压过花香",
+              "直属营的旗帜收得凌乱，点名时有人不应",
+              "廊下对游婵去向说法不一，谁也不肯说死"
             ],
             "transmitters": [
               {
@@ -6288,17 +6289,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "翠微园深处传来换水、撕布和压低嗓门的点名，门槛外泥印新旧叠在一起。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“小瀛洲战后”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "伤铺未散",
+              "text": "翠微园廊下横着未干的担架，李师师一系的人来回递药，直属营旗帜收得皱。有人问游婵可曾同回，回答却对不上。郭槐那边被冷淡打发出门，门里仍在补缺员。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.taiquan_sacred_fruit.lyl.event.taiquan_sacred_fruit_02",
-          "title": "局势中的黑魔海撤出谈判",
-          "summary": "围绕“黑魔海撤出谈判”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "花厅里撤军条款",
+          "summary": "翠微园花厅灯火未灭，黑魔海撤出宋境的条件被拆成数份，人手分头试探。",
           "sourceEventId": "lyl.event.taiquan_sacred_fruit_02",
           "settledWhenAny": [
             [
@@ -6315,8 +6316,9 @@
             "id": "omen.baseline.lyl.taiquan_sacred_fruit.lyl.event.taiquan_sacred_fruit_02",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“黑魔海撤出谈判”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "花厅案上摊开几份措辞互相顶牛的撤军条陈",
+              "秦桧进出时笑容谦退，袖里却多一卷北地来笺",
+              "门口侍从被吩咐分头传话，不许同路同行"
             ],
             "transmitters": [
               {
@@ -6326,17 +6328,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "花厅窗纸透出灯影，纸页翻动与压低的争执交替响起，院里候信的人换了一拨又一拨。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“黑魔海撤出谈判”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "条款未合",
+              "text": "翠微园花厅里，撤出宋境的条件被拆得七零八落。秦桧仍带着那点谦虚笑意进出，北地来笺却压在袖底。门口已有人分头传话，谁也不肯先把口封死。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.taiquan_sacred_fruit.lyl.event.taiquan_sacred_fruit_03",
-          "title": "局势中的高俅秘辛",
-          "summary": "围绕“高俅秘辛”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "高俅约在僻处",
+          "summary": "高俅避开正厅，改在僻室见客，宫廷里关于宋主生母的旧话又被压低重提。",
           "sourceEventId": "lyl.event.taiquan_sacred_fruit_03",
           "settledWhenAny": [
             [
@@ -6353,8 +6355,9 @@
             "id": "omen.baseline.lyl.taiquan_sacred_fruit.lyl.event.taiquan_sacred_fruit_03",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“高俅秘辛”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "高俅 encel? 侍从把闲人从侧廊清走，只留一间闭窗小室",
+              "宫里传来两套互相打架的身世说法，韦后名号夹在其中",
+              "程宗扬被约去密谈，帖上不写事由只写亥时"
             ],
             "transmitters": [
               {
@@ -6364,17 +6367,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "侧廊灯火收得只剩一盏，窗纸外脚步特意绕开，室内偶有压低的宫廷旧称。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“高俅秘辛”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "密帖亥时",
+              "text": "高俅那边把闲人从侧廊清净，只留一间闭窗小室。宫里关于宋主生母的旧话又冒出来，说法却彼此打架。一份不写事由的帖子约在亥时，门外仍可装作没看见。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.taiquan_sacred_fruit.lyl.event.taiquan_sacred_fruit_04",
-          "title": "局势中的云涛观迷楼",
-          "summary": "围绕“云涛观迷楼”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "云涛观门缝有风",
+          "summary": "陈琳领路往云涛观迷楼，楼里机关齿轮偶有轻响，有人影在夹层间一闪。",
           "sourceEventId": "lyl.event.taiquan_sacred_fruit_04",
           "settledWhenAny": [
             [
@@ -6391,8 +6394,9 @@
             "id": "omen.baseline.lyl.taiquan_sacred_fruit.lyl.event.taiquan_sacred_fruit_04",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“云涛观迷楼”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "云涛观迷楼底层的踏板被新扫过，灰尘却在缝里成线",
+              "陈琳把随从留在外廊，自己先试门槛机关",
+              "夹墙后有女子气息，像小紫一系的脂粉混着机油"
             ],
             "transmitters": [
               {
@@ -6402,17 +6406,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "迷楼外廊风穿过暗格，齿轮轻咬一声又停住，灯影在回廊里折了两折。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“云涛观迷楼”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "迷楼轻响",
+              "text": "陈琳把人留在云涛观外廊，自己先试迷楼门槛。踏板新扫过，缝里灰尘却成线；夹墙后一闪脂粉气，像小紫一系的人藏在机关后。楼里齿轮咬了一下，又没再动。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.taiquan_sacred_fruit.lyl.event.taiquan_sacred_fruit_05",
-          "title": "局势中的太泉钥匙",
-          "summary": "围绕“太泉钥匙”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "迷楼里问起钥匙",
+          "summary": "小紫逼梦娘开口，岳鹏举旧事和太泉熊谷的数字在墙缝间被反复核校。",
           "sourceEventId": "lyl.event.taiquan_sacred_fruit_05",
           "settledWhenAny": [
             [
@@ -6429,8 +6433,9 @@
             "id": "omen.baseline.lyl.taiquan_sacred_fruit.lyl.event.taiquan_sacred_fruit_05",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“太泉钥匙”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "梦娘被带到迷楼深处，说话时目光总往暗格上瞟",
+              "墙灰里隐约刻着一四七五，像方位又像口令",
+              "有人翻找旧钥孔，钥匙本身却未见影"
             ],
             "transmitters": [
               {
@@ -6440,17 +6445,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "迷楼夹层里烛火发青，数字被用指甲一遍遍描过，钥孔周围的漆皮新被抠开。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“太泉钥匙”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "数字未解",
+              "text": "小紫让梦娘在迷楼深处把话说明白。岳鹏举当年是否藏过钥匙，说法发虚；墙灰里一四七五几个字被反复描过，像太泉熊谷的口令。钥孔在，钥匙却还没露头。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.taiquan_sacred_fruit.lyl.event.taiquan_sacred_fruit_06",
-          "title": "局势中的盘江股东大会",
-          "summary": "围绕“盘江股东大会”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "程氏账房灯火通明",
+          "summary": "盘江程氏首次股东大会的坐席与票券连夜铺开，分红、增发和粮业主业吵成三摊。",
           "sourceEventId": "lyl.event.taiquan_sacred_fruit_06",
           "settledWhenAny": [
             [
@@ -6467,8 +6472,9 @@
             "id": "omen.baseline.lyl.taiquan_sacred_fruit.lyl.event.taiquan_sacred_fruit_06",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“盘江股东大会”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "四月二十六的告示贴在账房外，墨迹未干",
+              "分红册与新股票样张分两案摊开，有人按印有人拒签",
+              "粮栈管事进进出出，说要把经营改成以粮为主"
             ],
             "transmitters": [
               {
@@ -6478,17 +6484,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "账房灯火通夜，算盘与印泥味压过茶香，廊下候点名的股东把靴底蹭得发亮。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“盘江股东大会”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "票券未定",
+              "text": "盘江程氏账房外贴着四月二十六的会告。分红册和股票样张分两案摊着，按印的与拒签的肩挨肩。粮栈管事反复进出，只说往后要以粮食作主业，其余条款还在桌上。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.taiquan_sacred_fruit.lyl.event.taiquan_sacred_fruit_07",
-          "title": "局势中的抵达苍澜镇",
-          "summary": "围绕“抵达苍澜镇”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "苍澜镇物价陡涨",
+          "summary": "入苍澜镇后衣甲兵器标价翻倍，店家把太泉方向的风险写进价签里。",
           "sourceEventId": "lyl.event.taiquan_sacred_fruit_07",
           "settledWhenAny": [
             [
@@ -6505,8 +6511,9 @@
             "id": "omen.baseline.lyl.taiquan_sacred_fruit.lyl.event.taiquan_sacred_fruit_07",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“抵达苍澜镇”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "镇口货摊把冬衣与兵刃并排，价码比临安高出一截",
+              "店伙劝人多备厚裳，说往太泉去的路上风硬",
+              "客栈名册上短日里添了好几路生面孔"
             ],
             "transmitters": [
               {
@@ -6516,17 +6523,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "苍澜镇街面硫磺味若有若无，店招被风掀起一角，价牌上的数字被人改过不止一次。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“抵达苍澜镇”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "价签改过",
+              "text": "苍澜镇口把冬衣和兵刃摆在一处，价码比临安陡了一截。店伙只劝多备厚裳，说往太泉去的风硬。客栈名册上生面孔连日增加，谁先动身，街上还没有定论。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.taiquan_sacred_fruit.lyl.event.taiquan_sacred_fruit_08",
-          "title": "局势中的殇侯出手",
-          "summary": "围绕“殇侯出手”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "殇侯与君雄飞对峙",
+          "summary": "苍澜镇上两路强者气息对上，赤婴粉的气味在巷风里一闪即收，围观被清开。",
           "sourceEventId": "lyl.event.taiquan_sacred_fruit_08",
           "settledWhenAny": [
             [
@@ -6543,8 +6550,9 @@
             "id": "omen.baseline.lyl.taiquan_sacred_fruit.lyl.event.taiquan_sacred_fruit_08",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“殇侯出手”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "殇侯立在窄巷尽头，神色淡得像在等人自己先耗力",
+              "君雄飞一侧真元鼓荡，靴底石板已现细纹",
+              "有人闻见极淡的赤婴粉腥甜，随即被挥散"
             ],
             "transmitters": [
               {
@@ -6554,17 +6562,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "巷口被无声让开，瓦上落灰微颤，两股气息顶着，谁先出手仍看不真切。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“殇侯出手”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "巷风发紧",
+              "text": "苍澜窄巷里，殇侯站得极稳，君雄飞一侧真元却鼓得石板起纹。极淡的赤婴粉腥甜在风里一闪就被挥开。围观的人退到巷口，这一手是试探还是死手，当面还分不清。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.taiquan_sacred_fruit.lyl.event.taiquan_sacred_fruit_09",
-          "title": "局势中的酒店下毒乱战",
-          "summary": "围绕“酒店下毒乱战”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "酒店酒味不对",
+          "summary": "酒店后厨与食案气味发涩，宋三一系盯着左彤芝座次，武二郎已把铁件收到手边。",
           "sourceEventId": "lyl.event.taiquan_sacred_fruit_09",
           "settledWhenAny": [
             [
@@ -6581,8 +6589,9 @@
             "id": "omen.baseline.lyl.taiquan_sacred_fruit.lyl.event.taiquan_sacred_fruit_09",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“酒店下毒乱战”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "酒坛封泥被揭过，新倒的酒面上起细沫",
+              "活无常、死有分在廊下换过两次位置，正对左彤芝席",
+              "武二郎把一条铁轨模样的兵刃竖在桌脚，未拔出"
             ],
             "transmitters": [
               {
@@ -6592,17 +6601,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "堂内笑闹忽高忽低，下水道铁箅被靴尖碰得轻响，后厨的人进出时故意不看客席。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“酒店下毒乱战”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "封泥已动",
+              "text": "酒店里新揭的酒坛封泥不对味，细沫浮在盏沿。宋三那边和活无常、死有分换过位置，目光钉在左彤芝席上。武二郎只把铁轨模样的兵刃竖在桌脚，下水道铁箅被谁碰了一下。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.taiquan_sacred_fruit.lyl.event.taiquan_sacred_fruit_10",
-          "title": "局势中的赤阳圣果争夺",
-          "summary": "围绕“赤阳圣果争夺”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "火山口旗帜错杂",
+          "summary": "通往火山口的坡道被多派封了半幅，赤阳圣果将熟的热浪里，各家都在抢落脚处。",
           "sourceEventId": "lyl.event.taiquan_sacred_fruit_10",
           "settledWhenAny": [
             [
@@ -6619,8 +6628,9 @@
             "id": "omen.baseline.lyl.taiquan_sacred_fruit.lyl.event.taiquan_sacred_fruit_10",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“赤阳圣果争夺”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "火山口外几面不相属的旗帜插得过近，彼此不让路",
+              "地面有细微凹陷的新纹，热气从缝里往上顶",
+              "萧遥逸一系的人把守最内侧岩阶，却还没人动手夺果"
             ],
             "transmitters": [
               {
@@ -6630,10 +6640,10 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "硫烟把旗帜轮廓烧得发糊，岩缝里热浪一阵紧一阵，坡道上的脚印朝一个方向叠着。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“赤阳圣果争夺”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "岩阶相持",
+              "text": "火山口外旗帜插得过近，谁也不肯把坡道让开。岩缝里热气顶出细纹，像地皮自己先松了。萧遥逸一系守着最内侧岩阶，赤阳圣果的热影在烟里一闪，还没有人先伸手。"
             }
           }
         }

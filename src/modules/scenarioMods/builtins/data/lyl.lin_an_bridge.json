@@ -6075,8 +6075,8 @@
       "situations": [
         {
           "id": "world-sim.baseline.lyl.lin_an_bridge.lyl.event.lin_an_bridge_01_beat",
-          "title": "局势中的瓦棚情报",
-          "summary": "围绕“瓦棚情报”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "便门瓦棚风紧",
+          "summary": "便门瓦牡丹棚里茶客换桌、耳语压低，宋军部署与皇城司的闲话对不上号，线人影儿若有若无。",
           "sourceEventId": "lyl.event.lin_an_bridge_01_beat",
           "settledWhenAny": [
             [
@@ -6093,10 +6093,15 @@
             "id": "omen.baseline.lyl.lin_an_bridge.lyl.event.lin_an_bridge_01_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“瓦棚情报”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "瓦牡丹棚外多了几次短停的脚力，进棚只喝茶不点戏",
+              "棚里有人把宋军换防与贾府差遣说成两套互斥的版本",
+              "有人问皇城司名册时，邻座立刻改口谈花价"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6104,17 +6109,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "便门外瓦棚灯影晃动，茶盏碰撞压过说话声，棚帘一掀一落，听不清谁在对哪一路差遣较真。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“瓦棚情报”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "棚下耳语",
+              "text": "便门瓦牡丹棚里茶气混着脂粉香，几桌把宋军动向和贾府差遣说得对不上。有人刚提皇城司名册，邻座便改口谈花价。程宗扬若路过，只能听见风声，摸不到那人把话往哪边递。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.lin_an_bridge.lyl.event.lin_an_bridge_02_beat",
-          "title": "局势中的小瀛洲初遇",
-          "summary": "围绕“小瀛洲初遇”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "小瀛洲上人杂",
+          "summary": "小瀛洲画舫与岸边游客交叠，李师师一行的去向被打听得过勤，梁家恶少的呼喝已从对岸传过来。",
           "sourceEventId": "lyl.event.lin_an_bridge_02_beat",
           "settledWhenAny": [
             [
@@ -6131,10 +6136,15 @@
             "id": "omen.baseline.lyl.lin_an_bridge.lyl.event.lin_an_bridge_02_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“小瀛洲初遇”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "画舫码头有人反复问李师师今晚是否游洲",
+              "对岸传来梁府子弟呼朋引类、拦路让道的喝声",
+              "洲上侍从把贵客与市井游客的路径临时错开"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6142,17 +6152,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "小瀛洲水汽里混着丝竹与呵斥，画舫缆绳被反复收紧，岸边让路的人影一阵密、一阵散。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“小瀛洲初遇”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "洲上喧声",
+              "text": "小瀛洲岸边有人连问李师师可还登舟，对岸梁府子弟的呼喝已经压过丝竹。侍从把贵客与市井游客的路径临时错开。程宗扬若在近处，只见水光人影搅在一处，尚未分出谁先动手。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.lin_an_bridge.lyl.event.lin_an_bridge_03_beat",
-          "title": "局势中的林娘子疑云",
-          "summary": "围绕“林娘子疑云”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "禁军线口风乱",
+          "summary": "市井把林娘子的走动和禁军门禁绑在一起说，黑魔海的影儿只在传言里闪，有人已打听鲁智深在何处。",
           "sourceEventId": "lyl.event.lin_an_bridge_03_beat",
           "settledWhenAny": [
             [
@@ -6169,10 +6179,15 @@
             "id": "omen.baseline.lyl.lin_an_bridge.lyl.event.lin_an_bridge_03_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“林娘子疑云”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "茶摊上把林娘子出入与禁军换岗说成同一条线",
+              "黑魔海三字只在压低的口气里出现，立刻被岔开",
+              "有脚力打听城外哪座寺院还能见到鲁智深"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6180,17 +6195,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "临安巷口的茶摊把禁军门禁说得一阵紧一阵松，寺院方向的问讯比平日多，却没人敢把话说明。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“林娘子疑云”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "门禁传言",
+              "text": "巷口把林娘子的行踪和禁军换岗缠在一处讲，黑魔海只被压低提起又立刻岔开。另有脚力打听哪座寺院还见得到鲁智深。话头悬着，谁也没把线头接到明处。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.lin_an_bridge.lyl.event.lin_an_bridge_04_beat",
-          "title": "局势中的明庆寺相会",
-          "summary": "围绕“明庆寺相会”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "明庆寺酒气沉",
+          "summary": "明庆寺侧廊备了酒盏，鲁智深与林冲的名字被僧俗反复对上，林冲神色隐忍，寺外却另有人打探林娘子。",
           "sourceEventId": "lyl.event.lin_an_bridge_04_beat",
           "settledWhenAny": [
             [
@@ -6207,10 +6222,15 @@
             "id": "omen.baseline.lyl.lin_an_bridge.lyl.event.lin_an_bridge_04_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“明庆寺相会”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "寺侧禅房多摆了酒盏，不像寻常功课",
+              "僧俗对谈里把鲁智深与林冲的座位说得很近",
+              "寺门外有人打听林娘子近日可还出门"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6218,10 +6238,10 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "明庆寺钟声里夹着酒香，侧廊坐席未散，门外问讯的脚步停停走走，殿内却仍只闻低语。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“明庆寺相会”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "寺侧酒盏",
+              "text": "明庆寺侧廊多摆了酒盏，僧俗把鲁智深与林冲的座位说得很近。林冲若在席间，神色隐忍，话不多。门外另有人打听林娘子可还出门。酒气未散，席上的分寸仍像一根绷着的弦。"
             }
           }
         }

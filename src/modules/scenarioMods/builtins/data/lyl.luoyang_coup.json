@@ -6091,8 +6091,8 @@
       "situations": [
         {
           "id": "world-sim.baseline.lyl.luoyang_coup.lyl.event.s06_01",
-          "title": "局势中的天子暴毙消息传遍洛都",
-          "summary": "围绕“天子暴毙消息传遍洛都”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "宫里丧讯对不上",
+          "summary": "昭阳一带灯火乱跳，天子无息与太医仍在入殿的说法互相打架，吕冀府上已有人连夜备素帷。",
           "sourceEventId": "lyl.event.s06_01",
           "settledWhenAny": [
             [
@@ -6116,10 +6116,19 @@
             "id": "omen.baseline.lyl.luoyang_coup.lyl.event.s06_01",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“天子暴毙消息传遍洛都”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "宫门内外同时传开“天子无息”与“太医还在殿里”两套口信",
+              "襄邑侯府灯火通明，素帷、丧乐器具被连夜抬出",
+              "金蜜镝赤足驭马驰入宫门，神色铁青"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.jin_mi_di"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.zhao_feiyan"
+              },
               {
                 "kind": "messenger"
               },
@@ -6127,17 +6136,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "洛都夜风里混着丧乐试音和甲叶摩擦。宫道上的人影一会儿往昭阳，一会儿又被喝止换路，谁也说不准今夜该举哀还是该戒严。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“天子暴毙消息传遍洛都”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "丧讯对不上",
+              "text": "金蜜镝赤足驭马闯进宫门，未及下鞍便问天子鼻息。廊下有人说殿里已经没了声息，又有人说太医还在里头。西边吕冀府上素帷连夜抬出，中行说袖里刀柄露出一截，刘建一侧的口信却在说另有诏书要宣。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.luoyang_coup.lyl.event.s06_01b",
-          "title": "局势中的吕冀淫辱伪赵昭仪（友通期）",
-          "summary": "围绕“吕冀淫辱伪赵昭仪（友通期）”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "含光殿突然清场",
+          "summary": "昭仪所在殿阁被临时清人，吕冀带亲随入内，廊下只剩不敢抬头的内侍与一卷闲置的软索。",
           "sourceEventId": "lyl.event.s06_01b",
           "settledWhenAny": [
             [
@@ -6154,10 +6163,19 @@
             "id": "omen.baseline.lyl.luoyang_coup.lyl.event.s06_01b",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“吕冀淫辱伪赵昭仪（友通期）”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "含光殿廊下内侍被尽数喝退，只留张恽垂手立在柱影里",
+              "吕冀带着亲随径入昭仪所在，门外落了闩",
+              "廊下地上一卷软索未及收起，无人敢问用途"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.zhang_yun"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.yi_xin"
+              },
               {
                 "kind": "messenger"
               },
@@ -6165,17 +6183,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "含光殿一带忽然静得过分。殿门落闩后，只听得里头隐约有人低喝，廊柱阴影里内侍连呼吸都压着，不敢抬头去看那卷被丢在阶下的软索。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“吕冀淫辱伪赵昭仪（友通期）”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "殿门落闩",
+              "text": "张恽弓着脊背立在廊柱影里，看吕冀带人进了昭仪所在的殿阁。门闩落下后，外头只剩一卷未及收起的软索。义姁从侧廊经过时板着脸，只丢下一句“今夜谁也别进去”。里头将发生什么，廊下没有人敢说破。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.luoyang_coup.lyl.event.s06_02",
-          "title": "局势中的程宗扬安排退路与联络",
-          "summary": "围绕“程宗扬安排退路与联络”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "密道口灯火连夜",
+          "summary": "长秋宫密道口有人进出，秦桧按名册传召，鹏翼社与洛帮的人影在暗处聚齐，话只说到一半。",
           "sourceEventId": "lyl.event.s06_02",
           "settledWhenAny": [
             [
@@ -6192,10 +6210,19 @@
             "id": "omen.baseline.lyl.luoyang_coup.lyl.event.s06_02",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“程宗扬安排退路与联络”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "密道口灯火一夜未熄，行装与名册被分开放在石案上",
+              "秦桧青衫折扇，按名单把人往暗处引",
+              "程郑、郭解先后到齐，却都压着嗓门不提去向"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.qin_hui"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.yun_dan_liu"
+              },
               {
                 "kind": "messenger"
               },
@@ -6203,17 +6230,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "长秋宫墙根下的密道口有脚步来回。灯火压得很低，只照见名册边角和几件未打包完的行装。远处宫墙外仍有厮杀声，这边却像在赶另一桩更隐秘的事。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“程宗扬安排退路与联络”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "密道传召",
+              "text": "秦桧在密道口按名册点人，笑意谦和，话却一句不说满。云丹琉仗剑守在拐角，不让闲人靠近。程郑与郭解先后摸进来，石案上分开放着行装和未写完的差遣条。定陶王三个字只在纸边露了一角，谁也没把后文念出声。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.luoyang_coup.lyl.event.s06_03",
-          "title": "局势中的刘建攻占南宫与武库",
-          "summary": "围绕“刘建攻占南宫与武库”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "中垒军改道西行",
+          "summary": "崇德殿方向攻势受阻的传言刚起，中垒军与宗室家奴便改道西指昭阳；四门卫尉军同时收拢。",
           "sourceEventId": "lyl.event.s06_03",
           "settledWhenAny": [
             [
@@ -6237,10 +6264,19 @@
             "id": "omen.baseline.lyl.luoyang_coup.lyl.event.s06_03",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“刘建攻占南宫与武库”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "中垒军与大批宗室家奴在崇德殿外停顿后改道西行",
+              "分守四门的卫尉军开始向昭阳宫方向集中",
+              "长秋宫内有人求皇后下诏，授金蜜镝暂掌宫禁"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cai_jingzhong"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.jin_mi_di"
+              },
               {
                 "kind": "messenger"
               },
@@ -6248,17 +6284,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "昭阳宫外尘土被马蹄搅起又落下。旗帜从崇德一侧折向西，四门方向的号角不再对答，只往一处收。宫墙这边听得见甲叶，却看不清对方到底要攻哪一道门。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“刘建攻占南宫与武库”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "旗帜西折",
+              "text": "蔡敬仲立在长秋宫墙头，大红折扇未展，只盯着崇德殿外那一阵停顿。中垒军裹着宗室家奴折向昭阳，四门卫尉军也开始往同一处收拢。金蜜镝已在请皇后用印。南宫与武库眼下还各自亮着灯，没有人敢说哪一座会先失守。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.luoyang_coup.lyl.event.s06_04",
-          "title": "局势中的长秋宫守卫战",
-          "summary": "围绕“长秋宫守卫战”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "台阶上开始布人",
+          "summary": "武库方向火光与喊声交错，卫尉军往北宫退；蔡敬仲把内侍和期门武士压上长秋宫台阶。",
           "sourceEventId": "lyl.event.s06_04",
           "settledWhenAny": [
             [
@@ -6282,10 +6318,19 @@
             "id": "omen.baseline.lyl.luoyang_coup.lyl.event.s06_04",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“长秋宫守卫战”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "武库方向火光骤亮，虎贲旗号在烟尘里出没",
+              "卫尉军弃南宫建制，队形往北宫收拢",
+              "长秋宫三十六级台阶上，内侍与期门武士被分列布开"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cai_jingzhong"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.lu_jing"
+              },
               {
                 "kind": "messenger"
               },
@@ -6293,17 +6338,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "长秋宫台阶被火把照得发白。远处武库方向金属撞击一声接一声，近处只有靴底擦石级的声音。中垒军的旗在阶下晃了两晃，还没决定何时再上。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“长秋宫守卫战”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "石级布防",
+              "text": "蔡敬仲把内侍和期门武士一排排压上三十六级石阶，熊皮大氅一动不动。卢景翻着白眼贴在柱后，报武库那边火光乱跳、卫尉军往北宫退。阶下中垒军的旗晃了两晃，刘建的位置有人故意压着不报死讯——此刻谁也不敢让那条命从棋盘上拿掉。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.luoyang_coup.lyl.event.s06_05",
-          "title": "局势中的剑玉姬与程宗扬谈判",
-          "summary": "围绕“剑玉姬与程宗扬谈判”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "黑衣使者求见",
+          "summary": "剑玉姬的人入了长秋宫外廊，口信只说到“谈一谈”；蔡敬仲已把刘建旧事的卷宗压在袖里。",
           "sourceEventId": "lyl.event.s06_05",
           "settledWhenAny": [
             [
@@ -6320,10 +6365,19 @@
             "id": "omen.baseline.lyl.luoyang_coup.lyl.event.s06_05",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“剑玉姬与程宗扬谈判”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "黑衣面纱的使者在长秋宫外廊求见，不报兵事只说来谈",
+              "剑玉姬的名号随口信传入内殿，条件尚未摊开",
+              "蔡敬仲袖中多了一卷关于刘建旧迹的抄件"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.jian_yu_ji"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cai_jingzhong"
+              },
               {
                 "kind": "messenger"
               },
@@ -6331,17 +6385,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "长秋宫外廊忽然安静下来。甲士被撤到两翼，中间空出一条只够两人并走的路。风里有一丝陌生的冷香，像有人把战场临时改成了议事处。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“剑玉姬与程宗扬谈判”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "外廊来客",
+              "text": "剑玉姬的名号随黑衣使者送进内殿，话说得极缓，只提“成光”二字，其余都等对面开口。蔡敬仲脸色惨白，袖里却多了一卷刘建旧迹的抄件，随时能拍上案几。吴三桂把好手撤到两翼。这笔交易谈不谈得成，此刻谁也没有点头。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyl.luoyang_coup.lyl.event.s06_06",
-          "title": "局势中的吕奉先单骑破阵",
-          "summary": "围绕“吕奉先单骑破阵”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "白衣小将出列",
+          "summary": "阿阁阵前吕氏一侧忽然让出一条窄道，白衣箭袖的少年将单骑出列；越骑司马的旗杆晃了一下。",
           "sourceEventId": "lyl.event.s06_06",
           "settledWhenAny": [
             [
@@ -6365,10 +6419,19 @@
             "id": "omen.baseline.lyl.luoyang_coup.lyl.event.s06_06",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“吕奉先单骑破阵”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "吕氏阵脚让出窄道，白衣箭袖的吕奉先单骑出列",
+              "越骑军司马的旗杆在对面晃动，队形微微后收",
+              "吕戟那边有人传话，要接赵皇后往北宫"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.lv_fengxian"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cai_jingzhong"
+              },
               {
                 "kind": "messenger"
               },
@@ -6376,10 +6439,10 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "阿阁前的尘土被一匹马撕开。两边金鼓忽然对不上拍子，像有人把整场对峙按住了半息。北宫方向的灯火还在招手，长秋宫这边没人应。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“吕奉先单骑破阵”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "阵前让道",
+              "text": "吕奉先白衣箭袖，单骑从吕氏阵脚让出的窄道里出来，金冠未正，人已到两军之间。对面越骑司马的旗杆晃了一下。蔡敬仲在墙上冷冷丢下一句：看住阿阁，别让人把赵皇后接去北宫。两边都还僵着，没有人先退。"
             }
           }
         }

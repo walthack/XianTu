@@ -4565,8 +4565,8 @@
       "situations": [
         {
           "id": "world-sim.baseline.lcq.stage_11_lieshan_battle.lcq.event.s11_01_pengri_arrives",
-          "title": "局势中的捧日军抵烈山",
-          "summary": "围绕“捧日军抵烈山”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "烈山下骑兵立营",
+          "summary": "烈山坡下出现成建制骑兵与先锋旗帜，有人正在为后续大军相地划营；三川口一线尚未交手，风口已收紧。",
           "sourceEventId": "lcq.event.s11_01_pengri_arrives",
           "settledWhenAny": [
             [
@@ -4590,8 +4590,9 @@
             "id": "omen.baseline.lcq.stage_11_lieshan_battle.lcq.event.s11_01_pengri_arrives",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“捧日军抵烈山”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "斥候看见烈山坡下成列的骑兵旗帜与饮马沟",
+              "先锋旗号可辨刘宜孙、张亢部在转圈相地",
+              "立营木桩与斧锯声沿河谷往三川口拖长"
             ],
             "transmitters": [
               {
@@ -4601,17 +4602,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "烈山风口马嘶此起彼伏，烟尘贴着河谷往三川口方向拖长，岗哨换得比平日更密，却没人敢断言大军何时合拢。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“捧日军抵烈山”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "烈山下尘起",
+              "text": "河谷风里先送来马蹄，再送来立营的斧锯。坡下先锋旗转着圈相地，有人认出刘宜孙与张亢的部号。三川口还空着，空气已经发紧，去留都还来得及再看一眼。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_11_lieshan_battle.lcq.event.s11_02_cement_fortress",
-          "title": "局势中的江州水泥坚城",
-          "summary": "围绕“江州水泥坚城”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "江州灰垣新起",
+          "summary": "江州城外连续竖起灰白新城与悬楼脚手架，萧遥逸一侧在安排验看；城防究竟能撑多久，当面还说不准。",
           "sourceEventId": "lcq.event.s11_02_cement_fortress",
           "settledWhenAny": [
             [
@@ -4628,8 +4629,9 @@
             "id": "omen.baseline.lcq.stage_11_lieshan_battle.lcq.event.s11_02_cement_fortress",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“江州水泥坚城”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "江州郊外连片灰白城垣与悬楼脚手架未撤",
+              "匠役按座清点新堡，口中报出将近一打的数目",
+              "萧遥逸处传出请人近前验看新城防的口信"
             ],
             "transmitters": [
               {
@@ -4639,17 +4641,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "江州城外灰浆味混着潮气，脚手架在风里轻晃，新城垣棱角未磨圆，远处仍有人在搬石夯土，看不出验收会不会当场改口。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“江州水泥坚城”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "灰垣未干",
+              "text": "江州城外的灰白新垣还带着潮气，悬楼脚手架未拆尽。萧遥逸那边传话要人近前验看，匠役按座报数，口气发紧。这些新墙能不能改写江州的分量，此刻谁也不肯先拍板。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_11_lieshan_battle.lcq.event.s11_03_protect_yueshuang",
-          "title": "局势中的奉命护月霜",
-          "summary": "围绕“奉命护月霜”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "孟帐点人赴口",
+          "summary": "孟非卿帐中加急点出一营与雪隼佣兵，去向指向烈山三川口与月霜身边；令箭已出，前线如何接令仍未落定。",
           "sourceEventId": "lcq.event.s11_03_protect_yueshuang",
           "settledWhenAny": [
             [
@@ -4666,10 +4668,15 @@
             "id": "omen.baseline.lcq.stage_11_lieshan_battle.lcq.event.s11_03_protect_yueshuang",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“奉命护月霜”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "孟非卿帐外按册点出一营三十人及雪隼六百",
+              "口令写明赴烈山三川口，盯住月霜勿擅自冲锋",
+              "令箭与指挥权文书叠在帅案上，尚未当众宣读"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.meng_fei_qing"
+              },
               {
                 "kind": "messenger"
               },
@@ -4677,17 +4684,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "大营辕门灯火提前亮起，甲仗与行囊被按队码开，传令兵在孟帐与校场间来回，谁也不敢大声问月霜此刻身在哪一线。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“奉命护月霜”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "令箭未宣",
+              "text": "孟非卿帐外灯火提前亮起，一营与雪隼的名册被反复点过。口令指向烈山三川口，要人盯住月霜，别让她自己往前头冲。令箭还压在案上，帐里的人只是把甲胄再勒紧一寸。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_11_lieshan_battle.lcq.event.s11_04_xingyue_appears",
-          "title": "局势中的星月湖现身",
-          "summary": "围绕“星月湖现身”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "雪原下伏黑甲",
+          "summary": "雪原上出现整齐却未起身的黑影与压低的口令，星月湖中央军似在雪下埋伏；捧日前锋能否察觉，两边都还没先动手。",
           "sourceEventId": "lcq.event.s11_04_xingyue_appears",
           "settledWhenAny": [
             [
@@ -4704,10 +4711,15 @@
             "id": "omen.baseline.lcq.stage_11_lieshan_battle.lcq.event.s11_04_xingyue_appears",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“星月湖现身”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "雪面下露出一排排未抖落的黑色衣角",
+              "远处口令压得极低，像在对同一句口号练气",
+              "捧日前锋的斥候旗帜在雪线外停顿不前"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.meng_fei_qing"
+              },
               {
                 "kind": "messenger"
               },
@@ -4715,17 +4727,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "三川口外的雪原静得过分，风一过便有细碎的甲片声，却看不见整队人马。远处黑影与雪色叠在一起，谁先出声都可能把两边同时惊醒。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“星月湖现身”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "雪下有人",
+              "text": "雪原静得不像有军。风过处，黑色衣角从雪面下轻轻掀起又伏回去，口令压成一口气。捧日前锋的旗在雪线外顿住。这一线会不会整队起身，此刻谁也不肯先喊破。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_11_lieshan_battle.lcq.event.s11_05_wangtao_breaks",
-          "title": "局势中的王韬破阵",
-          "summary": "围绕“王韬破阵”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "前阵闻斧热",
+          "summary": "宋军前阵旗线发乱，有人高呼八骏王韬携巨斧突入；焦糊与热浪已到面前，防线会不会被撕开仍看不清。",
           "sourceEventId": "lcq.event.s11_05_wangtao_breaks",
           "settledWhenAny": [
             [
@@ -4742,10 +4754,15 @@
             "id": "omen.baseline.lcq.stage_11_lieshan_battle.lcq.event.s11_05_wangtao_breaks",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“王韬破阵”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "前阵旗线左右错位，盾墙出现不规则缺口",
+              "军中高呼王韬之名，并指认焚天斧的热浪",
+              "雪上留下焦黑斧痕，却不见人已穿透全阵"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.meng_fei_qing"
+              },
               {
                 "kind": "messenger"
               },
@@ -4753,17 +4770,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "前阵鼓点忽然乱了半拍，热浪夹着焦糊味扑到雪面上。盾墙后的人把矛杆握得发白，谁也不敢说那道斧影已经过去，还是还在往里钻。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“王韬破阵”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "前阵旗乱",
+              "text": "前阵旗线忽然错开半步，焦糊味贴着雪面扑来。有人喊王韬，有人只看见巨斧带起的热浪。盾墙缺口还不大，够不够一个人撕开整列，站在第二排也说不准。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_11_lieshan_battle.lcq.event.s11_06_snow_battle",
-          "title": "局势中的雪原鏖战",
-          "summary": "围绕“雪原鏖战”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "三川口雪不退",
+          "summary": "星月湖四营与宋军铁甲营在三川口雪原对咬，两边都不见收兵旗；雪面已被踏烂，胜负却还压在下一波冲击里。",
           "sourceEventId": "lcq.event.s11_06_snow_battle",
           "settledWhenAny": [
             [
@@ -4780,10 +4797,15 @@
             "id": "omen.baseline.lcq.stage_11_lieshan_battle.lcq.event.s11_06_snow_battle",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“雪原鏖战”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "三川口雪原上四营旗与铁甲营旗绞在一处",
+              "两边伤员后送，却看不见收兵的金鼓",
+              "雪面被踏成泥浆，矛林仍对着同一道坡"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.meng_fei_qing"
+              },
               {
                 "kind": "messenger"
               },
@@ -4791,17 +4813,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "三川口的雪已经被踩成黑泥，号角断续相接，谁也不肯先把旗倒下去。远处两股甲光仍顶在同一道坡上，风里只有兵器相磕，没有退营的鼓点。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“雪原鏖战”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "雪原不退",
+              "text": "三川口的雪被踏成泥浆，星月湖四营旗与铁甲营旗绞在一起。伤员往后抬，金鼓却不收。下一波还会不会顶上去，坡上的人只把矛杆再往前挪半寸。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_11_lieshan_battle.lcq.event.s11_07_camp_falls",
-          "title": "局势中的中军陷落",
-          "summary": "围绕“中军陷落”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "中军木栅发雷",
+          "summary": "宋军中军大纛附近雷光与焦烟骤起，御林军刀队已贴到木栅外；营门是否还能守住，帐里帐外说法不一。",
           "sourceEventId": "lcq.event.s11_07_camp_falls",
           "settledWhenAny": [
             [
@@ -4818,10 +4840,15 @@
             "id": "omen.baseline.lcq.stage_11_lieshan_battle.lcq.event.s11_07_camp_falls",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“中军陷落”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "中军大纛被雷光燎出焦边，旗杆发颤",
+              "木栅外刀队列阵，靴声比平日换防更密",
+              "术者袍角在营外掠过，空气里有硫磺味"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.meng_fei_qing"
+              },
               {
                 "kind": "messenger"
               },
@@ -4829,17 +4856,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "中军帐外的木栅被风吹得咯吱响，大纛焦边还在冒细烟。刀队的靴声贴着栅外走，谁也不敢大声问营门还能不能再撑过一阵雷。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“中军陷落”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "大纛焦边",
+              "text": "中军大纛的边被燎焦，硫磺味贴着木栅钻进来。刀队已在栅外列开，靴声密得不像例行换防。营门会不会被下一道雷撕开，帐里只把水瓮和沙袋再往门口推。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_11_lieshan_battle.lcq.event.s11_08_jiangzhou_lockdown",
-          "title": "局势中的江州戒严",
-          "summary": "围绕“江州戒严”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "江州门钥加封",
+          "summary": "捧日右厢军越过烈山、抵近江州的口信前后不一，城门加闩、垛口加石；全城是否正式戒严，街面上已先紧了半寸。",
           "sourceEventId": "lcq.event.s11_08_jiangzhou_lockdown",
           "settledWhenAny": [
             [
@@ -4856,8 +4883,9 @@
             "id": "omen.baseline.lcq.stage_11_lieshan_battle.lcq.event.s11_08_jiangzhou_lockdown",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“江州戒严”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "江州城门比往日早落闩，垛口连夜加石",
+              "过烈山来的驿卒说法互相打架，右厢军远近不一",
+              "街坊被勒令回坊，商铺只留后窗收货"
             ],
             "transmitters": [
               {
@@ -4867,17 +4895,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "江州城楼灯火连成一线，门闩落下的声音比往日重。街上只剩搬石的脚步，谁也不敢问城外那支右厢军到底到了哪一座墩台。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“江州戒严”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "城门早闩",
+              "text": "江州的城门比往日早落了一道闩，垛口上新石还带着土腥。驿卒把捧日右厢军说得忽远忽近，坊门却已经先关了。街上只剩搬石的人，没人拦你继续走路，只是路变窄了。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_11_lieshan_battle.lcq.event.s11_09_grain_plan",
-          "title": "局势中的粮战全盘",
-          "summary": "围绕“粮战全盘”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "筠州粮价暗涌",
+          "summary": "筠州布行暗桩往来加密，账面上金铢与晴州粮石的数目被反复改写；粮价会不会被硬抬上去，柜后还在压着声商量。",
           "sourceEventId": "lcq.event.s11_09_grain_plan",
           "settledWhenAny": [
             [
@@ -4894,8 +4922,9 @@
             "id": "omen.baseline.lcq.stage_11_lieshan_battle.lcq.event.s11_09_grain_plan",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“粮战全盘”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "筠州布行后柜加了两道门闩，暗桩进出更密",
+              "账页上金铢与粮石的数目被墨笔改过数次",
+              "晴州、宋境粮价的口信互相打架，每石报价不一"
             ],
             "transmitters": [
               {
@@ -4905,17 +4934,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "布行后柜灯火隔着帘子发黄，算盘声压得很低。门外粮行的牌价写了又擦，谁也不肯把最后一笔金铢先拍到柜面上。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“粮战全盘”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "后柜改账",
+              "text": "筠州布行后柜多了两道闩，暗桩进出带起纸墨气。账页上金铢与粮石被改过几遍，晴州与宋境的报价还对不齐。柜后压着声商量，却没有人当街把价牌钉死。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_11_lieshan_battle.lcq.event.s11_10_sanchuankou_defeat",
-          "title": "局势中的三川口败局",
-          "summary": "围绕“三川口败局”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "三川口后军失联",
+          "summary": "三川口外西夏旗帜成倍增密，前军与后军都监处的驿报对不上；刘平伤势传言矛盾，整线会不会崩开仍没有定说。",
           "sourceEventId": "lcq.event.s11_10_sanchuankou_defeat",
           "settledWhenAny": [
             [
@@ -4932,8 +4961,9 @@
             "id": "omen.baseline.lcq.stage_11_lieshan_battle.lcq.event.s11_10_sanchuankou_defeat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“三川口败局”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "西夏旗帜在三川口外层层加密，远近计数不一",
+              "后军都监黄德和处驿报中断，前军找不到接应",
+              "刘平伤重与无事的口信同一时辰先后进帐"
             ],
             "transmitters": [
               {
@@ -4943,10 +4973,10 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "三川口的烟比旗还密，前军鼓点忽然空了一拍。后路的驿卒迟迟不回，帐外把两封互相打架的伤情帖子按在灯下，谁也不敢先当众宣读。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“三川口败局”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "后路无驿",
+              "text": "三川口外的西夏旗加得太密，前军回头找后军都监的驿报，却对不上时辰。刘平伤重与无事的帖子同一盏灯下摊开。鼓点空了一拍，人还站在原地，没有人敢先说这线已经断了。"
             }
           }
         }

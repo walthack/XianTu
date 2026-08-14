@@ -4667,8 +4667,8 @@
       "situations": [
         {
           "id": "world-sim.baseline.lcq.stage_07_qingyuan_jiankang.lcq.event.s07_01_old_case",
-          "title": "局势中的同门旧案",
-          "summary": "围绕“同门旧案”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "左武军旧案再提",
+          "summary": "入晋之后，萧遥逸谈及左武军覆灭与朝廷积弊时口风发紧，星月湖对岳帅旧事的说法也不再整齐。",
           "sourceEventId": "lcq.event.s07_01_old_case",
           "settledWhenAny": [
             [
@@ -4685,8 +4685,9 @@
             "id": "omen.baseline.lcq.stage_07_qingyuan_jiankang.lcq.event.s07_01_old_case",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“同门旧案”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "萧遥逸谈左武军覆灭时口风发紧，不像闲话",
+              "星月湖一线对岳帅旧事的说法彼此对不上",
+              "清远驿中有人压低声音改换行路次序"
             ],
             "transmitters": [
               {
@@ -4696,17 +4697,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "清远馆驿灯火未歇，案卷与军籍被反复翻动，远处有人压着嗓子争论岳帅旧事，却没有人把话说死。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“同门旧案”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "旧案压来",
+              "text": "萧遥逸把左武军覆灭与朝廷积弊一并摊开，话到岳帅处便顿住。星月湖来的口信彼此打架，清远驿里行路次序也被悄悄改过，这桩旧案会压向谁，眼前还看不明白。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_07_qingyuan_jiankang.lcq.event.s07_02_kill_wu",
-          "title": "局势中的清远斩吴",
-          "summary": "围绕“清远斩吴”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "清远刀光将起",
+          "summary": "清远城中吴行德与卓云君一线忽然收紧，护卫换防、街巷封路，杀机与救人的空隙同时露了出来。",
           "sourceEventId": "lcq.event.s07_02_kill_wu",
           "settledWhenAny": [
             [
@@ -4723,8 +4724,9 @@
             "id": "omen.baseline.lcq.stage_07_qingyuan_jiankang.lcq.event.s07_02_kill_wu",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“清远斩吴”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "吴行德身边护卫换班比平日更密",
+              "卓云君所在方向传出仓促呼喝",
+              "几条街巷临时封路，刀鞘相撞声断续传来"
             ],
             "transmitters": [
               {
@@ -4734,17 +4736,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "清远城门内灯火乱晃，甲叶与刀鞘相撞，封路木障被临时抬出，却没人敢说今夜要落在谁身上。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“清远斩吴”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "清远收紧",
+              "text": "吴行德一行换防比白日更密，卓云君那边又传来仓促呼喝。几条街巷被木障堵住，刀鞘轻响却不见交手结果，清远今夜像被一只看不见的手捏紧。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_07_qingyuan_jiankang.lcq.event.s07_03_xiaozi_appears",
-          "title": "局势中的小紫现身",
-          "summary": "围绕“小紫现身”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "紫衫眼底变冷",
+          "summary": "小紫仍作娇憨，指上毒戒却被反复摩挲，伤重的卓云君身边空隙忽然变大，空气里的天真淡了一层。",
           "sourceEventId": "lcq.event.s07_03_xiaozi_appears",
           "settledWhenAny": [
             [
@@ -4761,10 +4763,15 @@
             "id": "omen.baseline.lcq.stage_07_qingyuan_jiankang.lcq.event.s07_03_xiaozi_appears",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“小紫现身”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "小紫笑意未改，指上毒戒却被反复摩挲",
+              "她袖中虫匣轻响，目光不再只作痴呆",
+              "重伤的卓云君身边护卫忽然散开一截"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.xiao_zi"
+              },
               {
                 "kind": "messenger"
               },
@@ -4772,17 +4779,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "灯影里紫衫银铃轻响，空气中有一丝若有若无的药苦，近处脚步乱了一拍，却看不清是谁先动。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“小紫现身”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "笑意收薄",
+              "text": "小紫仍挨着人说话，声线软得像往常，指上那枚毒戒却转个不停。袖中虫匣轻响，卓云君伤处附近的空隙忽然空出一截，像有人在等一个插手的瞬间。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_07_qingyuan_jiankang.lcq.event.s07_04_zhuo_subdued",
-          "title": "局势中的卓云君受制",
-          "summary": "围绕“卓云君受制”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "教御气势被压",
+          "summary": "卓云君伤后仍撑着教御架子，小紫却拿细针与药烟围着她转，主动权一点点从她手里往外滑。",
           "sourceEventId": "lcq.event.s07_04_zhuo_subdued",
           "settledWhenAny": [
             [
@@ -4799,10 +4806,15 @@
             "id": "omen.baseline.lcq.stage_07_qingyuan_jiankang.lcq.event.s07_04_zhuo_subdued",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“卓云君受制”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "卓云君伤势未愈，呵斥却比先前短促",
+              "小紫以细针药烟围住她的坐处",
+              "太乙真宗一线口信改称她暂不宜见客"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.xiao_zi"
+              },
               {
                 "kind": "messenger"
               },
@@ -4810,17 +4822,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "内室帘幕低垂，药烟与针匣气味混在一起，外头传话的人把嗓音压得很低，只说教御此刻不便见人。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“卓云君受制”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "帘后加压",
+              "text": "卓云君伤后仍想撑住教御的口气，话却越说越短。小紫把细针与药烟摆在她坐处周围，门外传话已改成暂不宜见客。她还能不能自己做主，旁人不敢断言。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_07_qingyuan_jiankang.lcq.event.s07_05_eight_steeds_informed",
-          "title": "局势中的八骏得讯",
-          "summary": "围绕“八骏得讯”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "星月湖讯到营",
+          "summary": "孟非卿案前堆着新到的口信，谢艺与黑魔海的名字被反复对读，生药铺方向已有人整装待发。",
           "sourceEventId": "lcq.event.s07_05_eight_steeds_informed",
           "settledWhenAny": [
             [
@@ -4837,10 +4849,15 @@
             "id": "omen.baseline.lcq.stage_07_qingyuan_jiankang.lcq.event.s07_05_eight_steeds_informed",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“八骏得讯”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "孟非卿把谢艺与黑魔海的口信对在一起",
+              "老四老五被点去查生药铺的行踪",
+              "营中兄弟情深的酒宴忽然改成密议"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.meng_fei_qing"
+              },
               {
                 "kind": "messenger"
               },
@@ -4848,17 +4865,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "大营灯火通明，信使泥点子还没干，帅案上的口信被按住一角，远处马厩里已有人试鞍，却没人喊出要报谁的仇。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“八骏得讯”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "营门信到",
+              "text": "孟非卿把谢艺与黑魔海的名字对在同一张纸上，浓眉压得很低。老四老五已被点去生药铺一带探路，酒宴撤成密议，星月湖今夜的怒意还没有落地。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_07_qingyuan_jiankang.lcq.event.s07_06_water_assassins",
-          "title": "局势中的水鬼暗杀",
-          "summary": "围绕“水鬼暗杀”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "舟侧水声异常",
+          "summary": "建康水面夜航时，舟侧水声乱了一拍，萧遥逸按刀而起，舱外黑影贴着舷板游过。",
           "sourceEventId": "lcq.event.s07_06_water_assassins",
           "settledWhenAny": [
             [
@@ -4875,8 +4892,9 @@
             "id": "omen.baseline.lcq.stage_07_qingyuan_jiankang.lcq.event.s07_06_water_assassins",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“水鬼暗杀”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "舟侧水声乱拍，不像寻常夜潮",
+              "萧遥逸忽然按住刀柄，示意熄灯",
+              "舷下有贴水游动的黑影一闪即逝"
             ],
             "transmitters": [
               {
@@ -4886,17 +4904,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "夜河雾重，桨声忽然停住，舷外水纹被什么东西割开又合上，舱里的人屏息听着，却还没看清来者是谁。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“水鬼暗杀”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "舷下水影",
+              "text": "夜舟刚驶入建康水面，舷外水声乱了一拍。萧遥逸按刀示意熄灯，黑影贴着船帮游过去，像水鬼试探，又像暗手在点人数，舱内一时谁也不敢先喊。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_07_qingyuan_jiankang.lcq.event.s07_07_dragon_hall",
-          "title": "局势中的神龙殿夜探",
-          "summary": "围绕“神龙殿夜探”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "神龙殿灯异常",
+          "summary": "宫城神龙殿方向禁足加严，舞乐却在子时仍未散，有人说殿内灯火只亮一层，像在遮什么。",
           "sourceEventId": "lcq.event.s07_07_dragon_hall",
           "settledWhenAny": [
             [
@@ -4913,8 +4931,9 @@
             "id": "omen.baseline.lcq.stage_07_qingyuan_jiankang.lcq.event.s07_07_dragon_hall",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“神龙殿夜探”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "神龙殿外周卫换防比往日提前半个时辰",
+              "子时仍有舞乐，殿内却只透一层昏灯",
+              "内侍口信互相矛盾，有的说圣躬安寝"
             ],
             "transmitters": [
               {
@@ -4924,17 +4943,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "宫墙内鼓漏错了一拍，神龙殿屋脊黑沉沉压着夜色，禁足木牌新钉，远处乐声细得不像朝会。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“神龙殿夜探”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "殿灯异状",
+              "text": "神龙殿外周卫提前换防，子时舞乐未歇，殿缝里却只漏出一层昏灯。内侍们有的说圣躬安寝，有的只摇头不语。夜色把那道门槛烘得很烫，却还没有人跨进去。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_07_qingyuan_jiankang.lcq.event.s07_08_palace_escape",
-          "title": "局势中的宫险分逃",
-          "summary": "围绕“宫险分逃”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "宫道杀气分流",
+          "summary": "回程宫道忽然多出刀光与宦者灯笼，左右夹巷同时封死，分路撤离的手势被压得很低。",
           "sourceEventId": "lcq.event.s07_08_palace_escape",
           "settledWhenAny": [
             [
@@ -4951,8 +4970,9 @@
             "id": "omen.baseline.lcq.stage_07_qingyuan_jiankang.lcq.event.s07_08_palace_escape",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“宫险分逃”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "回程夹巷两头同时落下拒马",
+              "宦者灯笼成排逼近，刀风先于人影",
+              "有人打分手势，准备拆开两条黑路"
             ],
             "transmitters": [
               {
@@ -4962,17 +4982,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "宫墙转角灯笼乱晃，拒马木刺擦出白痕，远处有人压着嗓子报路，却分不清哪条巷子还能走出去。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“宫险分逃”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "夹巷封死",
+              "text": "回程夹巷两头同时落下拒马，宦者灯笼一排排逼近，刀风已贴着墙皮。有人只打了个分手势，两条黑影各自没入更深的宫道，谁先被咬住，此刻谁也说不准。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_07_qingyuan_jiankang.lcq.event.s07_09_hengtang_ambush",
-          "title": "局势中的横塘遇袭",
-          "summary": "围绕“横塘遇袭”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "横塘水面合围",
+          "summary": "横塘别墅临水一面忽然多出船影，弩机上弦声贴着芦苇传来，院内有人去摸密道门闩。",
           "sourceEventId": "lcq.event.s07_09_hengtang_ambush",
           "settledWhenAny": [
             [
@@ -4989,8 +5009,9 @@
             "id": "omen.baseline.lcq.stage_07_qingyuan_jiankang.lcq.event.s07_09_hengtang_ambush",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“横塘遇袭”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "临水码头船影合拢，号灯乱闪",
+              "芦苇丛里传来弩机上弦的轻响",
+              "别墅内墙根有人去试密道门闩"
             ],
             "transmitters": [
               {
@@ -5000,17 +5021,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "横塘夜雾里桨声密了一层，弩机上弦的金属轻响贴着水面滑来，院中脚步慌乱，密道石缝里透出潮气。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“横塘遇袭”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "船弩合岸",
+              "text": "横塘别墅临水一面船影合拢，号灯乱闪。芦苇里弩机上弦，院墙根已有人去试密道门闩。水面像被一只手捏住，这一击落不落得下来，屋里还没人敢赌。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_07_qingyuan_jiankang.lcq.event.s07_10_dragon_fang",
-          "title": "局势中的龙牙杀机",
-          "summary": "围绕“龙牙杀机”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "龙牙锥影浮动",
+          "summary": "建康权贵席间忽然忌谈龙牙锥，萧遥逸查内奸的口风收紧，拜火教的名号与王大将军旧事被对在一起。",
           "sourceEventId": "lcq.event.s07_10_dragon_fang",
           "settledWhenAny": [
             [
@@ -5027,8 +5048,9 @@
             "id": "omen.baseline.lcq.stage_07_qingyuan_jiankang.lcq.event.s07_10_dragon_fang",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“龙牙杀机”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "席间有人把龙牙锥三字咽回去不说",
+              "萧遥逸查内奸的名单被反复涂改",
+              "王大将军旧事与拜火教传言对不上"
             ],
             "transmitters": [
               {
@@ -5038,10 +5060,10 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "建康夜宴散后廊下风冷，龙牙锥的匣影被人匆匆遮住，内奸二字只在唇边转一圈，没有人把话说死。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“龙牙杀机”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "锥影压席",
+              "text": "席间刚有人提起龙牙锥，话头便被按住。萧遥逸案上的内奸名单涂了又改，王大将军战死的旧账与拜火教传言对在一起，却对不齐。更大的伏击像还在城外绕圈。"
             }
           }
         }

@@ -4377,8 +4377,8 @@
       "situations": [
         {
           "id": "world-sim.baseline.lcq.stage_03b_snake_flower_bridge.lcq.event.s03b_snake_flower_bridge_01",
-          "title": "局势中的蛇彝毒袭",
-          "summary": "围绕“蛇彝毒袭”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "蛇彝地界风紧",
+          "summary": "通往蛇彝领地的林径忽然过分安静，草叶上有刺鼻药气，商队放慢脚步、改换探路次序。",
           "sourceEventId": "lcq.event.s03b_snake_flower_bridge_01",
           "settledWhenAny": [
             [
@@ -4395,10 +4395,15 @@
             "id": "omen.baseline.lcq.stage_03b_snake_flower_bridge.lcq.event.s03b_snake_flower_bridge_01",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“蛇彝毒袭”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "林间鸟虫声骤减，草叶带着刺鼻药气",
+              "探路人缩短间距，改走更高更干的土埂",
+              "程宗扬反复按刀，目光扫向藤蔓后的暗处"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -4406,17 +4411,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "湿气里混着苦药味，落叶下隐约有细绳与竹签擦过的痕迹，前队脚步乱了一拍，却没人敢先断言林子里有什么。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“蛇彝毒袭”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "药气入林",
+              "text": "蛇彝地界近了。草叶上的苦味贴着鼻腔，探路的人把间距收紧，专挑干硬土埂走。程宗扬按着刀柄，目光在藤蔓后停了停。风还在，人影却不见，只觉得林子把声音都吞掉了。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_03b_snake_flower_bridge.lcq.event.s03b_snake_flower_bridge_02",
-          "title": "局势中的屠村痕迹",
-          "summary": "围绕“屠村痕迹”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "长屋无人应门",
+          "summary": "蛇彝族长屋门户半敞、烟火已冷，门外泥土被反复踩乱，商队停在门槛外，不敢贸然进去。",
           "sourceEventId": "lcq.event.s03b_snake_flower_bridge_02",
           "settledWhenAny": [
             [
@@ -4433,10 +4438,15 @@
             "id": "omen.baseline.lcq.stage_03b_snake_flower_bridge.lcq.event.s03b_snake_flower_bridge_02",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“屠村痕迹”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "族长屋半敞，灶灰冷透，不见炊烟",
+              "门槛内外脚印杂乱，有拖拽与泼洒痕迹",
+              "有人捂住口鼻，只说屋里气味不对"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -4444,17 +4454,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "寨中狗不叫、灶不响，长屋木门斜开一线，冷灰与腥气从门缝里渗出来。商队停在屋外，先查脚印，没人敢先迈进那道门槛。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“屠村痕迹”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "冷灶敞门",
+              "text": "蛇彝族长屋的门虚掩着，灶灰是冷的。门槛内外脚印乱成一团，像有人进进出出，又像有东西被拖过。程宗扬在门外站住，先闻那股不对的气味。屋里静得过分，谁也还没看清里头究竟摆着什么。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_03b_snake_flower_bridge.lcq.event.s03b_snake_flower_bridge_03",
-          "title": "局势中的鬼王峒血符",
-          "summary": "围绕“鬼王峒血符”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "血符说法不一",
+          "summary": "屋内器物上现出暗红符痕，有人说是鬼王峒巫术，有人只认得出南荒仇杀记号，商队不敢久留。",
           "sourceEventId": "lcq.event.s03b_snake_flower_bridge_03",
           "settledWhenAny": [
             [
@@ -4471,8 +4481,9 @@
             "id": "omen.baseline.lcq.stage_03b_snake_flower_bridge.lcq.event.s03b_snake_flower_bridge_03",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“鬼王峒血符”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "梁柱与地面有未干透的暗红符痕",
+              "口信里同时出现“巫术”与“仇杀”两种说法",
+              "随行的人互相看一眼，已在收拾要走的东西"
             ],
             "transmitters": [
               {
@@ -4482,17 +4493,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "暗红符痕贴在梁柱与地面，气味腥而涩。有人把它叫作鬼王峒的记号，也有人只说南荒仇杀常留这种印。袋索已被提前收紧，去留还没人拍板。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“鬼王峒血符”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "符痕未干",
+              "text": "暗红符痕还没干透，贴在梁柱与地面上。有人压低声音说是鬼王峒的巫术，也有人只认它是南荒仇杀留下的记号。两种说法并排着，谁也没能一锤定音。袋索已经提前收紧，脚步却还停在原地。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_03b_snake_flower_bridge.lcq.event.s03b_snake_flower_bridge_04",
-          "title": "局势中的云氏同行",
-          "summary": "围绕“云氏同行”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "两队同望白夷",
+          "summary": "云氏商队与程宗扬一行在岔口滞留，口信都指向白夷族方向，是否并路仍未说死。",
           "sourceEventId": "lcq.event.s03b_snake_flower_bridge_04",
           "settledWhenAny": [
             [
@@ -4509,10 +4520,15 @@
             "id": "omen.baseline.lcq.stage_03b_snake_flower_bridge.lcq.event.s03b_snake_flower_bridge_04",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“云氏同行”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "云氏车仗与这边货驮停在同一岔口",
+              "两边探路的人都在打听白夷族的走法",
+              "程宗扬把霓龙丝的去向压在嘴边，尚未出口"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -4520,17 +4536,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "两支商队的牲口并排饮水，地图在膝上摊开又合上。白夷族的路名被反复提起，并队的话只说到一半，没有人先把条件讲死。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“云氏同行”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "岔口并辔",
+              "text": "云氏的车仗和这边的货驮停在同一岔口。探路的人来回打听白夷族怎么走，牲口喝着同一洼水。程宗扬把霓龙丝的去向按在舌底，话到唇边又收回。并路的意思已经散在风里，条款却还没落地。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_03b_snake_flower_bridge.lcq.event.s03b_snake_flower_bridge_05",
-          "title": "局势中的巨藤断桥",
-          "summary": "围绕“巨藤断桥”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "古藤吱呀作响",
+          "summary": "万古巨藤搭成的桥面发潮发滑，深处传来干裂的轻响，攀爬的人把间距拉开，却仍要往崖顶去。",
           "sourceEventId": "lcq.event.s03b_snake_flower_bridge_05",
           "settledWhenAny": [
             [
@@ -4547,8 +4563,9 @@
             "id": "omen.baseline.lcq.stage_03b_snake_flower_bridge.lcq.event.s03b_snake_flower_bridge_05",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“巨藤断桥”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "藤皮湿滑，手一握就渗出冷水",
+              "桥心深处传来细而干的裂响",
+              "前队放慢，后队抓住侧藤，不敢并排"
             ],
             "transmitters": [
               {
@@ -4558,17 +4575,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "万古巨藤横在崖间，皮上凝着水珠，踩上去微微下沉。桥心偶尔弹出一声干裂，像老木在里头松扣。人还在往上爬，只是每一步都先试重量。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“巨藤断桥”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "藤桥松扣",
+              "text": "万古巨藤搭成的桥面又潮又滑，手心刚握上去就沁出水来。桥心深处轻轻一响，像老筋在里头松了扣。前队把步子放慢，后队改抓两侧细藤。崖顶还在上头，脚底下那一层却已经不老实。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_03b_snake_flower_bridge.lcq.event.s03b_snake_flower_bridge_06",
-          "title": "局势中的花苗救援",
-          "summary": "围绕“花苗救援”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "崖上传来对歌",
+          "summary": "半崖之上忽然有花苗口音的歌声来回应答，人影在崖沿晃动，绳索垂下一段又停住。",
           "sourceEventId": "lcq.event.s03b_snake_flower_bridge_06",
           "settledWhenAny": [
             [
@@ -4585,8 +4602,9 @@
             "id": "omen.baseline.lcq.stage_03b_snake_flower_bridge.lcq.event.s03b_snake_flower_bridge_06",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“花苗救援”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "崖上传来花苗口音的对歌声",
+              "崖沿人影晃动，彩布与银饰一闪即收",
+              "粗绳垂下一截，末端在风里打转，尚未抛稳"
             ],
             "transmitters": [
               {
@@ -4596,17 +4614,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "歌声贴着石壁折下来，字句听不真切，调子却是花苗对答。崖沿上银饰一闪，粗绳垂了一截又停住。底下的人仰着头，还不知道上头要收还是要放。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“花苗救援”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "崖歌未落",
+              "text": "半崖上传来花苗口音的对歌，一问一答贴着石壁折下来。崖沿有人影晃过，彩布与银饰只闪一下。一根粗绳垂下一截，末端在风里打转，既没收回，也没抛稳。底下的人仰着头，只能先听那歌声落不落。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lcq.stage_03b_snake_flower_bridge.lcq.event.s03b_snake_flower_bridge_07",
-          "title": "局势中的龙神新娘",
-          "summary": "围绕“龙神新娘”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "送嫁路封半截",
+          "summary": "花苗寨中传出要备龙神新娘与贡物往熊耳铺的风声，鬼王峒的名号压得人不敢高声，行装却只备到一半。",
           "sourceEventId": "lcq.event.s03b_snake_flower_bridge_07",
           "settledWhenAny": [
             [
@@ -4623,8 +4641,9 @@
             "id": "omen.baseline.lcq.stage_03b_snake_flower_bridge.lcq.event.s03b_snake_flower_bridge_07",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“龙神新娘”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "绣衣与贡箱被抬到寨门，又被喝令放下",
+              "口信里熊耳铺与鬼王峒的名号互相顶着",
+              "少女被叫去试装，旋即又被遣回屋内"
             ],
             "transmitters": [
               {
@@ -4634,10 +4653,10 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "寨门内外脚步乱，绣衣与木箱抬起又放下。有人把熊耳铺和鬼王峒两个地名叠在同一句里，声音压得很低。送嫁的排场摆了一半，谁也不肯说这趟路到底走不走。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“龙神新娘”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "贡箱未发",
+              "text": "花苗寨里绣衣与贡箱抬到门口，又被喝令放下。熊耳铺和鬼王峒的名号挤在同一句口信里，谁先说谁就把声音压下去。有少女被叫去试装，旋即又被遣回屋。龙神新娘的名目已经传开，车仗却还停在寨门内。"
             }
           }
         }
