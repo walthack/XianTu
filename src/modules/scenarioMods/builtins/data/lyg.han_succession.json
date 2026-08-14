@@ -6241,8 +6241,8 @@
       "situations": [
         {
           "id": "world-sim.baseline.lyg.han_succession.lyg.event.han_succession_01_beat",
-          "title": "局势中的帝陵分兵",
-          "summary": "围绕“帝陵分兵”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "帝陵两路将分",
+          "summary": "巫宗去向与帝陵清场同时催人，行装被分成两堆，口令也开始对不齐，谁先动身仍无人拍板。",
           "sourceEventId": "lyg.event.han_succession_01_beat",
           "settledWhenAny": [
             [
@@ -6259,10 +6259,15 @@
             "id": "omen.baseline.lyg.han_succession.lyg.event.han_succession_01_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“帝陵分兵”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "帝陵方向的甲骑与追线的轻骑被分列整装",
+              "传令兵来回改口令，回陵与追线互相抢路",
+              "程宗扬面前两堆行囊，令旗未落"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6270,17 +6275,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "陵道风里夹着马勒与甲叶声，尘土扬起又落下，远处有人压着嗓子改口令，却说不清先走哪一路。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“帝陵分兵”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "两路将分",
+              "text": "帝陵一侧旗帜收短，另一侧轻骑已备好干粮。程宗扬看着两堆行装，巫宗的踪迹和陵上的清场同时催人，令旗却还停在半空。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.han_succession.lyg.event.han_succession_02_beat",
-          "title": "局势中的赵氏父兄失踪",
-          "summary": "围绕“赵氏父兄失踪”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "赵氏家讯失联",
+          "summary": "中常侍连夜入报，皇后父兄的应卯对不上号，帝陵侧门加岗，下落说法互相顶撞。",
           "sourceEventId": "lyg.event.han_succession_02_beat",
           "settledWhenAny": [
             [
@@ -6297,10 +6302,15 @@
             "id": "omen.baseline.lyg.han_succession.lyg.event.han_succession_02_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“赵氏父兄失踪”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "中常侍求见，只说皇后父兄近日无人应卯",
+              "帝陵侧门加锁，问到赵氏亲眷便支吾",
+              "口信有说远行、有说隔离，日辰对不齐"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6308,17 +6318,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "陵墙灯火比往日密一圈，内侍脚步急却不敢高声，门外马蹄停了又走，名册边空着两行。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“赵氏父兄失踪”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "名册空两行",
+              "text": "中常侍捧着名册立在廊下，皇后父兄的应卯处一片空白。帝陵侧门加了岗，传言互相顶撞，谁也不肯把下落说死。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.han_succession.lyg.event.han_succession_03_beat",
-          "title": "局势中的吕雉入府",
-          "summary": "围绕“吕雉入府”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "程府忽然谢客",
+          "summary": "程府内宅闭门清客，侧门停着未卸的女眷箱笼，吕雉求见留宿的风声压在厅里。",
           "sourceEventId": "lyg.event.han_succession_03_beat",
           "settledWhenAny": [
             [
@@ -6335,10 +6345,15 @@
             "id": "omen.baseline.lyg.han_succession.lyg.event.han_succession_03_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“吕雉入府”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "程府侧门停着未卸的女眷箱笼",
+              "内宅忽然谢客，丫鬟拦人不得近厅",
+              "廊下传吕雉求留，厅内压声未决"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6346,17 +6361,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "天井茶尚未凉，屏风后低语断续，门槛内外靴声一乱，门楣灯火却先亮了一夜。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“吕雉入府”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "内宅闭门",
+              "text": "程府侧门箱笼未卸，内宅忽然谢客。厅里只听得压低的争执，吕雉的来意还没说透，门槛上的灯已经亮过子时。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.han_succession.lyg.event.han_succession_04_beat",
-          "title": "局势中的拥立阴谋",
-          "summary": "围绕“拥立阴谋”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "储位密语压喉",
+          "summary": "信使进门先看左右，话到一半改称当面再说，闲人被拦在廊下，储位二字无人落笔。",
           "sourceEventId": "lyg.event.han_succession_04_beat",
           "settledWhenAny": [
             [
@@ -6373,10 +6388,15 @@
             "id": "omen.baseline.lyg.han_succession.lyg.event.han_succession_04_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“拥立阴谋”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "信使袖中纸角未展，只说宫里有人乱议储位",
+              "传话者互相叮嘱，不许把话写进册子",
+              "廊下拦客，只许极少数人入内听完"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6384,17 +6404,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "殿角风把烛火吹斜，靴底在砖上停了又起，谁也不敢把那半截口信说全。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“拥立阴谋”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "纸未摊开",
+              "text": "信使喉结滚动，只肯说宫里有人拿储位做局。纸还没摊开，廊下已先拦人，风比话先紧了一步，听的人脸色都不一样。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.han_succession.lyg.event.han_succession_05_beat",
-          "title": "局势中的蛇夫人计划",
-          "summary": "围绕“蛇夫人计划”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "椒房夜议发紧",
+          "summary": "昭阳殿灯火通宵，赵氏姐妹对坐压声，有人隐约提到一桩以储嗣压局的计较，细节却封着。",
           "sourceEventId": "lyg.event.han_succession_05_beat",
           "settledWhenAny": [
             [
@@ -6411,10 +6431,15 @@
             "id": "omen.baseline.lyg.han_succession.lyg.event.han_succession_05_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“蛇夫人计划”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "昭阳殿通宵未熄，赵氏姐妹忽语忽默",
+              "中人只传夫人有计，问下去便改口",
+              "言及储嗣，室内匣柜被一一扣严"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6422,17 +6447,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "殿外廊灯被罩住，药香与脂粉气缠在门缝里，谁走近便被软软挡回。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“蛇夫人计划”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "殿门扣严",
+              "text": "昭阳殿灯火一夜未歇。赵氏姐妹对坐时声线发紧，中人只含糊说夫人有计，匣柜扣死，储嗣二字像烫手。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.han_succession.lyg.event.han_succession_06_beat",
-          "title": "局势中的加速登基",
-          "summary": "围绕“加速登基”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "仪注连夜提前",
+          "summary": "定陶王受册的仪注被往前挪，长秋宫加岗禁声，程宗扬袖间气息忽冷忽热，两件事缠在一处。",
           "sourceEventId": "lyg.event.han_succession_06_beat",
           "settledWhenAny": [
             [
@@ -6449,10 +6474,15 @@
             "id": "omen.baseline.lyg.han_succession.lyg.event.han_succession_06_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“加速登基”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "礼官连夜改仪注，受册时辰往前挪",
+              "长秋宫内外加岗，闲话一律禁声",
+              "程宗扬袖间气息忽冷忽热，近侍不敢问"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6460,17 +6490,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "鼓架已列在殿外，太医的履声与礼官的笔声交错，谁也不敢问先办哪一桩。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“加速登基”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "时辰被挪",
+              "text": "礼官把受册时辰往前赶，长秋宫灯火却比仪仗更密。程宗扬袖风忽冷忽热，近侍低头走过，没人敢问今夜到底先稳哪一头。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.han_succession.lyg.event.han_succession_07_beat",
-          "title": "局势中的长秋宫夜入",
-          "summary": "围绕“长秋宫夜入”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "长秋宫夜禁",
+          "summary": "密道口换了锁钥，长秋宫夜禁陡然收紧，内里灯火偏明，程宗扬行功时呼吸一滞。",
           "sourceEventId": "lyg.event.han_succession_07_beat",
           "settledWhenAny": [
             [
@@ -6487,10 +6517,15 @@
             "id": "omen.baseline.lyg.han_succession.lyg.event.han_succession_07_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“长秋宫夜入”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "密道口新换锁钥，守门人不报时辰",
+              "宫墙内灯火偏明，外廊不许人近",
+              "程宗扬行功时呼吸一滞，袖风发紧"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6498,17 +6533,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "砖缝里渗出灯油味，夜风贴着宫墙走，远处更鼓被压低，像怕惊动里面的人。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“长秋宫夜入”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "密道换钥",
+              "text": "密道砖缝渗着灯油味。长秋宫夜禁陡然收紧，里面灯火偏明，像在等什么人，又像在怕什么人走近。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.han_succession.lyg.event.han_succession_08_beat",
-          "title": "局势中的登基骤变",
-          "summary": "围绕“登基骤变”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "典仪帷后紊乱",
+          "summary": "朝贺班列已齐，帷后却来回传汤药，程宗扬身边冷热不均，登基鼓乐压不住那一阵乱步。",
           "sourceEventId": "lyg.event.han_succession_08_beat",
           "settledWhenAny": [
             [
@@ -6525,10 +6560,15 @@
             "id": "omen.baseline.lyg.han_succession.lyg.event.han_succession_08_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“登基骤变”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "朝贺班列已齐，帷后仍在传汤与冰帕",
+              "有人拦着太医，不许在帘外高声",
+              "程宗扬额上冷汗，左右不敢揭帘"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6536,17 +6576,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "殿外韶乐已起，殿内却是履声杂乱，冰帕与热汤在帘后交叉传递，气味也不对。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“登基骤变”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "帷后传汤",
+              "text": "朝贺的班列在殿外站齐，帷后却只听见传汤与冰帕。程宗扬身边冷热不均，鼓乐再响，也盖不住帘后那一阵乱。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.han_succession.lyg.event.han_succession_09_beat",
-          "title": "局势中的通幽突破",
-          "summary": "围绕“通幽突破”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "真元关口将至",
+          "summary": "典仪未散，殿中烛火斜而不灭，死气与真元隐隐相绞，程宗扬胸口发闷，关口开不开仍看不清。",
           "sourceEventId": "lyg.event.han_succession_09_beat",
           "settledWhenAny": [
             [
@@ -6563,10 +6603,15 @@
             "id": "omen.baseline.lyg.han_succession.lyg.event.han_succession_09_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“通幽突破”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "殿中起了一层冷雾，香案烛火斜而不灭",
+              "有人提起孟舍人旧案，空气忽然发沉",
+              "程宗扬呼吸沉浊，近侍不敢近前试脉"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6574,17 +6619,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "钟磬还在响，地面却像结了一层薄霜，谁靠近御座都下意识屏住气。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“通幽突破”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "烛火斜着",
+              "text": "典仪未散，殿里忽然一层冷雾。程宗扬胸口发闷，烛火斜而不灭，死气与真元像在较劲，关口开不开，谁也不敢先出声。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.han_succession.lyg.event.han_succession_10_beat",
-          "title": "局势中的审问汪臻",
-          "summary": "围绕“审问汪臻”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "汪臻连夜被押",
+          "summary": "廊下新押到一人，名帖写着汪臻，白员外的诗文与口述被摊开对勘，对得上的句子很少。",
           "sourceEventId": "lyg.event.han_succession_10_beat",
           "settledWhenAny": [
             [
@@ -6601,10 +6646,15 @@
             "id": "omen.baseline.lyg.han_succession.lyg.event.han_succession_10_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“审问汪臻”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "廊下绑着新押到的人，名帖写着汪臻",
+              "案上摊开白员外旧诗，与口述对不齐",
+              "押解者只报擒获经过，不评传说真假"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6612,10 +6662,10 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "灯下纸边卷起，墨迹与口涎味混在一起，外面有人来回踱步，等一句能对上号的话。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“审问汪臻”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "诗文对不齐",
+              "text": "汪臻被连夜押到廊下，案上白员外的旧诗摊开一行行对。句子和口述总差半拍，押解的人只说人已经在，真假还没人敢拍板。"
             }
           }
         }

@@ -6122,8 +6122,8 @@
       "situations": [
         {
           "id": "world-sim.baseline.lyg.ganlu_aftershock.lyg.event.ganlu_aftershock_01_beat",
-          "title": "局势中的金身法王",
-          "summary": "围绕“金身法王”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "慈恩寺来帖",
+          "summary": "大慈恩寺换防加紧，请帖召程宗扬入寺，金身法王与窥基的说法互相打架，去向未明。",
           "sourceEventId": "lyg.event.ganlu_aftershock_01_beat",
           "settledWhenAny": [
             [
@@ -6140,8 +6140,9 @@
             "id": "omen.baseline.lyg.ganlu_aftershock.lyg.event.ganlu_aftershock_01_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“金身法王”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "大慈恩寺山门加派僧兵，香客被拦在影壁外",
+              "请帖上写着寺中召见程宗扬",
+              "金身法王与窥基的传闻彼此矛盾"
             ],
             "transmitters": [
               {
@@ -6151,17 +6152,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "城东梵呗夹着铁器声，寺门换岗比往日密，请帖与流言同时散开，却没人能说清寺内由谁做主。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“金身法王”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "寺门请帖",
+              "text": "大慈恩寺外僧兵换岗加紧，香客被挡在影壁。一份请帖送到程宗扬手边，只写寺中召见。街上有人呼金身法王，又有人咬定窥基遭指斥，两套说法对不上号。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.ganlu_aftershock.lyg.event.ganlu_aftershock_02_beat",
-          "title": "局势中的蓬莱秘阁",
-          "summary": "围绕“蓬莱秘阁”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "秘阁夜灯",
+          "summary": "银汉门到太液池一线换防加严，十六王宅口信含糊，蓬莱秘阁灯火异常，内里虚实不明。",
           "sourceEventId": "lyg.event.ganlu_aftershock_02_beat",
           "settledWhenAny": [
             [
@@ -6178,8 +6179,9 @@
             "id": "omen.baseline.lyg.ganlu_aftershock.lyg.event.ganlu_aftershock_02_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“蓬莱秘阁”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "持仇士良令牌过门的核验比往日苛刻",
+              "银汉门至太液池一线禁军换防打乱旧序",
+              "十六王宅方向驿马加急，口信含糊"
             ],
             "transmitters": [
               {
@@ -6189,17 +6191,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "宫墙内灯火沿太液池一线乱移，银汉门呵斥声一阵紧过一阵，令牌核验台前排起了沉默的人影。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“蓬莱秘阁”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "宫灯西移",
+              "text": "银汉门外禁军换防打乱旧序，持仇士良令牌者也要重核。太液池方向灯火挤向蓬莱秘阁，十六王宅口信含糊催人入内。里头在审什么，门外听不真切。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.ganlu_aftershock.lyg.event.ganlu_aftershock_03_beat",
-          "title": "局势中的长安劫掠",
-          "summary": "围绕“长安劫掠”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "寺观遭撬",
+          "summary": "长安寺观门板多被撬开，法云尼寺一带封路，衙署空班，巡丁失联，坊间说法互相打架。",
           "sourceEventId": "lyg.event.ganlu_aftershock_03_beat",
           "settledWhenAny": [
             [
@@ -6216,8 +6218,9 @@
             "id": "omen.baseline.lyg.ganlu_aftershock.lyg.event.ganlu_aftershock_03_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“长安劫掠”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "多处寺庙道观门环被撬，香案翻倒在阶下",
+              "法云尼寺巷口封路，巡丁班次对不上号",
+              "衙署堂上无人理事，里正互推不敢呈报"
             ],
             "transmitters": [
               {
@@ -6227,17 +6230,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "夜里铜器落地的声音从寺观方向传来，天亮后巷口多了封条和空岗，巡丁名册上有人失联，却没人敢说是谁下的手。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“长安劫掠”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "坊市封巷",
+              "text": "城里寺观门板多被撬开，香案翻在阶下。法云尼寺一带封了路，衙署堂上空着，里正互推。有人咬定窥基弃佛牵出乱子，有人只说恶徒趁火，谁也说不准还会蔓延到哪条街。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.ganlu_aftershock.lyg.event.ganlu_aftershock_04_beat",
-          "title": "局势中的秘阁供词",
-          "summary": "围绕“秘阁供词”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "秘阁夜审",
+          "summary": "蓬莱秘阁灯火通宵，李训被提审的风声传出，案卷匣来回搬运，供词内容对外封锁。",
           "sourceEventId": "lyg.event.ganlu_aftershock_04_beat",
           "settledWhenAny": [
             [
@@ -6254,8 +6257,9 @@
             "id": "omen.baseline.lyg.ganlu_aftershock.lyg.event.ganlu_aftershock_04_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“秘阁供词”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "蓬莱秘阁窗纸后灯火通宵不灭",
+              "有人看见李训被押往秘阁方向",
+              "封口案卷匣连夜进出，卫士禁止旁听"
             ],
             "transmitters": [
               {
@@ -6265,17 +6269,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "秘阁廊下枷锁轻响，灯影里人影跪起不定，卫士把闲人往回赶，只说今夜问案，不准打听供词。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“秘阁供词”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "阁中问案",
+              "text": "蓬莱秘阁灯火通宵，廊下有枷锁轻响。有人看见李训被押往那个方向，封口案卷匣进进出出。卫士只准报职名，不准旁听里头问的是哪几个人。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.ganlu_aftershock.lyg.event.ganlu_aftershock_05_beat",
-          "title": "局势中的李辅国审判",
-          "summary": "围绕“李辅国审判”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "秘阁设案",
+          "summary": "李辅国在蓬莱秘阁设案，田令孜、刘贞亮、鱼弘志被点名提审，庭上刀锯声隐约，落判不明。",
           "sourceEventId": "lyg.event.ganlu_aftershock_05_beat",
           "settledWhenAny": [
             [
@@ -6292,8 +6296,9 @@
             "id": "omen.baseline.lyg.ganlu_aftershock.lyg.event.ganlu_aftershock_05_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“李辅国审判”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "蓬莱秘阁正中设公案，李辅国临座问话",
+              "田令孜、刘贞亮、鱼弘志被依次点名",
+              "庭外备下刑具，卫士禁止传话出阁"
             ],
             "transmitters": [
               {
@@ -6303,17 +6308,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "秘阁庭院里公案灯火刺眼，点名声一个接一个，刑具在廊下摆开，没人敢把里面的话带出去。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“李辅国审判”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "阁中点名",
+              "text": "蓬莱秘阁正中摆开公案，李辅国临座。田令孜、刘贞亮、鱼弘志被依次点名，廊下刑具已经摆好。庭上问得很急，落判却没有传出来。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.ganlu_aftershock.lyg.event.ganlu_aftershock_06_beat",
-          "title": "局势中的杀李昂议",
-          "summary": "围绕“杀李昂议”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "安天下之议",
+          "summary": "贾文和神色急促求见程宗扬，密笺只写安天下，话锋对着李昂，却不把话说死。",
           "sourceEventId": "lyg.event.ganlu_aftershock_06_beat",
           "settledWhenAny": [
             [
@@ -6330,8 +6335,9 @@
             "id": "omen.baseline.lyg.ganlu_aftershock.lyg.event.ganlu_aftershock_06_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“杀李昂议”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "贾文和拦路求见，袖中捏着未展开的密笺",
+              "密笺上只写安天下三字，其余空白",
+              "他几次把话头引向李昂，又自己咽回去"
             ],
             "transmitters": [
               {
@@ -6341,17 +6347,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "僻静廊间脚步乱，贾文和反复徘徊，袖里纸页摩得发皱，像有一句极重的话卡在喉间。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“杀李昂议”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "密笺三字",
+              "text": "贾文和拦住程宗扬，袖中密笺只写安天下。他几次把话头引向李昂，又自己咽回去，神色比刀还紧。这话听得人胸口发沉，却没有逼人立刻答允。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.ganlu_aftershock.lyg.event.ganlu_aftershock_07_beat",
-          "title": "局势中的唐皇弑逆",
-          "summary": "围绕“唐皇弑逆”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "曲江苑封路",
+          "summary": "曲江苑精舍突然封路换防，程元振与鱼弘志一线调动异常，禁中灯火乱移，内里情况不明。",
           "sourceEventId": "lyg.event.ganlu_aftershock_07_beat",
           "settledWhenAny": [
             [
@@ -6368,8 +6374,9 @@
             "id": "omen.baseline.lyg.ganlu_aftershock.lyg.event.ganlu_aftershock_07_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“唐皇弑逆”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "曲江苑精舍巷口封路，旧门牌被撤下",
+              "鱼弘志随程元振一线连夜改道调动",
+              "精舍窗纸后灯火乱，金器碰撞声传出"
             ],
             "transmitters": [
               {
@@ -6379,17 +6386,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "曲江苑方向夜风里有呵斥和金属轻响，精舍外围换上生面孔，行人被赶到柳堤以外，没人说得清里头在做什么。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“唐皇弑逆”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "精舍封苑",
+              "text": "曲江苑精舍忽然封路，旧门牌撤了，换上生面孔守夜。鱼弘志随程元振一线改道调动，窗纸后灯火乱移，金器轻轻一碰又停。苑里压得很死，谁也看不见里头站着谁。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.ganlu_aftershock.lyg.event.ganlu_aftershock_08_beat",
-          "title": "局势中的仇士良返宫",
-          "summary": "围绕“仇士良返宫”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "车驾折返",
+          "summary": "仇士良车驾半路折返入宫，宫墙内惨叫难辨来处，萧太后起居无人应声，去向说法不一。",
           "sourceEventId": "lyg.event.ganlu_aftershock_08_beat",
           "settledWhenAny": [
             [
@@ -6406,8 +6413,9 @@
             "id": "omen.baseline.lyg.ganlu_aftershock.lyg.event.ganlu_aftershock_08_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“仇士良返宫”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "仇士良车驾出宫未远又折返回门",
+              "宫墙内传来惨叫，卫士互相对视不语",
+              "萧太后起居殿无人应声，侍女说辞打架"
             ],
             "transmitters": [
               {
@@ -6417,17 +6425,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "宫道上灯笼折返，车轮碾过湿石，墙里一声惨叫被风撕碎，内侍互相使眼色，谁也不肯把太后的名讳说全。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“仇士良返宫”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "车驾回辙",
+              "text": "仇士良车驾出宫未远又折返回门，脸上颜色难看。宫墙里一声惨叫辨不清来处，萧太后起居殿无人应声，侍女有的说请安未回，有的说根本没见到人。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.ganlu_aftershock.lyg.event.ganlu_aftershock_09_beat",
-          "title": "局势中的惨案传闻",
-          "summary": "围绕“惨案传闻”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "罗令来报",
+          "summary": "罗令神色发白求见程宗扬，宫中惨叫与升仙之说互相打架，妃嫔安危说法不一。",
           "sourceEventId": "lyg.event.ganlu_aftershock_09_beat",
           "settledWhenAny": [
             [
@@ -6444,8 +6452,9 @@
             "id": "omen.baseline.lyg.ganlu_aftershock.lyg.event.ganlu_aftershock_09_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“惨案传闻”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "罗令求见时袖口发抖，几次把话吞回去",
+              "宫中有人传升仙，有人只敢说听见惨叫",
+              "妃嫔所居灯火灭了一片，门上多了封条"
             ],
             "transmitters": [
               {
@@ -6455,10 +6464,10 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "偏殿外罗令徘徊不敢入内，远处宫墙里哭声与诵经声搅在一起，门上新贴的封条还没干透。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“惨案传闻”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "封条与哭",
+              "text": "罗令求见程宗扬，袖口发抖，话到嘴边又咽回去。他只说宫里有人讲升仙，有人只敢提惨叫，妃嫔所居灯火灭了一片，门上多了新封条。两套说法对不上，谁也没把经过说圆。"
             }
           }
         }

@@ -1238,8 +1238,8 @@
       "situations": [
         {
           "id": "world-sim.baseline.lyg.ganlu_bian.lyg.event.li_jinxiang_meeting",
-          "title": "局势中的接下李昂托付的闭门密令",
-          "summary": "围绕“接下李昂托付的闭门密令”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "宫门收紧闭门口信",
+          "summary": "大明宫清思殿外忽然加岗，李昂把杨玉环留在近前，话头落在天策府与鱼朝恩上，她听完神色发紧，却未当众说破。",
           "sourceEventId": "lyg.event.li_jinxiang_meeting",
           "settledWhenAny": [
             [
@@ -1256,10 +1256,19 @@
             "id": "omen.baseline.lyg.ganlu_bian.lyg.event.li_jinxiang_meeting",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“接下李昂托付的闭门密令”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "清思殿廊下临时加岗，闲人被喝止不得近前",
+              "杨玉环听李昂数语后蹙眉，似要出宫传话",
+              "口信反复落到天策府闭门与鱼朝恩身上"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.li_ang"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.yang_yuhuan"
+              },
               {
                 "kind": "messenger"
               },
@@ -1267,17 +1276,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "大明宫深处换岗比平日密，廊下灯影一动便有人低喝止步，殿内交代了什么，廊外听不真切。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“接下李昂托付的闭门密令”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "殿口加岗",
+              "text": "清思殿外多了一层岗。李昂只把杨玉环留在近前，说到天策府须闭门、鱼朝恩须有人盯住便住了口。杨玉环眉心微蹙，并未当众应下，廊上亦无人敢再问。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.ganlu_bian.lyg.event.yang_yuhuan_report",
-          "title": "局势中的赴阳禄门院会见黎锦香",
-          "summary": "围绕“赴阳禄门院会见黎锦香”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "废栈灯火等人",
+          "summary": "阳禄门院废弃客栈夜里透出灯火，黎锦香不走府门，只把路引压在字条上，约人对王守澄案的旧话。",
           "sourceEventId": "lyg.event.yang_yuhuan_report",
           "settledWhenAny": [
             [
@@ -1294,10 +1303,19 @@
             "id": "omen.baseline.lyg.ganlu_bian.lyg.event.yang_yuhuan_report",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“赴阳禄门院会见黎锦香”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "废弃客栈门缝漏灯，桌案压着半张路引字条",
+              "黎锦香避开府门，只在阳禄门院一带留痕",
+              "周飞近日未在客栈门口露面"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "lyg.character.li_jinxiang"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.zhou_fei"
+              },
               {
                 "kind": "messenger"
               },
@@ -1305,17 +1323,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "阳禄门院空屋里潮气很重，风过梁缝带起纸页，远处偶有脚步绕开正路，像在找一扇不该亮灯的门。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“赴阳禄门院会见黎锦香”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "废栈亮灯",
+              "text": "废弃客栈不该有灯，今夜却从门缝漏出来。字条只写阳禄门院，落款不像府里的人。黎锦香的气息停在屋后，周飞这边反而安静。去或不去，路还在脚下。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.ganlu_bian.lyg.event.jia_wenhe_plan",
-          "title": "局势中的厘清广源行等级控制",
-          "summary": "围绕“厘清广源行等级控制”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "行里暗处分人等",
+          "summary": "同一间废栈里，黎锦香把广源行对人的叫法说得断续，权势诱饵与人质惩罚都被点到，周飞的名字夹在缝里。",
           "sourceEventId": "lyg.event.jia_wenhe_plan",
           "settledWhenAny": [
             [
@@ -1332,10 +1350,19 @@
             "id": "omen.baseline.lyg.ganlu_bian.lyg.event.jia_wenhe_plan",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“厘清广源行等级控制”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "儿马、白口马这类称呼在灯下被反复咬清",
+              "黎锦香说到人质时压低声音，不再往下讲",
+              "周飞只传口信回来，人影对不上这些称呼"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "lyg.character.li_jinxiang"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.zhou_fei"
+              },
               {
                 "kind": "messenger"
               },
@@ -1343,17 +1370,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "客栈梁上积尘簌簌往下掉，灯焰一跳，墙上旧符纸便晃一下，像有人把等级名册在远处翻得沙沙响。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“厘清广源行等级控制”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "等级暗响",
+              "text": "黎锦香把广源行里的叫法一个个咬出来，儿马、白口马都带着权势和人质的味道。周飞的名字被她轻轻搁在中间，却不说他如今算哪一等。灯还亮着，话没有收完。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.ganlu_bian.lyg.event.soul_summoning",
-          "title": "局势中的确认周飞与十方丛林合谋",
-          "summary": "围绕“确认周飞与十方丛林合谋”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "宅门被人细细点名",
+          "summary": "密谈里程宅、孙寿与小紫被叠着提起，十方丛林的人在外围走过，周飞的路引与丛林路引对不齐，合不合谋还看不透。",
           "sourceEventId": "lyg.event.soul_summoning",
           "settledWhenAny": [
             [
@@ -1370,10 +1397,19 @@
             "id": "omen.baseline.lyg.ganlu_bian.lyg.event.soul_summoning",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“确认周飞与十方丛林合谋”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "孙寿与小紫的起居被外人打听得过细",
+              "十方丛林人影在程宅墙外转过不止一回",
+              "周飞名下路引与丛林路引有重叠墨迹"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "lyg.character.li_jinxiang"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.zhou_fei"
+              },
               {
                 "kind": "messenger"
               },
@@ -1381,17 +1417,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "废栈窗外夜风把尘土吹成一条细线，远处梆子乱了一拍，像有人沿着程宅外墙量路，又像只是巡夜走错。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“确认周飞与十方丛林合谋”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "墙外量路",
+              "text": "孙寿、小紫的名字被问得太具体，细到哪一进院子亮灯。窗外又晃过十方丛林的衣角，周飞那头的路引墨色却和丛林的混在一处。谁在联手，灯下对不上。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.ganlu_bian.lyg.event.bai_nichang_defeat",
-          "title": "局势中的核对黎锦香潜入与劫俘经过",
-          "summary": "围绕“核对黎锦香潜入与劫俘经过”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "密室对上宅中旧路",
+          "summary": "转入更深的密室后，黎锦香把程宅更道说得过熟，灯下另有女忍被隔开看管的痕迹，两边口径对不齐。",
           "sourceEventId": "lyg.event.bai_nichang_defeat",
           "settledWhenAny": [
             [
@@ -1408,10 +1444,19 @@
             "id": "omen.baseline.lyg.ganlu_bian.lyg.event.bai_nichang_defeat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“核对黎锦香潜入与劫俘经过”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "密室门闩新换，地上留着束绳与拖行印",
+              "黎锦香能准确指出程宅更道转角",
+              "飞鸟萤子被单独隔开，呼吸未稳"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "lyg.character.li_jinxiang"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.fei_niao_ying_zi"
+              },
               {
                 "kind": "messenger"
               },
@@ -1419,17 +1464,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "阳禄门院夹道潮冷，墙砖缝里渗出水渍，越往里走人声越薄，只剩锁链轻碰，像有旧事要被一条一条对过。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“核对黎锦香潜入与劫俘经过”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "更深一锁",
+              "text": "密室灯一亮，黎锦香先把程宅更道转角说全了，熟得不像旁听来的。角落里飞鸟萤子被隔开，腕上还有绳痕。她怎么进过宅、人又怎么到此，两边都只露出半句。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.ganlu_bian.lyg.event.liangzhou_victory",
-          "title": "局势中的问出飞鸟家族与剑柄线索",
-          "summary": "围绕“问出飞鸟家族与剑柄线索”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "女忍吐出信物半句",
+          "summary": "飞鸟萤子被唤醒后咬着家族、后裔和剑柄，雇主来历与印信真假对不上，黎锦香追问时她几次改口。",
           "sourceEventId": "lyg.event.liangzhou_victory",
           "settledWhenAny": [
             [
@@ -1446,10 +1491,19 @@
             "id": "omen.baseline.lyg.ganlu_bian.lyg.event.liangzhou_victory",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“问出飞鸟家族与剑柄线索”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "飞鸟萤子醒来先吐出藤原秀子后裔几字",
+              "案上摊着东瀛印信拓片与剑柄图样",
+              "追问雇主时她目光游移，前后不一"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "lyg.character.li_jinxiang"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.fei_niao_ying_zi"
+              },
               {
                 "kind": "messenger"
               },
@@ -1457,17 +1511,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "密室香灰结成一小截，醒神的气味刺鼻，案上拓片边角卷起，像刚从衣缝里被逼着掏出来，字迹被汗洇开。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“问出飞鸟家族与剑柄线索”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "拓片未干",
+              "text": "飞鸟萤子睁眼后先抓住藤原秀子后裔几个字，又摸到布都御魂剑柄的轮廓。案上印信拓片墨色未干。黎锦香问谁使她来找，她答了一半又咽回去。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.ganlu_bian.lyg.event.release_jingnian",
-          "title": "局势中的旁听博陆王府权宦追凶",
-          "summary": "围绕“旁听博陆王府权宦追凶”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "王府连夜召权宦",
+          "summary": "博陆王府灯火通明，李辅国把鱼朝恩、仇士良、田令孜召到堂上，追问王守澄怎么死的，堂上威压比话更先落地。",
           "sourceEventId": "lyg.event.release_jingnian",
           "settledWhenAny": [
             [
@@ -1484,10 +1538,19 @@
             "id": "omen.baseline.lyg.ganlu_bian.lyg.event.release_jingnian",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“旁听博陆王府权宦追凶”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "六道神目一开，廊下无人敢抬声",
+              "鱼朝恩被点到案前，像要接手追查",
+              "田令孜被喝住，不许再走近绛王"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.li_fuguo"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "lyg.character.yu_chaoen"
+              },
               {
                 "kind": "messenger"
               },
@@ -1495,17 +1558,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "博陆王府门环一夜未歇，甲叶相碰的声音排成两列，庭中火把照得石阶发白，谁先进堂，谁被留在槛外，看的人屏着气。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“旁听博陆王府权宦追凶”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "堂上追凶",
+              "text": "李辅国把权宦都叫到博陆王府。六道神目一压，鱼朝恩被点到案前，仇士良靠着神策的班列不语，田令孜则被当面截住，不许再往绛王那边靠。凶手是谁，堂上没人先认。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.ganlu_bian.lyg.event.su_sha_identified",
-          "title": "局势中的汇总甘露局势并采纳搅局计",
-          "summary": "围绕“汇总甘露局势并采纳搅局计”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "内厅对上宫中碎片",
+          "summary": "杨玉环关上舞阳侯府内厅，把郑注赴凤翔、李训内讧和窥基可能插手一一摊开，贾文和已在掂量净念与纳觉容部。",
           "sourceEventId": "lyg.event.su_sha_identified",
           "settledWhenAny": [
             [
@@ -1522,10 +1585,19 @@
             "id": "omen.baseline.lyg.ganlu_bian.lyg.event.su_sha_identified",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“汇总甘露局势并采纳搅局计”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "杨玉环进府先闭内厅，只谈凤翔与内讧",
+              "贾文和纸上写着释放番僧的利与险",
+              "十方丛林嫌隙被当作可借的一阵风"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.yang_yuhuan"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.jia_wenhe"
+              },
               {
                 "kind": "messenger"
               },
@@ -1533,17 +1605,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "侯府内厅烛芯结花，门外亲兵退到两丈外，桌上茶凉了仍没人动，像一份宫里带出的口信正和幕僚的算计顶在一处。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“汇总甘露局势并采纳搅局计”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "内厅对簿",
+              "text": "杨玉环带回的尽是碎的：郑注往凤翔，李训与他不合，窥基的名字也擦边。贾文和把净念、纳觉容部的去留写在纸角，说佛门一乱，外头的眼睛就会偏一阵。听的人还没拍板。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.ganlu_bian.lyg.event.xiao_zi_departure",
-          "title": "局势中的小紫询问瑶池宗修行法",
-          "summary": "围绕“小紫询问瑶池宗修行法”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "内院追问气海之法",
+          "summary": "小紫把白霓裳留在内院，追问瑶池宗强提气海的法子，朱殷旧事被拿来对照，她只抄代价，人仍在府中走动。",
           "sourceEventId": "lyg.event.xiao_zi_departure",
           "settledWhenAny": [
             [
@@ -1560,10 +1632,19 @@
             "id": "omen.baseline.lyg.ganlu_bian.lyg.event.xiao_zi_departure",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“小紫询问瑶池宗修行法”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "小紫追问如何硬提气海，不问旁事",
+              "白霓裳以朱殷为例，说明后路会变窄",
+              "纸上只抄步骤与损耗，未见整装出门"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.xiao_zi"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.bai_nichang"
+              },
               {
                 "kind": "messenger"
               },
@@ -1571,17 +1652,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "内院药香混着墨味，石桌上摊开半卷功法抄件，风把纸角掀起又落下，像有人想走，又像只是把法子先记下来。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“小紫询问瑶池宗修行法”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "只问代价",
+              "text": "小紫不问别的，只问瑶池宗怎样把气海硬提上去。白霓裳把朱殷的旧事摆出来：提得快，后面的路会窄。小紫把法子和损耗都抄了，身上还是府里的衣裳，行装没收。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.ganlu_bian.lyg.event.ganlu_crisis_final",
-          "title": "局势中的见证程宅战榜张贴",
-          "summary": "围绕“见证程宅战榜张贴”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "院中备下空白战榜",
+          "summary": "程宅廊柱下摊开榜纸与印泥，杨玉环与白霓裳较劲的风声已散开，吕雉仍在分派杂务，榜首写谁还没落墨。",
           "sourceEventId": "lyg.event.ganlu_crisis_final",
           "settledWhenAny": [
             [
@@ -1598,10 +1679,19 @@
             "id": "omen.baseline.lyg.ganlu_bian.lyg.event.ganlu_crisis_final",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“见证程宅战榜张贴”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "廊柱下备好空白战榜、笔砚与印泥",
+              "比试场地被腾空，两人气息隔院可感",
+              "吕雉照旧分派内宅差事，并不看榜"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.yang_yuhuan"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.bai_nichang"
+              },
               {
                 "kind": "messenger"
               },
@@ -1609,10 +1699,10 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "内宅天井被扫得干干净净，晾衣绳都收了，只留一块能落脚的空地，榜纸边压着镇纸，墨汁开了封，却还没有第一笔。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“见证程宅战榜张贴”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "榜纸未落",
+              "text": "杨玉环与白霓裳的较劲已经传进内宅。廊下列着空白战榜，印泥揭开盖，吕雉仍低头分派杂务，像这榜与她无关。谁的名字会写在最上面，墨还停在笔尖。"
             }
           }
         }

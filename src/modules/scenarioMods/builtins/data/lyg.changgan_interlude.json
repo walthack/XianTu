@@ -6202,8 +6202,8 @@
       "situations": [
         {
           "id": "world-sim.baseline.lyg.changgan_interlude.lyg.event.changgan_interlude_01_beat",
-          "title": "局势中的拜访李药师",
-          "summary": "围绕“拜访李药师”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "李药师处有令箭动静",
+          "summary": "年节里程宗扬往李药师处走动，门庭比平日更紧，令箭匣与南霁云的行踪都被人反复问起，拜访尚未落定。",
           "sourceEventId": "lyg.event.changgan_interlude_01_beat",
           "settledWhenAny": [
             [
@@ -6220,10 +6220,15 @@
             "id": "omen.baseline.lyg.changgan_interlude.lyg.event.changgan_interlude_01_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“拜访李药师”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "李药师门房连日核验拜帖，令箭匣被抬进内室后不再示人",
+              "南霁云在廊下徘徊，不肯说明今夜是否随行",
+              "程宗扬下巴胡茬未刮，仍按礼数候在外厅"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6231,17 +6236,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "李药师宅外换岗脚步比往年节更密，内室灯火一夜未歇，偶尔听得令箭匣锁扣轻响，却无人说清今夜会否见客。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“拜访李药师”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "令箭未出",
+              "text": "李药师宅里灯火一夜未歇。令箭匣抬进内室后便不再示人，南霁云在廊下走来走去，门房仍按礼数核验拜帖。程宗扬候在外厅，拜访能不能成、令箭会不会出手，都还没人敢断言。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.changgan_interlude.lyg.event.changgan_interlude_02_beat",
-          "title": "局势中的百衲衣线索",
-          "summary": "围绕“百衲衣线索”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "马厩里压着百衲衣",
+          "summary": "马厩深处有人被看住，百衲衣的线头与小公主、齐羽仙、周飞的名字缠在一起，口风互相顶撞。",
           "sourceEventId": "lyg.event.changgan_interlude_02_beat",
           "settledWhenAny": [
             [
@@ -6258,10 +6263,15 @@
             "id": "omen.baseline.lyg.changgan_interlude.lyg.event.changgan_interlude_02_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“百衲衣线索”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "马厩后槽有人被反缚，袖口露出百衲衣残片",
+              "看守互咬：有人说是寻岳霏，有人说是齐羽仙、周飞的旧账",
+              "程宗扬路过时听见警告：再问便要封口"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6269,17 +6279,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "马厩潮气里混着血腥与草料，后槽绳索新换过，百衲衣碎角卡在槽板缝里，看守换班时压低嗓子对骂，谁也不肯把话说全。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“百衲衣线索”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "马厩异响",
+              "text": "后槽绳索新换，百衲衣碎角卡在木缝里。看守对骂时一个咬定是寻岳霏，一个把齐羽仙、周飞扯进来，又立刻互相封口。程宗扬从槽边走过，只能听出有人被看住，救不救、问不问，都还悬着。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.changgan_interlude.lyg.event.changgan_interlude_03_beat",
-          "title": "局势中的昭南索赔",
-          "summary": "围绕“昭南索赔”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "昭南使者压着赔偿",
+          "summary": "昭南使节入城后宫门加岗，赔偿与交出张亢的话在朝堂外传得互相打架，兵锋是否真动仍无人敢认。",
           "sourceEventId": "lyg.event.changgan_interlude_03_beat",
           "settledWhenAny": [
             [
@@ -6296,10 +6306,15 @@
             "id": "omen.baseline.lyg.changgan_interlude.lyg.event.changgan_interlude_03_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“昭南索赔”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "昭南使节车仗停在宫门外，名刺上写着申服君",
+              "传言宋军假扮流寇，赔偿与交出张亢两说并传",
+              "殿前加岗，禁军不许闲人靠近使节驿馆"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6307,17 +6322,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "宫门外车仗旗号是昭南的，驿馆灯火通宵，禁军加岗封路。赔偿、交人、兴兵三套说法同时从廊下传出，没有一份能当准信。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“昭南索赔”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "使节压城",
+              "text": "昭南车仗停在宫门，名刺上是申服君。廊下同时传出赔偿、交出张亢、否则兴兵三套话，禁军已把驿馆封死。程宗扬听得见殿前加岗的甲叶声，朝堂怎么应、兵锋动不动，都还没有落锤。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.changgan_interlude.lyg.event.changgan_interlude_04_beat",
-          "title": "局势中的密约谈崩",
-          "summary": "围绕“密约谈崩”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "赵飞燕病线翻涌",
+          "summary": "宫中药案与赵飞燕相关的传讯一夜三改，太医与内侍口径对不上，病势真假仍压在帘后。",
           "sourceEventId": "lyg.event.changgan_interlude_04_beat",
           "settledWhenAny": [
             [
@@ -6334,10 +6349,15 @@
             "id": "omen.baseline.lyg.changgan_interlude.lyg.event.changgan_interlude_04_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“密约谈崩”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "太医院连夜煎药，药单上圈着赵飞燕名讳后又涂去",
+              "内侍传讯互相矛盾，有人说病重，有人说只是闭门",
+              "程宗扬路过复道时闻见苦药气，帘后无人应声"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6345,17 +6365,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "复道里苦药气一夜未散，太医院灯火通明，传讯人脚步乱，帘后始终没有准信传出。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“密约谈崩”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "帘后药气",
+              "text": "太医院灯火通宵，药单上赵飞燕的名讳写了又涂。内侍一个说病重，一个说只是闭门不见。程宗扬走复道时只闻得苦药气，帘后无人应声，病线往哪边扯，还没人敢说死。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.changgan_interlude.lyg.event.changgan_interlude_05_beat",
-          "title": "局势中的宗室试探",
-          "summary": "围绕“宗室试探”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "十方丛林暗桩挪位",
+          "summary": "城中丛林据点换防、暗号对不上，宗室与江湖线同时收紧，真正刀口仍藏在年节往来里。",
           "sourceEventId": "lyg.event.changgan_interlude_05_beat",
           "settledWhenAny": [
             [
@@ -6372,10 +6392,15 @@
             "id": "omen.baseline.lyg.changgan_interlude.lyg.event.changgan_interlude_05_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“宗室试探”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "十方丛林茶棚换了看场人，旧暗号无人应答",
+              "宗室车仗改道绕开常走的坊巷",
+              "程宗扬在年节人潮里看见两拨人互相盯梢"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6383,17 +6408,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "年节市声未歇，茶棚与坊口却换了生面孔，旧暗号落空，车仗改道，暗处脚步比白日更密。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“宗室试探”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "暗桩挪位",
+              "text": "茶棚看场人换了生面孔，旧暗号无人接。宗室车仗绕开常走的坊巷，两拨人在人潮里互相盯梢。程宗扬夹在礼数与杀机之间，只能看见暗桩在挪，刀口落在谁身上还没露出来。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.changgan_interlude.lyg.event.changgan_interlude_06_beat",
-          "title": "局势中的十方丛林谋刺",
-          "summary": "围绕“十方丛林谋刺”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "失踪名单对不上",
+          "summary": "城门与坊正手里的失踪名册互相打架，伏击线的痕迹刚露头，人去了哪仍说不清。",
           "sourceEventId": "lyg.event.changgan_interlude_06_beat",
           "settledWhenAny": [
             [
@@ -6410,10 +6435,15 @@
             "id": "omen.baseline.lyg.changgan_interlude.lyg.event.changgan_interlude_06_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“十方丛林谋刺”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "坊正名册少了几行，城门档簿却多了夜出未归",
+              "巷口有新换的封路木栏，泥里留着拖痕",
+              "程宗扬听更夫说：有人昨夜被叫走后再没回来"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6421,17 +6451,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "巷口封路木栏还带着新锯末，泥里拖痕到墙角便断。坊正与城门的名册对不上，更夫只肯说人昨夜被叫走。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“十方丛林谋刺”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "名册打架",
+              "text": "坊正少了几行，城门档簿却多了夜出未归。巷口木栏新换，泥里拖痕到墙角就断。程宗扬从更夫嘴里只掏出一句：有人昨夜被叫走，再也没露面。人在哪、是不是伏击，都还对不上。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.changgan_interlude.lyg.event.changgan_interlude_07_beat",
-          "title": "局势中的赵飞燕病线",
-          "summary": "围绕“赵飞燕病线”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "禁军调动乱了次序",
+          "summary": "左武军与皇城司的换防时辰对不上，林娘子一线的旧疑还压在禁军里，今夜岗哨比往年节更乱。",
           "sourceEventId": "lyg.event.changgan_interlude_07_beat",
           "settledWhenAny": [
             [
@@ -6448,10 +6478,15 @@
             "id": "omen.baseline.lyg.changgan_interlude.lyg.event.changgan_interlude_07_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“赵飞燕病线”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "左武军提前换岗，皇城司档簿上的时辰却没改",
+              "有人提起林娘子旧事，立刻被同伴堵住",
+              "程宗扬在便门看见两队禁军交叉而行，互不问令"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6459,17 +6494,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "便门外甲叶声乱了节拍，两队禁军交叉而过互不问令，档簿时辰与实际换岗对不上。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“赵飞燕病线”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "换防错位",
+              "text": "左武军提前换岗，皇城司档簿却仍写着旧时辰。有人刚提林娘子，便被同伴一把堵住。程宗扬在便门看见两队交叉而行、互不问令，禁军里那条旧缝是在收还是在裂，还看不透。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.changgan_interlude.lyg.event.changgan_interlude_08_beat",
-          "title": "局势中的以吕雉为饵",
-          "summary": "围绕“以吕雉为饵”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "贾师宪的令前后不一",
+          "summary": "贾师宪一侧的口信一夜两改，宋军部署与城内安插的说法互相拆台，真正要办的事仍压在签押房。",
           "sourceEventId": "lyg.event.changgan_interlude_08_beat",
           "settledWhenAny": [
             [
@@ -6486,10 +6521,15 @@
             "id": "omen.baseline.lyg.changgan_interlude.lyg.event.changgan_interlude_08_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“以吕雉为饵”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "签押房连续发出两道互相打架的手谕",
+              "宋军部署的传言与城内安插的名单对不上",
+              "程宗扬在瓦牡丹棚再听线人，对方只肯说再等等"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6497,17 +6537,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "签押房灯火通宵，两道手谕先后出门又被追回一道。瓦牡丹棚里线人把酒盏转了又转，不肯把话说死。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“以吕雉为饵”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "手谕打架",
+              "text": "签押房一夜出了两道互相打架的手谕，宋军部署与城内安插的名单对不上。程宗扬再去瓦牡丹棚，线人只把酒盏转了又转，说再等等。贾师宪到底要收网还是要放，还没落在纸面上。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.changgan_interlude.lyg.event.changgan_interlude_09_beat",
-          "title": "局势中的返程伏击",
-          "summary": "围绕“返程伏击”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "白霓裳失联的气味",
+          "summary": "白霓裳该出现的地方空着，王守澄与墨枫林的人影在巷口交错，伏击味已经起来，人还没见面。",
           "sourceEventId": "lyg.event.changgan_interlude_09_beat",
           "settledWhenAny": [
             [
@@ -6524,10 +6564,15 @@
             "id": "omen.baseline.lyg.changgan_interlude.lyg.event.changgan_interlude_09_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“返程伏击”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "白霓裳常走的巷口灯灭了半排，门环上有新刮痕",
+              "王守澄的人与墨枫林的人在对街互相让路又互相盯",
+              "程宗扬闻见巷风里有铁锈气，却看不见人"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6535,17 +6580,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "巷口灯灭了半排，门环新刮，铁锈气贴着墙根走。对街两拨人互相让路又互相盯，谁也不先举刀。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“返程伏击”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "巷灯半灭",
+              "text": "白霓裳常走的巷口灯灭了半排，门环上有新刮痕。王守澄的人与墨枫林的人对街相望，让路却不收眼。程宗扬只闻见铁锈气贴墙根走，人在不在里头、刀会不会出鞘，都还停在这一眼的对峙里。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.changgan_interlude.lyg.event.changgan_interlude_10_beat",
-          "title": "局势中的救出白霓裳",
-          "summary": "围绕“救出白霓裳”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "伏击线尚未收束",
+          "summary": "城西到复道的几处路口同时加岗又同时留缝，白霓裳一线与王守澄、墨枫林的调动叠在一起，收不收网还没人拍板。",
           "sourceEventId": "lyg.event.changgan_interlude_10_beat",
           "settledWhenAny": [
             [
@@ -6562,10 +6607,15 @@
             "id": "omen.baseline.lyg.changgan_interlude.lyg.event.changgan_interlude_10_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“救出白霓裳”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "复道口与城西巷同时加岗，却都留着一条可走的暗缝",
+              "白霓裳的物件被遗弃在转角，王守澄、墨枫林的令签却还在流转",
+              "程宗扬看见两路人马对向而行，谁也不先合围"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6573,10 +6623,10 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "复道与城西巷同时响起加岗的喝声，转角却留着一条暗缝。遗弃的物件与流转的令签同时在，两路人马对向而行，合围没有落下来。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“救出白霓裳”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "合围未落",
+              "text": "复道口与城西巷同时加岗，又都留着一条可走的暗缝。转角有白霓裳留下的物件，王守澄、墨枫林的令签却仍在人手上转。程宗扬看见两路对向而行，谁也不先合围——伏击是收还是放，这一息里还没有定。"
             }
           }
         }

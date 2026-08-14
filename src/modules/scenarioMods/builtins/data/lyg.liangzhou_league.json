@@ -6237,8 +6237,8 @@
       "situations": [
         {
           "id": "world-sim.baseline.lyg.liangzhou_league.lyg.event.s06_01",
-          "title": "局势中的程宗扬与杨玉环讨论离魂症和小紫的病情",
-          "summary": "围绕“程宗扬与杨玉环讨论离魂症和小紫的病情”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "内室压低的病名",
+          "summary": "杨玉环被请到僻静处，离魂症与小紫的气色被一并提起，她神色骤紧，再三叮嘱此事不可外传。",
           "sourceEventId": "lyg.event.s06_01",
           "settledWhenAny": [
             [
@@ -6255,10 +6255,15 @@
             "id": "omen.baseline.lyg.liangzhou_league.lyg.event.s06_01",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“程宗扬与杨玉环讨论离魂症和小紫的病情”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "杨玉环懒散神色收起，追问小紫近日是否失神恍惚",
+              "她忆起岳帅旧话，却把声音压到几乎听不见",
+              "侍女被拦在帘外，内室门闩反手落上"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.yang_yuhuan"
+              },
               {
                 "kind": "messenger"
               },
@@ -6266,17 +6271,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "偏厅帘影一动，香气未散，廊下侍女面面相觑，谁也不敢再往里送茶。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“程宗扬与杨玉环讨论离魂症和小紫的病情”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "勿使外人知",
+              "text": "杨玉环靠在软榻上本还打着哈欠，听见离魂二字却坐直了腰。她把小紫近来的失神来回问了两遍，忽然压低嗓子：岳帅提过类似病症，这话传出宅门，谁都担不起。门外脚步被她一声喝住。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.liangzhou_league.lyg.event.s06_02",
-          "title": "局势中的凉州盟比武大赛进展",
-          "summary": "围绕“凉州盟比武大赛进展”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "八强对阵已贴出",
+          "summary": "凉州武馆战榜更新，铁马堂挤进八强却神色发沉，周飞一侧三家连胜，下一场丹霞宗的名字压得堂中发闷。",
           "sourceEventId": "lyg.event.s06_02",
           "settledWhenAny": [
             [
@@ -6293,10 +6298,19 @@
             "id": "omen.baseline.lyg.liangzhou_league.lyg.event.s06_02",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“凉州盟比武大赛进展”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "铁中宝盯着新榜，浓髯下的脸沉得像浸过染料",
+              "高智商瘸着腿来回报签，一口咬定对阵丹霞宗实力悬殊",
+              "周飞带来的三家席位全是胜旗，看台耳语越来越密"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "lyg.character.tie_zhongbao"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.gao_zhishang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6304,17 +6318,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "武馆擂台换旗翻木牌的声响一阵紧似一阵，尘土未落，看台上已有人把下一场的对阵念了又念。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“凉州盟比武大赛进展”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "战榜压堂",
+              "text": "铁中宝把新榜看了半晌，一句话也挤不出来。高智商凑到他耳边，说铁马堂下一场要碰丹霞宗，强弱一眼便知。对面周飞一侧连胜的旗还在抖，武馆里的笑渐渐少了。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.liangzhou_league.lyg.event.s06_03",
-          "title": "局势中的阮香琳离开程宅返回舞都",
-          "summary": "围绕“阮香琳离开程宅返回舞都”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "渭水船缆已绷",
+          "summary": "阮香琳收拾行装要走水路回舞都报信，岸边多了护送的人影，船头却仍在核对口令与靠岸次序。",
           "sourceEventId": "lyg.event.s06_03",
           "settledWhenAny": [
             [
@@ -6331,10 +6345,19 @@
             "id": "omen.baseline.lyg.liangzhou_league.lyg.event.s06_03",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“阮香琳离开程宅返回舞都”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "阮香琳把给如瑶的口讯反复默念，不肯落成明文",
+              "星月湖大营两人已立在跳板两侧，不问闲话",
+              "帘后隐约有人跟着上船，脚步轻得像怕惊动水面"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.ruan_xiang_lin"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.quan_yu_ji"
+              },
               {
                 "kind": "messenger"
               },
@@ -6342,17 +6365,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "渭水码头缆绳勒得吱呀作响，船舱灯火半掩，岸上护送的人影来回换位，一时说不清谁明谁暗。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“阮香琳离开程宅返回舞都”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "夜船待发",
+              "text": "阮香琳立在跳板边，只说要回舞都把话送到如瑶耳里。两名星月湖兄弟已经守住船舷，泉玉姬却仍像没事人似的立在帘后。缆绳绷直了，河风一过，谁先动身还没人拍板。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.liangzhou_league.lyg.event.s06_04",
-          "title": "局势中的仇士良夺取神策军兵权并怀疑田令孜",
-          "summary": "围绕“仇士良夺取神策军兵权并怀疑田令孜”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "神策兵符易手",
+          "summary": "宫中左右神策军忽然换将，仇士良把兵符捏得发白，田令孜的名字在值房里被翻来覆去，却没有人敢当众坐实。",
           "sourceEventId": "lyg.event.s06_04",
           "settledWhenAny": [
             [
@@ -6369,10 +6392,15 @@
             "id": "omen.baseline.lyg.liangzhou_league.lyg.event.s06_04",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“仇士良夺取神策军兵权并怀疑田令孜”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "张承业的名帖送到右军辕门，旧将印信被当场收走",
+              "左军营门改挂杨家兄弟令旗，巡夜口令连换两遍",
+              "仇士良追问王守澄旧案，值房里佛门与藩镇的卷宗摊了一桌"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "lyg.character.chou_shiliang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6380,17 +6408,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "神策两军辕门灯火通宵不灭，换防的靴声来回踩过石阶，远处值房里压着嗓子对质，听不清结论。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“仇士良夺取神策军兵权并怀疑田令孜”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "两军易将",
+              "text": "右神策军辕门夜里收了旧印，张承业的人马接了岗；左军旗号换成杨家兄弟。仇士良坐在值房里把王守澄旧档翻得纸边发毛，田令孜、佛门、藩镇三个名字被他用指甲掐出印来，仍不宣读。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.liangzhou_league.lyg.event.s06_05",
-          "title": "局势中的袁天罡与徐君房实施招魂术，王守澄鬼魂显形",
-          "summary": "围绕“袁天罡与徐君房实施招魂术，王守澄鬼魂显形”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "天王寺夜设招魂",
+          "summary": "护国天王寺灯火通明，徐君房与袁天罡对案布阵，尸床旁的幡与龟甲都已摆齐，寺外戒严却仍听不清里面念的是什么。",
           "sourceEventId": "lyg.event.s06_05",
           "settledWhenAny": [
             [
@@ -6407,10 +6435,19 @@
             "id": "omen.baseline.lyg.liangzhou_league.lyg.event.s06_05",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“袁天罡与徐君房实施招魂术，王守澄鬼魂显形”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "徐君房反复擦拭龟甲，嘴上笑着，手却在抖",
+              "袁天罡白幡竖在尸床侧，不许闲人靠近香案",
+              "寺门加岗，仇士良的人在廊下来回，只准术士进出"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.xu_junfang"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.yuan_tiangang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6418,17 +6455,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "护国天王寺钟鼓停了一阵，香灰落得极厚，廊下甲士把闲人往外推，殿内灯影忽明忽暗。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“袁天罡与徐君房实施招魂术，王守澄鬼魂显形”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "幡影未定",
+              "text": "天王寺大殿被腾空，徐君房把龟甲对了又对，袁天罡将白幡钉在尸床一侧。仇士良的人封了寺门，只说今夜要问一句旧账。香灰结成条，殿里谁也还没开口。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.liangzhou_league.lyg.event.s06_06",
-          "title": "局势中的仇士良从王守澄鬼魂口中推断凶手指向田令孜",
-          "summary": "围绕“仇士良从王守澄鬼魂口中推断凶手指向田令孜”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "拂尘木鱼对不上",
+          "summary": "招魂后传出的凶器说法互相打架，仇士良把拂尘、木鱼与藩镇内侍佛门三条线并在案上，目光一次次扫过田令孜的旧档。",
           "sourceEventId": "lyg.event.s06_06",
           "settledWhenAny": [
             [
@@ -6445,10 +6482,15 @@
             "id": "omen.baseline.lyg.liangzhou_league.lyg.event.s06_06",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“仇士良从王守澄鬼魂口中推断凶手指向田令孜”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "值房里并排放着拂尘残穗与木鱼拓印，旁人说法并不一致",
+              "仇士良命人把藩镇、内侍、佛门名册叠成三摞",
+              "田令孜旧档被单独抽出，却未盖印、也未发出缉帖"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "lyg.character.chou_shiliang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6456,17 +6498,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "值房灯火一夜未熄，案上拓印与名册来回挪位，廊下小黄门只敢传纸，不敢传结论。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“仇士良从王守澄鬼魂口中推断凶手指向田令孜”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "三线并案",
+              "text": "仇士良把拂尘残穗和木鱼拓印按在灯下，又把藩镇、内侍、佛门三摞名册压住四角。田令孜那一卷被抽到最上头，他看了很久，墨笔悬着，始终没有落下判词。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.liangzhou_league.lyg.event.s06_07",
-          "title": "局势中的小紫准备晋级五级",
-          "summary": "围绕“小紫准备晋级五级”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "紫气压不住身",
+          "summary": "小紫周身死气沉得发沉，她自己说必须下水闭关，程宅已在备十二个时辰的守夜人手，去向却只提到渭水。",
           "sourceEventId": "lyg.event.s06_07",
           "settledWhenAny": [
             [
@@ -6483,10 +6525,15 @@
             "id": "omen.baseline.lyg.liangzhou_league.lyg.event.s06_07",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“小紫准备晋级五级”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "小紫紫衫下气息忽涨忽滞，连虫匣都被她提前封死",
+              "她向府里要一处无人的水下静室，时辰报了十二个",
+              "惊理被点名同行，行装里只有防水灯与守夜牌"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.xiao_zi"
+              },
               {
                 "kind": "messenger"
               },
@@ -6494,17 +6541,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "后院井栏结了一层薄霜似的寒意，紫衫人影来回试水，守夜牌已被分到几个人手里。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“小紫准备晋级五级”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "水下闭关",
+              "text": "小紫把虫匣一一封死，说墨枫林那口死气压在经脉里，再拖会自行冲境。她只要渭水底下十二个时辰，旁人不得近前。惊理的守夜牌已经发下去，河面上还没有船影。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.liangzhou_league.lyg.event.s06_08",
-          "title": "局势中的程宗扬与白霓裳亲密并召吕雉侍寝",
-          "summary": "围绕“程宗扬与白霓裳亲密并召吕雉侍寝”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "内宅传召帘后",
+          "summary": "白霓裳被留在暖阁里坐立不安，吕雉奉召入内演示侍奉规矩，门帘放下后只剩低语，廊下谁也不敢探头。",
           "sourceEventId": "lyg.event.s06_08",
           "settledWhenAny": [
             [
@@ -6521,10 +6568,19 @@
             "id": "omen.baseline.lyg.liangzhou_league.lyg.event.s06_08",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“程宗扬与白霓裳亲密并召吕雉侍寝”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "白霓裳白衣袖口被揉出褶皱，目光躲着暖阁软榻",
+              "内侍去请吕雉，口令只说教习规矩，不许第三人入帘",
+              "暖阁烛火调暗，门外只闻银饰轻响，听不清词句"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.bai_nichang"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.lv_zhi"
+              },
               {
                 "kind": "messenger"
               },
@@ -6532,17 +6588,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "内宅暖阁帘钩落下，香炉多添了一炷，廊下丫头互相使眼色，谁也不肯第一个掀帘。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“程宗扬与白霓裳亲密并召吕雉侍寝”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "暖阁低语",
+              "text": "白霓裳被留在暖阁，袖口绞得发皱。吕雉奉召进来，只听得一句教她看明白规矩，帘钩随即落下。银饰在烛影里轻轻碰了一下，廊下再无人敢问里面教的是哪一门。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.liangzhou_league.lyg.event.s06_09",
-          "title": "局势中的程宗扬心焦小紫未归，内宅报警铃响",
-          "summary": "围绕“程宗扬心焦小紫未归，内宅报警铃响”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "前院空等铃骤响",
+          "summary": "小紫、蛇奴、罂奴都还没有回音，前院只余一人来回踏步；内宅警报铃忽然连响，门廊灯火乱成一片。",
           "sourceEventId": "lyg.event.s06_09",
           "settledWhenAny": [
             [
@@ -6559,10 +6615,15 @@
             "id": "omen.baseline.lyg.liangzhou_league.lyg.event.s06_09",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“程宗扬心焦小紫未归，内宅报警铃响”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "前院等候的人把茶盏磕出缺口，三处回禀仍是空白",
+              "内宅警铃猛地拉响，值夜的人抓刀却对不上方向",
+              "后门与角门同时上闩，谁也说不清是误触还是真警"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6570,10 +6631,10 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "前院脚步来回碾过石板，内宅铃声忽然撕裂夜色，灯笼乱晃，角门铁闩磕得山响。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“程宗扬心焦小紫未归，内宅报警铃响”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "铃破夜静",
+              "text": "小紫那边没有信，蛇奴与罂奴同样没人回话。前院茶盏已经凉透，内宅警铃却突然拉满。值夜的人冲向回廊，角门与后门同时上闩，铃声还在抖，谁也没喊出缘由。"
             }
           }
         }

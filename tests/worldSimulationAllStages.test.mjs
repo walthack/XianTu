@@ -7,28 +7,39 @@ import { loadTs } from './loadTs.mjs';
 import { BASELINE_OMEN_TEXT, FORBIDDEN_OMEN_TEXT, LATIN_RESIDUE } from '../scripts/world-sim-omen-guards.mjs';
 
 const dataDir = new URL('../src/modules/scenarioMods/builtins/data/', import.meta.url);
-const refinementOverlay = new URL('../mod-kit/world-sim-refinements/qingyu-yunlong.json', import.meta.url);
+const refinementDir = new URL('../mod-kit/world-sim-refinements/', import.meta.url);
+// 每批一份 tracked overlay；条数是回归锚点，扩批时必须显式改这里。
+const refinementBatches = [
+  { file: 'qingyu-yunlong.json', books: ['qingyu', 'yunlong'], prefixes: ['lcq.', 'lyl.'], mods: 26, situations: 251 },
+  { file: 'yange.json', books: ['yange'], prefixes: ['lyg.'], mods: 11, situations: 106 },
+];
 
 async function loadBuiltins() {
   const files = (await readdir(new URL(dataDir))).filter(file => file.endsWith('.json') && file !== 'manifest.json').sort();
   return Promise.all(files.map(async file => JSON.parse(await readFile(join(dataDir.pathname, file), 'utf8'))));
 }
 
-test('Qingyu and Yunlong ship the complete tracked world-sim refinement overlay', async () => {
+test('every refinement batch ships its complete tracked world-sim overlay', async () => {
   const mods = await loadBuiltins();
   const modsById = new Map(mods.map(mod => [mod.manifest.id, mod]));
-  const overlay = JSON.parse(await readFile(refinementOverlay, 'utf8'));
-  const targetMods = mods.filter(mod => mod.manifest.id.startsWith('lcq.') || mod.manifest.id.startsWith('lyl.'));
+  const claimed = new Map();
+
+  for (const batch of refinementBatches) {
+  const overlay = JSON.parse(await readFile(new URL(batch.file, refinementDir), 'utf8'));
+  const targetMods = mods.filter(mod => batch.prefixes.some(prefix => mod.manifest.id.startsWith(prefix)));
   const baselineSituations = targetMods.flatMap(mod => mod.scenario.worldSimulation.situations)
     .filter(situation => situation.id.startsWith('world-sim.baseline.'));
 
-  assert.deepEqual(overlay.books, ['qingyu', 'yunlong']);
-  assert.equal(targetMods.length, 26);
-  assert.equal(baselineSituations.length, 251);
-  assert.equal(overlay.entries.length, 251);
-  assert.equal(new Set(overlay.entries.map(entry => entry.situationId)).size, 251);
+  assert.deepEqual(overlay.books, batch.books);
+  assert.equal(targetMods.length, batch.mods, batch.file);
+  assert.equal(baselineSituations.length, batch.situations, batch.file);
+  assert.equal(overlay.entries.length, batch.situations, batch.file);
+  assert.equal(new Set(overlay.entries.map(entry => entry.situationId)).size, batch.situations, batch.file);
 
   for (const entry of overlay.entries) {
+    const owner = claimed.get(entry.situationId);
+    assert.equal(owner, undefined, `${entry.situationId}: claimed by both ${owner} and ${batch.file}`);
+    claimed.set(entry.situationId, batch.file);
     const mod = modsById.get(entry.stageId);
     assert.ok(mod, `unknown refinement stage ${entry.stageId}`);
     const situation = mod.scenario.worldSimulation.situations.find(item => item.id === entry.situationId);
@@ -62,6 +73,7 @@ test('Qingyu and Yunlong ship the complete tracked world-sim refinement overlay'
       `${entry.situationId}: fallback transmitters missing`,
     );
   }
+  }
 });
 
 test('all builtin stages expose a validated world-sim baseline without changing the companion default', async () => {
@@ -91,9 +103,14 @@ test('all builtin stages expose a validated world-sim baseline without changing 
         situation.omen.presentation?.title,
         situation.omen.presentation?.text,
       ].join('｜');
-      // 只覆盖 omen 字段：燕歌 11 关的 situation.summary 仍是未精修的基线模板，不属本批范围。
       assert.equal(FORBIDDEN_OMEN_TEXT.test(omenText), false, `${mod.manifest.id}: forbidden omen text ${omenText}`);
       assert.equal(LATIN_RESIDUE.test(omenText), false, `${mod.manifest.id}: untranslated latin residue ${omenText}`);
+      // 机器生成的 baseline 局势连标题与摘要一起受精修合同约束；人工纵切（如定陶）另有裁定，不在此列。
+      if (situation.id.startsWith('world-sim.baseline.')) {
+        const headline = [situation.title, situation.summary].join('｜');
+        assert.equal(FORBIDDEN_OMEN_TEXT.test(headline), false, `${mod.manifest.id}: forbidden situation headline ${headline}`);
+        assert.equal(LATIN_RESIDUE.test(headline), false, `${mod.manifest.id}: latin residue in headline ${headline}`);
+      }
       assert.ok(situation.omen.afterTurns >= 0);
     }
   }

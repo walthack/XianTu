@@ -6255,8 +6255,8 @@
       "situations": [
         {
           "id": "world-sim.baseline.lyg.mijing_rumen.lyg.event.s02_01",
-          "title": "局势中的郭解送葬",
-          "summary": "围绕“郭解送葬”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "山中送葬的路单",
+          "summary": "舞阳侯府外，送葬队伍的次序与祭器清点忽然收紧，山路方向的口信前后不一，丧仪尚未启程。",
           "sourceEventId": "lyg.event.s02_01",
           "settledWhenAny": [
             [
@@ -6273,10 +6273,15 @@
             "id": "omen.baseline.lyg.mijing_rumen.lyg.event.s02_01",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“郭解送葬”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "侯府廊下堆起素幡与祭器，路牌被反复擦改",
+              "郭靖被乳媪抱着在侧院停住，远处有人低声改口令",
+              "卢景翻着白眼核对着进山次序，不肯让人抢先出门"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.lu_jing"
+              },
               {
                 "kind": "messenger"
               },
@@ -6284,17 +6289,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "素幡在廊下被风掀起一角，祭器磕碰有声。远处山道口有人改口令、换旗帜，却没有人说清何时起灵。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“郭解送葬”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "素幡未启",
+              "text": "舞阳侯府廊下，素幡与祭器被重新码齐。卢景翻着白眼核对着进山次序，路牌上的字迹擦了又写。郭靖被乳媪抱在侧院，远处口令忽然改了一遍。丧仪还停在门槛这边。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.mijing_rumen.lyg.event.s02_02",
-          "title": "局势中的赵飞燕中毒昏迷",
-          "summary": "围绕“赵飞燕中毒昏迷”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "洛都急召的药香",
+          "summary": "洛都传来赵飞燕脱困后气息紊乱的口信，药炉与血袋被连夜备下，救治尚未开手。",
           "sourceEventId": "lyg.event.s02_02",
           "settledWhenAny": [
             [
@@ -6311,10 +6316,19 @@
             "id": "omen.baseline.lyg.mijing_rumen.lyg.event.s02_02",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“赵飞燕中毒昏迷”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "驿使带来说她唇色发青、脉象乱跳",
+              "药寮灯火通宵，铜盆与干净布条被反复烫过",
+              "伊心守着药柜，不许闲人靠近那几味镇毒散"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.yi_xin"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.zhao_feiyan"
+              },
               {
                 "kind": "messenger"
               },
@@ -6322,17 +6336,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "洛都方向的驿尘未散，药香压过井边潮气。灯火通宵的药寮里，铜盆与布条烫了又烫，却无人敢说她此刻能否醒来。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“赵飞燕中毒昏迷”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "脉象乱跳",
+              "text": "驿使只说赵飞燕脱身后来时唇色发青、脉象乱跳。伊心守着药柜，铜盆与布条被烫过数遍。药香压过井边潮气，救治的手还没落下。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.mijing_rumen.lyg.event.s02_03",
-          "title": "局势中的程宗扬割腕输血救赵飞燕",
-          "summary": "围绕“程宗扬割腕输血救赵飞燕”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "井口白光未定",
+          "summary": "胶西邸水井深处白光时明时暗，入口守卫换班加密，各路窥伺的脚印在泥上交错。",
           "sourceEventId": "lyg.event.s02_03",
           "settledWhenAny": [
             [
@@ -6349,8 +6363,9 @@
             "id": "omen.baseline.lyg.mijing_rumen.lyg.event.s02_03",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“程宗扬割腕输血救赵飞燕”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "井沿泥层渗出细白光丝，守井的人换得更勤",
+              "兽蛮斥候的脚印与官靴印叠在同一片湿土上",
+              "蔡京忠把旧路牌翻过来，只写‘闲人止步’"
             ],
             "transmitters": [
               {
@@ -6360,17 +6375,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "井口潮气里夹着细白光丝，泥上脚印新旧交错。换岗的靴声比往日密，却没有人敢先探身下去。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“程宗扬割腕输血救赵飞燕”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "井光未开",
+              "text": "胶西邸井沿的泥层里渗出细白光丝。蔡京忠把旧路牌翻过来，只写闲人止步。兽蛮脚印与官靴印叠在同一片湿土上，入口仍停在将开未开之间。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.mijing_rumen.lyg.event.s02_04",
-          "title": "局势中的云丹琉闯入质问婚事",
-          "summary": "围绕“云丹琉闯入质问婚事”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "兽蛮归顺的试探",
+          "summary": "兽蛮营地炊烟未稳，使者送来的归顺条件互相打架，盟誓的酒坛还封着泥。",
           "sourceEventId": "lyg.event.s02_04",
           "settledWhenAny": [
             [
@@ -6387,8 +6402,9 @@
             "id": "omen.baseline.lyg.mijing_rumen.lyg.event.s02_04",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“云丹琉闯入质问婚事”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "营地外多了两拨说不同条件的使者",
+              "古格尔旧部的旗帜被收起一半，又有人偷偷展开",
+              "商真瑜在帐外听译语，迟迟不让酒坛启封"
             ],
             "transmitters": [
               {
@@ -6398,17 +6414,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "兽蛮营地炊烟忽高忽低，旗帜收了一半又有人偷偷展开。酒坛泥封完好，帐外译语来回改口。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“云丹琉闯入质问婚事”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "酒坛未启",
+              "text": "兽蛮帐外，两拨使者各说各的归顺条件。商真瑜听着译语，不许人动那坛封泥的酒。旧部旗帜收起一半，又有人在暗处重新展开。盟誓还停在帐帘这边。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.mijing_rumen.lyg.event.s02_05",
-          "title": "局势中的程宗扬与云苍峰商议婚事与财政",
-          "summary": "围绕“程宗扬与云苍峰商议婚事与财政”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "婚期前的封路",
+          "summary": "即将举行的婚礼路线被临时改道，礼单与护卫编制对不上，喜棚外多了不明巡骑。",
           "sourceEventId": "lyg.event.s02_05",
           "settledWhenAny": [
             [
@@ -6425,8 +6441,9 @@
             "id": "omen.baseline.lyg.mijing_rumen.lyg.event.s02_05",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“程宗扬与云苍峰商议婚事与财政”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "喜棚外的路被木栅拦住，礼单页角折了又展",
+              "护卫名册上的人数与实到盔甲对不齐",
+              "小紫在廊下核对妆匣，听见远处马蹄却不见喜乐"
             ],
             "transmitters": [
               {
@@ -6436,17 +6453,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "喜棚外木栅新钉，马蹄声近了又远。礼单页角折痕重叠，喜乐迟迟不响。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“程宗扬与云苍峰商议婚事与财政”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "喜棚封路",
+              "text": "喜棚外新钉的木栅拦住旧路。小紫在廊下核妆匣，听见远处马蹄却不见喜乐。护卫名册与实到盔甲对不齐，礼单页角折了又展。婚期仍悬在棚外。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.mijing_rumen.lyg.event.s02_06",
-          "title": "局势中的程宗扬请霍子孟做媒",
-          "summary": "围绕“程宗扬请霍子孟做媒”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "阳亢未消的夜潮",
+          "summary": "程宗扬阳亢未消，内息一阵紧似一阵，秘境深处仍有合德姑娘待援的口信，部署被这件事扯住。",
           "sourceEventId": "lyg.event.s02_06",
           "settledWhenAny": [
             [
@@ -6463,10 +6480,15 @@
             "id": "omen.baseline.lyg.mijing_rumen.lyg.event.s02_06",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“程宗扬请霍子孟做媒”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "他额角青筋微跳，手边冰巾换得比往日勤",
+              "秘境方向传来合德姑娘仍在深处的残讯",
+              "吕雉把比目鱼珠收进袖里，不许人今夜轻动入口"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6474,17 +6496,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "夜潮般的内息让廊下脚步发滞。冰巾换了一叠，井口白光仍在，深处口信断续，没有人敢说今夜能不能进。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“程宗扬请霍子孟做媒”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "内息发紧",
+              "text": "程宗扬额角青筋微跳，冰巾换了一叠。秘境深处仍有合德姑娘待援的残讯。吕雉把比目鱼珠收进袖里，不许人今夜轻动井口。部署被这股未消的潮意扯住。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.mijing_rumen.lyg.event.s02_07",
-          "title": "局势中的程宗扬探视金蜜镝并谈论帝统",
-          "summary": "围绕“程宗扬探视金蜜镝并谈论帝统”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "剑玉姬的窥伺",
+          "summary": "黑魔海一线的口信说剑玉姬不会放过井口，远处有人影停在林缘，却未现身。",
           "sourceEventId": "lyg.event.s02_07",
           "settledWhenAny": [
             [
@@ -6501,8 +6523,9 @@
             "id": "omen.baseline.lyg.mijing_rumen.lyg.event.s02_07",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“程宗扬探视金蜜镝并谈论帝统”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "林缘多次映出女子轮廓，转眼又没入雾里",
+              "巫宗残符的焦痕出现在井栏外侧",
+              "斯明信握着双刀守在暗处，不让人靠近林缘"
             ],
             "transmitters": [
               {
@@ -6512,17 +6535,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "林缘雾气里几次映出人影，井栏外侧多了焦黑符痕。暗处刀鞘轻响，却没有人走出林子。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“程宗扬探视金蜜镝并谈论帝统”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "林缘人影",
+              "text": "林缘雾气里几次映出女子轮廓，转眼没入树后。井栏外侧多了焦黑符痕。斯明信握着双刀守在暗处，不让人靠近那片林子。窥伺停在雾里，还没落到井沿。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.mijing_rumen.lyg.event.s02_08",
-          "title": "局势中的程宗扬安排武帝秘境探索",
-          "summary": "围绕“程宗扬安排武帝秘境探索”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "朝廷各怀心思",
+          "summary": "胶西邸外朝廷各路人马换防对不上号，文书印泥未干就改署，谁都不肯先亮底牌。",
           "sourceEventId": "lyg.event.s02_08",
           "settledWhenAny": [
             [
@@ -6539,8 +6562,9 @@
             "id": "omen.baseline.lyg.mijing_rumen.lyg.event.s02_08",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“程宗扬安排武帝秘境探索”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "同一道调防令盖了两方对不上的印",
+              "驿馆里的名刺写着不同差遣，却挤在同一条廊",
+              "蔡京忠把名刺按住，只让人报‘路过’"
             ],
             "transmitters": [
               {
@@ -6550,17 +6574,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "邸外换防的旗号前后不一，名刺挤在同一条廊上。印泥未干又改署，路过的人比办差的人多。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“程宗扬安排武帝秘境探索”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "印泥未干",
+              "text": "同一道调防令盖了两方对不上的印。蔡京忠按住名刺，只让人报路过。驿馆廊下差遣各写各的，旗号换了一遍又一遍，谁也不肯先亮底牌。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.mijing_rumen.lyg.event.s02_09",
-          "title": "局势中的程宗扬在武帝像前引发真龙异象",
-          "summary": "围绕“程宗扬在武帝像前引发真龙异象”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "入口部署未齐",
+          "summary": "已知入口的监控网还在铺线，岗哨、暗记与传讯口令对不齐，秘境真正开放仍差一口气。",
           "sourceEventId": "lyg.event.s02_09",
           "settledWhenAny": [
             [
@@ -6577,10 +6601,15 @@
             "id": "omen.baseline.lyg.mijing_rumen.lyg.event.s02_09",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“程宗扬在武帝像前引发真龙异象”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "井口、山径、旧祠三处同时加岗，口令却各说各的",
+              "暗记石被挪了位置，笑脸白石旁多了一圈新泥",
+              "程宗扬把电击棒别回腰间，只吩咐先看住井口"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6588,10 +6617,10 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "井口、山径、旧祠三处灯火同时亮起，口令对不齐。笑脸白石旁多了一圈新泥，暗记被挪过，部署还停在半途。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“程宗扬在武帝像前引发真龙异象”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "三处加岗",
+              "text": "井口、山径、旧祠同时加岗，口令却对不齐。笑脸白石旁多了一圈新泥。程宗扬把电击棒别回腰间，只吩咐先看住井口。入口还在将开未开的那一口气上。"
             }
           }
         }

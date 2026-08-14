@@ -9,9 +9,19 @@ import { BASELINE_OMEN_TEXT, FORBIDDEN_OMEN_TEXT, LATIN_RESIDUE } from './world-
 
 const root = resolve(import.meta.dirname, '..');
 const generatedRoot = join(root, 'mod-kit', 'generated', 'deepseek-v4-flash');
-const artifactRoot = join(root, '.xiantu-server', 'world-sim-refinement-2026-08-14');
-const overlayPath = join(root, 'mod-kit', 'world-sim-refinements', 'qingyu-yunlong.json');
-const books = ['qingyu', 'yunlong'];
+
+// 每批一个隔离工件目录和一份 tracked overlay；已完成的批次保持可重跑。
+const batches = {
+  'qingyu-yunlong': { books: ['qingyu', 'yunlong'], artifact: 'world-sim-refinement-2026-08-14', overlay: 'qingyu-yunlong.json' },
+  yange: { books: ['yange'], artifact: 'world-sim-refinement-yange-2026-08-14', overlay: 'yange.json' },
+};
+const batchId = process.env.WORLD_SIM_BATCH || 'qingyu-yunlong';
+const batch = batches[batchId];
+if (!batch) throw new Error(`unknown WORLD_SIM_BATCH ${batchId}; expected ${Object.keys(batches).join('|')}`);
+
+const artifactRoot = join(root, '.xiantu-server', batch.artifact);
+const overlayPath = join(root, 'mod-kit', 'world-sim-refinements', batch.overlay);
+const books = batch.books;
 const command = process.argv[2] || 'prepare';
 
 
@@ -120,11 +130,12 @@ function promptForStage(stage) {
     opening: stage.opening,
     situations: stage.situations,
   };
-  return `你是六朝架空历史互动叙事的内容编辑。请把下面一个 stage 的自动模板征兆逐条精修，并严格输出 schema JSON。\n\n目标：在承重事件发生前，让玩家从人物言行、使者口信、现场痕迹或环境异动感到局势变化；只写当前可观察事实，结果必须未知，玩家可以继续当前行动。\n\n硬约束：\n1. entries 数量、顺序、situationId 与输入完全一致，不漏项。\n2. 不改变人物性格、身份或知识边界；preferredCharacterIds 只能从该条 allowedCharacterIds 选择，没合适人物就留空。\n3. 不写玩家、系统、回合、倒计时、机会卡、原著、剧情、结局、尚未发生、事情还没开始等元语言。\n4. 不断言死亡、登基、遇袭成功、被俘、叛逃等确定结果；可以写换防、失联、封路、异常调动、器物痕迹、传言互相矛盾等征兆。\n5. 不添加新事实；所有具体细节必须能由 event、location、人物卡或较保守的现场感官推得。无法安全具体化时宁可克制。\n6. title 4–18字；summary 20–90字，描述当前压力而非结果；observableFacts 2–3条，每条8–45字；environmentFallback 25–100字；presentation.title 2–12字；presentation.text 45–140字。\n7. presentation.text 要像正文中自然插入的一小段，明确传递局势变化但不替玩家决定去留；避免每条都用“有人低声提到”“正在重新核对”。\n8. 成人或私密内容只作中性、不露骨的情境暗示，不扩写身体或性行为。\n\n输入数据：\n${JSON.stringify(data)}`;
+  return `你是六朝架空历史互动叙事的内容编辑。请把下面一个 stage 的自动模板征兆逐条精修，并严格输出 schema JSON。\n\n目标：在承重事件发生前，让玩家从人物言行、使者口信、现场痕迹或环境异动感到局势变化；只写当前可观察事实，结果必须未知，玩家可以继续当前行动。\n\n硬约束：\n1. entries 数量、顺序、situationId 与输入完全一致，不漏项。\n2. 不改变人物性格、身份或知识边界；preferredCharacterIds 只能从该条 allowedCharacterIds 选择，没合适人物就留空。\n3. 不写玩家、系统、回合、倒计时、机会卡、原著、剧情、结局、尚未发生、事情还没开始等元语言。\n4. 不断言死亡、登基、遇袭成功、被俘、叛逃等确定结果；可以写换防、失联、封路、异常调动、器物痕迹、传言互相矛盾等征兆。\n5. 不添加新事实；所有具体细节必须能由 event、location、人物卡或较保守的现场感官推得。无法安全具体化时宁可克制。\n6. title 4–18字；summary 20–90字，描述当前压力而非结果；observableFacts 2–3条，每条8–45字；environmentFallback 25–100字；presentation.title 2–12字；presentation.text 45–140字。\n7. presentation.text 要像正文中自然插入的一小段，明确传递局势变化但不替玩家决定去留；避免每条都用“有人低声提到”“正在重新核对”。\n8. 成人或私密内容只作中性、不露骨的情境暗示，不扩写身体或性行为。\n9. 全部文字必须是中文，不得出现任何英文单词或拉丁字母；人名必须与输入的人物卡完全一致，不得改字、不得自造新人名。\n10. 若该 event 本身要玩家去发现某个身份、真名、内奸或秘密，征兆只能写引出怀疑的可观察摩擦，不得用肯定句提前说出谜底。\n\n输入数据：\n${JSON.stringify(data)}`;
 }
 
 async function prepare() {
-  const stages = await loadStages();
+  // 人工纵切关（如 lyg.dingtao_beijing）没有 baseline situation，不进本批。
+  const stages = (await loadStages()).filter(stage => stage.situations.length > 0);
   await mkdir(join(artifactRoot, 'prompts'), { recursive: true });
   await mkdir(join(artifactRoot, 'results'), { recursive: true });
   await writeFile(join(artifactRoot, 'targets.json'), `${JSON.stringify(stages, null, 2)}\n`);
@@ -140,7 +151,8 @@ function runGrok(promptPath, schemaPath) {
     const args = [
       '--prompt-file', promptPath,
       '--model', 'grok-4.6',
-      '--reasoning-effort', 'low',
+      // 个别关会中途放弃、用占位条目凑满 schema 定长；这类关单独提档重跑。
+      '--reasoning-effort', process.env.WORLD_SIM_EFFORT || 'low',
       '--disable-web-search', '--no-memory', '--no-subagents',
       '--tools', '',
       '--json-schema', requireText(schemaPath),

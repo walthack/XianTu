@@ -5543,8 +5543,8 @@
       "situations": [
         {
           "id": "world-sim.baseline.lyg.changgan_begins.lyg.event.s03_01",
-          "title": "局势中的入住长安宣平坊宅院",
-          "summary": "围绕“入住长安宣平坊宅院”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "宣平坊催入城",
+          "summary": "宵禁将至，石超已备下宣平坊宅院与接风酒宴，祁远口中却夹着长安城里另一桩麻烦。",
           "sourceEventId": "lyg.event.s03_01",
           "settledWhenAny": [
             [
@@ -5561,10 +5561,19 @@
             "id": "omen.baseline.lyg.changgan_begins.lyg.event.s03_01",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“入住长安宣平坊宅院”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "石超派人连催：宣平坊宅院已备妥，须赶在宵禁前入城",
+              "坊门内外车马加急，宅院灯火先于主人点起",
+              "祁远私下嘀咕有人在长安闯了祸，前后说法对不上"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "lyg.character.shi_chao"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.qi_yuan"
+              },
               {
                 "kind": "messenger"
               },
@@ -5572,17 +5581,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "城门鼓点比白日更密，宣平坊方向灯火连成一片，车夫对是否赶得上宵禁各说各话。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“入住长安宣平坊宅院”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "宵禁将近",
+              "text": "石超腊黄脸上堆着笑，连连挥袖催人：宣平坊那处宅子酒宴已齐，再磨蹭便要撞上宵禁。祁远弓着背跟在侧后，账册未合，嘴里却漏出长安城里有人惹事的闲话，前后对不上。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.changgan_begins.lyg.event.s03_02",
-          "title": "局势中的程宗扬与祁远重逢叙旧",
-          "summary": "围绕“程宗扬与祁远重逢叙旧”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "江州旧讯压喉",
+          "summary": "祁远带着江州故人的口信在宅中徘徊，酒盏已温，话却一再咽回去。",
           "sourceEventId": "lyg.event.s03_02",
           "settledWhenAny": [
             [
@@ -5599,10 +5608,14 @@
             "id": "omen.baseline.lyg.changgan_begins.lyg.event.s03_02",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“程宗扬与祁远重逢叙旧”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "祁远把江州来信叠了又拆，迟迟不交出去",
+              "暖阁里酒已温过两遍，他还在门外徘徊"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.qi_yuan"
+              },
               {
                 "kind": "messenger"
               },
@@ -5610,17 +5623,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "宅院暖阁酒香先散出来，廊下只见一人反复揉着信札，像有一串旧名不敢一次说完。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“程宗扬与祁远重逢叙旧”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "旧信未交",
+              "text": "祁远青黄着脸立在暖阁外，江州信札被他揉得起毛。屋里酒香已散开一层，他却像怕一开口便扯出星月湖、临江楼那些旧事。廊下人来人往，谁也没逼他把话说完。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.changgan_begins.lyg.event.s03_03",
-          "title": "局势中的泼寒胡戏与杨玉环飙车斗殴",
-          "summary": "围绕“泼寒胡戏与杨玉环飙车斗殴”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "轻车冲乱戏场",
+          "summary": "泼寒胡戏正热闹，街口却被轻车长索搅开，捕快避让，围观的人不敢上前。",
           "sourceEventId": "lyg.event.s03_03",
           "settledWhenAny": [
             [
@@ -5644,10 +5657,15 @@
             "id": "omen.baseline.lyg.changgan_begins.lyg.event.s03_03",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“泼寒胡戏与杨玉环飙车斗殴”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "泼寒胡戏锣鼓未歇，街心已被轻车碾出一道泥痕",
+              "两名捕快见车头纹饰便侧身让开",
+              "有少年被长索扫倒，胡人商贩跪地求饶"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.yang_yuhuan"
+              },
               {
                 "kind": "messenger"
               },
@@ -5655,17 +5673,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "戏场水花未干，马蹄与鞭梢从坊口压过来，人群让出一道缝，却说不清那辆轻车要停在何处。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“泼寒胡戏与杨玉环飙车斗殴”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "戏场乱辙",
+              "text": "泼寒胡戏的水花还在飞，一辆轻车已从坊口冲进人群。长索抽在石板上作响，少年摔倒，胡人商贩跪成一排。两名捕快看见车头纹饰，竟把铁尺收回腰间。人群让出一条缝，没人敢问这车要停到哪一步。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.changgan_begins.lyg.event.s03_04",
-          "title": "局势中的潘金莲在长安出现",
-          "summary": "围绕“潘金莲在长安出现”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "面纱剑影守街",
+          "summary": "轻车外侧闪出戴双重面纱的白衣女子，剑上未干的血痕让路人纷纷改道。",
           "sourceEventId": "lyg.event.s03_04",
           "settledWhenAny": [
             [
@@ -5682,10 +5700,14 @@
             "id": "omen.baseline.lyg.changgan_begins.lyg.event.s03_04",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“潘金莲在长安出现”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "白衣女子面覆双重薄纱，提着带血长剑贴在轻车外侧",
+              "她目光扫过围观人群，路人立刻把闲话咽回去"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.pan_jinlian"
+              },
               {
                 "kind": "messenger"
               },
@@ -5693,17 +5715,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "街沿忽然空出半步，只因车侧多了一个覆纱提剑的身影，剑上腥气未散，闲话都矮了下去。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“潘金莲在长安出现”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "剑上未干",
+              "text": "轻车未停稳，一名覆着双重面纱的白衣女子已横剑守在外侧。剑锋上血痕未干，她并不喝骂，只把目光一片片扫过街沿。有人想吹口哨打趣，对上那双杏眼便生生止住。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.changgan_begins.lyg.event.s03_05",
-          "title": "局势中的袁天罡心态崩溃与道出经历",
-          "summary": "围绕“袁天罡心态崩溃与道出经历”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "白幡相士失色",
+          "summary": "袁天罡看完街头那一幕，白幡捏得发颤，话到嘴边又改口，像被什么旧坎绊住。",
           "sourceEventId": "lyg.event.s03_05",
           "settledWhenAny": [
             [
@@ -5720,10 +5742,15 @@
             "id": "omen.baseline.lyg.changgan_begins.lyg.event.s03_05",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“袁天罡心态崩溃与道出经历”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "袁天罡白幡斜倚，额上冷汗，鼻血又渗出来",
+              "他张口要骂权贵，话到一半改成自嘲",
+              "同乡旧谊被他反复提起，却说不清真正怕的是什么"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.yuan_tiangang"
+              },
               {
                 "kind": "messenger"
               },
@@ -5731,17 +5758,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "戏场余波未平，廊柱下有人拄着白幡喘气，鼻血滴在袖口，周围只听见断断续续的自嘲。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“袁天罡心态崩溃与道出经历”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "相士失神",
+              "text": "袁天罡退到廊柱下，白幡拄地，鼻血又顺着皱纹往下走。他先骂那车太横，随即声音矮下去，只反复念着自己这点本事在长安不值钱。没人听得清他到底想吐出哪一段旧事。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.changgan_begins.lyg.event.s03_06",
-          "title": "局势中的贾文和调查杨玉环背景",
-          "summary": "围绕“贾文和调查杨玉环背景”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "公主册档被翻",
+          "summary": "贾文和调取镇国大长公主的公开册档，食邑与封号对得上，来历却对不齐。",
           "sourceEventId": "lyg.event.s03_06",
           "settledWhenAny": [
             [
@@ -5758,10 +5785,15 @@
             "id": "omen.baseline.lyg.changgan_begins.lyg.event.s03_06",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“贾文和调查杨玉环背景”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "贾文和案上摊开异姓公主的公开册档，朱笔圈了食邑户数",
+              "四代年号下同一封号反复出现，旁注互相打架",
+              "他压住一份未署名的坊间传言，不肯当场读完"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.jia_wenhe"
+              },
               {
                 "kind": "messenger"
               },
@@ -5769,17 +5801,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "灯下纸页翻得比平日更快，封号与食邑抄了一遍又一遍，案角还压着一页不敢当众念的闲话。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“贾文和调查杨玉环背景”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "册档对不齐",
+              "text": "贾文和仍是那副三分笑，案上却摊满镇国大长公主的公开册档。异姓开府、食邑五千户都写得明白，只是四代年号底下同一封号反复出现，旁注彼此打架。他用镇纸压住一页未署名的闲话，先不读给旁人听。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.changgan_begins.lyg.event.s03_07",
-          "title": "局势中的程宗扬与杨玉环初次会面",
-          "summary": "围绕“程宗扬与杨玉环初次会面”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "紫云楼封顶层",
+          "summary": "紫云楼顶层忽然清场，公主名帖已到，守门人盘问比平日更细。",
           "sourceEventId": "lyg.event.s03_07",
           "settledWhenAny": [
             [
@@ -5796,10 +5828,15 @@
             "id": "omen.baseline.lyg.changgan_begins.lyg.event.s03_07",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“程宗扬与杨玉环初次会面”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "紫云楼顶层雅座被临时清退，只留一桌未动的茶盏",
+              "守门人核对照牌，连从人携带的匣子也要开看",
+              "楼下有人传杨玉环今夜要见远客，说法不一"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.yang_yuhuan"
+              },
               {
                 "kind": "messenger"
               },
@@ -5807,17 +5844,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "酒楼上层忽然空出来，楼梯口核对照牌的声音比往日硬，匣盖开合，谁也说不准今夜见的是哪一位。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“程宗扬与杨玉环初次会面”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "楼顶清座",
+              "text": "紫云楼到了晚间忽然把顶层清出来，茶盏摆好却不让闲客上楼。守门人核对照牌，连匣中杂物也要开看一眼。有人说杨玉环今夜要见远客，有人说只是酒令加严，两种话在楼梯口顶着。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.changgan_begins.lyg.event.s03_08",
-          "title": "局势中的小紫与吕雉被困大雁塔",
-          "summary": "围绕“小紫与吕雉被困大雁塔”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "雁塔僧岗断水",
+          "summary": "大雁塔四周僧人加岗封缸，塔内传出对峙的喝骂，谁也说不清里面还有几人。",
           "sourceEventId": "lyg.event.s03_08",
           "settledWhenAny": [
             [
@@ -5834,10 +5871,19 @@
             "id": "omen.baseline.lyg.changgan_begins.lyg.event.s03_08",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“小紫与吕雉被困大雁塔”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "大雁塔底层水缸被封，僧人轮值不让再往上送水",
+              "塔内有女声喝骂，报出的教门名号与寺外传言对不上",
+              "院角铁腥气很重，却看不见是何物"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "lyg.character.kuiji"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.xiao_zi"
+              },
               {
                 "kind": "messenger"
               },
@@ -5845,17 +5891,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "塔院加岗，水担停在阶下，窗里喝骂与廊下梵呗叠在一处，铁腥气随风散开，来由不明。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“小紫与吕雉被困大雁塔”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "雁塔断水",
+              "text": "大慈恩寺这边忽然把大雁塔下层水缸封了，僧人沿阶换岗，不许再往上送水。塔窗里隐约有女子喝骂，报出的名号和寺外闲话对不上。院角铁腥气很重，窥基立在阶下，并不解释为何加岗。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.changgan_begins.lyg.event.s03_09",
-          "title": "局势中的程宗扬在紫云楼宴后夜访大慈恩寺",
-          "summary": "围绕“程宗扬在紫云楼宴后夜访大慈恩寺”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "慈恩寺夜禁加严",
+          "summary": "散席之后大慈恩寺灯火异常，碑廊上锁，塔院拦人，巷口又传出教坊女子被强拉的哭喊。",
           "sourceEventId": "lyg.event.s03_09",
           "settledWhenAny": [
             [
@@ -5872,10 +5918,19 @@
             "id": "omen.baseline.lyg.changgan_begins.lyg.event.s03_09",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“程宗扬在紫云楼宴后夜访大慈恩寺”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "大慈恩寺碑廊临时上锁，僧人拦着不许近前摩挲名录",
+              "登塔石级被绳封住，窥基在阶上喝止闲人",
+              "寺外巷口有碧衣舞伎颈间带伤，女医正被叫去看诊"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.li_yan"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.yi_xin"
+              },
               {
                 "kind": "messenger"
               },
@@ -5883,10 +5938,10 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "寺里灯火偏亮，碑廊铁锁新上，塔阶拦绳未撤，巷口哭声与香火钱的讨价搅在一起。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“程宗扬在紫云楼宴后夜访大慈恩寺”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "碑廊上锁",
+              "text": "李炎散席后兴致未减，要往大慈恩寺夜游。寺里却先把碑廊锁了，登塔绳拦在阶上，窥基一口咬定香客不得上楼。巷口另有哭声：教坊舞伎衣襟被扯乱，义姁已被人叫去敷药。几件事叠在同一夜里，还没人把因果说圆。"
             }
           }
         }

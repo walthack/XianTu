@@ -6400,8 +6400,8 @@
       "situations": [
         {
           "id": "world-sim.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_01_beat",
-          "title": "局势中的宦官再分权",
-          "summary": "围绕“宦官再分权”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "内侍省连夜换印",
+          "summary": "内侍省灯火不歇，符印与职掌条被拆了又贴，枢密名帖和继位闲话对不上号。",
           "sourceEventId": "lyg.event.shituolin_endgame_01_beat",
           "settledWhenAny": [
             [
@@ -6418,8 +6418,9 @@
             "id": "omen.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_01_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“宦官再分权”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "内侍省门口今夜多了两拨对勘符印的人",
+              "枢密使名帖与留用名单上墨迹未干",
+              "廊下关于继位人选的说法互相打架"
             ],
             "transmitters": [
               {
@@ -6429,17 +6430,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "宫墙内侧符匣开合声一阵紧过一阵，灯火贴着门槛晃，却没人敢把新职掌说死。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“宦官再分权”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "换印未定",
+              "text": "内侍省廊下灯火通明，符印与职掌条被拆了又贴。有人说新枢密使已定，有人说旧人仍留用，连继位人选的闲话也对不上。风声紧，却没人敢当众拍板。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_02_beat",
-          "title": "局势中的独柳树刑场",
-          "summary": "围绕“独柳树刑场”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "独柳树突然封路",
+          "summary": "独柳树街口立起木栅，囚车与绳索被反复清点，观刑席空着，名单仍封在匣里。",
           "sourceEventId": "lyg.event.shituolin_endgame_02_beat",
           "settledWhenAny": [
             [
@@ -6456,8 +6457,9 @@
             "id": "omen.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_02_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“独柳树刑场”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "通往独柳树的街口已被木栅拦住",
+              "内侍押队反复清点囚车与绳索",
+              "百姓被驱往远处，官员席位却空着"
             ],
             "transmitters": [
               {
@@ -6467,17 +6469,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "独柳树一带尘土里混着新刨的木屑味，远处有人喝令让开，近处只听见车轮压过石板。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“独柳树刑场”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "刑场封街",
+              "text": "独柳树街口立起木栅，囚车辙印新鲜，绳索与席位被摆过又改。围观的人被赶远，官员席却空着。日影压向正中，名单仍封在匣里，没人敢先念。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_03_beat",
-          "title": "局势中的高阳疑冢",
-          "summary": "围绕“高阳疑冢”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "善果寺外问冢",
+          "summary": "善果寺外来人打听高阳坟墓方位，墓道过长、开口过多的闲话与宫中报丧对不上。",
           "sourceEventId": "lyg.event.shituolin_endgame_03_beat",
           "settledWhenAny": [
             [
@@ -6494,8 +6496,9 @@
             "id": "omen.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_03_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“高阳疑冢”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "善果寺山门有人追问高阳坟墓方位",
+              "闲话里墓道过长、开口过多对不上常理",
+              "宫中报丧与寺外说法互相打架"
             ],
             "transmitters": [
               {
@@ -6505,17 +6508,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "寺外香灰被风刮乱，山门铜环凉得扎手，僧院深处有人压着嗓子指路，不肯多说一句。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“高阳疑冢”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "问冢不对",
+              "text": "善果寺山门外来人打听高阳坟墓方位。有说墓道过百丈、开口过多，有说宫里已报丧。老僧只肯指方向，不答人还在不在，风把香灰刮得满阶都是。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_04_beat",
-          "title": "局势中的尸陀林主现身",
-          "summary": "围绕“尸陀林主现身”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "白骨莲华发冷",
+          "summary": "法会场边白骨莲华座忽然发冷，蕃密僧人退散，三眼与骷髅法冠的影子转眼对不上。",
           "sourceEventId": "lyg.event.shituolin_endgame_04_beat",
           "settledWhenAny": [
             [
@@ -6532,8 +6535,9 @@
             "id": "omen.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_04_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“尸陀林主现身”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "白骨莲华座边忽然透出刺骨冷气",
+              "蕃密僧人连连后退，梵音乱了拍",
+              "有人说见三眼法冠，转眼又说是香雾"
             ],
             "transmitters": [
               {
@@ -6543,17 +6547,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "场地边缘血气贴地游走，莲座骨纹像自己在响，远处僧衣翻飞，近处却听不清一句完整咒语。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“尸陀林主现身”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "莲座异冷",
+              "text": "法会场边那座白骨莲华座忽然发冷，蕃密僧人连连后退。有人瞥见三眼与骷髅法冠的影子，转眼又说只是香雾。血气贴地游走，看不清会落到谁身上。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_05_beat",
-          "title": "局势中的斩妖除魔",
-          "summary": "围绕“斩妖除魔”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "莲座四周刀光",
+          "summary": "众人围向发黑的莲华宝座，刀光与梵音绞在一处，座下血气未散，谁先落刀仍不定。",
           "sourceEventId": "lyg.event.shituolin_endgame_05_beat",
           "settledWhenAny": [
             [
@@ -6570,8 +6574,9 @@
             "id": "omen.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_05_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“斩妖除魔”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "莲华宝座周围刀光与梵音绞成一团",
+              "座下血气发黑，骨纹细细开裂",
+              "有人盯着颈椎方位，有人护着侧翼"
             ],
             "transmitters": [
               {
@@ -6581,17 +6586,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "宝座四周热风与冷雾对撞，兵器摩擦声断续响起，地面被踩出湿痕，却还没有人真正踏进座心。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“斩妖除魔”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "围座未破",
+              "text": "莲华宝座周围刀光与梵音绞在一处，座下血气发黑。有人盯着颈椎方向，有人护着侧翼。座未裂，人也未退，空气紧得像一根要断的弦。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_06_beat",
-          "title": "局势中的江王入宫",
-          "summary": "围绕“江王入宫”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "宫门连夜加钥",
+          "summary": "中使脚步匆忙，宫门加钥换防，江王行踪的口信前后不一，廊下没人敢拦问。",
           "sourceEventId": "lyg.event.shituolin_endgame_06_beat",
           "settledWhenAny": [
             [
@@ -6608,8 +6613,9 @@
             "id": "omen.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_06_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“江王入宫”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "中使气喘吁吁把纸条递进禁中",
+              "宫门临时加钥，宿卫换上一拨生脸",
+              "江王仪仗在内还是在外，说法打架"
             ],
             "transmitters": [
               {
@@ -6619,17 +6625,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "宫墙根下马蹄未停，门闩撞响两回，远处仪仗铃铛若有若无，近处只剩换防的甲叶声。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“江王入宫”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "中使急报",
+              "text": "中使气喘吁吁递进纸条，宫门加钥换防。有说江王已入禁中，有说仪仗还在外头。廊下脚步乱成一片，没人敢当众拦住问个明白。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_07_beat",
-          "title": "局势中的太液池黑雾",
-          "summary": "围绕“太液池黑雾”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "太液池贴水黑雾",
+          "summary": "太液池上黑雾贴水而起，骷髅模样的内侍在岸边绕行，栈道被封，密语听不清对准谁。",
           "sourceEventId": "lyg.event.shituolin_endgame_07_beat",
           "settledWhenAny": [
             [
@@ -6646,8 +6652,9 @@
             "id": "omen.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_07_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“太液池黑雾”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "太液池面黑雾贴着水纹往上爬",
+              "岸边有骷髅模样的内侍来回绕行",
+              "池畔栈道被封，巡夜灯一盏盏熄掉"
             ],
             "transmitters": [
               {
@@ -6657,17 +6664,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "池风带着腐冷，雾里偶尔碰出两句压低的对答，石栏湿滑，远处宫灯被吞得只剩一团暗黄。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“太液池黑雾”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "池上黑雾",
+              "text": "太液池面黑雾贴水而起，岸边有骷髅模样的内侍绕行。池畔栈道被封，雾里隐约有密语，听不清要对准谁。水声被压死，连鱼跃都停了。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_08_beat",
-          "title": "局势中的婆娑宝树",
-          "summary": "围绕“婆娑宝树”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "宝树对着天珠",
+          "summary": "琉璃天珠映着一株未成形的宝树，树影里有人气息发虚，供奉册被抽走，对象闲话打架。",
           "sourceEventId": "lyg.event.shituolin_endgame_08_beat",
           "settledWhenAny": [
             [
@@ -6684,8 +6691,9 @@
             "id": "omen.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_08_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“婆娑宝树”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "琉璃天珠正对一株未成形的宝树发亮",
+              "树影里两人气息发虚，衣袖发冷",
+              "供奉册被抽走，夺舍对象的闲话对不上"
             ],
             "transmitters": [
               {
@@ -6695,17 +6703,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "密室里树叶摩擦像细雨，珠光一闪一暗，墙角有人压着咳，谁也不肯把那本册子重新摊开。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“婆娑宝树”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "珠下宝树",
+              "text": "琉璃天珠对着一株未成形的宝树发亮，树影里两人气息发虚。供奉册被抽走，关于要换成谁的闲话互相打架。珠光一暗，连呼吸都小心起来。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_09_beat",
-          "title": "局势中的奉诏讨逆",
-          "summary": "围绕“奉诏讨逆”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "公主府甲仗出库",
+          "summary": "太真公主府内甲仗出库，家将整队朝大明宫，门口为圣旨真伪顶牛，队伍已动。",
           "sourceEventId": "lyg.event.shituolin_endgame_09_beat",
           "settledWhenAny": [
             [
@@ -6722,8 +6730,9 @@
             "id": "omen.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_09_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“奉诏讨逆”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "太真公主府甲库被打开，刀枪出架",
+              "家将在阶下整队，马首对着大明宫",
+              "门口有人骂圣旨是假的，有人死护黄绫"
             ],
             "transmitters": [
               {
@@ -6733,17 +6742,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "府门内外甲叶撞响，马喷着热气，黄绫在灯下晃得刺眼，谁先迈出第二步，两边都还咬着牙。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“奉诏讨逆”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "府门点兵",
+              "text": "太真公主府甲仗出库，家将整队朝大明宫。门口有人骂圣旨是假的，也有人捧着黄绫不让碰。队伍已经挪步，去向却还在门口吵着。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_10_beat",
-          "title": "局势中的莲座交锋",
-          "summary": "围绕“莲座交锋”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "莲座前添刀痕",
+          "summary": "莲花宝座上添了新刀痕，对面人影未散，侧廊有人同时靠近，谁先出手仍不定。",
           "sourceEventId": "lyg.event.shituolin_endgame_10_beat",
           "settledWhenAny": [
             [
@@ -6760,8 +6769,9 @@
             "id": "omen.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_10_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“莲座交锋”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "莲花宝座瓣缘多了一道新刀痕",
+              "座前对峙的人影谁也没有先退",
+              "侧廊同时传来裙裾与刀鞘轻响"
             ],
             "transmitters": [
               {
@@ -6771,17 +6781,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "宝座周围香灰被踩碎，空气里有铁锈和莲香对冲，远处脚步放得很轻，像在等第一声金属碰撞。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“莲座交锋”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "座前对峙",
+              "text": "莲花宝座上添了新刀痕，对面人影未散。侧廊有裙裾与刀光同时靠近，空气紧得像要断。谁先出手，两边都还按着兵器。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_11_beat",
-          "title": "局势中的浮屠塔困局",
-          "summary": "围绕“浮屠塔困局”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "净光收成塔影",
+          "summary": "琉璃净光在半空收成塔影与巨掌轮廓，地面发烫，退路变窄，塔门似开未开。",
           "sourceEventId": "lyg.event.shituolin_endgame_11_beat",
           "settledWhenAny": [
             [
@@ -6798,8 +6808,9 @@
             "id": "omen.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_11_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“浮屠塔困局”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "半空琉璃净光忽然收束成塔影",
+              "巨掌轮廓压下来，地面发烫发亮",
+              "退路变窄，塔门一线开合不定"
             ],
             "transmitters": [
               {
@@ -6809,17 +6820,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "光柱里尘埃直立不落，耳膜发胀，砖缝往外冒热气，前后左右都像被一只看不见的手往中间推。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“浮屠塔困局”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "光中成塔",
+              "text": "半空琉璃净光收成塔影，巨掌轮廓压下来。地面发烫，退路变窄，塔门似开未开，还看不出谁会被那道光收进去。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_12_beat",
-          "title": "局势中的李辅国肉身败亡",
-          "summary": "围绕“李辅国肉身败亡”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "权阉真身发朽",
+          "summary": "那具权阉肉身发出腐朽气味，死气外溢，四周人已围成半圈，刀未落，皮囊却在撑。",
           "sourceEventId": "lyg.event.shituolin_endgame_12_beat",
           "settledWhenAny": [
             [
@@ -6836,8 +6847,9 @@
             "id": "omen.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_12_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“李辅国肉身败亡”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "那具熟悉的权阉肉身散出朽味",
+              "死气从袖口袍摆往外渗",
+              "围上来的人已成半圈，刀都未出鞘"
             ],
             "transmitters": [
               {
@@ -6847,17 +6859,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "近处腐冷贴肤，远处有人屏住呼吸，地面霜一样薄薄一层白气，谁也不肯先踏进那圈死气里。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“李辅国肉身败亡”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "肉身发朽",
+              "text": "那具权阉肉身发出朽味，死气外溢。围上来的人已成半圈，刀未落，他却像撑不住自己的皮囊。空气沉得发黏，谁先动手都还没开口。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_13_beat",
-          "title": "局势中的太皇太后返老",
-          "summary": "围绕“太皇太后返老”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "子时寝殿灯乱",
+          "summary": "子时将近，太皇太后寝殿灯火乱跳，面容忽然变嫩的说法与烛影骗人的说法顶牛，外殿拦路。",
           "sourceEventId": "lyg.event.shituolin_endgame_13_beat",
           "settledWhenAny": [
             [
@@ -6874,8 +6886,9 @@
             "id": "omen.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_13_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“太皇太后返老”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "子时将近，太皇太后寝殿灯火乱跳",
+              "宫人有的说面容变嫩，有的说是烛影",
+              "外殿有人拦路，不许靠近榻前"
             ],
             "transmitters": [
               {
@@ -6885,17 +6898,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "寝殿窗纸后人影忽高忽矮，铜漏滴得又急又乱，门槛外甲士把枪杆横死，殿里只剩衣料摩擦声。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“太皇太后返老”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "寝殿异灯",
+              "text": "子时将近，太皇太后寝殿灯火乱跳。宫人有的说面容忽然变嫩，有的说只是烛影骗人。外殿有人拦路，不许靠近榻前，连呼吸都压着。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_14_beat",
-          "title": "局势中的驱魂线索",
-          "summary": "围绕“驱魂线索”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "深宫翻找供奉",
+          "summary": "宫里有人翻找供奉残件，五肉五甘露的名目被压着问，太皇太后神识是否还在则无人敢答。",
           "sourceEventId": "lyg.event.shituolin_endgame_14_beat",
           "settledWhenAny": [
             [
@@ -6912,8 +6925,9 @@
             "id": "omen.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_14_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“驱魂线索”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "深宫殿角有人翻箱搜供奉残件",
+              "五肉五甘露的名目只在齿缝里转",
+              "太皇太后神识还在不在，说法打架"
             ],
             "transmitters": [
               {
@@ -6923,17 +6937,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "宫廊深处柜门开合，药腥与甜腻混在一起，搜查的脚步时快时停，谁也不肯把那几个字说全。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“驱魂线索”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "搜供未开",
+              "text": "深宫里有人翻找供奉残件，口中压着五肉五甘露的名目。太皇太后神识是否还在，说法打架。搜查未停，那只匣子却还没人敢揭开。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_15_beat",
-          "title": "局势中的黑魔海旧怨开放口",
-          "summary": "围绕“黑魔海旧怨开放口”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "庵堂门闩扣死",
+          "summary": "庵堂灯火压低，有人追问两个玉姬下落与旧战里黑魔海的影，座中人气息不稳，回话含糊。",
           "sourceEventId": "lyg.event.shituolin_endgame_15_beat",
           "settledWhenAny": [
             [
@@ -6950,8 +6964,9 @@
             "id": "omen.baseline.lyg.shituolin_endgame.lyg.event.shituolin_endgame_15_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“黑魔海旧怨开放口”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "庵堂门闩从里面扣死，灯火压得很低",
+              "座上追问剑玉姬、泉玉姬下落",
+              "鬼王峒旧战里黑魔海的影被反复咬住"
             ],
             "transmitters": [
               {
@@ -6961,10 +6976,10 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "庵堂窗纸透出一线黄光，屋内人声压得发紧，门外只听见木鱼停了半拍，再无人进出。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“黑魔海旧怨开放口”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "庵中追问",
+              "text": "庵堂灯火压低，门闩扣死。有人追问剑玉姬、泉玉姬下落，又咬住鬼王峒旧战里黑魔海的影。座中人气息不稳，回话含糊，谁也没把那层纸捅破。"
             }
           }
         }

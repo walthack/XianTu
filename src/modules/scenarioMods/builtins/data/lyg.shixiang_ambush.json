@@ -1597,8 +1597,8 @@
       "situations": [
         {
           "id": "world-sim.baseline.lyg.shixiang_ambush.lyg.event.shixiang_s10",
-          "title": "局势中的听取北司与佛门动向",
-          "summary": "围绕“听取北司与佛门动向”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "紫云楼召见有异",
+          "summary": "杨玉环遣人请至紫云楼，口信把北司与佛门缠在一起；廊下另有鹤羽剑姬旁观，话里话外都像在试探底细。",
           "sourceEventId": "lyg.event.shixiang_s10",
           "settledWhenAny": [
             [
@@ -1615,10 +1615,19 @@
             "id": "omen.baseline.lyg.shixiang_ambush.lyg.event.shixiang_s10",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“听取北司与佛门动向”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "紫云楼侧门加了内侍核验，外来名刺被压住不传",
+              "杨玉环的口信只写北司借佛门查底，未写查到哪一层",
+              "潘金莲立在帘侧不入座，目光随着名刺来回"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.yang_yuhuan"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.pan_jinlian"
+              },
               {
                 "kind": "messenger"
               },
@@ -1626,17 +1635,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "紫云楼一带车马忽然稀疏，廊下多了核验名刺的内侍。远处佛寺晚钟与北司当值的灯火交错，却没人说清今夜要谈什么。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“听取北司与佛门动向”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "帘后试探",
+              "text": "紫云楼的请柬写得极短，只说北司正借佛门的册子对人问话。杨玉环坐得端正，潘金莲却停在帘边不进不退，像在听谁把话柄交到谁手里。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.shixiang_ambush.lyg.event.investigate_te_master",
-          "title": "局势中的潜入青龙寺查探特大师",
-          "summary": "围绕“潜入青龙寺查探特大师”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "青龙寺夜巡改路",
+          "summary": "青龙寺连夜换岗，坊间把摩尼寺灌顶与蕃密外援缠在一起；小紫已对寺墙缺口与更鼓间隙做记号，两边说法仍对不上。",
           "sourceEventId": "lyg.event.investigate_te_master",
           "settledWhenAny": [
             [
@@ -1653,10 +1662,15 @@
             "id": "omen.baseline.lyg.shixiang_ambush.lyg.event.investigate_te_master",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“潜入青龙寺查探特大师”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "青龙寺角门换了生面孔，旧巡签被收走",
+              "小紫在灯下比对更鼓与墙根潮痕",
+              "寺内传出异香与女眷低语，与僧籍对不上号"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.xiao_zi"
+              },
               {
                 "kind": "messenger"
               },
@@ -1664,17 +1678,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "青龙寺墙外灯火比往日密，更鼓乱了一拍。风里有陌生香料，远处又有人把摩尼寺灌顶的事说得互相打架。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“潜入青龙寺查探特大师”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "寺墙异香",
+              "text": "青龙寺今夜不按旧路巡更，角门的腰牌也换了批次。小紫蹲在暗处数过更次数，只说墙里香气不像本寺常焚之物，女眷脚步也对不上僧籍。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.shixiang_ambush.lyg.event.shixiang_s11",
-          "title": "局势中的接受鸿胪寺补救安排",
-          "summary": "围绕“接受鸿胪寺补救安排”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "鸿胪寺登门补礼",
+          "summary": "段文楚的车仗停在宣平坊程宅门外，名刺写着补救前失；随员捧着使节仪仗和元正朝会的名籍草稿，态度比往日软。",
           "sourceEventId": "lyg.event.shixiang_s11",
           "settledWhenAny": [
             [
@@ -1691,10 +1705,15 @@
             "id": "omen.baseline.lyg.shixiang_ambush.lyg.event.shixiang_s11",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“接受鸿胪寺补救安排”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "鸿胪寺少卿段文楚在门外候见，名刺写着致歉",
+              "随员托盘上是使节仪仗与名籍抄件",
+              "抄件空白处改过元正朝会座次，墨迹未干"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "lyg.character.np031"
+              },
               {
                 "kind": "messenger"
               },
@@ -1702,17 +1721,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "宣平坊门前忽然多了鸿胪寺青盖，随从压低嗓子练致辞。邻坊只看见礼盒进宅，听不清少卿究竟要还回哪一项礼遇。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“接受鸿胪寺补救安排”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "名刺致歉",
+              "text": "段文楚立在程宅阶下，先把名刺递进门，再说此前礼数有缺。随员怀里的名籍被指过一处：元正朝会的席位空着，却还盖着未定的印。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.shixiang_ambush.lyg.event.shixiang_s12",
-          "title": "局势中的见证慈恩寺红莲演法",
-          "summary": "围绕“见证慈恩寺红莲演法”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "慈恩寺红莲待演",
+          "summary": "大慈恩寺连夜铺红莲法坛，窥基要接待乐从训与观海；宫道上也有人试着清道，僧俗两边的说辞对不上。",
           "sourceEventId": "lyg.event.shixiang_s12",
           "settledWhenAny": [
             [
@@ -1729,10 +1748,19 @@
             "id": "omen.baseline.lyg.shixiang_ambush.lyg.event.shixiang_s12",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“见证慈恩寺红莲演法”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "大慈恩寺中庭铺开红莲法坛，香案比朔望更密",
+              "窥基亲迎乐从训，观海一系僧人另立一侧",
+              "宫门方向有人清道，却未张贴巡幸告示"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "lyg.character.kuiji"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "lyg.character.guan_hai"
+              },
               {
                 "kind": "messenger"
               },
@@ -1740,17 +1768,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "慈恩寺钟鼓比往日提早，红莲灯影把塔影拉得很长。寺外有军士勒马观望，寺内僧众神色不一，谁也说不准今夜演法要给谁看。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“见证慈恩寺红莲演法”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "红莲法坛",
+              "text": "大慈恩寺把红莲法坛支到中庭，窥基亲自把乐从训往前引，观海却带着密宗法器站在侧席。寺墙外隐约有清道声，告示空着，像有人要来，又像只是虚张。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.shixiang_ambush.lyg.event.shixiang_s13",
-          "title": "局势中的元正朝会辨认地球仪",
-          "summary": "围绕“元正朝会辨认地球仪”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "朝会异物入殿",
+          "summary": "元正朝会前，鸿胪寺把一件浑圆异物裹进帷中；徐君房自称秦使求见，殿中对那件器物的叫法彼此打架。",
           "sourceEventId": "lyg.event.shixiang_s13",
           "settledWhenAny": [
             [
@@ -1767,10 +1795,15 @@
             "id": "omen.baseline.lyg.shixiang_ambush.lyg.event.shixiang_s13",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“元正朝会辨认地球仪”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "大明宫廊下抬进蒙布圆器，内侍不许近看",
+              "徐君房名刺写着秦国使者，鸿胪寺印信还空着",
+              "两拨通事对器物来历各执一词"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.xu_junfang"
+              },
               {
                 "kind": "messenger"
               },
@@ -1778,17 +1811,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "大明宫元正陈设已齐，唯有西廊多了一座蒙布的架子。官员路过都侧目，却没人敢先说那是贡品还是私货。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“元正朝会辨认地球仪”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "蒙布圆器",
+              "text": "朝会启奏前，西廊下已支起蒙布的圆器。徐君房立在班列外，名刺上自称秦使，可鸿胪寺的印还空着。通事们把那物说成山河之形，又立刻改口，谁也不肯先认。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.shixiang_ambush.lyg.event.track_dagger_attacker",
-          "title": "局势中的追查宣平坊宦官命案",
-          "summary": "围绕“追查宣平坊宦官命案”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "坊外血字封路",
+          "summary": "宣平坊门外金吾突然拦街，地上有未干的血迹和痛骂宦官的字迹；邻人有的说私仇，有的说有人故意做样子。",
           "sourceEventId": "lyg.event.track_dagger_attacker",
           "settledWhenAny": [
             [
@@ -1805,8 +1838,9 @@
             "id": "omen.baseline.lyg.shixiang_ambush.lyg.event.track_dagger_attacker",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“追查宣平坊宦官命案”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "宣平坊外巷口被金吾用拒马封住",
+              "墙根用粗墨写着痛骂宦官的口号，墨未干",
+              "血迹旁落着短刃鞘口，刀身不见"
             ],
             "transmitters": [
               {
@@ -1816,17 +1850,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "宣平坊外原本通车的巷子忽然插上拒马，灯笼把墙上的字照得很白。远处有人喝令让开，却没人说清倒地的是哪一司的人。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“追查宣平坊宦官命案”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "血字封巷",
+              "text": "出宣平坊不远，金吾已把巷口堵住。墙上骂宦官的字还湿着，血从石缝渗到拒马脚下。有人咬定是私仇，有人说口号写得太整齐，像故意给人看。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.shixiang_ambush.lyg.event.shixiang_s14",
-          "title": "局势中的探查废弃兴庆宫",
-          "summary": "围绕“探查废弃兴庆宫”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "兴庆宫荒苑漏风",
+          "summary": "废弃兴庆宫的锁被新近碰过，杨玉环能指出哪些殿不该有穿堂风；荒苑深处石缝呼气，像另有通路，却看不见出口。",
           "sourceEventId": "lyg.event.shixiang_s14",
           "settledWhenAny": [
             [
@@ -1843,10 +1877,15 @@
             "id": "omen.baseline.lyg.shixiang_ambush.lyg.event.shixiang_s14",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“探查废弃兴庆宫”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "兴庆宫角门旧锁有新擦痕，苔藓被踩开",
+              "杨玉环止住随从，说某座亭下不该漏风",
+              "荒池旁石缝向外吐潮气，声如深井"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.yang_yuhuan"
+              },
               {
                 "kind": "messenger"
               },
@@ -1854,17 +1893,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "兴庆宫久无人居，今夜墙头却有灯影一闪即灭。风从封闭的殿基底下钻出来，带着土锈味，巡夜的人在宫墙外绕行，不敢入内。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“探查废弃兴庆宫”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "荒苑漏风",
+              "text": "兴庆宫的荒草没过阶沿，角门锁扣上却有新蹭出的亮痕。杨玉环站在亭边，让人先别踏那块空地，说风不是从廊上过来的。石缝里往外呵气，深得听不清尽头。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.shixiang_ambush.lyg.event.escape_or_counter",
-          "title": "局势中的处置太子误伤风波",
-          "summary": "围绕“处置太子误伤风波”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "宫中弓声乱报",
+          "summary": "大明宫内苑忽然清场，弓弦余音未散，义姁被人急召入内；有人喊刺客，有人护着太子不许围观，说法已经打起来。",
           "sourceEventId": "lyg.event.escape_or_counter",
           "settledWhenAny": [
             [
@@ -1881,10 +1920,19 @@
             "id": "omen.baseline.lyg.shixiang_ambush.lyg.event.escape_or_counter",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“处置太子误伤风波”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "内苑箭道被禁军临时围住，弓袋散落",
+              "义姁提着药匣从侧门跑入，衣襟未及整理",
+              "杨玉环身边护卫互阻，不许外人看清箭靶方向"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.yang_yuhuan"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.yi_xin"
+              },
               {
                 "kind": "messenger"
               },
@@ -1892,17 +1940,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "大明宫一段夹道突然断人，远处有人压着嗓子传伤情，又立刻改口。灯火往内苑聚拢，谁先开口都会把话说死。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“处置太子误伤风波”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "内苑清场",
+              "text": "内苑的箭道今夜多了禁军拒马。义姁提着药匣被人往里推，杨玉环一侧的护卫却死死挡住视线。有人喊刺客，有人只让给太子让路，两套说辞在夹道里对撞，谁也不肯再补一句。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.shixiang_ambush.lyg.event.lure_pan_jinlian",
-          "title": "局势中的迁入水香楼布置诱捕",
-          "summary": "围绕“迁入水香楼布置诱捕”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "水香楼明暗换防",
+          "summary": "程宅车仗连夜迁往水香楼，小紫在回廊钉暗记；楼外多了不穿号衣的守望，像在等一位熟客上门，又像只是避风。",
           "sourceEventId": "lyg.event.lure_pan_jinlian",
           "settledWhenAny": [
             [
@@ -1919,10 +1967,19 @@
             "id": "omen.baseline.lyg.shixiang_ambush.lyg.event.lure_pan_jinlian",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“迁入水香楼布置诱捕”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "水香楼后门加了暗哨，更鼓与手势对不上旧规",
+              "小紫沿池廊埋机关线，线头藏进盆景",
+              "有人打探潘金莲近日是否仍走这条水路"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.xiao_zi"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.pan_jinlian"
+              },
               {
                 "kind": "messenger"
               },
@@ -1930,17 +1987,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "水香楼灯火比往日整齐，厢房却空出一间正对池面。河面上偶尔漂过无灯的小船，岸上有人假装闲立，谁先靠岸都还说不定。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“迁入水香楼布置诱捕”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "池廊暗记",
+              "text": "家眷的箱笼刚抬进水香楼，小紫已沿池廊把细线埋进盆景。楼外的守望不举火把，只对更鼓。有人问起潘金莲可还走水路，得到的只是含糊的点头，没有下文。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.shixiang_ambush.lyg.event.ambush_at_shuixiang",
-          "title": "局势中的识破毒方刺客",
-          "summary": "围绕“识破毒方刺客”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "药方带着异味",
+          "summary": "一名自称王府小厮的人把药方送到水香楼，纸边有甜腥气味；成光先接了帖，楼里的人还在辨这方子该不该拆。",
           "sourceEventId": "lyg.event.ambush_at_shuixiang",
           "settledWhenAny": [
             [
@@ -1957,10 +2014,15 @@
             "id": "omen.baseline.lyg.shixiang_ambush.lyg.event.ambush_at_shuixiang",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“识破毒方刺客”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "门外小厮名刺写着王府差遣，口音对不上",
+              "药方纸角有一层发亮的薄霜，带甜腥",
+              "成光把方子托在袖外，不敢让墨迹沾手"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_guang"
+              },
               {
                 "kind": "messenger"
               },
@@ -1968,17 +2030,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "水香楼门房今夜多了一趟不曾预约的投书。纸卷在灯下发黏，旁边的人只说先别沾唇，谁也没敢断定这是寻常药方还是别的东西。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“识破毒方刺客”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "纸角薄霜",
+              "text": "门房把一个王府小厮拦在廊下。成光接过药方，指腹先碰到一层发亮的薄霜，甜腥味立刻浮起来。楼里有人说先封门再辨字，也有人要按帖上的姓去回访，两头都还没动。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.shixiang_ambush.lyg.event.final_showdown",
-          "title": "局势中的制止池畔混战并擒获女忍",
-          "summary": "围绕“制止池畔混战并擒获女忍”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "池畔剑气毒烟",
+          "summary": "水香楼池边忽然刀剑相交，潘金莲与一名东瀛装束的女子缠在一起；毒烟贴着水面走，有一侧忽然示弱，真假一时难断。",
           "sourceEventId": "lyg.event.final_showdown",
           "settledWhenAny": [
             [
@@ -1995,10 +2057,19 @@
             "id": "omen.baseline.lyg.shixiang_ambush.lyg.event.final_showdown",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“制止池畔混战并擒获女忍”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "水香楼池畔石栏被踩裂，两道身法一明一暗",
+              "潘金莲的剑尖指着对面女子，不许旁人靠近",
+              "水色上漂着浅色毒烟，风一转就往回廊扑"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.pan_jinlian"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.fei_niao_ying_zi"
+              },
               {
                 "kind": "messenger"
               },
@@ -2006,17 +2077,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "水香楼后池的灯影碎成两截，有人在岸上喝止，有人往水里退。烟味又苦又麻，守夜的人把窗户都插上，却听不清谁先动手。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“制止池畔混战并擒获女忍”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "池烟乱剑",
+              "text": "后池那边先是金铁一响，接着潘金莲的身影压到水边。对面女子忽然膝下一软，像要投降，毒烟却顺着她退开的空隙往回廊钻。谁在诱敌，谁在逃命，岸上还没有人敢先落脚。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.shixiang_ambush.lyg.event.raid_qinglongsi",
-          "title": "局势中的爆破摩尼寺营救女师",
-          "summary": "围绕“爆破摩尼寺营救女师”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "僧舍里在灌顶",
+          "summary": "青龙寺一角僧舍被围死，观海在里面布置灌顶法器；有女师的哭骂透出门缝，廊下堆着油瓮与火折，像要强开一条路。",
           "sourceEventId": "lyg.event.raid_qinglongsi",
           "settledWhenAny": [
             [
@@ -2033,10 +2104,15 @@
             "id": "omen.baseline.lyg.shixiang_ambush.lyg.event.raid_qinglongsi",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“爆破摩尼寺营救女师”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "观海令僧众锁住僧舍，不许外人递水",
+              "门内传出女师抗拒灌顶的喝骂",
+              "廊下油瓮与火折被人悄悄聚到墙根"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "lyg.character.guan_hai"
+              },
               {
                 "kind": "messenger"
               },
@@ -2044,17 +2120,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "青龙寺偏院今夜灯火只剩僧舍一窗。念诵声压过哭声，院门外有人来回量墙距，靴底踩得碎瓦轻响，却没有人宣布要做什么。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“爆破摩尼寺营救女师”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "僧舍锁喉",
+              "text": "偏院的僧舍从里面插上了门。观海的声音在领着灌顶的调子，女师的骂声一下一下撞在门板上。廊下有人把油瓮往墙根挪，火折藏在袖里，这条路能不能撕开，谁也不敢先点火。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.shixiang_ambush.lyg.event.forewarned_from_xinyong",
-          "title": "局势中的信永揭示蕃密邪径",
-          "summary": "围绕“信永揭示蕃密邪径”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "信永夜叩程宅",
+          "summary": "娑梵寺僧人信永深夜求见，神色比讲经时沉重；他反复提到蕃密灌顶和释特昧普的名字，又劝人先避一避锋芒。",
           "sourceEventId": "lyg.event.forewarned_from_xinyong",
           "settledWhenAny": [
             [
@@ -2071,10 +2147,15 @@
             "id": "omen.baseline.lyg.shixiang_ambush.lyg.event.forewarned_from_xinyong",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“信永揭示蕃密邪径”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "信永在宣平坊程宅门房留下娑梵寺名刺",
+              "他袖中佛册夹着蕃密灌顶的抄件，不肯当众展开",
+              "口风劝暂避，又把释特昧普败坏戒律说得极重"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.xin_yong"
+              },
               {
                 "kind": "messenger"
               },
@@ -2082,17 +2163,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "程宅门灯未熄，一位僧人立在檐下不入内。他说话极低，只在提到灌顶时抬高半音，随行的沙弥被留在巷口，不许靠近听。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“信永揭示蕃密邪径”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "僧人示警",
+              "text": "信永把袈裟上的夜露抖尽，才肯进厅。他不谈佛门公敌的告示，只把蕃密灌顶的抄件按在桌上，说释特昧普走的不是旧路。劝避的话说完，他又停住，等主人自己决断。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.shixiang_ambush.lyg.event.capture_feiniao",
-          "title": "局势中的审讯飞鸟萤子",
-          "summary": "围绕“审讯飞鸟萤子”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "水香楼内室问话",
+          "summary": "飞鸟萤子被单独安置在水香楼内室，绳扣未解；案上备着三张问条，她只用沉默对视，纸上还没有字。",
           "sourceEventId": "lyg.event.capture_feiniao",
           "settledWhenAny": [
             [
@@ -2109,10 +2190,15 @@
             "id": "omen.baseline.lyg.shixiang_ambush.lyg.event.capture_feiniao",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“审讯飞鸟萤子”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "水香楼内室窗纸被糊严，只留一名看押",
+              "飞鸟萤子拒食拒言，目光盯着问条不落笔",
+              "案上三张问条空白朝上，墨砚已开未用"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.fei_niao_ying_zi"
+              },
               {
                 "kind": "messenger"
               },
@@ -2120,10 +2206,10 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "水香楼最里一间灯火通宵，廊下只走一个看押的人。偶尔有问话的声音传出，回声却短得像撞在墙上，听不清有没有人答。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“审讯飞鸟萤子”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "三问无声",
+              "text": "内室的灯把飞鸟萤子的侧影钉在窗纸上。案上摊开三张问条，她连头也不低。门外有人说先问来路，有人只让把绳扣再检一遍，谁也不知道她会不会开口。"
             }
           }
         }

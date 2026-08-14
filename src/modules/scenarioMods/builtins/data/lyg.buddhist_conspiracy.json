@@ -6268,8 +6268,8 @@
       "situations": [
         {
           "id": "world-sim.baseline.lyg.buddhist_conspiracy.lyg.event.buddhist_conspiracy_01_beat",
-          "title": "局势中的宦官嫁祸",
-          "summary": "围绕“宦官嫁祸”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "仇宅门前血气",
+          "summary": "仇士良宅前忽然封路，石阶上的血痕说法不一，内侍班里已开始互相咬人。",
           "sourceEventId": "lyg.event.buddhist_conspiracy_01_beat",
           "settledWhenAny": [
             [
@@ -6286,10 +6286,15 @@
             "id": "omen.baseline.lyg.buddhist_conspiracy.lyg.event.buddhist_conspiracy_01_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“宦官嫁祸”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "仇士良家门前被临时拦起，闲人不得近前",
+              "石阶上有新溅的血，旁人指认互相打架",
+              "内侍把祸事往僧门上推，却说不清凶手"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6297,17 +6302,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "仇宅门前戒严，石阶上的血还湿着。远处内侍交头接耳，有人咬定僧门下手，却没人把话说死。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“宦官嫁祸”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "仇宅戒严",
+              "text": "程宗扬路过时，仇士良宅前已被拦住。石阶上的血未干，伤者去向不明，内侍们互相盯着袖口。有人咬定是僧门所为，有人只摇头。街口还能走，只是再近一步就会踩进这摊说不清的血里。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.buddhist_conspiracy.lyg.event.buddhist_conspiracy_02_beat",
-          "title": "局势中的小紫失踪",
-          "summary": "围绕“小紫失踪”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "渭水失联急报",
+          "summary": "惊理带回渭水口信，说小紫断了音讯，渡口空了熟船，程宗扬听得牙关发紧。",
           "sourceEventId": "lyg.event.buddhist_conspiracy_02_beat",
           "settledWhenAny": [
             [
@@ -6324,10 +6329,15 @@
             "id": "omen.baseline.lyg.buddhist_conspiracy.lyg.event.buddhist_conspiracy_02_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“小紫失踪”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "惊理神色发紧，反复说起小紫最后现身的河段",
+              "渭水渡口少了几条惯常的船，岸边脚印乱成一团",
+              "有人把失联往水里人影上推，却对不上形状"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6335,17 +6345,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "渭水风急，渡口少了几条熟船。岸边脚印乱成一团，惊理的口信只说到失联为止，后事无人敢断。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“小紫失踪”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "渭水急报",
+              "text": "惊理把口信递到程宗扬面前：小紫在渭水一带失了音讯，渡口空船，岸边脚印互相踩乱。程宗扬下巴的胡茬随着咬肌一紧。江面还在流，人影未现，眼下只知道该往哪一段水里去问。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.buddhist_conspiracy.lyg.event.buddhist_conspiracy_03_beat",
-          "title": "局势中的真经震慑",
-          "summary": "围绕“真经震慑”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "丛林僧阵收紧",
+          "summary": "十方丛林外围戒牒加严，僧兵换防比平日更密，杀机压在甬道里还没落下来。",
           "sourceEventId": "lyg.event.buddhist_conspiracy_03_beat",
           "settledWhenAny": [
             [
@@ -6362,10 +6372,15 @@
             "id": "omen.baseline.lyg.buddhist_conspiracy.lyg.event.buddhist_conspiracy_03_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“真经震慑”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "十方丛林山门加岗，戒牒验得比往日更狠",
+              "禅堂钟声乱了一拍，僧兵合十堵住甬道",
+              "有人在核对一则旧日转世名号，目光扫过行人"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6373,17 +6388,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "丛林钟声乱了一拍。甬道两侧僧兵合十而立，戒牒加严，却还没人先动手。空气里全是香灰和杀意。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“真经震慑”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "僧阵合围",
+              "text": "程宗扬走近十方丛林时，甬道两侧的僧兵已经合十成墙。钟声比平日少一拍，有人在核对一则旧日转世名号，目光全落在过路人身上。香灰未散，刀杖未出，这围还能进，也能退。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.buddhist_conspiracy.lyg.event.buddhist_conspiracy_04_beat",
-          "title": "局势中的兴唐寺火遁",
-          "summary": "围绕“兴唐寺火遁”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "兴唐寺灯树危",
+          "summary": "兴唐寺灯树下忽然多了黑衣巡夜，灯油味发冲，寺门换防对不上平日的更次。",
           "sourceEventId": "lyg.event.buddhist_conspiracy_04_beat",
           "settledWhenAny": [
             [
@@ -6400,10 +6415,15 @@
             "id": "omen.baseline.lyg.buddhist_conspiracy.lyg.event.buddhist_conspiracy_04_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“兴唐寺火遁”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "兴唐寺灯树四周被临时清场，油盏加得过满",
+              "廊柱后有黑衣人只对暗号不对名",
+              "寺门更次提前，僧役来回搬沙袋却不说缘故"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6411,17 +6431,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "兴唐寺灯树四周空了出来。油盏过满，黑衣人只对暗号。沙袋堆在廊下，火还没起，风已经发干。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“兴唐寺火遁”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "灯树清场",
+              "text": "程宗扬看见兴唐寺灯树被人清出一圈空地。油盏加得过满，廊柱后的黑衣人只对暗号不对名。僧役把沙袋往阶下搬，更次却提前了。灯还亮着，树还立着，只是再靠近就会踩进这圈发烫的光里。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.buddhist_conspiracy.lyg.event.buddhist_conspiracy_05_beat",
-          "title": "局势中的惊理争夺",
-          "summary": "围绕“惊理争夺”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "三方争抢惊理",
+          "summary": "魏博牙兵与僧人同时围住惊理所在的街口，另有一队不挂旗号的人从侧巷压过来。",
           "sourceEventId": "lyg.event.buddhist_conspiracy_05_beat",
           "settledWhenAny": [
             [
@@ -6438,10 +6458,15 @@
             "id": "omen.baseline.lyg.buddhist_conspiracy.lyg.event.buddhist_conspiracy_05_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“惊理争夺”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "魏博牙兵封住巷口，与僧队隔街对峙",
+              "惊理被夹在人缝里，衣袖已被人扯住",
+              "侧巷有不挂旗号的刀手压步而来"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6449,17 +6474,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "街口三拨人马挤在一处。牙兵与僧队隔街对峙，侧巷刀手无旗号。惊理被夹在人缝里，谁也不肯先松手。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“惊理争夺”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "巷口争夺",
+              "text": "程宗扬赶到巷口时，魏博牙兵已经封路，僧队隔街合十不退。惊理被夹在人缝中，衣袖被人扯住。侧巷里又压来一队不挂旗号的刀手。人还在，手还没松，这条巷子却已经没有空处可让。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.buddhist_conspiracy.lyg.event.buddhist_conspiracy_06_beat",
-          "title": "局势中的大雁塔佛咒",
-          "summary": "围绕“大雁塔佛咒”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "雁塔诵咒加紧",
+          "summary": "大雁塔下层忽然不许闲人近前，塔内灌顶法坛灯火通宵，咒声一层压过一层。",
           "sourceEventId": "lyg.event.buddhist_conspiracy_06_beat",
           "settledWhenAny": [
             [
@@ -6476,10 +6501,15 @@
             "id": "omen.baseline.lyg.buddhist_conspiracy.lyg.event.buddhist_conspiracy_06_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“大雁塔佛咒”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "大雁塔塔门加封，香客被喝令退到远处",
+              "塔内传出灌顶法器相击，咒声比平日更密",
+              "侍僧传呼释特昧普法号，不许外人问塔上事"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6487,17 +6517,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "大雁塔塔门加封。咒声一层压过一层，灌顶法器在塔内相击。侍僧只传释特昧普法号，塔上事一概不答。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“大雁塔佛咒”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "塔门加封",
+              "text": "程宗扬望见大雁塔下层已被喝退闲人。塔内咒声比平日更密，灌顶法器一声接一声。侍僧只传释特昧普的法号，不许人问塔上在做什么。塔檐灯火通宵，门却比往日更窄。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.buddhist_conspiracy.lyg.event.buddhist_conspiracy_07_beat",
-          "title": "局势中的先取田令孜",
-          "summary": "围绕“先取田令孜”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "田令孜府风紧",
+          "summary": "贾文和压低声音提起田令孜，假讯与压帖开始在宦官宅门间流转，真假还对不上。",
           "sourceEventId": "lyg.event.buddhist_conspiracy_07_beat",
           "settledWhenAny": [
             [
@@ -6514,10 +6544,15 @@
             "id": "omen.baseline.lyg.buddhist_conspiracy.lyg.event.buddhist_conspiracy_07_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“先取田令孜”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "贾文和屏退左右，只把田令孜三字咬在齿间",
+              "田令孜宅门加岗，来往名刺被一一扣下",
+              "街巷里散开互相打架的口讯，有的说程宗扬已亡"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6525,17 +6560,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "田令孜宅门加岗，名刺被扣。贾文和压低的话只落到先取二字。街巷假讯横飞，听的人半信半疑。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“先取田令孜”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "假讯流转",
+              "text": "贾文和屏退左右，对程宗扬只把田令孜三字咬在齿间。那边宅门已经加岗，名刺被一一扣下。街巷里同时散开互相打架的口讯，竟有人说程宗扬已亡。话是假是真，还没人敢拿来当令。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.buddhist_conspiracy.lyg.event.buddhist_conspiracy_08_beat",
-          "title": "局势中的窥基伪诏",
-          "summary": "围绕“窥基伪诏”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "程宅门外诏匣",
+          "summary": "窥基带着僧队停在程宅门外，诏匣封泥色泽可疑，宣诏的人被拦在二门。",
           "sourceEventId": "lyg.event.buddhist_conspiracy_08_beat",
           "settledWhenAny": [
             [
@@ -6552,10 +6587,15 @@
             "id": "omen.baseline.lyg.buddhist_conspiracy.lyg.event.buddhist_conspiracy_08_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“窥基伪诏”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "窥基率僧队立于程宅门外，诏匣高举却不即宣",
+              "刘贞亮要入内传诏，被门子以验印为由拖住",
+              "匣上封泥与平日内廷色泽对不上，两边都在盯"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6563,17 +6603,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "程宅门外僧队立定。诏匣高举不宣，封泥色泽可疑。刘贞亮被拦在二门，验印的话把两边都拖住了。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“窥基伪诏”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "诏匣未宣",
+              "text": "窥基带着僧队停在程宅门外，诏匣举得很高，却迟迟不宣。刘贞亮要入内传诏，门子以验印为由拖住他。匣上封泥和内廷平日的色泽对不上，廊下的人都在看，谁也还没先迈那一步。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.buddhist_conspiracy.lyg.event.buddhist_conspiracy_09_beat",
-          "title": "局势中的窥基众叛",
-          "summary": "围绕“窥基众叛”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "僧众站位分裂",
+          "summary": "程宅院中僧列忽然乱了，法旨被传来传去验看，窥基身边空出半圈。",
           "sourceEventId": "lyg.event.buddhist_conspiracy_09_beat",
           "settledWhenAny": [
             [
@@ -6590,10 +6630,15 @@
             "id": "omen.baseline.lyg.buddhist_conspiracy.lyg.event.buddhist_conspiracy_09_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“窥基众叛”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "释特昧普带着僧众立在对面，指着那卷法旨不放",
+              "净念、净空对视一眼，迟迟不肯站回原位",
+              "窥基袖中的法旨被索去验印，墨色在灯下发闷"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6601,17 +6646,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "程宅院里僧列乱了。法旨被索去验印，释特昧普指着不放。净念、净空站在半道上，窥基身边空出半圈。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“窥基众叛”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "法旨对质",
+              "text": "程宅院中，释特昧普带着僧众指着那卷法旨不放。净念、净空对视一眼，没有站回窥基身侧。法旨被索到灯下验印，墨色发闷。谁对谁错还没人拍板，站位却先裂开了一道缝。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.buddhist_conspiracy.lyg.event.buddhist_conspiracy_10_beat",
-          "title": "局势中的弃佛入魔",
-          "summary": "围绕“弃佛入魔”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "血偈压住院门",
+          "summary": "窥基退后半步，唇边偈语偏离摩法宗常调，袍底沁出暗红，院里的人不敢上前。",
           "sourceEventId": "lyg.event.buddhist_conspiracy_10_beat",
           "settledWhenAny": [
             [
@@ -6628,10 +6673,15 @@
             "id": "omen.baseline.lyg.buddhist_conspiracy.lyg.event.buddhist_conspiracy_10_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“弃佛入魔”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "窥基念偈的调子偏了，摩法宗的人脸色骤变",
+              "他胸口衣襟沁出暗红，指尖却按在生疏的印诀上",
+              "阶下腾起极淡的血雾，尸骸旁的僧众纷纷后退"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6639,17 +6689,17 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "窥基退后半步，偈语偏了常调。衣襟沁红，阶下升起极淡血雾。僧众后退，院门还在，人却不敢再近。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“弃佛入魔”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "血雾未散",
+              "text": "窥基在程宅阶下退后半步，唇边偈语偏离摩法宗常调。衣襟沁出暗红，指尖按着一套生疏的印诀，极淡的血雾从砖缝里冒上来。僧众往后退，程宗扬仍看得到人，只是这院里的气已经不对了。"
             }
           }
         },
         {
           "id": "world-sim.baseline.lyg.buddhist_conspiracy.lyg.event.buddhist_conspiracy_11_beat",
-          "title": "局势中的甘露变爆发",
-          "summary": "围绕“甘露变爆发”的局势尚未定局；玩家可以介入，也可以继续当前行动。",
+          "title": "宫门甲仗朝里",
+          "summary": "仇士良调神策军甲仗入大明宫，侧门改口令，吏从被点名集中，杀气还压在刀鞘里。",
           "sourceEventId": "lyg.event.buddhist_conspiracy_11_beat",
           "settledWhenAny": [
             [
@@ -6666,10 +6716,15 @@
             "id": "omen.baseline.lyg.buddhist_conspiracy.lyg.event.buddhist_conspiracy_11_beat",
             "afterTurns": 1,
             "observableFacts": [
-              "围绕“甘露变爆发”的安排正在被重新核对",
-              "相关人物、口信或行路次序出现了细小变化"
+              "大明宫侧门旧符作废，只许进不许出",
+              "神策军甲仗连夜出库，队列朝宫内收拢",
+              "外朝吏从被点名集中，名簿上有墨点新点"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.cheng_zongyang"
+              },
               {
                 "kind": "messenger"
               },
@@ -6677,10 +6732,10 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "远处传来点名、换岗或整理行装的动静，暂时没有人能说清缘由。",
+            "environmentFallback": "宫门改了口令。甲仗朝里收，吏从被点名集中。灯火比平日更白，刀还在鞘里，门却先窄了一截。",
             "presentation": {
-              "title": "风声有变",
-              "text": "有人低声提到“甘露变爆发”一带的安排正在重新核对，相关人物、口信或行路次序似乎有些变化。还看不出事情会往哪边走。"
+              "title": "甲仗入宫",
+              "text": "程宗扬靠近大明宫时，侧门旧符已经作废。神策军甲仗出库，队列不朝城外，只往宫里收。吏从被点名集中，名簿上新点了墨。刀还在鞘里，复道却先封了半边，墙外只能听见号令压着脚步走。"
             }
           }
         }
