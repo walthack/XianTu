@@ -5,6 +5,7 @@ import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 
 import { applyWorldSimRefinementOverlay } from './world-sim-refinement-overlay.mjs';
+import { BASELINE_OMEN_TEXT, FORBIDDEN_OMEN_TEXT, LATIN_RESIDUE } from './world-sim-omen-guards.mjs';
 
 const root = resolve(import.meta.dirname, '..');
 const generatedRoot = join(root, 'mod-kit', 'generated', 'deepseek-v4-flash');
@@ -13,8 +14,6 @@ const overlayPath = join(root, 'mod-kit', 'world-sim-refinements', 'qingyu-yunlo
 const books = ['qingyu', 'yunlong'];
 const command = process.argv[2] || 'prepare';
 
-const forbidden = /(玩家|系统|开发者|世界回合|回合后|倒计时|机会卡|原著|剧情|事件即将|结局|尚未发生|事情还没开始|必死|将死|终将|注定|必然|必定|一定会|已经(死亡|身亡|登基|遇袭|被俘|叛逃)|最终会|会被杀|将被杀)/u;
-const baselinePhrase = /(安排正在重新核对|相关人物、口信或行路次序|还看不出事情会往哪边走|风声有变)/u;
 
 function compactCharacter(character) {
   if (!character) return undefined;
@@ -246,8 +245,9 @@ function validateProposal(stage, proposal) {
     for (const value of texts) {
       if (typeof value !== 'string' || !value.trim()) issues.push(`${entry.situationId}: empty text`);
       else {
-        if (forbidden.test(value)) issues.push(`${entry.situationId}: forbidden wording: ${value}`);
-        if (baselinePhrase.test(value)) issues.push(`${entry.situationId}: baseline wording remains: ${value}`);
+        if (FORBIDDEN_OMEN_TEXT.test(value)) issues.push(`${entry.situationId}: forbidden wording: ${value}`);
+        if (BASELINE_OMEN_TEXT.test(value)) issues.push(`${entry.situationId}: baseline wording remains: ${value}`);
+        if (LATIN_RESIDUE.test(value)) issues.push(`${entry.situationId}: latin residue: ${value}`);
       }
     }
     if (entry.title.length < 4 || entry.title.length > 18) issues.push(`${entry.situationId}: title length`);

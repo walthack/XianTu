@@ -4,11 +4,10 @@ import { join } from 'node:path';
 import test from 'node:test';
 
 import { loadTs } from './loadTs.mjs';
+import { BASELINE_OMEN_TEXT, FORBIDDEN_OMEN_TEXT, LATIN_RESIDUE } from '../scripts/world-sim-omen-guards.mjs';
 
 const dataDir = new URL('../src/modules/scenarioMods/builtins/data/', import.meta.url);
 const refinementOverlay = new URL('../mod-kit/world-sim-refinements/qingyu-yunlong.json', import.meta.url);
-const forbiddenOmenText = /(机会卡|世界回合|最后\s*\d+\s*轮|剩余\s*\d+\s*回合|倒计时|将死|必死|终将(死亡|身亡|登基)|注定(死亡|身亡|登基)|必然(死亡|身亡|登基)|必定(死|登基|身亡)|一定(死|身亡|登基)|已经身亡|已经登基)/u;
-const baselineOmenText = /(安排正在重新核对|相关人物、口信或行路次序|还看不出事情会往哪边走|风声有变)/u;
 
 async function loadBuiltins() {
   const files = (await readdir(new URL(dataDir))).filter(file => file.endsWith('.json') && file !== 'manifest.json').sort();
@@ -40,14 +39,17 @@ test('Qingyu and Yunlong ship the complete tracked world-sim refinement overlay'
     assert.deepEqual(situation.omen.observableFacts, entry.observableFacts, entry.situationId);
     assert.equal(situation.omen.environmentFallback, entry.environmentFallback, entry.situationId);
     assert.deepEqual(situation.omen.presentation, entry.presentation, entry.situationId);
-    assert.equal(baselineOmenText.test([
+    const entryText = [
       entry.title,
       entry.summary,
       ...entry.observableFacts,
       entry.environmentFallback,
       entry.presentation.title,
       entry.presentation.text,
-    ].join('｜')), false, `${entry.situationId}: generic baseline wording remains`);
+    ].join('｜');
+    assert.equal(BASELINE_OMEN_TEXT.test(entryText), false, `${entry.situationId}: generic baseline wording remains`);
+    assert.equal(FORBIDDEN_OMEN_TEXT.test(entryText), false, `${entry.situationId}: forbidden wording`);
+    assert.equal(LATIN_RESIDUE.test(entryText), false, `${entry.situationId}: untranslated latin residue`);
 
     const sourceEvent = mod.scenario.events.find(event => event.id === entry.sourceEventId);
     const allowedCharacters = new Set(sourceEvent?.relatedCharacterIds || []);
@@ -89,7 +91,9 @@ test('all builtin stages expose a validated world-sim baseline without changing 
         situation.omen.presentation?.title,
         situation.omen.presentation?.text,
       ].join('｜');
-      assert.equal(forbiddenOmenText.test(omenText), false, `${mod.manifest.id}: forbidden omen text ${omenText}`);
+      // 只覆盖 omen 字段：燕歌 11 关的 situation.summary 仍是未精修的基线模板，不属本批范围。
+      assert.equal(FORBIDDEN_OMEN_TEXT.test(omenText), false, `${mod.manifest.id}: forbidden omen text ${omenText}`);
+      assert.equal(LATIN_RESIDUE.test(omenText), false, `${mod.manifest.id}: untranslated latin residue ${omenText}`);
       assert.ok(situation.omen.afterTurns >= 0);
     }
   }
