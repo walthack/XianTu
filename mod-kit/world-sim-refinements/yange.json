@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-08-14T12:43:15.714Z",
+  "generatedAt": "2026-08-14T13:14:00.014Z",
   "model": "grok-4.6-build",
   "books": [
     "yange"
@@ -411,51 +411,51 @@
       "stageId": "lyg.changgan_interlude",
       "situationId": "world-sim.baseline.lyg.changgan_interlude.lyg.event.changgan_interlude_01_beat",
       "sourceEventId": "lyg.event.changgan_interlude_01_beat",
-      "title": "李药师处有令箭动静",
-      "summary": "年节里程宗扬往李药师处走动，门庭比平日更紧，令箭匣与南霁云的行踪都被人反复问起，拜访尚未落定。",
+      "title": "李府令箭未出",
+      "summary": "年节里李药师宅门核验加严，令箭匣抬入内室，南霁云在廊下徘徊不语，程宗扬的拜访仍停在外厅。",
       "observableFacts": [
-        "李药师门房连日核验拜帖，令箭匣被抬进内室后不再示人",
-        "南霁云在廊下徘徊，不肯说明今夜是否随行",
-        "程宗扬下巴胡茬未刮，仍按礼数候在外厅"
+        "李药师门房连日核验拜帖，令箭匣抬入内室后不再示人",
+        "南霁云在廊下徘徊，不肯说今夜是否随行",
+        "外厅灯火未撤，程宗扬仍按礼数等候通传"
       ],
       "preferredCharacterIds": [
         "liuchao.character.cheng_zongyang"
       ],
-      "environmentFallback": "李药师宅外换岗脚步比往年节更密，内室灯火一夜未歇，偶尔听得令箭匣锁扣轻响，却无人说清今夜会否见客。",
+      "environmentFallback": "李药师宅外换岗比往年节更密，内室灯火一夜未歇，偶尔听得匣锁轻响，却无人说清今夜会否见客。",
       "presentation": {
         "title": "令箭未出",
-        "text": "李药师宅里灯火一夜未歇。令箭匣抬进内室后便不再示人，南霁云在廊下走来走去，门房仍按礼数核验拜帖。程宗扬候在外厅，拜访能不能成、令箭会不会出手，都还没人敢断言。"
+        "text": "李药师宅里灯火一夜未歇。令箭匣抬进内室后便不再示人，南霁云只在廊下走来走去。门房仍按礼数核验拜帖，程宗扬候在外厅，拜访能不能成、令箭会不会出手，都还没人敢断言。"
       }
     },
     {
       "stageId": "lyg.changgan_interlude",
       "situationId": "world-sim.baseline.lyg.changgan_interlude.lyg.event.changgan_interlude_02_beat",
       "sourceEventId": "lyg.event.changgan_interlude_02_beat",
-      "title": "马厩里压着百衲衣",
-      "summary": "马厩深处有人被看住，百衲衣的线头与小公主、齐羽仙、周飞的名字缠在一起，口风互相顶撞。",
+      "title": "马厩压着百衲衣",
+      "summary": "马厩后槽有人被看住，百衲衣残片卡在槽缝，看守把岳霏、齐羽仙、周飞的名字互相顶撞，口风极紧。",
       "observableFacts": [
-        "马厩后槽有人被反缚，袖口露出百衲衣残片",
-        "看守互咬：有人说是寻岳霏，有人说是齐羽仙、周飞的旧账",
-        "程宗扬路过时听见警告：再问便要封口"
+        "马厩后槽绳索新换，袖口露出百衲衣残片",
+        "看守互咬：有人说寻岳霏，有人扯上齐羽仙、周飞",
+        "再往下问，便有人过来拦话、赶人离槽"
       ],
       "preferredCharacterIds": [
         "liuchao.character.cheng_zongyang"
       ],
-      "environmentFallback": "马厩潮气里混着血腥与草料，后槽绳索新换过，百衲衣碎角卡在槽板缝里，看守换班时压低嗓子对骂，谁也不肯把话说全。",
+      "environmentFallback": "马厩潮气混着草料与血腥，后槽绳索新换，百衲衣碎角卡在木缝里。看守换班时压低嗓子对骂，谁也不肯把话说全。",
       "presentation": {
         "title": "马厩异响",
-        "text": "后槽绳索新换，百衲衣碎角卡在木缝里。看守对骂时一个咬定是寻岳霏，一个把齐羽仙、周飞扯进来，又立刻互相封口。程宗扬从槽边走过，只能听出有人被看住，救不救、问不问，都还悬着。"
+        "text": "后槽绳索新换，百衲衣碎角卡在木缝里。看守对骂时一个咬定是寻岳霏，一个把齐羽仙、周飞扯进来，随即互相封口。程宗扬从槽边走过，只听出有人被看住，救不救、问不问，都还悬着。"
       }
     },
     {
       "stageId": "lyg.changgan_interlude",
       "situationId": "world-sim.baseline.lyg.changgan_interlude.lyg.event.changgan_interlude_03_beat",
       "sourceEventId": "lyg.event.changgan_interlude_03_beat",
-      "title": "昭南使者压着赔偿",
-      "summary": "昭南使节入城后宫门加岗，赔偿与交出张亢的话在朝堂外传得互相打架，兵锋是否真动仍无人敢认。",
+      "title": "昭南使节压城",
+      "summary": "昭南车仗停在宫门，赔偿与交出张亢的话同时在廊下传开，驿馆加岗封路，朝堂如何应答仍无准信。",
       "observableFacts": [
-        "昭南使节车仗停在宫门外，名刺上写着申服君",
-        "传言宋军假扮流寇，赔偿与交出张亢两说并传",
+        "昭南车仗停在宫门外，名刺上写着申服君",
+        "赔偿、交出张亢、兴兵三套说法同时流传",
         "殿前加岗，禁军不许闲人靠近使节驿馆"
       ],
       "preferredCharacterIds": [
@@ -471,140 +471,140 @@
       "stageId": "lyg.changgan_interlude",
       "situationId": "world-sim.baseline.lyg.changgan_interlude.lyg.event.changgan_interlude_04_beat",
       "sourceEventId": "lyg.event.changgan_interlude_04_beat",
-      "title": "赵飞燕病线翻涌",
-      "summary": "宫中药案与赵飞燕相关的传讯一夜三改，太医与内侍口径对不上，病势真假仍压在帘后。",
+      "title": "兑付条款收紧",
+      "summary": "昭南卿士囊瓦把程氏商会的方案压在案上不批，兑付折扣、额度与年限的口风一夜数变，张亢的去留被绑进账册。",
       "observableFacts": [
-        "太医院连夜煎药，药单上圈着赵飞燕名讳后又涂去",
-        "内侍传讯互相矛盾，有人说病重，有人说只是闭门",
-        "程宗扬路过复道时闻见苦药气，帘后无人应声"
+        "囊瓦拒不落印，案上程氏商会文书被翻得起毛",
+        "堂上改口要八折兑付、年额五百万金铢、期限十年",
+        "交出张亢的话与商账绑在一起，两边口径对不上"
       ],
       "preferredCharacterIds": [
         "liuchao.character.cheng_zongyang"
       ],
-      "environmentFallback": "复道里苦药气一夜未散，太医院灯火通明，传讯人脚步乱，帘后始终没有准信传出。",
+      "environmentFallback": "议事堂灯火通宵，算盘与印泥并陈。程氏商会的方案被压在卷宗最下，新报上来的兑付数字越抬越高，门外候信的人来回换班。",
       "presentation": {
-        "title": "帘后药气",
-        "text": "太医院灯火通宵，药单上赵飞燕的名讳写了又涂。内侍一个说病重，一个说只是闭门不见。程宗扬走复道时只闻得苦药气，帘后无人应声，病线往哪边扯，还没人敢说死。"
+        "title": "条款加码",
+        "text": "囊瓦把程氏商会的方案压着不批，口头却改成八折兑付、年额五百万金铢、期限十年。张亢的名字被写进同一张条款里。程宗扬听得见算盘响，商约是谈崩还是再议，印泥还没干到纸上。"
       }
     },
     {
       "stageId": "lyg.changgan_interlude",
       "situationId": "world-sim.baseline.lyg.changgan_interlude.lyg.event.changgan_interlude_05_beat",
       "sourceEventId": "lyg.event.changgan_interlude_05_beat",
-      "title": "十方丛林暗桩挪位",
-      "summary": "城中丛林据点换防、暗号对不上，宗室与江湖线同时收紧，真正刀口仍藏在年节往来里。",
+      "title": "舞会里的称谓",
+      "summary": "杨玉环张罗宗室舞会，席位与称谓的帖子改了又改，诸王目光都压在程宗扬的姻亲名分上，厅里只听得调弦。",
       "observableFacts": [
-        "十方丛林茶棚换了看场人，旧暗号无人应答",
-        "宗室车仗改道绕开常走的坊巷",
-        "程宗扬在年节人潮里看见两拨人互相盯梢"
+        "杨玉环让人重排席笺，程宗扬身边的称谓格空着",
+        "诸王在廊下交换眼色，不敢大声问姻亲怎么写",
+        "昆仑奴磨勒在侧厅试步，节拍与中土舞阵不合"
       ],
       "preferredCharacterIds": [
         "liuchao.character.cheng_zongyang"
       ],
-      "environmentFallback": "年节市声未歇，茶棚与坊口却换了生面孔，旧暗号落空，车仗改道，暗处脚步比白日更密。",
+      "environmentFallback": "灯火把舞厅地板照得发亮，乐工调弦，席笺改贴。廊下诸王压低嗓子，侧厅传来与中土不合的踏地声，称谓这一格仍空着。",
       "presentation": {
-        "title": "暗桩挪位",
-        "text": "茶棚看场人换了生面孔，旧暗号无人接。宗室车仗绕开常走的坊巷，两拨人在人潮里互相盯梢。程宗扬夹在礼数与杀机之间，只能看见暗桩在挪，刀口落在谁身上还没露出来。"
+        "title": "席笺空格",
+        "text": "杨玉环让人重排席笺，程宗扬身边那一格称谓空着。诸王在廊下交换眼色，没人先开口。侧厅里昆仑奴磨勒试着踏地，节拍与中土舞阵对不上。厅里弦音已起，这声称呼会不会当众落下来，还悬在灯下。"
       }
     },
     {
       "stageId": "lyg.changgan_interlude",
       "situationId": "world-sim.baseline.lyg.changgan_interlude.lyg.event.changgan_interlude_06_beat",
       "sourceEventId": "lyg.event.changgan_interlude_06_beat",
-      "title": "失踪名单对不上",
-      "summary": "城门与坊正手里的失踪名册互相打架，伏击线的痕迹刚露头，人去了哪仍说不清。",
+      "title": "僧寺换手加岗",
+      "summary": "窥基连夜召集僧众，瑶池宗人马悄然抽身，娑梵寺一侧却忽然加派行脚僧，寺门钟点与平日对不上。",
       "observableFacts": [
-        "坊正名册少了几行，城门档簿却多了夜出未归",
-        "巷口有新换的封路木栏，泥里留着拖痕",
-        "程宗扬听更夫说：有人昨夜被叫走后再没回来"
+        "窥基禅房灯火通宵，十方丛林、释特昧普、观海先后入内",
+        "瑶池宗的人收了香案，连夜出城，不肯说明去向",
+        "娑梵寺加派行脚僧，戒刀与包袱在廊上码齐"
       ],
       "preferredCharacterIds": [
         "liuchao.character.cheng_zongyang"
       ],
-      "environmentFallback": "巷口封路木栏还带着新锯末，泥里拖痕到墙角便断。坊正与城门的名册对不上，更夫只肯说人昨夜被叫走。",
+      "environmentFallback": "几处丛林钟点乱了，禅房灯火通宵。这边香案收起、僧鞋出城，那边戒刀出匣、行脚僧换班，谁也不说今夜议的是什么。",
       "presentation": {
-        "title": "名册打架",
-        "text": "坊正少了几行，城门档簿却多了夜出未归。巷口木栏新换，泥里拖痕到墙角就断。程宗扬从更夫嘴里只掏出一句：有人昨夜被叫走，再也没露面。人在哪、是不是伏击，都还对不上。"
+        "title": "丛林换手",
+        "text": "窥基禅房灯火通宵，释特昧普与观海先后入内。瑶池宗的人收了香案连夜出城，娑梵寺廊上却忽然码齐戒刀与包袱。程宗扬只看见丛林在换手，刀口指谁、何时落，寺门里没有传出准话。"
       }
     },
     {
       "stageId": "lyg.changgan_interlude",
       "situationId": "world-sim.baseline.lyg.changgan_interlude.lyg.event.changgan_interlude_07_beat",
       "sourceEventId": "lyg.event.changgan_interlude_07_beat",
-      "title": "禁军调动乱了次序",
-      "summary": "左武军与皇城司的换防时辰对不上，林娘子一线的旧疑还压在禁军里，今夜岗哨比往年节更乱。",
+      "title": "病榻边的会社帖",
+      "summary": "赵飞燕病榻边药气不散，舞都会社的帖子已经拟好未发，贴身侍奉忽然屏退闲人，院门外隐有杨玉环的环佩声。",
       "observableFacts": [
-        "左武军提前换岗，皇城司档簿上的时辰却没改",
-        "有人提起林娘子旧事，立刻被同伴堵住",
-        "程宗扬在便门看见两队禁军交叉而行，互不问令"
+        "赵飞燕寝门半掩，药碗叠在榻几上，人未退热",
+        "案上放着未用印的舞都会社草帖",
+        "侍女屏退闲人，院门外传来杨玉环的环佩"
       ],
       "preferredCharacterIds": [
         "liuchao.character.cheng_zongyang"
       ],
-      "environmentFallback": "便门外甲叶声乱了节拍，两队禁军交叉而过互不问令，档簿时辰与实际换岗对不上。",
+      "environmentFallback": "内宅药气一夜未散，寝门半掩。案上会社草帖墨迹未干，廊上闲人被尽数屏退，院门外环佩声由远及近，帘后却没有准信传出。",
       "presentation": {
-        "title": "换防错位",
-        "text": "左武军提前换岗，皇城司档簿却仍写着旧时辰。有人刚提林娘子，便被同伴一把堵住。程宗扬在便门看见两队交叉而行、互不问令，禁军里那条旧缝是在收还是在裂，还看不透。"
+        "title": "帘后药气",
+        "text": "赵飞燕寝门半掩，药碗还烫。案上舞都会社的草帖拟好未用印，侍女忽然屏退闲人。院门外隐隐是杨玉环的环佩。程宗扬立在榻前，探望能说到哪一步、帘外会不会撞见，都还停在这一息。"
       }
     },
     {
       "stageId": "lyg.changgan_interlude",
       "situationId": "world-sim.baseline.lyg.changgan_interlude.lyg.event.changgan_interlude_08_beat",
       "sourceEventId": "lyg.event.changgan_interlude_08_beat",
-      "title": "贾师宪的令前后不一",
-      "summary": "贾师宪一侧的口信一夜两改，宋军部署与城内安插的说法互相拆台，真正要办的事仍压在签押房。",
+      "title": "吕雉行踪含糊",
+      "summary": "赵飞燕病讯传出的时辰，与吕雉离府的路线对不齐，十方丛林的人在她常走的巷口出现又散，谁在递话仍说不清。",
       "observableFacts": [
-        "签押房连续发出两道互相打架的手谕",
-        "宋军部署的传言与城内安插的名单对不上",
-        "程宗扬在瓦牡丹棚再听线人，对方只肯说再等等"
+        "吕雉离府时辰与赵飞燕病讯传开的时辰咬得很紧",
+        "她常走的巷口出现十方丛林的行脚僧，转眼又散",
+        "程宗扬让人跟着，只收回互相打架的两套说辞"
       ],
       "preferredCharacterIds": [
         "liuchao.character.cheng_zongyang"
       ],
-      "environmentFallback": "签押房灯火通宵，两道手谕先后出门又被追回一道。瓦牡丹棚里线人把酒盏转了又转，不肯把话说死。",
+      "environmentFallback": "内宅到坊巷的路上脚印新而乱。赵飞燕的病讯刚出墙，吕雉的车辙已压过同一条街，转角僧影一闪即空，没有人把两件事说圆。",
       "presentation": {
-        "title": "手谕打架",
-        "text": "签押房一夜出了两道互相打架的手谕，宋军部署与城内安插的名单对不上。程宗扬再去瓦牡丹棚，线人只把酒盏转了又转，说再等等。贾师宪到底要收网还是要放，还没落在纸面上。"
+        "title": "路线咬合",
+        "text": "赵飞燕病讯传出的那一刻，吕雉的车辙正好碾过同一条街。巷口闪过十方丛林的行脚僧，转眼又没了。程宗扬把两套说辞对在一起，对不齐，也没法坐实。这条线要不要再放长，还压在他袖里。"
       }
     },
     {
       "stageId": "lyg.changgan_interlude",
       "situationId": "world-sim.baseline.lyg.changgan_interlude.lyg.event.changgan_interlude_09_beat",
       "sourceEventId": "lyg.event.changgan_interlude_09_beat",
-      "title": "白霓裳失联的气味",
-      "summary": "白霓裳该出现的地方空着，王守澄与墨枫林的人影在巷口交错，伏击味已经起来，人还没见面。",
+      "title": "归途黑衣聚影",
+      "summary": "返程官道两侧灯火被人为掐灭，黑衣人影在树后聚了又散，前路换防封沟，后队报失联络，刀有没有出鞘仍看不清。",
       "observableFacts": [
-        "白霓裳常走的巷口灯灭了半排，门环上有新刮痕",
-        "王守澄的人与墨枫林的人在对街互相让路又互相盯",
-        "程宗扬闻见巷风里有铁锈气，却看不见人"
+        "归途官道灯笼连灭数里，树后黑衣人影聚了又散",
+        "前方驿铺换防，壕沟被新土填了半截",
+        "后队口信断了半个时辰，两套走法互相打架"
       ],
       "preferredCharacterIds": [
         "liuchao.character.cheng_zongyang"
       ],
-      "environmentFallback": "巷口灯灭了半排，门环新刮，铁锈气贴着墙根走。对街两拨人互相让路又互相盯，谁也不先举刀。",
+      "environmentFallback": "官道风里没有更鼓，只有衣袂擦树的细响。灯笼灭了一串，壕沟新土未干，前后队的口信对不上，谁也不敢先把这夜认成普通赶路。",
       "presentation": {
-        "title": "巷灯半灭",
-        "text": "白霓裳常走的巷口灯灭了半排，门环上有新刮痕。王守澄的人与墨枫林的人对街相望，让路却不收眼。程宗扬只闻见铁锈气贴墙根走，人在不在里头、刀会不会出鞘，都还停在这一眼的对峙里。"
+        "title": "官道熄灯",
+        "text": "返程官道上灯笼连灭数里，树后黑衣人影聚了又散，数过去总有四十来个，又不敢认准。前方驿铺换防封沟，后队口信突然断了。程宗扬勒马听风，这一程是改道还是硬闯，都还没落到刀上。"
       }
     },
     {
       "stageId": "lyg.changgan_interlude",
       "situationId": "world-sim.baseline.lyg.changgan_interlude.lyg.event.changgan_interlude_10_beat",
       "sourceEventId": "lyg.event.changgan_interlude_10_beat",
-      "title": "伏击线尚未收束",
-      "summary": "城西到复道的几处路口同时加岗又同时留缝，白霓裳一线与王守澄、墨枫林的调动叠在一起，收不收网还没人拍板。",
+      "title": "白霓裳失联处",
+      "summary": "白霓裳该出现的巷口灯灭了半排，王守澄与墨枫林的令签仍在流转，门环有新刮痕，人在不在里头还没有准信。",
       "observableFacts": [
-        "复道口与城西巷同时加岗，却都留着一条可走的暗缝",
-        "白霓裳的物件被遗弃在转角，王守澄、墨枫林的令签却还在流转",
-        "程宗扬看见两路人马对向而行，谁也不先合围"
+        "白霓裳常走的巷口灯灭半排，门环上有新刮痕",
+        "王守澄的人与墨枫林的人对街相望，互不让路",
+        "转角遗下一枚她常用的物件，人影却对不上"
       ],
       "preferredCharacterIds": [
         "liuchao.character.cheng_zongyang"
       ],
-      "environmentFallback": "复道与城西巷同时响起加岗的喝声，转角却留着一条暗缝。遗弃的物件与流转的令签同时在，两路人马对向而行，合围没有落下来。",
+      "environmentFallback": "巷口灯灭了半排，门环新刮，铁锈气贴着墙根走。对街两拨人互相盯梢，令签还在手里转，合围没有落下来。",
       "presentation": {
-        "title": "合围未落",
-        "text": "复道口与城西巷同时加岗，又都留着一条可走的暗缝。转角有白霓裳留下的物件，王守澄、墨枫林的令签却仍在人手上转。程宗扬看见两路对向而行，谁也不先合围——伏击是收还是放，这一息里还没有定。"
+        "title": "巷灯半灭",
+        "text": "白霓裳常走的巷口灯灭了半排，门环上有新刮痕。王守澄的人与墨枫林的人对街相望，令签仍在手里转。程宗扬只闻见铁锈气贴墙根走，人在不在里头、这一线收不收，都还停在这一眼的对峙里。"
       }
     },
     {

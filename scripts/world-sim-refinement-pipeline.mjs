@@ -151,8 +151,9 @@ function runGrok(promptPath, schemaPath) {
     const args = [
       '--prompt-file', promptPath,
       '--model', 'grok-4.6',
-      // 个别关会中途放弃、用占位条目凑满 schema 定长；这类关单独提档重跑。
-      '--reasoning-effort', process.env.WORLD_SIM_EFFORT || 'low',
+      // low 档实测有两类单关退化：用占位条目凑满 schema 定长（shixiang_ambush），
+      // 以及整段情节挪到别的事件上（changgan_interlude）。两者 medium 重跑均可修复。
+      '--reasoning-effort', process.env.WORLD_SIM_EFFORT || 'medium',
       '--disable-web-search', '--no-memory', '--no-subagents',
       '--tools', '',
       '--json-schema', requireText(schemaPath),
