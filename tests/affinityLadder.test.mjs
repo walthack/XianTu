@@ -329,6 +329,72 @@ test('姿态注入的两道门：主角显式排除 + 需有真实关系数据',
     'playerName 必须传进 formatFocusedCharacter');
 });
 
+// —— 角色专属姿态形态（防"高好感=通用温柔化"） ——
+
+test('小紫高好感不得退化为恋爱脑，深情形态是占有与铺路', async () => {
+  const { formatRelationStance } = await stancePromise;
+  const high = formatRelationStance('小紫', { favorability: 90 });
+  assert.ok(high.includes('【小紫·本人姿态形态·优先'), '应注入专属形态');
+  assert.ok(high.includes('高好感不等于恋爱脑'), '必须显式否定恋爱脑');
+  assert.match(high, /占有|铺路/, '深情的正确形态须写明');
+  assert.ok(high.includes('智商与信息始终压制主角'), '本色锚在任何档位都要在');
+  assert.ok(high.includes('程头儿'), '称谓本色不变');
+});
+
+test('小紫低好感不翻脸，断的是信息而非撒娇', async () => {
+  const { formatRelationStance } = await stancePromise;
+  const low = formatRelationStance('小紫', { favorability: -80 });
+  assert.ok(low.includes('不会翻脸'));
+  assert.ok(low.includes('智商与信息始终压制主角'), '本色锚同样注入');
+});
+
+test('凝羽高好感仍口是心非，变化只在不由自主的破绽', async () => {
+  const { formatRelationStance } = await stancePromise;
+  const high = formatRelationStance('凝羽', { favorability: 85 });
+  assert.ok(high.includes('高好感不改变她的嘴'));
+  assert.match(high, /颤|破绽/, '变化须落在生理破绽而非语言');
+  assert.ok(high.includes('从不口头承认爱意'), '本色锚在场');
+});
+
+test('月霜高好感不等于和解或温柔（正典：事后仍动杀心）', async () => {
+  const { formatRelationStance } = await stancePromise;
+  const high = formatRelationStance('月霜', { favorability: 85 });
+  assert.ok(high.includes('高好感不等于和解'));
+  assert.match(high, /刻薄找补|僵持/, '须保留傲娇找补的形态');
+});
+
+test('乐明珠是对照组：本色外露，高好感确实更黏', async () => {
+  const { formatRelationStance } = await stancePromise;
+  const high = formatRelationStance('乐明珠', { favorability: 85 });
+  assert.ok(high.includes('确实会更黏'), '本色外露的角色允许外露');
+  assert.ok(high.includes('外露不等于失去自我'), '仍要保底线');
+});
+
+test('外显度由本色而非性别决定：同为女性，三人高档形态互斥', async () => {
+  const { formatRelationStance } = await stancePromise;
+  const [leming, ningyu, yueshuang] = ['乐明珠', '凝羽', '月霜']
+    .map(n => formatRelationStance(n, { favorability: 85 }));
+  // 乐明珠外露、凝羽不改口、月霜不和解——若按性别设外显度，三者会被拉平
+  assert.ok(leming.includes('确实会更黏'));
+  assert.ok(ningyu.includes('高好感不改变她的嘴'));
+  assert.ok(yueshuang.includes('高好感不等于和解'));
+  assert.notEqual(leming, ningyu);
+  assert.notEqual(ningyu, yueshuang);
+});
+
+test('无专属档案的角色回落通用五维，不报错', async () => {
+  const { formatRelationStance } = await stancePromise;
+  const text = formatRelationStance('某路人甲', { favorability: 50 });
+  assert.ok(!text.includes('·本人姿态形态·优先'), '不应有专属形态块');
+  assert.ok(text.includes('主动披露深度'), '通用五维仍在');
+});
+
+test('通用不变量显式禁止"高好感=温柔化"', async () => {
+  const { formatRelationStance } = await stancePromise;
+  const text = formatRelationStance('某路人甲', { favorability: 90 });
+  assert.match(text, /严禁把高好感写成通用的温柔化／恋爱脑／有求必应/);
+});
+
 test('姿态可由外部传入以覆盖瞬时投影（供滞回接线）', async () => {
   const { formatRelationStance } = await stancePromise;
   const forced = formatRelationStance('贾文和', { favorability: 90, stance: 'low' });

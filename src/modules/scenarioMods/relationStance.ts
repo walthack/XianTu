@@ -17,6 +17,7 @@
  */
 
 import { stanceOf, tierOf, type AffinityStance } from './affinityLadder';
+import { formatStanceProfile } from './stanceProfiles';
 
 /** 五维度指引。顺序与路线图声明一致，渲染时逐条给出。 */
 const STANCE_GUIDANCE: Record<AffinityStance, readonly string[]> = {
@@ -43,7 +44,7 @@ const STANCE_GUIDANCE: Record<AffinityStance, readonly string[]> = {
   ],
 };
 
-const INVARIANTS = '不变量（任何姿态都不得越过）：人格底色、当前目标与判断方式、权力意识与身份仪态、正典边界、知识门禁与私有知情边界。**若本角色另有表演卡，其声线、称谓与禁忌一律优先于本合同**——本合同只调整投入程度与表达取向，不改变此人是谁，也不直接改写事件成败或关系数值。';
+const INVARIANTS = '不变量（任何姿态都不得越过）：人格底色、当前目标与判断方式、权力意识与身份仪态、正典边界、知识门禁与私有知情边界。**若本角色另有表演卡或本人姿态形态，其声线、称谓、禁忌与形态一律优先于上面的通用条款**——本合同只调整投入程度与表达取向，不改变此人是谁，也不直接改写事件成败或关系数值。**严禁把高好感写成通用的温柔化／恋爱脑／有求必应**：深情在不同人身上的形态天差地别（有人是占有与掌控，有人是口是心非的破绽，有人是交易性的臣服，有人根本不会缓和）；同理低好感也不得写成通用的恶毒或失智。';
 
 export interface RelationStanceContext {
   favorability: number;
@@ -67,5 +68,13 @@ export function formatRelationStance(name: string, context: RelationStanceContex
   // 刻意不把 tier.gist（「已认定必须除掉你」这类）写进 LLM 合同：它不属于五个受限维度，
   // 措辞又比五条指引更强，实测会被当成第六条、更硬的指令使用。gist 只服务 UI 与文档。
   const head = `【${name}·关系姿态·受限渲染合同】当前对玩家：${tier.name}（好感 ${fav}${label}）。只按以下五项调整表达：`;
-  return [head, ...STANCE_GUIDANCE[stance].map(line => `  · ${line}`), `  ${INVARIANTS}`].join('\n');
+  // 角色专属形态（若有）：通用五维只说"哪些方面可以变"，专属条款说"这个人变成什么样"。
+  // 没有它，高档会把所有角色拉向同一种温柔化——小紫会退化成恋爱脑，凝羽会开口示爱。
+  const own = formatStanceProfile(name, stance);
+  return [
+    head,
+    ...STANCE_GUIDANCE[stance].map(line => `  · ${line}`),
+    ...(own ? [own] : []),
+    `  ${INVARIANTS}`,
+  ].join('\n');
 }
