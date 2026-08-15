@@ -634,7 +634,9 @@ function buildFocusedCharacterPrompt(runtime: StoryRuntime, activeEvents: Scenar
   for (const event of activeEvents) {
     for (const id of event.relatedCharacterIds || []) focusedIds.add(id);
   }
-  if (runtime.opening?.playerCharacterId) focusedIds.add(runtime.opening.playerCharacterId);
+  // 原有一行 `focusedIds.add(runtime.opening.playerCharacterId)` 已删：37/37 内置 stage 的
+  // opening 都不带该字段，它从未生效；且姿态、亲密、上限各层本就排除主角，主角档案
+  // 进聚焦只是白占 token。删除不改变任何既有行为。
   const focusedCharacters = [...focusedIds]
     .map(id => characters.find(character => character.id === id))
     .filter((character): character is ScenarioModCharacter => !!character)
@@ -842,7 +844,9 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
   const canonicalSameLocationNames = currentLocation
     ? characters
         .filter(character =>
-          character.id !== runtime.opening?.playerCharacterId
+          // 原判据用 opening.playerCharacterId，该字段实测恒空、过滤形同虚设，
+          // 主角会被列进「在场」名单再被名字召回。改用存档玩家名。
+          character.name !== playerName
           && character.locationId === currentLocation.id
           && introducedAtLocation.has(character.id)
           && !charactersWithDynamicState.has(character.name),
@@ -938,7 +942,7 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
       const fav = Number(npc.好感度);
       if (!label || !Number.isFinite(fav)) continue;
       const hostile = /敌对|仇|死敌|敌人/.test(label);
-      const intimate = /亲密|爱慕|情人|道侣|挚友|伴侣/.test(label);
+      const intimate = /亲密|爱慕|情人|道侣|挚友|伴侣|主仆|主从|侍妾|后宫|夫妻|夫君|奴婢/.test(label);
       if ((hostile && fav > MISMATCH_HOSTILE_ABOVE) || (intimate && fav <= MISMATCH_INTIMATE_AT_OR_BELOW)) mismatches.push(`${(npc as { 名字?: string }).名字 || key}（${label}，好感 ${fav}，${tierOf(fav).name}）`);
       if (mismatches.length >= 4) break;
     }
@@ -964,7 +968,10 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
       .filter(event => isCriticalStoryEvent(event) && !completedIds.has(event.id))
       .flatMap(event => event.relatedCharacterIds || []),
   );
-  if (runtime.opening?.playerCharacterId) loadBearingIds.delete(runtime.opening.playerCharacterId);
+  // 同上：opening.playerCharacterId 恒空，主角一直留在承重保护名单里白占 20 人上限的名额。
+  for (const id of [...loadBearingIds]) {
+    if (characters.find(character => character.id === id)?.name === playerName) loadBearingIds.delete(id);
+  }
   const loadBearingNames = [...loadBearingIds]
     .map(id => characters.find(character => character.id === id)?.name)
     .filter((name): name is string => !!name)

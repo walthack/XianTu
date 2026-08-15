@@ -121,6 +121,14 @@ function stagePhase(entry: RegistryEntry, stageId: string): RegistryPhase | unde
 function relationshipPhases(entry: RegistryEntry): RegistryPhase[] {
   return asArray(entry.phaseIdentities).filter(p => p.scope === 'relationship-chain' || p.scope === 'identity-chain');
 }
+
+/**
+ * 本关身份已表明归属 → 转折已经发生，转折前的禁令不再适用。
+ * 依据是 registry 里 role 本来就按关卡区分了前后：孙寿在云龙是「吕氏外戚女眷」、
+ * 在燕歌是「程宗扬内宅侍婢」；吕雉在云龙是「汉国太后与吕氏权力核心」、
+ * 在燕歌是「原汉国太后，现为程宗扬性奴婢」。
+ */
+const AFTER_TURNING_POINT_RE = /后宫|侍妾|妾室|侍婢|侍奴|女奴|内宅|心腹|性奴|奴婢|道侣|伴侣|夫妻|情人/;
 function phaseProfileValue<K extends keyof RegistryStaticProfile>(
   profile: RegistryStaticProfile,
   currentPhase: RegistryPhase | undefined,
@@ -206,6 +214,17 @@ function buildNotes(entry: RegistryEntry, currentPhase: RegistryPhase | undefine
   if (currentPhase) {
     add('阶段身份', `当前关卡 ${currentPhase.stageId}：${currentPhase.identity || currentPhase.role || ''}`, 520);
     if (currentPhase.forbidden?.length) add('本阶段禁用', `${currentPhase.stageId}：${currentPhase.forbidden.join('、')}`, 360);
+    // 「转折前禁止提前写成后宫／侍妾／情人」是**纯约束、不含未来信息**，与上面被刻意排除的
+    // 「转折后才可写入」不同。此前两者被同一个 `if (!currentPhase)` 一起丢弃——恰恰在角色
+    // 真正登场的关卡里失效：实测 33 名角色、302 个「角色×关卡」组合无一注入（小紫 33 关、
+    // 卓云君 24 关、潘金莲 20 关、吕雉 18 关全丢）。现按本关身份判断后单独补回。
+    const settled = AFTER_TURNING_POINT_RE.test(`${currentPhase.identity || ''} ${currentPhase.role || ''}`);
+    if (!settled) {
+      for (const phase of relationshipPhases(entry)) {
+        if (phase.status !== 'forbid-final-state-before-turning-point') continue;
+        add('关系身份门禁', `${phase.seq || '转折前'}：${phase.identity || ''}`, 360);
+      }
+    }
   }
   // review.humanNotes / followUps 是内部维护记录（含日期/"扫描抓了…"等工程语），不进游戏
   // （曾泄漏到人物面板与 LLM 提示词）。别名合并信息对 LLM 有用且不尴尬，保留。
