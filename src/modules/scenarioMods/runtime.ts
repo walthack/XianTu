@@ -2428,7 +2428,19 @@ function updateStanceStates(saveData: SaveData, runtime: RuntimeState & { modId?
  *
  * 走引擎通道，不占模型的 ±15 单回合预算——否则引擎给的分会被日常加减挤掉。
  */
-function settleSharedExperienceAffinity(saveData: SaveData, runtime: RuntimeState & { modId?: string }): void {
+export interface SharedExperienceGrant {
+  name: string;
+  from: number;
+  to: number;
+  eventId: string;
+  eventName?: string;
+}
+
+function settleSharedExperienceAffinity(
+  saveData: SaveData,
+  runtime: RuntimeState & { modId?: string },
+): SharedExperienceGrant[] {
+  const grants: SharedExperienceGrant[] = [];
   try {
     const rt = runtime as unknown as {
       affinityGrantedEventIds?: string[];
@@ -2438,7 +2450,7 @@ function settleSharedExperienceAffinity(saveData: SaveData, runtime: RuntimeStat
       canon?: { characters?: Array<{ id: string; name: string }> };
     };
     const relations = (saveData as unknown as { 社交?: { 关系?: Record<string, unknown> } })?.社交?.关系;
-    if (!relations || typeof relations !== 'object') return;
+    if (!relations || typeof relations !== 'object') return grants;
 
     // 旧档首次结算：**只登记不补发**。存档里的好感值本身已经包含那些事件的影响
     // （当时由模型一路加上来），补发等于重复计算。真机实测过一次：某旧档已完成 7 个事件，
@@ -2450,11 +2462,11 @@ function settleSharedExperienceAffinity(saveData: SaveData, runtime: RuntimeStat
     const pending = (rt.completedEventIds || []).filter(id => !granted.has(id) && !offscreen.has(id));
     if (!pending.length) {
       if (isFirstSettlement) rt.affinityGrantedEventIds = [];
-      return;
+      return grants;
     }
     if (isFirstSettlement) {
       rt.affinityGrantedEventIds = [...new Set([...(rt.completedEventIds || [])])];
-      return;
+      return grants;
     }
 
     const nameById = new Map((rt.canon?.characters || []).map(item => [item.id, item.name]));
@@ -2475,18 +2487,24 @@ function settleSharedExperienceAffinity(saveData: SaveData, runtime: RuntimeStat
         const cap = affinityCapFor(name, label);
         const ceiling = cap ? cap.cap : 100;
         if (current >= ceiling) continue;
-        npc.好感度 = clampAffinity(Math.min(ceiling, current + grant));
+        const settled = clampAffinity(Math.min(ceiling, current + grant));
+        npc.好感度 = settled;
+        // 记录明细：引擎侧的变化必须能进玩家可见的状态流，否则因果只存在于代码里。
+        grants.push({ name, from: current, to: settled, eventId, eventName: event.name });
       }
     }
     rt.affinityGrantedEventIds = [...granted];
   } catch (error) {
     console.warn('[剧本模组] 共历事件好感结算失败（不阻断回合）:', error);
   }
+  return grants;
 }
 
 export function advanceScenarioRuntime(saveData: SaveData): {
   saveData: SaveData;
   transitions: ScenarioRuntimeTransition[];
+  /** 本轮共历事件带来的好感变动，供调用方推进玩家可见的状态流。 */
+  affinityGrants?: SharedExperienceGrant[];
 } {
   const next = structuredClone(saveData);
   const runtime = getRuntime(next);
@@ -2494,7 +2512,7 @@ export function advanceScenarioRuntime(saveData: SaveData): {
   reconcileSaveWithRegistry(next, runtime as RuntimeState & { modId?: string });
   projectBottomLinesToNpcs(next);
   updateAcquaintanceLedger(next, runtime as RuntimeState & { modId?: string });
-  settleSharedExperienceAffinity(next, runtime as RuntimeState & { modId?: string });
+  const affinityGrants = settleSharedExperienceAffinity(next, runtime as RuntimeState & { modId?: string });
   updateStanceStates(next, runtime as RuntimeState & { modId?: string });
   normalizeRuntimeFlags(runtime);
   settleReadyOpportunityCompletionFlags(runtime);
@@ -2667,5 +2685,5 @@ export function advanceScenarioRuntime(saveData: SaveData): {
   recordSettledBeatHandoff(runtime, transitions);
   recordChronicleTransitions(runtime, transitions);
 
-  return { saveData: next, transitions };
+  return { saveData: next, transitions, affinityGrants };
 }

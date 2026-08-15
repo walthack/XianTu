@@ -2497,6 +2497,16 @@ ${step1Text}
         newValue: transition.id,
       });
     });
+    // 共历事件好感：引擎侧结算，必须进玩家可见的状态流——否则好感涨了玩家不知道为什么，
+    // 因果就只存在于代码里。key 用标准路径，复用 stateChangeFormatter 既有的好感度格式化。
+    for (const grant of scenarioResult.affinityGrants || []) {
+      changes.push({
+        key: `社交.关系.${grant.name}.好感度`,
+        action: 'shared_experience',
+        oldValue: grant.from,
+        newValue: grant.to,
+      });
+    }
     // 里程碑奖励：称号=故事线正确落点的关卡完成奖励（引擎独占授予，AI 不能自封）
     for (const grantNote of applyMilestoneRewards(saveData, scenarioResult.transitions)) {
       changes.push({ key: '角色.身份.称号', action: 'milestone_reward', oldValue: undefined, newValue: grantNote });
