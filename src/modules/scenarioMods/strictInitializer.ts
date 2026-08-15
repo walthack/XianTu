@@ -307,6 +307,12 @@ export function transitionToNextScenarioStage(saveData: SaveData, modsOverride?:
   // done/章节进度仍按新关初始化，只继承分支、人物状态与 void 审计标记。
   const divergenceSnapshot = structuredClone(Array.isArray(rt.divergences) ? rt.divergences : []);
   const chronicleSnapshot = structuredClone(Array.isArray(rt.chronicle) ? rt.chronicle : []);
+  // 相识账本同理：玩家见过谁是**玩家历史**，换一关不会变回没见过。
+  // 不继承的话，孙寿在云龙认识过的事实到燕歌就消失，stage-projection 又会按原著快照
+  // 直接给她"内宅侍婢"的身份——正是 R3-12 要解决的那个矛盾。
+  const acquaintanceSnapshot = structuredClone(
+    rt.acquaintances && typeof rt.acquaintances === 'object' ? rt.acquaintances : {},
+  );
   const playerKnowledgeSnapshot = structuredClone(
     rt.playerKnowledge && typeof rt.playerKnowledge === 'object' ? rt.playerKnowledge : {},
   );
@@ -361,6 +367,9 @@ export function transitionToNextScenarioStage(saveData: SaveData, modsOverride?:
   newRuntime.reconciledRegistryVersion = rt.reconciledRegistryVersion;
   if (divergenceSnapshot.length) newRuntime.divergences = divergenceSnapshot;
   if (chronicleSnapshot.length) newRuntime.chronicle = chronicleSnapshot;
+  if (Object.keys(acquaintanceSnapshot).length) {
+    newRuntime.acquaintances = { ...(newRuntime.acquaintances || {}), ...acquaintanceSnapshot };
+  }
   newRuntime.playerKnowledge = {
     ...(newRuntime.playerKnowledge || {}),
     ...playerKnowledgeSnapshot,

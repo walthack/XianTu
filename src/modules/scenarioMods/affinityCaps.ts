@@ -18,6 +18,7 @@
  */
 
 import { AFFINITY_TIERS } from './affinityLadder';
+import { JOINED_RELATION_RE as SETTLED_RELATION_RE } from './acquaintanceLedger';
 
 export interface AffinityCap {
   names: string[];
@@ -31,8 +32,8 @@ export interface AffinityCap {
 
 const tierMax = (id: string) => AFFINITY_TIERS.find(t => t.id === id)!.max;
 
-/** 关系标签一旦表明归属，即视为正典加入事件已发生，cap 失效。 */
-const SETTLED_RELATION_RE = /后宫|侍妾|妾室|侍婢|心腹|部属|下属|属下|奴|婢|道侣|伴侣|夫妻|夫君|情人|同伴|队友|自己人|效忠|臣服|投靠|归顺/;
+// 关系标签一旦表明归属，即视为正典加入事件已发生，cap 失效。
+// 判据引用相识账本的唯一定义——此前本文件自带一份，与账本那份各自漏词（都漏了「主仆」）。
 
 export const AFFINITY_CAPS: readonly AffinityCap[] = [
   // —— 立场先于情感：忠诚有明确排序，感情排在后面 ——

@@ -31,6 +31,7 @@ import {
   type RejectedNpcDecisionEffect,
 } from './npcDecisionCore';
 import { AFFINITY_THRESHOLDS } from './affinityLadder';
+import { syncAcquaintanceLedger, type AcquaintanceLedger } from './acquaintanceLedger';
 import { recordOffscreenDivergence, type ScenarioDivergence } from './divergenceLedger';
 import { getCanonRailOrder, getCanonRailProfile, isCanonRailChapter } from './canonRail';
 import { updateDivergenceControl, type DivergenceSignal, type WorldPushState } from './divergenceControl';
@@ -2314,6 +2315,55 @@ function projectBottomLinesToNpcs(saveData: SaveData): void {
  */
 export const STEERING_DIVERGENCE_COOLDOWN = 4;
 
+/**
+ * 相识账本同步（R3-12）。每回合推进时把"玩家见过谁"落进存档。
+ *
+ * 与 `collectIntroducedCharacterIds` 的关键区别：那个只算进 prompt 副本、切关即失；
+ * 本账本写进 runtime 并由 initializer 跨关继承，因为"认识过"是不会因为换了一关就消失的事实。
+ * 首次写入（账本为空且已有完成事件）标 `backfilled`，表示是从既有进度近似回填而非实时记录。
+ */
+function updateAcquaintanceLedger(saveData: SaveData, runtime: RuntimeState & { modId?: string }): void {
+  try {
+    const rt = runtime as unknown as {
+      acquaintances?: AcquaintanceLedger;
+      canon?: { characters?: Array<{ id: string; name: string }> };
+      opening?: { featuredCharacterIds?: string[] };
+      events?: Array<{ id: string; relatedCharacterIds?: string[] }>;
+      activeEventIds?: string[];
+      completedEventIds?: string[];
+      worldTurn?: number;
+      modId?: string;
+    };
+    const characters = rt.canon?.characters || [];
+    if (!characters.length) return;
+    const isFirstWrite = !rt.acquaintances || !Object.keys(rt.acquaintances).length;
+    const hasProgress = Boolean(rt.completedEventIds?.length);
+    rt.acquaintances = rt.acquaintances && typeof rt.acquaintances === 'object' ? rt.acquaintances : {};
+
+    const seen = new Set([...(rt.activeEventIds || []), ...(rt.completedEventIds || [])]);
+    const metIds = new Set<string>();
+    for (const event of rt.events || []) {
+      if (!seen.has(event.id)) continue;
+      for (const id of event.relatedCharacterIds || []) metIds.add(id);
+    }
+    syncAcquaintanceLedger({
+      ledger: rt.acquaintances,
+      stageId: rt.modId,
+      worldTurn: rt.worldTurn,
+      characterNames: new Map(characters.map(item => [item.id, item.name])),
+      metCharacterIds: metIds,
+      featuredCharacterIds: rt.opening?.featuredCharacterIds,
+      relations: (saveData as unknown as { 社交?: { 关系?: Record<string, unknown> } })?.社交?.关系,
+      backfilled: isFirstWrite && hasProgress,
+      playerName: String(
+        (saveData as unknown as { 角色?: { 身份?: { 名字?: unknown } } })?.角色?.身份?.名字 || '',
+      ).trim() || undefined,
+    });
+  } catch (error) {
+    console.warn('[剧本模组] 相识账本同步失败（不阻断回合）:', error);
+  }
+}
+
 export function advanceScenarioRuntime(saveData: SaveData): {
   saveData: SaveData;
   transitions: ScenarioRuntimeTransition[];
@@ -2323,6 +2373,7 @@ export function advanceScenarioRuntime(saveData: SaveData): {
   if (!runtime) return { saveData: next, transitions: [] };
   reconcileSaveWithRegistry(next, runtime as RuntimeState & { modId?: string });
   projectBottomLinesToNpcs(next);
+  updateAcquaintanceLedger(next, runtime as RuntimeState & { modId?: string });
   normalizeRuntimeFlags(runtime);
   settleReadyOpportunityCompletionFlags(runtime);
   settleReadyEventActionCompletionFlags(runtime);

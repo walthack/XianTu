@@ -9,6 +9,7 @@ import { formatIntimacyProfile } from './intimacyProfiles';
 import { formatRelationStance } from './relationStance';
 import { formatAffinityCap } from './affinityCaps';
 import { computePresentNames, formatAbsenceGuard } from './presence';
+import { formatAcquaintance, type AcquaintanceLedger } from './acquaintanceLedger';
 import {
   AFFINITY_THRESHOLDS,
   MISMATCH_HOSTILE_ABOVE,
@@ -151,6 +152,8 @@ interface StoryRuntime {
   };
   divergences?: ScenarioDivergence[];
   introducedCharacterIds?: string[];
+  /** 相识账本（R3-12）：玩家见过谁、到什么程度。跨关继承。 */
+  acquaintances?: AcquaintanceLedger;
   canon?: {
     characters?: ScenarioModCharacter[];
     factions?: Array<{ id: string; name: string }>;
@@ -603,6 +606,12 @@ function formatFocusedCharacter(
   // presentNames 未传入时不做判定，保持既有行为。
   if (presentNames && !isProtagonist && !presentNames.has(character.name)) {
     lines.push(formatAbsenceGuard(character.name));
+  }
+  // 相识程度（R3-12）：挡住"按原著快照假定熟识"。stage-projection 会给孙寿
+  // 「内宅侍婢」的身份，哪怕玩家从没见过她——账本有记录才算数。
+  if (!isProtagonist) {
+    const acquaintanceLine = formatAcquaintance(runtime.acquaintances, character.name);
+    if (acquaintanceLine) lines.push(acquaintanceLine);
   }
   // 亲密档案（R3-8B）：名单门与场景门都在 formatIntimacyProfile 内部执行，此处只负责喂参数。
   if (intimacyGate) {
