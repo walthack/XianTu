@@ -7,6 +7,7 @@
  */
 import { set, get, unset, cloneDeep } from 'lodash';
 import { getTavernHelper, isTavernEnv } from '@/utils/tavern';
+import { createAffinityCommandGate } from '@/modules/scenarioMods/affinityLadder';
 import { toast } from './toast';
 import { useGameStateStore } from '@/stores/gameStateStore';
 import { useCharacterStore } from '@/stores/characterStore'; // 导入角色商店
@@ -3063,6 +3064,10 @@ ${saveDataJson}`;
     const out: any[] = [];
     const inventoryPath = '角色.背包.物品';
 
+    // 好感度写入权门禁（R3-9 §7 混合裁定）。逻辑在 affinityLadder，本处只按回合建实例。
+    // 本函数只处理 LLM 返回的 tavern_commands，引擎路径（关卡初始化、确定性降档）不经过这里。
+    const gateAffinity = createAffinityCommandGate();
+
     const isInventoryRootSet = (cmd: any): boolean => (
       cmd?.action === 'set' &&
       cmd?.key === inventoryPath &&
@@ -3321,7 +3326,10 @@ ${saveDataJson}`;
         continue;
       }
 
-      out.push(cmd);
+      const affinityGated = gateAffinity(cmd);
+      if (affinityGated.warning) console.warn(`[AI双向系统] ${affinityGated.warning}`);
+      if (affinityGated.command === null) continue;
+      out.push(affinityGated.command);
     }
 
     return out;

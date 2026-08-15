@@ -20,8 +20,18 @@
  *     ⚠️ 若将来转公开发行，本模块是 R1-3 已登记的「角色档案层 NSFW 门控」的作用面之一。
  */
 
-/** 好感分层阈值：与 storyContext 的底线门控同风格，低层近乎公开、高层需长期关系。 */
-const TIER_FAVOR = { shallow: 20, deep: 55, bonded: 80 } as const;
+import { AFFINITY_THRESHOLDS } from './affinityLadder';
+
+/**
+ * 好感分层阈值：低层近乎公开、高层需长期关系。
+ * 数值取自 `affinityLadder` 单一真值源，**不在本文件写死**——deep 曾是 55（卡在信重档
+ * 中间、无依据），2026-08-14 用户裁定迁到 60 对齐「亲厚」档入口。
+ */
+const TIER_FAVOR = {
+  shallow: AFFINITY_THRESHOLDS.intimacyShallow,
+  deep: AFFINITY_THRESHOLDS.intimacyDeep,
+  bonded: AFFINITY_THRESHOLDS.intimacyBonded,
+} as const;
 
 /**
  * 亲密场景判定。**刻意宁漏不误**：漏判只是少注入一次风味，误判会把成人内容带进普通场景。

@@ -144,7 +144,7 @@
                 <div class="detail-badges">
                   <span class="relationship-badge">{{ selectedPerson.与玩家关系 || '相识' }}</span>
                   <span class="intimacy-badge" :class="getIntimacyClass(selectedPerson.好感度)">
-                    好感 {{ selectedPerson.好感度 || 0 }}
+                    {{ getIntimacyTierName(selectedPerson.好感度) }} {{ selectedPerson.好感度 || 0 }}
                   </span>
                   <span class="race-badge">{{ selectedPerson.种族 || '人族' }}</span>
                   <span v-if="selectedPerson.势力归属" class="faction-badge">{{
@@ -1000,6 +1000,7 @@ import { useCharacterStore } from '@/stores/characterStore';
 import { useGameStateStore } from '@/stores/gameStateStore';
 import { getMemoryTime, getMemoryEvent } from '@/utils/memoryUtils';
 import { isTavernEnv } from '@/utils/tavern';
+import { tierOf, type AffinityTierId } from '@/modules/scenarioMods/affinityLadder';
 import { cloneDeep } from 'lodash';
 
 /**
@@ -1849,17 +1850,26 @@ const filteredRelationships = computed<NpcProfile[]>(() => {
 });
 
 // 工具函数
-const getIntimacyLevel = (intimacy: number | undefined): string => {
-  const value = intimacy || 0;
-  if (value >= 80) return 'high';
-  if (value >= 60) return 'good';
-  if (value >= 40) return 'medium';
-  if (value >= 20) return 'low';
-  if (value >= 0) return 'neutral';
-  if (value >= -20) return 'dislike';
-  if (value >= -40) return 'hostile';
-  return 'enemy';
+// 本面板原有一套独立的八级阈值（80/60/40/20/0/-20/-40），与 affinityLadder 的八档
+// 级数相同但边界不同——属规格漏列的第五处魔数。现改为按档位映射到既有 CSS 类，
+// 色阶命名与样式全部不动，只把判据收归单一真值源。
+const INTIMACY_CLASS_BY_TIER: Record<AffinityTierId, string> = {
+  sworn: 'high',
+  close: 'good',
+  trusted: 'medium',
+  acquainted: 'low',
+  stranger: 'neutral',
+  wary: 'dislike',
+  hostile: 'hostile',
+  nemesis: 'enemy',
 };
+
+const getIntimacyLevel = (intimacy: number | undefined): string => {
+  return INTIMACY_CLASS_BY_TIER[tierOf(intimacy || 0).id];
+};
+
+/** 档位名，与 CharacterDetailsPanel 同源，让玩家在两处看到同一套说法。 */
+const getIntimacyTierName = (intimacy: number | undefined): string => tierOf(intimacy || 0).name;
 
 const getIntimacyClass = (intimacy: number | undefined): string => {
   return `intimacy-${getIntimacyLevel(intimacy)}`;

@@ -6,6 +6,13 @@ import { narrativeVariantReplacesCanonRail, resolveScenarioEventNarrative } from
 import { formatDivergencePrompt, type ScenarioDivergence } from './divergenceLedger';
 import { findRegistryIdentitiesByContext, getRegistrySpeechStyle } from './characterResolver';
 import { formatIntimacyProfile } from './intimacyProfiles';
+import { formatRelationStance } from './relationStance';
+import {
+  AFFINITY_THRESHOLDS,
+  MISMATCH_HOSTILE_ABOVE,
+  MISMATCH_INTIMATE_AT_OR_BELOW,
+  tierOf,
+} from './affinityLadder';
 import {
   expandPrivateKnowledgeAssociations,
   playerKnowsPrivateFact,
@@ -409,9 +416,11 @@ function formatCharacterRelationship(
   return lines.join('；');
 }
 
-// 底线揭示门控：入队(自己人类关系) 或 好感≥30 才把【底线】喂给 LLM；否则隐去，
+// 底线揭示门控：入队(自己人类关系) 或 好感达「信重」档 才把【底线】喂给 LLM；否则隐去，
 // 避免敌对期把角色真实底线泄漏给 LLM（如小紫入队前的敌对行为被真底线约束住）。
-const BOTTOMLINE_REVEAL_FAVOR = 30;
+// 阈值取自 affinityLadder 单一真值源：曾写死 30（落在「相识」档中间、无依据），
+// 2026-08-14 迁到 40 ——「把你算进自己的盘子里」才透底线。
+const BOTTOMLINE_REVEAL_FAVOR = AFFINITY_THRESHOLDS.bottomLineReveal;
 const ALLY_RELATION = /同伴|伙伴|队友|道侣|伴侣|挚友|知己|情人|爱慕|恋|妾|后宫|侍妾|奴|婢|主仆|仆|结义|亲密|归顺|臣服|忠/;
 function shouldRevealBottomLine(fav: number, label: string): boolean {
   return fav >= BOTTOMLINE_REVEAL_FAVOR || ALLY_RELATION.test(label || '');
@@ -569,6 +578,18 @@ function formatFocusedCharacter(
     runtime.canon?.characters || [],
   );
   if (relation) lines.push(`  关系：${relation}`);
+  // 关系姿态（R3-9）：同一动作在低／中／高好感下应有不同的人物化反应。
+  // 只给五个维度的调整方向，不给台词——给台词会盖掉表演卡声线，反而让各角色在同档位上趋同。
+  // 门槛：只有**确实存在关系数据**的角色才注入。两个理由：
+  //   ① 主角必须排除——他就是玩家，"对玩家的姿态"对他无意义；他既不在 社交.关系 也不在
+  //      playerRelationships（relationships.ts 建档时显式 continue），故本判据自动排除他。
+  //      不用 `runtime.opening?.playerCharacterId`：真机实测该字段在运行时投影与 canon 里都是空，
+  //      判据会恒真而形同虚设（抓包见过「程宗扬·关系姿态：陌路（好感 0）」）。
+  //   ② 素未谋面的路人不该被注入"好感 0＝陌路"——那是默认值不是真实态度，属虚假精确。
+  const hasRelationData = live !== undefined || canonFav !== undefined;
+  if (hasRelationData) {
+    lines.push(formatRelationStance(character.name, { favorability: fav, relationLabel: label }));
+  }
   // 亲密档案（R3-8B）：名单门与场景门都在 formatIntimacyProfile 内部执行，此处只负责喂参数。
   if (intimacyGate) {
     const intimacy = formatIntimacyProfile(character.name, {
@@ -876,7 +897,7 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
       if (!label || !Number.isFinite(fav)) continue;
       const hostile = /敌对|仇|死敌|敌人/.test(label);
       const intimate = /亲密|爱慕|情人|道侣|挚友|伴侣/.test(label);
-      if ((hostile && fav >= 20) || (intimate && fav <= 0)) mismatches.push(`${(npc as { 名字?: string }).名字 || key}（${label}，好感 ${fav}）`);
+      if ((hostile && fav > MISMATCH_HOSTILE_ABOVE) || (intimate && fav <= MISMATCH_INTIMATE_AT_OR_BELOW)) mismatches.push(`${(npc as { 名字?: string }).名字 || key}（${label}，好感 ${fav}，${tierOf(fav).name}）`);
       if (mismatches.length >= 4) break;
     }
   }

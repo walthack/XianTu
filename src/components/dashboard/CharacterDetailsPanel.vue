@@ -369,7 +369,10 @@
                           <span class="rel-realm">{{ formatRealmDisplay(npc.境界) }}</span>
                         </div>
                       </div>
-                      <div class="rel-fav" :class="getFavorabilityClass(npc.好感度)">{{ npc.好感度 }}</div>
+                      <div class="rel-fav" :class="getFavorabilityClass(npc.好感度)">
+                        <span class="rel-fav-tier">{{ getFavorabilityTierName(npc.好感度) }}</span>
+                        <span class="rel-fav-value">{{ npc.好感度 }}</span>
+                      </div>
                     </div>
                     <div v-if="topRelationships.length === 0" class="empty-placeholder text-sm">
                       <Users :size="36" opacity="0.5" />
@@ -512,6 +515,7 @@ import { calculateFinalAttributes } from '@/utils/attributeCalculation';
 import { calculateAgeFromBirthdate, type GameTime as LifespanGameTime } from '@/utils/lifespanCalculator';
 import { formatRealmWithStage } from '@/utils/realmUtils';
 import { isTavernEnv } from '@/utils/tavern';
+import { tierOf } from '@/modules/scenarioMods/affinityLadder';
 import type { DaoData, InnateAttributes, Inventory, Item, ItemQuality, MasteredSkill, NpcProfile, SaveData, TechniqueItem } from '@/types/game';
 import type { Origin, TalentTier, SpiritRoot } from '@/types';
 import {
@@ -767,12 +771,18 @@ const topRelationships = computed(() => {
   return [...relationshipList.value].sort((a, b) => b.好感度 - a.好感度).slice(0, 10);
 });
 
+// 好感上色与档位名统一走 affinityLadder（曾写死 60/20/-20 三个魔数，与其它三处门禁互不相同）。
+// 八档压到既有四个色阶：负向三档共用 fav-low，陌路 neutral，相识 mid，正向三档共用 fav-high。
 const getFavorabilityClass = (favorability: number) => {
-  if (favorability >= 60) return 'fav-high';
-  if (favorability >= 20) return 'fav-mid';
-  if (favorability <= -20) return 'fav-low';
+  const { stance, id } = tierOf(favorability);
+  if (stance === 'low') return 'fav-low';
+  if (id === 'acquainted') return 'fav-mid';
+  if (stance === 'high') return 'fav-high';
   return 'fav-neutral';
 };
+
+/** UI 是玩家唯一能看到阶梯的地方——显示档位名而非裸数字，否则 5 与 10 的区别对玩家不存在。 */
+const getFavorabilityTierName = (favorability: number) => tierOf(favorability).name;
 
 const isSpecialNpc = (npc: NpcProfile): boolean => {
   const ext = (npc as any)?.扩展 as any;
@@ -2455,6 +2465,15 @@ const closeModals = () => {
   font-weight: 600;
   padding: 4px 10px;
   border-radius: var(--radius-sm);
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.rel-fav-value {
+  font-size: 12px;
+  opacity: 0.7;
 }
 
 .rel-fav.fav-high {
