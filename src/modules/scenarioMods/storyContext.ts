@@ -487,6 +487,7 @@ function formatFocusedCharacter(
   runtime: StoryRuntime,
   favByName?: Map<string, { fav: number; label: string }>,
   intimacyGate?: { sceneText: string },
+  playerName?: string,
 ): string {
   const profile = character.profile || {};
   const lines: string[] = [`- ${character.name}（${[character.gender, character.role, character.realm].filter(Boolean).join('；') || '正典人物'}）`];
@@ -580,14 +581,16 @@ function formatFocusedCharacter(
   if (relation) lines.push(`  关系：${relation}`);
   // 关系姿态（R3-9）：同一动作在低／中／高好感下应有不同的人物化反应。
   // 只给五个维度的调整方向，不给台词——给台词会盖掉表演卡声线，反而让各角色在同档位上趋同。
-  // 门槛：只有**确实存在关系数据**的角色才注入。两个理由：
-  //   ① 主角必须排除——他就是玩家，"对玩家的姿态"对他无意义；他既不在 社交.关系 也不在
-  //      playerRelationships（relationships.ts 建档时显式 continue），故本判据自动排除他。
-  //      不用 `runtime.opening?.playerCharacterId`：真机实测该字段在运行时投影与 canon 里都是空，
-  //      判据会恒真而形同虚设（抓包见过「程宗扬·关系姿态：陌路（好感 0）」）。
-  //   ② 素未谋面的路人不该被注入"好感 0＝陌路"——那是默认值不是真实态度，属虚假精确。
+  // 两道门，缺一不可：
+  //   ① 主角显式排除——他就是玩家，"对玩家的姿态"对他无意义。判据用存档里的玩家名，
+  //      **不用** `runtime.opening?.playerCharacterId`：真机实测该字段在运行时投影与 canon 里
+  //      都是空，判据恒真、形同虚设（抓包见过「程宗扬·关系姿态：陌路（好感 0）」）。
+  //      也不能只靠下面的 hasRelationData——主角碰巧不在关系表里，那是巧合而非保证（二审 P2）。
+  //   ② 必须确实存在关系数据——素未谋面的路人不该被注入"好感 0＝陌路"，那是默认值
+  //      不是真实态度，属虚假精确。
+  const isProtagonist = Boolean(playerName) && character.name === playerName;
   const hasRelationData = live !== undefined || canonFav !== undefined;
-  if (hasRelationData) {
+  if (!isProtagonist && hasRelationData) {
     lines.push(formatRelationStance(character.name, { favorability: fav, relationLabel: label }));
   }
   // 亲密档案（R3-8B）：名单门与场景门都在 formatIntimacyProfile 内部执行，此处只负责喂参数。
@@ -612,7 +615,7 @@ function reputationTier(value: number): string {
   return '籍籍无名';
 }
 
-function buildFocusedCharacterPrompt(runtime: StoryRuntime, activeEvents: ScenarioModEvent[], contextText = '', favByName?: Map<string, { fav: number; label: string }>, intimacyGate?: { sceneText: string }): string {
+function buildFocusedCharacterPrompt(runtime: StoryRuntime, activeEvents: ScenarioModEvent[], contextText = '', favByName?: Map<string, { fav: number; label: string }>, intimacyGate?: { sceneText: string }, playerName?: string): string {
   const characters = runtime.canon?.characters || [];
   if (!characters.length) return '';
   const focusedIds = new Set<string>();
@@ -642,7 +645,7 @@ function buildFocusedCharacterPrompt(runtime: StoryRuntime, activeEvents: Scenar
   }
   if (!focusedCharacters.length) return '';
   return `## 当前相关人物正典约束（防 OOC）
-${focusedCharacters.map(character => formatFocusedCharacter(character, runtime, favByName, intimacyGate)).join('\n')}
+${focusedCharacters.map(character => formatFocusedCharacter(character, runtime, favByName, intimacyGate, playerName)).join('\n')}
 
 【人物正典优先级】：
 1. 上述身份、关系、性格、谈吐/底线/目标、以及【身世】【情节】等正典备注是硬约束；不得改写、否定或让角色无因突变。
@@ -805,6 +808,8 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
     好感度?: number;
     当前位置?: { 描述?: string };
   }> | undefined;
+  // 玩家名：关系姿态层据此显式排除主角（见 formatFocusedCharacter 的两道门）。
+  const playerName = String(readPath(saveData, ['角色', '身份', '名字']) || '').trim() || undefined;
   const favByName = new Map<string, { fav: number; label: string }>();
   if (relations && typeof relations === 'object') {
     for (const [key, npc] of Object.entries(relations)) {
@@ -853,7 +858,7 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
     : contextText;
   // 亲密档案门控参数：场景判定只看玩家本轮输入（不含在场名单，避免误判）
   const intimacyGate = { sceneText: contextText };
-  const focusedCharacterSection = buildFocusedCharacterPrompt(runtime, activeEvents, focusContext, favByName, intimacyGate);
+  const focusedCharacterSection = buildFocusedCharacterPrompt(runtime, activeEvents, focusContext, favByName, intimacyGate, playerName);
   const npcPrivateKnowledgeGuard = buildNpcPrivateKnowledgeGuard(runtime);
   const introducedIds = new Set(collectIntroducedCharacterIds(runtime));
   const introducedNames = new Set<string>(

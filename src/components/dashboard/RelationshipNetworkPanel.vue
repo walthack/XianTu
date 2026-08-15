@@ -1851,8 +1851,10 @@ const filteredRelationships = computed<NpcProfile[]>(() => {
 
 // 工具函数
 // 本面板原有一套独立的八级阈值（80/60/40/20/0/-20/-40），与 affinityLadder 的八档
-// 级数相同但边界不同——属规格漏列的第五处魔数。现改为按档位映射到既有 CSS 类，
-// 色阶命名与样式全部不动，只把判据收归单一真值源。
+// 级数相同但边界不同——属规格漏列的第五处魔数。现改为按档位映射到既有 CSS 类：
+// 八个色阶类名与样式全部不动，但**负向边界确实变了**（不是 1:1 平移）——
+// 例如好感 -5 从 dislike 变 neutral、-50 从 enemy 变 hostile，因为新阶梯把
+// 0..19 与 -9..-1 合并成「陌路」，并把 enemy 的门槛从 -41 下移到 -60。这是有意的收归。
 const INTIMACY_CLASS_BY_TIER: Record<AffinityTierId, string> = {
   sworn: 'high',
   close: 'good',

@@ -30,6 +30,7 @@ import {
   type NpcWakeContext,
   type RejectedNpcDecisionEffect,
 } from './npcDecisionCore';
+import { AFFINITY_THRESHOLDS } from './affinityLadder';
 import { recordOffscreenDivergence, type ScenarioDivergence } from './divergenceLedger';
 import { getCanonRailOrder, getCanonRailProfile, isCanonRailChapter } from './canonRail';
 import { updateDivergenceControl, type DivergenceSignal, type WorldPushState } from './divergenceControl';
@@ -2276,9 +2277,11 @@ function reconcileSaveWithRegistry(saveData: SaveData, runtime: RuntimeState & {
 }
 
 // 正典人格底线投影：把 registry principles 落到 社交.关系.<NPC>.人格底线（UI 显示 + 触犯好感暴跌机制）。
-// 与提示词侧一致地按关系门控——好感≥30 或"自己人类"关系才揭示（陌生/敌对时保持"未记录"=尚未摸透）。
+// 与提示词侧一致地按关系门控——达「信重」档或"自己人类"关系才揭示（陌生/敌对时保持"未记录"=尚未摸透）。
 // 只填空的，不覆盖 LLM/玩家已写的底线；每回合运行(好感是动态的,跨过阈值即补)。
-const 底线揭示好感 = 30;
+// ⚠️ 阈值必须与 storyContext 的提示词侧门控同源：两边曾各写死 30，R3-9 迁移时只改了提示词侧
+// 变成 40，持久化侧仍是 30，同一个「底线揭示」概念两侧脱钩（独立二审 P1 抓到）。此后只引用常量。
+const 底线揭示好感 = AFFINITY_THRESHOLDS.bottomLineReveal;
 const 自己人关系 = /同伴|伙伴|队友|道侣|伴侣|挚友|知己|情人|爱慕|恋|妾|后宫|侍妾|奴|婢|主仆|仆|结义|亲密|归顺|臣服|忠/;
 function projectBottomLinesToNpcs(saveData: SaveData): void {
   try {

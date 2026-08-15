@@ -35,7 +35,7 @@ const STANCE_GUIDANCE: Record<AffinityStance, readonly string[]> = {
     '拒绝与设限方式：程式化推脱，留门不封死。',
   ],
   high: [
-    '语气与称谓：亲近但仍是本人的声线——**软化的是距离，不是人格**；称谓可更私人。',
+    '语气与称谓：投入程度提高，但**声线一律以该角色的表演卡为准**——冷硬的人保持冷硬，高好感不等于变热、变软或改口换称谓。',
     '善恶意解释倾向：默认玩家出于善意或已替自己考虑过，愿意先信一步。',
     '主动披露深度：主动交代自己在此局中的位置、顾虑与判断依据。',
     '协助／冒险意愿：愿意押上自己的资源或退路，为玩家担实质风险。',
@@ -43,7 +43,7 @@ const STANCE_GUIDANCE: Record<AffinityStance, readonly string[]> = {
   ],
 };
 
-const INVARIANTS = '不变量（任何姿态都不得越过）：人格底色、当前目标与判断方式、权力意识与身份仪态、正典边界、知识门禁与私有知情边界。姿态只改变表达与投入程度，不改变此人是谁，也不直接改写事件成败或关系数值。';
+const INVARIANTS = '不变量（任何姿态都不得越过）：人格底色、当前目标与判断方式、权力意识与身份仪态、正典边界、知识门禁与私有知情边界。**若本角色另有表演卡，其声线、称谓与禁忌一律优先于本合同**——本合同只调整投入程度与表达取向，不改变此人是谁，也不直接改写事件成败或关系数值。';
 
 export interface RelationStanceContext {
   favorability: number;
@@ -64,6 +64,8 @@ export function formatRelationStance(name: string, context: RelationStanceContex
   const tier = tierOf(fav);
   const stance = context.stance ?? stanceOf(fav);
   const label = context.relationLabel ? `，关系标签「${context.relationLabel}」` : '';
-  const head = `【${name}·关系姿态·受限渲染合同】当前对玩家：${tier.name}（好感 ${fav}${label}）——${tier.gist}。只按以下五项调整表达：`;
+  // 刻意不把 tier.gist（「已认定必须除掉你」这类）写进 LLM 合同：它不属于五个受限维度，
+  // 措辞又比五条指引更强，实测会被当成第六条、更硬的指令使用。gist 只服务 UI 与文档。
+  const head = `【${name}·关系姿态·受限渲染合同】当前对玩家：${tier.name}（好感 ${fav}${label}）。只按以下五项调整表达：`;
   return [head, ...STANCE_GUIDANCE[stance].map(line => `  · ${line}`), `  ${INVARIANTS}`].join('\n');
 }

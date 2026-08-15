@@ -126,10 +126,15 @@ function crossedWithMargin(fav: number, from: AffinityStance, to: AffinityStance
 }
 
 /**
- * 带滞回的姿态投影：**这是运行时唯一该用的姿态入口**。
+ * 带滞回的姿态投影。
  *
- * 路线图 R3-9 G1 明确要求"避免好感增减 1 点造成角色瞬间翻脸"，故跨档需同时满足
+ * 路线图 R3-9 G1 要求"避免好感增减 1 点造成角色瞬间翻脸"，故跨档需同时满足
  * ①越过阈值 ≥3 点 ②新档位维持 ≥1 游戏日。任一不满足则保持原姿态。
+ *
+ * ⚠️ **当前未接线**（独立二审 P1）：运行时注入走的是 `stanceOf` 瞬时投影，
+ * 因此 40／−10 边界上 1 点变化仍会立刻翻档。接线需要把 `StanceState` 持久化，
+ * 而 `storyContext` 是只读的 prompt 构建层，得由有存档写入权的一侧调用本函数并回传
+ * `stance` 给 `formatRelationStance`。在那之前不要宣称滞回已生效。
  *
  * 纯函数：不修改入参，返回新状态由调用方落存档。
  */
@@ -183,10 +188,13 @@ export function createAffinityCommandGate() {
     const matched = AFFINITY_COMMAND_KEY_RE.exec(key);
     if (!matched) return { command: cmd };
 
-    if (cmd.action === 'set') {
-      return { command: null, warning: `拒绝模型 set 好感度（写入权归引擎）：${key}` };
+    // 白名单：只有 add 放行，其余动作一律拒绝。
+    // 曾用黑名单（只拒 set）——被独立二审攻破：`delete 社交.关系.<NPC>.好感度` 会走
+    // executor 的 `unset`，字段消失后又被 dataRepair 补回 0，等价于一次无上限的归零；
+    // 配合同回合 add 可以从 80 跳到 15（净 -65），完全绕过 perTurn。
+    if (cmd.action !== 'add') {
+      return { command: null, warning: `拒绝模型对好感度执行 ${String(cmd.action)}（只允许 add，写入权归引擎）：${key}` };
     }
-    if (cmd.action !== 'add') return { command: cmd };
 
     const delta = Number(cmd.value);
     if (!Number.isFinite(delta)) return { command: cmd };

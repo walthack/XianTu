@@ -133,12 +133,39 @@ test('阈值锚点为用户裁定值（deep 已由 55 迁到 60）', async () =>
   assert.equal(tierOf(AFFINITY_THRESHOLDS.intimacyShallow).id, 'acquainted');
 });
 
-test('intimacyProfiles 的 deep 层随阈值迁移，55 不再解锁', async () => {
+test('intimacyProfiles 的 deep 层随阈值迁移：55 不解锁、60 解锁（断具体文本，不比长度）', async () => {
   const { formatIntimacyProfile } = await loadTs('../src/modules/scenarioMods/intimacyProfiles.ts');
   const scene = '两人同榻，宽衣解带。';
+  const DEEP = '羞耻感常态化';          // 吕雉 deep 层原文
+  const SHALLOW = '绝境求庇后委身';      // shallow 层，两档都该有
+  const at54 = formatIntimacyProfile('吕雉', { sceneText: scene, favor: 54 });
   const at55 = formatIntimacyProfile('吕雉', { sceneText: scene, favor: 55 });
+  const at59 = formatIntimacyProfile('吕雉', { sceneText: scene, favor: 59 });
   const at60 = formatIntimacyProfile('吕雉', { sceneText: scene, favor: 60 });
-  assert.ok(at60.length > at55.length, '好感 60 应比 55 多揭示一层');
+  for (const [label, text] of [['54', at54], ['55（旧阈值）', at55], ['59', at59]]) {
+    assert.ok(!text.includes(DEEP), `好感 ${label} 不应解锁 deep 层`);
+    assert.ok(text.includes(SHALLOW), `好感 ${label} 应仍有 shallow 层`);
+  }
+  assert.ok(at60.includes(DEEP), '好感 60 应解锁 deep 层');
+  // 硬边界任何档位都在
+  assert.ok(at54.includes('处女功法') || at54.includes('处子之身'), 'hardLimits 不受分层影响');
+});
+
+test('高档姿态不得盖掉表演卡声线（贾文和「他不会变热」）', async () => {
+  const { formatRelationStance } = await stancePromise;
+  const high = formatRelationStance('贾文和', { favorability: 90 });
+  // 曾写「亲近…称谓可更私人」，与其表演卡的冷淡短句、不得变热直接冲突（二审 P2）
+  assert.ok(!high.includes('称谓可更私人'), '不得指示改口换称谓');
+  assert.ok(high.includes('表演卡'), '高档语气项必须把声线权交还表演卡');
+  assert.match(high, /不等于变热|保持冷硬/, '必须显式否定"高好感=变热"');
+  assert.ok(high.includes('表演卡'), '不变量段须声明表演卡优先');
+});
+
+test('合同头部不得携带 tier.gist（它不属于五维度且措辞更强）', async () => {
+  const { formatRelationStance } = await stancePromise;
+  const nemesis = formatRelationStance('鬼巫王', { favorability: -80 });
+  assert.ok(nemesis.includes('仇雠'), '档位名仍要有');
+  assert.ok(!nemesis.includes('已认定必须除掉你'), 'gist 不得进 LLM 合同，只服务 UI/文档');
 });
 
 // —— 姿态渲染合同 ——
@@ -185,7 +212,7 @@ test('门禁拒绝模型 set 好感度（写入权归引擎）', async () => {
   const gate = createAffinityCommandGate();
   const result = gate({ action: 'set', key: '社交.关系.吕雉.好感度', value: 90 });
   assert.equal(result.command, null);
-  assert.match(result.warning, /拒绝模型 set 好感度/);
+  assert.match(result.warning, /拒绝模型对好感度执行 set/);
 });
 
 test('门禁放行 add，且不干扰其它路径的命令', async () => {
@@ -251,18 +278,55 @@ test('门禁对非数值 add 不做处理，交由既有校验链', async () => 
   assert.deepEqual(gate(cmd).command, cmd);
 });
 
-test('主角不得被注入关系姿态（真机抓包实测缺陷的回归）', async () => {
-  // 曾在 OpenRouter 主叙事请求里抓到「程宗扬·关系姿态·受限渲染合同：陌路（好感 0）」——
-  // 主角就是玩家，"对玩家的姿态"对他无意义，好感 0 只是因为他不在 社交.关系 里。
-  // 表演卡与亲密档案靠名单门天然规避，姿态层是全量注入，必须在 storyContext 显式排除。
+// —— 命令门禁的绕过面（独立二审 P1：delete 可绕过 ±15） ——
+
+test('门禁拒绝 delete 好感度（曾可绕过 perTurn 归零）', async () => {
+  const { createAffinityCommandGate } = await ladderPromise;
+  const gate = createAffinityCommandGate();
+  // 攻击序列：好感 80 时 delete 字段 → dataRepair 补回 0 → 同回合 add +15 → 15，净 -65。
+  const del = gate({ action: 'delete', key: '社交.关系.吕雉.好感度' });
+  assert.equal(del.command, null, 'delete 必须被拒绝');
+  assert.match(del.warning, /只允许 add/);
+});
+
+test('门禁对未知/其它动作一律拒绝（白名单而非黑名单）', async () => {
+  const { createAffinityCommandGate } = await ladderPromise;
+  const gate = createAffinityCommandGate();
+  for (const action of ['push', 'pull', 'unset', 'merge', undefined, '']) {
+    const r = gate({ action, key: '社交.关系.吕雉.好感度', value: 1 });
+    assert.equal(r.command, null, `动作 ${String(action)} 应被拒绝`);
+  }
+});
+
+test('门禁不误伤其它路径的 delete', async () => {
+  const { createAffinityCommandGate } = await ladderPromise;
+  const gate = createAffinityCommandGate();
+  const cmd = { action: 'delete', key: '社交.关系.吕雉.当前状态' };
+  assert.deepEqual(gate(cmd).command, cmd);
+});
+
+test('姿态注入的两道门：主角显式排除 + 需有真实关系数据', async () => {
+  // 缺陷史：真机抓包发现主角被注入「程宗扬·关系姿态：陌路（好感 0）」。
+  // 第一版修复用 runtime.opening?.playerCharacterId，该字段在运行时投影与 canon 中实测均为空，
+  // 判据恒真、完全没生效；第二版才改为「玩家名 + 关系数据」两道门。
+  // 这里断言两道门的判据都在，且顺序上主角优先——源码级断言是权宜（formatFocusedCharacter
+  // 未导出），但两条判据一起锁比只锁一条更难被无意改坏。
   const source = await import('node:fs').then(fs =>
     fs.readFileSync(new URL('../src/modules/scenarioMods/storyContext.ts', import.meta.url), 'utf8'));
   const call = source.indexOf('formatRelationStance(character.name');
   assert.ok(call > 0, 'storyContext 应调用 formatRelationStance');
-  const guardWindow = source.slice(Math.max(0, call - 900), call);
-  assert.match(guardWindow, /if \(hasRelationData\)/, '姿态注入必须被关系数据判据包裹');
-  assert.match(guardWindow, /const hasRelationData = live !== undefined \|\| canonFav !== undefined/,
-    '判据须基于真实关系数据；opening.playerCharacterId 在运行时与 canon 中实测均为空，用它会恒真');
+  const guardWindow = source.slice(Math.max(0, call - 1200), call);
+  assert.match(guardWindow, /const isProtagonist = Boolean\(playerName\) && character\.name === playerName/,
+    '必须有基于玩家名的显式主角判据');
+  assert.match(guardWindow, /if \(!isProtagonist && hasRelationData\)/, '两道门都要生效');
+  // 只禁止把它当**判据**用；注释里提到这个字段名（解释为什么不用）是允许的
+  assert.ok(!/character\.id\s*!==\s*runtime\.opening\?\.playerCharacterId/.test(guardWindow),
+    '不得回退到以 opening.playerCharacterId 为判据 —— 该字段实测为空，判据会恒真');
+  // playerName 必须真的被取到并一路传下来，否则第一道门永远是 false
+  assert.match(source, /const playerName = String\(readPath\(saveData, \['角色', '身份', '名字'\]\)/,
+    'playerName 必须从存档取');
+  assert.match(source, /formatFocusedCharacter\(character, runtime, favByName, intimacyGate, playerName\)/,
+    'playerName 必须传进 formatFocusedCharacter');
 });
 
 test('姿态可由外部传入以覆盖瞬时投影（供滞回接线）', async () => {
