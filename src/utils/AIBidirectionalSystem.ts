@@ -9,6 +9,7 @@ import { set, get, unset, cloneDeep } from 'lodash';
 import { getTavernHelper, isTavernEnv } from '@/utils/tavern';
 import { createAffinityCommandGate } from '@/modules/scenarioMods/affinityLadder';
 import { affinityCapFor } from '@/modules/scenarioMods/affinityCaps';
+import { computePresentNames } from '@/modules/scenarioMods/presence';
 import { toast } from './toast';
 import { useGameStateStore } from '@/stores/gameStateStore';
 import { useCharacterStore } from '@/stores/characterStore'; // 导入角色商店
@@ -225,11 +226,21 @@ class AIBidirectionalSystemClass {
   private getFocusedNpcNames(stateForAI: any): string[] {
     const relationships = stateForAI?.社交?.关系;
     if (!relationships || typeof relationships !== 'object') return [];
+    // 在场收窄（2026-08-15）：此前只看「实时关注」标志，实测存档 24/27 全为 true——
+    // 每回合要求模型推演散在中州与南荒各地的 24 个人的内心想法（其中还有关系标签
+    // 已是「被杀死」的），token 大量花在玩家看不见的地方，且各回合独立编造、前后不接。
+    // 现在标志只决定「是否候选」，真正入选还须**当前在场**；离场者的动态改由按需结算处理。
+    const present = computePresentNames({
+      playerLocation: String(stateForAI?.角色?.位置?.描述 || ''),
+      relations: relationships,
+    });
     return Object.entries(relationships)
-      .filter(([, npc]) => {
+      .filter(([name, npc]) => {
         if (!npc || typeof npc !== 'object') return false;
         const flag = (npc as any).实时关注;
-        return flag === true || flag === 1 || flag === 'true' || flag === 'True' || flag === 'TRUE' || flag === '是';
+        const tracked = flag === true || flag === 1 || flag === 'true' || flag === 'True' || flag === 'TRUE' || flag === '是';
+        if (!tracked) return false;
+        return present.has(String(name)) || present.has(String((npc as any).名字 || ''));
       })
       .map(([name]) => String(name))
       .filter((name) => name.trim().length > 0);

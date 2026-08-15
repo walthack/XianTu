@@ -325,7 +325,8 @@ test('姿态注入的两道门：主角显式排除 + 需有真实关系数据',
   // playerName 必须真的被取到并一路传下来，否则第一道门永远是 false
   assert.match(source, /const playerName = String\(readPath\(saveData, \['角色', '身份', '名字'\]\)/,
     'playerName 必须从存档取');
-  assert.match(source, /formatFocusedCharacter\(character, runtime, favByName, intimacyGate, playerName\)/,
+  // 只验关键参数在列，不锁完整签名——锁签名会在每次加参时误报（本条已因此断过一次）
+  assert.match(source, /formatFocusedCharacter\([^)]*\bplayerName\b/,
     'playerName 必须传进 formatFocusedCharacter');
 });
 

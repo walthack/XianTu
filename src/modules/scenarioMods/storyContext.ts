@@ -8,6 +8,7 @@ import { findRegistryIdentitiesByContext, getRegistrySpeechStyle } from './chara
 import { formatIntimacyProfile } from './intimacyProfiles';
 import { formatRelationStance } from './relationStance';
 import { formatAffinityCap } from './affinityCaps';
+import { computePresentNames, formatAbsenceGuard } from './presence';
 import {
   AFFINITY_THRESHOLDS,
   MISMATCH_HOSTILE_ABOVE,
@@ -489,6 +490,7 @@ function formatFocusedCharacter(
   favByName?: Map<string, { fav: number; label: string }>,
   intimacyGate?: { sceneText: string },
   playerName?: string,
+  presentNames?: Set<string>,
 ): string {
   const profile = character.profile || {};
   const lines: string[] = [`- ${character.name}（${[character.gender, character.role, character.realm].filter(Boolean).join('；') || '正典人物'}）`];
@@ -597,6 +599,11 @@ function formatFocusedCharacter(
     const capLine = formatAffinityCap(character.name, label);
     if (capLine) lines.push(capLine);
   }
+  // 在场门槛：档案照常注入（防 OOC），但不在场者不得登场——挡住"玩家点个名就把人召唤出来"。
+  // presentNames 未传入时不做判定，保持既有行为。
+  if (presentNames && !isProtagonist && !presentNames.has(character.name)) {
+    lines.push(formatAbsenceGuard(character.name));
+  }
   // 亲密档案（R3-8B）：名单门与场景门都在 formatIntimacyProfile 内部执行，此处只负责喂参数。
   if (intimacyGate) {
     const intimacy = formatIntimacyProfile(character.name, {
@@ -619,7 +626,7 @@ function reputationTier(value: number): string {
   return '籍籍无名';
 }
 
-function buildFocusedCharacterPrompt(runtime: StoryRuntime, activeEvents: ScenarioModEvent[], contextText = '', favByName?: Map<string, { fav: number; label: string }>, intimacyGate?: { sceneText: string }, playerName?: string): string {
+function buildFocusedCharacterPrompt(runtime: StoryRuntime, activeEvents: ScenarioModEvent[], contextText = '', favByName?: Map<string, { fav: number; label: string }>, intimacyGate?: { sceneText: string }, playerName?: string, presentNames?: Set<string>): string {
   const characters = runtime.canon?.characters || [];
   if (!characters.length) return '';
   const focusedIds = new Set<string>();
@@ -649,7 +656,7 @@ function buildFocusedCharacterPrompt(runtime: StoryRuntime, activeEvents: Scenar
   }
   if (!focusedCharacters.length) return '';
   return `## 当前相关人物正典约束（防 OOC）
-${focusedCharacters.map(character => formatFocusedCharacter(character, runtime, favByName, intimacyGate, playerName)).join('\n')}
+${focusedCharacters.map(character => formatFocusedCharacter(character, runtime, favByName, intimacyGate, playerName, presentNames)).join('\n')}
 
 【人物正典优先级】：
 1. 上述身份、关系、性格、谈吐/底线/目标、以及【身世】【情节】等正典备注是硬约束；不得改写、否定或让角色无因突变。
@@ -862,7 +869,33 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
     : contextText;
   // 亲密档案门控参数：场景判定只看玩家本轮输入（不含在场名单，避免误判）
   const intimacyGate = { sceneText: contextText };
-  const focusedCharacterSection = buildFocusedCharacterPrompt(runtime, activeEvents, focusContext, favByName, intimacyGate, playerName);
+  // 在场判定（presence.ts 单一判据）：活跃事件 / 开场声明 / 位置同建筑。
+  // 事件那一路同时兜住位置字段滞后——位置由 LLM 维护，实测会落后于剧情。
+  const eventCharacterNames = activeEvents
+    .flatMap(event => event.relatedCharacterIds || [])
+    .map(id => characters.find(character => character.id === id)?.name)
+    .filter((name): name is string => !!name);
+  const featuredCharacterNames = (runtime.opening?.featuredCharacterIds || [])
+    .map(id => characters.find(character => character.id === id)?.name)
+    .filter((name): name is string => !!name);
+  // 近期正文：只取 assistant 侧的最近两条，**不含玩家输入**（点名≠在场）。
+  const recentNarrative = (() => {
+    const history = readPath(saveData, ['系统', '历史', '叙事']);
+    if (!Array.isArray(history)) return '';
+    return history
+      .filter(entry => entry && typeof entry === 'object' && (entry as { role?: unknown }).role !== 'user')
+      .slice(-2)
+      .map(entry => String((entry as { content?: unknown }).content || ''))
+      .join('\n');
+  })();
+  const presentNames = computePresentNames({
+    playerLocation: String(readPath(saveData, ['角色', '位置', '描述']) || ''),
+    relations,
+    eventCharacterNames,
+    featuredCharacterNames,
+    recentNarrative,
+  });
+  const focusedCharacterSection = buildFocusedCharacterPrompt(runtime, activeEvents, focusContext, favByName, intimacyGate, playerName, presentNames);
   const npcPrivateKnowledgeGuard = buildNpcPrivateKnowledgeGuard(runtime);
   const introducedIds = new Set(collectIntroducedCharacterIds(runtime));
   const introducedNames = new Set<string>(
