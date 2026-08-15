@@ -144,6 +144,9 @@ export function buildExpandScenarioInitialization(
       contentAccess: structuredClone(mod.rules.contentAccess || []),
       currentChapterId: getInitialScenarioChapterId(mod),
       flags: { ...(mod.scenario.initialFlags || {}) },
+      // 新档从建档起就是空数组：让"字段不存在"只代表旧档。
+      // 否则新档第一轮也会走"首次登记不补发"分支，把真实完成的第一个事件吞掉。
+      affinityGrantedEventIds: [],
       canon: {
         factions: structuredClone(mod.canon?.factions || []),
         locations: structuredClone(mod.canon?.locations || []),

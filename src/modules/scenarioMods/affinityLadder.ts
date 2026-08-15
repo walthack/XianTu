@@ -81,6 +81,23 @@ export const AFFINITY_LIMITS = {
   bottomLineBreach: 60,
 } as const;
 
+/**
+ * 共历事件的好感增量（R3-9 §7 的"正典锚点"一类）。
+ *
+ * 立项理由：此前好感**怎么变**几乎全靠 LLM 自由裁量——门禁只管"不超过 ±15"，
+ * 不管"该不该加、加多少"。于是陪人闯过生死关可能 +5、寒暄两句可能 +12，
+ * 前面所有档位／姿态／上限都建立在一个随机游走的数值上，玩家感受不到因果。
+ *
+ * 这里给出**确定性锚点**：一起经历过的事，关系就该有变化，且变化可预期。
+ * 数值是初值，按实玩手感调整——机制有没有是结构问题，涨多快是数值问题。
+ */
+export const AFFINITY_EVENT_GRANT = {
+  /** 承重剧情事件（critical）。 */
+  critical: 8,
+  /** 普通事件。 */
+  normal: 3,
+} as const;
+
 /** 滞回参数：跨档需越过阈值这么多点，且新档维持这么多游戏日。 */
 const HYSTERESIS_MARGIN = 3;
 const HYSTERESIS_DAYS = 1;

@@ -32,7 +32,14 @@ import {
 } from './npcDecisionCore';
 import { AFFINITY_THRESHOLDS } from './affinityLadder';
 import { syncAcquaintanceLedger, type AcquaintanceLedger } from './acquaintanceLedger';
-import { gameDayOf, projectStance, type StanceState } from './affinityLadder';
+import {
+  AFFINITY_EVENT_GRANT,
+  clampAffinity,
+  gameDayOf,
+  projectStance,
+  type StanceState,
+} from './affinityLadder';
+import { affinityCapFor } from './affinityCaps';
 import { recordOffscreenDivergence, type ScenarioDivergence } from './divergenceLedger';
 import { getCanonRailOrder, getCanonRailProfile, isCanonRailChapter } from './canonRail';
 import { updateDivergenceControl, type DivergenceSignal, type WorldPushState } from './divergenceControl';
@@ -49,6 +56,11 @@ export interface ScenarioProgressState {
   completedChapterIds: string[];
   activeEventIds: string[];
   completedEventIds: string[];
+  /**
+   * 已结算共历好感的事件（R3-9 §7）。**字段存在与否有语义**：
+   * 不存在＝旧档，首次推进时只登记不补发；空数组＝新档，从第一个事件起正常给分。
+   */
+  affinityGrantedEventIds?: string[];
   playerKnowledge?: Record<string, ScenarioPlayerKnowledgeFact>;
   pathReceipts?: Record<string, ScenarioPathReceipt>;
   npcPrivateKnowledge?: Record<string, ScenarioNpcPrivateKnowledgeFact>;
@@ -2402,6 +2414,76 @@ function updateStanceStates(saveData: SaveData, runtime: RuntimeState & { modId?
   }
 }
 
+/**
+ * 共历事件的好感结算（R3-9 §7「正典锚点」）。
+ *
+ * 一起经历过的事，关系就该有变化——这是好感变化**唯一确定的因果来源**，
+ * 其余仍由模型在 ±15 内裁量。三条纪律：
+ *
+ *   1. **只算玩家亲历**：`offscreenResolvedEventIds` 里的场外结算不给分。
+ *      没参与的事凭什么拉近关系。
+ *   2. **每个事件只结算一次**：已结算的记进 `affinityGrantedEventIds`，
+ *      避免每回合重复给分（completedEventIds 是累积的）。
+ *   3. **仍受 cap 约束**：立场先于情感的角色不会因为一起做了事就突破天花板。
+ *
+ * 走引擎通道，不占模型的 ±15 单回合预算——否则引擎给的分会被日常加减挤掉。
+ */
+function settleSharedExperienceAffinity(saveData: SaveData, runtime: RuntimeState & { modId?: string }): void {
+  try {
+    const rt = runtime as unknown as {
+      affinityGrantedEventIds?: string[];
+      completedEventIds?: string[];
+      offscreenResolvedEventIds?: string[];
+      events?: ScenarioModEvent[];
+      canon?: { characters?: Array<{ id: string; name: string }> };
+    };
+    const relations = (saveData as unknown as { 社交?: { 关系?: Record<string, unknown> } })?.社交?.关系;
+    if (!relations || typeof relations !== 'object') return;
+
+    // 旧档首次结算：**只登记不补发**。存档里的好感值本身已经包含那些事件的影响
+    // （当时由模型一路加上来），补发等于重复计算。真机实测过一次：某旧档已完成 7 个事件，
+    // 首次结算让小紫 40→64，一次跳两档。与相识账本的 backfilled 同构，只是这里后果更实——
+    // 账本回填只是记录，好感补发直接改数值。
+    const isFirstSettlement = rt.affinityGrantedEventIds === undefined;
+    const granted = new Set(rt.affinityGrantedEventIds || []);
+    const offscreen = new Set(rt.offscreenResolvedEventIds || []);
+    const pending = (rt.completedEventIds || []).filter(id => !granted.has(id) && !offscreen.has(id));
+    if (!pending.length) {
+      if (isFirstSettlement) rt.affinityGrantedEventIds = [];
+      return;
+    }
+    if (isFirstSettlement) {
+      rt.affinityGrantedEventIds = [...new Set([...(rt.completedEventIds || [])])];
+      return;
+    }
+
+    const nameById = new Map((rt.canon?.characters || []).map(item => [item.id, item.name]));
+    const eventById = new Map((rt.events || []).map(event => [event.id, event]));
+
+    for (const eventId of pending) {
+      const event = eventById.get(eventId);
+      granted.add(eventId);
+      if (!event) continue;
+      const grant = isCriticalStoryEvent(event) ? AFFINITY_EVENT_GRANT.critical : AFFINITY_EVENT_GRANT.normal;
+      for (const characterId of event.relatedCharacterIds || []) {
+        const name = nameById.get(characterId);
+        if (!name) continue;
+        const npc = relations[name] as { 好感度?: unknown; 与玩家关系?: unknown } | undefined;
+        if (!npc || typeof npc !== 'object') continue;
+        const current = Number(npc.好感度) || 0;
+        const label = typeof npc.与玩家关系 === 'string' ? npc.与玩家关系 : undefined;
+        const cap = affinityCapFor(name, label);
+        const ceiling = cap ? cap.cap : 100;
+        if (current >= ceiling) continue;
+        npc.好感度 = clampAffinity(Math.min(ceiling, current + grant));
+      }
+    }
+    rt.affinityGrantedEventIds = [...granted];
+  } catch (error) {
+    console.warn('[剧本模组] 共历事件好感结算失败（不阻断回合）:', error);
+  }
+}
+
 export function advanceScenarioRuntime(saveData: SaveData): {
   saveData: SaveData;
   transitions: ScenarioRuntimeTransition[];
@@ -2412,6 +2494,7 @@ export function advanceScenarioRuntime(saveData: SaveData): {
   reconcileSaveWithRegistry(next, runtime as RuntimeState & { modId?: string });
   projectBottomLinesToNpcs(next);
   updateAcquaintanceLedger(next, runtime as RuntimeState & { modId?: string });
+  settleSharedExperienceAffinity(next, runtime as RuntimeState & { modId?: string });
   updateStanceStates(next, runtime as RuntimeState & { modId?: string });
   normalizeRuntimeFlags(runtime);
   settleReadyOpportunityCompletionFlags(runtime);
