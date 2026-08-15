@@ -484,6 +484,17 @@ test('凤凰宝典两人的势力级利害必须在 hardLimits', async () => {
   assert.match(le, /第七重|上限/, '须写明修为封顶的具体后果');
 });
 
+test('吕雉的破界后果与证据强度限定必须在 hardLimits', async () => {
+  // 正典只给了两个结论词（"反噬吸干""开封筹码"），没给机制细节，反噬承受方未明确。
+  // 与小紫的玉盏铃花（作者后记背书 + 五灵石解法 + 进度 3/5）证据强度差一档，
+  // 故档案须显式限定"不得演出破界及其后果"，避免 LLM 拿两个词自行发挥。
+  const { INTIMACY_PROFILES } = await loadTs('../src/modules/scenarioMods/intimacyProfiles.ts');
+  const lv = INTIMACY_PROFILES.find(p => p.names.includes('吕雉')).hardLimits.join('');
+  assert.match(lv, /反噬吸干/, '正典结论一必须在案');
+  assert.match(lv, /开封/, '正典结论二（预留的未来事件）必须在案');
+  assert.match(lv, /未明确|不得演出破界/, '证据缺口须显式标注，不得让模型自行补完');
+});
+
 test('无专属档案的角色回落通用五维，不报错', async () => {
   const { formatRelationStance } = await stancePromise;
   const text = formatRelationStance('某路人甲', { favorability: 50 });
