@@ -423,6 +423,22 @@ test('每份档案都有本色锚，且不得为空壳', async () => {
   }
 });
 
+test('杨玉环高档：逃是过程不是结论，但仍不得从容献身', async () => {
+  // 缺陷史：初版把"真凑近就逃"写成高档的**结论**，等于把她钉死在长弧起点，
+  // 与 intimacyProfiles 的 bonded 层「被压制后动情，长弧终点是究极尤物」直接打架——
+  // 好感 80+ 时两个注入会同时出现，互相矛盾。
+  const { formatRelationStance } = await stancePromise;
+  const high = formatRelationStance('杨玉环', { favorability: 85 });
+  assert.match(high, /逃.{0,4}是过程不是结论/, '必须写明逃不是结论');
+  assert.ok(high.includes('允许被压制后动情'), '高档须与亲密档案 bonded 层衔接');
+  assert.ok(high.includes('不是从容接受'), '节奏铁律：不得从容献身');
+  assert.ok(high.includes('不得写她从容献身'), '铁律须在本色锚，任何档位都注入');
+  // 低档回到弧线起点
+  const low = formatRelationStance('杨玉环', { favorability: -50 });
+  assert.ok(low.includes('逃得干脆决绝'), '低档应退回起点的逃跑节奏');
+  assert.ok(low.includes('不得写她从容献身'), '铁律在低档同样注入');
+});
+
 test('李师师的正典硬边界（无肉体关系）写进本色锚', async () => {
   const { formatRelationStance } = await stancePromise;
   const high = formatRelationStance('李师师', { favorability: 90 });
