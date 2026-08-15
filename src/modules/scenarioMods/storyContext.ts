@@ -7,6 +7,7 @@ import { formatDivergencePrompt, type ScenarioDivergence } from './divergenceLed
 import { findRegistryIdentitiesByContext, getRegistrySpeechStyle } from './characterResolver';
 import { formatIntimacyProfile } from './intimacyProfiles';
 import { formatRelationStance } from './relationStance';
+import { formatAffinityCap } from './affinityCaps';
 import {
   AFFINITY_THRESHOLDS,
   MISMATCH_HOSTILE_ABOVE,
@@ -592,6 +593,9 @@ function formatFocusedCharacter(
   const hasRelationData = live !== undefined || canonFav !== undefined;
   if (!isProtagonist && hasRelationData) {
     lines.push(formatRelationStance(character.name, { favorability: fav, relationLabel: label }));
+    // 关系上限：说明这份距离感的由来，让模型演得出而不是硬顶着不亲近。
+    const capLine = formatAffinityCap(character.name, label);
+    if (capLine) lines.push(capLine);
   }
   // 亲密档案（R3-8B）：名单门与场景门都在 formatIntimacyProfile 内部执行，此处只负责喂参数。
   if (intimacyGate) {

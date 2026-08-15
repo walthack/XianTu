@@ -179,7 +179,14 @@ export interface AffinityGateDecision {
  *
  * 只作用于 LLM 命令通道；引擎自身不经过此门。
  */
-export function createAffinityCommandGate() {
+export interface AffinityGateContext {
+  /** 取该 NPC 当前的好感与关系标签，用于执行上限（见 affinityCaps）。缺省则不执行上限。 */
+  lookup?: (npcName: string) => { favorability: number; relationLabel?: string } | undefined;
+  /** 上限查询。注入而非直接 import，避免 affinityLadder 反向依赖 affinityCaps。 */
+  capOf?: (npcName: string, relationLabel?: string) => { cap: number; reason: string } | null;
+}
+
+export function createAffinityCommandGate(context: AffinityGateContext = {}) {
   const budget = new Map<string, number>();
   return function gate(command: unknown): AffinityGateDecision {
     if (!command || typeof command !== 'object' || Array.isArray(command)) return { command: command as null };
@@ -202,12 +209,38 @@ export function createAffinityCommandGate() {
     const npc = matched[1];
     const used = budget.get(npc) ?? 0;
     const limit = AFFINITY_LIMITS.perTurn;
-    const allowed = Math.max(-limit, Math.min(limit, used + delta)) - used;
+    let allowed = Math.max(-limit, Math.min(limit, used + delta)) - used;
+
+    // 好感上限（affinityCaps）：在**命令层**削掉超出部分，而不是让数值涨上去、再在
+    // 表现层假装不亲近——那样存档与叙事会脱节，玩家看到的数字和人物态度对不上。
+    // 只削正向增量：cap 不阻止关系恶化。
+    let capNote = '';
+    if (allowed > 0 && context.lookup && context.capOf) {
+      const current = context.lookup(npc);
+      const capEntry = current ? context.capOf(npc, current.relationLabel) : null;
+      if (capEntry && current) {
+        const room = capEntry.cap - current.favorability;
+        if (room <= 0) {
+          return { command: null, warning: `好感已达上限 ${capEntry.cap}（${capEntry.reason}），丢弃：${key} +${delta}` };
+        }
+        if (allowed > room) {
+          capNote = `，触及上限 ${capEntry.cap}`;
+          allowed = room;
+        }
+      }
+    }
+
     if (allowed === 0) {
       return { command: null, warning: `好感度单回合额度已用尽，丢弃：${key} ${delta > 0 ? '+' : ''}${delta}` };
     }
     budget.set(npc, used + allowed);
     if (allowed === delta) return { command: cmd };
+    if (capNote) {
+      return {
+        command: { ...cmd, value: allowed },
+        warning: `好感度钳制 ${delta} → ${allowed}（${key}${capNote}）`,
+      };
+    }
     return {
       command: { ...cmd, value: allowed },
       warning: `好感度单回合净变化钳制 ${delta} → ${allowed}（${key}，本回合已用 ${used}）`,

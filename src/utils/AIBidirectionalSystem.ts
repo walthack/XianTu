@@ -8,6 +8,7 @@
 import { set, get, unset, cloneDeep } from 'lodash';
 import { getTavernHelper, isTavernEnv } from '@/utils/tavern';
 import { createAffinityCommandGate } from '@/modules/scenarioMods/affinityLadder';
+import { affinityCapFor } from '@/modules/scenarioMods/affinityCaps';
 import { toast } from './toast';
 import { useGameStateStore } from '@/stores/gameStateStore';
 import { useCharacterStore } from '@/stores/characterStore'; // 导入角色商店
@@ -3066,7 +3067,18 @@ ${saveDataJson}`;
 
     // 好感度写入权门禁（R3-9 §7 混合裁定）。逻辑在 affinityLadder，本处只按回合建实例。
     // 本函数只处理 LLM 返回的 tavern_commands，引擎路径（关卡初始化、确定性降档）不经过这里。
-    const gateAffinity = createAffinityCommandGate();
+    // 注入 lookup/capOf 后，好感上限（affinityCaps）也在此层执行。
+    const gateAffinity = createAffinityCommandGate({
+      lookup: (npcName: string) => {
+        const npc = get(saveData, `社交.关系.${npcName}`) as { 好感度?: unknown; 与玩家关系?: unknown } | undefined;
+        if (!npc || typeof npc !== 'object') return undefined;
+        return {
+          favorability: Number(npc.好感度) || 0,
+          relationLabel: typeof npc.与玩家关系 === 'string' ? npc.与玩家关系 : undefined,
+        };
+      },
+      capOf: (npcName: string, relationLabel?: string) => affinityCapFor(npcName, relationLabel),
+    });
 
     const isInventoryRootSet = (cmd: any): boolean => (
       cmd?.action === 'set' &&

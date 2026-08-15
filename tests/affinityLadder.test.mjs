@@ -529,6 +529,67 @@ test('吕雉的破界后果与证据强度限定必须在 hardLimits', async () 
   assert.match(lv, /TODO|待补/, '交易线未设计前须保留待补标记');
 });
 
+// —— 好感上限（规格 §9 待拍板项 C，2026-08-15 批准） ——
+
+test('上限在命令层生效：达到上限后正向 add 被丢弃', async () => {
+  const { createAffinityCommandGate } = await ladderPromise;
+  const { affinityCapFor } = await loadTs('../src/modules/scenarioMods/affinityCaps.ts');
+  const gate = createAffinityCommandGate({
+    lookup: () => ({ favorability: 39, relationLabel: '政治盟友' }),
+    capOf: affinityCapFor,
+  });
+  const r = gate({ action: 'add', key: '社交.关系.吕雉.好感度', value: 10 });
+  assert.equal(r.command, null, '已达上限应丢弃');
+  assert.match(r.warning, /已达上限/);
+});
+
+test('上限只削正向，不阻止关系恶化', async () => {
+  const { createAffinityCommandGate } = await ladderPromise;
+  const { affinityCapFor } = await loadTs('../src/modules/scenarioMods/affinityCaps.ts');
+  const gate = createAffinityCommandGate({
+    lookup: () => ({ favorability: 39, relationLabel: '政治盟友' }),
+    capOf: affinityCapFor,
+  });
+  assert.equal(gate({ action: 'add', key: '社交.关系.吕雉.好感度', value: -10 }).command.value, -10);
+});
+
+test('上限会把跨越上限的增量削到刚好触顶', async () => {
+  const { createAffinityCommandGate } = await ladderPromise;
+  const { affinityCapFor } = await loadTs('../src/modules/scenarioMods/affinityCaps.ts');
+  const gate = createAffinityCommandGate({
+    lookup: () => ({ favorability: 35, relationLabel: '政治盟友' }),
+    capOf: affinityCapFor,
+  });
+  // 吕雉 cap=39（相识上限），当前 35 → 只放行 4
+  const r = gate({ action: 'add', key: '社交.关系.吕雉.好感度', value: 12 });
+  assert.equal(r.command.value, 4);
+  assert.match(r.warning, /触及上限/);
+});
+
+test('关系标签表明已归属时上限自动失效（正典事件已发生）', async () => {
+  const { affinityCapFor } = await loadTs('../src/modules/scenarioMods/affinityCaps.ts');
+  assert.ok(affinityCapFor('惊理', '陌生人'), '未入队时应有上限');
+  assert.equal(affinityCapFor('惊理', '心腹'), null, '已归属则上限失效');
+  assert.equal(affinityCapFor('蛇夫人', '后宫'), null);
+  assert.equal(affinityCapFor('泉玉姬', '奴婢'), null);
+});
+
+test('未触发加入事件的非承重角色上限压在「陌路」', async () => {
+  const { affinityCapFor } = await loadTs('../src/modules/scenarioMods/affinityCaps.ts');
+  for (const name of ['惊理', '蛇夫人', '泉玉姬']) {
+    const entry = affinityCapFor(name, '陌生人');
+    assert.equal(entry.cap, 19, `${name} 未入队上限应为陌路上界`);
+    assert.match(entry.liftedBy, /正典加入事件/, `${name} 须写明解除所需的正典事件`);
+  }
+});
+
+test('无上限的角色返回 null，且上限说明不注入', async () => {
+  const { affinityCapFor, formatAffinityCap } = await loadTs('../src/modules/scenarioMods/affinityCaps.ts');
+  assert.equal(affinityCapFor('乐明珠', '情人'), null);
+  assert.equal(formatAffinityCap('乐明珠', '情人'), '');
+  assert.match(formatAffinityCap('吕雉', '政治盟友'), /关系上限.*相识/);
+});
+
 test('无专属档案的角色回落通用五维，不报错', async () => {
   const { formatRelationStance } = await stancePromise;
   const text = formatRelationStance('某路人甲', { favorability: 50 });
