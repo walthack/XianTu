@@ -388,8 +388,17 @@ test('第二批覆盖高频出场缺口，且不收录留白角色', async () =>
   for (const name of ['秦桧', '谢艺', '武二郎', '云苍峰', '孟非卿', '苏荔', '云丹琉', '杨玉环', '祁远', '潘金莲', '殇侯', '李师师', '赵飞燕', '袁天罡', '鬼巫王']) {
     assert.ok(hasStanceProfile(name), `${name} 应有姿态档案`);
   }
-  // 留白角色不得被"顺手补全"（裁定 #113）
-  assert.ok(!hasStanceProfile('苏妲己'), '苏妲己收编弧线留白，不得入册');
+  // 苏妲己：裁定 #113 冻结的是**收编弧线**（她被收服的三幕过程），不是人物本身——
+  // registry 常规字段照常可用。故她可入册，但档案必须守住留白，不得写出弧线终局。
+  assert.ok(hasStanceProfile('苏妲己'), '主要女性需覆盖；冻结的是弧线不是人物');
+  const sdj = STANCE_PROFILES.find(p => p.names.includes('苏妲己'));
+  const sdjLines = [...sdj.constant, ...Object.values(sdj.bands).flat()];
+  assert.ok(sdjLines.some(l => /留白|不得续写/.test(l)), '必须显式声明弧线留白');
+  // 检查终局词时必须排除**所有禁令行**：禁令要写出"不得臣服/归顺""收编弧线留白"
+  // 才能禁掉它们，否则禁令自己会命中禁词检测（本测试已因此返工两次）。
+  const sdjBody = sdjLines.filter(l => !/不得|留白/.test(l)).join('');
+  assert.ok(!/(收编|臣服|归顺|收服)/.test(sdjBody), '禁令之外不得写出被收服的终局');
+  assert.match(sdjBody, /拉锯/, '关系形态应停在正典原文的「拉锯」');
   // 别名要能命中
   assert.ok(hasStanceProfile('贾诩') && hasStanceProfile('龙骥') && hasStanceProfile('武二'));
   assert.ok(STANCE_PROFILES.length >= 21);
