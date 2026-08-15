@@ -61,6 +61,13 @@ export type AcquaintanceLedger = Record<string, AcquaintanceRecord>;
  */
 export const JOINED_RELATION_RE = /后宫|侍妾|妾室|侍婢|侍奴|女奴|内宅|主仆|主从|心腹|部属|下属|属下|奴婢|道侣|伴侣|夫妻|夫君|情人|效忠|臣服|投靠|归顺/;
 
+/**
+ * 关系类身份——**依赖玩家轨迹**，未相识时不成立。
+ * 与 JOINED_RELATION_RE 区分：那个判"标签是否表明已归属"，这个判"投影身份是否属于关系类"。
+ * 外貌、性格、宗派、族裔等不依赖轨迹的字段不在此列，仍以投影为准（草案 §5 第 3 条）。
+ */
+const RELATIONAL_IDENTITY_RE = /后宫|侍妾|妾室|侍婢|侍奴|女奴|内宅|主仆|主从|心腹|部属|下属|属下|奴婢|道侣|伴侣|夫妻|夫君|情人|姬妾|禁脔/;
+
 export function rankOf(kind: AcquaintanceKind): number {
   return KIND_RANK[kind] || 0;
 }
@@ -186,11 +193,25 @@ export function syncAcquaintanceLedger(input: LedgerSyncInput): number {
   return changed;
 }
 
-/** 供 prompt 注入：说明玩家与此人的相识程度，避免模型按原著快照假定熟识。 */
-export function formatAcquaintance(ledger: AcquaintanceLedger | undefined, name: string): string {
+/**
+ * 供 prompt 注入：说明玩家与此人的相识程度，避免模型按原著快照假定熟识。
+ *
+ * `projectedIdentity` 传入该角色**本关的投影身份**。这是本账本的立项动机所在：
+ * stage-projection 按原著轨迹发身份，孙寿在燕歌的 role 写死为「程宗扬内宅侍婢」，
+ * 哪怕玩家整条云龙线都没见过她。账本无记录时，必须显式否定那个身份——
+ * **存档事实优先于原著快照**（草案 §5）。
+ */
+export function formatAcquaintance(
+  ledger: AcquaintanceLedger | undefined,
+  name: string,
+  projectedIdentity?: string,
+): string {
   const record = acquaintanceByName(ledger, name);
   if (!record) {
-    return `  【素未谋面】玩家从未见过${name}，也未听说过。不得以旧识、故人或既有交情的方式相处；对方同样不认识玩家。`;
+    const projectionDenial = projectedIdentity && RELATIONAL_IDENTITY_RE.test(projectedIdentity)
+      ? `**上文档案里「${projectedIdentity}」一类的关系身份是原著轨迹的投影，此局并未发生**——玩家与她之间不存在任何隶属、亲密或旧谊，不得据此称呼、指使或亲近。`
+      : '';
+    return `  【素未谋面】玩家从未见过${name}，也未听说过。不得以旧识、故人或既有交情的方式相处；对方同样不认识玩家。${projectionDenial}`;
   }
   if (record.kind === 'rumored') {
     return `  【仅闻其名】玩家只听过关于${name}的传闻，**尚未见过本人**。不得写成旧识；初次照面应有初次照面的样子。`;

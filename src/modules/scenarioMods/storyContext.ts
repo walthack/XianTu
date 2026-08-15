@@ -610,7 +610,11 @@ function formatFocusedCharacter(
   // 相识程度（R3-12）：挡住"按原著快照假定熟识"。stage-projection 会给孙寿
   // 「内宅侍婢」的身份，哪怕玩家从没见过她——账本有记录才算数。
   if (!isProtagonist) {
-    const acquaintanceLine = formatAcquaintance(runtime.acquaintances, character.name);
+    const acquaintanceLine = formatAcquaintance(
+      runtime.acquaintances,
+      character.name,
+      String((character as { role?: string }).role || profile.origin || ''),
+    );
     if (acquaintanceLine) lines.push(acquaintanceLine);
   }
   // 亲密档案（R3-8B）：名单门与场景门都在 formatIntimacyProfile 内部执行，此处只负责喂参数。

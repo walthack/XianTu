@@ -173,6 +173,31 @@ test('素未谋面者注入明确约束', async () => {
   assert.match(line, /对方同样不认识玩家/, '双向都要挡');
 });
 
+test('未相识时显式否定投影的关系身份（账本的立项动机）', async () => {
+  // 孙寿在燕歌的 stage-projection role 写死为「程宗扬内宅侍婢」，
+  // 哪怕玩家整条云龙线都没见过她。账本无记录时必须当场否定那个身份。
+  const { formatAcquaintance } = await modPromise;
+  const line = formatAcquaintance({}, '孙寿', '程宗扬内宅侍婢');
+  assert.match(line, /素未谋面/);
+  assert.match(line, /原著轨迹的投影|此局并未发生/, '须点明那是投影而非既成事实');
+  assert.match(line, /不得据此称呼|不存在任何隶属/, '须禁止据此行动');
+  assert.ok(line.includes('程宗扬内宅侍婢'), '须引用被否定的具体身份');
+});
+
+test('非关系类投影身份不触发否定（外貌/宗派等不依赖轨迹）', async () => {
+  const { formatAcquaintance } = await modPromise;
+  const line = formatAcquaintance({}, '孟非卿', '星月湖大营领袖、三团团长');
+  assert.match(line, /素未谋面/, '仍然是素未谋面');
+  assert.ok(!line.includes('原著轨迹的投影'), '军职不是关系身份，不该被否定');
+});
+
+test('已相识者不否定投影身份', async () => {
+  const { upgradeAcquaintance, formatAcquaintance } = await modPromise;
+  const ledger = {};
+  upgradeAcquaintance(ledger, { characterId: 'a', name: '孙寿', kind: 'joined' });
+  assert.equal(formatAcquaintance(ledger, '孙寿', '程宗扬内宅侍婢'), '', '已归入者身份成立，不注入');
+});
+
 test('仅闻其名与一面之缘各有措辞', async () => {
   const { upgradeAcquaintance, formatAcquaintance } = await modPromise;
   const ledger = {};
@@ -208,7 +233,9 @@ test('账本写入 runtime 并在切关时继承', async () => {
 test('storyContext 消费账本，且主角不受影响', async () => {
   const fs = await import('node:fs');
   const src = fs.readFileSync(new URL('../src/modules/scenarioMods/storyContext.ts', import.meta.url), 'utf8');
-  const call = src.indexOf('formatAcquaintance(runtime.acquaintances');
+  // 跨行匹配：调用可能被格式化成多行，别锁单行形态（本条已因此断过一次）
+  const call = src.search(/formatAcquaintance\(\s*runtime\.acquaintances/);
   assert.ok(call > 0, 'storyContext 应注入相识程度');
-  assert.match(src.slice(Math.max(0, call - 200), call), /!isProtagonist/, '主角不注入');
+  assert.match(src.slice(Math.max(0, call - 260), call), /!isProtagonist/, '主角不注入');
+  assert.match(src.slice(call, call + 320), /role|origin/, '须把本关投影身份传进去以便否定');
 });
