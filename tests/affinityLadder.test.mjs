@@ -455,6 +455,35 @@ test('李师师的正典硬边界（无肉体关系）写进本色锚', async ()
   assert.ok(high.includes('停在精神层面'), '高档须显式收住');
 });
 
+test('小紫的玉盏铃花诅咒与五灵石暗线必须在 hardLimits（主线承重）', async () => {
+  // 裁定 #84 + ENDING-BLUEPRINT §48-49：她保留元红不是矜持，是与她交合的男子必丧魂成傀儡，
+  // 且不以她的意志为转移；解法是五灵石（正文 3/5），四颗则改寄主。这条是后续主线暗线的锚，
+  // 此前 intimacyProfiles 完全没有，等于把她最核心的动机与一整条暗线悬空。
+  const { INTIMACY_PROFILES } = await loadTs('../src/modules/scenarioMods/intimacyProfiles.ts');
+  const xz = INTIMACY_PROFILES.find(p => p.names.includes('小紫'));
+  const limits = xz.hardLimits.join('');
+  assert.match(limits, /玉盏铃花/, '诅咒来源必须点名');
+  assert.match(limits, /丧魂|傀儡/, '后果必须写明');
+  assert.match(limits, /不以她的意志为转移|想放过主角也做不到/, '必须写明她无法自主豁免');
+  assert.match(limits, /五灵石/, '解法暗线必须在案');
+  assert.match(limits, /四颗/, '四颗改寄主的悲剧岔路必须保留');
+  // 「不是她的主观意愿」由上面那条 /不以她的意志为转移/ 断言覆盖。
+  // 这里不再加禁词检测——禁令文本本身要写出禁词才能禁它，会自己命中（本文件已因此返工四次）。
+});
+
+test('凤凰宝典两人的势力级利害必须在 hardLimits', async () => {
+  // 破身不只是个人后果：凤凰宝典是光明观堂对抗黑魔海的战力根基，潘金莲是本代候选者，
+  // 大祭高潮「程宗扬 vs 潘金莲」整条对决线系于此（ENDING-BLUEPRINT §52）。
+  const { INTIMACY_PROFILES } = await loadTs('../src/modules/scenarioMods/intimacyProfiles.ts');
+  const pan = INTIMACY_PROFILES.find(p => p.names.includes('潘金莲')).hardLimits.join('');
+  assert.match(pan, /光明观堂/, '须点明所属势力');
+  assert.match(pan, /候选者/, '须点明她是本代候选者');
+  assert.match(pan, /对决线随之落空|失去出战资格/, '须写明破身的势力级后果');
+  const le = INTIMACY_PROFILES.find(p => p.names.includes('乐明珠')).hardLimits.join('');
+  assert.match(le, /光明观堂/, '乐明珠同为观堂资产');
+  assert.match(le, /第七重|上限/, '须写明修为封顶的具体后果');
+});
+
 test('无专属档案的角色回落通用五维，不报错', async () => {
   const { formatRelationStance } = await stancePromise;
   const text = formatRelationStance('某路人甲', { favorability: 50 });
