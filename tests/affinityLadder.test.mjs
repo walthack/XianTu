@@ -382,6 +382,54 @@ test('外显度由本色而非性别决定：同为女性，三人高档形态�
   assert.notEqual(ningyu, yueshuang);
 });
 
+test('第二批覆盖高频出场缺口，且不收录留白角色', async () => {
+  const { STANCE_PROFILES, hasStanceProfile } = await loadTs('../src/modules/scenarioMods/stanceProfiles.ts');
+  // 按事件出场频率排出的 top 缺口，补齐后应全部在册
+  for (const name of ['秦桧', '谢艺', '武二郎', '云苍峰', '孟非卿', '苏荔', '云丹琉', '杨玉环', '祁远', '潘金莲', '殇侯', '李师师', '赵飞燕', '袁天罡', '鬼巫王']) {
+    assert.ok(hasStanceProfile(name), `${name} 应有姿态档案`);
+  }
+  // 留白角色不得被"顺手补全"（裁定 #113）
+  assert.ok(!hasStanceProfile('苏妲己'), '苏妲己收编弧线留白，不得入册');
+  // 别名要能命中
+  assert.ok(hasStanceProfile('贾诩') && hasStanceProfile('龙骥') && hasStanceProfile('武二'));
+  assert.ok(STANCE_PROFILES.length >= 21);
+});
+
+test('所有档案的高档形态两两不雷同（本功能的存在理由）', async () => {
+  const { STANCE_PROFILES } = await loadTs('../src/modules/scenarioMods/stanceProfiles.ts');
+  const highs = STANCE_PROFILES
+    .filter(p => p.bands.high)
+    .map(p => ({ name: p.names[0], text: p.bands.high.join('') }));
+  assert.ok(highs.length >= 20, '绝大多数角色都应写明高档形态');
+  for (let i = 0; i < highs.length; i += 1) {
+    for (let j = i + 1; j < highs.length; j += 1) {
+      assert.notEqual(highs[i].text, highs[j].text, `${highs[i].name} 与 ${highs[j].name} 高档形态完全相同`);
+      // 粗粒度趋同检测：按二字片段算重合度，过高说明写成了同一套话术
+      const grams = (s) => new Set(Array.from({ length: Math.max(0, s.length - 1) }, (_, k) => s.slice(k, k + 2)));
+      const a = grams(highs[i].text); const b = grams(highs[j].text);
+      const inter = [...a].filter(g => b.has(g)).length;
+      const jac = inter / (a.size + b.size - inter);
+      assert.ok(jac < 0.5, `${highs[i].name} 与 ${highs[j].name} 高档形态雷同度过高（${jac.toFixed(2)}）`);
+    }
+  }
+});
+
+test('每份档案都有本色锚，且不得为空壳', async () => {
+  const { STANCE_PROFILES } = await loadTs('../src/modules/scenarioMods/stanceProfiles.ts');
+  for (const p of STANCE_PROFILES) {
+    assert.ok(p.constant.length >= 2, `${p.names[0]} 本色锚过少`);
+    assert.ok(p.constant.every(l => l.length >= 12), `${p.names[0]} 本色锚有空话`);
+    assert.ok(Object.keys(p.bands).length >= 1, `${p.names[0]} 至少要写一档形态`);
+  }
+});
+
+test('李师师的正典硬边界（无肉体关系）写进本色锚', async () => {
+  const { formatRelationStance } = await stancePromise;
+  const high = formatRelationStance('李师师', { favorability: 90 });
+  assert.match(high, /未发生肉体关系|精神之恋/, '硬边界必须在任何档位注入');
+  assert.ok(high.includes('停在精神层面'), '高档须显式收住');
+});
+
 test('无专属档案的角色回落通用五维，不报错', async () => {
   const { formatRelationStance } = await stancePromise;
   const text = formatRelationStance('某路人甲', { favorability: 50 });
