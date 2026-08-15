@@ -404,6 +404,28 @@ test('第二批覆盖高频出场缺口，且不收录留白角色', async () =>
   assert.ok(STANCE_PROFILES.length >= 21);
 });
 
+test('有出场的主要女性角色全部有姿态档案（用户要求的覆盖面）', async () => {
+  const fs = await import('node:fs');
+  const path = new URL('../src/modules/scenarioMods/builtins/character-registry.json', import.meta.url);
+  const registry = JSON.parse(fs.readFileSync(path, 'utf8'));
+  const { hasStanceProfile } = await loadTs('../src/modules/scenarioMods/stanceProfiles.ts');
+
+  // 出场 = 出现在事件的 relatedCharacterIds 里；只有出场角色才会被 focus 并注入姿态
+  const present = new Set();
+  for (const file of fs.readdirSync(new URL('../src/modules/scenarioMods/builtins/data/', import.meta.url))) {
+    if (!file.endsWith('.json')) continue;
+    const raw = fs.readFileSync(new URL(`../src/modules/scenarioMods/builtins/data/${file}`, import.meta.url), 'utf8');
+    for (const m of raw.matchAll(/"relatedCharacterIds"\s*:\s*\[([^\]]*)\]/g)) {
+      for (const id of m[1].matchAll(/"([^"]+)"/g)) present.add(id[1]);
+    }
+  }
+  const missing = registry.characters
+    .filter(c => c.tier === '主要' && c.gender === '女' && present.has(c.id))
+    .map(c => c.canonicalName)
+    .filter(name => !hasStanceProfile(name));
+  assert.deepEqual(missing, [], `有出场却缺姿态档案的主要女性：${missing.join('、')}`);
+});
+
 test('所有档案的高档形态两两不雷同（本功能的存在理由）', async () => {
   const { STANCE_PROFILES } = await loadTs('../src/modules/scenarioMods/stanceProfiles.ts');
   const highs = STANCE_PROFILES
@@ -492,7 +514,19 @@ test('吕雉的破界后果与证据强度限定必须在 hardLimits', async () 
   const lv = INTIMACY_PROFILES.find(p => p.names.includes('吕雉')).hardLimits.join('');
   assert.match(lv, /反噬吸干/, '正典结论一必须在案');
   assert.match(lv, /开封/, '正典结论二（预留的未来事件）必须在案');
-  assert.match(lv, /未明确|不得演出破界/, '证据缺口须显式标注，不得让模型自行补完');
+  assert.match(lv, /不得自行演出/, '未落定的部分须禁止模型自行补完');
+  // 用户 2026-08-15 定性：她交出筹码必然是达成重大交易，不是轻易给出。
+  // "贸然"是限定词——反噬惩罚的是绕过她意志的强取，不是这件事本身。
+  assert.match(lv, /交易门槛|重大交易/, '须写明这是交易而非诅咒');
+  assert.match(lv, /飞羽族存续|族群存续/, '对价必须锚在她唯一的动机上');
+  // 最要紧的一条：好感阶梯与姿态层是好感驱动的，必须显式切断"好感高＝顺理成章"
+  assert.match(lv, /好感度不是触发条件/, '好感不得成为触发条件');
+  assert.match(lv, /水到渠成|顺理成章/, '须点名并否定这两种典型误写');
+  // 临时兜底（用户 2026-08-15）：求欢不会答应；强行推进＝反噬吸干主角＝游戏结束。
+  // 反噬承受方由此定为主角，与小紫"交合者丧魂"形成对称。
+  assert.match(lv, /游戏结束/, '临时兜底后果须明确到游戏结束');
+  assert.match(lv, /主角被吸干|吸干.*主角|承受方就是主角/, '反噬承受方须写明是主角');
+  assert.match(lv, /TODO|待补/, '交易线未设计前须保留待补标记');
 });
 
 test('无专属档案的角色回落通用五维，不报错', async () => {
