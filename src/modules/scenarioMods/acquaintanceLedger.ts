@@ -21,10 +21,6 @@
  */
 export type AcquaintanceKind = 'rumored' | 'introduced' | 'encountered' | 'joined';
 
-/** 相遇时对方的处境。由世界状态推导，**不由 LLM 声明**。 */
-export type AcquaintanceCircumstance =
-  | 'in_power' | 'neutral' | 'fallen' | 'captive' | 'fugitive' | 'deceased';
-
 const KIND_RANK: Record<AcquaintanceKind, number> = {
   rumored: 1,
   introduced: 2,
@@ -41,12 +37,12 @@ export interface AcquaintanceRecord {
   atEventId?: string;
   atWorldTurn?: number;
   /**
-   * 相遇时对方的处境。孙寿在吕氏当权时是襄城君、倒台后是死囚——
-   * 同一个人，两条完全不同的关系曲线。
-   * ⚠️ 本轮**不做自动推导**（需与分歧账本联动），字段先留位。
+   * 相遇当时她是谁——**不是她后来是谁**。
+   *
+   * 孙寿在吕氏当权时是「襄城君、吕冀之妻」，倒台后是死囚。处境不需要另建枚举去推导：
+   * **它本来就写在剧情里**——玩家在哪个事件遇到她，那个事件的语境就是她当时的处境。
+   * 所以只记「在哪个事件」+「当时的身份」，处境由二者自然带出。
    */
-  circumstance?: AcquaintanceCircumstance;
-  /** 相遇当时她是谁——不是她后来是谁。 */
   identityAtMeeting?: string;
   /** 旧档回填的近似记录，证据强度低于实时写入。 */
   backfilled?: boolean;
@@ -77,10 +73,23 @@ export function rankOf(kind: AcquaintanceKind): number {
  */
 export function upgradeAcquaintance(ledger: AcquaintanceLedger, record: AcquaintanceRecord): boolean {
   const existing = ledger[record.characterId];
-  if (existing && rankOf(existing.kind) >= rankOf(record.kind)) return false;
-  ledger[record.characterId] = existing
-    ? { ...existing, ...record, backfilled: existing.backfilled && record.backfilled }
-    : { ...record };
+  if (!existing) {
+    ledger[record.characterId] = { ...record };
+    return true;
+  }
+  // 同级：不改 kind 与时点，但**补上缺失的字段**。
+  // 否则先入账的来源（开场声明不带事件 id）会把后到的、信息更全的同级记录整条挡掉——
+  // 真机实测：22 条里只有 1 条拿到 atEventId，其余都被开场声明先占位了。
+  if (rankOf(existing.kind) >= rankOf(record.kind)) {
+    let filled = false;
+    if (!existing.atEventId && record.atEventId) { existing.atEventId = record.atEventId; filled = true; }
+    if (!existing.identityAtMeeting && record.identityAtMeeting) {
+      existing.identityAtMeeting = record.identityAtMeeting;
+      filled = true;
+    }
+    return filled;
+  }
+  ledger[record.characterId] = { ...existing, ...record, backfilled: existing.backfilled && record.backfilled };
   return true;
 }
 
@@ -112,8 +121,10 @@ export interface LedgerSyncInput {
   worldTurn?: number;
   /** 角色 id → 名字（来自 canon.characters）。 */
   characterNames: Map<string, string>;
-  /** 已激活/已完成事件的 relatedCharacterIds。 */
-  metCharacterIds?: Iterable<string>;
+  /** 角色 id → 本关投影身份（`role`／`identity`）。用于记录"相遇当时她是谁"。 */
+  characterIdentities?: Map<string, string>;
+  /** 已激活/已完成事件带来的相识：角色 id → 首次出现的事件 id。 */
+  metCharacterIds?: Iterable<string> | Map<string, string>;
   /** 开场声明的角色。 */
   featuredCharacterIds?: Iterable<string>;
   /** 存档 社交.关系：名字 → { 与玩家关系 }。用于判定 joined。 */
@@ -138,7 +149,7 @@ export function syncAcquaintanceLedger(input: LedgerSyncInput): number {
   const { ledger, characterNames } = input;
   let changed = 0;
 
-  const note = (characterId: string, kind: AcquaintanceKind) => {
+  const note = (characterId: string, kind: AcquaintanceKind, eventId?: string) => {
     const name = characterNames.get(characterId);
     if (!name) return;
     if (input.playerName && name === input.playerName) return;
@@ -147,13 +158,17 @@ export function syncAcquaintanceLedger(input: LedgerSyncInput): number {
       name,
       kind,
       atStageId: input.stageId,
+      atEventId: eventId,
       atWorldTurn: input.worldTurn,
+      identityAtMeeting: input.characterIdentities?.get(characterId),
       backfilled: input.backfilled,
     })) changed += 1;
   };
 
   for (const id of input.featuredCharacterIds || []) note(id, 'encountered');
-  for (const id of input.metCharacterIds || []) note(id, 'encountered');
+  const met = input.metCharacterIds;
+  if (met instanceof Map) for (const [id, eventId] of met) note(id, 'encountered', eventId);
+  else for (const id of met || []) note(id, 'encountered');
 
   // 存档关系表：有条目即至少见过；标签表明归属则升到 joined。
   if (input.relations && typeof input.relations === 'object') {

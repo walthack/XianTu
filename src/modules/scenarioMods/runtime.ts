@@ -2326,7 +2326,7 @@ function updateAcquaintanceLedger(saveData: SaveData, runtime: RuntimeState & { 
   try {
     const rt = runtime as unknown as {
       acquaintances?: AcquaintanceLedger;
-      canon?: { characters?: Array<{ id: string; name: string }> };
+      canon?: { characters?: Array<{ id: string; name: string; role?: string; description?: string }> };
       opening?: { featuredCharacterIds?: string[] };
       events?: Array<{ id: string; relatedCharacterIds?: string[] }>;
       activeEventIds?: string[];
@@ -2341,16 +2341,24 @@ function updateAcquaintanceLedger(saveData: SaveData, runtime: RuntimeState & { 
     rt.acquaintances = rt.acquaintances && typeof rt.acquaintances === 'object' ? rt.acquaintances : {};
 
     const seen = new Set([...(rt.activeEventIds || []), ...(rt.completedEventIds || [])]);
-    const metIds = new Set<string>();
+    // 记住"是哪个事件带来的相识"——处境不必另建枚举推导，事件语境本身就是处境。
+    const metIds = new Map<string, string>();
     for (const event of rt.events || []) {
       if (!seen.has(event.id)) continue;
-      for (const id of event.relatedCharacterIds || []) metIds.add(id);
+      for (const id of event.relatedCharacterIds || []) if (!metIds.has(id)) metIds.set(id, event.id);
+    }
+    // 相遇当时她是谁：本关投影身份（characters 已经过 resolveScenarioCharacters 还原）。
+    const identities = new Map<string, string>();
+    for (const item of characters as Array<{ id: string; role?: string; description?: string }>) {
+      const identity = String(item.role || item.description || '').trim();
+      if (identity) identities.set(item.id, identity.slice(0, 60));
     }
     syncAcquaintanceLedger({
       ledger: rt.acquaintances,
       stageId: rt.modId,
       worldTurn: rt.worldTurn,
       characterNames: new Map(characters.map(item => [item.id, item.name])),
+      characterIdentities: identities,
       metCharacterIds: metIds,
       featuredCharacterIds: rt.opening?.featuredCharacterIds,
       relations: (saveData as unknown as { 社交?: { 关系?: Record<string, unknown> } })?.社交?.关系,

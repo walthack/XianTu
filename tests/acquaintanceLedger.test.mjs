@@ -72,6 +72,63 @@ test('事件与开场声明推导出 encountered', async () => {
   assert.equal(ledger['liuchao.character.jing_li'].atWorldTurn, 12);
 });
 
+test('记住是哪个事件带来的相识，以及当时她是谁', async () => {
+  // 处境不另建枚举推导——它本来就写在剧情里。孙寿在吕氏当权时是襄城君、
+  // 倒台后是死囚；记下"在哪个事件遇到"+"当时的身份"，处境自然带出。
+  const { syncAcquaintanceLedger, acquaintanceByName } = await modPromise;
+  const ledger = {};
+  syncAcquaintanceLedger({
+    ledger,
+    characterNames: NAMES,
+    characterIdentities: new Map([['liuchao.character.sun_shou', '襄城君、吕冀之妻']]),
+    metCharacterIds: new Map([['liuchao.character.sun_shou', 'lyl.event.s04_02']]),
+    stageId: 'lyl.taiquan_sacred_fruit',
+  });
+  const record = acquaintanceByName(ledger, '孙寿');
+  assert.equal(record.atEventId, 'lyl.event.s04_02', '须记下相遇事件');
+  assert.equal(record.identityAtMeeting, '襄城君、吕冀之妻', '须记下当时的身份，而非她后来是谁');
+  assert.equal(record.atStageId, 'lyl.taiquan_sacred_fruit');
+});
+
+test('同级记录补空字段，不被先入账者整条挡掉', async () => {
+  // 真机实测：开场声明先入账（不带事件 id），随后带事件 id 的同级记录被"只升不降"
+  // 整条拒绝，22 条里只有 1 条拿到 atEventId。同级应补空字段而非丢弃。
+  const { upgradeAcquaintance, acquaintanceOf } = await modPromise;
+  const ledger = {};
+  upgradeAcquaintance(ledger, { characterId: 'a', name: '甲', kind: 'encountered' });
+  const filled = upgradeAcquaintance(ledger, {
+    characterId: 'a', name: '甲', kind: 'encountered',
+    atEventId: 'evt.1', identityAtMeeting: '商队成员',
+  });
+  assert.equal(filled, true, '同级补字段应视为发生了变更');
+  assert.equal(acquaintanceOf(ledger, 'a').atEventId, 'evt.1');
+  assert.equal(acquaintanceOf(ledger, 'a').identityAtMeeting, '商队成员');
+  // 已有值不被后来的同级记录覆盖
+  upgradeAcquaintance(ledger, {
+    characterId: 'a', name: '甲', kind: 'encountered', atEventId: 'evt.2',
+  });
+  assert.equal(acquaintanceOf(ledger, 'a').atEventId, 'evt.1', '首次相遇的事件不被后续覆盖');
+});
+
+test('相识程度升级时刷新相遇时点，但不倒退', async () => {
+  const { syncAcquaintanceLedger, acquaintanceByName } = await modPromise;
+  const ledger = {};
+  syncAcquaintanceLedger({
+    ledger, characterNames: NAMES,
+    metCharacterIds: new Map([['liuchao.character.sun_shou', 'lyl.event.s04_02']]),
+    stageId: 'lyl.taiquan_sacred_fruit',
+  });
+  // 后续升级为 joined
+  syncAcquaintanceLedger({
+    ledger, characterNames: NAMES,
+    relations: { 孙寿: { 名字: '孙寿', 与玩家关系: '内宅侍婢' } },
+    stageId: 'lyg.changgan_begins',
+  });
+  const record = acquaintanceByName(ledger, '孙寿');
+  assert.equal(record.kind, 'joined');
+  assert.equal(record.atStageId, 'lyg.changgan_begins', '升级时点更新到归入那一关');
+});
+
 test('回填标记保留，用于标示证据强度较弱', async () => {
   const { syncAcquaintanceLedger } = await modPromise;
   const ledger = {};
