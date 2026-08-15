@@ -126,15 +126,25 @@ function crossedWithMargin(fav: number, from: AffinityStance, to: AffinityStance
 }
 
 /**
+ * 游戏日序号——滞回的"维持 ≥1 个游戏日"需要一个单调递增的日数。
+ * 历法取自 `gameStateStore` 的进位规则：30 日/月、12 月/年。
+ */
+export function gameDayOf(time: { 年?: unknown; 月?: unknown; 日?: unknown } | undefined): number {
+  const year = Number(time?.年) || 0;
+  const month = Number(time?.月) || 1;
+  const day = Number(time?.日) || 1;
+  return year * 360 + (month - 1) * 30 + day;
+}
+
+/**
  * 带滞回的姿态投影。
  *
  * 路线图 R3-9 G1 要求"避免好感增减 1 点造成角色瞬间翻脸"，故跨档需同时满足
  * ①越过阈值 ≥3 点 ②新档位维持 ≥1 游戏日。任一不满足则保持原姿态。
  *
- * ⚠️ **当前未接线**（独立二审 P1）：运行时注入走的是 `stanceOf` 瞬时投影，
- * 因此 40／−10 边界上 1 点变化仍会立刻翻档。接线需要把 `StanceState` 持久化，
- * 而 `storyContext` 是只读的 prompt 构建层，得由有存档写入权的一侧调用本函数并回传
- * `stance` 给 `formatRelationStance`。在那之前不要宣称滞回已生效。
+ * 已接线（2026-08-15）：`runtime.stanceStates` 持久化并跨关继承，由
+ * `advanceScenarioRuntime` 每回合调用本函数推进，`storyContext` 只读取结果。
+ * 写入权仍不在 prompt 构建层——那一侧只消费，不计算。
  *
  * 纯函数：不修改入参，返回新状态由调用方落存档。
  */

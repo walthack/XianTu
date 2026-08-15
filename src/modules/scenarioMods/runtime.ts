@@ -32,6 +32,7 @@ import {
 } from './npcDecisionCore';
 import { AFFINITY_THRESHOLDS } from './affinityLadder';
 import { syncAcquaintanceLedger, type AcquaintanceLedger } from './acquaintanceLedger';
+import { gameDayOf, projectStance, type StanceState } from './affinityLadder';
 import { recordOffscreenDivergence, type ScenarioDivergence } from './divergenceLedger';
 import { getCanonRailOrder, getCanonRailProfile, isCanonRailChapter } from './canonRail';
 import { updateDivergenceControl, type DivergenceSignal, type WorldPushState } from './divergenceControl';
@@ -2372,6 +2373,35 @@ function updateAcquaintanceLedger(saveData: SaveData, runtime: RuntimeState & { 
   }
 }
 
+/**
+ * 关系姿态滞回推进（R3-9 G1）。
+ *
+ * 路线图明确要求"避免好感增减 1 点造成角色瞬间翻脸"。滞回需要记住上一次的姿态，
+ * 所以状态必须持久化——`storyContext` 是只读的 prompt 构建层，不能在那里算。
+ * 这里每回合按当前好感推进一次，`storyContext` 只读结果。
+ *
+ * 与相识账本同构：写 runtime、跨关继承（见 strictInitializer）。
+ */
+function updateStanceStates(saveData: SaveData, runtime: RuntimeState & { modId?: string }): void {
+  try {
+    const rt = runtime as unknown as { stanceStates?: Record<string, StanceState> };
+    const relations = (saveData as unknown as { 社交?: { 关系?: Record<string, unknown> } })?.社交?.关系;
+    if (!relations || typeof relations !== 'object') return;
+    const day = gameDayOf(
+      (saveData as unknown as { 元数据?: { 时间?: { 年?: unknown; 月?: unknown; 日?: unknown } } })?.元数据?.时间,
+    );
+    rt.stanceStates = rt.stanceStates && typeof rt.stanceStates === 'object' ? rt.stanceStates : {};
+    for (const [key, npc] of Object.entries(relations)) {
+      if (!npc || typeof npc !== 'object') continue;
+      const name = String((npc as { 名字?: unknown }).名字 || key);
+      const favorability = Number((npc as { 好感度?: unknown }).好感度) || 0;
+      rt.stanceStates[name] = projectStance(favorability, rt.stanceStates[name], day);
+    }
+  } catch (error) {
+    console.warn('[剧本模组] 关系姿态推进失败（不阻断回合）:', error);
+  }
+}
+
 export function advanceScenarioRuntime(saveData: SaveData): {
   saveData: SaveData;
   transitions: ScenarioRuntimeTransition[];
@@ -2382,6 +2412,7 @@ export function advanceScenarioRuntime(saveData: SaveData): {
   reconcileSaveWithRegistry(next, runtime as RuntimeState & { modId?: string });
   projectBottomLinesToNpcs(next);
   updateAcquaintanceLedger(next, runtime as RuntimeState & { modId?: string });
+  updateStanceStates(next, runtime as RuntimeState & { modId?: string });
   normalizeRuntimeFlags(runtime);
   settleReadyOpportunityCompletionFlags(runtime);
   settleReadyEventActionCompletionFlags(runtime);

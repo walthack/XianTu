@@ -313,6 +313,11 @@ export function transitionToNextScenarioStage(saveData: SaveData, modsOverride?:
   const acquaintanceSnapshot = structuredClone(
     rt.acquaintances && typeof rt.acquaintances === 'object' ? rt.acquaintances : {},
   );
+  // 关系姿态同理：滞回状态跨关保留，否则每次切关姿态都从瞬时值重来，
+  // "维持 ≥1 游戏日才翻档"在关卡边界上就失效了。
+  const stanceSnapshot = structuredClone(
+    rt.stanceStates && typeof rt.stanceStates === 'object' ? rt.stanceStates : {},
+  );
   const playerKnowledgeSnapshot = structuredClone(
     rt.playerKnowledge && typeof rt.playerKnowledge === 'object' ? rt.playerKnowledge : {},
   );
@@ -369,6 +374,9 @@ export function transitionToNextScenarioStage(saveData: SaveData, modsOverride?:
   if (chronicleSnapshot.length) newRuntime.chronicle = chronicleSnapshot;
   if (Object.keys(acquaintanceSnapshot).length) {
     newRuntime.acquaintances = { ...(newRuntime.acquaintances || {}), ...acquaintanceSnapshot };
+  }
+  if (Object.keys(stanceSnapshot).length) {
+    newRuntime.stanceStates = { ...(newRuntime.stanceStates || {}), ...stanceSnapshot };
   }
   newRuntime.playerKnowledge = {
     ...(newRuntime.playerKnowledge || {}),

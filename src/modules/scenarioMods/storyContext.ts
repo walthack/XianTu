@@ -154,6 +154,8 @@ interface StoryRuntime {
   introducedCharacterIds?: string[];
   /** 相识账本（R3-12）：玩家见过谁、到什么程度。跨关继承。 */
   acquaintances?: AcquaintanceLedger;
+  /** 关系姿态滞回状态（R3-9 G1）。由 advanceScenarioRuntime 推进，此处只读。 */
+  stanceStates?: Record<string, { stance: 'low' | 'mid' | 'high' }>;
   canon?: {
     characters?: ScenarioModCharacter[];
     factions?: Array<{ id: string; name: string }>;
@@ -597,7 +599,13 @@ function formatFocusedCharacter(
   const isProtagonist = Boolean(playerName) && character.name === playerName;
   const hasRelationData = live !== undefined || canonFav !== undefined;
   if (!isProtagonist && hasRelationData) {
-    lines.push(formatRelationStance(character.name, { favorability: fav, relationLabel: label }));
+    // 姿态取**持久化的滞回结果**，而非当场按好感算——否则 40／-10 边界上 1 点变化
+    // 就会立刻翻档，正是路线图 G1 要防的。状态由 advanceScenarioRuntime 推进。
+    lines.push(formatRelationStance(character.name, {
+      favorability: fav,
+      relationLabel: label,
+      stance: runtime.stanceStates?.[character.name]?.stance,
+    }));
     // 关系上限：说明这份距离感的由来，让模型演得出而不是硬顶着不亲近。
     const capLine = formatAffinityCap(character.name, label);
     if (capLine) lines.push(capLine);

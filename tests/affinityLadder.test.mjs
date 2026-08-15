@@ -604,6 +604,36 @@ test('通用不变量显式禁止"高好感=温柔化"', async () => {
   assert.match(text, /严禁把高好感写成通用的温柔化／恋爱脑／有求必应/);
 });
 
+// —— 滞回接线（G1 要求：避免 1 点翻脸） ——
+
+test('游戏日按 30 日/月、12 月/年 单调递增', async () => {
+  const { gameDayOf } = await ladderPromise;
+  const d1 = gameDayOf({ 年: 220, 月: 1, 日: 8 });
+  assert.equal(gameDayOf({ 年: 220, 月: 1, 日: 9 }) - d1, 1, '隔日差 1');
+  assert.equal(gameDayOf({ 年: 220, 月: 2, 日: 8 }) - d1, 30, '隔月差 30');
+  assert.equal(gameDayOf({ 年: 221, 月: 1, 日: 8 }) - d1, 360, '隔年差 360');
+  assert.ok(gameDayOf(undefined) >= 0, '缺时间不抛错');
+});
+
+test('滞回状态持久化进 runtime 并跨关继承', async () => {
+  const fs = await import('node:fs');
+  const runtimeSrc = fs.readFileSync(new URL('../src/modules/scenarioMods/runtime.ts', import.meta.url), 'utf8');
+  assert.match(runtimeSrc, /updateStanceStates\(next, runtime/, '每回合须推进姿态');
+  assert.match(runtimeSrc, /rt\.stanceStates\[name\] = projectStance/, '须调用滞回函数并落状态');
+  const initSrc = fs.readFileSync(new URL('../src/modules/scenarioMods/strictInitializer.ts', import.meta.url), 'utf8');
+  assert.match(initSrc, /stanceSnapshot/, '切关须快照姿态状态');
+  assert.match(initSrc, /newRuntime\.stanceStates/, '切关须恢复姿态状态');
+});
+
+test('prompt 取持久化姿态而非当场瞬时算（G1 的实质）', async () => {
+  const fs = await import('node:fs');
+  const src = fs.readFileSync(new URL('../src/modules/scenarioMods/storyContext.ts', import.meta.url), 'utf8');
+  const call = src.search(/formatRelationStance\(character\.name/);
+  assert.ok(call > 0);
+  assert.match(src.slice(call, call + 400), /stance:\s*runtime\.stanceStates/,
+    '必须把持久化姿态传进去，否则滞回等于没接');
+});
+
 test('姿态可由外部传入以覆盖瞬时投影（供滞回接线）', async () => {
   const { formatRelationStance } = await stancePromise;
   const forced = formatRelationStance('贾文和', { favorability: 90, stance: 'low' });
