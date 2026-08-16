@@ -41,13 +41,16 @@ test('层六绝不由 resolveMainQuestLayer 返回（全 37 关）', async () =>
 
 test('MAIN_QUEST_NODES 完整性：数量在主线日志量级内，关卡集合 ⊆ 主轴关', async () => {
   const { MAIN_QUEST_NODES, MAIN_QUEST_STAGES, STAGE_ORDER } = await axisPromise;
-  // 原来写死 `=== 20`，锁的是当时的数字不是规则——按判据清理后（砍 4 条越界、
-  // 补 2 条血脉开场与 5 条太泉）立刻红，而节点表本来就该随内容增减。
-  // 锁真正该守的：**别退化成逐拍**。对标上古卷轴 5 主线日志约 18–19 条，上限取 30；
-  // 真超了说明又把 situation 那一级（143 条逐拍）摊进主轴了。
+  // 原来写死 `=== 20`；清理后立刻红，而节点表本就该随内容增减。
+  // 换掉时我又编了一个 12–30 的区间当界——**那同样是拍脑袋的数字，用户没有数量要求**
+  // （用户 2026-08-16：「为啥要 20 上下，我又没数字要求」，并裁定太泉那段铺开更好）。
+  //
+  // 真正要防的只有一件事：主轴退化成逐拍。那就拿**真实的逐拍层**来比，不用发明的区间——
+  // situation 那一级是每个局势一条（143 条），主轴若逼近它就说明摊平了。
+  const PER_BEAT_LAYER = 143;
   assert.ok(
-    MAIN_QUEST_NODES.length >= 12 && MAIN_QUEST_NODES.length <= 30,
-    `主轴节点 ${MAIN_QUEST_NODES.length} 条——少于 12 说明两根支柱没覆盖全，多于 30 说明退化成逐拍`,
+    MAIN_QUEST_NODES.length < PER_BEAT_LAYER / 2,
+    `主轴 ${MAIN_QUEST_NODES.length} 条，已逼近逐拍层（${PER_BEAT_LAYER} 条）——主轴是叠在其上的主线层，不该与它同量级`,
   );
   const stageOrder = new Set(STAGE_ORDER);
   const mainStages = new Set(MAIN_QUEST_STAGES.map(item => item.stageId));
