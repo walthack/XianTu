@@ -97,18 +97,31 @@ export const SECONDARY_LINES: SecondaryLine[] = [
     name: '太乙真宗',
     kind: 'sect',
     anchorCharacterIds: ['lcq.character.wang_zhe'],
-    entryHint: '王哲既已传功托付，太乙真宗的门就对你开着——去找他，或日后去找教御蔺采泉。',
+    entryHint: '王哲既已传功托付，太乙真宗的门就对你开着——去找他问清那份托付。',
     basis: '王哲是把程宗扬拉进太乙的人——`lcq.event.s01_04` objective 字面即「加入太乙真宗阵营」，'
       + '并在 `stage_02` 传功托付。**开局强制剧情就会见到他，等于自动开启**（用户确认 2026-08-16）。'
       + '（山门龙池两个 id 均不可达，故不用地点锚。）',
     nodes: [
+      // 这条线不是拉票选盟主，是扳倒现任掌教：蔺采泉杀了卓云君的师叔（seq 273）、
+      // 与商乐轩争位（391）、最终自立掌教（581），程宗扬后来承诺对付他（629）。
       { text: '受王哲传功托付，入太乙真宗阵营', status: 'ready', stageId: 'lcq.stage_01', eventId: 'lcq.event.s01_04' },
-      { text: '接下锦囊：清理门户、传授九阳', status: 'ready', stageId: 'lcq.stage_02', eventId: 'lcq.event.s02_01' },
-      { text: '与蔺采泉重议九阳的出处与名分', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_blacksea_trap_02_beat' },
-      { text: '清洗通魔教御，坐实道门操盘人', status: 'pending' },
-      { text: '锦囊后续：白纸如何变指令、失踪于何处、故人是谁', status: 'pending' },
+      { text: '接下锦囊与三托付', status: 'ready', stageId: 'lcq.stage_02', eventId: 'lcq.event.s02_01' },
+      { text: '在紫溪被点名去龙池', status: 'new', stageId: 'lcq.stage_03b_snake_flower_bridge', eventId: 'lcq.event.s03b_zixi_intercept' },
+      { text: '读王哲密信，受托清理门户', status: 'new', stageId: 'lcq.stage_07_qingyuan_jiankang', eventId: 'lcq.event.s07_wangzhe_letter' },
+      { text: '破道观：认出元行健是林之澜的人', status: 'ready', stageId: 'lcq.stage_10_jiangzhou_shadow_war', eventId: 'lcq.event.s10_06_ruined_temple' },
+      { text: '听清蔺采泉与商乐轩在争掌教', status: 'new', stageId: 'lcq.stage_10_jiangzhou_shadow_war', eventId: 'lcq.event.s10_yeying_struggle' },
+      // 这是对手开的价，不是盟友协商——文案不要写成结盟。
+      { text: '蔺采泉以支持江州，换你承认九阳出自他', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_blacksea_trap_02_beat' },
+      { text: '鹤林观：蔺采泉自立掌教，秋少君升任教御', status: 'new', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_lin_takes_seat' },
+      { text: '在翠微园承诺对付现任掌教', status: 'new', stageId: 'lyl.taiquan_sacred_fruit', eventId: 'lyl.event.sacred_against_lin' },
+      { text: '问清商乐轩认不认这届鹤林观即位', status: 'new', stageId: 'lyl.taiquan_sacred_fruit', eventId: 'lyl.event.taiyi_shang_stance' },
+      { text: '多数教御到手：选自坐掌教，或扶一个代理人', status: 'new', stageId: 'lyl.taiquan_sacred_fruit', eventId: 'lyl.event.taiyi_seat_choice' },
+      { text: '锦囊出指令、齐羽仙反用（续写第二幕）', status: 'pending' },
     ],
-    pendingExpansion: 'beat 级三分类 ✅6／⚠8／⏳2——八条线里 ⚠ 最多。加入之后的掌教斗争大面积没落地，锦囊停在"领取"。',
+    pendingExpansion: '顶点＝**掌教之位**，一条 event 两个出口：自坐，或持王哲遗命扶商乐轩／秋少君坐明面、自己操盘。'
+      + '多数判据＝在位教御 2／3（蔺自立后为商／卓／秋，最短路径商＋秋；卓的票留给人物线，本轮不设完成键）。'
+      + '正典只写到对手即位（seq 581 `掌教`），**程侧授名 timeline 无拍**，故顶点标需新增。'
+      + '卓云君收服链（`s07_02`～`s07_04` 等）按裁定归人物任务，不写成本线节点，只在「承诺对付掌教」一拍旁留插入点。',
   },
   {
     id: 'xingyuehu',
@@ -125,13 +138,26 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       + '孟非卿／卢景／王韬／斯明信不作入口，崔茂在默认线事件层不可达。'
       + '任一见过即开线，最早由谢艺第 4 关触发——比月霜第 1 关合理，开局就开星月湖太早。',
     nodes: [
-      { text: '在南荒结识谢艺，搭上星月湖', status: 'ready', stageId: 'lcq.stage_03b_snake_flower_bridge', eventId: 'lcq.event.s03b_snake_flower_bridge_04' },
-      { text: '建康与八骏会合', status: 'ready', stageId: 'lcq.stage_09_trade_and_escape', eventId: 'lcq.event.s09_01_eight_steeds_leave' },
+      { text: '打听岳帅旧事，问清星月湖是什么', status: 'ready', stageId: 'lcq.stage_04b_lingfei_baiyi_crisis', eventId: 'lcq.event.s04b_lingfei_baiyi_crisis_16' },
+      // 不另开 event：托付紧贴杀龙那一刻（谢艺 seq 210 被闪电击落，程宗扬替他杀了龙 211，
+      // 他才交代后事），所以**附在昭南的杀龙 event 里**双喂——昭南读了结，本线读托付。
+      { text: '赶到谢艺身边，接下他把小紫带往星月湖的托付', status: 'new', stageId: 'lcq.stage_05b', eventId: 'lcq.event.s05b_slay_dragon' },
+      { text: '向孟非卿报告谢艺之死', status: 'ready', stageId: 'lcq.stage_07_qingyuan_jiankang', eventId: 'lcq.event.s07_05_eight_steeds_informed' },
+      // 与汉国入口同一 event，待办各说各的：汉国读左武覆灭，本线读番号旧案。
+      { text: '跟着八骏，问清左武军怎么覆灭的', status: 'ready', stageId: 'lcq.stage_07_qingyuan_jiankang', eventId: 'lcq.event.s07_01_old_case' },
+      { text: '萧遥逸代表星月湖，向你开放资源', status: 'new', stageId: 'lcq.stage_07_qingyuan_jiankang', eventId: 'lcq.event.s07_xiao_opens' },
+      { text: '古冥隐点破：第八骏就是萧遥逸', status: 'ready', stageId: 'lcq.stage_08_jiankang_coup', eventId: 'lcq.event.s08_08_gumingyin_plot' },
+      { text: '八骏离建康，萧遥逸率水师赴江州', status: 'ready', stageId: 'lcq.stage_09_trade_and_escape', eventId: 'lcq.event.s09_01_eight_steeds_leave' },
+      { text: '以鹏翼社作抵押，替孟非卿筹十万金铢', status: 'ready', stageId: 'lcq.stage_10_jiangzhou_shadow_war', eventId: 'lcq.event.s10_05_war_funds' },
+      { text: '受孟非卿之命，率部赴三川口护月霜', status: 'ready', stageId: 'lcq.stage_11_lieshan_battle', eventId: 'lcq.event.s11_03_protect_yueshuang' },
       { text: '江州战事：与星月湖并肩', status: 'ready', stageId: 'lcq.stage_11_lieshan_battle', eventId: 'lcq.event.s11_04_xingyue_appears' },
-      { text: '入营判据：怎样才算真正编入星月湖', status: 'pending' },
-      { text: '岳帅冤案洗雪的收束', status: 'pending' },
+      { text: '全盘接管鹏翼社与星月湖暗产', status: 'new', stageId: 'lcq.stage_12_jiangzhou_counterwar', eventId: 'lcq.event.s12_pengyi_takeover' },
+      { text: '在临安祭岳鹏举与谢艺的墓', status: 'new', stageId: 'lyl.lin_an_bridge', eventId: 'lyl.event.lin_an_bridge_xieyi_tomb' },
+      { text: '岳帅归营、番号恢复、冤案洗雪（续写第二幕）', status: 'pending' },
     ],
-    pendingExpansion: 'beat 级 ✅10／⚠3／⏳3——内容已连续落地，缺的是入营判据与洗冤收束，不是没故事。',
+    pendingExpansion: '顶点＝**全盘接管鹏翼社与星月湖暗产**（seq 534 `第280章·默契`），形态与汉国 979 同构：名分换经营权，'
+      + '不是去当第八个骏。旧的「入营判据」pending 作废——正典的完成键就是 534，不该另发明一套军籍手续。'
+      + '此前的开放资源（276）、抵押借钱（404）、三川口指挥权（439）、江州并肩都只是**立场**：仍是他们的资源，你在用。',
   },
   {
     id: 'heimohai',
@@ -146,13 +172,30 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       + '且她已是主轴血脉线核心承重（层三解锁门／遗孤名册／大祭备用容器），'
       + '兼作黑魔海入口会让玩家分不清"认识小紫"是在推血脉还是在入毒宗。',
     nodes: [
-      { text: '南荒遇朱老头，落进毒宗的庇护', status: 'ready', stageId: 'lcq.stage_04', eventId: 'lcq.event.s04_02' },
-      { text: '建康再见殇侯，听出天命侯这回事', status: 'ready', stageId: 'lcq.stage_07_qingyuan_jiankang', eventId: 'lcq.event.s07_03_xiaozi_appears' },
-      { text: '太泉段卷入黑魔海的巢穴与杀局', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_blacksea_trap_04_beat' },
-      { text: '天命侯名分：玩家侧怎么争', status: 'pending' },
-      { text: '大祭与潘金莲的对决（续写第二幕）', status: 'pending' },
+      // 旧表三处挂错，本轮全部纠正：入口挂 `s04_02`（实为鬼王峒武士袭击）→ 改 `s04_04` 发蛊；
+      // 「听出天命侯」挂 `s07_03`（实为小紫制服卓云君，零天命侯字样）→ 拆成亮身份与名分两拍；
+      // 杀局挂 `_04_beat`（实为野猪林乱战）→ 改 `_08_beat`。
+      { text: '南荒发蛊：看清朱老头身边的东西不敢碰他', status: 'ready', stageId: 'lcq.stage_04', eventId: 'lcq.event.s04_04' },
+      { text: '把羊皮纸送到云苍峰，疑黑魔海与鬼王峒勾结', status: 'ready', stageId: 'lcq.stage_04b_lingfei_baiyi_crisis', eventId: 'lcq.event.s04b_lingfei_baiyi_crisis_04' },
+      // 原在隔离关 `stage_06` `s06_05`。**不跟着搬进 05b**：这场面见换个地方谈一样开得了后续，
+      // 与杀龙没有硬绑。落清远／建康——硬约束只有一条，必须早于下一拍「不与殇侯为敌」，
+      // 那时玩家得已经知道朱老头是谁。形态仍是可玩面见，不是「听说他是侯」。
+      { text: '当面确认朱老头就是殇侯，听他称你是天命之人', status: 'new', stageId: 'lcq.stage_07_qingyuan_jiankang', eventId: 'lcq.event.s07_shanghou_revealed' },
+      { text: '与萧遥逸击掌：不与殇侯为敌', status: 'new', stageId: 'lcq.stage_08_jiankang_coup', eventId: 'lcq.event.s08_palm_oath' },
+      { text: '查清黑魔海内隙，听泉玉姬供认御姬奴', status: 'ready', stageId: 'lcq.stage_09_trade_and_escape', eventId: 'lcq.event.s09_06_blacksea_fracture' },
+      { text: '先发制人捣江州巢穴，拿到阴阳鱼', status: 'ready', stageId: 'lcq.stage_10_jiangzhou_shadow_war', eventId: 'lcq.event.s10_07_preemptive_strike' },
+      { text: '殇侯施尸毒，破开宋军阵线', status: 'ready', stageId: 'lcq.stage_12_jiangzhou_counterwar', eventId: 'lcq.event.s12_16_corpse_poison' },
+      { text: '以人情和经济筹码，请殇侯留守江州', status: 'ready', stageId: 'lcq.stage_12_jiangzhou_counterwar', eventId: 'lcq.event.s12_17_shanghou_stays' },
+      { text: '用晴州水泥代理权，换黑魔海五年不入宋', status: 'new', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_cement_truce' },
+      { text: '小瀛洲杀局：逼出剑玉姬真身', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_blacksea_trap_08_beat' },
+      { text: '剑玉姬以成光换你支持刘建，当面回绝', status: 'new', stageId: 'lyl.han_palace_endgame', eventId: 'lyl.event.han_jianyu_refused' },
+      { text: '让毒宗承认：天命侯的传承在你这边', status: 'new', stageId: 'lyg.mijing_rumen', eventId: 'lyg.event.mijing_tianminghou' },
+      { text: '大祭：与潘金莲对决、总坛覆灭（续写第二幕）', status: 'pending' },
     ],
-    pendingExpansion: 'beat 级 ✅13／⚠3／⏳3——故事最多的一条。半成品的是**玩家侧名分**：「天命侯」全库 0 条 event。',
+    pendingExpansion: '顶点＝**天命侯**（蓝图 §13-C：名义殇侯、毒宗实推程宗扬）。正典有这个词、**没有授名**——'
+      + 'seq 222 是殇侯称你「天命之人」的谶语，1155 是中行说私室失言的一声惊呼且被当场怒斥，'
+      + '全库 396 条 event 搜「天命侯」命中 0。故不编一道「殇侯当场封侯」，'
+      + '而是在既有庇护关系上做成可完成的名分拍：完成键＝毒宗侧承认传承已归程，不是有人叫了一声。',
   },
   // —— 国家／地区线：锚地 ——
   {
