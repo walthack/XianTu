@@ -195,7 +195,10 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       { text: '八骏离建康，萧遥逸率水师赴江州', status: 'ready', stageId: 'lcq.stage_09_trade_and_escape', eventId: 'lcq.event.s09_01_eight_steeds_leave' },
       { text: '以鹏翼社作抵押，替孟非卿筹十万金铢', status: 'ready', stageId: 'lcq.stage_10_jiangzhou_shadow_war', eventId: 'lcq.event.s10_05_war_funds' },
       { text: '受孟非卿之命，率部赴三川口护月霜', status: 'ready', stageId: 'lcq.stage_11_lieshan_battle', eventId: 'lcq.event.s11_03_protect_yueshuang' },
+      // 高潮战不只一拍：它的展开在事件层现成躺着，先前每场仗只挑了中间那一条代表拍。
       { text: '江州战事：与星月湖并肩', status: 'ready', stageId: 'lcq.stage_11_lieshan_battle', eventId: 'lcq.event.s11_04_xingyue_appears' },
+      { text: '三川口：抵挡王韬的焚天斧', status: 'ready', stageId: 'lcq.stage_11_lieshan_battle', eventId: 'lcq.event.s11_05_wangtao_breaks' },
+      { text: '雪原鏖战：在三川口跟宋军拼到底', status: 'ready', stageId: 'lcq.stage_11_lieshan_battle', eventId: 'lcq.event.s11_06_snow_battle' },
       { text: '全盘接管鹏翼社与星月湖暗产', status: 'new', stageId: 'lcq.stage_12_jiangzhou_counterwar', eventId: 'lcq.event.s12_pengyi_takeover' },
       { text: '在临安祭岳鹏举与谢艺的墓', status: 'new', stageId: 'lyl.lin_an_bridge', eventId: 'lyl.event.lin_an_bridge_xieyi_tomb' },
       { text: '岳帅归营、番号恢复、冤案洗雪（续写第二幕）', status: 'pending' },
@@ -242,8 +245,13 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       { text: '先发制人捣江州巢穴，拿到阴阳鱼', status: 'ready', stageId: 'lcq.stage_10_jiangzhou_shadow_war', eventId: 'lcq.event.s10_07_preemptive_strike' },
       { text: '殇侯施尸毒，破开宋军阵线', status: 'ready', stageId: 'lcq.stage_12_jiangzhou_counterwar', eventId: 'lcq.event.s12_16_corpse_poison' },
       { text: '以人情和经济筹码，请殇侯留守江州', status: 'ready', stageId: 'lcq.stage_12_jiangzhou_counterwar', eventId: 'lcq.event.s12_17_shanghou_stays' },
+      // 高潮战不只一拍：它的展开在事件层现成躺着，先前每场仗只挑了中间那一条代表拍。
+      { text: '在太医局查医档，看出剑玉姬已经落子', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_blacksea_trap_07_beat' },
+      { text: '小瀛洲杀局', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_blacksea_trap_08_beat' },
       { text: '用晴州水泥代理权，换黑魔海五年不入宋', status: 'new', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_cement_truce' },
-      { text: '小瀛洲杀局：逼出剑玉姬真身', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_blacksea_trap_08_beat' },
+      { text: '在保宁寺放生池逼出剑玉姬真身', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_blacksea_trap_09_beat' },
+      { text: '八臂收束：从保宁寺突围', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_blacksea_trap_10_beat' },
+      { text: '战后在翠微园收拾伤员与残局', status: 'ready', stageId: 'lyl.taiquan_sacred_fruit', eventId: 'lyl.event.taiquan_sacred_fruit_01' },
       { text: '剑玉姬以成光换你支持刘建，当面回绝', status: 'new', stageId: 'lyl.han_palace_endgame', eventId: 'lyl.event.han_jianyu_refused' },
       { text: '让毒宗承认：天命侯的传承在你这边', status: 'new', stageId: 'lyg.mijing_rumen', eventId: 'lyg.event.mijing_tianminghou' },
       { text: '大祭：与潘金莲对决、总坛覆灭（续写第二幕）', status: 'pending' },
@@ -362,7 +370,10 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       // S2 并进 s11_09_grain_plan
       { text: '看清江州水泥坚城，问清粮战怎么做', status: 'ready', stageId: 'lcq.stage_11_lieshan_battle', eventId: 'lcq.event.s11_02_cement_fortress' },
       // S3 并进 s12_16_corpse_poison
+      // 高潮战不只一拍：它的展开在事件层现成躺着，先前每场仗只挑了中间那一条代表拍。
+      { text: '从宋军手里救下被擒的萧遥逸', status: 'ready', stageId: 'lcq.stage_12_jiangzhou_counterwar', eventId: 'lcq.event.s12_10_rescue_xiao' },
       { text: '扛住江州围城，看宋军阵线怎么破', status: 'ready', stageId: 'lcq.stage_12_jiangzhou_counterwar', eventId: 'lcq.event.s12_11_siege_begins' },
+      { text: '城门火攻：烧掉宋军的冲车', status: 'ready', stageId: 'lcq.stage_12_jiangzhou_counterwar', eventId: 'lcq.event.s12_12_gate_fire' },
       // S4 抵达／祭墓建议并进 lin_an_arrive，不单开
       { text: '临安落脚，摸清这座城的暗线', status: 'ready', stageId: 'lyl.lin_an_bridge', eventId: 'lyl.event.lin_an_bridge_01_beat' },
       // S5 另建议 lyl.event.lin_an_libu（临安落册）；文案用屯田司员外郎，不用「客卿」
@@ -457,7 +468,10 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       { text: '旁观李辅国审判；唐皇被弑', status: 'ready', stageId: 'lyg.ganlu_aftershock', eventId: 'lyg.event.ganlu_aftershock_05_beat' },
       { text: '与众人合力消灭窥基魔身', status: 'ready', stageId: 'lyg.shituolin_endgame', eventId: 'lyg.event.shituolin_endgame_05_beat' },
       // T9 并进 shituolin_endgame_10_beat
-      { text: '奉诏讨逆，莲座迎战李辅国', status: 'ready', stageId: 'lyg.shituolin_endgame', eventId: 'lyg.event.shituolin_endgame_09_beat' },
+      // 高潮战不只一拍：它的展开在事件层现成躺着，先前每场仗只挑了中间那一条代表拍。
+      { text: '奉诏讨逆', status: 'ready', stageId: 'lyg.shituolin_endgame', eventId: 'lyg.event.shituolin_endgame_09_beat' },
+      { text: '莲座前迎战李辅国', status: 'ready', stageId: 'lyg.shituolin_endgame', eventId: 'lyg.event.shituolin_endgame_10_beat' },
+      { text: '从浮屠塔的困局里脱身', status: 'ready', stageId: 'lyg.shituolin_endgame', eventId: 'lyg.event.shituolin_endgame_11_beat' },
       { text: '联手斩断李辅国肉身', status: 'ready', stageId: 'lyg.shituolin_endgame', eventId: 'lyg.event.shituolin_endgame_12_beat' },
       // T11：objective 是阻止夺舍；axisBeat 写明当场没拦住
       { text: '阻止太皇太后被夺舍', status: 'ready', stageId: 'lyg.shituolin_endgame', eventId: 'lyg.event.shituolin_endgame_13_beat' },
