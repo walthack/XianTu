@@ -99,13 +99,33 @@ test('八骏任一见过即开星月湖', async () => {
 });
 
 test('每条线都有入口指引，且说清"去哪／找谁"', async () => {
+  const fs = await import('node:fs');
   const { SECONDARY_LINES } = await loadTs('../src/modules/scenarioMods/secondaryLines.ts');
+  // 地名从正典里取，不在测试里手抄一份——手抄的那份迟早和数据对不上。
+  const names = new Map();
+  const dir = 'src/modules/scenarioMods/builtins/data/';
+  for (const f of fs.readdirSync(dir).filter(x => x.endsWith('.json'))) {
+    const j = JSON.parse(fs.readFileSync(dir + f, 'utf8'));
+    if (!j.scenario?.worldSimulation) continue;
+    for (const loc of j.canon?.locations || []) {
+      if (loc?.id && loc.name) names.set(loc.id, loc.name);
+    }
+  }
   for (const line of SECONDARY_LINES) {
     assert.ok(line.entryHint && line.entryHint.length >= 6, `${line.name} 缺入口指引`);
-    // 指引必须点出锚：地点线要提地名，宗派线要提人名
-    // 指引要对得上它实际用的锚：锚地就说去哪，锚人就说找谁／跟谁
+    // 指引要对得上它实际用的锚：锚地就说清是哪个地方，锚人就说找谁／跟谁。
+    //
+    // 地点线这条原来只找「去／前往」两个动词——那是弱代理，管不住真正要管的事。
+    // 引子按原文重写后（2026-08-16）它两头都失灵：唐国写了「入长安」却因为没有「去」字被判不合格，
+    // 而一句「想插手晋国朝局，去建康」这种没有任何内容的模板话反而一直合格。
+    // 改成校地名本身：锚指向哪个地方，指引里就得出现那个地方的名字。
     if (line.anchorLocationIds?.length) {
-      assert.ok(/去|前往/.test(line.entryHint), `${line.name} 的指引没说去哪：${line.entryHint}`);
+      const anchors = line.anchorLocationIds.map(id => names.get(id)).filter(Boolean);
+      assert.ok(anchors.length, `${line.name} 的地点锚在正典里查不到名字：${line.anchorLocationIds}`);
+      assert.ok(
+        anchors.some(n => line.entryHint.includes(n)),
+        `${line.name} 的指引没点出锚指向的地方（${anchors.join('／')}）：${line.entryHint}`,
+      );
     } else {
       assert.ok(/找|同行|跟/.test(line.entryHint), `${line.name} 的指引没说找谁：${line.entryHint}`);
     }

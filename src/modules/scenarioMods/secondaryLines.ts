@@ -254,8 +254,14 @@ export const SECONDARY_LINES: SecondaryLine[] = [
     name: '晋国',
     kind: 'nation',
     anchorLocationIds: ['liuchao.location.jiankang'],
-    entryHint: '想插手晋国朝局，去建康。',
-    basis: '建康＝晋国都城（官方附录地图 jin-nanzhao 幅在场；描述「晋国都城」）。第 10 关可达。',
+    entryHint: '建康的宫城里闹鬼——你用灵飞镜窥宫，撞见一个大汉从假山钻出，还回头察觉了你的窥视。'
+      + '把这桩怪事说给萧遥逸；夜探台城是他提的。',
+    basis: '建康＝晋国都城（官方附录地图 jin-nanzhao 幅在场；描述「晋国都城」）。第 10 关可达。'
+      + '**引子按原文重写**（用户 2026-08-16「引子有点弱，看下原文怎么写过去的」）：'
+      + '原来的「想插手晋国朝局，去建康」是模板话，正典里他并不是奔着朝局去的——'
+      + 'seq 241 用灵飞镜窥宫、撞见可疑大汉从假山钻出且被对方察觉；seq 242 把「宫禁闹鬼」告诉萧遥逸，'
+      + '**由萧提议夜探台城**。那个「鬼」后来查出是徐度安插的幽冥宗卧底（seq 268），篡位的前戏——'
+      + '即：入线的钩子是一桩鬼故事，不是从政的野心。',
     nodes: [
       { text: '进建康，夜探神龙殿，看清晋帝已被架空', status: 'ready', stageId: 'lcq.stage_07_qingyuan_jiankang', eventId: 'lcq.event.s07_07_dragon_hall' },
       // J2 并进 s08_03_beifu_rescue
@@ -280,10 +286,17 @@ export const SECONDARY_LINES: SecondaryLine[] = [
     id: 'song',
     name: '宋国',
     kind: 'nation',
-    anchorLocationIds: ['liuchao.location.linan', 'liuchao.location.lin_an'],
-    entryHint: '想插手宋国朝局，去临安。',
+    // 江州与临安都收：和汉国同一处毛病——锚只填都城，线就要等到 seq 559 才开，
+    // 而它第一个节点在 seq 383。江州是宋国找上门来的地方，比临安早得多。
+    anchorLocationIds: ['liuchao.location.jiangzhou', 'liuchao.location.linan', 'liuchao.location.lin_an'],
+    entryHint: '卢景带来的信不必等你到临安：贾师宪已经大举集结，江州要打起来了。'
+      + '改不改道去援，你自己定。',
     basis: '临安＝宋国都城。`linan` 覆盖 30 关为主，`lin_an` 只 1 关，一并收下防漏；'
-      + '`linan_city` 只在隔离关 `taiquan_expedition`，不收。',
+      + '`linan_city` 只在隔离关 `taiquan_expedition`，不收。'
+      + '**另收江州**（2026-08-16）：正典里宋国不是你走进临安才遇上的——seq 380 卢景带来消息，'
+      + '贾师宪大举集结、江州兵危，**程宗扬当场决定改道去援**；seq 383 贾师宪下令攻江州清岳党。'
+      + '本线第一个节点就落在 seq 383，而临安要到 seq 559 才落脚：只锚都城等于让入口比第一拍晚 176 拍。'
+      + '这与汉国「只锚洛都、把第 10 关的旧案漏掉」是同一个错，一并纠正。',
     nodes: [
       { text: '探查贾师宪攻江州、清岳党的军令', status: 'ready', stageId: 'lcq.stage_10_jiangzhou_shadow_war', eventId: 'lcq.event.s10_01_jiangzhou_order' },
       // S2 并进 s11_09_grain_plan
@@ -346,9 +359,16 @@ export const SECONDARY_LINES: SecondaryLine[] = [
     name: '唐国',
     kind: 'nation',
     anchorLocationIds: ['liuchao.location.changan'],
-    entryHint: '想插手唐国朝局，去长安。',
-    basis: '长安＝唐国都城。须用 `liuchao.location.changan`——`lyg.location.changan`（名「长安城」）'
-      + '在抽查的 live 关查无。第 30 关可达。',
+    entryHint: '你是带着汉国舞阳侯的身份出使唐国的——入长安，落脚宣平坊。'
+      + '路上袁天罡会告诉你：番僧在猎杀穿越者。',
+    basis: '长安＝唐国都城，第 30 关可达。**这次不是孪生 id 坑**（实测，2026-08-16）：'
+      + '`lyg.location.changan` 确实存在于 6 个关，但那 6 关同时都有 `liuchao.location.changan`——'
+      + '是真子集，收一个就够，加了等于没加。（旧 basis 写它「live 关查无」，与实测不符，已改。'
+      + '结论没变，理由是错的。汉国洛都那次是真孪生：24 关 vs 6 关互不覆盖，必须全收。）'
+      + '**引子按原文重写**（用户 2026-08-16）：他不是「想插手唐国朝局」才去的长安——'
+      + 'seq 1055「程宗扬**以舞阳侯身份**从舞都出发，乘船逆流前往唐国出使」：'
+      + '**汉国线的顶点就是本线的入场券**，两条线在这里咬合。'
+      + '把你卷进佛门纷争的钩子在路上：seq 1061 袁天罡透露番僧猎杀穿越者。',
     nodes: [
       // T1 汉使身份并进同关 s03_09
       { text: '以汉使入长安，在宣平坊落脚', status: 'ready', stageId: 'lyg.changgan_begins', eventId: 'lyg.event.s03_01' },
@@ -375,7 +395,10 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       { text: '换身后续：长安驱魂局', status: 'pending' },
     ],
     pendingExpansion: '线形：以汉使入长安 → 卷入佛门纷争 → 大战窥基魔身 → 甘露变 → 李辅国换身暂告一段落。'
-      + '顶点＝大都护、上柱国（恩同亲王，seq 1396）。T12 需新增 `shituolin_endgame_title_daduhu`（1395 登基／1397 辞官劝告并进）。'
+      + '**顶点是临时的**（用户裁定 2026-08-16）：大都护、上柱国（恩同亲王，seq 1396）只是原著段用完时的'
+      + '收束点，不是这条线的终局——李辅国换身之后还有戏，等剧本写出来再往后扩。'
+      + '所以它与其余七条线的顶点不同档：那七条是"这条线打穿了"，唐国这个是"原著素材到此为止"。'
+      + 'T12 需新增 `shituolin_endgame_title_daduhu`（1395 登基／1397 辞官劝告并进）。'
       + 'T14 换身后续：长安驱魂局，没剧本，留空待完成。旧「入仕唐廷的判据」作废。',
   },
 ];
