@@ -103,12 +103,20 @@ test('每条线都有入口指引，且说清"去哪／找谁"', async () => {
   const { SECONDARY_LINES } = await loadTs('../src/modules/scenarioMods/secondaryLines.ts');
   // 地名从正典里取，不在测试里手抄一份——手抄的那份迟早和数据对不上。
   const names = new Map();
+  const people = new Map();
   const dir = 'src/modules/scenarioMods/builtins/data/';
   for (const f of fs.readdirSync(dir).filter(x => x.endsWith('.json'))) {
     const j = JSON.parse(fs.readFileSync(dir + f, 'utf8'));
     if (!j.scenario?.worldSimulation) continue;
     for (const loc of j.canon?.locations || []) {
       if (loc?.id && loc.name) names.set(loc.id, loc.name);
+    }
+    // 人名收成集合：同一个 id 在不同关用不同称呼（殇侯／朱老头／朱八八）。
+    for (const c of j.canon?.characters || []) {
+      if (c?.id && c.name) {
+        if (!people.has(c.id)) people.set(c.id, new Set());
+        people.get(c.id).add(c.name);
+      }
     }
   }
   for (const line of SECONDARY_LINES) {
@@ -127,7 +135,14 @@ test('每条线都有入口指引，且说清"去哪／找谁"', async () => {
         `${line.name} 的指引没点出锚指向的地方（${anchors.join('／')}）：${line.entryHint}`,
       );
     } else {
-      assert.ok(/找|同行|跟/.test(line.entryHint), `${line.name} 的指引没说找谁：${line.entryHint}`);
+      // 同理，人物锚这半原来也只找「找／同行／跟」三个动词——同一个弱代理，一并收紧成校人名。
+      // 人物有别名（殇侯＝朱老头＝朱八八），任一出现即可：玩家在第 5 关认识的是「朱老头」。
+      const who = (line.anchorCharacterIds || []).flatMap(id => [...(people.get(id) || [])]);
+      assert.ok(who.length, `${line.name} 的人物锚在正典里查不到名字：${line.anchorCharacterIds}`);
+      assert.ok(
+        who.some(n => line.entryHint.includes(n)),
+        `${line.name} 的指引没点出锚指向的人（${who.join('／')}）：${line.entryHint}`,
+      );
     }
   }
 });
