@@ -833,7 +833,8 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
         if (layer?.text) {
           lines.push(`- 长期方向（常驻可见，玩家可无限期搁置）：${layer.text}`);
         }
-        const nodes = resolveMainQuestNodes(runtime.modId);
+        // 传入当前地点：隔离关被默认路线跳过时，节点靠地点锚仍能显示（见 MainQuestNode.locationId）。
+        const nodes = resolveMainQuestNodes(runtime.modId, currentLocation?.id);
         if (nodes.length) {
           lines.push(`- 本关主线节点：${nodes.map(node => node.text).join('；')}`);
         }

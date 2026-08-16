@@ -68,3 +68,26 @@ test('MAIN_QUEST_REQUIREMENTS 恰有两条完成要求', async () => {
     ['taiquan_rite', 'bloodline_survivor'],
   );
 });
+
+// 地点锚（用户裁定 2026-08-16）：隔离关被默认路线跳过，节点不能因此失踪。
+test('隔离关的主轴节点靠地点锚仍可达', async () => {
+  const { MAIN_QUEST_NODES, resolveMainQuestNodes } = await loadTs('../src/modules/scenarioMods/mainQuestAxis.ts');
+  const { DEFAULT_LINE_QUARANTINED_STAGE_IDS } = await loadTs('../src/modules/scenarioMods/canonRail.ts');
+
+  const quarantinedNodes = MAIN_QUEST_NODES.filter(n => DEFAULT_LINE_QUARANTINED_STAGE_IDS.has(n.stageId));
+  assert.ok(quarantinedNodes.length > 0, '若隔离名单已清空，本断言需重写而不是删除');
+
+  // 每个落在隔离关上的节点都必须有地点锚，否则默认路线上永远渲染不出来
+  for (const node of quarantinedNodes) {
+    assert.ok(node.locationId, `隔离关节点缺地点锚，将不可达：[${node.stageId}] ${node.text}`);
+    // 按地点也确实取得到
+    const byLocation = resolveMainQuestNodes(undefined, node.locationId);
+    assert.ok(byLocation.some(n => n.text === node.text), `地点锚 ${node.locationId} 取不到该节点`);
+  }
+});
+
+test('地点锚不误伤：无关地点取不到节点', async () => {
+  const { resolveMainQuestNodes } = await loadTs('../src/modules/scenarioMods/mainQuestAxis.ts');
+  assert.deepEqual(resolveMainQuestNodes(undefined, 'liuchao.location.does_not_exist'), []);
+  assert.deepEqual(resolveMainQuestNodes(undefined, undefined), []);
+});

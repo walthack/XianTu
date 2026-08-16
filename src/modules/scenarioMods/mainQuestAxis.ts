@@ -130,6 +130,22 @@ export interface MainQuestStageRole {
 export interface MainQuestNode {
   stageId: string;
   text: string;
+  /**
+   * 地点锚（用户裁定 2026-08-16：主线与二级线都该锚地点，不锚关卡）。
+   *
+   * 【为什么】关卡 ID 是脆的：`canonRail.DEFAULT_LINE_QUARANTINED_STAGE_IDS` 会让默认路线
+   * **静默跳过** 8 个关卡（每个拍点都无锚或来源复核发现锚点冲突，只允许显式 IF 进入），
+   * 其中 `lcq.stage_03`／`stage_05`／`stage_06` 正在主轴上。只按 `stageId` 精确匹配时，
+   * 这三关的节点在默认路线上**永远渲染不出来**——20 条节点死 3 条，且死的正是血脉线开场。
+   *
+   * 地点不随关卡编排变动。实测这三个锚在未隔离的关卡里都还在：
+   * 白湖商馆 → `stage_02`；鬼王峒 → `stage_03b`／`04`／`04b`／`05b`；鬼王宫 → `stage_05b`。
+   * 锚到地点后三条全部复活，且将来隔离名单缩小时不用再改。
+   *
+   * 用 id 不用名字：id 是权威键、不怕重名（已知「白夷」／「白夷谷」这类互含），
+   * 而 `resolveCurrentScenarioLocation` 已经把存档里的中文描述串解析成地点对象。
+   */
+  locationId?: string;
 }
 
 /**
@@ -225,12 +241,12 @@ export const MAIN_QUEST_NODES: MainQuestNode[] = [
   { stageId: 'lcq.stage_01', text: '从坠落处活下来，一路走到太乙真宗帅帐见着王哲' },
   { stageId: 'lcq.stage_02', text: '接下王哲的锦囊与九阳神功口诀，领受三件托付' },
   { stageId: 'lcq.stage_02', text: '见证王哲殉军，独自离开左武军的战场' },
-  { stageId: 'lcq.stage_03', text: '从白湖商馆的死局里脱身，组起自己的商队南下南荒' },
+  { stageId: 'lcq.stage_03', text: '从白湖商馆的死局里脱身，组起自己的商队南下南荒', locationId: 'liuchao.location.baihu_shang_guan' },
   { stageId: 'lcq.stage_03b_snake_flower_bridge', text: '查清蛇彝村灭村的真凶，循血符指向鬼王峒' },
-  { stageId: 'lcq.stage_05', text: '进鬼王峒，并当面辨认碧姬' },
+  { stageId: 'lcq.stage_05', text: '进鬼王峒，并当面辨认碧姬', locationId: 'liuchao.location.guiwangdong' },
   { stageId: 'lcq.stage_05b', text: '向碧姬追问小紫的过往' },
   { stageId: 'lcq.stage_05b', text: '与小紫达成临时协定，在鬼王宫策动奴隶倒戈' },
-  { stageId: 'lcq.stage_06', text: '接下谢艺对小紫与星月湖的托付，追上小紫见证她与碧姬的了断' },
+  { stageId: 'lcq.stage_06', text: '接下谢艺对小紫与星月湖的托付，追上小紫见证她与碧姬的了断', locationId: 'liuchao.location.gui_wang_gong' },
   { stageId: 'lyl.lin_an_bridge', text: '在临安立足，摸清这座城的暗线' },
   { stageId: 'lyl.xiaoyingzhou_blacksea_trap', text: '查明剑玉姬的真身' },
   { stageId: 'lyl.taiquan_sacred_fruit', text: '在云涛观迷楼找出太泉钥匙的线索' },
@@ -244,10 +260,21 @@ export const MAIN_QUEST_NODES: MainQuestNode[] = [
   { stageId: 'lyg.shituolin_endgame', text: '斩断李辅国肉身，并阻止太皇太后被夺舍' },
 ];
 
-/** 取当前关卡的主轴节点（0–2 条）。二级线关卡返回空数组。 */
-export function resolveMainQuestNodes(currentStageId: string | undefined): MainQuestNode[] {
-  if (!currentStageId) return [];
-  return MAIN_QUEST_NODES.filter(node => node.stageId === currentStageId);
+/**
+ * 取当前应显示的主轴节点。
+ *
+ * 命中条件是**关卡或地点任一**：默认路线会静默跳过隔离关（见 `MainQuestNode.locationId`），
+ * 只按关卡匹配会让那些关的节点永远渲染不出来。玩家人在锚点地点上，就该看得见那条节点。
+ * 二级线关卡且不在任何锚点上时返回空数组。
+ */
+export function resolveMainQuestNodes(
+  currentStageId: string | undefined,
+  currentLocationId?: string,
+): MainQuestNode[] {
+  if (!currentStageId && !currentLocationId) return [];
+  return MAIN_QUEST_NODES.filter(node =>
+    (currentStageId && node.stageId === currentStageId)
+    || (currentLocationId && node.locationId === currentLocationId));
 }
 
 /**

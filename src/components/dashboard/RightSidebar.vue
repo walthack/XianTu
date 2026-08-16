@@ -448,7 +448,15 @@ const worldQuestAxis = computed(() => {
   if (!rt || typeof rt !== 'object') return null;
   const layer = resolveMainQuestLayer(rt.modId);
   if (!layer?.text) return null;
-  const nodes = resolveMainQuestNodes(rt.modId)
+  // 当前地点：隔离关被默认路线跳过时，节点靠地点锚仍要显示（见 MainQuestNode.locationId）。
+  // 存档里存的是中文描述串，按地点名做最长匹配还原成 id——与 storyContext 的解析同口径。
+  const locDesc = String((gameStateStore.playerStatus as any)?.位置?.描述 || '').replace(/\s+/g, '');
+  const curLoc = locDesc
+    ? ((rt.canon?.locations || []) as Array<{ id: string; name: string }>)
+        .filter(l => l.name && l.name.length >= 2 && locDesc.includes(l.name.replace(/\s+/g, '')))
+        .sort((a, b) => b.name.length - a.name.length)[0]
+    : undefined;
+  const nodes = resolveMainQuestNodes(rt.modId, curLoc?.id)
     .map((node: { text?: string }) => String(node?.text || '').trim())
     .filter(Boolean)
     .join('；');
