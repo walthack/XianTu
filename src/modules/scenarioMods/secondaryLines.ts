@@ -20,7 +20,8 @@
  * `角色.位置.描述`，再由 `resolveCurrentScenarioLocation` 反查——多一道解析。
  *
  * 【纪律】本模块只回答"这条线现在接得到吗"，**不回答"玩家加入了没有"**。
- * 接到之后给不给、玩家点不点，是上层的事；引擎不替玩家决定。
+ * 锚一满足就把入口指引作为**待办**显示——不设"接受任务"这道手续（用户裁定 2026-08-16）：
+ * 与主线轴的长期方向同一口径，引擎只把话说清楚，照着做就是加入，不做也不损失什么。
  *
  * 归属与入口调研见 `docs/R3-10-SECONDARY-LINES-2026-08-16.md`
  * 与 `docs/R3-10-LINE-ENTRY-ANCHORS-2026-08-16.md`。
@@ -38,6 +39,14 @@ export interface SecondaryLine {
   anchorCharacterIds?: string[];
   /** 国家／地区线：走到就算到了的那个地方。 */
   anchorLocationId?: string;
+  /**
+   * 玩家可见的入口指引：**去哪里找谁**。
+   *
+   * 锚一满足就作为待办显示，**不需要玩家点击确认**（用户裁定 2026-08-16）——
+   * 与主线轴的长期方向同一口径：引擎只把话说清楚，不替玩家签字，也不设"接受任务"这道手续。
+   * 照着做就是加入，不做也不损失什么。
+   */
+  entryHint: string;
   /** 锚为什么是这个——正典依据，便于日后复核。 */
   basis: string;
 }
@@ -57,6 +66,7 @@ export const SECONDARY_LINES: SecondaryLine[] = [
     name: '太乙真宗',
     kind: 'sect',
     anchorCharacterIds: ['lcq.character.wang_zhe'],
+    entryHint: '王哲既已传功托付，太乙真宗的门就对你开着——去找他，或日后去找教御蔺采泉。',
     basis: '王哲是把程宗扬拉进太乙的人——`lcq.event.s01_04` objective 字面即「加入太乙真宗阵营」，'
       + '并在 `stage_02` 传功托付。**开局强制剧情就会见到他，等于自动开启**（用户确认 2026-08-16）。'
       + '（山门龙池两个 id 均不可达，故不用地点锚。）',
@@ -69,6 +79,7 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       'liuchao.character.xie_yi',      // 谢艺　 第 4 关（最早）·护岳帅父女
       'liuchao.character.xiao_yao_yi', // 萧遥逸 第 10 关·掌谍报商网
     ],
+    entryHint: '想搭上星月湖，去找八骏——先是谢艺，江州之后可找萧遥逸。',
     basis: '**用八骏，不用月霜**（用户裁定 2026-08-16）：月霜是要护的人，不是引你进门的人；'
       + '八骏才是星月湖建制（蓝图 §10：孟非卿掌军／萧遥逸掌谍报商网／谢艺护岳帅父女）。'
       + '**八骏里只取谢艺与萧遥逸**（用户裁定 2026-08-16）：这两人才是程宗扬实际打交道的，'
@@ -80,6 +91,7 @@ export const SECONDARY_LINES: SecondaryLine[] = [
     name: '黑魔海／毒宗',
     kind: 'sect',
     anchorCharacterIds: ['liuchao.character.shang_zhen_yu'],
+    entryHint: '毒宗的名分不在总坛里，在人身上——去找殇侯（你先认识的那位朱老头）。',
     basis: '秘密组织不靠走进总坛加入（蓝图总坛在昭南，事件层从未落地）。正典里程宗扬是毒宗系'
       + '「被庇护者」，蓝图 §13-C 定案「名义天命侯＝殇侯，毒宗实推的继承人＝程宗扬」。'
       + '同一 id 两个名字：第 5 关以「朱老头」现身，第 10 关以「殇侯」现身。'
@@ -93,6 +105,7 @@ export const SECONDARY_LINES: SecondaryLine[] = [
     name: '昭南',
     kind: 'nation',
     anchorLocationId: 'liuchao.location.xiongerpu',
+    entryHint: '想在昭南立足，先去熊耳铺——南荒诸部的往来都从那里过。',
     basis: '熊耳铺＝南荒腹地入口，`stage_03b` 起程、`stage_04` 落地。'
       + '都城麟趾／昭南城事件层未抵达，故用腹地入口。注意 `xiong_er_pu` 是另一套 id，只在 `stage_04`。',
   },
@@ -101,6 +114,7 @@ export const SECONDARY_LINES: SecondaryLine[] = [
     name: '晋国',
     kind: 'nation',
     anchorLocationId: 'liuchao.location.jiankang',
+    entryHint: '想插手晋国朝局，去建康。',
     basis: '建康＝晋国都城（官方附录地图 jin-nanzhao 幅在场；描述「晋国都城」）。第 10 关可达。',
   },
   {
@@ -108,6 +122,7 @@ export const SECONDARY_LINES: SecondaryLine[] = [
     name: '宋国',
     kind: 'nation',
     anchorLocationId: 'liuchao.location.linan',
+    entryHint: '想插手宋国朝局，去临安。',
     basis: '临安＝宋国都城。须用 `linan`——`lin_an` 与 `linan_city` 都只在隔离关，是死锚。',
   },
   {
@@ -115,6 +130,7 @@ export const SECONDARY_LINES: SecondaryLine[] = [
     name: '汉国',
     kind: 'nation',
     anchorLocationId: 'lyl.location.luoyang',
+    entryHint: '想插手汉国朝局，去洛都。',
     basis: '洛都＝汉国都城。须用 `lyl.location.luoyang`——atlas 孪生 `liuchao.location.luoyang` '
       + '在抵达关 `luoyang_cloud_secret` 不在场。',
   },
@@ -123,6 +139,7 @@ export const SECONDARY_LINES: SecondaryLine[] = [
     name: '唐国',
     kind: 'nation',
     anchorLocationId: 'liuchao.location.changan',
+    entryHint: '想插手唐国朝局，去长安。',
     basis: '长安＝唐国都城。须用 `liuchao.location.changan`——`lyg.location.changan`（名「长安城」）'
       + '在抽查的 live 关查无。第 30 关可达。',
   },
@@ -138,7 +155,8 @@ export const LINE_ANCHOR_MIN_ACQUAINTANCE = 'encountered' as const;
 /**
  * 当前接得到哪些二级线。纯函数：只看地点与相识账本，不读别的存档字段、不产生副作用。
  *
- * 只回答"接得到"，不回答"加入了"——见模块头纪律。
+ * 只回答"接得到"，不回答"加入了"——见模块头纪律。返回的每条都带 `entryHint`，
+ * 上层直接当待办显示即可，无需玩家确认。
  */
 export function resolveAvailableLines(
   currentLocationId: string | undefined,

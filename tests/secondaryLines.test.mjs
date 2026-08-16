@@ -84,3 +84,16 @@ test('八骏任一见过即开星月湖', async () => {
     assert.ok(opened.some(l => l.id === 'xingyuehu'), `见过八骏成员 ${id} 应开星月湖线`);
   }
 });
+
+test('每条线都有入口指引，且说清"去哪／找谁"', async () => {
+  const { SECONDARY_LINES } = await loadTs('../src/modules/scenarioMods/secondaryLines.ts');
+  for (const line of SECONDARY_LINES) {
+    assert.ok(line.entryHint && line.entryHint.length >= 6, `${line.name} 缺入口指引`);
+    // 指引必须点出锚：地点线要提地名，宗派线要提人名
+    if (line.kind === 'nation') {
+      assert.ok(/去|前往/.test(line.entryHint), `${line.name} 的指引没说去哪：${line.entryHint}`);
+    } else {
+      assert.ok(/找/.test(line.entryHint), `${line.name} 的指引没说找谁：${line.entryHint}`);
+    }
+  }
+});
