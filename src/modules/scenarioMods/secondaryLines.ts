@@ -150,13 +150,12 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       { text: '蔺采泉以支持江州，换你承认九阳出自他', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_blacksea_trap_02_beat' },
       { text: '鹤林观：蔺采泉自立掌教，秋少君升任教御', status: 'new', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_lin_takes_seat' },
       { text: '在翠微园承诺对付现任掌教', status: 'new', stageId: 'lyl.taiquan_sacred_fruit', eventId: 'lyl.event.sacred_against_lin' },
-      { text: '问清商乐轩认不认这届鹤林观即位', status: 'new', stageId: 'lyl.taiquan_sacred_fruit', eventId: 'lyl.event.taiyi_shang_stance' },
-      { text: '多数教御到手：选自坐掌教，或扶一个代理人', status: 'new', stageId: 'lyl.taiquan_sacred_fruit', eventId: 'lyl.event.taiyi_seat_choice' },
+      // ⏳ 扩写部分，本阶段不再细化（用户裁定 2026-08-16）：正典无此拍，只标未来待扩。
+      { text: '扳倒现任掌教、取得掌教之位（未来待扩）', status: 'pending' },
       { text: '锦囊出指令、齐羽仙反用（续写第二幕）', status: 'pending' },
     ],
-    pendingExpansion: '顶点＝**掌教之位**，一条 event 两个出口：自坐，或持王哲遗命扶商乐轩／秋少君坐明面、自己操盘。'
-      + '多数判据＝在位教御 2／3（蔺自立后为商／卓／秋，最短路径商＋秋；卓的票留给人物线，本轮不设完成键）。'
-      + '正典只写到对手即位（seq 581 `掌教`），**程侧授名 timeline 无拍**，故顶点标需新增。'
+    pendingExpansion: '**顶点是扩写，本阶段只标待扩**（用户裁定 2026-08-16）：正典写到对手蔺采泉自立掌教（seq 581）'
+      + '与程宗扬承诺对付他（seq 629）为止，**程侧授名 timeline 无拍**。扳倒掌教、多数教御、自坐或扶代理人——这些都是我们的扩写，不在本阶段细化。'
       + '卓云君收服链（`s07_02`～`s07_04` 等）按裁定归人物任务，不写成本线节点，只在「承诺对付掌教」一拍旁留插入点。',
   },
   {
@@ -253,10 +252,11 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       { text: '八臂收束：从保宁寺突围', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_blacksea_trap_10_beat' },
       { text: '战后在翠微园收拾伤员与残局', status: 'ready', stageId: 'lyl.taiquan_sacred_fruit', eventId: 'lyl.event.taiquan_sacred_fruit_01' },
       { text: '剑玉姬以成光换你支持刘建，当面回绝', status: 'new', stageId: 'lyl.han_palace_endgame', eventId: 'lyl.event.han_jianyu_refused' },
-      { text: '让毒宗承认：天命侯的传承在你这边', status: 'new', stageId: 'lyg.mijing_rumen', eventId: 'lyg.event.mijing_tianminghou' },
+      // ⏳ 扩写部分，本阶段不再细化（用户裁定 2026-08-16）：正典无此拍，只标未来待扩。
+      { text: '取得天命侯名分（未来待扩）', status: 'pending' },
       { text: '大祭：与潘金莲对决、总坛覆灭（续写第二幕）', status: 'pending' },
     ],
-    pendingExpansion: '顶点＝**天命侯**（蓝图 §13-C：名义殇侯、毒宗实推程宗扬）。正典有这个词、**没有授名**——'
+    pendingExpansion: '**顶点是扩写，本阶段只标待扩**（用户裁定 2026-08-16）。天命侯（蓝图 §13-C：名义殇侯、毒宗实推程宗扬）正典有词、**无授名**——'
       + 'seq 222 是殇侯称你「天命之人」的谶语，1155 是中行说私室失言的一声惊呼且被当场怒斥，'
       + '全库 396 条 event 搜「天命侯」命中 0。故不编一道「殇侯当场封侯」，'
       + '而是在既有庇护关系上做成可完成的名分拍：完成键＝毒宗侧承认传承已归程，不是有人叫了一声。',
@@ -341,7 +341,8 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       // J9 前半已有 s12_14_chenxing_appears／s12_15_capture_jingli；后半需新增
       { text: '把广源行在晋的旧账揭开（龙宸这条线）', status: 'new', stageId: 'lyl.taiquan_afterfall', eventId: 'lyl.event.jin_guangyuan_ledger' },
       // 顶点占位：原文未明，称号待定（seq 334「程宗扬无所得」）
-      { text: '让相府把建康的盐粮路写进你的名下', status: 'new', stageId: 'lyl.taiquan_afterfall', eventId: 'lyl.event.jin_charter' },
+      // ⏳ 扩写部分，本阶段不再细化（用户裁定 2026-08-16）：正典无此拍，只标未来待扩。
+      { text: '在晋廷取得一个名分（未来待扩，原文未明）', status: 'pending' },
     ],
     pendingExpansion: '线形：进建康看清帝室架空 → 宫变调查 → 相府／北府／云家立场（分赃无所得）→ 晋旱收粮＋广源行旧账 → 晋廷承认特许商权。'
       + '顶点＝占位名分，原文未明、称号待定（seq 334 反证）。节点文案不写死官名。'
