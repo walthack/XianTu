@@ -259,7 +259,9 @@ export const SECONDARY_LINES: SecondaryLine[] = [
     name: '汉国',
     kind: 'nation',
     anchorLocationIds: ['liuchao.location.luoyang', 'lyl.location.luoyang'],
-    entryHint: '想插手汉国朝局，去洛都。',
+    // 两条路都能入线：跟八骏查左武军的旧案（第 10 关，早得多），或直接走到洛都（第 24 关）。
+    anchorCharacterIds: ['liuchao.character.xiao_yao_yi'],
+    entryHint: '汉廷的账从一桩旧案查起——找萧遥逸问清左武军是怎么覆灭的；或者直接去洛都。',
     basis: '洛都＝汉国都城。**两个孪生 id 全收**：`liuchao.location.luoyang` 覆盖 24 关、'
       + '`lyl.location.luoyang` 覆盖 6 关（含抵达关 `luoyang_cloud_secret`，那关没有 atlas 那个）。'
       + '早先只填后者是错的——汉国线 6 关里只有 3 关能响，`dingtao_beijing` 与 `han_succession` '
@@ -267,6 +269,10 @@ export const SECONDARY_LINES: SecondaryLine[] = [
     nodes: [
       // 入口改挂（2026-08-16）：跟着八骏查左武军覆灭；第 10 关即可入线。同时喂星月湖。
       { text: '跟着八骏，问清左武军怎么覆灭的', status: 'ready', stageId: 'lcq.stage_07_qingyuan_jiankang', eventId: 'lcq.event.s07_01_old_case' },
+      // 旧案链的中段：seq 400 已有 event；772／871 需新增。第 4 拍才真正进汉廷的账。
+      { text: '与孟非卿复盘，查出有人切断补给、泄漏军机', status: 'ready', stageId: 'lcq.stage_10_jiangzhou_shadow_war', eventId: 'lcq.event.s10_04_left_army_review' },
+      { text: '追到汉廷朝会：粮草不继究竟是谁的责任', status: 'new', stageId: 'lyl.taiquan_afterfall', eventId: 'lyl.event.han_court_grain_blame' },
+      { text: '查出星月湖大营被诬成左武军覆灭的原因', status: 'new', stageId: 'lyl.luoyang_cloud_secret', eventId: 'lyl.event.han_xingyue_framed' },
       { text: '买下官身，在汉廷立住脚', status: 'ready', stageId: 'lyl.luoyang_cloud_secret', eventId: 'lyl.event.s05_01' },
       { text: '扛住吕氏动用汉军的围杀', status: 'ready', stageId: 'lyl.luoyang_cloud_secret', eventId: 'lyl.event.s05_03' },
       { text: '用纸钞买田；看清限田令要把云家卷进削豪强', status: 'new', stageId: 'lyl.luoyang_cloud_secret', eventId: 'lyl.event.han_limit_field' },

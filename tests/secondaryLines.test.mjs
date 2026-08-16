@@ -7,7 +7,7 @@ import { loadTs } from './loadTs.mjs';
 // 只验"接得到吗"，不验"加入了没有"——后者不归本模块。
 
 // 规则：国家／地区线锚地点，宗派线锚人。
-// 破例只有昭南一条——南荒没有可投的朝廷（麟趾／昭南城事件层从未抵达），
+// 破例只有昭南一条——它**没有**地点锚（南荒没有可投的朝廷，麟趾／昭南城事件层从未抵达），
 // 正典里进南荒必须有商队（冰蛊逼迫南行、与云苍峰商队同行），故锚在带路的人身上。
 // 破例写成白名单而不是放松规则：多一条破例就得改这里，改不动就说明该重想。
 const ANCHOR_RULE_EXEMPT_NATIONS = new Set(['zhaonan']);
@@ -17,8 +17,9 @@ test('两类线各用各的锚，破例只有白名单里那条', async () => {
   assert.equal(SECONDARY_LINES.length, 8, '八条线：宗派 3 ＋ 国家／地区 5');
   for (const line of SECONDARY_LINES) {
     if (line.kind === 'nation' && !ANCHOR_RULE_EXEMPT_NATIONS.has(line.id)) {
+      // 国家线**必须**有地点锚；**可以另外**有引路人锚（两条路都能入线）。
+      // 汉国即如此：跟八骏查左武军旧案（第 10 关）或直接走到洛都（第 24 关）。
       assert.ok(line.anchorLocationIds?.length, `国家／地区线 ${line.name} 必须有地点锚`);
-      assert.ok(!line.anchorCharacterIds, `国家／地区线 ${line.name} 不该用人物锚`);
     } else {
       assert.ok(line.anchorCharacterIds?.length, `${line.name} 必须有人物锚`);
       assert.ok(!line.anchorLocationIds, `${line.name} 不该用地点锚`);

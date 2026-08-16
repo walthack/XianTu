@@ -46,10 +46,17 @@ test('ready 节点指向的 stage 与 event 真实存在', async () => {
   assert.deepEqual(missing, [], '有 ready 节点指向不存在的 stage/event，玩家永远走不到');
 });
 
-test('汉国线的三条新增节点已标 new，不冒充可走', async () => {
+test('待新增节点都给了建议挂载关与建议 id，不冒充可走', async () => {
   const { SECONDARY_LINES } = await loadTs('../src/modules/scenarioMods/secondaryLines.ts');
-  const han = SECONDARY_LINES.find(l => l.id === 'han');
-  const news = han.nodes.filter(n => n.status === 'new');
-  assert.equal(news.length, 3, '汉国线应有 3 条待新增（H4 限田令／H5 传闻获知／H6 拥立与否）');
-  for (const n of news) assert.ok(n.stageId && n.eventId, '待新增节点也要给出建议挂载关与建议 id');
+  // 不锁具体条数——链路会随重写增减（汉国补旧案链后就从 3 条变 5 条）。
+  // 锁的是规则：凡标 new 的，必须给出建议挂载关与建议 id，否则等于一句空话。
+  let total = 0;
+  for (const line of SECONDARY_LINES) {
+    for (const n of line.nodes.filter(x => x.status === 'new')) {
+      total++;
+      assert.ok(n.stageId, `${line.name}「${n.text}」标了 new 却没给建议挂载关`);
+      assert.ok(n.eventId, `${line.name}「${n.text}」标了 new 却没给建议 event id`);
+    }
+  }
+  assert.ok(total > 0, '若已无待新增节点，本断言需重写而不是删除');
 });
