@@ -141,7 +141,11 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       { text: '打听岳帅旧事，问清星月湖是什么', status: 'ready', stageId: 'lcq.stage_04b_lingfei_baiyi_crisis', eventId: 'lcq.event.s04b_lingfei_baiyi_crisis_16' },
       // 不另开 event：托付紧贴杀龙那一刻（谢艺 seq 210 被闪电击落，程宗扬替他杀了龙 211，
       // 他才交代后事），所以**附在昭南的杀龙 event 里**双喂——昭南读了结，本线读托付。
-      { text: '赶到谢艺身边，接下他把小紫带往星月湖的托付', status: 'new', stageId: 'lcq.stage_05b', eventId: 'lcq.event.s05b_slay_dragon' },
+      //
+      // **文案不预设他必死**（用户裁定 2026-08-16）：原著里他伤重辞世，但这里不写死。
+      // 玩家赶到时他重伤未定，救不救得回来是结果不是前提。⚠ 真做成分岔的代价见
+      // `docs/R3-10-BACKLOG` P1-7：他的死是四处承重，其中「萧遥逸接骨灰」是萧的**唯一登场路径**。
+      { text: '赶到重伤的谢艺身边，接下他对小紫与星月湖的交代', status: 'new', stageId: 'lcq.stage_05b', eventId: 'lcq.event.s05b_slay_dragon' },
       { text: '向孟非卿报告谢艺之死', status: 'ready', stageId: 'lcq.stage_07_qingyuan_jiankang', eventId: 'lcq.event.s07_05_eight_steeds_informed' },
       // 与汉国入口同一 event，待办各说各的：汉国读左武覆灭，本线读番号旧案。
       { text: '跟着八骏，问清左武军怎么覆灭的', status: 'ready', stageId: 'lcq.stage_07_qingyuan_jiankang', eventId: 'lcq.event.s07_01_old_case' },
