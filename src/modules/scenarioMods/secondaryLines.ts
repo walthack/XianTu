@@ -37,8 +37,15 @@ export interface SecondaryLine {
   kind: SecondaryLineKind;
   /** 宗派线：引你进门的人。多个＝任一见过即可（如星月湖的八骏，见谁都算搭上线）。 */
   anchorCharacterIds?: string[];
-  /** 国家／地区线：走到就算到了的那个地方。 */
-  anchorLocationId?: string;
+  /**
+   * 国家／地区线：走到就算到了的那个地方。
+   *
+   * **多个＝同一地方的孪生 id 全收。** 孪生不是"二选一挑对的那个"，而是同一处地方在不同关卡
+   * 用了不同 id——只填一个，锚就只在那批关里响。实测洛都：`liuchao.location.luoyang` 覆盖 24 关、
+   * `lyl.location.luoyang` 覆盖 6 关，早先只填后者，导致汉国锚在 6 关里只有 3 关能响
+   * （`dingtao_beijing`／`han_succession` 玩家人在洛都却触发不了）。
+   */
+  anchorLocationIds?: string[];
   /**
    * 玩家可见的入口指引：**去哪里找谁**。
    *
@@ -54,10 +61,13 @@ export interface SecondaryLine {
 /**
  * 八条二级线的入口锚。
  *
- * ⚠ **孪生 id 陷阱**：同一个地方常有多个 id，选错就是死锚（名字对、id 错，触发器一样不响）。
- * 已实测的坑：临安 `lin_an`／`linan_city` 只在隔离关，须用 `linan`；
- * 长安 `lyg.location.changan` 在 live 关查无；洛都须用 `lyl.location.luoyang`
- * 而非 atlas 孪生；太乙山门「龙池」两个 id 都不可达，故太乙改走人物锚。
+ * ⚠ **孪生 id 陷阱**：同一个地方常有多个 id，各自只在一部分关卡里出现。
+ * **处置是"全收"，不是"挑对的那个"**——只填一个，锚就只在那批关里响。
+ * 实测各地 id 覆盖：临安 `linan` 30 关／`lin_an` 1 关（均收）；洛都 `liuchao.location.luoyang` 24 关／
+ * `lyl.location.luoyang` 6 关（均收）；建康、长安各只有一个 id。
+ * 确实该排除的只有两类：只在隔离关出现的（临安 `linan_city` 在 `taiquan_expedition`）、
+ * 以及 live 关查无的（`lyg.location.changan`）。
+ * 太乙山门「龙池」两个 id 都不可达，故太乙改走人物锚。
  */
 export const SECONDARY_LINES: SecondaryLine[] = [
   // —— 宗派线：锚人 ——
@@ -125,7 +135,7 @@ export const SECONDARY_LINES: SecondaryLine[] = [
     id: 'jin',
     name: '晋国',
     kind: 'nation',
-    anchorLocationId: 'liuchao.location.jiankang',
+    anchorLocationIds: ['liuchao.location.jiankang'],
     entryHint: '想插手晋国朝局，去建康。',
     basis: '建康＝晋国都城（官方附录地图 jin-nanzhao 幅在场；描述「晋国都城」）。第 10 关可达。',
   },
@@ -133,24 +143,27 @@ export const SECONDARY_LINES: SecondaryLine[] = [
     id: 'song',
     name: '宋国',
     kind: 'nation',
-    anchorLocationId: 'liuchao.location.linan',
+    anchorLocationIds: ['liuchao.location.linan', 'liuchao.location.lin_an'],
     entryHint: '想插手宋国朝局，去临安。',
-    basis: '临安＝宋国都城。须用 `linan`——`lin_an` 与 `linan_city` 都只在隔离关，是死锚。',
+    basis: '临安＝宋国都城。`linan` 覆盖 30 关为主，`lin_an` 只 1 关，一并收下防漏；'
+      + '`linan_city` 只在隔离关 `taiquan_expedition`，不收。',
   },
   {
     id: 'han',
     name: '汉国',
     kind: 'nation',
-    anchorLocationId: 'lyl.location.luoyang',
+    anchorLocationIds: ['liuchao.location.luoyang', 'lyl.location.luoyang'],
     entryHint: '想插手汉国朝局，去洛都。',
-    basis: '洛都＝汉国都城。须用 `lyl.location.luoyang`——atlas 孪生 `liuchao.location.luoyang` '
-      + '在抵达关 `luoyang_cloud_secret` 不在场。',
+    basis: '洛都＝汉国都城。**两个孪生 id 全收**：`liuchao.location.luoyang` 覆盖 24 关、'
+      + '`lyl.location.luoyang` 覆盖 6 关（含抵达关 `luoyang_cloud_secret`，那关没有 atlas 那个）。'
+      + '早先只填后者是错的——汉国线 6 关里只有 3 关能响，`dingtao_beijing` 与 `han_succession` '
+      + '玩家人在洛都却触发不了。',
   },
   {
     id: 'tang',
     name: '唐国',
     kind: 'nation',
-    anchorLocationId: 'liuchao.location.changan',
+    anchorLocationIds: ['liuchao.location.changan'],
     entryHint: '想插手唐国朝局，去长安。',
     basis: '长安＝唐国都城。须用 `liuchao.location.changan`——`lyg.location.changan`（名「长安城」）'
       + '在抽查的 live 关查无。第 30 关可达。',
@@ -176,7 +189,9 @@ export function resolveAvailableLines(
 ): SecondaryLine[] {
   const threshold = rankOf(LINE_ANCHOR_MIN_ACQUAINTANCE);
   return SECONDARY_LINES.filter(line => {
-    if (line.anchorLocationId) return Boolean(currentLocationId) && line.anchorLocationId === currentLocationId;
+    if (line.anchorLocationIds?.length) {
+      return Boolean(currentLocationId) && line.anchorLocationIds.includes(currentLocationId!);
+    }
     if (line.anchorCharacterIds?.length) {
       // 任一锚人见过即算搭上线——八骏见谁都算。
       return line.anchorCharacterIds.some(id => {

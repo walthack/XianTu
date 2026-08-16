@@ -17,11 +17,11 @@ test('两类线各用各的锚，破例只有白名单里那条', async () => {
   assert.equal(SECONDARY_LINES.length, 8, '八条线：宗派 3 ＋ 国家／地区 5');
   for (const line of SECONDARY_LINES) {
     if (line.kind === 'nation' && !ANCHOR_RULE_EXEMPT_NATIONS.has(line.id)) {
-      assert.ok(line.anchorLocationId, `国家／地区线 ${line.name} 必须有地点锚`);
+      assert.ok(line.anchorLocationIds?.length, `国家／地区线 ${line.name} 必须有地点锚`);
       assert.ok(!line.anchorCharacterIds, `国家／地区线 ${line.name} 不该用人物锚`);
     } else {
       assert.ok(line.anchorCharacterIds?.length, `${line.name} 必须有人物锚`);
-      assert.ok(!line.anchorLocationId, `${line.name} 不该用地点锚`);
+      assert.ok(!line.anchorLocationIds, `${line.name} 不该用地点锚`);
     }
     assert.ok(line.basis && line.basis.length > 10, `${line.name} 缺锚的正典依据`);
   }
@@ -38,20 +38,19 @@ test('两类线各用各的锚，破例只有白名单里那条', async () => {
 
 test('锚不得落在被默认路线跳过的死 id 上', async () => {
   const { SECONDARY_LINES } = await loadTs('../src/modules/scenarioMods/secondaryLines.ts');
-  // 实测的孪生死锚：选错 id 名字对、触发器不响
+  // 真正的死锚：只在隔离关出现、或 live 关查无。
+  // ⚠ 不要把"某一关没有它"当死锚——liuchao.location.luoyang 曾被误列，
+  // 它其实覆盖 24 关，只是抵达关 luoyang_cloud_secret 没有；那种应当"全收"而非排除。
   const deadLocationIds = new Set([
-    'liuchao.location.lin_an',      // 只在隔离关 lyl.lin_an_black_sea
     'linan_city',                   // 只在隔离关 lyl.taiquan_expedition
     'lyg.location.changan',         // live 关查无
-    'liuchao.location.luoyang',     // atlas 孪生，抵达关不在场
     'lcq.location.longchi',         // 太乙山门，只在 stage_01 注入
     'liuchao.location.longchi',
     'liuchao.location.xingyue_lake', // 只在 lyg.mijing_rumen 注入
   ]);
   for (const line of SECONDARY_LINES) {
-    if (line.anchorLocationId) {
-      assert.ok(!deadLocationIds.has(line.anchorLocationId),
-        `${line.name} 的地点锚 ${line.anchorLocationId} 是已知死锚`);
+    for (const id of line.anchorLocationIds || []) {
+      assert.ok(!deadLocationIds.has(id), `${line.name} 的地点锚 ${id} 是已知死锚`);
     }
   }
 });
@@ -104,10 +103,41 @@ test('每条线都有入口指引，且说清"去哪／找谁"', async () => {
     assert.ok(line.entryHint && line.entryHint.length >= 6, `${line.name} 缺入口指引`);
     // 指引必须点出锚：地点线要提地名，宗派线要提人名
     // 指引要对得上它实际用的锚：锚地就说去哪，锚人就说找谁／跟谁
-    if (line.anchorLocationId) {
+    if (line.anchorLocationIds?.length) {
       assert.ok(/去|前往/.test(line.entryHint), `${line.name} 的指引没说去哪：${line.entryHint}`);
     } else {
       assert.ok(/找|同行|跟/.test(line.entryHint), `${line.name} 的指引没说找谁：${line.entryHint}`);
+    }
+  }
+});
+
+// 孪生 id：同一地方在不同关用不同 id，只填一个锚就只在那批关里响。
+test('地点锚收齐孪生 id，覆盖该线全部关卡', async () => {
+  const fs = await import('node:fs');
+  const { SECONDARY_LINES } = await loadTs('../src/modules/scenarioMods/secondaryLines.ts');
+  const dir = 'src/modules/scenarioMods/builtins/data/';
+
+  // 统计每个地名在各关用的 id
+  const byName = {};
+  for (const f of fs.readdirSync(dir).filter(x => x.endsWith('.json'))) {
+    const j = JSON.parse(fs.readFileSync(dir + f, 'utf8'));
+    if (!j.scenario?.worldSimulation) continue;
+    for (const l of j.canon?.locations || []) {
+      (byName[l.name] ||= new Map()).set(l.id, (byName[l.name].get(l.id) || 0) + 1);
+    }
+  }
+
+  const anchorNames = { han: '洛都', song: '临安', jin: '建康', tang: '长安' };
+  for (const [lineId, placeName] of Object.entries(anchorNames)) {
+    const line = SECONDARY_LINES.find(l => l.id === lineId);
+    const variants = byName[placeName];
+    assert.ok(variants, `地名 ${placeName} 在库里查无`);
+    // 覆盖 ≥5 关的 id 必须被锚收下——漏了就会有整批关卡触发不了
+    for (const [id, count] of variants) {
+      if (count >= 5) {
+        assert.ok(line.anchorLocationIds.includes(id),
+          `${line.name} 漏收孪生 id ${id}（覆盖 ${count} 关），那批关卡里锚不会响`);
+      }
     }
   }
 });
