@@ -2326,6 +2326,346 @@
               }
             }
           ]
+        },
+        "worldActor": {
+          "pressure": {
+            "id": "world.lcq.s02_01.silk_bag",
+            "scope": "faction",
+            "summary": "帅帐里锦囊与口诀册已单独收起。接下托付，还是只保管物件，还没落口。",
+            "domains": [
+              "sect"
+            ],
+            "geography": [
+              "帅帐"
+            ],
+            "factionIds": [
+              "liuchao.faction.tai_yi_zhen_zong",
+              "lcq.faction.left_guard"
+            ],
+            "intensity": 2,
+            "canonPolicy": "process_only"
+          },
+          "decisionCore": {
+            "knowledgeFacts": {
+              "knowledge.lcq.s02_01.charge": {
+                "text": "王哲要程宗扬保管锦囊、修为达六阳后去太泉古阵、并守护月霜；托付与物件还没分开说死。",
+                "access": "public",
+                "evidence": "lcq.event.s02_01 axisBeat。"
+              }
+            },
+            "situation": {
+              "whitelist": [
+                "mandateTaken",
+                "objectOnly"
+              ],
+              "initialValues": {
+                "mandateTaken": 35,
+                "objectOnly": 30
+              },
+              "limits": {
+                "mandateTaken": {
+                  "min": 0,
+                  "max": 100
+                },
+                "objectOnly": {
+                  "min": 0,
+                  "max": 100
+                }
+              }
+            },
+            "canonPolicy": {
+              "invariant": [
+                "锦囊已经摆在案上"
+              ],
+              "forbiddenBefore": [
+                "王哲已经身死",
+                "锦囊已经拆开宣读"
+              ],
+              "processFreedom": [
+                "认下托付还是只保管物件"
+              ]
+            },
+            "actors": [
+              {
+                "characterId": "lcq.character.wang_zhe",
+                "identity": {
+                  "factionId": "liuchao.faction.tai_yi_zhen_zong",
+                  "office": "太乙掌教",
+                  "rank": 7
+                },
+                "personality": {
+                  "honor": 5,
+                  "caution": 4,
+                  "ambition": 2
+                },
+                "motives": {
+                  "legitimacy": 5,
+                  "stability": 4
+                },
+                "resources": {
+                  "influence": 5,
+                  "intelligence": 4,
+                  "troops": 4,
+                  "wealth": 3
+                },
+                "relationships": {},
+                "knowledge": [
+                  "knowledge.lcq.s02_01.charge"
+                ],
+                "agendas": [
+                  {
+                    "id": "agenda.lcq.s02_01.wang",
+                    "goal": "决定托付是整份落下，还是先只把物件交出去",
+                    "clock": 0,
+                    "escalation": [
+                      "密召",
+                      "交物",
+                      "问口"
+                    ]
+                  }
+                ],
+                "allowedActionIds": [
+                  "offer_patronage",
+                  "delay_commitment"
+                ],
+                "wake": {
+                  "tier": "local_critical"
+                },
+                "evidence": {
+                  "identity.rank": "人物卡：王哲为太乙真宗掌教、左武卫师帅。",
+                  "personality.honor": "axisBeat：亲口托付三事。",
+                  "personality.caution": "本拍先密召再交物。",
+                  "personality.ambition": "本拍不趁机扩权。",
+                  "motives.legitimacy": "人物卡：掌教。",
+                  "motives.stability": "本拍要托付有人接。",
+                  "resources.influence": "人物卡：掌教／师帅。",
+                  "resources.intelligence": "本拍独知锦囊内容。",
+                  "resources.troops": "本拍亲兵拦帐。",
+                  "resources.wealth": "本拍不靠赏赐。",
+                  "agendas.agenda.lcq.s02_01.wang.clock": "帐内已静，口尚未落。"
+                }
+              }
+            ],
+            "actionBindings": [
+              {
+                "actionId": "offer_patronage",
+                "actorIds": [
+                  "lcq.character.wang_zhe"
+                ],
+                "label": "把清理门户与传功一并问出口",
+                "reason": "物件可以交，托付要当面认",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lcq.s02_01.charge"
+                ],
+                "mustNotInvent": [
+                  "清理门户已经完成"
+                ],
+                "visibleSignal": "王哲把锦囊按住，先问这三件事谁来认",
+                "offscreenAction": "摊开整份托付",
+                "costs": {
+                  "influence": 1
+                },
+                "effects": {
+                  "mandateTaken": 12,
+                  "objectOnly": -4
+                },
+                "utility": {
+                  "urgency": 8,
+                  "factionGoal": 9,
+                  "expectedBenefit": 8,
+                  "situation": {
+                    "mandateTaken": -3
+                  }
+                },
+                "visibility": "public",
+                "durationTurns": 1
+              },
+              {
+                "actionId": "delay_commitment",
+                "actorIds": [
+                  "lcq.character.wang_zhe"
+                ],
+                "label": "先把锦囊交出去，不逼人把差事认死",
+                "reason": "物件先有人拿，话可以后说",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lcq.s02_01.charge"
+                ],
+                "mustNotInvent": [
+                  "锦囊已经拆开"
+                ],
+                "visibleSignal": "锦囊被推向对面，口诀册仍封着",
+                "offscreenAction": "只交物件",
+                "costs": {
+                  "intelligence": 1
+                },
+                "effects": {
+                  "objectOnly": 12,
+                  "mandateTaken": -6
+                },
+                "utility": {
+                  "expectedBenefit": 4
+                },
+                "visibility": "public",
+                "durationTurns": 1
+              }
+            ],
+            "maxVisibleActions": 2,
+            "narrativeGuard": {
+              "forbiddenTerms": [
+                "锦囊已经拆开",
+                "清理门户已经完成"
+              ],
+              "rejectConcreteQuantities": true,
+              "allowUnverifiedQuantities": true
+            }
+          },
+          "opportunities": [
+            {
+              "id": "opportunity.lcq.s02_01.take_full_mandate",
+              "title": "接下锦囊，并认下清理门户的托付",
+              "characterIds": [
+                "lcq.character.wang_zhe"
+              ],
+              "whyNow": "帐内只剩这句还没出口。认下托付，锦囊就不是普通物件。",
+              "nextStep": "当面收下锦囊，并承认清理门户与传授九阳是你接下来要办的差事。",
+              "stakes": "以后有人问这只囊是谁的差事，会先问到你；话也收不回去。",
+              "rewardPreview": "取得一次以王哲托付名义保管锦囊并认差的权限。",
+              "futureHint": "以后再有人提起这只囊，会先看你当时认没认过差事。",
+              "actionText": "我追踪“接下锦囊，并认下清理门户的托付”：收下锦囊，当面承认这是我的差事。",
+              "rewardKey": "permission.lcq.taiyi.silk_mandate",
+              "rewardLabel": "太乙·锦囊托付",
+              "trigger": {
+                "actorIds": [
+                  "lcq.character.wang_zhe"
+                ],
+                "actionIds": [
+                  "offer_patronage"
+                ]
+              },
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "settlement": "immediate",
+                "expiry": "persistent",
+                "steps": [
+                  {
+                    "id": "take_bag",
+                    "label": "当面收下锦囊",
+                    "actions": [
+                      {
+                        "id": "accept_silk_bag",
+                        "label": "收下锦囊",
+                        "actionText": "我当面从王哲案上收下锦囊，不让它再留在帐内无人认领。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "收下锦囊",
+                      "不让它再留在帐内"
+                    ],
+                    "rejectIf": [
+                      "只看一眼",
+                      "不接手"
+                    ]
+                  },
+                  {
+                    "id": "own_charge",
+                    "label": "认下清理门户的差事",
+                    "actions": [
+                      {
+                        "id": "acknowledge_purge_charge",
+                        "label": "认下托付",
+                        "actionText": "我承认清理门户与传授九阳是我接下来要办的差事，不改口说只是代为保管。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "承认",
+                      "差事",
+                      "不改口说只是代为保管"
+                    ],
+                    "rejectIf": [
+                      "只保管",
+                      "不认差事"
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "opportunity.lcq.s02_01.keep_object_only",
+              "title": "只保管锦囊，不把清理门户说成你的差事",
+              "characterIds": [
+                "lcq.character.wang_zhe"
+              ],
+              "whyNow": "物件可以先离开帅帐。差事若不出口，日后也不算你已经领了。",
+              "nextStep": "收下锦囊实物，明确此刻不把清理门户认成自己的差事。",
+              "stakes": "宗门不会按托付来找你；有人问这只囊的差事，帐里也没有你的画押。",
+              "rewardPreview": "取得一次只保管锦囊实物、不认差事的权限。",
+              "futureHint": "以后若再问这只囊，王哲一侧会记得你当时只接了物件。",
+              "actionText": "我追踪“只保管锦囊，不把清理门户说成你的差事”：收下实物，不认差事。",
+              "rewardKey": "permission.lcq.taiyi.silk_custody",
+              "rewardLabel": "太乙·锦囊代管",
+              "trigger": {
+                "actorIds": [
+                  "lcq.character.wang_zhe"
+                ],
+                "actionIds": [
+                  "delay_commitment"
+                ]
+              },
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "settlement": "immediate",
+                "expiry": "persistent",
+                "steps": [
+                  {
+                    "id": "hold_bag",
+                    "label": "收下锦囊实物",
+                    "actions": [
+                      {
+                        "id": "hold_silk_object",
+                        "label": "代管锦囊",
+                        "actionText": "我收下锦囊实物，答应先保管，不拆开、不宣读。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "收下锦囊实物",
+                      "先保管",
+                      "不拆开"
+                    ],
+                    "rejectIf": [
+                      "认下托付",
+                      "承认这是我的差事"
+                    ]
+                  },
+                  {
+                    "id": "no_charge",
+                    "label": "不认清理门户差事",
+                    "actions": [
+                      {
+                        "id": "refuse_purge_charge",
+                        "label": "不认差事",
+                        "actionText": "我明确此刻不把清理门户说成我的差事，也不画押认领。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "不把清理门户说成我的差事",
+                      "不画押"
+                    ],
+                    "rejectIf": [
+                      "承认",
+                      "差事",
+                      "认下托付"
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
         }
       },
       {

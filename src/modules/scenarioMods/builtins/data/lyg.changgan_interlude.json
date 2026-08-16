@@ -4059,6 +4059,38 @@
             "role": "萧氏子弟"
           }
         ]
+      },
+      {
+        "id": "liuchao.character.liao_qun_yu",
+        "name": "廖群玉",
+        "description": "宋国户部官员。本关只坐实他被看在马厩，袖间夹着百衲衣残片。",
+        "role": "户部官员",
+        "gender": "男",
+        "realm": "练气",
+        "affiliations": [
+          {
+            "factionId": "lyg.faction.song_state",
+            "category": "state",
+            "role": "户部官员"
+          }
+        ],
+        "profile": {
+          "attributes": {
+            "rootBone": 4,
+            "spirituality": 4,
+            "comprehension": 5,
+            "fortune": 4,
+            "charm": 5,
+            "temperament": 4
+          },
+          "personality": [
+            "文雅",
+            "谨慎",
+            "务实"
+          ],
+          "appearance": "谈吐文雅，颇有君子之风。",
+          "origin": "宋国户部"
+        }
       }
     ],
     "playerRelationships": [
@@ -5815,7 +5847,8 @@
           }
         ],
         "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang"
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.liao_qun_yu"
         ],
         "objective": "在马厩救出廖群玉，追问百衲衣线索",
         "playerCompletionContract": {
@@ -5834,6 +5867,350 @@
                 "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
                 "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
               }
+            }
+          ]
+        },
+        "relatedFactionIds": [
+          "lyg.faction.song_state"
+        ],
+        "worldActor": {
+          "pressure": {
+            "id": "world.lyg.interlude_02.bainayi",
+            "scope": "faction",
+            "summary": "马厩后槽有人被看住，百衲衣残片卡在缝里。救出后把线索写入使节账，还是只救人、不交卷，还没说死。",
+            "domains": [
+              "intelligence",
+              "court"
+            ],
+            "geography": [
+              "长安马厩"
+            ],
+            "factionIds": [
+              "lyg.faction.song_state"
+            ],
+            "intensity": 2,
+            "canonPolicy": "process_only"
+          },
+          "decisionCore": {
+            "knowledgeFacts": {
+              "knowledge.lyg.interlude_02.stable": {
+                "text": "廖群玉被看在马厩，百衲衣残片卡在槽缝；看守把岳霏等人的名字互相顶撞。",
+                "access": "public",
+                "evidence": "lyg.event.changgan_interlude_02_beat axisBeat。"
+              }
+            },
+            "situation": {
+              "whitelist": [
+                "envoyBrief",
+                "privateClue"
+              ],
+              "initialValues": {
+                "envoyBrief": 36,
+                "privateClue": 40
+              },
+              "limits": {
+                "envoyBrief": {
+                  "min": 0,
+                  "max": 100
+                },
+                "privateClue": {
+                  "min": 0,
+                  "max": 100
+                }
+              }
+            },
+            "canonPolicy": {
+              "invariant": [
+                "马厩里已经有人被看住",
+                "百衲衣残片已经可见"
+              ],
+              "forbiddenBefore": [
+                "小公主下落已经坐实",
+                "百衲衣已经献入宫中"
+              ],
+              "processFreedom": [
+                "写入使节核验还是只救人压住线索"
+              ]
+            },
+            "actors": [
+              {
+                "characterId": "liuchao.character.liao_qun_yu",
+                "identity": {
+                  "factionId": "lyg.faction.song_state",
+                  "office": "被看在马厩的户部官员",
+                  "rank": 3
+                },
+                "personality": {
+                  "caution": 5,
+                  "honor": 3,
+                  "ambition": 2
+                },
+                "motives": {
+                  "stability": 5,
+                  "legitimacy": 2
+                },
+                "resources": {
+                  "influence": 2,
+                  "intelligence": 4,
+                  "wealth": 2,
+                  "troops": 1
+                },
+                "relationships": {},
+                "knowledge": [
+                  "knowledge.lyg.interlude_02.stable"
+                ],
+                "agendas": [
+                  {
+                    "id": "agenda.lyg.interlude_02.liao",
+                    "goal": "先离开马厩，再决定百衲衣的话讲到哪一层",
+                    "clock": 1,
+                    "escalation": [
+                      "求救",
+                      "交残片",
+                      "封口"
+                    ]
+                  }
+                ],
+                "allowedActionIds": [
+                  "escort_witness",
+                  "conceal_evidence"
+                ],
+                "wake": {
+                  "tier": "local_critical"
+                },
+                "evidence": {
+                  "identity.rank": "人物卡：廖群玉为宋国户部官员，本拍被锁马厩。",
+                  "personality.caution": "人物卡：谨慎。",
+                  "personality.honor": "人物卡：有君子之风。",
+                  "personality.ambition": "本拍先求活命。",
+                  "motives.stability": "本拍要离开槽边。",
+                  "motives.legitimacy": "本拍仍握着残片。",
+                  "resources.influence": "本拍被看住。",
+                  "resources.intelligence": "axisBeat：他知道百衲衣线索。",
+                  "resources.wealth": "本拍无法使钱。",
+                  "resources.troops": "本拍没有随从。",
+                  "agendas.agenda.lyg.interlude_02.liao.clock": "绳索是新换的。"
+                }
+              }
+            ],
+            "actionBindings": [
+              {
+                "actionId": "escort_witness",
+                "actorIds": [
+                  "liuchao.character.liao_qun_yu"
+                ],
+                "label": "救出后把百衲衣线索写入使节核验",
+                "reason": "人可以走，话要有一份落得下的账",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lyg.interlude_02.stable"
+                ],
+                "mustNotInvent": [
+                  "小公主已经找到"
+                ],
+                "visibleSignal": "残片与看守互咬的名字被抄进同一份使节草单",
+                "offscreenAction": "写入使节账",
+                "costs": {
+                  "intelligence": 1
+                },
+                "effects": {
+                  "envoyBrief": 12,
+                  "privateClue": -4
+                },
+                "utility": {
+                  "urgency": 8,
+                  "factionGoal": 7,
+                  "expectedBenefit": 7,
+                  "situation": {
+                    "envoyBrief": -3
+                  }
+                },
+                "visibility": "public",
+                "durationTurns": 1
+              },
+              {
+                "actionId": "conceal_evidence",
+                "actorIds": [
+                  "liuchao.character.liao_qun_yu"
+                ],
+                "label": "只把人带走，线索不入使节账",
+                "reason": "救人不必先交卷",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lyg.interlude_02.stable"
+                ],
+                "mustNotInvent": [
+                  "百衲衣已经献入宫中"
+                ],
+                "visibleSignal": "人离开后槽，残片说法仍只在口头",
+                "offscreenAction": "压住线索",
+                "costs": {
+                  "influence": 1
+                },
+                "effects": {
+                  "privateClue": 12,
+                  "envoyBrief": -6
+                },
+                "utility": {
+                  "expectedBenefit": 4
+                },
+                "visibility": "public",
+                "durationTurns": 1
+              }
+            ],
+            "maxVisibleActions": 2,
+            "narrativeGuard": {
+              "forbiddenTerms": [
+                "小公主已经找到",
+                "已经入仕唐廷"
+              ],
+              "rejectConcreteQuantities": true,
+              "allowUnverifiedQuantities": true
+            }
+          },
+          "opportunities": [
+            {
+              "id": "opportunity.lyg.interlude_02.file_bainayi_brief",
+              "title": "救出后把百衲衣线索写入汉使核验",
+              "characterIds": [
+                "liuchao.character.liao_qun_yu"
+              ],
+              "whyNow": "残片还卡在槽缝。写进使节账，以后对得上；也会让汉使这一栏沾上这摊。",
+              "nextStep": "救出廖群玉，把百衲衣残片与看守互咬的名字分开登记进汉使核验，不写成已经坐实。",
+              "stakes": "汉使账上会留下这条线；以后再问百衲衣，也先问到你。",
+              "rewardPreview": "取得一次调用汉使百衲衣线索核验的权限。",
+              "futureHint": "以后再有人提起这件衣，会先看当时是谁把线索写下。",
+              "actionText": "我追踪“救出后把百衲衣线索写入汉使核验”：救人，残片与互咬的名字分开登记，不先坐实。",
+              "rewardKey": "permission.lyg.han_mission.bainayi_brief",
+              "rewardLabel": "汉使·百衲衣线索核验",
+              "trigger": {
+                "actorIds": [
+                  "liuchao.character.liao_qun_yu"
+                ],
+                "actionIds": [
+                  "escort_witness"
+                ]
+              },
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "settlement": "immediate",
+                "expiry": "standard",
+                "steps": [
+                  {
+                    "id": "pull_out",
+                    "label": "把人从后槽带走",
+                    "actions": [
+                      {
+                        "id": "extract_liao_from_stable",
+                        "label": "救出廖群玉",
+                        "actionText": "我把廖群玉从马厩后槽带走，不留他继续被看住。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "从马厩后槽带走",
+                      "不留他继续被看住"
+                    ],
+                    "rejectIf": [
+                      "只问残片不救人",
+                      "不管人"
+                    ]
+                  },
+                  {
+                    "id": "file_clue",
+                    "label": "写入汉使核验",
+                    "actions": [
+                      {
+                        "id": "file_bainayi_into_envoy_book",
+                        "label": "写入使节账",
+                        "actionText": "我把百衲衣残片与看守互咬的名字分开登记进汉使核验，不写成已经坐实。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "分开登记",
+                      "汉使核验",
+                      "不写成已经坐实"
+                    ],
+                    "rejectIf": [
+                      "不交卷",
+                      "自己压住"
+                    ]
+                  }
+                ]
+              },
+              "expiresAfterTurns": 4
+            },
+            {
+              "id": "opportunity.lyg.interlude_02.keep_clue_private",
+              "title": "救人，不把百衲衣线索写入使节账",
+              "characterIds": [
+                "liuchao.character.liao_qun_yu"
+              ],
+              "whyNow": "人可以先离开槽边。线索若不入库，使节账上就没有这份。",
+              "nextStep": "救出廖群玉，明确百衲衣的话不写入汉使核验。",
+              "stakes": "以后要对核只能靠口头；汉使这一栏也不会替这条线挡。",
+              "rewardPreview": "取得一次只救人、私下压住百衲衣线索的权限。",
+              "futureHint": "以后若再问这件衣，廖群玉会记得你当时写没写过账。",
+              "actionText": "我追踪“救人，不把百衲衣线索写入使节账”：带走人，线索不入库。",
+              "rewardKey": "permission.lyg.changan.private_bainayi",
+              "rewardLabel": "长安·私下压住百衲衣",
+              "trigger": {
+                "actorIds": [
+                  "liuchao.character.liao_qun_yu"
+                ],
+                "actionIds": [
+                  "conceal_evidence"
+                ]
+              },
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "settlement": "immediate",
+                "expiry": "standard",
+                "steps": [
+                  {
+                    "id": "save_man",
+                    "label": "把人带走",
+                    "actions": [
+                      {
+                        "id": "save_liao_only",
+                        "label": "只救人",
+                        "actionText": "我把廖群玉从马厩带走，先让他离开后槽。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "带走",
+                      "离开后槽"
+                    ],
+                    "rejectIf": [
+                      "先写进使节账再救人",
+                      "只取残片"
+                    ]
+                  },
+                  {
+                    "id": "no_file",
+                    "label": "线索不入使节账",
+                    "actions": [
+                      {
+                        "id": "keep_bainayi_off_envoy_book",
+                        "label": "不入账",
+                        "actionText": "我明确百衲衣的话不写入汉使核验，只留在口头。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "不写入汉使核验",
+                      "只留在口头"
+                    ],
+                    "rejectIf": [
+                      "登记进汉使核验",
+                      "写入使节账"
+                    ]
+                  }
+                ]
+              },
+              "expiresAfterTurns": 4
             }
           ]
         }

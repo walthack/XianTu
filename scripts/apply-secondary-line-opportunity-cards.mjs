@@ -6,6 +6,7 @@ import { join } from 'node:path';
 import { INSTALLS, generated } from './add-secondary-line-opportunity-cards.mjs';
 import './add-secondary-line-opportunity-cards-rest.mjs';
 import './add-secondary-line-opportunity-cards-south.mjs';
+import './add-secondary-line-opportunity-cards-sect-tang.mjs';
 
 function mergeIds(existing = [], extra = []) {
   return [...new Set([...(existing || []), ...extra])];

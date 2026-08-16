@@ -3,7 +3,28 @@
 > 面向「新加入的 agent」。读完这一篇即可独立认领一个模块开工。
 > 当前认领：无。**进行中**：无。
 >
-> ## 最后更新：2026-08-16（**四条二级线机会卡：汉／昭南／晋／宋**）
+> ## 最后更新：2026-08-16（**八条二级线机会卡补齐：太乙／星月湖／毒宗／唐**）
+>
+> 用户裁定：二级线要做成可玩。上一轮汉／昭南／晋／宋 27 张已挂；本轮补剩下四条 ready 节点。
+>
+> **已交付（未 commit）**：给 12 个空卡 ready 节点挂了 **24 张**新机会卡（全库 37→61）。改的是 `mod-kit/generated/deepseek-v4-flash/{book}/stages/*.json`，已 `sync-builtin-mods`。卡都是真岔口，`rewardKey` 用 `permission.<book>.<faction>.<what>`。太乙后续（教御支持度／掌教归属／卓云君个人线）未动。
+>
+> | 线 | 本轮新卡 | 说明 |
+> |---|---|---|
+> | 太乙真宗 | 6 | 三节点各 2 张。九阳名分按对手交易写：认出处换支持 vs 只收银不落名 |
+> | 星月湖 | 4 | `s03b_04` 已有昭南并路 2 张，不重挂。未做入营判据 |
+> | 黑魔海／毒宗 | 6 | 未写天命侯名分。`s04_02` 现场无朱老头 related，按同列向导＋武二郎护列做岔口 |
+> | 唐国 | 8 | 四节点各 2 张。未做入仕判据 |
+>
+> 仍不挂：汉国 `s01_09`（`local_condition`，再挂会打坏 R2-11E）。
+>
+> 门禁：`type-check` 全绿；`npm test -- --test-concurrency=1` 726 pass／5 skip／0 fail；改过的 11 个 stage `mod:validate` 全 PASS。
+>
+> 安装脚本（幂等）：`scripts/apply-secondary-line-opportunity-cards.mjs`（本轮增量 `add-secondary-line-opportunity-cards-sect-tang.mjs`）。
+>
+> ---
+>
+> ## 上一条：2026-08-16（**四条二级线机会卡：汉／昭南／晋／宋**）
 >
 > 用户裁定：二级线要做成可玩，不能只剩 objective＋完成键。本轮只动内容写完的四条国家／地区线。
 >

@@ -5018,7 +5018,9 @@
           "liuchao.character.zhong_hangyue"
         ],
         "relatedFactionIds": [
-          "liuchao.faction.cheng_shi_shang_hui"
+          "liuchao.faction.cheng_shi_shang_hui",
+          "lyg.faction.han_mission",
+          "liuchao.faction.tang_guo_chao_ting"
         ],
         "locationId": "liuchao.location.changan",
         "axisId": "yange.54.1",
@@ -5042,6 +5044,348 @@
                 "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
                 "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
               }
+            }
+          ]
+        },
+        "worldActor": {
+          "pressure": {
+            "id": "world.lyg.s03_01.xuanping",
+            "scope": "faction",
+            "summary": "宵禁将至，宣平坊酒宴已齐。按汉使入坊，还是只以商队客人落脚，还没落册。",
+            "domains": [
+              "court",
+              "commerce"
+            ],
+            "geography": [
+              "长安宣平坊"
+            ],
+            "factionIds": [
+              "liuchao.faction.cheng_shi_shang_hui",
+              "lyg.faction.han_mission",
+              "liuchao.faction.tang_guo_chao_ting"
+            ],
+            "intensity": 2,
+            "canonPolicy": "process_only"
+          },
+          "decisionCore": {
+            "knowledgeFacts": {
+              "knowledge.lyg.s03_01.banquet": {
+                "text": "石超催众人赶在宵禁前入住宣平坊宅院并设宴接风，祁远口中夹着城里另一桩麻烦。",
+                "access": "public",
+                "evidence": "lyg.event.s03_01 axisBeat。"
+              }
+            },
+            "situation": {
+              "whitelist": [
+                "envoyRoll",
+                "guestLodging"
+              ],
+              "initialValues": {
+                "envoyRoll": 40,
+                "guestLodging": 38
+              },
+              "limits": {
+                "envoyRoll": {
+                  "min": 0,
+                  "max": 100
+                },
+                "guestLodging": {
+                  "min": 0,
+                  "max": 100
+                }
+              }
+            },
+            "canonPolicy": {
+              "invariant": [
+                "宣平坊宅院已经备下"
+              ],
+              "forbiddenBefore": [
+                "宵禁已经关闭城门",
+                "使节身份已经在朝堂宣册"
+              ],
+              "processFreedom": [
+                "按汉使入坊还是只以客人落脚"
+              ]
+            },
+            "actors": [
+              {
+                "characterId": "lyg.character.shi_chao",
+                "identity": {
+                  "factionId": "liuchao.faction.cheng_shi_shang_hui",
+                  "office": "宣平坊接风主人",
+                  "rank": 4
+                },
+                "personality": {
+                  "caution": 3,
+                  "ambition": 4,
+                  "honor": 3
+                },
+                "motives": {
+                  "control": 4,
+                  "stability": 3
+                },
+                "resources": {
+                  "influence": 4,
+                  "wealth": 4,
+                  "intelligence": 3,
+                  "troops": 1
+                },
+                "relationships": {},
+                "knowledge": [
+                  "knowledge.lyg.s03_01.banquet"
+                ],
+                "agendas": [
+                  {
+                    "id": "agenda.lyg.s03_01.shi",
+                    "goal": "赶在宵禁前把人安进宣平坊，并决定坊册怎么写",
+                    "clock": 1,
+                    "escalation": [
+                      "催入城",
+                      "摆宴",
+                      "问身份"
+                    ]
+                  }
+                ],
+                "allowedActionIds": [
+                  "negotiate_court_procedure",
+                  "open_safe_route"
+                ],
+                "wake": {
+                  "tier": "local_critical"
+                },
+                "evidence": {
+                  "identity.rank": "人物卡：石超为程氏商会合作者，本拍备下宣平坊。",
+                  "personality.caution": "本拍先赶宵禁。",
+                  "personality.ambition": "本拍要接风落在他宅里。",
+                  "personality.honor": "本拍肯设宴。",
+                  "motives.control": "坊册由他这边写。",
+                  "motives.stability": "本拍先让人进城。",
+                  "resources.influence": "本拍在宣平坊有宅。",
+                  "resources.wealth": "axisBeat：酒宴已备。",
+                  "resources.intelligence": "本拍只知城里有麻烦。",
+                  "resources.troops": "本拍不调私兵。",
+                  "agendas.agenda.lyg.s03_01.shi.clock": "宵禁将近。"
+                }
+              }
+            ],
+            "actionBindings": [
+              {
+                "actionId": "negotiate_court_procedure",
+                "actorIds": [
+                  "lyg.character.shi_chao"
+                ],
+                "label": "按汉使身份写入坊册",
+                "reason": "接风可以是私宴，入城可以走使节账",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lyg.s03_01.banquet"
+                ],
+                "mustNotInvent": [
+                  "已经入仕唐廷"
+                ],
+                "visibleSignal": "名刺按汉使抄进宣平坊门簿",
+                "offscreenAction": "写入使节账",
+                "costs": {
+                  "influence": 1
+                },
+                "effects": {
+                  "envoyRoll": 12,
+                  "guestLodging": -4
+                },
+                "utility": {
+                  "urgency": 8,
+                  "factionGoal": 8,
+                  "expectedBenefit": 7,
+                  "situation": {
+                    "envoyRoll": -3
+                  }
+                },
+                "visibility": "public",
+                "durationTurns": 1
+              },
+              {
+                "actionId": "open_safe_route",
+                "actorIds": [
+                  "lyg.character.shi_chao"
+                ],
+                "label": "只以商队客人安进宅院",
+                "reason": "可以进城，不必先亮使节",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lyg.s03_01.banquet"
+                ],
+                "mustNotInvent": [
+                  "宵禁已经关闭城门"
+                ],
+                "visibleSignal": "门簿只写商队客人，不抄使节衔",
+                "offscreenAction": "只作客人落脚",
+                "costs": {
+                  "wealth": 1
+                },
+                "effects": {
+                  "guestLodging": 12,
+                  "envoyRoll": -6
+                },
+                "utility": {
+                  "expectedBenefit": 4
+                },
+                "visibility": "public",
+                "durationTurns": 1
+              }
+            ],
+            "maxVisibleActions": 2,
+            "narrativeGuard": {
+              "forbiddenTerms": [
+                "已经入仕唐廷",
+                "宵禁已经破门"
+              ],
+              "rejectConcreteQuantities": true,
+              "allowUnverifiedQuantities": true
+            }
+          },
+          "opportunities": [
+            {
+              "id": "opportunity.lyg.s03_01.enter_as_han_envoy",
+              "title": "以汉使身份入宣平坊",
+              "characterIds": [
+                "lyg.character.shi_chao"
+              ],
+              "whyNow": "宵禁将至。按汉使入坊，门簿会留下使节衔；城里有事也会先找到这个名字。",
+              "nextStep": "让石超把汉使身份写入宣平坊门簿，接风按使节账走。",
+              "stakes": "唐人会按汉使来认你；坊里再有麻烦，也先问到使节这一栏。",
+              "rewardPreview": "取得一次以汉使身份落脚宣平坊的权限。",
+              "futureHint": "以后长安再问你怎么进城的，石超会先翻这本门簿。",
+              "actionText": "我追踪“以汉使身份入宣平坊”：写入门簿使节衔，接风按使节账走。",
+              "rewardKey": "permission.lyg.han_mission.xuanping_entry",
+              "rewardLabel": "汉使·宣平坊入册",
+              "trigger": {
+                "actorIds": [
+                  "lyg.character.shi_chao"
+                ],
+                "actionIds": [
+                  "negotiate_court_procedure"
+                ]
+              },
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "settlement": "immediate",
+                "expiry": "standard",
+                "steps": [
+                  {
+                    "id": "name_envoy",
+                    "label": "亮明汉使身份",
+                    "actions": [
+                      {
+                        "id": "declare_han_envoy",
+                        "label": "亮汉使",
+                        "actionText": "我向石超亮明汉使身份，不把入城说成普通商队投宿。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "汉使身份",
+                      "不说成普通商队"
+                    ],
+                    "rejectIf": [
+                      "只以客人",
+                      "不亮使节"
+                    ]
+                  },
+                  {
+                    "id": "write_gate",
+                    "label": "写入坊门簿",
+                    "actions": [
+                      {
+                        "id": "write_envoy_on_gate_book",
+                        "label": "写入门簿",
+                        "actionText": "我让他把汉使衔抄进宣平坊门簿，接风按使节账走。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "抄进",
+                      "门簿",
+                      "使节账"
+                    ],
+                    "rejectIf": [
+                      "只写商队客人",
+                      "不抄使节衔"
+                    ]
+                  }
+                ]
+              },
+              "expiresAfterTurns": 4
+            },
+            {
+              "id": "opportunity.lyg.s03_01.lodge_as_guest",
+              "title": "只以商队客人落脚，不写入使节衔",
+              "characterIds": [
+                "lyg.character.shi_chao"
+              ],
+              "whyNow": "宅院已经点灯。先进城，门簿可以只写客人。",
+              "nextStep": "接受宣平坊落脚，明确门簿不抄汉使衔。",
+              "stakes": "使节账上没有你进城的记录；有事时也少一层使节名分。",
+              "rewardPreview": "取得一次以商队客人入住宣平坊、不亮使节的权限。",
+              "futureHint": "以后若再补使节名分，石超会记得你进城时写没写过这一栏。",
+              "actionText": "我追踪“只以商队客人落脚，不写入使节衔”：入住，门簿不抄汉使。",
+              "rewardKey": "permission.lyg.cheng.guest_lodging",
+              "rewardLabel": "程氏·宣平坊客人落脚",
+              "trigger": {
+                "actorIds": [
+                  "lyg.character.shi_chao"
+                ],
+                "actionIds": [
+                  "open_safe_route"
+                ]
+              },
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "settlement": "immediate",
+                "expiry": "standard",
+                "steps": [
+                  {
+                    "id": "enter_house",
+                    "label": "接受宅院落脚",
+                    "actions": [
+                      {
+                        "id": "accept_xuanping_house",
+                        "label": "入宅",
+                        "actionText": "我接受赶在宵禁前入住宣平坊，不拒绝接风。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "入住宣平坊",
+                      "不拒绝接风"
+                    ],
+                    "rejectIf": [
+                      "不进城",
+                      "按汉使宣册"
+                    ]
+                  },
+                  {
+                    "id": "blank_envoy",
+                    "label": "门簿不抄使节衔",
+                    "actions": [
+                      {
+                        "id": "keep_envoy_off_gate_book",
+                        "label": "不抄使节",
+                        "actionText": "我明确宣平坊门簿只写商队客人，不抄汉使衔。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "只写商队客人",
+                      "不抄汉使衔"
+                    ],
+                    "rejectIf": [
+                      "写入门簿使节衔",
+                      "按使节账走"
+                    ]
+                  }
+                ]
+              },
+              "expiresAfterTurns": 4
             }
           ]
         }

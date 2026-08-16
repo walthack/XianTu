@@ -4147,7 +4147,8 @@
           }
         ],
         "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang"
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.xiao_yao_yi"
         ],
         "objective": "在建康与萧遥逸会面",
         "playerCompletionContract": {
@@ -4165,6 +4166,346 @@
                 "success": "你已亲自执行“在建康与萧遥逸会面”；事件完成真值将由本地引擎落账。",
                 "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
                 "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        },
+        "relatedFactionIds": [
+          "liuchao.faction.xing_yue_hu"
+        ],
+        "worldActor": {
+          "pressure": {
+            "id": "world.lcq.s09_01.eight_steeds",
+            "scope": "faction",
+            "summary": "萧遥逸的约见帖已到建康。复盘写入湖册，还是只会面不落名，还没说死。",
+            "domains": [
+              "sect",
+              "intelligence"
+            ],
+            "geography": [
+              "建康"
+            ],
+            "factionIds": [
+              "liuchao.faction.xing_yue_hu"
+            ],
+            "intensity": 2,
+            "canonPolicy": "process_only"
+          },
+          "decisionCore": {
+            "knowledgeFacts": {
+              "knowledge.lcq.s09_01.meet": {
+                "text": "程宗扬与萧遥逸会面，讨论八骏离去、黑魔海余波与北府兵权变动。",
+                "access": "public",
+                "evidence": "lcq.event.s09_01_eight_steeds_leave axisBeat。"
+              }
+            },
+            "situation": {
+              "whitelist": [
+                "lakeRoll",
+                "privateMeet"
+              ],
+              "initialValues": {
+                "lakeRoll": 36,
+                "privateMeet": 40
+              },
+              "limits": {
+                "lakeRoll": {
+                  "min": 0,
+                  "max": 100
+                },
+                "privateMeet": {
+                  "min": 0,
+                  "max": 100
+                }
+              }
+            },
+            "canonPolicy": {
+              "invariant": [
+                "约见帖已经送到"
+              ],
+              "forbiddenBefore": [
+                "八骏已经全体归湖",
+                "北府兵权已经尘埃落定"
+              ],
+              "processFreedom": [
+                "写入湖册还是只会面"
+              ]
+            },
+            "actors": [
+              {
+                "characterId": "liuchao.character.xiao_yao_yi",
+                "identity": {
+                  "factionId": "liuchao.faction.xing_yue_hu",
+                  "office": "星月湖八骏",
+                  "rank": 5
+                },
+                "personality": {
+                  "caution": 4,
+                  "honor": 3,
+                  "ambition": 3
+                },
+                "motives": {
+                  "control": 4,
+                  "stability": 3
+                },
+                "resources": {
+                  "influence": 5,
+                  "intelligence": 5,
+                  "troops": 2,
+                  "wealth": 3
+                },
+                "relationships": {},
+                "knowledge": [
+                  "knowledge.lcq.s09_01.meet"
+                ],
+                "agendas": [
+                  {
+                    "id": "agenda.lcq.s09_01.xiao",
+                    "goal": "决定这场复盘要不要落进湖册",
+                    "clock": 0,
+                    "escalation": [
+                      "约见",
+                      "对读",
+                      "落册"
+                    ]
+                  }
+                ],
+                "allowedActionIds": [
+                  "audit_resources",
+                  "delay_commitment"
+                ],
+                "wake": {
+                  "tier": "local_critical"
+                },
+                "evidence": {
+                  "identity.rank": "人物卡：萧遥逸为星月湖八骏，掌谍报商网。",
+                  "personality.caution": "本拍先对读再落册。",
+                  "personality.honor": "本拍肯当面复盘。",
+                  "personality.ambition": "人物卡：八骏。",
+                  "motives.control": "湖册在谁手里谁调度。",
+                  "motives.stability": "本拍先把去向说清。",
+                  "resources.influence": "人物卡：八骏。",
+                  "resources.intelligence": "人物卡：掌谍报。",
+                  "resources.troops": "本拍不调湖军。",
+                  "resources.wealth": "本拍以情报为筹码。",
+                  "agendas.agenda.lcq.s09_01.xiao.clock": "约见帖已到，册未落。"
+                }
+              }
+            ],
+            "actionBindings": [
+              {
+                "actionId": "audit_resources",
+                "actorIds": [
+                  "liuchao.character.xiao_yao_yi"
+                ],
+                "label": "把复盘写入星月湖名册",
+                "reason": "说清楚的事，要落在湖册上才算数",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lcq.s09_01.meet"
+                ],
+                "mustNotInvent": [
+                  "已经正式编入星月湖"
+                ],
+                "visibleSignal": "八骏去向与北府换权被抄进同一份湖册草稿",
+                "offscreenAction": "推进落册",
+                "costs": {
+                  "intelligence": 1
+                },
+                "effects": {
+                  "lakeRoll": 12,
+                  "privateMeet": -4
+                },
+                "utility": {
+                  "urgency": 8,
+                  "factionGoal": 8,
+                  "expectedBenefit": 7,
+                  "situation": {
+                    "lakeRoll": -3
+                  }
+                },
+                "visibility": "public",
+                "durationTurns": 1
+              },
+              {
+                "actionId": "delay_commitment",
+                "actorIds": [
+                  "liuchao.character.xiao_yao_yi"
+                ],
+                "label": "只会面，不把站位写入湖册",
+                "reason": "可以谈，不必先落名",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lcq.s09_01.meet"
+                ],
+                "mustNotInvent": [
+                  "八骏已经全体归湖"
+                ],
+                "visibleSignal": "席上只对读口信，名册那一栏空着",
+                "offscreenAction": "只复盘不落册",
+                "costs": {
+                  "influence": 1
+                },
+                "effects": {
+                  "privateMeet": 12,
+                  "lakeRoll": -6
+                },
+                "utility": {
+                  "expectedBenefit": 4
+                },
+                "visibility": "public",
+                "durationTurns": 1
+              }
+            ],
+            "maxVisibleActions": 2,
+            "narrativeGuard": {
+              "forbiddenTerms": [
+                "八骏已经全体归湖",
+                "已经正式编入星月湖"
+              ],
+              "rejectConcreteQuantities": true,
+              "allowUnverifiedQuantities": true
+            }
+          },
+          "opportunities": [
+            {
+              "id": "opportunity.lcq.s09_01.write_lake_roll",
+              "title": "把建康复盘写入星月湖名册",
+              "characterIds": [
+                "liuchao.character.xiao_yao_yi"
+              ],
+              "whyNow": "约见已经排开。写入湖册，八骏去向和你的站位就有人认。",
+              "nextStep": "当着萧遥逸把这场复盘抄进星月湖名册，接受按册再问。",
+              "stakes": "湖里会按这份名册找你；北府那边若问起，也先问到星月湖。",
+              "rewardPreview": "取得一次调用星月湖建康复盘名册的权限。",
+              "futureHint": "以后萧遥逸再约复盘，会先看这份名册还在不在。",
+              "actionText": "我追踪“把建康复盘写入星月湖名册”：抄进湖册，接受按册再问。",
+              "rewardKey": "permission.lcq.xingyue.jiankang_review_roll",
+              "rewardLabel": "星月湖·建康复盘名册",
+              "trigger": {
+                "actorIds": [
+                  "liuchao.character.xiao_yao_yi"
+                ],
+                "actionIds": [
+                  "audit_resources"
+                ]
+              },
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "settlement": "immediate",
+                "expiry": "persistent",
+                "steps": [
+                  {
+                    "id": "copy_review",
+                    "label": "抄进湖册",
+                    "actions": [
+                      {
+                        "id": "copy_into_lake_roll",
+                        "label": "写入湖册",
+                        "actionText": "我当着萧遥逸把八骏去向与这场复盘抄进星月湖名册，不改口说只是闲谈。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "抄进星月湖名册",
+                      "不改口说只是闲谈"
+                    ],
+                    "rejectIf": [
+                      "只会面",
+                      "不写入湖册"
+                    ]
+                  },
+                  {
+                    "id": "accept_callback",
+                    "label": "接受按册再问",
+                    "actions": [
+                      {
+                        "id": "accept_roll_callback",
+                        "label": "按册再问",
+                        "actionText": "我接受星月湖以后按这份名册再来问我，不假装这是一次性谈话。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "按这份名册再来问",
+                      "不是一次性"
+                    ],
+                    "rejectIf": [
+                      "不落名",
+                      "只此一次"
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "opportunity.lcq.s09_01.meet_without_roll",
+              "title": "只会面，不把站位写入湖册",
+              "characterIds": [
+                "liuchao.character.xiao_yao_yi"
+              ],
+              "whyNow": "帖已经到了。见可以见，名册那一栏仍能空着。",
+              "nextStep": "与萧遥逸对读口信，明确湖册不写你的站位。",
+              "stakes": "湖里没有你的名字；以后要再对证，只能靠这次口头。",
+              "rewardPreview": "取得一次与星月湖私下复盘、不落湖册的权限。",
+              "futureHint": "以后若再约见，萧遥逸会按你写没写过名册来开条件。",
+              "actionText": "我追踪“只会面，不把站位写入湖册”：对读口信，湖册不写名字。",
+              "rewardKey": "permission.lcq.xingyue.private_review",
+              "rewardLabel": "星月湖·不落册会面",
+              "trigger": {
+                "actorIds": [
+                  "liuchao.character.xiao_yao_yi"
+                ],
+                "actionIds": [
+                  "delay_commitment"
+                ]
+              },
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "settlement": "immediate",
+                "expiry": "persistent",
+                "steps": [
+                  {
+                    "id": "take_meet",
+                    "label": "接受当面复盘",
+                    "actions": [
+                      {
+                        "id": "accept_private_review",
+                        "label": "当面复盘",
+                        "actionText": "我与萧遥逸当面复盘八骏去向与北府换权，不拒绝会面。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "当面复盘",
+                      "不拒绝会面"
+                    ],
+                    "rejectIf": [
+                      "不来",
+                      "把名册写上再谈"
+                    ]
+                  },
+                  {
+                    "id": "blank_roll",
+                    "label": "湖册不写站位",
+                    "actions": [
+                      {
+                        "id": "keep_name_off_lake_roll",
+                        "label": "不写湖册",
+                        "actionText": "我明确星月湖名册不写我的站位，这一栏留空。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "名册不写",
+                      "留空"
+                    ],
+                    "rejectIf": [
+                      "抄进星月湖名册",
+                      "写入湖册"
+                    ]
+                  }
+                ]
               }
             }
           ]

@@ -4654,6 +4654,347 @@
               }
             }
           ]
+        },
+        "relatedFactionIds": [
+          "liuchao.faction.xing_yue_hu"
+        ],
+        "worldActor": {
+          "pressure": {
+            "id": "world.lcq.s11_04.snow_standoff",
+            "scope": "faction",
+            "summary": "雪下黑甲已伏住。并肩写入前敌军令，还是只让两边先不先动手，还没喊破。",
+            "domains": [
+              "war"
+            ],
+            "geography": [
+              "三川口雪原"
+            ],
+            "factionIds": [
+              "liuchao.faction.xing_yue_hu"
+            ],
+            "intensity": 3,
+            "canonPolicy": "process_only"
+          },
+          "decisionCore": {
+            "knowledgeFacts": {
+              "knowledge.lcq.s11_04.ambush": {
+                "text": "星月湖中央军潜伏雪中，尚未起身；捧日前锋停在雪线外，两边都还没先动手。",
+                "access": "public",
+                "evidence": "lcq.event.s11_04_xingyue_appears axisBeat。"
+              }
+            },
+            "situation": {
+              "whitelist": [
+                "jointOrder",
+                "unlistedHold"
+              ],
+              "initialValues": {
+                "jointOrder": 42,
+                "unlistedHold": 38
+              },
+              "limits": {
+                "jointOrder": {
+                  "min": 0,
+                  "max": 100
+                },
+                "unlistedHold": {
+                  "min": 0,
+                  "max": 100
+                }
+              }
+            },
+            "canonPolicy": {
+              "invariant": [
+                "星月湖军已经伏在雪下"
+              ],
+              "forbiddenBefore": [
+                "雪原会战已经分出胜负",
+                "已经正式编入星月湖"
+              ],
+              "processFreedom": [
+                "写入前敌军令还是只压住动手"
+              ]
+            },
+            "actors": [
+              {
+                "characterId": "liuchao.character.meng_fei_qing",
+                "identity": {
+                  "factionId": "liuchao.faction.xing_yue_hu",
+                  "office": "星月湖八骏之首",
+                  "rank": 6
+                },
+                "personality": {
+                  "honor": 4,
+                  "caution": 3,
+                  "aggression": 3
+                },
+                "motives": {
+                  "control": 5,
+                  "stability": 4
+                },
+                "resources": {
+                  "influence": 5,
+                  "troops": 5,
+                  "intelligence": 3,
+                  "wealth": 2
+                },
+                "relationships": {},
+                "knowledge": [
+                  "knowledge.lcq.s11_04.ambush"
+                ],
+                "agendas": [
+                  {
+                    "id": "agenda.lcq.s11_04.meng",
+                    "goal": "决定雪下这队人先按谁的军令起身",
+                    "clock": 1,
+                    "escalation": [
+                      "伏住",
+                      "对口号",
+                      "起身"
+                    ]
+                  }
+                ],
+                "allowedActionIds": [
+                  "mobilize_forces",
+                  "withdraw_force"
+                ],
+                "wake": {
+                  "tier": "local_critical"
+                },
+                "evidence": {
+                  "identity.rank": "人物卡：孟非卿为星月湖八骏之首、三团团长。",
+                  "personality.honor": "本拍以齐口号压阵。",
+                  "personality.caution": "axisBeat：尚未起身。",
+                  "personality.aggression": "本拍中央军已伏住。",
+                  "motives.control": "军令在谁手里谁起身。",
+                  "motives.stability": "本拍先压住误击。",
+                  "resources.influence": "人物卡：八骏之首。",
+                  "resources.troops": "axisBeat：中央军整队。",
+                  "resources.intelligence": "本拍掌握伏击口令。",
+                  "resources.wealth": "本拍不靠买阵。",
+                  "agendas.agenda.lcq.s11_04.meng.clock": "雪下已伏，口号未破。"
+                }
+              }
+            ],
+            "actionBindings": [
+              {
+                "actionId": "mobilize_forces",
+                "actorIds": [
+                  "liuchao.character.meng_fei_qing"
+                ],
+                "label": "把并肩写进前敌军令",
+                "reason": "起身之前，要先说清谁跟谁一路",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lcq.s11_04.ambush"
+                ],
+                "mustNotInvent": [
+                  "已经正式编入星月湖"
+                ],
+                "visibleSignal": "雪下口令改成与捧日一侧对读的并肩句",
+                "offscreenAction": "写入军令",
+                "costs": {
+                  "troops": 1
+                },
+                "effects": {
+                  "jointOrder": 12,
+                  "unlistedHold": -4
+                },
+                "utility": {
+                  "urgency": 9,
+                  "factionGoal": 9,
+                  "expectedBenefit": 8,
+                  "situation": {
+                    "jointOrder": -3
+                  }
+                },
+                "visibility": "public",
+                "durationTurns": 1
+              },
+              {
+                "actionId": "withdraw_force",
+                "actorIds": [
+                  "liuchao.character.meng_fei_qing"
+                ],
+                "label": "只压住两边先不先动手",
+                "reason": "可以并肩站着，不必先入军册",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lcq.s11_04.ambush"
+                ],
+                "mustNotInvent": [
+                  "捧日军已经溃灭"
+                ],
+                "visibleSignal": "两边旗帜都停在雪线，谁也不先喊破",
+                "offscreenAction": "只压住动手",
+                "costs": {
+                  "influence": 1
+                },
+                "effects": {
+                  "unlistedHold": 12,
+                  "jointOrder": -6
+                },
+                "utility": {
+                  "expectedBenefit": 4
+                },
+                "visibility": "public",
+                "durationTurns": 1
+              }
+            ],
+            "maxVisibleActions": 2,
+            "narrativeGuard": {
+              "forbiddenTerms": [
+                "已经正式编入星月湖",
+                "捧日军已经溃灭"
+              ],
+              "rejectConcreteQuantities": true,
+              "allowUnverifiedQuantities": true
+            }
+          },
+          "opportunities": [
+            {
+              "id": "opportunity.lcq.s11_04.join_snow_order",
+              "title": "向孟非卿亮明并肩，写入前敌军令",
+              "characterIds": [
+                "liuchao.character.meng_fei_qing"
+              ],
+              "whyNow": "雪下已经伏住。写入军令，起身时按一路走；也会被写成星月湖前阵的人。",
+              "nextStep": "向孟非卿承认与星月湖并肩，接受写入前敌军令。",
+              "stakes": "星月湖会按这份军令找你要人；捧日一侧也会把你看成湖军同路。",
+              "rewardPreview": "取得一次列入星月湖雪原前敌军令的权限。",
+              "futureHint": "以后雪原再对阵，孟非卿会先看你当时入没入过军令。",
+              "actionText": "我追踪“向孟非卿亮明并肩，写入前敌军令”：承认并肩，接受写入军令。",
+              "rewardKey": "permission.lcq.xingyue.snowfield_joint_order",
+              "rewardLabel": "星月湖·雪原前敌军令",
+              "trigger": {
+                "actorIds": [
+                  "liuchao.character.meng_fei_qing"
+                ],
+                "actionIds": [
+                  "mobilize_forces"
+                ]
+              },
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "settlement": "immediate",
+                "expiry": "standard",
+                "steps": [
+                  {
+                    "id": "declare_side",
+                    "label": "亮明与星月湖并肩",
+                    "actions": [
+                      {
+                        "id": "declare_xingyue_side",
+                        "label": "亮明并肩",
+                        "actionText": "我向孟非卿承认此刻与星月湖并肩，不把这队雪下黑甲说成路人。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "与星月湖并肩",
+                      "不说成路人"
+                    ],
+                    "rejectIf": [
+                      "只压住动手",
+                      "不入军令"
+                    ]
+                  },
+                  {
+                    "id": "write_order",
+                    "label": "写入前敌军令",
+                    "actions": [
+                      {
+                        "id": "write_forward_order",
+                        "label": "写入军令",
+                        "actionText": "我接受把我写入星月湖前敌军令，起身时按这一路走。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "写入",
+                      "前敌军令"
+                    ],
+                    "rejectIf": [
+                      "不写入军令",
+                      "军册留空"
+                    ]
+                  }
+                ]
+              },
+              "expiresAfterTurns": 4
+            },
+            {
+              "id": "opportunity.lcq.s11_04.hold_without_roll",
+              "title": "只让两边先不先动手，不入军册",
+              "characterIds": [
+                "liuchao.character.meng_fei_qing"
+              ],
+              "whyNow": "雪线两边都还没喊破。压住动手，可以不把自己写进湖军。",
+              "nextStep": "与孟非卿约定两边先不先动手，明确军册不写你的名字。",
+              "stakes": "起身时星月湖没有义务按你的位置护你；你也不算他们前阵的人。",
+              "rewardPreview": "取得一次与星月湖约定雪原停手、不入军册的权限。",
+              "futureHint": "以后再在雪线碰头，孟非卿会记得你入没入过他的军令。",
+              "actionText": "我追踪“只让两边先不先动手，不入军册”：压住动手，军册不写名字。",
+              "rewardKey": "permission.lcq.xingyue.unlisted_hold",
+              "rewardLabel": "星月湖·雪原不入册",
+              "trigger": {
+                "actorIds": [
+                  "liuchao.character.meng_fei_qing"
+                ],
+                "actionIds": [
+                  "withdraw_force"
+                ]
+              },
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "settlement": "immediate",
+                "expiry": "standard",
+                "steps": [
+                  {
+                    "id": "hold_line",
+                    "label": "约定先不先动手",
+                    "actions": [
+                      {
+                        "id": "hold_both_lines",
+                        "label": "压住动手",
+                        "actionText": "我与孟非卿约定雪线两边先不先动手，不抢先喊破伏击。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "先不先动手",
+                      "不抢先喊破"
+                    ],
+                    "rejectIf": [
+                      "写入前敌军令",
+                      "立刻起身"
+                    ]
+                  },
+                  {
+                    "id": "blank_army",
+                    "label": "军册不写名字",
+                    "actions": [
+                      {
+                        "id": "keep_name_off_army_roll",
+                        "label": "不入军册",
+                        "actionText": "我明确星月湖军册不写我的名字，这一栏留空。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "军册不写",
+                      "留空"
+                    ],
+                    "rejectIf": [
+                      "写入前敌军令",
+                      "列入前阵"
+                    ]
+                  }
+                ]
+              },
+              "expiresAfterTurns": 4
+            }
+          ]
         }
       },
       {

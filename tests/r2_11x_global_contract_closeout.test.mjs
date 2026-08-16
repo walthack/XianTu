@@ -68,7 +68,7 @@ test('all opportunities are explicit, contracted, and decision-bound', async () 
   const stages = await loadAllStages();
   const rows = stages.flatMap(stage => stage.scenario.events.flatMap(event =>
     (event.worldActor?.opportunities || []).map(opportunity => ({ event, opportunity }))));
-  assert.equal(rows.length, 37);
+  assert.equal(rows.length, 61);
   for (const { event, opportunity } of rows) {
     assert.equal(Boolean(opportunity.trigger), true, opportunity.id);
     assert.equal(Boolean(opportunity.completionContract), true, opportunity.id);

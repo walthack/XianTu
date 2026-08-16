@@ -2460,10 +2460,13 @@
           "liuchao.character.ning_yu",
           "liuchao.character.wu_er_lang",
           "liuchao.character.su_li",
-          "liuchao.character.yi_hu"
+          "liuchao.character.yi_hu",
+          "liuchao.character.shang_zhen_yu"
         ],
         "relatedFactionIds": [
-          "liuchao.faction.gui_wang_dong"
+          "liuchao.faction.gui_wang_dong",
+          "liuchao.faction.x8b538653d9",
+          "liuchao.faction.bai_hu_shang_guan"
         ],
         "locationId": "liuchao.location.shan_jian",
         "axisId": "qingyu.48.1",
@@ -2506,6 +2509,408 @@
                 "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
                 "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
               }
+            }
+          ]
+        },
+        "worldActor": {
+          "pressure": {
+            "id": "world.lcq.s04_02.trail_shelter",
+            "scope": "faction",
+            "summary": "雾里甲仗已响。战后是接朱老头的私护，还是只让武二郎当众护住这一列，还没说死。",
+            "domains": [
+              "war",
+              "sect"
+            ],
+            "geography": [
+              "南荒山涧"
+            ],
+            "factionIds": [
+              "liuchao.faction.x8b538653d9",
+              "liuchao.faction.bai_hu_shang_guan"
+            ],
+            "intensity": 3,
+            "canonPolicy": "process_only"
+          },
+          "decisionCore": {
+            "knowledgeFacts": {
+              "knowledge.lcq.s04_02.raid": {
+                "text": "商队与花苗送亲队遭遇鬼王峒武士，武二郎以双刀扭转战局；同行向导朱老头仍在列中。",
+                "access": "public",
+                "evidence": "lcq.event.s04_02 axisBeat。"
+              }
+            },
+            "situation": {
+              "whitelist": [
+                "oldManShelter",
+                "publicEscort"
+              ],
+              "initialValues": {
+                "oldManShelter": 32,
+                "publicEscort": 48
+              },
+              "limits": {
+                "oldManShelter": {
+                  "min": 0,
+                  "max": 100
+                },
+                "publicEscort": {
+                  "min": 0,
+                  "max": 100
+                }
+              }
+            },
+            "canonPolicy": {
+              "invariant": [
+                "鬼王峒武士已经动手"
+              ],
+              "forbiddenBefore": [
+                "鬼王峒已经覆灭",
+                "向导已经离队"
+              ],
+              "processFreedom": [
+                "接朱老头私护还是只认武二郎当众护列"
+              ]
+            },
+            "actors": [
+              {
+                "characterId": "liuchao.character.shang_zhen_yu",
+                "identity": {
+                  "factionId": "liuchao.faction.x8b538653d9",
+                  "office": "南荒向导",
+                  "rank": 5
+                },
+                "personality": {
+                  "caution": 5,
+                  "ambition": 3,
+                  "honor": 2
+                },
+                "motives": {
+                  "control": 4,
+                  "stability": 3
+                },
+                "resources": {
+                  "influence": 4,
+                  "intelligence": 5,
+                  "troops": 2,
+                  "wealth": 2
+                },
+                "relationships": {},
+                "knowledge": [
+                  "knowledge.lcq.s04_02.raid"
+                ],
+                "agendas": [
+                  {
+                    "id": "agenda.lcq.s04_02.zhu",
+                    "goal": "战后把人接到自己的私护里，不走当众护卫账",
+                    "clock": 1,
+                    "escalation": [
+                      "靠拢",
+                      "压伤",
+                      "收列"
+                    ]
+                  }
+                ],
+                "allowedActionIds": [
+                  "offer_patronage"
+                ],
+                "wake": {
+                  "tier": "local_critical"
+                },
+                "evidence": {
+                  "identity.rank": "人物卡：朱老头为本关向导，殇侯门首领。本拍不暴露侯爷名号。",
+                  "personality.caution": "本拍先压伤再说话。",
+                  "personality.ambition": "人物卡：门主。",
+                  "personality.honor": "本拍肯伸手。",
+                  "motives.control": "私护账在他手里。",
+                  "motives.stability": "本拍先让人离开甲仗。",
+                  "resources.influence": "本拍只以向导身份开口。",
+                  "resources.intelligence": "人物卡：熟南荒。",
+                  "resources.troops": "本拍私人班底有限。",
+                  "resources.wealth": "本拍不靠买命。",
+                  "agendas.agenda.lcq.s04_02.zhu.clock": "雾里已经动手。"
+                }
+              },
+              {
+                "characterId": "liuchao.character.wu_er_lang",
+                "identity": {
+                  "factionId": "liuchao.faction.bai_hu_shang_guan",
+                  "office": "商队护卫",
+                  "rank": 4
+                },
+                "personality": {
+                  "honor": 4,
+                  "aggression": 4,
+                  "caution": 2
+                },
+                "motives": {
+                  "stability": 4,
+                  "legitimacy": 2
+                },
+                "resources": {
+                  "influence": 3,
+                  "troops": 4,
+                  "intelligence": 2,
+                  "wealth": 1
+                },
+                "relationships": {},
+                "knowledge": [
+                  "knowledge.lcq.s04_02.raid"
+                ],
+                "agendas": [
+                  {
+                    "id": "agenda.lcq.s04_02.wu",
+                    "goal": "当众把这一列护住，并让人看见是他护的",
+                    "clock": 1,
+                    "escalation": [
+                      "出刀",
+                      "斩杀",
+                      "收队"
+                    ]
+                  }
+                ],
+                "allowedActionIds": [
+                  "protect_principal"
+                ],
+                "wake": {
+                  "tier": "local_critical"
+                },
+                "evidence": {
+                  "identity.rank": "人物卡：武二郎为商队雇佣护卫。",
+                  "personality.honor": "人物卡：对兄弟重情。",
+                  "personality.aggression": "axisBeat：双刀扭转战局。",
+                  "personality.caution": "本拍先砍再问。",
+                  "motives.stability": "本拍要列还在。",
+                  "motives.legitimacy": "本拍要当众护住。",
+                  "resources.influence": "本拍商队里有名。",
+                  "resources.troops": "axisBeat：双刀斩杀武士。",
+                  "resources.intelligence": "本拍不靠探路。",
+                  "resources.wealth": "本拍受雇护卫。",
+                  "agendas.agenda.lcq.s04_02.wu.clock": "甲仗已到眼前。"
+                }
+              }
+            ],
+            "actionBindings": [
+              {
+                "actionId": "offer_patronage",
+                "actorIds": [
+                  "liuchao.character.shang_zhen_yu"
+                ],
+                "label": "战后按向导的法子把人接到私护里",
+                "reason": "当众护卫会留名，私护只走他那一列",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lcq.s04_02.raid"
+                ],
+                "mustNotInvent": [
+                  "朱老头已经表明侯爷身份"
+                ],
+                "visibleSignal": "朱老头把伤员往自己一侧的货驮后头领",
+                "offscreenAction": "收进私护",
+                "costs": {
+                  "intelligence": 1
+                },
+                "effects": {
+                  "oldManShelter": 12,
+                  "publicEscort": -4
+                },
+                "utility": {
+                  "urgency": 8,
+                  "factionGoal": 7,
+                  "expectedBenefit": 7,
+                  "situation": {
+                    "oldManShelter": -3
+                  }
+                },
+                "visibility": "public",
+                "durationTurns": 1
+              },
+              {
+                "actionId": "protect_principal",
+                "actorIds": [
+                  "liuchao.character.wu_er_lang"
+                ],
+                "label": "当众把这一列护住，不交给向导私护",
+                "reason": "刀已经出了，账也可以当众记",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lcq.s04_02.raid"
+                ],
+                "mustNotInvent": [
+                  "向导已经离队"
+                ],
+                "visibleSignal": "武二郎把人拦在自己刀后，不让向导把人领走",
+                "offscreenAction": "当众护列",
+                "costs": {
+                  "troops": 1
+                },
+                "effects": {
+                  "publicEscort": 12,
+                  "oldManShelter": -6
+                },
+                "utility": {
+                  "urgency": 9,
+                  "factionGoal": 7,
+                  "expectedBenefit": 8,
+                  "situation": {
+                    "publicEscort": -2
+                  }
+                },
+                "visibility": "public",
+                "durationTurns": 1
+              }
+            ],
+            "maxVisibleActions": 2,
+            "narrativeGuard": {
+              "forbiddenTerms": [
+                "天命侯已经坐实",
+                "朱老头已经表明侯爷身份"
+              ],
+              "rejectConcreteQuantities": true,
+              "allowUnverifiedQuantities": true
+            }
+          },
+          "opportunities": [
+            {
+              "id": "opportunity.lcq.s04_02.take_old_man_shelter",
+              "title": "战后接朱老头的私护",
+              "characterIds": [
+                "liuchao.character.shang_zhen_yu"
+              ],
+              "whyNow": "雾里已经动刀。接他的私护，伤和人都不走当众护卫账。",
+              "nextStep": "战后让朱老头按向导的法子把你接到他一侧，不把这事写成武二郎的当众护卫。",
+              "stakes": "以后南荒有人问你跟谁走，会先问到这个老头；武二郎也不会按护卫账认你。",
+              "rewardPreview": "取得一次调用朱老头南荒私护的权限。",
+              "futureHint": "以后再在岔路遇上，这个老头会记得你接没接过他的手。",
+              "actionText": "我追踪“战后接朱老头的私护”：跟他一侧走，不写成武二郎的当众护卫。",
+              "rewardKey": "permission.lcq.shanghou.trail_shelter",
+              "rewardLabel": "朱老头·南荒私护",
+              "trigger": {
+                "actorIds": [
+                  "liuchao.character.shang_zhen_yu"
+                ],
+                "actionIds": [
+                  "offer_patronage"
+                ]
+              },
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "settlement": "immediate",
+                "expiry": "standard",
+                "steps": [
+                  {
+                    "id": "follow_guide",
+                    "label": "跟向导一侧走",
+                    "actions": [
+                      {
+                        "id": "follow_old_man_column",
+                        "label": "跟私护列",
+                        "actionText": "我战后跟朱老头一侧的货驮走，不站回武二郎刀后的当众队列。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "跟朱老头一侧",
+                      "不站回武二郎刀后"
+                    ],
+                    "rejectIf": [
+                      "当众护住",
+                      "只认武二郎"
+                    ]
+                  },
+                  {
+                    "id": "off_public",
+                    "label": "不写入当众护卫账",
+                    "actions": [
+                      {
+                        "id": "keep_off_public_escort",
+                        "label": "不入护卫账",
+                        "actionText": "我明确这事不写成武二郎的当众护卫，私护只走向导那一列。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "不写成武二郎的当众护卫",
+                      "向导那一列"
+                    ],
+                    "rejectIf": [
+                      "当众护卫账",
+                      "武二郎护住"
+                    ]
+                  }
+                ]
+              },
+              "expiresAfterTurns": 4
+            },
+            {
+              "id": "opportunity.lcq.s04_02.take_wuerlang_escort",
+              "title": "只让武二郎当众护住这一列",
+              "characterIds": [
+                "liuchao.character.wu_er_lang"
+              ],
+              "whyNow": "他的刀已经扭转战局。当众护住，账在商队里；老头的私护可以不接。",
+              "nextStep": "站在武二郎刀后，明确不接受朱老头把你领到私护里。",
+              "stakes": "商队会把你看成他护下的人；老头那边也不会当你接过他的手。",
+              "rewardPreview": "取得一次由武二郎当众护列的权限。",
+              "futureHint": "以后再遇甲仗，武二郎会按你站没站过他刀后来认人。",
+              "actionText": "我追踪“只让武二郎当众护住这一列”：站他刀后，不接朱老头的私护。",
+              "rewardKey": "permission.lcq.wuerlang.public_escort",
+              "rewardLabel": "武二郎·当众护列",
+              "trigger": {
+                "actorIds": [
+                  "liuchao.character.wu_er_lang"
+                ],
+                "actionIds": [
+                  "protect_principal"
+                ]
+              },
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "settlement": "immediate",
+                "expiry": "standard",
+                "steps": [
+                  {
+                    "id": "stand_behind",
+                    "label": "站在武二郎刀后",
+                    "actions": [
+                      {
+                        "id": "stand_behind_wuerlang",
+                        "label": "站刀后",
+                        "actionText": "我站在武二郎刀后，接受他把这一列当众护住。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "武二郎刀后",
+                      "当众护住"
+                    ],
+                    "rejectIf": [
+                      "跟朱老头一侧",
+                      "接私护"
+                    ]
+                  },
+                  {
+                    "id": "refuse_private",
+                    "label": "不接向导私护",
+                    "actions": [
+                      {
+                        "id": "refuse_old_man_shelter",
+                        "label": "拒私护",
+                        "actionText": "我明确不接受朱老头把我领到他一侧的私护里。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "不接受朱老头",
+                      "私护"
+                    ],
+                    "rejectIf": [
+                      "跟朱老头一侧",
+                      "向导那一列"
+                    ]
+                  }
+                ]
+              },
+              "expiresAfterTurns": 4
             }
           ]
         }

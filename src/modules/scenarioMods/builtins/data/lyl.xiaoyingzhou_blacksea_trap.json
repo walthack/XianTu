@@ -3787,6 +3787,38 @@
             "role": "弟子"
           }
         ]
+      },
+      {
+        "id": "liuchao.character.lin_cai_quan",
+        "name": "蔺采泉",
+        "description": "太乙真宗教御。本关只坐实他以江州支持换程宗扬承认九阳出处。",
+        "role": "教御",
+        "gender": "男",
+        "realm": "化神",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.tai_yi_zhen_zong",
+            "category": "sect",
+            "role": "教御（首席教御）"
+          }
+        ],
+        "profile": {
+          "attributes": {
+            "rootBone": 7,
+            "spirituality": 8,
+            "comprehension": 6,
+            "fortune": 8,
+            "charm": 6,
+            "temperament": 6
+          },
+          "personality": [
+            "老奸巨猾",
+            "谦和",
+            "和气"
+          ],
+          "appearance": "身着布衣，面容沉静，身体挺得笔直，有鹰隼般犀利的眼睛。",
+          "origin": "太乙真宗教御"
+        }
       }
     ],
     "playerRelationships": [
@@ -5767,7 +5799,8 @@
           }
         ],
         "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang"
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.lin_cai_quan"
         ],
         "objective": "前往江州与蔺采泉交易",
         "playerCompletionContract": {
@@ -5786,6 +5819,350 @@
                 "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
                 "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
               }
+            }
+          ]
+        },
+        "relatedFactionIds": [
+          "liuchao.faction.tai_yi_zhen_zong"
+        ],
+        "worldActor": {
+          "pressure": {
+            "id": "world.lyl.trap_02.jiuyang_name",
+            "scope": "faction",
+            "summary": "蔺采泉把太乙对江州的支持，绑在九阳出处的一纸承认上。这是与对手谈条件，不是与友军协作。",
+            "domains": [
+              "sect",
+              "war"
+            ],
+            "geography": [
+              "江州"
+            ],
+            "factionIds": [
+              "liuchao.faction.tai_yi_zhen_zong"
+            ],
+            "intensity": 3,
+            "canonPolicy": "process_only"
+          },
+          "decisionCore": {
+            "knowledgeFacts": {
+              "knowledge.lyl.trap_02.deal": {
+                "text": "蔺采泉以支持江州为条件，要求程宗扬承认九阳神功出自他。",
+                "access": "public",
+                "evidence": "lyl.event.xiaoyingzhou_blacksea_trap_02_beat axisBeat。"
+              }
+            },
+            "situation": {
+              "whitelist": [
+                "nameGiven",
+                "supportUnnamed"
+              ],
+              "initialValues": {
+                "nameGiven": 38,
+                "supportUnnamed": 34
+              },
+              "limits": {
+                "nameGiven": {
+                  "min": 0,
+                  "max": 100
+                },
+                "supportUnnamed": {
+                  "min": 0,
+                  "max": 100
+                }
+              }
+            },
+            "canonPolicy": {
+              "invariant": [
+                "对方已经把江州支持绑在九阳出处上"
+              ],
+              "forbiddenBefore": [
+                "九阳出处已经写入宗门谱牒",
+                "江州已经陷落"
+              ],
+              "processFreedom": [
+                "把出处给他还是只收银、不给名"
+              ]
+            },
+            "actors": [
+              {
+                "characterId": "liuchao.character.lin_cai_quan",
+                "identity": {
+                  "factionId": "liuchao.faction.tai_yi_zhen_zong",
+                  "office": "太乙首席教御",
+                  "rank": 6
+                },
+                "personality": {
+                  "caution": 5,
+                  "ambition": 5,
+                  "honor": 2
+                },
+                "motives": {
+                  "control": 5,
+                  "legitimacy": 5
+                },
+                "resources": {
+                  "influence": 5,
+                  "intelligence": 5,
+                  "troops": 3,
+                  "wealth": 3
+                },
+                "relationships": {},
+                "knowledge": [
+                  "knowledge.lyl.trap_02.deal"
+                ],
+                "agendas": [
+                  {
+                    "id": "agenda.lyl.trap_02.lin",
+                    "goal": "逼对方把九阳出处写到自己名下，再谈江州",
+                    "clock": 1,
+                    "escalation": [
+                      "开价",
+                      "逼认",
+                      "收纸"
+                    ]
+                  }
+                ],
+                "allowedActionIds": [
+                  "trade_favor",
+                  "delay_commitment"
+                ],
+                "wake": {
+                  "tier": "local_critical"
+                },
+                "evidence": {
+                  "identity.rank": "人物卡：蔺采泉为太乙首席教御，本拍以江州要出处。",
+                  "personality.caution": "本拍先把条件写死。",
+                  "personality.ambition": "axisBeat：要九阳出自他。",
+                  "personality.honor": "本拍仍打支持江州的旗号。",
+                  "motives.control": "出处落在谁名下谁说了算。",
+                  "motives.legitimacy": "本拍要的是名分纸。",
+                  "resources.influence": "人物卡：首席教御。",
+                  "resources.intelligence": "本拍把两件事绑在一起。",
+                  "resources.troops": "本拍以宗门支持为筹码。",
+                  "resources.wealth": "本拍不靠买名。",
+                  "agendas.agenda.lyl.trap_02.lin.clock": "口信已到，纸未落。"
+                }
+              }
+            ],
+            "actionBindings": [
+              {
+                "actionId": "trade_favor",
+                "actorIds": [
+                  "liuchao.character.lin_cai_quan"
+                ],
+                "label": "把九阳出处换成江州支持",
+                "reason": "他开的价就是这张名分纸",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lyl.trap_02.deal"
+                ],
+                "mustNotInvent": [
+                  "九阳已经写入他的谱牒"
+                ],
+                "visibleSignal": "席上只留一纸：先认出处，再谈江州",
+                "offscreenAction": "推进认名交易",
+                "costs": {
+                  "influence": 1
+                },
+                "effects": {
+                  "nameGiven": 12,
+                  "supportUnnamed": -6
+                },
+                "utility": {
+                  "urgency": 9,
+                  "factionGoal": 9,
+                  "expectedBenefit": 8,
+                  "situation": {
+                    "nameGiven": -3
+                  }
+                },
+                "visibility": "public",
+                "durationTurns": 1
+              },
+              {
+                "actionId": "delay_commitment",
+                "actorIds": [
+                  "liuchao.character.lin_cai_quan"
+                ],
+                "label": "先谈江州支持，出处一栏留空",
+                "reason": "支持可以给，名分可以不下笔",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lyl.trap_02.deal"
+                ],
+                "mustNotInvent": [
+                  "江州已经陷落"
+                ],
+                "visibleSignal": "江州条款被单独抽出，出处一栏空着",
+                "offscreenAction": "把名分纸推后",
+                "costs": {
+                  "intelligence": 1
+                },
+                "effects": {
+                  "supportUnnamed": 12,
+                  "nameGiven": -6
+                },
+                "utility": {
+                  "expectedBenefit": 4
+                },
+                "visibility": "public",
+                "durationTurns": 1
+              }
+            ],
+            "maxVisibleActions": 2,
+            "narrativeGuard": {
+              "forbiddenTerms": [
+                "九阳已经写入他的谱牒",
+                "蔺采泉已经身死"
+              ],
+              "rejectConcreteQuantities": true,
+              "allowUnverifiedQuantities": true
+            }
+          },
+          "opportunities": [
+            {
+              "id": "opportunity.lyl.trap_02.give_jiuyang_name",
+              "title": "按他的口径认九阳出处，换江州支持",
+              "characterIds": [
+                "liuchao.character.lin_cai_quan"
+              ],
+              "whyNow": "对手把两件事绑死了。认出处，江州能换到他的宗门账；名分也就交出去。",
+              "nextStep": "当众按蔺采泉的口径承认九阳出处，并接受他把这张纸当作江州支持的对价。",
+              "stakes": "他会拿这张纸当把柄；以后有人问九阳从哪来，会先问到他。",
+              "rewardPreview": "取得一次以认出处换取太乙江州支持的权限。",
+              "futureHint": "以后再谈九阳的名分，他会先看你当时有没有把出处给他。",
+              "actionText": "我追踪“按他的口径认九阳出处，换江州支持”：按蔺采泉的口径认出处，换他的江州支持。",
+              "rewardKey": "permission.lyl.taiyi.jiuyang_attribution",
+              "rewardLabel": "太乙·九阳出处作价",
+              "trigger": {
+                "actorIds": [
+                  "liuchao.character.lin_cai_quan"
+                ],
+                "actionIds": [
+                  "trade_favor"
+                ]
+              },
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "settlement": "immediate",
+                "expiry": "standard",
+                "steps": [
+                  {
+                    "id": "say_source",
+                    "label": "按他的口径认出处",
+                    "actions": [
+                      {
+                        "id": "attribute_jiuyang_to_lin",
+                        "label": "认出处",
+                        "actionText": "我按蔺采泉的口径承认九阳出处，不改口说另有师承。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "按蔺采泉的口径",
+                      "承认九阳出处"
+                    ],
+                    "rejectIf": [
+                      "出处一栏留空",
+                      "不给名分"
+                    ]
+                  },
+                  {
+                    "id": "take_support",
+                    "label": "收下江州支持",
+                    "actions": [
+                      {
+                        "id": "accept_jiangzhou_support",
+                        "label": "收江州支持",
+                        "actionText": "我接受他把江州支持当作这张名分纸的对价，不假装这是无偿援助。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "江州支持",
+                      "对价",
+                      "不假装这是无偿"
+                    ],
+                    "rejectIf": [
+                      "无偿援助",
+                      "出处留空"
+                    ]
+                  }
+                ]
+              },
+              "expiresAfterTurns": 4
+            },
+            {
+              "id": "opportunity.lyl.trap_02.keep_name_off",
+              "title": "只收江州支持，不把出处写进他的名分纸",
+              "characterIds": [
+                "liuchao.character.lin_cai_quan"
+              ],
+              "whyNow": "江州可以要。出处若不落他的纸，这桩交易就只剩支援，没有名分。",
+              "nextStep": "收下他对江州的支持，明确九阳出处不写入他的名分纸。",
+              "stakes": "他会记住你当面没把出处给他；江州那边也少一层他能拿出来的名分。",
+              "rewardPreview": "取得一次只收银、不把九阳出处交给蔺采泉的权限。",
+              "futureHint": "以后他若再提九阳，会按你当时写没写过那一栏来开价。",
+              "actionText": "我追踪“只收江州支持，不把出处写进他的名分纸”：收支持，出处一栏留空。",
+              "rewardKey": "permission.lyl.taiyi.support_without_attribution",
+              "rewardLabel": "太乙·江州支持不落名",
+              "trigger": {
+                "actorIds": [
+                  "liuchao.character.lin_cai_quan"
+                ],
+                "actionIds": [
+                  "delay_commitment"
+                ]
+              },
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "settlement": "immediate",
+                "expiry": "standard",
+                "steps": [
+                  {
+                    "id": "take_help",
+                    "label": "收下江州支持",
+                    "actions": [
+                      {
+                        "id": "take_jiangzhou_help",
+                        "label": "收支持",
+                        "actionText": "我收下蔺采泉对江州的支持，不拒绝这笔援助。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "收下",
+                      "江州",
+                      "支持"
+                    ],
+                    "rejectIf": [
+                      "把出处给他",
+                      "按他的口径认"
+                    ]
+                  },
+                  {
+                    "id": "blank_name",
+                    "label": "出处一栏留空",
+                    "actions": [
+                      {
+                        "id": "leave_attribution_blank",
+                        "label": "不落名分",
+                        "actionText": "我明确九阳出处不写入他的名分纸，这一栏留空。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "不写入他的名分纸",
+                      "留空"
+                    ],
+                    "rejectIf": [
+                      "按蔺采泉的口径承认",
+                      "出处作价"
+                    ]
+                  }
+                ]
+              },
+              "expiresAfterTurns": 4
             }
           ]
         }
@@ -5847,7 +6224,8 @@
           }
         ],
         "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang"
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.shang_zhen_yu"
         ],
         "objective": "前往野猪林",
         "playerCompletionContract": {
@@ -5866,6 +6244,350 @@
                 "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
                 "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
               }
+            }
+          ]
+        },
+        "relatedFactionIds": [
+          "liuchao.faction.x8b538653d9",
+          "liuchao.faction.hei_mo_hai"
+        ],
+        "worldActor": {
+          "pressure": {
+            "id": "world.lyl.trap_04.robe_copy",
+            "scope": "faction",
+            "summary": "野猪林里衣钵风声比人更抢先。抄本交给朱老头一侧核验，还是自己压住，还没落袋。",
+            "domains": [
+              "sect",
+              "intelligence"
+            ],
+            "geography": [
+              "野猪林"
+            ],
+            "factionIds": [
+              "liuchao.faction.x8b538653d9",
+              "liuchao.faction.hei_mo_hai"
+            ],
+            "intensity": 3,
+            "canonPolicy": "process_only"
+          },
+          "decisionCore": {
+            "knowledgeFacts": {
+              "knowledge.lyl.trap_04.robe": {
+                "text": "野猪林多方混战，黑衣人抢夺衣钵，程宗扬抄录袈裟文字；朱老头一侧仍在收这条林子的线。",
+                "access": "public",
+                "evidence": "lyl.event.xiaoyingzhou_blacksea_trap_04_beat axisBeat。"
+              }
+            },
+            "situation": {
+              "whitelist": [
+                "handedOver",
+                "heldPrivate"
+              ],
+              "initialValues": {
+                "handedOver": 34,
+                "heldPrivate": 40
+              },
+              "limits": {
+                "handedOver": {
+                  "min": 0,
+                  "max": 100
+                },
+                "heldPrivate": {
+                  "min": 0,
+                  "max": 100
+                }
+              }
+            },
+            "canonPolicy": {
+              "invariant": [
+                "林中已经出现衣钵与抄录"
+              ],
+              "forbiddenBefore": [
+                "衣钵已经归宗",
+                "林中各方已经散尽"
+              ],
+              "processFreedom": [
+                "交朱老头一侧核验还是自己压住"
+              ]
+            },
+            "actors": [
+              {
+                "characterId": "liuchao.character.shang_zhen_yu",
+                "identity": {
+                  "factionId": "liuchao.faction.x8b538653d9",
+                  "office": "殇侯门一侧收线人",
+                  "rank": 6
+                },
+                "personality": {
+                  "caution": 5,
+                  "ambition": 4,
+                  "honor": 2
+                },
+                "motives": {
+                  "control": 5,
+                  "stability": 2
+                },
+                "resources": {
+                  "influence": 4,
+                  "intelligence": 5,
+                  "troops": 3,
+                  "wealth": 3
+                },
+                "relationships": {},
+                "knowledge": [
+                  "knowledge.lyl.trap_04.robe"
+                ],
+                "agendas": [
+                  {
+                    "id": "agenda.lyl.trap_04.zhu",
+                    "goal": "把衣钵抄本收到自己账上，不让它只留在抄录者手里",
+                    "clock": 1,
+                    "escalation": [
+                      "收线",
+                      "要抄本",
+                      "入库"
+                    ]
+                  }
+                ],
+                "allowedActionIds": [
+                  "gather_intelligence",
+                  "conceal_evidence"
+                ],
+                "wake": {
+                  "tier": "local_critical"
+                },
+                "evidence": {
+                  "identity.rank": "人物卡：朱老头为殇侯门首领，本拍只收线、不暴露后事。",
+                  "personality.caution": "本拍先收抄本再说话。",
+                  "personality.ambition": "本拍要线在自己账上。",
+                  "personality.honor": "本拍仍打收线旗号。",
+                  "motives.control": "抄本在谁手里谁说了算。",
+                  "motives.stability": "本拍避免抄本当众传开。",
+                  "resources.influence": "人物卡：门主。",
+                  "resources.intelligence": "本拍在林缘收线。",
+                  "resources.troops": "本拍有门下在场。",
+                  "resources.wealth": "本拍不靠买卷。",
+                  "agendas.agenda.lyl.trap_04.zhu.clock": "衣钵风声已起。"
+                }
+              }
+            ],
+            "actionBindings": [
+              {
+                "actionId": "gather_intelligence",
+                "actorIds": [
+                  "liuchao.character.shang_zhen_yu"
+                ],
+                "label": "把抄本收到殇侯门一侧核验",
+                "reason": "林子里人人要衣钵，先入库才说得清",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lyl.trap_04.robe"
+                ],
+                "mustNotInvent": [
+                  "袈裟英文已经当众译破"
+                ],
+                "visibleSignal": "朱老头一侧把抄本与现场说法分开登记",
+                "offscreenAction": "收进门账",
+                "costs": {
+                  "intelligence": 1
+                },
+                "effects": {
+                  "handedOver": 12,
+                  "heldPrivate": -4
+                },
+                "utility": {
+                  "urgency": 9,
+                  "factionGoal": 8,
+                  "expectedBenefit": 8,
+                  "situation": {
+                    "handedOver": -3
+                  }
+                },
+                "visibility": "public",
+                "durationTurns": 1
+              },
+              {
+                "actionId": "conceal_evidence",
+                "actorIds": [
+                  "liuchao.character.shang_zhen_yu"
+                ],
+                "label": "由抄录者自己压住，不入库",
+                "reason": "可以看见，不必先交卷",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lyl.trap_04.robe"
+                ],
+                "mustNotInvent": [
+                  "衣钵已经归宗"
+                ],
+                "visibleSignal": "门账那一栏空着，抄本仍在抄录者身上",
+                "offscreenAction": "不入库",
+                "costs": {
+                  "influence": 1
+                },
+                "effects": {
+                  "heldPrivate": 12,
+                  "handedOver": -6
+                },
+                "utility": {
+                  "expectedBenefit": 4
+                },
+                "visibility": "public",
+                "durationTurns": 1
+              }
+            ],
+            "maxVisibleActions": 2,
+            "narrativeGuard": {
+              "forbiddenTerms": [
+                "天命侯已经坐实",
+                "袈裟英文已经当众译破"
+              ],
+              "rejectConcreteQuantities": true,
+              "allowUnverifiedQuantities": true
+            }
+          },
+          "opportunities": [
+            {
+              "id": "opportunity.lyl.trap_04.hand_robe_to_shanghou",
+              "title": "把衣钵抄本交给朱老头一侧核验",
+              "characterIds": [
+                "liuchao.character.shang_zhen_yu"
+              ],
+              "whyNow": "林子里人人先问衣钵。交出去，核验走他的账；你也不再是唯一见过抄本的人。",
+              "nextStep": "把袈裟抄本交给朱老头一侧，按亲见与转述分开登记，不先译破。",
+              "stakes": "他会记住这条线从你这儿来；以后再问衣钵，也有权先看。",
+              "rewardPreview": "取得一次调用殇侯门衣钵抄本核验的权限。",
+              "futureHint": "以后再有人提起这件衣，朱老头一侧会记得是谁先把抄本交出来。",
+              "actionText": "我追踪“把衣钵抄本交给朱老头一侧核验”：交卷，不先译破，按亲见与转述分开登记。",
+              "rewardKey": "permission.lyl.shanghou.robe_audit",
+              "rewardLabel": "殇侯门·衣钵抄本核验",
+              "trigger": {
+                "actorIds": [
+                  "liuchao.character.shang_zhen_yu"
+                ],
+                "actionIds": [
+                  "gather_intelligence"
+                ]
+              },
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "settlement": "immediate",
+                "expiry": "standard",
+                "steps": [
+                  {
+                    "id": "pass_copy",
+                    "label": "交出抄本",
+                    "actions": [
+                      {
+                        "id": "hand_over_robe_copy",
+                        "label": "交抄本",
+                        "actionText": "我把袈裟抄本交给朱老头一侧，不自己藏起来。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "交给朱老头一侧",
+                      "不自己藏起来"
+                    ],
+                    "rejectIf": [
+                      "自己压住",
+                      "不交卷"
+                    ]
+                  },
+                  {
+                    "id": "no_translate",
+                    "label": "不先译破",
+                    "actions": [
+                      {
+                        "id": "forbid_public_translation",
+                        "label": "不译破",
+                        "actionText": "我要求按亲见与转述分开登记，不把抄本当众译破。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "分开登记",
+                      "不当众译破"
+                    ],
+                    "rejectIf": [
+                      "当众译破",
+                      "已经读懂英文"
+                    ]
+                  }
+                ]
+              },
+              "expiresAfterTurns": 4
+            },
+            {
+              "id": "opportunity.lyl.trap_04.keep_robe_private",
+              "title": "自己压住抄本，不入殇侯门账",
+              "characterIds": [
+                "liuchao.character.shang_zhen_yu"
+              ],
+              "whyNow": "抄本还在你身上。压住，门账就没有这份；以后要对核也只能靠你。",
+              "nextStep": "只向朱老头一侧声明你抄过，但不交卷、不入库。",
+              "stakes": "以后要对核只能靠你自己；他也不会为这条线替你挡。",
+              "rewardPreview": "取得一次私下压住野猪林抄本、不入门账的权限。",
+              "futureHint": "以后他若再要这件衣的抄本，会按你交没交过卷来开条件。",
+              "actionText": "我追踪“自己压住抄本，不入殇侯门账”：声明抄过，不交卷、不入库。",
+              "rewardKey": "permission.lyl.yezhu.private_copy",
+              "rewardLabel": "野猪林·私下压住抄本",
+              "trigger": {
+                "actorIds": [
+                  "liuchao.character.shang_zhen_yu"
+                ],
+                "actionIds": [
+                  "conceal_evidence"
+                ]
+              },
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "settlement": "immediate",
+                "expiry": "standard",
+                "steps": [
+                  {
+                    "id": "declare_copy",
+                    "label": "声明抄过",
+                    "actions": [
+                      {
+                        "id": "declare_copy_exists",
+                        "label": "声明抄过",
+                        "actionText": "我只向朱老头一侧声明我抄过袈裟，不把内容读给他听。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "声明我抄过",
+                      "不把内容读给他听"
+                    ],
+                    "rejectIf": [
+                      "交出抄本",
+                      "入库核验"
+                    ]
+                  },
+                  {
+                    "id": "no_file",
+                    "label": "不交卷入库",
+                    "actions": [
+                      {
+                        "id": "keep_copy_off_ledger",
+                        "label": "不入库",
+                        "actionText": "我明确抄本不交给殇侯门、不写入门账。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "不交给殇侯门",
+                      "不写入门账"
+                    ],
+                    "rejectIf": [
+                      "交给朱老头一侧",
+                      "入库"
+                    ]
+                  }
+                ]
+              },
+              "expiresAfterTurns": 4
             }
           ]
         }

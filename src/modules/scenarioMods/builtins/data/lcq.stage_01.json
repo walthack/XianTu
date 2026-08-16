@@ -2173,6 +2173,405 @@
               }
             }
           ]
+        },
+        "worldActor": {
+          "pressure": {
+            "id": "world.lcq.s01_04.join_taiyi",
+            "scope": "faction",
+            "summary": "太乙教御已压到草场。当场向谁认门，还是只受救命、不认宗门，还没说死。",
+            "domains": [
+              "sect",
+              "war"
+            ],
+            "geography": [
+              "草场"
+            ],
+            "factionIds": [
+              "liuchao.faction.tai_yi_zhen_zong"
+            ],
+            "intensity": 2,
+            "canonPolicy": "process_only"
+          },
+          "decisionCore": {
+            "knowledgeFacts": {
+              "knowledge.lcq.s01_04.arrival": {
+                "text": "卓云君以烈火法术救人，太乙真宗教御现身全歼兽蛮；蔺采泉一侧已把入门的话摊在火光里。",
+                "access": "public",
+                "evidence": "lcq.event.s01_04 axisBeat。"
+              }
+            },
+            "situation": {
+              "whitelist": [
+                "linLedger",
+                "zhuoRescue"
+              ],
+              "initialValues": {
+                "linLedger": 40,
+                "zhuoRescue": 55
+              },
+              "limits": {
+                "linLedger": {
+                  "min": 0,
+                  "max": 100
+                },
+                "zhuoRescue": {
+                  "min": 0,
+                  "max": 100
+                }
+              }
+            },
+            "canonPolicy": {
+              "invariant": [
+                "太乙教御已经现身救人"
+              ],
+              "forbiddenBefore": [
+                "已经正式授职教御",
+                "兽蛮已经退尽"
+              ],
+              "processFreedom": [
+                "向蔺采泉认门还是只受卓云君救命"
+              ]
+            },
+            "actors": [
+              {
+                "characterId": "liuchao.character.lin_cai_quan",
+                "identity": {
+                  "factionId": "liuchao.faction.tai_yi_zhen_zong",
+                  "office": "太乙首席教御",
+                  "rank": 6
+                },
+                "personality": {
+                  "caution": 4,
+                  "ambition": 5,
+                  "honor": 2
+                },
+                "motives": {
+                  "control": 5,
+                  "legitimacy": 4
+                },
+                "resources": {
+                  "influence": 5,
+                  "troops": 4,
+                  "intelligence": 4,
+                  "wealth": 2
+                },
+                "relationships": {},
+                "knowledge": [
+                  "knowledge.lcq.s01_04.arrival"
+                ],
+                "agendas": [
+                  {
+                    "id": "agenda.lcq.s01_04.lin",
+                    "goal": "把程宗扬当场记成他招进太乙的人",
+                    "clock": 1,
+                    "escalation": [
+                      "报号",
+                      "邀入",
+                      "记名"
+                    ]
+                  }
+                ],
+                "allowedActionIds": [
+                  "offer_patronage"
+                ],
+                "wake": {
+                  "tier": "local_critical"
+                },
+                "evidence": {
+                  "identity.rank": "人物卡：蔺采泉为太乙首席教御。",
+                  "personality.caution": "人物卡：谦和外表。",
+                  "personality.ambition": "人物卡：老奸巨猾。",
+                  "personality.honor": "本拍以救人邀入门。",
+                  "motives.control": "本拍要入门账落在他名下。",
+                  "motives.legitimacy": "人物卡：教御。",
+                  "resources.influence": "人物卡：首席教御。",
+                  "resources.troops": "axisBeat：教御弟子全歼兽蛮。",
+                  "resources.intelligence": "本拍先报宗门名号。",
+                  "resources.wealth": "本拍不靠买命。",
+                  "agendas.agenda.lcq.s01_04.lin.clock": "火光已到，入门未落笔。"
+                }
+              },
+              {
+                "characterId": "liuchao.character.zhuo_yunjun",
+                "identity": {
+                  "factionId": "liuchao.faction.tai_yi_zhen_zong",
+                  "office": "太乙教御",
+                  "rank": 5
+                },
+                "personality": {
+                  "honor": 4,
+                  "caution": 3,
+                  "aggression": 4
+                },
+                "motives": {
+                  "legitimacy": 3,
+                  "stability": 3
+                },
+                "resources": {
+                  "influence": 4,
+                  "troops": 3,
+                  "intelligence": 3,
+                  "wealth": 2
+                },
+                "relationships": {},
+                "knowledge": [
+                  "knowledge.lcq.s01_04.arrival"
+                ],
+                "agendas": [
+                  {
+                    "id": "agenda.lcq.s01_04.zhuo",
+                    "goal": "先把人从兽圈里拉出来，不急着替宗门收名",
+                    "clock": 1,
+                    "escalation": [
+                      "施法",
+                      "救人",
+                      "收势"
+                    ]
+                  }
+                ],
+                "allowedActionIds": [
+                  "protect_principal"
+                ],
+                "wake": {
+                  "tier": "local_critical"
+                },
+                "evidence": {
+                  "identity.rank": "人物卡：卓云君为本拍救人的教御。",
+                  "personality.honor": "axisBeat：她先救人。",
+                  "personality.caution": "本拍不先谈入门手续。",
+                  "personality.aggression": "axisBeat：烈火法术。",
+                  "motives.legitimacy": "本拍是教御出手。",
+                  "motives.stability": "本拍先破兽圈。",
+                  "resources.influence": "人物卡：教御。",
+                  "resources.troops": "本拍个人法术。",
+                  "resources.intelligence": "本拍先救人。",
+                  "resources.wealth": "本拍不谈供养。",
+                  "agendas.agenda.lcq.s01_04.zhuo.clock": "火光已落在兽圈上。"
+                }
+              }
+            ],
+            "actionBindings": [
+              {
+                "actionId": "offer_patronage",
+                "actorIds": [
+                  "liuchao.character.lin_cai_quan"
+                ],
+                "label": "当场把入太乙的名分记在他名下",
+                "reason": "救场的火光里，他要的是认门",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lcq.s01_04.arrival"
+                ],
+                "mustNotInvent": [
+                  "已经正式授职"
+                ],
+                "visibleSignal": "蔺采泉报出太乙教御名号，把入门的话压到火光里",
+                "offscreenAction": "记下入门账",
+                "costs": {
+                  "influence": 1
+                },
+                "effects": {
+                  "linLedger": 12,
+                  "zhuoRescue": -4
+                },
+                "utility": {
+                  "urgency": 8,
+                  "factionGoal": 8,
+                  "expectedBenefit": 7,
+                  "situation": {
+                    "linLedger": -3
+                  }
+                },
+                "visibility": "public",
+                "durationTurns": 1
+              },
+              {
+                "actionId": "protect_principal",
+                "actorIds": [
+                  "liuchao.character.zhuo_yunjun"
+                ],
+                "label": "只把人从兽圈里拉出来，不替宗门收名",
+                "reason": "救命和认门可以分开",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lcq.s01_04.arrival"
+                ],
+                "mustNotInvent": [
+                  "掌教已经易主"
+                ],
+                "visibleSignal": "卓云君收势，不催任何人当场拜门",
+                "offscreenAction": "只完成救人",
+                "costs": {
+                  "troops": 1
+                },
+                "effects": {
+                  "zhuoRescue": 10,
+                  "linLedger": -6
+                },
+                "utility": {
+                  "expectedBenefit": 4
+                },
+                "visibility": "public",
+                "durationTurns": 1
+              }
+            ],
+            "maxVisibleActions": 2,
+            "narrativeGuard": {
+              "forbiddenTerms": [
+                "已经正式授职",
+                "掌教已经易主"
+              ],
+              "rejectConcreteQuantities": true,
+              "allowUnverifiedQuantities": true
+            }
+          },
+          "opportunities": [
+            {
+              "id": "opportunity.lcq.s01_04.join_via_lin",
+              "title": "当众向蔺采泉认入太乙",
+              "characterIds": [
+                "liuchao.character.lin_cai_quan"
+              ],
+              "whyNow": "教御名号已经报出来。当场认门，入太乙的账会记在他名下。",
+              "nextStep": "当着火光向蔺采泉认入太乙真宗，接受他把你写入他的招揽账。",
+              "stakes": "以后宗门有人问你是谁招的，会先问到他；你也把把柄交在对手手里。",
+              "rewardPreview": "取得一次以蔺采泉招揽账进入太乙的权限。",
+              "futureHint": "以后再有人核对你怎么进的门，会先看这本招揽账还在不在。",
+              "actionText": "我追踪“当众向蔺采泉认入太乙”：当场认门，接受写入他的招揽账，不把这事说成只是路过被救。",
+              "rewardKey": "permission.lcq.taiyi.lin_recruit_roll",
+              "rewardLabel": "太乙·蔺采泉招揽账",
+              "trigger": {
+                "actorIds": [
+                  "liuchao.character.lin_cai_quan"
+                ],
+                "actionIds": [
+                  "offer_patronage"
+                ]
+              },
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "settlement": "immediate",
+                "expiry": "standard",
+                "steps": [
+                  {
+                    "id": "face_lin",
+                    "label": "当众向蔺采泉认门",
+                    "actions": [
+                      {
+                        "id": "acknowledge_lin_recruitment",
+                        "label": "向蔺认门",
+                        "actionText": "我当着火光向蔺采泉认入太乙真宗，不把这事说成只是路过被救。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "向蔺采泉认入",
+                      "不把这事说成只是路过"
+                    ],
+                    "rejectIf": [
+                      "只受救命",
+                      "不认宗门",
+                      "不认门"
+                    ]
+                  },
+                  {
+                    "id": "accept_roll",
+                    "label": "接受写入招揽账",
+                    "actions": [
+                      {
+                        "id": "accept_lin_recruit_roll",
+                        "label": "写入招揽账",
+                        "actionText": "我接受他把我写入他的招揽账，不改口说改天再议。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "写入",
+                      "招揽账"
+                    ],
+                    "rejectIf": [
+                      "改天再议",
+                      "不写入他的账"
+                    ]
+                  }
+                ]
+              },
+              "expiresAfterTurns": 4
+            },
+            {
+              "id": "opportunity.lcq.s01_04.take_rescue_only",
+              "title": "只受卓云君救命，不认宗门名分",
+              "characterIds": [
+                "liuchao.character.zhuo_yunjun"
+              ],
+              "whyNow": "她已经把人从兽圈里拉出来。救命可以领，认门可以不在这一刻落笔。",
+              "nextStep": "领受卓云君的救援，明确此刻不向任何教御认门。",
+              "stakes": "宗门不会欠你入门的情；蔺采泉也会记住你当面没认他。",
+              "rewardPreview": "取得一次只领卓云君救命、不入招揽账的权限。",
+              "futureHint": "以后有人问你当时有没有拜门，卓云君会记得你领没领过她的救。",
+              "actionText": "我追踪“只受卓云君救命，不认宗门名分”：领救援，不向蔺采泉或任何教御当场认门。",
+              "rewardKey": "permission.lcq.taiyi.zhuo_rescue_only",
+              "rewardLabel": "太乙·只领救命",
+              "trigger": {
+                "actorIds": [
+                  "liuchao.character.zhuo_yunjun"
+                ],
+                "actionIds": [
+                  "protect_principal"
+                ]
+              },
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "settlement": "immediate",
+                "expiry": "standard",
+                "steps": [
+                  {
+                    "id": "accept_fire",
+                    "label": "领受卓云君救援",
+                    "actions": [
+                      {
+                        "id": "accept_zhuo_rescue",
+                        "label": "领救援",
+                        "actionText": "我领受卓云君把我从兽圈里拉出来这件事，不假装没人救过。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "领受",
+                      "卓云君",
+                      "拉出来"
+                    ],
+                    "rejectIf": [
+                      "向蔺采泉认入",
+                      "当场拜门"
+                    ]
+                  },
+                  {
+                    "id": "refuse_roll",
+                    "label": "此刻不认门",
+                    "actions": [
+                      {
+                        "id": "refuse_sect_roll",
+                        "label": "不认门",
+                        "actionText": "我明确此刻不向蔺采泉或任何教御认门，不写入招揽账。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "不向",
+                      "认门",
+                      "不写入招揽账"
+                    ],
+                    "rejectIf": [
+                      "写入他的招揽账",
+                      "向蔺采泉认入"
+                    ]
+                  }
+                ]
+              },
+              "expiresAfterTurns": 4
+            }
+          ]
         }
       },
       {

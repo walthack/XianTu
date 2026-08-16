@@ -4610,6 +4610,348 @@
               }
             }
           ]
+        },
+        "relatedFactionIds": [
+          "liuchao.faction.hei_mo_hai"
+        ],
+        "worldActor": {
+          "pressure": {
+            "id": "world.lcq.s07_03.duzong_hand",
+            "scope": "faction",
+            "summary": "小紫已出手制住卓云君。认这笔毒门庇护，还是只领救命、不认门，还没说死。",
+            "domains": [
+              "sect"
+            ],
+            "geography": [
+              "建康"
+            ],
+            "factionIds": [
+              "liuchao.faction.hei_mo_hai"
+            ],
+            "intensity": 3,
+            "canonPolicy": "process_only"
+          },
+          "decisionCore": {
+            "knowledgeFacts": {
+              "knowledge.lcq.s07_03.rescue": {
+                "text": "小紫以毒戒制服重伤的卓云君，救下被制住的程宗扬。",
+                "access": "public",
+                "evidence": "lcq.event.s07_03_xiaozi_appears axisBeat。"
+              }
+            },
+            "situation": {
+              "whitelist": [
+                "sectShelter",
+                "rescueOnly"
+              ],
+              "initialValues": {
+                "sectShelter": 44,
+                "rescueOnly": 36
+              },
+              "limits": {
+                "sectShelter": {
+                  "min": 0,
+                  "max": 100
+                },
+                "rescueOnly": {
+                  "min": 0,
+                  "max": 100
+                }
+              }
+            },
+            "canonPolicy": {
+              "invariant": [
+                "小紫已经出手制住卓云君"
+              ],
+              "forbiddenBefore": [
+                "卓云君已经身死",
+                "毒宗名分已经公开册封"
+              ],
+              "processFreedom": [
+                "认毒门庇护还是只领救命"
+              ]
+            },
+            "actors": [
+              {
+                "characterId": "liuchao.character.xiao_zi",
+                "identity": {
+                  "factionId": "liuchao.faction.hei_mo_hai",
+                  "office": "毒宗嫡传",
+                  "rank": 6
+                },
+                "personality": {
+                  "caution": 5,
+                  "ambition": 4,
+                  "aggression": 3
+                },
+                "motives": {
+                  "control": 5,
+                  "legitimacy": 3
+                },
+                "resources": {
+                  "influence": 4,
+                  "intelligence": 5,
+                  "troops": 2,
+                  "wealth": 2
+                },
+                "relationships": {},
+                "knowledge": [
+                  "knowledge.lcq.s07_03.rescue"
+                ],
+                "agendas": [
+                  {
+                    "id": "agenda.lcq.s07_03.xiaozi",
+                    "goal": "救人的同时把庇护账记在毒门名下",
+                    "clock": 1,
+                    "escalation": [
+                      "现身",
+                      "下毒戒",
+                      "问认不认"
+                    ]
+                  }
+                ],
+                "allowedActionIds": [
+                  "offer_patronage",
+                  "protect_principal"
+                ],
+                "wake": {
+                  "tier": "local_critical"
+                },
+                "evidence": {
+                  "identity.rank": "人物卡：小紫为毒宗唯一嫡传。",
+                  "personality.caution": "人物卡：城府极深。",
+                  "personality.ambition": "本拍以嫡传身份出手。",
+                  "personality.aggression": "axisBeat：毒戒制服卓云君。",
+                  "motives.control": "庇护账在她手里。",
+                  "motives.legitimacy": "人物卡：毒宗嫡传。",
+                  "resources.influence": "人物卡：核心圈。",
+                  "resources.intelligence": "本拍先救人再问。",
+                  "resources.troops": "本拍个人武力。",
+                  "resources.wealth": "本拍不靠买命。",
+                  "agendas.agenda.lcq.s07_03.xiaozi.clock": "毒戒已落下。"
+                }
+              }
+            ],
+            "actionBindings": [
+              {
+                "actionId": "offer_patronage",
+                "actorIds": [
+                  "liuchao.character.xiao_zi"
+                ],
+                "label": "按毒门嫡传把这笔救命记成庇护",
+                "reason": "救了人，她要听你认不认这扇门",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lcq.s07_03.rescue"
+                ],
+                "mustNotInvent": [
+                  "毒宗已经公开册封"
+                ],
+                "visibleSignal": "小紫摩挲毒戒，等一句认不认",
+                "offscreenAction": "记下庇护账",
+                "costs": {
+                  "influence": 1
+                },
+                "effects": {
+                  "sectShelter": 12,
+                  "rescueOnly": -4
+                },
+                "utility": {
+                  "urgency": 9,
+                  "factionGoal": 8,
+                  "expectedBenefit": 8,
+                  "situation": {
+                    "sectShelter": -3
+                  }
+                },
+                "visibility": "public",
+                "durationTurns": 1
+              },
+              {
+                "actionId": "protect_principal",
+                "actorIds": [
+                  "liuchao.character.xiao_zi"
+                ],
+                "label": "只把人从卓云君手里拉开，不逼认门",
+                "reason": "救命可以先落地",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lcq.s07_03.rescue"
+                ],
+                "mustNotInvent": [
+                  "卓云君已经身死"
+                ],
+                "visibleSignal": "她收手，不再追问门派名分",
+                "offscreenAction": "只完成救人",
+                "costs": {
+                  "intelligence": 1
+                },
+                "effects": {
+                  "rescueOnly": 12,
+                  "sectShelter": -6
+                },
+                "utility": {
+                  "expectedBenefit": 4
+                },
+                "visibility": "public",
+                "durationTurns": 1
+              }
+            ],
+            "maxVisibleActions": 2,
+            "narrativeGuard": {
+              "forbiddenTerms": [
+                "天命侯已经坐实",
+                "毒宗已经公开册封"
+              ],
+              "rejectConcreteQuantities": true,
+              "allowUnverifiedQuantities": true
+            }
+          },
+          "opportunities": [
+            {
+              "id": "opportunity.lcq.s07_03.accept_duzong_shelter",
+              "title": "认下小紫这笔毒门庇护",
+              "characterIds": [
+                "liuchao.character.xiao_zi"
+              ],
+              "whyNow": "她已经用毒戒把人拉开。认这笔庇护，救命就按毒门的账走。",
+              "nextStep": "当着被制住的卓云君，承认这是小紫以毒门嫡传救你，并接受她记账。",
+              "stakes": "以后毒门有人问你是谁护的，会先问到她；太乙那边也会看见你领过这只手。",
+              "rewardPreview": "取得一次确认小紫毒门庇护账的权限。",
+              "futureHint": "以后她再伸手，会先看你这次认没认过这笔庇护。",
+              "actionText": "我追踪“认下小紫这笔毒门庇护”：承认是她以嫡传救我，接受记账。",
+              "rewardKey": "permission.lcq.xiaozi.duzong_shelter",
+              "rewardLabel": "小紫·毒门庇护",
+              "trigger": {
+                "actorIds": [
+                  "liuchao.character.xiao_zi"
+                ],
+                "actionIds": [
+                  "offer_patronage"
+                ]
+              },
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "settlement": "immediate",
+                "expiry": "standard",
+                "steps": [
+                  {
+                    "id": "name_hand",
+                    "label": "承认是毒门嫡传所救",
+                    "actions": [
+                      {
+                        "id": "name_duzong_hand",
+                        "label": "认嫡传所救",
+                        "actionText": "我当着现场承认是小紫以毒门嫡传把我从卓云君手里拉开，不说成路人出手。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "毒门嫡传",
+                      "不说成路人出手"
+                    ],
+                    "rejectIf": [
+                      "只领救命",
+                      "不认门"
+                    ]
+                  },
+                  {
+                    "id": "accept_book",
+                    "label": "接受她记账",
+                    "actions": [
+                      {
+                        "id": "accept_xiaozi_shelter_book",
+                        "label": "接受庇护账",
+                        "actionText": "我接受小紫把这笔庇护记在我身上，不改口说只是偶遇。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "庇护记在我身上",
+                      "不改口说只是偶遇"
+                    ],
+                    "rejectIf": [
+                      "不认门",
+                      "只是偶遇"
+                    ]
+                  }
+                ]
+              },
+              "expiresAfterTurns": 4
+            },
+            {
+              "id": "opportunity.lcq.s07_03.take_rescue_without_sect",
+              "title": "只要她制住卓云君，不认毒门名分",
+              "characterIds": [
+                "liuchao.character.xiao_zi"
+              ],
+              "whyNow": "人已经拉开。救命可以领，门派名分可以不在这一刻认。",
+              "nextStep": "领受救援，明确此刻不把这事写成毒门庇护。",
+              "stakes": "她会记住你领了手却不认门；毒门也不会按庇护来认你。",
+              "rewardPreview": "取得一次只领小紫救命、不入毒门账的权限。",
+              "futureHint": "以后她再问你认不认，会先看你这次有没有把名分推回去。",
+              "actionText": "我追踪“只要她制住卓云君，不认毒门名分”：领救援，不写入毒门庇护。",
+              "rewardKey": "permission.lcq.xiaozi.rescue_without_sect",
+              "rewardLabel": "小紫·只领救命",
+              "trigger": {
+                "actorIds": [
+                  "liuchao.character.xiao_zi"
+                ],
+                "actionIds": [
+                  "protect_principal"
+                ]
+              },
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "settlement": "immediate",
+                "expiry": "standard",
+                "steps": [
+                  {
+                    "id": "take_pull",
+                    "label": "领受她拉开的手",
+                    "actions": [
+                      {
+                        "id": "accept_xiaozi_pull",
+                        "label": "领救援",
+                        "actionText": "我领受小紫把我从卓云君手里拉开这件事，不假装没人救过。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "领受",
+                      "拉开",
+                      "不假装没人救过"
+                    ],
+                    "rejectIf": [
+                      "认下庇护",
+                      "毒门嫡传所救"
+                    ]
+                  },
+                  {
+                    "id": "refuse_sect",
+                    "label": "不认毒门名分",
+                    "actions": [
+                      {
+                        "id": "refuse_duzong_name",
+                        "label": "不认门",
+                        "actionText": "我明确此刻不把这事写成毒门庇护，也不认毒门名分。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "不把这事写成毒门庇护",
+                      "不认"
+                    ],
+                    "rejectIf": [
+                      "接受她记账",
+                      "毒门庇护"
+                    ]
+                  }
+                ]
+              },
+              "expiresAfterTurns": 4
+            }
+          ]
         }
       },
       {

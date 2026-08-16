@@ -5802,7 +5802,8 @@
           }
         ],
         "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang"
+          "liuchao.character.cheng_zongyang",
+          "lyg.character.chou_shiliang"
         ],
         "objective": "前往仇士良家门前调查刺杀现场",
         "playerCompletionContract": {
@@ -5821,6 +5822,351 @@
                 "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
                 "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
               }
+            }
+          ]
+        },
+        "relatedFactionIds": [
+          "liuchao.faction.tang_guo_chao_ting",
+          "lyg.faction.eunuch_group"
+        ],
+        "worldActor": {
+          "pressure": {
+            "id": "world.lyg.conspiracy_01.chou_gate",
+            "scope": "faction",
+            "summary": "仇宅门前已经封路。以汉使留下目击，还是只看现场、名字不入案卷，还没落笔。",
+            "domains": [
+              "court",
+              "intelligence"
+            ],
+            "geography": [
+              "长安仇宅"
+            ],
+            "factionIds": [
+              "liuchao.faction.tang_guo_chao_ting",
+              "lyg.faction.eunuch_group"
+            ],
+            "intensity": 3,
+            "canonPolicy": "process_only"
+          },
+          "decisionCore": {
+            "knowledgeFacts": {
+              "knowledge.lyg.conspiracy_01.blood": {
+                "text": "仇士良宅前忽然封路，石阶血痕说法不一，内侍班里开始互相咬人。",
+                "access": "public",
+                "evidence": "lyg.event.buddhist_conspiracy_01_beat axisBeat。"
+              }
+            },
+            "situation": {
+              "whitelist": [
+                "envoyWitness",
+                "anonymousLook"
+              ],
+              "initialValues": {
+                "envoyWitness": 38,
+                "anonymousLook": 42
+              },
+              "limits": {
+                "envoyWitness": {
+                  "min": 0,
+                  "max": 100
+                },
+                "anonymousLook": {
+                  "min": 0,
+                  "max": 100
+                }
+              }
+            },
+            "canonPolicy": {
+              "invariant": [
+                "仇宅门前已经封路",
+                "石阶上已有血痕"
+              ],
+              "forbiddenBefore": [
+                "凶手已经坐实",
+                "甘露变已经收场"
+              ],
+              "processFreedom": [
+                "汉使目击落卷还是不留名字"
+              ]
+            },
+            "actors": [
+              {
+                "characterId": "lyg.character.chou_shiliang",
+                "identity": {
+                  "factionId": "liuchao.faction.tang_guo_chao_ting",
+                  "office": "左街功德使",
+                  "rank": 6
+                },
+                "personality": {
+                  "caution": 5,
+                  "ambition": 4,
+                  "honor": 2
+                },
+                "motives": {
+                  "control": 5,
+                  "legitimacy": 4
+                },
+                "resources": {
+                  "influence": 5,
+                  "intelligence": 4,
+                  "troops": 3,
+                  "wealth": 3
+                },
+                "relationships": {},
+                "knowledge": [
+                  "knowledge.lyg.conspiracy_01.blood"
+                ],
+                "agendas": [
+                  {
+                    "id": "agenda.lyg.conspiracy_01.chou",
+                    "goal": "先把宅前血案的说法按住，并决定要不要外人名字入卷",
+                    "clock": 1,
+                    "escalation": [
+                      "封路",
+                      "互咬",
+                      "收证人"
+                    ]
+                  }
+                ],
+                "allowedActionIds": [
+                  "gather_intelligence",
+                  "conceal_evidence"
+                ],
+                "wake": {
+                  "tier": "local_critical"
+                },
+                "evidence": {
+                  "identity.rank": "人物卡：仇士良为左街功德使、四贵之一。",
+                  "personality.caution": "本拍先封路。",
+                  "personality.ambition": "人物卡：四贵之一。",
+                  "personality.honor": "本拍仍要一份说得过去的现场。",
+                  "motives.control": "案卷在内侍手里。",
+                  "motives.legitimacy": "人物卡：功德使。",
+                  "resources.influence": "人物卡：知内侍省事。",
+                  "resources.intelligence": "本拍宅前互咬。",
+                  "resources.troops": "本拍能封路。",
+                  "resources.wealth": "本拍不靠买路。",
+                  "agendas.agenda.lyg.conspiracy_01.chou.clock": "血还未干。"
+                }
+              }
+            ],
+            "actionBindings": [
+              {
+                "actionId": "gather_intelligence",
+                "actorIds": [
+                  "lyg.character.chou_shiliang"
+                ],
+                "label": "把路过的汉使写入目击卷",
+                "reason": "封路之后，名字落卷才算看见过",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lyg.conspiracy_01.blood"
+                ],
+                "mustNotInvent": [
+                  "凶手已经坐实"
+                ],
+                "visibleSignal": "门簿把汉使衔抄进仇宅目击栏",
+                "offscreenAction": "收入证人栏",
+                "costs": {
+                  "intelligence": 1
+                },
+                "effects": {
+                  "envoyWitness": 12,
+                  "anonymousLook": -4
+                },
+                "utility": {
+                  "urgency": 9,
+                  "factionGoal": 8,
+                  "expectedBenefit": 7,
+                  "situation": {
+                    "envoyWitness": -3
+                  }
+                },
+                "visibility": "public",
+                "durationTurns": 1
+              },
+              {
+                "actionId": "conceal_evidence",
+                "actorIds": [
+                  "lyg.character.chou_shiliang"
+                ],
+                "label": "只许看现场，不把外人名字写入案卷",
+                "reason": "看过和具名可以分开",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lyg.conspiracy_01.blood"
+                ],
+                "mustNotInvent": [
+                  "甘露变已经收场"
+                ],
+                "visibleSignal": "卫士赶人，目击栏空着",
+                "offscreenAction": "不留名",
+                "costs": {
+                  "influence": 1
+                },
+                "effects": {
+                  "anonymousLook": 12,
+                  "envoyWitness": -6
+                },
+                "utility": {
+                  "expectedBenefit": 4
+                },
+                "visibility": "public",
+                "durationTurns": 1
+              }
+            ],
+            "maxVisibleActions": 2,
+            "narrativeGuard": {
+              "forbiddenTerms": [
+                "凶手已经坐实",
+                "已经入仕唐廷"
+              ],
+              "rejectConcreteQuantities": true,
+              "allowUnverifiedQuantities": true
+            }
+          },
+          "opportunities": [
+            {
+              "id": "opportunity.lyg.conspiracy_01.sign_as_envoy",
+              "title": "以汉使身份留下仇宅目击",
+              "characterIds": [
+                "lyg.character.chou_shiliang"
+              ],
+              "whyNow": "门前已经封路。留下目击，案卷会有汉使这一栏；日后对证也先找到你。",
+              "nextStep": "在仇宅门前按汉使衔留下目击，只写亲见与未核验，不先定凶手。",
+              "stakes": "内侍两边都会按这个名字找你；想再装路过的人就晚了。",
+              "rewardPreview": "取得一次以汉使名义核验仇宅现场的权限。",
+              "futureHint": "以后再有人追问宅前那摊血，会先翻当时的目击栏。",
+              "actionText": "我追踪“以汉使身份留下仇宅目击”：按汉使衔落卷，只写亲见，不先定凶手。",
+              "rewardKey": "permission.lyg.han_mission.chou_house_witness",
+              "rewardLabel": "汉使·仇宅目击",
+              "trigger": {
+                "actorIds": [
+                  "lyg.character.chou_shiliang"
+                ],
+                "actionIds": [
+                  "gather_intelligence"
+                ]
+              },
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "settlement": "immediate",
+                "expiry": "standard",
+                "steps": [
+                  {
+                    "id": "stand_gate",
+                    "label": "在封路处亮明汉使",
+                    "actions": [
+                      {
+                        "id": "declare_envoy_at_gate",
+                        "label": "亮汉使",
+                        "actionText": "我在仇宅封路处亮明汉使身份，不假装只是路过看热闹。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "亮明汉使身份",
+                      "不假装只是路过"
+                    ],
+                    "rejectIf": [
+                      "不留名字",
+                      "只看一眼就走"
+                    ]
+                  },
+                  {
+                    "id": "sign_roll",
+                    "label": "写入目击栏",
+                    "actions": [
+                      {
+                        "id": "sign_witness_roll",
+                        "label": "落目击卷",
+                        "actionText": "我按汉使衔写入目击栏，只写亲见与未核验，不先指定凶手。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "写入目击栏",
+                      "不先指定凶手"
+                    ],
+                    "rejectIf": [
+                      "目击栏空着",
+                      "不留名"
+                    ]
+                  }
+                ]
+              },
+              "expiresAfterTurns": 4
+            },
+            {
+              "id": "opportunity.lyg.conspiracy_01.look_without_name",
+              "title": "只看现场，名字不入仇宅案卷",
+              "characterIds": [
+                "lyg.character.chou_shiliang"
+              ],
+              "whyNow": "血还湿着。看可以看，名字可以不落卷。",
+              "nextStep": "把现场看清楚，明确汉使衔不写入仇宅目击栏。",
+              "stakes": "以后要对证没有具名记录；内侍一时也指不到你。",
+              "rewardPreview": "取得一次匿名看过仇宅现场、不入案卷的权限。",
+              "futureHint": "以后若再补目击，仇宅那一侧会记得你当时写没写过名字。",
+              "actionText": "我追踪“只看现场，名字不入仇宅案卷”：看清楚，目击栏不写汉使衔。",
+              "rewardKey": "permission.lyg.changan.anonymous_look",
+              "rewardLabel": "长安·仇宅不留名",
+              "trigger": {
+                "actorIds": [
+                  "lyg.character.chou_shiliang"
+                ],
+                "actionIds": [
+                  "conceal_evidence"
+                ]
+              },
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "settlement": "immediate",
+                "expiry": "standard",
+                "steps": [
+                  {
+                    "id": "watch_steps",
+                    "label": "看清石阶现场",
+                    "actions": [
+                      {
+                        "id": "observe_blood_steps",
+                        "label": "看现场",
+                        "actionText": "我把仇宅石阶上的血痕与封路看清楚，不回头装没路过。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "看清楚",
+                      "不回头装没路过"
+                    ],
+                    "rejectIf": [
+                      "写入目击栏",
+                      "按汉使落卷"
+                    ]
+                  },
+                  {
+                    "id": "no_name",
+                    "label": "名字不入案卷",
+                    "actions": [
+                      {
+                        "id": "keep_name_off_case",
+                        "label": "不入卷",
+                        "actionText": "我明确汉使衔不写入仇宅目击栏，这一栏留空。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "不写入仇宅目击栏",
+                      "留空"
+                    ],
+                    "rejectIf": [
+                      "按汉使衔写入",
+                      "留下目击"
+                    ]
+                  }
+                ]
+              },
+              "expiresAfterTurns": 4
             }
           ]
         }

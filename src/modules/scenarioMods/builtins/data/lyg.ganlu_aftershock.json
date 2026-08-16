@@ -5853,7 +5853,8 @@
           }
         ],
         "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang"
+          "liuchao.character.cheng_zongyang",
+          "lyg.character.chou_shiliang"
         ],
         "objective": "调查长安城内劫掠事件",
         "playerCompletionContract": {
@@ -5872,6 +5873,351 @@
                 "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
                 "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
               }
+            }
+          ]
+        },
+        "relatedFactionIds": [
+          "liuchao.faction.tang_guo_chao_ting",
+          "lyg.faction.eunuch_group"
+        ],
+        "worldActor": {
+          "pressure": {
+            "id": "world.lyg.aftershock_03.temple_riot",
+            "scope": "faction",
+            "summary": "寺观门板多被撬开，衙署空班。核验走功德使一侧，还是只记坊间说法，还没人认领。",
+            "domains": [
+              "court",
+              "security"
+            ],
+            "geography": [
+              "长安法云尼寺一带"
+            ],
+            "factionIds": [
+              "liuchao.faction.tang_guo_chao_ting",
+              "lyg.faction.eunuch_group"
+            ],
+            "intensity": 2,
+            "canonPolicy": "process_only"
+          },
+          "decisionCore": {
+            "knowledgeFacts": {
+              "knowledge.lyg.aftershock_03.riot": {
+                "text": "长安寺观遭撬，法云尼寺一带封路，衙署空班，巡丁失联，坊间说法互相打架。",
+                "access": "public",
+                "evidence": "lyg.event.ganlu_aftershock_03_beat axisBeat。"
+              }
+            },
+            "situation": {
+              "whitelist": [
+                "officeAudit",
+                "streetNotes"
+              ],
+              "initialValues": {
+                "officeAudit": 34,
+                "streetNotes": 44
+              },
+              "limits": {
+                "officeAudit": {
+                  "min": 0,
+                  "max": 100
+                },
+                "streetNotes": {
+                  "min": 0,
+                  "max": 100
+                }
+              }
+            },
+            "canonPolicy": {
+              "invariant": [
+                "多处寺观已经被撬"
+              ],
+              "forbiddenBefore": [
+                "城内秩序已经恢复",
+                "主事人已经落判"
+              ],
+              "processFreedom": [
+                "走功德使核验还是只记坊间说法"
+              ]
+            },
+            "actors": [
+              {
+                "characterId": "lyg.character.chou_shiliang",
+                "identity": {
+                  "factionId": "liuchao.faction.tang_guo_chao_ting",
+                  "office": "左街功德使",
+                  "rank": 6
+                },
+                "personality": {
+                  "caution": 4,
+                  "ambition": 3,
+                  "honor": 2
+                },
+                "motives": {
+                  "control": 4,
+                  "legitimacy": 5
+                },
+                "resources": {
+                  "influence": 5,
+                  "intelligence": 4,
+                  "troops": 2,
+                  "wealth": 3
+                },
+                "relationships": {},
+                "knowledge": [
+                  "knowledge.lyg.aftershock_03.riot"
+                ],
+                "agendas": [
+                  {
+                    "id": "agenda.lyg.aftershock_03.chou",
+                    "goal": "决定寺观被撬这一摊要不要进功德使的册",
+                    "clock": 1,
+                    "escalation": [
+                      "封巷",
+                      "对说法",
+                      "收册"
+                    ]
+                  }
+                ],
+                "allowedActionIds": [
+                  "audit_resources",
+                  "conceal_evidence"
+                ],
+                "wake": {
+                  "tier": "local_critical"
+                },
+                "evidence": {
+                  "identity.rank": "人物卡：仇士良为左街功德使，寺观册在他职责内。",
+                  "personality.caution": "本拍先封巷。",
+                  "personality.ambition": "本拍要册在自己手里。",
+                  "personality.honor": "本拍仍要一份核验。",
+                  "motives.control": "功德使册由他收。",
+                  "motives.legitimacy": "人物卡：功德使。",
+                  "resources.influence": "人物卡：左街功德使。",
+                  "resources.intelligence": "本拍能收寺观册。",
+                  "resources.troops": "本拍巡丁已失联。",
+                  "resources.wealth": "本拍不靠赔香火。",
+                  "agendas.agenda.lyg.aftershock_03.chou.clock": "门板已被撬开。"
+                }
+              }
+            ],
+            "actionBindings": [
+              {
+                "actionId": "audit_resources",
+                "actorIds": [
+                  "lyg.character.chou_shiliang"
+                ],
+                "label": "把被撬寺观抄进功德使核验册",
+                "reason": "衙署空着，册还在功德使这一侧",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lyg.aftershock_03.riot"
+                ],
+                "mustNotInvent": [
+                  "劫掠主事人已经伏法"
+                ],
+                "visibleSignal": "法云尼寺一带的封路被抄进功德使草册",
+                "offscreenAction": "收入官册",
+                "costs": {
+                  "intelligence": 1
+                },
+                "effects": {
+                  "officeAudit": 12,
+                  "streetNotes": -4
+                },
+                "utility": {
+                  "urgency": 8,
+                  "factionGoal": 8,
+                  "expectedBenefit": 7,
+                  "situation": {
+                    "officeAudit": -3
+                  }
+                },
+                "visibility": "public",
+                "durationTurns": 1
+              },
+              {
+                "actionId": "conceal_evidence",
+                "actorIds": [
+                  "lyg.character.chou_shiliang"
+                ],
+                "label": "只准记下坊间说法，不入功德使册",
+                "reason": "街谈可以有，官册可以空",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lyg.aftershock_03.riot"
+                ],
+                "mustNotInvent": [
+                  "城内秩序已经恢复"
+                ],
+                "visibleSignal": "里正互推，功德使册那一栏空着",
+                "offscreenAction": "不入官册",
+                "costs": {
+                  "influence": 1
+                },
+                "effects": {
+                  "streetNotes": 12,
+                  "officeAudit": -6
+                },
+                "utility": {
+                  "expectedBenefit": 4
+                },
+                "visibility": "public",
+                "durationTurns": 1
+              }
+            ],
+            "maxVisibleActions": 2,
+            "narrativeGuard": {
+              "forbiddenTerms": [
+                "已经入仕唐廷",
+                "劫掠主事人已经伏法"
+              ],
+              "rejectConcreteQuantities": true,
+              "allowUnverifiedQuantities": true
+            }
+          },
+          "opportunities": [
+            {
+              "id": "opportunity.lyg.aftershock_03.file_temple_audit",
+              "title": "把寺观封路交给功德使核验",
+              "characterIds": [
+                "lyg.character.chou_shiliang"
+              ],
+              "whyNow": "衙署空着。抄进功德使册，以后对得上；也会让内侍这一侧先看见你。",
+              "nextStep": "把法云尼寺一带封路与被撬门板分开登记进功德使核验，不先指定主事人。",
+              "stakes": "功德使一侧会记住这条线从你这儿来；坊间也会把你看成管这摊的人。",
+              "rewardPreview": "取得一次调用左街功德使寺观核验的权限。",
+              "futureHint": "以后再有寺观被撬，会先问当时是谁主张抄册。",
+              "actionText": "我追踪“把寺观封路交给功德使核验”：封路与被撬门板分开登记，不先指定主事人。",
+              "rewardKey": "permission.lyg.tang.temple_audit",
+              "rewardLabel": "唐·功德使寺观核验",
+              "trigger": {
+                "actorIds": [
+                  "lyg.character.chou_shiliang"
+                ],
+                "actionIds": [
+                  "audit_resources"
+                ]
+              },
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "settlement": "immediate",
+                "expiry": "standard",
+                "steps": [
+                  {
+                    "id": "list_damage",
+                    "label": "登记被撬门板",
+                    "actions": [
+                      {
+                        "id": "list_forced_temple_doors",
+                        "label": "登记被撬",
+                        "actionText": "我把被撬的寺观门板与法云尼寺封路分开登记，不写成已经结案。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "分开登记",
+                      "不写成已经结案"
+                    ],
+                    "rejectIf": [
+                      "只记坊间说法",
+                      "不入册"
+                    ]
+                  },
+                  {
+                    "id": "into_office",
+                    "label": "抄进功德使册",
+                    "actions": [
+                      {
+                        "id": "copy_into_gongdeshi_roll",
+                        "label": "入功德使册",
+                        "actionText": "我把这份登记抄进左街功德使核验册，不留在街头口头。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "抄进",
+                      "功德使",
+                      "核验册"
+                    ],
+                    "rejectIf": [
+                      "不入功德使册",
+                      "只留街头口头"
+                    ]
+                  }
+                ]
+              },
+              "expiresAfterTurns": 4
+            },
+            {
+              "id": "opportunity.lyg.aftershock_03.keep_street_notes",
+              "title": "只记坊间说法，不入功德使册",
+              "characterIds": [
+                "lyg.character.chou_shiliang"
+              ],
+              "whyNow": "里正正在互推。记下街谈，官册可以空着。",
+              "nextStep": "只把互相打架的坊间说法记下，明确不抄进功德使核验册。",
+              "stakes": "以后要对核没有官册；功德使一侧也不会为这条线出面。",
+              "rewardPreview": "取得一次只保留坊间说法、不入功德使册的权限。",
+              "futureHint": "以后若再补官册，会先问你当时为什么只记下街谈。",
+              "actionText": "我追踪“只记坊间说法，不入功德使册”：记下街谈，官册那一栏留空。",
+              "rewardKey": "permission.lyg.changan.street_notes",
+              "rewardLabel": "长安·坊间劫掠记录",
+              "trigger": {
+                "actorIds": [
+                  "lyg.character.chou_shiliang"
+                ],
+                "actionIds": [
+                  "conceal_evidence"
+                ]
+              },
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "settlement": "immediate",
+                "expiry": "standard",
+                "steps": [
+                  {
+                    "id": "hear_streets",
+                    "label": "记下坊间说法",
+                    "actions": [
+                      {
+                        "id": "record_street_talk",
+                        "label": "记街谈",
+                        "actionText": "我只把寺观被撬的坊间说法分开记下，不先指定是谁下的手。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "坊间说法",
+                      "不先指定是谁"
+                    ],
+                    "rejectIf": [
+                      "抄进功德使册",
+                      "官册核验"
+                    ]
+                  },
+                  {
+                    "id": "no_office",
+                    "label": "不入功德使册",
+                    "actions": [
+                      {
+                        "id": "keep_off_gongdeshi_roll",
+                        "label": "不入官册",
+                        "actionText": "我明确这份记录不抄进左街功德使核验册。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "不抄进",
+                      "功德使核验册"
+                    ],
+                    "rejectIf": [
+                      "抄进功德使册",
+                      "收入官册"
+                    ]
+                  }
+                ]
+              },
+              "expiresAfterTurns": 4
             }
           ]
         }
