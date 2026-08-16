@@ -1757,8 +1757,8 @@
         },
         {
           "id": "world-sim.baseline.lcq.stage_03.lcq.event.s03_09",
-          "title": "黑石滩水势不对",
-          "summary": "黑石滩渡口水位与往年不同，两岸缆桩被重新打过；云氏商队也在对岸等渡。",
+          "title": "凝羽避开众人约话",
+          "summary": "南行夜营未散，凝羽把守夜的人支到外圈，只要单独说话。靠近时袖口发冷，她自己先按住了腕口。",
           "sourceEventId": "lcq.event.s03_09",
           "settledWhenAny": [
             [
@@ -1775,11 +1775,15 @@
             "id": "omen.baseline.lcq.stage_03.lcq.event.s03_09",
             "afterTurns": 1,
             "observableFacts": [
-              "黑石滩缆绳换了新桩，旧痕还泡在水里",
-              "对岸出现云氏商会的旗号，有人招手要合渡",
-              "祁远与云苍峰隔水对过话，语气谨慎"
+              "凝羽把守夜的人支到外圈，帐帘只留一条缝",
+              "她压低声音要单独谈，不肯当众开口",
+              "靠近时袖口透出一丝冷意，她先按住了自己的腕"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.ning_yu"
+              },
               {
                 "kind": "messenger"
               },
@@ -1787,10 +1791,10 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "黑石滩水声比往日重，新打的缆桩还渗着湿泥。两岸车铃对响，合不合伙渡，船家只等两头点头。",
+            "environmentFallback": "夜营外圈脚步散开，帐帘只留一条缝。里面压着嗓子说话，帘边的空气比外头凉。",
             "presentation": {
-              "title": "两岸缆响",
-              "text": "黑石滩的旧缆还泡在水里，新桩已经打上。对岸云氏旗号招手，云苍峰隔水问能不能合渡。祁远应得很慢，船在急流里打转，谁先下缆还没定。"
+              "title": "帐帘只留一条缝",
+              "text": "南行夜营还没散，凝羽把守夜的人支到外圈，帐帘只留一条缝。她压低声音要单独谈，不肯当众开口。靠近时袖口透出一丝冷意，她自己先按住了腕口。"
             }
           }
         },

@@ -2951,8 +2951,8 @@
         },
         {
           "id": "world-sim.baseline.lcq.stage_04.lcq.event.s04_03",
-          "title": "凝羽伤势未明",
-          "summary": "交手余波未散，凝羽步履发沉，护卫与花苗人围着她争执走法。伤势深浅、还能不能走，都没有定论。",
+          "title": "乐明珠避开送亲姐妹",
+          "summary": "送亲鼓还在响，乐明珠却不跟花苗姐妹走一处。她几次停步，像要单独开口，又把话咽回去。",
           "sourceEventId": "lcq.event.s04_03",
           "settledWhenAny": [
             [
@@ -2969,11 +2969,15 @@
             "id": "omen.baseline.lcq.stage_04.lcq.event.s04_03",
             "afterTurns": 1,
             "observableFacts": [
-              "凝羽肩甲有新裂口，呼吸比平时短促",
-              "武二郎守在她身侧，不许闲人靠近验伤",
-              "花苗人递来止血药草，气味辛烈，她没有立刻接"
+              "乐明珠落在送亲队侧后，不与花苗姐妹并排",
+              "她两次欲言又止，把话咽回去",
+              "袖间装扮与队里其他新娘略有错位，她自己按住了"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.le_mingzhu"
+              },
               {
                 "kind": "messenger"
               },
@@ -2981,10 +2985,10 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "涧边雾气未散，断刃与湿泥混在一起，有人蹲着包扎，有人仍盯着雾深处。",
+            "environmentFallback": "送亲鼓还在响，队形里空出半步。侧后有人停住，像要开口，又被鼓点盖过去。",
             "presentation": {
-              "title": "剑未归鞘",
-              "text": "雾稍退时，凝羽肩甲裂开一条新口，步子比平时沉。武二郎挡在身侧，不许人乱摸伤口。花苗人递上止血药草，辛味冲鼻，她只看了一眼。商队还停在涧底，前面的路没有人敢先走。"
+              "title": "队侧停步",
+              "text": "送亲鼓还在响，乐明珠却落在队侧，不跟花苗姐妹并排。她两次把话咽回去，袖间装扮与旁人略有错位，她自己先按住。商队只看见新娘离队半步，还没人问她要说什么。"
             }
           }
         },
@@ -3036,8 +3040,8 @@
         },
         {
           "id": "world-sim.baseline.lcq.stage_04.lcq.event.s04_05",
-          "title": "谢艺查验货驮",
-          "summary": "袭击余波未平，谢艺绕着货箱查封记与缺角。账册对不上的地方被单独挑出，还没人敢下结论。",
+          "title": "谷口水声骤重",
+          "summary": "山路未过午，谷口先传来浊水声。前队勒马，泥腥顺着风扑上来，路面还没见水。",
           "sourceEventId": "lcq.event.s04_05",
           "settledWhenAny": [
             [
@@ -3061,11 +3065,15 @@
             "id": "omen.baseline.lcq.stage_04.lcq.event.s04_05",
             "afterTurns": 1,
             "observableFacts": [
-              "谢艺按箱核封记，几只货箱的泥印被刮花",
-              "乐明珠跟着记缺角货号，笔尖停了两次",
-              "云苍峰要人把对不上的箱单独码开，不许混入正驮"
+              "谷口传来持续加重的水声，不像寻常溪流",
+              "前队勒住货驮，有人蹲下去摸路面的湿泥",
+              "风里带泥腥，远处树影晃得比刚才密"
             ],
             "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.yun_cang_feng"
+              },
               {
                 "kind": "messenger"
               },
@@ -3073,10 +3081,10 @@
                 "kind": "environment"
               }
             ],
-            "environmentFallback": "货场灯火未齐，封泥碎屑落在箱沿，有人低声对号，有人把缺箱拖到侧边。",
+            "environmentFallback": "谷口的水声忽然沉下去又抬起来，风里先有泥腥。路面还干着，前队已经勒住了货驮。",
             "presentation": {
-              "title": "封记被刮",
-              "text": "谢艺绕着货驮核封记，几只箱的泥印明显被刮过。乐明珠跟着记缺角货号，笔尖停了两次。云苍峰只吩咐把对不上的箱单独码开。缺的是货还是被人动过手，此刻谁也说不死。"
+              "title": "谷口浊声",
+              "text": "山路未过午，谷口先传来持续加重的水声，不像寻常溪流。前队勒住货驮，有人蹲下去摸路面湿泥。风里带泥腥，树影晃得比刚才密。云苍峰只让人把队伍收紧，水还没漫到脚边。"
             }
           }
         },

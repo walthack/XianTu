@@ -2507,6 +2507,15 @@ ${step1Text}
         newValue: grant.to,
       });
     }
+    // 承重事件声望：同上，引擎侧结算也必须让玩家看见涨在哪一件事上（P1-4）。
+    for (const grant of scenarioResult.reputationGrants || []) {
+      changes.push({
+        key: '角色.属性.声望',
+        action: 'event_reputation',
+        oldValue: grant.from,
+        newValue: grant.to,
+      });
+    }
     // 里程碑奖励：称号=故事线正确落点的关卡完成奖励（引擎独占授予，AI 不能自封）
     for (const grantNote of applyMilestoneRewards(saveData, scenarioResult.transitions)) {
       changes.push({ key: '角色.身份.称号', action: 'milestone_reward', oldValue: undefined, newValue: grantNote });

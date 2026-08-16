@@ -40,6 +40,7 @@ import {
   type StanceState,
 } from './affinityLadder';
 import { affinityCapFor } from './affinityCaps';
+import { REPUTATION_EVENT_GRANT, type ReputationGrant } from './reputationLedger';
 import { recordOffscreenDivergence, type ScenarioDivergence } from './divergenceLedger';
 import { getCanonRailOrder, getCanonRailProfile, isCanonRailChapter } from './canonRail';
 import { updateDivergenceControl, type DivergenceSignal, type WorldPushState } from './divergenceControl';
@@ -2436,6 +2437,69 @@ export interface SharedExperienceGrant {
   eventName?: string;
 }
 
+/**
+ * 事件驱动的声望结算（P1-4）——把扬名从模型自觉改成引擎因果。
+ *
+ * 与 `settleSharedExperienceAffinity` 同构，三条纪律照搬：
+ *   1. **只算玩家亲历**：`offscreenResolvedEventIds` 里的场外结算不给分。
+ *      人不在场，名声凭什么算到他头上。
+ *   2. **每个事件只结算一次**：已结算的记进 `reputationGrantedEventIds`。
+ *   3. **旧档首次结算只登记、不补发**：存档里的声望值已经包含那些事件的影响
+ *      （当时由模型一路加上来），补发等于重复计算——好感那边真机踩过这个坑。
+ *
+ * 立项理由与数值标定见 `reputationLedger.ts`。模型仍可为事件之外的扬名／败名写声望
+ * （`storyContext` 的 reputationLine 指引不变），引擎只负责承重事件这条确定线。
+ */
+function settleEventReputation(
+  saveData: SaveData,
+  runtime: RuntimeState & { modId?: string },
+): ReputationGrant[] {
+  const grants: ReputationGrant[] = [];
+  try {
+    const rt = runtime as unknown as {
+      reputationGrantedEventIds?: string[];
+      completedEventIds?: string[];
+      offscreenResolvedEventIds?: string[];
+      events?: ScenarioModEvent[];
+    };
+    const attrs = (saveData as unknown as { 角色?: { 属性?: Record<string, unknown> } })?.角色?.属性;
+    if (!attrs || typeof attrs !== 'object') return grants;
+
+    const isFirstSettlement = rt.reputationGrantedEventIds === undefined;
+    const granted = new Set(rt.reputationGrantedEventIds || []);
+    const offscreen = new Set(rt.offscreenResolvedEventIds || []);
+    const pending = (rt.completedEventIds || []).filter(id => !granted.has(id) && !offscreen.has(id));
+    if (!pending.length) {
+      if (isFirstSettlement) rt.reputationGrantedEventIds = [];
+      return grants;
+    }
+    if (isFirstSettlement) {
+      rt.reputationGrantedEventIds = [...new Set([...(rt.completedEventIds || [])])];
+      return grants;
+    }
+
+    const eventById = new Map((rt.events || []).map(event => [event.id, event]));
+    for (const eventId of pending) {
+      const event = eventById.get(eventId);
+      granted.add(eventId);
+      if (!event) continue;
+      const amount = isCriticalStoryEvent(event)
+        ? REPUTATION_EVENT_GRANT.critical
+        : REPUTATION_EVENT_GRANT.normal;
+      const current = Number(attrs.声望) || 0;
+      const settled = current + amount;
+      attrs.声望 = settled;
+      // 引擎侧的变化必须能进玩家可见的状态流，否则因果只存在于代码里。
+      // 地区立足度不在这里累加——它是**派生量**，见 `reputationLedger.regionStanding()`。
+      grants.push({ from: current, to: settled, eventId, eventName: event.name, amount });
+    }
+    rt.reputationGrantedEventIds = [...granted];
+  } catch (error) {
+    console.warn('[剧本模组] 事件声望结算失败（不阻断回合）:', error);
+  }
+  return grants;
+}
+
 function settleSharedExperienceAffinity(
   saveData: SaveData,
   runtime: RuntimeState & { modId?: string },
@@ -2505,6 +2569,8 @@ export function advanceScenarioRuntime(saveData: SaveData): {
   transitions: ScenarioRuntimeTransition[];
   /** 本轮共历事件带来的好感变动，供调用方推进玩家可见的状态流。 */
   affinityGrants?: SharedExperienceGrant[];
+  /** 本轮承重事件带来的声望变动（P1-4），同样进玩家可见状态流。 */
+  reputationGrants?: ReputationGrant[];
 } {
   const next = structuredClone(saveData);
   const runtime = getRuntime(next);
@@ -2513,6 +2579,7 @@ export function advanceScenarioRuntime(saveData: SaveData): {
   projectBottomLinesToNpcs(next);
   updateAcquaintanceLedger(next, runtime as RuntimeState & { modId?: string });
   const affinityGrants = settleSharedExperienceAffinity(next, runtime as RuntimeState & { modId?: string });
+  const reputationGrants = settleEventReputation(next, runtime as RuntimeState & { modId?: string });
   updateStanceStates(next, runtime as RuntimeState & { modId?: string });
   normalizeRuntimeFlags(runtime);
   settleReadyOpportunityCompletionFlags(runtime);
@@ -2685,5 +2752,5 @@ export function advanceScenarioRuntime(saveData: SaveData): {
   recordSettledBeatHandoff(runtime, transitions);
   recordChronicleTransitions(runtime, transitions);
 
-  return { saveData: next, transitions, affinityGrants };
+  return { saveData: next, transitions, affinityGrants, reputationGrants };
 }
