@@ -22,7 +22,8 @@ import {
   privateFactNeedsNarrativeAssociationGuard,
 } from './privateKnowledgeGuard';
 import { formatVoiceCard } from './voiceCards';
-import { formatWorldSimulationPrompt, isWorldSimulationRuntime } from './worldSimulation';
+import { resolveMainQuestLayer, resolveMainQuestNodes } from './mainQuestAxis';
+import { formatWorldSimulationPrompt, getCurrentWorldSituation, isWorldSimulationRuntime } from './worldSimulation';
 
 import type {
   ScenarioCondition,
@@ -823,8 +824,33 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
     !activeIds.has(event.id),
   );
   // 仅给出下一拍事件名称作为推进方向，不带 description，避免提前泄露未来剧情细节
+  // world_sim：长期方向（层）+ 本关主线节点 + 当前可切入点；不催、不卡、无进度惩罚。
+  // 二级线关卡节点为空则整行省略，不得另写“本关无主线／不重要”。
   const nextSection = worldMode
-    ? '- 没有需要玩家逐拍完成的“下一任务”。只呈现当前局势、已经结算的变化，以及人物此刻会采取的行动。'
+    ? (() => {
+        const layer = resolveMainQuestLayer(runtime.modId);
+        const lines: string[] = [];
+        if (layer?.text) {
+          lines.push(`- 长期方向（常驻可见，玩家可无限期搁置）：${layer.text}`);
+        }
+        const nodes = resolveMainQuestNodes(runtime.modId);
+        if (nodes.length) {
+          lines.push(`- 本关主线节点：${nodes.map(node => node.text).join('；')}`);
+        }
+        const situation = getCurrentWorldSituation(runtime as any);
+        const sourceEventId = situation?.sourceEventId;
+        if (sourceEventId) {
+          const sourceEvent = (runtime.events || []).find(event => event.id === sourceEventId);
+          const objective = typeof sourceEvent?.objective === 'string' ? sourceEvent.objective.trim() : '';
+          if (objective) {
+            lines.push(`- 当前可切入点：${objective}`);
+          }
+        }
+        lines.push(
+          '- 纪律：没有需要玩家逐拍完成的任务，也没有进度惩罚。玩家可立刻着手、绕路，或把上述方向搁置任意多轮。当玩家问「主线是什么／我该往哪走」时，据此如实作答，并给出此刻可行的切入方式（找谁、去哪、打听什么）。不得替玩家决定下一步，不得提前演出该方向的结果，也不得因玩家不朝它走而制造追兵、压力或惩罚。',
+        );
+        return lines.join('\n');
+      })()
     : nextEvents.length
     ? nextEvents.map(event => {
         const axisLine = formatAxisBeat(event, '下一拍');

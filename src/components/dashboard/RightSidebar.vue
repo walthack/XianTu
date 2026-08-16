@@ -187,7 +187,7 @@
         </div>
       </div>
 
-      <!-- 任务目标（剧情主线 + 即兴目标） -->
+      <!-- 任务目标（剧情主线 + 即兴目标；canon_companion 形态，含逐拍/回轨/启程） -->
       <div v-if="!worldMode && (questMain || questGoals.length)" class="collapsible-section quest-section">
         <div class="section-header" @click="questCollapsed = !questCollapsed">
           <h3 class="section-title">
@@ -224,6 +224,35 @@
           <div v-if="questGoals.length" class="quest-improv">
             <div class="quest-improv-label"><span class="quest-tag quest-tag-side">支线</span>{{ t('临时目标（可选）') }}</div>
             <div v-for="(g, i) in questGoals" :key="i" class="quest-goal"><span class="quest-mark-side">·</span>{{ g }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 任务目标（world_sim：长期方向 + 本关主轴节点 + 当前可切入点；不催、不逐拍、无回轨/启程） -->
+      <div v-if="worldMode && worldQuestAxis" class="collapsible-section quest-section">
+        <div class="section-header" @click="questCollapsed = !questCollapsed">
+          <h3 class="section-title">
+            <Clock :size="14" class="section-icon" />
+            <span>{{ t('任务目标') }}</span>
+          </h3>
+          <button class="collapse-toggle" :class="{ 'collapsed': questCollapsed }">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M8 10l4-4H4l4 4z"/>
+            </svg>
+          </button>
+        </div>
+        <div v-show="!questCollapsed" class="quest-body">
+          <div class="quest-main">
+            <div class="quest-chapter">
+              <span class="quest-tag quest-tag-main">主线</span>{{ worldQuestAxis.direction }}
+            </div>
+            <div v-if="worldQuestAxis.nodes" class="quest-event">
+              <span class="quest-mark-main">◆</span>{{ t('本关主线节点') }}：{{ worldQuestAxis.nodes }}
+            </div>
+            <div v-if="worldQuestAxis.entry" class="quest-event">
+              <span class="quest-mark-main">◆</span>{{ t('当前可切入点') }}：{{ worldQuestAxis.entry }}
+            </div>
+            <div class="quest-more">{{ t('可无限期搁置，无进度惩罚') }}</div>
           </div>
         </div>
       </div>
@@ -375,6 +404,7 @@ import {
   getCurrentWorldSituation,
   isWorldSimulationRuntime,
 } from '@/modules/scenarioMods/worldSimulation';
+import { resolveMainQuestLayer, resolveMainQuestNodes } from '@/modules/scenarioMods/mainQuestAxis';
 import { prefillChat } from '@/utils/chatBus';
 import { resolveScenarioEventNarrative } from '@/modules/scenarioMods/eventNarrativeView';
 import { returnToCanonAnchor } from '@/modules/scenarioMods/divergenceControl';
@@ -411,6 +441,27 @@ const trackingOpportunity = ref('');
 const worldDivergenceBusy = ref(false);
 const epistemicRuntime = computed(() => (gameStateStore.worldState as any)?.剧本模组);
 const worldMode = computed(() => isWorldSimulationRuntime(epistemicRuntime.value));
+// world_sim 主线轴：长期方向（当前层）+ 本关节点 + 局势源事件 objective；不含层六、无逐拍列表。
+const worldQuestAxis = computed(() => {
+  if (!worldMode.value) return null;
+  const rt: any = epistemicRuntime.value;
+  if (!rt || typeof rt !== 'object') return null;
+  const layer = resolveMainQuestLayer(rt.modId);
+  if (!layer?.text) return null;
+  const nodes = resolveMainQuestNodes(rt.modId)
+    .map((node: { text?: string }) => String(node?.text || '').trim())
+    .filter(Boolean)
+    .join('；');
+  let entry = '';
+  const situation = getCurrentWorldSituation(rt);
+  const sourceEventId = situation?.sourceEventId;
+  if (sourceEventId) {
+    const sourceEvent = (rt.events || []).find((event: any) => event?.id === sourceEventId);
+    const objective = typeof sourceEvent?.objective === 'string' ? sourceEvent.objective.trim() : '';
+    if (objective) entry = objective;
+  }
+  return { direction: layer.text, nodes, entry };
+});
 // 剧情主线：章节/活跃事件/清关状态/下一关（确定性，读 worldState.剧本模组）
 const questMain = computed(() => {
   const rt: any = (gameStateStore.worldState as any)?.剧本模组;
