@@ -253,26 +253,37 @@ export const MAIN_QUEST_STAGES: MainQuestStageRole[] = [
 
 /** 主轴 20 节点，按 `STAGE_ORDER` 链序排列。 */
 export const MAIN_QUEST_NODES: MainQuestNode[] = [
-  { stageId: 'lcq.stage_01', text: '从坠落处活下来，一路走到太乙真宗帅帐见着王哲' },
-  { stageId: 'lcq.stage_02', text: '接下王哲的锦囊与九阳神功口诀，领受三件托付' },
-  { stageId: 'lcq.stage_02', text: '见证王哲殉军，独自离开左武军的战场' },
-  { stageId: 'lcq.stage_03', text: '从白湖商馆的死局里脱身，组起自己的商队南下南荒', locationId: 'liuchao.location.baihu_shang_guan' },
-  { stageId: 'lcq.stage_03b_snake_flower_bridge', text: '查清蛇彝村灭村的真凶，循血符指向鬼王峒' },
-  { stageId: 'lcq.stage_05', text: '进鬼王峒，并当面辨认碧姬', locationId: 'liuchao.location.guiwangdong' },
-  { stageId: 'lcq.stage_05b', text: '向碧姬追问小紫的过往' },
-  { stageId: 'lcq.stage_05b', text: '与小紫达成临时协定，在鬼王宫策动奴隶倒戈' },
-  { stageId: 'lcq.stage_06', text: '接下谢艺对小紫与星月湖的托付，追上小紫见证她与碧姬的了断', locationId: 'liuchao.location.gui_wang_gong' },
-  { stageId: 'lyl.lin_an_bridge', text: '在临安立足，摸清这座城的暗线' },
-  { stageId: 'lyl.xiaoyingzhou_blacksea_trap', text: '查明剑玉姬的真身' },
-  { stageId: 'lyl.taiquan_sacred_fruit', text: '在云涛观迷楼找出太泉钥匙的线索' },
-  { stageId: 'lyl.taiquan_afterfall', text: '探索太泉古阵的人类居住区' },
-  { stageId: 'lyl.taiquan_afterfall', text: '登云府提亲，带走云如瑶' },
-  { stageId: 'lyl.han_palace_endgame', text: '在汉宫变局中抵达秘境入口' },
-  { stageId: 'lyg.mijing_rumen', text: '救治中毒昏迷的赵飞燕，并为她输血疗伤' },
-  { stageId: 'lyg.mijing_rumen', text: '在武帝像前安排秘境探索' },
-  { stageId: 'lyg.han_succession', text: '护住赵氏，在长秋宫促成登基' },
-  { stageId: 'lyg.han_succession', text: '在登基典仪中突破通幽境' },
-  { stageId: 'lyg.shituolin_endgame', text: '斩断李辅国肉身，并阻止太皇太后被夺舍' },
+  // #1 落点＝帅帐见王哲（旅程终点拍）；坠落／半兽人在 s01_01–s01_04。
+  { stageId: 'lcq.stage_01', text: '从坠落处活下来，一路走到太乙真宗帅帐见着王哲', status: 'ready', eventId: 'lcq.event.s01_05' },
+  { stageId: 'lcq.stage_02', text: '接下王哲的锦囊与九阳神功口诀，领受三件托付', status: 'ready', eventId: 'lcq.event.s02_01' },
+  { stageId: 'lcq.stage_02', text: '见证王哲殉军，独自离开左武军的战场', status: 'ready', eventId: 'lcq.event.s02_02' },
+  // #4 隔离关 stage_03。可达关无同事实 event（s02_06 只脱身；s03b_04 是跟云氏同行）
+  // → new。建议 id 挂 `lcq.stage_03b_snake_flower_bridge` 前缀（不放出隔离）。
+  { stageId: 'lcq.stage_03', text: '从白湖商馆的死局里脱身，组起自己的商队南下南荒', locationId: 'liuchao.location.baihu_shang_guan', status: 'new', eventId: 'lcq.event.s03b_baihu_caravan_south' },
+  { stageId: 'lcq.stage_03b_snake_flower_bridge', text: '查清蛇彝村灭村的真凶，循血符指向鬼王峒', status: 'ready', eventId: 'lcq.event.s03b_snake_flower_bridge_03' },
+  // #6 隔离关 stage_05（原 s05_11 进峒 + s05_13 辨认碧姬）。可达关无同事实 → new。
+  // 建议 id 挂 `lcq.stage_05b` 前缀（不放出隔离）。
+  { stageId: 'lcq.stage_05', text: '进鬼王峒，并当面辨认碧姬', locationId: 'liuchao.location.guiwangdong', status: 'new', eventId: 'lcq.event.s05b_enter_recognize_biji' },
+  { stageId: 'lcq.stage_05b', text: '向碧姬追问小紫的过往', status: 'ready', eventId: 'lcq.event.s05b_01_binu_reveals_xiaozi' },
+  // #8 文案压了两拍：临时协定 s05b_09 ＋ 奴隶倒戈 s05b_10；落倒戈拍（含小紫倒戈）。
+  { stageId: 'lcq.stage_05b', text: '与小紫达成临时协定，在鬼王宫策动奴隶倒戈', status: 'ready', eventId: 'lcq.event.s05b_10_slave_revolt_and_phoenix_change' },
+  // #9 隔离关 stage_06（s06_03 谢艺托付 + s06_04 碧姬了断）。谢艺托付已由星月湖
+  // 并进昭南杀龙 event——复用同一建议 id，不另开。建议挂 `lcq.stage_05b` 后缀。
+  { stageId: 'lcq.stage_06', text: '接下谢艺对小紫与星月湖的托付，追上小紫见证她与碧姬的了断', locationId: 'liuchao.location.gui_wang_gong', status: 'new', eventId: 'lcq.event.s05b_slay_dragon' },
+  { stageId: 'lyl.lin_an_bridge', text: '在临安立足，摸清这座城的暗线', status: 'ready', eventId: 'lyl.event.lin_an_bridge_01_beat' },
+  { stageId: 'lyl.xiaoyingzhou_blacksea_trap', text: '查明剑玉姬的真身', status: 'ready', eventId: 'lyl.event.xiaoyingzhou_blacksea_trap_09_beat' },
+  { stageId: 'lyl.taiquan_sacred_fruit', text: '在云涛观迷楼找出太泉钥匙的线索', status: 'ready', eventId: 'lyl.event.taiquan_sacred_fruit_05' },
+  { stageId: 'lyl.taiquan_afterfall', text: '探索太泉古阵的人类居住区', status: 'ready', eventId: 'lyl.event.taiquan_afterfall_05_beat' },
+  { stageId: 'lyl.taiquan_afterfall', text: '登云府提亲，带走云如瑶', status: 'ready', eventId: 'lyl.event.taiquan_afterfall_06_beat' },
+  { stageId: 'lyl.han_palace_endgame', text: '在汉宫变局中抵达秘境入口', status: 'ready', eventId: 'lyl.event.han_palace_endgame_07_beat' },
+  { stageId: 'lyg.mijing_rumen', text: '救治中毒昏迷的赵飞燕，并为她输血疗伤', status: 'ready', eventId: 'lyg.event.s02_02' },
+  // #17 文案「武帝像前」偏 s02_09；「安排秘境探索」本体是 s02_08（胶西邸／长秋宫）。
+  { stageId: 'lyg.mijing_rumen', text: '在武帝像前安排秘境探索', status: 'ready', eventId: 'lyg.event.s02_08' },
+  // #18 与汉国二级线同锚 s08（促成登基）；「长秋宫」字面更近 s06，但护住赵氏／登基收束在大典拍。
+  { stageId: 'lyg.han_succession', text: '护住赵氏，在长秋宫促成登基', status: 'ready', eventId: 'lyg.event.han_succession_08_beat' },
+  { stageId: 'lyg.han_succession', text: '在登基典仪中突破通幽境', status: 'ready', eventId: 'lyg.event.han_succession_09_beat' },
+  // #20 文案压了两拍：斩断肉身 s12 ＋ 阻止夺舍 s13；落夺舍拍（终局收束）。
+  { stageId: 'lyg.shituolin_endgame', text: '斩断李辅国肉身，并阻止太皇太后被夺舍', status: 'ready', eventId: 'lyg.event.shituolin_endgame_13_beat' },
 ];
 
 /**
