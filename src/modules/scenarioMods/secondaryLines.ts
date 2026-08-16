@@ -104,10 +104,19 @@ export const SECONDARY_LINES: SecondaryLine[] = [
     id: 'zhaonan',
     name: '昭南',
     kind: 'nation',
-    anchorLocationId: 'liuchao.location.xiongerpu',
-    entryHint: '想在昭南立足，先去熊耳铺——南荒诸部的往来都从那里过。',
-    basis: '熊耳铺＝南荒腹地入口，`stage_03b` 起程、`stage_04` 落地。'
-      + '都城麟趾／昭南城事件层未抵达，故用腹地入口。注意 `xiong_er_pu` 是另一套 id，只在 `stage_04`。',
+    // ⚠ 唯一用人物锚的国家／地区线。破例的理由是数据给的，不是随手定的——见 basis。
+    anchorCharacterIds: [
+      'liuchao.character.yun_cang_feng', // 云苍峰 第 4 关·商队带你进南荒
+      'liuchao.character.wu_er_lang',    // 武二郎 第 5 关·南荒队伍成员
+    ],
+    entryHint: '南荒没有可投的朝廷，只有带你进去的人——跟云苍峰的商队同行，队里还有武二郎。',
+    basis: '**破例用人物锚**（用户提出 2026-08-16）：其余四条国家线都能走进都城，昭南不能——'
+      + '麟趾／昭南城在事件层从未抵达，玩家到的全是部族聚落。正典里进南荒必须有商队：'
+      + '`stage_03` 苏妲己订下三个月南荒之约、以冰蛊逼迫南行、两日内组织南荒队伍；'
+      + '`stage_03b` 的 `云氏同行` objective 字面即「与云苍峰商队同行，前往白夷族」。'
+      + '**商队就是门票**，所以入口锚在带路的人身上。'
+      + '（原锚熊耳铺已废：它是 `stage_03b` 最后一个事件「龙神新娘｜前往熊耳铺」的落点，'
+      + '在南荒之行的尾巴上，不是门；且"想去就去"与冰蛊胁迫的正典不符。）',
   },
   {
     id: 'jin',
