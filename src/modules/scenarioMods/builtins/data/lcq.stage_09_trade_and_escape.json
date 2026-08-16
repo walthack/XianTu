@@ -4285,7 +4285,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang",
-          "liuchao.character.xiao_zi"
+          "liuchao.character.xiao_zi",
+          "liuchao.character.yun_cang_feng"
         ],
         "objective": "在织坊与小龙女谈判",
         "playerCompletionContract": {
@@ -4303,6 +4304,412 @@
                 "success": "你已亲自执行“在织坊与小龙女谈判”；事件完成真值将由本地引擎落账。",
                 "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
                 "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        },
+        "relatedFactionIds": [
+          "liuchao.faction.hei_mo_hai",
+          "liuchao.faction.yun_shi_shang_hui"
+        ],
+        "worldActor": {
+          "pressure": {
+            "id": "world.lcq.s09_04.weaving",
+            "scope": "faction",
+            "summary": "拉链坊转交云家的风声已到织坊，坊归属还没落印。",
+            "domains": [
+              "commerce"
+            ],
+            "geography": [
+              "织坊",
+              "建康"
+            ],
+            "factionIds": [
+              "liuchao.faction.hei_mo_hai",
+              "liuchao.faction.yun_shi_shang_hui"
+            ],
+            "intensity": 2,
+            "canonPolicy": "process_only"
+          },
+          "decisionCore": {
+            "knowledgeFacts": {
+              "knowledge.lcq.s09_04.claim": {
+                "text": "小紫因拉链坊被转交云家而兴师问罪，交换条件尚未摊开。",
+                "access": "public",
+                "evidence": "lcq.event.s09_04_weaving_trade axisBeat。"
+              }
+            },
+            "situation": {
+              "whitelist": [
+                "yunClaim",
+                "xiaoziClaim"
+              ],
+              "initialValues": {
+                "yunClaim": 48,
+                "xiaoziClaim": 52
+              },
+              "limits": {
+                "yunClaim": {
+                  "min": 0,
+                  "max": 100
+                },
+                "xiaoziClaim": {
+                  "min": 0,
+                  "max": 100
+                }
+              }
+            },
+            "canonPolicy": {
+              "invariant": [
+                "织坊归属争执已经摊开"
+              ],
+              "forbiddenBefore": [
+                "织坊已经烧毁",
+                "云家已经退出建康商局"
+              ],
+              "processFreedom": [
+                "坊归云家还是归小紫"
+              ]
+            },
+            "actors": [
+              {
+                "characterId": "liuchao.character.xiao_zi",
+                "identity": {
+                  "factionId": "liuchao.faction.hei_mo_hai",
+                  "office": "毒宗嫡传",
+                  "rank": 5
+                },
+                "personality": {
+                  "caution": 5,
+                  "ambition": 4,
+                  "aggression": 3
+                },
+                "motives": {
+                  "control": 5,
+                  "legitimacy": 2
+                },
+                "resources": {
+                  "influence": 4,
+                  "intelligence": 5,
+                  "wealth": 2,
+                  "troops": 2
+                },
+                "relationships": {},
+                "knowledge": [
+                  "knowledge.lcq.s09_04.claim"
+                ],
+                "agendas": [
+                  {
+                    "id": "agenda.lcq.s09_04.xiaozi",
+                    "goal": "把拉链坊从云家手里要回来",
+                    "clock": 1,
+                    "escalation": [
+                      "问账",
+                      "动手",
+                      "换条件"
+                    ]
+                  }
+                ],
+                "allowedActionIds": [
+                  "call_in_obligation"
+                ],
+                "wake": {
+                  "tier": "local_critical"
+                },
+                "evidence": {
+                  "identity.rank": "人物卡：小紫为毒宗唯一嫡传。",
+                  "personality.caution": "人物卡：城府极深。",
+                  "personality.ambition": "本拍兴师问罪。",
+                  "personality.aggression": "axisBeat：与程激斗。",
+                  "motives.control": "本拍要坊。",
+                  "motives.legitimacy": "本拍认这是她的产业。",
+                  "resources.influence": "人物卡：核心圈。",
+                  "resources.intelligence": "人物卡：布局。",
+                  "resources.wealth": "本拍以坊本身为筹码。",
+                  "resources.troops": "本拍个人武力。",
+                  "agendas.agenda.lcq.s09_04.xiaozi.clock": "她已上门。"
+                }
+              },
+              {
+                "characterId": "liuchao.character.yun_cang_feng",
+                "identity": {
+                  "factionId": "liuchao.faction.yun_shi_shang_hui",
+                  "office": "云氏当家人",
+                  "rank": 5
+                },
+                "personality": {
+                  "caution": 4,
+                  "honor": 3,
+                  "ambition": 4
+                },
+                "motives": {
+                  "control": 4,
+                  "stability": 3
+                },
+                "resources": {
+                  "influence": 5,
+                  "wealth": 5,
+                  "intelligence": 4,
+                  "troops": 1
+                },
+                "relationships": {},
+                "knowledge": [
+                  "knowledge.lcq.s09_04.claim"
+                ],
+                "agendas": [
+                  {
+                    "id": "agenda.lcq.s09_04.yun",
+                    "goal": "把拉链坊落成云家商局的一枚印",
+                    "clock": 1,
+                    "escalation": [
+                      "出示转交",
+                      "换条件",
+                      "落印"
+                    ]
+                  }
+                ],
+                "allowedActionIds": [
+                  "trade_favor"
+                ],
+                "wake": {
+                  "tier": "local_critical"
+                },
+                "evidence": {
+                  "identity.rank": "人物卡：云苍峰为云氏当家人。",
+                  "personality.caution": "本拍先谈条件。",
+                  "personality.honor": "本拍认转交文书。",
+                  "personality.ambition": "蓝图：晋国商战。",
+                  "motives.control": "本拍要坊入云家。",
+                  "motives.stability": "本拍避免织坊停摆。",
+                  "resources.influence": "人物卡：云氏当家人。",
+                  "resources.wealth": "人物卡：商会。",
+                  "resources.intelligence": "本拍持转交风声。",
+                  "resources.troops": "本拍不砸坊。",
+                  "agendas.agenda.lcq.s09_04.yun.clock": "转交风声已到。"
+                }
+              }
+            ],
+            "actionBindings": [
+              {
+                "actionId": "call_in_obligation",
+                "actorIds": [
+                  "liuchao.character.xiao_zi"
+                ],
+                "label": "按旧账把拉链坊要回来",
+                "reason": "转交若不算数，就要当面把坊拿回",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lcq.s09_04.claim"
+                ],
+                "mustNotInvent": [
+                  "小紫已经身死"
+                ],
+                "visibleSignal": "小紫把织机停了一角，只问坊还是不是她的",
+                "offscreenAction": "追讨织坊",
+                "costs": {
+                  "influence": 1
+                },
+                "effects": {
+                  "xiaoziClaim": 10,
+                  "yunClaim": -6
+                },
+                "utility": {
+                  "urgency": 9,
+                  "factionGoal": 8,
+                  "expectedBenefit": 8,
+                  "situation": {
+                    "xiaoziClaim": -2
+                  }
+                },
+                "visibility": "public",
+                "durationTurns": 1
+              },
+              {
+                "actionId": "trade_favor",
+                "actorIds": [
+                  "liuchao.character.yun_cang_feng"
+                ],
+                "label": "把织坊转交写成云家商局落印",
+                "reason": "风声已经到了，落印才算数",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lcq.s09_04.claim"
+                ],
+                "mustNotInvent": [
+                  "云家已经退出建康商局"
+                ],
+                "visibleSignal": "云家文书被摊在停掉的织机上",
+                "offscreenAction": "推进落印",
+                "costs": {
+                  "wealth": 1,
+                  "influence": 1
+                },
+                "effects": {
+                  "yunClaim": 10,
+                  "xiaoziClaim": -6
+                },
+                "utility": {
+                  "urgency": 8,
+                  "factionGoal": 8,
+                  "expectedBenefit": 8,
+                  "situation": {
+                    "yunClaim": -2
+                  }
+                },
+                "visibility": "public",
+                "durationTurns": 1
+              }
+            ],
+            "maxVisibleActions": 2,
+            "narrativeGuard": {
+              "forbiddenTerms": [
+                "织坊已经烧毁",
+                "小紫已经身死"
+              ],
+              "rejectConcreteQuantities": true,
+              "allowUnverifiedQuantities": true
+            }
+          },
+          "opportunities": [
+            {
+              "id": "opportunity.lcq.s09_04.cede_weaving_to_yun",
+              "title": "把拉链坊落印给云家",
+              "characterIds": [
+                "liuchao.character.yun_cang_feng"
+              ],
+              "whyNow": "转交风声已经到织坊。落印给云家，商局会记你站在他们一边。",
+              "nextStep": "当着小紫把坊写入云氏文书，并接受她记这笔仇。",
+              "stakes": "小紫会把坊当成被你交出去的；云家会把建康这一角记在你名下。",
+              "rewardPreview": "取得一次调用云氏建康织坊商局的权限。",
+              "futureHint": "以后云家再谈建康的铺，会按这枚印还在不在来找你。",
+              "actionText": "我追踪“把拉链坊落印给云家”：写入云氏文书，并接受小紫记这笔账。",
+              "rewardKey": "permission.lcq.yun.weaving_house",
+              "rewardLabel": "云氏·建康织坊落印",
+              "trigger": {
+                "actorIds": [
+                  "liuchao.character.yun_cang_feng"
+                ],
+                "actionIds": [
+                  "trade_favor"
+                ]
+              },
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "settlement": "immediate",
+                "expiry": "persistent",
+                "steps": [
+                  {
+                    "id": "write_yun",
+                    "label": "写入云氏文书",
+                    "actions": [
+                      {
+                        "id": "write_yun_deed",
+                        "label": "落云家印",
+                        "actionText": "我当着双方把拉链坊写入云氏文书，不改口说暂管。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "写入云氏文书",
+                      "不改口说暂管"
+                    ],
+                    "rejectIf": [
+                      "还给小紫",
+                      "撕掉转交"
+                    ]
+                  },
+                  {
+                    "id": "face_xiaozi",
+                    "label": "接受小紫记账",
+                    "actions": [
+                      {
+                        "id": "accept_xiaozi_grudge",
+                        "label": "接受记仇",
+                        "actionText": "我接受小紫把这笔转交记在我身上，不假装她已经同意。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "记在我身上",
+                      "不假装她已经同意"
+                    ],
+                    "rejectIf": [
+                      "她已经同意",
+                      "无人问罪"
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "opportunity.lcq.s09_04.return_weaving_to_xiaozi",
+              "title": "把拉链坊还给小紫",
+              "characterIds": [
+                "liuchao.character.xiao_zi"
+              ],
+              "whyNow": "她已经上门问账。还回去，云家商局少一枚印；她会记你没把坊交出去。",
+              "nextStep": "当众把坊交回小紫，并让云家文书作废。",
+              "stakes": "云家会记住建康这一角没落成；小紫会按自己的产业继续问你。",
+              "rewardPreview": "取得一次确认拉链坊仍归小紫问账的权限。",
+              "futureHint": "以后小紫再问产业，会先看你这次有没有把坊交回去。",
+              "actionText": "我追踪“把拉链坊还给小紫”：当众交回，并让云家转交文书作废。",
+              "rewardKey": "permission.lcq.xiaozi.weaving_claim",
+              "rewardLabel": "小紫·织坊问账",
+              "trigger": {
+                "actorIds": [
+                  "liuchao.character.xiao_zi"
+                ],
+                "actionIds": [
+                  "call_in_obligation"
+                ]
+              },
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "settlement": "immediate",
+                "expiry": "persistent",
+                "steps": [
+                  {
+                    "id": "return_house",
+                    "label": "当众交回织坊",
+                    "actions": [
+                      {
+                        "id": "return_house_to_xiaozi",
+                        "label": "交回织坊",
+                        "actionText": "我当众把拉链坊交回小紫，不继续按云家转交来管。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "交回小紫",
+                      "不继续按云家转交"
+                    ],
+                    "rejectIf": [
+                      "写入云氏文书",
+                      "落印给云家"
+                    ]
+                  },
+                  {
+                    "id": "void_deed",
+                    "label": "作废云家文书",
+                    "actions": [
+                      {
+                        "id": "void_yun_deed",
+                        "label": "作废转交",
+                        "actionText": "我让云家转交文书当场不作数，坊的问账回到小紫这边。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "转交文书",
+                      "不作数",
+                      "问账回到小紫"
+                    ],
+                    "rejectIf": [
+                      "云家落印有效",
+                      "暂管"
+                    ]
+                  }
+                ]
               }
             }
           ]

@@ -69,11 +69,11 @@ function stageFixture(stage, event) {
   };
 }
 
-test('curated opportunity inventory grows from seven to ten without mechanical event-card parity', async () => {
+test('curated opportunity inventory keeps the three R2-11W cards and stays below event-card parity', async () => {
   const stages = await loadAllStages();
   const opportunities = stages.flatMap(stage => stage.scenario.events.flatMap(event =>
     (event.worldActor?.opportunities || []).map(opportunity => ({ stage, event, opportunity }))));
-  assert.equal(opportunities.length, 10);
+  assert.equal(opportunities.length, 37);
   assert.equal(opportunities.length < stages.flatMap(stage => stage.scenario.events).length, true);
   assert.deepEqual(
     new Set(opportunities.filter(item => EXPECTED.has(item.opportunity.id)).map(item => item.opportunity.id)),

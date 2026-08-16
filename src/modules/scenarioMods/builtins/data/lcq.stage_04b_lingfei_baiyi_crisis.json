@@ -4275,7 +4275,9 @@
           }
         ],
         "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang"
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.yun_cang_feng",
+          "liuchao.character.xie_yi"
         ],
         "objective": "送羊皮纸至云苍峰鉴定",
         "playerCompletionContract": {
@@ -4293,6 +4295,441 @@
                 "success": "你已亲自执行“送羊皮纸至云苍峰鉴定”；事件完成真值将由本地引擎落账。",
                 "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
                 "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        },
+        "relatedFactionIds": [
+          "liuchao.faction.yun_shi_shang_hui",
+          "liuchao.faction.xing_yue_hu",
+          "liuchao.faction.biyu"
+        ],
+        "worldActor": {
+          "pressure": {
+            "id": "world.lcq.s04b_04.parchment",
+            "scope": "faction",
+            "summary": "空白羊皮被认成秘法传讯，先交给谁，等于先让哪一边知情。",
+            "domains": [
+              "intelligence"
+            ],
+            "geography": [
+              "南荒"
+            ],
+            "factionIds": [
+              "liuchao.faction.yun_shi_shang_hui",
+              "liuchao.faction.xing_yue_hu",
+              "liuchao.faction.biyu"
+            ],
+            "intensity": 2,
+            "canonPolicy": "process_only"
+          },
+          "decisionCore": {
+            "knowledgeFacts": {
+              "knowledge.lcq.s04b_04.letter": {
+                "text": "鸦人随身空白羊皮经鉴定可作秘法传讯，风声指向白夷，黑魔海与鬼王峒的勾结尚未坐实。",
+                "access": "public",
+                "evidence": "lcq.event.s04b_lingfei_baiyi_crisis_04 axisBeat。"
+              }
+            },
+            "situation": {
+              "whitelist": [
+                "neutralCustody",
+                "biyuBriefing"
+              ],
+              "initialValues": {
+                "neutralCustody": 40,
+                "biyuBriefing": 22
+              },
+              "limits": {
+                "neutralCustody": {
+                  "min": 0,
+                  "max": 100
+                },
+                "biyuBriefing": {
+                  "min": 0,
+                  "max": 100
+                }
+              }
+            },
+            "canonPolicy": {
+              "invariant": [
+                "羊皮已经发现"
+              ],
+              "forbiddenBefore": [
+                "三族已经开战",
+                "传讯真意已经破译完毕"
+              ],
+              "processFreedom": [
+                "中立鉴定还是先通报碧鲮"
+              ]
+            },
+            "actors": [
+              {
+                "characterId": "liuchao.character.yun_cang_feng",
+                "identity": {
+                  "factionId": "liuchao.faction.yun_shi_shang_hui",
+                  "office": "云氏当家人",
+                  "rank": 5
+                },
+                "personality": {
+                  "caution": 4,
+                  "honor": 3,
+                  "ambition": 3
+                },
+                "motives": {
+                  "stability": 5,
+                  "control": 3
+                },
+                "resources": {
+                  "influence": 5,
+                  "wealth": 4,
+                  "intelligence": 5,
+                  "troops": 1
+                },
+                "relationships": {},
+                "knowledge": [
+                  "knowledge.lcq.s04b_04.letter"
+                ],
+                "agendas": [
+                  {
+                    "id": "agenda.lcq.s04b_04.yun",
+                    "goal": "把羊皮留在商队手里做中立鉴定",
+                    "clock": 1,
+                    "escalation": [
+                      "收纸",
+                      "鉴定",
+                      "不选边"
+                    ]
+                  }
+                ],
+                "allowedActionIds": [
+                  "audit_resources",
+                  "delay_commitment"
+                ],
+                "wake": {
+                  "tier": "local_critical"
+                },
+                "evidence": {
+                  "identity.rank": "人物卡：云苍峰为云氏当家人。",
+                  "personality.caution": "本拍先鉴定不选边。",
+                  "personality.honor": "本拍肯经手但不替一族出头。",
+                  "personality.ambition": "人物卡：商界领袖。",
+                  "motives.stability": "本拍避免三族因一张纸开战。",
+                  "motives.control": "纸在谁手里谁就先知情。",
+                  "resources.influence": "人物卡：云氏当家人。",
+                  "resources.wealth": "本拍不买卖这张纸。",
+                  "resources.intelligence": "axisBeat：由他鉴定。",
+                  "resources.troops": "本拍无兵。",
+                  "agendas.agenda.lcq.s04b_04.yun.clock": "纸已翻出，尚未送出。"
+                }
+              },
+              {
+                "characterId": "liuchao.character.xie_yi",
+                "identity": {
+                  "factionId": "liuchao.faction.xing_yue_hu",
+                  "office": "星月湖八骏",
+                  "rank": 4
+                },
+                "personality": {
+                  "honor": 4,
+                  "caution": 3,
+                  "ambition": 3
+                },
+                "motives": {
+                  "legitimacy": 3,
+                  "stability": 4
+                },
+                "resources": {
+                  "influence": 3,
+                  "intelligence": 5,
+                  "wealth": 2,
+                  "troops": 2
+                },
+                "relationships": {},
+                "knowledge": [
+                  "knowledge.lcq.s04b_04.letter"
+                ],
+                "agendas": [
+                  {
+                    "id": "agenda.lcq.s04b_04.xie",
+                    "goal": "让碧鲮侧先知道这张纸在指谁",
+                    "clock": 0,
+                    "escalation": [
+                      "看纸",
+                      "通报",
+                      "护族"
+                    ]
+                  }
+                ],
+                "allowedActionIds": [
+                  "spread_message"
+                ],
+                "wake": {
+                  "tier": "local_critical"
+                },
+                "evidence": {
+                  "identity.rank": "人物卡：谢艺为星月湖八骏，并提供碧鲮线索。",
+                  "personality.honor": "本拍护的是她给过线索的那一族。",
+                  "personality.caution": "本拍不把纸公开给三族同时看。",
+                  "personality.ambition": "人物卡：八骏。",
+                  "motives.legitimacy": "本拍要碧鲮先知情。",
+                  "motives.stability": "本拍仍要避免当场撕破。",
+                  "resources.influence": "人物卡：八骏。",
+                  "resources.intelligence": "axisBeat：她提供碧鲮线索。",
+                  "resources.wealth": "本拍不买纸。",
+                  "resources.troops": "本拍有随行武力。",
+                  "agendas.agenda.lcq.s04b_04.xie.clock": "纸已出现，通报尚未发生。"
+                }
+              }
+            ],
+            "actionBindings": [
+              {
+                "actionId": "audit_resources",
+                "actorIds": [
+                  "liuchao.character.yun_cang_feng"
+                ],
+                "label": "把羊皮留在商队做中立鉴定",
+                "reason": "先分清能读的墨痕和不能读的猜测",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lcq.s04b_04.letter"
+                ],
+                "mustNotInvent": [
+                  "已经交给其中一族"
+                ],
+                "visibleSignal": "云苍峰只在火边看墨痕，不把纸递给任何一族",
+                "offscreenAction": "中立保管并鉴定",
+                "costs": {
+                  "intelligence": 1
+                },
+                "effects": {
+                  "neutralCustody": 12,
+                  "biyuBriefing": -2
+                },
+                "utility": {
+                  "urgency": 8,
+                  "factionGoal": 8,
+                  "expectedBenefit": 7,
+                  "situation": {
+                    "neutralCustody": -3
+                  }
+                },
+                "visibility": "public",
+                "durationTurns": 1
+              },
+              {
+                "actionId": "delay_commitment",
+                "actorIds": [
+                  "liuchao.character.yun_cang_feng"
+                ],
+                "label": "暂不把鉴定结论送出商队",
+                "reason": "结论一出门就等于选边",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lcq.s04b_04.letter"
+                ],
+                "mustNotInvent": [
+                  "已经公开结论"
+                ],
+                "visibleSignal": "纸被收回匣中，门外只听到“还不能定”",
+                "offscreenAction": "压住结论",
+                "costs": {
+                  "influence": 1
+                },
+                "effects": {
+                  "neutralCustody": 6
+                },
+                "utility": {
+                  "expectedBenefit": 2
+                },
+                "visibility": "rumor",
+                "durationTurns": 1
+              },
+              {
+                "actionId": "spread_message",
+                "actorIds": [
+                  "liuchao.character.xie_yi"
+                ],
+                "label": "先让碧鲮侧知道有这张传讯",
+                "reason": "纸若指向白夷，碧鲮不能最后一个听见",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lcq.s04b_04.letter"
+                ],
+                "mustNotInvent": [
+                  "三族已经同时知情"
+                ],
+                "visibleSignal": "谢艺把“有一张空白羊皮在指人”先递向碧鲮方向",
+                "offscreenAction": "先通报碧鲮",
+                "costs": {
+                  "influence": 1
+                },
+                "effects": {
+                  "biyuBriefing": 14,
+                  "neutralCustody": -6
+                },
+                "utility": {
+                  "urgency": 7,
+                  "factionGoal": 7,
+                  "expectedBenefit": 7,
+                  "situation": {
+                    "biyuBriefing": -3
+                  }
+                },
+                "visibility": "public",
+                "durationTurns": 1
+              }
+            ],
+            "maxVisibleActions": 2,
+            "narrativeGuard": {
+              "forbiddenTerms": [
+                "三族已经开战",
+                "传讯已经全部破译"
+              ],
+              "rejectConcreteQuantities": true,
+              "allowUnverifiedQuantities": true
+            }
+          },
+          "opportunities": [
+            {
+              "id": "opportunity.lcq.s04b_04.neutral_appraisal",
+              "title": "把传讯交给云苍峰中立鉴定",
+              "characterIds": [
+                "liuchao.character.yun_cang_feng"
+              ],
+              "whyNow": "纸一出门就等于先让某一族知情。留在云家手里，三族都不欠你，也不先恨你。",
+              "nextStep": "把羊皮交给云苍峰保管鉴定，不先通报任何一族。",
+              "stakes": "中立也会被看成不肯帮；真要选边时，三族都没有先收过你的情。",
+              "rewardPreview": "取得一次调用云氏秘法传讯中立鉴定的权限。",
+              "futureHint": "以后再有这种纸，云苍峰会记得你有没有把它留在商队。",
+              "actionText": "我追踪“把传讯交给云苍峰中立鉴定”：纸留商队，不先通报花苗、白夷或碧鲮。",
+              "rewardKey": "permission.lcq.yun.parchment_custody",
+              "rewardLabel": "云氏·传讯中立鉴定",
+              "trigger": {
+                "actorIds": [
+                  "liuchao.character.yun_cang_feng"
+                ],
+                "actionIds": [
+                  "audit_resources"
+                ]
+              },
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "settlement": "immediate",
+                "expiry": "persistent",
+                "steps": [
+                  {
+                    "id": "hand_yun",
+                    "label": "把羊皮交给云苍峰",
+                    "actions": [
+                      {
+                        "id": "give_parchment_to_yun",
+                        "label": "交云苍峰",
+                        "actionText": "我把空白羊皮交给云苍峰保管鉴定，不先送给任何一族。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "交给云苍峰",
+                      "不先送给任何一族"
+                    ],
+                    "rejectIf": [
+                      "先通报碧鲮",
+                      "交给谢艺"
+                    ]
+                  },
+                  {
+                    "id": "no_tribe",
+                    "label": "不先选边通报",
+                    "actions": [
+                      {
+                        "id": "withhold_tribe_brief",
+                        "label": "不选边",
+                        "actionText": "我明确在鉴定完成前，不把纸的存在单独通报花苗、白夷或碧鲮。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "鉴定完成前",
+                      "不把纸的存在单独通报"
+                    ],
+                    "rejectIf": [
+                      "先让碧鲮知道",
+                      "选边"
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "opportunity.lcq.s04b_04.brief_biyu_first",
+              "title": "让谢艺先通报碧鲮",
+              "characterIds": [
+                "liuchao.character.xie_yi"
+              ],
+              "whyNow": "谢艺手里有碧鲮的线。先让这一族知情，等于在三族里先站了一边。",
+              "nextStep": "把纸的存在先告诉谢艺，由她通报碧鲮，不走云家中立匣。",
+              "stakes": "碧鲮会记你先通报；另外两族若事后得知，会把你看成偏过一边。",
+              "rewardPreview": "取得一次经谢艺向碧鲮先期通报的权限。",
+              "futureHint": "以后碧鲮再听到南荒的风声，会先问当时是谁让他们早知道。",
+              "actionText": "我追踪“让谢艺先通报碧鲮”：把纸的存在先交给她，不走云家中立匣。",
+              "rewardKey": "permission.lcq.biyu.first_brief",
+              "rewardLabel": "碧鲮·先期传讯通报",
+              "trigger": {
+                "actorIds": [
+                  "liuchao.character.xie_yi"
+                ],
+                "actionIds": [
+                  "spread_message"
+                ]
+              },
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "settlement": "immediate",
+                "expiry": "persistent",
+                "steps": [
+                  {
+                    "id": "tell_xie",
+                    "label": "把纸的存在告诉谢艺",
+                    "actions": [
+                      {
+                        "id": "tell_xie_about_parchment",
+                        "label": "告知谢艺",
+                        "actionText": "我把空白羊皮的存在先告诉谢艺，请她决定如何通报碧鲮。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "告诉谢艺",
+                      "通报碧鲮"
+                    ],
+                    "rejectIf": [
+                      "交给云苍峰中立",
+                      "不先通报"
+                    ]
+                  },
+                  {
+                    "id": "no_neutral_box",
+                    "label": "不走云家中立匣",
+                    "actions": [
+                      {
+                        "id": "skip_yun_neutral_box",
+                        "label": "不入中立匣",
+                        "actionText": "我明确这张纸不先收入云氏中立匣，让碧鲮侧先知情。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "不先收入云氏中立匣",
+                      "碧鲮",
+                      "先知情"
+                    ],
+                    "rejectIf": [
+                      "中立鉴定",
+                      "三族同时知情"
+                    ]
+                  }
+                ]
               }
             }
           ]

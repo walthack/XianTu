@@ -4189,7 +4189,8 @@
           }
         ],
         "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang"
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.zhuo_yunjun"
         ],
         "objective": "在清远斩杀吴行德救卓云君",
         "playerCompletionContract": {
@@ -4207,6 +4208,348 @@
                 "success": "你已亲自执行“在清远斩杀吴行德救卓云君”；事件完成真值将由本地引擎落账。",
                 "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
                 "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        },
+        "relatedFactionIds": [
+          "liuchao.faction.tai_yi_zhen_zong",
+          "lyg.faction.jin_state"
+        ],
+        "worldActor": {
+          "pressure": {
+            "id": "world.lcq.s07_02.kill_wu",
+            "scope": "faction",
+            "summary": "清远刀光将起，救人之后认不认太乙门户的账，还没人签字。",
+            "domains": [
+              "court",
+              "combat"
+            ],
+            "geography": [
+              "清远"
+            ],
+            "factionIds": [
+              "liuchao.faction.tai_yi_zhen_zong",
+              "lyg.faction.jin_state"
+            ],
+            "intensity": 2,
+            "canonPolicy": "process_only"
+          },
+          "decisionCore": {
+            "knowledgeFacts": {
+              "knowledge.lcq.s07_02.ambush": {
+                "text": "吴行德与卓云君一线收紧，杀机与救人的空隙同时露出。",
+                "access": "public",
+                "evidence": "lcq.event.s07_02_kill_wu axisBeat。"
+              }
+            },
+            "situation": {
+              "whitelist": [
+                "zhuoAlive",
+                "taiyiDebt"
+              ],
+              "initialValues": {
+                "zhuoAlive": 35,
+                "taiyiDebt": 20
+              },
+              "limits": {
+                "zhuoAlive": {
+                  "min": 0,
+                  "max": 100
+                },
+                "taiyiDebt": {
+                  "min": 0,
+                  "max": 100
+                }
+              }
+            },
+            "canonPolicy": {
+              "invariant": [
+                "清远杀机已经对准卓云君"
+              ],
+              "forbiddenBefore": [
+                "卓云君已经身死",
+                "太乙已经改立掌教"
+              ],
+              "processFreedom": [
+                "认不认太乙门户账"
+              ]
+            },
+            "actors": [
+              {
+                "characterId": "liuchao.character.zhuo_yunjun",
+                "identity": {
+                  "factionId": "liuchao.faction.tai_yi_zhen_zong",
+                  "office": "太乙教御",
+                  "rank": 5
+                },
+                "personality": {
+                  "honor": 3,
+                  "caution": 2,
+                  "ambition": 3
+                },
+                "motives": {
+                  "legitimacy": 4,
+                  "stability": 3
+                },
+                "resources": {
+                  "influence": 4,
+                  "troops": 2,
+                  "intelligence": 3,
+                  "wealth": 2
+                },
+                "relationships": {},
+                "knowledge": [
+                  "knowledge.lcq.s07_02.ambush"
+                ],
+                "agendas": [
+                  {
+                    "id": "agenda.lcq.s07_02.zhuo",
+                    "goal": "活着离开清远，并决定这笔命债算不算太乙的",
+                    "clock": 1,
+                    "escalation": [
+                      "求援",
+                      "脱身",
+                      "认账"
+                    ]
+                  }
+                ],
+                "allowedActionIds": [
+                  "request_audience",
+                  "prepare_fallback_route"
+                ],
+                "wake": {
+                  "tier": "local_critical"
+                },
+                "evidence": {
+                  "identity.rank": "人物卡：卓云君为太乙真宗教御。",
+                  "personality.honor": "本拍是太乙教御遇刺。",
+                  "personality.caution": "本拍先要命。",
+                  "personality.ambition": "人物卡：教御。",
+                  "motives.legitimacy": "认账就会把命债写成门户的。",
+                  "motives.stability": "本拍先脱身。",
+                  "resources.influence": "人物卡：教御。",
+                  "resources.troops": "本拍护卫正在被换防。",
+                  "resources.intelligence": "本拍知道吴行德在收线。",
+                  "resources.wealth": "本拍不靠买命。",
+                  "agendas.agenda.lcq.s07_02.zhuo.clock": "街巷已封。"
+                }
+              }
+            ],
+            "actionBindings": [
+              {
+                "actionId": "request_audience",
+                "actorIds": [
+                  "liuchao.character.zhuo_yunjun"
+                ],
+                "label": "把求救说成太乙教御向人开口",
+                "reason": "开口本身就会留下门户账",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lcq.s07_02.ambush"
+                ],
+                "mustNotInvent": [
+                  "卓云君已经身死"
+                ],
+                "visibleSignal": "卓云君不再只喊救命，而是报出教御身份",
+                "offscreenAction": "留下太乙名义的求救",
+                "costs": {
+                  "influence": 1
+                },
+                "effects": {
+                  "zhuoAlive": 8,
+                  "taiyiDebt": 10
+                },
+                "utility": {
+                  "urgency": 9,
+                  "factionGoal": 8,
+                  "expectedBenefit": 8,
+                  "situation": {
+                    "zhuoAlive": -4
+                  }
+                },
+                "visibility": "public",
+                "durationTurns": 1
+              },
+              {
+                "actionId": "prepare_fallback_route",
+                "actorIds": [
+                  "liuchao.character.zhuo_yunjun"
+                ],
+                "label": "只求一条能走的缝，不提门户",
+                "reason": "活着离开不必先认太乙的账",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lcq.s07_02.ambush"
+                ],
+                "mustNotInvent": [
+                  "已经当众认下太乙账"
+                ],
+                "visibleSignal": "卓云君改走巷缝，不再报身份",
+                "offscreenAction": "只脱身不认账",
+                "costs": {
+                  "intelligence": 1
+                },
+                "effects": {
+                  "zhuoAlive": 6,
+                  "taiyiDebt": -4
+                },
+                "utility": {
+                  "expectedBenefit": 3
+                },
+                "visibility": "hidden",
+                "durationTurns": 1
+              }
+            ],
+            "maxVisibleActions": 2,
+            "narrativeGuard": {
+              "forbiddenTerms": [
+                "卓云君已经身死",
+                "吴行德已经投诚"
+              ],
+              "rejectConcreteQuantities": true,
+              "allowUnverifiedQuantities": true
+            }
+          },
+          "opportunities": [
+            {
+              "id": "opportunity.lcq.s07_02.accept_taiyi_debt",
+              "title": "认下救卓云君的太乙门户账",
+              "characterIds": [
+                "liuchao.character.zhuo_yunjun"
+              ],
+              "whyNow": "人还在清远巷里。认下这笔账，太乙会记你救了教御；入晋之后也会按门户的人来看你。",
+              "nextStep": "当众按太乙教御遇刺来救人，并承认这是门户的事。",
+              "stakes": "晋地会把你看成太乙的人；卓云君日后再求，也按这笔账开口。",
+              "rewardPreview": "取得一次被太乙记为救下教御的权限。",
+              "futureHint": "以后太乙再有人在晋地遇险，会先找曾经认过这笔账的人。",
+              "actionText": "我追踪“认下救卓云君的太乙门户账”：按教御遇刺救人，并承认这是门户的事。",
+              "rewardKey": "permission.lcq.taiyi.qingyuan_debt",
+              "rewardLabel": "太乙·清远教御命债",
+              "trigger": {
+                "actorIds": [
+                  "liuchao.character.zhuo_yunjun"
+                ],
+                "actionIds": [
+                  "request_audience"
+                ]
+              },
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "settlement": "immediate",
+                "expiry": "persistent",
+                "steps": [
+                  {
+                    "id": "name_office",
+                    "label": "按教御身份救人",
+                    "actions": [
+                      {
+                        "id": "save_as_taiyi_preceptor",
+                        "label": "按教御救人",
+                        "actionText": "我按太乙教御遇刺来救卓云君，不当成路人斗殴。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "太乙教御",
+                      "不当成路人斗殴"
+                    ],
+                    "rejectIf": [
+                      "只当路人",
+                      "不提门户"
+                    ]
+                  },
+                  {
+                    "id": "accept_debt",
+                    "label": "承认这是门户的事",
+                    "actions": [
+                      {
+                        "id": "accept_sect_debt",
+                        "label": "认下门户账",
+                        "actionText": "我承认这笔命债记在太乙门户账上，日后再算。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "记在太乙门户账上"
+                    ],
+                    "rejectIf": [
+                      "不认账",
+                      "只救人"
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "opportunity.lcq.s07_02.save_without_sect_debt",
+              "title": "只救人，不认太乙门户账",
+              "characterIds": [
+                "liuchao.character.zhuo_yunjun"
+              ],
+              "whyNow": "卓云君可以活，这笔账不必写成太乙的。入晋时你就还是外人。",
+              "nextStep": "救人离开封路，不按教御名义受谢。",
+              "stakes": "卓云君活着，但太乙不欠你；你在晋地也少一层门户掩护。",
+              "rewardPreview": "取得一次以私人名义在清远救人、不入太乙账的权限。",
+              "futureHint": "以后卓云君若再开口，会先分清你认过账没有。",
+              "actionText": "我追踪“只救人，不认太乙门户账”：救人离开封路，不按教御名义受谢。",
+              "rewardKey": "permission.lcq.jin.qingyuan_private_rescue",
+              "rewardLabel": "晋地·清远私人救援",
+              "trigger": {
+                "actorIds": [
+                  "liuchao.character.zhuo_yunjun"
+                ],
+                "actionIds": [
+                  "request_audience"
+                ]
+              },
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "settlement": "immediate",
+                "expiry": "persistent",
+                "steps": [
+                  {
+                    "id": "break_line",
+                    "label": "切开封路救人",
+                    "actions": [
+                      {
+                        "id": "break_seal_to_save",
+                        "label": "切开封路",
+                        "actionText": "我切开清远封路把卓云君救出来，不先问门户如何记账。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "切开",
+                      "封路",
+                      "救出来"
+                    ],
+                    "rejectIf": [
+                      "按教御名义受谢",
+                      "认下门户"
+                    ]
+                  },
+                  {
+                    "id": "refuse_thanks",
+                    "label": "不受教御名义的谢",
+                    "actions": [
+                      {
+                        "id": "refuse_preceptor_thanks",
+                        "label": "不受门户谢",
+                        "actionText": "我明确不按太乙教御名义受谢，这笔事不入门户账。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "不按太乙教御名义受谢",
+                      "不入门户账"
+                    ],
+                    "rejectIf": [
+                      "记在太乙门户账上",
+                      "认下这笔账"
+                    ]
+                  }
+                ]
               }
             }
           ]

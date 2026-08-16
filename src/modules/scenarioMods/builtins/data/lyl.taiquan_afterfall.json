@@ -6113,7 +6113,8 @@
           }
         ],
         "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang"
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.yun_cang_feng"
         ],
         "objective": "前往洛都查明风波",
         "playerCompletionContract": {
@@ -6131,6 +6132,276 @@
                 "success": "你已亲自执行“前往洛都查明风波”；事件完成真值将由本地引擎落账。",
                 "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
                 "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        },
+        "relatedFactionIds": [
+          "liuchao.faction.yun_shi_shang_hui",
+          "liuchao.faction.han_guo_chao_ting"
+        ],
+        "worldActor": {
+          "pressure": {
+            "id": "world.lyl.afterfall_07.court_door",
+            "scope": "faction",
+            "summary": "洛都因平亭侯下狱而门风加密，入朝的口子还没人认领。",
+            "domains": [
+              "court",
+              "commerce"
+            ],
+            "geography": [
+              "洛都"
+            ],
+            "factionIds": [
+              "liuchao.faction.yun_shi_shang_hui",
+              "liuchao.faction.han_guo_chao_ting"
+            ],
+            "intensity": 2,
+            "canonPolicy": "process_only"
+          },
+          "decisionCore": {
+            "knowledgeFacts": {
+              "knowledge.lyl.afterfall_07.case": {
+                "text": "平亭侯因宁成上奏下诏狱，洛都权贵说法互相打架。",
+                "access": "public",
+                "evidence": "lyl.event.taiquan_afterfall_07_beat axisBeat。"
+              }
+            },
+            "situation": {
+              "whitelist": [
+                "courtAccess",
+                "exposure"
+              ],
+              "initialValues": {
+                "courtAccess": 22,
+                "exposure": 48
+              },
+              "limits": {
+                "courtAccess": {
+                  "min": 0,
+                  "max": 100
+                },
+                "exposure": {
+                  "min": 0,
+                  "max": 100
+                }
+              }
+            },
+            "canonPolicy": {
+              "invariant": [
+                "平亭侯已经下诏狱"
+              ],
+              "forbiddenBefore": [
+                "官身已经买成"
+              ],
+              "processFreedom": [
+                "向谁打听入朝口子"
+              ]
+            },
+            "actors": [
+              {
+                "characterId": "liuchao.character.yun_cang_feng",
+                "identity": {
+                  "factionId": "liuchao.faction.yun_shi_shang_hui",
+                  "office": "云氏当家人",
+                  "rank": 5
+                },
+                "personality": {
+                  "caution": 4,
+                  "honor": 3,
+                  "ambition": 3
+                },
+                "motives": {
+                  "stability": 4,
+                  "control": 4
+                },
+                "resources": {
+                  "influence": 5,
+                  "wealth": 5,
+                  "intelligence": 4,
+                  "troops": 1
+                },
+                "relationships": {},
+                "knowledge": [
+                  "knowledge.lyl.afterfall_07.case"
+                ],
+                "agendas": [
+                  {
+                    "id": "agenda.lyl.afterfall_07.yun",
+                    "goal": "保住云氏还能用的入朝口子",
+                    "clock": 0,
+                    "escalation": [
+                      "对价",
+                      "递名"
+                    ]
+                  }
+                ],
+                "allowedActionIds": [
+                  "gather_intelligence",
+                  "trade_favor"
+                ],
+                "wake": {
+                  "tier": "local_critical"
+                },
+                "evidence": {
+                  "identity.rank": "人物卡：云苍峰为云氏当家人。",
+                  "personality.caution": "人物卡：沉稳老练。",
+                  "personality.honor": "人物卡：重情义。",
+                  "personality.ambition": "人物卡：商界领袖。",
+                  "motives.stability": "本拍只摸口子。",
+                  "motives.control": "人物卡：精明务实。",
+                  "resources.influence": "人物卡：云氏当家人。",
+                  "resources.wealth": "人物卡：商会领袖。",
+                  "resources.intelligence": "人物卡：西邸渠道熟。",
+                  "resources.troops": "本拍不调私兵。",
+                  "agendas.agenda.lyl.afterfall_07.yun.clock": "风波已起，口子未认领。"
+                }
+              }
+            ],
+            "actionBindings": [
+              {
+                "actionId": "gather_intelligence",
+                "actorIds": [
+                  "liuchao.character.yun_cang_feng"
+                ],
+                "label": "把西邸能问的门路分开登记",
+                "reason": "门风加密，先分清能问与不能问",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lyl.afterfall_07.case"
+                ],
+                "mustNotInvent": [
+                  "官身已经买成",
+                  "具体银数"
+                ],
+                "visibleSignal": "云苍峰把西邸传闻标成亲见、转述和尚未核实",
+                "offscreenAction": "整理不具名的门路清单",
+                "costs": {
+                  "intelligence": 1
+                },
+                "effects": {
+                  "courtAccess": 8
+                },
+                "utility": {
+                  "urgency": 8,
+                  "factionGoal": 8,
+                  "expectedBenefit": 7,
+                  "situation": {
+                    "courtAccess": -3
+                  }
+                },
+                "visibility": "public",
+                "durationTurns": 1
+              },
+              {
+                "actionId": "trade_favor",
+                "actorIds": [
+                  "liuchao.character.yun_cang_feng"
+                ],
+                "label": "问清云氏愿不愿把外人名字递进西邸",
+                "reason": "递名比问路更显眼",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lyl.afterfall_07.case"
+                ],
+                "mustNotInvent": [
+                  "已经递进西邸"
+                ],
+                "visibleSignal": "账房把问路和递名分成两份未签字草单",
+                "offscreenAction": "留下可撤回的递名条件",
+                "costs": {
+                  "influence": 1
+                },
+                "effects": {
+                  "exposure": 6
+                },
+                "utility": {
+                  "expectedBenefit": 3
+                },
+                "visibility": "rumor",
+                "durationTurns": 1
+              }
+            ],
+            "maxVisibleActions": 2,
+            "narrativeGuard": {
+              "forbiddenTerms": [
+                "官身已经买成",
+                "西邸已经批准"
+              ],
+              "rejectConcreteQuantities": true,
+              "allowUnverifiedQuantities": true
+            }
+          },
+          "opportunities": [
+            {
+              "id": "opportunity.lyl.afterfall_07.ask_yun_door",
+              "title": "向云苍峰摸西邸的口子",
+              "characterIds": [
+                "liuchao.character.yun_cang_feng"
+              ],
+              "whyNow": "洛都因平亭侯下狱而门风加密，自己闯朝堂只会撞上互相打架的抄件。",
+              "nextStep": "只向云苍峰核验西邸近日能问的门路，先不把名字递进去。",
+              "stakes": "问路会被云家记上一笔；问得太深也可能卷进平亭侯案的风口。",
+              "rewardPreview": "取得一次调用云氏西邸门路核验的权限。",
+              "futureHint": "以后再有人问入朝怎么走，云苍峰会记得谁先把口子摸清楚。",
+              "actionText": "我追踪“向云苍峰摸西邸的口子”：只核验能问的门路与不能问的禁区，先不递名、不买官。",
+              "rewardKey": "permission.lyl.yun.court_door_audit",
+              "rewardLabel": "云氏·西邸门路核验",
+              "trigger": {
+                "actorIds": [
+                  "liuchao.character.yun_cang_feng"
+                ],
+                "actionIds": [
+                  "gather_intelligence"
+                ]
+              },
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "settlement": "immediate",
+                "expiry": "persistent",
+                "steps": [
+                  {
+                    "id": "list_doors",
+                    "label": "核清近日能问的门路",
+                    "actions": [
+                      {
+                        "id": "list_west_residence_doors",
+                        "label": "登记能问的门路",
+                        "actionText": "我同云苍峰把西邸近日能问的门路与不能问的禁区分开登记，不先递名。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "能问的门路",
+                      "不能问",
+                      "不先递名"
+                    ],
+                    "rejectIf": [
+                      "已经买官",
+                      "名字已经递进"
+                    ]
+                  },
+                  {
+                    "id": "keep_name_off",
+                    "label": "确认此次不递名",
+                    "actions": [
+                      {
+                        "id": "refuse_early_nomination",
+                        "label": "把名字留在账外",
+                        "actionText": "我明确只要门路清单，不要云家把我的名字写进西邸草单。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "只要门路",
+                      "不要把我的名字"
+                    ],
+                    "rejectIf": [
+                      "把我的名字递进",
+                      "现在就买官"
+                    ]
+                  }
+                ]
               }
             }
           ]

@@ -4148,7 +4148,8 @@
           }
         ],
         "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang"
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.yun_cang_feng"
         ],
         "objective": "搜查蛇彝长屋，查清尸体来源",
         "playerCompletionContract": {
@@ -4166,6 +4167,350 @@
                 "success": "你已亲自执行“搜查蛇彝长屋，查清尸体来源”；事件完成真值将由本地引擎落账。",
                 "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
                 "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        },
+        "relatedFactionIds": [
+          "liuchao.faction.yun_shi_shang_hui"
+        ],
+        "worldActor": {
+          "pressure": {
+            "id": "world.lcq.s03b_02.massacre_traces",
+            "scope": "faction",
+            "summary": "蛇彝长屋里的血符还在，留证物还是焚屋，商队还没落笔。",
+            "domains": [
+              "intelligence",
+              "commerce"
+            ],
+            "geography": [
+              "蛇彝长屋"
+            ],
+            "factionIds": [
+              "liuchao.faction.yun_shi_shang_hui"
+            ],
+            "intensity": 2,
+            "canonPolicy": "process_only"
+          },
+          "decisionCore": {
+            "knowledgeFacts": {
+              "knowledge.lcq.s03b_02.corpses": {
+                "text": "长屋内有仪式性虐杀的女尸，商队怀疑鬼王峒所为，有人主张焚屋离去。",
+                "access": "public",
+                "evidence": "lcq.event.s03b_snake_flower_bridge_02 axisBeat。"
+              }
+            },
+            "situation": {
+              "whitelist": [
+                "evidenceKept",
+                "contamination"
+              ],
+              "initialValues": {
+                "evidenceKept": 30,
+                "contamination": 55
+              },
+              "limits": {
+                "evidenceKept": {
+                  "min": 0,
+                  "max": 100
+                },
+                "contamination": {
+                  "min": 0,
+                  "max": 100
+                }
+              }
+            },
+            "canonPolicy": {
+              "invariant": [
+                "长屋惨案已经发现"
+              ],
+              "forbiddenBefore": [
+                "鬼王峒已经覆灭",
+                "真凶已经坐实"
+              ],
+              "processFreedom": [
+                "留血符还是焚屋"
+              ]
+            },
+            "actors": [
+              {
+                "characterId": "liuchao.character.yun_cang_feng",
+                "identity": {
+                  "factionId": "liuchao.faction.yun_shi_shang_hui",
+                  "office": "云氏当家人",
+                  "rank": 5
+                },
+                "personality": {
+                  "caution": 5,
+                  "honor": 3,
+                  "ambition": 2
+                },
+                "motives": {
+                  "stability": 5,
+                  "control": 3
+                },
+                "resources": {
+                  "influence": 5,
+                  "wealth": 4,
+                  "intelligence": 4,
+                  "troops": 2
+                },
+                "relationships": {},
+                "knowledge": [
+                  "knowledge.lcq.s03b_02.corpses"
+                ],
+                "agendas": [
+                  {
+                    "id": "agenda.lcq.s03b_02.yun",
+                    "goal": "让商队尽快离开长屋，并决定血符带不带",
+                    "clock": 1,
+                    "escalation": [
+                      "清点",
+                      "取舍",
+                      "撤离"
+                    ]
+                  }
+                ],
+                "allowedActionIds": [
+                  "gather_intelligence",
+                  "conceal_evidence"
+                ],
+                "wake": {
+                  "tier": "local_critical"
+                },
+                "evidence": {
+                  "identity.rank": "人物卡：云苍峰为云氏当家人。",
+                  "personality.caution": "本拍先要人离开现场。",
+                  "personality.honor": "本拍仍要记录看见过什么。",
+                  "personality.ambition": "本拍不以扩地为目标。",
+                  "motives.stability": "本拍避免商队被血符缠住。",
+                  "motives.control": "带不带证物由队账决定。",
+                  "resources.influence": "人物卡：云氏当家人。",
+                  "resources.wealth": "本拍不在此做买卖。",
+                  "resources.intelligence": "本拍能判断何物可核验。",
+                  "resources.troops": "本拍有护卫。",
+                  "agendas.agenda.lcq.s03b_02.yun.clock": "长屋已开，人还在门槛内。"
+                }
+              }
+            ],
+            "actionBindings": [
+              {
+                "actionId": "gather_intelligence",
+                "actorIds": [
+                  "liuchao.character.yun_cang_feng"
+                ],
+                "label": "把可核验的血符与现场分开登记",
+                "reason": "不先指定真凶，只留下以后对得上的痕迹",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lcq.s03b_02.corpses"
+                ],
+                "mustNotInvent": [
+                  "真凶已经坐实"
+                ],
+                "visibleSignal": "云苍峰只让人取可封存的符记，不翻每一具尸体",
+                "offscreenAction": "保存可核验痕迹",
+                "costs": {
+                  "intelligence": 1
+                },
+                "effects": {
+                  "evidenceKept": 12,
+                  "contamination": 4
+                },
+                "utility": {
+                  "urgency": 8,
+                  "factionGoal": 7,
+                  "expectedBenefit": 7,
+                  "situation": {
+                    "evidenceKept": -3
+                  }
+                },
+                "visibility": "public",
+                "durationTurns": 1
+              },
+              {
+                "actionId": "conceal_evidence",
+                "actorIds": [
+                  "liuchao.character.yun_cang_feng"
+                ],
+                "label": "主张焚屋，不把血符带出村",
+                "reason": "带出长屋的东西会跟着商队走",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lcq.s03b_02.corpses"
+                ],
+                "mustNotInvent": [
+                  "血符已经带出村"
+                ],
+                "visibleSignal": "有人开始堆柴，账册上不记符记",
+                "offscreenAction": "焚屋后撤离",
+                "costs": {
+                  "influence": 1
+                },
+                "effects": {
+                  "contamination": -10,
+                  "evidenceKept": -8
+                },
+                "utility": {
+                  "expectedBenefit": 4
+                },
+                "visibility": "public",
+                "durationTurns": 1
+              }
+            ],
+            "maxVisibleActions": 2,
+            "narrativeGuard": {
+              "forbiddenTerms": [
+                "真凶已经坐实",
+                "鬼王峒已经覆灭"
+              ],
+              "rejectConcreteQuantities": true,
+              "allowUnverifiedQuantities": true
+            }
+          },
+          "opportunities": [
+            {
+              "id": "opportunity.lcq.s03b_02.keep_blood_token",
+              "title": "留下血符物证，不先定真凶",
+              "characterIds": [
+                "liuchao.character.yun_cang_feng"
+              ],
+              "whyNow": "长屋里的符记还在。带走可核验的一件，以后对得上；也会让商队沾上这摊。",
+              "nextStep": "只封存一件可核验血符，不把现场写成已经坐实鬼王峒。",
+              "stakes": "证物会跟着走；有人会把你当成还要追这摊的人。",
+              "rewardPreview": "取得一次调用蛇彝血符核验记录的权限。",
+              "futureHint": "以后再有人提起这座长屋，云苍峰会记得是谁坚持把符记带出来。",
+              "actionText": "我追踪“留下血符物证，不先定真凶”：只封存一件可核验符记，不把真凶写死。",
+              "rewardKey": "permission.lcq.yun.snake_house_token",
+              "rewardLabel": "云氏·蛇彝血符核验",
+              "trigger": {
+                "actorIds": [
+                  "liuchao.character.yun_cang_feng"
+                ],
+                "actionIds": [
+                  "gather_intelligence",
+                  "conceal_evidence"
+                ]
+              },
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "settlement": "immediate",
+                "expiry": "persistent",
+                "steps": [
+                  {
+                    "id": "seal_token",
+                    "label": "封存一件可核验符记",
+                    "actions": [
+                      {
+                        "id": "seal_one_token",
+                        "label": "封存血符",
+                        "actionText": "我只封存一件可核验的血符，不翻遍现场，也不先指定真凶。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "封存一件",
+                      "可核验",
+                      "不先指定真凶"
+                    ],
+                    "rejectIf": [
+                      "焚屋",
+                      "真凶已经是鬼王峒",
+                      "不留证物"
+                    ]
+                  },
+                  {
+                    "id": "log_source",
+                    "label": "记下取出位置",
+                    "actions": [
+                      {
+                        "id": "log_token_source",
+                        "label": "登记取出位置",
+                        "actionText": "我把符记取出的位置与看见的痕迹分开登记，不写成已经结案。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "取出的位置",
+                      "不写成已经结案"
+                    ],
+                    "rejectIf": [
+                      "已经结案",
+                      "焚屋灭迹"
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "opportunity.lcq.s03b_02.burn_and_leave",
+              "title": "焚屋离去，不把血符带出村",
+              "characterIds": [
+                "liuchao.character.yun_cang_feng"
+              ],
+              "whyNow": "商队停在门槛外。烧掉长屋能切断跟随，也会让这摊以后对不上。",
+              "nextStep": "同意焚屋，不把符记带进队账。",
+              "stakes": "以后再查这座村，少了可核验的物证；鬼王峒那边也少了一条指向你的痕迹。",
+              "rewardPreview": "取得一次与云氏共同决定焚屋撤离、不携带现场物证的权限。",
+              "futureHint": "以后有人问长屋里的东西去哪了，云苍峰会记得是谁主张烧掉。",
+              "actionText": "我追踪“焚屋离去，不把血符带出村”：同意焚屋，符记不入队账。",
+              "rewardKey": "permission.lcq.yun.burned_house_exit",
+              "rewardLabel": "云氏·焚屋撤离",
+              "trigger": {
+                "actorIds": [
+                  "liuchao.character.yun_cang_feng"
+                ],
+                "actionIds": [
+                  "gather_intelligence",
+                  "conceal_evidence"
+                ]
+              },
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "settlement": "immediate",
+                "expiry": "persistent",
+                "steps": [
+                  {
+                    "id": "agree_burn",
+                    "label": "同意焚屋",
+                    "actions": [
+                      {
+                        "id": "agree_to_burn_house",
+                        "label": "焚屋",
+                        "actionText": "我同意焚毁蛇彝长屋，不把现场留作可再入的据点。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "焚毁",
+                      "蛇彝长屋"
+                    ],
+                    "rejectIf": [
+                      "带走血符",
+                      "留下可再入"
+                    ]
+                  },
+                  {
+                    "id": "leave_tokens",
+                    "label": "符记不入队账",
+                    "actions": [
+                      {
+                        "id": "leave_tokens_in_fire",
+                        "label": "不带符记",
+                        "actionText": "我明确不把血符带出村、不写入云氏队账。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "不把血符带出村",
+                      "不写入"
+                    ],
+                    "rejectIf": [
+                      "封存一件",
+                      "带走符记"
+                    ]
+                  }
+                ]
               }
             }
           ]
@@ -4228,7 +4573,8 @@
           }
         ],
         "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang"
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.yun_cang_feng"
         ],
         "objective": "与云苍峰商队同行，前往白夷族",
         "playerCompletionContract": {
@@ -4246,6 +4592,346 @@
                 "success": "你已亲自执行“与云苍峰商队同行，前往白夷族”；事件完成真值将由本地引擎落账。",
                 "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
                 "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        },
+        "relatedFactionIds": [
+          "liuchao.faction.yun_shi_shang_hui"
+        ],
+        "worldActor": {
+          "pressure": {
+            "id": "world.lcq.s03b_04.joint_caravan",
+            "scope": "faction",
+            "summary": "两支商队都望白夷，并路之后交不交霓龙丝的底，还没说死。",
+            "domains": [
+              "commerce"
+            ],
+            "geography": [
+              "南荒岔口"
+            ],
+            "factionIds": [
+              "liuchao.faction.yun_shi_shang_hui"
+            ],
+            "intensity": 2,
+            "canonPolicy": "process_only"
+          },
+          "decisionCore": {
+            "knowledgeFacts": {
+              "knowledge.lcq.s03b_04.offer": {
+                "text": "云苍峰提议两支商队同行去白夷族，程宗扬一侧还藏着寻找霓龙丝的目标。",
+                "access": "public",
+                "evidence": "lcq.event.s03b_snake_flower_bridge_04 axisBeat。"
+              }
+            },
+            "situation": {
+              "whitelist": [
+                "jointRoute",
+                "goalDisclosure"
+              ],
+              "initialValues": {
+                "jointRoute": 45,
+                "goalDisclosure": 20
+              },
+              "limits": {
+                "jointRoute": {
+                  "min": 0,
+                  "max": 100
+                },
+                "goalDisclosure": {
+                  "min": 0,
+                  "max": 100
+                }
+              }
+            },
+            "canonPolicy": {
+              "invariant": [
+                "两队都望白夷"
+              ],
+              "forbiddenBefore": [
+                "已经抵达白夷王帐",
+                "霓龙丝已经到手"
+              ],
+              "processFreedom": [
+                "摊牌目标还是只并路"
+              ]
+            },
+            "actors": [
+              {
+                "characterId": "liuchao.character.yun_cang_feng",
+                "identity": {
+                  "factionId": "liuchao.faction.yun_shi_shang_hui",
+                  "office": "云氏当家人",
+                  "rank": 5
+                },
+                "personality": {
+                  "caution": 4,
+                  "honor": 3,
+                  "ambition": 3
+                },
+                "motives": {
+                  "control": 4,
+                  "stability": 4
+                },
+                "resources": {
+                  "influence": 5,
+                  "wealth": 5,
+                  "intelligence": 4,
+                  "troops": 2
+                },
+                "relationships": {},
+                "knowledge": [
+                  "knowledge.lcq.s03b_04.offer"
+                ],
+                "agendas": [
+                  {
+                    "id": "agenda.lcq.s03b_04.yun",
+                    "goal": "决定并路要不要把对方的真目标写进队账",
+                    "clock": 0,
+                    "escalation": [
+                      "并路",
+                      "问底",
+                      "分账"
+                    ]
+                  }
+                ],
+                "allowedActionIds": [
+                  "trade_favor",
+                  "open_safe_route"
+                ],
+                "wake": {
+                  "tier": "local_critical"
+                },
+                "evidence": {
+                  "identity.rank": "人物卡：云苍峰为云氏当家人。",
+                  "personality.caution": "人物卡：沉稳老练。",
+                  "personality.honor": "本拍肯并路。",
+                  "personality.ambition": "人物卡：商界领袖。",
+                  "motives.control": "队账由云家写。",
+                  "motives.stability": "本拍先要两队走得动。",
+                  "resources.influence": "人物卡：云氏当家人。",
+                  "resources.wealth": "人物卡：商会领袖。",
+                  "resources.intelligence": "人物卡：熟南荒商路。",
+                  "resources.troops": "本拍有护卫商队。",
+                  "agendas.agenda.lcq.s03b_04.yun.clock": "岔口尚未说死并路。"
+                }
+              }
+            ],
+            "actionBindings": [
+              {
+                "actionId": "trade_favor",
+                "actorIds": [
+                  "liuchao.character.yun_cang_feng"
+                ],
+                "label": "把并路条件摊开：交底还是只走一路",
+                "reason": "不先问清目标，并路后会抢货",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lcq.s03b_04.offer"
+                ],
+                "mustNotInvent": [
+                  "霓龙丝已经到手"
+                ],
+                "visibleSignal": "两队在岔口把货账和目的地分成两份谈",
+                "offscreenAction": "写出并路条件",
+                "costs": {
+                  "influence": 1
+                },
+                "effects": {
+                  "jointRoute": 8,
+                  "goalDisclosure": 6
+                },
+                "utility": {
+                  "urgency": 8,
+                  "factionGoal": 8,
+                  "expectedBenefit": 7,
+                  "situation": {
+                    "jointRoute": -2
+                  }
+                },
+                "visibility": "public",
+                "durationTurns": 1
+              },
+              {
+                "actionId": "open_safe_route",
+                "actorIds": [
+                  "liuchao.character.yun_cang_feng"
+                ],
+                "label": "先并路，货账分开走",
+                "reason": "可以同行，不必先交换真目标",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lcq.s03b_04.offer"
+                ],
+                "mustNotInvent": [
+                  "已经把霓龙丝写入队账"
+                ],
+                "visibleSignal": "两队编列同行，账册仍分两套",
+                "offscreenAction": "只并路不并账",
+                "costs": {
+                  "intelligence": 1
+                },
+                "effects": {
+                  "jointRoute": 10,
+                  "goalDisclosure": -4
+                },
+                "utility": {
+                  "expectedBenefit": 4
+                },
+                "visibility": "public",
+                "durationTurns": 1
+              }
+            ],
+            "maxVisibleActions": 2,
+            "narrativeGuard": {
+              "forbiddenTerms": [
+                "霓龙丝已经到手",
+                "已经抵达白夷王帐"
+              ],
+              "rejectConcreteQuantities": true,
+              "allowUnverifiedQuantities": true
+            }
+          },
+          "opportunities": [
+            {
+              "id": "opportunity.lcq.s03b_04.disclose_nilong_goal",
+              "title": "向云苍峰摊牌霓龙丝，换同行保护",
+              "characterIds": [
+                "liuchao.character.yun_cang_feng"
+              ],
+              "whyNow": "并路条件还没说死。把霓龙丝写进队账，云家会按这个目标护你，也会按这个目标分货。",
+              "nextStep": "把寻找霓龙丝的目标告诉云苍峰，并接受写进并路队账。",
+              "stakes": "云家以后按这个目标调度你；南荒有人问起来，也先问到云氏。",
+              "rewardPreview": "取得一次与云氏按霓龙丝目标并路护行的权限。",
+              "futureHint": "以后再谈南荒货，云苍峰会记得你交没交过底。",
+              "actionText": "我追踪“向云苍峰摊牌霓龙丝，换同行保护”：把目标写入并路队账，接受按此护行与分货。",
+              "rewardKey": "permission.lcq.yun.nilong_joint_ledger",
+              "rewardLabel": "云氏·霓龙丝并路队账",
+              "trigger": {
+                "actorIds": [
+                  "liuchao.character.yun_cang_feng"
+                ],
+                "actionIds": [
+                  "trade_favor"
+                ]
+              },
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "settlement": "immediate",
+                "expiry": "persistent",
+                "steps": [
+                  {
+                    "id": "tell_goal",
+                    "label": "摊牌霓龙丝目标",
+                    "actions": [
+                      {
+                        "id": "disclose_nilong_silk",
+                        "label": "说出霓龙丝",
+                        "actionText": "我向云苍峰说明此行要找霓龙丝，不把目标说成普通换货。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "霓龙丝",
+                      "不把目标说成普通换货"
+                    ],
+                    "rejectIf": [
+                      "只并路",
+                      "不交底",
+                      "普通换货"
+                    ]
+                  },
+                  {
+                    "id": "write_ledger",
+                    "label": "写入并路队账",
+                    "actions": [
+                      {
+                        "id": "write_goal_into_ledger",
+                        "label": "写入队账",
+                        "actionText": "我同意把霓龙丝目标写入云氏并路队账，接受按此护行。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "写入",
+                      "并路队账"
+                    ],
+                    "rejectIf": [
+                      "不写进队账",
+                      "只并路不并账"
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "opportunity.lcq.s03b_04.travel_without_brief",
+              "title": "只并路，不把真目标写入队账",
+              "characterIds": [
+                "liuchao.character.yun_cang_feng"
+              ],
+              "whyNow": "两队可以同行去白夷，不必先交换真目标。货账分开，云家不欠你，也不知你底。",
+              "nextStep": "接受并路编列，明确霓龙丝不入云氏队账。",
+              "stakes": "路上出事时云家没有义务按你的目标救人；你也不把底交给他们。",
+              "rewardPreview": "取得一次与云氏分账并路、互不并目标的权限。",
+              "futureHint": "以后云苍峰若再邀并路，会按你交没交底来开条件。",
+              "actionText": "我追踪“只并路，不把真目标写入队账”：同行去白夷，霓龙丝不入云氏账。",
+              "rewardKey": "permission.lcq.yun.separate_ledger_travel",
+              "rewardLabel": "云氏·分账并路",
+              "trigger": {
+                "actorIds": [
+                  "liuchao.character.yun_cang_feng"
+                ],
+                "actionIds": [
+                  "trade_favor"
+                ]
+              },
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "settlement": "immediate",
+                "expiry": "persistent",
+                "steps": [
+                  {
+                    "id": "join_column",
+                    "label": "接受并路编列",
+                    "actions": [
+                      {
+                        "id": "accept_joint_column",
+                        "label": "并路编列",
+                        "actionText": "我接受与云氏商队编列同行，不拒绝并路。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "编列同行",
+                      "不拒绝并路"
+                    ],
+                    "rejectIf": [
+                      "分道",
+                      "不并路"
+                    ]
+                  },
+                  {
+                    "id": "keep_goal_off",
+                    "label": "真目标不入队账",
+                    "actions": [
+                      {
+                        "id": "keep_nilong_off_ledger",
+                        "label": "不写入队账",
+                        "actionText": "我明确霓龙丝目标不写入云氏队账，两套货账分开走。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "不写入云氏队账",
+                      "货账分开"
+                    ],
+                    "rejectIf": [
+                      "写入队账",
+                      "摊牌霓龙丝"
+                    ]
+                  }
+                ]
               }
             }
           ]

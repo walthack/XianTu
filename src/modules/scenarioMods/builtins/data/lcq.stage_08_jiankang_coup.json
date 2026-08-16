@@ -4231,7 +4231,8 @@
           }
         ],
         "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang"
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.xiao_yao_yi"
         ],
         "objective": "在木垒与北府兵会合",
         "playerCompletionContract": {
@@ -4249,6 +4250,351 @@
                 "success": "你已亲自执行“在木垒与北府兵会合”；事件完成真值将由本地引擎落账。",
                 "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
                 "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        },
+        "relatedFactionIds": [
+          "liuchao.faction.xing_yue_hu",
+          "lyg.faction.jin_state"
+        ],
+        "worldActor": {
+          "pressure": {
+            "id": "world.lcq.s08_03.beifu",
+            "scope": "faction",
+            "summary": "木垒外出现禁军旗号，解围的人已经把你看清楚，认不认还没说。",
+            "domains": [
+              "war",
+              "court"
+            ],
+            "geography": [
+              "木垒",
+              "建康"
+            ],
+            "factionIds": [
+              "liuchao.faction.xing_yue_hu",
+              "lyg.faction.jin_state"
+            ],
+            "intensity": 2,
+            "canonPolicy": "process_only"
+          },
+          "decisionCore": {
+            "knowledgeFacts": {
+              "knowledge.lcq.s08_03.flags": {
+                "text": "易彪率北府兵扮作禁军突袭解围，萧遥逸识破救援者身份。",
+                "access": "public",
+                "evidence": "lcq.event.s08_03_beifu_rescue axisBeat。"
+              }
+            },
+            "situation": {
+              "whitelist": [
+                "reliefHold",
+                "identityExposure"
+              ],
+              "initialValues": {
+                "reliefHold": 50,
+                "identityExposure": 62
+              },
+              "limits": {
+                "reliefHold": {
+                  "min": 0,
+                  "max": 100
+                },
+                "identityExposure": {
+                  "min": 0,
+                  "max": 100
+                }
+              }
+            },
+            "canonPolicy": {
+              "invariant": [
+                "北府兵已经动手解围",
+                "萧遥逸已经识破身份"
+              ],
+              "forbiddenBefore": [
+                "宫变已经结束",
+                "北府兵已经溃败"
+              ],
+              "processFreedom": [
+                "亮身份还是受援不亮底"
+              ]
+            },
+            "actors": [
+              {
+                "characterId": "liuchao.character.xiao_yao_yi",
+                "identity": {
+                  "factionId": "liuchao.faction.xing_yue_hu",
+                  "office": "星月湖八骏",
+                  "rank": 5
+                },
+                "personality": {
+                  "caution": 4,
+                  "honor": 4,
+                  "ambition": 3
+                },
+                "motives": {
+                  "control": 4,
+                  "legitimacy": 3
+                },
+                "resources": {
+                  "influence": 5,
+                  "intelligence": 5,
+                  "troops": 3,
+                  "wealth": 3
+                },
+                "relationships": {},
+                "knowledge": [
+                  "knowledge.lcq.s08_03.flags"
+                ],
+                "agendas": [
+                  {
+                    "id": "agenda.lcq.s08_03.xiao",
+                    "goal": "决定把识破的身份写成自己人还是路过的人",
+                    "clock": 1,
+                    "escalation": [
+                      "对质",
+                      "记名",
+                      "放行"
+                    ]
+                  }
+                ],
+                "allowedActionIds": [
+                  "test_loyalty",
+                  "delay_commitment"
+                ],
+                "wake": {
+                  "tier": "local_critical"
+                },
+                "evidence": {
+                  "identity.rank": "人物卡：萧遥逸掌星月湖谍报商网。",
+                  "personality.caution": "人物卡：掌谍报。",
+                  "personality.honor": "本拍肯解围。",
+                  "personality.ambition": "人物卡：八骏。",
+                  "motives.control": "本拍要决定名册怎么写。",
+                  "motives.legitimacy": "亮身份就会进入北府目击。",
+                  "resources.influence": "人物卡：八骏。",
+                  "resources.intelligence": "axisBeat：他识破身份。",
+                  "resources.troops": "本拍北府兵在场。",
+                  "resources.wealth": "本拍不靠买命。",
+                  "agendas.agenda.lcq.s08_03.xiao.clock": "旗号已破。"
+                }
+              }
+            ],
+            "actionBindings": [
+              {
+                "actionId": "test_loyalty",
+                "actorIds": [
+                  "liuchao.character.xiao_yao_yi"
+                ],
+                "label": "当面对质被救的人是不是自己人",
+                "reason": "识破之后必须有一句认或不认",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lcq.s08_03.flags"
+                ],
+                "mustNotInvent": [
+                  "萧遥逸已经阵亡"
+                ],
+                "visibleSignal": "萧遥逸不再看旗号，只盯被救的人要一句回话",
+                "offscreenAction": "留下对质记录",
+                "costs": {
+                  "intelligence": 1
+                },
+                "effects": {
+                  "identityExposure": 8,
+                  "reliefHold": 4
+                },
+                "utility": {
+                  "urgency": 9,
+                  "factionGoal": 8,
+                  "expectedBenefit": 8,
+                  "situation": {
+                    "identityExposure": -2
+                  }
+                },
+                "visibility": "public",
+                "durationTurns": 1
+              },
+              {
+                "actionId": "delay_commitment",
+                "actorIds": [
+                  "liuchao.character.xiao_yao_yi"
+                ],
+                "label": "先把人带出木垒，名册后补",
+                "reason": "解围不必当场写进自己人",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lcq.s08_03.flags"
+                ],
+                "mustNotInvent": [
+                  "已经当众认下身份"
+                ],
+                "visibleSignal": "队伍先撤，名册空着一栏",
+                "offscreenAction": "受援不亮底",
+                "costs": {
+                  "influence": 1
+                },
+                "effects": {
+                  "reliefHold": 8,
+                  "identityExposure": -6
+                },
+                "utility": {
+                  "expectedBenefit": 3
+                },
+                "visibility": "rumor",
+                "durationTurns": 1
+              }
+            ],
+            "maxVisibleActions": 2,
+            "narrativeGuard": {
+              "forbiddenTerms": [
+                "宫变已经结束",
+                "萧遥逸已经阵亡"
+              ],
+              "rejectConcreteQuantities": true,
+              "allowUnverifiedQuantities": true
+            }
+          },
+          "opportunities": [
+            {
+              "id": "opportunity.lcq.s08_03.reveal_to_xiaoyaoyi",
+              "title": "向萧遥逸亮明身份",
+              "characterIds": [
+                "liuchao.character.xiao_yao_yi"
+              ],
+              "whyNow": "他已经看破。认下来，北府和星月湖会把你写成自己人；建康也会按这个看你。",
+              "nextStep": "当面对质时承认身份，接受写入目击名册。",
+              "stakes": "宫变两边都会按这个名字找你；想再装路过的禁军就晚了。",
+              "rewardPreview": "取得一次被星月湖记为建康解围自己人的权限。",
+              "futureHint": "以后建康再有人问木垒那一夜，萧遥逸会按名册上有没有你来答。",
+              "actionText": "我追踪“向萧遥逸亮明身份”：当面对质时承认身份，接受写入目击名册。",
+              "rewardKey": "permission.lcq.xingyue.jiankang_named_ally",
+              "rewardLabel": "星月湖·建康解围记名",
+              "trigger": {
+                "actorIds": [
+                  "liuchao.character.xiao_yao_yi"
+                ],
+                "actionIds": [
+                  "test_loyalty"
+                ]
+              },
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "settlement": "immediate",
+                "expiry": "persistent",
+                "steps": [
+                  {
+                    "id": "admit_name",
+                    "label": "当面对质时承认身份",
+                    "actions": [
+                      {
+                        "id": "admit_identity_to_xiao",
+                        "label": "承认身份",
+                        "actionText": "我向萧遥逸承认身份，不继续用禁军旗号遮掩。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "承认身份",
+                      "不继续用禁军旗号"
+                    ],
+                    "rejectIf": [
+                      "不亮底",
+                      "继续伪装"
+                    ]
+                  },
+                  {
+                    "id": "accept_roster",
+                    "label": "接受写入目击名册",
+                    "actions": [
+                      {
+                        "id": "accept_witness_roster",
+                        "label": "写入名册",
+                        "actionText": "我接受把这次解围写入星月湖目击名册，按自己人记。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "写入",
+                      "目击名册",
+                      "自己人"
+                    ],
+                    "rejectIf": [
+                      "名册空着",
+                      "路过的人"
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "opportunity.lcq.s08_03.accept_rescue_unnamed",
+              "title": "受救援，但不把身份写入名册",
+              "characterIds": [
+                "liuchao.character.xiao_yao_yi"
+              ],
+              "whyNow": "人可以先带出木垒。不亮底，你在宫变里仍是路过的；也就没有自己人的掩护。",
+              "nextStep": "接受撤离，明确名册那一栏不写名字。",
+              "stakes": "萧遥逸会记住你欠解围却不肯认；两边一时也指不到你。",
+              "rewardPreview": "取得一次接受北府解围、身份不入库的权限。",
+              "futureHint": "以后萧遥逸再救人，会先问对方肯不肯留下名字。",
+              "actionText": "我追踪“受救援，但不把身份写入名册”：先撤出木垒，名册那一栏空着。",
+              "rewardKey": "permission.lcq.jin.anonymous_relief",
+              "rewardLabel": "建康·不记名受援",
+              "trigger": {
+                "actorIds": [
+                  "liuchao.character.xiao_yao_yi"
+                ],
+                "actionIds": [
+                  "test_loyalty"
+                ]
+              },
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "settlement": "immediate",
+                "expiry": "persistent",
+                "steps": [
+                  {
+                    "id": "take_relief",
+                    "label": "接受撤离",
+                    "actions": [
+                      {
+                        "id": "accept_beifu_withdrawal",
+                        "label": "接受撤离",
+                        "actionText": "我接受北府兵带出木垒，不拒绝解围。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "接受",
+                      "带出木垒"
+                    ],
+                    "rejectIf": [
+                      "拒绝解围",
+                      "自己突围"
+                    ]
+                  },
+                  {
+                    "id": "blank_roster",
+                    "label": "名册不写名字",
+                    "actions": [
+                      {
+                        "id": "leave_roster_blank",
+                        "label": "空出名册",
+                        "actionText": "我明确这次不把身份写入目击名册，只受救援。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "不把身份写入",
+                      "目击名册"
+                    ],
+                    "rejectIf": [
+                      "按自己人记",
+                      "承认身份并入库"
+                    ]
+                  }
+                ]
               }
             }
           ]

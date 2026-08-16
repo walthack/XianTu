@@ -5704,7 +5704,8 @@
           }
         ],
         "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang"
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.yun_cang_feng"
         ],
         "objective": "前往便门瓦牡丹棚打探情报",
         "playerCompletionContract": {
@@ -5722,6 +5723,348 @@
                 "success": "你已亲自执行“前往便门瓦牡丹棚打探情报”；事件完成真值将由本地引擎落账。",
                 "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
                 "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        },
+        "relatedFactionIds": [
+          "liuchao.faction.yun_shi_shang_hui",
+          "lyg.faction.song_state"
+        ],
+        "worldActor": {
+          "pressure": {
+            "id": "world.lyl.linan_01.tip",
+            "scope": "faction",
+            "summary": "便门瓦棚的线报还在桌上，交给云家核验还是自己压住，还没人认领。",
+            "domains": [
+              "intelligence"
+            ],
+            "geography": [
+              "临安",
+              "便门瓦牡丹棚"
+            ],
+            "factionIds": [
+              "liuchao.faction.yun_shi_shang_hui"
+            ],
+            "intensity": 2,
+            "canonPolicy": "process_only"
+          },
+          "decisionCore": {
+            "knowledgeFacts": {
+              "knowledge.lyl.linan_01.shed": {
+                "text": "便门瓦牡丹棚出现涉及宋军部署与皇城司的闲话，线人尚未坐实。",
+                "access": "public",
+                "evidence": "lyl.event.lin_an_bridge_01_beat axisBeat。"
+              }
+            },
+            "situation": {
+              "whitelist": [
+                "yunCustody",
+                "privateHold"
+              ],
+              "initialValues": {
+                "yunCustody": 28,
+                "privateHold": 40
+              },
+              "limits": {
+                "yunCustody": {
+                  "min": 0,
+                  "max": 100
+                },
+                "privateHold": {
+                  "min": 0,
+                  "max": 100
+                }
+              }
+            },
+            "canonPolicy": {
+              "invariant": [
+                "瓦棚线报已经出现"
+              ],
+              "forbiddenBefore": [
+                "线人已经坐实",
+                "宋廷已经按此调军"
+              ],
+              "processFreedom": [
+                "交云家核验还是自己压住"
+              ]
+            },
+            "actors": [
+              {
+                "characterId": "liuchao.character.yun_cang_feng",
+                "identity": {
+                  "factionId": "liuchao.faction.yun_shi_shang_hui",
+                  "office": "云氏当家人",
+                  "rank": 5
+                },
+                "personality": {
+                  "caution": 5,
+                  "honor": 3,
+                  "ambition": 3
+                },
+                "motives": {
+                  "control": 4,
+                  "stability": 4
+                },
+                "resources": {
+                  "influence": 5,
+                  "intelligence": 5,
+                  "wealth": 4,
+                  "troops": 1
+                },
+                "relationships": {},
+                "knowledge": [
+                  "knowledge.lyl.linan_01.shed"
+                ],
+                "agendas": [
+                  {
+                    "id": "agenda.lyl.linan_01.yun",
+                    "goal": "决定这张临安线报进不进云家耳目网",
+                    "clock": 0,
+                    "escalation": [
+                      "收报",
+                      "对核",
+                      "压住"
+                    ]
+                  }
+                ],
+                "allowedActionIds": [
+                  "gather_intelligence",
+                  "conceal_evidence"
+                ],
+                "wake": {
+                  "tier": "local_critical"
+                },
+                "evidence": {
+                  "identity.rank": "人物卡：云苍峰为云氏当家人。",
+                  "personality.caution": "本拍先对核不坐实。",
+                  "personality.honor": "本拍肯经手核验。",
+                  "personality.ambition": "人物卡：商界领袖。",
+                  "motives.control": "线报进网就由云家调度。",
+                  "motives.stability": "本拍避免把传闻写成军令。",
+                  "resources.influence": "人物卡：云氏当家人。",
+                  "resources.intelligence": "人物卡：商网耳目。",
+                  "resources.wealth": "本拍可买眼线。",
+                  "resources.troops": "本拍无兵。",
+                  "agendas.agenda.lyl.linan_01.yun.clock": "闲话已到桌面。"
+                }
+              }
+            ],
+            "actionBindings": [
+              {
+                "actionId": "gather_intelligence",
+                "actorIds": [
+                  "liuchao.character.yun_cang_feng"
+                ],
+                "label": "用商网交叉核验瓦棚闲话",
+                "reason": "先分清亲见、转述和尚未核实",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lyl.linan_01.shed"
+                ],
+                "mustNotInvent": [
+                  "线人已经坐实"
+                ],
+                "visibleSignal": "云苍峰把瓦棚闲话标成三列，不写成已经坐实",
+                "offscreenAction": "交叉核验",
+                "costs": {
+                  "intelligence": 1
+                },
+                "effects": {
+                  "yunCustody": 12,
+                  "privateHold": -4
+                },
+                "utility": {
+                  "urgency": 8,
+                  "factionGoal": 8,
+                  "expectedBenefit": 7,
+                  "situation": {
+                    "yunCustody": -3
+                  }
+                },
+                "visibility": "public",
+                "durationTurns": 1
+              },
+              {
+                "actionId": "conceal_evidence",
+                "actorIds": [
+                  "liuchao.character.yun_cang_feng"
+                ],
+                "label": "只承认听说过，不把线报收入网",
+                "reason": "压在私人手里，商网就当没这张纸",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lyl.linan_01.shed"
+                ],
+                "mustNotInvent": [
+                  "已经抄入云家耳目网"
+                ],
+                "visibleSignal": "账房不抄瓦棚那一页",
+                "offscreenAction": "不入库",
+                "costs": {
+                  "influence": 1
+                },
+                "effects": {
+                  "privateHold": 10,
+                  "yunCustody": -6
+                },
+                "utility": {
+                  "expectedBenefit": 3
+                },
+                "visibility": "hidden",
+                "durationTurns": 1
+              }
+            ],
+            "maxVisibleActions": 2,
+            "narrativeGuard": {
+              "forbiddenTerms": [
+                "线人已经坐实",
+                "贾师宪已经按此下令"
+              ],
+              "rejectConcreteQuantities": true,
+              "allowUnverifiedQuantities": true
+            }
+          },
+          "opportunities": [
+            {
+              "id": "opportunity.lyl.linan_01.hand_tip_to_yun",
+              "title": "把瓦棚线报交给云家交叉核验",
+              "characterIds": [
+                "liuchao.character.yun_cang_feng"
+              ],
+              "whyNow": "临安暗线刚冒头。交给云家，耳目网会替你对核，也会把来源记在你身上。",
+              "nextStep": "把瓦棚闲话交给云苍峰，按亲见与转述分开核验，不写成已经坐实。",
+              "stakes": "云家会记住这条线从你这儿来；以后再问临安，他们也有权先看。",
+              "rewardPreview": "取得一次调用云氏临安耳目交叉核验的权限。",
+              "futureHint": "以后临安再起闲话，云苍峰会先问你还交不交。",
+              "actionText": "我追踪“把瓦棚线报交给云家交叉核验”：按来源等级登记，不把传闻写成已经坐实。",
+              "rewardKey": "permission.lyl.yun.linan_tip_audit",
+              "rewardLabel": "云氏·临安线报核验",
+              "trigger": {
+                "actorIds": [
+                  "liuchao.character.yun_cang_feng"
+                ],
+                "actionIds": [
+                  "gather_intelligence"
+                ]
+              },
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "settlement": "immediate",
+                "expiry": "persistent",
+                "steps": [
+                  {
+                    "id": "hand_over",
+                    "label": "把闲话交给云苍峰",
+                    "actions": [
+                      {
+                        "id": "hand_shed_talk_to_yun",
+                        "label": "交线报",
+                        "actionText": "我把便门瓦棚的闲话交给云苍峰，请他按来源等级核验。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "交给云苍峰",
+                      "来源等级核验"
+                    ],
+                    "rejectIf": [
+                      "自己压住",
+                      "不入库"
+                    ]
+                  },
+                  {
+                    "id": "no_confirm",
+                    "label": "不写成已经坐实",
+                    "actions": [
+                      {
+                        "id": "forbid_confirmed_source",
+                        "label": "不坐实线人",
+                        "actionText": "我明确在核验完成前，不把线人写成已经坐实，也不把闲话当成军令。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "不把线人写成已经坐实",
+                      "不把闲话当成军令"
+                    ],
+                    "rejectIf": [
+                      "线人已经坐实",
+                      "按此调军"
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "opportunity.lyl.linan_01.keep_tip_private",
+              "title": "自己压住瓦棚线报，不入云家网",
+              "characterIds": [
+                "liuchao.character.yun_cang_feng"
+              ],
+              "whyNow": "线报可以先不交给任何人。自己压住，云家没有这份；你也没有他们的核验。",
+              "nextStep": "只向云苍峰声明你听过瓦棚闲话，但不交卷、不入库。",
+              "stakes": "以后要对核只能靠你自己；云家也不会为这条线替你挡。",
+              "rewardPreview": "取得一次把临安瓦棚线报留在私人手里的权限。",
+              "futureHint": "以后有人向云家打听这条闲话，他们会说你没有交卷。",
+              "actionText": "我追踪“自己压住瓦棚线报，不入云家网”：只声明听过，不交卷。",
+              "rewardKey": "permission.lyl.linan.private_brief",
+              "rewardLabel": "临安·私人压住线报",
+              "trigger": {
+                "actorIds": [
+                  "liuchao.character.yun_cang_feng"
+                ],
+                "actionIds": [
+                  "gather_intelligence"
+                ]
+              },
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "settlement": "immediate",
+                "expiry": "persistent",
+                "steps": [
+                  {
+                    "id": "declare_heard",
+                    "label": "声明听过瓦棚闲话",
+                    "actions": [
+                      {
+                        "id": "declare_heard_shed_talk",
+                        "label": "声明听过",
+                        "actionText": "我向云苍峰声明自己听过便门瓦棚的闲话，不假装没这回事。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "听过",
+                      "便门瓦棚",
+                      "闲话"
+                    ],
+                    "rejectIf": [
+                      "交给云家核验",
+                      "交卷"
+                    ]
+                  },
+                  {
+                    "id": "no_file",
+                    "label": "不交卷入库",
+                    "actions": [
+                      {
+                        "id": "keep_tip_off_yun_net",
+                        "label": "不入库",
+                        "actionText": "我明确不把这张线报抄入云家耳目网，由我自己压住。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "不把这张线报抄入",
+                      "自己压住"
+                    ],
+                    "rejectIf": [
+                      "交叉核验",
+                      "交给云苍峰请他核验"
+                    ]
+                  }
+                ]
               }
             }
           ]

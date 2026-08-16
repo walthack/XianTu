@@ -4206,7 +4206,8 @@
           }
         ],
         "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang"
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.xiao_yao_yi"
         ],
         "objective": "前往江州，查看水泥城防",
         "playerCompletionContract": {
@@ -4224,6 +4225,348 @@
                 "success": "你已亲自执行“前往江州，查看水泥城防”；事件完成真值将由本地引擎落账。",
                 "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
                 "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        },
+        "relatedFactionIds": [
+          "liuchao.faction.xing_yue_hu",
+          "lyg.faction.song_state"
+        ],
+        "worldActor": {
+          "pressure": {
+            "id": "world.lcq.s11_02.fortress",
+            "scope": "faction",
+            "summary": "江州灰垣新起，城防编进星月湖还是移交官防，还没落册。",
+            "domains": [
+              "war",
+              "logistics"
+            ],
+            "geography": [
+              "江州"
+            ],
+            "factionIds": [
+              "liuchao.faction.xing_yue_hu",
+              "lyg.faction.song_state"
+            ],
+            "intensity": 2,
+            "canonPolicy": "process_only"
+          },
+          "decisionCore": {
+            "knowledgeFacts": {
+              "knowledge.lcq.s11_02.walls": {
+                "text": "萧遥逸展示两个月内建成的水泥城堡与悬楼，城防究竟编给谁尚未落册。",
+                "access": "public",
+                "evidence": "lcq.event.s11_02_cement_fortress axisBeat。"
+              }
+            },
+            "situation": {
+              "whitelist": [
+                "xingyueControl",
+                "officialRoll"
+              ],
+              "initialValues": {
+                "xingyueControl": 55,
+                "officialRoll": 30
+              },
+              "limits": {
+                "xingyueControl": {
+                  "min": 0,
+                  "max": 100
+                },
+                "officialRoll": {
+                  "min": 0,
+                  "max": 100
+                }
+              }
+            },
+            "canonPolicy": {
+              "invariant": [
+                "水泥城防已经建成"
+              ],
+              "forbiddenBefore": [
+                "江州已经陷落",
+                "城防已经拆毁"
+              ],
+              "processFreedom": [
+                "编进星月湖还是移交官防"
+              ]
+            },
+            "actors": [
+              {
+                "characterId": "liuchao.character.xiao_yao_yi",
+                "identity": {
+                  "factionId": "liuchao.faction.xing_yue_hu",
+                  "office": "江州一侧城防主持人",
+                  "rank": 5
+                },
+                "personality": {
+                  "caution": 4,
+                  "honor": 3,
+                  "ambition": 3
+                },
+                "motives": {
+                  "control": 5,
+                  "stability": 4
+                },
+                "resources": {
+                  "influence": 5,
+                  "intelligence": 5,
+                  "troops": 3,
+                  "wealth": 3
+                },
+                "relationships": {},
+                "knowledge": [
+                  "knowledge.lcq.s11_02.walls"
+                ],
+                "agendas": [
+                  {
+                    "id": "agenda.lcq.s11_02.xiao",
+                    "goal": "让新城防有一份能调度的名册",
+                    "clock": 1,
+                    "escalation": [
+                      "验看",
+                      "分册",
+                      "落权"
+                    ]
+                  }
+                ],
+                "allowedActionIds": [
+                  "audit_resources",
+                  "negotiate_court_procedure"
+                ],
+                "wake": {
+                  "tier": "local_critical"
+                },
+                "evidence": {
+                  "identity.rank": "人物卡：萧遥逸为星月湖八骏，亦有江州刺史身份。",
+                  "personality.caution": "本拍先验看再落权。",
+                  "personality.honor": "本拍把城防摊开给人看。",
+                  "personality.ambition": "人物卡：八骏。",
+                  "motives.control": "名册在谁手里谁调度。",
+                  "motives.stability": "本拍要城防撑得住。",
+                  "resources.influence": "人物卡：八骏／江州一侧。",
+                  "resources.intelligence": "本拍主持验看。",
+                  "resources.troops": "本拍能调动守备。",
+                  "resources.wealth": "本拍城防已建成。",
+                  "agendas.agenda.lcq.s11_02.xiao.clock": "脚手架还在，名册未落。"
+                }
+              }
+            ],
+            "actionBindings": [
+              {
+                "actionId": "audit_resources",
+                "actorIds": [
+                  "liuchao.character.xiao_yao_yi"
+                ],
+                "label": "按星月湖调度来核验新城防",
+                "reason": "谁核验，名册就先落在谁手里",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lcq.s11_02.walls"
+                ],
+                "mustNotInvent": [
+                  "城防已经拆毁"
+                ],
+                "visibleSignal": "悬楼与灰垣被标成星月湖可调度的段",
+                "offscreenAction": "把调度权留在星月湖",
+                "costs": {
+                  "intelligence": 1
+                },
+                "effects": {
+                  "xingyueControl": 10,
+                  "officialRoll": -4
+                },
+                "utility": {
+                  "urgency": 8,
+                  "factionGoal": 9,
+                  "expectedBenefit": 8,
+                  "situation": {
+                    "xingyueControl": -2
+                  }
+                },
+                "visibility": "public",
+                "durationTurns": 1
+              },
+              {
+                "actionId": "negotiate_court_procedure",
+                "actorIds": [
+                  "liuchao.character.xiao_yao_yi"
+                ],
+                "label": "把新城防移交官防名册",
+                "reason": "官防落册后，星月湖不能再私调",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lcq.s11_02.walls"
+                ],
+                "mustNotInvent": [
+                  "江州已经陷落"
+                ],
+                "visibleSignal": "礼吏开始抄灰垣入官防册",
+                "offscreenAction": "移交官防",
+                "costs": {
+                  "influence": 1
+                },
+                "effects": {
+                  "officialRoll": 12,
+                  "xingyueControl": -6
+                },
+                "utility": {
+                  "expectedBenefit": 4
+                },
+                "visibility": "public",
+                "durationTurns": 1
+              }
+            ],
+            "maxVisibleActions": 2,
+            "narrativeGuard": {
+              "forbiddenTerms": [
+                "江州已经陷落",
+                "十二座城已经拆毁"
+              ],
+              "rejectConcreteQuantities": true,
+              "allowUnverifiedQuantities": true
+            }
+          },
+          "opportunities": [
+            {
+              "id": "opportunity.lcq.s11_02.xingyue_fortress_control",
+              "title": "把水泥城防编进星月湖调度",
+              "characterIds": [
+                "liuchao.character.xiao_yao_yi"
+              ],
+              "whyNow": "灰垣已经立起来。编进星月湖，战时由他们调；官防册上就没有这份。",
+              "nextStep": "按星月湖段册核验新城防，不抄入官防。",
+              "stakes": "江州官场会把城防看成私军；星月湖会按这份名册找你要人。",
+              "rewardPreview": "取得一次调用星月湖江州城防调度的权限。",
+              "futureHint": "以后江州再加一圈墙，萧遥逸会按这份段册还在不在来找你。",
+              "actionText": "我追踪“把水泥城防编进星月湖调度”：按星月湖段册核验，不抄入官防。",
+              "rewardKey": "permission.lcq.xingyue.fortress_schedule",
+              "rewardLabel": "星月湖·江州城防调度",
+              "trigger": {
+                "actorIds": [
+                  "liuchao.character.xiao_yao_yi"
+                ],
+                "actionIds": [
+                  "audit_resources"
+                ]
+              },
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "settlement": "immediate",
+                "expiry": "persistent",
+                "steps": [
+                  {
+                    "id": "xy_audit",
+                    "label": "按星月湖段册核验",
+                    "actions": [
+                      {
+                        "id": "audit_as_xingyue_segments",
+                        "label": "星月湖核验",
+                        "actionText": "我按星月湖段册核验水泥城堡与悬楼，不先抄入官防。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "星月湖段册",
+                      "不先抄入官防"
+                    ],
+                    "rejectIf": [
+                      "移交官防",
+                      "抄入官防册"
+                    ]
+                  },
+                  {
+                    "id": "keep_schedule",
+                    "label": "调度权留在星月湖",
+                    "actions": [
+                      {
+                        "id": "keep_xingyue_schedule",
+                        "label": "留调度权",
+                        "actionText": "我确认战时调度按星月湖名册走，不另交官防衙署。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "调度按星月湖名册",
+                      "不另交官防"
+                    ],
+                    "rejectIf": [
+                      "官防落册",
+                      "移交衙署"
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "opportunity.lcq.s11_02.song_fortress_roll",
+              "title": "把水泥城防移交官防名册",
+              "characterIds": [
+                "liuchao.character.xiao_yao_yi"
+              ],
+              "whyNow": "萧遥逸也能按官防手续抄册。移交之后，城防是江州的，不是星月湖私军。",
+              "nextStep": "把灰垣与悬楼抄入官防册，战时不再按星月湖私调。",
+              "stakes": "星月湖会少一份私调权；官场会把守城记成朝廷的事。",
+              "rewardPreview": "取得一次把江州新城防写入官防名册的权限。",
+              "futureHint": "以后再验城，官防会先找曾经主张抄册的人。",
+              "actionText": "我追踪“把水泥城防移交官防名册”：抄入官防册，战时不按星月湖私调。",
+              "rewardKey": "permission.lcq.song.jiangzhou_fortress_roll",
+              "rewardLabel": "宋·江州官防落册",
+              "trigger": {
+                "actorIds": [
+                  "liuchao.character.xiao_yao_yi"
+                ],
+                "actionIds": [
+                  "audit_resources"
+                ]
+              },
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "settlement": "immediate",
+                "expiry": "persistent",
+                "steps": [
+                  {
+                    "id": "copy_roll",
+                    "label": "抄入官防册",
+                    "actions": [
+                      {
+                        "id": "copy_into_official_roll",
+                        "label": "抄官防册",
+                        "actionText": "我把水泥城堡与悬楼抄入官防册，不按星月湖私段留着。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "抄入官防册",
+                      "不按星月湖私段"
+                    ],
+                    "rejectIf": [
+                      "编进星月湖",
+                      "私军名册"
+                    ]
+                  },
+                  {
+                    "id": "forbid_private",
+                    "label": "战时不按星月湖私调",
+                    "actions": [
+                      {
+                        "id": "forbid_private_dispatch",
+                        "label": "禁私调",
+                        "actionText": "我写明战时调度走官防，不再按星月湖私调。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "走官防",
+                      "不再按星月湖私调"
+                    ],
+                    "rejectIf": [
+                      "调度权留在星月湖",
+                      "私调"
+                    ]
+                  }
+                ]
               }
             }
           ]

@@ -3875,6 +3875,43 @@
             "role": "雇佣援兵首领"
           }
         ]
+      },
+      {
+        "id": "liuchao.character.dong_zhuo",
+        "name": "董卓",
+        "description": "凉州军首领。本关只坐实他率军抵津门、声称奉大将军令却拿不出虎符。",
+        "role": "军阀",
+        "gender": "男",
+        "realm": "练气",
+        "affiliations": [
+          {
+            "factionId": "liuchao.faction.liangzhou_army",
+            "category": "military",
+            "role": "首领"
+          },
+          {
+            "factionId": "liuchao.faction.han_guo_chao_ting",
+            "category": "state",
+            "role": "边将"
+          }
+        ],
+        "profile": {
+          "attributes": {
+            "rootBone": 6,
+            "spirituality": 4,
+            "comprehension": 4,
+            "fortune": 5,
+            "charm": 4,
+            "temperament": 6
+          },
+          "personality": [
+            "横暴",
+            "刚愎自用",
+            "有军事经验"
+          ],
+          "appearance": "肥胖，剑髯怒张，身穿铁甲。",
+          "origin": "凉州军阀"
+        }
       }
     ],
     "playerRelationships": [
@@ -6195,7 +6232,8 @@
           }
         ],
         "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang"
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.dong_zhuo"
         ],
         "objective": "前往洛都津门拦截董卓",
         "playerCompletionContract": {
@@ -6214,6 +6252,353 @@
                 "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
                 "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
               }
+            }
+          ]
+        },
+        "relatedFactionIds": [
+          "liuchao.faction.liangzhou_army",
+          "liuchao.faction.han_guo_chao_ting"
+        ],
+        "worldActor": {
+          "pressure": {
+            "id": "world.lyl.endgame_08.unsealed_entry",
+            "scope": "faction",
+            "summary": "凉州军抵津门，声称奉大将军令却拿不出虎符。",
+            "domains": [
+              "war",
+              "court"
+            ],
+            "geography": [
+              "洛都津门"
+            ],
+            "factionIds": [
+              "liuchao.faction.liangzhou_army",
+              "liuchao.faction.han_guo_chao_ting"
+            ],
+            "intensity": 3,
+            "canonPolicy": "process_only"
+          },
+          "decisionCore": {
+            "knowledgeFacts": {
+              "knowledge.lyl.endgame_08.no_tally": {
+                "text": "董卓率凉州军入洛都津门，声称奉大将军令但无虎符。",
+                "access": "public",
+                "evidence": "lyl.event.han_palace_endgame_08_beat axisBeat。"
+              }
+            },
+            "situation": {
+              "whitelist": [
+                "gateControl",
+                "liangzhouLeverage"
+              ],
+              "initialValues": {
+                "gateControl": 36,
+                "liangzhouLeverage": 70
+              },
+              "limits": {
+                "gateControl": {
+                  "min": 0,
+                  "max": 100
+                },
+                "liangzhouLeverage": {
+                  "min": 0,
+                  "max": 100
+                }
+              }
+            },
+            "canonPolicy": {
+              "invariant": [
+                "凉州军已抵津门",
+                "当场拿不出虎符"
+              ],
+              "forbiddenBefore": [
+                "董卓已经入宫执政",
+                "刘建已经伏诛"
+              ],
+              "processFreedom": [
+                "拦门还是放行记账"
+              ]
+            },
+            "actors": [
+              {
+                "characterId": "liuchao.character.dong_zhuo",
+                "identity": {
+                  "factionId": "liuchao.faction.liangzhou_army",
+                  "office": "凉州军首领",
+                  "rank": 5
+                },
+                "personality": {
+                  "aggression": 4,
+                  "ambition": 4,
+                  "honor": 2
+                },
+                "motives": {
+                  "control": 5,
+                  "legitimacy": 2
+                },
+                "resources": {
+                  "influence": 4,
+                  "troops": 5,
+                  "wealth": 3,
+                  "intelligence": 2
+                },
+                "relationships": {},
+                "knowledge": [
+                  "knowledge.lyl.endgame_08.no_tally"
+                ],
+                "agendas": [
+                  {
+                    "id": "agenda.lyl.endgame_08.dong",
+                    "goal": "无符也要把凉州军送进津门",
+                    "clock": 1,
+                    "escalation": [
+                      "喝令",
+                      "斩骑",
+                      "闯关"
+                    ]
+                  }
+                ],
+                "allowedActionIds": [
+                  "public_declaration",
+                  "mobilize_forces"
+                ],
+                "wake": {
+                  "tier": "local_critical"
+                },
+                "evidence": {
+                  "identity.rank": "人物卡：董卓为凉州军首领。",
+                  "personality.aggression": "本拍斩杀骑手强行入京。",
+                  "personality.ambition": "人物卡：挟军入京。",
+                  "personality.honor": "本拍仍打大将军令的旗号。",
+                  "motives.control": "本拍要过津门。",
+                  "motives.legitimacy": "本拍缺的就是虎符。",
+                  "resources.influence": "本拍只有大将军令的口头旗号。",
+                  "resources.troops": "axisBeat：三千凉州军。",
+                  "resources.wealth": "本拍不靠买关。",
+                  "resources.intelligence": "本拍对洛都门禁不熟。",
+                  "agendas.agenda.lyl.endgame_08.dong.clock": "人已抵津门。"
+                }
+              }
+            ],
+            "actionBindings": [
+              {
+                "actionId": "public_declaration",
+                "actorIds": [
+                  "liuchao.character.dong_zhuo"
+                ],
+                "label": "当众宣称奉大将军令入京",
+                "reason": "无符也要把话先说死",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lyl.endgame_08.no_tally"
+                ],
+                "mustNotInvent": [
+                  "虎符已经验明"
+                ],
+                "visibleSignal": "津门外有人反复喊大将军令，却无人出示虎符",
+                "offscreenAction": "公开无符入京的说法",
+                "costs": {
+                  "influence": 1
+                },
+                "effects": {
+                  "liangzhouLeverage": 8,
+                  "gateControl": -4
+                },
+                "utility": {
+                  "urgency": 9,
+                  "factionGoal": 9,
+                  "expectedBenefit": 8,
+                  "situation": {
+                    "liangzhouLeverage": -3
+                  }
+                },
+                "visibility": "public",
+                "durationTurns": 1
+              },
+              {
+                "actionId": "mobilize_forces",
+                "actorIds": [
+                  "liuchao.character.dong_zhuo"
+                ],
+                "label": "让凉州军压住津门闸口",
+                "reason": "话若不顶用，就用阵列顶",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lyl.endgame_08.no_tally"
+                ],
+                "mustNotInvent": [
+                  "董卓已经伏诛"
+                ],
+                "visibleSignal": "凉州军阵列前移，闸口骑探被截",
+                "offscreenAction": "压住闸口不让关闭",
+                "costs": {
+                  "troops": 1
+                },
+                "effects": {
+                  "gateControl": -8
+                },
+                "utility": {
+                  "expectedBenefit": 4,
+                  "escalation": 3
+                },
+                "visibility": "public",
+                "durationTurns": 1
+              }
+            ],
+            "maxVisibleActions": 2,
+            "narrativeGuard": {
+              "forbiddenTerms": [
+                "虎符已经验明",
+                "董卓已经伏诛"
+              ],
+              "rejectConcreteQuantities": true,
+              "allowUnverifiedQuantities": true
+            }
+          },
+          "opportunities": [
+            {
+              "id": "opportunity.lyl.endgame_08.challenge_unsealed_entry",
+              "title": "在津门查验虎符并拦门",
+              "characterIds": [
+                "liuchao.character.dong_zhuo"
+              ],
+              "whyNow": "凉州军已经抵闸，当场拿不出虎符。拦下来，汉廷会记得是谁查的符。",
+              "nextStep": "当众要虎符，符不在就不放阵列过闸。",
+              "stakes": "董卓会把你记成挡路的人；闸口一旦动手，津门会先乱。",
+              "rewardPreview": "取得一次以汉廷名义核验入京兵符的权限。",
+              "futureHint": "以后再有无符之军抵门，汉廷会先问当时是谁拦过津门。",
+              "actionText": "我追踪“在津门查验虎符并拦门”：当众要虎符，符不在就不放凉州军过闸。",
+              "rewardKey": "permission.lyl.han.tiger_tally_challenge",
+              "rewardLabel": "汉廷·津门兵符核验",
+              "trigger": {
+                "actorIds": [
+                  "liuchao.character.dong_zhuo"
+                ],
+                "actionIds": [
+                  "public_declaration"
+                ]
+              },
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "settlement": "immediate",
+                "expiry": "standard",
+                "steps": [
+                  {
+                    "id": "demand_tally",
+                    "label": "当众索验虎符",
+                    "actions": [
+                      {
+                        "id": "demand_tiger_tally",
+                        "label": "索验虎符",
+                        "actionText": "我在津门当众向董卓索验虎符，只核验符在不在，不先开战。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "索验虎符",
+                      "不先开战"
+                    ],
+                    "rejectIf": [
+                      "放行",
+                      "承认大将军令",
+                      "已经放阵列过闸"
+                    ]
+                  },
+                  {
+                    "id": "hold_gate",
+                    "label": "符不在则不放闸",
+                    "actions": [
+                      {
+                        "id": "hold_gate_without_tally",
+                        "label": "拦住无符阵列",
+                        "actionText": "我确认符不在场后，下令闸口不放凉州军阵列通过。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "符不在场",
+                      "不放凉州军"
+                    ],
+                    "rejectIf": [
+                      "放阵列过闸",
+                      "承认大将军令"
+                    ]
+                  }
+                ]
+              },
+              "expiresAfterTurns": 4
+            },
+            {
+              "id": "opportunity.lyl.endgame_08.allow_unsealed_passage",
+              "title": "记下无符，仍放凉州军过闸",
+              "characterIds": [
+                "liuchao.character.dong_zhuo"
+              ],
+              "whyNow": "阵列已经压到闸口。放行能避免当场开打，也会让无符入京记在你默许的账上。",
+              "nextStep": "写明无符事实，再放阵列过闸。",
+              "stakes": "汉廷会记得你没拦；董卓会记得你没挡他。",
+              "rewardPreview": "取得一次与凉州军核对无符入京记录的权限。",
+              "futureHint": "以后有人追问津门那一夜，董卓会按你放没放行来认人。",
+              "actionText": "我追踪“记下无符，仍放凉州军过闸”：先把无符事实写下，再放阵列通过，不当场开战。",
+              "rewardKey": "permission.lyl.liangzhou.unsealed_passage",
+              "rewardLabel": "凉州军·无符过闸记录",
+              "trigger": {
+                "actorIds": [
+                  "liuchao.character.dong_zhuo"
+                ],
+                "actionIds": [
+                  "public_declaration"
+                ]
+              },
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "settlement": "immediate",
+                "expiry": "standard",
+                "steps": [
+                  {
+                    "id": "record_no_tally",
+                    "label": "写下无符事实",
+                    "actions": [
+                      {
+                        "id": "record_missing_tally",
+                        "label": "登记无符",
+                        "actionText": "我先写下凉州军当场拿不出虎符的事实，再谈过闸。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "拿不出虎符",
+                      "再谈过闸"
+                    ],
+                    "rejectIf": [
+                      "已经验明虎符",
+                      "拦门不放"
+                    ]
+                  },
+                  {
+                    "id": "open_gate",
+                    "label": "放阵列过闸",
+                    "actions": [
+                      {
+                        "id": "open_gate_without_fight",
+                        "label": "放行不过战",
+                        "actionText": "我放凉州军阵列过津门，不当场开战，也不把大将军令写成已验明的虎符。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "放凉州军阵列",
+                      "不当场开战"
+                    ],
+                    "rejectIf": [
+                      "拦门",
+                      "索验后不放",
+                      "已经开战"
+                    ]
+                  }
+                ]
+              },
+              "expiresAfterTurns": 4
             }
           ]
         }

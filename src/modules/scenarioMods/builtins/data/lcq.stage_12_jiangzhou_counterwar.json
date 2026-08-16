@@ -4186,7 +4186,9 @@
           }
         ],
         "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang"
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.xiao_yao_yi",
+          "liuchao.character.yun_cang_feng"
         ],
         "objective": "探查浮凌江乱石滩，另寻运粮路线",
         "narrativeVariants": [
@@ -4220,6 +4222,412 @@
                 "success": "你已亲自执行“探查浮凌江乱石滩，另寻运粮路线”；事件完成真值将由本地引擎落账。",
                 "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
                 "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        },
+        "relatedFactionIds": [
+          "liuchao.faction.xing_yue_hu",
+          "liuchao.faction.yun_shi_shang_hui"
+        ],
+        "worldActor": {
+          "pressure": {
+            "id": "world.lcq.s12_01.grain",
+            "scope": "faction",
+            "summary": "浮凌江乱石封航，粮是改走军运还是改走商队绕路，还没人认领。",
+            "domains": [
+              "logistics",
+              "war"
+            ],
+            "geography": [
+              "浮凌江",
+              "江州"
+            ],
+            "factionIds": [
+              "liuchao.faction.xing_yue_hu",
+              "liuchao.faction.yun_shi_shang_hui"
+            ],
+            "intensity": 2,
+            "canonPolicy": "process_only"
+          },
+          "decisionCore": {
+            "knowledgeFacts": {
+              "knowledge.lcq.s12_01.rocks": {
+                "text": "浮凌江下游乱石滩无法通航，人力转运成本过高，原运粮计划受阻。",
+                "access": "public",
+                "evidence": "lcq.event.s12_01_grain_route_blocked axisBeat。"
+              }
+            },
+            "situation": {
+              "whitelist": [
+                "armyLift",
+                "merchantDetour"
+              ],
+              "initialValues": {
+                "armyLift": 32,
+                "merchantDetour": 36
+              },
+              "limits": {
+                "armyLift": {
+                  "min": 0,
+                  "max": 100
+                },
+                "merchantDetour": {
+                  "min": 0,
+                  "max": 100
+                }
+              }
+            },
+            "canonPolicy": {
+              "invariant": [
+                "乱石滩已经封航"
+              ],
+              "forbiddenBefore": [
+                "江州已经断粮陷落",
+                "原航道已经疏通"
+              ],
+              "processFreedom": [
+                "军运还是商队绕路"
+              ]
+            },
+            "actors": [
+              {
+                "characterId": "liuchao.character.xiao_yao_yi",
+                "identity": {
+                  "factionId": "liuchao.faction.xing_yue_hu",
+                  "office": "星月湖八骏",
+                  "rank": 5
+                },
+                "personality": {
+                  "caution": 3,
+                  "honor": 3,
+                  "ambition": 3
+                },
+                "motives": {
+                  "control": 4,
+                  "stability": 5
+                },
+                "resources": {
+                  "influence": 5,
+                  "troops": 4,
+                  "intelligence": 4,
+                  "wealth": 2
+                },
+                "relationships": {},
+                "knowledge": [
+                  "knowledge.lcq.s12_01.rocks"
+                ],
+                "agendas": [
+                  {
+                    "id": "agenda.lcq.s12_01.xiao",
+                    "goal": "用军运把粮从乱石滩旁抬进城",
+                    "clock": 1,
+                    "escalation": [
+                      "探滩",
+                      "编队",
+                      "抬粮"
+                    ]
+                  }
+                ],
+                "allowedActionIds": [
+                  "reserve_supplies"
+                ],
+                "wake": {
+                  "tier": "local_critical"
+                },
+                "evidence": {
+                  "identity.rank": "人物卡：萧遥逸掌江州一侧调度。",
+                  "personality.caution": "本拍先探滩再编队。",
+                  "personality.honor": "本拍要粮进城。",
+                  "personality.ambition": "人物卡：八骏。",
+                  "motives.control": "军运名册在星月湖。",
+                  "motives.stability": "本拍先保粮。",
+                  "resources.influence": "人物卡：八骏。",
+                  "resources.troops": "本拍可编军运。",
+                  "resources.intelligence": "本拍能改路线。",
+                  "resources.wealth": "军运不靠加价。",
+                  "agendas.agenda.lcq.s12_01.xiao.clock": "船脚已不敢过滩。"
+                }
+              },
+              {
+                "characterId": "liuchao.character.yun_cang_feng",
+                "identity": {
+                  "factionId": "liuchao.faction.yun_shi_shang_hui",
+                  "office": "云氏当家人",
+                  "rank": 5
+                },
+                "personality": {
+                  "caution": 4,
+                  "honor": 3,
+                  "ambition": 4
+                },
+                "motives": {
+                  "control": 4,
+                  "stability": 4
+                },
+                "resources": {
+                  "influence": 5,
+                  "wealth": 5,
+                  "intelligence": 4,
+                  "troops": 1
+                },
+                "relationships": {},
+                "knowledge": [
+                  "knowledge.lcq.s12_01.rocks"
+                ],
+                "agendas": [
+                  {
+                    "id": "agenda.lcq.s12_01.yun",
+                    "goal": "用商队绕路把粮送到江州，并留下运价账",
+                    "clock": 1,
+                    "escalation": [
+                      "改道",
+                      "加价",
+                      "交货"
+                    ]
+                  }
+                ],
+                "allowedActionIds": [
+                  "open_safe_route"
+                ],
+                "wake": {
+                  "tier": "local_critical"
+                },
+                "evidence": {
+                  "identity.rank": "人物卡：云苍峰为云氏当家人。",
+                  "personality.caution": "本拍先找绕路。",
+                  "personality.honor": "本拍仍肯运粮。",
+                  "personality.ambition": "绕路会留下运价。",
+                  "motives.control": "商路在云家。",
+                  "motives.stability": "本拍要粮送到。",
+                  "resources.influence": "人物卡：云氏当家人。",
+                  "resources.wealth": "本拍能垫运费。",
+                  "resources.intelligence": "人物卡：熟商路。",
+                  "resources.troops": "本拍护卫有限。",
+                  "agendas.agenda.lcq.s12_01.yun.clock": "船脚加价已经开始。"
+                }
+              }
+            ],
+            "actionBindings": [
+              {
+                "actionId": "reserve_supplies",
+                "actorIds": [
+                  "liuchao.character.xiao_yao_yi"
+                ],
+                "label": "改用军运把粮从滩旁抬进城",
+                "reason": "航道废了，军册还能编人力",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lcq.s12_01.rocks"
+                ],
+                "mustNotInvent": [
+                  "江州已经断粮陷落"
+                ],
+                "visibleSignal": "星月湖开始按军册抽人抬粮，不再等船脚",
+                "offscreenAction": "启动军运",
+                "costs": {
+                  "troops": 1
+                },
+                "effects": {
+                  "armyLift": 12,
+                  "merchantDetour": -4
+                },
+                "utility": {
+                  "urgency": 9,
+                  "factionGoal": 9,
+                  "expectedBenefit": 8,
+                  "situation": {
+                    "armyLift": -3
+                  }
+                },
+                "visibility": "public",
+                "durationTurns": 1
+              },
+              {
+                "actionId": "open_safe_route",
+                "actorIds": [
+                  "liuchao.character.yun_cang_feng"
+                ],
+                "label": "给粮队另开一条不经乱石滩的商路",
+                "reason": "加价难听，但路还在",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lcq.s12_01.rocks"
+                ],
+                "mustNotInvent": [
+                  "原航道已经疏通"
+                ],
+                "visibleSignal": "云氏货队改走岸路，运价单被单独夹起",
+                "offscreenAction": "商队绕路",
+                "costs": {
+                  "wealth": 1,
+                  "intelligence": 1
+                },
+                "effects": {
+                  "merchantDetour": 12,
+                  "armyLift": -4
+                },
+                "utility": {
+                  "urgency": 8,
+                  "factionGoal": 8,
+                  "expectedBenefit": 8,
+                  "situation": {
+                    "merchantDetour": -3
+                  }
+                },
+                "visibility": "public",
+                "durationTurns": 1
+              }
+            ],
+            "maxVisibleActions": 2,
+            "narrativeGuard": {
+              "forbiddenTerms": [
+                "江州已经断粮陷落",
+                "乱石滩已经炸开"
+              ],
+              "rejectConcreteQuantities": true,
+              "allowUnverifiedQuantities": true
+            }
+          },
+          "opportunities": [
+            {
+              "id": "opportunity.lcq.s12_01.xingyue_grain_lift",
+              "title": "改走星月湖军运抬粮",
+              "characterIds": [
+                "liuchao.character.xiao_yao_yi"
+              ],
+              "whyNow": "船脚已经不敢过滩。军运能把粮抬进城，也会把运粮写成军方的事。",
+              "nextStep": "按军册抽人抬粮，不把运价交给商队。",
+              "stakes": "军运会抽走守备；商路会记住你没把这单给他们。",
+              "rewardPreview": "取得一次调用星月湖江州军运抬粮的权限。",
+              "futureHint": "以后江州再断航，萧遥逸会按你走没走过军册来编队。",
+              "actionText": "我追踪“改走星月湖军运抬粮”：按军册抽人，不把这单交给商队。",
+              "rewardKey": "permission.lcq.xingyue.grain_lift",
+              "rewardLabel": "星月湖·江州军运抬粮",
+              "trigger": {
+                "actorIds": [
+                  "liuchao.character.xiao_yao_yi"
+                ],
+                "actionIds": [
+                  "reserve_supplies"
+                ]
+              },
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "settlement": "immediate",
+                "expiry": "persistent",
+                "steps": [
+                  {
+                    "id": "open_roll",
+                    "label": "按军册抽人",
+                    "actions": [
+                      {
+                        "id": "open_army_grain_roll",
+                        "label": "开军运名册",
+                        "actionText": "我请萧遥逸按军册抽人抬粮，不再等船脚过滩。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "按军册抽人",
+                      "不再等船脚"
+                    ],
+                    "rejectIf": [
+                      "交给商队",
+                      "走云家绕路"
+                    ]
+                  },
+                  {
+                    "id": "no_merchant_bill",
+                    "label": "不把运价交给商队",
+                    "actions": [
+                      {
+                        "id": "keep_grain_off_merchant_bill",
+                        "label": "不交商单",
+                        "actionText": "我明确这批粮不走云氏运价单，按军运入城。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "不走云氏运价单",
+                      "按军运入城"
+                    ],
+                    "rejectIf": [
+                      "商队绕路",
+                      "运价单"
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "opportunity.lcq.s12_01.yun_grain_detour",
+              "title": "改走云家商队绕路运粮",
+              "characterIds": [
+                "liuchao.character.yun_cang_feng"
+              ],
+              "whyNow": "乱石滩过不去，云氏还能改岸路。粮会到，运价会记在云家账上。",
+              "nextStep": "按云氏绕路运粮，不抽星月湖军册。",
+              "stakes": "运价会被加码；军方会记住你没把粮交给军运。",
+              "rewardPreview": "取得一次调用云氏江州绕路运粮的权限。",
+              "futureHint": "以后再有封航，云苍峰会按你走没走过他的岸路来开价。",
+              "actionText": "我追踪“改走云家商队绕路运粮”：按云氏岸路走，不抽军册。",
+              "rewardKey": "permission.lcq.yun.grain_detour",
+              "rewardLabel": "云氏·江州绕路运粮",
+              "trigger": {
+                "actorIds": [
+                  "liuchao.character.yun_cang_feng"
+                ],
+                "actionIds": [
+                  "open_safe_route"
+                ]
+              },
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "settlement": "immediate",
+                "expiry": "persistent",
+                "steps": [
+                  {
+                    "id": "take_bank",
+                    "label": "改走岸路",
+                    "actions": [
+                      {
+                        "id": "take_yun_bank_route",
+                        "label": "走岸路",
+                        "actionText": "我按云苍峰指定的岸路改运，不强行过乱石滩。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "岸路改运",
+                      "不强行过乱石滩"
+                    ],
+                    "rejectIf": [
+                      "军运抬粮",
+                      "抽军册"
+                    ]
+                  },
+                  {
+                    "id": "accept_bill",
+                    "label": "接受云氏运价账",
+                    "actions": [
+                      {
+                        "id": "accept_yun_detour_bill",
+                        "label": "接受运价",
+                        "actionText": "我接受这批粮走云氏运价账，不另开军运名册。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "云氏运价账",
+                      "不另开军运名册"
+                    ],
+                    "rejectIf": [
+                      "按军册抽人",
+                      "军运入城"
+                    ]
+                  }
+                ]
               }
             }
           ]

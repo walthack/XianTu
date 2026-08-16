@@ -5983,7 +5983,9 @@
           }
         ],
         "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang"
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.zhao_feiyan",
+          "liuchao.character.lv_zhi"
         ],
         "objective": "在登基大典助程宗扬行功",
         "playerCompletionContract": {
@@ -6001,6 +6003,437 @@
                 "success": "你已亲自执行“在登基大典助程宗扬行功”；事件完成真值将由本地引擎落账。",
                 "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
                 "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        },
+        "relatedFactionIds": [
+          "liuchao.faction.han_guo_chao_ting"
+        ],
+        "worldActor": {
+          "pressure": {
+            "id": "world.lyg.succession_08.zhao_guard",
+            "scope": "faction",
+            "summary": "登基典仪帷后紊乱，赵氏出不出名、行功收在何处，还没人认领。",
+            "domains": [
+              "court"
+            ],
+            "geography": [
+              "登基大典"
+            ],
+            "factionIds": [
+              "liuchao.faction.han_guo_chao_ting"
+            ],
+            "intensity": 2,
+            "canonPolicy": "process_only"
+          },
+          "decisionCore": {
+            "knowledgeFacts": {
+              "knowledge.lyg.succession_08.crisis": {
+                "text": "程宗扬真气失控，吕雉指出需借双修行功；赵飞燕能否公开相助尚未说死。",
+                "access": "public",
+                "evidence": "lyg.event.han_succession_08_beat axisBeat。"
+              }
+            },
+            "situation": {
+              "whitelist": [
+                "riteStability",
+                "zhaoExposure"
+              ],
+              "initialValues": {
+                "riteStability": 34,
+                "zhaoExposure": 40
+              },
+              "limits": {
+                "riteStability": {
+                  "min": 0,
+                  "max": 100
+                },
+                "zhaoExposure": {
+                  "min": 0,
+                  "max": 100
+                }
+              }
+            },
+            "canonPolicy": {
+              "invariant": [
+                "典仪已经开始",
+                "行功危机已经发生"
+              ],
+              "forbiddenBefore": [
+                "新帝已经改立他人",
+                "赵氏已经倒台"
+              ],
+              "processFreedom": [
+                "公开护赵还是帷后了结"
+              ]
+            },
+            "actors": [
+              {
+                "characterId": "liuchao.character.zhao_feiyan",
+                "identity": {
+                  "factionId": "liuchao.faction.han_guo_chao_ting",
+                  "office": "皇后",
+                  "rank": 5
+                },
+                "personality": {
+                  "honor": 3,
+                  "caution": 3,
+                  "ambition": 3
+                },
+                "motives": {
+                  "legitimacy": 4,
+                  "stability": 4
+                },
+                "resources": {
+                  "influence": 4,
+                  "wealth": 3,
+                  "intelligence": 3,
+                  "troops": 1
+                },
+                "relationships": {},
+                "knowledge": [
+                  "knowledge.lyg.succession_08.crisis"
+                ],
+                "agendas": [
+                  {
+                    "id": "agenda.lyg.succession_08.zhao",
+                    "goal": "在典仪失控前把行功做完，并决定自己出不出名",
+                    "clock": 1,
+                    "escalation": [
+                      "入帷",
+                      "行功",
+                      "出列"
+                    ]
+                  }
+                ],
+                "allowedActionIds": [
+                  "protect_principal",
+                  "conceal_evidence"
+                ],
+                "wake": {
+                  "tier": "local_critical"
+                },
+                "evidence": {
+                  "identity.rank": "人物卡：赵飞燕为汉廷皇后。",
+                  "personality.honor": "本拍以身助行功。",
+                  "personality.caution": "出列会把把柄留在朝堂。",
+                  "personality.ambition": "人物卡：皇后。",
+                  "motives.legitimacy": "本拍关系到赵氏在新朝的位置。",
+                  "motives.stability": "本拍先要让典仪不崩。",
+                  "resources.influence": "人物卡：皇后。",
+                  "resources.wealth": "本拍不靠赏赐。",
+                  "resources.intelligence": "本拍能判断帷里外怎么收。",
+                  "resources.troops": "本拍无兵。",
+                  "agendas.agenda.lyg.succession_08.zhao.clock": "鼓乐已起，帷后已乱。"
+                }
+              },
+              {
+                "characterId": "liuchao.character.lv_zhi",
+                "identity": {
+                  "factionId": "liuchao.faction.han_guo_chao_ting",
+                  "office": "太后",
+                  "rank": 5
+                },
+                "personality": {
+                  "caution": 4,
+                  "honor": 3,
+                  "ambition": 3
+                },
+                "motives": {
+                  "stability": 5,
+                  "legitimacy": 4
+                },
+                "resources": {
+                  "influence": 5,
+                  "intelligence": 4,
+                  "wealth": 3,
+                  "troops": 1
+                },
+                "relationships": {},
+                "knowledge": [
+                  "knowledge.lyg.succession_08.crisis"
+                ],
+                "agendas": [
+                  {
+                    "id": "agenda.lyg.succession_08.lv_zhi",
+                    "goal": "让登基典仪不因行功失控而停",
+                    "clock": 1,
+                    "escalation": [
+                      "诊断",
+                      "收帷",
+                      "续仪"
+                    ]
+                  }
+                ],
+                "allowedActionIds": [
+                  "negotiate_court_procedure",
+                  "conceal_evidence"
+                ],
+                "wake": {
+                  "tier": "local_critical"
+                },
+                "evidence": {
+                  "identity.rank": "人物卡：吕雉为太后。",
+                  "personality.caution": "本拍先保典仪。",
+                  "personality.honor": "本拍仍要朝贺班列站得住。",
+                  "personality.ambition": "人物卡：太后。",
+                  "motives.stability": "本拍目标是大典不停。",
+                  "motives.legitimacy": "本拍要新帝登基落成。",
+                  "resources.influence": "人物卡：太后。",
+                  "resources.intelligence": "本拍指出需借双修行功。",
+                  "resources.wealth": "本拍不靠赏赐。",
+                  "resources.troops": "本拍无兵。",
+                  "agendas.agenda.lyg.succession_08.lv_zhi.clock": "汤药已在帷后传。"
+                }
+              }
+            ],
+            "actionBindings": [
+              {
+                "actionId": "protect_principal",
+                "actorIds": [
+                  "liuchao.character.zhao_feiyan"
+                ],
+                "label": "把行功收到典仪能看见的位置",
+                "reason": "公开相助能稳住班列，也会让赵氏出名",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lyg.succession_08.crisis"
+                ],
+                "mustNotInvent": [
+                  "赵氏已经倒台"
+                ],
+                "visibleSignal": "帷帘被拉开一角，班列看见有人在助行功",
+                "offscreenAction": "公开把赵氏留在辅政位旁",
+                "costs": {
+                  "influence": 1
+                },
+                "effects": {
+                  "riteStability": 10,
+                  "zhaoExposure": 12
+                },
+                "utility": {
+                  "urgency": 8,
+                  "factionGoal": 8,
+                  "expectedBenefit": 7,
+                  "situation": {
+                    "riteStability": -3
+                  }
+                },
+                "visibility": "public",
+                "durationTurns": 1
+              },
+              {
+                "actionId": "conceal_evidence",
+                "actorIds": [
+                  "liuchao.character.zhao_feiyan"
+                ],
+                "label": "把行功收在帷后",
+                "reason": "典仪外面只看见汤药，不看见是谁在助",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lyg.succession_08.crisis"
+                ],
+                "mustNotInvent": [
+                  "已经当众出列"
+                ],
+                "visibleSignal": "帷帘重新落下，班列只听见汤药盏响",
+                "offscreenAction": "不让赵氏在班列前出名",
+                "costs": {
+                  "influence": 1
+                },
+                "effects": {
+                  "riteStability": 6,
+                  "zhaoExposure": -8
+                },
+                "utility": {
+                  "expectedBenefit": 4
+                },
+                "visibility": "hidden",
+                "durationTurns": 1
+              },
+              {
+                "actionId": "negotiate_court_procedure",
+                "actorIds": [
+                  "liuchao.character.lv_zhi"
+                ],
+                "label": "让朝贺班列按原序站定",
+                "reason": "行功不能把登基程序拆掉",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lyg.succession_08.crisis"
+                ],
+                "mustNotInvent": [
+                  "新帝已经改立"
+                ],
+                "visibleSignal": "太后让礼官按原序续仪，不另宣罪名",
+                "offscreenAction": "保住登基程序",
+                "costs": {
+                  "influence": 1
+                },
+                "effects": {
+                  "riteStability": 8
+                },
+                "utility": {
+                  "expectedBenefit": 3
+                },
+                "visibility": "public",
+                "durationTurns": 1
+              }
+            ],
+            "maxVisibleActions": 2,
+            "narrativeGuard": {
+              "forbiddenTerms": [
+                "新帝已经改立",
+                "赵氏已经倒台"
+              ],
+              "rejectConcreteQuantities": true,
+              "allowUnverifiedQuantities": true
+            }
+          },
+          "opportunities": [
+            {
+              "id": "opportunity.lyg.succession_08.public_zhao_guard",
+              "title": "公开把赵氏护在典仪位上",
+              "characterIds": [
+                "liuchao.character.zhao_feiyan"
+              ],
+              "whyNow": "行功已经瞒不住帷后。公开护住，赵氏会跟新朝辅政绑在一起。",
+              "nextStep": "让班列看见赵飞燕在场相助，并承认她的位置。",
+              "stakes": "赵氏出了名，把柄也留在朝堂；有人会把辅政看成赵氏的人。",
+              "rewardPreview": "取得一次公开护持赵氏朝位的权限。",
+              "futureHint": "以后再有人动赵氏的位置，朝堂会先问当时是谁把她护在班列前。",
+              "actionText": "我追踪“公开把赵氏护在典仪位上”：让班列看见赵飞燕在场相助，并承认她的位置。",
+              "rewardKey": "permission.lyg.zhao.public_protection",
+              "rewardLabel": "赵氏·公开朝位护持",
+              "trigger": {
+                "actorIds": [
+                  "liuchao.character.zhao_feiyan"
+                ],
+                "actionIds": [
+                  "protect_principal",
+                  "conceal_evidence"
+                ]
+              },
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "settlement": "immediate",
+                "expiry": "persistent",
+                "steps": [
+                  {
+                    "id": "show_zhao",
+                    "label": "让班列看见赵氏在场",
+                    "actions": [
+                      {
+                        "id": "reveal_zhao_at_rite",
+                        "label": "公开赵氏在场",
+                        "actionText": "我让朝贺班列看见赵飞燕在场相助，不把行功说成无人。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "班列看见",
+                      "赵飞燕在场"
+                    ],
+                    "rejectIf": [
+                      "收在帷后",
+                      "不让人看见"
+                    ]
+                  },
+                  {
+                    "id": "name_her_place",
+                    "label": "承认赵氏的位置",
+                    "actions": [
+                      {
+                        "id": "acknowledge_zhao_place",
+                        "label": "承认朝位",
+                        "actionText": "我当众承认赵氏在这次典仪中的位置，不把她写成临时侍药。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "承认赵氏",
+                      "位置"
+                    ],
+                    "rejectIf": [
+                      "临时侍药",
+                      "帷后了结",
+                      "无人相助"
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "opportunity.lyg.succession_08.keep_zhao_veiled",
+              "title": "把行功收在帷后，赵氏不出名",
+              "characterIds": [
+                "liuchao.character.zhao_feiyan",
+                "liuchao.character.lv_zhi"
+              ],
+              "whyNow": "大典可以续，不一定非要让班列看见是谁在助。收在帷后，赵氏少一层把柄，也少一层名分。",
+              "nextStep": "只让太后和帷内的人知道行功，外面按原序续仪。",
+              "stakes": "赵氏安全，却没有公开名分；以后有人问是谁护过她，朝堂上没有见证。",
+              "rewardPreview": "取得一次在帷后收束行功、不把赵氏推到班列前的权限。",
+              "futureHint": "以后再有帷后的事，吕雉会记得你有没有把人推到帘外。",
+              "actionText": "我追踪“把行功收在帷后，赵氏不出名”：外面按原序续仪，不让班列看见是谁在助。",
+              "rewardKey": "permission.lyg.lv_zhi.veiled_rite",
+              "rewardLabel": "吕雉·帷后续仪",
+              "trigger": {
+                "actorIds": [
+                  "liuchao.character.zhao_feiyan"
+                ],
+                "actionIds": [
+                  "protect_principal",
+                  "conceal_evidence"
+                ]
+              },
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "settlement": "immediate",
+                "expiry": "persistent",
+                "steps": [
+                  {
+                    "id": "drop_curtain",
+                    "label": "落下帷帘",
+                    "actions": [
+                      {
+                        "id": "drop_rite_curtain",
+                        "label": "收进帷后",
+                        "actionText": "我把行功收进帷后，不让朝贺班列看见是谁在助。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "收进帷后",
+                      "不让朝贺班列看见"
+                    ],
+                    "rejectIf": [
+                      "拉开帷帘",
+                      "让班列看见"
+                    ]
+                  },
+                  {
+                    "id": "resume_order",
+                    "label": "按原序续仪",
+                    "actions": [
+                      {
+                        "id": "resume_rite_order",
+                        "label": "续原序",
+                        "actionText": "我请太后让礼官按原序续仪，不另宣赵氏的名字。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "按原序续仪",
+                      "不另宣赵氏"
+                    ],
+                    "rejectIf": [
+                      "当众出列",
+                      "公开护持"
+                    ]
+                  }
+                ]
               }
             }
           ]
