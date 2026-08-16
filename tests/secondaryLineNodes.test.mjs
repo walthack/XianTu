@@ -46,6 +46,39 @@ test('ready 节点指向的 stage 与 event 真实存在', async () => {
   assert.deepEqual(missing, [], '有 ready 节点指向不存在的 stage/event，玩家永远走不到');
 });
 
+test('ready 节点按全书时间线序排列，不让玩家往回跑', async () => {
+  const fs = await import('node:fs');
+  const { SECONDARY_LINES } = await loadTs('../src/modules/scenarioMods/secondaryLines.ts');
+  // 坐标用 event 自带的 `axisSeq`（全书统一时间线序），**不用关序**（用户 2026-08-16）：
+  // 关号是路由产物——8 个关被隔离静默跳过，"第 24 关"不是玩家看到的第 24 关；
+  // 且一关几十拍，关内乱序全被这个粗筐吃掉。改用 axisSeq 后，
+  // 原先按关号只看出 1 条线有问题，实际是 7 条线 12 处回退。
+  const dir = 'src/modules/scenarioMods/builtins/data/';
+  const seqOf = new Map();
+  for (const f of fs.readdirSync(dir).filter(x => x.endsWith('.json'))) {
+    const j = JSON.parse(fs.readFileSync(dir + f, 'utf8'));
+    if (!j.scenario?.worldSimulation) continue;
+    for (const e of j.scenario.events || []) {
+      if (typeof e.axisSeq === 'number') seqOf.set(e.id, e.axisSeq);
+    }
+  }
+  // 只校 ready→ready 这种两端都有真实 seq 的相邻对。new 节点没有真实 event，
+  // 拿所在关的起始 seq 估位会造出假回退（唐国顶点 1396 曾被估成 1321 而误报）。
+  const back = [];
+  for (const line of SECONDARY_LINES) {
+    let prev = null;
+    line.nodes.forEach((n, i) => {
+      const seq = n.status === 'ready' ? seqOf.get(n.eventId) : undefined;
+      if (typeof seq !== 'number') { if (n.status !== 'ready') prev = null; return; }
+      if (prev && seq < prev.seq) {
+        back.push(`${line.name}: #${prev.i}「${prev.text}」seq ${prev.seq} → #${i + 1}「${n.text}」seq ${seq}`);
+      }
+      prev = { i: i + 1, seq, text: n.text };
+    });
+  }
+  assert.deepEqual(back, [], '有节点排在比它更早的剧情之后，玩家照着待办走会被要求往回跑');
+});
+
 test('待新增节点都给了建议挂载关与建议 id，不冒充可走', async () => {
   const { SECONDARY_LINES } = await loadTs('../src/modules/scenarioMods/secondaryLines.ts');
   // 不锁具体条数——链路会随重写增减（汉国补旧案链后就从 3 条变 5 条）。
