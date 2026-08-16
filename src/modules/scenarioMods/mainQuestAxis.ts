@@ -143,8 +143,16 @@ export interface MainQuestNode {
    * 与二级线同口径：`ready` 填现有 id，`new` 填建议 id ＋ 建议挂载关。
    */
   eventId?: string;
-  /** 同 `LineNode.status`：`ready` ＝现在就走得到；`new` ＝原著里有、游戏里还没落地。 */
-  status?: 'ready' | 'new';
+  /**
+   * 同 `LineNode.status` 三档，区别要守住（用户裁定 2026-08-16）：
+   *   · `ready`   现在就走得到；
+   *   · `new`     **正典有这一拍、游戏没落地** → 给建议挂载关＋建议 id（如三条隔离关节点）；
+   *   · `pending` **正典压根没有**（是我们要编的）→ 只标待扩，**不给建议 id**。
+   *
+   * 先前六阳入口那条被我标成 `new` 并编了个 id——把我们的设计伪装成待补的既有内容，
+   * 与二级线上刚纠正过的是同一个错。
+   */
+  status?: 'ready' | 'new' | 'pending';
   /**
    * 地点锚（用户裁定 2026-08-16：主线与二级线都该锚地点，不锚关卡）。
    *
@@ -293,7 +301,7 @@ export const MAIN_QUEST_NODES: MainQuestNode[] = [
   { stageId: 'lyl.taiquan_afterfall', text: '探索太泉古阵的人类居住区', status: 'ready', eventId: 'lyl.event.taiquan_afterfall_05_beat' },
   // ⏳ 六阳开启古阵内的入口：正典压根没有这一拍——原著里程宗扬从未履行此托付
   // （全书修为最高见第四级入微境，他去太泉是为赤阳圣果救人）。按扩写口径只标待扩，不细化。
-  { stageId: 'lyl.taiquan_afterfall', text: '修为到六阳，开启古阵内的入口（未来待扩）', status: 'new', eventId: 'lyl.event.taiquan_liuyang_gate' },
+  { stageId: 'lyl.taiquan_afterfall', text: '修为到六阳，开启古阵内的入口（未来待扩）', status: 'pending' },
   { stageId: 'lyl.han_palace_endgame', text: '在汉宫变局中抵达秘境入口', status: 'ready', eventId: 'lyl.event.han_palace_endgame_07_beat' },
   { stageId: 'lyg.mijing_rumen', text: '保住赵飞燕——程赵之子这条盲点系在她身上', status: 'ready', eventId: 'lyg.event.s02_02' },
   // #17 文案「武帝像前」偏 s02_09；「安排秘境探索」本体是 s02_08（胶西邸／长秋宫）。

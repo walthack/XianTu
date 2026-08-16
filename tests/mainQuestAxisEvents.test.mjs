@@ -9,10 +9,14 @@ test('每条主轴节点都有 status；ready 落 stage+event，new 给建议挂
   const { MAIN_QUEST_NODES } = await loadTs('../src/modules/scenarioMods/mainQuestAxis.ts');
   assert.ok(MAIN_QUEST_NODES?.length >= 1, '主轴节点表为空');
   for (const n of MAIN_QUEST_NODES) {
-    assert.ok(['ready', 'new'].includes(n.status), `主轴节点状态非法：${n.status}（${n.text}）`);
+    assert.ok(['ready', 'new', 'pending'].includes(n.status), `主轴节点状态非法：${n.status}（${n.text}）`);
     assert.ok(n.text?.length >= 4, `主轴有空节点文案`);
     if (n.status === 'ready') {
       assert.ok(n.stageId && n.eventId, `ready 节点必须落到 stage+event：${n.text}`);
+    }
+    if (n.status === 'pending') {
+      // 正典压根没有的，只标待扩，不许给建议 id——否则等于把设计伪装成待补的既有内容。
+      assert.ok(!n.eventId, `主轴「${n.text}」标了 pending 却挂了 event id`);
     }
     if (n.status === 'new') {
       // 不锁具体条数——链路会随重写增减。锁的是规则：new 必须给出建议挂载关与建议 id。
