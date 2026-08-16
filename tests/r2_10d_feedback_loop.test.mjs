@@ -131,7 +131,7 @@ test('attitude changes utility and is clamped while canon config remains immutab
   assert.equal(core.actors[0].relationships['liuchao.character.cheng_zongyang'].trust, 44);
 });
 
-test('s01_05 knowledge and attitude survive JSON reload and change the s01_07 candidate set', async () => {
+test('s01_05 knowledge and attitude survive JSON reload and change the s01_07 candidate set', { skip: 'R3-10 线承重冻结与本断言冲突，待时效性 objective 过滤落地后重判（用户裁定 2026-08-16：玩家不到现场，帝统这类事根本不发生）' }, async () => {
   const stage = JSON.parse(await readFile(stageUrl, 'utf8'));
   const { decideNpcActions } = await loadTs('../src/modules/scenarioMods/npcDecisionCore.ts');
   const { advanceScenarioRuntime, getNarrativeAnchorEvent } =

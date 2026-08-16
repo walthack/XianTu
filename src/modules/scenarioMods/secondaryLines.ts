@@ -202,3 +202,115 @@ export function resolveAvailableLines(
     return false;
   });
 }
+
+/**
+ * 线承重事件：**玩家没接这条线之前，世界不许替他把这件事办了。**
+ *
+ * 立项理由（用户裁定 2026-08-16）：
+ *   「如果没启动汉国线，汉国线相关事件就不能自动发生并且推进。」
+ *   「world_sim 的『世界自行推进』是需要审核而且小范围限定死的，不是全部事件。」
+ *
+ * 【现状核实】全库 396 个事件里只有 **24 条**带 `offscreenResolution`（会自行结算），
+ * 占 6%；`deadlineTurns` 一条没有。所以"自行推进"本来就是小集合，问题不在范围大，
+ * 在于**这 24 条不是一类东西**。
+ *
+ * **本轮只处置其中一类：权力格局级**——帝统归谁、谁被拥立、谁被赐死，**玩家该有得选**，
+ * 故列入本表，所属线未开启时不结算。
+ *
+ * ⏳ **其余 14 条尚未审核，先留空**（用户裁定 2026-08-16）。曾把它们归为"世界背景级、
+ * 保留自行推进"，但那个分法站不住：「旱洪与易虎之死」是队伍共同经历、「捧日军抵烈山」
+ * 直接牵动江州战局，说"玩家在不在都一样"太草率。**未审核的一律维持现状**（照旧自行结算），
+ * 不要因为没进本表就当成已经判过。
+ *
+ * 【世界背景级的去向】用户给了方向（2026-08-16）：这一类不是"要不要自行推进"的分类问题，
+ * 而是**环境事件层的种子，可以自行扩写**——类比上古卷轴加入军团／风暴斗篷之后，
+ * 各地随之爆发战斗。它是玩家选边的回响，不是主线。
+ * 这一档正好落在既有的分工线上：**LLM 的发挥留给小支线与流言**（见模块头立项理由），
+ * 环境层就是那一档。故它与本表是两件事：本表管"世界不许替玩家做决定"，
+ * 环境层管"玩家的选择在世界里有回响"。实现另排。
+ *
+ * 典型反例是「吕冀赐死」，它的 worldDelta 自己写着「**你未在时限内前往永巷**」——
+ * 这话默认玩家知道有这回事、只是没去。可玩家若从没接过汉国线，他连永巷有个时限都不知道，
+ * 这句就成了凭空的责备。
+ *
+ * 【纪律】只收**审核过**的事件。别为了省事把整批塞进来——世界该转还得转，
+ * 冻住整个世界等玩家，比替玩家做决定更糟。
+ */
+export const LINE_CRITICAL_EVENTS: Record<string, string> = {
+  // 汉国：帝统归属在 dingtao_beijing 这一关定下
+  'lyg.event.s01_01': 'han', // 秦桧斩刘建
+  'lyg.event.s01_02': 'han', // 贾文和劫持定陶王
+  'lyg.event.s01_03': 'han', // 董卓挟持定陶王出洛都
+  'lyg.event.s01_04': 'han', // 霍子孟见吕雉
+  'lyg.event.s01_05': 'han', // 董卓拥立定陶王为帝
+  'lyg.event.s01_09': 'han', // 吕冀赐死
+  // 汉国：政变中段。这四条在隔离关 lyl.luoyang_coup 上，当前默认路线够不到，
+  // 先登记；该关的处置见 docs/R3-10-HAN-QUESTLINE-2026-08-16.md
+  'lyl.event.s06_01': 'han', // 天子暴毙消息传遍洛都
+  'lyl.event.s06_03': 'han', // 刘建攻占南宫与武库
+  'lyl.event.s06_04': 'han', // 长秋宫守卫战
+  'lyl.event.s06_06': 'han', // 吕奉先单骑破阵
+};
+
+/**
+ * 从存档的位置描述反查地点 id。
+ *
+ * 存档里存的是中文串（如「中州·白湖商馆」），与 `storyContext.resolveCurrentScenarioLocation`
+ * 同口径：按地点名做**最长匹配**，处理「白夷」／「白夷谷」这类互相包含。
+ * 放在本模块而不是 import storyContext——后者依赖 runtime，反向 import 会成环。
+ */
+export function resolveLocationIdFromPosition(
+  positionDescription: unknown,
+  locations: ReadonlyArray<{ id: string; name: string }> | undefined,
+): string | undefined {
+  const desc = String(positionDescription || '').replace(/\s+/g, '');
+  if (!desc || !locations?.length) return undefined;
+  return locations
+    .filter(l => l.name && l.name.length >= 2 && desc.includes(l.name.replace(/\s+/g, '')))
+    .sort((a, b) => b.name.length - a.name.length)[0]?.id;
+}
+
+/**
+ * 线承重事件的冻结判据：**玩家没到现场，这件事就不许自行推进**（用户裁定 2026-08-16）。
+ *
+ * 「到现场」两级判定，因为并非每条事件都带地点——实测 10 条里 7 条有 `locationId`，
+ * 「秦桧斩刘建」「吕冀赐死」「吕奉先单骑破阵」三条没有：
+ *
+ *   1. 事件带 `locationId` → 玩家当前地点与之相同才算到场；
+ *   2. 事件无 `locationId` → 退到关卡级：玩家人在该事件所属关卡即算到场。
+ *
+ * 到场之后不再特殊照顾——照常规规则走，玩家可以介入，也可以放着让它场外结算。
+ * **冻结只保证"玩家有得选"，不保证"玩家一定参与"。**
+ *
+ * 【裁定原文】用户 2026-08-16：「任务指引玩家去皇宫，玩家不去，剧情就不推进，
+ * 也没有汉帝被杀需要拥立新王的事情。如果玩家在董卓到来的时候临时起意跑到唐国，
+ * 那用例时间也就停着等玩家回来再继续。」
+ * 即：**不是"发生了而玩家没赶上"，是那件事根本没发生**；整条链停着等人，不设超时。
+ *
+ * ⚠ **与 R2-10／R2-11 既有验收冲突，尚未解决**（5 条测试红）。那批断言的是
+ * 「玩家不介入 → 到期场外结算，世界不因缺席而冻结」，与本规则相反。分歧实质是
+ * "玩家缺席"算不算"玩家的选择"——旧验收假定玩家知道有这回事而选择不去，
+ * 本规则针对的是玩家人在这一关、却从没被告知昭阳宫今晚要拥立新帝，那不叫选择叫没通知。
+ *
+ * ⏳ **时效性 objective 待做过滤**（用户 2026-08-16）：确有一些 objective 需要时效、
+ * 玩家没选择就该自动发生。那批要单独过滤出来豁免本闸，**做完之后再回头重判上述 5 条**。
+ * 在此之前二级主线按本写法默认冻结。
+ */
+export function lineCriticalFrozen(
+  event: { id: string; locationId?: string },
+  currentStageId: string | undefined,
+  currentLocationId: string | undefined,
+  locationDataAvailable = true,
+): boolean {
+  if (!LINE_CRITICAL_EVENTS[event.id]) return false;
+  // **判定不了就不判**：没有 `canon.locations` 时无从知道玩家在不在现场，
+  // 此时冻结等于凭一个测不出来的条件卡住世界。真实存档一定带 locations（共享正典注入到每关），
+  // 缺失的只有手搭 fixture，那些用例本就不在验证到场与否。
+  if (!locationDataAvailable) return false;
+  // 「现场」＝**那个地点**，不是那一关（用户裁定 2026-08-16）。
+  // 关卡级判定在此处是空转：`runtime.events` 本就只装当前关的事件（`runtime.ts:2091`
+  // `structuredClone(mod.scenario.events)`），玩家没到那一关，这些事件根本不在候选里。
+  // 故只有地点级才真正拦得住"人在这一关、却没去那座殿，帝统就自行定了"。
+  if (!event.locationId) return !currentStageId; // 无地点的退到关卡级（10 条里有 3 条）
+  return event.locationId !== currentLocationId;
+}

@@ -41,6 +41,7 @@ import {
 } from './affinityLadder';
 import { affinityCapFor } from './affinityCaps';
 import { REPUTATION_EVENT_GRANT, type ReputationGrant } from './reputationLedger';
+import { lineCriticalFrozen, resolveLocationIdFromPosition } from './secondaryLines';
 import { recordOffscreenDivergence, type ScenarioDivergence } from './divergenceLedger';
 import { getCanonRailOrder, getCanonRailProfile, isCanonRailChapter } from './canonRail';
 import { updateDivergenceControl, type DivergenceSignal, type WorldPushState } from './divergenceControl';
@@ -300,6 +301,8 @@ export interface RuntimeState extends ScenarioProgressState {
   canon?: {
     characters?: Array<{ id: string; name: string; profile?: { memories?: string[] } }>;
     factions?: Array<{ id: string; name: string }>;
+    /** 运行时一直带着（`storyContext` 在读），此前类型漏声明。 */
+    locations?: Array<{ id: string; name: string }>;
   };
   opening?: { text: string; playerCharacterId?: string };
   /** 旧档 reconcile 版本戳：与 registry 版本一致则跳过（正典更新后旧档第一回合自动对齐） */
@@ -1856,7 +1859,11 @@ function legacyOffscreenResolution(runtime: RuntimeState): NonNullable<ScenarioM
 }
 
 /** 世界级事件不等玩家领取任务；合同来自事件数据，旧存档由兼容层补齐。 */
-function resolveOffscreenWorldEvents(runtime: RuntimeState, transitions: ScenarioRuntimeTransition[]): void {
+function resolveOffscreenWorldEvents(
+  runtime: RuntimeState,
+  transitions: ScenarioRuntimeTransition[],
+  currentLocationId?: string,
+): void {
   const declared = runtime.events.map(event => event.offscreenResolution).filter(Boolean) as NonNullable<ScenarioModEvent['offscreenResolution']>[];
   const resolutions = declared.length ? declared : [legacyOffscreenResolution(runtime)].filter(Boolean) as NonNullable<ScenarioModEvent['offscreenResolution']>[];
   for (const resolution of resolutions) {
@@ -1916,6 +1923,15 @@ function resolveOffscreenWorldEvents(runtime: RuntimeState, transitions: Scenari
     // 数据增量会把一个关卡拆成多个场外合同；只允许当前已经激活的世界事件启动结算，
     // 否则同一 stall 阈值会把整关未来事件一次烧完。多事件战争合同仍由首个活跃节点启动整组。
     if (!unresolvedIds.some(id => runtime.activeEventIds.includes(id))) continue;
+    // 线承重事件冻结：玩家没到现场，世界不许替他把帝统这类事办了（用户裁定 2026-08-16）。
+    // 只冻 `LINE_CRITICAL_EVENTS` 里审核过的那批；到场之后照常规走，
+    // 玩家可以介入、也可以放着让它结算——冻结只保证"有得选"，不保证"一定参与"。
+    if (unresolvedIds.some(id => {
+      const event = runtime.events.find(item => item.id === id);
+      return event
+        ? lineCriticalFrozen(event, runtime.modId, currentLocationId, Boolean(runtime.canon?.locations?.length))
+        : false;
+    })) continue;
     runtime.flags[resolution.flagKey] = true;
     runtime.offscreenResolvedEventIds = [...new Set([...(runtime.offscreenResolvedEventIds || []), ...unresolvedIds])];
     runtime.activeEventIds = runtime.activeEventIds.filter(id => !unresolvedIds.includes(id));
@@ -2613,7 +2629,14 @@ export function advanceScenarioRuntime(saveData: SaveData): {
   refreshEventTimelineRevelations(runtime, transitions);
   syncPlayerKnowledgeLedger(runtime);
   backfillCompletedEventChronicle(runtime);
-  resolveOffscreenWorldEvents(runtime, transitions);
+  resolveOffscreenWorldEvents(
+    runtime,
+    transitions,
+    resolveLocationIdFromPosition(
+      (next as unknown as { 角色?: { 位置?: { 描述?: unknown } } })?.角色?.位置?.描述,
+      runtime.canon?.locations,
+    ),
+  );
 
   const current = runtime.chapters.find(chapter => chapter.id === runtime.currentChapterId);
   const currentEventIds = new Set(current?.eventIds || []);

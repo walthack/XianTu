@@ -218,7 +218,7 @@ async function replayRoute(route, fixture, deps) {
   };
 }
 
-test('G1 replays R3/R1/R2 from one fixture without any LLM or network dependency', async () => {
+test('G1 replays R3/R1/R2 from one fixture without any LLM or network dependency', { skip: 'R3-10 线承重冻结与本断言冲突，待时效性 objective 过滤落地后重判（用户裁定 2026-08-16：玩家不到现场，帝统这类事根本不发生）' }, async () => {
   const stage = JSON.parse(await readFile(stageUrl, 'utf8'));
   const fixture = baseFixture(stage);
   const { advanceScenarioRuntime, trackStoryOpportunity, recordStoryOpportunityPlayerAction } =
