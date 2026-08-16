@@ -56,6 +56,27 @@ export interface SecondaryLine {
   entryHint: string;
   /** 锚为什么是这个——正典依据，便于日后复核。 */
   basis: string;
+  /** 线内节点。骨架先搭齐，缺内容的标 `pending` 待扩。 */
+  nodes: LineNode[];
+  /** 这条线还缺什么（beat 级盘点结论）。空＝原著段已够打穿。 */
+  pendingExpansion?: string;
+}
+
+/**
+ * 线内节点。粒度同主轴 `MAIN_QUEST_NODES`——任务节点，不是逐拍。
+ *
+ * `status` 三档：
+ *   · `ready`   已有 stage＋event 承载，玩家现在就走得到；
+ *   · `new`     内容在原著里有、游戏里没落地，**需新增 event**（已给建议 id）；
+ *   · `pending` **待扩**：这一段还没规划，占位而已。
+ */
+export interface LineNode {
+  text: string;
+  status: 'ready' | 'new' | 'pending';
+  /** `ready` 必填；`new` 填建议挂载关。 */
+  stageId?: string;
+  /** `ready` 填现有 event id；`new` 填建议 id。 */
+  eventId?: string;
 }
 
 /**
@@ -80,6 +101,14 @@ export const SECONDARY_LINES: SecondaryLine[] = [
     basis: '王哲是把程宗扬拉进太乙的人——`lcq.event.s01_04` objective 字面即「加入太乙真宗阵营」，'
       + '并在 `stage_02` 传功托付。**开局强制剧情就会见到他，等于自动开启**（用户确认 2026-08-16）。'
       + '（山门龙池两个 id 均不可达，故不用地点锚。）',
+    nodes: [
+      { text: '受王哲传功托付，入太乙真宗阵营', status: 'ready', stageId: 'lcq.stage_01', eventId: 'lcq.event.s01_04' },
+      { text: '接下锦囊：清理门户、传授九阳', status: 'ready', stageId: 'lcq.stage_02', eventId: 'lcq.event.s02_01' },
+      { text: '与蔺采泉重议九阳的出处与名分', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_blacksea_trap_02_beat' },
+      { text: '清洗通魔教御，坐实道门操盘人', status: 'pending' },
+      { text: '锦囊后续：白纸如何变指令、失踪于何处、故人是谁', status: 'pending' },
+    ],
+    pendingExpansion: 'beat 级三分类 ✅6／⚠8／⏳2——八条线里 ⚠ 最多。加入之后的掌教斗争大面积没落地，锦囊停在"领取"。',
   },
   {
     id: 'xingyuehu',
@@ -95,6 +124,14 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       + '**八骏里只取谢艺与萧遥逸**（用户裁定 2026-08-16）：这两人才是程宗扬实际打交道的，'
       + '孟非卿／卢景／王韬／斯明信不作入口，崔茂在默认线事件层不可达。'
       + '任一见过即开线，最早由谢艺第 4 关触发——比月霜第 1 关合理，开局就开星月湖太早。',
+    nodes: [
+      { text: '在南荒结识谢艺，搭上星月湖', status: 'ready', stageId: 'lcq.stage_03b_snake_flower_bridge', eventId: 'lcq.event.s03b_snake_flower_bridge_04' },
+      { text: '建康与八骏会合', status: 'ready', stageId: 'lcq.stage_09_trade_and_escape', eventId: 'lcq.event.s09_01_eight_steeds_leave' },
+      { text: '江州战事：与星月湖并肩', status: 'ready', stageId: 'lcq.stage_11_lieshan_battle', eventId: 'lcq.event.s11_04_xingyue_appears' },
+      { text: '入营判据：怎样才算真正编入星月湖', status: 'pending' },
+      { text: '岳帅冤案洗雪的收束', status: 'pending' },
+    ],
+    pendingExpansion: 'beat 级 ✅10／⚠3／⏳3——内容已连续落地，缺的是入营判据与洗冤收束，不是没故事。',
   },
   {
     id: 'heimohai',
@@ -108,6 +145,14 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       + '**用殇侯不用小紫**（用户授权判断 2026-08-16）：小紫第 8 关才可达（首现关 `stage_05` 被隔离），'
       + '且她已是主轴血脉线核心承重（层三解锁门／遗孤名册／大祭备用容器），'
       + '兼作黑魔海入口会让玩家分不清"认识小紫"是在推血脉还是在入毒宗。',
+    nodes: [
+      { text: '南荒遇朱老头，落进毒宗的庇护', status: 'ready', stageId: 'lcq.stage_04', eventId: 'lcq.event.s04_02' },
+      { text: '建康再见殇侯，听出天命侯这回事', status: 'ready', stageId: 'lcq.stage_07_qingyuan_jiankang', eventId: 'lcq.event.s07_03_xiaozi_appears' },
+      { text: '太泉段卷入黑魔海的巢穴与杀局', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_blacksea_trap_04_beat' },
+      { text: '天命侯名分：玩家侧怎么争', status: 'pending' },
+      { text: '大祭与潘金莲的对决（续写第二幕）', status: 'pending' },
+    ],
+    pendingExpansion: 'beat 级 ✅13／⚠3／⏳3——故事最多的一条。半成品的是**玩家侧名分**：「天命侯」全库 0 条 event。',
   },
   // —— 国家／地区线：锚地 ——
   {
@@ -130,6 +175,14 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       + '不论玩家是被押去的还是自己走通商路去的，商队这一条都成立。'
       + '（原锚熊耳铺已废：它是 `stage_03b` 最后一个事件「龙神新娘｜前往熊耳铺」的落点，'
       + '在南荒之行的尾巴上，是深处不是门。）',
+    nodes: [
+      { text: '跟云苍峰的商队进南荒', status: 'ready', stageId: 'lcq.stage_03b_snake_flower_bridge', eventId: 'lcq.event.s03b_snake_flower_bridge_04' },
+      { text: '查清蛇彝村灭村，血符指向鬼王峒', status: 'ready', stageId: 'lcq.stage_03b_snake_flower_bridge', eventId: 'lcq.event.s03b_snake_flower_bridge_02' },
+      { text: '在花苗、白夷、碧鲮之间选边', status: 'ready', stageId: 'lcq.stage_04b_lingfei_baiyi_crisis', eventId: 'lcq.event.s04b_lingfei_baiyi_crisis_04' },
+      { text: '昭南朝廷（麟趾／昭南城）：事件层从未抵达', status: 'pending' },
+      { text: '开放线扩展位：芈氏外家 vs 程系经济渗透、阖闾破郢原型、凝羽回归线', status: 'pending' },
+    ],
+    pendingExpansion: 'beat 级 ✅8／⚠3／⏳5——腹地几乎全 ✅，但都城没抵达。**开放线，作者本人也没写完**，扩展位见蓝图 §6／§12。',
   },
   {
     id: 'jin',
@@ -138,6 +191,13 @@ export const SECONDARY_LINES: SecondaryLine[] = [
     anchorLocationIds: ['liuchao.location.jiankang'],
     entryHint: '想插手晋国朝局，去建康。',
     basis: '建康＝晋国都城（官方附录地图 jin-nanzhao 幅在场；描述「晋国都城」）。第 10 关可达。',
+    nodes: [
+      { text: '清远入晋，卷进建康疑局', status: 'ready', stageId: 'lcq.stage_07_qingyuan_jiankang', eventId: 'lcq.event.s07_02_kill_wu' },
+      { text: '玄武湖宫变', status: 'ready', stageId: 'lcq.stage_08_jiankang_coup', eventId: 'lcq.event.s08_03_beifu_rescue' },
+      { text: '云氏商局与沉江脱险', status: 'ready', stageId: 'lcq.stage_09_trade_and_escape', eventId: 'lcq.event.s09_04_weaving_trade' },
+      { text: '商战终局：广源行旧账清算', status: 'pending' },
+    ],
+    pendingExpansion: 'beat 级 ✅4／⚠5／⏳3——宫变中篇已在，缺商战终局。蓝图 §6 把晋写成商战副本（云如瑶＝岳霏揭晓地、小玲儿身世）。',
   },
   {
     id: 'song',
@@ -147,6 +207,13 @@ export const SECONDARY_LINES: SecondaryLine[] = [
     entryHint: '想插手宋国朝局，去临安。',
     basis: '临安＝宋国都城。`linan` 覆盖 30 关为主，`lin_an` 只 1 关，一并收下防漏；'
       + '`linan_city` 只在隔离关 `taiquan_expedition`，不收。',
+    nodes: [
+      { text: '江州坚守与粮战', status: 'ready', stageId: 'lcq.stage_11_lieshan_battle', eventId: 'lcq.event.s11_02_cement_fortress' },
+      { text: '江州围城与反攻', status: 'ready', stageId: 'lcq.stage_12_jiangzhou_counterwar', eventId: 'lcq.event.s12_01_grain_route_blocked' },
+      { text: '临安落脚，摸清这座城的暗线', status: 'ready', stageId: 'lyl.lin_an_bridge', eventId: 'lyl.event.lin_an_bridge_01_beat' },
+      { text: '临安官场：吏部／威远／武穆王府（细点全在隔离关）', status: 'pending' },
+    ],
+    pendingExpansion: 'beat 级 ✅6／⚠2／⏳2——江州＋临安已成块，缺临安官场细点。',
   },
   {
     id: 'han',
@@ -158,6 +225,19 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       + '`lyl.location.luoyang` 覆盖 6 关（含抵达关 `luoyang_cloud_secret`，那关没有 atlas 那个）。'
       + '早先只填后者是错的——汉国线 6 关里只有 3 关能响，`dingtao_beijing` 与 `han_succession` '
       + '玩家人在洛都却触发不了。',
+    nodes: [
+      { text: '去洛都，摸清入朝的口子', status: 'ready', stageId: 'lyl.taiquan_afterfall', eventId: 'lyl.event.taiquan_afterfall_07_beat' },
+      { text: '买下官身，在汉廷立住脚', status: 'ready', stageId: 'lyl.luoyang_cloud_secret', eventId: 'lyl.event.s05_01' },
+      { text: '扛住吕氏动用汉军的围杀', status: 'ready', stageId: 'lyl.luoyang_cloud_secret', eventId: 'lyl.event.s05_03' },
+      { text: '用纸钞买田；看清限田令要把云家卷进削豪强', status: 'new', stageId: 'lyl.luoyang_cloud_secret', eventId: 'lyl.event.han_limit_field' },
+      { text: '从传闻得知：天子已死，含光殿落到吕冀手里，刘建已起兵占了南宫', status: 'new', stageId: 'lyl.han_palace_endgame', eventId: 'lyl.event.han_power_vacuum' },
+      { text: '决定是否出面拥立定陶王', status: 'new', stageId: 'lyl.han_palace_endgame', eventId: 'lyl.event.han_sponsor_dingtao' },
+      { text: '董卓无符入京；刘建伏诛', status: 'ready', stageId: 'lyl.han_palace_endgame', eventId: 'lyl.event.han_palace_endgame_08_beat' },
+      { text: '到场或听任新朝承认定陶王', status: 'ready', stageId: 'lyg.dingtao_beijing', eventId: 'lyg.event.s01_05' },
+      { text: '吕冀赐死，见证吕雉亲裁诸吕', status: 'ready', stageId: 'lyg.dingtao_beijing', eventId: 'lyg.event.s01_09' },
+      { text: '护住赵氏，促成新帝登基，自己以辅政定型', status: 'ready', stageId: 'lyg.han_succession', eventId: 'lyg.event.han_succession_08_beat' },
+    ],
+    pendingExpansion: 'beat 级 ✅5／⚠2／⏳3，八条里对齐度最高。缺 3 条新 event（H4／H5／H6），其中 H5 靠流言获知、H6 给玩家拥立与否的选择。详见 docs/R3-10-HAN-QUESTLINE-2026-08-16.md。',
   },
   {
     id: 'tang',
@@ -167,6 +247,14 @@ export const SECONDARY_LINES: SecondaryLine[] = [
     entryHint: '想插手唐国朝局，去长安。',
     basis: '长安＝唐国都城。须用 `liuchao.location.changan`——`lyg.location.changan`（名「长安城」）'
       + '在抽查的 live 关查无。第 30 关可达。',
+    nodes: [
+      { text: '以汉使入长安，灞桥落脚', status: 'ready', stageId: 'lyg.changgan_begins', eventId: 'lyg.event.s03_01' },
+      { text: '摸清佛门暗潮冲着谁来', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.changgan_interlude_02_beat' },
+      { text: '甘露变：赶在密令落地前弄明白谁在动手', status: 'ready', stageId: 'lyg.buddhist_conspiracy', eventId: 'lyg.event.buddhist_conspiracy_01_beat' },
+      { text: '长安失序与弑君余波', status: 'ready', stageId: 'lyg.ganlu_aftershock', eventId: 'lyg.event.ganlu_aftershock_03_beat' },
+      { text: '入仕唐廷的判据（现无）', status: 'pending' },
+    ],
+    pendingExpansion: 'beat 级 ✅8／⚠1／⏳3——⚠ 最少的一条，原著段几乎打穿（甘露变收到李辅国肉身亡）。缺入仕判据。',
   },
 ];
 

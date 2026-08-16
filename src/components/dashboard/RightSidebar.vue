@@ -263,6 +263,29 @@
         :path-receipts="epistemicRuntime?.pathReceipts"
       />
 
+      <!-- 二级线待办：走到地方／认识对的人就出现，不需要接受任务 -->
+      <div v-if="availableLines.length" class="collapsible-section quest-section">
+        <div class="section-header" @click="linesCollapsed = !linesCollapsed">
+          <h3 class="section-title">
+            <Clock :size="14" class="section-icon" />
+            <span>{{ t('可投的门路') }}</span>
+          </h3>
+          <button class="collapse-toggle" :class="{ 'collapsed': linesCollapsed }">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8 10l4-4H4l4 4z"/></svg>
+          </button>
+        </div>
+        <div v-show="!linesCollapsed" class="quest-body">
+          <div v-for="line in availableLines" :key="line.id" class="quest-main">
+            <div class="quest-chapter">
+              <span class="quest-tag quest-tag-side">{{ line.kind }}</span>{{ line.name }}
+              <span class="quest-more">（{{ line.ready }}/{{ line.total }} 可走{{ line.pending ? '，余待扩' : '' }}）</span>
+            </div>
+            <div class="quest-event"><span class="quest-mark-side">·</span>{{ line.hint }}</div>
+          </div>
+          <div class="quest-more">{{ t('照着做就是加入，不做也不损失什么。') }}</div>
+        </div>
+      </div>
+
       <!-- 世界演员：角色先行动，玩家可选择是否介入 -->
       <div v-if="actorView" class="collapsible-section quest-section actor-section">
         <div class="section-header" @click="actorCollapsed = !actorCollapsed">
@@ -405,6 +428,7 @@ import {
   isWorldSimulationRuntime,
 } from '@/modules/scenarioMods/worldSimulation';
 import { resolveMainQuestLayer, resolveMainQuestNodes } from '@/modules/scenarioMods/mainQuestAxis';
+import { resolveAvailableLines, resolveLocationIdFromPosition } from '@/modules/scenarioMods/secondaryLines';
 import { prefillChat } from '@/utils/chatBus';
 import { resolveScenarioEventNarrative } from '@/modules/scenarioMods/eventNarrativeView';
 import { returnToCanonAnchor } from '@/modules/scenarioMods/divergenceControl';
@@ -431,6 +455,7 @@ const statusEffects = computed(() => {
 });
 
 const questCollapsed = ref(false);
+const linesCollapsed = ref(false);
 const worldlineCollapsed = ref(false);
 const chronicleCollapsed = ref(true);
 const actorCollapsed = ref(false);
@@ -469,6 +494,24 @@ const worldQuestAxis = computed(() => {
     if (objective) entry = objective;
   }
   return { direction: layer.text, nodes, entry };
+});
+// 二级线：锚一满足就作为待办显示，不需要玩家确认（用户裁定 2026-08-16）。
+const availableLines = computed(() => {
+  const rt: any = epistemicRuntime.value;
+  if (!rt || typeof rt !== 'object') return [];
+  const locId = resolveLocationIdFromPosition(
+    (gameStateStore.playerStatus as any)?.位置?.描述,
+    rt.canon?.locations,
+  );
+  return resolveAvailableLines(locId, rt.acquaintances).map((line: any) => ({
+    id: line.id,
+    name: line.name,
+    kind: line.kind === 'sect' ? '宗派' : '国家',
+    hint: line.entryHint,
+    ready: (line.nodes || []).filter((n: any) => n.status === 'ready').length,
+    total: (line.nodes || []).length,
+    pending: Boolean(line.pendingExpansion),
+  }));
 });
 // 剧情主线：章节/活跃事件/清关状态/下一关（确定性，读 worldState.剧本模组）
 const questMain = computed(() => {

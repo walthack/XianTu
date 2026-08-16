@@ -23,6 +23,7 @@ import {
 } from './privateKnowledgeGuard';
 import { formatVoiceCard } from './voiceCards';
 import { resolveMainQuestLayer, resolveMainQuestNodes } from './mainQuestAxis';
+import { resolveAvailableLines } from './secondaryLines';
 import { formatWorldSimulationPrompt, getCurrentWorldSituation, isWorldSimulationRuntime } from './worldSimulation';
 
 import type {
@@ -846,6 +847,11 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
           if (objective) {
             lines.push(`- 当前可切入点：${objective}`);
           }
+        }
+        // 二级线：走到地方／认识对的人就该让玩家知道有这条门路，不设"接受任务"手续。
+        const openLines = resolveAvailableLines(currentLocation?.id, (runtime as any).acquaintances);
+        if (openLines.length) {
+          lines.push(`- 此刻可投的门路：${openLines.map(l => `${l.name}——${l.entryHint}`).join('；')}`);
         }
         lines.push(
           '- 纪律：没有需要玩家逐拍完成的任务，也没有进度惩罚。玩家可立刻着手、绕路，或把上述方向搁置任意多轮。当玩家问「主线是什么／我该往哪走」时，据此如实作答，并给出此刻可行的切入方式（找谁、去哪、打听什么）。不得替玩家决定下一步，不得提前演出该方向的结果，也不得因玩家不朝它走而制造追兵、压力或惩罚。',
