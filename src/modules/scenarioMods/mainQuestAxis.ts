@@ -131,6 +131,21 @@ export interface MainQuestNode {
   stageId: string;
   text: string;
   /**
+   * 这一条落在哪个 event 上。
+   *
+   * 【为什么必须有】没有它，主轴在**事件层没有落点**——实测 2026-08-16：396 条 event 里
+   * 被任一条链认领的只有 54 条，而主轴认领 **0** 条。不是它没内容，是它没有 id 可对，
+   * 于是三级认领（主轴 → 二级线 → 人物任务）的第一步就无从开始。
+   *
+   * 另一个后果是精度：只锚 `stageId` 时主轴的位置只能到"关窗口"（第 1 条＝seq 1–36），
+   * 而二级线已经精确到某一拍，两者并排时主轴是一根粗条，也没法参与按 `axisSeq` 的排序校验。
+   *
+   * 与二级线同口径：`ready` 填现有 id，`new` 填建议 id ＋ 建议挂载关。
+   */
+  eventId?: string;
+  /** 同 `LineNode.status`：`ready` ＝现在就走得到；`new` ＝原著里有、游戏里还没落地。 */
+  status?: 'ready' | 'new';
+  /**
    * 地点锚（用户裁定 2026-08-16：主线与二级线都该锚地点，不锚关卡）。
    *
    * 【为什么】关卡 ID 是脆的：`canonRail.DEFAULT_LINE_QUARANTINED_STAGE_IDS` 会让默认路线
