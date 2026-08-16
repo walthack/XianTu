@@ -503,7 +503,7 @@ const availableLines = computed(() => {
     (gameStateStore.playerStatus as any)?.位置?.描述,
     rt.canon?.locations,
   );
-  return resolveAvailableLines(locId, rt.acquaintances).map((line: any) => ({
+  return resolveAvailableLines(locId, rt.acquaintances, rt.completedEventIds).map((line: any) => ({
     id: line.id,
     name: line.name,
     kind: line.kind === 'sect' ? '宗派' : '国家',

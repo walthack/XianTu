@@ -56,46 +56,78 @@ test('锚不得落在被默认路线跳过的死 id 上', async () => {
   }
 });
 
-test('地点锚：走到才算，走错地方不算', async () => {
-  const { resolveAvailableLines } = await loadTs('../src/modules/scenarioMods/secondaryLines.ts');
-  const atLinan = resolveAvailableLines('liuchao.location.linan', {});
-  assert.deepEqual(atLinan.map(l => l.id), ['song'], '在临安只该开宋国线');
+// 锚＝你知道那件事的那一拍（用户裁定 2026-08-16，收窄了原先"国家锚地点／宗派锚人"的规则）。
+// 下面三条原本编的是旧规则，随裁定一起改写：到场不再等于入线。
 
-  const nowhere = resolveAvailableLines('liuchao.location.not_a_place', {});
-  assert.deepEqual(nowhere, [], '无关地点不该开任何线');
-
-  const noLocation = resolveAvailableLines(undefined, {});
-  assert.deepEqual(noLocation, [], '没有地点信息时不该开地点锚线');
-});
-
-test('人物锚：真的见过才算，只听过传闻不算', async () => {
+test('到场不开线：走到地方、见到人，都只是"到了能知道的位置"', async () => {
   const { resolveAvailableLines } = await loadTs('../src/modules/scenarioMods/secondaryLines.ts');
 
-  // 只听过传闻 → 不开
-  const rumorOnly = resolveAvailableLines(undefined, {
-    'liuchao.character.shang_zhen_yu': { characterId: 'liuchao.character.shang_zhen_yu', kind: 'rumored' },
-  });
-  assert.deepEqual(rumorOnly, [], '只听过传闻不该开线——否则"世上有这么个人"就能入教');
+  // 走到临安——宋国的"知道"是贾师宪的攻江州军令，不是踏进都城。
+  const atLinan = resolveAvailableLines('liuchao.location.linan', {}, []);
+  assert.ok(!atLinan.some(l => l.id === 'song'),
+    '光走到临安不该开宋国线——那只是到了能知道的位置');
 
-  // 真的见过 → 开
-  const met = resolveAvailableLines(undefined, {
+  // 见到殇侯——黑魔海的"知道"是那张羊皮纸被解读，不是见着朱老头本人。
+  const metShanghou = resolveAvailableLines(undefined, {
     'liuchao.character.shang_zhen_yu': { characterId: 'liuchao.character.shang_zhen_yu', kind: 'encountered' },
-  });
-  assert.deepEqual(met.map(l => l.id), ['heimohai'], '见过殇侯该开黑魔海线');
+  }, []);
+  assert.ok(!metShanghou.some(l => l.id === 'heimohai'),
+    '见过朱老头不该开黑魔海线——玩家此时还不知道"黑魔海"这个名字');
+
+  // 见到谢艺——星月湖的"知道"是问清星月湖是什么。
+  const metXieYi = resolveAvailableLines(undefined, {
+    'liuchao.character.xie_yi': { characterId: 'liuchao.character.xie_yi', kind: 'encountered' },
+  }, []);
+  assert.ok(!metXieYi.some(l => l.id === 'xingyuehu'),
+    '见过谢艺不该开星月湖线——见到人不等于知道那是什么');
 });
 
-test('八骏任一见过即开星月湖', async () => {
+test('知道了才开线：锚事件完成，线才亮', async () => {
   const { resolveAvailableLines, SECONDARY_LINES } = await loadTs('../src/modules/scenarioMods/secondaryLines.ts');
-  const line = SECONDARY_LINES.find(l => l.id === 'xingyuehu');
-  assert.ok(line.anchorCharacterIds.length >= 2, '八骏该是多锚');
-  // 月霜不在锚里：她是要护的人，不是引路人（用户裁定）
-  assert.ok(!line.anchorCharacterIds.includes('lcq.character.yue_shuang'),
-    '月霜不该当星月湖入口——她是要护的人，不是引你进门的人');
-
-  for (const id of line.anchorCharacterIds) {
-    const opened = resolveAvailableLines(undefined, { [id]: { characterId: id, kind: 'encountered' } });
-    assert.ok(opened.some(l => l.id === 'xingyuehu'), `见过八骏成员 ${id} 应开星月湖线`);
+  for (const line of SECONDARY_LINES) {
+    if (!line.anchorEventIds?.length || line.anchorEventPending) continue;
+    const before = resolveAvailableLines(undefined, {}, []);
+    assert.ok(!before.some(l => l.id === line.id), `${line.name} 在锚事件完成前不该开`);
+    const after = resolveAvailableLines(undefined, {}, [line.anchorEventIds[0]]);
+    assert.ok(after.some(l => l.id === line.id),
+      `${line.name} 的锚事件 ${line.anchorEventIds[0]} 完成后应开线`);
   }
+});
+
+test('锚事件还没写出来的线，退回粗锚，不得变成永远打不开的死线', async () => {
+  const fs = await import('node:fs');
+  const { resolveAvailableLines, SECONDARY_LINES } = await loadTs('../src/modules/scenarioMods/secondaryLines.ts');
+  const dir = 'src/modules/scenarioMods/builtins/data/';
+  const real = new Set();
+  for (const f of fs.readdirSync(dir).filter(x => x.endsWith('.json'))) {
+    const j = JSON.parse(fs.readFileSync(dir + f, 'utf8'));
+    if (!j.scenario?.worldSimulation) continue;
+    for (const e of j.scenario.events || []) real.add(e.id);
+  }
+  for (const line of SECONDARY_LINES) {
+    assert.ok(line.anchorEventIds?.length, `${line.name} 没有锚事件——八条线都该锚在"知道那一刻"`);
+    const exists = line.anchorEventIds.some(id => real.has(id));
+    if (line.anchorEventPending) {
+      // 声明待补的，锚 id 必须确实还不存在（否则标志过期），且必须有粗锚可退。
+      assert.ok(!exists, `${line.name} 标了 anchorEventPending，但锚事件已经存在——标志该去掉了`);
+      assert.ok(line.anchorLocationIds?.length || line.anchorCharacterIds?.length,
+        `${line.name} 锚事件待补却没有粗锚可退，这条线永远打不开`);
+      // 并且必须已经挂了 new 节点把它排进待补清单，不能只留一个悬空 id。
+      assert.ok(line.nodes.some(n => n.status === 'new' && line.anchorEventIds.includes(n.eventId)),
+        `${line.name} 的待补锚事件没有对应的 new 节点，等于没人知道要补它`);
+    } else {
+      assert.ok(exists, `${line.name} 的锚事件 ${line.anchorEventIds} 在正典里查无——锚到不存在的 id 上，线永远打不开`);
+    }
+  }
+});
+
+test('星月湖的引路人仍是八骏，且不含月霜', async () => {
+  const { SECONDARY_LINES } = await loadTs('../src/modules/scenarioMods/secondaryLines.ts');
+  const line = SECONDARY_LINES.find(l => l.id === 'xingyuehu');
+  // 人物列表现在只用于指引落点（说明"去找谁"），不再参与判定，但仍不该指错人。
+  assert.ok(line.anchorCharacterIds.length >= 2, '八骏该给出多个引路人');
+  assert.ok(!line.anchorCharacterIds.includes('lcq.character.yue_shuang'),
+    '月霜不该当星月湖引路人——她是要护的人，不是引你进门的人');
 });
 
 test('每条线都有入口指引，且说清"去哪／找谁"', async () => {

@@ -6,11 +6,17 @@
  *    （类似上古卷轴走到一个地方触发事件，接到派系主线任务）。
  *    LLM 的发挥尽量安排在那些非重要小支线或者流言这种程度。」
  *
- * 【锚的分类】用户裁定的规则，直接落在既有两类线上：
- *   · **国家／地区线 → 锚地点**：国家就是一片地，走到就算到了；
- *   · **宗派线 → 锚相关人**：宗派是一群人，得有人引你进门。
- *   秘密组织尤其如此——黑魔海不可能靠走进总坛加入，正典里程宗扬是毒宗系「被庇护者」，
- *   那层关系从殇侯（朱老头）来，不是从地理来。
+ * 【锚是什么】**锚＝你知道那件事的那一拍**（用户裁定 2026-08-16，收窄了原规则）。
+ *   原来的规则是「国家线锚地点、宗派线锚人」——用户指出那两种**都太宽泛**：
+ *   走进建康只是"你到了能知道的位置"，不等于知道宫里闹鬼；见到谢艺也不等于知道星月湖是什么。
+ *   **线是被"知道"打开的，不是被"到场"打开的。**
+ *   地点与人退为指引落点说明（指向哪里／谁），不再参与判定。
+ *   样板是黑魔海：云苍峰把空白羊皮纸解读成秘法传讯的那一刻——用户类比上古卷轴的血手信。
+ *
+ * 【锚只能落 event，"知道"却是 beat 层的事实】beat 1399 条、event 396 条，约 3.5 : 1；
+ *   引擎能观测的只有 `completedEventIds`，所以锚必须落 event。两层对得上的线就精确锚，
+ *   对不上的要**为那一拍补 event**——八条里有两条如此（晋国闹鬼 seq 241–242、
+ *   唐国番僧猎杀穿越者 seq 1061），见 `anchorEventPending`。
  *
  * 【为什么不锚关卡】`canonRail.DEFAULT_LINE_QUARANTINED_STAGE_IDS` 让默认路线静默跳过
  * 8 个关卡。主轴已经因此死过 3 条节点。关卡编排会变，地点与人不会。
@@ -46,6 +52,34 @@ export interface SecondaryLine {
    * （`dingtao_beijing`／`han_succession` 玩家人在洛都却触发不了）。
    */
   anchorLocationIds?: string[];
+  /**
+   * **锚：你知道了那件事的那一拍。**
+   *
+   * 这不是"第三种锚"——是原来那两种太宽泛（用户裁定 2026-08-16）。
+   * 走进建康只是"你到了能知道的位置"，不等于知道宫里闹鬼；见到谢艺也不等于知道星月湖是什么。
+   * 线是被"知道"打开的，不是被"到场"打开的。
+   *
+   * 样板是黑魔海：云苍峰把那张空白羊皮纸解读成秘法传讯的瞬间，玩家才第一次知道这个名字。
+   * 用户类比上古卷轴的血手信——你不是被派去查它，是有人把它塞进了你手里。
+   * 注意它落在第 2 拍而非第 1 拍：见到朱老头（发蛊那关）更早，拿他当门会让线在你知道名字之前就开。
+   * 所以是逐条判断"哪一拍是知道"，不是机械取第一个节点。
+   *
+   * **声明了它就由它单独判定**；`anchorLocationIds`／`anchorCharacterIds` 退为指引落点说明，
+   * 只回答"指引把玩家指向哪里／谁"，不参与判定。
+   */
+  anchorEventIds?: string[];
+  /**
+   * 锚事件还没写出来——**在它落地之前，退回地点／人这类粗锚**。
+   *
+   * 八条线里有两条的「知道那一刻」在 beat 层有、event 层没有（实测 2026-08-16）：
+   * 晋国的宫城闹鬼（seq 241–242，事件层最近的 seq 264 已经是"去夜探"了）、
+   * 唐国的番僧猎杀穿越者（seq 1061，seq 1059–1065 整段事件层空白）。
+   * 锚到不存在的 id 上＝这条线永远打不开——主轴已经这么死过 3 条节点，不重蹈。
+   *
+   * 所以这两条先挂 `new` 节点把 event 补上，锚 id 照写，用本标志声明"暂用粗锚"。
+   * event 一旦补出来，去掉本标志即自动切到精确锚。
+   */
+  anchorEventPending?: true;
   /**
    * 玩家可见的入口指引：**去哪里找谁**。
    *
@@ -96,6 +130,8 @@ export const SECONDARY_LINES: SecondaryLine[] = [
     id: 'taiyi',
     name: '太乙真宗',
     kind: 'sect',
+    // 锚＝你知道那件事的那一拍（用户裁定 2026-08-16）。
+    anchorEventIds: ['lcq.event.s01_04'],
     anchorCharacterIds: ['lcq.character.wang_zhe'],
     entryHint: '王哲既已传功托付，太乙真宗的门就对你开着——去找他问清那份托付。',
     basis: '王哲是把程宗扬拉进太乙的人——`lcq.event.s01_04` objective 字面即「加入太乙真宗阵营」，'
@@ -127,6 +163,8 @@ export const SECONDARY_LINES: SecondaryLine[] = [
     id: 'xingyuehu',
     name: '星月湖',
     kind: 'sect',
+    // 锚＝你知道那件事的那一拍（用户裁定 2026-08-16）。
+    anchorEventIds: ['lcq.event.s04b_lingfei_baiyi_crisis_16'],
     anchorCharacterIds: [
       'liuchao.character.xie_yi',      // 谢艺　 第 4 关（最早）·护岳帅父女
       'liuchao.character.xiao_yao_yi', // 萧遥逸 第 10 关·掌谍报商网
@@ -170,6 +208,9 @@ export const SECONDARY_LINES: SecondaryLine[] = [
     id: 'heimohai',
     name: '黑魔海／毒宗',
     kind: 'sect',
+    // 线开在「信被解读出来」那一刻，不开在见到某个人（用户裁定 2026-08-16）。
+    anchorEventIds: ['lcq.event.s04b_lingfei_baiyi_crisis_04'],
+    // 保留但不参与判定：指引把玩家指向朱老头，说明"去问谁"。
     anchorCharacterIds: ['liuchao.character.shang_zhen_yu'],
     entryHint: '鸦人尸体上搜出一张白纸，云苍峰说那是秘法传讯——黑魔海与鬼王峒勾结；'
       + '苏妲己的回话只有一句：别惹他们。要找门路，问同行的朱老头。',
@@ -218,6 +259,8 @@ export const SECONDARY_LINES: SecondaryLine[] = [
     name: '昭南',
     kind: 'nation',
     // ⚠ 唯一用人物锚的国家／地区线。破例的理由是数据给的，不是随手定的——见 basis。
+    // 锚＝你知道那件事的那一拍（用户裁定 2026-08-16）。
+    anchorEventIds: ['lcq.event.s03b_snake_flower_bridge_02'],
     anchorCharacterIds: [
       'liuchao.character.yun_cang_feng', // 云苍峰 第 4 关·商队带你进南荒
       'liuchao.character.wu_er_lang',    // 武二郎 第 5 关·南荒队伍成员
@@ -261,6 +304,9 @@ export const SECONDARY_LINES: SecondaryLine[] = [
     id: 'jin',
     name: '晋国',
     kind: 'nation',
+    // 锚事件待补：闹鬼在 beat 层（seq 241–242）有，event 层查无，暂用建康粗锚。
+    anchorEventIds: ['lcq.event.s07_palace_haunting_rumor'],
+    anchorEventPending: true,
     anchorLocationIds: ['liuchao.location.jiankang'],
     entryHint: '建康宫城闹鬼的传闻。',
     basis: '建康＝晋国都城（官方附录地图 jin-nanzhao 幅在场；描述「晋国都城」）。第 10 关可达。'
@@ -273,6 +319,8 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       + 'seq 268 查出那是徐度安插的幽冥宗卧底——篡位的前戏。这些是**闹鬼传闻底下的真相**，'
       + '不写进指引（引擎不替玩家剧透）。',
     nodes: [
+      // 锚事件：seq 241–242 灵飞镜窥宫、与萧遥逸谈「宫禁闹鬼」。beat 有、event 无，需新增。
+      { text: '听说建康宫城里闹鬼', status: 'new', stageId: 'lcq.stage_07_qingyuan_jiankang', eventId: 'lcq.event.s07_palace_haunting_rumor' },
       { text: '进建康，夜探神龙殿，看清晋帝已被架空', status: 'ready', stageId: 'lcq.stage_07_qingyuan_jiankang', eventId: 'lcq.event.s07_07_dragon_hall' },
       // J2 并进 s08_03_beifu_rescue
       { text: '鹰愁峪入瓮，等北府来解围', status: 'ready', stageId: 'lcq.stage_08_jiankang_coup', eventId: 'lcq.event.s08_01_eagle_valley' },
@@ -298,6 +346,8 @@ export const SECONDARY_LINES: SecondaryLine[] = [
     kind: 'nation',
     // 江州与临安都收：和汉国同一处毛病——锚只填都城，线就要等到 seq 559 才开，
     // 而它第一个节点在 seq 383。江州是宋国找上门来的地方，比临安早得多。
+    // 锚＝你知道那件事的那一拍（用户裁定 2026-08-16）。
+    anchorEventIds: ['lcq.event.s10_01_jiangzhou_order'],
     anchorLocationIds: ['liuchao.location.jiangzhou', 'liuchao.location.linan', 'liuchao.location.lin_an'],
     entryHint: '贾师宪已经大举集结，江州要打起来了。',
     basis: '临安＝宋国都城。`linan` 覆盖 30 关为主，`lin_an` 只 1 关，一并收下防漏；'
@@ -334,6 +384,8 @@ export const SECONDARY_LINES: SecondaryLine[] = [
     id: 'han',
     name: '汉国',
     kind: 'nation',
+    // 锚＝你知道那件事的那一拍（用户裁定 2026-08-16）。
+    anchorEventIds: ['lcq.event.s07_01_old_case'],
     anchorLocationIds: ['liuchao.location.luoyang', 'lyl.location.luoyang'],
     // 两条路都能入线：跟八骏查左武军的旧案（第 10 关，早得多），或直接走到洛都（第 24 关）。
     anchorCharacterIds: ['liuchao.character.xiao_yao_yi'],
@@ -368,6 +420,9 @@ export const SECONDARY_LINES: SecondaryLine[] = [
     id: 'tang',
     name: '唐国',
     kind: 'nation',
+    // 锚事件待补：番僧猎杀穿越者在 beat 层（seq 1061）有，event 层 1059–1065 整段空白。
+    anchorEventIds: ['lyg.event.changgan_fanseng_hunt'],
+    anchorEventPending: true,
     anchorLocationIds: ['liuchao.location.changan'],
     entryHint: '番僧在猎杀穿越者，而且近来在长安大肆扩张——唐国本来崇道，如今佛门要压过道门。',
     basis: '长安＝唐国都城，第 30 关可达。**这次不是孪生 id 坑**（实测，2026-08-16）：'
@@ -387,6 +442,8 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       + '（另记一处结构：seq 1055 他是**以舞阳侯身份**出使唐国的——**汉国线的顶点就是本线的入场券**，'
       + '八条线里第一处明确的"顶点喂入口"。这层不写进指引，只作日后分层的依据。）',
     nodes: [
+      // 锚事件：seq 1061 袁天罡透露番僧猎杀穿越者。seq 1059–1065 事件层整段空白，需新增。
+      { text: '听袁天罡说破：番僧在猎杀穿越者', status: 'new', stageId: 'lyg.changgan_begins', eventId: 'lyg.event.changgan_fanseng_hunt' },
       // T1 汉使身份并进同关 s03_09
       { text: '以汉使入长安，在宣平坊落脚', status: 'ready', stageId: 'lyg.changgan_begins', eventId: 'lyg.event.s03_01' },
       { text: '看见十方丛林围了大雁塔', status: 'ready', stageId: 'lyg.changgan_begins', eventId: 'lyg.event.s03_08' },
@@ -436,9 +493,17 @@ export const LINE_ANCHOR_MIN_ACQUAINTANCE = 'encountered' as const;
 export function resolveAvailableLines(
   currentLocationId: string | undefined,
   ledger: AcquaintanceLedger | undefined,
+  completedEventIds?: readonly string[],
 ): SecondaryLine[] {
   const threshold = rankOf(LINE_ANCHOR_MIN_ACQUAINTANCE);
+  const done = completedEventIds?.length ? new Set(completedEventIds) : undefined;
   return SECONDARY_LINES.filter(line => {
+    // 事件锚优先：声明了它就由它单独判定，见 `anchorEventIds` 的说明。
+    // `anchorEventPending` ＝ 那条 event 还没写出来，此时不能用它判定（否则线永远打不开），
+    // 落回下面的粗锚。
+    if (line.anchorEventIds?.length && !line.anchorEventPending) {
+      return Boolean(done) && line.anchorEventIds.some(id => done!.has(id));
+    }
     if (line.anchorLocationIds?.length) {
       return Boolean(currentLocationId) && line.anchorLocationIds.includes(currentLocationId!);
     }

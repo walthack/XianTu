@@ -848,8 +848,12 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
             lines.push(`- 当前可切入点：${objective}`);
           }
         }
-        // 二级线：走到地方／认识对的人就该让玩家知道有这条门路，不设"接受任务"手续。
-        const openLines = resolveAvailableLines(currentLocation?.id, (runtime as any).acquaintances);
+        // 二级线：走到地方／认识对的人／知道了那件事，就该让玩家知道有这条门路，不设"接受任务"手续。
+        const openLines = resolveAvailableLines(
+          currentLocation?.id,
+          (runtime as any).acquaintances,
+          runtime.completedEventIds,
+        );
         if (openLines.length) {
           lines.push(`- 此刻可投的门路：${openLines.map(l => `${l.name}——${l.entryHint}`).join('；')}`);
         }
