@@ -39,9 +39,16 @@ test('层六绝不由 resolveMainQuestLayer 返回（全 37 关）', async () =>
   }
 });
 
-test('MAIN_QUEST_NODES 完整性：20 条且关卡集合 ⊆ 主轴关', async () => {
+test('MAIN_QUEST_NODES 完整性：数量在主线日志量级内，关卡集合 ⊆ 主轴关', async () => {
   const { MAIN_QUEST_NODES, MAIN_QUEST_STAGES, STAGE_ORDER } = await axisPromise;
-  assert.equal(MAIN_QUEST_NODES.length, 20);
+  // 原来写死 `=== 20`，锁的是当时的数字不是规则——按判据清理后（砍 4 条越界、
+  // 补 2 条血脉开场与 5 条太泉）立刻红，而节点表本来就该随内容增减。
+  // 锁真正该守的：**别退化成逐拍**。对标上古卷轴 5 主线日志约 18–19 条，上限取 30；
+  // 真超了说明又把 situation 那一级（143 条逐拍）摊进主轴了。
+  assert.ok(
+    MAIN_QUEST_NODES.length >= 12 && MAIN_QUEST_NODES.length <= 30,
+    `主轴节点 ${MAIN_QUEST_NODES.length} 条——少于 12 说明两根支柱没覆盖全，多于 30 说明退化成逐拍`,
+  );
   const stageOrder = new Set(STAGE_ORDER);
   const mainStages = new Set(MAIN_QUEST_STAGES.map(item => item.stageId));
   for (const node of MAIN_QUEST_NODES) {

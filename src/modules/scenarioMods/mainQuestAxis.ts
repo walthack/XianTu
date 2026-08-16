@@ -244,6 +244,10 @@ export const MAIN_QUEST_STAGES: MainQuestStageRole[] = [
   { stageId: 'lyl.lin_an_bridge', role: '赵飞燕线起点', pillars: ['bloodline'] },
   { stageId: 'lyl.xiaoyingzhou_blacksea_trap', role: '剑玉姬真身＝岳萼身份揭示；九阳交换', pillars: ['bloodline', 'taiquan'] },
   { stageId: 'lyl.taiquan_sacred_fruit', role: '太泉钥匙；赤阳圣果；高俅秘辛探身世', pillars: ['taiquan', 'bloodline'] },
+  // 太泉段整条排进主轴后补进来（2026-08-16）：蚁穴脱困那一拍（`find_exit`, seq 667）落在这一关。
+  // 此前排除它是因为共享正典注入会让它假阳性扫出「太泉／核心区」（见上方注释）；
+  // 但现在挂的是**实名 event**，不是靠扫描猜的，可以收。
+  { stageId: 'lyl.taiquan_core_conflict', role: '太泉蚁穴脱困', pillars: ['taiquan'] },
   { stageId: 'lyl.taiquan_afterfall', role: '探索人类居住区＝揭盅段；云如瑶＝岳霏', pillars: ['taiquan', 'bloodline'] },
   { stageId: 'lyl.han_palace_endgame', role: '秘境', pillars: ['bloodline'] },
   { stageId: 'lyg.mijing_rumen', role: '秘境续；小玲儿唯一在场关（疑似遗孤·超级用户）', pillars: ['bloodline'] },
