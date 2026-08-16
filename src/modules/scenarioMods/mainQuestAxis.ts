@@ -253,6 +253,15 @@ export const MAIN_QUEST_STAGES: MainQuestStageRole[] = [
 
 /** 主轴 20 节点，按 `STAGE_ORDER` 链序排列。 */
 export const MAIN_QUEST_NODES: MainQuestNode[] = [
+  // 血脉线开场。要求二「保住至少一名岳血后裔」此前在节点表里**零命中**——
+  // 玩家照主轴走完，两条完成要求一条都不会达成（实测 2026-08-16）。
+  //
+  // ⚠ 只补开场这两拍，**不补三川口护月霜**（用户裁定 2026-08-16）：要求写的是「至少一名」，
+  // 月霜只是王哲点名的默认人选、可被小紫等替代。堆三条月霜节点会把可替换的接口
+  // 读成唯一路径，与「不要求集齐」相矛盾。小紫那几拍（追问过往／临时协定／托付）
+  // 已经是另一个候选接口，主轴不必再替玩家指定保谁。
+  { stageId: 'lcq.stage_01', text: '遇上月霜——王哲点名要你守的那个岳帅后人', status: 'ready', eventId: 'lcq.event.s01_03' },
+  { stageId: 'lcq.stage_01', text: '替月霜解掉寒毒', status: 'ready', eventId: 'lcq.event.s01_06' },
   // #1 落点＝帅帐见王哲（旅程终点拍）；坠落／半兽人在 s01_01–s01_04。
   { stageId: 'lcq.stage_01', text: '从坠落处活下来，一路走到太乙真宗帅帐见着王哲', status: 'ready', eventId: 'lcq.event.s01_05' },
   { stageId: 'lcq.stage_02', text: '接下王哲的锦囊与九阳神功口诀，领受三件托付', status: 'ready', eventId: 'lcq.event.s02_01' },
@@ -270,20 +279,25 @@ export const MAIN_QUEST_NODES: MainQuestNode[] = [
   // #9 隔离关 stage_06（s06_03 谢艺托付 + s06_04 碧姬了断）。谢艺托付已由星月湖
   // 并进昭南杀龙 event——复用同一建议 id，不另开。建议挂 `lcq.stage_05b` 后缀。
   { stageId: 'lcq.stage_06', text: '接下谢艺对小紫与星月湖的托付，追上小紫见证她与碧姬的了断', locationId: 'liuchao.location.gui_wang_gong', status: 'new', eventId: 'lcq.event.s05b_slay_dragon' },
-  { stageId: 'lyl.lin_an_bridge', text: '在临安立足，摸清这座城的暗线', status: 'ready', eventId: 'lyl.event.lin_an_bridge_01_beat' },
-  { stageId: 'lyl.xiaoyingzhou_blacksea_trap', text: '查明剑玉姬的真身', status: 'ready', eventId: 'lyl.event.xiaoyingzhou_blacksea_trap_09_beat' },
+  // 太泉段：现成剧情整条排进来（用户裁定 2026-08-16）。此前主轴只取了钥匙与居住区两拍，
+  // 而这一段在事件层是完整的探索链——迷楼机关→取果→蚁穴→魔墟→古阵，共 8 条现成 event。
+  { stageId: 'lyl.taiquan_sacred_fruit', text: '在云涛观迷楼里摸清那套机关', status: 'ready', eventId: 'lyl.event.taiquan_sacred_fruit_04' },
   { stageId: 'lyl.taiquan_sacred_fruit', text: '在云涛观迷楼找出太泉钥匙的线索', status: 'ready', eventId: 'lyl.event.taiquan_sacred_fruit_05' },
+  { stageId: 'lyl.taiquan_sacred_fruit', text: '到火山口去争赤阳圣果——你此行真正的由头', status: 'ready', eventId: 'lyl.event.taiquan_sacred_fruit_10' },
+  { stageId: 'lyl.taiquan_core_conflict', text: '困在蚁穴里，先找到出去的路', status: 'ready', eventId: 'lyl.event.find_exit' },
+  { stageId: 'lyl.taiquan_afterfall', text: '进魔墟取那件东西', status: 'ready', eventId: 'lyl.event.taiquan_afterfall_03_beat' },
   { stageId: 'lyl.taiquan_afterfall', text: '探索太泉古阵的人类居住区', status: 'ready', eventId: 'lyl.event.taiquan_afterfall_05_beat' },
-  { stageId: 'lyl.taiquan_afterfall', text: '登云府提亲，带走云如瑶', status: 'ready', eventId: 'lyl.event.taiquan_afterfall_06_beat' },
+  // ⏳ 六阳开启古阵内的入口：正典压根没有这一拍——原著里程宗扬从未履行此托付
+  // （全书修为最高见第四级入微境，他去太泉是为赤阳圣果救人）。按扩写口径只标待扩，不细化。
+  { stageId: 'lyl.taiquan_afterfall', text: '修为到六阳，开启古阵内的入口（未来待扩）', status: 'new', eventId: 'lyl.event.taiquan_liuyang_gate' },
   { stageId: 'lyl.han_palace_endgame', text: '在汉宫变局中抵达秘境入口', status: 'ready', eventId: 'lyl.event.han_palace_endgame_07_beat' },
-  { stageId: 'lyg.mijing_rumen', text: '救治中毒昏迷的赵飞燕，并为她输血疗伤', status: 'ready', eventId: 'lyg.event.s02_02' },
+  { stageId: 'lyg.mijing_rumen', text: '保住赵飞燕——程赵之子这条盲点系在她身上', status: 'ready', eventId: 'lyg.event.s02_02' },
   // #17 文案「武帝像前」偏 s02_09；「安排秘境探索」本体是 s02_08（胶西邸／长秋宫）。
   { stageId: 'lyg.mijing_rumen', text: '在武帝像前安排秘境探索', status: 'ready', eventId: 'lyg.event.s02_08' },
   // #18 与汉国二级线同锚 s08（促成登基）；「长秋宫」字面更近 s06，但护住赵氏／登基收束在大典拍。
-  { stageId: 'lyg.han_succession', text: '护住赵氏，在长秋宫促成登基', status: 'ready', eventId: 'lyg.event.han_succession_08_beat' },
-  { stageId: 'lyg.han_succession', text: '在登基典仪中突破通幽境', status: 'ready', eventId: 'lyg.event.han_succession_09_beat' },
+  { stageId: 'lyg.han_succession', text: '护住赵氏一门，别让这支血脉在政变里断掉', status: 'ready', eventId: 'lyg.event.han_succession_08_beat' },
+  { stageId: 'lyg.han_succession', text: '在登基典仪上与赵飞燕行功，修为推到通幽境', status: 'ready', eventId: 'lyg.event.han_succession_09_beat' },
   // #20 文案压了两拍：斩断肉身 s12 ＋ 阻止夺舍 s13；落夺舍拍（终局收束）。
-  { stageId: 'lyg.shituolin_endgame', text: '斩断李辅国肉身，并阻止太皇太后被夺舍', status: 'ready', eventId: 'lyg.event.shituolin_endgame_13_beat' },
 ];
 
 /**
