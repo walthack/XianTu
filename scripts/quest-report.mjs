@@ -9,6 +9,49 @@
  * 用法：node scripts/quest-report.mjs [--json]
  * 输出：docs/quest-report.html（默认）或 stdout JSON
  */
+
+// ── 本轮待审：这一轮由 Claude 做出的判断，**每一条都需要用户过目**。
+// 用户 2026-08-18 指出：「主轴和二级线并未真正定稿，你这轮做完的是待审。」
+// 故本清单不是变更日志，是**审阅工单**：每条给出「我做了什么／依据是什么／你可能想推翻的是哪里」。
+const PENDING_REVIEW = [
+  { tag: '新增线', title: '加了第九条二级线「商道」',
+    did: '把事件层里 seq 134→885 的商业弧落成一条线，12 个 ready 节点。它既不锚地方也不锚人，锚「你第一次发现生意能办武力办不成的事」那一拍（seq 134）。',
+    basis: '你从「盘江股东大会」一条孤儿反查出整条线缺失。实测以商业为主语的拍 18 条，去掉隔离件后是全书跨度最长的一条连续弧。',
+    risk: '锚点选 seq 134 是我定的——更早的 s03_03「以新奇器物向苏妲己索酬」(seq 38) 在隔离关，锚上去线就打不开。若你要从更早开线，需先放出隔离件。' },
+  { tag: '重新归类', title: '把 4 条我原判「纯背景」的拍改判为情节拍',
+    did: '宦官嫁祸(1217)／宦官再分权(1321)／独柳树刑场(1335)／凉州盟擂台(1204) 落唐国线；入微突破(297) 按其实质「以珊瑚匕首逼退苏妲己」落晋国线；探视金蜜镝谈帝统(995) 落汉国线。',
+    basis: '你逐条驳回了我的「背景」判断，查证四字段后属实。',
+    risk: '凉州盟(1204) 落唐国线是我的选择——它是铁马堂的擂台赛，也可归商道线（镖局生意）或独立江湖线。' },
+  { tag: '归 trivial', title: '两条流言不上链',
+    did: '《阳武侯小史》流言、核武不扩散条约·惊魂——不挂任何线。',
+    basis: '你的裁定：算 trivial，日后作城市流言或杂项书籍提及。',
+    risk: '《阳武侯小史》其实直接关联血脉正统化（舆论把你说成阳武侯嫡子），与主轴的血脉要求同题。要进主轴的话现在说。' },
+  { tag: '消解 new', title: '主轴最后一个待写 event 判为「不必新增」',
+    did: '「进鬼王峒并当面辨认碧姬」原挂隔离关等裁定，改指已重建的可达件 geluo_summons_biji(seq 158)。',
+    basis: 'description 明写「程宗扬首次当面见到谢艺寻找的人」，正是这一拍。与昭南线双喂。',
+    risk: '双喂＝同一个 event 同时喂主轴与昭南。要分开就得新增一条 event。' },
+  { tag: '补断拍', title: '补了 8 处断拍，全部用现成 event，零新增',
+    did: '黑魔海 +2（巢穴逆转 419／静善夜袭 596）、晋国 +1（北府兵解围 287）、汉国 +1（郭解之死 956）、唐国 +2（小紫被救走 1090／鱼弘志弑唐皇 1312）、昭南 +1（苏妲己水镜传讯 100）、宋国 +1（林冲刺配 584）。',
+    basis: 'Claude 与 Grok 各自独立复审。Grok 报 10 处（6 个建议 id 我逐条核实，6/6 真实可达未认领）；我机械查出 2 处，恰在 Grok 判为干净的那两条线上。',
+    risk: '每一处的节点文案是我写的——文案怎么说这一拍，决定玩家看到什么。' },
+  { tag: '改文案', title: '删掉两处「文案在骗玩家」的半句',
+    did: '「董卓无符入京；刘建伏诛」「旁观李辅国审判；唐皇被弑」——删掉的那半句在对应 event 四字段里根本不存在。',
+    basis: 'Grok 抓出，我核实属实。真正的弑君是 seq 1312 另一条 event，已补为独立节点。',
+    risk: '无，这是修错。' },
+  { tag: '新机制', title: '汉国宫变段做成「去了现场／没去现场」两条分支',
+    did: '901「从传闻得知…」仅当没走过 891 含光殿现场时出现；902「决定是否拥立定陶王」仅当没走过 895 时出现。另在 4 个可达件上补了场外结算合同。',
+    basis: '你的设计问题。查证发现引擎早有 offscreenResolution ＋ conditions 两件现成机制，而这段的 4 条合同挂在隔离关原件上、永不触发——接线当初就建了，断在隔离迁移上。',
+    risk: '门控判据取 891／895 是我定的。若玩家走过 891 却没走过 896，关于刘建的部分对他仍是新消息——我按「入口拍」一刀切，没逐条分解。' },
+  { tag: '待接线', title: '人物任务落成模块，但尚未接进游戏',
+    did: 'characterQuests.ts：8 条线 54 拍 ＋ A 档 29 人 35 条单点高光，id 全部解析成真实 event。',
+    basis: '第三级此前零代码，只存在于 markdown 里。',
+    risk: '尚未接进 RightSidebar／storyContext，且它读上级的认领表——上级一动就要重抽。你指出的顺序问题即此。' },
+  { tag: '待落地', title: '商贾线设计落档，后期做',
+    did: 'docs/R3-11-COMMERCE-TIER-DESIGN：变现层设计（regionStanding × 商道台阶 → 每回合收益）。',
+    basis: '你的设想：通过商业版图扩展（攻略各国获地区声望）获得稳定金钱／物品。',
+    risk: '阻塞裁定 P1：地区立足度目前是 STAGE_ORDER 走过比例的纯派生量（打到哪赚到哪），玩家无法主动经营某地。甲（保持派生）／乙（加可投入分量）未定。' },
+];
+
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -190,7 +233,7 @@ function render(r) {
   };
 
   const rows = r.tiers.map(t => `<div class="row ${t.tier === 1 ? 'main' : ''}">
-    <div class="nm">${esc(t.name)}<i>${t.tier === 1 ? '一级' : t.kind === 'sect' ? '二级·宗派' : '二级·国家'}</i></div>
+    <div class="nm">${esc(t.name)}<i>${t.tier === 1 ? '一级' : t.kind === 'sect' ? '二级·宗派' : t.kind === 'commerce' ? '二级·商道' : '二级·国家'}</i></div>
     <div class="tk">${track(t)}</div></div>`).join('');
 
   const charRow = `<div class="row ch"><div class="nm">人物任务<i>三级·插入</i></div><div class="tk">${
@@ -304,6 +347,17 @@ ol.nodes li.p .sq{color:var(--ink3)}
  <div class="stat"><b class="mono">${charHooks.size}</b><span>人物挂点</span></div>
 </div></header>
 
+<h2>本轮待审</h2>
+<div class="box" style="padding:14px 16px">
+<p class="hk" style="margin-bottom:10px">这一轮由 Claude 做出的判断，<b>每一条都需要过目</b>。「你可能想推翻的」一栏写的是我自己知道的薄弱处。</p>
+${PENDING_REVIEW.map((p, i) => `<div class="ln" style="margin:0 0 12px">
+  <h3 class="serif" style="font-size:15px">${i + 1}. ${esc(p.title)}<span class="tg">${esc(p.tag)}</span></h3>
+  <div class="hk" style="padding:4px 0"><b>做了</b>　${esc(p.did)}</div>
+  <div class="hk" style="padding:4px 0"><b>依据</b>　${esc(p.basis)}</div>
+  <div class="hk" style="padding:4px 0"><b>你可能想推翻的</b>　${esc(p.risk)}</div>
+</div>`).join('')}
+</div>
+
 <h2>三级同轴</h2>
 <div class="box"><div class="axis">
 <div class="books"><div style="flex:550">六朝清羽记</div><div style="flex:397">六朝云龙吟</div><div style="flex:452">六朝燕歌行</div></div>
@@ -322,7 +376,7 @@ ${rows}${charRow}
 
 <h2>逐线展开：每条线的 event 与挂在下面的角色戏</h2>
 ${r.tiers.map(t => `<div class="ln">
-  <h3 class="serif">${esc(t.name)}<span class="tg">${t.tier === 1 ? '一级·主轴' : t.kind === 'sect' ? '二级·宗派' : '二级·国家'}</span></h3>
+  <h3 class="serif">${esc(t.name)}<span class="tg">${t.tier === 1 ? '一级·主轴' : t.kind === 'sect' ? '二级·宗派' : t.kind === 'commerce' ? '二级·商道' : '二级·国家'}</span></h3>
   ${t.hint ? `<div class="hint">${esc(t.hint)}</div>` : ''}
   <ol class="nodes">${t.nodes.map((n, i) => {
     const ev = n.eventId ? events.get(n.eventId) : undefined;

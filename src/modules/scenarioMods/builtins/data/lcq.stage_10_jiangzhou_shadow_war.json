@@ -4094,7 +4094,8 @@
           "lcq.event.s10_03_ninja_trace",
           "lcq.event.s10_04_left_army_review",
           "lcq.event.s10_05_war_funds",
-          "lcq.event.s10_06_ruined_temple"
+          "lcq.event.s10_06_ruined_temple",
+          "lcq.event.yuanxingjian_interrogated"
         ],
         "activation": [
           {
@@ -5131,6 +5132,49 @@
               ]
             }
           ]
+        }
+      },
+      {
+        "id": "lcq.event.yuanxingjian_interrogated",
+        "name": "审问元行健",
+        "description": "程宗扬指使泉玉姬抓捕太乙真宗元行健，审问出林之澜指使暗算月霜，以及蔺采泉等人因拜火教事务来晴州。",
+        "axisId": "qingyu.228.1",
+        "axisAnchor": "六朝清羽记·#228·第224章·驯奴",
+        "axisSeq": 413,
+        "axisBeat": "程宗扬指使泉玉姬抓捕太乙真宗门人元行健，审问出林之澜指使暗算月霜的阴谋，以及蔺采泉等人因拜火教事务来晴州。",
+        "critical": false,
+        "completion": [
+          {
+            "path": "flags.event.yuanxingjian_interrogated.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "objective": "审出元行健背后是谁",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "interrogate_yuanxingjian",
+              "label": "审出元行健背后是谁",
+              "actionText": "我把元行健拿下审问，要问出他听谁的、为什么冲月霜来。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“审出元行健背后是谁”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        },
+        "exploration": {
+          "role": "investigate"
         }
       }
     ],

@@ -4116,6 +4116,7 @@
           }
         ],
         "eventIds": [
+          "lcq.event.qiushaojun_breaks_with_linzhilan",
           "lcq.event.s11_08_jiangzhou_lockdown",
           "lcq.event.s11_09_grain_plan",
           "lcq.event.s11_10_sanchuankou_defeat"
@@ -5241,6 +5242,50 @@
               }
             }
           ]
+        }
+      },
+      {
+        "id": "lcq.event.qiushaojun_breaks_with_linzhilan",
+        "name": "秋少君反目",
+        "description": "秋少君向程宗扬透露，因元行健之死与师兄林之澜反目分手；林之澜怀疑其与卓云君失踪有关，不再认他为师弟。",
+        "axisId": "qingyu.250.1",
+        "axisAnchor": "六朝清羽记·#250·第246章·粮战",
+        "axisSeq": 463,
+        "axisBeat": "秋少君向程宗扬透露，因元行健之死与师兄林之澜反目分手，林之澜怀疑其与卓云君失踪有关，不再认他为师弟。",
+        "critical": false,
+        "completion": [
+          {
+            "path": "flags.event.qiushaojun_breaks_with_linzhilan.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.qiu_shao_jun"
+        ],
+        "objective": "弄清秋少君为什么与林之澜翻脸",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "confirm_qiushaojun_break",
+              "label": "弄清秋少君为什么与林之澜翻脸",
+              "actionText": "我找秋少君把话说开，弄清他和林之澜到底为什么走到反目。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“弄清秋少君为什么与林之澜翻脸”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        },
+        "exploration": {
+          "role": "payoff"
         }
       }
     ],

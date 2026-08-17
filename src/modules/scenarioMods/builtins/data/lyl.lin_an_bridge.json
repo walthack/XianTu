@@ -5699,7 +5699,8 @@
           "lyl.event.debut_zhaohede",
           "lyl.event.debut_yinfulan",
           "lyl.event.debut_jingli",
-          "lyl.event.debut_jianyuji"
+          "lyl.event.debut_jianyuji",
+          "lyl.event.xue_yanshan_slain"
         ]
       }
     ],
@@ -7452,6 +7453,49 @@
               ]
             }
           ]
+        }
+      },
+      {
+        "id": "lyl.event.xue_yanshan_slain",
+        "name": "薛延山遇害",
+        "description": "薛延山在西湖边藏身处被杀，首级被取走，冯源逃回报信。",
+        "axisId": "yunlong.16.1",
+        "axisAnchor": "六朝云龙吟·#16·遇袭",
+        "axisSeq": 568,
+        "axisBeat": "薛延山在西湖边藏身处被杀，首级被取走，冯源逃回报信。",
+        "critical": false,
+        "completion": [
+          {
+            "path": "flags.event.xue_yanshan_slain.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "objective": "查明薛延山的下落",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "confirm_xue_yanshan_death",
+              "label": "查明薛延山的下落",
+              "actionText": "我循冯源报来的消息去查薛延山的下落，看西湖那处藏身地究竟出了什么事。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“查明薛延山的下落”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        },
+        "exploration": {
+          "role": "payoff"
         }
       }
     ],

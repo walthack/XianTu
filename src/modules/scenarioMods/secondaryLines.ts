@@ -203,9 +203,11 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       { text: '听清蔺采泉与商乐轩在争掌教', status: 'ready', stageId: 'lcq.stage_10_jiangzhou_shadow_war', eventId: 'lcq.event.yeying_seat_struggle' },
       // 这是对手开的价，不是盟友协商——文案不要写成结盟。
       { text: '破道观：认出元行健是林之澜的人', status: 'ready', stageId: 'lcq.stage_10_jiangzhou_shadow_war', eventId: 'lcq.event.s10_06_ruined_temple' },
+      { text: '审出元行健：坐实林之澜指使暗算月霜', status: 'ready', stageId: 'lcq.stage_10_jiangzhou_shadow_war', eventId: 'lcq.event.yuanxingjian_interrogated' },
+      { text: '秋少君因元行健之死与林之澜反目', status: 'ready', stageId: 'lcq.stage_11_lieshan_battle', eventId: 'lcq.event.qiushaojun_breaks_with_linzhilan' },
+      // ⏳ 扩写部分，本阶段不再细化（用户裁定 2026-08-16）：正典无此拍，只标未来待扩。
       { text: '蔺采泉以支持江州，换你承认九阳出自他', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_blacksea_trap_02_beat' },
       { text: '鹤林观：蔺采泉自立掌教，秋少君升任教御', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_lin_takes_seat' },
-      // ⏳ 扩写部分，本阶段不再细化（用户裁定 2026-08-16）：正典无此拍，只标未来待扩。
       { text: '在翠微园承诺对付现任掌教', status: 'ready', stageId: 'lyl.taiquan_sacred_fruit', eventId: 'lyl.event.sacred_against_lin' },
       { text: '扳倒现任掌教、取得掌教之位（未来待扩）', status: 'pending' },
       { text: '锦囊出指令、齐羽仙反用（续写第二幕）', status: 'pending' },
@@ -263,6 +265,7 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       { text: '解读便门瓦接头字条', status: 'ready', stageId: 'lyl.lin_an_bridge', eventId: 'lyl.event.decode_bianmenwa_note' },
       { text: '西湖农居会见薛延山', status: 'ready', stageId: 'lyl.lin_an_bridge', eventId: 'lyl.event.meet_xue_yanshan' },
       { text: '辨认薛延山寒毒', status: 'ready', stageId: 'lyl.lin_an_bridge', eventId: 'lyl.event.identify_xue_cold_poison' },
+      { text: '薛延山在西湖藏身处被杀，首级被取走', status: 'ready', stageId: 'lyl.lin_an_bridge', eventId: 'lyl.event.xue_yanshan_slain' },
       { text: '在临安祭岳鹏举与谢艺的墓', status: 'ready', stageId: 'lyl.lin_an_bridge', eventId: 'lyl.event.lin_an_bridge_xieyi_tomb' },
       { text: '岳帅归营、番号恢复、冤案洗雪（续写第二幕）', status: 'pending' },
     ],
@@ -559,6 +562,7 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       { text: '决定是否出面拥立定陶王', status: 'ready', stageId: 'lyl.han_palace_endgame', eventId: 'lyl.event.han_sponsor_dingtao' },
       { text: '赶往平朔殿阻止吕巨君', status: 'ready', stageId: 'lyl.han_palace_endgame', eventId: 'lyl.event.han_palace_endgame_05_beat' },
       { text: '把定陶王从府里救出来', status: 'ready', stageId: 'lyl.han_palace_endgame', eventId: 'lyl.event.han_palace_endgame_06_beat' },
+      { text: '与逃出北宫的赵飞燕、赵合德会合', status: 'ready', stageId: 'lyl.han_palace_endgame', eventId: 'lyl.event.zhao_sisters_flee_north_palace' },
       { text: '董卓无符入京', status: 'ready', stageId: 'lyl.han_palace_endgame', eventId: 'lyl.event.han_palace_endgame_08_beat' },
       { text: '贾文和劫持定陶王', status: 'ready', stageId: 'lyg.dingtao_beijing', eventId: 'lyg.event.s01_02' },
       { text: '董卓挟持定陶王出洛都', status: 'ready', stageId: 'lyg.dingtao_beijing', eventId: 'lyg.event.s01_03' },

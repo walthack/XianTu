@@ -5930,6 +5930,7 @@
         ],
         "eventIds": [
           "lyl.event.han_palace_endgame_06_beat",
+          "lyl.event.zhao_sisters_flee_north_palace",
           "lyl.event.han_palace_endgame_07_beat",
           "lyl.event.han_palace_endgame_08_beat",
           "lyl.event.han_palace_endgame_09_beat",
@@ -7415,6 +7416,51 @@
           ],
           "worldDelta": "吕奉先单骑破阵的事已经传开，阿阁一线的僵持被他一个人打破。",
           "evidence": "R3-11 分支合同：本拍属于「玩家不在场也会发生」的宫变世界事件。等价合同原挂在隔离关 `lyl.luoyang_coup` 的原件上（默认路线静默跳过 → 永不触发），内容重建进 `lyl.han_palace_endgame` 时未跟随，此处补齐。"
+        }
+      },
+      {
+        "id": "lyl.event.zhao_sisters_flee_north_palace",
+        "name": "赵氏逃宫",
+        "description": "赵合德救出赵飞燕，一同逃出北宫，遇到程宗扬。",
+        "axisId": "yunlong.311.1",
+        "axisAnchor": "六朝云龙吟·#311·逃宫",
+        "axisSeq": 933,
+        "axisBeat": "赵合德救出赵飞燕，一同逃出北宫，遇到程宗扬。",
+        "critical": false,
+        "completion": [
+          {
+            "path": "flags.event.zhao_sisters_flee_north_palace.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.zhao_he_de",
+          "liuchao.character.zhao_feiyan"
+        ],
+        "objective": "接应逃出北宫的赵氏姐妹",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "meet_fleeing_zhao_sisters",
+              "label": "接应逃出北宫的赵氏姐妹",
+              "actionText": "我去接应逃出北宫的赵飞燕与赵合德。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“接应逃出北宫的赵氏姐妹”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        },
+        "exploration": {
+          "role": "payoff"
         }
       }
     ],
