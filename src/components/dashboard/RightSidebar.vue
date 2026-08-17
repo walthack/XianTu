@@ -506,7 +506,7 @@ const availableLines = computed(() => {
   return resolveAvailableLines(locId, rt.acquaintances, rt.completedEventIds).map((line: any) => ({
     id: line.id,
     name: line.name,
-    kind: line.kind === 'sect' ? '宗派' : '国家',
+    kind: line.kind === 'sect' ? '宗派' : line.kind === 'commerce' ? '商道' : '国家',
     hint: line.entryHint,
     ready: (line.nodes || []).filter((n: any) => n.status === 'ready').length,
     total: (line.nodes || []).length,

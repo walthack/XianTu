@@ -35,7 +35,7 @@
 
 import { acquaintanceOf, rankOf, type AcquaintanceLedger } from './acquaintanceLedger';
 
-export type SecondaryLineKind = 'sect' | 'nation';
+export type SecondaryLineKind = 'sect' | 'nation' | 'commerce';
 
 export interface SecondaryLine {
   id: string;
@@ -125,6 +125,44 @@ export interface LineNode {
  * 太乙山门「龙池」两个 id 都不可达，故太乙改走人物锚。
  */
 export const SECONDARY_LINES: SecondaryLine[] = [
+  // —— 商业线：锚事 ——
+  {
+    id: 'commerce',
+    name: '商道',
+    kind: 'commerce',
+    // 锚＝你第一次发现"生意能办武力办不成的事"那一拍（用户 2026-08-17 指出本线缺失）。
+    anchorEventIds: ['lcq.event.weapon_deal_with_geluo'],
+    entryHint: '兵器一笔买卖就化开了刀兵——这条路你走得通，往下还有织坊、粮仓、钱庄和一整个商社。',
+    basis: '**本线此前完全缺失**（用户 2026-08-17 由「盘江股东大会」一条孤儿反查发现）。'
+      + '实测事件层以商业为主语的拍共 18 条，去掉 3 条隔离件后是一条**从 seq 134 贯到 885 的完整弧**，'
+      + '跨度为八条线之最：兵器生意（134）→ 织坊换局（359）→ 十万金铢军资（404）→ 粮战全盘（465）'
+      + '→ 常平仓火计（496）→ 接管鹏翼社（534）→ 临安粮战令（550）→ 问清纸钞／纸钞纳税（575／578）'
+      + '→ 水泥换休战（618）→ 盘江股东大会（644）→ 纸钞买田（885）。'
+      + '主语一路在变：先是**换钱**，接着是**换军资**，再往后是**定粮价**、**接管商社**、'
+      + '**发行货币**、**开股东大会**，最后用自己发的钞去**买田**——'
+      + '这是全书唯一一条把「有钱」变成「有权」的链，而它一条节点都没落。'
+      + '锚不取更早的 `s03_03`（seq 38「以新奇器物向苏妲己索酬」）：那一拍在隔离关 `lcq.stage_03`，锚上去线就打不开。'
+      + '**双喂说明**：134／404／534／575／578／618／885 已被昭南、江州、宋国等线认领，本线共用不独占——'
+      + '同一拍在不同线里问的问题不同（那边问「仗怎么打赢」，这边问「钱从哪来、之后归谁」）。',
+    nodes: [
+      { text: '以一笔兵器生意化开阁罗那边的刀兵', status: 'ready', stageId: 'lcq.stage_04b_lingfei_baiyi_crisis', eventId: 'lcq.event.weapon_deal_with_geluo' },
+      { text: '织坊换局：拿下第一处自己的产业', status: 'ready', stageId: 'lcq.stage_09_trade_and_escape', eventId: 'lcq.event.s09_04_weaving_trade' },
+      { text: '凑出十万金铢军资', status: 'ready', stageId: 'lcq.stage_10_jiangzhou_shadow_war', eventId: 'lcq.event.s10_05_war_funds' },
+      { text: '把粮价算成一盘棋', status: 'ready', stageId: 'lcq.stage_11_lieshan_battle', eventId: 'lcq.event.s11_09_grain_plan' },
+      { text: '定下常平仓火计', status: 'ready', stageId: 'lcq.stage_12_jiangzhou_counterwar', eventId: 'lcq.event.s12_05_granary_fire_plan' },
+      { text: '接管鹏翼社，第一次手里有了整个商社', status: 'ready', stageId: 'lcq.stage_12_jiangzhou_counterwar', eventId: 'lcq.event.pengyi_takeover' },
+      { text: '发临安粮战令', status: 'ready', stageId: 'lcq.stage_12_jiangzhou_counterwar', eventId: 'lcq.event.s12_18_linan_grain_order' },
+      { text: '问清纸钞是怎么回事', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_paper_plan' },
+      { text: '让纸钞能纳税——自己发的钱，官府认了', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_paper_mint' },
+      { text: '拿水泥换一纸休战', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_cement_truce' },
+      { text: '开盘江程氏第一次股东大会：分红、发股、定主业', status: 'ready', stageId: 'lyl.taiquan_sacred_fruit', eventId: 'lyl.event.taiquan_sacred_fruit_06' },
+      { text: '用自己发的钞去买田', status: 'ready', stageId: 'lyl.luoyang_cloud_secret', eventId: 'lyl.event.han_limit_field' },
+      { text: '商社成势之后归谁、能换到什么（未来待扩）', status: 'pending' },
+    ],
+    pendingExpansion: '**正典写到「用纸钞买田」（seq 885）为止**，再往后商社的政治收束无拍，标待扩不细化。'
+      + '另有 3 条在隔离关（`final_preparations`／`s05_04`／`s06_02`），其中 `s05_04`「以兵器生意化解危机」'
+      + '与本线首节点 `weapon_deal_with_geluo` 同为 seq 134 同一拍的双版本，取可达那件即可，不申请放出隔离。',
+  },
   // —— 宗派线：锚人 ——
   {
     id: 'taiyi',
@@ -143,7 +181,6 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       { text: '受王哲传功托付，入太乙真宗阵营', status: 'ready', stageId: 'lcq.stage_01', eventId: 'lcq.event.s01_04' },
       { text: '接下锦囊与三托付', status: 'ready', stageId: 'lcq.stage_02', eventId: 'lcq.event.s02_01' },
       { text: '在紫溪被点名去龙池', status: 'ready', stageId: 'lcq.stage_03b_snake_flower_bridge', eventId: 'lcq.event.zixi_intercept' },
-      { text: '在紫溪被太乙的人拦下，点名要你去龙池', status: 'ready', stageId: 'lcq.stage_02', eventId: 'lcq.event.zixi_taiyi_intercept' },
       { text: '读王哲密信，受托清理门户', status: 'ready', stageId: 'lcq.stage_07_qingyuan_jiankang', eventId: 'lcq.event.wangzhe_letter' },
       { text: '听清蔺采泉与商乐轩在争掌教', status: 'ready', stageId: 'lcq.stage_10_jiangzhou_shadow_war', eventId: 'lcq.event.yeying_seat_struggle' },
       // 这是对手开的价，不是盟友协商——文案不要写成结盟。
@@ -382,16 +419,17 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       { text: '进建康，夜探神龙殿，看清晋帝已被架空', status: 'ready', stageId: 'lcq.stage_07_qingyuan_jiankang', eventId: 'lcq.event.s07_07_dragon_hall' },
       // J2 并进 s08_03_beifu_rescue
       { text: '鹰愁峪入瓮，等北府来解围', status: 'ready', stageId: 'lcq.stage_08_jiankang_coup', eventId: 'lcq.event.s08_01_eagle_valley' },
+      { text: '经脉既复，以珊瑚匕首逼退苏妲己', status: 'ready', stageId: 'lcq.stage_08_jiankang_coup', eventId: 'lcq.event.s08_05_breakthrough' },
       { text: '在玄武湖把晋帝、太后抢回来', status: 'ready', stageId: 'lcq.stage_08_jiankang_coup', eventId: 'lcq.event.s08_10_xuanwu_rescue' },
       { text: '看清分赃：萧家江宁、云家盐业、你一无所得', status: 'ready', stageId: 'lcq.stage_09_trade_and_escape', eventId: 'lcq.event.spoils_split' },
       { text: '问清北府此刻听谁的', status: 'ready', stageId: 'lcq.stage_09_trade_and_escape', eventId: 'lcq.event.s09_01_eight_steeds_leave' },
       { text: '问清相府此刻站在哪一边', status: 'ready', stageId: 'lcq.stage_09_trade_and_escape', eventId: 'lcq.event.xiangfu_stance' },
       { text: '听说晋相腾出江州，让宋军来剿星月湖', status: 'ready', stageId: 'lcq.stage_12_jiangzhou_counterwar', eventId: 'lcq.event.jin_vacate_jiangzhou' },
-      { text: '趁晋国大旱收粮，把建康当成营销中心来做', status: 'ready', stageId: 'lyl.taiquan_sacred_fruit', eventId: 'lyl.event.sacred_jin_drought' },
       // J9 前半已有 s12_14_chenxing_appears／s12_15_capture_jingli；后半需新增
-      { text: '把广源行在晋的旧账揭开（龙宸这条线）', status: 'ready', stageId: 'lyl.taiquan_afterfall', eventId: 'lyl.event.jin_guangyuan_ledger' },
+      { text: '趁晋国大旱收粮，把建康当成营销中心来做', status: 'ready', stageId: 'lyl.taiquan_sacred_fruit', eventId: 'lyl.event.sacred_jin_drought' },
       // 顶点占位：原文未明，称号待定（seq 334「程宗扬无所得」）
       // ⏳ 扩写部分，本阶段不再细化（用户裁定 2026-08-16）：正典无此拍，只标未来待扩。
+      { text: '把广源行在晋的旧账揭开（龙宸这条线）', status: 'ready', stageId: 'lyl.taiquan_afterfall', eventId: 'lyl.event.jin_guangyuan_ledger' },
       { text: '押运云氏金铢至伊水', status: 'ready', stageId: 'lyl.luoyang_cloud_secret', eventId: 'lyl.event.s05_09' },
       { text: '在晋廷取得一个名分（未来待扩，原文未明）', status: 'pending' },
     ],
@@ -505,6 +543,7 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       { text: '到场或听任新朝承认定陶王', status: 'ready', stageId: 'lyg.dingtao_beijing', eventId: 'lyg.event.s01_05' },
       { text: '吕冀赐死，见证吕雉亲裁诸吕', status: 'ready', stageId: 'lyg.dingtao_beijing', eventId: 'lyg.event.s01_09' },
       { text: '郭解送葬', status: 'ready', stageId: 'lyg.mijing_rumen', eventId: 'lyg.event.s02_01' },
+      { text: '探视金蜜镝，以成亲相胁逼他不干涉帝统', status: 'ready', stageId: 'lyg.mijing_rumen', eventId: 'lyg.event.s02_07' },
       { text: '转告程宗扬拥立阴谋内容', status: 'ready', stageId: 'lyg.han_succession', eventId: 'lyg.event.han_succession_04_beat' },
       { text: '问清赵合德：蛇夫人那条继嗣的计策要怎么破局', status: 'ready', stageId: 'lyg.han_succession', eventId: 'lyg.event.han_succession_05_beat' },
       { text: '护住赵氏，促成新帝登基，自己以辅政定型', status: 'ready', stageId: 'lyg.han_succession', eventId: 'lyg.event.han_succession_08_beat' },
@@ -572,12 +611,16 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       { text: '接下李昂那道闭门密令', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.liang_secret_order' },
       { text: '确认周飞与十方丛林是一伙的', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.zhoufei_conspiracy' },
       { text: '问出飞鸟家族与那截剑柄的关系', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.feiniao_hilt_clue' },
+      { text: '看凉州盟以擂台定盟主，铁马堂进八强', status: 'ready', stageId: 'lyg.liangzhou_league', eventId: 'lyg.event.s06_02' },
       { text: '查清仇士良夺取神策军兵权内幕', status: 'ready', stageId: 'lyg.liangzhou_league', eventId: 'lyg.event.s06_04' },
+      { text: '查李宏行刺匡佑、自残嫁祸和尚的现场', status: 'ready', stageId: 'lyg.buddhist_conspiracy', eventId: 'lyg.event.buddhist_conspiracy_01_beat' },
       { text: '扛住十方丛林围杀', status: 'ready', stageId: 'lyg.buddhist_conspiracy', eventId: 'lyg.event.buddhist_conspiracy_03_beat' },
       { text: '揭穿窥基伪诏，逼他弃佛入魔', status: 'ready', stageId: 'lyg.buddhist_conspiracy', eventId: 'lyg.event.buddhist_conspiracy_08_beat' },
       { text: '甘露变在大明宫爆发', status: 'ready', stageId: 'lyg.buddhist_conspiracy', eventId: 'lyg.event.buddhist_conspiracy_11_beat' },
       { text: '旁观李辅国审判；唐皇被弑', status: 'ready', stageId: 'lyg.ganlu_aftershock', eventId: 'lyg.event.ganlu_aftershock_05_beat' },
       { text: '思考贾文和杀李昂的建议', status: 'ready', stageId: 'lyg.ganlu_aftershock', eventId: 'lyg.event.ganlu_aftershock_06_beat' },
+      { text: '探听李辅国重分宦官职权与继位人选', status: 'ready', stageId: 'lyg.shituolin_endgame', eventId: 'lyg.event.shituolin_endgame_01_beat' },
+      { text: '目睹独柳树刑场：甘露变后的清算', status: 'ready', stageId: 'lyg.shituolin_endgame', eventId: 'lyg.event.shituolin_endgame_02_beat' },
       { text: '与众人合力消灭窥基魔身', status: 'ready', stageId: 'lyg.shituolin_endgame', eventId: 'lyg.event.shituolin_endgame_05_beat' },
       { text: '奉诏讨逆', status: 'ready', stageId: 'lyg.shituolin_endgame', eventId: 'lyg.event.shituolin_endgame_09_beat' },
       { text: '莲座前迎战李辅国', status: 'ready', stageId: 'lyg.shituolin_endgame', eventId: 'lyg.event.shituolin_endgame_10_beat' },
