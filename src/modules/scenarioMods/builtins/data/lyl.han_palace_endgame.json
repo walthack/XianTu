@@ -6849,7 +6849,14 @@
               ]
             }
           ]
-        }
+        },
+        "conditions": [
+          {
+            "path": "flags.event.lvji_defiles_consort.done",
+            "operator": "neq",
+            "value": true
+          }
+        ]
       },
       {
         "id": "lyl.event.han_sponsor_dingtao",
@@ -6923,7 +6930,14 @@
               ]
             }
           ]
-        }
+        },
+        "conditions": [
+          {
+            "path": "flags.event.arrange_escape_route.done",
+            "operator": "neq",
+            "value": true
+          }
+        ]
       },
       {
         "id": "lyl.event.liujian_takes_nangong",
@@ -6983,6 +6997,16 @@
               ]
             }
           ]
+        },
+        "offscreenResolution": {
+          "id": "offscreen.r3_11.liujian_takes_nangong",
+          "afterStallTurns": 8,
+          "flagKey": "world.r3_11.liujian_takes_nangong.offscreen_resolved",
+          "resolvedEventIds": [
+            "lyl.event.liujian_takes_nangong"
+          ],
+          "worldDelta": "刘建一方已经攻占南宫与武库，兵械和宫城通道易手，长秋宫危机随之升级。",
+          "evidence": "R3-11 分支合同：本拍属于「玩家不在场也会发生」的宫变世界事件。等价合同原挂在隔离关 `lyl.luoyang_coup` 的原件上（默认路线静默跳过 → 永不触发），内容重建进 `lyl.han_palace_endgame` 时未跟随，此处补齐。"
         }
       },
       {
@@ -7107,6 +7131,16 @@
               ]
             }
           ]
+        },
+        "offscreenResolution": {
+          "id": "offscreen.r3_11.emperor_death_spreads",
+          "afterStallTurns": 7,
+          "flagKey": "world.r3_11.emperor_death_spreads.offscreen_resolved",
+          "resolvedEventIds": [
+            "lyl.event.emperor_death_spreads"
+          ],
+          "worldDelta": "天子暴毙的消息已经传遍洛都，宫门、军营与豪门同时开始站队。",
+          "evidence": "R3-11 分支合同：本拍属于「玩家不在场也会发生」的宫变世界事件。等价合同原挂在隔离关 `lyl.luoyang_coup` 的原件上（默认路线静默跳过 → 永不触发），内容重建进 `lyl.han_palace_endgame` 时未跟随，此处补齐。"
         }
       },
       {
@@ -7235,6 +7269,16 @@
               ]
             }
           ]
+        },
+        "offscreenResolution": {
+          "id": "offscreen.r3_11.changqiu_palace_defense",
+          "afterStallTurns": 8,
+          "flagKey": "world.r3_11.changqiu_palace_defense.offscreen_resolved",
+          "resolvedEventIds": [
+            "lyl.event.changqiu_palace_defense"
+          ],
+          "worldDelta": "长秋宫的守卫战已经打完，台阶前的尸首被抬走，宫门换了人把守。",
+          "evidence": "R3-11 分支合同：本拍属于「玩家不在场也会发生」的宫变世界事件。等价合同原挂在隔离关 `lyl.luoyang_coup` 的原件上（默认路线静默跳过 → 永不触发），内容重建进 `lyl.han_palace_endgame` 时未跟随，此处补齐。"
         }
       },
       {
@@ -7361,6 +7405,16 @@
               ]
             }
           ]
+        },
+        "offscreenResolution": {
+          "id": "offscreen.r3_11.lvfengxian_breaks_line",
+          "afterStallTurns": 9,
+          "flagKey": "world.r3_11.lvfengxian_breaks_line.offscreen_resolved",
+          "resolvedEventIds": [
+            "lyl.event.lvfengxian_breaks_line"
+          ],
+          "worldDelta": "吕奉先单骑破阵的事已经传开，阿阁一线的僵持被他一个人打破。",
+          "evidence": "R3-11 分支合同：本拍属于「玩家不在场也会发生」的宫变世界事件。等价合同原挂在隔离关 `lyl.luoyang_coup` 的原件上（默认路线静默跳过 → 永不触发），内容重建进 `lyl.han_palace_endgame` 时未跟随，此处补齐。"
         }
       }
     ],
