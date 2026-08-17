@@ -9,7 +9,7 @@
     "description": "林冲线、野猪林乱战、明庆寺旧事、小瀛洲设伏与剑玉姬真身交锋，补齐太泉前的临安黑魔海主轴。",
     "axisVersion": "rebuild-2026-06-28",
     "axisOrder": 2.5,
-    "axisSeqLo": 567,
+    "axisSeqLo": 565,
     "axisSeqHi": 618,
     "eventIdContract": "append-only-frozen",
     "prevStageId": "lyl.taiquan_expedition",
@@ -5693,6 +5693,8 @@
       "event.xiaoyingzhou_cement_truce.done": false,
       "event.xiaoyingzhou_paper_plan.done": false,
       "event.xiaoyingzhou_paper_mint.done": false,
+      "event.linjia_sees_ningyi.done": false,
+      "event.xihu_villa_eavesdrop.done": false,
       "chapter.lyl.xiaoyingzhou_blacksea_trap.linchong.started": true,
       "chapter.lyl.xiaoyingzhou_blacksea_trap.linchong.done": false,
       "chapter.lyl.xiaoyingzhou_blacksea_trap.trap.started": false,
@@ -7006,6 +7008,130 @@
                 "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
                 "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
               }
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyl.event.linjia_sees_ningyi",
+        "name": "林家识破凝姨秘密",
+        "description": "程宗扬与秦桧、青面兽到林家作客，在楼上认出李师师所称的凝姨正是林娘子阮香凝，并发现她与成婚多年的表象不符，由此怀疑她与黑魔海有关。",
+        "axisId": "yunlong.14.1",
+        "axisAnchor": "六朝云龙吟·#14·处子",
+        "axisSeq": 565,
+        "axisBeat": "程宗扬在林家认出凝姨就是阮香凝，发现她与成婚多年的表象不符，怀疑其与黑魔海有关。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.linjia_sees_ningyi.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.qin_hui",
+          "liuchao.character.qing_mian_shou",
+          "liuchao.character.ruan_xiang_ning",
+          "liuchao.character.ruan_xiang_lin"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.hei_mo_hai"
+        ],
+        "objective": "到林家确认凝姨就是阮香凝，并记下她与黑魔海有关的疑点",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "identify_ningyi_as_ruan_xiangning",
+              "label": "在林家楼上确认凝姨就是阮香凝",
+              "actionText": "我到林家作客，在楼上认出李师师口中的凝姨就是林冲之妻阮香凝，先不当面揭破。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已在林家确认凝姨就是阮香凝；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "sequence_step_1"
+            },
+            {
+              "id": "note_black_sea_mismatch",
+              "label": "记下与黑魔海有关的疑点",
+              "actionText": "我把她与成婚多年表象不符之处同此前线索对上，只把黑魔海关联当作待查疑点，不向在场众人下定论。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已记下凝姨与黑魔海有关的疑点；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "sequence_step_1"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyl.event.xihu_villa_eavesdrop",
+        "name": "潜入西湖别业窃听密谋",
+        "description": "程宗扬循威远镖局马车的车辙追到西湖岔路，独自潜入临湖别业，从梁上听见高衙内与陆谦复盘失镖圈套，并确认他们还准备继续设计林冲。",
+        "axisId": "yunlong.14.2",
+        "axisAnchor": "六朝云龙吟·#14·处子",
+        "axisSeq": 566,
+        "axisBeat": "程宗扬潜入西湖别业，听见高衙内与陆谦复盘失镖圈套，并确认他们还要继续设计林冲。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.xihu_villa_eavesdrop.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.gao_zhishang",
+          "liuchao.character.ruan_xiang_lin"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.wei_yuan_escort"
+        ],
+        "objective": "潜入西湖别业，听清高衙内对付林冲的密谋",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "infiltrate_xihu_villa",
+              "label": "循车辙潜入西湖别业",
+              "actionText": "我循着威远镖局马车的车辙追到西湖岔路，随后独自潜入临湖别业，伏到水榭梁上。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已潜入西湖别业；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "sequence_step_1"
+            },
+            {
+              "id": "overhear_yanei_plot_against_lin",
+              "label": "在梁上听清对付林冲的密谋",
+              "actionText": "我伏在水榭梁上，听高衙内与陆谦亲口复盘如何劫走镖货、逼阮香琳就范，以及下一步如何对付林冲。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已听清高衙内对付林冲的密谋；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "sequence_step_1"
+              ]
             }
           ]
         }

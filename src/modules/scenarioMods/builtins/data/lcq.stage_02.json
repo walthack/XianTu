@@ -10,7 +10,7 @@
     "axisVersion": "rebuild-2026-06-28",
     "axisOrder": 1,
     "axisSeqLo": 19,
-    "axisSeqHi": 41,
+    "axisSeqHi": 53,
     "eventIdContract": "append-only-frozen",
     "prevStageId": "lcq.stage_01",
     "prevStageName": "六朝清羽记·第1集·太乙真宗",
@@ -2274,7 +2274,10 @@
       "event.s02_04.done": false,
       "event.s02_05.done": false,
       "event.s02_06.done": false,
-      "event.baihu_shangguan_escape.done": false
+      "event.baihu_shangguan_escape.done": false,
+      "event.sudaji_south_pact.done": false,
+      "event.wuerlang_joins.done": false,
+      "event.ningyu_regicide_offer.done": false
     },
     "events": [
       {
@@ -3018,6 +3021,188 @@
                 "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
                 "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
               }
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.sudaji_south_pact",
+        "name": "三个月南荒之约",
+        "description": "程宗扬与苏妲己订下三个月南荒之约：三个月内前往南荒采集霓龙丝，否则受炮烙之刑。",
+        "axisId": "qingyu.20.2",
+        "axisAnchor": "六朝清羽记·#20·第18章·妲己",
+        "axisSeq": 36,
+        "axisBeat": "程宗扬与苏妲己订下三个月南荒之约：三个月内前往南荒采集霓龙丝，否则受炮烙之刑。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.sudaji_south_pact.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.su_daji"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.bai_hu_shang_guan"
+        ],
+        "locationId": "liuchao.location.wuyuan",
+        "objective": "与苏妲己订下三个月内赴南荒采集霓龙丝的约定",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "offer_nylon_clue_for_term",
+              "label": "以霓龙丝线索换三个月期限",
+              "actionText": "我不当面硬拼，明确以自己掌握的霓龙丝产地线索，向苏妲己换取活命和三个月行动期限。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "south_pact_terms_opened"
+            },
+            {
+              "id": "seal_three_month_south_pact",
+              "label": "当面订下三个月南荒之约",
+              "actionText": "我当着苏妲己的面把约定说死：三个月内前往南荒采集霓龙丝，逾期受炮烙；这就是我南下的由头。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已与苏妲己订下三个月南荒之约；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "south_pact_terms_opened"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.wuerlang_joins",
+        "name": "武二郎入队",
+        "description": "武二郎因满城围捕走投无路，被迫答应加入程宗扬的南荒队伍。",
+        "axisId": "qingyu.31.2",
+        "axisAnchor": "六朝清羽记·#31·第29章·伏虎",
+        "axisSeq": 47,
+        "axisBeat": "武二郎因满城围捕走投无路，被迫答应加入程宗扬的南荒队伍。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.wuerlang_joins.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.bai_hu_shang_guan"
+        ],
+        "locationId": "liuchao.location.wuyuan",
+        "objective": "让走投无路的武二郎当面答应加入南荒队伍",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "confirm_wuerlang_no_prior_promise",
+              "label": "确认武二郎此前并未应诺同行",
+              "actionText": "我让武二郎把先前条件说清，承认他此前只求解开镣铐，并未真正答应随队南行。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "wuerlang_cornered_known"
+            },
+            {
+              "id": "secure_wuerlang_southbound",
+              "label": "取得武二郎随队南行的明确承诺",
+              "actionText": "武二郎因满城围捕走投无路返回后，我重新谈定报酬，当面取得他加入南荒队伍的明确承诺。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "武二郎已被迫答应加入南荒队伍；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "wuerlang_cornered_known"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.ningyu_regicide_offer",
+        "name": "凝羽开价弑主",
+        "description": "苏妲己的护卫凝羽私下向程宗扬提出合作除掉苏妲己，并揭开她体内阴寒之气的来源。",
+        "axisId": "qingyu.35.1",
+        "axisAnchor": "六朝清羽记·#35·第33章·武请",
+        "axisSeq": 53,
+        "axisBeat": "苏妲己的护卫凝羽私下向程宗扬提出合作除掉苏妲己，并揭开她体内阴寒之气的来源。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.ningyu_regicide_offer.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.ning_yu"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.bai_hu_shang_guan"
+        ],
+        "locationId": "liuchao.location.wuyuan",
+        "objective": "当面听清凝羽的弑主合作开价，并探明她体内阴寒之气的来源",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "hear_ningyu_regicide_price",
+              "label": "听清并回应凝羽的弑主开价",
+              "actionText": "凝羽私下找我，要求用巫术与她合作除掉苏妲己、她自己也准备赴死。我让她把条件和代价说清，再当面回应，不把尚未执行的提议写成既成事实。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "ningyu_regicide_price_heard"
+            },
+            {
+              "id": "trace_ningyu_cold_qi_source",
+              "label": "探明凝羽体内阴寒之气的来源",
+              "actionText": "我与凝羽共同运功，确认她体内阴寒之气来自西门庆把她当鼎炉调教，并听她亲口把这段旧事说清。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已听清凝羽的弑主合作开价，并探明她体内阴寒之气的来源；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "ningyu_regicide_price_heard"
+              ]
             }
           ]
         }

@@ -9,8 +9,8 @@
     "description": "李药师赠令、昭南赔款、宗室试探、十方丛林刺杀谋划、赵飞燕病线、返程伏击与白霓裳脱险。",
     "axisVersion": "rebuild-2026-06-28",
     "axisOrder": 3.5,
-    "axisSeqLo": 1116,
-    "axisSeqHi": 1190,
+    "axisSeqLo": 1115,
+    "axisSeqHi": 1200,
     "eventIdContract": "append-only-frozen",
     "prevStageId": "lyg.shixiang_ambush",
     "prevStageName": "六朝燕歌行·第669章·公敌",
@@ -5740,7 +5740,11 @@
       "chapter.lyg.changgan_interlude.ambush.started": false,
       "chapter.lyg.changgan_interlude.ambush.done": false,
       "event.debut_daiqisi.done": false,
-      "event.song_tongwen.done": false
+      "event.song_tongwen.done": false,
+      "event.interrogate_feiniao_yingzi.done": false,
+      "event.liang_secret_order.done": false,
+      "event.zhoufei_conspiracy.done": false,
+      "event.feiniao_hilt_clue.done": false
     },
     "chapters": [
       {
@@ -6610,6 +6614,255 @@
                 "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
                 "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
               }
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyg.event.interrogate_feiniao_yingzi",
+        "name": "审讯飞鸟萤子",
+        "description": "程宗扬当面审讯飞鸟萤子；飞鸟萤子拒绝合作。",
+        "axisId": "yange.84.1",
+        "axisAnchor": "六朝燕歌行·#84·蕃密",
+        "axisSeq": 1115,
+        "axisBeat": "程宗扬当面审讯飞鸟萤子；飞鸟萤子拒绝合作。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.interrogate_feiniao_yingzi.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.hei_mo_hai"
+        ],
+        "locationId": "liuchao.location.changan",
+        "objective": "当面审讯飞鸟萤子并记下她拒绝合作",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "open_feiniao_interrogation",
+              "label": "当面开审飞鸟萤子",
+              "actionText": "我当面开审飞鸟萤子，先说明她被俘的处境，不以假话换口供。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "feiniao_interrogation_opened"
+            },
+            {
+              "id": "record_feiniao_three_refusals",
+              "label": "问完三问并记下拒答",
+              "actionText": "我依次提出三个问题，把飞鸟萤子的拒绝合作原样记下，不伪造口供。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已当面审讯飞鸟萤子，并记下她拒绝合作；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "feiniao_interrogation_opened"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyg.event.liang_secret_order",
+        "name": "闭门密令",
+        "description": "杨玉环当面把李昂托付的闭门密令交给程宗扬：天策府闭门不涉，并牵制鱼朝恩。",
+        "axisId": "yange.127.1",
+        "axisAnchor": "六朝燕歌行·#127·",
+        "axisSeq": 1193,
+        "axisBeat": "杨玉环当面把李昂托付的闭门密令交给程宗扬：天策府闭门不涉，并牵制鱼朝恩。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.liang_secret_order.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.yang_yuhuan",
+          "lyg.character.yu_chaoen"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.tang_guo_chao_ting",
+          "lyg.faction.tiance_fu",
+          "lyg.faction.eunuch_group"
+        ],
+        "locationId": "lyg.location.changan",
+        "objective": "从杨玉环处接下李昂托付的闭门密令",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "hear_yang_closed_gate_order",
+              "label": "听杨玉环复述闭门口令",
+              "actionText": "我当面听杨玉环复述李昂原话：天策府须闭门不涉，并核清时限。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "closed_gate_wording_heard"
+            },
+            {
+              "id": "separate_yu_chaoen_hold",
+              "label": "分开记下牵制鱼朝恩",
+              "actionText": "我把牵制鱼朝恩与天策府闭门分开记下，不把杨玉环的质疑写成密令作废。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已从杨玉环处接下李昂托付的闭门密令；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "closed_gate_wording_heard"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyg.event.zhoufei_conspiracy",
+        "name": "周飞与十方丛林合谋",
+        "description": "程宗扬听黎锦香当面说清：周飞与十方丛林合谋针对程宅。",
+        "axisId": "yange.129.1",
+        "axisAnchor": "六朝燕歌行·#129·",
+        "axisSeq": 1198,
+        "axisBeat": "程宗扬听黎锦香当面说清：周飞与十方丛林合谋针对程宅。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.zhoufei_conspiracy.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "lyg.character.li_jinxiang",
+          "liuchao.character.zhou_fei",
+          "liuchao.character.xiao_zi"
+        ],
+        "relatedFactionIds": [
+          "lyg.faction.guangyuan_hang",
+          "liuchao.faction.shi_fang_cong_lin"
+        ],
+        "locationId": "lyg.location.changan",
+        "objective": "听黎锦香当面确认周飞与十方丛林合谋针对程宅",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "hear_li_zhou_conglin_terms",
+              "label": "听清合谋条件与名单",
+              "actionText": "我让黎锦香当面说清周飞与十方丛林交换的条件，以及针对程宅的目标名单。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "zhou_conglin_terms_heard"
+            },
+            {
+              "id": "confirm_zhou_conglin_plot",
+              "label": "确认合谋并布置反监视",
+              "actionText": "我确认周飞与十方丛林合谋针对程宅，并只按已证实的名单布置反监视。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已确认周飞与十方丛林合谋针对程宅；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "zhou_conglin_terms_heard"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyg.event.feiniao_hilt_clue",
+        "name": "飞鸟家族与剑柄线索",
+        "description": "程宗扬当面问出飞鸟家族与布都御魂剑柄线索。",
+        "axisId": "yange.130.2",
+        "axisAnchor": "六朝燕歌行·#130·阳禄门院",
+        "axisSeq": 1200,
+        "axisBeat": "程宗扬当面问出飞鸟家族与布都御魂剑柄线索。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.feiniao_hilt_clue.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "lyg.character.li_jinxiang"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.hei_mo_hai"
+        ],
+        "locationId": "lyg.location.changan",
+        "objective": "当面问出飞鸟家族与剑柄线索",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "ask_feiniao_family_employer",
+              "label": "问清雇主与家族目标",
+              "actionText": "我当面问清谁雇她、飞鸟家族要找何人，不把推测写成家族真相。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "feiniao_family_stated"
+            },
+            {
+              "id": "record_hilt_and_seal_clues",
+              "label": "记下剑柄与印信线索",
+              "actionText": "我把布都御魂剑柄、飞鸟家族与东瀛印信线索分开记下，等待后续核验。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已当面问出飞鸟家族与布都御魂剑柄线索；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "feiniao_family_stated"
+              ]
             }
           ]
         }

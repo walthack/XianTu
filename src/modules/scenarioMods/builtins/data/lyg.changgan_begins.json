@@ -10,7 +10,7 @@
     "axisVersion": "rebuild-2026-06-28",
     "axisOrder": 2,
     "axisSeqLo": 1061,
-    "axisSeqHi": 1091,
+    "axisSeqHi": 1096,
     "eventIdContract": "append-only-frozen",
     "prevStageId": "lyg.han_succession",
     "prevStageName": "六朝燕歌行·汉嗣更替与通幽突破",
@@ -4990,7 +4990,8 @@
       "event.s03_08.done": false,
       "event.s03_09.done": false,
       "event.debut_shefuren.done": false,
-      "event.changgan_fanseng_hunt.done": false
+      "event.changgan_fanseng_hunt.done": false,
+      "event.qinglongsi_te_master.done": false
     },
     "events": [
       {
@@ -5886,6 +5887,68 @@
                 "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
                 "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
               }
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyg.event.qinglongsi_te_master",
+        "name": "潜入青龙寺查探特大师",
+        "description": "程宗扬与小紫潜入青龙寺，查探释特昧普的扩张方式与外援。",
+        "axisId": "yange.72.1",
+        "axisAnchor": "六朝燕歌行·#72·婴衣",
+        "axisSeq": 1096,
+        "axisBeat": "程宗扬与小紫潜入青龙寺，查探释特昧普的扩张方式与外援。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.qinglongsi_te_master.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.xiao_zi"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.shi_fang_cong_lin",
+          "liuchao.faction.hei_mo_hai"
+        ],
+        "locationId": "liuchao.location.changan",
+        "objective": "潜入青龙寺查探释特昧普的扩张方式与外援",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "infiltrate_qinglongsi_watch_expansion",
+              "label": "潜入青龙寺察看扩张与外援",
+              "actionText": "我与小紫潜入青龙寺，隐蔽察看释特昧普如何扩张、寺内有哪些外来人手。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "qinglongsi_expansion_seen"
+            },
+            {
+              "id": "withdraw_qinglongsi_with_notes",
+              "label": "记下外援后撤离",
+              "actionText": "我把寺内分赃、外来信徒与黑魔海外援记清，在身份暴露前带小紫撤出青龙寺。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已潜入青龙寺查清释特昧普的扩张方式与外援，并在暴露前撤离；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "qinglongsi_expansion_seen"
+              ]
             }
           ]
         }

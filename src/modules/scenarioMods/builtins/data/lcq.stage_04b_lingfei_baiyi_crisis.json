@@ -10,7 +10,7 @@
     "axisVersion": "rebuild-2026-06-28",
     "axisOrder": 3.5,
     "axisSeqLo": 88,
-    "axisSeqHi": 122,
+    "axisSeqHi": 158,
     "eventIdContract": "append-only-frozen",
     "prevStageId": "lcq.stage_04",
     "prevStageName": "六朝清羽记·第44章·向导",
@@ -4058,7 +4058,13 @@
       "chapter.lcq.stage_04b_lingfei_baiyi_crisis.baiyi.started": false,
       "chapter.lcq.stage_04b_lingfei_baiyi_crisis.baiyi.done": false,
       "chapter.lcq.stage_04b_lingfei_baiyi_crisis.aftermath.started": false,
-      "chapter.lcq.stage_04b_lingfei_baiyi_crisis.aftermath.done": false
+      "chapter.lcq.stage_04b_lingfei_baiyi_crisis.aftermath.done": false,
+      "event.haishen_hall_merfolk.done": false,
+      "event.xieyi_biling_war.done": false,
+      "event.weapon_deal_with_geluo.done": false,
+      "event.guiwangdong_coop_pact.done": false,
+      "event.blank_letter_and_dagu.done": false,
+      "event.geluo_summons_biji.done": false
     },
     "chapters": [
       {
@@ -5331,6 +5337,387 @@
                 "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
                 "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
               }
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.haishen_hall_merfolk",
+        "name": "海神殿抵御鲛人",
+        "description": "程宗扬在废弃海神殿抵御鲛人袭击，护住受困的乐明珠。",
+        "axisId": "qingyu.76.1",
+        "axisAnchor": "六朝清羽记·#76·第74章·鲛人",
+        "axisSeq": 124,
+        "axisBeat": "程宗扬在废弃海神殿抵御鲛人袭击，护住受困的乐明珠。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.haishen_hall_merfolk.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.le_mingzhu"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.biyu"
+        ],
+        "locationId": "liuchao.location.sea_temple",
+        "objective": "在海神殿抵御鲛人，护住受困的乐明珠",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "shield_mingzhu_in_haishen_hall",
+              "label": "护住受困的乐明珠",
+              "actionText": "鲛人扑进废弃海神殿时，我先把受困的乐明珠护到石像后，挡住迎面的鱼叉。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已护住受困的乐明珠；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "mingzhu_shielded_in_hall"
+            },
+            {
+              "id": "repel_merfolk_in_haishen_hall",
+              "label": "在海神殿击退鲛人",
+              "actionText": "乐明珠被护住后，我在殿里迎击鲛人，把这波袭击打退。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已在海神殿抵御鲛人并护住受困的乐明珠；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "mingzhu_shielded_in_hall"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.xieyi_biling_war",
+        "name": "谢艺讲述碧鲮旧战",
+        "description": "谢艺讲述碧鲮族与鲛族旧战、朱狐冠来历，并希望程宗扬承接岳帅未竟之事。",
+        "axisId": "qingyu.78.3",
+        "axisAnchor": "六朝清羽记·#78·第76章·回忆",
+        "axisSeq": 128,
+        "axisBeat": "谢艺讲述碧鲮族与鲛族旧战、朱狐冠来历，并希望程宗扬承接岳帅未竟之事。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.xieyi_biling_war.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.le_mingzhu",
+          "liuchao.character.xie_yi"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.biyu",
+          "liuchao.faction.xing_yue_hu",
+          "liuchao.faction.guang_ming_guan_tang"
+        ],
+        "locationId": "liuchao.location.sea_temple",
+        "objective": "听谢艺讲清碧鲮旧战与朱狐冠来历，并回应他希望你承接岳帅未竟之事",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "hear_xieyi_biling_war_and_crown",
+              "label": "听清碧鲮旧战与朱狐冠来历",
+              "actionText": "我让谢艺当面把碧鲮族与鲛族旧战、朱狐冠的来历分别讲完。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已听清碧鲮旧战与朱狐冠来历；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "biling_war_heard"
+            },
+            {
+              "id": "answer_xieyi_yue_unfinished",
+              "label": "回应承接岳帅未竟之事",
+              "actionText": "谢艺说完后，我当面回应他希望我承接岳帅未竟之事，先把这句托付接住。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已听谢艺讲清碧鲮旧战与朱狐冠来历，并回应他希望你承接岳帅未竟之事；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "biling_war_heard"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.weapon_deal_with_geluo",
+        "name": "兵器生意化解危机",
+        "description": "程宗扬以兵器生意与鬼王峒使者阁罗敲定交易，化解眼前危机。",
+        "axisId": "qingyu.80.3",
+        "axisAnchor": "六朝清羽记·#80·第78章·转机",
+        "axisSeq": 134,
+        "axisBeat": "程宗扬以兵器生意与鬼王峒使者阁罗敲定交易，化解眼前危机。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.weapon_deal_with_geluo.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.qi_yuan",
+          "lcq.character.np006"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.bai_hu_shang_guan",
+          "liuchao.faction.gui_wang_dong"
+        ],
+        "locationId": "liuchao.location.biyu_village",
+        "objective": "以兵器生意与鬼王峒使者阁罗化解危机",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "open_weapon_talk_with_geluo",
+              "label": "向阁罗摊开兵器生意",
+              "actionText": "我当着阁罗把兵器货源和交易条件摊开，让他把我们当能供货的客商谈。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已向阁罗摊开兵器生意；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "geluo_weapon_talk_opened"
+            },
+            {
+              "id": "close_weapon_deal_with_geluo",
+              "label": "敲定交易化解危机",
+              "actionText": "我把回扣和交货条件跟阁罗敲定，用这笔兵器生意把眼前危机压下去。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已以兵器生意与鬼王峒使者阁罗化解危机；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "geluo_weapon_talk_opened"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.guiwangdong_coop_pact",
+        "name": "探峒同行约定",
+        "description": "程宗扬安置旧伤复发的凝羽，并与云氏、花苗结成探查鬼王峒的同行约定。",
+        "axisId": "qingyu.87.4",
+        "axisAnchor": "六朝清羽记·#87·第85章·幽路",
+        "axisSeq": 151,
+        "axisBeat": "程宗扬安置旧伤复发的凝羽，并与云氏、花苗结成探查鬼王峒的同行约定。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.guiwangdong_coop_pact.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.ning_yu",
+          "liuchao.character.xie_yi",
+          "liuchao.character.yun_cang_feng",
+          "liuchao.character.su_li"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.bai_hu_shang_guan",
+          "liuchao.faction.yun_shi_shang_hui",
+          "liuchao.faction.hua_miao"
+        ],
+        "locationId": "liuchao.location.south_wild_valley",
+        "objective": "安置旧伤复发的凝羽，并与云氏、花苗结成探查鬼王峒的同行约定",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "settle_ningyu_relapse",
+              "label": "安置旧伤复发的凝羽",
+              "actionText": "谢艺带回旧伤复发的凝羽后，我先把她安顿下来，确认照护安排。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已安置旧伤复发的凝羽；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "ningyu_relapse_settled"
+            },
+            {
+              "id": "seal_guiwangdong_coop_pact",
+              "label": "与云氏、花苗约定同行探峒",
+              "actionText": "凝羽安顿后，我当面与云苍峰、苏荔说清：云氏、花苗与我结成探查鬼王峒的同行约定。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已安置旧伤复发的凝羽，并与云氏、花苗结成探查鬼王峒的同行约定；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "ningyu_relapse_settled"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.blank_letter_and_dagu",
+        "name": "白纸信笺与达古",
+        "description": "白纸信笺打开仍是白纸；小紫当着阁罗说破达古已死。",
+        "axisId": "qingyu.89.2",
+        "axisAnchor": "六朝清羽记·#89·第87章·淫戏",
+        "axisSeq": 156,
+        "axisBeat": "白纸信笺打开仍是白纸；小紫当着阁罗说破达古已死。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.blank_letter_and_dagu.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.xie_yi",
+          "liuchao.character.xiao_zi",
+          "lcq.character.np006"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.gui_wang_dong"
+        ],
+        "locationId": "liuchao.location.guiwang_dong",
+        "objective": "确认白纸信笺仍是白纸，并应对小紫当着阁罗说破达古已死",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "open_blank_letter_in_person",
+              "label": "当面确认信笺仍是白纸",
+              "actionText": "我当着谢艺把信笺拆开，确认纸上仍是空白。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已确认白纸信笺仍是白纸；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "blank_letter_confirmed"
+            },
+            {
+              "id": "face_xiaozi_dagu_reveal",
+              "label": "应对小紫当着阁罗说破达古已死",
+              "actionText": "小紫当着阁罗说出达古已死后，我立刻接住现场，不让这话把商队当场钉成敌人。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已确认白纸信笺仍是白纸，并应对小紫当着阁罗说破达古已死；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "blank_letter_confirmed"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.geluo_summons_biji",
+        "name": "阁罗召来碧姬",
+        "description": "阁罗召来被称作碧奴的碧姬，程宗扬第一次当面见到谢艺要找的人。",
+        "axisId": "qingyu.90.2",
+        "axisAnchor": "六朝清羽记·#90·第88章·碧奴",
+        "axisSeq": 158,
+        "axisBeat": "阁罗召来被称作碧奴的碧姬，程宗扬第一次当面见到谢艺要找的人。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.geluo_summons_biji.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "lcq.character.np006",
+          "liuchao.character.bi_ji",
+          "liuchao.character.xie_yi"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.gui_wang_dong",
+          "liuchao.faction.biyu"
+        ],
+        "locationId": "liuchao.location.guiwang_dong",
+        "objective": "在阁罗召来被称作碧奴的碧姬时，当面见到谢艺要找的人",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "watch_geluo_summon_binu",
+              "label": "看阁罗召来被称作碧奴的人",
+              "actionText": "我看着阁罗把峒里称作碧奴的人召到面前，先记下这个称呼。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "阁罗已召来被称作碧奴的人；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "binu_summoned_by_geluo"
+            },
+            {
+              "id": "meet_biji_xieyi_seeks",
+              "label": "当面见到谢艺要找的碧姬",
+              "actionText": "人被召来后，我当面确认她就是谢艺要找的碧姬。这是我第一次见到她。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已当面见到阁罗召来的碧姬，确认她就是谢艺要找的人；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "binu_summoned_by_geluo"
+              ]
             }
           ]
         }

@@ -9,7 +9,7 @@
     "description": "吕冀重伤、吕巨君入宫、含光殿救人、秘境入口、董卓入京与秦桧斩刘建，完成云龙到燕歌前的汉宫收束。",
     "axisVersion": "rebuild-2026-06-28",
     "axisOrder": 5.5,
-    "axisSeqLo": 898,
+    "axisSeqLo": 896,
     "axisSeqHi": 947,
     "eventIdContract": "append-only-frozen",
     "prevStageId": "lyl.luoyang_coup",
@@ -5885,6 +5885,7 @@
       "event.han_jianyu_refused.done": false,
       "event.han_power_vacuum.done": false,
       "event.han_sponsor_dingtao.done": false,
+      "event.liujian_takes_nangong.done": false,
       "chapter.lyl.han_palace_endgame.palace.started": true,
       "chapter.lyl.han_palace_endgame.palace.done": false,
       "chapter.lyl.han_palace_endgame.endgame.started": false,
@@ -6913,6 +6914,66 @@
               },
               "requiresPreparation": [
                 "sequence_step_1"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyl.event.liujian_takes_nangong",
+        "name": "刘建攻占南宫与武库",
+        "description": "刘建起兵攻占南宫与武库。",
+        "axisId": "yunlong.284.1",
+        "axisAnchor": "六朝云龙吟·#284·乱军",
+        "axisSeq": 896,
+        "axisBeat": "刘建起兵攻占南宫与武库。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.liujian_takes_nangong.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "lyl.character.liu_jian"
+        ],
+        "relatedFactionIds": [
+          "lyl.faction.liu_jian"
+        ],
+        "objective": "确认刘建已起兵攻占南宫与武库",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "see_liujian_seize_nangong",
+              "label": "确认刘建起兵攻入南宫",
+              "actionText": "我赶到能看见南宫方向的位置，核对甲士旗号：刘建已经起兵，南宫落入他手。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已确认刘建起兵攻入南宫；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "nangong_fell_to_liujian"
+            },
+            {
+              "id": "confirm_armory_fell_to_liujian",
+              "label": "确认武库一并落入刘建之手",
+              "actionText": "我再核武库方向的火光与兵械调动：武库也已被刘建攻占。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已确认刘建起兵攻占南宫与武库；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "nangong_fell_to_liujian"
               ]
             }
           ]

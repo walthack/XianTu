@@ -3,7 +3,19 @@
 > 面向「新加入的 agent」。读完这一篇即可独立认领一个模块开工。
 > 当前认领：无。**进行中**：无。
 >
-> ## 最后更新：2026-08-17（**37 条 event 补写 36 条、三级报表、孤儿归类中**）
+> ## 最后更新：2026-08-17（**lcq.stage_04b 末尾补 6 条隔离关改挂 event**）
+>
+> append-only：原隔离关 `lcq.stage_05` 的海神殿鲛人／谢艺述旧战／兵器化解／探峒约定／白纸达古／阁罗召碧姬，改挂可达关 `lcq.stage_04b_lingfei_baiyi_crisis` 末尾为可玩拍：`haishen_hall_merfolk`(124)／`xieyi_biling_war`(128)／`weapon_deal_with_geluo`(134)／`guiwangdong_coop_pact`(151)／`blank_letter_and_dagu`(156)／`geluo_summons_biji`(158)。`manifest.axisSeqHi` 122→158。合同均为手写双步动作，未用 `advance_declared_objective`。引用均在本关 canon 名单内。未改既有 event、未改 chapters、未跑 `build:single`，未改 `src/`、`tests/`。`mod:validate` PASS（6 条未挂章节 warning）。
+>
+> ---
+>
+> ## 上一条：2026-08-17（**lcq.stage_02 末尾补 3 条隔离关改挂 event**）
+>
+> append-only：原隔离关 `lcq.stage_03` 的南荒之约／武二郎入队／凝羽开价弑主，改挂可达关 `lcq.stage_02` 末尾为可玩拍：`sudaji_south_pact`(36)／`wuerlang_joins`(47)／`ningyu_regicide_offer`(53)。`manifest.axisSeqHi` 41→53。合同均为手写双步动作，未用 `advance_declared_objective`。武二郎／西门庆不在本关 canon 名单，只写入正文，未挂 `relatedCharacterIds`。未改既有 event、未改 chapters、未跑 `build:single`，未改 `src/`、`tests/`。
+>
+> ---
+>
+> ## 上一条：2026-08-17（**37 条 event 补写 36 条、三级报表、孤儿归类中**）
 >
 > **① event 补写**：节点指向的落点从"37 条不存在"补到只剩 1 条。事件层 **396 → 432**。
 > 二级线 `new` 清零；主轴只剩 `enter_dong_recognize_biji`（挂隔离关 `lcq.stage_05`，等裁定）。

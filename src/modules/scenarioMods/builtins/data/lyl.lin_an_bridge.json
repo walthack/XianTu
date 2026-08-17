@@ -9,7 +9,7 @@
     "description": "临安瓦棚情报、小瀛洲初遇、林娘子疑云与明庆寺拜访，连接临安黑魔海线与太泉前置。",
     "axisVersion": "rebuild-2026-06-28",
     "axisOrder": 1.5,
-    "axisSeqLo": 559,
+    "axisSeqLo": 557,
     "axisSeqHi": 626,
     "eventIdContract": "append-only-frozen",
     "prevStageId": "lyl.lin_an_black_sea",
@@ -5659,7 +5659,10 @@
       "event.debut_yinfulan.done": false,
       "event.debut_jingli.done": false,
       "event.debut_jianyuji.done": false,
-      "event.lin_an_bridge_xieyi_tomb.done": false
+      "event.lin_an_bridge_xieyi_tomb.done": false,
+      "event.mingqingsi_lin_lu_meeting.done": false,
+      "event.blacksea_iron_puppet.done": false,
+      "event.siying_lane_saber_ambush.done": false
     },
     "chapters": [
       {
@@ -6467,6 +6470,187 @@
               },
               "requiresPreparation": [
                 "sequence_step_1"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyl.event.mingqingsi_lin_lu_meeting",
+        "name": "明庆寺旁观林鲁初会",
+        "description": "程宗扬在明庆寺菜园外旁观鲁智深倒拔垂杨柳，随后林冲上前通名，两名好汉一见如故；他判断时机未到，按住秦桧，没有贸然结交便离寺。",
+        "axisId": "yunlong.8.1",
+        "axisAnchor": "六朝云龙吟·#8·衙内",
+        "axisSeq": 557,
+        "axisBeat": "程宗扬在明庆寺旁观林冲与鲁智深通名初会，判断时机未到后离寺。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.mingqingsi_lin_lu_meeting.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.qin_hui"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.guang_ming_guan_tang"
+        ],
+        "objective": "到明庆寺旁观林冲与鲁智深初会，并在身份暴露前离开",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "watch_lin_lu_exchange_names",
+              "label": "在菜园外看清林冲与鲁智深通名",
+              "actionText": "我留在明庆寺菜园外，看鲁智深倒拔垂杨柳后，林冲翻墙入内与他通名结交。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已看清林冲与鲁智深在明庆寺通名初会；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "sequence_step_1"
+            },
+            {
+              "id": "leave_mingqingsi_unseen",
+              "label": "判断时机未到，先行离寺",
+              "actionText": "我按住准备上前的秦桧，只说一句「不到时候」，随后离寺，不让林冲、鲁智深看见我。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已在身份暴露前离开明庆寺；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "sequence_step_1"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyl.event.blacksea_iron_puppet",
+        "name": "江州铁傀儡场外拍",
+        "description": "程宗扬人在临安，经林清浦水镜看见江州城外场外一幕：小紫与一名身份未明的老者驱使铁傀儡重创虎翼军，小紫取走龙睛玉，并抽取一名军官阴魂试着驱动傀儡。",
+        "axisId": "yunlong.8.2",
+        "axisAnchor": "六朝云龙吟·#8·衙内",
+        "axisSeq": 558,
+        "axisBeat": "程宗扬经水镜看见江州场外铁傀儡重创虎翼军，小紫取走龙睛玉并以阴魂试傀儡。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.blacksea_iron_puppet.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.lin_qing_pu",
+          "liuchao.character.xiao_zi"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.hei_mo_hai"
+        ],
+        "objective": "用水镜看清江州铁傀儡重创虎翼军，以及小紫取走龙睛玉、抽取阴魂试傀儡",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "mirror_jiangzhou_iron_puppet",
+              "label": "用水镜看清铁傀儡重创虎翼军",
+              "actionText": "我让林清浦打开水镜，对准江州城外，看清铁傀儡重创虎翼军，紫衣少女小紫从现场取走龙睛玉。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已用水镜看清江州铁傀儡重创虎翼军、小紫取走龙睛玉；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "sequence_step_1"
+            },
+            {
+              "id": "mirror_xiaozi_yin_soul",
+              "label": "看清水镜里小紫抽取阴魂试傀儡",
+              "actionText": "水镜里我继续看小紫抽取一名军官阴魂，试着驱动那具铁傀儡；人不离临安，只把这场外拍看完。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已看清小紫抽取阴魂试傀儡；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "sequence_step_1"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyl.event.siying_lane_saber_ambush",
+        "name": "司营巷旁观买刀伏击",
+        "description": "程宗扬在司营巷旁观林冲买刀并确认伏击结果，不贸然打断高衙内的布局。",
+        "axisId": "yunlong.13.1",
+        "axisAnchor": "六朝云龙吟·#13·宝刀",
+        "axisSeq": 564,
+        "axisBeat": "程宗扬在司营巷旁观林冲买刀并确认伏击结果，不贸然打断高衙内的布局。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.siying_lane_saber_ambush.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.qin_hui"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.guang_ming_guan_tang"
+        ],
+        "objective": "在司营巷旁观林冲买刀并确认伏击结果，不贸然打断高衙内的布局",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "watch_linchong_buy_saber",
+              "label": "在司营巷看清林冲买刀",
+              "actionText": "我留在司营巷旁，看灰衣人把刀卖给林冲，并按住秦桧：这是高衙内的局，此刻不要上前打断。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已在司营巷看清林冲买刀，且没有打断高衙内的布局；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "siying_sale_watched"
+            },
+            {
+              "id": "confirm_ambush_without_breaking",
+              "label": "确认伏击结果，仍不打断布局",
+              "actionText": "藏剑竹杖发难后，我仍不抢先改写局面，只看清林冲拔刀、与鲁智深合力击退刺客。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已确认伏击结果，且没有贸然打断高衙内的布局；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "siying_sale_watched"
               ]
             }
           ]

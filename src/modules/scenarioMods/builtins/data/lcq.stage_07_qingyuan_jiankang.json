@@ -9,7 +9,7 @@
     "description": "清远内斗、卓云君受制、小紫显露操控本性、建康宫诡与横塘夜奔，承接南荒归来后进入晋国权谋线。",
     "axisVersion": "rebuild-2026-06-28",
     "axisOrder": 6,
-    "axisSeqLo": 232,
+    "axisSeqLo": 226,
     "axisSeqHi": 278,
     "eventIdContract": "append-only-frozen",
     "prevStageId": "lcq.stage_06",
@@ -4063,7 +4063,8 @@
       "event.wangzhe_letter.done": false,
       "event.xiao_opens_resources.done": false,
       "event.shanghou_revealed.done": false,
-      "event.palace_haunting_rumor.done": false
+      "event.palace_haunting_rumor.done": false,
+      "event.shanghou_cures_ice_gu.done": false
     },
     "chapters": [
       {
@@ -5539,6 +5540,66 @@
                 "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
                 "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
               }
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.shanghou_cures_ice_gu",
+        "name": "殇侯解除冰蛊",
+        "description": "殇侯解除程宗扬体内的冰蛊。",
+        "axisId": "qingyu.126.2",
+        "axisAnchor": "六朝清羽记·#126·第124章·授艺",
+        "axisSeq": 226,
+        "axisBeat": "殇侯解除程宗扬体内的冰蛊。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.shanghou_cures_ice_gu.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.shang_zhen_yu"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.x8b538653d9"
+        ],
+        "objective": "接受殇侯解除体内冰蛊，并当面确认蛊患已解",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "accept_shanghou_ice_gu_cure",
+              "label": "把体内冰蛊交给殇侯处置",
+              "actionText": "我把苏妲己所下冰蛊与期限向殇侯如实交代，接受他当场处置，不追问原文未载的具体解法。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已把体内冰蛊交给殇侯处置；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "ice_gu_handed_to_shanghou"
+            },
+            {
+              "id": "hear_shanghou_confirm_ice_gu_gone",
+              "label": "听殇侯确认冰蛊已解",
+              "actionText": "在《授艺》谈话里，我听殇侯亲口确认他已替我解除体内冰蛊。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已确认殇侯解除了体内冰蛊；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "ice_gu_handed_to_shanghou"
+              ]
             }
           ]
         }
