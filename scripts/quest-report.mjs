@@ -1,0 +1,304 @@
+#!/usr/bin/env node
+/**
+ * 三级任务链报表——从源码算，不手写，随时重跑即刷新。
+ *
+ * 为什么要它：审核时最费时间的不是读节点，是**对照**——哪个 event 被两级共用、
+ * 哪条线的顶点喂了另一条线的入口、人物戏挂在谁底下、哪里序倒了。
+ * 这些都能从 `mainQuestAxis.ts`／`secondaryLines.ts`／人物线文档里算出来。
+ *
+ * 用法：node scripts/quest-report.mjs [--json]
+ * 输出：docs/quest-report.html（默认）或 stdout JSON
+ */
+import fs from 'node:fs';
+import path from 'node:path';
+
+const ROOT = process.cwd();
+const DATA = 'src/modules/scenarioMods/builtins/data';
+const AXIS = 'src/modules/scenarioMods/mainQuestAxis.ts';
+const LINES = 'src/modules/scenarioMods/secondaryLines.ts';
+const CHARDOC = 'docs/R3-10-CHARACTER-QUESTS-DRAFT-2026-08-16.md';
+
+// ── 事件层：id → { seq, name, stage }
+const events = new Map();
+const stageWindows = new Map();
+for (const f of fs.readdirSync(path.join(ROOT, DATA)).filter(x => x.endsWith('.json'))) {
+  const j = JSON.parse(fs.readFileSync(path.join(ROOT, DATA, f), 'utf8'));
+  if (!j.scenario?.worldSimulation) continue;
+  stageWindows.set(j.manifest.id, [j.manifest.axisSeqLo, j.manifest.axisSeqHi]);
+  for (const e of j.scenario.events || []) {
+    events.set(e.id, { seq: e.axisSeq, name: e.name, stage: j.manifest.id });
+  }
+}
+
+// ── 节点表：正则抽，不引入 TS 运行时（报表要能独立跑）
+const nodeRe = /\{[^{}]*text: '([^']+)'[^{}]*\}/g;
+const field = (blob, key) => blob.match(new RegExp(`${key}: '([^']+)'`))?.[1];
+
+function parseNodes(blob) {
+  const out = [];
+  for (const m of blob.matchAll(nodeRe)) {
+    const b = m[0];
+    const status = field(b, 'status');
+    if (!status) continue;
+    const eventId = field(b, 'eventId');
+    out.push({
+      text: m[1],
+      status,
+      eventId,
+      stageId: field(b, 'stageId'),
+      branch: field(b, 'bloodlineBranch'),
+      seq: eventId && status === 'ready' ? events.get(eventId)?.seq : undefined,
+      exists: eventId ? events.has(eventId) : false,
+    });
+  }
+  return out;
+}
+
+const axisSrc = fs.readFileSync(path.join(ROOT, AXIS), 'utf8');
+const linesSrc = fs.readFileSync(path.join(ROOT, LINES), 'utf8');
+
+const axisStart = axisSrc.indexOf('MAIN_QUEST_NODES: MainQuestNode[]');
+const tiers = [{
+  id: 'main', name: '主轴', tier: 1,
+  nodes: parseNodes(axisSrc.slice(axisStart, axisSrc.indexOf('\n];', axisStart))),
+}];
+for (const m of linesSrc.matchAll(/id: '(\w+)',\s*\n\s*name: '([^']+)',\s*\n\s*kind: '(\w+)',([\s\S]*?)pendingExpansion:/g)) {
+  tiers.push({
+    id: m[1], name: m[2], tier: 2, kind: m[3],
+    anchor: m[4].match(/anchorEventIds: \['([^']+)'\]/)?.[1],
+    anchorPending: m[4].includes('anchorEventPending'),
+    hint: m[4].match(/entryHint: '([^']+)'/)?.[1] ?? '',
+    nodes: parseNodes(m[4]),
+  });
+}
+
+// ── 人物线：从文档抽「挂在哪个 event 下」。↪ 插入 与 ✅ 已有 都算挂点。
+const chars = [];
+if (fs.existsSync(path.join(ROOT, CHARDOC))) {
+  const doc = fs.readFileSync(path.join(ROOT, CHARDOC), 'utf8');
+  let cur = null;
+  for (const line of doc.split('\n')) {
+    const h = line.match(/^## \d+\.\s*(\S+)/);
+    if (h && !/^(口径|17|选谁)/.test(h[1])) { cur = { name: h[1], hooks: [] }; chars.push(cur); continue; }
+    if (!cur || !line.startsWith('|')) continue;
+    const ids = [...line.matchAll(/`((?:lcq|lyl|lyg)\.event\.[a-zA-Z0-9_]+)`/g)].map(x => x[1]);
+    if (!ids.length) continue;
+    const insert = line.includes('↪');
+    for (const id of ids) if (events.has(id) || insert) cur.hooks.push({ eventId: id, insert });
+  }
+}
+
+// ── 关系：双喂 / 序回退 / 人物挂点
+const owners = new Map();
+for (const t of tiers) for (const n of t.nodes) if (n.eventId) {
+  if (!owners.has(n.eventId)) owners.set(n.eventId, []);
+  owners.get(n.eventId).push(t.name);
+}
+const shared = [...owners].filter(([, v]) => v.length > 1)
+  .map(([id, v]) => ({ eventId: id, seq: events.get(id)?.seq, name: events.get(id)?.name, by: v }))
+  .sort((a, b) => (a.seq ?? 0) - (b.seq ?? 0));
+
+const regressions = [];
+for (const t of tiers) {
+  let prev = null;
+  t.nodes.forEach((n, i) => {
+    if (typeof n.seq !== 'number') { if (n.status !== 'ready') prev = null; return; }
+    if (prev && n.seq < prev.seq) regressions.push({ line: t.name, from: prev, to: { i: i + 1, ...n } });
+    prev = { i: i + 1, ...n };
+  });
+}
+
+const charHooks = new Map();
+for (const c of chars) for (const h of c.hooks) {
+  if (!charHooks.has(h.eventId)) charHooks.set(h.eventId, []);
+  charHooks.get(h.eventId).push(c.name);
+}
+
+// ── 人物任务清单：已展开 vs 待做。
+// **口径（用户裁定 2026-08-17）：这些角色都要做。「料不够」只决定做多深，不决定做不做**——
+// 所以下表不叫"不展开"，叫"待做"；理由一栏说明的是**该做到什么程度**，不是拒绝。
+const charTodo = [];
+if (fs.existsSync(path.join(ROOT, CHARDOC))) {
+  const doc = fs.readFileSync(path.join(ROOT, CHARDOC), 'utf8');
+  const i = doc.indexOf('### 2.2');
+  const j = doc.indexOf('\n**为什么', i);
+  if (i > 0) {
+    for (const line of doc.slice(i, j > 0 ? j : undefined).split('\n')) {
+      if (!line.startsWith('|') || line.includes('---')) continue;
+      const c = line.replace(/^\||\|$/g, '').split('|').map(x => x.trim());
+      if (c.length < 4 || /人物/.test(c[0])) continue;
+      charTodo.push({ name: c[0].replace(/\*\*/g, ''), total: c[1], unclaimed: c[2], note: c[3] });
+    }
+  }
+}
+const charDone = chars.map(c => {
+  const hooks = c.hooks;
+  return { name: c.name, points: hooks.length, insert: hooks.filter(h => h.insert).length };
+}).filter(c => c.points > 0);
+
+const report = { tiers, chars, charDone, charTodo, shared, regressions, stageWindows: [...stageWindows] };
+if (process.argv.includes('--json')) {
+  process.stdout.write(JSON.stringify(report, null, 1));
+} else {
+  const out = path.join(ROOT, 'docs/quest-report.html');
+  fs.writeFileSync(out, render(report));
+  const cnt = s => tiers.reduce((a, t) => a + t.nodes.filter(n => n.status === s).length, 0);
+  console.log(`已生成 ${out}`);
+  console.log(`  节点 ${tiers.reduce((a, t) => a + t.nodes.length, 0)}　ready ${cnt('ready')}　需新增 ${cnt('new')}　待扩 ${cnt('pending')}`);
+  console.log(`  双喂 ${shared.length}　序回退 ${regressions.length}　人物挂点 ${charHooks.size}`);
+  console.log(`  人物线 已展开 ${report.charDone.length} 条／待做 ${report.charTodo.length} 条`);
+}
+
+function render(r) {
+  const MAX = 1399;
+  const pc = s => ((s - 1) / MAX * 100).toFixed(3);
+  const esc = s => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+  const cnt = (t, s) => t.nodes.filter(n => n.status === s).length;
+  const seqOf = n => n.seq ?? undefined;
+
+  const track = t => {
+    const pts = t.nodes.filter(n => typeof seqOf(n) === 'number');
+    if (!pts.length) return '';
+    const lo = Math.min(...pts.map(seqOf)), hi = Math.max(...pts.map(seqOf));
+    const marks = t.nodes.map((n, i) => {
+      const s = seqOf(n);
+      if (typeof s !== 'number') return '';
+      const cls = ['m',
+        n.eventId === t.anchor ? 'anchor' : '',
+        n.status === 'new' ? 'new' : '',
+        charHooks.has(n.eventId) ? 'hooked' : '',
+        owners.get(n.eventId)?.length > 1 ? 'shared' : ''].filter(Boolean).join(' ');
+      const who = charHooks.get(n.eventId);
+      return `<i class="${cls}" style="left:${pc(s)}%" title="${esc(t.name)} #${i + 1}　seq ${s}　${esc(n.text)}${who ? `　［人物：${esc(who.join('／'))}］` : ''}"></i>`;
+    }).join('');
+    return `<div class="sp" style="left:${pc(lo)}%;width:${pc(hi) - pc(lo)}%"></div>${marks}`;
+  };
+
+  const rows = r.tiers.map(t => `<div class="row ${t.tier === 1 ? 'main' : ''}">
+    <div class="nm">${esc(t.name)}<i>${t.tier === 1 ? '一级' : t.kind === 'sect' ? '二级·宗派' : '二级·国家'}</i></div>
+    <div class="tk">${track(t)}</div></div>`).join('');
+
+  const charRow = `<div class="row ch"><div class="nm">人物任务<i>三级·插入</i></div><div class="tk">${
+    [...charHooks].map(([id, who]) => {
+      const s = events.get(id)?.seq;
+      return typeof s === 'number'
+        ? `<i class="m hook" style="left:${pc(s)}%" title="${esc(who.join('／'))}　挂在 ${esc(id)}　seq ${s}"></i>` : '';
+    }).join('')}</div></div>`;
+
+  const flags = [
+    ...r.regressions.map(x => `<li class="bad"><b>序回退</b> ${esc(x.line)}：#${x.from.i}「${esc(x.from.text)}」seq ${x.from.seq} → #${x.to.i}「${esc(x.to.text)}」seq ${x.to.seq}</li>`),
+    ...r.tiers.filter(t => t.anchorPending).map(t => `<li class="warn"><b>锚待补</b> ${esc(t.name)} 的锚事件 <code>${esc(t.anchor)}</code> 还没写，暂用粗锚</li>`),
+    ...r.tiers.flatMap(t => t.nodes.filter(n => n.status === 'new').map(n => `<li class="todo"><b>待写</b> ${esc(t.name)}：${esc(n.text)} → <code>${esc(n.eventId)}</code></li>`)),
+  ].join('');
+
+  return `<title>三级任务链</title>
+<style>
+:root{--paper:#EFE9DC;--card:#F6F2E8;--edge:#D3C8B2;--ink:#1F2124;--ink2:#4A4640;--ink3:#79715F;
+ --qing:#2C5C7A;--huang:#8F6209;--zhu:#9E3527;--lv:#46654B;--tan:#6A4B45;--grid:#DCD2BE;--band:#E2D9C6}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--paper:#15171A;--card:#1E2126;--edge:#333A42;
+ --ink:#ECE6DA;--ink2:#B8B0A1;--ink3:#8B8375;--qing:#74ADD1;--huang:#DCAE4A;--zhu:#E4735E;--lv:#88B28C;--tan:#B29189;--grid:#2B3138;--band:#232830}}
+:root[data-theme=dark]{--paper:#15171A;--card:#1E2126;--edge:#333A42;--ink:#ECE6DA;--ink2:#B8B0A1;--ink3:#8B8375;
+ --qing:#74ADD1;--huang:#DCAE4A;--zhu:#E4735E;--lv:#88B28C;--tan:#B29189;--grid:#2B3138;--band:#232830}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-size:15px;line-height:1.6;
+ font-family:"PingFang SC","Hiragino Sans GB",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.serif{font-family:"Songti SC","STSong",serif}
+.mono{font-family:ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums}
+.wrap{max-width:1180px;margin:0 auto;padding:44px 26px 80px}
+h1{font-size:32px;margin:0 0 4px;letter-spacing:.04em;font-weight:600}
+.sub{color:var(--ink3);font-size:13px}
+header{border-bottom:2px solid var(--ink);padding-bottom:18px;margin-bottom:26px}
+.stats{display:flex;gap:22px;flex-wrap:wrap;margin-top:15px}
+.stat b{font-size:21px;font-weight:600;display:block}
+.stat span{font-size:11px;color:var(--ink3);letter-spacing:.08em}
+h2{font-size:12px;letter-spacing:.18em;color:var(--ink3);font-weight:600;margin:38px 0 13px;
+ padding-bottom:6px;border-bottom:1px solid var(--edge)}
+.box{background:var(--card);border:1px solid var(--edge);padding:16px 18px 10px;overflow-x:auto}
+.axis{min-width:860px;position:relative}
+.books{display:flex;margin-left:104px;margin-bottom:7px;gap:2px}
+.books div{font-size:10px;letter-spacing:.1em;color:var(--ink3);background:var(--band);padding:3px 0;text-align:center}
+.row{display:grid;grid-template-columns:96px 1fr;align-items:center;gap:8px}
+.row+.row{margin-top:2px}
+.row.main{padding-bottom:7px;margin-bottom:7px;border-bottom:1px solid var(--edge)}
+.row.ch{padding-top:7px;margin-top:7px;border-top:1px solid var(--edge)}
+.nm{font-size:13px;text-align:right}
+.nm i{font-style:normal;font-size:9px;color:var(--ink3);display:block;letter-spacing:.06em}
+.row.main .nm{font-weight:600;font-size:14px}
+.tk{position:relative;height:24px}
+.tk::after{content:"";position:absolute;left:0;right:0;top:12px;height:1px;background:var(--grid)}
+.sp{position:absolute;top:11px;height:3px;background:var(--edge);border-radius:2px}
+.m{position:absolute;top:7px;width:7px;height:11px;margin-left:-3.5px;border-radius:1px;background:var(--qing)}
+.row.main .m{background:var(--tan);height:13px;top:6px}
+.m.new{background:none;border:1.5px solid var(--huang)}
+.m.anchor{top:2px;height:20px;width:3px;margin-left:-1.5px;background:var(--lv)}
+.m.shared::after{content:"";position:absolute;left:2px;top:-7px;width:1px;height:7px;background:var(--zhu)}
+.m.hooked::before{content:"";position:absolute;left:2px;top:11px;width:1px;height:9px;
+ background:repeating-linear-gradient(var(--ink3) 0 2px,transparent 2px 4px)}
+.m.hook{background:none;border:1.5px dashed var(--ink3);width:8px;height:8px;border-radius:50%;top:8px}
+.ticks{position:relative;height:15px;margin-left:104px;margin-top:4px}
+.ticks span{position:absolute;font-size:9px;color:var(--ink3);transform:translateX(-50%)}
+.lg{display:flex;gap:17px;flex-wrap:wrap;margin-top:13px;font-size:12px;color:var(--ink2);align-items:center}
+.lg i{display:inline-block;width:8px;height:11px;margin-right:5px;vertical-align:-1px;border-radius:1px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font-size:10px;letter-spacing:.1em;color:var(--ink3);padding:0 8px 6px;border-bottom:1px solid var(--edge)}
+td{padding:8px;border-bottom:1px solid var(--grid);vertical-align:top}
+ul{list-style:none;margin:0;padding:0}
+li{padding:7px 10px;border-left:3px solid var(--edge);background:var(--card);margin-bottom:5px;font-size:13px}
+li.bad{border-left-color:var(--zhu)}
+li.warn{border-left-color:var(--huang)}
+li.todo{border-left-color:var(--qing);opacity:.85}
+li b{font-size:10px;letter-spacing:.08em;margin-right:8px;color:var(--ink3)}
+code{font-family:ui-monospace,Menlo,monospace;font-size:11.5px}
+</style>
+<div class="wrap">
+<header><h1 class="serif">三级任务链</h1>
+<div class="sub">主轴 · 二级线 · 人物任务，同一根 <span class="mono">axisSeq</span> 轴 · 由源码生成，重跑即刷新</div>
+<div class="stats">
+ <div class="stat"><b class="mono">${r.tiers.reduce((a, t) => a + t.nodes.length, 0)}</b><span>节点</span></div>
+ <div class="stat"><b class="mono">${r.tiers.reduce((a, t) => a + cnt(t, 'ready'), 0)}</b><span>可走</span></div>
+ <div class="stat"><b class="mono">${r.tiers.reduce((a, t) => a + cnt(t, 'new'), 0)}</b><span>待写 EVENT</span></div>
+ <div class="stat"><b class="mono">${r.tiers.reduce((a, t) => a + cnt(t, 'pending'), 0)}</b><span>待扩</span></div>
+ <div class="stat"><b class="mono">${r.shared.length}</b><span>双喂</span></div>
+ <div class="stat"><b class="mono">${r.regressions.length}</b><span>序回退</span></div>
+ <div class="stat"><b class="mono">${charHooks.size}</b><span>人物挂点</span></div>
+</div></header>
+
+<h2>三级同轴</h2>
+<div class="box"><div class="axis">
+<div class="books"><div style="flex:550">六朝清羽记</div><div style="flex:397">六朝云龙吟</div><div style="flex:452">六朝燕歌行</div></div>
+${rows}${charRow}
+</div>
+<div class="ticks">${[1, 200, 400, 600, 800, 1000, 1200, 1399].map(v => `<span class="mono" style="left:${pc(v)}%">${v}</span>`).join('')}</div>
+</div>
+<div class="lg">
+ <span><i style="background:var(--tan)"></i>主轴节点</span>
+ <span><i style="background:var(--qing)"></i>二级线·可走</span>
+ <span><i style="border:1.5px solid var(--huang)"></i>待写 event</span>
+ <span><i style="background:var(--lv);width:3px"></i>锚</span>
+ <span><i style="border:1.5px dashed var(--ink3);border-radius:50%;width:8px;height:8px"></i>人物挂点</span>
+ <span>点上方红竖线＝双喂　点下方虚线＝有人物戏挂着</span>
+</div>
+
+<h2>双喂：同一个 event 被几级同时引用</h2>
+<div class="box" style="padding-bottom:16px"><table>
+<thead><tr><th>seq</th><th>event</th><th>被谁引用</th><th>人物戏</th></tr></thead><tbody>
+${r.shared.map(s => `<tr><td class="mono">${s.seq ?? '—'}</td><td>${esc(s.name ?? '')}<div class="mono" style="color:var(--ink3);font-size:11px">${esc(s.eventId)}</div></td>
+<td>${esc(s.by.join('　／　'))}</td><td>${esc((charHooks.get(s.eventId) || []).join('／')) || '—'}</td></tr>`).join('')}
+</tbody></table></div>
+
+<h2>人物任务：谁做了、谁待做</h2>
+<div class="box" style="padding-bottom:16px">
+<p style="margin:0 0 12px;font-size:13px;color:var(--ink2)">
+<b>这些角色都要做</b>（用户裁定 2026-08-17）。「料不够」只决定<b>做多深</b>——
+一两个插入点还是一条线——<b>不决定做不做</b>。所以下面第二张表叫「待做」，不叫「不展开」。</p>
+<table><thead><tr><th>已展开</th><th style="text-align:right">插入点</th><th style="text-align:right">其中挂在上级</th></tr></thead><tbody>
+${r.charDone.map(c => `<tr><td class="serif" style="font-size:15px">${esc(c.name)}</td><td class="mono" style="text-align:right">${c.points}</td><td class="mono" style="text-align:right">${c.insert || ''}</td></tr>`).join('')}
+</tbody></table>
+<table style="margin-top:18px"><thead><tr><th>待做</th><th style="text-align:right">事件层</th><th style="text-align:right">未认领</th><th>该做到什么程度</th></tr></thead><tbody>
+${r.charTodo.map(c => `<tr><td>${esc(c.name)}</td><td class="mono" style="text-align:right">${esc(c.total)}</td><td class="mono" style="text-align:right">${esc(c.unclaimed)}</td><td style="color:var(--ink2)">${esc(c.note)}</td></tr>`).join('')}
+</tbody></table></div>
+
+<h2>该看的地方</h2>
+<ul>${flags || '<li>无</li>'}</ul>
+</div>`;
+}
