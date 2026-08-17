@@ -301,6 +301,8 @@ export const MAIN_QUEST_STAGES: MainQuestStageRole[] = [
   // 本关窗口（986–1012）虽覆盖 seq 1012「被系统认定为超级用户」，但那一拍没有落成 event。
   { stageId: 'lyg.mijing_rumen', role: '秘境续（小玲儿在本关窗口内被认定为超级用户，但事件层未落拍）；与太泉同系统', pillars: ['taiquan', 'bloodline'] },
   { stageId: 'lyg.han_succession', role: '赵飞燕·子嗣线（毕业生受孕锚）', pillars: ['bloodline'] },
+  // 百衲衣寻小公主岳霏（seq 1123）落在本关——岳血后裔，属血脉支柱，故收进主轴关。
+  { stageId: 'lyg.changgan_interlude', role: '血脉：百衲衣寻岳霏', pillars: ['bloodline'] },
   { stageId: 'lyg.shituolin_endgame', role: '连载断点；鬼王线回响', pillars: [] },
 ];
 
@@ -331,41 +333,45 @@ export const MAIN_QUEST_NODES: MainQuestNode[] = [
   // 血脉揭示（用户裁定 2026-08-16）：玩家得先**知道**某人是岳血，要求二对他才可见。
   // 三条候选各有揭示拍：月霜＝王哲托付（`s02_01`，已在主干）；小紫这条＝本拍。
   { stageId: 'lcq.stage_04b_lingfei_baiyi_crisis', text: '听谢艺说破：岳帅还有个遗腹女', status: 'ready', eventId: 'lcq.event.s04b_lingfei_baiyi_crisis_18', bloodlineBranch: 'xiaozi' },
-  { stageId: 'lcq.stage_05', text: '进鬼王峒，并当面辨认碧姬', locationId: 'liuchao.location.guiwangdong', status: 'new', eventId: 'lcq.event.enter_dong_recognize_biji', bloodlineBranch: 'xiaozi' },
   { stageId: 'lcq.stage_05b', text: '向碧姬追问小紫的过往', status: 'ready', eventId: 'lcq.event.s05b_01_binu_reveals_xiaozi', bloodlineBranch: 'xiaozi' },
-  // #8 文案压了两拍：临时协定 s05b_09 ＋ 奴隶倒戈 s05b_10；落倒戈拍（含小紫倒戈）。
   { stageId: 'lcq.stage_05b', text: '与小紫达成临时协定，在鬼王宫策动奴隶倒戈', status: 'ready', eventId: 'lcq.event.s05b_10_slave_revolt_and_phoenix_change', bloodlineBranch: 'xiaozi' },
+  // #8 文案压了两拍：临时协定 s05b_09 ＋ 奴隶倒戈 s05b_10；落倒戈拍（含小紫倒戈）。
+  { stageId: 'lcq.stage_05b', text: '接下谢艺对小紫与星月湖的托付，追上小紫见证她与碧姬的了断', locationId: 'liuchao.location.gui_wang_gong', status: 'ready', eventId: 'lcq.event.slay_dragon', bloodlineBranch: 'xiaozi' },
   // #9 隔离关 stage_06（s06_03 谢艺托付 + s06_04 碧姬了断）。谢艺托付已由星月湖
   // 并进昭南杀龙 event——复用同一建议 id，不另开。建议挂 `lcq.stage_05b` 后缀。
-  { stageId: 'lcq.stage_05b', text: '接下谢艺对小紫与星月湖的托付，追上小紫见证她与碧姬的了断', locationId: 'liuchao.location.gui_wang_gong', status: 'ready', eventId: 'lcq.event.slay_dragon', bloodlineBranch: 'xiaozi' },
+  { stageId: 'lyl.taiquan_sacred_fruit', text: '在云涛观迷楼里摸清那套机关', status: 'ready', eventId: 'lyl.event.taiquan_sacred_fruit_04' },
   // 太泉段：现成剧情整条排进来（用户裁定 2026-08-16）。此前主轴只取了钥匙与居住区两拍，
   // 而这一段在事件层是完整的探索链——迷楼机关→取果→蚁穴→魔墟→古阵，共 8 条现成 event。
-  { stageId: 'lyl.taiquan_sacred_fruit', text: '在云涛观迷楼里摸清那套机关', status: 'ready', eventId: 'lyl.event.taiquan_sacred_fruit_04' },
   { stageId: 'lyl.taiquan_sacred_fruit', text: '在云涛观迷楼找出太泉钥匙的线索', status: 'ready', eventId: 'lyl.event.taiquan_sacred_fruit_05' },
   { stageId: 'lyl.taiquan_sacred_fruit', text: '到火山口去争赤阳圣果——你此行真正的由头', status: 'ready', eventId: 'lyl.event.taiquan_sacred_fruit_10' },
   { stageId: 'lyl.taiquan_core_conflict', text: '困在蚁穴里，先找到出去的路', status: 'ready', eventId: 'lyl.event.find_exit' },
   { stageId: 'lyl.taiquan_afterfall', text: '进魔墟取那件东西', status: 'ready', eventId: 'lyl.event.taiquan_afterfall_03_beat' },
   { stageId: 'lyl.taiquan_afterfall', text: '探索太泉古阵的人类居住区', status: 'ready', eventId: 'lyl.event.taiquan_afterfall_05_beat' },
+  { stageId: 'lyl.taiquan_afterfall', text: '在汉宫接上一条内线', status: 'ready', bloodlineBranch: 'zhao', eventId: 'lyl.event.taiquan_afterfall_09_beat' },
+  { stageId: 'lyl.han_palace_endgame', text: '在汉宫变局中抵达秘境入口', status: 'ready', eventId: 'lyl.event.han_palace_endgame_07_beat', bloodlineBranch: 'zhao' },
+  { stageId: 'lyg.mijing_rumen', text: '保住赵飞燕——程赵之子这条盲点系在她身上', status: 'ready', eventId: 'lyg.event.s02_02', bloodlineBranch: 'zhao' },
+  { stageId: 'lyg.mijing_rumen', text: '在武帝像前安排秘境探索', status: 'ready', eventId: 'lyg.event.s02_08', bloodlineBranch: 'zhao' },
   // ⏳ 六阳开启古阵内的入口：正典压根没有这一拍——原著里程宗扬从未履行此托付
   // （全书修为最高见第四级入微境，他去太泉是为赤阳圣果救人）。按扩写口径只标待扩，不细化。
-  { stageId: 'lyl.taiquan_afterfall', text: '修为到六阳，开启古阵内的入口（未来待扩）', status: 'pending' },
+  { stageId: 'lyg.mijing_rumen', text: '触发冰冰，当场验明谁在超级用户名单上', status: 'ready', eventId: 'lyg.event.mijing_superuser_roster' },
   // 小玲儿必须在太泉有一拍（用户裁定 2026-08-16）。正典没把她放进太泉段——
   // 她在 seq 610 小瀛洲（太泉之前）、788 割喉吕奉先、1012 **被系统认定为超级用户**、1016 被擒，
   // 正好卡在太泉前后两头。故这是扩写，只记要求不设计。她与小紫同属「超级用户」那一类。
-  { stageId: 'lyl.taiquan_afterfall', text: '小玲儿在太泉的那一拍（未来待扩）', status: 'pending', bloodlineBranch: 'xiaolinger' },
-  { stageId: 'lyl.han_palace_endgame', text: '在汉宫变局中抵达秘境入口', status: 'ready', eventId: 'lyl.event.han_palace_endgame_07_beat', bloodlineBranch: 'zhao' },
-  { stageId: 'lyg.mijing_rumen', text: '保住赵飞燕——程赵之子这条盲点系在她身上', status: 'ready', eventId: 'lyg.event.s02_02', bloodlineBranch: 'zhao' },
+  { stageId: 'lyg.han_succession', text: '护住赵氏一门，别让这支血脉在政变里断掉', status: 'ready', eventId: 'lyg.event.han_succession_08_beat', bloodlineBranch: 'zhao' },
+  { stageId: 'lyg.han_succession', text: '在登基典仪上与赵飞燕行功，修为推到通幽境', status: 'ready', eventId: 'lyg.event.han_succession_09_beat', bloodlineBranch: 'zhao' },
+  { stageId: 'lyg.changgan_interlude', text: '查出还有一个岳氏后人流落在外', status: 'ready', bloodlineBranch: 'xiaozi', eventId: 'lyg.event.changgan_interlude_02_beat' },
   // #17 文案「武帝像前」偏 s02_09；「安排秘境探索」本体是 s02_08（胶西邸／长秋宫）。
-  { stageId: 'lyg.mijing_rumen', text: '在武帝像前安排秘境探索', status: 'ready', eventId: 'lyg.event.s02_08', bloodlineBranch: 'zhao' },
+  { stageId: 'lcq.stage_05', text: '进鬼王峒，并当面辨认碧姬', locationId: 'liuchao.location.guiwangdong', status: 'new', eventId: 'lcq.event.enter_dong_recognize_biji', bloodlineBranch: 'xiaozi' },
   // 超级用户名单（用户提议 2026-08-16，已核实）：seq 1010「程触龙珠触发 AI 冰冰，获超级管理员权限；
   // **众人验证身份**，小紫雪雪被电击」、1012「小玲儿……**被系统认定为超级用户**」。
   // 这一拍是**要求二对玩家可见的机制**——系统当场验明谁在名单上，而不是靠叙述告诉玩家谁算岳血。
   // ⚠ 实测：全库 396 条 event 搜「超级用户／超级管理员／冰冰／验证身份」**命中 0**，
   // 且 seq 1007–1012 整段六拍事件层空白。正典有、游戏没落地 → `new`，不是待扩。
-  { stageId: 'lyg.mijing_rumen', text: '触发冰冰，当场验明谁在超级用户名单上', status: 'ready', eventId: 'lyg.event.mijing_superuser_roster' },
+  { stageId: 'lyl.taiquan_core_conflict', text: '想好怎么从核心区脱出去', status: 'ready', eventId: 'lyl.event.plan_counterattack' },
   // #18 与汉国二级线同锚 s08（促成登基）；「长秋宫」字面更近 s06，但护住赵氏／登基收束在大典拍。
-  { stageId: 'lyg.han_succession', text: '护住赵氏一门，别让这支血脉在政变里断掉', status: 'ready', eventId: 'lyg.event.han_succession_08_beat', bloodlineBranch: 'zhao' },
-  { stageId: 'lyg.han_succession', text: '在登基典仪上与赵飞燕行功，修为推到通幽境', status: 'ready', eventId: 'lyg.event.han_succession_09_beat', bloodlineBranch: 'zhao' },
+  { stageId: 'lyl.taiquan_core_conflict', text: '用阴阳鱼把追兵挡回去', status: 'ready', eventId: 'lyl.event.yin_yang_counter' },
+  { stageId: 'lyl.taiquan_afterfall', text: '修为到六阳，开启古阵内的入口（未来待扩）', status: 'pending' },
+  { stageId: 'lyl.taiquan_afterfall', text: '小玲儿在太泉的那一拍（未来待扩）', status: 'pending', bloodlineBranch: 'xiaolinger' },
   // 程赵之子按用户裁定只标待扩（2026-08-16）：正典 seq 1052 有「宣布赵飞燕有孕」，
   // 但把它认成「岳血候选」是我们的推演，不是正典写明的血脉认定——不给建议 id，不设计。
   { stageId: 'lyg.han_succession', text: '程赵之子这条血脉如何成立（未来待扩）', status: 'pending', bloodlineBranch: 'zhao' },
