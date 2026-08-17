@@ -40,7 +40,7 @@ function fixture(stage, event) {
   };
 }
 
-test('all 396 events have exactly one deterministic completion owner', async () => {
+test('every event has exactly one deterministic completion owner', async () => {
   const stages = await loadAllStages();
   const rows = stages.flatMap(stage => stage.scenario.events.map(event => ({ stage, event })));
   const objective = rows.filter(({ event }) => event.playerCompletionContract?.kind === 'objective_action');
@@ -51,10 +51,11 @@ test('all 396 events have exactly one deterministic completion owner', async () 
     && !event.worldActor?.opportunities?.some(opportunity => opportunity.completionContract));
 
   assert.equal(stages.length, 37);
-  assert.equal(rows.length, 396);
-  assert.equal(objective.length, 389);
-  assert.equal(localCondition.length, 1);
-  assert.equal(opportunityOnly.length, 6);
+  // 总数不写死（同 r2_11j，2026-08-17）：按线补写 event 会让它持续增长。
+  // 保留的是两个**小而固定的集合**——它们是例外，例外变多才该警觉。
+  assert.equal(localCondition.length, 1, 'local_condition 只该有一条（R2-11E 那个）');
+  assert.equal(opportunityOnly.length, 6, '只靠机会卡兜底的 event 只该有 6 条');
+  assert.ok(objective.length >= 389, 'objective_action 只增不减');
   assert.deepEqual(uncovered, []);
   for (const { event } of rows) {
     assert.equal(event.completion.length, 1, event.id);

@@ -182,7 +182,7 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       // **文案不预设他必死**（用户裁定 2026-08-16）：原著里他伤重辞世，但这里不写死。
       // 玩家赶到时他重伤未定，救不救得回来是结果不是前提。⚠ 真做成分岔的代价见
       // `docs/R3-10-BACKLOG` P1-7：他的死是四处承重，其中「萧遥逸接骨灰」是萧的**唯一登场路径**。
-      { text: '赶到重伤的谢艺身边，接下他对小紫与星月湖的交代', status: 'new', stageId: 'lcq.stage_05b', eventId: 'lcq.event.slay_dragon' },
+      { text: '赶到重伤的谢艺身边，接下他对小紫与星月湖的交代', status: 'ready', stageId: 'lcq.stage_05b', eventId: 'lcq.event.slay_dragon' },
       // 与汉国入口同一 event，待办各说各的：汉国读左武覆灭，本线读番号旧案。
       // 序按 axisSeq：旧案 232 在报丧 251 之前，先前两条排反了。
       { text: '跟着八骏，问清左武军怎么覆灭的', status: 'ready', stageId: 'lcq.stage_07_qingyuan_jiankang', eventId: 'lcq.event.s07_01_old_case' },
@@ -295,14 +295,14 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       { text: '问清花苗此刻站在哪一边', status: 'ready', stageId: 'lcq.stage_03b_snake_flower_bridge', eventId: 'lcq.event.s03b_snake_flower_bridge_07' },
       // Z4 并进 s04b_lingfei_baiyi_crisis_08／_09（识破投峒、族长被换）
       { text: '问清白夷此刻站在哪一边', status: 'ready', stageId: 'lcq.stage_04', eventId: 'lcq.event.s04_07' },
-      { text: '赶到碧鲮湾，看清他们此刻敢不敢站出来', status: 'new', stageId: 'lcq.stage_05b', eventId: 'lcq.event.biling_bay_stance' },
-      { text: '跟花苗谈清进鬼王峒的合作边界', status: 'new', stageId: 'lcq.stage_05b', eventId: 'lcq.event.huamiao_coop_boundary' },
+      { text: '赶到碧鲮湾，看清他们此刻敢不敢站出来', status: 'ready', stageId: 'lcq.stage_05b', eventId: 'lcq.event.biling_bay_stance' },
+      { text: '跟花苗谈清进鬼王峒的合作边界', status: 'ready', stageId: 'lcq.stage_05b', eventId: 'lcq.event.huamiao_coop_boundary' },
       // Z7 并进 s05b_05b_ideology_duel_and_defeat
       { text: '潜入鬼王宫，当面见鬼巫王', status: 'ready', stageId: 'lcq.stage_05b', eventId: 'lcq.event.s05b_05a_meet_ghost_king' },
       { text: '在鬼王宫里策动奴隶倒戈', status: 'ready', stageId: 'lcq.stage_05b', eventId: 'lcq.event.s05b_10_slave_revolt_and_phoenix_change' },
-      { text: '在祭台上把鬼巫王这一仗打完', status: 'new', stageId: 'lcq.stage_05b', eventId: 'lcq.event.ghost_king_swallowed' },
-      { text: '在破峒之后了结龙神', status: 'new', stageId: 'lcq.stage_05b', eventId: 'lcq.event.slay_dragon' },
-      { text: '散峒之后，听清三族是否真的站到你这边', status: 'new', stageId: 'lcq.stage_05b', eventId: 'lcq.event.tribes_pledge' },
+      { text: '在祭台上把鬼巫王这一仗打完', status: 'ready', stageId: 'lcq.stage_05b', eventId: 'lcq.event.ghost_king_swallowed' },
+      { text: '在破峒之后了结龙神', status: 'ready', stageId: 'lcq.stage_05b', eventId: 'lcq.event.slay_dragon' },
+      { text: '散峒之后，听清三族是否真的站到你这边', status: 'ready', stageId: 'lcq.stage_05b', eventId: 'lcq.event.tribes_pledge' },
     ],
     pendingExpansion: '线形：商队进南荒 → 查清蛇彝 → 取得花苗／白夷／碧鲮立场（观望≠归附）→ 决战鬼巫王／龙神 → 散峒后三族真正归附。'
       + '顶点＝三族真正归附（Z11 `s05b_tribes_pledge`）。隔离关 stage_05／06 不放出；斩蛇傀、合作边界、吞噬、杀龙、散峒改挂 05b 前缀／后缀。'

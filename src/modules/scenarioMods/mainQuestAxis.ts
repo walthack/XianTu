@@ -337,7 +337,7 @@ export const MAIN_QUEST_NODES: MainQuestNode[] = [
   { stageId: 'lcq.stage_05b', text: '与小紫达成临时协定，在鬼王宫策动奴隶倒戈', status: 'ready', eventId: 'lcq.event.s05b_10_slave_revolt_and_phoenix_change', bloodlineBranch: 'xiaozi' },
   // #9 隔离关 stage_06（s06_03 谢艺托付 + s06_04 碧姬了断）。谢艺托付已由星月湖
   // 并进昭南杀龙 event——复用同一建议 id，不另开。建议挂 `lcq.stage_05b` 后缀。
-  { stageId: 'lcq.stage_06', text: '接下谢艺对小紫与星月湖的托付，追上小紫见证她与碧姬的了断', locationId: 'liuchao.location.gui_wang_gong', status: 'new', eventId: 'lcq.event.slay_dragon', bloodlineBranch: 'xiaozi' },
+  { stageId: 'lcq.stage_05b', text: '接下谢艺对小紫与星月湖的托付，追上小紫见证她与碧姬的了断', locationId: 'liuchao.location.gui_wang_gong', status: 'ready', eventId: 'lcq.event.slay_dragon', bloodlineBranch: 'xiaozi' },
   // 太泉段：现成剧情整条排进来（用户裁定 2026-08-16）。此前主轴只取了钥匙与居住区两拍，
   // 而这一段在事件层是完整的探索链——迷楼机关→取果→蚁穴→魔墟→古阵，共 8 条现成 event。
   { stageId: 'lyl.taiquan_sacred_fruit', text: '在云涛观迷楼里摸清那套机关', status: 'ready', eventId: 'lyl.event.taiquan_sacred_fruit_04' },

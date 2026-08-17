@@ -3,7 +3,15 @@
 > 面向「新加入的 agent」。读完这一篇即可独立认领一个模块开工。
 > 当前认领：无。**进行中**：无。
 >
-> ## 最后更新：2026-08-16（**锚改成"知道"、主轴落 event、八条线重写完**）
+> ## 最后更新：2026-08-17（**lcq.stage_05b 末尾补 5 条昭南高潮 event**）
+>
+> 在 `lcq.stage_05b` 的 `scenario.events` append-only 写入 5 条：`biling_bay_stance`(139)／`huamiao_coop_boundary`(150)／`ghost_king_swallowed`(205)／`slay_dragon`(211)／`tribes_pledge`(218)。`manifest.axisSeqHi` 放宽到 218。谢艺只写重伤交代、不写死。
+>
+> 门禁：`npm run mod:validate -- …/lcq.stage_05b.json` PASS（5 条未挂章节 warning，未改 chapters）；`npm run build:single` 全绿。
+>
+> ---
+>
+> ## 上一条：2026-08-16（**锚改成"知道"、主轴落 event、八条线重写完**）
 >
 > 本轮把二级线从"骨架"推到"可评审"，并纠正了一条贯穿全局的口径错误。
 >

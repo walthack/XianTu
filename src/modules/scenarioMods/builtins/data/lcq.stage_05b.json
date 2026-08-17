@@ -10,7 +10,7 @@
     "axisVersion": "rebuild-2026-06-28",
     "axisOrder": 4.5,
     "axisSeqLo": 163,
-    "axisSeqHi": 195,
+    "axisSeqHi": 218,
     "eventIdContract": "append-only-frozen",
     "prevStageId": "lcq.stage_05",
     "prevStageName": "六朝清羽记·第73章·遇难",
@@ -4096,7 +4096,12 @@
       "event.s05b_10.done": false,
       "event.s05b_11.done": false,
       "event.s05b_12.done": false,
-      "event.debut_lemingzhu.done": false
+      "event.debut_lemingzhu.done": false,
+      "event.biling_bay_stance.done": false,
+      "event.huamiao_coop_boundary.done": false,
+      "event.ghost_king_swallowed.done": false,
+      "event.slay_dragon.done": false,
+      "event.tribes_pledge.done": false
     },
     "chapters": [
       {
@@ -4857,6 +4862,278 @@
                 "success": "你已完成“留在现场完成“乐明珠·招牌登场”的首次接触”的当前结构化步骤；最终完成真值由本地引擎落账。",
                 "partial": "该展示动作不产生 partial；需要分歧时必须另建本地判定合同。",
                 "failure": "该展示动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.biling_bay_stance",
+        "name": "碧鲮湾站出来",
+        "description": "蛇傀下令焚烧碧鲮族，程宗扬率众突袭斩杀蛇傀；碧鲮族获释后反攻鬼王峒。",
+        "axisId": "qingyu.82.2",
+        "axisAnchor": "六朝清羽记·#82·第80章·前路",
+        "axisSeq": 139,
+        "axisBeat": "蛇傀下令焚烧碧鲮族，程宗扬率众突袭斩杀蛇傀，碧鲮族获释后反攻鬼王峒。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.biling_bay_stance.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.wu_er_lang",
+          "liuchao.character.xie_yi",
+          "liuchao.character.bi_ji"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.biyu",
+          "liuchao.faction.gui_wang_dong"
+        ],
+        "locationId": "liuchao.location.biyu_village",
+        "objective": "赶到碧鲮湾，打断焚村并看清他们此刻敢不敢站出来",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "赶到碧鲮湾，打断焚村并看清他们此刻敢不敢站出来",
+              "actionText": "我按当前主线目标行动：赶到碧鲮湾，打断焚村并看清他们此刻敢不敢站出来",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“赶到碧鲮湾，打断焚村并看清他们此刻敢不敢站出来”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.huamiao_coop_boundary",
+        "name": "进峒合作边界",
+        "description": "云苍峰坦言云氏欲借机探鬼王峒底细并拉拢部族，程宗扬明确双方是平等合作不是依附。",
+        "axisId": "qingyu.87.3",
+        "axisAnchor": "六朝清羽记·#87·第85章·幽路",
+        "axisSeq": 150,
+        "axisBeat": "云苍峰坦言云氏欲借机探鬼王峒底细并拉拢部族，程宗扬明确双方是平等合作不是依附。",
+        "critical": true,
+        "conditions": [
+          {
+            "path": "flags.event.biling_bay_stance.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.huamiao_coop_boundary.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.yun_cang_feng",
+          "liuchao.character.su_li"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.hua_miao",
+          "liuchao.faction.yun_shi_shang_hui"
+        ],
+        "locationId": "liuchao.location.biyu",
+        "objective": "跟花苗谈清进鬼王峒的合作边界",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "跟花苗谈清进鬼王峒的合作边界",
+              "actionText": "我按当前主线目标行动：跟花苗谈清进鬼王峒的合作边界",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“跟花苗谈清进鬼王峒的合作边界”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.ghost_king_swallowed",
+        "name": "祭台吞王",
+        "description": "祭台决战中，鬼巫王以祭品唤醒龙神，反被龙神一口吞食。",
+        "axisId": "qingyu.114.2",
+        "axisAnchor": "六朝清羽记·#114·第112章·唤龙",
+        "axisSeq": 205,
+        "axisBeat": "鬼巫王以祭品唤醒龙神，反被龙神一口吞食。",
+        "critical": true,
+        "conditions": [
+          {
+            "path": "flags.event.s05b_12.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.ghost_king_swallowed.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.gui_wu_wang",
+          "liuchao.character.dragon_god",
+          "liuchao.character.xiao_zi",
+          "liuchao.character.xie_yi",
+          "liuchao.character.le_mingzhu"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.gui_wang_dong"
+        ],
+        "locationId": "liuchao.location.gui_wang_gong.jingshen_tai",
+        "objective": "在祭台上把鬼巫王这一仗打完",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在祭台上把鬼巫王这一仗打完",
+              "actionText": "我按当前主线目标行动：在祭台上把鬼巫王这一仗打完",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在祭台上把鬼巫王这一仗打完”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.slay_dragon",
+        "name": "了结龙神",
+        "description": "程宗扬借小紫指点刺穿龙颅、破坏苍龙星阵，龙神坠亡；重伤的谢艺把小紫与星月湖交代给他。",
+        "axisId": "qingyu.117.1",
+        "axisAnchor": "六朝清羽记·#117·第115章·杀神",
+        "axisSeq": 211,
+        "axisBeat": "程宗扬借小紫指点刺穿龙颅、破坏苍龙星阵，龙神坠亡；重伤的谢艺把小紫与星月湖交代给他。",
+        "critical": true,
+        "conditions": [
+          {
+            "path": "flags.event.ghost_king_swallowed.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.slay_dragon.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.xie_yi",
+          "liuchao.character.xiao_zi",
+          "liuchao.character.dragon_god",
+          "liuchao.character.le_mingzhu",
+          "liuchao.character.wu_er_lang",
+          "liuchao.character.ning_yu"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.gui_wang_dong",
+          "liuchao.faction.xing_yue_hu"
+        ],
+        "locationId": "liuchao.location.gui_wang_dong",
+        "objective": "了结龙神，并赶到重伤的谢艺身边接下他对小紫与星月湖的交代",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "了结龙神，并赶到重伤的谢艺身边接下他对小紫与星月湖的交代",
+              "actionText": "我按当前主线目标行动：了结龙神，并赶到重伤的谢艺身边接下他对小紫与星月湖的交代",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“了结龙神，并赶到重伤的谢艺身边接下他对小紫与星月湖的交代”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.tribes_pledge",
+        "name": "散峒听三族",
+        "description": "程宗扬解散鬼王峒势力，要求三族和平共处，并将龙神尸骸收益分十份。",
+        "axisId": "qingyu.120.2",
+        "axisAnchor": "六朝清羽记·#120·第118章·弑亲",
+        "axisSeq": 218,
+        "axisBeat": "程宗扬解散鬼王峒势力，要求三族和平共处，龙神尸骸收益分十份。",
+        "critical": true,
+        "conditions": [
+          {
+            "path": "flags.event.slay_dragon.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.tribes_pledge.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.su_li",
+          "liuchao.character.bi_ji",
+          "liuchao.character.yun_cang_feng"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.hua_miao",
+          "liuchao.faction.biyu",
+          "liuchao.faction.gui_wang_dong"
+        ],
+        "locationId": "liuchao.location.gui_wang_dong",
+        "objective": "散峒之后，听清三族是否真的站到你这边",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "散峒之后，听清三族是否真的站到你这边",
+              "actionText": "我按当前主线目标行动：散峒之后，听清三族是否真的站到你这边",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“散峒之后，听清三族是否真的站到你这边”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
               }
             }
           ]
