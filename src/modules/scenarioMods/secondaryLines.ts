@@ -196,17 +196,18 @@ export const SECONDARY_LINES: SecondaryLine[] = [
     nodes: [
       // 这条线不是拉票选盟主，是扳倒现任掌教：蔺采泉杀了卓云君的师叔（seq 273）、
       // 与商乐轩争位（391）、最终自立掌教（581），程宗扬后来承诺对付他（629）。
-      { text: '受王哲传功托付，入太乙真宗阵营', status: 'ready', stageId: 'lcq.stage_01', eventId: 'lcq.event.s01_04' },
+      { text: '太乙四教御现身救下你——蔺采泉、商乐轩、夙未央、卓云君', status: 'ready', stageId: 'lcq.stage_01', eventId: 'lcq.event.s01_04' },
       { text: '接下锦囊与三托付', status: 'ready', stageId: 'lcq.stage_02', eventId: 'lcq.event.s02_01' },
-      { text: '在紫溪被点名去龙池', status: 'ready', stageId: 'lcq.stage_03b_snake_flower_bridge', eventId: 'lcq.event.zixi_intercept' },
-      { text: '读王哲密信，受托清理门户', status: 'ready', stageId: 'lcq.stage_07_qingyuan_jiankang', eventId: 'lcq.event.wangzhe_letter' },
-      { text: '听清蔺采泉与商乐轩在争掌教', status: 'ready', stageId: 'lcq.stage_10_jiangzhou_shadow_war', eventId: 'lcq.event.yeying_seat_struggle' },
+      { text: '王哲以九阳神功自爆殉军——太乙掌教之位就此空出', status: 'ready', stageId: 'lcq.stage_02', eventId: 'lcq.event.s02_02' },
+      { text: '元行健带人拦下商馆的船，点名要你去龙池', status: 'ready', stageId: 'lcq.stage_03b_snake_flower_bridge', eventId: 'lcq.event.zixi_intercept' },
+      { text: '读王哲留下的密信：他要你替他清理太乙的门户', status: 'ready', stageId: 'lcq.stage_07_qingyuan_jiankang', eventId: 'lcq.event.wangzhe_letter' },
+      { text: '夜影关听清：蔺采泉与商乐轩借查卓云君叛教，实为争夺空出来的掌教之位', status: 'ready', stageId: 'lcq.stage_10_jiangzhou_shadow_war', eventId: 'lcq.event.yeying_seat_struggle' },
       // 这是对手开的价，不是盟友协商——文案不要写成结盟。
-      { text: '破道观：认出元行健是林之澜的人', status: 'ready', stageId: 'lcq.stage_10_jiangzhou_shadow_war', eventId: 'lcq.event.s10_06_ruined_temple' },
-      { text: '审出元行健：坐实林之澜指使暗算月霜', status: 'ready', stageId: 'lcq.stage_10_jiangzhou_shadow_war', eventId: 'lcq.event.yuanxingjian_interrogated' },
-      { text: '秋少君因元行健之死与林之澜反目', status: 'ready', stageId: 'lcq.stage_11_lieshan_battle', eventId: 'lcq.event.qiushaojun_breaks_with_linzhilan' },
+      { text: '破道观又撞见元行健——他替林之澜办事，而线索指向黑魔海', status: 'ready', stageId: 'lcq.stage_10_jiangzhou_shadow_war', eventId: 'lcq.event.s10_06_ruined_temple' },
+      { text: '审出元行健：暗算月霜是林之澜指使的——太乙内部有人在替黑魔海办事', status: 'ready', stageId: 'lcq.stage_10_jiangzhou_shadow_war', eventId: 'lcq.event.yuanxingjian_interrogated' },
+      { text: '秋少君与师兄林之澜决裂，起因是元行健之死', status: 'ready', stageId: 'lcq.stage_11_lieshan_battle', eventId: 'lcq.event.qiushaojun_breaks_with_linzhilan' },
       // ⏳ 扩写部分，本阶段不再细化（用户裁定 2026-08-16）：正典无此拍，只标未来待扩。
-      { text: '蔺采泉以支持江州，换你承认九阳出自他', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_blacksea_trap_02_beat' },
+      { text: '蔺采泉开价：他支持江州，换你承认九阳神功出自太乙、出自他', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_blacksea_trap_02_beat' },
       { text: '鹤林观：蔺采泉自立掌教，秋少君升任教御', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_lin_takes_seat' },
       { text: '在翠微园承诺对付现任掌教', status: 'ready', stageId: 'lyl.taiquan_sacred_fruit', eventId: 'lyl.event.sacred_against_lin' },
       { text: '扳倒现任掌教、取得掌教之位（未来待扩）', status: 'pending' },
