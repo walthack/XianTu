@@ -40,6 +40,11 @@
  *
  * 纪律：不催、不卡、无进度惩罚；玩家可无限期搁置。本模块只描述方向，不产生压力。
  *
+ * 【开场切法＝Helgen 洞口】（用户裁定 2026-08-17，见 `docs/R3-10-HELGEN-CUT-2026-08-17.md`）
+ *   强制段：`01` → `02` → 白湖脱身。地点是五原商馆，不是南荒商路。
+ *   自由世界从五原开始。洞口朝前＝南门商路 → 蛇彝村；本能一直跑就进昭南。
+ *   回头、找殇侯解蛊、拖到毒发，都合法。不要做出馆已在死村里，也不要把白湖写成南荒锚。
+ *
  * 设计全文见 `docs/R3-10-MAIN-QUEST-AXIS-DRAFT-2026-08-16.md`。
  */
 
@@ -161,9 +166,9 @@ export interface MainQuestNode {
    * 其中 `lcq.stage_03`／`stage_05`／`stage_06` 正在主轴上。只按 `stageId` 精确匹配时，
    * 这三关的节点在默认路线上**永远渲染不出来**——20 条节点死 3 条，且死的正是血脉线开场。
    *
-   * 地点不随关卡编排变动。实测这三个锚在未隔离的关卡里都还在：
-   * 白湖商馆 → `stage_02`；鬼王峒 → `stage_03b`／`04`／`04b`／`05b`；鬼王宫 → `stage_05b`。
-   * 锚到地点后三条全部复活，且将来隔离名单缩小时不用再改。
+   * 地点不随关卡编排变动。白湖脱身锚五原商馆（`baihu_shang_guan`），
+   * 不是南荒商路——那是出馆之后朝前的默认矢量，见 Helgen 切法。
+   * 鬼王峒／鬼王宫的地点锚仍是旧关卡匹配的兜底，任务链重构后应退为落点说明。
    *
    * 用 id 不用名字：id 是权威键、不怕重名（已知「白夷」／「白夷谷」这类互含），
    * 而 `resolveCurrentScenarioLocation` 已经把存档里的中文描述串解析成地点对象。
@@ -273,8 +278,10 @@ export const STAGE_ORDER: string[] = [
  */
 export const MAIN_QUEST_STAGES: MainQuestStageRole[] = [
   { stageId: 'lcq.stage_01', role: '落地：穿越、失去同伴', pillars: [] },
-  { stageId: 'lcq.stage_02', role: '王哲三托付——两根支柱同时种下', pillars: ['bloodline', 'taiquan'] },
-  { stageId: 'lcq.stage_03', role: '进南荒；谢艺登场（星月湖寻碧姬母子）', pillars: ['bloodline'] },
+  { stageId: 'lcq.stage_02', role: '王哲三托付；白湖脱身＝强制段终点', pillars: ['bloodline', 'taiquan'] },
+  // stage_03 是旧关卡包（赌局至蛇彝村），默认路线隔离。进南荒不是本关任务，
+  // 是出白湖后朝前走的默认矢量。谢艺在蛇彝村，属昭南开门之后。
+  { stageId: 'lcq.stage_03', role: '（旧包）白湖后续；不承担进南荒', pillars: ['bloodline'] },
   { stageId: 'lcq.stage_03b_snake_flower_bridge', role: '小紫入队', pillars: ['bloodline'] },
   // 谢艺说破「岳帅还有个遗腹女」（`s04b_..._18`, seq 121）落在本关——血脉揭示拍，故收进主轴关。
   { stageId: 'lcq.stage_04b_lingfei_baiyi_crisis', role: '血脉揭示：岳帅遗腹女', pillars: ['bloodline'] },
@@ -312,9 +319,12 @@ export const MAIN_QUEST_NODES: MainQuestNode[] = [
   { stageId: 'lcq.stage_01', text: '从坠落处活下来，一路走到太乙真宗帅帐见着王哲', status: 'ready', eventId: 'lcq.event.s01_05' },
   { stageId: 'lcq.stage_02', text: '接下王哲的锦囊与九阳神功口诀，领受三件托付', status: 'ready', eventId: 'lcq.event.s02_01' },
   { stageId: 'lcq.stage_02', text: '见证王哲殉军，独自离开左武军的战场', status: 'ready', eventId: 'lcq.event.s02_02' },
-  // #4 隔离关 stage_03。可达关无同事实 event（s02_06 只脱身；s03b_04 是跟云氏同行）
-  // → new。建议 id 挂 `lcq.stage_03b_snake_flower_bridge` 前缀（不放出隔离）。
-  { stageId: 'lcq.stage_03', text: '从白湖商馆的死局里脱身', locationId: 'liuchao.location.baihu_shang_guan', status: 'new', eventId: 'lcq.event.s03b_baihu_caravan_south', bloodlineBranch: 'xiaozi' },
+  // 强制段终点（Helgen 洞口，用户裁定 2026-08-17）。
+  // s02_06 只落到「被囚＋追问霓龙丝」，rail 禁止在那一拍脱身。本拍才是出馆。
+  // 地点＝五原商馆。不作废成南荒路上的锚定拍。
+  // 作废建议 id：`lcq.event.s03b_baihu_caravan_south`（那是按关改挂的旧写法）。
+  // 出馆后不要再加「必须到蛇彝村」主干节点——朝前走就会到，回头也合法。
+  { stageId: 'lcq.stage_02', text: '从白湖商馆的死局里脱身', locationId: 'liuchao.location.baihu_shang_guan', status: 'new', eventId: 'lcq.event.baihu_shangguan_escape' },
   { stageId: 'lcq.stage_03b_snake_flower_bridge', text: '查清蛇彝村灭村的真凶，循血符指向鬼王峒', status: 'ready', eventId: 'lcq.event.s03b_snake_flower_bridge_03', bloodlineBranch: 'xiaozi' },
   // #6 隔离关 stage_05（原 s05_11 进峒 + s05_13 辨认碧姬）。可达关无同事实 → new。
   // 建议 id 挂 `lcq.stage_05b` 前缀（不放出隔离）。
