@@ -3,7 +3,25 @@
 > 面向「新加入的 agent」。读完这一篇即可独立认领一个模块开工。
 > 当前认领：无。**进行中**：无。
 >
-> ## 最后更新：2026-08-17（**lyl.xiaoyingzhou_blacksea_trap 末尾补 4 条 event**）
+> ## 最后更新：2026-08-17（**lcq.stage_02／03b 各补 1 条 event**）
+>
+> append-only：`lcq.stage_02` 末尾 `lcq.event.baihu_shangguan_escape`（seq 41；timeline 40–59 无「出馆」专拍，取 `#25·第23章·赎身` 五原逃离拍）；`lcq.stage_03b_snake_flower_bridge` 末尾 `lcq.event.zixi_intercept`（seq 54，`#35·第33章·武请`）。`stage_02` 的 `manifest.axisSeqHi` 36→41；`stage_03b` 的 `axisSeqLo` 收到 54（前缀拍低于原窗 61–67）。合同均为手写具体动作，未用 `advance_declared_objective`。未改既有 event、未改 chapters、未跑 `build:single`，未改 `src/`、`tests/`。`mod:validate` PASS（各 1 条未挂章节 warning）。
+>
+> ---
+>
+> ## 上一条：2026-08-17（**lcq.stage_08／09／10 末尾补 4 条 event**）
+>
+> append-only：`lcq.stage_08` `palm_oath_shanghou`(300)／`lcq.stage_09` `xiangfu_stance`(343，王茂弘亲访答立场；非宫变前 302)／`spoils_split`(334，用户约 335)／`lcq.stage_10` `yeying_seat_struggle`(391)。四条均在原轴窗内，未放宽 `axisSeqHi`。合同均为手写双步动作，未用 `advance_declared_objective`。未改既有 event、未改 chapters、未跑 `build:single`，未改 `src/`、`tests/`。`mod:validate` PASS（4 条未挂章节 warning）。
+>
+> ---
+>
+> ## 上一条：2026-08-17（**yange 四关各补 1 条 event**）
+>
+> 在 `lyg.changgan_begins`／`lyg.changgan_interlude`／`lyg.mijing_rumen`／`lyg.shituolin_endgame` 的 `scenario.events` append-only 各写 1 条：`changgan_fanseng_hunt`(1061)／`song_tongwen`(1134)／`mijing_superuser_roster`(1010)／`shituolin_endgame_title_daduhu`(1396)。番僧拍低于原窗，`manifest.axisSeqLo` 1066–1091 收到 1061。合同均为手写具体动作，未用 `advance_declared_objective`。未改既有 event、未改 chapters、未跑 `build:single`，未改 `src/`、`tests/`。
+>
+> ---
+>
+> ## 上一条：2026-08-17（**lyl.xiaoyingzhou_blacksea_trap 末尾补 4 条 event**）
 >
 > 在 `lyl.xiaoyingzhou_blacksea_trap` 的 `scenario.events` append-only 写入 4 条：`xiaoyingzhou_lin_takes_seat`(581)／`xiaoyingzhou_cement_truce`(618，取 613/618 成交拍)／`xiaoyingzhou_paper_plan`(575)／`xiaoyingzhou_paper_mint`(578)。水泥拍超出原窗，`manifest.axisSeqHi` 567–615 放宽到 618。合同均为手写具体动作，未用 `advance_declared_objective`。未改既有 event、未改 chapters、未跑 `build:single`，未改 `src/`、`tests/`。`mod:validate` PASS（4 条未挂章节 warning）。
 >

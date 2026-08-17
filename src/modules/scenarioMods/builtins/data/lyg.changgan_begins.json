@@ -9,7 +9,7 @@
     "description": "程宗扬一行抵达长安灞桥，即将遭遇长安一霸杨玉环、旧识潘金莲，并开始卷入唐国官场、十方丛林与天策府的猜疑漩涡。本Mod覆盖从抵达灞桥到首次直面长安各方势力的高自由度开局。",
     "axisVersion": "rebuild-2026-06-28",
     "axisOrder": 2,
-    "axisSeqLo": 1066,
+    "axisSeqLo": 1061,
     "axisSeqHi": 1091,
     "eventIdContract": "append-only-frozen",
     "prevStageId": "lyg.han_succession",
@@ -4989,7 +4989,8 @@
       "event.s03_07.done": false,
       "event.s03_08.done": false,
       "event.s03_09.done": false,
-      "event.debut_shefuren.done": false
+      "event.debut_shefuren.done": false,
+      "event.changgan_fanseng_hunt.done": false
     },
     "events": [
       {
@@ -5843,6 +5844,47 @@
                 "success": "你已完成“留在现场完成“蛇夫人·招牌登场”的首次接触”的当前结构化步骤；最终完成真值由本地引擎落账。",
                 "partial": "该展示动作不产生 partial；需要分歧时必须另建本地判定合同。",
                 "failure": "该展示动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyg.event.changgan_fanseng_hunt",
+        "name": "番僧猎杀穿越者",
+        "description": "袁天罡向程宗扬透露番僧在猎杀穿越者。",
+        "axisId": "yange.51.2",
+        "axisAnchor": "六朝燕歌行·#51·隐疾",
+        "axisSeq": 1061,
+        "axisBeat": "袁天罡向程宗扬透露番僧在猎杀穿越者。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.changgan_fanseng_hunt.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.yuan_tiangang"
+        ],
+        "objective": "听袁天罡当面透露番僧在猎杀穿越者",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "hear_yuan_fanseng_hunt",
+              "label": "听袁天罡说破番僧猎杀穿越者",
+              "actionText": "我听袁天罡当面说完：番僧正在猎杀穿越者。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已听清袁天罡的话：番僧在猎杀穿越者；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
               }
             }
           ]

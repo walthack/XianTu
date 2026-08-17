@@ -4059,7 +4059,9 @@
       "chapter.lcq.stage_09_trade_and_escape.sinking.started": false,
       "chapter.lcq.stage_09_trade_and_escape.sinking.done": false,
       "chapter.lcq.stage_09_trade_and_escape.guangyang.started": false,
-      "chapter.lcq.stage_09_trade_and_escape.guangyang.done": false
+      "chapter.lcq.stage_09_trade_and_escape.guangyang.done": false,
+      "event.xiangfu_stance.done": false,
+      "event.spoils_split.done": false
     },
     "chapters": [
       {
@@ -5309,6 +5311,129 @@
                 "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
                 "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
               }
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.xiangfu_stance",
+        "name": "相府立场",
+        "description": "程宗扬当面问清王茂弘：相府此刻站在哪一边。王茂弘阐述无为而治，愿让权于萧侯等年轻人，并承诺保晋国二十年太平。",
+        "axisId": "qingyu.191.2",
+        "axisAnchor": "六朝清羽记·#191·第188章·随波",
+        "axisSeq": 343,
+        "axisBeat": "程宗扬当面问清王茂弘：相府此刻站在哪一边。王茂弘阐述无为而治，愿让权于萧侯等年轻人，并承诺保晋国二十年太平。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.xiangfu_stance.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "relatedFactionIds": [
+          "lyg.faction.jin_state"
+        ],
+        "locationId": "liuchao.location.jiankang",
+        "objective": "当面问清王茂弘：相府此刻站在哪一边，记下无为让权、保二十年太平",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "ask_wang_xiangfu_side",
+              "label": "当面问王茂弘：相府此刻站在哪一边",
+              "actionText": "我当着王茂弘把话问死：相府此刻站在哪一边，是跟萧家分州、跟云家分盐，还是另有主张。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "sequence_step_1"
+            },
+            {
+              "id": "hear_wang_wuwei_peace",
+              "label": "听清无为让权、保二十年太平",
+              "actionText": "我听王茂弘把无为而治说完，记下他愿让权于萧侯等年轻人，并承诺保晋国二十年太平——相府站的是这一边。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已问清相府立场：无为让权、保二十年太平；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "sequence_step_1"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.spoils_split",
+        "name": "宫变分赃",
+        "description": "宫变后分赃落定：王茂弘、谢安等各方妥协，萧家获江、宁二州，云家得盐业，程宗扬一无所得。",
+        "axisId": "qingyu.185.1",
+        "axisAnchor": "六朝清羽记·#185·第182章·战果",
+        "axisSeq": 334,
+        "axisBeat": "宫变后分赃落定：王茂弘、谢安等各方妥协，萧家获江、宁二州，云家得盐业，程宗扬一无所得。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.spoils_split.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.qin_hui"
+        ],
+        "relatedFactionIds": [
+          "lyg.faction.jin_state",
+          "liuchao.faction.xing_yue_hu",
+          "liuchao.faction.yun_shi_shang_hui"
+        ],
+        "locationId": "liuchao.location.jiankang",
+        "objective": "看清宫变分赃：萧家获江宁、云家得盐业，自己一无所得",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "hear_spoils_xiao_yun",
+              "label": "听清萧家获江宁、云家得盐业",
+              "actionText": "我向秦桧把宫变后的分赃名单问清楚：萧家获江、宁二州，云家得盐业，王茂弘与谢安等已妥协。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "sequence_step_1"
+            },
+            {
+              "id": "confirm_cheng_got_nothing",
+              "label": "确认自己一无所得",
+              "actionText": "我把名单再核一遍，当面坐实：萧家得州、云家得盐，自己在这次分赃里一无所得。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已看清分赃：萧家江宁、云家盐业、自己一无所得；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "sequence_step_1"
+              ]
             }
           ]
         }

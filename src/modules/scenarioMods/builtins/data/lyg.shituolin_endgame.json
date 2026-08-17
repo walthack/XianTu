@@ -5713,6 +5713,7 @@
       "event.shituolin_endgame_13.done": false,
       "event.shituolin_endgame_14.done": false,
       "event.shituolin_endgame_15.done": false,
+      "event.shituolin_endgame_title_daduhu.done": false,
       "chapter.lyg.shituolin_endgame.kui_ji.started": true,
       "chapter.lyg.shituolin_endgame.kui_ji.done": false,
       "chapter.lyg.shituolin_endgame.li_fuguo.started": false,
@@ -6389,6 +6390,46 @@
                 "success": "你已亲自执行“在庵堂审讯齐羽仙查旧怨”；事件完成真值将由本地引擎落账。",
                 "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
                 "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyg.event.shituolin_endgame_title_daduhu",
+        "name": "受封大都护",
+        "description": "程宗扬接旨受封大都护、勋授上柱国。",
+        "axisId": "yange.231.1",
+        "axisAnchor": "六朝燕歌行·#231·恩同亲王",
+        "axisSeq": 1396,
+        "axisBeat": "程宗扬接旨受封大都护、勋授上柱国。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.shituolin_endgame_title_daduhu.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "objective": "接旨受封大都护、勋授上柱国",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "receive_daduhu_shangzhuguo_edict",
+              "label": "接旨受封大都护、勋授上柱国",
+              "actionText": "我回宣平坊宅邸接旨，受封大都护、勋授上柱国。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已接旨受封大都护、勋授上柱国；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
               }
             }
           ]

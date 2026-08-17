@@ -10,7 +10,7 @@
     "axisVersion": "rebuild-2026-06-28",
     "axisOrder": 1.5,
     "axisSeqLo": 559,
-    "axisSeqHi": 562,
+    "axisSeqHi": 626,
     "eventIdContract": "append-only-frozen",
     "prevStageId": "lyl.lin_an_black_sea",
     "prevStageName": "六朝云龙吟·血誓",
@@ -5658,7 +5658,8 @@
       "event.debut_zhaohede.done": false,
       "event.debut_yinfulan.done": false,
       "event.debut_jingli.done": false,
-      "event.debut_jianyuji.done": false
+      "event.debut_jianyuji.done": false,
+      "event.lin_an_bridge_xieyi_tomb.done": false
     },
     "chapters": [
       {
@@ -6408,6 +6409,65 @@
                 "partial": "该展示动作不产生 partial；需要分歧时必须另建本地判定合同。",
                 "failure": "该展示动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
               }
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyl.event.lin_an_bridge_xieyi_tomb",
+        "name": "拜祭岳鹏举与谢艺墓",
+        "description": "月霜等股东抵临安后，程宗扬出城迎接，到风波亭后拜祭岳鹏举与谢艺的墓。",
+        "axisId": "yunlong.71.2",
+        "axisAnchor": "六朝云龙吟·#71·叵密",
+        "axisSeq": 626,
+        "axisBeat": "星月湖大营股东月霜等人抵达临安，程宗扬出城迎接并祭拜岳鹏举和谢艺墓。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.lin_an_bridge_xieyi_tomb.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.xing_yue_hu"
+        ],
+        "objective": "出城迎接月霜等人，到风波亭后拜祭岳鹏举与谢艺墓",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "meet_yueshuang_outside_linan",
+              "label": "出城迎接月霜等股东",
+              "actionText": "我出临安城去接星月湖大营股东月霜等人。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已出城接到月霜等人；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "sequence_step_1"
+            },
+            {
+              "id": "worship_yue_and_xieyi_tomb",
+              "label": "到风波亭后拜祭岳鹏举与谢艺墓",
+              "actionText": "我把人接到后，转到风波亭后，拜祭岳鹏举与谢艺的墓。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已到风波亭后拜祭岳鹏举与谢艺墓；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "sequence_step_1"
+              ]
             }
           ]
         }

@@ -4061,7 +4061,8 @@
       "chapter.lcq.stage_08_jiankang_coup.coup.started": false,
       "chapter.lcq.stage_08_jiankang_coup.coup.done": false,
       "event.s08_debut_xiaoyaoyi.done": false,
-      "event.debut_panjinlian.done": false
+      "event.debut_panjinlian.done": false,
+      "event.palm_oath_shanghou.done": false
     },
     "chapters": [
       {
@@ -4969,6 +4970,69 @@
                 "partial": "该展示动作不产生 partial；需要分歧时必须另建本地判定合同。",
                 "failure": "该展示动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
               }
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.palm_oath_shanghou",
+        "name": "掌誓不敌殇侯",
+        "description": "程宗扬向萧遥逸透露秦桧等人与黑魔海毒宗的关系，萧遥逸承诺不与殇侯为敌，双方击掌立约。",
+        "axisId": "qingyu.167.2",
+        "axisAnchor": "六朝清羽记·#167·第165章·掌誓",
+        "axisSeq": 300,
+        "axisBeat": "程宗扬向萧遥逸透露秦桧等人与黑魔海毒宗的关系，萧遥逸承诺不与殇侯为敌，双方击掌立约。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.palm_oath_shanghou.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.xiao_yao_yi",
+          "liuchao.character.qin_hui"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.xing_yue_hu",
+          "liuchao.faction.x8b538653d9"
+        ],
+        "locationId": "liuchao.location.jiankang",
+        "objective": "与萧遥逸击掌立约：不与殇侯为敌",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "tell_xiao_qinhui_blacksea",
+              "label": "向萧遥逸点明秦桧一系与黑魔海毒宗的关系",
+              "actionText": "我当着萧遥逸把秦桧等人与黑魔海毒宗的关系说清楚，让他听见这层利害。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "sequence_step_1"
+            },
+            {
+              "id": "palm_oath_not_against_shanghou",
+              "label": "与萧遥逸击掌，约不与殇侯为敌",
+              "actionText": "我与萧遥逸当面击掌，收下他不与殇侯为敌的承诺，把这条约钉死。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已与萧遥逸击掌立约、不与殇侯为敌；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "sequence_step_1"
+              ]
             }
           ]
         }

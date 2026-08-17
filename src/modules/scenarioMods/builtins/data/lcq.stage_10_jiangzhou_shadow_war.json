@@ -4059,7 +4059,8 @@
       "chapter.lcq.stage_10_jiangzhou_shadow_war.qingzhou.started": false,
       "chapter.lcq.stage_10_jiangzhou_shadow_war.qingzhou.done": false,
       "chapter.lcq.stage_10_jiangzhou_shadow_war.lair.started": false,
-      "chapter.lcq.stage_10_jiangzhou_shadow_war.lair.done": false
+      "chapter.lcq.stage_10_jiangzhou_shadow_war.lair.done": false,
+      "event.yeying_seat_struggle.done": false
     },
     "chapters": [
       {
@@ -5069,6 +5070,65 @@
                 "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
                 "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
               }
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.yeying_seat_struggle",
+        "name": "夜影争位",
+        "description": "程宗扬在夜影关听清：蔺采泉与商乐轩表面追查卓云君叛教，实则在争太乙掌教之位。",
+        "axisId": "qingyu.218.2",
+        "axisAnchor": "六朝清羽记·#218·第214章·商关",
+        "axisSeq": 391,
+        "axisBeat": "程宗扬在夜影关听清：蔺采泉与商乐轩表面追查卓云君叛教，实则在争太乙掌教之位。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.yeying_seat_struggle.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.tai_yi_zhen_zong"
+        ],
+        "objective": "在夜影关听清蔺采泉与商乐轩在争太乙掌教之位",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "overhear_lin_shang_yeying",
+              "label": "在夜影关听蔺采泉与商乐轩密议",
+              "actionText": "我在夜影关把蔺采泉与商乐轩的密议听全，先记下他们嘴上追查卓云君叛教。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "sequence_step_1"
+            },
+            {
+              "id": "confirm_taiyi_seat_struggle",
+              "label": "坐实二人在争太乙掌教之位",
+              "actionText": "我把密议的底子核清：蔺采泉与商乐轩不是在查叛教，是在争太乙掌教之位。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已在夜影关听清蔺采泉与商乐轩在争太乙掌教之位；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "sequence_step_1"
+              ]
             }
           ]
         }

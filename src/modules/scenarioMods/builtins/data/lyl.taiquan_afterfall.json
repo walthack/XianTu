@@ -6526,6 +6526,127 @@
             }
           ]
         }
+      },
+      {
+        "id": "lyl.event.jin_guangyuan_ledger",
+        "name": "广源行旧账",
+        "description": "把广源行在晋国的旧账揭开，对上龙宸这条线。",
+        "axisId": "yunlong.155.1",
+        "axisAnchor": "六朝云龙吟·#155·石见",
+        "axisSeq": 732,
+        "axisBeat": "程宗扬把广源行在晋国的旧账揭开，对上龙宸这条线。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.jin_guangyuan_ledger.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.yun_cang_feng",
+          "liuchao.character.jing_li"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.dragon_chen",
+          "lyg.faction.jin_state"
+        ],
+        "objective": "把广源行在晋的旧账揭开，牵出龙宸",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "open_jin_guangyuan_ledgers",
+              "label": "摊开广源行在晋国的旧账",
+              "actionText": "我把广源行在晋国留下的旧账摊开，先看清他们在建康做过哪些手脚。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已摊开广源行在晋国的旧账；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "sequence_step_1"
+            },
+            {
+              "id": "match_ledgers_to_longchen",
+              "label": "把旧账对上龙宸",
+              "actionText": "我拿摊开的广源行旧账去对龙宸这条线，把两边对上。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已把广源行在晋的旧账揭开，并牵出龙宸这条线；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "sequence_step_1"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyl.event.han_court_grain_blame",
+        "name": "朝会粮草账",
+        "description": "汉廷朝会上御史王温舒攻击丞相韦玄成，左武军粮草因此不继；程宗扬追问究竟是谁的责任。",
+        "axisId": "yunlong.195.2",
+        "axisAnchor": "六朝云龙吟·#195·樗材",
+        "axisSeq": 772,
+        "axisBeat": "汉廷朝会上御史王温舒攻击丞相韦玄成，导致左武军粮草不继；程宗扬追问究竟是谁的责任。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.han_court_grain_blame.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.han_guo_chao_ting"
+        ],
+        "objective": "在汉廷朝会上追问左武军粮草不继究竟是谁的责任",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "hear_court_grain_cutoff",
+              "label": "听清朝会上粮草被掐断",
+              "actionText": "我在汉廷朝会上听完：御史王温舒攻击丞相韦玄成，左武军粮草因此接不上。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已听清御史攻击丞相、左武军粮草不继；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "sequence_step_1"
+            },
+            {
+              "id": "ask_who_cut_zuowu_grain",
+              "label": "追问粮草不继是谁的责任",
+              "actionText": "我当场追问：左武军粮草不继，究竟是谁的责任。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已在汉廷朝会上追问左武军粮草不继究竟是谁的责任；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "sequence_step_1"
+              ]
+            }
+          ]
+        }
       }
     ],
     "worldSimulation": {

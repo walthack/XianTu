@@ -10,7 +10,7 @@
     "axisVersion": "rebuild-2026-06-28",
     "axisOrder": 1,
     "axisSeqLo": 19,
-    "axisSeqHi": 36,
+    "axisSeqHi": 41,
     "eventIdContract": "append-only-frozen",
     "prevStageId": "lcq.stage_01",
     "prevStageName": "六朝清羽记·第1集·太乙真宗",
@@ -2273,7 +2273,8 @@
       "event.s02_03.done": false,
       "event.s02_04.done": false,
       "event.s02_05.done": false,
-      "event.s02_06.done": false
+      "event.s02_06.done": false,
+      "event.baihu_shangguan_escape.done": false
     },
     "events": [
       {
@@ -2971,6 +2972,51 @@
                 "success": "你已亲自执行“在商馆揭穿苏妲己伪装，脱身”；事件完成真值将由本地引擎落账。",
                 "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
                 "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.baihu_shangguan_escape",
+        "name": "白湖脱身",
+        "description": "程宗扬从白湖商馆的死局里脱身，走出五原商馆。",
+        "axisId": "qingyu.25.2",
+        "axisAnchor": "六朝清羽记·#25·第23章·赎身",
+        "axisSeq": 41,
+        "axisBeat": "程宗扬从白湖商馆的死局里脱身，走出五原商馆。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.baihu_shangguan_escape.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.su_daji"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.bai_hu_shang_guan"
+        ],
+        "locationId": "liuchao.location.wuyuan",
+        "objective": "从白湖商馆的死局里脱身，走出五原商馆",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "walk_out_wuyuan_shangguan",
+              "label": "走出五原商馆",
+              "actionText": "我从白湖商馆内院走到大门，确认自己已不在囚室与死局里，自行迈出五原商馆，人仍留在五原城里。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已从白湖商馆的死局里脱身，走出五原商馆；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
               }
             }
           ]

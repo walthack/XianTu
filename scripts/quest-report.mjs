@@ -83,8 +83,14 @@ if (fs.existsSync(path.join(ROOT, CHARDOC))) {
     if (!cur || !line.startsWith('|')) continue;
     const ids = [...line.matchAll(/`((?:lcq|lyl|lyg)\.event\.[a-zA-Z0-9_]+)`/g)].map(x => x[1]);
     if (!ids.length) continue;
+    const cells = line.replace(/^\||\|$/g, '').split('|').map(x => x.trim());
+    // 表格形如 | # | 挂在 | 这一拍（玩家可见） | 标 |
+    const label = cells[0] || '';
+    const visible = cells[2] || '';
     const insert = line.includes('↪');
-    for (const id of ids) if (events.has(id) || insert) cur.hooks.push({ eventId: id, insert });
+    const isNew = line.includes('🆕');
+    // 一行可能引多个 id（并进拍），第一个当主挂点
+    cur.hooks.push({ eventId: ids[0], alsoIds: ids.slice(1), insert, isNew, label, visible });
   }
 }
 
@@ -111,7 +117,7 @@ for (const t of tiers) {
 const charHooks = new Map();
 for (const c of chars) for (const h of c.hooks) {
   if (!charHooks.has(h.eventId)) charHooks.set(h.eventId, []);
-  charHooks.get(h.eventId).push(c.name);
+  charHooks.get(h.eventId).push({ who: c.name, visible: h.visible, insert: h.insert });
 }
 
 // ── 人物任务清单：已展开 vs 待做。
@@ -169,7 +175,7 @@ function render(r) {
         charHooks.has(n.eventId) ? 'hooked' : '',
         owners.get(n.eventId)?.length > 1 ? 'shared' : ''].filter(Boolean).join(' ');
       const who = charHooks.get(n.eventId);
-      return `<i class="${cls}" style="left:${pc(s)}%" title="${esc(t.name)} #${i + 1}　seq ${s}　${esc(n.text)}${who ? `　［人物：${esc(who.join('／'))}］` : ''}"></i>`;
+      return `<i class="${cls}" style="left:${pc(s)}%" title="${esc(t.name)} #${i + 1}　seq ${s}　${esc(n.text)}${who ? `　［人物：${esc(who.map(x => x.who).join('／'))}］` : ''}"></i>`;
     }).join('');
     return `<div class="sp" style="left:${pc(lo)}%;width:${pc(hi) - pc(lo)}%"></div>${marks}`;
   };
@@ -182,7 +188,7 @@ function render(r) {
     [...charHooks].map(([id, who]) => {
       const s = events.get(id)?.seq;
       return typeof s === 'number'
-        ? `<i class="m hook" style="left:${pc(s)}%" title="${esc(who.join('／'))}　挂在 ${esc(id)}　seq ${s}"></i>` : '';
+        ? `<i class="m hook" style="left:${pc(s)}%" title="${esc(who.map(x => x.who).join('／'))}　挂在 ${esc(id)}　seq ${s}"></i>` : '';
     }).join('')}</div></div>`;
 
   const flags = [
@@ -249,6 +255,32 @@ li.warn{border-left-color:var(--huang)}
 li.todo{border-left-color:var(--qing);opacity:.85}
 li b{font-size:10px;letter-spacing:.08em;margin-right:8px;color:var(--ink3)}
 code{font-family:ui-monospace,Menlo,monospace;font-size:11.5px}
+.ln{background:var(--card);border:1px solid var(--edge);padding:15px 17px;margin-bottom:14px}
+.ln h3{margin:0 0 3px;font-size:18px;font-weight:600;letter-spacing:.03em}
+.tg{font-size:9.5px;letter-spacing:.11em;color:var(--ink3);margin-left:9px;vertical-align:2px;font-weight:400}
+.hint{font-size:12.5px;color:var(--ink3);border-left:2px solid var(--edge);padding-left:9px;margin:7px 0 11px}
+ol.nodes{list-style:none;margin:0;padding:0}
+ol.nodes li{display:grid;grid-template-columns:44px 1fr;gap:9px;padding:6px 0;border-top:1px solid var(--grid);
+ border-left:none;background:none;margin:0;align-items:baseline}
+ol.nodes li:first-child{border-top:none}
+ol.nodes li.w .sq{color:var(--huang)}
+ol.nodes li.p{opacity:.6}
+ol.nodes li.p .sq{color:var(--ink3)}
+.sq{font-size:11px;text-align:right;color:var(--qing);font-variant-numeric:tabular-nums}
+.bd{display:block}
+.tx{font-size:13.5px}
+.ev{display:block;font-size:11px;color:var(--ink3);margin-top:1px}
+.badge{display:inline-block;font-size:9.5px;letter-spacing:.08em;padding:1px 5px;margin:2px 4px 0 0;
+ border:1px solid currentColor;vertical-align:1px}
+.badge.anchor{color:var(--lv)}
+.badge.shared{color:var(--zhu)}
+.badge.todo{color:var(--huang)}
+.badge.pend{color:var(--ink3)}
+.badge.ins{color:var(--tan)}
+.hooks{margin-top:5px;padding-left:11px;border-left:2px dashed var(--grid)}
+.hk{font-size:12px;color:var(--ink2);padding:2px 0}
+.hk b{color:var(--tan);font-weight:600}
+.hk em{font-style:normal;font-size:10px;color:var(--ink3)}
 </style>
 <div class="wrap">
 <header><h1 class="serif">三级任务链</h1>
@@ -279,11 +311,55 @@ ${rows}${charRow}
  <span>点上方红竖线＝双喂　点下方虚线＝有人物戏挂着</span>
 </div>
 
+<h2>逐线展开：每条线的 event 与挂在下面的角色戏</h2>
+${r.tiers.map(t => `<div class="ln">
+  <h3 class="serif">${esc(t.name)}<span class="tg">${t.tier === 1 ? '一级·主轴' : t.kind === 'sect' ? '二级·宗派' : '二级·国家'}</span></h3>
+  ${t.hint ? `<div class="hint">${esc(t.hint)}</div>` : ''}
+  <ol class="nodes">${t.nodes.map((n, i) => {
+    const ev = n.eventId ? events.get(n.eventId) : undefined;
+    const st = n.status === 'ready' ? 'r' : n.status === 'new' ? 'w' : 'p';
+    const hooks = (charHooks.get(n.eventId) || []);
+    const hookRows = hooks.length ? `<div class="hooks">${hooks.map(h =>
+      `<div class="hk">↳ <b>${esc(h.who)}</b>　${esc(h.visible || '')}${h.insert ? ' <em>［插入］</em>' : ''}</div>`).join('')}</div>` : '';
+    return `<li class="${st}">
+      <span class="sq mono">${n.seq ?? (n.status === 'pending' ? '' : '?')}</span>
+      <span class="bd">
+        <span class="tx">${esc(n.text)}</span>
+        <span class="ev mono">${ev ? esc(ev.name) + '　' : ''}${n.eventId ? esc(n.eventId) : '（无 event · 待扩）'}</span>
+        ${n.eventId === t.anchor ? '<span class="badge anchor">锚</span>' : ''}
+        ${owners.get(n.eventId)?.length > 1 ? `<span class="badge shared">双喂 ${esc(owners.get(n.eventId).join('／'))}</span>` : ''}
+        ${n.status === 'new' ? '<span class="badge todo">待写 event</span>' : ''}
+        ${n.status === 'pending' ? '<span class="badge pend">未来待扩</span>' : ''}
+        ${hookRows}
+      </span></li>`;
+  }).join('')}</ol></div>`).join('')}
+
+<h2>逐角色：每个人自己的线</h2>
+<p style="font-size:13px;color:var(--ink2);margin:0 0 14px">
+角色戏不必是一条真任务线，但**对同一个角色应当读得出先后**——下面按 <span class="mono">axisSeq</span> 排。
+挂在上级节点下的标「插入」，那一拍上级读它的另一面。</p>
+${r.chars.filter(c => c.hooks.length).map(c => {
+  const hs = c.hooks.slice().sort((a, b) => (events.get(a.eventId)?.seq ?? 9999) - (events.get(b.eventId)?.seq ?? 9999));
+  return `<div class="ln"><h3 class="serif">${esc(c.name)}<span class="tg">三级·人物</span></h3>
+  <ol class="nodes">${hs.map(h => {
+    const ev = events.get(h.eventId);
+    const who = owners.get(h.eventId);
+    return `<li class="${h.isNew ? 'w' : 'r'}">
+      <span class="sq mono">${ev?.seq ?? '?'}</span>
+      <span class="bd"><span class="tx">${esc(h.visible || h.label)}</span>
+      <span class="ev mono">${ev ? esc(ev.name) + '　' : ''}${esc(h.eventId)}</span>
+      ${h.insert ? '<span class="badge ins">插入</span>' : ''}
+      ${h.isNew ? '<span class="badge todo">待写</span>' : ''}
+      ${who ? `<span class="badge shared">上级：${esc(who.join('／'))}</span>` : ''}
+      </span></li>`;
+  }).join('')}</ol></div>`;
+}).join('')}
+
 <h2>双喂：同一个 event 被几级同时引用</h2>
 <div class="box" style="padding-bottom:16px"><table>
 <thead><tr><th>seq</th><th>event</th><th>被谁引用</th><th>人物戏</th></tr></thead><tbody>
 ${r.shared.map(s => `<tr><td class="mono">${s.seq ?? '—'}</td><td>${esc(s.name ?? '')}<div class="mono" style="color:var(--ink3);font-size:11px">${esc(s.eventId)}</div></td>
-<td>${esc(s.by.join('　／　'))}</td><td>${esc((charHooks.get(s.eventId) || []).join('／')) || '—'}</td></tr>`).join('')}
+<td>${esc(s.by.join('　／　'))}</td><td>${esc((charHooks.get(s.eventId) || []).map(x => x.who).join('／')) || '—'}</td></tr>`).join('')}
 </tbody></table></div>
 
 <h2>人物任务：谁做了、谁待做</h2>

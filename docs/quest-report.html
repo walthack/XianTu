@@ -56,18 +56,44 @@ li.warn{border-left-color:var(--huang)}
 li.todo{border-left-color:var(--qing);opacity:.85}
 li b{font-size:10px;letter-spacing:.08em;margin-right:8px;color:var(--ink3)}
 code{font-family:ui-monospace,Menlo,monospace;font-size:11.5px}
+.ln{background:var(--card);border:1px solid var(--edge);padding:15px 17px;margin-bottom:14px}
+.ln h3{margin:0 0 3px;font-size:18px;font-weight:600;letter-spacing:.03em}
+.tg{font-size:9.5px;letter-spacing:.11em;color:var(--ink3);margin-left:9px;vertical-align:2px;font-weight:400}
+.hint{font-size:12.5px;color:var(--ink3);border-left:2px solid var(--edge);padding-left:9px;margin:7px 0 11px}
+ol.nodes{list-style:none;margin:0;padding:0}
+ol.nodes li{display:grid;grid-template-columns:44px 1fr;gap:9px;padding:6px 0;border-top:1px solid var(--grid);
+ border-left:none;background:none;margin:0;align-items:baseline}
+ol.nodes li:first-child{border-top:none}
+ol.nodes li.w .sq{color:var(--huang)}
+ol.nodes li.p{opacity:.6}
+ol.nodes li.p .sq{color:var(--ink3)}
+.sq{font-size:11px;text-align:right;color:var(--qing);font-variant-numeric:tabular-nums}
+.bd{display:block}
+.tx{font-size:13.5px}
+.ev{display:block;font-size:11px;color:var(--ink3);margin-top:1px}
+.badge{display:inline-block;font-size:9.5px;letter-spacing:.08em;padding:1px 5px;margin:2px 4px 0 0;
+ border:1px solid currentColor;vertical-align:1px}
+.badge.anchor{color:var(--lv)}
+.badge.shared{color:var(--zhu)}
+.badge.todo{color:var(--huang)}
+.badge.pend{color:var(--ink3)}
+.badge.ins{color:var(--tan)}
+.hooks{margin-top:5px;padding-left:11px;border-left:2px dashed var(--grid)}
+.hk{font-size:12px;color:var(--ink2);padding:2px 0}
+.hk b{color:var(--tan);font-weight:600}
+.hk em{font-style:normal;font-size:10px;color:var(--ink3)}
 </style>
 <div class="wrap">
 <header><h1 class="serif">三级任务链</h1>
 <div class="sub">主轴 · 二级线 · 人物任务，同一根 <span class="mono">axisSeq</span> 轴 · 由源码生成，重跑即刷新</div>
 <div class="stats">
  <div class="stat"><b class="mono">135</b><span>节点</span></div>
- <div class="stat"><b class="mono">107</b><span>可走</span></div>
- <div class="stat"><b class="mono">18</b><span>待写 EVENT</span></div>
+ <div class="stat"><b class="mono">124</b><span>可走</span></div>
+ <div class="stat"><b class="mono">1</b><span>待写 EVENT</span></div>
  <div class="stat"><b class="mono">10</b><span>待扩</span></div>
  <div class="stat"><b class="mono">6</b><span>双喂</span></div>
  <div class="stat"><b class="mono">0</b><span>序回退</span></div>
- <div class="stat"><b class="mono">34</b><span>人物挂点</span></div>
+ <div class="stat"><b class="mono">43</b><span>人物挂点</span></div>
 </div></header>
 
 <h2>三级同轴</h2>
@@ -75,23 +101,23 @@ code{font-family:ui-monospace,Menlo,monospace;font-size:11.5px}
 <div class="books"><div style="flex:550">六朝清羽记</div><div style="flex:397">六朝云龙吟</div><div style="flex:452">六朝燕歌行</div></div>
 <div class="row main">
     <div class="nm">主轴<i>一级</i></div>
-    <div class="tk"><div class="sp" style="left:0.500%;width:74.697%"></div><i class="m hooked" style="left:0.500%" title="主轴 #1　seq 8　遇上月霜——王哲点名要你守的那个岳帅后人　［人物：卓云君］"></i><i class="m" style="left:1.215%" title="主轴 #2　seq 18　替月霜解掉寒毒"></i><i class="m" style="left:1.287%" title="主轴 #3　seq 19　从坠落处活下来，一路走到太乙真宗帅帐见着王哲"></i><i class="m shared" style="left:1.358%" title="主轴 #4　seq 20　接下王哲的锦囊与九阳神功口诀，领受三件托付"></i><i class="m" style="left:2.073%" title="主轴 #5　seq 30　见证王哲殉军，独自离开左武军的战场"></i><i class="m hooked" style="left:4.432%" title="主轴 #7　seq 63　查清蛇彝村灭村的真凶，循血符指向鬼王峒　［人物：谢艺］"></i><i class="m hooked" style="left:8.578%" title="主轴 #8　seq 121　听谢艺说破：岳帅还有个遗腹女　［人物：谢艺］"></i><i class="m" style="left:11.651%" title="主轴 #10　seq 164　向碧姬追问小紫的过往"></i><i class="m shared" style="left:13.867%" title="主轴 #11　seq 195　与小紫达成临时协定，在鬼王宫策动奴隶倒戈"></i><i class="m shared" style="left:15.011%" title="主轴 #12　seq 211　接下谢艺对小紫与星月湖的托付，追上小紫见证她与碧姬的了断"></i><i class="m" style="left:45.390%" title="主轴 #13　seq 636　在云涛观迷楼里摸清那套机关"></i><i class="m" style="left:45.675%" title="主轴 #14　seq 640　在云涛观迷楼找出太泉钥匙的线索"></i><i class="m" style="left:47.320%" title="主轴 #15　seq 663　到火山口去争赤阳圣果——你此行真正的由头"></i><i class="m" style="left:47.605%" title="主轴 #16　seq 667　困在蚁穴里，先找到出去的路"></i><i class="m" style="left:49.607%" title="主轴 #17　seq 695　进魔墟取那件东西"></i><i class="m" style="left:50.536%" title="主轴 #18　seq 708　探索太泉古阵的人类居住区"></i><i class="m" style="left:66.833%" title="主轴 #21　seq 936　在汉宫变局中抵达秘境入口"></i><i class="m" style="left:70.693%" title="主轴 #22　seq 990　保住赵飞燕——程赵之子这条盲点系在她身上"></i><i class="m" style="left:71.122%" title="主轴 #23　seq 996　在武帝像前安排秘境探索"></i><i class="m shared" style="left:74.982%" title="主轴 #25　seq 1050　护住赵氏一门，别让这支血脉在政变里断掉"></i><i class="m" style="left:75.197%" title="主轴 #26　seq 1053　在登基典仪上与赵飞燕行功，修为推到通幽境"></i></div></div><div class="row ">
+    <div class="tk"><div class="sp" style="left:0.500%;width:74.697%"></div><i class="m hooked" style="left:0.500%" title="主轴 #1　seq 8　遇上月霜——王哲点名要你守的那个岳帅后人　［人物：卓云君］"></i><i class="m" style="left:1.215%" title="主轴 #2　seq 18　替月霜解掉寒毒"></i><i class="m" style="left:1.287%" title="主轴 #3　seq 19　从坠落处活下来，一路走到太乙真宗帅帐见着王哲"></i><i class="m shared" style="left:1.358%" title="主轴 #4　seq 20　接下王哲的锦囊与九阳神功口诀，领受三件托付"></i><i class="m" style="left:2.073%" title="主轴 #5　seq 30　见证王哲殉军，独自离开左武军的战场"></i><i class="m" style="left:2.859%" title="主轴 #6　seq 41　从白湖商馆的死局里脱身"></i><i class="m hooked" style="left:4.432%" title="主轴 #7　seq 63　查清蛇彝村灭村的真凶，循血符指向鬼王峒　［人物：谢艺］"></i><i class="m hooked" style="left:8.578%" title="主轴 #8　seq 121　听谢艺说破：岳帅还有个遗腹女　［人物：谢艺］"></i><i class="m" style="left:11.651%" title="主轴 #10　seq 164　向碧姬追问小紫的过往"></i><i class="m shared" style="left:13.867%" title="主轴 #11　seq 195　与小紫达成临时协定，在鬼王宫策动奴隶倒戈"></i><i class="m shared" style="left:15.011%" title="主轴 #12　seq 211　接下谢艺对小紫与星月湖的托付，追上小紫见证她与碧姬的了断"></i><i class="m" style="left:45.390%" title="主轴 #13　seq 636　在云涛观迷楼里摸清那套机关"></i><i class="m" style="left:45.675%" title="主轴 #14　seq 640　在云涛观迷楼找出太泉钥匙的线索"></i><i class="m" style="left:47.320%" title="主轴 #15　seq 663　到火山口去争赤阳圣果——你此行真正的由头"></i><i class="m" style="left:47.605%" title="主轴 #16　seq 667　困在蚁穴里，先找到出去的路"></i><i class="m" style="left:49.607%" title="主轴 #17　seq 695　进魔墟取那件东西"></i><i class="m" style="left:50.536%" title="主轴 #18　seq 708　探索太泉古阵的人类居住区"></i><i class="m" style="left:66.833%" title="主轴 #21　seq 936　在汉宫变局中抵达秘境入口"></i><i class="m" style="left:70.693%" title="主轴 #22　seq 990　保住赵飞燕——程赵之子这条盲点系在她身上"></i><i class="m" style="left:71.122%" title="主轴 #23　seq 996　在武帝像前安排秘境探索"></i><i class="m" style="left:72.123%" title="主轴 #24　seq 1010　触发冰冰，当场验明谁在超级用户名单上"></i><i class="m shared" style="left:74.982%" title="主轴 #25　seq 1050　护住赵氏一门，别让这支血脉在政变里断掉"></i><i class="m" style="left:75.197%" title="主轴 #26　seq 1053　在登基典仪上与赵飞燕行功，修为推到通幽境"></i></div></div><div class="row ">
     <div class="nm">太乙真宗<i>二级·宗派</i></div>
-    <div class="tk"><div class="sp" style="left:0.500%;width:40.958%"></div><i class="m anchor" style="left:0.500%" title="太乙真宗 #1　seq 8　受王哲传功托付，入太乙真宗阵营"></i><i class="m shared" style="left:1.358%" title="太乙真宗 #2　seq 20　接下锦囊与三托付"></i><i class="m" style="left:16.869%" title="太乙真宗 #4　seq 237　读王哲密信，受托清理门户"></i><i class="m" style="left:29.092%" title="太乙真宗 #5　seq 408　破道观：认出元行健是林之澜的人"></i><i class="m" style="left:40.958%" title="太乙真宗 #7　seq 574　蔺采泉以支持江州，换你承认九阳出自他"></i><i class="m" style="left:41.458%" title="太乙真宗 #8　seq 581　鹤林观：蔺采泉自立掌教，秋少君升任教御"></i></div></div><div class="row ">
+    <div class="tk"><div class="sp" style="left:0.500%;width:44.389%"></div><i class="m anchor" style="left:0.500%" title="太乙真宗 #1　seq 8　受王哲传功托付，入太乙真宗阵营"></i><i class="m shared" style="left:1.358%" title="太乙真宗 #2　seq 20　接下锦囊与三托付"></i><i class="m" style="left:3.788%" title="太乙真宗 #3　seq 54　在紫溪被点名去龙池"></i><i class="m" style="left:16.869%" title="太乙真宗 #4　seq 237　读王哲密信，受托清理门户"></i><i class="m" style="left:27.877%" title="太乙真宗 #5　seq 391　听清蔺采泉与商乐轩在争掌教"></i><i class="m" style="left:29.092%" title="太乙真宗 #6　seq 408　破道观：认出元行健是林之澜的人"></i><i class="m" style="left:40.958%" title="太乙真宗 #7　seq 574　蔺采泉以支持江州，换你承认九阳出自他"></i><i class="m" style="left:41.458%" title="太乙真宗 #8　seq 581　鹤林观：蔺采泉自立掌教，秋少君升任教御"></i><i class="m hooked" style="left:44.889%" title="太乙真宗 #9　seq 629　在翠微园承诺对付现任掌教　［人物：卓云君］"></i></div></div><div class="row ">
     <div class="nm">星月湖<i>二级·宗派</i></div>
-    <div class="tk"><div class="sp" style="left:8.292%;width:29.806999999999995%"></div><i class="m anchor" style="left:8.292%" title="星月湖 #1　seq 117　打听岳帅旧事，问清星月湖是什么"></i><i class="m shared" style="left:15.011%" title="星月湖 #2　seq 211　赶到重伤的谢艺身边，接下他对小紫与星月湖的交代"></i><i class="m hooked shared" style="left:16.512%" title="星月湖 #3　seq 232　跟着八骏，问清左武军怎么覆灭的　［人物：萧遥逸］"></i><i class="m" style="left:17.870%" title="星月湖 #4　seq 251　把谢艺的下落带给孟非卿"></i><i class="m" style="left:19.657%" title="星月湖 #5　seq 276　萧遥逸代表星月湖，向你开放资源"></i><i class="m" style="left:21.944%" title="星月湖 #6　seq 308　古冥隐点破：第八骏就是萧遥逸"></i><i class="m shared" style="left:23.874%" title="星月湖 #7　seq 335　八骏离建康，萧遥逸率水师赴江州"></i><i class="m" style="left:28.806%" title="星月湖 #8　seq 404　以鹏翼社作抵押，替孟非卿筹十万金铢"></i><i class="m" style="left:31.308%" title="星月湖 #9　seq 439　受孟非卿之命，率部赴三川口护月霜"></i><i class="m" style="left:31.665%" title="星月湖 #10　seq 444　江州战事：与星月湖并肩"></i><i class="m" style="left:31.951%" title="星月湖 #11　seq 448　三川口：抵挡王韬的焚天斧"></i><i class="m" style="left:32.094%" title="星月湖 #12　seq 450　雪原鏖战：在三川口跟宋军拼到底"></i><i class="m" style="left:38.099%" title="星月湖 #13　seq 534　全盘接管鹏翼社与星月湖暗产"></i></div></div><div class="row ">
+    <div class="tk"><div class="sp" style="left:8.292%;width:36.382999999999996%"></div><i class="m anchor" style="left:8.292%" title="星月湖 #1　seq 117　打听岳帅旧事，问清星月湖是什么"></i><i class="m shared" style="left:15.011%" title="星月湖 #2　seq 211　赶到重伤的谢艺身边，接下他对小紫与星月湖的交代"></i><i class="m hooked shared" style="left:16.512%" title="星月湖 #3　seq 232　跟着八骏，问清左武军怎么覆灭的　［人物：萧遥逸］"></i><i class="m" style="left:17.870%" title="星月湖 #4　seq 251　把谢艺的下落带给孟非卿"></i><i class="m" style="left:19.657%" title="星月湖 #5　seq 276　萧遥逸代表星月湖，向你开放资源"></i><i class="m" style="left:21.944%" title="星月湖 #6　seq 308　古冥隐点破：第八骏就是萧遥逸"></i><i class="m shared" style="left:23.874%" title="星月湖 #7　seq 335　八骏离建康，萧遥逸率水师赴江州"></i><i class="m" style="left:28.806%" title="星月湖 #8　seq 404　以鹏翼社作抵押，替孟非卿筹十万金铢"></i><i class="m" style="left:31.308%" title="星月湖 #9　seq 439　受孟非卿之命，率部赴三川口护月霜"></i><i class="m" style="left:31.665%" title="星月湖 #10　seq 444　江州战事：与星月湖并肩"></i><i class="m" style="left:31.951%" title="星月湖 #11　seq 448　三川口：抵挡王韬的焚天斧"></i><i class="m" style="left:32.094%" title="星月湖 #12　seq 450　雪原鏖战：在三川口跟宋军拼到底"></i><i class="m" style="left:38.099%" title="星月湖 #13　seq 534　全盘接管鹏翼社与星月湖暗产"></i><i class="m" style="left:44.675%" title="星月湖 #14　seq 626　在临安祭岳鹏举与谢艺的墓"></i></div></div><div class="row ">
     <div class="nm">黑魔海／毒宗<i>二级·宗派</i></div>
-    <div class="tk"><div class="sp" style="left:5.504%;width:58.61300000000001%"></div><i class="m" style="left:5.504%" title="黑魔海／毒宗 #1　seq 78　南荒发蛊：看清朱老头身边的东西不敢碰他"></i><i class="m anchor" style="left:6.576%" title="黑魔海／毒宗 #2　seq 93　把羊皮纸送到云苍峰，疑黑魔海与鬼王峒勾结"></i><i class="m" style="left:15.797%" title="黑魔海／毒宗 #3　seq 222　当面确认朱老头就是殇侯，听他称你是天命之人"></i><i class="m" style="left:26.090%" title="黑魔海／毒宗 #5　seq 366　查清黑魔海内隙，听泉玉姬供认御姬奴"></i><i class="m" style="left:29.593%" title="黑魔海／毒宗 #6　seq 415　先发制人捣江州巢穴，拿到阴阳鱼"></i><i class="m" style="left:39.028%" title="黑魔海／毒宗 #7　seq 547　殇侯施尸毒，破开宋军阵线"></i><i class="m" style="left:39.099%" title="黑魔海／毒宗 #8　seq 548　以人情和经济筹码，请殇侯留守江州"></i><i class="m" style="left:43.460%" title="黑魔海／毒宗 #9　seq 609　在太医局查医档，看出剑玉姬已经落子"></i><i class="m" style="left:43.531%" title="黑魔海／毒宗 #10　seq 610　小瀛洲杀局"></i><i class="m" style="left:43.817%" title="黑魔海／毒宗 #11　seq 614　在保宁寺放生池逼出剑玉姬真身"></i><i class="m" style="left:43.888%" title="黑魔海／毒宗 #12　seq 615　八臂收束：从保宁寺突围"></i><i class="m" style="left:43.960%" title="黑魔海／毒宗 #13　seq 616　战后在翠微园收拾伤员与残局"></i><i class="m" style="left:44.103%" title="黑魔海／毒宗 #14　seq 618　用晴州水泥代理权，换黑魔海五年不入宋"></i><i class="m" style="left:64.117%" title="黑魔海／毒宗 #15　seq 898　剑玉姬以成光换你支持刘建，当面回绝"></i></div></div><div class="row ">
+    <div class="tk"><div class="sp" style="left:5.504%;width:58.61300000000001%"></div><i class="m" style="left:5.504%" title="黑魔海／毒宗 #1　seq 78　南荒发蛊：看清朱老头身边的东西不敢碰他"></i><i class="m anchor" style="left:6.576%" title="黑魔海／毒宗 #2　seq 93　把羊皮纸送到云苍峰，疑黑魔海与鬼王峒勾结"></i><i class="m" style="left:15.797%" title="黑魔海／毒宗 #3　seq 222　当面确认朱老头就是殇侯，听他称你是天命之人"></i><i class="m" style="left:21.372%" title="黑魔海／毒宗 #4　seq 300　与萧遥逸击掌：不与殇侯为敌"></i><i class="m" style="left:26.090%" title="黑魔海／毒宗 #5　seq 366　查清黑魔海内隙，听泉玉姬供认御姬奴"></i><i class="m" style="left:29.593%" title="黑魔海／毒宗 #6　seq 415　先发制人捣江州巢穴，拿到阴阳鱼"></i><i class="m" style="left:39.028%" title="黑魔海／毒宗 #7　seq 547　殇侯施尸毒，破开宋军阵线"></i><i class="m" style="left:39.099%" title="黑魔海／毒宗 #8　seq 548　以人情和经济筹码，请殇侯留守江州"></i><i class="m" style="left:43.460%" title="黑魔海／毒宗 #9　seq 609　在太医局查医档，看出剑玉姬已经落子"></i><i class="m" style="left:43.531%" title="黑魔海／毒宗 #10　seq 610　小瀛洲杀局"></i><i class="m" style="left:43.817%" title="黑魔海／毒宗 #11　seq 614　在保宁寺放生池逼出剑玉姬真身"></i><i class="m" style="left:43.888%" title="黑魔海／毒宗 #12　seq 615　八臂收束：从保宁寺突围"></i><i class="m" style="left:43.960%" title="黑魔海／毒宗 #13　seq 616　战后在翠微园收拾伤员与残局"></i><i class="m" style="left:44.103%" title="黑魔海／毒宗 #14　seq 618　用晴州水泥代理权，换黑魔海五年不入宋"></i><i class="m" style="left:64.117%" title="黑魔海／毒宗 #15　seq 898　剑玉姬以成光换你支持刘建，当面回绝"></i></div></div><div class="row ">
     <div class="nm">昭南<i>二级·国家</i></div>
     <div class="tk"><div class="sp" style="left:4.360%;width:11.151%"></div><i class="m anchor" style="left:4.360%" title="昭南 #1　seq 62　查清蛇彝村灭村，血符指向鬼王峒"></i><i class="m" style="left:4.503%" title="昭南 #2　seq 64　跟云苍峰的商队进南荒"></i><i class="m" style="left:4.718%" title="昭南 #3　seq 67　问清花苗此刻站在哪一边"></i><i class="m" style="left:6.076%" title="昭南 #4　seq 86　问清白夷此刻站在哪一边"></i><i class="m" style="left:9.864%" title="昭南 #5　seq 139　赶到碧鲮湾，看清他们此刻敢不敢站出来"></i><i class="m" style="left:10.650%" title="昭南 #6　seq 150　跟花苗谈清进鬼王峒的合作边界"></i><i class="m" style="left:12.152%" title="昭南 #7　seq 171　潜入鬼王宫，当面见鬼巫王"></i><i class="m shared" style="left:13.867%" title="昭南 #8　seq 195　在鬼王宫里策动奴隶倒戈"></i><i class="m" style="left:14.582%" title="昭南 #9　seq 205　在祭台上把鬼巫王这一仗打完"></i><i class="m shared" style="left:15.011%" title="昭南 #10　seq 211　在破峒之后了结龙神"></i><i class="m" style="left:15.511%" title="昭南 #11　seq 218　散峒之后，听清三族是否真的站到你这边"></i></div></div><div class="row ">
     <div class="nm">晋国<i>二级·国家</i></div>
-    <div class="tk"><div class="sp" style="left:17.155%;width:17.583999999999996%"></div><i class="m anchor" style="left:17.155%" title="晋国 #1　seq 241　听说建康宫城里闹鬼"></i><i class="m" style="left:18.799%" title="晋国 #2　seq 264　进建康，夜探神龙殿，看清晋帝已被架空"></i><i class="m" style="left:19.943%" title="晋国 #3　seq 280　鹰愁峪入瓮，等北府来解围"></i><i class="m" style="left:22.516%" title="晋国 #4　seq 316　在玄武湖把晋帝、太后抢回来"></i><i class="m shared" style="left:23.874%" title="晋国 #6　seq 335　问清北府此刻听谁的"></i><i class="m" style="left:34.739%" title="晋国 #8　seq 487　听说晋相腾出江州，让宋军来剿星月湖"></i></div></div><div class="row ">
+    <div class="tk"><div class="sp" style="left:17.155%;width:35.097%"></div><i class="m anchor" style="left:17.155%" title="晋国 #1　seq 241　听说建康宫城里闹鬼"></i><i class="m" style="left:18.799%" title="晋国 #2　seq 264　进建康，夜探神龙殿，看清晋帝已被架空"></i><i class="m" style="left:19.943%" title="晋国 #3　seq 280　鹰愁峪入瓮，等北府来解围"></i><i class="m" style="left:22.516%" title="晋国 #4　seq 316　在玄武湖把晋帝、太后抢回来"></i><i class="m" style="left:23.803%" title="晋国 #5　seq 334　看清分赃：萧家江宁、云家盐业、你一无所得"></i><i class="m shared" style="left:23.874%" title="晋国 #6　seq 335　问清北府此刻听谁的"></i><i class="m" style="left:24.446%" title="晋国 #7　seq 343　问清相府此刻站在哪一边"></i><i class="m" style="left:34.739%" title="晋国 #8　seq 487　听说晋相腾出江州，让宋军来剿星月湖"></i><i class="m" style="left:45.175%" title="晋国 #9　seq 633　趁晋国大旱收粮，把建康当成营销中心来做"></i><i class="m" style="left:52.252%" title="晋国 #10　seq 732　把广源行在晋的旧账揭开（龙宸这条线）"></i></div></div><div class="row ">
     <div class="nm">宋国<i>二级·国家</i></div>
-    <div class="tk"><div class="sp" style="left:27.305%;width:53.395999999999994%"></div><i class="m anchor" style="left:27.305%" title="宋国 #1　seq 383　探查贾师宪攻江州、清岳党的军令"></i><i class="m" style="left:31.022%" title="宋国 #2　seq 435　看清江州水泥坚城，问清粮战怎么做"></i><i class="m" style="left:35.311%" title="宋国 #3　seq 495　接下屯田司员外郎，去把籍贯落进册"></i><i class="m hooked" style="left:37.169%" title="宋国 #4　seq 521　从宋军手里救下被擒的萧遥逸　［人物：萧遥逸］"></i><i class="m" style="left:37.527%" title="宋国 #5　seq 526　扛住江州围城，看宋军阵线怎么破"></i><i class="m" style="left:37.670%" title="宋国 #6　seq 528　城门火攻：烧掉宋军的冲车"></i><i class="m" style="left:39.886%" title="宋国 #7　seq 559　临安落脚，摸清这座城的暗线"></i><i class="m" style="left:41.029%" title="宋国 #8　seq 575　问清贾师宪此刻要你推的是什么"></i><i class="m" style="left:41.244%" title="宋国 #9　seq 578　让纸钞能纳税，逼宋军退兵"></i><i class="m" style="left:43.102%" title="宋国 #10　seq 604　问清太皇太后认不认你进宫"></i><i class="m" style="left:44.532%" title="宋国 #11　seq 624　问清高俅此刻站在哪一边"></i><i class="m" style="left:80.701%" title="宋国 #12　seq 1130　在长安接下昭南索赔这档子事"></i></div></div><div class="row ">
+    <div class="tk"><div class="sp" style="left:27.305%;width:53.681000000000004%"></div><i class="m anchor" style="left:27.305%" title="宋国 #1　seq 383　探查贾师宪攻江州、清岳党的军令"></i><i class="m" style="left:31.022%" title="宋国 #2　seq 435　看清江州水泥坚城，问清粮战怎么做"></i><i class="m" style="left:35.311%" title="宋国 #3　seq 495　接下屯田司员外郎，去把籍贯落进册"></i><i class="m hooked" style="left:37.169%" title="宋国 #4　seq 521　从宋军手里救下被擒的萧遥逸　［人物：萧遥逸］"></i><i class="m" style="left:37.527%" title="宋国 #5　seq 526　扛住江州围城，看宋军阵线怎么破"></i><i class="m" style="left:37.670%" title="宋国 #6　seq 528　城门火攻：烧掉宋军的冲车"></i><i class="m" style="left:39.886%" title="宋国 #7　seq 559　临安落脚，摸清这座城的暗线"></i><i class="m" style="left:41.029%" title="宋国 #8　seq 575　问清贾师宪此刻要你推的是什么"></i><i class="m" style="left:41.244%" title="宋国 #9　seq 578　让纸钞能纳税，逼宋军退兵"></i><i class="m" style="left:43.102%" title="宋国 #10　seq 604　问清太皇太后认不认你进宫"></i><i class="m" style="left:44.532%" title="宋国 #11　seq 624　问清高俅此刻站在哪一边"></i><i class="m" style="left:80.701%" title="宋国 #12　seq 1130　在长安接下昭南索赔这档子事"></i><i class="m" style="left:80.986%" title="宋国 #13　seq 1134　受礼部侍郎、通问计议使，用这颗印解宋困"></i></div></div><div class="row ">
     <div class="nm">汉国<i>二级·国家</i></div>
-    <div class="tk"><div class="sp" style="left:16.512%;width:58.47%"></div><i class="m anchor hooked shared" style="left:16.512%" title="汉国 #1　seq 232　跟着八骏，问清左武军怎么覆灭的　［人物：萧遥逸］"></i><i class="m" style="left:28.520%" title="汉国 #2　seq 400　与孟非卿复盘，查出有人切断补给、泄漏军机"></i><i class="m" style="left:55.468%" title="汉国 #5　seq 777　买下官身，在汉廷立住脚"></i><i class="m" style="left:55.611%" title="汉国 #6　seq 779　扛住吕氏动用汉军的围杀"></i><i class="m" style="left:64.332%" title="汉国 #8　seq 901　从传闻得知：天子已死，含光殿落到吕冀手里，刘建已起兵占了南宫"></i><i class="m" style="left:64.403%" title="汉国 #9　seq 902　决定是否出面拥立定陶王"></i><i class="m" style="left:67.119%" title="汉国 #10　seq 940　董卓无符入京；刘建伏诛"></i><i class="m" style="left:67.977%" title="汉国 #11　seq 952　到场或听任新朝承认定陶王"></i><i class="m" style="left:70.336%" title="汉国 #12　seq 985　吕冀赐死，见证吕雉亲裁诸吕"></i><i class="m shared" style="left:74.982%" title="汉国 #13　seq 1050　护住赵氏，促成新帝登基，自己以辅政定型"></i></div></div><div class="row ">
+    <div class="tk"><div class="sp" style="left:16.512%;width:58.47%"></div><i class="m anchor hooked shared" style="left:16.512%" title="汉国 #1　seq 232　跟着八骏，问清左武军怎么覆灭的　［人物：萧遥逸］"></i><i class="m" style="left:28.520%" title="汉国 #2　seq 400　与孟非卿复盘，查出有人切断补给、泄漏军机"></i><i class="m" style="left:55.111%" title="汉国 #3　seq 772　追到汉廷朝会：粮草不继究竟是谁的责任"></i><i class="m" style="left:55.468%" title="汉国 #4　seq 777　买下官身，在汉廷立住脚"></i><i class="m" style="left:55.611%" title="汉国 #5　seq 779　扛住吕氏动用汉军的围杀"></i><i class="m" style="left:62.187%" title="汉国 #6　seq 871　查出星月湖大营被诬成左武军覆灭的原因"></i><i class="m" style="left:63.188%" title="汉国 #7　seq 885　用纸钞买田；看清限田令要把云家卷进削豪强"></i><i class="m" style="left:64.332%" title="汉国 #8　seq 901　从传闻得知：天子已死，含光殿落到吕冀手里，刘建已起兵占了南宫"></i><i class="m" style="left:64.403%" title="汉国 #9　seq 902　决定是否出面拥立定陶王"></i><i class="m" style="left:67.119%" title="汉国 #10　seq 940　董卓无符入京；刘建伏诛"></i><i class="m" style="left:67.977%" title="汉国 #11　seq 952　到场或听任新朝承认定陶王"></i><i class="m" style="left:70.336%" title="汉国 #12　seq 985　吕冀赐死，见证吕雉亲裁诸吕"></i><i class="m shared" style="left:74.982%" title="汉国 #13　seq 1050　护住赵氏，促成新帝登基，自己以辅政定型"></i></div></div><div class="row ">
     <div class="nm">唐国<i>二级·国家</i></div>
-    <div class="tk"><div class="sp" style="left:76.126%;width:23.730999999999995%"></div><i class="m" style="left:76.126%" title="唐国 #2　seq 1066　以汉使入长安，在宣平坊落脚"></i><i class="m" style="left:77.770%" title="唐国 #3　seq 1089　看见十方丛林围了大雁塔"></i><i class="m" style="left:82.202%" title="唐国 #4　seq 1151　摸清十方丛林要刺汉使"></i><i class="m" style="left:87.563%" title="唐国 #5　seq 1226　扛住十方丛林围杀"></i><i class="m" style="left:90.708%" title="唐国 #6　seq 1270　揭穿窥基伪诏，逼他弃佛入魔"></i><i class="m" style="left:91.422%" title="唐国 #7　seq 1280　甘露变在大明宫爆发"></i><i class="m" style="left:93.352%" title="唐国 #8　seq 1307　旁观李辅国审判；唐皇被弑"></i><i class="m" style="left:96.283%" title="唐国 #9　seq 1348　与众人合力消灭窥基魔身"></i><i class="m" style="left:97.856%" title="唐国 #10　seq 1370　奉诏讨逆"></i><i class="m" style="left:98.142%" title="唐国 #11　seq 1374　莲座前迎战李辅国"></i><i class="m" style="left:98.213%" title="唐国 #12　seq 1375　从浮屠塔的困局里脱身"></i><i class="m" style="left:98.427%" title="唐国 #13　seq 1378　联手斩断李辅国肉身"></i><i class="m" style="left:98.713%" title="唐国 #14　seq 1382　阻止太皇太后被夺舍"></i><i class="m" style="left:99.857%" title="唐国 #15　seq 1398　搜查宫中找五肉五甘露"></i></div></div><div class="row ch"><div class="nm">人物任务<i>三级·插入</i></div><div class="tk"><i class="m hook" style="left:0.500%" title="卓云君　挂在 lcq.event.s01_03　seq 8"></i><i class="m hook" style="left:16.798%" title="卓云君　挂在 lcq.event.s07_02_kill_wu　seq 236"></i><i class="m hook" style="left:16.941%" title="卓云君　挂在 lcq.event.s07_03_xiaozi_appears　seq 238"></i><i class="m hook" style="left:19.299%" title="卓云君　挂在 lcq.event.s07_09_hengtang_ambush　seq 271"></i><i class="m hook" style="left:34.382%" title="卓云君　挂在 lcq.event.s12_02_recognize_zhuo　seq 482"></i><i class="m hook" style="left:4.432%" title="谢艺　挂在 lcq.event.s03b_snake_flower_bridge_03　seq 63"></i><i class="m hook" style="left:7.863%" title="谢艺　挂在 lcq.event.s04b_lingfei_baiyi_crisis_13　seq 111"></i><i class="m hook" style="left:8.149%" title="谢艺　挂在 lcq.event.s04b_lingfei_baiyi_crisis_15　seq 115"></i><i class="m hook" style="left:8.578%" title="谢艺　挂在 lcq.event.s04b_lingfei_baiyi_crisis_18　seq 121"></i><i class="m hook" style="left:39.671%" title="谢艺　挂在 lyl.event.debut_ruan_sisters　seq 556"></i><i class="m hook" style="left:5.147%" title="乐明珠　挂在 lcq.event.s04_03　seq 73"></i><i class="m hook" style="left:6.362%" title="乐明珠　挂在 lcq.event.s04b_lingfei_baiyi_crisis_02　seq 90"></i><i class="m hook" style="left:12.437%" title="乐明珠　挂在 lcq.event.s05b_06_breakout_and_reunion　seq 175"></i><i class="m hook" style="left:12.652%" title="乐明珠　挂在 lcq.event.s05b_07_xiaozi_trap　seq 178"></i><i class="m hook" style="left:16.512%" title="萧遥逸　挂在 lcq.event.s07_01_old_case　seq 232"></i><i class="m hook" style="left:18.013%" title="萧遥逸　挂在 lcq.event.s07_06_water_assassins　seq 253"></i><i class="m hook" style="left:19.800%" title="萧遥逸　挂在 lcq.event.s07_10_dragon_fang　seq 278"></i><i class="m hook" style="left:21.301%" title="萧遥逸　挂在 lcq.event.s08_06_pursuit_repelled　seq 299"></i><i class="m hook" style="left:37.169%" title="萧遥逸　挂在 lcq.event.s12_10_rescue_xiao　seq 521"></i><i class="m hook" style="left:76.269%" title="杨玉环　挂在 lyg.event.s03_03　seq 1068"></i><i class="m hook" style="left:77.698%" title="杨玉环　挂在 lyg.event.s03_07　seq 1088"></i><i class="m hook" style="left:81.701%" title="杨玉环　挂在 lyg.event.changgan_interlude_05_beat　seq 1144"></i><i class="m hook" style="left:85.919%" title="杨玉环　挂在 lyg.event.s06_01　seq 1203"></i><i class="m hook" style="left:55.826%" title="赵合德　挂在 lyl.event.s05_06　seq 782"></i><i class="m hook" style="left:55.897%" title="赵合德　挂在 lyl.event.s05_07　seq 783"></i><i class="m hook" style="left:55.969%" title="赵合德　挂在 lyl.event.s05_08　seq 784"></i><i class="m hook" style="left:4.289%" title="凝羽　挂在 lcq.event.s03b_snake_flower_bridge_01　seq 61"></i><i class="m hook" style="left:5.861%" title="凝羽　挂在 lcq.event.s04_06　seq 83"></i><i class="m hook" style="left:7.577%" title="凝羽　挂在 lcq.event.s04b_lingfei_baiyi_crisis_12　seq 107"></i></div></div>
+    <div class="tk"><div class="sp" style="left:75.768%;width:24.089%"></div><i class="m anchor" style="left:75.768%" title="唐国 #1　seq 1061　听袁天罡说破：番僧在猎杀穿越者"></i><i class="m" style="left:76.126%" title="唐国 #2　seq 1066　以汉使入长安，在宣平坊落脚"></i><i class="m" style="left:77.770%" title="唐国 #3　seq 1089　看见十方丛林围了大雁塔"></i><i class="m" style="left:82.202%" title="唐国 #4　seq 1151　摸清十方丛林要刺汉使"></i><i class="m" style="left:87.563%" title="唐国 #5　seq 1226　扛住十方丛林围杀"></i><i class="m" style="left:90.708%" title="唐国 #6　seq 1270　揭穿窥基伪诏，逼他弃佛入魔"></i><i class="m" style="left:91.422%" title="唐国 #7　seq 1280　甘露变在大明宫爆发"></i><i class="m" style="left:93.352%" title="唐国 #8　seq 1307　旁观李辅国审判；唐皇被弑"></i><i class="m" style="left:96.283%" title="唐国 #9　seq 1348　与众人合力消灭窥基魔身"></i><i class="m" style="left:97.856%" title="唐国 #10　seq 1370　奉诏讨逆"></i><i class="m" style="left:98.142%" title="唐国 #11　seq 1374　莲座前迎战李辅国"></i><i class="m" style="left:98.213%" title="唐国 #12　seq 1375　从浮屠塔的困局里脱身"></i><i class="m" style="left:98.427%" title="唐国 #13　seq 1378　联手斩断李辅国肉身"></i><i class="m" style="left:98.713%" title="唐国 #14　seq 1382　阻止太皇太后被夺舍"></i><i class="m" style="left:99.714%" title="唐国 #15　seq 1396　接旨大都护、上柱国"></i><i class="m" style="left:99.857%" title="唐国 #16　seq 1398　搜查宫中找五肉五甘露"></i></div></div><div class="row ch"><div class="nm">人物任务<i>三级·插入</i></div><div class="tk"><i class="m hook" style="left:0.500%" title="卓云君　挂在 lcq.event.s01_03　seq 8"></i><i class="m hook" style="left:16.798%" title="卓云君　挂在 lcq.event.s07_02_kill_wu　seq 236"></i><i class="m hook" style="left:16.941%" title="卓云君　挂在 lcq.event.s07_03_xiaozi_appears　seq 238"></i><i class="m hook" style="left:19.299%" title="卓云君　挂在 lcq.event.s07_09_hengtang_ambush　seq 271"></i><i class="m hook" style="left:34.382%" title="卓云君　挂在 lcq.event.s12_02_recognize_zhuo　seq 482"></i><i class="m hook" style="left:44.889%" title="卓云君　挂在 lyl.event.sacred_against_lin　seq 629"></i><i class="m hook" style="left:4.432%" title="谢艺　挂在 lcq.event.s03b_snake_flower_bridge_03　seq 63"></i><i class="m hook" style="left:7.863%" title="谢艺　挂在 lcq.event.s04b_lingfei_baiyi_crisis_13　seq 111"></i><i class="m hook" style="left:8.149%" title="谢艺　挂在 lcq.event.s04b_lingfei_baiyi_crisis_15　seq 115"></i><i class="m hook" style="left:8.578%" title="谢艺　挂在 lcq.event.s04b_lingfei_baiyi_crisis_18　seq 121"></i><i class="m hook" style="left:39.671%" title="谢艺　挂在 lyl.event.debut_ruan_sisters　seq 556"></i><i class="m hook" style="left:5.147%" title="乐明珠　挂在 lcq.event.s04_03　seq 73"></i><i class="m hook" style="left:6.362%" title="乐明珠　挂在 lcq.event.s04b_lingfei_baiyi_crisis_02　seq 90"></i><i class="m hook" style="left:12.437%" title="乐明珠　挂在 lcq.event.s05b_06_breakout_and_reunion　seq 175"></i><i class="m hook" style="left:12.652%" title="乐明珠　挂在 lcq.event.s05b_07_xiaozi_trap　seq 178"></i><i class="m hook" style="left:16.512%" title="萧遥逸　挂在 lcq.event.s07_01_old_case　seq 232"></i><i class="m hook" style="left:18.013%" title="萧遥逸　挂在 lcq.event.s07_06_water_assassins　seq 253"></i><i class="m hook" style="left:19.800%" title="萧遥逸　挂在 lcq.event.s07_10_dragon_fang　seq 278"></i><i class="m hook" style="left:21.301%" title="萧遥逸　挂在 lcq.event.s08_06_pursuit_repelled　seq 299"></i><i class="m hook" style="left:37.169%" title="萧遥逸　挂在 lcq.event.s12_10_rescue_xiao　seq 521"></i><i class="m hook" style="left:76.269%" title="杨玉环　挂在 lyg.event.s03_03　seq 1068"></i><i class="m hook" style="left:77.698%" title="杨玉环　挂在 lyg.event.s03_07　seq 1088"></i><i class="m hook" style="left:81.701%" title="杨玉环　挂在 lyg.event.changgan_interlude_05_beat　seq 1144"></i><i class="m hook" style="left:85.919%" title="杨玉环　挂在 lyg.event.s06_01　seq 1203"></i><i class="m hook" style="left:55.826%" title="赵合德　挂在 lyl.event.s05_06　seq 782"></i><i class="m hook" style="left:55.897%" title="赵合德　挂在 lyl.event.s05_07　seq 783"></i><i class="m hook" style="left:55.969%" title="赵合德　挂在 lyl.event.s05_08　seq 784"></i><i class="m hook" style="left:4.289%" title="凝羽　挂在 lcq.event.s03b_snake_flower_bridge_01　seq 61"></i><i class="m hook" style="left:5.861%" title="凝羽　挂在 lcq.event.s04_06　seq 83"></i><i class="m hook" style="left:7.577%" title="凝羽　挂在 lcq.event.s04b_lingfei_baiyi_crisis_12　seq 107"></i></div></div>
 </div>
 <div class="ticks"><span class="mono" style="left:0.000%">1</span><span class="mono" style="left:14.224%">200</span><span class="mono" style="left:28.520%">400</span><span class="mono" style="left:42.816%">600</span><span class="mono" style="left:57.112%">800</span><span class="mono" style="left:71.408%">1000</span><span class="mono" style="left:85.704%">1200</span><span class="mono" style="left:99.929%">1399</span></div>
 </div>
@@ -103,6 +129,1764 @@ code{font-family:ui-monospace,Menlo,monospace;font-size:11.5px}
  <span><i style="border:1.5px dashed var(--ink3);border-radius:50%;width:8px;height:8px"></i>人物挂点</span>
  <span>点上方红竖线＝双喂　点下方虚线＝有人物戏挂着</span>
 </div>
+
+<h2>逐线展开：每条线的 event 与挂在下面的角色戏</h2>
+<div class="ln">
+  <h3 class="serif">主轴<span class="tg">一级·主轴</span></h3>
+  
+  <ol class="nodes"><li class="r">
+      <span class="sq mono">8</span>
+      <span class="bd">
+        <span class="tx">遇上月霜——王哲点名要你守的那个岳帅后人</span>
+        <span class="ev mono">程宗扬与月霜初遇　lcq.event.s01_03</span>
+        
+        
+        
+        
+        <div class="hooks"><div class="hk">↳ <b>卓云君</b>　半兽人围上来。她用烈火法术救下你和月霜</div></div>
+      </span></li><li class="r">
+      <span class="sq mono">18</span>
+      <span class="bd">
+        <span class="tx">替月霜解掉寒毒</span>
+        <span class="ev mono">月霜强取真阳　lcq.event.s01_06</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">19</span>
+      <span class="bd">
+        <span class="tx">从坠落处活下来，一路走到太乙真宗帅帐见着王哲</span>
+        <span class="ev mono">程宗扬见王哲　lcq.event.s01_05</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">20</span>
+      <span class="bd">
+        <span class="tx">接下王哲的锦囊与九阳神功口诀，领受三件托付</span>
+        <span class="ev mono">王哲传功与托付　lcq.event.s02_01</span>
+        
+        <span class="badge shared">双喂 主轴／太乙真宗</span>
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">30</span>
+      <span class="bd">
+        <span class="tx">见证王哲殉军，独自离开左武军的战场</span>
+        <span class="ev mono">左武军与罗马军团大战　lcq.event.s02_02</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">41</span>
+      <span class="bd">
+        <span class="tx">从白湖商馆的死局里脱身</span>
+        <span class="ev mono">白湖脱身　lcq.event.baihu_shangguan_escape</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">63</span>
+      <span class="bd">
+        <span class="tx">查清蛇彝村灭村的真凶，循血符指向鬼王峒</span>
+        <span class="ev mono">鬼王峒血符　lcq.event.s03b_snake_flower_bridge_03</span>
+        
+        
+        
+        
+        <div class="hooks"><div class="hk">↳ <b>谢艺</b>　空村里，他指出尸体旁的鬼王峒血符。你第一次看见他本人动手 <em>［插入］</em></div></div>
+      </span></li><li class="r">
+      <span class="sq mono">121</span>
+      <span class="bd">
+        <span class="tx">听谢艺说破：岳帅还有个遗腹女</span>
+        <span class="ev mono">谢艺谈旧事　lcq.event.s04b_lingfei_baiyi_crisis_18</span>
+        
+        
+        
+        
+        <div class="hooks"><div class="hk">↳ <b>谢艺</b>　他换上现代休闲装，跟你谈玻璃，并吐出岳帅晕血、遗腹女</div></div>
+      </span></li><li class="w">
+      <span class="sq mono">?</span>
+      <span class="bd">
+        <span class="tx">进鬼王峒，并当面辨认碧姬</span>
+        <span class="ev mono">lcq.event.enter_dong_recognize_biji</span>
+        
+        
+        <span class="badge todo">待写 event</span>
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">164</span>
+      <span class="bd">
+        <span class="tx">向碧姬追问小紫的过往</span>
+        <span class="ev mono">小紫疑云　lcq.event.s05b_01_binu_reveals_xiaozi</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">195</span>
+      <span class="bd">
+        <span class="tx">与小紫达成临时协定，在鬼王宫策动奴隶倒戈</span>
+        <span class="ev mono">倒戈与凤凰异变　lcq.event.s05b_10_slave_revolt_and_phoenix_change</span>
+        
+        <span class="badge shared">双喂 主轴／昭南</span>
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">211</span>
+      <span class="bd">
+        <span class="tx">接下谢艺对小紫与星月湖的托付，追上小紫见证她与碧姬的了断</span>
+        <span class="ev mono">了结龙神　lcq.event.slay_dragon</span>
+        
+        <span class="badge shared">双喂 主轴／星月湖／昭南</span>
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">636</span>
+      <span class="bd">
+        <span class="tx">在云涛观迷楼里摸清那套机关</span>
+        <span class="ev mono">云涛观迷楼　lyl.event.taiquan_sacred_fruit_04</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">640</span>
+      <span class="bd">
+        <span class="tx">在云涛观迷楼找出太泉钥匙的线索</span>
+        <span class="ev mono">太泉钥匙　lyl.event.taiquan_sacred_fruit_05</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">663</span>
+      <span class="bd">
+        <span class="tx">到火山口去争赤阳圣果——你此行真正的由头</span>
+        <span class="ev mono">赤阳圣果争夺　lyl.event.taiquan_sacred_fruit_10</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">667</span>
+      <span class="bd">
+        <span class="tx">困在蚁穴里，先找到出去的路</span>
+        <span class="ev mono">寻找出口　lyl.event.find_exit</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">695</span>
+      <span class="bd">
+        <span class="tx">进魔墟取那件东西</span>
+        <span class="ev mono">魔墟夺宝　lyl.event.taiquan_afterfall_03_beat</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">708</span>
+      <span class="bd">
+        <span class="tx">探索太泉古阵的人类居住区</span>
+        <span class="ev mono">太泉古阵　lyl.event.taiquan_afterfall_05_beat</span>
+        
+        
+        
+        
+        
+      </span></li><li class="p">
+      <span class="sq mono"></span>
+      <span class="bd">
+        <span class="tx">修为到六阳，开启古阵内的入口（未来待扩）</span>
+        <span class="ev mono">（无 event · 待扩）</span>
+        <span class="badge anchor">锚</span>
+        
+        
+        <span class="badge pend">未来待扩</span>
+        
+      </span></li><li class="p">
+      <span class="sq mono"></span>
+      <span class="bd">
+        <span class="tx">小玲儿在太泉的那一拍（未来待扩）</span>
+        <span class="ev mono">（无 event · 待扩）</span>
+        <span class="badge anchor">锚</span>
+        
+        
+        <span class="badge pend">未来待扩</span>
+        
+      </span></li><li class="r">
+      <span class="sq mono">936</span>
+      <span class="bd">
+        <span class="tx">在汉宫变局中抵达秘境入口</span>
+        <span class="ev mono">秘境入口　lyl.event.han_palace_endgame_07_beat</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">990</span>
+      <span class="bd">
+        <span class="tx">保住赵飞燕——程赵之子这条盲点系在她身上</span>
+        <span class="ev mono">赵飞燕中毒昏迷　lyg.event.s02_02</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">996</span>
+      <span class="bd">
+        <span class="tx">在武帝像前安排秘境探索</span>
+        <span class="ev mono">程宗扬安排武帝秘境探索　lyg.event.s02_08</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">1010</span>
+      <span class="bd">
+        <span class="tx">触发冰冰，当场验明谁在超级用户名单上</span>
+        <span class="ev mono">冰冰验明超级用户　lyg.event.mijing_superuser_roster</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">1050</span>
+      <span class="bd">
+        <span class="tx">护住赵氏一门，别让这支血脉在政变里断掉</span>
+        <span class="ev mono">登基骤变　lyg.event.han_succession_08_beat</span>
+        
+        <span class="badge shared">双喂 主轴／汉国</span>
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">1053</span>
+      <span class="bd">
+        <span class="tx">在登基典仪上与赵飞燕行功，修为推到通幽境</span>
+        <span class="ev mono">通幽突破　lyg.event.han_succession_09_beat</span>
+        
+        
+        
+        
+        
+      </span></li><li class="p">
+      <span class="sq mono"></span>
+      <span class="bd">
+        <span class="tx">程赵之子这条血脉如何成立（未来待扩）</span>
+        <span class="ev mono">（无 event · 待扩）</span>
+        <span class="badge anchor">锚</span>
+        
+        
+        <span class="badge pend">未来待扩</span>
+        
+      </span></li></ol></div><div class="ln">
+  <h3 class="serif">太乙真宗<span class="tg">二级·宗派</span></h3>
+  <div class="hint">王哲既已传功托付，太乙真宗的门就对你开着——去找他问清那份托付。</div>
+  <ol class="nodes"><li class="r">
+      <span class="sq mono">8</span>
+      <span class="bd">
+        <span class="tx">受王哲传功托付，入太乙真宗阵营</span>
+        <span class="ev mono">太乙真宗介入　lcq.event.s01_04</span>
+        <span class="badge anchor">锚</span>
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">20</span>
+      <span class="bd">
+        <span class="tx">接下锦囊与三托付</span>
+        <span class="ev mono">王哲传功与托付　lcq.event.s02_01</span>
+        
+        <span class="badge shared">双喂 主轴／太乙真宗</span>
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">54</span>
+      <span class="bd">
+        <span class="tx">在紫溪被点名去龙池</span>
+        <span class="ev mono">紫溪拦截　lcq.event.zixi_intercept</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">237</span>
+      <span class="bd">
+        <span class="tx">读王哲密信，受托清理门户</span>
+        <span class="ev mono">王哲密信　lcq.event.wangzhe_letter</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">391</span>
+      <span class="bd">
+        <span class="tx">听清蔺采泉与商乐轩在争掌教</span>
+        <span class="ev mono">夜影争位　lcq.event.yeying_seat_struggle</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">408</span>
+      <span class="bd">
+        <span class="tx">破道观：认出元行健是林之澜的人</span>
+        <span class="ev mono">破道观线索　lcq.event.s10_06_ruined_temple</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">574</span>
+      <span class="bd">
+        <span class="tx">蔺采泉以支持江州，换你承认九阳出自他</span>
+        <span class="ev mono">九阳交换　lyl.event.xiaoyingzhou_blacksea_trap_02_beat</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">581</span>
+      <span class="bd">
+        <span class="tx">鹤林观：蔺采泉自立掌教，秋少君升任教御</span>
+        <span class="ev mono">蔺采泉继位　lyl.event.xiaoyingzhou_lin_takes_seat</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">629</span>
+      <span class="bd">
+        <span class="tx">在翠微园承诺对付现任掌教</span>
+        <span class="ev mono">承诺对付蔺采泉　lyl.event.sacred_against_lin</span>
+        
+        
+        
+        
+        <div class="hooks"><div class="hk">↳ <b>卓云君</b>　翠微园。她把 ZY5 的价拿到你面前兑现：你承诺对付现任掌教蔺采泉，并写下盘江程氏股份 <em>［插入］</em></div></div>
+      </span></li><li class="p">
+      <span class="sq mono"></span>
+      <span class="bd">
+        <span class="tx">扳倒现任掌教、取得掌教之位（未来待扩）</span>
+        <span class="ev mono">（无 event · 待扩）</span>
+        
+        
+        
+        <span class="badge pend">未来待扩</span>
+        
+      </span></li><li class="p">
+      <span class="sq mono"></span>
+      <span class="bd">
+        <span class="tx">锦囊出指令、齐羽仙反用（续写第二幕）</span>
+        <span class="ev mono">（无 event · 待扩）</span>
+        
+        
+        
+        <span class="badge pend">未来待扩</span>
+        
+      </span></li></ol></div><div class="ln">
+  <h3 class="serif">星月湖<span class="tg">二级·宗派</span></h3>
+  <div class="hint">想搭上星月湖，去找八骏——先是谢艺，江州之后可找萧遥逸。</div>
+  <ol class="nodes"><li class="r">
+      <span class="sq mono">117</span>
+      <span class="bd">
+        <span class="tx">打听岳帅旧事，问清星月湖是什么</span>
+        <span class="ev mono">岳帅旧闻　lcq.event.s04b_lingfei_baiyi_crisis_16</span>
+        <span class="badge anchor">锚</span>
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">211</span>
+      <span class="bd">
+        <span class="tx">赶到重伤的谢艺身边，接下他对小紫与星月湖的交代</span>
+        <span class="ev mono">了结龙神　lcq.event.slay_dragon</span>
+        
+        <span class="badge shared">双喂 主轴／星月湖／昭南</span>
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">232</span>
+      <span class="bd">
+        <span class="tx">跟着八骏，问清左武军怎么覆灭的</span>
+        <span class="ev mono">同门旧案　lcq.event.s07_01_old_case</span>
+        
+        <span class="badge shared">双喂 星月湖／汉国</span>
+        
+        
+        <div class="hooks"><div class="hk">↳ <b>萧遥逸</b>　他向你痛陈左武全军覆没。**这是他不靠骨灰的登场拍** <em>［插入］</em></div></div>
+      </span></li><li class="r">
+      <span class="sq mono">251</span>
+      <span class="bd">
+        <span class="tx">把谢艺的下落带给孟非卿</span>
+        <span class="ev mono">八骏得讯　lcq.event.s07_05_eight_steeds_informed</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">276</span>
+      <span class="bd">
+        <span class="tx">萧遥逸代表星月湖，向你开放资源</span>
+        <span class="ev mono">星月开库　lcq.event.xiao_opens_resources</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">308</span>
+      <span class="bd">
+        <span class="tx">古冥隐点破：第八骏就是萧遥逸</span>
+        <span class="ev mono">古冥隐毒计　lcq.event.s08_08_gumingyin_plot</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">335</span>
+      <span class="bd">
+        <span class="tx">八骏离建康，萧遥逸率水师赴江州</span>
+        <span class="ev mono">八骏离建康　lcq.event.s09_01_eight_steeds_leave</span>
+        
+        <span class="badge shared">双喂 星月湖／晋国</span>
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">404</span>
+      <span class="bd">
+        <span class="tx">以鹏翼社作抵押，替孟非卿筹十万金铢</span>
+        <span class="ev mono">十万金铢军资　lcq.event.s10_05_war_funds</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">439</span>
+      <span class="bd">
+        <span class="tx">受孟非卿之命，率部赴三川口护月霜</span>
+        <span class="ev mono">奉命护月霜　lcq.event.s11_03_protect_yueshuang</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">444</span>
+      <span class="bd">
+        <span class="tx">江州战事：与星月湖并肩</span>
+        <span class="ev mono">星月湖现身　lcq.event.s11_04_xingyue_appears</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">448</span>
+      <span class="bd">
+        <span class="tx">三川口：抵挡王韬的焚天斧</span>
+        <span class="ev mono">王韬破阵　lcq.event.s11_05_wangtao_breaks</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">450</span>
+      <span class="bd">
+        <span class="tx">雪原鏖战：在三川口跟宋军拼到底</span>
+        <span class="ev mono">雪原鏖战　lcq.event.s11_06_snow_battle</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">534</span>
+      <span class="bd">
+        <span class="tx">全盘接管鹏翼社与星月湖暗产</span>
+        <span class="ev mono">接管鹏翼社　lcq.event.pengyi_takeover</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">626</span>
+      <span class="bd">
+        <span class="tx">在临安祭岳鹏举与谢艺的墓</span>
+        <span class="ev mono">拜祭岳鹏举与谢艺墓　lyl.event.lin_an_bridge_xieyi_tomb</span>
+        
+        
+        
+        
+        
+      </span></li><li class="p">
+      <span class="sq mono"></span>
+      <span class="bd">
+        <span class="tx">岳帅归营、番号恢复、冤案洗雪（续写第二幕）</span>
+        <span class="ev mono">（无 event · 待扩）</span>
+        
+        
+        
+        <span class="badge pend">未来待扩</span>
+        
+      </span></li></ol></div><div class="ln">
+  <h3 class="serif">黑魔海／毒宗<span class="tg">二级·宗派</span></h3>
+  <div class="hint">鸦人尸体上搜出一张白纸，云苍峰说那是秘法传讯——黑魔海与鬼王峒勾结；</div>
+  <ol class="nodes"><li class="r">
+      <span class="sq mono">78</span>
+      <span class="bd">
+        <span class="tx">南荒发蛊：看清朱老头身边的东西不敢碰他</span>
+        <span class="ev mono">发蛊事件　lcq.event.s04_04</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">93</span>
+      <span class="bd">
+        <span class="tx">把羊皮纸送到云苍峰，疑黑魔海与鬼王峒勾结</span>
+        <span class="ev mono">秘法传讯信　lcq.event.s04b_lingfei_baiyi_crisis_04</span>
+        <span class="badge anchor">锚</span>
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">222</span>
+      <span class="bd">
+        <span class="tx">当面确认朱老头就是殇侯，听他称你是天命之人</span>
+        <span class="ev mono">殇侯现身　lcq.event.shanghou_revealed</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">300</span>
+      <span class="bd">
+        <span class="tx">与萧遥逸击掌：不与殇侯为敌</span>
+        <span class="ev mono">掌誓不敌殇侯　lcq.event.palm_oath_shanghou</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">366</span>
+      <span class="bd">
+        <span class="tx">查清黑魔海内隙，听泉玉姬供认御姬奴</span>
+        <span class="ev mono">黑魔海内隙　lcq.event.s09_06_blacksea_fracture</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">415</span>
+      <span class="bd">
+        <span class="tx">先发制人捣江州巢穴，拿到阴阳鱼</span>
+        <span class="ev mono">先发制人　lcq.event.s10_07_preemptive_strike</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">547</span>
+      <span class="bd">
+        <span class="tx">殇侯施尸毒，破开宋军阵线</span>
+        <span class="ev mono">殇侯尸毒破局　lcq.event.s12_16_corpse_poison</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">548</span>
+      <span class="bd">
+        <span class="tx">以人情和经济筹码，请殇侯留守江州</span>
+        <span class="ev mono">利聚留守　lcq.event.s12_17_shanghou_stays</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">609</span>
+      <span class="bd">
+        <span class="tx">在太医局查医档，看出剑玉姬已经落子</span>
+        <span class="ev mono">剑玉姬落棋　lyl.event.xiaoyingzhou_blacksea_trap_07_beat</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">610</span>
+      <span class="bd">
+        <span class="tx">小瀛洲杀局</span>
+        <span class="ev mono">小瀛洲杀局　lyl.event.xiaoyingzhou_blacksea_trap_08_beat</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">614</span>
+      <span class="bd">
+        <span class="tx">在保宁寺放生池逼出剑玉姬真身</span>
+        <span class="ev mono">剑玉姬真身　lyl.event.xiaoyingzhou_blacksea_trap_09_beat</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">615</span>
+      <span class="bd">
+        <span class="tx">八臂收束：从保宁寺突围</span>
+        <span class="ev mono">八臂收束　lyl.event.xiaoyingzhou_blacksea_trap_10_beat</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">616</span>
+      <span class="bd">
+        <span class="tx">战后在翠微园收拾伤员与残局</span>
+        <span class="ev mono">小瀛洲战后　lyl.event.taiquan_sacred_fruit_01</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">618</span>
+      <span class="bd">
+        <span class="tx">用晴州水泥代理权，换黑魔海五年不入宋</span>
+        <span class="ev mono">水泥换休战　lyl.event.xiaoyingzhou_cement_truce</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">898</span>
+      <span class="bd">
+        <span class="tx">剑玉姬以成光换你支持刘建，当面回绝</span>
+        <span class="ev mono">当面回绝剑玉姬　lyl.event.han_jianyu_refused</span>
+        
+        
+        
+        
+        
+      </span></li><li class="p">
+      <span class="sq mono"></span>
+      <span class="bd">
+        <span class="tx">取得天命侯名分（未来待扩）</span>
+        <span class="ev mono">（无 event · 待扩）</span>
+        
+        
+        
+        <span class="badge pend">未来待扩</span>
+        
+      </span></li><li class="p">
+      <span class="sq mono"></span>
+      <span class="bd">
+        <span class="tx">大祭：与潘金莲对决、总坛覆灭（续写第二幕）</span>
+        <span class="ev mono">（无 event · 待扩）</span>
+        
+        
+        
+        <span class="badge pend">未来待扩</span>
+        
+      </span></li></ol></div><div class="ln">
+  <h3 class="serif">昭南<span class="tg">二级·国家</span></h3>
+  <div class="hint">南荒没有可投的朝廷。跟云苍峰的商队走，或者自己出五原南门沿商路南下——</div>
+  <ol class="nodes"><li class="r">
+      <span class="sq mono">62</span>
+      <span class="bd">
+        <span class="tx">查清蛇彝村灭村，血符指向鬼王峒</span>
+        <span class="ev mono">屠村痕迹　lcq.event.s03b_snake_flower_bridge_02</span>
+        <span class="badge anchor">锚</span>
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">64</span>
+      <span class="bd">
+        <span class="tx">跟云苍峰的商队进南荒</span>
+        <span class="ev mono">云氏同行　lcq.event.s03b_snake_flower_bridge_04</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">67</span>
+      <span class="bd">
+        <span class="tx">问清花苗此刻站在哪一边</span>
+        <span class="ev mono">龙神新娘　lcq.event.s03b_snake_flower_bridge_07</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">86</span>
+      <span class="bd">
+        <span class="tx">问清白夷此刻站在哪一边</span>
+        <span class="ev mono">白夷族到达　lcq.event.s04_07</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">139</span>
+      <span class="bd">
+        <span class="tx">赶到碧鲮湾，看清他们此刻敢不敢站出来</span>
+        <span class="ev mono">碧鲮湾站出来　lcq.event.biling_bay_stance</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">150</span>
+      <span class="bd">
+        <span class="tx">跟花苗谈清进鬼王峒的合作边界</span>
+        <span class="ev mono">进峒合作边界　lcq.event.huamiao_coop_boundary</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">171</span>
+      <span class="bd">
+        <span class="tx">潜入鬼王宫，当面见鬼巫王</span>
+        <span class="ev mono">初见鬼巫王　lcq.event.s05b_05a_meet_ghost_king</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">195</span>
+      <span class="bd">
+        <span class="tx">在鬼王宫里策动奴隶倒戈</span>
+        <span class="ev mono">倒戈与凤凰异变　lcq.event.s05b_10_slave_revolt_and_phoenix_change</span>
+        
+        <span class="badge shared">双喂 主轴／昭南</span>
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">205</span>
+      <span class="bd">
+        <span class="tx">在祭台上把鬼巫王这一仗打完</span>
+        <span class="ev mono">祭台吞王　lcq.event.ghost_king_swallowed</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">211</span>
+      <span class="bd">
+        <span class="tx">在破峒之后了结龙神</span>
+        <span class="ev mono">了结龙神　lcq.event.slay_dragon</span>
+        
+        <span class="badge shared">双喂 主轴／星月湖／昭南</span>
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">218</span>
+      <span class="bd">
+        <span class="tx">散峒之后，听清三族是否真的站到你这边</span>
+        <span class="ev mono">散峒听三族　lcq.event.tribes_pledge</span>
+        
+        
+        
+        
+        
+      </span></li></ol></div><div class="ln">
+  <h3 class="serif">晋国<span class="tg">二级·国家</span></h3>
+  <div class="hint">建康宫城闹鬼的传闻。</div>
+  <ol class="nodes"><li class="r">
+      <span class="sq mono">241</span>
+      <span class="bd">
+        <span class="tx">听说建康宫城里闹鬼</span>
+        <span class="ev mono">宫禁闹鬼　lcq.event.palace_haunting_rumor</span>
+        <span class="badge anchor">锚</span>
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">264</span>
+      <span class="bd">
+        <span class="tx">进建康，夜探神龙殿，看清晋帝已被架空</span>
+        <span class="ev mono">神龙殿夜探　lcq.event.s07_07_dragon_hall</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">280</span>
+      <span class="bd">
+        <span class="tx">鹰愁峪入瓮，等北府来解围</span>
+        <span class="ev mono">鹰愁峪入瓮　lcq.event.s08_01_eagle_valley</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">316</span>
+      <span class="bd">
+        <span class="tx">在玄武湖把晋帝、太后抢回来</span>
+        <span class="ev mono">玄武湖救驾　lcq.event.s08_10_xuanwu_rescue</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">334</span>
+      <span class="bd">
+        <span class="tx">看清分赃：萧家江宁、云家盐业、你一无所得</span>
+        <span class="ev mono">宫变分赃　lcq.event.spoils_split</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">335</span>
+      <span class="bd">
+        <span class="tx">问清北府此刻听谁的</span>
+        <span class="ev mono">八骏离建康　lcq.event.s09_01_eight_steeds_leave</span>
+        
+        <span class="badge shared">双喂 星月湖／晋国</span>
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">343</span>
+      <span class="bd">
+        <span class="tx">问清相府此刻站在哪一边</span>
+        <span class="ev mono">相府立场　lcq.event.xiangfu_stance</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">487</span>
+      <span class="bd">
+        <span class="tx">听说晋相腾出江州，让宋军来剿星月湖</span>
+        <span class="ev mono">晋相腾出江州　lcq.event.jin_vacate_jiangzhou</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">633</span>
+      <span class="bd">
+        <span class="tx">趁晋国大旱收粮，把建康当成营销中心来做</span>
+        <span class="ev mono">晋旱收粮　lyl.event.sacred_jin_drought</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">732</span>
+      <span class="bd">
+        <span class="tx">把广源行在晋的旧账揭开（龙宸这条线）</span>
+        <span class="ev mono">广源行旧账　lyl.event.jin_guangyuan_ledger</span>
+        
+        
+        
+        
+        
+      </span></li><li class="p">
+      <span class="sq mono"></span>
+      <span class="bd">
+        <span class="tx">在晋廷取得一个名分（未来待扩，原文未明）</span>
+        <span class="ev mono">（无 event · 待扩）</span>
+        
+        
+        
+        <span class="badge pend">未来待扩</span>
+        
+      </span></li></ol></div><div class="ln">
+  <h3 class="serif">宋国<span class="tg">二级·国家</span></h3>
+  <div class="hint">贾师宪已经大举集结，江州要打起来了。</div>
+  <ol class="nodes"><li class="r">
+      <span class="sq mono">383</span>
+      <span class="bd">
+        <span class="tx">探查贾师宪攻江州、清岳党的军令</span>
+        <span class="ev mono">攻江州令　lcq.event.s10_01_jiangzhou_order</span>
+        <span class="badge anchor">锚</span>
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">435</span>
+      <span class="bd">
+        <span class="tx">看清江州水泥坚城，问清粮战怎么做</span>
+        <span class="ev mono">江州水泥坚城　lcq.event.s11_02_cement_fortress</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">495</span>
+      <span class="bd">
+        <span class="tx">接下屯田司员外郎，去把籍贯落进册</span>
+        <span class="ev mono">接下屯田司　lcq.event.tuntian_post</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">521</span>
+      <span class="bd">
+        <span class="tx">从宋军手里救下被擒的萧遥逸</span>
+        <span class="ev mono">救下萧遥逸　lcq.event.s12_10_rescue_xiao</span>
+        
+        
+        
+        
+        <div class="hooks"><div class="hk">↳ <b>萧遥逸</b>　秦翰生擒他。你救不救 <em>［插入］</em></div></div>
+      </span></li><li class="r">
+      <span class="sq mono">526</span>
+      <span class="bd">
+        <span class="tx">扛住江州围城，看宋军阵线怎么破</span>
+        <span class="ev mono">江州全面攻城　lcq.event.s12_11_siege_begins</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">528</span>
+      <span class="bd">
+        <span class="tx">城门火攻：烧掉宋军的冲车</span>
+        <span class="ev mono">城门火攻　lcq.event.s12_12_gate_fire</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">559</span>
+      <span class="bd">
+        <span class="tx">临安落脚，摸清这座城的暗线</span>
+        <span class="ev mono">瓦棚情报　lyl.event.lin_an_bridge_01_beat</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">575</span>
+      <span class="bd">
+        <span class="tx">问清贾师宪此刻要你推的是什么</span>
+        <span class="ev mono">问清纸钞　lyl.event.xiaoyingzhou_paper_plan</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">578</span>
+      <span class="bd">
+        <span class="tx">让纸钞能纳税，逼宋军退兵</span>
+        <span class="ev mono">纸钞纳税　lyl.event.xiaoyingzhou_paper_mint</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">604</span>
+      <span class="bd">
+        <span class="tx">问清太皇太后认不认你进宫</span>
+        <span class="ev mono">明庆寺旧识　lyl.event.xiaoyingzhou_blacksea_trap_06_beat</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">624</span>
+      <span class="bd">
+        <span class="tx">问清高俅此刻站在哪一边</span>
+        <span class="ev mono">高俅秘辛　lyl.event.taiquan_sacred_fruit_03</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">1130</span>
+      <span class="bd">
+        <span class="tx">在长安接下昭南索赔这档子事</span>
+        <span class="ev mono">昭南索赔　lyg.event.changgan_interlude_03_beat</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">1134</span>
+      <span class="bd">
+        <span class="tx">受礼部侍郎、通问计议使，用这颗印解宋困</span>
+        <span class="ev mono">通问计议使　lyg.event.song_tongwen</span>
+        
+        
+        
+        
+        
+      </span></li></ol></div><div class="ln">
+  <h3 class="serif">汉国<span class="tg">二级·国家</span></h3>
+  <div class="hint">汉廷的账从一桩旧案查起——找萧遥逸问清左武军是怎么覆灭的；或者直接去洛都。</div>
+  <ol class="nodes"><li class="r">
+      <span class="sq mono">232</span>
+      <span class="bd">
+        <span class="tx">跟着八骏，问清左武军怎么覆灭的</span>
+        <span class="ev mono">同门旧案　lcq.event.s07_01_old_case</span>
+        <span class="badge anchor">锚</span>
+        <span class="badge shared">双喂 星月湖／汉国</span>
+        
+        
+        <div class="hooks"><div class="hk">↳ <b>萧遥逸</b>　他向你痛陈左武全军覆没。**这是他不靠骨灰的登场拍** <em>［插入］</em></div></div>
+      </span></li><li class="r">
+      <span class="sq mono">400</span>
+      <span class="bd">
+        <span class="tx">与孟非卿复盘，查出有人切断补给、泄漏军机</span>
+        <span class="ev mono">左武军复盘　lcq.event.s10_04_left_army_review</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">772</span>
+      <span class="bd">
+        <span class="tx">追到汉廷朝会：粮草不继究竟是谁的责任</span>
+        <span class="ev mono">朝会粮草账　lyl.event.han_court_grain_blame</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">777</span>
+      <span class="bd">
+        <span class="tx">买下官身，在汉廷立住脚</span>
+        <span class="ev mono">云苍峰商议买官与铜矿　lyl.event.s05_01</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">779</span>
+      <span class="bd">
+        <span class="tx">扛住吕氏动用汉军的围杀</span>
+        <span class="ev mono">吕氏调动汉军围杀　lyl.event.s05_03</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">871</span>
+      <span class="bd">
+        <span class="tx">查出星月湖大营被诬成左武军覆灭的原因</span>
+        <span class="ev mono">星月湖被诬　lyl.event.han_xingyue_framed</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">885</span>
+      <span class="bd">
+        <span class="tx">用纸钞买田；看清限田令要把云家卷进削豪强</span>
+        <span class="ev mono">纸钞买田　lyl.event.han_limit_field</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">901</span>
+      <span class="bd">
+        <span class="tx">从传闻得知：天子已死，含光殿落到吕冀手里，刘建已起兵占了南宫</span>
+        <span class="ev mono">听闻汉宫真空　lyl.event.han_power_vacuum</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">902</span>
+      <span class="bd">
+        <span class="tx">决定是否出面拥立定陶王</span>
+        <span class="ev mono">是否拥立定陶王　lyl.event.han_sponsor_dingtao</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">940</span>
+      <span class="bd">
+        <span class="tx">董卓无符入京；刘建伏诛</span>
+        <span class="ev mono">董卓入京　lyl.event.han_palace_endgame_08_beat</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">952</span>
+      <span class="bd">
+        <span class="tx">到场或听任新朝承认定陶王</span>
+        <span class="ev mono">董卓拥立定陶王为帝　lyg.event.s01_05</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">985</span>
+      <span class="bd">
+        <span class="tx">吕冀赐死，见证吕雉亲裁诸吕</span>
+        <span class="ev mono">吕冀赐死　lyg.event.s01_09</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">1050</span>
+      <span class="bd">
+        <span class="tx">护住赵氏，促成新帝登基，自己以辅政定型</span>
+        <span class="ev mono">登基骤变　lyg.event.han_succession_08_beat</span>
+        
+        <span class="badge shared">双喂 主轴／汉国</span>
+        
+        
+        
+      </span></li></ol></div><div class="ln">
+  <h3 class="serif">唐国<span class="tg">二级·国家</span></h3>
+  <div class="hint">番僧在猎杀穿越者，而且近来在长安大肆扩张——唐国本来崇道，如今佛门要压过道门。</div>
+  <ol class="nodes"><li class="r">
+      <span class="sq mono">1061</span>
+      <span class="bd">
+        <span class="tx">听袁天罡说破：番僧在猎杀穿越者</span>
+        <span class="ev mono">番僧猎杀穿越者　lyg.event.changgan_fanseng_hunt</span>
+        <span class="badge anchor">锚</span>
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">1066</span>
+      <span class="bd">
+        <span class="tx">以汉使入长安，在宣平坊落脚</span>
+        <span class="ev mono">入住长安宣平坊宅院　lyg.event.s03_01</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">1089</span>
+      <span class="bd">
+        <span class="tx">看见十方丛林围了大雁塔</span>
+        <span class="ev mono">小紫与吕雉被困大雁塔　lyg.event.s03_08</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">1151</span>
+      <span class="bd">
+        <span class="tx">摸清十方丛林要刺汉使</span>
+        <span class="ev mono">十方丛林谋刺　lyg.event.changgan_interlude_06_beat</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">1226</span>
+      <span class="bd">
+        <span class="tx">扛住十方丛林围杀</span>
+        <span class="ev mono">真经震慑　lyg.event.buddhist_conspiracy_03_beat</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">1270</span>
+      <span class="bd">
+        <span class="tx">揭穿窥基伪诏，逼他弃佛入魔</span>
+        <span class="ev mono">窥基伪诏　lyg.event.buddhist_conspiracy_08_beat</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">1280</span>
+      <span class="bd">
+        <span class="tx">甘露变在大明宫爆发</span>
+        <span class="ev mono">甘露变爆发　lyg.event.buddhist_conspiracy_11_beat</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">1307</span>
+      <span class="bd">
+        <span class="tx">旁观李辅国审判；唐皇被弑</span>
+        <span class="ev mono">李辅国审判　lyg.event.ganlu_aftershock_05_beat</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">1348</span>
+      <span class="bd">
+        <span class="tx">与众人合力消灭窥基魔身</span>
+        <span class="ev mono">斩妖除魔　lyg.event.shituolin_endgame_05_beat</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">1370</span>
+      <span class="bd">
+        <span class="tx">奉诏讨逆</span>
+        <span class="ev mono">奉诏讨逆　lyg.event.shituolin_endgame_09_beat</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">1374</span>
+      <span class="bd">
+        <span class="tx">莲座前迎战李辅国</span>
+        <span class="ev mono">莲座交锋　lyg.event.shituolin_endgame_10_beat</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">1375</span>
+      <span class="bd">
+        <span class="tx">从浮屠塔的困局里脱身</span>
+        <span class="ev mono">浮屠塔困局　lyg.event.shituolin_endgame_11_beat</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">1378</span>
+      <span class="bd">
+        <span class="tx">联手斩断李辅国肉身</span>
+        <span class="ev mono">李辅国肉身败亡　lyg.event.shituolin_endgame_12_beat</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">1382</span>
+      <span class="bd">
+        <span class="tx">阻止太皇太后被夺舍</span>
+        <span class="ev mono">太皇太后返老　lyg.event.shituolin_endgame_13_beat</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">1396</span>
+      <span class="bd">
+        <span class="tx">接旨大都护、上柱国</span>
+        <span class="ev mono">受封大都护　lyg.event.shituolin_endgame_title_daduhu</span>
+        
+        
+        
+        
+        
+      </span></li><li class="r">
+      <span class="sq mono">1398</span>
+      <span class="bd">
+        <span class="tx">搜查宫中找五肉五甘露</span>
+        <span class="ev mono">驱魂线索　lyg.event.shituolin_endgame_14_beat</span>
+        
+        
+        
+        
+        
+      </span></li><li class="p">
+      <span class="sq mono"></span>
+      <span class="bd">
+        <span class="tx">换身后续：长安驱魂局</span>
+        <span class="ev mono">（无 event · 待扩）</span>
+        
+        
+        
+        <span class="badge pend">未来待扩</span>
+        
+      </span></li></ol></div>
+
+<h2>逐角色：每个人自己的线</h2>
+<p style="font-size:13px;color:var(--ink2);margin:0 0 14px">
+角色戏不必是一条真任务线，但**对同一个角色应当读得出先后**——下面按 <span class="mono">axisSeq</span> 排。
+挂在上级节点下的标「插入」，那一拍上级读它的另一面。</p>
+<div class="ln"><h3 class="serif">卓云君<span class="tg">三级·人物</span></h3>
+  <ol class="nodes"><li class="r">
+      <span class="sq mono">8</span>
+      <span class="bd"><span class="tx">半兽人围上来。她用烈火法术救下你和月霜</span>
+      <span class="ev mono">程宗扬与月霜初遇　lcq.event.s01_03</span>
+      
+      
+      <span class="badge shared">上级：主轴</span>
+      </span></li><li class="r">
+      <span class="sq mono">236</span>
+      <span class="bd"><span class="tx">玄真观：你斩杀吴行德，救下她</span>
+      <span class="ev mono">清远斩吴　lcq.event.s07_02_kill_wu</span>
+      
+      
+      
+      </span></li><li class="r">
+      <span class="sq mono">238</span>
+      <span class="bd"><span class="tx">小紫以毒戒制服重伤的她；细针秘术和残酷折磨让这位太乙教御彻底崩溃，沦为任人摆布的玩物</span>
+      <span class="ev mono">小紫现身　lcq.event.s07_03_xiaozi_appears</span>
+      
+      
+      
+      </span></li><li class="r">
+      <span class="sq mono">271</span>
+      <span class="bd"><span class="tx">你与小紫设局，迫使她放弃抵抗，同意以性奴身份赚钱赎身</span>
+      <span class="ev mono">横塘遇袭　lcq.event.s07_09_hengtang_ambush</span>
+      
+      
+      
+      </span></li><li class="r">
+      <span class="sq mono">482</span>
+      <span class="bd"><span class="tx">沐羽城庆典，你认出云中仙子就是她。小紫以更高权威再压一次，她为保命放弃抵抗，并指导徒儿侍奉</span>
+      <span class="ev mono">沐羽认出卓云君　lcq.event.s12_02_recognize_zhuo</span>
+      
+      
+      
+      </span></li><li class="r">
+      <span class="sq mono">629</span>
+      <span class="bd"><span class="tx">翠微园。她把 ZY5 的价拿到你面前兑现：你承诺对付现任掌教蔺采泉，并写下盘江程氏股份</span>
+      <span class="ev mono">承诺对付蔺采泉　lyl.event.sacred_against_lin</span>
+      <span class="badge ins">插入</span>
+      
+      <span class="badge shared">上级：太乙真宗</span>
+      </span></li><li class="w">
+      <span class="sq mono">?</span>
+      <span class="bd"><span class="tx">同夜你为她破处，确立人身依附。她坦白：失身是恩将仇报的报应；师叔被蔺采泉杀害；求你杀蔺，承诺终身为你的妓女</span>
+      <span class="ev mono">lcq.event.s07_zhuo_price</span>
+      
+      <span class="badge todo">待写</span>
+      
+      </span></li><li class="w">
+      <span class="sq mono">?</span>
+      <span class="bd"><span class="tx">你以「新任掌教」身份迫使她与申婉盈屈服，胁迫双修</span>
+      <span class="ev mono">lcq.event.s12_zhuo_forced</span>
+      
+      <span class="badge todo">待写</span>
+      
+      </span></li></ol></div><div class="ln"><h3 class="serif">谢艺<span class="tg">三级·人物</span></h3>
+  <ol class="nodes"><li class="r">
+      <span class="sq mono">63</span>
+      <span class="bd"><span class="tx">空村里，他指出尸体旁的鬼王峒血符。你第一次看见他本人动手</span>
+      <span class="ev mono">鬼王峒血符　lcq.event.s03b_snake_flower_bridge_03</span>
+      <span class="badge ins">插入</span>
+      
+      <span class="badge shared">上级：主轴</span>
+      </span></li><li class="r">
+      <span class="sq mono">111</span>
+      <span class="bd"><span class="tx">他独入地宫，杀光使者与武士，拷问碧宛下落无果后斩首</span>
+      <span class="ev mono">谢艺杀使　lcq.event.s04b_lingfei_baiyi_crisis_13</span>
+      
+      
+      
+      </span></li><li class="r">
+      <span class="sq mono">115</span>
+      <span class="bd"><span class="tx">你质问阿夕异常。他承认设计让你接触阿葭，并暗示灵飞镜会在南荒重逢</span>
+      <span class="ev mono">阿夕暗潮　lcq.event.s04b_lingfei_baiyi_crisis_15</span>
+      
+      
+      
+      </span></li><li class="r">
+      <span class="sq mono">121</span>
+      <span class="bd"><span class="tx">他换上现代休闲装，跟你谈玻璃，并吐出岳帅晕血、遗腹女</span>
+      <span class="ev mono">谢艺谈旧事　lcq.event.s04b_lingfei_baiyi_crisis_18</span>
+      
+      
+      <span class="badge shared">上级：主轴</span>
+      </span></li><li class="r">
+      <span class="sq mono">556</span>
+      <span class="bd"><span class="tx">`lyl.event.debut_ruan_sisters` 拜祭</span>
+      <span class="ev mono">抵达临安，拜祭谢艺　lyl.event.debut_ruan_sisters</span>
+      
+      
+      
+      </span></li><li class="w">
+      <span class="sq mono">?</span>
+      <span class="bd"><span class="tx">他讲清海湾旧战与朱狐冠，并希望你继承岳帅的使命。你保持警惕</span>
+      <span class="ev mono">lcq.event.s04b_xieyi_yue_mission</span>
+      
+      <span class="badge todo">待写</span>
+      
+      </span></li><li class="r">
+      <span class="sq mono">?</span>
+      <span class="bd"><span class="tx">龙神这一仗后，你赶到重伤的他身边。他把小紫和名下之物交给你，请你带往星月湖</span>
+      <span class="ev mono">lcq.event.s05b_slay_dragon</span>
+      <span class="badge ins">插入</span>
+      
+      
+      </span></li></ol></div><div class="ln"><h3 class="serif">乐明珠<span class="tg">三级·人物</span></h3>
+  <ol class="nodes"><li class="r">
+      <span class="sq mono">73</span>
+      <span class="bd"><span class="tx">她承认自己是光明观堂弟子，假扮新娘是为了刺杀鬼巫王</span>
+      <span class="ev mono">乐明珠身份揭露　lcq.event.s04_03</span>
+      
+      
+      
+      </span></li><li class="r">
+      <span class="sq mono">90</span>
+      <span class="bd"><span class="tx">她挺身战鸦人，经验不够被擒。你在鸦人营地救她</span>
+      <span class="ev mono">鸦人激战　lcq.event.s04b_lingfei_baiyi_crisis_02</span>
+      
+      
+      
+      </span></li><li class="r">
+      <span class="sq mono">175</span>
+      <span class="bd"><span class="tx">鬼王宫里她脱险现身，你与她重逢</span>
+      <span class="ev mono">突围与重逢　lcq.event.s05b_06_breakout_and_reunion</span>
+      
+      
+      
+      </span></li><li class="r">
+      <span class="sq mono">178</span>
+      <span class="bd"><span class="tx">小紫把她捉进深井。你追下去营救</span>
+      <span class="ev mono">小紫陷阱与深井　lcq.event.s05b_07_xiaozi_trap</span>
+      
+      
+      
+      </span></li><li class="w">
+      <span class="sq mono">?</span>
+      <span class="bd"><span class="tx">废弃海神殿：鲛人因朱狐冠发狂。你护住她，拔掉卡在她身上的鱼叉</span>
+      <span class="ev mono">lcq.event.s04b_lemingzhu_haishen</span>
+      
+      <span class="badge todo">待写</span>
+      
+      </span></li><li class="w">
+      <span class="sq mono">?</span>
+      <span class="bd"><span class="tx">花房：师姐潘金莲闯入，发现她与你、小紫在一起，强行把她带回师门</span>
+      <span class="ev mono">lcq.event.s07_pan_takes_pearl</span>
+      
+      <span class="badge todo">待写</span>
+      
+      </span></li><li class="w">
+      <span class="sq mono">?</span>
+      <span class="bd"><span class="tx">岸边重逢。她决定随你同船去晴州，参与筹建慈幼院</span>
+      <span class="ev mono">lcq.event.s10_lemingzhu_returns</span>
+      
+      <span class="badge todo">待写</span>
+      
+      </span></li></ol></div><div class="ln"><h3 class="serif">萧遥逸<span class="tg">三级·人物</span></h3>
+  <ol class="nodes"><li class="r">
+      <span class="sq mono">232</span>
+      <span class="bd"><span class="tx">他向你痛陈左武全军覆没。**这是他不靠骨灰的登场拍**</span>
+      <span class="ev mono">同门旧案　lcq.event.s07_01_old_case</span>
+      <span class="badge ins">插入</span>
+      
+      <span class="badge shared">上级：星月湖／汉国</span>
+      </span></li><li class="r">
+      <span class="sq mono">253</span>
+      <span class="bd"><span class="tx">舟侧两名水鬼。他警觉，与你联手击杀</span>
+      <span class="ev mono">水鬼暗杀　lcq.event.s07_06_water_assassins</span>
+      
+      
+      
+      </span></li><li class="r">
+      <span class="sq mono">278</span>
+      <span class="bd"><span class="tx">他告诉你：王大将军战死可能有内奸。线索指向拜火教</span>
+      <span class="ev mono">龙牙杀机　lcq.event.s07_10_dragon_fang</span>
+      
+      
+      
+      </span></li><li class="r">
+      <span class="sq mono">299</span>
+      <span class="bd"><span class="tx">苏妲己追杀你。他和小紫赶到，把人打退</span>
+      <span class="ev mono">追杀暂退　lcq.event.s08_06_pursuit_repelled</span>
+      
+      
+      
+      </span></li><li class="r">
+      <span class="sq mono">521</span>
+      <span class="bd"><span class="tx">秦翰生擒他。你救不救</span>
+      <span class="ev mono">救下萧遥逸　lcq.event.s12_10_rescue_xiao</span>
+      <span class="badge ins">插入</span>
+      
+      <span class="badge shared">上级：宋国</span>
+      </span></li><li class="r">
+      <span class="sq mono">?</span>
+      <span class="bd"><span class="tx">他代表星月湖宣布：全力支持你，向你开放所有资源</span>
+      <span class="ev mono">lcq.event.s07_xiao_opens</span>
+      <span class="badge ins">插入</span>
+      
+      
+      </span></li></ol></div><div class="ln"><h3 class="serif">杨玉环<span class="tg">三级·人物</span></h3>
+  <ol class="nodes"><li class="r">
+      <span class="sq mono">1068</span>
+      <span class="bd"><span class="tx">长安街：她驾车把人踩在地上训。对上眼</span>
+      <span class="ev mono">泼寒胡戏与杨玉环飙车斗殴　lyg.event.s03_03</span>
+      
+      
+      
+      </span></li><li class="r">
+      <span class="sq mono">1088</span>
+      <span class="bd"><span class="tx">紫云楼顶层：她出题（云如瑶、密码箱、手枪）。你答过关</span>
+      <span class="ev mono">程宗扬与杨玉环初次会面　lyg.event.s03_07</span>
+      
+      
+      
+      </span></li><li class="r">
+      <span class="sq mono">1144</span>
+      <span class="bd"><span class="tx">她当众称你姑父，看宗室什么脸。你接下或拆穿</span>
+      <span class="ev mono">宗室试探　lyg.event.changgan_interlude_05_beat</span>
+      
+      
+      
+      </span></li><li class="r">
+      <span class="sq mono">1203</span>
+      <span class="bd"><span class="tx">你向她打听离魂症。她想起岳帅提过类似的病，警告不能让外人知道</span>
+      <span class="ev mono">程宗扬与杨玉环讨论离魂症和小紫的病情　lyg.event.s06_01</span>
+      
+      
+      
+      </span></li><li class="r">
+      <span class="sq mono">?</span>
+      <span class="bd"><span class="tx">你留在现场，完成这块招牌接触卡</span>
+      <span class="ev mono">杨玉环·招牌登场　lyg.event.debut_yangyuhuan</span>
+      
+      
+      
+      </span></li></ol></div><div class="ln"><h3 class="serif">赵合德<span class="tg">三级·人物</span></h3>
+  <ol class="nodes"><li class="r">
+      <span class="sq mono">782</span>
+      <span class="bd"><span class="tx">徐璜传口谕：送她入宫封昭仪，应二鹅之象</span>
+      <span class="ev mono">天子下诏送赵合德入宫　lyl.event.s05_06</span>
+      
+      
+      
+      </span></li><li class="r">
+      <span class="sq mono">783</span>
+      <span class="bd"><span class="tx">乐津里人市：你用昭仪身份诱友通期去做替身</span>
+      <span class="ev mono">程宗扬寻访替代入宫者　lyl.event.s05_07</span>
+      
+      
+      
+      </span></li><li class="r">
+      <span class="sq mono">784</span>
+      <span class="bd"><span class="tx">你把方案说给她听。她同意，并问自己怎么办</span>
+      <span class="ev mono">程宗扬与赵合德商议替代入宫　lyl.event.s05_08</span>
+      
+      
+      
+      </span></li><li class="r">
+      <span class="sq mono">?</span>
+      <span class="bd"><span class="tx">玉佩逼她承认：皇后胞妹，上清观避祸</span>
+      <span class="ev mono">赵合德·招牌登场　lyl.event.debut_zhaohede</span>
+      
+      
+      
+      </span></li><li class="w">
+      <span class="sq mono">?</span>
+      <span class="bd"><span class="tx">天子暴毙。你扮内侍，把她和赵飞燕从昭阳宫送回长秋宫</span>
+      <span class="ev mono">lyl.event.han_escort_zhao</span>
+      
+      <span class="badge todo">待写</span>
+      
+      </span></li><li class="w">
+      <span class="sq mono">?</span>
+      <span class="bd"><span class="tx">山谷里你杀魏疾救下她。事后她同意做妾，约定关系</span>
+      <span class="ev mono">lyg.event.mijing_zhaohede_concubine</span>
+      
+      <span class="badge todo">待写</span>
+      
+      </span></li></ol></div><div class="ln"><h3 class="serif">凝羽<span class="tg">三级·人物</span></h3>
+  <ol class="nodes"><li class="r">
+      <span class="sq mono">61</span>
+      <span class="bd"><span class="tx">蛇彝人袭来。她斩杀来敌</span>
+      <span class="ev mono">蛇彝毒袭　lcq.event.s03b_snake_flower_bridge_01</span>
+      
+      
+      
+      </span></li><li class="r">
+      <span class="sq mono">83</span>
+      <span class="bd"><span class="tx">她因麻古成瘾痛苦。你向乐明珠求解毒</span>
+      <span class="ev mono">凝羽毒瘾发作　lcq.event.s04_06</span>
+      
+      
+      
+      </span></li><li class="r">
+      <span class="sq mono">107</span>
+      <span class="bd"><span class="tx">她从暗处刺穿鬼王峒使者的手掌</span>
+      <span class="ev mono">凝羽突袭　lcq.event.s04b_lingfei_baiyi_crisis_12</span>
+      
+      
+      
+      </span></li><li class="w">
+      <span class="sq mono">?</span>
+      <span class="bd"><span class="tx">她以肉体为诱，要求你用巫术与她合作除掉苏妲己，并说自己也会赴死。随后双修，你探明她体内阴寒之气来自西门庆把她当鼎炉调教</span>
+      <span class="ev mono">lcq.event.s03b_ningyu_regicide</span>
+      
+      <span class="badge todo">待写</span>
+      
+      </span></li></ol></div><div class="ln"><h3 class="serif">建议新增<span class="tg">三级·人物</span></h3>
+  <ol class="nodes"><li class="r">
+      <span class="sq mono">?</span>
+      <span class="bd"><span class="tx">seq 272–273 `第151章·花红`／`第152章·因果`</span>
+      <span class="ev mono">lcq.event.s07_zhuo_price</span>
+      
+      
+      
+      </span></li><li class="r">
+      <span class="sq mono">?</span>
+      <span class="bd"><span class="tx">seq 483 `第255章·伏威`</span>
+      <span class="ev mono">lcq.event.s12_zhuo_forced</span>
+      
+      
+      
+      </span></li><li class="r">
+      <span class="sq mono">?</span>
+      <span class="bd"><span class="tx">seq 128 `第76章·回忆`　← `s05_03`</span>
+      <span class="ev mono">lcq.event.s04b_xieyi_yue_mission</span>
+      
+      
+      
+      </span></li><li class="r">
+      <span class="sq mono">?</span>
+      <span class="bd"><span class="tx">seq 124／125　← `s05_01`＋`s05_02`</span>
+      <span class="ev mono">lcq.event.s04b_lemingzhu_haishen</span>
+      
+      
+      
+      </span></li><li class="r">
+      <span class="sq mono">?</span>
+      <span class="bd"><span class="tx">seq 228 `第126章·名士`</span>
+      <span class="ev mono">lcq.event.s07_pan_takes_pearl</span>
+      
+      
+      
+      </span></li><li class="r">
+      <span class="sq mono">?</span>
+      <span class="bd"><span class="tx">seq 386 `第212章·礼赠`</span>
+      <span class="ev mono">lcq.event.s10_lemingzhu_returns</span>
+      
+      
+      
+      </span></li><li class="r">
+      <span class="sq mono">?</span>
+      <span class="bd"><span class="tx">seq 52／53　← `s03_09`</span>
+      <span class="ev mono">lcq.event.s03b_ningyu_regicide</span>
+      
+      
+      
+      </span></li><li class="r">
+      <span class="sq mono">?</span>
+      <span class="bd"><span class="tx">seq 894　← `s06_01`</span>
+      <span class="ev mono">lyl.event.han_escort_zhao</span>
+      
+      
+      
+      </span></li><li class="r">
+      <span class="sq mono">?</span>
+      <span class="bd"><span class="tx">seq 998＋1000 `第619章·栖凤`</span>
+      <span class="ev mono">lyg.event.mijing_zhaohede_concubine</span>
+      
+      
+      
+      </span></li></ol></div>
 
 <h2>双喂：同一个 event 被几级同时引用</h2>
 <div class="box" style="padding-bottom:16px"><table>
@@ -122,12 +1906,12 @@ code{font-family:ui-monospace,Menlo,monospace;font-size:11.5px}
 <b>这些角色都要做</b>（用户裁定 2026-08-17）。「料不够」只决定<b>做多深</b>——
 一两个插入点还是一条线——<b>不决定做不做</b>。所以下面第二张表叫「待做」，不叫「不展开」。</p>
 <table><thead><tr><th>已展开</th><th style="text-align:right">插入点</th><th style="text-align:right">其中挂在上级</th></tr></thead><tbody>
-<tr><td class="serif" style="font-size:15px">卓云君</td><td class="mono" style="text-align:right">6</td><td class="mono" style="text-align:right">1</td></tr><tr><td class="serif" style="font-size:15px">谢艺</td><td class="mono" style="text-align:right">6</td><td class="mono" style="text-align:right">2</td></tr><tr><td class="serif" style="font-size:15px">乐明珠</td><td class="mono" style="text-align:right">4</td><td class="mono" style="text-align:right"></td></tr><tr><td class="serif" style="font-size:15px">萧遥逸</td><td class="mono" style="text-align:right">6</td><td class="mono" style="text-align:right">3</td></tr><tr><td class="serif" style="font-size:15px">杨玉环</td><td class="mono" style="text-align:right">5</td><td class="mono" style="text-align:right"></td></tr><tr><td class="serif" style="font-size:15px">赵合德</td><td class="mono" style="text-align:right">4</td><td class="mono" style="text-align:right"></td></tr><tr><td class="serif" style="font-size:15px">凝羽</td><td class="mono" style="text-align:right">3</td><td class="mono" style="text-align:right"></td></tr>
+<tr><td class="serif" style="font-size:15px">卓云君</td><td class="mono" style="text-align:right">8</td><td class="mono" style="text-align:right">1</td></tr><tr><td class="serif" style="font-size:15px">谢艺</td><td class="mono" style="text-align:right">7</td><td class="mono" style="text-align:right">2</td></tr><tr><td class="serif" style="font-size:15px">乐明珠</td><td class="mono" style="text-align:right">7</td><td class="mono" style="text-align:right"></td></tr><tr><td class="serif" style="font-size:15px">萧遥逸</td><td class="mono" style="text-align:right">6</td><td class="mono" style="text-align:right">3</td></tr><tr><td class="serif" style="font-size:15px">杨玉环</td><td class="mono" style="text-align:right">5</td><td class="mono" style="text-align:right"></td></tr><tr><td class="serif" style="font-size:15px">赵合德</td><td class="mono" style="text-align:right">6</td><td class="mono" style="text-align:right"></td></tr><tr><td class="serif" style="font-size:15px">凝羽</td><td class="mono" style="text-align:right">4</td><td class="mono" style="text-align:right"></td></tr><tr><td class="serif" style="font-size:15px">建议新增</td><td class="mono" style="text-align:right">9</td><td class="mono" style="text-align:right"></td></tr>
 </tbody></table>
 <table style="margin-top:18px"><thead><tr><th>待做</th><th style="text-align:right">事件层</th><th style="text-align:right">未认领</th><th>该做到什么程度</th></tr></thead><tbody>
 <tr><td>小紫</td><td class="mono" style="text-align:right">49</td><td class="mono" style="text-align:right">42</td><td style="color:var(--ink2)">**特例，不开线。** 主轴血脉／层三解锁门／遗孤名册。只在别人的线里出现</td></tr><tr><td>秦桧</td><td class="mono" style="text-align:right">20</td><td class="mono" style="text-align:right">19</td><td style="color:var(--ink2)">用户已点破：多是背景在场。`s07_qinhui_join` 是殇侯交付差遣，不是他向你开价</td></tr><tr><td>月霜</td><td class="mono" style="text-align:right">13</td><td class="mono" style="text-align:right">9</td><td style="color:var(--ink2)">开场寒毒／真阳是主轴第一夜；护月霜已被星月湖 `s11_03_protect_yueshuang`（第 9 个 ready/new 节点）认领。她没有另一张独立于血脉托付的价</td></tr><tr><td>武二郎</td><td class="mono" style="text-align:right">17</td><td class="mono" style="text-align:right">15</td><td style="color:var(--ink2)">加入三拍在隔离 `stage_03`；后续多为战斗在场。准嫂嫂写在潘金莲招牌上，不是他开口</td></tr><tr><td>潘金莲</td><td class="mono" style="text-align:right">15</td><td class="mono" style="text-align:right">12</td><td style="color:var(--ink2)">黑魔海 H13 大祭对手。本轮只当乐明珠线的师姐插入，不另开。验守宫砂／太泉伏击留在库存</td></tr><tr><td>赵飞燕</td><td class="mono" style="text-align:right">15</td><td class="mono" style="text-align:right">12</td><td style="color:var(--ink2)">主轴救治／输血 ＋ 汉国护赵氏。人物线会抢上级</td></tr><tr><td>吕雉</td><td class="mono" style="text-align:right">15</td><td class="mono" style="text-align:right">10</td><td style="color:var(--ink2)">汉国权力层。亲裁诸吕、入府已在汉／唐</td></tr><tr><td>云苍峰</td><td class="mono" style="text-align:right">14</td><td class="mono" style="text-align:right">8</td><td style="color:var(--ink2)">昭南商队入口，是势力不是人物价</td></tr><tr><td>苏荔</td><td class="mono" style="text-align:right">13</td><td class="mono" style="text-align:right">12</td><td style="color:var(--ink2)">花苗立场／归附，昭南已吃</td></tr><tr><td>贾文和</td><td class="mono" style="text-align:right">10</td><td class="mono" style="text-align:right">8</td><td style="color:var(--ink2)">董卓谋士／拥立／搅局，权力执行者</td></tr><tr><td>剑玉姬</td><td class="mono" style="text-align:right">10</td><td class="mono" style="text-align:right">5</td><td style="color:var(--ink2)">黑魔海已吃落子／杀局／真身／招揽回绝</td></tr><tr><td>祁远</td><td class="mono" style="text-align:right">9</td><td class="mono" style="text-align:right">6</td><td style="color:var(--ink2)">军火商说辞、落水、叙旧。同伴，无独立链</td></tr><tr><td>云丹琉</td><td class="mono" style="text-align:right">8</td><td class="mono" style="text-align:right">7</td><td style="color:var(--ink2)">招牌＋`s02_04` 婚事质问是她自己的口，后面吃不饱一条线。本轮不展开</td></tr><tr><td>白霓裳</td><td class="mono" style="text-align:right">8</td><td class="mono" style="text-align:right">5</td><td style="color:var(--ink2)">招牌晚，后续多在唐线群戏</td></tr><tr><td>孟非卿</td><td class="mono" style="text-align:right">8</td><td class="mono" style="text-align:right">4</td><td style="color:var(--ink2)">星月湖顶点在她许可接管产业。她是番号，不是人物线</td></tr><tr><td>殇侯</td><td class="mono" style="text-align:right">7</td><td class="mono" style="text-align:right">5</td><td style="color:var(--ink2)">黑魔海锚人。天命侯授名正典无拍，已标待扩</td></tr><tr><td>惊理</td><td class="mono" style="text-align:right">6</td><td class="mono" style="text-align:right">6</td><td style="color:var(--ink2)">刺客一拍，无后续要价</td></tr><tr><td>商乐轩／蔺采泉</td><td class="mono" style="text-align:right">&lt;6</td><td class="mono" style="text-align:right">—</td><td style="color:var(--ink2)">太乙对手／观望票，归二级线</td></tr><tr><td>尹馥兰／成光／齐羽仙／蛇夫人／泉玉姬／云如瑶</td><td class="mono" style="text-align:right">招牌有，链没有</td><td class="mono" style="text-align:right">—</td><td style="color:var(--ink2)">首次接触留着，本轮不展开</td></tr>
 </tbody></table></div>
 
 <h2>该看的地方</h2>
-<ul><li class="warn"><b>锚待补</b> 晋国 的锚事件 <code>lcq.event.palace_haunting_rumor</code> 还没写，暂用粗锚</li><li class="warn"><b>锚待补</b> 唐国 的锚事件 <code>lyg.event.changgan_fanseng_hunt</code> 还没写，暂用粗锚</li><li class="todo"><b>待写</b> 主轴：从白湖商馆的死局里脱身 → <code>lcq.event.baihu_shangguan_escape</code></li><li class="todo"><b>待写</b> 主轴：进鬼王峒，并当面辨认碧姬 → <code>lcq.event.enter_dong_recognize_biji</code></li><li class="todo"><b>待写</b> 主轴：触发冰冰，当场验明谁在超级用户名单上 → <code>lyg.event.mijing_superuser_roster</code></li><li class="todo"><b>待写</b> 太乙真宗：在紫溪被点名去龙池 → <code>lcq.event.zixi_intercept</code></li><li class="todo"><b>待写</b> 太乙真宗：听清蔺采泉与商乐轩在争掌教 → <code>lcq.event.yeying_seat_struggle</code></li><li class="todo"><b>待写</b> 太乙真宗：在翠微园承诺对付现任掌教 → <code>lyl.event.sacred_against_lin</code></li><li class="todo"><b>待写</b> 星月湖：在临安祭岳鹏举与谢艺的墓 → <code>lyl.event.lin_an_bridge_xieyi_tomb</code></li><li class="todo"><b>待写</b> 黑魔海／毒宗：与萧遥逸击掌：不与殇侯为敌 → <code>lcq.event.palm_oath_shanghou</code></li><li class="todo"><b>待写</b> 晋国：问清相府此刻站在哪一边 → <code>lcq.event.xiangfu_stance</code></li><li class="todo"><b>待写</b> 晋国：看清分赃：萧家江宁、云家盐业、你一无所得 → <code>lcq.event.spoils_split</code></li><li class="todo"><b>待写</b> 晋国：趁晋国大旱收粮，把建康当成营销中心来做 → <code>lyl.event.sacred_jin_drought</code></li><li class="todo"><b>待写</b> 晋国：把广源行在晋的旧账揭开（龙宸这条线） → <code>lyl.event.jin_guangyuan_ledger</code></li><li class="todo"><b>待写</b> 宋国：受礼部侍郎、通问计议使，用这颗印解宋困 → <code>lyg.event.song_tongwen</code></li><li class="todo"><b>待写</b> 汉国：追到汉廷朝会：粮草不继究竟是谁的责任 → <code>lyl.event.han_court_grain_blame</code></li><li class="todo"><b>待写</b> 汉国：查出星月湖大营被诬成左武军覆灭的原因 → <code>lyl.event.han_xingyue_framed</code></li><li class="todo"><b>待写</b> 汉国：用纸钞买田；看清限田令要把云家卷进削豪强 → <code>lyl.event.han_limit_field</code></li><li class="todo"><b>待写</b> 唐国：听袁天罡说破：番僧在猎杀穿越者 → <code>lyg.event.changgan_fanseng_hunt</code></li><li class="todo"><b>待写</b> 唐国：接旨大都护、上柱国 → <code>lyg.event.shituolin_endgame_title_daduhu</code></li></ul>
+<ul><li class="warn"><b>锚待补</b> 晋国 的锚事件 <code>lcq.event.palace_haunting_rumor</code> 还没写，暂用粗锚</li><li class="todo"><b>待写</b> 主轴：进鬼王峒，并当面辨认碧姬 → <code>lcq.event.enter_dong_recognize_biji</code></li></ul>
 </div>

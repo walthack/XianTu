@@ -9,7 +9,7 @@
     "description": "蛇彝袭击、鬼王峒屠村痕迹、云氏与商队合作、万古巨藤脱困及花苗送嫁，连接南荒初探与花苗/鬼王峒主轴。",
     "axisVersion": "rebuild-2026-06-28",
     "axisOrder": 2.5,
-    "axisSeqLo": 61,
+    "axisSeqLo": 54,
     "axisSeqHi": 67,
     "eventIdContract": "append-only-frozen",
     "prevStageId": "lcq.stage_03",
@@ -4041,6 +4041,7 @@
       "event.s03b_snake_flower_bridge_05.done": false,
       "event.s03b_snake_flower_bridge_06.done": false,
       "event.s03b_snake_flower_bridge_07.done": false,
+      "event.zixi_intercept.done": false,
       "chapter.lcq.stage_03b_snake_flower_bridge.snake.started": true,
       "chapter.lcq.stage_03b_snake_flower_bridge.snake.done": false,
       "chapter.lcq.stage_03b_snake_flower_bridge.flower.started": false,
@@ -5053,6 +5054,68 @@
                 "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
                 "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
               }
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.zixi_intercept",
+        "name": "紫溪拦截",
+        "description": "太乙真宗元行健等人在紫溪拦截白湖商馆船只，指名要程宗扬去龙池；程宗扬被迫出面，祁远被推落水。",
+        "axisId": "qingyu.35.2",
+        "axisAnchor": "六朝清羽记·#35·第33章·武请",
+        "axisSeq": 54,
+        "axisBeat": "在紫溪上，太乙真宗元行健等人拦截白湖商馆船只，指名要程宗扬去龙池，程宗扬避而不见后被迫出面，祁远被推落水中。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.zixi_intercept.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.ning_yu",
+          "liuchao.character.qi_yuan"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.bai_hu_shang_guan",
+          "liuchao.faction.tai_yi_zhen_zong"
+        ],
+        "objective": "在紫溪出面回应元行健拦船点名去龙池，并确认祁远落水",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "face_yuan_xingjian_at_zixi",
+              "label": "出面回应紫溪拦船点名",
+              "actionText": "元行健等人在紫溪拦住白湖商馆的船并点名要我去龙池后，我不再回避，到船头出面应下这句点名。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "zixi_named_to_longchi"
+            },
+            {
+              "id": "confirm_qiyuan_thrown_overboard",
+              "label": "确认祁远被推落水",
+              "actionText": "拦船冲突里祁远被推落水后，我当场确认他落水，并让船上的人把他捞回来。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已在紫溪出面应下点名去龙池，并确认祁远落水；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "zixi_named_to_longchi"
+              ]
             }
           ]
         }

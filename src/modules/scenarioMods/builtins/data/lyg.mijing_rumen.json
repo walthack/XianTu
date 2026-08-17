@@ -5618,7 +5618,8 @@
       "event.s02_07.done": false,
       "event.s02_08.done": false,
       "event.s02_09.done": false,
-      "event.yangwuhou_rumor.done": false
+      "event.yangwuhou_rumor.done": false,
+      "event.mijing_superuser_roster.done": false
     },
     "chapters": [
       {
@@ -6244,6 +6245,47 @@
                     }
                   ]
                 }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyg.event.mijing_superuser_roster",
+        "name": "冰冰验明超级用户",
+        "description": "程宗扬触龙珠触发AI冰冰、获超级管理员权限，冰冰当场验明在场众人身份、谁在超级用户名单上。",
+        "axisId": "yange.26.1",
+        "axisAnchor": "六朝燕歌行·#26·冰冰",
+        "axisSeq": 1010,
+        "axisBeat": "程宗扬触龙珠触发AI冰冰、获超级管理员权限，冰冰当场验明在场众人身份、谁在超级用户名单上。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.mijing_superuser_roster.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.xiao_zi"
+        ],
+        "objective": "触龙珠触发AI冰冰，获超级管理员权限，并让冰冰验明在场众人谁在超级用户名单上",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "touch_pearl_verify_superuser_roster",
+              "label": "触龙珠并听冰冰验明超级用户名单",
+              "actionText": "我伸手触龙珠，触发AI冰冰并取得超级管理员权限，当场听她验明在场众人谁在超级用户名单上。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已触龙珠触发AI冰冰、取得超级管理员权限，并听她验明在场众人谁在超级用户名单上；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
               }
             }
           ]

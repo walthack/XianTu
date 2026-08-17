@@ -5739,7 +5739,8 @@
       "chapter.lyg.changgan_interlude.court.done": false,
       "chapter.lyg.changgan_interlude.ambush.started": false,
       "chapter.lyg.changgan_interlude.ambush.done": false,
-      "event.debut_daiqisi.done": false
+      "event.debut_daiqisi.done": false,
+      "event.song_tongwen.done": false
     },
     "chapters": [
       {
@@ -6568,6 +6569,46 @@
                 "success": "你已完成“留在现场完成“佛堂善母”的首次接触”的当前结构化步骤；最终完成真值由本地引擎落账。",
                 "partial": "该展示动作不产生 partial；需要分歧时必须另建本地判定合同。",
                 "failure": "该展示动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyg.event.song_tongwen",
+        "name": "通问计议使",
+        "description": "程宗扬受礼部侍郎、通问计议使之职，用这颗印去解宋国之困。",
+        "axisId": "yange.97.1",
+        "axisAnchor": "六朝燕歌行·#97·密约",
+        "axisSeq": 1134,
+        "axisBeat": "程宗扬受礼部侍郎、通问计议使之职，用这颗印去解宋国之困。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.song_tongwen.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "objective": "受礼部侍郎、通问计议使之职，用这颗印去解宋国之困",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "accept_libu_tongwen_seal",
+              "label": "接下礼部侍郎、通问计议使之印",
+              "actionText": "我接下礼部侍郎、通问计议使之印，确认要用这颗印去解宋国之困。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已接下礼部侍郎、通问计议使之印，确认用这颗印去解宋国之困；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
               }
             }
           ]

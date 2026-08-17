@@ -324,7 +324,7 @@ export const MAIN_QUEST_NODES: MainQuestNode[] = [
   // 地点＝五原商馆。不作废成南荒路上的锚定拍。
   // 作废建议 id：`lcq.event.s03b_baihu_caravan_south`（那是按关改挂的旧写法）。
   // 出馆后不要再加「必须到蛇彝村」主干节点——朝前走就会到，回头也合法。
-  { stageId: 'lcq.stage_02', text: '从白湖商馆的死局里脱身', locationId: 'liuchao.location.baihu_shang_guan', status: 'new', eventId: 'lcq.event.baihu_shangguan_escape' },
+  { stageId: 'lcq.stage_02', text: '从白湖商馆的死局里脱身', locationId: 'liuchao.location.baihu_shang_guan', status: 'ready', eventId: 'lcq.event.baihu_shangguan_escape' },
   { stageId: 'lcq.stage_03b_snake_flower_bridge', text: '查清蛇彝村灭村的真凶，循血符指向鬼王峒', status: 'ready', eventId: 'lcq.event.s03b_snake_flower_bridge_03', bloodlineBranch: 'xiaozi' },
   // #6 隔离关 stage_05（原 s05_11 进峒 + s05_13 辨认碧姬）。可达关无同事实 → new。
   // 建议 id 挂 `lcq.stage_05b` 前缀（不放出隔离）。
@@ -362,7 +362,7 @@ export const MAIN_QUEST_NODES: MainQuestNode[] = [
   // 这一拍是**要求二对玩家可见的机制**——系统当场验明谁在名单上，而不是靠叙述告诉玩家谁算岳血。
   // ⚠ 实测：全库 396 条 event 搜「超级用户／超级管理员／冰冰／验证身份」**命中 0**，
   // 且 seq 1007–1012 整段六拍事件层空白。正典有、游戏没落地 → `new`，不是待扩。
-  { stageId: 'lyg.mijing_rumen', text: '触发冰冰，当场验明谁在超级用户名单上', status: 'new', eventId: 'lyg.event.mijing_superuser_roster' },
+  { stageId: 'lyg.mijing_rumen', text: '触发冰冰，当场验明谁在超级用户名单上', status: 'ready', eventId: 'lyg.event.mijing_superuser_roster' },
   // #18 与汉国二级线同锚 s08（促成登基）；「长秋宫」字面更近 s06，但护住赵氏／登基收束在大典拍。
   { stageId: 'lyg.han_succession', text: '护住赵氏一门，别让这支血脉在政变里断掉', status: 'ready', eventId: 'lyg.event.han_succession_08_beat', bloodlineBranch: 'zhao' },
   { stageId: 'lyg.han_succession', text: '在登基典仪上与赵飞燕行功，修为推到通幽境', status: 'ready', eventId: 'lyg.event.han_succession_09_beat', bloodlineBranch: 'zhao' },

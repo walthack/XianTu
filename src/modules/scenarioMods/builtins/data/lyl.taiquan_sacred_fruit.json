@@ -6252,6 +6252,127 @@
             }
           ]
         }
+      },
+      {
+        "id": "lyl.event.sacred_against_lin",
+        "name": "承诺对付蔺采泉",
+        "description": "程宗扬在翠微园向卓云君承诺对付现任掌教蔺采泉，并写下盘江程氏股份。",
+        "axisId": "yunlong.73.1",
+        "axisAnchor": "六朝云龙吟·#73·征服",
+        "axisSeq": 629,
+        "axisBeat": "程宗扬与卓云君在翠微园讨论，承诺对付蔺采泉并写下盘江程氏股份分配。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.sacred_against_lin.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.zhuo_yunjun"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.tai_yi_zhen_zong",
+          "liuchao.faction.pan_jiang_cheng"
+        ],
+        "objective": "在翠微园向卓云君承诺对付现任掌教蔺采泉，并写下盘江程氏股份",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "promise_zhuo_against_lin",
+              "label": "向卓云君承诺对付蔺采泉",
+              "actionText": "我在翠微园当着卓云君的面承诺：现任掌教蔺采泉，我来对付。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已向卓云君承诺对付现任掌教蔺采泉；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "sequence_step_1"
+            },
+            {
+              "id": "write_panjiang_cheng_shares",
+              "label": "写下盘江程氏股份",
+              "actionText": "我当场写下盘江程氏股份分配，把对卓云君的承诺落成纸面。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已在翠微园承诺对付蔺采泉，并写下盘江程氏股份；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "sequence_step_1"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyl.event.sacred_jin_drought",
+        "name": "晋旱收粮",
+        "description": "趁晋国大旱全力收粮，并把建康当成营销中心来做。",
+        "axisId": "yunlong.76.2",
+        "axisAnchor": "六朝云龙吟·#76·云涛",
+        "axisSeq": 633,
+        "axisBeat": "程宗扬与张少煌会面，得知晋国大旱及王茂弘意图，决定全力收购粮食，并把建康当成营销中心来做。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.sacred_jin_drought.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "relatedFactionIds": [
+          "lyg.faction.jin_state",
+          "liuchao.faction.pan_jiang_cheng"
+        ],
+        "objective": "趁晋国大旱收粮，把建康当成营销中心来做",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "hear_jin_drought_and_buy_grain",
+              "label": "得知晋旱并开手收粮",
+              "actionText": "我与张少煌对过晋国大旱和王茂弘的意图后，下令全力收购粮食。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已得知晋国大旱并开手收粮；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "sequence_step_1"
+            },
+            {
+              "id": "make_jiankang_grain_hub",
+              "label": "把建康做成营销中心",
+              "actionText": "我把这批旱粮的盘口放到建康，按营销中心来做，不把货散在别处。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已趁晋国大旱收粮，并把建康当成营销中心来做；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "sequence_step_1"
+              ]
+            }
+          ]
+        }
       }
     ],
     "worldSimulation": {
