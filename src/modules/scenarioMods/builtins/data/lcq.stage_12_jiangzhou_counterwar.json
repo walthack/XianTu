@@ -5325,6 +5325,188 @@
             }
           ]
         }
+      },
+      {
+        "id": "lcq.event.pengyi_takeover",
+        "name": "接管鹏翼社",
+        "description": "程宗扬获得孟非卿许可，全盘接管鹏翼社及星月湖大营暗中操控的产业。",
+        "axisId": "qingyu.285.1",
+        "axisAnchor": "六朝清羽记·#285·第280章·默契",
+        "axisSeq": 534,
+        "axisBeat": "程宗扬获得孟非卿许可，全盘接管鹏翼社及星月湖大营暗中操控的产业。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.pengyi_takeover.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.meng_fei_qing"
+        ],
+        "relatedFactionIds": [
+          "lyl.faction.pengyi",
+          "liuchao.faction.xing_yue_hu"
+        ],
+        "objective": "取得孟非卿许可，全盘接管鹏翼社及星月湖大营暗中操控的产业",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "ask_meng_pengyi_permission",
+              "label": "向孟非卿请准接管鹏翼社与暗产",
+              "actionText": "我当着孟非卿把鹏翼社和星月湖大营暗中操控的产业账册摊开，请她准我全盘接手。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "sequence_step_1"
+            },
+            {
+              "id": "take_over_pengyi_holdings",
+              "label": "收下鹏翼社印信与暗产账册",
+              "actionText": "我按孟非卿的许可收齐鹏翼社印信和星月湖暗产账册，把产业全盘接到自己名下。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "sequence_step_1"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.jin_vacate_jiangzhou",
+        "name": "晋相腾出江州",
+        "description": "晋相腾出江州，让宋军来剿星月湖。",
+        "axisId": "qingyu.262.1",
+        "axisAnchor": "六朝清羽记·#262·第257章·翻脸",
+        "axisSeq": 487,
+        "axisBeat": "晋国丞相与重臣定计，腾出江州让宋军剿灭岳武穆为首的星月湖余孽，不惜毁城以应对宋军入境。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.jin_vacate_jiangzhou.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "relatedFactionIds": [
+          "lyg.faction.jin_state",
+          "lyg.faction.song_state",
+          "liuchao.faction.xing_yue_hu"
+        ],
+        "objective": "确认晋相腾出江州，让宋军来剿星月湖",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "hear_jin_vacate_plan",
+              "label": "听清晋相腾出江州的定计",
+              "actionText": "我把晋相与重臣腾出江州、让宋军来剿星月湖的定计听清楚，确认他们已决定把江州让出来。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "sequence_step_1"
+            },
+            {
+              "id": "confirm_song_free_to_raid",
+              "label": "确认宋军可借空城来剿星月湖",
+              "actionText": "我当面坐实：晋相已腾出江州，宋军可以入境来剿星月湖，江州这边再不能指望晋军挡在前面。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "sequence_step_1"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.tuntian_post",
+        "name": "接下屯田司",
+        "description": "程宗扬接下屯田司员外郎的职位，把籍贯落进册。",
+        "axisId": "qingyu.266.2",
+        "axisAnchor": "六朝清羽记·#266·第261章·员外",
+        "axisSeq": 495,
+        "axisBeat": "滕甫赞赏程宗扬的义举，为其捐官屯田司员外郎；程宗扬接下职位，把籍贯落进册。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.tuntian_post.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.qin_hui"
+        ],
+        "relatedFactionIds": [
+          "lyg.faction.song_state"
+        ],
+        "objective": "接下屯田司员外郎，把籍贯落进册",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "accept_tuntian_yuanwailang",
+              "label": "接下屯田司员外郎的职帖",
+              "actionText": "我当着滕知州接下屯田司员外郎的职帖，不再推辞这笔捐官。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "sequence_step_1"
+            },
+            {
+              "id": "enter_native_place_on_roll",
+              "label": "把籍贯落进屯田司名册",
+              "actionText": "我按职帖把籍贯填进屯田司员外郎的名册，盖印入档。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "sequence_step_1"
+              ]
+            }
+          ]
+        }
       }
     ],
     "worldSimulation": {

@@ -3,7 +3,31 @@
 > 面向「新加入的 agent」。读完这一篇即可独立认领一个模块开工。
 > 当前认领：无。**进行中**：无。
 >
-> ## 最后更新：2026-08-17（**lcq.stage_05b 末尾补 5 条昭南高潮 event**）
+> ## 最后更新：2026-08-17（**lyl.xiaoyingzhou_blacksea_trap 末尾补 4 条 event**）
+>
+> 在 `lyl.xiaoyingzhou_blacksea_trap` 的 `scenario.events` append-only 写入 4 条：`xiaoyingzhou_lin_takes_seat`(581)／`xiaoyingzhou_cement_truce`(618，取 613/618 成交拍)／`xiaoyingzhou_paper_plan`(575)／`xiaoyingzhou_paper_mint`(578)。水泥拍超出原窗，`manifest.axisSeqHi` 567–615 放宽到 618。合同均为手写具体动作，未用 `advance_declared_objective`。未改既有 event、未改 chapters、未跑 `build:single`，未改 `src/`、`tests/`。`mod:validate` PASS（4 条未挂章节 warning）。
+>
+> ---
+>
+> ## 上一条：2026-08-17（**lyl.han_palace_endgame 末尾补 3 条汉宫前因 event**）
+>
+> 在 `lyl.han_palace_endgame` 的 `scenario.events` append-only 写入 3 条：`han_jianyu_refused`(898，原隔离关 `luoyang_coup` `s06_05` 改挂本关)／`han_power_vacuum`(901)／`han_sponsor_dingtao`(902)。`manifest.axisSeqLo` 收到 898 以容纳回绝拍；`axisSeqHi` 仍 947。合同均为手写具体动作，未用 `advance_declared_objective`。未改既有 event、未改 chapters、未跑 `build:single`，未改 `src/`、`tests/`。`mod:validate` PASS（3 条未挂章节 warning）。
+>
+> ---
+>
+> ## 上一条：2026-08-17（**lcq.stage_07 末尾补 4 条二级线 event**）
+>
+> 在 `lcq.stage_07_qingyuan_jiankang` 的 `scenario.events` append-only 写入 4 条：`wangzhe_letter`(237)／`xiao_opens_resources`(276)／`shanghou_revealed`(222，原隔离关 stage_06)／`palace_haunting_rumor`(241)。`manifest.axisSeqHi` 已是 278，未放宽。合同均为手写具体动作，未用 `advance_declared_objective`。未改既有 event、未改 chapters、未跑 `build:single`，未改 `src/`、`tests/`。`mod:validate` PASS（4 条未挂章节 warning）。
+>
+> ---
+>
+> ## 上一条：2026-08-17（**lcq.stage_12 末尾补 3 条江州余波 event**）
+>
+> 在 `lcq.stage_12_jiangzhou_counterwar` 的 `scenario.events` append-only 写入 3 条：`pengyi_takeover`(534)／`jin_vacate_jiangzhou`(487)／`tuntian_post`(495)。`manifest.axisSeqHi` 仍为 550，未放宽。合同均为手写双步动作，未用 `advance_declared_objective`。未跑 `build:single`，未改 `src/`、`tests/`。
+>
+> ---
+>
+> ## 上一条：2026-08-17（**lcq.stage_05b 末尾补 5 条昭南高潮 event**）
 >
 > 在 `lcq.stage_05b` 的 `scenario.events` append-only 写入 5 条：`biling_bay_stance`(139)／`huamiao_coop_boundary`(150)／`ghost_king_swallowed`(205)／`slay_dragon`(211)／`tribes_pledge`(218)。`manifest.axisSeqHi` 放宽到 218。谢艺只写重伤交代、不写死。
 >

@@ -4059,7 +4059,11 @@
       "chapter.lcq.stage_07_qingyuan_jiankang.hengtang.started": false,
       "chapter.lcq.stage_07_qingyuan_jiankang.hengtang.done": false,
       "event.s07_debut_qinhui.done": false,
-      "event.s07_qinhui_join.done": false
+      "event.s07_qinhui_join.done": false,
+      "event.wangzhe_letter.done": false,
+      "event.xiao_opens_resources.done": false,
+      "event.shanghou_revealed.done": false,
+      "event.palace_haunting_rumor.done": false
     },
     "chapters": [
       {
@@ -5341,6 +5345,199 @@
                 "success": "你已完成“确认秦桧归入麾下后的职责与约束”的当前结构化步骤；最终完成真值由本地引擎落账。",
                 "partial": "该展示动作不产生 partial；需要分歧时必须另建本地判定合同。",
                 "failure": "该展示动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.wangzhe_letter",
+        "name": "王哲密信",
+        "description": "程宗扬阅读王哲密信，受托清理太乙真宗门户。",
+        "axisId": "qingyu.133.4",
+        "axisAnchor": "六朝清羽记·#133·第131章·内斗",
+        "axisSeq": 237,
+        "axisBeat": "程宗扬阅读王哲密信，受托清理太乙真宗门户。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.wangzhe_letter.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.tai_yi_zhen_zong"
+        ],
+        "locationId": "liuchao.location.qingyuan_jin",
+        "objective": "阅读王哲密信，接下清理太乙真宗门户之托",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "read_wangzhe_secret_letter",
+              "label": "展开王哲密信并接下清理门户之托",
+              "actionText": "我展开王哲留下的密信读完，记下受托清理太乙真宗门户一事。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已读完王哲密信，并接下清理太乙真宗门户之托；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.xiao_opens_resources",
+        "name": "星月开库",
+        "description": "萧遥逸代表星月湖宣布全力支持程宗扬，并向其开放所有资源。",
+        "axisId": "qingyu.156.1",
+        "axisAnchor": "六朝清羽记·#156·第154章·布局",
+        "axisSeq": 276,
+        "axisBeat": "萧遥逸代表星月湖宣布，将全力支持程宗扬并向其开放所有资源。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.xiao_opens_resources.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.xiao_yao_yi"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.xing_yue_hu"
+        ],
+        "locationId": "liuchao.location.jiankang",
+        "objective": "听萧遥逸代表星月湖宣布全力支持并开放全部资源",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "accept_xingyue_open_resources",
+              "label": "当面听萧遥逸开放星月湖资源",
+              "actionText": "我当着萧遥逸的面，听他代表星月湖宣布全力支持我，并确认所有资源已向我开放。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已听清萧遥逸代表星月湖开放全部资源；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.shanghou_revealed",
+        "name": "殇侯现身",
+        "description": "程宗扬在叶媪引导下见到鸩羽殇侯，确认他就是朱老头；殇侯称他是天命之人。",
+        "axisId": "qingyu.122.2",
+        "axisAnchor": "六朝清羽记·#122·第120章·殇侯",
+        "axisSeq": 222,
+        "axisBeat": "程宗扬在叶媪引导下见到鸩羽殇侯，确认他就是朱老头；殇侯称他是天命之人。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.shanghou_revealed.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.shang_zhen_yu"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.x8b538653d9"
+        ],
+        "objective": "随叶媪见到鸩羽殇侯，确认他就是朱老头并听天命之说",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "follow_yeao_to_shanghou",
+              "label": "随叶媪去见鸩羽殇侯",
+              "actionText": "我随叶媪进入堂中，去见鸩羽殇侯。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "shanghou_audience_opened"
+            },
+            {
+              "id": "confirm_zhu_is_shanghou",
+              "label": "确认朱老头就是殇侯并听天命之说",
+              "actionText": "我当面确认朱老头就是鸩羽殇侯，并听他称我是天命之人。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已确认朱老头即殇侯，并听清天命之人之说；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "shanghou_audience_opened"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.palace_haunting_rumor",
+        "name": "宫禁闹鬼",
+        "description": "程宗扬用灵飞镜窥探宫城，撞见可疑大汉从假山钻出并被察觉，宫禁闹鬼的传闻传开。",
+        "axisId": "qingyu.135.2",
+        "axisAnchor": "六朝清羽记·#135·第133章·宫诡",
+        "axisSeq": 241,
+        "axisBeat": "程宗扬用灵飞镜窥探宫城，撞见可疑大汉从假山钻出并被察觉，宫禁闹鬼的传闻传开。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.palace_haunting_rumor.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "relatedFactionIds": [
+          "lyg.faction.jin_state"
+        ],
+        "locationId": "liuchao.location.jiankang",
+        "objective": "用灵飞镜窥探宫城，撞见假山大汉并记下宫禁闹鬼传闻",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "spy_palace_with_lingfei_mirror",
+              "label": "用灵飞镜窥宫并记下闹鬼传闻",
+              "actionText": "我用灵飞镜窥探宫城，撞见可疑大汉从假山钻出并被对方察觉；随后记下宫禁闹鬼的传闻已经传开。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已用灵飞镜撞见假山大汉，并记下宫禁闹鬼传闻；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
               }
             }
           ]

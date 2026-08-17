@@ -9,7 +9,7 @@
     "description": "吕冀重伤、吕巨君入宫、含光殿救人、秘境入口、董卓入京与秦桧斩刘建，完成云龙到燕歌前的汉宫收束。",
     "axisVersion": "rebuild-2026-06-28",
     "axisOrder": 5.5,
-    "axisSeqLo": 900,
+    "axisSeqLo": 898,
     "axisSeqHi": 947,
     "eventIdContract": "append-only-frozen",
     "prevStageId": "lyl.luoyang_coup",
@@ -5882,6 +5882,9 @@
       "event.han_palace_endgame_08.done": false,
       "event.han_palace_endgame_09.done": false,
       "event.han_palace_endgame_10.done": false,
+      "event.han_jianyu_refused.done": false,
+      "event.han_power_vacuum.done": false,
+      "event.han_sponsor_dingtao.done": false,
       "chapter.lyl.han_palace_endgame.palace.started": true,
       "chapter.lyl.han_palace_endgame.palace.done": false,
       "chapter.lyl.han_palace_endgame.endgame.started": false,
@@ -6679,6 +6682,238 @@
                 "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
                 "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
               }
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyl.event.han_jianyu_refused",
+        "name": "当面回绝剑玉姬",
+        "description": "剑玉姬以成光为条件换程宗扬支持刘建，蔡敬仲揭出刘建劣迹后，程宗扬当面回绝。",
+        "axisId": "yunlong.287.1",
+        "axisAnchor": "六朝云龙吟·#287·诱动",
+        "axisSeq": 898,
+        "axisBeat": "剑玉姬提出以成光为条件换程宗扬支持刘建，被蔡敬仲揭穿刘建劣迹后遭到拒绝。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.han_jianyu_refused.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.jian_yu_ji",
+          "liuchao.character.cai_jingzhong",
+          "lyl.character.liu_jian"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.hei_mo_hai",
+          "lyl.faction.liu_jian"
+        ],
+        "objective": "听完剑玉姬以成光换支持刘建的条件，并当面回绝",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "hear_chengguang_for_liujian",
+              "label": "听剑玉姬以成光换支持刘建",
+              "actionText": "我听剑玉姬把条件说完：她拿成光来换我出面支持刘建。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已听清她要以成光换你支持刘建；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "sequence_step_1"
+            },
+            {
+              "id": "hear_cai_expose_liujian",
+              "label": "听蔡敬仲揭出刘建劣迹",
+              "actionText": "我让蔡敬仲把刘建的劣迹当众说完，先把这桩交易的底揭开。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "蔡敬仲已揭出刘建劣迹；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "sequence_step_2",
+              "requiresPreparation": [
+                "sequence_step_1"
+              ]
+            },
+            {
+              "id": "refuse_jianyu_to_her_face",
+              "label": "当面回绝这桩交易",
+              "actionText": "蔡敬仲揭完刘建劣迹后，我当面回绝剑玉姬：不成交，也不支持刘建。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已当面回绝以成光换支持刘建的交易；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "sequence_step_2"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyl.event.han_power_vacuum",
+        "name": "听闻汉宫真空",
+        "description": "程宗扬从传闻得知天子已死、含光殿落到吕冀手里、刘建已起兵占了南宫。",
+        "axisId": "yunlong.289.2",
+        "axisAnchor": "六朝云龙吟·#289·斩使",
+        "axisSeq": 901,
+        "axisBeat": "程宗扬从传闻得知天子已死、含光殿落到吕冀手里、刘建已起兵占了南宫。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.han_power_vacuum.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.lv_ji",
+          "lyl.character.liu_jian"
+        ],
+        "relatedFactionIds": [
+          "lyl.faction.lyu_clan",
+          "lyl.faction.liu_jian",
+          "liuchao.faction.han_guo_chao_ting"
+        ],
+        "objective": "从传闻确认天子已死、含光殿落入吕冀之手、刘建已起兵占了南宫",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "hear_emperor_dead_rumor",
+              "label": "听清天子已死的丧讯",
+              "actionText": "我按街巷与宫门传来的丧讯核对：天子已经死了。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已从传闻确认天子已死；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "sequence_step_1"
+            },
+            {
+              "id": "confirm_hanguang_held_by_lvji",
+              "label": "确认含光殿落到吕冀手里",
+              "actionText": "我再核宫门换防：含光殿已经落到吕冀手里。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已确认含光殿落到吕冀手里；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "sequence_step_2",
+              "requiresPreparation": [
+                "sequence_step_1"
+              ]
+            },
+            {
+              "id": "confirm_liujian_took_nangong",
+              "label": "确认刘建已起兵占了南宫",
+              "actionText": "我把南宫易手的风声对死：刘建已经起兵，南宫在他手里。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已从传闻确认天子已死、含光殿落到吕冀手里、刘建已起兵占了南宫；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "sequence_step_2"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyl.event.han_sponsor_dingtao",
+        "name": "是否拥立定陶王",
+        "description": "程宗扬决定是否出面拥立定陶王。",
+        "axisId": "yunlong.289.3",
+        "axisAnchor": "六朝云龙吟·#289·斩使",
+        "axisSeq": 902,
+        "axisBeat": "程宗扬决定是否出面拥立定陶王。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.han_sponsor_dingtao.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.liu_xin"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.han_guo_chao_ting"
+        ],
+        "objective": "当面决定是否出面拥立定陶王",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "hear_dingtao_sponsorship_motion",
+              "label": "听清眼下要不要出面拥立定陶王",
+              "actionText": "我先听清这局：此刻有人要我出面拥立定陶王，也有人劝我按兵。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已听清是否出面拥立定陶王这件事；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "sequence_step_1"
+            },
+            {
+              "id": "sponsor_dingtao_in_person",
+              "label": "出面拥立定陶王",
+              "actionText": "我出面表态：这一局我拥立定陶王。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已出面拥立定陶王；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "sequence_step_1"
+              ]
+            },
+            {
+              "id": "withhold_dingtao_sponsorship",
+              "label": "按兵，不出面拥立",
+              "actionText": "我按兵不动，不当这局拥立定陶王的操盘手。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已决定不出面拥立定陶王；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "sequence_step_1"
+              ]
             }
           ]
         }

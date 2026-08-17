@@ -10,7 +10,7 @@
     "axisVersion": "rebuild-2026-06-28",
     "axisOrder": 2.5,
     "axisSeqLo": 567,
-    "axisSeqHi": 615,
+    "axisSeqHi": 618,
     "eventIdContract": "append-only-frozen",
     "prevStageId": "lyl.taiquan_expedition",
     "prevStageName": "六朝云龙吟·镖局",
@@ -5689,6 +5689,10 @@
       "event.xiaoyingzhou_blacksea_trap_08.done": false,
       "event.xiaoyingzhou_blacksea_trap_09.done": false,
       "event.xiaoyingzhou_blacksea_trap_10.done": false,
+      "event.xiaoyingzhou_lin_takes_seat.done": false,
+      "event.xiaoyingzhou_cement_truce.done": false,
+      "event.xiaoyingzhou_paper_plan.done": false,
+      "event.xiaoyingzhou_paper_mint.done": false,
       "chapter.lyl.xiaoyingzhou_blacksea_trap.linchong.started": true,
       "chapter.lyl.xiaoyingzhou_blacksea_trap.linchong.done": false,
       "chapter.lyl.xiaoyingzhou_blacksea_trap.trap.started": false,
@@ -6825,6 +6829,180 @@
               "timeCost": 1,
               "outcomeText": {
                 "success": "你已亲自执行“在保宁寺突围”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyl.event.xiaoyingzhou_lin_takes_seat",
+        "name": "蔺采泉继位",
+        "description": "蔺采泉在临安鹤林观宣布继承太乙真宗掌教，秋少君填补齐放鹤空缺出任教御。",
+        "axisId": "yunlong.30.1",
+        "axisAnchor": "六朝云龙吟·#30·掌教",
+        "axisSeq": 581,
+        "axisBeat": "蔺采泉在临安鹤林观宣布继承太乙真宗掌教，致力于六朝和平，秋少君填补齐放鹤空缺出任教御。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.xiaoyingzhou_lin_takes_seat.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.lin_cai_quan"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.tai_yi_zhen_zong"
+        ],
+        "objective": "到鹤林观看蔺采泉继位，并确认秋少君出任教御",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "witness_helinyuan_succession",
+              "label": "到鹤林观看蔺采泉继位",
+              "actionText": "我赶到临安鹤林观，当面听蔺采泉宣布继承太乙真宗掌教，并确认秋少君补上齐放鹤空缺、出任教御。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自到鹤林观看蔺采泉继位、秋少君出任教御；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyl.event.xiaoyingzhou_cement_truce",
+        "name": "水泥换休战",
+        "description": "程宗扬以晴州水泥五年代理权换黑魔海五年不踏入宋国。",
+        "axisId": "yunlong.67.1",
+        "axisAnchor": "六朝云龙吟·#67·交易",
+        "axisSeq": 618,
+        "axisBeat": "程宗扬与剑玉姬在丰乐楼谈生意，齐羽仙威胁李师师，剑玉姬以云如瑶下落稳住程宗扬；最终达成协议：黑魔海获晴州水泥五年代理权，承诺五年不踏入宋国。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.xiaoyingzhou_cement_truce.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.jian_yu_ji"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.hei_mo_hai"
+        ],
+        "objective": "用晴州水泥代理权换黑魔海五年不踏入宋国",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "trade_qingzhou_cement_for_truce",
+              "label": "用晴州水泥代理权换五年不入宋",
+              "actionText": "我在丰乐楼与剑玉姬谈妥：黑魔海拿晴州水泥五年代理权，五年内不得踏入宋国。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已用晴州水泥代理权换得黑魔海五年不踏入宋国；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyl.event.xiaoyingzhou_paper_plan",
+        "name": "问清纸钞",
+        "description": "当面问清贾师宪此刻要程宗扬推的是发行纸币。",
+        "axisId": "yunlong.22.1",
+        "axisAnchor": "六朝云龙吟·#22·轻佻",
+        "axisSeq": 575,
+        "axisBeat": "程宗扬在临安多宝阁与贾师宪会面，贾师宪提出发行纸币计划，程宗扬要求纸币用于支付赋税且发行数量须经认可。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.xiaoyingzhou_paper_plan.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "relatedFactionIds": [
+          "lyg.faction.song_state"
+        ],
+        "objective": "问清贾师宪此刻要你推的是什么",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "ask_jia_current_brief",
+              "label": "问清贾师宪此刻要你推什么",
+              "actionText": "我在临安多宝阁当面问贾师宪，此刻要我推的究竟是什么，听他把发行纸币的计划说清楚。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已问清贾师宪此刻要推的是发行纸币；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyl.event.xiaoyingzhou_paper_mint",
+        "name": "纸钞纳税",
+        "description": "让纸钞能纳税，以此逼宋军退兵。",
+        "axisId": "yunlong.27.1",
+        "axisAnchor": "六朝云龙吟·#27·金牌",
+        "axisSeq": 578,
+        "axisBeat": "程宗扬由童贯引导入宫觐见宋主，详述纸币发行计划，宋主同意纸币用于支付赋税并要求双方共同监制。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.xiaoyingzhou_paper_mint.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "relatedFactionIds": [
+          "lyg.faction.song_state"
+        ],
+        "objective": "让纸钞能纳税，以此逼宋军退兵",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "force_paper_tax_and_retreat",
+              "label": "让纸钞能纳税逼宋军退兵",
+              "actionText": "我入宫把纸钞能纳税谈成，用这件事逼宋军退兵。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已让纸钞能纳税，并以此逼宋军退兵；事件完成真值将由本地引擎落账。",
                 "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
                 "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
               }
