@@ -331,13 +331,13 @@ export const MAIN_QUEST_NODES: MainQuestNode[] = [
   // 血脉揭示（用户裁定 2026-08-16）：玩家得先**知道**某人是岳血，要求二对他才可见。
   // 三条候选各有揭示拍：月霜＝王哲托付（`s02_01`，已在主干）；小紫这条＝本拍。
   { stageId: 'lcq.stage_04b_lingfei_baiyi_crisis', text: '听谢艺说破：岳帅还有个遗腹女', status: 'ready', eventId: 'lcq.event.s04b_lingfei_baiyi_crisis_18', bloodlineBranch: 'xiaozi' },
-  { stageId: 'lcq.stage_05', text: '进鬼王峒，并当面辨认碧姬', locationId: 'liuchao.location.guiwangdong', status: 'new', eventId: 'lcq.event.s05b_enter_recognize_biji', bloodlineBranch: 'xiaozi' },
+  { stageId: 'lcq.stage_05', text: '进鬼王峒，并当面辨认碧姬', locationId: 'liuchao.location.guiwangdong', status: 'new', eventId: 'lcq.event.enter_dong_recognize_biji', bloodlineBranch: 'xiaozi' },
   { stageId: 'lcq.stage_05b', text: '向碧姬追问小紫的过往', status: 'ready', eventId: 'lcq.event.s05b_01_binu_reveals_xiaozi', bloodlineBranch: 'xiaozi' },
   // #8 文案压了两拍：临时协定 s05b_09 ＋ 奴隶倒戈 s05b_10；落倒戈拍（含小紫倒戈）。
   { stageId: 'lcq.stage_05b', text: '与小紫达成临时协定，在鬼王宫策动奴隶倒戈', status: 'ready', eventId: 'lcq.event.s05b_10_slave_revolt_and_phoenix_change', bloodlineBranch: 'xiaozi' },
   // #9 隔离关 stage_06（s06_03 谢艺托付 + s06_04 碧姬了断）。谢艺托付已由星月湖
   // 并进昭南杀龙 event——复用同一建议 id，不另开。建议挂 `lcq.stage_05b` 后缀。
-  { stageId: 'lcq.stage_06', text: '接下谢艺对小紫与星月湖的托付，追上小紫见证她与碧姬的了断', locationId: 'liuchao.location.gui_wang_gong', status: 'new', eventId: 'lcq.event.s05b_slay_dragon', bloodlineBranch: 'xiaozi' },
+  { stageId: 'lcq.stage_06', text: '接下谢艺对小紫与星月湖的托付，追上小紫见证她与碧姬的了断', locationId: 'liuchao.location.gui_wang_gong', status: 'new', eventId: 'lcq.event.slay_dragon', bloodlineBranch: 'xiaozi' },
   // 太泉段：现成剧情整条排进来（用户裁定 2026-08-16）。此前主轴只取了钥匙与居住区两拍，
   // 而这一段在事件层是完整的探索链——迷楼机关→取果→蚁穴→魔墟→古阵，共 8 条现成 event。
   { stageId: 'lyl.taiquan_sacred_fruit', text: '在云涛观迷楼里摸清那套机关', status: 'ready', eventId: 'lyl.event.taiquan_sacred_fruit_04' },

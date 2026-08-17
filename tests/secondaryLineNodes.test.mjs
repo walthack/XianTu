@@ -93,3 +93,29 @@ test('待新增节点都给了建议挂载关与建议 id，不冒充可走', as
   }
   assert.ok(total > 0, '若已无待新增节点，本断言需重写而不是删除');
 });
+
+test('新增 event 的建议 id 不带关卡前缀', async () => {
+  const { SECONDARY_LINES } = await loadTs('../src/modules/scenarioMods/secondaryLines.ts');
+  const { MAIN_QUEST_NODES } = await loadTs('../src/modules/scenarioMods/mainQuestAxis.ts');
+  // id 是键，不是索引（用户裁定 2026-08-17）。
+  //
+  // 关卡前缀（`s07_`／`s05b_`）把"这个 event 放在哪个文件里"写进了永久键，而那件事会变——
+  // 今天就改挂过多次，`s03b_baihu_caravan_south` 因此整个作废。
+  // 同理也不采用 `book.event.<线名>.<序号>`：**已有 6 条 event 被两条以上的链共用**
+  // （`slay_dragon` 同时喂主轴／星月湖／昭南），归属写进 id 就得对其余的撒谎；
+  // 而归属与顺序今天各变过 3 次以上。改名的代价已量过：925 处 `flags.event.<id>` 引用
+  // ＋ 37 关 append-only-frozen 契约 ＋ 所有现存存档。
+  //
+  // 故新 id 只写「发生了什么事」——那件事不变。归属、分组、排序留在节点表与 axisSeq 里。
+  // ⚠ 只约束**尚未落地的建议 id**：已存在的旧 id 是冻结契约，不改名。
+  const nodes = [
+    ...SECONDARY_LINES.flatMap(l => l.nodes.map(n => [l.name, n])),
+    ...MAIN_QUEST_NODES.map(n => ['主轴', n]),
+  ];
+  const bad = [];
+  for (const [line, n] of nodes) {
+    if (n.status !== 'new' || !n.eventId) continue;
+    if (/\.event\.s\d/.test(n.eventId)) bad.push(`${line}「${n.text}」→ ${n.eventId}`);
+  }
+  assert.deepEqual(bad, [], '建议 id 带了关卡前缀——关卡只是文件落点，不该写进永久键');
+});
