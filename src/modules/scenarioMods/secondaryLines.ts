@@ -310,14 +310,16 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       { text: '追查东瀛女忍者行踪', status: 'ready', stageId: 'lcq.stage_10_jiangzhou_shadow_war', eventId: 'lcq.event.s10_03_ninja_trace' },
       { text: '先发制人捣江州巢穴，拿到阴阳鱼', status: 'ready', stageId: 'lcq.stage_10_jiangzhou_shadow_war', eventId: 'lcq.event.s10_07_preemptive_strike' },
       // 高潮战不只一拍：它的展开在事件层现成躺着，先前每场仗只挑了中间那一条代表拍。
+      { text: '巢穴逆转：与黑魔海在洞穴激战，鱼无夷毒网偷袭', status: 'ready', stageId: 'lcq.stage_10_jiangzhou_shadow_war', eventId: 'lcq.event.s10_08_lair_reversal' },
       { text: '擒获龙宸刺客惊理', status: 'ready', stageId: 'lcq.stage_12_jiangzhou_counterwar', eventId: 'lcq.event.s12_15_capture_jingli' },
       { text: '殇侯施尸毒，破开宋军阵线', status: 'ready', stageId: 'lcq.stage_12_jiangzhou_counterwar', eventId: 'lcq.event.s12_16_corpse_poison' },
       { text: '以人情和经济筹码，请殇侯留守江州', status: 'ready', stageId: 'lcq.stage_12_jiangzhou_counterwar', eventId: 'lcq.event.s12_17_shanghou_stays' },
       { text: '江州铁傀儡场外拍', status: 'ready', stageId: 'lyl.lin_an_bridge', eventId: 'lyl.event.blacksea_iron_puppet' },
       { text: '野猪林乱战', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_blacksea_trap_04_beat' },
+      { text: '静善为袈裟符文夜袭，被炸弹击退', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_blacksea_trap_05_beat' },
+      // ⏳ 扩写部分，本阶段不再细化（用户裁定 2026-08-16）：正典无此拍，只标未来待扩。
       { text: '在太医局查医档，看出剑玉姬已经落子', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_blacksea_trap_07_beat' },
       { text: '小瀛洲杀局', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_blacksea_trap_08_beat' },
-      // ⏳ 扩写部分，本阶段不再细化（用户裁定 2026-08-16）：正典无此拍，只标未来待扩。
       { text: '在保宁寺放生池逼出剑玉姬真身', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_blacksea_trap_09_beat' },
       { text: '八臂收束：从保宁寺突围', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_blacksea_trap_10_beat' },
       { text: '战后在翠微园收拾伤员与残局', status: 'ready', stageId: 'lyl.taiquan_sacred_fruit', eventId: 'lyl.event.taiquan_sacred_fruit_01' },
@@ -384,6 +386,7 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       { text: '跟云苍峰的商队进南荒', status: 'ready', stageId: 'lcq.stage_03b_snake_flower_bridge', eventId: 'lcq.event.s03b_snake_flower_bridge_04' },
       { text: '问清花苗此刻站在哪一边', status: 'ready', stageId: 'lcq.stage_03b_snake_flower_bridge', eventId: 'lcq.event.s03b_snake_flower_bridge_07' },
       { text: '问清白夷此刻站在哪一边', status: 'ready', stageId: 'lcq.stage_04', eventId: 'lcq.event.s04_07' },
+      { text: '苏妲己水镜传讯——雇主并没有把你忘了', status: 'ready', stageId: 'lcq.stage_04b_lingfei_baiyi_crisis', eventId: 'lcq.event.s04b_lingfei_baiyi_crisis_07' },
       { text: '记录黑舌疑点并回应小紫登场', status: 'ready', stageId: 'lcq.stage_04b_lingfei_baiyi_crisis', eventId: 'lcq.event.xiaozi_first_appears' },
       { text: '海神殿抵御鲛人', status: 'ready', stageId: 'lcq.stage_04b_lingfei_baiyi_crisis', eventId: 'lcq.event.haishen_hall_merfolk' },
       { text: '拔除鱼叉稳定乐明珠伤势', status: 'ready', stageId: 'lcq.stage_04b_lingfei_baiyi_crisis', eventId: 'lcq.event.pull_harpoon_lemingzhu' },
@@ -437,16 +440,17 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       { text: '进建康，夜探神龙殿，看清晋帝已被架空', status: 'ready', stageId: 'lcq.stage_07_qingyuan_jiankang', eventId: 'lcq.event.s07_07_dragon_hall' },
       // J2 并进 s08_03_beifu_rescue
       { text: '鹰愁峪入瓮，等北府来解围', status: 'ready', stageId: 'lcq.stage_08_jiankang_coup', eventId: 'lcq.event.s08_01_eagle_valley' },
+      { text: '北府兵解围：易彪伪装禁军全歼州府兵', status: 'ready', stageId: 'lcq.stage_08_jiankang_coup', eventId: 'lcq.event.s08_03_beifu_rescue' },
       { text: '经脉既复，以珊瑚匕首逼退苏妲己', status: 'ready', stageId: 'lcq.stage_08_jiankang_coup', eventId: 'lcq.event.s08_05_breakthrough' },
       { text: '在玄武湖把晋帝、太后抢回来', status: 'ready', stageId: 'lcq.stage_08_jiankang_coup', eventId: 'lcq.event.s08_10_xuanwu_rescue' },
       { text: '看清分赃：萧家江宁、云家盐业、你一无所得', status: 'ready', stageId: 'lcq.stage_09_trade_and_escape', eventId: 'lcq.event.spoils_split' },
       { text: '问清北府此刻听谁的', status: 'ready', stageId: 'lcq.stage_09_trade_and_escape', eventId: 'lcq.event.s09_01_eight_steeds_leave' },
       { text: '问清相府此刻站在哪一边', status: 'ready', stageId: 'lcq.stage_09_trade_and_escape', eventId: 'lcq.event.xiangfu_stance' },
-      { text: '听说晋相腾出江州，让宋军来剿星月湖', status: 'ready', stageId: 'lcq.stage_12_jiangzhou_counterwar', eventId: 'lcq.event.jin_vacate_jiangzhou' },
       // J9 前半已有 s12_14_chenxing_appears／s12_15_capture_jingli；后半需新增
-      { text: '趁晋国大旱收粮，把建康当成营销中心来做', status: 'ready', stageId: 'lyl.taiquan_sacred_fruit', eventId: 'lyl.event.sacred_jin_drought' },
+      { text: '听说晋相腾出江州，让宋军来剿星月湖', status: 'ready', stageId: 'lcq.stage_12_jiangzhou_counterwar', eventId: 'lcq.event.jin_vacate_jiangzhou' },
       // 顶点占位：原文未明，称号待定（seq 334「程宗扬无所得」）
       // ⏳ 扩写部分，本阶段不再细化（用户裁定 2026-08-16）：正典无此拍，只标未来待扩。
+      { text: '趁晋国大旱收粮，把建康当成营销中心来做', status: 'ready', stageId: 'lyl.taiquan_sacred_fruit', eventId: 'lyl.event.sacred_jin_drought' },
       { text: '把广源行在晋的旧账揭开（龙宸这条线）', status: 'ready', stageId: 'lyl.taiquan_afterfall', eventId: 'lyl.event.jin_guangyuan_ledger' },
       { text: '押运云氏金铢至伊水', status: 'ready', stageId: 'lyl.luoyang_cloud_secret', eventId: 'lyl.event.s05_09' },
       { text: '在晋廷取得一个名分（未来待扩，原文未明）', status: 'pending' },
@@ -509,6 +513,7 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       { text: '途中遇袭', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_blacksea_trap_01_beat' },
       { text: '问清贾师宪此刻要你推的是什么', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_paper_plan' },
       { text: '让纸钞能纳税，逼宋军退兵', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_paper_mint' },
+      { text: '林冲刺配江州，要你去救', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_blacksea_trap_03_beat' },
       { text: '问清太皇太后认不认你进宫', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_blacksea_trap_06_beat' },
       { text: '问清高俅此刻站在哪一边', status: 'ready', stageId: 'lyl.taiquan_sacred_fruit', eventId: 'lyl.event.taiquan_sacred_fruit_03' },
       { text: '在长安接下昭南索赔这档子事', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.changgan_interlude_03_beat' },
@@ -554,11 +559,12 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       { text: '决定是否出面拥立定陶王', status: 'ready', stageId: 'lyl.han_palace_endgame', eventId: 'lyl.event.han_sponsor_dingtao' },
       { text: '赶往平朔殿阻止吕巨君', status: 'ready', stageId: 'lyl.han_palace_endgame', eventId: 'lyl.event.han_palace_endgame_05_beat' },
       { text: '把定陶王从府里救出来', status: 'ready', stageId: 'lyl.han_palace_endgame', eventId: 'lyl.event.han_palace_endgame_06_beat' },
-      { text: '董卓无符入京；刘建伏诛', status: 'ready', stageId: 'lyl.han_palace_endgame', eventId: 'lyl.event.han_palace_endgame_08_beat' },
+      { text: '董卓无符入京', status: 'ready', stageId: 'lyl.han_palace_endgame', eventId: 'lyl.event.han_palace_endgame_08_beat' },
       { text: '贾文和劫持定陶王', status: 'ready', stageId: 'lyg.dingtao_beijing', eventId: 'lyg.event.s01_02' },
       { text: '董卓挟持定陶王出洛都', status: 'ready', stageId: 'lyg.dingtao_beijing', eventId: 'lyg.event.s01_03' },
       { text: '霍子孟见吕雉', status: 'ready', stageId: 'lyg.dingtao_beijing', eventId: 'lyg.event.s01_04' },
       { text: '到场或听任新朝承认定陶王', status: 'ready', stageId: 'lyg.dingtao_beijing', eventId: 'lyg.event.s01_05' },
+      { text: '郭解临终把定陶王托付给你', status: 'ready', stageId: 'lyg.dingtao_beijing', eventId: 'lyg.event.s01_06' },
       { text: '吕冀赐死，见证吕雉亲裁诸吕', status: 'ready', stageId: 'lyg.dingtao_beijing', eventId: 'lyg.event.s01_09' },
       { text: '郭解送葬', status: 'ready', stageId: 'lyg.mijing_rumen', eventId: 'lyg.event.s02_01' },
       { text: '探视金蜜镝，以成亲相胁逼他不干涉帝统', status: 'ready', stageId: 'lyg.mijing_rumen', eventId: 'lyg.event.s02_07' },
@@ -603,26 +609,27 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       { text: '以汉使入长安，在宣平坊落脚', status: 'ready', stageId: 'lyg.changgan_begins', eventId: 'lyg.event.s03_01' },
       { text: '看见十方丛林围了大雁塔', status: 'ready', stageId: 'lyg.changgan_begins', eventId: 'lyg.event.s03_08' },
       // T4 并进 buddhist_conspiracy_04／_06（火遁／佛咒，过程）
-      { text: '弄清北司和佛门各自在查什么', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.north_bureau_buddhist_moves' },
+      { text: '小紫炸开禁制，你以汉使身份把她救走', status: 'ready', stageId: 'lyg.changgan_begins', eventId: 'lyg.event.s03_09' },
       // T5 并进 _09_beat／_10_beat
+      { text: '弄清北司和佛门各自在查什么', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.north_bureau_buddhist_moves' },
       { text: '潜进青龙寺，看清释特昧普是怎么扩张的', status: 'ready', stageId: 'lyg.changgan_begins', eventId: 'lyg.event.qinglongsi_te_master' },
-      { text: '把鸿胪寺的礼遇和朝会资格拿回来', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.honglusi_amends' },
       // T7 并进 ganlu_aftershock_07_beat
+      { text: '把鸿胪寺的礼遇和朝会资格拿回来', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.honglusi_amends' },
       { text: '看清红莲演法与唐皇敕令之间的张力', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.cien_red_lotus' },
-      { text: '在元正朝会上验明秦使的说辞', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.yuanzheng_globe' },
       // T9 并进 shituolin_endgame_10_beat
       // 高潮战不只一拍：它的展开在事件层现成躺着，先前每场仗只挑了中间那一条代表拍。
+      { text: '在元正朝会上验明秦使的说辞', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.yuanzheng_globe' },
       { text: '查宣平坊那桩宦官命案，别急着定谁是幕后', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.xuanping_eunuch_murder' },
       { text: '摸清废弃兴庆宫，标出地下入口', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.survey_xingqing_palace' },
       { text: '把太子误伤这件事压下去', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.prince_injury_control' },
-      { text: '在水香楼布好诱捕', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.shuixiang_lure_setup' },
       // T11：objective 是阻止夺舍；axisBeat 写明当场没拦住
-      { text: '识破毒方刺客，封住他的藏身范围', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.spot_poison_assassin' },
+      { text: '在水香楼布好诱捕', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.shuixiang_lure_setup' },
       // 序按 axisSeq：搜查宫中 1382 在受封 1396 之前，先前顶点排在了它前面。
       // 搜查宫中那一拍是原著段与续写第二幕的咬合点，但仍早于受封，顶点收尾。
+      { text: '识破毒方刺客，封住他的藏身范围', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.spot_poison_assassin' },
       { text: '池畔混战里把飞鸟萤子擒下', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.poolside_capture' },
-      { text: '炸开摩尼寺，救出被押的女师', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.blast_moni_temple' },
       // T14 用户裁定（2026-08-16）：没剧本，先留空，不要自行续写
+      { text: '炸开摩尼寺，救出被押的女师', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.blast_moni_temple' },
       { text: '听信永讲清蕃密的底细，再决定怎么应对', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.xinyong_reveals_fanmi' },
       { text: '从飞鸟萤子口中问出东西', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.interrogate_feiniao_yingzi' },
       { text: '摸清十方丛林要刺汉使', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.changgan_interlude_06_beat' },
@@ -635,8 +642,9 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       { text: '扛住十方丛林围杀', status: 'ready', stageId: 'lyg.buddhist_conspiracy', eventId: 'lyg.event.buddhist_conspiracy_03_beat' },
       { text: '揭穿窥基伪诏，逼他弃佛入魔', status: 'ready', stageId: 'lyg.buddhist_conspiracy', eventId: 'lyg.event.buddhist_conspiracy_08_beat' },
       { text: '甘露变在大明宫爆发', status: 'ready', stageId: 'lyg.buddhist_conspiracy', eventId: 'lyg.event.buddhist_conspiracy_11_beat' },
-      { text: '旁观李辅国审判；唐皇被弑', status: 'ready', stageId: 'lyg.ganlu_aftershock', eventId: 'lyg.event.ganlu_aftershock_05_beat' },
+      { text: '旁观李辅国审判宦官', status: 'ready', stageId: 'lyg.ganlu_aftershock', eventId: 'lyg.event.ganlu_aftershock_05_beat' },
       { text: '思考贾文和杀李昂的建议', status: 'ready', stageId: 'lyg.ganlu_aftershock', eventId: 'lyg.event.ganlu_aftershock_06_beat' },
+      { text: '鱼弘志弑杀唐皇李昂', status: 'ready', stageId: 'lyg.ganlu_aftershock', eventId: 'lyg.event.ganlu_aftershock_07_beat' },
       { text: '探听李辅国重分宦官职权与继位人选', status: 'ready', stageId: 'lyg.shituolin_endgame', eventId: 'lyg.event.shituolin_endgame_01_beat' },
       { text: '目睹独柳树刑场：甘露变后的清算', status: 'ready', stageId: 'lyg.shituolin_endgame', eventId: 'lyg.event.shituolin_endgame_02_beat' },
       { text: '与众人合力消灭窥基魔身', status: 'ready', stageId: 'lyg.shituolin_endgame', eventId: 'lyg.event.shituolin_endgame_05_beat' },
