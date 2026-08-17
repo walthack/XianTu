@@ -81,7 +81,7 @@ if (fs.existsSync(path.join(ROOT, CHARDOC))) {
     const h = line.match(/^## \d+\.\s*(\S+)/);
     if (h && !/^(口径|17|选谁)/.test(h[1])) { cur = { name: h[1], hooks: [] }; chars.push(cur); continue; }
     if (!cur || !line.startsWith('|')) continue;
-    const ids = [...line.matchAll(/`((?:lcq|lyl|lyg)\.event\.[a-zA-Z0-9_]+)`/g)].map(x => x[1]);
+    const ids = [...line.matchAll(/`((?:lcq|lyl|lyg|liuchao)\.event\.[a-zA-Z0-9_]+)`/g)].map(x => x[1]);
     if (!ids.length) continue;
     const cells = line.replace(/^\||\|$/g, '').split('|').map(x => x.trim());
     // 表格形如 | # | 挂在 | 这一拍（玩家可见） | 标 |
@@ -112,6 +112,15 @@ for (const t of tiers) {
     if (prev && n.seq < prev.seq) regressions.push({ line: t.name, from: prev, to: { i: i + 1, ...n } });
     prev = { i: i + 1, ...n };
   });
+}
+
+// §11 回填表用的是另一种表格形态（不在 `## N. 人名` 小节里），上面的分节解析读不到。
+// 那批同样是人物挂点，漏了会让"真孤儿"虚高 35 条——本轮实测就栽在这里。
+// 故再全文扫一遍：文档里出现过的 event id 一律算已挂点。
+const docHooked = new Set();
+if (fs.existsSync(path.join(ROOT, CHARDOC))) {
+  const raw = fs.readFileSync(path.join(ROOT, CHARDOC), 'utf8');
+  for (const m of raw.matchAll(/`((?:lcq|lyl|lyg|liuchao)\.event\.[a-zA-Z0-9_]+)`/g)) docHooked.add(m[1]);
 }
 
 const charHooks = new Map();
