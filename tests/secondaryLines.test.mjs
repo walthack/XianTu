@@ -6,11 +6,13 @@ import { loadTs } from './loadTs.mjs';
 // 二级线入口锚：国家／地区线锚地点，宗派线锚人（用户裁定 2026-08-16）。
 // 只验"接得到吗"，不验"加入了没有"——后者不归本模块。
 
-// 规则：国家／地区线锚地点，宗派线锚人。
-// 破例只有昭南一条——它**没有**地点锚（南荒没有可投的朝廷，麟趾／昭南城事件层从未抵达），
-// 正典里进南荒必须有商队（冰蛊逼迫南行、与云苍峰商队同行），故锚在带路的人身上。
-// 破例写成白名单而不是放松规则：多一条破例就得改这里，改不动就说明该重想。
-const ANCHOR_RULE_EXEMPT_NATIONS = new Set(['zhaonan']);
+// 规则：国家／地区线锚地点，宗派线锚人。破例写成白名单而不是放松规则——
+// 多一条破例就得改这里，改不动就说明该重想。
+// 昭南原本破例用人物锚，理由是「南荒没有可投的朝廷，只有带你进去的人」。
+// Helgen 切法（9ac33d8）把这个前提推翻了：入口改成「出五原南门一直走」——那是个地方，
+// 商队降为默认矢量上最常见的交通、不是门票。破例随之作废，昭南回归常规国家线。
+// 集合保留（不是删掉）：将来若再出现真破例，机制还在，且必须在 basis 里写明理由。
+const ANCHOR_RULE_EXEMPT_NATIONS = new Set([]);
 
 test('两类线各用各的锚，破例只有白名单里那条', async () => {
   const { SECONDARY_LINES } = await loadTs('../src/modules/scenarioMods/secondaryLines.ts');
@@ -162,8 +164,11 @@ test('每条线都有入口指引，且说清"去哪／找谁"', async () => {
     if (line.anchorLocationIds?.length) {
       const anchors = line.anchorLocationIds.map(id => names.get(id)).filter(Boolean);
       assert.ok(anchors.length, `${line.name} 的地点锚在正典里查不到名字：${line.anchorLocationIds}`);
+      // 行文里用的是地名本身，不是正式全称——昭南写「出五原南门」，而正典地名是「五原城」。
+      // 要求写全称会逼出「出五原城南门」这种别扭中文，故匹配时去掉常见通名后缀。
+      const bare = n => n.replace(/(城|府|关|镇|村|山|湖)$/u, '');
       assert.ok(
-        anchors.some(n => line.entryHint.includes(n)),
+        anchors.some(n => line.entryHint.includes(n) || line.entryHint.includes(bare(n))),
         `${line.name} 的指引没点出锚指向的地方（${anchors.join('／')}）：${line.entryHint}`,
       );
     } else {
