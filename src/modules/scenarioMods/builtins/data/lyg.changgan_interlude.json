@@ -9,7 +9,7 @@
     "description": "李药师赠令、昭南赔款、宗室试探、十方丛林刺杀谋划、赵飞燕病线、返程伏击与白霓裳脱险。",
     "axisVersion": "rebuild-2026-06-28",
     "axisOrder": 3.5,
-    "axisSeqLo": 1115,
+    "axisSeqLo": 1093,
     "axisSeqHi": 1200,
     "eventIdContract": "append-only-frozen",
     "prevStageId": "lyg.shixiang_ambush",
@@ -5744,7 +5744,19 @@
       "event.interrogate_feiniao_yingzi.done": false,
       "event.liang_secret_order.done": false,
       "event.zhoufei_conspiracy.done": false,
-      "event.feiniao_hilt_clue.done": false
+      "event.feiniao_hilt_clue.done": false,
+      "event.north_bureau_buddhist_moves.done": false,
+      "event.honglusi_amends.done": false,
+      "event.cien_red_lotus.done": false,
+      "event.yuanzheng_globe.done": false,
+      "event.xuanping_eunuch_murder.done": false,
+      "event.survey_xingqing_palace.done": false,
+      "event.prince_injury_control.done": false,
+      "event.shuixiang_lure_setup.done": false,
+      "event.spot_poison_assassin.done": false,
+      "event.poolside_capture.done": false,
+      "event.blast_moni_temple.done": false,
+      "event.xinyong_reveals_fanmi.done": false
     },
     "chapters": [
       {
@@ -6862,6 +6874,740 @@
               },
               "requiresPreparation": [
                 "feiniao_family_stated"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyg.event.north_bureau_buddhist_moves",
+        "name": "北司与佛门查探",
+        "description": "程宗扬从杨玉环处厘清北司与佛门的查探方向。",
+        "axisId": "yange.69.2",
+        "axisAnchor": "六朝燕歌行·#69·第669章·公敌",
+        "axisSeq": 1093,
+        "axisBeat": "程宗扬从杨玉环处厘清北司与佛门的查探方向。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.north_bureau_buddhist_moves.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.yang_yuhuan",
+          "liuchao.character.pan_jinlian"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.tang_guo_chao_ting",
+          "liuchao.faction.shi_fang_cong_lin"
+        ],
+        "locationId": "lyg.location.changan",
+        "objective": "从杨玉环处厘清北司与佛门的查探方向",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "hear_beisi_buddhist_leads",
+              "label": "分听北司与佛门线索",
+              "actionText": "我请杨玉环分别说明北司宦官与佛门掌握的线索，不把两路预先写成同一主使。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "beisi_buddhist_leads_heard"
+            },
+            {
+              "id": "record_beisi_buddhist_directions",
+              "label": "记下两路查探方向",
+              "actionText": "我把北司与佛门各自的查探方向分开记下，只做防备与查证，不提前触发尚未发生的杀局。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已从杨玉环处厘清北司与佛门的查探方向；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "beisi_buddhist_leads_heard"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyg.event.honglusi_amends",
+        "name": "鸿胪寺补救",
+        "description": "程宗扬确认鸿胪寺恢复的礼遇与元正朝会资格。",
+        "axisId": "yange.73.1",
+        "axisAnchor": "六朝燕歌行·#73·第673章·双燕",
+        "axisSeq": 1097,
+        "axisBeat": "程宗扬确认鸿胪寺恢复的礼遇与元正朝会资格。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.honglusi_amends.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.tang_guo_chao_ting"
+        ],
+        "locationId": "lyg.location.changan",
+        "objective": "确认鸿胪寺恢复的礼遇与元正朝会资格",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "verify_honglusi_courtesy",
+              "label": "核对恢复的礼遇",
+              "actionText": "我让段文楚把鸿胪寺恢复的出入与居停礼遇逐项说清，不接受口头致歉替代实际安排。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "honglusi_courtesy_verified"
+            },
+            {
+              "id": "confirm_yuanzheng_eligibility",
+              "label": "确认元正朝会资格",
+              "actionText": "我确认自己将以汉使身份参加元正朝会，并把这项资格与已恢复的礼遇一并记下。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已确认鸿胪寺恢复的礼遇与元正朝会资格；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "honglusi_courtesy_verified"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyg.event.cien_red_lotus",
+        "name": "慈恩寺红莲演法",
+        "description": "程宗扬确认慈恩寺红莲演法与唐皇敕令之间的张力。",
+        "axisId": "yange.75.2",
+        "axisAnchor": "yange.74.1+yange.75.2",
+        "axisSeq": 1100,
+        "axisBeat": "程宗扬确认慈恩寺红莲演法与唐皇敕令之间的张力。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.cien_red_lotus.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "relatedFactionIds": [
+          "lyg.faction.daciensi",
+          "liuchao.faction.shi_fang_cong_lin",
+          "liuchao.faction.tang_guo_chao_ting"
+        ],
+        "locationId": "lyg.location.changan",
+        "objective": "确认慈恩寺红莲演法与唐皇敕令之间的张力",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "record_cien_red_lotus_stances",
+              "label": "记下红莲演法立场",
+              "actionText": "我把窥基、观海与乐从训在慈恩寺红莲演法中的立场分别记下，确认佛门内部并非铁板一块。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "cien_red_lotus_stances_logged"
+            },
+            {
+              "id": "compare_emperor_restraint_order",
+              "label": "对照唐皇敕令",
+              "actionText": "唐皇亲临并要求约束僧众后，我对照寺内实际动向，确认敕令与红莲演法之间的张力。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已确认慈恩寺红莲演法与唐皇敕令之间的张力；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "cien_red_lotus_stances_logged"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyg.event.yuanzheng_globe",
+        "name": "元正朝会地球仪",
+        "description": "程宗扬在元正朝会核验徐君房的地球仪知识与秦使说辞。",
+        "axisId": "yange.77.1",
+        "axisAnchor": "yange.76.1+yange.77.1",
+        "axisSeq": 1102,
+        "axisBeat": "程宗扬在元正朝会核验徐君房的地球仪知识与秦使说辞。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.yuanzheng_globe.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.xu_junfang"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.tang_guo_chao_ting"
+        ],
+        "locationId": "lyg.location.changan",
+        "objective": "元正朝会核验徐君房的地球仪知识与秦使说辞",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "test_xu_junfang_globe",
+              "label": "核验地球仪知识",
+              "actionText": "我用不暴露自身来历的问题核验徐君房对地球仪与地理的理解。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "xu_globe_knowledge_tested"
+            },
+            {
+              "id": "record_qin_envoy_rhetoric",
+              "label": "记下秦使说辞",
+              "actionText": "我把徐君房自称秦使的说法与朝会反应分别记下，暂不替唐廷确认其身份。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已在元正朝会核验徐君房的地球仪知识与秦使说辞；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "xu_globe_knowledge_tested"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyg.event.xuanping_eunuch_murder",
+        "name": "宣平坊宦官命案",
+        "description": "程宗扬勘查宣平坊宦官命案并保留多种幕后可能。",
+        "axisId": "yange.77.2",
+        "axisAnchor": "六朝燕歌行·#77·朝会",
+        "axisSeq": 1103,
+        "axisBeat": "程宗扬勘查宣平坊宦官命案并保留多种幕后可能。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.xuanping_eunuch_murder.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.tang_guo_chao_ting"
+        ],
+        "locationId": "lyg.location.changan",
+        "objective": "勘查宣平坊宦官命案并保留多种幕后可能",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "inspect_xuanping_eunuch_scene",
+              "label": "勘查宣平坊现场",
+              "actionText": "我核对宣平坊外尸体、出入口与针对宦官的口号留下方式，先区分事实和刻意布置。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "xuanping_eunuch_scene_logged"
+            },
+            {
+              "id": "keep_xuanping_motive_branches",
+              "label": "保留多种幕后可能",
+              "actionText": "我把私人复仇、朝局冲突与诱饵三种可能分别立档，不因口号直接锁定主使。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已勘查宣平坊宦官命案并保留多种幕后可能；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "xuanping_eunuch_scene_logged"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyg.event.survey_xingqing_palace",
+        "name": "勘查废弃兴庆宫",
+        "description": "程宗扬勘查废弃兴庆宫并标记地下入口。",
+        "axisId": "yange.78.1",
+        "axisAnchor": "六朝燕歌行·#78·街险",
+        "axisSeq": 1104,
+        "axisBeat": "程宗扬勘查废弃兴庆宫并标记地下入口。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.survey_xingqing_palace.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.yang_yuhuan"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.tang_guo_chao_ting"
+        ],
+        "locationId": "lyg.location.changan",
+        "objective": "勘查废弃兴庆宫并标记地下入口",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "survey_xingqing_ruins",
+              "label": "勘查废弃宫苑",
+              "actionText": "我沿兴庆宫残垣与旧路排查异常，确认没有把后续通道位置预先写进地图。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "xingqing_ruins_surveyed"
+            },
+            {
+              "id": "mark_xingqing_underground",
+              "label": "标记地下入口",
+              "actionText": "发现悬空入口后，我记录方位与进入风险，暂不越过本段证据继续推演。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已勘查废弃兴庆宫并标记地下入口；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "xingqing_ruins_surveyed"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyg.event.prince_injury_control",
+        "name": "太子误伤风波",
+        "description": "程宗扬稳定太子伤势并控制误伤消息。",
+        "axisId": "yange.79.1",
+        "axisAnchor": "六朝燕歌行·#79·美射",
+        "axisSeq": 1105,
+        "axisBeat": "程宗扬稳定太子伤势并控制误伤消息。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.prince_injury_control.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.yang_yuhuan",
+          "liuchao.character.yi_xin"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.tang_guo_chao_ting"
+        ],
+        "locationId": "lyg.location.changan",
+        "objective": "稳定太子伤势并控制误伤消息",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "stabilize_prince_wound",
+              "label": "稳住太子伤势",
+              "actionText": "杨玉环误射太子李弘后，我先封锁现场并协助义姁取得救治空间，确保伤势不因混乱恶化。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "prince_wound_stabilized"
+            },
+            {
+              "id": "contain_prince_injury_news",
+              "label": "控制误伤消息",
+              "actionText": "伤势暂稳后，我统一对外口径为追查虚构刺客，不把杨玉环误射写成公开事实。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已稳定太子伤势并控制误伤消息；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "prince_wound_stabilized"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyg.event.shuixiang_lure_setup",
+        "name": "水香楼诱捕布置",
+        "description": "程宗扬完成水香楼警戒与诱捕布置。",
+        "axisId": "yange.79.2",
+        "axisAnchor": "六朝燕歌行·#79·美射",
+        "axisSeq": 1106,
+        "axisBeat": "程宗扬完成水香楼警戒与诱捕布置。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.shuixiang_lure_setup.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.pan_jinlian",
+          "liuchao.character.xiao_zi"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.guang_ming_guan_tang"
+        ],
+        "locationId": "lyg.location.changan",
+        "objective": "完成水香楼警戒与诱捕布置",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "set_shuixiang_watches",
+              "label": "布置水香楼警戒",
+              "actionText": "我把家眷迁入水香楼，按出入口安排明暗哨，先确保无关人员可以撤离。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "shuixiang_watches_set"
+            },
+            {
+              "id": "finish_shuixiang_lure_ring",
+              "label": "完成诱捕布置",
+              "actionText": "警戒就位后，我划定只针对潘金莲的诱捕区，避免把其他来客预判为敌人。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成水香楼警戒与诱捕布置；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "shuixiang_watches_set"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyg.event.spot_poison_assassin",
+        "name": "识破毒方刺客",
+        "description": "程宗扬控制麻痹毒势并封锁刺客藏身范围。",
+        "axisId": "yange.80.1",
+        "axisAnchor": "六朝燕歌行·#80·行刺",
+        "axisSeq": 1107,
+        "axisBeat": "程宗扬控制麻痹毒势并封锁刺客藏身范围。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.spot_poison_assassin.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.cheng_guang"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.tang_guo_chao_ting"
+        ],
+        "locationId": "lyg.location.changan",
+        "objective": "控制麻痹毒势并封锁刺客藏身范围",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "contain_paralysis_poison",
+              "label": "控制麻痹毒势",
+              "actionText": "假扮王府小厮的刺客送来涂毒药方后，我阻止继续接触药方，检查自己与成光的中毒程度并发出警讯。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "paralysis_poison_contained"
+            },
+            {
+              "id": "seal_assassin_hide_range",
+              "label": "封锁刺客藏身范围",
+              "actionText": "毒势受控后，我命明暗哨封住楼内通道，缩小假小厮的藏身范围。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已控制麻痹毒势并封锁刺客藏身范围；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "paralysis_poison_contained"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyg.event.poolside_capture",
+        "name": "池畔擒获飞鸟萤子",
+        "description": "程宗扬隔离毒烟并擒获飞鸟萤子。",
+        "axisId": "yange.81.1",
+        "axisAnchor": "yange.80.2+yange.80.3+yange.81.1",
+        "axisSeq": 1110,
+        "axisBeat": "程宗扬隔离毒烟并擒获飞鸟萤子。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.poolside_capture.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.pan_jinlian"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.hei_mo_hai",
+          "liuchao.faction.guang_ming_guan_tang"
+        ],
+        "locationId": "lyg.location.changan",
+        "objective": "隔离毒烟并擒获飞鸟萤子",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "isolate_poolside_smoke",
+              "label": "隔离池畔毒烟",
+              "actionText": "潘金莲与飞鸟萤子交锋延伸至池畔后，我先让无关人员退出毒烟范围，并切断两人继续缠斗的路线。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "poolside_smoke_isolated"
+            },
+            {
+              "id": "capture_feiniao_yingzi_feint",
+              "label": "识破示弱并擒获",
+              "actionText": "飞鸟萤子佯装无力时，我保持戒备、封住反击角度并将她制伏。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已隔离毒烟并擒获飞鸟萤子；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "poolside_smoke_isolated"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyg.event.blast_moni_temple",
+        "name": "爆破摩尼寺营救",
+        "description": "程宗扬制造营救窗口并确认摩尼寺女师是否脱险。",
+        "axisId": "yange.83.1",
+        "axisAnchor": "六朝燕歌行·#83·天雷",
+        "axisSeq": 1113,
+        "axisBeat": "程宗扬制造营救窗口并确认摩尼寺女师是否脱险。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.blast_moni_temple.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.x3a190100e6"
+        ],
+        "locationId": "lyg.location.changan",
+        "objective": "制造营救窗口并确认摩尼寺女师是否脱险",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "blast_moni_rescue_window",
+              "label": "引爆僧舍制造窗口",
+              "actionText": "观海等密宗僧人拷问摩尼女师并强行灌顶时，我在确认俘虏位置后引爆僧舍外围，为撤离制造短暂窗口。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "moni_rescue_window_blasted"
+            },
+            {
+              "id": "confirm_moni_teacher_fate",
+              "label": "确认女师是否脱险",
+              "actionText": "撤离前我确认摩尼寺女师未能脱险，并把失败结果与密宗灌顶证据如实记录。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已制造营救窗口并确认摩尼寺女师未能脱险；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "moni_rescue_window_blasted"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyg.event.xinyong_reveals_fanmi",
+        "name": "信永揭示蕃密邪径",
+        "description": "程宗扬听信永讲清蕃密邪径内幕并作出有依据的应对决定。",
+        "axisId": "yange.83.2",
+        "axisAnchor": "六朝燕歌行·#83·天雷",
+        "axisSeq": 1114,
+        "axisBeat": "程宗扬听信永讲清蕃密邪径内幕并作出有依据的应对决定。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.xinyong_reveals_fanmi.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.shi_fang_cong_lin"
+        ],
+        "locationId": "lyg.location.changan",
+        "objective": "听信永讲清蕃密邪径内幕并作出有依据的应对决定",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "hear_xinyong_fanmi_inside",
+              "label": "听清蕃密邪径内幕",
+              "actionText": "我让信永区分亲眼所见、佛门传闻与个人判断，讲清蕃密灌顶与释特昧普败坏佛门的内幕。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "xinyong_fanmi_inside_heard"
+            },
+            {
+              "id": "decide_fanmi_response",
+              "label": "作出有依据的应对决定",
+              "actionText": "掌握风险后，我拒绝无准备地硬闯，但明确不会因威胁放弃查证与抵抗。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已听信永讲清蕃密邪径内幕并作出有依据的应对决定；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "xinyong_fanmi_inside_heard"
               ]
             }
           ]

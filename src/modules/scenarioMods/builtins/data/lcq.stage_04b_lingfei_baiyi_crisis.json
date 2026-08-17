@@ -9,8 +9,8 @@
     "description": "夺取灵飞镜、鸦人救援、黑魔海传讯、白夷族勾结鬼王峒、地宫陷阱、谢艺杀使与大潮前夜，补齐南荒中段主轴。",
     "axisVersion": "rebuild-2026-06-28",
     "axisOrder": 3.5,
-    "axisSeqLo": 88,
-    "axisSeqHi": 158,
+    "axisSeqLo": 42,
+    "axisSeqHi": 162,
     "eventIdContract": "append-only-frozen",
     "prevStageId": "lcq.stage_04",
     "prevStageName": "六朝清羽记·第44章·向导",
@@ -4064,7 +4064,19 @@
       "event.weapon_deal_with_geluo.done": false,
       "event.guiwangdong_coop_pact.done": false,
       "event.blank_letter_and_dagu.done": false,
-      "event.geluo_summons_biji.done": false
+      "event.geluo_summons_biji.done": false,
+      "event.ice_gu_coercion.done": false,
+      "event.persuade_wuerlang.done": false,
+      "event.spot_dong_informant.done": false,
+      "event.ruins_ghost_warriors.done": false,
+      "event.enter_dong_with_migu.done": false,
+      "event.hongmiao_controlled.done": false,
+      "event.xiaozi_first_appears.done": false,
+      "event.pull_harpoon_lemingzhu.done": false,
+      "event.regroup_caravan_envoy.done": false,
+      "event.wuerlang_slays_dagu.done": false,
+      "event.yiyang_repels_yinsha.done": false,
+      "event.escape_cave_mechanism.done": false
     },
     "chapters": [
       {
@@ -5717,6 +5729,758 @@
               },
               "requiresPreparation": [
                 "binu_summoned_by_geluo"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.ice_gu_coercion",
+        "name": "冰蛊逼迫南行",
+        "description": "苏妲己以冰蛊逼迫程宗扬南行，两日内组织南荒队伍。",
+        "axisId": "qingyu.26.1",
+        "axisAnchor": "六朝清羽记·#26·第24章·诡计",
+        "axisSeq": 42,
+        "axisBeat": "苏妲己以冰蛊逼迫程宗扬南行，两日内组织南荒队伍。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.ice_gu_coercion.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.ning_yu",
+          "liuchao.character.qi_yuan"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.bai_hu_shang_guan"
+        ],
+        "locationId": "liuchao.location.wuyuan",
+        "objective": "确认苏妲己以冰蛊逼迫南行，并在两日内组织南荒队伍",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "confirm_ice_gu_southbound_order",
+              "label": "确认冰蛊逼迫南行",
+              "actionText": "我从酸梅汤冰块和身体反应确认苏妲己已下冰蛊，听清她以南荒差事换取暂不发作。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已确认苏妲己以冰蛊逼迫南行；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "ice_gu_southbound_known"
+            },
+            {
+              "id": "form_southbound_team_in_two_days",
+              "label": "两日内组织南荒队伍",
+              "actionText": "我与祁远按两日期限筹备车马、钱帛、护卫和奴隶，把必须南行的队伍拉起来。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已确认苏妲己以冰蛊逼迫南行，并在两日内组织南荒队伍；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "ice_gu_southbound_known"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.persuade_wuerlang",
+        "name": "劝住武二郎继续南行",
+        "description": "劝住要折返五原的武二郎，让商队继续南行。",
+        "axisId": "qingyu.33.1",
+        "axisAnchor": "六朝清羽记·#33·第31章·双刀",
+        "axisSeq": 51,
+        "axisBeat": "劝住要折返五原的武二郎，让商队继续南行。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.persuade_wuerlang.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.wu_er_lang"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.bai_wu",
+          "liuchao.faction.bai_hu_shang_guan"
+        ],
+        "locationId": "liuchao.location.south_wild_valley",
+        "objective": "劝住要折返五原的武二郎，并让商队继续南行",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "hear_wuerlang_return_wuyuan",
+              "label": "听清武二郎要折返五原",
+              "actionText": "我先让武二郎说清醉月楼误杀与西门庆隐瞒的因果，确认他要折返五原报复，不把他的怒意写成无端失控。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已听清武二郎要折返五原；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "wuerlang_return_heard"
+            },
+            {
+              "id": "keep_wuerlang_and_caravan_south",
+              "label": "劝住武二郎并让商队继续南行",
+              "actionText": "我以眼下路程、伤势和同行承诺劝住武二郎，先让整支商队继续往南荒走，不折返五原。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已劝住要折返五原的武二郎，并让商队继续南行；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "wuerlang_return_heard"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.spot_dong_informant",
+        "name": "处置鬼王峒眼线",
+        "description": "厘清兵器交易背后的危险，处置偷听的鬼王峒眼线。",
+        "axisId": "qingyu.81.3",
+        "axisAnchor": "六朝清羽记·#81·第79章·眼线",
+        "axisSeq": 137,
+        "axisBeat": "厘清兵器交易背后的危险，处置偷听的鬼王峒眼线。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.spot_dong_informant.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.yun_cang_feng"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.gui_wang_dong",
+          "liuchao.faction.yun_shi_shang_hui",
+          "liuchao.faction.biyu"
+        ],
+        "locationId": "liuchao.location.biyu_village",
+        "objective": "厘清兵器交易背后的危险，并处置偷听的鬼王峒眼线",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "clarify_weapon_deal_danger",
+              "label": "厘清兵器交易背后的危险",
+              "actionText": "我与云苍峰把鬼王峒采购数量、用途和北上风险逐项对照，确认这不只是普通兵器生意。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已厘清兵器交易背后的危险；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "weapon_deal_danger_known"
+            },
+            {
+              "id": "handle_dong_eavesdropper",
+              "label": "处置偷听的鬼王峒眼线",
+              "actionText": "发现偷听者后，我立即阻断其传讯并完成现场处置，避免商队判断外泄。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已厘清兵器交易背后的危险，并处置偷听的鬼王峒眼线；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "weapon_deal_danger_known"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.ruins_ghost_warriors",
+        "name": "古道废墟迎击鬼战士",
+        "description": "在古道废墟识别鬼王峒标记，协助易彪守住阵地。",
+        "axisId": "qingyu.84.2",
+        "axisAnchor": "六朝清羽记·#84·第82章·迎敌",
+        "axisSeq": 143,
+        "axisBeat": "在古道废墟识别鬼王峒标记，协助易彪守住阵地。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.ruins_ghost_warriors.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.xiao_zi",
+          "lcq.character.np004"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.gui_wang_dong",
+          "liuchao.faction.yun_shi_shang_hui"
+        ],
+        "locationId": "liuchao.location.south_wild_valley",
+        "objective": "在古道废墟识别鬼王峒标记，并协助易彪守住阵地",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "identify_dong_marks_in_ruins",
+              "label": "识别古道废墟的鬼王峒标记",
+              "actionText": "我确认古道废墟中的鬼脸标记属于鬼王峒，立即把宿营转为迎敌准备。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已在古道废墟识别鬼王峒标记；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "ruins_dong_marks_known"
+            },
+            {
+              "id": "help_yibiao_hold_ruins",
+              "label": "协助易彪守住阵地",
+              "actionText": "鬼战士来袭后，我配合易彪的阵形与弓弩火力守住废墟入口。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已在古道废墟识别鬼王峒标记，并协助易彪守住阵地；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "ruins_dong_marks_known"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.enter_dong_with_migu",
+        "name": "随弥骨进入鬼王峒",
+        "description": "随弥骨进入鬼王峒，阻止接待冲突升级并记清洞内路线与奴隶区。",
+        "axisId": "qingyu.88.3",
+        "axisAnchor": "六朝清羽记·#88·第86章·鬼峒",
+        "axisSeq": 154,
+        "axisBeat": "随弥骨进入鬼王峒，阻止接待冲突升级并记清洞内路线与奴隶区。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.enter_dong_with_migu.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.wu_er_lang",
+          "liuchao.character.xie_yi",
+          "liuchao.character.yun_cang_feng",
+          "liuchao.character.su_li",
+          "lcq.character.mi_gu"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.gui_wang_dong",
+          "liuchao.faction.hua_miao"
+        ],
+        "locationId": "liuchao.location.guiwang_dong",
+        "objective": "随弥骨进入鬼王峒，阻止接待冲突升级并记清洞内路线与奴隶区",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "stop_migu_reception_clash",
+              "label": "阻止接待冲突升级",
+              "actionText": "弥骨要带走苏荔、武二郎拔刀时，我配合云苍峰与谢艺把冲突压回交涉，不让入口打起来。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已阻止接待冲突升级；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "migu_reception_held"
+            },
+            {
+              "id": "follow_migu_and_map_slave_routes",
+              "label": "随弥骨入峒并记清路线与奴隶区",
+              "actionText": "冲突压住后，我随弥骨进入鬼王峒，沿途记下岔路、层级与奴隶区位置。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已随弥骨进入鬼王峒，阻止接待冲突升级并记清洞内路线与奴隶区；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "migu_reception_held"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.hongmiao_controlled",
+        "name": "确认红苗受控并护住苏荔",
+        "description": "确认红苗盟友已被鬼王峒控制，把苏荔从阁罗手中暂时保下。",
+        "axisId": "qingyu.94.1",
+        "axisAnchor": "六朝清羽记·#94·第92章·媚奴",
+        "axisSeq": 162,
+        "axisBeat": "确认红苗盟友已被鬼王峒控制，把苏荔从阁罗手中暂时保下。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.hongmiao_controlled.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.su_li",
+          "liuchao.character.dan_chen",
+          "lcq.character.np006"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.gui_wang_dong",
+          "liuchao.faction.hong_miao",
+          "liuchao.faction.hua_miao"
+        ],
+        "locationId": "liuchao.location.guiwang_dong",
+        "objective": "确认红苗盟友已被鬼王峒控制，并把苏荔从阁罗手中暂时保下",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "confirm_hongmiao_allies_controlled",
+              "label": "确认红苗盟友已被控制",
+              "actionText": "我与苏荔找到红苗人后，通过失神状态和无法回应确认他们已受鬼王峒控制。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已确认红苗盟友已被鬼王峒控制；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "hongmiao_control_seen"
+            },
+            {
+              "id": "keep_suli_from_geluo",
+              "label": "把苏荔从阁罗手中暂时保下",
+              "actionText": "面对阁罗对苏荔的企图，我以私下会见碧姬为由转移其注意，先把苏荔留在同行者一边。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已确认红苗盟友已被鬼王峒控制，并把苏荔从阁罗手中暂时保下；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "hongmiao_control_seen"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.xiaozi_first_appears",
+        "name": "记录黑舌疑点并回应小紫登场",
+        "description": "记录黑舌死亡疑点，并以眼前身份回应初次现身的小紫；小紫以碧鲮少女身份首现，这是她的登场。",
+        "axisId": "qingyu.75.1",
+        "axisAnchor": "六朝清羽记·#75·第73章·遇难",
+        "axisSeq": 123,
+        "axisBeat": "记录黑舌死亡疑点，并以眼前身份回应初次现身的小紫；小紫以碧鲮少女身份首现，这是她的登场。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.xiaozi_first_appears.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.xiao_zi"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.biyu"
+        ],
+        "locationId": "liuchao.location.biyu_village",
+        "objective": "记录黑舌死亡疑点，并以眼前身份回应初次现身的小紫",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "log_heishe_death_doubt",
+              "label": "记录黑舌死亡疑点",
+              "actionText": "我检查黑舌被蚌壳困住溺死的现场，只记下可见痕迹和疑点，不先指定凶手。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已记录黑舌死亡疑点；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "heishe_death_doubt_logged"
+            },
+            {
+              "id": "answer_xiaozi_biyu_debut",
+              "label": "以眼前身份回应初次现身的小紫",
+              "actionText": "我把眼前这个自称碧鲮少女的人当作初次见面来回应，只接她此刻的身份，不把后期来历写进这一拍。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已记录黑舌死亡疑点，并以眼前身份回应初次现身的小紫；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "heishe_death_doubt_logged"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.pull_harpoon_lemingzhu",
+        "name": "拔除鱼叉稳定乐明珠伤势",
+        "description": "拔除卡住乐明珠的鱼叉，并稳定她的伤势。",
+        "axisId": "qingyu.77.1",
+        "axisAnchor": "六朝清羽记·#77·第75章·戏问",
+        "axisSeq": 125,
+        "axisBeat": "拔除卡住乐明珠的鱼叉，并稳定她的伤势。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.pull_harpoon_lemingzhu.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.le_mingzhu"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.guang_ming_guan_tang"
+        ],
+        "locationId": "liuchao.location.sea_temple",
+        "objective": "拔除鱼叉并稳定乐明珠伤势",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "pull_harpoon_from_mingzhu",
+              "label": "拔除卡住乐明珠的鱼叉",
+              "actionText": "我确认倒刺和伤口方向，稳住乐明珠后拔除鲛人留下的鱼叉。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已拔除卡住乐明珠的鱼叉；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "mingzhu_harpoon_pulled"
+            },
+            {
+              "id": "stabilize_mingzhu_after_harpoon",
+              "label": "稳定乐明珠伤势",
+              "actionText": "鱼叉拔出后，我立刻止血包扎，确认乐明珠伤势稳住、能够行动。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已拔除鱼叉并稳定乐明珠伤势；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "mingzhu_harpoon_pulled"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.regroup_caravan_envoy",
+        "name": "收拢商队确认使者抵达",
+        "description": "收拢残余商队，确认鬼王峒使者已抵达海湾。",
+        "axisId": "qingyu.79.3",
+        "axisAnchor": "六朝清羽记·#79·第77章·进贡",
+        "axisSeq": 131,
+        "axisBeat": "收拢残余商队，确认鬼王峒使者已抵达海湾。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.regroup_caravan_envoy.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.a_xi",
+          "liuchao.character.qi_yuan",
+          "lcq.character.np006"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.bai_hu_shang_guan",
+          "liuchao.faction.gui_wang_dong"
+        ],
+        "locationId": "liuchao.location.biyu_village",
+        "objective": "收拢残余商队，并确认鬼王峒使者已抵达海湾",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "regroup_remaining_caravan",
+              "label": "收拢残余商队",
+              "actionText": "我清点仍失踪的祁远、石刚等人和还能行动的队员，先把残余商队收拢到可撤离的底线。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已收拢残余商队；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "remaining_caravan_regrouped"
+            },
+            {
+              "id": "confirm_guiwang_envoy_at_bay",
+              "label": "确认鬼王峒使者已抵达海湾",
+              "actionText": "白象与鬼王峒使者出现后，我停止贸然撤离，当面确认使者已抵达海湾。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已收拢残余商队，并确认鬼王峒使者已抵达海湾；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "remaining_caravan_regrouped"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.wuerlang_slays_dagu",
+        "name": "撑住围攻见证武二郎斩达古",
+        "description": "撑住达古率领的围攻，见证武二郎斩杀巫师扭转战局。",
+        "axisId": "qingyu.85.2",
+        "axisAnchor": "六朝清羽记·#85·第83章·虎威",
+        "axisSeq": 145,
+        "axisBeat": "撑住达古率领的围攻，见证武二郎斩杀巫师扭转战局。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.wuerlang_slays_dagu.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.wu_er_lang",
+          "lcq.character.np004"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.gui_wang_dong",
+          "liuchao.faction.yun_shi_shang_hui"
+        ],
+        "locationId": "liuchao.location.south_wild_valley",
+        "objective": "撑住达古率领的围攻，并见证武二郎斩杀巫师扭转战局",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "hold_dagu_siege_line",
+              "label": "撑住达古率领的围攻",
+              "actionText": "谈判被拒后，我继续组织弓弩和近战防线，撑住达古率领的围攻，给武二郎突击留出空隙。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已撑住达古率领的围攻；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "dagu_siege_held"
+            },
+            {
+              "id": "witness_wuerlang_turn_tide",
+              "label": "见证武二郎斩杀巫师扭转战局",
+              "actionText": "武二郎斩杀巫师达古后，我确认鬼战士失去巫术支撑、战局已经扭转。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已撑住达古率领的围攻，并见证武二郎斩杀巫师扭转战局；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "dagu_siege_held"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.yiyang_repels_yinsha",
+        "name": "护住苏荔以一阳境逼退阴煞",
+        "description": "护住苏荔，并以一阳境阳气逼退阴煞。",
+        "axisId": "qingyu.86.2",
+        "axisAnchor": "六朝清羽记·#86·第84章·阴煞",
+        "axisSeq": 147,
+        "axisBeat": "护住苏荔，并以一阳境阳气逼退阴煞。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.yiyang_repels_yinsha.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.su_li"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.hua_miao"
+        ],
+        "locationId": "liuchao.location.south_wild_valley",
+        "objective": "护住苏荔并以一阳境阳气逼退阴煞",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "shield_suli_from_yinsha_assault",
+              "label": "护住苏荔",
+              "actionText": "阴煞逼近时，我先挡住苏荔，不让她以自己换取片刻安全，正面把她护住。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已护住苏荔；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "suli_shielded_from_yinsha"
+            },
+            {
+              "id": "repel_yinsha_with_yiyang_yang",
+              "label": "以一阳境阳气逼退阴煞",
+              "actionText": "丹田真气爆发、破入一阳境后，我稳住阳气，把阴煞暂时逼退。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已护住苏荔，并以一阳境阳气逼退阴煞；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "suli_shielded_from_yinsha"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.escape_cave_mechanism",
+        "name": "借机关异动找出通行山洞",
+        "description": "利用机关异动摆脱看守，从岩壁找出可通行山洞。",
+        "axisId": "qingyu.92.1",
+        "axisAnchor": "六朝清羽记·#92·第90章·觅源",
+        "axisSeq": 160,
+        "axisBeat": "利用机关异动摆脱看守，从岩壁找出可通行山洞。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.escape_cave_mechanism.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "lcq.character.np006"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.gui_wang_dong"
+        ],
+        "locationId": "liuchao.location.guiwang_dong",
+        "objective": "利用机关异动摆脱看守，并从岩壁找出可通行山洞",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "slip_guards_on_mechanism_alarm",
+              "label": "利用机关异动摆脱看守",
+              "actionText": "阁罗被机关惊动离开时，我趁守卫注意转移，从看守范围里脱身到岩壁一侧。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已利用机关异动摆脱看守；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "guards_slipped_on_alarm"
+            },
+            {
+              "id": "find_passable_cave_in_cliff",
+              "label": "从岩壁找出可通行山洞",
+              "actionText": "我用匕首试探岩缝、撬开松动石块，从岩壁里找出一条可继续通行的山洞。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已利用机关异动摆脱看守，并从岩壁找出可通行山洞；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "guards_slipped_on_alarm"
               ]
             }
           ]

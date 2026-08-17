@@ -9,7 +9,7 @@
     "description": "吕冀重伤、吕巨君入宫、含光殿救人、秘境入口、董卓入京与秦桧斩刘建，完成云龙到燕歌前的汉宫收束。",
     "axisVersion": "rebuild-2026-06-28",
     "axisOrder": 5.5,
-    "axisSeqLo": 896,
+    "axisSeqLo": 891,
     "axisSeqHi": 947,
     "eventIdContract": "append-only-frozen",
     "prevStageId": "lyl.luoyang_coup",
@@ -5886,6 +5886,12 @@
       "event.han_power_vacuum.done": false,
       "event.han_sponsor_dingtao.done": false,
       "event.liujian_takes_nangong.done": false,
+      "event.lvji_defiles_consort.done": false,
+      "event.emperor_death_spreads.done": false,
+      "event.arrange_escape_route.done": false,
+      "event.changqiu_palace_defense.done": false,
+      "event.bounty_and_hu_cavalry.done": false,
+      "event.lvfengxian_breaks_line.done": false,
       "chapter.lyl.han_palace_endgame.palace.started": true,
       "chapter.lyl.han_palace_endgame.palace.done": false,
       "chapter.lyl.han_palace_endgame.endgame.started": false,
@@ -6974,6 +6980,384 @@
               },
               "requiresPreparation": [
                 "nangong_fell_to_liujian"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyl.event.lvji_defiles_consort",
+        "name": "藻井上看完淫辱",
+        "description": "程宗扬与赵合德藏在含光殿藻井上，屏息看完吕冀淫辱伪赵昭仪友通期的全过程。",
+        "axisId": "yunlong.280.1",
+        "axisAnchor": "六朝云龙吟·#280·凌辱",
+        "axisSeq": 891,
+        "axisBeat": "程宗扬与赵合德藏在含光殿藻井上，屏息看完吕冀淫辱伪赵昭仪友通期的全过程。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.lvji_defiles_consort.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.zhao_he_de",
+          "liuchao.character.lv_ji"
+        ],
+        "relatedFactionIds": [
+          "lyl.faction.lyu_clan"
+        ],
+        "objective": "与赵合德藏在含光殿藻井上，屏息看完吕冀淫辱伪赵昭仪友通期的全过程",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "hold_hede_silent_on_coffer",
+              "label": "按住赵合德，伏在藻井上屏息",
+              "actionText": "我按住身边的赵合德，两人一起屏息伏在含光殿藻井的板壁上，不让殿里察觉。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已与赵合德伏在藻井上屏息藏住；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "hidden_on_hanguang_coffer"
+            },
+            {
+              "id": "watch_lvji_defile_youtongqi",
+              "label": "屏息看完吕冀淫辱伪昭仪",
+              "actionText": "我盯着藻井下，把吕冀淫辱伪赵昭仪友通期的全过程看完，始终不让赵合德出声。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已与赵合德藏在含光殿藻井上，屏息看完吕冀淫辱伪赵昭仪友通期的全过程；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "hidden_on_hanguang_coffer"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyl.event.emperor_death_spreads",
+        "name": "护送赵氏回长秋宫",
+        "description": "天子暴毙的消息传遍洛都，程宗扬扮作内侍混出昭阳宫，护送赵飞燕与赵合德撤回长秋宫。",
+        "axisId": "yunlong.282.1",
+        "axisAnchor": "六朝云龙吟·#282·矫诏",
+        "axisSeq": 894,
+        "axisBeat": "天子暴毙的消息传遍洛都，程宗扬扮作内侍混出昭阳宫，护送赵飞燕与赵合德撤回长秋宫。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.emperor_death_spreads.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.zhao_feiyan",
+          "liuchao.character.zhao_he_de",
+          "liuchao.character.liu_ao"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.han_guo_chao_ting",
+          "lyl.faction.zhao_sisters"
+        ],
+        "objective": "扮作内侍混出昭阳宫，护送赵飞燕与赵合德撤回长秋宫",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "disguise_as_neishi_leave_zhaoyang",
+              "label": "换上内侍衣物混出昭阳宫",
+              "actionText": "天子暴毙的消息传开后，我换上内侍衣物，扶着赵合德从藻井下来，低着头混出昭阳宫。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已扮作内侍混出昭阳宫；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "left_zhaoyang_as_neishi"
+            },
+            {
+              "id": "escort_zhao_sisters_to_changqiu",
+              "label": "护送赵飞燕与赵合德回长秋宫",
+              "actionText": "我混在妃嫔与内侍队伍里，把赵飞燕与赵合德一路护回长秋宫。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已扮作内侍混出昭阳宫，护送赵飞燕与赵合德撤回长秋宫；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "left_zhaoyang_as_neishi"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyl.event.arrange_escape_route",
+        "name": "出宫拥立定陶王",
+        "description": "程宗扬从密道出宫，召齐各方定下拥立定陶王并分派任务。",
+        "axisId": "yunlong.283.1",
+        "axisAnchor": "六朝云龙吟·#283·侠义",
+        "axisSeq": 895,
+        "axisBeat": "程宗扬从密道出宫，召齐各方定下拥立定陶王并分派任务。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.arrange_escape_route.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.liu_xin",
+          "liuchao.character.guo_jie",
+          "liuchao.character.yun_dan_liu",
+          "liuchao.character.qin_hui",
+          "liuchao.character.gao_zhishang",
+          "liuchao.character.np069"
+        ],
+        "relatedFactionIds": [
+          "lyl.faction.pengyi",
+          "liuchao.faction.han_guo_chao_ting"
+        ],
+        "objective": "从密道出宫，召齐各方定下拥立定陶王并分派任务",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "exit_palace_by_secret_passage",
+              "label": "从密道出宫",
+              "actionText": "我从长秋宫寝殿后小阁的密道下去，摸黑走到废宅井口，再赶回通商里。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已从密道出宫；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "exited_via_secret_passage"
+            },
+            {
+              "id": "convene_and_assign_dingtao",
+              "label": "召齐各方定下拥立定陶王并分派",
+              "actionText": "我把这一夜讲给鹏翼社、程郑、郭解、洛帮众人，挑明拥立定陶王，再当场把联络游侠、游说商贾、争取羽林的差事分下去。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已从密道出宫，召齐各方定下拥立定陶王并分派任务；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "exited_via_secret_passage"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyl.event.changqiu_palace_defense",
+        "name": "守住长秋宫台阶",
+        "description": "程宗扬守住长秋宫台阶，同时看住刘建的性命此时不能丢。",
+        "axisId": "yunlong.285.1",
+        "axisAnchor": "六朝云龙吟·#285·空饷",
+        "axisSeq": 897,
+        "axisBeat": "程宗扬守住长秋宫台阶，同时看住刘建的性命此时不能丢。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.changqiu_palace_defense.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.cai_jingzhong",
+          "lyl.character.liu_jian"
+        ],
+        "relatedFactionIds": [
+          "lyl.faction.changqiu",
+          "lyl.faction.liu_jian"
+        ],
+        "objective": "守住长秋宫台阶，同时看住刘建的性命此时不能丢",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "hold_changqiu_steps",
+              "label": "守住长秋宫台阶",
+              "actionText": "我在阙楼上盯住长秋宫那三十六级台阶，让蔡敬仲把内侍一批批推上去，挡住中垒军。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已守住长秋宫台阶；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "changqiu_steps_held"
+            },
+            {
+              "id": "keep_liujian_alive_for_now",
+              "label": "按住弓手，不许此时射杀刘建",
+              "actionText": "敖润瞄准了刘建，我抬手按住他的弓——刘建这会儿要是死了，吕氏就赢了。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已守住长秋宫台阶，并看住刘建的性命此时不能丢；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "changqiu_steps_held"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyl.event.bounty_and_hu_cavalry",
+        "name": "赏格与争取桓郁",
+        "description": "程宗扬立下赏格稳住长秋宫守军，并抢在两方使节之前争取胡骑校尉桓郁。",
+        "axisId": "yunlong.287.1",
+        "axisAnchor": "六朝云龙吟·#287·诱动",
+        "axisSeq": 898,
+        "axisBeat": "程宗扬立下赏格稳住长秋宫守军，并抢在两方使节之前争取胡骑校尉桓郁。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.bounty_and_hu_cavalry.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.cai_jingzhong",
+          "liuchao.character.zhao_feiyan",
+          "liuchao.character.lu_jing"
+        ],
+        "relatedFactionIds": [
+          "lyl.faction.changqiu",
+          "liuchao.faction.cheng_shi_shang_hui"
+        ],
+        "objective": "立下赏格稳住长秋宫守军，并抢在两方使节之前争取胡骑校尉桓郁",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "post_changqiu_private_bounty",
+              "label": "立下赏格稳住长秋宫守军",
+              "actionText": "我让人把盛满金铢的木箱摆在宫门前，按人头发赏：守一日十枚，平乱后每日另加四十，伤者翻倍。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已立下赏格稳住长秋宫守军；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "changqiu_bounty_posted"
+            },
+            {
+              "id": "send_ahead_for_huan_yu",
+              "label": "抢在两方使节之前争取桓郁",
+              "actionText": "我写下以皇后名义召桓郁护驾的诏书用印，让敖润走密道出宫，去池阳宫赶在刘建与吕氏的使节之前。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已立下赏格稳住长秋宫守军，并抢在两方使节之前争取胡骑校尉桓郁；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "changqiu_bounty_posted"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyl.event.lvfengxian_breaks_line",
+        "name": "看住阿阁不让移宫",
+        "description": "程宗扬看住阿阁战局，不让吕氏把赵皇后接往北宫；吕奉先单骑破阵。",
+        "axisId": "yunlong.288.1",
+        "axisAnchor": "六朝云龙吟·#288·阻境",
+        "axisSeq": 899,
+        "axisBeat": "程宗扬看住阿阁战局，不让吕氏把赵皇后接往北宫；吕奉先单骑破阵。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.lvfengxian_breaks_line.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.zhao_feiyan",
+          "liuchao.character.cai_jingzhong",
+          "lyl.character.liu_jian"
+        ],
+        "relatedFactionIds": [
+          "lyl.faction.lyu_clan",
+          "lyl.faction.changqiu"
+        ],
+        "objective": "看住阿阁战局，别让吕氏把赵皇后接往北宫",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "watch_age_battle_from_que",
+              "label": "在阙楼上看住阿阁战局",
+              "actionText": "我在阙楼上看吕奉先单骑杀出、斩断天子旌旗，看两军在阿阁反复易手。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已看住阿阁战局；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "age_battle_watched"
+            },
+            {
+              "id": "block_empress_north_palace_transfer",
+              "label": "把长秋宫门守死，不让移宫",
+              "actionText": "我把长秋宫的门守死，不让吕氏把赵皇后接往北宫。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已看住阿阁战局，不让吕氏把赵皇后接往北宫；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "age_battle_watched"
               ]
             }
           ]

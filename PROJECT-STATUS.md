@@ -3,7 +3,49 @@
 > 面向「新加入的 agent」。读完这一篇即可独立认领一个模块开工。
 > 当前认领：无。**进行中**：无。
 >
-> ## 最后更新：2026-08-17（**lcq.stage_04b 末尾补 6 条隔离关改挂 event**）
+> ## 最后更新：2026-08-17（**lcq.stage_05b／lyl.lin_an_bridge 再补 7 条隔离关改挂 event**）
+>
+> append-only：① `lcq.stage_05b` 末尾 `xiaozi_kills_mother`(217，原隔离关 `lcq.stage_06`)，轴窗已含 217，未放宽。② `lyl.lin_an_bridge` 末尾六条（原 `lyl.lin_an_black_sea`／`lyl.taiquan_expedition`）：`survey_wumu_mansion`(556)／`decode_bianmenwa_note`(557)／`meet_xue_yanshan`(558)／`identify_xue_cold_poison`(559)／`decide_chase_weiyuan`(561)／`pass_kotian_stone`(562)。seq 均在 550–562 内递增加，未放宽轴窗。合同均为手写双步动作，未用 `advance_declared_objective`。薛延山／敖润／冯源／俞子元／李师师／月霜不在本关 canon 名单，只写入正文，未挂 `relatedCharacterIds`。未改既有 event、未改 chapters、未跑 `build:single`，未改 `src/`、`tests/`。`mod:validate` PASS（stage_05b 6 条、lin_an_bridge 17 条未挂章节 warning，含本轮 7 条）。
+>
+> ---
+>
+> ## 上一条：2026-08-17（**lcq.stage_04b 再补 6 条：小紫登场至脱困**）
+>
+> append-only：原隔离关 `lcq.stage_05` 的黑舌疑点与小紫首现／拔叉稳伤／收拢商队见使者／武二郎斩达古／一阳逼退阴煞／机关脱困，改挂可达关 `lcq.stage_04b_lingfei_baiyi_crisis` 末尾为可玩拍：`xiaozi_first_appears`(123)／`pull_harpoon_lemingzhu`(125)／`regroup_caravan_envoy`(131)／`wuerlang_slays_dagu`(145)／`yiyang_repels_yinsha`(147)／`escape_cave_mechanism`(160)。轴窗已是 42–162，未再放宽。合同均为手写双步动作，未用 `advance_declared_objective`。黑舌／达古／石刚不在本关 canon 名单，只写入正文，未挂对应 id。小紫本拍只以碧鲮少女身份登场，未写入后期来历。未改既有 event、未改 chapters、未跑 `build:single`，未改 `src/`、`tests/`。`mod:validate` PASS（18 条未挂章节 warning，含本轮 6 条）。
+>
+> ---
+>
+> ## 上一条：2026-08-17（**lcq.stage_02 末尾再补 3 条隔离关改挂 event**）
+>
+> append-only：原隔离关 `lcq.stage_03` 的凝羽登场／紫溪太乙拦船／抵达无声蛇彝村，改挂可达关 `lcq.stage_02` 末尾为可玩拍：`ningyu_enters_gamble`(35)／`zixi_taiyi_intercept`(54)／`silent_sheyi_village`(59)。`manifest.axisSeqHi` 58→59。合同均为手写双步动作，未用 `advance_declared_objective`。祁远／谢艺不在本关 canon 名单，只写入正文，未挂 `relatedCharacterIds`。未改既有 event、未改 chapters、未跑 `build:single`，未改 `src/`、`tests/`。
+>
+> ---
+>
+> ## 上一条：2026-08-17（**lyl.lin_an_bridge 末尾补 7 条隔离关改挂 event**）
+>
+> append-only：原隔离关 `lyl.lin_an_black_sea`／`lyl.taiquan_expedition` 的临安支线（李师师婚事＋威远失镖＋林冲）改挂可达关 `lyl.lin_an_bridge` 末尾为可玩拍：`tail_li_shishi`(555)／`evade_huangchengsi`(556)／`libu_registration`(558)／`leifeng_pagoda_invite`(559)／`leifeng_repel_gao`(560)／`weiyuan_extortion`(557)／`ivory_visit_weiyuan`(563)。`manifest.axisSeqLo` 557→555。合同均为手写双步动作，未用 `advance_declared_objective`。李师师／林冲／俞子元／陆谦／李寅臣不在本关 canon 名单，只写入正文，未挂 `relatedCharacterIds`。未改既有 event、未改 chapters、未跑 `build:single`，未改 `src/`、`tests/`。
+>
+> ---
+>
+> ## 上一条：2026-08-17（**lyl.han_palace_endgame 末尾补 6 条隔离关改挂 event**）
+>
+> append-only：原隔离关 `lyl.luoyang_coup` 的拥立定陶王全过程六拍，改挂可达关 `lyl.han_palace_endgame` 末尾为可玩拍：`lvji_defiles_consort`(891)／`emperor_death_spreads`(894)／`arrange_escape_route`(895)／`changqiu_palace_defense`(897)／`bounty_and_hu_cavalry`(898)／`lvfengxian_breaks_line`(899)。`manifest.axisSeqLo` 896→891。合同均为手写双步动作，未用 `advance_declared_objective`。友通期／敖润／桓郁／吕奉先不在本关 canon 名单，只写入正文，未挂 `relatedCharacterIds`。未改既有 event、未改 chapters、未跑 `build:single`，未改 `src/`、`tests/`。`mod:validate` PASS（10 条未挂章节 warning，含本轮 6 条）。
+>
+> ---
+>
+> ## 上一条：2026-08-17（**lcq.stage_04b 再补 6 条：五原至进峒**）
+>
+> append-only：原隔离关 `lcq.stage_03`／`lcq.stage_05` 的冰蛊南行／劝住武二郎／峒眼线／古道废墟／随弥骨入峒／红苗受控，改挂可达关 `lcq.stage_04b_lingfei_baiyi_crisis` 末尾为可玩拍：`ice_gu_coercion`(42)／`persuade_wuerlang`(51)／`spot_dong_informant`(137)／`ruins_ghost_warriors`(143)／`enter_dong_with_migu`(154)／`hongmiao_controlled`(162)。`manifest.axisSeqLo` 88→42，`axisSeqHi` 158→162。合同均为手写双步动作，未用 `advance_declared_objective`。苏妲己／西门庆／古道废墟地点不在本关 canon 名单，只写入正文，未挂对应 id。未改既有 event、未改 chapters、未跑 `build:single`，未改 `src/`、`tests/`。`mod:validate` PASS（12 条未挂章节 warning，含本轮 6 条）。
+>
+> ---
+>
+> ## 上一条：2026-08-17（**lcq.stage_02 末尾再补 5 条隔离关改挂 event**）
+>
+> append-only：原隔离关 `lcq.stage_03` 的赌局卖身／六十金铢／撕契出城／铁索桥／黑石滩，改挂可达关 `lcq.stage_02` 末尾为可玩拍：`gamble_bond_signed`(37)／`charge_sudaji_fee`(38)／`free_ajiman`(40)／`iron_bridge_ambush`(50)／`rainforest_black_shoal`(58)。`manifest.axisSeqHi` 53→58。合同均为手写双步动作，未用 `advance_declared_objective`。阿姬曼／武二郎／云苍峰不在本关 canon 名单，只写入正文，未挂 `relatedCharacterIds`。未改既有 event、未改 chapters、未跑 `build:single`，未改 `src/`、`tests/`。`mod:validate` PASS（9 条未挂章节 warning，含本轮 5 条）。
+>
+> ---
+>
+> ## 上一条：2026-08-17（**lcq.stage_04b 末尾补 6 条隔离关改挂 event**）
 >
 > append-only：原隔离关 `lcq.stage_05` 的海神殿鲛人／谢艺述旧战／兵器化解／探峒约定／白纸达古／阁罗召碧姬，改挂可达关 `lcq.stage_04b_lingfei_baiyi_crisis` 末尾为可玩拍：`haishen_hall_merfolk`(124)／`xieyi_biling_war`(128)／`weapon_deal_with_geluo`(134)／`guiwangdong_coop_pact`(151)／`blank_letter_and_dagu`(156)／`geluo_summons_biji`(158)。`manifest.axisSeqHi` 122→158。合同均为手写双步动作，未用 `advance_declared_objective`。引用均在本关 canon 名单内。未改既有 event、未改 chapters、未跑 `build:single`，未改 `src/`、`tests/`。`mod:validate` PASS（6 条未挂章节 warning）。
 >

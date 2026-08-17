@@ -4101,7 +4101,8 @@
       "event.huamiao_coop_boundary.done": false,
       "event.ghost_king_swallowed.done": false,
       "event.slay_dragon.done": false,
-      "event.tribes_pledge.done": false
+      "event.tribes_pledge.done": false,
+      "event.xiaozi_kills_mother.done": false
     },
     "chapters": [
       {
@@ -5135,6 +5136,73 @@
                 "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
                 "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
               }
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.xiaozi_kills_mother",
+        "name": "小紫弑母",
+        "description": "追上小紫，见证她与母亲碧姬对质后亲手弑母，并承接余波。",
+        "axisId": "qingyu.120.1",
+        "axisAnchor": "六朝清羽记·#120·第118章·弑亲",
+        "axisSeq": 217,
+        "axisBeat": "追上小紫，见证她与母亲碧姬对质后亲手弑母，并承接余波。",
+        "critical": true,
+        "conditions": [
+          {
+            "path": "flags.event.slay_dragon.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.xiaozi_kills_mother.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.xiao_zi",
+          "liuchao.character.bi_ji",
+          "liuchao.character.le_mingzhu"
+        ],
+        "locationId": "liuchao.location.gui_wang_dong",
+        "objective": "追上小紫，见证她与母亲碧姬对质后的决断并承接余波",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "chase_xiaozi_to_biji",
+              "label": "追上小紫，听清她与碧姬的对质",
+              "actionText": "我与乐明珠追到鬼王峒废墟旁，听清小紫向母亲碧姬质问幼年被出卖与虐待的旧恨，不把这场对质错写成拦人逃亡。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已追上小紫，并听清她与碧姬的对质；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "xiaozi_biji_confrontation_seen"
+            },
+            {
+              "id": "witness_xiaozi_kills_mother",
+              "label": "见证决断并承接余波",
+              "actionText": "我留在现场见证小紫亲手弑母，事后接住情绪崩溃的她，承认这件事留下的余波。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已见证小紫与碧姬对质后的决断，并承接余波；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "xiaozi_biji_confrontation_seen"
+              ]
             }
           ]
         }

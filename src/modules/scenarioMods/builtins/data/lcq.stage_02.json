@@ -10,7 +10,7 @@
     "axisVersion": "rebuild-2026-06-28",
     "axisOrder": 1,
     "axisSeqLo": 19,
-    "axisSeqHi": 53,
+    "axisSeqHi": 59,
     "eventIdContract": "append-only-frozen",
     "prevStageId": "lcq.stage_01",
     "prevStageName": "六朝清羽记·第1集·太乙真宗",
@@ -2277,7 +2277,12 @@
       "event.baihu_shangguan_escape.done": false,
       "event.sudaji_south_pact.done": false,
       "event.wuerlang_joins.done": false,
-      "event.ningyu_regicide_offer.done": false
+      "event.ningyu_regicide_offer.done": false,
+      "event.gamble_bond_signed.done": false,
+      "event.charge_sudaji_fee.done": false,
+      "event.free_ajiman.done": false,
+      "event.iron_bridge_ambush.done": false,
+      "event.rainforest_black_shoal.done": false
     },
     "events": [
       {
@@ -3202,6 +3207,497 @@
               },
               "requiresPreparation": [
                 "ningyu_regicide_price_heard"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.gamble_bond_signed",
+        "name": "赌局落败卖身",
+        "description": "程宗扬赌局落败，面对苏妲己作弊后的卖身结果，凝羽因此被卖。",
+        "axisId": "qingyu.21.1",
+        "axisAnchor": "六朝清羽记·#21·第19章·赌局",
+        "axisSeq": 37,
+        "axisBeat": "程宗扬赌局落败，面对苏妲己作弊后的卖身结果，凝羽因此被卖。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.gamble_bond_signed.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.su_daji",
+          "liuchao.character.ning_yu"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.bai_hu_shang_guan"
+        ],
+        "locationId": "liuchao.location.wuyuan",
+        "objective": "赌局落败后，面对苏妲己作弊造成的卖身结果，确认凝羽因此被卖",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "confirm_rigged_wager_loss",
+              "label": "确认刻香被加速后赌局落败",
+              "actionText": "我当面核对赌局时限与刻香，确认苏妲己作弊加速刻香、此局已判我落败，不把规则说成尚未结束。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "rigged_wager_loss_seen"
+            },
+            {
+              "id": "face_ningyu_sold_result",
+              "label": "面对凝羽因此被卖的结果",
+              "actionText": "赌局落败后，我面对苏妲己作弊造成的卖身结果，确认凝羽因此被卖，不把这拍改写成赌局作废或无人易主。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已面对苏妲己作弊后的卖身结果，确认凝羽因此被卖；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "rigged_wager_loss_seen"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.charge_sudaji_fee",
+        "name": "谈定六十金铢",
+        "description": "程宗扬在帮苏妲己取出新奇器物前，谈定六十金铢报酬。",
+        "axisId": "qingyu.23.1",
+        "axisAnchor": "六朝清羽记·#23·第21章·戏弄",
+        "axisSeq": 38,
+        "axisBeat": "程宗扬在帮苏妲己取出新奇器物前，谈定六十金铢报酬。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.charge_sudaji_fee.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.su_daji"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.bai_hu_shang_guan"
+        ],
+        "locationId": "liuchao.location.wuyuan",
+        "objective": "在帮苏妲己取出新奇器物前谈定六十金铢报酬",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "name_sixty_zhu_before_help",
+              "label": "先开出六十金铢工价",
+              "actionText": "苏妲己要我取出那件新奇器物之前，我先把工价说死：六十金铢，不预支就不动手。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "sixty_zhu_named"
+            },
+            {
+              "id": "lock_fee_then_remove_device",
+              "label": "谈定报酬后再取出器物",
+              "actionText": "苏妲己当面应下六十金铢后，我才按约帮她取出新奇器物，不把这拍写成先帮忙后空口赊账。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已在取出器物前谈定六十金铢报酬；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "sixty_zhu_named"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.free_ajiman",
+        "name": "撕毁阿姬曼身契",
+        "description": "程宗扬取得阿姬曼身契当面撕毁，并应对被封锁的出城路线。",
+        "axisId": "qingyu.25.1",
+        "axisAnchor": "六朝清羽记·#25·第23章·赎身",
+        "axisSeq": 40,
+        "axisBeat": "程宗扬取得阿姬曼身契当面撕毁，并应对被封锁的出城路线。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.free_ajiman.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.ning_yu"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.bai_hu_shang_guan"
+        ],
+        "locationId": "liuchao.location.wuyuan",
+        "objective": "取得阿姬曼身契当面撕毁，并应对被封锁的出城路线",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "take_ajiman_bond_in_hand",
+              "label": "取得阿姬曼身契",
+              "actionText": "我用五十金铢把阿姬曼的身契拿到自己手里，先确认契据已离开卖方，再准备当面处置。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "ajiman_bond_in_hand"
+            },
+            {
+              "id": "tear_bond_and_face_blockade",
+              "label": "当面撕契并改道出城",
+              "actionText": "我当着阿姬曼的面撕毁身契还她自由；发现商馆侍卫封锁出城岔路后，立刻改道避开搜查。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已当面撕毁阿姬曼身契，并应对被封锁的出城路线；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "ajiman_bond_in_hand"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.iron_bridge_ambush",
+        "name": "铁索桥伏击",
+        "description": "程宗扬稳定武二郎伤势，带队突破铁索桥伏击。",
+        "axisId": "qingyu.32.2",
+        "axisAnchor": "六朝清羽记·#32·第30章·险路",
+        "axisSeq": 50,
+        "axisBeat": "程宗扬稳定武二郎伤势，带队突破铁索桥伏击。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.iron_bridge_ambush.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.ning_yu"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.bai_hu_shang_guan"
+        ],
+        "locationId": "liuchao.location.wuyuan",
+        "objective": "稳定武二郎伤势，带队突破铁索桥伏击",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "stabilize_wuerlang_on_route",
+              "label": "先稳住武二郎伤势",
+              "actionText": "我与凝羽先处理武二郎中毒带伤的伤口，确认他还能随队，不把他丢在桥前。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "wuerlang_wound_held"
+            },
+            {
+              "id": "break_iron_bridge_ambush",
+              "label": "带队突破铁索桥伏击",
+              "actionText": "桥头被不明敌人抢占后，我护住伤员与货物，带队从进退两难的铁索桥上突过去。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已稳定武二郎伤势，并带队突破铁索桥伏击；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "wuerlang_wound_held"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.rainforest_black_shoal",
+        "name": "黑石滩渡河",
+        "description": "商队承受雨林伤亡，依凝羽的火光带两支商队渡过黑石滩。",
+        "axisId": "qingyu.37.2",
+        "axisAnchor": "六朝清羽记·#37·第35章·渡河",
+        "axisSeq": 58,
+        "axisBeat": "商队承受雨林伤亡，依凝羽的火光带两支商队渡过黑石滩。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.rainforest_black_shoal.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.ning_yu"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.bai_hu_shang_guan"
+        ],
+        "locationId": "liuchao.location.wuyuan",
+        "objective": "承受雨林伤亡，依凝羽的火光带两支商队渡过黑石滩",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "bear_rainforest_losses",
+              "label": "收拢雨林伤亡后再渡",
+              "actionText": "青藤蛇与山洪造成伤亡后，我先清点两队伤员与货物，承认损失，不装作无事过滩。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "rainforest_losses_borne"
+            },
+            {
+              "id": "follow_ningyu_fire_across_shoal",
+              "label": "依凝羽火光渡过黑石滩",
+              "actionText": "两队在黑石滩迷失后，我按凝羽岸边火光校正方向，带白湖与云氏两支商队渡过黑石滩。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已承受雨林伤亡，并依凝羽火光带两支商队渡过黑石滩；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "rainforest_losses_borne"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.ningyu_enters_gamble",
+        "name": "凝羽进入赌局",
+        "description": "凝羽奉苏妲己之命进入赌局，程宗扬认清她的处境并当面回应。",
+        "axisId": "qingyu.20.1",
+        "axisAnchor": "六朝清羽记·#20·第18章·妲己",
+        "axisSeq": 35,
+        "axisBeat": "凝羽奉苏妲己之命进入赌局，程宗扬认清她的处境并当面回应。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.ningyu_enters_gamble.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.su_daji",
+          "liuchao.character.ning_yu"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.bai_hu_shang_guan"
+        ],
+        "locationId": "liuchao.location.wuyuan",
+        "objective": "认清奉苏妲己之命进入赌局的凝羽的处境，并当面回应",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "see_ningyu_sent_into_gamble",
+              "label": "看清凝羽奉命进入赌局",
+              "actionText": "苏妲己命凝羽上场后，我当面看清她是奉命进入这场赌局的商馆侍卫长，只认眼前处境，不把后续来历提前当成已知。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "ningyu_gamble_debut_seen"
+            },
+            {
+              "id": "answer_ningyu_on_debut",
+              "label": "当面回应登场的凝羽",
+              "actionText": "我认清凝羽此刻被差遣进赌局的处境后当面回应她，把这拍当作她的登场，不借登场预写后来的经历。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已认清奉命进入赌局的凝羽的处境并当面回应；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "ningyu_gamble_debut_seen"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.zixi_taiyi_intercept",
+        "name": "紫溪太乙拦船",
+        "description": "太乙真宗在紫溪拦截船队，程宗扬现身交涉并救回落水的祁远。",
+        "axisId": "qingyu.35.2",
+        "axisAnchor": "六朝清羽记·#35·第33章·武请",
+        "axisSeq": 54,
+        "axisBeat": "太乙真宗在紫溪拦截船队，程宗扬现身交涉并救回落水的祁远。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.zixi_taiyi_intercept.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.ning_yu"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.bai_hu_shang_guan",
+          "liuchao.faction.tai_yi_zhen_zong"
+        ],
+        "locationId": "liuchao.location.wuyuan",
+        "objective": "在紫溪现身与太乙真宗交涉，并救回落水的祁远",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "face_taiyi_at_zixi",
+              "label": "现身与太乙真宗交涉",
+              "actionText": "太乙真宗在紫溪拦住船队后，我现身船头与对方当面交涉，承认他们在追问，同时拒绝让他们直接接管商队。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "zixi_taiyi_faced"
+            },
+            {
+              "id": "pull_qiyuan_back_aboard",
+              "label": "救回落水的祁远",
+              "actionText": "交涉冲突里祁远被推落水后，我立刻组织船上人手把他救回船队，不把他丢在紫溪里。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已在紫溪现身与太乙真宗交涉，并救回落水的祁远；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "zixi_taiyi_faced"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.silent_sheyi_village",
+        "name": "抵达无声蛇彝村",
+        "description": "商队抵达无灯火、无人声的蛇彝村，并在村中安置下来。",
+        "axisId": "qingyu.38.1",
+        "axisAnchor": "六朝清羽记·#38·第36章·蛇村",
+        "axisSeq": 59,
+        "axisBeat": "商队抵达无灯火、无人声的蛇彝村，并在村中安置下来。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.silent_sheyi_village.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.ning_yu"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.bai_hu_shang_guan"
+        ],
+        "locationId": "liuchao.location.wuyuan",
+        "objective": "抵达无灯火无人声的蛇彝村并安置商队，不预写灭村真相",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "confirm_sheyi_dark_and_silent",
+              "label": "确认寨里无灯也无人声",
+              "actionText": "商队抵寨后，我先从外围确认蛇彝村没有灯火、也没有人应门，只记下眼前的死静，不提前宣告灭村真相。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "sheyi_silence_confirmed"
+            },
+            {
+              "id": "settle_caravan_in_silent_sheyi",
+              "label": "在空村里安置商队",
+              "actionText": "确认无灯无人应之后，我在空村巷口安排警戒与宿处，先把商队人马安置下来，不走进下一章才揭开的真相。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "商队已抵达无灯火无人声的蛇彝村并安置下来；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "sheyi_silence_confirmed"
               ]
             }
           ]

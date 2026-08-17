@@ -9,7 +9,7 @@
     "description": "临安瓦棚情报、小瀛洲初遇、林娘子疑云与明庆寺拜访，连接临安黑魔海线与太泉前置。",
     "axisVersion": "rebuild-2026-06-28",
     "axisOrder": 1.5,
-    "axisSeqLo": 557,
+    "axisSeqLo": 555,
     "axisSeqHi": 626,
     "eventIdContract": "append-only-frozen",
     "prevStageId": "lyl.lin_an_black_sea",
@@ -5662,7 +5662,20 @@
       "event.lin_an_bridge_xieyi_tomb.done": false,
       "event.mingqingsi_lin_lu_meeting.done": false,
       "event.blacksea_iron_puppet.done": false,
-      "event.siying_lane_saber_ambush.done": false
+      "event.siying_lane_saber_ambush.done": false,
+      "event.tail_li_shishi.done": false,
+      "event.evade_huangchengsi.done": false,
+      "event.libu_registration.done": false,
+      "event.leifeng_pagoda_invite.done": false,
+      "event.leifeng_repel_gao.done": false,
+      "event.weiyuan_extortion.done": false,
+      "event.ivory_visit_weiyuan.done": false,
+      "event.survey_wumu_mansion.done": false,
+      "event.decode_bianmenwa_note.done": false,
+      "event.meet_xue_yanshan.done": false,
+      "event.identify_xue_cold_poison.done": false,
+      "event.decide_chase_weiyuan.done": false,
+      "event.pass_kotian_stone.done": false
     },
     "chapters": [
       {
@@ -6651,6 +6664,791 @@
               },
               "requiresPreparation": [
                 "siying_sale_watched"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyl.event.tail_li_shishi",
+        "name": "尾随李师师至威远镖局",
+        "description": "程宗扬尾随李师师的马车至威远镖局，确认她为何突然返回临安。",
+        "axisId": "yunlong.3.2",
+        "axisAnchor": "六朝云龙吟·#3·上钩",
+        "axisSeq": 555,
+        "axisBeat": "程宗扬尾随李师师的马车至威远镖局，确认她为何突然返回临安。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.tail_li_shishi.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.qin_hui"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.wei_yuan_escort"
+        ],
+        "objective": "尾随李师师的马车至威远镖局，确认她为何突然返回临安",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "follow_li_shishi_carriage_to_weiyuan",
+              "label": "跟住李师师的马车到威远镖局",
+              "actionText": "我让人调整车向，保持距离跟住那辆风尘仆仆的马车，直到它停在威远镖局门前。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已跟住李师师的马车到威远镖局门前；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "carriage_followed_to_weiyuan"
+            },
+            {
+              "id": "confirm_li_shishi_return_reason",
+              "label": "确认她为何突然返回临安",
+              "actionText": "我让秦桧去问总镖头家的籍册，确认车上是李师师，此番因家事突然返回临安。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已确认李师师因家事突然返回临安；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "carriage_followed_to_weiyuan"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyl.event.evade_huangchengsi",
+        "name": "识破皇城司尾随入明庆寺",
+        "description": "程宗扬识破皇城司尾随，不动手，以富商身份掩护行踪进入明庆寺。",
+        "axisId": "yunlong.6.1",
+        "axisAnchor": "六朝云龙吟·#6·临安",
+        "axisSeq": 556,
+        "axisBeat": "程宗扬识破皇城司尾随，不动手，以富商身份掩护行踪进入明庆寺。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.evade_huangchengsi.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.qin_hui",
+          "liuchao.character.qing_mian_shou"
+        ],
+        "relatedFactionIds": [
+          "lyg.faction.song_state"
+        ],
+        "objective": "识破皇城司尾随，不动手，以富商身份掩护行踪进入明庆寺",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "spot_huangchengsi_tail",
+              "label": "识破皇城司尾随且不动手",
+              "actionText": "秦桧铜镜里后头多出一道影子，我确认衣色像皇城司后按住随从，不许拔刀动手。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已识破皇城司尾随，且没有动手；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "huangchengsi_spotted_no_fight"
+            },
+            {
+              "id": "enter_mingqingsi_as_merchant",
+              "label": "以富商身份掩护行踪进入明庆寺",
+              "actionText": "我让青面兽背起整摊供香，摆出挥金如土的外地富商模样，从容走进明庆寺。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已以富商身份掩护行踪进入明庆寺；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "huangchengsi_spotted_no_fight"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyl.event.libu_registration",
+        "name": "吏部报到查明林冲调档",
+        "description": "程宗扬完成吏部报到，查明林冲调走了哪些档案。",
+        "axisId": "yunlong.8.2",
+        "axisAnchor": "六朝云龙吟·#8·衙内",
+        "axisSeq": 558,
+        "axisBeat": "程宗扬完成吏部报到，查明林冲调走了哪些档案。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.libu_registration.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.qin_hui"
+        ],
+        "relatedFactionIds": [
+          "lyg.faction.song_state"
+        ],
+        "objective": "完成吏部报到，查明林冲调走了哪些档案",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "register_at_libu_panjiang",
+              "label": "以盘江籍贯完成吏部报到",
+              "actionText": "我按既定身份填下盘江籍贯，在吏部验明正身，领到工部屯田司员外郎的告身与官袍。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成吏部报到；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "libu_register_done"
+            },
+            {
+              "id": "verify_lin_chong_taken_dossiers",
+              "label": "查明林冲调走了哪些档案",
+              "actionText": "我递给书吏几枚金铢，确认林冲已经把我刚填的籍贯、出身等档案一并调走。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已查明林冲调走了籍贯与出身档案；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "libu_register_done"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyl.event.leifeng_pagoda_invite",
+        "name": "应李师师之邀登雷峰塔",
+        "description": "程宗扬应李师师之邀，与她一同登上雷峰塔。",
+        "axisId": "yunlong.9.1",
+        "axisAnchor": "六朝云龙吟·#9·鲜菜",
+        "axisSeq": 559,
+        "axisBeat": "程宗扬应李师师之邀，与她一同登上雷峰塔。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.leifeng_pagoda_invite.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.qin_hui"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.guang_ming_guan_tang"
+        ],
+        "objective": "应李师师之邀，与她一同登上雷峰塔",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "accept_leifeng_invite",
+              "label": "答应李师师同游雷峰塔",
+              "actionText": "湖堤上李师师开口相邀，我当面答应，不推辞这一趟雷峰塔。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已答应李师师同游雷峰塔；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "leifeng_invite_accepted"
+            },
+            {
+              "id": "climb_leifeng_with_li_shishi",
+              "label": "与李师师一同登上雷峰塔",
+              "actionText": "我随李师师和她称作凝姨的美妇登上雷峰塔，等她把真正的来意说开。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已应邀与李师师登上雷峰塔；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "leifeng_invite_accepted"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyl.event.leifeng_repel_gao",
+        "name": "雷峰塔逼退高衙内",
+        "description": "程宗扬在雷峰塔阻止陆谦强带走李师师，逼高衙内一行退走。",
+        "axisId": "yunlong.9.2",
+        "axisAnchor": "六朝云龙吟·#9·鲜菜",
+        "axisSeq": 560,
+        "axisBeat": "程宗扬在雷峰塔阻止陆谦强带走李师师，逼高衙内一行退走。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.leifeng_repel_gao.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.qin_hui",
+          "liuchao.character.gao_zhishang"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.xad9e87112f"
+        ],
+        "objective": "在雷峰塔阻止陆谦强带走李师师，逼高衙内一行退走",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "stop_luqian_taking_li_shishi",
+              "label": "阻止陆谦强带走李师师",
+              "actionText": "陆谦抓住李师师手腕时，我示意秦桧上前，以一指震麻他的经脉，先把人解开。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已阻止陆谦强带走李师师；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "luqian_grip_broken"
+            },
+            {
+              "id": "drive_gao_yanei_off_pagoda",
+              "label": "逼高衙内一行退走",
+              "actionText": "我当面喝出高俅之名，以真气震响塔檐铜铃，迫使陆谦判断不能硬来，带高衙内一行退走。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已在雷峰塔逼高衙内一行退走；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "luqian_grip_broken"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyl.event.weiyuan_extortion",
+        "name": "确认高衙内勒索威远条件",
+        "description": "程宗扬听取俞子元的调查，确认高衙内勒索威远镖局的条件。",
+        "axisId": "yunlong.8.1",
+        "axisAnchor": "六朝云龙吟·#8·衙内",
+        "axisSeq": 557,
+        "axisBeat": "程宗扬听取俞子元的调查，确认高衙内勒索威远镖局的条件。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.weiyuan_extortion.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.qin_hui",
+          "liuchao.character.gao_zhishang"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.wei_yuan_escort"
+        ],
+        "objective": "听取俞子元的调查，确认高衙内勒索威远镖局的条件",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "hear_yu_ziyuan_weiyuan_probe",
+              "label": "听取俞子元的失镖调查",
+              "actionText": "我听俞子元把失镖货册摊开：高衙内名号、御赐玉带、价值十万贯，一项项对过。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已听完俞子元的失镖调查；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "yu_ziyuan_probe_heard"
+            },
+            {
+              "id": "confirm_gao_extortion_terms",
+              "label": "确认高衙内勒索威远镖局的条件",
+              "actionText": "我向俞子元核对门外风闻：高衙内以免于问罪为条件，逼李师师进入太尉府。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已确认高衙内勒索威远镖局的条件；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "yu_ziyuan_probe_heard"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyl.event.ivory_visit_weiyuan",
+        "name": "以象牙试探李寅臣夫妇",
+        "description": "程宗扬以押运象牙为名试探李寅臣夫妇，查明他们对李师师婚事的决定。",
+        "axisId": "yunlong.12.1",
+        "axisAnchor": "六朝云龙吟·#12·镖局",
+        "axisSeq": 563,
+        "axisBeat": "程宗扬以押运象牙为名试探李寅臣夫妇，查明他们对李师师婚事的决定。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.ivory_visit_weiyuan.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.qin_hui",
+          "liuchao.character.ruan_xiang_lin"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.wei_yuan_escort"
+        ],
+        "objective": "以押运象牙为名试探李寅臣夫妇，查明他们对李师师婚事的决定",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "offer_ivory_escort_to_weiyuan",
+              "label": "以押运象牙为名登门试探",
+              "actionText": "我让人抬出两根猛玛牙，向李寅臣提出送往晴州的押运委托，以此打开话头。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已以押运象牙为名登门试探；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "ivory_escort_offered"
+            },
+            {
+              "id": "confirm_weiyuan_marriage_decision",
+              "label": "查明他们对李师师婚事的决定",
+              "actionText": "我在厅中等候时留意后堂动静，确认阮香琳主张以李师师的婚事换取太尉府放过镖局。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已查明李寅臣夫妇对李师师婚事的决定；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "ivory_escort_offered"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyl.event.survey_wumu_mansion",
+        "name": "查勘武穆王府",
+        "description": "绕武穆王府查清建筑方位，不惊动周边暗梢。",
+        "axisId": "yunlong.6.1",
+        "axisAnchor": "六朝云龙吟·#6·临安",
+        "axisSeq": 556,
+        "axisBeat": "绕武穆王府查清建筑方位，不惊动周边暗梢。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.survey_wumu_mansion.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.qin_hui",
+          "liuchao.character.qing_mian_shou"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.x2d33e1eaf9"
+        ],
+        "objective": "绕武穆王府查清建筑方位，不惊动周边暗梢",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "circle_wumu_record_layout",
+              "label": "沿外墙记下王府建筑方位",
+              "actionText": "我装作逛街的富商，带秦桧与青面兽沿武穆王府外墙走上一圈，只记下亭台楼阁的方位，不去碰门上的封条。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已沿外墙记下武穆王府的建筑方位；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "wumu_layout_recorded"
+            },
+            {
+              "id": "leave_wumu_without_alerting",
+              "label": "不惊动周边暗梢便离开",
+              "actionText": "我压住脚步，看清巷口换岗与暗处目光一闪即收，不叫破、不拔刀，带人原路离开。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已查清武穆王府建筑方位，且没有惊动周边暗梢；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "wumu_layout_recorded"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyl.event.decode_bianmenwa_note",
+        "name": "解读便门瓦接头字条",
+        "description": "解读祈福暗号，并答复薛延山的会面请求。",
+        "axisId": "yunlong.8.1",
+        "axisAnchor": "六朝云龙吟·#8·衙内",
+        "axisSeq": 557,
+        "axisBeat": "解读祈福暗号，并答复薛延山的会面请求。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.decode_bianmenwa_note.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.qin_hui"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.x2d33e1eaf9",
+          "liuchao.faction.xue_sun"
+        ],
+        "objective": "解读祈福暗号，并答复薛延山的会面请求",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "decode_qifu_cipher_to_bianmenwa",
+              "label": "解读祈福暗号",
+              "actionText": "我把祈福榜字条铺平，按「君子」开头和落款解出便门瓦、二月十九申时与张官人的接头信息。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已解读祈福暗号；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "bianmenwa_cipher_decoded"
+            },
+            {
+              "id": "reply_xue_yanshan_meeting",
+              "label": "答复薛延山的会面请求",
+              "actionText": "冯源带回雪隼分舵口信后，我让他回复：吏部报到之后，我会亲自去西湖农居见薛延山。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已解读祈福暗号，并答复薛延山的会面请求；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "bianmenwa_cipher_decoded"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyl.event.meet_xue_yanshan",
+        "name": "西湖农居会见薛延山",
+        "description": "听完薛延山讲述太湖遇袭，并接下照管雪隼残部的托付。",
+        "axisId": "yunlong.8.2",
+        "axisAnchor": "六朝云龙吟·#8·衙内",
+        "axisSeq": 558,
+        "axisBeat": "听完薛延山讲述太湖遇袭，并接下照管雪隼残部的托付。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.meet_xue_yanshan.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.xue_sun"
+        ],
+        "objective": "听完薛延山讲述太湖遇袭，并接下照管雪隼残部的托付",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "hear_xue_taihu_ambush",
+              "label": "听薛延山讲完太湖遇袭",
+              "actionText": "敖润把闲人挡在西湖农居门外后，我让旁人安静下来，听薛延山把三条座船被水鬼凿沉、雪隼团在湖中血战的经过讲完。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已听完薛延山讲述太湖遇袭；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "xue_taihu_ambush_heard"
+            },
+            {
+              "id": "accept_xuesun_remnant_charge",
+              "label": "接下照管雪隼残部的托付",
+              "actionText": "我当面答应薛延山：他的兄弟就是我的手足，雪隼团留下的人我会照管。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已听完太湖遇袭，并接下照管雪隼残部的托付；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "xue_taihu_ambush_heard"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyl.event.identify_xue_cold_poison",
+        "name": "辨认薛延山寒毒",
+        "description": "检查薛延山的寒毒，并确认他是否见过鬼牙。",
+        "axisId": "yunlong.9.1",
+        "axisAnchor": "六朝云龙吟·#9·鲜菜",
+        "axisSeq": 559,
+        "axisBeat": "检查薛延山的寒毒，并确认他是否见过鬼牙。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.identify_xue_cold_poison.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.xue_sun"
+        ],
+        "objective": "检查薛延山的寒毒，并确认他是否见过鬼牙",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "diagnose_xue_cold_poison",
+              "label": "检查薛延山的寒毒",
+              "actionText": "我扣住薛延山的脉门仔细辨认，确认这股吞噬精血的寒毒与云如瑶、月霜体内的寒毒同源。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已检查薛延山的寒毒；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "xue_cold_poison_checked"
+            },
+            {
+              "id": "ask_xue_about_guiya",
+              "label": "确认他是否见过鬼牙",
+              "actionText": "我取出萧遥逸给我的鬼牙，请薛延山仔细辨认；他看过之后仍无法确认袭击者身份。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已检查寒毒，并确认薛延山是否见过鬼牙；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "xue_cold_poison_checked"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyl.event.decide_chase_weiyuan",
+        "name": "决定继续追查威远失镖",
+        "description": "与秦桧复盘雷峰塔冲突，决定继续调查失镖。",
+        "axisId": "yunlong.10.1",
+        "axisAnchor": "六朝云龙吟·#10·轻薄",
+        "axisSeq": 561,
+        "axisBeat": "与秦桧复盘雷峰塔冲突，决定继续调查失镖。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.decide_chase_weiyuan.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.qin_hui"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.guang_ming_guan_tang",
+          "liuchao.faction.wei_yuan_escort"
+        ],
+        "objective": "与秦桧复盘雷峰塔冲突，决定继续调查失镖",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "review_leifeng_with_qin_hui",
+              "label": "与秦桧复盘雷峰塔冲突",
+              "actionText": "高衙内退走、李师师致谢离开后，我听秦桧把光明观堂不介入江湖恩怨的立场说完，把雷峰塔这一场复盘清楚。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已与秦桧复盘雷峰塔冲突；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "leifeng_conflict_reviewed"
+            },
+            {
+              "id": "order_continue_weiyuan_inquiry",
+              "label": "决定继续调查失镖",
+              "actionText": "我仍让秦桧继续打听威远失镖：能帮便帮，不因光明观堂的立场把这条线索放下。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已与秦桧复盘雷峰塔冲突，并决定继续调查失镖；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "leifeng_conflict_reviewed"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyl.event.pass_kotian_stone",
+        "name": "经过叩天石前往便门瓦",
+        "description": "看过叩天石后，按暗号约定前往便门瓦。",
+        "axisId": "yunlong.10.2",
+        "axisAnchor": "六朝云龙吟·#10·轻薄",
+        "axisSeq": 562,
+        "axisBeat": "看过叩天石后，按暗号约定前往便门瓦。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.pass_kotian_stone.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.qin_hui"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.x2d33e1eaf9"
+        ],
+        "objective": "看过叩天石后，按暗号约定前往便门瓦",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "view_kotian_stone_sword",
+              "label": "看过叩天石",
+              "actionText": "我在朝天门前看过斩开叩天石的巨剑，与秦桧说清自己眼下只想一步一步经营。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已看过叩天石；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "kotian_stone_seen"
+            },
+            {
+              "id": "go_bianmenwa_by_cipher",
+              "label": "按暗号约定前往便门瓦",
+              "actionText": "我敲了敲车厢，让车夫转向便门瓦，去赴祈福字条上约定的接头。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已看过叩天石，并按暗号约定前往便门瓦；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "kotian_stone_seen"
               ]
             }
           ]
