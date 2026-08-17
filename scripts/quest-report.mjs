@@ -116,24 +116,34 @@ for (const m of linesSrc.matchAll(/id: '(\w+)',\s*\n\s*name: '([^']+)',\s*\n\s*k
 }
 
 // ── 人物线：从文档抽「挂在哪个 event 下」。↪ 插入 与 ✅ 已有 都算挂点。
+// ── 人物任务：**读模块，不读文档**（2026-08-18）。
+// 文档是草稿，`characterQuests.ts` 才是接进游戏的那份——待审稿必须审代码里真有的东西。
+// 仍用正则抽（报表不引入 TS 运行时）。
+const CHARMOD = 'src/modules/scenarioMods/characterQuests.ts';
 const chars = [];
-if (fs.existsSync(path.join(ROOT, CHARDOC))) {
-  const doc = fs.readFileSync(path.join(ROOT, CHARDOC), 'utf8');
+if (fs.existsSync(path.join(ROOT, CHARMOD))) {
+  const src = fs.readFileSync(path.join(ROOT, CHARMOD), 'utf8');
+  const questBlock = src.slice(src.indexOf('CHARACTER_QUESTS'), src.indexOf('CHARACTER_HIGHLIGHTS'));
   let cur = null;
-  for (const line of doc.split('\n')) {
-    const h = line.match(/^## \d+\.\s*(\S+)/);
-    if (h && !/^(口径|17|选谁)/.test(h[1])) { cur = { name: h[1], hooks: [] }; chars.push(cur); continue; }
-    if (!cur || !line.startsWith('|')) continue;
-    const ids = [...line.matchAll(/`((?:lcq|lyl|lyg|liuchao)\.event\.[a-zA-Z0-9_]+)`/g)].map(x => x[1]);
+  for (const line of questBlock.split('\n')) {
+    const nm = line.match(/^\s*name: '([^']+)',\s*$/);
+    if (nm) { cur = { name: nm[1], hooks: [] }; chars.push(cur); continue; }
+    const beat = line.match(/\{ text: '(.*?)', status: '(\w+)', eventIds: \[(.*?)\] \}/);
+    if (!cur || !beat) continue;
+    const ids = [...beat[3].matchAll(/'([^']+)'/g)].map(x => x[1]);
+    if (beat[2] === 'new' || !ids.length) continue;
+    cur.hooks.push({ eventId: ids[0], alsoIds: ids.slice(1), insert: beat[2] === 'insert', isNew: false,
+                     label: '', visible: beat[1] });
+  }
+  // A 档单点高光：不成线，但同样是人物挂点，也要进待审稿。
+  const hlBlock = src.slice(src.indexOf('CHARACTER_HIGHLIGHTS: CharacterHighlight[]'));
+  const byName = new Map(chars.map(c => [c.name, c]));
+  for (const m of hlBlock.matchAll(/\{ name: '([^']+)', eventIds: \[(.*?)\], text: '(.*?)' \}/g)) {
+    const ids = [...m[2].matchAll(/'([^']+)'/g)].map(x => x[1]);
     if (!ids.length) continue;
-    const cells = line.replace(/^\||\|$/g, '').split('|').map(x => x.trim());
-    // 表格形如 | # | 挂在 | 这一拍（玩家可见） | 标 |
-    const label = cells[0] || '';
-    const visible = cells[2] || '';
-    const insert = line.includes('↪');
-    const isNew = line.includes('🆕');
-    // 一行可能引多个 id（并进拍），第一个当主挂点
-    cur.hooks.push({ eventId: ids[0], alsoIds: ids.slice(1), insert, isNew, label, visible });
+    let c = byName.get(m[1]);
+    if (!c) { c = { name: m[1], hooks: [], highlightOnly: true }; chars.push(c); byName.set(m[1], c); }
+    c.hooks.push({ eventId: ids[0], alsoIds: ids.slice(1), insert: true, isNew: false, label: 'A档', visible: m[3] });
   }
 }
 
