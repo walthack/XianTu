@@ -79,13 +79,23 @@ test('MAIN_QUEST_REQUIREMENTS 恰有两条完成要求', async () => {
   );
 });
 
-// 地点锚（用户裁定 2026-08-16）：隔离关被默认路线跳过，节点不能因此失踪。
-test('隔离关的主轴节点靠地点锚仍可达', async () => {
+// 2026-08-17 规则升级：主轴**不该再有**节点落在隔离关上。
+//
+// 原断言写的是「隔离关的节点靠地点锚仍可达」——那是权宜：当时最后一个节点
+// （`enter_dong_recognize_biji`「当面辨认碧姬」）挂在隔离关 `lcq.stage_05` 等裁定，
+// 只能靠地点锚兜底。孤儿救援已把该拍重建为可达的 `geluo_summons_biji`（seq 158），
+// 主轴遂无隔离节点。原断言自己写着「若隔离名单已清空，本断言需重写而不是删除」，照办：
+// 规则从「兜得住」升级为「不该发生」。地点锚兜底的能力保留在下面的用例里，未删。
+test('主轴不得有节点落在隔离关上', async () => {
   const { MAIN_QUEST_NODES, resolveMainQuestNodes } = await loadTs('../src/modules/scenarioMods/mainQuestAxis.ts');
   const { DEFAULT_LINE_QUARANTINED_STAGE_IDS } = await loadTs('../src/modules/scenarioMods/canonRail.ts');
 
   const quarantinedNodes = MAIN_QUEST_NODES.filter(n => DEFAULT_LINE_QUARANTINED_STAGE_IDS.has(n.stageId));
-  assert.ok(quarantinedNodes.length > 0, '若隔离名单已清空，本断言需重写而不是删除');
+  assert.deepEqual(
+    quarantinedNodes.map(n => `[${n.stageId}] ${n.text}`),
+    [],
+    '主轴节点挂在被默认路线静默跳过的关上，玩家永远走不到——改挂可达关或找出该拍的可达版本',
+  );
 
   // 每个落在隔离关上的节点都必须有地点锚，否则默认路线上永远渲染不出来
   for (const node of quarantinedNodes) {

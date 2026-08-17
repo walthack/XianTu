@@ -1,0 +1,234 @@
+/**
+ * 第三级：人物任务。
+ *
+ * **形态是插入段，不是第三条节点序列**（用户裁定 2026-08-16）：
+ *
+ * > 「角色剧情是**二级线的下层插入事件**……这样才能产生——
+ * >  **如果这个角色不在场，这个 event 会变成另外一个样**的效果。」
+ *
+ * 所以每一拍都挂在一个**已存在的故事 event** 上，回答的是「这一拍因为带着谁而不同」，
+ * 而不是「第几步做什么」。三级权重依次递减：主轴 － 二级线 － 人物任务；
+ * 人物任务**不抢上级已认领的 event**，只在它下面当插入段（`insert`）。
+ *
+ * 数据由 `docs/R3-10-CHARACTER-QUESTS-DRAFT-2026-08-16.md` 机械抽取生成，
+ * 抽取器见 scratchpad `extract_cq.py`／`gen_cq.py`。**改内容改文档再重抽，不要手改本文件的表。**
+ * 抽取时逐条把文档里的 id 解析成真实 event id（跨书重名用 `axisSeq` 消歧），
+ * 解析不了的会报错——所以本文件里的 `ready`／`insert` id 都是真实存在的。
+ */
+
+export type CharacterBeatStatus =
+  /** 已有独立 event 承载这一拍。 */
+  | 'ready'
+  /** 正典有、游戏没落地，`eventIds` 是建议 id，**尚不存在**。 */
+  | 'new'
+  /** 挂在上级链已认领的 event 下面当插入段——同一拍，两边读到的东西不同。 */
+  | 'insert';
+
+export interface CharacterQuestBeat {
+  /** 玩家可见的一句：这一拍因为他而发生了什么。 */
+  text: string;
+  status: CharacterBeatStatus;
+  /** `ready`／`insert` 为真实 event id（两拍并进时多个）；`new` 为建议 id。 */
+  eventIds: string[];
+}
+
+export interface CharacterQuest {
+  id: string;
+  /** 人物名——与正典角色表同名，供 UI 与提示词直接用。 */
+  name: string;
+  beats: CharacterQuestBeat[];
+}
+
+/**
+ * A 档单点高光：**不成线**，但这一拍是属于这个人的。
+ *
+ * 来源是孤儿归类（2026-08-17）——它们本来就在事件层里，只是没人认领。
+ * 「料不够并不是这个角色不需要登场的理由」（用户裁定），故一律保留为挂点，
+ * 够料的日后升格成 `CHARACTER_QUESTS` 里的线。
+ */
+export interface CharacterHighlight {
+  name: string;
+  /** 这一拍/这几拍的真实 event id。 */
+  eventIds: string[];
+  /** 这一拍是他的什么。 */
+  text: string;
+}
+
+export const CHARACTER_QUESTS: CharacterQuest[] = [
+  {
+    id: 'xiaozi',
+    name: '小紫',
+    beats: [
+      { text: '你质问她，揭穿她一直在用的控制手段——她不是白痴', status: 'ready', eventIds: ['lcq.event.s05b_02_xiaozi_exposed'] },
+      { text: '她把乐明珠捉进深井。你下去救人，也第一次看清她做事的方式', status: 'ready', eventIds: ['lcq.event.s05b_07_xiaozi_trap'] },
+      { text: '她以毒戒制服卓云君，再用细针秘术把人压成玩物', status: 'ready', eventIds: ['lcq.event.s07_03_xiaozi_appears'] },
+      { text: '她重伤——你得决定护到什么程度', status: 'ready', eventIds: ['lcq.event.s09_03_xiaozi_wounded'] },
+      { text: '江州要人，你拒绝交出她', status: 'ready', eventIds: ['lcq.event.s09_10_separation'] },
+      { text: '兰汤馆，她压不住要吸血——你当场按住她', status: 'ready', eventIds: ['lcq.event.s10_10_xiaozi_crisis'] },
+      { text: '她以幽冥宗法术出手，点破辰星七妖，并牵出龙宸', status: 'ready', eventIds: ['lcq.event.s12_14_chenxing_appears'] },
+      { text: '她与莫如霖对质母亲碧姬的旧事', status: 'ready', eventIds: ['lyl.event.taiquan_afterfall_04_beat'] },
+      { text: '你向杨玉环打听离魂症——她母亲的病，可能也在她身上', status: 'ready', eventIds: ['lyg.event.s06_01'] },
+      { text: '送她到渭水水下闭关，冲五级', status: 'ready', eventIds: ['lyg.event.s06_07'] },
+      { text: '她没回来。内宅警铃响', status: 'ready', eventIds: ['lyg.event.s06_09'] },
+      { text: '她在渭水被掳走。你去找她', status: 'ready', eventIds: ['lyg.event.buddhist_conspiracy_02_beat'] },
+    ],
+  },
+  {
+    id: 'zhuoyunjun',
+    name: '卓云君',
+    beats: [
+      { text: '半兽人围上来。她用烈火法术救下你和月霜', status: 'insert', eventIds: ['lcq.event.s01_03'] },
+      { text: '玄真观：你斩杀吴行德，救下她', status: 'ready', eventIds: ['lcq.event.s07_02_kill_wu'] },
+      { text: '小紫以毒戒制服重伤的她；细针秘术和残酷折磨让这位太乙教御彻底崩溃，沦为任人摆布的玩物', status: 'ready', eventIds: ['lcq.event.s07_03_xiaozi_appears', 'lcq.event.s07_04_zhuo_subdued'] },
+      { text: '你与小紫设局，迫使她放弃抵抗，同意以性奴身份赚钱赎身', status: 'ready', eventIds: ['lcq.event.s07_09_hengtang_ambush'] },
+      { text: '同夜你为她破处，确立人身依附。她坦白：失身是恩将仇报的报应；师叔被蔺采泉杀害；求你杀蔺，承诺终身为你的妓女', status: 'new', eventIds: ['lcq.event.s07_zhuo_price'] },
+      { text: '沐羽城庆典，你认出云中仙子就是她。小紫以更高权威再压一次，她为保命放弃抵抗，并指导徒儿侍奉', status: 'ready', eventIds: ['lcq.event.s12_02_recognize_zhuo', 'lcq.event.s12_03_xiaozi_controls_zhuo'] },
+      { text: '你以「新任掌教」身份迫使她与申婉盈屈服，胁迫双修', status: 'new', eventIds: ['lcq.event.s12_zhuo_forced'] },
+      { text: '翠微园。她把 ZY5 的价拿到你面前兑现：你承诺对付现任掌教蔺采泉，并写下盘江程氏股份', status: 'insert', eventIds: ['lyl.event.sacred_against_lin', 'lyl.event.taiquan_sacred_fruit_02'] },
+    ],
+  },
+  {
+    id: 'xieyi',
+    name: '谢艺',
+    beats: [
+      { text: '空村里，他指出尸体旁的鬼王峒血符。你第一次看见他本人动手', status: 'insert', eventIds: ['lcq.event.s03b_snake_flower_bridge_03', 'lcq.event.s03_12'] },
+      { text: '他独入地宫，杀光使者与武士，拷问碧宛下落无果后斩首', status: 'ready', eventIds: ['lcq.event.s04b_lingfei_baiyi_crisis_13'] },
+      { text: '你质问阿夕异常。他承认设计让你接触阿葭，并暗示灵飞镜会在南荒重逢', status: 'ready', eventIds: ['lcq.event.s04b_lingfei_baiyi_crisis_15'] },
+      { text: '他换上现代休闲装，跟你谈玻璃，并吐出岳帅晕血、遗腹女', status: 'insert', eventIds: ['lcq.event.s04b_lingfei_baiyi_crisis_18'] },
+      { text: '他讲清海湾旧战与朱狐冠，并希望你继承岳帅的使命。你保持警惕', status: 'new', eventIds: ['lcq.event.s04b_xieyi_yue_mission'] },
+      { text: '龙神这一仗后，你赶到重伤的他身边。他把小紫和名下之物交给你，请你带往星月湖', status: 'insert', eventIds: ['lyg.event.s06_03'] },
+    ],
+  },
+  {
+    id: 'lemingzhu',
+    name: '乐明珠',
+    beats: [
+      { text: '她承认自己是光明观堂弟子，假扮新娘是为了刺杀鬼巫王', status: 'ready', eventIds: ['lcq.event.s04_03'] },
+      { text: '她挺身战鸦人，经验不够被擒。你在鸦人营地救她', status: 'ready', eventIds: ['lcq.event.s04b_lingfei_baiyi_crisis_02'] },
+      { text: '废弃海神殿：鲛人因朱狐冠发狂。你护住她，拔掉卡在她身上的鱼叉', status: 'new', eventIds: ['lcq.event.s04b_lemingzhu_haishen'] },
+      { text: '鬼王宫里她脱险现身，你与她重逢', status: 'ready', eventIds: ['lcq.event.s05b_06_breakout_and_reunion'] },
+      { text: '小紫把她捉进深井。你追下去营救', status: 'ready', eventIds: ['lcq.event.s05b_07_xiaozi_trap'] },
+      { text: '花房：师姐潘金莲闯入，发现她与你、小紫在一起，强行把她带回师门', status: 'new', eventIds: ['lcq.event.s07_pan_takes_pearl'] },
+      { text: '岸边重逢。她决定随你同船去晴州，参与筹建慈幼院', status: 'new', eventIds: ['lcq.event.s10_lemingzhu_returns'] },
+    ],
+  },
+  {
+    id: 'xiaoyaoyi',
+    name: '萧遥逸',
+    beats: [
+      { text: '他向你痛陈左武全军覆没。这是他不靠骨灰的登场拍', status: 'insert', eventIds: ['lcq.event.s07_01_old_case'] },
+      { text: '舟侧两名水鬼。他警觉，与你联手击杀', status: 'ready', eventIds: ['lcq.event.s07_06_water_assassins'] },
+      { text: '他告诉你：王大将军战死可能有内奸。线索指向拜火教', status: 'ready', eventIds: ['lcq.event.s07_10_dragon_fang'] },
+      { text: '他代表星月湖宣布：全力支持你，向你开放所有资源', status: 'insert', eventIds: ['lcq.event.xiao_opens_resources'] },
+      { text: '苏妲己追杀你。他和小紫赶到，把人打退', status: 'ready', eventIds: ['lcq.event.s08_06_pursuit_repelled'] },
+      { text: '秦翰生擒他。你救不救', status: 'insert', eventIds: ['lcq.event.s12_10_rescue_xiao'] },
+    ],
+  },
+  {
+    id: 'yangyuhuan',
+    name: '杨玉环',
+    beats: [
+      { text: '你留在现场，完成这块招牌接触卡', status: 'ready', eventIds: ['lyg.event.debut_yangyuhuan'] },
+      { text: '长安街：她驾车把人踩在地上训。对上眼', status: 'ready', eventIds: ['lyg.event.s03_03'] },
+      { text: '紫云楼顶层：她出题（云如瑶、密码箱、手枪）。你答过关', status: 'ready', eventIds: ['lyg.event.s03_07'] },
+      { text: '她当众称你姑父，看宗室什么脸。你接下或拆穿', status: 'ready', eventIds: ['lyg.event.changgan_interlude_05_beat'] },
+      { text: '你向她打听离魂症。她想起岳帅提过类似的病，警告不能让外人知道', status: 'ready', eventIds: ['lyg.event.s06_01'] },
+    ],
+  },
+  {
+    id: 'zhaohede',
+    name: '赵合德',
+    beats: [
+      { text: '玉佩逼她承认：皇后胞妹，上清观避祸', status: 'ready', eventIds: ['lyl.event.debut_zhaohede'] },
+      { text: '徐璜传口谕：送她入宫封昭仪，应二鹅之象', status: 'ready', eventIds: ['lyl.event.s05_06'] },
+      { text: '乐津里人市：你用昭仪身份诱友通期去做替身', status: 'ready', eventIds: ['lyl.event.s05_07'] },
+      { text: '你把方案说给她听。她同意，并问自己怎么办', status: 'ready', eventIds: ['lyl.event.s05_08'] },
+      { text: '天子暴毙。你扮内侍，把她和赵飞燕从昭阳宫送回长秋宫', status: 'new', eventIds: ['lyl.event.han_escort_zhao'] },
+      { text: '山谷里你杀魏疾救下她。事后她同意做妾，约定关系', status: 'new', eventIds: ['lyg.event.mijing_zhaohede_concubine'] },
+    ],
+  },
+  {
+    id: 'ningyu',
+    name: '凝羽',
+    beats: [
+      { text: '她以肉体为诱，要求你用巫术与她合作除掉苏妲己，并说自己也会赴死。随后双修，你探明她体内阴寒之气来自西门庆把她当鼎炉调教', status: 'new', eventIds: ['lcq.event.s03b_ningyu_regicide'] },
+      { text: '蛇彝人袭来。她斩杀来敌', status: 'ready', eventIds: ['lcq.event.s03b_snake_flower_bridge_01'] },
+      { text: '她因麻古成瘾痛苦。你向乐明珠求解毒', status: 'ready', eventIds: ['lcq.event.s04_06'] },
+      { text: '她从暗处刺穿鬼王峒使者的手掌', status: 'ready', eventIds: ['lcq.event.s04b_lingfei_baiyi_crisis_12'] },
+    ],
+  },
+];
+
+export const CHARACTER_HIGHLIGHTS: CharacterHighlight[] = [
+  { name: '尹馥兰', eventIds: ['lyl.event.yin_fulan_aid', 'lyl.event.taiquan_afterfall_02_beat', 'lyl.event.decide_yin_fulan_fate'], text: 'yin_fulan_aid 主动报伏并要后续安排／taiquan_afterfall_02_beat (688) 被弃下水道向你求救／decide_yin_fulan_fate 决定她与何漪莲的去留' },
+  { name: '吕雉', eventIds: ['lyg.event.debut_lvzhi', 'lyg.event.han_succession_03_beat'], text: 'debut_lvzhi 凤辇临朝立威、点破霍子孟三面受制／han_succession_03_beat (1033) 坦白弑君弑夫旧事、求留程府' },
+  { name: '云如瑶', eventIds: ['lcq.event.s09_02_yun_ruyao_faints', 'lyl.event.taiquan_afterfall_06_beat'], text: 's09_02_yun_ruyao_faints (344) 昏厥暴露病线／taiquan_afterfall_06_beat (718) 提亲受阻后私奔' },
+  { name: '林冲', eventIds: ['lyl.event.lin_an_bridge_04_beat', 'lyl.event.xiaoyingzhou_blacksea_trap_03_beat'], text: 'lin_an_bridge_04_beat (562) 明庆寺相会暴露忍辱处境／xiaoyingzhou_blacksea_trap_03_beat (584) 白虎堂后刺配江州，要你去救' },
+  { name: '卓云君', eventIds: ['lcq.event.s07_04_zhuo_subdued', 'lcq.event.s12_03_xiaozi_controls_zhuo'], text: 's07_04_zhuo_subdued (248) 崩溃失权／s12_03_xiaozi_controls_zhuo (484) 为保命放弃抵抗' },
+  { name: '黛绮丝', eventIds: ['lyg.event.debut_daiqisi'], text: '认定你是拯救者、誓为主仆，暴露摩尼教善母被禁锢的来历' },
+  { name: '苏妲己', eventIds: ['lcq.event.s02_06'], text: '揭开商馆主人伪装、追问霓龙丝——她向你要情报' },
+  { name: '易虎', eventIds: ['lcq.event.s04_05'], text: '救人受创、被洪水吞没——他自己的代价' },
+  { name: '李师师', eventIds: ['lyl.event.lin_an_bridge_02_beat'], text: '初遇小瀛洲、要你护她' },
+  { name: '静善', eventIds: ['lyl.event.xiaoyingzhou_blacksea_trap_05_beat'], text: '为袈裟符文夜袭索物' },
+  { name: '虞白樱', eventIds: ['lyl.event.yu_baiying_truce'], text: '脚踝受伤要你去魔墟救她，并提合作条件' },
+  { name: '左彤芝', eventIds: ['lyl.event.taiquan_sacred_fruit_09'], text: '宋三下毒要劫持的是她（武二郎只是在场）' },
+  { name: '郭解', eventIds: ['lyg.event.s01_06'], text: '临终把定陶王托付给你' },
+  { name: '董卓', eventIds: ['lyg.event.s01_07'], text: '自陈戎马收场，留下胡骑军情遗命' },
+  { name: '赵合德', eventIds: ['lyl.event.han_palace_endgame_03_beat'], text: '含光殿要救的昭仪是她' },
+  { name: '云丹琉', eventIds: ['lyg.event.s02_04'], text: '闯府质问被遗忘的婚事' },
+  { name: '云苍峰', eventIds: ['lyg.event.s02_05'], text: '谈婚礼与纸钞，承诺支援十万金铢' },
+  { name: '霍子孟', eventIds: ['lyg.event.s02_06'], text: '国丧期间应允证婚，把政治信用押给你' },
+  { name: '秦桧', eventIds: ['lcq.event.s07_debut_qinhui'], text: '殇侯点破他「灵敏有余，志浅易变」' },
+  { name: '班超', eventIds: ['lyg.event.highlight_banchao_lamb_leg'], text: '羊腿镇场立规矩，为田荣留退路' },
+  { name: '潘金莲', eventIds: ['lyl.event.pan_jinlian_ambush'], text: '在太泉核心区主动设伏' },
+  { name: '袁天罡', eventIds: ['lyg.event.s03_05'], text: '自述底层穿越者来历、童身换预知的代价' },
+  { name: '杨玉环', eventIds: ['lyg.event.s03_06'], text: '四朝履历被查到，疑与岳飞有关' },
+  { name: '李药师', eventIds: ['lyg.event.changgan_interlude_01_beat'], text: '赠令箭、派南霁云——向你开资源口' },
+  { name: '赵飞燕', eventIds: ['lyg.event.changgan_interlude_07_beat'], text: '病中接受舞都会社，要一个安置' },
+  { name: '白霓裳', eventIds: ['lyg.event.s06_08'], text: '要人安抚后庭恐惧' },
+  { name: '释特昧普', eventIds: ['lyg.event.ganlu_aftershock_01_beat'], text: '自封金身法王，邀你去慈恩寺' },
+  { name: '高阳', eventIds: ['lyg.event.shituolin_endgame_03_beat'], text: '疑冢超百丈、宫内报丧失踪——他的下场' },
+  { name: '小紫', eventIds: ['lcq.event.s09_04_weaving_trade'], text: '为拉链坊归属兴师问罪，以织坊交换平息（补进 §3）' },
+];
+
+/**
+ * 当前这一拍上，有谁的戏。
+ *
+ * 这是人物任务唯一的运行时入口——它不问"进行到第几步"，只问
+ * **"我现在踩着的这个 event，因为谁而不一样"**。这与形态一致：插入段不是序列。
+ * `new` 的拍不返回：那些 event 还不存在，返回了就是把玩家指向走不到的地方。
+ */
+export function characterBeatsAt(eventId: string | undefined): Array<{ name: string; text: string }> {
+  if (!eventId) return [];
+  const out: Array<{ name: string; text: string }> = [];
+  for (const quest of CHARACTER_QUESTS) {
+    for (const beat of quest.beats) {
+      if (beat.status !== 'new' && beat.eventIds.includes(eventId)) {
+        out.push({ name: quest.name, text: beat.text });
+      }
+    }
+  }
+  for (const highlight of CHARACTER_HIGHLIGHTS) {
+    if (highlight.eventIds.includes(eventId)) {
+      out.push({ name: highlight.name, text: highlight.text });
+    }
+  }
+  return out;
+}
+
+/** 每条人物线走了多少——只统计真实可走的拍（`new` 不计入分母，它还不存在）。 */
+export function characterQuestProgress(
+  completedEventIds: readonly string[] | undefined,
+): Array<{ id: string; name: string; done: number; total: number }> {
+  const done = new Set(completedEventIds || []);
+  return CHARACTER_QUESTS.map(quest => {
+    const walkable = quest.beats.filter(b => b.status !== 'new');
+    return {
+      id: quest.id,
+      name: quest.name,
+      // 一拍可能并进多个 event，任一完成即算这一拍走过。
+      done: walkable.filter(b => b.eventIds.some(id => done.has(id))).length,
+      total: walkable.length,
+    };
+  });
+}
