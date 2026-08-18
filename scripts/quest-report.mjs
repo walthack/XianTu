@@ -69,7 +69,22 @@ for (const f of fs.readdirSync(path.join(ROOT, DATA)).filter(x => x.endsWith('.j
   if (!j.scenario?.worldSimulation) continue;
   stageWindows.set(j.manifest.id, [j.manifest.axisSeqLo, j.manifest.axisSeqHi]);
   for (const e of j.scenario.events || []) {
-    events.set(e.id, { seq: e.axisSeq, name: e.name, stage: j.manifest.id });
+    events.set(e.id, {
+      seq: e.axisSeq, name: e.name, stage: j.manifest.id,
+      // 四字段拼一起，供「登场」判定用（谁最早出现在哪一拍）
+      blob: [e.name, e.description, e.objective, e.axisBeat].filter(Boolean).join(' '),
+    });
+  }
+}
+
+// ── 正典人名：登场判定用。取 `canonicalName`（registry 的 `name` 字段不存在，曾在此栽过）。
+const charNames = new Set();
+{
+  const p = path.join(ROOT, 'src/modules/scenarioMods/builtins/character-registry.json');
+  if (fs.existsSync(p)) {
+    for (const c of JSON.parse(fs.readFileSync(p, 'utf8')).characters || []) {
+      if (typeof c.canonicalName === 'string') charNames.add(c.canonicalName);
+    }
   }
 }
 
@@ -144,6 +159,31 @@ if (fs.existsSync(path.join(ROOT, CHARMOD))) {
     let c = byName.get(m[1]);
     if (!c) { c = { name: m[1], hooks: [], highlightOnly: true }; chars.push(c); byName.set(m[1], c); }
     c.hooks.push({ eventId: ids[0], alsoIds: ids.slice(1), insert: true, isNew: false, label: 'A档', visible: m[3] });
+  }
+}
+
+
+// ── 登场：某个角色在**事件层**里最早出现的那一拍。
+// 用户 2026-08-18：「登场如果是某个任务下挂的注名一下，现在状态更像没做。」
+// 实测确实容易误判——凝羽的登场就挂在昭南线 seq 35「奉苏妲己之命进赌局」上，
+// 但节点没有任何标记，看起来像没做。故在这里算出来并打标。
+// 判据是事件层最早出现，不是 `debut_*` 这个命名：那批「招牌登场」多数 axisSeq 为 0，
+// 且 16 条压根没被任何线认领——真正承载首次登场的往往是别的拍。
+const debutOf = new Map();   // eventId -> [人名]
+{
+  const named = [...charNames].filter(n => n.length >= 2 && n.length <= 4 && n !== '程宗扬');
+  const first = new Map();
+  const bySeq = [...events.entries()]
+    .filter(([, e]) => typeof e.seq === 'number' && e.seq > 0)
+    .sort((a, b) => a[1].seq - b[1].seq);
+  for (const [id, e] of bySeq) {
+    for (const n of named) {
+      if (!first.has(n) && (e.blob || '').includes(n)) first.set(n, id);
+    }
+  }
+  for (const [n, id] of first) {
+    if (!debutOf.has(id)) debutOf.set(id, []);
+    debutOf.get(id).push(n);
   }
 }
 
@@ -355,7 +395,16 @@ ol.nodes li.p .sq{color:var(--ink3)}
 .cmt:empty::before{content:attr(data-hint);color:var(--ink3);opacity:.5}
 .cmt:focus{background:var(--card);border-bottom-color:var(--qing);box-shadow:0 1px 0 0 var(--qing)}
 .cmt:not(:empty){border-bottom-color:var(--zhu);background:color-mix(in srgb,var(--zhu) 7%,transparent)}
+.badge.debut{background:var(--lv);color:var(--paper);border-color:var(--lv)}
 .linecmt{font-size:12px;color:var(--ink3);margin:4px 0 8px}
+.submit{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:14px 0 0;
+ padding:12px 14px;background:var(--card);border:1px solid var(--edge);border-left:3px solid var(--zhu)}
+.btn{font:inherit;font-size:13px;padding:7px 16px;border:1px solid var(--zhu);background:transparent;
+ color:var(--zhu);cursor:pointer;border-radius:2px}
+.btn:hover{background:var(--zhu);color:var(--paper)}
+.btn:focus-visible{outline:2px solid var(--qing);outline-offset:2px}
+.stamp{font-size:12px;color:var(--ink2)}
+.stamp:empty::before{content:"（还没标记过）";color:var(--ink3);opacity:.6}
 .cmthow{font-size:12px;color:var(--ink2);background:var(--card);border:1px solid var(--edge);
  border-left:3px solid var(--qing);padding:8px 12px;margin:14px 0 0}
 [artifact-sync-state=off] .cmt{border-bottom-style:solid;border-bottom-color:var(--ink3);opacity:.55}
@@ -376,6 +425,11 @@ ol.nodes li.p .sq{color:var(--ink3)}
 <div class="cmthow"><b>批注怎么用</b>　虚线处点一下就能直接打字。写下的批注会随本页保存，
 并回到 Claude 那边——<b>不需要复制粘贴给我</b>。每个节点、每条线、每条待审判断各有一个槽。
 若虚线变成实线灰色，说明这个视图是只读的，批注不会被保存。</div>
+
+<div class="submit">
+ <button type="button" id="mark" class="btn">标记这批批注已写完，请 Claude 复核</button>
+ <artifact-sync><span class="stamp" id="stamp"></span></artifact-sync>
+</div>
 
 <h2>本轮待审</h2>
 <div class="box" style="padding:14px 16px">
@@ -425,6 +479,7 @@ ${r.tiers.map(t => `<div class="ln">
         ${owners.get(n.eventId)?.length > 1 ? `<span class="badge shared">双喂 ${esc(owners.get(n.eventId).join('／'))}</span>` : ''}
         ${n.status === 'new' ? '<span class="badge todo">待写 event</span>' : ''}
         ${n.status === 'pending' ? '<span class="badge pend">未来待扩</span>' : ''}
+        ${debutOf.get(n.eventId) ? `<span class="badge debut">登场 ${esc(debutOf.get(n.eventId).join('／'))}</span>` : ''}
         ${hookRows}
         ${cmt('node:' + (n.eventId || t.name + '#' + (i + 1)), '这一拍的批注')}
       </span></li>`;
@@ -437,6 +492,7 @@ ${r.tiers.map(t => `<div class="ln">
 ${r.chars.filter(c => c.hooks.length).map(c => {
   const hs = c.hooks.slice().sort((a, b) => (events.get(a.eventId)?.seq ?? 9999) - (events.get(b.eventId)?.seq ?? 9999));
   return `<div class="ln"><h3 class="serif">${esc(c.name)}<span class="tg">三级·人物</span></h3>
+  <div class="linecmt">这个角色整体的批注　${cmt('charline:' + c.name, '这个人的戏够不够、缺什么')}</div>
   <ol class="nodes">${hs.map(h => {
     const ev = events.get(h.eventId);
     const who = owners.get(h.eventId);
@@ -447,6 +503,8 @@ ${r.chars.filter(c => c.hooks.length).map(c => {
       ${h.insert ? '<span class="badge ins">插入</span>' : ''}
       ${h.isNew ? '<span class="badge todo">待写</span>' : ''}
       ${who ? `<span class="badge shared">上级：${esc(who.join('／'))}</span>` : ''}
+      ${debutOf.get(h.eventId) ? `<span class="badge debut">登场 ${esc(debutOf.get(h.eventId).join('／'))}</span>` : ''}
+      ${cmt('char:' + c.name + ':' + h.eventId, '这一拍的批注')}
       </span></li>`;
   }).join('')}</ol></div>`;
 }).join('')}
@@ -472,5 +530,17 @@ ${r.charTodo.map(c => `<tr><td>${esc(c.name)}</td><td class="mono" style="text-a
 
 <h2>该看的地方</h2>
 <ul>${flags || '<li>无</li>'}</ul>
-</div>`;
+</div>
+<script>
+// 批注是逐键自动保存的（每个批注都在同步区里），本按钮**不负责发送**——
+// 它只给这一批批注盖一个可读的戳：把「几时写完、共几条」写进同步区的 DOM，
+// Claude 那边因此看得到「这批可以复核了」。改 DOM 必须发生在用户手势内，这正是合同支持的写法。
+document.getElementById('mark').addEventListener('click', function () {
+  var filled = Array.prototype.filter.call(
+    document.querySelectorAll('.cmt'), function (el) { return el.textContent.trim(); }).length;
+  document.getElementById('stamp').textContent =
+    '\u5df2\u6807\u8bb0 ' + new Date().toLocaleString('zh-CN', { hour12: false })
+    + '\uff0c\u5171 ' + filled + ' \u6761\u6279\u6ce8\u5f85\u590d\u6838';
+});
+</script>`;
 }

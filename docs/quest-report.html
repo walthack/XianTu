@@ -87,7 +87,16 @@ ol.nodes li.p .sq{color:var(--ink3)}
 .cmt:empty::before{content:attr(data-hint);color:var(--ink3);opacity:.5}
 .cmt:focus{background:var(--card);border-bottom-color:var(--qing);box-shadow:0 1px 0 0 var(--qing)}
 .cmt:not(:empty){border-bottom-color:var(--zhu);background:color-mix(in srgb,var(--zhu) 7%,transparent)}
+.badge.debut{background:var(--lv);color:var(--paper);border-color:var(--lv)}
 .linecmt{font-size:12px;color:var(--ink3);margin:4px 0 8px}
+.submit{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:14px 0 0;
+ padding:12px 14px;background:var(--card);border:1px solid var(--edge);border-left:3px solid var(--zhu)}
+.btn{font:inherit;font-size:13px;padding:7px 16px;border:1px solid var(--zhu);background:transparent;
+ color:var(--zhu);cursor:pointer;border-radius:2px}
+.btn:hover{background:var(--zhu);color:var(--paper)}
+.btn:focus-visible{outline:2px solid var(--qing);outline-offset:2px}
+.stamp{font-size:12px;color:var(--ink2)}
+.stamp:empty::before{content:"（还没标记过）";color:var(--ink3);opacity:.6}
 .cmthow{font-size:12px;color:var(--ink2);background:var(--card);border:1px solid var(--edge);
  border-left:3px solid var(--qing);padding:8px 12px;margin:14px 0 0}
 [artifact-sync-state=off] .cmt{border-bottom-style:solid;border-bottom-color:var(--ink3);opacity:.55}
@@ -108,6 +117,11 @@ ol.nodes li.p .sq{color:var(--ink3)}
 <div class="cmthow"><b>批注怎么用</b>　虚线处点一下就能直接打字。写下的批注会随本页保存，
 并回到 Claude 那边——<b>不需要复制粘贴给我</b>。每个节点、每条线、每条待审判断各有一个槽。
 若虚线变成实线灰色，说明这个视图是只读的，批注不会被保存。</div>
+
+<div class="submit">
+ <button type="button" id="mark" class="btn">标记这批批注已写完，请 Claude 复核</button>
+ <artifact-sync><span class="stamp" id="stamp"></span></artifact-sync>
+</div>
 
 <h2>本轮待审</h2>
 <div class="box" style="padding:14px 16px">
@@ -219,6 +233,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 月霜／卓云君</span>
         <div class="hooks"><div class="hk">↳ <b>卓云君</b>　半兽人围上来。她用烈火法术救下你和月霜 <em>［插入］</em></div></div>
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s01_03" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -226,6 +241,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">月霜强灌丹药，你在真阳驱使下与她性交，寒毒得解</span>
         <span class="ev mono">月霜强取真阳　lcq.event.s01_06</span>
+        
         
         
         
@@ -241,6 +257,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 王哲</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s01_05" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -252,6 +269,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         <span class="badge shared">双喂 主轴／太乙真宗</span>
         
         
+        <span class="badge debut">登场 岳帅</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s02_01" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -263,6 +281,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         <span class="badge shared">双喂 主轴／太乙真宗</span>
         
         
+        <span class="badge debut">登场 文泽／阿伽门侬／韩庚</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s02_02" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -270,6 +289,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">从白湖商馆死局里脱身，走出五原商馆</span>
         <span class="ev mono">白湖脱身　lcq.event.baihu_shangguan_escape</span>
+        
         
         
         
@@ -285,6 +305,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <div class="hooks"><div class="hk">↳ <b>谢艺</b>　空村里，他指出尸体旁的鬼王峒血符。你第一次看见他本人动手 <em>［插入］</em></div></div>
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s03b_snake_flower_bridge_03" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -292,6 +313,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">听谢艺谈玻璃技术，并说破岳帅晕血、还有个遗腹女</span>
         <span class="ev mono">谢艺谈旧事　lcq.event.s04b_lingfei_baiyi_crisis_18</span>
+        
         
         
         
@@ -308,12 +330,14 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.geluo_summons_biji" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">164</span>
       <span class="bd">
         <span class="tx">向碧姬问出：小紫曾主动投向鬼巫王——她不是单纯受害者</span>
         <span class="ev mono">小紫疑云　lcq.event.s05b_01_binu_reveals_xiaozi</span>
+        
         
         
         
@@ -330,6 +354,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s05b_10_slave_revolt_and_phoenix_change" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">211</span>
@@ -341,12 +366,14 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.slay_dragon" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">636</span>
       <span class="bd">
         <span class="tx">随陈琳进云涛观迷楼，摸清机关，撞见小紫等人</span>
         <span class="ev mono">云涛观迷楼　lyl.event.taiquan_sacred_fruit_04</span>
+        
         
         
         
@@ -362,6 +389,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 梦娘</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.taiquan_sacred_fruit_05" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -369,6 +397,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">到火山口争赤阳圣果，最终被萧遥逸吞下一颗</span>
         <span class="ev mono">赤阳圣果争夺　lyl.event.taiquan_sacred_fruit_10</span>
+        
         
         
         
@@ -385,6 +414,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.find_exit" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">695</span>
@@ -395,6 +425,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 周飞</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.taiquan_afterfall_03_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -402,6 +433,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">与小紫探人类居住区，撞见KTV卖场，推测太泉古阵是避难所</span>
         <span class="ev mono">太泉古阵　lyl.event.taiquan_afterfall_05_beat</span>
+        
         
         
         
@@ -417,6 +449,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 赵飞燕／赵合德</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.taiquan_afterfall_09_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -424,6 +457,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">吕雉以比目鱼珠开秘境，小紫把盛姬投入光柱，众人进入</span>
         <span class="ev mono">秘境入口　lyl.event.han_palace_endgame_07_beat</span>
+        
         
         
         
@@ -440,12 +474,14 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.s02_02" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">996</span>
       <span class="bd">
         <span class="tx">在长秋宫分派旧部监控秘境入口，自己率侍奴去探胶西邸</span>
         <span class="ev mono">程宗扬安排武帝秘境探索　lyg.event.s02_08</span>
+        
         
         
         
@@ -462,6 +498,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.mijing_superuser_roster" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1050</span>
@@ -473,12 +510,14 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.han_succession_08_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1053</span>
       <span class="bd">
         <span class="tx">因孟舍人死气失控，在登基典仪与赵飞燕双修，突破通幽境</span>
         <span class="ev mono">通幽突破　lyg.event.han_succession_09_beat</span>
+        
         
         
         
@@ -494,6 +533,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 廖群玉</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.changgan_interlude_02_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -501,6 +541,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">与尹馥兰商定：用阴阳鱼和地形反制潘金莲——硬刚还是设伏</span>
         <span class="ev mono">制定反制计划　lyl.event.plan_counterattack</span>
+        
         
         
         
@@ -517,6 +558,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.yin_yang_counter" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="p">
       <span class="sq mono"></span>
@@ -527,6 +569,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         <span class="badge pend">未来待扩</span>
+        
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:主轴#29" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="p">
@@ -539,6 +582,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         <span class="badge pend">未来待扩</span>
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:主轴#30" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="p">
       <span class="sq mono"></span>
@@ -549,6 +593,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         <span class="badge pend">未来待扩</span>
+        
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:主轴#31" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li></ol></div><div class="ln">
@@ -564,6 +609,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         <span class="badge shared">双喂 商道／昭南</span>
         
         
+        <span class="badge debut">登场 阁罗</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.weapon_deal_with_geluo" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -571,6 +617,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">以织坊交换，暂时平息小紫为拉链坊兴师问罪</span>
         <span class="ev mono">织坊换局　lcq.event.s09_04_weaving_trade</span>
+        
         
         
         
@@ -586,6 +633,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         <span class="badge shared">双喂 商道／星月湖</span>
         
         
+        <span class="badge debut">登场 陶弘敏</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s10_05_war_funds" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -593,6 +641,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">向云苍峰摊开粮战全盘，先从筠州布行暗桩切入</span>
         <span class="ev mono">粮战全盘　lcq.event.s11_09_grain_plan</span>
+        
         
         
         
@@ -609,6 +658,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s12_05_granary_fire_plan" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">534</span>
@@ -620,12 +670,14 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.pengyi_takeover" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">550</span>
       <span class="bd">
         <span class="tx">水镜令秦桧在筠州抛粮并散布和谈谣言，为临安压价铺路</span>
         <span class="ev mono">临安粮战令　lcq.event.s12_18_linan_grain_order</span>
+        
         
         
         
@@ -642,6 +694,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.xiaoyingzhou_paper_plan" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">578</span>
@@ -652,6 +705,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         <span class="badge shared">双喂 商道／宋国</span>
         
         
+        <span class="badge debut">登场 宋主／童贯</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.xiaoyingzhou_paper_mint" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -663,6 +717,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         <span class="badge shared">双喂 商道／黑魔海／毒宗</span>
         
         
+        <span class="badge debut">登场 齐羽仙</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.xiaoyingzhou_cement_truce" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -670,6 +725,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">开盘江程氏第一次股东大会：分红、发股、定主业</span>
         <span class="ev mono">盘江股东大会　lyl.event.taiquan_sacred_fruit_06</span>
+        
         
         
         
@@ -685,6 +741,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         <span class="badge shared">双喂 商道／汉国</span>
         
         
+        <span class="badge debut">登场 郭解／云秀峰</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.han_limit_field" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="p">
@@ -696,6 +753,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         <span class="badge pend">未来待扩</span>
+        
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:商道#13" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li></ol></div><div class="ln">
@@ -711,6 +769,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 夙未央／商乐轩／蔺采泉</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s01_04" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -722,6 +781,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         <span class="badge shared">双喂 主轴／太乙真宗</span>
         
         
+        <span class="badge debut">登场 岳帅</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s02_01" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -733,6 +793,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         <span class="badge shared">双喂 主轴／太乙真宗</span>
         
         
+        <span class="badge debut">登场 文泽／阿伽门侬／韩庚</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s02_02" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -740,6 +801,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">紫溪被迫出面：元行健拦船点名去龙池，祁远被推落水</span>
         <span class="ev mono">紫溪拦截　lcq.event.zixi_intercept</span>
+        
         
         
         
@@ -756,12 +818,14 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.wangzhe_letter" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">391</span>
       <span class="bd">
         <span class="tx">夜影关听清：蔺采泉与商乐轩借查卓云君叛教，实在争掌教之位</span>
         <span class="ev mono">夜影争位　lcq.event.yeying_seat_struggle</span>
+        
         
         
         
@@ -778,12 +842,14 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s10_06_ruined_temple" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">413</span>
       <span class="bd">
         <span class="tx">审出元行健：暗算月霜是林之澜指使，蔺采泉因拜火教来晴州</span>
         <span class="ev mono">审问元行健　lcq.event.yuanxingjian_interrogated</span>
+        
         
         
         
@@ -799,6 +865,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 秋少君</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.qiushaojun_breaks_with_linzhilan" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -806,6 +873,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">蔺采泉开价：他支持江州，换你承认九阳神功出自太乙、出自他</span>
         <span class="ev mono">九阳交换　lyl.event.xiaoyingzhou_blacksea_trap_02_beat</span>
+        
         
         
         
@@ -821,6 +889,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 齐放鹤</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.xiaoyingzhou_lin_takes_seat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -828,6 +897,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">在翠微园向卓云君承诺对付蔺采泉，并写下盘江程氏股份</span>
         <span class="ev mono">承诺对付蔺采泉　lyl.event.sacred_against_lin</span>
+        
         
         
         
@@ -844,6 +914,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         <span class="badge pend">未来待扩</span>
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:太乙真宗#13" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="p">
       <span class="sq mono"></span>
@@ -854,6 +925,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         <span class="badge pend">未来待扩</span>
+        
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:太乙真宗#14" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li></ol></div><div class="ln">
@@ -870,12 +942,14 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s04b_lingfei_baiyi_crisis_16" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">128</span>
       <span class="bd">
         <span class="tx">听谢艺讲清碧鲮与鲛族旧战、朱狐冠来历，他要你接岳帅未竟之事</span>
         <span class="ev mono">谢艺讲述碧鲮旧战　lcq.event.xieyi_biling_war</span>
+        
         
         
         
@@ -892,6 +966,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.slay_dragon" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">232</span>
@@ -902,6 +977,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         <span class="badge shared">双喂 星月湖／汉国</span>
         
         
+        <span class="badge debut">登场 萧遥逸</span>
         <div class="hooks"><div class="hk">↳ <b>萧遥逸</b>　他向你痛陈左武全军覆没。这是他不靠骨灰的登场拍 <em>［插入］</em></div></div>
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s07_01_old_case" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -913,6 +989,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 孟非卿</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s07_05_eight_steeds_informed" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -920,6 +997,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">萧遥逸代表星月湖，向你开放资源</span>
         <span class="ev mono">星月开库　lcq.event.xiao_opens_resources</span>
+        
         
         
         
@@ -935,6 +1013,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 古冥隐／剑玉姬</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s08_08_gumingyin_plot" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -946,6 +1025,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         <span class="badge shared">双喂 星月湖／晋国</span>
         
         
+        <span class="badge debut">登场 谢幼度</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s09_01_eight_steeds_leave" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -957,6 +1037,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         <span class="badge shared">双喂 商道／星月湖</span>
         
         
+        <span class="badge debut">登场 陶弘敏</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s10_05_war_funds" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -964,6 +1045,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">受命率一营与雪隼六百赴三川口护月霜，并拿到前线指挥权</span>
         <span class="ev mono">奉命护月霜　lcq.event.s11_03_protect_yueshuang</span>
+        
         
         
         
@@ -980,6 +1062,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s11_04_xingyue_appears" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">448</span>
@@ -990,6 +1073,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 王韬</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s11_05_wangtao_breaks" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -997,6 +1081,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">星月湖四营与宋军铁甲营在三川口血战，双方伤亡过半仍不退</span>
         <span class="ev mono">雪原鏖战　lcq.event.s11_06_snow_battle</span>
+        
         
         
         
@@ -1012,6 +1097,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 斯明信</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s12_06_dragon_guard_routs" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -1019,6 +1105,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">突袭龙卫左厢摧毁指挥，耿傅率残部结阵死守待援</span>
         <span class="ev mono">突袭龙卫左厢　lcq.event.s12_07_left_wing_raid</span>
+        
         
         
         
@@ -1034,6 +1121,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 葛怀敏</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s12_08_dingchuan_raid" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -1041,6 +1129,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">定川寨外，孟非卿以雷区伏击突围宋军，阵斩葛怀敏</span>
         <span class="ev mono">葛怀敏伏诛　lcq.event.s12_09_ge_huaimin_killed</span>
+        
         
         
         
@@ -1057,6 +1146,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.pengyi_takeover" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">557</span>
@@ -1067,6 +1157,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 薛延山</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.decode_bianmenwa_note" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -1074,6 +1165,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">西湖农居听薛延山讲完太湖遇袭，接下照管雪隼残部的托付</span>
         <span class="ev mono">西湖农居会见薛延山　lyl.event.meet_xue_yanshan</span>
+        
         
         
         
@@ -1090,12 +1182,14 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.identify_xue_cold_poison" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">568</span>
       <span class="bd">
         <span class="tx">查明薛延山在西湖藏身处被杀、首级被取，冯源逃回报信</span>
         <span class="ev mono">薛延山遇害　lyl.event.xue_yanshan_slain</span>
+        
         
         
         
@@ -1112,6 +1206,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.lin_an_bridge_xieyi_tomb" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="p">
       <span class="sq mono"></span>
@@ -1122,6 +1217,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         <span class="badge pend">未来待扩</span>
+        
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:星月湖#24" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li></ol></div><div class="ln">
@@ -1138,6 +1234,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s04_04" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">93</span>
@@ -1149,12 +1246,14 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s04b_lingfei_baiyi_crisis_04" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">222</span>
       <span class="bd">
         <span class="tx">当面确认朱老头就是殇侯，听他称你是天命之人</span>
         <span class="ev mono">殇侯现身　lcq.event.shanghou_revealed</span>
+        
         
         
         
@@ -1171,12 +1270,14 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.shanghou_cures_ice_gu" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">289</span>
       <span class="bd">
         <span class="tx">在庭院迎入苏妲己——黑魔海高压对局正式摊开</span>
         <span class="ev mono">苏妲己入局　lcq.event.s08_04_sudaji_enters</span>
+        
         
         
         
@@ -1193,6 +1294,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.palm_oath_shanghou" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">366</span>
@@ -1203,6 +1305,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 游婵</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s09_06_blacksea_fracture" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -1214,6 +1317,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 石之隼</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s10_03_ninja_trace" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -1221,6 +1325,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">定下先发制人打黑魔海——为护月霜、除江州后患</span>
         <span class="ev mono">先发制人　lcq.event.s10_07_preemptive_strike</span>
+        
         
         
         
@@ -1236,6 +1341,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 巫嬷嬷／鱼无夷</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s10_08_lair_reversal" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -1247,6 +1353,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 惊理</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s12_15_capture_jingli" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -1254,6 +1361,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">殇侯施尸毒破开宋军阵线，你因此得救</span>
         <span class="ev mono">殇侯尸毒破局　lcq.event.s12_16_corpse_poison</span>
+        
         
         
         
@@ -1270,12 +1378,14 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s12_17_shanghou_stays" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">558</span>
       <span class="bd">
         <span class="tx">水镜看见小紫驱铁傀儡重创虎翼军，取龙睛玉并以阴魂试傀儡</span>
         <span class="ev mono">江州铁傀儡场外拍　lyl.event.blacksea_iron_puppet</span>
+        
         
         
         
@@ -1291,6 +1401,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 孙天羽／静善</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.xiaoyingzhou_blacksea_trap_04_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -1298,6 +1409,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">静善为袈裟符文夜袭，被炸弹击退——你也受了伤</span>
         <span class="ev mono">静善夜袭　lyl.event.xiaoyingzhou_blacksea_trap_05_beat</span>
+        
         
         
         
@@ -1314,6 +1426,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.xiaoyingzhou_blacksea_trap_07_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">610</span>
@@ -1324,6 +1437,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 小玲儿</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.xiaoyingzhou_blacksea_trap_08_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -1331,6 +1445,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">在保宁寺放生池逼出剑玉姬真身——屠龙刀异变龙吟</span>
         <span class="ev mono">剑玉姬真身　lyl.event.xiaoyingzhou_blacksea_trap_09_beat</span>
+        
         
         
         
@@ -1346,6 +1461,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 米远志／八臂魔僧</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.xiaoyingzhou_blacksea_trap_10_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -1353,6 +1469,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">撤回翠微园收拾残局——游婵被劫，直属营伤亡惨重</span>
         <span class="ev mono">小瀛洲战后　lyl.event.taiquan_sacred_fruit_01</span>
+        
         
         
         
@@ -1368,6 +1485,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         <span class="badge shared">双喂 商道／黑魔海／毒宗</span>
         
         
+        <span class="badge debut">登场 齐羽仙</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.xiaoyingzhou_cement_truce" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -1379,6 +1497,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 君雄飞</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.taiquan_sacred_fruit_08" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -1386,6 +1505,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">查清宅下异动：惊理发现黑魔海黑鸦使者，其是卧底</span>
         <span class="ev mono">黑鸦使者现身　lyl.event.s05_05</span>
+        
         
         
         
@@ -1401,6 +1521,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 成光</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.han_jianyu_refused" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -1412,6 +1533,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         <span class="badge shared">双喂 黑魔海／毒宗／汉国</span>
         
         
+        
         <div class="hooks"><div class="hk">↳ <b>郭解</b>　临终把定陶王托付给你 <em>［插入］</em></div></div>
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.s01_06" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -1419,6 +1541,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">听阮香凝说定陶王因盛姬亲近她——盛姬是黑魔海御姬奴</span>
         <span class="ev mono">阮香凝透露定陶王与盛姬关联　lyg.event.s01_08</span>
+        
         
         
         
@@ -1435,12 +1558,14 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.s03_04" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1399</span>
       <span class="bd">
         <span class="tx">在庵堂性交安抚鱼玄机，同时审讯齐羽仙追问双姬旧怨</span>
         <span class="ev mono">黑魔海旧怨开放口　lyg.event.shituolin_endgame_15_beat</span>
+        
         
         
         
@@ -1457,6 +1582,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         <span class="badge pend">未来待扩</span>
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:黑魔海／毒宗#30" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="p">
       <span class="sq mono"></span>
@@ -1468,12 +1594,14 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         <span class="badge pend">未来待扩</span>
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:黑魔海／毒宗#31" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">?</span>
       <span class="bd">
         <span class="tx">收下殇侯交出的秦桧——他改称主公，成你身边第一智囊</span>
         <span class="ev mono">秦桧归入麾下　lcq.event.s07_qinhui_join</span>
+        
         
         
         
@@ -1493,6 +1621,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 凝羽</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.ningyu_enters_gamble" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -1500,6 +1629,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">与苏妲己订下三月南荒之约——采霓龙丝，否则炮烙</span>
         <span class="ev mono">三个月南荒之约　lcq.event.sudaji_south_pact</span>
+        
         
         
         
@@ -1516,12 +1646,14 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.gamble_bond_signed" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">38</span>
       <span class="bd">
         <span class="tx">帮苏妲己取物前，谈定六十金铢报酬</span>
         <span class="ev mono">谈定六十金铢　lcq.event.charge_sudaji_fee</span>
+        
         
         
         
@@ -1538,12 +1670,14 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.free_ajiman" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">42</span>
       <span class="bd">
         <span class="tx">苏妲己以冰蛊逼你南行——两日内必须凑齐队伍</span>
         <span class="ev mono">冰蛊逼迫南行　lcq.event.ice_gu_coercion</span>
+        
         
         
         
@@ -1559,6 +1693,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 武二郎</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.wuerlang_joins" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -1566,6 +1701,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">稳住武二郎伤势，带队突破铁索桥伏击</span>
         <span class="ev mono">铁索桥伏击　lcq.event.iron_bridge_ambush</span>
+        
         
         
         
@@ -1582,12 +1718,14 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.persuade_wuerlang" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">53</span>
       <span class="bd">
         <span class="tx">听清凝羽弑主开价，并探明她体内阴寒之气来源</span>
         <span class="ev mono">凝羽开价弑主　lcq.event.ningyu_regicide_offer</span>
+        
         
         
         
@@ -1604,12 +1742,14 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.rainforest_black_shoal" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">59</span>
       <span class="bd">
         <span class="tx">把商队安进无灯火无人声的蛇彝村</span>
         <span class="ev mono">抵达无声蛇彝村　lcq.event.silent_sheyi_village</span>
+        
         
         
         
@@ -1626,6 +1766,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s03b_snake_flower_bridge_02" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">64</span>
@@ -1636,6 +1777,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 云苍峰</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s03b_snake_flower_bridge_04" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -1647,6 +1789,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 龙神</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s03b_snake_flower_bridge_07" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -1654,6 +1797,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">与白夷族长交涉：他改要十日五万银铢现款，不再以货易货</span>
         <span class="ev mono">白夷族到达　lcq.event.s04_07</span>
+        
         
         
         
@@ -1670,6 +1814,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s04b_lingfei_baiyi_crisis_07" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">123</span>
@@ -1680,6 +1825,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 小紫</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.xiaozi_first_appears" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -1687,6 +1833,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">在废弃海神殿挡住鲛人，护住受困的乐明珠</span>
         <span class="ev mono">海神殿抵御鲛人　lcq.event.haishen_hall_merfolk</span>
+        
         
         
         
@@ -1703,12 +1850,14 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.pull_harpoon_lemingzhu" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">131</span>
       <span class="bd">
         <span class="tx">收拢残余商队，确认鬼王峒使者已抵达海湾</span>
         <span class="ev mono">收拢商队确认使者抵达　lcq.event.regroup_caravan_envoy</span>
+        
         
         
         
@@ -1724,6 +1873,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         <span class="badge shared">双喂 商道／昭南</span>
         
         
+        <span class="badge debut">登场 阁罗</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.weapon_deal_with_geluo" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -1731,6 +1881,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">处置偷听的鬼王峒眼线，厘清兵器交易背后的危险</span>
         <span class="ev mono">处置鬼王峒眼线　lcq.event.spot_dong_informant</span>
+        
         
         
         
@@ -1747,12 +1898,14 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.biling_bay_stance" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">143</span>
       <span class="bd">
         <span class="tx">在古道废墟认出鬼王峒标记，帮易彪守住阵地</span>
         <span class="ev mono">古道废墟迎击鬼战士　lcq.event.ruins_ghost_warriors</span>
+        
         
         
         
@@ -1769,12 +1922,14 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.wuerlang_slays_dagu" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">147</span>
       <span class="bd">
         <span class="tx">护住苏荔以一阳境逼退阴煞</span>
         <span class="ev mono">护住苏荔以一阳境逼退阴煞　lcq.event.yiyang_repels_yinsha</span>
+        
         
         
         
@@ -1791,12 +1946,14 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.huamiao_coop_boundary" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">151</span>
       <span class="bd">
         <span class="tx">安置旧伤复发的凝羽，与云氏、花苗谈成探峒同行</span>
         <span class="ev mono">探峒同行约定　lcq.event.guiwangdong_coop_pact</span>
+        
         
         
         
@@ -1812,6 +1969,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 弥骨</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.enter_dong_with_migu" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -1819,6 +1977,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">打开白纸信笺仍是白纸，小紫当着阁罗说破达古已死</span>
         <span class="ev mono">白纸信笺与达古　lcq.event.blank_letter_and_dagu</span>
+        
         
         
         
@@ -1835,12 +1994,14 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.geluo_summons_biji" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">160</span>
       <span class="bd">
         <span class="tx">借机关异动摆脱看守，从岩壁找出可通行山洞</span>
         <span class="ev mono">借机关异动找出通行山洞　lcq.event.escape_cave_mechanism</span>
+        
         
         
         
@@ -1857,12 +2018,14 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.hongmiao_controlled" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">171</span>
       <span class="bd">
         <span class="tx">潜入鬼王宫见鬼巫王——听清统一南荒与龙神计划</span>
         <span class="ev mono">初见鬼巫王　lcq.event.s05b_05a_meet_ghost_king</span>
+        
         
         
         
@@ -1879,12 +2042,14 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s05b_10_slave_revolt_and_phoenix_change" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">205</span>
       <span class="bd">
         <span class="tx">祭台决战：鬼巫王唤醒龙神，反被龙神一口吞掉</span>
         <span class="ev mono">祭台吞王　lcq.event.ghost_king_swallowed</span>
+        
         
         
         
@@ -1901,6 +2066,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.slay_dragon" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">217</span>
@@ -1912,12 +2078,14 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.xiaozi_kills_mother" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">218</span>
       <span class="bd">
         <span class="tx">解散鬼王峒，令三族共处，龙神尸骸收益分十份</span>
         <span class="ev mono">散峒听三族　lcq.event.tribes_pledge</span>
+        
         
         
         
@@ -1938,12 +2106,14 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.palace_haunting_rumor" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">264</span>
       <span class="bd">
         <span class="tx">与萧遥逸夜探神龙殿：晋帝昏迷如死，似遭操控</span>
         <span class="ev mono">神龙殿夜探　lcq.event.s07_07_dragon_hall</span>
+        
         
         
         
@@ -1959,6 +2129,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 徐敖</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s08_01_eagle_valley" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -1966,6 +2137,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">易彪率北府兵扮禁军全歼州府兵——萧遥逸识破他们身份</span>
         <span class="ev mono">北府兵解围　lcq.event.s08_03_beifu_rescue</span>
+        
         
         
         
@@ -1982,12 +2154,14 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s08_05_breakthrough" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">316</span>
       <span class="bd">
         <span class="tx">玄武湖上秦桧、吴三桂救下晋帝太后，古冥隐败逃</span>
         <span class="ev mono">玄武湖救驾　lcq.event.s08_10_xuanwu_rescue</span>
+        
         
         
         
@@ -2003,6 +2177,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 王茂弘</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.spoils_split" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -2014,6 +2189,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         <span class="badge shared">双喂 星月湖／晋国</span>
         
         
+        <span class="badge debut">登场 谢幼度</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s09_01_eight_steeds_leave" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -2021,6 +2197,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">问清王茂弘：相府无为让权给萧侯，承诺保晋国二十年太平</span>
         <span class="ev mono">相府立场　lcq.event.xiangfu_stance</span>
+        
         
         
         
@@ -2037,6 +2214,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.jin_vacate_jiangzhou" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">633</span>
@@ -2047,6 +2225,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 张少煌</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.sacred_jin_drought" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -2054,6 +2233,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">把广源行在晋的旧账揭开（龙宸这条线）</span>
         <span class="ev mono">广源行旧账　lyl.event.jin_guangyuan_ledger</span>
+        
         
         
         
@@ -2070,6 +2250,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.s05_09" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="p">
       <span class="sq mono"></span>
@@ -2080,6 +2261,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         <span class="badge pend">未来待扩</span>
+        
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:晋国#14" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li></ol></div><div class="ln">
@@ -2095,6 +2277,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 贾师宪</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s10_01_jiangzhou_order" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -2106,6 +2289,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 刘宜孙／张亢</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s11_01_pengri_arrives" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -2113,6 +2297,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">萧遥逸展示十二座水泥城堡与悬楼，江州城防大幅提升</span>
         <span class="ev mono">江州水泥坚城　lcq.event.s11_02_cement_fortress</span>
+        
         
         
         
@@ -2128,6 +2313,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 滕甫</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.tuntian_post" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -2139,6 +2325,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 秦翰</span>
         <div class="hooks"><div class="hk">↳ <b>萧遥逸</b>　秦翰生擒他。你救不救 <em>［插入］</em></div></div>
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s12_10_rescue_xiao" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -2146,6 +2333,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">防守江州：宋军连夜两万余人携投石机、巢车、云梯全面攻城</span>
         <span class="ev mono">江州全面攻城　lcq.event.s12_11_siege_begins</span>
+        
         
         
         
@@ -2162,6 +2350,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s12_12_gate_fire" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">551</span>
@@ -2172,6 +2361,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 夏用和</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.s01_01" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -2179,6 +2369,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">赶到荆溪村寨，斩杀屠寨凌辱妇女的王团练乡兵</span>
         <span class="ev mono">荆溪村寨被屠　lyl.event.s01_03</span>
+        
         
         
         
@@ -2194,6 +2385,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 李师师</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.tail_li_shishi" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -2201,6 +2393,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">识破皇城司盯梢，不动手，以富商身份掩护进明庆寺</span>
         <span class="ev mono">识破皇城司尾随入明庆寺　lyl.event.evade_huangchengsi</span>
+        
         
         
         
@@ -2217,12 +2410,14 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.survey_wumu_mansion" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">557</span>
       <span class="bd">
         <span class="tx">听俞子元回报，确认高衙内勒索威远镖局的条件</span>
         <span class="ev mono">确认高衙内勒索威远条件　lyl.event.weiyuan_extortion</span>
+        
         
         
         
@@ -2238,6 +2433,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 林冲／鲁智深</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.mingqingsi_lin_lu_meeting" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -2245,6 +2441,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">办完吏部报到，查明林冲调走了哪些档案</span>
         <span class="ev mono">吏部报到查明林冲调档　lyl.event.libu_registration</span>
+        
         
         
         
@@ -2261,12 +2458,14 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.lin_an_bridge_01_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">559</span>
       <span class="bd">
         <span class="tx">应李师师之邀登雷峰塔</span>
         <span class="ev mono">应李师师之邀登雷峰塔　lyl.event.leifeng_pagoda_invite</span>
+        
         
         
         
@@ -2282,6 +2481,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 陆谦</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.leifeng_repel_gao" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -2289,6 +2489,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">研判黑魔海或经林娘子渗禁军，决定去拜访鲁智深</span>
         <span class="ev mono">林娘子疑云　lyl.event.lin_an_bridge_03_beat</span>
+        
         
         
         
@@ -2305,12 +2506,14 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.decide_chase_weiyuan" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">562</span>
       <span class="bd">
         <span class="tx">看过叩天石，按暗号约定赶往便门瓦接头</span>
         <span class="ev mono">经过叩天石前往便门瓦　lyl.event.pass_kotian_stone</span>
+        
         
         
         
@@ -2326,6 +2529,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 李寅臣</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.ivory_visit_weiyuan" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -2333,6 +2537,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">司营巷旁观林冲买刀，确认伏击结果，不打断高衙内的局</span>
         <span class="ev mono">司营巷旁观买刀伏击　lyl.event.siying_lane_saber_ambush</span>
+        
         
         
         
@@ -2349,12 +2554,14 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.linjia_sees_ningyi" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">566</span>
       <span class="bd">
         <span class="tx">潜入西湖别业，听清高衙内与陆谦复盘失镖圈套，还要继续设计林冲</span>
         <span class="ev mono">潜入西湖别业窃听密谋　lyl.event.xihu_villa_eavesdrop</span>
+        
         
         
         
@@ -2371,6 +2578,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.xiaoyingzhou_blacksea_trap_01_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">575</span>
@@ -2379,6 +2587,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         <span class="ev mono">问清纸钞　lyl.event.xiaoyingzhou_paper_plan</span>
         
         <span class="badge shared">双喂 商道／宋国</span>
+        
         
         
         
@@ -2392,6 +2601,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         <span class="badge shared">双喂 商道／宋国</span>
         
         
+        <span class="badge debut">登场 宋主／童贯</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.xiaoyingzhou_paper_mint" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -2399,6 +2609,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">林冲持刀闯白虎堂被刺配江州，你与鲁智深计划营救</span>
         <span class="ev mono">林冲刺配　lyl.event.xiaoyingzhou_blacksea_trap_03_beat</span>
+        
         
         
         
@@ -2414,6 +2625,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 郭槐</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.xiaoyingzhou_blacksea_trap_06_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -2425,6 +2637,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 高俅</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.taiquan_sacred_fruit_03" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -2437,12 +2650,14 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.changgan_interlude_03_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1134</span>
       <span class="bd">
         <span class="tx">受礼部侍郎、通问计议使，用这颗印解宋困</span>
         <span class="ev mono">通问计议使　lyg.event.song_tongwen</span>
+        
         
         
         
@@ -2462,6 +2677,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         <span class="badge shared">双喂 星月湖／汉国</span>
         
         
+        <span class="badge debut">登场 萧遥逸</span>
         <div class="hooks"><div class="hk">↳ <b>萧遥逸</b>　他向你痛陈左武全军覆没。这是他不靠骨灰的登场拍 <em>［插入］</em></div></div>
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s07_01_old_case" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -2473,6 +2689,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 金蜜镝</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s10_04_left_army_review" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -2480,6 +2697,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">汉廷朝会上追问：王温舒攻韦玄成，左武军粮草不继究竟谁的责</span>
         <span class="ev mono">朝会粮草账　lyl.event.han_court_grain_blame</span>
+        
         
         
         
@@ -2495,6 +2713,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 韩定国／孙寿／襄城君</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.taiquan_afterfall_10_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -2502,6 +2721,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">与云苍峰商定开首阳山铜矿，并经西邸买二千石官与郡县小吏</span>
         <span class="ev mono">云苍峰商议买官与铜矿　lyl.event.s05_01</span>
+        
         
         
         
@@ -2518,6 +2738,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.s05_03" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">871</span>
@@ -2528,6 +2749,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 严君平</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.han_xingyue_framed" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -2539,6 +2761,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         <span class="badge shared">双喂 商道／汉国</span>
         
         
+        <span class="badge debut">登场 郭解／云秀峰</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.han_limit_field" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -2550,6 +2773,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 吕冀</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.lvji_defiles_consort" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -2557,6 +2781,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">扮作内侍混出昭阳宫，护赵飞燕与赵合德撤回长秋宫</span>
         <span class="ev mono">护送赵氏回长秋宫　lyl.event.emperor_death_spreads</span>
+        
         
         
         
@@ -2572,6 +2797,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 定陶王</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.arrange_escape_route" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -2579,6 +2805,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">确认刘建已起兵攻占南宫与武库</span>
         <span class="ev mono">刘建攻占南宫与武库　lyl.event.liujian_takes_nangong</span>
+        
         
         
         
@@ -2595,6 +2822,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.changqiu_palace_defense" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">898</span>
@@ -2605,6 +2833,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 桓郁</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.bounty_and_hu_cavalry" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -2616,6 +2845,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 吕奉先</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.lvfengxian_breaks_line" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -2623,6 +2853,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">从传闻得知：天子已死，含光殿落到吕冀手里，刘建已起兵占了南宫</span>
         <span class="ev mono">听闻汉宫真空　lyl.event.han_power_vacuum</span>
+        
         
         
         
@@ -2639,6 +2870,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.han_sponsor_dingtao" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">925</span>
@@ -2649,6 +2881,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 廖扶</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.han_palace_endgame_05_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -2660,6 +2893,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 闻清语</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.han_palace_endgame_06_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -2667,6 +2901,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">接应逃出北宫的赵飞燕、赵合德——合德把姐姐救了出来</span>
         <span class="ev mono">赵氏逃宫　lyl.event.zhao_sisters_flee_north_palace</span>
+        
         
         
         
@@ -2682,6 +2917,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 董卓</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.han_palace_endgame_08_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -2693,6 +2929,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 霍子孟／贾文和</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.s01_02" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -2700,6 +2937,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">随董卓凉州军挟定陶王出洛都，军士割袍追随</span>
         <span class="ev mono">董卓挟持定陶王出洛都　lyg.event.s01_03</span>
+        
         
         
         
@@ -2716,12 +2954,14 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.s01_04" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">952</span>
       <span class="bd">
         <span class="tx">到昭阳宫：董卓拥立定陶王为帝，贾文和献大赦、选材、迁都</span>
         <span class="ev mono">董卓拥立定陶王为帝　lyg.event.s01_05</span>
+        
         
         
         
@@ -2737,6 +2977,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         <span class="badge shared">双喂 黑魔海／毒宗／汉国</span>
         
         
+        
         <div class="hooks"><div class="hk">↳ <b>郭解</b>　临终把定陶王托付给你 <em>［插入］</em></div></div>
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.s01_06" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -2744,6 +2985,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">董卓死在贾文和怀里，留下胡骑异动、边地将有剧变的军情</span>
         <span class="ev mono">董卓之死　lyg.event.s01_07</span>
+        
         
         
         
@@ -2760,6 +3002,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.s01_09" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">989</span>
@@ -2770,6 +3013,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 郭靖</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.s02_01" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -2777,6 +3021,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">探视金蜜镝——他装伤避嫌；你以成亲相胁，他默许不干涉帝统</span>
         <span class="ev mono">程宗扬探视金蜜镝并谈论帝统　lyg.event.s02_07</span>
+        
         
         
         
@@ -2793,6 +3038,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.han_succession_04_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1043</span>
@@ -2803,6 +3049,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 蛇夫人</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.han_succession_05_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -2812,6 +3059,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         <span class="ev mono">登基骤变　lyg.event.han_succession_08_beat</span>
         
         <span class="badge shared">双喂 主轴／汉国</span>
+        
         
         
         
@@ -2830,6 +3078,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.han_succession_10_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1061</span>
@@ -2840,6 +3089,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 袁天罡</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.changgan_fanseng_hunt" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -2851,6 +3101,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 石超</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.s03_01" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -2862,6 +3113,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 窥基</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.s03_08" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -2873,6 +3125,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 李炎／小环／乐从训</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.s03_09" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -2880,6 +3133,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">从杨玉环处厘清北司与佛门各自在查什么</span>
         <span class="ev mono">北司与佛门查探　lyg.event.north_bureau_buddhist_moves</span>
+        
         
         
         
@@ -2895,6 +3149,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 释特昧普</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.qinglongsi_te_master" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -2902,6 +3157,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">把鸿胪寺的礼遇和朝会资格拿回来</span>
         <span class="ev mono">鸿胪寺补救　lyg.event.honglusi_amends</span>
+        
         
         
         
@@ -2918,6 +3174,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.cien_red_lotus" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1102</span>
@@ -2928,6 +3185,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 徐君房</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.yuanzheng_globe" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -2935,6 +3193,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">查宣平坊那桩宦官命案，别急着定谁是幕后</span>
         <span class="ev mono">宣平坊宦官命案　lyg.event.xuanping_eunuch_murder</span>
+        
         
         
         
@@ -2951,12 +3210,14 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.survey_xingqing_palace" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1105</span>
       <span class="bd">
         <span class="tx">稳住太子伤势，把误伤消息压下去</span>
         <span class="ev mono">太子误伤风波　lyg.event.prince_injury_control</span>
+        
         
         
         
@@ -2973,12 +3234,14 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.shuixiang_lure_setup" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1107</span>
       <span class="bd">
         <span class="tx">压住麻痹毒势，封住毒方刺客的藏身范围</span>
         <span class="ev mono">识破毒方刺客　lyg.event.spot_poison_assassin</span>
+        
         
         
         
@@ -2994,6 +3257,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 飞鸟萤子</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.poolside_capture" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -3001,6 +3265,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">炸开摩尼寺打开营救窗口，女师是否脱险待确认</span>
         <span class="ev mono">爆破摩尼寺营救　lyg.event.blast_moni_temple</span>
+        
         
         
         
@@ -3016,6 +3281,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 信永</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.xinyong_reveals_fanmi" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -3023,6 +3289,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">审飞鸟萤子，她拒绝合作</span>
         <span class="ev mono">审讯飞鸟萤子　lyg.event.interrogate_feiniao_yingzi</span>
+        
         
         
         
@@ -3039,6 +3306,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.changgan_interlude_06_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1193</span>
@@ -3049,6 +3317,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 李昂／鱼朝恩</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.liang_secret_order" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -3056,6 +3325,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">听黎锦香说清：周飞与十方丛林合谋针对程宅</span>
         <span class="ev mono">周飞与十方丛林合谋　lyg.event.zhoufei_conspiracy</span>
+        
         
         
         
@@ -3072,6 +3342,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.feiniao_hilt_clue" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1204</span>
@@ -3082,6 +3353,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 铁中宝</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.s06_02" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -3093,6 +3365,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 张承业</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.s06_04" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -3104,6 +3377,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 李宏</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.buddhist_conspiracy_01_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -3115,6 +3389,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 不拾一世</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.buddhist_conspiracy_03_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -3122,6 +3397,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">拒了窥基假诏和剃度，刘贞亮传诏被挡，当场动手</span>
         <span class="ev mono">窥基伪诏　lyg.event.buddhist_conspiracy_08_beat</span>
+        
         
         
         
@@ -3138,12 +3414,14 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.buddhist_conspiracy_11_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1307</span>
       <span class="bd">
         <span class="tx">旁观李辅国审宦官：田令孜、刘贞亮死，鱼弘志净身待赐死</span>
         <span class="ev mono">李辅国审判　lyg.event.ganlu_aftershock_05_beat</span>
+        
         
         
         
@@ -3160,6 +3438,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.ganlu_aftershock_06_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1312</span>
@@ -3170,6 +3449,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 程元振</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.ganlu_aftershock_07_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -3177,6 +3457,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">探听李辅国重分职权：程元振任枢密使，仇士良留用，继位人选在议</span>
         <span class="ev mono">宦官再分权　lyg.event.shituolin_endgame_01_beat</span>
+        
         
         
         
@@ -3193,12 +3474,14 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.shituolin_endgame_02_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1348</span>
       <span class="bd">
         <span class="tx">合力打散窥基魔身——头颅附老太监跑了，释特昧普也逃了</span>
         <span class="ev mono">斩妖除魔　lyg.event.shituolin_endgame_05_beat</span>
+        
         
         
         
@@ -3215,12 +3498,14 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.shituolin_endgame_09_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1374</span>
       <span class="bd">
         <span class="tx">莲座前砍向李辅国，受伤后被潘金莲、白霓裳救下</span>
         <span class="ev mono">莲座交锋　lyg.event.shituolin_endgame_10_beat</span>
+        
         
         
         
@@ -3237,12 +3522,14 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.shituolin_endgame_11_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1378</span>
       <span class="bd">
         <span class="tx">以生死根吸尽死气，联手斩断李辅国肉身</span>
         <span class="ev mono">李辅国肉身败亡　lyg.event.shituolin_endgame_12_beat</span>
+        
         
         
         
@@ -3258,6 +3545,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <span class="badge debut">登场 郭氏</span>
         
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.shituolin_endgame_13_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
@@ -3265,6 +3553,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="bd">
         <span class="tx">接旨大都护、上柱国</span>
         <span class="ev mono">受封大都护　lyg.event.shituolin_endgame_title_daduhu</span>
+        
         
         
         
@@ -3281,6 +3570,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.shituolin_endgame_14_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="p">
       <span class="sq mono"></span>
@@ -3292,6 +3582,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         <span class="badge pend">未来待扩</span>
         
+        
         <artifact-sync><span class="cmt" contenteditable="true" data-k="node:唐国#43" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li></ol></div>
 
@@ -3300,6 +3591,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
 角色戏不必是一条真任务线，但**对同一个角色应当读得出先后**——下面按 <span class="mono">axisSeq</span> 排。
 挂在上级节点下的标「插入」，那一拍上级读它的另一面。</p>
 <div class="ln"><h3 class="serif">小紫<span class="tg">三级·人物</span></h3>
+  <div class="linecmt">这个角色整体的批注　<artifact-sync><span class="cmt" contenteditable="true" data-k="charline:小紫" data-hint="这个人的戏够不够、缺什么"></span></artifact-sync></div>
   <ol class="nodes"><li class="r">
       <span class="sq mono">166</span>
       <span class="bd"><span class="tx">你质问她，揭穿她一直在用的控制手段——她不是白痴</span>
@@ -3307,6 +3599,8 @@ ol.nodes li.p .sq{color:var(--ink3)}
       
       
       
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:小紫:lcq.event.s05b_02_xiaozi_exposed" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">178</span>
       <span class="bd"><span class="tx">她把乐明珠捉进深井。你下去救人，也第一次看清她做事的方式</span>
@@ -3314,6 +3608,8 @@ ol.nodes li.p .sq{color:var(--ink3)}
       
       
       
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:小紫:lcq.event.s05b_07_xiaozi_trap" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">238</span>
       <span class="bd"><span class="tx">她以毒戒制服卓云君，再用细针秘术把人压成玩物</span>
@@ -3321,6 +3617,8 @@ ol.nodes li.p .sq{color:var(--ink3)}
       
       
       
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:小紫:lcq.event.s07_03_xiaozi_appears" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">347</span>
       <span class="bd"><span class="tx">她重伤——你得决定护到什么程度</span>
@@ -3328,6 +3626,8 @@ ol.nodes li.p .sq{color:var(--ink3)}
       
       
       
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:小紫:lcq.event.s09_03_xiaozi_wounded" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">359</span>
       <span class="bd"><span class="tx">为拉链坊归属兴师问罪，以织坊交换平息（补进 §3）</span>
@@ -3335,6 +3635,8 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="badge ins">插入</span>
       
       <span class="badge shared">上级：商道</span>
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:小紫:lcq.event.s09_04_weaving_trade" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">381</span>
       <span class="bd"><span class="tx">江州要人，你拒绝交出她</span>
@@ -3342,6 +3644,8 @@ ol.nodes li.p .sq{color:var(--ink3)}
       
       
       
+      <span class="badge debut">登场 卢景</span>
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:小紫:lcq.event.s09_10_separation" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">429</span>
       <span class="bd"><span class="tx">兰汤馆，她压不住要吸血——你当场按住她</span>
@@ -3349,6 +3653,8 @@ ol.nodes li.p .sq{color:var(--ink3)}
       
       
       
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:小紫:lcq.event.s10_10_xiaozi_crisis" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">539</span>
       <span class="bd"><span class="tx">她以幽冥宗法术出手，点破辰星七妖，并牵出龙宸</span>
@@ -3356,6 +3662,8 @@ ol.nodes li.p .sq{color:var(--ink3)}
       
       
       
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:小紫:lcq.event.s12_14_chenxing_appears" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">698</span>
       <span class="bd"><span class="tx">她与莫如霖对质母亲碧姬的旧事</span>
@@ -3363,6 +3671,8 @@ ol.nodes li.p .sq{color:var(--ink3)}
       
       
       
+      <span class="badge debut">登场 莫如霖</span>
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:小紫:lyl.event.taiquan_afterfall_04_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1203</span>
       <span class="bd"><span class="tx">你向杨玉环打听离魂症——她母亲的病，可能也在她身上</span>
@@ -3370,6 +3680,8 @@ ol.nodes li.p .sq{color:var(--ink3)}
       
       
       
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:小紫:lyg.event.s06_01" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1209</span>
       <span class="bd"><span class="tx">送她到渭水水下闭关，冲五级</span>
@@ -3377,6 +3689,8 @@ ol.nodes li.p .sq{color:var(--ink3)}
       
       
       
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:小紫:lyg.event.s06_07" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1216</span>
       <span class="bd"><span class="tx">她没回来。内宅警铃响</span>
@@ -3384,6 +3698,8 @@ ol.nodes li.p .sq{color:var(--ink3)}
       
       
       
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:小紫:lyg.event.s06_09" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1223</span>
       <span class="bd"><span class="tx">她在渭水被掳走。你去找她</span>
@@ -3391,7 +3707,10 @@ ol.nodes li.p .sq{color:var(--ink3)}
       
       
       
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:小紫:lyg.event.buddhist_conspiracy_02_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li></ol></div><div class="ln"><h3 class="serif">卓云君<span class="tg">三级·人物</span></h3>
+  <div class="linecmt">这个角色整体的批注　<artifact-sync><span class="cmt" contenteditable="true" data-k="charline:卓云君" data-hint="这个人的戏够不够、缺什么"></span></artifact-sync></div>
   <ol class="nodes"><li class="r">
       <span class="sq mono">8</span>
       <span class="bd"><span class="tx">半兽人围上来。她用烈火法术救下你和月霜</span>
@@ -3399,6 +3718,8 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="badge ins">插入</span>
       
       <span class="badge shared">上级：主轴</span>
+      <span class="badge debut">登场 月霜／卓云君</span>
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:卓云君:lcq.event.s01_03" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">236</span>
       <span class="bd"><span class="tx">玄真观：你斩杀吴行德，救下她</span>
@@ -3406,6 +3727,8 @@ ol.nodes li.p .sq{color:var(--ink3)}
       
       
       
+      <span class="badge debut">登场 吴行德</span>
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:卓云君:lcq.event.s07_02_kill_wu" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">238</span>
       <span class="bd"><span class="tx">小紫以毒戒制服重伤的她；细针秘术和残酷折磨让这位太乙教御彻底崩溃，沦为任人摆布的玩物</span>
@@ -3413,6 +3736,8 @@ ol.nodes li.p .sq{color:var(--ink3)}
       
       
       
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:卓云君:lcq.event.s07_03_xiaozi_appears" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">248</span>
       <span class="bd"><span class="tx">s07_04_zhuo_subdued (248) 崩溃失权／s12_03_xiaozi_controls_zhuo (484) 为保命放弃抵抗</span>
@@ -3420,6 +3745,8 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="badge ins">插入</span>
       
       
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:卓云君:lcq.event.s07_04_zhuo_subdued" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">271</span>
       <span class="bd"><span class="tx">你与小紫设局，迫使她放弃抵抗，同意以性奴身份赚钱赎身</span>
@@ -3427,6 +3754,8 @@ ol.nodes li.p .sq{color:var(--ink3)}
       
       
       
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:卓云君:lcq.event.s07_09_hengtang_ambush" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">482</span>
       <span class="bd"><span class="tx">沐羽城庆典，你认出云中仙子就是她。小紫以更高权威再压一次，她为保命放弃抵抗，并指导徒儿侍奉</span>
@@ -3434,6 +3763,8 @@ ol.nodes li.p .sq{color:var(--ink3)}
       
       
       
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:卓云君:lcq.event.s12_02_recognize_zhuo" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">629</span>
       <span class="bd"><span class="tx">翠微园。她把 ZY5 的价拿到你面前兑现：你承诺对付现任掌教蔺采泉，并写下盘江程氏股份</span>
@@ -3441,7 +3772,10 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="badge ins">插入</span>
       
       <span class="badge shared">上级：太乙真宗</span>
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:卓云君:lyl.event.sacred_against_lin" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li></ol></div><div class="ln"><h3 class="serif">谢艺<span class="tg">三级·人物</span></h3>
+  <div class="linecmt">这个角色整体的批注　<artifact-sync><span class="cmt" contenteditable="true" data-k="charline:谢艺" data-hint="这个人的戏够不够、缺什么"></span></artifact-sync></div>
   <ol class="nodes"><li class="r">
       <span class="sq mono">63</span>
       <span class="bd"><span class="tx">空村里，他指出尸体旁的鬼王峒血符。你第一次看见他本人动手</span>
@@ -3449,6 +3783,8 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="badge ins">插入</span>
       
       <span class="badge shared">上级：主轴</span>
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:谢艺:lcq.event.s03b_snake_flower_bridge_03" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">111</span>
       <span class="bd"><span class="tx">他独入地宫，杀光使者与武士，拷问碧宛下落无果后斩首</span>
@@ -3456,6 +3792,8 @@ ol.nodes li.p .sq{color:var(--ink3)}
       
       
       
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:谢艺:lcq.event.s04b_lingfei_baiyi_crisis_13" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">115</span>
       <span class="bd"><span class="tx">你质问阿夕异常。他承认设计让你接触阿葭，并暗示灵飞镜会在南荒重逢</span>
@@ -3463,6 +3801,8 @@ ol.nodes li.p .sq{color:var(--ink3)}
       
       
       
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:谢艺:lcq.event.s04b_lingfei_baiyi_crisis_15" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">121</span>
       <span class="bd"><span class="tx">他换上现代休闲装，跟你谈玻璃，并吐出岳帅晕血、遗腹女</span>
@@ -3470,6 +3810,8 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="badge ins">插入</span>
       
       <span class="badge shared">上级：主轴</span>
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:谢艺:lcq.event.s04b_lingfei_baiyi_crisis_18" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1205</span>
       <span class="bd"><span class="tx">龙神这一仗后，你赶到重伤的他身边。他把小紫和名下之物交给你，请你带往星月湖</span>
@@ -3477,7 +3819,10 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="badge ins">插入</span>
       
       
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:谢艺:lyg.event.s06_03" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li></ol></div><div class="ln"><h3 class="serif">乐明珠<span class="tg">三级·人物</span></h3>
+  <div class="linecmt">这个角色整体的批注　<artifact-sync><span class="cmt" contenteditable="true" data-k="charline:乐明珠" data-hint="这个人的戏够不够、缺什么"></span></artifact-sync></div>
   <ol class="nodes"><li class="r">
       <span class="sq mono">73</span>
       <span class="bd"><span class="tx">她承认自己是光明观堂弟子，假扮新娘是为了刺杀鬼巫王</span>
@@ -3485,6 +3830,8 @@ ol.nodes li.p .sq{color:var(--ink3)}
       
       
       
+      <span class="badge debut">登场 鬼巫王／乐明珠</span>
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:乐明珠:lcq.event.s04_03" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">90</span>
       <span class="bd"><span class="tx">她挺身战鸦人，经验不够被擒。你在鸦人营地救她</span>
@@ -3492,6 +3839,8 @@ ol.nodes li.p .sq{color:var(--ink3)}
       
       
       
+      <span class="badge debut">登场 阿夕</span>
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:乐明珠:lcq.event.s04b_lingfei_baiyi_crisis_02" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">175</span>
       <span class="bd"><span class="tx">鬼王宫里她脱险现身，你与她重逢</span>
@@ -3499,6 +3848,8 @@ ol.nodes li.p .sq{color:var(--ink3)}
       
       
       
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:乐明珠:lcq.event.s05b_06_breakout_and_reunion" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">178</span>
       <span class="bd"><span class="tx">小紫把她捉进深井。你追下去营救</span>
@@ -3506,7 +3857,10 @@ ol.nodes li.p .sq{color:var(--ink3)}
       
       
       
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:乐明珠:lcq.event.s05b_07_xiaozi_trap" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li></ol></div><div class="ln"><h3 class="serif">萧遥逸<span class="tg">三级·人物</span></h3>
+  <div class="linecmt">这个角色整体的批注　<artifact-sync><span class="cmt" contenteditable="true" data-k="charline:萧遥逸" data-hint="这个人的戏够不够、缺什么"></span></artifact-sync></div>
   <ol class="nodes"><li class="r">
       <span class="sq mono">232</span>
       <span class="bd"><span class="tx">他向你痛陈左武全军覆没。这是他不靠骨灰的登场拍</span>
@@ -3514,6 +3868,8 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="badge ins">插入</span>
       
       <span class="badge shared">上级：星月湖／汉国</span>
+      <span class="badge debut">登场 萧遥逸</span>
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:萧遥逸:lcq.event.s07_01_old_case" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">253</span>
       <span class="bd"><span class="tx">舟侧两名水鬼。他警觉，与你联手击杀</span>
@@ -3521,6 +3877,8 @@ ol.nodes li.p .sq{color:var(--ink3)}
       
       
       
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:萧遥逸:lcq.event.s07_06_water_assassins" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">276</span>
       <span class="bd"><span class="tx">他代表星月湖宣布：全力支持你，向你开放所有资源</span>
@@ -3528,6 +3886,8 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="badge ins">插入</span>
       
       <span class="badge shared">上级：星月湖</span>
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:萧遥逸:lcq.event.xiao_opens_resources" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">278</span>
       <span class="bd"><span class="tx">他告诉你：王大将军战死可能有内奸。线索指向拜火教</span>
@@ -3535,6 +3895,8 @@ ol.nodes li.p .sq{color:var(--ink3)}
       
       
       
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:萧遥逸:lcq.event.s07_10_dragon_fang" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">299</span>
       <span class="bd"><span class="tx">苏妲己追杀你。他和小紫赶到，把人打退</span>
@@ -3542,6 +3904,8 @@ ol.nodes li.p .sq{color:var(--ink3)}
       
       
       
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:萧遥逸:lcq.event.s08_06_pursuit_repelled" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">521</span>
       <span class="bd"><span class="tx">秦翰生擒他。你救不救</span>
@@ -3549,7 +3913,10 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="badge ins">插入</span>
       
       <span class="badge shared">上级：宋国</span>
+      <span class="badge debut">登场 秦翰</span>
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:萧遥逸:lcq.event.s12_10_rescue_xiao" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li></ol></div><div class="ln"><h3 class="serif">杨玉环<span class="tg">三级·人物</span></h3>
+  <div class="linecmt">这个角色整体的批注　<artifact-sync><span class="cmt" contenteditable="true" data-k="charline:杨玉环" data-hint="这个人的戏够不够、缺什么"></span></artifact-sync></div>
   <ol class="nodes"><li class="r">
       <span class="sq mono">1068</span>
       <span class="bd"><span class="tx">长安街：她驾车把人踩在地上训。对上眼</span>
@@ -3557,6 +3924,8 @@ ol.nodes li.p .sq{color:var(--ink3)}
       
       
       
+      <span class="badge debut">登场 潘金莲／杨玉环</span>
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:杨玉环:lyg.event.s03_03" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1071</span>
       <span class="bd"><span class="tx">四朝履历被查到，疑与岳飞有关</span>
@@ -3564,6 +3933,8 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="badge ins">插入</span>
       
       
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:杨玉环:lyg.event.s03_06" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1088</span>
       <span class="bd"><span class="tx">紫云楼顶层：她出题（云如瑶、密码箱、手枪）。你答过关</span>
@@ -3571,6 +3942,8 @@ ol.nodes li.p .sq{color:var(--ink3)}
       
       
       
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:杨玉环:lyg.event.s03_07" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1144</span>
       <span class="bd"><span class="tx">她当众称你姑父，看宗室什么脸。你接下或拆穿</span>
@@ -3578,6 +3951,8 @@ ol.nodes li.p .sq{color:var(--ink3)}
       
       
       
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:杨玉环:lyg.event.changgan_interlude_05_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1203</span>
       <span class="bd"><span class="tx">你向她打听离魂症。她想起岳帅提过类似的病，警告不能让外人知道</span>
@@ -3585,6 +3960,8 @@ ol.nodes li.p .sq{color:var(--ink3)}
       
       
       
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:杨玉环:lyg.event.s06_01" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">?</span>
       <span class="bd"><span class="tx">你留在现场，完成这块招牌接触卡</span>
@@ -3592,7 +3969,10 @@ ol.nodes li.p .sq{color:var(--ink3)}
       
       
       
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:杨玉环:lyg.event.debut_yangyuhuan" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li></ol></div><div class="ln"><h3 class="serif">赵合德<span class="tg">三级·人物</span></h3>
+  <div class="linecmt">这个角色整体的批注　<artifact-sync><span class="cmt" contenteditable="true" data-k="charline:赵合德" data-hint="这个人的戏够不够、缺什么"></span></artifact-sync></div>
   <ol class="nodes"><li class="r">
       <span class="sq mono">782</span>
       <span class="bd"><span class="tx">徐璜传口谕：送她入宫封昭仪，应二鹅之象</span>
@@ -3600,6 +3980,8 @@ ol.nodes li.p .sq{color:var(--ink3)}
       
       
       
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:赵合德:lyl.event.s05_06" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">783</span>
       <span class="bd"><span class="tx">乐津里人市：你用昭仪身份诱友通期去做替身</span>
@@ -3607,6 +3989,8 @@ ol.nodes li.p .sq{color:var(--ink3)}
       
       
       
+      <span class="badge debut">登场 友通期</span>
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:赵合德:lyl.event.s05_07" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">784</span>
       <span class="bd"><span class="tx">你把方案说给她听。她同意，并问自己怎么办</span>
@@ -3614,6 +3998,8 @@ ol.nodes li.p .sq{color:var(--ink3)}
       
       
       
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:赵合德:lyl.event.s05_08" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">910</span>
       <span class="bd"><span class="tx">含光殿要救的昭仪是她</span>
@@ -3621,6 +4007,8 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="badge ins">插入</span>
       
       
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:赵合德:lyl.event.han_palace_endgame_03_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">?</span>
       <span class="bd"><span class="tx">玉佩逼她承认：皇后胞妹，上清观避祸</span>
@@ -3628,7 +4016,10 @@ ol.nodes li.p .sq{color:var(--ink3)}
       
       
       
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:赵合德:lyl.event.debut_zhaohede" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li></ol></div><div class="ln"><h3 class="serif">凝羽<span class="tg">三级·人物</span></h3>
+  <div class="linecmt">这个角色整体的批注　<artifact-sync><span class="cmt" contenteditable="true" data-k="charline:凝羽" data-hint="这个人的戏够不够、缺什么"></span></artifact-sync></div>
   <ol class="nodes"><li class="r">
       <span class="sq mono">61</span>
       <span class="bd"><span class="tx">蛇彝人袭来。她斩杀来敌</span>
@@ -3636,6 +4027,8 @@ ol.nodes li.p .sq{color:var(--ink3)}
       
       
       
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:凝羽:lcq.event.s03b_snake_flower_bridge_01" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">83</span>
       <span class="bd"><span class="tx">她因麻古成瘾痛苦。你向乐明珠求解毒</span>
@@ -3643,6 +4036,8 @@ ol.nodes li.p .sq{color:var(--ink3)}
       
       
       
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:凝羽:lcq.event.s04_06" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">107</span>
       <span class="bd"><span class="tx">她从暗处刺穿鬼王峒使者的手掌</span>
@@ -3650,7 +4045,10 @@ ol.nodes li.p .sq{color:var(--ink3)}
       
       
       
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:凝羽:lcq.event.s04b_lingfei_baiyi_crisis_12" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li></ol></div><div class="ln"><h3 class="serif">尹馥兰<span class="tg">三级·人物</span></h3>
+  <div class="linecmt">这个角色整体的批注　<artifact-sync><span class="cmt" contenteditable="true" data-k="charline:尹馥兰" data-hint="这个人的戏够不够、缺什么"></span></artifact-sync></div>
   <ol class="nodes"><li class="r">
       <span class="sq mono">?</span>
       <span class="bd"><span class="tx">yin_fulan_aid 主动报伏并要后续安排／taiquan_afterfall_02_beat (688) 被弃下水道向你求救／decide_yin_fulan_fate 决定她与何漪莲的去留</span>
@@ -3658,7 +4056,10 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="badge ins">插入</span>
       
       
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:尹馥兰:lyl.event.yin_fulan_aid" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li></ol></div><div class="ln"><h3 class="serif">吕雉<span class="tg">三级·人物</span></h3>
+  <div class="linecmt">这个角色整体的批注　<artifact-sync><span class="cmt" contenteditable="true" data-k="charline:吕雉" data-hint="这个人的戏够不够、缺什么"></span></artifact-sync></div>
   <ol class="nodes"><li class="r">
       <span class="sq mono">?</span>
       <span class="bd"><span class="tx">debut_lvzhi 凤辇临朝立威、点破霍子孟三面受制／han_succession_03_beat (1033) 坦白弑君弑夫旧事、求留程府</span>
@@ -3666,7 +4067,10 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="badge ins">插入</span>
       
       
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:吕雉:lyg.event.debut_lvzhi" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li></ol></div><div class="ln"><h3 class="serif">云如瑶<span class="tg">三级·人物</span></h3>
+  <div class="linecmt">这个角色整体的批注　<artifact-sync><span class="cmt" contenteditable="true" data-k="charline:云如瑶" data-hint="这个人的戏够不够、缺什么"></span></artifact-sync></div>
   <ol class="nodes"><li class="r">
       <span class="sq mono">344</span>
       <span class="bd"><span class="tx">s09_02_yun_ruyao_faints (344) 昏厥暴露病线／taiquan_afterfall_06_beat (718) 提亲受阻后私奔</span>
@@ -3674,7 +4078,10 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="badge ins">插入</span>
       
       
+      <span class="badge debut">登场 云如瑶</span>
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:云如瑶:lcq.event.s09_02_yun_ruyao_faints" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li></ol></div><div class="ln"><h3 class="serif">林冲<span class="tg">三级·人物</span></h3>
+  <div class="linecmt">这个角色整体的批注　<artifact-sync><span class="cmt" contenteditable="true" data-k="charline:林冲" data-hint="这个人的戏够不够、缺什么"></span></artifact-sync></div>
   <ol class="nodes"><li class="r">
       <span class="sq mono">562</span>
       <span class="bd"><span class="tx">lin_an_bridge_04_beat (562) 明庆寺相会暴露忍辱处境／xiaoyingzhou_blacksea_trap_03_beat (584) 白虎堂后刺配江州，要你去救</span>
@@ -3682,7 +4089,10 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="badge ins">插入</span>
       
       
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:林冲:lyl.event.lin_an_bridge_04_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li></ol></div><div class="ln"><h3 class="serif">黛绮丝<span class="tg">三级·人物</span></h3>
+  <div class="linecmt">这个角色整体的批注　<artifact-sync><span class="cmt" contenteditable="true" data-k="charline:黛绮丝" data-hint="这个人的戏够不够、缺什么"></span></artifact-sync></div>
   <ol class="nodes"><li class="r">
       <span class="sq mono">?</span>
       <span class="bd"><span class="tx">认定你是拯救者、誓为主仆，暴露摩尼教善母被禁锢的来历</span>
@@ -3690,7 +4100,10 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="badge ins">插入</span>
       
       
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:黛绮丝:lyg.event.debut_daiqisi" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li></ol></div><div class="ln"><h3 class="serif">苏妲己<span class="tg">三级·人物</span></h3>
+  <div class="linecmt">这个角色整体的批注　<artifact-sync><span class="cmt" contenteditable="true" data-k="charline:苏妲己" data-hint="这个人的戏够不够、缺什么"></span></artifact-sync></div>
   <ol class="nodes"><li class="r">
       <span class="sq mono">35</span>
       <span class="bd"><span class="tx">揭开商馆主人伪装、追问霓龙丝——她向你要情报</span>
@@ -3698,7 +4111,10 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="badge ins">插入</span>
       
       
+      <span class="badge debut">登场 苏妲己</span>
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:苏妲己:lcq.event.s02_06" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li></ol></div><div class="ln"><h3 class="serif">易虎<span class="tg">三级·人物</span></h3>
+  <div class="linecmt">这个角色整体的批注　<artifact-sync><span class="cmt" contenteditable="true" data-k="charline:易虎" data-hint="这个人的戏够不够、缺什么"></span></artifact-sync></div>
   <ol class="nodes"><li class="r">
       <span class="sq mono">80</span>
       <span class="bd"><span class="tx">救人受创、被洪水吞没——他自己的代价</span>
@@ -3706,7 +4122,10 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="badge ins">插入</span>
       
       
+      <span class="badge debut">登场 易彪／易虎</span>
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:易虎:lcq.event.s04_05" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li></ol></div><div class="ln"><h3 class="serif">李师师<span class="tg">三级·人物</span></h3>
+  <div class="linecmt">这个角色整体的批注　<artifact-sync><span class="cmt" contenteditable="true" data-k="charline:李师师" data-hint="这个人的戏够不够、缺什么"></span></artifact-sync></div>
   <ol class="nodes"><li class="r">
       <span class="sq mono">560</span>
       <span class="bd"><span class="tx">初遇小瀛洲、要你护她</span>
@@ -3714,7 +4133,10 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="badge ins">插入</span>
       
       
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:李师师:lyl.event.lin_an_bridge_02_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li></ol></div><div class="ln"><h3 class="serif">静善<span class="tg">三级·人物</span></h3>
+  <div class="linecmt">这个角色整体的批注　<artifact-sync><span class="cmt" contenteditable="true" data-k="charline:静善" data-hint="这个人的戏够不够、缺什么"></span></artifact-sync></div>
   <ol class="nodes"><li class="r">
       <span class="sq mono">596</span>
       <span class="bd"><span class="tx">为袈裟符文夜袭索物</span>
@@ -3722,7 +4144,10 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="badge ins">插入</span>
       
       <span class="badge shared">上级：黑魔海／毒宗</span>
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:静善:lyl.event.xiaoyingzhou_blacksea_trap_05_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li></ol></div><div class="ln"><h3 class="serif">虞白樱<span class="tg">三级·人物</span></h3>
+  <div class="linecmt">这个角色整体的批注　<artifact-sync><span class="cmt" contenteditable="true" data-k="charline:虞白樱" data-hint="这个人的戏够不够、缺什么"></span></artifact-sync></div>
   <ol class="nodes"><li class="r">
       <span class="sq mono">666</span>
       <span class="bd"><span class="tx">脚踝受伤要你去魔墟救她，并提合作条件</span>
@@ -3730,7 +4155,10 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="badge ins">插入</span>
       
       
+      <span class="badge debut">登场 虞白樱</span>
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:虞白樱:lyl.event.yu_baiying_truce" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li></ol></div><div class="ln"><h3 class="serif">左彤芝<span class="tg">三级·人物</span></h3>
+  <div class="linecmt">这个角色整体的批注　<artifact-sync><span class="cmt" contenteditable="true" data-k="charline:左彤芝" data-hint="这个人的戏够不够、缺什么"></span></artifact-sync></div>
   <ol class="nodes"><li class="r">
       <span class="sq mono">656</span>
       <span class="bd"><span class="tx">宋三下毒要劫持的是她（武二郎只是在场）</span>
@@ -3738,7 +4166,10 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="badge ins">插入</span>
       
       
+      <span class="badge debut">登场 宋三／左彤芝</span>
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:左彤芝:lyl.event.taiquan_sacred_fruit_09" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li></ol></div><div class="ln"><h3 class="serif">郭解<span class="tg">三级·人物</span></h3>
+  <div class="linecmt">这个角色整体的批注　<artifact-sync><span class="cmt" contenteditable="true" data-k="charline:郭解" data-hint="这个人的戏够不够、缺什么"></span></artifact-sync></div>
   <ol class="nodes"><li class="r">
       <span class="sq mono">956</span>
       <span class="bd"><span class="tx">临终把定陶王托付给你</span>
@@ -3746,7 +4177,10 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="badge ins">插入</span>
       
       <span class="badge shared">上级：黑魔海／毒宗／汉国</span>
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:郭解:lyg.event.s01_06" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li></ol></div><div class="ln"><h3 class="serif">董卓<span class="tg">三级·人物</span></h3>
+  <div class="linecmt">这个角色整体的批注　<artifact-sync><span class="cmt" contenteditable="true" data-k="charline:董卓" data-hint="这个人的戏够不够、缺什么"></span></artifact-sync></div>
   <ol class="nodes"><li class="r">
       <span class="sq mono">957</span>
       <span class="bd"><span class="tx">自陈戎马收场，留下胡骑军情遗命</span>
@@ -3754,7 +4188,10 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="badge ins">插入</span>
       
       <span class="badge shared">上级：汉国</span>
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:董卓:lyg.event.s01_07" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li></ol></div><div class="ln"><h3 class="serif">云丹琉<span class="tg">三级·人物</span></h3>
+  <div class="linecmt">这个角色整体的批注　<artifact-sync><span class="cmt" contenteditable="true" data-k="charline:云丹琉" data-hint="这个人的戏够不够、缺什么"></span></artifact-sync></div>
   <ol class="nodes"><li class="r">
       <span class="sq mono">992</span>
       <span class="bd"><span class="tx">闯府质问被遗忘的婚事</span>
@@ -3762,7 +4199,10 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="badge ins">插入</span>
       
       
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:云丹琉:lyg.event.s02_04" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li></ol></div><div class="ln"><h3 class="serif">云苍峰<span class="tg">三级·人物</span></h3>
+  <div class="linecmt">这个角色整体的批注　<artifact-sync><span class="cmt" contenteditable="true" data-k="charline:云苍峰" data-hint="这个人的戏够不够、缺什么"></span></artifact-sync></div>
   <ol class="nodes"><li class="r">
       <span class="sq mono">993</span>
       <span class="bd"><span class="tx">谈婚礼与纸钞，承诺支援十万金铢</span>
@@ -3770,7 +4210,10 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="badge ins">插入</span>
       
       
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:云苍峰:lyg.event.s02_05" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li></ol></div><div class="ln"><h3 class="serif">霍子孟<span class="tg">三级·人物</span></h3>
+  <div class="linecmt">这个角色整体的批注　<artifact-sync><span class="cmt" contenteditable="true" data-k="charline:霍子孟" data-hint="这个人的戏够不够、缺什么"></span></artifact-sync></div>
   <ol class="nodes"><li class="r">
       <span class="sq mono">994</span>
       <span class="bd"><span class="tx">国丧期间应允证婚，把政治信用押给你</span>
@@ -3778,7 +4221,10 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="badge ins">插入</span>
       
       
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:霍子孟:lyg.event.s02_06" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li></ol></div><div class="ln"><h3 class="serif">秦桧<span class="tg">三级·人物</span></h3>
+  <div class="linecmt">这个角色整体的批注　<artifact-sync><span class="cmt" contenteditable="true" data-k="charline:秦桧" data-hint="这个人的戏够不够、缺什么"></span></artifact-sync></div>
   <ol class="nodes"><li class="r">
       <span class="sq mono">?</span>
       <span class="bd"><span class="tx">殇侯点破他「灵敏有余，志浅易变」</span>
@@ -3786,7 +4232,10 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="badge ins">插入</span>
       
       
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:秦桧:lcq.event.s07_debut_qinhui" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li></ol></div><div class="ln"><h3 class="serif">班超<span class="tg">三级·人物</span></h3>
+  <div class="linecmt">这个角色整体的批注　<artifact-sync><span class="cmt" contenteditable="true" data-k="charline:班超" data-hint="这个人的戏够不够、缺什么"></span></artifact-sync></div>
   <ol class="nodes"><li class="r">
       <span class="sq mono">?</span>
       <span class="bd"><span class="tx">羊腿镇场立规矩，为田荣留退路</span>
@@ -3794,7 +4243,10 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="badge ins">插入</span>
       
       
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:班超:lyg.event.highlight_banchao_lamb_leg" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li></ol></div><div class="ln"><h3 class="serif">潘金莲<span class="tg">三级·人物</span></h3>
+  <div class="linecmt">这个角色整体的批注　<artifact-sync><span class="cmt" contenteditable="true" data-k="charline:潘金莲" data-hint="这个人的戏够不够、缺什么"></span></artifact-sync></div>
   <ol class="nodes"><li class="r">
       <span class="sq mono">?</span>
       <span class="bd"><span class="tx">在太泉核心区主动设伏</span>
@@ -3802,7 +4254,10 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="badge ins">插入</span>
       
       
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:潘金莲:lyl.event.pan_jinlian_ambush" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li></ol></div><div class="ln"><h3 class="serif">袁天罡<span class="tg">三级·人物</span></h3>
+  <div class="linecmt">这个角色整体的批注　<artifact-sync><span class="cmt" contenteditable="true" data-k="charline:袁天罡" data-hint="这个人的戏够不够、缺什么"></span></artifact-sync></div>
   <ol class="nodes"><li class="r">
       <span class="sq mono">1070</span>
       <span class="bd"><span class="tx">自述底层穿越者来历、童身换预知的代价</span>
@@ -3810,7 +4265,10 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="badge ins">插入</span>
       
       
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:袁天罡:lyg.event.s03_05" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li></ol></div><div class="ln"><h3 class="serif">李药师<span class="tg">三级·人物</span></h3>
+  <div class="linecmt">这个角色整体的批注　<artifact-sync><span class="cmt" contenteditable="true" data-k="charline:李药师" data-hint="这个人的戏够不够、缺什么"></span></artifact-sync></div>
   <ol class="nodes"><li class="r">
       <span class="sq mono">1116</span>
       <span class="bd"><span class="tx">赠令箭、派南霁云——向你开资源口</span>
@@ -3818,7 +4276,10 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="badge ins">插入</span>
       
       
+      <span class="badge debut">登场 南霁云／李药师</span>
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:李药师:lyg.event.changgan_interlude_01_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li></ol></div><div class="ln"><h3 class="serif">赵飞燕<span class="tg">三级·人物</span></h3>
+  <div class="linecmt">这个角色整体的批注　<artifact-sync><span class="cmt" contenteditable="true" data-k="charline:赵飞燕" data-hint="这个人的戏够不够、缺什么"></span></artifact-sync></div>
   <ol class="nodes"><li class="r">
       <span class="sq mono">1154</span>
       <span class="bd"><span class="tx">病中接受舞都会社，要一个安置</span>
@@ -3826,7 +4287,10 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="badge ins">插入</span>
       
       
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:赵飞燕:lyg.event.changgan_interlude_07_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li></ol></div><div class="ln"><h3 class="serif">白霓裳<span class="tg">三级·人物</span></h3>
+  <div class="linecmt">这个角色整体的批注　<artifact-sync><span class="cmt" contenteditable="true" data-k="charline:白霓裳" data-hint="这个人的戏够不够、缺什么"></span></artifact-sync></div>
   <ol class="nodes"><li class="r">
       <span class="sq mono">1210</span>
       <span class="bd"><span class="tx">要人安抚后庭恐惧</span>
@@ -3834,7 +4298,10 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="badge ins">插入</span>
       
       
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:白霓裳:lyg.event.s06_08" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li></ol></div><div class="ln"><h3 class="serif">释特昧普<span class="tg">三级·人物</span></h3>
+  <div class="linecmt">这个角色整体的批注　<artifact-sync><span class="cmt" contenteditable="true" data-k="charline:释特昧普" data-hint="这个人的戏够不够、缺什么"></span></artifact-sync></div>
   <ol class="nodes"><li class="r">
       <span class="sq mono">1281</span>
       <span class="bd"><span class="tx">自封金身法王，邀你去慈恩寺</span>
@@ -3842,7 +4309,10 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="badge ins">插入</span>
       
       
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:释特昧普:lyg.event.ganlu_aftershock_01_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li></ol></div><div class="ln"><h3 class="serif">高阳<span class="tg">三级·人物</span></h3>
+  <div class="linecmt">这个角色整体的批注　<artifact-sync><span class="cmt" contenteditable="true" data-k="charline:高阳" data-hint="这个人的戏够不够、缺什么"></span></artifact-sync></div>
   <ol class="nodes"><li class="r">
       <span class="sq mono">1342</span>
       <span class="bd"><span class="tx">疑冢超百丈、宫内报丧失踪——他的下场</span>
@@ -3850,6 +4320,8 @@ ol.nodes li.p .sq{color:var(--ink3)}
       <span class="badge ins">插入</span>
       
       
+      
+      <artifact-sync><span class="cmt" contenteditable="true" data-k="char:高阳:lyg.event.shituolin_endgame_03_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li></ol></div>
 
 <h2>双喂：同一个 event 被几级同时引用</h2>
@@ -3889,3 +4361,15 @@ ol.nodes li.p .sq{color:var(--ink3)}
 <h2>该看的地方</h2>
 <ul><li class="warn"><b>锚待补</b> 晋国 的锚事件 <code>lcq.event.palace_haunting_rumor</code> 还没写，暂用粗锚</li></ul>
 </div>
+<script>
+// 批注是逐键自动保存的（每个批注都在同步区里），本按钮**不负责发送**——
+// 它只给这一批批注盖一个可读的戳：把「几时写完、共几条」写进同步区的 DOM，
+// Claude 那边因此看得到「这批可以复核了」。改 DOM 必须发生在用户手势内，这正是合同支持的写法。
+document.getElementById('mark').addEventListener('click', function () {
+  var filled = Array.prototype.filter.call(
+    document.querySelectorAll('.cmt'), function (el) { return el.textContent.trim(); }).length;
+  document.getElementById('stamp').textContent =
+    '已标记 ' + new Date().toLocaleString('zh-CN', { hour12: false })
+    + '，共 ' + filled + ' 条批注待复核';
+});
+</script>
