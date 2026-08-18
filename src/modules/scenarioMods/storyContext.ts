@@ -24,6 +24,7 @@ import {
 import { formatVoiceCard } from './voiceCards';
 import { resolveMainQuestLayer, resolveMainQuestNodes } from './mainQuestAxis';
 import { resolveAvailableLines } from './secondaryLines';
+import { characterBeatsAt } from './characterQuests';
 import { formatWorldSimulationPrompt, getCurrentWorldSituation, isWorldSimulationRuntime } from './worldSimulation';
 
 import type {
@@ -856,6 +857,11 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
         );
         if (openLines.length) {
           lines.push(`- 此刻可投的门路：${openLines.map(l => `${l.name}——${l.entryHint}`).join('；')}`);
+        }
+        // 人物任务：这一拍因为谁而不一样。空则整行省略，不得另写“本拍无人有戏”。
+        const beats = characterBeatsAt(anchor?.id);
+        if (beats.length) {
+          lines.push(`- 这一拍谁有戏：${beats.map(b => `${b.name}——${b.text}`).join('；')}`);
         }
         lines.push(
           '- 纪律：没有需要玩家逐拍完成的任务，也没有进度惩罚。玩家可立刻着手、绕路，或把上述方向搁置任意多轮。当玩家问「主线是什么／我该往哪走」时，据此如实作答，并给出此刻可行的切入方式（找谁、去哪、打听什么）。不得替玩家决定下一步，不得提前演出该方向的结果，也不得因玩家不朝它走而制造追兵、压力或惩罚。',

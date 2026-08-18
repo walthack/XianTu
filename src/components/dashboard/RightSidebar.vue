@@ -257,6 +257,26 @@
         </div>
       </div>
 
+      <!-- 人物任务：这一拍因为谁而不一样；空则整块不渲染 -->
+      <div v-if="characterBeats.length" class="collapsible-section quest-section">
+        <div class="section-header" @click="beatsCollapsed = !beatsCollapsed">
+          <h3 class="section-title">
+            <Clock :size="14" class="section-icon" />
+            <span>{{ t('这一拍谁有戏') }}</span>
+          </h3>
+          <button class="collapse-toggle" :class="{ 'collapsed': beatsCollapsed }">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8 10l4-4H4l4 4z"/></svg>
+          </button>
+        </div>
+        <div v-show="!beatsCollapsed" class="quest-body">
+          <div class="quest-main">
+            <div v-for="(beat, i) in characterBeats" :key="`${beat.name}-${i}`" class="quest-event">
+              <span class="quest-mark-side">·</span>{{ beat.name }}——{{ beat.text }}
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- 玩家认知与路径：只展示引擎已落账内容，不从叙事猜测事实 -->
       <EpistemicLedgerPanel
         :player-knowledge="epistemicRuntime?.playerKnowledge"
@@ -429,6 +449,7 @@ import {
 } from '@/modules/scenarioMods/worldSimulation';
 import { resolveMainQuestLayer, resolveMainQuestNodes } from '@/modules/scenarioMods/mainQuestAxis';
 import { resolveAvailableLines, resolveLocationIdFromPosition } from '@/modules/scenarioMods/secondaryLines';
+import { characterBeatsAt } from '@/modules/scenarioMods/characterQuests';
 import { prefillChat } from '@/utils/chatBus';
 import { resolveScenarioEventNarrative } from '@/modules/scenarioMods/eventNarrativeView';
 import { returnToCanonAnchor } from '@/modules/scenarioMods/divergenceControl';
@@ -456,6 +477,7 @@ const statusEffects = computed(() => {
 
 const questCollapsed = ref(false);
 const linesCollapsed = ref(false);
+const beatsCollapsed = ref(false);
 const worldlineCollapsed = ref(false);
 const chronicleCollapsed = ref(true);
 const actorCollapsed = ref(false);
@@ -512,6 +534,13 @@ const availableLines = computed(() => {
     total: (line.nodes || []).length,
     pending: Boolean(line.pendingExpansion),
   }));
+});
+// 人物任务：只问当前这一拍因为谁而不一样。事件 id 走 getScenarioFocusEvent，
+// 与主线 UI / 主叙事同一锚，避免从 activeEventIds 抽出资料事件。
+const characterBeats = computed(() => {
+  const rt: any = epistemicRuntime.value;
+  if (!rt || typeof rt !== 'object') return [];
+  return characterBeatsAt(getScenarioFocusEvent(rt)?.id);
 });
 // 剧情主线：章节/活跃事件/清关状态/下一关（确定性，读 worldState.剧本模组）
 const questMain = computed(() => {
