@@ -324,34 +324,8 @@ function render(r) {
     + `data-k="${esc(key)}" data-hint="${esc(hint || '批注')}"></span></artifact-sync>`;
   const seqOf = n => n.seq ?? undefined;
 
-  const track = t => {
-    const pts = t.nodes.filter(n => typeof seqOf(n) === 'number');
-    if (!pts.length) return '';
-    const lo = Math.min(...pts.map(seqOf)), hi = Math.max(...pts.map(seqOf));
-    const marks = t.nodes.map((n, i) => {
-      const s = seqOf(n);
-      if (typeof s !== 'number') return '';
-      const cls = ['m',
-        n.eventId === t.anchor ? 'anchor' : '',
-        n.status === 'new' ? 'new' : '',
-        charHooks.has(n.eventId) ? 'hooked' : '',
-        owners.get(n.eventId)?.length > 1 ? 'shared' : ''].filter(Boolean).join(' ');
-      const who = charHooks.get(n.eventId);
-      return `<i class="${cls}" style="left:${pc(s)}%" title="${esc(t.name)} #${i + 1}　seq ${s}　${esc(n.text)}${who ? `　［人物：${esc(who.map(x => x.who).join('／'))}］` : ''}"></i>`;
-    }).join('');
-    return `<div class="sp" style="left:${pc(lo)}%;width:${pc(hi) - pc(lo)}%"></div>${marks}`;
-  };
 
-  const rows = r.tiers.map(t => `<div class="row ${t.tier === 1 ? 'main' : ''}">
-    <div class="nm">${esc(t.name)}<i>${t.tier === 1 ? '一级' : t.kind === 'sect' ? '二级·宗派' : t.kind === 'commerce' ? '二级·商道' : '二级·国家'}</i></div>
-    <div class="tk">${track(t)}</div></div>`).join('');
 
-  const charRow = `<div class="row ch"><div class="nm">人物任务<i>三级·插入</i></div><div class="tk">${
-    [...charHooks].map(([id, who]) => {
-      const s = events.get(id)?.seq;
-      return typeof s === 'number'
-        ? `<i class="m hook" style="left:${pc(s)}%" title="${esc(who.map(x => x.who).join('／'))}　挂在 ${esc(id)}　seq ${s}"></i>` : '';
-    }).join('')}</div></div>`;
 
   const flags = [
     ...r.regressions.map(x => `<li class="bad"><b>序回退</b> ${esc(x.line)}：#${x.from.i}「${esc(x.from.text)}」seq ${x.from.seq} → #${x.to.i}「${esc(x.to.text)}」seq ${x.to.seq}</li>`),
@@ -507,22 +481,6 @@ ${PENDING_REVIEW.map((p, i) => `<div class="ln" style="margin:0 0 12px">
   <div class="hk" style="padding:4px 0"><b>你可能想推翻的</b>　${esc(p.risk)}</div>
   <div class="hk" style="padding:4px 0"><b>你的裁定</b>　${cmt('verdict:' + p.tag + ':' + i, '通过 / 改成…… / 推翻，理由')}</div>
 </div>`).join('')}
-</div>
-
-<h2>三级同轴</h2>
-<div class="box"><div class="axis">
-<div class="books"><div style="flex:550">六朝清羽记</div><div style="flex:397">六朝云龙吟</div><div style="flex:452">六朝燕歌行</div></div>
-${rows}${charRow}
-</div>
-<div class="ticks">${[1, 200, 400, 600, 800, 1000, 1200, 1399].map(v => `<span class="mono" style="left:${pc(v)}%">${v}</span>`).join('')}</div>
-</div>
-<div class="lg">
- <span><i style="background:var(--tan)"></i>主轴节点</span>
- <span><i style="background:var(--qing)"></i>二级线·可走</span>
- <span><i style="border:1.5px solid var(--huang)"></i>待写 event</span>
- <span><i style="background:var(--lv);width:3px"></i>锚</span>
- <span><i style="border:1.5px dashed var(--ink3);border-radius:50%;width:8px;height:8px"></i>人物挂点</span>
- <span>点上方红竖线＝双喂　点下方虚线＝有人物戏挂着</span>
 </div>
 
 <h2>逐线展开：每条线的 event 与挂在下面的角色戏</h2>

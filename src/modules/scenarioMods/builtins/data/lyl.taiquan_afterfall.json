@@ -5803,6 +5803,16 @@
       "event.taiquan_afterfall_08.done": false,
       "event.taiquan_afterfall_09.done": false,
       "event.taiquan_afterfall_10.done": false,
+      "event.jin_guangyuan_ledger.done": false,
+      "event.han_court_grain_blame.done": false,
+      "event.xingyin_beast_traps.done": false,
+      "event.pan_yu_tentacle_clash.done": false,
+      "event.rescue_yu_sisters.done": false,
+      "event.xiaozi_binds_yu_sisters.done": false,
+      "event.pan_settlement_clash.done": false,
+      "event.pan_hetu_exit.done": false,
+      "event.fen_wuchen_destroys_gate.done": false,
+      "event.taiquan_portal_exit.done": false,
       "chapter.lyl.taiquan_afterfall.taquan.started": true,
       "chapter.lyl.taiquan_afterfall.taquan.done": false,
       "chapter.lyl.taiquan_afterfall.luodu.started": false,
@@ -5824,7 +5834,11 @@
           "lyl.event.taiquan_afterfall_01_beat",
           "lyl.event.taiquan_afterfall_02_beat",
           "lyl.event.taiquan_afterfall_03_beat",
-          "lyl.event.taiquan_afterfall_04_beat"
+          "lyl.event.taiquan_afterfall_04_beat",
+          "lyl.event.xingyin_beast_traps",
+          "lyl.event.pan_yu_tentacle_clash",
+          "lyl.event.rescue_yu_sisters",
+          "lyl.event.xiaozi_binds_yu_sisters"
         ]
       },
       {
@@ -5844,7 +5858,11 @@
           "lyl.event.taiquan_afterfall_07_beat",
           "lyl.event.taiquan_afterfall_08_beat",
           "lyl.event.taiquan_afterfall_09_beat",
-          "lyl.event.taiquan_afterfall_10_beat"
+          "lyl.event.taiquan_afterfall_10_beat",
+          "lyl.event.pan_settlement_clash",
+          "lyl.event.pan_hetu_exit",
+          "lyl.event.fen_wuchen_destroys_gate",
+          "lyl.event.taiquan_portal_exit"
         ],
         "activation": [
           {
@@ -6643,6 +6661,505 @@
               },
               "requiresPreparation": [
                 "sequence_step_1"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyl.event.xingyin_beast_traps",
+        "name": "行淫兽困人",
+        "description": "程宗扬与小紫发现天井密封玻璃破损，赤阳藤外侵，内有行淫兽盘踞；青叶教尹馥兰被触肢缠困于玻璃幕内。",
+        "axisId": "yunlong.105.1",
+        "axisAnchor": "六朝云龙吟·#105·仇报",
+        "axisSeq": 672,
+        "axisBeat": "天井玻璃破损，行淫兽盘踞，尹馥兰被触肢缠困。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.xingyin_beast_traps.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.xiao_zi",
+          "liuchao.character.yin_fulan"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.xe6bd0066c9"
+        ],
+        "locationId": "liuchao.location.taiquan",
+        "objective": "查明天井内行淫兽与被困者的情况",
+        "evidence": "双源叙述。MiniMax《影像》前接《仇报》：发现天井与赤阳藤；尹馥兰困于行淫兽。deepseek seq 672 首句：尹馥兰被行淫兽捕获折磨。宋三先至后离去仅 MiniMax 有，正文未写死其去向。",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "observe_xingyin_ceiling",
+              "label": "看清天井里的触肢与被困者",
+              "actionText": "我靠近破损的天井玻璃，看清里面赤阳藤、行淫兽和被缠住的人。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已看清天井里的触肢与被困者；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "xingyin_ceiling_seen"
+            },
+            {
+              "id": "confirm_xingyin_trapped",
+              "label": "查明天井内行淫兽与被困者的情况",
+              "actionText": "我把天井里行淫兽盘踞、尹馥兰被触肢缠困这件事确认下来。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已查明天井内行淫兽与被困者的情况；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "xingyin_ceiling_seen"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyl.event.pan_yu_tentacle_clash",
+        "name": "触肢中的反噬",
+        "description": "虞紫薇被潘金莲从触肢中救出后，反将潘金莲推入触肢；潘金莲反击擒住虞紫薇，夺走虞白樱所持赤阳圣果后离去。",
+        "axisId": "yunlong.105.1",
+        "axisAnchor": "六朝云龙吟·#105·仇报",
+        "axisSeq": 672,
+        "axisBeat": "虞紫薇被救后反推潘金莲入触肢，潘金莲反击擒她，夺走虞白樱的赤阳圣果后离去。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.pan_yu_tentacle_clash.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.pan_jinlian"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.guang_ming_guan_tang"
+        ],
+        "locationId": "liuchao.location.taiquan",
+        "objective": "在触肢丛里插手潘金莲与虞氏的厮杀",
+        "evidence": "仅 deepseek seq 672 叙述（#105·仇报）有潘金莲救而反被推、夺果离去。MiniMax《仇报》《影像》同场只写尹馥兰被困与程宗扬救姐妹，无此对峙。采信为 deepseek 叙述拍，非台词；MiniMax 另记朱殷携另一枚圣果入雾障，与「虞白樱那一枚被夺」不必然互斥。虞白樱、虞紫薇不在本关 canon 名单，只入正文。",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "witness_pan_yu_tentacles",
+              "label": "看清触肢丛里潘金莲与虞紫薇如何交手",
+              "actionText": "我看清触肢丛里：潘金莲先把虞紫薇拉出来，虞紫薇反手把她推进触肢，随后潘金莲又把人擒住。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已看清触肢丛里这场冲突；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "pan_yu_tentacle_seen"
+            },
+            {
+              "id": "confirm_pan_takes_fruit",
+              "label": "在触肢丛里插手潘金莲与虞氏的厮杀",
+              "actionText": "我在触肢丛里插手潘金莲与虞氏的厮杀。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已在触肢丛里插手潘金莲与虞氏的厮杀；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "pan_yu_tentacle_seen"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyl.event.rescue_yu_sisters",
+        "name": "救出虞氏姐妹",
+        "description": "程宗扬凿碎玻璃，以死气护身穿过行淫兽触肢丛，救出虞白樱与虞紫薇。",
+        "axisId": "yunlong.105.2",
+        "axisAnchor": "六朝云龙吟·#105·仇报",
+        "axisSeq": 673,
+        "axisBeat": "程宗扬穿过行淫兽触肢，救出虞白樱与虞紫薇。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.rescue_yu_sisters.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.xiao_zi"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.xe6bd0066c9"
+        ],
+        "locationId": "liuchao.location.taiquan",
+        "objective": "从行淫兽处救出虞氏姐妹",
+        "evidence": "双源都有救出两姐妹。MiniMax《影像》作一次穿过触肢并救两人；deepseek seq 673 作先救虞白樱，再因小紫以寻找小香瓜为条件也救出虞紫薇。珊瑚匕首凿玻璃、死气护身为双源方法，不写入 objective。小香瓜条件仅 deepseek 有，不写成玩家必做步骤。",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "reach_xingyin_glass",
+              "label": "靠近困住虞氏姐妹的触肢丛",
+              "actionText": "我靠近困住虞氏姐妹的玻璃幕与触肢丛，看清两人还在。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已靠近困住虞氏姐妹的触肢丛；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "yu_sisters_located"
+            },
+            {
+              "id": "pull_yu_sisters_out",
+              "label": "从行淫兽处救出虞氏姐妹",
+              "actionText": "我从行淫兽触肢里把虞白樱和虞紫薇救出来。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已从行淫兽处救出虞氏姐妹；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "yu_sisters_located"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyl.event.xiaozi_binds_yu_sisters",
+        "name": "小紫收服虞氏",
+        "description": "小紫以雪雪击败虞白樱，令机械守卫用合金手铐锁住虞白樱与虞紫薇，将二人收为侍奴。",
+        "axisId": "yunlong.105.3",
+        "axisAnchor": "六朝云龙吟·#105·仇报",
+        "axisSeq": 674,
+        "axisBeat": "小紫以雪雪击败虞白樱，机械守卫用合金手铐锁住虞氏姐妹，收为侍奴。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.xiaozi_binds_yu_sisters.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.xiao_zi"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.xe6bd0066c9"
+        ],
+        "locationId": "liuchao.location.taiquan",
+        "objective": "过问小紫要把虞氏姐妹怎么办",
+        "evidence": "双源叙述。MiniMax《影像》：雪雪击败虞白樱，机械守卫合金手铐锁住二人，拟收为侍奴。deepseek seq 674：小紫设计使虞白樱中毒，雪雪击败她，手铐锁住，计划收为侍奴或卖掉。「中毒」与「或卖掉」仅 deepseek 有，正文只写已发生的锁拿与收服，不把卖掉写成既成。",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "watch_xiaozi_subdue_baiying",
+              "label": "看清小紫如何制住虞白樱",
+              "actionText": "我看清小紫让雪雪制住虞白樱，机械守卫已经准备好手铐。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已看清小紫如何制住虞白樱；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "yu_sisters_subdued"
+            },
+            {
+              "id": "confirm_yu_sisters_bound",
+              "label": "过问小紫要把虞氏姐妹怎么办",
+              "actionText": "我过问小紫要把虞氏姐妹怎么办。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已过问小紫要把虞氏姐妹怎么办；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "yu_sisters_subdued"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyl.event.pan_settlement_clash",
+        "name": "居住区再遇潘金莲",
+        "description": "在人类居住区，潘金莲循迹逼问程宗扬是否为黑魔海中人；程宗扬以阴阳鱼阴力污染其净化术，将其制服。",
+        "axisId": "yunlong.136.1",
+        "axisAnchor": "六朝云龙吟·#136·自缚",
+        "axisSeq": 709,
+        "axisBeat": "程宗扬在居住区以阴阳鱼阴力克制潘金莲净化术，将其制服。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.pan_settlement_clash.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.pan_jinlian",
+          "liuchao.character.le_mingzhu"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.guang_ming_guan_tang"
+        ],
+        "locationId": "liuchao.location.taiquan",
+        "objective": "应对潘金莲在居住区的追捕",
+        "evidence": "双源都有居住区再斗。deepseek seq 709：卫生间以阴鱼之力污染净化术制服。MiniMax《自缚》《羞姝》：潘金莲支开乐明珠后循迹，程宗扬以阴阳鱼禁制其穴道并囚于浴室。deepseek seq 710 剃毛、渔线仅单源，不写入 description。objective 不指定制服手段。",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "face_pan_in_settlement",
+              "label": "在居住区对上循迹而来的潘金莲",
+              "actionText": "我在人类居住区对上循迹而来的潘金莲，听清她仍把我认作黑魔海中人。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已在居住区对上潘金莲；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "pan_settlement_confronted"
+            },
+            {
+              "id": "resolve_pan_settlement_hunt",
+              "label": "应对潘金莲在居住区的追捕",
+              "actionText": "我应对潘金莲在居住区的追捕，不让这场追杀把居住区探索打断。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已应对潘金莲在居住区的追捕；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "pan_settlement_confronted"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyl.event.pan_hetu_exit",
+        "name": "河图带人离阵",
+        "description": "潘金莲凭借《河图》从核心区拱门带走朱殷与乐明珠，离开太泉古阵返回外界。",
+        "axisId": "yunlong.139.1",
+        "axisAnchor": "六朝云龙吟·#139·备礼",
+        "axisSeq": 712,
+        "axisBeat": "潘金莲利用《河图》带朱殷和乐明珠离开太泉古阵核心区返回外界。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.pan_hetu_exit.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.pan_jinlian",
+          "liuchao.character.le_mingzhu"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.guang_ming_guan_tang",
+          "liuchao.faction.yao_chi_zong"
+        ],
+        "locationId": "liuchao.location.taiquan",
+        "objective": "拦下带着《河图》要走的潘金莲",
+        "evidence": "双源叙述。deepseek seq 712 明写《河图》。MiniMax《备礼》写三人在中央广场由传送术消失于拱门之下。合并为河图启动拱门传送。朱殷不在本关 canon 名单，只入正文。",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "see_pan_take_mingzhu",
+              "label": "看见潘金莲带走乐明珠与朱殷",
+              "actionText": "我看见潘金莲带走点了穴的乐明珠，以及修为已失的朱殷，往核心区拱门去。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已看见潘金莲带走乐明珠与朱殷；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "pan_exit_party_seen"
+            },
+            {
+              "id": "confirm_pan_leaves_core",
+              "label": "拦下带着《河图》要走的潘金莲",
+              "actionText": "我拦下带着《河图》要走的潘金莲。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已拦下带着《河图》要走的潘金莲；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "pan_exit_party_seen"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyl.event.fen_wuchen_destroys_gate",
+        "name": "焚无尘自爆",
+        "description": "焚无尘遭假赤阳圣果戏弄后被围，临死自爆，太泉古阵秘境入口被毁；程宗扬未及带出的物品随之损失。",
+        "axisId": "yunlong.140.1",
+        "axisAnchor": "六朝云龙吟·#140·穷寇",
+        "axisSeq": 714,
+        "axisBeat": "焚无尘遭假圣果戏弄后被围，自爆摧毁太泉古阵秘境入口，未带出的物品损失。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.fen_wuchen_destroys_gate.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.xiao_zi",
+          "liuchao.character.shang_zhen_yu"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.x8b538653d9"
+        ],
+        "locationId": "liuchao.location.taiquan",
+        "objective": "在焚无尘自爆前保住能带走的东西",
+        "evidence": "deepseek seq 714–715：假圣果戏弄、围杀、自爆形神俱灭、毁秘境门户、未带出物品损失。MiniMax《穷寇》：墨枫林以假圣果脱身；众人围于轩辕坟；焚无尘火甲自爆。MiniMax 另写殇振羽与焚无尘同归于尽，但同份《真相》朱老头仍与程宗扬传送离阵，内自相矛盾，按裁定 #160 不采殇振羽之死。焚无尘、墨枫林不在本关名单，只入正文；朱老头以 shang_zhen_yu 入 related。",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "witness_fen_wuchen_cornered",
+              "label": "看清焚无尘被围后的自爆",
+              "actionText": "我看清焚无尘在假圣果落空后被围，随即自爆。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已看清焚无尘被围后的自爆；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "fen_wuchen_blast_seen"
+            },
+            {
+              "id": "confirm_taiquan_gate_lost",
+              "label": "在焚无尘自爆前保住能带走的东西",
+              "actionText": "我在焚无尘自爆前保住能带走的东西。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已在焚无尘自爆前保住能带走的东西；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "fen_wuchen_blast_seen"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyl.event.taiquan_portal_exit",
+        "name": "传送离阵",
+        "description": "程宗扬根据居住区遗迹判断太泉古阵是人类豢养之地。他与小紫、朱老头经传送阵离开太泉，抵达首阳山一带；机械守卫被算入传送，阵需约十年才能再充能。",
+        "axisId": "yunlong.141.2",
+        "axisAnchor": "六朝云龙吟·#141·真相",
+        "axisSeq": 717,
+        "axisBeat": "程宗扬、小紫、朱老头经传送阵离开太泉，抵达首阳山一带；机械守卫导致传送阵约需十年充能。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.taiquan_portal_exit.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.xiao_zi",
+          "liuchao.character.shang_zhen_yu"
+        ],
+        "locationId": "liuchao.location.taiquan",
+        "objective": "经传送阵离开太泉古阵",
+        "evidence": "双源都有传送离阵。deepseek seq 717 至首阳山；MiniMax《真相》先写云水流域附近，后章《首阳》会合。deepseek seq 716「豢养之地」是程宗扬的判断，正文作判断而非世界旁白；「决定炸毁并遗忘」是他的意向，不写入 objective。充能十年／机械守卫双源皆有。",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "find_taiquan_portal",
+              "label": "找到可离开太泉的传送阵",
+              "actionText": "我找到太泉里还能启动的传送阵，并确认小紫和朱老头在场。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已找到可离开太泉的传送阵；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "taiquan_portal_ready"
+            },
+            {
+              "id": "leave_taiquan_by_portal",
+              "label": "经传送阵离开太泉古阵",
+              "actionText": "我经传送阵离开太泉古阵。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已经由传送阵离开太泉古阵；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "taiquan_portal_ready"
               ]
             }
           ]

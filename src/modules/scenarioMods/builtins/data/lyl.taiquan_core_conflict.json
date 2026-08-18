@@ -4194,7 +4194,9 @@
               }
             }
           ]
-        }
+        },
+        "axisSeq": 666,
+        "evidence": "⚠ 原 `axisSeq` 为 null，排序被当 0，曾把本拍顶到主轴第一位（见 2026-08-18 修复）。正典时间线无独立编号，按内容落 666——紧接 idx 666「刺虎」（蚁穴深处遇尹馥兰、赤阳藤涌出）之后、idx 667 找到出口之前。**这是位置补齐，不是正典编号**。"
       },
       {
         "id": "lyl.event.pan_jinlian_ambush",
@@ -4285,7 +4287,9 @@
               }
             }
           ]
-        }
+        },
+        "axisSeq": 666,
+        "evidence": "同 `plan_counterattack`：原 `axisSeq` 为 null，按内容落 666。**位置补齐，非正典编号。**"
       },
       {
         "id": "lyl.event.decide_yin_fulan_fate",

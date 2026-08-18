@@ -209,8 +209,16 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       { text: '与尹馥兰商定：用阴阳鱼和地形反制潘金莲——硬刚还是设伏', status: 'ready', stageId: 'lyl.taiquan_core_conflict', eventId: 'lyl.event.plan_counterattack' },
       { text: '与尹馥兰用阴阳鱼反击潘金莲，把追兵挡回去', status: 'ready', stageId: 'lyl.taiquan_core_conflict', eventId: 'lyl.event.yin_yang_counter' },
       { text: '蚁穴被咬，虞白樱吸出淫毒——找到通往核心区的出口', status: 'ready', stageId: 'lyl.taiquan_core_conflict', eventId: 'lyl.event.find_exit' },
+      { text: '天井玻璃破了，赤阳藤外侵、行淫兽盘踞——尹馥兰被触肢缠在幕内', status: 'ready', stageId: 'lyl.taiquan_afterfall', eventId: 'lyl.event.xingyin_beast_traps' },
+      { text: '潘金莲与虞紫薇互推进触肢；潘金莲夺走虞白樱的赤阳圣果走了', status: 'ready', stageId: 'lyl.taiquan_afterfall', eventId: 'lyl.event.pan_yu_tentacle_clash' },
+      { text: '凿碎玻璃、以死气护身穿过触肢丛，把虞白樱与虞紫薇救出来', status: 'ready', stageId: 'lyl.taiquan_afterfall', eventId: 'lyl.event.rescue_yu_sisters' },
+      { text: '小紫用雪雪打服虞白樱，合金手铐一锁——姐妹俩成了她的侍奴', status: 'ready', stageId: 'lyl.taiquan_afterfall', eventId: 'lyl.event.xiaozi_binds_yu_sisters' },
       { text: '进魔墟：玄秘贝已失，周飞找到琉璃天珠，多方开抢', status: 'ready', stageId: 'lyl.taiquan_afterfall', eventId: 'lyl.event.taiquan_afterfall_03_beat' },
       { text: '与小紫探人类居住区，撞见KTV卖场，推测太泉古阵是避难所', status: 'ready', stageId: 'lyl.taiquan_afterfall', eventId: 'lyl.event.taiquan_afterfall_05_beat' },
+      { text: '居住区里潘金莲循迹逼问你是不是黑魔海的人——用阴阳鱼污了她的净化术', status: 'ready', stageId: 'lyl.taiquan_afterfall', eventId: 'lyl.event.pan_settlement_clash' },
+      { text: '潘金莲凭《河图》从拱门带走朱殷与乐明珠，出了太泉', status: 'ready', stageId: 'lyl.taiquan_afterfall', eventId: 'lyl.event.pan_hetu_exit' },
+      { text: '焚无尘被假圣果戏弄后临死自爆——秘境入口就此毁了', status: 'ready', stageId: 'lyl.taiquan_afterfall', eventId: 'lyl.event.fen_wuchen_destroys_gate' },
+      { text: '与小紫、朱老头经传送阵离开太泉，落在首阳山一带；阵要十年才能再充能', status: 'ready', stageId: 'lyl.taiquan_afterfall', eventId: 'lyl.event.taiquan_portal_exit' },
     ],
     pendingExpansion: '正典写到进入人类居住区、推测古阵是避难所为止。'
       + '「修为达六阳后祭祀故人」这一拍**正典无对应 event**（原著中程宗扬从未履行此托付，'
