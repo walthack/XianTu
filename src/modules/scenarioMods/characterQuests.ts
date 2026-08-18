@@ -103,7 +103,7 @@ export const CHARACTER_QUESTS: CharacterQuest[] = [
     id: 'lemingzhu',
     name: '乐明珠',
     beats: [
-      { text: '她承认自己是光明观堂弟子，假扮新娘是为了刺杀鬼巫王', status: 'ready', eventIds: ['lcq.event.s04_03'] },
+      { text: '她承认自己是光明观堂弟子，假扮新娘是为了刺杀鬼巫王', status: 'insert', eventIds: ['lcq.event.s04_03'] },
       { text: '她挺身战鸦人，经验不够被擒。你在鸦人营地救她', status: 'ready', eventIds: ['lcq.event.s04b_lingfei_baiyi_crisis_02'] },
       { text: '废弃海神殿：鲛人因朱狐冠发狂。你护住她，拔掉卡在她身上的鱼叉', status: 'new', eventIds: ['lcq.event.s04b_lemingzhu_haishen'] },
       { text: '鬼王宫里她脱险现身，你与她重逢', status: 'ready', eventIds: ['lcq.event.s05b_06_breakout_and_reunion'] },
@@ -129,7 +129,7 @@ export const CHARACTER_QUESTS: CharacterQuest[] = [
     name: '杨玉环',
     beats: [
       { text: '你留在现场，完成这块招牌接触卡', status: 'ready', eventIds: ['lyg.event.debut_yangyuhuan'] },
-      { text: '长安街：她驾车把人踩在地上训。对上眼', status: 'ready', eventIds: ['lyg.event.s03_03'] },
+      { text: '长安街：她驾车把人踩在地上训。对上眼', status: 'insert', eventIds: ['lyg.event.s03_03'] },
       { text: '紫云楼顶层：她出题（云如瑶、密码箱、手枪）。你答过关', status: 'ready', eventIds: ['lyg.event.s03_07'] },
       { text: '她当众称你姑父，看宗室什么脸。你接下或拆穿', status: 'ready', eventIds: ['lyg.event.changgan_interlude_05_beat'] },
       { text: '你向她打听离魂症。她想起岳帅提过类似的病，警告不能让外人知道', status: 'ready', eventIds: ['lyg.event.s06_01'] },
@@ -189,6 +189,10 @@ export const CHARACTER_HIGHLIGHTS: CharacterHighlight[] = [
   { name: '释特昧普', eventIds: ['lyg.event.ganlu_aftershock_01_beat'], text: '自封金身法王，邀你去慈恩寺' },
   { name: '高阳', eventIds: ['lyg.event.shituolin_endgame_03_beat'], text: '疑冢超百丈、宫内报丧失踪——他的下场' },
   { name: '小紫', eventIds: ['lcq.event.s09_04_weaving_trade'], text: '为拉链坊归属兴师问罪，以织坊交换平息（补进 §3）' },
+  { name: '吕雉', eventIds: ['lyg.event.s03_08'], text: '塔里不止小紫——汉太后落在十方丛林手里' },
+  { name: '吕雉', eventIds: ['lyg.event.shituolin_endgame_12_beat'], text: '他扑上来咬她，把真身露给你——三度失算里有她' },
+  { name: '秦桧', eventIds: ['lyl.event.mingqingsi_lin_lu_meeting'], text: '他急着上去攀林鲁——你按住的是这股热乎' },
+  { name: '秦桧', eventIds: ['lyl.event.decide_chase_weiyuan'], text: '观堂不管弟子家事——打听高衙内和失镖，你仍压给他' },
 ];
 
 /**
