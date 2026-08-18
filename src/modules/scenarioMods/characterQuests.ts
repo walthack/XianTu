@@ -196,6 +196,21 @@ export const CHARACTER_HIGHLIGHTS: CharacterHighlight[] = [
   { name: '惊理', eventIds: ['lyl.event.debut_jingli'], text: '庭院刺杀里露面——瑶池宗叛出去的那个，如今替龙宸拿刀' },
   { name: '惊理', eventIds: ['lcq.event.s12_15_capture_jingli'], text: '小紫抽了她的阴魂——她成了你追龙宸的活口' },
   { name: '惊理', eventIds: ['lyg.event.buddhist_conspiracy_05_beat'], text: '魏博牙兵、僧人和龙宸抢她——她这条命现在值钱了' },
+  { name: '乐明珠', eventIds: ['lcq.event.debut_lemingzhu'], text: '商队沿白象足迹进入密林途中——花苗族待嫁新娘（随商队前往鬼王峒完婚），随身携带师' },
+  { name: '云丹琉', eventIds: ['lyl.event.debut_yundanliu'], text: '云家海蜃楼院中，程宗扬翻墙逃匿时被其喝问——云家大小姐（贵族世家出身的年轻女子）' },
+  { name: '云如瑶', eventIds: ['lyl.event.debut_yunruyao'], text: '云宅小楼楼梯尽头——云苍峰之庶出幼妹，病弱足不出户的闺阁少女' },
+  { name: '剑玉姬', eventIds: ['lyl.event.debut_jianyuji'], text: '游婵与程宗扬密会时提及——黑魔海「仙姬」/上位供奉，通过游婵传讯' },
+  { name: '卓云君', eventIds: ['lyl.event.debut_zhuoyunjun'], text: '程宗扬在临安某处——太乙真宗教御（蔺贼势力败落后被小紫收服的逃亡者，三魂七魄留有' },
+  { name: '尹馥兰', eventIds: ['lyl.event.debut_yinfulan'], text: '建康，程宅——醉月楼老鸨（青楼管事）' },
+  { name: '成光', eventIds: ['lyg.event.debut_chengguang'], text: '一处宴席场所——仅以"江都王王后"身份被提及，尚未正式登场' },
+  { name: '月霜', eventIds: ['lcq.event.debut_yueshuang'], text: '太乙真宗众人救下受伤的月霜途中——大汉左武军第一军团帅帐亲兵，左武卫大将军王哲的' },
+  { name: '泉玉姬', eventIds: ['lyg.event.debut_quanyuji'], text: '建康徐府内院，刑案现场——长安六扇门女捕头' },
+  { name: '潘金莲', eventIds: ['lcq.event.debut_panjinlian'], text: '程宗扬居所/建康商馆房间——光明观堂弟子，乐明珠的师姐，武二郎的准嫂嫂' },
+  { name: '白霓裳', eventIds: ['lyg.event.debut_bainichang'], text: '静室内，赵归真引荐——瑶池宗奉玦仙子，瑶池宗未来宗主候选人' },
+  { name: '萧遥逸', eventIds: ['lcq.event.s08_debut_xiaoyaoyi'], text: '少陵侯嫡子萧遥逸上门拜访，先为小紫美貌所惊、赞叹失态，才自报名号。程' },
+  { name: '蛇夫人', eventIds: ['lyg.event.debut_shefuren'], text: '程宗扬通过窥视孔偷看卧室——小紫的侍奴、江湖中人' },
+  { name: '贾文和', eventIds: ['lyg.event.debut_jiawenhe'], text: '凉州军逼近洛都城门，战车之上——破虏将军董卓麾下谋士' },
+  { name: '齐羽仙', eventIds: ['lyg.event.debut_qiyuxian'], text: '翠微园门外，夜间阶下——黑魔海剑玉姬麾下得力干将，程宗扬旧识' },
 ];
 
 /**
