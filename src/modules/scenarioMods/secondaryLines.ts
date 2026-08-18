@@ -35,7 +35,7 @@
 
 import { acquaintanceOf, rankOf, type AcquaintanceLedger } from './acquaintanceLedger';
 
-export type SecondaryLineKind = 'sect' | 'nation' | 'commerce';
+export type SecondaryLineKind = 'sect' | 'nation' | 'commerce' | 'expedition';
 
 export interface SecondaryLine {
   id: string;
@@ -184,6 +184,37 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       + '\n\n**正典写到「用纸钞买田」（seq 885）为止**，再往后商社的政治收束无拍，标待扩不细化。'
       + '另有 3 条在隔离关（`final_preparations`／`s05_04`／`s06_02`），其中 `s05_04`「以兵器生意化解危机」'
       + '与本线首节点 `weapon_deal_with_geluo` 同为 seq 134 同一拍的双版本，取可达那件即可，不申请放出隔离。',
+  },
+  // —— 太泉：条件一的落点，自成一段 ——
+  {
+    id: 'taiquan',
+    name: '太泉古阵',
+    kind: 'expedition',
+    // 锚＝你第一次知道「钥匙在迷楼」那一拍（用户 2026-08-19 裁定太泉单独拿出来）。
+    anchorEventIds: ['lyl.event.taiquan_sacred_fruit_02'],
+    entryHint: '岳鹏举把太泉的钥匙藏在云涛观迷楼里，暗号是「太泉熊谷一四七五」——那地方进得去。',
+    basis: '**用户裁定 2026-08-19**：「太泉这一段，我觉得照理说应该单独拿出来，不应该放在原先的主轴里。」\n'
+      + '此前这 8 拍挂在主轴上，而主轴按同日裁定只保留「开局→王哲三托付」＋两个通关条件，'
+      + '不再作为任务清单展示。太泉恰是**条件一（修为达六阳，前往太泉古阵祭祀故人）的落点**，'
+      + '内容上也自成一条完整的弧：摸迷楼机关 → 问出钥匙暗号 → 争赤阳圣果 → 反制潘金莲的追兵 '
+      + '→ 找到核心区出口 → 魔墟夺宝 → 进人类居住区。\n'
+      + '⚠ `kind: expedition` 是新档位：它既不是宗派（无法统）也不是国家（不是政权地盘），'
+      + '是一处**远征目的地**。故不受「国家线跟玩家在这个国家的行动」那条地理规则约束。\n'
+      + '⚠ 「太泉古阵＝系统入口」是我们的设计推断，**正典只写「祭祀故人」，全书无「祭祀大阵」字样**'
+      + '（见主轴文档与裁定 #159／#160）。本线文案不得把它叙述成开启装置。',
+    nodes: [
+      { text: '随陈琳进云涛观迷楼，摸清机关，撞见小紫等人', status: 'ready', stageId: 'lyl.taiquan_sacred_fruit', eventId: 'lyl.event.taiquan_sacred_fruit_04' },
+      { text: '经小紫、梦娘问出：岳鹏举把钥匙藏在迷楼，暗号太泉熊谷一四七五', status: 'ready', stageId: 'lyl.taiquan_sacred_fruit', eventId: 'lyl.event.taiquan_sacred_fruit_05' },
+      { text: '到火山口争赤阳圣果，最终被萧遥逸吞下一颗', status: 'ready', stageId: 'lyl.taiquan_sacred_fruit', eventId: 'lyl.event.taiquan_sacred_fruit_10' },
+      { text: '与尹馥兰商定：用阴阳鱼和地形反制潘金莲——硬刚还是设伏', status: 'ready', stageId: 'lyl.taiquan_core_conflict', eventId: 'lyl.event.plan_counterattack' },
+      { text: '与尹馥兰用阴阳鱼反击潘金莲，把追兵挡回去', status: 'ready', stageId: 'lyl.taiquan_core_conflict', eventId: 'lyl.event.yin_yang_counter' },
+      { text: '蚁穴被咬，虞白樱吸出淫毒——找到通往核心区的出口', status: 'ready', stageId: 'lyl.taiquan_core_conflict', eventId: 'lyl.event.find_exit' },
+      { text: '进魔墟：玄秘贝已失，周飞找到琉璃天珠，多方开抢', status: 'ready', stageId: 'lyl.taiquan_afterfall', eventId: 'lyl.event.taiquan_afterfall_03_beat' },
+      { text: '与小紫探人类居住区，撞见KTV卖场，推测太泉古阵是避难所', status: 'ready', stageId: 'lyl.taiquan_afterfall', eventId: 'lyl.event.taiquan_afterfall_05_beat' },
+    ],
+    pendingExpansion: '正典写到进入人类居住区、推测古阵是避难所为止。'
+      + '「修为达六阳后祭祀故人」这一拍**正典无对应 event**（原著中程宗扬从未履行此托付，'
+      + '全书修为最高见入微境），属待扩，不在本阶段设计。',
   },
   // —— 宗派线：锚人 ——
   {
@@ -395,8 +426,9 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       // Z4 并进 s04b_lingfei_baiyi_crisis_08／_09（识破投峒、族长被换）
       { text: '帮苏妲己取物前，谈定六十金铢报酬', status: 'ready', stageId: 'lcq.stage_02', eventId: 'lcq.event.charge_sudaji_fee' },
       { text: '撕毁阿姬曼身契——出城路线已被封锁', status: 'ready', stageId: 'lcq.stage_02', eventId: 'lcq.event.free_ajiman' },
-      { text: '苏妲己以冰蛊逼你南行——两日内必须凑齐队伍', status: 'ready', stageId: 'lcq.stage_04b_lingfei_baiyi_crisis', eventId: 'lcq.event.ice_gu_coercion' },
+      { text: '从白湖商馆的死局里脱身，走出五原商馆', status: 'ready', stageId: 'lcq.stage_02', eventId: 'lcq.event.baihu_shangguan_escape' },
       // Z7 并进 s05b_05b_ideology_duel_and_defeat
+      { text: '苏妲己以冰蛊逼你南行——两日内必须凑齐队伍', status: 'ready', stageId: 'lcq.stage_04b_lingfei_baiyi_crisis', eventId: 'lcq.event.ice_gu_coercion' },
       { text: '满城围捕下逼出武二郎入队——他走投无路才答应', status: 'ready', stageId: 'lcq.stage_02', eventId: 'lcq.event.wuerlang_joins' },
       { text: '利用武二郎无路可退的处境，取得他随队南行的明确承诺', status: 'ready', stageId: 'lcq.stage_03', eventId: 'lcq.event.s03_06' },
       { text: '稳住武二郎伤势，带队突破铁索桥伏击', status: 'ready', stageId: 'lcq.stage_02', eventId: 'lcq.event.iron_bridge_ambush' },
@@ -656,6 +688,7 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       { text: '奉懿旨至永巷当众凌辱并赐死吕冀，其妻孙寿发配为奴', status: 'ready', stageId: 'lyg.dingtao_beijing', eventId: 'lyg.event.s01_09' },
       { text: '率众为郭解送葬，立郭靖为义子并让他继承舞阳侯', status: 'ready', stageId: 'lyg.mijing_rumen', eventId: 'lyg.event.s02_01' },
       { text: '探视金蜜镝——他装伤避嫌；你以成亲相胁，他默许不干涉帝统', status: 'ready', stageId: 'lyg.mijing_rumen', eventId: 'lyg.event.s02_07' },
+      { text: '触龙珠唤醒冰冰，拿到超级管理员权限——当场验明谁在名单上', status: 'ready', stageId: 'lyg.mijing_rumen', eventId: 'lyg.event.mijing_superuser_roster' },
       { text: '分兵：自己与云丹琉追巫宗，卓云君等人回帝陵', status: 'ready', stageId: 'lyg.han_succession', eventId: 'lyg.event.han_succession_01_beat' },
       { text: '在帝陵调查赵氏父兄下落——单超登场', status: 'ready', stageId: 'lyg.han_succession', eventId: 'lyg.event.han_succession_02_beat' },
       { text: '蔡敬仲转来：中行说要贾文和害死后帝，拥立你为帝', status: 'ready', stageId: 'lyg.han_succession', eventId: 'lyg.event.han_succession_04_beat' },

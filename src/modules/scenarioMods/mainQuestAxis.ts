@@ -320,60 +320,36 @@ export const MAIN_QUEST_NODES: MainQuestNode[] = [
   // #1 落点＝帅帐见王哲（旅程终点拍）；坠落／半兽人在 s01_01–s01_04。
   { stageId: 'lcq.stage_01', text: '王哲发现你身上有生死根，耗真气筑基，传下九阳神功口诀', status: 'ready', eventId: 'lcq.event.s01_05' },
   { stageId: 'lcq.stage_02', text: '接下王哲三托：保管锦囊、六阳后去太泉古阵、守护月霜', status: 'ready', eventId: 'lcq.event.s02_01' },
-  { stageId: 'lcq.stage_02', text: '完整见证左武军覆灭：王哲九阳合一如日轮殉军，你独自离开', status: 'ready', eventId: 'lcq.event.s02_02' },
   // 强制段终点（Helgen 洞口，用户裁定 2026-08-17）。
   // s02_06 只落到「被囚＋追问霓龙丝」，rail 禁止在那一拍脱身。本拍才是出馆。
   // 地点＝五原商馆。不作废成南荒路上的锚定拍。
   // 作废建议 id：`lcq.event.s03b_baihu_caravan_south`（那是按关改挂的旧写法）。
   // 出馆后不要再加「必须到蛇彝村」主干节点——朝前走就会到，回头也合法。
-  { stageId: 'lcq.stage_02', text: '从白湖商馆死局里脱身，走出五原商馆', locationId: 'liuchao.location.baihu_shang_guan', status: 'ready', eventId: 'lcq.event.baihu_shangguan_escape' },
-  { stageId: 'lcq.stage_03b_snake_flower_bridge', text: '听祁远、谢艺确认蛇彝村是鬼王峒血符屠村——商队仓促撤离', status: 'ready', eventId: 'lcq.event.s03b_snake_flower_bridge_03', bloodlineBranch: 'xiaozi' },
   // #6 隔离关 stage_05（原 s05_11 进峒 + s05_13 辨认碧姬）。可达关无同事实 → new。
   // 建议 id 挂 `lcq.stage_05b` 前缀（不放出隔离）。
   // 血脉揭示（用户裁定 2026-08-16）：玩家得先**知道**某人是岳血，要求二对他才可见。
   // 三条候选各有揭示拍：月霜＝王哲托付（`s02_01`，已在主干）；小紫这条＝本拍。
-  { stageId: 'lcq.stage_04b_lingfei_baiyi_crisis', text: '听谢艺谈玻璃技术，并说破岳帅晕血、还有个遗腹女', status: 'ready', eventId: 'lcq.event.s04b_lingfei_baiyi_crisis_18', bloodlineBranch: 'xiaozi' },
-  { stageId: 'lcq.stage_04b_lingfei_baiyi_crisis', text: '阁罗召来碧姬，你当面见到谢艺要找的人', locationId: 'liuchao.location.guiwangdong', status: 'ready', eventId: 'lcq.event.geluo_summons_biji', bloodlineBranch: 'xiaozi' },
-  { stageId: 'lcq.stage_05b', text: '向碧姬问出：小紫曾主动投向鬼巫王——她不是单纯受害者', status: 'ready', eventId: 'lcq.event.s05b_01_binu_reveals_xiaozi', bloodlineBranch: 'xiaozi' },
   // #8 文案压了两拍：临时协定 s05b_09 ＋ 奴隶倒戈 s05b_10；落倒戈拍（含小紫倒戈）。
-  { stageId: 'lcq.stage_05b', text: '小紫倒戈、奴隶暴动，你决定趁乱反杀——乐明珠凤凰宝典异变', status: 'ready', eventId: 'lcq.event.s05b_10_slave_revolt_and_phoenix_change', bloodlineBranch: 'xiaozi' },
   // #9 隔离关 stage_06（s06_03 谢艺托付 + s06_04 碧姬了断）。谢艺托付已由星月湖
   // 并进昭南杀龙 event——复用同一建议 id，不另开。建议挂 `lcq.stage_05b` 后缀。
-  { stageId: 'lcq.stage_05b', text: '借小紫指点刺穿龙颅，龙神坠亡；接下重伤谢艺对小紫与星月湖的托付', locationId: 'liuchao.location.gui_wang_gong', status: 'ready', eventId: 'lcq.event.slay_dragon', bloodlineBranch: 'xiaozi' },
   // 太泉段：现成剧情整条排进来（用户裁定 2026-08-16）。此前主轴只取了钥匙与居住区两拍，
   // 而这一段在事件层是完整的探索链——迷楼机关→取果→蚁穴→魔墟→古阵，共 8 条现成 event。
-  { stageId: 'lyl.taiquan_sacred_fruit', text: '随陈琳进云涛观迷楼，摸清机关，撞见小紫等人', status: 'ready', eventId: 'lyl.event.taiquan_sacred_fruit_04' },
-  { stageId: 'lyl.taiquan_sacred_fruit', text: '经小紫、梦娘问出：岳鹏举把钥匙藏在迷楼，暗号太泉熊谷一四七五', status: 'ready', eventId: 'lyl.event.taiquan_sacred_fruit_05' },
-  { stageId: 'lyl.taiquan_sacred_fruit', text: '到火山口争赤阳圣果，最终被萧遥逸吞下一颗', status: 'ready', eventId: 'lyl.event.taiquan_sacred_fruit_10' },
-  { stageId: 'lyl.taiquan_core_conflict', text: '与尹馥兰商定：用阴阳鱼和地形反制潘金莲——硬刚还是设伏', status: 'ready', eventId: 'lyl.event.plan_counterattack' },
-  { stageId: 'lyl.taiquan_core_conflict', text: '与尹馥兰用阴阳鱼反击潘金莲，把追兵挡回去', status: 'ready', eventId: 'lyl.event.yin_yang_counter' },
-  { stageId: 'lyl.taiquan_core_conflict', text: '蚁穴被咬，虞白樱吸出淫毒——找到通往核心区的出口', status: 'ready', eventId: 'lyl.event.find_exit' },
-  { stageId: 'lyl.taiquan_afterfall', text: '进魔墟：玄秘贝已失，周飞找到琉璃天珠，多方开抢', status: 'ready', eventId: 'lyl.event.taiquan_afterfall_03_beat' },
-  { stageId: 'lyl.taiquan_afterfall', text: '与小紫探人类居住区，撞见KTV卖场，推测太泉古阵是避难所', status: 'ready', eventId: 'lyl.event.taiquan_afterfall_05_beat' },
-  { stageId: 'lyl.taiquan_afterfall', text: '经徐璜向赵飞燕献求子仙符，她因赵合德银链召见你', status: 'ready', bloodlineBranch: 'zhao', eventId: 'lyl.event.taiquan_afterfall_09_beat' },
   // ⏳ 六阳开启古阵内的入口：正典压根没有这一拍——原著里程宗扬从未履行此托付
   // （全书修为最高见第四级入微境，他去太泉是为赤阳圣果救人）。按扩写口径只标待扩，不细化。
-  { stageId: 'lyl.han_palace_endgame', text: '吕雉以比目鱼珠开秘境，小紫把盛姬投入光柱，众人进入', status: 'ready', eventId: 'lyl.event.han_palace_endgame_07_beat', bloodlineBranch: 'zhao' },
   // 小玲儿必须在太泉有一拍（用户裁定 2026-08-16）。正典没把她放进太泉段——
   // 她在 seq 610 小瀛洲（太泉之前）、788 割喉吕奉先、1012 **被系统认定为超级用户**、1016 被擒，
   // 正好卡在太泉前后两头。故这是扩写，只记要求不设计。她与小紫同属「超级用户」那一类。
-  { stageId: 'lyg.mijing_rumen', text: '赵飞燕中毒昏迷，你用自身血液给她输血', status: 'ready', eventId: 'lyg.event.s02_02', bloodlineBranch: 'zhao' },
-  { stageId: 'lyg.mijing_rumen', text: '在长秋宫分派旧部监控秘境入口，自己率侍奴去探胶西邸', status: 'ready', eventId: 'lyg.event.s02_08', bloodlineBranch: 'zhao' },
-  { stageId: 'lyg.mijing_rumen', text: '触龙珠唤醒冰冰，拿到超级管理员权限，当场验明谁在名单上', status: 'ready', eventId: 'lyg.event.mijing_superuser_roster' },
   // #17 文案「武帝像前」偏 s02_09；「安排秘境探索」本体是 s02_08（胶西邸／长秋宫）。
   // 原为 new＋挂隔离关 `lcq.stage_05`，等裁定。2026-08-17 查明**不必新增**：
   // 隔离件 `s05_13`「阁罗召来碧姬」在孤儿救援时已重建为可达的 `geluo_summons_biji`（seq 158），
   // description 明写「程宗扬首次当面见到谢艺寻找的人」，正是这一拍。
   // 与昭南线双喂：昭南读「进峒进展」，主轴读「岳氏血脉候选的当面辨认」。
-  { stageId: 'lyg.han_succession', text: '真气失控昏迷，吕雉指出需双修炼化，赵飞燕以双修助你行功', status: 'ready', eventId: 'lyg.event.han_succession_08_beat', bloodlineBranch: 'zhao' },
   // 超级用户名单（用户提议 2026-08-16，已核实）：seq 1010「程触龙珠触发 AI 冰冰，获超级管理员权限；
   // **众人验证身份**，小紫雪雪被电击」、1012「小玲儿……**被系统认定为超级用户**」。
   // 这一拍是**要求二对玩家可见的机制**——系统当场验明谁在名单上，而不是靠叙述告诉玩家谁算岳血。
   // ⚠ 实测：全库 396 条 event 搜「超级用户／超级管理员／冰冰／验证身份」**命中 0**，
   // 且 seq 1007–1012 整段六拍事件层空白。正典有、游戏没落地 → `new`，不是待扩。
-  { stageId: 'lyg.han_succession', text: '因孟舍人死气失控，在登基典仪与赵飞燕双修，突破通幽境', status: 'ready', eventId: 'lyg.event.han_succession_09_beat', bloodlineBranch: 'zhao' },
   // #18 与汉国二级线同锚 s08（促成登基）；「长秋宫」字面更近 s06，但护住赵氏／登基收束在大典拍。
-  { stageId: 'lyg.changgan_interlude', text: '马厩救出廖群玉：他携百衲衣寻岳霏，并牵到齐羽仙、周飞', status: 'ready', bloodlineBranch: 'xiaozi', eventId: 'lyg.event.changgan_interlude_02_beat' },
   { stageId: 'lyl.taiquan_afterfall', text: '修为到六阳，开启古阵内的入口（未来待扩）', status: 'pending' },
   { stageId: 'lyl.taiquan_afterfall', text: '小玲儿在太泉的那一拍（未来待扩）', status: 'pending', bloodlineBranch: 'xiaolinger' },
   // 程赵之子按用户裁定只标待扩（2026-08-16）：正典 seq 1052 有「宣布赵飞燕有孕」，

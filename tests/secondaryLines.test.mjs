@@ -18,10 +18,13 @@ test('两类线各用各的锚，破例只有白名单里那条', async () => {
   const { SECONDARY_LINES } = await loadTs('../src/modules/scenarioMods/secondaryLines.ts');
   // 2026-08-17 由 8 增至 9：新增商道线。用户从「盘江股东大会」一条孤儿反查出本线整条缺失——
   // 事件层有一条 seq 134→885 的完整商业弧（跨度为全部线之最），而我们一条节点都没落。
-  assert.equal(SECONDARY_LINES.length, 9, '九条线：宗派 3 ＋ 国家／地区 5 ＋ 商道 1');
+  // 2026-08-19 由 9 增至 10：太泉单独成线（用户裁定「太泉这一段应该单独拿出来，不应该放在原先的主轴里」）。
+  // 它是 `expedition`——既非宗派（无法统）也非国家（不是政权地盘），是一处远征目的地，
+  // 恰为主线条件一（修为达六阳、前往太泉古阵祭祀故人）的落点。
+  assert.equal(SECONDARY_LINES.length, 10, '十条线：宗派 3 ＋ 国家 5 ＋ 商道 1 ＋ 远征 1');
   for (const line of SECONDARY_LINES) {
-    if (line.kind === 'commerce') {
-      // 商道既不锚地方也不锚人——它锚的是「你第一次发现生意能办武力办不成的事」那一拍。
+    if (line.kind === 'commerce' || line.kind === 'expedition') {
+      // 商道与太泉都既不锚地方也不锚人——它锚的是「你第一次发现生意能办武力办不成的事」那一拍。
       // 给它挂地点锚是错的：这条线跨十一关、没有一个"去了就算入线"的地方。
       assert.ok(line.anchorEventIds?.length, `${line.name} 是事锚线，必须给 anchorEventIds`);
       assert.ok(!line.anchorEventPending, `${line.name} 的锚事件必须是已落地的真 event`);
@@ -169,7 +172,7 @@ test('每条线都有入口指引，且说清"去哪／找谁"', async () => {
     // 引子按原文重写后（2026-08-16）它两头都失灵：唐国写了「入长安」却因为没有「去」字被判不合格，
     // 而一句「想插手晋国朝局，去建康」这种没有任何内容的模板话反而一直合格。
     // 改成校地名本身：锚指向哪个地方，指引里就得出现那个地方的名字。
-    if (line.kind === 'commerce') {
+    if (line.kind === 'commerce' || line.kind === 'expedition') {
       // 事锚线的指引不指路也不指人，只说清「这条路能走通」，故不校地名／人名。
       assert.ok(line.anchorEventIds?.length, `${line.name} 是事锚线却没有锚事件`);
     } else if (line.anchorLocationIds?.length) {

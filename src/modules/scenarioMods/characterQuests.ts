@@ -94,7 +94,7 @@ export const CHARACTER_QUESTS: CharacterQuest[] = [
       { text: '空村里，他指出尸体旁的鬼王峒血符。你第一次看见他本人动手', status: 'insert', eventIds: ['lcq.event.s03b_snake_flower_bridge_03', 'lcq.event.s03_12'] },
       { text: '他独入地宫，杀光使者与武士，拷问碧宛下落无果后斩首', status: 'ready', eventIds: ['lcq.event.s04b_lingfei_baiyi_crisis_13'] },
       { text: '你质问阿夕异常。他承认设计让你接触阿葭，并暗示灵飞镜会在南荒重逢', status: 'ready', eventIds: ['lcq.event.s04b_lingfei_baiyi_crisis_15'] },
-      { text: '他换上现代休闲装，跟你谈玻璃，并吐出岳帅晕血、遗腹女', status: 'insert', eventIds: ['lcq.event.s04b_lingfei_baiyi_crisis_18'] },
+      { text: '他换上现代休闲装，跟你谈玻璃，并吐出岳帅晕血、遗腹女', status: 'ready', eventIds: ['lcq.event.s04b_lingfei_baiyi_crisis_18'] },
       { text: '他讲清海湾旧战与朱狐冠，并希望你继承岳帅的使命。你保持警惕', status: 'new', eventIds: ['lcq.event.s04b_xieyi_yue_mission'] },
       { text: '龙神这一仗后，你赶到重伤的他身边。他把小紫和名下之物交给你，请你带往星月湖', status: 'insert', eventIds: ['lyg.event.s06_03'] },
     ],
@@ -211,6 +211,19 @@ export const CHARACTER_HIGHLIGHTS: CharacterHighlight[] = [
   { name: '蛇夫人', eventIds: ['lyg.event.debut_shefuren'], text: '程宗扬通过窥视孔偷看卧室——小紫的侍奴、江湖中人' },
   { name: '贾文和', eventIds: ['lyg.event.debut_jiawenhe'], text: '凉州军逼近洛都城门，战车之上——破虏将军董卓麾下谋士' },
   { name: '齐羽仙', eventIds: ['lyg.event.debut_qiyuxian'], text: '翠微园门外，夜间阶下——黑魔海剑玉姬麾下得力干将，程宗扬旧识' },
+  { name: '小紫', eventIds: ['lcq.event.s03b_snake_flower_bridge_03'], text: '听祁远、谢艺确认蛇彝村是鬼王峒血符屠村——商队仓促撤离' },
+  { name: '小紫', eventIds: ['lcq.event.s04b_lingfei_baiyi_crisis_18'], text: '听谢艺谈玻璃技术，并说破岳帅晕血、还有个遗腹女' },
+  { name: '小紫', eventIds: ['lcq.event.geluo_summons_biji'], text: '阁罗召来碧姬，你当面见到谢艺要找的人' },
+  { name: '小紫', eventIds: ['lcq.event.s05b_01_binu_reveals_xiaozi'], text: '向碧姬问出：小紫曾主动投向鬼巫王——她不是单纯受害者' },
+  { name: '小紫', eventIds: ['lcq.event.s05b_10_slave_revolt_and_phoenix_change'], text: '小紫倒戈、奴隶暴动，你决定趁乱反杀——乐明珠凤凰宝典异变' },
+  { name: '小紫', eventIds: ['lcq.event.slay_dragon'], text: '借小紫指点刺穿龙颅，龙神坠亡；接下重伤谢艺对小紫与星月湖的托付' },
+  { name: '赵飞燕', eventIds: ['lyl.event.taiquan_afterfall_09_beat'], text: '经徐璜向赵飞燕献求子仙符，她因赵合德银链召见你' },
+  { name: '赵飞燕', eventIds: ['lyl.event.han_palace_endgame_07_beat'], text: '吕雉以比目鱼珠开秘境，小紫把盛姬投入光柱，众人进入' },
+  { name: '赵飞燕', eventIds: ['lyg.event.s02_02'], text: '赵飞燕中毒昏迷，你用自身血液给她输血' },
+  { name: '赵飞燕', eventIds: ['lyg.event.s02_08'], text: '在长秋宫分派旧部监控秘境入口，自己率侍奴去探胶西邸' },
+  { name: '赵飞燕', eventIds: ['lyg.event.han_succession_08_beat'], text: '真气失控昏迷，吕雉指出需双修炼化，赵飞燕以双修助你行功' },
+  { name: '赵飞燕', eventIds: ['lyg.event.han_succession_09_beat'], text: '因孟舍人死气失控，在登基典仪与赵飞燕双修，突破通幽境' },
+  { name: '小紫', eventIds: ['lyg.event.changgan_interlude_02_beat'], text: '马厩救出廖群玉：他携百衲衣寻岳霏，并牵到齐羽仙、周飞' },
 ];
 
 /**
