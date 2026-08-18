@@ -45,31 +45,7 @@ test('每条 critical event 都被三级链认领；欠账只减不增', async (
 
   // 欠账清单：**只能减，不能增**。清掉一条就从这里删一条。
   // 新出现的 critical event 若不入链，测试会红——这正是本门禁存在的意义。
-  const DEBT = [
-  'lcq.event.s03b_snake_flower_bridge_05', 'lcq.event.s04b_lingfei_baiyi_crisis_01',
-  'lcq.event.s04b_lingfei_baiyi_crisis_03', 'lcq.event.s04b_lingfei_baiyi_crisis_05',
-  'lcq.event.s04b_lingfei_baiyi_crisis_06', 'lcq.event.s04b_lingfei_baiyi_crisis_09',
-  'lcq.event.s04b_lingfei_baiyi_crisis_10', 'lcq.event.s04b_lingfei_baiyi_crisis_11',
-  'lcq.event.s04b_lingfei_baiyi_crisis_14', 'lcq.event.s04b_lingfei_baiyi_crisis_17',
-  'lcq.event.s04b_lingfei_baiyi_crisis_19', 'lcq.event.s05b_04_enter_ghost_palace',
-  'lcq.event.s05b_08a_rescue_suli', 'lcq.event.s05b_09_temporary_pact_with_xiaozi',
-  'lcq.event.s08_02_wood_fort', 'lcq.event.s08_09_zhaoming_night', 'lcq.event.s09_05_drain_escape',
-  'lcq.event.s09_07_feiniao_infiltration', 'lcq.event.s09_09_jiangzhou_crisis',
-  'lcq.event.s10_02_yeying_pass', 'lcq.event.s10_09_yin_yang_fish', 'lcq.event.s11_07_camp_falls',
-  'lcq.event.s11_08_jiangzhou_lockdown', 'lcq.event.s11_10_sanchuankou_defeat',
-  'lcq.event.s12_01_grain_route_blocked', 'lcq.event.s12_04_river_granary',
-  'lcq.event.s12_13_long_siege', 'lcq.event.zixi_taiyi_intercept',
-  'lyg.event.buddhist_conspiracy_06_beat', 'lyg.event.buddhist_conspiracy_07_beat',
-  'lyg.event.buddhist_conspiracy_10_beat', 'lyg.event.changgan_interlude_04_beat',
-  'lyg.event.changgan_interlude_08_beat', 'lyg.event.changgan_interlude_09_beat',
-  'lyg.event.ganlu_aftershock_02_beat', 'lyg.event.ganlu_aftershock_03_beat',
-  'lyg.event.ganlu_aftershock_08_beat', 'lyg.event.han_succession_01_beat',
-  'lyg.event.han_succession_06_beat', 'lyg.event.han_succession_07_beat',
-  'lyg.event.shituolin_endgame_04_beat', 'lyg.event.shituolin_endgame_06_beat',
-  'lyg.event.shituolin_endgame_07_beat', 'lyl.event.han_palace_endgame_04_beat',
-  'lyl.event.han_palace_endgame_09_beat', 'lyl.event.han_palace_endgame_10_beat',
-  'lyl.event.taiquan_afterfall_01_beat', 'lyl.event.taiquan_sacred_fruit_07'
-  ];
+  const DEBT = [];
 
   const unexpected = orphans.filter(id => !DEBT.includes(id));
   assert.deepEqual(
