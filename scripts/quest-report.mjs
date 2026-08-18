@@ -10,6 +10,42 @@
  * 输出：docs/quest-report.html（默认）或 stdout JSON
  */
 
+// ── 本轮复审查出的**真缺陷**（用户 2026-08-18 要求：只报"不修就接不上"的）。
+// 已明确改判为**非缺陷**、不再列入：主轴 425 拍断层、血脉拍无抉择、主轴节点稀疏、深拍占比。
+// 判据基线：用户确认按《上古卷轴5》模式——**玩家跑到任何一个国家都能开启相应的线**，
+// 除非有真正的限制性要求。故"玩家必然按 seq 顺序走过前面内容"这个假设不成立，
+// 跨线依赖一律按"玩家可能没走过那条线"计。
+const REAL_DEFECTS = [
+  { kind: '已修', where: '主轴 / 黑魔海', what: '三条 event 的 axisSeq 为 null，排序当 0，被顶到线首',
+    detail: '`s07_qinhui_join`（黑魔海首拍，实属 222–278）／`plan_counterattack`＋`yin_yang_counter`（主轴首两拍，实属 666–667）。'
+      + '正典时间线查不到这三拍的对应 idx，故不编 seq；改为 null 时兜底用关窗起点。'
+      + '修后黑魔海首拍回到 seq 78，秦桧归顺落到 222，紧挨同为 222 的「确认朱老头就是殇侯」——殇侯交人这件事前后连上了。' },
+  { kind: '待修', where: '太乙 413→463', what: '元行健怎么死的，线上没有',
+    detail: '上一拍还在审元行健，下一拍已是「因他之死秋少君与林之澜反目」。正典 seq 463 有反目，元行健之死本身无 event。' },
+  { kind: '待修', where: '宋国 584→604', what: '营救林冲的结果（成／败／放弃）缺失',
+    detail: '584 已定营救林冲，604 人已在明庆寺另一现场。' },
+  { kind: '待修', where: '黑魔海 419→540', what: '先发制人那一仗的结局缺失',
+    detail: '415–419 开战打洞穴，540 已是小紫擒惊理，胜负不存在。' },
+  { kind: '待修', where: '唐国 1066→1089', what: '小紫、吕雉为何被困大雁塔，无前置',
+    detail: '1066 刚在宣平坊落脚，1089 已是「要救塔里的小紫与吕雉」。' },
+  { kind: '待修', where: '唐国 1382→1396', what: '战败之后如何还活着、为何受封',
+    detail: '1382 被李炎打断、李辅国占了郭氏，1396 直接受封大都护。' },
+  { kind: '待修', where: '晋国 372 前', what: '泉玉姬是谁、为何审，线上无来源',
+    detail: '343 是王茂弘让权，下一拍已在六扇门审问一个本线没出现过的人。' },
+  { kind: '待改序', where: '汉国 895→902', what: '因果写反，不是缺抉择',
+    detail: '895 已定拥立定陶王并分派任务，902 才问「是否出面拥立」。' },
+  { kind: '待摘', where: '宋国 1130／1134、黑魔海 1069／1399', what: '这几拍不属于这两条线的脊梁',
+    detail: '宋国 624 还在临安听高俅讲身世，1130 已在长安以唐使办昭南索赔；黑魔海 968 之后跳到长安口哨与庵堂审齐羽仙。补「从临安走到长安」是假修，应摘回本线或改挂。' },
+  { kind: '跨线', where: '宋国 ← 星月湖', what: '宋国打仗的结果落在星月湖线上',
+    detail: '439–516 三川口／定川寨。只走宋线会从 435 城防直接跳到 495 领官、521 城战，野外胜负是偷来的前提。' },
+  { kind: '跨线', where: '晋国 ← 黑魔海', what: '龙宸被劈成两半',
+    detail: '黑魔海 540 擒惊理才有入口，晋国 732／785 揭账、押运被劫。只走晋线，龙宸从账本里冒出来。' },
+  { kind: '跨线', where: '八条线共 17 处', what: '本线反复用某人，却从不介绍他（登场拍在别线，且不在主轴）',
+    detail: '黑魔海 5 人（殇侯／剑玉姬／西门庆／李师师／郭槐）、唐国 5 人（吕雉／小紫／潘金莲／杨玉环／贾文和）、'
+      + '昭南 4 人、星月湖／晋国／宋国各 1 人。⚠ 曾按「登场早于本线锚→玩家必然见过」筛到 8 处，'
+      + '但用户确认上古卷轴模式后该筛选不成立——玩家可以直接跑去唐国开线，从没走过昭南。' },
+];
+
 // ── 本轮待审：这一轮由 Claude 做出的判断，**每一条都需要用户过目**。
 // 用户 2026-08-18 指出：「主轴和二级线并未真正定稿，你这轮做完的是待审。」
 // 故本清单不是变更日志，是**审阅工单**：每条给出「我做了什么／依据是什么／你可能想推翻的是哪里」。
@@ -68,9 +104,15 @@ for (const f of fs.readdirSync(path.join(ROOT, DATA)).filter(x => x.endsWith('.j
   const j = JSON.parse(fs.readFileSync(path.join(ROOT, DATA, f), 'utf8'));
   if (!j.scenario?.worldSimulation) continue;
   stageWindows.set(j.manifest.id, [j.manifest.axisSeqLo, j.manifest.axisSeqHi]);
+  const seqs = (j.scenario.events || []).map(e => e.axisSeq).filter(v => typeof v === 'number');
+  const stageLo = seqs.length ? Math.min(...seqs) : 0;
   for (const e of j.scenario.events || []) {
     events.set(e.id, {
-      seq: e.axisSeq, name: e.name, stage: j.manifest.id,
+      // `axisSeq` 可能为 null。**不要当 0**——那会把后段内容顶到线首
+      // （实测曾造成主轴首拍变成太泉核心区、黑魔海首拍变成秦桧归顺）。
+      // 兜底用该关窗口起点：不发明正典数据，只保证排序不撒谎。
+      seq: e.axisSeq ?? stageLo, seqIsFallback: e.axisSeq == null,
+      name: e.name, stage: j.manifest.id,
       // 四字段拼一起，供「登场」判定用（谁最早出现在哪一拍）
       blob: [e.name, e.description, e.objective, e.axisBeat].filter(Boolean).join(' '),
     });
@@ -429,6 +471,19 @@ ol.nodes li.p .sq{color:var(--ink3)}
 <div class="submit">
  <button type="button" id="mark" class="btn">标记这批批注已写完，请 Claude 复核</button>
  <artifact-sync><span class="stamp" id="stamp"></span></artifact-sync>
+</div>
+
+<h2>本轮复审：真缺陷</h2>
+<div class="box" style="padding:14px 16px">
+<p class="hk" style="margin-bottom:10px">只列<b>不修就接不上</b>的。已明确改判为<b>非缺陷</b>、不再出现在此表：
+主轴 425 拍断层、血脉拍无抉择、主轴节点稀疏、深拍占比——主轴是<b>两个通关条件</b>不是故事线，
+这几项本就不该按"线"去要求。判据基线：按《上古卷轴5》模式，玩家可直接跑去任一国开线，
+故跨线依赖一律按"玩家可能没走过那条线"计。</p>
+${REAL_DEFECTS.map((d, i) => `<div class="ln" style="margin:0 0 10px">
+  <h3 class="serif" style="font-size:15px">${i + 1}. ${esc(d.where)}　${esc(d.what)}<span class="tg">${esc(d.kind)}</span></h3>
+  <div class="hk" style="padding:3px 0">${esc(d.detail)}</div>
+  <div class="hk" style="padding:3px 0"><b>你的裁定</b>　${cmt('defect:' + i, '修 / 不修 / 改成……')}</div>
+</div>`).join('')}
 </div>
 
 <h2>本轮待审</h2>
