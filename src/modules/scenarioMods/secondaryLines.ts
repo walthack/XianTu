@@ -375,15 +375,16 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       // 云家提议同行是你的反应，不是你入南荒的前提。（Z1 并进同关 _03 血符）
       { text: '寻找穿越后的降落地点——段强登场', status: 'ready', stageId: 'lcq.stage_01', eventId: 'lcq.event.s01_01' },
       { text: '当面认清凝羽处境并回应——她奉苏妲己之命进赌局', status: 'ready', stageId: 'lcq.stage_02', eventId: 'lcq.event.ningyu_enters_gamble' },
+      { text: '识破白湖商馆主人苏妲己的伪装——她要的是霓龙丝的下落', status: 'ready', stageId: 'lcq.stage_02', eventId: 'lcq.event.s02_06' },
       { text: '与苏妲己订下三月南荒之约——采霓龙丝，否则炮烙', status: 'ready', stageId: 'lcq.stage_02', eventId: 'lcq.event.sudaji_south_pact' },
-      { text: '赌局落败，苏妲己作弊——确认凝羽因此被卖', status: 'ready', stageId: 'lcq.stage_02', eventId: 'lcq.event.gamble_bond_signed' },
       // Z3 并进 lcq.event.s04_01（密谋刺王）
-      { text: '帮苏妲己取物前，谈定六十金铢报酬', status: 'ready', stageId: 'lcq.stage_02', eventId: 'lcq.event.charge_sudaji_fee' },
+      { text: '赌局落败，苏妲己作弊——确认凝羽因此被卖', status: 'ready', stageId: 'lcq.stage_02', eventId: 'lcq.event.gamble_bond_signed' },
       // Z4 并进 s04b_lingfei_baiyi_crisis_08／_09（识破投峒、族长被换）
+      { text: '帮苏妲己取物前，谈定六十金铢报酬', status: 'ready', stageId: 'lcq.stage_02', eventId: 'lcq.event.charge_sudaji_fee' },
       { text: '撕毁阿姬曼身契——出城路线已被封锁', status: 'ready', stageId: 'lcq.stage_02', eventId: 'lcq.event.free_ajiman' },
       { text: '苏妲己以冰蛊逼你南行——两日内必须凑齐队伍', status: 'ready', stageId: 'lcq.stage_04b_lingfei_baiyi_crisis', eventId: 'lcq.event.ice_gu_coercion' },
-      { text: '满城围捕下逼出武二郎入队——他走投无路才答应', status: 'ready', stageId: 'lcq.stage_02', eventId: 'lcq.event.wuerlang_joins' },
       // Z7 并进 s05b_05b_ideology_duel_and_defeat
+      { text: '满城围捕下逼出武二郎入队——他走投无路才答应', status: 'ready', stageId: 'lcq.stage_02', eventId: 'lcq.event.wuerlang_joins' },
       { text: '利用武二郎无路可退的处境，取得他随队南行的明确承诺', status: 'ready', stageId: 'lcq.stage_03', eventId: 'lcq.event.s03_06' },
       { text: '稳住武二郎伤势，带队突破铁索桥伏击', status: 'ready', stageId: 'lcq.stage_02', eventId: 'lcq.event.iron_bridge_ambush' },
       { text: '劝住要折返五原的武二郎，商队继续南行', status: 'ready', stageId: 'lcq.stage_04b_lingfei_baiyi_crisis', eventId: 'lcq.event.persuade_wuerlang' },
@@ -396,6 +397,7 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       { text: '与云苍峰同行赴白夷，透露霓龙丝——谢艺给出碧鲮线索', status: 'ready', stageId: 'lcq.stage_03b_snake_flower_bridge', eventId: 'lcq.event.s03b_snake_flower_bridge_04' },
       { text: '求助花苗族长，脱离困境——苏荔登场', status: 'ready', stageId: 'lcq.stage_03b_snake_flower_bridge', eventId: 'lcq.event.s03b_snake_flower_bridge_06' },
       { text: '问清花苗：苏荔被迫送出龙神新娘与贡物——去向熊耳铺', status: 'ready', stageId: 'lcq.stage_03b_snake_flower_bridge', eventId: 'lcq.event.s03b_snake_flower_bridge_07' },
+      { text: '乐明珠自认光明观堂弟子：她假扮花苗新娘，是为刺杀鬼巫王', status: 'ready', stageId: 'lcq.stage_04', eventId: 'lcq.event.s04_03' },
       { text: '探查鬼王峒送亲队内情——秦桧、吴三桂登场', status: 'ready', stageId: 'lcq.stage_04', eventId: 'lcq.event.s04_01' },
       { text: '与白夷族长交涉：他改要十日五万银铢现款，不再以货易货', status: 'ready', stageId: 'lcq.stage_04', eventId: 'lcq.event.s04_07' },
       { text: '借易勇水镜向苏妲己报黑魔海——她警告快寻霓龙丝', status: 'ready', stageId: 'lcq.stage_04b_lingfei_baiyi_crisis', eventId: 'lcq.event.s04b_lingfei_baiyi_crisis_07' },
@@ -544,8 +546,6 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       { text: '坐实林冲没被救下——刺配照旧，他仍要去江州', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.linchong_still_exiled' },
       { text: '潜入明庆寺观音殿，被郭槐、封德明制住，太皇太后认出劳力士后放人', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_blacksea_trap_06_beat' },
       { text: '与高俅密谈，得知宋主生母是韦太后等宫廷身世疑云', status: 'ready', stageId: 'lyl.taiquan_sacred_fruit', eventId: 'lyl.event.taiquan_sacred_fruit_03' },
-      { text: '在长安面见唐皇，接下昭南索赔：交张亢、赔款，否则兴兵', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.changgan_interlude_03_beat' },
-      { text: '受礼部侍郎、通问计议使，用这颗印解宋困', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.song_tongwen' },
     ],
     pendingExpansion: '线形：卷入贾师宪清岳党 → 查清粮战与围城 → 相府／太尉／后宫立场 → 纸钞落地逼退＋昭南索赔 → 礼部侍郎、通问计议使。'
       + '顶点＝礼部侍郎、通问计议使（seq 1134）。578 共同监制、1160 出资解困并进 S11，不另封「宝钞使」。'
@@ -647,28 +647,29 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       // T1 汉使身份并进同关 s03_09
       { text: '听袁天罡说破：番僧在猎杀穿越者', status: 'ready', stageId: 'lyg.changgan_begins', eventId: 'lyg.event.changgan_fanseng_hunt' },
       { text: '入长安宣平坊落脚，石超接风——吕奉先已在城中惹事', status: 'ready', stageId: 'lyg.changgan_begins', eventId: 'lyg.event.s03_01' },
-      { text: '要救大雁塔里的小紫与吕雉——窥基断水，她握着铸铁炸弹', status: 'ready', stageId: 'lyg.changgan_begins', eventId: 'lyg.event.s03_08' },
+      { text: '街头撞见杨玉环驾轻车伤人训话，潘金莲提剑为她警戒', status: 'ready', stageId: 'lyg.changgan_begins', eventId: 'lyg.event.s03_03' },
       // T4 并进 buddhist_conspiracy_04／_06（火遁／佛咒，过程）
-      { text: '夜访慈恩寺，碑上疑白行简是穿越者；汉使身份救走炸塔的小紫', status: 'ready', stageId: 'lyg.changgan_begins', eventId: 'lyg.event.s03_09' },
+      { text: '要救大雁塔里的小紫与吕雉——窥基断水，她握着铸铁炸弹', status: 'ready', stageId: 'lyg.changgan_begins', eventId: 'lyg.event.s03_08' },
       // T5 并进 _09_beat／_10_beat
+      { text: '夜访慈恩寺，碑上疑白行简是穿越者；汉使身份救走炸塔的小紫', status: 'ready', stageId: 'lyg.changgan_begins', eventId: 'lyg.event.s03_09' },
       { text: '从杨玉环处厘清北司与佛门各自在查什么', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.north_bureau_buddhist_moves' },
-      { text: '与小紫潜入青龙寺，摸清释特昧普的扩张方式与外援', status: 'ready', stageId: 'lyg.changgan_begins', eventId: 'lyg.event.qinglongsi_te_master' },
       // T7 并进 ganlu_aftershock_07_beat
+      { text: '与小紫潜入青龙寺，摸清释特昧普的扩张方式与外援', status: 'ready', stageId: 'lyg.changgan_begins', eventId: 'lyg.event.qinglongsi_te_master' },
       { text: '潜入青龙寺确认释特昧普的扩张方式与外援', status: 'ready', stageId: 'lyg.shixiang_ambush', eventId: 'lyg.event.investigate_te_master' },
-      { text: '把鸿胪寺的礼遇和朝会资格拿回来', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.honglusi_amends' },
       // T9 并进 shituolin_endgame_10_beat
       // 高潮战不只一拍：它的展开在事件层现成躺着，先前每场仗只挑了中间那一条代表拍。
+      { text: '把鸿胪寺的礼遇和朝会资格拿回来', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.honglusi_amends' },
       { text: '确认鸿胪寺恢复的礼遇与元正朝会资格——段文楚登场', status: 'ready', stageId: 'lyg.shixiang_ambush', eventId: 'lyg.event.shixiang_s11' },
       { text: '确认慈恩寺红莲演法与唐皇敕令之间的张力', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.cien_red_lotus' },
       { text: '确认红莲演法与唐皇敕令之间的张力——观海登场', status: 'ready', stageId: 'lyg.shixiang_ambush', eventId: 'lyg.event.shixiang_s12' },
-      { text: '元正朝会上核验徐君房的地球仪，对照秦使说辞', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.yuanzheng_globe' },
       // T11：objective 是阻止夺舍；axisBeat 写明当场没拦住
-      { text: '核验徐君房的地球仪知识与秦使说辞', status: 'ready', stageId: 'lyg.shixiang_ambush', eventId: 'lyg.event.shixiang_s13' },
+      { text: '元正朝会上核验徐君房的地球仪，对照秦使说辞', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.yuanzheng_globe' },
       // 序按 axisSeq：搜查宫中 1382 在受封 1396 之前，先前顶点排在了它前面。
       // 搜查宫中那一拍是原著段与续写第二幕的咬合点，但仍早于受封，顶点收尾。
+      { text: '核验徐君房的地球仪知识与秦使说辞', status: 'ready', stageId: 'lyg.shixiang_ambush', eventId: 'lyg.event.shixiang_s13' },
       { text: '查宣平坊那桩宦官命案，别急着定谁是幕后', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.xuanping_eunuch_murder' },
-      { text: '摸清废弃兴庆宫，标出地下入口', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.survey_xingqing_palace' },
       // T14 用户裁定（2026-08-16）：没剧本，先留空，不要自行续写
+      { text: '摸清废弃兴庆宫，标出地下入口', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.survey_xingqing_palace' },
       { text: '稳住太子伤势，把误伤消息压下去', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.prince_injury_control' },
       { text: '在水香楼布好诱捕', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.shuixiang_lure_setup' },
       { text: '压住麻痹毒势，封住毒方刺客的藏身范围', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.spot_poison_assassin' },
@@ -678,6 +679,8 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       { text: '听信永讲清蕃密邪径内幕，据此决定怎么应对', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.xinyong_reveals_fanmi' },
       { text: '听清蕃密内幕并作出有依据的应对决定——信永登场', status: 'ready', stageId: 'lyg.shixiang_ambush', eventId: 'lyg.event.forewarned_from_xinyong' },
       { text: '审飞鸟萤子，她拒绝合作', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.interrogate_feiniao_yingzi' },
+      { text: '在长安面见唐皇，接下昭南索赔：交张亢、赔款，否则兴兵', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.changgan_interlude_03_beat' },
+      { text: '受礼部侍郎、通问计议使，用这颗印解宋困', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.song_tongwen' },
       { text: '摸清窥基改唆娑梵寺主刺你——瑶池宗已退出', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.changgan_interlude_06_beat' },
       { text: '救出白霓裳，击杀王守澄——墨枫林登场', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.changgan_interlude_10_beat' },
       { text: '从杨玉环接下李昂密令：天策府闭门不涉，去牵制鱼朝恩', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.liang_secret_order' },
