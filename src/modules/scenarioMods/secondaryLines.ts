@@ -205,8 +205,9 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       // 这是对手开的价，不是盟友协商——文案不要写成结盟。
       { text: '破道观又撞见元行健——他替林之澜办事，而线索指向黑魔海', status: 'ready', stageId: 'lcq.stage_10_jiangzhou_shadow_war', eventId: 'lcq.event.s10_06_ruined_temple' },
       { text: '审出元行健：暗算月霜是林之澜指使，蔺采泉因拜火教来晴州', status: 'ready', stageId: 'lcq.stage_10_jiangzhou_shadow_war', eventId: 'lcq.event.yuanxingjian_interrogated' },
-      { text: '听清秋少君因元行健之死与林之澜决裂——还被疑卓云君失踪', status: 'ready', stageId: 'lcq.stage_11_lieshan_battle', eventId: 'lcq.event.qiushaojun_breaks_with_linzhilan' },
+      { text: '亲手了结元行健——审出他是林之澜的人之后', status: 'ready', stageId: 'lcq.stage_10_jiangzhou_shadow_war', eventId: 'lcq.event.yuanxingjian_disposed' },
       // ⏳ 扩写部分，本阶段不再细化（用户裁定 2026-08-16）：正典无此拍，只标未来待扩。
+      { text: '听清秋少君因元行健之死与林之澜决裂——还被疑卓云君失踪', status: 'ready', stageId: 'lcq.stage_11_lieshan_battle', eventId: 'lcq.event.qiushaojun_breaks_with_linzhilan' },
       { text: '蔺采泉开价：他支持江州，换你承认九阳神功出自太乙、出自他', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_blacksea_trap_02_beat' },
       { text: '到鹤林观看清：蔺采泉继任掌教，秋少君补齐放鹤出任教御', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_lin_takes_seat' },
       { text: '在翠微园向卓云君承诺对付蔺采泉，并写下盘江程氏股份', status: 'ready', stageId: 'lyl.taiquan_sacred_fruit', eventId: 'lyl.event.sacred_against_lin' },

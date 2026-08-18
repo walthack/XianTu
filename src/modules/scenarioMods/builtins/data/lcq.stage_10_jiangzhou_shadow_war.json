@@ -4095,7 +4095,8 @@
           "lcq.event.s10_04_left_army_review",
           "lcq.event.s10_05_war_funds",
           "lcq.event.s10_06_ruined_temple",
-          "lcq.event.yuanxingjian_interrogated"
+          "lcq.event.yuanxingjian_interrogated",
+          "lcq.event.yuanxingjian_disposed"
         ],
         "activation": [
           {
@@ -5220,6 +5221,65 @@
         "exploration": {
           "role": "payoff"
         }
+      },
+      {
+        "id": "lcq.event.yuanxingjian_disposed",
+        "name": "了结元行健",
+        "description": "元行健已被审出：暗算月霜是林之澜指使。人仍在程宗扬手里，程宗扬亲手了结了他。",
+        "axisSeq": 414,
+        "axisAnchor": "六朝清羽记·#228·第224章·驯奴",
+        "axisBeat": "审问之后元行健仍在程宗扬手里；程宗扬亲手将他了结。",
+        "critical": false,
+        "completion": [
+          {
+            "path": "flags.event.yuanxingjian_disposed.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "objective": "亲手了结元行健",
+        "exploration": {
+          "role": "payoff"
+        },
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "face_captive_yuanxingjian",
+              "label": "核清审完的元行健还在自己手里",
+              "actionText": "我把审完的元行健再核一遍：他供出暗算月霜是林之澜指使，人还在我手里。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已核清审完的元行健还在自己手里；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "yuanxingjian_still_in_hand"
+            },
+            {
+              "id": "kill_yuanxingjian_himself",
+              "label": "亲手了结元行健",
+              "actionText": "我亲手了结元行健。这是我自己做的，不是别人代劳。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲手了结元行健；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "yuanxingjian_still_in_hand"
+              ]
+            }
+          ]
+        },
+        "evidence": "正典依据：MiniMax 全书重抽 第246章·粮战「秋少君抵达江州，与林之澜决裂」——「程宗扬告知元行健是自己所杀，秋少君称算自己杀的」。⚠ 正典**陈述了这个事实但未演这场戏**：关押处、看守、动手场合两份抽取都没有写，故不编。写作约束（不进提示词）：不得写成他人动手；不得在此提前演秋少君与林之澜翻脸（那是 seq 463）。"
       }
     ],
     "worldSimulation": {
