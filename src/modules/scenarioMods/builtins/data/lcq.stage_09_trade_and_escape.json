@@ -4118,6 +4118,7 @@
         "eventIds": [
           "lcq.event.s09_06_blacksea_fracture",
           "lcq.event.s09_07_feiniao_infiltration",
+          "lcq.event.quanyuji_soul_pill",
           "lcq.event.s09_08_six_doors_confession",
           "lcq.event.s09_09_jiangzhou_crisis",
           "lcq.event.s09_10_separation"
@@ -5436,6 +5437,48 @@
               ]
             }
           ]
+        }
+      },
+      {
+        "id": "lcq.event.quanyuji_soul_pill",
+        "name": "泉玉姬献魂丹",
+        "description": "六扇门捕头泉玉姬疑郑九鹰是黑魔海卧底、交手受伤后，向程宗扬献出用自己一魂一魄炼成的魂丹；程宗扬吞下后得以控制她的生死，这才有后面的审问。",
+        "objective": "吞下泉玉姬的魂丹，掌握她的生死",
+        "axisSeq": 371,
+        "axisAnchor": "六朝清羽记·#208·第204章·魂丹",
+        "axisBeat": "泉玉姬向程宗扬献出用自己一魂一魄炼成的魂丹，程宗扬吞下后得以控制她的生死。",
+        "critical": false,
+        "completion": [
+          {
+            "path": "flags.event.quanyuji_soul_pill.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "swallow_quanyuji_soul_pill",
+              "label": "吞下泉玉姬的魂丹，掌握她的生死",
+              "actionText": "我吞下泉玉姬用自己一魂一魄炼成的魂丹，把她的生死捏在手里。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已吞下魂丹、掌握泉玉姬生死；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              }
+            }
+          ]
+        },
+        "exploration": {
+          "role": "investigate"
         }
       }
     ],

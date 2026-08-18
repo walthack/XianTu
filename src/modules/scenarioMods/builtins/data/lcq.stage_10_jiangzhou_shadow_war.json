@@ -4120,6 +4120,7 @@
           "lcq.event.s10_07_preemptive_strike",
           "lcq.event.s10_08_lair_reversal",
           "lcq.event.s10_09_yin_yang_fish",
+          "lcq.event.blacksea_vault_split",
           "lcq.event.s10_10_xiaozi_crisis"
         ],
         "activation": [
@@ -5175,6 +5176,49 @@
         },
         "exploration": {
           "role": "investigate"
+        }
+      },
+      {
+        "id": "lcq.event.blacksea_vault_split",
+        "name": "银库四六分成",
+        "description": "洞穴一仗未全胜，但黑魔海银库已取出五万金铢。孟非卿与程宗扬撞见后，以此解左武军军费，并定四六分成。",
+        "objective": "从黑魔海银库取得五万金铢并与孟非卿四六分成",
+        "axisSeq": 423,
+        "axisAnchor": "六朝清羽记·#233·第229章·倩影",
+        "axisBeat": "孟非卿意外撞见程宗扬，得知黑魔海银库获五万金铢，解了左武军军费燃眉之急，并决定四六分成。",
+        "critical": false,
+        "completion": [
+          {
+            "path": "flags.event.blacksea_vault_split.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.meng_fei_qing"
+        ],
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "split_blacksea_vault",
+              "label": "从黑魔海银库取得五万金铢并与孟非卿四六分成",
+              "actionText": "我把黑魔海银库那五万金铢与孟非卿按四六分成谈定。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已从黑魔海银库取得五万金铢并与孟非卿四六分成；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              }
+            }
+          ]
+        },
+        "exploration": {
+          "role": "payoff"
         }
       }
     ],

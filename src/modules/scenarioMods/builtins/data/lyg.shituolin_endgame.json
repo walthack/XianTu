@@ -5782,6 +5782,7 @@
         ],
         "eventIds": [
           "lyg.event.shituolin_endgame_13_beat",
+          "lyg.event.claim_slew_demon",
           "lyg.event.shituolin_endgame_14_beat",
           "lyg.event.shituolin_endgame_15_beat"
         ],
@@ -6433,6 +6434,48 @@
               }
             }
           ]
+        }
+      },
+      {
+        "id": "lyg.event.claim_slew_demon",
+        "name": "谎称斩杀妖祟",
+        "description": "太皇太后已被夺舍、李炎率群臣闯入后，程宗扬为免被指弑杀太皇太后，谎称斩杀了李辅国喂养的妖祟，并展示血藤为证。",
+        "objective": "用血藤谎称斩妖，避开弑杀太皇太后的罪责",
+        "axisSeq": 1383,
+        "axisAnchor": "六朝燕歌行·#224·玄机献处",
+        "axisBeat": "李炎率群臣闯入，程宗扬为避免被指弑杀太皇太后，谎称斩杀了李辅国喂养的妖祟，并展示血藤为证。",
+        "critical": false,
+        "completion": [
+          {
+            "path": "flags.event.claim_slew_demon.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "claim_slew_demon",
+              "label": "用血藤谎称斩妖，避开弑杀太皇太后的罪责",
+              "actionText": "我当着闯入的李炎把血藤亮出来，把现场说成斩了李辅国喂养的妖祟。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已用血藤把现场说成斩妖；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              }
+            }
+          ]
+        },
+        "exploration": {
+          "role": "payoff"
         }
       }
     ],

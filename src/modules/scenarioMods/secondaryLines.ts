@@ -316,12 +316,13 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       // 高潮战不只一拍：它的展开在事件层现成躺着，先前每场仗只挑了中间那一条代表拍。
       { text: '定下先发制人打黑魔海——为护月霜、除江州后患', status: 'ready', stageId: 'lcq.stage_10_jiangzhou_shadow_war', eventId: 'lcq.event.s10_07_preemptive_strike' },
       { text: '洞穴激战：辛卯泄出星月湖，鱼无夷毒网偷袭孟非卿', status: 'ready', stageId: 'lcq.stage_10_jiangzhou_shadow_war', eventId: 'lcq.event.s10_08_lair_reversal' },
+      { text: '从黑魔海银库取出五万金铢，与孟非卿谈定四六分成', status: 'ready', stageId: 'lcq.stage_10_jiangzhou_shadow_war', eventId: 'lcq.event.blacksea_vault_split' },
       { text: '小紫擒获龙宸刺客惊理——拿到追查龙宸与黑魔海的入口', status: 'ready', stageId: 'lcq.stage_12_jiangzhou_counterwar', eventId: 'lcq.event.s12_15_capture_jingli' },
       { text: '殇侯施尸毒破开宋军阵线，你因此得救', status: 'ready', stageId: 'lcq.stage_12_jiangzhou_counterwar', eventId: 'lcq.event.s12_16_corpse_poison' },
       { text: '用人情和经济筹码请殇侯留守两月，换来近卫军协防', status: 'ready', stageId: 'lcq.stage_12_jiangzhou_counterwar', eventId: 'lcq.event.s12_17_shanghou_stays' },
       { text: '水镜看见小紫驱铁傀儡重创虎翼军，取龙睛玉并以阴魂试傀儡', status: 'ready', stageId: 'lyl.lin_an_bridge', eventId: 'lyl.event.blacksea_iron_puppet' },
-      { text: '野猪林乱战：林冲重伤衣钵被夺，你抄下袈裟符文', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_blacksea_trap_04_beat' },
       // ⏳ 扩写部分，本阶段不再细化（用户裁定 2026-08-16）：正典无此拍，只标未来待扩。
+      { text: '野猪林乱战：林冲重伤衣钵被夺，你抄下袈裟符文', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_blacksea_trap_04_beat' },
       { text: '静善为袈裟符文夜袭，被炸弹击退——你也受了伤', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_blacksea_trap_05_beat' },
       { text: '在太医局查医档，摸清剑玉姬已借刘太后用药落子', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_blacksea_trap_07_beat' },
       { text: '在小瀛洲设伏对上剑玉姬、西门庆——西门庆与李师师受伤', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_blacksea_trap_08_beat' },
@@ -469,6 +470,7 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       // 顶点占位：原文未明，称号待定（seq 334「程宗扬无所得」）
       // ⏳ 扩写部分，本阶段不再细化（用户裁定 2026-08-16）：正典无此拍，只标未来待扩。
       { text: '问清王茂弘：相府无为让权给萧侯，承诺保晋国二十年太平', status: 'ready', stageId: 'lcq.stage_09_trade_and_escape', eventId: 'lcq.event.xiangfu_stance' },
+      { text: '收下泉玉姬用一魂一魄炼的魂丹，她的生死自此在你手里', status: 'ready', stageId: 'lcq.stage_09_trade_and_escape', eventId: 'lcq.event.quanyuji_soul_pill' },
       { text: '在六扇门审问泉玉姬', status: 'ready', stageId: 'lcq.stage_09_trade_and_escape', eventId: 'lcq.event.s09_08_six_doors_confession' },
       { text: '确认晋相腾出江州让宋军剿星月湖，不惜毁城', status: 'ready', stageId: 'lcq.stage_12_jiangzhou_counterwar', eventId: 'lcq.event.jin_vacate_jiangzhou' },
       { text: '听张少煌得知晋旱与王茂弘意图，决定全力收粮，建康做营销中心', status: 'ready', stageId: 'lyl.taiquan_sacred_fruit', eventId: 'lyl.event.sacred_jin_drought' },
@@ -539,6 +541,7 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       { text: '多宝阁问清贾师宪要你推纸币——你要纸币能纳税、发行量须经认可', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_paper_plan' },
       { text: '童贯引见宋主，纸币获准纳税并共同监制', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_paper_mint' },
       { text: '林冲持刀闯白虎堂被刺配江州，你与鲁智深计划营救', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_blacksea_trap_03_beat' },
+      { text: '坐实林冲没被救下——刺配照旧，他仍要去江州', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.linchong_still_exiled' },
       { text: '潜入明庆寺观音殿，被郭槐、封德明制住，太皇太后认出劳力士后放人', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_blacksea_trap_06_beat' },
       { text: '与高俅密谈，得知宋主生母是韦太后等宫廷身世疑云', status: 'ready', stageId: 'lyl.taiquan_sacred_fruit', eventId: 'lyl.event.taiquan_sacred_fruit_03' },
       { text: '在长安面见唐皇，接下昭南索赔：交张亢、赔款，否则兴兵', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.changgan_interlude_03_beat' },
@@ -706,6 +709,7 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       { text: '李辅国把你和杨玉环、吕雉、潘金莲、白霓裳收进浮屠塔', status: 'ready', stageId: 'lyg.shituolin_endgame', eventId: 'lyg.event.shituolin_endgame_11_beat' },
       { text: '以生死根吸尽死气，联手斩断李辅国肉身', status: 'ready', stageId: 'lyg.shituolin_endgame', eventId: 'lyg.event.shituolin_endgame_12_beat' },
       { text: '你拦不住：李辅国魂魄占了返老的太皇太后郭氏，李炎把你打断', status: 'ready', stageId: 'lyg.shituolin_endgame', eventId: 'lyg.event.shituolin_endgame_13_beat' },
+      { text: '谎称斩了李辅国喂的妖祟，以血藤为证，避开弑后的罪', status: 'ready', stageId: 'lyg.shituolin_endgame', eventId: 'lyg.event.claim_slew_demon' },
       { text: '接旨大都护、上柱国', status: 'ready', stageId: 'lyg.shituolin_endgame', eventId: 'lyg.event.shituolin_endgame_title_daduhu' },
       { text: '听贾文和：找五肉五甘露可驱李辅国魂——太皇太后魂魄或还在', status: 'ready', stageId: 'lyg.shituolin_endgame', eventId: 'lyg.event.shituolin_endgame_14_beat' },
       { text: '换身后续：长安驱魂局', status: 'pending' },

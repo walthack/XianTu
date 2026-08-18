@@ -5717,6 +5717,7 @@
           "lyl.event.xiaoyingzhou_blacksea_trap_02_beat",
           "lyl.event.xiaoyingzhou_blacksea_trap_03_beat",
           "lyl.event.xiaoyingzhou_blacksea_trap_04_beat",
+          "lyl.event.linchong_still_exiled",
           "lyl.event.xiaoyingzhou_blacksea_trap_05_beat"
         ]
       },
@@ -7134,6 +7135,48 @@
               ]
             }
           ]
+        }
+      },
+      {
+        "id": "lyl.event.linchong_still_exiled",
+        "name": "林冲仍赴江州",
+        "description": "野猪林截杀未逞，鲁智深与净念和解后，重伤的林冲并未被救出刺配，仍按原判赴江州；孙天羽与童贯被释放。",
+        "objective": "确认林冲仍赴江州：野猪林未死、刺配未撤",
+        "axisSeq": 590,
+        "axisAnchor": "六朝云龙吟·#40·袈裟",
+        "axisBeat": "程宗扬从袈裟抄录英文，发现一世不拾大师是穿越者，鲁智深与净念和解，林冲赴江州，孙天羽与童贯被释放。",
+        "critical": false,
+        "completion": [
+          {
+            "path": "flags.event.linchong_still_exiled.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "confirm_linchong_exiled",
+              "label": "确认林冲仍赴江州：野猪林未死、刺配未撤",
+              "actionText": "我看清野猪林这一场：林冲没死在截杀里，刺配也没撤，人还是去了江州。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已确认林冲仍赴江州；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              }
+            }
+          ]
+        },
+        "exploration": {
+          "role": "payoff"
         }
       }
     ],
