@@ -311,19 +311,22 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       { text: '让殇侯把你身上的冰蛊解了', status: 'ready', stageId: 'lcq.stage_07_qingyuan_jiankang', eventId: 'lcq.event.shanghou_cures_ice_gu' },
       { text: '在庭院迎入苏妲己——黑魔海高压对局正式摊开', status: 'ready', stageId: 'lcq.stage_08_jiankang_coup', eventId: 'lcq.event.s08_04_sudaji_enters' },
       { text: '向萧遥逸点破秦桧与毒宗，击掌约下不与殇侯为敌', status: 'ready', stageId: 'lcq.stage_08_jiankang_coup', eventId: 'lcq.event.palm_oath_shanghou' },
+      { text: '古冥隐设毒计：剑玉姬这条线第一次露面', status: 'ready', stageId: 'lcq.stage_08_jiankang_coup', eventId: 'lcq.event.s08_08_gumingyin_plot' },
       { text: '查清：游婵杀死内堂太监，黑魔海嫡传与外聘香主裂开', status: 'ready', stageId: 'lcq.stage_09_trade_and_escape', eventId: 'lcq.event.s09_06_blacksea_fracture' },
-      { text: '追查月霜遇袭：石之隼判定是东瀛忍者，其人已逃', status: 'ready', stageId: 'lcq.stage_10_jiangzhou_shadow_war', eventId: 'lcq.event.s10_03_ninja_trace' },
       // 高潮战不只一拍：它的展开在事件层现成躺着，先前每场仗只挑了中间那一条代表拍。
+      { text: '追查月霜遇袭：石之隼判定是东瀛忍者，其人已逃', status: 'ready', stageId: 'lcq.stage_10_jiangzhou_shadow_war', eventId: 'lcq.event.s10_03_ninja_trace' },
       { text: '定下先发制人打黑魔海——为护月霜、除江州后患', status: 'ready', stageId: 'lcq.stage_10_jiangzhou_shadow_war', eventId: 'lcq.event.s10_07_preemptive_strike' },
       { text: '洞穴激战：辛卯泄出星月湖，鱼无夷毒网偷袭孟非卿', status: 'ready', stageId: 'lcq.stage_10_jiangzhou_shadow_war', eventId: 'lcq.event.s10_08_lair_reversal' },
       { text: '从黑魔海银库取出五万金铢，与孟非卿谈定四六分成', status: 'ready', stageId: 'lcq.stage_10_jiangzhou_shadow_war', eventId: 'lcq.event.blacksea_vault_split' },
       { text: '小紫擒获龙宸刺客惊理——拿到追查龙宸与黑魔海的入口', status: 'ready', stageId: 'lcq.stage_12_jiangzhou_counterwar', eventId: 'lcq.event.s12_15_capture_jingli' },
       { text: '殇侯施尸毒破开宋军阵线，你因此得救', status: 'ready', stageId: 'lcq.stage_12_jiangzhou_counterwar', eventId: 'lcq.event.s12_16_corpse_poison' },
       { text: '用人情和经济筹码请殇侯留守两月，换来近卫军协防', status: 'ready', stageId: 'lcq.stage_12_jiangzhou_counterwar', eventId: 'lcq.event.s12_17_shanghou_stays' },
-      { text: '水镜看见小紫驱铁傀儡重创虎翼军，取龙睛玉并以阴魂试傀儡', status: 'ready', stageId: 'lyl.lin_an_bridge', eventId: 'lyl.event.blacksea_iron_puppet' },
       // ⏳ 扩写部分，本阶段不再细化（用户裁定 2026-08-16）：正典无此拍，只标未来待扩。
+      { text: '尾随李师师的马车到威远镖局，弄清她为何突然回临安', status: 'ready', stageId: 'lyl.lin_an_bridge', eventId: 'lyl.event.tail_li_shishi' },
+      { text: '水镜看见小紫驱铁傀儡重创虎翼军，取龙睛玉并以阴魂试傀儡', status: 'ready', stageId: 'lyl.lin_an_bridge', eventId: 'lyl.event.blacksea_iron_puppet' },
       { text: '野猪林乱战：林冲重伤衣钵被夺，你抄下袈裟符文', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_blacksea_trap_04_beat' },
       { text: '静善为袈裟符文夜袭，被炸弹击退——你也受了伤', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_blacksea_trap_05_beat' },
+      { text: '明庆寺撞见旧识郭槐', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_blacksea_trap_06_beat' },
       { text: '在太医局查医档，摸清剑玉姬已借刘太后用药落子', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_blacksea_trap_07_beat' },
       { text: '在小瀛洲设伏对上剑玉姬、西门庆——西门庆与李师师受伤', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_blacksea_trap_08_beat' },
       { text: '在保宁寺放生池逼出剑玉姬真身——屠龙刀异变龙吟', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_blacksea_trap_09_beat' },
@@ -335,7 +338,6 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       { text: '听剑玉姬以成光换支持刘建，蔡敬仲揭劣迹后当面回绝', status: 'ready', stageId: 'lyl.han_palace_endgame', eventId: 'lyl.event.han_jianyu_refused' },
       { text: '郭解被剑玉姬刺穿心脉，临终把定陶王托付给你', status: 'ready', stageId: 'lyg.dingtao_beijing', eventId: 'lyg.event.s01_06' },
       { text: '听阮香凝说定陶王因盛姬亲近她——盛姬是黑魔海御姬奴', status: 'ready', stageId: 'lyg.dingtao_beijing', eventId: 'lyg.event.s01_08' },
-      { text: '在长安街头口哨戏弄为杨玉环警戒的潘金莲', status: 'ready', stageId: 'lyg.changgan_begins', eventId: 'lyg.event.s03_04' },
       { text: '在庵堂性交安抚鱼玄机，同时审讯齐羽仙追问双姬旧怨', status: 'ready', stageId: 'lyg.shituolin_endgame', eventId: 'lyg.event.shituolin_endgame_15_beat' },
       { text: '取得天命侯名分（未来待扩）', status: 'pending' },
       { text: '大祭：与潘金莲对决、总坛覆灭（续写第二幕）', status: 'pending' },
@@ -457,20 +459,21 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       + '不写进指引（引擎不替玩家剧透）。',
     nodes: [
       // 锚事件：seq 241–242 灵飞镜窥宫、与萧遥逸谈「宫禁闹鬼」。beat 有、event 无，需新增。
+      { text: '萧遥逸交代左武军怎么覆灭，以及岳帅旧案上的分歧', status: 'ready', stageId: 'lcq.stage_07_qingyuan_jiankang', eventId: 'lcq.event.s07_01_old_case' },
       { text: '用灵飞镜窥见假山大汉钻出，被他察觉——宫禁闹鬼传开', status: 'ready', stageId: 'lcq.stage_07_qingyuan_jiankang', eventId: 'lcq.event.palace_haunting_rumor' },
-      { text: '与萧遥逸夜探神龙殿：晋帝昏迷如死，似遭操控', status: 'ready', stageId: 'lcq.stage_07_qingyuan_jiankang', eventId: 'lcq.event.s07_07_dragon_hall' },
       // J2 并进 s08_03_beifu_rescue
+      { text: '与萧遥逸夜探神龙殿：晋帝昏迷如死，似遭操控', status: 'ready', stageId: 'lcq.stage_07_qingyuan_jiankang', eventId: 'lcq.event.s07_07_dragon_hall' },
       { text: '在皇宫与云丹琉交手后逃生', status: 'ready', stageId: 'lcq.stage_07_qingyuan_jiankang', eventId: 'lcq.event.s07_08_palace_escape' },
       { text: '萧遥逸一行入鹰愁峪，遭徐敖州府兵军弩伏击，被困谷中', status: 'ready', stageId: 'lcq.stage_08_jiankang_coup', eventId: 'lcq.event.s08_01_eagle_valley' },
       { text: '易彪率北府兵扮禁军全歼州府兵——萧遥逸识破他们身份', status: 'ready', stageId: 'lcq.stage_08_jiankang_coup', eventId: 'lcq.event.s08_03_beifu_rescue' },
       { text: '九阳修复经脉，突破入微境，以珊瑚匕首逼退苏妲己', status: 'ready', stageId: 'lcq.stage_08_jiankang_coup', eventId: 'lcq.event.s08_05_breakthrough' },
       { text: '在宫室应对东瀛忍者——飞鸟熊藏登场', status: 'ready', stageId: 'lcq.stage_08_jiankang_coup', eventId: 'lcq.event.s08_07_palace_ninja' },
       { text: '玄武湖上秦桧、吴三桂救下晋帝太后，古冥隐败逃', status: 'ready', stageId: 'lcq.stage_08_jiankang_coup', eventId: 'lcq.event.s08_10_xuanwu_rescue' },
-      { text: '看清分赃：萧家江宁、云家盐业、你一无所得', status: 'ready', stageId: 'lcq.stage_09_trade_and_escape', eventId: 'lcq.event.spoils_split' },
       // J9 前半已有 s12_14_chenxing_appears／s12_15_capture_jingli；后半需新增
-      { text: '与萧遥逸复盘：八骏已离，幽长老被杀，北府兵权归谢幼度', status: 'ready', stageId: 'lcq.stage_09_trade_and_escape', eventId: 'lcq.event.s09_01_eight_steeds_leave' },
+      { text: '看清分赃：萧家江宁、云家盐业、你一无所得', status: 'ready', stageId: 'lcq.stage_09_trade_and_escape', eventId: 'lcq.event.spoils_split' },
       // 顶点占位：原文未明，称号待定（seq 334「程宗扬无所得」）
       // ⏳ 扩写部分，本阶段不再细化（用户裁定 2026-08-16）：正典无此拍，只标未来待扩。
+      { text: '与萧遥逸复盘：八骏已离，幽长老被杀，北府兵权归谢幼度', status: 'ready', stageId: 'lcq.stage_09_trade_and_escape', eventId: 'lcq.event.s09_01_eight_steeds_leave' },
       { text: '问清王茂弘：相府无为让权给萧侯，承诺保晋国二十年太平', status: 'ready', stageId: 'lcq.stage_09_trade_and_escape', eventId: 'lcq.event.xiangfu_stance' },
       { text: '收下泉玉姬用一魂一魄炼的魂丹，她的生死自此在你手里', status: 'ready', stageId: 'lcq.stage_09_trade_and_escape', eventId: 'lcq.event.quanyuji_soul_pill' },
       { text: '在六扇门审问泉玉姬', status: 'ready', stageId: 'lcq.stage_09_trade_and_escape', eventId: 'lcq.event.s09_08_six_doors_confession' },
