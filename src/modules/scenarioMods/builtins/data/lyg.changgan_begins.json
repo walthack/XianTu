@@ -4991,7 +4991,8 @@
       "event.s03_09.done": false,
       "event.debut_shefuren.done": false,
       "event.changgan_fanseng_hunt.done": false,
-      "event.qinglongsi_te_master.done": false
+      "event.qinglongsi_te_master.done": false,
+      "event.xiaozi_teleported_into_dayanta.done": false
     },
     "events": [
       {
@@ -5952,6 +5953,71 @@
             }
           ]
         }
+      },
+      {
+        "id": "lyg.event.xiaozi_teleported_into_dayanta",
+        "name": "查明小紫如何进了大雁塔",
+        "description": "大慈恩寺僧众按「擅闯大雁塔」围住塔内的人。查下来，小紫并非从寺门闯进去，而是从兴庆宫内某处遗迹被莫名传送到塔里，这才暴露塔与宫之间有传送阵。僧众仍按擅闯围塔断水。吕雉如何一并在塔内，正典没写，这一拍不编。",
+        "axisId": "yange.65.1",
+        "axisAnchor": "六朝燕歌行·#65·第665章·家世",
+        "axisSeq": 1087,
+        "axisBeat": "大雁塔围塔之前先查清：小紫并非擅闯，而是从兴庆宫内某处遗迹被莫名传送入塔；十方丛林按擅闯围她。",
+        "critical": false,
+        "completion": [
+          {
+            "path": "flags.event.xiaozi_teleported_into_dayanta.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.xiao_zi",
+          "lyg.character.kuiji"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.shi_fang_cong_lin"
+        ],
+        "locationId": "lyg.location.daciensi",
+        "objective": "查明小紫如何进了大雁塔、僧众为何围她",
+        "exploration": {
+          "role": "investigate"
+        },
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "hear_dayanta_trespass_siege",
+              "label": "听清僧众按擅闯围塔",
+              "actionText": "我先把大慈恩寺这边的说法听清：僧众认定有人擅闯大雁塔，正在围塔断水。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已听清僧众按擅闯围塔；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "dayanta_siege_heard"
+            },
+            {
+              "id": "confirm_xiaozi_xingqing_teleport",
+              "label": "查明小紫如何进了大雁塔、僧众为何围她",
+              "actionText": "我查明：小紫不是从寺门闯进去的，而是从兴庆宫内某处遗迹被莫名传送进塔；僧众仍按擅闯围她。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已查明小紫如何进了大雁塔、僧众为何围她；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "dayanta_siege_heard"
+              ]
+            }
+          ]
+        }
       }
     ],
     "chapters": [
@@ -5980,6 +6046,7 @@
           "lyg.event.s03_04",
           "lyg.event.s03_05",
           "lyg.event.s03_06",
+          "lyg.event.xiaozi_teleported_into_dayanta",
           "lyg.event.s03_07",
           "lyg.event.s03_08",
           "lyg.event.s03_09",

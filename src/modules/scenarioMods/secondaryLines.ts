@@ -509,24 +509,25 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       // S3 并进 s12_16_corpse_poison
       // 高潮战不只一拍：它的展开在事件层现成躺着，先前每场仗只挑了中间那一条代表拍。
       { text: '萧遥逸展示十二座水泥城堡与悬楼，江州城防大幅提升', status: 'ready', stageId: 'lcq.stage_11_lieshan_battle', eventId: 'lcq.event.s11_02_cement_fortress' },
+      { text: '向江州问清三川口的结局——捧日军三个军被星月湖击溃，不是捷报', status: 'ready', stageId: 'lcq.stage_11_lieshan_battle', eventId: 'lcq.event.sanchuankou_result_rumor' },
       { text: '接下滕甫捐来的屯田司员外郎，把籍贯落进册', status: 'ready', stageId: 'lcq.stage_12_jiangzhou_counterwar', eventId: 'lcq.event.tuntian_post' },
       { text: '从秦翰手里拼死救下萧遥逸，击伤其一指，重伤线开启', status: 'ready', stageId: 'lcq.stage_12_jiangzhou_counterwar', eventId: 'lcq.event.s12_10_rescue_xiao' },
-      { text: '防守江州：宋军连夜两万余人携投石机、巢车、云梯全面攻城', status: 'ready', stageId: 'lcq.stage_12_jiangzhou_counterwar', eventId: 'lcq.event.s12_11_siege_begins' },
       // S4 抵达／祭墓建议并进 lin_an_arrive，不单开
+      { text: '防守江州：宋军连夜两万余人携投石机、巢车、云梯全面攻城', status: 'ready', stageId: 'lcq.stage_12_jiangzhou_counterwar', eventId: 'lcq.event.s12_11_siege_begins' },
       { text: '城门用水泥门闸和滚油烧掉宋军冲车，江州守城占先', status: 'ready', stageId: 'lcq.stage_12_jiangzhou_counterwar', eventId: 'lcq.event.s12_12_gate_fire' },
       { text: '协助江州退军：宋军粮尽大溃，秦翰选锋营断后', status: 'ready', stageId: 'lyl.jiangzhou_retreat', eventId: 'lyl.event.s01_01' },
       { text: '乘船前往临安——鱼长老登场', status: 'ready', stageId: 'lyl.jiangzhou_retreat', eventId: 'lyl.event.s01_02' },
       { text: '赶到荆溪村寨，斩杀屠寨凌辱妇女的王团练乡兵', status: 'ready', stageId: 'lyl.jiangzhou_retreat', eventId: 'lyl.event.s01_03' },
       { text: '尾随李师师马车到威远镖局，确认她突然回临安的缘故', status: 'ready', stageId: 'lyl.lin_an_bridge', eventId: 'lyl.event.tail_li_shishi' },
       { text: '识破皇城司盯梢，不动手，以富商身份掩护进明庆寺', status: 'ready', stageId: 'lyl.lin_an_bridge', eventId: 'lyl.event.evade_huangchengsi' },
-      { text: '绕武穆王府查清建筑方位，没惊动周边暗梢', status: 'ready', stageId: 'lyl.lin_an_bridge', eventId: 'lyl.event.survey_wumu_mansion' },
       // S5 另建议 lyl.event.lin_an_libu（临安落册）；文案用屯田司员外郎，不用「客卿」
-      { text: '在风波亭后拜祭谢艺并安顿临安落脚处——敖润、冯源、林清浦登场', status: 'ready', stageId: 'lyl.lin_an_black_sea', eventId: 'lyl.event.debut_ruan_sisters' },
+      { text: '绕武穆王府查清建筑方位，没惊动周边暗梢', status: 'ready', stageId: 'lyl.lin_an_bridge', eventId: 'lyl.event.survey_wumu_mansion' },
       // 序按 axisSeq：太皇太后 604 在高俅 624 之前，先前两条排反了。
+      { text: '在风波亭后拜祭谢艺并安顿临安落脚处——敖润、冯源、林清浦登场', status: 'ready', stageId: 'lyl.lin_an_black_sea', eventId: 'lyl.event.debut_ruan_sisters' },
       { text: '听俞子元回报，确认高衙内勒索威远镖局的条件', status: 'ready', stageId: 'lyl.lin_an_bridge', eventId: 'lyl.event.weiyuan_extortion' },
       { text: '明庆寺外看鲁智深倒拔垂杨柳、林冲上前通名——你按住秦桧，没有贸然结交', status: 'ready', stageId: 'lyl.lin_an_bridge', eventId: 'lyl.event.mingqingsi_lin_lu_meeting' },
-      { text: '办完吏部报到，查明林冲调走了哪些档案', status: 'ready', stageId: 'lyl.lin_an_bridge', eventId: 'lyl.event.libu_registration' },
       // S10 并进 changgan_interlude_04_beat
+      { text: '办完吏部报到，查明林冲调走了哪些档案', status: 'ready', stageId: 'lyl.lin_an_bridge', eventId: 'lyl.event.libu_registration' },
       { text: '便门瓦牡丹棚摸到宋军部署、贾师宪决策、林冲底细，线人疑在皇城司', status: 'ready', stageId: 'lyl.lin_an_bridge', eventId: 'lyl.event.lin_an_bridge_01_beat' },
       { text: '应李师师之邀登雷峰塔', status: 'ready', stageId: 'lyl.lin_an_bridge', eventId: 'lyl.event.leifeng_pagoda_invite' },
       { text: '雷峰塔拦住陆谦强带走李师师，逼退高衙内一行', status: 'ready', stageId: 'lyl.lin_an_bridge', eventId: 'lyl.event.leifeng_repel_gao' },
@@ -649,26 +650,27 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       { text: '入长安宣平坊落脚，石超接风——吕奉先已在城中惹事', status: 'ready', stageId: 'lyg.changgan_begins', eventId: 'lyg.event.s03_01' },
       { text: '街头撞见杨玉环驾轻车伤人训话，潘金莲提剑为她警戒', status: 'ready', stageId: 'lyg.changgan_begins', eventId: 'lyg.event.s03_03' },
       // T4 并进 buddhist_conspiracy_04／_06（火遁／佛咒，过程）
-      { text: '要救大雁塔里的小紫与吕雉——窥基断水，她握着铸铁炸弹', status: 'ready', stageId: 'lyg.changgan_begins', eventId: 'lyg.event.s03_08' },
+      { text: '查明小紫不是闯进大雁塔的——她从兴庆宫遗迹被传送进塔，僧众仍按擅闯围她', status: 'ready', stageId: 'lyg.changgan_begins', eventId: 'lyg.event.xiaozi_teleported_into_dayanta' },
       // T5 并进 _09_beat／_10_beat
+      { text: '要救大雁塔里的小紫与吕雉——窥基断水，她握着铸铁炸弹', status: 'ready', stageId: 'lyg.changgan_begins', eventId: 'lyg.event.s03_08' },
       { text: '夜访慈恩寺，碑上疑白行简是穿越者；汉使身份救走炸塔的小紫', status: 'ready', stageId: 'lyg.changgan_begins', eventId: 'lyg.event.s03_09' },
-      { text: '从杨玉环处厘清北司与佛门各自在查什么', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.north_bureau_buddhist_moves' },
       // T7 并进 ganlu_aftershock_07_beat
+      { text: '从杨玉环处厘清北司与佛门各自在查什么', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.north_bureau_buddhist_moves' },
       { text: '与小紫潜入青龙寺，摸清释特昧普的扩张方式与外援', status: 'ready', stageId: 'lyg.changgan_begins', eventId: 'lyg.event.qinglongsi_te_master' },
-      { text: '潜入青龙寺确认释特昧普的扩张方式与外援', status: 'ready', stageId: 'lyg.shixiang_ambush', eventId: 'lyg.event.investigate_te_master' },
       // T9 并进 shituolin_endgame_10_beat
       // 高潮战不只一拍：它的展开在事件层现成躺着，先前每场仗只挑了中间那一条代表拍。
+      { text: '潜入青龙寺确认释特昧普的扩张方式与外援', status: 'ready', stageId: 'lyg.shixiang_ambush', eventId: 'lyg.event.investigate_te_master' },
       { text: '把鸿胪寺的礼遇和朝会资格拿回来', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.honglusi_amends' },
       { text: '确认鸿胪寺恢复的礼遇与元正朝会资格——段文楚登场', status: 'ready', stageId: 'lyg.shixiang_ambush', eventId: 'lyg.event.shixiang_s11' },
       { text: '确认慈恩寺红莲演法与唐皇敕令之间的张力', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.cien_red_lotus' },
-      { text: '确认红莲演法与唐皇敕令之间的张力——观海登场', status: 'ready', stageId: 'lyg.shixiang_ambush', eventId: 'lyg.event.shixiang_s12' },
       // T11：objective 是阻止夺舍；axisBeat 写明当场没拦住
-      { text: '元正朝会上核验徐君房的地球仪，对照秦使说辞', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.yuanzheng_globe' },
+      { text: '确认红莲演法与唐皇敕令之间的张力——观海登场', status: 'ready', stageId: 'lyg.shixiang_ambush', eventId: 'lyg.event.shixiang_s12' },
       // 序按 axisSeq：搜查宫中 1382 在受封 1396 之前，先前顶点排在了它前面。
       // 搜查宫中那一拍是原著段与续写第二幕的咬合点，但仍早于受封，顶点收尾。
+      { text: '元正朝会上核验徐君房的地球仪，对照秦使说辞', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.yuanzheng_globe' },
       { text: '核验徐君房的地球仪知识与秦使说辞', status: 'ready', stageId: 'lyg.shixiang_ambush', eventId: 'lyg.event.shixiang_s13' },
-      { text: '查宣平坊那桩宦官命案，别急着定谁是幕后', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.xuanping_eunuch_murder' },
       // T14 用户裁定（2026-08-16）：没剧本，先留空，不要自行续写
+      { text: '查宣平坊那桩宦官命案，别急着定谁是幕后', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.xuanping_eunuch_murder' },
       { text: '摸清废弃兴庆宫，标出地下入口', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.survey_xingqing_palace' },
       { text: '稳住太子伤势，把误伤消息压下去', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.prince_injury_control' },
       { text: '在水香楼布好诱捕', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.shuixiang_lure_setup' },

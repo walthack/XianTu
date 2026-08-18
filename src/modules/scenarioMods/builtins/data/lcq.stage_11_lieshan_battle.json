@@ -4054,6 +4054,7 @@
       "event.s11_08.done": false,
       "event.s11_09.done": false,
       "event.s11_10.done": false,
+      "event.sanchuankou_result_rumor.done": false,
       "chapter.lcq.stage_11_lieshan_battle.fortress.started": true,
       "chapter.lcq.stage_11_lieshan_battle.fortress.done": false,
       "chapter.lcq.stage_11_lieshan_battle.sanchuankou.started": false,
@@ -4094,7 +4095,8 @@
           "lcq.event.s11_04_xingyue_appears",
           "lcq.event.s11_05_wangtao_breaks",
           "lcq.event.s11_06_snow_battle",
-          "lcq.event.s11_07_camp_falls"
+          "lcq.event.s11_07_camp_falls",
+          "lcq.event.sanchuankou_result_rumor"
         ],
         "activation": [
           {
@@ -5286,6 +5288,81 @@
         },
         "exploration": {
           "role": "payoff"
+        }
+      },
+      {
+        "id": "lcq.event.sanchuankou_result_rumor",
+        "name": "听清三川口战果",
+        "description": "江州城里已经在传三川口的结局：捧日军三个军被星月湖大营击溃，刘平、卢政、郭遵战死，葬在三川口；星月湖折损约二百，宋军折了数千。这不是捷报。定川寨还没打到，不要把后一仗的胜负提前写进这一拍。",
+        "axisId": "qingyu.248.1",
+        "axisAnchor": "六朝清羽记·#248·第244章·篓鱼",
+        "axisSeq": 459,
+        "axisBeat": "江州传言坐实：捧日军三个军在三川口被星月湖大营击溃，刘平、卢政、郭遵战死安葬于三川口；星月湖约二百伤亡，宋军折损数千。",
+        "critical": false,
+        "completion": [
+          {
+            "path": "flags.event.sanchuankou_result_rumor.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.xiao_yao_yi"
+        ],
+        "relatedFactionIds": [
+          "lyg.faction.song_state",
+          "liuchao.faction.xing_yue_hu"
+        ],
+        "locationId": "liuchao.location.jiangzhou",
+        "objective": "向江州城里问清三川口那一仗的结局",
+        "exploration": {
+          "role": "payoff"
+        },
+        "offscreenResolution": {
+          "id": "offscreen.lcq.sanchuankou_result_rumor",
+          "afterStallTurns": 8,
+          "flagKey": "world.sanchuankou_result.offscreen_resolved",
+          "resolvedEventIds": [
+            "lcq.event.sanchuankou_result_rumor"
+          ],
+          "worldDelta": "你没亲自去问，三川口的结局还是传开了：捧日军三个军被星月湖击溃，刘平、卢政、郭遵战死。你只是听人转述，不算你打完这一仗，也不记功赏。",
+          "evidence": "MiniMax 重抽 qingyu「第244章·篓鱼」写明捧日军三个军在三川口被星月湖大营击溃。B 模型：缺席只进场外结算，不伪记玩家完成，不给好感声望。"
+        },
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "hear_sanchuankou_casualty_rumor",
+              "label": "听江州传言里的三川口伤亡",
+              "actionText": "我在江州城里把三川口的伤亡传言听全：谁溃了、谁没回来、折了多少人。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已听清江州传言里的三川口伤亡；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "sanchuankou_rumor_heard"
+            },
+            {
+              "id": "confirm_sanchuankou_song_rout",
+              "label": "向江州城里问清三川口那一仗的结局",
+              "actionText": "我向江州城里问清并坐实：三川口那一仗是捧日军三个军被星月湖击溃，不是捷报。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已向江州城里问清三川口那一仗的结局；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "sanchuankou_rumor_heard"
+              ]
+            }
+          ]
         }
       }
     ],
