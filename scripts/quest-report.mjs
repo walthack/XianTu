@@ -222,6 +222,13 @@ function render(r) {
   const pc = s => ((s - 1) / MAX * 100).toFixed(3);
   const esc = s => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
   const cnt = (t, s) => t.nodes.filter(n => n.status === s).length;
+  // 批注槽：`<artifact-sync>` 区域内的 contenteditable —— 读者敲进去的字会存进本页文档，
+  // 并回到 Claude 会话（runtime contract 0.2.4）。注意三条硬约束：
+  //   · `<textarea>` 的值**不会**被捕获，必须用 contenteditable 或 <input>；
+  //   · 区域内容必须是页面里真实存在的 HTML（本报表是构建期生成，满足）；
+  //   · 每块可编辑文本独占一个无子元素的容器。
+  const cmt = (key, hint) => `<artifact-sync><span class="cmt" contenteditable="true" `
+    + `data-k="${esc(key)}" data-hint="${esc(hint || '批注')}"></span></artifact-sync>`;
   const seqOf = n => n.seq ?? undefined;
 
   const track = t => {
@@ -343,6 +350,15 @@ ol.nodes li.p .sq{color:var(--ink3)}
 .hk{font-size:12px;color:var(--ink2);padding:2px 0}
 .hk b{color:var(--tan);font-weight:600}
 .hk em{font-style:normal;font-size:10px;color:var(--ink3)}
+.cmt{display:inline-block;min-width:190px;padding:2px 8px;border-bottom:1px dashed var(--edge);
+ font-size:13px;color:var(--zhu);outline:none;vertical-align:baseline}
+.cmt:empty::before{content:attr(data-hint);color:var(--ink3);opacity:.5}
+.cmt:focus{background:var(--card);border-bottom-color:var(--qing);box-shadow:0 1px 0 0 var(--qing)}
+.cmt:not(:empty){border-bottom-color:var(--zhu);background:color-mix(in srgb,var(--zhu) 7%,transparent)}
+.linecmt{font-size:12px;color:var(--ink3);margin:4px 0 8px}
+.cmthow{font-size:12px;color:var(--ink2);background:var(--card);border:1px solid var(--edge);
+ border-left:3px solid var(--qing);padding:8px 12px;margin:14px 0 0}
+[artifact-sync-state=off] .cmt{border-bottom-style:solid;border-bottom-color:var(--ink3);opacity:.55}
 </style>
 <div class="wrap">
 <header><h1 class="serif">三级任务链</h1>
@@ -357,6 +373,10 @@ ol.nodes li.p .sq{color:var(--ink3)}
  <div class="stat"><b class="mono">${charHooks.size}</b><span>人物挂点</span></div>
 </div></header>
 
+<div class="cmthow"><b>批注怎么用</b>　虚线处点一下就能直接打字。写下的批注会随本页保存，
+并回到 Claude 那边——<b>不需要复制粘贴给我</b>。每个节点、每条线、每条待审判断各有一个槽。
+若虚线变成实线灰色，说明这个视图是只读的，批注不会被保存。</div>
+
 <h2>本轮待审</h2>
 <div class="box" style="padding:14px 16px">
 <p class="hk" style="margin-bottom:10px">这一轮由 Claude 做出的判断，<b>每一条都需要过目</b>。「你可能想推翻的」一栏写的是我自己知道的薄弱处。</p>
@@ -365,6 +385,7 @@ ${PENDING_REVIEW.map((p, i) => `<div class="ln" style="margin:0 0 12px">
   <div class="hk" style="padding:4px 0"><b>做了</b>　${esc(p.did)}</div>
   <div class="hk" style="padding:4px 0"><b>依据</b>　${esc(p.basis)}</div>
   <div class="hk" style="padding:4px 0"><b>你可能想推翻的</b>　${esc(p.risk)}</div>
+  <div class="hk" style="padding:4px 0"><b>你的裁定</b>　${cmt('verdict:' + p.tag + ':' + i, '通过 / 改成…… / 推翻，理由')}</div>
 </div>`).join('')}
 </div>
 
@@ -388,6 +409,7 @@ ${rows}${charRow}
 ${r.tiers.map(t => `<div class="ln">
   <h3 class="serif">${esc(t.name)}<span class="tg">${t.tier === 1 ? '一级·主轴' : t.kind === 'sect' ? '二级·宗派' : t.kind === 'commerce' ? '二级·商道' : '二级·国家'}</span></h3>
   ${t.hint ? `<div class="hint">${esc(t.hint)}</div>` : ''}
+  <div class="linecmt">整条线的批注　${cmt('line:' + t.name, '这条线整体怎么看')}</div>
   <ol class="nodes">${t.nodes.map((n, i) => {
     const ev = n.eventId ? events.get(n.eventId) : undefined;
     const st = n.status === 'ready' ? 'r' : n.status === 'new' ? 'w' : 'p';
@@ -404,6 +426,7 @@ ${r.tiers.map(t => `<div class="ln">
         ${n.status === 'new' ? '<span class="badge todo">待写 event</span>' : ''}
         ${n.status === 'pending' ? '<span class="badge pend">未来待扩</span>' : ''}
         ${hookRows}
+        ${cmt('node:' + (n.eventId || t.name + '#' + (i + 1)), '这一拍的批注')}
       </span></li>`;
   }).join('')}</ol></div>`).join('')}
 

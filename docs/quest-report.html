@@ -82,6 +82,15 @@ ol.nodes li.p .sq{color:var(--ink3)}
 .hk{font-size:12px;color:var(--ink2);padding:2px 0}
 .hk b{color:var(--tan);font-weight:600}
 .hk em{font-style:normal;font-size:10px;color:var(--ink3)}
+.cmt{display:inline-block;min-width:190px;padding:2px 8px;border-bottom:1px dashed var(--edge);
+ font-size:13px;color:var(--zhu);outline:none;vertical-align:baseline}
+.cmt:empty::before{content:attr(data-hint);color:var(--ink3);opacity:.5}
+.cmt:focus{background:var(--card);border-bottom-color:var(--qing);box-shadow:0 1px 0 0 var(--qing)}
+.cmt:not(:empty){border-bottom-color:var(--zhu);background:color-mix(in srgb,var(--zhu) 7%,transparent)}
+.linecmt{font-size:12px;color:var(--ink3);margin:4px 0 8px}
+.cmthow{font-size:12px;color:var(--ink2);background:var(--card);border:1px solid var(--edge);
+ border-left:3px solid var(--qing);padding:8px 12px;margin:14px 0 0}
+[artifact-sync-state=off] .cmt{border-bottom-style:solid;border-bottom-color:var(--ink3);opacity:.55}
 </style>
 <div class="wrap">
 <header><h1 class="serif">三级任务链</h1>
@@ -96,6 +105,10 @@ ol.nodes li.p .sq{color:var(--ink3)}
  <div class="stat"><b class="mono">71</b><span>人物挂点</span></div>
 </div></header>
 
+<div class="cmthow"><b>批注怎么用</b>　虚线处点一下就能直接打字。写下的批注会随本页保存，
+并回到 Claude 那边——<b>不需要复制粘贴给我</b>。每个节点、每条线、每条待审判断各有一个槽。
+若虚线变成实线灰色，说明这个视图是只读的，批注不会被保存。</div>
+
 <h2>本轮待审</h2>
 <div class="box" style="padding:14px 16px">
 <p class="hk" style="margin-bottom:10px">这一轮由 Claude 做出的判断，<b>每一条都需要过目</b>。「你可能想推翻的」一栏写的是我自己知道的薄弱处。</p>
@@ -104,46 +117,55 @@ ol.nodes li.p .sq{color:var(--ink3)}
   <div class="hk" style="padding:4px 0"><b>做了</b>　把事件层里 seq 134→885 的商业弧落成一条线，12 个 ready 节点。它既不锚地方也不锚人，锚「你第一次发现生意能办武力办不成的事」那一拍（seq 134）。</div>
   <div class="hk" style="padding:4px 0"><b>依据</b>　你从「盘江股东大会」一条孤儿反查出整条线缺失。实测以商业为主语的拍 18 条，去掉隔离件后是全书跨度最长的一条连续弧。</div>
   <div class="hk" style="padding:4px 0"><b>你可能想推翻的</b>　锚点选 seq 134 是我定的——更早的 s03_03「以新奇器物向苏妲己索酬」(seq 38) 在隔离关，锚上去线就打不开。若你要从更早开线，需先放出隔离件。</div>
+  <div class="hk" style="padding:4px 0"><b>你的裁定</b>　<artifact-sync><span class="cmt" contenteditable="true" data-k="verdict:新增线:0" data-hint="通过 / 改成…… / 推翻，理由"></span></artifact-sync></div>
 </div><div class="ln" style="margin:0 0 12px">
   <h3 class="serif" style="font-size:15px">2. 把 4 条我原判「纯背景」的拍改判为情节拍<span class="tg">重新归类</span></h3>
   <div class="hk" style="padding:4px 0"><b>做了</b>　宦官嫁祸(1217)／宦官再分权(1321)／独柳树刑场(1335)／凉州盟擂台(1204) 落唐国线；入微突破(297) 按其实质「以珊瑚匕首逼退苏妲己」落晋国线；探视金蜜镝谈帝统(995) 落汉国线。</div>
   <div class="hk" style="padding:4px 0"><b>依据</b>　你逐条驳回了我的「背景」判断，查证四字段后属实。</div>
   <div class="hk" style="padding:4px 0"><b>你可能想推翻的</b>　凉州盟(1204) 落唐国线是我的选择——它是铁马堂的擂台赛，也可归商道线（镖局生意）或独立江湖线。</div>
+  <div class="hk" style="padding:4px 0"><b>你的裁定</b>　<artifact-sync><span class="cmt" contenteditable="true" data-k="verdict:重新归类:1" data-hint="通过 / 改成…… / 推翻，理由"></span></artifact-sync></div>
 </div><div class="ln" style="margin:0 0 12px">
   <h3 class="serif" style="font-size:15px">3. 两条流言不上链<span class="tg">归 trivial</span></h3>
   <div class="hk" style="padding:4px 0"><b>做了</b>　《阳武侯小史》流言、核武不扩散条约·惊魂——不挂任何线。</div>
   <div class="hk" style="padding:4px 0"><b>依据</b>　你的裁定：算 trivial，日后作城市流言或杂项书籍提及。</div>
   <div class="hk" style="padding:4px 0"><b>你可能想推翻的</b>　《阳武侯小史》其实直接关联血脉正统化（舆论把你说成阳武侯嫡子），与主轴的血脉要求同题。要进主轴的话现在说。</div>
+  <div class="hk" style="padding:4px 0"><b>你的裁定</b>　<artifact-sync><span class="cmt" contenteditable="true" data-k="verdict:归 trivial:2" data-hint="通过 / 改成…… / 推翻，理由"></span></artifact-sync></div>
 </div><div class="ln" style="margin:0 0 12px">
   <h3 class="serif" style="font-size:15px">4. 主轴最后一个待写 event 判为「不必新增」<span class="tg">消解 new</span></h3>
   <div class="hk" style="padding:4px 0"><b>做了</b>　「进鬼王峒并当面辨认碧姬」原挂隔离关等裁定，改指已重建的可达件 geluo_summons_biji(seq 158)。</div>
   <div class="hk" style="padding:4px 0"><b>依据</b>　description 明写「程宗扬首次当面见到谢艺寻找的人」，正是这一拍。与昭南线双喂。</div>
   <div class="hk" style="padding:4px 0"><b>你可能想推翻的</b>　双喂＝同一个 event 同时喂主轴与昭南。要分开就得新增一条 event。</div>
+  <div class="hk" style="padding:4px 0"><b>你的裁定</b>　<artifact-sync><span class="cmt" contenteditable="true" data-k="verdict:消解 new:3" data-hint="通过 / 改成…… / 推翻，理由"></span></artifact-sync></div>
 </div><div class="ln" style="margin:0 0 12px">
   <h3 class="serif" style="font-size:15px">5. 补了 8 处断拍，全部用现成 event，零新增<span class="tg">补断拍</span></h3>
   <div class="hk" style="padding:4px 0"><b>做了</b>　黑魔海 +2（巢穴逆转 419／静善夜袭 596）、晋国 +1（北府兵解围 287）、汉国 +1（郭解之死 956）、唐国 +2（小紫被救走 1090／鱼弘志弑唐皇 1312）、昭南 +1（苏妲己水镜传讯 100）、宋国 +1（林冲刺配 584）。</div>
   <div class="hk" style="padding:4px 0"><b>依据</b>　Claude 与 Grok 各自独立复审。Grok 报 10 处（6 个建议 id 我逐条核实，6/6 真实可达未认领）；我机械查出 2 处，恰在 Grok 判为干净的那两条线上。</div>
   <div class="hk" style="padding:4px 0"><b>你可能想推翻的</b>　每一处的节点文案是我写的——文案怎么说这一拍，决定玩家看到什么。</div>
+  <div class="hk" style="padding:4px 0"><b>你的裁定</b>　<artifact-sync><span class="cmt" contenteditable="true" data-k="verdict:补断拍:4" data-hint="通过 / 改成…… / 推翻，理由"></span></artifact-sync></div>
 </div><div class="ln" style="margin:0 0 12px">
   <h3 class="serif" style="font-size:15px">6. 删掉两处「文案在骗玩家」的半句<span class="tg">改文案</span></h3>
   <div class="hk" style="padding:4px 0"><b>做了</b>　「董卓无符入京；刘建伏诛」「旁观李辅国审判；唐皇被弑」——删掉的那半句在对应 event 四字段里根本不存在。</div>
   <div class="hk" style="padding:4px 0"><b>依据</b>　Grok 抓出，我核实属实。真正的弑君是 seq 1312 另一条 event，已补为独立节点。</div>
   <div class="hk" style="padding:4px 0"><b>你可能想推翻的</b>　无，这是修错。</div>
+  <div class="hk" style="padding:4px 0"><b>你的裁定</b>　<artifact-sync><span class="cmt" contenteditable="true" data-k="verdict:改文案:5" data-hint="通过 / 改成…… / 推翻，理由"></span></artifact-sync></div>
 </div><div class="ln" style="margin:0 0 12px">
   <h3 class="serif" style="font-size:15px">7. 汉国宫变段做成「去了现场／没去现场」两条分支<span class="tg">新机制</span></h3>
   <div class="hk" style="padding:4px 0"><b>做了</b>　901「从传闻得知…」仅当没走过 891 含光殿现场时出现；902「决定是否拥立定陶王」仅当没走过 895 时出现。另在 4 个可达件上补了场外结算合同。</div>
   <div class="hk" style="padding:4px 0"><b>依据</b>　你的设计问题。查证发现引擎早有 offscreenResolution ＋ conditions 两件现成机制，而这段的 4 条合同挂在隔离关原件上、永不触发——接线当初就建了，断在隔离迁移上。</div>
   <div class="hk" style="padding:4px 0"><b>你可能想推翻的</b>　门控判据取 891／895 是我定的。若玩家走过 891 却没走过 896，关于刘建的部分对他仍是新消息——我按「入口拍」一刀切，没逐条分解。</div>
+  <div class="hk" style="padding:4px 0"><b>你的裁定</b>　<artifact-sync><span class="cmt" contenteditable="true" data-k="verdict:新机制:6" data-hint="通过 / 改成…… / 推翻，理由"></span></artifact-sync></div>
 </div><div class="ln" style="margin:0 0 12px">
   <h3 class="serif" style="font-size:15px">8. 人物任务落成模块，但尚未接进游戏<span class="tg">待接线</span></h3>
   <div class="hk" style="padding:4px 0"><b>做了</b>　characterQuests.ts：8 条线 54 拍 ＋ A 档 29 人 35 条单点高光，id 全部解析成真实 event。</div>
   <div class="hk" style="padding:4px 0"><b>依据</b>　第三级此前零代码，只存在于 markdown 里。</div>
   <div class="hk" style="padding:4px 0"><b>你可能想推翻的</b>　尚未接进 RightSidebar／storyContext，且它读上级的认领表——上级一动就要重抽。你指出的顺序问题即此。</div>
+  <div class="hk" style="padding:4px 0"><b>你的裁定</b>　<artifact-sync><span class="cmt" contenteditable="true" data-k="verdict:待接线:7" data-hint="通过 / 改成…… / 推翻，理由"></span></artifact-sync></div>
 </div><div class="ln" style="margin:0 0 12px">
   <h3 class="serif" style="font-size:15px">9. 商贾线设计落档，后期做<span class="tg">待落地</span></h3>
   <div class="hk" style="padding:4px 0"><b>做了</b>　docs/R3-11-COMMERCE-TIER-DESIGN：变现层设计（regionStanding × 商道台阶 → 每回合收益）。</div>
   <div class="hk" style="padding:4px 0"><b>依据</b>　你的设想：通过商业版图扩展（攻略各国获地区声望）获得稳定金钱／物品。</div>
   <div class="hk" style="padding:4px 0"><b>你可能想推翻的</b>　阻塞裁定 P1：地区立足度目前是 STAGE_ORDER 走过比例的纯派生量（打到哪赚到哪），玩家无法主动经营某地。甲（保持派生）／乙（加可投入分量）未定。</div>
+  <div class="hk" style="padding:4px 0"><b>你的裁定</b>　<artifact-sync><span class="cmt" contenteditable="true" data-k="verdict:待落地:8" data-hint="通过 / 改成…… / 推翻，理由"></span></artifact-sync></div>
 </div>
 </div>
 
@@ -187,6 +209,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
 <div class="ln">
   <h3 class="serif">主轴<span class="tg">一级·主轴</span></h3>
   
+  <div class="linecmt">整条线的批注　<artifact-sync><span class="cmt" contenteditable="true" data-k="line:主轴" data-hint="这条线整体怎么看"></span></artifact-sync></div>
   <ol class="nodes"><li class="r">
       <span class="sq mono">8</span>
       <span class="bd">
@@ -197,6 +220,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         <div class="hooks"><div class="hk">↳ <b>卓云君</b>　半兽人围上来。她用烈火法术救下你和月霜 <em>［插入］</em></div></div>
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s01_03" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">18</span>
       <span class="bd">
@@ -207,6 +231,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s01_06" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">19</span>
       <span class="bd">
@@ -217,6 +242,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s01_05" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">20</span>
       <span class="bd">
@@ -227,6 +253,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s02_01" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">30</span>
       <span class="bd">
@@ -237,6 +264,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s02_02" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">41</span>
       <span class="bd">
@@ -247,6 +275,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.baihu_shangguan_escape" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">63</span>
       <span class="bd">
@@ -257,6 +286,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         <div class="hooks"><div class="hk">↳ <b>谢艺</b>　空村里，他指出尸体旁的鬼王峒血符。你第一次看见他本人动手 <em>［插入］</em></div></div>
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s03b_snake_flower_bridge_03" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">121</span>
       <span class="bd">
@@ -267,6 +297,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         <div class="hooks"><div class="hk">↳ <b>谢艺</b>　他换上现代休闲装，跟你谈玻璃，并吐出岳帅晕血、遗腹女 <em>［插入］</em></div></div>
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s04b_lingfei_baiyi_crisis_18" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">158</span>
       <span class="bd">
@@ -277,6 +308,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.geluo_summons_biji" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">164</span>
       <span class="bd">
@@ -287,6 +319,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s05b_01_binu_reveals_xiaozi" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">195</span>
       <span class="bd">
@@ -297,6 +330,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s05b_10_slave_revolt_and_phoenix_change" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">211</span>
       <span class="bd">
@@ -307,6 +341,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.slay_dragon" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">636</span>
       <span class="bd">
@@ -317,6 +352,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.taiquan_sacred_fruit_04" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">640</span>
       <span class="bd">
@@ -327,6 +363,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.taiquan_sacred_fruit_05" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">663</span>
       <span class="bd">
@@ -337,6 +374,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.taiquan_sacred_fruit_10" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">667</span>
       <span class="bd">
@@ -347,6 +385,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.find_exit" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">695</span>
       <span class="bd">
@@ -357,6 +396,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.taiquan_afterfall_03_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">708</span>
       <span class="bd">
@@ -367,6 +407,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.taiquan_afterfall_05_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">768</span>
       <span class="bd">
@@ -377,6 +418,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.taiquan_afterfall_09_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">936</span>
       <span class="bd">
@@ -387,6 +429,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.han_palace_endgame_07_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">990</span>
       <span class="bd">
@@ -397,6 +440,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.s02_02" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">996</span>
       <span class="bd">
@@ -407,6 +451,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.s02_08" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1010</span>
       <span class="bd">
@@ -417,6 +462,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.mijing_superuser_roster" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1050</span>
       <span class="bd">
@@ -427,6 +473,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.han_succession_08_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1053</span>
       <span class="bd">
@@ -437,6 +484,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.han_succession_09_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1123</span>
       <span class="bd">
@@ -447,6 +495,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.changgan_interlude_02_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">?</span>
       <span class="bd">
@@ -457,6 +506,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.plan_counterattack" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">?</span>
       <span class="bd">
@@ -467,6 +517,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.yin_yang_counter" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="p">
       <span class="sq mono"></span>
       <span class="bd">
@@ -477,6 +528,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         <span class="badge pend">未来待扩</span>
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:主轴#29" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="p">
       <span class="sq mono"></span>
       <span class="bd">
@@ -487,6 +539,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         <span class="badge pend">未来待扩</span>
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:主轴#30" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="p">
       <span class="sq mono"></span>
       <span class="bd">
@@ -497,9 +550,11 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         <span class="badge pend">未来待扩</span>
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:主轴#31" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li></ol></div><div class="ln">
   <h3 class="serif">商道<span class="tg">二级·商道</span></h3>
   <div class="hint">兵器一笔买卖就化开了刀兵——这条路你走得通，往下还有织坊、粮仓、钱庄和一整个商社。</div>
+  <div class="linecmt">整条线的批注　<artifact-sync><span class="cmt" contenteditable="true" data-k="line:商道" data-hint="这条线整体怎么看"></span></artifact-sync></div>
   <ol class="nodes"><li class="r">
       <span class="sq mono">134</span>
       <span class="bd">
@@ -510,6 +565,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.weapon_deal_with_geluo" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">359</span>
       <span class="bd">
@@ -520,6 +576,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         <div class="hooks"><div class="hk">↳ <b>小紫</b>　为拉链坊归属兴师问罪，以织坊交换平息（补进 §3） <em>［插入］</em></div></div>
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s09_04_weaving_trade" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">404</span>
       <span class="bd">
@@ -530,6 +587,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s10_05_war_funds" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">465</span>
       <span class="bd">
@@ -540,6 +598,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s11_09_grain_plan" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">496</span>
       <span class="bd">
@@ -550,6 +609,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s12_05_granary_fire_plan" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">534</span>
       <span class="bd">
@@ -560,6 +620,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.pengyi_takeover" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">550</span>
       <span class="bd">
@@ -570,6 +631,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s12_18_linan_grain_order" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">575</span>
       <span class="bd">
@@ -580,6 +642,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.xiaoyingzhou_paper_plan" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">578</span>
       <span class="bd">
@@ -590,6 +653,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.xiaoyingzhou_paper_mint" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">618</span>
       <span class="bd">
@@ -600,6 +664,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.xiaoyingzhou_cement_truce" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">644</span>
       <span class="bd">
@@ -610,6 +675,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.taiquan_sacred_fruit_06" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">885</span>
       <span class="bd">
@@ -620,6 +686,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.han_limit_field" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="p">
       <span class="sq mono"></span>
       <span class="bd">
@@ -630,9 +697,11 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         <span class="badge pend">未来待扩</span>
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:商道#13" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li></ol></div><div class="ln">
   <h3 class="serif">太乙真宗<span class="tg">二级·宗派</span></h3>
   <div class="hint">王哲既已传功托付，太乙真宗的门就对你开着——去找他问清那份托付。</div>
+  <div class="linecmt">整条线的批注　<artifact-sync><span class="cmt" contenteditable="true" data-k="line:太乙真宗" data-hint="这条线整体怎么看"></span></artifact-sync></div>
   <ol class="nodes"><li class="r">
       <span class="sq mono">8</span>
       <span class="bd">
@@ -643,6 +712,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s01_04" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">20</span>
       <span class="bd">
@@ -653,6 +723,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s02_01" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">30</span>
       <span class="bd">
@@ -663,6 +734,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s02_02" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">54</span>
       <span class="bd">
@@ -673,6 +745,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.zixi_intercept" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">237</span>
       <span class="bd">
@@ -683,6 +756,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.wangzhe_letter" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">391</span>
       <span class="bd">
@@ -693,6 +767,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.yeying_seat_struggle" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">408</span>
       <span class="bd">
@@ -703,6 +778,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s10_06_ruined_temple" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">413</span>
       <span class="bd">
@@ -713,6 +789,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.yuanxingjian_interrogated" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">463</span>
       <span class="bd">
@@ -723,6 +800,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.qiushaojun_breaks_with_linzhilan" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">574</span>
       <span class="bd">
@@ -733,6 +811,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.xiaoyingzhou_blacksea_trap_02_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">581</span>
       <span class="bd">
@@ -743,6 +822,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.xiaoyingzhou_lin_takes_seat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">629</span>
       <span class="bd">
@@ -753,6 +833,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         <div class="hooks"><div class="hk">↳ <b>卓云君</b>　翠微园。她把 ZY5 的价拿到你面前兑现：你承诺对付现任掌教蔺采泉，并写下盘江程氏股份 <em>［插入］</em></div></div>
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.sacred_against_lin" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="p">
       <span class="sq mono"></span>
       <span class="bd">
@@ -763,6 +844,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         <span class="badge pend">未来待扩</span>
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:太乙真宗#13" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="p">
       <span class="sq mono"></span>
       <span class="bd">
@@ -773,9 +855,11 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         <span class="badge pend">未来待扩</span>
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:太乙真宗#14" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li></ol></div><div class="ln">
   <h3 class="serif">星月湖<span class="tg">二级·宗派</span></h3>
   <div class="hint">想搭上星月湖，去找八骏——先是谢艺，江州之后可找萧遥逸。</div>
+  <div class="linecmt">整条线的批注　<artifact-sync><span class="cmt" contenteditable="true" data-k="line:星月湖" data-hint="这条线整体怎么看"></span></artifact-sync></div>
   <ol class="nodes"><li class="r">
       <span class="sq mono">117</span>
       <span class="bd">
@@ -786,6 +870,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s04b_lingfei_baiyi_crisis_16" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">128</span>
       <span class="bd">
@@ -796,6 +881,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.xieyi_biling_war" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">211</span>
       <span class="bd">
@@ -806,6 +892,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.slay_dragon" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">232</span>
       <span class="bd">
@@ -816,6 +903,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         <div class="hooks"><div class="hk">↳ <b>萧遥逸</b>　他向你痛陈左武全军覆没。这是他不靠骨灰的登场拍 <em>［插入］</em></div></div>
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s07_01_old_case" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">251</span>
       <span class="bd">
@@ -826,6 +914,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s07_05_eight_steeds_informed" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">276</span>
       <span class="bd">
@@ -836,6 +925,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         <div class="hooks"><div class="hk">↳ <b>萧遥逸</b>　他代表星月湖宣布：全力支持你，向你开放所有资源 <em>［插入］</em></div></div>
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.xiao_opens_resources" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">308</span>
       <span class="bd">
@@ -846,6 +936,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s08_08_gumingyin_plot" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">335</span>
       <span class="bd">
@@ -856,6 +947,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s09_01_eight_steeds_leave" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">404</span>
       <span class="bd">
@@ -866,6 +958,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s10_05_war_funds" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">439</span>
       <span class="bd">
@@ -876,6 +969,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s11_03_protect_yueshuang" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">444</span>
       <span class="bd">
@@ -886,6 +980,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s11_04_xingyue_appears" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">448</span>
       <span class="bd">
@@ -896,6 +991,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s11_05_wangtao_breaks" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">450</span>
       <span class="bd">
@@ -906,6 +1002,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s11_06_snow_battle" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">500</span>
       <span class="bd">
@@ -916,6 +1013,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s12_06_dragon_guard_routs" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">505</span>
       <span class="bd">
@@ -926,6 +1024,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s12_07_left_wing_raid" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">511</span>
       <span class="bd">
@@ -936,6 +1035,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s12_08_dingchuan_raid" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">516</span>
       <span class="bd">
@@ -946,6 +1046,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s12_09_ge_huaimin_killed" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">534</span>
       <span class="bd">
@@ -956,6 +1057,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.pengyi_takeover" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">557</span>
       <span class="bd">
@@ -966,6 +1068,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.decode_bianmenwa_note" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">558</span>
       <span class="bd">
@@ -976,6 +1079,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.meet_xue_yanshan" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">559</span>
       <span class="bd">
@@ -986,6 +1090,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.identify_xue_cold_poison" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">568</span>
       <span class="bd">
@@ -996,6 +1101,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.xue_yanshan_slain" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">626</span>
       <span class="bd">
@@ -1006,6 +1112,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.lin_an_bridge_xieyi_tomb" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="p">
       <span class="sq mono"></span>
       <span class="bd">
@@ -1016,9 +1123,11 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         <span class="badge pend">未来待扩</span>
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:星月湖#24" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li></ol></div><div class="ln">
   <h3 class="serif">黑魔海／毒宗<span class="tg">二级·宗派</span></h3>
   <div class="hint">鸦人尸体上搜出一张白纸，云苍峰说那是秘法传讯——黑魔海与鬼王峒勾结；</div>
+  <div class="linecmt">整条线的批注　<artifact-sync><span class="cmt" contenteditable="true" data-k="line:黑魔海／毒宗" data-hint="这条线整体怎么看"></span></artifact-sync></div>
   <ol class="nodes"><li class="r">
       <span class="sq mono">78</span>
       <span class="bd">
@@ -1029,6 +1138,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s04_04" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">93</span>
       <span class="bd">
@@ -1039,6 +1149,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s04b_lingfei_baiyi_crisis_04" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">222</span>
       <span class="bd">
@@ -1049,6 +1160,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.shanghou_revealed" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">226</span>
       <span class="bd">
@@ -1059,6 +1171,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.shanghou_cures_ice_gu" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">289</span>
       <span class="bd">
@@ -1069,6 +1182,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s08_04_sudaji_enters" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">300</span>
       <span class="bd">
@@ -1079,6 +1193,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.palm_oath_shanghou" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">366</span>
       <span class="bd">
@@ -1089,6 +1204,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s09_06_blacksea_fracture" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">397</span>
       <span class="bd">
@@ -1099,6 +1215,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s10_03_ninja_trace" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">415</span>
       <span class="bd">
@@ -1109,6 +1226,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s10_07_preemptive_strike" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">419</span>
       <span class="bd">
@@ -1119,6 +1237,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s10_08_lair_reversal" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">540</span>
       <span class="bd">
@@ -1129,6 +1248,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s12_15_capture_jingli" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">547</span>
       <span class="bd">
@@ -1139,6 +1259,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s12_16_corpse_poison" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">548</span>
       <span class="bd">
@@ -1149,6 +1270,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s12_17_shanghou_stays" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">558</span>
       <span class="bd">
@@ -1159,6 +1281,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.blacksea_iron_puppet" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">589</span>
       <span class="bd">
@@ -1169,6 +1292,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.xiaoyingzhou_blacksea_trap_04_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">596</span>
       <span class="bd">
@@ -1179,6 +1303,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         <div class="hooks"><div class="hk">↳ <b>静善</b>　为袈裟符文夜袭索物 <em>［插入］</em></div></div>
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.xiaoyingzhou_blacksea_trap_05_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">609</span>
       <span class="bd">
@@ -1189,6 +1314,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.xiaoyingzhou_blacksea_trap_07_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">610</span>
       <span class="bd">
@@ -1199,6 +1325,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.xiaoyingzhou_blacksea_trap_08_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">614</span>
       <span class="bd">
@@ -1209,6 +1336,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.xiaoyingzhou_blacksea_trap_09_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">615</span>
       <span class="bd">
@@ -1219,6 +1347,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.xiaoyingzhou_blacksea_trap_10_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">616</span>
       <span class="bd">
@@ -1229,6 +1358,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.taiquan_sacred_fruit_01" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">618</span>
       <span class="bd">
@@ -1239,6 +1369,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.xiaoyingzhou_cement_truce" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">652</span>
       <span class="bd">
@@ -1249,6 +1380,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.taiquan_sacred_fruit_08" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">781</span>
       <span class="bd">
@@ -1259,6 +1391,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.s05_05" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">898</span>
       <span class="bd">
@@ -1269,6 +1402,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.han_jianyu_refused" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">956</span>
       <span class="bd">
@@ -1279,6 +1413,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         <div class="hooks"><div class="hk">↳ <b>郭解</b>　临终把定陶王托付给你 <em>［插入］</em></div></div>
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.s01_06" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">968</span>
       <span class="bd">
@@ -1289,6 +1424,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.s01_08" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1069</span>
       <span class="bd">
@@ -1299,6 +1435,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.s03_04" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1399</span>
       <span class="bd">
@@ -1309,6 +1446,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.shituolin_endgame_15_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="p">
       <span class="sq mono"></span>
       <span class="bd">
@@ -1319,6 +1457,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         <span class="badge pend">未来待扩</span>
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:黑魔海／毒宗#30" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="p">
       <span class="sq mono"></span>
       <span class="bd">
@@ -1329,6 +1468,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         <span class="badge pend">未来待扩</span>
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:黑魔海／毒宗#31" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">?</span>
       <span class="bd">
@@ -1339,9 +1479,11 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s07_qinhui_join" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li></ol></div><div class="ln">
   <h3 class="serif">昭南<span class="tg">二级·国家</span></h3>
   <div class="hint">南荒没有可投的朝廷。跟云苍峰的商队走，或者自己出五原南门沿商路南下——</div>
+  <div class="linecmt">整条线的批注　<artifact-sync><span class="cmt" contenteditable="true" data-k="line:昭南" data-hint="这条线整体怎么看"></span></artifact-sync></div>
   <ol class="nodes"><li class="r">
       <span class="sq mono">35</span>
       <span class="bd">
@@ -1352,6 +1494,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.ningyu_enters_gamble" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">36</span>
       <span class="bd">
@@ -1362,6 +1505,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.sudaji_south_pact" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">37</span>
       <span class="bd">
@@ -1372,6 +1516,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.gamble_bond_signed" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">38</span>
       <span class="bd">
@@ -1382,6 +1527,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.charge_sudaji_fee" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">40</span>
       <span class="bd">
@@ -1392,6 +1538,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.free_ajiman" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">42</span>
       <span class="bd">
@@ -1402,6 +1549,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.ice_gu_coercion" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">47</span>
       <span class="bd">
@@ -1412,6 +1560,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.wuerlang_joins" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">50</span>
       <span class="bd">
@@ -1422,6 +1571,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.iron_bridge_ambush" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">51</span>
       <span class="bd">
@@ -1432,6 +1582,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.persuade_wuerlang" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">53</span>
       <span class="bd">
@@ -1442,6 +1593,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.ningyu_regicide_offer" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">58</span>
       <span class="bd">
@@ -1452,6 +1604,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.rainforest_black_shoal" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">59</span>
       <span class="bd">
@@ -1462,6 +1615,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.silent_sheyi_village" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">62</span>
       <span class="bd">
@@ -1472,6 +1626,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s03b_snake_flower_bridge_02" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">64</span>
       <span class="bd">
@@ -1482,6 +1637,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s03b_snake_flower_bridge_04" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">67</span>
       <span class="bd">
@@ -1492,6 +1648,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s03b_snake_flower_bridge_07" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">86</span>
       <span class="bd">
@@ -1502,6 +1659,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s04_07" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">100</span>
       <span class="bd">
@@ -1512,6 +1670,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s04b_lingfei_baiyi_crisis_07" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">123</span>
       <span class="bd">
@@ -1522,6 +1681,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.xiaozi_first_appears" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">124</span>
       <span class="bd">
@@ -1532,6 +1692,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.haishen_hall_merfolk" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">125</span>
       <span class="bd">
@@ -1542,6 +1703,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.pull_harpoon_lemingzhu" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">131</span>
       <span class="bd">
@@ -1552,6 +1714,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.regroup_caravan_envoy" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">134</span>
       <span class="bd">
@@ -1562,6 +1725,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.weapon_deal_with_geluo" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">137</span>
       <span class="bd">
@@ -1572,6 +1736,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.spot_dong_informant" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">139</span>
       <span class="bd">
@@ -1582,6 +1747,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.biling_bay_stance" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">143</span>
       <span class="bd">
@@ -1592,6 +1758,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.ruins_ghost_warriors" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">145</span>
       <span class="bd">
@@ -1602,6 +1769,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.wuerlang_slays_dagu" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">147</span>
       <span class="bd">
@@ -1612,6 +1780,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.yiyang_repels_yinsha" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">150</span>
       <span class="bd">
@@ -1622,6 +1791,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.huamiao_coop_boundary" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">151</span>
       <span class="bd">
@@ -1632,6 +1802,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.guiwangdong_coop_pact" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">154</span>
       <span class="bd">
@@ -1642,6 +1813,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.enter_dong_with_migu" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">156</span>
       <span class="bd">
@@ -1652,6 +1824,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.blank_letter_and_dagu" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">158</span>
       <span class="bd">
@@ -1662,6 +1835,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.geluo_summons_biji" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">160</span>
       <span class="bd">
@@ -1672,6 +1846,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.escape_cave_mechanism" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">162</span>
       <span class="bd">
@@ -1682,6 +1857,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.hongmiao_controlled" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">171</span>
       <span class="bd">
@@ -1692,6 +1868,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s05b_05a_meet_ghost_king" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">195</span>
       <span class="bd">
@@ -1702,6 +1879,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s05b_10_slave_revolt_and_phoenix_change" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">205</span>
       <span class="bd">
@@ -1712,6 +1890,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.ghost_king_swallowed" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">211</span>
       <span class="bd">
@@ -1722,6 +1901,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.slay_dragon" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">217</span>
       <span class="bd">
@@ -1732,6 +1912,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.xiaozi_kills_mother" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">218</span>
       <span class="bd">
@@ -1742,9 +1923,11 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.tribes_pledge" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li></ol></div><div class="ln">
   <h3 class="serif">晋国<span class="tg">二级·国家</span></h3>
   <div class="hint">建康宫城闹鬼的传闻。</div>
+  <div class="linecmt">整条线的批注　<artifact-sync><span class="cmt" contenteditable="true" data-k="line:晋国" data-hint="这条线整体怎么看"></span></artifact-sync></div>
   <ol class="nodes"><li class="r">
       <span class="sq mono">241</span>
       <span class="bd">
@@ -1755,6 +1938,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.palace_haunting_rumor" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">264</span>
       <span class="bd">
@@ -1765,6 +1949,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s07_07_dragon_hall" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">280</span>
       <span class="bd">
@@ -1775,6 +1960,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s08_01_eagle_valley" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">287</span>
       <span class="bd">
@@ -1785,6 +1971,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s08_03_beifu_rescue" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">297</span>
       <span class="bd">
@@ -1795,6 +1982,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s08_05_breakthrough" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">316</span>
       <span class="bd">
@@ -1805,6 +1993,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s08_10_xuanwu_rescue" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">334</span>
       <span class="bd">
@@ -1815,6 +2004,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.spoils_split" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">335</span>
       <span class="bd">
@@ -1825,6 +2015,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s09_01_eight_steeds_leave" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">343</span>
       <span class="bd">
@@ -1835,6 +2026,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.xiangfu_stance" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">487</span>
       <span class="bd">
@@ -1845,6 +2037,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.jin_vacate_jiangzhou" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">633</span>
       <span class="bd">
@@ -1855,6 +2048,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.sacred_jin_drought" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">732</span>
       <span class="bd">
@@ -1865,6 +2059,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.jin_guangyuan_ledger" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">785</span>
       <span class="bd">
@@ -1875,6 +2070,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.s05_09" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="p">
       <span class="sq mono"></span>
       <span class="bd">
@@ -1885,9 +2081,11 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         <span class="badge pend">未来待扩</span>
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:晋国#14" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li></ol></div><div class="ln">
   <h3 class="serif">宋国<span class="tg">二级·国家</span></h3>
   <div class="hint">贾师宪已经大举集结，江州要打起来了。</div>
+  <div class="linecmt">整条线的批注　<artifact-sync><span class="cmt" contenteditable="true" data-k="line:宋国" data-hint="这条线整体怎么看"></span></artifact-sync></div>
   <ol class="nodes"><li class="r">
       <span class="sq mono">383</span>
       <span class="bd">
@@ -1898,6 +2096,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s10_01_jiangzhou_order" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">433</span>
       <span class="bd">
@@ -1908,6 +2107,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s11_01_pengri_arrives" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">435</span>
       <span class="bd">
@@ -1918,6 +2118,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s11_02_cement_fortress" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">495</span>
       <span class="bd">
@@ -1928,6 +2129,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.tuntian_post" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">521</span>
       <span class="bd">
@@ -1938,6 +2140,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         <div class="hooks"><div class="hk">↳ <b>萧遥逸</b>　秦翰生擒他。你救不救 <em>［插入］</em></div></div>
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s12_10_rescue_xiao" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">526</span>
       <span class="bd">
@@ -1948,6 +2151,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s12_11_siege_begins" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">528</span>
       <span class="bd">
@@ -1958,6 +2162,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s12_12_gate_fire" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">551</span>
       <span class="bd">
@@ -1968,6 +2173,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.s01_01" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">553</span>
       <span class="bd">
@@ -1978,6 +2184,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.s01_03" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">555</span>
       <span class="bd">
@@ -1988,6 +2195,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.tail_li_shishi" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">556</span>
       <span class="bd">
@@ -1998,6 +2206,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.evade_huangchengsi" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">556</span>
       <span class="bd">
@@ -2008,6 +2217,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.survey_wumu_mansion" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">557</span>
       <span class="bd">
@@ -2018,6 +2228,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.weiyuan_extortion" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">557</span>
       <span class="bd">
@@ -2028,6 +2239,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.mingqingsi_lin_lu_meeting" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">558</span>
       <span class="bd">
@@ -2038,6 +2250,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.libu_registration" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">559</span>
       <span class="bd">
@@ -2048,6 +2261,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.lin_an_bridge_01_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">559</span>
       <span class="bd">
@@ -2058,6 +2272,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.leifeng_pagoda_invite" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">560</span>
       <span class="bd">
@@ -2068,6 +2283,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.leifeng_repel_gao" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">561</span>
       <span class="bd">
@@ -2078,6 +2294,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.lin_an_bridge_03_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">561</span>
       <span class="bd">
@@ -2088,6 +2305,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.decide_chase_weiyuan" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">562</span>
       <span class="bd">
@@ -2098,6 +2316,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.pass_kotian_stone" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">563</span>
       <span class="bd">
@@ -2108,6 +2327,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.ivory_visit_weiyuan" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">564</span>
       <span class="bd">
@@ -2118,6 +2338,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.siying_lane_saber_ambush" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">565</span>
       <span class="bd">
@@ -2128,6 +2349,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.linjia_sees_ningyi" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">566</span>
       <span class="bd">
@@ -2138,6 +2360,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.xihu_villa_eavesdrop" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">569</span>
       <span class="bd">
@@ -2148,6 +2371,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.xiaoyingzhou_blacksea_trap_01_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">575</span>
       <span class="bd">
@@ -2158,6 +2382,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.xiaoyingzhou_paper_plan" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">578</span>
       <span class="bd">
@@ -2168,6 +2393,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.xiaoyingzhou_paper_mint" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">584</span>
       <span class="bd">
@@ -2178,6 +2404,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.xiaoyingzhou_blacksea_trap_03_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">604</span>
       <span class="bd">
@@ -2188,6 +2415,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.xiaoyingzhou_blacksea_trap_06_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">624</span>
       <span class="bd">
@@ -2198,6 +2426,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.taiquan_sacred_fruit_03" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1130</span>
       <span class="bd">
@@ -2208,6 +2437,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.changgan_interlude_03_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1134</span>
       <span class="bd">
@@ -2218,9 +2448,11 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.song_tongwen" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li></ol></div><div class="ln">
   <h3 class="serif">汉国<span class="tg">二级·国家</span></h3>
   <div class="hint">汉廷的账从一桩旧案查起——找萧遥逸问清左武军是怎么覆灭的；或者直接去洛都。</div>
+  <div class="linecmt">整条线的批注　<artifact-sync><span class="cmt" contenteditable="true" data-k="line:汉国" data-hint="这条线整体怎么看"></span></artifact-sync></div>
   <ol class="nodes"><li class="r">
       <span class="sq mono">232</span>
       <span class="bd">
@@ -2231,6 +2463,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         <div class="hooks"><div class="hk">↳ <b>萧遥逸</b>　他向你痛陈左武全军覆没。这是他不靠骨灰的登场拍 <em>［插入］</em></div></div>
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s07_01_old_case" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">400</span>
       <span class="bd">
@@ -2241,6 +2474,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lcq.event.s10_04_left_army_review" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">772</span>
       <span class="bd">
@@ -2251,6 +2485,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.han_court_grain_blame" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">776</span>
       <span class="bd">
@@ -2261,6 +2496,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.taiquan_afterfall_10_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">777</span>
       <span class="bd">
@@ -2271,6 +2507,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.s05_01" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">779</span>
       <span class="bd">
@@ -2281,6 +2518,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.s05_03" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">871</span>
       <span class="bd">
@@ -2291,6 +2529,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.han_xingyue_framed" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">885</span>
       <span class="bd">
@@ -2301,6 +2540,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.han_limit_field" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">891</span>
       <span class="bd">
@@ -2311,6 +2551,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.lvji_defiles_consort" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">894</span>
       <span class="bd">
@@ -2321,6 +2562,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.emperor_death_spreads" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">895</span>
       <span class="bd">
@@ -2331,6 +2573,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.arrange_escape_route" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">896</span>
       <span class="bd">
@@ -2341,6 +2584,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.liujian_takes_nangong" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">897</span>
       <span class="bd">
@@ -2351,6 +2595,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.changqiu_palace_defense" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">898</span>
       <span class="bd">
@@ -2361,6 +2606,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.bounty_and_hu_cavalry" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">899</span>
       <span class="bd">
@@ -2371,6 +2617,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.lvfengxian_breaks_line" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">901</span>
       <span class="bd">
@@ -2381,6 +2628,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.han_power_vacuum" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">902</span>
       <span class="bd">
@@ -2391,6 +2639,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.han_sponsor_dingtao" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">925</span>
       <span class="bd">
@@ -2401,6 +2650,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.han_palace_endgame_05_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">929</span>
       <span class="bd">
@@ -2411,6 +2661,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.han_palace_endgame_06_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">933</span>
       <span class="bd">
@@ -2421,6 +2672,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.zhao_sisters_flee_north_palace" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">940</span>
       <span class="bd">
@@ -2431,6 +2683,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyl.event.han_palace_endgame_08_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">949</span>
       <span class="bd">
@@ -2441,6 +2694,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.s01_02" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">950</span>
       <span class="bd">
@@ -2451,6 +2705,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.s01_03" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">951</span>
       <span class="bd">
@@ -2461,6 +2716,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.s01_04" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">952</span>
       <span class="bd">
@@ -2471,6 +2727,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.s01_05" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">956</span>
       <span class="bd">
@@ -2481,6 +2738,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         <div class="hooks"><div class="hk">↳ <b>郭解</b>　临终把定陶王托付给你 <em>［插入］</em></div></div>
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.s01_06" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">957</span>
       <span class="bd">
@@ -2491,6 +2749,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         <div class="hooks"><div class="hk">↳ <b>董卓</b>　自陈戎马收场，留下胡骑军情遗命 <em>［插入］</em></div></div>
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.s01_07" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">985</span>
       <span class="bd">
@@ -2501,6 +2760,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.s01_09" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">989</span>
       <span class="bd">
@@ -2511,6 +2771,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.s02_01" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">995</span>
       <span class="bd">
@@ -2521,6 +2782,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.s02_07" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1038</span>
       <span class="bd">
@@ -2531,6 +2793,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.han_succession_04_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1043</span>
       <span class="bd">
@@ -2541,6 +2804,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.han_succession_05_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1050</span>
       <span class="bd">
@@ -2551,9 +2815,11 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.han_succession_08_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li></ol></div><div class="ln">
   <h3 class="serif">唐国<span class="tg">二级·国家</span></h3>
   <div class="hint">番僧在猎杀穿越者，而且近来在长安大肆扩张——唐国本来崇道，如今佛门要压过道门。</div>
+  <div class="linecmt">整条线的批注　<artifact-sync><span class="cmt" contenteditable="true" data-k="line:唐国" data-hint="这条线整体怎么看"></span></artifact-sync></div>
   <ol class="nodes"><li class="r">
       <span class="sq mono">1058</span>
       <span class="bd">
@@ -2564,6 +2830,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.han_succession_10_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1061</span>
       <span class="bd">
@@ -2574,6 +2841,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.changgan_fanseng_hunt" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1066</span>
       <span class="bd">
@@ -2584,6 +2852,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.s03_01" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1089</span>
       <span class="bd">
@@ -2594,6 +2863,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.s03_08" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1090</span>
       <span class="bd">
@@ -2604,6 +2874,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.s03_09" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1093</span>
       <span class="bd">
@@ -2614,6 +2885,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.north_bureau_buddhist_moves" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1096</span>
       <span class="bd">
@@ -2624,6 +2896,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.qinglongsi_te_master" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1097</span>
       <span class="bd">
@@ -2634,6 +2907,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.honglusi_amends" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1100</span>
       <span class="bd">
@@ -2644,6 +2918,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.cien_red_lotus" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1102</span>
       <span class="bd">
@@ -2654,6 +2929,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.yuanzheng_globe" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1103</span>
       <span class="bd">
@@ -2664,6 +2940,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.xuanping_eunuch_murder" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1104</span>
       <span class="bd">
@@ -2674,6 +2951,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.survey_xingqing_palace" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1105</span>
       <span class="bd">
@@ -2684,6 +2962,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.prince_injury_control" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1106</span>
       <span class="bd">
@@ -2694,6 +2973,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.shuixiang_lure_setup" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1107</span>
       <span class="bd">
@@ -2704,6 +2984,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.spot_poison_assassin" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1110</span>
       <span class="bd">
@@ -2714,6 +2995,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.poolside_capture" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1113</span>
       <span class="bd">
@@ -2724,6 +3006,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.blast_moni_temple" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1114</span>
       <span class="bd">
@@ -2734,6 +3017,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.xinyong_reveals_fanmi" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1115</span>
       <span class="bd">
@@ -2744,6 +3028,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.interrogate_feiniao_yingzi" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1151</span>
       <span class="bd">
@@ -2754,6 +3039,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.changgan_interlude_06_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1193</span>
       <span class="bd">
@@ -2764,6 +3050,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.liang_secret_order" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1198</span>
       <span class="bd">
@@ -2774,6 +3061,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.zhoufei_conspiracy" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1200</span>
       <span class="bd">
@@ -2784,6 +3072,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.feiniao_hilt_clue" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1204</span>
       <span class="bd">
@@ -2794,6 +3083,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.s06_02" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1206</span>
       <span class="bd">
@@ -2804,6 +3094,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.s06_04" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1217</span>
       <span class="bd">
@@ -2814,6 +3105,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.buddhist_conspiracy_01_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1226</span>
       <span class="bd">
@@ -2824,6 +3116,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.buddhist_conspiracy_03_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1270</span>
       <span class="bd">
@@ -2834,6 +3127,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.buddhist_conspiracy_08_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1280</span>
       <span class="bd">
@@ -2844,6 +3138,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.buddhist_conspiracy_11_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1307</span>
       <span class="bd">
@@ -2854,6 +3149,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.ganlu_aftershock_05_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1309</span>
       <span class="bd">
@@ -2864,6 +3160,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.ganlu_aftershock_06_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1312</span>
       <span class="bd">
@@ -2874,6 +3171,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.ganlu_aftershock_07_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1321</span>
       <span class="bd">
@@ -2884,6 +3182,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.shituolin_endgame_01_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1335</span>
       <span class="bd">
@@ -2894,6 +3193,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.shituolin_endgame_02_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1348</span>
       <span class="bd">
@@ -2904,6 +3204,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.shituolin_endgame_05_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1370</span>
       <span class="bd">
@@ -2914,6 +3215,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.shituolin_endgame_09_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1374</span>
       <span class="bd">
@@ -2924,6 +3226,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.shituolin_endgame_10_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1375</span>
       <span class="bd">
@@ -2934,6 +3237,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.shituolin_endgame_11_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1378</span>
       <span class="bd">
@@ -2944,6 +3248,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.shituolin_endgame_12_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1382</span>
       <span class="bd">
@@ -2954,6 +3259,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.shituolin_endgame_13_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1396</span>
       <span class="bd">
@@ -2964,6 +3270,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.shituolin_endgame_title_daduhu" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="r">
       <span class="sq mono">1398</span>
       <span class="bd">
@@ -2974,6 +3281,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:lyg.event.shituolin_endgame_14_beat" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li><li class="p">
       <span class="sq mono"></span>
       <span class="bd">
@@ -2984,6 +3292,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
         
         <span class="badge pend">未来待扩</span>
         
+        <artifact-sync><span class="cmt" contenteditable="true" data-k="node:唐国#43" data-hint="这一拍的批注"></span></artifact-sync>
       </span></li></ol></div>
 
 <h2>逐角色：每个人自己的线</h2>
