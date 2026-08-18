@@ -654,7 +654,7 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       { text: '入长安宣平坊落脚，石超接风——吕奉先已在城中惹事', status: 'ready', stageId: 'lyg.changgan_begins', eventId: 'lyg.event.s03_01' },
       { text: '街头撞见杨玉环驾轻车伤人训话，潘金莲提剑为她警戒', status: 'ready', stageId: 'lyg.changgan_begins', eventId: 'lyg.event.s03_03' },
       // T4 并进 buddhist_conspiracy_04／_06（火遁／佛咒，过程）
-      { text: '查明小紫不是闯进大雁塔的——她从兴庆宫遗迹被传送进塔，僧众仍按擅闯围她', status: 'ready', stageId: 'lyg.changgan_begins', eventId: 'lyg.event.xiaozi_teleported_into_dayanta' },
+      { text: '听小紫的说法：她称不是闯进去的，是从兴庆宫遗迹被传送进塔——僧众不认', status: 'ready', stageId: 'lyg.changgan_begins', eventId: 'lyg.event.xiaozi_teleported_into_dayanta' },
       // T5 并进 _09_beat／_10_beat
       { text: '要救大雁塔里的小紫与吕雉——窥基断水，她握着铸铁炸弹', status: 'ready', stageId: 'lyg.changgan_begins', eventId: 'lyg.event.s03_08' },
       { text: '夜访慈恩寺，碑上疑白行简是穿越者；汉使身份救走炸塔的小紫', status: 'ready', stageId: 'lyg.changgan_begins', eventId: 'lyg.event.s03_09' },
