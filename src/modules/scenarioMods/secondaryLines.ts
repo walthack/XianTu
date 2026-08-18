@@ -519,18 +519,19 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       // S4 抵达／祭墓建议并进 lin_an_arrive，不单开
       { text: '防守江州：宋军连夜两万余人携投石机、巢车、云梯全面攻城', status: 'ready', stageId: 'lcq.stage_12_jiangzhou_counterwar', eventId: 'lcq.event.s12_11_siege_begins' },
       { text: '城门用水泥门闸和滚油烧掉宋军冲车，江州守城占先', status: 'ready', stageId: 'lcq.stage_12_jiangzhou_counterwar', eventId: 'lcq.event.s12_12_gate_fire' },
+      { text: '小紫点破刺客是辰星七妖——背后是龙宸', status: 'ready', stageId: 'lcq.stage_12_jiangzhou_counterwar', eventId: 'lcq.event.s12_14_chenxing_appears' },
       { text: '协助江州退军：宋军粮尽大溃，秦翰选锋营断后', status: 'ready', stageId: 'lyl.jiangzhou_retreat', eventId: 'lyl.event.s01_01' },
       { text: '乘船前往临安——鱼长老登场', status: 'ready', stageId: 'lyl.jiangzhou_retreat', eventId: 'lyl.event.s01_02' },
       { text: '赶到荆溪村寨，斩杀屠寨凌辱妇女的王团练乡兵', status: 'ready', stageId: 'lyl.jiangzhou_retreat', eventId: 'lyl.event.s01_03' },
       { text: '尾随李师师马车到威远镖局，确认她突然回临安的缘故', status: 'ready', stageId: 'lyl.lin_an_bridge', eventId: 'lyl.event.tail_li_shishi' },
-      { text: '识破皇城司盯梢，不动手，以富商身份掩护进明庆寺', status: 'ready', stageId: 'lyl.lin_an_bridge', eventId: 'lyl.event.evade_huangchengsi' },
       // S5 另建议 lyl.event.lin_an_libu（临安落册）；文案用屯田司员外郎，不用「客卿」
-      { text: '绕武穆王府查清建筑方位，没惊动周边暗梢', status: 'ready', stageId: 'lyl.lin_an_bridge', eventId: 'lyl.event.survey_wumu_mansion' },
+      { text: '识破皇城司盯梢，不动手，以富商身份掩护进明庆寺', status: 'ready', stageId: 'lyl.lin_an_bridge', eventId: 'lyl.event.evade_huangchengsi' },
       // 序按 axisSeq：太皇太后 604 在高俅 624 之前，先前两条排反了。
+      { text: '绕武穆王府查清建筑方位，没惊动周边暗梢', status: 'ready', stageId: 'lyl.lin_an_bridge', eventId: 'lyl.event.survey_wumu_mansion' },
       { text: '在风波亭后拜祭谢艺并安顿临安落脚处——敖润、冯源、林清浦登场', status: 'ready', stageId: 'lyl.lin_an_black_sea', eventId: 'lyl.event.debut_ruan_sisters' },
       { text: '听俞子元回报，确认高衙内勒索威远镖局的条件', status: 'ready', stageId: 'lyl.lin_an_bridge', eventId: 'lyl.event.weiyuan_extortion' },
-      { text: '明庆寺外看鲁智深倒拔垂杨柳、林冲上前通名——你按住秦桧，没有贸然结交', status: 'ready', stageId: 'lyl.lin_an_bridge', eventId: 'lyl.event.mingqingsi_lin_lu_meeting' },
       // S10 并进 changgan_interlude_04_beat
+      { text: '明庆寺外看鲁智深倒拔垂杨柳、林冲上前通名——你按住秦桧，没有贸然结交', status: 'ready', stageId: 'lyl.lin_an_bridge', eventId: 'lyl.event.mingqingsi_lin_lu_meeting' },
       { text: '办完吏部报到，查明林冲调走了哪些档案', status: 'ready', stageId: 'lyl.lin_an_bridge', eventId: 'lyl.event.libu_registration' },
       { text: '便门瓦牡丹棚摸到宋军部署、贾师宪决策、林冲底细，线人疑在皇城司', status: 'ready', stageId: 'lyl.lin_an_bridge', eventId: 'lyl.event.lin_an_bridge_01_beat' },
       { text: '应李师师之邀登雷峰塔', status: 'ready', stageId: 'lyl.lin_an_bridge', eventId: 'lyl.event.leifeng_pagoda_invite' },
@@ -700,6 +701,7 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       { text: '查清仇士良夺神策军：张承业、杨家接管，疑田令孜联佛门藩镇杀王守澄', status: 'ready', stageId: 'lyg.liangzhou_league', eventId: 'lyg.event.s06_04' },
       { text: '查清李宏在仇士良门前刺匡佑、自残嫁祸和尚，意在宦官内讧', status: 'ready', stageId: 'lyg.buddhist_conspiracy', eventId: 'lyg.event.buddhist_conspiracy_01_beat' },
       { text: '自称不拾一世转世，念真经震慑十方丛林围杀', status: 'ready', stageId: 'lyg.buddhist_conspiracy', eventId: 'lyg.event.buddhist_conspiracy_03_beat' },
+      { text: '砍断兴唐寺灯树，在火海里斩了龙宸的杀手脱身', status: 'ready', stageId: 'lyg.buddhist_conspiracy', eventId: 'lyg.event.buddhist_conspiracy_04_beat' },
       { text: '拦截龙宸翼火蛇，救下惊理——王彦章、燕姣然登场', status: 'ready', stageId: 'lyg.buddhist_conspiracy', eventId: 'lyg.event.buddhist_conspiracy_05_beat' },
       { text: '拒了窥基假诏和剃度，刘贞亮传诏被挡，当场动手', status: 'ready', stageId: 'lyg.buddhist_conspiracy', eventId: 'lyg.event.buddhist_conspiracy_08_beat' },
       { text: '在程宅揭穿窥基伪造法旨——沮渠二世、净空登场', status: 'ready', stageId: 'lyg.buddhist_conspiracy', eventId: 'lyg.event.buddhist_conspiracy_09_beat' },

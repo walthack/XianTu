@@ -65,7 +65,7 @@ export const CHARACTER_QUESTS: CharacterQuest[] = [
       { text: '她重伤——你得决定护到什么程度', status: 'ready', eventIds: ['lcq.event.s09_03_xiaozi_wounded'] },
       { text: '江州要人，你拒绝交出她', status: 'ready', eventIds: ['lcq.event.s09_10_separation'] },
       { text: '兰汤馆，她压不住要吸血——你当场按住她', status: 'ready', eventIds: ['lcq.event.s10_10_xiaozi_crisis'] },
-      { text: '她以幽冥宗法术出手，点破辰星七妖，并牵出龙宸', status: 'ready', eventIds: ['lcq.event.s12_14_chenxing_appears'] },
+      { text: '她以幽冥宗法术出手，点破辰星七妖，并牵出龙宸', status: 'insert', eventIds: ['lcq.event.s12_14_chenxing_appears'] },
       { text: '她与莫如霖对质母亲碧姬的旧事', status: 'ready', eventIds: ['lyl.event.taiquan_afterfall_04_beat'] },
       { text: '你向杨玉环打听离魂症——她母亲的病，可能也在她身上', status: 'ready', eventIds: ['lyg.event.s06_01'] },
       { text: '送她到渭水水下闭关，冲五级', status: 'ready', eventIds: ['lyg.event.s06_07'] },
@@ -193,6 +193,9 @@ export const CHARACTER_HIGHLIGHTS: CharacterHighlight[] = [
   { name: '吕雉', eventIds: ['lyg.event.shituolin_endgame_12_beat'], text: '他扑上来咬她，把真身露给你——三度失算里有她' },
   { name: '秦桧', eventIds: ['lyl.event.mingqingsi_lin_lu_meeting'], text: '他急着上去攀林鲁——你按住的是这股热乎' },
   { name: '秦桧', eventIds: ['lyl.event.decide_chase_weiyuan'], text: '观堂不管弟子家事——打听高衙内和失镖，你仍压给他' },
+  { name: '惊理', eventIds: ['lyl.event.debut_jingli'], text: '庭院刺杀里露面——瑶池宗叛出去的那个，如今替龙宸拿刀' },
+  { name: '惊理', eventIds: ['lcq.event.s12_15_capture_jingli'], text: '小紫抽了她的阴魂——她成了你追龙宸的活口' },
+  { name: '惊理', eventIds: ['lyg.event.buddhist_conspiracy_05_beat'], text: '魏博牙兵、僧人和龙宸抢她——她这条命现在值钱了' },
 ];
 
 /**
