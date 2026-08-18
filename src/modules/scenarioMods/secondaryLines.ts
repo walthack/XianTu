@@ -307,21 +307,22 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       // 与杀龙没有硬绑。落清远／建康——硬约束只有一条，必须早于下一拍「不与殇侯为敌」，
       // 那时玩家得已经知道朱老头是谁。形态仍是可玩面见，不是「听说他是侯」。
       { text: '当面确认朱老头就是殇侯，听他称你是天命之人', status: 'ready', stageId: 'lcq.stage_07_qingyuan_jiankang', eventId: 'lcq.event.shanghou_revealed' },
+      { text: '收下殇侯交出的秦桧——他改称主公，成你身边第一智囊', status: 'ready', stageId: 'lcq.stage_07_qingyuan_jiankang', eventId: 'lcq.event.s07_qinhui_join' },
       { text: '让殇侯把你身上的冰蛊解了', status: 'ready', stageId: 'lcq.stage_07_qingyuan_jiankang', eventId: 'lcq.event.shanghou_cures_ice_gu' },
       { text: '在庭院迎入苏妲己——黑魔海高压对局正式摊开', status: 'ready', stageId: 'lcq.stage_08_jiankang_coup', eventId: 'lcq.event.s08_04_sudaji_enters' },
       { text: '向萧遥逸点破秦桧与毒宗，击掌约下不与殇侯为敌', status: 'ready', stageId: 'lcq.stage_08_jiankang_coup', eventId: 'lcq.event.palm_oath_shanghou' },
       { text: '查清：游婵杀死内堂太监，黑魔海嫡传与外聘香主裂开', status: 'ready', stageId: 'lcq.stage_09_trade_and_escape', eventId: 'lcq.event.s09_06_blacksea_fracture' },
       { text: '追查月霜遇袭：石之隼判定是东瀛忍者，其人已逃', status: 'ready', stageId: 'lcq.stage_10_jiangzhou_shadow_war', eventId: 'lcq.event.s10_03_ninja_trace' },
-      { text: '定下先发制人打黑魔海——为护月霜、除江州后患', status: 'ready', stageId: 'lcq.stage_10_jiangzhou_shadow_war', eventId: 'lcq.event.s10_07_preemptive_strike' },
       // 高潮战不只一拍：它的展开在事件层现成躺着，先前每场仗只挑了中间那一条代表拍。
+      { text: '定下先发制人打黑魔海——为护月霜、除江州后患', status: 'ready', stageId: 'lcq.stage_10_jiangzhou_shadow_war', eventId: 'lcq.event.s10_07_preemptive_strike' },
       { text: '洞穴激战：辛卯泄出星月湖，鱼无夷毒网偷袭孟非卿', status: 'ready', stageId: 'lcq.stage_10_jiangzhou_shadow_war', eventId: 'lcq.event.s10_08_lair_reversal' },
       { text: '小紫擒获龙宸刺客惊理——拿到追查龙宸与黑魔海的入口', status: 'ready', stageId: 'lcq.stage_12_jiangzhou_counterwar', eventId: 'lcq.event.s12_15_capture_jingli' },
       { text: '殇侯施尸毒破开宋军阵线，你因此得救', status: 'ready', stageId: 'lcq.stage_12_jiangzhou_counterwar', eventId: 'lcq.event.s12_16_corpse_poison' },
       { text: '用人情和经济筹码请殇侯留守两月，换来近卫军协防', status: 'ready', stageId: 'lcq.stage_12_jiangzhou_counterwar', eventId: 'lcq.event.s12_17_shanghou_stays' },
       { text: '水镜看见小紫驱铁傀儡重创虎翼军，取龙睛玉并以阴魂试傀儡', status: 'ready', stageId: 'lyl.lin_an_bridge', eventId: 'lyl.event.blacksea_iron_puppet' },
       { text: '野猪林乱战：林冲重伤衣钵被夺，你抄下袈裟符文', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_blacksea_trap_04_beat' },
-      { text: '静善为袈裟符文夜袭，被炸弹击退——你也受了伤', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_blacksea_trap_05_beat' },
       // ⏳ 扩写部分，本阶段不再细化（用户裁定 2026-08-16）：正典无此拍，只标未来待扩。
+      { text: '静善为袈裟符文夜袭，被炸弹击退——你也受了伤', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_blacksea_trap_05_beat' },
       { text: '在太医局查医档，摸清剑玉姬已借刘太后用药落子', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_blacksea_trap_07_beat' },
       { text: '在小瀛洲设伏对上剑玉姬、西门庆——西门庆与李师师受伤', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_blacksea_trap_08_beat' },
       { text: '在保宁寺放生池逼出剑玉姬真身——屠龙刀异变龙吟', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_blacksea_trap_09_beat' },
@@ -337,7 +338,6 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       { text: '在庵堂性交安抚鱼玄机，同时审讯齐羽仙追问双姬旧怨', status: 'ready', stageId: 'lyg.shituolin_endgame', eventId: 'lyg.event.shituolin_endgame_15_beat' },
       { text: '取得天命侯名分（未来待扩）', status: 'pending' },
       { text: '大祭：与潘金莲对决、总坛覆灭（续写第二幕）', status: 'pending' },
-      { text: '收下殇侯交出的秦桧——他改称主公，成你身边第一智囊', status: 'ready', stageId: 'lcq.stage_07_qingyuan_jiankang', eventId: 'lcq.event.s07_qinhui_join' },
     ],
     pendingExpansion: '**顶点是扩写，本阶段只标待扩**（用户裁定 2026-08-16）。天命侯（蓝图 §13-C：名义殇侯、毒宗实推程宗扬）正典有词、**无授名**——'
       + 'seq 222 是殇侯称你「天命之人」的谶语，1155 是中行说私室失言的一声惊呼且被当场怒斥，'

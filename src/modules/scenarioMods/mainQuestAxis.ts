@@ -345,35 +345,35 @@ export const MAIN_QUEST_NODES: MainQuestNode[] = [
   { stageId: 'lyl.taiquan_sacred_fruit', text: '随陈琳进云涛观迷楼，摸清机关，撞见小紫等人', status: 'ready', eventId: 'lyl.event.taiquan_sacred_fruit_04' },
   { stageId: 'lyl.taiquan_sacred_fruit', text: '经小紫、梦娘问出：岳鹏举把钥匙藏在迷楼，暗号太泉熊谷一四七五', status: 'ready', eventId: 'lyl.event.taiquan_sacred_fruit_05' },
   { stageId: 'lyl.taiquan_sacred_fruit', text: '到火山口争赤阳圣果，最终被萧遥逸吞下一颗', status: 'ready', eventId: 'lyl.event.taiquan_sacred_fruit_10' },
+  { stageId: 'lyl.taiquan_core_conflict', text: '与尹馥兰商定：用阴阳鱼和地形反制潘金莲——硬刚还是设伏', status: 'ready', eventId: 'lyl.event.plan_counterattack' },
+  { stageId: 'lyl.taiquan_core_conflict', text: '与尹馥兰用阴阳鱼反击潘金莲，把追兵挡回去', status: 'ready', eventId: 'lyl.event.yin_yang_counter' },
   { stageId: 'lyl.taiquan_core_conflict', text: '蚁穴被咬，虞白樱吸出淫毒——找到通往核心区的出口', status: 'ready', eventId: 'lyl.event.find_exit' },
   { stageId: 'lyl.taiquan_afterfall', text: '进魔墟：玄秘贝已失，周飞找到琉璃天珠，多方开抢', status: 'ready', eventId: 'lyl.event.taiquan_afterfall_03_beat' },
   { stageId: 'lyl.taiquan_afterfall', text: '与小紫探人类居住区，撞见KTV卖场，推测太泉古阵是避难所', status: 'ready', eventId: 'lyl.event.taiquan_afterfall_05_beat' },
   { stageId: 'lyl.taiquan_afterfall', text: '经徐璜向赵飞燕献求子仙符，她因赵合德银链召见你', status: 'ready', bloodlineBranch: 'zhao', eventId: 'lyl.event.taiquan_afterfall_09_beat' },
-  { stageId: 'lyl.han_palace_endgame', text: '吕雉以比目鱼珠开秘境，小紫把盛姬投入光柱，众人进入', status: 'ready', eventId: 'lyl.event.han_palace_endgame_07_beat', bloodlineBranch: 'zhao' },
-  { stageId: 'lyg.mijing_rumen', text: '赵飞燕中毒昏迷，你用自身血液给她输血', status: 'ready', eventId: 'lyg.event.s02_02', bloodlineBranch: 'zhao' },
   // ⏳ 六阳开启古阵内的入口：正典压根没有这一拍——原著里程宗扬从未履行此托付
   // （全书修为最高见第四级入微境，他去太泉是为赤阳圣果救人）。按扩写口径只标待扩，不细化。
-  { stageId: 'lyg.mijing_rumen', text: '在长秋宫分派旧部监控秘境入口，自己率侍奴去探胶西邸', status: 'ready', eventId: 'lyg.event.s02_08', bloodlineBranch: 'zhao' },
+  { stageId: 'lyl.han_palace_endgame', text: '吕雉以比目鱼珠开秘境，小紫把盛姬投入光柱，众人进入', status: 'ready', eventId: 'lyl.event.han_palace_endgame_07_beat', bloodlineBranch: 'zhao' },
   // 小玲儿必须在太泉有一拍（用户裁定 2026-08-16）。正典没把她放进太泉段——
   // 她在 seq 610 小瀛洲（太泉之前）、788 割喉吕奉先、1012 **被系统认定为超级用户**、1016 被擒，
   // 正好卡在太泉前后两头。故这是扩写，只记要求不设计。她与小紫同属「超级用户」那一类。
+  { stageId: 'lyg.mijing_rumen', text: '赵飞燕中毒昏迷，你用自身血液给她输血', status: 'ready', eventId: 'lyg.event.s02_02', bloodlineBranch: 'zhao' },
+  { stageId: 'lyg.mijing_rumen', text: '在长秋宫分派旧部监控秘境入口，自己率侍奴去探胶西邸', status: 'ready', eventId: 'lyg.event.s02_08', bloodlineBranch: 'zhao' },
   { stageId: 'lyg.mijing_rumen', text: '触龙珠唤醒冰冰，拿到超级管理员权限，当场验明谁在名单上', status: 'ready', eventId: 'lyg.event.mijing_superuser_roster' },
-  { stageId: 'lyg.han_succession', text: '真气失控昏迷，吕雉指出需双修炼化，赵飞燕以双修助你行功', status: 'ready', eventId: 'lyg.event.han_succession_08_beat', bloodlineBranch: 'zhao' },
-  { stageId: 'lyg.han_succession', text: '因孟舍人死气失控，在登基典仪与赵飞燕双修，突破通幽境', status: 'ready', eventId: 'lyg.event.han_succession_09_beat', bloodlineBranch: 'zhao' },
   // #17 文案「武帝像前」偏 s02_09；「安排秘境探索」本体是 s02_08（胶西邸／长秋宫）。
   // 原为 new＋挂隔离关 `lcq.stage_05`，等裁定。2026-08-17 查明**不必新增**：
   // 隔离件 `s05_13`「阁罗召来碧姬」在孤儿救援时已重建为可达的 `geluo_summons_biji`（seq 158），
   // description 明写「程宗扬首次当面见到谢艺寻找的人」，正是这一拍。
   // 与昭南线双喂：昭南读「进峒进展」，主轴读「岳氏血脉候选的当面辨认」。
-  { stageId: 'lyg.changgan_interlude', text: '马厩救出廖群玉：他携百衲衣寻岳霏，并牵到齐羽仙、周飞', status: 'ready', bloodlineBranch: 'xiaozi', eventId: 'lyg.event.changgan_interlude_02_beat' },
+  { stageId: 'lyg.han_succession', text: '真气失控昏迷，吕雉指出需双修炼化，赵飞燕以双修助你行功', status: 'ready', eventId: 'lyg.event.han_succession_08_beat', bloodlineBranch: 'zhao' },
   // 超级用户名单（用户提议 2026-08-16，已核实）：seq 1010「程触龙珠触发 AI 冰冰，获超级管理员权限；
   // **众人验证身份**，小紫雪雪被电击」、1012「小玲儿……**被系统认定为超级用户**」。
   // 这一拍是**要求二对玩家可见的机制**——系统当场验明谁在名单上，而不是靠叙述告诉玩家谁算岳血。
   // ⚠ 实测：全库 396 条 event 搜「超级用户／超级管理员／冰冰／验证身份」**命中 0**，
   // 且 seq 1007–1012 整段六拍事件层空白。正典有、游戏没落地 → `new`，不是待扩。
-  { stageId: 'lyl.taiquan_core_conflict', text: '与尹馥兰商定：用阴阳鱼和地形反制潘金莲——硬刚还是设伏', status: 'ready', eventId: 'lyl.event.plan_counterattack' },
+  { stageId: 'lyg.han_succession', text: '因孟舍人死气失控，在登基典仪与赵飞燕双修，突破通幽境', status: 'ready', eventId: 'lyg.event.han_succession_09_beat', bloodlineBranch: 'zhao' },
   // #18 与汉国二级线同锚 s08（促成登基）；「长秋宫」字面更近 s06，但护住赵氏／登基收束在大典拍。
-  { stageId: 'lyl.taiquan_core_conflict', text: '与尹馥兰用阴阳鱼反击潘金莲，把追兵挡回去', status: 'ready', eventId: 'lyl.event.yin_yang_counter' },
+  { stageId: 'lyg.changgan_interlude', text: '马厩救出廖群玉：他携百衲衣寻岳霏，并牵到齐羽仙、周飞', status: 'ready', bloodlineBranch: 'xiaozi', eventId: 'lyg.event.changgan_interlude_02_beat' },
   { stageId: 'lyl.taiquan_afterfall', text: '修为到六阳，开启古阵内的入口（未来待扩）', status: 'pending' },
   { stageId: 'lyl.taiquan_afterfall', text: '小玲儿在太泉的那一拍（未来待扩）', status: 'pending', bloodlineBranch: 'xiaolinger' },
   // 程赵之子按用户裁定只标待扩（2026-08-16）：正典 seq 1052 有「宣布赵飞燕有孕」，
