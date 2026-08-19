@@ -57,3 +57,32 @@ test('登场门槛必须绑住叙述者，且这条规则要真的进提示词',
   assert.match(prompt, /自相矛盾/, '必须点名禁止「写出名字又说你还不知道他的名字」');
 });
 
+test('名字解禁必须以「真见过」为准，不能因为事件激活就提前解禁', async () => {
+  // 代码级漏洞（2026-08-20 制作人要求做反例测试时查出）：
+  // `collectIntroducedCharacterIds` 取的是 `[...activeEventIds, ...completedEventIds]`
+  // 的相关角色——**事件一激活，它的相关人就全被算作已相识**，可玩家还没见着。
+  // 实测：`太乙真宗介入` 一激活，蔺采泉／商乐轩／卓云君／月霜 立刻全部解禁；
+  // `程宗扬见王哲` 一激活，王哲立刻解禁。名字比见面早整整一拍。
+  //
+  // 真正记「见没见过」的是相识账本（acquaintances），故命名规则改走账本。
+  const rtm = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  const { buildScenarioStoryPrompt } = await loadTs('../src/modules/scenarioMods/storyContext.ts');
+  const fs = await import('node:fs');
+  const mod = JSON.parse(fs.readFileSync('src/modules/scenarioMods/builtins/data/lcq.stage_01.json', 'utf8'));
+  const progress = rtm.createScenarioProgress(mod);
+  progress.flags = { ...(mod.scenario.initialFlags || {}) };
+  progress.worldTurn = 0;
+  progress.modId = mod.manifest.id;
+  progress.currentChapterId = rtm.getInitialScenarioChapterId(mod);
+  const save = rtm.advanceScenarioRuntime({ 世界: { 状态: { 剧本模组: progress } } }).saveData;
+
+  // 「太乙真宗介入」已激活（旧口径会把卓云君等四人全部解禁），但账本仍是空的
+  save.世界.状态.剧本模组.activeEventIds = ['lcq.event.s01_04'];
+  const prompt = buildScenarioStoryPrompt(save) || '';
+  assert.match(prompt, /一个正典人物都还没见过/, '账本为空时必须明说玩家谁都没见过');
+  assert.ok(
+    !/玩家\*\*真正见过\*\*的只有：[^）]*卓云君/.test(prompt),
+    '卓云君只是出现在已激活事件里，玩家并没有见过他——不得据此解禁其名',
+  );
+});
+

@@ -991,12 +991,26 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
   // 「那是王哲——虽然你还不知道他的名字」。制作人 2026-08-20 在 demo 里读到了这一句：
   // 名字漏了，还自己拆穿自己。故补一句把叙述也绑进来。
   // （模型很可能本来就读过原著，所以光靠"不给它档案"挡不住，必须显式禁止。）
-  const narratorNamingRule = '**叙述同样受此约束**：名单外的人物在正文里不得被直呼其名——'
+  // ⚠ 名字解禁必须以**相识账本**为准，不能沿用 introducedNames。
+  // introducedNames 由 `collectIntroducedCharacterIds` 算出，而它取的是
+  // `[...activeEventIds, ...completedEventIds]` 的相关角色——**事件一激活人就算相识**，
+  // 可玩家还没见着。实测：`太乙真宗介入` 一激活，蔺采泉／商乐轩／卓云君／月霜 立刻全部解禁；
+  // `程宗扬见王哲` 一激活，王哲立刻解禁。名字因此比见面早一整拍。
+  // 账本（acquaintances）记的才是「真见过没有」，故命名规则走账本。
+  const metNames = new Set(
+    Object.values((runtime.acquaintances || {}) as Record<string, { name?: string; kind?: string }>)
+      .filter(record => record?.name && record.kind !== 'rumored')   // 只闻其名 ≠ 认得出人
+      .map(record => String(record.name)),
+  );
+  const metLine = metNames.size
+    ? `（其中玩家**真正见过**的只有：${[...metNames].slice(0, 30).join('、')}。）`
+    : '（玩家目前**一个正典人物都还没见过**。）';
+  const narratorNamingRule = metLine + '**叙述同样受此约束**：玩家没见过的人物在正文里不得被直呼其名——'
     + '玩家此刻并不知道他叫什么，请用外观、衣着、位置或所作所为指代（如「那个黑甲武将」）。'
     + '名字只有在本轮有人当场说出口、或玩家自己问出来时才能开始使用，并且要把「怎么知道的」写进正文。'
     + '尤其**不得一边写出名字、一边注明「你还不知道他的名字」**——那是自相矛盾。';
   const introducedLine = introducedNames.size
-    ? `【本存档已相识人物】${[...introducedNames].slice(0, 30).join('、')}。此名单外的正典人物尚未在本存档登场；NPC 不得认识、回忆、转述其私事或以熟人身份提及。${narratorNamingRule}`
+    ? `【本存档已登场人物】${[...introducedNames].slice(0, 30).join('、')}。此名单外的正典人物尚未在本存档登场；NPC 不得认识、回忆、转述其私事或以熟人身份提及。${narratorNamingRule}`
     : `【本存档登场门槛】没有被当前事件或既有关系明确带入的人物，NPC 不得认识、回忆或主动提及。${narratorNamingRule}`;
 
   // 声望与认知闭环：当前值+档位醒目注入（静态 REPUTATION_GUIDE 埋在 worldStandards 里 LLM 不消费——
