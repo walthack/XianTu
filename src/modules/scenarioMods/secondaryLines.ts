@@ -430,7 +430,7 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       { text: '识破白湖商馆主人苏妲己的伪装——她要的是霓龙丝的下落', status: 'ready', stageId: 'lcq.stage_02', eventId: 'lcq.event.s02_06' },
       { text: '与苏妲己订下三月南荒之约——采霓龙丝，否则炮烙', status: 'ready', stageId: 'lcq.stage_02', eventId: 'lcq.event.sudaji_south_pact' },
       // Z3 并进 lcq.event.s04_01（密谋刺王）
-      { text: '赌局落败，苏妲己作弊——确认凝羽因此被卖', status: 'ready', stageId: 'lcq.stage_02', eventId: 'lcq.event.gamble_bond_signed' },
+      { text: '赌局落败，苏妲己作弊——签下卖身契，落入白湖商馆奴籍', status: 'ready', stageId: 'lcq.stage_02', eventId: 'lcq.event.gamble_bond_signed' },
       // Z4 并进 s04b_lingfei_baiyi_crisis_08／_09（识破投峒、族长被换）
       { text: '帮苏妲己取物前，谈定六十金铢报酬', status: 'ready', stageId: 'lcq.stage_02', eventId: 'lcq.event.charge_sudaji_fee' },
       { text: '撕毁阿姬曼身契——出城路线已被封锁', status: 'ready', stageId: 'lcq.stage_02', eventId: 'lcq.event.free_ajiman' },

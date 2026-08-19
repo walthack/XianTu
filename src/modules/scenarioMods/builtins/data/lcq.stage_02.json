@@ -3214,12 +3214,12 @@
       },
       {
         "id": "lcq.event.gamble_bond_signed",
-        "name": "赌局落败卖身",
-        "description": "程宗扬赌局落败，面对苏妲己作弊后的卖身结果，凝羽因此被卖。",
+        "name": "落败签下卖身契",
+        "description": "程宗扬为救凝羽与苏妲己对赌，苏妲己作弊加速刻香致其落败；程宗扬被迫签下卖身契，成为白湖商馆的奴隶。",
         "axisId": "qingyu.21.1",
         "axisAnchor": "六朝清羽记·#21·第19章·赌局",
         "axisSeq": 37,
-        "axisBeat": "程宗扬赌局落败，面对苏妲己作弊后的卖身结果，凝羽因此被卖。",
+        "axisBeat": "程宗扬为救凝羽与苏妲己对赌，苏妲己作弊加速刻香致其落败；程宗扬被迫签下卖身契，成为白湖商馆的奴隶。",
         "critical": true,
         "completion": [
           {
@@ -3237,7 +3237,7 @@
           "liuchao.faction.bai_hu_shang_guan"
         ],
         "locationId": "liuchao.location.wuyuan",
-        "objective": "赌局落败后，面对苏妲己作弊造成的卖身结果，确认凝羽因此被卖",
+        "objective": "面对落败的结果，签下那张卖身契",
         "playerCompletionContract": {
           "kind": "objective_action",
           "settleOn": [
@@ -3258,12 +3258,12 @@
               "grantsPreparation": "rigged_wager_loss_seen"
             },
             {
-              "id": "face_ningyu_sold_result",
-              "label": "面对凝羽因此被卖的结果",
-              "actionText": "赌局落败后，我面对苏妲己作弊造成的卖身结果，确认凝羽因此被卖，不把这拍改写成赌局作废或无人易主。",
+              "id": "sign_the_bond",
+              "label": "面对落败的结果，签下那张卖身契",
+              "actionText": "赌局落败后，我面对苏妲己作弊造成的结果，签下卖身契、成为白湖商馆的奴隶，不把这拍改写成赌局作废或由旁人代签。",
               "timeCost": 1,
               "outcomeText": {
-                "success": "你已面对苏妲己作弊后的卖身结果，确认凝羽因此被卖；事件完成真值由本地引擎落账。",
+                "success": "你已签下卖身契、落入白湖商馆奴籍；事件完成真值由本地引擎落账。",
                 "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
                 "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
               },
