@@ -158,6 +158,8 @@ export interface ScenarioModEvent {
   };
   /** 程序层事件时钟；相对“事件首次具备结构条件”的世界回合计时。 */
   timeline?: ScenarioModEventTimeline;
+  /** 场景压力：危险在场且逐轮收紧；见该接口注释。 */
+  pressure?: ScenarioModEventPressure;
   /** 玩家走进绝路时本局结束；只用于危险已在场的少数拍，见该接口注释。 */
   fatalOutcomes?: ScenarioModEventFatalOutcomes;
   narrativeVariants?: ScenarioModEventNarrativeVariant[];
@@ -273,6 +275,23 @@ export interface ScenarioWorldOmen {
     title: string;
     text: string;
   };
+}
+
+/**
+ * 场景压力：危险已经在场并且正在收紧，但**到点不一定死人**。
+ *
+ * 与 `fatalOutcomes.deadline` 的区别只在后果：那边到点是本局结束，
+ * 这边到点由既有的 `offscreenResolution` 把这一拍按默认结果落定
+ * （箭照样射出去，只是玩家没插上手）。逼近的演出方式两者共用一套：
+ * 逐轮送一条可观察事实，由正文写出来，**不用 UI 倒计时**（裁定 #155）。
+ *
+ * 用在「战场、火场、追兵在后」这类拍上；日常拍不配，默认仍是 A 档可无限等待。
+ */
+export interface ScenarioModEventPressure {
+  /** 从本拍激活起算，第几轮开始送第一条逼近。 */
+  afterTurns: number;
+  /** 逐轮送达的可观察事实。不得预告结局，只写正在发生的事。 */
+  approach: string[];
 }
 
 /** 本局结束时给叙述的事实骨架。引擎只给事实，正文由叙述写——不写成 UI 提示。 */

@@ -2077,6 +2077,35 @@ function settleFatalDeadlines(runtime: RuntimeState, transitions: ScenarioRuntim
   }
 }
 
+/**
+ * 场景压力：与绝路共用同一条送达路径，但到点不结束本局——
+ * 到点由既有的 `offscreenResolution` 把这一拍按默认结果落定。
+ *
+ * 立项由来（2026-08-19）：制作人真机试玩后指出「玩家可以毫无止境地在中州草原闲逛，
+ * 而不触发段强的死……这是战争场景不是日常，应该给到紧迫感」。
+ * 查证：机制其实在（`afterStallTurns: 8`），但**8 轮里零信号**——
+ * 引擎知道时钟在走，玩家不知道。与倒计时那个问题同一类：不喂到正文等于没有。
+ */
+function settleScenePressure(runtime: RuntimeState, transitions: ScenarioRuntimeTransition[]): void {
+  if (runtime.gameOver || runtime.pendingFatalApproach) return;   // 绝路的逼近优先
+  const now = Math.max(0, Number(runtime.worldTurn) || 0);
+  runtime.fatalApproachDelivered = Array.isArray(runtime.fatalApproachDelivered) ? runtime.fatalApproachDelivered : [];
+  for (const eventId of runtime.activeEventIds) {
+    const event = runtime.events.find(item => item.id === eventId);
+    const pressure = event?.pressure;
+    if (!event || !pressure || isEventSettled(runtime, eventId)) continue;
+    const startedAt = eventTimelineState(runtime, eventId)?.activatedAtTurn;
+    if (startedAt === undefined) continue;
+    const step = now - startedAt - pressure.afterTurns;
+    if (step < 0 || step >= pressure.approach.length) continue;
+    const key = `pressure:${eventId}#${step}`;
+    if (runtime.fatalApproachDelivered.includes(key)) continue;
+    runtime.fatalApproachDelivered.push(key);
+    runtime.pendingFatalApproach = { text: pressure.approach[step], atTurn: now };
+    transitions.push({ type: 'fatal_approach', id: key, detail: pressure.approach[step] });
+  }
+}
+
 function recordSettledBeatHandoff(runtime: RuntimeState, transitions: ScenarioRuntimeTransition[]): void {
   const completed = transitions
     .filter(transition => transition.type === 'event_completed')
@@ -2897,6 +2926,7 @@ export function advanceScenarioRuntime(saveData: SaveData): {
   syncActorEngine(runtime);
   refreshEventTimelineRevelations(runtime, transitions);
   settleFatalDeadlines(runtime, transitions);
+  settleScenePressure(runtime, transitions);
   recordSettledBeatHandoff(runtime, transitions);
   recordChronicleTransitions(runtime, transitions);
 

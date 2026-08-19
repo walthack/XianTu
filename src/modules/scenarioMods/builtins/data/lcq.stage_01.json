@@ -2031,12 +2031,12 @@
         "objective": "草原上半兽人突然杀到，先保住自己和身边的人",
         "offscreenResolution": {
           "id": "offscreen.r2_9.lcq_event_s01_02",
-          "afterStallTurns": 8,
+          "afterStallTurns": 4,
           "flagKey": "world.r2_9.lcq_event_s01_02.offscreen_resolved",
           "resolvedEventIds": [
             "lcq.event.s01_02"
           ],
-          "worldDelta": "段强仍在草原遭半兽人箭袭身亡；这场袭击没有因你缺席而停下，幸存者与战场痕迹成为后来者能接触到的后果。",
+          "worldDelta": "半兽人的箭袭没有等你做完决定：段强中箭身亡。这场袭击不因你是否出手而停下——尸身、箭矢与踏平的草地都留在原地，成为你此后必须面对的事实。",
           "evidence": "R2-9 世界引力合同：段强被射杀属于不依赖玩家领取任务才会发生的世界事件；仅在该节点已激活且长期停滞时结算。"
         },
         "playerCompletionContract": {
@@ -2056,6 +2056,14 @@
                 "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
               }
             }
+          ]
+        },
+        "pressure": {
+          "afterTurns": 1,
+          "approach": [
+            "远处那片喊杀声换了方向，正朝你们这一侧压过来；草浪一路倒伏，像有什么在贴地推进。",
+            "已经能分辨出蹄声和吼叫了。灌木后面立起几个佝偻的影子，兽面人身，手里的短弓正在上弦。",
+            "第一支箭钉进你脚边的泥里，箭羽还在抖。段强就在开阔处，背对着那个方向。"
           ]
         }
       },
@@ -2147,7 +2155,7 @@
         "objective": "有修士突然插手战场，先设法带着伤者脱险",
         "offscreenResolution": {
           "id": "offscreen.r2_9.lcq_event_s01_04",
-          "afterStallTurns": 8,
+          "afterStallTurns": 5,
           "flagKey": "world.r2_9.lcq_event_s01_04.offscreen_resolved",
           "resolvedEventIds": [
             "lcq.event.s01_04"
@@ -2571,6 +2579,13 @@
               },
               "expiresAfterTurns": 4
             }
+          ]
+        },
+        "pressure": {
+          "afterTurns": 1,
+          "approach": [
+            "兽蛮的包围圈在收紧，你和伤者被压向一处低洼；能退的方向正一个个消失。",
+            "有人在远处高声喝止，声音穿过喊杀压过来——但你不知道那是冲着谁来的。"
           ]
         }
       },
