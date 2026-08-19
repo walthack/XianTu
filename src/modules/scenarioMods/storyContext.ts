@@ -987,9 +987,17 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
   const globalIdentitySection = globalIdentityLines.length
     ? `## 别名与实体定锚（不可望文生义）\n${globalIdentityLines.join('\n')}\n以上均为人物姓名/别名，不是兵器、坐骑、功法、物品或可另造的同名角色。`
     : '';
+  // ⚠ 这条规则原先只管 **NPC 的知情**，不管**叙述者的笔**——于是旁白可以大方写出
+  // 「那是王哲——虽然你还不知道他的名字」。制作人 2026-08-20 在 demo 里读到了这一句：
+  // 名字漏了，还自己拆穿自己。故补一句把叙述也绑进来。
+  // （模型很可能本来就读过原著，所以光靠"不给它档案"挡不住，必须显式禁止。）
+  const narratorNamingRule = '**叙述同样受此约束**：名单外的人物在正文里不得被直呼其名——'
+    + '玩家此刻并不知道他叫什么，请用外观、衣着、位置或所作所为指代（如「那个黑甲武将」）。'
+    + '名字只有在本轮有人当场说出口、或玩家自己问出来时才能开始使用，并且要把「怎么知道的」写进正文。'
+    + '尤其**不得一边写出名字、一边注明「你还不知道他的名字」**——那是自相矛盾。';
   const introducedLine = introducedNames.size
-    ? `【本存档已相识人物】${[...introducedNames].slice(0, 30).join('、')}。此名单外的正典人物尚未在本存档登场；NPC 不得认识、回忆、转述其私事或以熟人身份提及。`
-    : '【本存档登场门槛】没有被当前事件或既有关系明确带入的人物，NPC 不得认识、回忆或主动提及。';
+    ? `【本存档已相识人物】${[...introducedNames].slice(0, 30).join('、')}。此名单外的正典人物尚未在本存档登场；NPC 不得认识、回忆、转述其私事或以熟人身份提及。${narratorNamingRule}`
+    : `【本存档登场门槛】没有被当前事件或既有关系明确带入的人物，NPC 不得认识、回忆或主动提及。${narratorNamingRule}`;
 
   // 声望与认知闭环：当前值+档位醒目注入（静态 REPUTATION_GUIDE 埋在 worldStandards 里 LLM 不消费——
   // 实测籍籍无名的主角被唐使"底细尽在掌握"）
