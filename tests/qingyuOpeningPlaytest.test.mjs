@@ -50,3 +50,24 @@ test('开局第一屏就有目标：建档时已预跑激活，不必等玩家�
   assert.equal(runtime.storyMode, undefined, 'demo 必须留在 canon_companion，否则完成合同按钮不出现');
 });
 
+test('开场正文不得剧透后续拍，也不得出现机制术语', async () => {
+  // 2026-08-19：初版开场把十八拍全列了出来（段强之死、王哲传功、五原城落为奴隶…），
+  // 还写了「Canon Rail 钉死」「任务栏会给出当前合同」「两处绝路会直接结束本局」——
+  // 制作人一进游戏就看到了。这些话属于**入口卡片**，不属于叙事面。
+  // 与本项目清理 objective 的规矩同源：玩家看到的东西里不许有开发者语言与剧透。
+  const mod = await loadStage();
+  const { createQingyuOpeningPlaytestSave } = await loadTs('../src/modules/scenarioMods/qingyuOpeningPlaytest.ts');
+  const save = createQingyuOpeningPlaytestSave(mod);
+  const opening = (save.系统?.历史?.叙事 || []).map(entry => [entry?.content, ...(entry?.actionOptions || [])].join(' ')).join('\n');
+  assert.ok(opening.length > 40, '开场正文不应为空');
+
+  // 机制术语：玩家不该在正文里读到系统怎么运作
+  for (const term of ['Canon Rail', '合同', '按钮', '任务栏', '回合', '拍', '本局']) {
+    assert.ok(!opening.includes(term), `开场正文出现机制术语「${term}」`);
+  }
+  // 后续拍的剧透：这些人和事在第一拍都还没发生
+  for (const term of ['段强之死', '王哲', '月霜', '太乙', '五原城', '苏妲己', '炮烙', '奴隶', '自爆']) {
+    assert.ok(!opening.includes(term), `开场正文剧透了后续内容「${term}」`);
+  }
+});
+
