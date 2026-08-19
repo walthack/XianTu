@@ -306,24 +306,36 @@
             </div>
           </div>
 
+          <div v-if="scenarioGameOver" class="game-over-card">
+            <div class="game-over-head">
+              <span class="game-over-tag">本局结束</span>
+              <h3>{{ scenarioGameOver.title }}</h3>
+            </div>
+            <p class="game-over-hint">这条路走到了尽头。结局已写在上方正文里。</p>
+            <div class="game-over-acts">
+              <button v-if="canRollback" @click="rollbackToLastConversation" class="go-primary">回到上一轮</button>
+              <button @click="router.push('/')" class="go-ghost">返回角色选择</button>
+            </div>
+          </div>
+
           <textarea
             v-model="inputText"
             @focus="isInputFocused = true"
             @blur="isInputFocused = false"
             @keydown="handleKeyDown"
             @input="handleInput"
-            :placeholder="playtestFinished ? '本次试玩已结束，请在上方提交反馈' : hasActiveCharacter ? t('请输入您的选择或行动...') : t('请先选择角色...')"
+            :placeholder="scenarioGameOver ? '本局已结束' : playtestFinished ? '本次试玩已结束，请在上方提交反馈' : hasActiveCharacter ? t('请输入您的选择或行动...') : t('请先选择角色...')"
             class="game-input"
             ref="inputRef"
             rows="1"
             wrap="soft"
-            :disabled="!hasActiveCharacter || isAIProcessing || playtestFinished"
+            :disabled="!hasActiveCharacter || isAIProcessing || playtestFinished || !!scenarioGameOver"
           ></textarea>
         </div>
 
         <button
           @click="sendMessage"
-          :disabled="!inputText.trim() || isAIProcessing || !hasActiveCharacter || playtestFinished"
+          :disabled="!inputText.trim() || isAIProcessing || !hasActiveCharacter || playtestFinished || !!scenarioGameOver"
           class="send-button"
         >
           <Loader2 v-if="isAIProcessing" :size="16" class="animate-spin" />
@@ -733,6 +745,13 @@ const actionQueue = useActionQueueStore();
 const uiStore = useUIStore();
 let aiResetToken = 0;
 const gameStateStore = useGameStateStore();
+// 本局已结束（玩家走进绝路）。引擎侧 `runtime.gameOver` 是唯一真值来源——
+// 结局正文由叙述在本轮已经写完，这里只负责收住界面：封输入，只留退路。
+const scenarioGameOver = computed<{ endingId: string; title: string; facts: string[] } | null>(() => {
+  const runtime = (gameStateStore.worldState as any)?.剧本模组;
+  const over = runtime?.gameOver;
+  return over?.endingId ? over : null;
+});
 const playtestFinished = computed(() => {
   const marker = (gameStateStore.systemExtensions as any)?.六朝世界试玩;
   const runtime = (gameStateStore.worldState as any)?.剧本模组;
@@ -1565,6 +1584,10 @@ const selectScenarioEngineAction = (option: ScenarioEngineActionSelection) => {
 };
 
 const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: JudgementResolution }) => {
+  if (scenarioGameOver.value) {
+    toast.info('本局已经结束');
+    return;
+  }
   if (playtestFinished.value) {
     toast.info('本次试玩纵切已经结束，请先提交反馈');
     return;
@@ -3180,7 +3203,70 @@ const syncGameState = async () => {
 }
 
 /* 输入框内部的文本区域 */
-.input-container .game-input {
+.input-container /* 本局结束：只收界面，不复述结局——正文已经写过了。
+   用朱砂系（--color-danger）压住，与普通提示区分；配色走既有变量，不写字面量。 */
+.game-over-card {
+  margin: 0 0 10px;
+  padding: 12px 14px;
+  border: 1px solid var(--color-danger);
+  border-left-width: 3px;
+  border-radius: 3px;
+  background: var(--color-surface-light);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.game-over-head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.game-over-tag {
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  color: var(--color-danger);
+  border: 1px solid var(--color-danger);
+  border-radius: 2px;
+  padding: 1px 6px;
+}
+.game-over-head h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+.game-over-hint {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+.game-over-acts {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.game-over-acts button {
+  font-size: 0.82rem;
+  padding: 6px 14px;
+  border-radius: 2px;
+  cursor: pointer;
+  font-family: inherit;
+}
+.go-primary {
+  background: var(--color-primary);
+  color: var(--color-surface);
+  border: 1px solid var(--color-primary);
+}
+.go-ghost {
+  background: transparent;
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border);
+}
+.game-over-acts button:hover { opacity: 0.88; }
+
+.game-input {
   flex: 1;
   border: none;
   background: transparent;
