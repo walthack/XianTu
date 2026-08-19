@@ -57,6 +57,19 @@ const REAL_DEFECTS = [
       + '只走晋线，龙宸会从账本里凭空冒出来。未处理。' },
 ];
 
+// ── 动词反推：与 `runtime.deriveInteractionVerb` 同一套正则（玩家看到的按钮＝动词·对象）。
+// 用户 2026-08-19 正在按标题审走向，故把每条会推出的动词标出来。
+// ⚠ 这是**复制**的启发式，不是共享代码——runtime 那边改了正则，这里要跟着改。
+const verbOf = t => {
+  if (!/(?:躲避|避开|规避|防备|不被)/u.test(t) && /(?:击退|迎战|攻击|斩杀|搏杀|交锋|制伏|制服)/u.test(t)) return '攻击';
+  if (/(?:使用|服用|取出|祭出|装备|交付).{0,10}(?:道具|药|丹|符|器|物|信|令)/u.test(t)) return '使用';
+  if (/(?:前往|赶往|赶赴|动身|启程|进入|离开)/u.test(t)) return '前往';
+  if (/(?:请求|询问|交谈|对话|商议|交涉|说服|劝说|告知)/u.test(t)) return '交谈';
+  if (/(?:观察|察看|查看|留意|见证|确认|调查|探查|打量|查明|查清|识别|辨认)/u.test(t)) return '观察';
+  if (/(?:休息|休整|修炼|调息|疗伤|打坐)/u.test(t)) return '修整';
+  return '行动';
+};
+
 // ── 本轮待审：这一轮由 Claude 做出的判断，**每一条都需要用户过目**。
 // 用户 2026-08-18 指出：「主轴和二级线并未真正定稿，你这轮做完的是待审。」
 // 故本清单不是变更日志，是**审阅工单**：每条给出「我做了什么／依据是什么／你可能想推翻的是哪里」。
@@ -414,6 +427,7 @@ ol.nodes li.p .sq{color:var(--ink3)}
 .badge.pend{color:var(--ink3)}
 .badge.ins{color:var(--tan)}
 .hooks{margin-top:5px;padding-left:11px;border-left:2px dashed var(--grid)}
+.vb{display:inline-block;min-width:30px;margin-right:6px;padding:1px 5px;font-size:10px;border-radius:2px;background:var(--band);color:var(--ink3);vertical-align:1px}
 .hk{font-size:12px;color:var(--ink2);padding:2px 0}
 .hk b{color:var(--tan);font-weight:600}
 .hk em{font-style:normal;font-size:10px;color:var(--ink3)}
@@ -497,7 +511,7 @@ ${r.tiers.map(t => `<div class="ln">
     return `<li class="${st}">
       <span class="sq mono">${n.seq ?? (n.status === 'pending' ? '' : '?')}</span>
       <span class="bd">
-        <span class="tx">${esc(n.text)}</span>
+        <span class="vb">${esc(verbOf(n.text))}</span><span class="tx">${esc(n.text)}</span>
         <span class="ev mono">${ev ? esc(ev.name) + '　' : ''}${n.eventId ? esc(n.eventId) : '（无 event · 待扩）'}</span>
         ${n.eventId === t.anchor ? '<span class="badge anchor">锚</span>' : ''}
         ${owners.get(n.eventId)?.length > 1 ? `<span class="badge shared">双喂 ${esc(owners.get(n.eventId).join('／'))}</span>` : ''}
