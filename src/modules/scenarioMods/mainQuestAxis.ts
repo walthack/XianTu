@@ -320,6 +320,22 @@ export const MAIN_QUEST_NODES: MainQuestNode[] = [
   // #1 落点＝帅帐见王哲（旅程终点拍）；坠落／半兽人在 s01_01–s01_04。
   { stageId: 'lcq.stage_01', text: '王哲发现你身上有生死根，耗真气筑基，传下九阳神功口诀', status: 'ready', eventId: 'lcq.event.s01_05' },
   { stageId: 'lcq.stage_02', text: '接下王哲三托：保管锦囊、六阳后去太泉古阵、守护月霜', status: 'ready', eventId: 'lcq.event.s02_01' },
+  // ── 强制段：五原城落奴 → 白湖商馆脱身（用户 2026-08-19 指出此前漏落）──
+  // 这一段之所以在主轴而不在昭南线：它是**教程段**——玩家在这里第一次经历
+  // 「走到某处 → 见到某人 → 触发一段剧情 → 再推进下一步」的完整循环，
+  // 并拿到第一个同行者（凝羽，挂在 seq 42「冰蛊逼南行」）。
+  // 上面第 281 行早把本关角色记成「王哲三托付；白湖脱身＝强制段终点」，
+  // 但节点一直没落——rail 延长（覆盖全关 18 拍）做了，主轴这一半漏了。
+  // 昭南线仍认领同一批 event（双喂），两边看到的是同一段剧情的不同用途。
+  { stageId: 'lcq.stage_02', text: '五原城把你当逃奴拿下，颈上烙了奴隶印记', status: 'ready', eventId: 'lcq.event.s02_04' },
+  { stageId: 'lcq.stage_02', text: '地牢里阿姬曼引你出逃，出去就撞上戈龙等人设的局', status: 'ready', eventId: 'lcq.event.s02_05' },
+  { stageId: 'lcq.stage_02', text: '识破白湖商馆主人苏妲己的伪装，被囚起来追问霓龙丝', status: 'ready', eventId: 'lcq.event.s02_06' },
+  { stageId: 'lcq.stage_02', text: '凝羽奉苏妲己之命入局，你当面认清她的处境', status: 'ready', eventId: 'lcq.event.ningyu_enters_gamble' },
+  { stageId: 'lcq.stage_02', text: '与苏妲己订下三月南荒之约：采不到霓龙丝就受炮烙', status: 'ready', eventId: 'lcq.event.sudaji_south_pact' },
+  { stageId: 'lcq.stage_02', text: '为救凝羽对赌，苏妲己作弊加速刻香，你签下卖身契入了商馆奴籍', status: 'ready', eventId: 'lcq.event.gamble_bond_signed' },
+  { stageId: 'lcq.stage_02', text: '替苏妲己取物之前谈定六十金铢', status: 'ready', eventId: 'lcq.event.charge_sudaji_fee' },
+  { stageId: 'lcq.stage_02', text: '取得阿姬曼身契当面撕毁', status: 'ready', eventId: 'lcq.event.free_ajiman' },
+  { stageId: 'lcq.stage_02', text: '从白湖商馆的死局里脱身，走出五原商馆', status: 'ready', eventId: 'lcq.event.baihu_shangguan_escape' },
   // 强制段终点（Helgen 洞口，用户裁定 2026-08-17）。
   // s02_06 只落到「被囚＋追问霓龙丝」，rail 禁止在那一拍脱身。本拍才是出馆。
   // 地点＝五原商馆。不作废成南荒路上的锚定拍。

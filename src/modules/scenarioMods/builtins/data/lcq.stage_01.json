@@ -1980,7 +1980,7 @@
         "axisSeq": 1,
         "axisAnchor": "六朝清羽记·#1·第1集·太乙真宗",
         "axisBeat": "程宗扬与段强乘坐飞机时被紫色雷电击中，两人从现代世界消失。",
-        "objective": "寻找穿越后的降落地点",
+        "objective": "航班上异变突起，先稳住自己并弄清身在何处",
         "playerCompletionContract": {
           "kind": "objective_action",
           "settleOn": [
@@ -1989,8 +1989,8 @@
           "actions": [
             {
               "id": "advance_declared_objective",
-              "label": "寻找穿越后的降落地点",
-              "actionText": "我按当前主线目标行动：寻找穿越后的降落地点",
+              "label": "航班上异变突起，先稳住自己并弄清身在何处",
+              "actionText": "我按当前主线目标行动：稳住自己并弄清身在何处",
               "timeCost": 1,
               "outcomeText": {
                 "success": "你已亲自执行“寻找穿越后的降落地点”；事件完成真值将由本地引擎落账。",
@@ -2028,7 +2028,7 @@
         "axisSeq": 2,
         "axisAnchor": "六朝清羽记·#1·第1集·太乙真宗",
         "axisBeat": "段强在穿越后的异世界中遭遇半兽人袭击而死亡。",
-        "objective": "避开半兽人袭击",
+        "objective": "草原上半兽人突然杀到，先保住自己和身边的人",
         "offscreenResolution": {
           "id": "offscreen.r2_9.lcq_event_s01_02",
           "afterStallTurns": 8,
@@ -2047,8 +2047,8 @@
           "actions": [
             {
               "id": "advance_declared_objective",
-              "label": "避开半兽人袭击",
-              "actionText": "我按当前主线目标行动：避开半兽人袭击",
+              "label": "草原上半兽人突然杀到，先保住自己和身边的人",
+              "actionText": "我按当前主线目标行动：保住自己和身边的人",
               "timeCost": 1,
               "outcomeText": {
                 "success": "你已亲自执行“避开半兽人袭击”；事件完成真值将由本地引擎落账。",
@@ -2090,7 +2090,7 @@
         "axisSeq": 8,
         "axisAnchor": "六朝清羽记·#5·第4章·生死",
         "axisBeat": "程宗扬被半兽人围攻，卓云君施展烈火法术救下他和月霜，太乙真宗四位教御及其弟子现身并全歼兽蛮武士。",
-        "objective": "获取卓云君救助",
+        "objective": "战场上有名受伤军士，先判断该不该伸手相助",
         "playerCompletionContract": {
           "kind": "objective_action",
           "settleOn": [
@@ -2099,8 +2099,8 @@
           "actions": [
             {
               "id": "advance_declared_objective",
-              "label": "获取卓云君救助",
-              "actionText": "我按当前主线目标行动：获取卓云君救助",
+              "label": "战场上有名受伤军士，先判断该不该伸手相助",
+              "actionText": "我按当前主线目标行动：判断该不该伸手相助",
               "timeCost": 1,
               "outcomeText": {
                 "success": "你已亲自执行“获取卓云君救助”；事件完成真值将由本地引擎落账。",
@@ -2144,7 +2144,7 @@
         "axisSeq": 8,
         "axisAnchor": "六朝清羽记·#5·第4章·生死",
         "axisBeat": "程宗扬被半兽人围攻，卓云君施展烈火法术救下他和月霜，太乙真宗四位教御及其弟子现身并全歼兽蛮武士。",
-        "objective": "加入太乙真宗阵营",
+        "objective": "有修士突然插手战场，先设法带着伤者脱险",
         "offscreenResolution": {
           "id": "offscreen.r2_9.lcq_event_s01_04",
           "afterStallTurns": 8,
@@ -2163,8 +2163,8 @@
           "actions": [
             {
               "id": "advance_declared_objective",
-              "label": "加入太乙真宗阵营",
-              "actionText": "我按当前主线目标行动：加入太乙真宗阵营",
+              "label": "有修士突然插手战场，先设法带着伤者脱险",
+              "actionText": "我按当前主线目标行动：设法带着伤者脱险",
               "timeCost": 1,
               "outcomeText": {
                 "success": "你已亲自执行“加入太乙真宗阵营”；事件完成真值将由本地引擎落账。",
@@ -2605,7 +2605,7 @@
         "axisSeq": 19,
         "axisAnchor": "六朝清羽记·#10·第9章·传功",
         "axisBeat": "王哲耗费真气为程宗扬筑基疗伤，传授九阳神功口诀，程宗扬以自创文字记录口诀。",
-        "objective": "见王哲学习九阳神功",
+        "objective": "在帅帐里把来历说清楚，先让对方诊治你的伤",
         "playerCompletionContract": {
           "kind": "objective_action",
           "settleOn": [
@@ -2614,8 +2614,8 @@
           "actions": [
             {
               "id": "advance_declared_objective",
-              "label": "见王哲学习九阳神功",
-              "actionText": "我按当前主线目标行动：见王哲学习九阳神功",
+              "label": "在帅帐里把来历说清楚，先让对方诊治你的伤",
+              "actionText": "我按当前主线目标行动：让对方诊治你的伤",
               "timeCost": 1,
               "outcomeText": {
                 "success": "你已亲自执行“见王哲学习九阳神功”；事件完成真值将由本地引擎落账。",
@@ -2655,7 +2655,7 @@
         "axisSeq": 18,
         "axisAnchor": "六朝清羽记·#9·第8章·治伤",
         "axisBeat": "程宗扬在真阳驱使下强行与月霜发生关系，意外通过性交将真阳传入月霜体内，压制并化解了她的寒毒。",
-        "objective": "与月霜解除寒毒危机",
+        "objective": "月霜身上的寒毒正在失控，先应对眼前危局",
         "playerCompletionContract": {
           "kind": "objective_action",
           "settleOn": [
@@ -2664,8 +2664,8 @@
           "actions": [
             {
               "id": "advance_declared_objective",
-              "label": "与月霜解除寒毒危机",
-              "actionText": "我按当前主线目标行动：与月霜解除寒毒危机",
+              "label": "月霜身上的寒毒正在失控，先应对眼前危局",
+              "actionText": "我按当前主线目标行动：应对眼前危局",
               "timeCost": 1,
               "outcomeText": {
                 "success": "你已亲自执行“与月霜解除寒毒危机”；事件完成真值将由本地引擎落账。",
@@ -2692,7 +2692,7 @@
           "lcq.character.yue_shuang"
         ],
         "critical": false,
-        "objective": "留在现场完成“月霜·招牌登场”的首次接触",
+        "objective": "留在现场，先把眼前这个人看清楚",
         "playerCompletionContract": {
           "kind": "objective_action",
           "settleOn": [
@@ -2701,7 +2701,7 @@
           "actions": [
             {
               "id": "advance_curated_event",
-              "label": "留在现场完成“月霜·招牌登场”的首次接触",
+              "label": "把眼前这个人看清楚",
               "actionText": "我留在现场观察并回应，完成“月霜·招牌登场”的首次接触。",
               "timeCost": 1,
               "outcomeText": {

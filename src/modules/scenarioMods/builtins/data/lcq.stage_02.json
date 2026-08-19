@@ -2316,7 +2316,7 @@
         "axisSeq": 20,
         "axisAnchor": "六朝清羽记·#10·第9章·传功",
         "axisBeat": "王哲托付程宗扬三件事：保管锦囊、修为达六阳后前往太泉古阵祭祀、守护岳帅后人月霜。",
-        "objective": "前往王哲处，获取锦囊并接受托付",
+        "objective": "王哲还有事要当面交代，先听他把话说完",
         "playerCompletionContract": {
           "kind": "objective_action",
           "settleOn": [
@@ -2325,8 +2325,8 @@
           "actions": [
             {
               "id": "advance_declared_objective",
-              "label": "前往王哲处，获取锦囊并接受托付",
-              "actionText": "我按当前主线目标行动：前往王哲处，获取锦囊并接受托付",
+              "label": "王哲还有事要当面交代，先听他把话说完",
+              "actionText": "我按当前主线目标行动：听他把话说完",
               "timeCost": 1,
               "outcomeText": {
                 "success": "你已亲自执行“前往王哲处，获取锦囊并接受托付”；事件完成真值将由本地引擎落账。",
@@ -2721,7 +2721,7 @@
           "阿伽门侬",
           "焦土"
         ],
-        "objective": "完整见证左武军覆灭与王哲殉军的三段因果",
+        "objective": "左武军已与联军开战，先保住自己和月霜，跟上战局变化",
         "offscreenResolution": {
           "id": "offscreen.r2_9.lcq_event_s02_02",
           "afterStallTurns": 7,
@@ -2869,7 +2869,7 @@
         "axisSeq": 31,
         "axisAnchor": "六朝清羽记·#17·第15章·冤屈",
         "axisBeat": "程宗扬被戈龙和孙疤脸误认为是逃跑的奴隶，遭到暴打和烙刑，被强制烙印奴隶印记。",
-        "objective": "在五原城中避免被误抓为奴隶",
+        "objective": "五原城里有人把你当成逃奴，先应付眼前的盘问与拉扯",
         "playerCompletionContract": {
           "kind": "objective_action",
           "settleOn": [
@@ -2878,8 +2878,8 @@
           "actions": [
             {
               "id": "advance_declared_objective",
-              "label": "在五原城中避免被误抓为奴隶",
-              "actionText": "我按当前主线目标行动：在五原城中避免被误抓为奴隶",
+              "label": "五原城里有人把你当成逃奴，先应付眼前的盘问与拉扯",
+              "actionText": "我按当前主线目标行动：应付眼前的盘问与拉扯",
               "timeCost": 1,
               "outcomeText": {
                 "success": "你已亲自执行“在五原城中避免被误抓为奴隶”；事件完成真值将由本地引擎落账。",
@@ -2916,7 +2916,7 @@
         "axisSeq": 33,
         "axisAnchor": "六朝清羽记·#19·第17章·圈套",
         "axisBeat": "程宗扬被故意放出牢房后遭戈龙伏击，被迫杀死孙疤脸并试图反抗。",
-        "objective": "在五原城牢房外应对戈龙伏击",
+        "objective": "地牢里有人靠近你，先判断她要带你去哪",
         "playerCompletionContract": {
           "kind": "objective_action",
           "settleOn": [
@@ -2925,8 +2925,8 @@
           "actions": [
             {
               "id": "advance_declared_objective",
-              "label": "在五原城牢房外应对戈龙伏击",
-              "actionText": "我按当前主线目标行动：在五原城牢房外应对戈龙伏击",
+              "label": "地牢里有人靠近你，先判断她要带你去哪",
+              "actionText": "我按当前主线目标行动：判断她要带你去哪",
               "timeCost": 1,
               "outcomeText": {
                 "success": "你已亲自执行“在五原城牢房外应对戈龙伏击”；事件完成真值将由本地引擎落账。",
@@ -2964,7 +2964,7 @@
         "axisSeq": 35,
         "axisAnchor": "六朝清羽记·#20·第18章·妲己",
         "axisBeat": "程宗扬识破商馆女主人苏妲己的伪装，揭露其外淫内端的实质，苏妲己下令处死男奴，并囚禁程宗扬逼问霓龙丝情报。",
-        "objective": "在商馆揭穿苏妲己伪装，脱身",
+        "objective": "在白湖商馆与馆主当面周旋，看清她究竟是谁",
         "playerCompletionContract": {
           "kind": "objective_action",
           "settleOn": [
@@ -2973,8 +2973,8 @@
           "actions": [
             {
               "id": "advance_declared_objective",
-              "label": "在商馆揭穿苏妲己伪装，脱身",
-              "actionText": "我按当前主线目标行动：在商馆揭穿苏妲己伪装，脱身",
+              "label": "在白湖商馆与馆主当面周旋，看清她究竟是谁",
+              "actionText": "我按当前主线目标行动：看清她究竟是谁",
               "timeCost": 1,
               "outcomeText": {
                 "success": "你已亲自执行“在商馆揭穿苏妲己伪装，脱身”；事件完成真值将由本地引擎落账。",
@@ -3054,7 +3054,7 @@
           "liuchao.faction.bai_hu_shang_guan"
         ],
         "locationId": "liuchao.location.wuyuan",
-        "objective": "与苏妲己订下三个月内赴南荒采集霓龙丝的约定",
+        "objective": "面对苏妲己就霓龙丝一事的逼问，谈清眼下能换到的期限",
         "playerCompletionContract": {
           "kind": "objective_action",
           "settleOn": [
@@ -3175,7 +3175,7 @@
           "liuchao.faction.bai_hu_shang_guan"
         ],
         "locationId": "liuchao.location.wuyuan",
-        "objective": "当面听清凝羽的弑主合作开价，并探明她体内阴寒之气的来源",
+        "objective": "当面听清凝羽私下的合作条件，并探明她体内阴寒之气从何而来",
         "playerCompletionContract": {
           "kind": "objective_action",
           "settleOn": [
@@ -3237,7 +3237,7 @@
           "liuchao.faction.bai_hu_shang_guan"
         ],
         "locationId": "liuchao.location.wuyuan",
-        "objective": "面对落败的结果，签下那张卖身契",
+        "objective": "赌局局面骤变，面对眼前的刻香与契书做出回应",
         "playerCompletionContract": {
           "kind": "objective_action",
           "settleOn": [
@@ -3259,7 +3259,7 @@
             },
             {
               "id": "sign_the_bond",
-              "label": "面对落败的结果，签下那张卖身契",
+              "label": "面对眼前的刻香与契书做出回应",
               "actionText": "赌局落败后，我面对苏妲己作弊造成的结果，签下卖身契、成为白湖商馆的奴隶，不把这拍改写成赌局作废或由旁人代签。",
               "timeCost": 1,
               "outcomeText": {
@@ -3359,7 +3359,7 @@
           "liuchao.faction.bai_hu_shang_guan"
         ],
         "locationId": "liuchao.location.wuyuan",
-        "objective": "取得阿姬曼身契当面撕毁，并应对被封锁的出城路线",
+        "objective": "取得阿姬曼的身契并当面还她自由，再设法出城",
         "playerCompletionContract": {
           "kind": "objective_action",
           "settleOn": [
@@ -3420,7 +3420,7 @@
           "liuchao.faction.bai_hu_shang_guan"
         ],
         "locationId": "liuchao.location.wuyuan",
-        "objective": "稳定武二郎伤势，带队突破铁索桥伏击",
+        "objective": "先稳住武二郎伤势，再带队过铁索桥",
         "playerCompletionContract": {
           "kind": "objective_action",
           "settleOn": [
@@ -3481,7 +3481,7 @@
           "liuchao.faction.bai_hu_shang_guan"
         ],
         "locationId": "liuchao.location.wuyuan",
-        "objective": "承受雨林伤亡，依凝羽的火光带两支商队渡过黑石滩",
+        "objective": "收拢雨林里的伤员，按岸边火光把两支商队渡过黑石滩",
         "playerCompletionContract": {
           "kind": "objective_action",
           "settleOn": [
@@ -3543,7 +3543,7 @@
           "liuchao.faction.bai_hu_shang_guan"
         ],
         "locationId": "liuchao.location.wuyuan",
-        "objective": "认清奉苏妲己之命进入赌局的凝羽的处境，并当面回应",
+        "objective": "凝羽突然入局，当面看清她此刻的处境并回应",
         "playerCompletionContract": {
           "kind": "objective_action",
           "settleOn": [
@@ -3605,7 +3605,7 @@
           "liuchao.faction.tai_yi_zhen_zong"
         ],
         "locationId": "liuchao.location.wuyuan",
-        "objective": "在紫溪现身与太乙真宗交涉，并救回落水的祁远",
+        "objective": "应对紫溪上太乙真宗拦船，护住船上的人",
         "playerCompletionContract": {
           "kind": "objective_action",
           "settleOn": [
@@ -3666,7 +3666,7 @@
           "liuchao.faction.bai_hu_shang_guan"
         ],
         "locationId": "liuchao.location.wuyuan",
-        "objective": "抵达无灯火无人声的蛇彝村并安置商队，不预写灭村真相",
+        "objective": "抵达蛇彝村，把商队安顿下来",
         "playerCompletionContract": {
           "kind": "objective_action",
           "settleOn": [

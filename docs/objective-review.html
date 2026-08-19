@@ -1,0 +1,612 @@
+<title>Objective 复审单</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;700&family=Noto+Sans+SC:wght@400;500;700&display=swap">
+<style>
+:root{
+ --paper:#F3EEE4; --card:#FBF8F2; --sink:#EAE3D6; --line:#D8CFBE;
+ --ink:#231F1C; --ink2:#5C554C; --ink3:#8A8175;
+ --qing:#2E5C6E; --zhu:#A8352A; --teng:#9C7118; --lv:#3F6B52;
+ --serif:"Noto Serif SC",Songti SC,serif; --sans:"Noto Sans SC",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+ --paper:#1C1917; --card:#252120; --sink:#2E2926; --line:#3D3733;
+ --ink:#EDE6DA; --ink2:#B3A99B; --ink3:#867C70;
+ --qing:#7FB3C4; --zhu:#E0796A; --teng:#D7AE55; --lv:#84B394;
+}}
+:root[data-theme="dark"]{
+ --paper:#1C1917; --card:#252120; --sink:#2E2926; --line:#3D3733;
+ --ink:#EDE6DA; --ink2:#B3A99B; --ink3:#867C70;
+ --qing:#7FB3C4; --zhu:#E0796A; --teng:#D7AE55; --lv:#84B394;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);
+ font-size:15px;line-height:1.7;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1000px;margin:0 auto;padding:40px 22px 90px;display:flex;flex-direction:column;gap:26px}
+h1{font-family:var(--serif);font-size:30px;font-weight:700;margin:0;text-wrap:balance;letter-spacing:.01em}
+.sub{color:var(--ink2);margin:6px 0 0;max-width:62ch}
+.stat{display:flex;flex-wrap:wrap;gap:10px}
+.stat div{background:var(--card);border:1px solid var(--line);border-radius:3px;padding:8px 13px;
+ font-variant-numeric:tabular-nums}
+.stat b{font-family:var(--serif);font-size:20px;display:block;line-height:1.25}
+.stat span{font-size:11.5px;color:var(--ink3);letter-spacing:.06em}
+.rule{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--qing);
+ border-radius:0 3px 3px 0;padding:20px 22px}
+.rule h2{font-family:var(--serif);font-size:19px;margin:0 0 4px}
+.rule .eyebrow{font-size:11px;letter-spacing:.14em;color:var(--qing);font-weight:700;
+ text-transform:uppercase;margin:0 0 8px}
+.rule p{margin:0 0 10px;max-width:66ch}
+.rule p:last-child{margin-bottom:0}
+.rule .key{background:var(--sink);border-radius:3px;padding:12px 14px;font-family:var(--serif);
+ font-size:15.5px;margin-top:12px}
+.row{background:var(--card);border:1px solid var(--line);border-radius:3px;padding:16px 18px;
+ display:flex;flex-direction:column;gap:11px}
+.row.keep{opacity:.72}
+.row header{display:flex;align-items:baseline;gap:11px;flex-wrap:wrap}
+.seq{font-variant-numeric:tabular-nums;font-size:12px;color:var(--ink3);
+ background:var(--sink);border-radius:2px;padding:2px 7px;font-weight:700}
+.row h3{font-family:var(--serif);font-size:17px;margin:0;font-weight:500}
+.chips{display:flex;gap:5px;flex-wrap:wrap;margin-left:auto}
+.v{font-size:11px;padding:2px 7px;border-radius:2px;letter-spacing:.03em;white-space:nowrap}
+.v.crit{background:color-mix(in srgb,var(--zhu) 15%,transparent);color:var(--zhu);
+ border:1px solid color-mix(in srgb,var(--zhu) 35%,transparent)}
+.v.warn{background:color-mix(in srgb,var(--teng) 15%,transparent);color:var(--teng);
+ border:1px solid color-mix(in srgb,var(--teng) 35%,transparent)}
+.v.ok{background:color-mix(in srgb,var(--lv) 15%,transparent);color:var(--lv);
+ border:1px solid color-mix(in srgb,var(--lv) 35%,transparent)}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);
+ border:1px solid var(--line);border-radius:3px;overflow:hidden}
+@media (max-width:640px){.pair{grid-template-columns:1fr}}
+.cell{background:var(--card);padding:11px 13px}
+.cell.old p{color:var(--ink2);text-decoration:line-through;text-decoration-color:color-mix(in srgb,var(--zhu) 55%,transparent)}
+.cell.new p{color:var(--ink);font-weight:500}
+.cell p{margin:3px 0 0;font-family:var(--serif);font-size:15.5px}
+.lbl{font-size:10.5px;letter-spacing:.1em;color:var(--ink3);text-transform:uppercase}
+.why,.note,.mine{margin:0;font-size:13.5px;color:var(--ink2);max-width:72ch}
+.why b,.note b,.mine b{color:var(--ink);font-weight:700;margin-right:8px;font-size:12.5px}
+.note{color:var(--ink2)}
+.note b{color:var(--teng)}
+.mine{border-top:1px dashed var(--line);padding-top:9px}
+.mine b{color:var(--qing)}
+.mine.diff b{color:var(--zhu)}
+.mine.half b{color:var(--teng)}
+.mine.plus b{color:var(--lv)}
+.act{display:flex;gap:14px;flex-wrap:wrap;align-items:center;border-top:1px solid var(--line);padding-top:11px}
+.act label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:5px;color:var(--ink2)}
+.act input[type=radio]{accent-color:var(--qing);cursor:pointer}
+.txt{flex:1;min-width:180px;background:var(--paper);border:1px solid var(--line);border-radius:2px;
+ padding:6px 9px;font-family:var(--sans);font-size:13px;color:var(--ink)}
+.txt:focus,.act input:focus-visible,button:focus-visible{outline:2px solid var(--qing);outline-offset:2px}
+.bar{position:sticky;bottom:0;background:var(--card);border:1px solid var(--line);border-radius:3px;
+ padding:12px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;
+ box-shadow:0 -2px 16px color-mix(in srgb,var(--ink) 9%,transparent)}
+button{background:var(--qing);color:var(--paper);border:0;border-radius:2px;padding:8px 16px;
+ font-family:var(--sans);font-size:13.5px;font-weight:700;cursor:pointer}
+button.ghost{background:transparent;color:var(--qing);border:1px solid var(--qing)}
+#say{font-size:13px;color:var(--ink2)}
+</style>
+<div class="wrap">
+<header>
+ <h1>Objective 复审单</h1>
+ <p class="sub">demo 段（清羽记 stage_01 + stage_02）25 条任务指引。Grok 独立审、Claude 校对，
+ 圈选后按底部按钮把结论复制回对话。</p>
+</header>
+
+<div class="stat">
+ <div><b>25</b><span>待审</span></div>
+ <div><b>22</b><span>GROK 标需人审</span></div>
+ <div><b>4</b><span>判为合格</span></div>
+ <div><b>3</b><span>CLAUDE 有异议</span></div>
+</div>
+
+<section class="rule">
+ <p class="eyebrow">先裁定这一条 · 其余 25 条都跟着它走</p>
+ <h2>objective 该写「要达成什么」，还是「眼下什么局面」？</h2>
+ <p>这两个写法会打架：seq 31 那拍正典结果就是被抓，写「避免被抓」指反了正典，
+ 写「被抓为奴隶」又提前把结局告诉玩家。Grok 给的是第三条路——</p>
+ <p><b>处境 ＋ 眼下要做的判断</b>，既不写终点，也不写终点的反面。</p>
+ <div class="key">检验口诀：删掉结局名词（身亡、烙印、溃散、入营、传功成功）之后，
+ 剩下的是否仍是一个此刻就能执行的判断；若只剩「去成为那个结局」或「去阻止那个结局」，就还没写对。</div>
+</section>
+
+<article class="row" data-i="0">
+ <header>
+  <span class="seq"></span>
+  <h3>月霜·招牌登场</h3>
+  <div class="chips"><span class="v crit">开发者语言</span></div>
+ </header>
+ <div class="pair">
+  <div class="cell old"><span class="lbl">现在玩家看到的</span><p>留在现场完成“月霜·招牌登场”的首次接触</p></div>
+  <div class="cell new"><span class="lbl">Grok 改写</span><p>留在现场，先把眼前这个人看清楚</p></div>
+ </div>
+ <p class="why"><b>问题</b>任务栏直接搬用内部事件标题「月霜·招牌登场」，是给开发者看的名称，不是给玩家的指引。</p>
+ <p class="note"><b>争议点</b>本拍无 rail 合同，改写只按「处境+当下判断」；要不要点名月霜、以及「招牌登场」是否应对玩家隐藏，需制作人定。</p>
+ 
+ <div class="act">
+  <label><input type="radio" name="d0" value="采纳改写"> 采纳</label>
+  <label><input type="radio" name="d0" value="保留原文"> 保留原文</label>
+  <label><input type="radio" name="d0" value="我另有写法"> 我另有写法</label>
+  <input class="txt" placeholder="要改成什么／为什么（可留空）">
+ </div>
+</article><article class="row" data-i="1">
+ <header>
+  <span class="seq">1</span>
+  <h3>程宗扬与段强穿越</h3>
+  <div class="chips"><span class="v warn">剧透结果</span></div>
+ </header>
+ <div class="pair">
+  <div class="cell old"><span class="lbl">现在玩家看到的</span><p>寻找穿越后的降落地点</p></div>
+  <div class="cell new"><span class="lbl">Grok 改写</span><p>航班上异变突起，先稳住自己并弄清身在何处</p></div>
+ </div>
+ <p class="why"><b>问题</b>「穿越后」把本拍 mustReach（遭雷击并坠入异界）写成既成事实，玩家还没经历异变就知道自己会穿越。</p>
+ <p class="note"><b>争议点</b>R1×R3 较轻：不能写改穿越原因/换同行者，也不能预告「你将穿越」。若任务栏在坠地之后才出现，改成「弄清自己落到了何处」即可，切入点需制作人定。</p>
+ <p class="mine "><b>Claude · 一致</b>「穿越后」这个词本身就把结果说成既成事实——比我原先判的「措辞怪」准。</p>
+ <div class="act">
+  <label><input type="radio" name="d1" value="采纳改写"> 采纳</label>
+  <label><input type="radio" name="d1" value="保留原文"> 保留原文</label>
+  <label><input type="radio" name="d1" value="我另有写法"> 我另有写法</label>
+  <input class="txt" placeholder="要改成什么／为什么（可留空）">
+ </div>
+</article><article class="row" data-i="2">
+ <header>
+  <span class="seq">2</span>
+  <h3>段强被射杀</h3>
+  <div class="chips"><span class="v crit">与正典相反</span></div>
+ </header>
+ <div class="pair">
+  <div class="cell old"><span class="lbl">现在玩家看到的</span><p>避开半兽人袭击</p></div>
+  <div class="cell new"><span class="lbl">Grok 改写</span><p>草原上半兽人突然杀到，先保住自己和身边的人</p></div>
+ </div>
+ <p class="why"><b>问题</b>「避开半兽人袭击」把玩家推向禁令里的「段强存活」，与 mustReach「段强遭袭身亡」相反。</p>
+ <p class="note"><b>争议点</b>典型 R1×R3：不能写避开/救下段强，也不能写段强将被射死。只给箭雨已至的处境和当下求生判断，死亡作为过程后果发生。</p>
+ <p class="mine "><b>Claude · 一致</b>最硬的一条：合同禁令直写「段强存活／段强失踪」，而 objective 叫玩家去避开袭击。</p>
+ <div class="act">
+  <label><input type="radio" name="d2" value="采纳改写"> 采纳</label>
+  <label><input type="radio" name="d2" value="保留原文"> 保留原文</label>
+  <label><input type="radio" name="d2" value="我另有写法"> 我另有写法</label>
+  <input class="txt" placeholder="要改成什么／为什么（可留空）">
+ </div>
+</article><article class="row" data-i="3">
+ <header>
+  <span class="seq">8</span>
+  <h3>程宗扬与月霜初遇</h3>
+  <div class="chips"><span class="v crit">与正典相反</span><span class="v warn">绑死做法</span></div>
+ </header>
+ <div class="pair">
+  <div class="cell old"><span class="lbl">现在玩家看到的</span><p>获取卓云君救助</p></div>
+  <div class="cell new"><span class="lbl">Grok 改写</span><p>战场上有名受伤军士，先判断该不该伸手相助</p></div>
+ </div>
+ <p class="why"><b>问题</b>本拍必达是与受伤、女扮男装的月霜初遇并因误触起冲突，任务却点名下一拍人物卓云君并绑死「向他求援」，触犯「提前引入后续人物」。</p>
+ <p class="note"><b>争议点</b>R1×R3：不能预支卓云君施救，也不能剧透女扮男装或误触。是否在任务栏点「月霜」这个名字，需制作人定。</p>
+ <p class="mine plus"><b>Claude · 一致 · 我另有依据</b>补一条依据：本拍禁令就是「提前引入后续人物」，而卓云君正是后续人物——这条 objective 踩的是它自己那拍的禁令。</p>
+ <div class="act">
+  <label><input type="radio" name="d3" value="采纳改写"> 采纳</label>
+  <label><input type="radio" name="d3" value="保留原文"> 保留原文</label>
+  <label><input type="radio" name="d3" value="我另有写法"> 我另有写法</label>
+  <input class="txt" placeholder="要改成什么／为什么（可留空）">
+ </div>
+</article><article class="row" data-i="4">
+ <header>
+  <span class="seq">8</span>
+  <h3>太乙真宗介入</h3>
+  <div class="chips"><span class="v warn">剧透结果</span><span class="v warn">绑死做法</span></div>
+ </header>
+ <div class="pair">
+  <div class="cell old"><span class="lbl">现在玩家看到的</span><p>加入太乙真宗阵营</p></div>
+  <div class="cell new"><span class="lbl">Grok 改写</span><p>有修士突然插手战场，先设法带着伤者脱险</p></div>
+ </div>
+ <p class="why"><b>问题</b>本拍必达是太乙介入、击退兽蛮并脱险，「加入太乙真宗阵营」把收留预告成入营站队，路径和归属都被写死。</p>
+ <p class="note"><b>争议点</b>R1×R3：不能写拒绝救援或改写脱险，也不能写「你将被收编」。叙事若已亮明太乙名号，可把「修士」改回宗门名，但不要写加入阵营。</p>
+ <p class="mine plus"><b>Claude · 我更正自己</b>我先前说它踩禁令「无关人物获得太乙身份」是过度解读，撤回。Grok 的定性更准：把「被收留」预告成「入营站队」，同时把路径写死。</p>
+ <div class="act">
+  <label><input type="radio" name="d4" value="采纳改写"> 采纳</label>
+  <label><input type="radio" name="d4" value="保留原文"> 保留原文</label>
+  <label><input type="radio" name="d4" value="我另有写法"> 我另有写法</label>
+  <input class="txt" placeholder="要改成什么／为什么（可留空）">
+ </div>
+</article><article class="row" data-i="5">
+ <header>
+  <span class="seq">18</span>
+  <h3>月霜强取真阳</h3>
+  <div class="chips"><span class="v warn">剧透结果</span></div>
+ </header>
+ <div class="pair">
+  <div class="cell old"><span class="lbl">现在玩家看到的</span><p>与月霜解除寒毒危机</p></div>
+  <div class="cell new"><span class="lbl">Grok 改写</span><p>月霜身上的寒毒正在失控，先应对眼前危局</p></div>
+ </div>
+ <p class="why"><b>问题</b>「解除寒毒危机」把 mustReach（寒毒被真阳压制化解）写成任务完成态，玩家未经历过程已知会成功。</p>
+ <p class="note"><b>争议点</b>R1×R3：不能写改用替代疗法或跳过本拍，也不能写真阳入体、发生关系或寒毒将被解除。只保留危局与当下应对。</p>
+ <p class="mine "><b>Claude · 一致</b></p>
+ <div class="act">
+  <label><input type="radio" name="d5" value="采纳改写"> 采纳</label>
+  <label><input type="radio" name="d5" value="保留原文"> 保留原文</label>
+  <label><input type="radio" name="d5" value="我另有写法"> 我另有写法</label>
+  <input class="txt" placeholder="要改成什么／为什么（可留空）">
+ </div>
+</article><article class="row" data-i="6">
+ <header>
+  <span class="seq">19</span>
+  <h3>程宗扬见王哲</h3>
+  <div class="chips"><span class="v warn">剧透结果</span><span class="v warn">绑死做法</span></div>
+ </header>
+ <div class="pair">
+  <div class="cell old"><span class="lbl">现在玩家看到的</span><p>见王哲学习九阳神功</p></div>
+  <div class="cell new"><span class="lbl">Grok 改写</span><p>在帅帐里把来历说清楚，先让对方诊治你的伤</p></div>
+ </div>
+ <p class="why"><b>问题</b>「见王哲学习九阳神功」把本拍授功结果直接写给玩家，并绑死见谁、学哪门功。</p>
+ <p class="note"><b>争议点</b>R1×R3：不能写拒传或改写传功，也不能预告九阳神功与筑基。王哲之名若前拍已亮明可保留，功法名不宜出现。</p>
+ <p class="mine "><b>Claude · 一致</b></p>
+ <div class="act">
+  <label><input type="radio" name="d6" value="采纳改写"> 采纳</label>
+  <label><input type="radio" name="d6" value="保留原文"> 保留原文</label>
+  <label><input type="radio" name="d6" value="我另有写法"> 我另有写法</label>
+  <input class="txt" placeholder="要改成什么／为什么（可留空）">
+ </div>
+</article><article class="row" data-i="7">
+ <header>
+  <span class="seq">20</span>
+  <h3>王哲传功与托付</h3>
+  <div class="chips"><span class="v warn">绑死做法</span><span class="v warn">剧透结果</span></div>
+ </header>
+ <div class="pair">
+  <div class="cell old"><span class="lbl">现在玩家看到的</span><p>前往王哲处，获取锦囊并接受托付</p></div>
+  <div class="cell new"><span class="lbl">Grok 改写</span><p>王哲还有事要当面交代，先听他把话说完</p></div>
+ </div>
+ <p class="why"><b>问题</b>「前往王哲处」绑死路径，「获取锦囊并接受托付」又预告本拍交付物与托付本身。</p>
+ <p class="note"><b>争议点</b>R1×R3：不能改写托付，也不能预告锦囊、太泉或守护月霜。禁令写明不可提前泄露太泉秘密。</p>
+ <p class="mine "><b>Claude · 一致</b></p>
+ <div class="act">
+  <label><input type="radio" name="d7" value="采纳改写"> 采纳</label>
+  <label><input type="radio" name="d7" value="保留原文"> 保留原文</label>
+  <label><input type="radio" name="d7" value="我另有写法"> 我另有写法</label>
+  <input class="txt" placeholder="要改成什么／为什么（可留空）">
+ </div>
+</article><article class="row keep" data-i="8">
+ <header>
+  <span class="seq">22</span>
+  <h3>秦军与罗马军团交战</h3>
+  <div class="chips"><span class="v ok">合格</span><span class="v ok">原样保留</span></div>
+ </header>
+ <div class="pair">
+  <div class="cell old"><span class="lbl">现在玩家看到的</span><p>在秦军与罗马军的交战中求生并观察战局</p></div>
+  <div class="cell new"><span class="lbl">Grok 改写</span><p>在秦军与罗马军的交战中求生并观察战局</p></div>
+ </div>
+ <p class="why"><b>问题</b>只给出交战处境和当下要做的事（求生、看清战局），既不指向打赢或改写溃散，也不预告秦军必败。</p>
+ 
+ <p class="mine "><b>Claude · 一致</b>我们两边都判 ok，唯一一致过关的一条。</p>
+ <div class="act">
+  <label><input type="radio" name="d8" value="采纳改写"> 采纳</label>
+  <label><input type="radio" name="d8" value="保留原文"> 保留原文</label>
+  <label><input type="radio" name="d8" value="我另有写法"> 我另有写法</label>
+  <input class="txt" placeholder="要改成什么／为什么（可留空）">
+ </div>
+</article><article class="row" data-i="9">
+ <header>
+  <span class="seq">30</span>
+  <h3>左武军与罗马军团大战</h3>
+  <div class="chips"><span class="v warn">剧透结果</span><span class="v crit">开发者语言</span></div>
+ </header>
+ <div class="pair">
+  <div class="cell old"><span class="lbl">现在玩家看到的</span><p>完整见证左武军覆灭与王哲殉军的三段因果</p></div>
+  <div class="cell new"><span class="lbl">Grok 改写</span><p>左武军已与联军开战，先保住自己和月霜，跟上战局变化</p></div>
+ </div>
+ <p class="why"><b>问题</b>「覆灭」「殉军」把本拍结局预先说完，「三段因果」是结构统计口径，玩家不该知道这拍被切成三段。</p>
+ <p class="note"><b>争议点</b>典型 R1×R3：不能写守住全军或救下王哲，也不能写覆灭与殉军。多步按钮本身已偏剧透，任务栏至少不要再复述三段结局。</p>
+ <p class="mine "><b>Claude · 一致</b></p>
+ <div class="act">
+  <label><input type="radio" name="d9" value="采纳改写"> 采纳</label>
+  <label><input type="radio" name="d9" value="保留原文"> 保留原文</label>
+  <label><input type="radio" name="d9" value="我另有写法"> 我另有写法</label>
+  <input class="txt" placeholder="要改成什么／为什么（可留空）">
+ </div>
+</article><article class="row" data-i="10">
+ <header>
+  <span class="seq">31</span>
+  <h3>程宗扬在五原城被误抓为奴隶</h3>
+  <div class="chips"><span class="v crit">与正典相反</span></div>
+ </header>
+ <div class="pair">
+  <div class="cell old"><span class="lbl">现在玩家看到的</span><p>在五原城中避免被误抓为奴隶</p></div>
+  <div class="cell new"><span class="lbl">Grok 改写</span><p>五原城里有人把你当成逃奴，先应付眼前的盘问与拉扯</p></div>
+ </div>
+ <p class="why"><b>问题</b>「避免被误抓为奴隶」正对着 forbiddenInCanon「避免被误抓的既定结果」，与 mustReach（被误认逃奴、殴打并烙印）相反。</p>
+ <p class="note"><b>争议点</b>题目所举的 R1×R3 范例：不能写避免被抓，也不能写将被殴打烙印。只写已被当成逃奴的处境和当下应对，烙印作为过程后果落下。</p>
+ <p class="mine "><b>Claude · 一致</b>两难的标准范例，你的裁定主要就看这条。</p>
+ <div class="act">
+  <label><input type="radio" name="d10" value="采纳改写"> 采纳</label>
+  <label><input type="radio" name="d10" value="保留原文"> 保留原文</label>
+  <label><input type="radio" name="d10" value="我另有写法"> 我另有写法</label>
+  <input class="txt" placeholder="要改成什么／为什么（可留空）">
+ </div>
+</article><article class="row" data-i="11">
+ <header>
+  <span class="seq">33</span>
+  <h3>程宗扬与阿姬曼·芭娜相遇</h3>
+  <div class="chips"><span class="v warn">剧透结果</span></div>
+ </header>
+ <div class="pair">
+  <div class="cell old"><span class="lbl">现在玩家看到的</span><p>在五原城牢房外应对戈龙伏击</p></div>
+  <div class="cell new"><span class="lbl">Grok 改写</span><p>地牢里有人靠近你，先判断她要带你去哪</p></div>
+ </div>
+ <p class="why"><b>问题</b>「戈龙伏击」把尚未发生的埋伏对象与性质预先告知，本拍前半的放人/相遇直接被剧透成圈套。</p>
+ <p class="note"><b>争议点</b>R1×R3：不能写躲开伏击或改写孙疤脸之死，也不能预告戈龙伏击。若任务栏出现在已出牢房之后，可改成「出了牢房就有人拦路，先保住自己」。</p>
+ <p class="mine half"><b>Claude · 部分同意</b>Grok 判「戈龙伏击尚未发生」。我查到正典写着「程宗扬发现逃出囚室系**戈龙等人故意设局**」——所以戈龙设局有据，不是无中生有，问题是提前告知。另外 description 只写了阿姬曼那一面、objective 只写戈龙那一面，**两边各半**，玩家怎么拼都拼不全。</p>
+ <div class="act">
+  <label><input type="radio" name="d11" value="采纳改写"> 采纳</label>
+  <label><input type="radio" name="d11" value="保留原文"> 保留原文</label>
+  <label><input type="radio" name="d11" value="我另有写法"> 我另有写法</label>
+  <input class="txt" placeholder="要改成什么／为什么（可留空）">
+ </div>
+</article><article class="row" data-i="12">
+ <header>
+  <span class="seq">35</span>
+  <h3>程宗扬见苏妲己</h3>
+  <div class="chips"><span class="v crit">与正典相反</span><span class="v warn">剧透结果</span></div>
+ </header>
+ <div class="pair">
+  <div class="cell old"><span class="lbl">现在玩家看到的</span><p>在商馆揭穿苏妲己伪装，脱身</p></div>
+  <div class="cell new"><span class="lbl">Grok 改写</span><p>在白湖商馆与馆主当面周旋，看清她究竟是谁</p></div>
+ </div>
+ <p class="why"><b>问题</b>「脱身」把玩家指向本拍不会成立的出困（mustReach 是识破后遭囚并被追问），同时「揭穿苏妲己伪装」把身份揭穿写成已知任务。</p>
+ <p class="note"><b>争议点</b>典型 R1×R3：不能写「脱身/避免被囚」，也不能写「被囚禁」。改写把重点放在当面核对身份与应对盘问，囚禁在过程中落地。</p>
+ <p class="mine plus"><b>Claude · 一致 · 它比我准</b>B 批最硬的一条，比我看得准。合同 allowedElaboration 明写「**不得替程宗扬直接脱身**」、禁令含「提前解决商馆冲突」，而 objective 写的就是「脱身」——指引直接指向合同明令禁止的事，且「脱身」是 seq 41 那一拍的内容。</p>
+ <div class="act">
+  <label><input type="radio" name="d12" value="采纳改写"> 采纳</label>
+  <label><input type="radio" name="d12" value="保留原文"> 保留原文</label>
+  <label><input type="radio" name="d12" value="我另有写法"> 我另有写法</label>
+  <input class="txt" placeholder="要改成什么／为什么（可留空）">
+ </div>
+</article><article class="row" data-i="13">
+ <header>
+  <span class="seq">35</span>
+  <h3>凝羽进入赌局</h3>
+  <div class="chips"><span class="v warn">剧透结果</span></div>
+ </header>
+ <div class="pair">
+  <div class="cell old"><span class="lbl">现在玩家看到的</span><p>认清奉苏妲己之命进入赌局的凝羽的处境，并当面回应</p></div>
+  <div class="cell new"><span class="lbl">Grok 改写</span><p>凝羽突然入局，当面看清她此刻的处境并回应</p></div>
+ </div>
+ <p class="why"><b>问题</b>任务栏直接写明「奉苏妲己之命进入赌局」，把本拍要当面认清的事实提前交给玩家。</p>
+ <p class="note"><b>争议点</b>R3 与防误读打架：点明「奉命」会剧透认清结果，但完全不提主使，玩家可能理解成她是被卖入局（正是 forbidden）。</p>
+ <p class="mine "><b>Claude · 一致</b></p>
+ <div class="act">
+  <label><input type="radio" name="d13" value="采纳改写"> 采纳</label>
+  <label><input type="radio" name="d13" value="保留原文"> 保留原文</label>
+  <label><input type="radio" name="d13" value="我另有写法"> 我另有写法</label>
+  <input class="txt" placeholder="要改成什么／为什么（可留空）">
+ </div>
+</article><article class="row" data-i="14">
+ <header>
+  <span class="seq">36</span>
+  <h3>三个月南荒之约</h3>
+  <div class="chips"><span class="v warn">剧透结果</span></div>
+ </header>
+ <div class="pair">
+  <div class="cell old"><span class="lbl">现在玩家看到的</span><p>与苏妲己订下三个月内赴南荒采集霓龙丝的约定</p></div>
+  <div class="cell new"><span class="lbl">Grok 改写</span><p>面对苏妲己就霓龙丝一事的逼问，谈清眼下能换到的期限</p></div>
+ </div>
+ <p class="why"><b>问题</b>把尚未谈成的终点条款（三个月内赴南荒采霓龙丝）写成已定任务，玩家未谈先知道会订下什么约。</p>
+ <p class="note"><b>争议点</b>R1×R3：此拍正典就是订约，不能写成拒约；但原句把期限、南荒、采丝一次写死。另需确认「赴南荒采丝」会不会把产地写成已核实事实（forbidden 第三条）。</p>
+ <p class="mine "><b>Claude · 一致</b></p>
+ <div class="act">
+  <label><input type="radio" name="d14" value="采纳改写"> 采纳</label>
+  <label><input type="radio" name="d14" value="保留原文"> 保留原文</label>
+  <label><input type="radio" name="d14" value="我另有写法"> 我另有写法</label>
+  <input class="txt" placeholder="要改成什么／为什么（可留空）">
+ </div>
+</article><article class="row" data-i="15">
+ <header>
+  <span class="seq">37</span>
+  <h3>落败签下卖身契</h3>
+  <div class="chips"><span class="v warn">剧透结果</span></div>
+ </header>
+ <div class="pair">
+  <div class="cell old"><span class="lbl">现在玩家看到的</span><p>面对落败的结果，签下那张卖身契</p></div>
+  <div class="cell new"><span class="lbl">Grok 改写</span><p>赌局局面骤变，面对眼前的刻香与契书做出回应</p></div>
+ </div>
+ <p class="why"><b>问题</b>「落败」和「签下卖身契」已是本拍终点，任务栏先把败局与为奴结果告诉玩家。</p>
+ <p class="note"><b>争议点</b>标准 R1×R3：写「赢下赌局/拒签」违反 R1，写「签契为奴」违反 R3。改写只摊开刻香与契书这两处压力面，与两枚按钮仍能对上。</p>
+ <p class="mine "><b>Claude · 一致</b>这条原文是我今天改的，确实剧透了会输。</p>
+ <div class="act">
+  <label><input type="radio" name="d15" value="采纳改写"> 采纳</label>
+  <label><input type="radio" name="d15" value="保留原文"> 保留原文</label>
+  <label><input type="radio" name="d15" value="我另有写法"> 我另有写法</label>
+  <input class="txt" placeholder="要改成什么／为什么（可留空）">
+ </div>
+</article><article class="row keep" data-i="16">
+ <header>
+  <span class="seq">38</span>
+  <h3>谈定六十金铢</h3>
+  <div class="chips"><span class="v ok">合格</span><span class="v ok">原样保留</span></div>
+ </header>
+ <div class="pair">
+  <div class="cell old"><span class="lbl">现在玩家看到的</span><p>在帮苏妲己取出新奇器物前谈定六十金铢报酬</p></div>
+  <div class="cell new"><span class="lbl">Grok 改写</span><p>在帮苏妲己取出新奇器物前谈定六十金铢报酬</p></div>
+ </div>
+ <p class="why"><b>问题</b>玩家本就会主动谈价，六十金铢是此拍要谈成的工价而非中段逆转，也不绑取出器物的手段。</p>
+ 
+ <p class="mine "><b>Claude · 一致</b>判 ok 合理：谈价是玩家本就会主动去做的事，不是中段逆转。</p>
+ <div class="act">
+  <label><input type="radio" name="d16" value="采纳改写"> 采纳</label>
+  <label><input type="radio" name="d16" value="保留原文"> 保留原文</label>
+  <label><input type="radio" name="d16" value="我另有写法"> 我另有写法</label>
+  <input class="txt" placeholder="要改成什么／为什么（可留空）">
+ </div>
+</article><article class="row" data-i="17">
+ <header>
+  <span class="seq">40</span>
+  <h3>撕毁阿姬曼身契</h3>
+  <div class="chips"><span class="v warn">剧透结果</span></div>
+ </header>
+ <div class="pair">
+  <div class="cell old"><span class="lbl">现在玩家看到的</span><p>取得阿姬曼身契当面撕毁，并应对被封锁的出城路线</p></div>
+  <div class="cell new"><span class="lbl">Grok 改写</span><p>取得阿姬曼的身契并当面还她自由，再设法出城</p></div>
+ </div>
+ <p class="why"><b>问题</b>撕契还自由可作为眼前要做的事，但「被封锁的出城路线」是撕契之后才发生的变故，提前写进任务栏。</p>
+ <p class="note"><b>争议点</b>出城封锁是「随即遭遇」，属结果/转折。去封锁后，按钮「改道出城」会略跳；若制作人认为封锁开场时已可见，可维持原句后半。</p>
+ <p class="mine half"><b>Claude · 部分同意</b>同意去掉「出城封锁」。但它的改写「当面还她自由」仍然是结果，可以再收一档。</p>
+ <div class="act">
+  <label><input type="radio" name="d17" value="采纳改写"> 采纳</label>
+  <label><input type="radio" name="d17" value="保留原文"> 保留原文</label>
+  <label><input type="radio" name="d17" value="我另有写法"> 我另有写法</label>
+  <input class="txt" placeholder="要改成什么／为什么（可留空）">
+ </div>
+</article><article class="row keep" data-i="18">
+ <header>
+  <span class="seq">41</span>
+  <h3>白湖脱身</h3>
+  <div class="chips"><span class="v ok">合格</span><span class="v ok">原样保留</span></div>
+ </header>
+ <div class="pair">
+  <div class="cell old"><span class="lbl">现在玩家看到的</span><p>从白湖商馆的死局里脱身，走出五原商馆</p></div>
+  <div class="cell new"><span class="lbl">Grok 改写</span><p>从白湖商馆的死局里脱身，走出五原商馆</p></div>
+ </div>
+ <p class="why"><b>问题</b>出馆脱身是玩家会主动追求、且与 mustReach 一致的方向，未写成已出五原城，也未指定改道或和解。</p>
+ 
+ <p class="mine "><b>Claude · 一致</b></p>
+ <div class="act">
+  <label><input type="radio" name="d18" value="采纳改写"> 采纳</label>
+  <label><input type="radio" name="d18" value="保留原文"> 保留原文</label>
+  <label><input type="radio" name="d18" value="我另有写法"> 我另有写法</label>
+  <input class="txt" placeholder="要改成什么／为什么（可留空）">
+ </div>
+</article><article class="row keep" data-i="19">
+ <header>
+  <span class="seq">47</span>
+  <h3>武二郎入队</h3>
+  <div class="chips"><span class="v ok">合格</span><span class="v ok">原样保留</span></div>
+ </header>
+ <div class="pair">
+  <div class="cell old"><span class="lbl">现在玩家看到的</span><p>让走投无路的武二郎当面答应加入南荒队伍</p></div>
+  <div class="cell new"><span class="lbl">Grok 改写</span><p>让走投无路的武二郎当面答应加入南荒队伍</p></div>
+ </div>
+ <p class="why"><b>问题</b>拉武二郎随队南行是玩家会追求的方向，与「当面答应入队」的必达一致，也未写死劝说手段。</p>
+ <p class="note"><b>争议点</b>多步合同的按钮 1「确认此前并未应诺」是连续性核对，现 objective 几乎只覆盖按钮 2；是否要补一句「去而复返、先问清旧诺」请制作人定。</p>
+ <p class="mine diff"><b>Claude · 我不同意</b>**我不同意判 ok。**「当面答应」把结果给了玩家——武二郎会答应。这与 seq 36 南荒之约是同一形态（都是「谈成某事」），Grok 那条判了 spoils 却把这条判 ok，两条标准不一致。请你一并裁定。</p>
+ <div class="act">
+  <label><input type="radio" name="d19" value="采纳改写"> 采纳</label>
+  <label><input type="radio" name="d19" value="保留原文"> 保留原文</label>
+  <label><input type="radio" name="d19" value="我另有写法"> 我另有写法</label>
+  <input class="txt" placeholder="要改成什么／为什么（可留空）">
+ </div>
+</article><article class="row" data-i="20">
+ <header>
+  <span class="seq">50</span>
+  <h3>铁索桥伏击</h3>
+  <div class="chips"><span class="v warn">剧透结果</span></div>
+ </header>
+ <div class="pair">
+  <div class="cell old"><span class="lbl">现在玩家看到的</span><p>稳定武二郎伤势，带队突破铁索桥伏击</p></div>
+  <div class="cell new"><span class="lbl">Grok 改写</span><p>先稳住武二郎伤势，再带队过铁索桥</p></div>
+ </div>
+ <p class="why"><b>问题</b>「突破铁索桥伏击」既预告伏击必发生，也预告脱困成功，玩家过桥前已知道结局。</p>
+ <p class="note"><b>争议点</b>R1×R3：不能写「避开伏击」，也不能写「突破伏击」。去伏击后，按钮 2 仍写着伏击，任务栏与按钮的剧透层级会不一致。</p>
+ <p class="mine "><b>Claude · 一致</b></p>
+ <div class="act">
+  <label><input type="radio" name="d20" value="采纳改写"> 采纳</label>
+  <label><input type="radio" name="d20" value="保留原文"> 保留原文</label>
+  <label><input type="radio" name="d20" value="我另有写法"> 我另有写法</label>
+  <input class="txt" placeholder="要改成什么／为什么（可留空）">
+ </div>
+</article><article class="row" data-i="21">
+ <header>
+  <span class="seq">53</span>
+  <h3>凝羽开价弑主</h3>
+  <div class="chips"><span class="v warn">剧透结果</span></div>
+ </header>
+ <div class="pair">
+  <div class="cell old"><span class="lbl">现在玩家看到的</span><p>当面听清凝羽的弑主合作开价，并探明她体内阴寒之气的来源</p></div>
+  <div class="cell new"><span class="lbl">Grok 改写</span><p>当面听清凝羽私下的合作条件，并探明她体内阴寒之气从何而来</p></div>
+ </div>
+ <p class="why"><b>问题</b>「弑主合作开价」把私下开价的内容写进任务栏；阴寒来源写成「去探明」可以，但弑主本身是本拍才揭开的提议。</p>
+ <p class="note"><b>争议点</b>未写出「来自西门庆」是对的。争议只在任务栏能否点「弑主」：点了省事但对不上「先听清再知道她要干什么」。</p>
+ <p class="mine "><b>Claude · 一致</b></p>
+ <div class="act">
+  <label><input type="radio" name="d21" value="采纳改写"> 采纳</label>
+  <label><input type="radio" name="d21" value="保留原文"> 保留原文</label>
+  <label><input type="radio" name="d21" value="我另有写法"> 我另有写法</label>
+  <input class="txt" placeholder="要改成什么／为什么（可留空）">
+ </div>
+</article><article class="row" data-i="22">
+ <header>
+  <span class="seq">54</span>
+  <h3>紫溪太乙拦船</h3>
+  <div class="chips"><span class="v warn">剧透结果</span><span class="v warn">绑死做法</span></div>
+ </header>
+ <div class="pair">
+  <div class="cell old"><span class="lbl">现在玩家看到的</span><p>在紫溪现身与太乙真宗交涉，并救回落水的祁远</p></div>
+  <div class="cell new"><span class="lbl">Grok 改写</span><p>应对紫溪上太乙真宗拦船，护住船上的人</p></div>
+ </div>
+ <p class="why"><b>问题</b>「救回落水的祁远」剧透中段落水；「现身」把被迫暴露写成指定做法。</p>
+ <p class="note"><b>争议点</b>mustReach 只写祁远被推落水、forbidden 禁止失踪不归，并未写必须由程宗扬救起。去「现身/落水」后，按钮 2 会比任务栏更剧透，属 R3 与 R5 对拉。</p>
+ <p class="mine plus"><b>Claude · 一致 · 我另有依据</b>独立证实：「救回落水的祁远」两份抽取都查不到，「落水」只有 DeepSeek 有。这条不只是剧透，是**无正典依据**。</p>
+ <div class="act">
+  <label><input type="radio" name="d22" value="采纳改写"> 采纳</label>
+  <label><input type="radio" name="d22" value="保留原文"> 保留原文</label>
+  <label><input type="radio" name="d22" value="我另有写法"> 我另有写法</label>
+  <input class="txt" placeholder="要改成什么／为什么（可留空）">
+ </div>
+</article><article class="row" data-i="23">
+ <header>
+  <span class="seq">58</span>
+  <h3>黑石滩渡河</h3>
+  <div class="chips"><span class="v warn">剧透结果</span><span class="v warn">绑死做法</span></div>
+ </header>
+ <div class="pair">
+  <div class="cell old"><span class="lbl">现在玩家看到的</span><p>承受雨林伤亡，依凝羽的火光带两支商队渡过黑石滩</p></div>
+  <div class="cell new"><span class="lbl">Grok 改写</span><p>收拢雨林里的伤员，按岸边火光把两支商队渡过黑石滩</p></div>
+ </div>
+ <p class="why"><b>问题</b>「承受雨林伤亡」把必有伤亡写成任务；「依凝羽的火光」把渡河做法写死。</p>
+ <p class="note"><b>争议点</b>伤亡是 R1×R3：不能写「避免伤亡」（forbidden 禁止抹去），也不能命令玩家去「承受伤亡」。火光是否点名凝羽：不写会弱化 forbidden「指引不得改属他人」，写了则绑做法。</p>
+ <p class="mine "><b>Claude · 一致</b></p>
+ <div class="act">
+  <label><input type="radio" name="d23" value="采纳改写"> 采纳</label>
+  <label><input type="radio" name="d23" value="保留原文"> 保留原文</label>
+  <label><input type="radio" name="d23" value="我另有写法"> 我另有写法</label>
+  <input class="txt" placeholder="要改成什么／为什么（可留空）">
+ </div>
+</article><article class="row" data-i="24">
+ <header>
+  <span class="seq">59</span>
+  <h3>抵达无声蛇彝村</h3>
+  <div class="chips"><span class="v crit">开发者语言</span><span class="v warn">剧透结果</span></div>
+ </header>
+ <div class="pair">
+  <div class="cell old"><span class="lbl">现在玩家看到的</span><p>抵达无灯火无人声的蛇彝村并安置商队，不预写灭村真相</p></div>
+  <div class="cell new"><span class="lbl">Grok 改写</span><p>抵达蛇彝村，把商队安顿下来</p></div>
+ </div>
+ <p class="why"><b>问题</b>「不预写灭村真相」是写给叙述模型的禁令，整句漏进玩家字段；「无灯火无人声」也把入村才发现的空寨写成已知目标。</p>
+ <p class="note"><b>争议点</b>泄漏本身没有争议。争议是「无灯火无人声」算处境还是剧透：保留则玩家未进村已知空寨，去掉则要靠按钮 1 才点明。</p>
+ <p class="mine "><b>Claude · 一致</b>写作禁令漏进玩家字段，这类最该清干净。</p>
+ <div class="act">
+  <label><input type="radio" name="d24" value="采纳改写"> 采纳</label>
+  <label><input type="radio" name="d24" value="保留原文"> 保留原文</label>
+  <label><input type="radio" name="d24" value="我另有写法"> 我另有写法</label>
+  <input class="txt" placeholder="要改成什么／为什么（可留空）">
+ </div>
+</article>
+
+<div class="bar">
+ <button id="copy">复制全部批注</button>
+ <button class="ghost" id="all">全部采纳</button>
+ <span id="say">圈完点复制，粘回对话即可。</span>
+</div>
+</div>
+<script>
+const rows=[...document.querySelectorAll('.row')];
+document.getElementById('all').onclick=()=>{
+ rows.forEach((r,i)=>{const el=r.querySelector('input[value="采纳改写"]'); if(el) el.checked=true;});
+ document.getElementById('say').textContent='已全部勾选采纳，可再逐条改。';
+};
+document.getElementById('copy').onclick=async()=>{
+ const out=rows.map(r=>{
+  const seq=r.querySelector('.seq').textContent, name=r.querySelector('h3').textContent;
+  const pick=r.querySelector('input[type=radio]:checked'), txt=r.querySelector('.txt').value.trim();
+  if(!pick && !txt) return null;
+  return `seq ${seq} ${name}　${pick?pick.value:'（未圈选）'}${txt?'　→ '+txt:''}`;
+ }).filter(Boolean);
+ const text = out.length ? 'objective 复审裁定：\n'+out.join('\n') : '（还没有圈选任何一条）';
+ try{ await navigator.clipboard.writeText(text);
+  document.getElementById('say').textContent=`已复制 ${out.length} 条，粘回对话。`; }
+ catch(e){ document.getElementById('say').textContent='复制失败，请手动选中下面文字：'+text.slice(0,80); }
+};
+</script>
