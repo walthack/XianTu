@@ -124,10 +124,20 @@ const CHARDOC = 'docs/R3-10-CHARACTER-QUESTS-DRAFT-2026-08-16.md';
 // ── 事件层：id → { seq, name, stage }
 const events = new Map();
 const stageWindows = new Map();
+const chapterOf = new Map();   // eventId → 所属章（大场景）
 for (const f of fs.readdirSync(path.join(ROOT, DATA)).filter(x => x.endsWith('.json'))) {
   const j = JSON.parse(fs.readFileSync(path.join(ROOT, DATA, f), 'utf8'));
   if (!j.scenario?.worldSimulation) continue;
   stageWindows.set(j.manifest.id, [j.manifest.axisSeqLo, j.manifest.axisSeqHi]);
+  // 章（`scenario.chapters`）就是「大场景」，其 eventIds 是这场戏下的小拍。
+  // 2026-08-19 用户看着一串平铺的拍问「这一串是否可以归入一个大场景」——
+  // 结构本来就在，是本报告没显示；显示出来同时也防误合：
+  // 他举的三川口／定川寨看着像一场，实为两关两章两场仗（史上亦相隔两年）。
+  for (const c of j.scenario.chapters || []) {
+    for (const id of c.eventIds || []) {
+      chapterOf.set(id, { id: c.id, title: c.title || c.id, summary: c.summary || '', size: (c.eventIds || []).length });
+    }
+  }
   const seqs = (j.scenario.events || []).map(e => e.axisSeq).filter(v => typeof v === 'number');
   const stageLo = seqs.length ? Math.min(...seqs) : 0;
   for (const e of j.scenario.events || []) {
@@ -427,6 +437,10 @@ ol.nodes li.p .sq{color:var(--ink3)}
 .badge.pend{color:var(--ink3)}
 .badge.ins{color:var(--tan)}
 .hooks{margin-top:5px;padding-left:11px;border-left:2px dashed var(--grid)}
+.chap{list-style:none;margin:14px 0 4px;padding:5px 9px;background:var(--band);border-left:3px solid var(--accent);border-radius:0 3px 3px 0}
+.chap b{font-family:var(--serif);font-size:14px}
+.cn{margin-left:9px;font-size:11px;color:var(--ink3)}
+.cs{margin-top:2px;font-size:11.5px;color:var(--ink2);line-height:1.55}
 .vb{display:inline-block;min-width:30px;margin-right:6px;padding:1px 5px;font-size:10px;border-radius:2px;background:var(--band);color:var(--ink3);vertical-align:1px}
 .hk{font-size:12px;color:var(--ink2);padding:2px 0}
 .hk b{color:var(--tan);font-weight:600}
@@ -504,11 +518,21 @@ ${r.tiers.map(t => `<div class="ln">
   <div class="linecmt">整条线的批注　${cmt('line:' + t.name, '这条线整体怎么看')}</div>
   <ol class="nodes">${t.nodes.map((n, i) => {
     const ev = n.eventId ? events.get(n.eventId) : undefined;
+    // 章头：与上一拍不同章就起一个新的大场景标题。
+    // 「本线 X／全章 Y」——Y>X 表示这场戏还有几拍没走本线（在别条线上，或无人认领）。
+    const ch = chapterOf.get(n.eventId);
+    const prevCh = i > 0 ? chapterOf.get(t.nodes[i - 1].eventId) : undefined;
+    let chHead = '';
+    if (ch && ch.id !== prevCh?.id) {
+      const mine = t.nodes.filter(x => chapterOf.get(x.eventId)?.id === ch.id).length;
+      chHead = `<li class="chap"><b>${esc(ch.title)}</b><span class="cn">本线 ${mine}／全章 ${ch.size} 拍</span>`
+             + (ch.summary ? `<div class="cs">${esc(ch.summary)}</div>` : '') + '</li>';
+    }
     const st = n.status === 'ready' ? 'r' : n.status === 'new' ? 'w' : 'p';
     const hooks = (charHooks.get(n.eventId) || []);
     const hookRows = hooks.length ? `<div class="hooks">${hooks.map(h =>
       `<div class="hk">↳ <b>${esc(h.who)}</b>　${esc(h.visible || '')}${h.insert ? ' <em>［插入］</em>' : ''}</div>`).join('')}</div>` : '';
-    return `<li class="${st}">
+    return chHead + `<li class="${st}">
       <span class="sq mono">${n.seq ?? (n.status === 'pending' ? '' : '?')}</span>
       <span class="bd">
         <span class="vb">${esc(verbOf(n.text))}</span><span class="tx">${esc(n.text)}</span>
