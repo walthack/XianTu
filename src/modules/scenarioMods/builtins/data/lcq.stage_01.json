@@ -2680,7 +2680,13 @@
         "id": "lcq.event.debut_yueshuang",
         "name": "月霜·招牌登场",
         "description": "太乙真宗众人救下受伤的月霜途中（通过众人交谈叙述方式首次被提及身份） 初始身份：大汉左武军第一军团帅帐亲兵，左武卫大将军王哲的弟子。随后：草原鞭打程宗扬；初露锋芒斩黄金骑士。",
-        "conditions": [],
+        "conditions": [
+          {
+            "path": "flags.event.s01_04.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
         "completion": [
           {
             "path": "flags.event.debut_yueshuang.done",
@@ -2711,7 +2717,8 @@
               }
             }
           ]
-        }
+        },
+        "axisSeq": 9
       }
     ],
     "chapters": [
