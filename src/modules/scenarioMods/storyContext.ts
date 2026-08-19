@@ -1081,6 +1081,21 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
   const stageEntryLine = stageEntry?.toStageId === runtime.modId && stageEntry.text?.trim()
     ? `【跨关落点·只演出不改真值】玩家已经完成上一段行程并进入本关。主阅读面当前显示的权威开场是：“${stageEntry.text.trim()}”。本轮必须从这个落点和当前事件继续，用眼前人物动作或环境变化接入玩家本次行动；不得复演上一关收束，不得把关卡名、内部 ID 或“切关”机制写进正文。`
     : '';
+  // 危险逐轮逼近：引擎只给可观察事实，压力由正文演出——不用 UI 倒计时（裁定 #155）。
+  // 制作人 2026-08-19：「倒计时让 LLM 自己用语言喂给玩家即可。」
+  const approach = (runtime as { pendingFatalApproach?: { text: string } }).pendingFatalApproach;
+  const fatalApproachLine = approach?.text
+    ? `【眼前的危险·只演出不预告结局】本轮正文必须让玩家亲身感到这件正在发生的事：“${approach.text}”。`
+      + '用感官与人物反应写出它比上一轮更近了，让玩家自己判断还剩多少余裕；'
+      + '**不得**出现回合数、倒计时、剩余轮次或任何机制口径，**也不得**预告玩家会死、会得救或危险将如何收场。'
+    : '';
+  // 本局已结束：正文写结局，然后停在那里。
+  const over = (runtime as { gameOver?: { title: string; facts: string[] } }).gameOver;
+  const gameOverLine = over
+    ? `【本局结束·结局正文】玩家已走到这条路的尽头。按以下引擎认定的事实写一段收束正文，标题是“${over.title}”：`
+      + over.facts.map(fact => `“${fact}”`).join('；')
+      + '。只写这些事实与其当场的样子，不得改写、不得留生机、不得添加后续或转机，不得提示玩家可以怎么做——本局到此为止。'
+    : '';
   const settledBeat = runtime.lastSettledBeat;
   const settledEvent = settledBeat ? runtime.events.find(event => event.id === settledBeat.eventId) : undefined;
   const hasLocalEventReceipt = Boolean(
@@ -1162,7 +1177,7 @@ ${nextSection}
 ## 剧情标记
 ${JSON.stringify(runtime.flags || {})}
 
-${focusedCharacterSection ? `${focusedCharacterSection}\n\n` : ''}${npcPrivateKnowledgeGuard ? `${npcPrivateKnowledgeGuard}\n\n` : ''}${globalIdentitySection ? `${globalIdentitySection}\n\n` : ''}${loadBearingLine ? `${loadBearingLine}\n\n` : ''}${divergenceLine ? `${divergenceLine}\n\n` : ''}${stageEntryLine ? `${stageEntryLine}\n\n` : ''}${settledBeatLine ? `${settledBeatLine}\n\n` : ''}${returnBridgeLine ? `${returnBridgeLine}\n\n` : ''}${divergenceControlLine ? `${divergenceControlLine}\n\n` : ''}${epistemicLine ? `${epistemicLine}\n\n` : ''}${worldActorLine ? `${worldActorLine}\n\n` : ''}${worldPushLine ? `${worldPushLine}\n\n` : ''}${steeringLine ? `${steeringLine}\n\n` : ''}${reputationLine}\n\n${relationLine ? `${relationLine}\n\n` : ''}${completedGoalLine ? `${completedGoalLine}\n\n` : ''}${improvLine}\n\n【正典叙事事实约束】：
+${focusedCharacterSection ? `${focusedCharacterSection}\n\n` : ''}${npcPrivateKnowledgeGuard ? `${npcPrivateKnowledgeGuard}\n\n` : ''}${globalIdentitySection ? `${globalIdentitySection}\n\n` : ''}${loadBearingLine ? `${loadBearingLine}\n\n` : ''}${divergenceLine ? `${divergenceLine}\n\n` : ''}${stageEntryLine ? `${stageEntryLine}\n\n` : ''}${gameOverLine ? `${gameOverLine}\n\n` : ''}${fatalApproachLine ? `${fatalApproachLine}\n\n` : ''}${settledBeatLine ? `${settledBeatLine}\n\n` : ''}${returnBridgeLine ? `${returnBridgeLine}\n\n` : ''}${divergenceControlLine ? `${divergenceControlLine}\n\n` : ''}${epistemicLine ? `${epistemicLine}\n\n` : ''}${worldActorLine ? `${worldActorLine}\n\n` : ''}${worldPushLine ? `${worldPushLine}\n\n` : ''}${steeringLine ? `${steeringLine}\n\n` : ''}${reputationLine}\n\n${relationLine ? `${relationLine}\n\n` : ''}${completedGoalLine ? `${completedGoalLine}\n\n` : ''}${improvLine}\n\n【正典叙事事实约束】：
 1. 已知人物的姓名、别名、身份、物种、势力、亲属与政治关系均是事实字段：不得把人物写成兵器、坐骑、功法、物品或新角色；不得把称号、别名拆成另一个实体。
 2. 人物之间的血缘、主从、婚配、同党、结盟、仇怨，只有上文正典人物档案或当前事件明确写出时才可断言。没有依据时只能写“尚未可知/传闻待证”，绝不可因同姓、官职、阵营或历史常识擅自补关系。
 3. 叙事正文也必须遵守上述正典；这不是仅约束 tavern_commands 的规则。若玩家要求与正典矛盾的事实，明确说明冲突并以正典版本续写。

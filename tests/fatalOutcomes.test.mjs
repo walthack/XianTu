@@ -108,3 +108,45 @@ test('deadline 的 approach 条数必须是 turns - 1', async () => {
     }
   }
 });
+
+test('逼近正文与结局事实必须真的进到提示词里', async () => {
+  // transition 只带内部 id（`lcq.event.s02_02#0`），喂不到模型——
+  // 这正是本轮先查后写的原因：`fatal_approach` 发出来了，但若没有第二条路，
+  // 玩家永远看不到焰浪。制作人 2026-08-19：「倒计时让 LLM 自己用语言喂给玩家即可。」
+  const { buildScenarioStoryPrompt } = await loadTs('../src/modules/scenarioMods/storyContext.ts');
+  const rtm = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  const mod = JSON.parse(fs.readFileSync(DATA, 'utf8'));
+
+  // ① 逼近：正文必须拿到那句可观察事实，且不得出现机制口径
+  let save = bootstrap(rtm, mod);
+  const rt = () => save.世界.状态.剧本模组;
+  rt().activeEventIds = ['lcq.event.s02_02'];
+  rt().eventActionStates = {
+    'lcq.event.s02_02': {
+      contractHash: 'x', attemptCount: 1, preparations: [],
+      attempts: [{
+        actionId: 'witness_wang_zhe_nine_suns', outcome: 'success',
+        attemptedAtTurn: Math.max(0, Number(rt().worldTurn) || 0), detail: '',
+      }],
+    },
+  };
+  save = rtm.advanceScenarioRuntime(save).saveData;
+  assert.ok(rt().pendingFatalApproach?.text, '引擎应把本轮逼近事实挂到 runtime 上');
+  const ctx = buildScenarioStoryPrompt(save) || '';
+  assert.ok(ctx.includes(rt().pendingFatalApproach.text), '逼近事实没有进提示词——玩家将永远看不到焰浪');
+  assert.ok(/不得.*倒计时/.test(ctx), '必须显式禁止把回合数写进正文');
+
+  // ② 结局：事实要全部进提示词
+  rt().gameOver = {
+    endingId: 'lcq.ending.death.wangzhe_blast', title: '十里焦土',
+    facts: ['王哲以九阳神功合一，化为太阳之火与敌军同归于尽', '程宗扬没有离开战场，被焰浪吞没'],
+    sourceEventId: 'lcq.event.s02_02', atTurn: 9,
+  };
+  const overCtx = buildScenarioStoryPrompt(save) || '';
+  assert.ok(overCtx.includes('十里焦土'), '结局标题要进提示词');
+  for (const fact of rt().gameOver.facts) {
+    assert.ok(overCtx.includes(fact), `结局事实漏了：${fact}`);
+  }
+  assert.ok(/本局到此为止|不得留生机/.test(overCtx), '必须禁止叙述给玩家留转机');
+});
+

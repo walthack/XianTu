@@ -287,6 +287,8 @@ export interface RuntimeState extends ScenarioProgressState {
   gameOver?: { endingId: string; title: string; facts: string[]; sourceEventId: string; atTurn: number };
   /** 已送达过的逼近提示，防同一轮/重载重复送。 */
   fatalApproachDelivered?: string[];
+  /** 本轮该由正文演出的逼近事实。只演出、不预告结局；storyContext 读取后即由下一轮覆盖。 */
+  pendingFatalApproach?: { text: string; atTurn: number };
   /** 回主线引子偏移冷却：玩家主动偏移主线时置 N，引擎逐轮递减、期间暂停 stall 并静默引子。
    *  存于 runtime(世界.状态.剧本模组)——引擎专属字段，canonGuard 保护、LLM 命令写不到。 */
   steeringCooldown?: number;
@@ -2026,6 +2028,9 @@ function appendChronicleEntry(
 function settleFatalDeadlines(runtime: RuntimeState, transitions: ScenarioRuntimeTransition[]): void {
   if (runtime.gameOver) return;
   const now = Math.max(0, Number(runtime.worldTurn) || 0);
+  if (runtime.pendingFatalApproach && runtime.pendingFatalApproach.atTurn !== now) {
+    delete runtime.pendingFatalApproach;   // 上一轮的逼近不再重演
+  }
   runtime.fatalApproachDelivered = Array.isArray(runtime.fatalApproachDelivered) ? runtime.fatalApproachDelivered : [];
   for (const eventId of runtime.activeEventIds) {
     const event = runtime.events.find(item => item.id === eventId);
@@ -2057,6 +2062,8 @@ function settleFatalDeadlines(runtime: RuntimeState, transitions: ScenarioRuntim
     const key = `${eventId}#${step}`;
     if (runtime.fatalApproachDelivered.includes(key)) continue;
     runtime.fatalApproachDelivered.push(key);
+    // transition 只带内部 id，喂不到模型；正文必须另走一条能进提示词的路。
+    runtime.pendingFatalApproach = { text: deadline.approach[step], atTurn: now };
     transitions.push({ type: 'fatal_approach', id: key, detail: deadline.approach[step] });
   }
 }
