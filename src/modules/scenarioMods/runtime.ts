@@ -69,7 +69,9 @@ export interface ScenarioProgressState {
 }
 
 export interface ScenarioRuntimeTransition {
-  type: 'chapter_activated' | 'chapter_completed' | 'event_activated' | 'event_completed' | 'event_revealed' | 'event_omen' | 'stage_ready' | 'world_event_resolved';
+  /** `fatal_approach` 用 detail 携带本轮的可观察事实；其余类型不带。 */
+  detail?: string;
+  type: 'chapter_activated' | 'chapter_completed' | 'event_activated' | 'event_completed' | 'event_revealed' | 'event_omen' | 'stage_ready' | 'world_event_resolved' | 'fatal_approach' | 'game_over';
   id: string;
 }
 
@@ -281,6 +283,10 @@ export interface RuntimeState extends ScenarioProgressState {
   nextStageReadyId?: string | null;
   /** 剧情停滞轮数：连续多少轮无事件/章节推进（供收束提示分档），推进即清零 */
   stallTurns?: number;
+  /** 本局已结束（玩家走进绝路）。置上之后引擎不再推进任何进度。 */
+  gameOver?: { endingId: string; title: string; facts: string[]; sourceEventId: string; atTurn: number };
+  /** 已送达过的逼近提示，防同一轮/重载重复送。 */
+  fatalApproachDelivered?: string[];
   /** 回主线引子偏移冷却：玩家主动偏移主线时置 N，引擎逐轮递减、期间暂停 stall 并静默引子。
    *  存于 runtime(世界.状态.剧本模组)——引擎专属字段，canonGuard 保护、LLM 命令写不到。 */
   steeringCooldown?: number;
@@ -1219,7 +1225,7 @@ export function getCurrentStoryEventActions(saveData: SaveData): ScenarioEventAc
     ? Math.max(0, timeline.eligibleAtTurn + event.timeline.deadlineTurns - (Number(runtime.worldTurn) || 0))
     : undefined;
   const contractStep = currentContractStep(runtime);
-  return contract.actions.filter(action => eventActionAvailable(action, state)).map(action => {
+  const steps: ScenarioEventActionSelection[] = contract.actions.filter(action => eventActionAvailable(action, state)).map(action => {
     const expectedOutcome: ScenarioPlayerCompletionOutcome = contract.kind === 'objective_action'
       ? 'success'
       : conditionsMatch(action.successWhen, saveData, runtime) ? 'success' : action.unmetOutcome || 'failure';
@@ -1232,7 +1238,7 @@ export function getCurrentStoryEventActions(saveData: SaveData): ScenarioEventAc
     const targetSuffix = interaction.targetLabel ? ` · ${interaction.targetLabel}` : '';
     const stepSuffix = isCurrentSequentialStep ? `（第 ${contractStep!.index}/${contractStep!.total} 步）` : '';
     return {
-      source: 'event_engine',
+      source: 'event_engine' as const,
       eventId: event.id,
       actionId: action.id,
       label: `${INTERACTION_VERB_LABELS[interaction.verb]}${targetSuffix}${stepSuffix}`,
@@ -1250,6 +1256,26 @@ export function getCurrentStoryEventActions(saveData: SaveData): ScenarioEventAc
       ...(remainingTurns !== undefined ? { remainingTurns } : {}),
     };
   });
+  // 玩家主动走绝路的选项与正常动作并列。它们不进合同、不影响 contractHash、
+  // 也不推进本拍——选中即本局结束。放在最后，避免挤掉当前该做的那一步。
+  const fatalChoices = (event.fatalOutcomes?.choices || []).map(choice => {
+    const interaction = deriveInteraction(runtime, event, choice.label, choice.actionText);
+    const targetSuffix = interaction.targetLabel ? ` · ${interaction.targetLabel}` : '';
+    return {
+      source: 'event_engine' as const,
+      eventId: event.id,
+      actionId: choice.id,
+      label: `${INTERACTION_VERB_LABELS[interaction.verb]}${targetSuffix}`,
+      actionText: choice.actionText,
+      playerLine: choice.actionText,
+      timeCost: 1 as const,
+      contractHash: state.contractHash,
+      expectedOutcome: 'success' as ScenarioPlayerCompletionOutcome,
+      outcomeText: choice.ending.title,
+      interaction,
+    };
+  });
+  return [...steps, ...fatalChoices];
 }
 
 /** 当前章节显式开放的非承重探索动作；可忽略，且永远不能替代唯一主线锚点。 */
@@ -1348,6 +1374,21 @@ export function recordStoryEventStructuredAction(
   const state = reconcileEventActionContract(runtime, event);
   if (!state || state.contractHash !== selection.contractHash) {
     return { attempted: false, completed: false, eventId: event.id, reason: 'stale_contract' };
+  }
+  // 绝路选项先于合同动作判定：它不推进本拍，直接结束本局。
+  const fatalChoice = (event.fatalOutcomes?.choices || []).find(item => item.id === selection.actionId);
+  if (fatalChoice) {
+    if (fatalChoice.actionText !== selection.actionText) {
+      return { attempted: false, completed: false, eventId: event.id, reason: 'stale_action' };
+    }
+    runtime.gameOver = {
+      endingId: fatalChoice.ending.id,
+      title: fatalChoice.ending.title,
+      facts: [...fatalChoice.ending.facts],
+      sourceEventId: event.id,
+      atTurn: Math.max(0, Number(runtime.worldTurn) || 0),
+    };
+    return { attempted: true, completed: false, eventId: event.id, actionId: fatalChoice.id, outcome: 'success' };
   }
   const action = contract.actions.find(item => item.id === selection.actionId);
   if (!action || action.timeCost !== selection.timeCost || action.actionText !== selection.actionText) {
@@ -1973,6 +2014,51 @@ function appendChronicleEntry(
   const chronicle = runtime.chronicle ??= [];
   if (chronicle.some(item => item.id === entry.id)) return;
   chronicle.push({ ...entry, sequence: chronicle.length + 1 });
+}
+
+/**
+ * 绝路结算：危险逐轮逼近，到点吞没，本局结束。
+ *
+ * 时钟起点＝`afterActionId` 那一步成功的回合（省略则用本拍激活回合）——
+ * 「王哲自爆」那一拍要的是**自爆之后**焰浪才开始逼近，不是一进场就开始倒数。
+ * 逼近只送可观察事实，不预告死亡；到点才落 `gameOver`（裁定 #155：不用 UI 倒计时代替叙事）。
+ */
+function settleFatalDeadlines(runtime: RuntimeState, transitions: ScenarioRuntimeTransition[]): void {
+  if (runtime.gameOver) return;
+  const now = Math.max(0, Number(runtime.worldTurn) || 0);
+  runtime.fatalApproachDelivered = Array.isArray(runtime.fatalApproachDelivered) ? runtime.fatalApproachDelivered : [];
+  for (const eventId of runtime.activeEventIds) {
+    const event = runtime.events.find(item => item.id === eventId);
+    const deadline = event?.fatalOutcomes?.deadline;
+    if (!event || !deadline || isEventSettled(runtime, eventId)) continue;
+    let startedAt: number | undefined;
+    if (deadline.afterActionId) {
+      const attempt = (runtime.eventActionStates?.[eventId]?.attempts || [])
+        .find(item => item.actionId === deadline.afterActionId && item.outcome !== 'failure');
+      startedAt = attempt?.attemptedAtTurn;
+    } else {
+      startedAt = eventTimelineState(runtime, eventId)?.activatedAtTurn;
+    }
+    if (startedAt === undefined) continue;      // 危险还没开始，不计时
+    const age = now - startedAt;
+    if (age >= deadline.turns) {
+      runtime.gameOver = {
+        endingId: deadline.ending.id,
+        title: deadline.ending.title,
+        facts: [...deadline.ending.facts],
+        sourceEventId: eventId,
+        atTurn: now,
+      };
+      transitions.push({ type: 'game_over', id: deadline.ending.id });
+      return;
+    }
+    const step = age - 1;                        // age 1 → approach[0]
+    if (step < 0 || step >= deadline.approach.length) continue;
+    const key = `${eventId}#${step}`;
+    if (runtime.fatalApproachDelivered.includes(key)) continue;
+    runtime.fatalApproachDelivered.push(key);
+    transitions.push({ type: 'fatal_approach', id: key, detail: deadline.approach[step] });
+  }
 }
 
 function recordSettledBeatHandoff(runtime: RuntimeState, transitions: ScenarioRuntimeTransition[]): void {
@@ -2611,6 +2697,8 @@ export function advanceScenarioRuntime(saveData: SaveData): {
   const next = structuredClone(saveData);
   const runtime = getRuntime(next);
   if (!runtime) return { saveData: next, transitions: [] };
+  // 本局已结束：不再推进任何进度，也不再激活新拍。玩家只能读档。
+  if ((runtime as RuntimeState).gameOver) return { saveData: next, transitions: [] };
   reconcileSaveWithRegistry(next, runtime as RuntimeState & { modId?: string });
   projectBottomLinesToNpcs(next);
   updateAcquaintanceLedger(next, runtime as RuntimeState & { modId?: string });
@@ -2792,6 +2880,7 @@ export function advanceScenarioRuntime(saveData: SaveData): {
   updateDivergenceControl(next, progressed);
   syncActorEngine(runtime);
   refreshEventTimelineRevelations(runtime, transitions);
+  settleFatalDeadlines(runtime, transitions);
   recordSettledBeatHandoff(runtime, transitions);
   recordChronicleTransitions(runtime, transitions);
 

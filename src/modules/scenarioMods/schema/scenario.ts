@@ -158,6 +158,8 @@ export interface ScenarioModEvent {
   };
   /** 程序层事件时钟；相对“事件首次具备结构条件”的世界回合计时。 */
   timeline?: ScenarioModEventTimeline;
+  /** 玩家走进绝路时本局结束；只用于危险已在场的少数拍，见该接口注释。 */
+  fatalOutcomes?: ScenarioModEventFatalOutcomes;
   narrativeVariants?: ScenarioModEventNarrativeVariant[];
   /** 玩家长期缺席时由世界自行结算的事件组；不计作玩家完成。 */
   offscreenResolution?: ScenarioModEventOffscreenResolution;
@@ -271,6 +273,39 @@ export interface ScenarioWorldOmen {
     title: string;
     text: string;
   };
+}
+
+/** 本局结束时给叙述的事实骨架。引擎只给事实，正文由叙述写——不写成 UI 提示。 */
+export interface ScenarioFatalEnding {
+  id: string;
+  title: string;
+  facts: string[];
+}
+
+/**
+ * 玩家自己走进的绝路：本局在此结束。
+ *
+ * ⚠ 这**不是**全局超时惩罚。默认仍是 A 档「节点可无限等待，玩家可以去做别的」；
+ * 只有「危险已经在场并且正在逼近」的少数拍才配 `deadline`，压力来自场景本身。
+ * 逼近必须靠 `approach` 的可观察事实经正文传达，**不得用 UI 倒计时**（裁定 #155）。
+ */
+export interface ScenarioModEventFatalOutcomes {
+  /** 危险逐轮逼近，第 `turns` 轮被吞没。 */
+  deadline?: {
+    /** 危险从哪一步完成之后开始逼近；省略则从本拍激活起算。 */
+    afterActionId?: string;
+    turns: number;
+    /** 前 `turns - 1` 轮逐轮送达的可观察事实。不得预告死亡，只写正在发生的事。 */
+    approach: string[];
+    ending: ScenarioFatalEnding;
+  };
+  /** 玩家主动选择的绝路；与正常动作并列成按钮，选了即结束。 */
+  choices?: Array<{
+    id: string;
+    label: string;
+    actionText: string;
+    ending: ScenarioFatalEnding;
+  }>;
 }
 
 export interface ScenarioModEventTimeline {

@@ -2782,6 +2782,26 @@
               }
             }
           ]
+        },
+        "fatalOutcomes": {
+          "deadline": {
+            "afterActionId": "witness_wang_zhe_nine_suns",
+            "turns": 3,
+            "approach": [
+              "热浪先一步到了，眼前的草叶卷曲发黑；身后的喊杀声正被一种更大的声音盖过去。",
+              "光墙已经推到近前，吸进去的空气是烫的；月霜在拽你的袖子，说不出话。"
+            ],
+            "ending": {
+              "id": "lcq.ending.death.wangzhe_blast",
+              "title": "十里焦土",
+              "facts": [
+                "王哲以九阳神功合一，化为太阳之火与敌军同归于尽",
+                "草原化为十里焦土",
+                "程宗扬没有离开战场，被焰浪吞没",
+                "月霜没有被带走"
+              ]
+            }
+          }
         }
       },
       {
@@ -3087,6 +3107,24 @@
               "requiresPreparation": [
                 "south_pact_terms_opened"
               ]
+            }
+          ]
+        },
+        "fatalOutcomes": {
+          "choices": [
+            {
+              "id": "refuse_term_take_paolao",
+              "label": "拒绝期限，要她现在就动炮烙",
+              "actionText": "我不接三个月的条件，当面对苏妲己说：要炮烙就现在动手。",
+              "ending": {
+                "id": "lcq.ending.death.paolao",
+                "title": "炮烙",
+                "facts": [
+                  "程宗扬当面拒绝三个月南荒之约",
+                  "苏妲己依约执行炮烙",
+                  "霓龙丝无人去采，南荒之行未曾成行"
+                ]
+              }
             }
           ]
         }
