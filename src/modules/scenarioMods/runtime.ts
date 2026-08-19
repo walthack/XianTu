@@ -2521,7 +2521,12 @@ function updateAcquaintanceLedger(saveData: SaveData, runtime: RuntimeState & { 
     const hasProgress = Boolean(rt.completedEventIds?.length);
     rt.acquaintances = rt.acquaintances && typeof rt.acquaintances === 'object' ? rt.acquaintances : {};
 
-    const seen = new Set([...(rt.activeEventIds || []), ...(rt.completedEventIds || [])]);
+    // ⚠ 只认**已完成**的事件。事件"激活"只表示这一拍开始了，玩家还没见到人——
+    // 若把 activeEventIds 也算进来，账本会在该拍第一轮就把人记成 encountered，
+    // 名字因此比见面早整整一拍（2026-08-20 做反例测试时查出：`太乙真宗介入` 一激活，
+    // 蔺采泉／商乐轩／卓云君／月霜 立刻全部解禁；`程宗扬见王哲` 一激活王哲立刻解禁）。
+    // 正在进行的那一拍里，人物由正文按外观指代；拍一落定就记账，此后可以直呼其名。
+    const seen = new Set(rt.completedEventIds || []);
     // 记住"是哪个事件带来的相识"——处境不必另建枚举推导，事件语境本身就是处境。
     const metIds = new Map<string, string>();
     for (const event of rt.events || []) {

@@ -52,7 +52,13 @@ test('关系标签表明归属时同步为 joined', async () => {
   });
   assert.ok(hasJoined(ledger, '小紫'), '主仆表明已归属');
   assert.ok(!hasJoined(ledger, '孙寿'), '陌生人不算归属');
-  assert.equal(ledger['liuchao.character.sun_shou'].kind, 'encountered', '有关系条目即至少见过');
+  // 2026-08-20 改口径：**有关系条目不再等于见过**。
+  // 建档时 `社交.关系` 会被塞进全关角色档案，且关系标签与好感度都按原著预填
+  // （stage_01 开局王哲那条就写着「恩人/受托者、好感 55」，玩家却连面都没见过）。
+  // 原口径于是让整关的人从第 0 回合起全部解禁，旁白因此提前叫出名字。
+  // 现在关系表只承认**归属级**标签（主仆/麾下这类，投影不会给的中性默认值），
+  // 其余交给「已完成的事件」去记——玩家真见过，那一拍自然会完成。
+  assert.equal(ledger['liuchao.character.sun_shou'], undefined, '「陌生人」这种标签是投影默认值，不构成见过');
 });
 
 test('事件与开场声明推导出 encountered', async () => {

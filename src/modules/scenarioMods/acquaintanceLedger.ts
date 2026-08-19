@@ -177,7 +177,19 @@ export function syncAcquaintanceLedger(input: LedgerSyncInput): number {
   if (met instanceof Map) for (const [id, eventId] of met) note(id, 'encountered', eventId);
   else for (const id of met || []) note(id, 'encountered');
 
-  // 存档关系表：有条目即至少见过；标签表明归属则升到 joined。
+  // 存档关系表**只承认「归属级」标签**，普通条目不构成"见过"。
+  //
+  // 2026-08-20 做反例测试时查实：建档时 `社交.关系` 就被塞进全关角色档案，
+  // 而且**关系标签与好感度都是按原著预填的**——stage_01 一开局，王哲那条就写着
+  // `与玩家关系="恩人/受托者"、好感度=55`，可玩家连他的面都没见过。
+  // 原先"有条目即至少见过"于是让整关的人从第 0 回合起全部解禁；
+  // 制作人读到的「那是王哲——虽然你还不知道他的名字」正源于此。
+  //
+  // 讽刺的是这正是本账本立项要挡的东西（见文件头孙寿那个例子），
+  // 结果它自己又把同一份投影当成了证据。
+  //
+  // 现在只保留归属级标签这一条：主仆／麾下这类不会是投影的中性默认值，
+  // 玩家真把人收进来了才会出现。其余一律交给「已完成的事件」去记。
   if (input.relations && typeof input.relations === 'object') {
     const idByName = new Map<string, string>();
     for (const [id, name] of characterNames) if (!idByName.has(name)) idByName.set(name, id);
@@ -187,7 +199,8 @@ export function syncAcquaintanceLedger(input: LedgerSyncInput): number {
       const characterId = idByName.get(name) || idByName.get(key);
       if (!characterId) continue;
       const label = String((npc as { 与玩家关系?: unknown }).与玩家关系 || '');
-      note(characterId, JOINED_RELATION_RE.test(label) ? 'joined' : 'encountered');
+      if (!JOINED_RELATION_RE.test(label)) continue;
+      note(characterId, 'joined');
     }
   }
   return changed;

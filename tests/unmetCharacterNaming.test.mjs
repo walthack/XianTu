@@ -86,3 +86,31 @@ test('名字解禁必须以「真见过」为准，不能因为事件激活就�
   );
 });
 
+test('相识账本只认已完成的拍——正在进行的那一拍不算见过（用带 canon.characters 的真档）', async () => {
+  // ⚠ 这条测试的写法本身是个教训：上一版我用精简存档验，账本一直是空的，
+  // 我据此以为"修好了"。**实情是 `updateAcquaintanceLedger` 第一行
+  // `if (!characters.length) return;` 直接退出了**——精简存档没有 canon.characters，
+  // 我测的东西根本不在链路里。故这里必须用带 canon 的真模组建档。
+  const rtm = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  const { createQingyuOpeningPlaytestSave } = await loadTs('../src/modules/scenarioMods/qingyuOpeningPlaytest.ts');
+  const fsm = await import('node:fs');
+  const { parseScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
+  const mod = parseScenarioMod(JSON.parse(fsm.readFileSync('src/modules/scenarioMods/builtins/data/lcq.stage_01.json', 'utf8')));
+  let save = createQingyuOpeningPlaytestSave(mod);
+  const rt = () => save.世界.状态.剧本模组;
+  assert.ok((rt().canon?.characters || []).length > 0, '真档必须带 canon.characters，否则账本逻辑整段被跳过');
+
+  // 把「太乙真宗介入」设为进行中（卓云君等人在它的 relatedCharacterIds 里），但一拍未完成
+  rt().activeEventIds = ['lcq.event.s01_04'];
+  rt().completedEventIds = [];
+  save = rtm.advanceScenarioRuntime(save).saveData;
+  const met = Object.values(rt().acquaintances || {}).map(record => record.name);
+  assert.ok(!met.includes('卓云君'), `拍还没完成就把卓云君记成见过了：${met.join('、')}`);
+
+  // 完成之后才算见过
+  rt().completedEventIds = ['lcq.event.s01_04'];
+  save = rtm.advanceScenarioRuntime(save).saveData;
+  const after = Object.values(rt().acquaintances || {}).map(record => record.name);
+  assert.ok(after.includes('卓云君'), `拍完成后应当记账，实际：${after.join('、')}`);
+});
+
