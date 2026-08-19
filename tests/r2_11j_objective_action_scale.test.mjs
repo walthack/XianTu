@@ -172,7 +172,15 @@ test('one migrated objective action per book completes only through the engine a
     assert.equal(action.expectedOutcome, 'success');
     assert.doesNotMatch(action.label, /主线推进|主线判定/);
     assert.equal(typeof action.interaction?.verb, 'string');
-    assert.equal(typeof action.interaction?.targetLabel, 'string');
+    // 2026-08-19 放宽：对象是**可选**的。
+    // 原断言要求按钮必须有对象，而当时的兜底是「拿事件名当对象」——
+    // 真机实测因此出现「行动 · 段强被射杀」：事件名是内部标题、写的是本拍结果，
+    // 印在按钮上等于剧透。现在对象只认 `presentation.targetLabel` 与本关点到的人名，
+    // 都没有就不给对象（按钮只剩动词，难看但不撒谎）。
+    if (action.interaction?.targetLabel !== undefined) {
+      assert.equal(typeof action.interaction.targetLabel, 'string');
+      assert.notEqual(action.interaction.targetLabel, event.name, '事件名不得当按钮对象');
+    }
 
     const completionPath = event.completion[0].path;
     const guarded = guardScenarioModCommands(save, [{

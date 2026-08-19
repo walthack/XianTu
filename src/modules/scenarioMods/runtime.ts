@@ -1194,7 +1194,16 @@ function deriveInteraction(
     : undefined;
   const explicitTarget = event.presentation?.targetLabel?.trim();
   const eventName = String(event.name || '').trim();
-  const fallbackTarget = eventName.length > 0 && eventName.length <= 10 ? eventName : undefined;
+  // ⚠ 事件名**不能**当按钮对象。事件名是内部标题（「段强被射杀」「王哲传功与托付」），
+  // 写的是这一拍的结果；拿它当对象等于把结局印在按钮上。
+  //
+  // 真机实测（2026-08-19）：objective 与 action label 都已清理成
+  // 「草原上半兽人突然杀到，先保住自己和身边的人」，玩家看到的按钮却是
+  // **「行动 · 段强被射杀」**——我们把剧透从 objective 里清掉，它又从事件名绕回了按钮。
+  //
+  // 对象只认两个来源：`presentation.targetLabel`（作者显式指定）与本关 canon.characters
+  // 里被文案点到的人名。都没有就不给对象——按钮只剩动词，难看但不撒谎。
+  const fallbackTarget = undefined;
   return {
     verb,
     targetLabel: explicitTarget || target?.name || textualTarget || fallbackTarget,

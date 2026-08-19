@@ -150,3 +150,23 @@ test('逼近正文与结局事实必须真的进到提示词里', async () => {
   assert.ok(/本局到此为止|不得留生机/.test(overCtx), '必须禁止叙述给玩家留转机');
 });
 
+
+test('事件名不得成为按钮对象——那是内部标题，写的是本拍结果', async () => {
+  // 真机实测（2026-08-19）：objective 与 action label 都已清理干净，
+  // 玩家看到的按钮却是「行动 · 段强被射杀」——事件名经 fallbackTarget 把结局印回了按钮。
+  const rtm = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  const mod = JSON.parse(fs.readFileSync('src/modules/scenarioMods/builtins/data/lcq.stage_01.json', 'utf8'));
+  const progress = rtm.createScenarioProgress(mod);
+  progress.flags = { ...(mod.scenario.initialFlags || {}) };
+  progress.worldTurn = 0;
+  progress.modId = mod.manifest.id;
+  progress.currentChapterId = rtm.getInitialScenarioChapterId(mod);
+  let save = rtm.advanceScenarioRuntime({ 世界: { 状态: { 剧本模组: progress } } }).saveData;
+  const runtime = save.世界.状态.剧本模组;
+  runtime.activeEventIds = ['lcq.event.s01_02'];
+  const labels = rtm.getCurrentStoryEventActions(save).map(action => action.label);
+  assert.ok(labels.length > 0, '应当有可选动作');
+  for (const label of labels) {
+    assert.ok(!label.includes('段强被射杀'), `按钮把事件名当成了对象：${label}`);
+  }
+});
