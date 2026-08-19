@@ -61,7 +61,9 @@ test('world simulation playtest is a one-click isolated normal-game flow', () =>
   const characterManagement = read('src/components/character-creation/CharacterManagement.vue');
 
   assert.match(modeSelection, /六朝世界试玩/);
+  assert.match(modeSelection, /清羽记开局/);
   assert.match(router, /path:\s*'\/world-sim-playtest'/);
+  assert.match(router, /path:\s*'\/qingyu-opening-playtest'/);
   assert.match(start, /installIsolatedPlaytestCharacter/);
   assert.match(start, /router\.replace\('\/game'\)/);
   assert.match(store, /固定 ID 只允许覆盖同 kind 的试玩档/);

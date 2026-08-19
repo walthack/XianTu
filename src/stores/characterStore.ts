@@ -47,6 +47,8 @@ interface IsolatedPlaytestPayload {
   characterId: string;
   slotName: string;
   markerKind: string;
+  /** 存档签名所在的 系统.扩展 键。缺省仍读「六朝世界试玩」，供既有试玩入口使用。 */
+  markerExtensionKey?: string;
   saveData: SaveData;
 }
 
@@ -736,7 +738,8 @@ export const useCharacterStore = defineStore('characterV3', () => {
    */
   const installIsolatedPlaytestCharacter = async (payload: IsolatedPlaytestPayload): Promise<void> => {
     if (!initialized.value) await initializeStore();
-    const marker = payload.saveData?.系统?.扩展?.六朝世界试玩;
+    const markerExtensionKey = payload.markerExtensionKey || '六朝世界试玩';
+    const marker = payload.saveData?.系统?.扩展?.[markerExtensionKey];
     if (marker?.kind !== payload.markerKind || marker?.disposable !== true) {
       throw new Error('拒绝安装没有隔离试玩签名的存档');
     }
@@ -750,7 +753,7 @@ export const useCharacterStore = defineStore('characterV3', () => {
         throw new Error('固定试玩角色 ID 已被其他角色占用，已拒绝覆盖');
       }
       const existingSave = await storage.loadLocalSaveData(payload.characterId, payload.slotName);
-      const existingKind = existingSave?.系统?.扩展?.六朝世界试玩?.kind;
+      const existingKind = existingSave?.系统?.扩展?.[markerExtensionKey]?.kind;
       if (existingKind !== payload.markerKind) {
         throw new Error('固定试玩角色 ID 已被其他角色占用，已拒绝覆盖');
       }

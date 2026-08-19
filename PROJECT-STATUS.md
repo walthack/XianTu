@@ -3,7 +3,13 @@
 > 面向「新加入的 agent」。读完这一篇即可独立认领一个模块开工。
 > 当前认领：无。**进行中**：无。
 >
-> ## 最后更新：2026-08-17（**lcq.stage_05b／lyl.lin_an_bridge 再补 7 条隔离关改挂 event**）
+> ## 最后更新：2026-08-19（**清羽记开局 demo 入口：首页按钮 → 入口卡片 → 隔离存档进 /game**）
+>
+> 已交付：照抄「六朝世界试玩」形状，新增 `canon_companion` 平行入口。模组 `lcq.stage_01`（玩到 `lcq.stage_02`），用 `buildStrictScenarioInitialization` 建档，**不**写 `world_sim`。marker kind=`qingyu-demo-v1`，扩展键=`清羽记开局`。`installIsolatedPlaytestCharacter` 增加可选 `markerExtensionKey`。未改 `runtime.ts` / `storyContext.ts` / `canonRail.ts` / builtins json / `MainGamePanel.vue` 的 `playtestFinished`。未 commit。`type-check` 干净；`tests/*.test.mjs` 747 pass / 0 fail / 5 skip。
+>
+> ---
+>
+> ## 上一条：2026-08-17（**lcq.stage_05b／lyl.lin_an_bridge 再补 7 条隔离关改挂 event**）
 >
 > append-only：① `lcq.stage_05b` 末尾 `xiaozi_kills_mother`(217，原隔离关 `lcq.stage_06`)，轴窗已含 217，未放宽。② `lyl.lin_an_bridge` 末尾六条（原 `lyl.lin_an_black_sea`／`lyl.taiquan_expedition`）：`survey_wumu_mansion`(556)／`decode_bianmenwa_note`(557)／`meet_xue_yanshan`(558)／`identify_xue_cold_poison`(559)／`decide_chase_weiyuan`(561)／`pass_kotian_stone`(562)。seq 均在 550–562 内递增加，未放宽轴窗。合同均为手写双步动作，未用 `advance_declared_objective`。薛延山／敖润／冯源／俞子元／李师师／月霜不在本关 canon 名单，只写入正文，未挂 `relatedCharacterIds`。未改既有 event、未改 chapters、未跑 `build:single`，未改 `src/`、`tests/`。`mod:validate` PASS（stage_05b 6 条、lin_an_bridge 17 条未挂章节 warning，含本轮 7 条）。
 >

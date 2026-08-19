@@ -69,6 +69,10 @@
           <Orbit :size="18" />
           <span>六朝世界试玩</span>
         </button>
+        <button class="btn-ghost demo-entry" data-testid="open-qingyu-opening-playtest" @click="openQingyuOpeningPlaytest">
+          <Feather :size="18" />
+          <span>清羽记开局</span>
+        </button>
       </div>
     </div>
   </div>
@@ -76,7 +80,7 @@
 
 <script setup lang="ts">
 import VideoBackground from '@/components/common/VideoBackground.vue';
-import { Sparkles, History, User, Check, Library, Orbit } from 'lucide-vue-next';
+import { Sparkles, History, User, Check, Library, Orbit, Feather } from 'lucide-vue-next';
 import { useRouter } from 'vue-router';
 
 const displayVersion = APP_VERSION;
@@ -102,6 +106,10 @@ const openScenarioMods = () => {
 
 const openWorldSimulationPlaytest = () => {
   router.push('/world-sim-playtest');
+};
+
+const openQingyuOpeningPlaytest = () => {
+  router.push('/qingyu-opening-playtest');
 };
 </script>
 
