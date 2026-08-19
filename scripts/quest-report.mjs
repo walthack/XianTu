@@ -125,10 +125,30 @@ const CHARDOC = 'docs/R3-10-CHARACTER-QUESTS-DRAFT-2026-08-16.md';
 const events = new Map();
 const stageWindows = new Map();
 const chapterOf = new Map();   // eventId → 所属章（大场景）
+const gateOf = new Map();      // eventId → 前置拍的 id 尾段（该拍 done 才开）
 for (const f of fs.readdirSync(path.join(ROOT, DATA)).filter(x => x.endsWith('.json'))) {
   const j = JSON.parse(fs.readFileSync(path.join(ROOT, DATA, f), 'utf8'));
   if (!j.scenario?.worldSimulation) continue;
   stageWindows.set(j.manifest.id, [j.manifest.axisSeqLo, j.manifest.axisSeqHi]);
+  // 触发关系（核实 2026-08-19，读 `runtime.ts` 的推进循环得出）：
+  //   关→关   本关无 active 且无未结 critical → `stage_ready`
+  //   章→章   章的 `activation` 链在上一章的 done flag 上（`settleCompletedChapterFlags` 派生）
+  //   章内     **章一激活，章内 conditions 通过的 event 一次性全部进 `activeEventIds`**；
+  //            而 `conditionsMatch` 首行是 `!conditions?.length` —— **空条件＝无条件放行**。
+  // 故章内默认**无先后**，除非某拍的 conditions 指向同章另一拍的 `flags.event.X.done`。
+  // 全库实测：524 拍中有 conditions 的 177（34%），指向另一拍的 143，**同章的仅 71（14%）**。
+  // 唯一的严格顺序是 canonRail（一次只放一拍），但 37 个 world_sim 关里只有 2 关有。
+  // 用户 2026-08-19：「接下去这个 event 怎么触发没有显示在文档内，所以前后 event 会让我觉得没啥关系」——
+  // 感觉是准的，故在此把门控读出来标进报告。
+  for (const e of j.scenario.events || []) {
+    for (const c of e.conditions || []) {
+      const m = /^flags\.event\.(.+)\.done$/.exec(c.path || '');
+      if (m && c.operator === 'eq' && c.value === true) {
+        if (!gateOf.has(e.id)) gateOf.set(e.id, []);
+        gateOf.get(e.id).push(m[1]);
+      }
+    }
+  }
   // 章（`scenario.chapters`）就是「大场景」，其 eventIds 是这场戏下的小拍。
   // 2026-08-19 用户看着一串平铺的拍问「这一串是否可以归入一个大场景」——
   // 结构本来就在，是本报告没显示；显示出来同时也防误合：
@@ -441,6 +461,9 @@ ol.nodes li.p .sq{color:var(--ink3)}
 .chap b{font-family:var(--serif);font-size:14px}
 .cn{margin-left:9px;font-size:11px;color:var(--ink3)}
 .cs{margin-top:2px;font-size:11.5px;color:var(--ink2);line-height:1.55}
+.pool{margin-left:8px;padding:1px 5px;font-size:10px;border-radius:2px;background:var(--warn-bg,#e8d9b0);color:var(--ink2)}
+.chain{margin-left:8px;padding:1px 5px;font-size:10px;border-radius:2px;background:var(--ok-bg,#c9dcc4);color:var(--ink2)}
+.gate{display:block;margin:1px 0 0;font-size:11px;color:var(--accent)}
 .vb{display:inline-block;min-width:30px;margin-right:6px;padding:1px 5px;font-size:10px;border-radius:2px;background:var(--band);color:var(--ink3);vertical-align:1px}
 .hk{font-size:12px;color:var(--ink2);padding:2px 0}
 .hk b{color:var(--tan);font-weight:600}
@@ -525,7 +548,16 @@ ${r.tiers.map(t => `<div class="ln">
     let chHead = '';
     if (ch && ch.id !== prevCh?.id) {
       const mine = t.nodes.filter(x => chapterOf.get(x.eventId)?.id === ch.id).length;
-      chHead = `<li class="chap"><b>${esc(ch.title)}</b><span class="cn">本线 ${mine}／全章 ${ch.size} 拍</span>`
+      // 章内是「链」还是「池」：看这章有几拍被同章另一拍的 done flag 门住。
+      // 池＝章一激活就全部同时开放，玩家眼里没有先后——这正是「前后 event 没啥关系」的来源。
+      const chIds = t.nodes.filter(x => chapterOf.get(x.eventId)?.id === ch.id).map(x => x.eventId);
+      const chTails = new Set(chIds.map(id => String(id).split('.').pop()));
+      const gated = chIds.filter(id => (gateOf.get(id) || []).some(g => chTails.has(g))).length;
+      const shape = mine < 2 ? '' : gated === 0
+        ? `<span class="pool">池 · ${mine} 拍同时开放，章内无先后</span>`
+        : gated >= mine - 1 ? '<span class="chain">链 · 章内逐拍串起</span>'
+        : `<span class="pool">半链 · ${gated}/${mine - 1} 处有前置</span>`;
+      chHead = `<li class="chap"><b>${esc(ch.title)}</b><span class="cn">本线 ${mine}／全章 ${ch.size} 拍</span>${shape}`
              + (ch.summary ? `<div class="cs">${esc(ch.summary)}</div>` : '') + '</li>';
     }
     const st = n.status === 'ready' ? 'r' : n.status === 'new' ? 'w' : 'p';
@@ -536,6 +568,7 @@ ${r.tiers.map(t => `<div class="ln">
       <span class="sq mono">${n.seq ?? (n.status === 'pending' ? '' : '?')}</span>
       <span class="bd">
         <span class="vb">${esc(verbOf(n.text))}</span><span class="tx">${esc(n.text)}</span>
+        ${(gateOf.get(n.eventId) || []).length ? `<span class="gate">⇠ 需先 ${esc((gateOf.get(n.eventId) || []).map(g => events.get([...events.keys()].find(k => k.endsWith('.' + g)) || '')?.name || g).join('、'))}</span>` : ''}
         <span class="ev mono">${ev ? esc(ev.name) + '　' : ''}${n.eventId ? esc(n.eventId) : '（无 event · 待扩）'}</span>
         ${n.eventId === t.anchor ? '<span class="badge anchor">锚</span>' : ''}
         ${owners.get(n.eventId)?.length > 1 ? `<span class="badge shared">双喂 ${esc(owners.get(n.eventId).join('／'))}</span>` : ''}
