@@ -16,8 +16,9 @@ import { loadTs } from './loadTs.mjs';
 // 根因不是漏绑（那已在 #161 修掉），是 **rail 只覆盖了本关 18 拍中的 6 拍**。
 // `railStageComplete` 的语义是「rail 跑完＝整关跑完」，故 **rail 关的 critical 必须全在 rail 上**。
 //
-// ⚠ 本测试现在断言的是**缺陷仍然存在**。rail 延长到 18 拍后它会红，
-// 届时把断言改成「stage_ready 必须触发」——**红了是好事，不要删掉本文件**。
+// **2026-08-19 当天已修**：rail 延长到覆盖全关 18 拍（12 份合同由 Grok 按两份抽取取证、Claude 校对）。
+// 断言随之翻转为「必须通关」。保留本文件是为了防回归——
+// 若日后有人给 rail 关新增了不在 rail 上的 critical，这里会立刻红。
 
 const R = 'src/modules/scenarioMods/builtins/data/lcq.stage_02.json';
 
@@ -48,14 +49,14 @@ async function playthrough(preferRail) {
   return { ready: false, turn: 41, done: save.世界.状态.剧本模组.completedEventIds.length };
 }
 
-test('stage_02：玩家跟着主线（rail）走会卡死——rail 只盖了 18 拍中的 6 拍', async () => {
+test('stage_02：玩家跟着主线（rail）走能通关（rail 已覆盖全关 18 拍）', async () => {
   const out = await playthrough(true);
-  assert.equal(out.ready, false, '若这里变成 true，说明 rail 已延长到全关，请把本测试改为断言必须 ready');
-  assert.equal(out.done, 6, 'rail 那 6 拍做完就再无可做；剩下 12 拍永远激活不了');
+  assert.equal(out.ready, true, 'rail 若又只盖了一部分，跟着主线走会在 rail 跑完那一刻锁死剩余内容');
+  assert.equal(out.done, 18, '18 拍逐一走完');
 });
 
-test('stage_02：先清池再走 rail 反而能通关（说明缺陷取决于玩家次序，不是必然）', async () => {
+test('stage_02：换一种玩家次序同样能通关（顺序不该决定通不通）', async () => {
   const out = await playthrough(false);
-  assert.equal(out.ready, true, '按激活顺序埋头做能走完 18 拍');
+  assert.equal(out.ready, true);
   assert.equal(out.done, 18);
 });

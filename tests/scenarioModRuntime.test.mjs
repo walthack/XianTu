@@ -151,10 +151,17 @@ test('Canon Rail event contracts are carried into reconciliation candidates', as
 test('Canon Rail stage_02 uses the reviewed source order and repaired battle node', async () => {
   const { getCanonRailProfile } = await loadTs('../src/modules/scenarioMods/canonRail.ts');
   const profile = getCanonRailProfile({ modId: 'lcq.stage_02' });
-  assert.deepEqual(profile.orderedEventIds, [
+  // 2026-08-19：rail 由 6 拍延长到覆盖全关 18 拍。
+  // 原因不是排版，是死锁——`railStageComplete` 的语义是「rail 跑完＝整关跑完」，
+  // 它会清空 activeEventIds 并把所有章标完成；rail 只盖 6 拍时，
+  // 玩家跟着主线走到第 6 拍就把剩下 12 拍锁死了（见 `tests/stage02RailDeadlock.test.mjs`）。
+  // 前 6 拍的顺序（s02_03 在 s02_02 之前）是人工复核过的原著序，保持不动。
+  assert.deepEqual(profile.orderedEventIds.slice(0, 6), [
     'lcq.event.s02_01', 'lcq.event.s02_03', 'lcq.event.s02_02',
     'lcq.event.s02_04', 'lcq.event.s02_05', 'lcq.event.s02_06',
   ]);
+  assert.equal(profile.orderedEventIds.length, 18, 'rail 必须覆盖本关全部拍，否则 railStageComplete 会锁死剩余内容');
+  assert.equal(profile.orderedEventIds.at(-1), 'lcq.event.silent_sheyi_village');
   assert.match(profile.contracts.find(c => c.eventId === 'lcq.event.s02_03').mustReach, /秦军/);
 });
 
