@@ -137,7 +137,8 @@ for (const f of fs.readdirSync(path.join(ROOT, DATA)).filter(x => x.endsWith('.j
   //            而 `conditionsMatch` 首行是 `!conditions?.length` —— **空条件＝无条件放行**。
   // 故章内默认**无先后**，除非某拍的 conditions 指向同章另一拍的 `flags.event.X.done`。
   // 全库实测：524 拍中有 conditions 的 177（34%），指向另一拍的 143，**同章的仅 71（14%）**。
-  // 唯一的严格顺序是 canonRail（一次只放一拍），但 37 个 world_sim 关里只有 2 关有。
+  // 严格顺序来自 canonRail（一次只放一拍）：37 个 world_sim 关里 29 关有 rail profile，
+  // 但每个 profile 只覆盖**一个章**的一串 orderedEventIds，章外的拍仍是池。
   // 用户 2026-08-19：「接下去这个 event 怎么触发没有显示在文档内，所以前后 event 会让我觉得没啥关系」——
   // 感觉是准的，故在此把门控读出来标进报告。
   for (const e of j.scenario.events || []) {

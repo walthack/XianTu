@@ -3725,11 +3725,23 @@
         ],
         "eventIds": [
           "lcq.event.s02_01",
-          "lcq.event.s02_02",
           "lcq.event.s02_03",
+          "lcq.event.s02_02",
           "lcq.event.s02_04",
           "lcq.event.s02_05",
-          "lcq.event.s02_06"
+          "lcq.event.s02_06",
+          "lcq.event.ningyu_enters_gamble",
+          "lcq.event.sudaji_south_pact",
+          "lcq.event.gamble_bond_signed",
+          "lcq.event.charge_sudaji_fee",
+          "lcq.event.free_ajiman",
+          "lcq.event.baihu_shangguan_escape",
+          "lcq.event.wuerlang_joins",
+          "lcq.event.iron_bridge_ambush",
+          "lcq.event.ningyu_regicide_offer",
+          "lcq.event.zixi_taiyi_intercept",
+          "lcq.event.rainforest_black_shoal",
+          "lcq.event.silent_sheyi_village"
         ]
       }
     ],
