@@ -36,33 +36,43 @@ test('战场拍的引信不超过 5 轮，且逼近提示必须覆盖到落定�
   }
 });
 
-test('逐轮送出逼近事实，并进到提示词里', async () => {
+test('闲逛时逐轮送出逼近事实，并进到提示词里（走真实路径，不伪造时钟）', async () => {
+  // ⚠ 初版这条测试**手动塞了 `eventTimeline[...].activatedAtTurn`**，于是绿得很好看，
+  // 而线上一次都没发出来——`activatedAtTurn` 只对配了 `timeline` 字段的 event 存在，
+  // 战场这些拍都没有。制作人玩了很多回合没见到任何逼近提示，离线复现才查出来。
+  // 现在时钟改用 `stallTurns`（与 offscreen 引信同一把尺），测试也必须走真实路径。
   const rtm = await loadTs('../src/modules/scenarioMods/runtime.ts');
   const { buildScenarioStoryPrompt } = await loadTs('../src/modules/scenarioMods/storyContext.ts');
-  const mod = JSON.parse(fs.readFileSync(DATA, 'utf8'));
-  const progress = rtm.createScenarioProgress(mod);
-  progress.flags = { ...(mod.scenario.initialFlags || {}) };
-  progress.worldTurn = 0;
-  progress.modId = mod.manifest.id;
-  progress.currentChapterId = rtm.getInitialScenarioChapterId(mod);
-  progress.nextStageId = 'NEXT';
-  let save = rtm.advanceScenarioRuntime({ 世界: { 状态: { 剧本模组: progress } } }).saveData;
-  const rt = () => save.世界.状态.剧本模组;
-  // 把玩家钉在「段强被射杀」这一拍上，然后什么都不做
-  rt().activeEventIds = ['lcq.event.s01_02'];
-  rt().eventTimeline = { 'lcq.event.s01_02': { eligibleAtTurn: 0, activatedAtTurn: Number(rt().worldTurn) || 0 } };
+  const { parseScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
+  const { createQingyuOpeningPlaytestSave } = await loadTs('../src/modules/scenarioMods/qingyuOpeningPlaytest.ts');
+  const mod = parseScenarioMod(JSON.parse(fs.readFileSync(DATA, 'utf8')));
 
+  let save = createQingyuOpeningPlaytestSave(mod);
+  const rt = () => save.世界.状态.剧本模组;
+  // 像真实玩家那样做掉首拍，让「段强被射杀」成为当前拍
+  rt().flags['event.s01_01.done'] = true;
+  save = rtm.advanceScenarioRuntime(save).saveData;
+  assert.deepEqual(rt().activeEventIds, ['lcq.event.s01_02'], '首拍完成后应当推进到段强这一拍');
+
+  // 之后什么都不做
   const delivered = [];
+  let promptWhenDelivered = '';
   for (let turn = 0; turn < 4; turn += 1) {
     const out = rtm.advanceScenarioRuntime(save);
     save = out.saveData;
     const hit = out.transitions.find(item => item.type === 'fatal_approach');
-    if (hit) delivered.push(hit.detail);
+    if (!hit) continue;
+    delivered.push(hit.detail);
+    // 必须在**送出的那一轮**取提示词：非本轮的逼近会被主动清掉（不重演上一轮）。
+    promptWhenDelivered = buildScenarioStoryPrompt(save) || '';
   }
-  assert.ok(delivered.length >= 2, `闲逛四轮至少该收到两条逼近，实际 ${delivered.length}`);
-  assert.match(delivered[0], /喊杀|草浪/, '第一条应当只是远处的动静');
+  assert.equal(delivered.length, 3, `闲逛应逐轮收到三条逼近，实际 ${delivered.length}：${delivered.join(' | ')}`);
+  assert.match(delivered[0], /喊杀|草浪/, '第一条只是远处的动静');
+  assert.match(delivered[2], /箭/, '第三条箭应该已经落到脚边');
 
-  rt().pendingFatalApproach = { text: delivered[delivered.length - 1], atTurn: Number(rt().worldTurn) || 0 };
-  const prompt = buildScenarioStoryPrompt(save) || '';
-  assert.ok(prompt.includes(delivered[delivered.length - 1]), '逼近事实必须进提示词，否则玩家永远感觉不到');
+  assert.ok(
+    promptWhenDelivered.includes(delivered[delivered.length - 1]),
+    '逼近事实必须进提示词，否则玩家永远感觉不到',
+  );
+  assert.match(promptWhenDelivered, /眼前的危险/, '必须带上"只演出不预告结局"的指令');
 });

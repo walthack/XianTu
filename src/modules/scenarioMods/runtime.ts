@@ -2096,9 +2096,15 @@ function settleScenePressure(runtime: RuntimeState, transitions: ScenarioRuntime
     const event = runtime.events.find(item => item.id === eventId);
     const pressure = event?.pressure;
     if (!event || !pressure || isEventSettled(runtime, eventId)) continue;
-    const startedAt = eventTimelineState(runtime, eventId)?.activatedAtTurn;
-    if (startedAt === undefined) continue;
-    const step = now - startedAt - pressure.afterTurns;
+    // ⚠ 时钟用 `stallTurns`，不用 `activatedAtTurn`。
+    // 后者只对配了 `timeline` 字段的 event 存在（`syncEventTimelineEligibility` 只给它们建状态），
+    // 而战场这些拍都没有 timeline —— 初版据此取值，`startedAt` 恒为 undefined，
+    // **逼近提示一次都发不出来**（2026-08-20 离线复现闲逛 12 轮，每轮都是"无事发生"）。
+    // 当时的单测之所以绿，是因为我在测试里手动塞了 activatedAtTurn——测了个不在链路里的东西。
+    //
+    // 换成 stallTurns 还有个额外好处：它与 `offscreenResolution.afterStallTurns` 是**同一把尺**，
+    // 逼近节奏和落定时点天然对齐（stall 1/2/3 逐条送，stall 4 箭落地）。
+    const step = (Number(runtime.stallTurns) || 0) - pressure.afterTurns;
     if (step < 0 || step >= pressure.approach.length) continue;
     const key = `pressure:${eventId}#${step}`;
     if (runtime.fatalApproachDelivered.includes(key)) continue;
