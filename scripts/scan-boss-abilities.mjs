@@ -24,6 +24,11 @@ const BOOKS = { qingyu: 'A-六朝清羽记.epub', yunlong: 'B- 六朝云龙吟.e
 // 故本次扫描的产出重点是 `verifyExisting` 的**证实／未见**分野——
 // 它直接回答「哪些有据可依、哪些得自己编」，而不是追求每条都有铁证。
 const BOSSES = ['剑玉姬', '西门庆', '焚无尘', '古格尔', '阿伽门侬', '吕冀', '仇士良', '李辅国', '释特昧普', '米远志', '八臂魔僧', '徐敖', '鱼弘志', '窥基'];
+
+const registry = JSON.parse(readFileSync(join(root, 'src/modules/scenarioMods/builtins/character-registry.json'), 'utf8'));
+const entryOf = new Map(registry.characters.map(c => [c.canonicalName, c]));
+
+// ⚠ 必须放在 `registry` 之后：全部模式要读它。放前面会 ReferenceError（踩过）。
 const TARGETS = process.env.XIANTU_SCAN_NAMES === '全部'
   ? registry.characters
       .filter(c => (c.staticProfile?.signatureAbilities || []).length)
@@ -31,9 +36,6 @@ const TARGETS = process.env.XIANTU_SCAN_NAMES === '全部'
   : process.env.XIANTU_SCAN_NAMES
     ? process.env.XIANTU_SCAN_NAMES.split(',').map(x => x.trim()).filter(Boolean)
     : BOSSES;
-
-const registry = JSON.parse(readFileSync(join(root, 'src/modules/scenarioMods/builtins/character-registry.json'), 'utf8'));
-const entryOf = new Map(registry.characters.map(c => [c.canonicalName, c]));
 
 const envText = existsSync(join(root, '.env')) ? readFileSync(join(root, '.env'), 'utf8') : '';
 const OR_KEY = Object.fromEntries(envText.split(/\r?\n/).flatMap(l => { const m = l.match(/^\s*([A-Za-z_]\w*)\s*=\s*(.*)\s*$/); if (!m) return []; let v = m[2]; if ((v.startsWith('"') && v.endsWith('"')) || (v.startsWith("'") && v.endsWith("'"))) v = v.slice(1, -1); return [[m[1], v]]; })).OPENROUTER_API_KEY;
