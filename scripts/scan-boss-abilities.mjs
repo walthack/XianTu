@@ -15,7 +15,22 @@ const outDir = join(gen, 'character-canon/boss-ability-scan');
 const material = '/Volumes/botsvault/06_material';
 const BOOKS = { qingyu: 'A-六朝清羽记.epub', yunlong: 'B- 六朝云龙吟.epub', yange: 'C-六朝燕歌行.epub' };
 
+// 默认扫章节 BOSS；`XIANTU_SCAN_NAMES=全部` 则扫 registry 里所有带 signatureAbilities 的角色。
+//
+// 2026-08-20 扩量由来：要做「玩家找高好感角色学功法」（backlog P4-1），
+// 而 `signatureAbilities` 是当初一次性抽的短标签、**不带原文依据**，只有这 14 个 BOSS 有精扫。
+// 用户裁定标准不必苛刻：「这个本来就是有一些模糊的东西……有些招式或功法的名字，
+// 我们可能还要自己去编。所以这个不需要特别精确。」
+// 故本次扫描的产出重点是 `verifyExisting` 的**证实／未见**分野——
+// 它直接回答「哪些有据可依、哪些得自己编」，而不是追求每条都有铁证。
 const BOSSES = ['剑玉姬', '西门庆', '焚无尘', '古格尔', '阿伽门侬', '吕冀', '仇士良', '李辅国', '释特昧普', '米远志', '八臂魔僧', '徐敖', '鱼弘志', '窥基'];
+const TARGETS = process.env.XIANTU_SCAN_NAMES === '全部'
+  ? registry.characters
+      .filter(c => (c.staticProfile?.signatureAbilities || []).length)
+      .map(c => c.canonicalName)
+  : process.env.XIANTU_SCAN_NAMES
+    ? process.env.XIANTU_SCAN_NAMES.split(',').map(x => x.trim()).filter(Boolean)
+    : BOSSES;
 
 const registry = JSON.parse(readFileSync(join(root, 'src/modules/scenarioMods/builtins/character-registry.json'), 'utf8'));
 const entryOf = new Map(registry.characters.map(c => [c.canonicalName, c]));
@@ -85,7 +100,7 @@ const parse = t => { try { const j = String(t).match(/```(?:json)?\s*([\s\S]*?)`
 async function run() {
   mkdirSync(outDir, { recursive: true });
   const summary = [];
-  for (const name of BOSSES) {
+  for (const name of TARGETS) {
     const dst = join(outDir, `${name}.json`);
     if (existsSync(dst)) { summary.push(JSON.parse(readFileSync(dst, 'utf8'))); continue; }
     const entry = entryOf.get(name);
@@ -126,6 +141,6 @@ async function run() {
     md.push('');
   }
   writeFileSync(join(outDir, 'REPORT.md'), md.join('\n'));
-  console.error(`完成 ${summary.length}/${BOSSES.length} → ${outDir}/REPORT.md`);
+  console.error(`完成 ${summary.length}/${TARGETS.length} → ${outDir}/REPORT.md`);
 }
 run().catch(e => { console.error(e); process.exit(1); });
