@@ -131,9 +131,9 @@ test('逼近正文与结局事实必须真的进到提示词里', async () => {
     },
   };
   save = rtm.advanceScenarioRuntime(save).saveData;
-  assert.ok(rt().pendingFatalApproach?.text, '引擎应把本轮逼近事实挂到 runtime 上');
+  assert.ok(rt().pendingFatalApproach?.texts?.length, '引擎应把本轮逼近事实挂到 runtime 上');
   const ctx = buildScenarioStoryPrompt(save) || '';
-  assert.ok(ctx.includes(rt().pendingFatalApproach.text), '逼近事实没有进提示词——玩家将永远看不到焰浪');
+  assert.ok(rt().pendingFatalApproach.texts.every(t => ctx.includes(t)), '逼近事实没有进提示词——玩家将永远看不到焰浪');
   assert.ok(/不得.*倒计时/.test(ctx), '必须显式禁止把回合数写进正文');
 
   // ② 结局：事实要全部进提示词

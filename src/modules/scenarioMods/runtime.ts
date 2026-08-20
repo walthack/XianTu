@@ -289,8 +289,15 @@ export interface RuntimeState extends ScenarioProgressState {
   gameOver?: { endingId: string; title: string; facts: string[]; sourceEventId: string; atTurn: number };
   /** 已送达过的逼近提示，防同一轮/重载重复送。 */
   fatalApproachDelivered?: string[];
-  /** 本轮该由正文演出的逼近事实。只演出、不预告结局；storyContext 读取后即由下一轮覆盖。 */
-  pendingFatalApproach?: { text: string; atTurn: number };
+  /**
+   * 本轮该由正文演出的逼近事实。只演出、不预告结局；非本轮的自动清掉。
+   *
+   * ⚠ `texts` 是数组不是单值：同一回合可能有多个配了 pressure 的拍同时在逼近，
+   * 早先写成单值时**后写覆盖先写，另一条静默丢失**（2026-08-20 评审时发现）。
+   */
+  pendingFatalApproach?: { texts: string[]; atTurn: number };
+  /** 配了 `pressure` 的拍**第一次激活**的世界回合。锚在事件上，不随全局 stall 归零。 */
+  pressureStartedAt?: Record<string, number>;
   /** 回主线引子偏移冷却：玩家主动偏移主线时置 N，引擎逐轮递减、期间暂停 stall 并静默引子。
    *  存于 runtime(世界.状态.剧本模组)——引擎专属字段，canonGuard 保护、LLM 命令写不到。 */
   steeringCooldown?: number;
@@ -1969,9 +1976,15 @@ function resolveOffscreenWorldEvents(
       && resolution.resolvedEventIds.includes(runtime.actorEngine.anchorEventId || '')
       && trackedAge < TRACKED_OPPORTUNITY_MAX_TURNS
     );
+    // 配了 `pressure` 的拍：落定也走**事件自己的时钟**，与逼近提示同一把尺。
+    // 否则逼近按事件龄推进、落定按全局 stall 判定，玩家做点别的就两边脱节
+    // （制作人 2026-08-20 指出「铆定对应的 event，一旦触发之后就进入计数」）。
+    const pressureStartedAt = owner?.pressure ? runtime.pressureStartedAt?.[owner.id] : undefined;
     const due = owner?.timeline?.deadlineTurns !== undefined
       ? eventTimelineDeadlineDue(runtime, owner)
-      : effectiveStall >= resolution.afterStallTurns;
+      : pressureStartedAt !== undefined
+        ? (Number(runtime.worldTurn) || 0) - pressureStartedAt >= resolution.afterStallTurns
+        : effectiveStall >= resolution.afterStallTurns;
     const trackedOpportunity = findOpportunity(owner, runtime.actorEngine?.trackedOpportunityId);
     const trackedOpportunityState = trackedOpportunity
       ? runtime.actorEngine?.opportunityStates?.[trackedOpportunity.id]
@@ -2006,14 +2019,24 @@ function resolveOffscreenWorldEvents(
         ? lineCriticalFrozen(event, runtime.modId, currentLocationId, Boolean(runtime.canon?.locations?.length))
         : false;
     })) continue;
+    // 强制在场的拍：到点是**当场演完**，不是场外结算。
+    // 用户 2026-08-20 裁定（段强之死这一拍）：「是需要当场演完的，因为我们在现场」。
+    // 差别不只是文案——`offscreen` 这个 outcome 会让 `recordSettledBeatHandoff` 跳过这一拍，
+    // 于是镜头明明在场，交接却按"你不在"处理。故在场版走 participated。
+    const onScene = unresolvedIds.every(id =>
+      runtime.events.find(item => item.id === id)?.playerPresence === 'required');
     runtime.flags[resolution.flagKey] = true;
-    runtime.offscreenResolvedEventIds = [...new Set([...(runtime.offscreenResolvedEventIds || []), ...unresolvedIds])];
+    if (!onScene) {
+      runtime.offscreenResolvedEventIds = [...new Set([...(runtime.offscreenResolvedEventIds || []), ...unresolvedIds])];
+    } else {
+      for (const id of unresolvedIds) if (!runtime.completedEventIds.includes(id)) runtime.completedEventIds.push(id);
+    }
     runtime.activeEventIds = runtime.activeEventIds.filter(id => !unresolvedIds.includes(id));
-    for (const eventId of unresolvedIds) markEventTimelineOccurred(runtime, eventId, 'offscreen');
+    for (const eventId of unresolvedIds) markEventTimelineOccurred(runtime, eventId, onScene ? 'participated' : 'offscreen');
     refreshEventTimelineRevelations(runtime, transitions);
     recordOffscreenDivergence(runtime, {
       id: resolution.id, eventId: unresolvedIds[0],
-      worldDelta: resolution.worldDelta, evidence: resolution.evidence,
+      worldDelta: (onScene && resolution.onSceneDelta) || resolution.worldDelta, evidence: resolution.evidence,
       revealed: unresolvedIds.every(id => eventIsKnownToPlayer(runtime, id)),
     });
     transitions.push({ type: 'world_event_resolved', id: resolution.id });
@@ -2074,7 +2097,10 @@ function settleFatalDeadlines(runtime: RuntimeState, transitions: ScenarioRuntim
     if (runtime.fatalApproachDelivered.includes(key)) continue;
     runtime.fatalApproachDelivered.push(key);
     // transition 只带内部 id，喂不到模型；正文必须另走一条能进提示词的路。
-    runtime.pendingFatalApproach = { text: deadline.approach[step], atTurn: now };
+    runtime.pendingFatalApproach = {
+      texts: [...(runtime.pendingFatalApproach?.atTurn === now ? runtime.pendingFatalApproach.texts : []), deadline.approach[step]],
+      atTurn: now,
+    };
     transitions.push({ type: 'fatal_approach', id: key, detail: deadline.approach[step] });
   }
 }
@@ -2089,27 +2115,38 @@ function settleFatalDeadlines(runtime: RuntimeState, transitions: ScenarioRuntim
  * 引擎知道时钟在走，玩家不知道。与倒计时那个问题同一类：不喂到正文等于没有。
  */
 function settleScenePressure(runtime: RuntimeState, transitions: ScenarioRuntimeTransition[]): void {
-  if (runtime.gameOver || runtime.pendingFatalApproach) return;   // 绝路的逼近优先
+  // 只在本局已结束时跳过。**不再因为绝路逼近已占槽而整段跳过**——
+  // 那是单值时代的让位写法，会让同轮的场景压力静默消失；现在是队列，两者可以并存。
+  if (runtime.gameOver) return;
   const now = Math.max(0, Number(runtime.worldTurn) || 0);
   runtime.fatalApproachDelivered = Array.isArray(runtime.fatalApproachDelivered) ? runtime.fatalApproachDelivered : [];
+  runtime.pressureStartedAt = runtime.pressureStartedAt && typeof runtime.pressureStartedAt === 'object' ? runtime.pressureStartedAt : {};
   for (const eventId of runtime.activeEventIds) {
     const event = runtime.events.find(item => item.id === eventId);
     const pressure = event?.pressure;
     if (!event || !pressure || isEventSettled(runtime, eventId)) continue;
-    // ⚠ 时钟用 `stallTurns`，不用 `activatedAtTurn`。
-    // 后者只对配了 `timeline` 字段的 event 存在（`syncEventTimelineEligibility` 只给它们建状态），
-    // 而战场这些拍都没有 timeline —— 初版据此取值，`startedAt` 恒为 undefined，
-    // **逼近提示一次都发不出来**（2026-08-20 离线复现闲逛 12 轮，每轮都是"无事发生"）。
-    // 当时的单测之所以绿，是因为我在测试里手动塞了 activatedAtTurn——测了个不在链路里的东西。
+    // ⚠ 时钟**锚在这一拍上**，不用全局 `stallTurns`，也不用 `activatedAtTurn`。
     //
-    // 换成 stallTurns 还有个额外好处：它与 `offscreenResolution.afterStallTurns` 是**同一把尺**，
-    // 逼近节奏和落定时点天然对齐（stall 1/2/3 逐条送，stall 4 箭落地）。
-    const step = (Number(runtime.stallTurns) || 0) - pressure.afterTurns;
+    // · `activatedAtTurn` 只对配了 `timeline` 字段的 event 存在（`syncEventTimelineEligibility`
+    //   只给它们建状态），战场这些拍都没有 → 初版据此取值，逼近一次都发不出来。
+    // · 换成 `stallTurns` 能发了，但制作人 2026-08-20 指出更根本的问题：
+    //   「是不是需要铆定对应的 event，一旦触发之后就进入计数」——对。
+    //   `stallTurns` 是**全局**计数，玩家顺手完成别的事就归零，
+    //   于是焰浪从「远处喊杀换了方向」重新开始——**危险倒退了**；
+    //   `steeringCooldown` 一开还会把它冻住。
+    //
+    // 故自建 `pressureStartedAt`：这一拍第一次激活时记下回合，此后单调递增，不受别处影响。
+    const startedAt = runtime.pressureStartedAt[eventId] ?? now;
+    if (runtime.pressureStartedAt[eventId] === undefined) runtime.pressureStartedAt[eventId] = now;
+    const step = now - startedAt - pressure.afterTurns;
     if (step < 0 || step >= pressure.approach.length) continue;
     const key = `pressure:${eventId}#${step}`;
     if (runtime.fatalApproachDelivered.includes(key)) continue;
     runtime.fatalApproachDelivered.push(key);
-    runtime.pendingFatalApproach = { text: pressure.approach[step], atTurn: now };
+    runtime.pendingFatalApproach = {
+      texts: [...(runtime.pendingFatalApproach?.atTurn === now ? runtime.pendingFatalApproach.texts : []), pressure.approach[step]],
+      atTurn: now,
+    };
     transitions.push({ type: 'fatal_approach', id: key, detail: pressure.approach[step] });
   }
 }

@@ -158,6 +158,8 @@ export interface ScenarioModEvent {
   };
   /** 程序层事件时钟；相对“事件首次具备结构条件”的世界回合计时。 */
   timeline?: ScenarioModEventTimeline;
+  /** 玩家是否必须在场；见 `ScenarioPlayerPresence`。省略＝可以不在场。 */
+  playerPresence?: ScenarioPlayerPresence;
   /** 场景压力：危险在场且逐轮收紧；见该接口注释。 */
   pressure?: ScenarioModEventPressure;
   /** 玩家走进绝路时本局结束；只用于危险已在场的少数拍，见该接口注释。 */
@@ -295,6 +297,20 @@ export interface ScenarioUndisclosedSelfFact {
   /** 点破的方式，供叙述在解禁那一拍写出来。 */
   disclosedBy?: string;
 }
+
+/**
+ * 玩家是否必须在场。
+ *
+ * 用户 2026-08-20：「我们的 event 是有**强制玩家在场**的 event 和**玩家可以不在场**的 event，
+ * 所以这个之后每个案例跑的话，会进一步人工来做区分。」
+ *
+ * · `required`：这一拍只会在玩家眼前发生。到点不是"场外结算"，而是**当场演完**——
+ *   箭照样射出去，但镜头在场，口吻是「你插了手，仗也不停」，不是「你没插上手」。
+ * · 省略（默认）：保持既有行为，到点由 `offscreenResolution` 按场外口吻结算。
+ *
+ * 逐拍人工判定，**不要批量推断**。
+ */
+export type ScenarioPlayerPresence = 'required';
 
 /**
  * 场景压力：危险已经在场并且正在收紧，但**到点不一定死人**。
@@ -616,6 +632,8 @@ export interface ScenarioWorldActorContract {
 }
 
 export interface ScenarioModEventOffscreenResolution {
+  /** 玩家在场时的落定文案（`playerPresence: 'required'` 时用）。口吻必须是当场，不是场外。 */
+  onSceneDelta?: string;
   id: string;
   afterStallTurns: number;
   flagKey: string;
