@@ -3069,7 +3069,19 @@
       "structuralAnchors": [],
       "forkableOutcomes": [],
       "referenceBeats": []
-    }
+    },
+    "undisclosedSelfFacts": [
+      {
+        "fact": "生死根",
+        "untilEventId": "lcq.event.s01_05",
+        "disclosedBy": "王哲在帅帐中察觉并说破"
+      },
+      {
+        "fact": "九阳神功",
+        "untilEventId": "lcq.event.s01_05",
+        "disclosedBy": "王哲筑基后传下口诀"
+      }
+    ]
   },
   "rules": {
     "mode": "strict",

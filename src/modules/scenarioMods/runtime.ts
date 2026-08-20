@@ -63,6 +63,8 @@ export interface ScenarioProgressState {
    * 不存在＝旧档，首次推进时只登记不补发；空数组＝新档，从第一个事件起正常给分。
    */
   affinityGrantedEventIds?: string[];
+  /** 主角尚不自知的自身设定（从模组带入，storyContext 据此下禁令）。 */
+  undisclosedSelfFacts?: Array<{ fact: string; untilEventId: string; disclosedBy?: string }>;
   playerKnowledge?: Record<string, ScenarioPlayerKnowledgeFact>;
   pathReceipts?: Record<string, ScenarioPathReceipt>;
   npcPrivateKnowledge?: Record<string, ScenarioNpcPrivateKnowledgeFact>;
@@ -2262,6 +2264,10 @@ export function createScenarioProgress(mod: ScenarioMod): ScenarioProgressState 
   return {
     chapters,
     events,
+    // 主角尚不自知的自身设定：必须随 runtime 走，storyContext 才看得到（否则禁令永不生效）。
+    ...(mod.scenario.undisclosedSelfFacts?.length
+      ? { undisclosedSelfFacts: structuredClone(mod.scenario.undisclosedSelfFacts) }
+      : {}),
     completedChapterIds: [],
     activeEventIds: [],
     completedEventIds,

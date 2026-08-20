@@ -1005,6 +1005,19 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
   const metLine = metNames.size
     ? `（其中玩家**真正见过**的只有：${[...metNames].slice(0, 30).join('、')}。）`
     : '（玩家目前**一个正典人物都还没见过**。）';
+  // 主角自己还不知道的自身设定：引擎知道 ≠ 角色知道。
+  // 这些字段建档时就写进 `角色.身份`，随人物面板每轮发给模型，storyContext 拦不住它进上下文，
+  // 只能显式禁止使用。制作人 2026-08-20 在第二拍就看到选项「尝试用生死根救治」。
+  const undisclosed = ((runtime as { undisclosedSelfFacts?: Array<{ fact: string; untilEventId: string; disclosedBy?: string }> })
+    .undisclosedSelfFacts || [])
+    .filter(item => item?.fact && !(runtime.completedEventIds || []).includes(item.untilEventId));
+  const undisclosedLine = undisclosed.length
+    ? `【主角尚不自知】玩家角色**还不知道**自己身上有这些：${undisclosed.map(item => `「${item.fact}」`).join('、')}。`
+      + '这些字段确实写在人物面板上，但那是引擎的账，不是角色的认知——'
+      + '**正文、玩家台词与行动选项里一律不得出现这些词**，也不得让主角据此行事或自述。'
+      + '它们只能在剧情把它点破的那一拍由当场的人物说出来，那之后才可使用。'
+      + (undisclosed.some(item => item.disclosedBy) ? `（点破方式：${undisclosed.filter(item => item.disclosedBy).map(item => `${item.fact}＝${item.disclosedBy}`).join('；')}）` : '')
+    : '';
   const narratorNamingRule = metLine + '**叙述同样受此约束**：玩家没见过的人物在正文里不得被直呼其名——'
     + '玩家此刻并不知道他叫什么，请用外观、衣着、位置或所作所为指代（如「那个黑甲武将」）。'
     + '名字只有在本轮有人当场说出口、或玩家自己问出来时才能开始使用，并且要把「怎么知道的」写进正文。'
@@ -1199,7 +1212,7 @@ ${nextSection}
 ## 剧情标记
 ${JSON.stringify(runtime.flags || {})}
 
-${focusedCharacterSection ? `${focusedCharacterSection}\n\n` : ''}${npcPrivateKnowledgeGuard ? `${npcPrivateKnowledgeGuard}\n\n` : ''}${globalIdentitySection ? `${globalIdentitySection}\n\n` : ''}${loadBearingLine ? `${loadBearingLine}\n\n` : ''}${divergenceLine ? `${divergenceLine}\n\n` : ''}${stageEntryLine ? `${stageEntryLine}\n\n` : ''}${gameOverLine ? `${gameOverLine}\n\n` : ''}${fatalApproachLine ? `${fatalApproachLine}\n\n` : ''}${settledBeatLine ? `${settledBeatLine}\n\n` : ''}${returnBridgeLine ? `${returnBridgeLine}\n\n` : ''}${divergenceControlLine ? `${divergenceControlLine}\n\n` : ''}${epistemicLine ? `${epistemicLine}\n\n` : ''}${worldActorLine ? `${worldActorLine}\n\n` : ''}${worldPushLine ? `${worldPushLine}\n\n` : ''}${steeringLine ? `${steeringLine}\n\n` : ''}${reputationLine}\n\n${relationLine ? `${relationLine}\n\n` : ''}${completedGoalLine ? `${completedGoalLine}\n\n` : ''}${improvLine}\n\n【正典叙事事实约束】：
+${focusedCharacterSection ? `${focusedCharacterSection}\n\n` : ''}${npcPrivateKnowledgeGuard ? `${npcPrivateKnowledgeGuard}\n\n` : ''}${globalIdentitySection ? `${globalIdentitySection}\n\n` : ''}${loadBearingLine ? `${loadBearingLine}\n\n` : ''}${divergenceLine ? `${divergenceLine}\n\n` : ''}${stageEntryLine ? `${stageEntryLine}\n\n` : ''}${undisclosedLine ? `${undisclosedLine}\n\n` : ''}${gameOverLine ? `${gameOverLine}\n\n` : ''}${fatalApproachLine ? `${fatalApproachLine}\n\n` : ''}${settledBeatLine ? `${settledBeatLine}\n\n` : ''}${returnBridgeLine ? `${returnBridgeLine}\n\n` : ''}${divergenceControlLine ? `${divergenceControlLine}\n\n` : ''}${epistemicLine ? `${epistemicLine}\n\n` : ''}${worldActorLine ? `${worldActorLine}\n\n` : ''}${worldPushLine ? `${worldPushLine}\n\n` : ''}${steeringLine ? `${steeringLine}\n\n` : ''}${reputationLine}\n\n${relationLine ? `${relationLine}\n\n` : ''}${completedGoalLine ? `${completedGoalLine}\n\n` : ''}${improvLine}\n\n【正典叙事事实约束】：
 1. 已知人物的姓名、别名、身份、物种、势力、亲属与政治关系均是事实字段：不得把人物写成兵器、坐骑、功法、物品或新角色；不得把称号、别名拆成另一个实体。
 2. 人物之间的血缘、主从、婚配、同党、结盟、仇怨，只有上文正典人物档案或当前事件明确写出时才可断言。没有依据时只能写“尚未可知/传闻待证”，绝不可因同姓、官职、阵营或历史常识擅自补关系。
 3. 叙事正文也必须遵守上述正典；这不是仅约束 tavern_commands 的规则。若玩家要求与正典矛盾的事实，明确说明冲突并以正典版本续写。

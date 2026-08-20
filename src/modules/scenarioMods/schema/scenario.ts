@@ -278,6 +278,25 @@ export interface ScenarioWorldOmen {
 }
 
 /**
+ * 主角**自己还不知道**的自身设定。
+ *
+ * 这些字段（灵根、功法、出身…）建档时就写进 `角色.身份`，随人物面板每轮发给模型——
+ * **引擎知道 ≠ 角色知道**。若不显式拦，模型会把它当常识写进正文与行动选项：
+ * 制作人 2026-08-20 在 demo 第二拍就看到选项「查看斥候伤势，尝试用**生死根**救治」，
+ * 而生死根要到 seq 19「王哲发现其身上有生死根」才被点破。
+ *
+ * 与「未相识者不得直呼其名」同源：都是**档案里有、玩家还不知道**。
+ */
+export interface ScenarioUndisclosedSelfFact {
+  /** 不得出现的词，如「生死根」。 */
+  fact: string;
+  /** 这一拍完成之后解禁。 */
+  untilEventId: string;
+  /** 点破的方式，供叙述在解禁那一拍写出来。 */
+  disclosedBy?: string;
+}
+
+/**
  * 场景压力：危险已经在场并且正在收紧，但**到点不一定死人**。
  *
  * 与 `fatalOutcomes.deadline` 的区别只在后果：那边到点是本局结束，
@@ -697,6 +716,8 @@ export interface ScenarioWorldSimulation {
 }
 
 export interface ScenarioModScenario {
+  /** 主角自己还不知道的自身设定；见该接口注释。 */
+  undisclosedSelfFacts?: ScenarioUndisclosedSelfFact[];
   opening: ScenarioModOpening;
   initialFlags?: Record<string, ScenarioFlagValue>;
   /** 仅为有明确证据的纵切显式声明；旧事件不要求批量回填。 */
