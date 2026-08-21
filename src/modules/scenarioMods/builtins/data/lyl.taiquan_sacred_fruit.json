@@ -5803,7 +5803,9 @@
       "chapter.lyl.taiquan_sacred_fruit.linan_close.started": true,
       "chapter.lyl.taiquan_sacred_fruit.linan_close.done": false,
       "chapter.lyl.taiquan_sacred_fruit.canglan.started": false,
-      "chapter.lyl.taiquan_sacred_fruit.canglan.done": false
+      "chapter.lyl.taiquan_sacred_fruit.canglan.done": false,
+      "event.sacred_against_lin.done": false,
+      "event.sacred_jin_drought.done": false
     },
     "chapters": [
       {

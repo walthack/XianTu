@@ -6,6 +6,7 @@ import type {
   ScenarioMod,
   ScenarioModChapter,
   ScenarioModEvent,
+  ScenarioModItem,
   ScenarioNarrativeFactReceipt,
   ScenarioNpcDecisionActor,
   ScenarioNpcMemoryEpisode,
@@ -50,6 +51,12 @@ import {
   getWorldSimulationFocusEvent,
   type WorldSimulationRuntimeState,
 } from './worldSimulation';
+import {
+  settleScenarioInventoryTransfers,
+  type ScenarioInventorySettlement,
+  type ScenarioInventoryTransferReceipt,
+} from './inventoryTransactions';
+import { resolveFixedQuestObjective } from './fixedQuestObjectives';
 
 
 export interface ScenarioProgressState {
@@ -68,6 +75,8 @@ export interface ScenarioProgressState {
   playerKnowledge?: Record<string, ScenarioPlayerKnowledgeFact>;
   pathReceipts?: Record<string, ScenarioPathReceipt>;
   npcPrivateKnowledge?: Record<string, ScenarioNpcPrivateKnowledgeFact>;
+  /** 本地物品交易回执；transferId 去重，且随关卡继承。 */
+  inventoryTransferReceipts?: ScenarioInventoryTransferReceipt[];
 }
 
 export interface ScenarioRuntimeTransition {
@@ -320,6 +329,7 @@ export interface RuntimeState extends ScenarioProgressState {
     factions?: Array<{ id: string; name: string }>;
     /** 运行时一直带着（`storyContext` 在读），此前类型漏声明。 */
     locations?: Array<{ id: string; name: string }>;
+    items?: ScenarioModItem[];
   };
   opening?: { text: string; playerCharacterId?: string };
   /** 旧档 reconcile 版本戳：与 registry 版本一致则跳过（正典更新后旧档第一回合自动对齐） */
@@ -1069,16 +1079,22 @@ function ensureActorMemoryEntry(state: ScenarioActorEngineState, actorId: string
 }
 
 function applyStoryEventOutcomeEffects(
+  saveData: SaveData,
   runtime: RuntimeState,
   event: ScenarioModEvent,
   actionId: string,
   outcome: ScenarioPlayerCompletionOutcome,
   effects: ScenarioPlayerCompletionEffects | undefined,
   attemptNumber: number,
-): void {
-  if (!effects) return;
+): ScenarioInventorySettlement[] {
+  if (!effects) return [];
   const turn = Math.max(0, Number(runtime.worldTurn) || 0);
   const actorState = ensureActorEngine(runtime);
+  const inventorySettlements = settleScenarioInventoryTransfers(saveData, runtime, effects, {
+    eventId: event.id,
+    actionId,
+    outcome,
+  });
   for (const relationship of effects.relationships || []) {
     const actor = ensureActorMemoryEntry(actorState, relationship.actorId, turn);
     const target = actor.relationships[relationship.targetCharacterId] ||= {};
@@ -1125,6 +1141,7 @@ function applyStoryEventOutcomeEffects(
       occurredAtTurn: turn,
     });
   }
+  return inventorySettlements;
 }
 
 function hasPathReceiptConflict(
@@ -1223,6 +1240,10 @@ function deriveInteraction(
 function derivePlayerLine(event: ScenarioModEvent, actionText: string): string {
   const explicitLine = event.presentation?.playerLine?.trim();
   if (explicitLine) return explicitLine;
+  const fixedObjective = resolveFixedQuestObjective(event);
+  if (fixedObjective && fixedObjective !== String(event.objective || '').trim()) {
+    return `我${fixedObjective}`;
+  }
   const templatedPrefix = '我按当前主线目标行动：';
   if (actionText.startsWith(templatedPrefix)) {
     const objective = actionText.slice(templatedPrefix.length).trim();
@@ -1296,6 +1317,41 @@ export function getCurrentStoryEventActions(saveData: SaveData): ScenarioEventAc
     };
   });
   return [...steps, ...fatalChoices];
+}
+
+function normalizeEventActionIntent(value: string): string {
+  return value.normalize('NFKC').toLowerCase().replace(/[\p{P}\p{S}\s]+/gu, '');
+}
+
+/**
+ * 把玩家的自然行动句保守映射回当前本地事件动作。
+ * 只认作者显式声明的短语；否定优先、歧义关闭，不读取 LLM 也不写任何真值。
+ */
+export function resolveStoryEventActionFromPlayerText(
+  saveData: SaveData,
+  playerText: string,
+): ScenarioEventActionSelection | undefined {
+  if (typeof playerText !== 'string' || !playerText.trim() || hasPendingStoryBeatHandoff(saveData)) return undefined;
+  const runtime = getRuntime(saveData);
+  const event = runtime ? getCurrentPlayerCompletionEvent(runtime) : undefined;
+  const contract = event?.playerCompletionContract;
+  if (!event || !contract) return undefined;
+  const normalized = normalizeEventActionIntent(playerText);
+  if (!normalized) return undefined;
+
+  const matches = getCurrentStoryEventActions(saveData).filter(selection => {
+    const action = contract.actions.find(item => item.id === selection.actionId);
+    const intent = action?.intentMatch;
+    if (!intent) return false;
+    const rejected = (intent.rejectIf || []).map(normalizeEventActionIntent).filter(Boolean);
+    if (rejected.some(phrase => normalized.includes(phrase))) return false;
+    const any = (intent.matchAny || []).map(normalizeEventActionIntent).filter(Boolean);
+    const all = (intent.matchAll || []).map(normalizeEventActionIntent).filter(Boolean);
+    if (any.length > 0 && !any.some(phrase => normalized.includes(phrase))) return false;
+    if (all.length > 0 && !all.every(phrase => normalized.includes(phrase))) return false;
+    return any.length > 0 || all.length > 0;
+  });
+  return matches.length === 1 ? matches[0] : undefined;
 }
 
 /** 当前章节显式开放的非承重探索动作；可忽略，且永远不能替代唯一主线锚点。 */
@@ -1376,7 +1432,15 @@ export function acknowledgeStageEntryPresentation(saveData: SaveData, toStageId:
 export function recordStoryEventStructuredAction(
   saveData: SaveData,
   selection: ScenarioEventActionSelection,
-): { attempted: boolean; completed: boolean; eventId?: string; actionId?: string; outcome?: ScenarioPlayerCompletionOutcome; reason?: string } {
+): {
+  attempted: boolean;
+  completed: boolean;
+  eventId?: string;
+  actionId?: string;
+  outcome?: ScenarioPlayerCompletionOutcome;
+  reason?: string;
+  inventorySettlements?: ScenarioInventorySettlement[];
+} {
   const runtime = getRuntime(saveData);
   if (!runtime || !['event_engine', 'exploration_engine'].includes(selection?.source)) {
     return { attempted: false, completed: false, reason: 'invalid_selection' };
@@ -1455,10 +1519,25 @@ export function recordStoryEventStructuredAction(
   if (action.kind === 'prepare' && outcome === 'success' && action.grantsPreparation) {
     state.preparations = [...new Set([...(state.preparations || []), action.grantsPreparation])].sort();
   }
-  applyStoryEventOutcomeEffects(runtime, event, action.id, outcome, action.outcomeEffects?.[outcome], attemptNumber);
+  const inventorySettlements = applyStoryEventOutcomeEffects(
+    saveData,
+    runtime,
+    event,
+    action.id,
+    outcome,
+    action.outcomeEffects?.[outcome],
+    attemptNumber,
+  );
   const completed = action.kind !== 'prepare' && outcome !== 'failure' && contract.settleOn.includes(outcome);
   if (completed) state.readyAtTurn = turn;
-  return { attempted: true, completed, eventId: event.id, actionId: action.id, outcome };
+  return {
+    attempted: true,
+    completed,
+    eventId: event.id,
+    actionId: action.id,
+    outcome,
+    ...(inventorySettlements.length ? { inventorySettlements } : {}),
+  };
 }
 
 function reconcileOpportunityCompletionContract(
@@ -1475,6 +1554,20 @@ function reconcileOpportunityCompletionContract(
     state.completionChoices = {};
   }
   state.completionContractHash = nextHash;
+}
+
+function settleOpportunityStepInventory(
+  saveData: SaveData,
+  runtime: RuntimeState,
+  event: ScenarioModEvent,
+  step: NonNullable<ScenarioStoryOpportunity['completionContract']>['steps'][number],
+  actionId: string,
+): ScenarioInventorySettlement[] {
+  return settleScenarioInventoryTransfers(saveData, runtime, step.outcomeEffects, {
+    eventId: event.id,
+    actionId,
+    outcome: 'success',
+  });
 }
 
 /** 当前步骤的结构化推进动作；只由本地合同生成，不依赖 LLM action_options。 */
@@ -1508,7 +1601,14 @@ export function getTrackedStoryOpportunityActions(saveData: SaveData): ScenarioO
 export function recordStoryOpportunityStructuredAction(
   saveData: SaveData,
   selection: ScenarioOpportunityActionSelection,
-): { progressed: boolean; completed: boolean; opportunityId?: string; stepId?: string; reason?: string } {
+): {
+  progressed: boolean;
+  completed: boolean;
+  opportunityId?: string;
+  stepId?: string;
+  reason?: string;
+  inventorySettlements?: ScenarioInventorySettlement[];
+} {
   const runtime = getRuntime(saveData);
   const state = runtime?.actorEngine;
   if (!runtime || !state || selection?.source !== 'opportunity_engine') {
@@ -1518,7 +1618,7 @@ export function recordStoryOpportunityStructuredAction(
   const opportunity = findOpportunity(anchor || undefined, state.trackedOpportunityId);
   const opportunityState = opportunity && state.opportunityStates?.[opportunity.id];
   const contract = opportunity?.completionContract;
-  if (!opportunity || !contract || opportunity.id !== selection.opportunityId || opportunityState?.status !== 'tracked') {
+  if (!anchor || !opportunity || !contract || opportunity.id !== selection.opportunityId || opportunityState?.status !== 'tracked') {
     return { progressed: false, completed: false, reason: 'stale_opportunity' };
   }
   reconcileOpportunityCompletionContract(opportunityState, opportunity);
@@ -1540,9 +1640,16 @@ export function recordStoryOpportunityStructuredAction(
   opportunityState.lastCompletionActionKey = `${turn}:structured:${selection.actionId}`;
   opportunityState.completionChoices ||= {};
   opportunityState.completionChoices[step.id] = action.id;
+  const inventorySettlements = settleOpportunityStepInventory(saveData, runtime, anchor, step, action.id);
   const completed = opportunityState.completionStepIndex >= contract.steps.length;
   if (completed) opportunityState.completionReadyAtTurn = turn;
-  return { progressed: true, completed, opportunityId: opportunity.id, stepId: step.id };
+  return {
+    progressed: true,
+    completed,
+    opportunityId: opportunity.id,
+    stepId: step.id,
+    ...(inventorySettlements.length ? { inventorySettlements } : {}),
+  };
 }
 
 function opportunityStepMatches(
@@ -1568,7 +1675,13 @@ function opportunityStepMatches(
 export function recordStoryOpportunityPlayerAction(
   saveData: SaveData,
   playerAction: string,
-): { progressed: boolean; completed: boolean; opportunityId?: string; stepId?: string } {
+): {
+  progressed: boolean;
+  completed: boolean;
+  opportunityId?: string;
+  stepId?: string;
+  inventorySettlements?: ScenarioInventorySettlement[];
+} {
   const runtime = getRuntime(saveData);
   if (!runtime || typeof playerAction !== 'string' || !playerAction.trim()) {
     return { progressed: false, completed: false };
@@ -1579,7 +1692,7 @@ export function recordStoryOpportunityPlayerAction(
   const opportunity = findOpportunity(anchor || undefined, state.trackedOpportunityId);
   const contract = opportunity?.completionContract;
   const opportunityState = opportunity && state.opportunityStates?.[opportunity.id];
-  if (!opportunity || !contract || opportunityState?.status !== 'tracked') {
+  if (!anchor || !opportunity || !contract || opportunityState?.status !== 'tracked') {
     return { progressed: false, completed: false };
   }
   reconcileOpportunityCompletionContract(opportunityState, opportunity);
@@ -1611,9 +1724,17 @@ export function recordStoryOpportunityPlayerAction(
 
   opportunityState.completionStepIndex = index + 1;
   opportunityState.lastCompletionProgressAtTurn = turn;
+  const actionId = step.actions?.length === 1 ? step.actions[0].id : step.id;
+  const inventorySettlements = settleOpportunityStepInventory(saveData, runtime, anchor, step, actionId);
   const completed = opportunityState.completionStepIndex >= contract.steps.length;
   if (completed) opportunityState.completionReadyAtTurn = turn;
-  return { progressed: true, completed, opportunityId: opportunity.id, stepId: step.id };
+  return {
+    progressed: true,
+    completed,
+    opportunityId: opportunity.id,
+    stepId: step.id,
+    ...(inventorySettlements.length ? { inventorySettlements } : {}),
+  };
 }
 
 function settleReadyOpportunityCompletionFlags(runtime: RuntimeState): void {
@@ -2317,6 +2438,7 @@ export function createScenarioProgress(mod: ScenarioMod): ScenarioProgressState 
     playerKnowledge: createInitialPlayerKnowledge(mod),
     pathReceipts: {},
     npcPrivateKnowledge: createInitialNpcPrivateKnowledge(mod),
+    inventoryTransferReceipts: [],
   };
 }
 

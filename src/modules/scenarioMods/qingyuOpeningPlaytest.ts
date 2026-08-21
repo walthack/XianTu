@@ -94,12 +94,21 @@ export function createQingyuOpeningPlaytestSave(mod: ScenarioMod, generatedAt = 
   if (mod.manifest.id !== QINGYU_OPENING_PLAYTEST_MOD_ID) {
     throw new Error(`清羽记开局试玩需要内置模组 ${QINGYU_OPENING_PLAYTEST_MOD_ID}`);
   }
+  // Demo 的开场正文已经把「紫电穿越、坠入草原、段强就在身边」完整呈现给玩家。
+  // 这正是 s01_01 的既定结果，不该再要求玩家逐字发送一次 objective 才算发生。
+  // 复用 initialFlags → createScenarioProgress 的既有初始化语义，只给隔离 Demo 覆写；
+  // 不改全局事件 schema，也不让 LLM 或按钮写 canonical flag。
+  const playtestMod = structuredClone(mod);
+  playtestMod.scenario.initialFlags = {
+    ...(playtestMod.scenario.initialFlags || {}),
+    'event.s01_01.done': true,
+  };
   const save = applyStrictScenarioInitializationToSave(
     createMinimalSaveDataV3(),
-    buildStrictScenarioInitialization(mod, generatedAt),
+    buildStrictScenarioInitialization(playtestMod, generatedAt),
   );
   applyCreationPreset(save, mod);
-  // 预跑一轮引擎，把首拍激活出来。
+  // 预跑一轮引擎：s01_01 已由开场事实结清，第一屏直接激活 s01_02 的世界压力。
   //
   // 真机实测（2026-08-19）：不预跑的话，玩家进游戏第一屏的任务栏只有
   // 「章节：第1章·穿越」——**没有 objective、没有完成合同按钮**，因为激活发生在

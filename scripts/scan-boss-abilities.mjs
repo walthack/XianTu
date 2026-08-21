@@ -99,16 +99,29 @@ async function askDeepSeek(user) {
 }
 const parse = t => { try { const j = String(t).match(/```(?:json)?\s*([\s\S]*?)```/)?.[1] || String(t).slice(String(t).indexOf('{'), String(t).lastIndexOf('}') + 1); return JSON.parse(j); } catch { return null; } };
 
+function matchesCurrentAbilities(result, expected) {
+  if (!Array.isArray(result?.verifyExisting)) return false;
+  const actual = result.verifyExisting.map(item => String(item?.名 || ''));
+  return actual.length === expected.length && actual.every((ability, index) => ability === expected[index]);
+}
+
 async function run() {
   mkdirSync(outDir, { recursive: true });
   const summary = [];
   for (const name of TARGETS) {
     const dst = join(outDir, `${name}.json`);
-    if (existsSync(dst)) { summary.push(JSON.parse(readFileSync(dst, 'utf8'))); continue; }
     const entry = entryOf.get(name);
     const kws = [name, ...((entry?.aliases) || [])].filter(a => a && a.length >= 2 && !/[（(]/.test(a)).slice(0, 4);
     const identity = String(entry?.staticProfile?.identitySummary || '').slice(0, 60);
-    const existing = (entry?.staticProfile?.signatureAbilities || []).map(s => String(s).slice(0, 30));
+    const existing = (entry?.staticProfile?.signatureAbilities || []).map(String);
+    if (existsSync(dst)) {
+      const cached = JSON.parse(readFileSync(dst, 'utf8'));
+      if (matchesCurrentAbilities(cached, existing)) {
+        summary.push(cached);
+        continue;
+      }
+      console.error(`↻ ${name}: 角色卡能力已变化，旧扫描缓存失效`);
+    }
     const ev = windows(kws);
     const user = userPrompt(name, identity, existing, ev);
     let r = parse(askMiniMax(user));
@@ -125,6 +138,7 @@ async function run() {
       }
     }
     r.name = name;
+    r._scannedSignatureAbilities = existing;
     writeFileSync(dst, JSON.stringify(r, null, 2) + '\n');
     summary.push(r);
     console.error(`${name}: 能力${(r.abilities || []).length} 验旧${(r.verifyExisting || []).length} 结局:${(r.ending?.述 || '?').slice(0, 20)}`);

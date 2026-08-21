@@ -199,6 +199,15 @@ export interface ScenarioPlayerCompletionContract {
     /** 全部条件满足为 success，否则按 unmetOutcome 结算；不读取 LLM 正文。 */
     successWhen?: ScenarioCondition[];
     unmetOutcome?: 'partial' | 'failure';
+    /**
+     * 自由输入到本地动作身份的保守匹配。只用于解析当前可用动作；
+     * 任一 rejectIf 命中即拒绝，歧义时不返回动作。
+     */
+    intentMatch?: {
+      matchAny?: string[];
+      matchAll?: string[];
+      rejectIf?: string[];
+    };
     outcomeText: {
       success: string;
       partial: string;
@@ -210,6 +219,15 @@ export interface ScenarioPlayerCompletionContract {
 }
 
 export interface ScenarioPlayerCompletionEffects {
+  /**
+   * 由本地事件判定原子结算的物品转移。正文与 tavern_commands 只负责演出，
+   * 不再拥有这批物品的发放权。transferId 是跨重试/重载的幂等键。
+   */
+  inventoryTransfers?: Array<{
+    transferId: string;
+    itemId: string;
+    quantity: number;
+  }>;
   relationships?: Array<{
     actorId: string;
     targetCharacterId: string;
@@ -606,6 +624,8 @@ export interface ScenarioStoryOpportunity {
     steps: Array<{
       id: string;
       label: string;
+      /** 当前步骤被本地合同接受后立即结算；机会卡步骤目前只开放稳定物品转移。 */
+      outcomeEffects?: Pick<ScenarioPlayerCompletionEffects, 'inventoryTransfers'>;
       /** 引擎声明的确定性推进动作；文本匹配仅保留为自由输入兼容层。 */
       actions?: Array<{
         id: string;

@@ -92,17 +92,17 @@ test('主轴不得有节点落在隔离关上', async () => {
 
   const quarantinedNodes = MAIN_QUEST_NODES.filter(n => DEFAULT_LINE_QUARANTINED_STAGE_IDS.has(n.stageId));
   assert.deepEqual(
-    quarantinedNodes.map(n => `[${n.stageId}] ${n.text}`),
+    quarantinedNodes.map(n => `[${n.stageId}] ${n.reviewSummary}`),
     [],
     '主轴节点挂在被默认路线静默跳过的关上，玩家永远走不到——改挂可达关或找出该拍的可达版本',
   );
 
   // 每个落在隔离关上的节点都必须有地点锚，否则默认路线上永远渲染不出来
   for (const node of quarantinedNodes) {
-    assert.ok(node.locationId, `隔离关节点缺地点锚，将不可达：[${node.stageId}] ${node.text}`);
+    assert.ok(node.locationId, `隔离关节点缺地点锚，将不可达：[${node.stageId}] ${node.reviewSummary}`);
     // 按地点也确实取得到
     const byLocation = resolveMainQuestNodes(undefined, node.locationId);
-    assert.ok(byLocation.some(n => n.text === node.text), `地点锚 ${node.locationId} 取不到该节点`);
+    assert.ok(byLocation.some(n => n.reviewSummary === node.reviewSummary), `地点锚 ${node.locationId} 取不到该节点`);
   }
 });
 

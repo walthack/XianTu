@@ -1925,6 +1925,35 @@ ${step1Text}
         oldValue: undefined,
         newValue: { actionId: eventProgress.actionId, outcome: eventProgress.outcome },
       });
+      for (const settlement of eventProgress.inventorySettlements || []) {
+        changes.push({
+          key: settlement.key,
+          action: 'set',
+          oldValue: settlement.oldValue,
+          newValue: settlement.newValue,
+        });
+      }
+    }
+    // 机会卡步骤同样先于模型命令结算。这样“王哲递出锦囊”的正文或命令只能演出，
+    // 不能在本地交易之后再补发第二只。
+    const opportunityProgress = options?.opportunityAction
+      ? recordStoryOpportunityStructuredAction(saveData, options.opportunityAction)
+      : recordStoryOpportunityPlayerAction(saveData, options?.userAction || '');
+    if (opportunityProgress.progressed) {
+      changes.push({
+        key: `世界.状态.剧本模组.actorEngine.opportunityStates.${opportunityProgress.opportunityId}`,
+        action: opportunityProgress.completed ? 'opportunity_completed' : 'opportunity_progressed',
+        oldValue: undefined,
+        newValue: opportunityProgress.stepId,
+      });
+      for (const settlement of opportunityProgress.inventorySettlements || []) {
+        changes.push({
+          key: settlement.key,
+          action: 'set',
+          oldValue: settlement.oldValue,
+          newValue: settlement.newValue,
+        });
+      }
     }
 
     const behavior = {
@@ -2098,6 +2127,26 @@ ${step1Text}
       }
     }
 
+    // 本地事件合同已经原子发放的物品，模型不得再 set/add 一次。预处理会把
+    // “同名但另一个 ID”的 set 归并到既有 ID，因此在预处理后按最终路径拦截即可。
+    const locallySettledInventoryPaths = new Set(
+      [
+        ...(eventProgress?.inventorySettlements || []),
+        ...(opportunityProgress.inventorySettlements || []),
+      ].map(settlement => settlement.key),
+    );
+    if (locallySettledInventoryPaths.size > 0) {
+      for (let index = validCommands.length - 1; index >= 0; index -= 1) {
+        const command = validCommands[index];
+        const settledPath = [...locallySettledInventoryPaths].find(path =>
+          command.key === path || command.key.startsWith(`${path}.`),
+        );
+        if (!settledPath) continue;
+        validCommands.splice(index, 1);
+        rejectedCommands.push({ command, errors: ['该物品已由本地事件合同结算，拒绝 LLM 重复发放或改写'] });
+      }
+    }
+
     // 记录被拒绝的指令（格式/只读保护/value 完整性）
     if (rejectedCommands.length > 0) {
       console.error(`[AI双向系统] 共拒绝 ${rejectedCommands.length} 条无效指令（已拦截，不会执行）`);
@@ -2169,7 +2218,19 @@ ${step1Text}
       }
     }
 
-    const reconciledInventoryChanges = this.reconcileNarratedInventoryPossessions(saveData, textContent);
+    const locallySettledInventoryIdentities = new Set(
+      [
+        ...(eventProgress?.inventorySettlements || []),
+        ...(opportunityProgress.inventorySettlements || []),
+      ]
+        .map(settlement => getInventoryItemIdentityKey(settlement.receipt.itemName))
+        .filter(Boolean),
+    );
+    const reconciledInventoryChanges = this.reconcileNarratedInventoryPossessions(
+      saveData,
+      textContent,
+      locallySettledInventoryIdentities,
+    );
     commandAppliedChanges.push(...reconciledInventoryChanges);
 
     // 本地判定已先把来源化战斗伤害写入 resolution；本回合正文只负责演出，
@@ -2451,19 +2512,6 @@ ${step1Text}
       console.warn('[事件对账] 跳过（异常）:', error);
     }
 
-    // 机会卡亲历合同只读取玩家本人本轮提交的行动。正文与 tavern_commands 无论写得多像
-    // “完成”，都不能推进合同；一次成功响应最多推进一个步骤，done 由 runtime 独占写入。
-    const opportunityProgress = options?.opportunityAction
-      ? recordStoryOpportunityStructuredAction(saveData, options.opportunityAction)
-      : recordStoryOpportunityPlayerAction(saveData, options?.userAction || '');
-    if (opportunityProgress.progressed) {
-      changes.push({
-        key: `世界.状态.剧本模组.actorEngine.opportunityStates.${opportunityProgress.opportunityId}`,
-        action: opportunityProgress.completed ? 'opportunity_completed' : 'opportunity_progressed',
-        oldValue: undefined,
-        newValue: opportunityProgress.stepId,
-      });
-    }
     const scenarioResult = advanceScenarioRuntime(saveData);
     saveData = scenarioResult.saveData;
     const runtimeAfterAdvance = (saveData as any)?.世界?.状态?.剧本模组;
@@ -3481,7 +3529,11 @@ ${saveDataJson}`;
     };
   }
 
-  private reconcileNarratedInventoryPossessions(saveData: SaveData, text: string): StateChange[] {
+  private reconcileNarratedInventoryPossessions(
+    saveData: SaveData,
+    text: string,
+    locallySettledIdentities: Set<string> = new Set(),
+  ): StateChange[] {
     const itemNames = detectNarratedInventoryPossessions(text);
     if (itemNames.length === 0) return [];
     const gainQuantityByIdentity = new Map(
@@ -3508,6 +3560,7 @@ ${saveDataJson}`;
       const name = rawName.trim();
       const identity = getInventoryItemIdentityKey(name);
       if (!name || !identity) continue;
+      if (locallySettledIdentities.has(identity)) continue;
 
       const existing = existingItemsByIdentity.get(identity);
       const narratedGainQuantity = gainQuantityByIdentity.get(identity) || 0;

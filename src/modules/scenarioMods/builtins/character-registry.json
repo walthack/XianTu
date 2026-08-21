@@ -1,13 +1,13 @@
 {
   "schema": "xiantu.character-registry.v1",
-  "version": "cr-2026-08-13-6f3a5d006e77c613",
-  "sourceHash": "6f3a5d006e77c613",
+  "version": "cr-2026-08-21-c63658cada8f983b",
+  "sourceHash": "c63658cada8f983b",
   "sourceGeneratedAt": "2026-06-30T12:50:33.965Z",
-  "generatedAt": "2026-08-13T17:03:45.225Z",
+  "generatedAt": "2026-08-21T00:14:54.548Z",
   "stats": {
     "total": 315,
-    "stagePresent": 217,
-    "canonOnly": 98,
+    "stagePresent": 218,
+    "canonOnly": 97,
     "collisionsMerged": 0
   },
   "characters": [
@@ -7102,127 +7102,6 @@
         ]
       },
       "embedText": "飞鸟熊藏 ｜ 东瀛上忍/黑魔海供奉 ｜ 【晋国人物】 ｜ 黑魔海(供奉)、东瀛(乱波上忍) ｜ 登场于晋宫/建康宫中某处密室 ｜ （原文仅提及已死，无生前言行，无法归纳） ｜ 敌人；被程宗扬击杀的敌人 ｜ 飞鸟供奉/飞鸟熊藏兄弟/倭贼 （原文无对程宗扬的称呼）/被称呼为飞鸟兄弟中的哥哥 ｜ 被程宗扬等人杀死，尸体被用于易容冒充；被黑魔海招揽为供奉，曾与弟弟（或兄长）熊藏一同逃至建康；被程宗扬夺走屠龙刀刀柄；飞鸟熊藏被程宗扬杀死；他带到建康的布都御魂后来落入程宗扬手中"
-    },
-    {
-      "id": "canon.character.f8997273a4",
-      "canonicalName": "廖群玉",
-      "aliases": [],
-      "gender": "男",
-      "books": [
-        "qingyu",
-        "yunlong",
-        "yange"
-      ],
-      "tier": "主要",
-      "stagePresence": false,
-      "staticProfile": {
-        "identitySummary": "宋国户部官员（贾师宪下属）",
-        "personality": [
-          "文雅",
-          "谨慎",
-          "务实",
-          "有君子之风",
-          "善于察言观色"
-        ],
-        "appearance": "谈吐文雅，颇有君子之风，摆出文士派头时引经据典、娓娓而谈",
-        "speechStyle": "文绉绉，礼貌客气，偶尔带官腔，如‘请陶先生三思’‘公子最好另选佳处’",
-        "principles": [
-          "忠于职守，对朝廷事务谨慎",
-          "不轻易违背承诺，对临时变卦者恼怒"
-        ],
-        "goals": [
-          "协助贾师宪推行纸币及财政改革，维护户部利益，同时与程宗扬保持良好合作关系"
-        ],
-        "weaknesses": [
-          "对程宗扬的激进商业手段（如房地产、纸币发行）有时感到被动或压力"
-        ],
-        "signatureAbilities": [],
-        "relationToProtagonist": [
-          "程宗扬的商业合作伙伴及政治盟友，贾师宪的下属"
-        ],
-        "formsOfAddress": [
-          "程宗扬称其为‘老廖’；被他人称为‘廖群玉’或‘廖大人’"
-        ],
-        "joining": [
-          "作为宋国股东加入盘江程氏，第7章股东大会中列为新加入的宋国股东"
-        ],
-        "keyEvents": [
-          "求见杨玉环献婴衣",
-          "被贾文和以刀威胁",
-          "被冤枉锁于马厩",
-          "怀揣锦囊返回临安"
-        ],
-        "ending": [],
-        "affiliations": [
-          {
-            "faction": "贾师宪势力",
-            "role": "幕僚/书坊掌柜"
-          },
-          {
-            "faction": "悦生堂",
-            "role": "堂主"
-          }
-        ],
-        "debutLocation": {
-          "location": "临安",
-          "locator": "chapter265.html（第二十二集）",
-          "scene": "在晴州偶遇程宗扬与秦桧后，于临安悦生堂正式与程宗扬会面，自报家门"
-        },
-        "birthYear": 180,
-        "visualIdentity": {
-          "face": "留胡须"
-        },
-        "visualOutfits": [
-          {
-            "id": "default",
-            "scope": "default",
-            "outfit": "棉布长袍（半旧不新）",
-            "props": "捋胡须；坐于客厅等候"
-          }
-        ]
-      },
-      "region": "宋国",
-      "phaseIdentities": [
-        {
-          "scope": "stage-projection",
-          "stageId": "lyg.shixiang_ambush",
-          "book": "yange",
-          "seqLo": 1092,
-          "seqHi": 1115,
-          "identity": "宋国户部官员（贾师宪下属）",
-          "role": "宋国文臣，传递情报者",
-          "description": "悦生堂老板廖群玉是个识货的书商，与程宗扬素有交情，曾亲赠一套《金瓶梅》，两人谈书论道时满室墨香浮动。",
-          "notes": [
-            "【关系】程宗扬的商业合作伙伴及政治盟友，贾师宪的下属",
-            "【目标】协助贾师宪推行纸币及财政改革，维护户部利益，同时与程宗扬保持良好合作关系"
-          ],
-          "status": "stage-current"
-        },
-        {
-          "scope": "stage-projection",
-          "stageId": "lyl.taiquan_expedition",
-          "book": "yunlong",
-          "seqLo": 563,
-          "seqHi": 566,
-          "identity": "宋国户部官员（贾师宪下属）",
-          "role": "书商",
-          "description": "悦生堂老板廖群玉是个识货的书商，与程宗扬素有交情，曾亲赠一套《金瓶梅》，两人谈书论道时满室墨香浮动。",
-          "notes": [
-            "【关系】程宗扬的商业合作伙伴及政治盟友，贾师宪的下属",
-            "【目标】协助贾师宪推行纸币及财政改革，维护户部利益，同时与程宗扬保持良好合作关系"
-          ],
-          "status": "stage-current"
-        }
-      ],
-      "review": {
-        "approved": false,
-        "reviewed": true,
-        "flags": [
-          "duplicate-merged"
-        ],
-        "conflicts": []
-      },
-      "embedText": "廖群玉 ｜ 宋国户部官员（贾师宪下属） ｜ 【宋国人物】 ｜ 贾师宪势力(幕僚/书坊掌柜)、悦生堂(堂主) ｜ 登场于临安 ｜ 文雅、谨慎、务实、有君子之风、善于察言观色 ｜ 程宗扬的商业合作伙伴及政治盟友，贾师宪的下属 ｜ 程宗扬称其为‘老廖’；被他人称为‘廖群玉’或‘廖大人’ ｜ 求见杨玉环献婴衣；被贾文和以刀威胁；被冤枉锁于马厩；怀揣锦囊返回临安"
     },
     {
       "id": "canon.character.fb2941e742",
@@ -19957,6 +19836,127 @@
         "conflicts": []
       },
       "embedText": "廖扶 ｜ 汝南名士，左武军/射声军将领 ｜ 吕氏外戚集团(谋士/门客) ｜ 果断、冷静、有智谋、善于观察、重视名节 ｜ 无直接个人关系（刘诏势力下的将领） ｜ 被称“汝南廖扶”；程宗扬（主角）未直接称呼 ｜ 月旦评上一举成名；指挥左武、射声军夺永福门、攻玉堂殿；多次使用冰封术；一夜白发，头发掉落殆尽；葬身火中"
+    },
+    {
+      "id": "liuchao.character.liao_qun_yu",
+      "canonicalName": "廖群玉",
+      "aliases": [],
+      "gender": "男",
+      "books": [
+        "qingyu",
+        "yunlong",
+        "yange"
+      ],
+      "tier": "主要",
+      "stagePresence": true,
+      "staticProfile": {
+        "identitySummary": "宋国户部官员（贾师宪下属）",
+        "personality": [
+          "文雅",
+          "谨慎",
+          "务实",
+          "有君子之风",
+          "善于察言观色"
+        ],
+        "appearance": "谈吐文雅，颇有君子之风，摆出文士派头时引经据典、娓娓而谈",
+        "speechStyle": "文绉绉，礼貌客气，偶尔带官腔，如‘请陶先生三思’‘公子最好另选佳处’",
+        "principles": [
+          "忠于职守，对朝廷事务谨慎",
+          "不轻易违背承诺，对临时变卦者恼怒"
+        ],
+        "goals": [
+          "协助贾师宪推行纸币及财政改革，维护户部利益，同时与程宗扬保持良好合作关系"
+        ],
+        "weaknesses": [
+          "对程宗扬的激进商业手段（如房地产、纸币发行）有时感到被动或压力"
+        ],
+        "signatureAbilities": [],
+        "relationToProtagonist": [
+          "程宗扬的商业合作伙伴及政治盟友，贾师宪的下属"
+        ],
+        "formsOfAddress": [
+          "程宗扬称其为‘老廖’；被他人称为‘廖群玉’或‘廖大人’"
+        ],
+        "joining": [
+          "作为宋国股东加入盘江程氏，第7章股东大会中列为新加入的宋国股东"
+        ],
+        "keyEvents": [
+          "求见杨玉环献婴衣",
+          "被贾文和以刀威胁",
+          "被冤枉锁于马厩",
+          "怀揣锦囊返回临安"
+        ],
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "贾师宪势力",
+            "role": "幕僚/书坊掌柜"
+          },
+          {
+            "faction": "悦生堂",
+            "role": "堂主"
+          }
+        ],
+        "debutLocation": {
+          "location": "临安",
+          "locator": "chapter265.html（第二十二集）",
+          "scene": "在晴州偶遇程宗扬与秦桧后，于临安悦生堂正式与程宗扬会面，自报家门"
+        },
+        "birthYear": 180,
+        "visualIdentity": {
+          "face": "留胡须"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "棉布长袍（半旧不新）",
+            "props": "捋胡须；坐于客厅等候"
+          }
+        ]
+      },
+      "region": "宋国",
+      "phaseIdentities": [
+        {
+          "scope": "stage-projection",
+          "stageId": "lyg.shixiang_ambush",
+          "book": "yange",
+          "seqLo": 1092,
+          "seqHi": 1115,
+          "identity": "宋国户部官员（贾师宪下属）",
+          "role": "宋国文臣，传递情报者",
+          "description": "悦生堂老板廖群玉是个识货的书商，与程宗扬素有交情，曾亲赠一套《金瓶梅》，两人谈书论道时满室墨香浮动。",
+          "notes": [
+            "【关系】程宗扬的商业合作伙伴及政治盟友，贾师宪的下属",
+            "【目标】协助贾师宪推行纸币及财政改革，维护户部利益，同时与程宗扬保持良好合作关系"
+          ],
+          "status": "stage-current"
+        },
+        {
+          "scope": "stage-projection",
+          "stageId": "lyl.taiquan_expedition",
+          "book": "yunlong",
+          "seqLo": 563,
+          "seqHi": 566,
+          "identity": "宋国户部官员（贾师宪下属）",
+          "role": "书商",
+          "description": "悦生堂老板廖群玉是个识货的书商，与程宗扬素有交情，曾亲赠一套《金瓶梅》，两人谈书论道时满室墨香浮动。",
+          "notes": [
+            "【关系】程宗扬的商业合作伙伴及政治盟友，贾师宪的下属",
+            "【目标】协助贾师宪推行纸币及财政改革，维护户部利益，同时与程宗扬保持良好合作关系"
+          ],
+          "status": "stage-current"
+        }
+      ],
+      "review": {
+        "approved": false,
+        "reviewed": true,
+        "flags": [
+          "duplicate-merged"
+        ],
+        "conflicts": []
+      },
+      "embedText": "廖群玉 ｜ 宋国户部官员（贾师宪下属） ｜ 【宋国人物】 ｜ 贾师宪势力(幕僚/书坊掌柜)、悦生堂(堂主) ｜ 登场于临安 ｜ 文雅、谨慎、务实、有君子之风、善于察言观色 ｜ 程宗扬的商业合作伙伴及政治盟友，贾师宪的下属 ｜ 程宗扬称其为‘老廖’；被他人称为‘廖群玉’或‘廖大人’ ｜ 求见杨玉环献婴衣；被贾文和以刀威胁；被冤枉锁于马厩；怀揣锦囊返回临安"
     },
     {
       "id": "liuchao.character.lin_cai_quan",

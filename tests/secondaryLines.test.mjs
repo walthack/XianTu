@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
 import test from 'node:test';
 
 import { loadTs } from './loadTs.mjs';
@@ -48,6 +49,11 @@ test('两类线各用各的锚，破例只有白名单里那条', async () => {
     assert.ok(line, `白名单里的 ${id} 不存在了，白名单该清理`);
     assert.match(line.basis, /破例/, `${line.name} 破例了却没在 basis 里说明理由`);
   }
+});
+
+test('任务栏把太泉 expedition 显示成远征，不伪装成国家线', () => {
+  const sidebar = fs.readFileSync('src/components/dashboard/RightSidebar.vue', 'utf8');
+  assert.match(sidebar, /line\.kind === 'expedition'[\s\S]*\? '远征'/);
 });
 
 test('锚不得落在被默认路线跳过的死 id 上', async () => {

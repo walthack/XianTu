@@ -4060,7 +4060,8 @@
       "chapter.lcq.stage_11_lieshan_battle.sanchuankou.started": false,
       "chapter.lcq.stage_11_lieshan_battle.sanchuankou.done": false,
       "chapter.lcq.stage_11_lieshan_battle.grain.started": false,
-      "chapter.lcq.stage_11_lieshan_battle.grain.done": false
+      "chapter.lcq.stage_11_lieshan_battle.grain.done": false,
+      "event.qiushaojun_breaks_with_linzhilan.done": false
     },
     "chapters": [
       {

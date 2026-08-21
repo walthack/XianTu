@@ -22,8 +22,8 @@ import {
   privateFactNeedsNarrativeAssociationGuard,
 } from './privateKnowledgeGuard';
 import { formatVoiceCard } from './voiceCards';
-import { resolveMainQuestLayer, resolveMainQuestNodes } from './mainQuestAxis';
-import { resolveAvailableLines } from './secondaryLines';
+import { resolveCurrentMainQuestNode, resolveMainQuestLayer } from './mainQuestAxis';
+import { resolveAvailableLines, secondaryLinesAtEvent } from './secondaryLines';
 import { characterBeatsAt } from './characterQuests';
 import { formatWorldSimulationPrompt, getCurrentWorldSituation, isWorldSimulationRuntime } from './worldSimulation';
 
@@ -835,19 +835,29 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
         if (layer?.text) {
           lines.push(`- 长期方向（常驻可见，玩家可无限期搁置）：${layer.text}`);
         }
-        // 传入当前地点：隔离关被默认路线跳过时，节点靠地点锚仍能显示（见 MainQuestNode.locationId）。
-        const nodes = resolveMainQuestNodes(runtime.modId, currentLocation?.id);
-        if (nodes.length) {
-          lines.push(`- 本关主线节点：${nodes.map(node => node.text).join('；')}`);
-        }
         const situation = getCurrentWorldSituation(runtime as any);
         const sourceEventId = situation?.sourceEventId;
+        let currentWorldEvent: ScenarioModEvent | undefined;
+        let currentWorldObjective = '';
         if (sourceEventId) {
           const sourceEvent = (runtime.events || []).find(event => event.id === sourceEventId);
-          const objective = typeof sourceEvent?.objective === 'string' ? sourceEvent.objective.trim() : '';
-          if (objective) {
-            lines.push(`- 当前可切入点：${objective}`);
-          }
+          currentWorldEvent = sourceEvent;
+          currentWorldObjective = sourceEvent
+            ? String(resolveScenarioEventNarrative(sourceEvent, runtime.flags || {}, runtime.divergences).objective || '').trim()
+            : '';
+        }
+        if (!currentWorldEvent && anchor) {
+          currentWorldEvent = anchor;
+          currentWorldObjective = String(
+            resolveScenarioEventNarrative(anchor, runtime.flags || {}, runtime.divergences).objective || '',
+          ).trim();
+        }
+        // 结果摘要只供制作审阅；玩家与 LLM 只拿当前绑定 event 的固定 objective。
+        const mainNode = resolveCurrentMainQuestNode(runtime.modId, currentLocation?.id, currentWorldEvent?.id);
+        if (mainNode && currentWorldObjective) {
+          lines.push(`- 当前主轴目标：${currentWorldObjective}`);
+        } else if (currentWorldObjective) {
+          lines.push(`- 当前可切入点：${currentWorldObjective}`);
         }
         // 二级线：走到地方／认识对的人／知道了那件事，就该让玩家知道有这条门路，不设"接受任务"手续。
         const openLines = resolveAvailableLines(
@@ -856,12 +866,18 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
           runtime.completedEventIds,
         );
         if (openLines.length) {
-          lines.push(`- 此刻可投的门路：${openLines.map(l => `${l.name}——${l.entryHint}`).join('；')}`);
+          const activeLineIds = new Set(secondaryLinesAtEvent(currentWorldEvent?.id).map(line => line.id));
+          lines.push(`- 此刻可投的门路：${openLines.map(l => {
+            const current = activeLineIds.has(l.id) && currentWorldObjective
+              ? `；当前目标：${currentWorldObjective}`
+              : '';
+            return `${l.name}——${l.entryHint}${current}`;
+          }).join('；')}`);
         }
         // 人物任务：这一拍因为谁而不一样。空则整行省略，不得另写“本拍无人有戏”。
-        const beats = characterBeatsAt(anchor?.id);
-        if (beats.length) {
-          lines.push(`- 这一拍谁有戏：${beats.map(b => `${b.name}——${b.text}`).join('；')}`);
+        const beats = characterBeatsAt(currentWorldEvent?.id);
+        if (beats.length && currentWorldObjective) {
+          lines.push(`- 人物任务切入：${beats.map(b => `${b.name}——${currentWorldObjective}`).join('；')}`);
         }
         lines.push(
           '- 纪律：没有需要玩家逐拍完成的任务，也没有进度惩罚。玩家可立刻着手、绕路，或把上述方向搁置任意多轮。当玩家问「主线是什么／我该往哪走」时，据此如实作答，并给出此刻可行的切入方式（找谁、去哪、打听什么）。不得替玩家决定下一步，不得提前演出该方向的结果，也不得因玩家不朝它走而制造追兵、压力或惩罚。',
@@ -1058,8 +1074,8 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
     ? `【刚完成的即兴目标·本轮必须叙事回报】\n${completedGoalReceipts.slice(0, 3).map((g: any) => `- ${g?.标题 || ''}${g?.证据 ? `（依据：${compactText(String(g.证据), 80)}）` : ''}`).filter(Boolean).join('\n')}\n这些目标已经由接地审计确认完成。本轮须在正文中给出与目标规模相称、且有当前处境依据的回报：情报、关系变化、财货、声望或新机会至少一种；需要落状态时输出对应合法指令。不得重复完成目标、不得凭空发放超额奖励。`
     : '';
   const improvLine = Array.isArray(improvGoals) && improvGoals.length
-    ? `【即兴目标·玩家侧可选支线（跨轮追踪，读档续写保持不悄然翻转）】\n${improvGoals.slice(0, 3).map((g: any) => `- ${typeof g === 'string' ? g : g?.标题 || ''}`).filter(Boolean).join('\n')}\n性质：这些是玩家临时选择的**可选支线**目标，**不代表主线方向，不得盖过或替代上文"当前事件/最近主线节点"**；主叙事推进以主线为准，即兴目标仅在玩家主动选择追踪时顺应。维护规则：目标达成或失效时用 set 更新 系统.扩展.任务追踪.即兴目标（整组重写，上限 3 条）；只记跨轮仍需追踪的目标，场景内小动作不记。`
-    : `【即兴目标槽】当叙事确立了需跨轮追踪的临时目标（如"取回某物""赴某约"），用 set 写入 系统.扩展.任务追踪.即兴目标（数组，元素 {"标题":"..."}，上限 3 条）；达成/失效必须清除。这是玩家侧可选支线，**不得盖过主线**。`;
+    ? `【个人目标·跨轮追踪（读档续写保持不悄然翻转）】\n${improvGoals.slice(0, 3).map((g: any) => `- ${typeof g === 'string' ? g : g?.标题 || ''}`).filter(Boolean).join('\n')}\n性质：这些只是玩家临时选择的**个人目标／备忘**，不是引擎注册的动态委托，不自带奖励、期限或任务落账，也不代表主线方向；不得盖过或替代上文"当前事件/最近主线节点"。仅在玩家主动追踪时顺应；达成或失效时用 set 整组更新 系统.扩展.任务追踪.即兴目标（上限 3 条）。`
+    : `【个人目标槽】当玩家明确形成需跨轮追踪的临时打算（如"取回某物""赴某约"），可用 set 写入 系统.扩展.任务追踪.即兴目标（数组，元素 {"标题":"..."}，上限 3 条）；达成/失效必须清除。它只是个人备忘，不是动态委托，不产生奖励、期限或任务落账，**不得盖过主线**。`;
 
   // 承重角色保护：尚未完成的关键剧情事件所系人物，不得被即兴写死/永久失能（只报名字，不泄事件细节）
   const loadBearingIds = new Set<string>(

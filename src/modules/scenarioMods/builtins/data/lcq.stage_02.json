@@ -2282,7 +2282,10 @@
       "event.charge_sudaji_fee.done": false,
       "event.free_ajiman.done": false,
       "event.iron_bridge_ambush.done": false,
-      "event.rainforest_black_shoal.done": false
+      "event.rainforest_black_shoal.done": false,
+      "event.ningyu_enters_gamble.done": false,
+      "event.zixi_taiyi_intercept.done": false,
+      "event.silent_sheyi_village.done": false
     },
     "events": [
       {
@@ -2561,6 +2564,15 @@
                   {
                     "id": "take_bag",
                     "label": "当面收下锦囊",
+                    "outcomeEffects": {
+                      "inventoryTransfers": [
+                        {
+                          "transferId": "lcq.event.s02_01.inventory.jin_nang",
+                          "itemId": "lcq.item.jin_nang",
+                          "quantity": 1
+                        }
+                      ]
+                    },
                     "actions": [
                       {
                         "id": "accept_silk_bag",
@@ -2632,6 +2644,15 @@
                   {
                     "id": "hold_bag",
                     "label": "收下锦囊实物",
+                    "outcomeEffects": {
+                      "inventoryTransfers": [
+                        {
+                          "transferId": "lcq.event.s02_01.inventory.jin_nang",
+                          "itemId": "lcq.item.jin_nang",
+                          "quantity": 1
+                        }
+                      ]
+                    },
                     "actions": [
                       {
                         "id": "hold_silk_object",

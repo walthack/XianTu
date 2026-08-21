@@ -479,6 +479,7 @@ import {
   getStageDepartureOffer,
   getTrackedStoryOpportunityActions,
   hasPendingStoryBeatHandoff,
+  resolveStoryEventActionFromPlayerText,
   type ScenarioEventActionSelection,
   type ScenarioOpportunityActionSelection,
 } from '@/modules/scenarioMods/runtime';
@@ -1667,6 +1668,18 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
 	    uiStore.lastSentUserIntentSource = 'unknown';
 	  }
 
+  const scenarioSaveAtSend = gameStateStore.toSaveData();
+  const exactSelectedEventAction = selectedScenarioEngineAction.value?.source !== 'opportunity_engine'
+    && selectedScenarioEngineAction.value?.playerLine === userMessage
+    ? selectedScenarioEngineAction.value
+    : undefined;
+  const resolvedEventAction = exactSelectedEventAction
+    || (scenarioSaveAtSend ? resolveStoryEventActionFromPlayerText(scenarioSaveAtSend, userMessage) : undefined);
+  const exactSelectedOpportunityAction = selectedScenarioEngineAction.value?.source === 'opportunity_engine'
+    && selectedScenarioEngineAction.value.actionText === userMessage
+    ? selectedScenarioEngineAction.value
+    : undefined;
+
   // 获取动作队列中的文本
   console.log('[前端] 动作队列 actionQueueText:', actionQueueText);
 
@@ -1679,12 +1692,8 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
     finalUserMessage = actionQueueText ? `<行动趋向>${actionQueueText}</行动趋向>
 ` : '';
   }
-  if (
-    selectedScenarioEngineAction.value
-    && selectedScenarioEngineAction.value.source !== 'opportunity_engine'
-    && selectedScenarioEngineAction.value.playerLine === userMessage
-  ) {
-    const result = selectedScenarioEngineAction.value;
+  if (resolvedEventAction) {
+    const result = resolvedEventAction;
     finalUserMessage += `\n【本地事件判定已预结算】事件=${result.eventId}；动作=${result.actionId}；结果=${result.expectedOutcome}；既定反馈=${result.outcomeText}。只演出该既定结果，不得另行判定、升级结果或写入事件完成标记。\n`;
   }
   if (execution?.resolution) {
@@ -1735,16 +1744,8 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
         useStreaming: useStreaming.value,
         shouldAbort: () => !uiStore.isAIProcessing || aiResetToken !== resetSnapshot,
       };
-      const selectedPlayerLine = !selectedScenarioEngineAction.value
-        ? undefined
-        : selectedScenarioEngineAction.value.source === 'opportunity_engine'
-          ? selectedScenarioEngineAction.value.actionText
-          : selectedScenarioEngineAction.value.playerLine;
-      if (selectedScenarioEngineAction.value && selectedPlayerLine === userMessage) {
-        const selected = { ...selectedScenarioEngineAction.value };
-        if (selected.source === 'opportunity_engine') options.opportunityAction = selected;
-        else options.eventAction = selected;
-      }
+      if (exactSelectedOpportunityAction) options.opportunityAction = { ...exactSelectedOpportunityAction };
+      else if (resolvedEventAction) options.eventAction = { ...resolvedEventAction };
 
       // 酒馆环境：流式通过事件系统处理（STREAM_TOKEN_RECEIVED_INCREMENTALLY）
       // 非酒馆环境（网页版自定义API）：需要设置 onStreamChunk 才能实时渲染

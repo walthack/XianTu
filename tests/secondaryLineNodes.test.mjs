@@ -14,12 +14,12 @@ test('八条线都有节点骨架，且各自说明还缺什么', async () => {
     }
     for (const n of line.nodes) {
       assert.ok(['ready', 'new', 'pending'].includes(n.status), `${line.name} 节点状态非法：${n.status}`);
-      assert.ok(n.text?.length >= 4, `${line.name} 有空节点文案`);
+      assert.ok(n.reviewSummary?.length >= 4, `${line.name} 有空节点文案`);
       if (n.status === 'ready') {
-        assert.ok(n.stageId && n.eventId, `${line.name} 的 ready 节点必须落到 stage+event：${n.text}`);
+        assert.ok(n.stageId && n.eventId, `${line.name} 的 ready 节点必须落到 stage+event：${n.reviewSummary}`);
       }
       if (n.status === 'pending') {
-        assert.ok(!n.eventId, `${line.name} 的待扩节点不该挂 event：${n.text}`);
+        assert.ok(!n.eventId, `${line.name} 的待扩节点不该挂 event：${n.reviewSummary}`);
       }
     }
   }
@@ -40,7 +40,7 @@ test('ready 节点指向的 stage 与 event 真实存在', async () => {
     for (const n of line.nodes.filter(x => x.status === 'ready')) {
       const evs = stageEvents.get(n.stageId);
       if (!evs) { missing.push(`${line.name}: 关卡不存在 ${n.stageId}`); continue; }
-      if (!evs.has(n.eventId)) missing.push(`${line.name}: ${n.stageId} 里没有 ${n.eventId}（${n.text}）`);
+      if (!evs.has(n.eventId)) missing.push(`${line.name}: ${n.stageId} 里没有 ${n.eventId}（${n.reviewSummary}）`);
     }
   }
   assert.deepEqual(missing, [], '有 ready 节点指向不存在的 stage/event，玩家永远走不到');
@@ -71,9 +71,9 @@ test('ready 节点按全书时间线序排列，不让玩家往回跑', async ()
       const seq = n.status === 'ready' ? seqOf.get(n.eventId) : undefined;
       if (typeof seq !== 'number') { if (n.status !== 'ready') prev = null; return; }
       if (prev && seq < prev.seq) {
-        back.push(`${line.name}: #${prev.i}「${prev.text}」seq ${prev.seq} → #${i + 1}「${n.text}」seq ${seq}`);
+        back.push(`${line.name}: #${prev.i}「${prev.summary}」seq ${prev.seq} → #${i + 1}「${n.reviewSummary}」seq ${seq}`);
       }
-      prev = { i: i + 1, seq, text: n.text };
+      prev = { i: i + 1, seq, summary: n.reviewSummary };
     });
   }
   assert.deepEqual(back, [], '有节点排在比它更早的剧情之后，玩家照着待办走会被要求往回跑');
@@ -87,8 +87,8 @@ test('待新增节点都给了建议挂载关与建议 id，不冒充可走', as
   for (const line of SECONDARY_LINES) {
     for (const n of line.nodes.filter(x => x.status === 'new')) {
       total++;
-      assert.ok(n.stageId, `${line.name}「${n.text}」标了 new 却没给建议挂载关`);
-      assert.ok(n.eventId, `${line.name}「${n.text}」标了 new 却没给建议 event id`);
+      assert.ok(n.stageId, `${line.name}「${n.reviewSummary}」标了 new 却没给建议挂载关`);
+      assert.ok(n.eventId, `${line.name}「${n.reviewSummary}」标了 new 却没给建议 event id`);
     }
   }
   // 原本断言「必须还有 new 节点」，用来提醒别把这条测试删掉。2026-08-17 二级线的 new 已全部写完，
@@ -117,7 +117,7 @@ test('新增 event 的建议 id 不带关卡前缀', async () => {
   const bad = [];
   for (const [line, n] of nodes) {
     if (n.status !== 'new' || !n.eventId) continue;
-    if (/\.event\.s\d/.test(n.eventId)) bad.push(`${line}「${n.text}」→ ${n.eventId}`);
+    if (/\.event\.s\d/.test(n.eventId)) bad.push(`${line}「${n.reviewSummary}」→ ${n.eventId}`);
   }
   assert.deepEqual(bad, [], '建议 id 带了关卡前缀——关卡只是文件落点，不该写进永久键');
 });

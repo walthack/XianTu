@@ -222,7 +222,7 @@
             </template>
           </div>
           <div v-if="questGoals.length" class="quest-improv">
-            <div class="quest-improv-label"><span class="quest-tag quest-tag-side">支线</span>{{ t('临时目标（可选）') }}</div>
+            <div class="quest-improv-label"><span class="quest-tag quest-tag-side">个人</span>{{ t('个人目标（可选）') }}</div>
             <div v-for="(g, i) in questGoals" :key="i" class="quest-goal"><span class="quest-mark-side">·</span>{{ g }}</div>
           </div>
         </div>
@@ -247,7 +247,7 @@
               <span class="quest-tag quest-tag-main">主线</span>{{ worldQuestAxis.direction }}
             </div>
             <div v-if="worldQuestAxis.nodes" class="quest-event">
-              <span class="quest-mark-main">◆</span>{{ t('本关主线节点') }}：{{ worldQuestAxis.nodes }}
+              <span class="quest-mark-main">◆</span>{{ t('当前主轴目标') }}：{{ worldQuestAxis.nodes }}
             </div>
             <div v-if="worldQuestAxis.entry" class="quest-event">
               <span class="quest-mark-main">◆</span>{{ t('当前可切入点') }}：{{ worldQuestAxis.entry }}
@@ -271,7 +271,7 @@
         <div v-show="!beatsCollapsed" class="quest-body">
           <div class="quest-main">
             <div v-for="(beat, i) in characterBeats" :key="`${beat.name}-${i}`" class="quest-event">
-              <span class="quest-mark-side">·</span>{{ beat.name }}——{{ beat.text }}
+              <span class="quest-mark-side">·</span>{{ beat.name }}——{{ beat.objective }}
             </div>
           </div>
         </div>
@@ -298,9 +298,9 @@
           <div v-for="line in availableLines" :key="line.id" class="quest-main">
             <div class="quest-chapter">
               <span class="quest-tag quest-tag-side">{{ line.kind }}</span>{{ line.name }}
-              <span class="quest-more">（{{ line.ready }}/{{ line.total }} 可走{{ line.pending ? '，余待扩' : '' }}）</span>
             </div>
             <div class="quest-event"><span class="quest-mark-side">·</span>{{ line.hint }}</div>
+            <div v-if="line.objective" class="quest-event"><span class="quest-mark-main">◆</span>{{ t('当前目标') }}：{{ line.objective }}</div>
           </div>
           <div class="quest-more">{{ t('照着做就是加入，不做也不损失什么。') }}</div>
         </div>
@@ -447,8 +447,8 @@ import {
   getCurrentWorldSituation,
   isWorldSimulationRuntime,
 } from '@/modules/scenarioMods/worldSimulation';
-import { resolveMainQuestLayer, resolveMainQuestNodes } from '@/modules/scenarioMods/mainQuestAxis';
-import { resolveAvailableLines, resolveLocationIdFromPosition } from '@/modules/scenarioMods/secondaryLines';
+import { resolveCurrentMainQuestNode, resolveMainQuestLayer } from '@/modules/scenarioMods/mainQuestAxis';
+import { resolveAvailableLines, resolveLocationIdFromPosition, secondaryLinesAtEvent } from '@/modules/scenarioMods/secondaryLines';
 import { characterBeatsAt } from '@/modules/scenarioMods/characterQuests';
 import { prefillChat } from '@/utils/chatBus';
 import { resolveScenarioEventNarrative } from '@/modules/scenarioMods/eventNarrativeView';
@@ -488,6 +488,16 @@ const trackingOpportunity = ref('');
 const worldDivergenceBusy = ref(false);
 const epistemicRuntime = computed(() => (gameStateStore.worldState as any)?.剧本模组);
 const worldMode = computed(() => isWorldSimulationRuntime(epistemicRuntime.value));
+const currentQuestEvent = (rt: any): any => {
+  const sourceEventId = getCurrentWorldSituation(rt)?.sourceEventId;
+  return (sourceEventId && (rt.events || []).find((event: any) => event?.id === sourceEventId))
+    || getScenarioFocusEvent(rt);
+};
+const visibleQuestObjective = (rt: any, event: any): string => {
+  if (!event) return '';
+  const view = resolveScenarioEventNarrative(event, rt.flags || {}, rt.divergences);
+  return String(view.objective || '').trim();
+};
 // world_sim 主线轴：长期方向（当前层）+ 本关节点 + 局势源事件 objective；不含层六、无逐拍列表。
 const worldQuestAxis = computed(() => {
   if (!worldMode.value) return null;
@@ -503,19 +513,15 @@ const worldQuestAxis = computed(() => {
         .filter(l => l.name && l.name.length >= 2 && locDesc.includes(l.name.replace(/\s+/g, '')))
         .sort((a, b) => b.name.length - a.name.length)[0]
     : undefined;
-  const nodes = resolveMainQuestNodes(rt.modId, curLoc?.id)
-    .map((node: { text?: string }) => String(node?.text || '').trim())
-    .filter(Boolean)
-    .join('；');
-  let entry = '';
-  const situation = getCurrentWorldSituation(rt);
-  const sourceEventId = situation?.sourceEventId;
-  if (sourceEventId) {
-    const sourceEvent = (rt.events || []).find((event: any) => event?.id === sourceEventId);
-    const objective = typeof sourceEvent?.objective === 'string' ? sourceEvent.objective.trim() : '';
-    if (objective) entry = objective;
-  }
-  return { direction: layer.text, nodes, entry };
+  const event = currentQuestEvent(rt);
+  const objective = visibleQuestObjective(rt, event);
+  const mainNode = resolveCurrentMainQuestNode(rt.modId, curLoc?.id, event?.id);
+  return {
+    direction: layer.text,
+    // 同关未来节点的 reviewSummary 不再提前摊给玩家；只显示当前 event 的固定 objective。
+    nodes: mainNode ? objective : '',
+    entry: mainNode ? '' : objective,
+  };
 });
 // 二级线：锚一满足就作为待办显示，不需要玩家确认（用户裁定 2026-08-16）。
 const availableLines = computed(() => {
@@ -525,14 +531,20 @@ const availableLines = computed(() => {
     (gameStateStore.playerStatus as any)?.位置?.描述,
     rt.canon?.locations,
   );
+  const event = currentQuestEvent(rt);
+  const activeLineIds = new Set(secondaryLinesAtEvent(event?.id).map(line => line.id));
   return resolveAvailableLines(locId, rt.acquaintances, rt.completedEventIds).map((line: any) => ({
     id: line.id,
     name: line.name,
-    kind: line.kind === 'sect' ? '宗派' : line.kind === 'commerce' ? '商道' : '国家',
+    kind: line.kind === 'sect'
+      ? '宗派'
+      : line.kind === 'commerce'
+        ? '商道'
+        : line.kind === 'expedition'
+          ? '远征'
+          : '国家',
     hint: line.entryHint,
-    ready: (line.nodes || []).filter((n: any) => n.status === 'ready').length,
-    total: (line.nodes || []).length,
-    pending: Boolean(line.pendingExpansion),
+    objective: activeLineIds.has(line.id) ? visibleQuestObjective(rt, event) : '',
   }));
 });
 // 人物任务：只问当前这一拍因为谁而不一样。事件 id 走 getScenarioFocusEvent，
@@ -540,7 +552,10 @@ const availableLines = computed(() => {
 const characterBeats = computed(() => {
   const rt: any = epistemicRuntime.value;
   if (!rt || typeof rt !== 'object') return [];
-  return characterBeatsAt(getScenarioFocusEvent(rt)?.id);
+  const event = currentQuestEvent(rt);
+  const objective = visibleQuestObjective(rt, event);
+  if (!objective) return [];
+  return characterBeatsAt(event?.id).map(beat => ({ name: beat.name, objective }));
 });
 // 剧情主线：章节/活跃事件/清关状态/下一关（确定性，读 worldState.剧本模组）
 const questMain = computed(() => {

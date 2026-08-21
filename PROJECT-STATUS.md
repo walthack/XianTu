@@ -1,9 +1,51 @@
 # 仙途 (XianTu) · 项目总体状况与并行分工文档
 
 > 面向「新加入的 agent」。读完这一篇即可独立认领一个模块开工。
-> 当前认领：无。**进行中**：无。
+> 当前认领：Codex。**清羽 Demo 三级任务链纵切已实现，三级任务固定目标已完成数据／展示分离，待用户重建隔离档真机复测；稳定物品交易底座已接入本地事件合同**；动态 LLM 委托已定边界但尚未接运行时，角色能力扫描二验产物保留，暂未混改。
 >
-> ## 最后更新：2026-08-20（**四天补记：本文档实质停在 08-17，其间 70 个提交未进档**）
+> ## 最后更新：2026-08-21（**四天补记：本文档实质停在 08-17，其间 70 个提交未进档**）
+>
+> ### 2026-08-21：P0-P2 收束——自然行动落账与王哲锦囊实物交易
+> · 协作按用户新分工执行：Grok 4.6 承担高 token 草案／第二意见，Codex 复审、落地与门禁；Claude 额度耗尽，本轮跳过。P0 完整审稿会话=`01a021a0-d1be-7131-9d5d-e951452565fe`；P1/P2 因 Grok 本地大文件读取接口故障改用最小上下文，审计原件在 `.xiantu-server/grok-p0-p2-2026-08-21/`。
+> · **P0**：10 个权威 stage 补齐 17 条既有 event completion `initialFlags=false`，不改事件、条件、ID、顺序或正典事实。此前阻塞提交的 `uninitialized_flag` 欠账已清；`canon:build` 首次恢复全绿。
+> · **P1**：事件动作新增可选 `intentMatch(matchAny/matchAll/rejectIf)`；运行时只在当前可用承重动作内做 NFKC／标点空白归一化匹配，否定优先、歧义关闭、泛化短句不认，最终仍把完整 `eventId/actionId/contractHash/actionText/outcome` 交给原有本地结算器。按钮原路径保留，清羽 Demo 只为 `s01_02..s01_06` 写了保守场内短语；段强／太乙两拍的压力与场外时钟不变，三条 A 类拍仍可无限等待玩家。
+> · **P2**：王哲锦囊不挂在“听他说完”的宽泛事件动作，而挂在两个互斥机会路线的第一步实物接收点（`accept_silk_bag`／`hold_silk_object`）。两路共享物理交易 ID=`lcq.event.s02_01.inventory.jin_nang`，本地 catalog 发 `lcq.item.jin_nang ×1`；结构化按钮与自由输入都走同一幂等回执，重试／刷新／误走另一分支不双发。机会步骤的本地结算提前到模型命令应用前，正文补账和 tavern command 均不能再发第二只。
+> · 验证：P1/P2 专项 14/14；`type-check`、`build:single`、`git diff --check` 全绿；完整 `canon:build` **790 / 785 pass / 0 fail / 5 skip**，37 关 schema、裁定执法、主轴／存档契约全部通过。局域网常驻服 `0.0.0.0:8091` 在线 bundle 已命中自然动作解析器、段强短语与锦囊 transferId；Windows 可继续从 `192.168.50.51:8091` 重建清羽 Demo 隔离档测试。
+>
+> ### 2026-08-21：三级任务固定目标重写与动态 LLM 委托设计
+> · 三级层级不变：主轴／二级任务线／人物任务。原节点 `text` 共 516 条（主轴 16、二级 382、人物 54、高光 64）完整改名为制作侧 `reviewSummary`；它可以记结果，但不再进入玩家 UI 或叙事 prompt。所有真实可走节点继续绑定本地 event：主轴 13/13、二级 374/374、人物 49/49 均有固定 `objective`，`pending/new` 不冒充当前任务。
+> · Grok 4.6 只读全量比对提出 67 条问题候选；Codex 对照 description、completion contract 与知识边界逐条复审，采纳 52 条表现层改写，去掉开发者元语言、提前谜底、错误主体和结果剧透。另 15 条不采纳：其中一些本来就是合法的战斗／营救目标，另一些被 Grok 改成“决定是否”却没有第二条本地合同，落地会制造假选择。
+> · 52 条覆盖集中在 `fixedQuestObjectives.ts`，只影响任务栏、叙事视图与动作预填；event id、conditions、completion、contract hash/action payload、Canon Rail、IF 与世界真值均不改。显式 narrative variant 与已确认世界线偏离优先级高于基础覆盖。
+> · 右栏 world_sim 只展示当前 event 的固定目标，不再摊同关未来节点或 `ready/total/余待扩` 制作进度；二级线与人物任务消费同一当前目标。“即兴目标”改称“个人目标”，明确只是玩家主动意图的跨轮备忘，不具备任务奖励、期限或结算权。
+> · 随机内容另设“动态委托／机缘”，不作为第四级正典任务线。必须由已登场 NPC、告示、已拾物品、现场痕迹、可信传闻或世界余波在场内触发；LLM 只起草，引擎冻结来源、目标、生命周期、验收、奖励预算、期限与幂等回执。生命周期分 `player_dependent`（玩家不做就静置）与 `world_timed`（世界到期自行失效／场外结算）；物品奖励复用 `inventoryTransactions`。本轮只完成设计，尚未接入 runtime；首个建议纵切是五原商馆的低风险 NPC 交付委托。
+> · 记录：`docs/FIXED-QUEST-OBJECTIVE-REVIEW-2026-08-21.md`、`docs/DYNAMIC-LLM-QUEST-DESIGN-2026-08-21.md`。Claude 额度耗尽，按用户裁定跳过；Grok 会话 `01a01ffe-b7f2-7013-9447-87757406ac0d` 的审计原件保存在 `.xiantu-server/grok-quest-objectives-2026-08-21/`。
+> · 门禁：专项 26/26；串行全量 tests **780 / 775 pass / 0 fail / 5 skip**；`type-check`、`build:single`、`git diff --check` 全绿。并行全量曾出现两份 Node 测试进程反序列化噪声，单测与串行全量均复验通过。`canon:build` 仍只在既有 10 个旧 stage 的 17 条 `initialFlags` 欠账处中断，本轮 `lcq.stage_01` 与目标表现层无新增 schema 错误；依项目纪律未 commit。
+> · 局域网测试服务已刷新并验证：`0.0.0.0:8091` 在本机两张局域网网卡 `192.168.50.51`／`192.168.50.164` 均返回 200，在线 bundle 已命中“当前主轴目标”“个人目标（可选）”及固定目标覆盖文案。
+>
+> ### 2026-08-21：稳定物品获得机制纵切
+> · 根因确认：现行主路径仍是“正文叙述获得 → 指令模型补 `角色.背包.物品` → 中文正则查漏补账”，会受措辞、别名、数量、JSON 结构与重试影响；`narratedInventory` 只能做兼容兜底，不能继续当物品真值来源。
+> · 新增本地交易合同 `outcomeEffects.inventoryTransfers`：每笔声明 `transferId / itemId / quantity`，物品完整数据只取当前模组 catalog；本地动作 outcome 确定后，同一调用内写背包与 `inventoryTransferReceipts`。`transferId` 幂等，重复响应／刷新不多发，同 itemId 确定性叠加数量，回执跨关继承。
+> · 校验层新增：item 引用必须存在、数量必须为 1..999 整数、transferId 必须归属源 event 命名空间且全模组不重复。模型若又对本地已发物品 set/add 会被拦；正文补账兜底也跳过该物品，封住双发。
+> · 设计与后续分层见 `docs/ITEM-ACQUISITION-TRANSACTION-DESIGN-2026-08-21.md`：固定剧情物品已可稳定接入；探索 loot 与即兴赠送后续也必须先形成待领取 catalog/本地判定，再复用同一交易器，不能让模型直接发背包。
+> · 本轮未改 canon 数据或核心 prompt，也未为测试凭空发奖励。清羽线自然的首个真机验收点是王哲交锦囊，待逐拍核准后再把 transfer 挂到对应成功动作。
+> · 门禁：新增聚焦测试 5 条；全量 tests **773 / 768 pass / 0 fail / 5 skip**；`type-check`、生产单文件 webpack、`git diff --check` 全绿。全内置模组复核仍仅受 08-20 已记录的 10 个旧 stage `initialFlags` 欠账阻塞，未 commit。
+>
+> ### 2026-08-20 夜：三级任务链推进纵切认领
+> · 用户真机在清羽 Demo 首拍自由行动 17 轮，`s01_01` 仍未落账；现行 `objective_action` 只有点击正文下方“主线”按钮且保持预填文字逐字不变才会送入本地合同。界面却写“可修改后发送”，修改或自由输入都会失去选择身份。这把任务栏变成了剧情遥控器，属于引擎缺陷而非玩家操作问题。
+> · 用户纠正：本轮盘点单位不是全库 524 个 event，而是 Claude 已完成并接入游戏的**三级任务线**。主轴不是故事线，而是“六阳＋保住一名岳血后裔”两个通关条件；二级任务线承载国家／地区／宗派等长期内容；人物任务作为上级当前拍的插入段，不抢上级 event。
+> · R3-12 已确认两种事件推进形状：A＝无时限等待玩家，B＝`offscreenResolution` 超时后世界自行结算、玩家只能事后得知。不要另造 `world_driven/player_driven` 平行 schema；“自动发生／不强推”只在具体任务线内部选择现有 A/B 合同。
+> · 本轮先按三级链盘清 `lcq.stage_01` Demo：区分此处呈现的是主轴条件、哪条二级线入口、哪些人物插入；再修它们如何由地点／相识／世界时钟自然接上。Grok 只按任务线复核其他线的归属、入口与 A/B 使用建议，Codex 复审后才改源文件；Claude 额度耗尽，本轮不再提交 Claude，但其既有实现与校验结论是本轮基线。
+> · 已实现：Demo 开场正文已经呈现的 `s01_01` 通过隔离建档的 `initialFlags` 直接落账，第一屏进入 `s01_02` 段强遇袭压力；`s01_01` 从昭南线移除；太乙入口提示不再提前宣告王哲已经托付；太泉 `expedition` 在右栏显示为“远征”而非“国家”。未改三级链架构、全局事件 schema、canon 数据或核心 prompt。
+> · Grok 任务线级复核经 Codex 对照后落档：`docs/THREE-TIER-QUEST-TRIGGER-AUDIT-2026-08-20.md`。十条二级线 kind 均保持；八条成线人物任务均保持人物线。晋国首节点归属、太泉入口暗号剧透列为后续候选，本轮未越界修改。
+> · 门禁：聚焦 16/16；全量 tests **768 / 763 pass / 0 fail / 5 skip**；`type-check`、`build:single`、`git diff --check` 全绿。`canon:build` 在本轮文件之外的既有欠账处失败：10 个旧 stage 的新增 event 缺 `scenario.initialFlags` 声明；本轮相关 `lcq.stage_01` schema PASS。构建产生的同步噪声已还原，未夹带进工作区。由于项目要求 `canon:build` 全绿才 commit，本轮暂未提交。
+>
+> ### 2026-08-20 晚：协作方式与能力扫描接手状态
+> · Claude 额度已用完，用户明确同意当前阶段**跳过 Claude**。协作口径：Grok 承担高 token 的代码实现、批量内容生成与初步自检；Codex 负责拆解任务、正典／知识边界／架构复核、补丁审查、必要修正与最终门禁。Claude 恢复前不作为完成阻塞项。
+> · 不应把 Grok 限缩为“只写内容”：此前它负责过代码和大量内容生成，质量可用。边界是 canon 数据或核心 prompt 不允许 Grok 直接覆盖；此类改动仍先出草稿／补丁，由 Codex 审核后落库。
+> · §七所记 `45 / 161` 已过时。当前目录已覆盖 161 / 161 个目标且 JSON 均可解析，但不能据此判定完成：`REPORT.md` 只汇总了 2 人，另有 25 人的 `verifyExisting` 数量与当前角色卡 `signatureAbilities` 数量不一致，说明断点续跑复用了旧口径结果。
+> · Codex 加入逐字覆盖审计后，确认实际是 **38 人**有当前条目缺失、旧条目残留、重复或口径漂移；根因之一是旧扫描器把每条 `signatureAbilities` 截到 30 字再送验，长复合字段天然无法对齐。现已取消截断，并让条目不一致时旧缓存自动失效。
+> · 前两次 Grok 试跑把“二验”错误扩大成回查整本 EPUB，已中止且**没有采用半成品**。用户纠正后二验合同定为：只比较 MiniMax 扫描产物、当前 `signatureAbilities` 与现有技法／器物拆分清单，判断可直接映射、格式漂移或确实缺项；**不重读原著、不重做抽取**。Grok 承担批量对比，Codex 复核后才允许落结果；不提前实施已压后的 P4-1「向高好感角色学功法」。
+> · 正确合同的 Grok 第一批已完成 10 / 38 人、29 个当前条目：5 direct／20 format-only／4 partial／0 missing／17 需 Codex 判断。Codex 复核抓到阿合马当前卡把一条括号内容错拆为三个数组项，以及玄萝“阳钧宗／阳钩宗”一字冲突，证明不可机械落库。记录=`docs/ABILITY-SCAN-GROK-SECOND-PASS-2026-08-20.md`；本批未改 canon。
 >
 > ### 交给 Codex 的一句话
 > demo 入口可玩（首页「清羽记开局」→ 隔离档 → `/game`，`canon_companion`），

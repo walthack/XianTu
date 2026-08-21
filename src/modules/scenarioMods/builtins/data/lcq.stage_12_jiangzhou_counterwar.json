@@ -4069,7 +4069,10 @@
       "chapter.lcq.stage_12_jiangzhou_counterwar.siege.started": false,
       "chapter.lcq.stage_12_jiangzhou_counterwar.siege.done": false,
       "chapter.lcq.stage_12_jiangzhou_counterwar.chenxing.started": false,
-      "chapter.lcq.stage_12_jiangzhou_counterwar.chenxing.done": false
+      "chapter.lcq.stage_12_jiangzhou_counterwar.chenxing.done": false,
+      "event.pengyi_takeover.done": false,
+      "event.jin_vacate_jiangzhou.done": false,
+      "event.tuntian_post.done": false
     },
     "chapters": [
       {

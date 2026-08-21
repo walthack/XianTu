@@ -5719,7 +5719,8 @@
       "chapter.lyg.shituolin_endgame.li_fuguo.started": false,
       "chapter.lyg.shituolin_endgame.li_fuguo.done": false,
       "chapter.lyg.shituolin_endgame.old_grudge.started": false,
-      "chapter.lyg.shituolin_endgame.old_grudge.done": false
+      "chapter.lyg.shituolin_endgame.old_grudge.done": false,
+      "event.claim_slew_demon.done": false
     },
     "chapters": [
       {

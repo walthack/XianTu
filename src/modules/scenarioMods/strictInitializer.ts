@@ -330,6 +330,9 @@ export function transitionToNextScenarioStage(saveData: SaveData, modsOverride?:
   const npcPrivateKnowledgeSnapshot = structuredClone(
     rt.npcPrivateKnowledge && typeof rt.npcPrivateKnowledge === 'object' ? rt.npcPrivateKnowledge : {},
   );
+  const inventoryTransferReceiptsSnapshot = structuredClone(
+    Array.isArray(rt.inventoryTransferReceipts) ? rt.inventoryTransferReceipts : [],
+  );
   if (!chronicleSnapshot.some((item: any) => item?.id === `chronicle.stage.${rt.modId}.${targetId}`)) {
     chronicleSnapshot.push({
       id: `chronicle.stage.${rt.modId}.${targetId}`,
@@ -393,6 +396,9 @@ export function transitionToNextScenarioStage(saveData: SaveData, modsOverride?:
     ...(newRuntime.npcPrivateKnowledge || {}),
     ...npcPrivateKnowledgeSnapshot,
   };
+  if (inventoryTransferReceiptsSnapshot.length) {
+    newRuntime.inventoryTransferReceipts = inventoryTransferReceiptsSnapshot;
+  }
   Object.assign(newRuntime.flags, inheritedWorldlineFlags);
   // 立即推进一轮：激活新关首章/首批事件
   const advanced = advanceScenarioRuntime(next);

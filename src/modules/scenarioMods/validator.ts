@@ -108,7 +108,59 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
   const eventIds = new Set<string>();
   const chapterIds = new Set<string>();
   const pathReceiptIds = new Set<string>();
+  const inventoryTransferIds = new Map<string, {
+    sourceEventId: string;
+    itemId: string;
+    quantity: number;
+    opportunityAlias: boolean;
+  }>();
   const omenIds = new Set<string>();
+
+  const validateInventoryTransfers = (
+    value: unknown,
+    path: string,
+    sourceEventId: string,
+    opportunityAlias: boolean,
+  ) => {
+    forEachRecord(value, path, (transfer, transferPath) => {
+      const validTransferId = validateId(transfer.transferId, `${transferPath}.transferId`, add);
+      const validItemId = validateId(transfer.itemId, `${transferPath}.itemId`, add);
+      const validQuantity = typeof transfer.quantity === 'number'
+        && Number.isInteger(transfer.quantity)
+        && transfer.quantity >= 1
+        && transfer.quantity <= 999;
+      if (validTransferId) {
+        const transferId = String(transfer.transferId);
+        if (!transferId.startsWith(`${sourceEventId}.inventory.`)) {
+          add(`${transferPath}.transferId`, 'invalid_owner', 'Inventory transfer IDs must be namespaced by the source event.');
+        }
+        const next = {
+          sourceEventId,
+          itemId: String(transfer.itemId),
+          quantity: Number(transfer.quantity),
+          opportunityAlias,
+        };
+        const previous = inventoryTransferIds.get(transferId);
+        const samePhysicalTransfer = previous
+          && previous.opportunityAlias
+          && opportunityAlias
+          && previous.sourceEventId === next.sourceEventId
+          && previous.itemId === next.itemId
+          && previous.quantity === next.quantity;
+        if (previous && !samePhysicalTransfer) {
+          add(`${transferPath}.transferId`, 'duplicate_id', `Duplicate or conflicting inventory transfer "${transferId}".`);
+        } else if (!previous) {
+          inventoryTransferIds.set(transferId, next);
+        }
+      }
+      if (validItemId && !itemIds.has(String(transfer.itemId))) {
+        add(`${transferPath}.itemId`, 'unknown_reference', `Unknown item "${transfer.itemId}".`);
+      }
+      if (!validQuantity) {
+        add(`${transferPath}.quantity`, 'invalid_range', 'Inventory transfer quantity must be an integer within 1..999.');
+      }
+    });
+  };
 
   const canon = input.canon;
   if (canon !== undefined && !isRecord(canon)) {
@@ -435,6 +487,9 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
                   add(`${actionPath}.unmetOutcome`, 'forbidden', 'objective_action must not declare unmetOutcome.');
                 }
               }
+              if (action.intentMatch !== undefined) {
+                validateIntentMatch(action.intentMatch, `${actionPath}.intentMatch`, add);
+              }
               if (!isRecord(action.outcomeText)) {
                 add(`${actionPath}.outcomeText`, 'required_object', 'outcomeText must declare all three outcomes.');
               } else {
@@ -456,6 +511,12 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
                       add(effectsPath, 'invalid_type', 'Outcome effects must be an object.');
                       continue;
                     }
+                    validateInventoryTransfers(
+                      rawEffects.inventoryTransfers,
+                      `${effectsPath}.inventoryTransfers`,
+                      String(entity.id),
+                      false,
+                    );
                     forEachRecord(rawEffects.relationships, `${effectsPath}.relationships`, (relationship, relationshipPath) => {
                       for (const field of ['actorId', 'targetCharacterId']) {
                         if (validateId(relationship[field], `${relationshipPath}.${field}`, add)
@@ -855,6 +916,18 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
                     const hasAll = Array.isArray(step.matchAll) && step.matchAll.length > 0;
                     if (!hasAny && !hasAll) {
                       add(stepPath, 'empty_matcher', 'A completion step needs matchAny or matchAll evidence.');
+                    }
+                    if (step.outcomeEffects !== undefined) {
+                      if (!isRecord(step.outcomeEffects)) {
+                        add(`${stepPath}.outcomeEffects`, 'invalid_type', 'Opportunity step outcomeEffects must be an object.');
+                      } else {
+                        validateInventoryTransfers(
+                          step.outcomeEffects.inventoryTransfers,
+                          `${stepPath}.outcomeEffects.inventoryTransfers`,
+                          String(entity.id),
+                          true,
+                        );
+                      }
                     }
                   });
                 }
@@ -1881,6 +1954,71 @@ function validateStringArray(value: unknown, path: string, add: AddIssue): void 
     return;
   }
   value.forEach((entry, index) => requireString(entry, `${path}[${index}]`, add));
+}
+
+function normalizeIntentPhrase(value: string): string {
+  return value.normalize('NFKC').toLowerCase().replace(/[\p{P}\p{S}\s]+/gu, '');
+}
+
+function validateIntentMatch(value: unknown, path: string, add: AddIssue): void {
+  if (!isRecord(value)) {
+    add(path, 'invalid_type', `${path} must be an object.`);
+    return;
+  }
+  const positive = new Set<string>();
+  let hasPositive = false;
+  for (const key of ['matchAny', 'matchAll'] as const) {
+    const entries = value[key];
+    if (entries === undefined) continue;
+    if (!Array.isArray(entries) || entries.length < 1 || entries.length > 8) {
+      add(`${path}.${key}`, 'invalid_range', `${path}.${key} must contain 1 to 8 phrases.`);
+      continue;
+    }
+    hasPositive = true;
+    const local = new Set<string>();
+    entries.forEach((entry, index) => {
+      const entryPath = `${path}.${key}[${index}]`;
+      if (!isNonEmptyString(entry)) {
+        add(entryPath, 'required_string', `${entryPath} must be a non-empty string.`);
+        return;
+      }
+      const normalized = normalizeIntentPhrase(entry.trim());
+      if (!normalized) {
+        add(entryPath, 'invalid_string', `${entryPath} must contain letters or numbers.`);
+      } else if (local.has(normalized) || positive.has(normalized)) {
+        add(entryPath, 'duplicate_value', `Duplicate normalized intent phrase "${normalized}".`);
+      }
+      local.add(normalized);
+      positive.add(normalized);
+    });
+  }
+  if (!hasPositive) {
+    add(path, 'required_matcher', 'intentMatch must declare matchAny and/or matchAll.');
+  }
+  const rejected = value.rejectIf;
+  if (rejected !== undefined) {
+    if (!Array.isArray(rejected) || rejected.length < 1 || rejected.length > 8) {
+      add(`${path}.rejectIf`, 'invalid_range', `${path}.rejectIf must contain 1 to 8 phrases.`);
+      return;
+    }
+    const local = new Set<string>();
+    rejected.forEach((entry, index) => {
+      const entryPath = `${path}.rejectIf[${index}]`;
+      if (!isNonEmptyString(entry)) {
+        add(entryPath, 'required_string', `${entryPath} must be a non-empty string.`);
+        return;
+      }
+      const normalized = normalizeIntentPhrase(entry.trim());
+      if (!normalized) {
+        add(entryPath, 'invalid_string', `${entryPath} must contain letters or numbers.`);
+      } else if (local.has(normalized)) {
+        add(entryPath, 'duplicate_value', `Duplicate normalized intent phrase "${normalized}".`);
+      } else if (positive.has(normalized)) {
+        add(entryPath, 'conflicting_value', `Rejected intent phrase "${normalized}" duplicates a positive phrase.`);
+      }
+      local.add(normalized);
+    });
+  }
 }
 
 function validateIdArray(value: unknown, path: string, add: AddIssue): void {

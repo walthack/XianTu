@@ -134,7 +134,11 @@ export interface MainQuestStageRole {
  */
 export interface MainQuestNode {
   stageId: string;
-  text: string;
+  /**
+   * 制作侧事件结果摘要。只供任务链审阅、报表与因果核对，不得直接展示给玩家。
+   * 玩家目标始终读取本节点 `eventId` 所绑定 event 的固定 `objective`。
+   */
+  reviewSummary: string;
   /**
    * 这一条落在哪个 event 上。
    *
@@ -315,11 +319,11 @@ export const MAIN_QUEST_NODES: MainQuestNode[] = [
   // 月霜只是王哲点名的默认人选、可被小紫等替代。堆三条月霜节点会把可替换的接口
   // 读成唯一路径，与「不要求集齐」相矛盾。小紫那几拍（追问过往／临时协定／托付）
   // 已经是另一个候选接口，主轴不必再替玩家指定保谁。
-  { stageId: 'lcq.stage_01', text: '战场遇月霜，卓云君烈火救下你俩，太乙真宗教御全歼兽蛮', status: 'ready', eventId: 'lcq.event.s01_03', bloodlineBranch: 'yueshuang' },
-  { stageId: 'lcq.stage_01', text: '月霜强灌丹药，你在真阳驱使下与她性交，寒毒得解', status: 'ready', eventId: 'lcq.event.s01_06', bloodlineBranch: 'yueshuang' },
+  { stageId: 'lcq.stage_01', reviewSummary: '战场遇月霜，卓云君烈火救下你俩，太乙真宗教御全歼兽蛮', status: 'ready', eventId: 'lcq.event.s01_03', bloodlineBranch: 'yueshuang' },
+  { stageId: 'lcq.stage_01', reviewSummary: '月霜强灌丹药，你在真阳驱使下与她性交，寒毒得解', status: 'ready', eventId: 'lcq.event.s01_06', bloodlineBranch: 'yueshuang' },
   // #1 落点＝帅帐见王哲（旅程终点拍）；坠落／半兽人在 s01_01–s01_04。
-  { stageId: 'lcq.stage_01', text: '王哲发现你身上有生死根，耗真气筑基，传下九阳神功口诀', status: 'ready', eventId: 'lcq.event.s01_05' },
-  { stageId: 'lcq.stage_02', text: '接下王哲三托：保管锦囊、六阳后去太泉古阵、守护月霜', status: 'ready', eventId: 'lcq.event.s02_01' },
+  { stageId: 'lcq.stage_01', reviewSummary: '王哲发现你身上有生死根，耗真气筑基，传下九阳神功口诀', status: 'ready', eventId: 'lcq.event.s01_05' },
+  { stageId: 'lcq.stage_02', reviewSummary: '接下王哲三托：保管锦囊、六阳后去太泉古阵、守护月霜', status: 'ready', eventId: 'lcq.event.s02_01' },
   // ── 强制段：五原城落奴 → 白湖商馆脱身（用户 2026-08-19 指出此前漏落）──
   // 这一段之所以在主轴而不在昭南线：它是**教程段**——玩家在这里第一次经历
   // 「走到某处 → 见到某人 → 触发一段剧情 → 再推进下一步」的完整循环，
@@ -327,15 +331,15 @@ export const MAIN_QUEST_NODES: MainQuestNode[] = [
   // 上面第 281 行早把本关角色记成「王哲三托付；白湖脱身＝强制段终点」，
   // 但节点一直没落——rail 延长（覆盖全关 18 拍）做了，主轴这一半漏了。
   // 昭南线仍认领同一批 event（双喂），两边看到的是同一段剧情的不同用途。
-  { stageId: 'lcq.stage_02', text: '五原城把你当逃奴拿下，颈上烙了奴隶印记', status: 'ready', eventId: 'lcq.event.s02_04' },
-  { stageId: 'lcq.stage_02', text: '地牢里阿姬曼引你出逃，出去就撞上戈龙等人设的局', status: 'ready', eventId: 'lcq.event.s02_05' },
-  { stageId: 'lcq.stage_02', text: '识破白湖商馆主人苏妲己的伪装，被囚起来追问霓龙丝', status: 'ready', eventId: 'lcq.event.s02_06' },
-  { stageId: 'lcq.stage_02', text: '凝羽奉苏妲己之命入局，你当面认清她的处境', status: 'ready', eventId: 'lcq.event.ningyu_enters_gamble' },
-  { stageId: 'lcq.stage_02', text: '与苏妲己订下三月南荒之约：采不到霓龙丝就受炮烙', status: 'ready', eventId: 'lcq.event.sudaji_south_pact' },
-  { stageId: 'lcq.stage_02', text: '为救凝羽对赌，苏妲己作弊加速刻香，你签下卖身契入了商馆奴籍', status: 'ready', eventId: 'lcq.event.gamble_bond_signed' },
-  { stageId: 'lcq.stage_02', text: '替苏妲己取物之前谈定六十金铢', status: 'ready', eventId: 'lcq.event.charge_sudaji_fee' },
-  { stageId: 'lcq.stage_02', text: '取得阿姬曼身契当面撕毁', status: 'ready', eventId: 'lcq.event.free_ajiman' },
-  { stageId: 'lcq.stage_02', text: '从白湖商馆的死局里脱身，走出五原商馆', status: 'ready', eventId: 'lcq.event.baihu_shangguan_escape' },
+  { stageId: 'lcq.stage_02', reviewSummary: '五原城把你当逃奴拿下，颈上烙了奴隶印记', status: 'ready', eventId: 'lcq.event.s02_04' },
+  { stageId: 'lcq.stage_02', reviewSummary: '地牢里阿姬曼引你出逃，出去就撞上戈龙等人设的局', status: 'ready', eventId: 'lcq.event.s02_05' },
+  { stageId: 'lcq.stage_02', reviewSummary: '识破白湖商馆主人苏妲己的伪装，被囚起来追问霓龙丝', status: 'ready', eventId: 'lcq.event.s02_06' },
+  { stageId: 'lcq.stage_02', reviewSummary: '凝羽奉苏妲己之命入局，你当面认清她的处境', status: 'ready', eventId: 'lcq.event.ningyu_enters_gamble' },
+  { stageId: 'lcq.stage_02', reviewSummary: '与苏妲己订下三月南荒之约：采不到霓龙丝就受炮烙', status: 'ready', eventId: 'lcq.event.sudaji_south_pact' },
+  { stageId: 'lcq.stage_02', reviewSummary: '为救凝羽对赌，苏妲己作弊加速刻香，你签下卖身契入了商馆奴籍', status: 'ready', eventId: 'lcq.event.gamble_bond_signed' },
+  { stageId: 'lcq.stage_02', reviewSummary: '替苏妲己取物之前谈定六十金铢', status: 'ready', eventId: 'lcq.event.charge_sudaji_fee' },
+  { stageId: 'lcq.stage_02', reviewSummary: '取得阿姬曼身契当面撕毁', status: 'ready', eventId: 'lcq.event.free_ajiman' },
+  { stageId: 'lcq.stage_02', reviewSummary: '从白湖商馆的死局里脱身，走出五原商馆', status: 'ready', eventId: 'lcq.event.baihu_shangguan_escape' },
   // 强制段终点（Helgen 洞口，用户裁定 2026-08-17）。
   // s02_06 只落到「被囚＋追问霓龙丝」，rail 禁止在那一拍脱身。本拍才是出馆。
   // 地点＝五原商馆。不作废成南荒路上的锚定拍。
@@ -366,11 +370,11 @@ export const MAIN_QUEST_NODES: MainQuestNode[] = [
   // ⚠ 实测：全库 396 条 event 搜「超级用户／超级管理员／冰冰／验证身份」**命中 0**，
   // 且 seq 1007–1012 整段六拍事件层空白。正典有、游戏没落地 → `new`，不是待扩。
   // #18 与汉国二级线同锚 s08（促成登基）；「长秋宫」字面更近 s06，但护住赵氏／登基收束在大典拍。
-  { stageId: 'lyl.taiquan_afterfall', text: '修为到六阳，开启古阵内的入口（未来待扩）', status: 'pending' },
-  { stageId: 'lyl.taiquan_afterfall', text: '小玲儿在太泉的那一拍（未来待扩）', status: 'pending', bloodlineBranch: 'xiaolinger' },
+  { stageId: 'lyl.taiquan_afterfall', reviewSummary: '修为到六阳，开启古阵内的入口（未来待扩）', status: 'pending' },
+  { stageId: 'lyl.taiquan_afterfall', reviewSummary: '小玲儿在太泉的那一拍（未来待扩）', status: 'pending', bloodlineBranch: 'xiaolinger' },
   // 程赵之子按用户裁定只标待扩（2026-08-16）：正典 seq 1052 有「宣布赵飞燕有孕」，
   // 但把它认成「岳血候选」是我们的推演，不是正典写明的血脉认定——不给建议 id，不设计。
-  { stageId: 'lyg.han_succession', text: '程赵之子这条血脉如何成立（未来待扩）', status: 'pending', bloodlineBranch: 'zhao' },
+  { stageId: 'lyg.han_succession', reviewSummary: '程赵之子这条血脉如何成立（未来待扩）', status: 'pending', bloodlineBranch: 'zhao' },
   // #20 文案压了两拍：斩断肉身 s12 ＋ 阻止夺舍 s13；落夺舍拍（终局收束）。
 ];
 
@@ -389,6 +393,20 @@ export function resolveMainQuestNodes(
   return MAIN_QUEST_NODES.filter(node =>
     (currentStageId && node.stageId === currentStageId)
     || (currentLocationId && node.locationId === currentLocationId));
+}
+
+/**
+ * 当前 event 是否正落在主轴节点上。
+ * `pending/new` 不会成为玩家当前目标；它们仍只留在制作侧待办清单。
+ */
+export function resolveCurrentMainQuestNode(
+  currentStageId: string | undefined,
+  currentLocationId: string | undefined,
+  currentEventId: string | undefined,
+): MainQuestNode | undefined {
+  if (!currentEventId) return undefined;
+  return resolveMainQuestNodes(currentStageId, currentLocationId).find(node =>
+    node.status === 'ready' && node.eventId === currentEventId);
 }
 
 /**

@@ -40,14 +40,33 @@ test('qingyu opening playtest save is isolated canon_companion with player compl
   assert.ok(actions.length > 0, 'canon_companion 开局应出现完成合同按钮');
 });
 
-test('开局第一屏就有目标：建档时已预跑激活，不必等玩家先发一轮', async () => {
+test('开场已呈现的穿越事实直接落账，第一屏进入段强遇袭压力', async () => {
   // 真机实测发现的缺口：不预跑的话第一屏任务栏只有「章节：第1章·穿越」，
   // 没有 objective 也没有完成合同按钮——因为激活发生在 advanceScenarioRuntime 内部。
   const { createQingyuOpeningPlaytestSave } = await loadTs('../src/modules/scenarioMods/qingyuOpeningPlaytest.ts');
   const mod = await loadStage();
   const runtime = createQingyuOpeningPlaytestSave(mod).世界.状态.剧本模组;
-  assert.deepEqual(runtime.activeEventIds, ['lcq.event.s01_01'], '建档后首拍必须已经激活');
+  assert.equal(runtime.flags['event.s01_01.done'], true, '开场正文已经呈现的穿越事实应直接落账');
+  assert.ok(runtime.completedEventIds.includes('lcq.event.s01_01'), '穿越拍应进入完成账本');
+  assert.deepEqual(runtime.activeEventIds, ['lcq.event.s01_02'], '第一屏应直接进入会自行推进的段强遇袭压力');
   assert.equal(runtime.storyMode, undefined, 'demo 必须留在 canon_companion，否则完成合同按钮不出现');
+});
+
+test('Demo 五拍自然行动词保持保守，世界压力与场外结算时钟不变', async () => {
+  const mod = await loadStage();
+  const events = new Map(mod.scenario.events.map(event => [event.id, event]));
+  for (const id of ['lcq.event.s01_02', 'lcq.event.s01_03', 'lcq.event.s01_04', 'lcq.event.s01_05', 'lcq.event.s01_06']) {
+    const action = events.get(id)?.playerCompletionContract?.actions?.[0];
+    assert.ok(action?.intentMatch?.matchAny?.length, `${id} 应声明自然行动正向短语`);
+    assert.ok(action?.intentMatch?.rejectIf?.length, `${id} 应声明否定优先短语`);
+  }
+  assert.equal(events.get('lcq.event.s01_02')?.pressure?.afterTurns, 1);
+  assert.equal(events.get('lcq.event.s01_02')?.offscreenResolution?.afterStallTurns, 4);
+  assert.equal(events.get('lcq.event.s01_04')?.pressure?.afterTurns, 1);
+  assert.equal(events.get('lcq.event.s01_04')?.offscreenResolution?.afterStallTurns, 5);
+  assert.equal(events.get('lcq.event.s01_03')?.offscreenResolution, undefined);
+  assert.equal(events.get('lcq.event.s01_05')?.offscreenResolution, undefined);
+  assert.equal(events.get('lcq.event.s01_06')?.offscreenResolution, undefined);
 });
 
 test('开场正文不得剧透后续拍，也不得出现机制术语', async () => {
@@ -70,4 +89,3 @@ test('开场正文不得剧透后续拍，也不得出现机制术语', async ()
     assert.ok(!opening.includes(term), `开场正文剧透了后续内容「${term}」`);
   }
 });
-

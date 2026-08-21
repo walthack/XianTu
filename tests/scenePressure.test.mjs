@@ -49,10 +49,9 @@ test('闲逛时逐轮送出逼近事实，并进到提示词里（走真实路�
 
   let save = createQingyuOpeningPlaytestSave(mod);
   const rt = () => save.世界.状态.剧本模组;
-  // 像真实玩家那样做掉首拍，让「段强被射杀」成为当前拍
-  rt().flags['event.s01_01.done'] = true;
-  save = rtm.advanceScenarioRuntime(save).saveData;
-  assert.deepEqual(rt().activeEventIds, ['lcq.event.s01_02'], '首拍完成后应当推进到段强这一拍');
+  // Demo 开场正文已经呈现并结清穿越落地，第一屏直接进入段强这一拍。
+  // 不可再额外 advance 一次，否则会把第一条逼近送在测试开始收集之前。
+  assert.deepEqual(rt().activeEventIds, ['lcq.event.s01_02'], '建档第一屏应当已经进入段强这一拍');
 
   // 之后什么都不做
   const delivered = [];
@@ -89,8 +88,6 @@ test('危险不因玩家做了别的事而倒退——时钟锚在这一拍上',
 
   let save = createQingyuOpeningPlaytestSave(mod);
   const rt = () => save.世界.状态.剧本模组;
-  rt().flags['event.s01_01.done'] = true;
-  save = rtm.advanceScenarioRuntime(save).saveData;
   assert.deepEqual(rt().activeEventIds, ['lcq.event.s01_02']);
 
   const delivered = [];
@@ -130,8 +127,7 @@ test('强制在场的拍：到点当场演完，不走场外口吻', async () =>
 
   let save = createQingyuOpeningPlaytestSave(mod);
   const rt = () => save.世界.状态.剧本模组;
-  rt().flags['event.s01_01.done'] = true;
-  save = rtm.advanceScenarioRuntime(save).saveData;
+  assert.deepEqual(rt().activeEventIds, ['lcq.event.s01_02']);
   for (let turn = 0; turn < 8; turn += 1) {
     save = rtm.advanceScenarioRuntime(save).saveData;
     if (!rt().activeEventIds.includes('lcq.event.s01_02')) break;

@@ -5675,7 +5675,8 @@
       "event.meet_xue_yanshan.done": false,
       "event.identify_xue_cold_poison.done": false,
       "event.decide_chase_weiyuan.done": false,
-      "event.pass_kotian_stone.done": false
+      "event.pass_kotian_stone.done": false,
+      "event.xue_yanshan_slain.done": false
     },
     "chapters": [
       {

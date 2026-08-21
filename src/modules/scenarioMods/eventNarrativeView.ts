@@ -1,5 +1,6 @@
 import type { ScenarioCondition, ScenarioModEvent } from './schema';
 import type { ScenarioDivergence } from './divergenceLedger';
+import { resolveFixedQuestObjective } from './fixedQuestObjectives';
 
 // 旧存档把事件快照直接落在 runtime.events 中。它们不会随着内置关卡
 // 数据升级而自动补齐 narrativeVariants，因此这里保留极小的兼容层。
@@ -79,7 +80,9 @@ export function resolveScenarioEventNarrative(
   const variant = variants?.find(item => item.when.every(condition => matches(condition, flags)));
   if (variant) return { ...event, ...variant };
   const divergence = relatedDivergence(event, divergences);
-  return divergence ? projectFromDivergence(event, divergence) : event;
+  if (divergence) return projectFromDivergence(event, divergence);
+  const objective = resolveFixedQuestObjective(event);
+  return objective && objective !== event.objective ? { ...event, objective } : event;
 }
 
 /** 仅显式声明的分歧投影可替代 Canon Rail；普通条件化文案仍保留默认正典合同。 */

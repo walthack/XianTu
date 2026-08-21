@@ -186,7 +186,7 @@ const charNames = new Set();
 }
 
 // ── 节点表：正则抽，不引入 TS 运行时（报表要能独立跑）
-const nodeRe = /\{[^{}]*text: '([^']+)'[^{}]*\}/g;
+const nodeRe = /\{[^{}]*reviewSummary: '([^']+)'[^{}]*\}/g;
 const field = (blob, key) => blob.match(new RegExp(`${key}: '([^']+)'`))?.[1];
 
 function parseNodes(blob) {
@@ -240,7 +240,7 @@ if (fs.existsSync(path.join(ROOT, CHARMOD))) {
   for (const line of questBlock.split('\n')) {
     const nm = line.match(/^\s*name: '([^']+)',\s*$/);
     if (nm) { cur = { name: nm[1], hooks: [] }; chars.push(cur); continue; }
-    const beat = line.match(/\{ text: '(.*?)', status: '(\w+)', eventIds: \[(.*?)\] \}/);
+    const beat = line.match(/\{ reviewSummary: '(.*?)', status: '(\w+)', eventIds: \[(.*?)\] \}/);
     if (!cur || !beat) continue;
     const ids = [...beat[3].matchAll(/'([^']+)'/g)].map(x => x[1]);
     if (beat[2] === 'new' || !ids.length) continue;
@@ -250,7 +250,7 @@ if (fs.existsSync(path.join(ROOT, CHARMOD))) {
   // A 档单点高光：不成线，但同样是人物挂点，也要进待审稿。
   const hlBlock = src.slice(src.indexOf('CHARACTER_HIGHLIGHTS: CharacterHighlight[]'));
   const byName = new Map(chars.map(c => [c.name, c]));
-  for (const m of hlBlock.matchAll(/\{ name: '([^']+)', eventIds: \[(.*?)\], text: '(.*?)' \}/g)) {
+  for (const m of hlBlock.matchAll(/\{ name: '([^']+)', eventIds: \[(.*?)\], reviewSummary: '(.*?)' \}/g)) {
     const ids = [...m[2].matchAll(/'([^']+)'/g)].map(x => x[1]);
     if (!ids.length) continue;
     let c = byName.get(m[1]);

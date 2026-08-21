@@ -4060,7 +4060,10 @@
       "chapter.lcq.stage_10_jiangzhou_shadow_war.qingzhou.done": false,
       "chapter.lcq.stage_10_jiangzhou_shadow_war.lair.started": false,
       "chapter.lcq.stage_10_jiangzhou_shadow_war.lair.done": false,
-      "event.yeying_seat_struggle.done": false
+      "event.yeying_seat_struggle.done": false,
+      "event.yuanxingjian_interrogated.done": false,
+      "event.blacksea_vault_split.done": false,
+      "event.yuanxingjian_disposed.done": false
     },
     "chapters": [
       {

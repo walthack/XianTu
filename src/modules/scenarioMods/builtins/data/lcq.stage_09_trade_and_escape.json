@@ -4061,7 +4061,8 @@
       "chapter.lcq.stage_09_trade_and_escape.guangyang.started": false,
       "chapter.lcq.stage_09_trade_and_escape.guangyang.done": false,
       "event.xiangfu_stance.done": false,
-      "event.spoils_split.done": false
+      "event.spoils_split.done": false,
+      "event.quanyuji_soul_pill.done": false
     },
     "chapters": [
       {

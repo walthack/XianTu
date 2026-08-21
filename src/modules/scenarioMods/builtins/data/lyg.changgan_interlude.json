@@ -530,6 +530,20 @@
         "description": "兰陵萧氏（家族）——简介待补，源自角色归属富化自动补录。",
         "type": "家族",
         "features": []
+      },
+      {
+        "id": "liuchao.faction.xb96c00cd05",
+        "name": "贾师宪势力",
+        "description": "贾师宪势力（组织）——简介待补，源自角色归属富化自动补录。",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.x7f3bf258b3",
+        "name": "悦生堂",
+        "description": "悦生堂（组织）——简介待补，源自角色归属富化自动补录。",
+        "type": "组织",
+        "features": []
       }
     ],
     "locations": [
@@ -4072,6 +4086,16 @@
             "factionId": "lyg.faction.song_state",
             "category": "state",
             "role": "户部官员"
+          },
+          {
+            "factionId": "liuchao.faction.xb96c00cd05",
+            "category": "organization",
+            "role": "幕僚/书坊掌柜"
+          },
+          {
+            "factionId": "liuchao.faction.x7f3bf258b3",
+            "category": "organization",
+            "role": "堂主"
           }
         ],
         "profile": {
@@ -4086,7 +4110,9 @@
           "personality": [
             "文雅",
             "谨慎",
-            "务实"
+            "务实",
+            "有君子之风",
+            "善于察言观色"
           ],
           "appearance": "谈吐文雅，颇有君子之风。",
           "origin": "宋国户部"

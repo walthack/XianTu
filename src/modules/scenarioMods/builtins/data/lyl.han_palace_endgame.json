@@ -3907,7 +3907,8 @@
           "personality": [
             "横暴",
             "刚愎自用",
-            "有军事经验"
+            "有军事经验",
+            "对胡人警惕"
           ],
           "appearance": "肥胖，剑髯怒张，身穿铁甲。",
           "origin": "凉州军阀"
@@ -4867,6 +4868,17 @@
       {
         "fromCharacterId": "liuchao.character.huo_qu_bing",
         "toCharacterId": "liuchao.character.shi_jing_tang",
+        "relation": "同袍",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同袍",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.liu_xin",
+        "toCharacterId": "liuchao.character.dong_zhuo",
         "relation": "同袍",
         "score": 30,
         "direction": "bidirectional",
@@ -5895,7 +5907,8 @@
       "chapter.lyl.han_palace_endgame.palace.started": true,
       "chapter.lyl.han_palace_endgame.palace.done": false,
       "chapter.lyl.han_palace_endgame.endgame.started": false,
-      "chapter.lyl.han_palace_endgame.endgame.done": false
+      "chapter.lyl.han_palace_endgame.endgame.done": false,
+      "event.zhao_sisters_flee_north_palace.done": false
     },
     "chapters": [
       {

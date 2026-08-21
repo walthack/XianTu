@@ -4681,6 +4681,39 @@
           "同袍",
           "同势力派生"
         ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.zhao_he_de",
+        "toCharacterId": "liuchao.character.lin_cai_quan",
+        "relation": "同门",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同门",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "liuchao.character.zhuo_yunjun",
+        "toCharacterId": "liuchao.character.lin_cai_quan",
+        "relation": "同门",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同门",
+          "同势力派生"
+        ]
+      },
+      {
+        "fromCharacterId": "lcq.character.yue_shuang",
+        "toCharacterId": "liuchao.character.lin_cai_quan",
+        "relation": "同门",
+        "score": 30,
+        "direction": "bidirectional",
+        "tags": [
+          "同门",
+          "同势力派生"
+        ]
       }
     ],
     "factionRelationships": [
@@ -5698,7 +5731,8 @@
       "chapter.lyl.xiaoyingzhou_blacksea_trap.linchong.started": true,
       "chapter.lyl.xiaoyingzhou_blacksea_trap.linchong.done": false,
       "chapter.lyl.xiaoyingzhou_blacksea_trap.trap.started": false,
-      "chapter.lyl.xiaoyingzhou_blacksea_trap.trap.done": false
+      "chapter.lyl.xiaoyingzhou_blacksea_trap.trap.done": false,
+      "event.linchong_still_exiled.done": false
     },
     "chapters": [
       {
