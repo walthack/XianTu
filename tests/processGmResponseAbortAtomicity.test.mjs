@@ -11,6 +11,7 @@ const jiti = createJiti(import.meta.url, {
   alias: {
     '@': fileURLToPath(new URL('../src', import.meta.url)),
     '@/stores/characterStore': fileURLToPath(new URL('./stubs/characterStoreForAbortTest.ts', import.meta.url)),
+    '@/services/eventReconcileService': fileURLToPath(new URL('./stubs/eventReconcileServiceForAbortTest.ts', import.meta.url)),
   },
 });
 
@@ -26,6 +27,54 @@ function resetCharacterStoreAbortCalls() {
 function characterStoreAbortCalls() {
   const calls = globalThis.__xiantuAbortCharacterStoreCalls;
   return Array.isArray(calls) ? [...calls] : [];
+}
+
+function resetEventReconcileAbortCalls() {
+  const bag = globalThis.__xiantuAbortEventReconcile;
+  if (!bag) return;
+  bag.calls = [];
+  bag.finished = [];
+  bag.delayMs = 40;
+}
+
+function eventReconcileAbortCalls() {
+  const bag = globalThis.__xiantuAbortEventReconcile;
+  return Array.isArray(bag?.calls) ? [...bag.calls] : [];
+}
+
+function eventReconcileAbortFinished() {
+  const bag = globalThis.__xiantuAbortEventReconcile;
+  return Array.isArray(bag?.finished) ? [...bag.finished] : [];
+}
+
+function stage02Runtime() {
+  return {
+    modId: 'lcq.stage_02',
+    stallTurns: 10,
+    worldTurn: 10,
+    currentChapterId: 'lcq.chapter.s02',
+    chapters: [{ id: 'lcq.chapter.s02', eventIds: ['lcq.event.s02_04'] }],
+    events: [{
+      id: 'lcq.event.s02_04',
+      name: '五原落奴',
+      description: '点心铺里有人从两面逼近。',
+      objective: '先保住性命并看清他们把人往哪里带',
+      critical: true,
+      completion: [{ path: 'flags.event.s02_04.done', operator: 'eq', value: true }],
+    }],
+    completedChapterIds: [],
+    activeEventIds: ['lcq.event.s02_04'],
+    completedEventIds: ['lcq.event.s02_03'],
+    flags: { 'event.s02_04.done': false },
+    divergences: [],
+  };
+}
+
+function refreshSnapshots(ctx) {
+  ctx.store.loadFromSaveData(ctx.original);
+  ctx.originalPrint = fingerprint(ctx.original);
+  ctx.liveBefore = ctx.store.toSaveData();
+  ctx.liveBeforePrint = fingerprint(ctx.liveBefore);
 }
 
 if (!globalThis.localStorage || typeof globalThis.localStorage.getItem !== 'function') {
@@ -101,6 +150,7 @@ function gmResponse(commands) {
 async function setup() {
   setActivePinia(createPinia());
   resetCharacterStoreAbortCalls();
+  resetEventReconcileAbortCalls();
   const { createMinimalSaveDataV3 } = await loadTs('../src/utils/dataRepair.ts');
   const { AIBidirectionalSystem } = await loadTs('../src/utils/AIBidirectionalSystem.ts');
   const { useGameStateStore } = await loadTs('../src/stores/gameStateStore.ts');
@@ -302,4 +352,134 @@ test('P0-1 外层只认 aborted 标志，成功返回后不再用 shouldAbort �
     source,
     /if \(shouldAbort\(\)\) \{\s*console\.log\('\[AI System\] Abort detected after processGmResponse/,
   );
+});
+
+test('P0-1 取消发生在 store 写入前：必须打到 discard clone before store write', async () => {
+  const ctx = await setup();
+  // 1 条命令：入口、结算后、循环内、循环后、辅助等待后，第 6 次是写入前。
+  const abort = abortAfter(5);
+  const { saveData, stateChanges, abortReason } = await ctx.AIBidirectionalSystem.processGmResponse(
+    gmResponse([{ action: 'set', key: '角色.属性.声望', value: 7 }]),
+    ctx.original,
+    false,
+    abort.shouldAbort,
+    { userAction: '走进白湖商馆' },
+  );
+  assert.equal(abortReason, 'discard clone before store write');
+  assertZeroCommit({
+    ...ctx,
+    returned: saveData,
+    stateChanges,
+    label: 'store 写入前 abort',
+  });
+});
+
+test('P0-1 取消后真实 openWorldAction 回执必须整批丢弃', async () => {
+  const ctx = await setup();
+  ctx.original.世界.状态.剧本模组 = stage02Runtime();
+  const { ensureWuyuanOpenWorldSlice, getWuyuanOpenWorldSelections } = await loadTs(
+    '../src/modules/scenarioMods/wuyuanOpenWorldSlice.ts',
+  );
+  ensureWuyuanOpenWorldSlice(ctx.original);
+  const travel = getWuyuanOpenWorldSelections(ctx.original).find(item => item.kind === 'travel');
+  refreshSnapshots(ctx);
+  assert.ok(travel, '五原市集应有一条显式 travel 选择');
+  const abort = abortAfter(1);
+  const { saveData, stateChanges, abortReason } = await ctx.AIBidirectionalSystem.processGmResponse(
+    gmResponse([]),
+    ctx.original,
+    false,
+    abort.shouldAbort,
+    { userAction: travel.actionText, openWorldAction: travel },
+  );
+  assert.equal(abortReason, 'discard clone after local settlement');
+  assertZeroCommit({
+    ...ctx,
+    returned: saveData,
+    stateChanges,
+    label: 'openWorldAction abort',
+  });
+  assert.notEqual(
+    ctx.liveBefore?.角色?.位置?.描述,
+    '中州·五原·点心铺',
+    '基线不应已经走到点心铺',
+  );
+  assert.notEqual(saveData?.角色?.位置?.描述, '中州·五原·点心铺');
+  assert.notEqual(ctx.store.toSaveData()?.角色?.位置?.描述, '中州·五原·点心铺');
+  assert.equal(
+    ctx.store.toSaveData()?.世界?.状态?.剧本模组?.openWorldSlice?.currentZoneId,
+    ctx.liveBefore?.世界?.状态?.剧本模组?.openWorldSlice?.currentZoneId,
+  );
+});
+
+test('P0-1 abort 返回后后台 event_reconcile 不得写 live store 或 saveCurrentGame', async () => {
+  const ctx = await setup();
+  ctx.original.世界.状态.剧本模组 = stage02Runtime();
+  refreshSnapshots(ctx);
+  const { useCharacterStore } = await loadTs('./stubs/characterStoreForAbortTest.ts');
+  const { useAPIManagementStore } = await loadTs('../src/stores/apiManagementStore.ts');
+  useCharacterStore().rootState.当前激活存档 = { 角色ID: 'char-abort-p01b', 存档槽位: '存档1' };
+  useAPIManagementStore().setFunctionEnabled('event_reconcile', true);
+  const delayMs = globalThis.__xiantuAbortEventReconcile?.delayMs || 40;
+  const abort = abortAfter(3);
+  const { saveData, stateChanges, abortReason } = await ctx.AIBidirectionalSystem.processGmResponse(
+    gmResponse([]),
+    ctx.original,
+    false,
+    abort.shouldAbort,
+    { userAction: '查看任务' },
+  );
+  assert.equal(abortReason, 'discard clone after auxiliary wait');
+  assertZeroCommit({
+    ...ctx,
+    returned: saveData,
+    stateChanges,
+    label: '后台对账启动窗口 abort',
+  });
+  await new Promise(resolve => setTimeout(resolve, delayMs + 80));
+  assert.deepEqual(
+    eventReconcileAbortCalls(),
+    [],
+    'abort 路径不应启动后台 event_reconcile',
+  );
+  assert.deepEqual(eventReconcileAbortFinished(), []);
+  assertZeroCommit({
+    ...ctx,
+    returned: saveData,
+    stateChanges,
+    label: '后台对账结束后',
+  });
+  const live = ctx.store.toSaveData();
+  assert.equal(live?.世界?.状态?.剧本模组?.flags?.['event.s02_04.done'], false);
+  assert.deepEqual(live?.世界?.状态?.剧本模组?.divergences || [], []);
+  assert.deepEqual(characterStoreAbortCalls(), []);
+});
+
+test('P0-1 正常提交后才启动后台 event_reconcile', async () => {
+  const ctx = await setup();
+  ctx.original.世界.状态.剧本模组 = stage02Runtime();
+  refreshSnapshots(ctx);
+  const { useCharacterStore } = await loadTs('./stubs/characterStoreForAbortTest.ts');
+  const { useAPIManagementStore } = await loadTs('../src/stores/apiManagementStore.ts');
+  useCharacterStore().rootState.当前激活存档 = { 角色ID: 'char-abort-p01b', 存档槽位: '存档1' };
+  useAPIManagementStore().setFunctionEnabled('event_reconcile', true);
+  const delayMs = globalThis.__xiantuAbortEventReconcile?.delayMs || 40;
+  const { abortReason } = await ctx.AIBidirectionalSystem.processGmResponse(
+    gmResponse([{ action: 'set', key: '角色.属性.声望', value: 3 }]),
+    ctx.original,
+    false,
+    () => false,
+    { userAction: '查看任务' },
+  );
+  assert.equal(abortReason, undefined);
+  assert.equal(eventReconcileAbortFinished().length, 0, '提交返回时后台对账不得已经写完');
+  await new Promise(resolve => setTimeout(resolve, delayMs + 80));
+  assert.equal(eventReconcileAbortCalls().length, 1);
+  assert.equal(eventReconcileAbortFinished().length, 1);
+  assert.equal(ctx.store.toSaveData()?.世界?.状态?.剧本模组?.flags?.['event.s02_04.done'], true);
+  assert.equal(
+    (ctx.store.toSaveData()?.世界?.状态?.剧本模组?.divergences || []).some(item => item?.id === 'abort-test-divergence'),
+    true,
+  );
+  assert.equal(characterStoreAbortCalls().some(item => item.fn === 'saveCurrentGame'), true);
 });

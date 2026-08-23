@@ -2157,6 +2157,7 @@ ${step1Text}
         abortReason: reason,
       };
     };
+    let deferredEventReconcile: { textContent: string; userAction: string } | null = null;
     if (abortRequested()) {
       return abortUncommitted('skip command processing');
     }
@@ -2739,53 +2740,12 @@ ${step1Text}
           changes.push(...deterministicChanges);
           console.info(`[事件对账] 谢艺互斥结果确定性落账，变更 ${deterministicChanges.length} 项`);
         } else {
-        const baselineSaveData = cloneDeep(saveData);
-        const isolatedSaveData = cloneDeep(saveData);
-        const characterStore = useCharacterStore();
-        const activeAtLaunch = characterStore.rootState.当前激活存档
-          ? { ...characterStore.rootState.当前激活存档 }
-          : null;
-        const modIdAtLaunch = String((baselineSaveData as any)?.世界?.状态?.剧本模组?.modId || '');
-
-        // 事件对账负责主线 flag/分歧账本，不能丢弃；但也不能让二次 LLM 锁住正文、输入和主存档。
-        // 在隔离副本继续执行，完成后做三方合并并二次落盘。
-        void (async () => {
-          try {
-            const reconcileChanges = await runEventReconcile({
-              saveData: isolatedSaveData,
-              recentText: textContent,
-              userAction: options?.userAction || '',
-              summarize: this._summarizeValueForChangeLog.bind(this),
-            });
-            const activeNow = characterStore.rootState.当前激活存档;
-            if (!activeAtLaunch || !activeNow
-              || activeNow.角色ID !== activeAtLaunch.角色ID
-              || activeNow.存档槽位 !== activeAtLaunch.存档槽位) {
-              console.warn('[事件对账] 后台结果到达时已切换存档，安全丢弃');
-              return;
-            }
-            const currentSave = useGameStateStore().toSaveData();
-            if (!currentSave) return;
-            const currentModId = String((currentSave as any)?.世界?.状态?.剧本模组?.modId || '');
-            if (modIdAtLaunch && currentModId && currentModId !== modIdAtLaunch) {
-              console.warn('[事件对账] 后台结果到达时关卡已切换，安全丢弃');
-              return;
-            }
-            const merged = mergeDeferredReconcileResult(currentSave, baselineSaveData, isolatedSaveData);
-            if (merged) {
-              const advanced = advanceScenarioRuntime(currentSave);
-              useGameStateStore().loadFromSaveData(advanced.saveData);
-              await characterStore.saveCurrentGame();
-              toast.info(`事件账本已后台对齐（${reconcileChanges.length} 项）`);
-              console.info(`[事件对账] 后台三方合并完成，变更 ${reconcileChanges.length} 项`);
-            } else {
-              useGameStateStore().loadFromSaveData(currentSave);
-              await characterStore.saveCurrentGame();
-            }
-          } catch (error) {
-            console.warn('[事件对账] 后台任务失败，主事务不受影响:', error);
-          }
-        })();
+        // 只记录启动意图。真正的后台对账必须等本轮确认写入 live store 之后，
+        // 否则 abort 丢弃 clone 后，隔离任务仍可能三方合并并 saveCurrentGame。
+        deferredEventReconcile = {
+          textContent,
+          userAction: options?.userAction || '',
+        };
         }
       }
     } catch (error) {
@@ -2932,6 +2892,58 @@ ${step1Text}
         if (abortRequested()) {
           gameStateStore.loadFromSaveData(currentSaveData);
           return abortUncommitted('restore store after late abort');
+        }
+        if (deferredEventReconcile) {
+          const baselineSaveData = cloneDeep(saveData);
+          const isolatedSaveData = cloneDeep(saveData);
+          const characterStore = useCharacterStore();
+          const activeAtLaunch = characterStore.rootState.当前激活存档
+            ? { ...characterStore.rootState.当前激活存档 }
+            : null;
+          const modIdAtLaunch = String((baselineSaveData as any)?.世界?.状态?.剧本模组?.modId || '');
+          const reconcileText = deferredEventReconcile.textContent;
+          const reconcileUserAction = deferredEventReconcile.userAction;
+          deferredEventReconcile = null;
+
+          // 事件对账负责主线 flag/分歧账本，不能丢弃；但也不能让二次 LLM 锁住正文、输入和主存档。
+          // 在隔离副本继续执行，完成后做三方合并并二次落盘。
+          void (async () => {
+            try {
+              const reconcileChanges = await runEventReconcile({
+                saveData: isolatedSaveData,
+                recentText: reconcileText,
+                userAction: reconcileUserAction,
+                summarize: this._summarizeValueForChangeLog.bind(this),
+              });
+              const activeNow = characterStore.rootState.当前激活存档;
+              if (!activeAtLaunch || !activeNow
+                || activeNow.角色ID !== activeAtLaunch.角色ID
+                || activeNow.存档槽位 !== activeAtLaunch.存档槽位) {
+                console.warn('[事件对账] 后台结果到达时已切换存档，安全丢弃');
+                return;
+              }
+              const currentSave = useGameStateStore().toSaveData();
+              if (!currentSave) return;
+              const currentModId = String((currentSave as any)?.世界?.状态?.剧本模组?.modId || '');
+              if (modIdAtLaunch && currentModId && currentModId !== modIdAtLaunch) {
+                console.warn('[事件对账] 后台结果到达时关卡已切换，安全丢弃');
+                return;
+              }
+              const merged = mergeDeferredReconcileResult(currentSave, baselineSaveData, isolatedSaveData);
+              if (merged) {
+                const advanced = advanceScenarioRuntime(currentSave);
+                useGameStateStore().loadFromSaveData(advanced.saveData);
+                await characterStore.saveCurrentGame();
+                toast.info(`事件账本已后台对齐（${reconcileChanges.length} 项）`);
+                console.info(`[事件对账] 后台三方合并完成，变更 ${reconcileChanges.length} 项`);
+              } else {
+                useGameStateStore().loadFromSaveData(currentSave);
+                await characterStore.saveCurrentGame();
+              }
+            } catch (error) {
+              console.warn('[事件对账] 后台任务失败，主事务不受影响:', error);
+            }
+          })();
         }
       }
       if (shouldAutoSummarize) {
