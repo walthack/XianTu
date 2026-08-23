@@ -1,7 +1,12 @@
 # 仙途 (XianTu) · 项目总体状况与并行分工文档
 
 > 面向「新加入的 agent」。读完这一篇即可独立认领一个模块开工。
-> 当前认领：Codex。**保持玩家模型／配置不变的生成速度 Demo 正在从 R3 单回合扩为清羽开局至 `lcq.event.baihu_shangguan_escape` 的完整试玩线。** 已证明热路径相对 Legacy 显著提速；当前产品原则改为“本地系统决定持久因果与红线，LLM 自由描写合法过程和临时现场细节”，不再要求模型只选固定 beat/style-code。实验开关继续默认关闭；完整路线、反例与同模型真机对比通过前不替换主路。`editionPack` 与新档差异暂不实施。
+> 当前认领：无。**保持玩家模型／配置不变的生成速度 Demo 已完成清羽开局至 `lcq.event.baihu_shangguan_escape` 的代码纵切，本轮阶段性收尾。** 已证明热路径相对 Legacy 显著提速；产品原则保持“本地系统约束关键持久因果与既定红线，LLM 自由描写合法过程、合理现场物件与临时细节”，不回退到固定 beat/style-code。实验开关继续默认关闭，不替换主路；完整路线真机、读档连续性与同模型速度证据留待下一轮。`editionPack` 与新档差异暂不实施。
+>
+> ### 2026-08-23：Batch B 二审后阶段性收尾；旧版叙事补背包机制转专项待办
+> · Claude 只读二审 job=`claude-2026-08-23T13-35-46-372Z-db02aa03` 检查提交 `82d6b1c`，确认默认关闭、取消／超时安全、三类生产枚举与结算、白湖边界、知识投影和单请求性能合同成立；同时指出 Fast 正文仍会进入既有 `reconcileNarratedInventoryPossessions`，模型描写的物件可能被旧版机制持久化进正式背包。
+> · 经产品校准，这不等于“正文不得补出玉佩、短刀等合理现场物件”，也不立即按项目级 P0 追修。真正待评估的是旧版“叙事事实自动补账”本身在玩家自由输入、遗漏命令兜底与持久世界真值之间是否仍有净收益，以及 Fast／Legacy 是否应采用不同来源策略。禁止用扩大禁词或整段拦截的方式牺牲合理探索。
+> · 该项已登记 `TODO.md`，优先级为“Fast 默认开启或替换主路之前必须评定”，当前不修改运行时代码。Batch B 保持 **IMPLEMENTED / EXPERIMENT DEFAULT-OFF / PHASE CLOSED**；自动门禁证据仍为聚焦 **27/27**、完整 `canon:build` **836 / 831 pass / 0 fail / 5 skip**。下一轮若恢复，应先评定叙事补账机制，再决定是否补真机全线／速度验收。
 >
 > ### 2026-08-23：清羽速度 Demo 自由叙事 Batch B 已实现，待 Claude／隔离真机批准
 > · Grok 4.6 按窄批次完成主体，Codex 审核并收口：快速 `RenderPacket` 已从 R3 判定扩到清羽隔离档真实 `eventAction`、王哲锦囊 `opportunityAction` 与五原 `openWorldAction`；范围止于 `lcq.event.baihu_shangguan_escape`，该事件完成后全快路 fail closed，后续武二郎／铁索桥／南路／蛇彝村不覆盖。
