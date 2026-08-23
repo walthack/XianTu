@@ -1,7 +1,7 @@
 # 仙途 (XianTu) · 项目总体状况与并行分工文档
 
 > 面向「新加入的 agent」。读完这一篇即可独立认领一个模块开工。
-> **当前认领：P0-1 已复现并修代码，Claude 路1 二审 GO-WITH-CHANGES 后已按 P0 补测试与 store 回滚。** owner=Grok 4.6。起始 HEAD=`a6a2dc4`。未 commit。空命令 post-loop 用 `abortAfter(2)`，辅助等待后用 `abortAfter(3)`，均按 `abortReason` 断言闸口。`processGmResponse` 返回 `aborted/abortReason`；外层只在 `aborted` 时跳过 commit，成功路径即使随后 abort 也不拆已提交事务。store 写入前再查 abort，写入后若 abort 则 `loadFromSaveData(原档)`。证据：`tests/processGmResponseAbortAtomicity.test.mjs` **6/6**、`npm run type-check`、`git diff --check`。下一位：Claude 可复验；不要替本实现签核。
+> **当前认领：P0-1 步骤1 完成，待 Codex 审核关闭。** owner=Grok 4.6。起始 `3f47ba1`。真实 `gameStateStore` 快照（去掉更新时间）在 abort 路径与 abort 前逐字段一致；`saveCurrentGame` 记录调用而非静默 no-op，abort 路径必须 0 次。补「store 写入后滚回」闸与外层只认 `aborted` 的源码钉。聚焦 **8/8**。下一步：Codex 审核后关闭 P0-1；清羽→白湖试玩不由本刀代跑。
 > 当前没有已确认的项目级 P0 缺陷；P0 队列只含本项“先复现再裁定”，以及正式发测前的清羽开局→白湖脱身连续试玩门。五原玩法闭环与 `world_sim` G2 为 P1。Fast Demo 已阶段性收尾并保持默认关闭，`editionPack` 暂停。
 >
 > ### 2026-08-23：当前 P 级队列已重排，准备移交其他 agent

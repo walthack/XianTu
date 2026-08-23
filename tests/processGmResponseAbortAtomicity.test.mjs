@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 import { createJiti } from 'jiti';
 import { fileURLToPath } from 'node:url';
@@ -15,6 +16,16 @@ const jiti = createJiti(import.meta.url, {
 
 async function loadTs(relativePath) {
   return jiti.import(new URL(relativePath, import.meta.url).pathname);
+}
+
+function resetCharacterStoreAbortCalls() {
+  const bag = globalThis;
+  if (Array.isArray(bag.__xiantuAbortCharacterStoreCalls)) bag.__xiantuAbortCharacterStoreCalls.length = 0;
+}
+
+function characterStoreAbortCalls() {
+  const calls = globalThis.__xiantuAbortCharacterStoreCalls;
+  return Array.isArray(calls) ? [...calls] : [];
 }
 
 if (!globalThis.localStorage || typeof globalThis.localStorage.getItem !== 'function') {
@@ -48,6 +59,16 @@ function gameplaySlice(save) {
   };
 }
 
+function stableStoreSnapshot(save) {
+  if (!save) return save;
+  const copy = JSON.parse(JSON.stringify(save));
+  if (copy.元数据) delete copy.元数据.更新时间;
+  for (const entry of copy.系统?.历史?.叙事 || []) {
+    if (entry?.stateChanges?.timestamp) delete entry.stateChanges.timestamp;
+  }
+  return copy;
+}
+
 function abortAfter(allowCalls) {
   let calls = 0;
   const shouldAbort = () => {
@@ -79,6 +100,7 @@ function gmResponse(commands) {
 
 async function setup() {
   setActivePinia(createPinia());
+  resetCharacterStoreAbortCalls();
   const { createMinimalSaveDataV3 } = await loadTs('../src/utils/dataRepair.ts');
   const { AIBidirectionalSystem } = await loadTs('../src/utils/AIBidirectionalSystem.ts');
   const { useGameStateStore } = await loadTs('../src/stores/gameStateStore.ts');
@@ -116,7 +138,17 @@ function assertZeroCommit({ original, originalPrint, liveBefore, returned, store
       gameplaySlice(liveBefore),
       `${label}: gameStateStore 已吃进未提交的 clone`,
     );
+    assert.deepEqual(
+      stableStoreSnapshot(live),
+      stableStoreSnapshot(liveBefore),
+      `${label}: 真实 store 快照相对 abort 前不一致`,
+    );
   }
+  assert.deepEqual(
+    characterStoreAbortCalls(),
+    [],
+    `${label}: abort 路径调用了 saveCurrentGame`,
+  );
   const keys = (stateChanges?.changes || []).map(change => String(change.key || ''));
   assert.equal(
     keys.some(key => /eventActionStates|opportunityStates|openWorldSlice|背包|inventory/i.test(key)),
@@ -224,6 +256,26 @@ test('P0-1 取消发生在辅助等待之后：必须打到 store 写入前的�
   });
 });
 
+test('P0-1 取消发生在 store 写入之后：必须把真实 store 快照滚回 abort 前', async () => {
+  const ctx = await setup();
+  // 1 条命令：入口、结算后、循环内、循环后、辅助等待后、写入前，第 7 次才是写入后回滚。
+  const abort = abortAfter(6);
+  const { saveData, stateChanges, abortReason } = await ctx.AIBidirectionalSystem.processGmResponse(
+    gmResponse([{ action: 'set', key: '角色.属性.声望', value: 7 }]),
+    ctx.original,
+    false,
+    abort.shouldAbort,
+    { userAction: '走进白湖商馆' },
+  );
+  assert.equal(abortReason, 'restore store after late abort');
+  assertZeroCommit({
+    ...ctx,
+    returned: saveData,
+    stateChanges,
+    label: 'store 写入后 abort',
+  });
+});
+
 test('P0-1 正常路径仍提交正文与命令，不能被 abort 闸误伤', async () => {
   const ctx = await setup();
   const { saveData } = await ctx.AIBidirectionalSystem.processGmResponse(
@@ -236,4 +288,18 @@ test('P0-1 正常路径仍提交正文与命令，不能被 abort 闸误伤', as
   assert.equal(saveData.角色.属性.声望, 3);
   assert.notEqual(fingerprint(saveData), ctx.originalPrint);
   assert.equal(fingerprint(ctx.original), ctx.originalPrint);
+  const live = ctx.store.toSaveData();
+  assert.equal(live?.角色?.属性?.声望, 3);
+  assert.notDeepEqual(gameplaySlice(live), gameplaySlice(ctx.liveBefore));
+});
+
+test('P0-1 外层只认 aborted 标志，成功返回后不再用 shouldAbort 拆已提交事务', async () => {
+  const source = await readFile(new URL('../src/utils/AIBidirectionalSystem.ts', import.meta.url), 'utf8');
+  assert.match(source, /const \{ saveData: updatedSaveData, stateChanges, aborted \} = await this\.processGmResponse/);
+  assert.match(source, /if \(aborted\) \{/);
+  assert.match(source, /processGmResponse aborted, skip transaction commit/);
+  assert.doesNotMatch(
+    source,
+    /if \(shouldAbort\(\)\) \{\s*console\.log\('\[AI System\] Abort detected after processGmResponse/,
+  );
 });
