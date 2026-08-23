@@ -1,19 +1,24 @@
 # 仙途 (XianTu) · 项目总体状况与并行分工文档
 
 > 面向「新加入的 agent」。读完这一篇即可独立认领一个模块开工。
-> 当前认领：无。**保持玩家模型／配置不变的生成速度 Demo 已完成清羽开局至 `lcq.event.baihu_shangguan_escape` 的代码纵切，本轮阶段性收尾。** 已证明热路径相对 Legacy 显著提速；产品原则保持“本地系统约束关键持久因果与既定红线，LLM 自由描写合法过程、合理现场物件与临时细节”，不回退到固定 beat/style-code。实验开关继续默认关闭，不替换主路；完整路线真机、读档连续性与同模型速度证据留待下一轮。`editionPack` 与新档差异暂不实施。
+> 当前认领：无。**当前 P0／P1／P2 已重新清账，下一位 agent 只从 `docs/CURRENT-P-LEVEL-HANDOFF-2026-08-23.md` 认领一个编号。** 当前没有已确认的项目级 P0 缺陷；P0 队列只含“先复现再裁定”的 `processGmResponse` 取消原子性风险，以及正式发测前的清羽开局→白湖脱身连续试玩门。五原玩法闭环与 `world_sim` G2 为 P1；Fast／Legacy 补背包评估、Fast 全线速度、关系姿态与数据债为 P2。Fast Demo 已阶段性收尾并保持默认关闭，`editionPack` 暂停。
+>
+> ### 2026-08-23：当前 P 级队列已重排，准备移交其他 agent
+> · 当前唯一认领入口=`docs/CURRENT-P-LEVEL-HANDOFF-2026-08-23.md`。分级口径改为：P0 只收已确认的存档／主线破坏与发测硬门；静态怀疑必须先复现，不能直接触发架构重写。旧 `R3-10-BACKLOG`、本文 §5 和 `TODO.md` 的历史优先级不再作为当前排序权威。
+> · P0-1＝`processGmResponse` 取消原子性反例，先测后修；P0-2＝默认主路清羽开局至白湖脱身的连续真机与读档门。P1-1＝复用现有移动地基补完五原 30–40 回合玩法循环；P1-2＝三书抽样的 `world_sim` G2。P2 不抢占前两级，Fast 补背包争议仅在准备默认开启前专项评估。
+> · 用户最新固定分工：Grok 负责主要代码实现与聚焦测试，Claude 负责独立只读／真机核验，Codex 负责方向、范围合同、canon／知识边界、补丁审核和最终验收。当前未创建或派发任何 agent 任务，等待下一位按编号认领。
 >
 > ### 2026-08-23：Batch B 二审后阶段性收尾；旧版叙事补背包机制转专项待办
 > · Claude 只读二审 job=`claude-2026-08-23T13-35-46-372Z-db02aa03` 检查提交 `82d6b1c`，确认默认关闭、取消／超时安全、三类生产枚举与结算、白湖边界、知识投影和单请求性能合同成立；同时指出 Fast 正文仍会进入既有 `reconcileNarratedInventoryPossessions`，模型描写的物件可能被旧版机制持久化进正式背包。
 > · 经产品校准，这不等于“正文不得补出玉佩、短刀等合理现场物件”，也不立即按项目级 P0 追修。真正待评估的是旧版“叙事事实自动补账”本身在玩家自由输入、遗漏命令兜底与持久世界真值之间是否仍有净收益，以及 Fast／Legacy 是否应采用不同来源策略。禁止用扩大禁词或整段拦截的方式牺牲合理探索。
 > · 该项已登记 `TODO.md`，优先级为“Fast 默认开启或替换主路之前必须评定”，当前不修改运行时代码。Batch B 保持 **IMPLEMENTED / EXPERIMENT DEFAULT-OFF / PHASE CLOSED**；自动门禁证据仍为聚焦 **27/27**、完整 `canon:build` **836 / 831 pass / 0 fail / 5 skip**。下一轮若恢复，应先评定叙事补账机制，再决定是否补真机全线／速度验收。
 >
-> ### 2026-08-23：清羽速度 Demo 自由叙事 Batch B 已实现，待 Claude／隔离真机批准
+> ### 2026-08-23：清羽速度 Demo 自由叙事 Batch B 实现记录（历史阶段）
 > · Grok 4.6 按窄批次完成主体，Codex 审核并收口：快速 `RenderPacket` 已从 R3 判定扩到清羽隔离档真实 `eventAction`、王哲锦囊 `opportunityAction` 与五原 `openWorldAction`；范围止于 `lcq.event.baihu_shangguan_escape`，该事件完成后全快路 fail closed，后续武二郎／铁索桥／南路／蛇彝村不覆盖。
 > · 所有选择必须与生产枚举出的 fresh selection 全字段一致；planner 只在 clone 预演本地结算，正式状态仍由既有 `processGmResponse` 事务写入。普通事件不得借王哲之名发锦囊；只有机会步骤的真实 inventory receipt 可投影 `获得1×锦囊`。显式传入 pending、stale 或篡改 judgement 时，即使 selection 合法也关闭快路。
 > · 短 prompt 只含当前动作、通用本地结果、精确 settled facts、公开场景及“现场且已揭示”人物的安全 personality 标签（最多 3 人×3 条）；`currentThought/currentAppearance/memories/notes`、未揭示／不在场人物与带秘密、知识、身份、记忆、计划等标签不投影。模型仍可自由写合理现场细节；凭空持久物／能力、未结算玩家伤势、明确新死亡／关系终态、内部 ID、越界人物与事件完成声明走 deterministic fallback，同时保留尸体旧血、生死根感应死亡气息、险些被杀与假设关系后果等合法描写。
 > · 性能合同未变：页面当前 provider/model/temperature、1 chat、0 embedding/RAG/Step2/rewrite/retry、`max_tokens=1024`、35s deadline，开关默认关闭。聚焦 **27/27**、`npm run type-check`、`git diff --check` 全绿；完整 `canon:build` **836 / 831 pass / 0 fail / 5 skip**，未改 canon、核心 prompt、内置事件 JSON、正式存档合同或 API 配置。
-> · Grok 主要落盘会话：B1a=`01a02eb3-c43b-7a01-b766-285220279c70`、B1b=`01a02eb8-e444-7310-91f1-4b783fada322`、B1c=`01a02ebe-b8c5-7251-9376-0e0233f4c44f`、B2a=`01a02ec5-110e-7903-9fbe-a9726b2fb16d`、B2b=`01a02ec6-0522-75e1-a3e9-e4014cb172a5`、B2c=`01a02eca-4371-7af2-af8e-d57ad167d41b`、红线收口=`01a02ecf-5c32-7701-bc0c-e0a71657e1a1`／`01a02ed1-7aa8-78a0-97ac-09929a74e4b8`。当前结论为 **IMPLEMENTED / NOT YET APPROVED**；下一步只做 Claude 只读反例二审与保持页面模型设置不变的隔离真机全线／速度验收。
+> · Grok 主要落盘会话：B1a=`01a02eb3-c43b-7a01-b766-285220279c70`、B1b=`01a02eb8-e444-7310-91f1-4b783fada322`、B1c=`01a02ebe-b8c5-7251-9376-0e0233f4c44f`、B2a=`01a02ec5-110e-7903-9fbe-a9726b2fb16d`、B2b=`01a02ec6-0522-75e1-a3e9-e4014cb172a5`、B2c=`01a02eca-4371-7af2-af8e-d57ad167d41b`、红线收口=`01a02ecf-5c32-7701-bc0c-e0a71657e1a1`／`01a02ed1-7aa8-78a0-97ac-09929a74e4b8`。本条完成时结论为 **IMPLEMENTED / NOT YET APPROVED**；后续二审与阶段收尾结论以上方最新条目和当前 P 级交接为准。
 >
 > ### 2026-08-23：清羽速度 Demo 自由叙事 Batch A 已完成（历史阶段）
 > · Grok 4.6 完成主体改造，Codex 审核收口：R3 短刀事实由三种无玩法价值的位置细节收敛为 `source=nearby_battlefield_corpse + acquired:boolean + judgement receipt`。`perfect/great_success/success → acquired=true`，`partial/failure/critical_failure → false`；旧 `scene_held/on_ground/at_corpse` 状态只读兼容，短刀仍不进入正式背包、不改任务终态。
@@ -864,11 +869,12 @@ UI显示进度、剩余窗口与时间成本，截止按 `participated / partial
 
 ```bash
 npm run type-check          # TS 类型
-npm test                    # 单测（当前 186 用例，全绿）
-npm run mod:validate        # 18 关卡 Mod 校验，必须 18/18 PASS
-node scripts/validate-shared-scenario-atlas.mjs   # 共享 atlas（exit 0）
-node scripts/validate-if-branches.mjs             # if 线（若动到 if/spine）
+npm run canon:build         # 当前项目级完整门；数量会增长，不依赖历史固定计数
+npm run build:single        # 单机生产构建
+git diff --check            # 补丁格式
 ```
+
+另跑任务对应的聚焦测试；涉及共享 atlas 或 IF/spine 时再跑对应校验器。不要再使用本节早期的 18 关／186 用例固定数字判断当前基线。
 
 改完 mod 数据后：`node scripts/sync-builtin-mods.mjs` → 同步 NAS `完善版剧本Mod/` → `launchctl kickstart -k …` 重启服。
 - 「补漏不重做」是铁律：脚本一律 union/补空不覆盖、晚期内容时间门控、每步落 `stages-pre-*-backup/`。
@@ -876,9 +882,9 @@ node scripts/validate-if-branches.mjs             # if 线（若动到 if/spine�
 
 ---
 
-## 5. 当前可认领模块（2026-07-22 清账后）
+## 5. 历史可认领模块快照（2026-07-22；不再代表当前排序）
 
-> 历史 qingyu 全本重抽、IF 校验接门、R2-10 G2 与 R2-11 已全部收口，不再作为新 agent 待办。以下按当前优先级排序。
+> 本节保留历史上下文，不得直接据此认领。当前任务编号、分级、验收与分工统一见 `docs/CURRENT-P-LEVEL-HANDOFF-2026-08-23.md`。
 
 ### A. 发测前门禁 ⭐ 当前首选
 - ✅ **可见掷骰单一权威（2026-08-01 遗留清账完成）**：默认／分步 prompt 均退役无本地回执的 LLM `〔判定〕` 与计算公式，统一 preflight→确认→掷骰→回执；覆盖三入口、常见风险措辞与刷新／重试。`FormattedText` 组件实例渲染回归与休眠扩展规则清理均已补齐，不再作为待认领项。
@@ -919,8 +925,10 @@ node scripts/validate-if-branches.mjs             # if 线（若动到 if/spine�
 
 ## 6. 工作分工惯例（用户定的固定模式）
 
-- **Claude 管概念/方向/质量护栏**（框架·原型·schema·防过度推断·防过度模糊）；**DeepSeek 管批量原文读取 + 逐角色细化**。
-- DeepSeek 坑：大块露骨原文易被审核返空、综合型约束易误判 unsupported → 用「约束式分类」（锚定章节窗口 + 只要标签不要复述细节）规避。
+- **Grok 4.6 管主要代码实现、高 token 批次、聚焦测试与自查**；必须按窄批次实际落盘。
+- **Claude 管独立只读二审和隔离真机核验**；不直接替自己写的实现签核。
+- **Codex 管总体方向、范围合同、canon／知识边界、补丁审核、门禁与最终验收**；不与 Grok 争抢主体代码。
+- DeepSeek／MiniMax 默认是游戏内容生成 provider 或经明确委托的批量材料模型，不作为当前代码 owner。DeepSeek 大块露骨原文易被审核返空、综合型约束易误判 unsupported，批量材料仍用“锚定章节窗口＋只要标签、不复述细节”的约束式分类。
 - **人物卡 = 权威源**，别太歪（程宗扬曾被抽成"随和洒脱"，卡实为"务实/精明/有野心"）。
 - 未经用户要求不擅自 git 提交、不擅自同步 NAS 成品区（草稿类先待审）。
 
@@ -929,7 +937,7 @@ node scripts/validate-if-branches.mjs             # if 线（若动到 if/spine�
 ## 7. 给新 agent 的最短上手路径
 
 1. `cd` 进真实工作目录（§1），`git status --short` 与 `git log --oneline -5` 确认当前分支／工作区；不要依赖历史固定提交号判断基线。
-2. 读仓库根 `RELEASE-ROADMAP.md`、本文顶端最新状态与 §5；涉及正典数据时再读 `character-canon/CORE-DOCS-ROADMAP.md`／`TODO-待完成.md`。
+2. 先读 `docs/CURRENT-P-LEVEL-HANDOFF-2026-08-23.md` 与本文顶端最新状态，只认领一个编号；涉及正典数据时再读 `CANON-DECISIONS.md`、`SAVE-CONTRACT.json`、`character-canon/CORE-DOCS-ROADMAP.md`／`TODO-待完成.md`。
 3. 跑一遍 §4 门禁确认基线绿。
 4. 认领模块前检查当前分支与他人改动；涉及 canon、核心 prompt 或冻结 ID 时先读裁定簿与 `SAVE-CONTRACT.json`，不得覆盖受保护字段。
 5. 改完 → 门禁全过 → 同步内置/NAS → 重启服 → （必要时）Chrome MCP 连 Windows live 验证。

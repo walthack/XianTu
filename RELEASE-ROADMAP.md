@@ -4,6 +4,7 @@
 > 与 `character-canon/CORE-DOCS-ROADMAP.md`（内容管线 A~K 组）、`character-canon/TODO-待完成.md`（工作项）互补：那两份管内容质量，这份只管发布拦截与发布后的价值排序。
 > 更新约定同 core-docs roadmap：完成一项把 `[ ]` 改 `[x]` 并补"产物/日期"。
 > 2026-07-22 状态清账：R2-10B/C/K/M 的历史 `[~]` 已按 33 轮 G2 真机与 R2-11 最终收口证据改为 `[x]`；Canon 两份清单的重复／过期项已同步归档。
+> 2026-08-23 当前 P 级认领与多 agent 分工统一见 `docs/CURRENT-P-LEVEL-HANDOFF-2026-08-23.md`；本路线图继续保存里程碑与发布历史，不再单独决定当前执行顺序。
 
 ## 总判断
 
