@@ -3,7 +3,14 @@
 > 面向「新加入的 agent」。读完这一篇即可独立认领一个模块开工。
 > 当前认领：Codex。**保持玩家模型／配置不变的生成速度 Demo 正在从 R3 单回合扩为清羽开局至 `lcq.event.baihu_shangguan_escape` 的完整试玩线。** 已证明热路径相对 Legacy 显著提速；当前产品原则改为“本地系统决定持久因果与红线，LLM 自由描写合法过程和临时现场细节”，不再要求模型只选固定 beat/style-code。实验开关继续默认关闭；完整路线、反例与同模型真机对比通过前不替换主路。`editionPack` 与新档差异暂不实施。
 >
-> ### 2026-08-23：清羽速度 Demo 自由叙事 Batch A 已完成，完整路线 Batch B 待实现
+> ### 2026-08-23：清羽速度 Demo 自由叙事 Batch B 已实现，待 Claude／隔离真机批准
+> · Grok 4.6 按窄批次完成主体，Codex 审核并收口：快速 `RenderPacket` 已从 R3 判定扩到清羽隔离档真实 `eventAction`、王哲锦囊 `opportunityAction` 与五原 `openWorldAction`；范围止于 `lcq.event.baihu_shangguan_escape`，该事件完成后全快路 fail closed，后续武二郎／铁索桥／南路／蛇彝村不覆盖。
+> · 所有选择必须与生产枚举出的 fresh selection 全字段一致；planner 只在 clone 预演本地结算，正式状态仍由既有 `processGmResponse` 事务写入。普通事件不得借王哲之名发锦囊；只有机会步骤的真实 inventory receipt 可投影 `获得1×锦囊`。显式传入 pending、stale 或篡改 judgement 时，即使 selection 合法也关闭快路。
+> · 短 prompt 只含当前动作、通用本地结果、精确 settled facts、公开场景及“现场且已揭示”人物的安全 personality 标签（最多 3 人×3 条）；`currentThought/currentAppearance/memories/notes`、未揭示／不在场人物与带秘密、知识、身份、记忆、计划等标签不投影。模型仍可自由写合理现场细节；凭空持久物／能力、未结算玩家伤势、明确新死亡／关系终态、内部 ID、越界人物与事件完成声明走 deterministic fallback，同时保留尸体旧血、生死根感应死亡气息、险些被杀与假设关系后果等合法描写。
+> · 性能合同未变：页面当前 provider/model/temperature、1 chat、0 embedding/RAG/Step2/rewrite/retry、`max_tokens=1024`、35s deadline，开关默认关闭。聚焦 **27/27**、`npm run type-check`、`git diff --check` 全绿；完整 `canon:build` **836 / 831 pass / 0 fail / 5 skip**，未改 canon、核心 prompt、内置事件 JSON、正式存档合同或 API 配置。
+> · Grok 主要落盘会话：B1a=`01a02eb3-c43b-7a01-b766-285220279c70`、B1b=`01a02eb8-e444-7310-91f1-4b783fada322`、B1c=`01a02ebe-b8c5-7251-9376-0e0233f4c44f`、B2a=`01a02ec5-110e-7903-9fbe-a9726b2fb16d`、B2b=`01a02ec6-0522-75e1-a3e9-e4014cb172a5`、B2c=`01a02eca-4371-7af2-af8e-d57ad167d41b`、红线收口=`01a02ecf-5c32-7701-bc0c-e0a71657e1a1`／`01a02ed1-7aa8-78a0-97ac-09929a74e4b8`。当前结论为 **IMPLEMENTED / NOT YET APPROVED**；下一步只做 Claude 只读反例二审与保持页面模型设置不变的隔离真机全线／速度验收。
+>
+> ### 2026-08-23：清羽速度 Demo 自由叙事 Batch A 已完成（历史阶段）
 > · Grok 4.6 完成主体改造，Codex 审核收口：R3 短刀事实由三种无玩法价值的位置细节收敛为 `source=nearby_battlefield_corpse + acquired:boolean + judgement receipt`。`perfect/great_success/success → acquired=true`，`partial/failure/critical_failure → false`；旧 `scene_held/on_ground/at_corpse` 状态只读兼容，短刀仍不进入正式背包、不改任务终态。
 > · 固定 beat/style-code 运行时及测试已删除，恢复一次 `120–260` 字短 LLM 自由正文；合法正文直接显示，允许尸体、普通短刀、旧血迹、草叶等合理现场细节。只有与本地 acquired/outcome 冲突、凭空持久物品／能力、明确未结算玩家伤势、死亡／关系／事件完成、命令或内部 ID 等红线才 fallback。
 > · 性能合同保持页面当前 provider/model/temperature，单次 chat、0 embedding/RAG/rewrite/retry、`max_tokens=1024`、35s deadline，开关默认关闭。聚焦 `19/19`、`npm run type-check`、`git diff --check` 与完整 `canon:build` **828 / 823 pass / 0 fail / 5 skip** 全绿；未改 canon、核心 prompt、内置事件 JSON、冻结 ID、正式存档合同或 API 配置。

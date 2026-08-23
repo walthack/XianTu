@@ -569,7 +569,9 @@ class AIBidirectionalSystemClass {
       playerAction: userMessage,
       judgementResolution: options?.judgementResolution,
       aborted: shouldAbort(),
-      hasOtherActionContract: !!(options?.opportunityAction || options?.eventAction || options?.openWorldAction),
+      eventAction: options?.eventAction,
+      opportunityAction: options?.opportunityAction,
+      openWorldAction: options?.openWorldAction,
     });
     if (!plan) return null;
     options?.onProgressUpdate?.('实验快路：写现场正文…');
