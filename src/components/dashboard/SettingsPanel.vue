@@ -162,6 +162,25 @@
           <h4 class="section-title">🎮 {{ t('游戏功能') }}</h4>
         </div>
         <div class="settings-list">
+          <div class="setting-item">
+            <div class="setting-info">
+              <label class="setting-name">{{ t('清羽快速叙事（实验）') }}</label>
+              <span class="setting-desc">{{
+                t('仅用于“清羽记开局”至白湖脱身；开启后立即生效，建议新档全程保持同一状态')
+              }}</span>
+            </div>
+            <div class="setting-control">
+              <label class="setting-switch">
+                <input
+                  type="checkbox"
+                  v-model="fastNarrativeDemoEnabled"
+                  @change="onFastNarrativeDemoChange"
+                />
+                <span class="switch-slider"></span>
+              </label>
+            </div>
+          </div>
+
           <!-- 道号修改 -->
           <div class="setting-item setting-item-full" v-if="currentPlayerName">
             <div class="setting-info">
@@ -397,11 +416,43 @@ import { useCharacterStore } from '@/stores/characterStore';
 import { useGameStateStore } from '@/stores/gameStateStore';
 import { useUIStore } from '@/stores/uiStore';
 import { unwrapDadBundle } from '@/utils/dadBundle';
+import { FAST_NARRATIVE_DEMO_STORAGE_KEY } from '@/modules/scenarioMods/fastNarrativeDemoAdjudication';
 
 const { t, setLanguage, currentLanguage } = useI18n();
 const characterStore = useCharacterStore();
 const gameStateStore = useGameStateStore();
 const uiStore = useUIStore();
+const fastNarrativeDemoEnabled = ref(false);
+
+const readFastNarrativeDemoSetting = () => {
+  try {
+    return localStorage.getItem(FAST_NARRATIVE_DEMO_STORAGE_KEY) === 'true';
+  } catch {
+    return false;
+  }
+};
+
+const persistFastNarrativeDemoSetting = (enabled: boolean, showToast = true) => {
+  try {
+    if (enabled) {
+      localStorage.setItem(FAST_NARRATIVE_DEMO_STORAGE_KEY, 'true');
+    } else {
+      localStorage.removeItem(FAST_NARRATIVE_DEMO_STORAGE_KEY);
+    }
+    if (showToast) {
+      toast.success(enabled ? '清羽快速叙事已开启' : '清羽快速叙事已关闭');
+    }
+  } catch (error) {
+    fastNarrativeDemoEnabled.value = readFastNarrativeDemoSetting();
+    console.error('保存清羽快速叙事开关失败:', error);
+    toast.error('快速叙事开关保存失败，请重试');
+  }
+};
+
+const onFastNarrativeDemoChange = () => {
+  persistFastNarrativeDemoSetting(fastNarrativeDemoEnabled.value);
+};
+
 const onLanguageChange = () => {
   setLanguage(currentLanguage.value);
   toast.success('语言设置已更新');
@@ -739,6 +790,8 @@ const resetSettings = () => {
     cancelText: '取消',
     onConfirm: () => {
       debug.log('设置面板', '开始重置设置');
+      fastNarrativeDemoEnabled.value = false;
+      persistFastNarrativeDemoSetting(false, false);
       Object.assign(settings, {
         theme: 'auto',
         uiScale: 100,
@@ -897,6 +950,7 @@ const router = useRouter();
 // 组件挂载时加载设置
 onMounted(() => {
   debug.log('设置面板', '组件已加载');
+  fastNarrativeDemoEnabled.value = readFastNarrativeDemoSetting();
   loadSettings();
   loadVectorMemoryConfig();
 
