@@ -1,7 +1,8 @@
 # 仙途 (XianTu) · 项目总体状况与并行分工文档
 
 > 面向「新加入的 agent」。读完这一篇即可独立认领一个模块开工。
-> 当前认领：无。**当前 P0／P1／P2 已重新清账，下一位 agent 只从 `docs/CURRENT-P-LEVEL-HANDOFF-2026-08-23.md` 认领一个编号。** 当前没有已确认的项目级 P0 缺陷；P0 队列只含“先复现再裁定”的 `processGmResponse` 取消原子性风险，以及正式发测前的清羽开局→白湖脱身连续试玩门。五原玩法闭环与 `world_sim` G2 为 P1；Fast／Legacy 补背包评估、Fast 全线速度、关系姿态与数据债为 P2。Fast Demo 已阶段性收尾并保持默认关闭，`editionPack` 暂停。
+> **当前认领：P0-1 已复现并修代码，Claude 路1 二审 GO-WITH-CHANGES 后已按 P0 补测试与 store 回滚。** owner=Grok 4.6。起始 HEAD=`a6a2dc4`。未 commit。空命令 post-loop 用 `abortAfter(2)`，辅助等待后用 `abortAfter(3)`，均按 `abortReason` 断言闸口。`processGmResponse` 返回 `aborted/abortReason`；外层只在 `aborted` 时跳过 commit，成功路径即使随后 abort 也不拆已提交事务。store 写入前再查 abort，写入后若 abort 则 `loadFromSaveData(原档)`。证据：`tests/processGmResponseAbortAtomicity.test.mjs` **6/6**、`npm run type-check`、`git diff --check`。下一位：Claude 可复验；不要替本实现签核。
+> 当前没有已确认的项目级 P0 缺陷；P0 队列只含本项“先复现再裁定”，以及正式发测前的清羽开局→白湖脱身连续试玩门。五原玩法闭环与 `world_sim` G2 为 P1。Fast Demo 已阶段性收尾并保持默认关闭，`editionPack` 暂停。
 >
 > ### 2026-08-23：当前 P 级队列已重排，准备移交其他 agent
 > · 当前唯一认领入口=`docs/CURRENT-P-LEVEL-HANDOFF-2026-08-23.md`。分级口径改为：P0 只收已确认的存档／主线破坏与发测硬门；静态怀疑必须先复现，不能直接触发架构重写。旧 `R3-10-BACKLOG`、本文 §5 和 `TODO.md` 的历史优先级不再作为当前排序权威。

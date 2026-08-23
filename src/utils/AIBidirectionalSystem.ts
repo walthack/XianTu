@@ -1366,7 +1366,7 @@ ${missingItems.length > 0 ? `【上次结构化输出缺失】
     try {
       // 🔥 使用 v3 而不是原始 saveData，因为 maybeTriggerScheduledWorldEvent 可能已修改了 v3（如下次事件时间）
       const dataForProcessing = isSaveDataV3(saveData) ? saveData : migrateSaveDataToLatest(saveData).migrated;
-      const { saveData: updatedSaveData, stateChanges } = await this.processGmResponse(
+      const { saveData: updatedSaveData, stateChanges, aborted } = await this.processGmResponse(
         gmResponse,
         dataForProcessing as SaveData,
         false,
@@ -1378,6 +1378,10 @@ ${missingItems.length > 0 ? `【上次结构化输出缺失】
           openWorldAction: options?.openWorldAction,
         }
       );
+      if (aborted) {
+        console.log('[AI System] processGmResponse aborted, skip transaction commit');
+        return gmResponse;
+      }
       // 从这里返回的响应已经完成本地状态事务。UI 只能展示，不能再因可选字段
       // 缺失而把同一玩家输入送回 processPlayerAction。
       gmResponse.stateChanges = stateChanges;
@@ -1988,11 +1992,19 @@ ${step1Text}
       eventAction?: ScenarioEventActionSelection;
       openWorldAction?: WuyuanOpenWorldSelection;
     }
-  ): Promise<{ saveData: SaveData; stateChanges: StateChangeLog }> {
+  ): Promise<{ saveData: SaveData; stateChanges: StateChangeLog; aborted?: boolean; abortReason?: string }> {
     const abortRequested = () => shouldAbort?.() ?? false;
+    const abortUncommitted = (reason: string) => {
+      console.log(`[AI System] Abort detected, ${reason}`);
+      return {
+        saveData: currentSaveData,
+        stateChanges: { changes: [], timestamp: new Date().toISOString() },
+        aborted: true,
+        abortReason: reason,
+      };
+    };
     if (abortRequested()) {
-      console.log('[AI System] Abort detected, skip command processing');
-      return { saveData: currentSaveData, stateChanges: { changes: [], timestamp: new Date().toISOString() } };
+      return abortUncommitted('skip command processing');
     }
     // 🔥 先修复数据格式，确保所有字段正确
     const { repairSaveData } = await import('./dataRepair');
@@ -2214,6 +2226,10 @@ ${step1Text}
     }
 
 
+    if (abortRequested()) {
+      return abortUncommitted('discard clone after local settlement');
+    }
+
     const uiStore = useUIStore();
     const protectionMode = this.getCommandProtectionMode(uiStore);
 
@@ -2295,8 +2311,7 @@ ${step1Text}
 
     for (const command of sortedCommands) {
       if (abortRequested()) {
-        console.log('[AI System] Abort detected, stop command execution loop');
-        break;
+        return abortUncommitted('discard clone after partial command execution');
       }
       try {
         // 单机版忽略旧 prompt 或旧存档残留的联机日志命令，且不写入存档。
@@ -2326,6 +2341,10 @@ ${step1Text}
           }
         });
       }
+    }
+
+    if (abortRequested()) {
+      return abortUncommitted('discard clone before post-command reconcile');
     }
 
     const locallySettledInventoryIdentities = new Set(
@@ -2742,6 +2761,10 @@ ${step1Text}
       console.warn('[AI双向系统] 自动初始化宗门系统失败（非致命）:', e);
     }
 
+    if (abortRequested()) {
+      return abortUncommitted('discard clone after auxiliary wait');
+    }
+
     if (!isInitialization) {
       const gameStateStore = useGameStateStore();
       const liveModId = String((gameStateStore.worldState as any)?.剧本模组?.modId || '');
@@ -2750,7 +2773,14 @@ ${step1Text}
         const liveSave = gameStateStore.toSaveData();
         if (liveSave) saveData = liveSave;
       } else {
+        if (abortRequested()) {
+          return abortUncommitted('discard clone before store write');
+        }
         gameStateStore.loadFromSaveData(saveData);
+        if (abortRequested()) {
+          gameStateStore.loadFromSaveData(currentSaveData);
+          return abortUncommitted('restore store after late abort');
+        }
       }
       if (shouldAutoSummarize) {
         queueIsolatedMemorySummary(

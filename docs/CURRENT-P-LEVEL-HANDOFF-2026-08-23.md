@@ -18,7 +18,7 @@
 
 ### P0-1 `processGmResponse` 取消原子性：先复现，后裁定
 
-**状态**：未关闭风险，尚无确定性反例；不是已经坐实的 P0 bug。
+**状态**：2026-08-23 Grok 已在真实 `processGmResponse` 调用边界复现并修代码，**尚未 commit，待 Claude 独立二审**。入口 abort 原可零提交；结算后／首条命令后／命令循环后段会把 clone 当结果返回。修复见 `tests/processGmResponseAbortAtomicity.test.mjs` 与 `AIBidirectionalSystem.processGmResponse` 的 abort 丢弃 clone。
 
 现有 `processGmResponse` 在 clone 上先结算 event／opportunity／open-world，再执行模型命令；命令循环检测到取消时会 `break`，随后仍可能继续叙事补账、runtime 推进并返回 clone。Claude 曾据此指出“取消时部分提交”的风险，但 Fast Demo 明确未顺手修这一旧路径。
 
