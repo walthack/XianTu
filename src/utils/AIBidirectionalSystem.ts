@@ -45,7 +45,7 @@ import {
 import {
   FAST_NARRATIVE_DEADLINE_MS,
   FAST_NARRATIVE_GENERATE_OPTIONS,
-  finalizeFastNarrativeText,
+  finalizeFastNarrativeStyleDirective,
   planFastNarrativeDemo,
   wrapFastNarrativeGmResponse,
 } from '@/modules/scenarioMods/fastNarrativeDemo';
@@ -572,7 +572,7 @@ class AIBidirectionalSystemClass {
       hasOtherActionContract: !!(options?.opportunityAction || options?.eventAction || options?.openWorldAction),
     });
     if (!plan) return null;
-    options?.onProgressUpdate?.('实验快路：单次纯文本渲染…');
+    options?.onProgressUpdate?.('实验快路：选择叙事节奏…');
     const { aiService } = await import('@/services/aiService');
     let raw = '';
     let timedOut = false;
@@ -615,7 +615,7 @@ class AIBidirectionalSystemClass {
     if (timedOut) {
       options?.onProgressUpdate?.('实验快路：超时，使用本地收束文本。');
     }
-    const text = finalizeFastNarrativeText(raw, plan.packet, plan.forbiddenNames);
+    const text = finalizeFastNarrativeStyleDirective(raw, plan.packet, plan.beatContract);
     return wrapFastNarrativeGmResponse(text);
   }
 

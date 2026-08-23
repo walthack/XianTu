@@ -3,6 +3,11 @@
 > 面向「新加入的 agent」。读完这一篇即可独立认领一个模块开工。
 > 当前认领：Codex。**保持玩家模型／配置不变的生成速度窄 Demo 已完成 DeepSeek 与 MiniMax 单场景实测**：MiniMax Phase 5 批次 F100–F109 总耗时 median `16.037s`、P95 `20.739s`，每轮 1 chat、0 embedding、非叙事状态零漂移；相对 Legacy median `91.510s` 已证明热路径提速。叙事质量仍为 NO-GO：8/10 显示模型正文，但人工复核仍见未落账的物件属性、即时伤痛与威胁闭合；实验开关继续默认关闭，不扩第二场景、不替换主路。`editionPack` 与新档差异暂不实施。
 >
+> ### 2026-08-23：清羽速度 Demo 正向 beat contract 架构已实现，待 Claude／真机批准
+> · 当前候选把模型从“事实正文作者”降为“风格码选择器”：模型只能返回 `pace/sensory/cadence/focus` 四个 allowlist 字段；六档掷骰结果、三种短刀现场终态、既有身体代价、动作／感官 beat 和最终中文正文全部由本地 canonical contract 构建。模型正文、JSON、命令、内部 ID、前后缀、空响应或注入都不会显示，只触发默认风格；重复 finalize 只匹配 raw，实际可见核心仍重新取自本地 renderer。
+> · 普通风格 prompt 已由约 `2.48KB` 再降至实测 `593B`，不含人物名、连续性、任务目标、判定 ID、roll/total、effects、processBoundary 或内部事件信息；玩家行动被压成单行、截到 240 字并作为 JSON 字符串引用。调用合同暂冻结为页面当前 provider/model/temperature、1 chat、0 embedding、0 RAG、0 rewrite、0 retry、`max_tokens=1024`、35s deadline，便于把后续速度差异归因于架构。
+> · Grok 分批实现会话：Batch A=`01a02e2f-3a03-7d40-88fa-3a2b02c5db35`，防篡改收口=`01a02e36-0530-7cf2-8463-f47b2b107f20`／`01a02e3a-5c21-72d3-988e-e4f264921348`，Batch B1/B2=`01a02e42-0bcb-7960-a945-364da8a85264`／`01a02e46-e291-7930-97e9-661c8bcf0c1b`，provenance 收口=`01a02e49-39f2-7d41-8f70-bcce0406cade`。Codex 独立复现并修复过“篡改 beat text 可显示”的 P0，最终聚焦 `18/18`；完整 `canon:build` 为 **834 / 829 pass / 0 fail / 5 skip**。Batch A 已提交 `dd1e500`；Batch B 尚待本次 clean commit、Claude 只读二审和隔离真机正例／反例／读档连续性／同模型速度证据。开关仍默认关闭，当前状态是 **IMPLEMENTED / NOT YET APPROVED**。
+>
 > ### 2026-08-23：清羽速度 Demo 博德式判定适配（Claude 二审与 P0/P1 收口完成）
 > · 现有 R3“尸体短刀＋翻滚躲箭”已接成本地真实结算：最近战场尸体携带凡品短刀是有来源的 scene fact；`perfect/great_success/success → scene_held`，`partial → on_ground`，`failure/critical_failure → at_corpse`。scene fact、唯一现场位置和 action receipt 全部放在隔离 `系统.扩展.清羽记开局.adjudication`，绑定全局判定账的 `judgementId/actionHash/outcome`；重复 settlement 与同文案新 judgement 都不再产生第二次落账或重骰入口。
 > · settlement 在 `resolvePendingJudgement` 后、第一次保存和 LLM 调用前执行；实验开关默认关闭时零写入。短刀任何结果都不进正式背包，不改 `lcq.event.s01_02` flags/completion/offscreen/任务 JSON；prompt 只投影短刀来源、已结算三终态和“当前事件终局不可由本轮改写”，不泄露段强必死。模型正文与终态冲突时整段走 deterministic fallback，并只追加一个对应终态 coda。取得后只有明确使用短刀的风险行动才得到 `source:item` 因子，marker 没有全局判定账对应回执时 fail closed。

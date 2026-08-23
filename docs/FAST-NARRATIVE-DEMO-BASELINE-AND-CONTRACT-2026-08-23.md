@@ -278,3 +278,17 @@ Claude 只读二审 `claude-2026-08-23T07-40-07-528Z-9fb0da62` 给出 **GO-WITH-
 - P1：settlement 写入时继续强制核对全局 judgement ledger；随后写入覆盖判定 ID、动作摘要、六档结果、现场位置、事实 ID 与结算回合的完整性摘要。读取只接受摘要和场景内部不变量均一致的回执，因此合法状态不会在原判定滚出 20 条 `recent` 后失效，缺摘要或字段篡改则 fail closed。
 
 Grok 4.6 会话 `01a02da2-0a10-7190-bcf8-84744c6e3a0c` 完成窄补丁，Codex 审核并独立运行门禁：P0/P1 聚焦 `21/21`、类型检查通过；完整 `canon:build` 为 `823 tests / 818 pass / 0 fail / 5 skip`。下一步只剩 clean commit 后的正式页面三终态、续用短刀与同模型速度复验；实验开关仍默认关闭。
+
+## 12. 正向 beat contract 候选实现（待独立二审与真机）
+
+Phase 5 的速度已经成立，但自由散文仍会发明物件属性、即时伤势和威胁闭合。本轮因此把授权方向反转：本地系统不再事后用正则猜模型写得是否合法，而是在掷骰结算后先构建唯一 canonical beat contract，再让模型只选一个极窄风格码。
+
+- 本地输入：六档 `JudgementOutcome`、与其唯一对应的 `scene_held/on_ground/at_corpse`、是否已有结算身体代价。
+- 模型输出：仅 `pace=<...>;sensory=<...>;cadence=<...>;focus=<...>`；四字段合计 144 种合法组合。
+- 玩家可见文本：动作、感官、结果、短刀终态与在场人物收束均由本地 renderer 输出。模型 raw 只可作为 exact 风格码或幂等匹配键，永不作为可见正文值。
+- 失败路径：空响应、自由正文、合法码后附正文、JSON、命令、内部 ID、未知／重复／缺失字段全部使用本地默认风格，不重试，不转回模型散文。
+- 防篡改：renderer 会按 outcome/location/harm 重建 canonical contract，并逐字段、逐顺序、逐文本比较；改 beat 文本／ID／顺序、缺／多 beat、额外字段或错终态均返回 null。
+
+普通 R3 风格 prompt 实测 `593B`，相较 Phase 5 约 `2.48KB` 又缩小约 `76%`；相较 Legacy `134–137KB` 缩小超过 `99.5%`。本轮为了可归因比较，没有同时改 provider、model、temperature、`max_tokens=1024` 或 35 秒 deadline。实际 TTFT、总耗时、模型是否稳定返回 exact 风格码，以及相对 Phase 5 的收益仍必须由相同页面设置下的真机样本证明，不能由 prompt 大小推断。
+
+Codex 当前门禁：beat contract 与运行时聚焦 `18/18`；全量 `canon:build` 为 `834 tests / 829 pass / 0 fail / 5 skip`。实验开关仍默认关闭，不扩第二场景、不接 editionPack、不改 canon、核心 prompt、任务 JSON、存档合同或玩家 API 配置。当前判定：**实现候选 GO；默认启用、扩场景与性能结论均 NOT YET PROVEN。**
