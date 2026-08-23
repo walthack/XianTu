@@ -49,9 +49,26 @@ test('manual input, suggested action wording, and queued operations share the ex
   const suggestedAction = '游说守将打开城门';
   assert.equal(buildLocalJudgementPreflight(composeJudgementAction(suggestedAction, ''), save, 3)?.kind, 'social');
   assert.equal(buildLocalJudgementPreflight(composeJudgementAction('', '【操作】盗取守卫腰牌'), save, 3)?.kind, 'stealth');
-  for (const safeAction of ['我与店家闲聊近况', '他打了个哈欠', '我先打了个招呼', '打出一张牌', '抢夺先机']) {
+  for (const safeAction of ['我与店家闲聊近况', '他打了个哈欠', '我先打了个招呼', '打出一张牌', '抢夺先机', '我抢下话语权，继续解释来意', '躲开麻烦']) {
     assert.equal(buildLocalJudgementPreflight(safeAction, save, 3), null, safeAction);
   }
+});
+
+test('R3 grab-and-dodge battlefield wording hits one combat proposal without widening 抢下/躲开', async () => {
+  const { buildLocalJudgementPreflight } = await loadTs('../src/utils/judgementPreflight.ts');
+  const save = { 角色: { 身份: { 先天六司: {}, 后天六司: {} }, 位置: { 灵气浓度: 50 } } };
+  const r3 = '我猛地扑向最近的一具尸体，抢下他手里的短刀，然后借着草丛翻滚躲开射来的箭。';
+  const proposal = buildLocalJudgementPreflight(r3, save, 1);
+  assert.ok(proposal, 'fixed R3 input must reach local risk preflight');
+  assert.equal(proposal.kind, 'combat', 'RISK_RULES keeps combat before escape/stealth; 抢下手里短刀 is the first hit');
+  assert.equal(proposal.status, 'pending');
+  assert.equal(
+    buildLocalJudgementPreflight('我抢下话语权，继续解释来意', save, 1),
+    null,
+    'ordinary 抢下 without a weapon-in-hand object must stay unjudged',
+  );
+  assert.equal(buildLocalJudgementPreflight('躲开射来的箭', save, 1)?.kind, 'escape');
+  assert.equal(buildLocalJudgementPreflight('抢下他手里的短刀', save, 1)?.kind, 'combat');
 });
 
 test('active Canon Rail events use process-only policy while explicit rewrites require IF', async () => {
@@ -134,4 +151,73 @@ test('explicit matching talent affects situational judgement but never grants an
   ]);
   const unnamed = buildLocalJudgementPreflight('我探查暗门', save, 1);
   assert.equal(unnamed.factors.some(factor => factor.source === 'talent'), false);
+});
+
+test('清羽现场短刀只凭已落账持有回执提供 item factor', async () => {
+  const { buildLocalJudgementPreflight } = await loadTs('../src/utils/judgementPreflight.ts');
+  const demo = await loadTs('../src/modules/scenarioMods/fastNarrativeDemoAdjudication.ts');
+  const { hashJudgementAction } = await loadTs('../src/utils/judgementEngine.ts');
+  const ON_STORAGE = { getItem: key => (key === 'xiantu.fastNarrativeDemo.v1' ? 'true' : null) };
+  const OFF_STORAGE = { getItem: () => null };
+  const sourceAction = '我猛地扑向最近的一具尸体，抢下他手里的短刀，然后借着草丛翻滚躲开射来的箭。';
+  const actionHash = hashJudgementAction(sourceAction);
+  const judgement = {
+    id: 'judge-held-knife', status: 'resolved', actionText: sourceAction, actionHash,
+    kind: 'combat', whyNow: '战场抢刀有风险', difficulty: { band: 'hard', value: 20 }, factors: [],
+    stakes: { success: '抢到短刀', partial: '短刀脱手', failure: '未能取刀' },
+    canonPolicy: 'route_process_only', sourceEventId: 'lcq.event.s01_02', createdAtTurn: 1,
+    roll: 12, total: 22, outcome: 'success', appliedEffects: [], resolvedAtTurn: 1,
+  };
+  const save = {
+    角色: { 身份: { 先天六司: {}, 后天六司: {} }, 位置: { 灵气浓度: 50 } },
+    世界: { 状态: { 剧本模组: { modId: 'lcq.stage_01', activeEventIds: ['lcq.event.s01_02'] } } },
+    系统: { 扩展: {
+      判定: { version: 1, recent: [judgement] },
+      清羽记开局: { kind: 'qingyu-demo-v1' },
+    } },
+  };
+  assert.equal(demo.settleFastNarrativeDemoAdjudication(save, judgement, { storage: ON_STORAGE }).applied, true);
+
+  const explicit = buildLocalJudgementPreflight('我用短刀格挡迎面劈来的兵刃', save, 2, ON_STORAGE);
+  assert.deepEqual(explicit.factors.filter(factor => factor.source === 'item'), [
+    { label: '现场物品·凡品短刀', value: 3, source: 'item' },
+  ]);
+  assert.equal(
+    buildLocalJudgementPreflight('我观察手里的短刀', save, 2, ON_STORAGE),
+    null,
+    '只提到短刀而没有风险动作或明确使用，不应凭空触发判定',
+  );
+  assert.equal(
+    buildLocalJudgementPreflight('我用短刀格挡迎面劈来的兵刃', save, 2, OFF_STORAGE)
+      .factors.some(factor => factor.source === 'item'),
+    false,
+    '总开关关闭时不授予物品因子',
+  );
+
+  const expiredRecent = structuredClone(save);
+  expiredRecent.系统.扩展.判定.recent = [];
+  assert.equal(
+    buildLocalJudgementPreflight('我用短刀格挡迎面劈来的兵刃', expiredRecent, 2, ON_STORAGE)
+      .factors.some(factor => factor.source === 'item'),
+    true,
+    '清空 recent 不得让已经合法签发的回执失效',
+  );
+
+  const tamperedHash = structuredClone(save);
+  tamperedHash.系统.扩展.清羽记开局.adjudication.actionReceipts[0].verificationHash = 'forged';
+  assert.equal(
+    buildLocalJudgementPreflight('我用短刀格挡迎面劈来的兵刃', tamperedHash, 2, ON_STORAGE)
+      .factors.some(factor => factor.source === 'item'),
+    false,
+    '篡改回执摘要必须 fail closed',
+  );
+
+  const tamperedReceipt = structuredClone(save);
+  tamperedReceipt.系统.扩展.清羽记开局.adjudication.actionReceipts[0].outcome = 'failure';
+  assert.equal(
+    buildLocalJudgementPreflight('我用短刀格挡迎面劈来的兵刃', tamperedReceipt, 2, ON_STORAGE)
+      .factors.some(factor => factor.source === 'item'),
+    false,
+    '篡改回执字段必须 fail closed',
+  );
 });

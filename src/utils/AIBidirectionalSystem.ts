@@ -42,6 +42,17 @@ import {
   type ScenarioEventActionSelection,
   type ScenarioOpportunityActionSelection,
 } from '@/modules/scenarioMods/runtime';
+import {
+  FAST_NARRATIVE_DEADLINE_MS,
+  FAST_NARRATIVE_GENERATE_OPTIONS,
+  finalizeFastNarrativeText,
+  planFastNarrativeDemo,
+  wrapFastNarrativeGmResponse,
+} from '@/modules/scenarioMods/fastNarrativeDemo';
+import {
+  settleWuyuanOpenWorldSelection,
+  type WuyuanOpenWorldSelection,
+} from '@/modules/scenarioMods/wuyuanOpenWorldSlice';
 import { applyMilestoneRewards } from '@/modules/scenarioMods/milestoneRewards';
 import { buildScenarioStoryPrompt, createScenarioPromptState } from '@/modules/scenarioMods/storyContext';
 import { stripNarrativeEntityTypeConflicts, stripNarrativeUnintroducedCharacters } from '@/modules/scenarioMods/characterResolver';
@@ -50,6 +61,7 @@ import {
   extractLegacyJudgementMarkers,
   stripLegacyJudgementMarkers,
 } from '@/utils/judgementRules';
+import type { JudgementResolution } from '@/utils/judgementEngine';
 import { reconcileNarrativeState } from '@/utils/narrativeStateReconciler';
 import { runProgressAudit, shouldRunAudit } from '@/services/progressAuditService';
 import { runDeterministicBijiReconcile, runDeterministicHighlightReconcile, runDeterministicXieyiReconcile, runEventReconcile, shouldRunReconcile, evidenceLikely, buildChainCandidates } from '@/services/eventReconcileService';
@@ -158,6 +170,10 @@ export interface ProcessOptions {
   opportunityAction?: ScenarioOpportunityActionSelection;
   /** 由非机会卡事件合同生成的本地判定动作；成功响应后才消费。 */
   eventAction?: ScenarioEventActionSelection;
+  /** 五原局部开放世界的显式移动／消息／问题合同；成功响应后才消费。 */
+  openWorldAction?: WuyuanOpenWorldSelection;
+  /** 本轮已经本地落账的判定回执只读副本；实验快路渲染用。 */
+  judgementResolution?: JudgementResolution;
 }
 
 /**
@@ -541,6 +557,68 @@ class AIBidirectionalSystemClass {
     return this.instance;
   }
 
+  private async tryFastNarrativeDemo(
+    saveData: SaveData,
+    userMessage: string,
+    options: (ProcessOptions & { generation_id?: string }) | undefined,
+    generationId: string,
+    shouldAbort: () => boolean,
+  ): Promise<GM_Response | null> {
+    const plan = planFastNarrativeDemo({
+      saveData,
+      playerAction: userMessage,
+      judgementResolution: options?.judgementResolution,
+      aborted: shouldAbort(),
+      hasOtherActionContract: !!(options?.opportunityAction || options?.eventAction || options?.openWorldAction),
+    });
+    if (!plan) return null;
+    options?.onProgressUpdate?.('实验快路：单次纯文本渲染…');
+    const { aiService } = await import('@/services/aiService');
+    let raw = '';
+    let timedOut = false;
+    let userCancelled = false;
+    const controller = new AbortController();
+    const deadline = setTimeout(() => {
+      timedOut = true;
+      controller.abort();
+    }, FAST_NARRATIVE_DEADLINE_MS);
+    const cancelWatcher = setInterval(() => {
+      if (!shouldAbort()) return;
+      userCancelled = true;
+      controller.abort();
+    }, 100);
+    try {
+      raw = await aiService.generate({
+        ...FAST_NARRATIVE_GENERATE_OPTIONS,
+        injects: [{
+          content: plan.systemPrompt,
+          role: 'system',
+          depth: 4,
+          position: 'in_chat',
+        }],
+        user_input: plan.userPrompt,
+        generation_id: generationId,
+        signal: controller.signal,
+      });
+    } catch (error) {
+      if (userCancelled || shouldAbort()) {
+        throw new Error('请求已被取消');
+      }
+      raw = '';
+    } finally {
+      clearTimeout(deadline);
+      clearInterval(cancelWatcher);
+    }
+    if (userCancelled || shouldAbort()) {
+      throw new Error('请求已被取消');
+    }
+    if (timedOut) {
+      options?.onProgressUpdate?.('实验快路：超时，使用本地收束文本。');
+    }
+    const text = finalizeFastNarrativeText(raw, plan.packet, plan.forbiddenNames);
+    return wrapFastNarrativeGmResponse(text);
+  }
+
   /**
    * 处理玩家行动 - 简化版流程
    * 1. 调用AI生成响应
@@ -599,6 +677,17 @@ class AIBidirectionalSystemClass {
     // UI 会对占位响应发起一次结构化重试；失败响应本身必须是零副作用的。
     let generationFailed = false;
     try {
+      const fastNarrativeResponse = await this.tryFastNarrativeDemo(
+        saveData,
+        userMessage,
+        options,
+        generationId,
+        shouldAbort,
+      );
+      if (fastNarrativeResponse) {
+        gmResponse = fastNarrativeResponse;
+      }
+      if (!fastNarrativeResponse) {
       const v3 = isSaveDataV3(saveData) ? (saveData as any) : migrateSaveDataToLatest(saveData).migrated;
 
       // 发送给 AI 的状态：严格使用 V3 五域结构（命令 key 也必须按此结构输出）
@@ -1250,6 +1339,7 @@ ${missingItems.length > 0 ? `【上次结构化输出缺失】
       if (useStreaming && options?.onStreamComplete) {
         options.onStreamComplete();
       }
+      }
     } catch (error) {
       console.error('[AI双向系统] AI生成失败:', error);
       generationFailed = true;
@@ -1283,6 +1373,7 @@ ${missingItems.length > 0 ? `【上次结构化输出缺失】
           userAction: (userMessage && String(userMessage).trim()) || '继续当前活动',
           opportunityAction: options?.opportunityAction,
           eventAction: options?.eventAction,
+          openWorldAction: options?.openWorldAction,
         }
       );
       // 从这里返回的响应已经完成本地状态事务。UI 只能展示，不能再因可选字段
@@ -1893,6 +1984,7 @@ ${step1Text}
       userAction?: string;
       opportunityAction?: ScenarioOpportunityActionSelection;
       eventAction?: ScenarioEventActionSelection;
+      openWorldAction?: WuyuanOpenWorldSelection;
     }
   ): Promise<{ saveData: SaveData; stateChanges: StateChangeLog }> {
     const abortRequested = () => shouldAbort?.() ?? false;
@@ -1913,6 +2005,22 @@ ${step1Text}
     const handoffEventIdBefore = typeof (saveData as any)?.世界?.状态?.剧本模组?.lastSettledBeat?.eventId === 'string'
       ? String((saveData as any).世界.状态.剧本模组.lastSettledBeat.eventId)
       : '';
+    // 显式空间/问题合同与事件、机会卡相同：先由本地系统结算，模型命令只能演出回执。
+    const openWorldProgress = options?.openWorldAction
+      ? settleWuyuanOpenWorldSelection(saveData, options.openWorldAction)
+      : undefined;
+    if (openWorldProgress?.settled) {
+      changes.push({
+        key: '世界.状态.剧本模组.openWorldSlice',
+        action: openWorldProgress.idempotent ? 'open_world_idempotent' : 'open_world_settled',
+        oldValue: undefined,
+        newValue: {
+          kind: options?.openWorldAction?.kind,
+          identityId: options?.openWorldAction?.identityId,
+          settledFacts: openWorldProgress.settledFacts,
+        },
+      });
+    }
     // 非机会卡的本地判定在任何模型命令执行前结算；模型只能演出调用前已确定的结果，
     // 不能先改属性再反向影响本轮 success/partial/failure。
     const eventProgress = options?.eventAction

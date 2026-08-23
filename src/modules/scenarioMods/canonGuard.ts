@@ -405,6 +405,9 @@ export function compileScenarioProtectedPaths(saveData: SaveData): string[] {
     // 称号=里程碑奖励，只能由引擎(milestoneRewards)在故事线正确落点授予，AI 不得自封/篡改
     '角色.身份.称号',
   ]);
+  // 显式空间合同启用后，位置只允许本地 travel/canon projection 写入。
+  // 模型可以描写已经结算的路程，但不能用 tavern_command 绕过邻接、已知路线与到达回执。
+  if ((runtime as { openWorldSlice?: unknown }).openWorldSlice) paths.add('角色.位置');
   const canon = runtime.canon || {};
   const worldInfo = readPath(saveData, ['世界', '信息']) as Record<string, unknown> | undefined;
 

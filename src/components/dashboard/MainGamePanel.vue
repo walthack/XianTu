@@ -143,7 +143,7 @@
               class="action-option-btn engine-action-btn"
               :disabled="isAIProcessing"
             >
-              <span class="engine-action-badge">{{ option.source === 'event_engine' ? t('主线') : option.source === 'exploration_engine' ? t('探索') : t('机会') }}</span>
+              <span class="engine-action-badge">{{ option.source === 'event_engine' ? t('主线') : option.source === 'exploration_engine' ? t('探索') : option.source === 'open_world_engine' ? t('地方') : t('机会') }}</span>
               {{ option.label }} · 耗时 {{ option.timeCost }} 回合<template v-if="'remainingTurns' in option && option.remainingTurns !== undefined"> · 剩余 {{ option.remainingTurns }} 次重要行动</template>
             </button>
             <div class="engine-action-hint">{{ t('点按填入，可修改后发送') }}</div>
@@ -484,11 +484,17 @@ import {
   type ScenarioOpportunityActionSelection,
 } from '@/modules/scenarioMods/runtime';
 import {
+  getWuyuanOpenWorldSelections,
+  resolveWuyuanOpenWorldSelectionFromText,
+  type WuyuanOpenWorldSelection,
+} from '@/modules/scenarioMods/wuyuanOpenWorldSlice';
+import {
   getCurrentWorldSituation,
   getWorldSimulationPresentationNotices,
   settleWorldSimulationJudgement,
 } from '@/modules/scenarioMods/worldSimulation';
 import { WORLD_SIMULATION_PLAYTEST_KIND } from '@/modules/scenarioMods/worldSimulationPlaytest';
+import { settleFastNarrativeDemoAdjudication } from '@/modules/scenarioMods/fastNarrativeDemoAdjudication';
 import type {  CharacterProfile } from '@/types/game';
 import type { GM_Response } from '@/types/AIGameMaster'; // AIGameMaster.d.ts 仍然需要保留
 
@@ -763,15 +769,21 @@ const playtestFinished = computed(() => {
 const isTavernEnvFlag = isTavernEnv();
 const enhancedActionQueue = EnhancedActionQueueManager.getInstance();
 const bidirectionalSystem = AIBidirectionalSystem;
-type ScenarioEngineActionSelection = ScenarioOpportunityActionSelection | ScenarioEventActionSelection;
+type ScenarioEngineActionSelection = ScenarioOpportunityActionSelection | ScenarioEventActionSelection | WuyuanOpenWorldSelection;
 const selectedScenarioEngineAction = ref<ScenarioEngineActionSelection | null>(null);
 const scenarioEngineActionOptions = computed<ScenarioEngineActionSelection[]>(() => {
   const save = gameStateStore.toSaveData();
   if (!save) return [];
+  const openWorldActions = getWuyuanOpenWorldSelections(save);
+  const eventActions = (hasPendingStoryBeatHandoff(save) ? [] : getCurrentStoryEventActions(save))
+    // 五原落奴这拍由“先走到点心铺 → 选择应对过程 → 收束既定被抓事实”的局部合同承接。
+    // 隐藏旧的宽泛单按钮，避免绕过移动、代价和失败转新状态。
+    .filter(action => !(openWorldActions.length && action.eventId === 'lcq.event.s02_04'));
   return [
-    ...(hasPendingStoryBeatHandoff(save) ? [] : getCurrentStoryEventActions(save)),
+    ...eventActions,
     ...getCurrentStoryExplorationActions(save),
     ...getTrackedStoryOpportunityActions(save),
+    ...openWorldActions,
   ];
 });
 const stageDepartureOffer = computed(() => {
@@ -1575,7 +1587,9 @@ const selectActionOption = (option: string) => {
 
 const selectScenarioEngineAction = (option: ScenarioEngineActionSelection) => {
   selectedScenarioEngineAction.value = option;
-  const playerLine = option.source === 'opportunity_engine' ? option.actionText : option.playerLine;
+  const playerLine = option.source === 'opportunity_engine' || option.source === 'open_world_engine'
+    ? option.actionText
+    : option.playerLine;
   lastSelectedActionOption.value = playerLine;
   inputText.value = playerLine;
   nextTick(() => {
@@ -1631,7 +1645,10 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
     }
   }
 
-  if (!execution?.skipPreflight) {
+  const preflightOpenWorldAction = selectedScenarioEngineAction.value?.source === 'open_world_engine'
+    ? selectedScenarioEngineAction.value
+    : (saveData ? resolveWuyuanOpenWorldSelectionFromText(saveData, inputText.value.trim()) : undefined);
+  if (!execution?.skipPreflight && !preflightOpenWorldAction) {
     const proposal = buildLocalJudgementPreflight(judgementAction, saveData, getNarrativeTurn(saveData));
     if (proposal) {
       persistPendingJudgement(saveData, proposal);
@@ -1670,6 +1687,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
 
   const scenarioSaveAtSend = gameStateStore.toSaveData();
   const exactSelectedEventAction = selectedScenarioEngineAction.value?.source !== 'opportunity_engine'
+    && selectedScenarioEngineAction.value?.source !== 'open_world_engine'
     && selectedScenarioEngineAction.value?.playerLine === userMessage
     ? selectedScenarioEngineAction.value
     : undefined;
@@ -1679,6 +1697,12 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
     && selectedScenarioEngineAction.value.actionText === userMessage
     ? selectedScenarioEngineAction.value
     : undefined;
+  const exactSelectedOpenWorldAction = selectedScenarioEngineAction.value?.source === 'open_world_engine'
+    && selectedScenarioEngineAction.value.actionText === userMessage
+    ? selectedScenarioEngineAction.value
+    : undefined;
+  const resolvedOpenWorldAction = exactSelectedOpenWorldAction
+    || (scenarioSaveAtSend ? resolveWuyuanOpenWorldSelectionFromText(scenarioSaveAtSend, userMessage) : undefined);
 
   // 获取动作队列中的文本
   console.log('[前端] 动作队列 actionQueueText:', actionQueueText);
@@ -1695,6 +1719,9 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
   if (resolvedEventAction) {
     const result = resolvedEventAction;
     finalUserMessage += `\n【本地事件判定已预结算】事件=${result.eventId}；动作=${result.actionId}；结果=${result.expectedOutcome}；既定反馈=${result.outcomeText}。只演出该既定结果，不得另行判定、升级结果或写入事件完成标记。\n`;
+  }
+  if (resolvedOpenWorldAction) {
+    finalUserMessage += `\n【本地开放世界行动已预结算】类型=${resolvedOpenWorldAction.kind}；既定事实=${resolvedOpenWorldAction.settledFacts.join('；')}。只演出这些既定事实，不得另行移动玩家、改写路线、免除代价或写入开放世界账本。\n`;
   }
   if (execution?.resolution) {
     const result = execution.resolution;
@@ -1746,6 +1773,8 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
       };
       if (exactSelectedOpportunityAction) options.opportunityAction = { ...exactSelectedOpportunityAction };
       else if (resolvedEventAction) options.eventAction = { ...resolvedEventAction };
+      if (resolvedOpenWorldAction) options.openWorldAction = { ...resolvedOpenWorldAction };
+      if (execution?.resolution) options.judgementResolution = structuredClone(execution.resolution);
 
       // 酒馆环境：流式通过事件系统处理（STREAM_TOKEN_RECEIVED_INCREMENTALLY）
       // 非酒馆环境（网页版自定义API）：需要设置 onStreamChunk 才能实时渲染
@@ -2021,6 +2050,7 @@ const executePendingJudgement = async (testOutcome?: JudgementOutcome) => {
     currentTurn: getNarrativeTurn(save),
     ...(testOutcome ? { testOutcome } : {}),
   });
+  settleFastNarrativeDemoAdjudication(save, resolution);
   const worldSimulationResult = settleWorldSimulationJudgement(save, resolution);
   await persistJudgementSave(save);
   if (worldSimulationResult.pending) {

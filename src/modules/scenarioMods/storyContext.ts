@@ -26,6 +26,7 @@ import { resolveCurrentMainQuestNode, resolveMainQuestLayer } from './mainQuestA
 import { resolveAvailableLines, secondaryLinesAtEvent } from './secondaryLines';
 import { characterBeatsAt } from './characterQuests';
 import { formatWorldSimulationPrompt, getCurrentWorldSituation, isWorldSimulationRuntime } from './worldSimulation';
+import { getWuyuanOpenWorldPrompt } from './wuyuanOpenWorldSlice';
 
 import type {
   ScenarioCondition,
@@ -722,6 +723,10 @@ export function createScenarioPromptState<T extends SaveData>(saveData: T): T {
   // 不得把整份作者合同作为通用状态 JSON 泄给模型。
   delete runtime.worldSimulation;
   delete runtime.worldSimulationState;
+  // 局部空间账含内部 route/action/receipt ID；模型只消费 buildScenarioStoryPrompt
+  // 编译后的当前位置、已知去处与人物状态，不能看到或仿写原始账本。
+  delete (runtime as any).openWorldSlice;
+  delete (runtime as any).openWorldSliceLastWorldTurn;
   return promptState;
 }
 
@@ -1201,9 +1206,12 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
     // 称号=里程碑奖励的运行时状态（引擎授予）：从存档读，未获得的头衔不进 prompt → 结构上防"未卜先知"
     formatEarnedTitles(saveData),
   ].filter(Boolean).join('；');
+  const openWorldLine = getWuyuanOpenWorldPrompt(saveData);
 
   return `# 当前剧本进度（仅限可见内容）
 ${stageLine ? `## 当前关卡\n${stageLine}\n\n` : ''}${chapterSection}
+
+${openWorldLine ? `${openWorldLine}\n` : ''}
 
 ## 六朝国别风貌基准（虚构五国对应华夏朝代，环境/服饰/礼仪描写以此为准）
 - 唐国＝唐朝：长安气象，朱雀大街、坊市制、胡商胡姬；男子幞头圆领袍、女子高髻襦裙披帛；乐舞胡风华贵开放；称谓如“郎君/娘子/圣人（皇帝）”。

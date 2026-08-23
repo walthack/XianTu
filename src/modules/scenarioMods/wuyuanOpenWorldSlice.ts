@@ -1,0 +1,302 @@
+import type { SaveData } from '@/types/game';
+
+import {
+  advanceOpenWorldTurns,
+  getOpenWorldSliceView,
+  hydrateOpenWorldSliceRuntime,
+  matchOpenWorldProblemAction,
+  matchOpenWorldTravelInput,
+  readOpenWorldNotice,
+  settleOpenWorldProblemAction,
+  settleOpenWorldTravel,
+  type OpenWorldSliceDefinition,
+  type OpenWorldSliceRuntime,
+} from './openWorldSlice';
+import { getCurrentStoryEventActions, recordStoryEventStructuredAction } from './runtime';
+
+export const WUYUAN_OPEN_WORLD_SLICE_ID = 'lcq.open_world.wuyuan_v1';
+
+export const WUYUAN_OPEN_WORLD_DEFINITION: OpenWorldSliceDefinition = {
+  id: WUYUAN_OPEN_WORLD_SLICE_ID,
+  initialZoneId: 'lcq.zone.wuyuan.market',
+  zones: [
+    { id: 'lcq.zone.wuyuan.market', name: '五原露天市集', aliases: ['五原市集', '露天市集', '市集'] },
+    { id: 'lcq.zone.wuyuan.pastry_shop', name: '点心铺', aliases: ['糕饼铺', '饼铺'] },
+    { id: 'lcq.zone.wuyuan.water_prison', name: '白湖商馆水牢', aliases: ['水牢'] },
+    { id: 'lcq.zone.wuyuan.baihu_hall', name: '白湖商馆内院', aliases: ['商馆内院', '白湖商馆'] },
+  ],
+  routes: [
+    {
+      id: 'lcq.route.wuyuan.market_to_pastry_street',
+      fromZoneId: 'lcq.zone.wuyuan.market', toZoneId: 'lcq.zone.wuyuan.pastry_shop',
+      label: '沿人多的街面过去', aliases: ['走街面', '沿街', '人多的路'], turnCost: 1,
+    },
+    {
+      id: 'lcq.route.wuyuan.market_to_pastry_alley',
+      fromZoneId: 'lcq.zone.wuyuan.market', toZoneId: 'lcq.zone.wuyuan.pastry_shop',
+      label: '绕较安静的后巷', aliases: ['走后巷', '绕后巷', '安静的路'], turnCost: 2,
+      requirementKey: 'lcq.knowledge.wuyuan.pastry_back_alley',
+    },
+  ],
+  notices: [
+    {
+      id: 'lcq.notice.wuyuan.market_layout',
+      source: '市集货棚旁的旧木牌', reliability: 'confirmed', atZoneId: 'lcq.zone.wuyuan.market',
+      text: '木牌只画了眼前市集的货棚、马匹摊位和点心铺方向；这里没有城门与官署标记。',
+    },
+    {
+      id: 'lcq.notice.wuyuan.pastry_back_alley',
+      source: '相邻货摊摊主的低声提醒', reliability: 'rumor', atZoneId: 'lcq.zone.wuyuan.market',
+      text: '摊主说点心铺后面另有一条安静窄巷，但他没有保证巷里一定安全。',
+      unlockZoneIds: ['lcq.zone.wuyuan.pastry_shop'],
+      unlockRouteIds: ['lcq.route.wuyuan.market_to_pastry_alley'],
+      unlockRequirementKeys: ['lcq.knowledge.wuyuan.pastry_back_alley'],
+    },
+  ],
+  // 只引用 stage02 已有角色 ID。王哲属于此前帅帐阶段，明确不在本表。
+  actors: [
+    {
+      id: 'liuchao.character.ning_yu', name: '凝羽', initialZoneId: 'lcq.zone.wuyuan.baihu_hall',
+      desire: '观察局势，判断眼前的人是否值得出手相助', initialStatus: '尚未与玩家照面',
+    },
+    {
+      id: 'liuchao.character.su_daji', name: '苏妲己', initialZoneId: 'lcq.zone.wuyuan.baihu_hall',
+      desire: '掌握商馆内的谈判与交易主动', initialStatus: '尚未与玩家照面',
+    },
+  ],
+  problems: [{
+    id: 'lcq.problem.wuyuan.pastry_capture', atZoneId: 'lcq.zone.wuyuan.pastry_shop',
+    title: '点心铺里的逼近', objective: '陌生人从两面逼近；先保住性命并看清他们把人往哪里带',
+    initialState: 'confronted', terminalStates: ['captured_observant', 'captured_injured'],
+    actionIds: ['lcq.action.wuyuan.delay_and_observe', 'lcq.action.wuyuan.break_for_exit'],
+  }],
+  actions: [
+    {
+      id: 'lcq.action.wuyuan.delay_and_observe', problemId: 'lcq.problem.wuyuan.pastry_capture',
+      label: '用话头拖住他们', actionText: '你不报来历，先用话头拖住逼近的人，同时看清门窗与押送方向。',
+      aliases: ['拖住他们', '用话头拖延', '先交涉', '观察退路'], rejectIf: ['不交涉', '不说话'],
+      availableInStates: ['confronted'], outcome: 'partial', nextProblemState: 'captured_observant',
+      settledFacts: ['对方没有被说服，只短暂停了手', '你看清了门窗与后来押送的方向', '人数差距使你最终仍被制住'],
+      costs: ['外地口音引来额外留意'],
+      consequences: [
+        {
+          id: 'ningyu_notices_composure', delayTurns: 4, actorId: 'liuchao.character.ning_yu',
+          cause: '你在点心铺被围时仍先观察而没有乱报身份', effect: '凝羽后来见到你时先留意你的镇定与观察力',
+          apply: { actorStatus: '留意玩家是否能在受制时保持清醒' },
+        },
+        {
+          id: 'remembered_route_opens', delayTurns: 12,
+          cause: '你在被押走前记住了门窗与转折方向', effect: '商馆内出现可继续核对的脱身路线线索',
+          apply: { problemId: 'lcq.problem.wuyuan.pastry_capture', problemState: 'route_memory_available' },
+        },
+      ],
+    },
+    {
+      id: 'lcq.action.wuyuan.break_for_exit', problemId: 'lcq.problem.wuyuan.pastry_capture',
+      label: '撞开桌案抢出口', actionText: '你抢先撞开桌案冲向出口，不把这次突围写成已经逃脱。',
+      aliases: ['撞开桌案', '抢出口', '冲向出口', '动手脱身'], rejectIf: ['不动手', '不冲'],
+      availableInStates: ['confronted'], outcome: 'failure-forward', nextProblemState: 'captured_injured',
+      settledFacts: ['你撞开了第一人，却被更多人从侧后封住', '你没有逃脱，但记住了对方合围与押送的次序', '你带着新伤被制住'],
+      costs: ['新增一处可见伤势'],
+      consequences: [
+        {
+          id: 'ningyu_notices_injury', delayTurns: 4, actorId: 'liuchao.character.ning_yu',
+          cause: '你在点心铺抢出口失败并带伤被押走', effect: '凝羽后来见到你时先判断伤势与仍可行动的余地',
+          apply: { actorStatus: '先观察玩家伤势与行动余地' },
+        },
+        {
+          id: 'guard_pattern_remembered', delayTurns: 12,
+          cause: '你亲身撞过合围并记住押送次序', effect: '商馆内出现可利用的换岗与合围空隙线索',
+          apply: { problemId: 'lcq.problem.wuyuan.pastry_capture', problemState: 'guard_pattern_available' },
+        },
+      ],
+    },
+  ],
+};
+
+export type WuyuanOpenWorldSelection = {
+  source: 'open_world_engine';
+  kind: 'travel' | 'notice' | 'problem_action';
+  identityId: string;
+  receiptId: string;
+  label: string;
+  actionText: string;
+  settledFacts: string[];
+};
+
+type RuntimeWithSlice = {
+  modId?: string;
+  storyMode?: 'canon_companion' | 'world_sim';
+  worldTurn?: number;
+  activeEventIds?: string[];
+  completedEventIds?: string[];
+  openWorldSlice?: OpenWorldSliceRuntime;
+  openWorldSliceLastWorldTurn?: number;
+};
+
+function runtimeOf(saveData: SaveData): RuntimeWithSlice | undefined {
+  return (saveData as any)?.世界?.状态?.剧本模组;
+}
+
+function inWuyuanPhase(runtime: RuntimeWithSlice): boolean {
+  if (runtime.modId !== 'lcq.stage_02') return false;
+  const active = runtime.activeEventIds || [];
+  const completed = runtime.completedEventIds || [];
+  return completed.includes('lcq.event.s02_03')
+    || active.some(id => id === 'lcq.event.s02_04' || id === 'lcq.event.s02_05' || id === 'lcq.event.s02_06')
+    || completed.includes('lcq.event.s02_04');
+}
+
+function projectCanonLocation(runtime: RuntimeWithSlice): void {
+  const state = runtime.openWorldSlice;
+  if (!state) return;
+  const completed = runtime.completedEventIds || [];
+  let projected: string | undefined;
+  if (completed.includes('lcq.event.s02_05')) projected = 'lcq.zone.wuyuan.baihu_hall';
+  else if (completed.includes('lcq.event.s02_04')) projected = 'lcq.zone.wuyuan.water_prison';
+  if (!projected || state.currentZoneId === projected) return;
+  const from = WUYUAN_OPEN_WORLD_DEFINITION.zones.find(zone => zone.id === state.currentZoneId)?.name || '原处';
+  const to = WUYUAN_OPEN_WORLD_DEFINITION.zones.find(zone => zone.id === projected)?.name || '新地点';
+  state.currentZoneId = projected;
+  state.knownZoneIds = [...new Set([...state.knownZoneIds, projected])];
+  const id = `canon-location:${projected}`;
+  if (!state.chronicle.some(entry => entry.id === id)) {
+    const cause = completed.includes('lcq.event.s02_05') ? '你与水牢中的阿姬曼相遇后局面继续推进' : '点心铺中的应对最终仍收束为被商馆人制住';
+    const effect = `你从${from}被带到${to}`;
+    state.chronicle.push({ id, atTurn: state.elapsedTurns, cause, effect, text: `因为${cause}，所以${effect}` });
+  }
+}
+
+function projectPlayerPosition(saveData: SaveData, state: OpenWorldSliceRuntime): void {
+  const zone = WUYUAN_OPEN_WORLD_DEFINITION.zones.find(item => item.id === state.currentZoneId);
+  const position = (saveData as any)?.角色?.位置;
+  if (!zone || !position || typeof position !== 'object') return;
+  position.描述 = `中州·五原·${zone.name}`;
+}
+
+export function ensureWuyuanOpenWorldSlice(saveData: SaveData): OpenWorldSliceRuntime | undefined {
+  const runtime = runtimeOf(saveData);
+  if (!runtime || !inWuyuanPhase(runtime)) return undefined;
+  if (runtime.openWorldSlice?.version !== 1 || runtime.openWorldSlice.sliceId !== WUYUAN_OPEN_WORLD_SLICE_ID) {
+    runtime.openWorldSlice = hydrateOpenWorldSliceRuntime(runtime.openWorldSlice, WUYUAN_OPEN_WORLD_DEFINITION);
+  }
+  if (!runtime.openWorldSlice.knownZoneIds.includes('lcq.zone.wuyuan.pastry_shop')) {
+    runtime.openWorldSlice.knownZoneIds.push('lcq.zone.wuyuan.pastry_shop');
+  }
+  if (!runtime.openWorldSlice.knownRouteIds.includes('lcq.route.wuyuan.market_to_pastry_street')) {
+    runtime.openWorldSlice.knownRouteIds.push('lcq.route.wuyuan.market_to_pastry_street');
+  }
+  const now = Math.max(0, Number(runtime.worldTurn) || 0);
+  const last = runtime.openWorldSliceLastWorldTurn;
+  if (typeof last === 'number' && now > last) {
+    advanceOpenWorldTurns(runtime.openWorldSlice, WUYUAN_OPEN_WORLD_DEFINITION, now - last);
+  }
+  runtime.openWorldSliceLastWorldTurn = now;
+  projectCanonLocation(runtime);
+  projectPlayerPosition(saveData, runtime.openWorldSlice);
+  return runtime.openWorldSlice;
+}
+
+function receiptId(state: OpenWorldSliceRuntime, kind: WuyuanOpenWorldSelection['kind'], id: string): string {
+  return `${WUYUAN_OPEN_WORLD_SLICE_ID}:${kind}:${id}:${state.elapsedTurns}`;
+}
+
+export function getWuyuanOpenWorldSelections(saveData: SaveData): WuyuanOpenWorldSelection[] {
+  const state = ensureWuyuanOpenWorldSlice(saveData);
+  if (!state) return [];
+  const view = getOpenWorldSliceView(state, WUYUAN_OPEN_WORLD_DEFINITION);
+  return [
+    ...view.destinations.map(item => ({
+      source: 'open_world_engine' as const, kind: 'travel' as const, identityId: item.routeId,
+      receiptId: receiptId(state, 'travel', item.routeId), label: `前往 · ${item.destination}`,
+      actionText: `我选择${item.label}，前往${item.destination}。`,
+      settledFacts: [`你从${view.currentLocation}出发`, `你沿“${item.label}”前往${item.destination}`, `路程消耗${item.turnCost}轮`],
+    })),
+    ...view.notices.map(item => ({
+      source: 'open_world_engine' as const, kind: 'notice' as const, identityId: item.id,
+      receiptId: receiptId(state, 'notice', item.id), label: '查看 · 现场消息',
+      actionText: `我停下来查看这条现场消息：${item.presentation}`,
+      settledFacts: [item.presentation],
+    })),
+    ...view.problems.flatMap(problem => problem.actions.map(action => {
+      const definition = WUYUAN_OPEN_WORLD_DEFINITION.actions.find(item => item.id === action.id)!;
+      return {
+        source: 'open_world_engine' as const, kind: 'problem_action' as const, identityId: action.id,
+        receiptId: receiptId(state, 'problem_action', action.id), label: action.label, actionText: action.actionText,
+        settledFacts: [...definition.settledFacts, ...(definition.costs || []).map(cost => `代价：${cost}`)],
+      };
+    })),
+  ];
+}
+
+export function resolveWuyuanOpenWorldSelectionFromText(saveData: SaveData, playerText: string): WuyuanOpenWorldSelection | undefined {
+  const state = ensureWuyuanOpenWorldSlice(saveData);
+  if (!state) return undefined;
+  const available = getWuyuanOpenWorldSelections(saveData);
+  const travel = matchOpenWorldTravelInput(state, WUYUAN_OPEN_WORLD_DEFINITION, playerText);
+  if (travel.status === 'matched') return available.find(item => item.kind === 'travel' && item.identityId === travel.value.routeId);
+  const problem = WUYUAN_OPEN_WORLD_DEFINITION.problems.find(item => item.atZoneId === state.currentZoneId);
+  if (problem) {
+    const action = matchOpenWorldProblemAction(state, WUYUAN_OPEN_WORLD_DEFINITION, problem.id, playerText);
+    if (action.status === 'matched') return available.find(item => item.kind === 'problem_action' && item.identityId === action.value.actionId);
+  }
+  return undefined;
+}
+
+export function settleWuyuanOpenWorldSelection(saveData: SaveData, selection: WuyuanOpenWorldSelection): {
+  settled: boolean;
+  idempotent: boolean;
+  reason?: string;
+  settledFacts: string[];
+  canonEventCompleted?: boolean;
+} {
+  const runtime = runtimeOf(saveData);
+  const state = ensureWuyuanOpenWorldSlice(saveData);
+  if (!runtime || !state || selection?.source !== 'open_world_engine') {
+    return { settled: false, idempotent: false, reason: 'inactive_slice', settledFacts: [] };
+  }
+  const current = getWuyuanOpenWorldSelections(saveData).find(item =>
+    item.kind === selection.kind && item.identityId === selection.identityId && item.receiptId === selection.receiptId);
+  if (!current) {
+    const already = [...state.travelReceipts, ...state.noticeReceipts, ...state.actionReceipts]
+      .some(item => item.receiptId === selection.receiptId);
+    return already
+      ? { settled: true, idempotent: true, settledFacts: selection.settledFacts }
+      : { settled: false, idempotent: false, reason: 'stale_selection', settledFacts: [] };
+  }
+  const result = selection.kind === 'travel'
+    ? settleOpenWorldTravel(state, WUYUAN_OPEN_WORLD_DEFINITION, selection.identityId, selection.receiptId)
+    : selection.kind === 'notice'
+      ? readOpenWorldNotice(state, WUYUAN_OPEN_WORLD_DEFINITION, selection.identityId, selection.receiptId)
+      : settleOpenWorldProblemAction(state, WUYUAN_OPEN_WORLD_DEFINITION, selection.identityId, selection.receiptId);
+  if (result.status === 'rejected') {
+    return { settled: false, idempotent: false, reason: result.reason, settledFacts: [] };
+  }
+  projectPlayerPosition(saveData, state);
+  let canonEventCompleted = false;
+  if (selection.kind === 'problem_action' && runtime.storyMode !== 'world_sim') {
+    const eventSelection = getCurrentStoryEventActions(saveData)
+      .find(item => item.eventId === 'lcq.event.s02_04');
+    if (eventSelection) canonEventCompleted = recordStoryEventStructuredAction(saveData, eventSelection).completed;
+  }
+  return {
+    settled: true,
+    idempotent: result.status === 'idempotent',
+    settledFacts: selection.settledFacts,
+    ...(canonEventCompleted ? { canonEventCompleted } : {}),
+  };
+}
+
+export function getWuyuanOpenWorldPrompt(saveData: SaveData): string {
+  const state = ensureWuyuanOpenWorldSlice(saveData);
+  if (!state) return '';
+  const view = getOpenWorldSliceView(state, WUYUAN_OPEN_WORLD_DEFINITION);
+  const destinations = view.destinations.length
+    ? view.destinations.map(item => `${item.destination}（${item.label}，耗时${item.turnCost}轮）`).join('；')
+    : '眼下没有新的本地可达去处';
+  const actors = view.actorsHere.length
+    ? view.actorsHere.map(actor => `${actor.name}：${actor.status}；当前意图=${actor.desire}`).join('；')
+    : '当前地点没有已登记的承重人物在场';
+  const problems = view.problems.map(problem => `${problem.title}：${problem.objective}`).join('；') || '无';
+  return `# 五原局部行动账（本地真值）\n当前位置：${view.currentLocation}\n已知可去处：${destinations}\n在场人物：${actors}\n眼前可处理的问题：${problems}\n只可描写以上已知地点、路线与人物状态；不得用正文把玩家移动到未结算地点。`;
+}

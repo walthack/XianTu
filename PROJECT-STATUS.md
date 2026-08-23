@@ -1,9 +1,72 @@
 # 仙途 (XianTu) · 项目总体状况与并行分工文档
 
 > 面向「新加入的 agent」。读完这一篇即可独立认领一个模块开工。
-> 当前认领：Codex。**清羽 Demo 三级任务链纵切已实现，三级任务固定目标已完成数据／展示分离，待用户重建隔离档真机复测；稳定物品交易底座已接入本地事件合同**；动态 LLM 委托已定边界但尚未接运行时，角色能力扫描二验产物保留，暂未混改。
+> 当前认领：Codex。**保持玩家模型／配置不变的生成速度窄 Demo 已完成 DeepSeek 与 MiniMax 单场景实测**：MiniMax Phase 5 批次 F100–F109 总耗时 median `16.037s`、P95 `20.739s`，每轮 1 chat、0 embedding、非叙事状态零漂移；相对 Legacy median `91.510s` 已证明热路径提速。叙事质量仍为 NO-GO：8/10 显示模型正文，但人工复核仍见未落账的物件属性、即时伤痛与威胁闭合；实验开关继续默认关闭，不扩第二场景、不替换主路。`editionPack` 与新档差异暂不实施。
 >
-> ## 最后更新：2026-08-21（**四天补记：本文档实质停在 08-17，其间 70 个提交未进档**）
+> ### 2026-08-23：清羽速度 Demo 博德式判定适配（Claude 二审与 P0/P1 收口完成）
+> · 现有 R3“尸体短刀＋翻滚躲箭”已接成本地真实结算：最近战场尸体携带凡品短刀是有来源的 scene fact；`perfect/great_success/success → scene_held`，`partial → on_ground`，`failure/critical_failure → at_corpse`。scene fact、唯一现场位置和 action receipt 全部放在隔离 `系统.扩展.清羽记开局.adjudication`，绑定全局判定账的 `judgementId/actionHash/outcome`；重复 settlement 与同文案新 judgement 都不再产生第二次落账或重骰入口。
+> · settlement 在 `resolvePendingJudgement` 后、第一次保存和 LLM 调用前执行；实验开关默认关闭时零写入。短刀任何结果都不进正式背包，不改 `lcq.event.s01_02` flags/completion/offscreen/任务 JSON；prompt 只投影短刀来源、已结算三终态和“当前事件终局不可由本轮改写”，不泄露段强必死。模型正文与终态冲突时整段走 deterministic fallback，并只追加一个对应终态 coda。取得后只有明确使用短刀的风险行动才得到 `source:item` 因子，marker 没有全局判定账对应回执时 fail closed。
+> · Claude 只读二审 job=`claude-2026-08-23T07-40-07-528Z-9fb0da62` 结论为 **GO-WITH-CHANGES**：P0＝总开关关闭后既有 `scene_held` 仍会授予短刀因子；P1＝读取依赖只保留 20 条的全局 judgement `recent`，会让合法现场事实随游戏推进失效。Grok 会话 `01a02da2-0a10-7190-bcf8-84744c6e3a0c` 按窄合同实际完成补丁；Codex 复核后确认 P0 已补总开关，P1 改为写入时继续验证全局判定账、读取时验证覆盖 `judgementId/actionHash/outcome/location/sceneFact/turn` 的自包含完整性摘要及内部不变量。旧／缺摘要／篡改回执一律 fail closed，合法回执滚出 20 条窗口后仍连续。
+> · 性能合同未变：同玩家 provider/model/temperature、1 chat / 0 embedding / 1024 tokens / 35s deadline / requestMaxRetries=0；未改 canon、核心 prompt、正式任务 JSON 或 API 配置。P0/P1 聚焦测试 `21/21` 与 `npm run type-check` 全绿；完整 `npm run canon:build` 为 **823 / 818 pass / 0 fail / 5 skip**，37 关 schema、人工裁定执法、主轴／存档合同全绿。真实页面三终态、续用短刀及同模型速度仍待 clean commit 后真机验收。实施合同位于 `.xiantu-server/bg3-style-demo-adaptation-20260823/IMPLEMENTATION-CONTRACT.md`。
+>
+> ## 最后更新：2026-08-23（**补记：本文档此前实质停在 08-17，其间 70 个提交未进档**）
+>
+> ### 2026-08-23：MiniMax 输出预算与 actorless core 真机复验
+> · F70–F79 交错证明 `768` 对 MiniMax 不安全：768 组 3/5 因 `finish_reason=length` 截断并回退；3072 组 5/5 自然结束。F80–F89 再交错后，1024 组 5/5 自然结束，wall median `12.970s`；1536 组 5/5 自然结束，median `16.626s`。因此 Grok Phase 4 将默认关闭快路的调用级上限收敛为跨模型最低已测候选 `1024`，不修改玩家页面 API 配置。
+> · 人工检查 F70–F92 发现旧门禁虽然保持存档零漂移，却仍允许模型给段强新增对白／动作／位置、给玩家新增伤口／衣损、虚构敌人数量距离和额外 loot。Grok Phase 5 改为“模型只写玩家当下动作／感官的非可信 core；段强在场与短刀终态由本地可信 coda 追加”，明显 NPC／敌人／伤势／数量越界直接回退，不发第二次 LLM。Codex 复核聚焦 `6/6`、`build:single`、`git diff --check` 全绿。
+> · MiniMax 2.7 Highspeed 真机 F100–F109：wall median/min/P95/max=`16.037/12.219/20.739/21.081s`；TTFT=`13.100/9.301/17.766/18.052s`；10/10 HTTP 200、1 chat、0 embedding、实际 `max_tokens=1024`、零生成后状态漂移且短刀不入包。9/10 自然 stop，1/10 触顶回退；最终 8 份模型正文、2 份本地正文。
+> · 质量结论仍为 **NO-GO**：新门已拦截明显 NPC 行动，但显示文本仍出现“陌生力量／额外收益”、第二支箭威胁闭合、新刀鞘／刃口／血渍属性、未落账钝痛等事实。速度架构成立，现有“自由散文 + 负面正则”还不足以保证玩家体验；下一轮须先决定更强的正向事实词表／本地 beat sheet 合同，不能继续无止境追加同义词正则。默认开关保持关闭，未提交 Git。
+>
+> ### 2026-08-23：Grok Phase 3 输出预算实验完成，额外收益未证明
+> · 正确改用 Grok 4.6 `acceptEdits + 有工具 + 20 turns + streaming-json` 后，会话 `01a02c8f-4baf-7a33-b55e-ea24f6187d47` 正常读取、改写并自检；只把默认关闭快路的调用级输出预算 `3072→768`、表现目标 `250–500→180–280` 字，并更新聚焦测试。Codex 复核：聚焦 `5/5`、`build:single`、`git diff --check` 全绿。
+> · F50–F59（全部 768）只有 2/10 完整模型正文，8/10 在约 35 秒空响应后走本地正文。为排除时段差异又交错跑 F60–F69：768 组 wall median `38.106s`、模型响应 0/5；3072 组 median `38.086s`、模型响应 1/5；两组 TTFT median 都为 `35.163s`。10/10 均为 1 chat / 0 embedding、零状态漂移、短刀不入包。
+> · 当时结论：`768` 的额外提速为 **NOT PROVEN**，主导因素是 OpenRouter 上游未在 35 秒内返回响应体。后续 MiniMax 交错实测已证明 `768` 会截断，当前实验源码已改为 `1024`。产品运行时默认模型口径仍是玩家 API 配置所选的 **DeepSeek V4 Flash 或 MiniMax 2.7 Highspeed**。
+>
+> ### 2026-08-23：生成速度 Demo 第二阶段收束
+> · 本地终态取代短刀释放同义词穷举；模型可自由写当下过程，但持久获得、非第二人称、NPC 未授权装备／伤势仍失败关闭。超时上限从诊断的 45s 收到 `35s`；服务错误／越界不二次请求，直接显示自然本地正文。
+> · F30–F39：总耗时 median `25.770s`、P95/max `38.143s`；TTFT median `22.833s`、P95/max `35.172s`；10/10 为 1 chat / 0 embedding，10/10 零状态漂移且短刀不入包。相对 Legacy 总耗时 median 降低 `71.8%`（约 `3.55×`）。该批 5 份模型正文／5 份本地正文；人工复核追加拦截 1 条 NPC 暗示受伤文本。最终 NPC 短边界 prompt 后补跑 F40–F42，3/3 可读、零漂移。
+> · 门禁：聚焦 `5/5`、`build:single` 全绿；完整 `canon:build` **813 / 808 pass / 0 fail / 5 skip**。没有改 canon、核心 prompt、存档 schema 或玩家 API 配置。Grok 第二阶段三次未形成交付物，已核实原因是 Codex 错用 `plan + 空工具 + 单轮 + plain` 的互相冲突参数，不是 Grok 模型或推理服务哑火；本次由 Codex 按原窄合同兜底集成。决策为单场景 Demo GO-WITH-CHANGES，默认开启／扩场景 NO-GO。详见 `docs/FAST-NARRATIVE-DEMO-BASELINE-AND-CONTRACT-2026-08-23.md`。
+>
+> ### 2026-08-23：生成速度窄 Demo 与正式 A/B 完成
+> · Grok 完成主体架构／代码草案，Codex 负责接入、失败关闭、人物与未落账物品门禁及最终验证；Claude 首次 A/B 驱动未形成有效样本，第二次在执行前遇到额度上限，最终由 Codex 沿用隔离合同完成实测。未改 canon、冻结 ID、核心 prompt 或存档 schema；快路开关 `xiantu.fastNarrativeDemo.v1` 默认关闭。
+> · 相同 `deepseek/deepseek-v4-flash-0731`、temperature `0.6`、相同 R3 输入下，Legacy L1–L3 总耗时 median `91.510s`（58.791–195.653），TTFT median `74.730s`；Fast 最终轮 F7–F9 总耗时 median `42.965s`（20.676–105.057），TTFT median `39.814s`。总耗时中位数降低 `53.0%`，约 `2.13×`。
+> · Legacy 每回合 1–2 次 chat 加 10–11 次 embedding，chat 请求约 `134–137KB`；Fast 固定 1 次 chat、0 embedding、请求约 `2.27KB`，体积降低约 `98.3%`。Fast 三份生成前后非叙事状态均零漂移、背包均无短刀。
+> · 玩家体验仍未达到扩场景标准：最终轮两份模型正文直接呈现，一份语义合格原文因“短刀滑进草丛”未命中本地终态词表而显示安全 fallback；另有诊断样本遇到上游 `content:null`。旧路径三份则分别出现 13 字残片、未落账持刀、以及状态未推进却写死段强死亡。
+> · 决策：**新热路径架构 GO-WITH-CHANGES；扩大范围／替换主路径 NO-GO。** 下一刀应由本地合同追加固定终态收束，并为单请求设置硬等待上限，不再继续堆同义词正则；同场景至少 10 次稳定性与 P95 验收后再考虑第二场景。完整数据与证据见 `docs/FAST-NARRATIVE-DEMO-BASELINE-AND-CONTRACT-2026-08-23.md`。
+>
+> ### 2026-08-23：生成速度真机部分基线与窄 Demo 合同锁定
+> · Claude 真机任务 `claude-2026-08-22T17-28-42-251Z-944cc330` 在隔离源码快照／浏览器档案中实际运行清羽开局；因 30 分钟任务上限被终止，结论为 **PARTIAL / NOT FULLY PROVEN**，源码 guard 通过且未修改项目。证据目录=`/Users/clawbot/.claude/scratch/xiantu-speed-baseline-evidence-20260823/`。
+> · 页面保持 `deepseek/deepseek-v4-flash-0731`、temperature `0.6`、max tokens `20000`、force JSON 开启、润色关闭。1 次预热 + 3 次计时中，页面生成结束中位数 `121.860s`；唯一有效计时首字 `112.056s`。R3 风险动作单次 chat 仍耗 `130.969s`，请求约 `67.7KB`、响应 SSE 约 `1.10MB`；R1/R2 各发生 3 次完整 chat 且页面正文未更新。
+> · 已验证主要慢点为约 `67KB` 全量上下文、过大的输出空间、JSON／命令合同、硬门禁缓冲和全量重试；网络首包通常约 `1–11s`，embedding 热回合约 `0.3s/次`，不是百秒主因。
+> · 第一刀改为清羽 `lcq.stage_01` **本地判定已结算回合**的实验快路：本地真值先落账，allowlist `RenderPacket`，同 provider/model/temperature 单次纯文本渲染，调用级 `maxTokens=3072`、隐式重试 0，不跑 Step2／RAG／embedding／润色，不让 LLM 写任何命令；失败只走确定性安全短文。显式开关默认关闭，非目标回合完全走旧路。
+> · Grok 写主体代码与聚焦测试草案；Codex 只审查、集成和跑门禁；Claude 用同一隔离档克隆、同一 R3 输入做真机 A/B。首版目标：1 次 chat、请求 ≤12KB、无 embedding、Fast 中位总耗时 ≤45s 且比 Legacy 至少快 50%，本地 judgement／effects 和全部非叙事状态一致。完整合同见 `docs/FAST-NARRATIVE-DEMO-BASELINE-AND-CONTRACT-2026-08-23.md`。
+>
+> ### 2026-08-23：Claude 已完成存档专属演出版独立评估
+> · 只读二审 `claude-2026-08-22T14-00-51-032Z-a57c409a` 已完成，结论为 **GO-WITH-CHANGES**；Claude 未修改项目文件、未提交 Git。完整报告位于 `~/.claude/plans/xiantu-git-cryptic-owl.md`。
+> · 采纳“制作期审核变体库 + 新档 seed 确定性绑定 + 存档持久化回执”；不采纳开局时由 LLM 生成整包，也不允许后台预写未来正文。
+> · 当前只批准阶段 0+1：补齐现状文档，并由 Grok 产出独立 `editionPack` 模块与聚焦测试草案；Codex 只做合同／正典／知识边界审查、补丁整合与门禁；Claude 在落地后做独立只读复核。此阶段不接现有 runtime，不改 `AIBidirectionalSystem.ts`，不删 Step2／`tavern_commands`，不把未揭示内容加入 prompt。
+> · Claude 另发现现有 `processGmResponse` 取消路径可能部分提交状态的 P0 风险；该问题与 `editionPack` 分开立项、分开测试，不与第一刀混改。
+>
+> ### 2026-08-22：存档专属演出版／快速叙事架构留档，待 Claude 复核
+> · 用户明确人物性格、初始设定、核心动机、知识边界、正典故事线与关键锚点均已固定；新档差异不得生成新世界或改写人物，只能落在合法环境牌、传闻顺序、连接演出、过程纹理和已有合同支持的局部后果。
+> · Grok 4.6 独立只读评估推荐：制作期生成并审核变体库，新档用 seed 确定性绑定 `slotId → contentId` 并持久化 revealed／consumed／invalidated 回执；反对开局运行时 LLM 生成整包，也反对后台预写未来正文。Codex 综合判断暂同意，以五原窄纵切为候选，不扩到 37 stage。
+> · 候选热路径为“本地实际落账 → 短 RenderPacket → 固定骨架或一次短 LLM 渲染”；现有预结算与真实写账时序、移除分步第 2 步、旧档迁移、失败原子性及变体库门禁均属大架构改动，**Claude 额度恢复并完成独立评估前不实施**。
+> · 评估包、三方案比较、数据合同、五原试点、验收指标及暂定 Grok／Claude／Codex 分工见 `docs/SAVE-SCOPED-EDITION-PACK-ARCHITECTURE-BRIEF-2026-08-22.md`。本条只登记候选与等待状态，不授权改 canon、核心 prompt、冻结 ID 或存档合同。
+>
+> ### 2026-08-21：文字开放世界 RPG 定位体检入档
+> · 总判断：六朝已经是较强的正典互动叙事／世界因果引擎，但开放世界 RPG 的日常循环仍未完全闭合；当前缺口不是内容量，而是“获取局势 → 自主移动 → 用角色能力解决 → 承担成本与失败 → 世界／人物反馈 → 新机会与长期回响”尚未在一个连续纵切中稳定成立。
+> · 优先级正式登记为：**P0 显式移动与空间规则 → 核心玩法动词 → 深拍延迟后果；P1 动态委托运行时 → 成长／经济／声望消费 → 承重 NPC 生活逻辑；P2 玩家可读信息与枢纽节奏。** 不另起平行任务层、事实引擎或 NPC 全量模拟。
+> · 下一里程碑建议：以清羽开局／五原商馆为 30–40 回合纵切，覆盖 3–5 个相连地点、两条有代价的路线、一条动态交付委托、至少两种解决方法、一个 B 类场外事件、一件后续有用物品、一名十轮后主动回应的 NPC，以及失败后仍可继续的局面。
+> · 纵切通过前，不优先为 37 stage 批量增加 event、征兆、机会卡或 NPC 日程；自动化全绿不替代真机文本、知识边界与“一个选择如何在十轮后产生乐趣”的验收。
+> · 完整判断、范围、非目标和玩家视角验收：`docs/TEXT-OPEN-WORLD-RPG-DESIGN-AUDIT-2026-08-21.md`。本文档只登记设计与排期，不授权直接改 canon、核心 prompt、冻结 ID 或存档合同。
+>
+> ### 2026-08-21：五原开放世界 P0/P1 窄纵切实现
+> · 用户纠正空间连续性后，实施边界重新锁定：**草原战争／左武军帅帐／王哲托付在前；战事与王哲身死后才进入五原，再到点心铺、落奴与白湖商馆。** 五原局部层不含帅帐、王哲或“城门盘查”；原 stage 数据中“五原城墙高耸”的旧生成描述未在本轮越权修改，但局部提示明确按源文采用无城门／无官署标记的开放市集。
+> · 新增通用本地 `openWorldSlice`：稳定 zone/route ID、已知目的地 allowlist、有向邻接、路线条件、耗时与到达回执；自然输入 NFKC 归一、否定优先、歧义关闭；notice/source/reliability 分账；problem action、partial／failure-forward、成本、3–5／10–20 回合后果、承重 actor 状态及“因为 X，所以 Y”因果编年史均幂等持久化。旧档缺字段时只补默认，不清回执。
+> · 五原纵切在 `lcq.stage_02` 且战争／帅帐段完成后才启用：初始为五原露天市集；已知街面快路可去点心铺，摊主传闻可解锁较慢后巷，未指定路线时保持歧义；固定消息始终显示来源与“已证实／传闻”层级。位置由本地合同写 `角色.位置`，模型命令在纵切启用后不得改位置或绕过到达回执。
+> · `s02_04` 旧宽泛“一键推进”在 UI 被局部合同替换：玩家可拖住话头观察，或撞开桌案抢出口。两者分别形成 partial／failure-forward 的过程、成本和后续线索，但在 `canon_companion` 都诚实收束为既定被抓；`world_sim` 只结算局部过程，**不获得 Canon Rail completion 权**。王哲锦囊未被消费或改成通行证。
+> · 承重人物首版只引用 stage02 已有合法 ID：凝羽、苏妲己固定在白湖商馆内院，未见面前不显示为在场；玩家在点心铺的应对会在 4 轮后改变凝羽后来观察玩家的切入点，12 轮后留下不同脱身线索。阿姬曼／葛龙／孙疤脸因当前关卡无合法角色 ID，本轮没有发明持久 actor。
+> · Grok 4.6 按用户建议尝试实际编写两次，但其本地读取工具卡住，隔离 worktree 始终零改动，已中止以免继续耗额；本轮代码由 Codex 实现并复核。门禁：新增聚焦 17/17；完整 `canon:build` **807 / 802 pass / 0 fail / 5 skip**，37 关 schema、裁定执法、主轴／存档合同全绿；`type-check`、`build:single`、`git diff --check` 全绿。本地页面加载、清羽入口与控制台错误检查通过；**尚待从草原连续玩到五原的真机文本／长期乐趣验收**，自动化不替代该项。
 >
 > ### 2026-08-21：P0-P2 收束——自然行动落账与王哲锦囊实物交易
 > · 协作按用户新分工执行：Grok 4.6 承担高 token 草案／第二意见，Codex 复审、落地与门禁；Claude 额度耗尽，本轮跳过。P0 完整审稿会话=`01a021a0-d1be-7131-9d5d-e951452565fe`；P1/P2 因 Grok 本地大文件读取接口故障改用最小上下文，审计原件在 `.xiantu-server/grok-p0-p2-2026-08-21/`。

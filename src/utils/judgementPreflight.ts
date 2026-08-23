@@ -9,10 +9,11 @@ import { calculateTurnJudgementData } from './judgementRules';
 import { getCanonRailContract, getCanonRailProfile } from '@/modules/scenarioMods/canonRail';
 import { getNarrativeAnchorEvent } from '@/modules/scenarioMods/runtime';
 import { findWorldSimulationIntervention } from '@/modules/scenarioMods/worldSimulation';
+import { fastNarrativeDemoShortKnifeFactor } from '@/modules/scenarioMods/fastNarrativeDemoAdjudication';
 
 const RISK_RULES: Array<[JudgementKind, RegExp]> = [
-  ['combat', /攻击|出手|偷袭|斩杀|刺杀|搏杀|斗法|交手|战斗|迎战|应战|反击|格挡|挡住|阻击|拦住|制服|擒拿|对决|打晕|击晕|下毒|抢劫|抢夺(?!先机|时间|机会|话语权)|(?:斩|砍|刺|杀|击|射)(?:向|出|了|死|伤|中|退|倒|那|这|他|她|它|敌|贼|妖|守卫|对手)|打(?:向|死|伤|中|退|倒|那|这|他|她|它|敌|贼|妖|守卫|对手)|打了(?:他|她|它|敌人|守卫|对手)|打出(?:一|两|三|数)?(?:拳|掌|招|击)/],
-  ['escape', /逃跑|逃走|逃离|逃出去|跑掉|撤退|脱身|突围|甩开|摆脱|冲出包围|避开追兵/],
+  ['combat', /攻击|出手|偷袭|斩杀|刺杀|搏杀|斗法|交手|战斗|迎战|应战|反击|格挡|挡住|阻击|拦住|制服|擒拿|对决|打晕|击晕|下毒|抢劫|抢夺(?!先机|时间|机会|话语权)|抢下.{0,8}(?:手里|手中|手上).{0,6}(?:短刀|长刀|刀剑|佩刀|佩剑|剑|匕首|斧|枪|矛|弓|兵器|武器)|(?:斩|砍|刺|杀|击|射)(?:向|出|了|死|伤|中|退|倒|那|这|他|她|它|敌|贼|妖|守卫|对手)|打(?:向|死|伤|中|退|倒|那|这|他|她|它|敌|贼|妖|守卫|对手)|打了(?:他|她|它|敌人|守卫|对手)|打出(?:一|两|三|数)?(?:拳|掌|招|击)/],
+  ['escape', /逃跑|逃走|逃离|逃出去|跑掉|撤退|脱身|突围|甩开|摆脱|冲出包围|避开追兵|躲开.{0,8}(?:射来的|飞来的|袭来的)?箭/],
   ['stealth', /潜入|潜行|隐匿|藏身|敛息|偷窃|偷走|盗取|顺走|暗杀|撬锁|偷听|刺探|窥探|躲过|瞒过守卫|避开守卫/],
   ['craft', /炼丹|炼器|制符|布阵|炼制|锻造|打造|配药|制药|制作(?:丹药|法器|符箓|阵盘)/],
   ['cultivate', /突破|冲击境界|冲关|闭关|修炼|运功|双修|调息|疗伤|疗愈|修复经脉/],
@@ -122,6 +123,7 @@ export function buildLocalJudgementPreflight(
   actionText: string,
   saveData: any,
   currentTurn: number,
+  storage?: { getItem(key: string): string | null },
 ): JudgementProposal | null {
   const normalized = actionText.trim();
   const runtime = saveData?.世界?.状态?.剧本模组;
@@ -197,6 +199,7 @@ export function buildLocalJudgementPreflight(
     failure: '行动受阻，局势可能恶化；可以换做法或先准备。',
     criticalFailure: '局势显著恶化，必须承接更重的余波。',
   };
+  const sceneItemFactor = fastNarrativeDemoShortKnifeFactor(saveData, normalized, storage);
   return createJudgementProposal({
     actionText: normalized,
     kind,
@@ -206,6 +209,7 @@ export function buildLocalJudgementPreflight(
       ...stateFactors(kind, saveData),
       ...scenarioSkillFactors(kind, normalized, saveData),
       ...explicitTalentFactors(kind, normalized, saveData),
+      ...(sceneItemFactor ? [sceneItemFactor] : []),
       { label: '幸运', value: data.幸运点, source: 'condition' },
       environmentFactorFor(kind, data),
     ],

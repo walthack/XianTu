@@ -104,6 +104,25 @@ export interface GenerateOptions {
   signal?: AbortSignal;
   /** 强制JSON格式输出（仅支持OpenAI兼容API，如DeepSeek）*/
   responseFormat?: 'json_object';
+  /**
+   * 调用级响应模式。默认 configured 保持现有行为：
+   * 未显式传 responseFormat 时，仍可被 assigned config 的 forceJsonOutput 设为 json_object。
+   * text 压过 assigned config 的 forceJsonOutput，但不改 store／localStorage／用户配置。
+   * json_object 明确强制 JSON。
+   */
+  responseMode?: GenerateResponseMode;
+}
+
+export type GenerateResponseMode = 'configured' | 'text' | 'json_object';
+
+export function resolveGenerateResponseFormat(
+  options?: { responseMode?: GenerateResponseMode; responseFormat?: 'json_object' },
+  assignedConfig?: { forceJsonOutput?: boolean } | null,
+): 'json_object' | undefined {
+  const mode = options?.responseMode || 'configured';
+  if (mode === 'text') return undefined;
+  if (mode === 'json_object') return 'json_object';
+  return options?.responseFormat || (assignedConfig?.forceJsonOutput ? 'json_object' : undefined);
 }
 
 // ============ AI服务类 ============
@@ -725,7 +744,7 @@ class AIService {
         if (apiConfig && apiConfig.id !== 'default') {
           console.log(`[AI服务-酒馆] 功能[${usageType}]使用独立API直连: ${apiConfig.name}`);
           // 如果API配置启用了强制JSON输出，设置responseFormat
-          if (apiConfig.forceJsonOutput && !requestOptions.responseFormat) {
+          if (resolveGenerateResponseFormat(requestOptions, apiConfig) === 'json_object') {
             requestOptions.responseFormat = 'json_object';
           }
           return this.generateWithAPIConfig(requestOptions, {
@@ -748,7 +767,7 @@ class AIService {
       if (apiConfig) {
         console.log(`[AI服务-网页] 使用功能[${usageType}]分配的API: ${apiConfig.name}`);
         // 如果API配置启用了强制JSON输出，设置responseFormat
-        if (apiConfig.forceJsonOutput && !requestOptions.responseFormat) {
+        if (resolveGenerateResponseFormat(requestOptions, apiConfig) === 'json_object') {
           requestOptions.responseFormat = 'json_object';
         }
         return this.generateWithAPIConfig(requestOptions, {
@@ -793,7 +812,7 @@ class AIService {
         if (apiConfig && apiConfig.id !== 'default') {
           console.log(`[AI服务-酒馆] 功能[${usageType}]使用独立API直连(Raw): ${apiConfig.name}`);
           // 如果API配置启用了强制JSON输出，设置responseFormat
-          if (apiConfig.forceJsonOutput && !requestOptions.responseFormat) {
+          if (resolveGenerateResponseFormat(requestOptions, apiConfig) === 'json_object') {
             requestOptions.responseFormat = 'json_object';
           }
           return this.generateRawWithAPIConfig(requestOptions, {
@@ -816,7 +835,7 @@ class AIService {
       if (apiConfig) {
         console.log(`[AI服务-网页] 使用功能[${usageType}]分配的API: ${apiConfig.name}`);
         // 如果API配置启用了强制JSON输出，设置responseFormat
-        if (apiConfig.forceJsonOutput && !requestOptions.responseFormat) {
+        if (resolveGenerateResponseFormat(requestOptions, apiConfig) === 'json_object') {
           requestOptions.responseFormat = 'json_object';
         }
         return this.generateRawWithAPIConfig(requestOptions, {
@@ -1169,10 +1188,10 @@ class AIService {
     }
 
     const shouldStream = options.should_stream ?? this.config.streaming ?? false;
-    // 🔥 读取功能对应的 API 配置的 forceJsonOutput 设置
+    // 🔥 读取功能对应的 API 配置的 forceJsonOutput 设置；responseMode=text 可压过它。
     const usageType = options.usageType;
     const assignedConfig = usageType ? this.getAPIConfigForUsageType(usageType) : null;
-    const responseFormat = options.responseFormat || (assignedConfig?.forceJsonOutput ? 'json_object' : undefined);
+    const responseFormat = resolveGenerateResponseFormat(options, assignedConfig);
     return this.callAPI(messages, shouldStream, options.onStreamChunk, responseFormat, options.usageType, options.maxTokens, requestConfig, options.signal);
   }
 
@@ -1191,10 +1210,10 @@ class AIService {
 
     console.log(`[AI服务-自定义Raw] 消息数量: ${messages.length}`);
     const shouldStream = options.should_stream ?? this.config.streaming ?? false;
-    // 🔥 读取功能对应的 API 配置的 forceJsonOutput 设置
+    // 🔥 读取功能对应的 API 配置的 forceJsonOutput 设置；responseMode=text 可压过它。
     const usageType = options.usageType;
     const assignedConfig = usageType ? this.getAPIConfigForUsageType(usageType) : null;
-    const responseFormat = options.responseFormat || (assignedConfig?.forceJsonOutput ? 'json_object' : undefined);
+    const responseFormat = resolveGenerateResponseFormat(options, assignedConfig);
     console.log(`[AI服务-自定义Raw] shouldStream=${shouldStream}, hasOnStreamChunk=${!!options.onStreamChunk}, options.should_stream=${options.should_stream}, config.streaming=${this.config.streaming}`);
     return this.callAPI(messages, shouldStream, options.onStreamChunk, responseFormat, options.usageType, options.maxTokens, requestConfig, options.signal);
   }
