@@ -13,21 +13,28 @@ import {
 } from './qingyuOpeningPlaytest';
 
 export const FAST_NARRATIVE_DEMO_KNIFE_FACT_ID = 'qingyu-demo.scene.nearest-corpse-short-knife';
+export const FAST_NARRATIVE_DEMO_KNIFE_SOURCE = 'nearby_battlefield_corpse' as const;
 export const FAST_NARRATIVE_DEMO_FIXED_TERMINAL_EVENT_ID = 'lcq.event.s01_02';
 export const FAST_NARRATIVE_DEMO_TERMINAL_PROJECTION = '当前事件终局不可由本轮改写';
 export const FAST_NARRATIVE_DEMO_STORAGE_KEY = 'xiantu.fastNarrativeDemo.v1';
 const RECEIPT_VERIFICATION_DOMAIN = 'xiantu.fastNarrativeDemo.receipt.v1';
+const LEGACY_KNIFE_SOURCE = 'nearest_battlefield_corpse';
+const LEGACY_KNIFE_LOCATIONS = ['scene_held', 'on_ground', 'at_corpse'] as const;
 
 type StorageLike = { getItem(key: string): string | null };
+type LegacyKnifeLocation = (typeof LEGACY_KNIFE_LOCATIONS)[number];
+type StoredKnifeSource = typeof FAST_NARRATIVE_DEMO_KNIFE_SOURCE | typeof LEGACY_KNIFE_SOURCE;
 
-export type FastNarrativeDemoKnifeLocation = 'scene_held' | 'on_ground' | 'at_corpse';
+export type FastNarrativeDemoKnifeSource = typeof FAST_NARRATIVE_DEMO_KNIFE_SOURCE;
+/** Legacy experimental locations; read for migration only, never written back. */
+export type FastNarrativeDemoKnifeLocation = LegacyKnifeLocation;
 
 export interface FastNarrativeDemoSceneFact {
   id: typeof FAST_NARRATIVE_DEMO_KNIFE_FACT_ID;
   kind: 'grounded_scene_item';
   itemName: '短刀';
   quality: '凡品';
-  source: 'nearest_battlefield_corpse';
+  source: StoredKnifeSource;
   sourceText: string;
   establishedByJudgementId: string;
 }
@@ -36,7 +43,8 @@ export interface FastNarrativeDemoActionReceipt {
   judgementId: string;
   actionHash: string;
   outcome: JudgementOutcome;
-  knifeLocation: FastNarrativeDemoKnifeLocation;
+  acquired?: boolean;
+  knifeLocation?: LegacyKnifeLocation;
   sceneFactId: typeof FAST_NARRATIVE_DEMO_KNIFE_FACT_ID;
   settledAtTurn: number;
   verificationHash: string;
@@ -48,7 +56,7 @@ export interface FastNarrativeDemoAdjudicationState {
   actionReceipts: FastNarrativeDemoActionReceipt[];
   knife: {
     itemName: '短刀';
-    location: FastNarrativeDemoKnifeLocation;
+    acquired: boolean;
     lastJudgementId: string;
   } | null;
   terminalBoundaries: Array<{
@@ -59,9 +67,9 @@ export interface FastNarrativeDemoAdjudicationState {
 
 export interface FastNarrativeDemoAdjudicationView {
   itemName: '短刀';
+  source: FastNarrativeDemoKnifeSource;
   sourceText: string;
-  location: FastNarrativeDemoKnifeLocation;
-  sceneHeld: boolean;
+  acquired: boolean;
   judgementId: string;
   processBoundary: typeof FAST_NARRATIVE_DEMO_TERMINAL_PROJECTION;
 }
@@ -73,6 +81,10 @@ export interface FastNarrativeDemoSettlementResult {
 }
 
 const DEMO_ACTION_RE = /尸体[\s\S]{0,20}(?:短刀|刀)[\s\S]{0,30}(?:翻滚|躲开|避开)[\s\S]{0,16}箭|(?:抢下|夺下|抽出)[\s\S]{0,12}(?:短刀|刀)[\s\S]{0,30}(?:翻滚|躲开|避开)[\s\S]{0,16}箭/;
+const VALID_OUTCOMES = new Set<JudgementOutcome>([
+  'critical_failure', 'failure', 'partial', 'success', 'great_success', 'perfect',
+]);
+const LEGACY_LOCATION_SET = new Set<string>(LEGACY_KNIFE_LOCATIONS);
 
 function asRecord(value: unknown): Record<string, any> | null {
   return value && typeof value === 'object' && !Array.isArray(value)
@@ -97,13 +109,60 @@ function isFeatureEnabled(storage?: StorageLike): boolean {
   }
 }
 
-function knifeLocationFor(outcome: JudgementOutcome): FastNarrativeDemoKnifeLocation {
-  if (outcome === 'perfect' || outcome === 'great_success' || outcome === 'success') return 'scene_held';
-  if (outcome === 'partial') return 'on_ground';
-  return 'at_corpse';
+export function acquiredForFastNarrativeDemoOutcome(outcome: unknown): boolean | null {
+  if (typeof outcome !== 'string' || !VALID_OUTCOMES.has(outcome as JudgementOutcome)) return null;
+  return outcome === 'perfect' || outcome === 'great_success' || outcome === 'success';
 }
 
-function receiptVerificationSource(receipt: Omit<FastNarrativeDemoActionReceipt, 'verificationHash'>): string {
+function acquiredFromLegacyLocation(location: unknown): boolean | null {
+  if (location === 'scene_held') return true;
+  if (location === 'on_ground' || location === 'at_corpse') return false;
+  return null;
+}
+
+function canonicalKnifeSource(value: unknown): StoredKnifeSource | null {
+  if (value === FAST_NARRATIVE_DEMO_KNIFE_SOURCE || value === LEGACY_KNIFE_SOURCE) return value;
+  return null;
+}
+
+function receiptAcquired(receipt: FastNarrativeDemoActionReceipt): boolean | null {
+  if (typeof receipt.acquired === 'boolean') {
+    if (receipt.knifeLocation != null) {
+      const fromLocation = acquiredFromLegacyLocation(receipt.knifeLocation);
+      if (fromLocation !== receipt.acquired) return null;
+    }
+    return receipt.acquired;
+  }
+  return acquiredFromLegacyLocation(receipt.knifeLocation);
+}
+
+function newReceiptVerificationSource(receipt: {
+  judgementId: string;
+  actionHash: string;
+  outcome: JudgementOutcome;
+  acquired: boolean;
+  sceneFactId: typeof FAST_NARRATIVE_DEMO_KNIFE_FACT_ID;
+  settledAtTurn: number;
+}): string {
+  return [
+    RECEIPT_VERIFICATION_DOMAIN,
+    receipt.judgementId,
+    receipt.actionHash,
+    receipt.outcome,
+    receipt.acquired ? 'acquired=true' : 'acquired=false',
+    receipt.sceneFactId,
+    String(receipt.settledAtTurn),
+  ].join('|');
+}
+
+function legacyReceiptVerificationSource(receipt: {
+  judgementId: string;
+  actionHash: string;
+  outcome: JudgementOutcome;
+  knifeLocation: LegacyKnifeLocation;
+  sceneFactId: typeof FAST_NARRATIVE_DEMO_KNIFE_FACT_ID;
+  settledAtTurn: number;
+}): string {
   return [
     RECEIPT_VERIFICATION_DOMAIN,
     receipt.judgementId,
@@ -115,8 +174,26 @@ function receiptVerificationSource(receipt: Omit<FastNarrativeDemoActionReceipt,
   ].join('|');
 }
 
-function hashActionReceipt(receipt: Omit<FastNarrativeDemoActionReceipt, 'verificationHash'>): string {
-  return hashJudgementAction(receiptVerificationSource(receipt));
+function hashNewActionReceipt(receipt: {
+  judgementId: string;
+  actionHash: string;
+  outcome: JudgementOutcome;
+  acquired: boolean;
+  sceneFactId: typeof FAST_NARRATIVE_DEMO_KNIFE_FACT_ID;
+  settledAtTurn: number;
+}): string {
+  return hashJudgementAction(newReceiptVerificationSource(receipt));
+}
+
+function hashLegacyActionReceipt(receipt: {
+  judgementId: string;
+  actionHash: string;
+  outcome: JudgementOutcome;
+  knifeLocation: LegacyKnifeLocation;
+  sceneFactId: typeof FAST_NARRATIVE_DEMO_KNIFE_FACT_ID;
+  settledAtTurn: number;
+}): string {
+  return hashJudgementAction(legacyReceiptVerificationSource(receipt));
 }
 
 function isIntactSceneReceipt(
@@ -124,12 +201,25 @@ function isIntactSceneReceipt(
   knife: NonNullable<FastNarrativeDemoAdjudicationState['knife']>,
   receipt: FastNarrativeDemoActionReceipt,
 ): boolean {
-  return receipt.judgementId === knife.lastJudgementId
-    && receipt.knifeLocation === knife.location
-    && receipt.sceneFactId === fact.id
-    && fact.establishedByJudgementId === receipt.judgementId
-    && !!normalizeText(receipt.verificationHash)
-    && receipt.verificationHash === hashActionReceipt({
+  if (receipt.judgementId !== knife.lastJudgementId) return false;
+  if (receipt.sceneFactId !== fact.id) return false;
+  if (fact.establishedByJudgementId !== receipt.judgementId) return false;
+  if (!normalizeText(receipt.verificationHash)) return false;
+  const acquired = receiptAcquired(receipt);
+  if (acquired !== knife.acquired) return false;
+
+  if (typeof receipt.acquired === 'boolean') {
+    return receipt.verificationHash === hashNewActionReceipt({
+      judgementId: receipt.judgementId,
+      actionHash: receipt.actionHash,
+      outcome: receipt.outcome,
+      acquired: receipt.acquired,
+      sceneFactId: receipt.sceneFactId,
+      settledAtTurn: receipt.settledAtTurn,
+    });
+  }
+  if (receipt.knifeLocation && LEGACY_LOCATION_SET.has(receipt.knifeLocation)) {
+    return receipt.verificationHash === hashLegacyActionReceipt({
       judgementId: receipt.judgementId,
       actionHash: receipt.actionHash,
       outcome: receipt.outcome,
@@ -137,6 +227,8 @@ function isIntactSceneReceipt(
       sceneFactId: receipt.sceneFactId,
       settledAtTurn: receipt.settledAtTurn,
     });
+  }
+  return false;
 }
 
 function emptyState(): FastNarrativeDemoAdjudicationState {
@@ -162,49 +254,71 @@ function readState(saveData: unknown): FastNarrativeDemoAdjudicationState | null
         && value.kind === 'grounded_scene_item'
         && value.itemName === '短刀'
         && value.quality === '凡品'
-        && value.source === 'nearest_battlefield_corpse'
+        && !!canonicalKnifeSource(value.source)
         && !!normalizeText(value.sourceText)
         && !!normalizeText(value.establishedByJudgementId);
-    }) as FastNarrativeDemoSceneFact[]
+    }).map((fact: unknown) => {
+      const value = asRecord(fact)!;
+      return {
+        id: FAST_NARRATIVE_DEMO_KNIFE_FACT_ID,
+        kind: 'grounded_scene_item' as const,
+        itemName: '短刀' as const,
+        quality: '凡品' as const,
+        source: canonicalKnifeSource(value.source) as StoredKnifeSource,
+        sourceText: normalizeText(value.sourceText),
+        establishedByJudgementId: normalizeText(value.establishedByJudgementId),
+      } satisfies FastNarrativeDemoSceneFact;
+    })
     : [];
-  const validOutcomes = new Set<JudgementOutcome>([
-    'critical_failure', 'failure', 'partial', 'success', 'great_success', 'perfect',
-  ]);
-  const validLocations = new Set<FastNarrativeDemoKnifeLocation>(['scene_held', 'on_ground', 'at_corpse']);
   const actionReceipts = Array.isArray(raw.actionReceipts)
     ? raw.actionReceipts.flatMap((receipt: unknown) => {
       const value = asRecord(receipt);
       const settledAtTurn = Number(value?.settledAtTurn);
+      const hasAcquired = typeof value?.acquired === 'boolean';
+      const hasLegacyLocation = LEGACY_LOCATION_SET.has(value?.knifeLocation);
       if (
         !normalizeText(value?.judgementId)
         || !normalizeText(value?.actionHash)
-        || !validOutcomes.has(value?.outcome)
-        || !validLocations.has(value?.knifeLocation)
+        || !VALID_OUTCOMES.has(value?.outcome)
+        || (!hasAcquired && !hasLegacyLocation)
         || value?.sceneFactId !== FAST_NARRATIVE_DEMO_KNIFE_FACT_ID
         || !Number.isFinite(settledAtTurn)
         || !normalizeText(value?.verificationHash)
       ) return [];
-      return [{
+      const parsed: FastNarrativeDemoActionReceipt = {
         judgementId: normalizeText(value.judgementId),
         actionHash: normalizeText(value.actionHash),
         outcome: value.outcome as JudgementOutcome,
-        knifeLocation: value.knifeLocation as FastNarrativeDemoKnifeLocation,
         sceneFactId: FAST_NARRATIVE_DEMO_KNIFE_FACT_ID,
         settledAtTurn,
         verificationHash: normalizeText(value.verificationHash),
-      } satisfies FastNarrativeDemoActionReceipt];
+      };
+      if (hasAcquired) parsed.acquired = value.acquired as boolean;
+      if (hasLegacyLocation) parsed.knifeLocation = value.knifeLocation as LegacyKnifeLocation;
+      if (receiptAcquired(parsed) == null) return [];
+      return [parsed];
     })
     : [];
   const rawKnife = asRecord(raw.knife);
-  const knife = rawKnife?.itemName === '短刀'
-    && validLocations.has(rawKnife.location)
-    && !!normalizeText(rawKnife.lastJudgementId)
-    ? {
-      itemName: '短刀' as const,
-      location: rawKnife.location as FastNarrativeDemoKnifeLocation,
-      lastJudgementId: normalizeText(rawKnife.lastJudgementId),
+  let knife: FastNarrativeDemoAdjudicationState['knife'] = null;
+  if (rawKnife?.itemName === '短刀' && !!normalizeText(rawKnife.lastJudgementId)) {
+    if (typeof rawKnife.acquired === 'boolean') {
+      knife = {
+        itemName: '短刀',
+        acquired: rawKnife.acquired,
+        lastJudgementId: normalizeText(rawKnife.lastJudgementId),
+      };
+    } else {
+      const acquired = acquiredFromLegacyLocation(rawKnife.location);
+      if (acquired != null) {
+        knife = {
+          itemName: '短刀',
+          acquired,
+          lastJudgementId: normalizeText(rawKnife.lastJudgementId),
+        };
+      }
     }
-    : null;
+  }
 
   return {
     version: 1,
@@ -222,11 +336,53 @@ function readState(saveData: unknown): FastNarrativeDemoAdjudicationState | null
   };
 }
 
+function persistReceipt(receipt: FastNarrativeDemoActionReceipt): FastNarrativeDemoActionReceipt {
+  const acquired = receiptAcquired(receipt);
+  if (typeof receipt.acquired === 'boolean' && receipt.knifeLocation == null && acquired != null) {
+    return {
+      judgementId: receipt.judgementId,
+      actionHash: receipt.actionHash,
+      outcome: receipt.outcome,
+      acquired,
+      sceneFactId: receipt.sceneFactId,
+      settledAtTurn: receipt.settledAtTurn,
+      verificationHash: receipt.verificationHash,
+    };
+  }
+  return {
+    judgementId: receipt.judgementId,
+    actionHash: receipt.actionHash,
+    outcome: receipt.outcome,
+    ...(receipt.knifeLocation ? { knifeLocation: receipt.knifeLocation } : {}),
+    ...(typeof receipt.acquired === 'boolean' ? { acquired: receipt.acquired } : {}),
+    sceneFactId: receipt.sceneFactId,
+    settledAtTurn: receipt.settledAtTurn,
+    verificationHash: receipt.verificationHash,
+  };
+}
+
 function writeState(saveData: unknown, state: FastNarrativeDemoAdjudicationState): void {
   const root = asRecord(saveData);
   const marker = asRecord(root?.系统?.扩展?.[QINGYU_OPENING_PLAYTEST_EXTENSION_KEY]);
   if (!marker) throw new Error('清羽 Demo marker 不存在，不能写入判定回执');
-  marker.adjudication = state;
+  marker.adjudication = {
+    version: 1,
+    sceneFacts: state.sceneFacts.map(fact => ({
+      ...fact,
+      source: canonicalKnifeSource(fact.source) === LEGACY_KNIFE_SOURCE
+        ? LEGACY_KNIFE_SOURCE
+        : FAST_NARRATIVE_DEMO_KNIFE_SOURCE,
+    })),
+    actionReceipts: state.actionReceipts.map(persistReceipt),
+    knife: state.knife
+      ? {
+        itemName: '短刀' as const,
+        acquired: state.knife.acquired,
+        lastJudgementId: state.knife.lastJudgementId,
+      }
+      : null,
+    terminalBoundaries: state.terminalBoundaries,
+  };
 }
 
 export function readFastNarrativeDemoAdjudicationView(
@@ -242,9 +398,9 @@ export function readFastNarrativeDemoAdjudicationView(
   if (!receipt || !fact || !isIntactSceneReceipt(fact, knife, receipt)) return null;
   return {
     itemName: '短刀',
+    source: FAST_NARRATIVE_DEMO_KNIFE_SOURCE,
     sourceText: fact.sourceText,
-    location: knife.location,
-    sceneHeld: knife.location === 'scene_held',
+    acquired: knife.acquired,
     judgementId: receipt.judgementId,
     processBoundary: FAST_NARRATIVE_DEMO_TERMINAL_PROJECTION,
   };
@@ -292,31 +448,34 @@ export function settleFastNarrativeDemoAdjudication(
     return { applied: false, reason: 'already_settled', view: readFastNarrativeDemoAdjudicationView(saveData) };
   }
 
-  const location = knifeLocationFor(resolution.outcome as JudgementOutcome);
+  const acquired = acquiredForFastNarrativeDemoOutcome(resolution.outcome);
+  if (acquired == null) {
+    return { applied: false, reason: 'unverified_resolution', view: readFastNarrativeDemoAdjudicationView(saveData) };
+  }
   if (!state.sceneFacts.some(fact => fact.id === FAST_NARRATIVE_DEMO_KNIFE_FACT_ID)) {
     state.sceneFacts.push({
       id: FAST_NARRATIVE_DEMO_KNIFE_FACT_ID,
       kind: 'grounded_scene_item',
       itemName: '短刀',
       quality: '凡品',
-      source: 'nearest_battlefield_corpse',
+      source: FAST_NARRATIVE_DEMO_KNIFE_SOURCE,
       sourceText: '最近的战场尸体僵硬的手指间原本握着一把凡品短刀。',
       establishedByJudgementId: resolution.id,
     });
   }
-  const actionReceipt: Omit<FastNarrativeDemoActionReceipt, 'verificationHash'> = {
+  const actionReceipt: Parameters<typeof hashNewActionReceipt>[0] = {
     judgementId: resolution.id,
     actionHash: resolution.actionHash,
     outcome: resolution.outcome as JudgementOutcome,
-    knifeLocation: location,
+    acquired,
     sceneFactId: FAST_NARRATIVE_DEMO_KNIFE_FACT_ID,
     settledAtTurn: resolution.resolvedAtTurn,
   };
   state.actionReceipts.push({
     ...actionReceipt,
-    verificationHash: hashActionReceipt(actionReceipt),
+    verificationHash: hashNewActionReceipt(actionReceipt),
   });
-  state.knife = { itemName: '短刀', location, lastJudgementId: resolution.id };
+  state.knife = { itemName: '短刀', acquired, lastJudgementId: resolution.id };
   if (!state.terminalBoundaries.some(boundary => boundary.eventId === FAST_NARRATIVE_DEMO_FIXED_TERMINAL_EVENT_ID)) {
     state.terminalBoundaries.push({
       eventId: FAST_NARRATIVE_DEMO_FIXED_TERMINAL_EVENT_ID,
@@ -336,6 +495,6 @@ export function fastNarrativeDemoShortKnifeFactor(
 ): JudgementFactor | null {
   if (!isFeatureEnabled(storage)) return null;
   const view = readFastNarrativeDemoAdjudicationView(saveData);
-  if (!view?.sceneHeld || !EXPLICIT_SHORT_KNIFE_USE_RE.test(normalizeText(actionText))) return null;
+  if (!view?.acquired || !EXPLICIT_SHORT_KNIFE_USE_RE.test(normalizeText(actionText))) return null;
   return { label: '现场物品·凡品短刀', value: 3, source: 'item' };
 }

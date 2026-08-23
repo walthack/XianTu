@@ -5,15 +5,16 @@ import { loadTs } from './loadTs.mjs';
 
 const DEMO_ACTION = '我猛地扑向最近的一具尸体，抢下他手里的短刀，然后借着草丛翻滚躲开射来的箭。';
 const OUTCOMES = [
-  ['perfect', 'scene_held'],
-  ['great_success', 'scene_held'],
-  ['success', 'scene_held'],
-  ['partial', 'on_ground'],
-  ['failure', 'at_corpse'],
-  ['critical_failure', 'at_corpse'],
+  ['perfect', true],
+  ['great_success', true],
+  ['success', true],
+  ['partial', false],
+  ['failure', false],
+  ['critical_failure', false],
 ];
 const ON_STORAGE = { getItem: key => (key === 'xiantu.fastNarrativeDemo.v1' ? 'true' : null) };
 const OFF_STORAGE = { getItem: () => null };
+const FACT_ID = 'qingyu-demo.scene.nearest-corpse-short-knife';
 
 async function fixture(outcome, options = {}) {
   const { hashJudgementAction } = await loadTs('../src/utils/judgementEngine.ts');
@@ -67,9 +68,60 @@ async function fixture(outcome, options = {}) {
   return { save, resolution };
 }
 
-test('六种判定结果映射为互斥的短刀现场终态，且不进入背包或改写任务账', async () => {
+async function legacyVerificationHash(receipt) {
+  const { hashJudgementAction } = await loadTs('../src/utils/judgementEngine.ts');
+  return hashJudgementAction([
+    'xiantu.fastNarrativeDemo.receipt.v1',
+    receipt.judgementId,
+    receipt.actionHash,
+    receipt.outcome,
+    receipt.knifeLocation,
+    receipt.sceneFactId,
+    String(receipt.settledAtTurn),
+  ].join('|'));
+}
+
+async function installLegacyKnifeState(save, resolution, knifeLocation) {
+  const verificationHash = await legacyVerificationHash({
+    judgementId: resolution.id,
+    actionHash: resolution.actionHash,
+    outcome: resolution.outcome,
+    knifeLocation,
+    sceneFactId: FACT_ID,
+    settledAtTurn: resolution.resolvedAtTurn,
+  });
+  save.系统.扩展.清羽记开局.adjudication = {
+    version: 1,
+    sceneFacts: [{
+      id: FACT_ID,
+      kind: 'grounded_scene_item',
+      itemName: '短刀',
+      quality: '凡品',
+      source: 'nearest_battlefield_corpse',
+      sourceText: '最近的战场尸体僵硬的手指间原本握着一把凡品短刀。',
+      establishedByJudgementId: resolution.id,
+    }],
+    actionReceipts: [{
+      judgementId: resolution.id,
+      actionHash: resolution.actionHash,
+      outcome: resolution.outcome,
+      knifeLocation,
+      sceneFactId: FACT_ID,
+      settledAtTurn: resolution.resolvedAtTurn,
+      verificationHash,
+    }],
+    knife: {
+      itemName: '短刀',
+      location: knifeLocation,
+      lastJudgementId: resolution.id,
+    },
+    terminalBoundaries: [{ eventId: 'lcq.event.s01_02', policy: 'fixed_terminal' }],
+  };
+}
+
+test('六种判定结果映射为 acquired，且不进入背包或改写任务账', async () => {
   const demo = await loadTs('../src/modules/scenarioMods/fastNarrativeDemoAdjudication.ts');
-  for (const [outcome, location] of OUTCOMES) {
+  for (const [outcome, acquired] of OUTCOMES) {
     const { save, resolution } = await fixture(outcome);
     const backpackBefore = structuredClone(save.角色.背包);
     const runtimeBefore = structuredClone(save.世界.状态.剧本模组);
@@ -77,19 +129,25 @@ test('六种判定结果映射为互斥的短刀现场终态，且不进入背�
     const settled = demo.settleFastNarrativeDemoAdjudication(save, resolution, { storage: ON_STORAGE });
 
     assert.equal(settled.applied, true, outcome);
-    assert.equal(settled.view.location, location, outcome);
-    assert.equal(settled.view.sceneHeld, location === 'scene_held', outcome);
+    assert.equal(settled.view.acquired, acquired, outcome);
+    assert.equal(settled.view.source, 'nearby_battlefield_corpse', outcome);
     assert.equal(settled.view.judgementId, resolution.id, outcome);
     assert.equal(settled.view.processBoundary, '当前事件终局不可由本轮改写');
+    assert.equal('location' in settled.view, false, outcome);
+    assert.equal('sceneHeld' in settled.view, false, outcome);
     assert.equal(JSON.stringify(settled.view).includes('段强'), false);
     assert.deepEqual(save.角色.背包, backpackBefore, `${outcome} 不得写入正式背包`);
     assert.deepEqual(save.世界.状态.剧本模组, runtimeBefore, `${outcome} 不得改任务 flag/完成状态`);
     const state = save.系统.扩展.清羽记开局.adjudication;
     assert.equal(state.sceneFacts.length, 1);
+    assert.equal(state.sceneFacts[0].source, 'nearby_battlefield_corpse');
     assert.equal(state.actionReceipts.length, 1);
     assert.equal(state.actionReceipts[0].judgementId, resolution.id);
+    assert.equal(state.actionReceipts[0].acquired, acquired, outcome);
+    assert.equal('knifeLocation' in state.actionReceipts[0], false, outcome);
     assert.match(state.actionReceipts[0].verificationHash, /^[0-9a-z]+$/);
-    assert.equal(state.knife.location, location);
+    assert.equal(state.knife.acquired, acquired, outcome);
+    assert.equal('location' in state.knife, false, outcome);
   }
 });
 
@@ -149,7 +207,7 @@ test('非 Demo、非 stage_01、未匹配动作或未落账 resolution 一律 fa
   assert.equal(unverifiedSave.系统.扩展.清羽记开局.adjudication, undefined);
 });
 
-test('短刀 item factor 只在现场持有且本轮明确使用时出现', async () => {
+test('短刀 item factor 只在 acquired=true 且本轮明确使用时出现', async () => {
   const demo = await loadTs('../src/modules/scenarioMods/fastNarrativeDemoAdjudication.ts');
 
   const held = await fixture('success');
@@ -167,7 +225,7 @@ test('短刀 item factor 只在现场持有且本轮明确使用时出现', asyn
   assert.equal(demo.fastNarrativeDemoShortKnifeFactor(none.save, '我用短刀格挡', ON_STORAGE), null);
 });
 
-test('总开关关闭时同一 scene_held 存档不授予短刀因子且不写入', async () => {
+test('总开关关闭时同一 acquired 存档不授予短刀因子且不写入', async () => {
   const demo = await loadTs('../src/modules/scenarioMods/fastNarrativeDemoAdjudication.ts');
   const { save, resolution } = await fixture('success');
   assert.equal(demo.settleFastNarrativeDemoAdjudication(save, resolution, { storage: OFF_STORAGE }).reason, 'feature_disabled');
@@ -192,7 +250,7 @@ test('合法短刀回执不因 recent 滚动窗口过期而失效，篡改摘要
   const { save, resolution } = await fixture('success');
   const settled = demo.settleFastNarrativeDemoAdjudication(save, resolution, { storage: ON_STORAGE });
   assert.equal(settled.applied, true);
-  assert.equal(settled.view.sceneHeld, true);
+  assert.equal(settled.view.acquired, true);
 
   save.系统.扩展.判定.recent = [
     ...save.系统.扩展.判定.recent,
@@ -208,7 +266,7 @@ test('合法短刀回执不因 recent 滚动窗口过期而失效，篡改摘要
   assert.equal(recent.length, 20);
 
   const view = demo.readFastNarrativeDemoAdjudicationView(save);
-  assert.equal(view.sceneHeld, true);
+  assert.equal(view.acquired, true);
   assert.equal(view.judgementId, resolution.id);
   assert.deepEqual(demo.fastNarrativeDemoShortKnifeFactor(save, '我用短刀格挡袭来的兵刃', ON_STORAGE), {
     label: '现场物品·凡品短刀', value: 3, source: 'item',
@@ -224,8 +282,32 @@ test('合法短刀回执不因 recent 滚动窗口过期而失效，篡改摘要
   assert.equal(demo.readFastNarrativeDemoAdjudicationView(tamperedOutcome), null);
   assert.equal(demo.fastNarrativeDemoShortKnifeFactor(tamperedOutcome, '我用短刀格挡袭来的兵刃', ON_STORAGE), null);
 
-  const tamperedLocation = structuredClone(save);
-  tamperedLocation.系统.扩展.清羽记开局.adjudication.actionReceipts[0].knifeLocation = 'at_corpse';
-  assert.equal(demo.readFastNarrativeDemoAdjudicationView(tamperedLocation), null);
-  assert.equal(demo.fastNarrativeDemoShortKnifeFactor(tamperedLocation, '我用短刀格挡袭来的兵刃', ON_STORAGE), null);
+  const tamperedAcquired = structuredClone(save);
+  tamperedAcquired.系统.扩展.清羽记开局.adjudication.actionReceipts[0].acquired = false;
+  assert.equal(demo.readFastNarrativeDemoAdjudicationView(tamperedAcquired), null);
+  assert.equal(demo.fastNarrativeDemoShortKnifeFactor(tamperedAcquired, '我用短刀格挡袭来的兵刃', ON_STORAGE), null);
+});
+
+test('旧 scene_held/on_ground/at_corpse 读取迁移为 acquired，不要求写回位置', async () => {
+  const demo = await loadTs('../src/modules/scenarioMods/fastNarrativeDemoAdjudication.ts');
+  const cases = [
+    ['success', 'scene_held', true],
+    ['partial', 'on_ground', false],
+    ['failure', 'at_corpse', false],
+  ];
+  for (const [outcome, location, acquired] of cases) {
+    const { save, resolution } = await fixture(outcome);
+    await installLegacyKnifeState(save, resolution, location);
+    const before = JSON.stringify(save.系统.扩展.清羽记开局.adjudication);
+    const view = demo.readFastNarrativeDemoAdjudicationView(save);
+    assert.equal(view.acquired, acquired, location);
+    assert.equal(view.source, 'nearby_battlefield_corpse', location);
+    assert.equal('location' in view, false, location);
+    assert.equal(JSON.stringify(save.系统.扩展.清羽记开局.adjudication), before, location);
+    assert.equal(
+      demo.fastNarrativeDemoShortKnifeFactor(save, '我用短刀格挡袭来的兵刃', ON_STORAGE) != null,
+      acquired,
+      location,
+    );
+  }
 });
