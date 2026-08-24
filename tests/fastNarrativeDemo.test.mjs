@@ -683,6 +683,9 @@ test('qingyu demo causal actions need dice and arm a pending judgement', async (
     '烧毁客栈',
     '宣布王哲死亡',
     '永久增加灵性',
+    '宰了段强',
+    '毁掉那面木牌',
+    '把短刀据为己有',
   ];
   for (const playerAction of cases) {
     const route = demo.routeFastNarrativeDemo(planInput(save, resolution, {
