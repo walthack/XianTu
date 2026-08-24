@@ -25,7 +25,14 @@ import {
   type WuyuanOpenWorldSelection,
 } from './wuyuanOpenWorldSlice';
 import { stripModelThinking } from '@/utils/jsonExtract';
-import { describeJudgementEffect, getJudgementState, type JudgementResolution } from '@/utils/judgementEngine';
+import {
+  createJudgementProposal,
+  describeJudgementEffect,
+  getJudgementState,
+  persistPendingJudgement,
+  type JudgementProposal,
+  type JudgementResolution,
+} from '@/utils/judgementEngine';
 import { buildLocalJudgementPreflight } from '@/utils/judgementPreflight';
 import type { GM_Response } from '@/types/AIGameMaster';
 import type { SaveData } from '@/types/game';
@@ -104,7 +111,7 @@ export interface PlanFastNarrativeDemoInput {
 export type FastNarrativeDemoRoute =
   | { outcome: 'legacy' }
   | { outcome: 'fast'; plan: FastNarrativePlan }
-  | { outcome: 'need_dice'; text: string }
+  | { outcome: 'need_dice'; text: string; proposal: JudgementProposal }
   | { outcome: 'clarify'; text: string }
   | { outcome: 'local'; text: string };
 
@@ -119,7 +126,7 @@ export const FAST_NARRATIVE_BAD_RECEIPT_TEXT =
 export const FAST_NARRATIVE_MULTI_SELECTION_TEXT =
   '同时选了多种行动。请只选一件：事件、机会或五原行动。';
 
-const DEMO_CAUSAL_RE = /收入背包|放进背包|放入背包|交给.{0,8}(?:短刀|玉佩|锦囊|刀|剑)|传授功法|传功|永久获得|杀死|弄死|救活|改写命运/;
+const DEMO_CAUSAL_RE = /(?:收入|放进|放入)背包|拿走|取走|捡起|拾起|丢掉|扔掉|丢弃|赠予|送给|交给|传授|传功|学会|领悟|掌握|习得|真经|秘籍|心法|神功|功法|永久获得|永久增加|增加.{0,4}(?:灵性|根骨|悟性|气运|寿命)|杀死|弄死|救活|宣布.{0,12}(?:死亡|死了)|已经死了|烧毁|放火|拆毁|改写命运/;
 
 function cloneJson<T>(value: T): T {
   return JSON.parse(JSON.stringify(value)) as T;
@@ -162,8 +169,45 @@ function isBlankFastNarrativeAction(text: string): boolean {
 }
 
 function needsDemoDice(actionText: string, saveData: SaveData, storage?: StorageLike): boolean {
-  if (buildLocalJudgementPreflight(actionText, saveData, 0, storage)) return true;
-  return DEMO_CAUSAL_RE.test(actionText);
+  return !!demoCausalProposal(actionText, saveData, storage);
+}
+
+function demoCausalProposal(
+  actionText: string,
+  saveData: SaveData,
+  storage?: StorageLike,
+): JudgementProposal | null {
+  const preflight = buildLocalJudgementPreflight(actionText, saveData, 0, storage);
+  if (preflight) return preflight;
+  if (!DEMO_CAUSAL_RE.test(actionText)) return null;
+  return createJudgementProposal({
+    actionText,
+    kind: 'explore',
+    whyNow: '此行动可能改变能力、物品、人物生死或世界因果，须在叙事前确认。',
+    difficulty: { band: 'normal', value: 15 },
+    factors: [],
+    stakes: {
+      success: '按当前做法取得直接进展。',
+      partial: '达成部分目标，但会留下代价或余波。',
+      failure: '行动受阻，局势可能恶化。',
+    },
+    canonPolicy: 'route_process_only',
+    createdAtTurn: 0,
+  });
+}
+
+export function armFastNarrativeNeedDice(
+  saveData: SaveData,
+  actionText: string,
+  storage?: StorageLike,
+): JudgementProposal | null {
+  const proposal = demoCausalProposal(extractRawPlayerAction(actionText), saveData, storage);
+  if (!proposal) return null;
+  try {
+    return persistPendingJudgement(saveData, proposal);
+  } catch {
+    return getJudgementState(saveData).pending || proposal;
+  }
 }
 
 function verifiedJudgementFromInput(
@@ -689,8 +733,11 @@ export function routeFastNarrativeDemo(input: PlanFastNarrativeDemoInput): FastN
   if (plan) return { outcome: 'fast', plan };
 
   if (selectedCount === 1) return { outcome: 'clarify', text: FAST_NARRATIVE_STALE_SELECTION_TEXT };
-  if (needsDemoDice(action, saveData, input.storage) && !verifiedJudgementFromInput(input, saveData)) {
-    return { outcome: 'need_dice', text: FAST_NARRATIVE_NEED_DICE_TEXT };
+  if (!verifiedJudgementFromInput(input, saveData)) {
+    const proposal = demoCausalProposal(action, saveData, input.storage);
+    if (proposal) {
+      return { outcome: 'need_dice', text: FAST_NARRATIVE_NEED_DICE_TEXT, proposal };
+    }
   }
   return {
     outcome: 'local',

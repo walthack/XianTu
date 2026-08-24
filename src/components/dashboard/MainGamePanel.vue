@@ -1916,6 +1916,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
 
 
       // 检查角色死亡状态（在状态更新后）
+      refreshPendingJudgement();
       const currentSaveData = gameStateStore.toSaveData();
       if (currentSaveData) {
         // 检查气血

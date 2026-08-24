@@ -45,6 +45,7 @@ import {
 import {
   FAST_NARRATIVE_DEADLINE_MS,
   FAST_NARRATIVE_GENERATE_OPTIONS,
+  armFastNarrativeNeedDice,
   finalizeFastNarrativeText,
   isFastNarrativeDemoScope,
   routeFastNarrativeDemo,
@@ -580,6 +581,10 @@ class AIBidirectionalSystemClass {
     if (!isFastNarrativeDemoScope(routeInput)) return null;
     const route = routeFastNarrativeDemo(routeInput);
     if (route.outcome === 'legacy') return null;
+    if (route.outcome === 'need_dice') {
+      armFastNarrativeNeedDice(saveData, userMessage);
+      return wrapFastNarrativeGmResponse(route.text);
+    }
     if (route.outcome !== 'fast') {
       return wrapFastNarrativeGmResponse(route.text);
     }

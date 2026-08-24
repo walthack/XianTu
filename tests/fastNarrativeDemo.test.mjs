@@ -407,6 +407,8 @@ test('source path takes one text generate call and default-off keeps the legacy 
   assert.ok(processFn.includes('if (!fastNarrativeResponse)'));
   assert.match(tryFn, /routeFastNarrativeDemo/);
   assert.match(tryFn, /isFastNarrativeDemoScope/);
+  assert.match(tryFn, /armFastNarrativeNeedDice/);
+  assert.match(tryFn, /if \(route\.outcome === 'need_dice'\)/);
   assert.match(tryFn, /if \(route\.outcome !== 'fast'\)/);
   assert.match(tryFn, /FAST_NARRATIVE_GENERATE_OPTIONS/);
   assert.match(tryFn, /FAST_NARRATIVE_DEADLINE_MS/);
@@ -666,4 +668,33 @@ test('qingyu demo routes never silently fall back to legacy', async () => {
   const sceneFallback = demo.buildFastNarrativeFallback(look.plan.packet);
   assert.match(sceneFallback, /这里是什么地方/);
   assert.doesNotMatch(sceneFallback, /短刀|尸体|草丛/);
+});
+
+test('qingyu demo causal actions need dice and arm a pending judgement', async () => {
+  const demo = await loadDemo();
+  const { save, resolution } = await eligibleFixture();
+  const { getJudgementState } = await loadTs('../src/utils/judgementEngine.ts');
+  const cases = [
+    '学会九阴真经',
+    '拿走玉佩',
+    '扔掉短刀',
+    '烧毁客栈',
+    '宣布王哲死亡',
+    '永久增加灵性',
+  ];
+  for (const playerAction of cases) {
+    const route = demo.routeFastNarrativeDemo(planInput(save, resolution, {
+      judgementResolution: undefined,
+      playerAction,
+    }));
+    assert.equal(route.outcome, 'need_dice', playerAction);
+    assert.ok(route.proposal, playerAction);
+  }
+
+  const armed = JSON.parse(JSON.stringify(save));
+  armed.系统 = armed.系统 || {};
+  const pending = demo.armFastNarrativeNeedDice(armed, '拿走玉佩');
+  assert.ok(pending);
+  assert.equal(getJudgementState(armed).pending?.id, pending.id);
+  assert.match(getJudgementState(armed).pending?.actionText || '', /拿走玉佩/);
 });
