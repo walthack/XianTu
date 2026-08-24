@@ -634,7 +634,8 @@ test('qingyu demo routes never silently fall back to legacy', async () => {
     judgementResolution: undefined,
     playerAction: '我把这块玉佩放进背包',
   }));
-  assert.equal(bag.outcome, 'need_dice');
+  assert.equal(bag.outcome, 'clarify');
+  assert.equal(bag.holdAction, '我把这块玉佩放进背包');
 
   const blank = demo.routeFastNarrativeDemo(planInput(save, resolution, {
     judgementResolution: undefined,
@@ -676,7 +677,7 @@ test('qingyu demo causal actions need dice and arm a pending judgement', async (
   const demo = await loadDemo();
   const { save, resolution } = await eligibleFixture();
   const { getJudgementState } = await loadTs('../src/utils/judgementEngine.ts');
-  const cases = [
+  const unknown = [
     '学会九阴真经',
     '拿走玉佩',
     '扔掉短刀',
@@ -687,19 +688,36 @@ test('qingyu demo causal actions need dice and arm a pending judgement', async (
     '毁掉那面木牌',
     '把短刀据为己有',
   ];
-  for (const playerAction of cases) {
+  for (const playerAction of unknown) {
     const route = demo.routeFastNarrativeDemo(planInput(save, resolution, {
       judgementResolution: undefined,
       playerAction,
     }));
-    assert.equal(route.outcome, 'need_dice', playerAction);
-    assert.ok(route.proposal, playerAction);
+    assert.equal(route.outcome, 'clarify', playerAction);
+    assert.equal(route.holdAction, playerAction, playerAction);
   }
+
+  const held = JSON.parse(JSON.stringify(save));
+  demo.writePendingFastIntent(held, '宰了段强');
+  const confirmed = demo.routeFastNarrativeDemo(planInput(held, resolution, {
+    judgementResolution: undefined,
+    playerAction: demo.FAST_NARRATIVE_CONFIRM_RISK_TEXT,
+  }));
+  assert.equal(confirmed.outcome, 'need_dice');
+  assert.match(confirmed.proposal?.actionText || '', /宰了段强/);
+
+  const lookHeld = JSON.parse(JSON.stringify(save));
+  demo.writePendingFastIntent(lookHeld, '这里是什么地方');
+  const confirmedSafe = demo.routeFastNarrativeDemo(planInput(lookHeld, resolution, {
+    judgementResolution: undefined,
+    playerAction: demo.FAST_NARRATIVE_CONFIRM_SAFE_TEXT,
+  }));
+  assert.equal(confirmedSafe.outcome, 'fast');
+  assert.equal(confirmedSafe.plan.packet.kind, 'scene');
 
   const armed = JSON.parse(JSON.stringify(save));
   armed.系统 = armed.系统 || {};
-  const pending = demo.armFastNarrativeNeedDice(armed, '拿走玉佩');
+  const pending = demo.armFastNarrativeNeedDice(armed, A_B_ACTION);
   assert.ok(pending);
   assert.equal(getJudgementState(armed).pending?.id, pending.id);
-  assert.match(getJudgementState(armed).pending?.actionText || '', /拿走玉佩/);
 });

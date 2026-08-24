@@ -46,10 +46,12 @@ import {
   FAST_NARRATIVE_DEADLINE_MS,
   FAST_NARRATIVE_GENERATE_OPTIONS,
   armFastNarrativeNeedDice,
+  clearPendingFastIntent,
   finalizeFastNarrativeText,
   isFastNarrativeDemoScope,
   routeFastNarrativeDemo,
   wrapFastNarrativeGmResponse,
+  writePendingFastIntent,
 } from '@/modules/scenarioMods/fastNarrativeDemo';
 import {
   settleWuyuanOpenWorldSelection,
@@ -63,7 +65,7 @@ import {
   extractLegacyJudgementMarkers,
   stripLegacyJudgementMarkers,
 } from '@/utils/judgementRules';
-import type { JudgementResolution } from '@/utils/judgementEngine';
+import { persistPendingJudgement, type JudgementResolution } from '@/utils/judgementEngine';
 import { reconcileNarrativeState } from '@/utils/narrativeStateReconciler';
 import { runProgressAudit, shouldRunAudit } from '@/services/progressAuditService';
 import { runDeterministicBijiReconcile, runDeterministicHighlightReconcile, runDeterministicXieyiReconcile, runEventReconcile, shouldRunReconcile, evidenceLikely, buildChainCandidates } from '@/services/eventReconcileService';
@@ -582,12 +584,26 @@ class AIBidirectionalSystemClass {
     const route = routeFastNarrativeDemo(routeInput);
     if (route.outcome === 'legacy') return null;
     if (route.outcome === 'need_dice') {
-      armFastNarrativeNeedDice(saveData, userMessage);
+      clearPendingFastIntent(saveData);
+      if (route.proposal) {
+        try {
+          persistPendingJudgement(saveData, route.proposal);
+        } catch {
+          armFastNarrativeNeedDice(saveData, route.proposal.actionText);
+        }
+      } else {
+        armFastNarrativeNeedDice(saveData, userMessage);
+      }
       return wrapFastNarrativeGmResponse(route.text);
+    }
+    if (route.outcome === 'clarify') {
+      if (route.holdAction) writePendingFastIntent(saveData, route.holdAction);
+      return wrapFastNarrativeGmResponse(route.text, route.options || []);
     }
     if (route.outcome !== 'fast') {
       return wrapFastNarrativeGmResponse(route.text);
     }
+    clearPendingFastIntent(saveData);
     const plan = route.plan;
     options?.onProgressUpdate?.('实验快路：写现场正文…');
     const { aiService } = await import('@/services/aiService');

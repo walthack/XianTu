@@ -112,21 +112,21 @@ export type FastNarrativeDemoRoute =
   | { outcome: 'legacy' }
   | { outcome: 'fast'; plan: FastNarrativePlan }
   | { outcome: 'need_dice'; text: string; proposal: JudgementProposal }
-  | { outcome: 'clarify'; text: string }
+  | { outcome: 'clarify'; text: string; holdAction?: string; options?: string[] }
   | { outcome: 'local'; text: string };
 
 export const FAST_NARRATIVE_NEED_DICE_TEXT =
   '此行动会改变能力、物品、人物生死或世界因果。请先确认并掷骰。';
+export const FAST_NARRATIVE_CONFIRM_SAFE_TEXT = '只是查看或询问';
+export const FAST_NARRATIVE_CONFIRM_RISK_TEXT = '这是一次有后果的行动';
 export const FAST_NARRATIVE_CLARIFY_TEXT =
-  '这句话还不够判断你要做什么。请说得更具体一些：是查看、询问、移动，还是一次有风险的行动？';
+  '还不能判断这是无后果的查看询问，还是会改物品、能力或生死的行动。请选：只是查看或询问 / 这是一次有后果的行动。';
 export const FAST_NARRATIVE_STALE_SELECTION_TEXT =
   '当前选择已过期或无法按本地合同结算。请重新选一次眼前行动。';
 export const FAST_NARRATIVE_BAD_RECEIPT_TEXT =
   '判定回执不一致或尚未结算。请重新确认掷骰。';
 export const FAST_NARRATIVE_MULTI_SELECTION_TEXT =
   '同时选了多种行动。请只选一件：事件、机会或五原行动。';
-
-const DEMO_CAUSAL_RE = /(?:收入|放进|放入)背包|拿走|取走|捡起|拾起|丢掉|扔掉|丢弃|赠予|送给|交给|据为己有|传授|传功|学会|领悟|掌握|习得|真经|秘籍|心法|神功|功法|永久获得|永久增加|增加.{0,4}(?:灵性|根骨|悟性|气运|寿命)|杀死|杀了|弄死|宰了|宰掉|宰死|干掉|勒死|毒死|烧死|救活|宣布.{0,12}(?:死亡|死了)|已经死了|烧毁|放火|拆毁|毁掉|撕毁|砸毁|改写命运/;
 
 function cloneJson<T>(value: T): T {
   return JSON.parse(JSON.stringify(value)) as T;
@@ -165,21 +165,68 @@ function isFastNarrativeFailClosed(saveData: SaveData): boolean {
 }
 
 function isBlankFastNarrativeAction(text: string): boolean {
-  return extractRawPlayerAction(text).replace(/[。！？!?…\s]/g, '').length < 2;
+  return compactFastAction(text).length < 2;
+}
+
+function compactFastAction(text: string): string {
+  return extractRawPlayerAction(text).replace(/[。！？!?…\s]+/g, '');
+}
+
+function isSafeFastNarrativeAction(text: string): boolean {
+  const t = compactFastAction(text);
+  if (!t) return false;
+  if (/^(?:我想?)?(?:问一下|打听一下)?(?:这里|这儿|眼前|附近)?(?:是什么地方|是哪儿|是哪里|怎么了|发生了什么|什么情况)$/.test(t)) {
+    return true;
+  }
+  if (/^(?:我)?(?:先)?(?:和|跟).{1,8}(?:闲聊|打招呼|说说话|寒暄)(?:几句|近况|一下)?$/.test(t)) {
+    return true;
+  }
+  if (/^(?:我)?(?:先)?(?:四处|四周)?(?:看看|听听|观察|打量|张望|环顾|看|望|听|等|站着|待着)(?:一下|一看|一听)?(?:四周|周围|眼前|附近|风景|情况)?$/.test(t)) {
+    return true;
+  }
+  return false;
+}
+
+function isFastConfirmSafe(text: string): boolean {
+  return compactFastAction(text) === compactFastAction(FAST_NARRATIVE_CONFIRM_SAFE_TEXT);
+}
+
+function isFastConfirmRisk(text: string): boolean {
+  return compactFastAction(text) === compactFastAction(FAST_NARRATIVE_CONFIRM_RISK_TEXT);
+}
+
+function demoMarker(saveData: SaveData): Record<string, any> | null {
+  return asRecord(asRecord(asRecord((saveData as any)?.系统)?.扩展)?.清羽记开局);
+}
+
+export function writePendingFastIntent(saveData: SaveData, actionText: string): void {
+  const marker = demoMarker(saveData);
+  if (!marker) return;
+  marker.pendingFastIntent = { actionText: extractRawPlayerAction(actionText) };
+}
+
+export function readPendingFastIntent(saveData: SaveData): string {
+  return readText(demoMarker(saveData)?.pendingFastIntent?.actionText);
+}
+
+export function clearPendingFastIntent(saveData: SaveData): void {
+  const marker = demoMarker(saveData);
+  if (marker && 'pendingFastIntent' in marker) delete marker.pendingFastIntent;
 }
 
 function needsDemoDice(actionText: string, saveData: SaveData, storage?: StorageLike): boolean {
-  return !!demoCausalProposal(actionText, saveData, storage);
+  return !!buildLocalJudgementPreflight(actionText, saveData, 0, storage);
 }
 
 function demoCausalProposal(
   actionText: string,
   saveData: SaveData,
   storage?: StorageLike,
+  forceGeneric = false,
 ): JudgementProposal | null {
   const preflight = buildLocalJudgementPreflight(actionText, saveData, 0, storage);
   if (preflight) return preflight;
-  if (!DEMO_CAUSAL_RE.test(actionText)) return null;
+  if (!forceGeneric) return null;
   return createJudgementProposal({
     actionText,
     kind: 'explore',
@@ -700,7 +747,11 @@ export function planFastNarrativeDemo(input: PlanFastNarrativeDemoInput): FastNa
     if (!packet.resolution?.outcome) return null;
   } else {
     const action = extractRawPlayerAction(input.playerAction);
-    if (isBlankFastNarrativeAction(action) || needsDemoDice(action, saveData, input.storage)) return null;
+    if (
+      isBlankFastNarrativeAction(action)
+      || needsDemoDice(action, saveData, input.storage)
+      || !isSafeFastNarrativeAction(action)
+    ) return null;
     packet = buildScenePacket(saveData, input.playerAction);
   }
 
@@ -731,6 +782,24 @@ export function routeFastNarrativeDemo(input: PlanFastNarrativeDemoInput): FastN
     return { outcome: 'clarify', text: FAST_NARRATIVE_CLARIFY_TEXT };
   }
 
+  if (selectedCount === 0 && (isFastConfirmSafe(action) || isFastConfirmRisk(action))) {
+    const held = readPendingFastIntent(saveData);
+    if (!held) {
+      return { outcome: 'clarify', text: FAST_NARRATIVE_CLARIFY_TEXT };
+    }
+    if (isFastConfirmSafe(action)) {
+      const plan = planFastNarrativeDemo({ ...input, playerAction: held, judgementResolution: undefined });
+      if (plan) return { outcome: 'fast', plan };
+      return {
+        outcome: 'local',
+        text: buildFastNarrativeFallback(buildScenePacket(saveData, held)),
+      };
+    }
+    const proposal = demoCausalProposal(held, saveData, input.storage, true);
+    if (!proposal) return { outcome: 'clarify', text: FAST_NARRATIVE_CLARIFY_TEXT };
+    return { outcome: 'need_dice', text: FAST_NARRATIVE_NEED_DICE_TEXT, proposal };
+  }
+
   const plan = planFastNarrativeDemo(input);
   if (plan) return { outcome: 'fast', plan };
 
@@ -739,6 +808,14 @@ export function routeFastNarrativeDemo(input: PlanFastNarrativeDemoInput): FastN
     const proposal = demoCausalProposal(action, saveData, input.storage);
     if (proposal) {
       return { outcome: 'need_dice', text: FAST_NARRATIVE_NEED_DICE_TEXT, proposal };
+    }
+    if (!isSafeFastNarrativeAction(action)) {
+      return {
+        outcome: 'clarify',
+        text: FAST_NARRATIVE_CLARIFY_TEXT,
+        holdAction: action,
+        options: [FAST_NARRATIVE_CONFIRM_SAFE_TEXT, FAST_NARRATIVE_CONFIRM_RISK_TEXT],
+      };
     }
   }
   return {
@@ -913,11 +990,11 @@ export function finalizeFastNarrativeText(
   return text;
 }
 
-export function wrapFastNarrativeGmResponse(text: string): GM_Response {
+export function wrapFastNarrativeGmResponse(text: string, actionOptions: string[] = []): GM_Response {
   return {
     text,
     mid_term_memory: '',
     tavern_commands: [],
-    action_options: [],
+    action_options: actionOptions,
   };
 }
