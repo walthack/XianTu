@@ -19,7 +19,8 @@ if (!globalThis.localStorage || typeof globalThis.localStorage.getItem !== 'func
 const stageUrl = new URL('../src/modules/scenarioMods/builtins/data/lcq.stage_01.json', import.meta.url);
 const A_B_ACTION = '我猛地扑向最近的一具尸体，抢下他手里的短刀，然后借着草丛翻滚躲开射来的箭。';
 const ON_STORAGE = { getItem: key => (key === 'xiantu.fastNarrativeDemo.v1' ? 'true' : null) };
-const OFF_STORAGE = { getItem: () => null };
+const OFF_STORAGE = { getItem: key => (key === 'xiantu.fastNarrativeDemo.v1' ? 'false' : null) };
+const UNSET_STORAGE = { getItem: () => null };
 const OUTCOMES = ['critical_failure', 'failure', 'partial', 'success', 'great_success', 'perfect'];
 const EXPECTED_ACQUIRED = {
   perfect: true,
@@ -96,6 +97,7 @@ test('fast narrative demo is fail-closed by default and rejects ineligible turns
   const demo = await loadDemo();
   const { save, resolution } = await eligibleFixture();
 
+  assert.equal(demo.isFastNarrativeDemoEnabled(UNSET_STORAGE), true);
   assert.equal(demo.isFastNarrativeDemoEnabled(OFF_STORAGE), false);
   assert.equal(demo.isFastNarrativeDemoEnabled({ getItem: () => 'TRUE' }), false);
   assert.equal(demo.planFastNarrativeDemo(planInput(save, resolution, { storage: OFF_STORAGE })), null);

@@ -166,7 +166,7 @@
             <div class="setting-info">
               <label class="setting-name">{{ t('清羽快速叙事（实验）') }}</label>
               <span class="setting-desc">{{
-                t('仅用于“清羽记开局”至白湖脱身；开启后立即生效，建议新档全程保持同一状态')
+                t('仅用于“清羽记开局”至白湖脱身；默认开启，关闭后走旧路。建议新档全程保持同一状态')
               }}</span>
             </div>
             <div class="setting-control">
@@ -422,13 +422,15 @@ const { t, setLanguage, currentLanguage } = useI18n();
 const characterStore = useCharacterStore();
 const gameStateStore = useGameStateStore();
 const uiStore = useUIStore();
-const fastNarrativeDemoEnabled = ref(false);
+const fastNarrativeDemoEnabled = ref(true);
 
 const readFastNarrativeDemoSetting = () => {
   try {
-    return localStorage.getItem(FAST_NARRATIVE_DEMO_STORAGE_KEY) === 'true';
+    const raw = localStorage.getItem(FAST_NARRATIVE_DEMO_STORAGE_KEY);
+    if (raw == null || raw === '') return true;
+    return raw === 'true';
   } catch {
-    return false;
+    return true;
   }
 };
 
@@ -437,7 +439,7 @@ const persistFastNarrativeDemoSetting = (enabled: boolean, showToast = true) => 
     if (enabled) {
       localStorage.setItem(FAST_NARRATIVE_DEMO_STORAGE_KEY, 'true');
     } else {
-      localStorage.removeItem(FAST_NARRATIVE_DEMO_STORAGE_KEY);
+      localStorage.setItem(FAST_NARRATIVE_DEMO_STORAGE_KEY, 'false');
     }
     if (showToast) {
       toast.success(enabled ? '清羽快速叙事已开启' : '清羽快速叙事已关闭');
@@ -790,8 +792,8 @@ const resetSettings = () => {
     cancelText: '取消',
     onConfirm: () => {
       debug.log('设置面板', '开始重置设置');
-      fastNarrativeDemoEnabled.value = false;
-      persistFastNarrativeDemoSetting(false, false);
+      fastNarrativeDemoEnabled.value = true;
+      persistFastNarrativeDemoSetting(true, false);
       Object.assign(settings, {
         theme: 'auto',
         uiScale: 100,

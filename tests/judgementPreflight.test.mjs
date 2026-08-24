@@ -158,7 +158,7 @@ test('清羽现场短刀只凭已落账持有回执提供 item factor', async ()
   const demo = await loadTs('../src/modules/scenarioMods/fastNarrativeDemoAdjudication.ts');
   const { hashJudgementAction } = await loadTs('../src/utils/judgementEngine.ts');
   const ON_STORAGE = { getItem: key => (key === 'xiantu.fastNarrativeDemo.v1' ? 'true' : null) };
-  const OFF_STORAGE = { getItem: () => null };
+  const OFF_STORAGE = { getItem: key => (key === 'xiantu.fastNarrativeDemo.v1' ? 'false' : null) };
   const sourceAction = '我猛地扑向最近的一具尸体，抢下他手里的短刀，然后借着草丛翻滚躲开射来的箭。';
   const actionHash = hashJudgementAction(sourceAction);
   const judgement = {

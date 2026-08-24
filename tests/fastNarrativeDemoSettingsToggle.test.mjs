@@ -15,7 +15,8 @@ test('settings panel exposes the existing fast narrative demo flag without touch
   const script = compileScript(descriptor, { id: 'fast-narrative-settings-toggle' });
   assert.match(script.content, /FAST_NARRATIVE_DEMO_STORAGE_KEY/);
   assert.match(script.content, /localStorage\.setItem\(FAST_NARRATIVE_DEMO_STORAGE_KEY, 'true'\)/);
-  assert.match(script.content, /localStorage\.removeItem\(FAST_NARRATIVE_DEMO_STORAGE_KEY\)/);
+  assert.match(script.content, /localStorage\.setItem\(FAST_NARRATIVE_DEMO_STORAGE_KEY, 'false'\)/);
+  assert.match(script.content, /if \(raw == null \|\| raw === ''\) return true/);
 
   const template = compileTemplate({
     id: 'fast-narrative-settings-toggle',

@@ -103,9 +103,11 @@ export function isFastNarrativeDemoKnifeAction(actionText: string): boolean {
 function isFeatureEnabled(storage?: StorageLike): boolean {
   try {
     const source = storage ?? (typeof globalThis.localStorage === 'undefined' ? undefined : globalThis.localStorage);
-    return source?.getItem(FAST_NARRATIVE_DEMO_STORAGE_KEY) === 'true';
+    const raw = source?.getItem(FAST_NARRATIVE_DEMO_STORAGE_KEY);
+    if (raw == null || raw === '') return true;
+    return raw === 'true';
   } catch {
-    return false;
+    return true;
   }
 }
 
