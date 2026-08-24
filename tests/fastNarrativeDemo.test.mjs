@@ -407,6 +407,9 @@ test('source path takes one text generate call and default-off keeps the legacy 
   assert.ok(processFn.includes('tryFastNarrativeDemo'));
   assert.ok(processFn.indexOf('tryFastNarrativeDemo') < processFn.indexOf('createScenarioPromptState(v3'));
   assert.ok(processFn.includes('if (!fastNarrativeResponse)'));
+  assert.match(processFn, /isFastNarrativeHoldResponse/);
+  assert.ok(processFn.indexOf('isFastNarrativeHoldResponse') < processFn.indexOf('processGmResponse'));
+  assert.match(tryFn, /wrapFastNarrativeHoldResponse/);
   assert.match(tryFn, /routeFastNarrativeDemo/);
   assert.match(tryFn, /isFastNarrativeDemoScope/);
   assert.match(tryFn, /armFastNarrativeNeedDice/);
@@ -623,6 +626,18 @@ test('qingyu demo routes never silently fall back to legacy', async () => {
   }));
   assert.equal(chat.outcome, 'fast');
 
+  const where = demo.routeFastNarrativeDemo(planInput(save, resolution, {
+    judgementResolution: undefined,
+    playerAction: '我在哪儿',
+  }));
+  assert.equal(where.outcome, 'fast');
+
+  const compound = demo.routeFastNarrativeDemo(planInput(save, resolution, {
+    judgementResolution: undefined,
+    playerAction: '我跟段强料理了守卫再闲聊几句',
+  }));
+  assert.equal(compound.outcome, 'clarify');
+
   const risk = demo.routeFastNarrativeDemo(planInput(save, resolution, {
     judgementResolution: undefined,
     playerAction: A_B_ACTION,
@@ -720,4 +735,8 @@ test('qingyu demo causal actions need dice and arm a pending judgement', async (
   const pending = demo.armFastNarrativeNeedDice(armed, A_B_ACTION);
   assert.ok(pending);
   assert.equal(getJudgementState(armed).pending?.id, pending.id);
+
+  const hold = demo.wrapFastNarrativeHoldResponse('clarify');
+  assert.equal(demo.isFastNarrativeHoldResponse(hold), true);
+  assert.equal(hold.tavern_commands.length, 0);
 });

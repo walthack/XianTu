@@ -49,8 +49,10 @@ import {
   clearPendingFastIntent,
   finalizeFastNarrativeText,
   isFastNarrativeDemoScope,
+  isFastNarrativeHoldResponse,
   routeFastNarrativeDemo,
   wrapFastNarrativeGmResponse,
+  wrapFastNarrativeHoldResponse,
   writePendingFastIntent,
 } from '@/modules/scenarioMods/fastNarrativeDemo';
 import {
@@ -594,13 +596,15 @@ class AIBidirectionalSystemClass {
       } else {
         armFastNarrativeNeedDice(saveData, userMessage);
       }
-      return wrapFastNarrativeGmResponse(route.text);
+      return wrapFastNarrativeHoldResponse('need_dice');
     }
     if (route.outcome === 'clarify') {
       if (route.holdAction) writePendingFastIntent(saveData, route.holdAction);
-      return wrapFastNarrativeGmResponse(route.text, route.options || []);
+      else clearPendingFastIntent(saveData);
+      return wrapFastNarrativeHoldResponse('clarify');
     }
     if (route.outcome !== 'fast') {
+      clearPendingFastIntent(saveData);
       return wrapFastNarrativeGmResponse(route.text);
     }
     clearPendingFastIntent(saveData);
@@ -719,6 +723,10 @@ class AIBidirectionalSystemClass {
       );
       if (fastNarrativeResponse) {
         gmResponse = fastNarrativeResponse;
+      }
+      if (isFastNarrativeHoldResponse(fastNarrativeResponse)) {
+        gameStateStore.loadFromSaveData(saveData);
+        return fastNarrativeResponse;
       }
       if (!fastNarrativeResponse) {
       const v3 = isSaveDataV3(saveData) ? (saveData as any) : migrateSaveDataToLatest(saveData).migrated;

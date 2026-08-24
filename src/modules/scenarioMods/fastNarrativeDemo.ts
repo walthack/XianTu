@@ -175,13 +175,14 @@ function compactFastAction(text: string): string {
 function isSafeFastNarrativeAction(text: string): boolean {
   const t = compactFastAction(text);
   if (!t) return false;
+  if (/^(?:我)?(?:现在)?(?:在哪儿|在哪里|在哪)$/.test(t)) return true;
   if (/^(?:我想?)?(?:问一下|打听一下)?(?:这里|这儿|眼前|附近)?(?:是什么地方|是哪儿|是哪里|怎么了|发生了什么|什么情况)$/.test(t)) {
     return true;
   }
-  if (/^(?:我)?(?:先)?(?:和|跟).{1,8}(?:闲聊|打招呼|说说话|寒暄)(?:几句|近况|一下)?$/.test(t)) {
+  if (/^(?:我)?(?:先)?(?:和|跟)(?:店家|摊主|路人)?(?:闲聊|打招呼|说说话|寒暄)(?:几句|近况|一下)?$/.test(t)) {
     return true;
   }
-  if (/^(?:我)?(?:先)?(?:四处|四周)?(?:看看|听听|观察|打量|张望|环顾|看|望|听|等|站着|待着)(?:一下|一看|一听)?(?:四周|周围|眼前|附近|风景|情况)?$/.test(t)) {
+  if (/^(?:我)?(?:先)?(?:四处|四周)?(?:看看|听听|观察|打量|张望|环顾)(?:一下|一看|一听)?(?:四周|周围|眼前|附近|风景|情况)?$/.test(t)) {
     return true;
   }
   return false;
@@ -997,4 +998,19 @@ export function wrapFastNarrativeGmResponse(text: string, actionOptions: string[
     tavern_commands: [],
     action_options: actionOptions,
   };
+}
+
+export function wrapFastNarrativeHoldResponse(kind: 'clarify' | 'need_dice'): GM_Response {
+  return {
+    text: ' ',
+    mid_term_memory: ' ',
+    tavern_commands: [],
+    action_options: [],
+    fastNarrativeHold: true,
+    fastNarrativeHoldKind: kind,
+  } as GM_Response;
+}
+
+export function isFastNarrativeHoldResponse(response: unknown): boolean {
+  return Boolean(response && typeof response === 'object' && (response as { fastNarrativeHold?: unknown }).fastNarrativeHold === true);
 }
