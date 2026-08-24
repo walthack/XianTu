@@ -101,6 +101,12 @@ test('fast narrative demo is fail-closed by default and rejects ineligible turns
   assert.equal(demo.planFastNarrativeDemo(planInput(save, resolution, { storage: OFF_STORAGE })), null);
   assert.equal(demo.planFastNarrativeDemo(planInput(save, resolution, { aborted: true })), null);
   assert.equal(demo.planFastNarrativeDemo(planInput(save, resolution, { judgementResolution: undefined })), null);
+  assert.equal(demo.routeFastNarrativeDemo(planInput(save, resolution, { storage: OFF_STORAGE })).outcome, 'legacy');
+  assert.equal(demo.routeFastNarrativeDemo(planInput(save, resolution, { aborted: true })).outcome, 'legacy');
+  assert.equal(
+    demo.routeFastNarrativeDemo(planInput(save, resolution, { judgementResolution: undefined })).outcome,
+    'need_dice',
+  );
 
   const otherSave = JSON.parse(JSON.stringify(save));
   delete otherSave.系统.扩展.清羽记开局;
@@ -399,6 +405,9 @@ test('source path takes one text generate call and default-off keeps the legacy 
   assert.ok(processFn.includes('tryFastNarrativeDemo'));
   assert.ok(processFn.indexOf('tryFastNarrativeDemo') < processFn.indexOf('createScenarioPromptState(v3'));
   assert.ok(processFn.includes('if (!fastNarrativeResponse)'));
+  assert.match(tryFn, /routeFastNarrativeDemo/);
+  assert.match(tryFn, /isFastNarrativeDemoScope/);
+  assert.match(tryFn, /if \(route\.outcome !== 'fast'\)/);
   assert.match(tryFn, /FAST_NARRATIVE_GENERATE_OPTIONS/);
   assert.match(tryFn, /FAST_NARRATIVE_DEADLINE_MS/);
   assert.equal(bidirectional.includes('hasOtherActionContract'), false);
@@ -422,7 +431,8 @@ test('source path takes one text generate call and default-off keeps the legacy 
   assert.equal(tryFn.includes('characterRagService'), false);
   assert.equal(tryFn.includes('optimizeText'), false);
   assert.equal(tryFn.includes('shouldActuallySplit'), false);
-  assert.ok(tryFn.indexOf('if (!plan) return null') < tryFn.indexOf('aiService.generate'));
+  assert.ok(tryFn.indexOf("if (route.outcome !== 'fast')") < tryFn.indexOf('aiService.generate'));
+  assert.ok(tryFn.indexOf('wrapFastNarrativeGmResponse(route.text)') < tryFn.indexOf('aiService.generate'));
   assert.equal(demo.FAST_NARRATIVE_GENERATE_OPTIONS.usageType, 'main');
   assert.equal(demo.FAST_NARRATIVE_MAX_TOKENS, 1024);
   assert.equal(demo.FAST_NARRATIVE_GENERATE_OPTIONS.maxTokens, 1024);
@@ -588,4 +598,72 @@ test('indoor event packet fallback names the current location without grassland 
   for (const banned of ['草尖', '草丛', '风贴', '尸体', '短刀']) {
     assert.equal(fallback.includes(banned), false, `indoor fallback leaked ${banned}`);
   }
+});
+
+test('qingyu demo routes never silently fall back to legacy', async () => {
+  const demo = await loadDemo();
+  const { save, resolution } = await eligibleFixture();
+
+  const look = demo.routeFastNarrativeDemo(planInput(save, resolution, {
+    judgementResolution: undefined,
+    playerAction: '这里是什么地方',
+  }));
+  assert.equal(look.outcome, 'fast');
+  assert.equal(look.plan.packet.kind, 'scene');
+  assert.match(look.plan.userPrompt, /kind=scene/);
+  assertPromptClean(`${look.plan.systemPrompt}\n${look.plan.userPrompt}`);
+
+  const chat = demo.routeFastNarrativeDemo(planInput(save, resolution, {
+    judgementResolution: undefined,
+    playerAction: '我先和店家闲聊几句',
+  }));
+  assert.equal(chat.outcome, 'fast');
+
+  const risk = demo.routeFastNarrativeDemo(planInput(save, resolution, {
+    judgementResolution: undefined,
+    playerAction: A_B_ACTION,
+  }));
+  assert.equal(risk.outcome, 'need_dice');
+  assert.equal(risk.text, demo.FAST_NARRATIVE_NEED_DICE_TEXT);
+
+  const bag = demo.routeFastNarrativeDemo(planInput(save, resolution, {
+    judgementResolution: undefined,
+    playerAction: '我把这块玉佩放进背包',
+  }));
+  assert.equal(bag.outcome, 'need_dice');
+
+  const blank = demo.routeFastNarrativeDemo(planInput(save, resolution, {
+    judgementResolution: undefined,
+    playerAction: '…',
+  }));
+  assert.equal(blank.outcome, 'clarify');
+  assert.equal(blank.text, demo.FAST_NARRATIVE_CLARIFY_TEXT);
+
+  const mismatched = JSON.parse(JSON.stringify(resolution));
+  mismatched.roll = 1;
+  mismatched.outcome = 'critical_failure';
+  const badReceipt = demo.routeFastNarrativeDemo(planInput(save, resolution, {
+    judgementResolution: mismatched,
+  }));
+  assert.equal(badReceipt.outcome, 'clarify');
+  assert.equal(badReceipt.text, demo.FAST_NARRATIVE_BAD_RECEIPT_TEXT);
+
+  const judged = demo.routeFastNarrativeDemo(planInput(save, resolution));
+  assert.equal(judged.outcome, 'fast');
+  assert.equal(judged.plan.packet.kind, 'judgement');
+
+  const laterStage = JSON.parse(JSON.stringify(save));
+  laterStage.世界.状态.剧本模组.modId = 'lcq.stage_99';
+  assert.equal(demo.routeFastNarrativeDemo(planInput(laterStage, resolution)).outcome, 'legacy');
+
+  const escaped = JSON.parse(JSON.stringify(save));
+  escaped.世界.状态.剧本模组.completedEventIds = [
+    ...(escaped.世界.状态.剧本模组.completedEventIds || []),
+    'lcq.event.baihu_shangguan_escape',
+  ];
+  assert.equal(demo.routeFastNarrativeDemo(planInput(escaped, resolution)).outcome, 'legacy');
+
+  const sceneFallback = demo.buildFastNarrativeFallback(look.plan.packet);
+  assert.match(sceneFallback, /这里是什么地方/);
+  assert.doesNotMatch(sceneFallback, /短刀|尸体|草丛/);
 });

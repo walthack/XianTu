@@ -26,6 +26,7 @@ import {
 } from './wuyuanOpenWorldSlice';
 import { stripModelThinking } from '@/utils/jsonExtract';
 import { describeJudgementEffect, getJudgementState, type JudgementResolution } from '@/utils/judgementEngine';
+import { buildLocalJudgementPreflight } from '@/utils/judgementPreflight';
 import type { GM_Response } from '@/types/AIGameMaster';
 import type { SaveData } from '@/types/game';
 
@@ -48,7 +49,7 @@ export const FAST_NARRATIVE_GENERATE_OPTIONS = {
 
 type StorageLike = { getItem(key: string): string | null };
 
-export type FastNarrativePacketKind = 'judgement' | 'event' | 'opportunity' | 'open_world';
+export type FastNarrativePacketKind = 'judgement' | 'event' | 'opportunity' | 'open_world' | 'scene';
 
 export interface FastNarrativeResolutionView {
   id: string;
@@ -100,6 +101,26 @@ export interface PlanFastNarrativeDemoInput {
   storage?: StorageLike;
 }
 
+export type FastNarrativeDemoRoute =
+  | { outcome: 'legacy' }
+  | { outcome: 'fast'; plan: FastNarrativePlan }
+  | { outcome: 'need_dice'; text: string }
+  | { outcome: 'clarify'; text: string }
+  | { outcome: 'local'; text: string };
+
+export const FAST_NARRATIVE_NEED_DICE_TEXT =
+  '此行动会改变能力、物品、人物生死或世界因果。请先确认并掷骰。';
+export const FAST_NARRATIVE_CLARIFY_TEXT =
+  '这句话还不够判断你要做什么。请说得更具体一些：是查看、询问、移动，还是一次有风险的行动？';
+export const FAST_NARRATIVE_STALE_SELECTION_TEXT =
+  '当前选择已过期或无法按本地合同结算。请重新选一次眼前行动。';
+export const FAST_NARRATIVE_BAD_RECEIPT_TEXT =
+  '判定回执不一致或尚未结算。请重新确认掷骰。';
+export const FAST_NARRATIVE_MULTI_SELECTION_TEXT =
+  '同时选了多种行动。请只选一件：事件、机会或五原行动。';
+
+const DEMO_CAUSAL_RE = /收入背包|放进背包|放入背包|交给.{0,8}(?:短刀|玉佩|锦囊|刀|剑)|传授功法|传功|永久获得|杀死|弄死|救活|改写命运/;
+
 function cloneJson<T>(value: T): T {
   return JSON.parse(JSON.stringify(value)) as T;
 }
@@ -136,17 +157,40 @@ function isFastNarrativeFailClosed(saveData: SaveData): boolean {
   return completed.includes('lcq.event.baihu_shangguan_escape');
 }
 
-function hasQingyuOpeningPlaytestActiveEvent(saveData: SaveData): boolean {
-  const runtime = asRecord(asRecord((saveData as any)?.世界)?.状态)?.剧本模组;
-  const activeIds = new Set(Array.isArray(runtime?.activeEventIds) ? runtime.activeEventIds : []);
-  const completed = new Set(Array.isArray(runtime?.completedEventIds) ? runtime.completedEventIds : []);
-  const events = Array.isArray(runtime?.events) ? runtime.events : [];
-  for (const event of events) {
-    const id = readText(event?.id);
-    if (!id || !activeIds.has(id) || completed.has(id)) continue;
-    if ([...(QINGYU_OPENING_PLAYTEST_EVENT_IDS as Iterable<string>)].includes(id)) return true;
-  }
-  return false;
+function isBlankFastNarrativeAction(text: string): boolean {
+  return extractRawPlayerAction(text).replace(/[。！？!?…\s]/g, '').length < 2;
+}
+
+function needsDemoDice(actionText: string, saveData: SaveData, storage?: StorageLike): boolean {
+  if (buildLocalJudgementPreflight(actionText, saveData, 0, storage)) return true;
+  return DEMO_CAUSAL_RE.test(actionText);
+}
+
+function verifiedJudgementFromInput(
+  input: PlanFastNarrativeDemoInput,
+  saveData: SaveData,
+): JudgementResolution | undefined {
+  if (!input.judgementResolution) return undefined;
+  if (input.judgementResolution.status !== 'resolved') return undefined;
+  if (!resolutionReceiptMatches(saveData, input.judgementResolution)) return undefined;
+  return input.judgementResolution;
+}
+
+function buildScenePacket(saveData: SaveData, playerAction: string): FastNarrativeRenderPacket {
+  return {
+    kind: 'scene',
+    ...baseRenderFields(saveData, playerAction),
+    resultText: '当前行动不改变能力、物品、生死或世界因果',
+    settledFacts: [],
+  };
+}
+
+export function isFastNarrativeDemoScope(input: Pick<PlanFastNarrativeDemoInput, 'saveData' | 'storage'>): boolean {
+  if (!isFastNarrativeDemoEnabled(input.storage)) return false;
+  if (!input.saveData || !isQingyuOpeningPlaytestSave(input.saveData)) return false;
+  if (!isAllowedFastNarrativeRuntimeMod(readRuntimeModId(input.saveData))) return false;
+  if (isFastNarrativeFailClosed(input.saveData)) return false;
+  return true;
 }
 
 function eventIdOfSelection(selection: ScenarioEventActionSelection): string {
@@ -584,13 +628,10 @@ function previewSelectionPacket(
 }
 
 export function planFastNarrativeDemo(input: PlanFastNarrativeDemoInput): FastNarrativePlan | null {
-  if (!isFastNarrativeDemoEnabled(input.storage)) return null;
+  if (!isFastNarrativeDemoScope(input)) return null;
   if (input.aborted) return null;
-  if (!input.saveData || !isQingyuOpeningPlaytestSave(input.saveData)) return null;
   const saveData = input.saveData;
-  if (!isAllowedFastNarrativeRuntimeMod(readRuntimeModId(saveData))) return null;
-  if (isFastNarrativeFailClosed(saveData)) return null;
-  if (!hasQingyuOpeningPlaytestActiveEvent(saveData)) return null;
+  if (!saveData) return null;
 
   const selectedCount = [input.eventAction, input.opportunityAction, input.openWorldAction]
     .filter(value => value != null).length;
@@ -601,21 +642,20 @@ export function planFastNarrativeDemo(input: PlanFastNarrativeDemoInput): FastNa
       return null;
     }
   }
-  const verifiedJudgement = input.judgementResolution
-    && input.judgementResolution.status === 'resolved'
-    && resolutionReceiptMatches(saveData, input.judgementResolution)
-    ? input.judgementResolution
-    : undefined;
+  const verifiedJudgement = verifiedJudgementFromInput(input, saveData);
 
   let packet: FastNarrativeRenderPacket | null = null;
   if (selectedCount === 1) {
     packet = previewSelectionPacket(saveData, input);
     if (!packet) return null;
     if (verifiedJudgement) packet = overlayVerifiedJudgement(packet, saveData, verifiedJudgement);
-  } else {
-    if (!verifiedJudgement) return null;
+  } else if (verifiedJudgement) {
     packet = buildFastNarrativeRenderPacket(saveData, input.playerAction, verifiedJudgement);
     if (!packet.resolution?.outcome) return null;
+  } else {
+    const action = extractRawPlayerAction(input.playerAction);
+    if (isBlankFastNarrativeAction(action) || needsDemoDice(action, saveData, input.storage)) return null;
+    packet = buildScenePacket(saveData, input.playerAction);
   }
 
   const forbiddenNames = readForbiddenKnownNames(saveData, packet.presentNames);
@@ -623,6 +663,39 @@ export function planFastNarrativeDemo(input: PlanFastNarrativeDemoInput): FastNa
   const plan: FastNarrativePlan = { packet, forbiddenNames, ...prompts };
   if (estimateFastNarrativePromptBytes(plan) > FAST_NARRATIVE_PROMPT_BUDGET_BYTES) return null;
   return plan;
+}
+
+export function routeFastNarrativeDemo(input: PlanFastNarrativeDemoInput): FastNarrativeDemoRoute {
+  if (input.aborted || !isFastNarrativeDemoScope(input)) return { outcome: 'legacy' };
+  const saveData = input.saveData;
+  if (!saveData) return { outcome: 'legacy' };
+
+  const selectedCount = [input.eventAction, input.opportunityAction, input.openWorldAction]
+    .filter(value => value != null).length;
+  if (selectedCount > 1) return { outcome: 'clarify', text: FAST_NARRATIVE_MULTI_SELECTION_TEXT };
+
+  if (Object.prototype.hasOwnProperty.call(input, 'judgementResolution') && input.judgementResolution != null) {
+    if (input.judgementResolution.status !== 'resolved' || !resolutionReceiptMatches(saveData, input.judgementResolution)) {
+      return { outcome: 'clarify', text: FAST_NARRATIVE_BAD_RECEIPT_TEXT };
+    }
+  }
+
+  const action = extractRawPlayerAction(input.playerAction, input.judgementResolution);
+  if (selectedCount === 0 && isBlankFastNarrativeAction(action)) {
+    return { outcome: 'clarify', text: FAST_NARRATIVE_CLARIFY_TEXT };
+  }
+
+  const plan = planFastNarrativeDemo(input);
+  if (plan) return { outcome: 'fast', plan };
+
+  if (selectedCount === 1) return { outcome: 'clarify', text: FAST_NARRATIVE_STALE_SELECTION_TEXT };
+  if (needsDemoDice(action, saveData, input.storage) && !verifiedJudgementFromInput(input, saveData)) {
+    return { outcome: 'need_dice', text: FAST_NARRATIVE_NEED_DICE_TEXT };
+  }
+  return {
+    outcome: 'local',
+    text: buildFastNarrativeFallback(buildScenePacket(saveData, input.playerAction)),
+  };
 }
 
 export function normalizeFastNarrativeText(raw: string): string {
@@ -727,6 +800,12 @@ function fallbackSceneLead(packet: FastNarrativeRenderPacket): string {
 
 export function buildFastNarrativeFallback(packet: FastNarrativeRenderPacket): string {
   const lead = fallbackSceneLead(packet);
+  if (packet.kind === 'scene') {
+    const action = stripTerminalPunctuation(packet.playerAction || '你看向眼前');
+    return `${lead}。${action}。眼前没有新的结算，你先把这一眼看清楚。`
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
   if (packet.kind === 'open_world') {
     const facts = (packet.settledFacts || []).map(stripTerminalPunctuation).filter(Boolean);
     const body = facts.length ? facts.join('。') : stripTerminalPunctuation(packet.resultText || '当前选择已经落账');

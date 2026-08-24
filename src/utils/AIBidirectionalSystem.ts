@@ -46,7 +46,8 @@ import {
   FAST_NARRATIVE_DEADLINE_MS,
   FAST_NARRATIVE_GENERATE_OPTIONS,
   finalizeFastNarrativeText,
-  planFastNarrativeDemo,
+  isFastNarrativeDemoScope,
+  routeFastNarrativeDemo,
   wrapFastNarrativeGmResponse,
 } from '@/modules/scenarioMods/fastNarrativeDemo';
 import {
@@ -564,16 +565,25 @@ class AIBidirectionalSystemClass {
     generationId: string,
     shouldAbort: () => boolean,
   ): Promise<GM_Response | null> {
-    const plan = planFastNarrativeDemo({
+    if (shouldAbort()) {
+      throw new Error('请求已被取消');
+    }
+    const routeInput = {
       saveData,
       playerAction: userMessage,
       judgementResolution: options?.judgementResolution,
-      aborted: shouldAbort(),
+      aborted: false,
       eventAction: options?.eventAction,
       opportunityAction: options?.opportunityAction,
       openWorldAction: options?.openWorldAction,
-    });
-    if (!plan) return null;
+    };
+    if (!isFastNarrativeDemoScope(routeInput)) return null;
+    const route = routeFastNarrativeDemo(routeInput);
+    if (route.outcome === 'legacy') return null;
+    if (route.outcome !== 'fast') {
+      return wrapFastNarrativeGmResponse(route.text);
+    }
+    const plan = route.plan;
     options?.onProgressUpdate?.('实验快路：写现场正文…');
     const { aiService } = await import('@/services/aiService');
     let raw = '';
