@@ -650,7 +650,7 @@ class AIBidirectionalSystemClass {
     const split = splitFastNarrativeOutput(raw);
     const text = finalizeFastNarrativeText(split.body, plan.packet, plan.forbiddenNames);
     const actionOptions = this.isActionOptionsEnabled(useUIStore())
-      ? buildFastNarrativeActionOptions(plan.packet, text, split.options)
+      ? buildFastNarrativeActionOptions(plan.packet, text, split.options, plan.forbiddenNames)
       : [];
     return wrapFastNarrativeGmResponse(text, actionOptions);
   }

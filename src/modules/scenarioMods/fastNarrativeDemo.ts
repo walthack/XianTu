@@ -929,6 +929,7 @@ function sceneSentenceBlocked(
   if (hasUnauthorizedDurableGain(sentence, packet)) return true;
   if (UNAUTHORIZED_ABILITY_RE.test(sentence)) return true;
   if (hasUnauthorizedDeathAssertion(sentence) && !settledFactsAuthorizeDeath(packet)) return true;
+  if (UNAUTHORIZED_RELATION_RE.test(sentence) && !settledFactsAuthorize(packet, UNAUTHORIZED_RELATION_RE)) return true;
   if (hasUnsupportedPlayerHarm(sentence, packet)) return true;
   return false;
 }
@@ -939,11 +940,12 @@ function sanitizeFastSceneNarrative(
   forbiddenNames: string[],
 ): string {
   if (isUnusableFastNarrativeShell(text)) return '';
-  return splitNarrativeSentences(text)
+  const cleaned = splitNarrativeSentences(text)
     .filter(sentence => !sceneSentenceBlocked(sentence, packet, forbiddenNames))
     .join('')
     .replace(/\s+/g, ' ')
     .trim();
+  return cleaned.includes('你') ? cleaned : '';
 }
 const FAILED_KNIFE_ACQUISITION_RE = /(?:没能|未能|没有|并未|不曾).{0,12}(?:抢到|取到|拿到|夺到|抽出|取走).{0,6}(?:短刀|刀)|(?:短刀|刀).{0,12}(?:仍在尸体|留在尸体|没能取走)/;
 const GAINED_KNIFE_RE = /(?:抢到|夺过|夺下|抽出|拿到|取到|取走|握紧|攥紧|握着|拿着).{0,12}(?:短刀|刀)|(?:短刀|刀).{0,12}(?:落在手中|握在手中|被你握住|握在你手)/;
@@ -1110,10 +1112,30 @@ export function finalizeFastNarrativeText(
   return text;
 }
 
+const UNTRUSTED_OPTION_TERMINAL_RE = /^(?:直接|当场|立刻)?(?:杀死|斩杀|处死|弄死)|(?:结为|成为)(?:盟友|敌人|恋人|道侣)|好感度|关系变为|正式结盟|就此决裂/;
+const UNTRUSTED_OPTION_ABILITY_RE = /(?:学会|领悟|掌握|习得).{0,16}(?:神功|功法|心法|秘籍|武功|真经|招式|术法|技能)/;
+
+function untrustedActionOptionBlocked(
+  option: string,
+  packet: FastNarrativeRenderPacket,
+  forbiddenNames: string[],
+): boolean {
+  if (forbiddenNames.some(name => name.length >= 2 && option.includes(name))) return true;
+  if (isUnusableFastNarrativeShell(option)) return true;
+  if (hasUnauthorizedDurableGain(option, packet)) return true;
+  if (UNAUTHORIZED_ABILITY_RE.test(option) || UNTRUSTED_OPTION_ABILITY_RE.test(option)) return true;
+  if (UNTRUSTED_OPTION_TERMINAL_RE.test(option)) return true;
+  if (hasUnauthorizedDeathAssertion(option) && !settledFactsAuthorizeDeath(packet)) return true;
+  if (UNAUTHORIZED_RELATION_RE.test(option) && !settledFactsAuthorize(packet, UNAUTHORIZED_RELATION_RE)) return true;
+  if (hasUnsupportedPlayerHarm(option, packet)) return true;
+  return false;
+}
+
 export function buildFastNarrativeActionOptions(
   packet: FastNarrativeRenderPacket,
   narrativeText = '',
   parsedOptions: string[] = [],
+  forbiddenNames: string[] = [],
 ): string[] {
   const playerName = readText(packet.playerName);
   const location = stripTerminalPunctuation(packet.publicScene.location || '');
@@ -1124,8 +1146,9 @@ export function buildFastNarrativeActionOptions(
   const lastSentence = splitNarrativeSentences(narrativeText).at(-1) || '';
   const hook = clipOptionText(lastSentence.replace(/^你/, ''));
   const preferred = (packet.preferredAdvance || []).map(clipOptionText).filter(Boolean);
+  const safeParsedOptions = parsedOptions.filter(option => !untrustedActionOptionBlocked(option, packet, forbiddenNames));
   const options = [
-    ...parsedOptions,
+    ...safeParsedOptions,
     ...preferred,
     action ? (action.startsWith('继续') ? action : `顺着${action}`) : '',
     names[0] ? `看${names[0]}此刻如何反应` : '',

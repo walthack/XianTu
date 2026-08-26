@@ -334,6 +334,32 @@ test('red-line violations fail closed; ordinary scene knife prose is allowed', a
   assert.equal(demo.isValidFastNarrativeText('月霜突然从草丛后现身。', plan.packet, plan.forbiddenNames), false);
 });
 
+test('scene prose keeps second-person grounding and removes unsupported relationship endings', async () => {
+  const demo = await loadDemo();
+  const { save, resolution } = await eligibleFixture();
+  const plan = demo.planFastNarrativeDemo(planInput(save, resolution));
+  const scenePacket = {
+    ...plan.packet,
+    kind: 'scene',
+    playerAction: '看看段强怎么样了',
+    resultText: '当前行动不改变能力、物品、生死或世界因果',
+  };
+  const fallback = demo.buildFastNarrativeFallback(scenePacket);
+  const cleaned = demo.finalizeFastNarrativeText(
+    '段强抬头望向天边。你顺着他的目光看去。你们正式结盟。',
+    scenePacket,
+    plan.forbiddenNames,
+  );
+
+  assert.equal(cleaned, '段强抬头望向天边。你顺着他的目光看去。');
+  assert.equal(cleaned.includes('正式结盟'), false);
+  assert.equal(
+    demo.finalizeFastNarrativeText('段强抬头望向天边。', scenePacket, plan.forbiddenNames),
+    fallback,
+  );
+  assert.ok(fallback.includes('你'));
+});
+
 test('fallback is local-only and wrapping stays command-free', async () => {
   const demo = await loadDemo();
   const { save, resolution } = await eligibleFixture();
@@ -380,6 +406,32 @@ test('fallback is local-only and wrapping stays command-free', async () => {
   );
   assert.ok(paraphrased.some(option => option.includes('拉着段强躲')), '换说法的选项仍须保留推进原词');
   assert.ok(paraphrased.some(option => option.includes('带段强找掩护')) || paraphrased.some(option => option.includes('护住段强撤')));
+
+  const filtered = demo.buildFastNarrativeActionOptions(
+    plan.packet,
+    first,
+    [
+      '去找尚未登场的苏妲己',
+      '直接杀死王哲',
+      '把玉佩收入背包',
+      '与段强结为盟友',
+      '学会九阴真经',
+      '阻止王哲杀死段强',
+      '先掌握眼前线索',
+      '先停手观察四周',
+    ],
+    ['苏妲己'],
+  );
+  assert.ok(filtered.includes('先停手观察四周'));
+  assert.ok(filtered.includes('阻止王哲杀死段强'));
+  assert.ok(filtered.includes('先掌握眼前线索'));
+  assert.equal(filtered.some(option => [
+    '去找尚未登场的苏妲己',
+    '直接杀死王哲',
+    '把玉佩收入背包',
+    '与段强结为盟友',
+    '学会九阴真经',
+  ].includes(option)), false);
 });
 
 test('oversized action is truncated and tail injection stays out of the prompt', async () => {
@@ -467,7 +519,7 @@ test('source path takes one text generate call and default-off keeps the legacy 
   assert.match(tryFn, /clearInterval\(cancelWatcher\)/);
   assert.match(tryFn, /splitFastNarrativeOutput\(raw\)/);
   assert.match(tryFn, /finalizeFastNarrativeText\(split\.body, plan\.packet, plan\.forbiddenNames\)/);
-  assert.match(tryFn, /buildFastNarrativeActionOptions\(plan\.packet, text, split\.options\)/);
+  assert.match(tryFn, /buildFastNarrativeActionOptions\(plan\.packet, text, split\.options, plan\.forbiddenNames\)/);
   assert.equal(tryFn.includes('finalizeFastNarrativeStyleDirective'), false);
   assert.equal(tryFn.includes('beatContract'), false);
   assert.equal(tryFn.includes('onStreamChunk'), false);

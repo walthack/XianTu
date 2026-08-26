@@ -11,6 +11,7 @@ import { mkdir, readFile, readdir, writeFile, rm, copyFile } from 'node:fs/promi
 import { existsSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { expandWorldSimBaseline } from './expand-world-sim-baseline.mjs';
+import { validateQingyuStage01AuthorityFile } from './validate-qingyu-stage01-authority.mjs';
 import { applyTrackedWorldSimRefinements } from './world-sim-refinement-overlay.mjs';
 
 const root = resolve(import.meta.dirname, '..');
@@ -19,6 +20,9 @@ const outDir = join(root, 'src', 'modules', 'scenarioMods', 'builtins', 'data');
 const books = ['qingyu', 'yunlong', 'yange'];
 
 async function run() {
+  // fail closed before deleting the tracked builtins: this source tree is gitignored,
+  // so a regressed local/NAS copy must never silently overwrite a known-good bundle.
+  await validateQingyuStage01AuthorityFile();
   // 只补缺失的 worldSimulation；已有人工纵切由生成器明确跳过，
   // 这样标准 canon:build 在任意工作机上都不会把全 stage 可玩底座覆盖掉。
   await expandWorldSimBaseline();
