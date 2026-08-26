@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>清羽记开局 Demo · 任务链</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;700&family=Noto+Sans+SC:wght@400;500;700&display=swap">
+<style>
+:root{
+ --paper:#F3EEE4; --card:#FBF8F2; --sink:#EAE3D6; --line:#D8CFBE;
+ --ink:#231F1C; --ink2:#5C554C; --ink3:#8A8175;
+ --qing:#2E5C6E; --zhu:#A8352A; --teng:#9C7118; --lv:#3F6B52;
+ --serif:"Noto Serif SC",Songti SC,serif; --sans:"Noto Sans SC",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.7}
+.wrap{max-width:980px;margin:0 auto;padding:40px 22px 80px}
+h1{font-family:var(--serif);font-size:30px;margin:0 0 8px}
+.sub{color:var(--ink2);max-width:68ch;margin:0 0 22px}
+.stat{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:22px}
+.stat div{background:var(--card);border:1px solid var(--line);border-radius:3px;padding:8px 13px}
+.stat b{font-family:var(--serif);font-size:20px;display:block}
+.stat span{font-size:11.5px;color:var(--ink3);letter-spacing:.06em}
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 28px}
+.v{font-size:11px;padding:2px 8px;border-radius:2px;letter-spacing:.03em;white-space:nowrap}
+.v.A{background:color-mix(in srgb,var(--qing) 14%,transparent);color:var(--qing);border:1px solid color-mix(in srgb,var(--qing) 32%,transparent)}
+.v.B{background:color-mix(in srgb,var(--teng) 15%,transparent);color:var(--teng);border:1px solid color-mix(in srgb,var(--teng) 35%,transparent)}
+.v.fatal{background:color-mix(in srgb,var(--zhu) 15%,transparent);color:var(--zhu);border:1px solid color-mix(in srgb,var(--zhu) 35%,transparent)}
+.v.ok{background:color-mix(in srgb,var(--lv) 15%,transparent);color:var(--lv);border:1px solid color-mix(in srgb,var(--lv) 35%,transparent)}
+.stage{font-family:var(--serif);font-size:18px;margin:28px 0 12px;color:var(--qing)}
+.row{background:var(--card);border:1px solid var(--line);border-radius:3px;padding:16px 18px;margin:0 0 12px}
+.row header{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.seq{font-variant-numeric:tabular-nums;font-size:12px;color:var(--ink3);background:var(--sink);border-radius:2px;padding:2px 7px;font-weight:700}
+.row h3{font-family:var(--serif);font-size:17px;margin:0;font-weight:600}
+.id{font-size:12px;color:var(--ink3)}
+.compass{font-family:var(--serif);font-size:18px;margin:8px 0 4px}
+.obj{margin:0 0 8px;color:var(--ink2)}
+.meta{display:grid;gap:6px;font-size:13.5px;color:var(--ink2)}
+.meta b{color:var(--ink);font-weight:600;margin-right:6px;font-size:12px}
+.phrases{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.phrases span{background:var(--sink);border-radius:2px;padding:2px 8px;font-size:12.5px}
+.phrases .no{opacity:.65;text-decoration:line-through}
+.arrow{text-align:center;color:var(--ink3);font-size:12px;letter-spacing:.2em;margin:2px 0 10px}
+</style>
+<body>
+<div class="wrap">
+<h1>清羽记开局 Demo · 完整任务链</h1>
+<p class="sub">隔离档 <code>char_qingyu_opening_playtest_v1</code>，从草原落到白湖脱身共 18 拍。顺序是正典轨（月霜寒毒在见王哲之前）。A＝一直等玩家；B＝到点世界结算；绝路＝本局结束。任务栏显示「去哪 · 见谁：objective」。</p>
+<div class="stat">
+  <div><b>18</b><span>拍 · Demo 范围</span></div>
+  <div><b>12</b><span>A 等待玩家</span></div>
+  <div><b>4</b><span>B 到点结算</span></div>
+  <div><b>2</b><span>绝路</span></div>
+</div>
+<div class="legend">
+  <span class="v A">A 等待玩家</span>
+  <span class="v B">B 到点结算 / 织入</span>
+  <span class="v fatal">绝路</span>
+  <span class="v ok">Demo 到点织入当前行动</span>
+</div>
+<div class="stage">第1关 · 草原</div><article class="row">
+<header>
+  <span class="seq">01</span>
+  <h3>程宗扬与段强穿越</h3>
+  <span class="v B">B 到点织入 · 3 回合</span>
+  <span class="v ok">织入当前行动</span>
+  <span class="id">lcq.event.s01_01</span>
+</header>
+<div class="compass">去草原 · 见段强</div>
+<p class="obj">航班上异变突起，先稳住自己并弄清身在何处</p>
+<div class="meta">
+  <div><b>怎么推进</b>到点把既定结局织进你正在做的事 · 在场演完，不记场外 · 地点 草原 · 段强</div>
+  <div><b>正典必须到达</b>程宗扬与段强在航班上遭紫色雷电击中，并从现代世界消失、坠入异界草原。</div>
+  <div><b>到点结局</b>风里的血腥味不再含糊。你看清了草浪、旗帜和兽影，也看清段强就在几步外。这片草原正在开战。</div>
+  
+  
+  <div><b>可推进说法</b><div class="phrases"><span>稳住自己</span><span>弄清身在何处</span><span>确认段强</span><span>弄清这片草原</span><span>找掩体</span><span>处理落地</span><span class="no">不管段强</span><span class="no">丢下段强</span></div></div>
+</div>
+</article>
+<div class="arrow">↓</div>
+<article class="row">
+<header>
+  <span class="seq">02</span>
+  <h3>段强被射杀</h3>
+  <span class="v B">B 到点织入 · 4 回合</span>
+  <span class="v ok">织入当前行动</span>
+  <span class="id">lcq.event.s01_02</span>
+</header>
+<div class="compass">去草原 · 见段强</div>
+<p class="obj">草原上半兽人突然杀到，先保住自己和身边的人</p>
+<div class="meta">
+  <div><b>怎么推进</b>到点把既定结局织进你正在做的事 · 在场演完，不记场外 · 地点 草原 · 段强</div>
+  <div><b>正典必须到达</b>段强在异界草原遭半兽人袭击身亡，程宗扬被迫独自求生。</div>
+  <div><b>到点结局</b>半兽人的箭没有等你做完决定。你就在几步之外，看着那一支钉进段强的脖子——他还想说什么，血先从领口涌了出来。你插了手，仗也没有因此停下。</div>
+  <div><b>逼近</b>远处那片喊杀声换了方向，正朝你们这一侧压过来；草浪一路倒伏，像有什么在贴地推进。 → 已经能分辨出蹄声和吼叫了。灌木后面立起几个佝偻的影子，兽面人身，手里的短弓正在上弦。 → 第一支箭钉进你脚边的泥里，箭羽还在抖。段强就在开阔处，背对着那个方向。</div>
+  
+  <div><b>可推进说法</b><div class="phrases"><span>拉着段强躲</span><span>带段强找掩护</span><span>护住段强撤</span><span class="no">不管段强</span><span class="no">丢下段强</span><span class="no">袖手旁观</span></div></div>
+</div>
+</article>
+<div class="arrow">↓</div>
+<article class="row">
+<header>
+  <span class="seq">03</span>
+  <h3>程宗扬与月霜初遇</h3>
+  <span class="v A">A 等待玩家</span>
+  
+  <span class="id">lcq.event.s01_03</span>
+</header>
+<div class="compass">去草原 · 见月霜</div>
+<p class="obj">战场上有名受伤军士，先判断该不该伸手相助</p>
+<div class="meta">
+  <div><b>怎么推进</b>去「草原」即推进；不靠精确原句 · 地点 草原 · 月霜</div>
+  <div><b>正典必须到达</b>程宗扬在战场与受伤、女扮男装的月霜初遇，冲突由误触其胸部引发。</div>
+  
+  
+  
+  <div><b>可推进说法</b><div class="phrases"><span>查看伤兵伤势</span><span>扶起受伤军士</span><span>救下受伤军士</span><span>带伤兵离开</span><span>见月霜</span><span>上前查看伤者</span><span>看看那个伤兵</span><span class="no">不管伤兵</span><span class="no">不救伤者</span><span class="no">丢下伤者</span><span class="no">转身离开</span></div></div>
+</div>
+</article>
+<div class="arrow">↓</div>
+<article class="row">
+<header>
+  <span class="seq">04</span>
+  <h3>太乙真宗介入</h3>
+  <span class="v B">B 到点结算 · 5 回合</span>
+  
+  <span class="id">lcq.event.s01_04</span>
+</header>
+<div class="compass">去草原 · 见蔺采泉 · 见商乐轩</div>
+<p class="obj">有修士突然插手战场，先设法带着伤者脱险</p>
+<div class="meta">
+  <div><b>怎么推进</b>闲逛够回合后世界自行结清 · 地点 草原 · 蔺采泉、商乐轩、月霜、卓云君</div>
+  <div><b>正典必须到达</b>卓云君施救，太乙真宗诸人介入并击退兽蛮，使程宗扬与月霜脱险。</div>
+  <div><b>到点结局</b>太乙真宗已介入草原战局并带走伤员；你错过了最初接触，只能从留下的人证与去向继续追赶。</div>
+  <div><b>逼近</b>兽蛮的包围圈在收紧，你和伤者被压向一处低洼；能退的方向正一个个消失。 → 有人在远处高声喝止，声音穿过喊杀压过来——但你不知道那是冲着谁来的。</div>
+  
+  <div><b>可推进说法</b><div class="phrases"><span>带着伤者脱险</span><span>护送伤者撤离</span><span>背着伤者离开</span><span class="no">丢下伤者</span><span class="no">不管伤者</span><span class="no">独自离开</span></div></div>
+</div>
+</article>
+<div class="arrow">↓</div>
+<article class="row">
+<header>
+  <span class="seq">05</span>
+  <h3>月霜强取真阳</h3>
+  <span class="v A">A 等待玩家</span>
+  
+  <span class="id">lcq.event.s01_06</span>
+</header>
+<div class="compass">见月霜</div>
+<p class="obj">月霜身上的寒毒正在失控，先应对眼前危局</p>
+<div class="meta">
+  <div><b>怎么推进</b>见人/行动推进；不靠精确原句 · 月霜</div>
+  <div><b>正典必须到达</b>月霜寒毒危急，真阳进入其体内并压制、化解寒毒。</div>
+  
+  
+  
+  <div><b>可推进说法</b><div class="phrases"><span>帮月霜压住寒毒</span><span>救治月霜的寒毒</span><span>设法缓解月霜寒毒</span><span>见月霜</span><span>应对眼前危局</span><span class="no">不管月霜</span><span class="no">丢下月霜</span><span class="no">任由寒毒发作</span><span class="no">转身离开</span></div></div>
+</div>
+</article>
+<div class="arrow">↓</div>
+<article class="row">
+<header>
+  <span class="seq">06</span>
+  <h3>程宗扬见王哲</h3>
+  <span class="v A">A 等待玩家</span>
+  
+  <span class="id">lcq.event.s01_05</span>
+</header>
+<div class="compass">去帅帐 · 见王哲</div>
+<p class="obj">在帅帐里把来历说清楚，先让对方诊治你的伤</p>
+<div class="meta">
+  <div><b>怎么推进</b>去「帅帐」即推进；不靠精确原句 · 地点 帅帐 · 王哲</div>
+  <div><b>正典必须到达</b>王哲为程宗扬筑基疗伤，授其九阳神功口诀，程宗扬以自创文字记录。</div>
+  
+  
+  
+  <div><b>可推进说法</b><div class="phrases"><span>请王哲诊治</span><span>让王哲诊治</span><span>让王哲查看伤势</span><span>向王哲说明来历请他诊治</span><span>去帅帐</span><span>前往帅帐</span><span>走进帅帐</span><span>见王哲</span><span class="no">拒绝诊治</span><span class="no">隐瞒来历离开</span><span class="no">不让王哲查看</span></div></div>
+</div>
+</article>
+<div class="arrow">↓</div>
+<div class="stage">第2关 · 五原/白湖</div><article class="row">
+<header>
+  <span class="seq">07</span>
+  <h3>王哲传功与托付</h3>
+  <span class="v A">A 等待玩家</span>
+  
+  <span class="id">lcq.event.s02_01</span>
+</header>
+<div class="compass">去帅帐 · 见王哲</div>
+<p class="obj">王哲还有事要当面交代，先听他把话说完</p>
+<div class="meta">
+  <div><b>怎么推进</b>去「帅帐」即推进；不靠精确原句 · 地点 帅帐 · 王哲</div>
+  <div><b>正典必须到达</b>王哲托付程宗扬三件事：保管锦囊、修为达六阳后前往太泉古阵祭祀、守护岳帅后人月霜。</div>
+  
+  
+  
+  
+</div>
+</article>
+<div class="arrow">↓</div>
+<article class="row">
+<header>
+  <span class="seq">08</span>
+  <h3>秦军与罗马军团交战</h3>
+  <span class="v B">B 到点结算 · 7 回合</span>
+  
+  <span class="id">lcq.event.s02_03</span>
+</header>
+<div class="compass">见月霜</div>
+<p class="obj">在秦军与罗马军的交战中求生并观察战局</p>
+<div class="meta">
+  <div><b>怎么推进</b>闲逛够回合后世界自行结清 · 月霜</div>
+  <div><b>正典必须到达</b>天武营秦军与罗马第十二军团交战，弩手远程杀伤敌军，但罗马军团投掷标枪重创秦军方阵，短兵相接后秦军因罗马右刺战术而溃散。</div>
+  <div><b>到点结局</b>秦军随后卷入罗马军团战事，军情、俘虏与道路封锁成为玩家缺席后的既成事实。</div>
+  
+  
+  
+</div>
+</article>
+<div class="arrow">↓</div>
+<article class="row">
+<header>
+  <span class="seq">09</span>
+  <h3>左武军与罗马军团大战</h3>
+  <span class="v fatal">绝路限时 · 3 回合</span>
+  
+  <span class="id">lcq.event.s02_02</span>
+</header>
+<div class="compass">见王哲 · 见韩庚</div>
+<p class="obj">左武军已与联军开战，先保住自己和月霜，跟上战局变化</p>
+<div class="meta">
+  <div><b>怎么推进</b>到点本局结束 · 王哲、韩庚、阿伽门侬、月霜</div>
+  <div><b>正典必须到达</b>半预制高光：先完整交代左武第一军团在罗马、马其顿、兽蛮联军围攻下伤亡殆尽、天霁营毁弩、帅帐卫士杀马毁械与文泽自刎；随后把镜头锁定王哲：脱甲悬空，九阳依次点亮并合一如日轮，阿伽门侬由轻蔑转为惊恐，毁灭性光球坠地将战场化为焦土，完成王哲以自身殉军的收束。不得把这一段概括成“一招自爆”，也不得让旁人抢走最后一击。</div>
+  <div><b>到点结局</b>左武军与罗马军团的战事自行爆发，前线死伤与溃兵已经改变五原周边局势。</div>
+  
+  
+  
+</div>
+</article>
+<div class="arrow">↓</div>
+<article class="row">
+<header>
+  <span class="seq">10</span>
+  <h3>程宗扬在五原城被误抓为奴隶</h3>
+  <span class="v A">A 等待玩家</span>
+  
+  <span class="id">lcq.event.s02_04</span>
+</header>
+<div class="compass">去五原城</div>
+<p class="obj">五原城里有人把你当成逃奴，先应付眼前的盘问与拉扯</p>
+<div class="meta">
+  <div><b>怎么推进</b>去「五原城」即推进；不靠精确原句 · 地点 五原城</div>
+  <div><b>正典必须到达</b>程宗扬被戈龙和孙疤脸误认为是逃跑的奴隶，遭到暴打和烙刑，被强制烙印奴隶印记。</div>
+  
+  
+  
+  
+</div>
+</article>
+<div class="arrow">↓</div>
+<article class="row">
+<header>
+  <span class="seq">11</span>
+  <h3>程宗扬与阿姬曼·芭娜相遇</h3>
+  <span class="v A">A 等待玩家</span>
+  
+  <span class="id">lcq.event.s02_05</span>
+</header>
+<div class="compass">—</div>
+<p class="obj">地牢里有人靠近你，先判断她要带你去哪</p>
+<div class="meta">
+  <div><b>怎么推进</b>见人/行动推进；不靠精确原句</div>
+  <div><b>正典必须到达</b>程宗扬被故意放出牢房后遭戈龙伏击，被迫杀死孙疤脸并试图反抗。</div>
+  
+  
+  
+  
+</div>
+</article>
+<div class="arrow">↓</div>
+<article class="row">
+<header>
+  <span class="seq">12</span>
+  <h3>程宗扬见苏妲己</h3>
+  <span class="v A">A 等待玩家</span>
+  
+  <span class="id">lcq.event.s02_06</span>
+</header>
+<div class="compass">见苏妲己 · 见凝羽</div>
+<p class="obj">在白湖商馆与馆主当面周旋，看清她究竟是谁</p>
+<div class="meta">
+  <div><b>怎么推进</b>见人/行动推进；不靠精确原句 · 苏妲己、凝羽</div>
+  <div><b>正典必须到达</b>程宗扬识破商馆女主人苏妲己的伪装，揭露其外淫内端的实质，苏妲己下令处死男奴，并囚禁程宗扬逼问霓龙丝情报。</div>
+  
+  
+  
+  
+</div>
+</article>
+<div class="arrow">↓</div>
+<article class="row">
+<header>
+  <span class="seq">13</span>
+  <h3>凝羽进入赌局</h3>
+  <span class="v A">A 等待玩家</span>
+  
+  <span class="id">lcq.event.ningyu_enters_gamble</span>
+</header>
+<div class="compass">去五原城 · 见苏妲己 · 见凝羽</div>
+<p class="obj">凝羽突然入局，当面看清她此刻的处境并回应</p>
+<div class="meta">
+  <div><b>怎么推进</b>去「五原城」即推进；不靠精确原句 · 地点 五原城 · 苏妲己、凝羽</div>
+  <div><b>正典必须到达</b>凝羽奉苏妲己之命进入赌局，程宗扬认清她的处境并当面回应。</div>
+  
+  
+  
+  
+</div>
+</article>
+<div class="arrow">↓</div>
+<article class="row">
+<header>
+  <span class="seq">14</span>
+  <h3>三个月南荒之约</h3>
+  <span class="v fatal">绝路自选</span>
+  
+  <span class="id">lcq.event.sudaji_south_pact</span>
+</header>
+<div class="compass">去五原城 · 见苏妲己</div>
+<p class="obj">面对苏妲己就霓龙丝一事的逼问，谈清眼下能换到的期限</p>
+<div class="meta">
+  <div><b>怎么推进</b>选错即本局结束 · 地点 五原城 · 苏妲己</div>
+  <div><b>正典必须到达</b>程宗扬与苏妲己订下三个月南荒之约：三个月内前往南荒采集霓龙丝，否则受炮烙之刑。</div>
+  
+  
+  <div><b>绝路选项</b>炮烙</div>
+  
+</div>
+</article>
+<div class="arrow">↓</div>
+<article class="row">
+<header>
+  <span class="seq">15</span>
+  <h3>落败签下卖身契</h3>
+  <span class="v A">A 等待玩家</span>
+  
+  <span class="id">lcq.event.gamble_bond_signed</span>
+</header>
+<div class="compass">去五原城 · 见苏妲己 · 见凝羽</div>
+<p class="obj">赌局局面骤变，面对眼前的刻香与契书做出回应</p>
+<div class="meta">
+  <div><b>怎么推进</b>去「五原城」即推进；不靠精确原句 · 地点 五原城 · 苏妲己、凝羽</div>
+  <div><b>正典必须到达</b>程宗扬为救凝羽与苏妲己对赌，苏妲己作弊加速刻香致其落败；程宗扬被迫签下卖身契，成为白湖商馆的奴隶。</div>
+  
+  
+  
+  
+</div>
+</article>
+<div class="arrow">↓</div>
+<article class="row">
+<header>
+  <span class="seq">16</span>
+  <h3>谈定六十金铢</h3>
+  <span class="v A">A 等待玩家</span>
+  
+  <span class="id">lcq.event.charge_sudaji_fee</span>
+</header>
+<div class="compass">去五原城 · 见苏妲己</div>
+<p class="obj">在帮苏妲己取出新奇器物前谈定六十金铢报酬</p>
+<div class="meta">
+  <div><b>怎么推进</b>去「五原城」即推进；不靠精确原句 · 地点 五原城 · 苏妲己</div>
+  <div><b>正典必须到达</b>程宗扬在帮苏妲己取出新奇器物前，谈定六十金铢报酬。</div>
+  
+  
+  
+  
+</div>
+</article>
+<div class="arrow">↓</div>
+<article class="row">
+<header>
+  <span class="seq">17</span>
+  <h3>撕毁阿姬曼身契</h3>
+  <span class="v A">A 等待玩家</span>
+  
+  <span class="id">lcq.event.free_ajiman</span>
+</header>
+<div class="compass">去五原城 · 见凝羽</div>
+<p class="obj">取得阿姬曼的身契并当面还她自由，再设法出城</p>
+<div class="meta">
+  <div><b>怎么推进</b>去「五原城」即推进；不靠精确原句 · 地点 五原城 · 凝羽</div>
+  <div><b>正典必须到达</b>程宗扬取得阿姬曼身契当面撕毁，并应对被封锁的出城路线。</div>
+  
+  
+  
+  
+</div>
+</article>
+<div class="arrow">↓</div>
+<article class="row">
+<header>
+  <span class="seq">18</span>
+  <h3>白湖脱身</h3>
+  <span class="v A">A 等待玩家</span>
+  
+  <span class="id">lcq.event.baihu_shangguan_escape</span>
+</header>
+<div class="compass">去五原城 · 见苏妲己</div>
+<p class="obj">从白湖商馆的死局里脱身，走出五原商馆</p>
+<div class="meta">
+  <div><b>怎么推进</b>去「五原城」即推进；不靠精确原句 · 地点 五原城 · 苏妲己</div>
+  <div><b>正典必须到达</b>程宗扬从白湖商馆的死局里脱身，走出五原商馆。</div>
+  
+  
+  
+  
+</div>
+</article>
+
+<p class="sub" style="margin-top:28px">数据来自 <code>lcq.stage_01/02.json</code> + Demo 覆写（s01_01 限时 3 回合；s01_03/05/06 TES 短语；s01_05 地点帅帐）。生成时间 2026-08-25。不含武二郎之后（Demo 在白湖脱身 fail-closed）。</p>
+</div>
+</body>
+</html>
