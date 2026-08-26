@@ -3,7 +3,7 @@
 > 面向「新加入的 agent」。读完这一篇即可独立认领一个模块开工。
 > **2026-08-26 Grok 提交复审修复 1／3 已完成。** owner=Codex。①权威 `lcq.stage_01` 已补帅帐地点与 `s01_05.locationId`；每次内置同步在删除旧 bundle 前先校验这两个权威锚点，退化时 fail closed，manifest 已刷新。③Fast scene 正文须保留第二人称落点、会剔除未授权关系终态，模型生成选项会过滤未登场人物及未结算的物品／能力／生死／关系终态；玩家自由输入闸未收紧。Claude 只读二验 `claude-2026-08-26T15-11-55-181Z-19257edc`=`PASS_WITH_FINDINGS`（P0/P1 无）。最终验证：锚点门+Fast 23/23、`type-check` PASS、`canon:build` 867 项（862 pass / 5 skip / 0 fail）、`git diff --check` PASS。
 > **移动系统待设计：** 当前没有 RPG 式可交互地图与统一移动合同；不以文本匹配修补五原移动。后续须独立设计“系统强制移动／玩家结构化主动移动／幂等移动回执”，本轮不改位置流程、不实现临时方案。
-> **既有待审：P0-1 步骤1 完成，待 Codex 审核关闭。** owner=Grok 4.6。起始 `3f47ba1`。真实 `gameStateStore` 快照（去掉更新时间）在 abort 路径与 abort 前逐字段一致；`saveCurrentGame` 记录调用而非静默 no-op，abort 路径必须 0 次。补「store 写入后滚回」闸与外层只认 `aborted` 的源码钉。聚焦 **8/8**。下一步：Codex 审核后关闭 P0-1；清羽→白湖试玩不由本刀代跑。
+> **P0-1 正式审核：NOT CLOSED。** 当前分支的 store 快照／写入后回滚／外层 `aborted` 闸聚焦 **8/8** PASS；但后台 `event_reconcile` 仍在最终 abort 闸之前启动，abort 返回后仍可三方合并并调用 `saveCurrentGame`。候选修复 `89ba21c` 及补充门禁（总计 12 条）仍只在 `fix/p0-1b-abort-reconcile`，未合入当前分支。下一步：单独审核／合入该候选修复后重跑全门；P0-2 不受影响、不关闭。
 > 当前没有已确认的项目级 P0 缺陷；P0 队列只含本项“先复现再裁定”，以及正式发测前的清羽开局→白湖脱身连续试玩门。五原玩法闭环与 `world_sim` G2 为 P1。Fast Demo 已阶段性收尾并保持默认关闭，`editionPack` 暂停。
 >
 > ### 2026-08-23：当前 P 级队列已重排，准备移交其他 agent
