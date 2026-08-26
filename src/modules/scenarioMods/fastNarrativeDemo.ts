@@ -753,7 +753,7 @@ function previewSelectionPacket(
     const settledFacts = exactOpenWorldSettledFacts(preview.settledFacts);
     return {
       kind: 'open_world',
-      ...baseRenderFields(saveData, input.playerAction, input.judgementResolution),
+      ...baseRenderFields(clone, input.playerAction, input.judgementResolution),
       actionText: selectionActionText(exact),
       resultText: settledFacts.length ? settledFacts.join('；') : '当前开放世界选择已按本地合同结算',
       settledFacts,

@@ -13,8 +13,11 @@ import {
   type OpenWorldSliceRuntime,
 } from './openWorldSlice';
 import { getCurrentStoryEventActions, recordStoryEventStructuredAction } from './runtime';
+import { resolveLocationIdFromPosition } from './secondaryLines';
 
 export const WUYUAN_OPEN_WORLD_SLICE_ID = 'lcq.open_world.wuyuan_v1';
+export const WUYUAN_MARKET_ARRIVAL_ID = 'lcq.route.wuyuan.arrive_market';
+const MARKET_ZONE_ID = 'lcq.zone.wuyuan.market';
 
 export const WUYUAN_OPEN_WORLD_DEFINITION: OpenWorldSliceDefinition = {
   id: WUYUAN_OPEN_WORLD_SLICE_ID,
@@ -138,13 +141,38 @@ function runtimeOf(saveData: SaveData): RuntimeWithSlice | undefined {
   return (saveData as any)?.世界?.状态?.剧本模组;
 }
 
-function inWuyuanPhase(runtime: RuntimeWithSlice): boolean {
-  if (runtime.modId !== 'lcq.stage_02') return false;
-  const active = runtime.activeEventIds || [];
-  const completed = runtime.completedEventIds || [];
-  return completed.includes('lcq.event.s02_03')
-    || active.some(id => id === 'lcq.event.s02_04' || id === 'lcq.event.s02_05' || id === 'lcq.event.s02_06')
-    || completed.includes('lcq.event.s02_04');
+function completedIds(runtime: RuntimeWithSlice): string[] {
+  return runtime.completedEventIds || [];
+}
+
+function wangZheFallen(runtime: RuntimeWithSlice): boolean {
+  return completedIds(runtime).includes('lcq.event.s02_02');
+}
+
+function playerLocationDescription(saveData: SaveData): string {
+  return String((saveData as { 角色?: { 位置?: { 描述?: unknown } } })?.角色?.位置?.描述 || '');
+}
+
+function playerInWuyuan(saveData: SaveData, runtime: RuntimeWithSlice): boolean {
+  const desc = playerLocationDescription(saveData);
+  if (desc.includes('五原')) return true;
+  const locId = resolveLocationIdFromPosition(desc, (runtime as { canon?: { locations?: Array<{ id: string; name: string }> } }).canon?.locations);
+  return locId === 'liuchao.location.wuyuan';
+}
+
+function inWuyuanSlice(runtime: RuntimeWithSlice, saveData: SaveData): boolean {
+  if (runtime.modId !== 'lcq.stage_02' || !wangZheFallen(runtime)) return false;
+  if (playerInWuyuan(saveData, runtime)) return true;
+  return completedIds(runtime).some(id => (
+    id === 'lcq.event.s02_04' || id === 'lcq.event.s02_05' || id === 'lcq.event.s02_06'
+  ));
+}
+
+function isWuyuanMarketTravelText(playerText: string): boolean {
+  const normalized = playerText.normalize('NFKC').toLowerCase().replace(/[\p{P}\p{S}\s]+/gu, '');
+  if (!normalized) return false;
+  if (normalized.includes('点心铺') || normalized.includes('糕饼铺') || normalized.includes('后巷')) return false;
+  return /去五原|前往五原|去市集|前往五原露天市集/.test(normalized);
 }
 
 function projectCanonLocation(runtime: RuntimeWithSlice): void {
@@ -174,9 +202,7 @@ function projectPlayerPosition(saveData: SaveData, state: OpenWorldSliceRuntime)
   position.描述 = `中州·五原·${zone.name}`;
 }
 
-export function ensureWuyuanOpenWorldSlice(saveData: SaveData): OpenWorldSliceRuntime | undefined {
-  const runtime = runtimeOf(saveData);
-  if (!runtime || !inWuyuanPhase(runtime)) return undefined;
+function hydrateWuyuanSlice(runtime: RuntimeWithSlice): OpenWorldSliceRuntime {
   if (runtime.openWorldSlice?.version !== 1 || runtime.openWorldSlice.sliceId !== WUYUAN_OPEN_WORLD_SLICE_ID) {
     runtime.openWorldSlice = hydrateOpenWorldSliceRuntime(runtime.openWorldSlice, WUYUAN_OPEN_WORLD_DEFINITION);
   }
@@ -192,16 +218,40 @@ export function ensureWuyuanOpenWorldSlice(saveData: SaveData): OpenWorldSliceRu
     advanceOpenWorldTurns(runtime.openWorldSlice, WUYUAN_OPEN_WORLD_DEFINITION, now - last);
   }
   runtime.openWorldSliceLastWorldTurn = now;
-  projectCanonLocation(runtime);
-  projectPlayerPosition(saveData, runtime.openWorldSlice);
   return runtime.openWorldSlice;
+}
+
+export function ensureWuyuanOpenWorldSlice(saveData: SaveData): OpenWorldSliceRuntime | undefined {
+  const runtime = runtimeOf(saveData);
+  if (!runtime || !inWuyuanSlice(runtime, saveData)) return undefined;
+  const state = hydrateWuyuanSlice(runtime);
+  projectCanonLocation(runtime);
+  projectPlayerPosition(saveData, state);
+  return state;
 }
 
 function receiptId(state: OpenWorldSliceRuntime, kind: WuyuanOpenWorldSelection['kind'], id: string): string {
   return `${WUYUAN_OPEN_WORLD_SLICE_ID}:${kind}:${id}:${state.elapsedTurns}`;
 }
 
+function marketArrivalSelection(saveData: SaveData): WuyuanOpenWorldSelection {
+  const from = playerLocationDescription(saveData) || '帅帐';
+  const to = '五原露天市集';
+  return {
+    source: 'open_world_engine',
+    kind: 'travel',
+    identityId: WUYUAN_MARKET_ARRIVAL_ID,
+    receiptId: `${WUYUAN_OPEN_WORLD_SLICE_ID}:travel:${WUYUAN_MARKET_ARRIVAL_ID}:arrive`,
+    label: '前往 · 五原露天市集',
+    actionText: '我去五原城。',
+    settledFacts: [`你从${from}出发`, `你抵达${to}`, '路程消耗1轮'],
+  };
+}
+
 export function getWuyuanOpenWorldSelections(saveData: SaveData): WuyuanOpenWorldSelection[] {
+  const runtime = runtimeOf(saveData);
+  if (!runtime || runtime.modId !== 'lcq.stage_02' || !wangZheFallen(runtime)) return [];
+  if (!inWuyuanSlice(runtime, saveData)) return [marketArrivalSelection(saveData)];
   const state = ensureWuyuanOpenWorldSlice(saveData);
   if (!state) return [];
   const view = getOpenWorldSliceView(state, WUYUAN_OPEN_WORLD_DEFINITION);
@@ -230,6 +280,12 @@ export function getWuyuanOpenWorldSelections(saveData: SaveData): WuyuanOpenWorl
 }
 
 export function resolveWuyuanOpenWorldSelectionFromText(saveData: SaveData, playerText: string): WuyuanOpenWorldSelection | undefined {
+  const runtime = runtimeOf(saveData);
+  if (!runtime || !wangZheFallen(runtime)) return undefined;
+  if (!inWuyuanSlice(runtime, saveData)) {
+    if (!isWuyuanMarketTravelText(playerText)) return undefined;
+    return marketArrivalSelection(saveData);
+  }
   const state = ensureWuyuanOpenWorldSlice(saveData);
   if (!state) return undefined;
   const available = getWuyuanOpenWorldSelections(saveData);
@@ -243,6 +299,52 @@ export function resolveWuyuanOpenWorldSelectionFromText(saveData: SaveData, play
   return undefined;
 }
 
+function settleArriveWuyuanMarket(saveData: SaveData, selection: WuyuanOpenWorldSelection): {
+  settled: boolean;
+  idempotent: boolean;
+  reason?: string;
+  settledFacts: string[];
+} {
+  const runtime = runtimeOf(saveData);
+  if (!runtime || !wangZheFallen(runtime) || selection?.identityId !== WUYUAN_MARKET_ARRIVAL_ID) {
+    return { settled: false, idempotent: false, reason: 'inactive_slice', settledFacts: [] };
+  }
+  const state = hydrateWuyuanSlice(runtime);
+  const already = state.travelReceipts.some(item => item.routeId === WUYUAN_MARKET_ARRIVAL_ID);
+  if (already && playerInWuyuan(saveData, runtime) && state.currentZoneId === MARKET_ZONE_ID) {
+    return { settled: true, idempotent: true, settledFacts: selection.settledFacts };
+  }
+  const fromName = playerLocationDescription(saveData) || '帅帐';
+  const departedAtTurn = state.elapsedTurns;
+  state.elapsedTurns += 1;
+  state.currentZoneId = MARKET_ZONE_ID;
+  state.knownZoneIds = [...new Set([...state.knownZoneIds, MARKET_ZONE_ID])];
+  const receiptId = selection.receiptId;
+  if (!state.travelReceipts.some(item => item.receiptId === receiptId)) {
+    state.travelReceipts.push({
+      receiptId,
+      routeId: WUYUAN_MARKET_ARRIVAL_ID,
+      fromZoneId: 'lcq.location.command_tent',
+      toZoneId: MARKET_ZONE_ID,
+      departedAtTurn,
+      arrivedAtTurn: state.elapsedTurns,
+      turnCost: 1,
+    });
+  }
+  const to = WUYUAN_OPEN_WORLD_DEFINITION.zones.find(zone => zone.id === MARKET_ZONE_ID)?.name || '五原露天市集';
+  if (!state.chronicle.some(entry => entry.id === `travel:${receiptId}`)) {
+    state.chronicle.push({
+      id: `travel:${receiptId}`,
+      atTurn: state.elapsedTurns,
+      cause: `你从${fromName}前往五原`,
+      effect: `你在付出1轮路程后抵达${to}`,
+      text: `因为你从${fromName}前往五原，所以你在付出1轮路程后抵达${to}`,
+    });
+  }
+  projectPlayerPosition(saveData, state);
+  return { settled: true, idempotent: false, settledFacts: selection.settledFacts };
+}
+
 export function settleWuyuanOpenWorldSelection(saveData: SaveData, selection: WuyuanOpenWorldSelection): {
   settled: boolean;
   idempotent: boolean;
@@ -250,6 +352,9 @@ export function settleWuyuanOpenWorldSelection(saveData: SaveData, selection: Wu
   settledFacts: string[];
   canonEventCompleted?: boolean;
 } {
+  if (selection?.identityId === WUYUAN_MARKET_ARRIVAL_ID) {
+    return settleArriveWuyuanMarket(saveData, selection);
+  }
   const runtime = runtimeOf(saveData);
   const state = ensureWuyuanOpenWorldSlice(saveData);
   if (!runtime || !state || selection?.source !== 'open_world_engine') {

@@ -1368,6 +1368,10 @@ export function resolveStoryEventActionFromPlayerText(
   });
   if (matches.length === 1) return matches[0];
   if (matches.length > 1) return undefined;
+  if (event.id === 'lcq.event.s02_04') {
+    const travelToCity = /去五原|前往五原|去市集/.test(normalized);
+    if (travelToCity) return undefined;
+  }
   const pointers = questCompassPhrases(event, runtime, playerLocationId(saveData, runtime))
     .map(normalizeEventActionIntent)
     .filter(Boolean);
@@ -1850,6 +1854,7 @@ function settleArrivalObjective(saveData: SaveData, runtime: RuntimeState): void
   if (!locId) return;
   const event = getCurrentPlayerCompletionEvent(runtime);
   if (!event?.locationId || event.locationId !== locId) return;
+  if (event.id === 'lcq.event.s02_04') return;
   const startedAt = runtime.eventActivatedAtLocation?.[event.id];
   if (startedAt === undefined || startedAt === event.locationId) return;
   const fatalIds = new Set((event.fatalOutcomes?.choices || []).map(item => item.id));

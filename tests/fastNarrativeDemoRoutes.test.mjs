@@ -18,6 +18,7 @@ const stage01Url = new URL('../src/modules/scenarioMods/builtins/data/lcq.stage_
 const stage02Url = new URL('../src/modules/scenarioMods/builtins/data/lcq.stage_02.json', import.meta.url);
 const ON_STORAGE = { getItem: key => (key === 'xiantu.fastNarrativeDemo.v1' ? 'true' : null) };
 const S02_01 = 'lcq.event.s02_01';
+const S02_02 = 'lcq.event.s02_02';
 const S02_03 = 'lcq.event.s02_03';
 const S02_04 = 'lcq.event.s02_04';
 const BAIHU = 'lcq.event.baihu_shangguan_escape';
@@ -225,8 +226,13 @@ test('wuyuan open world fresh selection plans kind=open_world from clone settlem
   } = await loadTs('../src/modules/scenarioMods/wuyuanOpenWorldSlice.ts');
   const save = await stage02Fixture();
   locateEvent(save, S02_04, {
-    completedEventIds: [S02_03],
-    flags: { 'event.s02_04.done': false, 'event.s02_03.done': true, 'chapter.lcq.stage_02.started': true },
+    completedEventIds: [S02_02, S02_03],
+    flags: {
+      'event.s02_04.done': false,
+      'event.s02_03.done': true,
+      'event.s02_02.done': true,
+      'chapter.lcq.stage_02.started': true,
+    },
   });
   assert.equal(playtestMarker(save).kind, 'qingyu-demo-v1');
 

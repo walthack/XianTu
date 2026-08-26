@@ -20,12 +20,45 @@ function captureEvent() {
 function save(storyMode) {
   const event = captureEvent();
   return {
+    角色: { 位置: { 描述: '中州·五原·五原露天市集' } },
     世界: { 状态: { 剧本模组: {
       modId: 'lcq.stage_02', ...(storyMode ? { storyMode } : {}), worldTurn: 10,
       currentChapterId: 'lcq.chapter.s02',
       chapters: [{ id: 'lcq.chapter.s02', eventIds: [event.id] }], events: [event],
       completedChapterIds: [], activeEventIds: [event.id],
-      completedEventIds: ['lcq.event.s02_03'], flags: { 'event.s02_04.done': false },
+      completedEventIds: ['lcq.event.s02_02', 'lcq.event.s02_03'],
+      flags: { 'event.s02_02.done': true, 'event.s02_03.done': true, 'event.s02_04.done': false },
+      canon: { locations: [
+        { id: 'lcq.location.command_tent', name: '帅帐' },
+        { id: 'liuchao.location.wuyuan', name: '五原城' },
+      ] },
+    } } },
+  };
+}
+
+function warCampSave(extra = {}) {
+  const event = captureEvent();
+  event.locationId = 'liuchao.location.wuyuan';
+  event.objective = '五原城里有人把你当成逃奴，先应付眼前的盘问与拉扯';
+  return {
+    角色: { 位置: { 描述: '中州·帅帐' } },
+    世界: { 状态: { 剧本模组: {
+      modId: 'lcq.stage_02',
+      worldTurn: 20,
+      currentChapterId: 'lcq.chapter.s02',
+      chapters: [{ id: 'lcq.chapter.s02', eventIds: ['lcq.event.s02_01', 'lcq.event.s02_03', 'lcq.event.s02_02', event.id] }],
+      events: [
+        { id: 'lcq.event.s02_01', completion: [{ path: 'flags.event.s02_01.done', operator: 'eq', value: true }] },
+        { id: 'lcq.event.s02_03', completion: [{ path: 'flags.event.s02_03.done', operator: 'eq', value: true }] },
+        { id: 'lcq.event.s02_02', completion: [{ path: 'flags.event.s02_02.done', operator: 'eq', value: true }] },
+        event,
+      ],
+      completedChapterIds: [],
+      ...extra,
+      canon: { locations: [
+        { id: 'lcq.location.command_tent', name: '帅帐' },
+        { id: 'liuchao.location.wuyuan', name: '五原城' },
+      ] },
     } } },
   };
 }
@@ -35,11 +68,67 @@ test('wuyuan slice starts only after the war/shuaizhang phase and contains no ga
   const tooEarly = save();
   tooEarly.世界.状态.剧本模组.completedEventIds = [];
   tooEarly.世界.状态.剧本模组.activeEventIds = ['lcq.event.s02_03'];
+  tooEarly.世界.状态.剧本模组.flags = { 'event.s02_02.done': false, 'event.s02_03.done': false, 'event.s02_04.done': false };
   assert.equal(ensureWuyuanOpenWorldSlice(tooEarly), undefined);
   const serialized = JSON.stringify(WUYUAN_OPEN_WORLD_DEFINITION);
   assert.equal(serialized.includes('王哲'), false);
   assert.equal(serialized.includes('城门盘查'), false);
   assert.equal(serialized.includes('帅帐'), false);
+});
+
+test('s02_03_done_s02_02_active_at_shuaizhang_does_not_enable_wuyuan', async () => {
+  const {
+    ensureWuyuanOpenWorldSlice, getWuyuanOpenWorldSelections,
+  } = await loadTs('../src/modules/scenarioMods/wuyuanOpenWorldSlice.ts');
+  const current = warCampSave({
+    completedEventIds: ['lcq.event.s02_01', 'lcq.event.s02_03'],
+    activeEventIds: ['lcq.event.s02_02'],
+    flags: {
+      'event.s02_01.done': true,
+      'event.s02_03.done': true,
+      'event.s02_02.done': false,
+      'event.s02_04.done': false,
+    },
+  });
+  assert.equal(ensureWuyuanOpenWorldSlice(current), undefined);
+  assert.equal(current.世界.状态.剧本模组.openWorldSlice, undefined);
+  const selections = getWuyuanOpenWorldSelections(current);
+  assert.equal(selections.length, 0);
+  assert.equal(selections.some(item => item.label.includes('点心铺')), false);
+  assert.equal(current.角色.位置.描述, '中州·帅帐');
+});
+
+test('arrive_wuyuan_market_does_not_complete_s02_04_or_reveal_water_prison', async () => {
+  const {
+    getWuyuanOpenWorldSelections, resolveWuyuanOpenWorldSelectionFromText, settleWuyuanOpenWorldSelection,
+    getWuyuanOpenWorldPrompt, WUYUAN_MARKET_ARRIVAL_ID,
+  } = await loadTs('../src/modules/scenarioMods/wuyuanOpenWorldSlice.ts');
+  const { resolveStoryEventActionFromPlayerText } = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  const current = warCampSave({
+    completedEventIds: ['lcq.event.s02_01', 'lcq.event.s02_03', 'lcq.event.s02_02'],
+    activeEventIds: ['lcq.event.s02_04'],
+    flags: {
+      'event.s02_01.done': true,
+      'event.s02_03.done': true,
+      'event.s02_02.done': true,
+      'event.s02_04.done': false,
+    },
+  });
+  assert.equal(resolveStoryEventActionFromPlayerText(current, '我去五原城。'), undefined);
+  const beforePastry = getWuyuanOpenWorldSelections(current);
+  assert.equal(beforePastry.some(item => item.label.includes('点心铺')), false);
+  const selection = resolveWuyuanOpenWorldSelectionFromText(current, '我去五原城。');
+  assert.equal(selection?.identityId, WUYUAN_MARKET_ARRIVAL_ID);
+  const settled = settleWuyuanOpenWorldSelection(current, selection);
+  assert.equal(settled.settled, true);
+  assert.equal(current.角色.位置.描述, '中州·五原·五原露天市集');
+  assert.ok((current.世界.状态.剧本模组.openWorldSlice?.travelReceipts || []).length >= 1);
+  assert.equal(current.世界.状态.剧本模组.flags['event.s02_04.done'], false);
+  assert.deepEqual(current.世界.状态.剧本模组.activeEventIds, ['lcq.event.s02_04']);
+  assert.equal(current.世界.状态.剧本模组.completedEventIds.includes('lcq.event.s02_05'), false);
+  const after = getWuyuanOpenWorldSelections(current);
+  assert.equal(after.some(item => item.kind === 'travel' && item.label.includes('点心铺')), true);
+  assert.doesNotMatch(getWuyuanOpenWorldPrompt(current), /白湖商馆水牢/);
 });
 
 test('market exposes explicit known travel and authored notices without revealing White Lake', async () => {
@@ -57,7 +146,6 @@ test('active slice protects player position from model commands and projects onl
   const { compileScenarioProtectedPaths } = await loadTs('../src/modules/scenarioMods/canonGuard.ts');
   const { buildScenarioStoryPrompt, createScenarioPromptState } = await loadTs('../src/modules/scenarioMods/storyContext.ts');
   const current = save();
-  current.角色 = { 位置: { 描述: '旧位置' } };
   ensureWuyuanOpenWorldSlice(current);
   assert.equal(current.角色.位置.描述, '中州·五原·五原露天市集');
   assert.ok(compileScenarioProtectedPaths(current).includes('角色.位置'));
