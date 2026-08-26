@@ -4,7 +4,7 @@
 > **2026-08-26 Grok 提交复审修复 1／3 已完成。** owner=Codex。①权威 `lcq.stage_01` 已补帅帐地点与 `s01_05.locationId`；每次内置同步在删除旧 bundle 前先校验这两个权威锚点，退化时 fail closed，manifest 已刷新。③Fast scene 正文须保留第二人称落点、会剔除未授权关系终态，模型生成选项会过滤未登场人物及未结算的物品／能力／生死／关系终态；玩家自由输入闸未收紧。Claude 只读二验 `claude-2026-08-26T15-11-55-181Z-19257edc`=`PASS_WITH_FINDINGS`（P0/P1 无）。最终验证：锚点门+Fast 23/23、`type-check` PASS、`canon:build` 867 项（862 pass / 5 skip / 0 fail）、`git diff --check` PASS。
 > **移动系统待设计：** 当前没有 RPG 式可交互地图与统一移动合同；不以文本匹配修补五原移动。后续须独立设计“系统强制移动／玩家结构化主动移动／幂等移动回执”，本轮不改位置流程、不实现临时方案。
 > **P0-1 正式审核：NOT CLOSED。** 当前分支的 store 快照／写入后回滚／外层 `aborted` 闸聚焦 **8/8** PASS；但后台 `event_reconcile` 仍在最终 abort 闸之前启动，abort 返回后仍可三方合并并调用 `saveCurrentGame`。候选修复 `89ba21c` 及补充门禁（总计 12 条）仍只在 `fix/p0-1b-abort-reconcile`，未合入当前分支。下一步：单独审核／合入该候选修复后重跑全门；P0-2 不受影响、不关闭。
-> 当前没有已确认的项目级 P0 缺陷；P0 队列只含本项“先复现再裁定”，以及正式发测前的清羽开局→白湖脱身连续试玩门。五原玩法闭环与 `world_sim` G2 为 P1。Fast Demo 已阶段性收尾并保持默认关闭，`editionPack` 暂停。
+> 当前已确认的项目级 P0 缺陷为 P0-1 后台 `event_reconcile` 的 abort 原子性缺口；P0-2 仍是正式发测前的清羽开局→白湖脱身连续试玩门，不因本轮审查关闭。五原玩法闭环与 `world_sim` G2 为 P1。Fast Demo 已阶段性收尾并保持默认关闭，`editionPack` 暂停。
 >
 > ### 2026-08-23：当前 P 级队列已重排，准备移交其他 agent
 > · 当前唯一认领入口=`docs/CURRENT-P-LEVEL-HANDOFF-2026-08-23.md`。分级口径改为：P0 只收已确认的存档／主线破坏与发测硬门；静态怀疑必须先复现，不能直接触发架构重写。旧 `R3-10-BACKLOG`、本文 §5 和 `TODO.md` 的历史优先级不再作为当前排序权威。
