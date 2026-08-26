@@ -44,6 +44,12 @@ test('split and shared prompt routes forbid model rolls and require new risks to
   assert.match(pipeline, /stripLegacyJudgementMarkers\(textContent\)/);
   assert.match(pipeline, /stripLegacyJudgementMarkers\([\s\S]*response\.mid_term_memory/);
   assert.match(pipeline, /本回合无本地判定回执/);
+  assert.match(pipeline, /verifyResolvedJudgementReceipt/);
+  assert.match(pipeline, /formatVerifiedJudgementReceiptForPrompt/);
+  assert.match(pipeline, /judgementHasLocalCombatHpWrite/);
+  assert.doesNotMatch(pipeline, /userMessage\.includes\('【本地判定已结算】'\)/);
+  assert.doesNotMatch(pipeline, /userAction\?\.includes\('【本地判定已结算】'\)/);
+  assert.doesNotMatch(pipeline, /本地战斗伤害已结算=true/);
 
   const dormantCultivationRules = businessModule.CULTIVATION_SPEED_RULES;
   assert.match(dormantCultivationRules, /难度、骰点、成功率、成败及机械后果只服从【本地判定已结算】回执/);

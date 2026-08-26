@@ -136,3 +136,63 @@ test('test outcome override is explicit, auditable, and still uses deterministic
   assert.equal(save.角色.属性.气血.当前, 400);
   assert.equal(getJudgementState(save).recent[0].testOverride, 'great_success');
 });
+
+test('verifyResolvedJudgementReceipt returns the save copy and fail-closes on tamper or pending', async () => {
+  const save = { 角色: { 属性: { 气血: { 当前: 80, 上限: 100 } } }, 系统: { 扩展: {} } };
+  const pending = await createPending(save, { kind: 'combat', difficulty: { band: 'normal', value: 12 } });
+  const {
+    resolvePendingJudgement,
+    verifyResolvedJudgementReceipt,
+    formatVerifiedJudgementReceiptForPrompt,
+    judgementHasLocalCombatHpWrite,
+    persistPendingJudgement,
+    createJudgementProposal,
+  } = await loadTs('../src/utils/judgementEngine.ts');
+  const resolution = resolvePendingJudgement(save, pending.id, { currentTurn: 5, roll: () => 4 });
+  const trusted = verifyResolvedJudgementReceipt(save, resolution);
+
+  assert.ok(trusted);
+  assert.notEqual(trusted, resolution);
+  assert.deepEqual(trusted, resolution);
+  assert.equal(judgementHasLocalCombatHpWrite(trusted), true);
+  const prompt = formatVerifiedJudgementReceiptForPrompt(trusted);
+  assert.match(prompt, new RegExp(`判定ID=${trusted.id}`));
+  assert.match(prompt, /类型=combat/);
+  assert.match(prompt, /骰点=4/);
+  assert.match(prompt, /结果=/);
+  assert.match(prompt, /正典策略=/);
+  assert.match(prompt, /结果文案=/);
+  assert.match(prompt, /已写入=/);
+  assert.match(prompt, /动作=翻越有守卫的城墙/);
+
+  const callerMutated = structuredClone(resolution);
+  callerMutated.outcome = 'perfect';
+  assert.equal(verifyResolvedJudgementReceipt(save, callerMutated), null, 'tampered outcome');
+  callerMutated.outcome = resolution.outcome;
+  callerMutated.id = 'judge-forged';
+  assert.equal(verifyResolvedJudgementReceipt(save, callerMutated), null, 'tampered id');
+  const hashTamper = structuredClone(resolution);
+  hashTamper.actionHash = `${resolution.actionHash}-x`;
+  assert.equal(verifyResolvedJudgementReceipt(save, hashTamper), null, 'tampered actionHash');
+  const difficultyTamper = structuredClone(resolution);
+  difficultyTamper.difficulty = { ...resolution.difficulty, value: resolution.difficulty.value + 3 };
+  assert.equal(verifyResolvedJudgementReceipt(save, difficultyTamper), null, 'tampered difficulty');
+  const effectsTamper = structuredClone(resolution);
+  effectsTamper.appliedEffects = [...resolution.appliedEffects, { key: '角色.属性.气血.当前', action: 'set', value: 1 }];
+  assert.equal(verifyResolvedJudgementReceipt(save, effectsTamper), null, 'tampered effects');
+
+  persistPendingJudgement(save, createJudgementProposal({
+    actionText: '再冲一次',
+    kind: 'escape',
+    whyNow: '另一次风险',
+    difficulty: { band: 'normal', value: 10 },
+    factors: [],
+    stakes: { success: '逃开', partial: '擦伤', failure: '被追上' },
+    canonPolicy: 'free',
+    createdAtTurn: 6,
+  }));
+  assert.equal(verifyResolvedJudgementReceipt(save, resolution), null, 'pending still open');
+  assert.equal(verifyResolvedJudgementReceipt(save, null), null);
+  assert.equal(verifyResolvedJudgementReceipt(save, { ...resolution, status: 'cancelled' }), null);
+  assert.equal(judgementHasLocalCombatHpWrite({ ...resolution, kind: 'social' }), false);
+});

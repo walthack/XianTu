@@ -104,10 +104,10 @@ function isFeatureEnabled(storage?: StorageLike): boolean {
   try {
     const source = storage ?? (typeof globalThis.localStorage === 'undefined' ? undefined : globalThis.localStorage);
     const raw = source?.getItem(FAST_NARRATIVE_DEMO_STORAGE_KEY);
-    if (raw == null || raw === '') return true;
+    if (raw == null || raw === '') return false;
     return raw === 'true';
   } catch {
-    return true;
+    return false;
   }
 }
 

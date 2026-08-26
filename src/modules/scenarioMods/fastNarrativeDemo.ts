@@ -30,8 +30,10 @@ import {
 import { stripModelThinking } from '@/utils/jsonExtract';
 import {
   describeJudgementEffect,
+  describeJudgementOutcomeText,
   getJudgementState,
   persistPendingJudgement,
+  verifyResolvedJudgementReceipt,
   type JudgementProposal,
   type JudgementResolution,
 } from '@/utils/judgementEngine';
@@ -209,10 +211,7 @@ function verifiedJudgementFromInput(
   input: PlanFastNarrativeDemoInput,
   saveData: SaveData,
 ): JudgementResolution | undefined {
-  if (!input.judgementResolution) return undefined;
-  if (input.judgementResolution.status !== 'resolved') return undefined;
-  if (!resolutionReceiptMatches(saveData, input.judgementResolution)) return undefined;
-  return input.judgementResolution;
+  return verifyResolvedJudgementReceipt(saveData, input.judgementResolution) ?? undefined;
 }
 
 const SCENE_NO_CHANGE_RESULT = '当前行动不改变能力、物品、生死或世界因果';
@@ -342,10 +341,10 @@ export function isFastNarrativeDemoEnabled(storage?: StorageLike): boolean {
   try {
     const source = storage ?? (typeof globalThis.localStorage === 'undefined' ? undefined : globalThis.localStorage);
     const raw = source?.getItem(FAST_NARRATIVE_DEMO_STORAGE_KEY);
-    if (raw == null || raw === '') return true;
+    if (raw == null || raw === '') return false;
     return raw === 'true';
   } catch {
-    return true;
+    return false;
   }
 }
 
@@ -357,16 +356,6 @@ export function extractRawPlayerAction(playerAction: string, resolution?: Judgem
   return withoutReceipt || readText(resolution?.actionText);
 }
 
-function settledOutcomeText(resolution: JudgementResolution): string {
-  const stakes = resolution.stakes;
-  if (resolution.outcome === 'perfect') return readText(stakes.perfect) || readText(stakes.greatSuccess) || readText(stakes.success);
-  if (resolution.outcome === 'great_success') return readText(stakes.greatSuccess) || readText(stakes.success);
-  if (resolution.outcome === 'success') return readText(stakes.success);
-  if (resolution.outcome === 'partial') return readText(stakes.partial);
-  if (resolution.outcome === 'critical_failure') return readText(stakes.criticalFailure) || readText(stakes.failure);
-  return readText(stakes.failure);
-}
-
 function resolutionView(resolution: JudgementResolution): FastNarrativeResolutionView {
   return {
     id: resolution.id,
@@ -375,19 +364,10 @@ function resolutionView(resolution: JudgementResolution): FastNarrativeResolutio
     ...(typeof resolution.total === 'number' ? { total: resolution.total } : {}),
     difficulty: cloneJson(resolution.difficulty),
     ...(resolution.outcome ? { outcome: resolution.outcome } : {}),
-    settledOutcomeText: settledOutcomeText(resolution),
+    settledOutcomeText: describeJudgementOutcomeText(resolution),
     canonPolicy: resolution.canonPolicy,
     appliedEffects: cloneJson(resolution.appliedEffects || []),
   };
-}
-
-function resolutionReceiptMatches(saveData: unknown, resolution: JudgementResolution): boolean {
-  if (!resolution || resolution.status !== 'resolved') return false;
-  const state = getJudgementState(saveData);
-  if (state.pending) return false;
-  const recent = state.recent.find(item => item.id === resolution.id);
-  if (!recent || recent.status !== 'resolved') return false;
-  return JSON.stringify(resolutionView(recent)) === JSON.stringify(resolutionView(resolution));
 }
 
 function readPublicLocation(saveData: SaveData): string {
@@ -773,7 +753,7 @@ export function planFastNarrativeDemo(input: PlanFastNarrativeDemoInput): FastNa
   if (selectedCount > 1) return null;
 
   if (Object.prototype.hasOwnProperty.call(input, 'judgementResolution') && input.judgementResolution != null) {
-    if (input.judgementResolution.status !== 'resolved' || !resolutionReceiptMatches(saveData, input.judgementResolution)) {
+    if (!verifyResolvedJudgementReceipt(saveData, input.judgementResolution)) {
       return null;
     }
   }
@@ -813,7 +793,7 @@ export function routeFastNarrativeDemo(input: PlanFastNarrativeDemoInput): FastN
   if (selectedCount > 1) return { outcome: 'clarify', text: FAST_NARRATIVE_MULTI_SELECTION_TEXT };
 
   if (Object.prototype.hasOwnProperty.call(input, 'judgementResolution') && input.judgementResolution != null) {
-    if (input.judgementResolution.status !== 'resolved' || !resolutionReceiptMatches(saveData, input.judgementResolution)) {
+    if (!verifyResolvedJudgementReceipt(saveData, input.judgementResolution)) {
       return { outcome: 'clarify', text: FAST_NARRATIVE_BAD_RECEIPT_TEXT };
     }
   }

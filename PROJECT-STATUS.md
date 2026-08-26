@@ -1,6 +1,7 @@
 # 仙途 (XianTu) · 项目总体状况与并行分工文档
 
 > 面向「新加入的 agent」。读完这一篇即可独立认领一个模块开工。
+> **2026-08-27 清羽 Demo 回退 Legacy 与本地判定接回：Grok 已实现，待 Codex 收口。** Fast 缺省/空值/异常/重置 fail closed，显式 `'true'` 仍 opt-in。通用 `verifyResolvedJudgementReceipt` 接入 Legacy prompt、命令保护与战斗补伤闸；展示仍剥 `〔判定〕` 标签，补伤读剥前正文。Fast 专属短刀 scene fact 仍受实验开关控制。Claude 只读二审 `claude-2026-08-26T16-42-57-666Z-840617c2`=`GO-WITH-CHANGES`（P0 无）；P1 补伤闸已用 `processGmResponse` 真路径补测。合同=`docs/GROK-LEGACY-DEFAULT-AND-LOCAL-JUDGEMENT-BRIDGE-2026-08-27.md`。未做 Legacy 性能优化。P0-1/P0-2 均不因本任务关闭。
 > **2026-08-26 Grok 提交复审修复 1／3 已完成。** owner=Codex。①权威 `lcq.stage_01` 已补帅帐地点与 `s01_05.locationId`；每次内置同步在删除旧 bundle 前先校验这两个权威锚点，退化时 fail closed，manifest 已刷新。③Fast scene 正文须保留第二人称落点、会剔除未授权关系终态，模型生成选项会过滤未登场人物及未结算的物品／能力／生死／关系终态；玩家自由输入闸未收紧。Claude 只读二验 `claude-2026-08-26T15-11-55-181Z-19257edc`=`PASS_WITH_FINDINGS`（P0/P1 无）。最终验证：锚点门+Fast 23/23、`type-check` PASS、`canon:build` 867 项（862 pass / 5 skip / 0 fail）、`git diff --check` PASS。
 > **移动系统待设计：** 当前没有 RPG 式可交互地图与统一移动合同；不以文本匹配修补五原移动。后续须独立设计“系统强制移动／玩家结构化主动移动／幂等移动回执”，本轮不改位置流程、不实现临时方案。
 > **P0-1 正式审核：NOT CLOSED。** 当前分支的 store 快照／写入后回滚／外层 `aborted` 闸聚焦 **8/8** PASS；但后台 `event_reconcile` 仍在最终 abort 闸之前启动，abort 返回后仍可三方合并并调用 `saveCurrentGame`。候选修复 `89ba21c` 及补充门禁（总计 12 条）仍只在 `fix/p0-1b-abort-reconcile`，未合入当前分支。下一步：单独审核／合入该候选修复后重跑全门；P0-2 不受影响、不关闭。

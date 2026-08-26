@@ -166,7 +166,7 @@
             <div class="setting-info">
               <label class="setting-name">{{ t('清羽快速叙事（实验）') }}</label>
               <span class="setting-desc">{{
-                t('仅用于“清羽记开局”至白湖脱身；默认开启，关闭后走旧路。建议新档全程保持同一状态')
+                t('默认关闭，开启后仅用于清羽实验路线；关闭后走 Legacy')
               }}</span>
             </div>
             <div class="setting-control">
@@ -422,15 +422,15 @@ const { t, setLanguage, currentLanguage } = useI18n();
 const characterStore = useCharacterStore();
 const gameStateStore = useGameStateStore();
 const uiStore = useUIStore();
-const fastNarrativeDemoEnabled = ref(true);
+const fastNarrativeDemoEnabled = ref(false);
 
 const readFastNarrativeDemoSetting = () => {
   try {
     const raw = localStorage.getItem(FAST_NARRATIVE_DEMO_STORAGE_KEY);
-    if (raw == null || raw === '') return true;
+    if (raw == null || raw === '') return false;
     return raw === 'true';
   } catch {
-    return true;
+    return false;
   }
 };
 
@@ -792,8 +792,8 @@ const resetSettings = () => {
     cancelText: '取消',
     onConfirm: () => {
       debug.log('设置面板', '开始重置设置');
-      fastNarrativeDemoEnabled.value = true;
-      persistFastNarrativeDemoSetting(true, false);
+      fastNarrativeDemoEnabled.value = false;
+      persistFastNarrativeDemoSetting(false, false);
       Object.assign(settings, {
         theme: 'auto',
         uiScale: 100,

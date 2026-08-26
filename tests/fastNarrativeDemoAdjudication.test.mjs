@@ -14,6 +14,7 @@ const OUTCOMES = [
 ];
 const ON_STORAGE = { getItem: key => (key === 'xiantu.fastNarrativeDemo.v1' ? 'true' : null) };
 const OFF_STORAGE = { getItem: key => (key === 'xiantu.fastNarrativeDemo.v1' ? 'false' : null) };
+const UNSET_STORAGE = { getItem: () => null };
 const FACT_ID = 'qingyu-demo.scene.nearest-corpse-short-knife';
 
 async function fixture(outcome, options = {}) {
@@ -188,6 +189,7 @@ test('非 Demo、非 stage_01、未匹配动作或未落账 resolution 一律 fa
   const { save, resolution } = await fixture('success');
 
   assert.equal(demo.settleFastNarrativeDemoAdjudication(save, resolution, { storage: OFF_STORAGE }).reason, 'feature_disabled');
+  assert.equal(demo.settleFastNarrativeDemoAdjudication(save, resolution, { storage: UNSET_STORAGE }).reason, 'feature_disabled');
   assert.equal(save.系统.扩展.清羽记开局.adjudication, undefined, '显式关闭时不得写入 Demo 回执');
 
   const other = structuredClone(save);
@@ -237,10 +239,10 @@ test('总开关关闭时同一 acquired 存档不授予短刀因子且不写入'
     label: '现场物品·凡品短刀', value: 3, source: 'item',
   });
   assert.equal(demo.fastNarrativeDemoShortKnifeFactor(save, '我用短刀格挡袭来的兵刃', OFF_STORAGE), null);
-  assert.deepEqual(
-    demo.fastNarrativeDemoShortKnifeFactor(save, '我用短刀格挡袭来的兵刃'),
-    { label: '现场物品·凡品短刀', value: 3, source: 'item' },
-    '未写入开关时默认开启',
+  assert.equal(
+    demo.fastNarrativeDemoShortKnifeFactor(save, '我用短刀格挡袭来的兵刃', UNSET_STORAGE),
+    null,
+    '未写入开关时默认关闭，不授予短刀因子',
   );
 });
 

@@ -97,10 +97,14 @@ test('fast narrative demo is fail-closed by default and rejects ineligible turns
   const demo = await loadDemo();
   const { save, resolution } = await eligibleFixture();
 
-  assert.equal(demo.isFastNarrativeDemoEnabled(UNSET_STORAGE), true);
+  assert.equal(demo.isFastNarrativeDemoEnabled(UNSET_STORAGE), false);
+  assert.equal(demo.isFastNarrativeDemoEnabled({ getItem: () => '' }), false);
+  assert.equal(demo.isFastNarrativeDemoEnabled({ getItem: () => { throw new Error('denied'); } }), false);
   assert.equal(demo.isFastNarrativeDemoEnabled(OFF_STORAGE), false);
+  assert.equal(demo.isFastNarrativeDemoEnabled(ON_STORAGE), true);
   assert.equal(demo.isFastNarrativeDemoEnabled({ getItem: () => 'TRUE' }), false);
   assert.equal(demo.planFastNarrativeDemo(planInput(save, resolution, { storage: OFF_STORAGE })), null);
+  assert.equal(demo.planFastNarrativeDemo(planInput(save, resolution, { storage: UNSET_STORAGE })), null);
   assert.equal(demo.planFastNarrativeDemo(planInput(save, resolution, { aborted: true })), null);
   assert.equal(demo.planFastNarrativeDemo(planInput(save, resolution, { judgementResolution: undefined })), null);
   assert.equal(demo.routeFastNarrativeDemo(planInput(save, resolution, { storage: OFF_STORAGE })).outcome, 'legacy');

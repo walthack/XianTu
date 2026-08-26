@@ -16,7 +16,11 @@ test('settings panel exposes the existing fast narrative demo flag without touch
   assert.match(script.content, /FAST_NARRATIVE_DEMO_STORAGE_KEY/);
   assert.match(script.content, /localStorage\.setItem\(FAST_NARRATIVE_DEMO_STORAGE_KEY, 'true'\)/);
   assert.match(script.content, /localStorage\.setItem\(FAST_NARRATIVE_DEMO_STORAGE_KEY, 'false'\)/);
-  assert.match(script.content, /if \(raw == null \|\| raw === ''\) return true/);
+  assert.match(script.content, /if \(raw == null \|\| raw === ''\) return false/);
+  assert.match(script.content, /fastNarrativeDemoEnabled = ref\(false\)/);
+  assert.match(script.content, /fastNarrativeDemoEnabled\.value = false/);
+  assert.match(script.content, /persistFastNarrativeDemoSetting\(false, false\)/);
+  assert.match(source, /默认关闭，开启后仅用于清羽实验路线；关闭后走 Legacy/);
 
   const template = compileTemplate({
     id: 'fast-narrative-settings-toggle',

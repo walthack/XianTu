@@ -67,7 +67,13 @@ import {
   extractLegacyJudgementMarkers,
   stripLegacyJudgementMarkers,
 } from '@/utils/judgementRules';
-import { persistPendingJudgement, type JudgementResolution } from '@/utils/judgementEngine';
+import {
+  formatVerifiedJudgementReceiptForPrompt,
+  judgementHasLocalCombatHpWrite,
+  persistPendingJudgement,
+  verifyResolvedJudgementReceipt,
+  type JudgementResolution,
+} from '@/utils/judgementEngine';
 import { reconcileNarrativeState } from '@/utils/narrativeStateReconciler';
 import { runProgressAudit, shouldRunAudit } from '@/services/progressAuditService';
 import { runDeterministicBijiReconcile, runDeterministicHighlightReconcile, runDeterministicXieyiReconcile, runEventReconcile, shouldRunReconcile, evidenceLikely, buildChainCandidates } from '@/services/eventReconcileService';
@@ -178,7 +184,7 @@ export interface ProcessOptions {
   eventAction?: ScenarioEventActionSelection;
   /** 五原局部开放世界的显式移动／消息／问题合同；成功响应后才消费。 */
   openWorldAction?: WuyuanOpenWorldSelection;
-  /** 本轮已经本地落账的判定回执只读副本；实验快路渲染用。 */
+  /** 本轮已经本地落账的判定回执只读副本；Legacy 与实验快路共用，须经存档核验。 */
   judgementResolution?: JudgementResolution;
 }
 
@@ -707,6 +713,8 @@ class AIBidirectionalSystemClass {
       throw new Error('无法获取存档数据，请确保角色已加载');
     }
 
+    const trustedJudgementResolution = verifyResolvedJudgementReceipt(saveData, options?.judgementResolution);
+
     // 2. 准备AI上下文
     options?.onProgressUpdate?.('构建提示词并请求AI生成…');
     let gmResponse: GM_Response = { text: '', mid_term_memory: '', tavern_commands: [], action_options: [] };
@@ -860,8 +868,8 @@ class AIBidirectionalSystemClass {
         coreStatusSummary += `\n- 天赋: ${formatTalentsForPrompt(character.天赋)}`;
       }
 
-      coreStatusSummary += userMessage.includes('【本地判定已结算】')
-        ? '\n\n# 本回合本地判定回执\n只可演出用户消息中同一判定ID给出的既定骰点、总值、结果与已写入效果；不得重新计算、掷骰或输出判定卡。'
+      coreStatusSummary += trustedJudgementResolution
+        ? `\n\n# 本回合本地判定回执\n${formatVerifiedJudgementReceiptForPrompt(trustedJudgementResolution)}`
         : '\n\n# 本回合无本地判定回执\n禁止计算或输出骰点、判定值、难度与成败；新生风险必须停在玩家选择行动之前。';
       // --- 结束 ---
 
@@ -1414,6 +1422,7 @@ ${missingItems.length > 0 ? `【上次结构化输出缺失】
           opportunityAction: options?.opportunityAction,
           eventAction: options?.eventAction,
           openWorldAction: options?.openWorldAction,
+          judgementResolution: trustedJudgementResolution ?? undefined,
         }
       );
       if (aborted) {
@@ -2029,6 +2038,7 @@ ${step1Text}
       opportunityAction?: ScenarioOpportunityActionSelection;
       eventAction?: ScenarioEventActionSelection;
       openWorldAction?: WuyuanOpenWorldSelection;
+      judgementResolution?: JudgementResolution;
     }
   ): Promise<{ saveData: SaveData; stateChanges: StateChangeLog; aborted?: boolean; abortReason?: string }> {
     const abortRequested = () => shouldAbort?.() ?? false;
@@ -2136,6 +2146,8 @@ ${step1Text}
 
     const timePrefix = this._formatGameTime((saveData as any).元数据?.时间);
     let textContent = sanitizeAITextForDisplay(response.text || '').trim();
+    // 展示/记忆必须剥模型判定标签；叙事补伤仍要看见失败战斗标签，否则补伤闸永远打不中。
+    const textForNarratedDamage = textContent;
     const legacyJudgementMarkers = extractLegacyJudgementMarkers(textContent);
     if (legacyJudgementMarkers.length) {
       console.debug('[判定 P0] 观察到 legacy 正文判定标签（不作为状态事实）:', legacyJudgementMarkers);
@@ -2280,7 +2292,8 @@ ${step1Text}
       commandPipeline.warnings.forEach((warn) => console.warn(`[AI双向系统] ${warn}`));
     }
 
-    if (options?.userAction?.includes('【本地判定已结算】')) {
+    const trustedJudgementResolution = verifyResolvedJudgementReceipt(saveData, options?.judgementResolution);
+    if (trustedJudgementResolution) {
       const localOnlyPrefixes = ['角色.属性.气血.当前', '角色.属性.神识.当前', '角色.效果'];
       for (let index = validCommands.length - 1; index >= 0; index -= 1) {
         const command = validCommands[index];
@@ -2402,10 +2415,10 @@ ${step1Text}
 
     // 本地判定已先把来源化战斗伤害写入 resolution；本回合正文只负责演出，
     // 不得再由叙事补账第二次扣血。
-    const hasLocalCombatDamage = options?.userAction?.includes('本地战斗伤害已结算=true') === true;
+    const hasLocalCombatDamage = judgementHasLocalCombatHpWrite(trustedJudgementResolution);
     const reconciledDamageChange = hasLocalCombatDamage
       ? null
-      : this.reconcileNarratedPlayerDamage(saveData, textContent, sortedCommands);
+      : this.reconcileNarratedPlayerDamage(saveData, textForNarratedDamage, sortedCommands);
     if (reconciledDamageChange) {
       commandAppliedChanges.push(reconciledDamageChange);
     }

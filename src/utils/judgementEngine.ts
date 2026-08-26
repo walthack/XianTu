@@ -239,6 +239,89 @@ export function getJudgementState(saveData: unknown): JudgementState {
   return { version: 1, ...(pending ? { pending } : {}), recent };
 }
 
+function judgementAuthoritySnapshot(resolution: JudgementResolution): Record<string, unknown> {
+  return {
+    id: resolution.id,
+    status: resolution.status,
+    actionText: resolution.actionText,
+    actionHash: resolution.actionHash,
+    kind: resolution.kind,
+    target: resolution.target ?? null,
+    whyNow: resolution.whyNow,
+    difficulty: resolution.difficulty,
+    factors: resolution.factors,
+    stakes: resolution.stakes,
+    canonPolicy: resolution.canonPolicy,
+    sourceEventId: resolution.sourceEventId ?? null,
+    authorityReceipt: resolution.authorityReceipt ?? null,
+    createdAtTurn: resolution.createdAtTurn,
+    roll: resolution.roll ?? null,
+    total: resolution.total ?? null,
+    outcome: resolution.outcome ?? null,
+    testOverride: resolution.testOverride ?? null,
+    appliedEffects: resolution.appliedEffects,
+    resolvedAtTurn: resolution.resolvedAtTurn,
+  };
+}
+
+/**
+ * Returns the save's trusted resolved copy when the caller receipt matches
+ * the current judgement ledger. Fail closed: never throws.
+ */
+export function verifyResolvedJudgementReceipt(
+  saveData: unknown,
+  resolution: JudgementResolution | null | undefined,
+): JudgementResolution | null {
+  try {
+    if (!resolution || typeof resolution !== 'object' || Array.isArray(resolution)) return null;
+    if (resolution.status !== 'resolved') return null;
+    const state = getJudgementState(saveData);
+    if (state.pending) return null;
+    const recent = state.recent.find(item => item.id === resolution.id);
+    if (!recent || recent.status !== 'resolved') return null;
+    if (JSON.stringify(judgementAuthoritySnapshot(recent)) !== JSON.stringify(judgementAuthoritySnapshot(resolution))) {
+      return null;
+    }
+    return clone(recent);
+  } catch {
+    return null;
+  }
+}
+
+export function describeJudgementOutcomeText(resolution: JudgementResolution): string {
+  const stakes = resolution.stakes;
+  if (resolution.outcome === 'perfect') return normalizeText(stakes.perfect) || normalizeText(stakes.greatSuccess) || normalizeText(stakes.success);
+  if (resolution.outcome === 'great_success') return normalizeText(stakes.greatSuccess) || normalizeText(stakes.success);
+  if (resolution.outcome === 'success') return normalizeText(stakes.success);
+  if (resolution.outcome === 'partial') return normalizeText(stakes.partial);
+  if (resolution.outcome === 'critical_failure') return normalizeText(stakes.criticalFailure) || normalizeText(stakes.failure);
+  if (resolution.outcome === 'failure') return normalizeText(stakes.failure);
+  return '';
+}
+
+export function formatVerifiedJudgementReceiptForPrompt(resolution: JudgementResolution): string {
+  const effectSummary = (resolution.appliedEffects || []).map(describeJudgementEffect).join('；') || '无';
+  const outcomeText = describeJudgementOutcomeText(resolution) || '无';
+  return [
+    '只可演出同一判定ID给出的既定骰点、总值、结果与已写入效果；不得重新计算、掷骰或输出判定卡。',
+    `动作=${resolution.actionText}`,
+    `判定ID=${resolution.id}`,
+    `类型=${resolution.kind}`,
+    `骰点=${resolution.roll}`,
+    `总值=${resolution.total}`,
+    `难度=${resolution.difficulty.value}`,
+    `结果=${resolution.outcome}`,
+    `正典策略=${resolution.canonPolicy}`,
+    `结果文案=${outcomeText}`,
+    `已写入=${effectSummary}`,
+  ].join('；');
+}
+
+export function judgementHasLocalCombatHpWrite(resolution: JudgementResolution | null | undefined): boolean {
+  if (!resolution || resolution.status !== 'resolved' || resolution.kind !== 'combat') return false;
+  return (resolution.appliedEffects || []).some(effect => effect.key === '角色.属性.气血.当前');
+}
+
 function writeJudgementState(saveData: unknown, state: JudgementState): void {
   const root = saveData as Record<string, any>;
   if (!root || typeof root !== 'object') throw new Error('无法写入判定状态：存档无效');
