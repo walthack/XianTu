@@ -46,14 +46,14 @@ import {
   FAST_NARRATIVE_DEADLINE_MS,
   FAST_NARRATIVE_GENERATE_OPTIONS,
   armFastNarrativeNeedDice,
-  clearPendingFastIntent,
+  buildFastNarrativeActionOptions,
   finalizeFastNarrativeText,
   isFastNarrativeDemoScope,
   isFastNarrativeHoldResponse,
   routeFastNarrativeDemo,
+  splitFastNarrativeOutput,
   wrapFastNarrativeGmResponse,
   wrapFastNarrativeHoldResponse,
-  writePendingFastIntent,
 } from '@/modules/scenarioMods/fastNarrativeDemo';
 import {
   settleWuyuanOpenWorldSelection,
@@ -586,7 +586,6 @@ class AIBidirectionalSystemClass {
     const route = routeFastNarrativeDemo(routeInput);
     if (route.outcome === 'legacy') return null;
     if (route.outcome === 'need_dice') {
-      clearPendingFastIntent(saveData);
       if (route.proposal) {
         try {
           persistPendingJudgement(saveData, route.proposal);
@@ -599,15 +598,11 @@ class AIBidirectionalSystemClass {
       return wrapFastNarrativeHoldResponse('need_dice');
     }
     if (route.outcome === 'clarify') {
-      if (route.holdAction) writePendingFastIntent(saveData, route.holdAction);
-      else clearPendingFastIntent(saveData);
-      return wrapFastNarrativeHoldResponse('clarify');
+      return wrapFastNarrativeHoldResponse('clarify', route.text);
     }
     if (route.outcome !== 'fast') {
-      clearPendingFastIntent(saveData);
       return wrapFastNarrativeGmResponse(route.text);
     }
-    clearPendingFastIntent(saveData);
     const plan = route.plan;
     options?.onProgressUpdate?.('实验快路：写现场正文…');
     const { aiService } = await import('@/services/aiService');
@@ -652,8 +647,12 @@ class AIBidirectionalSystemClass {
     if (timedOut) {
       options?.onProgressUpdate?.('实验快路：超时，使用本地收束文本。');
     }
-    const text = finalizeFastNarrativeText(raw, plan.packet, plan.forbiddenNames);
-    return wrapFastNarrativeGmResponse(text);
+    const split = splitFastNarrativeOutput(raw);
+    const text = finalizeFastNarrativeText(split.body, plan.packet, plan.forbiddenNames);
+    const actionOptions = this.isActionOptionsEnabled(useUIStore())
+      ? buildFastNarrativeActionOptions(plan.packet, text, split.options)
+      : [];
+    return wrapFastNarrativeGmResponse(text, actionOptions);
   }
 
   /**
