@@ -12,6 +12,11 @@ export const QINGYU_OPENING_PLAYTEST_MOD_ID = 'lcq.stage_01';
 export const QINGYU_OPENING_PLAYTEST_END_MOD_ID = 'lcq.stage_02';
 export const QINGYU_OPENING_PLAYTEST_EXTENSION_KEY = '清羽记开局';
 
+/** Demo 里 s01_01 自由行动这么多回合后由世界自行结清，激活下一段。建档预跑占 1，玩家再输入 2 回合后到点。 */
+export const QINGYU_OPENING_S01_01_AUTO_STALL_TURNS = 3;
+/** Demo 仅这两拍到点织入当前行动：s01_01 过渡遇袭，s01_02 段强既定死亡。其它拍不默认自动推进叙事。 */
+export const QINGYU_DEMO_TIMER_WEAVE_EVENT_IDS = ['lcq.event.s01_01', 'lcq.event.s01_02'] as const;
+
 export const QINGYU_OPENING_PLAYTEST_EVENT_IDS = [
   'lcq.event.s01_01',
   'lcq.event.s01_02',
@@ -61,6 +66,50 @@ const OPENING_TEXT = `雷光是紫色的。
 
 天是亮的。风里有血腥味。`;
 
+function overlayDemoIntent(mod: ScenarioMod, eventId: string, extraAny: string[]): void {
+  const action = mod.scenario.events?.find(item => item.id === eventId)?.playerCompletionContract?.actions?.[0];
+  if (!action) return;
+  action.intentMatch = {
+    matchAny: [...new Set([...(action.intentMatch?.matchAny || []), ...extraAny])],
+    rejectIf: [...(action.intentMatch?.rejectIf || [])],
+  };
+}
+
+function applyQingyuOpeningDemoOverrides(mod: ScenarioMod): void {
+  // 限时自动推进只覆写开场落地拍。A 线 TES（去哪/见谁、到达即推进）不加 timer。
+  const event = mod.scenario.events?.find(item => item.id === 'lcq.event.s01_01');
+  if (event) {
+    event.playerPresence = 'required';
+    event.offscreenResolution = {
+      id: 'offscreen.qingyu_demo.lcq_event_s01_01',
+      afterStallTurns: QINGYU_OPENING_S01_01_AUTO_STALL_TURNS,
+      flagKey: 'world.qingyu_demo.lcq_event_s01_01.offscreen_resolved',
+      resolvedEventIds: ['lcq.event.s01_01'],
+      worldDelta: '你已经看清：这不是上海，是一片正在交战的草原。段强还在身边，远处的喊杀声正往这边压。',
+      onSceneDelta: '风里的血腥味不再含糊。你看清了草浪、旗帜和兽影，也看清段强就在几步外。这片草原正在开战。',
+      evidence: '清羽 Demo：s01_01 在玩家自由行动 2-3 回合后由世界自行结清穿越落地，激活下一段。',
+    };
+    overlayDemoIntent(mod, 'lcq.event.s01_01', [
+      '稳住自己',
+      '弄清身在何处',
+      '确认段强',
+      '弄清这片草原',
+      '找掩体',
+      '处理落地',
+    ]);
+    const action = event.playerCompletionContract?.actions?.[0];
+    if (action?.intentMatch && !(action.intentMatch.rejectIf || []).length) {
+      action.intentMatch.rejectIf = ['不管段强', '丢下段强'];
+    }
+  }
+
+  overlayDemoIntent(mod, 'lcq.event.s01_03', ['见月霜', '上前查看伤者', '看看那个伤兵']);
+  const tent = mod.scenario.events?.find(item => item.id === 'lcq.event.s01_05');
+  if (tent) tent.locationId = 'lcq.location.command_tent';
+  overlayDemoIntent(mod, 'lcq.event.s01_05', ['去帅帐', '前往帅帐', '走进帅帐', '见王哲']);
+  overlayDemoIntent(mod, 'lcq.event.s01_06', ['见月霜', '应对眼前危局']);
+}
+
 function applyCreationPreset(save: SaveData, mod: ScenarioMod): void {
   const preset = mod.scenario.opening.creationPreset;
   const identity = save.角色.身份 as CharacterBaseInfo;
@@ -94,27 +143,17 @@ export function createQingyuOpeningPlaytestSave(mod: ScenarioMod, generatedAt = 
   if (mod.manifest.id !== QINGYU_OPENING_PLAYTEST_MOD_ID) {
     throw new Error(`清羽记开局试玩需要内置模组 ${QINGYU_OPENING_PLAYTEST_MOD_ID}`);
   }
-  // Demo 的开场正文已经把「紫电穿越、坠入草原、段强就在身边」完整呈现给玩家。
-  // 这正是 s01_01 的既定结果，不该再要求玩家逐字发送一次 objective 才算发生。
-  // 复用 initialFlags → createScenarioProgress 的既有初始化语义，只给隔离 Demo 覆写；
-  // 不改全局事件 schema，也不让 LLM 或按钮写 canonical flag。
+  // 开场正文已经把穿越落地演给玩家看，但 s01_01 仍要留 2-3 回合自由行动，
+  // 再由世界自行结清并激活 s01_02。不预置 done，也不改全局事件 schema。
   const playtestMod = structuredClone(mod);
-  playtestMod.scenario.initialFlags = {
-    ...(playtestMod.scenario.initialFlags || {}),
-    'event.s01_01.done': true,
-  };
+  applyQingyuOpeningDemoOverrides(playtestMod);
   const save = applyStrictScenarioInitializationToSave(
     createMinimalSaveDataV3(),
     buildStrictScenarioInitialization(playtestMod, generatedAt),
   );
   applyCreationPreset(save, mod);
-  // 预跑一轮引擎：s01_01 已由开场事实结清，第一屏直接激活 s01_02 的世界压力。
-  //
-  // 真机实测（2026-08-19）：不预跑的话，玩家进游戏第一屏的任务栏只有
-  // 「章节：第1章·穿越」——**没有 objective、没有完成合同按钮**，因为激活发生在
-  // `advanceScenarioRuntime` 内部，而它要等玩家先发一个回合才跑。
-  // 本 demo 要验的正是"指引清不清楚"，第一屏空着就验不了。
-  // （这不是 demo 专有的问题：正常开局同样如此，只是那里玩家习惯先自己描述一句。）
+  // 预跑一轮引擎：激活发生在 advanceScenarioRuntime 内部。不预跑的话第一屏
+  // 任务栏只有「章节：第1章·穿越」，没有 objective、没有完成合同按钮。
   const primed = advanceScenarioRuntime(save).saveData;
   save.世界 = primed.世界;
 
@@ -141,9 +180,9 @@ export function createQingyuOpeningPlaytestSave(mod: ScenarioMod, generatedAt = 
     content: OPENING_TEXT,
     time: '【清羽·草原落地】',
     actionOptions: [
-      '先确认段强还在身边，弄清这片草原是哪里',
-      '避开交战双方，找掩体观察',
-      '先处理落地后的伤势与方位',
+      '先确认段强还在身边',
+      '弄清这片草原是哪里',
+      '找掩体观察四周',
     ],
   }];
   save.社交.记忆.短期记忆 = [OPENING_TEXT];

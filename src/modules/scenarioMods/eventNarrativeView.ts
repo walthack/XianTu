@@ -85,6 +85,53 @@ export function resolveScenarioEventNarrative(
   return objective && objective !== event.objective ? { ...event, objective } : event;
 }
 
+type QuestCompassRuntime = {
+  opening?: { playerCharacterId?: string };
+  canon?: {
+    characters?: Array<{ id?: string; name?: string }>;
+    locations?: Array<{ id?: string; name?: string }>;
+  };
+} | null | undefined;
+
+function questCompassTargets(event: ScenarioModEvent, runtime: QuestCompassRuntime): { locName: string; who: string[] } {
+  const locName = String((runtime?.canon?.locations || []).find(item => item.id === event.locationId)?.name || '').trim();
+  const playerId = String(runtime?.opening?.playerCharacterId || '');
+  const playerName = String((runtime?.canon?.characters || []).find(item => item.id === playerId)?.name || '').trim();
+  const who = [...new Set((event.relatedCharacterIds || [])
+    .filter(id => id && id !== playerId)
+    .map(id => String((runtime?.canon?.characters || []).find(item => item.id === id)?.name || '').trim())
+    .filter(name => name.length >= 2 && name !== playerName))]
+    .slice(0, 2);
+  return { locName, who };
+}
+
+/** 当前拍要去哪、见谁。已在目标地点时不再写「去某地」。 */
+export function questCompassPhrases(
+  event: ScenarioModEvent | null | undefined,
+  runtime: QuestCompassRuntime,
+  atLocationId?: string,
+): string[] {
+  if (!event) return [];
+  const { locName, who } = questCompassTargets(event, runtime);
+  const phrases: string[] = [];
+  if (locName && event.locationId && event.locationId !== atLocationId) phrases.push(`去${locName}`);
+  for (const name of who) phrases.push(`见${name}`);
+  return phrases;
+}
+
+/** 任务栏罗盘：去哪、见谁。不剧透结果，不替代 objective。 */
+export function formatQuestCompass(
+  event: ScenarioModEvent | null | undefined,
+  runtime: QuestCompassRuntime,
+  atLocationId?: string,
+): string {
+  const objective = resolveFixedQuestObjective(event);
+  const pointer = questCompassPhrases(event, runtime, atLocationId).join(' · ');
+  if (!pointer) return objective;
+  if (!objective) return pointer;
+  return `${pointer}：${objective}`;
+}
+
 /** 仅显式声明的分歧投影可替代 Canon Rail；普通条件化文案仍保留默认正典合同。 */
 export function narrativeVariantReplacesCanonRail(
   event: ScenarioModEvent,

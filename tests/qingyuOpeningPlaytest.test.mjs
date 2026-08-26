@@ -40,16 +40,71 @@ test('qingyu opening playtest save is isolated canon_companion with player compl
   assert.ok(actions.length > 0, 'canon_companion 开局应出现完成合同按钮');
 });
 
-test('开场已呈现的穿越事实直接落账，第一屏进入段强遇袭压力', async () => {
-  // 真机实测发现的缺口：不预跑的话第一屏任务栏只有「章节：第1章·穿越」，
-  // 没有 objective 也没有完成合同按钮——因为激活发生在 advanceScenarioRuntime 内部。
-  const { createQingyuOpeningPlaytestSave } = await loadTs('../src/modules/scenarioMods/qingyuOpeningPlaytest.ts');
+test('第一屏停在穿越落地，自由行动 2-3 回合后自动进入段强遇袭', async () => {
+  const {
+    createQingyuOpeningPlaytestSave,
+    QINGYU_OPENING_S01_01_AUTO_STALL_TURNS,
+  } = await loadTs('../src/modules/scenarioMods/qingyuOpeningPlaytest.ts');
+  const { advanceScenarioRuntime, resolveStoryEventActionFromPlayerText } = await loadTs('../src/modules/scenarioMods/runtime.ts');
   const mod = await loadStage();
-  const runtime = createQingyuOpeningPlaytestSave(mod).世界.状态.剧本模组;
-  assert.equal(runtime.flags['event.s01_01.done'], true, '开场正文已经呈现的穿越事实应直接落账');
-  assert.ok(runtime.completedEventIds.includes('lcq.event.s01_01'), '穿越拍应进入完成账本');
-  assert.deepEqual(runtime.activeEventIds, ['lcq.event.s01_02'], '第一屏应直接进入会自行推进的段强遇袭压力');
-  assert.equal(runtime.storyMode, undefined, 'demo 必须留在 canon_companion，否则完成合同按钮不出现');
+  let save = createQingyuOpeningPlaytestSave(mod);
+  const runtime = () => save.世界.状态.剧本模组;
+  assert.equal(runtime().flags['event.s01_01.done'], false, '穿越落地不再预置结清，留给玩家 2-3 回合');
+  assert.deepEqual(runtime().activeEventIds, ['lcq.event.s01_01'], '第一屏应激活穿越落地，任务栏才有 objective');
+  assert.equal(runtime().storyMode, undefined, 'demo 必须留在 canon_companion，否则完成合同按钮不出现');
+  assert.equal(
+    resolveStoryEventActionFromPlayerText(save, '先确认段强还在身边')?.eventId,
+    'lcq.event.s01_01',
+    '开场选项必须能直接推进 s01_01',
+  );
+  assert.equal(resolveStoryEventActionFromPlayerText(save, '我变成美少女'), undefined);
+
+  const s01_01 = runtime().events.find(event => event.id === 'lcq.event.s01_01');
+  assert.equal(s01_01?.offscreenResolution?.afterStallTurns, QINGYU_OPENING_S01_01_AUTO_STALL_TURNS);
+  assert.equal(s01_01?.playerPresence, 'required');
+
+  let settledAt = 0;
+  for (let turn = 1; turn <= QINGYU_OPENING_S01_01_AUTO_STALL_TURNS; turn += 1) {
+    save = advanceScenarioRuntime(save).saveData;
+    if (!runtime().activeEventIds.includes('lcq.event.s01_01')) {
+      settledAt = turn;
+      break;
+    }
+  }
+  assert.ok(settledAt >= 2 && settledAt <= 3, `s01_01 应在第 2-3 次自由推进时结清，实际第 ${settledAt} 次`);
+  assert.ok(runtime().completedEventIds.includes('lcq.event.s01_01'), '在场结清应记入完成账本');
+  assert.ok(!(runtime().offscreenResolvedEventIds || []).includes('lcq.event.s01_01'));
+  assert.deepEqual(runtime().activeEventIds, ['lcq.event.s01_02'], '结清后应激活段强遇袭');
+  const demoOnly = runtime().events.filter(event => String(event.offscreenResolution?.id || '').includes('qingyu_demo'));
+  assert.deepEqual(demoOnly.map(event => event.id), ['lcq.event.s01_01'], 'Demo 不得给其它拍加自动推进覆写');
+});
+
+test('s01_02 在 4 个自由回合内到点结清段强之死，不靠诊治原句', async () => {
+  const { createQingyuOpeningPlaytestSave } = await loadTs('../src/modules/scenarioMods/qingyuOpeningPlaytest.ts');
+  const { advanceScenarioRuntime, peekImminentWorldResolution } = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  let save = createQingyuOpeningPlaytestSave(await loadStage());
+  const rt = () => save.世界.状态.剧本模组;
+  for (let turn = 0; turn < 6 && rt().activeEventIds.includes('lcq.event.s01_01'); turn += 1) {
+    save = advanceScenarioRuntime(save).saveData;
+  }
+  assert.deepEqual(rt().activeEventIds, ['lcq.event.s01_02']);
+  const fuse = rt().events.find(event => event.id === 'lcq.event.s01_02')?.offscreenResolution?.afterStallTurns;
+  assert.equal(fuse, 4);
+
+  let settledAt = 0;
+  for (let turn = 1; turn <= fuse; turn += 1) {
+    const due = peekImminentWorldResolution(save);
+    save = advanceScenarioRuntime(save).saveData;
+    if (rt().completedEventIds.includes('lcq.event.s01_02')) {
+      settledAt = turn;
+      assert.equal(due?.eventId, 'lcq.event.s01_02', '到点当轮应先织进当前行动，再落账');
+      assert.match(String(due.ending), /脖子|中箭|身亡|领口/);
+      break;
+    }
+  }
+  assert.ok(settledAt >= 1 && settledAt <= fuse, `段强之死应在 ${fuse} 回合内到点，实际第 ${settledAt || '未结'} 回合`);
+  assert.ok(!(rt().offscreenResolvedEventIds || []).includes('lcq.event.s01_02'));
+  assert.deepEqual(rt().activeEventIds, ['lcq.event.s01_03']);
 });
 
 test('Demo 五拍自然行动词保持保守，世界压力与场外结算时钟不变', async () => {
@@ -67,6 +122,48 @@ test('Demo 五拍自然行动词保持保守，世界压力与场外结算时钟
   assert.equal(events.get('lcq.event.s01_03')?.offscreenResolution, undefined);
   assert.equal(events.get('lcq.event.s01_05')?.offscreenResolution, undefined);
   assert.equal(events.get('lcq.event.s01_06')?.offscreenResolution, undefined);
+});
+
+test('Demo A 线覆写：去帅帐/见人能推进，且不加自动推进 timer', async () => {
+  const { createQingyuOpeningPlaytestSave } = await loadTs('../src/modules/scenarioMods/qingyuOpeningPlaytest.ts');
+  const {
+    advanceScenarioRuntime,
+    resolveStoryEventActionFromPlayerText,
+  } = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  const { formatQuestCompass } = await loadTs('../src/modules/scenarioMods/eventNarrativeView.ts');
+  const save = createQingyuOpeningPlaytestSave(await loadStage());
+  const events = save.世界.状态.剧本模组.events;
+  const byId = id => events.find(event => event.id === id);
+  const phrases = id => byId(id)?.playerCompletionContract?.actions?.[0]?.intentMatch?.matchAny || [];
+
+  assert.equal(byId('lcq.event.s01_05')?.locationId, 'lcq.location.command_tent');
+  assert.ok(phrases('lcq.event.s01_03').includes('见月霜'));
+  assert.ok(phrases('lcq.event.s01_05').includes('去帅帐'));
+  assert.ok(phrases('lcq.event.s01_05').includes('见王哲'));
+  assert.ok(phrases('lcq.event.s01_06').includes('见月霜'));
+  assert.equal(byId('lcq.event.s01_03')?.offscreenResolution, undefined);
+  assert.equal(byId('lcq.event.s01_05')?.offscreenResolution, undefined);
+  assert.equal(byId('lcq.event.s01_06')?.offscreenResolution, undefined);
+  const demoTimers = events.filter(event => String(event.offscreenResolution?.id || '').includes('qingyu_demo'));
+  assert.deepEqual(demoTimers.map(event => event.id), ['lcq.event.s01_01']);
+
+  const prior = ['lcq.event.s01_01', 'lcq.event.s01_02', 'lcq.event.s01_03', 'lcq.event.s01_04', 'lcq.event.s01_06'];
+  const rt = save.世界.状态.剧本模组;
+  rt.completedEventIds = prior;
+  for (const id of prior) rt.flags[`event.${id.slice('lcq.event.'.length)}.done`] = true;
+  rt.activeEventIds = [];
+  const next = advanceScenarioRuntime(save).saveData;
+  assert.ok(next.世界.状态.剧本模组.activeEventIds.includes('lcq.event.s01_05'));
+  const compass = formatQuestCompass(
+    next.世界.状态.剧本模组.events.find(event => event.id === 'lcq.event.s01_05'),
+    next.世界.状态.剧本模组,
+    'lcq.location.grassland',
+  );
+  assert.match(compass, /去帅帐/);
+  assert.match(compass, /见王哲/);
+  assert.equal(resolveStoryEventActionFromPlayerText(next, '去帅帐')?.eventId, 'lcq.event.s01_05');
+  assert.equal(resolveStoryEventActionFromPlayerText(next, '请王哲诊治')?.eventId, 'lcq.event.s01_05');
+  assert.equal(resolveStoryEventActionFromPlayerText(next, '随便走走')?.eventId, undefined);
 });
 
 test('开场正文不得剧透后续拍，也不得出现机制术语', async () => {

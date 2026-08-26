@@ -20,6 +20,15 @@ import { loadTs } from './loadTs.mjs';
 
 const DATA = 'src/modules/scenarioMods/builtins/data/lcq.stage_01.json';
 
+function skipToEvent(rtm, save, eventId, maxTurns = 8) {
+  let current = save;
+  for (let turn = 0; turn < maxTurns; turn += 1) {
+    if ((current.世界.状态.剧本模组.activeEventIds || []).includes(eventId)) return current;
+    current = rtm.advanceScenarioRuntime(current).saveData;
+  }
+  return current;
+}
+
 test('战场拍的引信不超过 5 轮，且逼近提示必须覆盖到落定之前', () => {
   const mod = JSON.parse(fs.readFileSync(DATA, 'utf8'));
   for (const event of mod.scenario.events) {
@@ -47,11 +56,11 @@ test('闲逛时逐轮送出逼近事实，并进到提示词里（走真实路�
   const { createQingyuOpeningPlaytestSave } = await loadTs('../src/modules/scenarioMods/qingyuOpeningPlaytest.ts');
   const mod = parseScenarioMod(JSON.parse(fs.readFileSync(DATA, 'utf8')));
 
-  let save = createQingyuOpeningPlaytestSave(mod);
+  let save = skipToEvent(rtm, createQingyuOpeningPlaytestSave(mod), 'lcq.event.s01_02');
   const rt = () => save.世界.状态.剧本模组;
-  // Demo 开场正文已经呈现并结清穿越落地，第一屏直接进入段强这一拍。
-  // 不可再额外 advance 一次，否则会把第一条逼近送在测试开始收集之前。
-  assert.deepEqual(rt().activeEventIds, ['lcq.event.s01_02'], '建档第一屏应当已经进入段强这一拍');
+  // s01_01 自由行动 2-3 回合后才进入段强这一拍。跳到该拍之后不要再额外 advance，
+  // 否则会把第一条逼近送在测试开始收集之前。
+  assert.deepEqual(rt().activeEventIds, ['lcq.event.s01_02'], '进入段强拍后才能量逼近时钟');
 
   // 之后什么都不做
   const delivered = [];
@@ -86,7 +95,7 @@ test('危险不因玩家做了别的事而倒退——时钟锚在这一拍上',
   const { createQingyuOpeningPlaytestSave } = await loadTs('../src/modules/scenarioMods/qingyuOpeningPlaytest.ts');
   const mod = parseScenarioMod(JSON.parse(fs.readFileSync(DATA, 'utf8')));
 
-  let save = createQingyuOpeningPlaytestSave(mod);
+  let save = skipToEvent(rtm, createQingyuOpeningPlaytestSave(mod), 'lcq.event.s01_02');
   const rt = () => save.世界.状态.剧本模组;
   assert.deepEqual(rt().activeEventIds, ['lcq.event.s01_02']);
 
@@ -125,7 +134,7 @@ test('强制在场的拍：到点当场演完，不走场外口吻', async () =>
   assert.ok(beat.offscreenResolution.onSceneDelta, '强制在场就必须配在场版落定文案');
   assert.ok(!/缺席|你不在|没插上手/.test(beat.offscreenResolution.onSceneDelta), '在场版不得写成"你不在"的口吻');
 
-  let save = createQingyuOpeningPlaytestSave(mod);
+  let save = skipToEvent(rtm, createQingyuOpeningPlaytestSave(mod), 'lcq.event.s01_02');
   const rt = () => save.世界.状态.剧本模组;
   assert.deepEqual(rt().activeEventIds, ['lcq.event.s01_02']);
   for (let turn = 0; turn < 8; turn += 1) {

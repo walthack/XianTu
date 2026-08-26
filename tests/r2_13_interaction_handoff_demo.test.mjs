@@ -322,13 +322,15 @@ test('validator accepts event-level presentation and rejects non-string display 
     && issue.code === 'invalid_reference'), true);
 });
 
-test('the handoff window hides both next-beat surfaces and successful sends clear the editable line', async () => {
+test('handoff keeps journal and next-beat buttons; successful sends clear the editable line', async () => {
   const [mainPanel, rightSidebar] = await Promise.all([
     readFile(mainPanelUrl, 'utf8'),
     readFile(rightSidebarUrl, 'utf8'),
   ]);
-  assert.match(mainPanel, /hasPendingStoryBeatHandoff\(save\) \? \[\] : getCurrentStoryEventActions\(save\)/);
-  assert.match(rightSidebar, /anchor && !\(save && hasPendingStoryBeatHandoff\(save\)\) \? \[anchor\] : \[\]/);
+  assert.match(mainPanel, /const eventActions = getCurrentStoryEventActions\(save\)/);
+  assert.doesNotMatch(mainPanel, /hasPendingStoryBeatHandoff\(save\) \? \[\] : getCurrentStoryEventActions\(save\)/);
+  assert.match(rightSidebar, /const activeEvents = anchor \? \[anchor\] : \[\];/);
+  assert.equal(rightSidebar.includes('hasPendingStoryBeatHandoff'), false);
   assert.match(
     mainPanel,
     /if \(!hasError && aiResponse\) \{[\s\S]{0,300}inputText\.value = '';[\s\S]{0,200}selectedScenarioEngineAction\.value = null;/,

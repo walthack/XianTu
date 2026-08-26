@@ -437,7 +437,6 @@ import { formatRealmWithStage } from '@/utils/realmUtils';
 import { calculateAgeFromBirthdate } from '@/utils/lifespanCalculator';
 import {
   getScenarioFocusEvent,
-  hasPendingStoryBeatHandoff,
   trackStoryOpportunity,
   TRACKED_OPPORTUNITY_MAX_TURNS,
 } from '@/modules/scenarioMods/runtime';
@@ -451,7 +450,7 @@ import { resolveCurrentMainQuestNode, resolveMainQuestLayer } from '@/modules/sc
 import { resolveAvailableLines, resolveLocationIdFromPosition, secondaryLinesAtEvent } from '@/modules/scenarioMods/secondaryLines';
 import { characterBeatsAt } from '@/modules/scenarioMods/characterQuests';
 import { prefillChat } from '@/utils/chatBus';
-import { resolveScenarioEventNarrative } from '@/modules/scenarioMods/eventNarrativeView';
+import { formatQuestCompass, resolveScenarioEventNarrative } from '@/modules/scenarioMods/eventNarrativeView';
 import { returnToCanonAnchor } from '@/modules/scenarioMods/divergenceControl';
 import { useI18n } from '@/i18n';
 
@@ -493,10 +492,15 @@ const currentQuestEvent = (rt: any): any => {
   return (sourceEventId && (rt.events || []).find((event: any) => event?.id === sourceEventId))
     || getScenarioFocusEvent(rt);
 };
+const playerLocationDescription = (): string => String(gameStateStore.location?.描述 || '');
+const questAtLocationId = (rt: any): string | undefined => resolveLocationIdFromPosition(
+  playerLocationDescription(),
+  rt?.canon?.locations,
+);
 const visibleQuestObjective = (rt: any, event: any): string => {
   if (!event) return '';
   const view = resolveScenarioEventNarrative(event, rt.flags || {}, rt.divergences);
-  return String(view.objective || '').trim();
+  return formatQuestCompass(view, rt, questAtLocationId(rt)) || String(view.objective || '').trim();
 };
 // world_sim 主线轴：长期方向（当前层）+ 本关节点 + 局势源事件 objective；不含层六、无逐拍列表。
 const worldQuestAxis = computed(() => {
@@ -507,7 +511,7 @@ const worldQuestAxis = computed(() => {
   if (!layer?.text) return null;
   // 当前地点：隔离关被默认路线跳过时，节点靠地点锚仍要显示（见 MainQuestNode.locationId）。
   // 存档里存的是中文描述串，按地点名做最长匹配还原成 id——与 storyContext 的解析同口径。
-  const locDesc = String((gameStateStore.playerStatus as any)?.位置?.描述 || '').replace(/\s+/g, '');
+  const locDesc = playerLocationDescription().replace(/\s+/g, '');
   const curLoc = locDesc
     ? ((rt.canon?.locations || []) as Array<{ id: string; name: string }>)
         .filter(l => l.name && l.name.length >= 2 && locDesc.includes(l.name.replace(/\s+/g, '')))
@@ -528,7 +532,7 @@ const availableLines = computed(() => {
   const rt: any = epistemicRuntime.value;
   if (!rt || typeof rt !== 'object') return [];
   const locId = resolveLocationIdFromPosition(
-    (gameStateStore.playerStatus as any)?.位置?.描述,
+    playerLocationDescription(),
     rt.canon?.locations,
   );
   const event = currentQuestEvent(rt);
@@ -564,11 +568,10 @@ const questMain = computed(() => {
   const chapter = (rt.chapters || []).find((c: any) => c.id === rt.currentChapterId);
   // 与主叙事/flag guard 共用同一个运行时锚点，避免 UI 单独从 activeEventIds 选出资料事件。
   const anchor = getScenarioFocusEvent(rt);
-  const save = gameStateStore.toSaveData();
-  const activeEvents = anchor && !(save && hasPendingStoryBeatHandoff(save)) ? [anchor] : [];
+  const activeEvents = anchor ? [anchor] : [];
   const events = activeEvents.slice(0, 1).map((e: any) => {
     const view = resolveScenarioEventNarrative(e, rt.flags || {}, rt.divergences);
-    return view.objective || view.name;
+    return formatQuestCompass(view, rt, questAtLocationId(rt)) || view.objective || view.name;
   }).filter(Boolean);
   const moreCount = Math.max(0, activeEvents.length - 1);
   const ready = rt.nextStageReadyId && rt.nextStageReadyId === rt.nextStageId;

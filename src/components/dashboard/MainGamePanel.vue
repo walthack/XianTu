@@ -209,16 +209,6 @@
           <button @click="cancelPendingJudgement" :disabled="isAIProcessing">撤回</button>
         </div>
       </section>
-      <section v-else-if="pendingFastIntent" class="judgement-preflight-card">
-        <div class="judgement-preflight-title">需要确认 · 尚未进入叙事</div>
-        <div class="judgement-preflight-action">{{ pendingFastIntent.actionText }}</div>
-        <p>这是无后果的查看询问，还是会改物品、能力或生死的行动？确认前不推进回合、不写入正文。</p>
-        <div class="judgement-preflight-actions">
-          <button @click="confirmPendingFastIntent('safe')" :disabled="isAIProcessing">{{ FAST_NARRATIVE_CONFIRM_SAFE_TEXT }}</button>
-          <button @click="confirmPendingFastIntent('risk')" :disabled="isAIProcessing">{{ FAST_NARRATIVE_CONFIRM_RISK_TEXT }}</button>
-          <button @click="cancelPendingFastIntent" :disabled="isAIProcessing">撤回</button>
-        </div>
-      </section>
       <section v-else-if="latestJudgement?.status === 'resolved'" class="judgement-result-card">
         <div class="judgement-preflight-title">本地判定结果 · {{ latestJudgement.outcome }}</div>
         <div>{{ latestJudgement.actionText }}</div>
@@ -488,7 +478,6 @@ import {
   getStageEntryPresentation,
   getStageDepartureOffer,
   getTrackedStoryOpportunityActions,
-  hasPendingStoryBeatHandoff,
   resolveStoryEventActionFromPlayerText,
   type ScenarioEventActionSelection,
   type ScenarioOpportunityActionSelection,
@@ -506,11 +495,7 @@ import {
 import { WORLD_SIMULATION_PLAYTEST_KIND } from '@/modules/scenarioMods/worldSimulationPlaytest';
 import { settleFastNarrativeDemoAdjudication } from '@/modules/scenarioMods/fastNarrativeDemoAdjudication';
 import {
-  FAST_NARRATIVE_CONFIRM_RISK_TEXT,
-  FAST_NARRATIVE_CONFIRM_SAFE_TEXT,
-  clearPendingFastIntent,
   isFastNarrativeHoldResponse,
-  readPendingFastIntent,
 } from '@/modules/scenarioMods/fastNarrativeDemo';
 import type {  CharacterProfile } from '@/types/game';
 import type { GM_Response } from '@/types/AIGameMaster'; // AIGameMaster.d.ts 仍然需要保留
@@ -540,7 +525,6 @@ const inputText = computed({
 const isInputFocused = ref(false);
 const pendingJudgement = ref<JudgementProposal | null>(null);
 const latestJudgement = ref<JudgementResolution | null>(null);
-const pendingFastIntent = ref<{ actionText: string } | null>(null);
 const showJudgementTestControls = JUDGEMENT_TEST_CONTROLS;
 
 const refreshPendingJudgement = () => {
@@ -550,17 +534,10 @@ const refreshPendingJudgement = () => {
   latestJudgement.value = state?.recent.at(-1) || null;
 };
 
-const refreshPendingFastIntent = () => {
-  const save = gameStateStore.toSaveData();
-  const actionText = save ? readPendingFastIntent(save) : '';
-  pendingFastIntent.value = actionText ? { actionText } : null;
-};
-
 const persistJudgementSave = async (save: any) => {
   gameStateStore.loadFromSaveData(save);
   await characterStore.saveCurrentGame();
   refreshPendingJudgement();
-  refreshPendingFastIntent();
 };
 // 🔥 使用全局状态替代组件状态
 const isAIProcessing = computed(() => uiStore.isAIProcessing);
@@ -800,7 +777,7 @@ const scenarioEngineActionOptions = computed<ScenarioEngineActionSelection[]>(()
   const save = gameStateStore.toSaveData();
   if (!save) return [];
   const openWorldActions = getWuyuanOpenWorldSelections(save);
-  const eventActions = (hasPendingStoryBeatHandoff(save) ? [] : getCurrentStoryEventActions(save))
+  const eventActions = getCurrentStoryEventActions(save)
     // 五原落奴这拍由“先走到点心铺 → 选择应对过程 → 收束既定被抓事实”的局部合同承接。
     // 隐藏旧的宽泛单按钮，避免绕过移动、代价和失败转新状态。
     .filter(action => !(openWorldActions.length && action.eventId === 'lcq.event.s02_04'));
@@ -1840,12 +1817,12 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
       if (isFastNarrativeHoldResponse(aiResponse)) {
         const save = gameStateStore.toSaveData();
         if (save) await persistJudgementSave(save);
-        else {
-          refreshPendingJudgement();
-          refreshPendingFastIntent();
-        }
+        else refreshPendingJudgement();
         if (pendingJudgement.value) toast.info('此行动存在风险，请先确认判定');
-        else if (pendingFastIntent.value) toast.info('请确认这是查看询问还是有后果的行动');
+        else {
+          const notice = String((aiResponse as { fastNarrativeHoldNotice?: unknown }).fastNarrativeHoldNotice || '').trim();
+          if (notice) toast.info(notice);
+        }
         return;
       }
       if (aiResponse) {
@@ -1953,7 +1930,6 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
 
       // 检查角色死亡状态（在状态更新后）
       refreshPendingJudgement();
-      refreshPendingFastIntent();
       const currentSaveData = gameStateStore.toSaveData();
       if (currentSaveData) {
         // 检查气血
@@ -2121,21 +2097,6 @@ const cancelPendingJudgement = async () => {
   toast.success('已撤回行动判定');
 };
 
-const confirmPendingFastIntent = async (kind: 'safe' | 'risk') => {
-  if (!pendingFastIntent.value || isAIProcessing.value) return;
-  inputText.value = kind === 'safe' ? FAST_NARRATIVE_CONFIRM_SAFE_TEXT : FAST_NARRATIVE_CONFIRM_RISK_TEXT;
-  await sendMessage();
-};
-
-const cancelPendingFastIntent = async () => {
-  if (!pendingFastIntent.value) return;
-  const save = gameStateStore.toSaveData();
-  if (!save) return;
-  clearPendingFastIntent(save);
-  await persistJudgementSave(save);
-  toast.success('已撤回确认');
-};
-
 // （移除逐条总结逻辑）不再对溢出的短期记忆逐条生成总结
 
 // 键盘事件处理
@@ -2281,7 +2242,6 @@ watch(() => characterStore.rootState.当前激活存档, async (newSlotId, oldSl
     resetPanelState();
     await initializePanelForSave();
     refreshPendingJudgement();
-    refreshPendingFastIntent();
   }
 });
 
@@ -2297,7 +2257,6 @@ onMounted(async () => {
     // 为初始加载的存档初始化面板
     await initializePanelForSave();
     refreshPendingJudgement();
-    refreshPendingFastIntent();
 
     // 监听来自MemoryCenterPanel的配置更新事件
     panelBus.on('memory-settings-updated', (settings: unknown) => {

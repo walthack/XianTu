@@ -57,6 +57,7 @@ import {
   type ScenarioInventoryTransferReceipt,
 } from './inventoryTransactions';
 import { resolveFixedQuestObjective } from './fixedQuestObjectives';
+import { formatQuestCompass, questCompassPhrases } from './eventNarrativeView';
 
 
 export interface ScenarioProgressState {
@@ -314,6 +315,8 @@ export interface RuntimeState extends ScenarioProgressState {
   divergences?: ScenarioDivergence[];
   /** 场外世界事件已结算的原事件；与 completedEventIds 分离，防止把玩家未参与的原著拍伪记为完成。 */
   offscreenResolvedEventIds?: string[];
+  /** 本轮强制按在场合同结算的世界事件；消费即清，不改时钟。 */
+  forcedWorldEventIds?: string[];
   /** 玩家可回看的战役编年史；只记已结算事实，跨关继承。 */
   chronicle?: ScenarioChronicleEntry[];
   /** 玩家认知与世界真值、NPC 知识分账；旧档可缺省。 */
@@ -324,6 +327,8 @@ export interface RuntimeState extends ScenarioProgressState {
   npcPrivateKnowledge?: Record<string, ScenarioNpcPrivateKnowledgeFact>;
   /** 非机会卡事件的本地尝试、判定与完成状态。 */
   eventActionStates?: Record<string, ScenarioEventActionState>;
+  /** 事件激活时所在地点。用于「走到目标地点才推进」，同地激活的拍不会因人已在场而立刻结清。 */
+  eventActivatedAtLocation?: Record<string, string>;
   canon?: {
     characters?: Array<{ id: string; name: string; profile?: { memories?: string[] } }>;
     factions?: Array<{ id: string; name: string }>;
@@ -1031,7 +1036,7 @@ export function getCurrentContractStep(saveData: SaveData): ScenarioContractStep
   return runtime ? currentContractStep(runtime) : undefined;
 }
 
-/** 上一拍尚待下一轮正文承接时，UI 暂缓展示下一拍按钮；自由输入不受影响。 */
+/** 上一拍尚待下一轮正文承接：prompt 走余波窗；任务栏与主线按钮仍展示，自由输入可落账。 */
 export function hasPendingStoryBeatHandoff(saveData: SaveData): boolean {
   const runtime = getRuntime(saveData);
   const handoff = runtime?.lastSettledBeat;
@@ -1278,13 +1283,18 @@ export function getCurrentStoryEventActions(saveData: SaveData): ScenarioEventAc
     );
     const targetSuffix = interaction.targetLabel ? ` · ${interaction.targetLabel}` : '';
     const stepSuffix = isCurrentSequentialStep ? `（第 ${contractStep!.index}/${contractStep!.total} 步）` : '';
+    const atLocationId = playerLocationId(saveData, runtime);
+    const traveling = Boolean(event.locationId && event.locationId !== atLocationId);
+    const compass = traveling ? formatQuestCompass(event, runtime, atLocationId) : '';
+    const derivedLabel = `${INTERACTION_VERB_LABELS[interaction.verb]}${targetSuffix}${stepSuffix}`;
+    const useCompass = Boolean(compass && !isLinearStepContract(contract));
     return {
       source: 'event_engine' as const,
       eventId: event.id,
       actionId: action.id,
-      label: `${INTERACTION_VERB_LABELS[interaction.verb]}${targetSuffix}${stepSuffix}`,
+      label: useCompass ? compass : derivedLabel,
       actionText: action.actionText,
-      playerLine: derivePlayerLine(event, action.actionText),
+      playerLine: useCompass ? compass : derivePlayerLine(event, action.actionText),
       timeCost: action.timeCost,
       contractHash: state.contractHash,
       expectedOutcome,
@@ -1331,27 +1341,45 @@ export function resolveStoryEventActionFromPlayerText(
   saveData: SaveData,
   playerText: string,
 ): ScenarioEventActionSelection | undefined {
-  if (typeof playerText !== 'string' || !playerText.trim() || hasPendingStoryBeatHandoff(saveData)) return undefined;
+  // 交接窗只藏下一拍按钮，不挡自由输入（TES：去帅帐/见月霜仍须能落账）。
+  if (typeof playerText !== 'string' || !playerText.trim()) return undefined;
   const runtime = getRuntime(saveData);
   const event = runtime ? getCurrentPlayerCompletionEvent(runtime) : undefined;
   const contract = event?.playerCompletionContract;
-  if (!event || !contract) return undefined;
+  if (!runtime || !event || !contract) return undefined;
   const normalized = normalizeEventActionIntent(playerText);
   if (!normalized) return undefined;
 
-  const matches = getCurrentStoryEventActions(saveData).filter(selection => {
+  const selections = getCurrentStoryEventActions(saveData);
+  const rejectedBy = (selection: ScenarioEventActionSelection): boolean => {
+    const action = contract.actions.find(item => item.id === selection.actionId);
+    const rejected = (action?.intentMatch?.rejectIf || []).map(normalizeEventActionIntent).filter(Boolean);
+    return rejected.some(phrase => normalized.includes(phrase));
+  };
+  const matches = selections.filter(selection => {
     const action = contract.actions.find(item => item.id === selection.actionId);
     const intent = action?.intentMatch;
-    if (!intent) return false;
-    const rejected = (intent.rejectIf || []).map(normalizeEventActionIntent).filter(Boolean);
-    if (rejected.some(phrase => normalized.includes(phrase))) return false;
+    if (!intent || rejectedBy(selection)) return false;
     const any = (intent.matchAny || []).map(normalizeEventActionIntent).filter(Boolean);
     const all = (intent.matchAll || []).map(normalizeEventActionIntent).filter(Boolean);
     if (any.length > 0 && !any.some(phrase => normalized.includes(phrase))) return false;
     if (all.length > 0 && !all.every(phrase => normalized.includes(phrase))) return false;
     return any.length > 0 || all.length > 0;
   });
-  return matches.length === 1 ? matches[0] : undefined;
+  if (matches.length === 1) return matches[0];
+  if (matches.length > 1) return undefined;
+  const pointers = questCompassPhrases(event, runtime, playerLocationId(saveData, runtime))
+    .map(normalizeEventActionIntent)
+    .filter(Boolean);
+  if (!pointers.length) return undefined;
+  const fatalIds = new Set((event.fatalOutcomes?.choices || []).map(item => item.id));
+  const pointerMatches = selections.filter(selection =>
+    selection.source === 'event_engine'
+    && !fatalIds.has(selection.actionId)
+    && !rejectedBy(selection)
+    && pointers.some(phrase => normalized.includes(phrase)),
+  );
+  return pointerMatches.length === 1 ? pointerMatches[0] : undefined;
 }
 
 /** 当前章节显式开放的非承重探索动作；可忽略，且永远不能替代唯一主线锚点。 */
@@ -1530,6 +1558,7 @@ export function recordStoryEventStructuredAction(
   );
   const completed = action.kind !== 'prepare' && outcome !== 'failure' && contract.settleOn.includes(outcome);
   if (completed) state.readyAtTurn = turn;
+  if (event.locationId) movePlayerToEventLocation(saveData, runtime, event.locationId);
   return {
     attempted: true,
     completed,
@@ -1785,6 +1814,50 @@ function readPath(root: unknown, path: string[]): unknown {
     current = (current as Record<string, unknown>)[key];
   }
   return current;
+}
+
+function playerLocationId(saveData: SaveData, runtime: RuntimeState): string {
+  return resolveLocationIdFromPosition(
+    (saveData as { 角色?: { 位置?: { 描述?: unknown } } })?.角色?.位置?.描述,
+    runtime.canon?.locations,
+  ) || '';
+}
+
+function movePlayerToEventLocation(saveData: SaveData, runtime: RuntimeState, locationId: string): void {
+  if (playerLocationId(saveData, runtime) === locationId) return;
+  const loc = (runtime.canon?.locations || []).find(item => item.id === locationId) as
+    | { id?: string; name?: string; coordinates?: { x?: number; y?: number } }
+    | undefined;
+  const name = String(loc?.name || '').trim();
+  if (!name) return;
+  const position = (saveData as { 角色?: { 位置?: { 描述?: unknown; x?: number; y?: number } } }).角色?.位置;
+  if (!position || typeof position !== 'object') return;
+  const current = String(position.描述 || '');
+  const continent = current.includes('·') ? current.slice(0, current.indexOf('·')) : '';
+  position.描述 = continent ? `${continent}·${name}` : name;
+  if (typeof loc?.coordinates?.x === 'number') position.x = loc.coordinates.x;
+  if (typeof loc?.coordinates?.y === 'number') position.y = loc.coordinates.y;
+}
+
+function rememberEventActivationLocation(saveData: SaveData, runtime: RuntimeState, eventId: string): void {
+  runtime.eventActivatedAtLocation ||= {};
+  if (runtime.eventActivatedAtLocation[eventId] !== undefined) return;
+  runtime.eventActivatedAtLocation[eventId] = playerLocationId(saveData, runtime);
+}
+
+function settleArrivalObjective(saveData: SaveData, runtime: RuntimeState): void {
+  const locId = playerLocationId(saveData, runtime);
+  if (!locId) return;
+  const event = getCurrentPlayerCompletionEvent(runtime);
+  if (!event?.locationId || event.locationId !== locId) return;
+  const startedAt = runtime.eventActivatedAtLocation?.[event.id];
+  if (startedAt === undefined || startedAt === event.locationId) return;
+  const fatalIds = new Set((event.fatalOutcomes?.choices || []).map(item => item.id));
+  const selection = getCurrentStoryEventActions(saveData).find(item =>
+    item.source === 'event_engine' && item.eventId === event.id && !fatalIds.has(item.actionId),
+  );
+  if (!selection) return;
+  recordStoryEventStructuredAction(saveData, selection);
 }
 
 function getRuntime(saveData: SaveData): RuntimeState | null {
@@ -2101,11 +2174,17 @@ function resolveOffscreenWorldEvents(
     // 否则逼近按事件龄推进、落定按全局 stall 判定，玩家做点别的就两边脱节
     // （制作人 2026-08-20 指出「铆定对应的 event，一旦触发之后就进入计数」）。
     const pressureStartedAt = owner?.pressure ? runtime.pressureStartedAt?.[owner.id] : undefined;
-    const due = owner?.timeline?.deadlineTurns !== undefined
+    const forced = Boolean(owner && (runtime.forcedWorldEventIds || []).includes(owner.id));
+    const due = forced || (owner?.timeline?.deadlineTurns !== undefined
       ? eventTimelineDeadlineDue(runtime, owner)
       : pressureStartedAt !== undefined
-        ? (Number(runtime.worldTurn) || 0) - pressureStartedAt >= resolution.afterStallTurns
-        : effectiveStall >= resolution.afterStallTurns;
+        // 压力锚记在激活当轮 worldTurn++ 之后；到点检查在下一轮 ++ 之前。
+        // 不加这一拍，afterStallTurns=4 的段强之死要第 5 次自由输入才落账。
+        ? (Number(runtime.worldTurn) || 0) - pressureStartedAt + 1 >= resolution.afterStallTurns
+        : effectiveStall >= resolution.afterStallTurns);
+    if (forced && owner) {
+      runtime.forcedWorldEventIds = (runtime.forcedWorldEventIds || []).filter(id => id !== owner.id);
+    }
     const trackedOpportunity = findOpportunity(owner, runtime.actorEngine?.trackedOpportunityId);
     const trackedOpportunityState = trackedOpportunity
       ? runtime.actorEngine?.opportunityStates?.[trackedOpportunity.id]
@@ -2907,6 +2986,51 @@ function settleSharedExperienceAffinity(
   return grants;
 }
 
+/** 本轮按该拍已有的在场/场外合同结算，不拨时钟。事件未激活或已结清时返回 false。 */
+export function forceActiveWorldEventResolution(saveData: SaveData, eventId: string): boolean {
+  const runtime = getRuntime(saveData);
+  if (!runtime || !eventId) return false;
+  if (isEventSettled(runtime, eventId)) return false;
+  if (!runtime.activeEventIds.includes(eventId)) return false;
+  const event = runtime.events.find(item => item.id === eventId);
+  if (!event?.offscreenResolution) return false;
+  runtime.forcedWorldEventIds = [...new Set([...(runtime.forcedWorldEventIds || []), eventId])];
+  return true;
+}
+
+export interface ImminentWorldResolution {
+  eventId: string;
+  eventName: string;
+  ending: string;
+  afterStallTurns: number;
+}
+
+/** 只读：本轮 advance 会按在场/场外合同收束哪一拍。不改传入存档。 */
+export function peekImminentWorldResolution(saveData: SaveData): ImminentWorldResolution | null {
+  const runtime = getRuntime(saveData);
+  if (!runtime) return null;
+  const beforeIds = [...runtime.activeEventIds];
+  const { saveData: after, transitions } = advanceScenarioRuntime(saveData);
+  if (!transitions.some(item => item.type === 'world_event_resolved')) return null;
+  const afterRuntime = getRuntime(after);
+  if (!afterRuntime) return null;
+  const event = runtime.events.find(item => (
+    beforeIds.includes(item.id)
+    && Boolean(item.offscreenResolution)
+    && isEventSettled(afterRuntime, item.id)
+  ));
+  if (!event?.offscreenResolution) return null;
+  const onScene = event.playerPresence === 'required';
+  const ending = String((onScene && event.offscreenResolution.onSceneDelta) || event.offscreenResolution.worldDelta || '').trim();
+  if (!ending) return null;
+  return {
+    eventId: event.id,
+    eventName: String(event.name || ''),
+    ending,
+    afterStallTurns: event.offscreenResolution.afterStallTurns,
+  };
+}
+
 export function advanceScenarioRuntime(saveData: SaveData): {
   saveData: SaveData;
   transitions: ScenarioRuntimeTransition[];
@@ -2935,6 +3059,12 @@ export function advanceScenarioRuntime(saveData: SaveData): {
   runtime.completedChapterIds = Array.isArray(runtime.completedChapterIds) ? runtime.completedChapterIds : [];
   runtime.activeEventIds = Array.isArray(runtime.activeEventIds) ? runtime.activeEventIds : [];
   runtime.completedEventIds = Array.isArray(runtime.completedEventIds) ? runtime.completedEventIds : [];
+  runtime.eventActivatedAtLocation = runtime.eventActivatedAtLocation && typeof runtime.eventActivatedAtLocation === 'object'
+    ? runtime.eventActivatedAtLocation
+    : {};
+  for (const eventId of runtime.activeEventIds) rememberEventActivationLocation(next, runtime, eventId);
+  settleArrivalObjective(next, runtime);
+  settleReadyEventActionCompletionFlags(runtime);
   runtime.offscreenResolvedEventIds = Array.isArray(runtime.offscreenResolvedEventIds) ? runtime.offscreenResolvedEventIds : [];
   runtime.eventTimeline = runtime.eventTimeline && typeof runtime.eventTimeline === 'object'
     ? runtime.eventTimeline
@@ -3051,6 +3181,7 @@ export function advanceScenarioRuntime(saveData: SaveData): {
       runtime.activeEventIds.push(nextRailEventId);
       const state = eventTimelineState(runtime, nextRailEventId);
       if (state && state.activatedAtTurn === undefined) state.activatedAtTurn = Math.max(0, Number(runtime.worldTurn) || 0);
+      rememberEventActivationLocation(next, runtime, nextRailEventId);
       transitions.push({ type: 'event_activated', id: nextRailEventId });
     }
   }
@@ -3062,6 +3193,7 @@ export function advanceScenarioRuntime(saveData: SaveData): {
       runtime.activeEventIds.push(eventId);
       const state = eventTimelineState(runtime, eventId);
       if (state && state.activatedAtTurn === undefined) state.activatedAtTurn = Math.max(0, Number(runtime.worldTurn) || 0);
+      rememberEventActivationLocation(next, runtime, eventId);
       transitions.push({ type: 'event_activated', id: eventId });
     }
   }

@@ -347,6 +347,18 @@
         "features": []
       },
       {
+        "id": "lcq.location.command_tent",
+        "name": "帅帐",
+        "description": "草原战场上左武军的帅帐。",
+        "type": "城池",
+        "continentId": "liuchao.continent.zhongzhou",
+        "coordinates": {
+          "x": 881,
+          "y": 4366
+        },
+        "features": []
+      },
+      {
         "id": "lcq.location.longchi",
         "name": "龙池",
         "description": "太乙真宗驻地。 太乙真宗道观所在，山门巍峨，云雾缭绕，为六朝道教第一大宗的主坛所在。（民俗：道教圣地，讲究清修炼丹，弟子遍布六朝各地，掌教就职典礼庄严肃穆。） 太乙真宗圣地，龙阙山所在地，掌教就职大典举行地，山势险峻（民俗：道教圣地，太乙真宗总坛所在，九阳神功传承之地）",
@@ -2655,6 +2667,7 @@
           "lcq.faction.left_guard",
           "liuchao.faction.tai_yi_zhen_zong"
         ],
+        "locationId": "lcq.location.command_tent",
         "axisId": "qingyu.10.1",
         "axisMethod": "deepseek",
         "axisSeq": 19,

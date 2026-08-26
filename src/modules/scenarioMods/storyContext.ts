@@ -187,6 +187,20 @@ function getRuntime(saveData: SaveData): StoryRuntime | null {
   return record as unknown as StoryRuntime;
 }
 
+/** 场景压力 / 绝路逼近：与 Legacy 主叙事同一条文案。引擎只给可观察事实，正文演出，不用倒计时。 */
+export function formatScenePressurePrompt(saveData: SaveData): string {
+  const runtime = getRuntime(saveData) as { pendingFatalApproach?: { texts?: unknown[] } } | null;
+  const approachTexts = (runtime?.pendingFatalApproach?.texts || [])
+    .map(item => String(item || '').trim())
+    .filter(Boolean);
+  if (!approachTexts.length) return '';
+  return `【眼前的危险·只演出不预告结局】本轮正文必须让玩家亲身感到${approachTexts.length > 1 ? '这几件' : '这件'}正在发生的事：`
+    + approachTexts.map(item => `“${item}”`).join('；')
+    + '。'
+    + '用感官与人物反应写出它比上一轮更近了，让玩家自己判断还剩多少余裕；'
+    + '**不得**出现回合数、倒计时、剩余轮次或任何机制口径，**也不得**预告玩家会死、会得救或危险将如何收场。';
+}
+
 function formatPlayerEpistemicContext(runtime: StoryRuntime, anchor: ScenarioModEvent | null): string {
   const facts = Object.values(runtime.playerKnowledge || {});
   const entityNames = new Map([
@@ -1139,15 +1153,7 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
     : '';
   // 危险逐轮逼近：引擎只给可观察事实，压力由正文演出——不用 UI 倒计时（裁定 #155）。
   // 制作人 2026-08-19：「倒计时让 LLM 自己用语言喂给玩家即可。」
-  const approach = (runtime as { pendingFatalApproach?: { texts?: string[] } }).pendingFatalApproach;
-  const approachTexts = (approach?.texts || []).filter(Boolean);
-  const fatalApproachLine = approachTexts.length
-    ? `【眼前的危险·只演出不预告结局】本轮正文必须让玩家亲身感到${approachTexts.length > 1 ? '这几件' : '这件'}正在发生的事：`
-      + approachTexts.map(item => `“${item}”`).join('；')
-      + '。'
-      + '用感官与人物反应写出它比上一轮更近了，让玩家自己判断还剩多少余裕；'
-      + '**不得**出现回合数、倒计时、剩余轮次或任何机制口径，**也不得**预告玩家会死、会得救或危险将如何收场。'
-    : '';
+  const fatalApproachLine = formatScenePressurePrompt(saveData);
   // 本局已结束：正文写结局，然后停在那里。
   const over = (runtime as { gameOver?: { title: string; facts: string[] } }).gameOver;
   const gameOverLine = over
