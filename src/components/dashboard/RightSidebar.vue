@@ -437,6 +437,7 @@ import { formatRealmWithStage } from '@/utils/realmUtils';
 import { calculateAgeFromBirthdate } from '@/utils/lifespanCalculator';
 import {
   getScenarioFocusEvent,
+  getStageDepartureOffer,
   trackStoryOpportunity,
   TRACKED_OPPORTUNITY_MAX_TURNS,
 } from '@/modules/scenarioMods/runtime';
@@ -575,6 +576,8 @@ const questMain = computed(() => {
   }).filter(Boolean);
   const moreCount = Math.max(0, activeEvents.length - 1);
   const ready = rt.nextStageReadyId && rt.nextStageReadyId === rt.nextStageId;
+  const departure = ready ? getStageDepartureOffer(gameStateStore.toSaveData()) : null;
+  if (departure?.label && !events.length) events.push(departure.label);
   const cleared = ready && !chapter && !events.length;
   const next = Boolean(ready);
   // 脱节哨兵（零成本确定性）：停滞轮数超阈值 → UI 预警"主线疑似脱节"，只提示、不改任何数据。

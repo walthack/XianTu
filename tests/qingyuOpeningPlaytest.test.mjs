@@ -186,3 +186,23 @@ test('开场正文不得剧透后续拍，也不得出现机制术语', async ()
     assert.ok(!opening.includes(term), `开场正文剧透了后续内容「${term}」`);
   }
 });
+
+test('清羽切关进帅帐不剧透自爆或玩家可改结局', async () => {
+  const { createQingyuOpeningPlaytestSave, QINGYU_STAGE_02_OPENING_TEXT } =
+    await loadTs('../src/modules/scenarioMods/qingyuOpeningPlaytest.ts');
+  const { transitionToNextScenarioStage } = await loadTs('../src/modules/scenarioMods/strictInitializer.ts');
+  const { getStageEntryPresentation } = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  const { parseScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
+  const stage02Url = new URL('../src/modules/scenarioMods/builtins/data/lcq.stage_02.json', import.meta.url);
+  const stage02 = parseScenarioMod(JSON.parse(await readFile(stage02Url, 'utf8')));
+  const save = createQingyuOpeningPlaytestSave(await loadStage());
+  save.世界.状态.剧本模组.nextStageReadyId = 'lcq.stage_02';
+  const result = transitionToNextScenarioStage(save, [stage02]);
+  assert.equal(result.ok, true, result.reason);
+  const entry = getStageEntryPresentation(result.saveData);
+  assert.equal(entry?.text, QINGYU_STAGE_02_OPENING_TEXT);
+  for (const term of ['自爆', '全军覆没', '玩家可介入', '改变月霜', '救援韩庚']) {
+    assert.equal(entry?.text.includes(term), false, `切关正文剧透「${term}」`);
+  }
+  assert.match(String(stage02.scenario.opening.text), /自爆/, '内置模组原文仍保留，只覆写 Demo 切关阅读面');
+});

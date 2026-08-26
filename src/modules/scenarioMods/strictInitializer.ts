@@ -6,6 +6,7 @@ import { withNativeScenarioLocationType } from './locationTypes';
 import { advanceScenarioRuntime, createScenarioProgress, getInitialScenarioChapterId, type ScenarioProgressState } from './runtime';
 import { applyScenarioRelationshipsToSave } from './relationships';
 import { isDefaultLineQuarantinedStageId } from './canonRail';
+import { overlayQingyuStage02Opening } from './qingyuOpeningPlaytest';
 
 export interface ScenarioModRuntimeState extends ScenarioProgressState {
   schema: ScenarioMod['schema'];
@@ -304,6 +305,9 @@ export function transitionToNextScenarioStage(saveData: SaveData, modsOverride?:
     mod = targetId ? (mods || []).find(item => item.manifest.id === targetId) : undefined;
   }
   if (!mod) return { saveData, ok: false, reason: `未找到下一关模组 ${targetId}` };
+  if ((saveData as any)?.系统?.扩展?.清羽记开局?.kind === 'qingyu-demo-v1') {
+    mod = overlayQingyuStage02Opening(mod);
+  }
 
   const relationSnapshot = structuredClone((saveData as any)?.社交?.关系 || {});
   // 世界线分歧是玩家历史，不是当前关卡模板数据。切关时必须跨关携带；

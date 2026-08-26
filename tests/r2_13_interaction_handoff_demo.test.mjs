@@ -195,11 +195,14 @@ test('stage departure offer is a persistent direct command gated by the engine-o
   assert.equal(getStageDepartureOffer(save), null);
 
   runtime.nextStageReadyId = runtime.nextStageId;
+  runtime.currentChapterId = null;
+  runtime.activeEventIds = [];
   const offer = getStageDepartureOffer(save);
   assert.deepEqual(offer, {
     nextStageId: runtime.nextStageId,
     label: '收拾行装，继续旅程',
   });
+  assert.equal(offer.label, '收拾行装，继续旅程');
   runtime.worldTurn += 20;
   assert.deepEqual(getStageDepartureOffer(JSON.parse(JSON.stringify(save))), offer);
 
@@ -331,6 +334,8 @@ test('handoff keeps journal and next-beat buttons; successful sends clear the ed
   assert.doesNotMatch(mainPanel, /hasPendingStoryBeatHandoff\(save\) \? \[\] : getCurrentStoryEventActions\(save\)/);
   assert.match(rightSidebar, /const activeEvents = anchor \? \[anchor\] : \[\];/);
   assert.equal(rightSidebar.includes('hasPendingStoryBeatHandoff'), false);
+  assert.match(rightSidebar, /getStageDepartureOffer/);
+  assert.match(rightSidebar, /departure\?\.label && !events\.length\) events\.push\(departure\.label\)/);
   assert.match(
     mainPanel,
     /if \(!hasError && aiResponse\) \{[\s\S]{0,300}inputText\.value = '';[\s\S]{0,200}selectedScenarioEngineAction\.value = null;/,

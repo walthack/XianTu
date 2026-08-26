@@ -66,6 +66,20 @@ const OPENING_TEXT = `雷光是紫色的。
 
 天是亮的。风里有血腥味。`;
 
+/** 切关进帅帐只写眼前，不写王哲身死或玩家可改结局。 */
+export const QINGYU_STAGE_02_OPENING_TEXT = `帅帐里灯火压得很低。
+
+帐外还能听见远处的喊杀，但这里已经静下来了。案上有一只未拆的锦囊，对面的人还坐着，像是有话要当面说完。
+
+帐帘刚落下。你站在门槛里。`;
+
+export function overlayQingyuStage02Opening(mod: ScenarioMod): ScenarioMod {
+  if (mod.manifest.id !== QINGYU_OPENING_PLAYTEST_END_MOD_ID) return mod;
+  const next = structuredClone(mod);
+  next.scenario.opening = { ...next.scenario.opening, text: QINGYU_STAGE_02_OPENING_TEXT };
+  return next;
+}
+
 function overlayDemoIntent(mod: ScenarioMod, eventId: string, extraAny: string[]): void {
   const action = mod.scenario.events?.find(item => item.id === eventId)?.playerCompletionContract?.actions?.[0];
   if (!action) return;
