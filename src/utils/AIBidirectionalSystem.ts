@@ -17,7 +17,7 @@ import { useUIStore } from '@/stores/uiStore';
 import type { GM_Response, TavernCommand } from '@/types/AIGameMaster';
 import type { CharacterProfile, StateChangeLog, SaveData, GameTime, StateChange, GameMessage, StatusEffect, EventSystem, GameEvent } from '@/types/game';
 import { updateMasteredSkills } from './masteredSkillsCalculator';
-import {  assembleSystemPrompt } from './prompts/promptAssembler';
+import { assembleNarrativeOnlySystemPrompt, assembleSystemPrompt } from './prompts/promptAssembler';
 import { getPrompt } from '@/services/defaultPrompts';
 import { normalizeGameTime } from './time';
 import { updateStatusEffects } from './statusEffectManager';
@@ -56,6 +56,10 @@ import {
   wrapFastNarrativeHoldResponse,
 } from '@/modules/scenarioMods/fastNarrativeDemo';
 import {
+  LEGACY_NARRATIVE_PILOT_GENERATE_OPTIONS,
+  planLegacyNarrativePilot,
+} from '@/modules/scenarioMods/legacyNarrativePilot';
+import {
   settleWuyuanOpenWorldSelection,
   type WuyuanOpenWorldSelection,
 } from '@/modules/scenarioMods/wuyuanOpenWorldSlice';
@@ -69,7 +73,6 @@ import {
 } from '@/utils/judgementRules';
 import {
   formatVerifiedJudgementReceiptForPrompt,
-  judgementHasLocalCombatHpWrite,
   persistPendingJudgement,
   verifyResolvedJudgementReceipt,
   type JudgementResolution,
@@ -77,7 +80,6 @@ import {
 import { reconcileNarrativeState } from '@/utils/narrativeStateReconciler';
 import { runProgressAudit, shouldRunAudit } from '@/services/progressAuditService';
 import { runDeterministicBijiReconcile, runDeterministicHighlightReconcile, runDeterministicXieyiReconcile, runEventReconcile, shouldRunReconcile, evidenceLikely, buildChainCandidates } from '@/services/eventReconcileService';
-import { detectNarratedPlayerDamage } from '@/utils/narratedDamage';
 import { validateModelCommandPipeline } from '@/utils/modelCommandPipeline';
 import { recoverUnmarkedPlayerZeroHealth } from '@/utils/playerVitalGuard';
 import { runBoundedAuxiliaryTask } from '@/utils/boundedAuxiliaryTask';
@@ -182,6 +184,8 @@ export interface ProcessOptions {
   opportunityAction?: ScenarioOpportunityActionSelection;
   /** 由非机会卡事件合同生成的本地判定动作；成功响应后才消费。 */
   eventAction?: ScenarioEventActionSelection;
+  /** 结构化事件动作的来源；单幕试验只接受玩家实际点击的动作，不接受文本回推。 */
+  eventActionProvenance?: 'selected' | 'resolved_text';
   /** 五原局部开放世界的显式移动／消息／问题合同；成功响应后才消费。 */
   openWorldAction?: WuyuanOpenWorldSelection;
   /** 本轮已经本地落账的判定回执只读副本；Legacy 与实验快路共用，须经存档核验。 */
@@ -463,6 +467,21 @@ class AIBidirectionalSystemClass {
     return result;
   }
 
+  private limitNarrativePilotText(text: string, maxChars: number = 1000): string {
+    const normalized = text.trim();
+    if (normalized.length <= maxChars) return normalized;
+    const head = normalized.slice(0, maxChars);
+    const sentenceEnd = Math.max(
+      head.lastIndexOf('。'),
+      head.lastIndexOf('！'),
+      head.lastIndexOf('？'),
+      head.lastIndexOf('”'),
+    );
+    return sentenceEnd >= Math.floor(maxChars * 0.65)
+      ? head.slice(0, sentenceEnd + 1).trim()
+      : head.trim();
+  }
+
   private sanitizeActionOptionsForDisplay(options: unknown): string[] {
     if (!Array.isArray(options)) return [];
     const cleaned = options
@@ -661,6 +680,97 @@ class AIBidirectionalSystemClass {
     return wrapFastNarrativeGmResponse(text, actionOptions);
   }
 
+  private async tryLegacyNarrativePilot(
+    saveData: SaveData,
+    options: ProcessOptions | undefined,
+    generationId: string,
+    shouldAbort: () => boolean,
+  ): Promise<GM_Response | null> {
+    const plan = planLegacyNarrativePilot({
+      saveData,
+      eventAction: options?.eventAction,
+      eventActionProvenance: options?.eventActionProvenance,
+    });
+    if (!plan) return null;
+    if (options?.opportunityAction || options?.openWorldAction || options?.judgementResolution) return null;
+    if (shouldAbort()) throw new Error('请求已被取消');
+
+    options?.onProgressUpdate?.('Legacy 单幕试验：生成纯正文…');
+    const v3 = isSaveDataV3(saveData) ? saveData : migrateSaveDataToLatest(saveData).migrated;
+    const stateForAI = createScenarioPromptState(v3 as SaveData);
+    const recentText = (v3?.社交?.记忆?.短期记忆 || []).slice(-2).join('\n');
+    const focusContext = [plan.playerLine, recentText].filter(Boolean).join('\n');
+    const scenarioCanonPrompt = buildScenarioCanonPrompt(stateForAI as SaveData);
+    const scenarioStoryPrompt = buildScenarioStoryPrompt(v3 as SaveData, focusContext);
+    const actionGatePrompt = buildActionGatePrompt(saveData, getNarrativeTurn(saveData));
+    const focusedNpcPrompt = this.buildFocusedNpcPrompt(stateForAI);
+    const managedNarrativePrompt = await assembleNarrativeOnlySystemPrompt(stateForAI);
+    const systemPrompt = `
+${managedNarrativePrompt}
+${scenarioCanonPrompt ? `\n${scenarioCanonPrompt}\n` : ''}
+${scenarioStoryPrompt ? `\n${scenarioStoryPrompt}\n` : ''}
+${actionGatePrompt ? `\n${actionGatePrompt}\n` : ''}
+${focusedNpcPrompt ? `\n${focusedNpcPrompt}\n` : ''}
+
+# 本回合本地结构化行动
+- 玩家选择：${plan.playerLine}
+- 本地既定反馈：${plan.outcomeText}
+- 模型权限：只负责正文演出；没有命令、判定、物品、伤害、移动、关系或事件状态写入权。
+
+# 当前最小状态
+${JSON.stringify(plan.compactState)}
+${recentText ? `\n# 最近正文\n${recentText}` : ''}
+`.trim();
+
+    const promptBytes = new TextEncoder().encode(systemPrompt).byteLength;
+    const startedAt = Date.now();
+    const { aiService } = await import('@/services/aiService');
+    const useStreaming = options?.useStreaming ?? aiService.getConfig().streaming ?? true;
+    const raw = await aiService.generate({
+      ...LEGACY_NARRATIVE_PILOT_GENERATE_OPTIONS,
+      injects: [{
+        content: systemPrompt,
+        role: 'system',
+        depth: 4,
+        position: 'in_chat',
+      }],
+      user_input: plan.playerLine,
+      should_stream: useStreaming,
+      generation_id: `${generationId}_legacy_narrative_pilot`,
+      onStreamChunk: useStreaming && !requiresNarrativeBuffering(scenarioStoryPrompt)
+        ? options?.onStreamChunk
+        : undefined,
+    });
+    if (shouldAbort()) throw new Error('请求已被取消');
+
+    const candidate = this.limitNarrativePilotText(this.extractNarrativeText(String(raw)));
+    if (!candidate) throw new Error('Legacy 单幕试验返回空正文');
+    const performance = decideNarrativePerformanceAttempt(
+      candidate,
+      plan.playerLine,
+      scenarioStoryPrompt,
+      1,
+      1,
+    );
+    const text = this.limitNarrativePilotText(performance.narrative);
+    console.info('[Legacy单幕试验]', {
+      eventId: plan.selection.eventId,
+      promptBytes,
+      outputChars: text.length,
+      elapsedMs: Date.now() - startedAt,
+      usedLocalFallback: !performance.valid,
+      maxTokens: LEGACY_NARRATIVE_PILOT_GENERATE_OPTIONS.maxTokens,
+      embeddingCalls: 0,
+      modelCommands: 0,
+    });
+    return {
+      text,
+      mid_term_memory: '',
+      tavern_commands: [],
+      action_options: [],
+    };
+  }
+
   /**
    * 处理玩家行动 - 简化版流程
    * 1. 调用AI生成响应
@@ -718,6 +828,7 @@ class AIBidirectionalSystemClass {
     // 2. 准备AI上下文
     options?.onProgressUpdate?.('构建提示词并请求AI生成…');
     let gmResponse: GM_Response = { text: '', mid_term_memory: '', tavern_commands: [], action_options: [] };
+    let usedLegacyNarrativePilot = false;
     // UI 会对占位响应发起一次结构化重试；失败响应本身必须是零副作用的。
     let generationFailed = false;
     try {
@@ -736,6 +847,17 @@ class AIBidirectionalSystemClass {
         return fastNarrativeResponse;
       }
       if (!fastNarrativeResponse) {
+      const legacyNarrativePilotResponse = await this.tryLegacyNarrativePilot(
+        saveData,
+        options,
+        generationId,
+        shouldAbort,
+      );
+      if (legacyNarrativePilotResponse) {
+        gmResponse = legacyNarrativePilotResponse;
+        usedLegacyNarrativePilot = true;
+      }
+      if (!legacyNarrativePilotResponse) {
       const v3 = isSaveDataV3(saveData) ? (saveData as any) : migrateSaveDataToLatest(saveData).migrated;
 
       // 发送给 AI 的状态：严格使用 V3 五域结构（命令 key 也必须按此结构输出）
@@ -1388,6 +1510,7 @@ ${missingItems.length > 0 ? `【上次结构化输出缺失】
         options.onStreamComplete();
       }
       }
+      }
     } catch (error) {
       console.error('[AI双向系统] AI生成失败:', error);
       generationFailed = true;
@@ -1423,6 +1546,7 @@ ${missingItems.length > 0 ? `【上次结构化输出缺失】
           eventAction: options?.eventAction,
           openWorldAction: options?.openWorldAction,
           judgementResolution: trustedJudgementResolution ?? undefined,
+          narrativeAuthority: usedLegacyNarrativePilot ? 'local_contract' : 'model',
         }
       );
       if (aborted) {
@@ -2039,6 +2163,8 @@ ${step1Text}
       eventAction?: ScenarioEventActionSelection;
       openWorldAction?: WuyuanOpenWorldSelection;
       judgementResolution?: JudgementResolution;
+      /** local_contract 时，模型正文与命令均无状态写入权。 */
+      narrativeAuthority?: 'model' | 'local_contract';
     }
   ): Promise<{ saveData: SaveData; stateChanges: StateChangeLog; aborted?: boolean; abortReason?: string }> {
     const abortRequested = () => shouldAbort?.() ?? false;
@@ -2136,6 +2262,7 @@ ${step1Text}
           ? Math.max(20, Math.min(200, Math.floor(options.implicitMidFallbackMaxLen)))
           : 80,
     };
+    const modelNarrativeCanWriteState = options?.narrativeAuthority !== 'local_contract';
 
     // 仅当需要写入叙事历史时才确保系统.历史.叙事存在
     if (behavior.appendNarrativeHistory) {
@@ -2146,8 +2273,6 @@ ${step1Text}
 
     const timePrefix = this._formatGameTime((saveData as any).元数据?.时间);
     let textContent = sanitizeAITextForDisplay(response.text || '').trim();
-    // 展示/记忆必须剥模型判定标签；叙事补伤仍要看见失败战斗标签，否则补伤闸永远打不中。
-    const textForNarratedDamage = textContent;
     const legacyJudgementMarkers = extractLegacyJudgementMarkers(textContent);
     if (legacyJudgementMarkers.length) {
       console.debug('[判定 P0] 观察到 legacy 正文判定标签（不作为状态事实）:', legacyJudgementMarkers);
@@ -2292,6 +2417,12 @@ ${step1Text}
       commandPipeline.warnings.forEach((warn) => console.warn(`[AI双向系统] ${warn}`));
     }
 
+    if (!modelNarrativeCanWriteState && validCommands.length > 0) {
+      for (const command of validCommands.splice(0)) {
+        rejectedCommands.push({ command, errors: ['本回合由本地结构化合同独占状态写入，拒绝模型命令'] });
+      }
+    }
+
     const trustedJudgementResolution = verifyResolvedJudgementReceipt(saveData, options?.judgementResolution);
     if (trustedJudgementResolution) {
       const localOnlyPrefixes = ['角色.属性.气血.当前', '角色.属性.神识.当前', '角色.效果'];
@@ -2406,37 +2537,22 @@ ${step1Text}
         .map(settlement => getInventoryItemIdentityKey(settlement.receipt.itemName))
         .filter(Boolean),
     );
-    const reconciledInventoryChanges = this.reconcileNarratedInventoryPossessions(
-      saveData,
-      textContent,
-      locallySettledInventoryIdentities,
-    );
+    const reconciledInventoryChanges = modelNarrativeCanWriteState
+      ? this.reconcileNarratedInventoryPossessions(saveData, textContent, locallySettledInventoryIdentities)
+      : [];
     commandAppliedChanges.push(...reconciledInventoryChanges);
 
-    // 本地判定已先把来源化战斗伤害写入 resolution；本回合正文只负责演出，
-    // 不得再由叙事补账第二次扣血。
-    const hasLocalCombatDamage = judgementHasLocalCombatHpWrite(trustedJudgementResolution);
-    const reconciledDamageChange = hasLocalCombatDamage
-      ? null
-      : this.reconcileNarratedPlayerDamage(saveData, textForNarratedDamage, sortedCommands);
-    if (reconciledDamageChange) {
-      commandAppliedChanges.push(reconciledDamageChange);
-    }
+    // 模型正文里的旧判定标签只做观察与剥除，绝不再触发气血写入。
+    // 风险行动伤害必须来自结构化本地 judgement resolution。
 
-    const inspectedItemChanges = this.reconcileInspectedItemDescriptions(
-      saveData,
-      options?.userAction || '',
-      textContent,
-      sortedCommands
-    );
+    const inspectedItemChanges = modelNarrativeCanWriteState
+      ? this.reconcileInspectedItemDescriptions(saveData, options?.userAction || '', textContent, sortedCommands)
+      : [];
     commandAppliedChanges.push(...inspectedItemChanges);
 
-    const inspectedNpcChanges = this.reconcileInspectedNpcAppearance(
-      saveData,
-      options?.userAction || '',
-      textContent,
-      sortedCommands
-    );
+    const inspectedNpcChanges = modelNarrativeCanWriteState
+      ? this.reconcileInspectedNpcAppearance(saveData, options?.userAction || '', textContent, sortedCommands)
+      : [];
     commandAppliedChanges.push(...inspectedNpcChanges);
 
     // 叙事-数据同步兜底（位置 + 跨轮即兴目标）。默认开，可用 localStorage 'narrative-state-reconcile'='off' 关闭。
@@ -2447,7 +2563,7 @@ ${step1Text}
         return true;
       }
     })();
-    if (narrativeReconcileEnabled) {
+    if (modelNarrativeCanWriteState && narrativeReconcileEnabled) {
       const narrativeStateChanges = reconcileNarrativeState({
         saveDataBefore: saveDataSnapshotBeforeCommands,
         saveData,
@@ -2476,7 +2592,9 @@ ${step1Text}
 
     // LLM 指令可直写气血，且 UI 将 0 视为硬死亡；正文未明确写玩家死亡时，
     // 必须把误扣的 0 恢复为濒死/昏迷保底，不能把“昏过去”变成存档死锁。
-    const nonfatalRecovery = recoverUnmarkedPlayerZeroHealth(saveData, textContent);
+    const nonfatalRecovery = modelNarrativeCanWriteState
+      ? recoverUnmarkedPlayerZeroHealth(saveData, textContent)
+      : null;
     if (nonfatalRecovery) {
       console.warn(`[AI双向系统] 非致死叙事气血保底: ${nonfatalRecovery.oldValue} → ${nonfatalRecovery.newValue}`);
       commandAppliedChanges.push({
@@ -2494,7 +2612,7 @@ ${step1Text}
       const apiStore = useAPIManagementStore();
       const currentGoals = get(saveData, '系统.扩展.任务追踪.即兴目标');
       // 已知执行错误（可能回滚）时不浪费一次审计 LLM 调用
-      if (!hadExecutionError && apiStore.isFunctionEnabled('progress_audit') && shouldRunAudit(options?.userAction || '', currentGoals)) {
+      if (modelNarrativeCanWriteState && !hadExecutionError && apiStore.isFunctionEnabled('progress_audit') && shouldRunAudit(options?.userAction || '', currentGoals)) {
         const isolatedSaveData = cloneDeep(saveData);
         const auditResult = await runBoundedAuxiliaryTask(() => runProgressAudit({
           saveData: isolatedSaveData,
@@ -2613,7 +2731,7 @@ ${step1Text}
 
     // 事件对账（闭环第三环：走偏不卡死）：哨兵触发式——stallTurns 达阈值才跑，核对存档记忆
     // 补落 done/void 事件 flag，随后 advanceScenarioRuntime 当轮即推进解锁。best-effort，失败无影响。
-    try {
+    if (modelNarrativeCanWriteState) try {
       const rtForReconcile = (saveData as any)?.世界?.状态?.剧本模组;
       const highlightChanges = !hadExecutionError && rtForReconcile
         ? runDeterministicHighlightReconcile(saveData, textContent)
@@ -3694,30 +3812,6 @@ ${saveDataJson}`;
     }
 
     return repaired;
-  }
-
-  private reconcileNarratedPlayerDamage(
-    saveData: SaveData,
-    text: string,
-    commands: Array<{ action: string; key: string; value?: unknown }>
-  ): StateChange | null {
-    const damage = detectNarratedPlayerDamage(text, commands, saveData);
-    if (!damage) return null;
-
-    const healthPath = '角色.属性.气血.当前';
-    const oldValue = get(saveData, healthPath);
-    if (typeof oldValue !== 'number') return null;
-
-    const newValue = Math.max(0, oldValue + damage.amount);
-    set(saveData, healthPath, newValue);
-    console.warn(`[AI双向系统] 叙事战斗伤害补账: ${damage.amount} 气血（${damage.reason}）`);
-
-    return {
-      key: healthPath,
-      action: 'add',
-      oldValue: this._summarizeValueForChangeLog(healthPath, oldValue, 'add'),
-      newValue: this._summarizeValueForChangeLog(healthPath, newValue, 'add')
-    };
   }
 
   private reconcileNarratedInventoryPossessions(

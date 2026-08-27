@@ -268,6 +268,20 @@ ${R2_9_NARRATIVE_GUARD_RULES}
       weight: 7,
       condition: 'splitGeneration'
     },
+    legacyNarrativeOnly: {
+      name: '9.1 Legacy 单幕纯正文',
+      content: `# Legacy narrative-only 响应合同（实验）
+
+- 只输出可直接展示的中文叙事正文，不要 JSON、Markdown、行动选项、记忆摘要、系统说明或数据命令。
+- 正文目标 800–1000 字，硬上限 1000 字；用动作、感官与人物反应推进，不复述规则和玩家输入。
+- 本回合行动与结果已经由本地结构化合同确定。只演出提示中明确给出的既定动作、反馈和当前公开事实；不得重新判定、掷骰或追加伤势、物品、能力、位置移动、人物死亡、关系终态及事件完成声明。
+- 新生风险只能呈现到玩家需要再次选择的位置；不得替玩家继续行动。
+- 必须保持第二人称，并让结尾自然交还玩家行动权。`,
+      category: 'coreRequest',
+      description: 'Legacy 单幕提速试验的纯正文输出合同',
+      order: 9.1,
+      weight: 10
+    },
     splitGenerationStep2: {
       name: '10. 分步指令',
       content: `# 分步生成 2/2：仅指令

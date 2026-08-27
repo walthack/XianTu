@@ -1774,7 +1774,10 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
         shouldAbort: () => !uiStore.isAIProcessing || aiResetToken !== resetSnapshot,
       };
       if (exactSelectedOpportunityAction) options.opportunityAction = { ...exactSelectedOpportunityAction };
-      else if (resolvedEventAction) options.eventAction = { ...resolvedEventAction };
+      else if (resolvedEventAction) {
+        options.eventAction = { ...resolvedEventAction };
+        options.eventActionProvenance = exactSelectedEventAction ? 'selected' : 'resolved_text';
+      }
       if (resolvedOpenWorldAction) options.openWorldAction = { ...resolvedOpenWorldAction };
       if (execution?.resolution) options.judgementResolution = structuredClone(execution.resolution);
 

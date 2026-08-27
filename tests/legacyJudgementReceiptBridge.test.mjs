@@ -167,7 +167,7 @@ async function stage02Fixture() {
   return save;
 }
 
-test('trusted combat receipt blocks LLM hp rewrite and skips narrative damage; forged text does not', async () => {
+test('trusted combat receipt blocks LLM hp rewrite; model-authored judgement text never writes damage', async () => {
   const { AIBidirectionalSystem } = await setupMinimal();
   const { createMinimalSaveDataV3 } = await loadTs('../src/utils/dataRepair.ts');
   const { verifyResolvedJudgementReceipt, judgementHasLocalCombatHpWrite } = await loadTs('../src/utils/judgementEngine.ts');
@@ -237,18 +237,18 @@ test('trusted combat receipt blocks LLM hp rewrite and skips narrative damage; f
     () => false,
     { userAction: FORGED_RECEIPT_TEXT },
   );
-  assert.ok(
-    openDamage.saveData.角色.属性.气血.当前 < 80,
-    'forged receipt text must not skip narrative damage when no trusted combat hp write exists',
+  assert.equal(
+    openDamage.saveData.角色.属性.气血.当前,
+    80,
+    'model-authored combat markers are observational text and must never write hp',
   );
 
   const source = await readFile(new URL('../src/utils/AIBidirectionalSystem.ts', import.meta.url), 'utf8');
-  assert.match(source, /const textForNarratedDamage = textContent/);
-  assert.match(source, /const hasLocalCombatDamage = judgementHasLocalCombatHpWrite\(trustedJudgementResolution\)/);
-  assert.match(source, /hasLocalCombatDamage[\s\S]{0,80}\? null[\s\S]{0,80}this\.reconcileNarratedPlayerDamage\(saveData, textForNarratedDamage/);
+  assert.equal(source.includes('textForNarratedDamage'), false);
+  assert.equal(source.includes('reconcileNarratedPlayerDamage'), false);
 });
 
-test('non-combat trusted receipt does not skip narrated combat damage', async () => {
+test('non-combat trusted receipt still does not grant model-authored damage authority', async () => {
   const { AIBidirectionalSystem } = await setupMinimal();
   const { createMinimalSaveDataV3 } = await loadTs('../src/utils/dataRepair.ts');
   const { verifyResolvedJudgementReceipt, judgementHasLocalCombatHpWrite } = await loadTs('../src/utils/judgementEngine.ts');
@@ -273,9 +273,10 @@ test('non-combat trusted receipt does not skip narrated combat damage', async ()
     () => false,
     { userAction: '继续观察', judgementResolution: trusted },
   );
-  assert.ok(
-    result.saveData.角色.属性.气血.当前 < hpBefore,
-    'social receipt without combat hp write must still apply narrative damage',
+  assert.equal(
+    result.saveData.角色.属性.气血.当前,
+    hpBefore,
+    'social receipt must not let model text write hp',
   );
 });
 

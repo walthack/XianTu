@@ -103,3 +103,55 @@ export async function assembleSystemPrompt(
 
   return normalizedSections.join('\n\n---\n\n');
 }
+
+/**
+ * Legacy-compatible narrator prompt for locally authoritative turns.
+ * User-managed narrative/business/personality/world rules remain active. JSON
+ * output and save-schema prompts are omitted because this call cannot author
+ * commands or world state.
+ */
+export async function assembleNarrativeOnlySystemPrompt(gameState?: any): Promise<string> {
+  const [
+    responseContract,
+    businessRulesPrompt,
+    playerPersonalityPrompt,
+    textFormatsPrompt,
+    worldStandardsPrompt,
+    eventRulesPrompt,
+  ] = await Promise.all([
+    getPrompt('legacyNarrativeOnly'),
+    getPrompt('businessRules'),
+    getPrompt('playerPersonality'),
+    getPrompt('textFormatRules'),
+    getPrompt('worldStandards'),
+    getPrompt('eventSystemRules'),
+  ]);
+
+  const tavernEnv = isTavernEnv();
+  const promptSections = [
+    tavernEnv ? businessRulesPrompt : stripNsfwContent(businessRulesPrompt),
+    playerPersonalityPrompt,
+    textFormatsPrompt,
+    worldStandardsPrompt,
+    GAOSHOUBANG_NARRATION_RULE,
+    eventRulesPrompt,
+    responseContract,
+  ];
+
+  if (tavernEnv) {
+    const settingsFromStore = getNsfwSettingsFromStorage();
+    const cfg = (gameState?.系统?.配置 ?? {}) as Record<string, unknown>;
+    const nsfwMode = typeof cfg.nsfwMode === 'boolean' ? cfg.nsfwMode : settingsFromStore.nsfwMode;
+    const nsfwGenderFilter = typeof cfg.nsfwGenderFilter === 'string'
+      ? cfg.nsfwGenderFilter
+      : settingsFromStore.nsfwGenderFilter;
+    promptSections.push([
+      '# NSFW设置（酒馆端）',
+      `- nsfwMode: ${nsfwMode ? 'true' : 'false'}`,
+      `- nsfwGenderFilter: ${nsfwGenderFilter}`,
+      '- 本回合仅渲染既定公开现场，不创建 NPC、私密资料或任何存档数据。',
+    ].join('\n'));
+  }
+
+  return promptSections.map(section => section.trim()).filter(Boolean).join('\n\n---\n\n');
+}

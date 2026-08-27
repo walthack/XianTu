@@ -494,7 +494,7 @@ test('source path takes one text generate call and default-off keeps the legacy 
   );
   const tryFn = bidirectional.slice(
     bidirectional.indexOf('private async tryFastNarrativeDemo'),
-    bidirectional.indexOf('public async processPlayerAction'),
+    bidirectional.indexOf('private async tryLegacyNarrativePilot'),
   );
   assert.ok(processFn.includes('tryFastNarrativeDemo'));
   assert.ok(processFn.indexOf('tryFastNarrativeDemo') < processFn.indexOf('createScenarioPromptState(v3'));

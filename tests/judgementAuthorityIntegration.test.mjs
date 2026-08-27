@@ -46,7 +46,7 @@ test('split and shared prompt routes forbid model rolls and require new risks to
   assert.match(pipeline, /本回合无本地判定回执/);
   assert.match(pipeline, /verifyResolvedJudgementReceipt/);
   assert.match(pipeline, /formatVerifiedJudgementReceiptForPrompt/);
-  assert.match(pipeline, /judgementHasLocalCombatHpWrite/);
+  assert.doesNotMatch(pipeline, /reconcileNarratedPlayerDamage|textForNarratedDamage/);
   assert.doesNotMatch(pipeline, /userMessage\.includes\('【本地判定已结算】'\)/);
   assert.doesNotMatch(pipeline, /userAction\?\.includes\('【本地判定已结算】'\)/);
   assert.doesNotMatch(pipeline, /本地战斗伤害已结算=true/);

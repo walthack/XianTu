@@ -181,6 +181,25 @@
             </div>
           </div>
 
+          <div class="setting-item">
+            <div class="setting-info">
+              <label class="setting-name">{{ t('Legacy 第一幕提速试验') }}</label>
+              <span class="setting-desc">{{
+                t('默认关闭；仅点击清羽第一幕的本地行动时生成纯正文，其他回合仍走完整 Legacy')
+              }}</span>
+            </div>
+            <div class="setting-control">
+              <label class="setting-switch">
+                <input
+                  type="checkbox"
+                  v-model="legacyNarrativePilotEnabled"
+                  @change="onLegacyNarrativePilotChange"
+                />
+                <span class="switch-slider"></span>
+              </label>
+            </div>
+          </div>
+
           <!-- 道号修改 -->
           <div class="setting-item setting-item-full" v-if="currentPlayerName">
             <div class="setting-info">
@@ -417,12 +436,14 @@ import { useGameStateStore } from '@/stores/gameStateStore';
 import { useUIStore } from '@/stores/uiStore';
 import { unwrapDadBundle } from '@/utils/dadBundle';
 import { FAST_NARRATIVE_DEMO_STORAGE_KEY } from '@/modules/scenarioMods/fastNarrativeDemoAdjudication';
+import { LEGACY_NARRATIVE_PILOT_STORAGE_KEY } from '@/modules/scenarioMods/legacyNarrativePilot';
 
 const { t, setLanguage, currentLanguage } = useI18n();
 const characterStore = useCharacterStore();
 const gameStateStore = useGameStateStore();
 const uiStore = useUIStore();
 const fastNarrativeDemoEnabled = ref(false);
+const legacyNarrativePilotEnabled = ref(false);
 
 const readFastNarrativeDemoSetting = () => {
   try {
@@ -453,6 +474,29 @@ const persistFastNarrativeDemoSetting = (enabled: boolean, showToast = true) => 
 
 const onFastNarrativeDemoChange = () => {
   persistFastNarrativeDemoSetting(fastNarrativeDemoEnabled.value);
+};
+
+const readLegacyNarrativePilotSetting = () => {
+  try {
+    return localStorage.getItem(LEGACY_NARRATIVE_PILOT_STORAGE_KEY) === 'true';
+  } catch {
+    return false;
+  }
+};
+
+const persistLegacyNarrativePilotSetting = (enabled: boolean, showToast = true) => {
+  try {
+    localStorage.setItem(LEGACY_NARRATIVE_PILOT_STORAGE_KEY, enabled ? 'true' : 'false');
+    if (showToast) toast.success(enabled ? 'Legacy 第一幕提速试验已开启' : 'Legacy 第一幕提速试验已关闭');
+  } catch (error) {
+    legacyNarrativePilotEnabled.value = readLegacyNarrativePilotSetting();
+    console.error('保存 Legacy 第一幕提速试验开关失败:', error);
+    toast.error('Legacy 第一幕提速试验开关保存失败，请重试');
+  }
+};
+
+const onLegacyNarrativePilotChange = () => {
+  persistLegacyNarrativePilotSetting(legacyNarrativePilotEnabled.value);
 };
 
 const onLanguageChange = () => {
@@ -794,6 +838,8 @@ const resetSettings = () => {
       debug.log('设置面板', '开始重置设置');
       fastNarrativeDemoEnabled.value = false;
       persistFastNarrativeDemoSetting(false, false);
+      legacyNarrativePilotEnabled.value = false;
+      persistLegacyNarrativePilotSetting(false, false);
       Object.assign(settings, {
         theme: 'auto',
         uiScale: 100,
@@ -953,6 +999,7 @@ const router = useRouter();
 onMounted(() => {
   debug.log('设置面板', '组件已加载');
   fastNarrativeDemoEnabled.value = readFastNarrativeDemoSetting();
+  legacyNarrativePilotEnabled.value = readLegacyNarrativePilotSetting();
   loadSettings();
   loadVectorMemoryConfig();
 
