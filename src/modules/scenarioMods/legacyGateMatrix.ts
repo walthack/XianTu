@@ -21,9 +21,9 @@ export const LEGACY_GATE_MATRIX: LegacyGateRule[] = [
   { id: 'reserved-future', gate: 5, name: '禁止提前演后续拍点', localAnchor: 'reservedFutureTerms → packet.mustNotAppear', inNarratorPacket: true },
   { id: 'present-cast', gate: 6, name: '只投影在场/已揭示人物', localAnchor: 'computePresentNames', inNarratorPacket: true },
   { id: 'sentence-gate', gate: 7, name: '句级输出门', localAnchor: 'createLegacySentenceStream + firstSafeSentenceAt', inNarratorPacket: false },
-  { id: 'full-text-guard', gate: 8, name: '全文终检', localAnchor: 'validateNarrativePerformance', inNarratorPacket: false },
+  { id: 'full-text-guard', gate: 8, name: '全文终检', localAnchor: 'validateLegacyVisibleNarrative + mustAppear', inNarratorPacket: false },
   { id: 'no-commands', gate: 9, name: 'Narrator 无命令与存档权', localAnchor: 'empty tavern_commands + narrativeAuthority=local_contract', inNarratorPacket: true },
-  { id: 'fail-closed', gate: 10, name: '空/违规走本地收束', localAnchor: 'safeNarrativeFallbackForContext', inNarratorPacket: false },
+  { id: 'fail-closed', gate: 10, name: '空/违规走本地收束', localAnchor: 'buildLegacySafeNarrative', inNarratorPacket: false },
 ];
 
 export function uncoveredLegacyGates(rules: LegacyGateRule[] = LEGACY_GATE_MATRIX): LegacyGateId[] {

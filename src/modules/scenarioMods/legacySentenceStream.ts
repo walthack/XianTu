@@ -1,18 +1,27 @@
 import { stripModelThinking } from '@/utils/jsonExtract';
 import { noteFirstSafeSentence } from '@/utils/turnTelemetry';
 import {
-  hasHardNarrativeViolation,
-  safeNarrativeFallbackForContext,
-  validateNarrativePerformance,
-} from './narrativePerformanceGuard';
+  buildLegacySafeNarrative,
+  clipToNarrativeCap,
+  countVisibleNarrativeChars,
+  LEGACY_NARRATIVE_MAX_CHARS,
+  LEGACY_NARRATIVE_MIN_CHARS,
+  narrativeHasRequiredConcepts,
+  validateLegacyVisibleNarrative,
+} from './legacyNarrativeContract';
+import type { LegacyNarratorPacket } from './legacyNarratorPacket';
 
 const LOOKAHEAD_SENTENCES = 1;
+const REQUIRED_CLOSURE_RESERVE_CHARS = 180;
 const SENTENCE_RE = /[^。！？\n]*[。！？\n]+/gu;
 
 export interface LegacySentenceStreamInput {
   userInput: string;
   storyPrompt: string;
-  mustNotAppear: string[];
+  packet: LegacyNarratorPacket;
+  mustNotAppear?: string[];
+  minChars?: number;
+  maxChars?: number;
   onSafeText?: (delta: string, displayed: string) => void;
 }
 
@@ -24,13 +33,19 @@ export function createLegacySentenceStream(input: LegacySentenceStreamInput) {
   let displayed = '';
   let stopped = false;
   let usedFallback = false;
+  const minChars = input.minChars ?? LEGACY_NARRATIVE_MIN_CHARS;
+  const maxChars = input.maxChars ?? LEGACY_NARRATIVE_MAX_CHARS;
+  const mustNotAppear = input.mustNotAppear || input.packet.mustNotAppear || [];
 
-  function violates(text: string): boolean {
+  function violates(text: string, partial: boolean): boolean {
     if (!text.trim()) return false;
-    if (input.mustNotAppear.some(term => term && text.includes(term))) return true;
-    return hasHardNarrativeViolation(
-      validateNarrativePerformance(text, input.userInput, input.storyPrompt),
-    );
+    if (mustNotAppear.some(term => term && text.includes(term))) return true;
+    const visible = validateLegacyVisibleNarrative(text, input.packet, {
+      partial,
+      userInput: input.userInput,
+      storyPrompt: input.storyPrompt,
+    });
+    return !visible.valid;
   }
 
   function emit(sentence: string): void {
@@ -40,10 +55,22 @@ export function createLegacySentenceStream(input: LegacySentenceStreamInput) {
     input.onSafeText?.(sentence, displayed);
   }
 
+  function canEmit(sentence: string): boolean {
+    if (violates(sentence, true) || violates(displayed + sentence, true)) return false;
+    const trial = displayed + sentence;
+    const chars = countVisibleNarrativeChars(trial);
+    if (chars > maxChars) return false;
+    if (
+      chars > Math.max(0, maxChars - REQUIRED_CLOSURE_RESERVE_CHARS)
+      && !narrativeHasRequiredConcepts(trial, input.packet)
+    ) return false;
+    return true;
+  }
+
   function tryEmitHead(): boolean {
     if (stopped || !held.length) return false;
     const next = held[0];
-    if (violates(next) || violates(displayed + next)) {
+    if (!canEmit(next)) {
       stopped = true;
       held.length = 0;
       return false;
@@ -86,33 +113,53 @@ export function createLegacySentenceStream(input: LegacySentenceStreamInput) {
     }
   }
 
-  function finish(): { text: string; raw: string; usedFallback: boolean; stopped: boolean } {
+  function flushHeld(): void {
     if (!stopped && pending.trim()) held.push(pending);
     pending = '';
     while (!stopped && held.length) {
       if (!tryEmitHead()) break;
     }
-    let text = displayed.trim();
-    const full = validateNarrativePerformance(text, input.userInput, input.storyPrompt);
-    if (!text || hasHardNarrativeViolation(full) || stopped) {
-      const fallback = safeNarrativeFallbackForContext(input.userInput, input.storyPrompt);
-      text = text ? `${text}\n${fallback}` : fallback;
-      usedFallback = true;
-      if (!displayed.trim()) {
-        displayed = text;
-        input.onSafeText?.(text, displayed);
-        noteFirstSafeSentence();
-      } else {
-        input.onSafeText?.(`\n${fallback}`, `${displayed}\n${fallback}`);
-      }
-    }
-    return { text, raw, usedFallback, stopped };
+  }
+
+  function applyLocalSafety(): void {
+    const current = displayed.trim();
+    const complete = validateLegacyVisibleNarrative(current, input.packet, {
+      userInput: input.userInput,
+      storyPrompt: input.storyPrompt,
+    });
+    const tooShort = countVisibleNarrativeChars(current) < minChars;
+    if (current && complete.valid && !tooShort) return;
+    const next = clipToNarrativeCap(
+      buildLegacySafeNarrative(input.packet, current),
+      maxChars,
+    );
+    const merged = current && next.startsWith(current) ? next : (current ? `${current}\n${next}` : next);
+    displayed = clipToNarrativeCap(merged, maxChars);
+    usedFallback = true;
+    const delta = displayed.startsWith(current) ? displayed.slice(current.length) : displayed;
+    if (delta.trim()) input.onSafeText?.(delta, displayed);
+    if (displayed.trim()) noteFirstSafeSentence();
+  }
+
+  function closeAttempt(): { displayed: string; raw: string; stopped: boolean } {
+    flushHeld();
+    return { displayed: displayed.trim(), raw, stopped };
+  }
+
+  function finish(): { text: string; raw: string; usedFallback: boolean; stopped: boolean; displayed: string } {
+    flushHeld();
+    applyLocalSafety();
+    const text = displayed.trim();
+    return { text, raw, usedFallback, stopped, displayed: text };
   }
 
   return {
     push,
+    closeAttempt,
     finish,
+    applyLocalSafety,
     getDisplayed: () => displayed,
     isEmpty: () => !raw.trim() && !displayed.trim() && held.length === 0 && !pending.trim(),
+    hasVisibleText: () => Boolean(displayed.trim()),
   };
 }

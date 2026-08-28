@@ -59,9 +59,18 @@ import {
   LEGACY_NARRATIVE_PILOT_GENERATE_OPTIONS,
   planLegacyNarrativePilot,
 } from '@/modules/scenarioMods/legacyNarrativePilot';
-import { buildLegacyNarratorPrompt, LEGACY_NARRATOR_PACKET_BUDGET_BYTES } from '@/modules/scenarioMods/legacyNarratorPacket';
-import { createLegacySentenceStream } from '@/modules/scenarioMods/legacySentenceStream';
-import { scheduleBackgroundMemoryWork } from '@/utils/backgroundMemoryWork';
+import {
+  buildLegacyNarratorPrompt,
+  isLegacyPilotPromptWithinBudget,
+  LEGACY_NARRATOR_PROMPT_BUDGET_BYTES,
+} from '@/modules/scenarioMods/legacyNarratorPacket';
+import { generateLegacyPilotNarrative } from '@/modules/scenarioMods/legacyNarrativePilotGenerate';
+import {
+  beginForegroundAiTurn,
+  endForegroundAiTurn,
+  scheduleBackgroundMemoryWork,
+} from '@/utils/backgroundMemoryWork';
+import { resolveLegacyForegroundRecall } from '@/utils/legacyForegroundRecall';
 import {
   beginTurnTelemetry,
   endTurnTelemetry,
@@ -239,6 +248,12 @@ export interface MemorySummaryOptions {
    *   - 适用场景：后台任务、自动总结、批量处理
    */
   useStreaming?: boolean;
+
+  /**
+   * 后台自动总结静默；记忆中心手动总结保持 toast/反馈。
+   * 未传时视为手动，默认 false。
+   */
+  silent?: boolean;
 }
 
 class AIBidirectionalSystemClass {
@@ -479,21 +494,6 @@ class AIBidirectionalSystemClass {
     return result;
   }
 
-  private limitNarrativePilotText(text: string, maxChars: number = 1000): string {
-    const normalized = text.trim();
-    if (normalized.length <= maxChars) return normalized;
-    const head = normalized.slice(0, maxChars);
-    const sentenceEnd = Math.max(
-      head.lastIndexOf('。'),
-      head.lastIndexOf('！'),
-      head.lastIndexOf('？'),
-      head.lastIndexOf('”'),
-    );
-    return sentenceEnd >= Math.floor(maxChars * 0.65)
-      ? head.slice(0, sentenceEnd + 1).trim()
-      : head.trim();
-  }
-
   private sanitizeActionOptionsForDisplay(options: unknown): string[] {
     if (!Array.isArray(options)) return [];
     const cleaned = options
@@ -710,47 +710,57 @@ class AIBidirectionalSystemClass {
     options?.onProgressUpdate?.('Legacy 单幕试验：生成纯正文…');
     const recallStarted = Date.now();
     const compiled = await buildLegacyNarratorPrompt(saveData, plan);
+    if (!isLegacyPilotPromptWithinBudget(compiled)) {
+      console.warn('[Legacy单幕试验] 总输入超过预算，回落普通 Legacy', {
+        promptBytes: compiled.promptBytes,
+        packetBytes: compiled.packetBytes,
+        promptBudgetBytes: LEGACY_NARRATOR_PROMPT_BUDGET_BYTES,
+        managedPromptOverrides: compiled.managedPromptOverrides,
+      });
+      return null;
+    }
     noteRecallWait(Date.now() - recallStarted);
     notePromptBytes(compiled.promptBytes);
-    if (compiled.promptBytes > LEGACY_NARRATOR_PACKET_BUDGET_BYTES) {
-      console.warn('[Legacy单幕试验] Render Packet 超过 6KB 预算', compiled.promptBytes);
-    }
     const startedAt = Date.now();
     const { aiService } = await import('@/services/aiService');
     const useStreaming = options?.useStreaming ?? aiService.getConfig().streaming ?? true;
+    const maxRetries = aiService.getConfig().maxRetries ?? 1;
     noteBufferedFullResponse(false);
-    const stream = createLegacySentenceStream({
-      userInput: plan.playerLine,
+    const finished = await generateLegacyPilotNarrative({
+      playerLine: plan.playerLine,
       storyPrompt: compiled.storyPrompt,
-      mustNotAppear: compiled.packet.mustNotAppear,
-      onSafeText: (delta) => options?.onStreamChunk?.(delta),
+      packet: compiled.packet,
+      maxRetries,
+      useStreaming,
+      generationId: `${generationId}_legacy_narrative_pilot`,
+      extractNarrativeText: raw => this.extractNarrativeText(raw),
+      onStreamChunk: options?.onStreamChunk,
+      shouldAbort,
+      generate: ({ generationId: attemptId, onStreamChunk }) => aiService.generate({
+        ...LEGACY_NARRATIVE_PILOT_GENERATE_OPTIONS,
+        requestMaxRetries: 0,
+        injects: [{
+          content: compiled.systemPrompt,
+          role: 'system',
+          depth: 4,
+          position: 'in_chat',
+        }],
+        user_input: plan.playerLine,
+        should_stream: useStreaming,
+        generation_id: attemptId,
+        onStreamChunk,
+      }),
     });
-    const raw = await aiService.generate({
-      ...LEGACY_NARRATIVE_PILOT_GENERATE_OPTIONS,
-      injects: [{
-        content: compiled.systemPrompt,
-        role: 'system',
-        depth: 4,
-        position: 'in_chat',
-      }],
-      user_input: plan.playerLine,
-      should_stream: useStreaming,
-      generation_id: `${generationId}_legacy_narrative_pilot`,
-      onStreamChunk: useStreaming ? (chunk: string) => stream.push(chunk) : undefined,
-    });
-    if (shouldAbort()) throw new Error('请求已被取消');
-    if (!useStreaming || stream.isEmpty()) {
-      stream.push(this.extractNarrativeText(String(raw)));
-    }
-    const finished = stream.finish();
-    const text = this.limitNarrativePilotText(finished.text);
+    const text = finished.text;
     if (!text) throw new Error('Legacy 单幕试验返回空正文');
     console.info(`[Legacy单幕试验] ${JSON.stringify({
       eventId: plan.selection.eventId,
       promptBytes: compiled.promptBytes,
+      packetBytes: compiled.packetBytes,
       outputChars: text.length,
       elapsedMs: Date.now() - startedAt,
       usedLocalFallback: finished.usedFallback,
+      attempts: finished.attempts,
       bufferedFullResponse: false,
       maxTokens: LEGACY_NARRATIVE_PILOT_GENERATE_OPTIONS.maxTokens,
       embeddingCalls: 0,
@@ -825,6 +835,7 @@ class AIBidirectionalSystemClass {
     // UI 会对占位响应发起一次结构化重试；失败响应本身必须是零副作用的。
     let generationFailed = false;
     beginTurnTelemetry('legacy');
+    beginForegroundAiTurn();
     try {
     try {
       const fastNarrativeResponse = await this.tryFastNarrativeDemo(
@@ -869,12 +880,20 @@ class AIBidirectionalSystemClass {
         delete stateForAI.系统.历史.叙事;
       }
 
-      // 前台不再等待向量检索；禁止把全量长期记忆塞进正文请求。
       const recallStarted = Date.now();
-      const vectorMemorySection = '';
-      const narrativeRagSection = '';
-      const characterRagSection = '';
-      if (stateForAI.社交?.记忆) stateForAI.社交.记忆.长期记忆 = [];
+      const activeSave = useCharacterStore().rootState.当前激活存档;
+      const {
+        vectorMemorySection,
+        narrativeRagSection,
+        characterRagSection,
+      } = await resolveLegacyForegroundRecall({
+        userMessage,
+        v3,
+        stateForAI,
+        saveSlot: activeSave?.角色ID && activeSave?.存档槽位
+          ? `${activeSave.角色ID}_${activeSave.存档槽位}`
+          : undefined,
+      });
       noteRecallWait(Date.now() - recallStarted);
 
       // 保存短期记忆用于单独发送
@@ -1504,6 +1523,7 @@ ${missingItems.length > 0 ? `【上次结构化输出缺失】
       return gmResponse;
     }
     } finally {
+      endForegroundAiTurn();
       endTurnTelemetry();
     }
   }
@@ -2895,7 +2915,7 @@ ${step1Text}
       }
       if (shouldAutoSummarize) {
         queueIsolatedMemorySummary(
-          () => this.triggerMemorySummary(),
+          () => this.triggerMemorySummary({ silent: true }),
           error => console.error('[AI双向系统] 自动记忆总结在后台失败:', error),
         );
       }
@@ -2933,13 +2953,16 @@ ${step1Text}
    * });
    */
   public async triggerMemorySummary(options?: MemorySummaryOptions): Promise<void> {
+    const silent = options?.silent === true;
     if (this.isSummarizing) {
+      if (!silent) toast.warning('已有一个总结任务正在进行中，请稍候...');
       console.log('[AI双向系统] 检测到已有总结任务在运行，本次触发被跳过。');
       return;
     }
 
     this.isSummarizing = true;
     console.log('[AI双向系统] 开始记忆总结流程...');
+    if (!silent) toast.loading('正在调用AI总结中期记忆...', { id: 'memory-summary' });
 
     try {
       const gameStateStore = useGameStateStore();
@@ -2967,6 +2990,7 @@ ${step1Text}
       // 检查中期记忆数量是否达到触发阈值
       if (midTermMemories.length < midTermTrigger) {
         console.log(`[AI双向系统] 中期记忆数量(${midTermMemories.length})未达到触发阈值(${midTermTrigger})，取消总结。`);
+        if (!silent) toast.info(`中期记忆未达到触发阈值(${midTermTrigger}条)，已取消总结`, { id: 'memory-summary' });
         return;
       }
 
@@ -2976,11 +3000,13 @@ ${step1Text}
 
       if (numToSummarize <= 0) {
         console.log('[AI双向系统] 计算出的总结数量 <= 0，配置错误，取消操作。');
+        if (!silent) toast.error('记忆配置错误：触发阈值必须大于保留数量', { id: 'memory-summary' });
         return;
       }
 
       if (midTermMemories.length < numToSummarize) {
         console.log(`[AI双向系统] 中期记忆数量(${midTermMemories.length})不足以总结${numToSummarize}条，取消总结。`);
+        if (!silent) toast.info(`中期记忆不足${numToSummarize}条，已取消总结`, { id: 'memory-summary' });
         return;
       }
 
@@ -3160,9 +3186,12 @@ ${saveDataJson}`;
       await characterStore.saveCurrentGame();
 
       console.log(`[AI双向系统] ✅ 总结完成：${numToSummarize}条中期记忆 -> 1条长期记忆。保留 ${remainingCurrentMemories.length} 条。`);
+      if (!silent) toast.success(`成功总结 ${numToSummarize} 条记忆！`, { id: 'memory-summary' });
 
     } catch (error) {
+      const errorMsg = error instanceof Error ? error.message : '未知错误';
       console.error('[AI双向系统] 记忆总结失败:', error);
+      if (!silent) toast.error(`记忆总结失败: ${errorMsg}`, { id: 'memory-summary' });
     } finally {
       this.isSummarizing = false;
       console.log('[AI双向系统] 记忆总结流程结束，已释放锁。');

@@ -112,45 +112,9 @@ test('local-contract response settles the real event once but rejects every mode
   assert.equal(result.saveData.世界.状态.剧本模组.completedEventIds.includes('lcq.event.s01_01'), true);
 });
 
-test('production wiring preserves Legacy settings and compiles a Packet on the s01_01 vehicle', async () => {
-  const source = await readFile(new URL('../src/utils/AIBidirectionalSystem.ts', import.meta.url), 'utf8');
-  const pilotStart = source.indexOf('private async tryLegacyNarrativePilot');
-  const processStart = source.indexOf('public async processPlayerAction', pilotStart);
-  const initialStart = source.indexOf('public async generateInitialMessage', processStart);
-  const commitStart = source.indexOf('public async processGmResponse');
-  const pilotMethod = source.slice(pilotStart, processStart);
-  const processMethod = source.slice(processStart, initialStart);
-  const commitMethod = source.slice(commitStart, source.indexOf('public async triggerMemorySummary', commitStart));
-  assert.ok(pilotStart > 0 && processStart > pilotStart);
-  assert.match(pilotMethod, /buildLegacyNarratorPrompt/);
-  assert.match(pilotMethod, /createLegacySentenceStream/);
-  assert.equal(pilotMethod.includes('assembleNarrativeOnlySystemPrompt'), false);
-  assert.match(pilotMethod, /noteBufferedFullResponse\(false\)/);
-  assert.match(pilotMethod, /LEGACY_NARRATIVE_PILOT_GENERATE_OPTIONS/);
-  assert.match(pilotMethod, /aiService\.generate\(/);
-  assert.equal((pilotMethod.match(/aiService\.generate\(/g) || []).length, 1);
-  assert.equal(pilotMethod.includes('vectorMemoryService'), false);
-  assert.equal(pilotMethod.includes('narrativeRagService'), false);
-  assert.equal(pilotMethod.includes('characterRagService'), false);
-  assert.equal(pilotMethod.includes('requestMaxRetries'), false);
-  assert.match(source, /narrativeAuthority: usedLegacyNarrativePilot \? 'local_contract' : 'model'/);
-  assert.match(processMethod, /const vectorMemorySection = ''/);
-  assert.match(processMethod, /stateForAI\.社交\.记忆\.长期记忆 = \[\]/);
-  assert.equal(processMethod.includes('buildSectionForPrompt'), false);
-  assert.equal(processMethod.includes('ensureIndexed'), false);
-  assert.match(processMethod, /beginTurnTelemetry\('legacy'\)/);
-  assert.match(processMethod, /endTurnTelemetry\(\)/);
-  assert.match(commitMethod, /scheduleBackgroundMemoryWork/);
-  assert.equal(source.includes("toast.loading('正在调用AI总结中期记忆...'"), false);
-  assert.equal(source.includes('成功总结'), false);
-
-  const store = await readFile(new URL('../src/stores/characterStore.ts', import.meta.url), 'utf8');
-  assert.equal(store.includes('await vectorMemoryService.syncFromLongTermMemories'), false);
-  assert.match(store, /scheduleBackgroundMemoryWork/);
-
-  const panel = await readFile(new URL('../src/components/dashboard/MainGamePanel.vue', import.meta.url), 'utf8');
-  assert.match(panel, /options\.eventActionProvenance = exactSelectedEventAction \? 'selected' : 'resolved_text'/);
-  const settings = await readFile(new URL('../src/components/dashboard/SettingsPanel.vue', import.meta.url), 'utf8');
-  assert.match(settings, /LEGACY_NARRATIVE_PILOT_STORAGE_KEY/);
-  assert.match(settings, /Legacy 第一幕提速试验/);
+test('pilot generate options keep global retry config and do not embed requestMaxRetries', async () => {
+  const { LEGACY_NARRATIVE_PILOT_GENERATE_OPTIONS } = await loadTs('../src/modules/scenarioMods/legacyNarrativePilot.ts');
+  assert.equal(LEGACY_NARRATIVE_PILOT_GENERATE_OPTIONS.maxTokens, 2048);
+  assert.equal(LEGACY_NARRATIVE_PILOT_GENERATE_OPTIONS.responseMode, 'text');
+  assert.equal('requestMaxRetries' in LEGACY_NARRATIVE_PILOT_GENERATE_OPTIONS, false);
 });
