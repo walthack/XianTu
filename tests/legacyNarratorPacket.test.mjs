@@ -76,6 +76,23 @@ test('real s01_01 packet includes 段强, location, and no internal engine langu
   assert.doesNotMatch(compiled.systemPrompt, /tavern_commands|assembleNarrativeOnlySystemPrompt|businessRules/);
   assert.match(compiled.systemPrompt, /slow_orient/);
   assert.match(compiled.systemPrompt, /hold_ground/);
+  assert.match(compiled.systemPrompt, /grass_iron/);
+});
+
+test('authoritative RenderPlan enum is always appended; custom prompts are preferences only', async () => {
+  const { compileLegacyNarratorPacket, LEGACY_NARRATOR_PROMPT_BUDGET_BYTES } = await loadTs(
+    '../src/modules/scenarioMods/legacyNarratorPacket.ts',
+  );
+  const { LEGACY_RENDER_PLAN_INSTRUCTION } = await loadTs('../src/modules/scenarioMods/legacyRenderPlan.ts');
+  const { save, plan } = await openingPlan();
+  const storyPrompt = 'renderGuard.forbiddenTerms=神兵';
+  const accidental = '偏好慢开场 slow_orient，不要急着跑。';
+  const compiled = compileLegacyNarratorPacket(save, plan, storyPrompt, accidental, PERSONALITY);
+  assert.ok(compiled.systemPrompt.includes(LEGACY_RENDER_PLAN_INSTRUCTION));
+  assert.match(compiled.systemPrompt, /grass_iron/);
+  assert.match(compiled.systemPrompt, /hold_ground/);
+  assert.match(compiled.systemPrompt, /偏好慢开场/);
+  assert.ok(compiled.promptBytes <= LEGACY_NARRATOR_PROMPT_BUDGET_BYTES, compiled.promptBytes);
 });
 
 test('default profile can enter the pilot; oversized profile is not truncated and falls back', async () => {

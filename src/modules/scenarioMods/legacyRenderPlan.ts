@@ -53,12 +53,10 @@ function isAllowed<T extends string>(value: unknown, allowed: readonly T[]): val
 
 export function parseLegacyRenderPlan(raw: string): { plan: LegacyRenderPlan; parsed: boolean } {
   const fallback = { plan: { ...DEFAULT_LEGACY_RENDER_PLAN }, parsed: false as const };
-  const text = stripModelThinking(String(raw || ''));
-  const start = text.indexOf('{');
-  const end = text.lastIndexOf('}');
-  if (start < 0 || end <= start) return fallback;
+  const text = stripModelThinking(String(raw || '')).trim();
+  if (!text.startsWith('{') || !text.endsWith('}')) return fallback;
   try {
-    const json = JSON.parse(text.slice(start, end + 1));
+    const json = JSON.parse(text);
     if (!json || typeof json !== 'object' || Array.isArray(json)) return fallback;
     const keys = Object.keys(json).sort();
     const expected = [...LEGACY_RENDER_PLAN_FIELDS].sort();

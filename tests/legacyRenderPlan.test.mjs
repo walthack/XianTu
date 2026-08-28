@@ -19,6 +19,10 @@ test('RenderPlan requires all four legal fields and rejects extras or illegal va
   );
   assert.equal(parseLegacyRenderPlan(VALID).parsed, true);
   assert.equal(parseLegacyRenderPlan(`<think>hide</think>${VALID}`).parsed, true);
+  assert.equal(parseLegacyRenderPlan(`  ${VALID}  `).parsed, true);
+  assert.equal(parseLegacyRenderPlan(`说明${VALID}谢谢`).parsed, false);
+  assert.equal(parseLegacyRenderPlan(`${VALID}\n谢谢`).parsed, false);
+  assert.equal(parseLegacyRenderPlan(`\`\`\`json\n${VALID}\n\`\`\``).parsed, false);
   assert.equal(parseLegacyRenderPlan('{"pacing":"slow_orient","sensory":"grass_iron","companion":"dazed"}').parsed, false);
   assert.equal(parseLegacyRenderPlan('{"pacing":"slow_orient","sensory":"grass_iron","companion":"dazed","closing":"hold_ground","text":"正文"}').parsed, false);
   assert.equal(parseLegacyRenderPlan('{"pacing":"sprint","sensory":"grass_iron","companion":"dazed","closing":"hold_ground"}').parsed, false);

@@ -289,9 +289,10 @@ function renderNarratorSystemPrompt(
   packet: LegacyNarratorPacket,
 ): string {
   const managed = readText(profile);
-  const contract = managed.includes('slow_orient') ? managed : [LEGACY_RENDER_PLAN_INSTRUCTION, managed].filter(Boolean).join('\n\n');
+  const preference = managed && managed !== LEGACY_RENDER_PLAN_INSTRUCTION ? managed : '';
   return [
-    contract,
+    LEGACY_RENDER_PLAN_INSTRUCTION,
+    preference,
     readText(playerPersonality),
     '# Render Packet',
     JSON.stringify(packet),

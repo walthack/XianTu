@@ -60,7 +60,10 @@ export function flushBackgroundMemoryWorkForTests(): Promise<void> {
  * Long LLM calls must stay outside this queue.
  */
 export function runExclusive<T>(saveSlot: string, task: () => Promise<T>): Promise<T> {
-  if (!saveSlot) return task();
+  if (!saveSlot) {
+    console.warn('[后台记忆] 无存档槽，跳过互斥写入');
+    return Promise.resolve(undefined as T);
+  }
   const run = chain.catch(() => undefined).then(task);
   chain = run.then(() => undefined, () => undefined);
   return run;
@@ -152,7 +155,7 @@ export async function commitMemorySummaryIndex(input: {
 }): Promise<void> {
   const slot = input.saveSlot || '';
   if (!slot) {
-    await input.write();
+    console.warn('[后台记忆] 无存档槽，跳过索引写入');
     return;
   }
   bumpMemoryWorkRevision(slot);

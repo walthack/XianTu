@@ -736,7 +736,7 @@ class AIBidirectionalSystemClass {
     const { aiService } = await import('@/services/aiService');
     const useStreaming = options?.useStreaming ?? aiService.getConfig().streaming ?? true;
     const maxRetries = aiService.getConfig().maxRetries ?? 1;
-    noteBufferedFullResponse(false);
+    noteBufferedFullResponse(true);
     const finished = await generateLegacyPilotNarrative({
       playerLine: plan.playerLine,
       storyPrompt: compiled.storyPrompt,
@@ -746,7 +746,7 @@ class AIBidirectionalSystemClass {
       generationId: `${generationId}_legacy_narrative_pilot`,
       onStreamChunk: options?.onStreamChunk,
       shouldAbort,
-      generate: ({ generationId: attemptId, onStreamChunk }) => aiService.generate({
+      generate: ({ generationId: attemptId }) => aiService.generate({
         ...LEGACY_NARRATIVE_PILOT_GENERATE_OPTIONS,
         requestMaxRetries: 0,
         injects: [{
@@ -756,9 +756,8 @@ class AIBidirectionalSystemClass {
           position: 'in_chat',
         }],
         user_input: plan.playerLine,
-        should_stream: useStreaming,
+        should_stream: false,
         generation_id: attemptId,
-        onStreamChunk,
       }),
     });
     const text = finished.text;
@@ -771,7 +770,7 @@ class AIBidirectionalSystemClass {
       elapsedMs: Date.now() - startedAt,
       usedLocalFallback: finished.usedFallback,
       attempts: finished.attempts,
-      bufferedFullResponse: false,
+      bufferedFullResponse: true,
       maxTokens: LEGACY_NARRATIVE_PILOT_GENERATE_OPTIONS.maxTokens,
       embeddingCalls: 0,
       modelCommands: 0,
