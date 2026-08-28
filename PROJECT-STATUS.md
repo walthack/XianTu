@@ -1,6 +1,7 @@
 # 仙途 (XianTu) · 项目总体状况与并行分工文档
 
 > 面向「新加入的 agent」。读完这一篇即可独立认领一个模块开工。
+> **2026-08-29 Codex REJECT 后改实时关注为行为测试。** `presence.test.mjs` 不再对 `getFocusedNpcNames` 做源码子串匹配，直接测 `focusedNpcNamesFromState`（谢艺入选、小紫异建筑排除、段强已死亡排除），并断言生产路径仍 `return focusedNpcNamesFromState(stateForAI)`。未扩白湖。P0-1 / P0-2 仍 OPEN。
 > **2026-08-29 Codex 再 REJECT：实时关注名单旁路。** `focusedNpcNamesFromState` 现在用 `departedPresentNames` 排除死者，已死亡外貌不再入实时关注。s01_06 顺序回归同时检查 story prompt 与生产名单。未扩白湖。P0-1 / P0-2 仍 OPEN。
 > **2026-08-29 Codex REJECT 后补共享 Legacy 在场生命周期。** `storyContext` 的 `【在场】` / `computePresentNames` 排除已结算离场人物（s01_02 后段强）；档案仍可注入但带【当前不在场】。s01_06 全量 Legacy 回归检查 prompt。未扩白湖。P0-1 / P0-2 仍 OPEN。
 > **2026-08-29 扩场景 P1 收口（未扩白湖）。** ①Narrator 在场名单只取当前事件 `relatedCharacterIds`，不再每轮合并开场 `featuredCharacterIds`；s01_02 完成后段强进入 mustNotAppear，真实顺序 s01_01→02→03→04→06→05 不得复活。②先 `previewLegacyPilotSettlement` 再合成正文；移动/伤亡回执来自克隆结算后的地点与完成结果，不是按事件 ID 预写。③Pilot 生成过程不发 `onStreamChunk`，取消则丢弃未提交正文；事务提交后再把全文发给前台。隔离档自然页连续 6 拍：s01_03/04/05 的 Pilot 正文不再写段强；s01_05 位置落到 `中州·帅帐`；s01_06 按合同走普通 Legacy（该路径仍可能写段强，不在本批短链范围）。证据 `/tmp/xiantu-stage01-seq-1787938628509`。P0-1 / P0-2 仍 OPEN。
