@@ -1,6 +1,7 @@
 # 仙途 (XianTu) · 项目总体状况与并行分工文档
 
 > 面向「新加入的 agent」。读完这一篇即可独立认领一个模块开工。
+> **2026-08-29 Codex 再 REJECT：Fast 复活段强 + flag 编码。** Fast `computePresentNames` 现传 `excludeNames: departedPresentNames`；s01_05 计划路径 present 无段强、forbidden 有段强。`eventIsCompleted` 与 runtime 一致：嵌套优先、`"true"` 字符串、扁平兜底。未扩白湖。P0-1 / P0-2 仍 OPEN。
 > **2026-08-29 Codex P1：外貌字段不得当死亡证。** `focusedNpcNamesFromState` 不再用 `当前外貌状态` 匹配「已死亡/身亡/尸体」。王哲、段强正典 `profile.currentAppearance` 都写着「已死亡」，活人会被误踢出实时关注。离场只认 `departedPresentNames`（s01_02 完成后段强）。回归：王哲档案已死亡仍入选；s01_02 未完成时段强档案已死亡仍入选；完成后即使外貌正常也排除。未扩白湖。P0-1 / P0-2 仍 OPEN。
 > **2026-08-29 Codex REJECT 后改实时关注为行为测试。** `presence.test.mjs` 不再对 `getFocusedNpcNames` 做源码子串匹配，直接测 `focusedNpcNamesFromState`（谢艺入选、小紫异建筑排除、段强已死亡排除），并断言生产路径仍 `return focusedNpcNamesFromState(stateForAI)`。未扩白湖。P0-1 / P0-2 仍 OPEN。
 > **2026-08-29 Codex 再 REJECT：实时关注名单旁路。** `focusedNpcNamesFromState` 现在用 `departedPresentNames` 排除死者，已死亡外貌不再入实时关注。s01_06 顺序回归同时检查 story prompt 与生产名单。未扩白湖。P0-1 / P0-2 仍 OPEN。

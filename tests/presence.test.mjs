@@ -161,3 +161,23 @@ test('实时关注已收窄到在场者（不再全量推演）', async () => {
   const fn = src.slice(src.indexOf('private getFocusedNpcNames'), src.indexOf('private buildFocusedNpcPrompt'));
   assert.match(fn, /return focusedNpcNamesFromState\(stateForAI\)/, '生产实时关注须委托共享名单');
 });
+
+test('离场名单认运行时 flag 编码（字符串布尔、嵌套、嵌套优先）', async () => {
+  const { departedPresentNames, focusedNpcNamesFromState } = await modPromise;
+  const duan = { 名字: '段强', 当前位置: { 描述: PLAYER }, 实时关注: true, 当前外貌状态: '状态正常' };
+  const focused = runtime => focusedNpcNamesFromState({
+    角色: { 位置: { 描述: PLAYER } },
+    社交: { 关系: { 段强: duan } },
+    世界: { 状态: { 剧本模组: runtime } },
+  });
+
+  assert.deepEqual(departedPresentNames({ flags: { 'event.s01_02.done': 'true' } }), ['段强']);
+  assert.equal(focused({ flags: { 'event.s01_02.done': 'true' } }).includes('段强'), false);
+
+  assert.deepEqual(departedPresentNames({ flags: { event: { s01_02: { done: true } } } }), ['段强']);
+  assert.equal(focused({ flags: { event: { s01_02: { done: true } } } }).includes('段强'), false);
+
+  const mixed = { flags: { 'event.s01_02.done': false, event: { s01_02: { done: true } } } };
+  assert.deepEqual(departedPresentNames(mixed), ['段强']);
+  assert.equal(focused(mixed).includes('段强'), false);
+});

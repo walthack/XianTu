@@ -980,6 +980,8 @@ test('Demo Fast：见王哲拍选项带去帅帐，点选即推进不靠诊治�
     storage: ON_STORAGE,
   });
   assert.ok(plan, '去帅帐应走 Fast 事件合同，不要求骰门');
+  assert.equal(plan.packet.presentNames.includes('段强'), false, `present=${plan.packet.presentNames.join(',')}`);
+  assert.ok(plan.forbiddenNames.includes('段强'), 's01_02 完成后 Fast 须把段强列入不得登场');
   assert.ok(plan.packet.preferredAdvance?.some(phrase => phrase.includes('去帅帐')));
   const options = demo.buildFastNarrativeActionOptions(plan.packet);
   assert.ok(options.some(option => option.includes('去帅帐')), `选项实际=${options.join(' / ')}`);

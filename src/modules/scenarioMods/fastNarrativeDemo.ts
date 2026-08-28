@@ -1,5 +1,5 @@
 import { rankOf, type AcquaintanceLedger } from './acquaintanceLedger';
-import { computePresentNames } from './presence';
+import { computePresentNames, departedPresentNames } from './presence';
 import {
   FAST_NARRATIVE_DEMO_STORAGE_KEY,
   readFastNarrativeDemoAdjudicationView,
@@ -433,6 +433,7 @@ function readPresentRevealedNames(saveData: SaveData): string[] {
     playerLocation: readPublicLocation(saveData),
     eventCharacterNames: eventNames,
     featuredCharacterNames: featuredNames,
+    excludeNames: departedPresentNames(runtime),
   });
   return [...present].filter(name => revealed.has(name) && name !== playerName).sort();
 }

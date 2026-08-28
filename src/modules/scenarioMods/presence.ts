@@ -101,10 +101,31 @@ export function computePresentNames(input: PresenceInput): Set<string> {
   return present;
 }
 
+function coerceFlagScalar(value: unknown): unknown {
+  if (value === 'true') return true;
+  if (value === 'false') return false;
+  return value;
+}
+
+function readRuntimeFlag(flags: Record<string, unknown> | undefined, path: string): unknown {
+  if (!flags) return undefined;
+  let nested: unknown = flags;
+  for (const part of path.split('.')) {
+    if (!nested || typeof nested !== 'object' || Array.isArray(nested)) {
+      nested = undefined;
+      break;
+    }
+    nested = (nested as Record<string, unknown>)[part];
+  }
+  if (nested !== undefined) return nested;
+  if (Object.prototype.hasOwnProperty.call(flags, path)) return flags[path];
+  return undefined;
+}
+
 function eventIsCompleted(runtime: { flags?: Record<string, unknown>; completedEventIds?: unknown } | null | undefined, eventId: string): boolean {
   if (!runtime) return false;
   const flagKey = `${String(eventId || '').replace(/^lcq\.event\./, 'event.')}.done`;
-  if (runtime.flags?.[flagKey] === true) return true;
+  if (coerceFlagScalar(readRuntimeFlag(runtime.flags, flagKey)) === true) return true;
   const completed = Array.isArray(runtime.completedEventIds) ? runtime.completedEventIds : [];
   return completed.includes(eventId);
 }
