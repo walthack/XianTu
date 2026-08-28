@@ -69,6 +69,7 @@ import {
   beginForegroundAiTurn,
   endForegroundAiTurn,
   scheduleBackgroundMemoryWork,
+  commitMemorySummaryIndex,
 } from '@/utils/backgroundMemoryWork';
 import { resolveLegacyForegroundRecall } from '@/utils/legacyForegroundRecall';
 import {
@@ -1533,6 +1534,8 @@ ${missingItems.length > 0 ? `【上次结构化输出缺失】
     userPrompt: string,
     options?: ProcessOptions
   ): Promise<GM_Response> {
+    beginForegroundAiTurn();
+    try {
     const tavernHelper = getTavernHelper();
     const uiStore = useUIStore();
     const actionOptionsEnabled = this.isActionOptionsEnabled(uiStore);
@@ -2072,6 +2075,9 @@ ${step1Text}
     } catch (error) {
       console.error('[AI双向系统] 初始消息生成失败:', error);
       throw new Error(`初始消息生成失败: ${error instanceof Error ? error.message : '未知错误'}`);
+    }
+    } finally {
+      endForegroundAiTurn();
     }
   }
 
@@ -3171,13 +3177,20 @@ ${saveDataJson}`;
       gameStateStore.memory.长期记忆.push(newLongTermMemory);
       gameStateStore.memory.中期记忆 = remainingCurrentMemories;
 
-      // 🔥 同步到长期检索索引（如果启用）
+      // 🔥 同步到长期检索索引：LLM 已结束，只把写索引送进存档互斥队列。
       try {
-        const { vectorMemoryService } = await import('@/services/vectorMemoryService');
-        if (vectorMemoryService.canAutoIndex()) {
-          await vectorMemoryService.addMemory(newLongTermMemory, 7);
-          console.log('[长期检索] 新长期记忆已添加到检索索引');
-        }
+        const active = characterStore.rootState.当前激活存档;
+        const saveSlot = active?.角色ID && active?.存档槽位 ? `${active.角色ID}_${active.存档槽位}` : '';
+        await commitMemorySummaryIndex({
+          saveSlot,
+          write: async () => {
+            const { vectorMemoryService } = await import('@/services/vectorMemoryService');
+            if (vectorMemoryService.canAutoIndex()) {
+              await vectorMemoryService.addMemory(newLongTermMemory, 7);
+              console.log('[长期检索] 新长期记忆已添加到检索索引');
+            }
+          },
+        });
       } catch (e) {
         console.warn('[长期检索] 添加到检索索引失败:', e);
       }

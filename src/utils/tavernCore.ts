@@ -6,6 +6,7 @@
 
 import { aiService } from '@/services/aiService';
 import type { APIUsageType } from '@/stores/apiManagementStore';
+import { beginForegroundAiTurn, endForegroundAiTurn } from '@/utils/backgroundMemoryWork';
 
 /**
  * 使用原始提示词生成AI响应
@@ -23,6 +24,7 @@ export async function generateWithRawPrompt(
   usageType?: APIUsageType,
   onStreamChunk?: (chunk: string) => void
 ): Promise<string> {
+  beginForegroundAiTurn();
   try {
     // 注意：使用 user 角色而不是 system，避免中转API忽略
     const response = await aiService.generateRaw({
@@ -52,5 +54,7 @@ export async function generateWithRawPrompt(
   } catch (error) {
     console.error('[TavernCore] 生成响应失败:', error);
     throw error;
+  } finally {
+    endForegroundAiTurn();
   }
 }

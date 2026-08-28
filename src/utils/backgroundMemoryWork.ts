@@ -13,7 +13,8 @@ export interface BackgroundMemoryWorkTask {
 export type BackgroundMemoryWorkRunner = (task: BackgroundMemoryWorkTask) => Promise<void>;
 
 let latestRevisionBySlot = new Map<string, number>();
-let chain: Promise<void> = Promise.resolve();
+let slotChains = new Map<string, Promise<void>>();
+let flushTail: Promise<void> = Promise.resolve();
 let foregroundDepth = 0;
 
 function delay(ms: number): Promise<void> {
@@ -32,14 +33,43 @@ export function isForegroundAiTurnActive(): boolean {
   return foregroundDepth > 0;
 }
 
+export function currentMemoryWorkRevision(saveSlot: string): number {
+  return latestRevisionBySlot.get(saveSlot) || 0;
+}
+
+export function bumpMemoryWorkRevision(saveSlot: string): number {
+  const slot = saveSlot || '';
+  if (!slot) return 0;
+  const revision = (latestRevisionBySlot.get(slot) || 0) + 1;
+  latestRevisionBySlot.set(slot, revision);
+  return revision;
+}
+
 export function resetBackgroundMemoryWorkForTests(): void {
   latestRevisionBySlot = new Map();
-  chain = Promise.resolve();
+  slotChains = new Map();
+  flushTail = Promise.resolve();
   foregroundDepth = 0;
 }
 
 export function flushBackgroundMemoryWorkForTests(): Promise<void> {
-  return chain;
+  return flushTail;
+}
+
+/**
+ * One exclusive writer per save slot. Different slots may run in parallel.
+ * Long LLM calls must stay outside this queue; only index/memory writes enter it.
+ */
+export function runExclusive<T>(saveSlot: string, task: () => Promise<T>): Promise<T> {
+  const slot = saveSlot || '';
+  if (!slot) return task();
+  const previous = slotChains.get(slot) || Promise.resolve();
+  const run = previous
+    .catch(() => undefined)
+    .then(task);
+  slotChains.set(slot, run.then(() => undefined, () => undefined));
+  flushTail = Promise.all([flushTail, slotChains.get(slot)]).then(() => undefined);
+  return run;
 }
 
 async function runDefaultIndex(task: BackgroundMemoryWorkTask): Promise<void> {
@@ -93,33 +123,44 @@ export function scheduleBackgroundMemoryWork(
   const slot = saveSlotId || '';
   if (!slot) return null;
   noteBackgroundStartedAfterCommit();
-  const revision = (latestRevisionBySlot.get(slot) || 0) + 1;
-  latestRevisionBySlot.set(slot, revision);
+  const revision = bumpMemoryWorkRevision(slot);
   const snapshot = cloneDeep(saveData);
-  chain = chain
-    .catch(() => undefined)
-    .then(async () => {
-      if (latestRevisionBySlot.get(slot) !== revision) return;
-      const isStale = () => latestRevisionBySlot.get(slot) !== revision;
-      const waitIfForegroundBusy = async () => {
-        while (foregroundDepth > 0) {
-          if (isStale()) return;
-          await delay(10);
-        }
-      };
-      try {
-        await waitIfForegroundBusy();
+  void runExclusive(slot, async () => {
+    if (latestRevisionBySlot.get(slot) !== revision) return;
+    const isStale = () => latestRevisionBySlot.get(slot) !== revision;
+    const waitIfForegroundBusy = async () => {
+      while (foregroundDepth > 0) {
         if (isStale()) return;
-        await runner({
-          saveSlot: slot,
-          revision,
-          snapshot,
-          isStale,
-          waitIfForegroundBusy,
-        });
-      } catch (error) {
-        console.warn('[后台记忆] 索引失败（不影响回合）:', error);
+        await delay(10);
       }
-    });
+    };
+    try {
+      await waitIfForegroundBusy();
+      if (isStale()) return;
+      await runner({
+        saveSlot: slot,
+        revision,
+        snapshot,
+        isStale,
+        waitIfForegroundBusy,
+      });
+    } catch (error) {
+      console.warn('[后台记忆] 索引失败（不影响回合）:', error);
+    }
+  });
   return revision;
+}
+
+/** After a memory summary lands, invalidate stale snapshot index jobs, then write the new vector. */
+export async function commitMemorySummaryIndex(input: {
+  saveSlot: string;
+  write: () => Promise<void>;
+}): Promise<void> {
+  const slot = input.saveSlot || '';
+  if (!slot) {
+    await input.write();
+    return;
+  }
+  bumpMemoryWorkRevision(slot);
+  await runExclusive(slot, input.write);
 }
