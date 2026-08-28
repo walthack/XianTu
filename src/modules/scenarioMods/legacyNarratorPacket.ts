@@ -49,6 +49,7 @@ export interface LegacyMustAppear {
 }
 
 export interface LegacyNarratorPacket {
+  eventId?: string;
   action: string;
   settledOutcome: string;
   location: string;
@@ -62,7 +63,7 @@ export interface LegacyNarratorPacket {
   body: { 气血?: string; 效果?: string[] };
   recentNarrative: string;
   outputContract: string;
-  receipts: { move: boolean; casualty: boolean };
+  receipts: { move: boolean; casualty: boolean; moveTo?: string };
 }
 
 function readText(value: unknown): string {
@@ -78,6 +79,29 @@ function readLocation(saveData: SaveData): string {
   const location = (saveData as any)?.角色?.位置;
   if (typeof location === 'string') return location.trim();
   return readText(location?.描述);
+}
+
+function locationIdFromDescription(runtime: RuntimeLike, description: string): string {
+  const text = readText(description);
+  if (!text) return '';
+  const locations = Array.isArray(runtime.canon?.locations) ? runtime.canon.locations : [];
+  const hit = locations.find((item: any) => readText(item?.name) && text.includes(readText(item.name)));
+  return readText(hit?.id);
+}
+
+function structuredMoveTarget(saveData: SaveData, eventId: string): { id: string; label: string } | null {
+  const runtime = runtimeOf(saveData);
+  const event = (runtime.events || []).find((item: any) => item?.id === eventId);
+  const targetId = readText(event?.locationId);
+  if (!targetId) return null;
+  const currentId = locationIdFromDescription(runtime, readLocation(saveData));
+  if (!currentId || currentId === targetId) return null;
+  const loc = (runtime.canon?.locations || []).find((item: any) => item?.id === targetId);
+  const name = readText(loc?.name);
+  if (!name) return null;
+  const current = readLocation(saveData);
+  const continent = current.includes('·') ? current.slice(0, current.indexOf('·')) : '';
+  return { id: targetId, label: continent ? `${continent}·${name}` : name };
 }
 
 function asLedger(value: unknown): AcquaintanceLedger {
@@ -233,15 +257,20 @@ export function compileLegacyNarratorPacket(
   const action = playerFacingFact(plan.playerLine) || readText(plan.playerLine);
   const settledOutcome = playerFacingFact(plan.outcomeText);
   const presentActors = readPresentActors(saveData, capsule.presentNames);
+  const moveTarget = structuredMoveTarget(saveData, plan.selection.eventId);
+  const casualty = plan.selection.eventId === 'lcq.event.s01_02';
+  const appearLocation = moveTarget?.label || capsule.location;
   const publicFacts = uniqueFacts([
     capsule.location,
+    appearLocation,
     capsule.currentObjective,
     settledOutcome,
+    ...(casualty ? ['段强中箭身亡'] : []),
     ...capsule.presentNames.map(name => `${name}在场`),
     ...capsule.facts,
   ]);
   const mustAppear: LegacyMustAppear = {
-    location: capsule.location,
+    location: appearLocation,
     present: [...capsule.presentNames],
     objective: capsule.currentObjective,
   };
@@ -256,6 +285,7 @@ export function compileLegacyNarratorPacket(
   ])].filter(term => term && !requiredTerms.includes(term) && !isInternalDevLanguage(term)).slice(0, 12);
 
   const packet: LegacyNarratorPacket = {
+    eventId: plan.selection.eventId,
     action,
     settledOutcome,
     location: capsule.location,
@@ -276,7 +306,11 @@ export function compileLegacyNarratorPacket(
     },
     recentNarrative: capsule.recentNarrative,
     outputContract: '只输出 RenderPlan JSON；不要叙事正文。无命令、无存档写入权。',
-    receipts: { move: false, casualty: false },
+    receipts: {
+      move: Boolean(moveTarget),
+      casualty,
+      ...(moveTarget ? { moveTo: moveTarget.label } : {}),
+    },
   };
 
   const compiled = trimPacketToBudget(profile, playerPersonality, packet);

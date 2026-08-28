@@ -44,7 +44,7 @@ async function openingFixture() {
   return { save, selection };
 }
 
-test('pilot accepts only an exact selected s01_01 action and fails closed otherwise', async () => {
+test('pilot accepts only an exact selected stage_01 action and fails closed otherwise', async () => {
   const pilot = await loadTs('../src/modules/scenarioMods/legacyNarrativePilot.ts');
   const { save, selection } = await openingFixture();
 
@@ -61,6 +61,14 @@ test('pilot accepts only an exact selected s01_01 action and fails closed otherw
   });
   assert.ok(plan);
   assert.equal(plan.selection.eventId, 'lcq.event.s01_01');
+  assert.deepEqual(pilot.LEGACY_NARRATIVE_PILOT_EVENT_IDS, [
+    'lcq.event.s01_01',
+    'lcq.event.s01_02',
+    'lcq.event.s01_03',
+    'lcq.event.s01_04',
+    'lcq.event.s01_05',
+  ]);
+  assert.equal(pilot.isLegacyPilotEventId('lcq.event.s01_06'), false);
   assert.equal(plan.playerLine, selection.playerLine);
   assert.equal(pilot.LEGACY_NARRATIVE_PILOT_GENERATE_OPTIONS.maxTokens, 256);
   assert.equal(pilot.LEGACY_NARRATIVE_PILOT_GENERATE_OPTIONS.responseMode, 'text');
@@ -133,6 +141,6 @@ test('disabled legacyRenderPlan or playerPersonality fails the short path closed
     source.indexOf('public async processPlayerAction'),
   );
   assert.match(pilot, /areLegacyPilotPromptsEnabled\(isPromptEnabled\)/);
-  assert.match(pilot, /isLegacyPilotSoloCast/);
+  assert.match(pilot, /acceptLegacyPilotScene/);
   assert.equal(pilot.includes('extractNarrativeText'), false);
 });

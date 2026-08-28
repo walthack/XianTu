@@ -63,9 +63,9 @@ import {
 import {
   buildLegacyNarratorPrompt,
   isLegacyPilotPromptWithinBudget,
-  isLegacyPilotSoloCast,
   LEGACY_NARRATOR_PROMPT_BUDGET_BYTES,
 } from '@/modules/scenarioMods/legacyNarratorPacket';
+import { acceptLegacyPilotScene } from '@/modules/scenarioMods/legacyPilotScenes';
 import { generateLegacyPilotNarrative } from '@/modules/scenarioMods/legacyNarrativePilotGenerate';
 import {
   beginForegroundAiTurn,
@@ -717,8 +717,13 @@ class AIBidirectionalSystemClass {
     options?.onProgressUpdate?.('Legacy 单幕试验：生成纯正文…');
     const recallStarted = Date.now();
     const compiled = await buildLegacyNarratorPrompt(saveData, plan);
-    if (!isLegacyPilotSoloCast(compiled.packet)) {
-      console.warn('[Legacy单幕试验] 在场人物不是单人，回落普通 Legacy', compiled.packet.present);
+    if (!acceptLegacyPilotScene(compiled.packet)) {
+      console.warn('[Legacy单幕试验] 场景合同不完整，回落普通 Legacy', {
+        eventId: compiled.packet.eventId,
+        present: compiled.packet.present,
+        location: compiled.packet.location,
+        receipts: compiled.packet.receipts,
+      });
       return null;
     }
     if (!isLegacyPilotPromptWithinBudget(compiled)) {

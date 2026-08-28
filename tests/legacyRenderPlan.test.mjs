@@ -58,6 +58,7 @@ test('composed prose stays inside Packet receipts', async () => {
     recentNarrative: '',
     outputContract: 'plan',
     receipts: { move: false, casualty: false },
+    eventId: 'lcq.event.s01_01',
   };
   const text = composeLegacyNarrativeFromPlan(packet);
   assert.match(text, /段强/);
