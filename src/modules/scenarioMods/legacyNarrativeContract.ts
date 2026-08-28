@@ -255,14 +255,16 @@ function safeSentencePool(packet: LegacyNarratorPacket): string[] {
   const goalLine = /稳住|弄清|身在何处|辨认/.test(objective)
     ? `你没有起身就跑。眼下第一件事仍是先稳住自己，辨认这一处落点，弄清身在何处。`
     : `你没有起身就跑。眼下第一件事仍是${objective}。`;
-  const named = names.flatMap((companion, index) => {
-    const pronoun = names.length > 1 && index === names.length - 1 ? '对方' : '他';
+  const named = names.flatMap((companion) => {
+    if (companion !== '段强') {
+      return [`${companion}就在几步开外。`];
+    }
     return [
       `${companion}就在几步开外，肩背一起一伏，嘴唇发白，一时说不出完整的话。`,
-      `“${companion}。”你低声叫了一声。${pronoun}答应得晚半拍，声音发干，却毕竟应了。`,
+      `“${companion}。”你低声叫了一声。他答应得晚半拍，声音发干，却毕竟应了。`,
       `${companion}朝你这边爬了一小步，手在空中抓了抓，像还想抓住并不存在的扶手。`,
       `${companion}忽然抓住一把草，像抓住最后一点能证明这不是虚空的东西。`,
-      `${companion}的呼吸渐渐从乱变成急。你朝${pronoun}点了下头，意思是先活过这一刻。`,
+      `${companion}的呼吸渐渐从乱变成急。你朝他点了下头，意思是先活过这一刻。`,
       `${companion}抬眼看你，喉咙动了动，终于挤出半句：“这……这不是飞机。”`,
       `${companion}还蹲在原处，手指死死抠着草根，像生怕一松手人就会重新掉回去。`,
     ];

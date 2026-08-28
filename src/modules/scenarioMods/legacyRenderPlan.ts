@@ -1,3 +1,4 @@
+import { stripModelThinking } from '@/utils/jsonExtract';
 import {
   buildLegacySafeNarrative,
   clipToNarrativeCap,
@@ -30,34 +31,59 @@ export const DEFAULT_LEGACY_RENDER_PLAN: LegacyRenderPlan = {
   closing: 'hold_ground',
 };
 
-export const LEGACY_RENDER_PLAN_INSTRUCTION = [
-  '只输出一个 JSON 对象，不要叙事正文，不要 Markdown。',
-  '{"pacing":"slow_orient|tense_watch|steady_breathe","sensory":"grass_iron|wind_sky|mud_body","companion":"dazed|answers|silent_grip","closing":"hold_ground|look_far|steady_breath"}',
-].join('\n');
+export const LEGACY_RENDER_PLAN_FIELDS = ['pacing', 'sensory', 'companion', 'closing'] as const;
 
-function pickEnum<T extends string>(value: unknown, allowed: readonly T[], fallback: T): T {
-  return allowed.includes(value as T) ? (value as T) : fallback;
+export const LEGACY_RENDER_PLAN_INSTRUCTION = `# Legacy RenderPlan 响应合同（实验）
+
+只输出一个 JSON 对象，不要叙事正文，不要 Markdown，不要 text 字段。
+
+四个字段必须全部出现，不得增删字段，取值必须与下列枚举完全一致：
+
+- pacing: ${LEGACY_RENDER_PACING.join(' | ')}
+- sensory: ${LEGACY_RENDER_SENSORY.join(' | ')}
+- companion: ${LEGACY_RENDER_COMPANION.join(' | ')}
+- closing: ${LEGACY_RENDER_CLOSING.join(' | ')}
+
+示例：
+{"pacing":"slow_orient","sensory":"grass_iron","companion":"dazed","closing":"hold_ground"}`;
+
+function isAllowed<T extends string>(value: unknown, allowed: readonly T[]): value is T {
+  return typeof value === 'string' && allowed.includes(value as T);
 }
 
 export function parseLegacyRenderPlan(raw: string): { plan: LegacyRenderPlan; parsed: boolean } {
-  const text = String(raw || '');
+  const fallback = { plan: { ...DEFAULT_LEGACY_RENDER_PLAN }, parsed: false as const };
+  const text = stripModelThinking(String(raw || ''));
   const start = text.indexOf('{');
   const end = text.lastIndexOf('}');
-  if (start < 0 || end <= start) return { plan: { ...DEFAULT_LEGACY_RENDER_PLAN }, parsed: false };
+  if (start < 0 || end <= start) return fallback;
   try {
     const json = JSON.parse(text.slice(start, end + 1));
-    if (!json || typeof json !== 'object') return { plan: { ...DEFAULT_LEGACY_RENDER_PLAN }, parsed: false };
+    if (!json || typeof json !== 'object' || Array.isArray(json)) return fallback;
+    const keys = Object.keys(json).sort();
+    const expected = [...LEGACY_RENDER_PLAN_FIELDS].sort();
+    if (keys.length !== expected.length || keys.some((key, index) => key !== expected[index])) {
+      return fallback;
+    }
+    if (
+      !isAllowed(json.pacing, LEGACY_RENDER_PACING)
+      || !isAllowed(json.sensory, LEGACY_RENDER_SENSORY)
+      || !isAllowed(json.companion, LEGACY_RENDER_COMPANION)
+      || !isAllowed(json.closing, LEGACY_RENDER_CLOSING)
+    ) {
+      return fallback;
+    }
     return {
       parsed: true,
       plan: {
-        pacing: pickEnum(json.pacing, LEGACY_RENDER_PACING, DEFAULT_LEGACY_RENDER_PLAN.pacing),
-        sensory: pickEnum(json.sensory, LEGACY_RENDER_SENSORY, DEFAULT_LEGACY_RENDER_PLAN.sensory),
-        companion: pickEnum(json.companion, LEGACY_RENDER_COMPANION, DEFAULT_LEGACY_RENDER_PLAN.companion),
-        closing: pickEnum(json.closing, LEGACY_RENDER_CLOSING, DEFAULT_LEGACY_RENDER_PLAN.closing),
+        pacing: json.pacing,
+        sensory: json.sensory,
+        companion: json.companion,
+        closing: json.closing,
       },
     };
   } catch {
-    return { plan: { ...DEFAULT_LEGACY_RENDER_PLAN }, parsed: false };
+    return fallback;
   }
 }
 
@@ -65,6 +91,9 @@ function preferredSentences(packet: LegacyNarratorPacket, plan: LegacyRenderPlan
   const location = packet.location || '这片草地';
   const names = (packet.mustAppear?.present || packet.present || []).filter(Boolean);
   const companion = names[0] || '身边的人';
+  const answers = companion === '段强'
+    ? `${companion}抬眼看你，喉咙动了动，终于挤出半句：“这……这不是飞机。”`
+    : `${companion}就在几步开外，一时说不出完整的话。`;
   const sensory = {
     grass_iron: `风从${location.replace(/[·,，]/g, '')}上刮过来，铁锈、草汁和远处人喊马嘶混在一起。`,
     wind_sky: `天光白得刺眼。你抬手挡了挡，这才看清地平线处有烟，有尘。`,
@@ -77,7 +106,7 @@ function preferredSentences(packet: LegacyNarratorPacket, plan: LegacyRenderPlan
   }[plan.pacing];
   const reaction = {
     dazed: `${companion}就在几步开外，肩背一起一伏，嘴唇发白，一时说不出完整的话。`,
-    answers: `${companion}抬眼看你，喉咙动了动，终于挤出半句：“这……这不是飞机。”`,
+    answers,
     silent_grip: `${companion}忽然抓住一把草，像抓住最后一点能证明这不是虚空的东西。`,
   }[plan.companion];
   const closing = {

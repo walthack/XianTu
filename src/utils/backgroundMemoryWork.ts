@@ -13,8 +13,7 @@ export interface BackgroundMemoryWorkTask {
 export type BackgroundMemoryWorkRunner = (task: BackgroundMemoryWorkTask) => Promise<void>;
 
 let latestRevisionBySlot = new Map<string, number>();
-let slotChains = new Map<string, Promise<void>>();
-let flushTail: Promise<void> = Promise.resolve();
+let chain: Promise<void> = Promise.resolve();
 let foregroundDepth = 0;
 
 function delay(ms: number): Promise<void> {
@@ -47,28 +46,23 @@ export function bumpMemoryWorkRevision(saveSlot: string): number {
 
 export function resetBackgroundMemoryWorkForTests(): void {
   latestRevisionBySlot = new Map();
-  slotChains = new Map();
-  flushTail = Promise.resolve();
+  chain = Promise.resolve();
   foregroundDepth = 0;
 }
 
 export function flushBackgroundMemoryWorkForTests(): Promise<void> {
-  return flushTail;
+  return chain;
 }
 
 /**
- * One exclusive writer per save slot. Different slots may run in parallel.
- * Long LLM calls must stay outside this queue; only index/memory writes enter it.
+ * Global exclusive writer. vectorMemoryService / narrativeRagService are
+ * process-wide singletons, so different save slots cannot write in parallel.
+ * Long LLM calls must stay outside this queue.
  */
 export function runExclusive<T>(saveSlot: string, task: () => Promise<T>): Promise<T> {
-  const slot = saveSlot || '';
-  if (!slot) return task();
-  const previous = slotChains.get(slot) || Promise.resolve();
-  const run = previous
-    .catch(() => undefined)
-    .then(task);
-  slotChains.set(slot, run.then(() => undefined, () => undefined));
-  flushTail = Promise.all([flushTail, slotChains.get(slot)]).then(() => undefined);
+  if (!saveSlot) return task();
+  const run = chain.catch(() => undefined).then(task);
+  chain = run.then(() => undefined, () => undefined);
   return run;
 }
 

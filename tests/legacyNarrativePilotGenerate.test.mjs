@@ -38,7 +38,6 @@ test('first failed RenderPlan call retries, then local composition is shown', as
     maxRetries: 1,
     useStreaming: true,
     generationId: 'pilot',
-    extractNarrativeText: raw => raw,
     onStreamChunk: delta => displayed.push(delta),
     generate: async ({ generationId }) => {
       calls.push(generationId);
@@ -68,7 +67,6 @@ test('maxRetries=0 does not start a second model attempt', async () => {
     maxRetries: 0,
     useStreaming: false,
     generationId: 'pilot',
-    extractNarrativeText: raw => raw,
     generate: async ({ generationId }) => {
       calls.push(generationId);
       throw new Error('upstream fail');
@@ -95,7 +93,6 @@ test('model free prose never reaches the screen', async () => {
     maxRetries: 0,
     useStreaming: true,
     generationId: 'pilot',
-    extractNarrativeText: raw => raw,
     generate: async ({ generationId }) => {
       calls.push(generationId);
       return '你撑着湿草站起来，捡起一柄神兵，段强当场死了，随后赶往帅帐。';
@@ -120,7 +117,6 @@ test('non-streaming pilot never emits chunk callbacks', async () => {
     maxRetries: Number.NaN,
     useStreaming: false,
     generationId: 'pilot',
-    extractNarrativeText: raw => raw,
     onStreamChunk: chunk => chunks.push(chunk),
     generate: async () => '{"pacing":"slow_orient","sensory":"mud_body","companion":"answers","closing":"look_far"}',
   });
@@ -130,22 +126,16 @@ test('non-streaming pilot never emits chunk callbacks', async () => {
   assert.match(result.text, /段强/);
 });
 
-test('local wrap-up names every mustAppear person and reserves more room as the cast grows', async () => {
-  const { buildLegacySafeNarrative, requiredClosureReserveChars, requiredPresentNames } = await loadTs(
-    '../src/modules/scenarioMods/legacyNarrativeContract.ts',
-  );
+test('narrow trial requires a solo present cast and does not copy 段强 voice to others', async () => {
+  const { buildLegacySafeNarrative } = await loadTs('../src/modules/scenarioMods/legacyNarrativeContract.ts');
+  const { isLegacyPilotSoloCast } = await loadTs('../src/modules/scenarioMods/legacyNarratorPacket.ts');
   const compiled = await openingCompiled();
-  const one = structuredClone(compiled.packet);
-  one.present = ['段强'];
-  one.mustAppear = { ...one.mustAppear, present: ['段强'] };
+  assert.equal(isLegacyPilotSoloCast(compiled.packet), true);
   const two = structuredClone(compiled.packet);
   two.present = ['段强', '秦军斥候'];
   two.mustAppear = { ...two.mustAppear, present: ['段强', '秦军斥候'] };
-  const oneText = buildLegacySafeNarrative(one);
+  assert.equal(isLegacyPilotSoloCast(two), false);
   const twoText = buildLegacySafeNarrative(two);
-  assert.deepEqual(requiredPresentNames(two), ['段强', '秦军斥候']);
-  assert.ok(requiredClosureReserveChars(two) > requiredClosureReserveChars(one));
-  assert.equal(oneText.includes('段强'), true);
-  assert.equal(twoText.includes('段强'), true);
-  assert.equal(twoText.includes('秦军斥候'), true);
+  assert.equal(twoText.includes('秦军斥候……终于挤出半句：“这……这不是飞机。”'), false);
+  assert.equal(/秦军斥候[^。]{0,24}这……这不是飞机/.test(twoText), false);
 });

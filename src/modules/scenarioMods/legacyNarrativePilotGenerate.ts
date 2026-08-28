@@ -19,7 +19,6 @@ export interface LegacyPilotGenerateInput {
   useStreaming: boolean;
   generationId: string;
   generate: (call: LegacyPilotGenerateCall) => Promise<string>;
-  extractNarrativeText: (raw: string) => string;
   onStreamChunk?: (delta: string) => void;
   shouldAbort?: () => boolean;
 }
@@ -80,7 +79,7 @@ export async function generateLegacyPilotNarrative(
         generationId: `${input.generationId}_a${attempt}`,
       });
       if (input.shouldAbort?.()) throw new Error('请求已被取消');
-      const parsed = parseLegacyRenderPlan(input.extractNarrativeText(String(raw)));
+      const parsed = parseLegacyRenderPlan(String(raw));
       const body = composeLegacyNarrativeFromPlan(input.packet, parsed.plan);
       const published = publishLocalBody(input, body);
       if (input.useStreaming && !published.text) input.onStreamChunk?.(body);

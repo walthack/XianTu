@@ -119,13 +119,13 @@ test('pilot generate options keep global retry config and do not embed requestMa
   assert.equal('requestMaxRetries' in LEGACY_NARRATIVE_PILOT_GENERATE_OPTIONS, false);
 });
 
-test('disabled legacyNarrativeOnly or playerPersonality fails the short path closed', async () => {
+test('disabled legacyRenderPlan or playerPersonality fails the short path closed', async () => {
   const { areLegacyPilotPromptsEnabled, LEGACY_PILOT_REQUIRED_PROMPT_KEYS } = await loadTs(
     '../src/modules/scenarioMods/legacyNarrativePilot.ts',
   );
-  assert.deepEqual(LEGACY_PILOT_REQUIRED_PROMPT_KEYS, ['legacyNarrativeOnly', 'playerPersonality']);
+  assert.deepEqual(LEGACY_PILOT_REQUIRED_PROMPT_KEYS, ['legacyRenderPlan', 'playerPersonality']);
   assert.equal(await areLegacyPilotPromptsEnabled(async () => true), true);
-  assert.equal(await areLegacyPilotPromptsEnabled(async key => key !== 'legacyNarrativeOnly'), false);
+  assert.equal(await areLegacyPilotPromptsEnabled(async key => key !== 'legacyRenderPlan'), false);
   assert.equal(await areLegacyPilotPromptsEnabled(async key => key !== 'playerPersonality'), false);
   const source = await readFile(new URL('../src/utils/AIBidirectionalSystem.ts', import.meta.url), 'utf8');
   const pilot = source.slice(
@@ -133,4 +133,6 @@ test('disabled legacyNarrativeOnly or playerPersonality fails the short path clo
     source.indexOf('public async processPlayerAction'),
   );
   assert.match(pilot, /areLegacyPilotPromptsEnabled\(isPromptEnabled\)/);
+  assert.match(pilot, /isLegacyPilotSoloCast/);
+  assert.equal(pilot.includes('extractNarrativeText'), false);
 });

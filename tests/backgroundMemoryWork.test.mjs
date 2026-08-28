@@ -20,19 +20,18 @@ function delay(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-test('a slot only indexes its latest snapshot; different slots may run in parallel', async () => {
+test('a slot only indexes its latest snapshot; all slots share one write queue', async () => {
   const bg = await loadTs('../src/utils/backgroundMemoryWork.ts');
   bg.resetBackgroundMemoryWorkForTests();
   const log = [];
-  const activeBySlot = new Map();
-  let maxSameSlot = 0;
+  let active = 0;
+  let maxActive = 0;
   const runner = async task => {
-    const current = (activeBySlot.get(task.saveSlot) || 0) + 1;
-    activeBySlot.set(task.saveSlot, current);
-    maxSameSlot = Math.max(maxSameSlot, current);
+    active += 1;
+    maxActive = Math.max(maxActive, active);
     log.push({ slot: task.saveSlot, note: task.snapshot.note });
     await delay(25);
-    activeBySlot.set(task.saveSlot, (activeBySlot.get(task.saveSlot) || 1) - 1);
+    active -= 1;
   };
   const first = { note: 'slotA-old', 社交: { 记忆: { 长期记忆: ['a1'] } } };
   const latestA = { note: 'slotA-new', 社交: { 记忆: { 长期记忆: ['a2'] } } };
@@ -43,10 +42,28 @@ test('a slot only indexes its latest snapshot; different slots may run in parall
   first.note = 'mutated-after-schedule';
   latestA.note = 'mutated-after-schedule';
   await bg.flushBackgroundMemoryWorkForTests();
-  assert.equal(maxSameSlot, 1);
-  assert.deepEqual(log.filter(item => item.slot === 'slotA').map(item => item.note), ['slotA-new']);
-  assert.equal(log.some(item => item.slot === 'slotB' && item.note === 'slotB'), true);
+  assert.equal(maxActive, 1);
+  assert.deepEqual(log.map(item => `${item.slot}:${item.note}`), ['slotA:slotA-new', 'slotB:slotB']);
   assert.equal(log.every(item => item.note !== 'mutated-after-schedule'), true);
+});
+
+test('singleton RAG slot identity is preserved because writes never overlap', async () => {
+  const bg = await loadTs('../src/utils/backgroundMemoryWork.ts');
+  bg.resetBackgroundMemoryWorkForTests();
+  let singletonSlot = null;
+  const writes = [];
+  const runner = async task => {
+    singletonSlot = task.saveSlot;
+    await delay(20);
+    writes.push({ requested: task.saveSlot, actual: singletonSlot });
+  };
+  bg.scheduleBackgroundMemoryWork({ note: 'A' }, 'slotA', runner);
+  bg.scheduleBackgroundMemoryWork({ note: 'B' }, 'slotB', runner);
+  await bg.flushBackgroundMemoryWorkForTests();
+  assert.deepEqual(writes, [
+    { requested: 'slotA', actual: 'slotA' },
+    { requested: 'slotB', actual: 'slotB' },
+  ]);
 });
 
 test('summary index write and snapshot index sync on the same slot never overlap', async () => {

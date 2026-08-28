@@ -52,6 +52,7 @@ import { REALM_ATTRIBUTE_STANDARDS, QUALITY_SYSTEM, MARTIAL_SYSTEM, EQUIPMENT_SY
 import { ACTION_OPTIONS_RULES } from '@/utils/prompts/definitions/actionOptions';
 import { EVENT_SYSTEM_RULES } from '@/utils/prompts/definitions/eventSystemRules';
 import { PLAYER_PERSONALITY_RULES } from '@/utils/prompts/definitions/playerPersonality';
+import { LEGACY_RENDER_PLAN_INSTRUCTION } from '@/modules/scenarioMods/legacyRenderPlan';
 import { NPC_RELATION_NETWORK_RULES, NPC_RELATION_COMMANDS, NPC_FACTION_RULES } from '@/utils/prompts/definitions/npcRelationRules';
 
 export interface PromptDefinition {
@@ -280,6 +281,14 @@ ${R2_9_NARRATIVE_GUARD_RULES}
       category: 'coreRequest',
       description: 'Legacy 单幕提速试验的纯正文输出合同',
       order: 9.1,
+      weight: 10
+    },
+    legacyRenderPlan: {
+      name: '9.2 Legacy RenderPlan',
+      content: LEGACY_RENDER_PLAN_INSTRUCTION,
+      category: 'coreRequest',
+      description: 'Legacy 单幕试验的结构化 RenderPlan 输出合同',
+      order: 9.2,
       weight: 10
     },
     splitGenerationStep2: {

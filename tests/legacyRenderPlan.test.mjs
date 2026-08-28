@@ -2,13 +2,39 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { loadTs } from './loadTs.mjs';
 
+const VALID = '{"pacing":"slow_orient","sensory":"grass_iron","companion":"dazed","closing":"hold_ground"}';
+
 test('invalid model output falls back to the default plan and never copies free prose', async () => {
-  const { parseLegacyRenderPlan, composeLegacyNarrativeFromPlan, DEFAULT_LEGACY_RENDER_PLAN } = await loadTs(
+  const { parseLegacyRenderPlan, DEFAULT_LEGACY_RENDER_PLAN } = await loadTs(
     '../src/modules/scenarioMods/legacyRenderPlan.ts',
   );
   const parsed = parseLegacyRenderPlan('你捡起神兵，赶往帅帐，段强死了。');
   assert.equal(parsed.parsed, false);
   assert.deepEqual(parsed.plan, DEFAULT_LEGACY_RENDER_PLAN);
+});
+
+test('RenderPlan requires all four legal fields and rejects extras or illegal values', async () => {
+  const { parseLegacyRenderPlan, DEFAULT_LEGACY_RENDER_PLAN, LEGACY_RENDER_PLAN_INSTRUCTION } = await loadTs(
+    '../src/modules/scenarioMods/legacyRenderPlan.ts',
+  );
+  assert.equal(parseLegacyRenderPlan(VALID).parsed, true);
+  assert.equal(parseLegacyRenderPlan(`<think>hide</think>${VALID}`).parsed, true);
+  assert.equal(parseLegacyRenderPlan('{"pacing":"slow_orient","sensory":"grass_iron","companion":"dazed"}').parsed, false);
+  assert.equal(parseLegacyRenderPlan('{"pacing":"slow_orient","sensory":"grass_iron","companion":"dazed","closing":"hold_ground","text":"正文"}').parsed, false);
+  assert.equal(parseLegacyRenderPlan('{"pacing":"sprint","sensory":"grass_iron","companion":"dazed","closing":"hold_ground"}').parsed, false);
+  assert.deepEqual(parseLegacyRenderPlan('{"pacing":"sprint","sensory":"grass_iron","companion":"dazed","closing":"hold_ground"}').plan, DEFAULT_LEGACY_RENDER_PLAN);
+  assert.match(LEGACY_RENDER_PLAN_INSTRUCTION, /slow_orient/);
+  assert.match(LEGACY_RENDER_PLAN_INSTRUCTION, /hold_ground/);
+  assert.match(LEGACY_RENDER_PLAN_INSTRUCTION, /不要 text 字段/);
+});
+
+test('narrative text extractor would drop a RenderPlan JSON without a text field', async () => {
+  const { parseLegacyRenderPlan } = await loadTs('../src/modules/scenarioMods/legacyRenderPlan.ts');
+  const extracted = JSON.parse(VALID).text || '';
+  assert.equal(extracted, '');
+  assert.equal(parseLegacyRenderPlan(VALID).parsed, true);
+  const source = await import('node:fs/promises').then(fs => fs.readFile(new URL('../src/modules/scenarioMods/legacyNarrativePilotGenerate.ts', import.meta.url), 'utf8'));
+  assert.equal(source.includes('extractNarrativeText'), false);
 });
 
 test('composed prose stays inside Packet receipts', async () => {

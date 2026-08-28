@@ -4,6 +4,7 @@ import { computePresentNames } from './presence';
 import { getScenarioFocusEvent, type ScenarioEventActionSelection } from './runtime';
 import { buildScenarioStoryPrompt } from './storyContext';
 import { isInternalDevLanguage, stripInternalDevLanguage } from './legacyNarrativeContract';
+import { LEGACY_RENDER_PLAN_INSTRUCTION } from './legacyRenderPlan';
 import type { SaveData } from '@/types/game';
 import type { LegacyNarrativePilotPlan } from './legacyNarrativePilot';
 
@@ -287,15 +288,17 @@ function renderNarratorSystemPrompt(
   playerPersonality: string,
   packet: LegacyNarratorPacket,
 ): string {
+  const managed = readText(profile);
+  const contract = managed.includes('slow_orient') ? managed : [LEGACY_RENDER_PLAN_INSTRUCTION, managed].filter(Boolean).join('\n\n');
   return [
-    readText(profile),
+    contract,
     readText(playerPersonality),
     '# Render Packet',
     JSON.stringify(packet),
     '# 模型权限',
-    '- 只输出一个 RenderPlan JSON 对象，不要叙事正文。',
+    '- 只输出一个 RenderPlan JSON 对象，不要叙事正文，不要 text 字段。',
     '- 不得输出命令、判定、物品、移动、死亡、关系终态或事件完成声明。',
-    '- JSON 字段仅限 pacing/sensory/companion/closing 四个枚举。',
+    '- JSON 必须且仅含 pacing、sensory、companion、closing，取值见上方枚举。',
   ].filter(Boolean).join('\n\n');
 }
 
@@ -305,6 +308,11 @@ function utf8Bytes(text: string): number {
 
 function packetBytesOf(packet: LegacyNarratorPacket): number {
   return utf8Bytes(JSON.stringify(packet));
+}
+
+export function isLegacyPilotSoloCast(packet: LegacyNarratorPacket): boolean {
+  const names = [...new Set((packet.present || []).map(name => String(name || '').trim()).filter(Boolean))];
+  return names.length === 1;
 }
 
 export function isLegacyPilotPromptWithinBudget(input: {
@@ -371,7 +379,7 @@ export async function buildLegacyNarratorPrompt(
   const storyPrompt = buildScenarioStoryPrompt(saveData, [plan.playerLine, recentText].filter(Boolean).join('\n'));
   const managedKeys = [...LEGACY_PILOT_SUBSTITUTED_PROMPT_KEYS];
   const [profile, playerPersonality, ...managedValues] = await Promise.all([
-    getPrompt('legacyNarrativeOnly'),
+    getPrompt('legacyRenderPlan'),
     getPrompt('playerPersonality'),
     ...managedKeys.map(key => getPrompt(key)),
   ]);

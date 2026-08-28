@@ -74,6 +74,8 @@ test('real s01_01 packet includes 段强, location, and no internal engine langu
   assert.ok(compiled.systemPrompt.includes('甲'.repeat(900)), 'user-managed narrator profile must not be sliced to 700 chars');
   assert.ok(compiled.systemPrompt.includes('主角性格'));
   assert.doesNotMatch(compiled.systemPrompt, /tavern_commands|assembleNarrativeOnlySystemPrompt|businessRules/);
+  assert.match(compiled.systemPrompt, /slow_orient/);
+  assert.match(compiled.systemPrompt, /hold_ground/);
 });
 
 test('default profile can enter the pilot; oversized profile is not truncated and falls back', async () => {

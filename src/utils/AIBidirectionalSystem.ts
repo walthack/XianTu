@@ -63,6 +63,7 @@ import {
 import {
   buildLegacyNarratorPrompt,
   isLegacyPilotPromptWithinBudget,
+  isLegacyPilotSoloCast,
   LEGACY_NARRATOR_PROMPT_BUDGET_BYTES,
 } from '@/modules/scenarioMods/legacyNarratorPacket';
 import { generateLegacyPilotNarrative } from '@/modules/scenarioMods/legacyNarrativePilotGenerate';
@@ -716,6 +717,10 @@ class AIBidirectionalSystemClass {
     options?.onProgressUpdate?.('Legacy 单幕试验：生成纯正文…');
     const recallStarted = Date.now();
     const compiled = await buildLegacyNarratorPrompt(saveData, plan);
+    if (!isLegacyPilotSoloCast(compiled.packet)) {
+      console.warn('[Legacy单幕试验] 在场人物不是单人，回落普通 Legacy', compiled.packet.present);
+      return null;
+    }
     if (!isLegacyPilotPromptWithinBudget(compiled)) {
       console.warn('[Legacy单幕试验] 总输入超过预算，回落普通 Legacy', {
         promptBytes: compiled.promptBytes,
@@ -739,7 +744,6 @@ class AIBidirectionalSystemClass {
       maxRetries,
       useStreaming,
       generationId: `${generationId}_legacy_narrative_pilot`,
-      extractNarrativeText: raw => this.extractNarrativeText(raw),
       onStreamChunk: options?.onStreamChunk,
       shouldAbort,
       generate: ({ generationId: attemptId, onStreamChunk }) => aiService.generate({
