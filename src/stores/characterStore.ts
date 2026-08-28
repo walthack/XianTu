@@ -1056,24 +1056,11 @@ export const useCharacterStore = defineStore('characterV3', () => {
         gameStateStore.loadFromSaveData(patched);
         debug.log('角色商店', '✅ 存档数据已加载到 gameStateStore');
 
-        // 🔥 初始化向量记忆服务并导入现有长期记忆
         try {
-          const { vectorMemoryService } = await import('@/services/vectorMemoryService');
-          const { narrativeRagService } = await import('@/services/narrativeRagService');
-          const saveSlotId = `${charId}_${slotKey}`;
-          await vectorMemoryService.init(saveSlotId);
-          await narrativeRagService.init(saveSlotId);
-
-          // 如果启用了长期检索，将当前存档的长期记忆同步成本地向量索引
-          if (vectorMemoryService.isEnabled()) {
-            const existingMemories = (targetSlot.存档数据 as any).社交?.记忆?.长期记忆 || [];
-            if (existingMemories.length > 0) {
-              debug.log('角色商店', `同步 ${existingMemories.length} 条长期记忆到本地检索索引`);
-              await vectorMemoryService.syncFromLongTermMemories(existingMemories);
-            }
-          }
+          const { scheduleBackgroundMemoryWork } = await import('@/utils/backgroundMemoryWork');
+          scheduleBackgroundMemoryWork(patched, `${charId}_${slotKey}`);
         } catch (e) {
-          console.warn('[角色商店] 初始化向量记忆服务失败（非致命）:', e);
+          console.warn('[角色商店] 后台记忆索引调度失败（非致命）:', e);
         }
       }
 

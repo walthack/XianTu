@@ -15,6 +15,11 @@ import type { APIUsageType, APIConfig as StoreAPIConfig } from '@/stores/apiMana
 import { buildOpenAICompatibleEndpoint, normalizeOpenAIBaseUrl } from './openAIEndpoint';
 import { toUserFacingAIError } from './apiErrorMessage';
 import { isTruncatedFinishReason } from './aiResponseTermination';
+import {
+  noteGenerateComplete,
+  noteGenerateStart,
+  wrapTelemetryStreamChunk,
+} from '@/utils/turnTelemetry';
 
 // ============ API提供商类型 ============
 export type APIProvider = 'openai' | 'claude' | 'gemini' | 'deepseek' | 'zhipu' | 'xai' | 'openrouter' | 'ollama' | 'siliconflow-embedding' | 'custom';
@@ -729,10 +734,20 @@ class AIService {
    * - 如果没有配置独立API，使用默认API
    */
   async generate(options: GenerateOptions): Promise<string> {
-    return this.withRequestController(async (signal) => this.executeWithRetry(async () => {
+    return this.withRequestController(async (signal) => {
+      try {
+        return await this.executeWithRetry(async () => {
       const requestOptions = { ...options, signal };
       this.syncModeWithEnvironment();
       const usageType = requestOptions.usageType || 'main';
+      const assigned = this.getAPIConfigForUsageType(usageType);
+      noteGenerateStart({
+        provider: assigned?.provider || this.config.customAPI?.provider || null,
+        model: assigned?.model || this.config.customAPI?.model || null,
+        maxTokens: requestOptions.maxTokens ?? assigned?.maxTokens ?? this.config.customAPI?.maxTokens ?? null,
+        jsonObject: resolveGenerateResponseFormat(requestOptions, assigned) === 'json_object',
+      });
+      requestOptions.onStreamChunk = wrapTelemetryStreamChunk(requestOptions.onStreamChunk);
       console.log(`[AI服务] 调用generate，模式: ${this.config.mode}, usageType: ${usageType}, hasOnStreamChunk=${!!requestOptions.onStreamChunk}`);
 
       // 酒馆模式特殊处理
@@ -782,7 +797,11 @@ class AIService {
 
       // 网页模式默认
       return this.generateWithCustomAPI(requestOptions);
-    }, `generate[${options.usageType || 'main'}]`, options.requestMaxRetries, signal), options.signal);
+        }, `generate[${options.usageType || 'main'}]`, options.requestMaxRetries, signal);
+      } finally {
+        noteGenerateComplete();
+      }
+    }, options.signal);
   }
 
   /**

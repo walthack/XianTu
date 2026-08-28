@@ -48,3 +48,10 @@ test('stream preview waits for text field and never echoes analysis or JSON synt
     '雨落\n青石',
   );
 });
+
+test('text-only Packet preview shows gated prose without waiting for a JSON text field', () => {
+  assert.equal(
+    extractStreamingNarrativeText('你撑着湿草站起来。风里有铁锈味。'),
+    '你撑着湿草站起来。风里有铁锈味。',
+  );
+});

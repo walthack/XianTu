@@ -215,7 +215,13 @@ export function extractStreamingNarrativeText(text: string): string {
   if (!cleaned) return '';
 
   const textKey = /"(?:text|叙事文本|narrative)"\s*:\s*"/.exec(cleaned);
-  if (!textKey || textKey.index === undefined) return '';
+  if (!textKey || textKey.index === undefined) {
+    const trimmed = cleaned.trimStart();
+    if (trimmed.startsWith('{') || trimmed.startsWith('```') || cleaned.includes('{"') || cleaned.includes('{ "')) {
+      return '';
+    }
+    return cleaned;
+  }
 
   const valueStart = textKey.index + textKey[0].length;
   let escaped = false;

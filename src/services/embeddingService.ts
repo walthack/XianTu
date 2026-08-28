@@ -1,5 +1,6 @@
 import axios from 'axios';
 import type { APIProvider } from '@/services/aiService';
+import { markEmbeddingCall } from '@/utils/turnTelemetry';
 
 export interface EmbeddingRequestConfig {
   provider: APIProvider;
@@ -65,6 +66,7 @@ export async function createEmbeddings(
   config: EmbeddingRequestConfig,
   inputs: string[],
 ): Promise<number[][]> {
+  markEmbeddingCall();
   const provider = config.provider;
   const baseUrl = normalizeBaseUrl(config.url);
   const apiKey = (config.apiKey || '').trim();

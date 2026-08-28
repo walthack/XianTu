@@ -17,7 +17,7 @@ import { useUIStore } from '@/stores/uiStore';
 import type { GM_Response, TavernCommand } from '@/types/AIGameMaster';
 import type { CharacterProfile, StateChangeLog, SaveData, GameTime, StateChange, GameMessage, StatusEffect, EventSystem, GameEvent } from '@/types/game';
 import { updateMasteredSkills } from './masteredSkillsCalculator';
-import { assembleNarrativeOnlySystemPrompt, assembleSystemPrompt } from './prompts/promptAssembler';
+import { assembleSystemPrompt } from './prompts/promptAssembler';
 import { getPrompt } from '@/services/defaultPrompts';
 import { normalizeGameTime } from './time';
 import { updateStatusEffects } from './statusEffectManager';
@@ -59,6 +59,18 @@ import {
   LEGACY_NARRATIVE_PILOT_GENERATE_OPTIONS,
   planLegacyNarrativePilot,
 } from '@/modules/scenarioMods/legacyNarrativePilot';
+import { buildLegacyNarratorPrompt, LEGACY_NARRATOR_PACKET_BUDGET_BYTES } from '@/modules/scenarioMods/legacyNarratorPacket';
+import { createLegacySentenceStream } from '@/modules/scenarioMods/legacySentenceStream';
+import { scheduleBackgroundMemoryWork } from '@/utils/backgroundMemoryWork';
+import {
+  beginTurnTelemetry,
+  endTurnTelemetry,
+  noteAuxWaitBeforeUnlock,
+  noteBufferedFullResponse,
+  notePromptBytes,
+  noteRecallWait,
+  noteTurnPath,
+} from '@/utils/turnTelemetry';
 import {
   settleWuyuanOpenWorldSelection,
   type WuyuanOpenWorldSelection,
@@ -696,40 +708,27 @@ class AIBidirectionalSystemClass {
     if (shouldAbort()) throw new Error('请求已被取消');
 
     options?.onProgressUpdate?.('Legacy 单幕试验：生成纯正文…');
-    const v3 = isSaveDataV3(saveData) ? saveData : migrateSaveDataToLatest(saveData).migrated;
-    const stateForAI = createScenarioPromptState(v3 as SaveData);
-    const recentText = (v3?.社交?.记忆?.短期记忆 || []).slice(-2).join('\n');
-    const focusContext = [plan.playerLine, recentText].filter(Boolean).join('\n');
-    const scenarioCanonPrompt = buildScenarioCanonPrompt(stateForAI as SaveData);
-    const scenarioStoryPrompt = buildScenarioStoryPrompt(v3 as SaveData, focusContext);
-    const actionGatePrompt = buildActionGatePrompt(saveData, getNarrativeTurn(saveData));
-    const focusedNpcPrompt = this.buildFocusedNpcPrompt(stateForAI);
-    const managedNarrativePrompt = await assembleNarrativeOnlySystemPrompt(stateForAI);
-    const systemPrompt = `
-${managedNarrativePrompt}
-${scenarioCanonPrompt ? `\n${scenarioCanonPrompt}\n` : ''}
-${scenarioStoryPrompt ? `\n${scenarioStoryPrompt}\n` : ''}
-${actionGatePrompt ? `\n${actionGatePrompt}\n` : ''}
-${focusedNpcPrompt ? `\n${focusedNpcPrompt}\n` : ''}
-
-# 本回合本地结构化行动
-- 玩家选择：${plan.playerLine}
-- 本地既定反馈：${plan.outcomeText}
-- 模型权限：只负责正文演出；没有命令、判定、物品、伤害、移动、关系或事件状态写入权。
-
-# 当前最小状态
-${JSON.stringify(plan.compactState)}
-${recentText ? `\n# 最近正文\n${recentText}` : ''}
-`.trim();
-
-    const promptBytes = new TextEncoder().encode(systemPrompt).byteLength;
+    const recallStarted = Date.now();
+    const compiled = await buildLegacyNarratorPrompt(saveData, plan);
+    noteRecallWait(Date.now() - recallStarted);
+    notePromptBytes(compiled.promptBytes);
+    if (compiled.promptBytes > LEGACY_NARRATOR_PACKET_BUDGET_BYTES) {
+      console.warn('[Legacy单幕试验] Render Packet 超过 6KB 预算', compiled.promptBytes);
+    }
     const startedAt = Date.now();
     const { aiService } = await import('@/services/aiService');
     const useStreaming = options?.useStreaming ?? aiService.getConfig().streaming ?? true;
+    noteBufferedFullResponse(false);
+    const stream = createLegacySentenceStream({
+      userInput: plan.playerLine,
+      storyPrompt: compiled.storyPrompt,
+      mustNotAppear: compiled.packet.mustNotAppear,
+      onSafeText: (delta) => options?.onStreamChunk?.(delta),
+    });
     const raw = await aiService.generate({
       ...LEGACY_NARRATIVE_PILOT_GENERATE_OPTIONS,
       injects: [{
-        content: systemPrompt,
+        content: compiled.systemPrompt,
         role: 'system',
         depth: 4,
         position: 'in_chat',
@@ -737,32 +736,26 @@ ${recentText ? `\n# 最近正文\n${recentText}` : ''}
       user_input: plan.playerLine,
       should_stream: useStreaming,
       generation_id: `${generationId}_legacy_narrative_pilot`,
-      onStreamChunk: useStreaming && !requiresNarrativeBuffering(scenarioStoryPrompt)
-        ? options?.onStreamChunk
-        : undefined,
+      onStreamChunk: useStreaming ? (chunk: string) => stream.push(chunk) : undefined,
     });
     if (shouldAbort()) throw new Error('请求已被取消');
-
-    const candidate = this.limitNarrativePilotText(this.extractNarrativeText(String(raw)));
-    if (!candidate) throw new Error('Legacy 单幕试验返回空正文');
-    const performance = decideNarrativePerformanceAttempt(
-      candidate,
-      plan.playerLine,
-      scenarioStoryPrompt,
-      1,
-      1,
-    );
-    const text = this.limitNarrativePilotText(performance.narrative);
-    console.info('[Legacy单幕试验]', {
+    if (!useStreaming || stream.isEmpty()) {
+      stream.push(this.extractNarrativeText(String(raw)));
+    }
+    const finished = stream.finish();
+    const text = this.limitNarrativePilotText(finished.text);
+    if (!text) throw new Error('Legacy 单幕试验返回空正文');
+    console.info(`[Legacy单幕试验] ${JSON.stringify({
       eventId: plan.selection.eventId,
-      promptBytes,
+      promptBytes: compiled.promptBytes,
       outputChars: text.length,
       elapsedMs: Date.now() - startedAt,
-      usedLocalFallback: !performance.valid,
+      usedLocalFallback: finished.usedFallback,
+      bufferedFullResponse: false,
       maxTokens: LEGACY_NARRATIVE_PILOT_GENERATE_OPTIONS.maxTokens,
       embeddingCalls: 0,
       modelCommands: 0,
-    });
+    })}`);
     return {
       text,
       mid_term_memory: '',
@@ -831,6 +824,8 @@ ${recentText ? `\n# 最近正文\n${recentText}` : ''}
     let usedLegacyNarrativePilot = false;
     // UI 会对占位响应发起一次结构化重试；失败响应本身必须是零副作用的。
     let generationFailed = false;
+    beginTurnTelemetry('legacy');
+    try {
     try {
       const fastNarrativeResponse = await this.tryFastNarrativeDemo(
         saveData,
@@ -840,6 +835,7 @@ ${recentText ? `\n# 最近正文\n${recentText}` : ''}
         shouldAbort,
       );
       if (fastNarrativeResponse) {
+        noteTurnPath('fast');
         gmResponse = fastNarrativeResponse;
       }
       if (isFastNarrativeHoldResponse(fastNarrativeResponse)) {
@@ -854,6 +850,7 @@ ${recentText ? `\n# 最近正文\n${recentText}` : ''}
         shouldAbort,
       );
       if (legacyNarrativePilotResponse) {
+        noteTurnPath('legacy_pilot');
         gmResponse = legacyNarrativePilotResponse;
         usedLegacyNarrativePilot = true;
       }
@@ -872,77 +869,13 @@ ${recentText ? `\n# 最近正文\n${recentText}` : ''}
         delete stateForAI.系统.历史.叙事;
       }
 
-      // 🔥 向量记忆检索：如果启用，使用 TopK 相关记忆替代全量长期记忆
-      let vectorMemorySection = '';
-      try {
-        const { vectorMemoryService } = await import('@/services/vectorMemoryService');
-        const active = useCharacterStore().rootState.当前激活存档;
-        if (active?.角色ID && active?.存档槽位) {
-          await vectorMemoryService.init(`${active.角色ID}_${active.存档槽位}`);
-        }
-        const longTermMemories = stateForAI.社交?.记忆?.长期记忆 || [];
-        if (vectorMemoryService.isEnabled() && Array.isArray(longTermMemories) && longTermMemories.length > 0) {
-          await vectorMemoryService.syncFromLongTermMemories(longTermMemories);
-          const stats = await vectorMemoryService.getStats();
-          if (stats.total === 0) {
-            console.warn('[长期检索] 索引为空：请先在【记忆中心 -> 长期检索】转化长期记忆');
-          } else {
-            const recentShort = (v3?.社交?.记忆?.短期记忆 || []).slice(-2).join('\n');
-            const searchQuery = [userMessage || '', recentShort].filter(Boolean).join('\n');
-            const context = {
-              currentLocation: stateForAI.角色?.位置?.描述,
-            };
-            const results = await vectorMemoryService.searchMemories(searchQuery, context);
-            vectorMemorySection = vectorMemoryService.formatForAI(results);
-            // 清空全量长期记忆，改用向量检索结果（即使为空也不再全量发送，避免token爆炸）
-            stateForAI.社交.记忆.长期记忆 = [];
-            console.log(`[长期检索] 已注入 ${results.length} 条相关长期记忆（索引总数：${stats.total}）`);
-          }
-        }
-      } catch (e) {
-        console.warn('[长期检索] 检索失败，使用全量模式:', e);
-      }
-
-      // 记忆增强 / 叙事检索：按本次输入检索历史 GM 叙事片段，增强长程剧情连续性
-      let narrativeRagSection = '';
-      try {
-        const { narrativeRagService } = await import('@/services/narrativeRagService');
-        const active = useCharacterStore().rootState.当前激活存档;
-        if (active?.角色ID && active?.存档槽位) {
-          await narrativeRagService.init(`${active.角色ID}_${active.存档槽位}`);
-        }
-        if (narrativeRagService.isEnabled()) {
-          const recentShort = (v3?.社交?.记忆?.短期记忆 || []).slice(-2).join('\n');
-          const ragQuery = [userMessage || '', recentShort, stateForAI.角色?.位置?.描述 || ''].filter(Boolean).join('\n');
-          narrativeRagSection = await narrativeRagService.buildSectionForPrompt(ragQuery || '继续当前剧情', v3);
-          if (narrativeRagSection) {
-            const stats = await narrativeRagService.getStats();
-            console.log(`[记忆增强/叙事检索] 已注入相关叙事片段（索引总数：${stats.total}）`);
-          }
-        }
-      } catch (e) {
-        console.warn('[记忆增强/叙事检索] 检索失败，跳过叙事增强:', e);
-      }
-
-      // 角色表向量检索（Character RAG）：按当前场景语义召回相关角色（含离场/历史角色）作正典参考
-      let characterRagSection = '';
-      try {
-        const { characterRagService } = await import('@/services/characterRagService');
-        await characterRagService.init();
-        if (characterRagService.isEnabled()) {
-          // 后台建/更新全局角色索引（不阻塞发送；键控命中时为 no-op，首次运行数回合内逐步补全）
-          void characterRagService.ensureIndexed().catch(() => {});
-          const recentShort = (v3?.社交?.记忆?.短期记忆 || []).slice(-2).join('\n');
-          const ragQuery = [userMessage || '', recentShort, stateForAI.角色?.位置?.描述 || ''].filter(Boolean).join('\n');
-          characterRagSection = await characterRagService.buildSectionForPrompt(ragQuery || '继续当前剧情', { topK: 6, minScore: 0.4 });
-          if (characterRagSection) {
-            const stats = await characterRagService.getStats();
-            console.log(`[角色检索] 已注入召回的相关角色（索引总数：${stats.total}）`);
-          }
-        }
-      } catch (e) {
-        console.warn('[角色检索] 检索失败，跳过角色增强:', e);
-      }
+      // 前台不再等待向量检索；禁止把全量长期记忆塞进正文请求。
+      const recallStarted = Date.now();
+      const vectorMemorySection = '';
+      const narrativeRagSection = '';
+      const characterRagSection = '';
+      if (stateForAI.社交?.记忆) stateForAI.社交.记忆.长期记忆 = [];
+      noteRecallWait(Date.now() - recallStarted);
 
       // 保存短期记忆用于单独发送
       const shortTermMemory = v3?.社交?.记忆?.短期记忆 || [];
@@ -1039,6 +972,7 @@ ${characterRagSection ? `\n${characterRagSection}\n` : ''}
 你正在修仙世界《仙途》中扮演GM。以下是当前完整游戏存档(JSON格式):
 ${stateJsonString}
 `.trim();
+      notePromptBytes(new TextEncoder().encode(systemPrompt).byteLength);
 
       const userActionForAI = (userMessage && userMessage.toString().trim()) || '继续当前活动';
       console.log('[AI双向系统] 用户输入 userMessage:', userMessage);
@@ -1086,7 +1020,9 @@ ${stateJsonString}
       const useStreaming = options?.useStreaming ?? aiConfig.streaming ?? true;
       // 含正典渲染硬门禁时只关闭 UI 分片回调；网络层仍可流式收齐，
       // 避免部分供应商的非流式请求显著变慢，同时保证首稿不会提前展示。
-      const narrativeStreaming = useStreaming && !requiresNarrativeBuffering(scenarioStoryPrompt);
+      const bufferedFullResponse = requiresNarrativeBuffering(scenarioStoryPrompt);
+      noteBufferedFullResponse(bufferedFullResponse);
+      const narrativeStreaming = useStreaming && !bufferedFullResponse;
 
       const isSplitEnabled = (() => {
         if (typeof options?.splitResponseGeneration === 'boolean') return options.splitResponseGeneration;
@@ -1231,6 +1167,7 @@ ${stateJsonString}
         // ========== 第1步：正文生成（失败重试1次） ==========
         options?.onProgressUpdate?.('分步生成：第1步（正文）…');
         const systemPromptStep1 = await buildSplitSystemPrompt(1);
+        notePromptBytes(new TextEncoder().encode(systemPromptStep1).byteLength);
         const injectsStep1 = buildSplitInjects(systemPromptStep1, true);
         let step1Text = '';
         let performanceCorrection = '';
@@ -1565,6 +1502,9 @@ ${missingItems.length > 0 ? `【上次结构化输出缺失】
     } catch (error) {
       console.error('[AI双向系统] 指令执行失败:', error);
       return gmResponse;
+    }
+    } finally {
+      endTurnTelemetry();
     }
   }
 
@@ -2614,12 +2554,14 @@ ${step1Text}
       // 已知执行错误（可能回滚）时不浪费一次审计 LLM 调用
       if (modelNarrativeCanWriteState && !hadExecutionError && apiStore.isFunctionEnabled('progress_audit') && shouldRunAudit(options?.userAction || '', currentGoals)) {
         const isolatedSaveData = cloneDeep(saveData);
+        const auxStarted = Date.now();
         const auditResult = await runBoundedAuxiliaryTask(() => runProgressAudit({
           saveData: isolatedSaveData,
           recentText: textContent,
           userAction: options?.userAction || '',
           summarize: this._summarizeValueForChangeLog.bind(this),
         }), AUXILIARY_LLM_WAIT_MS);
+        noteAuxWaitBeforeUnlock(Date.now() - auxStarted);
         if (auditResult.status === 'completed') {
           const isolatedGoals = get(isolatedSaveData, '系统.扩展.任务追踪.即兴目标');
           if (isolatedGoals !== undefined) set(saveData, '系统.扩展.任务追踪.即兴目标', cloneDeep(isolatedGoals));
@@ -2959,6 +2901,16 @@ ${step1Text}
       }
     }
 
+    try {
+      const characterStore = useCharacterStore();
+      const active = characterStore.rootState.当前激活存档;
+      if (active?.角色ID && active?.存档槽位) {
+        scheduleBackgroundMemoryWork(saveData, `${active.角色ID}_${active.存档槽位}`);
+      }
+    } catch (error) {
+      console.warn('[后台记忆] 调度失败（不影响回合）:', error);
+    }
+
     return { saveData, stateChanges: stateChangesLog };
   }
 
@@ -2982,14 +2934,12 @@ ${step1Text}
    */
   public async triggerMemorySummary(options?: MemorySummaryOptions): Promise<void> {
     if (this.isSummarizing) {
-      toast.warning('已有一个总结任务正在进行中，请稍候...');
       console.log('[AI双向系统] 检测到已有总结任务在运行，本次触发被跳过。');
       return;
     }
 
     this.isSummarizing = true;
     console.log('[AI双向系统] 开始记忆总结流程...');
-    toast.loading('正在调用AI总结中期记忆...', { id: 'memory-summary' });
 
     try {
       const gameStateStore = useGameStateStore();
@@ -3017,7 +2967,6 @@ ${step1Text}
       // 检查中期记忆数量是否达到触发阈值
       if (midTermMemories.length < midTermTrigger) {
         console.log(`[AI双向系统] 中期记忆数量(${midTermMemories.length})未达到触发阈值(${midTermTrigger})，取消总结。`);
-        toast.info(`中期记忆未达到触发阈值(${midTermTrigger}条)，已取消总结`, { id: 'memory-summary' });
         return;
       }
 
@@ -3027,13 +2976,11 @@ ${step1Text}
 
       if (numToSummarize <= 0) {
         console.log('[AI双向系统] 计算出的总结数量 <= 0，配置错误，取消操作。');
-        toast.error('记忆配置错误：触发阈值必须大于保留数量', { id: 'memory-summary' });
         return;
       }
 
       if (midTermMemories.length < numToSummarize) {
         console.log(`[AI双向系统] 中期记忆数量(${midTermMemories.length})不足以总结${numToSummarize}条，取消总结。`);
-        toast.info(`中期记忆不足${numToSummarize}条，已取消总结`, { id: 'memory-summary' });
         return;
       }
 
@@ -3213,12 +3160,9 @@ ${saveDataJson}`;
       await characterStore.saveCurrentGame();
 
       console.log(`[AI双向系统] ✅ 总结完成：${numToSummarize}条中期记忆 -> 1条长期记忆。保留 ${remainingCurrentMemories.length} 条。`);
-      toast.success(`成功总结 ${numToSummarize} 条记忆！`, { id: 'memory-summary' });
 
     } catch (error) {
-      const errorMsg = error instanceof Error ? error.message : '未知错误';
       console.error('[AI双向系统] 记忆总结失败:', error);
-      toast.error(`记忆总结失败: ${errorMsg}`, { id: 'memory-summary' });
     } finally {
       this.isSummarizing = false;
       console.log('[AI双向系统] 记忆总结流程结束，已释放锁。');

@@ -75,8 +75,8 @@ tryFastNarrativeDemo
 | 路径 | 存储键 | 提示词来源 | generate 选项 | 命令 |
 |---|---|---|---|---|
 | Fast | `xiantu.fastNarrativeDemo.v1`=`true`，且清羽 Demo 范围内 | Fast 自建短 prompt，**不**走 `assembleSystemPrompt` | `usageType=main`，`maxTokens=2048`，`responseMode=text`，`requestMaxRetries=0` | 空 |
-| Legacy 单幕 | `xiantu.legacyNarrativePilot.s01_01.v1`=`true`，且点选 `s01_01` 新鲜结构化按钮 | `assembleNarrativeOnlySystemPrompt`：仍 `getPrompt(businessRules/性格/格式/世界/事件)`，去掉 JSON 与存档 schema；另加正典/剧本/行动门 | 同上，`maxTokens=2048`，`responseMode=text` | 空 |
-| 完整 Legacy | 前两条都不进 | `assembleSystemPrompt` + 正典 + 剧本 + 存档 JSON + 可选 RAG | `usageType=main`，跟随 `forceJsonOutput`，max 掐到 8192 | 模型可出 `tavern_commands` |
+| Legacy 单幕 | `xiantu.legacyNarrativePilot.s01_01.v1`=`true`，且点选 `s01_01` 新鲜结构化按钮 | `buildLegacyNarratorPrompt`：Narrator Profile + ≤6KB Render Packet；不再拼 `assembleNarrativeOnlySystemPrompt` | 同上，`maxTokens=2048`，`responseMode=text` | 空 |
+| 完整 Legacy | 前两条都不进 | `assembleSystemPrompt` + 正典 + 剧本 + 存档 JSON；前台不再注入三套 RAG / 全量长期记忆 | `usageType=main`，跟随 `forceJsonOutput`，max 掐到 8192 | 模型可出 `tavern_commands` |
 
 完整 Legacy 系统 prompt 的拼装顺序（`AIBidirectionalSystem.processPlayerAction`）：
 
