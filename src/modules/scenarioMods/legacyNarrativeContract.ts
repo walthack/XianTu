@@ -309,7 +309,7 @@ function endsWithCompleteSentence(text: string): boolean {
   return /[。！？]$/.test(String(text || '').trim());
 }
 
-function assembleSafeNarrative(packet: LegacyNarratorPacket, existing: string): string {
+function assembleSafeNarrative(packet: LegacyNarratorPacket, existing: string, preferred: string[] = []): string {
   let text = String(existing || '').trim();
   if (text && !/[。！？”]$/.test(text)) text += '。';
   if (text && !validateLegacyVisibleNarrative(text, packet, { partial: true }).valid) {
@@ -320,7 +320,7 @@ function assembleSafeNarrative(packet: LegacyNarratorPacket, existing: string): 
     if (complete.valid) return clipToNarrativeCap(text, LEGACY_NARRATIVE_MAX_CHARS);
   }
 
-  const pool = safeSentencePool(packet);
+  const pool = [...preferred.filter(Boolean), ...safeSentencePool(packet)];
   for (const sentence of pool) {
     if (!sentence || text.includes(sentence)) continue;
     const trial = `${text}${sentence}`;
@@ -360,12 +360,13 @@ function assembleSafeNarrative(packet: LegacyNarratorPacket, existing: string): 
 export function buildLegacySafeNarrative(
   packet: LegacyNarratorPacket,
   existing = '',
+  preferred: string[] = [],
 ): string {
-  const assembled = assembleSafeNarrative(packet, existing);
+  const assembled = assembleSafeNarrative(packet, existing, preferred);
   const complete = validateLegacyVisibleNarrative(assembled, packet);
   if (complete.valid) return assembled;
   if (existing) {
-    const fresh = assembleSafeNarrative(packet, '');
+    const fresh = assembleSafeNarrative(packet, '', preferred);
     const freshCheck = validateLegacyVisibleNarrative(fresh, packet);
     if (freshCheck.valid) return fresh;
   }

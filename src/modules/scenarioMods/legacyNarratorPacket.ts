@@ -61,6 +61,7 @@ export interface LegacyNarratorPacket {
   body: { 气血?: string; 效果?: string[] };
   recentNarrative: string;
   outputContract: string;
+  receipts: { move: boolean; casualty: boolean };
 }
 
 function readText(value: unknown): string {
@@ -273,7 +274,8 @@ export function compileLegacyNarratorPacket(
       ...(effects.length ? { 效果: effects } : {}),
     },
     recentNarrative: capsule.recentNarrative,
-    outputContract: '写 800–1000 字第二人称正文；只演出 Packet 内既定公开事实与人物声音；无命令、无存档写入权；不要复述内部回执原文。',
+    outputContract: '只输出 RenderPlan JSON；不要叙事正文。无命令、无存档写入权。',
+    receipts: { move: false, casualty: false },
   };
 
   const compiled = trimPacketToBudget(profile, playerPersonality, packet);
@@ -291,9 +293,9 @@ function renderNarratorSystemPrompt(
     '# Render Packet',
     JSON.stringify(packet),
     '# 模型权限',
-    '- 只输出可展示中文正文。',
-    '- 不得输出 JSON、命令、判定、物品、移动、死亡、关系终态或事件完成声明。',
-    '- 必要语义必须出现：当前位置、在场人物、当前目标/行动目的。人物性格只作表演提示，不要逐字复述性格标签。',
+    '- 只输出一个 RenderPlan JSON 对象，不要叙事正文。',
+    '- 不得输出命令、判定、物品、移动、死亡、关系终态或事件完成声明。',
+    '- JSON 字段仅限 pacing/sensory/companion/closing 四个枚举。',
   ].filter(Boolean).join('\n\n');
 }
 

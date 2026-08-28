@@ -8,7 +8,7 @@ import {
 export const LEGACY_NARRATIVE_PILOT_STORAGE_KEY = 'xiantu.legacyNarrativePilot.s01_01.v1';
 export const LEGACY_PILOT_REQUIRED_PROMPT_KEYS = ['legacyNarrativeOnly', 'playerPersonality'] as const;
 export const LEGACY_NARRATIVE_PILOT_EVENT_ID = 'lcq.event.s01_01';
-export const LEGACY_NARRATIVE_PILOT_MAX_TOKENS = 2048;
+export const LEGACY_NARRATIVE_PILOT_MAX_TOKENS = 256;
 export const LEGACY_NARRATIVE_PILOT_GENERATE_OPTIONS = {
   usageType: 'main' as const,
   maxTokens: LEGACY_NARRATIVE_PILOT_MAX_TOKENS,

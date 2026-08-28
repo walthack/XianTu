@@ -25,13 +25,10 @@ async function openingCompiled() {
   return { ...compiled, plan };
 }
 
-test('first failed attempt with no visible text retries on a fresh stream and does not duplicate', async () => {
+test('first failed RenderPlan call retries, then local composition is shown', async () => {
   const { generateLegacyPilotNarrative } = await loadTs('../src/modules/scenarioMods/legacyNarrativePilotGenerate.ts');
-  const { buildLegacySafeNarrative, countVisibleNarrativeChars } = await loadTs(
-    '../src/modules/scenarioMods/legacyNarrativeContract.ts',
-  );
+  const { countVisibleNarrativeChars } = await loadTs('../src/modules/scenarioMods/legacyNarrativeContract.ts');
   const compiled = await openingCompiled();
-  const longText = buildLegacySafeNarrative(compiled.packet);
   const calls = [];
   const displayed = [];
   const result = await generateLegacyPilotNarrative({
@@ -43,22 +40,20 @@ test('first failed attempt with no visible text retries on a fresh stream and do
     generationId: 'pilot',
     extractNarrativeText: raw => raw,
     onStreamChunk: delta => displayed.push(delta),
-    generate: async ({ generationId, onStreamChunk }) => {
+    generate: async ({ generationId }) => {
       calls.push(generationId);
       if (calls.length === 1) throw new Error('upstream fail');
-      onStreamChunk?.(longText);
-      return longText;
+      return '{"pacing":"slow_orient","sensory":"grass_iron","companion":"dazed","closing":"hold_ground"}';
     },
   });
   assert.equal(calls.length, 2);
   assert.notEqual(calls[0], calls[1]);
   assert.equal(result.attempts, 2);
   assert.equal(result.retried, true);
-  assert.equal(result.usedFallback, false);
   assert.equal(result.text, result.displayed);
-  assert.equal(result.text, longText.trim());
   assert.ok(countVisibleNarrativeChars(result.text) >= 800);
-  assert.equal(displayed.join('').split(longText.trim()).length - 1, 1);
+  assert.equal(result.text.includes('神兵'), false);
+  assert.ok(displayed.join('').length > 0);
 });
 
 test('maxRetries=0 does not start a second model attempt', async () => {
@@ -88,7 +83,7 @@ test('maxRetries=0 does not start a second model attempt', async () => {
   assert.match(result.text, /段强/);
 });
 
-test('visible sentences block a new model attempt and continue locally', async () => {
+test('model free prose never reaches the screen', async () => {
   const { generateLegacyPilotNarrative } = await loadTs('../src/modules/scenarioMods/legacyNarrativePilotGenerate.ts');
   const { countVisibleNarrativeChars } = await loadTs('../src/modules/scenarioMods/legacyNarrativeContract.ts');
   const compiled = await openingCompiled();
@@ -97,30 +92,27 @@ test('visible sentences block a new model attempt and continue locally', async (
     playerLine: compiled.plan.playerLine,
     storyPrompt: STORY,
     packet: compiled.packet,
-    maxRetries: 1,
+    maxRetries: 0,
     useStreaming: true,
     generationId: 'pilot',
     extractNarrativeText: raw => raw,
-    generate: async ({ generationId, onStreamChunk }) => {
+    generate: async ({ generationId }) => {
       calls.push(generationId);
-      onStreamChunk?.('你撑着湿草站起来。风里有铁锈味。');
-      throw new Error('broken pipe after visible text');
+      return '你撑着湿草站起来，捡起一柄神兵，段强当场死了，随后赶往帅帐。';
     },
   });
   assert.equal(calls.length, 1);
-  assert.equal(result.usedFallback, true);
-  assert.ok(result.text.startsWith('你撑着湿草站起来。'));
   assert.ok(countVisibleNarrativeChars(result.text) >= 800);
   assert.equal(result.text.includes('神兵'), false);
+  assert.equal(result.text.includes('当场死了'), false);
+  assert.equal(result.text.includes('赶往帅帐'), false);
   assert.equal(result.text, result.displayed);
 });
 
 test('non-streaming pilot never emits chunk callbacks', async () => {
   const { generateLegacyPilotNarrative } = await loadTs('../src/modules/scenarioMods/legacyNarrativePilotGenerate.ts');
-  const { buildLegacySafeNarrative } = await loadTs('../src/modules/scenarioMods/legacyNarrativeContract.ts');
   const compiled = await openingCompiled();
   const chunks = [];
-  const body = buildLegacySafeNarrative(compiled.packet);
   const result = await generateLegacyPilotNarrative({
     playerLine: compiled.plan.playerLine,
     storyPrompt: STORY,
@@ -130,11 +122,12 @@ test('non-streaming pilot never emits chunk callbacks', async () => {
     generationId: 'pilot',
     extractNarrativeText: raw => raw,
     onStreamChunk: chunk => chunks.push(chunk),
-    generate: async () => body,
+    generate: async () => '{"pacing":"slow_orient","sensory":"mud_body","companion":"answers","closing":"look_far"}',
   });
   assert.equal(result.attempts, 1);
   assert.equal(result.usedFallback, false);
   assert.deepEqual(chunks, []);
+  assert.match(result.text, /段强/);
 });
 
 test('local wrap-up names every mustAppear person and reserves more room as the cast grows', async () => {
