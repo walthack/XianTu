@@ -133,15 +133,28 @@ test('实时关注已收窄到在场者（不再全量推演）', async () => {
       关系: {
         谢艺: { ...RELATIONS['谢艺'], 实时关注: true },
         小紫: { ...RELATIONS['小紫'], 实时关注: true },
-        段强: { 名字: '段强', 当前位置: { 描述: PLAYER }, 实时关注: true, 当前外貌状态: '已死亡' },
+        王哲: { 名字: '王哲', 当前位置: { 描述: PLAYER }, 实时关注: true, 当前外貌状态: '已死亡' },
+        段强: { 名字: '段强', 当前位置: { 描述: PLAYER }, 实时关注: true, 当前外貌状态: '状态正常' },
       },
     },
     世界: { 状态: { 剧本模组: { flags: { 'event.s01_02.done': true }, completedEventIds: ['lcq.event.s01_02'] } } },
   };
   const names = focusedNpcNamesFromState(state);
   assert.ok(names.includes('谢艺'), '同建筑且实时关注的活人应入选');
+  assert.ok(names.includes('王哲'), '正典档案外貌写已死亡的活人不得被排除');
   assert.equal(names.includes('小紫'), false, '不同建筑即使实时关注也不入选');
-  assert.equal(names.includes('段强'), false, '已死亡或已离场者不入实时关注');
+  assert.equal(names.includes('段强'), false, '已结算离场者不入实时关注');
+
+  const beforeDeath = focusedNpcNamesFromState({
+    ...state,
+    社交: {
+      关系: {
+        段强: { 名字: '段强', 当前位置: { 描述: PLAYER }, 实时关注: true, 当前外貌状态: '已死亡' },
+      },
+    },
+    世界: { 状态: { 剧本模组: { flags: {}, completedEventIds: [] } } },
+  });
+  assert.ok(beforeDeath.includes('段强'), 's01_02 未完成时，档案外貌已死亡不能提前排除段强');
 
   const fs = await import('node:fs');
   const src = fs.readFileSync(new URL('../src/utils/AIBidirectionalSystem.ts', import.meta.url), 'utf8');

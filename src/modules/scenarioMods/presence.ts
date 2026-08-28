@@ -116,6 +116,7 @@ export function departedPresentNames(runtime: { flags?: Record<string, unknown>;
   return names;
 }
 
+/** Live-watch names. Death/departure is `departedPresentNames` only — never `当前外貌状态` (canon profiles stamp 已死亡 on living 王哲/段强). */
 export function focusedNpcNamesFromState(stateForAI: {
   社交?: { 关系?: Record<string, unknown> };
   角色?: { 位置?: { 描述?: unknown } };
@@ -132,8 +133,7 @@ export function focusedNpcNamesFromState(stateForAI: {
   return Object.entries(relationships)
     .filter(([name, npc]) => {
       if (!npc || typeof npc !== 'object') return false;
-      const record = npc as { 当前外貌状态?: unknown; 实时关注?: unknown; 名字?: unknown };
-      if (/已死亡|身亡|尸体/.test(String(record.当前外貌状态 || ''))) return false;
+      const record = npc as { 实时关注?: unknown; 名字?: unknown };
       const flag = record.实时关注;
       const tracked = flag === true || flag === 1 || flag === 'true' || flag === 'True' || flag === 'TRUE' || flag === '是';
       if (!tracked) return false;
