@@ -116,6 +116,33 @@ export function departedPresentNames(runtime: { flags?: Record<string, unknown>;
   return names;
 }
 
+export function focusedNpcNamesFromState(stateForAI: {
+  社交?: { 关系?: Record<string, unknown> };
+  角色?: { 位置?: { 描述?: unknown } };
+  世界?: { 状态?: { 剧本模组?: { flags?: Record<string, unknown>; completedEventIds?: unknown } } };
+}): string[] {
+  const relationships = stateForAI?.社交?.关系;
+  if (!relationships || typeof relationships !== 'object') return [];
+  const runtime = stateForAI?.世界?.状态?.剧本模组;
+  const present = computePresentNames({
+    playerLocation: String(stateForAI?.角色?.位置?.描述 || ''),
+    relations: relationships,
+    excludeNames: departedPresentNames(runtime),
+  });
+  return Object.entries(relationships)
+    .filter(([name, npc]) => {
+      if (!npc || typeof npc !== 'object') return false;
+      const record = npc as { 当前外貌状态?: unknown; 实时关注?: unknown; 名字?: unknown };
+      if (/已死亡|身亡|尸体/.test(String(record.当前外貌状态 || ''))) return false;
+      const flag = record.实时关注;
+      const tracked = flag === true || flag === 1 || flag === 'true' || flag === 'True' || flag === 'TRUE' || flag === '是';
+      if (!tracked) return false;
+      return present.has(String(name)) || present.has(String(record.名字 || ''));
+    })
+    .map(([name]) => String(name))
+    .filter(name => name.trim().length > 0);
+}
+
 /** 不在场角色的档案约束。与传闻／征兆层咬合：想见人就得去打听、去找。 */
 export function formatAbsenceGuard(name: string): string {
   return `  【当前不在场】${name}此刻不在你面前。**不得让其本人登场、说话或行动**；只能以听闻、传言、书信、旧事回忆或他人转述的方式提及。玩家若要见他，应通过打听消息、前往其所在之处等方式推进，不得凭一句提名就让人出现。`;
