@@ -7,12 +7,12 @@ import {
   LEGACY_NARRATIVE_MAX_CHARS,
   LEGACY_NARRATIVE_MIN_CHARS,
   narrativeHasRequiredConcepts,
+  requiredClosureReserveChars,
   validateLegacyVisibleNarrative,
 } from './legacyNarrativeContract';
 import type { LegacyNarratorPacket } from './legacyNarratorPacket';
 
 const LOOKAHEAD_SENTENCES = 1;
-const REQUIRED_CLOSURE_RESERVE_CHARS = 180;
 const SENTENCE_RE = /[^。！？\n]*[。！？\n]+/gu;
 
 export interface LegacySentenceStreamInput {
@@ -61,7 +61,7 @@ export function createLegacySentenceStream(input: LegacySentenceStreamInput) {
     const chars = countVisibleNarrativeChars(trial);
     if (chars > maxChars) return false;
     if (
-      chars > Math.max(0, maxChars - REQUIRED_CLOSURE_RESERVE_CHARS)
+      chars > Math.max(0, maxChars - requiredClosureReserveChars(input.packet))
       && !narrativeHasRequiredConcepts(trial, input.packet)
     ) return false;
     return true;
@@ -133,8 +133,7 @@ export function createLegacySentenceStream(input: LegacySentenceStreamInput) {
       buildLegacySafeNarrative(input.packet, current),
       maxChars,
     );
-    const merged = current && next.startsWith(current) ? next : (current ? `${current}\n${next}` : next);
-    displayed = clipToNarrativeCap(merged, maxChars);
+    displayed = clipToNarrativeCap(next, maxChars);
     usedFallback = true;
     const delta = displayed.startsWith(current) ? displayed.slice(current.length) : displayed;
     if (delta.trim()) input.onSafeText?.(delta, displayed);

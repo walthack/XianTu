@@ -6,6 +6,7 @@ import {
 } from '@/modules/scenarioMods/runtime';
 
 export const LEGACY_NARRATIVE_PILOT_STORAGE_KEY = 'xiantu.legacyNarrativePilot.s01_01.v1';
+export const LEGACY_PILOT_REQUIRED_PROMPT_KEYS = ['legacyNarrativeOnly', 'playerPersonality'] as const;
 export const LEGACY_NARRATIVE_PILOT_EVENT_ID = 'lcq.event.s01_01';
 export const LEGACY_NARRATIVE_PILOT_MAX_TOKENS = 2048;
 export const LEGACY_NARRATIVE_PILOT_GENERATE_OPTIONS = {
@@ -21,6 +22,13 @@ export interface LegacyNarrativePilotPlan {
   playerLine: string;
   outcomeText: string;
   compactState: Record<string, unknown>;
+}
+
+export async function areLegacyPilotPromptsEnabled(
+  isEnabled: (key: string) => Promise<boolean>,
+): Promise<boolean> {
+  const flags = await Promise.all(LEGACY_PILOT_REQUIRED_PROMPT_KEYS.map(key => isEnabled(key)));
+  return flags.every(Boolean);
 }
 
 export function isLegacyNarrativePilotEnabled(storage?: StorageLike): boolean {

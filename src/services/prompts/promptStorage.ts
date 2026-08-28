@@ -243,6 +243,12 @@ class PromptStorage {
     return Object.keys(allPrompts).filter(key => allPrompts[key].enabled);
   }
 
+  async isEnabled(key: string): Promise<boolean> {
+    await this.init();
+    const saved = await this.db!.get('prompts', key);
+    return saved?.enabled !== false;
+  }
+
   async get(key: string): Promise<string> {
     await this.init();
     const defaults = getSystemPrompts();

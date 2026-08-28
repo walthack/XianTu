@@ -18,7 +18,7 @@ import type { GM_Response, TavernCommand } from '@/types/AIGameMaster';
 import type { CharacterProfile, StateChangeLog, SaveData, GameTime, StateChange, GameMessage, StatusEffect, EventSystem, GameEvent } from '@/types/game';
 import { updateMasteredSkills } from './masteredSkillsCalculator';
 import { assembleSystemPrompt } from './prompts/promptAssembler';
-import { getPrompt } from '@/services/defaultPrompts';
+import { getPrompt, isPromptEnabled } from '@/services/defaultPrompts';
 import { normalizeGameTime } from './time';
 import { updateStatusEffects } from './statusEffectManager';
 import { sanitizeAITextForDisplay } from '@/utils/textSanitizer';
@@ -57,6 +57,7 @@ import {
 } from '@/modules/scenarioMods/fastNarrativeDemo';
 import {
   LEGACY_NARRATIVE_PILOT_GENERATE_OPTIONS,
+  areLegacyPilotPromptsEnabled,
   planLegacyNarrativePilot,
 } from '@/modules/scenarioMods/legacyNarrativePilot';
 import {
@@ -705,6 +706,10 @@ class AIBidirectionalSystemClass {
       eventActionProvenance: options?.eventActionProvenance,
     });
     if (!plan) return null;
+    if (!(await areLegacyPilotPromptsEnabled(isPromptEnabled))) {
+      console.warn('[Legacy单幕试验] 必要提示词已禁用，回落普通 Legacy');
+      return null;
+    }
     if (options?.opportunityAction || options?.openWorldAction || options?.judgementResolution) return null;
     if (shouldAbort()) throw new Error('请求已被取消');
 

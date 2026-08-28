@@ -638,3 +638,7 @@ ${R2_9_NARRATIVE_GUARD_RULES}
 export async function getPrompt(key: string): Promise<string> {
   return await promptStorage.get(key);
 }
+
+export async function isPromptEnabled(key: string): Promise<boolean> {
+  return promptStorage.isEnabled(key);
+}

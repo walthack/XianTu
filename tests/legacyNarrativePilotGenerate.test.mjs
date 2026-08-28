@@ -136,3 +136,23 @@ test('non-streaming pilot never emits chunk callbacks', async () => {
   assert.equal(result.usedFallback, false);
   assert.deepEqual(chunks, []);
 });
+
+test('local wrap-up names every mustAppear person and reserves more room as the cast grows', async () => {
+  const { buildLegacySafeNarrative, requiredClosureReserveChars, requiredPresentNames } = await loadTs(
+    '../src/modules/scenarioMods/legacyNarrativeContract.ts',
+  );
+  const compiled = await openingCompiled();
+  const one = structuredClone(compiled.packet);
+  one.present = ['段强'];
+  one.mustAppear = { ...one.mustAppear, present: ['段强'] };
+  const two = structuredClone(compiled.packet);
+  two.present = ['段强', '秦军斥候'];
+  two.mustAppear = { ...two.mustAppear, present: ['段强', '秦军斥候'] };
+  const oneText = buildLegacySafeNarrative(one);
+  const twoText = buildLegacySafeNarrative(two);
+  assert.deepEqual(requiredPresentNames(two), ['段强', '秦军斥候']);
+  assert.ok(requiredClosureReserveChars(two) > requiredClosureReserveChars(one));
+  assert.equal(oneText.includes('段强'), true);
+  assert.equal(twoText.includes('段强'), true);
+  assert.equal(twoText.includes('秦军斥候'), true);
+});

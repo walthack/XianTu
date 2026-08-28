@@ -236,57 +236,72 @@ function placeLabel(location: string): string {
   return locationFragments(location)[0] || '这片草地';
 }
 
+export function requiredPresentNames(packet: LegacyNarratorPacket): string[] {
+  return [...new Set((requiredConcepts(packet).present || []).map(name => String(name || '').trim()).filter(Boolean))];
+}
+
+export function requiredClosureReserveChars(packet: LegacyNarratorPacket): number {
+  const names = requiredPresentNames(packet);
+  const n = Math.max(1, names.length);
+  return Math.min(420, 180 + (n - 1) * 48);
+}
+
 function safeSentencePool(packet: LegacyNarratorPacket): string[] {
-  const companion = (packet.present || []).find(Boolean) || '身边的人';
+  const companions = requiredPresentNames(packet);
+  const names = companions.length ? companions : ['身边的人'];
   const location = packet.location || '这片草地';
   const place = placeLabel(location);
   const objective = stripInternalDevLanguage(packet.currentObjective || '先稳住自己并弄清身在何处');
   const goalLine = /稳住|弄清|身在何处|辨认/.test(objective)
     ? `你没有起身就跑。眼下第一件事仍是先稳住自己，辨认这一处落点，弄清身在何处。`
     : `你没有起身就跑。眼下第一件事仍是${objective}。`;
+  const named = names.flatMap((companion, index) => {
+    const pronoun = names.length > 1 && index === names.length - 1 ? '对方' : '他';
+    return [
+      `${companion}就在几步开外，肩背一起一伏，嘴唇发白，一时说不出完整的话。`,
+      `“${companion}。”你低声叫了一声。${pronoun}答应得晚半拍，声音发干，却毕竟应了。`,
+      `${companion}朝你这边爬了一小步，手在空中抓了抓，像还想抓住并不存在的扶手。`,
+      `${companion}忽然抓住一把草，像抓住最后一点能证明这不是虚空的东西。`,
+      `${companion}的呼吸渐渐从乱变成急。你朝${pronoun}点了下头，意思是先活过这一刻。`,
+      `${companion}抬眼看你，喉咙动了动，终于挤出半句：“这……这不是飞机。”`,
+      `${companion}还蹲在原处，手指死死抠着草根，像生怕一松手人就会重新掉回去。`,
+    ];
+  });
+  const nearby = names.join('、');
   return [
-    `${companion}就在几步开外，肩背一起一伏，嘴唇发白，一时说不出完整的话。`,
+    ...named,
     `风从${place}上刮过来，铁锈、草汁和远处人喊马嘶混在一起。`,
     goalLine,
     `你撑着湿草撑起上身。掌心下面仍是泥土和草根，凉，黏，带着刚被压过的草汁。`,
     `耳膜里还残留着刚才那一阵轰响，像整片天空从中间被撕开。`,
     `你先稳住呼吸，再慢慢把膝盖从泥里抽出来，让自己重新坐实。`,
     `指甲缝里是黑土，指节还在发抖。衣服被露水洇透，贴在小腿上发凉。`,
-    `“${companion}。”你低声叫了一声。他答应得晚半拍，声音发干，却毕竟应了。`,
-    `他眼睛很大，神情里仍带着那种容易把眼前一切当成梦的恍惚。`,
-    `你认得这副样子，眼下却只能先确认他还在、还能喘气。`,
     `四周不是跑道，也不是舱壁。草浪一层层推开，远近都有旗帜和人影在晃。`,
     `天光白得刺眼。你抬手挡了挡，这才看清地平线处有烟，有尘，有一群人正在厮杀。`,
     `那些动静离你还不近，可风已经把血腥味送过来了。`,
     `脚底的土是软的，踩下去会陷。你试着把重心放稳，免得再摔回草里。`,
-    `${companion}朝你这边爬了一小步，手在空中抓了抓，像还想抓住并不存在的扶手。`,
     `你把眼前能确定的事在心里过了一遍：人还在，地是草地，天还亮着，远处在打仗。`,
     `你用袖口擦掉嘴角的土，味道又腥又苦。`,
     `一只虫子从草叶上弹开。你跟着它的方向看过去，只看到更多的草。`,
     `你试着辨认太阳的位置，又辨认风的来处，好让自己不要转糊涂。`,
-    `${companion}忽然抓住一把草，像抓住最后一点能证明这不是虚空的东西。`,
-    `你让他先喘气，自己则把视野放远：左面是开阔的坡，右面有旗帜在抖，再远处有金属碰撞的碎响。`,
+    `你让身边的人先喘气，自己则把视野放远：左面是开阔的坡，右面有旗帜在抖，再远处有金属碰撞的碎响。`,
     `你再看了看自己的落点。周围只剩被压倒的草和浅浅的泥窝。`,
     `你把手指插入土里，确认它会凉、会湿、会粘。这是实的。`,
     `有那么一瞬间你想问这是哪里。问题已经在嘴里，答案却不能靠空想。`,
     `你决定先把能看见的都看清楚：人、草、烟、旗、还有自己还能不能站稳。`,
-    `${companion}的呼吸渐渐从乱变成急。你朝他点了下头，意思是先活过这一刻。`,
-    `风更大了些。草浪把你们两个小小的影子一下下盖住，又一下下掀开。`,
+    `风更大了些。草浪把你们小小的影子一下下盖住，又一下下掀开。`,
     `你把膝盖上的泥抹掉，重新蹲稳，让自己处在随时能起身、却还不盲目冲出去的位置。`,
-    `远处的喊杀仍在继续。你只把这一圈看得更清楚：${place}还在脚下，${companion}还在身边。`,
+    `远处的喊杀仍在继续。你只把这一圈看得更清楚：${place}还在脚下，${nearby}还在身边。`,
     `你把呼吸重新对齐，先弄清自己身在何处。`,
     `草叶刮过手腕，留下一道浅浅的凉意。你没有跟着远处的喊声走。`,
     `你再听了听自己的心跳，一下一下，沉，却还算齐。`,
-    `${companion}抬眼看你，喉咙动了动，终于挤出半句：“这……这不是飞机。”`,
     `你点了下头，没有急着回答。先把能看见的边界看完。`,
     `坡下有旗在抖。旗的颜色被烟尘搅浑，看不真切，可那是人在动，不是云。`,
     `你用手背抹掉睫毛上的土，视野这才干净一点。`,
     `泥土的味道很重。比机舱里那点循环空气要实得多。`,
     `你把一只手按在地上，另一只手虚扶着，让自己随时能撑起来。`,
-    `${companion}还蹲在原处，手指死死抠着草根，像生怕一松手人就会重新掉回去。`,
     `你低声说：“先别动。看清楚再说话。”`,
-    `他自己点头，动作小，却听进去了。`,
-    `你把目光从他脸上收回来，重新量这片落点：前、后、左、右，都是草。`,
+    `你把目光收回来，重新量这片落点：前、后、左、右，都是草。`,
   ];
 }
 
