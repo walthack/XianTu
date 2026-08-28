@@ -157,44 +157,97 @@ test('movement is authorized only by structured receipt, never by matching 去�
   assert.equal(playerSaidGo.includes('去帅帐'), true);
 });
 
-test('s01_02 structured action is accepted after s01_01 settles; s01_06 is not', async () => {
+test('real canon order s01_01→02→03→04→06→05 never revives 段强 and move receipts come from settlement', async () => {
   const { parseScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
   const { createQingyuOpeningPlaytestSave } = await loadTs('../src/modules/scenarioMods/qingyuOpeningPlaytest.ts');
   const { getCurrentStoryEventActions, recordStoryEventStructuredAction, advanceScenarioRuntime } = await loadTs(
     '../src/modules/scenarioMods/runtime.ts',
   );
   const { planLegacyNarrativePilot } = await loadTs('../src/modules/scenarioMods/legacyNarrativePilot.ts');
-  const { compileLegacyNarratorPacket } = await loadTs('../src/modules/scenarioMods/legacyNarratorPacket.ts');
+  const {
+    compileLegacyNarratorPacket,
+    previewLegacyPilotSettlement,
+  } = await loadTs('../src/modules/scenarioMods/legacyNarratorPacket.ts');
   const { acceptLegacyPilotScene } = await loadTs('../src/modules/scenarioMods/legacyPilotScenes.ts');
+  const { composeLegacyNarrativeFromPlan } = await loadTs('../src/modules/scenarioMods/legacyRenderPlan.ts');
   const raw = await readFile(new URL('../src/modules/scenarioMods/builtins/data/lcq.stage_01.json', import.meta.url), 'utf8');
   let save = createQingyuOpeningPlaytestSave(parseScenarioMod(JSON.parse(raw)));
-  const first = getCurrentStoryEventActions(save).find(item => item.eventId === 'lcq.event.s01_01');
-  assert.ok(first);
-  recordStoryEventStructuredAction(save, first);
-  save = advanceScenarioRuntime(save).saveData;
-  const second = getCurrentStoryEventActions(save).find(item => item.eventId === 'lcq.event.s01_02');
-  assert.ok(second, 's01_02 must become selectable after s01_01');
-  const plan = planLegacyNarrativePilot({
-    saveData: save,
-    eventAction: second,
-    eventActionProvenance: 'selected',
-    storage: ON,
-  });
-  assert.ok(plan);
-  assert.equal(plan.selection.eventId, 'lcq.event.s01_02');
-  const compiled = compileLegacyNarratorPacket(save, plan, 'renderGuard.forbiddenTerms=神兵', '叙述者配置', '性格');
-  assert.equal(compiled.packet.receipts.casualty, true);
-  assert.equal(compiled.packet.receipts.move, false);
-  assert.equal(acceptLegacyPilotScene(compiled.packet), true);
+  const seen = [];
 
-  const sixth = {
-    ...second,
-    eventId: 'lcq.event.s01_06',
+  const play = eventId => {
+    const selection = getCurrentStoryEventActions(save).find(item => item.eventId === eventId);
+    assert.ok(selection, `missing selectable ${eventId}`);
+    const plan = planLegacyNarrativePilot({
+      saveData: save,
+      eventAction: selection,
+      eventActionProvenance: 'selected',
+      storage: ON,
+    });
+    if (eventId === 'lcq.event.s01_06') {
+      assert.equal(plan, null);
+      recordStoryEventStructuredAction(save, selection);
+      save = advanceScenarioRuntime(save).saveData;
+      seen.push({ eventId, present: null, text: '', receipts: null });
+      return;
+    }
+    assert.ok(plan, eventId);
+    const preview = previewLegacyPilotSettlement(save, selection);
+    const compiled = compileLegacyNarratorPacket(
+      preview.settled,
+      plan,
+      'renderGuard.forbiddenTerms=神兵',
+      '叙述者配置',
+      '性格',
+      preview.receipts,
+    );
+    assert.equal(acceptLegacyPilotScene(compiled.packet), true, eventId);
+    const text = composeLegacyNarrativeFromPlan(compiled.packet);
+    seen.push({
+      eventId,
+      present: compiled.packet.present,
+      mustAppear: compiled.packet.mustAppear.present,
+      receipts: compiled.packet.receipts,
+      location: compiled.packet.location,
+      text,
+    });
+    recordStoryEventStructuredAction(save, selection);
+    save = advanceScenarioRuntime(save).saveData;
   };
-  assert.equal(planLegacyNarrativePilot({
-    saveData: save,
-    eventAction: sixth,
-    eventActionProvenance: 'selected',
-    storage: ON,
-  }), null);
+
+  play('lcq.event.s01_01');
+  play('lcq.event.s01_02');
+  play('lcq.event.s01_03');
+  play('lcq.event.s01_04');
+  play('lcq.event.s01_06');
+  play('lcq.event.s01_05');
+
+  const byId = Object.fromEntries(seen.map(item => [item.eventId, item]));
+  assert.deepEqual(byId['lcq.event.s01_01'].present, ['段强']);
+  assert.equal(byId['lcq.event.s01_02'].receipts.casualty, true);
+  assert.match(byId['lcq.event.s01_02'].text, /段强/);
+  assert.equal(byId['lcq.event.s01_03'].present.includes('段强'), false, byId['lcq.event.s01_03'].present.join(','));
+  assert.equal(byId['lcq.event.s01_03'].text.includes('段强'), false);
+  assert.match(byId['lcq.event.s01_03'].text, /月霜/);
+  assert.equal(byId['lcq.event.s01_04'].present.includes('段强'), false);
+  assert.equal(byId['lcq.event.s01_04'].text.includes('段强'), false);
+  assert.equal(byId['lcq.event.s01_05'].present.includes('段强'), false);
+  assert.equal(byId['lcq.event.s01_05'].text.includes('段强'), false);
+  assert.equal(byId['lcq.event.s01_05'].receipts.move, true);
+  assert.match(byId['lcq.event.s01_05'].receipts.moveTo, /帅帐/);
+  assert.match(byId['lcq.event.s01_05'].location, /帅帐/);
+  assert.match(save.角色.位置.描述, /帅帐/);
+});
+
+test('production pilot withholds player chunks until the event transaction commits', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const system = await readFile(new URL('../src/utils/AIBidirectionalSystem.ts', import.meta.url), 'utf8');
+  const start = system.indexOf('private async tryLegacyNarrativePilot');
+  const slice = system.slice(start, system.indexOf('public async processPlayerAction', start));
+  assert.equal(/onStreamChunk: options\?\.onStreamChunk/.test(slice), false);
+  assert.match(slice, /useStreaming: false/);
+  assert.match(slice, /if \(shouldAbort\(\)\) throw/);
+  const commit = system.slice(system.indexOf('if (aborted)'), system.indexOf('public async generateInitialMessage'));
+  assert.match(commit, /usedLegacyNarrativePilot && gmResponse\.text/);
+  assert.match(commit, /onStreamChunk\?\.\(gmResponse\.text\)/);
+  assert.match(commit, /gmResponse = \{ text: '', mid_term_memory: '', tavern_commands: \[\], action_options: \[\] \}/);
 });

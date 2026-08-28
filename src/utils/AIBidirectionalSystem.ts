@@ -717,6 +717,10 @@ class AIBidirectionalSystemClass {
     options?.onProgressUpdate?.('Legacy 单幕试验：生成纯正文…');
     const recallStarted = Date.now();
     const compiled = await buildLegacyNarratorPrompt(saveData, plan);
+    if (!compiled.settlementAttempted) {
+      console.warn('[Legacy单幕试验] 预结算未成立，回落普通 Legacy', plan.selection.eventId);
+      return null;
+    }
     if (!acceptLegacyPilotScene(compiled.packet)) {
       console.warn('[Legacy单幕试验] 场景合同不完整，回落普通 Legacy', {
         eventId: compiled.packet.eventId,
@@ -739,7 +743,6 @@ class AIBidirectionalSystemClass {
     notePromptBytes(compiled.promptBytes);
     const startedAt = Date.now();
     const { aiService } = await import('@/services/aiService');
-    const useStreaming = options?.useStreaming ?? aiService.getConfig().streaming ?? true;
     const maxRetries = aiService.getConfig().maxRetries ?? 1;
     noteBufferedFullResponse(true);
     const finished = await generateLegacyPilotNarrative({
@@ -747,9 +750,8 @@ class AIBidirectionalSystemClass {
       storyPrompt: compiled.storyPrompt,
       packet: compiled.packet,
       maxRetries,
-      useStreaming,
+      useStreaming: false,
       generationId: `${generationId}_legacy_narrative_pilot`,
-      onStreamChunk: options?.onStreamChunk,
       shouldAbort,
       generate: ({ generationId: attemptId }) => aiService.generate({
         ...LEGACY_NARRATIVE_PILOT_GENERATE_OPTIONS,
@@ -767,6 +769,7 @@ class AIBidirectionalSystemClass {
     });
     const text = finished.text;
     if (!text) throw new Error('Legacy 单幕试验返回空正文');
+    if (shouldAbort()) throw new Error('请求已被取消');
     console.info(`[Legacy单幕试验] ${JSON.stringify({
       eventId: plan.selection.eventId,
       promptBytes: compiled.promptBytes,
@@ -1452,6 +1455,9 @@ ${missingItems.length > 0 ? `【上次结构化输出缺失】
       // 🔥 文本优化：如果启用，对生成的文本进行润色
       if (shouldAbort()) {
         console.log('[AI System] Abort detected, skip text optimization and command execution');
+        if (usedLegacyNarrativePilot) {
+          gmResponse = { text: '', mid_term_memory: '', tavern_commands: [], action_options: [] };
+        }
         return gmResponse;
       }
       if (gmResponse && gmResponse.text) {
@@ -1468,6 +1474,9 @@ ${missingItems.length > 0 ? `【上次结构化输出缺失】
 
       if (shouldAbort()) {
         console.log('[AI System] Abort detected, skip command execution');
+        if (usedLegacyNarrativePilot) {
+          gmResponse = { text: '', mid_term_memory: '', tavern_commands: [], action_options: [] };
+        }
         return gmResponse;
       }
       if (!gmResponse || !gmResponse.text || gmResponse.text.trim() === '') {
@@ -1475,8 +1484,8 @@ ${missingItems.length > 0 ? `【上次结构化输出缺失】
         throw new Error('AI响应为空或格式错误');
       }
 
-      // 流式传输完成后调用回调
-      if (useStreaming && options?.onStreamComplete) {
+      // 普通 Legacy 在提交前即可结束流式层。Pilot 正文等本地事务提交后再发。
+      if (useStreaming && options?.onStreamComplete && !usedLegacyNarrativePilot) {
         options.onStreamComplete();
       }
       }
@@ -1500,6 +1509,9 @@ ${missingItems.length > 0 ? `【上次结构化输出缺失】
     options?.onProgressUpdate?.('执行AI指令…');
     if (shouldAbort()) {
       console.log('[AI System] Abort detected, skip command execution');
+      if (usedLegacyNarrativePilot) {
+        gmResponse = { text: '', mid_term_memory: '', tavern_commands: [], action_options: [] };
+      }
       return gmResponse;
     }
     try {
@@ -1521,12 +1533,19 @@ ${missingItems.length > 0 ? `【上次结构化输出缺失】
       );
       if (aborted) {
         console.log('[AI System] processGmResponse aborted, skip transaction commit');
+        if (usedLegacyNarrativePilot) {
+          gmResponse = { text: '', mid_term_memory: '', tavern_commands: [], action_options: [] };
+        }
         return gmResponse;
       }
       // 从这里返回的响应已经完成本地状态事务。UI 只能展示，不能再因可选字段
       // 缺失而把同一玩家输入送回 processPlayerAction。
       gmResponse.stateChanges = stateChanges;
       gmResponse.transactionCommitted = true;
+      if (usedLegacyNarrativePilot && gmResponse.text) {
+        options?.onStreamChunk?.(gmResponse.text);
+        options?.onStreamComplete?.();
+      }
       if (options?.onStateChange) {
         options.onStateChange(updatedSaveData as unknown as PlainObject);
       }

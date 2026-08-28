@@ -1,7 +1,13 @@
+import { cloneDeep } from 'lodash';
 import { getPrompt, getSystemPrompts } from '@/services/defaultPrompts';
 import { rankOf, type AcquaintanceLedger } from './acquaintanceLedger';
 import { computePresentNames } from './presence';
-import { getScenarioFocusEvent, type ScenarioEventActionSelection } from './runtime';
+import {
+  advanceScenarioRuntime,
+  getScenarioFocusEvent,
+  recordStoryEventStructuredAction,
+  type ScenarioEventActionSelection,
+} from './runtime';
 import { buildScenarioStoryPrompt } from './storyContext';
 import { isInternalDevLanguage, stripInternalDevLanguage } from './legacyNarrativeContract';
 import { LEGACY_RENDER_PLAN_INSTRUCTION } from './legacyRenderPlan';
@@ -81,29 +87,6 @@ function readLocation(saveData: SaveData): string {
   return readText(location?.描述);
 }
 
-function locationIdFromDescription(runtime: RuntimeLike, description: string): string {
-  const text = readText(description);
-  if (!text) return '';
-  const locations = Array.isArray(runtime.canon?.locations) ? runtime.canon.locations : [];
-  const hit = locations.find((item: any) => readText(item?.name) && text.includes(readText(item.name)));
-  return readText(hit?.id);
-}
-
-function structuredMoveTarget(saveData: SaveData, eventId: string): { id: string; label: string } | null {
-  const runtime = runtimeOf(saveData);
-  const event = (runtime.events || []).find((item: any) => item?.id === eventId);
-  const targetId = readText(event?.locationId);
-  if (!targetId) return null;
-  const currentId = locationIdFromDescription(runtime, readLocation(saveData));
-  if (!currentId || currentId === targetId) return null;
-  const loc = (runtime.canon?.locations || []).find((item: any) => item?.id === targetId);
-  const name = readText(loc?.name);
-  if (!name) return null;
-  const current = readLocation(saveData);
-  const continent = current.includes('·') ? current.slice(0, current.indexOf('·')) : '';
-  return { id: targetId, label: continent ? `${continent}·${name}` : name };
-}
-
 function asLedger(value: unknown): AcquaintanceLedger {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return {};
   return value as AcquaintanceLedger;
@@ -139,27 +122,43 @@ function isRevealedName(ledger: AcquaintanceLedger, name: string, playerName: st
   return true;
 }
 
-function readPresentNames(saveData: SaveData): string[] {
+function eventIsCompleted(runtime: RuntimeLike, eventId: string): boolean {
+  const flagKey = String(eventId || '').replace(/^lcq\.event\./, 'event.') + '.done';
+  if (runtime.flags?.[flagKey] === true) return true;
+  const completed = Array.isArray(runtime.completedEventIds) ? runtime.completedEventIds : [];
+  return completed.includes(eventId);
+}
+
+function departedNames(saveData: SaveData, currentEventId: string): string[] {
+  const runtime = runtimeOf(saveData);
+  if (currentEventId !== 'lcq.event.s01_02' && eventIsCompleted(runtime, 'lcq.event.s01_02')) {
+    return ['段强'];
+  }
+  return [];
+}
+
+function readPresentNames(saveData: SaveData, eventId?: string): string[] {
   const runtime = runtimeOf(saveData);
   const ledger = acquaintanceLedgerOf(runtime);
   const playerName = readText((saveData as any)?.角色?.身份?.名字);
+  const focusId = readText(eventId);
   const eventNames: string[] = [];
-  const activeIds = new Set(Array.isArray(runtime.activeEventIds) ? runtime.activeEventIds : []);
   for (const event of runtime.events || []) {
-    if (!activeIds.has(event?.id)) continue;
+    if (focusId && event?.id !== focusId) continue;
+    if (!focusId) {
+      const activeIds = new Set(Array.isArray(runtime.activeEventIds) ? runtime.activeEventIds : []);
+      if (!activeIds.has(event?.id)) continue;
+    }
     for (const id of event.relatedCharacterIds || []) {
       const name = resolveCharacterName(runtime, ledger, id);
       if (name && name !== playerName && isRevealedName(ledger, name, playerName)) eventNames.push(name);
     }
   }
-  const featuredNames = (runtime.opening?.featuredCharacterIds || [])
-    .map((id: string) => resolveCharacterName(runtime, ledger, id))
-    .filter((name: string) => name && name !== playerName && isRevealedName(ledger, name, playerName));
+  const dead = new Set(departedNames(saveData, focusId));
   return [...computePresentNames({
     playerLocation: readLocation(saveData),
-    eventCharacterNames: eventNames,
-    featuredCharacterNames: featuredNames,
-  })].filter(name => name !== playerName).sort();
+    eventCharacterNames: eventNames.filter(name => !dead.has(name)),
+  })].filter(name => name !== playerName && !dead.has(name)).sort();
 }
 
 function isSafePersonalityTrait(trait: string): boolean {
@@ -218,7 +217,8 @@ function uniqueFacts(values: Array<string | undefined>): string[] {
 
 export function readLocalMemoryCapsule(saveData: SaveData, selection: ScenarioEventActionSelection): LegacyMemoryCapsule {
   const runtime = runtimeOf(saveData);
-  const focus = getScenarioFocusEvent(runtime as never);
+  const selectedEvent = (runtime.events || []).find((item: any) => item?.id === selection.eventId);
+  const focus = selectedEvent || getScenarioFocusEvent(runtime as never);
   const recent = ((saveData as any)?.社交?.记忆?.短期记忆 || []).slice(-1).join('\n');
   const currentObjective = playerFacingFact(focus?.objective);
   const facts = uniqueFacts([
@@ -228,11 +228,39 @@ export function readLocalMemoryCapsule(saveData: SaveData, selection: ScenarioEv
   ]).slice(0, 6);
   return {
     location: readLocation(saveData),
-    presentNames: readPresentNames(saveData),
+    presentNames: readPresentNames(saveData, selection.eventId),
     eventId: selection.eventId,
     facts,
     recentNarrative: readText(recent).slice(0, CAPSULE_CHAR_LIMIT),
     currentObjective,
+  };
+}
+
+export interface LegacyPilotSettlementPreview {
+  settled: SaveData;
+  receipts: { move: boolean; casualty: boolean; moveTo?: string };
+  progress: ReturnType<typeof recordStoryEventStructuredAction>;
+}
+
+/** Clone-and-settle so packets read actual location/death results, not event-id guesses. */
+export function previewLegacyPilotSettlement(
+  saveData: SaveData,
+  selection: ScenarioEventActionSelection,
+): LegacyPilotSettlementPreview {
+  const beforeLocation = readLocation(saveData);
+  const settled = cloneDeep(saveData);
+  const progress = recordStoryEventStructuredAction(settled, selection);
+  const advanced = advanceScenarioRuntime(settled).saveData;
+  const afterLocation = readLocation(advanced);
+  const move = Boolean(beforeLocation && afterLocation && beforeLocation !== afterLocation);
+  return {
+    settled: advanced,
+    progress,
+    receipts: {
+      move,
+      casualty: Boolean(progress.completed && progress.eventId === 'lcq.event.s01_02'),
+      ...(move ? { moveTo: afterLocation } : {}),
+    },
   };
 }
 
@@ -242,6 +270,7 @@ export function compileLegacyNarratorPacket(
   storyPrompt: string,
   profile: string,
   playerPersonality = '',
+  receipts?: { move: boolean; casualty: boolean; moveTo?: string },
 ): {
   packet: LegacyNarratorPacket;
   systemPrompt: string;
@@ -257,15 +286,14 @@ export function compileLegacyNarratorPacket(
   const action = playerFacingFact(plan.playerLine) || readText(plan.playerLine);
   const settledOutcome = playerFacingFact(plan.outcomeText);
   const presentActors = readPresentActors(saveData, capsule.presentNames);
-  const moveTarget = structuredMoveTarget(saveData, plan.selection.eventId);
-  const casualty = plan.selection.eventId === 'lcq.event.s01_02';
-  const appearLocation = moveTarget?.label || capsule.location;
+  const settledReceipts = receipts || { move: false, casualty: false };
+  const appearLocation = settledReceipts.moveTo || capsule.location;
   const publicFacts = uniqueFacts([
     capsule.location,
     appearLocation,
     capsule.currentObjective,
     settledOutcome,
-    ...(casualty ? ['段强中箭身亡'] : []),
+    ...(settledReceipts.casualty ? ['段强中箭身亡'] : []),
     ...capsule.presentNames.map(name => `${name}在场`),
     ...capsule.facts,
   ]);
@@ -282,6 +310,7 @@ export function compileLegacyNarratorPacket(
   const mustNotAppear = [...new Set([
     ...parseListedTerms(storyPrompt, 'reservedFutureTerms'),
     ...parseListedTerms(storyPrompt, 'forbiddenTerms'),
+    ...departedNames(saveData, plan.selection.eventId),
   ])].filter(term => term && !requiredTerms.includes(term) && !isInternalDevLanguage(term)).slice(0, 12);
 
   const packet: LegacyNarratorPacket = {
@@ -307,9 +336,9 @@ export function compileLegacyNarratorPacket(
     recentNarrative: capsule.recentNarrative,
     outputContract: '只输出 RenderPlan JSON；不要叙事正文。无命令、无存档写入权。',
     receipts: {
-      move: Boolean(moveTarget),
-      casualty,
-      ...(moveTarget ? { moveTo: moveTarget.label } : {}),
+      move: Boolean(settledReceipts.move),
+      casualty: Boolean(settledReceipts.casualty),
+      ...(settledReceipts.moveTo ? { moveTo: settledReceipts.moveTo } : {}),
     },
   };
 
@@ -409,6 +438,8 @@ export async function buildLegacyNarratorPrompt(
   capsule: LegacyMemoryCapsule;
   managedPromptCompatible: boolean;
   managedPromptOverrides: string[];
+  settlementAttempted: boolean;
+  receipts: { move: boolean; casualty: boolean; moveTo?: string };
 }> {
   const recentText = ((saveData as any)?.社交?.记忆?.短期记忆 || []).slice(-2).join('\n');
   const storyPrompt = buildScenarioStoryPrompt(saveData, [plan.playerLine, recentText].filter(Boolean).join('\n'));
@@ -422,11 +453,21 @@ export async function buildLegacyNarratorPrompt(
   const currentManaged = Object.fromEntries(managedKeys.map((key, index) => [key, managedValues[index] ?? '']));
   const defaultManaged = Object.fromEntries(managedKeys.map(key => [key, promptDefaults[key]?.content ?? '']));
   const managedPromptOverrides = findLegacyPilotManagedPromptOverrides(currentManaged, defaultManaged);
-  const compiled = compileLegacyNarratorPacket(saveData, plan, storyPrompt, profile, playerPersonality);
+  const preview = previewLegacyPilotSettlement(saveData, plan.selection);
+  const compiled = compileLegacyNarratorPacket(
+    preview.settled,
+    plan,
+    storyPrompt,
+    profile,
+    playerPersonality,
+    preview.receipts,
+  );
   return {
     ...compiled,
     storyPrompt,
     managedPromptCompatible: managedPromptOverrides.length === 0,
     managedPromptOverrides,
+    settlementAttempted: Boolean(preview.progress.attempted || preview.progress.completed),
+    receipts: preview.receipts,
   };
 }
