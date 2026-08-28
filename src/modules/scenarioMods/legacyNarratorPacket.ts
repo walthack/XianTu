@@ -1,7 +1,7 @@
 import { cloneDeep } from 'lodash';
 import { getPrompt, getSystemPrompts } from '@/services/defaultPrompts';
 import { rankOf, type AcquaintanceLedger } from './acquaintanceLedger';
-import { computePresentNames } from './presence';
+import { computePresentNames, departedPresentNames } from './presence';
 import {
   advanceScenarioRuntime,
   getScenarioFocusEvent,
@@ -122,19 +122,9 @@ function isRevealedName(ledger: AcquaintanceLedger, name: string, playerName: st
   return true;
 }
 
-function eventIsCompleted(runtime: RuntimeLike, eventId: string): boolean {
-  const flagKey = String(eventId || '').replace(/^lcq\.event\./, 'event.') + '.done';
-  if (runtime.flags?.[flagKey] === true) return true;
-  const completed = Array.isArray(runtime.completedEventIds) ? runtime.completedEventIds : [];
-  return completed.includes(eventId);
-}
-
 function departedNames(saveData: SaveData, currentEventId: string): string[] {
-  const runtime = runtimeOf(saveData);
-  if (currentEventId !== 'lcq.event.s01_02' && eventIsCompleted(runtime, 'lcq.event.s01_02')) {
-    return ['段强'];
-  }
-  return [];
+  return departedPresentNames(runtimeOf(saveData))
+    .filter(name => !(currentEventId === 'lcq.event.s01_02' && name === '段强'));
 }
 
 function readPresentNames(saveData: SaveData, eventId?: string): string[] {

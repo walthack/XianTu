@@ -35,6 +35,8 @@ export interface PresenceInput {
    * **刻意不含玩家输入**：玩家打出名字只代表想找他，不代表人在。
    */
   recentNarrative?: string;
+  /** Names that must not count as present even if featured or recently narrated. */
+  excludeNames?: Iterable<string>;
 }
 
 /** 取位置描述的"建筑段"：第 3 段优先，不足则退到第 2 段，再不足用整串。 */
@@ -92,7 +94,26 @@ export function computePresentNames(input: PresenceInput): Set<string> {
       }
     }
   }
+  for (const name of input.excludeNames || []) {
+    if (!name) continue;
+    present.delete(String(name));
+  }
   return present;
+}
+
+function eventIsCompleted(runtime: { flags?: Record<string, unknown>; completedEventIds?: unknown } | null | undefined, eventId: string): boolean {
+  if (!runtime) return false;
+  const flagKey = `${String(eventId || '').replace(/^lcq\.event\./, 'event.')}.done`;
+  if (runtime.flags?.[flagKey] === true) return true;
+  const completed = Array.isArray(runtime.completedEventIds) ? runtime.completedEventIds : [];
+  return completed.includes(eventId);
+}
+
+/** Characters who have already left the living present cast. */
+export function departedPresentNames(runtime: { flags?: Record<string, unknown>; completedEventIds?: unknown } | null | undefined): string[] {
+  const names: string[] = [];
+  if (eventIsCompleted(runtime, 'lcq.event.s01_02')) names.push('段强');
+  return names;
 }
 
 /** 不在场角色的档案约束。与传闻／征兆层咬合：想见人就得去打听、去找。 */

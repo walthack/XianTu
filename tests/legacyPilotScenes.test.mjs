@@ -170,6 +170,7 @@ test('real canon order s01_01→02→03→04→06→05 never revives 段强 and 
   } = await loadTs('../src/modules/scenarioMods/legacyNarratorPacket.ts');
   const { acceptLegacyPilotScene } = await loadTs('../src/modules/scenarioMods/legacyPilotScenes.ts');
   const { composeLegacyNarrativeFromPlan } = await loadTs('../src/modules/scenarioMods/legacyRenderPlan.ts');
+  const { buildScenarioStoryPrompt } = await loadTs('../src/modules/scenarioMods/storyContext.ts');
   const raw = await readFile(new URL('../src/modules/scenarioMods/builtins/data/lcq.stage_01.json', import.meta.url), 'utf8');
   let save = createQingyuOpeningPlaytestSave(parseScenarioMod(JSON.parse(raw)));
   const seen = [];
@@ -218,6 +219,9 @@ test('real canon order s01_01→02→03→04→06→05 never revives 段强 and 
   play('lcq.event.s01_02');
   play('lcq.event.s01_03');
   play('lcq.event.s01_04');
+  const s01_06Prompt = buildScenarioStoryPrompt(save);
+  assert.doesNotMatch(s01_06Prompt, /【在场】[^\n]*段强/);
+  assert.match(s01_06Prompt, /当前不在场】段强/);
   play('lcq.event.s01_06');
   play('lcq.event.s01_05');
 

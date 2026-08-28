@@ -8,7 +8,7 @@ import { findRegistryIdentitiesByContext, getRegistrySpeechStyle } from './chara
 import { formatIntimacyProfile } from './intimacyProfiles';
 import { formatRelationStance } from './relationStance';
 import { formatAffinityCap } from './affinityCaps';
-import { computePresentNames, formatAbsenceGuard } from './presence';
+import { computePresentNames, departedPresentNames, formatAbsenceGuard } from './presence';
 import { formatAcquaintance, type AcquaintanceLedger } from './acquaintanceLedger';
 import {
   AFFINITY_THRESHOLDS,
@@ -966,7 +966,8 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
       }
     }
   }
-  const sameLocationList = [...sameLocationNames];
+  const departed = new Set(departedPresentNames(runtime));
+  const sameLocationList = [...sameLocationNames].filter(name => !departed.has(name));
   const focusContext = sameLocationList.length
     ? `${contextText}\n【在场】${sameLocationList.slice(0, 12).join('、')}`
     : contextText;
@@ -977,10 +978,10 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
   const eventCharacterNames = activeEvents
     .flatMap(event => event.relatedCharacterIds || [])
     .map(id => characters.find(character => character.id === id)?.name)
-    .filter((name): name is string => !!name);
+    .filter((name): name is string => !!name && !departed.has(name));
   const featuredCharacterNames = (runtime.opening?.featuredCharacterIds || [])
     .map(id => characters.find(character => character.id === id)?.name)
-    .filter((name): name is string => !!name);
+    .filter((name): name is string => !!name && !departed.has(name));
   // 近期正文：只取 assistant 侧的最近两条，**不含玩家输入**（点名≠在场）。
   const recentNarrative = (() => {
     const history = readPath(saveData, ['系统', '历史', '叙事']);
@@ -997,6 +998,7 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
     eventCharacterNames,
     featuredCharacterNames,
     recentNarrative,
+    excludeNames: departed,
   });
   const focusedCharacterSection = buildFocusedCharacterPrompt(runtime, activeEvents, focusContext, favByName, intimacyGate, playerName, presentNames);
   const npcPrivateKnowledgeGuard = buildNpcPrivateKnowledgeGuard(runtime);
