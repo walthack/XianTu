@@ -1527,6 +1527,9 @@ export function recordStoryEventStructuredAction(
   if (state.lastAttemptAtTurn === turn) {
     return { attempted: false, completed: false, eventId: event.id, reason: 'already_attempted' };
   }
+  if (event.id === 'lcq.event.s02_04' && !wuyuanS0204MapContractMet(runtime)) {
+    return { attempted: false, completed: false, eventId: event.id, reason: 'open_world_prerequisites' };
+  }
   const success = contract.kind === 'objective_action' || conditionsMatch(action.successWhen, saveData, runtime);
   const outcome: ScenarioPlayerCompletionOutcome = success ? 'success' : action.unmetOutcome || 'failure';
   const detail = action.outcomeText[outcome];
@@ -1867,6 +1870,34 @@ function settleArrivalObjective(saveData: SaveData, runtime: RuntimeState): void
   );
   if (!selection) return;
   recordStoryEventStructuredAction(saveData, selection);
+}
+
+const WUYUAN_S02_04_PASTRY_ZONE = 'lcq.zone.wuyuan.pastry_shop';
+const WUYUAN_S02_04_PLAYER_ROUTES = new Set([
+  'lcq.route.wuyuan.market_to_pastry_street',
+  'lcq.route.wuyuan.market_to_pastry_alley',
+]);
+const WUYUAN_S02_04_LOCAL_ACTIONS = new Set([
+  'lcq.action.wuyuan.delay_and_observe',
+  'lcq.action.wuyuan.break_for_exit',
+]);
+
+function wuyuanS0204MapContractMet(runtime: RuntimeState): boolean {
+  const slice = (runtime as RuntimeState & {
+    openWorldSlice?: {
+      currentZoneId?: string;
+      travelReceipts?: Array<{ routeId?: string; mode?: string }>;
+      actionReceipts?: Array<{ actionId?: string }>;
+    };
+  }).openWorldSlice;
+  if (!slice || slice.currentZoneId !== WUYUAN_S02_04_PASTRY_ZONE) return false;
+  const hasPlayerHop = (slice.travelReceipts || []).some(item => (
+    item.mode === 'player' && WUYUAN_S02_04_PLAYER_ROUTES.has(String(item.routeId || ''))
+  ));
+  const hasLocal = (slice.actionReceipts || []).some(item => (
+    WUYUAN_S02_04_LOCAL_ACTIONS.has(String(item.actionId || ''))
+  ));
+  return hasPlayerHop && hasLocal;
 }
 
 function getRuntime(saveData: SaveData): RuntimeState | null {

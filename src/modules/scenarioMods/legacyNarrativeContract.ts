@@ -3,7 +3,7 @@ import {
   hasHardNarrativeViolation,
   validateNarrativePerformance,
 } from './narrativePerformanceGuard';
-import { legacyPilotSafeSentencePool } from './legacyPilotScenes';
+import { legacyPilotPaddingSentences, legacyPilotSafeSentencePool } from './legacyPilotScenes';
 import type { LegacyMustAppear, LegacyNarratorPacket } from './legacyNarratorPacket';
 
 export const LEGACY_NARRATIVE_MIN_CHARS = 800;
@@ -267,7 +267,11 @@ function assembleSafeNarrative(packet: LegacyNarratorPacket, existing: string, p
     if (complete.valid) return clipToNarrativeCap(text, LEGACY_NARRATIVE_MAX_CHARS);
   }
 
-  const pool = [...preferred.filter(Boolean), ...safeSentencePool(packet)];
+  const pool = [
+    ...preferred.filter(Boolean),
+    ...safeSentencePool(packet),
+    ...legacyPilotPaddingSentences(packet),
+  ];
   for (const sentence of pool) {
     if (!sentence || text.includes(sentence)) continue;
     const trial = `${text}${sentence}`;
@@ -280,18 +284,6 @@ function assembleSafeNarrative(packet: LegacyNarratorPacket, existing: string, p
       countVisibleNarrativeChars(text) >= LEGACY_NARRATIVE_MIN_CHARS
       && validateLegacyVisibleNarrative(text, packet).valid
     ) break;
-  }
-
-  if (countVisibleNarrativeChars(text) < LEGACY_NARRATIVE_MIN_CHARS) {
-    const filler = '风还在吹。草还在动。你把这一圈又看清楚了一些。';
-    while (
-      countVisibleNarrativeChars(text + filler) <= LEGACY_NARRATIVE_MAX_CHARS
-      && countVisibleNarrativeChars(text) < LEGACY_NARRATIVE_MIN_CHARS
-    ) {
-      const check = validateLegacyVisibleNarrative(text + filler, packet, { partial: true });
-      if (!check.valid) break;
-      text += filler;
-    }
   }
 
   if (countVisibleNarrativeChars(text) > LEGACY_NARRATIVE_MAX_CHARS) {

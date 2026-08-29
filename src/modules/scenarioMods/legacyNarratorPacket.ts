@@ -277,7 +277,8 @@ export function previewLegacyPilotSettlement(
   const hopMove = Boolean(first?.fromZoneId && last?.toZoneId && first.fromZoneId !== last.toZoneId);
   const rawLocationMove = Boolean(beforeLocation && afterLocation && beforeLocation !== afterLocation);
   const sliceHydrated = !beforeZone && Boolean(afterZone);
-  const move = Boolean(hopMove || (rawLocationMove && !sliceHydrated) || (beforeZone && afterZone && beforeZone !== afterZone));
+  const unrelatedZoneShift = Boolean(beforeZone && afterZone && beforeZone !== afterZone && !hopMove);
+  const move = Boolean(hopMove || (rawLocationMove && !sliceHydrated && !unrelatedZoneShift));
   return {
     settled: advanced,
     progress,
@@ -285,11 +286,10 @@ export function previewLegacyPilotSettlement(
       move,
       casualty: Boolean(progress.completed && (progress.eventId === 'lcq.event.s01_02' || progress.eventId === 'lcq.event.s02_02')),
       ...(move && afterLocation && afterLocation !== beforeLocation ? { moveTo: afterLocation } : {}),
-      ...(first?.fromZoneId ? { fromZoneId: String(first.fromZoneId) } : beforeZone && afterZone && beforeZone !== afterZone ? { fromZoneId: beforeZone } : {}),
-      ...(last?.toZoneId ? { toZoneId: String(last.toZoneId) } : afterZone && beforeZone !== afterZone ? { toZoneId: afterZone } : {}),
+      ...(first?.fromZoneId ? { fromZoneId: String(first.fromZoneId) } : {}),
+      ...(last?.toZoneId ? { toZoneId: String(last.toZoneId) } : {}),
       ...(last?.routeId ? { routeId: String(last.routeId) } : {}),
-      ...(last?.mode || (move && afterZone) ? { mode: last?.mode === 'forced' ? 'forced' : 'player' } : {}),
-      ...(selection.eventId && last?.causeEventId ? { causeEventId: String(last.causeEventId) } : {}),
+      ...(last?.mode === 'forced' ? { mode: 'forced' as const, causeEventId: String(last.causeEventId || selection.eventId || '') } : {}),
     },
   };
 }

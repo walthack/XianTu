@@ -196,6 +196,36 @@ test('travel is explicit and both local solutions converge to the canon capture 
   assert.equal(world.世界.状态.剧本模组.eventActionStates, undefined);
 });
 
+test('direct s02_04 structured action from 帅帐 is rejected without water-prison hop', async () => {
+  const { getCurrentStoryEventActions, recordStoryEventStructuredAction } = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  const { ensureWuyuanOpenWorldSlice } = await loadTs('../src/modules/scenarioMods/wuyuanOpenWorldSlice.ts');
+  const current = warCampSave({
+    completedEventIds: ['lcq.event.s02_01', 'lcq.event.s02_03', 'lcq.event.s02_02'],
+    activeEventIds: ['lcq.event.s02_04'],
+    flags: {
+      'event.s02_01.done': true,
+      'event.s02_03.done': true,
+      'event.s02_02.done': true,
+      'event.s02_04.done': false,
+    },
+  });
+  const selection = getCurrentStoryEventActions(current).find(item => item.eventId === 'lcq.event.s02_04');
+  assert.ok(selection, 'stale/external s02_04 selection must still be enumerable so the runtime gate can reject it');
+  const result = recordStoryEventStructuredAction(current, selection);
+  assert.equal(result.attempted, false);
+  assert.equal(result.completed, false);
+  assert.equal(result.reason, 'open_world_prerequisites');
+  assert.equal(current.角色.位置.描述, '中州·帅帐');
+  assert.equal(current.世界.状态.剧本模组.flags['event.s02_04.done'], false);
+  assert.deepEqual(current.世界.状态.剧本模组.activeEventIds, ['lcq.event.s02_04']);
+  assert.equal((current.世界.状态.剧本模组.completedEventIds || []).includes('lcq.event.s02_04'), false);
+  ensureWuyuanOpenWorldSlice(current);
+  assert.equal(current.角色.位置.描述, '中州·帅帐');
+  const receipts = current.世界.状态.剧本模组.openWorldSlice?.travelReceipts || [];
+  assert.equal(receipts.some(item => item.causeEventId === 'lcq.event.s02_04'), false);
+  assert.equal(receipts.some(item => item.toZoneId === 'lcq.zone.wuyuan.water_prison'), false);
+});
+
 test('completed canon beats settle forced routes instead of teleporting', async () => {
   const { ensureWuyuanOpenWorldSlice } = await loadTs('../src/modules/scenarioMods/wuyuanOpenWorldSlice.ts');
   const current = save();
@@ -284,12 +314,28 @@ test('escape hops commit only after completedEventIds are advanced', async () =>
   }
   const transitioned = transitionToNextScenarioStage(saveData, [parseScenarioMod(JSON.parse(raw02))]);
   saveData = advanceScenarioRuntime(transitioned.saveData).saveData;
+  const {
+    getWuyuanOpenWorldSelections, resolveWuyuanOpenWorldSelectionFromText, settleWuyuanOpenWorldSelection,
+  } = await loadTs('../src/modules/scenarioMods/wuyuanOpenWorldSlice.ts');
   for (const beat of [
     'lcq.event.s02_01', 'lcq.event.s02_03', 'lcq.event.s02_02', 'lcq.event.s02_04',
     'lcq.event.s02_05', 'lcq.event.s02_06', 'lcq.event.ningyu_enters_gamble',
     'lcq.event.sudaji_south_pact', 'lcq.event.gamble_bond_signed',
     'lcq.event.charge_sudaji_fee', 'lcq.event.free_ajiman',
   ]) {
+    if (beat === 'lcq.event.s02_04') {
+      const arrive = resolveWuyuanOpenWorldSelectionFromText(saveData, '我去五原城。');
+      assert.ok(arrive);
+      settleWuyuanOpenWorldSelection(saveData, arrive);
+      const travel = getWuyuanOpenWorldSelections(saveData).find(item => item.kind === 'travel');
+      assert.ok(travel);
+      settleWuyuanOpenWorldSelection(saveData, travel);
+      const local = getWuyuanOpenWorldSelections(saveData).find(item => item.kind === 'problem_action');
+      assert.ok(local);
+      assert.equal(settleWuyuanOpenWorldSelection(saveData, local).canonEventCompleted, true);
+      saveData = advanceScenarioRuntime(saveData).saveData;
+      continue;
+    }
     for (let step = 0; step < 8; step += 1) {
       if ((runtimeOf(saveData).completedEventIds || []).includes(beat)) break;
       const selection = getCurrentStoryEventActions(saveData).find(item => item.eventId === beat) || contractAction(saveData);

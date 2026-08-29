@@ -462,16 +462,18 @@ export function settleOpenWorldForcedTravelChain(
   routeIds: string[],
   causeEventId: string,
 ): OpenWorldSettlementResult<OpenWorldTravelReceipt[]> {
+  const preview = structuredClone(state);
   const receipts: OpenWorldTravelReceipt[] = [];
   let anySettled = false;
   for (const routeId of routeIds) {
-    const hop = settleOpenWorldForcedTravel(state, definition, routeId, causeEventId);
+    const hop = settleOpenWorldForcedTravel(preview, definition, routeId, causeEventId);
     if (hop.status === 'rejected' || !hop.receipt) {
-      return { status: 'rejected', reason: hop.reason, receipt: receipts };
+      return { status: 'rejected', reason: hop.reason };
     }
     if (hop.status === 'settled') anySettled = true;
     receipts.push(hop.receipt);
   }
+  Object.assign(state, preview);
   return { status: anySettled ? 'settled' : 'idempotent', receipt: receipts };
 }
 

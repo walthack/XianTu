@@ -100,6 +100,8 @@ function atSameWuyuanLeaf(
 const S02_02_CAST = ['王哲', '月霜'] as const;
 
 const LEGACY_PILOT_FINAL_ACTION_IDS: Partial<Record<LegacyPilotEventId, string>> = {
+  'lcq.event.ningyu_enters_gamble': 'answer_ningyu_on_debut',
+  'lcq.event.sudaji_south_pact': 'seal_three_month_south_pact',
   'lcq.event.gamble_bond_signed': 'sign_the_bond',
   'lcq.event.charge_sudaji_fee': 'lock_fee_then_remove_device',
   'lcq.event.free_ajiman': 'tear_bond_and_face_blockade',
@@ -356,25 +358,32 @@ function martyrPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan): 
   return [reaction, sensory, pacing, closing].filter(Boolean);
 }
 
-function brandPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan): string[] {
+function brandPlaceName(packet: LegacyNarratorPacket): string {
   const dest = String(packet.receipts?.moveTo || packet.mustAppear?.location || packet.location || '五原城');
-  const destName = isWuyuanCityLabel(dest) ? '五原城' : dest.replace(/[·,，]/g, '') || '五原城';
+  if (isPastryShopLabel(dest)) return '点心铺';
+  if (isWaterPrisonLabel(dest)) return '白湖商馆水牢';
+  if (isWuyuanCityLabel(dest)) return '五原城';
+  return dest.replace(/[·,，]/g, '') || '五原城';
+}
+
+function brandPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan): string[] {
+  const destName = brandPlaceName(packet);
   const companion = presentNames(packet).find(name => name === '月霜');
   const side = companion ? `${companion}被挡在人群外。` : '身边没有能替你回话的人。';
   const sensory = {
-    grass_iron: `${destName}城门这一侧，马粪、铁锈和热烙铁的焦糊叠在一起。锁链先碰到手腕。`,
-    wind_sky: `城门洞把风挤窄。尘土扑到牙上，有人已经把烙铁从炉里抽出来。`,
+    grass_iron: `${destName}这一侧，马粪、铁锈和热烙铁的焦糊叠在一起。锁链先碰到手腕。`,
+    wind_sky: `货棚把风挤窄。尘土扑到牙上，有人已经把烙铁从炉里抽出来。`,
     mud_body: `靴底还带着帐外的土。${destName}的石板是硬的，膝盖撞上去发麻。`,
   }[plan.sensory];
   const pacing = {
     slow_orient: `五原城里有人把你当成逃奴，先应付眼前的盘问与拉扯。你没有去辨认他们的名字。`,
-    tense_watch: `你把呼吸压低，先看清城门兵和拿烙铁的人站在哪一侧，再开口。`,
+    tense_watch: `你把呼吸压低，先看清货棚边的人和拿烙铁的人站在哪一侧，再开口。`,
     steady_breathe: `你先把气沉住。盘问已经落到脸上，拉扯比话更快。`,
   }[plan.pacing];
   const reaction = {
     dazed: `有人卡住你的后颈，问你从哪座庄子逃出来。你一时答不上来。`,
-    answers: `有人骂：“逃奴还敢进城？”随即把你的胳膊拧到背后。`,
-    silent_grip: `一只手扣住你的腕骨，力道大，不让你从城门这一侧退回去。`,
+    answers: `有人骂：“逃奴还敢进市集？”随即把你的胳膊拧到背后。`,
+    silent_grip: `一只手扣住你的腕骨，力道大，不让你从货棚这一侧退回去。`,
   }[plan.companion];
   const closing = {
     hold_ground: `殴打过后，烙铁按上颈侧。奴隶印记落下，痛是实的，名分也是实的。`,
@@ -382,8 +391,8 @@ function brandPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan): s
     steady_breath: `你把呼吸重新对齐，先挨过这一烙。印记在，盘问还在，人还在${destName}。`,
   }[plan.closing];
   const arrival = packet.receipts?.move
-    ? `城门洞一暗。你跨过门槛，泥还留在城外，${destName}里的嘈杂压过来。`
-    : `你已在${destName}里。城门在身后合上，石板把靴底磕响。`;
+    ? `货棚一暗。你从人缝里挤进去，泥还留在街面上，${destName}里的嘈杂压过来。`
+    : `你已在${destName}里。货棚在身侧排开，石板把靴底磕响。`;
   return [arrival, side, reaction, sensory, pacing, closing].filter(Boolean);
 }
 
@@ -397,7 +406,7 @@ function ambushPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan): 
   const destName = dungeonPlaceName(packet);
   const sensory = {
     grass_iron: `${destName}地牢这一侧，潮气和铁锈贴着石壁。颈上的印记还烫，锁链先碰到腕骨。`,
-    wind_sky: `牢门缝里挤进一点风。地牢比城门更暗，有人的脚步贴着水声过来。`,
+    wind_sky: `牢门缝里挤进一点风。地牢比市集更暗，有人的脚步贴着水声过来。`,
     mud_body: `靴底还停在${destName}。石板上是湿的，膝盖一跪就凉。`,
   }[plan.sensory];
   const pacing = {
@@ -925,44 +934,43 @@ function martyrPool(packet: LegacyNarratorPacket): string[] {
 }
 
 function brandPool(packet: LegacyNarratorPacket): string[] {
-  const dest = String(packet.receipts?.moveTo || packet.mustAppear?.location || packet.location || '五原城');
-  const destName = isWuyuanCityLabel(dest) ? '五原城' : dest.replace(/[·,，]/g, '') || '五原城';
+  const destName = brandPlaceName(packet);
   const companion = presentNames(packet).find(name => name === '月霜');
   const named = companion
     ? [
       `${companion}被挡在人群外，够不着你这一侧。`,
-      `你没有让${companion}挤进城门兵中间。眼下先应付盘问与拉扯。`,
+      `你没有让${companion}挤进货棚边的人缝。眼下先应付盘问与拉扯。`,
     ]
     : [
-      `身边没有能替你回话的人。盘问只对着你。`,
+      `盘问只对着你，没有旁人替你回话。`,
     ];
   const arrival = packet.receipts?.move
     ? [
-      `城门洞一暗。你跨过门槛，泥还留在城外，${destName}里的嘈杂压过来。`,
-      `靴底的凉停在城门槛这一侧。石板是热的。`,
+      `货棚一暗。你从人缝里挤进去，泥还留在街面上，${destName}里的嘈杂压过来。`,
+      `靴底的凉停在市集石板这一侧。石板是热的。`,
     ]
     : [
-      `你已在${destName}里。城门在身后，石板把靴底磕响。`,
+      `你已在${destName}里。货棚在身侧，石板把靴底磕响。`,
     ];
   return [
     ...named,
     ...arrival,
     `五原城里有人把你当成逃奴，先应付眼前的盘问与拉扯。`,
-    `城门兵不问来历的细处，先问你从哪座庄子逃出来。`,
+    `货棚边的人不问来历的细处，先问你从哪座庄子逃出来。`,
     `你说不清庄子的名字。这话一出口，拉扯就到了。`,
     `有人卡住你的后领，把你从人缝里拖到墙根。`,
     `殴打是短的。拳落到肋下，石板顶着膝盖。`,
-    `炉子就在门洞内侧。烙铁抽出来时，焦糊味比马粪更先扑到脸上。`,
+    `炉子就在货棚内侧。烙铁抽出来时，焦糊味比马粪更先扑到脸上。`,
     `你没有去辨认拿烙铁的人叫什么。眼下只剩颈侧这一块皮。`,
     `烙铁按上来。痛是实的，奴隶印记也是实的。`,
     `印记落下以后，盘问停了一停。逃奴已经定了。`,
     `你没有伸手去揭。印记还烫着，揭不掉。`,
     `锁链碰到腕骨，凉，硬，带着刚出炉的铁腥。`,
     `你把能确定的事过了一遍：地是${destName}，人把你当逃奴，印记已经落下。`,
-    `城门这一侧仍是${destName}。你没有被拖去别的城。`,
+    `市集这一侧仍是${destName}。你没有被拖去别的城。`,
     `你低声说：“我不是逃奴。”没有人接这句话。`,
     `拉扯把你的肩甲扯歪。你没有还手，先挨过这一息。`,
-    `热烙铁离开颈侧时，风从门洞灌进来，痛反而更清楚。`,
+    `热烙铁离开颈侧时，风从货棚缝里灌进来，痛反而更清楚。`,
     `你跪在石板上，把气从牙缝里挤出去。`,
     `人群外有马嘶。你没有抬头去认旗。`,
     `印记在。名分在。${destName}还在脚下。`,
@@ -1303,7 +1311,7 @@ function walkPool(packet: LegacyNarratorPacket): string[] {
     `巷里有人低声问价。你不接话，只把人带过这一截。`,
     `脱身落下的标志是门槛。门槛过后，人还在五原城。`,
     `你没有把和解说出口。走出五原商馆这一步已经够用。`,
-    `城门的方向还能看见灯。你不朝那盏灯走。`,
+    `巷口的方向还能看见灯。你不朝那盏灯走。`,
   ];
 }
 
@@ -1456,4 +1464,60 @@ export function legacyPilotSafeSentencePool(packet: LegacyNarratorPacket): strin
 
 export function usesOpeningStockSentences(text: string): boolean {
   return OPENING_STOCK_RE.test(String(text || ''));
+}
+
+function indoorWuyuanPlace(packet: LegacyNarratorPacket): boolean {
+  const loc = packet.mustAppear?.location || packet.location || '';
+  return isWuyuanCityLabel(loc)
+    || isPastryShopLabel(loc)
+    || isWaterPrisonLabel(loc)
+    || isBaihuHallLabel(loc)
+    || isBaihuGateLabel(loc)
+    || isBaihuFrontStreetLabel(loc);
+}
+
+/** Unique, non-repeating texture. Adds no new people, items, deaths, or moves. */
+export function legacyPilotPaddingSentences(packet: LegacyNarratorPacket): string[] {
+  const place = placeOf(packet);
+  if (indoorWuyuanPlace(packet)) {
+    return [
+      `你把肩沉下一寸，让自己停在${place}还能站住的位置。`,
+      `这一息没有新的动静落到你身上。`,
+      `你数过自己的呼吸，没有去改已经落下的事。`,
+      `石板还在靴底。你用这个事实把重心收回来。`,
+      `你把目光从近处挪到更近处，只确认自己还在原位。`,
+      `掌心发潮。你没有把它擦到别的东西上。`,
+      `你让牙关松开半拍，再咬住，免得自己出声。`,
+      `周围的嘈杂没有给你新的名字。`,
+      `你把一只手按在膝上，另一只手空着。`,
+      `灯火或天光在这一侧跳了一下。你没有抬头去追。`,
+      `你把已经看见的边界又走了一遍，没有跨出去。`,
+      `气味还在。你按这个事实停住，不发明下一截。`,
+      `你把呼吸放短，再放长，让自己继续待在${place}。`,
+      `膝下那一点压感没有消失。人还在。`,
+      `你没有伸手去碰还没落到你手里的东西。`,
+      `耳边有人走过。你仍停在原处。`,
+      `你把下巴收住，不让自己去认远处的旗。`,
+      `这一圈里没有新的路。你把这一点看清楚。`,
+      `你把袖口的灰抹掉，动作很小。`,
+      `你把能确定的方位又核了一遍：人在，地在，这一息还没有过完。`,
+    ];
+  }
+  return [
+    `你把重心从左膝换到右膝，没有站起来乱跑。`,
+    `这一息没有新的喊声落到你身边。`,
+    `你数过自己的呼吸，先确认人还在原处。`,
+    `泥土还贴在掌纹里。你没有把它当成路标。`,
+    `你把目光从近处挪到更近处，只确认自己站得住。`,
+    `风从耳边过去。它没有带来新的名字。`,
+    `你让牙关松开半拍，再咬住。`,
+    `你把一只手按在膝上，另一只手空着。`,
+    `天光没有变。你按这个事实停住。`,
+    `你没有伸手去抓还没落到手里的东西。`,
+    `远处有动静。你仍停在原处。`,
+    `你把下巴收住，不跟着喊声走。`,
+    `草叶还贴在腕上。你没有把它们拨开当路。`,
+    `你把袖口的泥抹掉，动作很小。`,
+    `你把能确定的方位又核了一遍：人在，地在，这一息还没有过完。`,
+  ];
 }

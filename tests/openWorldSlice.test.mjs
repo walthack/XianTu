@@ -211,6 +211,13 @@ test('forced travel ignores known-route gates, records cause, and rejects off-gr
   assert.equal(chain.status, 'settled');
   assert.equal(chainState.currentZoneId, 'zone.hidden');
   assert.equal(settleOpenWorldForcedTravelChain(chainState, definition(), ['route.square.shop', 'route.shop.hidden'], 'event.chain').status, 'idempotent');
+  const broken = await state();
+  const beforeBroken = structuredClone(broken);
+  const rejected = settleOpenWorldForcedTravelChain(broken, definition(), ['route.square.shop', 'missing'], 'event.broken');
+  assert.equal(rejected.status, 'rejected');
+  assert.equal(rejected.reason, 'unknown_route');
+  assert.equal(rejected.receipt, undefined);
+  assert.deepEqual(broken, beforeBroken);
   const alreadyThere = await state({ currentZoneId: 'zone.hidden' });
   const filled = backfillOrSettleForcedTravel(alreadyThere, definition(), 'route.shop.hidden', 'event.old');
   assert.equal(filled.status, 'settled');
