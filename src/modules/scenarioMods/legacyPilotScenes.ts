@@ -11,6 +11,7 @@ export const LEGACY_NARRATIVE_PILOT_EVENT_IDS = [
   'lcq.event.s02_01',
   'lcq.event.s02_03',
   'lcq.event.s02_02',
+  'lcq.event.s02_04',
 ] as const;
 
 export type LegacyPilotEventId = (typeof LEGACY_NARRATIVE_PILOT_EVENT_IDS)[number];
@@ -43,6 +44,11 @@ function isCommandTentLabel(value: unknown): boolean {
 
 function isQingyuCommandTent(value: unknown): boolean {
   return String(value || '').trim() === '中州·帅帐';
+}
+
+function isWuyuanCityLabel(value: unknown): boolean {
+  const text = String(value || '').trim();
+  return text === '五原城' || /(^|[·])五原城$/.test(text);
 }
 
 const S02_02_CAST = ['王哲', '月霜'] as const;
@@ -82,6 +88,12 @@ export function acceptLegacyPilotScene(packet: LegacyNarratorPacket): boolean {
     if (names.length !== 2 || !names.includes('王哲') || !names.includes('月霜')) return false;
     const atTent = isQingyuCommandTent(packet.location) && isQingyuCommandTent(packet.mustAppear?.location);
     return atTent && packet.receipts?.move === false && packet.receipts?.casualty === true;
+  }
+  if (eventId === 'lcq.event.s02_04') {
+    if (names.some(name => name !== '月霜')) return false;
+    const atCity = isWuyuanCityLabel(packet.location) && isWuyuanCityLabel(packet.mustAppear?.location);
+    const moving = packet.receipts?.move === true && isWuyuanCityLabel(packet.receipts?.moveTo);
+    return (atCity || moving) && packet.receipts?.casualty === false;
   }
   return false;
 }
@@ -222,6 +234,37 @@ function martyrPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan): 
   return [reaction, sensory, pacing, closing].filter(Boolean);
 }
 
+function brandPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan): string[] {
+  const dest = String(packet.receipts?.moveTo || packet.mustAppear?.location || packet.location || '五原城');
+  const destName = isWuyuanCityLabel(dest) ? '五原城' : dest.replace(/[·,，]/g, '') || '五原城';
+  const companion = presentNames(packet).find(name => name === '月霜');
+  const side = companion ? `${companion}被挡在人群外。` : '身边没有能替你回话的人。';
+  const sensory = {
+    grass_iron: `${destName}城门这一侧，马粪、铁锈和热烙铁的焦糊叠在一起。锁链先碰到手腕。`,
+    wind_sky: `城门洞把风挤窄。尘土扑到牙上，有人已经把烙铁从炉里抽出来。`,
+    mud_body: `靴底还带着帐外的土。${destName}的石板是硬的，膝盖撞上去发麻。`,
+  }[plan.sensory];
+  const pacing = {
+    slow_orient: `五原城里有人把你当成逃奴，先应付眼前的盘问与拉扯。你没有去辨认他们的名字。`,
+    tense_watch: `你把呼吸压低，先看清城门兵和拿烙铁的人站在哪一侧，再开口。`,
+    steady_breathe: `你先把气沉住。盘问已经落到脸上，拉扯比话更快。`,
+  }[plan.pacing];
+  const reaction = {
+    dazed: `有人卡住你的后颈，问你从哪座庄子逃出来。你一时答不上来。`,
+    answers: `有人骂：“逃奴还敢进城？”随即把你的胳膊拧到背后。`,
+    silent_grip: `一只手扣住你的腕骨，力道大，不让你从城门这一侧退回去。`,
+  }[plan.companion];
+  const closing = {
+    hold_ground: `殴打过后，烙铁按上颈侧。奴隶印记落下，痛是实的，名分也是实的。`,
+    look_far: `你被按在石板上。烙铁的热先到，印记后到。${destName}这一侧，逃奴已经定了。`,
+    steady_breath: `你把呼吸重新对齐，先挨过这一烙。印记在，盘问还在，人还在${destName}。`,
+  }[plan.closing];
+  const arrival = packet.receipts?.move
+    ? `城门洞一暗。你跨过门槛，泥还留在城外，${destName}里的嘈杂压过来。`
+    : `你已在${destName}里。城门在身后合上，石板把靴底磕响。`;
+  return [arrival, side, reaction, sensory, pacing, closing].filter(Boolean);
+}
+
 function legionPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan): string[] {
   const companion = '月霜';
   const place = placeOf(packet);
@@ -341,6 +384,7 @@ export function legacyPilotPreferredSentences(
   if (eventId === 'lcq.event.s02_01') return mandatePreferred(packet, plan);
   if (eventId === 'lcq.event.s02_03') return legionPreferred(packet, plan);
   if (eventId === 'lcq.event.s02_02') return martyrPreferred(packet, plan);
+  if (eventId === 'lcq.event.s02_04') return brandPreferred(packet, plan);
   return openingPreferred(packet, plan);
 }
 
@@ -531,6 +575,54 @@ function martyrPool(packet: LegacyNarratorPacket): string[] {
   ];
 }
 
+function brandPool(packet: LegacyNarratorPacket): string[] {
+  const dest = String(packet.receipts?.moveTo || packet.mustAppear?.location || packet.location || '五原城');
+  const destName = isWuyuanCityLabel(dest) ? '五原城' : dest.replace(/[·,，]/g, '') || '五原城';
+  const companion = presentNames(packet).find(name => name === '月霜');
+  const named = companion
+    ? [
+      `${companion}被挡在人群外，够不着你这一侧。`,
+      `你没有让${companion}挤进城门兵中间。眼下先应付盘问与拉扯。`,
+    ]
+    : [
+      `身边没有能替你回话的人。盘问只对着你。`,
+    ];
+  const arrival = packet.receipts?.move
+    ? [
+      `城门洞一暗。你跨过门槛，泥还留在城外，${destName}里的嘈杂压过来。`,
+      `靴底的凉停在城门槛这一侧。石板是热的。`,
+    ]
+    : [
+      `你已在${destName}里。城门在身后，石板把靴底磕响。`,
+    ];
+  return [
+    ...named,
+    ...arrival,
+    `五原城里有人把你当成逃奴，先应付眼前的盘问与拉扯。`,
+    `城门兵不问来历的细处，先问你从哪座庄子逃出来。`,
+    `你说不清庄子的名字。这话一出口，拉扯就到了。`,
+    `有人卡住你的后领，把你从人缝里拖到墙根。`,
+    `殴打是短的。拳落到肋下，石板顶着膝盖。`,
+    `炉子就在门洞内侧。烙铁抽出来时，焦糊味比马粪更先扑到脸上。`,
+    `你没有去辨认拿烙铁的人叫什么。眼下只剩颈侧这一块皮。`,
+    `烙铁按上来。痛是实的，奴隶印记也是实的。`,
+    `印记落下以后，盘问停了一停。逃奴已经定了。`,
+    `你没有伸手去揭。印记还烫着，揭不掉。`,
+    `锁链碰到腕骨，凉，硬，带着刚出炉的铁腥。`,
+    `你把能确定的事过了一遍：地是${destName}，人把你当逃奴，印记已经落下。`,
+    `城门这一侧仍是${destName}。你没有被拖去别的城。`,
+    `你低声说：“我不是逃奴。”没有人接这句话。`,
+    `拉扯把你的肩甲扯歪。你没有还手，先挨过这一息。`,
+    `热烙铁离开颈侧时，风从门洞灌进来，痛反而更清楚。`,
+    `你跪在石板上，把气从牙缝里挤出去。`,
+    `人群外有马嘶。你没有抬头去认旗。`,
+    `印记在。名分在。${destName}还在脚下。`,
+    `你把一只膝盖跪稳，另一只手按住刚烙过的那一侧，不让自己倒下去。`,
+    `他们把你当货物点过一遍。点完，烙才算完。`,
+    `你没有把这一段写成已经脱身。印记还烫着。`,
+  ];
+}
+
 function legionPool(packet: LegacyNarratorPacket): string[] {
   const companion = '月霜';
   const place = placeOf(packet);
@@ -666,6 +758,7 @@ export function legacyPilotSafeSentencePool(packet: LegacyNarratorPacket): strin
   if (eventId === 'lcq.event.s02_01') return mandatePool(packet);
   if (eventId === 'lcq.event.s02_03') return legionPool(packet);
   if (eventId === 'lcq.event.s02_02') return martyrPool(packet);
+  if (eventId === 'lcq.event.s02_04') return brandPool(packet);
   return openingPool(packet);
 }
 

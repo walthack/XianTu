@@ -163,7 +163,48 @@ test('incomplete scene contracts fail closed; s01_06 requires 月霜', async () 
     })), false, fake);
   }
   assert.deepEqual(filterLegacyPilotEventCharacterNames('lcq.event.s02_02', ['月霜', '王哲', '阿伽门侬', '韩庚']), ['月霜', '王哲']);
-  assert.equal(acceptLegacyPilotScene(basePacket({ eventId: 'lcq.event.s02_04', present: ['月霜'] })), false);
+  assert.equal(isLegacyPilotEventId('lcq.event.s02_04'), true);
+  assert.ok(LEGACY_NARRATIVE_PILOT_EVENT_IDS.includes('lcq.event.s02_04'));
+  assert.equal(acceptLegacyPilotScene(basePacket({
+    eventId: 'lcq.event.s02_04',
+    location: '中州·帅帐',
+    present: [],
+    presentActors: [],
+    mustAppear: { location: '中州·五原城', present: [], objective: '五原城里有人把你当成逃奴，先应付眼前的盘问与拉扯' },
+    receipts: { move: true, casualty: false, moveTo: '中州·五原城' },
+  })), true);
+  assert.equal(acceptLegacyPilotScene(basePacket({
+    eventId: 'lcq.event.s02_04',
+    location: '中州·五原城',
+    present: ['月霜'],
+    presentActors: [{ name: '月霜', traits: [] }],
+    mustAppear: { location: '中州·五原城', present: ['月霜'], objective: '五原城里有人把你当成逃奴，先应付眼前的盘问与拉扯' },
+    receipts: { move: false, casualty: false },
+  })), true);
+  assert.equal(acceptLegacyPilotScene(basePacket({
+    eventId: 'lcq.event.s02_04',
+    location: '中州·帅帐',
+    present: ['月霜'],
+    mustAppear: { location: '中州·帅帐', present: ['月霜'], objective: '五原城里有人把你当成逃奴，先应付眼前的盘问与拉扯' },
+    receipts: { move: false, casualty: false },
+  })), false);
+  assert.equal(acceptLegacyPilotScene(basePacket({
+    eventId: 'lcq.event.s02_04',
+    location: '中州·五原城',
+    present: ['王哲'],
+    mustAppear: { location: '中州·五原城', present: ['王哲'], objective: '五原城里有人把你当成逃奴，先应付眼前的盘问与拉扯' },
+    receipts: { move: true, casualty: false, moveTo: '中州·五原城' },
+  })), false);
+  for (const fake of ['五原露天市集', '五原商馆', '中州·五原·帅帐', '白湖商馆水牢']) {
+    assert.equal(acceptLegacyPilotScene(basePacket({
+      eventId: 'lcq.event.s02_04',
+      location: fake,
+      present: [],
+      mustAppear: { location: fake, present: [], objective: '五原城里有人把你当成逃奴，先应付眼前的盘问与拉扯' },
+      receipts: { move: true, casualty: false, moveTo: fake },
+    })), false, fake);
+  }
+  assert.equal(acceptLegacyPilotScene(basePacket({ eventId: 'lcq.event.s02_05', present: ['月霜'] })), false);
   assert.equal(planLegacyNarrativePilot({
     saveData: {},
     eventAction: { source: 'event_engine', eventId: 'lcq.event.s02_01' },
@@ -272,6 +313,18 @@ test('each expanded scene uses its own local variants, not opening stock', async
     publicFacts: ['中州·帅帐', '王哲在场', '月霜在场', '王哲九阳殉军'],
     receipts: { move: false, casualty: true },
   });
+  const brand = basePacket({
+    eventId: 'lcq.event.s02_04',
+    location: '中州·帅帐',
+    present: [],
+    presentActors: [],
+    action: '应付眼前的盘问与拉扯',
+    currentObjective: '五原城里有人把你当成逃奴，先应付眼前的盘问与拉扯',
+    mustAppear: { location: '中州·五原城', present: [], objective: '五原城里有人把你当成逃奴，先应付眼前的盘问与拉扯' },
+    mustNotAppear: ['神兵'],
+    publicFacts: ['中州·帅帐', '中州·五原城', '奴隶印记'],
+    receipts: { move: true, casualty: false, moveTo: '中州·五原城' },
+  });
 
   assert.equal(acceptLegacyPilotScene(danger), true);
   assert.equal(acceptLegacyPilotScene(interact), true);
@@ -281,8 +334,9 @@ test('each expanded scene uses its own local variants, not opening stock', async
   assert.equal(acceptLegacyPilotScene(mandate), true);
   assert.equal(acceptLegacyPilotScene(legion), true);
   assert.equal(acceptLegacyPilotScene(martyr), true);
+  assert.equal(acceptLegacyPilotScene(brand), true);
 
-  for (const packet of [danger, interact, progress, arrive, frost, mandate, legion, martyr]) {
+  for (const packet of [danger, interact, progress, arrive, frost, mandate, legion, martyr, brand]) {
     const text = composeLegacyNarrativeFromPlan(packet);
     const check = validateLegacyVisibleNarrative(text, packet);
     assert.equal(check.valid, true, `${packet.eventId}: ${check.issues.join(';')}\n${text}`);
@@ -386,6 +440,29 @@ test('each expanded scene uses its own local variants, not opening stock', async
           assert.equal(text.includes('阿伽门侬'), false, text);
           assert.equal(text.includes('韩庚'), false, text);
           assert.equal(text.includes('文泽'), false, text);
+        }
+      }
+    }
+  }
+  const brandText = composeLegacyNarrativeFromPlan(brand);
+  assert.match(brandText, /五原城/);
+  assert.match(brandText, /逃奴|盘问|拉扯/);
+  assert.match(brandText, /烙|奴隶印记/);
+  assert.equal(brandText.includes('王哲'), false);
+  assert.equal(brandText.includes('段强'), false);
+  assert.equal(brandText.includes('戈龙'), false);
+  assert.equal(brandText.includes('孙疤脸'), false);
+  assert.equal(brandText.includes('解除'), false);
+  assert.equal(/未结算|回执|合同/.test(brandText), false, brandText);
+  for (const pacing of LEGACY_RENDER_PACING) {
+    for (const sensory of LEGACY_RENDER_SENSORY) {
+      for (const companion of LEGACY_RENDER_COMPANION) {
+        for (const closing of LEGACY_RENDER_CLOSING) {
+          const text = composeLegacyNarrativeFromPlan(brand, { pacing, sensory, companion, closing });
+          assert.equal(text.includes('戈龙'), false, text);
+          assert.equal(text.includes('孙疤脸'), false, text);
+          assert.equal(text.includes('王哲'), false, text);
+          assert.match(text, /五原城/);
         }
       }
     }
