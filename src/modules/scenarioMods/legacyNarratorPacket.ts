@@ -57,6 +57,7 @@ export interface LegacyMustAppear {
 
 export interface LegacyNarratorPacket {
   eventId?: string;
+  actionId?: string;
   action: string;
   settledOutcome: string;
   location: string;
@@ -319,6 +320,7 @@ export function compileLegacyNarratorPacket(
 
   const packet: LegacyNarratorPacket = {
     eventId: plan.selection.eventId,
+    actionId: readText(plan.selection.actionId) || undefined,
     action,
     settledOutcome,
     location: capsule.location,

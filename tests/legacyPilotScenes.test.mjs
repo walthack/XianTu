@@ -328,6 +328,7 @@ test('incomplete scene contracts fail closed; s01_06 requires 月霜', async () 
   assert.deepEqual(filterLegacyPilotEventCharacterNames('lcq.event.gamble_bond_signed', ['苏妲己', '凝羽']), ['凝羽']);
   assert.equal(acceptLegacyPilotScene(basePacket({
     eventId: 'lcq.event.gamble_bond_signed',
+    actionId: 'sign_the_bond',
     location: '中州·五原城',
     present: ['凝羽'],
     presentActors: [{ name: '凝羽', traits: [] }],
@@ -336,6 +337,24 @@ test('incomplete scene contracts fail closed; s01_06 requires 月霜', async () 
   })), true);
   assert.equal(acceptLegacyPilotScene(basePacket({
     eventId: 'lcq.event.gamble_bond_signed',
+    actionId: 'confirm_rigged_wager_loss',
+    location: '中州·五原城',
+    present: ['凝羽'],
+    presentActors: [{ name: '凝羽', traits: [] }],
+    mustAppear: { location: '中州·五原城', present: ['凝羽'], objective: '赌局局面骤变，面对眼前的刻香与契书做出回应' },
+    receipts: { move: false, casualty: false },
+  })), false);
+  assert.equal(acceptLegacyPilotScene(basePacket({
+    eventId: 'lcq.event.gamble_bond_signed',
+    location: '中州·五原城',
+    present: ['凝羽'],
+    presentActors: [{ name: '凝羽', traits: [] }],
+    mustAppear: { location: '中州·五原城', present: ['凝羽'], objective: '赌局局面骤变，面对眼前的刻香与契书做出回应' },
+    receipts: { move: false, casualty: false },
+  })), false);
+  assert.equal(acceptLegacyPilotScene(basePacket({
+    eventId: 'lcq.event.gamble_bond_signed',
+    actionId: 'sign_the_bond',
     location: '中州·五原城',
     present: [],
     mustAppear: { location: '中州·五原城', present: [], objective: '赌局局面骤变，面对眼前的刻香与契书做出回应' },
@@ -343,6 +362,7 @@ test('incomplete scene contracts fail closed; s01_06 requires 月霜', async () 
   })), false);
   assert.equal(acceptLegacyPilotScene(basePacket({
     eventId: 'lcq.event.gamble_bond_signed',
+    actionId: 'sign_the_bond',
     location: '中州·五原城',
     present: ['凝羽', '苏妲己'],
     mustAppear: { location: '中州·五原城', present: ['凝羽', '苏妲己'], objective: '赌局局面骤变，面对眼前的刻香与契书做出回应' },
@@ -352,6 +372,7 @@ test('incomplete scene contracts fail closed; s01_06 requires 月霜', async () 
   assert.deepEqual(filterLegacyPilotEventCharacterNames('lcq.event.charge_sudaji_fee', ['苏妲己', '凝羽']), []);
   assert.equal(acceptLegacyPilotScene(basePacket({
     eventId: 'lcq.event.charge_sudaji_fee',
+    actionId: 'lock_fee_then_remove_device',
     location: '中州·五原城',
     present: [],
     mustAppear: { location: '中州·五原城', present: [], objective: '在帮苏妲己取出新奇器物前谈定六十金铢报酬' },
@@ -359,11 +380,20 @@ test('incomplete scene contracts fail closed; s01_06 requires 月霜', async () 
   })), true);
   assert.equal(acceptLegacyPilotScene(basePacket({
     eventId: 'lcq.event.charge_sudaji_fee',
+    actionId: 'lock_fee_then_remove_device',
     location: '中州·五原·白湖商馆内院',
     present: [],
     mustAppear: { location: '中州·五原·白湖商馆内院', present: [], objective: '在帮苏妲己取出新奇器物前谈定六十金铢报酬' },
     receipts: { move: false, casualty: false },
   })), true);
+  assert.equal(acceptLegacyPilotScene(basePacket({
+    eventId: 'lcq.event.charge_sudaji_fee',
+    actionId: 'name_sixty_zhu_before_help',
+    location: '中州·五原城',
+    present: [],
+    mustAppear: { location: '中州·五原城', present: [], objective: '在帮苏妲己取出新奇器物前谈定六十金铢报酬' },
+    receipts: { move: false, casualty: false },
+  })), false);
   assert.equal(acceptLegacyPilotScene(basePacket({
     eventId: 'lcq.event.charge_sudaji_fee',
     location: '中州·五原城',
@@ -373,6 +403,15 @@ test('incomplete scene contracts fail closed; s01_06 requires 月霜', async () 
   })), false);
   assert.equal(acceptLegacyPilotScene(basePacket({
     eventId: 'lcq.event.charge_sudaji_fee',
+    actionId: 'lock_fee_then_remove_device',
+    location: '中州·五原城',
+    present: ['苏妲己'],
+    mustAppear: { location: '中州·五原城', present: ['苏妲己'], objective: '在帮苏妲己取出新奇器物前谈定六十金铢报酬' },
+    receipts: { move: false, casualty: false },
+  })), false);
+  assert.equal(acceptLegacyPilotScene(basePacket({
+    eventId: 'lcq.event.charge_sudaji_fee',
+    actionId: 'lock_fee_then_remove_device',
     location: '中州·五原城',
     present: [],
     mustAppear: { location: '中州·五原·白湖商馆内院', present: [], objective: '在帮苏妲己取出新奇器物前谈定六十金铢报酬' },
@@ -382,6 +421,7 @@ test('incomplete scene contracts fail closed; s01_06 requires 月霜', async () 
   assert.deepEqual(filterLegacyPilotEventCharacterNames('lcq.event.free_ajiman', ['凝羽', '阿姬曼']), ['凝羽']);
   assert.equal(acceptLegacyPilotScene(basePacket({
     eventId: 'lcq.event.free_ajiman',
+    actionId: 'tear_bond_and_face_blockade',
     location: '中州·五原城',
     present: ['凝羽'],
     presentActors: [{ name: '凝羽', traits: [] }],
@@ -390,6 +430,16 @@ test('incomplete scene contracts fail closed; s01_06 requires 月霜', async () 
   })), true);
   assert.equal(acceptLegacyPilotScene(basePacket({
     eventId: 'lcq.event.free_ajiman',
+    actionId: 'take_ajiman_bond_in_hand',
+    location: '中州·五原城',
+    present: ['凝羽'],
+    presentActors: [{ name: '凝羽', traits: [] }],
+    mustAppear: { location: '中州·五原城', present: ['凝羽'], objective: '取得阿姬曼的身契并当面还她自由，再设法出城' },
+    receipts: { move: false, casualty: false },
+  })), false);
+  assert.equal(acceptLegacyPilotScene(basePacket({
+    eventId: 'lcq.event.free_ajiman',
+    actionId: 'tear_bond_and_face_blockade',
     location: '中州·五原城',
     present: [],
     mustAppear: { location: '中州·五原城', present: [], objective: '取得阿姬曼的身契并当面还她自由，再设法出城' },
@@ -397,6 +447,7 @@ test('incomplete scene contracts fail closed; s01_06 requires 月霜', async () 
   })), false);
   assert.equal(acceptLegacyPilotScene(basePacket({
     eventId: 'lcq.event.free_ajiman',
+    actionId: 'tear_bond_and_face_blockade',
     location: '中州·五原城',
     present: ['凝羽', '阿姬曼'],
     mustAppear: { location: '中州·五原城', present: ['凝羽', '阿姬曼'], objective: '取得阿姬曼的身契并当面还她自由，再设法出城' },
@@ -406,6 +457,7 @@ test('incomplete scene contracts fail closed; s01_06 requires 月霜', async () 
   assert.deepEqual(filterLegacyPilotEventCharacterNames('lcq.event.baihu_shangguan_escape', ['苏妲己', '凝羽']), []);
   assert.equal(acceptLegacyPilotScene(basePacket({
     eventId: 'lcq.event.baihu_shangguan_escape',
+    actionId: 'walk_out_wuyuan_shangguan',
     location: '中州·五原城',
     present: [],
     mustAppear: { location: '中州·五原城', present: [], objective: '从白湖商馆的死局里脱身，走出五原商馆' },
@@ -413,6 +465,7 @@ test('incomplete scene contracts fail closed; s01_06 requires 月霜', async () 
   })), true);
   assert.equal(acceptLegacyPilotScene(basePacket({
     eventId: 'lcq.event.baihu_shangguan_escape',
+    actionId: 'walk_out_wuyuan_shangguan',
     location: '中州·五原·白湖商馆内院',
     present: [],
     mustAppear: { location: '中州·五原·白湖商馆内院', present: [], objective: '从白湖商馆的死局里脱身，走出五原商馆' },
@@ -420,6 +473,7 @@ test('incomplete scene contracts fail closed; s01_06 requires 月霜', async () 
   })), true);
   assert.equal(acceptLegacyPilotScene(basePacket({
     eventId: 'lcq.event.baihu_shangguan_escape',
+    actionId: 'walk_out_wuyuan_shangguan',
     location: '中州·五原城',
     present: ['凝羽'],
     mustAppear: { location: '中州·五原城', present: ['凝羽'], objective: '从白湖商馆的死局里脱身，走出五原商馆' },
@@ -427,6 +481,7 @@ test('incomplete scene contracts fail closed; s01_06 requires 月霜', async () 
   })), false);
   assert.equal(acceptLegacyPilotScene(basePacket({
     eventId: 'lcq.event.baihu_shangguan_escape',
+    actionId: 'walk_out_wuyuan_shangguan',
     location: '中州·五原城',
     present: [],
     mustAppear: { location: '中州·五原·白湖商馆内院', present: [], objective: '从白湖商馆的死局里脱身，走出五原商馆' },
@@ -434,6 +489,7 @@ test('incomplete scene contracts fail closed; s01_06 requires 月霜', async () 
   })), false);
   assert.equal(acceptLegacyPilotScene(basePacket({
     eventId: 'lcq.event.baihu_shangguan_escape',
+    actionId: 'walk_out_wuyuan_shangguan',
     location: '中州·五原城',
     present: [],
     mustAppear: { location: '中州·五原城', present: [], objective: '从白湖商馆的死局里脱身，走出五原商馆' },
@@ -610,6 +666,7 @@ test('each expanded scene uses its own local variants, not opening stock', async
   });
   const bond = basePacket({
     eventId: 'lcq.event.gamble_bond_signed',
+    actionId: 'sign_the_bond',
     location: '中州·五原城',
     present: ['凝羽'],
     presentActors: [{ name: '凝羽', traits: [] }],
@@ -622,6 +679,7 @@ test('each expanded scene uses its own local variants, not opening stock', async
   });
   const fee = basePacket({
     eventId: 'lcq.event.charge_sudaji_fee',
+    actionId: 'lock_fee_then_remove_device',
     location: '中州·五原城',
     present: [],
     presentActors: [],
@@ -634,6 +692,7 @@ test('each expanded scene uses its own local variants, not opening stock', async
   });
   const tear = basePacket({
     eventId: 'lcq.event.free_ajiman',
+    actionId: 'tear_bond_and_face_blockade',
     location: '中州·五原城',
     present: ['凝羽'],
     presentActors: [{ name: '凝羽', traits: [] }],
@@ -646,6 +705,7 @@ test('each expanded scene uses its own local variants, not opening stock', async
   });
   const walk = basePacket({
     eventId: 'lcq.event.baihu_shangguan_escape',
+    actionId: 'walk_out_wuyuan_shangguan',
     location: '中州·五原城',
     present: [],
     presentActors: [],
@@ -931,6 +991,149 @@ test('each expanded scene uses its own local variants, not opening stock', async
       }
     }
   }
+});
+
+test('白湖四拍 prepare 回落；只有最终动作才进 Pilot', async () => {
+  const { parseScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
+  const { createQingyuOpeningPlaytestSave } = await loadTs('../src/modules/scenarioMods/qingyuOpeningPlaytest.ts');
+  const { transitionToNextScenarioStage } = await loadTs('../src/modules/scenarioMods/strictInitializer.ts');
+  const {
+    getCurrentStoryEventActions,
+    getScenarioFocusEvent,
+    recordStoryEventStructuredAction,
+    advanceScenarioRuntime,
+  } = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  const { planLegacyNarrativePilot } = await loadTs('../src/modules/scenarioMods/legacyNarrativePilot.ts');
+  const { compileLegacyNarratorPacket, previewLegacyPilotSettlement } = await loadTs(
+    '../src/modules/scenarioMods/legacyNarratorPacket.ts',
+  );
+  const { acceptLegacyPilotScene } = await loadTs('../src/modules/scenarioMods/legacyPilotScenes.ts');
+  const { composeLegacyNarrativeFromPlan } = await loadTs('../src/modules/scenarioMods/legacyRenderPlan.ts');
+  const [raw01, raw02] = await Promise.all([
+    readFile(new URL('../src/modules/scenarioMods/builtins/data/lcq.stage_01.json', import.meta.url), 'utf8'),
+    readFile(new URL('../src/modules/scenarioMods/builtins/data/lcq.stage_02.json', import.meta.url), 'utf8'),
+  ]);
+  const stage01 = parseScenarioMod(JSON.parse(raw01));
+  const stage02 = parseScenarioMod(JSON.parse(raw02));
+  let save = createQingyuOpeningPlaytestSave(stage01);
+  const runtimeOf = current => current.世界?.状态?.剧本模组;
+  const contractAction = current => {
+    const event = getScenarioFocusEvent(runtimeOf(current));
+    const contractIds = new Set((event?.playerCompletionContract?.actions || []).map(action => action.id));
+    return getCurrentStoryEventActions(current).find(item => contractIds.has(item.actionId));
+  };
+  const playCurrent = () => {
+    const selection = contractAction(save);
+    assert.ok(selection, `missing selectable ${JSON.stringify(runtimeOf(save)?.activeEventIds)}`);
+    recordStoryEventStructuredAction(save, selection);
+    save = advanceScenarioRuntime(save).saveData;
+  };
+  for (let step = 0; step < 40; step += 1) {
+    if (save.世界?.状态?.剧本模组?.nextStageReadyId === 'lcq.stage_02') break;
+    playCurrent();
+  }
+  assert.equal(save.世界?.状态?.剧本模组?.nextStageReadyId, 'lcq.stage_02');
+  const transitioned = transitionToNextScenarioStage(save, [stage02]);
+  assert.equal(transitioned.ok, true, transitioned.reason);
+  save = advanceScenarioRuntime(transitioned.saveData).saveData;
+  const prepareOf = {
+    'lcq.event.gamble_bond_signed': 'confirm_rigged_wager_loss',
+    'lcq.event.charge_sudaji_fee': 'name_sixty_zhu_before_help',
+    'lcq.event.free_ajiman': 'take_ajiman_bond_in_hand',
+  };
+  const finalOf = {
+    'lcq.event.gamble_bond_signed': 'sign_the_bond',
+    'lcq.event.charge_sudaji_fee': 'lock_fee_then_remove_device',
+    'lcq.event.free_ajiman': 'tear_bond_and_face_blockade',
+    'lcq.event.baihu_shangguan_escape': 'walk_out_wuyuan_shangguan',
+  };
+  const leakOf = {
+    'lcq.event.gamble_bond_signed': /卖身契|奴籍/,
+    'lcq.event.charge_sudaji_fee': /取出|器物/,
+    'lcq.event.free_ajiman': /撕/,
+  };
+  const seen = { prepare: [], final: [] };
+  const beats = [
+    'lcq.event.s02_01',
+    'lcq.event.s02_03',
+    'lcq.event.s02_02',
+    'lcq.event.s02_04',
+    'lcq.event.s02_05',
+    'lcq.event.s02_06',
+    'lcq.event.ningyu_enters_gamble',
+    'lcq.event.sudaji_south_pact',
+    'lcq.event.gamble_bond_signed',
+    'lcq.event.charge_sudaji_fee',
+    'lcq.event.free_ajiman',
+    'lcq.event.baihu_shangguan_escape',
+  ];
+  for (const beat of beats) {
+    for (let step = 0; step < 8; step += 1) {
+      if ((runtimeOf(save).completedEventIds || []).includes(beat)) break;
+      const selection = getCurrentStoryEventActions(save).find(item => item.eventId === beat)
+        || contractAction(save);
+      assert.ok(selection, `${beat} step ${step + 1}`);
+      assert.equal(selection.eventId, beat, `${beat} got ${selection.eventId}`);
+      if (finalOf[beat]) {
+        const plan = planLegacyNarrativePilot({
+          saveData: save,
+          eventAction: selection,
+          eventActionProvenance: 'selected',
+          storage: ON,
+        });
+        assert.ok(plan, `${beat} ${selection.actionId} must still enter the pilot planner`);
+        const preview = previewLegacyPilotSettlement(save, selection);
+        const compiled = compileLegacyNarratorPacket(
+          preview.settled,
+          plan,
+          '',
+          '',
+          '',
+          preview.receipts,
+        );
+        assert.equal(compiled.packet.actionId, selection.actionId);
+        const accepted = acceptLegacyPilotScene(compiled.packet);
+        if (selection.actionId === prepareOf[beat]) {
+          assert.equal(preview.progress.completed, false, `${beat} prepare must not complete`);
+          assert.equal(accepted, false, `${beat} prepare must fail closed`);
+          const leaked = composeLegacyNarrativeFromPlan(compiled.packet);
+          assert.match(leaked, leakOf[beat], leaked);
+          seen.prepare.push(selection.actionId);
+        } else if (selection.actionId === finalOf[beat]) {
+          assert.equal(preview.progress.completed, true, `${beat} final must complete`);
+          assert.equal(accepted, true, `${beat} final ${JSON.stringify({
+            present: compiled.packet.present,
+            location: compiled.packet.location,
+            appear: compiled.packet.mustAppear,
+            receipts: compiled.packet.receipts,
+          })}`);
+          const text = composeLegacyNarrativeFromPlan(compiled.packet);
+          assert.equal(text.includes('阿姬曼'), false, text);
+          assert.equal(text.includes('草还在动'), false, text);
+          if (beat === 'lcq.event.baihu_shangguan_escape') {
+            assert.match(text, /脱身|走出五原商馆/);
+          } else {
+            assert.equal(text.includes('脱身'), false, text);
+          }
+          seen.final.push(selection.actionId);
+        }
+      }
+      recordStoryEventStructuredAction(save, selection);
+      save = advanceScenarioRuntime(save).saveData;
+    }
+    assert.ok((runtimeOf(save).completedEventIds || []).includes(beat), beat);
+  }
+  assert.deepEqual(seen.prepare, [
+    'confirm_rigged_wager_loss',
+    'name_sixty_zhu_before_help',
+    'take_ajiman_bond_in_hand',
+  ]);
+  assert.deepEqual(seen.final, [
+    'sign_the_bond',
+    'lock_fee_then_remove_device',
+    'tear_bond_and_face_blockade',
+    'walk_out_wuyuan_shangguan',
+  ]);
 });
 
 test('movement is authorized only by structured receipt, never by matching 去帅帐', async () => {

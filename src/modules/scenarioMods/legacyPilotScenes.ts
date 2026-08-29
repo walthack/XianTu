@@ -77,6 +77,13 @@ function atSameCityOrHall(packet: LegacyNarratorPacket): boolean {
 
 const S02_02_CAST = ['王哲', '月霜'] as const;
 
+const LEGACY_PILOT_FINAL_ACTION_IDS: Partial<Record<LegacyPilotEventId, string>> = {
+  'lcq.event.gamble_bond_signed': 'sign_the_bond',
+  'lcq.event.charge_sudaji_fee': 'lock_fee_then_remove_device',
+  'lcq.event.free_ajiman': 'tear_bond_and_face_blockade',
+  'lcq.event.baihu_shangguan_escape': 'walk_out_wuyuan_shangguan',
+};
+
 /** relatedCharacterIds that may force-present. Physical extras still fail accept. */
 export function filterLegacyPilotEventCharacterNames(eventId: string | undefined, names: string[]): string[] {
   if (
@@ -97,6 +104,8 @@ export function filterLegacyPilotEventCharacterNames(eventId: string | undefined
 export function acceptLegacyPilotScene(packet: LegacyNarratorPacket): boolean {
   const eventId = legacyPilotEventIdOf(packet);
   if (!isLegacyPilotEventId(eventId)) return false;
+  const finalAction = LEGACY_PILOT_FINAL_ACTION_IDS[eventId];
+  if (finalAction && packet.actionId !== finalAction) return false;
   const names = presentNames(packet);
   if (eventId === 'lcq.event.s01_01') return names.length === 1 && names[0] === '段强';
   if (eventId === 'lcq.event.s01_02') return names.length === 1 && names[0] === '段强';
