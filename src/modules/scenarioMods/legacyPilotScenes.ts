@@ -47,7 +47,8 @@ function isQingyuCommandTent(value: unknown): boolean {
 
 const S02_02_CAST = ['王哲', '月霜'] as const;
 
-export function filterLegacyPilotPresentNames(eventId: string | undefined, names: string[]): string[] {
+/** relatedCharacterIds that may force-present. Physical extras still fail accept. */
+export function filterLegacyPilotEventCharacterNames(eventId: string | undefined, names: string[]): string[] {
   if (eventId !== 'lcq.event.s02_02') return names;
   return names.filter(name => (S02_02_CAST as readonly string[]).includes(name));
 }

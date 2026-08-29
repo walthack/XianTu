@@ -29,7 +29,7 @@ function basePacket(over = {}) {
 test('incomplete scene contracts fail closed; s01_06 requires 月霜', async () => {
   const {
     acceptLegacyPilotScene,
-    filterLegacyPilotPresentNames,
+    filterLegacyPilotEventCharacterNames,
     isLegacyPilotEventId,
     LEGACY_NARRATIVE_PILOT_EVENT_IDS,
   } = await loadTs('../src/modules/scenarioMods/legacyPilotScenes.ts');
@@ -162,7 +162,13 @@ test('incomplete scene contracts fail closed; s01_06 requires 月霜', async () 
       receipts: { move: false, casualty: true },
     })), false, fake);
   }
-  assert.deepEqual(filterLegacyPilotPresentNames('lcq.event.s02_02', ['月霜', '王哲', '阿伽门侬', '韩庚']), ['月霜', '王哲']);
+  assert.deepEqual(filterLegacyPilotEventCharacterNames('lcq.event.s02_02', ['月霜', '王哲', '阿伽门侬', '韩庚']), ['月霜', '王哲']);
+  const compileSrc = await readFile(new URL('../src/modules/scenarioMods/legacyNarratorPacket.ts', import.meta.url), 'utf8');
+  const compileFn = compileSrc.slice(
+    compileSrc.indexOf('export function compileLegacyNarratorPacket'),
+    compileSrc.indexOf('function renderNarratorSystemPrompt'),
+  );
+  assert.equal(/filterLegacyPilot/.test(compileFn), false, 'compile must not strip extras before accept');
   assert.equal(acceptLegacyPilotScene(basePacket({ eventId: 'lcq.event.s02_04', present: ['月霜'] })), false);
   assert.equal(planLegacyNarrativePilot({
     saveData: {},

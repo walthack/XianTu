@@ -9,7 +9,7 @@ import {
   type ScenarioEventActionSelection,
 } from './runtime';
 import { buildScenarioStoryPrompt } from './storyContext';
-import { filterLegacyPilotPresentNames } from './legacyPilotScenes';
+import { filterLegacyPilotEventCharacterNames } from './legacyPilotScenes';
 import { isInternalDevLanguage, stripInternalDevLanguage } from './legacyNarrativeContract';
 import { LEGACY_RENDER_PLAN_INSTRUCTION } from './legacyRenderPlan';
 import type { SaveData } from '@/types/game';
@@ -147,9 +147,10 @@ function readPresentNames(saveData: SaveData, eventId?: string): string[] {
     }
   }
   const dead = new Set(departedNames(saveData, focusId));
+  const sceneEventNames = filterLegacyPilotEventCharacterNames(focusId, eventNames).filter(name => !dead.has(name));
   return [...computePresentNames({
     playerLocation: readLocation(saveData),
-    eventCharacterNames: eventNames.filter(name => !dead.has(name)),
+    eventCharacterNames: sceneEventNames,
   })].filter(name => name !== playerName && !dead.has(name)).sort();
 }
 
@@ -277,7 +278,7 @@ export function compileLegacyNarratorPacket(
     : [];
   const action = playerFacingFact(plan.playerLine) || readText(plan.playerLine);
   const settledOutcome = playerFacingFact(plan.outcomeText);
-  const presentNames = filterLegacyPilotPresentNames(plan.selection.eventId, capsule.presentNames);
+  const presentNames = capsule.presentNames;
   const presentActors = readPresentActors(saveData, presentNames);
   const settledReceipts = receipts || { move: false, casualty: false };
   const appearLocation = settledReceipts.moveTo || capsule.location;
