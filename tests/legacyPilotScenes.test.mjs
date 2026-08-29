@@ -26,16 +26,26 @@ function basePacket(over = {}) {
   };
 }
 
-test('s01_06 and incomplete scene contracts fail closed', async () => {
+test('incomplete scene contracts fail closed; s01_06 requires 月霜', async () => {
   const {
     acceptLegacyPilotScene,
     isLegacyPilotEventId,
     LEGACY_NARRATIVE_PILOT_EVENT_IDS,
   } = await loadTs('../src/modules/scenarioMods/legacyPilotScenes.ts');
   const { planLegacyNarrativePilot } = await loadTs('../src/modules/scenarioMods/legacyNarrativePilot.ts');
-  assert.equal(isLegacyPilotEventId('lcq.event.s01_06'), false);
-  assert.ok(LEGACY_NARRATIVE_PILOT_EVENT_IDS.includes('lcq.event.s01_05'));
-  assert.equal(acceptLegacyPilotScene(basePacket({ eventId: 'lcq.event.s01_06', present: ['月霜'] })), false);
+  assert.equal(isLegacyPilotEventId('lcq.event.s01_06'), true);
+  assert.ok(LEGACY_NARRATIVE_PILOT_EVENT_IDS.includes('lcq.event.s01_06'));
+  assert.equal(acceptLegacyPilotScene(basePacket({
+    eventId: 'lcq.event.s01_06',
+    present: ['月霜'],
+    presentActors: [{ name: '月霜', traits: [] }],
+    mustAppear: { location: '中州·草原', present: ['月霜'], objective: '月霜身上的寒毒正在失控，先应对眼前危局' },
+  })), true);
+  assert.equal(acceptLegacyPilotScene(basePacket({
+    eventId: 'lcq.event.s01_06',
+    present: ['段强'],
+    mustAppear: { location: '中州·草原', present: ['段强'], objective: '寒毒' },
+  })), false);
   assert.equal(acceptLegacyPilotScene(basePacket({
     eventId: 'lcq.event.s01_05',
     present: ['王哲'],
@@ -44,7 +54,7 @@ test('s01_06 and incomplete scene contracts fail closed', async () => {
   })), false);
   assert.equal(planLegacyNarrativePilot({
     saveData: {},
-    eventAction: { source: 'event_engine', eventId: 'lcq.event.s01_06' },
+    eventAction: { source: 'event_engine', eventId: 'lcq.event.s02_01' },
     eventActionProvenance: 'selected',
     storage: ON,
   }), null);
@@ -99,13 +109,24 @@ test('each expanded scene uses its own local variants, not opening stock', async
     publicFacts: ['中州·草原', '中州·帅帐', '王哲在场'],
     receipts: { move: true, casualty: false, moveTo: '中州·帅帐' },
   });
+  const frost = basePacket({
+    eventId: 'lcq.event.s01_06',
+    present: ['月霜'],
+    presentActors: [{ name: '月霜', traits: [] }],
+    action: '应对眼前危局',
+    currentObjective: '月霜身上的寒毒正在失控，先应对眼前危局',
+    mustAppear: { location: '中州·草原', present: ['月霜'], objective: '月霜身上的寒毒正在失控，先应对眼前危局' },
+    mustNotAppear: ['神兵'],
+    publicFacts: ['中州·草原', '月霜在场'],
+  });
 
   assert.equal(acceptLegacyPilotScene(danger), true);
   assert.equal(acceptLegacyPilotScene(interact), true);
   assert.equal(acceptLegacyPilotScene(progress), true);
   assert.equal(acceptLegacyPilotScene(arrive), true);
+  assert.equal(acceptLegacyPilotScene(frost), true);
 
-  for (const packet of [danger, interact, progress, arrive]) {
+  for (const packet of [danger, interact, progress, arrive, frost]) {
     const text = composeLegacyNarrativeFromPlan(packet);
     const check = validateLegacyVisibleNarrative(text, packet);
     assert.equal(check.valid, true, `${packet.eventId}: ${check.issues.join(';')}\n${text}`);
@@ -129,6 +150,11 @@ test('each expanded scene uses its own local variants, not opening stock', async
   assert.match(arriveText, /王哲/);
   assert.match(arriveText, /帅帐/);
   assert.match(arriveText, /诊治|来历/);
+  const frostText = composeLegacyNarrativeFromPlan(frost);
+  assert.match(frostText, /月霜/);
+  assert.match(frostText, /寒毒/);
+  assert.match(frostText, /真阳|丹药|危局/);
+  assert.equal(frostText.includes('段强'), false);
 });
 
 test('movement is authorized only by structured receipt, never by matching 去帅帐', async () => {
@@ -185,13 +211,6 @@ test('real canon order s01_01→02→03→04→06→05 never revives 段强 and 
       eventActionProvenance: 'selected',
       storage: ON,
     });
-    if (eventId === 'lcq.event.s01_06') {
-      assert.equal(plan, null);
-      recordStoryEventStructuredAction(save, selection);
-      save = advanceScenarioRuntime(save).saveData;
-      seen.push({ eventId, present: null, text: '', receipts: null });
-      return;
-    }
     assert.ok(plan, eventId);
     const preview = previewLegacyPilotSettlement(save, selection);
     const compiled = compileLegacyNarratorPacket(
@@ -236,6 +255,11 @@ test('real canon order s01_01→02→03→04→06→05 never revives 段强 and 
   assert.match(byId['lcq.event.s01_03'].text, /月霜/);
   assert.equal(byId['lcq.event.s01_04'].present.includes('段强'), false);
   assert.equal(byId['lcq.event.s01_04'].text.includes('段强'), false);
+  assert.equal(byId['lcq.event.s01_06'].present.includes('段强'), false);
+  assert.equal(byId['lcq.event.s01_06'].text.includes('段强'), false);
+  assert.match(byId['lcq.event.s01_06'].text, /月霜/);
+  assert.match(byId['lcq.event.s01_06'].text, /寒毒/);
+  assert.equal(byId['lcq.event.s01_06'].receipts.move, false);
   assert.equal(byId['lcq.event.s01_05'].present.includes('段强'), false);
   assert.equal(byId['lcq.event.s01_05'].text.includes('段强'), false);
   assert.equal(byId['lcq.event.s01_05'].receipts.move, true);

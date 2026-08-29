@@ -7,6 +7,7 @@ export const LEGACY_NARRATIVE_PILOT_EVENT_IDS = [
   'lcq.event.s01_03',
   'lcq.event.s01_04',
   'lcq.event.s01_05',
+  'lcq.event.s01_06',
 ] as const;
 
 export type LegacyPilotEventId = (typeof LEGACY_NARRATIVE_PILOT_EVENT_IDS)[number];
@@ -46,6 +47,7 @@ export function acceptLegacyPilotScene(packet: LegacyNarratorPacket): boolean {
     const moving = packet.receipts?.move === true && /帅帐/.test(String(packet.receipts?.moveTo || ''));
     return atTent || moving;
   }
+  if (eventId === 'lcq.event.s01_06') return names.includes('月霜');
   return false;
 }
 
@@ -159,6 +161,32 @@ function progressPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan)
   return [reaction, sensory, pacing, closing].filter(Boolean);
 }
 
+function frostPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan): string[] {
+  const companion = presentNames(packet).find(name => name === '月霜') || presentNames(packet)[0] || '月霜';
+  const place = placeOf(packet);
+  const sensory = {
+    grass_iron: `${companion}的寒气贴着伤处往外冒。铁锈味还在，可这一侧已经冷过了血。`,
+    wind_sky: `风一过，${companion}唇边结了一层白。天光还在，她却像被抽空了热。`,
+    mud_body: `你按住${companion}的肩。掌心碰到的不是泥，是一层往骨头里钻的冷。`,
+  }[plan.sensory];
+  const pacing = {
+    slow_orient: `你没有退开。月霜身上的寒毒正在失控，先应对眼前危局。`,
+    tense_watch: `你把呼吸压低，盯住${companion}指节发青的那一侧，不让寒气再散开。`,
+    steady_breathe: `你先把气沉住，再接住她塞过来的那粒丹药。`,
+  }[plan.pacing];
+  const reaction = {
+    dazed: `${companion}的目光已经散了，牙关咬得发白，一句完整的话都挤不出来。`,
+    answers: `${companion}喘着说：“吞下去——寒毒压不住了。”声音又硬又短。`,
+    silent_grip: `${companion}抓住你的腕骨，力道大得不像伤者，把丹药按进你掌心。`,
+  }[plan.companion];
+  const closing = {
+    hold_ground: `真阳被逼出来。你把热送进她体内，先压住这一波寒毒。`,
+    look_far: `你让${companion}靠着你，自己把视野放到${place}这一侧：寒气退了一寸，人还在。`,
+    steady_breath: `你把呼吸重新对齐，先把她这一身寒毒压下去。`,
+  }[plan.closing];
+  return [reaction, sensory, pacing, closing].filter(Boolean);
+}
+
 function arrivePreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan): string[] {
   const dest = String(packet.receipts?.moveTo || packet.mustAppear?.location || '帅帐');
   const destName = /帅帐/.test(dest) ? '帅帐' : dest.replace(/[·,，]/g, '');
@@ -197,6 +225,7 @@ export function legacyPilotPreferredSentences(
   if (eventId === 'lcq.event.s01_03') return interactPreferred(packet, plan);
   if (eventId === 'lcq.event.s01_04') return progressPreferred(packet, plan);
   if (eventId === 'lcq.event.s01_05') return arrivePreferred(packet, plan);
+  if (eventId === 'lcq.event.s01_06') return frostPreferred(packet, plan);
   return openingPreferred(packet, plan);
 }
 
@@ -359,6 +388,37 @@ function progressPool(packet: LegacyNarratorPacket): string[] {
   ];
 }
 
+function frostPool(packet: LegacyNarratorPacket): string[] {
+  const names = presentNames(packet);
+  const companion = names.find(name => name === '月霜') || names[0] || '月霜';
+  const place = placeOf(packet);
+  return [
+    ...namedBeats(names, name => `${name}就在你身侧，寒气从伤处一层层往外冒。`),
+    `月霜身上的寒毒正在失控，先应对眼前危局。`,
+    `${companion}把一粒丹药按进你掌心，指节已经发青。`,
+    `你没有问这是什么功法。眼下只剩把寒毒压住。`,
+    `丹药入喉，一股热从胃里顶上来，撞上她身上那层冷。`,
+    `你把${companion}从${place}的湿土里托起来，让她靠住你的肩。`,
+    `真阳被逼出来。热不是温柔的，它往她肋下那口寒里钻。`,
+    `她的呼吸乱。你按这个事实走：人还在，毒还在，你伸了手。`,
+    `你低声说：“我在。先把寒压下去。”`,
+    `寒气贴着你的小臂往上爬。你没有松手。`,
+    `你把外衣盖到${companion}背上，不是为了遮，是为了留住那一点刚起来的热。`,
+    `她咬着牙，目光凶得很，一时分不清这是救命还是把把柄交出来。`,
+    `你没有去翻她的怀。眼下只处理眼前这口寒毒。`,
+    `热和冷在她体内顶住。你把步子迈小，不让她再摔回泥里。`,
+    `风从${place}上刮过来。这一侧已经不是战场的热，是骨头缝里的冷。`,
+    `你让${companion}的头低于你的肩，自己去挡还在散的寒气。`,
+    `真阳传入的那一瞬，她喉间溢出一声极短的喘。`,
+    `你把能确定的事过了一遍：人是${companion}，毒是寒毒，热还在你这边。`,
+    `她抓住你的衣襟，指节发白，像生怕一松手寒气就会把人吞回去。`,
+    `你没有把这写成温存。你只是把热送进去，把危局先压住。`,
+    `寒气退了一寸。你没有停，直到她的牙关不再抖成一团。`,
+    `你把膝盖跪稳，让两个人都还在${place}这一小块能看见的土上。`,
+    `远处喊杀还在。你只守这一息：寒毒先下去，别的以后再说。`,
+  ];
+}
+
 function arrivePool(packet: LegacyNarratorPacket): string[] {
   const dest = String(packet.receipts?.moveTo || packet.mustAppear?.location || '帅帐');
   const destName = /帅帐/.test(dest) ? '帅帐' : dest.replace(/[·,，]/g, '') || '帅帐';
@@ -403,6 +463,7 @@ export function legacyPilotSafeSentencePool(packet: LegacyNarratorPacket): strin
   if (eventId === 'lcq.event.s01_03') return interactPool(packet);
   if (eventId === 'lcq.event.s01_04') return progressPool(packet);
   if (eventId === 'lcq.event.s01_05') return arrivePool(packet);
+  if (eventId === 'lcq.event.s01_06') return frostPool(packet);
   return openingPool(packet);
 }
 
