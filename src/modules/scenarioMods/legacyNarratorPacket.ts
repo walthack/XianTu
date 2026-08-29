@@ -150,7 +150,9 @@ function readPresentNames(saveData: SaveData, eventId?: string): string[] {
   const sceneEventNames = filterLegacyPilotEventCharacterNames(focusId, eventNames).filter(name => !dead.has(name));
   return [...computePresentNames({
     playerLocation: readLocation(saveData),
+    relations: (saveData as any)?.社交?.关系,
     eventCharacterNames: sceneEventNames,
+    excludeNames: dead,
   })].filter(name => name !== playerName && !dead.has(name)).sort();
 }
 

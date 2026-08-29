@@ -163,12 +163,6 @@ test('incomplete scene contracts fail closed; s01_06 requires 月霜', async () 
     })), false, fake);
   }
   assert.deepEqual(filterLegacyPilotEventCharacterNames('lcq.event.s02_02', ['月霜', '王哲', '阿伽门侬', '韩庚']), ['月霜', '王哲']);
-  const compileSrc = await readFile(new URL('../src/modules/scenarioMods/legacyNarratorPacket.ts', import.meta.url), 'utf8');
-  const compileFn = compileSrc.slice(
-    compileSrc.indexOf('export function compileLegacyNarratorPacket'),
-    compileSrc.indexOf('function renderNarratorSystemPrompt'),
-  );
-  assert.equal(/filterLegacyPilot/.test(compileFn), false, 'compile must not strip extras before accept');
   assert.equal(acceptLegacyPilotScene(basePacket({ eventId: 'lcq.event.s02_04', present: ['月霜'] })), false);
   assert.equal(planLegacyNarrativePilot({
     saveData: {},
@@ -391,6 +385,45 @@ test('movement is authorized only by structured receipt, never by matching 去�
   const playerSaidGo = '去帅帐';
   assert.equal(withReceipt.receipts.move, true);
   assert.equal(playerSaidGo.includes('去帅帐'), true);
+});
+
+test('s02_02 co-located outsider stays in compiled present and fails accept', async () => {
+  const { parseScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
+  const { createQingyuOpeningPlaytestSave } = await loadTs('../src/modules/scenarioMods/qingyuOpeningPlaytest.ts');
+  const { compileLegacyNarratorPacket, readLocalMemoryCapsule } = await loadTs(
+    '../src/modules/scenarioMods/legacyNarratorPacket.ts',
+  );
+  const { acceptLegacyPilotScene } = await loadTs('../src/modules/scenarioMods/legacyPilotScenes.ts');
+  const raw = await readFile(new URL('../src/modules/scenarioMods/builtins/data/lcq.stage_01.json', import.meta.url), 'utf8');
+  const save = createQingyuOpeningPlaytestSave(parseScenarioMod(JSON.parse(raw)));
+  save.角色.位置.描述 = '中州·帅帐';
+  save.社交 = save.社交 || {};
+  save.社交.关系 = save.社交.关系 || {};
+  save.社交.关系['王哲'] = { 名字: '王哲', 当前位置: { 描述: '中州·帅帐' } };
+  save.社交.关系['月霜'] = { 名字: '月霜', 当前位置: { 描述: '中州·帅帐' } };
+  save.社交.关系['帐内亲兵'] = { 名字: '帐内亲兵', 当前位置: { 描述: '中州·帅帐' } };
+  const selection = {
+    source: 'event_engine',
+    eventId: 'lcq.event.s02_02',
+    actionId: 'record_battlefield_aftermath',
+    actionText: '确认焦土余波与殉军结果',
+    playerLine: '确认焦土余波与殉军结果',
+    outcomeText: '王哲九阳殉军',
+  };
+  const capsule = readLocalMemoryCapsule(save, selection);
+  assert.ok(capsule.presentNames.includes('帐内亲兵'), capsule.presentNames.join(','));
+  assert.ok(capsule.presentNames.includes('王哲'));
+  assert.ok(capsule.presentNames.includes('月霜'));
+  const compiled = compileLegacyNarratorPacket(
+    save,
+    { selection, playerLine: selection.playerLine, outcomeText: selection.outcomeText, compactState: {} },
+    '',
+    '',
+    '',
+    { move: false, casualty: true },
+  );
+  assert.ok(compiled.packet.present.includes('帐内亲兵'), compiled.packet.present.join(','));
+  assert.equal(acceptLegacyPilotScene(compiled.packet), false);
 });
 
 test('real canon order s01_01→02→03→04→06→05 never revives 段强 and move receipts come from settlement', async () => {
