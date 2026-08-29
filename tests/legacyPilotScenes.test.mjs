@@ -467,12 +467,14 @@ test('s02_02 81 plans on a natural stage-02 save never name unmet 阿伽门侬',
   const transitioned = transitionToNextScenarioStage(save, [stage02]);
   assert.equal(transitioned.ok, true, transitioned.reason);
   save = advanceScenarioRuntime(transitioned.saveData).saveData;
+  delete save.世界.状态.剧本模组.departedCast;
   for (const beat of ['lcq.event.s02_01', 'lcq.event.s02_03', 'lcq.event.s02_02']) {
     for (let step = 0; step < 8; step += 1) {
       if ((save.世界?.状态?.剧本模组?.completedEventIds || []).includes(beat)) break;
       const selection = getCurrentStoryEventActions(save).find(item => item.eventId === beat);
       assert.ok(selection, `${beat} step ${step + 1}`);
       if (beat === 'lcq.event.s02_02' && selection.actionId === 'record_battlefield_aftermath') {
+        delete save.世界.状态.剧本模组.departedCast;
         const plan = planLegacyNarrativePilot({
           saveData: save,
           eventAction: selection,

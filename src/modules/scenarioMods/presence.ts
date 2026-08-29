@@ -130,21 +130,38 @@ function eventIsCompleted(runtime: { flags?: Record<string, unknown>; completedE
   return completed.includes(eventId);
 }
 
-/** Characters who have already left the living present cast. */
-export function departedPresentNames(runtime: {
+type DepartedRuntime = {
   flags?: Record<string, unknown>;
   completedEventIds?: unknown;
   departedCast?: unknown;
-} | null | undefined): string[] {
+  modId?: unknown;
+  prevStageId?: unknown;
+};
+
+function qingyuStagePastOpening(runtime: DepartedRuntime | null | undefined): boolean {
+  const modId = String(runtime?.modId || '');
+  if (modId && modId !== 'lcq.stage_01' && modId.startsWith('lcq.stage_')) return true;
+  return String(runtime?.prevStageId || '') === 'lcq.stage_01';
+}
+
+/** Characters who have already left the living present cast. */
+export function departedPresentNames(runtime: DepartedRuntime | null | undefined): string[] {
   const names: string[] = [];
   const persisted = Array.isArray(runtime?.departedCast) ? runtime.departedCast : [];
   for (const name of persisted) {
     const text = String(name || '').trim();
     if (text) names.push(text);
   }
-  if (eventIsCompleted(runtime, 'lcq.event.s01_02')) names.push('段强');
+  if (eventIsCompleted(runtime, 'lcq.event.s01_02') || qingyuStagePastOpening(runtime)) names.push('段强');
   if (eventIsCompleted(runtime, 'lcq.event.s02_02')) names.push('王哲');
   return [...new Set(names)];
+}
+
+/** Persist inferred deaths onto runtime so later stages and old saves share one list. */
+export function stampDepartedCast(runtime: DepartedRuntime | null | undefined): string[] {
+  const names = departedPresentNames(runtime);
+  if (runtime && typeof runtime === 'object') runtime.departedCast = names;
+  return names;
 }
 
 /** Live-watch names. Death/departure is `departedPresentNames` only — never `当前外貌状态` (canon profiles stamp 已死亡 on living 王哲/段强). */

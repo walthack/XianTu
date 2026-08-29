@@ -58,6 +58,7 @@ import {
 } from './inventoryTransactions';
 import { resolveFixedQuestObjective } from './fixedQuestObjectives';
 import { formatQuestCompass, questCompassPhrases } from './eventNarrativeView';
+import { stampDepartedCast } from './presence';
 
 
 export interface ScenarioProgressState {
@@ -1564,6 +1565,7 @@ export function recordStoryEventStructuredAction(
   );
   const completed = action.kind !== 'prepare' && outcome !== 'failure' && contract.settleOn.includes(outcome);
   if (completed) state.readyAtTurn = turn;
+  if (completed) stampDepartedCast(runtime);
   if (event.locationId) movePlayerToEventLocation(saveData, runtime, event.locationId);
   return {
     attempted: true,
@@ -3140,6 +3142,7 @@ export function advanceScenarioRuntime(saveData: SaveData): {
 
   // 事件落账后立即派生本章完成 flag，保证后续章节 activation 能在同一轮生效。
   settleCompletedChapterFlags(runtime);
+  stampDepartedCast(runtime);
   syncNpcPrivateKnowledgeUnlocks(runtime);
 
   const railStageComplete = Boolean(railProfile
