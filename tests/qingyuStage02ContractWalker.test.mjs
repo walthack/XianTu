@@ -271,6 +271,14 @@ test('B 类 s02_03 / s02_02 玩家参与与停滞 7 回合场外都能结清', a
     })}`);
     assert.ok((rt.offscreenResolvedEventIds || []).includes(beat), `${beat} 停滞必须记入场外账本`);
     assert.equal(rt.gameOver, undefined, `${beat} 未见证自爆前闲逛不得焰浪死亡`);
+    if (beat === 'lcq.event.s02_02') {
+      const { departedPresentNames, focusedNpcNamesFromState } = await loadTs('../src/modules/scenarioMods/presence.ts');
+      const { buildScenarioStoryPrompt } = await loadTs('../src/modules/scenarioMods/storyContext.ts');
+      assert.ok(departedPresentNames(rt).includes('王哲'), departedPresentNames(rt).join(','));
+      assert.equal(focusedNpcNamesFromState(stalled.save).includes('王哲'), false);
+      assert.doesNotMatch(buildScenarioStoryPrompt(stalled.save), /【在场】[^\n]*王哲/);
+      assert.ok((rt.departedCast || []).includes('王哲'), JSON.stringify(rt.departedCast));
+    }
   }
 });
 

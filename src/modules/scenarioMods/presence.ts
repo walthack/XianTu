@@ -122,17 +122,24 @@ function readRuntimeFlag(flags: Record<string, unknown> | undefined, path: strin
   return undefined;
 }
 
-function eventIsCompleted(runtime: { flags?: Record<string, unknown>; completedEventIds?: unknown } | null | undefined, eventId: string): boolean {
+function eventIsCompleted(runtime: {
+  flags?: Record<string, unknown>;
+  completedEventIds?: unknown;
+  offscreenResolvedEventIds?: unknown;
+} | null | undefined, eventId: string): boolean {
   if (!runtime) return false;
   const flagKey = `${String(eventId || '').replace(/^lcq\.event\./, 'event.')}.done`;
   if (coerceFlagScalar(readRuntimeFlag(runtime.flags, flagKey)) === true) return true;
   const completed = Array.isArray(runtime.completedEventIds) ? runtime.completedEventIds : [];
-  return completed.includes(eventId);
+  if (completed.includes(eventId)) return true;
+  const offscreen = Array.isArray(runtime.offscreenResolvedEventIds) ? runtime.offscreenResolvedEventIds : [];
+  return offscreen.includes(eventId);
 }
 
 type DepartedRuntime = {
   flags?: Record<string, unknown>;
   completedEventIds?: unknown;
+  offscreenResolvedEventIds?: unknown;
   departedCast?: unknown;
   modId?: unknown;
   prevStageId?: unknown;
