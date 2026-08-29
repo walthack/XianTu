@@ -9,6 +9,7 @@ import {
   type ScenarioEventActionSelection,
 } from './runtime';
 import { buildScenarioStoryPrompt } from './storyContext';
+import { filterLegacyPilotPresentNames } from './legacyPilotScenes';
 import { isInternalDevLanguage, stripInternalDevLanguage } from './legacyNarrativeContract';
 import { LEGACY_RENDER_PLAN_INSTRUCTION } from './legacyRenderPlan';
 import type { SaveData } from '@/types/game';
@@ -276,7 +277,8 @@ export function compileLegacyNarratorPacket(
     : [];
   const action = playerFacingFact(plan.playerLine) || readText(plan.playerLine);
   const settledOutcome = playerFacingFact(plan.outcomeText);
-  const presentActors = readPresentActors(saveData, capsule.presentNames);
+  const presentNames = filterLegacyPilotPresentNames(plan.selection.eventId, capsule.presentNames);
+  const presentActors = readPresentActors(saveData, presentNames);
   const settledReceipts = receipts || { move: false, casualty: false };
   const appearLocation = settledReceipts.moveTo || capsule.location;
   const publicFacts = uniqueFacts([
@@ -286,12 +288,12 @@ export function compileLegacyNarratorPacket(
     settledOutcome,
     ...(settledReceipts.casualty && plan.selection.eventId === 'lcq.event.s01_02' ? ['段强中箭身亡'] : []),
     ...(settledReceipts.casualty && plan.selection.eventId === 'lcq.event.s02_02' ? ['王哲九阳殉军'] : []),
-    ...capsule.presentNames.map(name => `${name}在场`),
+    ...presentNames.map(name => `${name}在场`),
     ...capsule.facts,
   ]);
   const mustAppear: LegacyMustAppear = {
     location: appearLocation,
-    present: [...capsule.presentNames],
+    present: [...presentNames],
     objective: capsule.currentObjective,
   };
   const requiredTerms = uniqueFacts([
@@ -317,7 +319,7 @@ export function compileLegacyNarratorPacket(
       action,
       outcome: settledOutcome || capsule.currentObjective,
     },
-    present: capsule.presentNames,
+    present: presentNames,
     presentActors,
     mustAppear,
     mustNotAppear,

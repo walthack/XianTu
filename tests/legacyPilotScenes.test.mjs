@@ -29,6 +29,7 @@ function basePacket(over = {}) {
 test('incomplete scene contracts fail closed; s01_06 requires 月霜', async () => {
   const {
     acceptLegacyPilotScene,
+    filterLegacyPilotPresentNames,
     isLegacyPilotEventId,
     LEGACY_NARRATIVE_PILOT_EVENT_IDS,
   } = await loadTs('../src/modules/scenarioMods/legacyPilotScenes.ts');
@@ -145,6 +146,23 @@ test('incomplete scene contracts fail closed; s01_06 requires 月霜', async () 
     mustAppear: { location: '中州·帅帐', present: ['王哲'], objective: '跟上战局变化' },
     receipts: { move: false, casualty: true },
   })), false);
+  assert.equal(acceptLegacyPilotScene(basePacket({
+    eventId: 'lcq.event.s02_02',
+    location: '中州·帅帐',
+    present: ['王哲', '月霜', '韩庚', '阿伽门侬'],
+    mustAppear: { location: '中州·帅帐', present: ['王哲', '月霜', '韩庚', '阿伽门侬'], objective: '左武军已与联军开战，先保住自己和月霜，跟上战局变化' },
+    receipts: { move: false, casualty: true },
+  })), false);
+  for (const fake of ['帅帐', '南荒·敌军·帅帐', '中州·五原·帅帐', '中州·帅帐外']) {
+    assert.equal(acceptLegacyPilotScene(basePacket({
+      eventId: 'lcq.event.s02_02',
+      location: fake,
+      present: ['王哲', '月霜'],
+      mustAppear: { location: fake, present: ['王哲', '月霜'], objective: '左武军已与联军开战，先保住自己和月霜，跟上战局变化' },
+      receipts: { move: false, casualty: true },
+    })), false, fake);
+  }
+  assert.deepEqual(filterLegacyPilotPresentNames('lcq.event.s02_02', ['月霜', '王哲', '阿伽门侬', '韩庚']), ['月霜', '王哲']);
   assert.equal(acceptLegacyPilotScene(basePacket({ eventId: 'lcq.event.s02_04', present: ['月霜'] })), false);
   assert.equal(planLegacyNarrativePilot({
     saveData: {},

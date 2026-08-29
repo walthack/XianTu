@@ -41,6 +41,17 @@ function isCommandTentLabel(value: unknown): boolean {
   return text === '帅帐' || /(^|[·])帅帐$/.test(text);
 }
 
+function isQingyuCommandTent(value: unknown): boolean {
+  return String(value || '').trim() === '中州·帅帐';
+}
+
+const S02_02_CAST = ['王哲', '月霜'] as const;
+
+export function filterLegacyPilotPresentNames(eventId: string | undefined, names: string[]): string[] {
+  if (eventId !== 'lcq.event.s02_02') return names;
+  return names.filter(name => (S02_02_CAST as readonly string[]).includes(name));
+}
+
 export function acceptLegacyPilotScene(packet: LegacyNarratorPacket): boolean {
   const eventId = legacyPilotEventIdOf(packet);
   if (!isLegacyPilotEventId(eventId)) return false;
@@ -67,8 +78,8 @@ export function acceptLegacyPilotScene(packet: LegacyNarratorPacket): boolean {
     return atTent && packet.receipts?.move === false;
   }
   if (eventId === 'lcq.event.s02_02') {
-    if (!names.includes('王哲') || !names.includes('月霜') || names.includes('段强')) return false;
-    const atTent = isCommandTentLabel(packet.location) && isCommandTentLabel(packet.mustAppear?.location);
+    if (names.length !== 2 || !names.includes('王哲') || !names.includes('月霜')) return false;
+    const atTent = isQingyuCommandTent(packet.location) && isQingyuCommandTent(packet.mustAppear?.location);
     return atTent && packet.receipts?.move === false && packet.receipts?.casualty === true;
   }
   return false;
