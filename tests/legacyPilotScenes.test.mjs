@@ -424,6 +424,20 @@ test('s02_02 co-located outsider stays in compiled present and fails accept', as
   );
   assert.ok(compiled.packet.present.includes('帐内亲兵'), compiled.packet.present.join(','));
   assert.equal(acceptLegacyPilotScene(compiled.packet), false);
+
+  save.社交.关系['帐内亲兵'].当前位置.描述 = '中州·营门';
+  save.社交.记忆 = save.社交.记忆 || {};
+  save.社交.记忆.短期记忆 = ['帐内亲兵还在帅帐里守着门槛。'];
+  const stale = compileLegacyNarratorPacket(
+    save,
+    { selection, playerLine: selection.playerLine, outcomeText: selection.outcomeText, compactState: {} },
+    '',
+    '',
+    '',
+    { move: false, casualty: true },
+  );
+  assert.ok(stale.packet.present.includes('帐内亲兵'), stale.packet.present.join(','));
+  assert.equal(acceptLegacyPilotScene(stale.packet), false);
 });
 
 test('real canon order s01_01→02→03→04→06→05 never revives 段强 and move receipts come from settlement', async () => {
