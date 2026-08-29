@@ -10,6 +10,7 @@ import {
 } from './runtime';
 import { buildScenarioStoryPrompt } from './storyContext';
 import { filterLegacyPilotEventCharacterNames } from './legacyPilotScenes';
+import { ensureWuyuanOpenWorldSlice } from './wuyuanOpenWorldSlice';
 import { isInternalDevLanguage, stripInternalDevLanguage } from './legacyNarrativeContract';
 import { LEGACY_RENDER_PLAN_INSTRUCTION } from './legacyRenderPlan';
 import type { SaveData } from '@/types/game';
@@ -71,7 +72,7 @@ export interface LegacyNarratorPacket {
   body: { 气血?: string; 效果?: string[] };
   recentNarrative: string;
   outputContract: string;
-  receipts: { move: boolean; casualty: boolean; moveTo?: string };
+  receipts: LegacyPilotMoveReceipts;
 }
 
 function readText(value: unknown): string {
@@ -239,9 +240,20 @@ export function readLocalMemoryCapsule(saveData: SaveData, selection: ScenarioEv
   };
 }
 
+export interface LegacyPilotMoveReceipts {
+  move: boolean;
+  casualty: boolean;
+  moveTo?: string;
+  fromZoneId?: string;
+  toZoneId?: string;
+  routeId?: string;
+  mode?: 'player' | 'forced';
+  causeEventId?: string;
+}
+
 export interface LegacyPilotSettlementPreview {
   settled: SaveData;
-  receipts: { move: boolean; casualty: boolean; moveTo?: string };
+  receipts: LegacyPilotMoveReceipts;
   progress: ReturnType<typeof recordStoryEventStructuredAction>;
 }
 
@@ -251,18 +263,33 @@ export function previewLegacyPilotSettlement(
   selection: ScenarioEventActionSelection,
 ): LegacyPilotSettlementPreview {
   const beforeLocation = readLocation(saveData);
+  const beforeZone = String((saveData as any)?.世界?.状态?.剧本模组?.openWorldSlice?.currentZoneId || '');
   const settled = cloneDeep(saveData);
   const progress = recordStoryEventStructuredAction(settled, selection);
   const advanced = advanceScenarioRuntime(settled).saveData;
+  ensureWuyuanOpenWorldSlice(advanced);
   const afterLocation = readLocation(advanced);
-  const move = Boolean(beforeLocation && afterLocation && beforeLocation !== afterLocation);
+  const afterZone = String((advanced as any)?.世界?.状态?.剧本模组?.openWorldSlice?.currentZoneId || '');
+  const hops = (((advanced as any)?.世界?.状态?.剧本模组?.openWorldSlice?.travelReceipts) || [])
+    .filter((item: { mode?: string; causeEventId?: string }) => item?.mode === 'forced' && item?.causeEventId === selection.eventId);
+  const last = hops[hops.length - 1];
+  const first = hops[0];
+  const hopMove = Boolean(first?.fromZoneId && last?.toZoneId && first.fromZoneId !== last.toZoneId);
+  const rawLocationMove = Boolean(beforeLocation && afterLocation && beforeLocation !== afterLocation);
+  const sliceHydrated = !beforeZone && Boolean(afterZone);
+  const move = Boolean(hopMove || (rawLocationMove && !sliceHydrated) || (beforeZone && afterZone && beforeZone !== afterZone));
   return {
     settled: advanced,
     progress,
     receipts: {
       move,
       casualty: Boolean(progress.completed && (progress.eventId === 'lcq.event.s01_02' || progress.eventId === 'lcq.event.s02_02')),
-      ...(move ? { moveTo: afterLocation } : {}),
+      ...(move && afterLocation && afterLocation !== beforeLocation ? { moveTo: afterLocation } : {}),
+      ...(first?.fromZoneId ? { fromZoneId: String(first.fromZoneId) } : beforeZone && afterZone && beforeZone !== afterZone ? { fromZoneId: beforeZone } : {}),
+      ...(last?.toZoneId ? { toZoneId: String(last.toZoneId) } : afterZone && beforeZone !== afterZone ? { toZoneId: afterZone } : {}),
+      ...(last?.routeId ? { routeId: String(last.routeId) } : {}),
+      ...(last?.mode || (move && afterZone) ? { mode: last?.mode === 'forced' ? 'forced' : 'player' } : {}),
+      ...(selection.eventId && last?.causeEventId ? { causeEventId: String(last.causeEventId) } : {}),
     },
   };
 }
@@ -273,7 +300,7 @@ export function compileLegacyNarratorPacket(
   storyPrompt: string,
   profile: string,
   playerPersonality = '',
-  receipts?: { move: boolean; casualty: boolean; moveTo?: string },
+  receipts?: LegacyPilotMoveReceipts,
 ): {
   packet: LegacyNarratorPacket;
   systemPrompt: string;
@@ -345,6 +372,11 @@ export function compileLegacyNarratorPacket(
       move: Boolean(settledReceipts.move),
       casualty: Boolean(settledReceipts.casualty),
       ...(settledReceipts.moveTo ? { moveTo: settledReceipts.moveTo } : {}),
+      ...(settledReceipts.fromZoneId ? { fromZoneId: settledReceipts.fromZoneId } : {}),
+      ...(settledReceipts.toZoneId ? { toZoneId: settledReceipts.toZoneId } : {}),
+      ...(settledReceipts.routeId ? { routeId: settledReceipts.routeId } : {}),
+      ...(settledReceipts.mode ? { mode: settledReceipts.mode } : {}),
+      ...(settledReceipts.causeEventId ? { causeEventId: settledReceipts.causeEventId } : {}),
     },
   };
 
@@ -445,7 +477,7 @@ export async function buildLegacyNarratorPrompt(
   managedPromptCompatible: boolean;
   managedPromptOverrides: string[];
   settlementAttempted: boolean;
-  receipts: { move: boolean; casualty: boolean; moveTo?: string };
+  receipts: LegacyPilotMoveReceipts;
 }> {
   const recentText = ((saveData as any)?.社交?.记忆?.短期记忆 || []).slice(-2).join('\n');
   const storyPrompt = buildScenarioStoryPrompt(saveData, [plan.playerLine, recentText].filter(Boolean).join('\n'));

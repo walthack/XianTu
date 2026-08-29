@@ -1,10 +1,17 @@
 export type OpenWorldReliability = 'confirmed' | 'credible' | 'rumor';
 export type OpenWorldProblemOutcome = 'success' | 'partial' | 'failure-forward';
+export type OpenWorldZoneKind = 'settlement' | 'street' | 'interior' | 'compound';
+export type OpenWorldTravelMode = 'player' | 'forced';
 
 export interface OpenWorldZone {
   id: string;
   name: string;
   aliases?: string[];
+  kind?: OpenWorldZoneKind;
+  parentZoneId?: string;
+  worldLocationId?: string;
+  /** Containers default not standable. Leaves default standable. */
+  standable?: boolean;
 }
 
 export interface OpenWorldRoute {
@@ -99,6 +106,8 @@ export interface OpenWorldTravelReceipt {
   departedAtTurn: number;
   arrivedAtTurn: number;
   turnCost: number;
+  mode: OpenWorldTravelMode;
+  causeEventId?: string;
 }
 
 export interface OpenWorldNoticeReceipt {
@@ -193,6 +202,45 @@ function zoneById(definition: OpenWorldSliceDefinition, id: string): OpenWorldZo
   return definition.zones.find(zone => zone.id === id);
 }
 
+export function zoneIsStandable(zone: OpenWorldZone | undefined): boolean {
+  if (!zone) return false;
+  if (zone.standable === false) return false;
+  if (zone.standable === true) return true;
+  return zone.kind !== 'settlement' && zone.kind !== 'compound';
+}
+
+export function worldLocationIdOf(definition: OpenWorldSliceDefinition, zoneId: string): string {
+  let current = zoneById(definition, zoneId);
+  const seen = new Set<string>();
+  while (current && !seen.has(current.id)) {
+    seen.add(current.id);
+    if (current.worldLocationId) return current.worldLocationId;
+    current = current.parentZoneId ? zoneById(definition, current.parentZoneId) : undefined;
+  }
+  return '';
+}
+
+function firstStandableZoneId(definition: OpenWorldSliceDefinition, preferred?: string): string {
+  if (preferred && zoneIsStandable(zoneById(definition, preferred))) return preferred;
+  if (zoneIsStandable(zoneById(definition, definition.initialZoneId))) return definition.initialZoneId;
+  return definition.zones.find(zone => zoneIsStandable(zone))?.id || definition.initialZoneId;
+}
+
+function hydrateTravelReceipt(raw: Partial<OpenWorldTravelReceipt> | undefined): OpenWorldTravelReceipt | undefined {
+  if (!raw?.receiptId || !raw.routeId || !raw.fromZoneId || !raw.toZoneId) return undefined;
+  return {
+    receiptId: String(raw.receiptId),
+    routeId: String(raw.routeId),
+    fromZoneId: String(raw.fromZoneId),
+    toZoneId: String(raw.toZoneId),
+    departedAtTurn: Math.max(0, Number(raw.departedAtTurn) || 0),
+    arrivedAtTurn: Math.max(0, Number(raw.arrivedAtTurn) || 0),
+    turnCost: Math.max(0, Number(raw.turnCost) || 0),
+    mode: raw.mode === 'forced' ? 'forced' : 'player',
+    ...(raw.causeEventId ? { causeEventId: String(raw.causeEventId) } : {}),
+  };
+}
+
 function routeById(definition: OpenWorldSliceDefinition, id: string): OpenWorldRoute | undefined {
   return definition.routes.find(route => route.id === id);
 }
@@ -222,9 +270,10 @@ export function hydrateOpenWorldSliceRuntime(
   raw: Partial<OpenWorldSliceRuntime> | null | undefined,
   definition: OpenWorldSliceDefinition,
 ): OpenWorldSliceRuntime {
-  const currentZoneId = raw?.currentZoneId && zoneById(definition, raw.currentZoneId)
-    ? raw.currentZoneId
-    : definition.initialZoneId;
+  const currentZoneId = firstStandableZoneId(
+    definition,
+    raw?.currentZoneId && zoneById(definition, raw.currentZoneId) ? raw.currentZoneId : undefined,
+  );
   const actorStates = { ...(raw?.actorStates || {}) };
   for (const actor of definition.actors) {
     actorStates[actor.id] ||= {
@@ -244,7 +293,7 @@ export function hydrateOpenWorldSliceRuntime(
     knownRouteIds: unique(raw?.knownRouteIds || []).filter(id => Boolean(routeById(definition, id))),
     requirements: unique(raw?.requirements || []),
     elapsedTurns: Math.max(0, Number(raw?.elapsedTurns) || 0),
-    travelReceipts: [...(raw?.travelReceipts || [])],
+    travelReceipts: (raw?.travelReceipts || []).map(hydrateTravelReceipt).filter((item): item is OpenWorldTravelReceipt => Boolean(item)),
     noticeReceipts: [...(raw?.noticeReceipts || [])],
     actionReceipts: [...(raw?.actionReceipts || [])],
     consequenceReceipts: [...(raw?.consequenceReceipts || [])],
@@ -323,6 +372,9 @@ export function settleOpenWorldTravel(
   if (route.requirementKey && !state.requirements.includes(route.requirementKey)) {
     return { status: 'rejected', reason: 'requirement_missing' };
   }
+  if (!zoneIsStandable(zoneById(definition, route.toZoneId))) {
+    return { status: 'rejected', reason: 'not_standable' };
+  }
   const departedAtTurn = state.elapsedTurns;
   state.elapsedTurns += route.turnCost;
   const receipt: OpenWorldTravelReceipt = {
@@ -333,6 +385,7 @@ export function settleOpenWorldTravel(
     departedAtTurn,
     arrivedAtTurn: state.elapsedTurns,
     turnCost: route.turnCost,
+    mode: 'player',
   };
   state.travelReceipts.push(receipt);
   state.currentZoneId = route.toZoneId;
@@ -341,6 +394,148 @@ export function settleOpenWorldTravel(
   appendChronicle(state, `travel:${receiptId}`, `你从${from}选择${route.label}`, `你在付出${route.turnCost}轮路程后抵达${to}`);
   settleDueConsequences(state, definition);
   return { status: 'settled', receipt };
+}
+
+export function forcedTravelReceiptId(causeEventId: string, routeId: string): string {
+  return `forced:${causeEventId}:${routeId}`;
+}
+
+function existingForcedTravel(
+  state: OpenWorldSliceRuntime,
+  causeEventId: string,
+  routeId: string,
+): OpenWorldTravelReceipt | undefined {
+  return state.travelReceipts.find(item => item.mode === 'forced' && item.causeEventId === causeEventId && item.routeId === routeId);
+}
+
+export function settleOpenWorldForcedTravel(
+  state: OpenWorldSliceRuntime,
+  definition: OpenWorldSliceDefinition,
+  routeId: string,
+  causeEventId: string,
+  receiptId = forcedTravelReceiptId(causeEventId, routeId),
+): OpenWorldSettlementResult<OpenWorldTravelReceipt> {
+  const cause = String(causeEventId || '').trim();
+  if (!cause) return { status: 'rejected', reason: 'missing_cause' };
+  const already = existingForcedTravel(state, cause, routeId);
+  if (already) return { status: 'idempotent', receipt: already };
+  const existing = receiptConflict(state, receiptId);
+  if (existing) {
+    const receipt = state.travelReceipts.find(item => item.receiptId === receiptId);
+    return existing.kind === 'travel' && existing.identity === routeId
+      ? { status: 'idempotent', receipt }
+      : { status: 'rejected', reason: 'receipt_conflict' };
+  }
+  const route = routeById(definition, routeId);
+  if (!route) return { status: 'rejected', reason: 'unknown_route' };
+  if (route.fromZoneId !== state.currentZoneId) return { status: 'rejected', reason: 'not_adjacent' };
+  if (!zoneIsStandable(zoneById(definition, route.toZoneId))) {
+    return { status: 'rejected', reason: 'not_standable' };
+  }
+  const departedAtTurn = state.elapsedTurns;
+  state.elapsedTurns += route.turnCost;
+  const receipt: OpenWorldTravelReceipt = {
+    receiptId,
+    routeId,
+    fromZoneId: route.fromZoneId,
+    toZoneId: route.toZoneId,
+    departedAtTurn,
+    arrivedAtTurn: state.elapsedTurns,
+    turnCost: route.turnCost,
+    mode: 'forced',
+    causeEventId: cause,
+  };
+  state.travelReceipts.push(receipt);
+  state.currentZoneId = route.toZoneId;
+  state.knownZoneIds = unique([...state.knownZoneIds, route.toZoneId]).filter(id => Boolean(zoneById(definition, id)));
+  state.knownRouteIds = unique([...state.knownRouteIds, route.id]).filter(id => Boolean(routeById(definition, id)));
+  const from = zoneById(definition, route.fromZoneId)?.name || '原地';
+  const to = zoneById(definition, route.toZoneId)?.name || '目的地';
+  appendChronicle(state, `travel:${receiptId}`, `事件将你从${from}沿${route.label}带走`, `你被带到${to}`);
+  settleDueConsequences(state, definition);
+  return { status: 'settled', receipt };
+}
+
+export function settleOpenWorldForcedTravelChain(
+  state: OpenWorldSliceRuntime,
+  definition: OpenWorldSliceDefinition,
+  routeIds: string[],
+  causeEventId: string,
+): OpenWorldSettlementResult<OpenWorldTravelReceipt[]> {
+  const receipts: OpenWorldTravelReceipt[] = [];
+  let anySettled = false;
+  for (const routeId of routeIds) {
+    const hop = settleOpenWorldForcedTravel(state, definition, routeId, causeEventId);
+    if (hop.status === 'rejected' || !hop.receipt) {
+      return { status: 'rejected', reason: hop.reason, receipt: receipts };
+    }
+    if (hop.status === 'settled') anySettled = true;
+    receipts.push(hop.receipt);
+  }
+  return { status: anySettled ? 'settled' : 'idempotent', receipt: receipts };
+}
+
+/**
+ * If already at the destination, record the historical hop without walking.
+ * If standing on the route origin, settle normally. Never warp from a third zone.
+ */
+export function rememberOpenWorldForcedTravel(
+  state: OpenWorldSliceRuntime,
+  definition: OpenWorldSliceDefinition,
+  routeId: string,
+  causeEventId: string,
+): OpenWorldSettlementResult<OpenWorldTravelReceipt> {
+  const cause = String(causeEventId || '').trim();
+  if (!cause) return { status: 'rejected', reason: 'missing_cause' };
+  const already = existingForcedTravel(state, cause, routeId);
+  if (already) return { status: 'idempotent', receipt: already };
+  const route = routeById(definition, routeId);
+  if (!route) return { status: 'rejected', reason: 'unknown_route' };
+  const receipt: OpenWorldTravelReceipt = {
+    receiptId: forcedTravelReceiptId(cause, routeId),
+    routeId,
+    fromZoneId: route.fromZoneId,
+    toZoneId: route.toZoneId,
+    departedAtTurn: state.elapsedTurns,
+    arrivedAtTurn: state.elapsedTurns,
+    turnCost: 0,
+    mode: 'forced',
+    causeEventId: cause,
+  };
+  state.travelReceipts.push(receipt);
+  state.knownZoneIds = unique([...state.knownZoneIds, route.toZoneId]).filter(id => Boolean(zoneById(definition, id)));
+  state.knownRouteIds = unique([...state.knownRouteIds, route.id]).filter(id => Boolean(routeById(definition, id)));
+  return { status: 'settled', receipt };
+}
+
+export function backfillOrSettleForcedTravel(
+  state: OpenWorldSliceRuntime,
+  definition: OpenWorldSliceDefinition,
+  routeId: string,
+  causeEventId: string,
+): OpenWorldSettlementResult<OpenWorldTravelReceipt> {
+  const already = existingForcedTravel(state, causeEventId, routeId);
+  if (already) return { status: 'idempotent', receipt: already };
+  const route = routeById(definition, routeId);
+  if (!route) return { status: 'rejected', reason: 'unknown_route' };
+  if (state.currentZoneId === route.toZoneId) {
+    const receipt: OpenWorldTravelReceipt = {
+      receiptId: forcedTravelReceiptId(causeEventId, routeId),
+      routeId,
+      fromZoneId: route.fromZoneId,
+      toZoneId: route.toZoneId,
+      departedAtTurn: state.elapsedTurns,
+      arrivedAtTurn: state.elapsedTurns,
+      turnCost: 0,
+      mode: 'forced',
+      causeEventId,
+    };
+    state.travelReceipts.push(receipt);
+    state.knownZoneIds = unique([...state.knownZoneIds, route.toZoneId]).filter(id => Boolean(zoneById(definition, id)));
+    state.knownRouteIds = unique([...state.knownRouteIds, route.id]).filter(id => Boolean(routeById(definition, id)));
+    return { status: 'settled', receipt };
+  }
+  return settleOpenWorldForcedTravel(state, definition, routeId, causeEventId);
 }
 
 export function presentOpenWorldNotice(notice: OpenWorldNotice): string {

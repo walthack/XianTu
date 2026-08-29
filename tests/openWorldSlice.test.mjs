@@ -169,6 +169,55 @@ test('unknown actor consequences are not scheduled and old saves hydrate without
   assert.equal(runtime.pendingConsequences.some(item => item.actorId === 'actor.invented'), false);
 });
 
+test('old travel receipts hydrate a player mode and compound zones are not standable current', async () => {
+  const { hydrateOpenWorldSliceRuntime, zoneIsStandable } = await subject();
+  const nested = definition();
+  nested.zones.push(
+    { id: 'zone.town', name: '城镇', kind: 'settlement', standable: false },
+    { id: 'zone.compound', name: '商馆', kind: 'compound', parentZoneId: 'zone.town', standable: false },
+  );
+  nested.zones.find(zone => zone.id === 'zone.square').parentZoneId = 'zone.town';
+  nested.zones.find(zone => zone.id === 'zone.square').worldLocationId = 'world.city';
+  nested.initialZoneId = 'zone.town';
+  const runtime = hydrateOpenWorldSliceRuntime({
+    currentZoneId: 'zone.compound',
+    travelReceipts: [{
+      receiptId: 'kept', routeId: 'route.square.shop', fromZoneId: 'zone.square', toZoneId: 'zone.shop',
+      departedAtTurn: 5, arrivedAtTurn: 7, turnCost: 2,
+    }],
+  }, nested);
+  assert.equal(runtime.currentZoneId, 'zone.square');
+  assert.equal(runtime.travelReceipts[0].mode, 'player');
+  assert.equal(zoneIsStandable(nested.zones.find(zone => zone.id === 'zone.compound')), false);
+});
+
+test('forced travel ignores known-route gates, records cause, and rejects off-graph jumps', async () => {
+  const { settleOpenWorldForcedTravel, settleOpenWorldForcedTravelChain, backfillOrSettleForcedTravel } = await subject();
+  const runtime = await state();
+  assert.equal(settleOpenWorldForcedTravel(runtime, definition(), 'route.shop.hidden', 'event.capture').reason, 'not_adjacent');
+  const first = settleOpenWorldForcedTravel(runtime, definition(), 'route.square.shop', 'event.capture');
+  assert.equal(first.status, 'settled');
+  assert.equal(first.receipt.mode, 'forced');
+  assert.equal(first.receipt.causeEventId, 'event.capture');
+  assert.equal(runtime.currentZoneId, 'zone.shop');
+  assert.equal(settleOpenWorldForcedTravel(runtime, definition(), 'route.square.shop', 'event.capture').status, 'idempotent');
+  const hidden = await state({ currentZoneId: 'zone.shop', knownZoneIds: ['zone.shop'], knownRouteIds: [] });
+  const dragged = settleOpenWorldForcedTravel(hidden, definition(), 'route.shop.hidden', 'event.drag');
+  assert.equal(dragged.status, 'settled');
+  assert.equal(hidden.currentZoneId, 'zone.hidden');
+  assert.ok(hidden.knownZoneIds.includes('zone.hidden'));
+  const chainState = await state();
+  const chain = settleOpenWorldForcedTravelChain(chainState, definition(), ['route.square.shop', 'route.shop.hidden'], 'event.chain');
+  assert.equal(chain.status, 'settled');
+  assert.equal(chainState.currentZoneId, 'zone.hidden');
+  assert.equal(settleOpenWorldForcedTravelChain(chainState, definition(), ['route.square.shop', 'route.shop.hidden'], 'event.chain').status, 'idempotent');
+  const alreadyThere = await state({ currentZoneId: 'zone.hidden' });
+  const filled = backfillOrSettleForcedTravel(alreadyThere, definition(), 'route.shop.hidden', 'event.old');
+  assert.equal(filled.status, 'settled');
+  assert.equal(alreadyThere.currentZoneId, 'zone.hidden');
+  assert.equal(filled.receipt.turnCost, 0);
+});
+
 test('player-readable view exposes location, legal next steps, stable presence and no internal IDs in prose', async () => {
   const { getOpenWorldSliceView } = await subject();
   const runtime = await state();

@@ -195,7 +195,14 @@ test('incomplete scene contracts fail closed; s01_06 requires 月霜', async () 
     mustAppear: { location: '中州·五原城', present: ['王哲'], objective: '五原城里有人把你当成逃奴，先应付眼前的盘问与拉扯' },
     receipts: { move: true, casualty: false, moveTo: '中州·五原城' },
   })), false);
-  for (const fake of ['五原露天市集', '五原商馆', '中州·五原·帅帐', '白湖商馆水牢']) {
+  assert.equal(acceptLegacyPilotScene(basePacket({
+    eventId: 'lcq.event.s02_04',
+    location: '中州·五原·白湖商馆水牢',
+    present: [],
+    mustAppear: { location: '中州·五原·白湖商馆水牢', present: [], objective: '五原城里有人把你当成逃奴，先应付眼前的盘问与拉扯' },
+    receipts: { move: true, casualty: false, moveTo: '中州·五原·白湖商馆水牢', toZoneId: 'lcq.zone.wuyuan.water_prison', mode: 'forced' },
+  })), true);
+  for (const fake of ['五原露天市集', '五原商馆', '中州·五原·帅帐']) {
     assert.equal(acceptLegacyPilotScene(basePacket({
       eventId: 'lcq.event.s02_04',
       location: fake,
@@ -458,19 +465,23 @@ test('incomplete scene contracts fail closed; s01_06 requires 月霜', async () 
   assert.equal(acceptLegacyPilotScene(basePacket({
     eventId: 'lcq.event.baihu_shangguan_escape',
     actionId: 'walk_out_wuyuan_shangguan',
-    location: '中州·五原城',
+    location: '中州·五原·白湖商馆门前街',
     present: [],
-    mustAppear: { location: '中州·五原城', present: [], objective: '从白湖商馆的死局里脱身，走出五原商馆' },
-    receipts: { move: false, casualty: false },
+    mustAppear: { location: '中州·五原·白湖商馆门前街', present: [], objective: '从白湖商馆的死局里脱身，走出五原商馆' },
+    receipts: {
+      move: true, casualty: false, moveTo: '中州·五原·白湖商馆门前街',
+      fromZoneId: 'lcq.zone.wuyuan.baihu_hall', toZoneId: 'lcq.zone.wuyuan.baihu_front_street',
+      routeId: 'lcq.route.baihu.exit_front_gate', mode: 'forced', causeEventId: 'lcq.event.baihu_shangguan_escape',
+    },
   })), true);
   assert.equal(acceptLegacyPilotScene(basePacket({
     eventId: 'lcq.event.baihu_shangguan_escape',
     actionId: 'walk_out_wuyuan_shangguan',
-    location: '中州·五原·白湖商馆内院',
+    location: '中州·五原城',
     present: [],
-    mustAppear: { location: '中州·五原·白湖商馆内院', present: [], objective: '从白湖商馆的死局里脱身，走出五原商馆' },
+    mustAppear: { location: '中州·五原城', present: [], objective: '从白湖商馆的死局里脱身，走出五原商馆' },
     receipts: { move: false, casualty: false },
-  })), true);
+  })), false);
   assert.equal(acceptLegacyPilotScene(basePacket({
     eventId: 'lcq.event.baihu_shangguan_escape',
     actionId: 'walk_out_wuyuan_shangguan',
@@ -706,15 +717,19 @@ test('each expanded scene uses its own local variants, not opening stock', async
   const walk = basePacket({
     eventId: 'lcq.event.baihu_shangguan_escape',
     actionId: 'walk_out_wuyuan_shangguan',
-    location: '中州·五原城',
+    location: '中州·五原·白湖商馆门前街',
     present: [],
     presentActors: [],
     action: '走出五原商馆',
     currentObjective: '从白湖商馆的死局里脱身，走出五原商馆',
-    mustAppear: { location: '中州·五原城', present: [], objective: '从白湖商馆的死局里脱身，走出五原商馆' },
+    mustAppear: { location: '中州·五原·白湖商馆门前街', present: [], objective: '从白湖商馆的死局里脱身，走出五原商馆' },
     mustNotAppear: ['神兵'],
-    publicFacts: ['中州·五原城', '五原商馆'],
-    receipts: { move: false, casualty: false },
+    publicFacts: ['中州·五原·白湖商馆门前街', '五原商馆'],
+    receipts: {
+      move: true, casualty: false, moveTo: '中州·五原·白湖商馆门前街',
+      fromZoneId: 'lcq.zone.wuyuan.baihu_hall', toZoneId: 'lcq.zone.wuyuan.baihu_front_street',
+      routeId: 'lcq.route.baihu.exit_front_gate', mode: 'forced', causeEventId: 'lcq.event.baihu_shangguan_escape',
+    },
   });
 
   assert.equal(acceptLegacyPilotScene(danger), true);
@@ -1107,6 +1122,11 @@ test('白湖四拍 prepare 回落；只有最终动作才进 Pilot', async () =>
             appear: compiled.packet.mustAppear,
             receipts: compiled.packet.receipts,
           })}`);
+          if (beat === 'lcq.event.baihu_shangguan_escape') {
+            assert.equal(preview.receipts.toZoneId, 'lcq.zone.wuyuan.baihu_front_street');
+            assert.equal(preview.receipts.mode, 'forced');
+            assert.equal(preview.receipts.move, true);
+          }
           const text = composeLegacyNarrativeFromPlan(compiled.packet);
           assert.equal(text.includes('阿姬曼'), false, text);
           assert.equal(text.includes('草还在动'), false, text);

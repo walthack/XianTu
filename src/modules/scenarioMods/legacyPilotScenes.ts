@@ -69,10 +69,32 @@ function isBaihuHallLabel(value: unknown): boolean {
   return text === '白湖商馆内院' || /(^|[·])白湖商馆内院$/.test(text);
 }
 
+function isBaihuGateLabel(value: unknown): boolean {
+  const text = String(value || '').trim();
+  return text === '白湖商馆大门' || /(^|[·])白湖商馆大门$/.test(text);
+}
+
+function isBaihuFrontStreetLabel(value: unknown): boolean {
+  const text = String(value || '').trim();
+  return text === '白湖商馆门前街' || /(^|[·])白湖商馆门前街$/.test(text);
+}
+
+function isPastryShopLabel(value: unknown): boolean {
+  const text = String(value || '').trim();
+  return text === '点心铺' || /(^|[·])点心铺$/.test(text);
+}
+
 function atSameCityOrHall(packet: LegacyNarratorPacket): boolean {
   const atCity = isWuyuanCityLabel(packet.location) && isWuyuanCityLabel(packet.mustAppear?.location);
   const atHall = isBaihuHallLabel(packet.location) && isBaihuHallLabel(packet.mustAppear?.location);
   return atCity || atHall;
+}
+
+function atSameWuyuanLeaf(
+  packet: LegacyNarratorPacket,
+  match: (value: unknown) => boolean,
+): boolean {
+  return match(packet.location) && match(packet.mustAppear?.location);
 }
 
 const S02_02_CAST = ['王哲', '月霜'] as const;
@@ -135,21 +157,33 @@ export function acceptLegacyPilotScene(packet: LegacyNarratorPacket): boolean {
   }
   if (eventId === 'lcq.event.s02_04') {
     if (names.some(name => name !== '月霜')) return false;
-    const atCity = isWuyuanCityLabel(packet.location) && isWuyuanCityLabel(packet.mustAppear?.location);
-    const moving = packet.receipts?.move === true && isWuyuanCityLabel(packet.receipts?.moveTo);
-    return (atCity || moving) && packet.receipts?.casualty === false;
+    const atCity = atSameWuyuanLeaf(packet, isWuyuanCityLabel);
+    const atPrison = atSameWuyuanLeaf(packet, isWaterPrisonLabel);
+    const atPastry = atSameWuyuanLeaf(packet, isPastryShopLabel);
+    const dest = packet.receipts?.moveTo || packet.location;
+    const moving = packet.receipts?.move === true && (
+      isWuyuanCityLabel(dest) || isWaterPrisonLabel(dest) || isPastryShopLabel(dest)
+      || packet.receipts?.toZoneId === 'lcq.zone.wuyuan.water_prison'
+    );
+    return (atCity || atPrison || atPastry || moving) && packet.receipts?.casualty === false;
   }
   if (eventId === 'lcq.event.s02_05') {
     if (names.length !== 0) return false;
-    const atCity = isWuyuanCityLabel(packet.location) && isWuyuanCityLabel(packet.mustAppear?.location);
-    const atPrison = isWaterPrisonLabel(packet.location) && isWaterPrisonLabel(packet.mustAppear?.location);
+    const atCity = atSameWuyuanLeaf(packet, isWuyuanCityLabel);
+    const atPrison = atSameWuyuanLeaf(packet, isWaterPrisonLabel);
     return (atCity || atPrison) && packet.receipts?.move === false && packet.receipts?.casualty === false;
   }
   if (eventId === 'lcq.event.s02_06') {
     if (names.length !== 0) return false;
-    const atCity = isWuyuanCityLabel(packet.location) && isWuyuanCityLabel(packet.mustAppear?.location);
-    const atHall = isBaihuHallLabel(packet.location) && isBaihuHallLabel(packet.mustAppear?.location);
-    return (atCity || atHall) && packet.receipts?.move === false && packet.receipts?.casualty === false;
+    const atCity = atSameWuyuanLeaf(packet, isWuyuanCityLabel);
+    const atHall = atSameWuyuanLeaf(packet, isBaihuHallLabel);
+    const dest = packet.receipts?.moveTo || packet.location;
+    const movingToHall = packet.receipts?.move === true && (
+      isBaihuHallLabel(dest) || packet.receipts?.toZoneId === 'lcq.zone.wuyuan.baihu_hall'
+    );
+    if (packet.receipts?.casualty === true) return false;
+    if (movingToHall) return true;
+    return (atCity || atHall) && packet.receipts?.move === false;
   }
   if (eventId === 'lcq.event.ningyu_enters_gamble') {
     if (names.length !== 1 || names[0] !== '凝羽') return false;
@@ -175,7 +209,15 @@ export function acceptLegacyPilotScene(packet: LegacyNarratorPacket): boolean {
   }
   if (eventId === 'lcq.event.baihu_shangguan_escape') {
     if (names.length !== 0) return false;
-    return atSameCityOrHall(packet) && packet.receipts?.move === false && packet.receipts?.casualty === false;
+    if (packet.receipts?.casualty === true) return false;
+    if (isWuyuanCityLabel(packet.receipts?.moveTo) && packet.receipts?.move === true && !isBaihuFrontStreetLabel(packet.receipts?.moveTo)) {
+      return false;
+    }
+    const toStreet = packet.receipts?.toZoneId === 'lcq.zone.wuyuan.baihu_front_street'
+      || isBaihuFrontStreetLabel(packet.receipts?.moveTo)
+      || atSameWuyuanLeaf(packet, isBaihuFrontStreetLabel);
+    const forced = packet.receipts?.mode !== 'player' || packet.receipts?.causeEventId === eventId;
+    return toStreet && packet.receipts?.move === true && forced;
   }
   return false;
 }
@@ -381,6 +423,8 @@ function ambushPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan): 
 function hallPlaceName(packet: LegacyNarratorPacket): string {
   const loc = packet.mustAppear?.location || packet.location || '';
   if (isBaihuHallLabel(loc)) return '白湖商馆内院';
+  if (isBaihuFrontStreetLabel(loc)) return '白湖商馆门前街';
+  if (isBaihuGateLabel(loc)) return '白湖商馆大门';
   return '五原城';
 }
 
@@ -538,9 +582,11 @@ function tearPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan): st
 }
 
 function walkPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan): string[] {
-  const destName = hallPlaceName(packet);
+  const destName = isBaihuFrontStreetLabel(packet.mustAppear?.location || packet.location)
+    ? '白湖商馆门前街'
+    : hallPlaceName(packet);
   const sensory = {
-    grass_iron: `${destName}到大门这一截，香淡了，铁腥还在。女侍卫的步点贴着墙。`,
+    grass_iron: `内院到大门这一截，香淡了，铁腥还在。女侍卫的步点贴着墙。你停在${destName}。`,
     wind_sky: `大门把风挤进来。死局在身后，五原城还在门外。`,
     mud_body: `靴底离开内院的石。门槛这一侧仍是五原城，不是南下的路。`,
   }[plan.sensory];
@@ -555,7 +601,7 @@ function walkPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan): st
     silent_grip: `你按住门框，不回头，也不把步子迈成出城。`,
   }[plan.companion];
   const closing = {
-    hold_ground: `你迈出五原商馆。死局留在身后。人仍在五原城里，没有被抓回馆里。`,
+    hold_ground: `你迈出五原商馆，停在${destName}。死局留在身后。人仍在五原城里，没有被抓回馆里。`,
     look_far: `你把视野放到街口：搜查还在，南门不是这一拍。脱身只到出馆。`,
     steady_breath: `你把呼吸重新对齐，先走出五原商馆。城里还站得住，城外的路还没有走。`,
   }[plan.closing];
@@ -1208,10 +1254,12 @@ function tearPool(packet: LegacyNarratorPacket): string[] {
 }
 
 function walkPool(packet: LegacyNarratorPacket): string[] {
-  const destName = hallPlaceName(packet);
+  const destName = isBaihuFrontStreetLabel(packet.mustAppear?.location || packet.location)
+    ? '白湖商馆门前街'
+    : hallPlaceName(packet);
   return [
     `从白湖商馆的死局里脱身，走出五原商馆。`,
-    `你从${destName}走到大门。囚室留在身后。`,
+    `你从内院走到大门，再迈到${destName}。囚室留在身后。`,
     `女侍卫还在搜查。你改道，不直闯。`,
     `你迈出五原商馆。人仍留在五原城里。`,
     `这一步只出馆，人还停在五原城里。`,

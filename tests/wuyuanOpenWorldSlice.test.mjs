@@ -195,16 +195,33 @@ test('travel is explicit and both local solutions converge to the canon capture 
   assert.equal(world.世界.状态.剧本模组.eventActionStates, undefined);
 });
 
-test('completed canon beats deterministically project water-prison and hall location with causal receipts', async () => {
+test('completed canon beats settle forced routes instead of teleporting', async () => {
   const { ensureWuyuanOpenWorldSlice } = await loadTs('../src/modules/scenarioMods/wuyuanOpenWorldSlice.ts');
   const current = save();
   ensureWuyuanOpenWorldSlice(current);
   current.世界.状态.剧本模组.completedEventIds.push('lcq.event.s02_04');
   const water = ensureWuyuanOpenWorldSlice(current);
   assert.equal(water.currentZoneId, 'lcq.zone.wuyuan.water_prison');
+  assert.equal(current.角色.位置.描述, '中州·五原·白湖商馆水牢');
+  const capture = water.travelReceipts.find(item => item.causeEventId === 'lcq.event.s02_04');
+  assert.equal(capture?.mode, 'forced');
+  assert.equal(capture?.toZoneId, 'lcq.zone.wuyuan.water_prison');
   assert.match(water.chronicle.at(-1).text, /^因为.+，所以.+$/);
   current.世界.状态.剧本模组.completedEventIds.push('lcq.event.s02_05');
-  assert.equal(ensureWuyuanOpenWorldSlice(current).currentZoneId, 'lcq.zone.wuyuan.baihu_hall');
+  assert.equal(ensureWuyuanOpenWorldSlice(current).currentZoneId, 'lcq.zone.wuyuan.water_prison');
+  current.世界.状态.剧本模组.completedEventIds.push('lcq.event.s02_06');
+  const hall = ensureWuyuanOpenWorldSlice(current);
+  assert.equal(hall.currentZoneId, 'lcq.zone.wuyuan.baihu_hall');
+  assert.equal(current.角色.位置.描述, '中州·五原·白湖商馆内院');
+  current.世界.状态.剧本模组.completedEventIds.push('lcq.event.baihu_shangguan_escape');
+  const street = ensureWuyuanOpenWorldSlice(current);
+  assert.equal(street.currentZoneId, 'lcq.zone.wuyuan.baihu_front_street');
+  assert.equal(current.角色.位置.描述, '中州·五原·白湖商馆门前街');
+  const hops = street.travelReceipts.filter(item => item.causeEventId === 'lcq.event.baihu_shangguan_escape');
+  assert.deepEqual(hops.map(item => item.routeId), [
+    'lcq.route.baihu.hall_to_gate',
+    'lcq.route.baihu.exit_front_gate',
+  ]);
 });
 
 test('delayed response is tied to the chosen process and is idempotent across refresh', async () => {
