@@ -87,14 +87,31 @@ test('incomplete scene contracts fail closed; s01_06 requires 月霜', async () 
   })), false);
   assert.equal(acceptLegacyPilotScene(basePacket({
     eventId: 'lcq.event.s02_03',
+    location: '中州·帅帐',
     present: ['月霜'],
     presentActors: [{ name: '月霜', traits: [] }],
-    mustAppear: { location: '中州·草原', present: ['月霜'], objective: '在秦军与罗马军的交战中求生并观察战局' },
+    mustAppear: { location: '中州·帅帐', present: ['月霜'], objective: '在秦军与罗马军的交战中求生并观察战局' },
+    receipts: { move: false, casualty: false },
   })), true);
   assert.equal(acceptLegacyPilotScene(basePacket({
     eventId: 'lcq.event.s02_03',
+    location: '中州·草原',
+    present: ['月霜'],
+    presentActors: [{ name: '月霜', traits: [] }],
+    mustAppear: { location: '中州·草原', present: ['月霜'], objective: '在秦军与罗马军的交战中求生并观察战局' },
+  })), false);
+  assert.equal(acceptLegacyPilotScene(basePacket({
+    eventId: 'lcq.event.s02_03',
+    location: '中州·帅帐',
+    present: ['月霜'],
+    mustAppear: { location: '中州·帅帐', present: ['月霜'], objective: '在秦军与罗马军的交战中求生并观察战局' },
+    receipts: { move: true, casualty: false, moveTo: '中州·草原' },
+  })), false);
+  assert.equal(acceptLegacyPilotScene(basePacket({
+    eventId: 'lcq.event.s02_03',
     present: ['月霜', '段强'],
-    mustAppear: { location: '中州·草原', present: ['月霜', '段强'], objective: '求生并观察战局' },
+    location: '中州·帅帐',
+    mustAppear: { location: '中州·帅帐', present: ['月霜', '段强'], objective: '求生并观察战局' },
   })), false);
   assert.equal(acceptLegacyPilotScene(basePacket({ eventId: 'lcq.event.s02_02', present: ['王哲'] })), false);
   assert.equal(planLegacyNarrativePilot({

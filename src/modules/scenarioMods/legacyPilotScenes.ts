@@ -55,7 +55,11 @@ export function acceptLegacyPilotScene(packet: LegacyNarratorPacket): boolean {
     const atTent = /帅帐/.test(packet.location || '') || /帅帐/.test(packet.mustAppear?.location || '');
     return atTent;
   }
-  if (eventId === 'lcq.event.s02_03') return names.includes('月霜') && !names.includes('段强');
+  if (eventId === 'lcq.event.s02_03') {
+    if (!names.includes('月霜') || names.includes('段强')) return false;
+    const atTent = /帅帐/.test(packet.location || '') && /帅帐/.test(packet.mustAppear?.location || '');
+    return atTent && packet.receipts?.move !== true;
+  }
   return false;
 }
 
