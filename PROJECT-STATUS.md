@@ -1,6 +1,7 @@
 # 仙途 (XianTu) · 项目总体状况与并行分工文档
 
 > 面向「新加入的 agent」。读完这一篇即可独立认领一个模块开工。
+> **2026-08-29 Codex approve s01_06 后扩 s02_01。** 无新 P0/P1。短链纳入王哲当面托付：须王哲在场、地在帅帐、拒段强；独立锦囊／三事托付变体，不复用草原／寒毒库存。s02_03 及以后仍 fail closed。未到白湖脱身。P0-1 / P0-2 仍 OPEN。
 > **2026-08-29 Codex P1 后收口 s01_06。** 混在场 `月霜+段强` 拒收，句库不写段强。正典拍保留：月霜强行灌药、真阳激发下贴身交合、寒毒被压。未扩白湖。P0-1 / P0-2 仍 OPEN。
 > **2026-08-29 Codex approve e43cf50..058effd 后扩 s01_06。** 无新 P0/P1。短链纳入 `lcq.event.s01_06`：在场须有月霜，独立寒毒／丹药／真阳变体，不复用草原／飞机库存；顺序回归 s01_01→02→03→04→06→05 仍不复活段强，s01_06 无移动回执。未扩白湖。P0-1 / P0-2 仍 OPEN。
 > **2026-08-29 Codex 再 REJECT：Fast 复活段强 + flag 编码。** Fast `computePresentNames` 现传 `excludeNames: departedPresentNames`；s01_05 计划路径 present 无段强、forbidden 有段强。`eventIsCompleted` 与 runtime 一致：嵌套优先、`"true"` 字符串、扁平兜底。未扩白湖。P0-1 / P0-2 仍 OPEN。

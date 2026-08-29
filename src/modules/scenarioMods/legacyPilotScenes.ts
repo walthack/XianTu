@@ -8,6 +8,7 @@ export const LEGACY_NARRATIVE_PILOT_EVENT_IDS = [
   'lcq.event.s01_04',
   'lcq.event.s01_05',
   'lcq.event.s01_06',
+  'lcq.event.s02_01',
 ] as const;
 
 export type LegacyPilotEventId = (typeof LEGACY_NARRATIVE_PILOT_EVENT_IDS)[number];
@@ -48,6 +49,11 @@ export function acceptLegacyPilotScene(packet: LegacyNarratorPacket): boolean {
     return atTent || moving;
   }
   if (eventId === 'lcq.event.s01_06') return names.includes('月霜') && !names.includes('段强');
+  if (eventId === 'lcq.event.s02_01') {
+    if (!names.includes('王哲') || names.includes('段强')) return false;
+    const atTent = /帅帐/.test(packet.location || '') || /帅帐/.test(packet.mustAppear?.location || '');
+    return atTent;
+  }
   return false;
 }
 
@@ -161,6 +167,31 @@ function progressPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan)
   return [reaction, sensory, pacing, closing].filter(Boolean);
 }
 
+function mandatePreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan): string[] {
+  const destName = '帅帐';
+  const sensory = {
+    grass_iron: `${destName}里灯火压得很低。案上那只未拆的锦囊还在，帐外喊杀被油灯隔开一层。`,
+    wind_sky: `帐帘落下。你看清王哲肩甲未卸，锦囊单独收在案上。`,
+    mud_body: `靴底的泥停在门槛外。帐里是热的，锦囊就在手能够到、却还没落到你手里的位置。`,
+  }[plan.sensory];
+  const pacing = {
+    slow_orient: `你没有先问战局。王哲还有事要当面交代，先听他把话说完。`,
+    tense_watch: `你把呼吸压低，先看清锦囊和人对面的距离，再开口。`,
+    steady_breathe: `你先把气沉住，听他把托付说完。`,
+  }[plan.pacing];
+  const reaction = {
+    dazed: `王哲看着你，目光沉，一时没有把三件事一次说完。`,
+    answers: `王哲说：“锦囊你先收着。太泉的事，修为够了再去。月霜，你护住。”声音不高，却把顺序钉死了。`,
+    silent_grip: `王哲把锦囊按到你掌心，指节稳定，像在确认一件他还不肯说破的事。`,
+  }[plan.companion];
+  const closing = {
+    hold_ground: `你在${destName}里站稳，把锦囊、太泉祭祀和守护月霜这三件事听完。`,
+    look_far: `你让他把话说完，自己把视野放到帐帘外：杀声还在，托付已经落到你手上。`,
+    steady_breath: `你把呼吸重新对齐，先把这番当面交代接住。`,
+  }[plan.closing];
+  return [reaction, sensory, pacing, closing].filter(Boolean);
+}
+
 function frostPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan): string[] {
   const companion = '月霜';
   const place = placeOf(packet);
@@ -226,6 +257,7 @@ export function legacyPilotPreferredSentences(
   if (eventId === 'lcq.event.s01_04') return progressPreferred(packet, plan);
   if (eventId === 'lcq.event.s01_05') return arrivePreferred(packet, plan);
   if (eventId === 'lcq.event.s01_06') return frostPreferred(packet, plan);
+  if (eventId === 'lcq.event.s02_01') return mandatePreferred(packet, plan);
   return openingPreferred(packet, plan);
 }
 
@@ -388,6 +420,34 @@ function progressPool(packet: LegacyNarratorPacket): string[] {
   ];
 }
 
+function mandatePool(packet: LegacyNarratorPacket): string[] {
+  const destName = '帅帐';
+  return [
+    `王哲就在案对面，肩甲未卸。`,
+    `王哲还有事要当面交代，先听他把话说完。`,
+    `${destName}里灯火压得很低。锦囊单独收在案上，还没拆。`,
+    `你没有先报功。托付不说完，帐外的仗也帮不上忙。`,
+    `王哲把锦囊推到你手边。那一下比任何安慰都短。`,
+    `他说了三件事：锦囊先保管，修为够了去太泉祭祀，月霜要护住。`,
+    `你把能确定的事过了一遍：人是王哲，地是${destName}，锦囊还在。`,
+    `帐外喊杀仍在。帐里已经能把话说明白。`,
+    `你没有伸手拆锦囊。他说过，现在只保管。`,
+    `太泉的名字点到为止。你没有追问阵里有什么。`,
+    `月霜不在这张案对面。托付里有她，人不在帐里。`,
+    `你让他把顺序钉死：先听完，再接物件。`,
+    `灯火在甲片上跳。你看见自己的手还在微微发颤。`,
+    `你没有把帐外的仗再演一遍。这里要的是能听完的事实。`,
+    `锦囊入手时，帐帘外有人走过，又停下。`,
+    `你把肩甲的扣松开一格，方便他把话说清楚。`,
+    `来历已经说过。这一息要的是托付，不是再讲一遍穿越。`,
+    `王哲点了下头。那一下把三件事压进你掌心。`,
+    `你站在能被看见、也能随时被问的位置。`,
+    `你把这一息交给当面交代，不把未发生的战局写成已完。`,
+    `靴底还凉。帐里的空气是热的。`,
+    `你低声应了一句。应的是听完，不是已经办完。`,
+  ];
+}
+
 function frostPool(packet: LegacyNarratorPacket): string[] {
   const companion = '月霜';
   const place = placeOf(packet);
@@ -463,6 +523,7 @@ export function legacyPilotSafeSentencePool(packet: LegacyNarratorPacket): strin
   if (eventId === 'lcq.event.s01_04') return progressPool(packet);
   if (eventId === 'lcq.event.s01_05') return arrivePool(packet);
   if (eventId === 'lcq.event.s01_06') return frostPool(packet);
+  if (eventId === 'lcq.event.s02_01') return mandatePool(packet);
   return openingPool(packet);
 }
 

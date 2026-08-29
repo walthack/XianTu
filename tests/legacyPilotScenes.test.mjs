@@ -66,6 +66,26 @@ test('incomplete scene contracts fail closed; s01_06 requires 月霜', async () 
     mustAppear: { location: '中州·草原', present: ['王哲'], objective: '诊治' },
     receipts: { move: false, casualty: false },
   })), false);
+  assert.equal(acceptLegacyPilotScene(basePacket({
+    eventId: 'lcq.event.s02_01',
+    present: ['王哲'],
+    presentActors: [{ name: '王哲', traits: [] }],
+    location: '中州·帅帐',
+    mustAppear: { location: '中州·帅帐', present: ['王哲'], objective: '王哲还有事要当面交代，先听他把话说完' },
+  })), true);
+  assert.equal(acceptLegacyPilotScene(basePacket({
+    eventId: 'lcq.event.s02_01',
+    present: ['王哲', '段强'],
+    location: '中州·帅帐',
+    mustAppear: { location: '中州·帅帐', present: ['王哲', '段强'], objective: '听他把话说完' },
+  })), false);
+  assert.equal(acceptLegacyPilotScene(basePacket({
+    eventId: 'lcq.event.s02_01',
+    present: ['王哲'],
+    location: '中州·草原',
+    mustAppear: { location: '中州·草原', present: ['王哲'], objective: '听他把话说完' },
+  })), false);
+  assert.equal(acceptLegacyPilotScene(basePacket({ eventId: 'lcq.event.s02_03', present: ['月霜'] })), false);
   assert.equal(planLegacyNarrativePilot({
     saveData: {},
     eventAction: { source: 'event_engine', eventId: 'lcq.event.s02_01' },
@@ -133,14 +153,26 @@ test('each expanded scene uses its own local variants, not opening stock', async
     mustNotAppear: ['神兵'],
     publicFacts: ['中州·草原', '月霜在场'],
   });
+  const mandate = basePacket({
+    eventId: 'lcq.event.s02_01',
+    location: '中州·帅帐',
+    present: ['王哲'],
+    presentActors: [{ name: '王哲', traits: [] }],
+    action: '听他把话说完',
+    currentObjective: '王哲还有事要当面交代，先听他把话说完',
+    mustAppear: { location: '中州·帅帐', present: ['王哲'], objective: '王哲还有事要当面交代，先听他把话说完' },
+    mustNotAppear: ['神兵'],
+    publicFacts: ['中州·帅帐', '王哲在场', '锦囊'],
+  });
 
   assert.equal(acceptLegacyPilotScene(danger), true);
   assert.equal(acceptLegacyPilotScene(interact), true);
   assert.equal(acceptLegacyPilotScene(progress), true);
   assert.equal(acceptLegacyPilotScene(arrive), true);
   assert.equal(acceptLegacyPilotScene(frost), true);
+  assert.equal(acceptLegacyPilotScene(mandate), true);
 
-  for (const packet of [danger, interact, progress, arrive, frost]) {
+  for (const packet of [danger, interact, progress, arrive, frost, mandate]) {
     const text = composeLegacyNarrativeFromPlan(packet);
     const check = validateLegacyVisibleNarrative(text, packet);
     assert.equal(check.valid, true, `${packet.eventId}: ${check.issues.join(';')}\n${text}`);
@@ -172,6 +204,14 @@ test('each expanded scene uses its own local variants, not opening stock', async
   assert.match(frostText, /真阳/);
   assert.match(frostText, /交合|贴身|发生关系|传入/);
   assert.equal(frostText.includes('段强'), false);
+  const mandateText = composeLegacyNarrativeFromPlan(mandate);
+  assert.match(mandateText, /王哲/);
+  assert.match(mandateText, /帅帐/);
+  assert.match(mandateText, /锦囊/);
+  assert.match(mandateText, /托付|听他把话说完|当面交代/);
+  assert.equal(mandateText.includes('段强'), false);
+  assert.equal(mandateText.includes('这不是飞机'), false);
+  assert.equal(mandateText.includes('寒毒正在失控'), false);
 });
 
 test('movement is authorized only by structured receipt, never by matching 去帅帐', async () => {
