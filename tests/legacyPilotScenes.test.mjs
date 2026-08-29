@@ -177,13 +177,15 @@ test('each expanded scene uses its own local variants, not opening stock', async
   });
   const legion = basePacket({
     eventId: 'lcq.event.s02_03',
+    location: '中州·帅帐',
     present: ['月霜'],
     presentActors: [{ name: '月霜', traits: [] }],
     action: '在秦军与罗马军的交战中求生并观察战局',
     currentObjective: '在秦军与罗马军的交战中求生并观察战局',
-    mustAppear: { location: '中州·草原', present: ['月霜'], objective: '在秦军与罗马军的交战中求生并观察战局' },
+    mustAppear: { location: '中州·帅帐', present: ['月霜'], objective: '在秦军与罗马军的交战中求生并观察战局' },
     mustNotAppear: ['神兵'],
-    publicFacts: ['中州·草原', '月霜在场', '秦军', '罗马'],
+    publicFacts: ['中州·帅帐', '月霜在场', '秦军', '罗马'],
+    receipts: { move: false, casualty: false },
   });
 
   assert.equal(acceptLegacyPilotScene(danger), true);
@@ -242,6 +244,9 @@ test('each expanded scene uses its own local variants, not opening stock', async
   assert.match(legionText, /罗马/);
   assert.match(legionText, /溃散/);
   assert.match(legionText, /求生|观察战局/);
+  assert.match(legionText, /帅帐/);
+  assert.equal(legion.receipts.move, false);
+  assert.equal(/走进了|冲出帅帐|按进泥/.test(legionText), false, legionText);
   assert.equal(legionText.includes('段强'), false);
   assert.equal(legionText.includes('这不是飞机'), false);
   assert.equal(legionText.includes('寒毒正在失控'), false);
