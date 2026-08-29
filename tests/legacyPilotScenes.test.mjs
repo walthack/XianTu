@@ -100,6 +100,16 @@ test('incomplete scene contracts fail closed; s01_06 requires 月霜', async () 
     presentActors: [{ name: '月霜', traits: [] }],
     mustAppear: { location: '中州·草原', present: ['月霜'], objective: '在秦军与罗马军的交战中求生并观察战局' },
   })), false);
+  for (const fake of ['中州·帅帐外', '中州·帅帐门前', '中州·帅帐旧址']) {
+    assert.equal(acceptLegacyPilotScene(basePacket({
+      eventId: 'lcq.event.s02_03',
+      location: fake,
+      present: ['月霜'],
+      presentActors: [{ name: '月霜', traits: [] }],
+      mustAppear: { location: fake, present: ['月霜'], objective: '在秦军与罗马军的交战中求生并观察战局' },
+      receipts: { move: false, casualty: false },
+    })), false, fake);
+  }
   assert.equal(acceptLegacyPilotScene(basePacket({
     eventId: 'lcq.event.s02_03',
     location: '中州·帅帐',

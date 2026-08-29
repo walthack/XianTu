@@ -35,6 +35,11 @@ function placeOf(packet: LegacyNarratorPacket): string {
   return raw.replace(/[·,，]/g, '') || raw || '这片草地';
 }
 
+function isCommandTentLabel(value: unknown): boolean {
+  const text = String(value || '').trim();
+  return text === '帅帐' || /(^|[·])帅帐$/.test(text);
+}
+
 export function acceptLegacyPilotScene(packet: LegacyNarratorPacket): boolean {
   const eventId = legacyPilotEventIdOf(packet);
   if (!isLegacyPilotEventId(eventId)) return false;
@@ -57,8 +62,8 @@ export function acceptLegacyPilotScene(packet: LegacyNarratorPacket): boolean {
   }
   if (eventId === 'lcq.event.s02_03') {
     if (!names.includes('月霜') || names.includes('段强')) return false;
-    const atTent = /帅帐/.test(packet.location || '') && /帅帐/.test(packet.mustAppear?.location || '');
-    return atTent && packet.receipts?.move !== true;
+    const atTent = isCommandTentLabel(packet.location) && isCommandTentLabel(packet.mustAppear?.location);
+    return atTent && packet.receipts?.move === false;
   }
   return false;
 }
