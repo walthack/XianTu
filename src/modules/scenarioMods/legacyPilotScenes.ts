@@ -13,6 +13,7 @@ export const LEGACY_NARRATIVE_PILOT_EVENT_IDS = [
   'lcq.event.s02_02',
   'lcq.event.s02_04',
   'lcq.event.s02_05',
+  'lcq.event.s02_06',
 ] as const;
 
 export type LegacyPilotEventId = (typeof LEGACY_NARRATIVE_PILOT_EVENT_IDS)[number];
@@ -57,10 +58,16 @@ function isWaterPrisonLabel(value: unknown): boolean {
   return text === '白湖商馆水牢' || /(^|[·])白湖商馆水牢$/.test(text);
 }
 
+function isBaihuHallLabel(value: unknown): boolean {
+  const text = String(value || '').trim();
+  return text === '白湖商馆内院' || /(^|[·])白湖商馆内院$/.test(text);
+}
+
 const S02_02_CAST = ['王哲', '月霜'] as const;
 
 /** relatedCharacterIds that may force-present. Physical extras still fail accept. */
 export function filterLegacyPilotEventCharacterNames(eventId: string | undefined, names: string[]): string[] {
+  if (eventId === 'lcq.event.s02_06') return [];
   if (eventId !== 'lcq.event.s02_02') return names;
   return names.filter(name => (S02_02_CAST as readonly string[]).includes(name));
 }
@@ -106,6 +113,12 @@ export function acceptLegacyPilotScene(packet: LegacyNarratorPacket): boolean {
     const atCity = isWuyuanCityLabel(packet.location) && isWuyuanCityLabel(packet.mustAppear?.location);
     const atPrison = isWaterPrisonLabel(packet.location) && isWaterPrisonLabel(packet.mustAppear?.location);
     return (atCity || atPrison) && packet.receipts?.move === false && packet.receipts?.casualty === false;
+  }
+  if (eventId === 'lcq.event.s02_06') {
+    if (names.length !== 0) return false;
+    const atCity = isWuyuanCityLabel(packet.location) && isWuyuanCityLabel(packet.mustAppear?.location);
+    const atHall = isBaihuHallLabel(packet.location) && isBaihuHallLabel(packet.mustAppear?.location);
+    return (atCity || atHall) && packet.receipts?.move === false && packet.receipts?.casualty === false;
   }
   return false;
 }
@@ -308,6 +321,37 @@ function ambushPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan): 
   return [reaction, sensory, pacing, closing].filter(Boolean);
 }
 
+function hallPlaceName(packet: LegacyNarratorPacket): string {
+  const loc = packet.mustAppear?.location || packet.location || '';
+  if (isBaihuHallLabel(loc)) return '白湖商馆内院';
+  return '五原城';
+}
+
+function hallPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan): string[] {
+  const destName = hallPlaceName(packet);
+  const sensory = {
+    grass_iron: `${destName}这一侧，香和铁锈叠在一起。白湖商馆的灯把馆主的妆照得很端。`,
+    wind_sky: `帘后有风。馆主坐得很稳，像早就等你把话说完。`,
+    mud_body: `靴底还停在${destName}。地是干的，颈上的印记却还烫。`,
+  }[plan.sensory];
+  const pacing = {
+    slow_orient: `在白湖商馆与馆主当面周旋，看清她究竟是谁。你没有先求放行。`,
+    tense_watch: `你把呼吸压低，先看清她坐在哪一侧，再开口。`,
+    steady_breathe: `你先把气沉住。周旋已经落到案对面，伪装比客套更先要看清。`,
+  }[plan.pacing];
+  const reaction = {
+    dazed: `馆主看着你，笑得很浅，一时不让你把她认成哪一路的人。`,
+    answers: `馆主说：“霓龙丝的事，你知道多少？”声音不高，却把问题钉死了。`,
+    silent_grip: `馆主按住案沿，指节稳定，像在确认一件她还不打算说破的事。`,
+  }[plan.companion];
+  const closing = {
+    hold_ground: `伪装被看穿以后，囚禁落到你身上。霓龙丝的问题还在，人还在${destName}。`,
+    look_far: `你把视野放到帘外：没有放行。馆主要的是情报，不是送你出门。`,
+    steady_breath: `你把呼吸重新对齐，先挨过这一问。囚禁是实的，交易还没有落。`,
+  }[plan.closing];
+  return [reaction, sensory, pacing, closing].filter(Boolean);
+}
+
 function legionPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan): string[] {
   const companion = '月霜';
   const place = placeOf(packet);
@@ -429,6 +473,7 @@ export function legacyPilotPreferredSentences(
   if (eventId === 'lcq.event.s02_02') return martyrPreferred(packet, plan);
   if (eventId === 'lcq.event.s02_04') return brandPreferred(packet, plan);
   if (eventId === 'lcq.event.s02_05') return ambushPreferred(packet, plan);
+  if (eventId === 'lcq.event.s02_06') return hallPreferred(packet, plan);
   return openingPreferred(packet, plan);
 }
 
@@ -698,6 +743,36 @@ function ambushPool(packet: LegacyNarratorPacket): string[] {
   ];
 }
 
+function hallPool(packet: LegacyNarratorPacket): string[] {
+  const destName = hallPlaceName(packet);
+  return [
+    `在白湖商馆与馆主当面周旋，看清她究竟是谁。`,
+    `${destName}这一侧灯火压得很低。案对面坐着馆主。`,
+    `你没有先求放行。周旋在前，出门在后。`,
+    `馆主的妆很端。端的下面另有一层。`,
+    `你把能确定的事过了一遍：地是${destName}，人是馆主，要问的是霓龙丝。`,
+    `霓龙丝三个字落在案上。你没有立刻答。`,
+    `伪装被看穿时，她的笑收了一寸。`,
+    `囚禁不是一句话。帘落下，出口被挡住。`,
+    `你没有把囚禁改写成合作。交易还没有落。`,
+    `她追问来路。你只把已经落到眼前的事实说完。`,
+    `印记还烫着。馆里的香盖不住铁腥。`,
+    `你低声说：“我不是来谈价钱的。”没有人接这句话当成交。`,
+    `帘外有人走过，又停下。你仍在${destName}。`,
+    `你把一只手按在膝上，另一只手空着，不伸向门。`,
+    `馆主要的是情报。你先看清这一点。`,
+    `你没有迈出门槛。这一息还在问，不在走。`,
+    `灯火在杯沿上跳。你看见自己的手还在微微发颤。`,
+    `她把问题重复了一遍。霓龙丝仍在桌上。`,
+    `你把呼吸重新对齐：识破了，被囚了，问还在。`,
+    `靴底仍在${destName}。你没有把后一截馆外的路提前走完。`,
+    `案对面的人还坐着。你还跪着。`,
+    `你没有去翻她的名。眼下只处理当面这一问。`,
+    `香更浓了。你用这个事实走：人还在，问还在，门还关着。`,
+    `你让她把顺序钉死：先问，后囚。出门不在这一息。`,
+  ];
+}
+
 function legionPool(packet: LegacyNarratorPacket): string[] {
   const companion = '月霜';
   const place = placeOf(packet);
@@ -835,6 +910,7 @@ export function legacyPilotSafeSentencePool(packet: LegacyNarratorPacket): strin
   if (eventId === 'lcq.event.s02_02') return martyrPool(packet);
   if (eventId === 'lcq.event.s02_04') return brandPool(packet);
   if (eventId === 'lcq.event.s02_05') return ambushPool(packet);
+  if (eventId === 'lcq.event.s02_06') return hallPool(packet);
   return openingPool(packet);
 }
 

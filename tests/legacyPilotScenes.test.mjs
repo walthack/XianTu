@@ -252,7 +252,38 @@ test('incomplete scene contracts fail closed; s01_06 requires 月霜', async () 
       receipts: { move: false, casualty: false },
     })), false, fake);
   }
-  assert.equal(acceptLegacyPilotScene(basePacket({ eventId: 'lcq.event.s02_06', present: [] })), false);
+  assert.equal(isLegacyPilotEventId('lcq.event.s02_06'), true);
+  assert.deepEqual(filterLegacyPilotEventCharacterNames('lcq.event.s02_06', ['苏妲己', '凝羽']), []);
+  assert.equal(acceptLegacyPilotScene(basePacket({
+    eventId: 'lcq.event.s02_06',
+    location: '中州·五原城',
+    present: [],
+    presentActors: [],
+    mustAppear: { location: '中州·五原城', present: [], objective: '在白湖商馆与馆主当面周旋，看清她究竟是谁' },
+    receipts: { move: false, casualty: false },
+  })), true);
+  assert.equal(acceptLegacyPilotScene(basePacket({
+    eventId: 'lcq.event.s02_06',
+    location: '中州·五原·白湖商馆内院',
+    present: [],
+    mustAppear: { location: '中州·五原·白湖商馆内院', present: [], objective: '在白湖商馆与馆主当面周旋，看清她究竟是谁' },
+    receipts: { move: false, casualty: false },
+  })), true);
+  assert.equal(acceptLegacyPilotScene(basePacket({
+    eventId: 'lcq.event.s02_06',
+    location: '中州·五原城',
+    present: ['苏妲己'],
+    mustAppear: { location: '中州·五原城', present: ['苏妲己'], objective: '在白湖商馆与馆主当面周旋，看清她究竟是谁' },
+    receipts: { move: false, casualty: false },
+  })), false);
+  assert.equal(acceptLegacyPilotScene(basePacket({
+    eventId: 'lcq.event.s02_06',
+    location: '中州·五原城',
+    present: [],
+    mustAppear: { location: '中州·五原·白湖商馆内院', present: [], objective: '在白湖商馆与馆主当面周旋，看清她究竟是谁' },
+    receipts: { move: false, casualty: false },
+  })), false);
+  assert.equal(acceptLegacyPilotScene(basePacket({ eventId: 'lcq.event.ningyu_enters_gamble', present: [] })), false);
   assert.equal(planLegacyNarrativePilot({
     saveData: {},
     eventAction: { source: 'event_engine', eventId: 'lcq.event.s02_01' },
@@ -385,6 +416,18 @@ test('each expanded scene uses its own local variants, not opening stock', async
     publicFacts: ['中州·五原城', '地牢'],
     receipts: { move: false, casualty: false },
   });
+  const hall = basePacket({
+    eventId: 'lcq.event.s02_06',
+    location: '中州·五原城',
+    present: [],
+    presentActors: [],
+    action: '看清她究竟是谁',
+    currentObjective: '在白湖商馆与馆主当面周旋，看清她究竟是谁',
+    mustAppear: { location: '中州·五原城', present: [], objective: '在白湖商馆与馆主当面周旋，看清她究竟是谁' },
+    mustNotAppear: ['神兵'],
+    publicFacts: ['中州·五原城', '白湖商馆', '霓龙丝'],
+    receipts: { move: false, casualty: false },
+  });
 
   assert.equal(acceptLegacyPilotScene(danger), true);
   assert.equal(acceptLegacyPilotScene(interact), true);
@@ -396,8 +439,9 @@ test('each expanded scene uses its own local variants, not opening stock', async
   assert.equal(acceptLegacyPilotScene(martyr), true);
   assert.equal(acceptLegacyPilotScene(brand), true);
   assert.equal(acceptLegacyPilotScene(ambush), true);
+  assert.equal(acceptLegacyPilotScene(hall), true);
 
-  for (const packet of [danger, interact, progress, arrive, frost, mandate, legion, martyr, brand, ambush]) {
+  for (const packet of [danger, interact, progress, arrive, frost, mandate, legion, martyr, brand, ambush, hall]) {
     const text = composeLegacyNarrativeFromPlan(packet);
     const check = validateLegacyVisibleNarrative(text, packet);
     assert.equal(check.valid, true, `${packet.eventId}: ${check.issues.join(';')}\n${text}`);
@@ -547,6 +591,26 @@ test('each expanded scene uses its own local variants, not opening stock', async
           assert.equal(text.includes('戈龙'), false, text);
           assert.equal(text.includes('孙疤脸'), false, text);
           assert.match(text, /伏击|地牢/);
+        }
+      }
+    }
+  }
+  const hallText = composeLegacyNarrativeFromPlan(hall);
+  assert.match(hallText, /白湖商馆|馆主/);
+  assert.match(hallText, /霓龙丝/);
+  assert.match(hallText, /囚禁|伪装/);
+  assert.equal(hallText.includes('苏妲己'), false);
+  assert.equal(hallText.includes('凝羽'), false);
+  assert.equal(hallText.includes('脱身'), false);
+  assert.equal(/未结算|回执|合同/.test(hallText), false, hallText);
+  for (const pacing of LEGACY_RENDER_PACING) {
+    for (const sensory of LEGACY_RENDER_SENSORY) {
+      for (const companion of LEGACY_RENDER_COMPANION) {
+        for (const closing of LEGACY_RENDER_CLOSING) {
+          const text = composeLegacyNarrativeFromPlan(hall, { pacing, sensory, companion, closing });
+          assert.equal(text.includes('苏妲己'), false, text);
+          assert.equal(text.includes('凝羽'), false, text);
+          assert.equal(text.includes('脱身'), false, text);
         }
       }
     }
