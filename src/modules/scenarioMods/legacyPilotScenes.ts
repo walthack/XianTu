@@ -14,6 +14,7 @@ export const LEGACY_NARRATIVE_PILOT_EVENT_IDS = [
   'lcq.event.s02_04',
   'lcq.event.s02_05',
   'lcq.event.s02_06',
+  'lcq.event.ningyu_enters_gamble',
 ] as const;
 
 export type LegacyPilotEventId = (typeof LEGACY_NARRATIVE_PILOT_EVENT_IDS)[number];
@@ -68,6 +69,7 @@ const S02_02_CAST = ['王哲', '月霜'] as const;
 /** relatedCharacterIds that may force-present. Physical extras still fail accept. */
 export function filterLegacyPilotEventCharacterNames(eventId: string | undefined, names: string[]): string[] {
   if (eventId === 'lcq.event.s02_06') return [];
+  if (eventId === 'lcq.event.ningyu_enters_gamble') return names.filter(name => name === '凝羽');
   if (eventId !== 'lcq.event.s02_02') return names;
   return names.filter(name => (S02_02_CAST as readonly string[]).includes(name));
 }
@@ -116,6 +118,12 @@ export function acceptLegacyPilotScene(packet: LegacyNarratorPacket): boolean {
   }
   if (eventId === 'lcq.event.s02_06') {
     if (names.length !== 0) return false;
+    const atCity = isWuyuanCityLabel(packet.location) && isWuyuanCityLabel(packet.mustAppear?.location);
+    const atHall = isBaihuHallLabel(packet.location) && isBaihuHallLabel(packet.mustAppear?.location);
+    return (atCity || atHall) && packet.receipts?.move === false && packet.receipts?.casualty === false;
+  }
+  if (eventId === 'lcq.event.ningyu_enters_gamble') {
+    if (names.length !== 1 || names[0] !== '凝羽') return false;
     const atCity = isWuyuanCityLabel(packet.location) && isWuyuanCityLabel(packet.mustAppear?.location);
     const atHall = isBaihuHallLabel(packet.location) && isBaihuHallLabel(packet.mustAppear?.location);
     return (atCity || atHall) && packet.receipts?.move === false && packet.receipts?.casualty === false;
@@ -352,6 +360,32 @@ function hallPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan): st
   return [reaction, sensory, pacing, closing].filter(Boolean);
 }
 
+function gambleDebutPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan): string[] {
+  const destName = hallPlaceName(packet);
+  const companion = '凝羽';
+  const sensory = {
+    grass_iron: `${destName}这一侧，赌具和香叠在一起。${companion}被馆主差到案前，甲叶还没暖。`,
+    wind_sky: `帘后有风。${companion}走进来，步子比馆主的笑更短。`,
+    mud_body: `靴底还停在${destName}。石板是硬的，${companion}停在你能看见、也还能回话的位置。`,
+  }[plan.sensory];
+  const pacing = {
+    slow_orient: `凝羽突然入局，当面看清她此刻的处境并回应。你没有把后话提前说完。`,
+    tense_watch: `你把呼吸压低，先看清她是被差进来的，再开口。`,
+    steady_breathe: `你先把气沉住。入局已经落到眼前，处境比来历更先要认。`,
+  }[plan.pacing];
+  const reaction = {
+    dazed: `${companion}站在案前，一时说不清自己愿不愿意上这一桌。`,
+    answers: `${companion}低声说：“是馆主要我上场。”声音短，像把差遣说完就不肯再补。`,
+    silent_grip: `${companion}的手按在刀柄上，没有拔，只让你看见她是被推进来的。`,
+  }[plan.companion];
+  const closing = {
+    hold_ground: `你当面应了一句。认的是她此刻被差遣进赌局，不是后面那些还没落到桌上的事。`,
+    look_far: `你让${companion}停在肩侧，自己把视野放到馆主那一侧：差遣是她下的，入局是这一拍。`,
+    steady_breath: `你把呼吸重新对齐，先回应登场的${companion}。人还在${destName}，契还没有落到手上。`,
+  }[plan.closing];
+  return [reaction, sensory, pacing, closing].filter(Boolean);
+}
+
 function legionPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan): string[] {
   const companion = '月霜';
   const place = placeOf(packet);
@@ -474,6 +508,7 @@ export function legacyPilotPreferredSentences(
   if (eventId === 'lcq.event.s02_04') return brandPreferred(packet, plan);
   if (eventId === 'lcq.event.s02_05') return ambushPreferred(packet, plan);
   if (eventId === 'lcq.event.s02_06') return hallPreferred(packet, plan);
+  if (eventId === 'lcq.event.ningyu_enters_gamble') return gambleDebutPreferred(packet, plan);
   return openingPreferred(packet, plan);
 }
 
@@ -773,6 +808,37 @@ function hallPool(packet: LegacyNarratorPacket): string[] {
   ];
 }
 
+function gambleDebutPool(packet: LegacyNarratorPacket): string[] {
+  const destName = hallPlaceName(packet);
+  const companion = '凝羽';
+  return [
+    `凝羽突然入局，当面看清她此刻的处境并回应。`,
+    `${companion}被馆主差到${destName}这一侧。`,
+    `你没有把她认成被卖之人。眼下只认奉命上场。`,
+    `赌具已经摆上。她还站着，没有坐下。`,
+    `你问她愿不愿意。她不答来历，只把差遣说完。`,
+    `馆主没有离席。差遣是当面落下的。`,
+    `你把能确定的事过了一遍：人是${companion}，地是${destName}，事是入局。`,
+    `你当面应了一句。应的是处境，不是后头的输赢。`,
+    `她的目光很硬。像在看这一桌，不是在看逃路。`,
+    `你没有预写后来的经历。登场只到这一息。`,
+    `印记还烫着。她看见了，没有问。`,
+    `你低声说：“我看见你是被差进来的。”她点了下头。`,
+    `帘外有人走过。你仍在${destName}。`,
+    `你让${companion}停在能回话的位置，自己不把桌子掀了。`,
+    `契还没有递过来。你不许自己把未落到手上的字写成已签。`,
+    `她的甲叶轻响。你按这个事实走：人到了，局开了。`,
+    `你没有去翻她的怀。眼下只处理当面这一拍。`,
+    `馆主要她上场。你把这句话听完。`,
+    `你把呼吸重新对齐：入局是真的，来历还不是这一拍的事。`,
+    `靴底仍在${destName}。你没有把后一截赌局提前走完。`,
+    `${companion}的手指在刀柄上停了一停，又松开。`,
+    `你站在能被她看见、也能随时被馆主问的位置。`,
+    `香和铁锈叠在一起。你只守这一息已经落下的登场。`,
+    `你把这一拍交给当面回应，不把未发生的落败写成已得。`,
+  ];
+}
+
 function legionPool(packet: LegacyNarratorPacket): string[] {
   const companion = '月霜';
   const place = placeOf(packet);
@@ -911,6 +977,7 @@ export function legacyPilotSafeSentencePool(packet: LegacyNarratorPacket): strin
   if (eventId === 'lcq.event.s02_04') return brandPool(packet);
   if (eventId === 'lcq.event.s02_05') return ambushPool(packet);
   if (eventId === 'lcq.event.s02_06') return hallPool(packet);
+  if (eventId === 'lcq.event.ningyu_enters_gamble') return gambleDebutPool(packet);
   return openingPool(packet);
 }
 
