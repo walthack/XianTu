@@ -498,6 +498,39 @@ test('incomplete scene contracts fail closed; s01_06 requires 月霜', async () 
     mustAppear: { location: '中州·五原·白湖商馆内院', present: [], objective: '从白湖商馆的死局里脱身，走出五原商馆' },
     receipts: { move: false, casualty: false },
   })), false);
+  const escapeOk = {
+    eventId: 'lcq.event.baihu_shangguan_escape',
+    actionId: 'walk_out_wuyuan_shangguan',
+    location: '中州·五原·白湖商馆门前街',
+    present: [],
+    mustAppear: { location: '中州·五原·白湖商馆门前街', present: [], objective: '从白湖商馆的死局里脱身，走出五原商馆' },
+    receipts: {
+      move: true, casualty: false, moveTo: '中州·五原·白湖商馆门前街',
+      fromZoneId: 'lcq.zone.wuyuan.baihu_hall', toZoneId: 'lcq.zone.wuyuan.baihu_front_street',
+      routeId: 'lcq.route.baihu.exit_front_gate', mode: 'forced', causeEventId: 'lcq.event.baihu_shangguan_escape',
+    },
+  };
+  assert.equal(acceptLegacyPilotScene(basePacket(escapeOk)), true);
+  assert.equal(acceptLegacyPilotScene(basePacket({
+    ...escapeOk,
+    receipts: { ...escapeOk.receipts, mode: 'player' },
+  })), false);
+  assert.equal(acceptLegacyPilotScene(basePacket({
+    ...escapeOk,
+    receipts: { ...escapeOk.receipts, mode: undefined, causeEventId: undefined },
+  })), false);
+  assert.equal(acceptLegacyPilotScene(basePacket({
+    ...escapeOk,
+    receipts: { ...escapeOk.receipts, causeEventId: 'lcq.event.s02_06' },
+  })), false);
+  assert.equal(acceptLegacyPilotScene(basePacket({
+    ...escapeOk,
+    receipts: { ...escapeOk.receipts, fromZoneId: 'lcq.zone.wuyuan.baihu_gate' },
+  })), false);
+  assert.equal(acceptLegacyPilotScene(basePacket({
+    ...escapeOk,
+    receipts: { ...escapeOk.receipts, routeId: 'lcq.route.baihu.hall_to_gate', toZoneId: 'lcq.zone.wuyuan.baihu_gate' },
+  })), false);
   assert.equal(acceptLegacyPilotScene(basePacket({
     eventId: 'lcq.event.baihu_shangguan_escape',
     actionId: 'walk_out_wuyuan_shangguan',

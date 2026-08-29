@@ -210,14 +210,12 @@ export function acceptLegacyPilotScene(packet: LegacyNarratorPacket): boolean {
   if (eventId === 'lcq.event.baihu_shangguan_escape') {
     if (names.length !== 0) return false;
     if (packet.receipts?.casualty === true) return false;
-    if (isWuyuanCityLabel(packet.receipts?.moveTo) && packet.receipts?.move === true && !isBaihuFrontStreetLabel(packet.receipts?.moveTo)) {
-      return false;
-    }
-    const toStreet = packet.receipts?.toZoneId === 'lcq.zone.wuyuan.baihu_front_street'
-      || isBaihuFrontStreetLabel(packet.receipts?.moveTo)
-      || atSameWuyuanLeaf(packet, isBaihuFrontStreetLabel);
-    const forced = packet.receipts?.mode !== 'player' || packet.receipts?.causeEventId === eventId;
-    return toStreet && packet.receipts?.move === true && forced;
+    return packet.receipts?.move === true
+      && packet.receipts?.mode === 'forced'
+      && packet.receipts?.causeEventId === eventId
+      && packet.receipts?.fromZoneId === 'lcq.zone.wuyuan.baihu_hall'
+      && packet.receipts?.toZoneId === 'lcq.zone.wuyuan.baihu_front_street'
+      && packet.receipts?.routeId === 'lcq.route.baihu.exit_front_gate';
   }
   return false;
 }

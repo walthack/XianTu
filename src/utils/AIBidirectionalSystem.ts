@@ -2195,7 +2195,6 @@ ${step1Text}
       ? recordStoryEventStructuredAction(saveData, options.eventAction)
       : undefined;
     if (eventProgress?.attempted) {
-      ensureWuyuanOpenWorldSlice(saveData);
       changes.push({
         key: `世界.状态.剧本模组.eventActionStates.${eventProgress.eventId}`,
         action: eventProgress.completed ? 'event_action_completed' : 'event_action_attempted',
@@ -2795,6 +2794,7 @@ ${step1Text}
 
     const scenarioResult = advanceScenarioRuntime(saveData);
     saveData = scenarioResult.saveData;
+    ensureWuyuanOpenWorldSlice(saveData);
     const runtimeAfterAdvance = (saveData as any)?.世界?.状态?.剧本模组;
     if (
       textContent

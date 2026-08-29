@@ -308,8 +308,11 @@ function projectPlayerPosition(saveData: SaveData, state: OpenWorldSliceRuntime)
 }
 
 function hydrateWuyuanSlice(runtime: RuntimeWithSlice): OpenWorldSliceRuntime {
-  if (runtime.openWorldSlice?.version !== 1 || runtime.openWorldSlice.sliceId !== WUYUAN_OPEN_WORLD_SLICE_ID) {
-    runtime.openWorldSlice = hydrateOpenWorldSliceRuntime(runtime.openWorldSlice, WUYUAN_OPEN_WORLD_DEFINITION);
+  const next = hydrateOpenWorldSliceRuntime(runtime.openWorldSlice, WUYUAN_OPEN_WORLD_DEFINITION);
+  if (runtime.openWorldSlice && runtime.openWorldSlice.sliceId === WUYUAN_OPEN_WORLD_SLICE_ID) {
+    Object.assign(runtime.openWorldSlice, next);
+  } else {
+    runtime.openWorldSlice = next;
   }
   if (!runtime.openWorldSlice.knownZoneIds.includes('lcq.zone.wuyuan.pastry_shop')) {
     runtime.openWorldSlice.knownZoneIds.push('lcq.zone.wuyuan.pastry_shop');
@@ -462,12 +465,15 @@ export function settleWuyuanOpenWorldSelection(saveData: SaveData, selection: Wu
     return settleArriveWuyuanMarket(saveData, selection);
   }
   const runtime = runtimeOf(saveData);
-  const state = ensureWuyuanOpenWorldSlice(saveData);
-  if (!runtime || !state || selection?.source !== 'open_world_engine') {
+  if (!runtime || selection?.source !== 'open_world_engine' || !ensureWuyuanOpenWorldSlice(saveData)) {
     return { settled: false, idempotent: false, reason: 'inactive_slice', settledFacts: [] };
   }
   const current = getWuyuanOpenWorldSelections(saveData).find(item =>
     item.kind === selection.kind && item.identityId === selection.identityId && item.receiptId === selection.receiptId);
+  const state = runtime.openWorldSlice;
+  if (!state) {
+    return { settled: false, idempotent: false, reason: 'inactive_slice', settledFacts: [] };
+  }
   if (!current) {
     const already = [...state.travelReceipts, ...state.noticeReceipts, ...state.actionReceipts]
       .some(item => item.receiptId === selection.receiptId);
