@@ -210,4 +210,14 @@ test('离场名单认运行时 flag 编码（字符串布尔、嵌套、嵌套�
   const oldStage02 = { modId: 'lcq.stage_02', flags: {}, completedEventIds: [] };
   assert.deepEqual(departedPresentNames(oldStage02), ['段强']);
   assert.equal(focused(oldStage02).includes('段强'), false);
+  assert.equal(departedPresentNames(oldStage02).includes('王哲'), false);
+
+  const oldStage03 = { modId: 'lcq.stage_03', flags: {}, completedEventIds: [] };
+  assert.deepEqual(departedPresentNames(oldStage03).sort(), ['段强', '王哲']);
+  const focusedWang = focusedNpcNamesFromState({
+    角色: { 位置: { 描述: PLAYER } },
+    社交: { 关系: { 王哲: { 名字: '王哲', 当前位置: { 描述: PLAYER }, 实时关注: true, 当前外貌状态: '状态正常' } } },
+    世界: { 状态: { 剧本模组: oldStage03 } },
+  });
+  assert.equal(focusedWang.includes('王哲'), false);
 });

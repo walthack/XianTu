@@ -151,6 +151,12 @@ function qingyuStagePastOpening(runtime: DepartedRuntime | null | undefined): bo
   return String(runtime?.prevStageId || '') === 'lcq.stage_01';
 }
 
+function qingyuStagePastWangZhe(runtime: DepartedRuntime | null | undefined): boolean {
+  const modId = String(runtime?.modId || '');
+  if (modId.startsWith('lcq.stage_') && modId !== 'lcq.stage_01' && modId !== 'lcq.stage_02') return true;
+  return String(runtime?.prevStageId || '') === 'lcq.stage_02';
+}
+
 /** Characters who have already left the living present cast. */
 export function departedPresentNames(runtime: DepartedRuntime | null | undefined): string[] {
   const names: string[] = [];
@@ -160,7 +166,7 @@ export function departedPresentNames(runtime: DepartedRuntime | null | undefined
     if (text) names.push(text);
   }
   if (eventIsCompleted(runtime, 'lcq.event.s01_02') || qingyuStagePastOpening(runtime)) names.push('段强');
-  if (eventIsCompleted(runtime, 'lcq.event.s02_02')) names.push('王哲');
+  if (eventIsCompleted(runtime, 'lcq.event.s02_02') || qingyuStagePastWangZhe(runtime)) names.push('王哲');
   return [...new Set(names)];
 }
 
