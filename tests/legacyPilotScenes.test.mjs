@@ -123,7 +123,13 @@ test('incomplete scene contracts fail closed; s01_06 requires 月霜', async () 
 });
 
 test('each expanded scene uses its own local variants, not opening stock', async () => {
-  const { composeLegacyNarrativeFromPlan } = await loadTs('../src/modules/scenarioMods/legacyRenderPlan.ts');
+  const {
+    composeLegacyNarrativeFromPlan,
+    LEGACY_RENDER_PACING,
+    LEGACY_RENDER_SENSORY,
+    LEGACY_RENDER_COMPANION,
+    LEGACY_RENDER_CLOSING,
+  } = await loadTs('../src/modules/scenarioMods/legacyRenderPlan.ts');
   const { usesOpeningStockSentences, acceptLegacyPilotScene } = await loadTs(
     '../src/modules/scenarioMods/legacyPilotScenes.ts',
   );
@@ -264,6 +270,17 @@ test('each expanded scene uses its own local variants, not opening stock', async
   assert.match(legionText, /帅帐/);
   assert.equal(legion.receipts.move, false);
   assert.equal(/走进了|冲出帅帐|按进泥/.test(legionText), false, legionText);
+  for (const pacing of LEGACY_RENDER_PACING) {
+    for (const sensory of LEGACY_RENDER_SENSORY) {
+      for (const companion of LEGACY_RENDER_COMPANION) {
+        for (const closing of LEGACY_RENDER_CLOSING) {
+          const text = composeLegacyNarrativeFromPlan(legion, { pacing, sensory, companion, closing });
+          assert.equal(/未结算|回执|合同/.test(text), false, text);
+          assert.match(text, /帅帐/);
+        }
+      }
+    }
+  }
   assert.equal(legionText.includes('段强'), false);
   assert.equal(legionText.includes('这不是飞机'), false);
   assert.equal(legionText.includes('寒毒正在失控'), false);

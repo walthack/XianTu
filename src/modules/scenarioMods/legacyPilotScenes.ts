@@ -183,7 +183,7 @@ function legionPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan): 
   }[plan.sensory];
   const pacing = {
     slow_orient: `你没有冲出${place}。在秦军与罗马军的交战中求生并观察战局。`,
-    tense_watch: `你把呼吸压低，从帐口盯住右刺那一侧，不让${companion}迈出未结算的那一步。`,
+    tense_watch: `你把呼吸压低，从帐口盯住右刺那一侧，不让${companion}迈过帐门。`,
     steady_breathe: `你先把气沉住，和${companion}停在还能看见溃势、却还在${place}的位置。`,
   }[plan.pacing];
   const reaction = {
@@ -474,7 +474,7 @@ function legionPool(packet: LegacyNarratorPacket): string[] {
     `${companion}的目光很硬。她看的是阵，不是逃路。`,
     `标枪的第二轮比第一轮更齐。你把膝盖在门槛内侧跪稳。`,
     `方阵的后排开始往后踏。这不是整顿，是溃。`,
-    `你没有迈出未结算的那一步。矛是别人的，命是自己的。`,
+    `你没有迈过帐门。矛是别人的，命是自己的。`,
     `远处喊杀换了调。你只守${place}这一小段能看见的边界。`,
     `你让${companion}停在肩侧，自己从帐口去看右刺还在不在推进。`,
     `秦军溃散已经落下来。你把这一息看完，不把未发生的胜写成已得。`,
