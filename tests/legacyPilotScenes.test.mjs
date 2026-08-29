@@ -307,7 +307,24 @@ test('incomplete scene contracts fail closed; s01_06 requires 月霜', async () 
     mustAppear: { location: '中州·五原城', present: [], objective: '凝羽突然入局，当面看清她此刻的处境并回应' },
     receipts: { move: false, casualty: false },
   })), false);
-  assert.equal(acceptLegacyPilotScene(basePacket({ eventId: 'lcq.event.sudaji_south_pact', present: ['凝羽'] })), false);
+  assert.equal(isLegacyPilotEventId('lcq.event.sudaji_south_pact'), true);
+  assert.deepEqual(filterLegacyPilotEventCharacterNames('lcq.event.sudaji_south_pact', ['苏妲己']), []);
+  assert.equal(acceptLegacyPilotScene(basePacket({
+    eventId: 'lcq.event.sudaji_south_pact',
+    location: '中州·五原城',
+    present: [],
+    presentActors: [],
+    mustAppear: { location: '中州·五原城', present: [], objective: '面对苏妲己就霓龙丝一事的逼问，谈清眼下能换到的期限' },
+    receipts: { move: false, casualty: false },
+  })), true);
+  assert.equal(acceptLegacyPilotScene(basePacket({
+    eventId: 'lcq.event.sudaji_south_pact',
+    location: '中州·五原城',
+    present: ['苏妲己'],
+    mustAppear: { location: '中州·五原城', present: ['苏妲己'], objective: '面对苏妲己就霓龙丝一事的逼问，谈清眼下能换到的期限' },
+    receipts: { move: false, casualty: false },
+  })), false);
+  assert.equal(acceptLegacyPilotScene(basePacket({ eventId: 'lcq.event.gamble_bond_signed', present: [] })), false);
   assert.equal(planLegacyNarrativePilot({
     saveData: {},
     eventAction: { source: 'event_engine', eventId: 'lcq.event.s02_01' },
@@ -464,6 +481,18 @@ test('each expanded scene uses its own local variants, not opening stock', async
     publicFacts: ['中州·五原城', '凝羽在场'],
     receipts: { move: false, casualty: false },
   });
+  const pact = basePacket({
+    eventId: 'lcq.event.sudaji_south_pact',
+    location: '中州·五原城',
+    present: [],
+    presentActors: [],
+    action: '当面订下三个月南荒之约',
+    currentObjective: '面对苏妲己就霓龙丝一事的逼问，谈清眼下能换到的期限',
+    mustAppear: { location: '中州·五原城', present: [], objective: '面对苏妲己就霓龙丝一事的逼问，谈清眼下能换到的期限' },
+    mustNotAppear: ['神兵'],
+    publicFacts: ['中州·五原城', '霓龙丝', '三个月'],
+    receipts: { move: false, casualty: false },
+  });
 
   assert.equal(acceptLegacyPilotScene(danger), true);
   assert.equal(acceptLegacyPilotScene(interact), true);
@@ -477,8 +506,9 @@ test('each expanded scene uses its own local variants, not opening stock', async
   assert.equal(acceptLegacyPilotScene(ambush), true);
   assert.equal(acceptLegacyPilotScene(hall), true);
   assert.equal(acceptLegacyPilotScene(debut), true);
+  assert.equal(acceptLegacyPilotScene(pact), true);
 
-  for (const packet of [danger, interact, progress, arrive, frost, mandate, legion, martyr, brand, ambush, hall, debut]) {
+  for (const packet of [danger, interact, progress, arrive, frost, mandate, legion, martyr, brand, ambush, hall, debut, pact]) {
     const text = composeLegacyNarrativeFromPlan(packet);
     const check = validateLegacyVisibleNarrative(text, packet);
     assert.equal(check.valid, true, `${packet.eventId}: ${check.issues.join(';')}\n${text}`);
@@ -666,6 +696,23 @@ test('each expanded scene uses its own local variants, not opening stock', async
           assert.equal(text.includes('苏妲己'), false, text);
           assert.equal(text.includes('卖身契'), false, text);
           assert.match(text, /凝羽/);
+        }
+      }
+    }
+  }
+  const pactText = composeLegacyNarrativeFromPlan(pact);
+  assert.match(pactText, /三个月|期限/);
+  assert.match(pactText, /霓龙丝/);
+  assert.match(pactText, /南荒/);
+  assert.equal(pactText.includes('苏妲己'), false);
+  assert.equal(/未结算|回执|合同/.test(pactText), false, pactText);
+  for (const pacing of LEGACY_RENDER_PACING) {
+    for (const sensory of LEGACY_RENDER_SENSORY) {
+      for (const companion of LEGACY_RENDER_COMPANION) {
+        for (const closing of LEGACY_RENDER_CLOSING) {
+          const text = composeLegacyNarrativeFromPlan(pact, { pacing, sensory, companion, closing });
+          assert.equal(text.includes('苏妲己'), false, text);
+          assert.match(text, /三个月|期限|霓龙丝/);
         }
       }
     }

@@ -15,6 +15,7 @@ export const LEGACY_NARRATIVE_PILOT_EVENT_IDS = [
   'lcq.event.s02_05',
   'lcq.event.s02_06',
   'lcq.event.ningyu_enters_gamble',
+  'lcq.event.sudaji_south_pact',
 ] as const;
 
 export type LegacyPilotEventId = (typeof LEGACY_NARRATIVE_PILOT_EVENT_IDS)[number];
@@ -68,7 +69,7 @@ const S02_02_CAST = ['王哲', '月霜'] as const;
 
 /** relatedCharacterIds that may force-present. Physical extras still fail accept. */
 export function filterLegacyPilotEventCharacterNames(eventId: string | undefined, names: string[]): string[] {
-  if (eventId === 'lcq.event.s02_06') return [];
+  if (eventId === 'lcq.event.s02_06' || eventId === 'lcq.event.sudaji_south_pact') return [];
   if (eventId === 'lcq.event.ningyu_enters_gamble') return names.filter(name => name === '凝羽');
   if (eventId !== 'lcq.event.s02_02') return names;
   return names.filter(name => (S02_02_CAST as readonly string[]).includes(name));
@@ -124,6 +125,12 @@ export function acceptLegacyPilotScene(packet: LegacyNarratorPacket): boolean {
   }
   if (eventId === 'lcq.event.ningyu_enters_gamble') {
     if (names.length !== 1 || names[0] !== '凝羽') return false;
+    const atCity = isWuyuanCityLabel(packet.location) && isWuyuanCityLabel(packet.mustAppear?.location);
+    const atHall = isBaihuHallLabel(packet.location) && isBaihuHallLabel(packet.mustAppear?.location);
+    return (atCity || atHall) && packet.receipts?.move === false && packet.receipts?.casualty === false;
+  }
+  if (eventId === 'lcq.event.sudaji_south_pact') {
+    if (names.length !== 0) return false;
     const atCity = isWuyuanCityLabel(packet.location) && isWuyuanCityLabel(packet.mustAppear?.location);
     const atHall = isBaihuHallLabel(packet.location) && isBaihuHallLabel(packet.mustAppear?.location);
     return (atCity || atHall) && packet.receipts?.move === false && packet.receipts?.casualty === false;
@@ -386,6 +393,31 @@ function gambleDebutPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPl
   return [reaction, sensory, pacing, closing].filter(Boolean);
 }
 
+function southPactPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan): string[] {
+  const destName = hallPlaceName(packet);
+  const sensory = {
+    grass_iron: `${destName}案上仍是霓龙丝三个字。香更浓，馆主把期限按在你颈上那块还烫的皮旁边。`,
+    wind_sky: `帘不透风。馆主把三个月说得很短，像把活路和炮烙放在同一只杯里。`,
+    mud_body: `靴底还停在${destName}。你的膝抵着石，印记还烫，期限还没有落。`,
+  }[plan.sensory];
+  const pacing = {
+    slow_orient: `面对馆主就霓龙丝一事的逼问，谈清眼下能换到的期限。你没有去碰那条立刻动手的路。`,
+    tense_watch: `你把呼吸压低，先看清三个月和炮烙各落在哪一侧，再开口。`,
+    steady_breathe: `你先把气沉住。线索可以换期限，现在动手的那条你不接。`,
+  }[plan.pacing];
+  const reaction = {
+    dazed: `馆主看着你，等你把霓龙丝的线索交出来，一时不让你把活路说成已经到手。`,
+    answers: `馆主说：“三个月。南荒。采不到，炮烙。”声音不高，却把约定钉死了。`,
+    silent_grip: `馆主按住案沿，指节稳定，像在确认你敢不敢接这三个月。`,
+  }[plan.companion];
+  const closing = {
+    hold_ground: `你把三个月南荒之约接住。霓龙丝是由头，炮烙是后手，人还在${destName}。`,
+    look_far: `你让约先落在案上，自己把视野放到帘外：出门是后一截，这一拍只把期限说死。`,
+    steady_breath: `你把呼吸重新对齐，先把三个月订死。现在动手的那条没有落到你身上。`,
+  }[plan.closing];
+  return [reaction, sensory, pacing, closing].filter(Boolean);
+}
+
 function legionPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan): string[] {
   const companion = '月霜';
   const place = placeOf(packet);
@@ -509,6 +541,7 @@ export function legacyPilotPreferredSentences(
   if (eventId === 'lcq.event.s02_05') return ambushPreferred(packet, plan);
   if (eventId === 'lcq.event.s02_06') return hallPreferred(packet, plan);
   if (eventId === 'lcq.event.ningyu_enters_gamble') return gambleDebutPreferred(packet, plan);
+  if (eventId === 'lcq.event.sudaji_south_pact') return southPactPreferred(packet, plan);
   return openingPreferred(packet, plan);
 }
 
@@ -839,6 +872,36 @@ function gambleDebutPool(packet: LegacyNarratorPacket): string[] {
   ];
 }
 
+function southPactPool(packet: LegacyNarratorPacket): string[] {
+  const destName = hallPlaceName(packet);
+  return [
+    `面对馆主就霓龙丝一事的逼问，谈清眼下能换到的期限。`,
+    `${destName}案上仍是那三个字。馆主等你开口。`,
+    `你不当面硬拼。线索换三个月，活路先落在期限上。`,
+    `三个月内前往南荒采集霓龙丝。这句话被钉死。`,
+    `逾期是炮烙。你听见了，没有去接现在动手的那条。`,
+    `你把能确定的事过了一遍：地是${destName}，问是霓龙丝，约是三个月。`,
+    `馆主点了下头。那一下把南荒之约说死。`,
+    `你低声应了一句。应的是期限，不是已经出门。`,
+    `印记还烫着。约比烙更长，也更窄。`,
+    `帘外没有放行。你仍在${destName}。`,
+    `你把一只手按在膝上，不伸向门。`,
+    `南下的由头是这一约。由头还在案上。`,
+    `你没有把后一截采丝提前走完。`,
+    `炮烙停在口头。这一拍没有落到皮肉上。`,
+    `你让她把顺序钉死：先约，后走。走不在这一息。`,
+    `香更浓了。你按这个事实走：约在，人在，门还关着。`,
+    `你把呼吸重新对齐：三个月是真的，现在动手不是。`,
+    `靴底仍在${destName}。你没有迈出馆门。`,
+    `霓龙丝产地只点到能换期限的程度。`,
+    `你没有去翻她的名。眼下只处理当面这一约。`,
+    `灯火在杯沿上跳。你看见自己的手还在微微发颤。`,
+    `约已经说死。你把这一拍交给期限，不把未发生的南荒路写成已走。`,
+    `馆主把杯放下。那一下比任何安慰都短。`,
+    `你站在能被看见、也能随时被再问的位置。`,
+  ];
+}
+
 function legionPool(packet: LegacyNarratorPacket): string[] {
   const companion = '月霜';
   const place = placeOf(packet);
@@ -978,6 +1041,7 @@ export function legacyPilotSafeSentencePool(packet: LegacyNarratorPacket): strin
   if (eventId === 'lcq.event.s02_05') return ambushPool(packet);
   if (eventId === 'lcq.event.s02_06') return hallPool(packet);
   if (eventId === 'lcq.event.ningyu_enters_gamble') return gambleDebutPool(packet);
+  if (eventId === 'lcq.event.sudaji_south_pact') return southPactPool(packet);
   return openingPool(packet);
 }
 
