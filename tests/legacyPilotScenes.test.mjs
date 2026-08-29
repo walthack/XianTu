@@ -204,7 +204,48 @@ test('incomplete scene contracts fail closed; s01_06 requires 月霜', async () 
       receipts: { move: true, casualty: false, moveTo: fake },
     })), false, fake);
   }
-  assert.equal(acceptLegacyPilotScene(basePacket({ eventId: 'lcq.event.s02_05', present: ['月霜'] })), false);
+  assert.equal(isLegacyPilotEventId('lcq.event.s02_05'), true);
+  assert.ok(LEGACY_NARRATIVE_PILOT_EVENT_IDS.includes('lcq.event.s02_05'));
+  assert.equal(acceptLegacyPilotScene(basePacket({
+    eventId: 'lcq.event.s02_05',
+    location: '中州·五原城',
+    present: [],
+    presentActors: [],
+    mustAppear: { location: '中州·五原城', present: [], objective: '地牢里有人靠近你，先判断她要带你去哪' },
+    receipts: { move: false, casualty: false },
+  })), true);
+  assert.equal(acceptLegacyPilotScene(basePacket({
+    eventId: 'lcq.event.s02_05',
+    location: '中州·五原·白湖商馆水牢',
+    present: [],
+    presentActors: [],
+    mustAppear: { location: '中州·五原·白湖商馆水牢', present: [], objective: '地牢里有人靠近你，先判断她要带你去哪' },
+    receipts: { move: false, casualty: false },
+  })), true);
+  assert.equal(acceptLegacyPilotScene(basePacket({
+    eventId: 'lcq.event.s02_05',
+    location: '中州·五原城',
+    present: ['月霜'],
+    mustAppear: { location: '中州·五原城', present: ['月霜'], objective: '地牢里有人靠近你，先判断她要带你去哪' },
+    receipts: { move: false, casualty: false },
+  })), false);
+  assert.equal(acceptLegacyPilotScene(basePacket({
+    eventId: 'lcq.event.s02_05',
+    location: '中州·五原城',
+    present: [],
+    mustAppear: { location: '中州·五原城', present: [], objective: '地牢里有人靠近你，先判断她要带你去哪' },
+    receipts: { move: true, casualty: false, moveTo: '中州·五原·白湖商馆内院' },
+  })), false);
+  for (const fake of ['白湖商馆内院', '点心铺', '中州·帅帐', '五原商馆']) {
+    assert.equal(acceptLegacyPilotScene(basePacket({
+      eventId: 'lcq.event.s02_05',
+      location: fake,
+      present: [],
+      mustAppear: { location: fake, present: [], objective: '地牢里有人靠近你，先判断她要带你去哪' },
+      receipts: { move: false, casualty: false },
+    })), false, fake);
+  }
+  assert.equal(acceptLegacyPilotScene(basePacket({ eventId: 'lcq.event.s02_06', present: [] })), false);
   assert.equal(planLegacyNarrativePilot({
     saveData: {},
     eventAction: { source: 'event_engine', eventId: 'lcq.event.s02_01' },
@@ -325,6 +366,18 @@ test('each expanded scene uses its own local variants, not opening stock', async
     publicFacts: ['中州·帅帐', '中州·五原城', '奴隶印记'],
     receipts: { move: true, casualty: false, moveTo: '中州·五原城' },
   });
+  const ambush = basePacket({
+    eventId: 'lcq.event.s02_05',
+    location: '中州·五原城',
+    present: [],
+    presentActors: [],
+    action: '判断她要带你去哪',
+    currentObjective: '地牢里有人靠近你，先判断她要带你去哪',
+    mustAppear: { location: '中州·五原城', present: [], objective: '地牢里有人靠近你，先判断她要带你去哪' },
+    mustNotAppear: ['神兵'],
+    publicFacts: ['中州·五原城', '地牢'],
+    receipts: { move: false, casualty: false },
+  });
 
   assert.equal(acceptLegacyPilotScene(danger), true);
   assert.equal(acceptLegacyPilotScene(interact), true);
@@ -335,8 +388,9 @@ test('each expanded scene uses its own local variants, not opening stock', async
   assert.equal(acceptLegacyPilotScene(legion), true);
   assert.equal(acceptLegacyPilotScene(martyr), true);
   assert.equal(acceptLegacyPilotScene(brand), true);
+  assert.equal(acceptLegacyPilotScene(ambush), true);
 
-  for (const packet of [danger, interact, progress, arrive, frost, mandate, legion, martyr, brand]) {
+  for (const packet of [danger, interact, progress, arrive, frost, mandate, legion, martyr, brand, ambush]) {
     const text = composeLegacyNarrativeFromPlan(packet);
     const check = validateLegacyVisibleNarrative(text, packet);
     assert.equal(check.valid, true, `${packet.eventId}: ${check.issues.join(';')}\n${text}`);
@@ -463,6 +517,29 @@ test('each expanded scene uses its own local variants, not opening stock', async
           assert.equal(text.includes('孙疤脸'), false, text);
           assert.equal(text.includes('王哲'), false, text);
           assert.match(text, /五原城/);
+        }
+      }
+    }
+  }
+  const ambushText = composeLegacyNarrativeFromPlan(ambush);
+  assert.match(ambushText, /地牢|牢房/);
+  assert.match(ambushText, /靠近|带你去哪/);
+  assert.match(ambushText, /伏击/);
+  assert.equal(ambushText.includes('阿姬曼'), false);
+  assert.equal(ambushText.includes('戈龙'), false);
+  assert.equal(ambushText.includes('孙疤脸'), false);
+  assert.equal(ambushText.includes('王哲'), false);
+  assert.equal(/身亡|死亡|气绝/.test(ambushText), false, ambushText);
+  assert.equal(/未结算|回执|合同/.test(ambushText), false, ambushText);
+  for (const pacing of LEGACY_RENDER_PACING) {
+    for (const sensory of LEGACY_RENDER_SENSORY) {
+      for (const companion of LEGACY_RENDER_COMPANION) {
+        for (const closing of LEGACY_RENDER_CLOSING) {
+          const text = composeLegacyNarrativeFromPlan(ambush, { pacing, sensory, companion, closing });
+          assert.equal(text.includes('阿姬曼'), false, text);
+          assert.equal(text.includes('戈龙'), false, text);
+          assert.equal(text.includes('孙疤脸'), false, text);
+          assert.match(text, /伏击|地牢/);
         }
       }
     }

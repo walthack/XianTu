@@ -12,6 +12,7 @@ export const LEGACY_NARRATIVE_PILOT_EVENT_IDS = [
   'lcq.event.s02_03',
   'lcq.event.s02_02',
   'lcq.event.s02_04',
+  'lcq.event.s02_05',
 ] as const;
 
 export type LegacyPilotEventId = (typeof LEGACY_NARRATIVE_PILOT_EVENT_IDS)[number];
@@ -49,6 +50,15 @@ function isQingyuCommandTent(value: unknown): boolean {
 function isWuyuanCityLabel(value: unknown): boolean {
   const text = String(value || '').trim();
   return text === '五原城' || /(^|[·])五原城$/.test(text);
+}
+
+function isWaterPrisonLabel(value: unknown): boolean {
+  const text = String(value || '').trim();
+  return text === '白湖商馆水牢' || /(^|[·])白湖商馆水牢$/.test(text);
+}
+
+function isS0205Place(value: unknown): boolean {
+  return isWuyuanCityLabel(value) || isWaterPrisonLabel(value);
 }
 
 const S02_02_CAST = ['王哲', '月霜'] as const;
@@ -94,6 +104,11 @@ export function acceptLegacyPilotScene(packet: LegacyNarratorPacket): boolean {
     const atCity = isWuyuanCityLabel(packet.location) && isWuyuanCityLabel(packet.mustAppear?.location);
     const moving = packet.receipts?.move === true && isWuyuanCityLabel(packet.receipts?.moveTo);
     return (atCity || moving) && packet.receipts?.casualty === false;
+  }
+  if (eventId === 'lcq.event.s02_05') {
+    if (names.length !== 0) return false;
+    const atPlace = isS0205Place(packet.location) && isS0205Place(packet.mustAppear?.location);
+    return atPlace && packet.receipts?.move === false && packet.receipts?.casualty === false;
   }
   return false;
 }
@@ -265,6 +280,37 @@ function brandPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan): s
   return [arrival, side, reaction, sensory, pacing, closing].filter(Boolean);
 }
 
+function dungeonPlaceName(packet: LegacyNarratorPacket): string {
+  const loc = packet.mustAppear?.location || packet.location || '';
+  if (isWaterPrisonLabel(loc)) return '水牢';
+  return '五原城';
+}
+
+function ambushPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan): string[] {
+  const destName = dungeonPlaceName(packet);
+  const sensory = {
+    grass_iron: `${destName}地牢这一侧，潮气和铁锈贴着石壁。颈上的印记还烫，锁链先碰到腕骨。`,
+    wind_sky: `牢门缝里挤进一点风。地牢比城门更暗，有人的脚步贴着水声过来。`,
+    mud_body: `靴底还停在${destName}。石板上是湿的，膝盖一跪就凉。`,
+  }[plan.sensory];
+  const pacing = {
+    slow_orient: `地牢里有人靠近你，先判断她要带你去哪。你没有立刻跟着走。`,
+    tense_watch: `你把呼吸压低，先看清她停在牢门哪一侧，再开口。`,
+    steady_breathe: `你先把气沉住。靠近已经落到眼前，去哪比名字更先要弄清。`,
+  }[plan.pacing];
+  const reaction = {
+    dazed: `她靠近时没有报名字。你一时分不清这是放人还是把你再往外送一截。`,
+    answers: `她低声说：“跟我走。别出声。”声音短，像在赶时间。`,
+    silent_grip: `她扣住你的腕骨，力道不重，却不让你停在原处。`,
+  }[plan.companion];
+  const closing = {
+    hold_ground: `牢门开了。外面等着的是伏击。你反抗，扑上来的人倒在地上，不再动。`,
+    look_far: `她把你带出地牢。石阶尽头有人截住。你先反抗，不把这一截写成已经过关。`,
+    steady_breath: `你把呼吸重新对齐，先看清伏击落在哪一侧。人还在${destName}，牢外这一刀已经落下。`,
+  }[plan.closing];
+  return [reaction, sensory, pacing, closing].filter(Boolean);
+}
+
 function legionPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan): string[] {
   const companion = '月霜';
   const place = placeOf(packet);
@@ -385,6 +431,7 @@ export function legacyPilotPreferredSentences(
   if (eventId === 'lcq.event.s02_03') return legionPreferred(packet, plan);
   if (eventId === 'lcq.event.s02_02') return martyrPreferred(packet, plan);
   if (eventId === 'lcq.event.s02_04') return brandPreferred(packet, plan);
+  if (eventId === 'lcq.event.s02_05') return ambushPreferred(packet, plan);
   return openingPreferred(packet, plan);
 }
 
@@ -623,6 +670,37 @@ function brandPool(packet: LegacyNarratorPacket): string[] {
   ];
 }
 
+function ambushPool(packet: LegacyNarratorPacket): string[] {
+  const destName = dungeonPlaceName(packet);
+  return [
+    `地牢里有人靠近你，先判断她要带你去哪。`,
+    `${destName}这一侧仍是牢房。石壁在滴水。`,
+    `她没有报名字。靠近的脚步比话更先到。`,
+    `你问她要带你去哪。她只把下巴往牢门外抬了一下。`,
+    `锁链松了一格。这不像越狱，像有人故意把你放出去。`,
+    `你没有立刻迈过门槛。先看清门外有没有第二个人。`,
+    `她说跟她走。你跟着，只走到石阶这一截。`,
+    `牢门开了。风比里面热，也更脏。`,
+    `石阶尽头有人截住。这是伏击，不是送你出城。`,
+    `你没有把这一段写成已经脱身。伏击先落到肋下。`,
+    `扑上来的人要按你的颈。你把肩顶回去。`,
+    `反抗是短的。他的刀没有落到你脖子上。`,
+    `他倒在地上，不再扑过来。你没有去翻他的怀。`,
+    `你把能确定的事过了一遍：地是${destName}地牢，有人靠近，门外是伏击。`,
+    `她停在台阶上，没有过来收刀。`,
+    `你低声说：“这就是你要带我去的地方？”没有人接这句话。`,
+    `印记还烫着。牢外的石板比牢里硬。`,
+    `你把一只膝盖跪稳，另一只手按住刚挣开的那一侧。`,
+    `第二个人没有立刻出现。你只守这一息已经落下的伏击。`,
+    `你没有跟着她再往里走。眼下先判断去哪，不把后一截提前演完。`,
+    `潮气从地牢门口灌回来。你还在${destName}这一侧。`,
+    `刀落在石板上，响了一下。你没有去捡。`,
+    `靠近你的人仍站在能看见你、也随时能退的位置。`,
+    `你把呼吸重新对齐：牢开了，伏击到了，人倒了。`,
+    `靴底仍在${destName}。你没有迈去别的馆。`,
+  ];
+}
+
 function legionPool(packet: LegacyNarratorPacket): string[] {
   const companion = '月霜';
   const place = placeOf(packet);
@@ -759,6 +837,7 @@ export function legacyPilotSafeSentencePool(packet: LegacyNarratorPacket): strin
   if (eventId === 'lcq.event.s02_03') return legionPool(packet);
   if (eventId === 'lcq.event.s02_02') return martyrPool(packet);
   if (eventId === 'lcq.event.s02_04') return brandPool(packet);
+  if (eventId === 'lcq.event.s02_05') return ambushPool(packet);
   return openingPool(packet);
 }
 
