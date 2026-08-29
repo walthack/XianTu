@@ -208,7 +208,9 @@ test('each expanded scene uses its own local variants, not opening stock', async
   assert.match(mandateText, /王哲/);
   assert.match(mandateText, /帅帐/);
   assert.match(mandateText, /锦囊/);
+  assert.match(mandateText, /案上/);
   assert.match(mandateText, /托付|听他把话说完|当面交代/);
+  assert.equal(/入手|掌心|交到你手里|落到你手上/.test(mandateText), false, mandateText);
   assert.equal(mandateText.includes('段强'), false);
   assert.equal(mandateText.includes('这不是飞机'), false);
   assert.equal(mandateText.includes('寒毒正在失控'), false);
