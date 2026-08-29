@@ -76,6 +76,10 @@ test('pilot accepts only an exact selected stage_01 action and fails closed othe
     'lcq.event.s02_06',
     'lcq.event.ningyu_enters_gamble',
     'lcq.event.sudaji_south_pact',
+    'lcq.event.gamble_bond_signed',
+    'lcq.event.charge_sudaji_fee',
+    'lcq.event.free_ajiman',
+    'lcq.event.baihu_shangguan_escape',
   ]);
   assert.equal(pilot.isLegacyPilotEventId('lcq.event.s01_06'), true);
   assert.equal(pilot.isLegacyPilotEventId('lcq.event.s02_01'), true);
@@ -86,7 +90,11 @@ test('pilot accepts only an exact selected stage_01 action and fails closed othe
   assert.equal(pilot.isLegacyPilotEventId('lcq.event.s02_06'), true);
   assert.equal(pilot.isLegacyPilotEventId('lcq.event.ningyu_enters_gamble'), true);
   assert.equal(pilot.isLegacyPilotEventId('lcq.event.sudaji_south_pact'), true);
-  assert.equal(pilot.isLegacyPilotEventId('lcq.event.gamble_bond_signed'), false);
+  assert.equal(pilot.isLegacyPilotEventId('lcq.event.gamble_bond_signed'), true);
+  assert.equal(pilot.isLegacyPilotEventId('lcq.event.charge_sudaji_fee'), true);
+  assert.equal(pilot.isLegacyPilotEventId('lcq.event.free_ajiman'), true);
+  assert.equal(pilot.isLegacyPilotEventId('lcq.event.baihu_shangguan_escape'), true);
+  assert.equal(pilot.isLegacyPilotEventId('lcq.event.wuerlang_joins'), false);
   assert.equal(plan.playerLine, selection.playerLine);
   assert.equal(pilot.LEGACY_NARRATIVE_PILOT_GENERATE_OPTIONS.maxTokens, 256);
   assert.equal(pilot.LEGACY_NARRATIVE_PILOT_GENERATE_OPTIONS.responseMode, 'text');

@@ -16,6 +16,10 @@ export const LEGACY_NARRATIVE_PILOT_EVENT_IDS = [
   'lcq.event.s02_06',
   'lcq.event.ningyu_enters_gamble',
   'lcq.event.sudaji_south_pact',
+  'lcq.event.gamble_bond_signed',
+  'lcq.event.charge_sudaji_fee',
+  'lcq.event.free_ajiman',
+  'lcq.event.baihu_shangguan_escape',
 ] as const;
 
 export type LegacyPilotEventId = (typeof LEGACY_NARRATIVE_PILOT_EVENT_IDS)[number];
@@ -65,12 +69,27 @@ function isBaihuHallLabel(value: unknown): boolean {
   return text === '白湖商馆内院' || /(^|[·])白湖商馆内院$/.test(text);
 }
 
+function atSameCityOrHall(packet: LegacyNarratorPacket): boolean {
+  const atCity = isWuyuanCityLabel(packet.location) && isWuyuanCityLabel(packet.mustAppear?.location);
+  const atHall = isBaihuHallLabel(packet.location) && isBaihuHallLabel(packet.mustAppear?.location);
+  return atCity || atHall;
+}
+
 const S02_02_CAST = ['王哲', '月霜'] as const;
 
 /** relatedCharacterIds that may force-present. Physical extras still fail accept. */
 export function filterLegacyPilotEventCharacterNames(eventId: string | undefined, names: string[]): string[] {
-  if (eventId === 'lcq.event.s02_06' || eventId === 'lcq.event.sudaji_south_pact') return [];
-  if (eventId === 'lcq.event.ningyu_enters_gamble') return names.filter(name => name === '凝羽');
+  if (
+    eventId === 'lcq.event.s02_06'
+    || eventId === 'lcq.event.sudaji_south_pact'
+    || eventId === 'lcq.event.charge_sudaji_fee'
+    || eventId === 'lcq.event.baihu_shangguan_escape'
+  ) return [];
+  if (
+    eventId === 'lcq.event.ningyu_enters_gamble'
+    || eventId === 'lcq.event.gamble_bond_signed'
+    || eventId === 'lcq.event.free_ajiman'
+  ) return names.filter(name => name === '凝羽');
   if (eventId !== 'lcq.event.s02_02') return names;
   return names.filter(name => (S02_02_CAST as readonly string[]).includes(name));
 }
@@ -131,9 +150,23 @@ export function acceptLegacyPilotScene(packet: LegacyNarratorPacket): boolean {
   }
   if (eventId === 'lcq.event.sudaji_south_pact') {
     if (names.length !== 0) return false;
-    const atCity = isWuyuanCityLabel(packet.location) && isWuyuanCityLabel(packet.mustAppear?.location);
-    const atHall = isBaihuHallLabel(packet.location) && isBaihuHallLabel(packet.mustAppear?.location);
-    return (atCity || atHall) && packet.receipts?.move === false && packet.receipts?.casualty === false;
+    return atSameCityOrHall(packet) && packet.receipts?.move === false && packet.receipts?.casualty === false;
+  }
+  if (eventId === 'lcq.event.gamble_bond_signed') {
+    if (names.length !== 1 || names[0] !== '凝羽') return false;
+    return atSameCityOrHall(packet) && packet.receipts?.move === false && packet.receipts?.casualty === false;
+  }
+  if (eventId === 'lcq.event.charge_sudaji_fee') {
+    if (names.length !== 0) return false;
+    return atSameCityOrHall(packet) && packet.receipts?.move === false && packet.receipts?.casualty === false;
+  }
+  if (eventId === 'lcq.event.free_ajiman') {
+    if (names.length !== 1 || names[0] !== '凝羽') return false;
+    return atSameCityOrHall(packet) && packet.receipts?.move === false && packet.receipts?.casualty === false;
+  }
+  if (eventId === 'lcq.event.baihu_shangguan_escape') {
+    if (names.length !== 0) return false;
+    return atSameCityOrHall(packet) && packet.receipts?.move === false && packet.receipts?.casualty === false;
   }
   return false;
 }
@@ -418,6 +451,108 @@ function southPactPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan
   return [reaction, sensory, pacing, closing].filter(Boolean);
 }
 
+function bondPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan): string[] {
+  const destName = hallPlaceName(packet);
+  const companion = '凝羽';
+  const sensory = {
+    grass_iron: `${destName}这一侧，刻香比人更快。香灰塌下去，${companion}还站在桌边。`,
+    wind_sky: `帘不透风。刻香被催着往下烧，赌局的时限已经提前到头。`,
+    mud_body: `靴底还停在${destName}。案上是契书，香是热的，你的手是凉的。`,
+  }[plan.sensory];
+  const pacing = {
+    slow_orient: `赌局局面骤变，面对眼前的刻香与契书做出回应。你没有把此局说成尚未结束。`,
+    tense_watch: `你把呼吸压低，先看清刻香被加速的那一侧，再伸手。`,
+    steady_breathe: `你先把气沉住。落败已经落下，卖身契就在眼前。`,
+  }[plan.pacing];
+  const reaction = {
+    dazed: `${companion}看着刻香，一时说不出完整的话，只把你往契书那一侧推。`,
+    answers: `${companion}低声说：“香被催了。这一局已经判你输。”声音又硬又短。`,
+    silent_grip: `${companion}扣住你的腕骨，不让你把桌子掀了，只让你看见眼前这张契。`,
+  }[plan.companion];
+  const closing = {
+    hold_ground: `你签下卖身契。奴籍落到白湖商馆名下。人还在${destName}，此局没有作废。`,
+    look_far: `你让${companion}停在身边，自己把视野放到馆主那一侧：作弊是她的，签字是你的。`,
+    steady_breath: `你把呼吸重新对齐，先把这张契签完。被卖的是你，不是${companion}。`,
+  }[plan.closing];
+  return [reaction, sensory, pacing, closing].filter(Boolean);
+}
+
+function feePreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan): string[] {
+  const destName = hallPlaceName(packet);
+  const sensory = {
+    grass_iron: `${destName}案上摆着一件新奇器物。馆主要你先动手，工价还没有落。`,
+    wind_sky: `帘后有风。器物在灯下发亮，六十金铢还没说死。`,
+    mud_body: `靴底还停在${destName}。你的手按在膝上，不伸向那件东西。`,
+  }[plan.sensory];
+  const pacing = {
+    slow_orient: `在帮馆主取出新奇器物前谈定六十金铢报酬。你没有先伸手。`,
+    tense_watch: `你把呼吸压低，先把工价钉在六十金铢，再看她应不应。`,
+    steady_breathe: `你先把气沉住。不预支就不动手。`,
+  }[plan.pacing];
+  const reaction = {
+    dazed: `馆主看着器物，一时不提工钱，像要你先把东西取下来。`,
+    answers: `馆主说：“六十金铢。先写条。”声音不高，却把价钉死了。`,
+    silent_grip: `馆主按住案沿，指节稳定，像在确认你敢不敢把价说在动手前面。`,
+  }[plan.companion];
+  const closing = {
+    hold_ground: `价先落，手后伸。六十金铢谈定以后，你才帮她取出器物。人还在${destName}。`,
+    look_far: `你把视野放到条据上：工钱在前，取物在后。没有空口赊账。`,
+    steady_breath: `你把呼吸重新对齐，先把六十金铢锁死，再碰那件器物。`,
+  }[plan.closing];
+  return [reaction, sensory, pacing, closing].filter(Boolean);
+}
+
+function tearPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan): string[] {
+  const destName = hallPlaceName(packet);
+  const companion = '凝羽';
+  const sensory = {
+    grass_iron: `${destName}这一侧，身契比香更硬。你把它拿到手里，纸边还烫着印。`,
+    wind_sky: `帘后有风。身契在灯下发白，${companion}停在能看见撕口的位置。`,
+    mud_body: `靴底还停在${destName}。五十金铢已经换手，契还没撕。`,
+  }[plan.sensory];
+  const pacing = {
+    slow_orient: `取得那张身契并当面还她自由，再设法出城。你没有把撕契写成未发生。`,
+    tense_watch: `你把呼吸压低，先确认契据已在自己手里，再当面撕开。`,
+    steady_breathe: `你先把气沉住。撕契在前，改道在后。`,
+  }[plan.pacing];
+  const reaction = {
+    dazed: `${companion}看着那张契，一时说不出完整的话，只把撕口对着灯。`,
+    answers: `${companion}低声说：“撕了。门外有人在搜。”声音又硬又短。`,
+    silent_grip: `${companion}扣住你的腕骨，不让你把契揣回去，只让你当面撕完。`,
+  }[plan.companion];
+  const closing = {
+    hold_ground: `身契被当面撕开。她自由了。出城岔路已被搜查封住，你立刻改道。人还在${destName}。`,
+    look_far: `你让${companion}停在身边，自己把视野放到门外：女侍卫在搜，南门不是这一拍的路。`,
+    steady_breath: `你把呼吸重新对齐，先把契撕完，再躲开搜查。人仍在五原城里。`,
+  }[plan.closing];
+  return [reaction, sensory, pacing, closing].filter(Boolean);
+}
+
+function walkPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan): string[] {
+  const destName = hallPlaceName(packet);
+  const sensory = {
+    grass_iron: `${destName}到大门这一截，香淡了，铁腥还在。女侍卫的步点贴着墙。`,
+    wind_sky: `大门把风挤进来。死局在身后，五原城还在门外。`,
+    mud_body: `靴底离开内院的石。门槛这一侧仍是五原城，不是南下的路。`,
+  }[plan.sensory];
+  const pacing = {
+    slow_orient: `从白湖商馆的死局里脱身，走出五原商馆。人仍留在五原城里。`,
+    tense_watch: `你把呼吸压低，先看清女侍卫搜查的方向，再改道迈出门。`,
+    steady_breathe: `你先把气沉住。出馆是这一拍，出五原城不是。`,
+  }[plan.pacing];
+  const reaction = {
+    dazed: `门外有人在搜。你一时分不清该直走还是改道，只先离开囚室这一截。`,
+    answers: `你低声说：“出馆。人还留在城里。”没有人把这句话改成和解。`,
+    silent_grip: `你按住门框，不回头，也不把步子迈成出城。`,
+  }[plan.companion];
+  const closing = {
+    hold_ground: `你迈出五原商馆。死局留在身后。人仍在五原城里，没有被抓回馆里。`,
+    look_far: `你把视野放到街口：搜查还在，南门不是这一拍。脱身只到出馆。`,
+    steady_breath: `你把呼吸重新对齐，先走出五原商馆。城里还站得住，城外的路还没有走。`,
+  }[plan.closing];
+  return [reaction, sensory, pacing, closing].filter(Boolean);
+}
+
 function legionPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan): string[] {
   const companion = '月霜';
   const place = placeOf(packet);
@@ -542,6 +677,10 @@ export function legacyPilotPreferredSentences(
   if (eventId === 'lcq.event.s02_06') return hallPreferred(packet, plan);
   if (eventId === 'lcq.event.ningyu_enters_gamble') return gambleDebutPreferred(packet, plan);
   if (eventId === 'lcq.event.sudaji_south_pact') return southPactPreferred(packet, plan);
+  if (eventId === 'lcq.event.gamble_bond_signed') return bondPreferred(packet, plan);
+  if (eventId === 'lcq.event.charge_sudaji_fee') return feePreferred(packet, plan);
+  if (eventId === 'lcq.event.free_ajiman') return tearPreferred(packet, plan);
+  if (eventId === 'lcq.event.baihu_shangguan_escape') return walkPreferred(packet, plan);
   return openingPreferred(packet, plan);
 }
 
@@ -902,6 +1041,217 @@ function southPactPool(packet: LegacyNarratorPacket): string[] {
   ];
 }
 
+function bondPool(packet: LegacyNarratorPacket): string[] {
+  const destName = hallPlaceName(packet);
+  const companion = '凝羽';
+  return [
+    `赌局局面骤变，面对眼前的刻香与契书做出回应。`,
+    `${companion}还在${destName}这一侧。刻香比人更快。`,
+    `香被催着往下烧。时限提前到头，此局已判你落败。`,
+    `你没有把规则说成尚未结束。落败已经落下。`,
+    `馆主没有离席。作弊是当面的。`,
+    `案上是卖身契。你伸手。`,
+    `你把能确定的事过了一遍：人是${companion}，地是${destName}，字是你签的。`,
+    `被卖的是你。你没有把这张契推给她去签。`,
+    `旁人没有代签。笔在你手里。`,
+    `奴籍落到白湖商馆名下。此局没有作废。`,
+    `你低声说：“我签。”${companion}没有拦。`,
+    `印记还烫着。契比烙更长。`,
+    `你让${companion}停在能看见签字的位置。`,
+    `帘外有人走过。你仍在${destName}。`,
+    `你没有掀桌子。眼下只处理眼前这张契。`,
+    `香灰塌尽。时限已经没了。`,
+    `你把呼吸重新对齐：落败是真的，签字是真的。`,
+    `靴底仍在${destName}。你没有把后一截赎身提前走完。`,
+    `${companion}的目光很硬。她看的是契，不是逃路。`,
+    `你把一只手按在契上，另一只手空着。`,
+    `馆主要的是这张字。你按这个事实走。`,
+    `你没有去翻她的名。眼下只处理当面这一局。`,
+    `灯火在墨上跳。你看见自己的手还在微微发颤。`,
+    `你把这一拍交给签字，不把未发生的赢说成已得。`,
+    `刻香的烟直着往上抽。时限被人为截短，这一局已经没有回头的规则。`,
+    `你把笔按在契上。墨还没干，奴籍已经从这一笔开始算。`,
+    `馆主坐在原处。作弊的手没有收回去。`,
+    `${companion}没有替你签字。她只看着你把这一笔写完。`,
+    `案上的契不长。字却把你卖进白湖商馆。`,
+    `你没有去问她愿不愿意。这一拍要应的是你自己落败。`,
+    `香油溅到腕骨上。热是短的，契是长的。`,
+    `你把能看见的边界看完：桌还在，人还在，字已经落。`,
+    `落败不是商量。刻香先到头，契后到手上。`,
+    `你让自己跪稳，好把这一笔写清楚。`,
+    `馆主的笑很浅。浅的下面是已经判完的局。`,
+    `你没有把奴籍说成还能改。这一拍的字已经落进她的簿子。`,
+    `灯把契上的空白照得很白。你把空白填上。`,
+    `${companion}的甲叶轻响。她没有拔刀，只不让你把契推回去。`,
+    `时限尽了。你按这个事实走：输了，签了，人还在${destName}。`,
+    `墨在纸上渗开一圈。你没有停笔。`,
+    `赌具还摊在原处。没有人宣布重开。`,
+    `你把肩压低，让签字这一息先结束。`,
+    `你把拇指按在契尾。那一按把奴籍按实。`,
+    `馆主没有宣布可悔。这一局的字就是终局。`,
+    `${companion}的呼吸很稳。稳的是看着你签完，不是替你签。`,
+    `香尽以后，没有人把时限再拨回去。`,
+  ];
+}
+
+function feePool(packet: LegacyNarratorPacket): string[] {
+  const destName = hallPlaceName(packet);
+  return [
+    `在帮苏妲己取出新奇器物前谈定六十金铢报酬。`,
+    `${destName}案上摆着那件东西。工价还没有落。`,
+    `你先开出六十金铢。不预支就不动手。`,
+    `馆主应下这个数。条据写在动手前面。`,
+    `你把能确定的事过了一遍：地是${destName}，价是六十金铢，手还没伸。`,
+    `价先落，手后伸。没有空口赊账。`,
+    `你低声说：“六十金铢。写下。”她点了下头。`,
+    `器物在灯下发亮。你仍按在膝上。`,
+    `条据落下以后，你才帮她取出。`,
+    `工价不到手，你就不碰匣扣。`,
+    `印记还烫着。工钱比烙更清楚。`,
+    `帘外没有放行。你仍在${destName}。`,
+    `你把一只手按在条据上，另一只手才碰器物。`,
+    `南荒的路不在这一拍。眼下只锁工价。`,
+    `你把呼吸重新对齐：六十金铢是真的，取物在后。`,
+    `靴底仍在${destName}。你没有迈出门。`,
+    `馆主把杯放下。那一下把价说死。`,
+    `你没有去翻她的名。眼下只处理当面这六十金铢。`,
+    `灯火在器物上跳。你看见自己的手还在微微发颤。`,
+    `你站在能被看见、也能随时被再问的位置。`,
+    `香更浓了。你按这个事实走：价在，物在，门还关着。`,
+    `你让她把顺序钉死：先价，后取。`,
+    `工钱落到条上。你才动手。`,
+    `你把这一拍交给定价，不把未发生的南荒路说成已走。`,
+    `条据的墨还没干。你用这个事实走：价已落，手才可以动。`,
+    `器物取下来时，你没有问它从哪来。眼下只锁六十金铢。`,
+    `馆主把器物转了一圈。你仍等条据先落下。`,
+    `你把膝盖跪稳，让自己处在能动手、却还不空手赊账的位置。`,
+    `灯把六十金铢这几个字照得很清楚。你按这个数走。`,
+    `你没有去估那件东西值多少。工价已经说死。`,
+    `门外有人停了一停。你仍在${destName}，价还在条上。`,
+    `六十金铢写在条上以前，你的手不碰那件器物。`,
+    `馆主把条据推过来。你先看数，再看物。`,
+    `工钱是预支。预支不到手，取出就不发生。`,
+    `你把条上的数读出声。六十金铢，一个字都不让少。`,
+    `器物还在她那一侧。价不过来，物不过来。`,
+    `你没有把工钱说成事后再算。这一拍先锁数。`,
+    `灯下能看见条据的折痕。折痕比客套更硬。`,
+    `她点头的那一下把工价按死。你这才把器物从匣里取出来。`,
+    `匣扣是冷的。冷也要等六十金铢先落。`,
+    `你让顺序钉在条上：数、据、再取。`,
+    `案对面的人还坐着。价还没有从口头落到纸上时，你也不起身。`,
+    `匣盖掀开以前，条据必须先在你手边。`,
+    `你把六十金铢这个数重复了一遍，直到她不再改口。`,
+    `工钱的数写清楚了，你才碰那件发亮的器物。`,
+  ];
+}
+
+function tearPool(packet: LegacyNarratorPacket): string[] {
+  const destName = hallPlaceName(packet);
+  const companion = '凝羽';
+  return [
+    `取得那张身契并当面还她自由，再设法出城。`,
+    `${companion}在${destName}这一侧看着你把契拿到手里。`,
+    `五十金铢换手。契据离开卖方。`,
+    `你当着她的面把身契撕开。撕口对着灯。`,
+    `纸已经裂了。撕契这一下是当面落下的。`,
+    `她自由了。你没有把她重新按回卖方手里。`,
+    `你把能确定的事过了一遍：地是${destName}，物是身契，结果是撕毁。`,
+    `${companion}低声说门外有搜查。你听见了。`,
+    `出城岔路被女侍卫封住。你立刻改道。`,
+    `你没有直闯南门。这一拍只躲开搜查。`,
+    `印记还烫着。撕开的纸比烙更响。`,
+    `你让${companion}停在能看见撕口的位置。`,
+    `帘外步点很齐。你仍在${destName}。`,
+    `你把碎纸放下。不揣回去。`,
+    `你低声说：“撕了。改道。”她点了下头。`,
+    `你把呼吸重新对齐：契没了，人还在城里。`,
+    `靴底仍在${destName}。出城的路还没有走。`,
+    `搜查还在门外。你不把这一截改成硬闯。`,
+    `你没有去翻那张契上的名。眼下只处理当面这一撕。`,
+    `灯火在纸边跳。你看见自己的手还在微微发颤。`,
+    `你站在能被看见、也能随时改道的位置。`,
+    `香淡了。铁腥还在。`,
+    `你把这一拍交给撕契和改道，不把未发生的出城说成已走。`,
+    `${companion}的目光很硬。她看的是撕口，不是逃路。`,
+    `纸裂开的声音很短。短过门外那些齐整的步点。`,
+    `你把撕开的两半分开按在案上。不让它们再对回去。`,
+    `${companion}看见撕口，肩松了一寸。`,
+    `五十金铢已经不在你手里。契也不再是有效的那一张。`,
+    `门外女侍卫换了方向。你带着她立刻改道。`,
+    `你没有去撞南门那一截。搜查封住的路你不走。`,
+    `碎纸落在灯下。自由是当面的，出城还不是。`,
+    `你把能确定的边界看完：契没了，人还在${destName}，门外在搜。`,
+    `改道是这一拍的活路。硬闯不是。`,
+    `她跟你侧过廊柱。搜查的人没有立刻转过来。`,
+    `你让自己停在还能转身的位置，不把步子迈成出城。`,
+    `灯把撕口照得很白。白的是裂开，不是放行。`,
+    `你把碎纸从案上抹开，让她看清那张契已经作废。`,
+    `廊外靴钉很密。你只带她换一条还能走的廊。`,
+    `撕开的纸边还连着一丝。你把它再拉开。`,
+    `${companion}把碎纸看清楚，这才跟你侧过身。`,
+    `卖方那一侧没有再递第二张契。这一张已经废了。`,
+    `你听见南门方向有人喝停。你带着她往相反的廊走。`,
+    `改道不是逃出五原城。改道只是不撞上这一队搜查。`,
+    `你把她的袖口从灯下拉开，免得撕口的白纸再被看见。`,
+    `廊柱后面能停半息。你只停半息，再换一条廊。`,
+    `身契作废以后，她不再被那张纸捆在原处。`,
+  ];
+}
+
+function walkPool(packet: LegacyNarratorPacket): string[] {
+  const destName = hallPlaceName(packet);
+  return [
+    `从白湖商馆的死局里脱身，走出五原商馆。`,
+    `你从${destName}走到大门。囚室留在身后。`,
+    `女侍卫还在搜查。你改道，不直闯。`,
+    `你迈出五原商馆。人仍留在五原城里。`,
+    `这一步只出馆，人还停在五原城里。`,
+    `你没有被抓回馆里。死局留在门槛那一侧。`,
+    `你把能确定的事过了一遍：出馆是真的，出城不是。`,
+    `街口有风。搜查的步点还在。`,
+    `你低声说：“出馆。城里还能站。”`,
+    `你没有回头去和解。这一拍只走路。`,
+    `印记还烫着。门外的石板比馆里硬。`,
+    `靴底离开内院。五原城还在脚下。`,
+    `你把呼吸重新对齐：脱身到出馆为止。`,
+    `南门不是这一拍。你不把路提前走完。`,
+    `你站在能改道、也能随时停住的位置。`,
+    `香淡了。铁腥被风冲开一截。`,
+    `你没有迈成出城的步子。城里还站得住。`,
+    `搜查换了方向。你跟着换，不硬闯。`,
+    `大门在身后合上一寸。你没有退回去。`,
+    `你把这一拍交给出馆，不把未发生的南荒路说成已走。`,
+    `五原城还在。商馆死局不在你这一侧。`,
+    `你用袖口擦掉额上的汗，视野这才干净一点。`,
+    `你点了下头，没有急着跑出城。`,
+    `风更大了些。你只把这一圈看得更清楚：人在城里，馆在身后。`,
+    `门槛在身后。五原城的石板接住你的靴底。`,
+    `你没有被馆里的人拖回去。死局停在门内。`,
+    `女侍卫的灯从墙根扫过来。你贴着另一侧走。`,
+    `出馆这一步已经落下。出城那一步还没有。`,
+    `街面比内院宽。宽也不等于南门已过。`,
+    `你把能确定的边界看完：馆在身后，人在城里，搜查还在。`,
+    `风从巷口灌进来。你只走到巷口这一截。`,
+    `脱身是出馆。馆门合上以后，你还站在五原城里。`,
+    `你没有去喊和解。话在这一拍里用不上。`,
+    `石板上有昨夜的水渍。你踩过去，不回头。`,
+    `女侍卫的步点远了一寸。你用这一寸把人带出馆门。`,
+    `五原商馆的灯被门框切掉一半。另一半已经照不到你。`,
+    `巷口的人声比馆里杂。杂也不把你送出五原城。`,
+    `你把肩上的香气抖掉，只留下城里这一口风。`,
+    `你侧过门槛的那一瞬，馆里的香被门外的风切断。`,
+    `五原城的街石比内院粗。粗的是城，不是城外的路。`,
+    `搜查的灯在背后晃。你不回头去对那道光。`,
+    `你把步子放短，只走到还能看见商馆门楣的位置。`,
+    `门楣上的字还在。你已经不在那两个字下面。`,
+    `你让风从领口灌进来，确认自己这一侧是街，不是囚室。`,
+    `巷里有人低声问价。你不接话，只把人带过这一截。`,
+    `脱身落下的标志是门槛。门槛过后，人还在五原城。`,
+    `你没有把和解说出口。走出五原商馆这一步已经够用。`,
+    `城门的方向还能看见灯。你不朝那盏灯走。`,
+  ];
+}
+
 function legionPool(packet: LegacyNarratorPacket): string[] {
   const companion = '月霜';
   const place = placeOf(packet);
@@ -1042,6 +1392,10 @@ export function legacyPilotSafeSentencePool(packet: LegacyNarratorPacket): strin
   if (eventId === 'lcq.event.s02_06') return hallPool(packet);
   if (eventId === 'lcq.event.ningyu_enters_gamble') return gambleDebutPool(packet);
   if (eventId === 'lcq.event.sudaji_south_pact') return southPactPool(packet);
+  if (eventId === 'lcq.event.gamble_bond_signed') return bondPool(packet);
+  if (eventId === 'lcq.event.charge_sudaji_fee') return feePool(packet);
+  if (eventId === 'lcq.event.free_ajiman') return tearPool(packet);
+  if (eventId === 'lcq.event.baihu_shangguan_escape') return walkPool(packet);
   return openingPool(packet);
 }
 
