@@ -295,6 +295,22 @@ test('each expanded scene uses its own local variants, not opening stock', async
   assert.match(dangerText, /段强/);
   assert.match(dangerText, /箭|弓/);
   assert.match(dangerText, /中箭身亡|气绝|脖子/);
+  const extraDeath = composeLegacyNarrativeFromPlan(basePacket({
+    eventId: 'lcq.event.s01_02',
+    present: ['帐内亲兵', '段强'],
+    presentActors: [{ name: '帐内亲兵', traits: [] }, { name: '段强', traits: [] }],
+    mustAppear: { location: '中州·草原', present: ['帐内亲兵', '段强'], objective: '草原上半兽人突然杀到，先保住自己和身边的人' },
+    publicFacts: ['中州·草原', '帐内亲兵在场', '段强在场', '段强中箭身亡'],
+    receipts: { move: false, casualty: true },
+  }));
+  assert.equal(acceptLegacyPilotScene(basePacket({
+    eventId: 'lcq.event.s01_02',
+    present: ['帐内亲兵', '段强'],
+    mustAppear: { location: '中州·草原', present: ['帐内亲兵', '段强'], objective: '草原上半兽人突然杀到，先保住自己和身边的人' },
+    receipts: { move: false, casualty: true },
+  })), false);
+  assert.match(extraDeath, /段强/);
+  assert.doesNotMatch(extraDeath, /帐内亲兵.{0,12}(脖子|中箭|气绝)/);
   const interactText = composeLegacyNarrativeFromPlan(interact);
   assert.match(interactText, /月霜/);
   assert.match(interactText, /伸手相助|伤/);

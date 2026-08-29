@@ -58,7 +58,7 @@ export function acceptLegacyPilotScene(packet: LegacyNarratorPacket): boolean {
   if (!isLegacyPilotEventId(eventId)) return false;
   const names = presentNames(packet);
   if (eventId === 'lcq.event.s01_01') return names.length === 1 && names[0] === '段强';
-  if (eventId === 'lcq.event.s01_02') return names.includes('段强');
+  if (eventId === 'lcq.event.s01_02') return names.length === 1 && names[0] === '段强';
   if (eventId === 'lcq.event.s01_03') return names.includes('月霜');
   if (eventId === 'lcq.event.s01_04') return names.some(name => (S01_04_CAST as readonly string[]).includes(name));
   if (eventId === 'lcq.event.s01_05') {
@@ -121,7 +121,7 @@ function openingPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan):
 }
 
 function dangerPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan): string[] {
-  const companion = presentNames(packet)[0] || '段强';
+  const companion = '段强';
   const sensory = {
     grass_iron: `第一支箭钉进你脚边的泥里，箭羽还在抖。蹄声贴着草根压过来。`,
     wind_sky: `喊杀声换了方向。灌木后面立起几个佝偻的影子，短弓正在上弦。`,
@@ -401,8 +401,7 @@ function openingPool(packet: LegacyNarratorPacket): string[] {
 }
 
 function dangerPool(packet: LegacyNarratorPacket): string[] {
-  const names = presentNames(packet);
-  const companion = names.find(name => name === '段强') || names[0] || '段强';
+  const companion = '段强';
   const place = placeOf(packet);
   const death = packet.receipts?.casualty
     ? [
@@ -415,7 +414,7 @@ function dangerPool(packet: LegacyNarratorPacket): string[] {
       `第一支箭只钉在泥里。你不许自己把未见回执的伤亡写成终局。`,
     ];
   return [
-    ...namedBeats(names, name => `${name}就在开阔处，背对着弓弦拉满的方向。`),
+    `${companion}就在开阔处，背对着弓弦拉满的方向。`,
     `草浪一路倒伏，像有什么在贴地推进。你听见蹄声和吼叫叠在一起。`,
     `佝偻的影子从灌木后立起来，兽面人身，短弓正在上弦。`,
     `你没有去辨认这是不是上海。眼下只剩保住自己和身边的人。`,

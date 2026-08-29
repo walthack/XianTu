@@ -148,15 +148,17 @@ function readPresentNames(saveData: SaveData, eventId?: string): string[] {
   }
   const dead = new Set(departedNames(saveData, focusId));
   const sceneEventNames = filterLegacyPilotEventCharacterNames(focusId, eventNames).filter(name => !dead.has(name));
-  const recentNarrative = (((saveData as any)?.社交?.记忆?.短期记忆 || []) as unknown[])
-    .slice(-2)
-    .map(item => String(item || ''))
-    .join('\n');
+  const physicalExtras = focusId === 'lcq.event.s02_02';
+  const recentNarrative = physicalExtras
+    ? (((saveData as any)?.社交?.记忆?.短期记忆 || []) as unknown[])
+      .slice(-2)
+      .map(item => String(item || ''))
+      .join('\n')
+    : '';
   return [...computePresentNames({
     playerLocation: readLocation(saveData),
-    relations: (saveData as any)?.社交?.关系,
+    ...(physicalExtras ? { relations: (saveData as any)?.社交?.关系, recentNarrative } : {}),
     eventCharacterNames: sceneEventNames,
-    recentNarrative,
     excludeNames: dead,
   })].filter(name => name !== playerName && !dead.has(name)).sort();
 }
