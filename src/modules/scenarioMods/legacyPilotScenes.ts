@@ -10,6 +10,7 @@ export const LEGACY_NARRATIVE_PILOT_EVENT_IDS = [
   'lcq.event.s01_06',
   'lcq.event.s02_01',
   'lcq.event.s02_03',
+  'lcq.event.s02_02',
 ] as const;
 
 export type LegacyPilotEventId = (typeof LEGACY_NARRATIVE_PILOT_EVENT_IDS)[number];
@@ -64,6 +65,11 @@ export function acceptLegacyPilotScene(packet: LegacyNarratorPacket): boolean {
     if (!names.includes('月霜') || names.includes('段强')) return false;
     const atTent = isCommandTentLabel(packet.location) && isCommandTentLabel(packet.mustAppear?.location);
     return atTent && packet.receipts?.move === false;
+  }
+  if (eventId === 'lcq.event.s02_02') {
+    if (!names.includes('王哲') || !names.includes('月霜') || names.includes('段强')) return false;
+    const atTent = isCommandTentLabel(packet.location) && isCommandTentLabel(packet.mustAppear?.location);
+    return atTent && packet.receipts?.move === false && packet.receipts?.casualty === true;
   }
   return false;
 }
@@ -174,6 +180,32 @@ function progressPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan)
     hold_ground: `你把${wounded}转到火光内侧，先脱险，不跟着兽群的退向乱跑。`,
     look_far: `你让${wounded}靠着你，自己把视野放到修士落点：人在，火在，路还没有封死。`,
     steady_breath: `你把呼吸重新对齐，带着伤者从这一段战场里退出来。`,
+  }[plan.closing];
+  return [reaction, sensory, pacing, closing].filter(Boolean);
+}
+
+function martyrPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan): string[] {
+  const companion = '月霜';
+  const place = placeOf(packet);
+  const sensory = {
+    grass_iron: `${place}帐口外，左武军的旗已经碎了。热浪先到，铁锈味被一种更干的焦糊盖住。`,
+    wind_sky: `帐帘外天光忽然白得发烫。九阳一枚枚点亮，像有人把白昼重新钉上天空。`,
+    mud_body: `靴底还停在${place}。帐外的土开始发硬发裂，热气贴着门槛往里钻。`,
+  }[plan.sensory];
+  const pacing = {
+    slow_orient: `左武军已与联军开战，先保住自己和月霜，跟上战局变化。你没有冲出${place}。`,
+    tense_watch: `你把呼吸压低，从帐口盯住王哲脱甲悬空的那一线，不让${companion}迈过帐门。`,
+    steady_breathe: `你先把气沉住，拉住${companion}，停在还能看见九阳、人还在${place}的位置。`,
+  }[plan.pacing];
+  const reaction = {
+    dazed: `${companion}咬着牙，说不出完整的话，只把你往帐门内侧拽。`,
+    answers: `${companion}低声说：“看他。别抢这一击。”声音又硬又短。`,
+    silent_grip: `${companion}扣住你的腕骨，力道大，不让你离开${place}去挡那团越来越亮的光。`,
+  }[plan.companion];
+  const closing = {
+    hold_ground: `九阳依次点亮，合一如日轮。光球坠地，帐外成了焦土。王哲以自身殉军，旁人没有抢走最后一击。`,
+    look_far: `你拉住${companion}，自己把视野放到帐外：阿伽门侬那一侧的轻蔑散了，日轮落下去，左武第一军团覆灭。`,
+    steady_breath: `你把呼吸重新对齐，先保住自己和${companion}。王哲的九阳收束了这一局，人还在${place}。`,
   }[plan.closing];
   return [reaction, sensory, pacing, closing].filter(Boolean);
 }
@@ -296,6 +328,7 @@ export function legacyPilotPreferredSentences(
   if (eventId === 'lcq.event.s01_06') return frostPreferred(packet, plan);
   if (eventId === 'lcq.event.s02_01') return mandatePreferred(packet, plan);
   if (eventId === 'lcq.event.s02_03') return legionPreferred(packet, plan);
+  if (eventId === 'lcq.event.s02_02') return martyrPreferred(packet, plan);
   return openingPreferred(packet, plan);
 }
 
@@ -458,6 +491,35 @@ function progressPool(packet: LegacyNarratorPacket): string[] {
   ];
 }
 
+function martyrPool(packet: LegacyNarratorPacket): string[] {
+  const companion = '月霜';
+  const place = placeOf(packet);
+  return [
+    `王哲就在帐外那一线。${companion}就在你身侧。人还在${place}。`,
+    `左武军已与联军开战，先保住自己和月霜，跟上战局变化。`,
+    `左武第一军团在罗马、马其顿、兽蛮联军围攻下伤亡殆尽。`,
+    `天霁营的弩已经毁了。帅帐卫士在帐外杀马毁械。`,
+    `你没有把这一段写成一招了断。先看清覆灭的前因。`,
+    `王哲脱甲悬空。九阳依次点亮，没有旁人上去抢这一击。`,
+    `九阳合一如日轮。白得发烫的光把帐帘照透。`,
+    `帐外那一侧，阿伽门侬的轻蔑散了，换成来不及收住的惊。`,
+    `毁灭性的光球坠地。战场化作焦土，热浪拍到${place}门槛上。`,
+    `王哲以自身殉军。左武第一军团覆灭。`,
+    `你拉住${companion}，停在帐口内侧，不迈过帐门去追那团光。`,
+    `焰浪在帐外滚过去。你先保住自己和她。`,
+    `你低声说：“看着。这一击是他的。”`,
+    `你把能确定的事过了一遍：人是王哲，功是九阳，地是${place}，结果是焦土。`,
+    `${companion}的目光很硬。她看的是日轮，不是逃路。`,
+    `文泽那一侧已经没有完整的喝令。前因落完了，镜头才锁到王哲。`,
+    `韩庚不在你身边。前线的覆灭是听见的，不是你改写的。`,
+    `你没有冲出去改写成别人收束。最后一击仍是王哲的九阳。`,
+    `日轮落下去以后，帐外只剩焦土和还没散尽的热。`,
+    `你让${companion}的肩低于帐门，自己从帐口把这一局看完。`,
+    `求生不是改写牺牲。王哲留下，你们还在${place}。`,
+    `靴底仍在${place}。你往后偏半步，仍看着那枚日轮坠地。`,
+  ];
+}
+
 function legionPool(packet: LegacyNarratorPacket): string[] {
   const companion = '月霜';
   const place = placeOf(packet);
@@ -592,6 +654,7 @@ export function legacyPilotSafeSentencePool(packet: LegacyNarratorPacket): strin
   if (eventId === 'lcq.event.s01_06') return frostPool(packet);
   if (eventId === 'lcq.event.s02_01') return mandatePool(packet);
   if (eventId === 'lcq.event.s02_03') return legionPool(packet);
+  if (eventId === 'lcq.event.s02_02') return martyrPool(packet);
   return openingPool(packet);
 }
 

@@ -134,6 +134,7 @@ function eventIsCompleted(runtime: { flags?: Record<string, unknown>; completedE
 export function departedPresentNames(runtime: { flags?: Record<string, unknown>; completedEventIds?: unknown } | null | undefined): string[] {
   const names: string[] = [];
   if (eventIsCompleted(runtime, 'lcq.event.s01_02')) names.push('段强');
+  if (eventIsCompleted(runtime, 'lcq.event.s02_02')) names.push('王哲');
   return names;
 }
 

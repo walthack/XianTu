@@ -124,7 +124,8 @@ function isRevealedName(ledger: AcquaintanceLedger, name: string, playerName: st
 
 function departedNames(saveData: SaveData, currentEventId: string): string[] {
   return departedPresentNames(runtimeOf(saveData))
-    .filter(name => !(currentEventId === 'lcq.event.s01_02' && name === '段强'));
+    .filter(name => !(currentEventId === 'lcq.event.s01_02' && name === '段强'))
+    .filter(name => !(currentEventId === 'lcq.event.s02_02' && name === '王哲'));
 }
 
 function readPresentNames(saveData: SaveData, eventId?: string): string[] {
@@ -248,7 +249,7 @@ export function previewLegacyPilotSettlement(
     progress,
     receipts: {
       move,
-      casualty: Boolean(progress.completed && progress.eventId === 'lcq.event.s01_02'),
+      casualty: Boolean(progress.completed && (progress.eventId === 'lcq.event.s01_02' || progress.eventId === 'lcq.event.s02_02')),
       ...(move ? { moveTo: afterLocation } : {}),
     },
   };
@@ -283,7 +284,8 @@ export function compileLegacyNarratorPacket(
     appearLocation,
     capsule.currentObjective,
     settledOutcome,
-    ...(settledReceipts.casualty ? ['段强中箭身亡'] : []),
+    ...(settledReceipts.casualty && plan.selection.eventId === 'lcq.event.s01_02' ? ['段强中箭身亡'] : []),
+    ...(settledReceipts.casualty && plan.selection.eventId === 'lcq.event.s02_02' ? ['王哲九阳殉军'] : []),
     ...capsule.presentNames.map(name => `${name}在场`),
     ...capsule.facts,
   ]);

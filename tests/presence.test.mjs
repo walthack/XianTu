@@ -156,6 +156,17 @@ test('实时关注已收窄到在场者（不再全量推演）', async () => {
   });
   assert.ok(beforeDeath.includes('段强'), 's01_02 未完成时，档案外貌已死亡不能提前排除段强');
 
+  const afterWang = focusedNpcNamesFromState({
+    ...state,
+    社交: {
+      关系: {
+        王哲: { 名字: '王哲', 当前位置: { 描述: PLAYER }, 实时关注: true, 当前外貌状态: '状态正常' },
+      },
+    },
+    世界: { 状态: { 剧本模组: { flags: { 'event.s02_02.done': true }, completedEventIds: ['lcq.event.s02_02'] } } },
+  });
+  assert.equal(afterWang.includes('王哲'), false, 's02_02 完成后王哲离场，外貌正常也不得入实时关注');
+
   const fs = await import('node:fs');
   const src = fs.readFileSync(new URL('../src/utils/AIBidirectionalSystem.ts', import.meta.url), 'utf8');
   const fn = src.slice(src.indexOf('private getFocusedNpcNames'), src.indexOf('private buildFocusedNpcPrompt'));

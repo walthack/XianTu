@@ -70,11 +70,13 @@ test('pilot accepts only an exact selected stage_01 action and fails closed othe
     'lcq.event.s01_06',
     'lcq.event.s02_01',
     'lcq.event.s02_03',
+    'lcq.event.s02_02',
   ]);
   assert.equal(pilot.isLegacyPilotEventId('lcq.event.s01_06'), true);
   assert.equal(pilot.isLegacyPilotEventId('lcq.event.s02_01'), true);
   assert.equal(pilot.isLegacyPilotEventId('lcq.event.s02_03'), true);
-  assert.equal(pilot.isLegacyPilotEventId('lcq.event.s02_02'), false);
+  assert.equal(pilot.isLegacyPilotEventId('lcq.event.s02_02'), true);
+  assert.equal(pilot.isLegacyPilotEventId('lcq.event.s02_04'), false);
   assert.equal(plan.playerLine, selection.playerLine);
   assert.equal(pilot.LEGACY_NARRATIVE_PILOT_GENERATE_OPTIONS.maxTokens, 256);
   assert.equal(pilot.LEGACY_NARRATIVE_PILOT_GENERATE_OPTIONS.responseMode, 'text');
