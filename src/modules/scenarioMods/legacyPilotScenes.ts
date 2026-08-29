@@ -216,7 +216,7 @@ function martyrPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan): 
   }[plan.companion];
   const closing = {
     hold_ground: `九阳依次点亮，合一如日轮。光球坠地，帐外成了焦土。王哲以自身殉军，旁人没有抢走最后一击。`,
-    look_far: `你拉住${companion}，自己把视野放到帐外：阿伽门侬那一侧的轻蔑散了，日轮落下去，左武第一军团覆灭。`,
+    look_far: `你拉住${companion}，自己把视野放到帐外：联军那一侧的轻蔑散了，日轮落下去，左武第一军团覆灭。`,
     steady_breath: `你把呼吸重新对齐，先保住自己和${companion}。王哲的九阳收束了这一局，人还在${place}。`,
   }[plan.closing];
   return [reaction, sensory, pacing, closing].filter(Boolean);
@@ -513,7 +513,7 @@ function martyrPool(packet: LegacyNarratorPacket): string[] {
     `你没有把这一段写成一招了断。先看清覆灭的前因。`,
     `王哲脱甲悬空。九阳依次点亮，没有旁人上去抢这一击。`,
     `九阳合一如日轮。白得发烫的光把帐帘照透。`,
-    `帐外那一侧，阿伽门侬的轻蔑散了，换成来不及收住的惊。`,
+    `帐外那一侧，联军骑手的轻蔑散了，换成来不及收住的惊。`,
     `毁灭性的光球坠地。战场化作焦土，热浪拍到${place}门槛上。`,
     `王哲以自身殉军。左武第一军团覆灭。`,
     `你拉住${companion}，停在帐口内侧，不迈过帐门去追那团光。`,
@@ -521,8 +521,8 @@ function martyrPool(packet: LegacyNarratorPacket): string[] {
     `你低声说：“看着。这一击是他的。”`,
     `你把能确定的事过了一遍：人是王哲，功是九阳，地是${place}，结果是焦土。`,
     `${companion}的目光很硬。她看的是日轮，不是逃路。`,
-    `文泽那一侧已经没有完整的喝令。前因落完了，镜头才锁到王哲。`,
-    `韩庚不在你身边。前线的覆灭是听见的，不是你改写的。`,
+    `帐外那一侧已经没有完整的喝令。前因落完了，才把目光锁到王哲。`,
+    `前线的覆灭是听见的，不是你从帐口改写的。`,
     `你没有冲出去改写成别人收束。最后一击仍是王哲的九阳。`,
     `日轮落下去以后，帐外只剩焦土和还没散尽的热。`,
     `你让${companion}的肩低于帐门，自己从帐口把这一局看完。`,

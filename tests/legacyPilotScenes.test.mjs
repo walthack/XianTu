@@ -373,8 +373,23 @@ test('each expanded scene uses its own local variants, not opening stock', async
   assert.match(martyrText, /帅帐/);
   assert.equal(martyrText.includes('一招自爆'), false);
   assert.equal(martyrText.includes('段强'), false);
+  assert.equal(martyrText.includes('阿伽门侬'), false);
+  assert.equal(martyrText.includes('韩庚'), false);
+  assert.equal(martyrText.includes('文泽'), false);
   assert.equal(/走进了|冲出帅帐/.test(martyrText), false, martyrText);
   assert.equal(/未结算|回执|合同/.test(martyrText), false, martyrText);
+  for (const pacing of LEGACY_RENDER_PACING) {
+    for (const sensory of LEGACY_RENDER_SENSORY) {
+      for (const companion of LEGACY_RENDER_COMPANION) {
+        for (const closing of LEGACY_RENDER_CLOSING) {
+          const text = composeLegacyNarrativeFromPlan(martyr, { pacing, sensory, companion, closing });
+          assert.equal(text.includes('阿伽门侬'), false, text);
+          assert.equal(text.includes('韩庚'), false, text);
+          assert.equal(text.includes('文泽'), false, text);
+        }
+      }
+    }
+  }
 });
 
 test('movement is authorized only by structured receipt, never by matching 去帅帐', async () => {
@@ -401,6 +416,102 @@ test('movement is authorized only by structured receipt, never by matching 去�
   const playerSaidGo = '去帅帐';
   assert.equal(withReceipt.receipts.move, true);
   assert.equal(playerSaidGo.includes('去帅帐'), true);
+});
+
+test('s02_02 81 plans on a natural stage-02 save never name unmet 阿伽门侬', async () => {
+  const { parseScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
+  const { createQingyuOpeningPlaytestSave } = await loadTs('../src/modules/scenarioMods/qingyuOpeningPlaytest.ts');
+  const { transitionToNextScenarioStage } = await loadTs('../src/modules/scenarioMods/strictInitializer.ts');
+  const {
+    getCurrentStoryEventActions,
+    getScenarioFocusEvent,
+    recordStoryEventStructuredAction,
+    advanceScenarioRuntime,
+  } = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  const { planLegacyNarrativePilot } = await loadTs('../src/modules/scenarioMods/legacyNarrativePilot.ts');
+  const { compileLegacyNarratorPacket, previewLegacyPilotSettlement } = await loadTs(
+    '../src/modules/scenarioMods/legacyNarratorPacket.ts',
+  );
+  const {
+    composeLegacyNarrativeFromPlan,
+    LEGACY_RENDER_PACING,
+    LEGACY_RENDER_SENSORY,
+    LEGACY_RENDER_COMPANION,
+    LEGACY_RENDER_CLOSING,
+  } = await loadTs('../src/modules/scenarioMods/legacyRenderPlan.ts');
+  const [raw01, raw02] = await Promise.all([
+    readFile(new URL('../src/modules/scenarioMods/builtins/data/lcq.stage_01.json', import.meta.url), 'utf8'),
+    readFile(new URL('../src/modules/scenarioMods/builtins/data/lcq.stage_02.json', import.meta.url), 'utf8'),
+  ]);
+  const stage01 = parseScenarioMod(JSON.parse(raw01));
+  const stage02 = parseScenarioMod(JSON.parse(raw02));
+  let save = createQingyuOpeningPlaytestSave(stage01);
+  const runtimeOf = current => current.世界?.状态?.剧本模组;
+  const contractAction = current => {
+    const event = getScenarioFocusEvent(runtimeOf(current));
+    const contractIds = new Set((event?.playerCompletionContract?.actions || []).map(action => action.id));
+    return getCurrentStoryEventActions(current).find(item => contractIds.has(item.actionId));
+  };
+  const playCurrent = () => {
+    const selection = contractAction(save);
+    assert.ok(selection, `missing selectable ${JSON.stringify(runtimeOf(save)?.activeEventIds)}`);
+    recordStoryEventStructuredAction(save, selection);
+    save = advanceScenarioRuntime(save).saveData;
+  };
+  for (let step = 0; step < 40; step += 1) {
+    if (save.世界?.状态?.剧本模组?.nextStageReadyId === 'lcq.stage_02') break;
+    playCurrent();
+  }
+  assert.equal(save.世界?.状态?.剧本模组?.nextStageReadyId, 'lcq.stage_02');
+  const transitioned = transitionToNextScenarioStage(save, [stage02]);
+  assert.equal(transitioned.ok, true, transitioned.reason);
+  save = advanceScenarioRuntime(transitioned.saveData).saveData;
+  for (const beat of ['lcq.event.s02_01', 'lcq.event.s02_03', 'lcq.event.s02_02']) {
+    for (let step = 0; step < 8; step += 1) {
+      if ((save.世界?.状态?.剧本模组?.completedEventIds || []).includes(beat)) break;
+      const selection = getCurrentStoryEventActions(save).find(item => item.eventId === beat);
+      assert.ok(selection, `${beat} step ${step + 1}`);
+      if (beat === 'lcq.event.s02_02' && selection.actionId === 'record_battlefield_aftermath') {
+        const plan = planLegacyNarrativePilot({
+          saveData: save,
+          eventAction: selection,
+          eventActionProvenance: 'selected',
+          storage: ON,
+        });
+        assert.ok(plan);
+        const preview = previewLegacyPilotSettlement(save, selection);
+        const compiled = compileLegacyNarratorPacket(
+          preview.settled,
+          plan,
+          '',
+          '',
+          '',
+          preview.receipts,
+        );
+        const met = Object.values(save.世界?.状态?.剧本模组?.acquaintances || {})
+          .filter(record => record?.name && record.kind !== 'rumored')
+          .map(record => String(record.name));
+        assert.equal(met.includes('阿伽门侬'), false, met.join(','));
+        for (const pacing of LEGACY_RENDER_PACING) {
+          for (const sensory of LEGACY_RENDER_SENSORY) {
+            for (const companion of LEGACY_RENDER_COMPANION) {
+              for (const closing of LEGACY_RENDER_CLOSING) {
+                const text = composeLegacyNarrativeFromPlan(compiled.packet, {
+                  pacing, sensory, companion, closing,
+                });
+                assert.equal(text.includes('阿伽门侬'), false, text);
+                assert.equal(text.includes('韩庚'), false, text);
+                assert.equal(text.includes('文泽'), false, text);
+              }
+            }
+          }
+        }
+      }
+      recordStoryEventStructuredAction(save, selection);
+      save = advanceScenarioRuntime(save).saveData;
+    }
+    assert.ok((save.世界?.状态?.剧本模组?.completedEventIds || []).includes(beat), beat);
+  }
 });
 
 test('s02_02 co-located outsider stays in compiled present and fails accept', async () => {
