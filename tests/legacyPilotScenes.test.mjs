@@ -236,6 +236,13 @@ test('incomplete scene contracts fail closed; s01_06 requires 月霜', async () 
     mustAppear: { location: '中州·五原城', present: [], objective: '地牢里有人靠近你，先判断她要带你去哪' },
     receipts: { move: true, casualty: false, moveTo: '中州·五原·白湖商馆内院' },
   })), false);
+  assert.equal(acceptLegacyPilotScene(basePacket({
+    eventId: 'lcq.event.s02_05',
+    location: '中州·五原城',
+    present: [],
+    mustAppear: { location: '中州·五原·白湖商馆水牢', present: [], objective: '地牢里有人靠近你，先判断她要带你去哪' },
+    receipts: { move: false, casualty: false },
+  })), false);
   for (const fake of ['白湖商馆内院', '点心铺', '中州·帅帐', '五原商馆']) {
     assert.equal(acceptLegacyPilotScene(basePacket({
       eventId: 'lcq.event.s02_05',

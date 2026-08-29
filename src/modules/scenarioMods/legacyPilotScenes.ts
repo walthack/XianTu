@@ -57,10 +57,6 @@ function isWaterPrisonLabel(value: unknown): boolean {
   return text === '白湖商馆水牢' || /(^|[·])白湖商馆水牢$/.test(text);
 }
 
-function isS0205Place(value: unknown): boolean {
-  return isWuyuanCityLabel(value) || isWaterPrisonLabel(value);
-}
-
 const S02_02_CAST = ['王哲', '月霜'] as const;
 
 /** relatedCharacterIds that may force-present. Physical extras still fail accept. */
@@ -107,8 +103,9 @@ export function acceptLegacyPilotScene(packet: LegacyNarratorPacket): boolean {
   }
   if (eventId === 'lcq.event.s02_05') {
     if (names.length !== 0) return false;
-    const atPlace = isS0205Place(packet.location) && isS0205Place(packet.mustAppear?.location);
-    return atPlace && packet.receipts?.move === false && packet.receipts?.casualty === false;
+    const atCity = isWuyuanCityLabel(packet.location) && isWuyuanCityLabel(packet.mustAppear?.location);
+    const atPrison = isWaterPrisonLabel(packet.location) && isWaterPrisonLabel(packet.mustAppear?.location);
+    return (atCity || atPrison) && packet.receipts?.move === false && packet.receipts?.casualty === false;
   }
   return false;
 }
