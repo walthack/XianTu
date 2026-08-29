@@ -32,6 +32,7 @@ test('incomplete scene contracts fail closed; s01_06 requires 月霜', async () 
     isLegacyPilotEventId,
     LEGACY_NARRATIVE_PILOT_EVENT_IDS,
   } = await loadTs('../src/modules/scenarioMods/legacyPilotScenes.ts');
+  const { composeLegacyNarrativeFromPlan } = await loadTs('../src/modules/scenarioMods/legacyRenderPlan.ts');
   const { planLegacyNarrativePilot } = await loadTs('../src/modules/scenarioMods/legacyNarrativePilot.ts');
   assert.equal(isLegacyPilotEventId('lcq.event.s01_06'), true);
   assert.ok(LEGACY_NARRATIVE_PILOT_EVENT_IDS.includes('lcq.event.s01_06'));
@@ -46,6 +47,19 @@ test('incomplete scene contracts fail closed; s01_06 requires 月霜', async () 
     present: ['段强'],
     mustAppear: { location: '中州·草原', present: ['段强'], objective: '寒毒' },
   })), false);
+  const mixed = basePacket({
+    eventId: 'lcq.event.s01_06',
+    present: ['月霜', '段强'],
+    presentActors: [{ name: '月霜', traits: [] }, { name: '段强', traits: [] }],
+    mustAppear: { location: '中州·草原', present: ['月霜', '段强'], objective: '月霜身上的寒毒正在失控，先应对眼前危局' },
+    publicFacts: ['中州·草原', '月霜在场', '段强在场'],
+  });
+  assert.equal(acceptLegacyPilotScene(mixed), false);
+  const mixedText = composeLegacyNarrativeFromPlan(mixed);
+  assert.equal(mixedText.includes('段强'), false, mixedText);
+  assert.match(mixedText, /月霜/);
+  assert.match(mixedText, /丹药/);
+  assert.match(mixedText, /强行|掐开|灌/);
   assert.equal(acceptLegacyPilotScene(basePacket({
     eventId: 'lcq.event.s01_05',
     present: ['王哲'],
@@ -153,7 +167,10 @@ test('each expanded scene uses its own local variants, not opening stock', async
   const frostText = composeLegacyNarrativeFromPlan(frost);
   assert.match(frostText, /月霜/);
   assert.match(frostText, /寒毒/);
-  assert.match(frostText, /真阳|丹药|危局/);
+  assert.match(frostText, /丹药/);
+  assert.match(frostText, /强行|掐开|灌/);
+  assert.match(frostText, /真阳/);
+  assert.match(frostText, /交合|贴身|发生关系|传入/);
   assert.equal(frostText.includes('段强'), false);
 });
 
@@ -259,6 +276,9 @@ test('real canon order s01_01→02→03→04→06→05 never revives 段强 and 
   assert.equal(byId['lcq.event.s01_06'].text.includes('段强'), false);
   assert.match(byId['lcq.event.s01_06'].text, /月霜/);
   assert.match(byId['lcq.event.s01_06'].text, /寒毒/);
+  assert.match(byId['lcq.event.s01_06'].text, /丹药/);
+  assert.match(byId['lcq.event.s01_06'].text, /强行|掐开|灌/);
+  assert.match(byId['lcq.event.s01_06'].text, /真阳/);
   assert.equal(byId['lcq.event.s01_06'].receipts.move, false);
   assert.equal(byId['lcq.event.s01_05'].present.includes('段强'), false);
   assert.equal(byId['lcq.event.s01_05'].text.includes('段强'), false);

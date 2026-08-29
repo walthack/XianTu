@@ -1,6 +1,7 @@
 # 仙途 (XianTu) · 项目总体状况与并行分工文档
 
 > 面向「新加入的 agent」。读完这一篇即可独立认领一个模块开工。
+> **2026-08-29 Codex P1 后收口 s01_06。** 混在场 `月霜+段强` 拒收，句库不写段强。正典拍保留：月霜强行灌药、真阳激发下贴身交合、寒毒被压。未扩白湖。P0-1 / P0-2 仍 OPEN。
 > **2026-08-29 Codex approve e43cf50..058effd 后扩 s01_06。** 无新 P0/P1。短链纳入 `lcq.event.s01_06`：在场须有月霜，独立寒毒／丹药／真阳变体，不复用草原／飞机库存；顺序回归 s01_01→02→03→04→06→05 仍不复活段强，s01_06 无移动回执。未扩白湖。P0-1 / P0-2 仍 OPEN。
 > **2026-08-29 Codex 再 REJECT：Fast 复活段强 + flag 编码。** Fast `computePresentNames` 现传 `excludeNames: departedPresentNames`；s01_05 计划路径 present 无段强、forbidden 有段强。`eventIsCompleted` 与 runtime 一致：嵌套优先、`"true"` 字符串、扁平兜底。未扩白湖。P0-1 / P0-2 仍 OPEN。
 > **2026-08-29 Codex P1：外貌字段不得当死亡证。** `focusedNpcNamesFromState` 不再用 `当前外貌状态` 匹配「已死亡/身亡/尸体」。王哲、段强正典 `profile.currentAppearance` 都写着「已死亡」，活人会被误踢出实时关注。离场只认 `departedPresentNames`（s01_02 完成后段强）。回归：王哲档案已死亡仍入选；s01_02 未完成时段强档案已死亡仍入选；完成后即使外貌正常也排除。未扩白湖。P0-1 / P0-2 仍 OPEN。

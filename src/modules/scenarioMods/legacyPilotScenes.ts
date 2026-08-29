@@ -47,7 +47,7 @@ export function acceptLegacyPilotScene(packet: LegacyNarratorPacket): boolean {
     const moving = packet.receipts?.move === true && /帅帐/.test(String(packet.receipts?.moveTo || ''));
     return atTent || moving;
   }
-  if (eventId === 'lcq.event.s01_06') return names.includes('月霜');
+  if (eventId === 'lcq.event.s01_06') return names.includes('月霜') && !names.includes('段强');
   return false;
 }
 
@@ -162,7 +162,7 @@ function progressPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan)
 }
 
 function frostPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan): string[] {
-  const companion = presentNames(packet).find(name => name === '月霜') || presentNames(packet)[0] || '月霜';
+  const companion = '月霜';
   const place = placeOf(packet);
   const sensory = {
     grass_iron: `${companion}的寒气贴着伤处往外冒。铁锈味还在，可这一侧已经冷过了血。`,
@@ -171,18 +171,18 @@ function frostPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan): s
   }[plan.sensory];
   const pacing = {
     slow_orient: `你没有退开。月霜身上的寒毒正在失控，先应对眼前危局。`,
-    tense_watch: `你把呼吸压低，盯住${companion}指节发青的那一侧，不让寒气再散开。`,
-    steady_breathe: `你先把气沉住，再接住她塞过来的那粒丹药。`,
+    tense_watch: `你把呼吸压低，盯住${companion}指节发青的那一侧，不让她把丹药塞进嘴里的手停住。`,
+    steady_breathe: `你先把气沉住。她已经掐开你的牙关，要把丹药强行灌下去。`,
   }[plan.pacing];
   const reaction = {
-    dazed: `${companion}的目光已经散了，牙关咬得发白，一句完整的话都挤不出来。`,
-    answers: `${companion}喘着说：“吞下去——寒毒压不住了。”声音又硬又短。`,
-    silent_grip: `${companion}抓住你的腕骨，力道大得不像伤者，把丹药按进你掌心。`,
+    dazed: `${companion}的目光已经散了，仍掐着你的下颌，把那粒丹药往你齿间塞。`,
+    answers: `${companion}喘着说：“吞下去——寒毒压不住了。”随即掐开你的牙关，把丹药强行灌进嘴里。`,
+    silent_grip: `${companion}扣住你的后颈，力道大得不像伤者，把丹药强行塞进你嘴里。`,
   }[plan.companion];
   const closing = {
-    hold_ground: `真阳被逼出来。你把热送进她体内，先压住这一波寒毒。`,
-    look_far: `你让${companion}靠着你，自己把视野放到${place}这一侧：寒气退了一寸，人还在。`,
-    steady_breath: `你把呼吸重新对齐，先把她这一身寒毒压下去。`,
+    hold_ground: `丹药入喉，真阳被逼出来。你压住她，把热传入她体内，寒毒这才退下去。`,
+    look_far: `真阳激发后你与${companion}贴身交合，把热送进她体内。${place}这一侧，寒气退了一寸。`,
+    steady_breath: `你把呼吸重新对齐，在真阳驱使下与她发生关系，直到寒毒被压住。`,
   }[plan.closing];
   return [reaction, sensory, pacing, closing].filter(Boolean);
 }
@@ -389,30 +389,29 @@ function progressPool(packet: LegacyNarratorPacket): string[] {
 }
 
 function frostPool(packet: LegacyNarratorPacket): string[] {
-  const names = presentNames(packet);
-  const companion = names.find(name => name === '月霜') || names[0] || '月霜';
+  const companion = '月霜';
   const place = placeOf(packet);
   return [
-    ...namedBeats(names, name => `${name}就在你身侧，寒气从伤处一层层往外冒。`),
+    `${companion}就在你身侧，寒气从伤处一层层往外冒。`,
     `月霜身上的寒毒正在失控，先应对眼前危局。`,
-    `${companion}把一粒丹药按进你掌心，指节已经发青。`,
-    `你没有问这是什么功法。眼下只剩把寒毒压住。`,
-    `丹药入喉，一股热从胃里顶上来，撞上她身上那层冷。`,
-    `你把${companion}从${place}的湿土里托起来，让她靠住你的肩。`,
-    `真阳被逼出来。热不是温柔的，它往她肋下那口寒里钻。`,
-    `她的呼吸乱。你按这个事实走：人还在，毒还在，你伸了手。`,
+    `${companion}掐开你的牙关，把丹药强行灌进你嘴里。`,
+    `你想吐，她按住你的下颌。丹药已经过喉。`,
+    `丹药入喉，一股热从胃里顶上来，真阳被逼得往外冲。`,
+    `真阳激发后你压住${companion}，与她贴身交合，把热传入她体内。`,
+    `这一次不是温存。寒毒要的是真阳，你只能把热送进去。`,
+    `她的呼吸乱。你按这个事实走：人还在，毒还在，丹药已经下肚。`,
     `你低声说：“我在。先把寒压下去。”`,
     `寒气贴着你的小臂往上爬。你没有松手。`,
-    `你把外衣盖到${companion}背上，不是为了遮，是为了留住那一点刚起来的热。`,
+    `发生关系的那几息里，热把她肋下那口冷一点点顶开。`,
     `她咬着牙，目光凶得很，一时分不清这是救命还是把把柄交出来。`,
     `你没有去翻她的怀。眼下只处理眼前这口寒毒。`,
-    `热和冷在她体内顶住。你把步子迈小，不让她再摔回泥里。`,
+    `热和冷在她体内顶住。你把她按在${place}的土上，不让寒气再散开。`,
     `风从${place}上刮过来。这一侧已经不是战场的热，是骨头缝里的冷。`,
     `你让${companion}的头低于你的肩，自己去挡还在散的寒气。`,
     `真阳传入的那一瞬，她喉间溢出一声极短的喘。`,
-    `你把能确定的事过了一遍：人是${companion}，毒是寒毒，热还在你这边。`,
+    `你把能确定的事过了一遍：人是${companion}，毒是寒毒，丹药已经强行灌下。`,
     `她抓住你的衣襟，指节发白，像生怕一松手寒气就会把人吞回去。`,
-    `你没有把这写成温存。你只是把热送进去，把危局先压住。`,
+    `你没有把这写成温存。强行灌药，真阳交合，把危局先压住。`,
     `寒气退了一寸。你没有停，直到她的牙关不再抖成一团。`,
     `你把膝盖跪稳，让两个人都还在${place}这一小块能看见的土上。`,
     `远处喊杀还在。你只守这一息：寒毒先下去，别的以后再说。`,
