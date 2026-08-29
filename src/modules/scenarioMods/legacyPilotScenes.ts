@@ -9,6 +9,7 @@ export const LEGACY_NARRATIVE_PILOT_EVENT_IDS = [
   'lcq.event.s01_05',
   'lcq.event.s01_06',
   'lcq.event.s02_01',
+  'lcq.event.s02_03',
 ] as const;
 
 export type LegacyPilotEventId = (typeof LEGACY_NARRATIVE_PILOT_EVENT_IDS)[number];
@@ -54,6 +55,7 @@ export function acceptLegacyPilotScene(packet: LegacyNarratorPacket): boolean {
     const atTent = /帅帐/.test(packet.location || '') || /帅帐/.test(packet.mustAppear?.location || '');
     return atTent;
   }
+  if (eventId === 'lcq.event.s02_03') return names.includes('月霜') && !names.includes('段强');
   return false;
 }
 
@@ -167,6 +169,32 @@ function progressPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan)
   return [reaction, sensory, pacing, closing].filter(Boolean);
 }
 
+function legionPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan): string[] {
+  const companion = '月霜';
+  const place = placeOf(packet);
+  const sensory = {
+    grass_iron: `标枪先到。秦军方阵的前排被钉住，铁锈味和尘土一起扑到脸上。`,
+    wind_sky: `弩矢从这一侧飞出去。对面罗马第十二军团的盾墙没有散，风把旗面拍得发硬。`,
+    mud_body: `你把${companion}按低。泥里全是被踩乱的脚印，短兵相接的声音贴着地皮传来。`,
+  }[plan.sensory];
+  const pacing = {
+    slow_orient: `你没有把这拍写成逃走。在秦军与罗马军的交战中求生并观察战局。`,
+    tense_watch: `你把呼吸压低，盯住右刺那一侧，不让${companion}再站到标枪能及的开阔处。`,
+    steady_breathe: `你先把步子踩实，再把${companion}拉到方阵内侧还能看见溃势的位置。`,
+  }[plan.pacing];
+  const reaction = {
+    dazed: `${companion}咬着牙，一时说不出完整的判断，只把你往盾墙缺口外侧拽。`,
+    answers: `${companion}低声说：“标枪过了。右刺来了——看清再动。”声音又硬又短。`,
+    silent_grip: `${companion}扣住你的腕骨，力道大，不让你冲进已经乱掉的前排。`,
+  }[plan.companion];
+  const closing = {
+    hold_ground: `秦军方阵被右刺撕开，人开始溃散。你和${companion}还在${place}这一侧看着这一局落下。`,
+    look_far: `你让${companion}靠着你，自己把视野放到溃散处：盾墙还在推进，秦军已经守不住。`,
+    steady_breath: `你把呼吸重新对齐，先求生，把秦军溃散看成已经发生的战局。`,
+  }[plan.closing];
+  return [reaction, sensory, pacing, closing].filter(Boolean);
+}
+
 function mandatePreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan): string[] {
   const destName = '帅帐';
   const sensory = {
@@ -258,6 +286,7 @@ export function legacyPilotPreferredSentences(
   if (eventId === 'lcq.event.s01_05') return arrivePreferred(packet, plan);
   if (eventId === 'lcq.event.s01_06') return frostPreferred(packet, plan);
   if (eventId === 'lcq.event.s02_01') return mandatePreferred(packet, plan);
+  if (eventId === 'lcq.event.s02_03') return legionPreferred(packet, plan);
   return openingPreferred(packet, plan);
 }
 
@@ -420,6 +449,35 @@ function progressPool(packet: LegacyNarratorPacket): string[] {
   ];
 }
 
+function legionPool(packet: LegacyNarratorPacket): string[] {
+  const companion = '月霜';
+  const place = placeOf(packet);
+  return [
+    `${companion}就在你身侧，甲叶上全是尘。`,
+    `在秦军与罗马军的交战中求生并观察战局。`,
+    `天武营的弩还在放。对面是罗马第十二军团的盾。`,
+    `标枪砸进方阵。前排的人还没来得及换矛。`,
+    `你没有冲上去改写这一局。眼下只求生，并看清溃在何处。`,
+    `右刺从盾墙内侧递出来。秦军的阵脚先乱了半步。`,
+    `你把${companion}拉到${place}还能看见全阵的土坡内侧。`,
+    `短兵相接的声音很近。你把呼吸压住，数得出盾牌碰撞的次数。`,
+    `秦军方阵被撕开一道。人开始往两侧溃散。`,
+    `你低声说：“别冲前排。看他们怎么散。”`,
+    `风把旗面拍硬。罗马的步点没有乱，秦军的步点乱了。`,
+    `你用身体挡住迎面的尘，让${companion}先把伤处离开放枪线。`,
+    `求生不是逃走改写战局。你还在场，秦军已经溃了。`,
+    `你把能确定的事过了一遍：人是${companion}，对面是罗马，结果是溃散。`,
+    `${companion}的目光很硬。她看的是阵，不是逃路。`,
+    `标枪的第二轮比第一轮更齐。你把膝盖跪稳。`,
+    `方阵的后排开始往后踏。这不是整顿，是溃。`,
+    `你没有去捡地上的矛。矛是别人的，命是自己的。`,
+    `远处喊杀换了调。你只守这一小段能看见的土。`,
+    `你让${companion}的头低于你的肩，自己去看右刺还在不在推进。`,
+    `秦军溃散已经落下来。你把这一息看完，不把未发生的胜写成已得。`,
+    `你把掌心按进泥里，借力把人往后偏半步，仍看着阵面。`,
+  ];
+}
+
 function mandatePool(packet: LegacyNarratorPacket): string[] {
   const destName = '帅帐';
   return [
@@ -524,6 +582,7 @@ export function legacyPilotSafeSentencePool(packet: LegacyNarratorPacket): strin
   if (eventId === 'lcq.event.s01_05') return arrivePool(packet);
   if (eventId === 'lcq.event.s01_06') return frostPool(packet);
   if (eventId === 'lcq.event.s02_01') return mandatePool(packet);
+  if (eventId === 'lcq.event.s02_03') return legionPool(packet);
   return openingPool(packet);
 }
 
