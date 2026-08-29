@@ -191,4 +191,8 @@ test('离场名单认运行时 flag 编码（字符串布尔、嵌套、嵌套�
   const mixed = { flags: { 'event.s01_02.done': false, event: { s01_02: { done: true } } } };
   assert.deepEqual(departedPresentNames(mixed), ['段强']);
   assert.equal(focused(mixed).includes('段强'), false);
+
+  const carried = { flags: {}, completedEventIds: [], departedCast: ['段强'] };
+  assert.deepEqual(departedPresentNames(carried), ['段强']);
+  assert.equal(focused(carried).includes('段强'), false);
 });

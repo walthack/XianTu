@@ -313,6 +313,8 @@ export interface RuntimeState extends ScenarioProgressState {
   steeringCooldown?: number;
   /** 玩家造成的世界线差异；本地对账引擎独占写入，LLM 只读。 */
   divergences?: ScenarioDivergence[];
+  /** 已离场角色名。玩家历史，切关必须继承——死亡事件 flag 不随关卡模板带走。 */
+  departedCast?: string[];
   /** 场外世界事件已结算的原事件；与 completedEventIds 分离，防止把玩家未参与的原著拍伪记为完成。 */
   offscreenResolvedEventIds?: string[];
   /** 本轮强制按在场合同结算的世界事件；消费即清，不改时钟。 */

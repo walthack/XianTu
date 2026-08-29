@@ -432,6 +432,7 @@ test('s02_02 81 plans on a natural stage-02 save never name unmet 阿伽门侬',
   const { compileLegacyNarratorPacket, previewLegacyPilotSettlement } = await loadTs(
     '../src/modules/scenarioMods/legacyNarratorPacket.ts',
   );
+  const { acceptLegacyPilotScene } = await loadTs('../src/modules/scenarioMods/legacyPilotScenes.ts');
   const {
     composeLegacyNarrativeFromPlan,
     LEGACY_RENDER_PACING,
@@ -492,6 +493,8 @@ test('s02_02 81 plans on a natural stage-02 save never name unmet 阿伽门侬',
           .filter(record => record?.name && record.kind !== 'rumored')
           .map(record => String(record.name));
         assert.equal(met.includes('阿伽门侬'), false, met.join(','));
+        assert.deepEqual([...compiled.packet.present].sort(), ['月霜', '王哲'], compiled.packet.present.join(','));
+        assert.equal(acceptLegacyPilotScene(compiled.packet), true);
         for (const pacing of LEGACY_RENDER_PACING) {
           for (const sensory of LEGACY_RENDER_SENSORY) {
             for (const companion of LEGACY_RENDER_COMPANION) {

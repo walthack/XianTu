@@ -7,6 +7,7 @@ import { advanceScenarioRuntime, createScenarioProgress, getInitialScenarioChapt
 import { applyScenarioRelationshipsToSave } from './relationships';
 import { isDefaultLineQuarantinedStageId } from './canonRail';
 import { overlayQingyuStage02Opening } from './qingyuOpeningPlaytest';
+import { departedPresentNames } from './presence';
 
 export interface ScenarioModRuntimeState extends ScenarioProgressState {
   schema: ScenarioMod['schema'];
@@ -320,6 +321,7 @@ export function transitionToNextScenarioStage(saveData: SaveData, modsOverride?:
   const acquaintanceSnapshot = structuredClone(
     rt.acquaintances && typeof rt.acquaintances === 'object' ? rt.acquaintances : {},
   );
+  const departedCastSnapshot = [...new Set(departedPresentNames(rt))];
   // 关系姿态同理：滞回状态跨关保留，否则每次切关姿态都从瞬时值重来，
   // "维持 ≥1 游戏日才翻档"在关卡边界上就失效了。
   const stanceSnapshot = structuredClone(
@@ -385,6 +387,7 @@ export function transitionToNextScenarioStage(saveData: SaveData, modsOverride?:
   if (Object.keys(acquaintanceSnapshot).length) {
     newRuntime.acquaintances = { ...(newRuntime.acquaintances || {}), ...acquaintanceSnapshot };
   }
+  if (departedCastSnapshot.length) newRuntime.departedCast = departedCastSnapshot;
   if (Object.keys(stanceSnapshot).length) {
     newRuntime.stanceStates = { ...(newRuntime.stanceStates || {}), ...stanceSnapshot };
   }

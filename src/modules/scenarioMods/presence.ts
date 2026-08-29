@@ -131,11 +131,20 @@ function eventIsCompleted(runtime: { flags?: Record<string, unknown>; completedE
 }
 
 /** Characters who have already left the living present cast. */
-export function departedPresentNames(runtime: { flags?: Record<string, unknown>; completedEventIds?: unknown } | null | undefined): string[] {
+export function departedPresentNames(runtime: {
+  flags?: Record<string, unknown>;
+  completedEventIds?: unknown;
+  departedCast?: unknown;
+} | null | undefined): string[] {
   const names: string[] = [];
+  const persisted = Array.isArray(runtime?.departedCast) ? runtime.departedCast : [];
+  for (const name of persisted) {
+    const text = String(name || '').trim();
+    if (text) names.push(text);
+  }
   if (eventIsCompleted(runtime, 'lcq.event.s01_02')) names.push('段强');
   if (eventIsCompleted(runtime, 'lcq.event.s02_02')) names.push('王哲');
-  return names;
+  return [...new Set(names)];
 }
 
 /** Live-watch names. Death/departure is `departedPresentNames` only — never `当前外貌状态` (canon profiles stamp 已死亡 on living 王哲/段强). */
