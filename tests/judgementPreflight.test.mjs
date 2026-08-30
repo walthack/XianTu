@@ -3,10 +3,19 @@ import test from 'node:test';
 import { loadTs } from './loadTs.mjs';
 
 test('tear-bond authored line hits explore preflight because of 搜查', async () => {
-  const { buildLocalJudgementPreflight } = await loadTs('../src/utils/judgementPreflight.ts');
+  const { buildLocalJudgementPreflight, shouldSkipJudgementPreflight } = await loadTs('../src/utils/judgementPreflight.ts');
   const save = { 角色: { 身份: { 先天六司: {}, 后天六司: {} }, 位置: { 灵气浓度: 50 } } };
   const line = '我当着阿姬曼的面撕毁身契还她自由；发现商馆侍卫封锁出城岔路后，立刻改道避开搜查。';
   assert.equal(buildLocalJudgementPreflight(line, save, 20)?.kind, 'explore');
+  assert.equal(shouldSkipJudgementPreflight({
+    selectedSource: 'event_engine', selectedPlayerLine: line, userMessage: line,
+  }), true);
+  assert.equal(shouldSkipJudgementPreflight({
+    selectedSource: 'event_engine', selectedPlayerLine: line, userMessage: `${line}再搜一遍`,
+  }), false);
+  assert.equal(shouldSkipJudgementPreflight({
+    selectedSource: 'open_world_engine', userMessage: '我选择沿人多的街面过去，前往点心铺。',
+  }), true);
 });
 
 test('preflight only proposes cards for explicit risky actions', async () => {

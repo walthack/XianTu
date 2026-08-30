@@ -469,23 +469,27 @@ export function settleWuyuanOpenWorldSelection(saveData: SaveData, selection: Wu
     return { settled: false, idempotent: false, reason: 'inactive_slice', settledFacts: [] };
   }
   const current = getWuyuanOpenWorldSelections(saveData).find(item =>
-    item.kind === selection.kind && item.identityId === selection.identityId && item.receiptId === selection.receiptId);
+    item.kind === selection.kind && item.identityId === selection.identityId);
   const state = runtime.openWorldSlice;
   if (!state) {
     return { settled: false, idempotent: false, reason: 'inactive_slice', settledFacts: [] };
   }
   if (!current) {
-    const already = [...state.travelReceipts, ...state.noticeReceipts, ...state.actionReceipts]
-      .some(item => item.receiptId === selection.receiptId);
+    const already = selection.kind === 'travel'
+      ? state.travelReceipts.some(item => item.routeId === selection.identityId || item.receiptId === selection.receiptId)
+      : selection.kind === 'notice'
+        ? state.noticeReceipts.some(item => item.noticeId === selection.identityId || item.receiptId === selection.receiptId)
+        : state.actionReceipts.some(item => item.actionId === selection.identityId || item.receiptId === selection.receiptId);
     return already
       ? { settled: true, idempotent: true, settledFacts: selection.settledFacts }
       : { settled: false, idempotent: false, reason: 'stale_selection', settledFacts: [] };
   }
+  const receiptId = current.receiptId;
   const result = selection.kind === 'travel'
-    ? settleOpenWorldTravel(state, WUYUAN_OPEN_WORLD_DEFINITION, selection.identityId, selection.receiptId)
+    ? settleOpenWorldTravel(state, WUYUAN_OPEN_WORLD_DEFINITION, selection.identityId, receiptId)
     : selection.kind === 'notice'
-      ? readOpenWorldNotice(state, WUYUAN_OPEN_WORLD_DEFINITION, selection.identityId, selection.receiptId)
-      : settleOpenWorldProblemAction(state, WUYUAN_OPEN_WORLD_DEFINITION, selection.identityId, selection.receiptId);
+      ? readOpenWorldNotice(state, WUYUAN_OPEN_WORLD_DEFINITION, selection.identityId, receiptId)
+      : settleOpenWorldProblemAction(state, WUYUAN_OPEN_WORLD_DEFINITION, selection.identityId, receiptId);
   if (result.status === 'rejected') {
     return { settled: false, idempotent: false, reason: result.reason, settledFacts: [] };
   }

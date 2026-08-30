@@ -172,6 +172,32 @@ test('reading the rumor unlocks a slower named route, and unspecified destinatio
   assert.equal(resolveWuyuanOpenWorldSelectionFromText(current, '我走后巷去点心铺').identityId, 'lcq.route.wuyuan.market_to_pastry_alley');
 });
 
+test('stale elapsedTurns receipt still settles pastry travel by route identity', async () => {
+  const {
+    getWuyuanOpenWorldSelections, settleWuyuanOpenWorldSelection, ensureWuyuanOpenWorldSlice,
+  } = await loadTs('../src/modules/scenarioMods/wuyuanOpenWorldSlice.ts');
+  const current = save();
+  const travel = getWuyuanOpenWorldSelections(current).find(item => item.kind === 'travel');
+  assert.ok(travel, 'market must offer pastry travel');
+  assert.match(travel.identityId, /market_to_pastry/);
+  current.世界.状态.剧本模组.worldTurn = Number(current.世界.状态.剧本模组.worldTurn || 0) + 1;
+  current.世界.状态.剧本模组.openWorldSliceLastWorldTurn = 0;
+  const state = ensureWuyuanOpenWorldSlice(current);
+  assert.notEqual(state.elapsedTurns, Number(String(travel.receiptId).split(':').at(-1)), 'hydrate must mint a new receipt clock');
+  const fresh = getWuyuanOpenWorldSelections(current).find(item => item.kind === 'travel' && item.identityId === travel.identityId);
+  assert.ok(fresh);
+  assert.notEqual(fresh.receiptId, travel.receiptId);
+  const settled = settleWuyuanOpenWorldSelection(current, travel);
+  assert.equal(settled.settled, true, settled.reason);
+  assert.equal(settled.reason, undefined);
+  assert.equal(current.世界.状态.剧本模组.openWorldSlice.currentZoneId, 'lcq.zone.wuyuan.pastry_shop');
+  assert.equal(current.角色.位置.描述, '中州·五原·点心铺');
+  const again = settleWuyuanOpenWorldSelection(current, travel);
+  assert.equal(again.settled, true);
+  assert.equal(again.idempotent, true);
+  assert.equal(current.世界.状态.剧本模组.openWorldSlice.currentZoneId, 'lcq.zone.wuyuan.pastry_shop');
+});
+
 test('travel is explicit and both local solutions converge to the canon capture only in companion mode', async () => {
   const {
     getWuyuanOpenWorldSelections, settleWuyuanOpenWorldSelection,

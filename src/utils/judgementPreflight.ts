@@ -23,6 +23,20 @@ const RISK_RULES: Array<[JudgementKind, RegExp]> = [
 ];
 const EXPLICIT_IF_INTENT = /收服|招揽|结盟|策反|纳入后宫|纳妾|改写命运|救下.*不死|提前杀死/;
 
+/** Clicked event/open-world contracts are already locally settled; keyword risk cards must not intercept them. */
+export function shouldSkipJudgementPreflight(input: {
+  skipPreflight?: boolean;
+  selectedSource?: string;
+  selectedPlayerLine?: string;
+  userMessage?: string;
+}): boolean {
+  if (input.skipPreflight) return true;
+  if (input.selectedSource === 'open_world_engine') return true;
+  return input.selectedSource === 'event_engine'
+    && Boolean(input.selectedPlayerLine)
+    && input.selectedPlayerLine === input.userMessage;
+}
+
 /** The queued action is part of the submitted intent and must be preflighted too. */
 export function composeJudgementAction(intentText: string, actionQueueText: string): string {
   const intent = intentText.trim();

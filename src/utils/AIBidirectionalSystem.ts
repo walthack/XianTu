@@ -835,6 +835,16 @@ class AIBidirectionalSystemClass {
     }
 
     const trustedJudgementResolution = verifyResolvedJudgementReceipt(saveData, options?.judgementResolution);
+    if (options?.openWorldAction) {
+      const previewed = settleWuyuanOpenWorldSelection(saveData, options.openWorldAction);
+      if (!previewed.settled) {
+        console.warn('[开放世界] 生成前结算未成立', {
+          identityId: options.openWorldAction.identityId,
+          receiptId: options.openWorldAction.receiptId,
+          reason: previewed.reason,
+        });
+      }
+    }
 
     // 2. 准备AI上下文
     options?.onProgressUpdate?.('构建提示词并请求AI生成…');
@@ -2187,6 +2197,13 @@ ${step1Text}
     const openWorldProgress = options?.openWorldAction
       ? settleWuyuanOpenWorldSelection(saveData, options.openWorldAction)
       : undefined;
+    if (options?.openWorldAction && !openWorldProgress?.settled) {
+      console.warn('[开放世界] 结算未成立', {
+        identityId: options.openWorldAction.identityId,
+        receiptId: options.openWorldAction.receiptId,
+        reason: openWorldProgress?.reason,
+      });
+    }
     if (openWorldProgress?.settled) {
       changes.push({
         key: '世界.状态.剧本模组.openWorldSlice',

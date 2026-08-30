@@ -9,8 +9,7 @@ test('all three player entry forms converge on the same preflight before AI gene
   const source = await read('../src/components/dashboard/MainGamePanel.vue');
   assert.match(source, /const judgementAction = composeJudgementAction\(inputText\.value, actionQueueText\)/);
   assert.match(source, /buildLocalJudgementPreflight\(judgementAction, saveData, getNarrativeTurn\(saveData\)\)/);
-  assert.match(source, /preflightSelectedEventAction/);
-  assert.match(source, /!preflightOpenWorldAction && !preflightSelectedEventAction/);
+  assert.match(source, /shouldSkipJudgementPreflight/);
   assert.match(source, /const selectActionOption[\s\S]*inputText\.value = trimmed/);
   assert.match(source, /行动判定（尚未掷骰）/);
   assert.match(source, /确认并掷骰/);

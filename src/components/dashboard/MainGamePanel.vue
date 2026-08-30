@@ -470,7 +470,7 @@ import {
   type JudgementResolution,
   type JudgementOutcome,
 } from '@/utils/judgementEngine';
-import { buildLocalJudgementPreflight, composeJudgementAction } from '@/utils/judgementPreflight';
+import { buildLocalJudgementPreflight, composeJudgementAction, shouldSkipJudgementPreflight } from '@/utils/judgementPreflight';
 import { getNarrativeTurn } from '@/utils/actionGate';
 import {
   getCurrentStoryEventActions,
@@ -1650,9 +1650,14 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
   const preflightOpenWorldAction = selectedScenarioEngineAction.value?.source === 'open_world_engine'
     ? selectedScenarioEngineAction.value
     : (saveData ? resolveWuyuanOpenWorldSelectionFromText(saveData, inputText.value.trim()) : undefined);
-  const preflightSelectedEventAction = selectedScenarioEngineAction.value?.source === 'event_engine'
-    && selectedScenarioEngineAction.value?.playerLine === inputText.value.trim();
-  if (!execution?.skipPreflight && !preflightOpenWorldAction && !preflightSelectedEventAction) {
+  if (!shouldSkipJudgementPreflight({
+    skipPreflight: execution?.skipPreflight,
+    selectedSource: selectedScenarioEngineAction.value?.source,
+    selectedPlayerLine: selectedScenarioEngineAction.value && 'playerLine' in selectedScenarioEngineAction.value
+      ? selectedScenarioEngineAction.value.playerLine
+      : undefined,
+    userMessage: inputText.value.trim(),
+  }) && !preflightOpenWorldAction) {
     const proposal = buildLocalJudgementPreflight(judgementAction, saveData, getNarrativeTurn(saveData));
     if (proposal) {
       persistPendingJudgement(saveData, proposal);
