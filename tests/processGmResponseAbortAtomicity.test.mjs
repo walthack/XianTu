@@ -64,8 +64,8 @@ function stage02Runtime() {
     }],
     completedChapterIds: [],
     activeEventIds: ['lcq.event.s02_04'],
-    completedEventIds: ['lcq.event.s02_03'],
-    flags: { 'event.s02_04.done': false },
+    completedEventIds: ['lcq.event.s02_02', 'lcq.event.s02_03'],
+    flags: { 'event.s02_02.done': true, 'event.s02_03.done': true, 'event.s02_04.done': false },
     divergences: [],
   };
 }
