@@ -1253,6 +1253,13 @@
                 "operator": "eq",
                 "value": true
               }
+            ],
+            [
+              {
+                "path": "flags.event.s06_03.void",
+                "operator": "eq",
+                "value": true
+              }
             ]
           ],
           "anchorIds": [],

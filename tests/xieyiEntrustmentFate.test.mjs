@@ -257,3 +257,62 @@ test('隔离 stage_06 看到 void 映射后不得从空 active 列表再挂上�
   assert.equal(runtime.activeEventIds.includes('lcq.event.s06_03'), false);
   assert.equal(getCurrentStoryEventActions(next).some(item => item.eventId === 'lcq.event.s06_03'), false);
 });
+
+const S06_03_SITUATION_ID = 'world-sim.baseline.lcq.stage_06.lcq.event.s06_03';
+
+function stage06WorldSimRuntime(stage06, flags) {
+  return {
+    storyMode: 'world_sim',
+    worldTurn: 4,
+    flags: {
+      'event.s06_01.done': true,
+      'event.s06_02.done': true,
+      ...flags,
+    },
+    events: structuredClone(stage06.scenario.events),
+    worldSimulation: structuredClone(stage06.scenario.worldSimulation),
+    worldSimulationState: {
+      actionReceipts: [],
+      deliveredOmenIds: [],
+      pendingOmenIds: [],
+      situationActivatedAtTurns: { [S06_03_SITUATION_ID]: 0 },
+    },
+  };
+}
+
+test('隔离 stage_06 的 world-sim 局势见 void 后不得再送雷火贯胸征兆', async () => {
+  const { getCurrentWorldSituation, deliverDueWorldOmens } = await loadTs('../src/modules/scenarioMods/worldSimulation.ts');
+  const stage06 = JSON.parse(await readFile(stage06Url, 'utf8'));
+  const situation = stage06.scenario.worldSimulation.situations.find(item => item.id === S06_03_SITUATION_ID);
+  assert.deepEqual(
+    situation.settledWhenAny,
+    [
+      [{ path: 'flags.event.s06_03.done', operator: 'eq', value: true }],
+      [{ path: 'flags.event.s06_03.void', operator: 'eq', value: true }],
+    ],
+  );
+
+  const unsettled = stage06WorldSimRuntime(stage06, {});
+  assert.equal(getCurrentWorldSituation(unsettled)?.id, S06_03_SITUATION_ID);
+  assert.equal(
+    deliverDueWorldOmens(unsettled, []).some(item => item.eventId === 'lcq.event.s06_03'),
+    true,
+  );
+
+  const voided = stage06WorldSimRuntime(stage06, {
+    'event.s06_03.void': true,
+    'character.xie_yi.status': 'longrest',
+  });
+  assert.notEqual(getCurrentWorldSituation(voided)?.id, S06_03_SITUATION_ID);
+  assert.notEqual(getCurrentWorldSituation(voided)?.sourceEventId, 'lcq.event.s06_03');
+  const voidNotices = deliverDueWorldOmens(voided, []);
+  assert.equal(voidNotices.some(item => item.eventId === 'lcq.event.s06_03'), false);
+  assert.equal(voidNotices.some(item => /雷贯|雷火贯胸/.test(`${item.title || ''}${item.detail || ''}`)), false);
+
+  const done = stage06WorldSimRuntime(stage06, {
+    'event.s06_03.done': true,
+    'character.xie_yi.status': 'dead',
+  });
+  assert.notEqual(getCurrentWorldSituation(done)?.id, S06_03_SITUATION_ID);
+  assert.equal(deliverDueWorldOmens(done, []).some(item => item.eventId === 'lcq.event.s06_03'), false);
+});
