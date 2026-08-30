@@ -51,7 +51,24 @@ test('pilot accepts only an exact selected stage_01 action and fails closed othe
   assert.equal(pilot.isLegacyNarrativePilotEnabled(OFF), false);
   assert.equal(pilot.isLegacyNarrativePilotEnabled(ON), true);
   assert.equal(pilot.planLegacyNarrativePilot({ saveData: save, eventAction: selection, eventActionProvenance: 'selected', storage: OFF }), null);
-  assert.equal(pilot.planLegacyNarrativePilot({ saveData: save, eventAction: selection, eventActionProvenance: 'resolved_text', storage: ON }), null);
+  const demoNatural = pilot.planLegacyNarrativePilot({
+    saveData: save,
+    eventAction: selection,
+    eventActionProvenance: 'resolved_text',
+    playerActionText: '我先观察四周，再查看段强是否受伤。',
+    storage: ON,
+  });
+  assert.ok(demoNatural);
+  assert.equal(demoNatural.playerLine, '我先观察四周，再查看段强是否受伤。');
+  const ordinary = structuredClone(save);
+  delete ordinary.系统.扩展.清羽记开局;
+  assert.equal(pilot.planLegacyNarrativePilot({
+    saveData: ordinary,
+    eventAction: selection,
+    eventActionProvenance: 'resolved_text',
+    playerActionText: '我先观察四周，再查看段强是否受伤。',
+    storage: ON,
+  }), null);
 
   const plan = pilot.planLegacyNarrativePilot({
     saveData: save,

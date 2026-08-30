@@ -5,6 +5,7 @@ import test from 'node:test';
 import { loadTs } from './loadTs.mjs';
 
 const stageUrl = new URL('../src/modules/scenarioMods/builtins/data/lcq.stage_01.json', import.meta.url);
+const stage02Url = new URL('../src/modules/scenarioMods/builtins/data/lcq.stage_02.json', import.meta.url);
 
 async function loadStage() {
   const { parseScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
@@ -77,6 +78,79 @@ test('第一屏停在穿越落地，自由行动 2-3 回合后自动进入段强
   assert.deepEqual(runtime().activeEventIds, ['lcq.event.s01_02'], '结清后应激活段强遇袭');
   const demoOnly = runtime().events.filter(event => String(event.offscreenResolution?.id || '').includes('qingyu_demo'));
   assert.deepEqual(demoOnly.map(event => event.id), ['lcq.event.s01_01'], 'Demo 不得给其它拍加自动推进覆写');
+});
+
+test('Demo 自然行动与点击建议落同一份本地回执并在当前响应轮推进', async () => {
+  const { createQingyuOpeningPlaytestSave } = await loadTs('../src/modules/scenarioMods/qingyuOpeningPlaytest.ts');
+  const {
+    advanceScenarioRuntime,
+    getCurrentStoryEventActions,
+    recordStoryEventStructuredAction,
+    resolveStoryEventActionFromPlayerText,
+  } = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  const original = createQingyuOpeningPlaytestSave(await loadStage());
+  const clicked = getCurrentStoryEventActions(original).find(item => item.eventId === 'lcq.event.s01_01');
+  const natural = resolveStoryEventActionFromPlayerText(original, '我先观察四周，再查看段强是否受伤。');
+  assert.ok(clicked);
+  assert.deepEqual(natural, clicked);
+
+  const clickSave = structuredClone(original);
+  const naturalSave = structuredClone(original);
+  assert.equal(recordStoryEventStructuredAction(clickSave, clicked).completed, true);
+  assert.equal(recordStoryEventStructuredAction(naturalSave, natural).completed, true);
+  const clickedAdvanced = advanceScenarioRuntime(clickSave).saveData;
+  const naturalAdvanced = advanceScenarioRuntime(naturalSave).saveData;
+  assert.deepEqual(
+    naturalAdvanced.世界.状态.剧本模组.eventActionStates,
+    clickedAdvanced.世界.状态.剧本模组.eventActionStates,
+  );
+  assert.deepEqual(
+    naturalAdvanced.世界.状态.剧本模组.completedEventIds,
+    clickedAdvanced.世界.状态.剧本模组.completedEventIds,
+  );
+  assert.equal(naturalAdvanced.世界.状态.剧本模组.flags['event.s01_01.done'], true);
+  assert.deepEqual(naturalAdvanced.世界.状态.剧本模组.activeEventIds, ['lcq.event.s01_02']);
+});
+
+test('Demo stage_02 为每个承重步骤补自然行动，不改 builtin 源数据', async () => {
+  const { parseScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
+  const { overlayQingyuStage02Opening } = await loadTs('../src/modules/scenarioMods/qingyuOpeningPlaytest.ts');
+  const source = parseScenarioMod(JSON.parse(await readFile(stage02Url, 'utf8')));
+  const sourceJson = JSON.stringify(source);
+  const demo = overlayQingyuStage02Opening(source);
+  const actions = new Map();
+  for (const event of demo.scenario.events) {
+    for (const action of event.playerCompletionContract?.actions || []) {
+      actions.set(`${event.id}:${action.id}`, action);
+    }
+  }
+  for (const key of [
+    'lcq.event.s02_01:advance_declared_objective',
+    'lcq.event.s02_02:hold_left_army_line',
+    'lcq.event.s02_02:witness_wang_zhe_nine_suns',
+    'lcq.event.s02_02:record_battlefield_aftermath',
+    'lcq.event.ningyu_enters_gamble:see_ningyu_sent_into_gamble',
+    'lcq.event.ningyu_enters_gamble:answer_ningyu_on_debut',
+    'lcq.event.sudaji_south_pact:offer_nylon_clue_for_term',
+    'lcq.event.sudaji_south_pact:seal_three_month_south_pact',
+    'lcq.event.baihu_shangguan_escape:walk_out_wuyuan_shangguan',
+  ]) {
+    assert.ok(actions.get(key)?.intentMatch?.matchAny?.length, `${key} 应有 Demo 自然行动入口`);
+  }
+  assert.equal(
+    actions.has('lcq.event.s02_04:advance_declared_objective')
+      && Boolean(actions.get('lcq.event.s02_04:advance_declared_objective')?.intentMatch?.matchAny?.length),
+    false,
+    '五原落奴不得绕过地图／局部动作回执',
+  );
+  assert.equal(JSON.stringify(source), sourceJson, 'Demo overlay 不得反写 builtin 模组');
+});
+
+test('清羽 Demo UI 把剧情合同呈现为行动建议，不显示主线／普通一回合成本', async () => {
+  const panel = await readFile(new URL('../src/components/dashboard/MainGamePanel.vue', import.meta.url), 'utf8');
+  assert.match(panel, /v-if="showScenarioActionMechanics\(option\)" class="engine-action-badge"/);
+  assert.match(panel, /qingyuOpeningDemo \? t\('可以直接描述行动，也可点按建议填入'\)/);
+  assert.match(panel, /!qingyuOpeningDemo\.value \|\| option\.source !== 'event_engine'/);
 });
 
 test('s01_02 在 4 个自由回合内到点结清段强之死，不靠诊治原句', async () => {

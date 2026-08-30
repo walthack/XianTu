@@ -12,7 +12,7 @@ export interface LegacyGateRule {
 /** Living coverage matrix: every inherited rule must land on at least one gate. */
 export const LEGACY_GATE_MATRIX: LegacyGateRule[] = [
   { id: 'fresh-selection', gate: 1, name: '结构化选项必须 fresh', localAnchor: 'planLegacyNarrativePilot/sameFreshSelection', inNarratorPacket: true },
-  { id: 'selected-provenance', gate: 1, name: '自由输入不得进单幕', localAnchor: 'eventActionProvenance=selected', inNarratorPacket: true },
+  { id: 'selected-provenance', gate: 1, name: '自然输入仅 Demo 且须映射 fresh 动作', localAnchor: 'selected 或 qingyu-demo resolved_text + sameFreshSelection', inNarratorPacket: true },
   { id: 'judgement-receipt', gate: 2, name: '判定结果本地先结算', localAnchor: 'verifyResolvedJudgementReceipt', inNarratorPacket: true },
   { id: 'event-contract', gate: 2, name: '事件合同本地结算', localAnchor: 'recordStoryEventStructuredAction', inNarratorPacket: true },
   { id: 'known-facts', gate: 3, name: '只投影玩家已知事实', localAnchor: 'compileLegacyNarratorPacket.mustAppear', inNarratorPacket: true },

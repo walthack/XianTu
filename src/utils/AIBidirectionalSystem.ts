@@ -211,7 +211,7 @@ export interface ProcessOptions {
   opportunityAction?: ScenarioOpportunityActionSelection;
   /** 由非机会卡事件合同生成的本地判定动作；成功响应后才消费。 */
   eventAction?: ScenarioEventActionSelection;
-  /** 结构化事件动作的来源；单幕试验只接受玩家实际点击的动作，不接受文本回推。 */
+  /** 结构化事件动作的来源。单幕试验默认只接受点击；隔离清羽 Demo 也接受已映射到 fresh 动作的自然句。 */
   eventActionProvenance?: 'selected' | 'resolved_text';
   /** 五原局部开放世界的显式移动／消息／问题合同；成功响应后才消费。 */
   openWorldAction?: WuyuanOpenWorldSelection;
@@ -684,11 +684,13 @@ class AIBidirectionalSystemClass {
     options: ProcessOptions | undefined,
     generationId: string,
     shouldAbort: () => boolean,
+    userMessage?: string,
   ): Promise<GM_Response | null> {
     const plan = planLegacyNarrativePilot({
       saveData,
       eventAction: options?.eventAction,
       eventActionProvenance: options?.eventActionProvenance,
+      playerActionText: userMessage,
     });
     if (!plan) return null;
     if (!(await areLegacyPilotPromptsEnabled(isPromptEnabled))) {
@@ -878,6 +880,7 @@ class AIBidirectionalSystemClass {
         options,
         generationId,
         shouldAbort,
+        userMessage,
       );
       if (legacyNarrativePilotResponse) {
         noteTurnPath('legacy_pilot');

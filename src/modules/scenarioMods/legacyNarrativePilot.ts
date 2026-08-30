@@ -4,6 +4,7 @@ import {
   getCurrentStoryEventActions,
   type ScenarioEventActionSelection,
 } from '@/modules/scenarioMods/runtime';
+import { isQingyuOpeningPlaytestSave } from './qingyuOpeningPlaytest';
 import { isLegacyPilotEventId, LEGACY_NARRATIVE_PILOT_EVENT_IDS } from './legacyPilotScenes';
 
 export const LEGACY_NARRATIVE_PILOT_STORAGE_KEY = 'xiantu.legacyNarrativePilot.s01_01.v1';
@@ -81,17 +82,21 @@ function compactPilotState(saveData: SaveData): Record<string, unknown> {
 }
 
 /**
- * One-scene Legacy experiment. It accepts only an exact, fresh action selected
- * from the structured event UI. Natural-text recovery never receives this route.
+ * One-scene Legacy experiment. It accepts exact, fresh structured selections.
+ * The isolated Qingyu Demo also accepts a selection recovered from authored
+ * natural-intent phrases; other saves retain the selected-only compatibility gate.
  */
 export function planLegacyNarrativePilot(input: {
   saveData: SaveData;
   eventAction?: ScenarioEventActionSelection;
   eventActionProvenance?: 'selected' | 'resolved_text';
+  playerActionText?: string;
   storage?: StorageLike;
 }): LegacyNarrativePilotPlan | null {
   if (!isLegacyNarrativePilotEnabled(input.storage)) return null;
-  if (input.eventActionProvenance !== 'selected') return null;
+  const demoNaturalIntent = input.eventActionProvenance === 'resolved_text'
+    && isQingyuOpeningPlaytestSave(input.saveData);
+  if (input.eventActionProvenance !== 'selected' && !demoNaturalIntent) return null;
   const provided = input.eventAction;
   if (!provided || provided.source !== 'event_engine' || !isLegacyPilotEventId(provided.eventId)) {
     return null;
@@ -100,9 +105,10 @@ export function planLegacyNarrativePilot(input: {
   const fresh = getCurrentStoryEventActions(input.saveData)
     .find(candidate => sameFreshSelection(candidate, provided));
   if (!fresh) return null;
+  const naturalPlayerLine = demoNaturalIntent ? String(input.playerActionText || '').trim().slice(0, 600) : '';
   return {
     selection: structuredClone(fresh),
-    playerLine: fresh.playerLine,
+    playerLine: naturalPlayerLine || fresh.playerLine,
     outcomeText: fresh.outcomeText,
     compactState: compactPilotState(input.saveData),
   };

@@ -77,16 +77,110 @@ export function overlayQingyuStage02Opening(mod: ScenarioMod): ScenarioMod {
   if (mod.manifest.id !== QINGYU_OPENING_PLAYTEST_END_MOD_ID) return mod;
   const next = structuredClone(mod);
   next.scenario.opening = { ...next.scenario.opening, text: QINGYU_STAGE_02_OPENING_TEXT };
+  applyQingyuDemoNaturalIntents(next);
   return next;
 }
 
-function overlayDemoIntent(mod: ScenarioMod, eventId: string, extraAny: string[]): void {
-  const action = mod.scenario.events?.find(item => item.id === eventId)?.playerCompletionContract?.actions?.[0];
+function overlayDemoActionIntent(
+  mod: ScenarioMod,
+  eventId: string,
+  actionId: string,
+  extraAny: string[],
+  extraReject: string[] = [],
+): void {
+  const action = mod.scenario.events
+    ?.find(item => item.id === eventId)
+    ?.playerCompletionContract?.actions?.find(item => item.id === actionId);
   if (!action) return;
   action.intentMatch = {
     matchAny: [...new Set([...(action.intentMatch?.matchAny || []), ...extraAny])],
-    rejectIf: [...(action.intentMatch?.rejectIf || [])],
+    rejectIf: [...new Set([...(action.intentMatch?.rejectIf || []), ...extraReject])],
   };
+}
+
+function applyQingyuDemoNaturalIntents(mod: ScenarioMod): void {
+  const event = (
+    eventId: string,
+    extraAny: string[],
+    extraReject: string[] = [],
+  ) => overlayDemoActionIntent(mod, eventId, 'advance_declared_objective', extraAny, extraReject);
+
+  // Demo 的自然行动只是把玩家意图映射到当前 fresh 合同；成功、移动、物品和死亡
+  // 仍全部由本地 settlement 决定。短语只覆盖眼前可执行动作，否定与离场优先拒绝。
+  event('lcq.event.s01_01', [
+    '稳住自己', '弄清身在何处', '确认段强', '查看段强', '弄清这片草原', '观察四周', '找掩体', '处理落地',
+  ], ['不管段强', '丢下段强']);
+  event('lcq.event.s01_02', [
+    '带段强躲开', '拉段强避箭', '掩护段强', '寻找掩护', '躲开半兽人', '避开箭袭',
+  ]);
+  event('lcq.event.s01_03', [
+    '见月霜', '上前查看伤者', '看看那个伤兵', '查看伤者', '扶住伤者', '救那个伤兵',
+  ]);
+  event('lcq.event.s01_04', [
+    '带伤者脱险', '带伤兵脱险', '护着伤者撤退', '跟修士撤离', '离开战场',
+  ], ['独自离开', '丢下伤者']);
+  event('lcq.event.s01_05', [
+    '去帅帐', '前往帅帐', '走进帅帐', '见王哲', '请他看伤', '说明自己的来历',
+  ]);
+  event('lcq.event.s01_06', [
+    '见月霜', '应对眼前危局', '压住寒毒', '替月霜疗伤', '救月霜',
+  ]);
+
+  event('lcq.event.s02_01', [
+    '听王哲交代', '听他说完', '问王哲还有什么事', '询问王哲后事', '听清三件事',
+  ], ['不听王哲', '转身离开帅帐']);
+  event('lcq.event.s02_03', [
+    '观察秦军和罗马军交战', '观察战局', '躲避交战', '跟着月霜求生', '在乱军中活下来',
+  ], ['冲出帅帐逃亡']);
+  overlayDemoActionIntent(mod, 'lcq.event.s02_02', 'hold_left_army_line', [
+    '守住左武军阵线', '看清左武军为何覆灭', '留在帅帐观察战场',
+  ], ['离开帅帐']);
+  overlayDemoActionIntent(mod, 'lcq.event.s02_02', 'witness_wang_zhe_nine_suns', [
+    '看王哲施展九阳', '见证王哲九阳合一', '守在王哲身边',
+  ], ['阻止王哲出手']);
+  overlayDemoActionIntent(mod, 'lcq.event.s02_02', 'record_battlefield_aftermath', [
+    '确认战场余波', '查看焦土', '确认王哲殉军结果', '看清左武军结局',
+  ]);
+  // s02_04 必须走五原地图与局部问题动作，不能用旧事件按钮／自然句绕开地图回执。
+  event('lcq.event.s02_05', [
+    '判断她要带我去哪', '询问她要去哪', '跟着她离开地牢', '观察靠近的人', '试探她的来意',
+  ], ['拒绝离开地牢']);
+  event('lcq.event.s02_06', [
+    '与馆主周旋', '询问馆主身份', '观察白湖馆主', '看清她是谁', '回应馆主',
+  ]);
+  overlayDemoActionIntent(mod, 'lcq.event.ningyu_enters_gamble', 'see_ningyu_sent_into_gamble', [
+    '看清凝羽进入赌局', '观察凝羽入局', '弄清谁把凝羽送来',
+  ]);
+  overlayDemoActionIntent(mod, 'lcq.event.ningyu_enters_gamble', 'answer_ningyu_on_debut', [
+    '回应凝羽', '和凝羽说话', '询问凝羽来意',
+  ]);
+  overlayDemoActionIntent(mod, 'lcq.event.sudaji_south_pact', 'offer_nylon_clue_for_term', [
+    '用霓龙丝线索换期限', '拿霓龙丝线索谈条件', '提出三个月期限',
+  ]);
+  overlayDemoActionIntent(mod, 'lcq.event.sudaji_south_pact', 'seal_three_month_south_pact', [
+    '订下三个月南荒之约', '答应三个月之约', '与苏妲己当面立约',
+  ], ['拒绝南荒之约']);
+  overlayDemoActionIntent(mod, 'lcq.event.gamble_bond_signed', 'confirm_rigged_wager_loss', [
+    '检查刻香', '确认赌局落败', '看清刻香被动了手脚',
+  ]);
+  overlayDemoActionIntent(mod, 'lcq.event.gamble_bond_signed', 'sign_the_bond', [
+    '回应眼前契书', '拿起契书', '签下身契', '面对赌债契书',
+  ], ['拒绝签契', '撕毁契书']);
+  overlayDemoActionIntent(mod, 'lcq.event.charge_sudaji_fee', 'name_sixty_zhu_before_help', [
+    '开价六十金铢', '向苏妲己报价', '先谈六十金铢工价',
+  ]);
+  overlayDemoActionIntent(mod, 'lcq.event.charge_sudaji_fee', 'lock_fee_then_remove_device', [
+    '谈定报酬', '收下六十金铢', '谈妥后取出器物',
+  ]);
+  overlayDemoActionIntent(mod, 'lcq.event.free_ajiman', 'take_ajiman_bond_in_hand', [
+    '拿到阿姬曼身契', '把阿姬曼的身契拿过来', '索要阿姬曼身契',
+  ]);
+  overlayDemoActionIntent(mod, 'lcq.event.free_ajiman', 'tear_bond_and_face_blockade', [
+    '撕毁阿姬曼身契', '当面撕契', '带阿姬曼离开', '改道出城',
+  ]);
+  overlayDemoActionIntent(mod, 'lcq.event.baihu_shangguan_escape', 'walk_out_wuyuan_shangguan', [
+    '离开五原商馆', '走出五原商馆', '离开白湖商馆', '走出商馆',
+  ]);
 }
 
 function applyQingyuOpeningDemoOverrides(mod: ScenarioMod): void {
@@ -103,25 +197,10 @@ function applyQingyuOpeningDemoOverrides(mod: ScenarioMod): void {
       onSceneDelta: '风里的血腥味不再含糊。你看清了草浪、旗帜和兽影，也看清段强就在几步外。这片草原正在开战。',
       evidence: '清羽 Demo：s01_01 在玩家自由行动 2-3 回合后由世界自行结清穿越落地，激活下一段。',
     };
-    overlayDemoIntent(mod, 'lcq.event.s01_01', [
-      '稳住自己',
-      '弄清身在何处',
-      '确认段强',
-      '弄清这片草原',
-      '找掩体',
-      '处理落地',
-    ]);
-    const action = event.playerCompletionContract?.actions?.[0];
-    if (action?.intentMatch && !(action.intentMatch.rejectIf || []).length) {
-      action.intentMatch.rejectIf = ['不管段强', '丢下段强'];
-    }
   }
-
-  overlayDemoIntent(mod, 'lcq.event.s01_03', ['见月霜', '上前查看伤者', '看看那个伤兵']);
   const tent = mod.scenario.events?.find(item => item.id === 'lcq.event.s01_05');
   if (tent) tent.locationId = 'lcq.location.command_tent';
-  overlayDemoIntent(mod, 'lcq.event.s01_05', ['去帅帐', '前往帅帐', '走进帅帐', '见王哲']);
-  overlayDemoIntent(mod, 'lcq.event.s01_06', ['见月霜', '应对眼前危局']);
+  applyQingyuDemoNaturalIntents(mod);
 }
 
 function applyCreationPreset(save: SaveData, mod: ScenarioMod): void {

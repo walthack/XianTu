@@ -143,10 +143,10 @@
               class="action-option-btn engine-action-btn"
               :disabled="isAIProcessing"
             >
-              <span class="engine-action-badge">{{ option.source === 'event_engine' ? t('主线') : option.source === 'exploration_engine' ? t('探索') : option.source === 'open_world_engine' ? t('地方') : t('机会') }}</span>
-              {{ option.label }} · 耗时 {{ option.timeCost }} 回合<template v-if="'remainingTurns' in option && option.remainingTurns !== undefined"> · 剩余 {{ option.remainingTurns }} 次重要行动</template>
+              <span v-if="showScenarioActionMechanics(option)" class="engine-action-badge">{{ option.source === 'event_engine' ? t('主线') : option.source === 'exploration_engine' ? t('探索') : option.source === 'open_world_engine' ? t('地方') : t('机会') }}</span>
+              {{ option.label }}<template v-if="showScenarioActionMechanics(option)"> · 耗时 {{ option.timeCost }} 回合<template v-if="'remainingTurns' in option && option.remainingTurns !== undefined"> · 剩余 {{ option.remainingTurns }} 次重要行动</template></template>
             </button>
-            <div class="engine-action-hint">{{ t('点按填入，可修改后发送') }}</div>
+            <div class="engine-action-hint">{{ qingyuOpeningDemo ? t('可以直接描述行动，也可点按建议填入') : t('点按填入，可修改后发送') }}</div>
           </div>
 
           <div v-if="stageDepartureOffer" class="action-options opportunity-action-options">
@@ -493,6 +493,7 @@ import {
   settleWorldSimulationJudgement,
 } from '@/modules/scenarioMods/worldSimulation';
 import { WORLD_SIMULATION_PLAYTEST_KIND } from '@/modules/scenarioMods/worldSimulationPlaytest';
+import { isQingyuOpeningPlaytestSave } from '@/modules/scenarioMods/qingyuOpeningPlaytest';
 import { settleFastNarrativeDemoAdjudication } from '@/modules/scenarioMods/fastNarrativeDemoAdjudication';
 import {
   isFastNarrativeHoldResponse,
@@ -773,6 +774,10 @@ const enhancedActionQueue = EnhancedActionQueueManager.getInstance();
 const bidirectionalSystem = AIBidirectionalSystem;
 type ScenarioEngineActionSelection = ScenarioOpportunityActionSelection | ScenarioEventActionSelection | WuyuanOpenWorldSelection;
 const selectedScenarioEngineAction = ref<ScenarioEngineActionSelection | null>(null);
+const qingyuOpeningDemo = computed(() => isQingyuOpeningPlaytestSave(gameStateStore.toSaveData()));
+const showScenarioActionMechanics = (option: ScenarioEngineActionSelection) => (
+  !qingyuOpeningDemo.value || option.source !== 'event_engine'
+);
 const scenarioEngineActionOptions = computed<ScenarioEngineActionSelection[]>(() => {
   const save = gameStateStore.toSaveData();
   if (!save) return [];
