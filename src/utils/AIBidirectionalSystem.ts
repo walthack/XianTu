@@ -35,6 +35,7 @@ import {
   acknowledgeStageEntryPresentation,
   acknowledgeStoryBeatHandoff,
   advanceScenarioRuntime,
+  clarifyUnobtainedSilkPouchNarrative,
   recordStoryEventStructuredAction,
   recordStoryOpportunityPlayerAction,
   recordStoryOpportunityStructuredAction,
@@ -87,7 +88,7 @@ import {
 import {
   ensureWuyuanOpenWorldSlice,
   settleWuyuanOpenWorldSelection,
-  composeWuyuanOpenWorldNarrative,
+  previewWuyuanOpenWorldNarrative,
   type WuyuanOpenWorldSelection,
 } from '@/modules/scenarioMods/wuyuanOpenWorldSlice';
 import { applyMilestoneRewards } from '@/modules/scenarioMods/milestoneRewards';
@@ -838,16 +839,6 @@ class AIBidirectionalSystemClass {
     }
 
     const trustedJudgementResolution = verifyResolvedJudgementReceipt(saveData, options?.judgementResolution);
-    if (options?.openWorldAction) {
-      const previewed = settleWuyuanOpenWorldSelection(saveData, options.openWorldAction);
-      if (!previewed.settled) {
-        console.warn('[开放世界] 生成前结算未成立', {
-          identityId: options.openWorldAction.identityId,
-          receiptId: options.openWorldAction.receiptId,
-          reason: previewed.reason,
-        });
-      }
-    }
 
     // 2. 准备AI上下文
     options?.onProgressUpdate?.('构建提示词并请求AI生成…');
@@ -889,7 +880,10 @@ class AIBidirectionalSystemClass {
       }
       if (!legacyNarrativePilotResponse) {
       const openWorldLocalText = options?.openWorldAction
-        ? composeWuyuanOpenWorldNarrative(saveData, options.openWorldAction)
+        ? previewWuyuanOpenWorldNarrative(saveData, {
+          openWorldAction: options.openWorldAction,
+          eventAction: options.eventAction,
+        })
         : '';
       if (openWorldLocalText) {
         noteTurnPath('open_world');
@@ -2298,7 +2292,10 @@ ${step1Text}
     }
 
     const timePrefix = this._formatGameTime((saveData as any).元数据?.时间);
-    let textContent = sanitizeAITextForDisplay(response.text || '').trim();
+    let textContent = clarifyUnobtainedSilkPouchNarrative(
+      saveData,
+      sanitizeAITextForDisplay(response.text || '').trim(),
+    );
     const legacyJudgementMarkers = extractLegacyJudgementMarkers(textContent);
     if (legacyJudgementMarkers.length) {
       console.debug('[判定 P0] 观察到 legacy 正文判定标签（不作为状态事实）:', legacyJudgementMarkers);

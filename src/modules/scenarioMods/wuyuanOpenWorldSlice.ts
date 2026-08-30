@@ -16,7 +16,12 @@ import {
   type OpenWorldSliceRuntime,
   type OpenWorldTravelReceipt,
 } from './openWorldSlice';
-import { getCurrentStoryEventActions, recordStoryEventStructuredAction } from './runtime';
+import {
+  advanceScenarioRuntime,
+  getCurrentStoryEventActions,
+  recordStoryEventStructuredAction,
+  type ScenarioEventActionSelection,
+} from './runtime';
 import { resolveLocationIdFromPosition } from './secondaryLines';
 
 export const WUYUAN_OPEN_WORLD_SLICE_ID = 'lcq.open_world.wuyuan_v1';
@@ -509,42 +514,56 @@ export function settleWuyuanOpenWorldSelection(saveData: SaveData, selection: Wu
   };
 }
 
-const WUYUAN_GATE_LEAK_RE = /城门|门洞|城墙/;
+const WUYUAN_GATE_LEAK_RE = /城门|门洞|城墙|县衙/;
+const WUYUAN_MECHANIC_LEAK_RE = /已经结算|没落地|把结果认下来|没有官署可过|回执|机制/;
 
-/** Local hop/action prose. Wuyuan has no city gates; do not send these beats through full Legacy. */
+function playerFacingFact(fact: string): boolean {
+  if (!fact) return false;
+  return !WUYUAN_GATE_LEAK_RE.test(fact) && !WUYUAN_MECHANIC_LEAK_RE.test(fact);
+}
+
+/** Local hop/action prose from the already-final slice, not from a mid-transaction pastry snapshot. */
 export function composeWuyuanOpenWorldNarrative(
   saveData: SaveData,
   selection: WuyuanOpenWorldSelection,
 ): string {
   const state = ensureWuyuanOpenWorldSlice(saveData);
-  const place = WUYUAN_OPEN_WORLD_DEFINITION.zones.find(zone => zone.id === state?.currentZoneId)?.name || '五原';
-  const facts = (selection.settledFacts || []).map(item => String(item || '').trim()).filter(Boolean);
-  const lines = [
-    ...facts.map(fact => /[。！？]$/.test(fact) ? fact : `${fact}。`),
-    `你停在${place}。`,
-    `这一步只走到已经结算的位置，不把没落地的路写成已经过了。`,
-  ];
-  if (selection.identityId === WUYUAN_MARKET_ARRIVAL_ID || (
-    state?.currentZoneId === MARKET_ZONE_ID && selection.kind === 'travel' && !/pastry/.test(selection.identityId || '')
-  )) {
-    lines.push(`露天货棚和摊位挤在这一片，摊位直接铺到街面上，没有官署可过。`);
-    lines.push(`人声是市集的人声，尘土是街面的尘土。`);
+  const zoneId = state?.currentZoneId || '';
+  const lines = (selection.settledFacts || [])
+    .map(item => String(item || '').trim())
+    .filter(playerFacingFact)
+    .map(fact => /[。！？]$/.test(fact) ? fact : `${fact}。`);
+  if (zoneId === MARKET_ZONE_ID) {
+    lines.push('你从帅帐抵达五原露天市集。');
+    lines.push('露天货棚和摊位挤在这一片，摊位直接铺到街面上。');
+  } else if (zoneId === PASTRY_ZONE_ID) {
+    lines.push('你沿街面进入点心铺。');
+    lines.push('点心铺这一侧，甜香和麦粉味压过街面的尘。');
+  } else if (zoneId === PRISON_ZONE_ID) {
+    lines.push('应对失败或部分成功后你仍被制住，被押入白湖商馆水牢。');
+    lines.push('水汽和石壁压得很近。你还在商馆这一截里。');
+  } else {
+    const place = WUYUAN_OPEN_WORLD_DEFINITION.zones.find(zone => zone.id === zoneId)?.name;
+    if (place) lines.push(`你来到${place}。`);
   }
-  if (state?.currentZoneId === PASTRY_ZONE_ID) {
-    lines.push(`点心铺这一侧，甜香和麦粉味压过街面的尘。`);
-    lines.push(`铺门半敞，案后有人在忙，门口还能站住。`);
-  }
-  if (state?.currentZoneId === PRISON_ZONE_ID) {
-    lines.push(`水汽和石壁压得很近。你还在商馆这一截里。`);
-  }
-  if (selection.kind === 'problem_action') {
-    lines.push(`眼前的人还在逼近。你先把已经结算的结果认下来。`);
-  }
-  if (selection.kind === 'notice') {
-    lines.push(`你把这条现场消息看完，没有把它写成另一条没结算的路。`);
-  }
-  const text = lines.filter(line => !WUYUAN_GATE_LEAK_RE.test(line)).join('');
-  return text;
+  return lines.filter(line => playerFacingFact(line)).join('');
+}
+
+/** Clone-and-preview the formal transaction, then compose. The clone is discarded. */
+export function previewWuyuanOpenWorldNarrative(
+  saveData: SaveData,
+  input: {
+    openWorldAction?: WuyuanOpenWorldSelection;
+    eventAction?: ScenarioEventActionSelection;
+  },
+): string {
+  if (!input.openWorldAction) return '';
+  const clone = structuredClone(saveData);
+  settleWuyuanOpenWorldSelection(clone, input.openWorldAction);
+  if (input.eventAction) recordStoryEventStructuredAction(clone, input.eventAction);
+  const advanced = advanceScenarioRuntime(clone).saveData;
+  ensureWuyuanOpenWorldSlice(advanced);
+  return composeWuyuanOpenWorldNarrative(advanced, input.openWorldAction);
 }
 
 export function getWuyuanOpenWorldPrompt(saveData: SaveData): string {

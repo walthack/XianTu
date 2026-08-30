@@ -202,8 +202,74 @@ test('local Wuyuan hop prose names the settled leaf and never fabricates a city 
   const system = await (await import('node:fs/promises')).readFile(new URL('../src/utils/AIBidirectionalSystem.ts', import.meta.url), 'utf8');
   const start = system.indexOf('if (!legacyNarrativePilotResponse)');
   const slice = system.slice(start, system.indexOf('const v3 = isSaveDataV3'));
-  assert.match(slice, /composeWuyuanOpenWorldNarrative/);
+  assert.match(slice, /previewWuyuanOpenWorldNarrative/);
   assert.match(slice, /noteTurnPath\('open_world'\)/);
+  assert.doesNotMatch(system.slice(0, system.indexOf('const trustedJudgementResolution')), /settleWuyuanOpenWorldSelection\(saveData/);
+});
+
+const MECHANIC_LEAK = /结算|落地|回执|机制|城门|门洞|城墙|县衙|没有官署|没落地|认下来/;
+
+test('pastry hop preview names 点心铺 and does not commit the clone', async () => {
+  const {
+    getWuyuanOpenWorldSelections, previewWuyuanOpenWorldNarrative, ensureWuyuanOpenWorldSlice,
+  } = await loadTs('../src/modules/scenarioMods/wuyuanOpenWorldSlice.ts');
+  const current = save();
+  const travel = getWuyuanOpenWorldSelections(current).find(item => item.kind === 'travel');
+  const before = JSON.stringify(current);
+  const text = previewWuyuanOpenWorldNarrative(current, { openWorldAction: travel });
+  assert.match(text, /点心铺/);
+  assert.match(text, /沿街面进入点心铺/);
+  assert.doesNotMatch(text, MECHANIC_LEAK);
+  assert.equal(JSON.stringify(current), before, 'preview clone must not write the live save');
+  assert.equal(current.角色.位置.描述, '中州·五原·五原露天市集');
+  const liveSlice = ensureWuyuanOpenWorldSlice(current);
+  assert.equal(liveSlice.currentZoneId, 'lcq.zone.wuyuan.market');
+  assert.equal((liveSlice.travelReceipts || []).filter(item => /pastry/.test(item.routeId || '')).length, 0);
+});
+
+test('capture preview consumes the finished transaction: 水牢 loc and prose, pastry hop stays pastry', async () => {
+  const slice = await loadTs('../src/modules/scenarioMods/wuyuanOpenWorldSlice.ts');
+  const runtime = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  const pastrySave = save();
+  const travel = slice.getWuyuanOpenWorldSelections(pastrySave).find(item => item.kind === 'travel');
+  slice.settleWuyuanOpenWorldSelection(pastrySave, travel);
+  const pastryText = slice.previewWuyuanOpenWorldNarrative(pastrySave, { openWorldAction: travel });
+  assert.match(pastryText, /点心铺/);
+  assert.equal(pastrySave.角色.位置.描述, '中州·五原·点心铺');
+  const pastryTravel = (pastrySave.世界.状态.剧本模组.openWorldSlice.travelReceipts || [])
+    .filter(item => item.routeId === 'lcq.route.wuyuan.market_to_pastry_street');
+  assert.equal(pastryTravel.length, 1);
+
+  const capture = slice.getWuyuanOpenWorldSelections(pastrySave).find(item => item.kind === 'problem_action');
+  const eventAction = runtime.getCurrentStoryEventActions(pastrySave).find(item => item.eventId === 'lcq.event.s02_04');
+  const beforeCapture = JSON.stringify(pastrySave);
+  const captureText = slice.previewWuyuanOpenWorldNarrative(pastrySave, {
+    openWorldAction: capture,
+    eventAction,
+  });
+  assert.match(captureText, /水牢/);
+  assert.doesNotMatch(captureText, /停在点心铺/);
+  assert.doesNotMatch(captureText, MECHANIC_LEAK);
+  assert.equal(JSON.stringify(pastrySave), beforeCapture, 'failed/cancelled generation must keep the pastry snapshot');
+  assert.equal(pastrySave.角色.位置.描述, '中州·五原·点心铺');
+  assert.equal((pastrySave.世界.状态.剧本模组.completedEventIds || []).includes('lcq.event.s02_04'), false);
+  const liveActions = (pastrySave.世界.状态.剧本模组.openWorldSlice.actionReceipts || [])
+    .filter(item => item.actionId === capture.identityId);
+  assert.equal(liveActions.length, 0);
+
+  const committed = JSON.parse(beforeCapture);
+  slice.settleWuyuanOpenWorldSelection(committed, capture);
+  if (eventAction) runtime.recordStoryEventStructuredAction(committed, eventAction);
+  const advanced = runtime.advanceScenarioRuntime(committed).saveData;
+  slice.ensureWuyuanOpenWorldSlice(advanced);
+  assert.equal(advanced.角色.位置.描述, '中州·五原·白湖商馆水牢');
+  assert.match(slice.previewWuyuanOpenWorldNarrative(advanced, { openWorldAction: capture }), /水牢/);
+  const actionReceipts = (advanced.世界.状态.剧本模组.openWorldSlice.actionReceipts || [])
+    .filter(item => item.actionId === capture.identityId);
+  assert.equal(actionReceipts.length, 1);
+  const pastryRoutes = (advanced.世界.状态.剧本模组.openWorldSlice.travelReceipts || [])
+    .filter(item => item.routeId === 'lcq.route.wuyuan.market_to_pastry_street');
+  assert.equal(pastryRoutes.length, 1);
 });
 
 test('stale elapsedTurns receipt still settles pastry travel by route identity', async () => {

@@ -1460,6 +1460,19 @@ export function acknowledgeStageEntryPresentation(saveData: SaveData, toStageId:
   return true;
 }
 
+const SILK_POUCH_TAKE_RE = /(?:获得|接过|收下|王哲递给|放入背包|收入背包).{0,12}锦囊|锦囊.{0,12}(?:获得|接过|收下|放入背包|收入背包)/;
+const SILK_POUCH_UNOBTAINED = '锦囊仍未到手。案上的锦囊没有因为这句话变成你的东西。';
+
+/** After local inventory settlement: if the bag has no 锦囊, Legacy must not write that it was obtained. */
+export function clarifyUnobtainedSilkPouchNarrative(saveData: SaveData, text: string): string {
+  if (!text) return text;
+  const qty = Number((saveData as { 角色?: { 背包?: { 物品?: Record<string, { 数量?: number }> } } })
+    ?.角色?.背包?.物品?.['lcq.item.jin_nang']?.数量) || 0;
+  if (qty > 0) return text;
+  if (!SILK_POUCH_TAKE_RE.test(text)) return text;
+  return SILK_POUCH_UNOBTAINED;
+}
+
 /**
  * 在成功 AI 回合后消费一次非机会卡事件动作，并只依据存档状态执行本地判定。
  * LLM 正文、命令和自报结果均不参与 success/partial/failure 裁定。

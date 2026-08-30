@@ -320,6 +320,20 @@ test('both Wang Zhe receipt routes grant the same physical silk bag exactly once
   }
 });
 
+test('after the silk opportunity is gone, claiming 收下锦囊 does not invent possession', async () => {
+  const { clarifyUnobtainedSilkPouchNarrative } = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  const save = opportunityInventorySave('opportunity.lcq.s02_01.take_full_mandate');
+  save.世界.状态.剧本模组.completedEventIds = ['lcq.event.s02_01'];
+  save.世界.状态.剧本模组.activeEventIds = ['lcq.event.s02_03'];
+  save.世界.状态.剧本模组.flags['event.s02_01.done'] = true;
+  save.世界.状态.剧本模组.actorEngine = { trackedOpportunityId: undefined, opportunityStates: {} };
+  const clarified = clarifyUnobtainedSilkPouchNarrative(save, '你从王哲案上收下锦囊，收入背包。');
+  assert.match(clarified, /锦囊仍未到手/);
+  assert.equal(save.角色.背包.物品['lcq.item.jin_nang'], undefined);
+  const keep = clarifyUnobtainedSilkPouchNarrative(save, '你听他把三件事说完，锦囊还在案上。');
+  assert.match(keep, /还在案上/);
+});
+
 test('opportunity free text grants only on the physical receipt step, never on refusal or later mandate text', async () => {
   const { recordStoryOpportunityPlayerAction } = await loadTs('../src/modules/scenarioMods/runtime.ts');
   const save = opportunityInventorySave('opportunity.lcq.s02_01.take_full_mandate');
