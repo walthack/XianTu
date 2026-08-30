@@ -692,6 +692,72 @@ export function estimateFastNarrativePromptBytes(plan: Pick<FastNarrativePlan, '
   return new TextEncoder().encode(`${plan.systemPrompt}\n${plan.userPrompt}`).length;
 }
 
+const QINGYU_OPPORTUNITY_STALE_TEXT = '当前选择已经过期。请重新选一次眼前行动。';
+
+function stripOpportunityChrome(label: string): string {
+  return String(label || '')
+    .replace(/^【推进·\d+\/\d+】/, '')
+    .replace(/[·•]\s*耗时.*$/, '')
+    .trim();
+}
+
+function opportunityGrantLines(settlements: unknown): string[] {
+  if (!Array.isArray(settlements)) return [];
+  const lines: string[] = [];
+  const seen = new Set<string>();
+  for (const item of settlements) {
+    const name = readText(asRecord(asRecord(item)?.receipt)?.itemName);
+    if (!name || seen.has(name)) continue;
+    seen.add(name);
+    lines.push(`${name}已经到手`);
+  }
+  return lines;
+}
+
+function remainingOpportunityLabels(saveData: SaveData): string[] {
+  return [...new Set(
+    getTrackedStoryOpportunityActions(saveData)
+      .map(item => stripOpportunityChrome(item.label))
+      .filter(Boolean),
+  )];
+}
+
+function composeQingyuOpportunityNarrative(
+  saveData: SaveData,
+  exact: ScenarioOpportunityActionSelection,
+  grants: string[],
+  remaining: string[],
+): string {
+  const location = readPublicLocation(saveData) || '现场';
+  const action = stripTerminalPunctuation(selectionActionText(exact) || '你继续推进眼前这一步');
+  const parts = [location, action, ...grants];
+  parts.push(remaining.length ? `接下来需要${remaining.join('，')}` : '眼前这一步已经做完');
+  return `${parts.filter(Boolean).join('。')}。`.replace(/。+/g, '。');
+}
+
+/**
+ * Qingyu Demo structured opportunityAction: settle the contract on a clone,
+ * then render only from that receipt. Never a 156KB Legacy path.
+ */
+export function previewQingyuOpportunityNarrative(
+  saveData: SaveData,
+  opportunityAction?: ScenarioOpportunityActionSelection,
+): string {
+  if (!isQingyuOpeningPlaytestSave(saveData)) return '';
+  if (!opportunityAction || opportunityAction.source !== 'opportunity_engine') return '';
+  const clone = cloneJson(saveData);
+  const exact = findExactFreshSelection(getTrackedStoryOpportunityActions(clone), opportunityAction);
+  if (!exact) return QINGYU_OPPORTUNITY_STALE_TEXT;
+  const preview = recordStoryOpportunityStructuredAction(clone, exact);
+  if (!preview?.progressed) return QINGYU_OPPORTUNITY_STALE_TEXT;
+  return composeQingyuOpportunityNarrative(
+    saveData,
+    exact,
+    opportunityGrantLines(preview.inventorySettlements),
+    remainingOpportunityLabels(clone),
+  );
+}
+
 function previewSelectionPacket(
   saveData: SaveData,
   input: PlanFastNarrativeDemoInput,

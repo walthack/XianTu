@@ -218,6 +218,58 @@ test('wang zhe silk pouch opportunity plans kind=opportunity with exact transfer
   assert.equal(snapshot(save), before);
 });
 
+test('qingyu demo structured opportunityAction renders from local receipts and never invents loot', async () => {
+  const demo = await loadDemo();
+  const {
+    getTrackedStoryOpportunityActions,
+    recordStoryOpportunityStructuredAction,
+    trackStoryOpportunity,
+  } = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  const save = await stage02Fixture();
+  locateEvent(save, S02_01, {
+    completedEventIds: [],
+    flags: { 'event.s02_01.done': false, 'chapter.lcq.stage_02.started': true },
+  });
+  assert.equal(trackStoryOpportunity(save, TAKE_MANDATE).ok, true);
+  const firstSelection = getTrackedStoryOpportunityActions(save)[0];
+  const before = snapshot(save);
+
+  const firstText = demo.previewQingyuOpportunityNarrative(save, firstSelection);
+  assert.match(firstText, /锦囊已经到手/);
+  assert.match(firstText, /接下来需要认下托付/);
+  assert.doesNotMatch(firstText, /令牌|旧帕|缺口|过哨|获得|回执|落账|机制/);
+  assert.equal(snapshot(save), before, 'preview must not mutate the live save');
+
+  const first = recordStoryOpportunityStructuredAction(save, firstSelection);
+  assert.equal(first.progressed, true);
+  assert.equal(save.角色.背包.物品['lcq.item.jin_nang'].数量, 1);
+  save.世界.状态.剧本模组.worldTurn += 1;
+
+  const secondSelection = getTrackedStoryOpportunityActions(save)[0];
+  assert.match(secondSelection.label, /认下托付/);
+  const secondText = demo.previewQingyuOpportunityNarrative(save, secondSelection);
+  assert.match(secondText, /眼前这一步已经做完/);
+  assert.doesNotMatch(secondText, /令牌|旧帕|缺口|过哨|获得|已经到手/);
+  assert.equal(save.角色.背包.物品['lcq.item.jin_nang'].数量, 1);
+  assert.equal(save.世界.状态.剧本模组.inventoryTransferReceipts.length, 1);
+
+  const stale = demo.previewQingyuOpportunityNarrative(save, firstSelection);
+  assert.match(stale, /已经过期/);
+  assert.doesNotMatch(stale, /令牌|旧帕/);
+
+  const unmarked = cloneJson(save);
+  delete unmarked.系统.扩展.清羽记开局;
+  assert.equal(demo.previewQingyuOpportunityNarrative(unmarked, secondSelection), '');
+});
+
+test('qingyu demo structured opportunityAction is wired before 156KB Legacy', async () => {
+  const system = await readFile(new URL('../src/utils/AIBidirectionalSystem.ts', import.meta.url), 'utf8');
+  const start = system.indexOf('if (!legacyNarrativePilotResponse)');
+  const slice = system.slice(start, system.indexOf('const v3 = isSaveDataV3'));
+  assert.match(slice, /previewQingyuOpportunityNarrative/);
+  assert.match(slice, /if \(!localContractText\)/);
+});
+
 test('wuyuan open world fresh selection plans kind=open_world from clone settlement', async () => {
   const demo = await loadDemo();
   const {

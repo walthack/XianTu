@@ -52,6 +52,7 @@ import {
   finalizeFastNarrativeText,
   isFastNarrativeDemoScope,
   isFastNarrativeHoldResponse,
+  previewQingyuOpportunityNarrative,
   routeFastNarrativeDemo,
   splitFastNarrativeOutput,
   wrapFastNarrativeGmResponse,
@@ -884,13 +885,16 @@ class AIBidirectionalSystemClass {
         playerActionText: userMessage,
         opportunityAction: options?.opportunityAction,
       });
-      const openWorldLocalText = !repeatSilkPouchText && options?.openWorldAction
+      const opportunityLocalText = !repeatSilkPouchText
+        ? previewQingyuOpportunityNarrative(saveData, options?.opportunityAction)
+        : '';
+      const openWorldLocalText = !repeatSilkPouchText && !opportunityLocalText && options?.openWorldAction
         ? previewWuyuanOpenWorldNarrative(saveData, {
           openWorldAction: options.openWorldAction,
           eventAction: options.eventAction,
         })
         : '';
-      const localContractText = repeatSilkPouchText || openWorldLocalText;
+      const localContractText = repeatSilkPouchText || opportunityLocalText || openWorldLocalText;
       if (localContractText) {
         if (openWorldLocalText) noteTurnPath('open_world');
         else noteTurnPath('local_contract');
