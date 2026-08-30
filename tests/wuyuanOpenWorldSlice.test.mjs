@@ -172,6 +172,40 @@ test('reading the rumor unlocks a slower named route, and unspecified destinatio
   assert.equal(resolveWuyuanOpenWorldSelectionFromText(current, '我走后巷去点心铺').identityId, 'lcq.route.wuyuan.market_to_pastry_alley');
 });
 
+test('local Wuyuan hop prose names the settled leaf and never fabricates a city gate', async () => {
+  const {
+    getWuyuanOpenWorldSelections, settleWuyuanOpenWorldSelection, composeWuyuanOpenWorldNarrative,
+  } = await loadTs('../src/modules/scenarioMods/wuyuanOpenWorldSlice.ts');
+  const current = save();
+  const travel = getWuyuanOpenWorldSelections(current).find(item => item.kind === 'travel');
+  settleWuyuanOpenWorldSelection(current, travel);
+  const pastry = composeWuyuanOpenWorldNarrative(current, travel);
+  assert.match(pastry, /点心铺/);
+  assert.doesNotMatch(pastry, /城门|门洞|城墙/);
+  const {
+    resolveWuyuanOpenWorldSelectionFromText, WUYUAN_MARKET_ARRIVAL_ID,
+  } = await loadTs('../src/modules/scenarioMods/wuyuanOpenWorldSlice.ts');
+  const camp = warCampSave({
+    completedEventIds: ['lcq.event.s02_01', 'lcq.event.s02_03', 'lcq.event.s02_02'],
+    activeEventIds: ['lcq.event.s02_04'],
+    flags: {
+      'event.s02_01.done': true, 'event.s02_03.done': true,
+      'event.s02_02.done': true, 'event.s02_04.done': false,
+    },
+  });
+  const arrive = resolveWuyuanOpenWorldSelectionFromText(camp, '我去五原城。');
+  assert.equal(arrive?.identityId, WUYUAN_MARKET_ARRIVAL_ID);
+  settleWuyuanOpenWorldSelection(camp, arrive);
+  const market = composeWuyuanOpenWorldNarrative(camp, arrive);
+  assert.match(market, /市集/);
+  assert.doesNotMatch(market, /城门|门洞|城墙/);
+  const system = await (await import('node:fs/promises')).readFile(new URL('../src/utils/AIBidirectionalSystem.ts', import.meta.url), 'utf8');
+  const start = system.indexOf('if (!legacyNarrativePilotResponse)');
+  const slice = system.slice(start, system.indexOf('const v3 = isSaveDataV3'));
+  assert.match(slice, /composeWuyuanOpenWorldNarrative/);
+  assert.match(slice, /noteTurnPath\('open_world'\)/);
+});
+
 test('stale elapsedTurns receipt still settles pastry travel by route identity', async () => {
   const {
     getWuyuanOpenWorldSelections, settleWuyuanOpenWorldSelection, ensureWuyuanOpenWorldSlice,

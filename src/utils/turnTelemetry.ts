@@ -1,4 +1,4 @@
-export type TurnTelemetryPath = 'legacy' | 'legacy_pilot' | 'fast';
+export type TurnTelemetryPath = 'legacy' | 'legacy_pilot' | 'fast' | 'open_world';
 
 export interface TurnTelemetry {
   path: TurnTelemetryPath;

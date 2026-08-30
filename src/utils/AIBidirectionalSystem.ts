@@ -87,6 +87,7 @@ import {
 import {
   ensureWuyuanOpenWorldSlice,
   settleWuyuanOpenWorldSelection,
+  composeWuyuanOpenWorldNarrative,
   type WuyuanOpenWorldSelection,
 } from '@/modules/scenarioMods/wuyuanOpenWorldSlice';
 import { applyMilestoneRewards } from '@/modules/scenarioMods/milestoneRewards';
@@ -884,6 +885,20 @@ class AIBidirectionalSystemClass {
         usedLegacyNarrativePilot = true;
       }
       if (!legacyNarrativePilotResponse) {
+      const openWorldLocalText = options?.openWorldAction
+        ? composeWuyuanOpenWorldNarrative(saveData, options.openWorldAction)
+        : '';
+      if (openWorldLocalText) {
+        noteTurnPath('open_world');
+        gmResponse = {
+          text: openWorldLocalText,
+          mid_term_memory: '',
+          tavern_commands: [],
+          action_options: [],
+        };
+        usedLegacyNarrativePilot = true;
+      }
+      if (!openWorldLocalText) {
       const v3 = isSaveDataV3(saveData) ? (saveData as any) : migrateSaveDataToLatest(saveData).migrated;
 
       // 发送给 AI 的状态：严格使用 V3 五域结构（命令 key 也必须按此结构输出）
@@ -1488,6 +1503,7 @@ ${missingItems.length > 0 ? `【上次结构化输出缺失】
       // 普通 Legacy 在提交前即可结束流式层。Pilot 正文等本地事务提交后再发。
       if (useStreaming && options?.onStreamComplete && !usedLegacyNarrativePilot) {
         options.onStreamComplete();
+      }
       }
       }
       }
