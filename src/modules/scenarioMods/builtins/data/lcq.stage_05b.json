@@ -5128,8 +5128,7 @@
         "locationId": "liuchao.location.gui_wang_dong",
         "objective": "听清谢艺把小紫带往星月湖的托付，并决定承接遗言或施针救治",
         "presentation": {
-          "targetLabel": "谢艺",
-          "playerLine": "龙神已死。我赶到重伤的谢艺身边，听他把小紫带往星月湖的托付说完。"
+          "targetLabel": "谢艺"
         },
         "offscreenResolution": {
           "id": "offscreen.lcq.xieyi_entrustment.default_death",

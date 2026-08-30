@@ -69,7 +69,35 @@ test('slay_dragon 已收窄为只收龙神死亡', async () => {
   const fate = stage.scenario.events.find(event => event.id === EVENT_ID);
   assert.ok(fate, '必须存在 xieyi_entrustment');
   assert.deepEqual(fate.playerCompletionContract.actions.map(item => item.id), ['accept_entrustment', 'rescue_xieyi']);
-  assert.ok(fate.playerCompletionContract.actions.find(item => item.id === 'rescue_xieyi').judgement);
+  const rescue = fate.playerCompletionContract.actions.find(item => item.id === 'rescue_xieyi');
+  assert.ok(rescue.judgement);
+  assert.equal(rescue.judgement.kind, 'cultivate');
+  assert.equal(rescue.judgement.difficulty, 'severe');
+  assert.equal(rescue.judgement.difficultyValue, 25);
+  assert.equal(rescue.judgement.applyCultivationRecovery, false);
+  assert.equal(fate.presentation?.playerLine, undefined, '二选一不得被共享 playerLine 盖住');
+});
+
+test('承接/救治预填各自合同句；救治签发含乐明珠 +8', async () => {
+  const { getCurrentStoryEventActions } = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  const { buildEventActionJudgementProposal } = await loadTs('../src/utils/judgementPreflight.ts');
+  const stage = JSON.parse(await readFile(stageUrl, 'utf8'));
+  const save = fixture(stage);
+  const actions = getCurrentStoryEventActions(save);
+  const accept = actions.find(item => item.actionId === 'accept_entrustment');
+  const rescue = actions.find(item => item.actionId === 'rescue_xieyi');
+  assert.equal(accept.actionText, '我陪谢艺把话说完，不打断、不施针。');
+  assert.equal(accept.playerLine, accept.actionText);
+  assert.equal(rescue.actionText, '让乐明珠施针，我运功护持。不灌补心丹。');
+  assert.equal(rescue.playerLine, rescue.actionText);
+  const proposal = buildEventActionJudgementProposal(save, 20, rescue);
+  assert.equal(proposal.kind, 'cultivate');
+  assert.equal(proposal.difficulty.value, 25);
+  assert.equal(proposal.canonPolicy, 'route_process_only');
+  assert.deepEqual(
+    proposal.factors.find(item => item.source === 'ally'),
+    { label: '同伴·乐明珠针灸', value: 8, source: 'ally' },
+  );
 });
 
 test('乐明珠不在场时隐藏救治，只留承接', async () => {
@@ -162,20 +190,23 @@ test('取消救治判定不收束命运', async () => {
   );
 });
 
-test('隔离 stage_06 看到 void 映射后不得再激活 s06_03', async () => {
-  const { advanceScenarioRuntime, getCurrentStoryEventActions } = await loadTs('../src/modules/scenarioMods/runtime.ts');
-  const stage06 = JSON.parse(await readFile(stage06Url, 'utf8'));
-  const save = {
+function stage06Save(stage06, flags, activeEventIds) {
+  return {
     角色: { 位置: { 描述: '南荒·鬼王峒' } },
     世界: {
       状态: {
         剧本模组: {
           modId: stage06.manifest.id,
-          flags: { 'event.s06_03.void': true, 'character.xie_yi.status': 'longrest' },
+          flags: {
+            'chapter.lcq.stage_06.started': true,
+            'event.s06_01.done': true,
+            'event.s06_02.done': true,
+            ...flags,
+          },
           chapters: structuredClone(stage06.scenario.chapters),
           currentChapterId: stage06.scenario.chapters[0]?.id,
           events: structuredClone(stage06.scenario.events),
-          activeEventIds: ['lcq.event.s06_03'],
+          activeEventIds,
           completedEventIds: [],
           completedChapterIds: [],
           offscreenResolvedEventIds: [],
@@ -185,6 +216,42 @@ test('隔离 stage_06 看到 void 映射后不得再激活 s06_03', async () => 
       },
     },
   };
+}
+
+test('隔离 stage_06 看到 void 映射后不得再激活 s06_03', async () => {
+  const { advanceScenarioRuntime, getCurrentStoryEventActions } = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  const stage06 = JSON.parse(await readFile(stage06Url, 'utf8'));
+  const save = stage06Save(stage06, {
+    'event.s06_03.void': true,
+    'character.xie_yi.status': 'longrest',
+  }, ['lcq.event.s06_03']);
+  const next = advanceScenarioRuntime(save).saveData;
+  const runtime = runtimeOf(next);
+  assert.equal(runtime.activeEventIds.includes('lcq.event.s06_03'), false);
+  assert.equal(getCurrentStoryEventActions(next).some(item => item.eventId === 'lcq.event.s06_03'), false);
+});
+
+test('隔离 stage_06 看到 done 映射后不得再激活辞世，即使当前未挂着 s06_03', async () => {
+  const { advanceScenarioRuntime, getCurrentStoryEventActions } = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  const stage06 = JSON.parse(await readFile(stage06Url, 'utf8'));
+  const save = stage06Save(stage06, {
+    'event.s06_03.done': true,
+    'character.xie_yi.status': 'dead',
+  }, []);
+  const next = advanceScenarioRuntime(save).saveData;
+  const runtime = runtimeOf(next);
+  assert.equal(runtime.activeEventIds.includes('lcq.event.s06_03'), false);
+  assert.equal(getCurrentStoryEventActions(next).some(item => item.eventId === 'lcq.event.s06_03'), false);
+});
+
+test('隔离 stage_06 看到 void 映射后不得从空 active 列表再挂上辞世', async () => {
+  const { advanceScenarioRuntime, getCurrentStoryEventActions } = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  const stage06 = JSON.parse(await readFile(stage06Url, 'utf8'));
+  const save = stage06Save(stage06, {
+    'event.s06_03.void': true,
+    'character.xie_yi.status': 'longrest',
+    'branch.lcq.if_xieyi_longrest.active': true,
+  }, []);
   const next = advanceScenarioRuntime(save).saveData;
   const runtime = runtimeOf(next);
   assert.equal(runtime.activeEventIds.includes('lcq.event.s06_03'), false);

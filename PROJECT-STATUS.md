@@ -1,6 +1,9 @@
 # 仙途 (XianTu) · 项目总体状况与并行分工文档
 
 > 面向「新加入的 agent」。读完这一篇即可独立认领一个模块开工。
+> **2026-08-31 I1+I2 事件判定地基 + 谢艺二态映射已落地，I3/I4 未做。** 合同=`docs/GROK-XINGYUEHU-XIEYI-FATE-CONTRACT-2026-08-30.md`，裁定 #163。I1：事件动作可声明本地判定，救治签发 `cultivate`／severe 25，优先于关键词 skip（`shouldSkipJudgementPreflight` 全局规则不变）；取消回二选一；已掷按 id 锁定；不走 `if_only`/100，不套自我疗伤回血。I2：`slay_dragon` 只收龙死；`lcq.event.xieyi_entrustment` 二选一，乐明珠不在场隐藏救治；success+ 同事务 void `s06_03` + longrest IF，其余收束 done+dead；不生成 missing；隔离 `stage_06` 见 done/void 映射不得再演辞世。P0-1 仍 OPEN。不宣称 P0-1/P0-2 因此关闭。
+> **2026-08-30 星月湖 G-1 FAIL（历史）。** 证据 `/tmp/xiantu-g1-xingyuehu-source-audit-1788102368000`。当时 verdict=`FAIL_MISSING_LOAD_BEARING_BEATS`：可达 `slay_dragon` 把杀龙与托付合并，未继承冻结 `s06_03`。该缺口由上方 I1+I2 承接；G-1 须在 I1+I2 候选上重跑，通过后才 G0。不解禁 `lcq.stage_06`，不改 `s06_03` 语义。
+> **2026-08-30 二级线下一门改为 G-1 来源完整性审计。** 第一纵切仍优先星月湖“谢艺命运 → 星月湖响应”。G-1 已跑并失败，见上条；本条不再表示「尚未审计」。
 > **2026-08-30 P0-2 CLOSED。** HEAD `150cd72`，连续真机 `/tmp/xiantu-p0-2-final-1788100032875`，七门全 PASS、findings 空、无真值冲突。Demo 结构化 `opportunityAction` 本地完成合同/回执后小渲染层演出，1/2、重复领取、2/2 均 `local_contract` 0 bytes，不进 156KB Legacy、不发明令牌/旧帕。清羽 Demo 冻结：非 P0 修辞、文风、49 秒 Pilot 延迟一律 P1，不再阻塞、不再围绕这条固定路径打磨。下一步不是继续修 Demo，而是交付「固定主线 + 至少一个真实分支 + LLM 动态演出」的连续章节。P0-1 仍 OPEN。
 > **2026-08-30 P0-2 指南：锦囊须在 s02_01 仍 active 时追踪右侧机会卡，不要先点「听他把话说完」。** 合同 walker 也是先 `trackStoryOpportunity` 再走两步机会动作。五原本地正文改为 clone 上按正式事务顺序预结算后再 compose；落奴同轮写水牢，去掉「已经结算」类制作话术。P0-1 仍 OPEN；P0-2 已关闭，见最上条。
 > **2026-08-30 Codex 收口：清羽 Demo 自然行动不再依赖“主线遥控器”。** 仅限隔离 `qingyu-demo-v1`：stage_01／02 当前承重步骤补保守自然行动词；解析出的 fresh 本地动作与点击建议等权进入 Fast／Pilot，Pilot 保留玩家原句演出；普通事件建议隐藏「主线／耗时1回合」，改提示“可以直接描述行动”。点击与自然句落同一回执并在当前响应轮推进；普通存档仍 selected-only，否定／歧义 fail closed，`s02_04` 仍必须走五原地图／局部回执。聚焦 56/56 + 最终 Pilot/场景 35/35、`type-check`、`build:single`、完整 `canon:build` **938 / 933 pass / 0 fail / 5 skip**、`git diff --check` 全绿。未做连续真机，P0-1 / P0-2 不因此关闭。

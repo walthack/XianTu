@@ -2143,6 +2143,8 @@ export const TRACKED_OPPORTUNITY_MAX_TURNS = 6;
 function isEventSettled(runtime: RuntimeState, eventId: string): boolean {
   if (runtime.completedEventIds.includes(eventId)
     || (runtime.offscreenResolvedEventIds || []).includes(eventId)) return true;
+  // 可达命运拍已经映射过冻结锚后，隔离 stage_06 不得再激活辞世。
+  if (eventId === S06_03_EVENT_ID && xieyiFateAlreadyMapped(runtime)) return true;
   const event = runtime.events.find(item => item.id === eventId);
   const completion = event?.completion?.[0];
   if (
