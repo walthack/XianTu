@@ -309,7 +309,7 @@ test('incomplete scene contracts fail closed; s01_06 requires 月霜', async () 
     presentActors: [{ name: '凝羽', traits: [] }],
     mustAppear: { location: '中州·五原城', present: ['凝羽'], objective: '凝羽突然入局，当面看清她此刻的处境并回应' },
     receipts: { move: false, casualty: false },
-  })), false);
+  })), true);
   assert.equal(acceptLegacyPilotScene(basePacket({
     eventId: 'lcq.event.ningyu_enters_gamble',
     location: '中州·五原城',
@@ -343,7 +343,7 @@ test('incomplete scene contracts fail closed; s01_06 requires 月霜', async () 
     presentActors: [],
     mustAppear: { location: '中州·五原城', present: [], objective: '面对苏妲己就霓龙丝一事的逼问，谈清眼下能换到的期限' },
     receipts: { move: false, casualty: false },
-  })), false);
+  })), true);
   assert.equal(acceptLegacyPilotScene(basePacket({
     eventId: 'lcq.event.sudaji_south_pact',
     location: '中州·五原城',
@@ -370,7 +370,7 @@ test('incomplete scene contracts fail closed; s01_06 requires 月霜', async () 
     presentActors: [{ name: '凝羽', traits: [] }],
     mustAppear: { location: '中州·五原城', present: ['凝羽'], objective: '赌局局面骤变，面对眼前的刻香与契书做出回应' },
     receipts: { move: false, casualty: false },
-  })), false);
+  })), true);
   assert.equal(acceptLegacyPilotScene(basePacket({
     eventId: 'lcq.event.gamble_bond_signed',
     location: '中州·五原城',
@@ -378,7 +378,7 @@ test('incomplete scene contracts fail closed; s01_06 requires 月霜', async () 
     presentActors: [{ name: '凝羽', traits: [] }],
     mustAppear: { location: '中州·五原城', present: ['凝羽'], objective: '赌局局面骤变，面对眼前的刻香与契书做出回应' },
     receipts: { move: false, casualty: false },
-  })), false);
+  })), true);
   assert.equal(acceptLegacyPilotScene(basePacket({
     eventId: 'lcq.event.gamble_bond_signed',
     actionId: 'sign_the_bond',
@@ -420,7 +420,7 @@ test('incomplete scene contracts fail closed; s01_06 requires 月霜', async () 
     present: [],
     mustAppear: { location: '中州·五原城', present: [], objective: '在帮苏妲己取出新奇器物前谈定六十金铢报酬' },
     receipts: { move: false, casualty: false },
-  })), false);
+  })), true);
   assert.equal(acceptLegacyPilotScene(basePacket({
     eventId: 'lcq.event.charge_sudaji_fee',
     location: '中州·五原城',
@@ -463,7 +463,7 @@ test('incomplete scene contracts fail closed; s01_06 requires 月霜', async () 
     presentActors: [{ name: '凝羽', traits: [] }],
     mustAppear: { location: '中州·五原城', present: ['凝羽'], objective: '取得阿姬曼的身契并当面还她自由，再设法出城' },
     receipts: { move: false, casualty: false },
-  })), false);
+  })), true);
   assert.equal(acceptLegacyPilotScene(basePacket({
     eventId: 'lcq.event.free_ajiman',
     actionId: 'tear_bond_and_face_blockade',
@@ -479,7 +479,7 @@ test('incomplete scene contracts fail closed; s01_06 requires 月霜', async () 
     present: ['凝羽', '阿姬曼'],
     mustAppear: { location: '中州·五原城', present: ['凝羽', '阿姬曼'], objective: '取得阿姬曼的身契并当面还她自由，再设法出城' },
     receipts: { move: false, casualty: false },
-  })), false);
+  })), true);
   assert.equal(isLegacyPilotEventId('lcq.event.baihu_shangguan_escape'), true);
   assert.deepEqual(filterLegacyPilotEventCharacterNames('lcq.event.baihu_shangguan_escape', ['苏妲己', '凝羽']), []);
   assert.equal(acceptLegacyPilotScene(basePacket({
@@ -1085,7 +1085,7 @@ test('each expanded scene uses its own local variants, not opening stock', async
   }
 });
 
-test('白湖四拍 prepare 回落；只有最终动作才进 Pilot', async () => {
+test('白湖四拍 prepare 进 Pilot 但不写终态；最终动作才写终态', async () => {
   const { parseScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
   const { createQingyuOpeningPlaytestSave } = await loadTs('../src/modules/scenarioMods/qingyuOpeningPlaytest.ts');
   const { transitionToNextScenarioStage } = await loadTs('../src/modules/scenarioMods/strictInitializer.ts');
@@ -1147,11 +1147,11 @@ test('白湖四拍 prepare 回落；只有最终动作才进 Pilot', async () =>
     'lcq.event.baihu_shangguan_escape': 'walk_out_wuyuan_shangguan',
   };
   const leakOf = {
-    'lcq.event.ningyu_enters_gamble': /当面回应|处境/,
-    'lcq.event.sudaji_south_pact': /三个月|南荒之约|说死/,
-    'lcq.event.gamble_bond_signed': /卖身契|奴籍/,
-    'lcq.event.charge_sudaji_fee': /取出|器物/,
-    'lcq.event.free_ajiman': /撕/,
+    'lcq.event.ningyu_enters_gamble': /当面应了一句|回应登场|当面回应/,
+    'lcq.event.sudaji_south_pact': /南荒之约接住|把三个月订死|约已经说死|把南荒之约说死/,
+    'lcq.event.gamble_bond_signed': /签下卖身契|奴籍落到/,
+    'lcq.event.charge_sudaji_fee': /才帮她取出器物|取出器物/,
+    'lcq.event.free_ajiman': /身契被当面撕开|当面撕开/,
   };
   const seen = { prepare: [], final: [] };
   const beats = [
@@ -1209,9 +1209,9 @@ test('白湖四拍 prepare 回落；只有最终动作才进 Pilot', async () =>
         const accepted = acceptLegacyPilotScene(compiled.packet);
         if (selection.actionId === prepareOf[beat]) {
           assert.equal(preview.progress.completed, false, `${beat} prepare must not complete`);
-          assert.equal(accepted, false, `${beat} prepare must fail closed`);
+          assert.equal(accepted, true, `${beat} prepare must stay on Pilot`);
           const leaked = composeLegacyNarrativeFromPlan(compiled.packet);
-          assert.match(leaked, leakOf[beat], leaked);
+          assert.equal(leakOf[beat].test(leaked), false, leaked);
           seen.prepare.push(selection.actionId);
         } else if (selection.actionId === finalOf[beat]) {
           assert.equal(preview.progress.completed, true, `${beat} final must complete`);
@@ -1275,9 +1275,11 @@ test('see_ningyu_sent_into_gamble does not enter Pilot final-reply prose', async
     ...prepare,
     actionId: 'answer_ningyu_on_debut',
   });
-  assert.equal(acceptLegacyPilotScene(prepare), false);
+  assert.equal(acceptLegacyPilotScene(prepare), true);
   assert.equal(acceptLegacyPilotScene(final), true);
+  const prepareText = composeLegacyNarrativeFromPlan(prepare);
   const text = composeLegacyNarrativeFromPlan(final);
+  assert.equal(/当面应了一句|回应登场/.test(prepareText), false, prepareText);
   assert.match(text, /当面应了一句|回应登场/);
 });
 
@@ -1297,9 +1299,11 @@ test('offer_nylon_clue_for_term does not enter Pilot sealed-pact prose', async (
     ...prepare,
     actionId: 'seal_three_month_south_pact',
   });
-  assert.equal(acceptLegacyPilotScene(prepare), false);
+  assert.equal(acceptLegacyPilotScene(prepare), true);
   assert.equal(acceptLegacyPilotScene(final), true);
+  const prepareText = composeLegacyNarrativeFromPlan(prepare);
   const text = composeLegacyNarrativeFromPlan(final);
+  assert.equal(/南荒之约接住|把三个月订死|约已经说死/.test(prepareText), false, prepareText);
   assert.match(text, /南荒之约接住|把三个月订死|约已经说死/);
 });
 

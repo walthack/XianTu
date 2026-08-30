@@ -125,11 +125,16 @@ export function filterLegacyPilotEventCharacterNames(eventId: string | undefined
   return names.filter(name => (S02_02_CAST as readonly string[]).includes(name));
 }
 
-export function acceptLegacyPilotScene(packet: LegacyNarratorPacket): boolean {
+export function isLegacyPilotFinalAction(packet: LegacyNarratorPacket): boolean {
   const eventId = legacyPilotEventIdOf(packet);
   if (!isLegacyPilotEventId(eventId)) return false;
   const finalAction = LEGACY_PILOT_FINAL_ACTION_IDS[eventId];
-  if (finalAction && packet.actionId !== finalAction) return false;
+  return !finalAction || packet.actionId === finalAction;
+}
+
+export function acceptLegacyPilotScene(packet: LegacyNarratorPacket): boolean {
+  const eventId = legacyPilotEventIdOf(packet);
+  if (!isLegacyPilotEventId(eventId)) return false;
   const names = presentNames(packet);
   if (eventId === 'lcq.event.s01_01') return names.length === 1 && names[0] === '段强';
   if (eventId === 'lcq.event.s01_02') return names.length === 1 && names[0] === '段强';
@@ -206,7 +211,8 @@ export function acceptLegacyPilotScene(packet: LegacyNarratorPacket): boolean {
     return atSameCityOrHall(packet) && packet.receipts?.move === false && packet.receipts?.casualty === false;
   }
   if (eventId === 'lcq.event.free_ajiman') {
-    if (names.length !== 1 || names[0] !== '凝羽') return false;
+    if (!names.includes('凝羽')) return false;
+    if (names.some(name => name !== '凝羽' && name !== '阿姬曼')) return false;
     return atSameCityOrHall(packet) && packet.receipts?.move === false && packet.receipts?.casualty === false;
   }
   if (eventId === 'lcq.event.baihu_shangguan_escape') {
@@ -463,12 +469,17 @@ function hallPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan): st
 function gambleDebutPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan): string[] {
   const destName = hallPlaceName(packet);
   const companion = '凝羽';
+  const prepare = !isLegacyPilotFinalAction(packet);
   const sensory = {
     grass_iron: `${destName}这一侧，赌具和香叠在一起。${companion}被馆主差到案前，甲叶还没暖。`,
     wind_sky: `帘后有风。${companion}走进来，步子比馆主的笑更短。`,
     mud_body: `靴底还停在${destName}。石板是硬的，${companion}停在你能看见、也还能回话的位置。`,
   }[plan.sensory];
-  const pacing = {
+  const pacing = prepare ? {
+    slow_orient: `凝羽突然入局。你先看清她此刻被差到案前，不把后话提前说完。`,
+    tense_watch: `你把呼吸压低，先看清她是被差进来的，还不回话。`,
+    steady_breathe: `你先把气沉住。入局已经落到眼前，处境比来历更先要认。`,
+  }[plan.pacing] : {
     slow_orient: `凝羽突然入局，当面看清她此刻的处境并回应。你没有把后话提前说完。`,
     tense_watch: `你把呼吸压低，先看清她是被差进来的，再开口。`,
     steady_breathe: `你先把气沉住。入局已经落到眼前，处境比来历更先要认。`,
@@ -478,7 +489,11 @@ function gambleDebutPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPl
     answers: `${companion}低声说：“是馆主要我上场。”声音短，像把差遣说完就不肯再补。`,
     silent_grip: `${companion}的手按在刀柄上，没有拔，只让你看见她是被推进来的。`,
   }[plan.companion];
-  const closing = {
+  const closing = prepare ? {
+    hold_ground: `你把这一眼看清楚。认的是她此刻被差遣进赌局，当面那句还没有出口。`,
+    look_far: `你让${companion}停在肩侧，自己把视野放到馆主那一侧：差遣是她下的，回应还在后一拍。`,
+    steady_breath: `你把呼吸重新对齐，先看清登场的${companion}。人还在${destName}，你还没有回话。`,
+  }[plan.closing] : {
     hold_ground: `你当面应了一句。认的是她此刻被差遣进赌局，不是后面那些还没落到桌上的事。`,
     look_far: `你让${companion}停在肩侧，自己把视野放到馆主那一侧：差遣是她下的，入局是这一拍。`,
     steady_breath: `你把呼吸重新对齐，先回应登场的${companion}。人还在${destName}，契还没有落到手上。`,
@@ -488,6 +503,7 @@ function gambleDebutPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPl
 
 function southPactPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan): string[] {
   const destName = hallPlaceName(packet);
+  const prepare = !isLegacyPilotFinalAction(packet);
   const sensory = {
     grass_iron: `${destName}案上仍是霓龙丝三个字。香更浓，馆主把期限按在你颈上那块还烫的皮旁边。`,
     wind_sky: `帘不透风。馆主把三个月说得很短，像把活路和炮烙放在同一只杯里。`,
@@ -503,7 +519,11 @@ function southPactPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan
     answers: `馆主说：“三个月。南荒。采不到，炮烙。”声音不高，却把约定钉死了。`,
     silent_grip: `馆主按住案沿，指节稳定，像在确认你敢不敢接这三个月。`,
   }[plan.companion];
-  const closing = {
+  const closing = prepare ? {
+    hold_ground: `你把霓龙丝线索按在案上。约还没有接住，人还在${destName}。`,
+    look_far: `你让线索先落到案上，自己把视野放到帘外：期限还没有说死。`,
+    steady_breath: `你把呼吸重新对齐，先把线索交出去。三个月还没有订死。`,
+  }[plan.closing] : {
     hold_ground: `你把三个月南荒之约接住。霓龙丝是由头，炮烙是后手，人还在${destName}。`,
     look_far: `你让约先落在案上，自己把视野放到帘外：出门是后一截，这一拍只把期限说死。`,
     steady_breath: `你把呼吸重新对齐，先把三个月订死。现在动手的那条没有落到你身上。`,
@@ -529,7 +549,11 @@ function bondPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan): st
     answers: `${companion}低声说：“香被催了。这一局已经判你输。”声音又硬又短。`,
     silent_grip: `${companion}扣住你的腕骨，不让你把桌子掀了，只让你看见眼前这张契。`,
   }[plan.companion];
-  const closing = {
+  const closing = !isLegacyPilotFinalAction(packet) ? {
+    hold_ground: `你先看清刻香被动了手脚。契还在案上，字还没有落下。`,
+    look_far: `你让${companion}停在身边，自己把视野放到香上：时限被催了，签字还没有落到这一拍。`,
+    steady_breath: `你把呼吸重新对齐，先把落败认下来。卖身契还没有签完。`,
+  }[plan.closing] : {
     hold_ground: `你签下卖身契。奴籍落到白湖商馆名下。人还在${destName}，此局没有作废。`,
     look_far: `你让${companion}停在身边，自己把视野放到馆主那一侧：作弊是她的，签字是你的。`,
     steady_breath: `你把呼吸重新对齐，先把这张契签完。被卖的是你，不是${companion}。`,
@@ -554,7 +578,11 @@ function feePreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan): str
     answers: `馆主说：“六十金铢。先写条。”声音不高，却把价钉死了。`,
     silent_grip: `馆主按住案沿，指节稳定，像在确认你敢不敢把价说在动手前面。`,
   }[plan.companion];
-  const closing = {
+  const closing = !isLegacyPilotFinalAction(packet) ? {
+    hold_ground: `你先把六十金铢开出来。器物还在案上，手还没有伸。`,
+    look_far: `你把视野放到价上：工钱还没有锁死，取物不在这一拍。`,
+    steady_breath: `你把呼吸重新对齐，先把价说在动手前面。器物还没有取出。`,
+  }[plan.closing] : {
     hold_ground: `价先落，手后伸。六十金铢谈定以后，你才帮她取出器物。人还在${destName}。`,
     look_far: `你把视野放到条据上：工钱在前，取物在后。没有空口赊账。`,
     steady_breath: `你把呼吸重新对齐，先把六十金铢锁死，再碰那件器物。`,
@@ -580,7 +608,11 @@ function tearPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan): st
     answers: `${companion}低声说：“撕了。门外有人在搜。”声音又硬又短。`,
     silent_grip: `${companion}扣住你的腕骨，不让你把契揣回去，只让你当面撕完。`,
   }[plan.companion];
-  const closing = {
+  const closing = !isLegacyPilotFinalAction(packet) ? {
+    hold_ground: `你把那张身契拿到手里。纸边还烫着印，撕口还没有落下。`,
+    look_far: `你让${companion}停在身边，自己把视野放到契上：契在手里，当面撕开是后一拍。`,
+    steady_breath: `你把呼吸重新对齐，先确认契据已换手。还没有撕。`,
+  }[plan.closing] : {
     hold_ground: `身契被当面撕开。她自由了。出城岔路已被搜查封住，你立刻改道。人还在${destName}。`,
     look_far: `你让${companion}停在身边，自己把视野放到门外：女侍卫在搜，南门不是这一拍的路。`,
     steady_breath: `你把呼吸重新对齐，先把契撕完，再躲开搜查。人仍在五原城里。`,
@@ -1044,7 +1076,7 @@ function hallPool(packet: LegacyNarratorPacket): string[] {
 function gambleDebutPool(packet: LegacyNarratorPacket): string[] {
   const destName = hallPlaceName(packet);
   const companion = '凝羽';
-  return [
+  const lines = [
     `凝羽突然入局，当面看清她此刻的处境并回应。`,
     `${companion}被馆主差到${destName}这一侧。`,
     `你没有把她认成被卖之人。眼下只认奉命上场。`,
@@ -1070,11 +1102,15 @@ function gambleDebutPool(packet: LegacyNarratorPacket): string[] {
     `香和铁锈叠在一起。你只守这一息已经落下的登场。`,
     `你把这一拍交给当面回应，不把未发生的落败写成已得。`,
   ];
+  if (isLegacyPilotFinalAction(packet)) return lines;
+  return lines.filter(line => !/当面应了一句|当面回应/.test(line)).concat([
+    `你先把她被差进来这件事看清楚。当面那句还没有出口。`,
+  ]);
 }
 
 function southPactPool(packet: LegacyNarratorPacket): string[] {
   const destName = hallPlaceName(packet);
-  return [
+  const lines = [
     `面对馆主就霓龙丝一事的逼问，谈清眼下能换到的期限。`,
     `${destName}案上仍是那三个字。馆主等你开口。`,
     `你不当面硬拼。线索换三个月，活路先落在期限上。`,
@@ -1100,12 +1136,16 @@ function southPactPool(packet: LegacyNarratorPacket): string[] {
     `馆主把杯放下。那一下比任何安慰都短。`,
     `你站在能被看见、也能随时被再问的位置。`,
   ];
+  if (isLegacyPilotFinalAction(packet)) return lines;
+  return lines.filter(line => !/南荒之约说死|把三个月订死|约已经说死|把南荒之约说死/.test(line)).concat([
+    `你把霓龙丝线索按在案上。三个月还没有说死。`,
+  ]);
 }
 
 function bondPool(packet: LegacyNarratorPacket): string[] {
   const destName = hallPlaceName(packet);
   const companion = '凝羽';
-  return [
+  const lines = [
     `赌局局面骤变，面对眼前的刻香与契书做出回应。`,
     `${companion}还在${destName}这一侧。刻香比人更快。`,
     `香被催着往下烧。时限提前到头，此局已判你落败。`,
@@ -1153,11 +1193,15 @@ function bondPool(packet: LegacyNarratorPacket): string[] {
     `${companion}的呼吸很稳。稳的是看着你签完，不是替你签。`,
     `香尽以后，没有人把时限再拨回去。`,
   ];
+  if (isLegacyPilotFinalAction(packet)) return lines;
+  return lines.filter(line => !/我签|奴籍落到|字已经落|把这一笔写完|把奴籍按实|签字是真的/.test(line)).concat([
+    `你先看清刻香被动了手脚。契还没有落到手上。`,
+  ]);
 }
 
 function feePool(packet: LegacyNarratorPacket): string[] {
   const destName = hallPlaceName(packet);
-  return [
+  const lines = [
     `在帮苏妲己取出新奇器物前谈定六十金铢报酬。`,
     `${destName}案上摆着那件东西。工价还没有落。`,
     `你先开出六十金铢。不预支就不动手。`,
@@ -1204,12 +1248,16 @@ function feePool(packet: LegacyNarratorPacket): string[] {
     `你把六十金铢这个数重复了一遍，直到她不再改口。`,
     `工钱的数写清楚了，你才碰那件发亮的器物。`,
   ];
+  if (isLegacyPilotFinalAction(packet)) return lines;
+  return lines.filter(line => !/才帮她取出|才动手|才碰那件|才把器物|从匣里取出来/.test(line)).concat([
+    `你先把六十金铢开出来。器物还没有取出。`,
+  ]);
 }
 
 function tearPool(packet: LegacyNarratorPacket): string[] {
   const destName = hallPlaceName(packet);
   const companion = '凝羽';
-  return [
+  const lines = [
     `取得那张身契并当面还她自由，再设法出城。`,
     `${companion}在${destName}这一侧看着你把契拿到手里。`,
     `五十金铢换手。契据离开卖方。`,
@@ -1257,6 +1305,10 @@ function tearPool(packet: LegacyNarratorPacket): string[] {
     `廊柱后面能停半息。你只停半息，再换一条廊。`,
     `身契作废以后，她不再被那张纸捆在原处。`,
   ];
+  if (isLegacyPilotFinalAction(packet)) return lines;
+  return lines.filter(line => !/当面撕开|撕了|她自由了|身契被当面撕开|契没了/.test(line)).concat([
+    `你把那张身契拿到手里。还没有撕。`,
+  ]);
 }
 
 function walkPool(packet: LegacyNarratorPacket): string[] {
