@@ -180,11 +180,45 @@ export interface ScenarioModEvent {
   };
 }
 
+/**
+ * 事件动作上的显式本地判定。点击后由合同签发，不走关键词风险预检。
+ * 取消回到原动作列表；已掷结果按判定 id 锁定，不得重骰。
+ */
+export interface ScenarioEventActionJudgement {
+  kind: 'combat' | 'cultivate' | 'craft' | 'explore' | 'social' | 'escape' | 'stealth' | 'scheme';
+  difficulty: 'easy' | 'normal' | 'hard' | 'severe' | 'extreme';
+  difficultyValue: number;
+  target?: string;
+  successOutcomes: Array<'success' | 'great_success' | 'perfect'>;
+  /** 缺省 false：合同判定不得套用玩家自我疗伤回血。 */
+  applyCultivationRecovery?: boolean;
+  /** 确认掷骰时扣神识；critical_failure 用 covering 比例覆盖，不叠乘。 */
+  spiritCost?: {
+    onResolveRatio: number;
+    criticalFailureRatio: number;
+  };
+  allyFactors?: Array<{
+    characterId: string;
+    label: string;
+    value: number;
+    requireNamed?: boolean;
+  }>;
+  whyNow?: string;
+  stakes?: {
+    perfect?: string;
+    greatSuccess?: string;
+    success: string;
+    partial: string;
+    failure: string;
+    criticalFailure?: string;
+  };
+}
+
 export interface ScenarioPlayerCompletionContract {
   /** objective_action 由玩家点击引擎声明动作即成功；local_condition 还会读取本地状态判定。 */
   kind: 'local_condition' | 'objective_action';
-  /** 哪些本地判定结果足以完成该事件；failure 默认只能重试或等待场外截止。 */
-  settleOn: Array<Exclude<ScenarioPlayerCompletionOutcome, 'failure'>>;
+  /** 哪些本地判定结果足以完成该事件。默认不含 failure；作者显式列入时失败也可收束。 */
+  settleOn: ScenarioPlayerCompletionOutcome[];
   actions: Array<{
     id: string;
     label: string;
@@ -208,6 +242,10 @@ export interface ScenarioPlayerCompletionContract {
       matchAll?: string[];
       rejectIf?: string[];
     };
+    /** 所列角色不在场时隐藏该动作。 */
+    requiresPresentCharacterIds?: string[];
+    /** 显式本地判定；有此字段时优先于普通事件动作的跳过预检。 */
+    judgement?: ScenarioEventActionJudgement;
     outcomeText: {
       success: string;
       partial: string;

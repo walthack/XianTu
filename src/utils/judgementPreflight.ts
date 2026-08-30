@@ -1,10 +1,14 @@
 import {
   createJudgementProposal,
   environmentFactorFor,
+  getJudgementState,
+  persistPendingJudgement,
   type CreateJudgementProposalInput,
   type JudgementKind,
   type JudgementProposal,
+  type JudgementResolution,
 } from './judgementEngine';
+import type { ScenarioEventActionJudgement } from '@/modules/scenarioMods/schema';
 import { calculateTurnJudgementData } from './judgementRules';
 import { getCanonRailContract, getCanonRailProfile } from '@/modules/scenarioMods/canonRail';
 import { getNarrativeAnchorEvent } from '@/modules/scenarioMods/runtime';
@@ -232,4 +236,134 @@ export function buildLocalJudgementPreflight(
     ...(runtime?.storyMode !== 'world_sim' && contract ? { sourceEventId: contract.eventId } : {}),
     createdAtTurn: currentTurn,
   });
+}
+
+export interface EventActionJudgementSelection {
+  eventId: string;
+  actionId: string;
+  actionText: string;
+  contractHash: string;
+  judgement?: ScenarioEventActionJudgement;
+}
+
+function allyFactorsFor(
+  actionText: string,
+  spec: ScenarioEventActionJudgement,
+  saveData: any,
+): Array<{ label: string; value: number; source: 'ally' }> {
+  const characters = saveData?.世界?.状态?.剧本模组?.canon?.characters;
+  return (spec.allyFactors || []).flatMap(factor => {
+    const name = Array.isArray(characters)
+      ? String(characters.find((item: any) => item?.id === factor.characterId)?.name || '').trim()
+      : '';
+    if (factor.requireNamed !== false && name && !actionText.includes(name)) return [];
+    return [{ label: factor.label, value: Number(factor.value) || 0, source: 'ally' as const }];
+  });
+}
+
+function eventActionReceiptMatches(
+  receipt: JudgementProposal['authorityReceipt'],
+  selection: EventActionJudgementSelection,
+): boolean {
+  return receipt?.kind === 'event_action_judgement'
+    && receipt.eventId === selection.eventId
+    && receipt.actionId === selection.actionId
+    && receipt.contractHash === selection.contractHash;
+}
+
+/** 已掷出的合同判定按 id 锁定；取消档不得冒充已结算。 */
+export function findResolvedEventActionJudgement(
+  saveData: unknown,
+  selection: EventActionJudgementSelection,
+): JudgementResolution | null {
+  if (!selection.judgement) return null;
+  const state = getJudgementState(saveData);
+  const found = state.recent.find(item => (
+    item.status === 'resolved'
+    && eventActionReceiptMatches(item.authorityReceipt, selection)
+  ));
+  return found || null;
+}
+
+/**
+ * 由事件动作合同签发一次本地判定。不走关键词分类，也不签发 if_only/100。
+ */
+export function buildEventActionJudgementProposal(
+  saveData: any,
+  currentTurn: number,
+  selection: EventActionJudgementSelection,
+): JudgementProposal {
+  const spec = selection.judgement;
+  if (!spec) throw new Error('事件动作未声明判定合同');
+  const normalized = selection.actionText.trim();
+  const kind = spec.kind;
+  const data = calculateTurnJudgementData(
+    saveData?.角色?.身份?.先天六司,
+    saveData?.角色?.身份?.后天六司,
+    saveData?.角色?.位置,
+  );
+  const stakes = spec.stakes || {
+    perfect: '以压倒性优势达成目标，且不留下额外代价。',
+    greatSuccess: '大幅推进当前目标，并取得额外收益。',
+    success: '按当前做法取得直接进展。',
+    partial: '达成部分目标，但会留下代价或余波。',
+    failure: '行动受阻，局势可能恶化；可以换做法或先准备。',
+    criticalFailure: '局势显著恶化，必须承接更重的余波。',
+  };
+  return createJudgementProposal({
+    actionText: normalized,
+    kind,
+    ...(spec.target ? { target: spec.target } : {}),
+    whyNow: spec.whyNow || '此行动由事件合同签发一次本地判定。',
+    difficulty: { band: spec.difficulty, value: spec.difficultyValue },
+    factors: [
+      ...stateFactors(kind, saveData),
+      ...scenarioSkillFactors(kind, normalized, saveData),
+      ...explicitTalentFactors(kind, normalized, saveData),
+      ...allyFactorsFor(normalized, spec, saveData),
+      { label: '幸运', value: data.幸运点, source: 'condition' },
+      environmentFactorFor(kind, data),
+    ],
+    stakes,
+    canonPolicy: 'route_process_only',
+    sourceEventId: selection.eventId,
+    authorityReceipt: {
+      kind: 'event_action_judgement',
+      eventId: selection.eventId,
+      actionId: selection.actionId,
+      contractHash: selection.contractHash,
+    },
+    applyCultivationRecovery: spec.applyCultivationRecovery === true,
+    ...(spec.spiritCost ? { spiritCost: spec.spiritCost } : {}),
+    createdAtTurn: currentTurn,
+  });
+}
+
+export type PreparedEventActionJudgement =
+  | { kind: 'none' }
+  | { kind: 'issued'; proposal: JudgementProposal }
+  | { kind: 'pending'; proposal: JudgementProposal }
+  | { kind: 'resolved'; resolution: JudgementResolution };
+
+/**
+ * 合同判定优先于普通事件动作的跳过预检：未掷则签发，已掷则锁定回执。
+ * 不改 shouldSkipJudgementPreflight 的全局规则。
+ */
+export function prepareEventActionJudgement(
+  saveData: unknown,
+  selection: EventActionJudgementSelection | undefined,
+  currentTurn: number,
+): PreparedEventActionJudgement {
+  if (!selection?.judgement) return { kind: 'none' };
+  const resolved = findResolvedEventActionJudgement(saveData, selection);
+  if (resolved) return { kind: 'resolved', resolution: resolved };
+  const state = getJudgementState(saveData);
+  if (state.pending && eventActionReceiptMatches(state.pending.authorityReceipt, selection)) {
+    return { kind: 'pending', proposal: state.pending };
+  }
+  const proposal = persistPendingJudgement(
+    saveData,
+    buildEventActionJudgementProposal(saveData, currentTurn, selection),
+  );
+  return { kind: 'issued', proposal };
 }

@@ -428,9 +428,9 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
           if (
             !Array.isArray(contract.settleOn)
             || contract.settleOn.length < 1
-            || contract.settleOn.some(outcome => !['success', 'partial'].includes(String(outcome)))
+            || contract.settleOn.some(outcome => !['success', 'partial', 'failure'].includes(String(outcome)))
           ) {
-            add(`${contractPath}.settleOn`, 'invalid_enum', 'settleOn must contain success and/or partial.');
+            add(`${contractPath}.settleOn`, 'invalid_enum', 'settleOn must contain success, partial, and/or failure.');
           }
           if (!Array.isArray(contract.actions) || contract.actions.length < 1 || contract.actions.length > 8) {
             add(`${contractPath}.actions`, 'invalid_range', 'playerCompletionContract.actions must contain 1 to 8 actions.');
@@ -470,7 +470,7 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
               if (action.kind !== 'prepare' && action.grantsPreparation !== undefined) {
                 add(`${actionPath}.grantsPreparation`, 'invalid_value', 'Only prepare actions may grant preparation.');
               }
-              if (contract.kind === 'local_condition') {
+              if (contract.kind === 'local_condition' && action.judgement === undefined) {
                 if (!Array.isArray(action.successWhen) || action.successWhen.length < 1) {
                   add(`${actionPath}.successWhen`, 'required_array', 'A local condition action needs at least one success condition.');
                 } else {
@@ -479,7 +479,7 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
                 if (!['partial', 'failure'].includes(String(action.unmetOutcome))) {
                   add(`${actionPath}.unmetOutcome`, 'invalid_enum', 'unmetOutcome must be partial or failure.');
                 }
-              } else {
+              } else if (contract.kind !== 'local_condition') {
                 if (action.successWhen !== undefined) {
                   add(`${actionPath}.successWhen`, 'forbidden', 'objective_action must not declare successWhen.');
                 }
@@ -489,6 +489,17 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
               }
               if (action.intentMatch !== undefined) {
                 validateIntentMatch(action.intentMatch, `${actionPath}.intentMatch`, add);
+              }
+              if (action.requiresPresentCharacterIds !== undefined) {
+                validateIdArray(action.requiresPresentCharacterIds, `${actionPath}.requiresPresentCharacterIds`, add);
+                for (const characterId of Array.isArray(action.requiresPresentCharacterIds) ? action.requiresPresentCharacterIds : []) {
+                  if (typeof characterId === 'string' && !characterIds.has(characterId)) {
+                    add(`${actionPath}.requiresPresentCharacterIds`, 'unknown_reference', `Unknown character "${characterId}".`);
+                  }
+                }
+              }
+              if (action.judgement !== undefined) {
+                validateEventActionJudgement(action.judgement, `${actionPath}.judgement`, characterIds, add);
               }
               if (!isRecord(action.outcomeText)) {
                 add(`${actionPath}.outcomeText`, 'required_object', 'outcomeText must declare all three outcomes.');
@@ -1958,6 +1969,79 @@ function validateStringArray(value: unknown, path: string, add: AddIssue): void 
 
 function normalizeIntentPhrase(value: string): string {
   return value.normalize('NFKC').toLowerCase().replace(/[\p{P}\p{S}\s]+/gu, '');
+}
+
+const EVENT_ACTION_JUDGEMENT_KINDS = new Set([
+  'combat', 'cultivate', 'craft', 'explore', 'social', 'escape', 'stealth', 'scheme',
+]);
+const EVENT_ACTION_JUDGEMENT_DIFFICULTIES = new Set(['easy', 'normal', 'hard', 'severe', 'extreme']);
+const EVENT_ACTION_JUDGEMENT_SUCCESS = new Set(['success', 'great_success', 'perfect']);
+
+function validateEventActionJudgement(
+  value: unknown,
+  path: string,
+  characterIds: Set<string>,
+  add: AddIssue,
+): void {
+  if (!isRecord(value)) {
+    add(path, 'invalid_type', 'Event action judgement must be an object.');
+    return;
+  }
+  if (!EVENT_ACTION_JUDGEMENT_KINDS.has(String(value.kind))) {
+    add(`${path}.kind`, 'invalid_enum', 'Event action judgement kind is invalid.');
+  }
+  if (!EVENT_ACTION_JUDGEMENT_DIFFICULTIES.has(String(value.difficulty))) {
+    add(`${path}.difficulty`, 'invalid_enum', 'Event action judgement difficulty is invalid.');
+  }
+  if (typeof value.difficultyValue !== 'number' || !Number.isFinite(value.difficultyValue) || value.difficultyValue < 1) {
+    add(`${path}.difficultyValue`, 'invalid_number', 'Event action judgement difficultyValue must be a positive number.');
+  }
+  if (value.target !== undefined) {
+    if (validateId(value.target, `${path}.target`, add) && !characterIds.has(String(value.target))) {
+      add(`${path}.target`, 'unknown_reference', `Unknown character "${value.target}".`);
+    }
+  }
+  if (!Array.isArray(value.successOutcomes) || value.successOutcomes.length < 1
+    || value.successOutcomes.some(outcome => !EVENT_ACTION_JUDGEMENT_SUCCESS.has(String(outcome)))) {
+    add(`${path}.successOutcomes`, 'invalid_enum', 'successOutcomes must contain success, great_success, and/or perfect.');
+  }
+  if (value.applyCultivationRecovery !== undefined && typeof value.applyCultivationRecovery !== 'boolean') {
+    add(`${path}.applyCultivationRecovery`, 'invalid_type', 'applyCultivationRecovery must be a boolean.');
+  }
+  if (value.spiritCost !== undefined) {
+    if (!isRecord(value.spiritCost)) {
+      add(`${path}.spiritCost`, 'invalid_type', 'spiritCost must be an object.');
+    } else {
+      for (const key of ['onResolveRatio', 'criticalFailureRatio'] as const) {
+        const ratio = value.spiritCost[key];
+        if (typeof ratio !== 'number' || !Number.isFinite(ratio) || ratio < 0 || ratio > 1) {
+          add(`${path}.spiritCost.${key}`, 'invalid_number', `${key} must be a ratio from 0 to 1.`);
+        }
+      }
+    }
+  }
+  if (value.allyFactors !== undefined) {
+    forEachRecord(value.allyFactors, `${path}.allyFactors`, (factor, factorPath) => {
+      if (validateId(factor.characterId, `${factorPath}.characterId`, add)
+        && !characterIds.has(String(factor.characterId))) {
+        add(`${factorPath}.characterId`, 'unknown_reference', `Unknown character "${factor.characterId}".`);
+      }
+      requireString(factor.label, `${factorPath}.label`, add);
+      if (typeof factor.value !== 'number' || !Number.isFinite(factor.value)) {
+        add(`${factorPath}.value`, 'invalid_number', 'Ally factor value must be a number.');
+      }
+    });
+  }
+  if (value.whyNow !== undefined) requireString(value.whyNow, `${path}.whyNow`, add);
+  if (value.stakes !== undefined) {
+    if (!isRecord(value.stakes)) {
+      add(`${path}.stakes`, 'invalid_type', 'stakes must be an object.');
+    } else {
+      for (const key of ['success', 'partial', 'failure'] as const) {
+        requireString(value.stakes[key], `${path}.stakes.${key}`, add);
+      }
+    }
+  }
 }
 
 function validateIntentMatch(value: unknown, path: string, add: AddIssue): void {

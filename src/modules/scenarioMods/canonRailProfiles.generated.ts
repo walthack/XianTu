@@ -408,7 +408,12 @@ export const GENERATED_CANON_RAIL_PROFILES: CanonRailProfile[] = [
       "lcq.event.s05b_08a_rescue_suli",
       "lcq.event.s05b_08b_altar_corpse_fight_and_danchen",
       "lcq.event.s05b_09_temporary_pact_with_xiaozi",
-      "lcq.event.s05b_10_slave_revolt_and_phoenix_change"
+      "lcq.event.s05b_10_slave_revolt_and_phoenix_change",
+      "lcq.event.ghost_king_swallowed",
+      "lcq.event.slay_dragon",
+      "lcq.event.xieyi_entrustment",
+      "lcq.event.xiaozi_kills_mother",
+      "lcq.event.tribes_pledge"
     ],
     "contracts": [
       {
@@ -524,6 +529,59 @@ export const GENERATED_CANON_RAIL_PROFILES: CanonRailProfile[] = [
       {
         "eventId": "lcq.event.s05b_10_slave_revolt_and_phoenix_change",
         "mustReach": "乐明珠因程宗扬无意中传输死气而触发凤凰宝典第七层异变，谢艺揭露其是光明观堂为岳帅培养的姬妾，程宗扬决定先杀鬼巫王再处理关系。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.ghost_king_swallowed",
+        "mustReach": "鬼巫王以祭品唤醒龙神，反被龙神一口吞食。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.slay_dragon",
+        "mustReach": "程宗扬借小紫指点刺穿龙颅、破坏苍龙星阵，龙神坠亡。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情",
+          "在本拍结算谢艺命运或完成托付"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.xieyi_entrustment",
+        "mustReach": "赶到重伤谢艺身边，听清把小紫带往星月湖的托付；命运由承接或救治判定结算。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "提前演出后续剧情",
+          "在本纵切生成 missing",
+          "不经救治判定合同写活谢艺",
+          "把 s06_03 改名或迁走"
+        ],
+        "allowedElaboration": "可补足针法、呼吸、哭骂与托付现场的过渡，不得改写死／生真值。"
+      },
+      {
+        "eventId": "lcq.event.xiaozi_kills_mother",
+        "mustReach": "追上小紫，见证她与母亲碧姬对质后亲手弑母，并承接余波。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.tribes_pledge",
+        "mustReach": "程宗扬解散鬼王峒势力，要求三族和平共处，龙神尸骸收益分十份。",
         "completionEvidence": [],
         "forbiddenInCanon": [
           "改写本拍原著结果",

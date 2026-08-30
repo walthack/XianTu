@@ -11,6 +11,7 @@ import type {
   ScenarioNpcDecisionActor,
   ScenarioNpcMemoryEpisode,
   ScenarioNpcPrivateKnowledgeFact,
+  ScenarioEventActionJudgement,
   ScenarioPlayerCompletionContract,
   ScenarioPlayerCompletionEffects,
   ScenarioPlayerCompletionOutcome,
@@ -43,7 +44,8 @@ import {
 import { affinityCapFor } from './affinityCaps';
 import { REPUTATION_EVENT_GRANT, type ReputationGrant } from './reputationLedger';
 import { lineCriticalFrozen, resolveLocationIdFromPosition } from './secondaryLines';
-import { recordOffscreenDivergence, type ScenarioDivergence } from './divergenceLedger';
+import { recordOffscreenDivergence, recordReconcileDivergences, type ScenarioDivergence } from './divergenceLedger';
+import type { JudgementOutcome, JudgementResolution } from '@/utils/judgementEngine';
 import { getCanonRailOrder, getCanonRailProfile, isCanonRailChapter } from './canonRail';
 import { updateDivergenceControl, type DivergenceSignal, type WorldPushState } from './divergenceControl';
 import {
@@ -58,7 +60,7 @@ import {
 } from './inventoryTransactions';
 import { resolveFixedQuestObjective } from './fixedQuestObjectives';
 import { formatQuestCompass, questCompassPhrases } from './eventNarrativeView';
-import { stampDepartedCast } from './presence';
+import { departedPresentNames, stampDepartedCast } from './presence';
 
 
 export interface ScenarioProgressState {
@@ -202,6 +204,7 @@ export interface ScenarioEventActionSelection {
   interaction: ScenarioInteractionAffordance;
   stepIndex?: number;
   stepTotal?: number;
+  judgement?: ScenarioEventActionJudgement;
 }
 
 export type ScenarioInteractionVerb = 'observe' | 'talk' | 'act' | 'use' | 'rest' | 'move' | 'attack';
@@ -989,13 +992,33 @@ function isAvailableExplorationEvent(runtime: RuntimeState, event: ScenarioModEv
   return Boolean(chapter?.eventIds?.includes(event.id));
 }
 
+function requiredCharactersPresent(
+  action: ScenarioPlayerCompletionContract['actions'][number],
+  runtime: RuntimeState,
+): boolean {
+  const required = action.requiresPresentCharacterIds || [];
+  if (!required.length) return true;
+  const departed = new Set(departedPresentNames(runtime).map(name => String(name || '').trim()).filter(Boolean));
+  const characters = Array.isArray(runtime.canon?.characters) ? runtime.canon.characters : [];
+  return required.every(characterId => {
+    if (departed.has(characterId)) return false;
+    const slug = characterId.split('.').filter(Boolean).at(-1) || characterId;
+    const status = runtime.flags[`character.${slug}.status`];
+    if (typeof status === 'string' && /^(dead|missing)$/i.test(status.trim())) return false;
+    const name = String((characters as Array<{ id?: string; name?: string }>).find(item => item.id === characterId)?.name || '').trim();
+    return !name || !departed.has(name);
+  });
+}
+
 function eventActionAvailable(
   action: ScenarioPlayerCompletionContract['actions'][number],
   state: ScenarioEventActionState,
+  runtime: RuntimeState,
 ): boolean {
   const preparations = new Set(state.preparations || []);
   if (action.kind === 'prepare' && action.grantsPreparation && preparations.has(action.grantsPreparation)) return false;
-  return (action.requiresPreparation || []).every(item => preparations.has(item));
+  if (!(action.requiresPreparation || []).every(item => preparations.has(item))) return false;
+  return requiredCharactersPresent(action, runtime);
 }
 
 function isLinearStepContract(contract: ScenarioPlayerCompletionContract): boolean {
@@ -1015,7 +1038,7 @@ function currentContractStep(runtime: RuntimeState): ScenarioContractStep | unde
   if (!event || !contract) return undefined;
   const state = reconcileEventActionContract(runtime, event);
   if (!state || state.readyAtTurn !== undefined) return undefined;
-  const action = contract.actions.find(item => eventActionAvailable(item, state));
+  const action = contract.actions.find(item => eventActionAvailable(item, state, runtime));
   if (!action) return undefined;
   const actionIndex = contract.actions.indexOf(action);
   return {
@@ -1274,7 +1297,7 @@ export function getCurrentStoryEventActions(saveData: SaveData): ScenarioEventAc
     ? Math.max(0, timeline.eligibleAtTurn + event.timeline.deadlineTurns - (Number(runtime.worldTurn) || 0))
     : undefined;
   const contractStep = currentContractStep(runtime);
-  const steps: ScenarioEventActionSelection[] = contract.actions.filter(action => eventActionAvailable(action, state)).map(action => {
+  const steps: ScenarioEventActionSelection[] = contract.actions.filter(action => eventActionAvailable(action, state, runtime)).map(action => {
     const expectedOutcome: ScenarioPlayerCompletionOutcome = contract.kind === 'objective_action'
       ? 'success'
       : conditionsMatch(action.successWhen, saveData, runtime) ? 'success' : action.unmetOutcome || 'failure';
@@ -1308,6 +1331,7 @@ export function getCurrentStoryEventActions(saveData: SaveData): ScenarioEventAc
         stepTotal: contractStep!.total,
       } : {}),
       ...(remainingTurns !== undefined ? { remainingTurns } : {}),
+      ...(action.judgement ? { judgement: structuredClone(action.judgement) } : {}),
     };
   });
   // 玩家主动走绝路的选项与正常动作并列。它们不进合同、不影响 contractHash、
@@ -1402,7 +1426,7 @@ export function getCurrentStoryExplorationActions(saveData: SaveData): ScenarioE
       const contract = event.playerCompletionContract!;
       const state = reconcileEventActionContract(runtime, event);
       if (!state || state.readyAtTurn !== undefined) return [];
-      return contract.actions.filter(action => eventActionAvailable(action, state)).map(action => {
+      return contract.actions.filter(action => eventActionAvailable(action, state, runtime)).map(action => {
         const expectedOutcome: ScenarioPlayerCompletionOutcome = contract.kind === 'objective_action'
           ? 'success'
           : conditionsMatch(action.successWhen, saveData, runtime) ? 'success' : action.unmetOutcome || 'failure';
@@ -1523,9 +1547,56 @@ export function previewRepeatSilkPouchClaimNarrative(
  * 在成功 AI 回合后消费一次非机会卡事件动作，并只依据存档状态执行本地判定。
  * LLM 正文、命令和自报结果均不参与 success/partial/failure 裁定。
  */
+function eventOutcomeFromJudgement(
+  action: ScenarioPlayerCompletionContract['actions'][number],
+  resolution: JudgementResolution,
+): ScenarioPlayerCompletionOutcome {
+  const successOutcomes = new Set(action.judgement?.successOutcomes || ['success', 'great_success', 'perfect']);
+  if (resolution.outcome && successOutcomes.has(resolution.outcome)) return 'success';
+  if (resolution.outcome === 'partial') return 'partial';
+  return action.unmetOutcome || 'failure';
+}
+
+const XIEYI_ENTRUSTMENT_EVENT_ID = 'lcq.event.xieyi_entrustment';
+const XIEYI_RESCUE_ACTION_ID = 'rescue_xieyi';
+const S06_03_EVENT_ID = 'lcq.event.s06_03';
+
+function xieyiFateAlreadyMapped(runtime: RuntimeState): boolean {
+  return runtime.flags['event.s06_03.done'] === true || runtime.flags['event.s06_03.void'] === true;
+}
+
+/** 判定引擎不写 flags；命运映射与事件结算同事务提交。本纵切不生成 missing。 */
+function applyXieyiEntrustmentFateMapping(
+  runtime: RuntimeState,
+  input: {
+    actionId: string;
+    judgementOutcome?: JudgementOutcome;
+    evidence: string;
+  },
+): void {
+  if (xieyiFateAlreadyMapped(runtime)) return;
+  const judgementOutcome = input.judgementOutcome;
+  const longrest = input.actionId === XIEYI_RESCUE_ACTION_ID
+    && (judgementOutcome === 'success' || judgementOutcome === 'great_success' || judgementOutcome === 'perfect');
+  if (longrest) {
+    runtime.flags['event.s06_03.void'] = true;
+    recordReconcileDivergences(runtime, [{
+      id: S06_03_EVENT_ID,
+      verdict: 'void',
+      evidence: input.evidence,
+      worldDelta: input.evidence,
+      characterStates: { 'liuchao.character.xie_yi': 'longrest' },
+    }]);
+    return;
+  }
+  runtime.flags['event.s06_03.done'] = true;
+  runtime.flags['character.xie_yi.status'] = 'dead';
+}
+
 export function recordStoryEventStructuredAction(
   saveData: SaveData,
   selection: ScenarioEventActionSelection,
+  options?: { judgementResolution?: JudgementResolution },
 ): {
   attempted: boolean;
   completed: boolean;
@@ -1579,7 +1650,7 @@ export function recordStoryEventStructuredAction(
   if (selection.source === 'exploration_engine' && !isAvailableExplorationEvent(runtime, event)) {
     return { attempted: false, completed: false, eventId, reason: 'stale_event' };
   }
-  if (!eventActionAvailable(action, state)) {
+  if (!eventActionAvailable(action, state, runtime)) {
     return { attempted: false, completed: false, eventId: event.id, reason: 'action_unavailable' };
   }
   const turn = Math.max(0, Number(runtime.worldTurn) || 0);
@@ -1589,10 +1660,27 @@ export function recordStoryEventStructuredAction(
   if (event.id === 'lcq.event.s02_04' && !wuyuanS0204MapContractMet(runtime)) {
     return { attempted: false, completed: false, eventId: event.id, reason: 'open_world_prerequisites' };
   }
-  const success = contract.kind === 'objective_action' || conditionsMatch(action.successWhen, saveData, runtime);
-  const outcome: ScenarioPlayerCompletionOutcome = success ? 'success' : action.unmetOutcome || 'failure';
+  let outcome: ScenarioPlayerCompletionOutcome;
+  if (action.judgement) {
+    const resolution = options?.judgementResolution;
+    if (!resolution || resolution.status !== 'resolved') {
+      return { attempted: false, completed: false, eventId: event.id, reason: 'judgement_required' };
+    }
+    if (
+      resolution.authorityReceipt?.kind !== 'event_action_judgement'
+      || resolution.authorityReceipt.eventId !== event.id
+      || resolution.authorityReceipt.actionId !== action.id
+      || resolution.authorityReceipt.contractHash !== selection.contractHash
+    ) {
+      return { attempted: false, completed: false, eventId: event.id, reason: 'stale_judgement' };
+    }
+    outcome = eventOutcomeFromJudgement(action, resolution);
+  } else {
+    const success = contract.kind === 'objective_action' || conditionsMatch(action.successWhen, saveData, runtime);
+    outcome = success ? 'success' : action.unmetOutcome || 'failure';
+  }
   const detail = action.outcomeText[outcome];
-  if (selection.expectedOutcome !== outcome || selection.outcomeText !== detail) {
+  if (!action.judgement && (selection.expectedOutcome !== outcome || selection.outcomeText !== detail)) {
     return { attempted: false, completed: false, eventId: event.id, reason: 'stale_condition' };
   }
   if (hasPathReceiptConflict(runtime, event, action.outcomeEffects?.[outcome])) {
@@ -1625,9 +1713,16 @@ export function recordStoryEventStructuredAction(
     action.outcomeEffects?.[outcome],
     attemptNumber,
   );
-  const completed = action.kind !== 'prepare' && outcome !== 'failure' && contract.settleOn.includes(outcome);
+  const completed = action.kind !== 'prepare' && contract.settleOn.includes(outcome);
   if (completed) state.readyAtTurn = turn;
   if (completed) stampDepartedCast(runtime);
+  if (completed && event.id === XIEYI_ENTRUSTMENT_EVENT_ID) {
+    applyXieyiEntrustmentFateMapping(runtime, {
+      actionId: action.id,
+      judgementOutcome: action.judgement ? options?.judgementResolution?.outcome : undefined,
+      evidence: detail,
+    });
+  }
   if (event.locationId) movePlayerToEventLocation(saveData, runtime, event.locationId);
   return {
     attempted: true,
@@ -1931,6 +2026,21 @@ function settleArrivalObjective(saveData: SaveData, runtime: RuntimeState): void
   recordStoryEventStructuredAction(saveData, selection);
 }
 
+function settleAbandonedXieyiEntrustment(saveData: SaveData, runtime: RuntimeState): void {
+  if (isEventSettled(runtime, XIEYI_ENTRUSTMENT_EVENT_ID) || !runtime.activeEventIds.includes(XIEYI_ENTRUSTMENT_EVENT_ID)) return;
+  const event = runtime.events.find(item => item.id === XIEYI_ENTRUSTMENT_EVENT_ID);
+  if (!event?.locationId) return;
+  const startedAt = runtime.eventActivatedAtLocation?.[event.id];
+  if (startedAt === undefined || startedAt !== event.locationId) return;
+  const locId = playerLocationId(saveData, runtime);
+  if (!locId || locId === event.locationId) return;
+  const selection = getCurrentStoryEventActions(saveData).find(item => (
+    item.source === 'event_engine' && item.eventId === event.id && item.actionId === 'accept_entrustment'
+  ));
+  if (!selection) return;
+  recordStoryEventStructuredAction(saveData, selection);
+}
+
 const WUYUAN_S02_04_PASTRY_ZONE = 'lcq.zone.wuyuan.pastry_shop';
 const WUYUAN_S02_04_PLAYER_ROUTES = new Set([
   'lcq.route.wuyuan.market_to_pastry_street',
@@ -2031,8 +2141,16 @@ export const OFFSCREEN_WORLD_EVENT_STALL_THRESHOLD = 10;
 export const TRACKED_OPPORTUNITY_MAX_TURNS = 6;
 
 function isEventSettled(runtime: RuntimeState, eventId: string): boolean {
-  return runtime.completedEventIds.includes(eventId)
-    || (runtime.offscreenResolvedEventIds || []).includes(eventId);
+  if (runtime.completedEventIds.includes(eventId)
+    || (runtime.offscreenResolvedEventIds || []).includes(eventId)) return true;
+  const event = runtime.events.find(item => item.id === eventId);
+  const completion = event?.completion?.[0];
+  if (
+    completion?.path?.startsWith('flags.')
+    && completion.path.endsWith('.done')
+    && runtime.flags[completion.path.slice('flags.'.length).replace(/\.done$/, '.void')] === true
+  ) return true;
+  return false;
 }
 
 function eventTimelineState(runtime: RuntimeState, eventId: string): ScenarioEventTimelineState | undefined {
@@ -2325,6 +2443,12 @@ function resolveOffscreenWorldEvents(
     const onScene = unresolvedIds.every(id =>
       runtime.events.find(item => item.id === id)?.playerPresence === 'required');
     runtime.flags[resolution.flagKey] = true;
+    if (unresolvedIds.includes(XIEYI_ENTRUSTMENT_EVENT_ID)) {
+      applyXieyiEntrustmentFateMapping(runtime, {
+        actionId: 'accept_entrustment',
+        evidence: (onScene && resolution.onSceneDelta) || resolution.worldDelta,
+      });
+    }
     if (!onScene) {
       runtime.offscreenResolvedEventIds = [...new Set([...(runtime.offscreenResolvedEventIds || []), ...unresolvedIds])];
     } else {
@@ -3163,6 +3287,7 @@ export function advanceScenarioRuntime(saveData: SaveData): {
     : {};
   for (const eventId of runtime.activeEventIds) rememberEventActivationLocation(next, runtime, eventId);
   settleArrivalObjective(next, runtime);
+  settleAbandonedXieyiEntrustment(next, runtime);
   settleReadyEventActionCompletionFlags(runtime);
   runtime.offscreenResolvedEventIds = Array.isArray(runtime.offscreenResolvedEventIds) ? runtime.offscreenResolvedEventIds : [];
   runtime.eventTimeline = runtime.eventTimeline && typeof runtime.eventTimeline === 'object'

@@ -291,16 +291,13 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       + '任一见过即开线，最早由谢艺第 4 关触发——比月霜第 1 关合理，开局就开星月湖太早。',
     nodes: [
       { reviewSummary: '向云苍峰问清岳帅生平与星月湖渊源——谢艺要找的或是岳帅姬妾', status: 'ready', stageId: 'lcq.stage_04b_lingfei_baiyi_crisis', eventId: 'lcq.event.s04b_lingfei_baiyi_crisis_16' },
-      // 不另开 event：托付紧贴杀龙那一刻（谢艺 seq 210 被闪电击落，程宗扬替他杀了龙 211，
-      // 他才交代后事），所以**附在昭南的杀龙 event 里**双喂——昭南读了结，本线读托付。
-      //
-      // **文案不预设他必死**（用户裁定 2026-08-16）：原著里他伤重辞世，但这里不写死。
-      // 玩家赶到时他重伤未定，救不救得回来是结果不是前提。⚠ 真做成分岔的代价见
-      // `docs/R3-10-BACKLOG` P1-7：他的死是四处承重，其中「萧遥逸接骨灰」是萧的**唯一登场路径**。
+      // 杀龙与托付已拆拍：`slay_dragon` 只收龙神死亡；命运在 `xieyi_entrustment`。
+      // 玩家赶到时他重伤未定，救不救得回来是结果不是前提。
       { reviewSummary: '听谢艺讲清碧鲮与鲛族旧战、朱狐冠来历，他要你接岳帅未竟之事', status: 'ready', stageId: 'lcq.stage_04b_lingfei_baiyi_crisis', eventId: 'lcq.event.xieyi_biling_war' },
       // 与汉国入口同一 event，待办各说各的：汉国读左武覆灭，本线读番号旧案。
       // 序按 axisSeq：旧案 232 在报丧 251 之前，先前两条排反了。
-      { reviewSummary: '刺穿龙颅破苍龙星阵，龙神坠亡；重伤谢艺把小紫与星月湖交给你', status: 'ready', stageId: 'lcq.stage_05b', eventId: 'lcq.event.slay_dragon' },
+      { reviewSummary: '刺穿龙颅破苍龙星阵，龙神坠亡', status: 'ready', stageId: 'lcq.stage_05b', eventId: 'lcq.event.slay_dragon' },
+      { reviewSummary: '赶到重伤谢艺身边，听清把小紫带往星月湖的托付', status: 'ready', stageId: 'lcq.stage_05b', eventId: 'lcq.event.xieyi_entrustment' },
       // 文案不写「之死」：上游已按裁定改成重伤未定，这里跟着中性化。
       // ⚠ 挂的 event 本身字面即死讯，属 backlog P1-7 四处承重之一，真分岔归 R2-0。
       { reviewSummary: '萧遥逸交代左武军怎么覆灭，以及岳帅旧案上的分歧', status: 'ready', stageId: 'lcq.stage_07_qingyuan_jiankang', eventId: 'lcq.event.s07_01_old_case' },
@@ -505,7 +502,8 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       { reviewSummary: '稳住乐明珠药效，以岳鹏举身份线劝小紫临时反杀鬼巫王', status: 'ready', stageId: 'lcq.stage_05b', eventId: 'lcq.event.s05b_09_temporary_pact_with_xiaozi' },
       { reviewSummary: '小紫倒戈、奴隶暴动，你决定反杀——乐明珠凤凰宝典异变', status: 'ready', stageId: 'lcq.stage_05b', eventId: 'lcq.event.s05b_10_slave_revolt_and_phoenix_change' },
       { reviewSummary: '祭台决战：鬼巫王唤醒龙神，反被龙神一口吞掉', status: 'ready', stageId: 'lcq.stage_05b', eventId: 'lcq.event.ghost_king_swallowed' },
-      { reviewSummary: '借小紫指点了结龙神——重伤谢艺把小紫与星月湖托你', status: 'ready', stageId: 'lcq.stage_05b', eventId: 'lcq.event.slay_dragon' },
+      { reviewSummary: '借小紫指点了结龙神', status: 'ready', stageId: 'lcq.stage_05b', eventId: 'lcq.event.slay_dragon' },
+      { reviewSummary: '赶到重伤谢艺身边，听清把小紫带往星月湖的托付', status: 'ready', stageId: 'lcq.stage_05b', eventId: 'lcq.event.xieyi_entrustment' },
       { reviewSummary: '追上小紫，见证她对质后亲手弑母碧姬并接下余波', status: 'ready', stageId: 'lcq.stage_05b', eventId: 'lcq.event.xiaozi_kills_mother' },
       { reviewSummary: '解散鬼王峒，令三族共处，龙神尸骸收益分十份', status: 'ready', stageId: 'lcq.stage_05b', eventId: 'lcq.event.tribes_pledge' },
       { reviewSummary: '循朱老头留下的路线进入村落，当面确认殇侯身份与天命之说', status: 'ready', stageId: 'lcq.stage_06', eventId: 'lcq.event.s06_05' },

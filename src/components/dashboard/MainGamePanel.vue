@@ -470,7 +470,7 @@ import {
   type JudgementResolution,
   type JudgementOutcome,
 } from '@/utils/judgementEngine';
-import { buildLocalJudgementPreflight, composeJudgementAction, shouldSkipJudgementPreflight } from '@/utils/judgementPreflight';
+import { buildLocalJudgementPreflight, composeJudgementAction, prepareEventActionJudgement, shouldSkipJudgementPreflight } from '@/utils/judgementPreflight';
 import { getNarrativeTurn } from '@/utils/actionGate';
 import {
   getCurrentStoryEventActions,
@@ -1655,8 +1655,28 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
   const preflightOpenWorldAction = selectedScenarioEngineAction.value?.source === 'open_world_engine'
     ? selectedScenarioEngineAction.value
     : (saveData ? resolveWuyuanOpenWorldSelectionFromText(saveData, inputText.value.trim()) : undefined);
+  const selectedEventJudgementAction = selectedScenarioEngineAction.value?.source === 'event_engine'
+    && 'judgement' in selectedScenarioEngineAction.value
+    && selectedScenarioEngineAction.value.judgement
+    && selectedScenarioEngineAction.value.playerLine === inputText.value.trim()
+    ? selectedScenarioEngineAction.value
+    : undefined;
+  let contractedJudgementResolution = execution?.resolution;
+  if (saveData && selectedEventJudgementAction && !contractedJudgementResolution) {
+    const prepared = prepareEventActionJudgement(
+      saveData,
+      selectedEventJudgementAction,
+      getNarrativeTurn(saveData),
+    );
+    if (prepared.kind === 'issued' || prepared.kind === 'pending') {
+      await persistJudgementSave(saveData);
+      toast.info('此行动存在风险，请先确认判定');
+      return;
+    }
+    if (prepared.kind === 'resolved') contractedJudgementResolution = prepared.resolution;
+  }
   if (!shouldSkipJudgementPreflight({
-    skipPreflight: execution?.skipPreflight,
+    skipPreflight: execution?.skipPreflight || Boolean(contractedJudgementResolution),
     selectedSource: selectedScenarioEngineAction.value?.source,
     selectedPlayerLine: selectedScenarioEngineAction.value && 'playerLine' in selectedScenarioEngineAction.value
       ? selectedScenarioEngineAction.value.playerLine
@@ -1739,8 +1759,8 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
   if (resolvedOpenWorldAction) {
     finalUserMessage += `\n【本地开放世界行动已预结算】类型=${resolvedOpenWorldAction.kind}；既定事实=${resolvedOpenWorldAction.settledFacts.join('；')}。只演出这些既定事实，不得另行移动玩家、改写路线、免除代价或写入开放世界账本。\n`;
   }
-  if (execution?.resolution) {
-    const result = execution.resolution;
+  if (contractedJudgementResolution) {
+    const result = contractedJudgementResolution;
     const localDamageApplied = result.kind === 'combat' && result.appliedEffects.some(effect => effect.key === '角色.属性.气血.当前');
     const effectSummary = result.appliedEffects.map(describeJudgementEffect).join('；') || '无';
     finalUserMessage += `\n【本地判定已结算】判定ID=${result.id}；类型=${result.kind}；骰点=${result.roll}；总值=${result.total}；难度=${result.difficulty.value}；结果=${result.outcome}；正典策略=${result.canonPolicy}；已写入=${effectSummary}${localDamageApplied ? '；本地战斗伤害已结算=true' : ''}。只叙述该既定结果和已写入状态，不得另行掷骰、改写数字、杜撰额外状态效果或写入系统.扩展.判定；若策略为 route_process_only，不得直接完成、void 或改写活动正典事件。\n`;
@@ -1793,7 +1813,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
         options.eventActionProvenance = exactSelectedEventAction ? 'selected' : 'resolved_text';
       }
       if (resolvedOpenWorldAction) options.openWorldAction = { ...resolvedOpenWorldAction };
-      if (execution?.resolution) options.judgementResolution = structuredClone(execution.resolution);
+      if (contractedJudgementResolution) options.judgementResolution = structuredClone(contractedJudgementResolution);
 
       // 酒馆环境：流式通过事件系统处理（STREAM_TOKEN_RECEIVED_INCREMENTALLY）
       // 非酒馆环境（网页版自定义API）：需要设置 onStreamChunk 才能实时渲染

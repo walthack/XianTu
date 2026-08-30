@@ -2,6 +2,20 @@ import { rollD20 } from './diceRoller';
 import { JUDGEMENT_STATE_PATH, type TurnJudgementData } from './judgementRules';
 import type { WorldSimulationAuthorityReceipt } from '@/modules/scenarioMods/worldSimulation';
 
+export interface EventActionJudgementReceipt {
+  kind: 'event_action_judgement';
+  eventId: string;
+  actionId: string;
+  contractHash: string;
+}
+
+export type JudgementAuthorityReceipt = WorldSimulationAuthorityReceipt | EventActionJudgementReceipt;
+
+export interface JudgementSpiritCost {
+  onResolveRatio: number;
+  criticalFailureRatio: number;
+}
+
 export type JudgementKind =
   | 'combat'
   | 'cultivate'
@@ -42,8 +56,11 @@ export interface JudgementProposal {
   };
   canonPolicy: JudgementCanonPolicy;
   sourceEventId?: string;
-  /** 仅由本地世界模式合同签发；玩家输入和 LLM 正文都不能自行构造真值。 */
-  authorityReceipt?: WorldSimulationAuthorityReceipt;
+  /** 仅由本地合同签发；玩家输入和 LLM 正文都不能自行构造真值。 */
+  authorityReceipt?: JudgementAuthorityReceipt;
+  /** false 时不套用自我疗伤回血。缺省保持关键词修炼的既有行为。 */
+  applyCultivationRecovery?: boolean;
+  spiritCost?: JudgementSpiritCost;
   createdAtTurn: number;
 }
 
@@ -125,19 +142,38 @@ function normalizeFactor(raw: unknown): JudgementFactor | null {
   return { label, value, source: source as JudgementFactor['source'] };
 }
 
-function normalizeAuthorityReceipt(raw: unknown): WorldSimulationAuthorityReceipt | undefined {
+function normalizeSpiritCost(raw: unknown): JudgementSpiritCost | undefined {
   if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return undefined;
-  const value = raw as Partial<WorldSimulationAuthorityReceipt>;
+  const value = raw as Partial<JudgementSpiritCost>;
+  const onResolveRatio = Number(value.onResolveRatio);
+  const criticalFailureRatio = Number(value.criticalFailureRatio);
+  if (!Number.isFinite(onResolveRatio) || onResolveRatio < 0 || onResolveRatio > 1) return undefined;
+  if (!Number.isFinite(criticalFailureRatio) || criticalFailureRatio < 0 || criticalFailureRatio > 1) return undefined;
+  return { onResolveRatio, criticalFailureRatio };
+}
+
+function normalizeAuthorityReceipt(raw: unknown): JudgementAuthorityReceipt | undefined {
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return undefined;
+  const value = raw as Partial<JudgementAuthorityReceipt> & { kind?: string };
+  if (value.kind === 'event_action_judgement') {
+    const receipt = value as Partial<EventActionJudgementReceipt>;
+    const eventId = normalizeText(receipt.eventId);
+    const actionId = normalizeText(receipt.actionId);
+    const contractHash = normalizeText(receipt.contractHash);
+    if (!eventId || !actionId || !contractHash) return undefined;
+    return { kind: 'event_action_judgement', eventId, actionId, contractHash };
+  }
   if (value.kind !== 'world_sim_intervention') return undefined;
+  const intervention = value as Partial<WorldSimulationAuthorityReceipt>;
   const fields = ['situationId', 'outcomeId', 'sourceEventId', 'branchId', 'interventionId'] as const;
-  if (fields.some(field => !normalizeText(value[field]))) return undefined;
+  if (fields.some(field => !normalizeText(intervention[field]))) return undefined;
   return {
-    kind: value.kind,
-    situationId: normalizeText(value.situationId),
-    outcomeId: normalizeText(value.outcomeId),
-    sourceEventId: normalizeText(value.sourceEventId),
-    branchId: normalizeText(value.branchId),
-    interventionId: normalizeText(value.interventionId),
+    kind: 'world_sim_intervention',
+    situationId: normalizeText(intervention.situationId),
+    outcomeId: normalizeText(intervention.outcomeId),
+    sourceEventId: normalizeText(intervention.sourceEventId),
+    branchId: normalizeText(intervention.branchId),
+    interventionId: normalizeText(intervention.interventionId),
   };
 }
 
@@ -190,6 +226,8 @@ function normalizeProposal(raw: unknown): JudgementProposal | null {
     ...(normalizeAuthorityReceipt(value.authorityReceipt)
       ? { authorityReceipt: normalizeAuthorityReceipt(value.authorityReceipt) }
       : {}),
+    ...(value.applyCultivationRecovery === false ? { applyCultivationRecovery: false } : {}),
+    ...(normalizeSpiritCost(value.spiritCost) ? { spiritCost: normalizeSpiritCost(value.spiritCost) } : {}),
     createdAtTurn: normalizeTurn(value.createdAtTurn),
   };
 }
@@ -408,9 +446,32 @@ function targetAfterRecovery(root: any, attribute: '气血' | '神识', ratio: n
   return Math.min(max, Math.max(0, current + Math.max(1, Math.round(max * ratio))));
 }
 
+function spiritCostEffects(
+  saveData: unknown,
+  proposal: JudgementProposal,
+  outcome: JudgementOutcome,
+): JudgementResolution['appliedEffects'] {
+  const cost = proposal.spiritCost;
+  if (!cost) return [];
+  const ratio = outcome === 'critical_failure' ? cost.criticalFailureRatio : cost.onResolveRatio;
+  if (!Number.isFinite(ratio) || ratio <= 0) return [];
+  const root = saveData as any;
+  const current = Number(root?.角色?.属性?.神识?.当前);
+  const max = Number(root?.角色?.属性?.神识?.上限);
+  if (!Number.isFinite(current) || !Number.isFinite(max) || max <= 0) return [];
+  const target = Math.max(0, current - Math.max(0, Math.round(max * ratio)));
+  if (target === current) return [];
+  return [{ key: '角色.属性.神识.当前', action: 'set', value: target }];
+}
+
 function cultivationRecoveryEffects(saveData: unknown, proposal: JudgementProposal, outcome: JudgementOutcome): JudgementResolution['appliedEffects'] {
   const ratio = CULTIVATION_RECOVERY_RATIO[outcome];
-  if (proposal.kind !== 'cultivate' || !ratio || !CULTIVATION_RECOVERY_KEYWORDS.test(proposal.actionText)) return [];
+  if (
+    proposal.applyCultivationRecovery === false
+    || proposal.kind !== 'cultivate'
+    || !ratio
+    || !CULTIVATION_RECOVERY_KEYWORDS.test(proposal.actionText)
+  ) return [];
   const root = saveData as any;
   const effects: JudgementResolution['appliedEffects'] = [];
   for (const attribute of ['气血', '神识'] as const) {
@@ -438,6 +499,7 @@ function deterministicOutcomeEffects(saveData: unknown, proposal: JudgementPropo
   if (['partial', 'success', 'great_success', 'perfect'].includes(outcome)) {
     effects.push(...cultivationRecoveryEffects(saveData, proposal, outcome));
   }
+  effects.push(...spiritCostEffects(saveData, proposal, outcome));
   if (!['partial', 'failure', 'critical_failure'].includes(outcome)) return effects;
   if (proposal.kind === 'combat') {
     const root = saveData as any;
@@ -478,6 +540,14 @@ function applyDeterministicEffects(saveData: unknown, effects: JudgementResoluti
     if (effect.key === '角色.属性.气血.当前' && effect.action === 'add' && typeof effect.value === 'number') {
       root.角色 ??= {}; root.角色.属性 ??= {}; root.角色.属性.气血 ??= {};
       root.角色.属性.气血.当前 = Math.max(1, Number(root.角色.属性.气血.当前 || 1) + effect.value);
+    }
+    if (effect.key === '角色.属性.神识.当前' && effect.action === 'add' && typeof effect.value === 'number') {
+      root.角色 ??= {}; root.角色.属性 ??= {}; root.角色.属性.神识 ??= {};
+      const max = Number(root.角色.属性.神识.上限);
+      const next = Number(root.角色.属性.神识.当前 || 0) + effect.value;
+      root.角色.属性.神识.当前 = Number.isFinite(max) && max > 0
+        ? Math.min(max, Math.max(0, Math.round(next)))
+        : Math.max(0, Math.round(next));
     }
     if ((effect.key === '角色.属性.气血.当前' || effect.key === '角色.属性.神识.当前') && effect.action === 'set' && typeof effect.value === 'number') {
       const attribute = effect.key.includes('气血') ? '气血' : '神识';

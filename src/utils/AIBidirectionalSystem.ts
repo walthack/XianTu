@@ -2242,8 +2242,11 @@ ${step1Text}
     }
     // 非机会卡的本地判定在任何模型命令执行前结算；模型只能演出调用前已确定的结果，
     // 不能先改属性再反向影响本轮 success/partial/failure。
+    const trustedEventJudgement = verifyResolvedJudgementReceipt(saveData, options?.judgementResolution);
     const eventProgress = options?.eventAction
-      ? recordStoryEventStructuredAction(saveData, options.eventAction)
+      ? recordStoryEventStructuredAction(saveData, options.eventAction, {
+          ...(trustedEventJudgement ? { judgementResolution: trustedEventJudgement } : {}),
+        })
       : undefined;
     if (eventProgress?.attempted) {
       changes.push({
