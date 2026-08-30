@@ -198,7 +198,7 @@ test('local Wuyuan hop prose names the settled leaf and never fabricates a city 
   settleWuyuanOpenWorldSelection(camp, arrive);
   const market = composeWuyuanOpenWorldNarrative(camp, arrive);
   assert.match(market, /市集/);
-  assert.doesNotMatch(market, /城门|门洞|城墙/);
+  assert.doesNotMatch(market, /城门|门洞|城墙|没有街面/);
   const system = await (await import('node:fs/promises')).readFile(new URL('../src/utils/AIBidirectionalSystem.ts', import.meta.url), 'utf8');
   const start = system.indexOf('if (!legacyNarrativePilotResponse)');
   const slice = system.slice(start, system.indexOf('const v3 = isSaveDataV3'));

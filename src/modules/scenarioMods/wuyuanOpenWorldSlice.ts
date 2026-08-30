@@ -499,6 +499,7 @@ export function settleWuyuanOpenWorldSelection(saveData: SaveData, selection: Wu
     const eventSelection = getCurrentStoryEventActions(saveData)
       .find(item => item.eventId === 'lcq.event.s02_04');
     if (eventSelection) canonEventCompleted = recordStoryEventStructuredAction(saveData, eventSelection).completed;
+    if (canonEventCompleted) ensureWuyuanOpenWorldSlice(saveData);
   }
   return {
     settled: true,
@@ -523,11 +524,13 @@ export function composeWuyuanOpenWorldNarrative(
     `你停在${place}。`,
     `这一步只走到已经结算的位置，不把没落地的路写成已经过了。`,
   ];
-  if (selection.identityId === WUYUAN_MARKET_ARRIVAL_ID || state?.currentZoneId === MARKET_ZONE_ID) {
-    lines.push(`露天货棚和摊位挤在这一片，没有城门和官署可过。`);
+  if (selection.identityId === WUYUAN_MARKET_ARRIVAL_ID || (
+    state?.currentZoneId === MARKET_ZONE_ID && selection.kind === 'travel' && !/pastry/.test(selection.identityId || '')
+  )) {
+    lines.push(`露天货棚和摊位挤在这一片，摊位直接铺到街面上，没有官署可过。`);
     lines.push(`人声是市集的人声，尘土是街面的尘土。`);
   }
-  if (state?.currentZoneId === PASTRY_ZONE_ID || /pastry/.test(selection.identityId || '')) {
+  if (state?.currentZoneId === PASTRY_ZONE_ID) {
     lines.push(`点心铺这一侧，甜香和麦粉味压过街面的尘。`);
     lines.push(`铺门半敞，案后有人在忙，门口还能站住。`);
   }
@@ -540,8 +543,8 @@ export function composeWuyuanOpenWorldNarrative(
   if (selection.kind === 'notice') {
     lines.push(`你把这条现场消息看完，没有把它写成另一条没结算的路。`);
   }
-  const text = lines.join('');
-  return WUYUAN_GATE_LEAK_RE.test(text) ? text.replace(/城门|门洞|城墙/g, '街面') : text;
+  const text = lines.filter(line => !WUYUAN_GATE_LEAK_RE.test(line)).join('');
+  return text;
 }
 
 export function getWuyuanOpenWorldPrompt(saveData: SaveData): string {
