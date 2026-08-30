@@ -133,8 +133,14 @@ test('合同判定签发 cultivate/severe 25，不走 if_only/100，也不套用
   assert.equal(issued.kind, 'issued');
   const hpBefore = save.角色.属性.气血.当前;
   const spiritBefore = save.角色.属性.神识.当前;
-  const resolution = resolvePendingJudgement(save, issued.proposal.id, { currentTurn: 3, roll: () => 20 });
+  // Pin outcome: 重伤 -15 plus random 幸运点 can otherwise land critical_failure (10% 神识).
+  const resolution = resolvePendingJudgement(save, issued.proposal.id, {
+    currentTurn: 3,
+    testOutcome: 'success',
+    roll: () => 20,
+  });
   assert.equal(resolution.status, 'resolved');
+  assert.equal(resolution.outcome, 'success');
   assert.equal(save.角色.属性.气血.当前, hpBefore, '合同救治不得套用自我疗伤回血');
   assert.equal(save.角色.属性.神识.当前, spiritBefore - 20, '确认掷骰扣神识 5%');
   assert.equal(getJudgementState(save).pending, undefined);
