@@ -36,6 +36,7 @@ import {
   acknowledgeStoryBeatHandoff,
   advanceScenarioRuntime,
   clarifyUnobtainedSilkPouchNarrative,
+  previewRepeatSilkPouchClaimNarrative,
   recordStoryEventStructuredAction,
   recordStoryOpportunityPlayerAction,
   recordStoryOpportunityStructuredAction,
@@ -879,23 +880,29 @@ class AIBidirectionalSystemClass {
         usedLegacyNarrativePilot = true;
       }
       if (!legacyNarrativePilotResponse) {
-      const openWorldLocalText = options?.openWorldAction
+      const repeatSilkPouchText = previewRepeatSilkPouchClaimNarrative(saveData, {
+        playerActionText: userMessage,
+        opportunityAction: options?.opportunityAction,
+      });
+      const openWorldLocalText = !repeatSilkPouchText && options?.openWorldAction
         ? previewWuyuanOpenWorldNarrative(saveData, {
           openWorldAction: options.openWorldAction,
           eventAction: options.eventAction,
         })
         : '';
-      if (openWorldLocalText) {
-        noteTurnPath('open_world');
+      const localContractText = repeatSilkPouchText || openWorldLocalText;
+      if (localContractText) {
+        if (openWorldLocalText) noteTurnPath('open_world');
+        else noteTurnPath('local_contract');
         gmResponse = {
-          text: openWorldLocalText,
+          text: localContractText,
           mid_term_memory: '',
           tavern_commands: [],
           action_options: [],
         };
         usedLegacyNarrativePilot = true;
       }
-      if (!openWorldLocalText) {
+      if (!localContractText) {
       const v3 = isSaveDataV3(saveData) ? (saveData as any) : migrateSaveDataToLatest(saveData).migrated;
 
       // 发送给 AI 的状态：严格使用 V3 五域结构（命令 key 也必须按此结构输出）

@@ -320,6 +320,83 @@ test('both Wang Zhe receipt routes grant the same physical silk bag exactly once
   }
 });
 
+test('repeat 收下锦囊 after jin_nang receipt stays local and does not invent loot or a second grant', async () => {
+  const {
+    recordStoryOpportunityPlayerAction,
+    getTrackedStoryOpportunityActions,
+    previewRepeatSilkPouchClaimNarrative,
+  } = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  const save = opportunityInventorySave('opportunity.lcq.s02_01.take_full_mandate');
+  const mandate = save.世界.状态.剧本模组.events[0].worldActor.opportunities
+    .find(item => item.id === 'opportunity.lcq.s02_01.take_full_mandate');
+  mandate.completionContract.steps[1].id = 'own_charge';
+  mandate.completionContract.steps[1].actions[0].label = '认下托付';
+  mandate.completionContract.steps[1].actions[0].actionText =
+    '我承认清理门户与传授九阳是我接下来要办的差事，不改口说只是代为保管。';
+
+  assert.equal(previewRepeatSilkPouchClaimNarrative(save, { playerActionText: '我当面收下锦囊' }), '');
+
+  const first = recordStoryOpportunityPlayerAction(save, '我当面收下锦囊。');
+  assert.equal(first.progressed, true);
+  assert.equal(first.inventorySettlements?.length, 1);
+  assert.equal(save.角色.背包.物品['lcq.item.jin_nang'].数量, 1);
+  assert.equal(save.世界.状态.剧本模组.inventoryTransferReceipts.length, 1);
+
+  save.世界.状态.剧本模组.worldTurn += 1;
+  const text = previewRepeatSilkPouchClaimNarrative(save, { playerActionText: '我当面收下锦囊' });
+  assert.equal(text, '锦囊已经收妥，接下来需要认下托付。');
+  assert.doesNotMatch(text, /令牌|缺口|过哨|西边|路线|获得/);
+  assert.equal((text.match(/获得/g) || []).length, 0);
+
+  const repeated = recordStoryOpportunityPlayerAction(save, '我当面收下锦囊');
+  assert.equal(repeated.progressed, false);
+  assert.equal(save.角色.背包.物品['lcq.item.jin_nang'].数量, 1);
+  assert.equal(save.世界.状态.剧本模组.inventoryTransferReceipts.length, 1);
+  assert.deepEqual(Object.keys(save.角色.背包.物品), ['lcq.item.jin_nang']);
+
+  const next = getTrackedStoryOpportunityActions(save);
+  assert.equal(next.length, 1);
+  assert.match(next[0].label, /推进·2\/2/);
+  assert.match(next[0].label, /认下托付/);
+
+  assert.equal(previewRepeatSilkPouchClaimNarrative(save, {
+    playerActionText: '我承认清理门户与传授九阳是我接下来要办的差事，不改口说只是代为保管。',
+  }), '');
+  assert.equal(previewRepeatSilkPouchClaimNarrative(save, {
+    opportunityAction: {
+      source: 'opportunity_engine',
+      opportunityId: next[0].opportunityId,
+      stepId: 'own_charge',
+      actionId: next[0].actionId,
+      label: next[0].label,
+      actionText: next[0].actionText,
+      timeCost: 1,
+      contractHash: next[0].contractHash,
+    },
+  }), '');
+  assert.equal(previewRepeatSilkPouchClaimNarrative(save, {
+    opportunityAction: {
+      source: 'opportunity_engine',
+      opportunityId: first.opportunityId,
+      stepId: 'take_bag',
+      actionId: 'accept_silk_bag',
+      label: '【推进·1/2】收下锦囊',
+      actionText: '我当面从王哲案上收下锦囊，不让它再留在帐内无人认领。',
+      timeCost: 1,
+      contractHash: next[0].contractHash,
+    },
+  }), '锦囊已经收妥，接下来需要认下托付。');
+});
+
+test('repeat silk-pouch claim is wired before 154KB Legacy', async () => {
+  const system = await readFile(new URL('../src/utils/AIBidirectionalSystem.ts', import.meta.url), 'utf8');
+  const start = system.indexOf('if (!legacyNarrativePilotResponse)');
+  const slice = system.slice(start, system.indexOf('const v3 = isSaveDataV3'));
+  assert.match(slice, /previewRepeatSilkPouchClaimNarrative/);
+  assert.match(slice, /noteTurnPath\('local_contract'\)/);
+  assert.match(slice, /if \(!localContractText\)/);
+});
+
 test('after the silk opportunity is gone, claiming 收下锦囊 does not invent possession', async () => {
   const { clarifyUnobtainedSilkPouchNarrative } = await loadTs('../src/modules/scenarioMods/runtime.ts');
   const save = opportunityInventorySave('opportunity.lcq.s02_01.take_full_mandate');

@@ -1462,6 +1462,10 @@ export function acknowledgeStageEntryPresentation(saveData: SaveData, toStageId:
 
 const SILK_POUCH_TAKE_RE = /(?:获得|接过|收下|王哲递给|放入背包|收入背包).{0,12}锦囊|锦囊.{0,12}(?:获得|接过|收下|放入背包|收入背包)/;
 const SILK_POUCH_UNOBTAINED = '锦囊仍未到手。案上的锦囊没有因为这句话变成你的东西。';
+const JIN_NANG_TRANSFER_ID = 'lcq.event.s02_01.inventory.jin_nang';
+const SILK_POUCH_ALREADY_HELD_NEXT = '锦囊已经收妥，接下来需要认下托付。';
+const SILK_POUCH_ALREADY_HELD = '锦囊已经收妥。';
+const SILK_POUCH_CLAIM_STEP_IDS = new Set(['take_bag', 'hold_bag']);
 
 /** After local inventory settlement: if the bag has no 锦囊, Legacy must not write that it was obtained. */
 export function clarifyUnobtainedSilkPouchNarrative(saveData: SaveData, text: string): string {
@@ -1471,6 +1475,48 @@ export function clarifyUnobtainedSilkPouchNarrative(saveData: SaveData, text: st
   if (qty > 0) return text;
   if (!SILK_POUCH_TAKE_RE.test(text)) return text;
   return SILK_POUCH_UNOBTAINED;
+}
+
+function hasJinNangTransferReceipt(saveData: SaveData): boolean {
+  return (getRuntime(saveData)?.inventoryTransferReceipts || [])
+    .some(item => item.transferId === JIN_NANG_TRANSFER_ID);
+}
+
+function isSilkPouchClaimIntent(text: string): boolean {
+  const raw = String(text || '').trim();
+  if (!raw) return false;
+  return SILK_POUCH_TAKE_RE.test(raw) || normalizeOpportunityAction(raw).includes('收下锦囊');
+}
+
+function repeatSilkPouchHeldText(saveData: SaveData): string {
+  const next = getTrackedStoryOpportunityActions(saveData);
+  if (next.some(item => /认下托付/.test(item.label) || item.stepId === 'own_charge')) {
+    return SILK_POUCH_ALREADY_HELD_NEXT;
+  }
+  return SILK_POUCH_ALREADY_HELD;
+}
+
+/**
+ * 锦囊回执已在时，重复领取意图不再进 Legacy。
+ * 不推进 2/2，不补第二只锦囊，也不发明令牌或路线。
+ */
+export function previewRepeatSilkPouchClaimNarrative(
+  saveData: SaveData,
+  input: {
+    playerActionText?: string;
+    opportunityAction?: ScenarioOpportunityActionSelection;
+  } = {},
+): string {
+  if (!hasJinNangTransferReceipt(saveData)) return '';
+  const structured = input.opportunityAction;
+  if (structured?.source === 'opportunity_engine') {
+    if (SILK_POUCH_CLAIM_STEP_IDS.has(structured.stepId) || isSilkPouchClaimIntent(structured.actionText)) {
+      return repeatSilkPouchHeldText(saveData);
+    }
+    return '';
+  }
+  if (!isSilkPouchClaimIntent(input.playerActionText || '')) return '';
+  return repeatSilkPouchHeldText(saveData);
 }
 
 /**
