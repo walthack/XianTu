@@ -480,6 +480,15 @@ test('incomplete scene contracts fail closed; s01_06 requires 月霜', async () 
     mustAppear: { location: '中州·五原城', present: ['凝羽', '阿姬曼'], objective: '取得阿姬曼的身契并当面还她自由，再设法出城' },
     receipts: { move: false, casualty: false },
   })), true);
+  assert.equal(acceptLegacyPilotScene(basePacket({
+    eventId: 'lcq.event.free_ajiman',
+    actionId: 'tear_bond_and_face_blockade',
+    location: '中州·五原·白湖商馆内院',
+    present: ['凝羽', '阿姬曼·芭娜', '苏妲己'],
+    presentActors: [{ name: '凝羽', traits: [] }, { name: '阿姬曼·芭娜', traits: [] }],
+    mustAppear: { location: '中州·五原·白湖商馆内院', present: ['凝羽', '阿姬曼·芭娜', '苏妲己'], objective: '取得阿姬曼的身契并当面还她自由，再设法出城' },
+    receipts: { move: false, casualty: false },
+  })), true);
   assert.equal(isLegacyPilotEventId('lcq.event.baihu_shangguan_escape'), true);
   assert.deepEqual(filterLegacyPilotEventCharacterNames('lcq.event.baihu_shangguan_escape', ['苏妲己', '凝羽']), []);
   assert.equal(acceptLegacyPilotScene(basePacket({

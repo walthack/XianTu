@@ -212,7 +212,8 @@ export function acceptLegacyPilotScene(packet: LegacyNarratorPacket): boolean {
   }
   if (eventId === 'lcq.event.free_ajiman') {
     if (!names.includes('凝羽')) return false;
-    if (names.some(name => name !== '凝羽' && name !== '阿姬曼')) return false;
+    const allowed = (name: string) => name === '凝羽' || name === '苏妲己' || name.includes('阿姬曼') || name === '芭娜';
+    if (names.some(name => !allowed(name))) return false;
     return atSameCityOrHall(packet) && packet.receipts?.move === false && packet.receipts?.casualty === false;
   }
   if (eventId === 'lcq.event.baihu_shangguan_escape') {
