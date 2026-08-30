@@ -12,10 +12,17 @@
 3. 提交纪律：`npm run canon:build` 全绿（37 关校验 + 92 测试）才可 commit；
    人工拍板的新裁定在同一 commit 里追加进裁定簿；核心文档权威=工作目录（裁定簿/简报已入 git）；改动后单向 rsync 到 NAS `character-canon/`（仅用户阅览镜像，不得反向拉取或在 NAS 上编辑）。
 
-## Claude 二审回报
+## 审查路由（Grok 控制面）
 
-- 提交只读二审时，必须通过 `/Users/clawbot/.codex/bin/claude-review-submit.mjs`，不得直接调用 `claude-async.mjs submit`。
+- 控制面 / 实现 / 返修 / 门禁 / 结束判断：Grok。Claude 与 Codex 都不控制流程。
+- 默认二审：Claude Code。提交只读二审必须通过 `/Users/clawbot/.codex/bin/claude-review-submit.mjs`，不得直接调用 `claude-async.mjs submit`。
 - 包装器会原子登记 `~/.codex/claude-review-watch.json`；本线程心跳只监控该 job，完成后主动回报并写入 `reported:true`，避免遗漏或重复回报。
+- 备用审查：Codex CLI（`codex exec review`），审查完整 `base..HEAD`，并读取尚未关闭的 Claude findings。
+- 切换条件：`claude_5h_quota_exhausted` / `claude_job_submit_failed` / `claude_review_incomplete` / `user_explicitly_requests_codex` / `urgent_synchronous_review` / `claude_result_conflicts_with_tests_or_contract` / `independent_adjudication_required`。
+- 粘性：`per_task`。同一任务一旦切到 Codex，审到任务结束；下一任务再恢复默认 Claude。
+- 高风险可开双审（Claude PASS → Codex 独立复核），不是日常默认。
+- Claude/Codex 调用失败不是 PASS。
+- 入口：`/xiantu-review-loop`（`.grok/workflows/xiantu-review-loop.rhai`），adapter 在 `.grok/workflows/reviewers/`。
 
 ## Grok 4.6 Build 成人向内容委托
 
