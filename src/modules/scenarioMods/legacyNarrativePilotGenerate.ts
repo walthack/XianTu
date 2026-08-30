@@ -11,6 +11,8 @@ export interface LegacyPilotGenerateCall {
   onStreamChunk?: (chunk: string) => void;
 }
 
+export const LEGACY_PILOT_GENERATE_TIMEOUT_MS = 45_000;
+
 export interface LegacyPilotGenerateInput {
   playerLine: string;
   storyPrompt: string;
@@ -21,6 +23,8 @@ export interface LegacyPilotGenerateInput {
   generate: (call: LegacyPilotGenerateCall) => Promise<string>;
   onStreamChunk?: (delta: string) => void;
   shouldAbort?: () => boolean;
+  /** Cap the RenderPlan call; the visible body is always composed locally. */
+  generateTimeoutMs?: number;
 }
 
 export interface LegacyPilotGenerateResult {
@@ -29,6 +33,31 @@ export interface LegacyPilotGenerateResult {
   usedFallback: boolean;
   attempts: number;
   retried: boolean;
+}
+
+function isPilotGenerateTimeout(error: unknown): boolean {
+  return error instanceof Error && error.message.includes('Legacy 单幕试验生成超时');
+}
+
+async function callPilotGenerate(
+  input: LegacyPilotGenerateInput,
+  attemptId: string,
+): Promise<string> {
+  const configured = Number(input.generateTimeoutMs);
+  const timeoutMs = Number.isFinite(configured) && configured > 0
+    ? Math.floor(configured)
+    : LEGACY_PILOT_GENERATE_TIMEOUT_MS;
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  try {
+    return await Promise.race([
+      input.generate({ generationId: attemptId }),
+      new Promise<string>((_, reject) => {
+        timer = setTimeout(() => reject(new Error('Legacy 单幕试验生成超时')), timeoutMs);
+      }),
+    ]);
+  } finally {
+    if (timer) clearTimeout(timer);
+  }
 }
 
 function publishLocalBody(
@@ -75,9 +104,7 @@ export async function generateLegacyPilotNarrative(
     if (input.shouldAbort?.()) throw new Error('请求已被取消');
     attempts = attempt + 1;
     try {
-      const raw = await input.generate({
-        generationId: `${input.generationId}_a${attempt}`,
-      });
+      const raw = await callPilotGenerate(input, `${input.generationId}_a${attempt}`);
       if (input.shouldAbort?.()) throw new Error('请求已被取消');
       const parsed = parseLegacyRenderPlan(String(raw));
       const body = composeLegacyNarrativeFromPlan(input.packet, parsed.plan);
@@ -93,7 +120,7 @@ export async function generateLegacyPilotNarrative(
     } catch (error) {
       lastError = error;
       if (input.shouldAbort?.()) throw error;
-      if (attempt < maxRetries) continue;
+      if (!isPilotGenerateTimeout(error) && attempt < maxRetries) continue;
       const body = composeLegacyNarrativeFromPlan(input.packet);
       const published = publishLocalBody(input, body);
       if (input.useStreaming && !published.text) input.onStreamChunk?.(body);

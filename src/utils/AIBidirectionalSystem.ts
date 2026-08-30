@@ -67,6 +67,7 @@ import {
 } from '@/modules/scenarioMods/legacyNarratorPacket';
 import { acceptLegacyPilotScene } from '@/modules/scenarioMods/legacyPilotScenes';
 import { generateLegacyPilotNarrative } from '@/modules/scenarioMods/legacyNarrativePilotGenerate';
+import { composeLegacyNarrativeFromPlan } from '@/modules/scenarioMods/legacyRenderPlan';
 import {
   beginForegroundAiTurn,
   endForegroundAiTurn,
@@ -693,7 +694,8 @@ class AIBidirectionalSystemClass {
       console.warn('[Legacy单幕试验] 必要提示词已禁用，回落普通 Legacy');
       return null;
     }
-    if (options?.opportunityAction || options?.openWorldAction || options?.judgementResolution) return null;
+    if (options?.opportunityAction || options?.judgementResolution) return null;
+    if (options?.openWorldAction && !options?.eventAction) return null;
     if (shouldAbort()) throw new Error('请求已被取消');
 
     options?.onProgressUpdate?.('Legacy 单幕试验：生成纯正文…');
@@ -704,13 +706,20 @@ class AIBidirectionalSystemClass {
       return null;
     }
     if (!acceptLegacyPilotScene(compiled.packet)) {
-      console.warn('[Legacy单幕试验] 场景合同不完整，回落普通 Legacy', {
+      console.warn('[Legacy单幕试验] 场景合同不完整，改用本地句库，不回落普通 Legacy', {
         eventId: compiled.packet.eventId,
         present: compiled.packet.present,
         location: compiled.packet.location,
         receipts: compiled.packet.receipts,
       });
-      return null;
+      const text = composeLegacyNarrativeFromPlan(compiled.packet);
+      if (!text) return null;
+      return {
+        text,
+        mid_term_memory: '',
+        tavern_commands: [],
+        action_options: [],
+      };
     }
     if (!isLegacyPilotPromptWithinBudget(compiled)) {
       console.warn('[Legacy单幕试验] 总输入超过预算，回落普通 Legacy', {

@@ -55,6 +55,34 @@ test('first failed RenderPlan call retries, then local composition is shown', as
   assert.ok(displayed.join('').length > 0);
 });
 
+test('RenderPlan hang falls back to local composition without a second wait', async () => {
+  const { generateLegacyPilotNarrative } = await loadTs('../src/modules/scenarioMods/legacyNarrativePilotGenerate.ts');
+  const { countVisibleNarrativeChars } = await loadTs('../src/modules/scenarioMods/legacyNarrativeContract.ts');
+  const compiled = await openingCompiled();
+  const calls = [];
+  const started = Date.now();
+  const result = await generateLegacyPilotNarrative({
+    playerLine: compiled.plan.playerLine,
+    storyPrompt: STORY,
+    packet: compiled.packet,
+    maxRetries: 1,
+    useStreaming: false,
+    generationId: 'pilot',
+    generateTimeoutMs: 40,
+    generate: async ({ generationId }) => {
+      calls.push(generationId);
+      await new Promise(() => {});
+      return '';
+    },
+  });
+  assert.equal(calls.length, 1);
+  assert.ok(Date.now() - started < 1000);
+  assert.equal(result.usedFallback, true);
+  assert.equal(result.attempts, 1);
+  assert.ok(countVisibleNarrativeChars(result.text) >= 800);
+  assert.match(result.text, /段强/);
+});
+
 test('maxRetries=0 does not start a second model attempt', async () => {
   const { generateLegacyPilotNarrative } = await loadTs('../src/modules/scenarioMods/legacyNarrativePilotGenerate.ts');
   const { countVisibleNarrativeChars } = await loadTs('../src/modules/scenarioMods/legacyNarrativeContract.ts');

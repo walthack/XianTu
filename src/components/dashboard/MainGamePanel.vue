@@ -1650,7 +1650,9 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
   const preflightOpenWorldAction = selectedScenarioEngineAction.value?.source === 'open_world_engine'
     ? selectedScenarioEngineAction.value
     : (saveData ? resolveWuyuanOpenWorldSelectionFromText(saveData, inputText.value.trim()) : undefined);
-  if (!execution?.skipPreflight && !preflightOpenWorldAction) {
+  const preflightSelectedEventAction = selectedScenarioEngineAction.value?.source === 'event_engine'
+    && selectedScenarioEngineAction.value?.playerLine === inputText.value.trim();
+  if (!execution?.skipPreflight && !preflightOpenWorldAction && !preflightSelectedEventAction) {
     const proposal = buildLocalJudgementPreflight(judgementAction, saveData, getNarrativeTurn(saveData));
     if (proposal) {
       persistPendingJudgement(saveData, proposal);
@@ -1703,8 +1705,10 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
     && selectedScenarioEngineAction.value.actionText === userMessage
     ? selectedScenarioEngineAction.value
     : undefined;
-  const resolvedOpenWorldAction = exactSelectedOpenWorldAction
-    || (scenarioSaveAtSend ? resolveWuyuanOpenWorldSelectionFromText(scenarioSaveAtSend, userMessage) : undefined);
+  const resolvedOpenWorldAction = exactSelectedEventAction
+    ? undefined
+    : exactSelectedOpenWorldAction
+      || (scenarioSaveAtSend ? resolveWuyuanOpenWorldSelectionFromText(scenarioSaveAtSend, userMessage) : undefined);
 
   // 获取动作队列中的文本
   console.log('[前端] 动作队列 actionQueueText:', actionQueueText);
