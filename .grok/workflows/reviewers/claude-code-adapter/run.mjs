@@ -5,6 +5,8 @@ import { readFileSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { join } from 'node:path';
 
+import { classifyReviewText } from '../classify-review-verdict.mjs';
+
 const submitPath = join(homedir(), '.codex', 'bin', 'claude-review-submit.mjs');
 const asyncPath = join(homedir(), '.codex', 'bin', 'claude-async.mjs');
 const POLL_MS = 15_000;
@@ -35,14 +37,7 @@ function classify({ submitOk, submitErr, jobId, state, isError, result }) {
   if (state !== 'done' || isError || !String(result || '').trim()) {
     return { status: 'fallback', fallback_reason: 'claude_review_incomplete' };
   }
-  const text = String(result);
-  const hasBlocker = /\bP0\b|\bP1\b|REJECT|NO-GO|NOT CLOSED|MUST FIX|FAIL CLOSED/i.test(text)
-    && !/\bP0\/P1 无\b|\bno P0\b|\bno P1\b|\bP0\/P1 none\b/i.test(text);
-  const goWithChanges = /GO-WITH-CHANGES/i.test(text);
-  const hasPass = /\bPASS\b|PASS_WITH_FINDINGS|APPROVE|\bLGTM\b|NO FINDINGS|no findings/i.test(text);
-  if (hasBlocker || goWithChanges) return { status: 'findings', fallback_reason: '' };
-  if (hasPass) return { status: 'pass', fallback_reason: '' };
-  return { status: 'findings', fallback_reason: '' };
+  return { status: classifyReviewText(result), fallback_reason: '' };
 }
 
 function parseJobId(stdout) {

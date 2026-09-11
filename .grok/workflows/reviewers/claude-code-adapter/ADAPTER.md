@@ -31,8 +31,8 @@ Copy `status` from the script JSON. Do not upgrade `failed` / `fallback` / `find
 
 | status | meaning | controller action |
 |---|---|---|
-| `pass` | Claude finished and no P0/P1 / REJECT / NO-GO | Grok runs final gate (or dual Codex if configured) |
-| `findings` | Claude finished with open issues | Grok fixes, resubmits this adapter |
+| `pass` | Claude finished and no open P0/P1 / REJECT / NO-GO. `P0/P1 无` and project milestones `P0-1`/`P0-2` are not blockers. `FAIL CLOSED` is product jargon, not a verdict. | Grok runs final gate (or dual Codex if configured) |
+| `findings` | Claude finished with an open P0/P1 finding line, REJECT, NO-GO, GO-WITH-CHANGES, or MUST FIX | Grok fixes, resubmits this adapter |
 | `fallback` | quota / submit fail / incomplete | Grok switches to Codex for this task |
 | `failed` | adapter crash; not a review verdict | not PASS; controller may still fallback if reason matches |
 
