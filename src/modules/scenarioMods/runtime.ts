@@ -1014,11 +1014,17 @@ function eventActionAvailable(
   action: ScenarioPlayerCompletionContract['actions'][number],
   state: ScenarioEventActionState,
   runtime: RuntimeState,
+  saveData?: SaveData,
 ): boolean {
   const preparations = new Set(state.preparations || []);
   if (action.kind === 'prepare' && action.grantsPreparation && preparations.has(action.grantsPreparation)) return false;
   if (!(action.requiresPreparation || []).every(item => preparations.has(item))) return false;
-  return requiredCharactersPresent(action, runtime);
+  if (!requiredCharactersPresent(action, runtime)) return false;
+  if (action.visibleWhen?.length) {
+    const save = saveData || ({ 世界: { 状态: { 剧本模组: runtime } } } as SaveData);
+    if (!conditionsMatch(action.visibleWhen, save, runtime)) return false;
+  }
+  return true;
 }
 
 function isLinearStepContract(contract: ScenarioPlayerCompletionContract): boolean {
@@ -1297,7 +1303,7 @@ export function getCurrentStoryEventActions(saveData: SaveData): ScenarioEventAc
     ? Math.max(0, timeline.eligibleAtTurn + event.timeline.deadlineTurns - (Number(runtime.worldTurn) || 0))
     : undefined;
   const contractStep = currentContractStep(runtime);
-  const steps: ScenarioEventActionSelection[] = contract.actions.filter(action => eventActionAvailable(action, state, runtime)).map(action => {
+  const steps: ScenarioEventActionSelection[] = contract.actions.filter(action => eventActionAvailable(action, state, runtime, saveData)).map(action => {
     const expectedOutcome: ScenarioPlayerCompletionOutcome = contract.kind === 'objective_action'
       ? 'success'
       : conditionsMatch(action.successWhen, saveData, runtime) ? 'success' : action.unmetOutcome || 'failure';
@@ -1426,7 +1432,7 @@ export function getCurrentStoryExplorationActions(saveData: SaveData): ScenarioE
       const contract = event.playerCompletionContract!;
       const state = reconcileEventActionContract(runtime, event);
       if (!state || state.readyAtTurn !== undefined) return [];
-      return contract.actions.filter(action => eventActionAvailable(action, state, runtime)).map(action => {
+      return contract.actions.filter(action => eventActionAvailable(action, state, runtime, saveData)).map(action => {
         const expectedOutcome: ScenarioPlayerCompletionOutcome = contract.kind === 'objective_action'
           ? 'success'
           : conditionsMatch(action.successWhen, saveData, runtime) ? 'success' : action.unmetOutcome || 'failure';
@@ -1650,7 +1656,7 @@ export function recordStoryEventStructuredAction(
   if (selection.source === 'exploration_engine' && !isAvailableExplorationEvent(runtime, event)) {
     return { attempted: false, completed: false, eventId, reason: 'stale_event' };
   }
-  if (!eventActionAvailable(action, state, runtime)) {
+  if (!eventActionAvailable(action, state, runtime, saveData)) {
     return { attempted: false, completed: false, eventId: event.id, reason: 'action_unavailable' };
   }
   const turn = Math.max(0, Number(runtime.worldTurn) || 0);

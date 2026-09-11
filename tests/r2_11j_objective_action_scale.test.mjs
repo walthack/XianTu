@@ -119,11 +119,9 @@ test('every event is covered, and the mechanical bucket does not grow unnoticed'
   //      新 event 必须手写合同，混进机械桶就说明有人图省事跑了批量迁移。
   assert.equal(covered.length, allEvents.length, '有 event 既无 playerCompletionContract 也无机会卡合同');
   assert.ok(objectiveActions.length <= allEvents.length);
-  // 267 → 272（2026-08-17）：昭南那批 5 条新 event 套了通用的 `advance_declared_objective`，
-  // 落进了机械桶。**这是欠账不是新常态**——本断言当场抓到了它，故意不悄悄放松：
-  // 提到 272 并在此记名，等机会卡重写那一轮（backlog：61 张待重写）一并补成手写合同，
-  // 补完把这里改回 267。再涨就说明又有人图省事跑批量迁移。
-  const MECHANICAL_BUCKET = 272;
+  // 267 → 272（2026-08-17）：昭南那批 5 条新 event 套了通用的 `advance_declared_objective`。
+  // 2026-09-11：`s07_05` 改成手写两态合同，桶 272 → 271，lcq. 127 → 126。再涨才是新的批量迁移。
+  const MECHANICAL_BUCKET = 271;
   const OWED = [
     'lcq.event.biling_bay_stance', 'lcq.event.huamiao_coop_boundary',
     'lcq.event.ghost_king_swallowed', 'lcq.event.slay_dragon', 'lcq.event.tribes_pledge',
@@ -139,7 +137,7 @@ test('every event is covered, and the mechanical bucket does not grow unnoticed'
       mechanicallyMigrated.filter(({ event }) => event.id.startsWith(prefix)).length,
     ])),
     // lcq. 122 → 127：同上，昭南那 5 条欠账都在 lcq。补成手写合同后改回 122。
-    { 'lcq.': 127, 'lyl.': 59, 'lyg.': 86 },
+    { 'lcq.': 126, 'lyl.': 59, 'lyg.': 86 },
   );
   // 隔离关只挡机械迁移：批量脚本不得把旧自由稿目标自动合法化（裁定 #61/#62）。
   // 逐拍重建过来源的隔离关（R2-11M 起）可以有人工撰写的合同，但永远不能是 advance_declared_objective。

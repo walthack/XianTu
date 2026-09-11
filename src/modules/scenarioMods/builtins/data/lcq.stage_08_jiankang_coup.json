@@ -4060,6 +4060,7 @@
       "chapter.lcq.stage_08_jiankang_coup.sudaji.done": false,
       "chapter.lcq.stage_08_jiankang_coup.coup.started": false,
       "chapter.lcq.stage_08_jiankang_coup.coup.done": false,
+      "event.xiaoyaoyi_arrives.done": false,
       "event.s08_debut_xiaoyaoyi.done": false,
       "event.debut_panjinlian.done": false,
       "event.palm_oath_shanghou.done": false
@@ -4902,7 +4903,13 @@
         "id": "lcq.event.s08_debut_xiaoyaoyi",
         "name": "萧遥逸接骨灰",
         "description": "少陵侯嫡子萧遥逸上门拜访，先为小紫美貌所惊、赞叹失态，才自报名号。程宗扬告知谢艺死讯并交出骨灰与佩刀——萧遥逸抱匣恸哭，继而暴怒痛骂黑魔海足足半个时辰，最终取走三哥骨灰离去（星月湖八骏·玄骐，谢艺之弟）。",
-        "conditions": [],
+        "conditions": [
+          {
+            "path": "flags.event.xiaoyaoyi_arrives.done",
+            "operator": "neq",
+            "value": true
+          }
+        ],
         "completion": [
           {
             "path": "flags.event.s08_debut_xiaoyaoyi.done",

@@ -17,6 +17,8 @@ export const FIXED_QUEST_OBJECTIVE_OVERRIDES: Readonly<Record<string, string>> =
   'lcq.event.debut_panjinlian': '应对突然闯进来找乐明珠的人',
   'lcq.event.s07_debut_qinhui': '接住这个深夜来报北地有讯的文士',
   'lcq.event.s08_debut_xiaoyaoyi': '接待上门来访的少陵侯嫡子',
+  'lcq.event.xiaoyaoyi_arrives': '接待上门的萧遥逸：交骨灰，或协助密送伤员',
+  'lcq.event.s07_05_eight_steeds_informed': '向孟非卿说明谢艺的下场，并留下实质安排',
   'lyg.event.debut_bainichang': '看清赵归真引进静室的白衣女子',
   'lyg.event.debut_chengguang': '听清席上把江都王王后扯进哪段旧事',
   'lyg.event.debut_daiqisi': '看清佛堂废墟里被禁锢的那位妇人',

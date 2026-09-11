@@ -244,6 +244,8 @@ export interface ScenarioPlayerCompletionContract {
     };
     /** 所列角色不在场时隐藏该动作。 */
     requiresPresentCharacterIds?: string[];
+    /** 本地条件不满足时隐藏该动作；只读存档／flags，不读 LLM。 */
+    visibleWhen?: ScenarioCondition[];
     /** 显式本地判定；有此字段时优先于普通事件动作的跳过预检。 */
     judgement?: ScenarioEventActionJudgement;
     outcomeText: {

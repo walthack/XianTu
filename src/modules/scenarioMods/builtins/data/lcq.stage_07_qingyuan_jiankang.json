@@ -4042,6 +4042,8 @@
       ]
     },
     "initialFlags": {
+      "event.xieyi_entrustment.done": false,
+      "event.xiaoyaoyi_arrives.done": false,
       "event.s07_01.done": false,
       "event.s07_02.done": false,
       "event.s07_03.done": false,
@@ -4079,6 +4081,7 @@
           }
         ],
         "eventIds": [
+          "lcq.event.xiaoyaoyi_arrives",
           "lcq.event.s07_01_old_case",
           "lcq.event.s07_02_kill_wu",
           "lcq.event.s07_03_xiaozi_appears",
@@ -4138,6 +4141,143 @@
     ],
     "events": [
       {
+        "id": "lcq.event.xiaoyaoyi_arrives",
+        "name": "萧遥逸上门",
+        "description": "少陵侯嫡子萧遥逸在左武旧案之前上门。谢艺已死则接骨灰；谢艺长养则接伤员、安排秘密转移，不得发丧。",
+        "axisId": null,
+        "axisMethod": "carrier-before-s07_01",
+        "axisAnchor": "六朝清羽记·#132·第130章·同门",
+        "axisSeq": 231,
+        "axisBeat": "萧遥逸在左武旧案之前上门：死则接骨灰，生还则接伤员。",
+        "critical": true,
+        "conditions": [
+          {
+            "path": "flags.event.xieyi_entrustment.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.xiaoyaoyi_arrives.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.xiao_yao_yi",
+          "liuchao.character.xie_yi",
+          "liuchao.character.xiao_zi"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.xing_yue_hu"
+        ],
+        "objective": "接待上门的萧遥逸：交骨灰，或协助密送伤员",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "deliver_ashes",
+              "label": "交骨灰",
+              "actionText": "我把谢艺的骨灰交给上门的萧遥逸，不隐瞒死讯。",
+              "timeCost": 1,
+              "visibleWhen": [
+                {
+                  "path": "flags.branch.lcq.if_xieyi_longrest.active",
+                  "operator": "neq",
+                  "value": true
+                }
+              ],
+              "intentMatch": {
+                "matchAny": [
+                  "交骨灰",
+                  "交出骨灰",
+                  "接骨灰"
+                ],
+                "rejectIf": [
+                  "他还活着",
+                  "密送",
+                  "不发丧"
+                ]
+              },
+              "outcomeText": {
+                "success": "萧遥逸接过骨灰。这是他的首次登场，左武旧案还没开口。",
+                "partial": "该动作不产生 partial。",
+                "failure": "该动作不产生 failure。"
+              },
+              "outcomeEffects": {
+                "success": {
+                  "pathReceipts": [
+                    {
+                      "receiptId": "lcq.event.xiaoyaoyi_arrives.path.ashes_delivered",
+                      "sourceEventId": "lcq.event.xiaoyaoyi_arrives",
+                      "choiceId": "deliver_ashes",
+                      "mutexGroupId": "lcq.event.xiaoyaoyi_arrives.mutex.fate",
+                      "dimension": "method",
+                      "label": "萧遥逸接走谢艺骨灰",
+                      "consumeAtEventIds": [
+                        "lcq.event.s07_05_eight_steeds_informed"
+                      ]
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "id": "escort_wounded",
+              "label": "协助密送",
+              "actionText": "我协助萧遥逸接走重伤的谢艺，安排秘密转移，不发丧、不交出骨灰。",
+              "timeCost": 1,
+              "visibleWhen": [
+                {
+                  "path": "flags.branch.lcq.if_xieyi_longrest.active",
+                  "operator": "eq",
+                  "value": true
+                }
+              ],
+              "intentMatch": {
+                "matchAny": [
+                  "密送",
+                  "接伤员",
+                  "秘密转移"
+                ],
+                "rejectIf": [
+                  "交骨灰",
+                  "发丧",
+                  "他已经死了"
+                ]
+              },
+              "outcomeText": {
+                "success": "萧遥逸接走伤员并安排密送。不得发丧，不得把谢艺写成已死。",
+                "partial": "该动作不产生 partial。",
+                "failure": "该动作不产生 failure。"
+              },
+              "outcomeEffects": {
+                "success": {
+                  "pathReceipts": [
+                    {
+                      "receiptId": "lcq.event.xiaoyaoyi_arrives.path.wounded_escorted",
+                      "sourceEventId": "lcq.event.xiaoyaoyi_arrives",
+                      "choiceId": "escort_wounded",
+                      "mutexGroupId": "lcq.event.xiaoyaoyi_arrives.mutex.fate",
+                      "dimension": "method",
+                      "label": "萧遥逸接走长养的谢艺",
+                      "consumeAtEventIds": [
+                        "lcq.event.s07_05_eight_steeds_informed"
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
         "id": "lcq.event.s07_01_old_case",
         "name": "同门旧案",
         "description": "萧遥逸向程宗扬交代左武军覆灭、朝廷腐朽与岳帅旧案分歧，星月湖线正式压上晋国舞台。",
@@ -4154,7 +4294,8 @@
           }
         ],
         "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang"
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.xiao_yao_yi"
         ],
         "objective": "向萧遥逸询问左武军覆灭详情",
         "playerCompletionContract": {
@@ -5021,7 +5162,7 @@
           "liuchao.character.xiao_zi",
           "liuchao.character.meng_fei_qing"
         ],
-        "objective": "向孟非卿报告谢艺之死",
+        "objective": "向孟非卿说明谢艺的下场，并留下实质安排",
         "narrativeVariants": [
           {
             "when": [
@@ -5059,14 +5200,205 @@
           ],
           "actions": [
             {
-              "id": "advance_declared_objective",
-              "label": "向孟非卿报告谢艺之死",
-              "actionText": "我按当前主线目标行动：向孟非卿报告谢艺之死",
+              "id": "report_death",
+              "label": "说明已死",
+              "actionText": "我向孟非卿说明谢艺已死，以及生药铺可能成为诱引。",
               "timeCost": 1,
+              "visibleWhen": [
+                {
+                  "path": "flags.branch.lcq.if_xieyi_longrest.active",
+                  "operator": "neq",
+                  "value": true
+                }
+              ],
+              "intentMatch": {
+                "matchAny": [
+                  "说明谢艺已死",
+                  "报告谢艺之死",
+                  "生药铺诱引"
+                ],
+                "rejectIf": [
+                  "他还活着",
+                  "密送",
+                  "长养"
+                ]
+              },
               "outcomeText": {
-                "success": "你已亲自执行“向孟非卿报告谢艺之死”；事件完成真值将由本地引擎落账。",
-                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
-                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+                "success": "孟非卿受死讯，安排葬事，并令查生药铺。只听完不算完成；这项安排已经落账。",
+                "partial": "该动作不产生 partial。",
+                "failure": "该动作不产生 failure。"
+              },
+              "outcomeEffects": {
+                "success": {
+                  "playerKnowledge": [
+                    {
+                      "factId": "knowledge.s07_05.death_reported",
+                      "subjectId": "liuchao.character.xie_yi",
+                      "predicate": "reported_dead",
+                      "claim": "孟非卿已得知谢艺之死，并令查生药铺。",
+                      "status": "confirmed",
+                      "disclosureScope": "player"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "id": "claim_escort",
+              "label": "认领护送",
+              "actionText": "我向孟非卿说明谢艺还活着，并认领护送／看护这一边。秘密转移和调查都由他当场开启。",
+              "timeCost": 1,
+              "visibleWhen": [
+                {
+                  "path": "flags.branch.lcq.if_xieyi_longrest.active",
+                  "operator": "eq",
+                  "value": true
+                }
+              ],
+              "intentMatch": {
+                "matchAny": [
+                  "认领护送",
+                  "看护",
+                  "护送伤员"
+                ],
+                "rejectIf": [
+                  "他已经死了",
+                  "发丧",
+                  "交骨灰"
+                ]
+              },
+              "outcomeText": {
+                "success": "孟非卿确定秘密转移方案，并开启生药铺／联络泄漏调查。你认领护送；调查由星月湖承担。",
+                "partial": "该动作不产生 partial。",
+                "failure": "该动作不产生 failure。"
+              },
+              "outcomeEffects": {
+                "success": {
+                  "playerKnowledge": [
+                    {
+                      "factId": "knowledge.s07_05.meng_secret_transfer",
+                      "subjectId": "liuchao.character.meng_fei_qing",
+                      "predicate": "secret_transfer_planned",
+                      "objectId": "liuchao.character.xie_yi",
+                      "claim": "孟非卿当场确定把谢艺秘密转移的方案。",
+                      "status": "confirmed",
+                      "disclosureScope": "player"
+                    },
+                    {
+                      "factId": "knowledge.s07_05.meng_investigation_open",
+                      "subjectId": "liuchao.character.meng_fei_qing",
+                      "predicate": "investigation_opened",
+                      "claim": "孟非卿同时开启生药铺／联络泄漏调查。",
+                      "status": "confirmed",
+                      "disclosureScope": "player"
+                    }
+                  ],
+                  "pathReceipts": [
+                    {
+                      "receiptId": "lcq.event.s07_05_eight_steeds_informed.path.player_escort",
+                      "sourceEventId": "lcq.event.s07_05_eight_steeds_informed",
+                      "choiceId": "claim_escort",
+                      "mutexGroupId": "lcq.event.s07_05_eight_steeds_informed.mutex.player_claim",
+                      "dimension": "participation",
+                      "label": "玩家认领护送／看护",
+                      "consumeAtEventIds": [
+                        "lcq.event.xiao_opens_resources"
+                      ]
+                    }
+                  ],
+                  "memories": [
+                    {
+                      "actorIds": [
+                        "liuchao.character.meng_fei_qing"
+                      ],
+                      "summary": "玩家认领护送；调查由星月湖承担并已开启。",
+                      "tags": [
+                        "xieyi_longrest",
+                        "investigation"
+                      ],
+                      "salience": 80
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "id": "claim_investigate",
+              "label": "认领调查",
+              "actionText": "我向孟非卿说明谢艺还活着，并认领生药铺／联络泄漏调查这一边。秘密转移仍由他安排。",
+              "timeCost": 1,
+              "visibleWhen": [
+                {
+                  "path": "flags.branch.lcq.if_xieyi_longrest.active",
+                  "operator": "eq",
+                  "value": true
+                }
+              ],
+              "intentMatch": {
+                "matchAny": [
+                  "认领调查",
+                  "查生药铺",
+                  "调查泄漏"
+                ],
+                "rejectIf": [
+                  "他已经死了",
+                  "发丧",
+                  "交骨灰"
+                ]
+              },
+              "outcomeText": {
+                "success": "孟非卿确定秘密转移方案，并开启调查。你认领调查；护送由星月湖承担。",
+                "partial": "该动作不产生 partial。",
+                "failure": "该动作不产生 failure。"
+              },
+              "outcomeEffects": {
+                "success": {
+                  "playerKnowledge": [
+                    {
+                      "factId": "knowledge.s07_05.meng_secret_transfer",
+                      "subjectId": "liuchao.character.meng_fei_qing",
+                      "predicate": "secret_transfer_planned",
+                      "objectId": "liuchao.character.xie_yi",
+                      "claim": "孟非卿当场确定把谢艺秘密转移的方案。",
+                      "status": "confirmed",
+                      "disclosureScope": "player"
+                    },
+                    {
+                      "factId": "knowledge.s07_05.meng_investigation_open",
+                      "subjectId": "liuchao.character.meng_fei_qing",
+                      "predicate": "investigation_opened",
+                      "claim": "孟非卿同时开启生药铺／联络泄漏调查。",
+                      "status": "confirmed",
+                      "disclosureScope": "player"
+                    }
+                  ],
+                  "pathReceipts": [
+                    {
+                      "receiptId": "lcq.event.s07_05_eight_steeds_informed.path.player_investigate",
+                      "sourceEventId": "lcq.event.s07_05_eight_steeds_informed",
+                      "choiceId": "claim_investigate",
+                      "mutexGroupId": "lcq.event.s07_05_eight_steeds_informed.mutex.player_claim",
+                      "dimension": "participation",
+                      "label": "玩家认领调查",
+                      "consumeAtEventIds": [
+                        "lcq.event.xiao_opens_resources"
+                      ]
+                    }
+                  ],
+                  "memories": [
+                    {
+                      "actorIds": [
+                        "liuchao.character.meng_fei_qing"
+                      ],
+                      "summary": "玩家认领调查；秘密转移由星月湖承担并已确定方案。",
+                      "tags": [
+                        "xieyi_longrest",
+                        "escort"
+                      ],
+                      "salience": 80
+                    }
+                  ]
+                }
               }
             }
           ]

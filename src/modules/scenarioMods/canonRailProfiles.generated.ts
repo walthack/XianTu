@@ -596,6 +596,7 @@ export const GENERATED_CANON_RAIL_PROFILES: CanonRailProfile[] = [
     "modId": "lcq.stage_07_qingyuan_jiankang",
     "chapterId": "lcq.chapter.stage_07_qingyuan_jiankang_qingyuan",
     "orderedEventIds": [
+      "lcq.event.xiaoyaoyi_arrives",
       "lcq.event.s07_01_old_case",
       "lcq.event.s07_02_kill_wu",
       "lcq.event.s07_03_xiaozi_appears",
@@ -608,6 +609,17 @@ export const GENERATED_CANON_RAIL_PROFILES: CanonRailProfile[] = [
       "lcq.event.s07_10_dragon_fang"
     ],
     "contracts": [
+      {
+        "eventId": "lcq.event.xiaoyaoyi_arrives",
+        "mustReach": "萧遥逸在左武旧案之前上门：谢艺已死则接骨灰，长养则接伤员并安排密送。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "把首次登场排到左武旧案之后",
+          "生还线交出骨灰或发丧",
+          "死亡线写成接伤员"
+        ],
+        "allowedElaboration": "可补足失态、哭骂或密送巷线，不得改写死／生真值。"
+      },
       {
         "eventId": "lcq.event.s07_01_old_case",
         "mustReach": "萧遥逸向程宗扬痛陈左武军全军覆没、朝廷腐朽，并透露星月湖内部对岳帅命运的分歧。",
@@ -650,7 +662,7 @@ export const GENERATED_CANON_RAIL_PROFILES: CanonRailProfile[] = [
       },
       {
         "eventId": "lcq.event.s07_05_eight_steeds_informed",
-        "mustReach": "孟非卿得知谢艺之死与黑魔海有关后，命令老四老五调查生药铺，并决心报复，展现了权谋与兄弟情深的转折。",
+        "mustReach": "按谢艺命运回执向孟非卿说明下场：死则说明已死及生药铺诱引；生还则孟非卿同时落秘密转移与调查，玩家只认领一边。",
         "completionEvidence": [],
         "forbiddenInCanon": [
           "改写本拍原著结果",

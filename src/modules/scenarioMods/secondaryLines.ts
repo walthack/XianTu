@@ -300,8 +300,9 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       { reviewSummary: '赶到重伤谢艺身边，听清把小紫带往星月湖的托付', status: 'ready', stageId: 'lcq.stage_05b', eventId: 'lcq.event.xieyi_entrustment' },
       // 文案不写「之死」：上游已按裁定改成重伤未定，这里跟着中性化。
       // ⚠ 挂的 event 本身字面即死讯，属 backlog P1-7 四处承重之一，真分岔归 R2-0。
+      { reviewSummary: '萧遥逸在左武旧案之前上门：死则接骨灰，生还则接伤员', status: 'ready', stageId: 'lcq.stage_07_qingyuan_jiankang', eventId: 'lcq.event.xiaoyaoyi_arrives' },
       { reviewSummary: '萧遥逸交代左武军怎么覆灭，以及岳帅旧案上的分歧', status: 'ready', stageId: 'lcq.stage_07_qingyuan_jiankang', eventId: 'lcq.event.s07_01_old_case' },
-      { reviewSummary: '向孟非卿报明谢艺之死与黑魔海有关，他令查生药铺并决意报复', status: 'ready', stageId: 'lcq.stage_07_qingyuan_jiankang', eventId: 'lcq.event.s07_05_eight_steeds_informed' },
+      { reviewSummary: '按谢艺命运向孟非卿说明下场，并留下实质安排', status: 'ready', stageId: 'lcq.stage_07_qingyuan_jiankang', eventId: 'lcq.event.s07_05_eight_steeds_informed' },
       { reviewSummary: '萧遥逸代表星月湖，向你开放资源', status: 'ready', stageId: 'lcq.stage_07_qingyuan_jiankang', eventId: 'lcq.event.xiao_opens_resources' },
       { reviewSummary: '古冥隐点破第八骏是萧遥逸，要以太后贵妃为饵杀剑玉姬——身份已暴露', status: 'ready', stageId: 'lcq.stage_08_jiankang_coup', eventId: 'lcq.event.s08_08_gumingyin_plot' },
       { reviewSummary: '看萧遥逸闯入昭明宫刑室，把古冥隐逼走', status: 'ready', stageId: 'lcq.stage_08_jiankang_coup', eventId: 'lcq.event.s08_09_zhaoming_night' },
@@ -533,6 +534,7 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       + '不写进指引（引擎不替玩家剧透）。',
     nodes: [
       // 锚事件：seq 241–242 灵飞镜窥宫、与萧遥逸谈「宫禁闹鬼」。beat 有、event 无，需新增。
+      { reviewSummary: '萧遥逸在左武旧案之前上门：死则接骨灰，生还则接伤员', status: 'ready', stageId: 'lcq.stage_07_qingyuan_jiankang', eventId: 'lcq.event.xiaoyaoyi_arrives' },
       { reviewSummary: '萧遥逸交代左武军怎么覆灭，以及岳帅旧案上的分歧', status: 'ready', stageId: 'lcq.stage_07_qingyuan_jiankang', eventId: 'lcq.event.s07_01_old_case' },
       { reviewSummary: '用灵飞镜窥见假山大汉钻出，被他察觉——宫禁闹鬼传开', status: 'ready', stageId: 'lcq.stage_07_qingyuan_jiankang', eventId: 'lcq.event.palace_haunting_rumor' },
       // J2 并进 s08_03_beifu_rescue
@@ -659,6 +661,7 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       + '玩家人在洛都却触发不了。',
     nodes: [
       // 入口改挂（2026-08-16）：跟着八骏查左武军覆灭；第 10 关即可入线。同时喂星月湖。
+      { reviewSummary: '萧遥逸在左武旧案之前上门：死则接骨灰，生还则接伤员', status: 'ready', stageId: 'lcq.stage_07_qingyuan_jiankang', eventId: 'lcq.event.xiaoyaoyi_arrives' },
       { reviewSummary: '萧遥逸交代左武军怎么覆灭，以及岳帅旧案上的分歧', status: 'ready', stageId: 'lcq.stage_07_qingyuan_jiankang', eventId: 'lcq.event.s07_01_old_case' },
       // 旧案链的中段：seq 400 已有 event；772／871 需新增。第 4 拍才真正进汉廷的账。
       { reviewSummary: '与孟非卿复盘王哲左武军覆灭：有人切断补给、泄军机，排除金蜜镝', status: 'ready', stageId: 'lcq.stage_10_jiangzhou_shadow_war', eventId: 'lcq.event.s10_04_left_army_review' },

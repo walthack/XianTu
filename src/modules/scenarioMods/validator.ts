@@ -498,6 +498,9 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
                   }
                 }
               }
+              if (action.visibleWhen !== undefined) {
+                validateConditions(action.visibleWhen, `${actionPath}.visibleWhen`, add);
+              }
               if (action.judgement !== undefined) {
                 validateEventActionJudgement(action.judgement, `${actionPath}.judgement`, characterIds, add);
               }
