@@ -3814,6 +3814,13 @@
     ],
     "items": [
       {
+        "id": "lcq.item.xieyi_ashes",
+        "name": "谢艺骨灰",
+        "description": "谢艺伤重辞世后留下的骨灰。只在死亡线生成一次，生还线不得出现。",
+        "type": "other",
+        "grade": "凡品"
+      },
+      {
         "id": "liuchao.item.coral_dagger",
         "name": "珊瑚匕首",
         "description": "从鲛人身上获得的珊瑚铁匕首，锋锐异常。",
@@ -4102,6 +4109,7 @@
       "event.ghost_king_swallowed.done": false,
       "event.slay_dragon.done": false,
       "event.xieyi_entrustment.done": false,
+      "world.xieyi_ashes.generated": false,
       "event.tribes_pledge.done": false,
       "event.xiaozi_kills_mother.done": false
     },

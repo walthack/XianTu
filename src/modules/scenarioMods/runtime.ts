@@ -1566,9 +1566,28 @@ function eventOutcomeFromJudgement(
 const XIEYI_ENTRUSTMENT_EVENT_ID = 'lcq.event.xieyi_entrustment';
 const XIEYI_RESCUE_ACTION_ID = 'rescue_xieyi';
 const S06_03_EVENT_ID = 'lcq.event.s06_03';
+const XIEYI_ASHES_ITEM_ID = 'lcq.item.xieyi_ashes';
+const XIEYI_ASHES_TRANSFER_ID = 'lcq.event.xieyi_entrustment.inventory.xieyi_ashes';
+const XIEYI_ASHES_FLAG = 'world.xieyi_ashes.generated';
 
 function xieyiFateAlreadyMapped(runtime: RuntimeState): boolean {
   return runtime.flags['event.s06_03.done'] === true || runtime.flags['event.s06_03.void'] === true;
+}
+
+function grantXieyiAshesOnce(saveData: SaveData, runtime: RuntimeState): void {
+  if (runtime.flags[XIEYI_ASHES_FLAG] === true) return;
+  settleScenarioInventoryTransfers(saveData, runtime, {
+    inventoryTransfers: [{
+      transferId: XIEYI_ASHES_TRANSFER_ID,
+      itemId: XIEYI_ASHES_ITEM_ID,
+      quantity: 1,
+    }],
+  }, {
+    eventId: XIEYI_ENTRUSTMENT_EVENT_ID,
+    actionId: 'accept_entrustment',
+    outcome: 'success',
+  });
+  runtime.flags[XIEYI_ASHES_FLAG] = true;
 }
 
 /** 判定引擎不写 flags；命运映射与事件结算同事务提交。本纵切不生成 missing。 */
@@ -1579,6 +1598,7 @@ function applyXieyiEntrustmentFateMapping(
     judgementOutcome?: JudgementOutcome;
     evidence: string;
   },
+  saveData?: SaveData,
 ): void {
   if (xieyiFateAlreadyMapped(runtime)) return;
   const judgementOutcome = input.judgementOutcome;
@@ -1597,6 +1617,7 @@ function applyXieyiEntrustmentFateMapping(
   }
   runtime.flags['event.s06_03.done'] = true;
   runtime.flags['character.xie_yi.status'] = 'dead';
+  if (saveData) grantXieyiAshesOnce(saveData, runtime);
 }
 
 export function recordStoryEventStructuredAction(
@@ -1727,7 +1748,7 @@ export function recordStoryEventStructuredAction(
       actionId: action.id,
       judgementOutcome: action.judgement ? options?.judgementResolution?.outcome : undefined,
       evidence: detail,
-    });
+    }, saveData);
   }
   if (event.locationId) movePlayerToEventLocation(saveData, runtime, event.locationId);
   return {
@@ -2363,6 +2384,7 @@ function resolveOffscreenWorldEvents(
   runtime: RuntimeState,
   transitions: ScenarioRuntimeTransition[],
   currentLocationId?: string,
+  saveData?: SaveData,
 ): void {
   const declared = runtime.events.map(event => event.offscreenResolution).filter(Boolean) as NonNullable<ScenarioModEvent['offscreenResolution']>[];
   const resolutions = declared.length ? declared : [legacyOffscreenResolution(runtime)].filter(Boolean) as NonNullable<ScenarioModEvent['offscreenResolution']>[];
@@ -2455,7 +2477,7 @@ function resolveOffscreenWorldEvents(
       applyXieyiEntrustmentFateMapping(runtime, {
         actionId: 'accept_entrustment',
         evidence: (onScene && resolution.onSceneDelta) || resolution.worldDelta,
-      });
+      }, saveData);
     }
     if (!onScene) {
       runtime.offscreenResolvedEventIds = [...new Set([...(runtime.offscreenResolvedEventIds || []), ...unresolvedIds])];
@@ -3327,6 +3349,7 @@ export function advanceScenarioRuntime(saveData: SaveData): {
       (next as unknown as { 角色?: { 位置?: { 描述?: unknown } } })?.角色?.位置?.描述,
       runtime.canon?.locations,
     ),
+    next,
   );
 
   const current = runtime.chapters.find(chapter => chapter.id === runtime.currentChapterId);

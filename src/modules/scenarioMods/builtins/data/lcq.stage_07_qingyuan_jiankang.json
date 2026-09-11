@@ -4017,6 +4017,13 @@
         "skillIds": []
       },
       {
+        "id": "lcq.item.xieyi_ashes",
+        "name": "谢艺骨灰",
+        "description": "谢艺伤重辞世后留下的骨灰。只在死亡线生成一次，生还线不得出现。",
+        "type": "other",
+        "grade": "凡品"
+      },
+      {
         "id": "lcq.item.s05b_spiral_needle",
         "name": "螺旋长针",
         "description": "鬼王宫控制与解除控制相关的关键道具，推动苏荔受制、救援和控制解除节点。",
@@ -5751,7 +5758,7 @@
           "liuchao.faction.xing_yue_hu"
         ],
         "locationId": "liuchao.location.jiankang",
-        "objective": "听萧遥逸代表星月湖宣布全力支持并开放全部资源",
+        "objective": "当着萧遥逸听清星月湖眼下能用的资源",
         "playerCompletionContract": {
           "kind": "objective_action",
           "settleOn": [
@@ -5759,14 +5766,109 @@
           ],
           "actions": [
             {
-              "id": "accept_xingyue_open_resources",
-              "label": "当面听萧遥逸开放星月湖资源",
-              "actionText": "我当着萧遥逸的面，听他代表星月湖宣布全力支持我，并确认所有资源已向我开放。",
+              "id": "hear_xingyue_support_dead",
+              "label": "听清星月湖眼下能用的资源",
+              "actionText": "我当着萧遥逸的面，听他代表星月湖宣布支持，并问清眼下能用的资源。",
               "timeCost": 1,
+              "visibleWhen": [
+                {
+                  "path": "flags.branch.lcq.if_xieyi_longrest.active",
+                  "operator": "neq",
+                  "value": true
+                }
+              ],
               "outcomeText": {
-                "success": "你已听清萧遥逸代表星月湖开放全部资源；事件完成真值由本地引擎落账。",
-                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
-                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                "success": "星月湖组织支持已经落账。谢艺名下遗留事务按遗产路径处理。",
+                "partial": "该动作不产生 partial。",
+                "failure": "该动作不产生 failure。"
+              },
+              "outcomeEffects": {
+                "success": {
+                  "playerKnowledge": [
+                    {
+                      "factId": "knowledge.xiao_opens.org_support",
+                      "subjectId": "liuchao.faction.xing_yue_hu",
+                      "predicate": "org_support_opened",
+                      "claim": "萧遥逸代表星月湖宣布组织支持，并问清眼下能用的资源。",
+                      "status": "confirmed",
+                      "disclosureScope": "player"
+                    },
+                    {
+                      "factId": "knowledge.xiao_opens.xieyi_estate",
+                      "subjectId": "liuchao.character.xie_yi",
+                      "predicate": "estate_authority",
+                      "claim": "谢艺已死，其个人事务按遗留事务处理权交接。",
+                      "status": "confirmed",
+                      "disclosureScope": "player"
+                    }
+                  ],
+                  "pathReceipts": [
+                    {
+                      "receiptId": "lcq.event.xiao_opens_resources.path.estate_authority",
+                      "sourceEventId": "lcq.event.xiao_opens_resources",
+                      "choiceId": "hear_xingyue_support_dead",
+                      "mutexGroupId": "lcq.event.xiao_opens_resources.mutex.xieyi_affairs",
+                      "dimension": "method",
+                      "label": "谢艺个人事务按遗产路径处理",
+                      "consumeAtEventIds": [
+                        "lcq.event.xiao_opens_resources"
+                      ]
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "id": "hear_xingyue_support_longrest",
+              "label": "听清星月湖眼下能用的资源",
+              "actionText": "我当着萧遥逸的面，听他代表星月湖宣布支持，并问清眼下能用的资源。",
+              "timeCost": 1,
+              "visibleWhen": [
+                {
+                  "path": "flags.branch.lcq.if_xieyi_longrest.active",
+                  "operator": "eq",
+                  "value": true
+                }
+              ],
+              "outcomeText": {
+                "success": "星月湖组织支持已经落账。谢艺个人事务仍归他本人，本拍不交割、不称继承。",
+                "partial": "该动作不产生 partial。",
+                "failure": "该动作不产生 failure。"
+              },
+              "outcomeEffects": {
+                "success": {
+                  "playerKnowledge": [
+                    {
+                      "factId": "knowledge.xiao_opens.org_support",
+                      "subjectId": "liuchao.faction.xing_yue_hu",
+                      "predicate": "org_support_opened",
+                      "claim": "萧遥逸代表星月湖宣布组织支持，并问清眼下能用的资源。",
+                      "status": "confirmed",
+                      "disclosureScope": "player"
+                    },
+                    {
+                      "factId": "knowledge.xiao_opens.xieyi_retains_affairs",
+                      "subjectId": "liuchao.character.xie_yi",
+                      "predicate": "retains_personal_affairs",
+                      "claim": "谢艺仍在长养，个人事务仍归他本人，不得称为继承。",
+                      "status": "confirmed",
+                      "disclosureScope": "player"
+                    }
+                  ],
+                  "pathReceipts": [
+                    {
+                      "receiptId": "lcq.event.xiao_opens_resources.path.retains_affairs",
+                      "sourceEventId": "lcq.event.xiao_opens_resources",
+                      "choiceId": "hear_xingyue_support_longrest",
+                      "mutexGroupId": "lcq.event.xiao_opens_resources.mutex.xieyi_affairs",
+                      "dimension": "method",
+                      "label": "谢艺个人事务仍归本人",
+                      "consumeAtEventIds": [
+                        "lcq.event.xiao_opens_resources"
+                      ]
+                    }
+                  ]
+                }
               }
             }
           ]

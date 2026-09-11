@@ -6453,7 +6453,23 @@
         "relatedFactionIds": [
           "liuchao.faction.xing_yue_hu"
         ],
-        "objective": "出城迎接月霜等人，到风波亭后拜祭岳鹏举与谢艺墓",
+        "objective": "出城迎接月霜等人，到风波亭后拜祭岳鹏举；谢艺墓只在死亡线出现",
+        "narrativeVariants": [
+          {
+            "when": [
+              {
+                "path": "flags.branch.lcq.if_xieyi_longrest.active",
+                "operator": "eq",
+                "value": true
+              }
+            ],
+            "replacesCanonRail": true,
+            "name": "拜祭岳鹏举",
+            "description": "月霜等股东抵临安后，程宗扬出城迎接，到风波亭后只祭岳鹏举。谢艺仍在长养，不得出现谢艺墓，不得空墓冒充已葬。",
+            "axisBeat": "出城迎接月霜等人，到风波亭后只祭岳鹏举。",
+            "objective": "出城迎接月霜等人，到风波亭后只祭岳鹏举"
+          }
+        ],
         "playerCompletionContract": {
           "kind": "objective_action",
           "settleOn": [
@@ -6478,14 +6494,81 @@
               "label": "到风波亭后拜祭岳鹏举与谢艺墓",
               "actionText": "我把人接到后，转到风波亭后，拜祭岳鹏举与谢艺的墓。",
               "timeCost": 1,
+              "visibleWhen": [
+                {
+                  "path": "flags.branch.lcq.if_xieyi_longrest.active",
+                  "operator": "neq",
+                  "value": true
+                }
+              ],
               "outcomeText": {
                 "success": "你已到风波亭后拜祭岳鹏举与谢艺墓；事件完成真值将由本地引擎落账。",
-                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
-                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                "partial": "该动作不产生 partial。",
+                "failure": "该动作不产生 failure。"
               },
               "requiresPreparation": [
                 "sequence_step_1"
-              ]
+              ],
+              "outcomeEffects": {
+                "success": {
+                  "playerKnowledge": [
+                    {
+                      "factId": "knowledge.lin_an.xieyi_tomb_visited",
+                      "subjectId": "lyl.event.lin_an_bridge_xieyi_tomb",
+                      "predicate": "tomb_visited",
+                      "claim": "在风波亭后拜祭了岳鹏举与谢艺墓。",
+                      "status": "confirmed",
+                      "disclosureScope": "player"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "id": "worship_yue_only",
+              "label": "到风波亭后只祭岳鹏举",
+              "actionText": "我把人接到后，转到风波亭后，只祭岳鹏举。这里没有谢艺墓。",
+              "timeCost": 1,
+              "visibleWhen": [
+                {
+                  "path": "flags.branch.lcq.if_xieyi_longrest.active",
+                  "operator": "eq",
+                  "value": true
+                }
+              ],
+              "intentMatch": {
+                "matchAny": [
+                  "只祭岳鹏举",
+                  "没有谢艺墓"
+                ],
+                "rejectIf": [
+                  "谢艺墓",
+                  "空墓",
+                  "已葬"
+                ]
+              },
+              "outcomeText": {
+                "success": "你已到风波亭后只祭岳鹏举。谢艺仍在长养，不得出现谢艺墓。",
+                "partial": "该动作不产生 partial。",
+                "failure": "该动作不产生 failure。"
+              },
+              "requiresPreparation": [
+                "sequence_step_1"
+              ],
+              "outcomeEffects": {
+                "success": {
+                  "playerKnowledge": [
+                    {
+                      "factId": "knowledge.lin_an.no_xieyi_tomb",
+                      "subjectId": "lyl.event.lin_an_bridge_xieyi_tomb",
+                      "predicate": "no_tomb",
+                      "claim": "谢艺仍在长养，风波亭后没有谢艺墓。",
+                      "status": "confirmed",
+                      "disclosureScope": "player"
+                    }
+                  ]
+                }
+              }
             }
           ]
         }

@@ -1,7 +1,8 @@
 # 仙途 (XianTu) · 项目总体状况与并行分工文档
 
 > 面向「新加入的 agent」。读完这一篇即可独立认领一个模块开工。
-> **2026-09-11 I3 第一段真实下游已落地，I4 未做。** 萧遥逸登场前移到 `lcq.event.xiaoyaoyi_arrives`（`s07_01` 之前）：dead 交骨灰，longrest 协助密送。`s07_05` 两态结构化动作：死亡线说明已死；生还线孟非卿同时落秘密转移＋调查，玩家只认领护送或调查一边。谢艺人物任务错误 id 已改到 `xieyi_entrustment`／`xieyi_biling_war`。I1+I2 仍在 HEAD 链上。P0-1 仍 OPEN。
+> **2026-09-12 I4 第二段下游已落地。** `xiao_opens_resources` 两态共用同一句玩家行动，权威效果按命运分叉：dead 落遗产处理权，longrest 谢艺个人事务仍归本人、本拍不交割。临安墓 longrest 只祭岳鹏举，不得出现谢艺墓。骨灰只在死亡映射生成一次（`lcq.item.xieyi_ashes` + `world.xieyi_ashes.generated`），生还线不发。LLM 只渲染已落账的 playerKnowledge／pathReceipts。I3 仍在 HEAD 链上。P0-1 仍 OPEN。
+> **2026-09-11 I3 第一段真实下游已落地。** 萧遥逸登场前移到 `lcq.event.xiaoyaoyi_arrives`（`s07_01` 之前）：dead 交骨灰，longrest 协助密送。`s07_05` 两态结构化动作：死亡线说明已死；生还线孟非卿同时落秘密转移＋调查，玩家只认领护送或调查一边。谢艺人物任务错误 id 已改到 `xieyi_entrustment`／`xieyi_biling_war`。I1+I2 仍在 HEAD 链上。P0-1 仍 OPEN。
 > **2026-08-31 I1+I2 事件判定地基 + 谢艺二态映射已落地。** 合同=`docs/GROK-XINGYUEHU-XIEYI-FATE-CONTRACT-2026-08-30.md`，裁定 #163。I1：事件动作可声明本地判定，救治签发 `cultivate`／severe 25，优先于关键词 skip（`shouldSkipJudgementPreflight` 全局规则不变）；取消回二选一；已掷按 id 锁定；不走 `if_only`/100，不套自我疗伤回血。I2：`slay_dragon` 只收龙死；`lcq.event.xieyi_entrustment` 二选一，乐明珠不在场隐藏救治；success+ 同事务 void `s06_03` + longrest IF，其余收束 done+dead；不生成 missing；隔离 `stage_06` 见 done/void 映射不得再演辞世，world-sim baseline omen 的 `settledWhenAny` 同样认 `.void`。P0-1 仍 OPEN。不宣称 P0-1/P0-2 因此关闭。
 > **2026-08-30 星月湖 G-1 FAIL（历史）。** 证据 `/tmp/xiantu-g1-xingyuehu-source-audit-1788102368000`。当时 verdict=`FAIL_MISSING_LOAD_BEARING_BEATS`：可达 `slay_dragon` 把杀龙与托付合并，未继承冻结 `s06_03`。该缺口由上方 I1+I2 承接；G-1 须在 I1+I2 候选上重跑，通过后才 G0。不解禁 `lcq.stage_06`，不改 `s06_03` 语义。
 > **2026-08-30 二级线下一门改为 G-1 来源完整性审计。** 第一纵切仍优先星月湖“谢艺命运 → 星月湖响应”。G-1 已跑并失败，见上条；本条不再表示「尚未审计」。

@@ -22,6 +22,7 @@ function fixture(stage, extra = {}) {
       身份: { 名字: '程宗扬', 先天六司: { 悟性: 8, 灵性: 6, 心性: 4 }, 后天六司: {} },
       位置: { 描述: '南荒·鬼王峒', 灵气浓度: 50 },
       属性: { 气血: { 当前: 80, 上限: 200 }, 神识: { 当前: 200, 上限: 400 } },
+      背包: { 物品: {} },
     },
     社交: { 关系: { 乐明珠: { 名字: '乐明珠', 当前位置: '南荒·鬼王峒', 实时关注: true } } },
     系统: { 扩展: {} },
@@ -41,6 +42,7 @@ function fixture(stage, extra = {}) {
           ],
           offscreenResolvedEventIds: [],
           eventActionStates: {},
+          inventoryTransferReceipts: [],
           departedCast: extra.departedCast || [],
           divergences: [],
           stallTurns: 0,
@@ -51,6 +53,13 @@ function fixture(stage, extra = {}) {
               { id: 'liuchao.character.xie_yi', name: '谢艺' },
             ],
             locations: [{ id: 'liuchao.location.gui_wang_dong', name: '鬼王峒' }],
+            items: [{
+              id: 'lcq.item.xieyi_ashes',
+              name: '谢艺骨灰',
+              description: '谢艺伤重辞世后留下的骨灰。只在死亡线生成一次，生还线不得出现。',
+              type: 'other',
+              grade: '凡品',
+            }],
           },
         },
       },
@@ -124,6 +133,10 @@ test('【承接】映射 s06_03 done + dead，不写 IF，不写 missing', async
   assert.equal(runtime.flags['branch.lcq.if_xieyi_longrest.active'], undefined);
   assert.equal(runtime.flags['world.xieyi_absence.active'], undefined);
   assert.equal((runtime.divergences || []).length, 0);
+  assert.equal(save.角色.背包.物品['lcq.item.xieyi_ashes']?.数量, 1);
+  assert.equal(runtime.flags['world.xieyi_ashes.generated'], true);
+  assert.equal(runtime.inventoryTransferReceipts.length, 1);
+  assert.equal(runtime.inventoryTransferReceipts[0].transferId, 'lcq.event.xieyi_entrustment.inventory.xieyi_ashes');
 });
 
 test('【救治】success+ 同事务 void + longrest IF；判定引擎不写 flags', async () => {
@@ -148,6 +161,9 @@ test('【救治】success+ 同事务 void + longrest IF；判定引擎不写 fla
   assert.equal(runtime.flags['branch.lcq.if_xieyi_longrest.active'], true);
   assert.equal(runtime.flags['world.xieyi_absence.active'], undefined);
   assert.equal(getJudgementState(save).pending, undefined);
+  assert.equal(save.角色.背包.物品['lcq.item.xieyi_ashes'], undefined);
+  assert.equal(runtime.flags['world.xieyi_ashes.generated'], false);
+  assert.equal((runtime.inventoryTransferReceipts || []).length, 0);
 });
 
 test('救治 partial/failure 仍死亡；映射幂等', async () => {
@@ -166,10 +182,13 @@ test('救治 partial/failure 仍死亡；映射幂等', async () => {
   assert.equal(runtime.flags['event.s06_03.done'], true);
   assert.equal(runtime.flags['event.s06_03.void'], undefined);
   assert.equal(runtime.flags['character.xie_yi.status'], 'dead');
+  assert.equal(save.角色.背包.物品['lcq.item.xieyi_ashes']?.数量, 1);
   runtime.worldTurn = 21;
   const again = recordStoryEventStructuredAction(save, rescue, { judgementResolution: resolution });
   assert.equal(again.reason, 'already_completed');
   assert.equal(runtime.flags['event.s06_03.void'], undefined);
+  assert.equal(save.角色.背包.物品['lcq.item.xieyi_ashes']?.数量, 1);
+  assert.equal(runtime.inventoryTransferReceipts.length, 1);
 });
 
 test('取消救治判定不收束命运', async () => {
