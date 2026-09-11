@@ -83,13 +83,27 @@ test('复审通过的坏目标由固定表现层覆盖，不改 event 合同', a
     FIXED_QUEST_OBJECTIVE_OVERRIDES,
     resolveFixedQuestObjective,
   } = await loadTs('../src/modules/scenarioMods/fixedQuestObjectives.ts');
-  assert.equal(Object.keys(FIXED_QUEST_OBJECTIVE_OVERRIDES).length, 52);
+  assert.equal(Object.keys(FIXED_QUEST_OBJECTIVE_OVERRIDES).length, 54);
   assert.equal(
     resolveFixedQuestObjective({
       id: 'lcq.event.s03_12',
       objective: '在不预写灭村真相的前提下进入蛇彝村并安置商队',
     }),
     '进入这座无灯火的蛇彝村，先安置商队',
+  );
+  assert.equal(
+    resolveFixedQuestObjective({
+      id: 'lcq.event.xiaoyaoyi_arrives',
+      objective: '接待上门来访的少陵侯嫡子',
+    }),
+    '接待上门的萧遥逸：交骨灰，或协助密送伤员',
+  );
+  assert.equal(
+    resolveFixedQuestObjective({
+      id: 'lcq.event.s07_05_eight_steeds_informed',
+      objective: '向孟非卿说明谢艺的下场',
+    }),
+    '向孟非卿说明谢艺的下场，并留下实质安排',
   );
   assert.equal(
     resolveFixedQuestObjective({ id: 'event.safe', objective: '询问守门人发生了什么' }),
