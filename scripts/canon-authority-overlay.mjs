@@ -95,8 +95,23 @@ function resolveSetTarget(root, path) {
   return { parent, key: last.value };
 }
 
-function isIdArray(value) {
-  return Array.isArray(value) && value.length > 0 && value.every(item => item && typeof item === 'object' && typeof item.id === 'string');
+function isIdAddressedArray(value) {
+  return Array.isArray(value)
+    && value.length > 0
+    && value.every(item => item && typeof item === 'object' && typeof item.id === 'string');
+}
+
+function assertValidIdArray(value, path, side) {
+  const seen = new Set();
+  for (let i = 0; i < value.length; i += 1) {
+    const item = value[i];
+    if (!item || typeof item !== 'object' || typeof item.id !== 'string') {
+      fail(`${side} id-array item missing string id at ${path}[${i}]`);
+    }
+    if (item.id === '') fail(`${side} id-array has empty id at ${path}[${i}]`);
+    if (seen.has(item.id)) fail(`${side} id-array has duplicate id ${item.id} at ${path}`);
+    seen.add(item.id);
+  }
 }
 
 function replaceObjectKeys(target, next) {
@@ -114,8 +129,12 @@ function emitOps(from, to, path, ops) {
   if (deepEqual(from, to)) return;
   if (from === undefined) fail(`unexpected missing source at ${path || '<root>'}`);
   if (to === undefined) fail(`overlay must not delete ${path || '<root>'}`);
-  // isIdArray requires length>0, so emptying an id-array must not fall through to set.
-  if (isIdArray(from) && Array.isArray(to) && (to.length === 0 || isIdArray(to))) {
+  // Once source is id-addressed, keep that structure. Empty target still hits delete detection.
+  if (isIdAddressedArray(from)) {
+    const at = path || '<root>';
+    assertValidIdArray(from, at, 'source');
+    if (!Array.isArray(to)) fail(`overlay must keep id-addressed array at ${at}`);
+    if (to.length > 0) assertValidIdArray(to, at, 'target');
     emitIdArrayOps(from, to, path, ops);
     return;
   }

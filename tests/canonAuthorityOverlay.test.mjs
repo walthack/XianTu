@@ -141,6 +141,126 @@ test('clearing a non-empty id-array fail-closes; empty→filled and non-id array
   );
 });
 
+test('id-addressed source keeps a valid id-array; malformed target or source fail-closes', () => {
+  const fromAB = { scenario: { events: [{ id: 'a' }, { id: 'b' }] } };
+
+  assert.throws(
+    () => buildCanonAuthorityOps(fromAB, { scenario: { events: [{ note: 'no-id-field' }] } }),
+    /target id-array item missing string id at scenario.events\[0\]/,
+  );
+  assert.throws(
+    () => buildCanonAuthorityOps(fromAB, { scenario: { events: [{ id: 'a' }, { note: 'x' }] } }),
+    /target id-array item missing string id at scenario.events\[1\]/,
+  );
+  assert.throws(
+    () => buildCanonAuthorityOps(fromAB, { scenario: { events: [{}] } }),
+    /target id-array item missing string id at scenario.events\[0\]/,
+  );
+  assert.throws(
+    () => buildCanonAuthorityOps(fromAB, { scenario: { events: [null] } }),
+    /target id-array item missing string id at scenario.events\[0\]/,
+  );
+  assert.throws(
+    () => buildCanonAuthorityOps(fromAB, { scenario: { events: [{ id: 1 }] } }),
+    /target id-array item missing string id at scenario.events\[0\]/,
+  );
+  assert.throws(
+    () => buildCanonAuthorityOps(fromAB, { scenario: { events: [{ id: null }] } }),
+    /target id-array item missing string id at scenario.events\[0\]/,
+  );
+  assert.throws(
+    () => buildCanonAuthorityOps(fromAB, { scenario: { events: [{ id: '' }] } }),
+    /target id-array has empty id at scenario.events\[0\]/,
+  );
+  assert.throws(
+    () => buildCanonAuthorityOps(fromAB, { scenario: { events: [{ id: 'c' }, { id: 'c' }] } }),
+    /target id-array has duplicate id c at scenario.events/,
+  );
+  assert.throws(
+    () => buildCanonAuthorityOps(fromAB, { scenario: { events: [{ id: 'a' }, { id: 'a' }] } }),
+    /target id-array has duplicate id a at scenario.events/,
+  );
+  assert.throws(
+    () => buildCanonAuthorityOps(fromAB, { scenario: { events: null } }),
+    /must keep id-addressed array at scenario.events/,
+  );
+  assert.throws(
+    () => buildCanonAuthorityOps(fromAB, { scenario: { events: 'oops' } }),
+    /must keep id-addressed array at scenario.events/,
+  );
+  assert.throws(
+    () => buildCanonAuthorityOps(fromAB, { scenario: { events: { id: 'a' } } }),
+    /must keep id-addressed array at scenario.events/,
+  );
+  assert.throws(
+    () => buildCanonAuthorityOps(
+      { scenario: { events: [{ id: 'a' }, { id: 'a' }] } },
+      { scenario: { events: [{ id: 'a' }, { id: 'a' }, { id: 'b' }] } },
+    ),
+    /source id-array has duplicate id a at scenario.events/,
+  );
+  assert.throws(
+    () => buildCanonAuthorityOps(
+      { scenario: { events: [{ id: '' }] } },
+      { scenario: { events: [{ id: 'a' }] } },
+    ),
+    /source id-array has empty id at scenario.events\[0\]/,
+  );
+
+  assert.deepEqual(
+    buildCanonAuthorityOps(fromAB, { scenario: { events: [{ id: 'c' }] } }),
+    [{
+      op: 'set',
+      path: 'scenario.events',
+      from: [{ id: 'a' }, { id: 'b' }],
+      to: [{ id: 'c' }],
+    }],
+  );
+  assert.deepEqual(
+    buildCanonAuthorityOps(fromAB, { scenario: { events: [{ id: 'a' }, { id: 'b' }, { id: 'c' }] } }),
+    [{ op: 'insertAfter', path: 'scenario.events', afterId: 'b', value: { id: 'c' } }],
+  );
+  assert.deepEqual(
+    buildCanonAuthorityOps(
+      { scenario: { events: [{ id: 'a' }] } },
+      { scenario: { events: [{ id: 'a', name: 'x' }] } },
+    ),
+    [{
+      op: 'insertKeys',
+      path: 'scenario.events[id=a]',
+      afterKey: 'id',
+      beforeKey: null,
+      entries: { name: 'x' },
+    }],
+  );
+  assert.deepEqual(
+    buildCanonAuthorityOps(
+      { scenario: { events: [{ id: 'a' }, { name: 'x' }] } },
+      { scenario: { events: [{ id: 'b' }] } },
+    ),
+    [{
+      op: 'set',
+      path: 'scenario.events',
+      from: [{ id: 'a' }, { name: 'x' }],
+      to: [{ id: 'b' }],
+    }],
+  );
+  assert.deepEqual(
+    buildCanonAuthorityOps(
+      { scenario: { events: [{ id: 1 }] } },
+      { scenario: { events: [{ id: 'a' }] } },
+    ),
+    [{ op: 'set', path: 'scenario.events', from: [{ id: 1 }], to: [{ id: 'a' }] }],
+  );
+  assert.deepEqual(
+    buildCanonAuthorityOps(
+      { scenario: { events: [] } },
+      { scenario: { events: [{ id: 'a' }, { id: 'a' }] } },
+    ),
+    [{ op: 'set', path: 'scenario.events', from: [], to: [{ id: 'a' }, { id: 'a' }] }],
+  );
+});
+
 test('tracked overlays are exactly the five I1-I4 generated→builtin closures', async () => {
   const catalog = await loadTrackedCanonAuthorityOverlays();
   assert.deepEqual(catalog.stageIds, STAGES.map(stage => stage.stageId));
