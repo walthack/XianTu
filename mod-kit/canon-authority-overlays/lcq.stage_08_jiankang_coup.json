@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "stageId": "lcq.stage_08_jiankang_coup",
+  "ops": [
+    {
+      "op": "insertKeys",
+      "path": "scenario.initialFlags",
+      "afterKey": "chapter.lcq.stage_08_jiankang_coup.coup.done",
+      "beforeKey": "event.s08_debut_xiaoyaoyi.done",
+      "entries": {
+        "event.xiaoyaoyi_arrives.done": false
+      }
+    },
+    {
+      "op": "set",
+      "path": "scenario.events[id=lcq.event.s08_debut_xiaoyaoyi].conditions",
+      "from": [],
+      "to": [
+        {
+          "path": "flags.event.xiaoyaoyi_arrives.done",
+          "operator": "neq",
+          "value": true
+        }
+      ]
+    }
+  ]
+}

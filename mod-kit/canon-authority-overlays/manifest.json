@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "overlays": [
+    {
+      "stageId": "lcq.stage_05b",
+      "file": "lcq.stage_05b.json",
+      "book": "qingyu"
+    },
+    {
+      "stageId": "lcq.stage_06",
+      "file": "lcq.stage_06.json",
+      "book": "qingyu"
+    },
+    {
+      "stageId": "lcq.stage_07_qingyuan_jiankang",
+      "file": "lcq.stage_07_qingyuan_jiankang.json",
+      "book": "qingyu"
+    },
+    {
+      "stageId": "lcq.stage_08_jiankang_coup",
+      "file": "lcq.stage_08_jiankang_coup.json",
+      "book": "qingyu"
+    },
+    {
+      "stageId": "lyl.lin_an_bridge",
+      "file": "lyl.lin_an_bridge.json",
+      "book": "yunlong"
+    }
+  ]
+}

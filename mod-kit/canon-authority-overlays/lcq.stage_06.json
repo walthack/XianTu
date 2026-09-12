@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "stageId": "lcq.stage_06",
+  "ops": [
+    {
+      "op": "set",
+      "path": "scenario.worldSimulation.situations[id=world-sim.baseline.lcq.stage_06.lcq.event.s06_03].settledWhenAny",
+      "from": [
+        [
+          {
+            "path": "flags.event.s06_03.done",
+            "operator": "eq",
+            "value": true
+          }
+        ]
+      ],
+      "to": [
+        [
+          {
+            "path": "flags.event.s06_03.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        [
+          {
+            "path": "flags.event.s06_03.void",
+            "operator": "eq",
+            "value": true
+          }
+        ]
+      ]
+    }
+  ]
+}

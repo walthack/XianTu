@@ -10,6 +10,11 @@ import { createHash } from 'node:crypto';
 import { mkdir, readFile, readdir, writeFile, rm, copyFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { join, resolve } from 'node:path';
+import {
+  applyTrackedCanonAuthorityOverlay,
+  assertCanonAuthorityOverlaysApplied,
+  loadTrackedCanonAuthorityOverlays,
+} from './canon-authority-overlay.mjs';
 import { expandWorldSimBaseline } from './expand-world-sim-baseline.mjs';
 import { validateQingyuStage01AuthorityFile } from './validate-qingyu-stage01-authority.mjs';
 import { applyTrackedWorldSimRefinements } from './world-sim-refinement-overlay.mjs';
@@ -23,6 +28,7 @@ async function run() {
   // fail closed before deleting the tracked builtins: this source tree is gitignored,
   // so a regressed local/NAS copy must never silently overwrite a known-good bundle.
   await validateQingyuStage01AuthorityFile();
+  const authorityCatalog = await loadTrackedCanonAuthorityOverlays();
   // 只补缺失的 worldSimulation；已有人工纵切由生成器明确跳过，
   // 这样标准 canon:build 在任意工作机上都不会把全 stage 可玩底座覆盖掉。
   await expandWorldSimBaseline();
@@ -30,6 +36,7 @@ async function run() {
   await mkdir(outDir, { recursive: true });
   const hash = createHash('sha256');
   const ids = [];
+  const appliedAuthority = new Set();
   for (const book of books) {
     const stageDir = join(gen, book, 'stages');
     for (const f of (await readdir(stageDir)).filter(n => n.endsWith('.json') && !n.endsWith('.uncertainties.json')).sort()) {
@@ -38,12 +45,16 @@ async function run() {
       await applyTrackedWorldSimRefinements(mod);
       const id = mod.manifest?.id;
       if (!id) throw new Error(`${book}/${f} 缺 manifest.id`);
+      // generated remains the source; tracked overlays close I1-I4 builtins without unignoring generated.
+      const authority = await applyTrackedCanonAuthorityOverlay(mod, authorityCatalog);
+      if (authority.matched) appliedAuthority.add(id);
       const pretty = `${JSON.stringify(mod, null, 2)}\n`;
       await writeFile(join(outDir, `${id}.json`), pretty);
       hash.update(id).update(pretty);
       ids.push(id);
     }
   }
+  await assertCanonAuthorityOverlaysApplied(appliedAuthority, authorityCatalog);
   const version = hash.digest('hex').slice(0, 12);
   await writeFile(join(outDir, '..', 'manifest.json'), `${JSON.stringify({ version, ids }, null, 2)}\n`);
   console.log(`内置 ${ids.length} 个 mod → src/modules/scenarioMods/builtins/data/，version=${version}`);

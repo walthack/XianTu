@@ -1,6 +1,7 @@
 # 仙途 (XianTu) · 项目总体状况与并行分工文档
 
 > 面向「新加入的 agent」。读完这一篇即可独立认领一个模块开工。
+> **2026-09-12 R0 权威 overlay 已落地并实测。** HEAD `09c052a` 起：`generated` 保持 gitignore，五份 tracked overlay（`lcq.stage_05b/06/07/08` + `lyl.lin_an_bridge`，31 ops）在 `sync-builtin-mods` 中 fail-closed 闭合 I1–I4，不解开 generated。主工作区两次 sync 幂等：tracked builtins 组合哈希 `a79b3f176db23272255b963df64f9c6b8abef41db003a83c20e719ca19bebe98`，manifest `987ee47e83fa`，git diff 不变。`git archive HEAD` 隔离副本 `/tmp/xiantu-r0-isolate-20260912-102157` 只拷候选 tracked 源与 overlay 新文件，三份 08-30 docs 未入副本；隔离 sync 重建 37 个 data JSON = HEAD，仅刷新过期 manifest `e9633d6b164c`→`987ee47e83fa`。隔离聚焦 **57/57**、`type-check`、完整 `canon:build` **984 / 979 pass / 0 fail / 5 skip**（37 关 schema PASS，28.6s）。主工作区 `canon:build` 的 registry 日期噪音已还原，`sourceHash=c63658cada8f983b` 未改。三份 docs 仍不跟踪，未写 NAS。**P0-1 仍 OPEN，P0-2 仍 CLOSED。不宣称 P0 因此关闭。**
 > **2026-09-12 I3+I4 二审返修：固定目标覆盖计数。** I3 给 `FIXED_QUEST_OBJECTIVE_OVERRIDES` 加了 `xiaoyaoyi_arrives`／`s07_05`，表现层测试仍断言 52 键，`npm test` 在 HEAD `941ba8b` 红。计数改为 54，并锁这两条覆盖文案。不宣称 P0-1/P0-2 关闭。
 > **2026-09-12 I4 第二段下游已落地。** `xiao_opens_resources` 两态共用同一句玩家行动，权威效果按命运分叉：dead 落遗产处理权，longrest 谢艺个人事务仍归本人、本拍不交割。临安墓 longrest 只祭岳鹏举，不得出现谢艺墓。骨灰只在死亡映射生成一次（`lcq.item.xieyi_ashes` + `world.xieyi_ashes.generated`），生还线不发。LLM 只渲染已落账的 playerKnowledge／pathReceipts。I3 仍在 HEAD 链上。P0-1 仍 OPEN。
 > **2026-09-11 I3 第一段真实下游已落地。** 萧遥逸登场前移到 `lcq.event.xiaoyaoyi_arrives`（`s07_01` 之前）：dead 交骨灰，longrest 协助密送。`s07_05` 两态结构化动作：死亡线说明已死；生还线孟非卿同时落秘密转移＋调查，玩家只认领护送或调查一边。谢艺人物任务错误 id 已改到 `xieyi_entrustment`／`xieyi_biling_war`。I1+I2 仍在 HEAD 链上。P0-1 仍 OPEN。

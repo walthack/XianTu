@@ -544,7 +544,7 @@ test('source path takes one text generate call and default-off keeps the legacy 
   assert.equal(demo.FAST_NARRATIVE_DEADLINE_MS, 35_000);
 
   const panel = await readFile(new URL('../src/components/dashboard/MainGamePanel.vue', import.meta.url), 'utf8');
-  assert.match(panel, /options\.judgementResolution = structuredClone\(execution\.resolution\)/);
+  assert.match(panel, /options\.judgementResolution = structuredClone\(contractedJudgementResolution\)/);
   assert.equal(panel.includes('planFastNarrativeDemo'), false);
   assert.equal(panel.includes('buildFastNarrativeFallback'), false);
 });

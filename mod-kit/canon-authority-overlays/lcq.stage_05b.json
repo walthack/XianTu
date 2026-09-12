@@ -1,0 +1,272 @@
+{
+  "version": 1,
+  "stageId": "lcq.stage_05b",
+  "ops": [
+    {
+      "op": "insertBefore",
+      "path": "content.items",
+      "beforeId": "liuchao.item.coral_dagger",
+      "value": {
+        "id": "lcq.item.xieyi_ashes",
+        "name": "谢艺骨灰",
+        "description": "谢艺伤重辞世后留下的骨灰。只在死亡线生成一次，生还线不得出现。",
+        "type": "other",
+        "grade": "凡品"
+      }
+    },
+    {
+      "op": "insertKeys",
+      "path": "scenario.initialFlags",
+      "afterKey": "event.slay_dragon.done",
+      "beforeKey": "event.tribes_pledge.done",
+      "entries": {
+        "event.xieyi_entrustment.done": false,
+        "world.xieyi_ashes.generated": false
+      }
+    },
+    {
+      "op": "set",
+      "path": "scenario.chapters[id=lcq.chapter.stage_05b_reversal].eventIds",
+      "from": [
+        "lcq.event.s05b_08a_rescue_suli",
+        "lcq.event.s05b_08b_altar_corpse_fight_and_danchen",
+        "lcq.event.s05b_09_temporary_pact_with_xiaozi",
+        "lcq.event.s05b_10_slave_revolt_and_phoenix_change"
+      ],
+      "to": [
+        "lcq.event.s05b_08a_rescue_suli",
+        "lcq.event.s05b_08b_altar_corpse_fight_and_danchen",
+        "lcq.event.s05b_09_temporary_pact_with_xiaozi",
+        "lcq.event.s05b_10_slave_revolt_and_phoenix_change",
+        "lcq.event.ghost_king_swallowed",
+        "lcq.event.slay_dragon",
+        "lcq.event.xieyi_entrustment",
+        "lcq.event.xiaozi_kills_mother",
+        "lcq.event.tribes_pledge"
+      ]
+    },
+    {
+      "op": "set",
+      "path": "scenario.events[id=lcq.event.slay_dragon].description",
+      "from": "程宗扬借小紫指点刺穿龙颅、破坏苍龙星阵，龙神坠亡；重伤的谢艺把小紫与星月湖交代给他。",
+      "to": "程宗扬借小紫指点刺穿龙颅、破坏苍龙星阵，龙神坠亡。谢艺在围猎中受创，战后命运尚未结算。"
+    },
+    {
+      "op": "set",
+      "path": "scenario.events[id=lcq.event.slay_dragon].axisBeat",
+      "from": "程宗扬借小紫指点刺穿龙颅、破坏苍龙星阵，龙神坠亡；重伤的谢艺把小紫与星月湖交代给他。",
+      "to": "程宗扬借小紫指点刺穿龙颅、破坏苍龙星阵，龙神坠亡。"
+    },
+    {
+      "op": "set",
+      "path": "scenario.events[id=lcq.event.slay_dragon].objective",
+      "from": "了结龙神，并赶到重伤的谢艺身边接下他对小紫与星月湖的交代",
+      "to": "了结龙神"
+    },
+    {
+      "op": "set",
+      "path": "scenario.events[id=lcq.event.slay_dragon].playerCompletionContract.actions[id=advance_declared_objective].label",
+      "from": "了结龙神，并赶到重伤的谢艺身边接下他对小紫与星月湖的交代",
+      "to": "了结龙神"
+    },
+    {
+      "op": "set",
+      "path": "scenario.events[id=lcq.event.slay_dragon].playerCompletionContract.actions[id=advance_declared_objective].actionText",
+      "from": "我按当前主线目标行动：了结龙神，并赶到重伤的谢艺身边接下他对小紫与星月湖的交代",
+      "to": "我按当前主线目标行动：了结龙神。借小紫指点刺穿龙颅、破坏苍龙星阵。"
+    },
+    {
+      "op": "set",
+      "path": "scenario.events[id=lcq.event.slay_dragon].playerCompletionContract.actions[id=advance_declared_objective].outcomeText.success",
+      "from": "你已亲自执行“了结龙神，并赶到重伤的谢艺身边接下他对小紫与星月湖的交代”；事件完成真值将由本地引擎落账。",
+      "to": "你已亲自执行“了结龙神”；龙神坠亡，事件完成真值将由本地引擎落账。谢艺命运尚未结算。"
+    },
+    {
+      "op": "insertAfter",
+      "path": "scenario.events",
+      "afterId": "lcq.event.slay_dragon",
+      "value": {
+        "id": "lcq.event.xieyi_entrustment",
+        "name": "谢艺托付",
+        "description": "龙神坠亡后，程宗扬赶到重伤的谢艺身边。谢艺请他把小紫带往星月湖交给王韬、孟非卿或萧遥逸；云苍峰见证。命运尚未结算。",
+        "axisId": null,
+        "axisMethod": "carrier-maps-s06_03",
+        "axisAnchor": "六朝清羽记·#116·第114章·围猎",
+        "axisSeq": 212,
+        "axisBeat": "赶到重伤谢艺身边，听清把小紫带往星月湖的托付；命运尚未结算。",
+        "critical": true,
+        "playerPresence": "required",
+        "conditions": [
+          {
+            "path": "flags.event.slay_dragon.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.xieyi_entrustment.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.xie_yi",
+          "liuchao.character.xiao_zi",
+          "liuchao.character.le_mingzhu",
+          "liuchao.character.yun_cang_feng"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.xing_yue_hu"
+        ],
+        "locationId": "liuchao.location.gui_wang_dong",
+        "objective": "听清谢艺把小紫带往星月湖的托付，并决定承接遗言或施针救治",
+        "presentation": {
+          "targetLabel": "谢艺"
+        },
+        "offscreenResolution": {
+          "id": "offscreen.lcq.xieyi_entrustment.default_death",
+          "afterStallTurns": 2,
+          "flagKey": "event.xieyi_entrustment.done",
+          "resolvedEventIds": [
+            "lcq.event.xieyi_entrustment"
+          ],
+          "worldDelta": "你离开或未在窗口内作出选择，谢艺把托付说完后伤重辞世。",
+          "onSceneDelta": "你未及时施针，谢艺把托付说完后伤重辞世。",
+          "evidence": "命运拍未在窗口内收束，默认正典死亡。"
+        },
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success",
+            "partial",
+            "failure"
+          ],
+          "actions": [
+            {
+              "id": "accept_entrustment",
+              "label": "承接",
+              "actionText": "我陪谢艺把话说完，不打断、不施针。",
+              "timeCost": 1,
+              "intentMatch": {
+                "matchAny": [
+                  "陪谢艺把话说完",
+                  "承接托付",
+                  "听他把话说完"
+                ],
+                "rejectIf": [
+                  "施针",
+                  "救治",
+                  "灌补心丹",
+                  "让他失踪"
+                ]
+              },
+              "outcomeText": {
+                "success": "你陪谢艺把话说完。他把小紫带往星月湖的托付交代清楚后伤重辞世。",
+                "partial": "该动作不产生 partial。",
+                "failure": "该动作不产生 failure。"
+              }
+            },
+            {
+              "id": "rescue_xieyi",
+              "label": "救治",
+              "actionText": "让乐明珠施针，我运功护持。不灌补心丹。",
+              "timeCost": 1,
+              "requiresPresentCharacterIds": [
+                "liuchao.character.le_mingzhu"
+              ],
+              "intentMatch": {
+                "matchAny": [
+                  "乐明珠施针",
+                  "运功护持",
+                  "救治谢艺"
+                ],
+                "rejectIf": [
+                  "灌补心丹",
+                  "独自运功救活",
+                  "宣布已救活",
+                  "让他失踪"
+                ]
+              },
+              "judgement": {
+                "kind": "cultivate",
+                "difficulty": "severe",
+                "difficultyValue": 25,
+                "target": "liuchao.character.xie_yi",
+                "successOutcomes": [
+                  "success",
+                  "great_success",
+                  "perfect"
+                ],
+                "applyCultivationRecovery": false,
+                "spiritCost": {
+                  "onResolveRatio": 0.05,
+                  "criticalFailureRatio": 0.1
+                },
+                "allyFactors": [
+                  {
+                    "characterId": "liuchao.character.le_mingzhu",
+                    "label": "同伴·乐明珠针灸",
+                    "value": 8,
+                    "requireNamed": true
+                  }
+                ],
+                "whyNow": "乐明珠施针、你运功护持，这是一次可见的救治判定。",
+                "stakes": {
+                  "perfect": "伤势压住，谢艺可密送长养。",
+                  "greatSuccess": "伤势压住，谢艺可密送长养。",
+                  "success": "伤势压住，谢艺可密送长养。",
+                  "partial": "争取到把遗言说完的时间，人仍死。",
+                  "failure": "抢救失败，谢艺伤重不治。",
+                  "criticalFailure": "抢救失败，余波更重，谢艺伤重不治。"
+                }
+              },
+              "outcomeText": {
+                "success": "乐明珠施针、你运功护持成功。谢艺伤势压住，进入长养，可密送。",
+                "partial": "你们争取到把遗言说完的时间，谢艺仍伤重辞世。",
+                "failure": "抢救失败，谢艺伤重辞世。"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "op": "set",
+      "path": "scenario.events[id=lcq.event.tribes_pledge].conditions",
+      "from": [
+        {
+          "path": "flags.event.slay_dragon.done",
+          "operator": "eq",
+          "value": true
+        }
+      ],
+      "to": [
+        {
+          "path": "flags.event.xieyi_entrustment.done",
+          "operator": "eq",
+          "value": true
+        }
+      ]
+    },
+    {
+      "op": "set",
+      "path": "scenario.events[id=lcq.event.xiaozi_kills_mother].conditions",
+      "from": [
+        {
+          "path": "flags.event.slay_dragon.done",
+          "operator": "eq",
+          "value": true
+        }
+      ],
+      "to": [
+        {
+          "path": "flags.event.xieyi_entrustment.done",
+          "operator": "eq",
+          "value": true
+        }
+      ]
+    }
+  ]
+}
