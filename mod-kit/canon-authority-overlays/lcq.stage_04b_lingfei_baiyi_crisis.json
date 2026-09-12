@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "ops": [
+    {
+      "op": "set",
+      "path": "scenario.chapters[id=lcq.chapter.s04b_lingfei_baiyi_crisis_aftermath].eventIds",
+      "from": [
+        "lcq.event.s04b_lingfei_baiyi_crisis_13",
+        "lcq.event.s04b_lingfei_baiyi_crisis_14",
+        "lcq.event.s04b_lingfei_baiyi_crisis_15",
+        "lcq.event.s04b_lingfei_baiyi_crisis_16",
+        "lcq.event.s04b_lingfei_baiyi_crisis_17",
+        "lcq.event.s04b_lingfei_baiyi_crisis_18",
+        "lcq.event.s04b_lingfei_baiyi_crisis_19"
+      ],
+      "to": [
+        "lcq.event.s04b_lingfei_baiyi_crisis_13",
+        "lcq.event.s04b_lingfei_baiyi_crisis_14",
+        "lcq.event.s04b_lingfei_baiyi_crisis_15",
+        "lcq.event.s04b_lingfei_baiyi_crisis_16",
+        "lcq.event.xieyi_biling_war",
+        "lcq.event.s04b_lingfei_baiyi_crisis_17",
+        "lcq.event.s04b_lingfei_baiyi_crisis_18",
+        "lcq.event.s04b_lingfei_baiyi_crisis_19"
+      ]
+    }
+  ]
+}

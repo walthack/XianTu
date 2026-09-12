@@ -17,7 +17,12 @@
       "from": [],
       "to": [
         {
-          "path": "flags.event.xiaoyaoyi_arrives.done",
+          "path": "pathReceipts.lcq.event.xiaoyaoyi_arrives.path.ashes_delivered",
+          "operator": "neq",
+          "value": true
+        },
+        {
+          "path": "pathReceipts.lcq.event.xiaoyaoyi_arrives.path.wounded_escorted",
           "operator": "neq",
           "value": true
         }

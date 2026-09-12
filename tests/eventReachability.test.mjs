@@ -13,10 +13,8 @@ import { loadTs } from './loadTs.mjs';
 //     · 章那处          `for (const eventId of chapterEventIds)`
 //   **两者都够不到的 event 永远进不了 active**，玩家永远不会被给到它的目标与动作。
 //
-// 而它还会反过来挡路：`hasPendingCriticalEvent` 扫的是 `runtime.events` 全体，
-// 未结的 critical 会让 `stage_ready` 不触发，`strictInitializer` 那道硬门便拒绝切关
-// （`reason: '本关关键剧情尚未完成'`）。逃生口只剩一个——模型自己越序 set 了 done flag
-// （见 `scenarioModRuntime` 那条 dead-lock regression）。**那正是用户明确说不想依赖的软路径。**
+// 切关门禁现已只扫生产可达 critical（rail / 当前章 / 已 active）。未挂章 critical
+// 不再挡 `stage_ready`，但玩家仍然永远激活不了它们，所以本测试继续要求绑章或上 rail。
 //
 // 决定性对照（2026-08-19 实测）：
 //   lcq.stage_01   event  7　全绑章　critical 6　全在 rail 上　→ 0 悬空
@@ -32,7 +30,6 @@ const DIR = 'src/modules/scenarioMods/builtins/data/';
 const DEBT = new Set([
   'lcq.event.zixi_intercept',
   'lcq.event.haishen_hall_merfolk',
-  'lcq.event.xieyi_biling_war',
   'lcq.event.weapon_deal_with_geluo',
   'lcq.event.guiwangdong_coop_pact',
   'lcq.event.blank_letter_and_dagu',
@@ -52,7 +49,6 @@ const DEBT = new Set([
   'lcq.event.biling_bay_stance',
   'lcq.event.huamiao_coop_boundary',
   'lcq.event.wangzhe_letter',
-  'lcq.event.xiao_opens_resources',
   'lcq.event.shanghou_revealed',
   'lcq.event.palace_haunting_rumor',
   'lcq.event.shanghou_cures_ice_gu',
@@ -94,7 +90,6 @@ const DEBT = new Set([
   'lyl.event.changqiu_palace_defense',
   'lyl.event.bounty_and_hu_cavalry',
   'lyl.event.lvfengxian_breaks_line',
-  'lyl.event.lin_an_bridge_xieyi_tomb',
   'lyl.event.mingqingsi_lin_lu_meeting',
   'lyl.event.blacksea_iron_puppet',
   'lyl.event.siying_lane_saber_ambush',
@@ -168,9 +163,8 @@ test('rail 关里「不在 rail 上的 critical」数量不得增长', async () 
   //
   // rail 只覆盖 profile 指定的那一个章的那串 orderedEventIds。落在 rail 之外、
   // 但绑了章的 critical 仍能激活——章循环对非 rail 事件照常按 conditions 放行。
-  // 隐患在于 `railStageComplete` 一旦成立（rail 全部结清），它会**清空 activeEventIds
-  // 并把所有章标完成**；此后这些拍再无激活机会，却仍然计入 `hasPendingCriticalEvent`
-  // 而挡住 `stage_ready`。即：**玩家若先跑完 rail 再回头，就回不去了。**
+  // 隐患在于 `railStageComplete` 一旦成立会清空 activeEventIds 并把所有章标完成；
+  // 切关门禁现已不再让这些拍挡住 `stage_ready`，但仍会错过它们。数量只减不增。
   //
   // 是否真的卡死取决于玩家次序与模型是否越序落 flag，故这里不断言「必须为 0」，
   // 只钉住数量不再增长。真要判定得靠真机自测（skill `xiantu-game-selftest`）实跑。
@@ -186,7 +180,7 @@ test('rail 关里「不在 rail 上的 critical」数量不得增长', async () 
     }
   }
   assert.ok(
-    offRail.length <= 117,
-    `rail 关里「不在 rail 上的 critical」从 117 涨到了 ${offRail.length} —— 新增的拍要么进 rail，要么确认它不该是 critical`,
+    offRail.length <= 114,
+    `rail 关里「不在 rail 上的 critical」从 114 涨到了 ${offRail.length} —— 新增的拍要么进 rail，要么确认它不该是 critical`,
   );
 });

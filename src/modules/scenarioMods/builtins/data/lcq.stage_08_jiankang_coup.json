@@ -4905,7 +4905,12 @@
         "description": "少陵侯嫡子萧遥逸上门拜访，先为小紫美貌所惊、赞叹失态，才自报名号。程宗扬告知谢艺死讯并交出骨灰与佩刀——萧遥逸抱匣恸哭，继而暴怒痛骂黑魔海足足半个时辰，最终取走三哥骨灰离去（星月湖八骏·玄骐，谢艺之弟）。",
         "conditions": [
           {
-            "path": "flags.event.xiaoyaoyi_arrives.done",
+            "path": "pathReceipts.lcq.event.xiaoyaoyi_arrives.path.ashes_delivered",
+            "operator": "neq",
+            "value": true
+          },
+          {
+            "path": "pathReceipts.lcq.event.xiaoyaoyi_arrives.path.wounded_escorted",
             "operator": "neq",
             "value": true
           }

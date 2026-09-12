@@ -4110,6 +4110,7 @@
         ],
         "eventIds": [
           "lcq.event.s07_05_eight_steeds_informed",
+          "lcq.event.xiao_opens_resources",
           "lcq.event.s07_06_water_assassins",
           "lcq.event.s07_07_dragon_hall",
           "lcq.event.s07_08_palace_escape"
@@ -5214,6 +5215,11 @@
               "visibleWhen": [
                 {
                   "path": "flags.branch.lcq.if_xieyi_longrest.active",
+                  "operator": "neq",
+                  "value": true
+                },
+                {
+                  "path": "flags.world.xieyi_absence.active",
                   "operator": "neq",
                   "value": true
                 }

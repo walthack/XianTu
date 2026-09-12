@@ -2,6 +2,11 @@
   "version": 1,
   "overlays": [
     {
+      "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+      "file": "lcq.stage_04b_lingfei_baiyi_crisis.json",
+      "book": "qingyu"
+    },
+    {
       "stageId": "lcq.stage_05b",
       "file": "lcq.stage_05b.json",
       "book": "qingyu"

@@ -46,7 +46,7 @@ import { REPUTATION_EVENT_GRANT, type ReputationGrant } from './reputationLedger
 import { lineCriticalFrozen, resolveLocationIdFromPosition } from './secondaryLines';
 import { recordOffscreenDivergence, recordReconcileDivergences, type ScenarioDivergence } from './divergenceLedger';
 import type { JudgementOutcome, JudgementResolution } from '@/utils/judgementEngine';
-import { getCanonRailOrder, getCanonRailProfile, isCanonRailChapter } from './canonRail';
+import { getCanonRailOrder, getCanonRailProfile, isCanonRailChapter, type CanonRailProfile } from './canonRail';
 import { updateDivergenceControl, type DivergenceSignal, type WorldPushState } from './divergenceControl';
 import {
   deliverDueWorldOmens,
@@ -2115,6 +2115,10 @@ function resolveConditionValue(condition: ScenarioCondition, saveData: SaveData,
     if (Object.prototype.hasOwnProperty.call(runtime.flags, flagPath)) return runtime.flags[flagPath];
     return undefined;
   }
+  if (condition.path.startsWith('pathReceipts.')) {
+    const receiptId = condition.path.slice('pathReceipts.'.length);
+    return Boolean(runtime.pathReceipts?.[receiptId]);
+  }
   return readPath(saveData, condition.path.split('.'));
 }
 
@@ -2162,6 +2166,29 @@ function isCriticalStoryEvent(event: ScenarioModEvent): boolean {
   if (event.critical !== undefined) return event.critical;
   if (event.axisMethod === 'reviewed-no-anchor' || event.axisId === null) return false;
   return Boolean(event.axisBeat || event.axisId || typeof event.axisSeq === 'number');
+}
+
+/** 当前生产可达：rail 拍、已 active、或当前章 eventIds。未挂章 critical 不能挡切关。 */
+export function isProductionReachableStoryEvent(
+  runtime: Pick<RuntimeState, 'activeEventIds' | 'currentChapterId' | 'chapters'>,
+  event: Pick<ScenarioModEvent, 'id'>,
+  railProfile: CanonRailProfile | null,
+): boolean {
+  if (railProfile?.orderedEventIds.includes(event.id)) return true;
+  if ((runtime.activeEventIds || []).includes(event.id)) return true;
+  const current = (runtime.chapters || []).find(chapter => chapter.id === runtime.currentChapterId);
+  return Boolean(current?.eventIds?.includes(event.id));
+}
+
+export function hasPendingProductionCriticalEvent(
+  runtime: RuntimeState,
+  railProfile: CanonRailProfile | null = getCanonRailProfile(runtime),
+): boolean {
+  return (runtime.events || []).some(event =>
+    isCriticalStoryEvent(event)
+    && !isEventSettled(runtime, event.id)
+    && isProductionReachableStoryEvent(runtime, event, railProfile),
+  );
 }
 
 export const OFFSCREEN_WORLD_EVENT_STALL_THRESHOLD = 10;
@@ -3454,9 +3481,7 @@ export function advanceScenarioRuntime(saveData: SaveData): {
     }
   }
 
-  const hasPendingCriticalEvent = runtime.events.some(event =>
-    isCriticalStoryEvent(event) && !isEventSettled(runtime, event.id),
-  );
+  const hasPendingCriticalEvent = hasPendingProductionCriticalEvent(runtime, railProfile);
   if (
     runtime.nextStageId &&
     !runtime.currentChapterId &&

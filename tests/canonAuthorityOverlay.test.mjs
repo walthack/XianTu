@@ -20,6 +20,7 @@ const builtinDir = new URL('../src/modules/scenarioMods/builtins/data/', import.
 const gitignoreUrl = new URL('../.gitignore', import.meta.url);
 
 const STAGES = [
+  { stageId: 'lcq.stage_04b_lingfei_baiyi_crisis', book: 'qingyu' },
   { stageId: 'lcq.stage_05b', book: 'qingyu' },
   { stageId: 'lcq.stage_06', book: 'qingyu' },
   { stageId: 'lcq.stage_07_qingyuan_jiankang', book: 'qingyu' },
@@ -261,10 +262,10 @@ test('id-addressed source keeps a valid id-array; malformed target or source fai
   );
 });
 
-test('tracked overlays are exactly the five I1-I4 generated→builtin closures', async () => {
+test('tracked overlays are exactly the six generated→builtin closures', async () => {
   const catalog = await loadTrackedCanonAuthorityOverlays();
   assert.deepEqual(catalog.stageIds, STAGES.map(stage => stage.stageId));
-  assert.equal(catalog.manifest.overlays.length, 5);
+  assert.equal(catalog.manifest.overlays.length, 6);
 });
 
 test('generated plus tracked overlay reconstructs the Git-tracked builtins', async () => {
@@ -290,7 +291,7 @@ test('generated plus tracked overlay reconstructs the Git-tracked builtins', asy
 
 test('source drift in a load-bearing generated field fails closed', async () => {
   const catalog = await loadTrackedCanonAuthorityOverlays();
-  const generated = await loadGenerated(STAGES[0]);
+  const generated = await loadGenerated(STAGES.find(stage => stage.stageId === 'lcq.stage_05b'));
   const slay = generated.scenario.events.find(event => event.id === 'lcq.event.slay_dragon');
   slay.description = 'drifted source';
   await applyTrackedWorldSimRefinements(generated);

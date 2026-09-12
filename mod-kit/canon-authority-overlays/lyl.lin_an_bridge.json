@@ -4,6 +4,37 @@
   "ops": [
     {
       "op": "set",
+      "path": "scenario.chapters[id=lyl.chapter.lin_an_bridge_intel].eventIds",
+      "from": [
+        "lyl.event.lin_an_bridge_01_beat",
+        "lyl.event.lin_an_bridge_02_beat",
+        "lyl.event.lin_an_bridge_03_beat",
+        "lyl.event.lin_an_bridge_04_beat",
+        "lyl.event.debut_yundanliu",
+        "lyl.event.debut_yunruyao",
+        "lyl.event.debut_zhaohede",
+        "lyl.event.debut_yinfulan",
+        "lyl.event.debut_jingli",
+        "lyl.event.debut_jianyuji",
+        "lyl.event.xue_yanshan_slain"
+      ],
+      "to": [
+        "lyl.event.lin_an_bridge_01_beat",
+        "lyl.event.lin_an_bridge_02_beat",
+        "lyl.event.lin_an_bridge_03_beat",
+        "lyl.event.lin_an_bridge_04_beat",
+        "lyl.event.lin_an_bridge_xieyi_tomb",
+        "lyl.event.debut_yundanliu",
+        "lyl.event.debut_yunruyao",
+        "lyl.event.debut_zhaohede",
+        "lyl.event.debut_yinfulan",
+        "lyl.event.debut_jingli",
+        "lyl.event.debut_jianyuji",
+        "lyl.event.xue_yanshan_slain"
+      ]
+    },
+    {
+      "op": "set",
       "path": "scenario.events[id=lyl.event.lin_an_bridge_xieyi_tomb].objective",
       "from": "出城迎接月霜等人，到风波亭后拜祭岳鹏举与谢艺墓",
       "to": "出城迎接月霜等人，到风波亭后拜祭岳鹏举；谢艺墓只在死亡线出现"

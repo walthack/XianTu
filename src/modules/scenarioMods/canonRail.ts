@@ -264,14 +264,98 @@ const HAND_REVIEWED_CANON_RAIL_PROFILES: CanonRailProfile[] = [
 ];
 
 /**
+ * Load-bearing default-line beats that already exist as stage events with
+ * source axes, but were never generated onto the rail. Tracked here instead of
+ * re-running the generator, which would pull every hanging critical onto the
+ * spine. Overlay chapter bindings remain the authoritative data hang.
+ */
+const DEFAULT_LINE_EXTRA_RAIL_BEATS: Array<{
+  modId: string;
+  afterEventId: string;
+  eventIds: string[];
+  contracts: CanonRailContract[];
+}> = [
+  {
+    modId: 'lcq.stage_04b_lingfei_baiyi_crisis',
+    afterEventId: 'lcq.event.s04b_lingfei_baiyi_crisis_16',
+    eventIds: ['lcq.event.xieyi_biling_war'],
+    contracts: [{
+      eventId: 'lcq.event.xieyi_biling_war',
+      mustReach: '谢艺讲述碧鲮族与鲛族旧战、朱狐冠来历，并希望程宗扬承接岳帅未竟之事。',
+      completionEvidence: [],
+      forbiddenInCanon: ['改写本拍原著结果', '提前演出后续剧情'],
+      allowedElaboration: '可补足场景、对话、即时行动与相邻拍点之间的过渡。',
+    }],
+  },
+  {
+    modId: 'lcq.stage_07_qingyuan_jiankang',
+    afterEventId: 'lcq.event.s07_05_eight_steeds_informed',
+    eventIds: ['lcq.event.xiao_opens_resources'],
+    contracts: [{
+      eventId: 'lcq.event.xiao_opens_resources',
+      mustReach: '当着萧遥逸听清星月湖眼下能用的资源。死则按遗产路径处理谢艺事务，生还则个人事务仍归本人。',
+      completionEvidence: [],
+      forbiddenInCanon: ['生还线写成继承或交割', '死亡线把谢艺写成仍在处理个人事务', '提前演出后续剧情'],
+      allowedElaboration: '可补足资源清点与当下可用范围，不得改写死／生真值。',
+    }],
+  },
+  {
+    modId: 'lyl.lin_an_bridge',
+    afterEventId: 'lyl.event.lin_an_bridge_04_beat',
+    eventIds: ['lyl.event.lin_an_bridge_xieyi_tomb'],
+    contracts: [{
+      eventId: 'lyl.event.lin_an_bridge_xieyi_tomb',
+      mustReach: '出城迎接月霜等人，到风波亭后拜祭岳鹏举；谢艺墓只在死亡线出现。',
+      completionEvidence: [],
+      forbiddenInCanon: ['生还线出现谢艺墓或空墓冒充已葬', '提前演出后续剧情'],
+      allowedElaboration: '可补足迎接与祭扫过程，不得改写死／生真值。',
+    }],
+  },
+];
+
+function withDefaultLineExtraRailBeats(profiles: CanonRailProfile[]): CanonRailProfile[] {
+  return profiles.map(profile => {
+    const extras = DEFAULT_LINE_EXTRA_RAIL_BEATS.filter(item => item.modId === profile.modId);
+    if (!extras.length) return profile;
+    let orderedEventIds = [...profile.orderedEventIds];
+    let contracts = [...profile.contracts];
+    for (const extra of extras) {
+      const already = extra.eventIds.filter(id => orderedEventIds.includes(id));
+      if (already.length) {
+        throw new Error(`${profile.modId} extra rail beat already present: ${already.join(', ')}`);
+      }
+      if (extra.contracts.length !== extra.eventIds.length) {
+        throw new Error(`${profile.modId} extra rail beat contracts must match eventIds`);
+      }
+      const afterIndex = orderedEventIds.indexOf(extra.afterEventId);
+      if (afterIndex < 0) {
+        throw new Error(`${profile.modId} extra rail beat missing afterEventId ${extra.afterEventId}`);
+      }
+      const insertAt = afterIndex + 1;
+      orderedEventIds = [
+        ...orderedEventIds.slice(0, insertAt),
+        ...extra.eventIds,
+        ...orderedEventIds.slice(insertAt),
+      ];
+      contracts = [
+        ...contracts.slice(0, insertAt),
+        ...extra.contracts,
+        ...contracts.slice(insertAt),
+      ];
+    }
+    return { ...profile, orderedEventIds, contracts };
+  });
+}
+
+/**
  * Every source-anchored built-in stage is covered here. Profiles generated
  * from the source axis are deterministic; hand-reviewed profiles above take
  * precedence when a source audit supplied stronger wording or a correction.
  */
-export const CANON_RAIL_PROFILES: CanonRailProfile[] = [
+export const CANON_RAIL_PROFILES: CanonRailProfile[] = withDefaultLineExtraRailBeats([
   ...HAND_REVIEWED_CANON_RAIL_PROFILES,
   ...GENERATED_CANON_RAIL_PROFILES,
-];
+]);
 
 /** Only source-anchored stages may enter the default-line registry. */
 export function getCanonRailProfile(runtime: { modId?: unknown } | null | undefined): CanonRailProfile | null {
