@@ -101,6 +101,46 @@ test('buildCanonAuthorityOps refuses deletions and reconstructs by applying the 
   assert.throws(() => buildCanonAuthorityOps(miniMod(), wouldDelete), /would delete/);
 });
 
+test('clearing a non-empty id-array fail-closes; empty→filled and non-id arrays still set', () => {
+  assert.throws(
+    () => buildCanonAuthorityOps(
+      { scenario: { events: [{ id: 'a' }, { id: 'b' }] } },
+      { scenario: { events: [] } },
+    ),
+    /would delete ids a, b at scenario.events/,
+  );
+
+  assert.deepEqual(
+    buildCanonAuthorityOps(
+      { scenario: { events: [] } },
+      { scenario: { events: [{ id: 'a' }] } },
+    ),
+    [{ op: 'set', path: 'scenario.events', from: [], to: [{ id: 'a' }] }],
+  );
+
+  assert.deepEqual(
+    buildCanonAuthorityOps(
+      { scenario: { tags: ['old', 'also'] } },
+      { scenario: { tags: ['new'] } },
+    ),
+    [{ op: 'set', path: 'scenario.tags', from: ['old', 'also'], to: ['new'] }],
+  );
+  assert.deepEqual(
+    buildCanonAuthorityOps(
+      { scenario: { tags: ['old'] } },
+      { scenario: { tags: [] } },
+    ),
+    [{ op: 'set', path: 'scenario.tags', from: ['old'], to: [] }],
+  );
+  assert.deepEqual(
+    buildCanonAuthorityOps(
+      { scenario: { notes: [{ name: 'x' }] } },
+      { scenario: { notes: [] } },
+    ),
+    [{ op: 'set', path: 'scenario.notes', from: [{ name: 'x' }], to: [] }],
+  );
+});
+
 test('tracked overlays are exactly the five I1-I4 generated→builtin closures', async () => {
   const catalog = await loadTrackedCanonAuthorityOverlays();
   assert.deepEqual(catalog.stageIds, STAGES.map(stage => stage.stageId));

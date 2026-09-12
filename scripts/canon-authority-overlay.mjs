@@ -114,7 +114,8 @@ function emitOps(from, to, path, ops) {
   if (deepEqual(from, to)) return;
   if (from === undefined) fail(`unexpected missing source at ${path || '<root>'}`);
   if (to === undefined) fail(`overlay must not delete ${path || '<root>'}`);
-  if (isIdArray(from) && isIdArray(to)) {
+  // isIdArray requires length>0, so emptying an id-array must not fall through to set.
+  if (isIdArray(from) && Array.isArray(to) && (to.length === 0 || isIdArray(to))) {
     emitIdArrayOps(from, to, path, ops);
     return;
   }
