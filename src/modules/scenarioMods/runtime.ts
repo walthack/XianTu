@@ -2015,6 +2015,19 @@ function playerLocationId(saveData: SaveData, runtime: RuntimeState): string {
   ) || '';
 }
 
+function locationNameById(runtime: RuntimeState, locationId: string | undefined): string {
+  if (!locationId) return '';
+  return String((runtime.canon?.locations || []).find(item => item.id === locationId)?.name || '').trim();
+}
+
+function sameSceneLocation(runtime: RuntimeState, leftId: string | undefined, rightId: string | undefined): boolean {
+  if (!leftId || !rightId) return false;
+  if (leftId === rightId) return true;
+  const left = locationNameById(runtime, leftId);
+  const right = locationNameById(runtime, rightId);
+  return Boolean(left && left === right);
+}
+
 function movePlayerToEventLocation(saveData: SaveData, runtime: RuntimeState, locationId: string): void {
   if (playerLocationId(saveData, runtime) === locationId) return;
   const loc = (runtime.canon?.locations || []).find(item => item.id === locationId) as
@@ -2058,9 +2071,9 @@ function settleAbandonedXieyiEntrustment(saveData: SaveData, runtime: RuntimeSta
   const event = runtime.events.find(item => item.id === XIEYI_ENTRUSTMENT_EVENT_ID);
   if (!event?.locationId) return;
   const startedAt = runtime.eventActivatedAtLocation?.[event.id];
-  if (startedAt === undefined || startedAt !== event.locationId) return;
+  if (startedAt === undefined || !sameSceneLocation(runtime, startedAt, event.locationId)) return;
   const locId = playerLocationId(saveData, runtime);
-  if (!locId || locId === event.locationId) return;
+  if (!locId || sameSceneLocation(runtime, locId, event.locationId)) return;
   const selection = getCurrentStoryEventActions(saveData).find(item => (
     item.source === 'event_engine' && item.eventId === event.id && item.actionId === 'accept_entrustment'
   ));
