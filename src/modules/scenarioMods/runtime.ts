@@ -1595,7 +1595,10 @@ function grantXieyiAshesOnce(saveData: SaveData, runtime: RuntimeState): void {
   runtime.flags[XIEYI_ASHES_FLAG] = true;
 }
 
-/** 托付一旦落成，挂起的 rescue 判定必须归档，避免离场后 modal 残留或旧 result 再改命运。 */
+/**
+ * 托付已由承接、离场或场内停滞默认死亡等路径落成后，清理未兑现的 rescue pending。
+ * 只按 cancel 契约做审计归档；显式取消仍回到二选一，不得把 cancel 本身映射为死亡。
+ */
 function archiveAbandonedXieyiRescueJudgement(saveData: SaveData, runtime: RuntimeState): void {
   const pending = getJudgementState(saveData).pending;
   const receipt = pending?.authorityReceipt;
@@ -2533,6 +2536,7 @@ function resolveOffscreenWorldEvents(
         actionId: 'accept_entrustment',
         evidence: (onScene && resolution.onSceneDelta) || resolution.worldDelta,
       }, saveData);
+      if (saveData) archiveAbandonedXieyiRescueJudgement(saveData, runtime);
     }
     if (!onScene) {
       runtime.offscreenResolvedEventIds = [...new Set([...(runtime.offscreenResolvedEventIds || []), ...unresolvedIds])];

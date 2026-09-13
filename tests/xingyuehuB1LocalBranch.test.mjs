@@ -97,7 +97,7 @@ async function loadProductionApi() {
     { applyStrictScenarioInitializationToSave, buildStrictScenarioInitialization },
     runtime,
     { prepareEventActionJudgement },
-    { resolvePendingJudgement, getJudgementState },
+    { resolvePendingJudgement, getJudgementState, createJudgementProposal, persistPendingJudgement, cancelPendingJudgement },
     { runDeterministicXieyiReconcile, runEventReconcile },
   ] = await Promise.all([
     loadTs('../src/utils/dataRepair.ts'),
@@ -115,6 +115,9 @@ async function loadProductionApi() {
     prepareEventActionJudgement,
     resolvePendingJudgement,
     getJudgementState,
+    createJudgementProposal,
+    persistPendingJudgement,
+    cancelPendingJudgement,
     runDeterministicXieyiReconcile,
     runEventReconcile,
   };
@@ -187,6 +190,36 @@ function settleChoice(api, save) {
   runtimeOf(next).worldTurn = (Number(runtimeOf(next).worldTurn) || 0) + 1;
   next = api.advanceScenarioRuntime(next).saveData;
   return next;
+}
+
+function stallInPlaceUntilEntrustmentSettled(api, save, { pendingId } = {}) {
+  const location = String(save.角色.位置.描述 || '');
+  assert.match(location, /鬼王峒/, '停滞须从命运拍现场开始');
+  const afterStallTurns = Number(
+    (runtimeOf(save).events || []).find(item => item.id === ENTRUSTMENT)?.offscreenResolution?.afterStallTurns,
+  );
+  assert.equal(afterStallTurns, 2, '命运拍 afterStallTurns 须为生产默认 2');
+  const maxAdvances = afterStallTurns + 6;
+  for (let turn = 0; turn < maxAdvances; turn += 1) {
+    assert.equal(String(save.角色.位置.描述 || ''), location, '停滞期间须保持原地');
+    assert.notEqual(runtimeOf(save).flags['event.xieyi_entrustment.done'], true, '阈值前不得完成托付');
+    assert.notEqual(runtimeOf(save).flags['character.xie_yi.status'], 'dead', '阈值前不得预写 dead');
+    if (pendingId) {
+      assert.equal(
+        api.getJudgementState(save).pending?.id,
+        pendingId,
+        '阈值前须保持 rescue pending，settleAbandoned 不得因同场提前清掉',
+      );
+    }
+    save = api.advanceScenarioRuntime(save).saveData;
+    if (
+      runtimeOf(save).flags['character.xie_yi.status'] === 'dead'
+      || runtimeOf(save).flags['event.xieyi_entrustment.done'] === true
+    ) {
+      return save;
+    }
+  }
+  throw new Error(`stayed on scene ${maxAdvances} advances without default fate; stall=${runtimeOf(save).stallTurns}`);
 }
 
 async function pokeIdempotency(api, save, selection, oppositeText) {
@@ -484,4 +517,75 @@ test('B1 已掷 rescue success+ 尚未落账时离场仍死亡，旧 result 不�
   assertDeadFate(reloaded, '已掷离场 JSON 重载');
   await pokeIdempotency(api, reloaded, accept, SURVIVAL_TEXT);
   assertXieyiCriticalAffinity(reloaded, beforeFav, '已掷离场重放后');
+});
+
+test('B1 现场签发 rescue pending 后原地停滞到 afterStallTurns，默认死亡须归档 pending 并解除全局判定软锁', async () => {
+  const api = await loadProductionApi();
+  const stage = await loadStage();
+  let save = await walkToEntrustment(api, stage);
+  const rescue = api.getCurrentStoryEventActions(save).find(item => item.actionId === 'rescue_xieyi');
+  const accept = api.getCurrentStoryEventActions(save).find(item => item.actionId === 'accept_entrustment');
+  assert.ok(rescue, '乐明珠在场时须枚举【救治】');
+  assert.ok(accept, '签发 pending 时仍须保留【承接】');
+  assert.match(String(save.角色.位置.描述 || ''), /鬼王峒/);
+  const beforeFav = xieyiFavorability(save);
+  const spiritBefore = Number(save.角色.属性.神识.当前);
+  const hpBefore = Number(save.角色.属性.气血.当前);
+  assert.equal(Number.isFinite(spiritBefore), true);
+  assert.equal(Number.isFinite(hpBefore), true);
+
+  const issued = api.prepareEventActionJudgement(save, rescue, runtimeOf(save).worldTurn);
+  assert.ok(issued.proposal?.id, '须签发 rescue pending judgement');
+  assert.equal(api.getJudgementState(save).pending?.id, issued.proposal.id);
+  assertNoFateInjected(save, '签发 pending 后');
+
+  save = stallInPlaceUntilEntrustmentSettled(api, save, { pendingId: issued.proposal.id });
+  save = api.advanceScenarioRuntime(save).saveData;
+  assert.match(String(save.角色.位置.描述 || ''), /鬼王峒/, '默认收束后仍须在命运拍现场');
+  assertDeadFate(save, '原地停滞默认收束');
+  assertXieyiCriticalAffinity(save, beforeFav, '原地停滞默认收束');
+  assert.equal(
+    (runtimeOf(save).completedEventIds || []).includes(ENTRUSTMENT),
+    true,
+    '托付须写入 completedEventIds',
+  );
+  assert.equal(Number(save.角色.属性.神识.当前), spiritBefore, '未兑现 rescue 不得扣神识');
+  assert.equal(Number(save.角色.属性.气血.当前), hpBefore, '未兑现 rescue 不得扣气血');
+
+  const judgement = api.getJudgementState(save);
+  assert.equal(judgement.pending, undefined, '原地停滞默认死亡后不得残留 pending');
+  const archived = judgement.recent.find(item => item.id === issued.proposal.id);
+  assert.ok(archived, '须按现有契约归档未兑现 rescue');
+  assert.equal(archived.status, 'cancelled', '未兑现 rescue 须归档为 cancelled，不能把显式 cancel 映射成死亡');
+  assert.equal(archived.roll, undefined);
+  assert.deepEqual(archived.appliedEffects, []);
+
+  const unrelated = api.createJudgementProposal({
+    actionText: '翻越有守卫的城墙',
+    kind: 'stealth',
+    whyNow: '守卫巡逻存在暴露风险',
+    difficulty: { band: 'hard', value: 20 },
+    factors: [{ label: '夜色掩护', value: 3, source: 'condition' }],
+    stakes: { success: '悄然通过', partial: '留下痕迹但进入内城', failure: '被守卫察觉' },
+    canonPolicy: 'free',
+    createdAtTurn: runtimeOf(save).worldTurn,
+  });
+  const persisted = api.persistPendingJudgement(save, unrelated);
+  assert.equal(persisted.id, unrelated.id);
+  assert.notEqual(persisted.id, issued.proposal.id, '新 pending 不得复用已归档 rescue id');
+  assert.equal(api.getJudgementState(save).pending?.id, persisted.id, '归档后须能签发无关判定');
+  const cleaned = api.cancelPendingJudgement(save, persisted.id, runtimeOf(save).worldTurn);
+  assert.equal(cleaned.status, 'cancelled');
+  assert.equal(api.getJudgementState(save).pending, undefined, '测试结束须按契约取消清理无关 pending');
+
+  const reloaded = reloadSave(save);
+  assertDeadFate(reloaded, '原地停滞 JSON 重载');
+  assertXieyiCriticalAffinity(reloaded, beforeFav, '原地停滞 JSON 重载');
+  assert.equal(api.getJudgementState(reloaded).pending, undefined, 'JSON 重载后不得复活 pending');
+  await pokeIdempotency(api, reloaded, accept, SURVIVAL_TEXT);
+  assertDeadFate(reloaded, '原地停滞重放后');
+  assertXieyiCriticalAffinity(reloaded, beforeFav, '原地停滞重放后');
+  assert.equal(xieyiFavorability(reloaded), beforeFav + CRITICAL_AFFINITY_GRANT);
+  assert.equal(Number(reloaded.角色.属性.神识.当前), spiritBefore);
+  assert.equal(Number(reloaded.角色.属性.气血.当前), hpBefore);
 });
