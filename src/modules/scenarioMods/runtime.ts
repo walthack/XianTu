@@ -45,7 +45,12 @@ import { affinityCapFor } from './affinityCaps';
 import { REPUTATION_EVENT_GRANT, type ReputationGrant } from './reputationLedger';
 import { lineCriticalFrozen, resolveLocationIdFromPosition } from './secondaryLines';
 import { recordOffscreenDivergence, recordReconcileDivergences, type ScenarioDivergence } from './divergenceLedger';
-import type { JudgementOutcome, JudgementResolution } from '@/utils/judgementEngine';
+import {
+  cancelPendingJudgement,
+  getJudgementState,
+  type JudgementOutcome,
+  type JudgementResolution,
+} from '@/utils/judgementEngine';
 import { getCanonRailOrder, getCanonRailProfile, isCanonRailChapter, type CanonRailProfile } from './canonRail';
 import { updateDivergenceControl, type DivergenceSignal, type WorldPushState } from './divergenceControl';
 import {
@@ -1590,6 +1595,15 @@ function grantXieyiAshesOnce(saveData: SaveData, runtime: RuntimeState): void {
   runtime.flags[XIEYI_ASHES_FLAG] = true;
 }
 
+/** 托付一旦落成，挂起的 rescue 判定必须归档，避免离场后 modal 残留或旧 result 再改命运。 */
+function archiveAbandonedXieyiRescueJudgement(saveData: SaveData, runtime: RuntimeState): void {
+  const pending = getJudgementState(saveData).pending;
+  const receipt = pending?.authorityReceipt;
+  if (!pending || receipt?.kind !== 'event_action_judgement') return;
+  if (receipt.eventId !== XIEYI_ENTRUSTMENT_EVENT_ID) return;
+  cancelPendingJudgement(saveData, pending.id, Math.max(0, Number(runtime.worldTurn) || 0));
+}
+
 /** 判定引擎不写 flags；命运映射与事件结算同事务提交。本纵切不生成 missing。 */
 function applyXieyiEntrustmentFateMapping(
   runtime: RuntimeState,
@@ -1749,6 +1763,7 @@ export function recordStoryEventStructuredAction(
       judgementOutcome: action.judgement ? options?.judgementResolution?.outcome : undefined,
       evidence: detail,
     }, saveData);
+    archiveAbandonedXieyiRescueJudgement(saveData, runtime);
   }
   if (event.locationId) movePlayerToEventLocation(saveData, runtime, event.locationId);
   return {

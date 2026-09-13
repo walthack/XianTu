@@ -10,6 +10,8 @@ const ASHES_ITEM = 'lcq.item.xieyi_ashes';
 const ASHES_TRANSFER = 'lcq.event.xieyi_entrustment.inventory.xieyi_ashes';
 const SURVIVAL_TEXT = '谢艺重伤昏迷但尚有气息，众人救回了他，确认谢艺生还。';
 const DEATH_TEXT = '谢艺倒在乱石间，呼吸断绝，确认其已经死亡。';
+const XIEYI_EXISTING_AFFINITY = 24;
+const CRITICAL_AFFINITY_GRANT = 8;
 
 const runtimeOf = save => save.世界.状态.剧本模组;
 
@@ -23,6 +25,34 @@ function ashesCount(save) {
 
 function ashesReceipts(save) {
   return (runtimeOf(save).inventoryTransferReceipts || []).filter(item => item.transferId === ASHES_TRANSFER);
+}
+
+function seedExistingXieyiRelation(save, favorability = XIEYI_EXISTING_AFFINITY) {
+  save.社交 ||= {};
+  save.社交.关系 ||= {};
+  save.社交.关系.谢艺 = {
+    名字: '谢艺',
+    好感度: favorability,
+    与玩家关系: '同伴',
+  };
+}
+
+function xieyiFavorability(save) {
+  const value = Number(save.社交?.关系?.谢艺?.好感度);
+  assert.equal(Number.isFinite(value), true, '须存在既有谢艺关系且好感度为有限数');
+  return value;
+}
+
+function assertXieyiCriticalAffinity(save, beforeFav, label) {
+  assert.equal(
+    xieyiFavorability(save),
+    beforeFav + CRITICAL_AFFINITY_GRANT,
+    `${label}: 谢艺好感须精确 +${CRITICAL_AFFINITY_GRANT}`,
+  );
+  assert.ok(
+    (runtimeOf(save).affinityGrantedEventIds || []).includes(ENTRUSTMENT),
+    `${label}: 须登记共历关系结算`,
+  );
 }
 
 function assertNoFateInjected(save, label) {
@@ -67,7 +97,7 @@ async function loadProductionApi() {
     { applyStrictScenarioInitializationToSave, buildStrictScenarioInitialization },
     runtime,
     { prepareEventActionJudgement },
-    { resolvePendingJudgement },
+    { resolvePendingJudgement, getJudgementState },
     { runDeterministicXieyiReconcile, runEventReconcile },
   ] = await Promise.all([
     loadTs('../src/utils/dataRepair.ts'),
@@ -84,6 +114,7 @@ async function loadProductionApi() {
     ...runtime,
     prepareEventActionJudgement,
     resolvePendingJudgement,
+    getJudgementState,
     runDeterministicXieyiReconcile,
     runEventReconcile,
   };
@@ -99,6 +130,7 @@ async function productionSave(api, stage) {
     api.createMinimalSaveDataV3(),
     api.buildStrictScenarioInitialization(stage, '2026-09-13T00:00:00.000Z'),
   );
+  seedExistingXieyiRelation(save);
   return api.advanceScenarioRuntime(save).saveData;
 }
 
@@ -128,7 +160,16 @@ async function walkToEntrustment(api, stage) {
     if ((runtime.activeEventIds || []).includes(ENTRUSTMENT)) {
       const actions = api.getCurrentStoryEventActions(save);
       if (actions.some(item => item.eventId === ENTRUSTMENT)) {
+        // 上一拍在同一轮 advance 里才写入 completedEventIds，共历好感要再推一轮才入账。
+        // 这一轮不是玩家行动，不能消耗场外 afterStallTurns 窗口。
+        const stallBefore = Number(runtimeOf(save).stallTurns) || 0;
+        save = api.advanceScenarioRuntime(save).saveData;
+        runtimeOf(save).stallTurns = stallBefore;
         assertNoFateInjected(save, '走到命运拍');
+        assert.ok(
+          api.getCurrentStoryEventActions(save).some(item => item.eventId === ENTRUSTMENT),
+          '收口共历好感后仍须停在命运拍',
+        );
         return save;
       }
     }
@@ -158,7 +199,7 @@ async function pokeIdempotency(api, save, selection, oppositeText) {
     ashes: runtimeOf(save).flags['world.xieyi_ashes.generated'] === true,
   });
   const beforeAffinity = [...(runtimeOf(save).affinityGrantedEventIds || [])].sort();
-  const beforeFav = Number(save.社交?.关系?.谢艺?.好感度);
+  const beforeFav = xieyiFavorability(save);
 
   const replayed = api.recordStoryEventStructuredAction(save, selection);
   assert.ok(
@@ -199,9 +240,7 @@ async function pokeIdempotency(api, save, selection, oppositeText) {
     beforeAffinity,
     '重复推进不得二次发放共历好感',
   );
-  if (Number.isFinite(beforeFav)) {
-    assert.equal(Number(after.社交.关系.谢艺.好感度), beforeFav, '重复推进不得改谢艺好感');
-  }
+  assert.equal(xieyiFavorability(after), beforeFav, '重复推进不得改谢艺好感');
   return after;
 }
 
@@ -211,7 +250,7 @@ test('B1 生产入口【承接】唯一落成 dead，资源/关系后果经 JSON
   let save = await walkToEntrustment(api, stage);
   const accept = api.getCurrentStoryEventActions(save).find(item => item.actionId === 'accept_entrustment');
   assert.ok(accept, '生产入口必须枚举【承接】');
-  const beforeFav = Number(save.社交?.关系?.谢艺?.好感度);
+  const beforeFav = xieyiFavorability(save);
 
   const recorded = api.recordStoryEventStructuredAction(save, accept);
   assert.equal(recorded.completed, true);
@@ -219,20 +258,16 @@ test('B1 生产入口【承接】唯一落成 dead，资源/关系后果经 JSON
   assert.equal(sameTurn.reason, 'already_completed', '同一拍重复承接须直接拒绝');
   save = settleChoice(api, save);
   assertDeadFate(save, '承接当场');
-  assert.ok(
-    (runtimeOf(save).affinityGrantedEventIds || []).includes(ENTRUSTMENT),
-    '死亡线须登记共历关系结算',
-  );
-  if (Number.isFinite(beforeFav) && save.社交?.关系?.谢艺) {
-    assert.ok(Number(save.社交.关系.谢艺.好感度) >= beforeFav, '死亡线不得扣谢艺好感');
-  }
+  assertXieyiCriticalAffinity(save, beforeFav, '承接当场');
 
   const reloaded = reloadSave(save);
   assertDeadFate(reloaded, 'JSON 重载');
+  assertXieyiCriticalAffinity(reloaded, beforeFav, 'JSON 重载');
   const replay = api.getCurrentStoryEventActions(reloaded);
   assert.equal(replay.some(item => item.eventId === ENTRUSTMENT), false, '重载后不得再给命运二选一');
   await pokeIdempotency(api, reloaded, accept, SURVIVAL_TEXT);
   assertDeadFate(reloaded, '重放后');
+  assertXieyiCriticalAffinity(reloaded, beforeFav, '重放后');
 });
 
 test('B1 生产入口【救治】success+ 唯一落成 longrest，无骨灰，JSON 重载保持且幂等', async () => {
@@ -241,7 +276,7 @@ test('B1 生产入口【救治】success+ 唯一落成 longrest，无骨灰，JS
   let save = await walkToEntrustment(api, stage);
   const rescue = api.getCurrentStoryEventActions(save).find(item => item.actionId === 'rescue_xieyi');
   assert.ok(rescue, '乐明珠在场时生产入口必须枚举【救治】');
-  const beforeFav = Number(save.社交?.关系?.谢艺?.好感度);
+  const beforeFav = xieyiFavorability(save);
 
   const issued = api.prepareEventActionJudgement(save, rescue, runtimeOf(save).worldTurn);
   let pendingReload = reloadSave(save);
@@ -263,18 +298,14 @@ test('B1 生产入口【救治】success+ 唯一落成 longrest，无骨灰，JS
   assert.equal(recorded.completed, true);
   save = settleChoice(api, pendingReload);
   assertLongrestFate(save, '救治当场');
-  assert.ok(
-    (runtimeOf(save).affinityGrantedEventIds || []).includes(ENTRUSTMENT),
-    '生还线须登记共历关系结算',
-  );
-  if (Number.isFinite(beforeFav) && save.社交?.关系?.谢艺) {
-    assert.ok(Number(save.社交.关系.谢艺.好感度) >= beforeFav, '生还线不得扣谢艺好感');
-  }
+  assertXieyiCriticalAffinity(save, beforeFav, '救治当场');
 
   const reloaded = reloadSave(save);
   assertLongrestFate(reloaded, 'JSON 重载');
+  assertXieyiCriticalAffinity(reloaded, beforeFav, 'JSON 重载');
   await pokeIdempotency(api, reloaded, rescue, DEATH_TEXT);
   assertLongrestFate(reloaded, '重放后');
+  assertXieyiCriticalAffinity(reloaded, beforeFav, '重放后');
 });
 
 test('B1 未知/不可解析位置 fail-closed，不得离场默认 dead；可解析外场后再按离场收束', async () => {
@@ -284,6 +315,7 @@ test('B1 未知/不可解析位置 fail-closed，不得离场默认 dead；可�
   const accept = api.getCurrentStoryEventActions(save).find(item => item.actionId === 'accept_entrustment');
   assert.ok(accept, '走到命运拍后须仍有【承接】');
   assert.match(String(save.角色.位置.描述 || ''), /鬼王峒/);
+  const beforeFav = xieyiFavorability(save);
 
   save.角色.位置.描述 = '__unresolvable_location__';
   save = settleChoice(api, save);
@@ -299,13 +331,16 @@ test('B1 未知/不可解析位置 fail-closed，不得离场默认 dead；可�
     true,
     '不可解析位置后仍须保留命运二选一',
   );
+  assert.equal(xieyiFavorability(save), beforeFav, '不可解析位置不得发谢艺好感');
 
   save.角色.位置.描述 = '南荒·碧鲮族';
   save = settleChoice(api, save);
   assertDeadFate(save, '可解析外场后离开现场');
+  assertXieyiCriticalAffinity(save, beforeFav, '可解析外场后离开现场');
 
   const reloaded = reloadSave(save);
   assertDeadFate(reloaded, '外场收束后 JSON 重载');
+  assertXieyiCriticalAffinity(reloaded, beforeFav, '外场收束后 JSON 重载');
   await pokeIdempotency(api, reloaded, accept, SURVIVAL_TEXT);
 });
 
@@ -316,6 +351,7 @@ test('B1 离开命运拍现场按承接收束 dead，且不得被重放切走', 
   const accept = api.getCurrentStoryEventActions(save).find(item => item.actionId === 'accept_entrustment');
   assert.ok(accept);
   assert.match(String(save.角色.位置.描述 || ''), /鬼王峒/);
+  const beforeFav = xieyiFavorability(save);
   const activatedAt = runtimeOf(save).eventActivatedAtLocation?.[ENTRUSTMENT];
   const activatedName = String(
     (runtimeOf(save).canon?.locations || []).find(item => item.id === activatedAt)?.name || '',
@@ -325,8 +361,127 @@ test('B1 离开命运拍现场按承接收束 dead，且不得被重放切走', 
   save.角色.位置.描述 = '南荒·碧鲮族';
   save = settleChoice(api, save);
   assertDeadFate(save, '离开现场');
+  assertXieyiCriticalAffinity(save, beforeFav, '离开现场');
 
   const reloaded = reloadSave(save);
   assertDeadFate(reloaded, '离开后 JSON 重载');
+  assertXieyiCriticalAffinity(reloaded, beforeFav, '离开后 JSON 重载');
   await pokeIdempotency(api, reloaded, accept, SURVIVAL_TEXT);
+});
+
+test('B1 挂起 rescue judgement 后离场按死亡收束，清理 pending，旧判定不能改写命运', async () => {
+  const api = await loadProductionApi();
+  const stage = await loadStage();
+  let save = await walkToEntrustment(api, stage);
+  const rescue = api.getCurrentStoryEventActions(save).find(item => item.actionId === 'rescue_xieyi');
+  const accept = api.getCurrentStoryEventActions(save).find(item => item.actionId === 'accept_entrustment');
+  assert.ok(rescue, '乐明珠在场时须枚举【救治】');
+  assert.ok(accept, '挂起判定时仍须保留【承接】');
+  const beforeFav = xieyiFavorability(save);
+  const spiritBefore = Number(save.角色.属性.神识.当前);
+  assert.equal(Number.isFinite(spiritBefore), true);
+
+  const issued = api.prepareEventActionJudgement(save, rescue, runtimeOf(save).worldTurn);
+  assert.ok(issued.proposal?.id, '须签发 rescue pending judgement');
+  assert.equal(api.getJudgementState(save).pending?.id, issued.proposal.id, '离场前须挂起 rescue 判定');
+  assertNoFateInjected(save, '签发 pending 后');
+
+  save.角色.位置.描述 = '南荒·碧鲮族';
+  save = settleChoice(api, save);
+  assertDeadFate(save, '挂起 rescue 后离场');
+  assertXieyiCriticalAffinity(save, beforeFav, '挂起 rescue 后离场');
+  const judgement = api.getJudgementState(save);
+  assert.equal(judgement.pending, undefined, '离场后不得残留 pending judgement');
+  const archived = judgement.recent.find(item => item.id === issued.proposal.id);
+  assert.ok(archived, '离场须按现有契约归档挂起判定');
+  assert.equal(archived.status, 'cancelled', '未兑现的 rescue 判定须归档为 cancelled');
+  assert.equal(Number(save.角色.属性.神识.当前), spiritBefore, '未兑现的 rescue 判定不得在离场后扣神识');
+
+  const replayed = api.resolvePendingJudgement(save, issued.proposal.id, {
+    currentTurn: runtimeOf(save).worldTurn,
+    testOutcome: 'success',
+    roll: () => 18,
+  });
+  assert.equal(replayed.status, 'cancelled', '归档后不得重骰成 success');
+  assert.notEqual(replayed.outcome, 'success');
+  assertDeadFate(save, '旧 pending resolve 后');
+  assert.equal(xieyiFavorability(save), beforeFav + CRITICAL_AFFINITY_GRANT, '旧 pending resolve 后不得重奖好感');
+
+  const recorded = api.recordStoryEventStructuredAction(save, rescue, {
+    judgementResolution: {
+      ...issued.proposal,
+      status: 'resolved',
+      roll: 18,
+      total: 40,
+      outcome: 'success',
+      appliedEffects: [],
+      resolvedAtTurn: runtimeOf(save).worldTurn,
+    },
+  });
+  assert.ok(
+    recorded.reason === 'already_completed'
+      || recorded.reason === 'stale_event'
+      || recorded.reason === 'stale_judgement'
+      || recorded.reason === 'judgement_required',
+    `旧 rescue record 须拒绝，实际=${recorded.reason}`,
+  );
+  assertDeadFate(save, '旧 rescue record 后');
+  assert.notEqual(runtimeOf(save).flags['character.xie_yi.status'], 'longrest');
+  assert.notEqual(runtimeOf(save).flags['branch.lcq.if_xieyi_longrest.active'], true);
+
+  const reloaded = reloadSave(save);
+  assertDeadFate(reloaded, '挂起离场 JSON 重载');
+  assert.equal(api.getJudgementState(reloaded).pending, undefined, 'JSON 重载后不得复活 pending');
+  await pokeIdempotency(api, reloaded, accept, SURVIVAL_TEXT);
+  assertDeadFate(reloaded, '挂起离场重放后');
+  assertXieyiCriticalAffinity(reloaded, beforeFav, '挂起离场重放后');
+});
+
+test('B1 已掷 rescue success+ 尚未落账时离场仍死亡，旧 result 不能切到 longrest', async () => {
+  const api = await loadProductionApi();
+  const stage = await loadStage();
+  let save = await walkToEntrustment(api, stage);
+  const rescue = api.getCurrentStoryEventActions(save).find(item => item.actionId === 'rescue_xieyi');
+  const accept = api.getCurrentStoryEventActions(save).find(item => item.actionId === 'accept_entrustment');
+  assert.ok(rescue);
+  assert.ok(accept);
+  const beforeFav = xieyiFavorability(save);
+
+  const issued = api.prepareEventActionJudgement(save, rescue, runtimeOf(save).worldTurn);
+  const locked = api.resolvePendingJudgement(save, issued.proposal.id, {
+    currentTurn: runtimeOf(save).worldTurn,
+    testOutcome: 'success',
+    roll: () => 18,
+  });
+  assert.equal(locked.status, 'resolved');
+  assert.equal(locked.outcome, 'success');
+  assert.equal(api.getJudgementState(save).pending, undefined, '已掷后 pending 应已归档');
+  assertNoFateInjected(save, '已掷尚未落账');
+
+  save.角色.位置.描述 = '南荒·碧鲮族';
+  save = settleChoice(api, save);
+  assertDeadFate(save, '已掷 success+ 后离场');
+  assertXieyiCriticalAffinity(save, beforeFav, '已掷 success+ 后离场');
+  assert.equal(api.getJudgementState(save).pending, undefined);
+
+  const again = api.resolvePendingJudgement(save, issued.proposal.id, {
+    currentTurn: runtimeOf(save).worldTurn,
+    testOutcome: 'failure',
+    roll: () => 1,
+  });
+  assert.equal(again.outcome, 'success', '已掷结果锁定不可重骰');
+  const recorded = api.recordStoryEventStructuredAction(save, rescue, { judgementResolution: locked });
+  assert.ok(
+    recorded.reason === 'already_completed' || recorded.reason === 'stale_event',
+    `已落成死亡后旧 success+ 不得再记账，实际=${recorded.reason}`,
+  );
+  assertDeadFate(save, '旧 success+ record 后');
+  assert.notEqual(runtimeOf(save).flags['event.s06_03.void'], true);
+  assert.notEqual(runtimeOf(save).flags['character.xie_yi.status'], 'longrest');
+  assert.equal(xieyiFavorability(save), beforeFav + CRITICAL_AFFINITY_GRANT);
+
+  const reloaded = reloadSave(save);
+  assertDeadFate(reloaded, '已掷离场 JSON 重载');
+  await pokeIdempotency(api, reloaded, accept, SURVIVAL_TEXT);
+  assertXieyiCriticalAffinity(reloaded, beforeFav, '已掷离场重放后');
 });
