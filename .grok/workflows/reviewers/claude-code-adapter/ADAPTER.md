@@ -9,6 +9,7 @@ Default second review. Grok calls it after a candidate commit exists.
 ## Hard rules
 
 - Submit only through `/Users/clawbot/.codex/bin/claude-review-submit.mjs`.
+- Omit `--model` to inherit `/Users/clawbot/.codex/claude-review-config.json`, currently `claude-opus-5-5` (Opus 5.5). Do not hardcode an older model or silently downgrade; an explicit model is an intentional override.
 - Never call `claude-async.mjs submit` directly.
 - Never pass `--permission-mode`. The wrapper pins `plan`.
 - Never edit `src/`, `tests/`, `mods/`, `mod-kit/`, or git state.

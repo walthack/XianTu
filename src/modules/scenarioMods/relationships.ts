@@ -1,4 +1,5 @@
 import type { SaveData } from '@/types/game';
+import { mergeFixedScenarioStarterInventory } from './fixedInventoryContracts';
 
 import type {
   ScenarioModCharacter,
@@ -255,7 +256,7 @@ export function applyScenarioRelationshipsToSave(saveData: SaveData, source: Sce
     next.角色.技能 = next.角色.技能 || { 掌握技能: [], 装备栏: [], 冷却: {} };
     next.角色.技能.掌握技能 = nativeContent.skills;
     next.角色.背包 = next.角色.背包 || { 灵石: { 下品: 0, 中品: 0, 上品: 0, 极品: 0 }, 物品: {} };
-    next.角色.背包.物品 = { ...(next.角色.背包.物品 || {}), ...nativeContent.items };
+    next.角色.背包.物品 = mergeFixedScenarioStarterInventory(next.角色.背包.物品 || {}, nativeContent.items);
     next.角色.修炼 = next.角色.修炼 || {};
     next.角色.修炼.修炼功法 = nativeContent.primaryTechnique;
 

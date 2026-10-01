@@ -166,7 +166,7 @@ test('stage02 fresh event selection plans kind=event without mutating save', asy
   assert.equal(snapshot(save), before);
 });
 
-test('wang zhe silk pouch opportunity plans kind=opportunity with exact transfer fact', async () => {
+test('wang zhe opportunity and explicit main handoff plans share the fixed pouch transfer fact', async () => {
   const demo = await loadDemo();
   const {
     getCurrentStoryEventActions,
@@ -203,8 +203,9 @@ test('wang zhe silk pouch opportunity plans kind=opportunity with exact transfer
     ? demo.planFastNarrativeDemo(planInput(save, { eventAction: eventActions[0] }))
     : null;
   if (eventPlan) {
-    assert.equal((eventPlan.packet.settledFacts || []).includes('获得1×锦囊'), false,
-      'the silk-pouch transfer must not be attributed to a normal event plan');
+    assert.equal((eventPlan.packet.settledFacts || []).includes('获得1×锦囊'), true,
+      'the explicit main handoff now carries the same fixed transfer as the opportunity route');
+    assert.equal(snapshot(save), before, 'main handoff planning must not mutate inventory');
   }
 
   const tamperedId = { ...selection, actionId: `${selection.actionId}__tampered` };

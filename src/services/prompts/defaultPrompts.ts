@@ -88,8 +88,26 @@ export const PROMPT_CATEGORIES = {
     name: '动态生成提示词',
     description: '游戏中动态生成NPC/事件/物品的提示词',
     icon: '🎨'
+  },
+  module: {
+    name: '回合模块提示词',
+    description: '模块链路（剧情演出／回合记忆／后台审计）的模块指令；结算、权限与验证不在此处',
+    icon: '🧩'
   }
 };
+
+/** 回合模块指令。提示词面板可改；被停用或清空时模块回落到这里的默认值，避免空指令。 */
+export const MODULE_NARRATIVE_SYSTEM_PROMPT = '你只负责演出本轮行动，输出第二人称中文正文约300至600字，不输出JSON、思考或系统规则。'
+  + '行动结果已由本地合同确定，不重新判定，不修改状态，不替玩家增加决定。人物只知道本轮公开信息；'
+  + '不新增人物、道具、地点、关系身份。承接最近正文，禁止重演已经完成的前一幕。';
+export const MODULE_MEMORY_INSTRUCTION_PROMPT = '从编号原文句子中选出1至4句最重要的已发生事实作为记忆。'
+  + '只返回JSON {"sentenceIds":[0,2]}，使用原有整数id，不重复、不重写句子、不增加事实，不写思考过程。';
+export const BACKGROUND_AUDIT_INSTRUCTION_PROMPT = '你是只读的连续性审计员。输入包含最近若干回合的编号正文与本地确认的状态摘要。'
+  + '只找下列类别的问题：fact_drift（人物或事实前后矛盾）、knowledge_leak（人物知道了不该知道的事）、'
+  + 'state_mismatch（正文与状态摘要不一致，如写了获得却不在背包）、player_agency（替玩家做了玩家未输入的关键决定）、'
+  + 'dangling_hook（已抛出的承诺或线索长期无承接）、voice_drift（称谓或语域漂移）。'
+  + '只返回JSON {"findings":[{"category":"类别","turn":回合编号,"quote":"该回合连续原文","issue":"具体问题"}]}，最多6条；'
+  + '没有问题返回 {"findings":[]}。quote 必须逐字摘自对应回合正文，不改写正文、不给修改建议以外的指令、不写思考过程。';
 
 // 合并核心输出规则
 const CORE_OUTPUT_RULES = [JSON_OUTPUT_RULES, RESPONSE_FORMAT_RULES, DATA_STRUCTURE_STRICTNESS, NARRATIVE_PURITY_RULES].join('\n\n');
@@ -215,6 +233,30 @@ export function getSystemPrompts(): Record<string, PromptDefinition> {
       order: 8,
       weight: 5,
       condition: 'eventSystem'
+    },
+    moduleNarrativeSystem: {
+      name: '模块·剧情演出',
+      content: MODULE_NARRATIVE_SYSTEM_PROMPT,
+      category: 'module',
+      description: '模块链路前台正文的职责指令；场景材料与结算边界由系统追加',
+      order: 1,
+      weight: 8
+    },
+    moduleMemoryInstruction: {
+      name: '模块·回合记忆',
+      content: MODULE_MEMORY_INSTRUCTION_PROMPT,
+      category: 'module',
+      description: '从已提交正文中按句子编号摘录记忆；输出由本地验证器校验',
+      order: 2,
+      weight: 6
+    },
+    backgroundAuditInstruction: {
+      name: '模块·后台审计',
+      content: BACKGROUND_AUDIT_INSTRUCTION_PROMPT,
+      category: 'module',
+      description: '只读跨回合一致性审计；结果只进本地审计日志，不回流游戏',
+      order: 3,
+      weight: 4
     },
     splitGenerationStep1: {
       name: '9. 分步正文',

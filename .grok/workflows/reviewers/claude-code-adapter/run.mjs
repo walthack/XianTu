@@ -67,7 +67,7 @@ function sleep(ms) {
 async function submit(repo, prompt) {
   return new Promise((resolve) => {
     const child = spawn(process.execPath, [
-      submitPath, '--cwd', repo, '--model', 'claude-sonnet-5', '--max-budget-usd', '10',
+      submitPath, '--cwd', repo, '--max-budget-usd', '10',
     ], { stdio: ['pipe', 'pipe', 'pipe'] });
     let stdout = '';
     let stderr = '';

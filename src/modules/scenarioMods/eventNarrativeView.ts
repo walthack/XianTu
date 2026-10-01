@@ -14,6 +14,43 @@ const legacyNarrativeVariants: Record<string, Array<{
   axisBeat?: string;
   objective?: string;
 }>> = {
+  'lcq.event.gamble_bond_signed': [
+    {
+      when: [
+        { path: 'flags.event.gamble_bond_signed.refused_capture', operator: 'eq', value: true },
+        { path: 'flags.world.baihu.hall_controlled', operator: 'eq', value: true },
+      ],
+      replacesCanonRail: true,
+      name: '拒赌后被商馆扣押',
+      description: '程宗扬明确拒绝与苏妲己对赌，并未入局也未签卖身契；苏妲己命人拿下后，他仍受白湖商馆控制。',
+      axisBeat: '程宗扬拒赌后被扣押，仍受白湖商馆控制；此事不是赌输签契。',
+      objective: '面对拒赌后被扣押、仍受商馆控制的局面',
+    },
+    {
+      when: [{ path: 'flags.event.gamble_bond_signed.refused_capture', operator: 'eq', value: true }],
+      replacesCanonRail: true,
+      name: '拒赌后离开商馆',
+      description: '程宗扬明确拒绝与苏妲己对赌，并未入局也未签卖身契；后来已从白湖商馆脱身，当前不再受商馆扣押。',
+      axisBeat: '程宗扬曾拒赌并未签契，现已离馆；此事不是赌输签契。',
+      objective: '承接拒赌后离馆的既成历史，不得改写成赌输或当前仍被扣押',
+    },
+    {
+      when: [{ path: 'flags.world.baihu.gamble_refusal_phase', operator: 'eq', value: 'capture_ordered' }],
+      replacesCanonRail: true,
+      name: '拒赌后的拘拿',
+      description: '你已拒绝这场赌局。苏妲己翻脸命人拿下，你尚未脱开商馆控制；此事不是赌局落败或签契。',
+      axisBeat: '苏妲己因拒赌命人拿下；不得写成已经赌输或自愿签卖身契。',
+      objective: '苏妲己已因你拒赌命人拿下，先应对眼前拘拿',
+    },
+  ],
+  'lcq.event.ningyu_enters_gamble': [{
+    when: [{ path: 'flags.world.baihu.gamble_refusal_phase', operator: 'eq', value: 'capture_ordered' }],
+    replacesCanonRail: true,
+    name: '拒赌后的拘拿',
+    description: '凝羽已被差遣入局的当场，你拒绝与苏妲己对赌。苏妲己翻脸命人拿下，你尚未脱开商馆控制。',
+    axisBeat: '你已拒绝赌局，苏妲己命人拿下；不得写成已经赌输或签契。',
+    objective: '苏妲己已因你拒赌命人拿下，先应对眼前拘拿',
+  }],
   'lcq.event.s07_05_eight_steeds_informed': [{
     when: [{ path: 'flags.event.s06_03.void', operator: 'eq', value: true }],
     replacesCanonRail: true,
@@ -95,7 +132,9 @@ type QuestCompassRuntime = {
 
 function questCompassTargets(event: ScenarioModEvent, runtime: QuestCompassRuntime): { locName: string; who: string[] } {
   const locName = String((runtime?.canon?.locations || []).find(item => item.id === event.locationId)?.name || '').trim();
-  const playerId = String(runtime?.opening?.playerCharacterId || '');
+  const playerId = String(runtime?.opening?.playerCharacterId
+    || ((runtime?.canon?.characters || []).some(item => item.id === 'liuchao.character.cheng_zongyang')
+      ? 'liuchao.character.cheng_zongyang' : ''));
   const playerName = String((runtime?.canon?.characters || []).find(item => item.id === playerId)?.name || '').trim();
   const who = [...new Set((event.relatedCharacterIds || [])
     .filter(id => id && id !== playerId)

@@ -1,4 +1,5 @@
 import type { SaveData } from '@/types/game';
+import { fixedInventoryCommandViolation } from './fixedInventoryContracts';
 import { getNarrativeAnchorEvent } from './runtime';
 import { expandPrivateKnowledgeAssociations } from './privateKnowledgeGuard';
 
@@ -349,6 +350,9 @@ function findScenarioFlagViolation(runtime: ScenarioRuntimeState, command: Comma
   if (command.action !== 'set') return '剧本进度 flags 只能用 set 写入';
 
   const flagPath = key.slice('世界.状态.剧本模组.flags.'.length);
+  if (flagPath.startsWith('world.baihu.') || flagPath === 'event.gamble_bond_signed.refused_capture') {
+    return '白湖拒赌账本只能由本地引擎写入';
+  }
   const parts = flagPath.split('.');
   const namespace = parts[0];
   if (namespace !== 'event' && namespace !== 'chapter') return null;
@@ -402,6 +406,8 @@ export function compileScenarioProtectedPaths(saveData: SaveData): string[] {
   const paths = new Set<string>([
     '世界.状态.剧本模组',
     '系统.扩展.剧本模组',
+    // 回合／摘要／质量回执由代码维护，模型不可伪造或覆盖。
+    '系统.扩展.回合模块试玩',
     // 称号=里程碑奖励，只能由引擎(milestoneRewards)在故事线正确落点授予，AI 不得自封/篡改
     '角色.身份.称号',
   ]);
@@ -536,6 +542,11 @@ export function guardScenarioModCommands(saveData: SaveData, commands: unknown[]
     const key = typeof (command as CommandLike)?.key === 'string'
       ? normalizePath((command as CommandLike).key as string)
       : '';
+    const inventoryViolation = key ? fixedInventoryCommandViolation(saveData, key) : null;
+    if (inventoryViolation) {
+      rejected.push({ command, reason: inventoryViolation });
+      continue;
+    }
     if (key === '系统.扩展.判定' || key.startsWith('系统.扩展.判定.')) {
       rejected.push({ command, reason: '行动判定状态仅可由本地引擎写入' });
       continue;

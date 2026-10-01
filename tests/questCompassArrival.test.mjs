@@ -85,8 +85,9 @@ test('人已在目标地点时任务栏不写去该地，去帅帐按钮填入�
   assert.ok(action, '见王哲拍应有主线按钮');
   assert.match(action.label, /去帅帐/);
   assert.match(action.label, /见王哲/);
-  assert.equal(action.playerLine, action.label, '点按填入必须与按钮文案一致');
+  assert.equal(action.playerLine.includes(action.label), false, '玩家填入不得直接塞罗盘');
   assert.equal(action.playerLine.includes('我让对方诊治'), false);
+  assert.match(action.playerLine, /^我/);
 });
 
 test('见月霜结清后立刻有去帅帐主线按钮合同', async () => {
@@ -110,7 +111,8 @@ test('见月霜结清后立刻有去帅帐主线按钮合同', async () => {
   const wang = getCurrentStoryEventActions(next).find(item => item.eventId === 'lcq.event.s01_05' && item.source === 'event_engine');
   assert.ok(wang);
   assert.match(wang.label, /去帅帐/);
-  assert.equal(wang.playerLine, wang.label);
+  assert.equal(wang.playerLine.includes(wang.label), false);
+  assert.match(wang.playerLine, /^我/);
 });
 
 test('交接窗不挡去帅帐：自由输入仍落账并改地点', async () => {

@@ -36,6 +36,7 @@ export function shouldSkipJudgementPreflight(input: {
 }): boolean {
   if (input.skipPreflight) return true;
   if (input.selectedSource === 'open_world_engine') return true;
+  if (input.selectedSource === 'baihu_gamble_refusal_engine') return true;
   return input.selectedSource === 'event_engine'
     && Boolean(input.selectedPlayerLine)
     && input.selectedPlayerLine === input.userMessage;

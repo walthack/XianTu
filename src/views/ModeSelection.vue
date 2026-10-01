@@ -65,14 +65,23 @@
           <Library :size="18" />
           <span>剧本模组</span>
         </button>
-        <button class="btn-ghost demo-entry" data-testid="open-world-sim-playtest" @click="openWorldSimulationPlaytest">
-          <Orbit :size="18" />
-          <span>六朝世界试玩</span>
+        <button class="btn-ghost demo-entry" data-testid="open-xingyuehu-quest-playtest" @click="openXingyuehuQuestPlaytest">
+          <Moon :size="18" />
+          <span>星月湖任务线试玩</span>
         </button>
-        <button class="btn-ghost demo-entry" data-testid="open-qingyu-opening-playtest" @click="openQingyuOpeningPlaytest">
-          <Feather :size="18" />
-          <span>清羽记开局</span>
-        </button>
+        <details class="legacy-playtests" data-testid="legacy-playtests">
+          <summary>历史试玩／开发测试</summary>
+          <div class="legacy-playtest-actions">
+            <button class="btn-ghost demo-entry" data-testid="open-world-sim-playtest" @click="openWorldSimulationPlaytest">
+              <Orbit :size="18" />
+              <span>六朝世界试玩</span>
+            </button>
+            <button class="btn-ghost demo-entry" data-testid="open-qingyu-opening-playtest" @click="openQingyuOpeningPlaytest">
+              <Feather :size="18" />
+              <span>清羽记开局</span>
+            </button>
+          </div>
+        </details>
       </div>
     </div>
   </div>
@@ -80,7 +89,7 @@
 
 <script setup lang="ts">
 import VideoBackground from '@/components/common/VideoBackground.vue';
-import { Sparkles, History, User, Check, Library, Orbit, Feather } from 'lucide-vue-next';
+import { Sparkles, History, User, Check, Library, Orbit, Feather, Moon } from 'lucide-vue-next';
 import { useRouter } from 'vue-router';
 
 const displayVersion = APP_VERSION;
@@ -110,6 +119,10 @@ const openWorldSimulationPlaytest = () => {
 
 const openQingyuOpeningPlaytest = () => {
   router.push('/qingyu-opening-playtest');
+};
+
+const openXingyuehuQuestPlaytest = () => {
+  router.push('/xingyuehu-quest-playtest');
 };
 </script>
 
@@ -582,6 +595,32 @@ button {
 .btn-ghost.demo-entry {
   color: #91cec5;
   border-color: rgba(121, 188, 178, 0.28);
+}
+
+.legacy-playtests {
+  flex-basis: 100%;
+  text-align: center;
+  color: #a09a8d;
+}
+
+.legacy-playtests summary {
+  display: inline-block;
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 0.35rem 0.6rem;
+}
+
+.legacy-playtests summary:hover,
+.legacy-playtests summary:focus-visible {
+  color: #ddd7c9;
+}
+
+.legacy-playtest-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.65rem;
+  padding-top: 0.5rem;
 }
 
 /* 过渡动画 */

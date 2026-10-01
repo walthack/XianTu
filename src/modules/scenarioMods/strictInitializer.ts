@@ -7,6 +7,12 @@ import { advanceScenarioRuntime, createScenarioProgress, getInitialScenarioChapt
 import { applyScenarioRelationshipsToSave } from './relationships';
 import { isDefaultLineQuarantinedStageId } from './canonRail';
 import { overlayQingyuStage02Opening } from './qingyuOpeningPlaytest';
+import { overlayXingyuehuQuestPlaytestStage, XINGYUEHU_QUEST_PLAYTEST_KIND } from './xingyuehuQuestPlaytest';
+import {
+  overlayXingyuehuLandingPlaytestStage,
+  XINGYUEHU_LANDING_PLAYTEST_EXTENSION_KEY,
+  XINGYUEHU_LANDING_PLAYTEST_KIND,
+} from './xingyuehuLandingPlaytest';
 import { departedPresentNames } from './presence';
 
 export interface ScenarioModRuntimeState extends ScenarioProgressState {
@@ -309,6 +315,11 @@ export function transitionToNextScenarioStage(saveData: SaveData, modsOverride?:
   if ((saveData as any)?.系统?.扩展?.清羽记开局?.kind === 'qingyu-demo-v1') {
     mod = overlayQingyuStage02Opening(mod);
   }
+  if ((saveData as any)?.系统?.扩展?.星月湖任务线试玩?.kind === XINGYUEHU_QUEST_PLAYTEST_KIND) {
+    mod = overlayXingyuehuQuestPlaytestStage(mod);
+  } else if ((saveData as any)?.系统?.扩展?.[XINGYUEHU_LANDING_PLAYTEST_EXTENSION_KEY]?.kind === XINGYUEHU_LANDING_PLAYTEST_KIND) {
+    mod = overlayXingyuehuLandingPlaytestStage(mod);
+  }
 
   const relationSnapshot = structuredClone((saveData as any)?.社交?.关系 || {});
   // 世界线分歧是玩家历史，不是当前关卡模板数据。切关时必须跨关携带；
@@ -349,8 +360,15 @@ export function transitionToNextScenarioStage(saveData: SaveData, modsOverride?:
     });
   }
   const inheritedWorldlineFlags = Object.fromEntries(Object.entries(rt.flags || {}).filter(([key]) =>
-    key.startsWith('branch.') || key.startsWith('character.') || key.endsWith('.void'),
+    key.startsWith('branch.')
+    || key.startsWith('character.')
+    || key.endsWith('.void')
+    || key.startsWith('world.baihu.')
+    || key === 'event.gamble_bond_signed.refused_capture',
   ));
+  const inheritedBaihuGambleRefusal = rt.baihuGambleRefusal && typeof rt.baihuGambleRefusal === 'object'
+    ? structuredClone(rt.baihuGambleRefusal)
+    : undefined;
   const initialization = buildStrictScenarioInitialization(mod);
   const next = applyStrictScenarioInitializationToSave(saveData, initialization);
   // 回填累积关系：旧值(好感/关系/记忆等)优先，新关正典只补新增字段与新记忆
@@ -407,6 +425,9 @@ export function transitionToNextScenarioStage(saveData: SaveData, modsOverride?:
     newRuntime.inventoryTransferReceipts = inventoryTransferReceiptsSnapshot;
   }
   Object.assign(newRuntime.flags, inheritedWorldlineFlags);
+  if (inheritedBaihuGambleRefusal) {
+    (newRuntime as { baihuGambleRefusal?: unknown }).baihuGambleRefusal = inheritedBaihuGambleRefusal;
+  }
   // 立即推进一轮：激活新关首章/首批事件
   const advanced = advanceScenarioRuntime(next);
   const advancedRuntime = (advanced.saveData as any)?.世界?.状态?.剧本模组;

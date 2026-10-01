@@ -1,4 +1,4 @@
-export type TurnTelemetryPath = 'legacy' | 'legacy_pilot' | 'fast' | 'open_world' | 'local_contract';
+export type TurnTelemetryPath = 'legacy' | 'legacy_pilot' | 'modular' | 'fast' | 'open_world' | 'local_contract';
 
 export interface TurnTelemetry {
   path: TurnTelemetryPath;
@@ -140,7 +140,7 @@ export function endTurnTelemetry(): TurnTelemetry | null {
   active = null;
   const line = `[回合埋点] ${JSON.stringify(last)}`;
   // 单幕试验必须总能在控制台拆时间；完整 Legacy 仍走 info，受调试开关约束。
-  if (last.path === 'legacy_pilot') console.error(line);
+  if (last.path === 'legacy_pilot' || last.path === 'modular') console.error(line);
   else console.info(line);
   return last;
 }

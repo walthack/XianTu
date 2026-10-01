@@ -5,6 +5,12 @@
 - `PROJECT-STATUS.md` 是本项目多 agent 的共享进度、分工、交付与 Git 汇总权威。开始认领、完成交付或改变阶段状态时，先读后更新本文件。
 - 根目录 `CHANGELOG.md` 属原 repo 历史；不得将本协作线的状态记录误写进去。
 
+## 策划轮次固定记录（2026-10-01 用户要求）
+
+- 系统策划与剧情／事件策划每轮共同更新 `docs/PLANNING-ROUNDS.md`，开工登记目标，交付／阻塞／范围变化时更新各自小节；沿用同一执行批次编号，保留历史轮次。
+- 更新须包含交付链接、成熟度、验证证据层级、未测项、跨组依赖及下轮建议；按文档模板执行。
+- Codex做方向复核前先读 `PROJECT-STATUS.md` 与该文档最新轮次，再核对交付证据。项目状态权威与既有 Grok 控制面、审核路由保持不变。
+
 1. **修改 canon 数据（mod-kit/generated/**）或核心 prompt（src/modules/scenarioMods/storyContext.ts 等）前，必读**
    `mod-kit/generated/deepseek-v4-flash/character-canon/CANON-DECISIONS.md`（正典裁定簿）。
 2. 带执法标记（AFF_PROTECTED / AGE_PROTECTED / DEBUT_PROTECTED / USER_CANON）的字段是人工裁定，
@@ -16,6 +22,7 @@
 
 - 控制面 / 实现 / 返修 / 门禁 / 结束判断：Grok。Claude 与 Codex 都不控制流程。
 - 默认二审：Claude Code。提交只读二审必须通过 `/Users/clawbot/.codex/bin/claude-review-submit.mjs`，不得直接调用 `claude-async.mjs submit`。
+- Claude 只读二审统一默认模型：Opus 5.5（`claude-opus-5-5`）。单一配置 `/Users/clawbot/.codex/claude-review-config.json`；包装器与 Grok adapter 省略 `--model` 继承默认，显式指定才覆盖，不得失败后静默降级。此调整不改真机任务模型、游戏 API、只读权限或预算。
 - 包装器会原子登记 `~/.codex/claude-review-watch.json`；本线程心跳只监控该 job，完成后主动回报并写入 `reported:true`，避免遗漏或重复回报。
 - 备用审查：Codex CLI（`codex exec review`），审查完整 `base..HEAD`，并读取尚未关闭的 Claude findings。
 - 切换条件：`claude_5h_quota_exhausted` / `claude_job_submit_failed` / `claude_review_incomplete` / `user_explicitly_requests_codex` / `urgent_synchronous_review` / `claude_result_conflicts_with_tests_or_contract` / `independent_adjudication_required`。

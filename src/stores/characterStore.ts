@@ -33,6 +33,14 @@ import SaveMigrationModal from '@/components/dashboard/components/SaveMigrationM
 import type { World} from '@/types';
 import type { TavernCommand as ValidatedTavernCommand } from '@/types/AIGameMaster';
 import type { LocalStorageRoot, CharacterProfile, CharacterBaseInfo, SaveSlot, SaveData, StateChangeLog, Realm, NpcProfile, Item } from '@/types/game';
+import {
+  applyLoadedSaveToWorkingSlotMeta,
+  isIsolatedLocalOnlyProfile,
+  landingPlaytestWorkingSlot,
+  shouldReattachLandingPlaytestWorkingCopy,
+  shouldSkipRemoteRootPersist,
+  stampSlotSaveTimes,
+} from '@/utils/isolatedPlaytestPersist';
 
 // 假设的创角数据包，实际应从创角流程获取
 interface CreationPayload {
@@ -149,9 +157,15 @@ export const useCharacterStore = defineStore('characterV3', () => {
 
   // 🔥 异步初始化：从 IndexedDB 加载数据
   const initialized = ref(false);
+  let initializePromise: Promise<void> | null = null;
   const initializeStore = async () => {
     if (initialized.value) return;
+    if (initializePromise) return initializePromise;
+    initializePromise = runInitializeStore();
+    return initializePromise;
+  };
 
+  const runInitializeStore = async () => {
     try {
       // 1. 先尝试数据迁移
       const migrated = await storage.migrateData();
@@ -164,6 +178,11 @@ export const useCharacterStore = defineStore('characterV3', () => {
 
       // 🔥 3. 兼容性迁移：将旧版本的存档结构迁移到新结构
       let needsSave = false;
+      const mutatedProfileIds: string[] = [];
+      const markMutated = (charId: string) => {
+        needsSave = true;
+        if (!mutatedProfileIds.includes(charId)) mutatedProfileIds.push(charId);
+      };
       Object.entries(rootState.value.角色列表).forEach(([charId, profile]) => {
         const anyProfile = profile as any;
         const roleNameForLog = anyProfile.角色?.名字 || anyProfile.角色基础信息?.名字 || charId;
@@ -172,13 +191,13 @@ export const useCharacterStore = defineStore('characterV3', () => {
         if (!anyProfile.角色 && anyProfile.角色基础信息) {
           anyProfile.角色 = anyProfile.角色基础信息;
           delete anyProfile.角色基础信息;
-          needsSave = true;
+          markMutated(charId);
         }
 
         // 3.0.1 确保存档列表存在（新结构要求）
         if (!anyProfile.存档列表 || typeof anyProfile.存档列表 !== 'object') {
           anyProfile.存档列表 = {};
-          needsSave = true;
+          markMutated(charId);
         }
 
         // 单机化后，旧联机 profile/key 只允许由显式复制迁移读取；启动阶段不得改名、删除或补写别名。
@@ -216,7 +235,7 @@ export const useCharacterStore = defineStore('characterV3', () => {
 
           // 删除废弃字段
           delete profile.存档;
-          needsSave = true;
+          markMutated(charId);
 
           debug.log('角色商店', `✅ 角色「${roleNameForLog}」旧版本存档结构迁移完成`);
         }
@@ -228,7 +247,7 @@ export const useCharacterStore = defineStore('characterV3', () => {
             保存时间: null,
             存档数据: null
           };
-          needsSave = true;
+          markMutated(charId);
         }
 
         if (profile.模式 === '单机' && profile.存档列表 && !profile.存档列表['时间点存档']) {
@@ -237,14 +256,14 @@ export const useCharacterStore = defineStore('characterV3', () => {
             保存时间: null,
             存档数据: null
           };
-          needsSave = true;
+          markMutated(charId);
         }
 
       });
 
-      // 如果有迁移，保存到存储
+      // 如果有迁移，保存到存储。只动隔离试玩时不得 PUT 共享远端。
       if (needsSave) {
-        await storage.saveRootData(rootState.value);
+        await commitMetadataToStorage({ mutatedProfileIds });
         debug.log('角色商店', '✅ 迁移后的数据已保存');
       }
 
@@ -341,7 +360,10 @@ export const useCharacterStore = defineStore('characterV3', () => {
    * [核心] 保存当前状态到本地存储
    * 确保任何修改后都能持久化
    */
-  const commitMetadataToStorage = async (): Promise<void> => {
+  const commitMetadataToStorage = async (options?: {
+    localOnly?: boolean;
+    mutatedProfileIds?: string[];
+  }): Promise<void> => {
     try {
       // 🔥 新架构：只保存元数据，不保存庞大的存档数据
       const metadataRoot = JSON.parse(JSON.stringify(rootState.value));
@@ -357,8 +379,14 @@ export const useCharacterStore = defineStore('characterV3', () => {
         }
       });
 
-      // 存储层会剔除隔离试玩元数据，并保留进入试玩前的远端活动指针。
-      await storage.saveRootData(metadataRoot);
+      // 隔离试玩只写本机；远端活动指针与正式角色元数据保持进入试玩前的样子。
+      await storage.saveRootData(metadataRoot, {
+        localOnly: shouldSkipRemoteRootPersist({
+          root: metadataRoot,
+          localOnly: options?.localOnly,
+          mutatedProfileIds: options?.mutatedProfileIds,
+        }),
+      });
       debug.log('角色商店', '✅ 角色元数据已提交到存储');
 
       // 触发响应式更新
@@ -770,6 +798,7 @@ export const useCharacterStore = defineStore('characterV3', () => {
         localOnly: true,
       },
       存档列表: {
+        ...(existing?.存档列表 || {}),
         [payload.slotName]: {
           存档名: payload.slotName,
           保存时间: now,
@@ -1042,9 +1071,31 @@ export const useCharacterStore = defineStore('characterV3', () => {
 
         uiStore.updateLoadingText('天机重置完毕，正在加载存档...');
 
+        let activeSlotKey = slotKey;
+        if (shouldReattachLandingPlaytestWorkingCopy(profile, slotKey) && targetSlot.存档数据) {
+          const workingKey = landingPlaytestWorkingSlot();
+          const workingData = cloneDeep(targetSlot.存档数据);
+          if (!profile.存档列表) profile.存档列表 = {};
+          const workingSlot = profile.存档列表[workingKey] || {
+            存档名: workingKey,
+            保存时间: '',
+            角色名字: profile.角色?.名字,
+            境界: '凡人',
+            位置: '未知',
+            修为进度: 0,
+          };
+          applyLoadedSaveToWorkingSlotMeta(workingSlot, workingData, new Date().toISOString());
+          profile.存档列表[workingKey] = workingSlot;
+          await storage.saveSaveData(charId, workingKey, workingData, { localOnly: true });
+          delete targetSlot.存档数据;
+          workingSlot.存档数据 = workingData;
+          targetSlot = workingSlot;
+          activeSlotKey = workingKey;
+        }
+
         // 2. 设置激活存档
         debug.log('角色商店', '设置当前激活存档');
-      rootState.value.当前激活存档 = { 角色ID: charId, 存档槽位: slotKey };
+      rootState.value.当前激活存档 = { 角色ID: charId, 存档槽位: activeSlotKey };
       await commitMetadataToStorage(); // 立即保存激活状态
 
       // 3. 将加载的存档数据同步到 gameStateStore
@@ -1439,7 +1490,7 @@ export const useCharacterStore = defineStore('characterV3', () => {
       debug.log('角色商店', `✅ 存档内容已保存到 IndexedDB (Key: ${active.角色ID}_${active.存档槽位})`);
 
       // 4. 更新Pinia Store中的 *元数据*
-      slot.保存时间 = new Date().toISOString();
+      stampSlotSaveTimes(slot, new Date().toISOString());
       const playerAttributes = (currentSaveData as any).角色?.属性;
       const playerLocation = (currentSaveData as any).角色?.位置;
       slot.境界 = playerAttributes?.境界?.名称 || '凡人';
@@ -1707,6 +1758,7 @@ export const useCharacterStore = defineStore('characterV3', () => {
       const newSlot: SaveSlot = {
         存档名: saveName,
         保存时间: now,
+        最后保存时间: now,
         角色名字: (currentSaveData as any).角色?.身份?.名字,
         境界: playerAttributes?.境界?.名称 || '凡人',
         位置: playerLocation?.描述 || '未知',
@@ -1819,6 +1871,7 @@ export const useCharacterStore = defineStore('characterV3', () => {
       const newSlotData: SaveSlot = {
         存档名: slotName,
         保存时间: now,
+        最后保存时间: now,
         存档数据: currentSaveData,
         角色名字: (currentSaveData as any).角色?.身份?.名字,
         境界: playerAttributes?.境界?.名称 || '凡人',
@@ -2130,10 +2183,11 @@ export const useCharacterStore = defineStore('characterV3', () => {
     const gameStateStore = useGameStateStore();
     try {
       uiStore.startLoading('正在退出游戏...');
+      const exitingIsolated = isIsolatedLocalOnlyProfile(activeCharacterProfile.value);
       await clearAllCharacterData();
       gameStateStore.resetState(); // 清除游戏状态（包括联机状态）
       rootState.value.当前激活存档 = null;
-      await commitMetadataToStorage();
+      await commitMetadataToStorage({ localOnly: exitingIsolated });
       toast.success(isTavernEnv() ? '已成功退出游戏，酒馆环境已重置。' : '已成功退出游戏。');
     } catch (error) {
       debug.error('角色商店', '退出游戏会话失败', error);

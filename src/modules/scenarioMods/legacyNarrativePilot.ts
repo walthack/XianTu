@@ -4,14 +4,14 @@ import {
   getCurrentStoryEventActions,
   type ScenarioEventActionSelection,
 } from '@/modules/scenarioMods/runtime';
-import { isQingyuOpeningPlaytestSave } from './qingyuOpeningPlaytest';
+import { isScopedNaturalIntentSave } from './playtestNarrativeScope';
 import { isLegacyPilotEventId, LEGACY_NARRATIVE_PILOT_EVENT_IDS } from './legacyPilotScenes';
 
 export const LEGACY_NARRATIVE_PILOT_STORAGE_KEY = 'xiantu.legacyNarrativePilot.s01_01.v1';
 export const LEGACY_PILOT_REQUIRED_PROMPT_KEYS = ['legacyRenderPlan', 'playerPersonality'] as const;
 export const LEGACY_NARRATIVE_PILOT_EVENT_ID = 'lcq.event.s01_01';
 export { isLegacyPilotEventId, LEGACY_NARRATIVE_PILOT_EVENT_IDS };
-export const LEGACY_NARRATIVE_PILOT_MAX_TOKENS = 256;
+export const LEGACY_NARRATIVE_PILOT_MAX_TOKENS = 2048;
 export const LEGACY_NARRATIVE_PILOT_GENERATE_OPTIONS = {
   usageType: 'main' as const,
   maxTokens: LEGACY_NARRATIVE_PILOT_MAX_TOKENS,
@@ -95,7 +95,7 @@ export function planLegacyNarrativePilot(input: {
 }): LegacyNarrativePilotPlan | null {
   if (!isLegacyNarrativePilotEnabled(input.storage)) return null;
   const demoNaturalIntent = input.eventActionProvenance === 'resolved_text'
-    && isQingyuOpeningPlaytestSave(input.saveData);
+    && isScopedNaturalIntentSave(input.saveData);
   if (input.eventActionProvenance !== 'selected' && !demoNaturalIntent) return null;
   const provided = input.eventAction;
   if (!provided || provided.source !== 'event_engine' || !isLegacyPilotEventId(provided.eventId)) {

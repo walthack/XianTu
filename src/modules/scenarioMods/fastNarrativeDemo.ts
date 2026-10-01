@@ -12,6 +12,7 @@ import {
   QINGYU_OPENING_PLAYTEST_EVENT_IDS,
   QINGYU_OPENING_PLAYTEST_MOD_ID,
 } from './qingyuOpeningPlaytest';
+import { isScopedNaturalIntentSave, isScopedPlaytestSave } from './playtestNarrativeScope';
 import {
   getCurrentStoryEventActions,
   getScenarioFocusEvent,
@@ -250,7 +251,7 @@ function buildScenePacket(saveData: SaveData, playerAction: string): FastNarrati
 
 export function isFastNarrativeDemoScope(input: Pick<PlanFastNarrativeDemoInput, 'saveData' | 'storage'>): boolean {
   if (!isFastNarrativeDemoEnabled(input.storage)) return false;
-  if (!input.saveData || !isQingyuOpeningPlaytestSave(input.saveData)) return false;
+  if (!input.saveData || !isScopedNaturalIntentSave(input.saveData)) return false;
   if (!isAllowedFastNarrativeRuntimeMod(readRuntimeModId(input.saveData))) return false;
   if (isFastNarrativeFailClosed(input.saveData)) return false;
   return true;
@@ -743,7 +744,7 @@ export function previewQingyuOpportunityNarrative(
   saveData: SaveData,
   opportunityAction?: ScenarioOpportunityActionSelection,
 ): string {
-  if (!isQingyuOpeningPlaytestSave(saveData)) return '';
+  if (!isScopedPlaytestSave(saveData)) return '';
   if (!opportunityAction || opportunityAction.source !== 'opportunity_engine') return '';
   const clone = cloneJson(saveData);
   const exact = findExactFreshSelection(getTrackedStoryOpportunityActions(clone), opportunityAction);

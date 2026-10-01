@@ -66,6 +66,10 @@ import {
 import { resolveFixedQuestObjective } from './fixedQuestObjectives';
 import { formatQuestCompass, questCompassPhrases } from './eventNarrativeView';
 import { departedPresentNames, stampDepartedCast } from './presence';
+import { releaseBaihuGambleRefusalIfEscaped } from './baihuGambleRefusal';
+import { resolveScopedPlayerLine } from './playerActionPresentation';
+import { fixedStoryInventoryEffects } from './fixedInventoryContracts';
+import { isScopedPlayerPresentationEvent } from './playtestNarrativeScope';
 
 
 export interface ScenarioProgressState {
@@ -1043,12 +1047,21 @@ function isLinearStepContract(contract: ScenarioPlayerCompletionContract): boole
   });
 }
 
+function isBaihuCaptureBlockingDefaultEvent(runtime: RuntimeState, eventId: string): boolean {
+  const phase = (runtime as RuntimeState & { baihuGambleRefusal?: { phase?: string } }).baihuGambleRefusal?.phase;
+  return phase === 'capture_ordered'
+    && (eventId === 'lcq.event.ningyu_enters_gamble' || eventId === 'lcq.event.gamble_bond_signed');
+}
+
 function currentContractStep(runtime: RuntimeState): ScenarioContractStep | undefined {
   const event = getCurrentPlayerCompletionEvent(runtime);
   const contract = event?.playerCompletionContract;
   if (!event || !contract) return undefined;
   const state = reconcileEventActionContract(runtime, event);
   if (!state || state.readyAtTurn !== undefined) return undefined;
+  if (isBaihuCaptureBlockingDefaultEvent(runtime, event.id)) {
+    return undefined;
+  }
   const action = contract.actions.find(item => eventActionAvailable(item, state, runtime));
   if (!action) return undefined;
   const actionIndex = contract.actions.indexOf(action);
@@ -1279,19 +1292,28 @@ function deriveInteraction(
   };
 }
 
-function derivePlayerLine(event: ScenarioModEvent, actionText: string): string {
+function derivePlayerLine(
+  event: ScenarioModEvent,
+  action: { id: string; label?: string; actionText: string },
+  storyMode?: string,
+): string {
+  const scoped = resolveScopedPlayerLine(event, action, storyMode);
+  if (scoped) return scoped;
   const explicitLine = event.presentation?.playerLine?.trim();
   if (explicitLine) return explicitLine;
+  if (isScopedPlayerPresentationEvent(event.id, storyMode)) {
+    return action.actionText;
+  }
   const fixedObjective = resolveFixedQuestObjective(event);
   if (fixedObjective && fixedObjective !== String(event.objective || '').trim()) {
     return `我${fixedObjective}`;
   }
   const templatedPrefix = '我按当前主线目标行动：';
-  if (actionText.startsWith(templatedPrefix)) {
-    const objective = actionText.slice(templatedPrefix.length).trim();
-    return objective ? `我${objective}` : actionText;
+  if (action.actionText.startsWith(templatedPrefix)) {
+    const objective = action.actionText.slice(templatedPrefix.length).trim();
+    return objective ? `我${objective}` : action.actionText;
   }
-  return actionText;
+  return action.actionText;
 }
 
 /** 当前非机会卡承重事件的本地动作；按钮身份来自事件合同，不来自 LLM。 */
@@ -1303,12 +1325,16 @@ export function getCurrentStoryEventActions(saveData: SaveData): ScenarioEventAc
   if (!event || !contract) return [];
   const state = reconcileEventActionContract(runtime, event);
   if (!state || state.readyAtTurn !== undefined) return [];
+  if (isBaihuCaptureBlockingDefaultEvent(runtime, event.id)) {
+    return [];
+  }
   const timeline = eventTimelineState(runtime, event.id);
   const remainingTurns = event.timeline?.deadlineTurns !== undefined && timeline
     ? Math.max(0, timeline.eligibleAtTurn + event.timeline.deadlineTurns - (Number(runtime.worldTurn) || 0))
     : undefined;
   const contractStep = currentContractStep(runtime);
-  const steps: ScenarioEventActionSelection[] = contract.actions.filter(action => eventActionAvailable(action, state, runtime, saveData)).map(action => {
+  const availableActions = contract.actions.filter(action => eventActionAvailable(action, state, runtime, saveData));
+  const steps: ScenarioEventActionSelection[] = availableActions.map(action => {
     const expectedOutcome: ScenarioPlayerCompletionOutcome = contract.kind === 'objective_action'
       ? 'success'
       : conditionsMatch(action.successWhen, saveData, runtime) ? 'success' : action.unmetOutcome || 'failure';
@@ -1321,7 +1347,11 @@ export function getCurrentStoryEventActions(saveData: SaveData): ScenarioEventAc
     const targetSuffix = interaction.targetLabel ? ` · ${interaction.targetLabel}` : '';
     const stepSuffix = isCurrentSequentialStep ? `（第 ${contractStep!.index}/${contractStep!.total} 步）` : '';
     const atLocationId = playerLocationId(saveData, runtime);
-    const traveling = Boolean(event.locationId && event.locationId !== atLocationId);
+    const traveling = Boolean(
+      event.locationId
+      && event.locationId !== atLocationId
+      && !sameSceneLocation(runtime, event.locationId, atLocationId),
+    );
     const compass = traveling ? formatQuestCompass(event, runtime, atLocationId) : '';
     const derivedLabel = `${INTERACTION_VERB_LABELS[interaction.verb]}${targetSuffix}${stepSuffix}`;
     const useCompass = Boolean(compass && !isLinearStepContract(contract));
@@ -1331,7 +1361,7 @@ export function getCurrentStoryEventActions(saveData: SaveData): ScenarioEventAc
       actionId: action.id,
       label: useCompass ? compass : derivedLabel,
       actionText: action.actionText,
-      playerLine: useCompass ? compass : derivePlayerLine(event, action.actionText),
+      playerLine: derivePlayerLine(event, action, runtime.storyMode),
       timeCost: action.timeCost,
       contractHash: state.contractHash,
       expectedOutcome,
@@ -1345,6 +1375,15 @@ export function getCurrentStoryEventActions(saveData: SaveData): ScenarioEventAc
       ...(action.judgement ? { judgement: structuredClone(action.judgement) } : {}),
     };
   });
+  // 同一人物、同一地点上的分支动作可能推导出相同交互标签（例如谢艺的“承接/救治”
+  // 都会变成“行动 · 谢艺”）。只有发生碰撞时才补作者动作名，既保留现有交互语法，
+  // 又确保玩家能看懂自己选的是哪条路。
+  const labelCounts = new Map<string, number>();
+  for (const selection of steps) labelCounts.set(selection.label, (labelCounts.get(selection.label) || 0) + 1);
+  for (const [index, selection] of steps.entries()) {
+    if ((labelCounts.get(selection.label) || 0) < 2) continue;
+    selection.label = `${selection.label} · ${availableActions[index].label}`;
+  }
   // 玩家主动走绝路的选项与正常动作并列。它们不进合同、不影响 contractHash、
   // 也不推进本拍——选中即本局结束。放在最后，避免挤掉当前该做的那一步。
   const fatalChoices = (event.fatalOutcomes?.choices || []).map(choice => {
@@ -1381,6 +1420,11 @@ export function resolveStoryEventActionFromPlayerText(
 ): ScenarioEventActionSelection | undefined {
   // 交接窗只藏下一拍按钮，不挡自由输入（TES：去帅帐/见月霜仍须能落账）。
   if (typeof playerText !== 'string' || !playerText.trim()) return undefined;
+  const rawIntent = playerText.trim();
+  // 问句、整句假设或转述不得靠去标点后的短语伪记同意。句中另有陈述时仍可匹配。
+  if (/[？?]\s*$/.test(rawIntent)) return undefined;
+  if (/^(?:如果|要是|假如|倘若|若是)/.test(rawIntent)) return undefined;
+  if (/^(?:她说|他说|凝羽说|苏妲己说|别人说|有人说|他们说)/.test(rawIntent)) return undefined;
   const runtime = getRuntime(saveData);
   const event = runtime ? getCurrentPlayerCompletionEvent(runtime) : undefined;
   const contract = event?.playerCompletionContract;
@@ -1664,6 +1708,9 @@ export function recordStoryEventStructuredAction(
   if (!event || !contract || event.id !== selection.eventId) {
     return { attempted: false, completed: false, reason: 'stale_event' };
   }
+  if (isBaihuCaptureBlockingDefaultEvent(runtime, event.id)) {
+    return { attempted: false, completed: false, eventId: event.id, reason: 'gamble_refusal_capture' };
+  }
   const state = reconcileEventActionContract(runtime, event);
   if (!state || state.contractHash !== selection.contractHash) {
     return { attempted: false, completed: false, eventId: event.id, reason: 'stale_contract' };
@@ -1758,6 +1805,12 @@ export function recordStoryEventStructuredAction(
     attemptNumber,
   );
   const completed = action.kind !== 'prepare' && contract.settleOn.includes(outcome);
+  if (completed && outcome === 'success') {
+    inventorySettlements.push(...settleScenarioInventoryTransfers(
+      saveData, runtime, fixedStoryInventoryEffects(event.id, action.id),
+      { eventId: event.id, actionId: action.id, outcome },
+    ));
+  }
   if (completed) state.readyAtTurn = turn;
   if (completed) stampDepartedCast(runtime);
   if (completed && event.id === XIEYI_ENTRUSTMENT_EVENT_ID) {
@@ -3550,6 +3603,7 @@ export function advanceScenarioRuntime(saveData: SaveData): {
   settleScenePressure(runtime, transitions);
   recordSettledBeatHandoff(runtime, transitions);
   recordChronicleTransitions(runtime, transitions);
+  releaseBaihuGambleRefusalIfEscaped(next);
 
   return { saveData: next, transitions, affinityGrants, reputationGrants };
 }

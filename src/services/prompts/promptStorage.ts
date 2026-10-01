@@ -55,23 +55,30 @@ interface CloudPromptsPayload {
 
 class PromptStorage {
   private db: IDBPDatabase<PromptsDB> | null = null;
+  private memoryOnly = false;
   private remoteLoaded = false;
   private bulkImporting = false;
 
   async init() {
-    if (this.db) return;
-    this.db = await openDB<PromptsDB>('dad-prompts', 1, {
-      upgrade(db) {
-        if (!db.objectStoreNames.contains('prompts')) {
-          db.createObjectStore('prompts', { keyPath: 'key' });
+    if (this.db || this.memoryOnly) return;
+    try {
+      this.db = await openDB<PromptsDB>('dad-prompts', 1, {
+        upgrade(db) {
+          if (!db.objectStoreNames.contains('prompts')) {
+            db.createObjectStore('prompts', { keyPath: 'key' });
+          }
         }
-      }
-    });
+      });
+    } catch (error) {
+      console.warn('[提示词存储] IndexedDB 不可用，回落内存默认提示词', error);
+      this.memoryOnly = true;
+    }
   }
 
   private async getLocalRecords(): Promise<StoredPromptRecord[]> {
     await this.init();
-    return await this.db!.getAll('prompts');
+    if (this.memoryOnly || !this.db) return [];
+    return await this.db.getAll('prompts');
   }
 
   private async syncLocalToCloud(): Promise<void> {
@@ -94,6 +101,7 @@ class PromptStorage {
   private async loadRemoteOverrides(): Promise<void> {
     if (this.remoteLoaded) return;
     this.remoteLoaded = true;
+    if (this.memoryOnly || !this.db) return;
 
     const remoteData = await loadUserCloudData<CloudPromptsPayload>(PROMPTS_CLOUD_KEY);
     const remoteRecords = this.normalizeCloudRecords(remoteData);
@@ -122,7 +130,7 @@ class PromptStorage {
     const result: Record<string, PromptItem> = {};
 
     for (const key in defaults) {
-      const saved = await this.db!.get('prompts', key);
+      const saved = (this.memoryOnly || !this.db) ? undefined : await this.db.get('prompts', key);
       const currentContent = saved?.content || defaults[key].content;
       // enabled 默认为 true，只有明确设置为 false 时才禁用
       const isEnabled = saved?.enabled !== false;
@@ -202,7 +210,8 @@ class PromptStorage {
 
   async save(key: string, content: string, enabled: boolean = true, weight?: number) {
     await this.init();
-    await this.db!.put('prompts', {
+    if (this.memoryOnly || !this.db) return;
+    await this.db.put('prompts', {
       key,
       content,
       modified: true,
@@ -220,8 +229,9 @@ class PromptStorage {
    */
   async setEnabled(key: string, enabled: boolean) {
     await this.init();
+    if (this.memoryOnly || !this.db) return;
     const defaults = getSystemPrompts();
-    const saved = await this.db!.get('prompts', key);
+    const saved = await this.db.get('prompts', key);
     const content = saved?.content || defaults[key]?.content || '';
     const modified = saved?.modified || false;
 
@@ -245,14 +255,16 @@ class PromptStorage {
 
   async isEnabled(key: string): Promise<boolean> {
     await this.init();
-    const saved = await this.db!.get('prompts', key);
+    if (this.memoryOnly || !this.db) return true;
+    const saved = await this.db.get('prompts', key);
     return saved?.enabled !== false;
   }
 
   async get(key: string): Promise<string> {
     await this.init();
     const defaults = getSystemPrompts();
-    const saved = await this.db!.get('prompts', key);
+    if (this.memoryOnly || !this.db) return defaults[key]?.content || '';
+    const saved = await this.db.get('prompts', key);
 
     if (saved?.enabled === false) {
       return '';
@@ -269,13 +281,15 @@ class PromptStorage {
 
   async reset(key: string) {
     await this.init();
-    await this.db!.delete('prompts', key);
+    if (this.memoryOnly || !this.db) return;
+    await this.db.delete('prompts', key);
     await this.syncLocalToCloud();
   }
 
   async resetAll() {
     await this.init();
-    await this.db!.clear('prompts');
+    if (this.memoryOnly || !this.db) return;
+    await this.db.clear('prompts');
     await this.syncLocalToCloud();
   }
 

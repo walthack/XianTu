@@ -14,6 +14,14 @@ export function buildNarrativePromptState(state: SaveData): Record<string, unkno
   const world = source.世界 || {};
   const worldState = world.状态 || {};
   const runtime = worldState.剧本模组;
+  // 创角身份中保留的完整世界副本已在世界.信息中提供，不重复传输。
+  const identity = source.角色?.身份;
+  const compactIdentity = identity && typeof identity === 'object' ? { ...identity } : identity;
+  if (String(runtime?.modId || '').startsWith('lcq.')
+    && compactIdentity?.世界 && typeof compactIdentity.世界 === 'object') {
+    compactIdentity.世界 = compactIdentity.世界.名称 || compactIdentity.世界.name
+      || world.信息?.世界名称 || '当前世界';
+  }
   const compactRuntime = runtime && typeof runtime === 'object'
     ? {
         modId: runtime.modId,
@@ -36,7 +44,7 @@ export function buildNarrativePromptState(state: SaveData): Record<string, unkno
   return {
     元数据: { 时间: source.元数据?.时间 },
     角色: {
-      身份: source.角色?.身份,
+      身份: compactIdentity,
       属性: source.角色?.属性,
       位置: source.角色?.位置,
       效果: source.角色?.效果,

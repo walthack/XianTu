@@ -36,7 +36,9 @@ export type APIUsageType =
   | 'sect_generation'  // 宗门内容生成（藏经阁、贡献商店等）
   | 'crafting'  // 炼丹炼器
   | 'progress_audit'  // 进度审计（跨轮即兴目标的独立低温审计，后台事后追更）
-  | 'event_reconcile';  // 事件对账（哨兵触发式主线死锁自愈，done/void 双通道，稀有触发）
+  | 'event_reconcile'  // 事件对账（哨兵触发式主线死锁自愈，done/void 双通道，稀有触发）
+  | 'background_audit'  // 后台只读审计：仅作传输计量口径，模型由模块分配决定（未单独配置继承主流程）
+  | 'module_narrative';  // 模块剧情演出：精简上下文，仅作传输计量口径，不占旧链路"每回合长请求"预算
 
 /**
  * 辅助功能的生成模式（仅酒馆端可选）
@@ -63,6 +65,17 @@ export interface APIAssignment {
   type: APIUsageType;
   apiId: string;  // 对应API配置的ID
 }
+
+/** 模块级模型分配：apiId 为 MODULE_INHERIT 表示未单独配置，继承模块卡声明的功能配置。 */
+export interface ModuleAssignment {
+  moduleId: string;
+  apiId: string;
+}
+export const MODULE_INHERIT = 'inherit';
+
+/** 研发/内测构建（非 production）默认开启后台审计；正式版默认关闭（用户裁定 Q5）。 */
+const DEV_BUILD_DEFAULTS = typeof MODULE_DEV_DEFAULTS !== 'undefined' ? MODULE_DEV_DEFAULTS === true : false;
+const DEFAULT_MODULE_ENABLED: Record<string, boolean> = { audit: DEV_BUILD_DEFAULTS };
 
 /**
  * 运行模式
@@ -202,6 +215,11 @@ export const useAPIManagementStore = defineStore('apiManagement', () => {
   // 功能启用状态配置
   const functionEnabled = ref<FunctionEnabledConfig[]>([...DEFAULT_FUNCTION_ENABLED]);
 
+  // 模块级模型分配（独立于功能分配；未设置即继承）
+  const moduleAssignments = ref<ModuleAssignment[]>([]);
+  // 模块自有开关（只登记有独立开关的模块，如后台审计）
+  const moduleEnabled = ref<Record<string, boolean>>({ ...DEFAULT_MODULE_ENABLED });
+
   // AI生成设置
   const aiGenerationSettings = ref({
     splitStep2Streaming: false, // 分步生成第2步是否使用流式传输（默认关闭）
@@ -286,6 +304,16 @@ export const useAPIManagementStore = defineStore('apiManagement', () => {
       mergedEnabled.set(type, { type, enabled });
     }
     functionEnabled.value = DEFAULT_FUNCTION_ENABLED.map(e => mergedEnabled.get(e.type) || e);
+
+    const savedModuleAssignments = Array.isArray(data.moduleAssignments) ? data.moduleAssignments : [];
+    moduleAssignments.value = savedModuleAssignments
+      .filter((a: any) => typeof a?.moduleId === 'string' && typeof a?.apiId === 'string')
+      .map((a: any) => ({ moduleId: a.moduleId, apiId: a.apiId }));
+    const savedModuleEnabled = data.moduleEnabled && typeof data.moduleEnabled === 'object' ? data.moduleEnabled : {};
+    moduleEnabled.value = { ...DEFAULT_MODULE_ENABLED };
+    for (const [id, value] of Object.entries(savedModuleEnabled)) {
+      if (typeof value === 'boolean') moduleEnabled.value[id] = value;
+    }
   };
 
   const ensureDefaultConfig = () => {
@@ -309,6 +337,8 @@ export const useAPIManagementStore = defineStore('apiManagement', () => {
     apiAssignments: apiAssignments.value,
     functionModes: functionModes.value,
     functionEnabled: functionEnabled.value,
+    moduleAssignments: moduleAssignments.value,
+    moduleEnabled: moduleEnabled.value,
     aiGenerationSettings: aiGenerationSettings.value
   });
 
@@ -449,6 +479,8 @@ export const useAPIManagementStore = defineStore('apiManagement', () => {
         assignment.apiId = 'default';
       }
     });
+    // 模块分配回到「继承」，而不是悄悄改成 default 连接
+    moduleAssignments.value = moduleAssignments.value.filter(assignment => assignment.apiId !== id);
 
     apiConfigs.value = apiConfigs.value.filter(api => api.id !== id);
     saveToStorage();
@@ -477,6 +509,35 @@ export const useAPIManagementStore = defineStore('apiManagement', () => {
     }
 
     return api;
+  };
+
+  /** 模块单独分配的连接 id；未设置返回 MODULE_INHERIT。 */
+  const getModuleAssignment = (moduleId: string): string =>
+    moduleAssignments.value.find(a => a.moduleId === moduleId)?.apiId || MODULE_INHERIT;
+
+  const assignModuleAPI = (moduleId: string, apiId: string) => {
+    moduleAssignments.value = moduleAssignments.value.filter(a => a.moduleId !== moduleId);
+    if (apiId && apiId !== MODULE_INHERIT) moduleAssignments.value.push({ moduleId, apiId });
+    saveToStorage();
+  };
+
+  /**
+   * 模块的模型解析：单独分配且启用的连接优先；否则继承 inheritType 的功能分配。
+   * 单独分配的连接被停用/删除时同样回到继承，不回退到 default 连接。
+   */
+  const getAPIForModule = (moduleId: string, inheritType: APIUsageType): { config: APIConfig | null; inherited: boolean } => {
+    const assigned = getModuleAssignment(moduleId);
+    if (assigned !== MODULE_INHERIT) {
+      const api = apiConfigs.value.find(a => a.id === assigned && a.enabled);
+      if (api) return { config: api, inherited: false };
+    }
+    return { config: getAPIForType(inheritType), inherited: true };
+  };
+
+  const isModuleEnabled = (moduleId: string): boolean => moduleEnabled.value[moduleId] ?? true;
+  const setModuleEnabled = (moduleId: string, enabled: boolean) => {
+    moduleEnabled.value = { ...moduleEnabled.value, [moduleId]: enabled };
+    saveToStorage();
   };
 
   // 切换API启用状态
@@ -535,6 +596,8 @@ export const useAPIManagementStore = defineStore('apiManagement', () => {
       apiAssignments: apiAssignments.value,
       functionModes: functionModes.value,
       functionEnabled: functionEnabled.value,
+      moduleAssignments: moduleAssignments.value,
+      moduleEnabled: moduleEnabled.value,
       aiGenerationSettings: aiGenerationSettings.value,
       exportTime: new Date().toISOString()
     };
@@ -599,6 +662,14 @@ export const useAPIManagementStore = defineStore('apiManagement', () => {
       if (data.functionEnabled && Array.isArray(data.functionEnabled)) {
         functionEnabled.value = data.functionEnabled;
       }
+      if (Array.isArray(data.moduleAssignments)) {
+        moduleAssignments.value = data.moduleAssignments
+          .filter((a: any) => typeof a?.moduleId === 'string' && typeof a?.apiId === 'string')
+          .map((a: any) => ({ moduleId: a.moduleId, apiId: a.apiId }));
+      }
+      if (data.moduleEnabled && typeof data.moduleEnabled === 'object') {
+        moduleEnabled.value = { ...DEFAULT_MODULE_ENABLED, ...data.moduleEnabled };
+      }
       if (data.aiGenerationSettings) {
         aiGenerationSettings.value = {
           ...aiGenerationSettings.value,
@@ -617,6 +688,8 @@ export const useAPIManagementStore = defineStore('apiManagement', () => {
     apiAssignments,
     functionModes,
     functionEnabled,
+    moduleAssignments,
+    moduleEnabled,
     aiGenerationSettings,
     cloudSyncState,
     enabledAPIs,
@@ -633,6 +706,11 @@ export const useAPIManagementStore = defineStore('apiManagement', () => {
     getFunctionMode,
     setFunctionEnabled,
     isFunctionEnabled,
+    getModuleAssignment,
+    assignModuleAPI,
+    getAPIForModule,
+    isModuleEnabled,
+    setModuleEnabled,
     updateAIGenerationSettings,
     exportConfig,
     uploadConfigToCloud,

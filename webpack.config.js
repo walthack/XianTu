@@ -166,7 +166,9 @@ export default (env, argv) => {
         // this branch at build time.
         'JUDGEMENT_TEST_CONTROLS': JSON.stringify(!isProduction),
         // Disposable R2 acceptance character/fixture controls. Never ship in production.
-        'R2_ACCEPTANCE_CONTROLS': JSON.stringify(!isProduction)
+        'R2_ACCEPTANCE_CONTROLS': JSON.stringify(!isProduction),
+        // 研发/内测构建的模块默认值（如后台审计默认开启）；正式版默认关闭。
+        'MODULE_DEV_DEFAULTS': JSON.stringify(!isProduction)
       }),
       new HtmlWebpackPlugin({
         template: './index.html',

@@ -113,7 +113,7 @@ test('pilot accepts only an exact selected stage_01 action and fails closed othe
   assert.equal(pilot.isLegacyPilotEventId('lcq.event.baihu_shangguan_escape'), true);
   assert.equal(pilot.isLegacyPilotEventId('lcq.event.wuerlang_joins'), false);
   assert.equal(plan.playerLine, selection.playerLine);
-  assert.equal(pilot.LEGACY_NARRATIVE_PILOT_GENERATE_OPTIONS.maxTokens, 256);
+  assert.equal(pilot.LEGACY_NARRATIVE_PILOT_GENERATE_OPTIONS.maxTokens, 2048);
   assert.equal(pilot.LEGACY_NARRATIVE_PILOT_GENERATE_OPTIONS.responseMode, 'text');
   assert.equal('requestMaxRetries' in pilot.LEGACY_NARRATIVE_PILOT_GENERATE_OPTIONS, false, 'global retry setting must remain active');
 
@@ -165,7 +165,7 @@ test('local-contract response settles the real event once but rejects every mode
 
 test('pilot generate options keep global retry config and do not embed requestMaxRetries', async () => {
   const { LEGACY_NARRATIVE_PILOT_GENERATE_OPTIONS } = await loadTs('../src/modules/scenarioMods/legacyNarrativePilot.ts');
-  assert.equal(LEGACY_NARRATIVE_PILOT_GENERATE_OPTIONS.maxTokens, 256);
+  assert.equal(LEGACY_NARRATIVE_PILOT_GENERATE_OPTIONS.maxTokens, 2048);
   assert.equal(LEGACY_NARRATIVE_PILOT_GENERATE_OPTIONS.responseMode, 'text');
   assert.equal('requestMaxRetries' in LEGACY_NARRATIVE_PILOT_GENERATE_OPTIONS, false);
 });

@@ -4,6 +4,9 @@ import { createMinimalSaveDataV3 } from '@/utils/dataRepair';
 import type { ScenarioMod } from './schema';
 import { advanceScenarioRuntime } from './runtime';
 import { applyStrictScenarioInitializationToSave, buildStrictScenarioInitialization } from './strictInitializer';
+import { QINGYU_OPENING_TEXT, QINGYU_STAGE_02_OPENING_TEXT } from './qingyuOpeningTexts';
+
+export { QINGYU_OPENING_TEXT, QINGYU_STAGE_02_OPENING_TEXT } from './qingyuOpeningTexts';
 
 export const QINGYU_OPENING_PLAYTEST_CHARACTER_ID = 'char_qingyu_opening_playtest_v1';
 export const QINGYU_OPENING_PLAYTEST_SLOT = '清羽记开局';
@@ -58,21 +61,6 @@ export interface QingyuOpeningPlaytestMarker {
 // 这些话本身没错，但它们属于**入口卡片**（玩家在那里决定要不要开始，知道范围是合理的），
 // 不属于开场正文。卡片上已经写了，这里再写一遍纯属有害。
 // 这与本轮清理 objective 的规矩是同一条：玩家看到的东西里不许有开发者语言与剧透。
-const OPENING_TEXT = `雷光是紫色的。
-
-机舱在那一瞬间失去了所有声音——引擎、广播、邻座的呼吸，一齐没了。等你重新听见东西，耳朵里只剩风，草叶擦过脸颊的窸窣，以及远处某种连成一片的低鸣，像是很多人在同时喊叫。
-
-你趴在草里。掌心下面是湿的泥土和草根，不是座椅，不是金属。段强在几步开外，还没爬起来。
-
-天是亮的。风里有血腥味。`;
-
-/** 切关进帅帐只写眼前，不写王哲身死或玩家可改结局。 */
-export const QINGYU_STAGE_02_OPENING_TEXT = `帅帐里灯火压得很低。
-
-帐外还能听见远处的喊杀，但这里已经静下来了。案上有一只未拆的锦囊，对面的人还坐着，像是有话要当面说完。
-
-帐帘刚落下。你站在门槛里。`;
-
 export function overlayQingyuStage02Opening(mod: ScenarioMod): ScenarioMod {
   if (mod.manifest.id !== QINGYU_OPENING_PLAYTEST_END_MOD_ID) return mod;
   const next = structuredClone(mod);
@@ -150,10 +138,10 @@ function applyQingyuDemoNaturalIntents(mod: ScenarioMod): void {
   ]);
   overlayDemoActionIntent(mod, 'lcq.event.ningyu_enters_gamble', 'see_ningyu_sent_into_gamble', [
     '看清凝羽进入赌局', '观察凝羽入局', '弄清谁把凝羽送来',
-  ]);
+  ], ['赌就不必了', '不赌了', '我拒绝赌局', '我不参加赌局']);
   overlayDemoActionIntent(mod, 'lcq.event.ningyu_enters_gamble', 'answer_ningyu_on_debut', [
     '回应凝羽', '和凝羽说话', '询问凝羽来意',
-  ]);
+  ], ['赌就不必了', '不赌了', '我拒绝赌局', '我不参加赌局']);
   overlayDemoActionIntent(mod, 'lcq.event.sudaji_south_pact', 'offer_nylon_clue_for_term', [
     '用霓龙丝线索换期限', '拿霓龙丝线索谈条件', '提出三个月期限',
   ]);
@@ -162,10 +150,10 @@ function applyQingyuDemoNaturalIntents(mod: ScenarioMod): void {
   ], ['拒绝南荒之约']);
   overlayDemoActionIntent(mod, 'lcq.event.gamble_bond_signed', 'confirm_rigged_wager_loss', [
     '检查刻香', '确认赌局落败', '看清刻香被动了手脚',
-  ]);
+  ], ['赌就不必了', '不赌了', '我拒绝赌局', '我不参加赌局']);
   overlayDemoActionIntent(mod, 'lcq.event.gamble_bond_signed', 'sign_the_bond', [
     '回应眼前契书', '拿起契书', '签下身契', '面对赌债契书',
-  ], ['拒绝签契', '撕毁契书']);
+  ], ['拒绝签契', '撕毁契书', '赌就不必了', '不赌了', '我拒绝赌局', '我不参加赌局']);
   overlayDemoActionIntent(mod, 'lcq.event.charge_sudaji_fee', 'name_sixty_zhu_before_help', [
     '开价六十金铢', '向苏妲己报价', '先谈六十金铢工价',
   ]);
@@ -270,7 +258,7 @@ export function createQingyuOpeningPlaytestSave(mod: ScenarioMod, generatedAt = 
   save.系统.扩展[QINGYU_OPENING_PLAYTEST_EXTENSION_KEY] = marker;
   save.系统.历史.叙事 = [{
     type: 'gm',
-    content: OPENING_TEXT,
+    content: QINGYU_OPENING_TEXT,
     time: '【清羽·草原落地】',
     actionOptions: [
       '先确认段强还在身边',
@@ -278,7 +266,7 @@ export function createQingyuOpeningPlaytestSave(mod: ScenarioMod, generatedAt = 
       '找掩体观察四周',
     ],
   }];
-  save.社交.记忆.短期记忆 = [OPENING_TEXT];
+  save.社交.记忆.短期记忆 = [QINGYU_OPENING_TEXT];
   return save;
 }
 

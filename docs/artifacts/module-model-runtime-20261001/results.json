@@ -1,0 +1,185 @@
+{
+  "status": "READY_FOR_TRUE_DEVICE",
+  "scope": "model-replaceable module runtime",
+  "focused": {
+    "total": 36,
+    "pass": 36
+  },
+  "gate": {
+    "total": 1119,
+    "pass": 1114,
+    "skip": 5,
+    "fail": 0
+  },
+  "controlled": [
+    {
+      "url": "http://127.0.0.1:8091",
+      "passed": true,
+      "requests": [
+        {
+          "model": "main",
+          "chars": 1666,
+          "stream": false
+        },
+        {
+          "model": "memory",
+          "chars": 360,
+          "stream": false
+        },
+        {
+          "model": "quality",
+          "chars": 272,
+          "stream": false
+        },
+        {
+          "model": "alternate-narrator",
+          "chars": 1666,
+          "stream": false
+        },
+        {
+          "model": "memory",
+          "chars": 360,
+          "stream": false
+        },
+        {
+          "model": "quality",
+          "chars": 272,
+          "stream": false
+        },
+        {
+          "model": "main",
+          "chars": 1666,
+          "stream": false
+        },
+        {
+          "model": "memory",
+          "chars": 360,
+          "stream": false
+        },
+        {
+          "model": "quality",
+          "chars": 272,
+          "stream": false
+        },
+        {
+          "model": "main",
+          "chars": 1666,
+          "stream": false
+        },
+        {
+          "model": "main",
+          "chars": 1666,
+          "stream": false
+        },
+        {
+          "model": "memory",
+          "chars": 360,
+          "stream": false
+        },
+        {
+          "model": "main",
+          "chars": 1666,
+          "stream": false
+        },
+        {
+          "model": "memory",
+          "chars": 360,
+          "stream": false
+        }
+      ],
+      "foregroundIndependent": true,
+      "reload": true,
+      "rejectedEvidence": true,
+      "lateIsolated": true,
+      "invalidMainUncommitted": true,
+      "disabledRouteRespected": true,
+      "backgroundFailureIsolated": true,
+      "modelSwapSameContract": true
+    },
+    {
+      "url": "http://127.0.0.1:18097",
+      "passed": true,
+      "requests": [
+        {
+          "model": "main",
+          "chars": 1666,
+          "stream": false
+        },
+        {
+          "model": "memory",
+          "chars": 360,
+          "stream": false
+        },
+        {
+          "model": "quality",
+          "chars": 272,
+          "stream": false
+        },
+        {
+          "model": "alternate-narrator",
+          "chars": 1666,
+          "stream": false
+        },
+        {
+          "model": "memory",
+          "chars": 360,
+          "stream": false
+        },
+        {
+          "model": "quality",
+          "chars": 272,
+          "stream": false
+        },
+        {
+          "model": "main",
+          "chars": 1666,
+          "stream": false
+        },
+        {
+          "model": "memory",
+          "chars": 360,
+          "stream": false
+        },
+        {
+          "model": "quality",
+          "chars": 272,
+          "stream": false
+        },
+        {
+          "model": "main",
+          "chars": 1666,
+          "stream": false
+        },
+        {
+          "model": "main",
+          "chars": 1666,
+          "stream": false
+        },
+        {
+          "model": "memory",
+          "chars": 360,
+          "stream": false
+        },
+        {
+          "model": "main",
+          "chars": 1666,
+          "stream": false
+        },
+        {
+          "model": "memory",
+          "chars": 360,
+          "stream": false
+        }
+      ],
+      "foregroundIndependent": true,
+      "reload": true,
+      "rejectedEvidence": true,
+      "lateIsolated": true,
+      "invalidMainUncommitted": true,
+      "disabledRouteRespected": true,
+      "backgroundFailureIsolated": true,
+      "modelSwapSameContract": true
+    }
+  ],
+  "realModelMatrix": "not rerun in this revision; controlled model swap is not real-model quality or SLA proof"
+}

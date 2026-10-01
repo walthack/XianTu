@@ -1,6 +1,7 @@
 <template>
   <div class="main-game-panel">
     <WorldSimulationPlaytestPanel />
+    <XingyuehuQuestPlaytestHud />
     <!-- 短期记忆区域 -->
     <div class="memory-section" v-if="showMemorySection">
       <div class="memory-header" @click="toggleMemory">
@@ -123,13 +124,11 @@
               </button>
             </div>
           </div>
-          <div v-if="uiStore.lastSentUserIntentText" class="last-user-intent">
+          <div v-if="currentNarrative.userIntent" class="last-user-intent">
             <div class="last-user-intent-header">
               <span class="k">你的输入</span>
-              <span v-if="uiStore.lastSentUserIntentSource === 'action_option'" class="badge">来自行动推荐</span>
-              <span v-else-if="uiStore.lastSentUserIntentSource === 'mixed'" class="badge">含行动推荐</span>
             </div>
-            <div class="last-user-intent-text">{{ uiStore.lastSentUserIntentText }}</div>
+            <div class="last-user-intent-text">{{ currentNarrative.userIntent }}</div>
           </div>
           <div class="narrative-text">
             <FormattedText :text="currentNarrative.content" />
@@ -143,8 +142,9 @@
               class="action-option-btn engine-action-btn"
               :disabled="isAIProcessing"
             >
-              <span v-if="showScenarioActionMechanics(option)" class="engine-action-badge">{{ option.source === 'event_engine' ? t('主线') : option.source === 'exploration_engine' ? t('探索') : option.source === 'open_world_engine' ? t('地方') : t('机会') }}</span>
+              <span v-if="showScenarioActionMechanics(option)" class="engine-action-badge">{{ option.source === 'event_engine' ? t('主线') : option.source === 'exploration_engine' ? t('探索') : option.source === 'open_world_engine' ? t('地方') : option.source === 'baihu_gamble_refusal_engine' ? t('应对') : t('机会') }}</span>
               {{ option.label }}<template v-if="showScenarioActionMechanics(option)"> · 耗时 {{ option.timeCost }} 回合<template v-if="'remainingTurns' in option && option.remainingTurns !== undefined"> · 剩余 {{ option.remainingTurns }} 次重要行动</template></template>
+              <span v-if="'costHint' in option && option.costHint" class="engine-action-cost"> · {{ option.costHint }}</span>
             </button>
             <div class="engine-action-hint">{{ qingyuOpeningDemo ? t('可以直接描述行动，也可点按建议填入') : t('点按填入，可修改后发送') }}</div>
           </div>
@@ -318,13 +318,29 @@
             </div>
           </div>
 
+          <div v-else-if="xingyuehuPlaytestFinished" class="game-over-card">
+            <div class="game-over-head">
+              <span class="game-over-tag">试玩完成</span>
+              <h3>{{ xingyuehuLandingFinished ? '星月湖组织支持这一段已经听清' : '星月湖这一段任务线已经结束' }}</h3>
+            </div>
+            <p class="game-over-hint">{{
+              xingyuehuLandingFinished
+                ? '这是星月湖组织支持的阶段结局，不是整个星月湖故事完结。'
+                : '谢艺的命运、你的介入方式和星月湖的回应都已写入这个隔离存档。'
+            }}</p>
+            <div class="game-over-acts">
+              <button @click="router.push('/xingyuehu-quest-playtest')" class="go-primary">返回试玩入口</button>
+              <button @click="router.push('/')" class="go-ghost">返回角色选择</button>
+            </div>
+          </div>
+
           <textarea
             v-model="inputText"
             @focus="isInputFocused = true"
             @blur="isInputFocused = false"
             @keydown="handleKeyDown"
             @input="handleInput"
-            :placeholder="scenarioGameOver ? '本局已结束' : playtestFinished ? '本次试玩已结束，请在上方提交反馈' : hasActiveCharacter ? t('请输入您的选择或行动...') : t('请先选择角色...')"
+            :placeholder="scenarioGameOver ? '本局已结束' : playtestFinished ? '本次试玩已结束' : hasActiveCharacter ? t('请输入您的选择或行动...') : t('请先选择角色...')"
             class="game-input"
             ref="inputRef"
             rows="1"
@@ -437,6 +453,8 @@
 </template>
 
 <script setup lang="ts">
+import { cancelModuleBackground, startModuleBackground } from '@/services/modularTurnBackground';
+import { scheduleBackgroundAudit, yieldBackgroundAudit } from '@/services/backgroundAudit';
 import { ref, onMounted, onActivated, onUnmounted, nextTick, computed, watch } from 'vue';
 import {
   Send, Loader2, ChevronDown, ChevronRight, ScrollText, RotateCcw, Shield, BrainCircuit, Bell, History
@@ -456,8 +474,18 @@ import { calculateAgeFromBirthdate } from '@/utils/lifespanCalculator';
 import { aiService } from '@/services/aiService';
 import { extractTextFromJsonResponse, extractStreamingNarrativeText } from '@/utils/textSanitizer';
 import { validateProcessedAIResponse } from '@/utils/processedAIResponseValidation';
+import { usesFixedScenarioInventory } from '@/modules/scenarioMods/fixedInventoryContracts';
+import {
+  beginQingyuTurnLongRequests,
+  invalidateQingyuTurnLongRequests,
+  peekActiveQingyuTurnId,
+  remainingQingyuTurnLongRequests,
+  releaseQingyuTurnLongRequests,
+} from '@/services/qingyuTurnLongRequests';
+import { isAiRequestTimeout } from '@/services/aiRequestDeadline';
 import FormattedText from '@/components/common/FormattedText.vue';
 import WorldSimulationPlaytestPanel from '@/components/dashboard/WorldSimulationPlaytestPanel.vue';
+import XingyuehuQuestPlaytestHud from '@/components/dashboard/XingyuehuQuestPlaytestHud.vue';
 import { useGameStateStore } from '@/stores/gameStateStore';
 import { getSnapshots } from '@/utils/snapshotManager';
 import {
@@ -488,12 +516,27 @@ import {
   type WuyuanOpenWorldSelection,
 } from '@/modules/scenarioMods/wuyuanOpenWorldSlice';
 import {
+  BAIHU_GAMBLE_REFUSAL_SOURCE,
+  getBaihuGambleRefusalSelections,
+  resolveBaihuGambleRefusalFromText,
+  type BaihuGambleRefusalSelection,
+} from '@/modules/scenarioMods/baihuGambleRefusal';
+import {
   getCurrentWorldSituation,
   getWorldSimulationPresentationNotices,
   settleWorldSimulationJudgement,
 } from '@/modules/scenarioMods/worldSimulation';
 import { WORLD_SIMULATION_PLAYTEST_KIND } from '@/modules/scenarioMods/worldSimulationPlaytest';
 import { isQingyuOpeningPlaytestSave } from '@/modules/scenarioMods/qingyuOpeningPlaytest';
+import {
+  abortInFlightNaturalIntent,
+  intentSaveFingerprint,
+  NATURAL_INTENT_CLARIFY_DEFAULT,
+  resolveNaturalIntent,
+  verifyFreshSelection,
+} from '@/modules/scenarioMods/naturalIntentRouter';
+import { isXingyuehuQuestPlaytestFinished } from '@/modules/scenarioMods/xingyuehuQuestPlaytest';
+import { isXingyuehuLandingPlaytestFinished } from '@/modules/scenarioMods/xingyuehuLandingPlaytest';
 import { settleFastNarrativeDemoAdjudication } from '@/modules/scenarioMods/fastNarrativeDemoAdjudication';
 import {
   isFastNarrativeHoldResponse,
@@ -714,6 +757,7 @@ const persistAIProcessingState = () => {
 const forceResetAIProcessingState = () => {
   console.log('[强制重置] 清除AI处理状态和会话存储');
   // 取消所有正在进行的AI请求（包括重试中的）
+  abortInFlightNaturalIntent();
   aiService.cancelAllRequests();
   aiResetToken += 1;
   uiStore.resetStreamingState();
@@ -754,6 +798,30 @@ const characterStore = useCharacterStore();
 const actionQueue = useActionQueueStore();
 const uiStore = useUIStore();
 let aiResetToken = 0;
+let ownedQingyuTurnId: string | null = null;
+
+/** 本组件拥有的回合清理：切档与卸载共用。只失效/取消自己的 turn，不清后来者的 busy。 */
+const abandonOwnedGameTurn = () => {
+  cancelModuleBackground();
+  yieldBackgroundAudit();
+  aiResetToken += 1;
+  const owned = ownedQingyuTurnId;
+  ownedQingyuTurnId = null;
+  const active = peekActiveQingyuTurnId();
+  if (owned) {
+    invalidateQingyuTurnLongRequests(owned);
+    aiService.abortQingyuTurnRequests(owned);
+  }
+  if (!active || active === owned) {
+    abortInFlightNaturalIntent();
+    uiStore.resetStreamingState();
+    streamingMessageIndex.value = null;
+    rawStreamingContent.value = '';
+    uiStore.setCurrentGenerationId(null);
+    uiStore.setAIProcessing(false);
+    persistAIProcessingState();
+  }
+};
 const gameStateStore = useGameStateStore();
 // 本局已结束（玩家走进绝路）。引擎侧 `runtime.gameOver` 是唯一真值来源——
 // 结局正文由叙述在本轮已经写完，这里只负责收住界面：封输入，只留退路。
@@ -762,17 +830,22 @@ const scenarioGameOver = computed<{ endingId: string; title: string; facts: stri
   const over = runtime?.gameOver;
   return over?.endingId ? over : null;
 });
-const playtestFinished = computed(() => {
+const worldSimulationPlaytestFinished = computed(() => {
   const marker = (gameStateStore.systemExtensions as any)?.六朝世界试玩;
   const runtime = (gameStateStore.worldState as any)?.剧本模组;
   return marker?.kind === WORLD_SIMULATION_PLAYTEST_KIND
     && runtime?.storyMode === 'world_sim'
     && !getCurrentWorldSituation(runtime);
 });
+const xingyuehuLandingFinished = computed(() => isXingyuehuLandingPlaytestFinished(gameStateStore.toSaveData()));
+const xingyuehuPlaytestFinished = computed(() => (
+  isXingyuehuQuestPlaytestFinished(gameStateStore.toSaveData()) || xingyuehuLandingFinished.value
+));
+const playtestFinished = computed(() => worldSimulationPlaytestFinished.value || xingyuehuPlaytestFinished.value);
 const isTavernEnvFlag = isTavernEnv();
 const enhancedActionQueue = EnhancedActionQueueManager.getInstance();
 const bidirectionalSystem = AIBidirectionalSystem;
-type ScenarioEngineActionSelection = ScenarioOpportunityActionSelection | ScenarioEventActionSelection | WuyuanOpenWorldSelection;
+type ScenarioEngineActionSelection = ScenarioOpportunityActionSelection | ScenarioEventActionSelection | WuyuanOpenWorldSelection | BaihuGambleRefusalSelection;
 const selectedScenarioEngineAction = ref<ScenarioEngineActionSelection | null>(null);
 const qingyuOpeningDemo = computed(() => isQingyuOpeningPlaytestSave(gameStateStore.toSaveData()));
 const showScenarioActionMechanics = (option: ScenarioEngineActionSelection) => (
@@ -782,6 +855,7 @@ const scenarioEngineActionOptions = computed<ScenarioEngineActionSelection[]>(()
   const save = gameStateStore.toSaveData();
   if (!save) return [];
   const openWorldActions = getWuyuanOpenWorldSelections(save);
+  const gambleRefusalActions = getBaihuGambleRefusalSelections(save);
   const eventActions = getCurrentStoryEventActions(save)
     // 五原落奴这拍由“先走到点心铺 → 选择应对过程 → 收束既定被抓事实”的局部合同承接。
     // 隐藏旧的宽泛单按钮，避免绕过移动、代价和失败转新状态。
@@ -791,6 +865,7 @@ const scenarioEngineActionOptions = computed<ScenarioEngineActionSelection[]>(()
     ...getCurrentStoryExplorationActions(save),
     ...getTrackedStoryOpportunityActions(save),
     ...openWorldActions,
+    ...gambleRefusalActions,
   ];
 });
 const stageDepartureOffer = computed(() => {
@@ -933,6 +1008,7 @@ const currentNarrative = computed(() => {
       .join('\n\n');
     return {
       type: latestNarrative.type || 'narrative',
+      userIntent: (latestNarrative as { userIntent?: string }).userIntent || '',
       content: [content || '...', noticeText].filter(Boolean).join('\n\n'),
       time: currentTimeString,
       stateChanges: latestNarrative.stateChanges || { changes: [] },
@@ -943,6 +1019,7 @@ const currentNarrative = computed(() => {
   // 无数据时的默认内容
   return {
     type: 'system',
+    userIntent: '',
     content: content || '开局生成失败，请检查API上下文长度是否足够，是否使用支持流式的API，然后返回主页重新开始生成。',
     time: currentTimeString,
     stateChanges: { changes: [] },
@@ -1355,6 +1432,7 @@ const selectAction = (action: ActionItem) => {
 };
 
 const cancelAction = () => {
+  abortInFlightNaturalIntent();
   selectedAction.value = null;
   selectedTime.value = 1;
   customTime.value = 1;
@@ -1420,6 +1498,14 @@ const retryAIResponse = async (
   previousErrors: string[],
   maxRetries: number = 2
 ): Promise<GM_Response | null> => {
+  const saveForRetryBudget = gameStateStore.toSaveData();
+  if (
+    remainingQingyuTurnLongRequests() === 0
+    || (saveForRetryBudget && usesFixedScenarioInventory(saveForRetryBudget))
+  ) {
+    console.warn('[AI响应重试] 清羽/固定道具合同回合不再发起格式重试长请求');
+    return null;
+  }
   console.log('[AI响应重试] 开始重试，之前的错误:', previousErrors);
   const resetSnapshot = aiResetToken;
 
@@ -1474,6 +1560,7 @@ const retryAIResponse = async (
         onProgressUpdate: (progress: string) => {
           console.log('[AI重试进度]', progress);
         },
+        playerIntentText: uiStore.lastSentUserIntentText,
         useStreaming: useStreaming.value, // 🔥 启用流式传输
         shouldAbort: () => !uiStore.isAIProcessing || aiResetToken !== resetSnapshot,
         generation_id: retryGenerationId  // 🔥 传递 generation_id
@@ -1485,6 +1572,7 @@ const retryAIResponse = async (
         resetStreamParseState(); // 重置解析状态
         (options as any).onStreamChunk = (chunk: string) => {
           if (!useStreaming.value || !chunk) return;
+          if (aiResetToken !== resetSnapshot || !uiStore.isAIProcessing) return;
           console.log('[网页版流式-重试] 收到chunk:', chunk.length, '字符');
           handleStreamChunk(chunk);
         };
@@ -1502,6 +1590,8 @@ const retryAIResponse = async (
       }
 
       if (aiResponse) {
+        if (aiResponse.generationError) throw Object.assign(new Error(aiResponse.generationError.message), { code: aiResponse.generationError.code });
+        if (aiResponse.outputTruncated) return aiResponse;
         const validation = validateProcessedAIResponse(aiResponse);
         if (validation.isValid) {
           console.log(`[AI响应重试] 第${attempt}次尝试成功`);
@@ -1513,6 +1603,7 @@ const retryAIResponse = async (
         }
       }
     } catch (error) {
+      if (isAiRequestTimeout(error) || (error && typeof error === 'object' && 'code' in error && (error.code === 'AI_REQUEST_TIMEOUT' || error.code === 'PLAYER_AGENCY_VIOLATION'))) throw error;
       if (isCanceledError(error) || !uiStore.isAIProcessing || aiResetToken !== resetSnapshot) {
         console.log('[AI响应重试] 已取消，停止重试');
         return null;
@@ -1594,7 +1685,9 @@ const selectActionOption = (option: string) => {
 
 const selectScenarioEngineAction = (option: ScenarioEngineActionSelection) => {
   selectedScenarioEngineAction.value = option;
-  const playerLine = option.source === 'opportunity_engine' || option.source === 'open_world_engine'
+  const playerLine = option.source === 'opportunity_engine'
+    || option.source === 'open_world_engine'
+    || option.source === BAIHU_GAMBLE_REFUSAL_SOURCE
     ? option.actionText
     : option.playerLine;
   lastSelectedActionOption.value = playerLine;
@@ -1621,12 +1714,18 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
     toast.warning('AI正在处理中，请稍等...');
     return;
   }
+  uiStore.setAIProcessing(true);
+  persistAIProcessingState();
   if (!hasActiveCharacter.value) {
+    uiStore.setAIProcessing(false);
+    persistAIProcessingState();
     toast.error('请先选择或创建角色');
     return;
   }
 
   if (pendingJudgement.value && !execution?.skipPreflight) {
+    uiStore.setAIProcessing(false);
+    persistAIProcessingState();
     toast.warning('请先处理当前待确认的行动判定');
     return;
   }
@@ -1636,6 +1735,8 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
   if (saveData) {
     // 检查气血
     if ((saveData as any).角色?.属性?.气血?.当前 !== undefined && (saveData as any).角色.属性.气血.当前 <= 0) {
+      uiStore.setAIProcessing(false);
+      persistAIProcessingState();
       toast.error('角色已死亡，气血耗尽。无法继续游戏，请重新开始或复活角色。');
       return;
     }
@@ -1646,6 +1747,8 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
     if (birthDate && gameTime && typeof lifespanLimit === 'number') {
       const currentAge = calculateAgeFromBirthdate(birthDate, gameTime);
       if (currentAge >= lifespanLimit) {
+        uiStore.setAIProcessing(false);
+        persistAIProcessingState();
         toast.error('角色已死亡，寿元耗尽。无法继续游戏，请重新开始或复活角色。');
         return;
       }
@@ -1655,6 +1758,97 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
   const preflightOpenWorldAction = selectedScenarioEngineAction.value?.source === 'open_world_engine'
     ? selectedScenarioEngineAction.value
     : (saveData ? resolveWuyuanOpenWorldSelectionFromText(saveData, inputText.value.trim()) : undefined);
+  const buttonSelected = Boolean(
+    selectedScenarioEngineAction.value
+    && (
+      ('playerLine' in selectedScenarioEngineAction.value && selectedScenarioEngineAction.value.playerLine === inputText.value.trim())
+      || selectedScenarioEngineAction.value.actionText === inputText.value.trim()
+    ),
+  );
+  let routedIntentAction: ScenarioEngineActionSelection | undefined;
+  let skipKeywordPreflightFromIntent = buttonSelected;
+  let intentHeldProcessing = false;
+  if (saveData && !buttonSelected) {
+    const intentReset = aiResetToken;
+    const inputSnapshot = inputText.value.trim();
+    const activeSnapshot = characterStore.rootState.当前激活存档
+      ? { 角色ID: characterStore.rootState.当前激活存档.角色ID, 存档槽位: characterStore.rootState.当前激活存档.存档槽位 }
+      : null;
+    const saveFingerprint = intentSaveFingerprint(saveData);
+    uiStore.setAIProcessing(true);
+    persistAIProcessingState();
+    let continueAfterIntent = false;
+    try {
+      const intent = await resolveNaturalIntent({
+        saveData,
+        playerText: inputSnapshot,
+        selected: selectedScenarioEngineAction.value,
+        resolveFromText: resolveStoryEventActionFromPlayerText,
+        signal: undefined,
+        // 行动解释模块：预算/超时/推理档位由模块卡决定，模型按「回合模块模型」分配，未单独配置继承主流程。
+        generate: async ({ systemPrompt, userPrompt, signal, requestId }) => {
+          const { runGameModelModule } = await import('@/services/gameModelModules');
+          const { raw } = await runGameModelModule('intent', {
+            system: systemPrompt, input: userPrompt, generationId: requestId, signal,
+          });
+          return raw;
+        },
+      });
+      if (!uiStore.isAIProcessing || aiResetToken !== intentReset) return;
+      if (inputText.value.trim() !== inputSnapshot) {
+        toast.info(NATURAL_INTENT_CLARIFY_DEFAULT);
+        return;
+      }
+      const activeNow = characterStore.rootState.当前激活存档;
+      if (!activeSnapshot || !activeNow
+        || activeNow.角色ID !== activeSnapshot.角色ID
+        || activeNow.存档槽位 !== activeSnapshot.存档槽位) {
+        toast.info(NATURAL_INTENT_CLARIFY_DEFAULT);
+        return;
+      }
+      const latestSave = gameStateStore.toSaveData();
+      if (!latestSave || intentSaveFingerprint(latestSave) !== saveFingerprint) {
+        toast.info(NATURAL_INTENT_CLARIFY_DEFAULT);
+        return;
+      }
+      skipKeywordPreflightFromIntent = intent.skipKeywordPreflight;
+      if (intent.kind === 'unclear' || intent.kind === 'failed') {
+        toast.info(intent.clarification || NATURAL_INTENT_CLARIFY_DEFAULT);
+        return;
+      }
+      if (intent.selection) {
+        const fresh = intent.kind === 'matched'
+          ? verifyFreshSelection(latestSave, {
+            actionId: intent.selection.actionId || ('identityId' in intent.selection ? intent.selection.identityId : ''),
+            source: intent.selection.source,
+            eventId: 'eventId' in intent.selection ? String(intent.selection.eventId || '') : undefined,
+            contractHash: 'contractHash' in intent.selection
+              ? String(intent.selection.contractHash || '')
+              : ('receiptId' in intent.selection ? String(intent.selection.receiptId || '') : undefined),
+          })
+          : intent.selection;
+        if (intent.kind === 'matched' && !fresh) {
+          toast.info(NATURAL_INTENT_CLARIFY_DEFAULT);
+          return;
+        }
+        routedIntentAction = (fresh || intent.selection) as ScenarioEngineActionSelection;
+      }
+      continueAfterIntent = true;
+      intentHeldProcessing = true;
+    } finally {
+      if (!continueAfterIntent && aiResetToken === intentReset) {
+        uiStore.setAIProcessing(false);
+        persistAIProcessingState();
+        await nextTick();
+        inputRef.value?.focus();
+      }
+    }
+  }
+  const preflightGambleRefusalAction = selectedScenarioEngineAction.value?.source === BAIHU_GAMBLE_REFUSAL_SOURCE
+    ? selectedScenarioEngineAction.value
+    : routedIntentAction?.source === BAIHU_GAMBLE_REFUSAL_SOURCE
+      ? routedIntentAction
+    : (saveData ? resolveBaihuGambleRefusalFromText(saveData, inputText.value.trim()) : undefined);
   const selectedEventJudgementAction = selectedScenarioEngineAction.value?.source === 'event_engine'
     && 'judgement' in selectedScenarioEngineAction.value
     && selectedScenarioEngineAction.value.judgement
@@ -1670,23 +1864,27 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
     );
     if (prepared.kind === 'issued' || prepared.kind === 'pending') {
       await persistJudgementSave(saveData);
+      uiStore.setAIProcessing(false);
+      persistAIProcessingState();
       toast.info('此行动存在风险，请先确认判定');
       return;
     }
     if (prepared.kind === 'resolved') contractedJudgementResolution = prepared.resolution;
   }
   if (!shouldSkipJudgementPreflight({
-    skipPreflight: execution?.skipPreflight || Boolean(contractedJudgementResolution),
-    selectedSource: selectedScenarioEngineAction.value?.source,
+    skipPreflight: execution?.skipPreflight || Boolean(contractedJudgementResolution) || skipKeywordPreflightFromIntent,
+    selectedSource: selectedScenarioEngineAction.value?.source || routedIntentAction?.source,
     selectedPlayerLine: selectedScenarioEngineAction.value && 'playerLine' in selectedScenarioEngineAction.value
       ? selectedScenarioEngineAction.value.playerLine
       : undefined,
     userMessage: inputText.value.trim(),
-  }) && !preflightOpenWorldAction) {
+  }) && !preflightOpenWorldAction && !preflightGambleRefusalAction) {
     const proposal = buildLocalJudgementPreflight(judgementAction, saveData, getNarrativeTurn(saveData));
     if (proposal) {
       persistPendingJudgement(saveData, proposal);
       await persistJudgementSave(saveData);
+      uiStore.setAIProcessing(false);
+      persistAIProcessingState();
       toast.info('此行动存在风险，请先确认判定');
       return;
     }
@@ -1722,22 +1920,42 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
   const scenarioSaveAtSend = gameStateStore.toSaveData();
   const exactSelectedEventAction = selectedScenarioEngineAction.value?.source !== 'opportunity_engine'
     && selectedScenarioEngineAction.value?.source !== 'open_world_engine'
+    && selectedScenarioEngineAction.value?.source !== BAIHU_GAMBLE_REFUSAL_SOURCE
     && selectedScenarioEngineAction.value?.playerLine === userMessage
     ? selectedScenarioEngineAction.value
     : undefined;
-  const resolvedEventAction = exactSelectedEventAction
-    || (scenarioSaveAtSend ? resolveStoryEventActionFromPlayerText(scenarioSaveAtSend, userMessage) : undefined);
+  const exactSelectedGambleRefusalAction = selectedScenarioEngineAction.value?.source === BAIHU_GAMBLE_REFUSAL_SOURCE
+    && selectedScenarioEngineAction.value.actionText === userMessage
+    ? selectedScenarioEngineAction.value
+    : undefined;
+  const resolvedGambleRefusalAction = exactSelectedEventAction
+    ? undefined
+    : exactSelectedGambleRefusalAction
+      || (routedIntentAction?.source === BAIHU_GAMBLE_REFUSAL_SOURCE ? routedIntentAction : undefined)
+      || (scenarioSaveAtSend ? resolveBaihuGambleRefusalFromText(scenarioSaveAtSend, userMessage) : undefined);
+  const resolvedEventAction = resolvedGambleRefusalAction
+    ? undefined
+    : exactSelectedEventAction
+      || (routedIntentAction && routedIntentAction.source === 'event_engine'
+        ? routedIntentAction
+        : undefined)
+      || (scenarioSaveAtSend ? resolveStoryEventActionFromPlayerText(scenarioSaveAtSend, userMessage) : undefined);
   const exactSelectedOpportunityAction = selectedScenarioEngineAction.value?.source === 'opportunity_engine'
     && selectedScenarioEngineAction.value.actionText === userMessage
     ? selectedScenarioEngineAction.value
     : undefined;
+  const resolvedOpportunityAction = exactSelectedEventAction || resolvedGambleRefusalAction
+    ? undefined
+    : exactSelectedOpportunityAction
+      || (routedIntentAction?.source === 'opportunity_engine' ? routedIntentAction : undefined);
   const exactSelectedOpenWorldAction = selectedScenarioEngineAction.value?.source === 'open_world_engine'
     && selectedScenarioEngineAction.value.actionText === userMessage
     ? selectedScenarioEngineAction.value
     : undefined;
-  const resolvedOpenWorldAction = exactSelectedEventAction
+  const resolvedOpenWorldAction = exactSelectedEventAction || resolvedGambleRefusalAction || resolvedOpportunityAction
     ? undefined
     : exactSelectedOpenWorldAction
+      || (routedIntentAction?.source === 'open_world_engine' ? routedIntentAction : undefined)
       || (scenarioSaveAtSend ? resolveWuyuanOpenWorldSelectionFromText(scenarioSaveAtSend, userMessage) : undefined);
 
   // 获取动作队列中的文本
@@ -1759,6 +1977,9 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
   if (resolvedOpenWorldAction) {
     finalUserMessage += `\n【本地开放世界行动已预结算】类型=${resolvedOpenWorldAction.kind}；既定事实=${resolvedOpenWorldAction.settledFacts.join('；')}。只演出这些既定事实，不得另行移动玩家、改写路线、免除代价或写入开放世界账本。\n`;
   }
+  if (resolvedGambleRefusalAction) {
+    finalUserMessage += `\n【本地白湖拒赌冲突已预结算】动作=${resolvedGambleRefusalAction.actionId}；既定事实=${resolvedGambleRefusalAction.settledFacts.join('；')}。只演出这些既定事实。不得写成已经赌输、自愿签卖身契、已经逃脱，也不得改写尚未发生的南荒之约。\n`;
+  }
   if (contractedJudgementResolution) {
     const result = contractedJudgementResolution;
     const localDamageApplied = result.kind === 'combat' && result.appliedEffects.some(effect => effect.key === '角色.属性.气血.当前');
@@ -1779,6 +2000,10 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
 
   // 用户消息只作为行动趋向提示词，不添加到记忆中
   const resetSnapshot = aiResetToken;
+  // 前台开始：后台审计让路；回合记忆不取消，迟到结果排队到下一次提交后落账。
+  yieldBackgroundAudit();
+  const qingyuTurnId = beginQingyuTurnLongRequests(scenarioSaveAtSend);
+  ownedQingyuTurnId = qingyuTurnId;
   uiStore.setAIProcessing(true);
   persistAIProcessingState();
 
@@ -1804,15 +2029,17 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
         onProgressUpdate: (progress: string) => {
           console.log('[AI进度]', progress);
         },
+        playerIntentText: userMessage,
         useStreaming: useStreaming.value,
         shouldAbort: () => !uiStore.isAIProcessing || aiResetToken !== resetSnapshot,
       };
-      if (exactSelectedOpportunityAction) options.opportunityAction = { ...exactSelectedOpportunityAction };
+      if (resolvedOpportunityAction) options.opportunityAction = { ...resolvedOpportunityAction };
       else if (resolvedEventAction) {
         options.eventAction = { ...resolvedEventAction };
         options.eventActionProvenance = exactSelectedEventAction ? 'selected' : 'resolved_text';
       }
       if (resolvedOpenWorldAction) options.openWorldAction = { ...resolvedOpenWorldAction };
+      if (resolvedGambleRefusalAction) options.gambleRefusalAction = { ...resolvedGambleRefusalAction };
       if (contractedJudgementResolution) options.judgementResolution = structuredClone(contractedJudgementResolution);
 
       // 酒馆环境：流式通过事件系统处理（STREAM_TOKEN_RECEIVED_INCREMENTALLY）
@@ -1822,6 +2049,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
         resetStreamParseState(); // 重置解析状态
         (options as any).onStreamChunk = (chunk: string) => {
           if (!useStreaming.value || !chunk) return;
+          if (aiResetToken !== resetSnapshot || !uiStore.isAIProcessing) return;
           console.log('[网页版流式] 收到chunk:', chunk.length, '字符');
           handleStreamChunk(chunk);
         };
@@ -1838,6 +2066,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
         console.log('[图片上传] 将发送', selectedImages.value.length, '张图片');
       }
 
+      (options as { qingyuTurnId?: string }).qingyuTurnId = qingyuTurnId;
       aiResponse = await bidirectionalSystem.processPlayerAction(
         finalUserMessage,
         character,
@@ -1849,6 +2078,8 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
         aiResponse = null;
         return;
       }
+
+      if (aiResponse?.transactionCommitted && aiResponse.narrativeNotice) toast.warning(aiResponse.narrativeNotice);
 
       // 验证AI响应结构
       if (isFastNarrativeHoldResponse(aiResponse)) {
@@ -1863,9 +2094,25 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
         return;
       }
       if (aiResponse) {
+        if (aiResponse.generationError) throw Object.assign(new Error(aiResponse.generationError.message), { code: aiResponse.generationError.code });
+        if (aiResponse.outputTruncated) {
+          toast.warning('回应被截断，已保留你的输入，可手动重试。');
+          aiResponse = null;
+          return;
+        }
         const validation = validateProcessedAIResponse(aiResponse);
         if (!validation.isValid) {
           console.warn('[AI响应验证] 结构验证失败:', validation.errors);
+          const saveForRetry = gameStateStore.toSaveData();
+          if (
+            aiResponse.transactionCommitted
+            || remainingQingyuTurnLongRequests() === 0
+            || (saveForRetry && usesFixedScenarioInventory(saveForRetry))
+          ) {
+            toast.warning('AI响应格式不正确，已保留你的输入，可手动重试。');
+            aiResponse = null;
+            return;
+          }
           toast.warning('AI响应格式不正确，正在重试...');
 
           // 尝试重新生成
@@ -1882,6 +2129,11 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
           }
 
           if (retryResponse) {
+            if (retryResponse.outputTruncated) {
+              toast.warning('回应被截断，已保留你的输入，可手动重试。');
+              aiResponse = null;
+              return;
+            }
             aiResponse = retryResponse;
             // 注意：重试成功后不显示额外的toast，统一在最后显示"天道已回"
             console.log('[AI响应验证] 重试成功');
@@ -2064,8 +2316,14 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
     uiStore.setCurrentGenerationId(null);
     persistAIProcessingState();
   } finally {
+    if (aiResetToken === resetSnapshot) {
+      releaseQingyuTurnLongRequests(qingyuTurnId);
+      if (ownedQingyuTurnId === qingyuTurnId) ownedQingyuTurnId = null;
+    } else {
+      invalidateQingyuTurnLongRequests(qingyuTurnId);
+    }
     // 🔥 兜底机制：确保状态一定被清除
-    if (isAIProcessing.value) {
+    if (aiResetToken === resetSnapshot && isAIProcessing.value) {
       console.warn('[AI响应处理] finally块：状态未清除，强制清除（兜底）');
       uiStore.setAIProcessing(false);
       streamingMessageIndex.value = null;
@@ -2076,7 +2334,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
     }
 
     // 最终统一存档（仅成功时）
-    if (aiResponse) {
+    if (aiResetToken === resetSnapshot && aiResponse) {
       try {
         console.log('[AI响应处理] 最终统一存档...');
         await characterStore.saveCurrentGame();
@@ -2085,10 +2343,18 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
           toast.success(`存档【${slot.存档名}】已保存`);
         }
         console.log('[AI响应处理] 最终统一存档完成');
+        if (aiResponse.transactionCommitted) {
+          startModuleBackground();
+          scheduleBackgroundAudit();
+        }
       } catch (storageError) {
         console.error('[AI响应处理] 最终统一存档失败:', storageError);
         toast.error('游戏存档失败，请尝试手动保存');
       }
+    }
+    if (aiResetToken === resetSnapshot) {
+      await nextTick();
+      inputRef.value?.focus();
     }
   }
 };
@@ -2259,16 +2525,11 @@ const initializePanelForSave = async () => {
 // 重置面板状态以进行存档切换
 const resetPanelState = () => {
   console.log('[主面板] 检测到存档切换，正在重置面板状态...');
+  abandonOwnedGameTurn();
   actionQueue.clearActions();
   // currentNarrative 现在自动显示最新短期记忆
   inputText.value = '';
   latestMessageText.value = null;
-
-  // --- 重置命令日志相关状态 ---
-
-  // isAIProcessing 在切换存档时应重置为 false
-  uiStore.setAIProcessing(false);
-  persistAIProcessingState(); // 清除持久化状态
 };
 
 // 监听激活存档ID的变化
@@ -2404,9 +2665,10 @@ onActivated(() => {
   restoreAIProcessingState();
 });
 
-// 🔥 组件卸载时清理事件监听器（使用全局标志）
+// 🔥 组件卸载时先放弃本组件回合，再清监听。非酒馆也必须取消在途请求。
 onUnmounted(() => {
-  console.log('[主面板] 组件卸载，清理事件监听器');
+  console.log('[主面板] 组件卸载，放弃本组件回合并清理事件监听器');
+  abandonOwnedGameTurn();
 
   chatBus.off('prefill', handleChatPrefill);
   chatBus.off('send', handleChatSend);

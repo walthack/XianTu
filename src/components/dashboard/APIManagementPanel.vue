@@ -204,6 +204,55 @@
             </div>
           </div>
 
+          <div class="function-group-header" data-testid="module-model-settings">
+            <h5 class="group-title">🧩 回合模块模型</h5>
+            <span class="group-desc">每个模块可单独指定连接（含独立 API Key）与模型；未单独配置时继承括号中的功能分配。修改自动保存，下次任务生效，在途任务不换模型。</span>
+          </div>
+          <div v-for="module in moduleModelSettings" :key="module.id" class="setting-item" :data-testid="`module-row-${module.id}`">
+            <div class="setting-info">
+              <label class="setting-name" :for="`module-model-${module.id}`">{{ module.name }}</label>
+              <span class="setting-desc">{{ module.description }}</span>
+              <span class="setting-desc">当前：{{ moduleRouteLabel(module) }}</span>
+              <span v-if="module.id === 'audit'" class="setting-desc">
+                只读、不影响游戏进程。开启后约每 {{ auditCheckpointTurns }} 回合调用一次所选模型，会占用该连接的 API 额度。
+              </span>
+              <span v-if="module.id === 'audit'" class="setting-desc">
+                本地日志 {{ auditLogCount }} 条 · <a href="#" data-testid="audit-export" @click.prevent="exportAuditLog">导出日志</a>
+              </span>
+            </div>
+            <div class="setting-control">
+              <div class="control-row">
+                <div v-if="module.id === 'audit'" class="inline-toggle">
+                  <label class="toggle-label" :for="`module-enabled-${module.id}`">启用</label>
+                  <label class="setting-switch compact">
+                    <input :id="`module-enabled-${module.id}`" type="checkbox"
+                      :checked="apiStore.isModuleEnabled(module.id)"
+                      @change="apiStore.setModuleEnabled(module.id, ($event.target as HTMLInputElement).checked)" />
+                    <span class="switch-slider"></span>
+                  </label>
+                </div>
+                <div v-else-if="module.id === 'memory'" class="inline-toggle">
+                  <label class="toggle-label" :for="`module-enabled-${module.id}`">启用</label>
+                  <label class="setting-switch compact">
+                    <input :id="`module-enabled-${module.id}`" type="checkbox"
+                      :checked="apiStore.isFunctionEnabled('memory_summary')"
+                      @change="apiStore.setFunctionEnabled('memory_summary', ($event.target as HTMLInputElement).checked)" />
+                    <span class="switch-slider"></span>
+                  </label>
+                </div>
+                <select :id="`module-model-${module.id}`" class="setting-select"
+                  :value="apiStore.getModuleAssignment(module.id)"
+                  @change="apiStore.assignModuleAPI(module.id, ($event.target as HTMLSelectElement).value)">
+                  <option :value="MODULE_INHERIT">继承「{{ getFunctionName(module.inheritUsageType) }}」</option>
+                  <option v-for="api in apiStore.apiConfigs" :key="api.id" :value="api.id" :disabled="!api.enabled">
+                    {{ getDisplayName(api) }} · {{ api.model || '未配置模型' }}{{ !api.enabled ? '（未启用）' : '' }}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <p class="group-desc">模块分配独立于下方功能分配：改模块模型不会改动主流程等原有功能。回合记忆的开关与「记忆总结」共用。</p>
+
           <!-- ========== 主游戏流程（3个） ========== -->
           <div class="function-group-header">
             <h5 class="group-title">🎮 主游戏流程</h5>
@@ -649,10 +698,38 @@ import { getNsfwSettingsFromStorage, type NsfwGenderFilter } from '@/utils/nsfw'
 import { isTavernEnv } from '@/utils/tavern';
 import { toast } from '@/utils/toast';
 import { useI18n } from '@/i18n';
+import { GAME_MODEL_MODULES, type ModelModuleDefinition } from '@/services/moduleModelRuntime';
+import { MODULE_INHERIT } from '@/stores/apiManagementStore';
+import { resolveGameModuleRoute } from '@/services/gameModelModules';
+import { exportBackgroundAuditLog, getBackgroundAuditLog } from '@/services/backgroundAudit';
+import { AUDIT_CHECKPOINT_TURNS } from '@/modules/scenarioMods/backgroundAuditCore';
 
 const { t } = useI18n();
 const apiStore = useAPIManagementStore();
 const uiStore = useUIStore();
+const moduleModelLabels: Record<string, { name: string; description: string }> = {
+  intent: { name: '行动解释', description: '把自然输入解释成当前合法动作；建议选响应快的小模型。' },
+  narrative: { name: '剧情演出', description: '模块链路试玩回合的前台正文；不判定、不改状态。' },
+  memory: { name: '回合记忆', description: '正文提交后从原文摘录记忆，替换该回合的短期记忆条目。' },
+  audit: { name: '后台审计', description: '按检查点做跨回合一致性校验，结果只进本地审计日志。' },
+};
+const moduleModelSettings = GAME_MODEL_MODULES.map(module => ({
+  ...module,
+  ...(moduleModelLabels[module.id] || { name: module.id, description: module.purpose }),
+}));
+const auditCheckpointTurns = AUDIT_CHECKPOINT_TURNS;
+const auditLogCount = ref(getBackgroundAuditLog().length);
+const moduleRouteLabel = (module: ModelModuleDefinition) => {
+  const route = resolveGameModuleRoute(module);
+  if (route.viaHost) return '继承酒馆主流程';
+  const model = route.config ? `${getDisplayName(route.config)} · ${route.config.model || '未配置模型'}` : '未配置';
+  return route.inherited ? `继承「${getFunctionName(module.inheritUsageType)}」→ ${model}` : model;
+};
+const exportAuditLog = () => {
+  auditLogCount.value = getBackgroundAuditLog().length;
+  exportBackgroundAuditLog();
+};
+
 
 // 初始化加载
 onMounted(async () => {
@@ -892,7 +969,9 @@ const getFunctionName = (type: APIUsageType): string => {
       sect_generation: '宗门生成',
       crafting: '炼丹炼器',
       progress_audit: '进度审计',
-      event_reconcile: '事件对账'
+      event_reconcile: '事件对账',
+      background_audit: '后台审计',
+      module_narrative: '剧情演出（模块）'
     };
   return names[type] || type;
 };
@@ -912,7 +991,9 @@ const getFunctionDesc = (type: APIUsageType): string => {
         sect_generation: '生成宗门内容如藏经阁、贡献商店（可配置Raw/标准模式）',
         crafting: '炼丹炼器系统（可配置Raw/标准模式）',
         progress_audit: '后台审计跨轮即兴目标：达成/失效/新增，仅更新任务目标（可用快速模型）',
-        event_reconcile: '主线卡死自愈：停滞超阈值时核对存档记忆补落事件标记（哨兵触发、稀有调用，可用快速模型）'
+        event_reconcile: '主线卡死自愈：停滞超阈值时核对存档记忆补落事件标记（哨兵触发、稀有调用，可用快速模型）',
+        background_audit: '只读跨回合一致性审计，结果只进本地日志（在「回合模块模型」中配置）',
+        module_narrative: '模块链路的前台正文（在「回合模块模型」中配置）'
       };
     return descs[type] || '';
   } else {
@@ -928,7 +1009,9 @@ const getFunctionDesc = (type: APIUsageType): string => {
         sect_generation: '生成宗门内容如藏经阁、贡献商店（可用快速模型）',
         crafting: '炼丹炼器系统（可用快速模型）',
         progress_audit: '后台审计跨轮即兴目标：达成/失效/新增，仅更新任务目标（可用快速模型）',
-        event_reconcile: '主线卡死自愈：停滞超阈值时核对存档记忆补落事件标记（哨兵触发、稀有调用，可用快速模型）'
+        event_reconcile: '主线卡死自愈：停滞超阈值时核对存档记忆补落事件标记（哨兵触发、稀有调用，可用快速模型）',
+        background_audit: '只读跨回合一致性审计，结果只进本地日志（在「回合模块模型」中配置）',
+        module_narrative: '模块链路的前台正文（在「回合模块模型」中配置）'
       };
     return descs[type] || '';
   }

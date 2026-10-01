@@ -1,0 +1,194 @@
+{
+  "status": "READY_FOR_TRUE_DEVICE",
+  "gate": {
+    "total": 1114,
+    "pass": 1109,
+    "skip": 5,
+    "fail": 0,
+    "typeCheck": true,
+    "buildSingle": true
+  },
+  "realSmoke": {
+    "url": "http://127.0.0.1:18097",
+    "enableQualityInDisposableContext": true,
+    "readyMs": 5228,
+    "completedMs": 20104,
+    "receipt": {
+      "id": "gen_1790826115420_w8puj6o81",
+      "path": "modular",
+      "eventId": "lcq.event.sudaji_south_pact",
+      "promptChars": 1495,
+      "foregroundMs": 5012,
+      "text": "你仍被扣在白湖商馆内院，身上的禁制没有松，只是对方没再急着逼你低头。苏妲己坐在上首，指尖慢慢敲着那页摊开的货单，像在等你先开口。\n\n你也没有再绕。霓龙丝的产地线索是你手里少数还能拿上桌的东西——不是求饶，是交换。你把话说得清楚：这条线索可以给她，但你要三个月期限。三个月内，你不受押、不签契、不入局，商馆这边不得再以霓龙丝为由扣你。\n\n苏妲己听完，没有立刻答话。她的目光在你脸上停了片刻，像在掂量你这句话里有多少是真货，又有多少是空口拖时间。她当然听得懂“产地线索”四个字的分量，也听得懂“三个月”是什么意思——那不是求饶，是给自己留一口气。\n\n“产地线索，”她终于开口，声音不高，尾音却压得很稳，“你倒是会挑东西换命。”\n\n你没有接她的讽，只把话钉在原地：线索可以先讲一半，另一半等期限落地再说。她没有点头，也没有摇头，只是把货单合上，指节在封皮上轻轻一压。\n\n“三个月。”她重复了一遍，像在试这三个字的斤两，“你拿一条产地线索，就想换三个月？”\n\n她没有说不行。但也没有说行。内院里的风从廊下穿过来，吹得灯影晃了一下。你知道这一步已经递出去了，接下来只看她怎么接。",
+      "memory": {
+        "status": "accepted",
+        "value": "你也没有再绕。霓龙丝的产地线索是你手里少数还能拿上桌的东西——不是求饶，是交换。你把话说得清楚：这条线索可以给她，但你要三个月期限。三个月内，你不受押、不签契、不入局，商馆这边不得再以霓龙丝为由扣你。；“三个月。”她重复了一遍，像在试这三个字的斤两，“你拿一条产地线索，就想换三个月？”；她没有说不行。但也没有说行。内院里的风从廊下穿过来，吹得灯影晃了一下。你知道这一步已经递出去了，接下来只看她怎么接。",
+        "elapsedMs": 9611
+      },
+      "quality": {
+        "status": "accepted",
+        "value": "[]",
+        "elapsedMs": 14801
+      }
+    },
+    "requests": [
+      {
+        "model": "typesafe/jev-router",
+        "chars": 1666,
+        "startedAt": 1790826115441
+      },
+      {
+        "model": "MiniMax-M2.7-highspeed",
+        "chars": 801,
+        "startedAt": 1790826120603
+      },
+      {
+        "model": "deepseek/deepseek-v4.1-flash",
+        "chars": 662,
+        "startedAt": 1790826120603
+      }
+    ],
+    "writesBlocked": 1,
+    "configurationUnchanged": true,
+    "errors": []
+  },
+  "controlled": [
+    {
+      "url": "http://127.0.0.1:8091",
+      "passed": true,
+      "requests": [
+        {
+          "model": "main",
+          "chars": 1666,
+          "stream": false
+        },
+        {
+          "model": "memory",
+          "chars": 360,
+          "stream": false
+        },
+        {
+          "model": "quality",
+          "chars": 272,
+          "stream": false
+        },
+        {
+          "model": "main",
+          "chars": 1666,
+          "stream": false
+        },
+        {
+          "model": "memory",
+          "chars": 360,
+          "stream": false
+        },
+        {
+          "model": "quality",
+          "chars": 272,
+          "stream": false
+        },
+        {
+          "model": "main",
+          "chars": 1666,
+          "stream": false
+        },
+        {
+          "model": "main",
+          "chars": 1666,
+          "stream": false
+        },
+        {
+          "model": "memory",
+          "chars": 360,
+          "stream": false
+        },
+        {
+          "model": "main",
+          "chars": 1666,
+          "stream": false
+        },
+        {
+          "model": "memory",
+          "chars": 360,
+          "stream": false
+        }
+      ],
+      "foregroundIndependent": true,
+      "reload": true,
+      "rejectedEvidence": true,
+      "lateIsolated": true,
+      "invalidMainUncommitted": true,
+      "disabledRouteRespected": true,
+      "backgroundFailureIsolated": true
+    },
+    {
+      "url": "http://127.0.0.1:18097",
+      "passed": true,
+      "requests": [
+        {
+          "model": "main",
+          "chars": 1666,
+          "stream": false
+        },
+        {
+          "model": "memory",
+          "chars": 360,
+          "stream": false
+        },
+        {
+          "model": "quality",
+          "chars": 272,
+          "stream": false
+        },
+        {
+          "model": "main",
+          "chars": 1666,
+          "stream": false
+        },
+        {
+          "model": "memory",
+          "chars": 360,
+          "stream": false
+        },
+        {
+          "model": "quality",
+          "chars": 272,
+          "stream": false
+        },
+        {
+          "model": "main",
+          "chars": 1666,
+          "stream": false
+        },
+        {
+          "model": "main",
+          "chars": 1666,
+          "stream": false
+        },
+        {
+          "model": "memory",
+          "chars": 360,
+          "stream": false
+        },
+        {
+          "model": "main",
+          "chars": 1666,
+          "stream": false
+        },
+        {
+          "model": "memory",
+          "chars": 360,
+          "stream": false
+        }
+      ],
+      "foregroundIndependent": true,
+      "reload": true,
+      "rejectedEvidence": true,
+      "lateIsolated": true,
+      "invalidMainUncommitted": true,
+      "disabledRouteRespected": true,
+      "backgroundFailureIsolated": true
+    }
+  ],
+  "scope": "isolated stage01/02 authored event contracts; not continuous true-device or SLA PASS"
+}

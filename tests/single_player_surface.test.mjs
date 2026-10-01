@@ -62,8 +62,10 @@ test('world simulation playtest is a one-click isolated normal-game flow', () =>
 
   assert.match(modeSelection, /六朝世界试玩/);
   assert.match(modeSelection, /清羽记开局/);
+  assert.match(modeSelection, /星月湖任务线试玩/);
   assert.match(router, /path:\s*'\/world-sim-playtest'/);
   assert.match(router, /path:\s*'\/qingyu-opening-playtest'/);
+  assert.match(router, /path:\s*'\/xingyuehu-quest-playtest'/);
   assert.match(start, /installIsolatedPlaytestCharacter/);
   assert.match(start, /router\.replace\('\/game'\)/);
   assert.match(store, /固定 ID 只允许覆盖同 kind 的试玩档/);
@@ -77,6 +79,13 @@ test('world simulation playtest is a one-click isolated normal-game flow', () =>
   assert.match(storage, /profile\?\.隔离试玩信息\?\.localOnly === true/);
   assert.match(storage, /本机隔离试玩档/);
   assert.match(storage, /lastRemoteRoot\?\.当前激活存档/);
+  assert.match(storage, /if \(options\.localOnly\) \{/);
+  assert.match(store, /shouldSkipRemoteRootPersist/);
+  assert.match(store, /shouldReattachLandingPlaytestWorkingCopy/);
+  assert.match(store, /commitMetadataToStorage\(\{ mutatedProfileIds \}\)/);
+  assert.match(mainPanel, /setAIProcessing\(true\)[\s\S]*resolveNaturalIntent/);
+  assert.match(mainPanel, /inputText\.value\.trim\(\) !== inputSnapshot/);
+  assert.match(mainPanel, /intentSaveFingerprint\(latestSave\) !== saveFingerprint/);
   assert.doesNotMatch(savePanel, /const \{ loadSaveData \} = await import\('@\/utils\/indexedDBManager'\)/);
   assert.match(savePanel, /localOnly: characterStore\.activeCharacterProfile\?\.隔离试玩信息\?\.localOnly === true/);
   assert.match(mainPanel, /saveSaveData\(active\.角色ID, active\.存档槽位, restored,[\s\S]*localOnly:/);

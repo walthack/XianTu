@@ -27,6 +27,7 @@ import { resolveAvailableLines, secondaryLinesAtEvent } from './secondaryLines';
 import { characterBeatsAt } from './characterQuests';
 import { formatWorldSimulationPrompt, getCurrentWorldSituation, isWorldSimulationRuntime } from './worldSimulation';
 import { getWuyuanOpenWorldPrompt } from './wuyuanOpenWorldSlice';
+import { getBaihuGambleRefusalPrompt } from './baihuGambleRefusal';
 
 import type {
   ScenarioCondition,
@@ -741,6 +742,7 @@ export function createScenarioPromptState<T extends SaveData>(saveData: T): T {
   // 编译后的当前位置、已知去处与人物状态，不能看到或仿写原始账本。
   delete (runtime as any).openWorldSlice;
   delete (runtime as any).openWorldSliceLastWorldTurn;
+  delete (runtime as any).baihuGambleRefusal;
   return promptState;
 }
 
@@ -1086,6 +1088,8 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
   const relationLine = mismatches.length
     ? `【关系-好感失配修正】以下 NPC 的关系标签与好感度明显失配：${mismatches.join('、')}。本轮起以角色内方式收敛：要么让关系随剧情演进并用 set 更新 社交.关系.<名字>.与玩家关系（如"敌对"→"亦敌亦友/表面敌对暗生情愫"），要么在叙事中交代表里不一的原因并把标签改为体现这种复杂性的表述。此后好感度跨档变化时必须同步演进关系标签，不得让标签僵死。`
     : '';
+  // 好感不等于关系身份；只要求已发生的关系变化得到记忆与标签承认。
+  const relationshipEvolutionLine = '【关系演进】人物答应了什么、拒绝了什么与关系身份分别记录。若本轮双方明确确认新的关系身份，用 set 更新既有人物的 社交.关系.<名字>.与玩家关系，并补充其记忆；只作了承诺或仍未确认名分则沿用现有身份，在记忆中记录已发生的变化。不得仅凭好感上涨、玩家单方面表白、询问或模型自行推测授予恋人/情人身份。玩家选择安静交谈或休息时，可以让该场景完整展开；外部异动只按真实到期事件与当前压力出现，不必每轮插入。';
   const divergenceLine = formatDivergencePrompt((runtime as { divergences?: any[] }).divergences);
 
   // 即兴目标槽（跨轮追踪，读档不翻转的治本一环）
@@ -1215,11 +1219,12 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
     formatEarnedTitles(saveData),
   ].filter(Boolean).join('；');
   const openWorldLine = getWuyuanOpenWorldPrompt(saveData);
+  const gambleRefusalLine = getBaihuGambleRefusalPrompt(saveData);
 
   return `# 当前剧本进度（仅限可见内容）
 ${stageLine ? `## 当前关卡\n${stageLine}\n\n` : ''}${chapterSection}
 
-${openWorldLine ? `${openWorldLine}\n` : ''}
+${openWorldLine ? `${openWorldLine}\n` : ''}${gambleRefusalLine ? `${gambleRefusalLine}\n` : ''}
 
 ## 六朝国别风貌基准（虚构五国对应华夏朝代，环境/服饰/礼仪描写以此为准）
 - 唐国＝唐朝：长安气象，朱雀大街、坊市制、胡商胡姬；男子幞头圆领袍、女子高髻襦裙披帛；乐舞胡风华贵开放；称谓如“郎君/娘子/圣人（皇帝）”。
@@ -1247,7 +1252,7 @@ ${nextSection}
 ## 剧情标记
 ${JSON.stringify(runtime.flags || {})}
 
-${focusedCharacterSection ? `${focusedCharacterSection}\n\n` : ''}${npcPrivateKnowledgeGuard ? `${npcPrivateKnowledgeGuard}\n\n` : ''}${globalIdentitySection ? `${globalIdentitySection}\n\n` : ''}${loadBearingLine ? `${loadBearingLine}\n\n` : ''}${divergenceLine ? `${divergenceLine}\n\n` : ''}${stageEntryLine ? `${stageEntryLine}\n\n` : ''}${undisclosedLine ? `${undisclosedLine}\n\n` : ''}${gameOverLine ? `${gameOverLine}\n\n` : ''}${fatalApproachLine ? `${fatalApproachLine}\n\n` : ''}${settledBeatLine ? `${settledBeatLine}\n\n` : ''}${returnBridgeLine ? `${returnBridgeLine}\n\n` : ''}${divergenceControlLine ? `${divergenceControlLine}\n\n` : ''}${epistemicLine ? `${epistemicLine}\n\n` : ''}${worldActorLine ? `${worldActorLine}\n\n` : ''}${worldPushLine ? `${worldPushLine}\n\n` : ''}${steeringLine ? `${steeringLine}\n\n` : ''}${reputationLine}\n\n${relationLine ? `${relationLine}\n\n` : ''}${completedGoalLine ? `${completedGoalLine}\n\n` : ''}${improvLine}\n\n【正典叙事事实约束】：
+${focusedCharacterSection ? `${focusedCharacterSection}\n\n` : ''}${npcPrivateKnowledgeGuard ? `${npcPrivateKnowledgeGuard}\n\n` : ''}${globalIdentitySection ? `${globalIdentitySection}\n\n` : ''}${loadBearingLine ? `${loadBearingLine}\n\n` : ''}${divergenceLine ? `${divergenceLine}\n\n` : ''}${stageEntryLine ? `${stageEntryLine}\n\n` : ''}${undisclosedLine ? `${undisclosedLine}\n\n` : ''}${gameOverLine ? `${gameOverLine}\n\n` : ''}${fatalApproachLine ? `${fatalApproachLine}\n\n` : ''}${settledBeatLine ? `${settledBeatLine}\n\n` : ''}${returnBridgeLine ? `${returnBridgeLine}\n\n` : ''}${divergenceControlLine ? `${divergenceControlLine}\n\n` : ''}${epistemicLine ? `${epistemicLine}\n\n` : ''}${worldActorLine ? `${worldActorLine}\n\n` : ''}${worldPushLine ? `${worldPushLine}\n\n` : ''}${steeringLine ? `${steeringLine}\n\n` : ''}${reputationLine}\n\n${relationLine ? `${relationLine}\n\n` : ''}${relationshipEvolutionLine}\n\n${completedGoalLine ? `${completedGoalLine}\n\n` : ''}${improvLine}\n\n【正典叙事事实约束】：
 1. 已知人物的姓名、别名、身份、物种、势力、亲属与政治关系均是事实字段：不得把人物写成兵器、坐骑、功法、物品或新角色；不得把称号、别名拆成另一个实体。
 2. 人物之间的血缘、主从、婚配、同党、结盟、仇怨，只有上文正典人物档案或当前事件明确写出时才可断言。没有依据时只能写“尚未可知/传闻待证”，绝不可因同姓、官职、阵营或历史常识擅自补关系。
 3. 叙事正文也必须遵守上述正典；这不是仅约束 tavern_commands 的规则。若玩家要求与正典矛盾的事实，明确说明冲突并以正典版本续写。

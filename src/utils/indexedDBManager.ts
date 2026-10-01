@@ -341,11 +341,20 @@ export async function saveActiveSave(
   }
 }
 
-export async function saveRootData(root: LocalStorageRoot, options: { remoteRoot?: LocalStorageRoot } = {}): Promise<void> {
+export async function saveRootData(root: LocalStorageRoot, options: { remoteRoot?: LocalStorageRoot; localOnly?: boolean } = {}): Promise<void> {
   try {
     console.log('[IndexedDB-保存] 开始保存根数据');
     console.log('[IndexedDB-保存] 角色列表键名:', Object.keys(root.角色列表));
     console.log('[IndexedDB-保存] 当前激活存档:', root.当前激活存档);
+
+    if (options.localOnly) {
+      await Promise.all([
+        saveCharacters(root.角色列表, { localOnly: true }),
+        saveActiveSave(root.当前激活存档, { localOnly: true }),
+      ]);
+      console.log('[IndexedDB-保存] ✅ 根数据（分片）已只写本机，未改远端');
+      return;
+    }
 
     const remoteRoot = options.remoteRoot || (() => {
       const sanitized = JSON.parse(JSON.stringify(root)) as LocalStorageRoot;

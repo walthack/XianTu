@@ -403,8 +403,9 @@ const exitToMenu = async () => {
   // 🔥 [新架构] 不再需要清理酒馆上下文，数据已在IndexedDB中管理
   console.log('[返回道途] 准备返回主菜单');
 
+  const exitingIsolated = characterStore.activeCharacterProfile?.隔离试玩信息?.localOnly === true;
   characterStore.rootState.当前激活存档 = null;
-  await characterStore.commitMetadataToStorage();
+  await characterStore.commitMetadataToStorage({ localOnly: exitingIsolated });
   console.log('[返回道途] 已重置激活存档状态');
 
   uiStore.stopLoading();

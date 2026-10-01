@@ -11,10 +11,29 @@
  *    - 可为不同功能分配不同的API
  */
 import axios from 'axios';
+import { AiRequestTimeoutError, isAiRequestTimeout, withAiRequestDeadline } from './aiRequestDeadline';
 import type { APIUsageType, APIConfig as StoreAPIConfig } from '@/stores/apiManagementStore';
 import { buildOpenAICompatibleEndpoint, normalizeOpenAIBaseUrl } from './openAIEndpoint';
 import { toUserFacingAIError } from './apiErrorMessage';
-import { isTruncatedFinishReason } from './aiResponseTermination';
+import {
+  isTruncatedFinishReason,
+  isOutputTruncationError,
+  isNonRetryableAiError,
+  OutputTruncationError,
+  recordAiRequestDiagnostic,
+  readUsageTotals,
+} from './aiResponseTermination';
+import {
+  salvageCompleteNarrativeResponse,
+  serializeSalvagedNarrativeResponse,
+} from './narrativeResponseSalvage';
+import { optionalReasoningParam } from './optionalReasoningParams';
+import {
+  consumeQingyuTurnLongRequest,
+  peekActiveQingyuTurnId,
+  remainingQingyuTurnTimeMs,
+  QingyuTurnLongRequestBudgetError,
+} from './qingyuTurnLongRequests';
 import {
   noteGenerateComplete,
   noteGenerateStart,
@@ -43,6 +62,13 @@ export interface AIConfig {
 }
 
 type DirectAPIConfig = NonNullable<AIConfig['customAPI']>;
+type QingyuTransportBudget = {
+  usageType?: string;
+  maxTokens?: number;
+  qingyuTurnId?: string;
+  reasoningEffort?: 'none' | 'low';
+};
+const qingyuTransportBudgetBySignal = new WeakMap<AbortSignal, QingyuTransportBudget>();
 
 // API提供商预设配置
 export const API_PROVIDER_PRESETS: Record<APIProvider, {
@@ -84,6 +110,8 @@ export interface AIMessage {
 }
 
 export interface GenerateOptions {
+  /** 模块运行时固定的本次连接配置，不写回API管理，也不随重试重新路由。 */
+  apiConfigOverride?: Readonly<DirectAPIConfig>;
   user_input?: string;
   ordered_prompts?: AIMessage[];
   should_stream?: boolean;
@@ -105,6 +133,13 @@ export interface GenerateOptions {
   maxTokens?: number;
   /** 本次调用在服务层的隐式重试次数；开局分步状态机设为 0，由外层统一控制总预算。 */
   requestMaxRetries?: number;
+  /** 单次生成（含补救）截止与OpenRouter调用级推理预算，不改用户配置。 */
+  timeoutMs?: number;
+  reasoningEffort?: 'none' | 'low';
+  /** 清羽长请求预算所属回合。实际 HTTP/酒馆传输按此 id 计次。 */
+  qingyuTurnId?: string;
+  /** 后台模块不继承前台回合预算／取消归属。 */
+  background?: boolean;
   /** 调用级取消信号；由 AIService 为每次顶层请求创建并向下透传。 */
   signal?: AbortSignal;
   /** 强制JSON格式输出（仅支持OpenAI兼容API，如DeepSeek）*/
@@ -131,6 +166,26 @@ export function resolveGenerateResponseFormat(
 }
 
 // ============ AI服务类 ============
+/** 主叙事调用级输出上限。截断补救不得再放大预算。 */
+export const MAIN_NARRATIVE_OUTPUT_CAP = 8192;
+/** @deprecated 不再把截断补救膨胀到 16000；保留别名以免旧测试/调用读到空值。 */
+export const TRUNCATION_RECOVERY_MAX_TOKENS = MAIN_NARRATIVE_OUTPUT_CAP;
+
+function salvageTruncationError(error: unknown): string | null {
+  if (!isOutputTruncationError(error)) return null;
+  const salvaged = salvageCompleteNarrativeResponse((error as OutputTruncationError).partialContent || '');
+  return salvaged ? serializeSalvagedNarrativeResponse(salvaged) : null;
+}
+
+/** 只补救未指定调用级预算的主叙事请求；意图分类等小预算调用截断即失败。 */
+export function shouldRecoverTruncation(options: Pick<GenerateOptions, 'usageType' | 'maxTokens' | 'signal'>, error: unknown): boolean {
+  if (!isOutputTruncationError(error)) return false;
+  if ((error as OutputTruncationError).recoveryAttempted) return false;
+  if (options.signal?.aborted) return false;
+  if ((options.usageType || 'main') !== 'main') return false;
+  return options.maxTokens === undefined;
+}
+
 class AIService {
   private config: AIConfig = {
     mode: 'tavern',
@@ -150,9 +205,25 @@ class AIService {
 
   // 每个顶层请求各有独立 controller；集合只用于“取消全部”，不会决定单次请求配置或信号。
   private activeAbortControllers = new Set<AbortController>();
+  private turnAbortControllers = new Map<string, Set<AbortController>>();
+  private controllerTurnIds = new WeakMap<AbortController, string>();
 
   constructor() {
     this.loadConfig();
+  }
+
+  /**
+   * 只取消指定清羽回合的在途请求，不得误杀后来者的合法回合。
+   */
+  abortQingyuTurnRequests(turnId: string) {
+    const set = this.turnAbortControllers.get(turnId);
+    if (!set) return;
+    console.log('[AI服务] 取消指定回合请求', turnId);
+    for (const controller of [...set]) {
+      controller.abort();
+      this.releaseRequestController(controller);
+    }
+    this.turnAbortControllers.delete(turnId);
   }
 
   /**
@@ -162,6 +233,7 @@ class AIService {
     console.log('[AI服务] 取消所有请求');
     for (const controller of this.activeAbortControllers) controller.abort();
     this.activeAbortControllers.clear();
+    this.turnAbortControllers.clear();
     const tavernHelper = this.getTavernHelper();
     if (tavernHelper) {
       if (typeof (tavernHelper as any).abortGeneration === 'function') {
@@ -176,22 +248,35 @@ class AIService {
     }
   }
 
-  private createRequestController(): AbortController {
+  private createRequestController(turnId?: string): AbortController {
     const controller = new AbortController();
     this.activeAbortControllers.add(controller);
+    const id = turnId || peekActiveQingyuTurnId() || undefined;
+    if (id) {
+      let set = this.turnAbortControllers.get(id);
+      if (!set) {
+        set = new Set();
+        this.turnAbortControllers.set(id, set);
+      }
+      set.add(controller);
+      this.controllerTurnIds.set(controller, id);
+    }
     return controller;
   }
 
   private releaseRequestController(controller: AbortController): void {
     this.activeAbortControllers.delete(controller);
+    const id = this.controllerTurnIds.get(controller);
+    if (id) this.turnAbortControllers.get(id)?.delete(controller);
   }
 
   private async withRequestController<T>(
     fn: (signal: AbortSignal) => Promise<T>,
     inheritedSignal?: AbortSignal,
+    turnId?: string,
   ): Promise<T> {
     if (inheritedSignal) return fn(inheritedSignal);
-    const controller = this.createRequestController();
+    const controller = this.createRequestController(turnId);
     try {
       return await fn(controller.signal);
     } finally {
@@ -230,6 +315,9 @@ class AIService {
         // 如果是取消操作，立即停止，不重试
         if (signal?.aborted || lastError.message?.includes('取消') || lastError.message?.includes('abort')) {
           console.log(`[AI服务] ${operationName} 检测到取消信号，立即停止`);
+          throw lastError;
+        }
+        if (isNonRetryableAiError(lastError)) {
           throw lastError;
         }
 
@@ -734,13 +822,98 @@ class AIService {
    * - 如果没有配置独立API，使用默认API
    */
   async generate(options: GenerateOptions): Promise<string> {
+    const turnId = options.background ? `background_${options.generation_id || Date.now()}`
+      : options.qingyuTurnId ?? peekActiveQingyuTurnId() ?? undefined;
+    if (options.background) options = { ...options, qingyuTurnId: turnId };
+    const remaining = remainingQingyuTurnTimeMs(turnId);
+    const totalMs = options.timeoutMs === undefined ? remaining
+      : remaining === null ? options.timeoutMs : Math.min(options.timeoutMs, remaining);
+    if (totalMs === null) return this.generateWithinBudget(options);
+    if (totalMs <= 0) throw new AiRequestTimeoutError('total', 60000);
+    const controller = this.createRequestController(turnId);
+    const onAbort = () => controller.abort(options.signal?.reason);
+    options.signal?.addEventListener('abort', onAbort, { once: true });
+    try {
+      if (options.signal?.aborted) onAbort();
+      return await withAiRequestDeadline(signal => this.generateWithinBudget({
+        ...options, qingyuTurnId: turnId, signal,
+      }), { signal: controller.signal, totalMs, firstByteMs: totalMs });
+    } finally {
+      options.signal?.removeEventListener('abort', onAbort);
+      this.releaseRequestController(controller);
+    }
+  }
+
+  private async generateWithinBudget(options: GenerateOptions): Promise<string> {
+    const withTurn: GenerateOptions = {
+      ...options,
+      qingyuTurnId: options.qingyuTurnId ?? peekActiveQingyuTurnId() ?? undefined,
+    };
+    try {
+      return await this.generateOnce(withTurn);
+    } catch (error) {
+      if (error instanceof QingyuTurnLongRequestBudgetError) throw error;
+      const salvaged = salvageTruncationError(error);
+      if (salvaged) return salvaged;
+      if (!shouldRecoverTruncation(withTurn, error)) throw error;
+      // 主叙事截断只补救一次，且不把预算从 8192 膨胀到 16000。
+      console.warn(`[AI服务] 主叙事输出截断，以 maxTokens=${MAIN_NARRATIVE_OUTPUT_CAP} 自动补救一次（不放大预算）`);
+      try {
+        return await this.generateOnce({
+          ...withTurn,
+          maxTokens: MAIN_NARRATIVE_OUTPUT_CAP,
+          requestMaxRetries: 0,
+          should_stream: false,
+          onStreamChunk: undefined,
+        });
+      } catch (retryError) {
+        const recovered = salvageTruncationError(retryError);
+        if (recovered) return recovered;
+        if (isOutputTruncationError(retryError)) {
+          throw new OutputTruncationError({
+            budget: MAIN_NARRATIVE_OUTPUT_CAP,
+            usageType: options.usageType || 'main',
+            attempt: 1,
+            recoveryAttempted: true,
+            partialContent: (retryError as OutputTruncationError).partialContent,
+          });
+        }
+        throw retryError;
+      }
+    }
+  }
+
+  private bindQingyuTransportBudget(signal: AbortSignal | undefined, options: GenerateOptions): void {
+    if (!signal) return;
+    qingyuTransportBudgetBySignal.set(signal, {
+      usageType: options.usageType || 'main',
+      reasoningEffort: options.reasoningEffort ?? (remainingQingyuTurnTimeMs(options.qingyuTurnId) !== null ? 'low' : undefined),
+      maxTokens: options.maxTokens,
+      qingyuTurnId: options.qingyuTurnId ?? peekActiveQingyuTurnId() ?? undefined,
+    });
+  }
+
+  /** 每次实际 long transport（含网络重试与非流降级）计一次预算。非清羽回合 consume 直接放行。 */
+  private chargeQingyuLongTransport(signal?: AbortSignal): void {
+    const bound = signal ? qingyuTransportBudgetBySignal.get(signal) : undefined;
+    const options = bound || {
+      usageType: 'main' as const,
+      qingyuTurnId: peekActiveQingyuTurnId() ?? undefined,
+    };
+    if (!consumeQingyuTurnLongRequest(options, options.qingyuTurnId)) {
+      throw new QingyuTurnLongRequestBudgetError();
+    }
+  }
+
+  private async generateOnce(options: GenerateOptions): Promise<string> {
     return this.withRequestController(async (signal) => {
+      this.bindQingyuTransportBudget(signal, options);
       try {
         return await this.executeWithRetry(async () => {
       const requestOptions = { ...options, signal };
       this.syncModeWithEnvironment();
       const usageType = requestOptions.usageType || 'main';
-      const assigned = this.getAPIConfigForUsageType(usageType);
+      const assigned = requestOptions.apiConfigOverride || this.getAPIConfigForUsageType(usageType);
       noteGenerateStart({
         provider: assigned?.provider || this.config.customAPI?.provider || null,
         model: assigned?.model || this.config.customAPI?.model || null,
@@ -749,6 +922,10 @@ class AIService {
       });
       requestOptions.onStreamChunk = wrapTelemetryStreamChunk(requestOptions.onStreamChunk);
       console.log(`[AI服务] 调用generate，模式: ${this.config.mode}, usageType: ${usageType}, hasOnStreamChunk=${!!requestOptions.onStreamChunk}`);
+
+      if (requestOptions.apiConfigOverride) {
+        return this.generateWithAPIConfig(requestOptions, requestOptions.apiConfigOverride);
+      }
 
       // 酒馆模式特殊处理
       if (this.config.mode === 'tavern') {
@@ -801,7 +978,7 @@ class AIService {
       } finally {
         noteGenerateComplete();
       }
-    }, options.signal);
+    }, options.signal, options.qingyuTurnId);
   }
 
   /**
@@ -816,8 +993,14 @@ class AIService {
    * - 如果没有配置独立API，使用默认API
    */
   async generateRaw(options: GenerateOptions): Promise<string> {
-    return this.withRequestController(async (signal) => this.executeWithRetry(async () => {
-      const requestOptions = { ...options, signal };
+    const withTurn: GenerateOptions = {
+      ...options,
+      qingyuTurnId: options.qingyuTurnId ?? peekActiveQingyuTurnId() ?? undefined,
+    };
+    return this.withRequestController(async (signal) => {
+      this.bindQingyuTransportBudget(signal, withTurn);
+      return this.executeWithRetry(async () => {
+      const requestOptions = { ...withTurn, signal };
       this.syncModeWithEnvironment();
       const usageType = requestOptions.usageType || 'main';
       console.log(`[AI服务] 调用generateRaw，模式: ${this.config.mode}, usageType: ${usageType}`);
@@ -869,7 +1052,8 @@ class AIService {
 
       // 网页模式默认
       return this.generateRawWithCustomAPI(requestOptions);
-    }, `generateRaw[${options.usageType || 'main'}]`, options.requestMaxRetries, signal), options.signal);
+    }, `generateRaw[${withTurn.usageType || 'main'}]`, withTurn.requestMaxRetries, signal);
+    }, options.signal, withTurn.qingyuTurnId);
   }
 
   /**
@@ -947,6 +1131,7 @@ class AIService {
         if (options.signal?.aborted) {
           throw new Error('请求已被取消');
         }
+        this.chargeQingyuLongTransport(options.signal);
         return await tavernHelper.generate(options);
       }, { retries: options.requestMaxRetries, signal: options.signal });
     } catch (error) {
@@ -969,6 +1154,7 @@ class AIService {
         if (options.signal?.aborted) {
           throw new Error('请求已被取消');
         }
+        this.chargeQingyuLongTransport(options.signal);
         return await tavernHelper.generateRaw(options);
       }, { retries: options.requestMaxRetries, signal: options.signal });
       return String(result);
@@ -1059,6 +1245,7 @@ class AIService {
   }
 
   private isRetryableError(error: unknown): boolean {
+    if (isNonRetryableAiError(error)) return false;
     const message = (() => {
       if (!error) return '';
       if (typeof error === 'string') return error;
@@ -1085,6 +1272,7 @@ class AIService {
   }
 
   private toUserFacingError(error: unknown): Error {
+    if (error instanceof Error && isNonRetryableAiError(error)) return error;
     return toUserFacingAIError(error);
   }
 
@@ -1353,11 +1541,18 @@ class AIService {
     return null;
   }
 
-  private getEffectiveRequestedMaxTokens(_provider: APIProvider, _model: string, requestedMaxTokens: number, usageType?: APIUsageType): number {
-    // 主叙事默认配置曾请求 16k 输出；在 163,840 上下文的兼容端点上，长存档输入
-    // 约 149k 时会形成必然失败的 149k+16k 请求。8k 足够正文+结构化指令，并为
-    // 未知模型（无法可靠推断 context window）保留安全余量。显式单次 override 仍会
-    // 先经过这里，因此主流程始终受同一上限保护。
+  private getEffectiveRequestedMaxTokens(
+    _provider: APIProvider,
+    _model: string,
+    requestedMaxTokens: number,
+    usageType?: APIUsageType,
+    callLevelOverride?: number,
+  ): number {
+    // 调用级预算（快路/意图/单次恢复）按调用方给出的值走，仍受模型输出上限与上下文夹紧。
+    if (typeof callLevelOverride === 'number' && Number.isFinite(callLevelOverride) && callLevelOverride > 0) {
+      return callLevelOverride;
+    }
+    // 主叙事默认配置曾请求 16k 输出；未知模型不猜新规格，保留 8k 安全余量。
     return usageType === 'main' || usageType === undefined
       ? Math.min(requestedMaxTokens, 8192)
       : requestedMaxTokens;
@@ -1436,8 +1631,36 @@ class AIService {
     signal?: AbortSignal,
   ): Promise<string> {
     const { provider, url, apiKey, model, temperature, maxTokens } = apiConfig;
-    const requestedMaxTokens = this.getEffectiveRequestedMaxTokens(provider, model, maxTokensOverride ?? maxTokens ?? 16000, usageType);
+    const requestedMaxTokens = this.getEffectiveRequestedMaxTokens(provider, model, maxTokens ?? 16000, usageType, maxTokensOverride);
     const safeMaxTokens = this.clampMaxTokensForContext(provider, model, messages, requestedMaxTokens);
+    const inputChars = messages.reduce((sum, item) => sum + String(item.content || '').length, 0);
+    const requestId = `req_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+
+    const emitDiagnostic = (attempt: number, finishReason: string | undefined, truncated: boolean, usage?: unknown) => {
+      recordAiRequestDiagnostic({
+        usageType,
+        requestId,
+        attempt,
+        finishReason,
+        budget: safeMaxTokens,
+        inputChars,
+        usage: readUsageTotals(usage),
+        truncated,
+      });
+    };
+
+    const throwTruncated = (finishReason: unknown, attempt: number, usage?: unknown, partialContent?: string): never => {
+      emitDiagnostic(attempt, typeof finishReason === 'string' ? finishReason : undefined, true, usage);
+      throw new OutputTruncationError({
+        finishReason: typeof finishReason === 'string' ? finishReason : undefined,
+        budget: safeMaxTokens,
+        usageType,
+        requestId,
+        attempt,
+        recoveryAttempted: false,
+        partialContent,
+      });
+    };
 
     // 智谱AI使用不同的API路径
     const normalizedUrl = normalizeOpenAIBaseUrl(url);
@@ -1450,7 +1673,9 @@ class AIService {
     try {
       if (streaming) {
         try {
-          return await this.streamingRequestOpenAI(url, apiKey, model, messages, temperature || 0.7, safeMaxTokens, onStreamChunk, responseFormat, provider, signal);
+          this.chargeQingyuLongTransport(signal);
+          return await this.streamingRequestOpenAI(url, apiKey, model, messages, temperature || 0.7, safeMaxTokens, onStreamChunk, responseFormat, provider, signal,
+            (finishReason, usage) => emitDiagnostic(0, finishReason, isTruncatedFinishReason(finishReason), usage));
         } catch (e) {
           const msg = e instanceof Error ? e.message : String(e);
           if (!this.isStreamUnsupportedError(msg)) throw e;
@@ -1463,6 +1688,9 @@ class AIService {
             stream: false
           };
           this.applyMaxTokensParam(requestBody, provider, model, safeMaxTokens);
+          Object.assign(requestBody, optionalReasoningParam(provider, model, {
+          url, effort: signal ? qingyuTransportBudgetBySignal.get(signal)?.reasoningEffort : undefined,
+        }) || {});
 
           // 如果指定了 JSON 格式，添加 response_format
           // 🔥 注意：某些模型/API不支持 response_format
@@ -1474,6 +1702,7 @@ class AIService {
             console.log('[AI服务-OpenAI兼容] 启用JSON格式输出(降级非流式)');
           }
 
+          this.chargeQingyuLongTransport(signal);
           const response = await axios.post(
             chatEndpoint,
             requestBody,
@@ -1491,8 +1720,9 @@ class AIService {
           const content = message?.content || message?.reasoning_content || message?.reasoning || '';
           const finishReason = response.data.choices?.[0]?.finish_reason;
           if (isTruncatedFinishReason(finishReason)) {
-            throw new Error(`响应因输出长度限制被截断（maxTokens=${safeMaxTokens}）`);
+            throwTruncated(finishReason, 0, response.data.usage, content);
           }
+          emitDiagnostic(0, finishReason, false, response.data.usage);
           console.log(`[AI服务-OpenAI] 响应长度: ${content.length}`);
           return content;
         }
@@ -1504,6 +1734,9 @@ class AIService {
           stream: false
         };
         this.applyMaxTokensParam(requestBody, provider, model, safeMaxTokens);
+        Object.assign(requestBody, optionalReasoningParam(provider, model, {
+          url, effort: signal ? qingyuTransportBudgetBySignal.get(signal)?.reasoningEffort : undefined,
+        }) || {});
 
         // 如果指定了 JSON 格式，添加 response_format
         // 🔥 注意：某些模型/API不支持 response_format
@@ -1515,6 +1748,7 @@ class AIService {
           console.log('[AI服务-OpenAI兼容] 启用JSON格式输出(非流式)');
         }
 
+        this.chargeQingyuLongTransport(signal);
         const response = await axios.post(
           chatEndpoint,
           requestBody,
@@ -1532,14 +1766,21 @@ class AIService {
         const content = message?.content || message?.reasoning_content || message?.reasoning || '';
         const finishReason = response.data.choices?.[0]?.finish_reason;
         if (isTruncatedFinishReason(finishReason)) {
-          throw new Error(`响应因输出长度限制被截断（maxTokens=${safeMaxTokens}）`);
+          throwTruncated(finishReason, 0, response.data.usage, content);
         }
+        emitDiagnostic(0, finishReason, false, response.data.usage);
         console.log(`[AI服务-OpenAI] 响应长度: ${content.length}`);
         return content;
       }
     } catch (error) {
       console.error('[AI服务-OpenAI] 失败:', error);
+      if (error instanceof QingyuTurnLongRequestBudgetError) throw error;
+      if (isAiRequestTimeout(error)) throw error;
+      if (isOutputTruncationError(error)) throw error;
       if (axios.isAxiosError(error)) {
+        if (error.code === 'ECONNABORTED' || error.code === 'ETIMEDOUT') {
+          throw new AiRequestTimeoutError('total', Number(error.config?.timeout) || 120000);
+        }
         if (error.response) {
           throw new Error(`API错误 ${error.response.status}: ${JSON.stringify(error.response.data)}`);
         } else if (error.request) {
@@ -1616,12 +1857,14 @@ class AIService {
     try {
       if (streaming) {
         try {
+          this.chargeQingyuLongTransport(signal);
           return await this.streamingRequestClaude(baseUrl, apiKey, model, systemPrompt, claudeMessages, temperature || 0.7, safeMaxTokens, onStreamChunk, signal);
         } catch (e) {
           const msg = e instanceof Error ? e.message : String(e);
           if (!this.isStreamUnsupportedError(msg)) throw e;
           console.warn('[AI服务-Claude] 当前API可能不支持流式传输，已自动降级为非流式请求。');
 
+          this.chargeQingyuLongTransport(signal);
           const response = await axios.post(
             `${baseUrl}/v1/messages`,
             buildRequestBody(),
@@ -1638,7 +1881,7 @@ class AIService {
 
           let content = response.data.content[0]?.text || '';
           if (isTruncatedFinishReason(response.data.stop_reason)) {
-            throw new Error(`响应因输出长度限制被截断（maxTokens=${safeMaxTokens}）`);
+            throw new OutputTruncationError({ budget: safeMaxTokens });
           }
           // 如果使用了 prefill，需要在返回内容前加上 '{'
           if (responseFormat === 'json_object' && content && !content.startsWith('{')) {
@@ -1648,6 +1891,7 @@ class AIService {
           return content;
         }
       } else {
+        this.chargeQingyuLongTransport(signal);
         const response = await axios.post(
           `${baseUrl}/v1/messages`,
           buildRequestBody(),
@@ -1664,7 +1908,7 @@ class AIService {
 
         let content = response.data.content[0]?.text || '';
         if (isTruncatedFinishReason(response.data.stop_reason)) {
-          throw new Error(`响应因输出长度限制被截断（maxTokens=${safeMaxTokens}）`);
+          throw new OutputTruncationError({ budget: safeMaxTokens });
         }
         // 如果使用了 prefill，需要在返回内容前加上 '{'
         if (responseFormat === 'json_object' && content && !content.startsWith('{')) {
@@ -1675,6 +1919,9 @@ class AIService {
       }
     } catch (error) {
       console.error('[AI服务-Claude] 失败:', error);
+      if (error instanceof QingyuTurnLongRequestBudgetError) throw error;
+      if (isAiRequestTimeout(error)) throw error;
+      if (isOutputTruncationError(error)) throw error;
       if (axios.isAxiosError(error)) {
         if (error.response) {
           throw new Error(`Claude API错误 ${error.response.status}: ${JSON.stringify(error.response.data)}`);
@@ -1767,6 +2014,7 @@ class AIService {
         headers['Authorization'] = `Bearer ${apiKey}`;
       }
 
+      this.chargeQingyuLongTransport(signal);
       return axios.post(requestUrl, requestBody, {
         headers,
         timeout: 120000,
@@ -1777,7 +2025,7 @@ class AIService {
     const readGeminiContent = (response: any): string => {
       const candidate = response.data.candidates?.[0];
       if (isTruncatedFinishReason(candidate?.finishReason)) {
-        throw new Error(`响应因输出长度限制被截断（maxTokens=${safeMaxTokens}）`);
+        throw new OutputTruncationError({ budget: safeMaxTokens });
       }
       return candidate?.content?.parts?.[0]?.text || '';
     };
@@ -1785,6 +2033,7 @@ class AIService {
     try {
       if (streaming) {
         try {
+          this.chargeQingyuLongTransport(signal);
           return await this.streamingRequestGemini(baseUrl, apiKey, model, systemInstruction, contents, temperature || 0.7, safeMaxTokens, onStreamChunk, signal);
         } catch (e) {
           const msg = e instanceof Error ? e.message : String(e);
@@ -1830,6 +2079,9 @@ class AIService {
       }
     } catch (error) {
       console.error('[AI服务-Gemini] 失败:', error);
+      if (error instanceof QingyuTurnLongRequestBudgetError) throw error;
+      if (isAiRequestTimeout(error)) throw error;
+      if (isOutputTruncationError(error)) throw error;
       if (axios.isAxiosError(error)) {
         if (error.response) {
           throw new Error(`Gemini API错误 ${error.response.status}: ${JSON.stringify(error.response.data)}`);
@@ -1851,6 +2103,31 @@ class AIService {
     responseFormat?: 'json_object',
     provider?: APIProvider,
     signal?: AbortSignal,
+    onFinish?: (finishReason: string | undefined, usage: unknown) => void,
+  ): Promise<string> {
+    return withAiRequestDeadline((requestSignal, firstByte) => {
+      const policy = signal ? qingyuTransportBudgetBySignal.get(signal) : undefined;
+      if (policy) qingyuTransportBudgetBySignal.set(requestSignal, policy);
+      return this.streamingRequestOpenAIOnce(
+      url, apiKey, model, messages, temperature, maxTokens, onStreamChunk,
+      responseFormat, provider, requestSignal, firstByte, onFinish,
+      );
+    }, { signal });
+  }
+
+  private async streamingRequestOpenAIOnce(
+    url: string,
+    apiKey: string,
+    model: string,
+    messages: AIMessage[],
+    temperature: number,
+    maxTokens: number,
+    onStreamChunk?: (chunk: string) => void,
+    responseFormat?: 'json_object',
+    provider?: APIProvider,
+    signal?: AbortSignal,
+    onFirstByte?: () => void,
+    onFinish?: (finishReason: string | undefined, usage: unknown) => void,
   ): Promise<string> {
     console.log('[AI服务-OpenAI流式] 开始');
 
@@ -1861,6 +2138,12 @@ class AIService {
       max_tokens: maxTokens,
       stream: true
     };
+    if (provider === 'openrouter' || /openrouter\.ai/i.test(url)) {
+      requestBody.stream_options = { include_usage: true };
+    }
+    Object.assign(requestBody, optionalReasoningParam(provider, model, {
+          url, effort: signal ? qingyuTransportBudgetBySignal.get(signal)?.reasoningEffort : undefined,
+        }) || {});
 
     // 如果指定了 JSON 格式，添加 response_format
     // 🔥 注意：某些模型/API不支持 response_format
@@ -1907,9 +2190,13 @@ class AIService {
     // 则回退使用思维链文本，避免返回空结果导致“AI生成失败”。
     let reasoningBuffer = '';
     let truncated = false;
+    let finishReason: string | undefined;
+    let usage: unknown;
     const result = await this.processSSEStream(response, (data) => {
       const parsed = JSON.parse(data);
-      const choice = parsed.choices[0];
+      if (parsed.usage) usage = parsed.usage;
+      const choice = parsed.choices?.[0];
+      if (choice?.finish_reason) finishReason = choice.finish_reason;
       const delta = choice?.delta;
       if (isTruncatedFinishReason(choice?.finish_reason)) {
         truncated = true;
@@ -1925,13 +2212,15 @@ class AIService {
       }
 
       return '';
-    }, onStreamChunk, signal);
+    }, onStreamChunk, signal, onFirstByte);
+    onFinish?.(finishReason, usage);
 
+    const visible = result.trim() ? result : reasoningBuffer;
     if (truncated) {
-      throw new Error(`响应因输出长度限制被截断（maxTokens=${maxTokens}）`);
+      throw new OutputTruncationError({ budget: maxTokens, partialContent: visible });
     }
 
-    return result.trim() ? result : reasoningBuffer;
+    return visible;
   }
 
   // Claude格式流式请求
@@ -2015,7 +2304,7 @@ class AIService {
     }, onStreamChunk, signal);
 
     if (truncated) {
-      throw new Error(`响应因输出长度限制被截断（maxTokens=${maxTokens}）`);
+      throw new OutputTruncationError({ budget: maxTokens });
     }
     return result;
   }
@@ -2092,7 +2381,7 @@ class AIService {
     }, onStreamChunk, signal);
 
     if (truncated) {
-      throw new Error(`响应因输出长度限制被截断（maxTokens=${maxTokens}）`);
+      throw new OutputTruncationError({ budget: maxTokens });
     }
     return result;
   }
@@ -2103,6 +2392,7 @@ class AIService {
     extractContent: (data: string) => string,
     onStreamChunk?: (chunk: string) => void,
     signal?: AbortSignal,
+    onFirstByte?: () => void,
   ): Promise<string> {
     console.log(`[AI服务-流式] processSSEStream 开始, hasOnStreamChunk=${!!onStreamChunk}`);
 
@@ -2135,7 +2425,9 @@ class AIService {
         }
 
         const { done, value } = await reader.read();
+        if (signal?.aborted) throw new Error('请求已取消');
         if (done) break;
+        if (value?.byteLength) onFirstByte?.();
 
         buffer += decoder.decode(value, { stream: true });
         const lines = buffer.split('\n');

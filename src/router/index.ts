@@ -11,6 +11,7 @@ import ScenarioModManagerView from '../views/ScenarioModManagerView.vue';
 import WorldSimulationDemoView from '../views/WorldSimulationDemoView.vue';
 import WorldSimulationPlaytestStartView from '../views/WorldSimulationPlaytestStartView.vue';
 import QingyuOpeningPlaytestStartView from '../views/QingyuOpeningPlaytestStartView.vue';
+import XingyuehuQuestPlaytestStartView from '../views/XingyuehuQuestPlaytestStartView.vue';
 
 // 创建一个包装组件来传递fullscreen属性
 import { h } from 'vue';
@@ -88,6 +89,11 @@ const routes = [
     path: '/qingyu-opening-playtest',
     name: 'QingyuOpeningPlaytest',
     component: QingyuOpeningPlaytestStartView,
+  },
+  {
+    path: '/xingyuehu-quest-playtest',
+    name: 'XingyuehuQuestPlaytest',
+    component: XingyuehuQuestPlaytestStartView,
   },
   {
     path: '/world-sim-demo',

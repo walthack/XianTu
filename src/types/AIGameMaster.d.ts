@@ -187,13 +187,23 @@ export interface GM_Request {
  * AI Game Master 返回的结构化响应对象 (天道响应)。
  */
 export interface GM_Response {
+  moduleReceipt?: import('@/modules/scenarioMods/modularTurn').ModuleReceipt;
   /** AI生成的主要叙事内容，用于展示给用户。也作为短期记忆存储 */
   text: string;
+  /** 输出因长度限制被截断；不得当网络错误自动重试。 */
+  outputTruncated?: boolean;
+  /** Terminal request failures are surfaced without restarting the whole turn. */
+  generationError?: { code: string; message: string };
   /**
    * 一个包含所有状态变更指令的数组。
    * 前端需要解析并执行这些指令。
    */
   tavern_commands?: TavernCommand[];
+  /**
+   * 结构化道具引用。权威是已登记 ID 与用途，不是同名字符串。
+   * purpose: owned | scene | claim | grant
+   */
+  item_references?: Array<{ id: string; purpose?: string }>;
   /** 新增：用于承载关键记忆的烙印，将被注入到中期记忆中。 */
   mid_term_memory?: string;
   /** 短期记忆（别名，指向text字段） */
@@ -218,6 +228,8 @@ export interface GM_Response {
   stateChanges?: import('./game').StateChangeLog;
   /** 客户端内部标记：本响应已经执行并提交过状态事务，展示层不得再次重放玩家行动。 */
   transactionCommitted?: boolean;
+  /** 已本地结算但模型正文降级，UI提示继续而非重放动作。 */
+  narrativeNotice?: string;
   system_messages?: string[];
   /** 行动选项（必填，3-5个选项） */
   action_options: string[];
