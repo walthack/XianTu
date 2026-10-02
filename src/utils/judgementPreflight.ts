@@ -262,6 +262,20 @@ function allyFactorsFor(
   });
 }
 
+/** 此前动作回执因子：只认已落账的 success 尝试，布尔计一次（读档/重试不叠加）。 */
+function receiptFactorsFor(
+  spec: ScenarioEventActionJudgement,
+  saveData: any,
+): Array<{ label: string; value: number; source: 'condition' }> {
+  const states = saveData?.世界?.状态?.剧本模组?.eventActionStates || {};
+  return (spec.receiptFactors || []).flatMap(factor => {
+    const attempts = states[factor.eventId]?.attempts;
+    const settled = Array.isArray(attempts)
+      && attempts.some((attempt: any) => attempt?.actionId === factor.actionId && attempt?.outcome === 'success');
+    return settled ? [{ label: factor.label, value: Number(factor.value) || 0, source: 'condition' as const }] : [];
+  });
+}
+
 function eventActionReceiptMatches(
   receipt: JudgementProposal['authorityReceipt'],
   selection: EventActionJudgementSelection,
@@ -322,6 +336,7 @@ export function buildEventActionJudgementProposal(
       ...scenarioSkillFactors(kind, normalized, saveData),
       ...explicitTalentFactors(kind, normalized, saveData),
       ...allyFactorsFor(normalized, spec, saveData),
+      ...receiptFactorsFor(spec, saveData),
       { label: '幸运', value: data.幸运点, source: 'condition' },
       environmentFactorFor(kind, data),
     ],

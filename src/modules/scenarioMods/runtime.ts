@@ -64,10 +64,11 @@ import {
   type ScenarioInventoryTransferReceipt,
 } from './inventoryTransactions';
 import { resolveFixedQuestObjective } from './fixedQuestObjectives';
-import { formatQuestCompass, questCompassPhrases } from './eventNarrativeView';
+import { formatQuestCompass, questCompassPhrases, storyRouteLocation } from './eventNarrativeView';
 import { departedPresentNames, stampDepartedCast } from './presence';
 import { releaseBaihuGambleRefusalIfEscaped } from './baihuGambleRefusal';
 import { resolveScopedPlayerLine } from './playerActionPresentation';
+import { ensureEncounteredScenarioCharacter } from './relationships';
 import { fixedStoryInventoryEffects } from './fixedInventoryContracts';
 import { isScopedPlayerPresentationEvent } from './playtestNarrativeScope';
 
@@ -1238,7 +1239,7 @@ function deriveInteractionVerb(text: string): ScenarioInteractionVerb {
  * ⚠ **隐式契约：动作按钮的「动词 · 对象」是从文案反推的，不是独立字段。**
  * （标注于 2026-08-19，用户裁定「可以标注，具体任务内容修改之后再扩展」。）
  *
- * 玩家看到的按钮＝`动词 · 对象（第 N/M 步）`，两半都来自 `label + actionText`：
+ * 玩家看到的按钮＝`动词 · 对象`（不显示步骤进度，用户裁定 2026-10-02），两半都来自 `label + actionText`：
  *   · **动词**由 `deriveInteractionVerb` 的正则判定——
  *     「询问／交谈／商议／交涉／说服」→ 交谈；「观察／查看／确认／查明／查清／辨认」→ 观察；
  *     「击退／斩杀／制伏」→ 攻击；「前往／赶赴／进入」→ 前往；都不命中则落 `act`（行动）。
@@ -1299,6 +1300,7 @@ function derivePlayerLine(
 ): string {
   const scoped = resolveScopedPlayerLine(event, action, storyMode);
   if (scoped) return scoped;
+  if ((event.playerCompletionContract?.actions.length || 0) > 1) return action.actionText;
   const explicitLine = event.presentation?.playerLine?.trim();
   if (explicitLine) return explicitLine;
   if (isScopedPlayerPresentationEvent(event.id, storyMode)) {
@@ -1345,21 +1347,21 @@ export function getCurrentStoryEventActions(saveData: SaveData): ScenarioEventAc
       && contractStep.action.id === action.id,
     );
     const targetSuffix = interaction.targetLabel ? ` · ${interaction.targetLabel}` : '';
-    const stepSuffix = isCurrentSequentialStep ? `（第 ${contractStep!.index}/${contractStep!.total} 步）` : '';
     const atLocationId = playerLocationId(saveData, runtime);
     const traveling = Boolean(
-      event.locationId
+      !storyRouteLocation(event.id) && event.locationId
       && event.locationId !== atLocationId
       && !sameSceneLocation(runtime, event.locationId, atLocationId),
     );
     const compass = traveling ? formatQuestCompass(event, runtime, atLocationId) : '';
-    const derivedLabel = `${INTERACTION_VERB_LABELS[interaction.verb]}${targetSuffix}${stepSuffix}`;
+    const derivedLabel = `${INTERACTION_VERB_LABELS[interaction.verb]}${targetSuffix}`;
     const useCompass = Boolean(compass && !isLinearStepContract(contract));
     return {
       source: 'event_engine' as const,
       eventId: event.id,
       actionId: action.id,
-      label: useCompass ? compass : derivedLabel,
+      label: (useCompass ? compass : derivedLabel).endsWith(String(action.label || ''))
+        ? (useCompass ? compass : derivedLabel) : `${useCompass ? compass : derivedLabel} · ${action.label}`,
       actionText: action.actionText,
       playerLine: derivePlayerLine(event, action, runtime.storyMode),
       timeCost: action.timeCost,
@@ -1375,25 +1377,15 @@ export function getCurrentStoryEventActions(saveData: SaveData): ScenarioEventAc
       ...(action.judgement ? { judgement: structuredClone(action.judgement) } : {}),
     };
   });
-  // 同一人物、同一地点上的分支动作可能推导出相同交互标签（例如谢艺的“承接/救治”
-  // 都会变成“行动 · 谢艺”）。只有发生碰撞时才补作者动作名，既保留现有交互语法，
-  // 又确保玩家能看懂自己选的是哪条路。
-  const labelCounts = new Map<string, number>();
-  for (const selection of steps) labelCounts.set(selection.label, (labelCounts.get(selection.label) || 0) + 1);
-  for (const [index, selection] of steps.entries()) {
-    if ((labelCounts.get(selection.label) || 0) < 2) continue;
-    selection.label = `${selection.label} · ${availableActions[index].label}`;
-  }
   // 玩家主动走绝路的选项与正常动作并列。它们不进合同、不影响 contractHash、
   // 也不推进本拍——选中即本局结束。放在最后，避免挤掉当前该做的那一步。
   const fatalChoices = (event.fatalOutcomes?.choices || []).map(choice => {
     const interaction = deriveInteraction(runtime, event, choice.label, choice.actionText);
-    const targetSuffix = interaction.targetLabel ? ` · ${interaction.targetLabel}` : '';
     return {
       source: 'event_engine' as const,
       eventId: event.id,
       actionId: choice.id,
-      label: `${INTERACTION_VERB_LABELS[interaction.verb]}${targetSuffix}`,
+      label: `${choice.label}（本局结束）`,
       actionText: choice.actionText,
       playerLine: choice.actionText,
       timeCost: 1 as const,
@@ -1403,7 +1395,15 @@ export function getCurrentStoryEventActions(saveData: SaveData): ScenarioEventAc
       interaction,
     };
   });
-  return [...steps, ...fatalChoices];
+  // 普通动作与致命选项一起检查重名；发生碰撞才补作者动作名。
+  const selections = [...steps, ...fatalChoices];
+  const authoredLabels = [...availableActions, ...(event.fatalOutcomes?.choices || [])];
+  const labelCounts = new Map<string, number>();
+  for (const selection of selections) labelCounts.set(selection.label, (labelCounts.get(selection.label) || 0) + 1);
+  for (const [index, selection] of selections.entries()) {
+    if ((labelCounts.get(selection.label) || 0) >= 2) selection.label += ` · ${authoredLabels[index].label}`;
+  }
+  return selections;
 }
 
 function normalizeEventActionIntent(value: string): string {
@@ -1724,7 +1724,7 @@ export function recordStoryEventStructuredAction(
     runtime.gameOver = {
       endingId: fatalChoice.ending.id,
       title: fatalChoice.ending.title,
-      facts: [...fatalChoice.ending.facts],
+      facts: fatalChoice.ending.facts.map(fact => event.id === 'lcq.event.sudaji_south_pact' ? fact.replace('依约执行炮烙', '下令执行炮烙') : fact),
       sourceEventId: event.id,
       atTurn: Math.max(0, Number(runtime.worldTurn) || 0),
     };
@@ -1804,6 +1804,7 @@ export function recordStoryEventStructuredAction(
     action.outcomeEffects?.[outcome],
     attemptNumber,
   );
+  if (outcome === 'success') settleEarlyStoryTrade(saveData, runtime, event.id, action.id);
   const completed = action.kind !== 'prepare' && contract.settleOn.includes(outcome);
   if (completed && outcome === 'success') {
     inventorySettlements.push(...settleScenarioInventoryTransfers(
@@ -1821,7 +1822,10 @@ export function recordStoryEventStructuredAction(
     }, saveData);
     archiveAbandonedXieyiRescueJudgement(saveData, runtime);
   }
-  if (event.locationId) movePlayerToEventLocation(saveData, runtime, event.locationId);
+  syncEarlyEncounteredCharacters(saveData, runtime);
+  const routeLocation = storyRouteLocation(event.id);
+  if (routeLocation && (saveData as any)?.角色?.位置) (saveData as any).角色.位置.描述 = `中州·${routeLocation}`;
+  else if (event.locationId) movePlayerToEventLocation(saveData, runtime, event.locationId);
   return {
     attempted: true,
     completed,
@@ -2624,7 +2628,7 @@ function appendChronicleEntry(
  * 「王哲自爆」那一拍要的是**自爆之后**焰浪才开始逼近，不是一进场就开始倒数。
  * 逼近只送可观察事实，不预告死亡；到点才落 `gameOver`（裁定 #155：不用 UI 倒计时代替叙事）。
  */
-function settleFatalDeadlines(runtime: RuntimeState, transitions: ScenarioRuntimeTransition[]): void {
+function settleFatalDeadlines(runtime: RuntimeState, transitions: ScenarioRuntimeTransition[], saveData: SaveData): void {
   if (runtime.gameOver) return;
   const now = Math.max(0, Number(runtime.worldTurn) || 0);
   if (runtime.pendingFatalApproach && runtime.pendingFatalApproach.atTurn !== now) {
@@ -2635,6 +2639,8 @@ function settleFatalDeadlines(runtime: RuntimeState, transitions: ScenarioRuntim
     const event = runtime.events.find(item => item.id === eventId);
     const deadline = event?.fatalOutcomes?.deadline;
     if (!event || !deadline || isEventSettled(runtime, eventId)) continue;
+    // `when` 不成立时整条绝路不计时（如只对持有某路线回执的存档生效的延后后果）。
+    if (!conditionsMatch(deadline.when, saveData, runtime)) continue;
     let startedAt: number | undefined;
     if (deadline.afterActionId) {
       const attempt = (runtime.eventActionStates?.[eventId]?.attempts || [])
@@ -3396,6 +3402,52 @@ export function peekImminentWorldResolution(saveData: SaveData): ImminentWorldRe
   };
 }
 
+/** 明确留在九阳焰浪中是绝路，不是离场后的余波确认；沿用该拍既有死亡正文。 */
+export function previewWangZheStayEnding(saveData: SaveData, playerText: string) {
+  const runtime = getRuntime(saveData);
+  const raw = String(playerText || '').trim();
+  if (!runtime?.activeEventIds?.includes('lcq.event.s02_02') || runtime.gameOver) return undefined;
+  if (!runtime.eventActionStates?.['lcq.event.s02_02']?.attempts?.some(item => item.actionId === 'witness_wang_zhe_nine_suns' && item.outcome === 'success')) return undefined;
+  if (/[？?“”"「」『』]|如果|假如|要是|他说|她说|并非|并未|不是|没有说|没说|才怪|曾经|之前|不(?:留|看)|离开|逃离|撤离/.test(raw)) return undefined;
+  if (!/(?:我不走|不逃|不撤|留下|留在(?:原地|战场)|留.{0,12}看.{0,8}王哲)/.test(raw)) return undefined;
+  return runtime.events.find(item => item.id === 'lcq.event.s02_02')?.fatalOutcomes?.deadline?.ending;
+}
+
+/** 已验证剧情动作的固定交易；回执避免读档/重复结算再次收付。 */
+function settleEarlyStoryTrade(saveData: SaveData, runtime: RuntimeState, eventId: string, actionId: string): void {
+  const key = `trade.${eventId}.${actionId}`;
+  if (runtime.flags[key]) return;
+  const fee = eventId === 'lcq.event.charge_sudaji_fee' && actionId === 'lock_fee_then_remove_device';
+  const buy = eventId === 'lcq.event.free_ajiman' && actionId === 'take_ajiman_bond_in_hand';
+  const tear = eventId === 'lcq.event.free_ajiman' && actionId === 'tear_bond_and_face_blockade';
+  if (!fee && !buy && !tear) return;
+  const inventory = saveData.角色?.背包;
+  if (!inventory) return;
+  if (fee || buy) {
+    inventory.货币 ||= {};
+    const gold = inventory.货币.金铢 || { 币种: '金铢', 名称: '金铢', 数量: 0, 价值度: 1 };
+    inventory.货币.金铢 = { ...gold, 数量: Math.max(0, (Number(gold.数量) || 0) + (fee ? 60 : -50)) };
+  }
+  const bondId = 'lcq.item.ajiman_bond';
+  inventory.物品 ||= {};
+  if (buy) inventory.物品[bondId] = { 物品ID: bondId, 名称: '阿姬曼身契', 类型: '其他', 品质: { quality: '凡', grade: 0 }, 数量: 1, 描述: '从祁老四手中接过的阿姬曼身契。', 已装备: false } as any;
+  if (tear) delete inventory.物品[bondId];
+  runtime.flags[key] = true;
+}
+
+/** 初识与旧检查点补登记只读已结算动作，不依赖早期关卡缺失的 relatedCharacterIds。 */
+function syncEarlyEncounteredCharacters(saveData: SaveData, runtime: RuntimeState): void {
+  const source = { ...(runtime.canon as any), ...(runtime as any).content, opening: runtime.opening || {} };
+  for (const [eventId, characterId, name, gender] of [
+    ['lcq.event.free_ajiman', 'liuchao.character.a_jiman_bana', '阿姬曼', '女'],
+    ['lcq.event.wuerlang_joins', 'liuchao.character.wu_er_lang', '武二郎', '男'],
+  ]) {
+    if (runtime.completedEventIds?.includes(eventId) || runtime.eventActionStates?.[eventId]?.attempts?.some(item => item.outcome === 'success')) {
+      ensureEncounteredScenarioCharacter(saveData, source, characterId, { name, gender });
+    }
+  }
+}
+
 export function advanceScenarioRuntime(saveData: SaveData): {
   saveData: SaveData;
   transitions: ScenarioRuntimeTransition[];
@@ -3409,6 +3461,7 @@ export function advanceScenarioRuntime(saveData: SaveData): {
   if (!runtime) return { saveData: next, transitions: [] };
   // 本局已结束：不再推进任何进度，也不再激活新拍。玩家只能读档。
   if ((runtime as RuntimeState).gameOver) return { saveData: next, transitions: [] };
+  syncEarlyEncounteredCharacters(next, runtime);
   reconcileSaveWithRegistry(next, runtime as RuntimeState & { modId?: string });
   projectBottomLinesToNpcs(next);
   updateAcquaintanceLedger(next, runtime as RuntimeState & { modId?: string });
@@ -3599,7 +3652,7 @@ export function advanceScenarioRuntime(saveData: SaveData): {
   updateDivergenceControl(next, progressed);
   syncActorEngine(runtime);
   refreshEventTimelineRevelations(runtime, transitions);
-  settleFatalDeadlines(runtime, transitions);
+  settleFatalDeadlines(runtime, transitions, next);
   settleScenePressure(runtime, transitions);
   recordSettledBeatHandoff(runtime, transitions);
   recordChronicleTransitions(runtime, transitions);

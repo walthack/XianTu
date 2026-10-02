@@ -90,6 +90,7 @@ function publishLocalBody(
  * s01_01 vehicle: the model only returns a short RenderPlan.
  * Visible 800–1000 chars are composed locally from Packet + reviewed variants.
  */
+// @deprecated LEGACY：模块化稳定后删除（2026-10-02 用户决定）
 export async function generateLegacyPilotNarrative(
   input: LegacyPilotGenerateInput,
 ): Promise<LegacyPilotGenerateResult> {

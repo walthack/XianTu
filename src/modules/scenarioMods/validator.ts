@@ -372,6 +372,7 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
           add(`${entity.__path}.presentation`, 'invalid_type', 'presentation must be an object.');
         } else {
           optionalString(entity.presentation.targetLabel, `${entity.__path}.presentation.targetLabel`, add);
+          optionalString(entity.presentation.image, `${entity.__path}.presentation.image`, add);
           optionalString(entity.presentation.playerLine, `${entity.__path}.presentation.playerLine`, add);
           if (entity.presentation.stepGuardTerms !== undefined) {
             const guardPath = `${entity.__path}.presentation.stepGuardTerms`;
@@ -2032,6 +2033,16 @@ function validateEventActionJudgement(
       requireString(factor.label, `${factorPath}.label`, add);
       if (typeof factor.value !== 'number' || !Number.isFinite(factor.value)) {
         add(`${factorPath}.value`, 'invalid_number', 'Ally factor value must be a number.');
+      }
+    });
+  }
+  if (value.receiptFactors !== undefined) {
+    forEachRecord(value.receiptFactors, `${path}.receiptFactors`, (factor, factorPath) => {
+      validateId(factor.eventId, `${factorPath}.eventId`, add);
+      requireString(factor.actionId, `${factorPath}.actionId`, add);
+      requireString(factor.label, `${factorPath}.label`, add);
+      if (typeof factor.value !== 'number' || !Number.isFinite(factor.value)) {
+        add(`${factorPath}.value`, 'invalid_number', 'Receipt factor value must be a number.');
       }
     });
   }

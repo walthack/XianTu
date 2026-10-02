@@ -75,17 +75,19 @@ test('fixed verbs are presentation-only and carry the flood farewell into the Ni
     await loadTs('../src/modules/scenarioMods/narrativePerformanceGuard.ts');
 
   let save = advanceScenarioRuntime(fixture(stage)).saveData;
+  // 用户裁定 2026-10-02：按钮不显示步骤进度；步数只留在 stepIndex/stepTotal 与给写手的分步边界里。
   const expectedFloodLabels = [
-    '观察 · 易虎（第 1/3 步）',
-    '观察 · 易虎（第 2/3 步）',
-    '交谈 · 易彪（第 3/3 步）',
+    '观察 · 易虎',
+    '观察 · 易虎',
+    '交谈 · 易彪',
   ];
   for (const [index, expectedLabel] of expectedFloodLabels.entries()) {
     const [action] = getCurrentStoryEventActions(save);
-    assert.equal(action.label, expectedLabel);
+    assert.equal(action.label, `${expectedLabel} · ${stage.scenario.events.find(item => item.id === FLOOD_EVENT_ID).playerCompletionContract.actions[index].label}`);
     assert.equal(action.stepIndex, index + 1);
     assert.equal(action.stepTotal, 3);
     assert.doesNotMatch(action.label, /主线推进|主线判定/);
+    assert.doesNotMatch(action.label, /第\s*\d+\s*\/\s*\d+\s*步/);
     const step = getCurrentContractStep(save);
     assert.equal(step.index, index + 1);
     assert.equal(step.total, 3);
@@ -117,7 +119,7 @@ test('fixed verbs are presentation-only and carry the flood farewell into the Ni
   assert.equal(hasPendingStoryBeatHandoff(save), true);
 
   const [detoxAction] = getCurrentStoryEventActions(save);
-  assert.equal(detoxAction.label, '交谈 · 乐明珠');
+  assert.equal(detoxAction.label, '交谈 · 乐明珠 · 请求乐明珠为凝羽解毒');
   assert.equal(detoxAction.playerLine, '我请乐明珠替凝羽解毒。');
   assert.equal(detoxAction.actionText, '我按当前主线目标行动：请求乐明珠为凝羽解毒');
   assert.equal(detoxAction.interaction.verb, 'talk');
@@ -291,14 +293,14 @@ test('target fallback never echoes a long objective and event presentation stays
   }];
   let advanced = advanceScenarioRuntime(save).saveData;
   let [selection] = getCurrentStoryEventActions(advanced);
-  assert.equal(selection.label, '行动');
+  assert.equal(selection.label, '行动 · 处理眼前事务');
   assert.doesNotMatch(selection.label, /灭村|蛇彝村|安置商队/);
 
   const eventAfter = runtimeOf(advanced).events.find(item => item.id === FLOOD_EVENT_ID);
   const contractBefore = JSON.stringify(eventAfter.playerCompletionContract);
   eventAfter.presentation = { targetLabel: '蛇彝村', playerLine: '我先安置商队。' };
   selection = getCurrentStoryEventActions(advanced)[0];
-  assert.equal(selection.label, '行动 · 蛇彝村');
+  assert.equal(selection.label, '行动 · 蛇彝村 · 处理眼前事务');
   assert.equal(selection.playerLine, '我先安置商队。');
   assert.equal(JSON.stringify(eventAfter.playerCompletionContract), contractBefore);
 });

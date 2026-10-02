@@ -130,6 +130,23 @@ type QuestCompassRuntime = {
   };
 } | null | undefined;
 
+/** 短版 stage02 合并了多段原著章节；界面按当前剧情地点标段，不沿用第10章标题。 */
+export function storyChapterTitle(modId: string | undefined, eventId: string | undefined, fallback: string): string {
+  if (modId !== 'lcq.stage_02' || !eventId) return fallback;
+  if (['lcq.event.s02_01', 'lcq.event.s02_03', 'lcq.event.s02_02'].includes(eventId)) return fallback;
+  return storyRouteLocation(eventId)?.includes('南荒') ? '南荒商路' : '五原';
+}
+
+export function storyRouteLocation(eventId: string): string | undefined {
+  return ({
+    'lcq.event.iron_bridge_ambush': '南荒途中·铁索桥',
+    'lcq.event.ningyu_regicide_offer': '南荒途中·商队宿处',
+    'lcq.event.zixi_taiyi_intercept': '南荒途中·紫溪',
+    'lcq.event.rainforest_black_shoal': '南荒途中·雨林黑石滩',
+    'lcq.event.silent_sheyi_village': '南荒·蛇彝村',
+  } as Record<string, string>)[eventId];
+}
+
 function questCompassTargets(event: ScenarioModEvent, runtime: QuestCompassRuntime): { locName: string; who: string[] } {
   const locName = String((runtime?.canon?.locations || []).find(item => item.id === event.locationId)?.name || '').trim();
   const playerId = String(runtime?.opening?.playerCharacterId
@@ -153,7 +170,7 @@ export function questCompassPhrases(
   if (!event) return [];
   const { locName, who } = questCompassTargets(event, runtime);
   const phrases: string[] = [];
-  if (locName && event.locationId && event.locationId !== atLocationId) phrases.push(`去${locName}`);
+  if (!storyRouteLocation(event.id) && locName && event.locationId && event.locationId !== atLocationId) phrases.push(`去${locName}`);
   for (const name of who) phrases.push(`见${name}`);
   return phrases;
 }

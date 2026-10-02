@@ -17,6 +17,7 @@ import {
  * - 预算：单次输入 ≤12000 字、每小时 ≤12 次；失败只记日志，不重试、不提示玩家。
  */
 const auditDefinition = GAME_MODEL_MODULES.find(item => item.id === 'audit')!;
+let idleTimer: ReturnType<typeof setTimeout> | undefined;
 let inFlight: { controller: AbortController; stopWatch: () => void } | null = null;
 
 function storage() {
@@ -25,6 +26,7 @@ function storage() {
 
 /** 前台开始时调用：取消在途审计。 */
 export function yieldBackgroundAudit(): void {
+  clearTimeout(idleTimer); idleTimer = undefined;
   if (!inFlight) return;
   inFlight.controller.abort();
   inFlight.stopWatch();
@@ -50,6 +52,11 @@ function summarizeState(save: any): Record<string, unknown> {
 
 /** 前台提交并存档后调用；只在检查点、开关开启、预算内、前台空闲时发起。 */
 export function scheduleBackgroundAudit(): void {
+  clearTimeout(idleTimer);
+  idleTimer = setTimeout(() => { idleTimer = undefined; runIdleAudit(); }, 5000);
+}
+
+function runIdleAudit(): void {
   if (inFlight || useUIStore().isAIProcessing) return;
   if (!isGameModuleEnabled(auditDefinition)) return;
   const store = storage();

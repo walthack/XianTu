@@ -261,11 +261,12 @@ export interface LegacyPilotSettlementPreview {
 export function previewLegacyPilotSettlement(
   saveData: SaveData,
   selection: ScenarioEventActionSelection,
+  options?: Parameters<typeof recordStoryEventStructuredAction>[2],
 ): LegacyPilotSettlementPreview {
   const beforeLocation = readLocation(saveData);
   const beforeZone = String((saveData as any)?.世界?.状态?.剧本模组?.openWorldSlice?.currentZoneId || '');
   const settled = cloneDeep(saveData);
-  const progress = recordStoryEventStructuredAction(settled, selection);
+  const progress = recordStoryEventStructuredAction(settled, selection, options);
   const advanced = advanceScenarioRuntime(settled).saveData;
   ensureWuyuanOpenWorldSlice(advanced);
   const afterLocation = readLocation(advanced);

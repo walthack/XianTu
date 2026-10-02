@@ -34,6 +34,7 @@ export async function areLegacyPilotPromptsEnabled(
   return flags.every(Boolean);
 }
 
+// @deprecated LEGACY：模块化稳定后删除（2026-10-02 用户决定）
 export function isLegacyNarrativePilotEnabled(storage?: StorageLike): boolean {
   try {
     const source = storage ?? (typeof globalThis.localStorage === 'undefined' ? undefined : globalThis.localStorage);

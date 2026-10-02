@@ -1084,6 +1084,7 @@ export interface GameTime extends AIMetadata {
 // --- 存档数据核心 ---
 
 export interface GameMessage {
+  image?: string;
   /** The player intent that produced this specific narrative, persisted with it. */
   userIntent?: string;
   type: 'user' | 'ai' | 'system' | 'player' | 'gm';

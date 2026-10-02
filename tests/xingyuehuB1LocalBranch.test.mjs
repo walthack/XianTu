@@ -156,10 +156,18 @@ function playAvailableAction(api, save) {
   return api.advanceScenarioRuntime(save).saveData;
 }
 
-async function walkToEntrustment(api, stage) {
+// 第106章战前锁（裁定 #168）：默认选【支援】，与此前逐拍点第一个可用动作的行为一致。
+async function walkToEntrustment(api, stage, supportChoice = 'support_xieyi_counterstrike') {
   let save = await productionSave(api, stage);
   for (let turn = 0; turn < 40; turn += 1) {
     const runtime = runtimeOf(save);
+    const lockChoice = api.getCurrentStoryEventActions(save).find(item => item.actionId === supportChoice);
+    if (lockChoice) {
+      assert.equal(api.recordStoryEventStructuredAction(save, lockChoice).attempted, true, supportChoice);
+      save = api.advanceScenarioRuntime(save).saveData;
+      runtimeOf(save).worldTurn = (Number(runtimeOf(save).worldTurn) || 0) + 1;
+      continue;
+    }
     if ((runtime.activeEventIds || []).includes(ENTRUSTMENT)) {
       const actions = api.getCurrentStoryEventActions(save);
       if (actions.some(item => item.eventId === ENTRUSTMENT)) {
@@ -588,4 +596,107 @@ test('B1 现场签发 rescue pending 后原地停滞到 afterStallTurns，默认
   assert.equal(xieyiFavorability(reloaded), beforeFav + CRITICAL_AFFINITY_GRANT);
   assert.equal(Number(reloaded.角色.属性.神识.当前), spiritBefore);
   assert.equal(Number(reloaded.角色.属性.气血.当前), hpBefore);
+});
+
+
+// ── 第106章「支不支援谢艺」（裁定 #168）：支援只给救治判定一个公开 +2，生死仍按 #163 映射结算。
+const SUPPORT = 'support_xieyi_counterstrike';
+const NO_SUPPORT = 'rest_then_follow_team';
+const factorSum = proposal => proposal.factors.reduce((sum, factor) => sum + factor.value, 0);
+const supportFactors = proposal => proposal.factors.filter(factor => factor.label === '此前支援');
+// 幸运点取 Math.random；签发时固定随机数，使两条路线的基础因子可比（只影响测试，不改产品逻辑）。
+function prepareWithFixedLuck(api, save, rescue) {
+  const original = Math.random;
+  Math.random = () => 0.5;
+  try { return api.prepareEventActionJudgement(save, rescue, runtimeOf(save).worldTurn); } finally { Math.random = original; }
+}
+
+async function rescueWithRoll(choice, roll) {
+  const api = await loadProductionApi();
+  let save = await walkToEntrustment(api, await loadStage(), choice);
+  const rescue = api.getCurrentStoryEventActions(save).find(item => item.actionId === 'rescue_xieyi');
+  assert.ok(rescue, '乐明珠在场时仍须枚举【救治】（支援不替代医者）');
+  const issued = prepareWithFixedLuck(api, save, rescue);
+  const resolution = api.resolvePendingJudgement(save, issued.proposal.id, { currentTurn: runtimeOf(save).worldTurn, roll: () => roll });
+  const recorded = api.recordStoryEventStructuredAction(save, rescue, { judgementResolution: resolution });
+  assert.equal(recorded.completed, true);
+  save = settleChoice(api, save);
+  return { api, save, proposal: issued.proposal, resolution };
+}
+
+async function baseFactorSum() {
+  const api = await loadProductionApi();
+  const save = await walkToEntrustment(api, await loadStage(), NO_SUPPORT);
+  const rescue = api.getCurrentStoryEventActions(save).find(item => item.actionId === 'rescue_xieyi');
+  return factorSum(prepareWithFixedLuck(api, save, rescue).proposal);
+}
+
+test('第106章锁：临时协定先完成准备步，再二选一【支援】/【不主动支援】，两者都完成本拍', async () => {
+  const api = await loadProductionApi();
+  const branch = await loadTs('../src/modules/scenarioMods/branchDecision.ts');
+  let save = await productionSave(api, await loadStage());
+  for (let turn = 0; turn < 40; turn += 1) {
+    const actions = api.getCurrentStoryEventActions(save);
+    if (actions.some(item => item.actionId === SUPPORT)) break;
+    save = playAvailableAction(api, save);
+    runtimeOf(save).worldTurn = (Number(runtimeOf(save).worldTurn) || 0) + 1;
+  }
+  const decision = branch.detectBranchDecision(api.getCurrentStoryEventActions(save));
+  assert.deepEqual(decision?.labels, ['协助谢艺准备反杀，随队返回', '不主动支援，先休整，随队同行']);
+  for (const choice of [SUPPORT, NO_SUPPORT]) {
+    const fork = reloadSave(save);
+    const option = api.getCurrentStoryEventActions(fork).find(item => item.actionId === choice);
+    api.recordStoryEventStructuredAction(fork, option);
+    const after = api.advanceScenarioRuntime(fork).saveData;
+    assert.ok(runtimeOf(after).completedEventIds.includes('lcq.event.s05b_09_temporary_pact_with_xiaozi'), choice);
+    assertNoFateInjected(after, `${choice} 不提前决定谢艺命运`);
+  }
+});
+
+test('支援／不支援 × 救治成功／死亡：+2 公开计入一次，生死仍按 #163 映射', async () => {
+  const base = await baseFactorSum();
+  const pivot = 25 - base - 2; // 支援时总值恰为 25（success），不支援时为 23（partial→死亡）
+  assert.ok(pivot >= 1 && pivot <= 20, `基础因子和 ${base} 使 +2 无法成为胜负手，请调整夹具`);
+
+  const supportWins = await rescueWithRoll(SUPPORT, pivot);
+  assert.deepEqual(supportFactors(supportWins.proposal).map(factor => factor.value), [2], '支援：判定前公开「此前支援 +2」');
+  assert.equal(factorSum(supportWins.proposal), base + 2);
+  assert.equal(supportWins.resolution.outcome, 'success');
+  assertLongrestFate(supportWins.save, '支援→救治成功');
+
+  const supportDies = await rescueWithRoll(SUPPORT, 1);
+  assert.equal(supportFactors(supportDies.proposal).length, 1);
+  assert.ok(supportDies.resolution.total < 25, '支援不保证救活');
+  assertDeadFate(supportDies.save, '支援→死亡');
+
+  const noSupportWins = await rescueWithRoll(NO_SUPPORT, 20);
+  assert.equal(supportFactors(noSupportWins.proposal).length, 0, '不支援：原公式，无加成');
+  assert.ok(noSupportWins.resolution.total >= 25, `基础因子和 ${base} + 20 应能成功`);
+  assertLongrestFate(noSupportWins.save, '不支援→救治成功');
+
+  const noSupportDies = await rescueWithRoll(NO_SUPPORT, pivot);
+  assert.equal(supportFactors(noSupportDies.proposal).length, 0);
+  assert.equal(noSupportDies.resolution.outcome, 'partial', '同一骰点下缺这 +2 即不足 25');
+  assertDeadFate(noSupportDies.save, '不支援→死亡');
+});
+
+test('支援加成只计一次：撤回重开、JSON 读档、重试都不叠加；已掷后不可补加', async () => {
+  const api = await loadProductionApi();
+  let save = await walkToEntrustment(api, await loadStage(), SUPPORT);
+  const rescue = api.getCurrentStoryEventActions(save).find(item => item.actionId === 'rescue_xieyi');
+  const first = api.prepareEventActionJudgement(save, rescue, runtimeOf(save).worldTurn);
+  assert.equal(supportFactors(first.proposal).length, 1);
+  api.cancelPendingJudgement(save, first.proposal.id, runtimeOf(save).worldTurn);
+  save = reloadSave(save);
+  const reissued = api.prepareEventActionJudgement(save, rescue, runtimeOf(save).worldTurn);
+  assert.deepEqual(supportFactors(reissued.proposal).map(factor => factor.value), [2], '撤回重开、读档后仍只有一个 +2');
+  const locked = api.resolvePendingJudgement(save, reissued.proposal.id, { currentTurn: runtimeOf(save).worldTurn, roll: () => 10 });
+  save = reloadSave(save);
+  const replay = api.resolvePendingJudgement(save, reissued.proposal.id, { currentTurn: runtimeOf(save).worldTurn, roll: () => 20 });
+  assert.equal(replay.total, locked.total, '已掷结果锁定，重试不重骰也不补加');
+  // 已掷后再补一次"支援"回执也不改变已锁定的结果。
+  const states = runtimeOf(save).eventActionStates['lcq.event.s05b_09_temporary_pact_with_xiaozi'];
+  states.attempts.push({ ...states.attempts.find(item => item.actionId === SUPPORT) });
+  const afterExtra = api.resolvePendingJudgement(save, reissued.proposal.id, { currentTurn: runtimeOf(save).worldTurn, roll: () => 20 });
+  assert.equal(afterExtra.total, locked.total);
 });

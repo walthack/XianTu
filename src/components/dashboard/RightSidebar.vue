@@ -209,7 +209,7 @@
             <div v-if="questMain.signal?.level === 'medium' || questMain.signal?.level === 'high'" class="quest-stall-warn" style="color:#e6a23c;font-size:12px;margin-top:4px;line-height:1.4;">
               世界线偏离：{{ questMain.signal.level === 'high' ? '大偏' : '中偏' }}（{{ questMain.signal.score }}/100）。你可以继续当前支流，也可以主动回到最近承重节点。
             </div>
-            <button v-if="questMain.canReturn" class="quest-next-btn" :disabled="returningToCanon" @click="cutBackToCanon">
+            <button v-if="questMain.canReturn && !epistemicRuntime?.gameOver && !detectBranchDecision(getCurrentStoryEventActions(gameStateStore.toSaveData()))" class="quest-next-btn" :disabled="returningToCanon" @click="cutBackToCanon">
               {{ returningToCanon ? t('回轨中…') : t('↩ 斩线回轨') }}
             </button>
             <div v-if="questMain.cleared" class="quest-cleared">✅ {{ t('本关剧情已完成') }}</div>
@@ -437,6 +437,7 @@ import { formatRealmWithStage } from '@/utils/realmUtils';
 import { calculateAgeFromBirthdate } from '@/utils/lifespanCalculator';
 import {
   getScenarioFocusEvent,
+  getCurrentStoryEventActions,
   getStageDepartureOffer,
   trackStoryOpportunity,
   TRACKED_OPPORTUNITY_MAX_TURNS,
@@ -451,7 +452,8 @@ import { resolveCurrentMainQuestNode, resolveMainQuestLayer } from '@/modules/sc
 import { resolveAvailableLines, resolveLocationIdFromPosition, secondaryLinesAtEvent } from '@/modules/scenarioMods/secondaryLines';
 import { characterBeatsAt } from '@/modules/scenarioMods/characterQuests';
 import { prefillChat } from '@/utils/chatBus';
-import { formatQuestCompass, resolveScenarioEventNarrative } from '@/modules/scenarioMods/eventNarrativeView';
+import { formatQuestCompass, resolveScenarioEventNarrative, storyChapterTitle } from '@/modules/scenarioMods/eventNarrativeView';
+import { detectBranchDecision } from '@/modules/scenarioMods/branchDecision';
 import { returnToCanonAnchor } from '@/modules/scenarioMods/divergenceControl';
 import { useI18n } from '@/i18n';
 
@@ -566,7 +568,9 @@ const characterBeats = computed(() => {
 const questMain = computed(() => {
   const rt: any = (gameStateStore.worldState as any)?.剧本模组;
   if (!rt || typeof rt !== 'object') return null;
-  const chapter = (rt.chapters || []).find((c: any) => c.id === rt.currentChapterId);
+  const focusId = getScenarioFocusEvent(rt)?.id;
+  const chapter = (rt.chapters || []).find((c: any) => focusId && c.eventIds?.includes(focusId))
+    || (rt.chapters || []).find((c: any) => c.id === rt.currentChapterId);
   // 与主叙事/flag guard 共用同一个运行时锚点，避免 UI 单独从 activeEventIds 选出资料事件。
   const anchor = getScenarioFocusEvent(rt);
   const activeEvents = anchor ? [anchor] : [];
@@ -588,7 +592,7 @@ const questMain = computed(() => {
   const signal = rt.divergenceSignal;
   const canReturn = signal?.level === 'medium' || signal?.level === 'high' || stalled;
   return {
-    chapter: chapter ? `章节：${chapter.title || chapter.id}` : '',
+    chapter: chapter ? `章节：${storyChapterTitle(rt.modId, anchor?.id, chapter.title || chapter.id)}` : '',
     events,
     moreCount,
     cleared,

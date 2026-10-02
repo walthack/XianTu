@@ -3208,6 +3208,35 @@
               ]
             }
           ]
+        },
+        "fatalOutcomes": {
+          "deadline": {
+            "afterActionId": "confirm_wuerlang_no_prior_promise",
+            "when": [
+              {
+                "path": "pathReceipts.lcq.event.free_ajiman.path.bond_pocketed",
+                "operator": "eq",
+                "value": true
+              }
+            ],
+            "turns": 0,
+            "approach": [],
+            "ending": {
+              "id": "lcq.ending.death.ajiman_bond",
+              "title": "冰蛊",
+              "facts": [
+                "程宗扬没有当面撕毁阿姬曼的身契，只把它收进了怀里",
+                "阿姬曼因此不信他，不肯跟他离开五原城",
+                "冰蛊是之后苏妲己在冰镇酸梅汤里给程宗扬种下的",
+                "苏妲己下令追查买走舞姬的人，那张没有撕掉的身契让她查到了程宗扬",
+                "苏妲己催动冰蛊，寒气冻住了程宗扬的心脏与脑浆，他当场毙命",
+                "阿姬曼被收回白湖商馆，镣铐加身，和箱笼货物一起被逐件清点、登记入册，押往黑魔海",
+                "那个没有舌头的哑奴母亲早被卖给了路过的晋国商人，阿姬曼再也见不到她",
+                "她的哥哥将永远等不到她回来",
+                "阿姬曼心里最后一点盼头熄灭了，没有人会来救她，也没有任何转机"
+              ]
+            }
+          }
         }
       },
       {
@@ -3451,6 +3480,37 @@
               "requiresPreparation": [
                 "ajiman_bond_in_hand"
               ]
+            },
+            {
+              "id": "pocket_ajiman_bond",
+              "label": "先收起身契，出城再说",
+              "actionText": "我先把阿姬曼的身契收进怀里，不当面撕掉，出城再说。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你没有撕毁阿姬曼的身契，只把它收进怀里，先出城再说；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "ajiman_bond_in_hand"
+              ],
+              "outcomeEffects": {
+                "success": {
+                  "pathReceipts": [
+                    {
+                      "receiptId": "lcq.event.free_ajiman.path.bond_pocketed",
+                      "sourceEventId": "lcq.event.free_ajiman",
+                      "choiceId": "pocket_ajiman_bond",
+                      "mutexGroupId": "lcq.event.free_ajiman.mutex.bond",
+                      "dimension": "method",
+                      "label": "没有撕掉阿姬曼的身契（苏妲己已下令追查买走舞姬的人）",
+                      "consumeAtEventIds": [
+                        "lcq.event.wuerlang_joins"
+                      ]
+                    }
+                  ]
+                }
+              }
             }
           ]
         }
@@ -3635,6 +3695,24 @@
               "requiresPreparation": [
                 "ningyu_gamble_debut_seen"
               ]
+            }
+          ]
+        },
+        "fatalOutcomes": {
+          "choices": [
+            {
+              "id": "refuse_gamble_take_paolao",
+              "label": "不赌",
+              "actionText": "我当面回绝这场赌局，不和苏妲己赌。",
+              "ending": {
+                "id": "lcq.ending.death.paolao",
+                "title": "炮烙",
+                "facts": [
+                  "程宗扬当面回绝白湖商馆的赌局",
+                  "苏妲己下令执行炮烙",
+                  "赌局未开，卖身契未签"
+                ]
+              }
             }
           ]
         }

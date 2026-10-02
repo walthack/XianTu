@@ -117,3 +117,46 @@ test('R2-12 runtime materialization uses stage-opening relations and withholds f
   assert.equal(resolveScenarioCharacters([gatedRuan], 'lyl.xiaoyingzhou_blacksea_trap'), 0);
   assert.match(relation(resolve('阮香凝', 'lyl.taiquan_sacred_fruit')), /后宫/);
 });
+
+// 角色卡提前泄露修复（2026-10-02）：走向类字段（关系/入伙/情节/结局）的静态卡值是全书终点快照，
+// 只在本关 phase 覆盖、或角色声明了转折且本关有投影时才可用；否则不回落静态卡。
+test('static trajectory fields are not injected into stages before a declared turning point', async () => {
+  const { resolveScenarioCharacters } = await loadTs('../src/modules/scenarioMods/characterResolver.ts');
+  const notesOf = (name, stageId) => {
+    const actor = { name, profile: {} };
+    assert.equal(resolveScenarioCharacters([actor], stageId), 1);
+    return actor.profile.notes || [];
+  };
+  const trajectory = notes => notes.filter(note => /^【(关系|入伙|情节|结局)】/.test(note));
+  // 无转折声明的角色：静态终态不得进早期关卡。
+  for (const [name, stageId] of [['凝羽', 'lcq.stage_01'], ['凝羽', 'lcq.stage_02'], ['月霜', 'lcq.stage_01'],
+    ['碧姬', 'lcq.stage_04b_lingfei_baiyi_crisis'], ['乐明珠', 'lcq.stage_04b_lingfei_baiyi_crisis']]) {
+    assert.deepEqual(trajectory(notesOf(name, stageId)), [], `${name}@${stageId}`);
+  }
+  // 有转折声明、但本关没有投影：同样不回落（卓云君第2关夹在两个"尚未被擒"覆盖之间）。
+  // （【阶段身份】里的“转折前禁止提前称为后宫”是约束规则，不算泄露，故只看走向字段。）
+  assert.deepEqual(trajectory(notesOf('卓云君', 'lcq.stage_02')), []);
+  // 本关有覆盖的照常注入本关值。
+  assert.match(relation(notesOf('小紫', 'lcq.stage_04b_lingfei_baiyi_crisis')), /尚未.*后宫/);
+});
+
+test('character RAG injects only the current stage projection identity/relation, never the static endpoint', async () => {
+  const { characterRagService } = await loadTs('../src/services/characterRagService.ts');
+  const registry = JSON.parse(await readFile(new URL('../src/modules/scenarioMods/builtins/character-registry.json', import.meta.url), 'utf8'));
+  const picked = ['小紫', '卓云君', '凝羽'].map(name => registry.characters.find(entry => entry.canonicalName === name));
+  const original = { isEnabled: characterRagService.isEnabled, db: characterRagService.db, search: characterRagService.search };
+  try {
+    characterRagService.isEnabled = () => true;
+    characterRagService.db = {};
+    characterRagService.search = async () => picked.map((entry, index) => ({ id: entry.id, canonicalName: entry.canonicalName, score: 0.9 - index / 100 }));
+    const early = await characterRagService.buildSectionForPrompt('q', { stageId: 'lcq.stage_02' });
+    assert.ok(!/后宫|正宫|侍婢|肉体伴侣|岳帅与碧鲮族碧姬之女|殇候解除/.test(early), early);
+    const projected = await characterRagService.buildSectionForPrompt('q', { stageId: 'lcq.stage_04b_lingfei_baiyi_crisis' });
+    assert.match(projected, /与主角关系：同行伙伴；本关开场尚未与程宗扬确立后宫或正宫关系/);
+    assert.ok(!/后宫正宫|后宫之首/.test(projected), projected);
+    const noStage = await characterRagService.buildSectionForPrompt('q');
+    assert.ok(!/与主角关系：/.test(noStage), '无关卡上下文时不注入任何关系');
+  } finally {
+    Object.assign(characterRagService, original);
+  }
+});

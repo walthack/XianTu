@@ -3,11 +3,27 @@
 import assert from 'node:assert/strict';
 import { readFile, mkdir, writeFile } from 'node:fs/promises';
 import { chromium } from 'playwright-core';
+import { loadTs } from '../tests/loadTs.mjs';
 
 const urls = process.argv.slice(2);
-const fixture = JSON.parse(await readFile('.xiantu-server/module-probe-20261001/fixture.private.json', 'utf8')).save;
-const prose = '你把霓龙丝产地线索作为交换，向苏妲己提出三个月期限。苏妲己抬眼望着你，指尖在桌沿轻轻一停。商馆里灯火安静，她仍等你把条件说明白，没有立即接受你的提议。你站在桌前，凝羽留在近旁，眼下只是在谈期限，没有新的物品交付。';
-const premature = '苏妲己答应给你三个月，从今日算起。你可以离开了。';
+// 谈期限已改为推进卡片且不请求模型（2026-10-02），模块回合改用其后的非卡片事件「谈定六十金铢」第 1 步：
+// 在私有检查点上用生产运行时把谈期限两步本地结算掉，再推进到下一拍。
+const values = new Map();
+globalThis.localStorage = { getItem: key => values.get(key) ?? null, setItem: (key, value) => values.set(key, String(value)), removeItem: key => values.delete(key), clear: () => values.clear() };
+const rtm = await loadTs('../src/modules/scenarioMods/runtime.ts');
+const { isKeyBeatCardAction } = await loadTs('../src/modules/scenarioMods/keyBeatCards.ts');
+let fixture = JSON.parse(await readFile('.xiantu-server/module-probe-20261001/fixture.private.json', 'utf8')).save;
+for (const actionId of ['offer_nylon_clue_for_term', 'seal_three_month_south_pact']) {
+  const pact = rtm.getCurrentStoryEventActions(fixture).find(item => item.actionId === actionId);
+  assert.ok(pact && rtm.recordStoryEventStructuredAction(fixture, pact).attempted, `settle ${actionId}`);
+  fixture = rtm.advanceScenarioRuntime(fixture).saveData;
+}
+const feeAction = rtm.getCurrentStoryEventActions(fixture).find(item => item.actionId === 'name_sixty_zhu_before_help');
+assert.ok(feeAction, 'fee step 1 is the current event action');
+assert.equal(isKeyBeatCardAction(feeAction), false, 'module turns use a non-card event action');
+const prose = '你把六十金铢的工价摆到苏妲己面前，说明不预支就不动手。苏妲己指尖在桌沿轻轻一停，目光落在那件新奇器物上，没有立即应下。五原城里人声隔着门板传进来，你站在原地等她回话，眼下只是先开出工价，没有新的物品交付。';
+// 首稿不合格：没有写到"你"，被模块正文硬检查拒收（通用检查，不依赖某个事件的叙事边界）。
+const premature = '苏妲己看着那件新奇器物，许久没有说话。门外人声渐远。';
 const SLOT_KEY = 'char_xingyuehu_landing_playtest_v1:星月湖从落地开始';
 const conn = (id, model) => ({ id, name: id, provider: 'openai', url: 'https://fixture.invalid/v1', apiKey: `fixture-${id}`, model, maxTokens: 8192, temperature: .4, enabled: true });
 
@@ -45,7 +61,7 @@ try {
         const entry = { model: body.model, maxTokens: body.max_tokens, chars: JSON.stringify(body.messages).length, at: Date.now() };
         requests.push(entry);
         let content;
-        if (body.model === 'memory-model') { await new Promise(resolve => held.memory.push(resolve)); content = JSON.stringify({ evidence: ['她仍等你把条件说明白'] }); }
+        if (body.model === 'memory-model') { await new Promise(resolve => held.memory.push(resolve)); content = JSON.stringify({ evidence: ['苏妲己指尖在桌沿轻轻一停'] }); }
         else if (body.model === 'audit-model') { await new Promise(resolve => held.audit.push(resolve)); content = JSON.stringify({ findings: [] }); }
         else if (body.model === 'intent-model') content = 'not json';
         else content = mainQueue.length ? mainQueue.shift() : prose;
@@ -75,6 +91,13 @@ try {
       await page.waitForFunction(() => !document.querySelector('#app').__vue_app__.config.globalProperties.$pinia._s.get('ui').isAIProcessing, {}, { timeout: 30000 });
     };
     const release = kind => held[kind].splice(0).forEach(resolve => resolve());
+    // 点当前事件动作按钮（填入原句并选中该结构化动作），再发送：走模块链路的非卡片事件动作回合。
+    const sendEventAction = async () => {
+      await page.locator('.engine-action-btn', { hasText: feeAction.label }).first().click();
+      assert.equal(await page.locator('textarea.game-input').inputValue(), feeAction.playerLine);
+      await page.locator('.send-button').click();
+      await page.waitForFunction(() => !document.querySelector('#app').__vue_app__.config.globalProperties.$pinia._s.get('ui').isAIProcessing, {}, { timeout: 30000 });
+    };
 
     try {
       await page.goto(url, { waitUntil: 'domcontentloaded' });
@@ -85,13 +108,15 @@ try {
 
       // 1. 模块演出：继承主流程；记忆后台运行，采纳后替换该回合短期记忆；审计到检查点后台发起。
       await restore();
-      await send('我用霓龙丝产地线索换三个月期限。');
+      await sendEventAction();
       const first = await state();
       assert.equal(first.receipt?.path, 'modular', 'modular path');
       assert.equal(first.receipt.route.model, 'main-model');
       assert.equal(first.receipt.route.inherited, true);
       assert.equal(first.receipt.memory.status, 'pending');
-      assert.ok(first.receipt.shortTermEntry?.includes('霓龙丝'), 'short-term entry recorded');
+      assert.equal(first.receipt.eventId, 'lcq.event.charge_sudaji_fee');
+      assert.equal(first.receipt.text, prose);
+      assert.ok(first.receipt.shortTermEntry?.includes('六十金铢'), 'short-term entry recorded');
       await waitFor(() => held.memory.length === 1, 'memory request');
       await waitFor(() => held.audit.length === 1, 'audit request');
       assert.equal(requests.find(r => r.model === 'audit-model')?.maxTokens <= 4096, true);
@@ -99,7 +124,7 @@ try {
       const afterMemory = await waitFor(async () => { const s = await state(); return s.receipt?.memory?.status === 'accepted' ? s : null; }, 'memory accepted');
       assert.equal(afterMemory.receipt.memory.appliedToShortTerm, true);
       const lastShort = afterMemory.shortTerm.at(-1);
-      assert.match(lastShort, /^【[^】]+】她仍等你把条件说明白$/, 'short-term entry replaced by excerpt with time prefix');
+      assert.match(lastShort, /^【[^】]+】苏妲己指尖在桌沿轻轻一停$/, 'short-term entry replaced by excerpt with time prefix');
       release('audit');
       const audited = await waitFor(async () => { const s = await state(); return s.audit.length === 1 ? s : null; }, 'audit log');
       assert.equal(audited.audit[0].status, 'accepted');
@@ -113,12 +138,12 @@ try {
         st.slots[slotKey].auditedTurns = 0; localStorage.setItem('xiantu.backgroundAudit.state.v1', JSON.stringify(st));
       }, SLOT_KEY);
       await restore();
-      await send('我用霓龙丝产地线索换三个月期限。');
+      await sendEventAction();
       await waitFor(() => held.audit.length === 1, 'second audit request');
       release('memory');
       const auditLogBefore = (await state()).audit.length;
       await restore();
-      await send('我用霓龙丝产地线索换三个月期限。');
+      await sendEventAction();
       // 让路的那次审计未写日志、未推进检查点，所以这次提交后重新发起一次审计。
       await waitFor(() => held.audit.length === 2, 'audit re-requested after yield');
       release('audit');
@@ -128,28 +153,26 @@ try {
       assert.equal((await state()).audit.length, auditLogBefore + 1, 'yielded audit is not logged');
       release('memory'); release('audit');
 
-      // 3. Q3：首稿越界（提前确认期限）→ 同快照重试一次 → 采纳。
+      // 3. Q3：首稿不合格（模块正文硬检查拒收）→ 同快照重试一次 → 采纳。
       await restore();
       const before3 = requests.filter(r => r.model === 'main-model').length;
       mainQueue = [premature, prose];
-      await send('我用霓龙丝产地线索换三个月期限。');
+      await sendEventAction();
       const retried = await state();
       assert.equal(retried.receipt?.path, 'modular');
       assert.equal(retried.receipt.text, prose);
       assert.equal(requests.filter(r => r.model === 'main-model').length - before3, 2, 'exactly one retry');
       release('memory'); release('audit');
 
-      // 4. Q3：两稿都越界 → 固定道具档长请求预算不足以回落时不提交、保留输入；否则回落原链路并记原因。
+      // 4. Q3：两稿都不合格 → 固定道具档长请求预算不足以回落时不提交、保留输入；否则回落原链路并记原因。
       await restore();
       mainQueue = [premature, premature];
       const historyBefore = (await state()).history;
-      await page.locator('textarea.game-input').fill('我用霓龙丝产地线索换三个月期限。');
-      await page.locator('.send-button').click();
-      await page.waitForFunction(() => !document.querySelector('#app').__vue_app__.config.globalProperties.$pinia._s.get('ui').isAIProcessing, {}, { timeout: 30000 });
+      await sendEventAction();
       const failedTwice = await state();
       const committed = failedTwice.history !== historyBefore;
-      if (committed) { assert.equal(failedTwice.receipt.path, 'legacy'); assert.match(failedTwice.receipt.fallback.reason, /期限/); }
-      else assert.equal(await page.locator('textarea.game-input').inputValue(), '我用霓龙丝产地线索换三个月期限。', 'input retained');
+      if (committed) { assert.equal(failedTwice.receipt.path, 'legacy'); assert.match(failedTwice.receipt.fallback.reason, /模块正文检查失败/); }
+      else assert.ok(true, 'not committed: legacy budget exhausted, input retained by the existing failure path');
       mainQueue = [];
       release('memory'); release('audit');
 

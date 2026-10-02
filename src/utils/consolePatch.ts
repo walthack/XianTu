@@ -36,7 +36,7 @@ console.log = ((...args: any[]) => {
 }) as ConsoleMethod;
 
 console.warn = ((...args: any[]) => {
-  if (canConsoleDebug()) original.warn(...args);
+  if (canConsoleDebug() || args[0] === '[DEMO_MODULE_ONLY]') original.warn(...args);
 }) as ConsoleMethod;
 
 console.info = ((...args: any[]) => {

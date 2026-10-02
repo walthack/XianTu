@@ -103,7 +103,8 @@ test('deadline 的 approach 条数必须是 turns - 1', async () => {
     for (const event of mod.scenario?.events || []) {
       const d = event.fatalOutcomes?.deadline;
       if (!d) continue;
-      assert.equal(d.approach.length, d.turns - 1, `${event.id} 的 approach 条数与 turns 对不上`);
+      // turns: 0 = 锚定动作落账当回合即结算（延后触发的旧选择后果，裁定 #169），没有中间回合，也就没有逼近条。
+      assert.equal(d.approach.length, Math.max(0, d.turns - 1), `${event.id} 的 approach 条数与 turns 对不上`);
       assert.ok(d.ending.facts.length >= 2, `${event.id} 的结局事实太少，叙述写不出东西`);
     }
   }

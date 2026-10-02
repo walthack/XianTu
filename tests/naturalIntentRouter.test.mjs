@@ -112,7 +112,7 @@ test('outside the scoped window, questions pass through untouched', async () => 
   }
 });
 
-test('classifier failure and malformed output hold input; uncertain and invalid candidates do not settle', async () => {
+test('classifier failure on a contract chain holds input; uncertain and invalid candidates do not settle', async () => {
   const router = await loadTs('../src/modules/scenarioMods/naturalIntentRouter.ts');
   const { save } = await openingSave();
   const cases = [
@@ -125,9 +125,11 @@ test('classifier failure and malformed output hold input; uncertain and invalid 
   for (const [index, [playerText, generate]] of cases.entries()) {
     const result = await router.resolveNaturalIntent({ saveData: save, playerText, generate });
     if (index < 2) {
+      // 固定事件链上识别失败：停下保留输入，常驻提示（用户裁定 2026-10-01，真机 fx-pact2）。
       assert.equal(result.kind, 'failed');
       assert.equal(result.selection, undefined);
-      assert.match(result.clarification, /重试/);
+      assert.equal(result.hold, true);
+      assert.equal(result.clarification, router.NATURAL_INTENT_CONTRACT_HOLD);
     } else assertNarratedWithoutSettlement(result, playerText);
   }
 });
@@ -145,4 +147,18 @@ test('already-aborted signal does not classify', async () => {
   });
   assert.equal(result.kind, 'failed');
   assert.equal(result.reason, 'aborted');
+});
+
+
+test('classifier failure degrades to a non-settling free action only when nothing but local open-world actions is offered', async () => {
+  const router = await loadTs('../src/modules/scenarioMods/naturalIntentRouter.ts');
+  const local = router.onClassifierFailure('classifier_error', [{ source: 'open_world_engine', actionId: 'walk', label: '去点心铺' }]);
+  assert.equal(local.kind, 'free');
+  assert.equal(local.skipKeywordPreflight, true);
+  assert.equal(local.notice, router.NATURAL_INTENT_DEGRADED_NOTICE);
+  for (const source of ['event_engine', 'baihu_gamble_refusal_engine', 'opportunity_engine']) {
+    const held = router.onClassifierFailure('malformed', [{ source: 'open_world_engine', actionId: 'walk', label: '去点心铺' }, { source, actionId: 'x', label: '合同动作' }]);
+    assert.equal(held.kind, 'failed', source);
+    assert.equal(held.hold, true, source);
+  }
 });

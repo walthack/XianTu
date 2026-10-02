@@ -350,7 +350,8 @@ function findScenarioFlagViolation(runtime: ScenarioRuntimeState, command: Comma
   if (command.action !== 'set') return '剧本进度 flags 只能用 set 写入';
 
   const flagPath = key.slice('世界.状态.剧本模组.flags.'.length);
-  if (flagPath.startsWith('world.baihu.') || flagPath === 'event.gamble_bond_signed.refused_capture') {
+  if (flagPath.startsWith('world.baihu.') || flagPath === 'event.gamble_bond_signed.refused_capture'
+    || flagPath === 'event.gamble_bond_signed.outcome') {
     return '白湖拒赌账本只能由本地引擎写入';
   }
   const parts = flagPath.split('.');

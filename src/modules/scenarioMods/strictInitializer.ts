@@ -364,7 +364,8 @@ export function transitionToNextScenarioStage(saveData: SaveData, modsOverride?:
     || key.startsWith('character.')
     || key.endsWith('.void')
     || key.startsWith('world.baihu.')
-    || key === 'event.gamble_bond_signed.refused_capture',
+    || key === 'event.gamble_bond_signed.refused_capture'
+    || key === 'event.gamble_bond_signed.outcome',
   ));
   const inheritedBaihuGambleRefusal = rt.baihuGambleRefusal && typeof rt.baihuGambleRefusal === 'object'
     ? structuredClone(rt.baihuGambleRefusal)

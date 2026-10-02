@@ -40,9 +40,11 @@ export function collectRegisteredItemCatalog(save: SaveData | null | undefined):
   const items = (save as { 世界?: { 状态?: { 剧本模组?: { canon?: { items?: unknown } } } } } | null | undefined)
     ?.世界?.状态?.剧本模组?.canon?.items;
   if (!Array.isArray(items)) return [];
-  return items
+  const catalog = items
     .filter((item): item is { id: string; name?: string } => !!item && typeof (item as { id?: unknown }).id === 'string')
     .map(item => ({ id: item.id, name: String(item.name || '') }));
+  if (usesFixedScenarioInventory(save as SaveData) && !catalog.some(item => item.id === 'lcq.item.ajiman_bond')) catalog.push({ id: 'lcq.item.ajiman_bond', name: '阿姬曼身契' });
+  return catalog;
 }
 
 export function ownedInventoryItemIds(save: SaveData | null | undefined): string[] {
@@ -218,6 +220,30 @@ export function unsupportedInventoryGainNames(
     detected.push(name);
   }
   return [...new Set(detected)];
+}
+
+/** 删去未授权获得句后，正文至少还要剩这么多字才保留；否则整段回落为提示。 */
+export const MIN_KEPT_NARRATIVE_CHARS = 40;
+
+/**
+ * 只删除含"未授权获得"声明的句子，保留其余正文（2026-10-01 真机反馈：整段清空误伤过大）。
+ * 删后整段若仍检出未授权获得（跨句写法），返回 null，由调用方 fail closed 回落为提示。
+ */
+export function stripUnsupportedGainClauses(
+  text: string,
+  grantedNames: string[],
+  context?: ItemReferenceContext,
+): { text: string; removed: string[] } | null {
+  const segments = String(text || '').match(/[^。！？!?\n]+[。！？!?]*[”’」』"]*|\n+/g) || [];
+  const removed: string[] = [];
+  const kept = segments.filter(segment => {
+    if (/^\n+$/.test(segment)) return true;
+    if (unsupportedInventoryGainNames(segment, grantedNames, context).length) { removed.push(segment.trim()); return false; }
+    return true;
+  });
+  const result = kept.join('').replace(/\n{3,}/g, '\n\n').trim();
+  if (unsupportedInventoryGainNames(result, grantedNames, context).length) return null;
+  return { text: result, removed };
 }
 
 /**

@@ -42,6 +42,7 @@ import type {
   ScenarioNpcPrivateKnowledgeFact,
   ScenarioPrivateKnowledgeAssociationGuard,
 } from './schema';
+import { getKeyBeatCardDefinition } from './keyBeatCards';
 
 interface StoryRuntime {
   modId: string;
@@ -824,6 +825,11 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
             ? `【Canon Rail·默认正典】以下是本拍跨多轮必须达成的完整结果（不是本轮要求）：${contract.mustReach}\n  本轮只推进到第 ${contractStep.index}/${contractStep.total} 步「${contractStep.action.label}」。允许补足：${contract.allowedElaboration}\n${forbiddenLine}  禁止：不得以 void、替代结局、提前跳拍或新增 IF 分支改写此结果；只有用户显式进入 IF 支线时才可改写正典走向。\n  `
             : `【Canon Rail·默认正典】本拍必须达成：${contract.mustReach}\n  允许补足：${contract.allowedElaboration}\n${forbiddenLine}  禁止：不得以 void、替代结局、提前跳拍或新增 IF 分支改写此结果；只有用户显式进入 IF 支线时才可改写正典走向。\n  `
           : '';
+        // 重要桥段推进卡片：写手只拿"未决"的事实，不拿整拍结局与本步台词（复测 fx-pact2）。
+        if (getKeyBeatCardDefinition(event.id)) {
+          const pendingLabel = contractStep?.action.label || '当前这一步';
+          return `- ${event.name}（事件ID：${event.id}）：【关键抉择·由玩家点卡片确认】「${pendingLabel}」尚未由玩家确认，这件事眼下还悬着。这一拍的结果只在玩家点卡片后由系统给出，结果句由系统接在正文之后。本回合正文只写对话、神态与环境，停在对方答复揭晓之前；不得写出答应、成交、订下期限等结果，也不得替玩家做决定。期限与罚则可以作为要求或威胁提出，但尚未得到玩家接受，不得讲成已成立的约定。\n  ${reservedLine}${forbiddenLine}  禁止：不得改写正典走向。\n  相关正典：${context || '无'}\n  【本地事件合同】玩家动作由程序判定；严禁写入本事件完成键，正文与命令都不是完成证据。\n`;
+        }
         const localContractLine = event.playerCompletionContract
           ? `  【本地事件合同】玩家动作与 success/partial/failure 均由程序判定；你只演出系统提供的既定结果。严禁写入本事件完成键，正文与命令都不是完成证据。\n`
           : `  完成写入键（事件达成时原样 set true）：${formatCompletionWriteKeys(event.completion)}`;
@@ -1166,6 +1172,7 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
     ? `【本局结束·结局正文】玩家已走到这条路的尽头。按以下引擎认定的事实写一段收束正文，标题是“${over.title}”：`
       + over.facts.map(fact => `“${fact}”`).join('；')
       + '。只写这些事实与其当场的样子，不得改写、不得留生机、不得添加后续或转机，不得提示玩家可以怎么做——本局到此为止。'
+      + '不得有任何性内容或露骨描写。'
     : '';
   const settledBeat = runtime.lastSettledBeat;
   const settledEvent = settledBeat ? runtime.events.find(event => event.id === settledBeat.eventId) : undefined;

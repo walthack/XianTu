@@ -17,7 +17,7 @@ const PLAYER_LINES: Record<string, string> = {
   'lcq.event.s02_05::advance_declared_objective': '我判断她要带我去哪。',
   'lcq.event.s02_06::advance_declared_objective': '我与馆主周旋，看清她是谁。',
   'lcq.event.ningyu_enters_gamble::see_ningyu_sent_into_gamble': '我看清凝羽奉命进入这场赌局。',
-  'lcq.event.ningyu_enters_gamble::answer_ningyu_on_debut': '我当面回应凝羽。',
+  'lcq.event.ningyu_enters_gamble::answer_ningyu_on_debut': '我当面回应凝羽，接下这场赌局。',
   'lcq.event.sudaji_south_pact::offer_nylon_clue_for_term': '我用霓龙丝产地线索换三个月期限。',
   'lcq.event.sudaji_south_pact::seal_three_month_south_pact': '我当面订下三个月南荒之约。',
   'lcq.event.sudaji_south_pact::refuse_term_take_paolao': '我不接三个月的条件。',
@@ -25,8 +25,8 @@ const PLAYER_LINES: Record<string, string> = {
   'lcq.event.gamble_bond_signed::sign_the_bond': '我签下眼前这份契书。',
   'lcq.event.charge_sudaji_fee::name_sixty_zhu_before_help': '我先开出六十金铢工价。',
   'lcq.event.charge_sudaji_fee::lock_fee_then_remove_device': '谈定报酬后，我才按约取出器物。',
-  'lcq.event.free_ajiman::take_ajiman_bond_in_hand': '我把阿姬曼的身契拿到手里。',
-  'lcq.event.free_ajiman::tear_bond_and_face_blockade': '我当面撕契并改道出城。',
+  'lcq.event.free_ajiman::take_ajiman_bond_in_hand': '我用五十金铢买下阿姬曼，将她的身契拿在手里。',
+  'lcq.event.free_ajiman::tear_bond_and_face_blockade': '我当着阿姬曼的面撕毁身契，还她自由；遇到封锁后改道出城。',
   'lcq.event.baihu_shangguan_escape::walk_out_wuyuan_shangguan': '我走出五原商馆。',
 };
 
@@ -41,11 +41,12 @@ export function lookupScopedPlayerLine(eventId: string, actionId: string): strin
 }
 
 export function resolveScopedPlayerLine(
-  event: Pick<ScenarioModEvent, 'id' | 'presentation'>,
+  event: Pick<ScenarioModEvent, 'id' | 'presentation' | 'playerCompletionContract'>,
   action: { id: string; label?: string; actionText?: string },
   storyMode?: string,
 ): string | undefined {
   if (!isScopedPlayerPresentationEvent(event.id, storyMode)) return undefined;
+  if ((event.playerCompletionContract?.actions.length || 0) > 1) return lookupScopedPlayerLine(event.id, action.id) || action.actionText;
   const explicitLine = event.presentation?.playerLine?.trim();
   if (explicitLine) return explicitLine;
   return lookupScopedPlayerLine(event.id, action.id);

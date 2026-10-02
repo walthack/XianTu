@@ -246,3 +246,20 @@ D1–D5 是框架形态问题，D6–D10 是接线问题。
 - vue-tsc 对改动文件无新增错误；`MainGamePanel.vue` 与 `APIManagementPanel.vue` 中的既有 vue-tsc 报错不在本轮改动行。
 - 回落旧链路后，旧链路自身的失败仍按原有方式处理（保留输入）。
 - 记忆替换只作用于模块链路回合；旧链路回合的短期记忆与自动总结机制未改。
+
+## 十一、真机反馈修复（2026-10-01，凝羽亲密对照测试 #1 #2）
+
+依据：`../playtest-2026-09-28/REPORT-2026-10-01-ningyu-intimacy.md`；主策划复核 `NINGYU-INTIMACY-REVIEW-2026-10-01.md` 结论一致。
+
+| 报告项 | 修复 | 位置 |
+|---|---|---|
+| #1 道具门禁清空 5444 字正文 | 结构化字段越权（未知 ID、未授权写入/引用）只丢弃指令与 `item_references`，正文不受牵连；正文里的未授权"获得"只删所在句（`stripUnsupportedGainClauses`），删后仍检出或剩余不足 40 字才回落为整段提示；中期记忆同步删句，行动选项去掉涉及该物品的项。背包仍只认本地交付回执 | `fixedInventoryContracts.ts`、`AIBidirectionalSystem.ts` |
+| #2 意图识别 10 秒超时整回合失败 | 行动解释模块卡 `onFail` 改为 `free_action`：识别超时/报错/格式坏时按既有"拿不准"降级——照常演出、不结算任何候选、不回落关键词判定，并给非阻断提示「行动识别没有及时完成，本回合按自由行动处理，不结算剧情动作。」取消、过期、存档已变仍中止 | `naturalIntentRouter.ts`、`MainGamePanel.vue`、`moduleModelRuntime.ts` |
+
+说明：日志中被检测为获得的名称是「来：不是花苗寨的牌记」，配合 `item_2000111_hut_slip` 推断模型写了玩家接过一张未登记牌记（推断，原文未落日志）。拦这一句是对的，问题在于拦一句清全文；名称切分不准不影响句级删除。
+
+证据：type-check；全量 1133（1128 pass / 5 skip / 0 fail）；`run4FollowupRepairs` 新增长正文+未知 ID 保留正文、单句越权只删一句两例；`naturalIntentRouter` 失败降级断言更新；单页生产构建；diffcheck。受控浏览器：`smoke-module-framework` 8091 PASS；`smoke-run3-intent` 的 `malformed` 在修复前副本（4d56a44，临时端口 18110）为"中止并提示"，修复后 8091 为"照常演出、无事件结算"PASS，`late` 两边 PASS。`smoke-run3-intent` 的 `matched` 模式在修复前后**同样失败**（两次约 6.6 万字原链路请求，脚本仍按 Run3 的精简路线断言），属脚本过时，非本次回归；正文桩已改为合法 JSON。
+
+未处理：#4 世界调度给玩家主导场景让路（待用户裁定）；#3 空响应、#5 拒绝后好感上涨、#6 人称漂移。
+
+完整修复说明（含后续用户裁定的白湖「赌还是不赌」分支锁）：[NINGYU-FEEDBACK-REPAIRS-2026-10-01.md](NINGYU-FEEDBACK-REPAIRS-2026-10-01.md)。

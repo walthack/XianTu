@@ -39,8 +39,13 @@ try {
             if (parsed.playerText && Array.isArray(parsed.candidates)) intent = parsed;
           } catch { /* narrative/system content is not the intent payload */ }
         }
-        requests.push({ kind: intent ? 'intent' : 'narration', chars: JSON.stringify(body).length });
-        let content = '你踩稳脚下的草地，环顾四周。陌生的风掠过草叶，身旁的人仍在，你先辨清眼前的处境。';
+        // 开发版默认开模块链路（MODULE_DEV_DEFAULTS）：模块回合后还会在后台发回合记忆／审计请求，
+        // 它们不是演出重试，单独记账（只改判定，不改产品行为）。
+        const system = (body.messages || []).map(message => String(message.content || '')).join('\n');
+        const background = /作为记忆/.test(system) && /sentenceIds/.test(system) ? 'memory' : /连续性审计员/.test(system) ? 'audit' : '';
+        requests.push({ kind: intent ? 'intent' : background || 'narration', chars: JSON.stringify(body).length });
+        // 2026-10-01：当前路线走要求 JSON 的原链路，正文桩改为合法 JSON（原纯文本桩已过时）。
+        let content = JSON.stringify({ text: '你踩稳脚下的草地，环顾四周。陌生的风掠过草叶，身旁的人仍在，你先辨清眼前的处境。', mid_term_memory: '', tavern_commands: [], action_options: [] });
         if (intent) {
           seenIntent();
           if (mode === 'late') await gate;
@@ -71,7 +76,9 @@ try {
       const snapshot = () => page.evaluate(() => {
         const stores = document.querySelector('#app').__vue_app__.config.globalProperties.$pinia._s;
         const save = stores.get('gameState').toSaveData();
-        return { runtime: JSON.stringify(save.世界.状态.剧本模组), history: JSON.stringify(save.系统.历史), processing: stores.get('ui').isAIProcessing };
+        const rt = save.世界.状态.剧本模组 || {};
+        const settled = JSON.stringify({ done: Object.keys(rt.flags || {}).filter(key => /^event\..*\.done$/.test(key) && rt.flags[key]).sort(), completed: rt.completedEventIds || [] });
+        return { runtime: JSON.stringify(rt), settled, history: JSON.stringify(save.系统.历史), processing: stores.get('ui').isAIProcessing };
       });
       let before = await snapshot();
       await page.locator('textarea.game-input').fill(typed);
@@ -102,6 +109,14 @@ try {
         const prose = requests.filter(item => item.kind === 'narration');
         assert.ok(prose.length <= 1, 'no multi-layer narration retry');
         assert.ok(prose.every(item => item.chars < 24000), 'default demo must use compact prompt, not whole-save Legacy');
+      } else if (mode === 'malformed') {
+        // 2026-10-01 用户裁定：固定事件链上识别失败——停下、保留输入、常驻提示，不演出也不结算。
+        assert.ok(after.settled === before.settled, 'malformed intent must not settle any event');
+        assert.ok(after.history === before.history, 'malformed intent on a contract chain must not narrate');
+        assert.equal(requests.length, 1, 'malformed intent must not fall through to narration');
+        assert.equal(await page.locator('textarea.game-input').inputValue(), typed, 'input retained');
+        assert.match(await page.locator('[data-testid="intent-hold-message"]').innerText(), /没有推进/, 'persistent hold message visible');
+        await page.screenshot({ path: '.xiantu-server/run3-intent-malformed-hold.png' });
       } else {
         assert.ok(after.runtime === before.runtime, `${mode} intent must not advance/change runtime`);
         assert.ok(after.history === before.history, `${mode} intent must not append narration`);

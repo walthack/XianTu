@@ -11,12 +11,12 @@
     </div>
 
     <details v-if="moduleReceipt" class="hint" data-testid="module-turn-status">
-      <summary>本轮{{ moduleReceipt.path === 'modular' ? '模块演出' : '原链路' }}<span v-if="moduleReceipt.path === 'modular'"> · {{ (moduleReceipt.foregroundMs / 1000).toFixed(1) }}秒 · 输入{{ moduleReceipt.promptChars }}字</span></summary>
+      <summary>本轮{{ RECEIPT_PATH_LABELS[moduleReceipt.path] || '原链路' }}<span v-if="moduleReceipt.path === 'modular'"> · {{ (moduleReceipt.foregroundMs / 1000).toFixed(1) }}秒 · 输入{{ moduleReceipt.promptChars }}字</span></summary>
       <p v-if="moduleReceipt.route">演出模型：{{ moduleReceipt.route.model }}（{{ moduleReceipt.route.provider }}{{ moduleReceipt.route.inherited ? '，继承' : '' }}）；记忆模型：{{ moduleReceipt.memory?.route?.model || '未记录' }}。</p>
       <p v-if="moduleReceipt.fallback" data-testid="module-turn-fallback">模块演出 {{ moduleReceipt.fallback.attempts }} 次未通过，本轮回落原链路：{{ moduleReceipt.fallback.reason }}</p>
       <p v-if="moduleReceipt.path === 'modular'">回合记忆：{{ moduleReceipt.memory?.status || '未运行' }}{{ moduleReceipt.memory?.appliedToShortTerm ? '（已替换为短期记忆摘录）' : '' }}。后台结果不改写已展示正文。</p>
       <button type="button" @click="exportModuleReport">导出模块回合记录</button>
-      <button v-if="moduleReceipt.path === 'modular'" type="button" @click="startModuleBackground">恢复／重试本轮后台</button>
+      <button v-if="moduleReceipt.path === 'modular' && ['failed', 'rejected'].includes(moduleReceipt.memory?.status || '')" type="button" @click="startModuleBackground">重试本轮记忆整理</button>
     </details>
     <p v-if="experience.currentGoal" class="goal" data-testid="xingyuehu-playtest-goal">{{ experience.currentGoal }}</p>
     <p v-if="experience.whyNow" class="hint">{{ experience.whyNow }}</p>
@@ -78,6 +78,8 @@ import {
 
 const gameStateStore = useGameStateStore();
 const moduleReceipt = computed(() => getModuleReceipts(gameStateStore.toSaveData()).at(-1));
+// 回执标记 → 玩家可读的正文来源；未列出的（legacy）即原链路。
+const RECEIPT_PATH_LABELS: Record<string, string> = { modular: '模块演出', fast: '快演出', local: '本地结算（未请求模型）', card: '卡片结算（未请求模型）' };
 function exportModuleReport() {
   const data = { version: 1, exportedAt: new Date().toISOString(), receipts: getModuleReceipts(gameStateStore.toSaveData()) };
   const url = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }));

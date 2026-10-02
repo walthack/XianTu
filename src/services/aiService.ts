@@ -67,6 +67,8 @@ type QingyuTransportBudget = {
   maxTokens?: number;
   qingyuTurnId?: string;
   reasoningEffort?: 'none' | 'low';
+  timeoutMode?: 'content_idle';
+  onTransportStart?: () => void;
 };
 const qingyuTransportBudgetBySignal = new WeakMap<AbortSignal, QingyuTransportBudget>();
 
@@ -135,6 +137,9 @@ export interface GenerateOptions {
   requestMaxRetries?: number;
   /** 单次生成（含补救）截止与OpenRouter调用级推理预算，不改用户配置。 */
   timeoutMs?: number;
+  /** 流式演出不继承旧回合总截止；仅等待首段正文和正文流空闲。 */
+  timeoutMode?: 'content_idle';
+  onTransportStart?: () => void;
   reasoningEffort?: 'none' | 'low';
   /** 清羽长请求预算所属回合。实际 HTTP/酒馆传输按此 id 计次。 */
   qingyuTurnId?: string;
@@ -825,6 +830,18 @@ class AIService {
     const turnId = options.background ? `background_${options.generation_id || Date.now()}`
       : options.qingyuTurnId ?? peekActiveQingyuTurnId() ?? undefined;
     if (options.background) options = { ...options, qingyuTurnId: turnId };
+    if (options.timeoutMode === 'content_idle') {
+      const controller = this.createRequestController(turnId);
+      const onAbort = () => controller.abort(options.signal?.reason);
+      options.signal?.addEventListener('abort', onAbort, { once: true });
+      try {
+        if (options.signal?.aborted) onAbort();
+        return await this.generateWithinBudget({ ...options, qingyuTurnId: turnId, signal: controller.signal });
+      } finally {
+        options.signal?.removeEventListener('abort', onAbort);
+        this.releaseRequestController(controller);
+      }
+    }
     const remaining = remainingQingyuTurnTimeMs(turnId);
     const totalMs = options.timeoutMs === undefined ? remaining
       : remaining === null ? options.timeoutMs : Math.min(options.timeoutMs, remaining);
@@ -889,12 +906,14 @@ class AIService {
       usageType: options.usageType || 'main',
       reasoningEffort: options.reasoningEffort ?? (remainingQingyuTurnTimeMs(options.qingyuTurnId) !== null ? 'low' : undefined),
       maxTokens: options.maxTokens,
+      timeoutMode: options.timeoutMode, onTransportStart: options.onTransportStart,
       qingyuTurnId: options.qingyuTurnId ?? peekActiveQingyuTurnId() ?? undefined,
     });
   }
 
   /** 每次实际 long transport（含网络重试与非流降级）计一次预算。非清羽回合 consume 直接放行。 */
   private chargeQingyuLongTransport(signal?: AbortSignal): void {
+    if (signal?.aborted) throw new DOMException('请求已取消', 'AbortError');
     const bound = signal ? qingyuTransportBudgetBySignal.get(signal) : undefined;
     const options = bound || {
       usageType: 'main' as const,
@@ -903,6 +922,7 @@ class AIService {
     if (!consumeQingyuTurnLongRequest(options, options.qingyuTurnId)) {
       throw new QingyuTurnLongRequestBudgetError();
     }
+    bound?.onTransportStart?.();
   }
 
   private async generateOnce(options: GenerateOptions): Promise<string> {
@@ -1678,7 +1698,7 @@ class AIService {
             (finishReason, usage) => emitDiagnostic(0, finishReason, isTruncatedFinishReason(finishReason), usage));
         } catch (e) {
           const msg = e instanceof Error ? e.message : String(e);
-          if (!this.isStreamUnsupportedError(msg)) throw e;
+          if (!this.isStreamUnsupportedError(msg) || (signal && qingyuTransportBudgetBySignal.get(signal)?.timeoutMode === 'content_idle')) throw e;
           console.warn('[AI服务-OpenAI兼容] 当前API可能不支持流式传输，已自动降级为非流式请求。');
 
           const requestBody: any = {
@@ -2112,7 +2132,8 @@ class AIService {
       url, apiKey, model, messages, temperature, maxTokens, onStreamChunk,
       responseFormat, provider, requestSignal, firstByte, onFinish,
       );
-    }, { signal });
+    }, signal && qingyuTransportBudgetBySignal.get(signal)?.timeoutMode === 'content_idle'
+      ? { signal, totalMs: null, firstByteMs: 30000, idleMs: 30000 } : { signal });
   }
 
   private async streamingRequestOpenAIOnce(
@@ -2145,6 +2166,11 @@ class AIService {
           url, effort: signal ? qingyuTransportBudgetBySignal.get(signal)?.reasoningEffort : undefined,
         }) || {});
 
+    if (/^MiniMax-M3$/i.test(model) && /api\.minimax(?:i)?\.(?:com|io)/i.test(url)
+      && signal && qingyuTransportBudgetBySignal.get(signal)?.reasoningEffort === 'none') {
+      requestBody.thinking = { type: 'disabled' };
+      requestBody.reasoning_split = true;
+    }
     // 如果指定了 JSON 格式，添加 response_format
     // 🔥 注意：某些模型/API不支持 response_format
     const isReasonerModel = model.includes('reasoner') || model.includes('r1');
@@ -2208,14 +2234,15 @@ class AIService {
       // 普通 content（优先）
       const hasActualContent = delta?.content !== undefined && delta?.content !== null && delta?.content !== '';
       if (hasActualContent) {
+        if (signal && qingyuTransportBudgetBySignal.get(signal)?.timeoutMode === 'content_idle' && String(delta.content).trim()) onFirstByte?.();
         return delta.content;
       }
 
       return '';
-    }, onStreamChunk, signal, onFirstByte);
+    }, onStreamChunk, signal, signal && qingyuTransportBudgetBySignal.get(signal)?.timeoutMode === 'content_idle' ? undefined : onFirstByte);
     onFinish?.(finishReason, usage);
 
-    const visible = result.trim() ? result : reasoningBuffer;
+    const visible = result.trim() ? result : signal && qingyuTransportBudgetBySignal.get(signal)?.reasoningEffort === 'none' ? '' : reasoningBuffer;
     if (truncated) {
       throw new OutputTruncationError({ budget: maxTokens, partialContent: visible });
     }

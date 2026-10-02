@@ -148,6 +148,8 @@ export interface ScenarioModEvent {
   presentation?: {
     /** 固定动词按钮的短目标；缺省时由当前人物或事件短名派生。 */
     targetLabel?: string;
+    /** 这一拍的插图资源路径；未配置时不显示图片。 */
+    image?: string;
     /** 点击确定性按钮后预填的玩家视角自然句；不替代 actionText 判定载荷。 */
     playerLine?: string;
     /**
@@ -202,6 +204,16 @@ export interface ScenarioEventActionJudgement {
     label: string;
     value: number;
     requireNamed?: boolean;
+  }>;
+  /**
+   * 此前动作回执因子：所列事件动作已在本档成功结算（eventActionStates 中有 success 尝试）时，
+   * 掷骰前公开计入一次。只读已落账回执，布尔计一次；已掷结果按判定 id 锁定，不会补加。
+   */
+  receiptFactors?: Array<{
+    eventId: string;
+    actionId: string;
+    label: string;
+    value: number;
   }>;
   whyNow?: string;
   stakes?: {
@@ -406,6 +418,8 @@ export interface ScenarioModEventFatalOutcomes {
   deadline?: {
     /** 危险从哪一步完成之后开始逼近；省略则从本拍激活起算。 */
     afterActionId?: string;
+    /** 只在这些条件成立时计时（如某条路线回执）；省略则无条件。用于延后触发的旧选择后果。 */
+    when?: ScenarioCondition[];
     turns: number;
     /** 前 `turns - 1` 轮逐轮送达的可观察事实。不得预告死亡，只写正在发生的事。 */
     approach: string[];

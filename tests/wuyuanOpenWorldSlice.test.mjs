@@ -218,7 +218,7 @@ test('pastry hop preview names 点心铺 and does not commit the clone', async (
   const before = JSON.stringify(current);
   const text = previewWuyuanOpenWorldNarrative(current, { openWorldAction: travel });
   assert.match(text, /点心铺/);
-  assert.match(text, /沿街面进入点心铺/);
+  assert.match(text, /前往点心铺/);
   assert.doesNotMatch(text, MECHANIC_LEAK);
   assert.equal(JSON.stringify(current), before, 'preview clone must not write the live save');
   assert.equal(current.角色.位置.描述, '中州·五原·五原露天市集');

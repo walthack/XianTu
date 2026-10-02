@@ -131,19 +131,20 @@
             <div class="last-user-intent-text">{{ currentNarrative.userIntent }}</div>
           </div>
           <div class="narrative-text">
+            <img v-if="currentNarrative.image" :src="currentNarrative.image" alt="剧情插图" style="display:block;max-width:100%;height:auto;margin:0 auto 1rem;" />
             <FormattedText :text="currentNarrative.content" />
           </div>
 
-          <div v-if="scenarioEngineActionOptions.length" class="action-options engine-action-options">
+          <div v-if="engineButtonOptions.length" class="action-options engine-action-options">
             <button
-              v-for="option in scenarioEngineActionOptions"
+              v-for="option in engineButtonOptions"
               :key="`${option.contractHash}:${option.source}:${'stepId' in option ? option.stepId : option.eventId}:${option.actionId}`"
               @click="selectScenarioEngineAction(option)"
               class="action-option-btn engine-action-btn"
               :disabled="isAIProcessing"
             >
               <span v-if="showScenarioActionMechanics(option)" class="engine-action-badge">{{ option.source === 'event_engine' ? t('主线') : option.source === 'exploration_engine' ? t('探索') : option.source === 'open_world_engine' ? t('地方') : option.source === 'baihu_gamble_refusal_engine' ? t('应对') : t('机会') }}</span>
-              {{ option.label }}<template v-if="showScenarioActionMechanics(option)"> · 耗时 {{ option.timeCost }} 回合<template v-if="'remainingTurns' in option && option.remainingTurns !== undefined"> · 剩余 {{ option.remainingTurns }} 次重要行动</template></template>
+              {{ option.label }}<template v-if="showScenarioActionMechanics(option)"> · 耗时 {{ 'timeCost' in option ? (option.timeCost ?? 1) : 1 }} 回合<template v-if="'remainingTurns' in option && option.remainingTurns !== undefined"> · 剩余 {{ option.remainingTurns }} 次重要行动</template></template>
               <span v-if="'costHint' in option && option.costHint" class="engine-action-cost"> · {{ option.costHint }}</span>
             </button>
             <div class="engine-action-hint">{{ qingyuOpeningDemo ? t('可以直接描述行动，也可点按建议填入') : t('点按填入，可修改后发送') }}</div>
@@ -161,12 +162,12 @@
 
           <!-- 行动选项 -->
           <div
-            v-if="uiStore.enableActionOptions && currentNarrative.actionOptions?.length && scenarioEngineActionOptions.length"
+            v-if="!scenarioGameOver && uiStore.enableActionOptions && !keyBeatCard && !branchDecision && currentNarrative.actionOptions?.length && scenarioEngineActionOptions.length"
             class="other-action-label"
           >
             {{ t('其他行动') }}
           </div>
-          <div v-if="uiStore.enableActionOptions && currentNarrative.actionOptions?.length" class="action-options secondary-action-options">
+          <div v-if="!scenarioGameOver && uiStore.enableActionOptions && !keyBeatCard && !branchDecision && currentNarrative.actionOptions?.length" class="action-options secondary-action-options">
             <button
               v-for="(option, index) in currentNarrative.actionOptions"
               :key="index"
@@ -252,7 +253,37 @@
         </div>
       </div>
 
-      <div class="input-wrapper">
+      <section v-if="keyBeatCard" class="key-beat-card" :class="{ 'is-highlighted': keyBeatHighlight }" data-testid="key-beat-card">
+        <div class="key-beat-title">{{ KEY_BEAT_CARD_TITLE }}</div>
+        <button
+          v-for="option in keyBeatCard.options"
+          :key="`${option.selection.eventId}:${option.selection.actionId}`"
+          class="key-beat-option"
+          data-testid="key-beat-option"
+          :disabled="isAIProcessing"
+          @click="confirmKeyBeatCard(option)"
+        >
+          <span class="key-beat-label">{{ option.label }}</span>
+          <span v-if="option.stepTag || option.judgementTag" class="key-beat-tag">{{ [option.stepTag, option.judgementTag].filter(Boolean).join(' · ') }}</span>
+        </button>
+        <p class="key-beat-hint">{{ KEY_BEAT_CARD_HINT }}</p>
+      </section>
+      <section v-if="branchDecision" class="key-beat-card" data-testid="branch-decision">
+        <div class="key-beat-title">{{ BRANCH_DECISION_TITLE }}</div>
+        <button
+          v-for="(option, index) in branchDecision.options"
+          :key="`${option.eventId}:${option.actionId}`"
+          class="key-beat-option"
+          data-testid="branch-decision-option"
+          :disabled="isAIProcessing"
+          @click="confirmBranchDecision(option)"
+        >
+          <span class="key-beat-label">{{ branchDecision.labels[index] }}</span>
+        </button>
+        <p class="key-beat-hint">{{ BRANCH_DECISION_HINT }}</p>
+      </section>
+      <div v-if="intentHoldMessage" class="intent-hold-message" data-testid="intent-hold-message" role="status">{{ intentHoldMessage }}</div>
+      <div v-if="!branchDecision" class="input-wrapper">
         <!-- 隐藏的文件选择器 -->
         <input
           type="file"
@@ -311,7 +342,8 @@
               <span class="game-over-tag">本局结束</span>
               <h3>{{ scenarioGameOver.title }}</h3>
             </div>
-            <p class="game-over-hint">这条路走到了尽头。结局已写在上方正文里。</p>
+            <p class="game-over-hint">这条路走到了尽头。本局结局如下。</p>
+            <p v-for="(fact, index) in scenarioGameOver.facts" :key="index" class="game-over-hint">{{ fact }}</p>
             <div class="game-over-acts">
               <button v-if="canRollback" @click="rollbackToLastConversation" class="go-primary">回到上一轮</button>
               <button @click="router.push('/')" class="go-ghost">返回角色选择</button>
@@ -340,7 +372,8 @@
             @blur="isInputFocused = false"
             @keydown="handleKeyDown"
             @input="handleInput"
-            :placeholder="scenarioGameOver ? '本局已结束' : playtestFinished ? '本次试玩已结束' : hasActiveCharacter ? t('请输入您的选择或行动...') : t('请先选择角色...')"
+            :placeholder="scenarioGameOver ? '本局已结束' : playtestFinished ? '本次试玩已结束' : branchDecision ? `${BRANCH_DECISION_TITLE}：请点选上方选项` : hasActiveCharacter ? t('请输入您的选择或行动...') : t('请先选择角色...')"
+            :readonly="!!branchDecision"
             class="game-input"
             ref="inputRef"
             rows="1"
@@ -351,7 +384,7 @@
 
         <button
           @click="sendMessage"
-          :disabled="!inputText.trim() || isAIProcessing || !hasActiveCharacter || playtestFinished || !!scenarioGameOver"
+          :disabled="!inputText.trim() || isAIProcessing || !hasActiveCharacter || playtestFinished || !!scenarioGameOver || (!!branchDecision && !branchDecisionReady)"
           class="send-button"
         >
           <Loader2 v-if="isAIProcessing" :size="16" class="animate-spin" />
@@ -455,6 +488,8 @@
 <script setup lang="ts">
 import { cancelModuleBackground, startModuleBackground } from '@/services/modularTurnBackground';
 import { scheduleBackgroundAudit, yieldBackgroundAudit } from '@/services/backgroundAudit';
+import { BRANCH_DECISION_HINT, BRANCH_DECISION_TITLE, branchDecisionAllowsSend, detectBranchDecision, isDormantLockedOption, type BranchDecisionCandidate } from '@/modules/scenarioMods/branchDecision';
+import { getActiveKeyBeatCard, isKeyBeatCardAction, KEY_BEAT_CARD_HINT, KEY_BEAT_CARD_TITLE, KEY_BEAT_CONFIRM_NOTICE, type KeyBeatCardOption } from '@/modules/scenarioMods/keyBeatCards';
 import { ref, onMounted, onActivated, onUnmounted, nextTick, computed, watch } from 'vue';
 import {
   Send, Loader2, ChevronDown, ChevronRight, ScrollText, RotateCcw, Shield, BrainCircuit, Bell, History
@@ -847,13 +882,15 @@ const enhancedActionQueue = EnhancedActionQueueManager.getInstance();
 const bidirectionalSystem = AIBidirectionalSystem;
 type ScenarioEngineActionSelection = ScenarioOpportunityActionSelection | ScenarioEventActionSelection | WuyuanOpenWorldSelection | BaihuGambleRefusalSelection;
 const selectedScenarioEngineAction = ref<ScenarioEngineActionSelection | null>(null);
+/** 固定事件链上识别失败而停下时的常驻提示；玩家改输入或重新发送即清除。 */
+const intentHoldMessage = ref('');
 const qingyuOpeningDemo = computed(() => isQingyuOpeningPlaytestSave(gameStateStore.toSaveData()));
 const showScenarioActionMechanics = (option: ScenarioEngineActionSelection) => (
   !qingyuOpeningDemo.value || option.source !== 'event_engine'
 );
 const scenarioEngineActionOptions = computed<ScenarioEngineActionSelection[]>(() => {
   const save = gameStateStore.toSaveData();
-  if (!save) return [];
+  if (!save || scenarioGameOver.value) return [];
   const openWorldActions = getWuyuanOpenWorldSelections(save);
   const gambleRefusalActions = getBaihuGambleRefusalSelections(save);
   const eventActions = getCurrentStoryEventActions(save)
@@ -868,9 +905,35 @@ const scenarioEngineActionOptions = computed<ScenarioEngineActionSelection[]>(()
     ...gambleRefusalActions,
   ];
 });
+// 重要桥段推进卡片（剧情策划裁定 A）：卡片动作不再出现在正文末尾的小按钮里，只能点卡片推进。
+const keyBeatCard = computed(() => getActiveKeyBeatCard(gameStateStore.toSaveData()));
+const keyBeatHighlight = ref(false);
+let keyBeatConfirmedByCard = false;
+// 锁定时只显示固定选项（见下方分支区块）；未激活的锁选项（如决定步之前的致命选项）不提前显示。
+const engineButtonOptions = computed(() => branchDecision.value ? [] :
+  scenarioEngineActionOptions.value.filter(option => !isKeyBeatCardAction(option as { source?: string; eventId?: string; actionId?: string })
+    && !isDormantLockedOption(option as unknown as BranchDecisionCandidate)));
+/** 选项填入输入框时使用的原句（与 selectScenarioEngineAction 一致）。 */
+const engineOptionLine = (option: ScenarioEngineActionSelection): string => (
+  option.source === 'opportunity_engine'
+  || option.source === 'open_world_engine'
+  || option.source === BAIHU_GAMBLE_REFUSAL_SOURCE
+    ? option.actionText
+    : option.playerLine
+);
+// 剧情分支点：只能在给定选项中选，不接受自由输入（判定见 branchDecision.ts）。
+// 本局已结束（如选了致命选项）时不再锁：让结局卡片与返回入口显示出来。
+const branchDecision = computed(() => scenarioGameOver.value ? null :
+  detectBranchDecision(scenarioEngineActionOptions.value as unknown as Array<BranchDecisionCandidate & ScenarioEngineActionSelection>));
+const branchDecisionReady = computed(() => branchDecisionAllowsSend(
+  branchDecision.value,
+  selectedScenarioEngineAction.value as unknown as (BranchDecisionCandidate & ScenarioEngineActionSelection) | null,
+  inputText.value,
+  engineOptionLine,
+));
 const stageDepartureOffer = computed(() => {
   const save = gameStateStore.toSaveData();
-  return save ? getStageDepartureOffer(save) : null;
+  return save && !scenarioGameOver.value ? getStageDepartureOffer(save) : null;
 });
 const stageDeparturePending = ref(false);
 
@@ -980,6 +1043,7 @@ const currentNarrative = computed(() => {
   if (stageEntry) {
     return {
       type: 'stage_entry',
+      image: undefined as string | undefined,
       content: stageEntry.text,
       time: currentTimeString,
       stateChanges: { changes: [] },
@@ -1009,9 +1073,10 @@ const currentNarrative = computed(() => {
     return {
       type: latestNarrative.type || 'narrative',
       userIntent: (latestNarrative as { userIntent?: string }).userIntent || '',
-      content: [content || '...', noticeText].filter(Boolean).join('\n\n'),
+      content: [latestNarrative.content.replace(/^【.*?】\s*/, '') || content || '...', noticeText].filter(Boolean).join('\n\n'),
       time: currentTimeString,
       stateChanges: latestNarrative.stateChanges || { changes: [] },
+      image: latestNarrative.image,
       actionOptions: latestNarrative.actionOptions || []
     };
   }
@@ -1019,6 +1084,7 @@ const currentNarrative = computed(() => {
   // 无数据时的默认内容
   return {
     type: 'system',
+    image: undefined as string | undefined,
     userIntent: '',
     content: content || '开局生成失败，请检查API上下文长度是否足够，是否使用支持流式的API，然后返回主页重新开始生成。',
     time: currentTimeString,
@@ -1683,13 +1749,22 @@ const selectActionOption = (option: string) => {
   });
 };
 
+const confirmKeyBeatCard = async (option: KeyBeatCardOption) => {
+  keyBeatHighlight.value = false;
+  selectScenarioEngineAction(option.selection);
+  keyBeatConfirmedByCard = true;
+  await sendMessage();
+};
+
+// 锁定时没有输入框：点固定选项即选中并发送（仍走原有结构化动作与本地合同）。
+const confirmBranchDecision = async (option: ScenarioEngineActionSelection) => {
+  selectScenarioEngineAction(option);
+  await sendMessage();
+};
+
 const selectScenarioEngineAction = (option: ScenarioEngineActionSelection) => {
   selectedScenarioEngineAction.value = option;
-  const playerLine = option.source === 'opportunity_engine'
-    || option.source === 'open_world_engine'
-    || option.source === BAIHU_GAMBLE_REFUSAL_SOURCE
-    ? option.actionText
-    : option.playerLine;
+  const playerLine = engineOptionLine(option);
   lastSelectedActionOption.value = playerLine;
   inputText.value = playerLine;
   nextTick(() => {
@@ -1699,12 +1774,24 @@ const selectScenarioEngineAction = (option: ScenarioEngineActionSelection) => {
 };
 
 const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: JudgementResolution }) => {
+  // 本次发送是否由点推进卡片发起；先取出再清零，任何提前返回都不会把确认带到下一次发送。
+  const confirmedByCard = keyBeatConfirmedByCard;
+  keyBeatConfirmedByCard = false;
+  // @click="sendMessage" 会把鼠标事件当作第一个参数传进来；只有带判定结果/跳过预检的二次执行才算"已确认的后续执行"。
+  const isFollowUpExecution = Boolean(execution && typeof execution === 'object'
+    && ('resolution' in execution || 'skipPreflight' in execution));
   if (scenarioGameOver.value) {
     toast.info('本局已经结束');
     return;
   }
   if (playtestFinished.value) {
     toast.info('本次试玩纵切已经结束，请先提交反馈');
+    return;
+  }
+  intentHoldMessage.value = '';
+  // 剧情分支点：只接受已选中的选项原句；判定确认等后续执行沿用已选动作，不再拦。
+  if (!isFollowUpExecution && branchDecision.value && !branchDecisionReady.value) {
+    toast.info(`${BRANCH_DECISION_TITLE}：请从选项中选择一项后再发送`);
     return;
   }
   const actionQueueText = actionQueue.getActionPrompt();
@@ -1812,7 +1899,9 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
         return;
       }
       skipKeywordPreflightFromIntent = intent.skipKeywordPreflight;
+      if (intent.notice) toast.info(intent.notice);
       if (intent.kind === 'unclear' || intent.kind === 'failed') {
+        if (intent.hold) intentHoldMessage.value = intent.clarification || NATURAL_INTENT_CLARIFY_DEFAULT;
         toast.info(intent.clarification || NATURAL_INTENT_CLARIFY_DEFAULT);
         return;
       }
@@ -1843,6 +1932,17 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
         inputRef.value?.focus();
       }
     }
+  }
+  // 重要桥段推进卡片：输入框里的话被识别为要推进卡片动作时，只高亮卡片提示确认，不推进。
+  // 判定确认后的二次执行沿用当初点卡片的确认。
+  const keyBeatAttempt = [routedIntentAction, buttonSelected ? selectedScenarioEngineAction.value : undefined]
+    .find(action => isKeyBeatCardAction(action as { source?: string; eventId?: string; actionId?: string } | undefined));
+  if (!isFollowUpExecution && keyBeatAttempt && !(confirmedByCard && keyBeatAttempt === selectedScenarioEngineAction.value)) {
+    keyBeatHighlight.value = true;
+    intentHoldMessage.value = KEY_BEAT_CONFIRM_NOTICE;
+    uiStore.setAIProcessing(false);
+    persistAIProcessingState();
+    return;
   }
   const preflightGambleRefusalAction = selectedScenarioEngineAction.value?.source === BAIHU_GAMBLE_REFUSAL_SOURCE
     ? selectedScenarioEngineAction.value
@@ -2153,6 +2253,9 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
       // --- 核心逻辑：整合最终文本并更新状态 ---
       let finalText = '';
       const gmResp = aiResponse; // aiResponse 本身就是 GM_Response
+      if (gmResp?.transactionCommitted) {
+        inputText.value = ''; lastSelectedActionOption.value = null; selectedScenarioEngineAction.value = null;
+      }
 
       console.log('[AI响应处理] 开始处理AI响应文本');
       console.log('[AI响应处理] aiResponse:', aiResponse);
@@ -2456,6 +2559,8 @@ const adjustTextareaHeight = () => {
 
 // 监听输入变化以调整高度
 const handleInput = () => {
+  intentHoldMessage.value = '';
+  keyBeatHighlight.value = false;
   nextTick(() => {
     adjustTextareaHeight();
   });
@@ -3783,6 +3888,82 @@ const syncGameState = async () => {
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.08em;
+}
+
+.key-beat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0 0 8px;
+  padding: 10px 12px;
+  border: 2px solid var(--color-primary, #4c87ad);
+  border-radius: 6px;
+  background: var(--color-surface-light, var(--color-surface));
+}
+
+.key-beat-card.is-highlighted {
+  box-shadow: 0 0 0 3px rgba(230, 162, 60, 0.55);
+  border-color: var(--color-warning, #e6a23c);
+}
+
+.key-beat-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.key-beat-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 12px;
+  border: 1px solid var(--color-primary, #4c87ad);
+  border-radius: 4px;
+  background: var(--color-surface);
+  color: inherit;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.key-beat-option:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.key-beat-tag {
+  flex-shrink: 0;
+  font-size: 12px;
+  color: var(--color-warning, #e6a23c);
+}
+
+.key-beat-hint {
+  margin: 0;
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.intent-hold-message {
+  /* 独占输入行上方一行（与判定确认卡同层），不挤占输入框。 */
+  margin: 0 0 8px;
+  padding: 6px 10px;
+  border-left: 3px solid var(--color-warning, #e6a23c);
+  border-radius: 3px;
+  background: var(--color-surface-light, var(--color-surface));
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.branch-decision-banner {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 6px;
+  padding: 6px 10px;
+  border-left: 3px solid var(--color-warning, #e6a23c);
+  font-size: 12px;
+  line-height: 1.5;
 }
 
 .engine-action-hint {

@@ -173,6 +173,21 @@ export function isBaihuGambleWindowEventId(eventId: string | undefined): boolean
   return !!eventId && WINDOW_EVENT_IDS.has(eventId);
 }
 
+/**
+ * 契书拍的结果（用户裁定 2026-10-01）：`event.gamble_bond_signed.done` 只表示"这一拍已结案"，
+ * 签契与拒赌被拿下都会结案。下游需要知道"签没签"时，一律读本函数或 outcome 标记，不得读 done。
+ */
+export const GAMBLE_BOND_OUTCOME_FLAG = 'event.gamble_bond_signed.outcome';
+export type GambleBondOutcome = 'signed' | 'refused' | 'open';
+export function gambleBondOutcome(saveData: SaveData | null | undefined): GambleBondOutcome {
+  const runtime = runtimeOf(saveData);
+  if (!runtime) return 'open';
+  const flags = runtime.flags || {};
+  if (flags[GAMBLE_BOND_OUTCOME_FLAG] === 'refused' || flags['event.gamble_bond_signed.refused_capture'] === true) return 'refused';
+  if (flags['event.gamble_bond_signed.done'] === true || (runtime.completedEventIds || []).includes(GAMBLE_BOND_EVENT_ID)) return 'signed';
+  return 'open';
+}
+
 export function gambleAlreadyLostOrSigned(saveData: SaveData | null | undefined): boolean {
   const runtime = runtimeOf(saveData);
   if (!runtime) return false;
@@ -202,7 +217,8 @@ export function isBaihuGambleRefusalWindow(saveData: SaveData | null | undefined
   if (!runtime || runtime.storyMode === 'world_sim') return false;
   if (runtime.modId && runtime.modId !== 'lcq.stage_02') return false;
   const currentId = focusEventId(runtime);
-  if (!isBaihuGambleWindowEventId(currentId)) return false;
+  // 用户裁定 2026-10-02：拒赌窗口只开在凝羽入局这一拍；契书拍不再新开（已在扣押中的旧档仍按原窗口应对）。
+  if (currentId !== NINGYU_GAMBLE_EVENT_ID) return false;
   if (readBaihuGambleRefusal(saveData)?.phase === 'detained') return false;
   if (gambleAlreadyLostOrSigned(saveData)) return false;
   if (eventState(runtime, currentId)?.readyAtTurn !== undefined) return false;
@@ -467,6 +483,7 @@ function writeRefusalFlags(runtime: RuntimeLike, phase: BaihuGambleRefusalPhase)
   runtime.flags['world.baihu.hall_controlled'] = phase === 'detained';
   if (phase === 'detained' || phase === 'released') {
     runtime.flags['event.gamble_bond_signed.refused_capture'] = true;
+    runtime.flags[GAMBLE_BOND_OUTCOME_FLAG] = 'refused';
   }
 }
 

@@ -33,7 +33,7 @@ type CharacterRagServiceLike = {
   init(): Promise<void>;
   isEnabled(): boolean;
   ensureIndexed(): Promise<unknown>;
-  buildSectionForPrompt(query: string, opts?: { topK?: number; minScore?: number }): Promise<string>;
+  buildSectionForPrompt(query: string, opts?: { topK?: number; minScore?: number; stageId?: string }): Promise<string>;
   getStats(): Promise<{ total: number }>;
 };
 
@@ -59,6 +59,7 @@ async function activeSaveSlot(): Promise<string | undefined> {
  * Ordinary Legacy foreground recall. Pilot paths must not call this.
  * Background indexing is a separate optimization and does not replace this retrieval.
  */
+// @deprecated LEGACY：模块化稳定后删除（2026-10-02 用户决定）
 export async function resolveLegacyForegroundRecall(
   input: LegacyForegroundRecallInput,
   deps: LegacyForegroundRecallDeps = {},
@@ -127,6 +128,7 @@ export async function resolveLegacyForegroundRecall(
       characterRagSection = await characterRagService.buildSectionForPrompt(ragQuery || '继续当前剧情', {
         topK: 6,
         minScore: 0.4,
+        stageId: v3?.世界?.状态?.剧本模组?.modId,
       });
       if (characterRagSection) {
         const stats = await characterRagService.getStats();

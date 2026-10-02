@@ -1,6 +1,6 @@
 import type { SaveData } from '@/types/game';
 import {
-  getCurrentStoryEventActions,
+  getCurrentStoryEventActions, previewWangZheStayEnding,
   getTrackedStoryOpportunityActions,
   type ScenarioEventActionSelection,
   type ScenarioOpportunityActionSelection,
@@ -50,8 +50,30 @@ export interface NaturalIntentResult {
   selection?: NaturalIntentSelection;
   reason?: string;
   clarification?: string;
+  /** 非阻断提示：本回合照常进行，只告诉玩家发生了什么（如识别超时已按自由行动处理）。 */
+  notice?: string;
+  /** 正在固定事件链上、识别失败而停下：界面需常驻显示 clarification，直到玩家改输入或重发。 */
+  hold?: boolean;
   skipKeywordPreflight: boolean;
   usedModel: boolean;
+}
+
+/**
+ * 行动解释模块的失败策略（模块卡 onFail=hold_on_contract，用户裁定 2026-10-01）：
+ * 识别模型超时/报错/格式坏时——
+ * - 候选里有合同动作（主线事件、拒赌应对、机会卡）＝正在固定事件链上：停下，保留输入，
+ *   常驻提示请玩家点选项或换说法。自由叙事不能推进事件链，也不能被当作已推进
+ *   （真机 fx-pact2：降级后正文写"三个月，我准了"，进度却停在第 2/2 步）。
+ * - 只剩地方行动可选：按"拿不准"降级——照常演出、不结算、不回落关键词判定，并提示。
+ * 取消、过期、存档已变仍按原样中止。
+ */
+export const NATURAL_INTENT_DEGRADED_NOTICE = '行动识别没有及时完成，本回合按自由行动处理，不结算剧情动作。';
+export const NATURAL_INTENT_CONTRACT_HOLD = '这一步关系到当前剧情进度，行动没能识别，本回合没有推进。输入已保留，请点选上方选项，或换个说法再发送。';
+export function onClassifierFailure(reason: string, candidates: readonly NaturalIntentCandidate[]): NaturalIntentResult {
+  if (candidates.some(candidate => candidate.source !== 'open_world_engine')) {
+    return { kind: 'failed', reason, clarification: NATURAL_INTENT_CONTRACT_HOLD, hold: true, skipKeywordPreflight: true, usedModel: true };
+  }
+  return { kind: 'free', reason, notice: NATURAL_INTENT_DEGRADED_NOTICE, skipKeywordPreflight: true, usedModel: true };
 }
 
 type IntentGenerate = (input: {
@@ -248,6 +270,9 @@ export function resolveNaturalIntentFastPath(
   if (selected && (selected.playerLine === raw || selected.actionText === raw)) {
     return { kind: 'button', skipKeywordPreflight: true, usedModel: false };
   }
+  if (!hasUnclearIntentFrame(raw) && previewWangZheStayEnding(saveData, raw)) return {
+    kind: 'free', reason: 'stay_on_wangzhe_battlefield', skipKeywordPreflight: true, usedModel: false,
+  };
   const refusal = resolveBaihuGambleRefusalFromText(saveData, raw);
   if (refusal) {
     return {
@@ -366,7 +391,7 @@ export async function resolveNaturalIntent(input: {
       return { kind: 'failed', reason: 'state_changed', clarification: NATURAL_INTENT_CLARIFY_DEFAULT, skipKeywordPreflight: true, usedModel: true };
     }
     const parsed = parseIntentJson(output);
-    if (!parsed) return { kind: 'failed', reason: 'malformed', clarification: '未能识别这次行动，输入已保留。请重试或选择当前建议动作。', skipKeywordPreflight: true, usedModel: true };
+    if (!parsed) return onClassifierFailure('malformed', candidates);
     if (parsed.certainty !== 'high') return narrateWithoutSettlement('low_certainty', true);
     if (!parsed.actionId) return narrateWithoutSettlement('missing_action', true);
     if (parsed.actionId === 'none') {
@@ -382,7 +407,10 @@ export async function resolveNaturalIntent(input: {
     if (!selection) return narrateWithoutSettlement('stale_or_ambiguous_candidate', true);
     return { kind: 'matched', selection, skipKeywordPreflight: true, usedModel: true };
   } catch {
-    return { kind: 'failed', reason: 'classifier_error', clarification: '行动识别失败，输入已保留。请重试或选择当前建议动作。', skipKeywordPreflight: true, usedModel: true };
+    if (input.signal?.aborted) {
+      return { kind: 'failed', reason: 'aborted', clarification: NATURAL_INTENT_CLARIFY_DEFAULT, skipKeywordPreflight: true, usedModel: true };
+    }
+    return onClassifierFailure('classifier_error', candidates);
   } finally {
     input.signal?.removeEventListener('abort', onAbort);
     if (inFlight === controller) inFlight = null;

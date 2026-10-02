@@ -164,7 +164,30 @@ test('publish path blocks unreceipted item grants and unknown IDs without treati
     { userAction: '我听他把话说完。', playerIntentText: '我听他把话说完。' },
   );
   assert.equal(hasStarSword(refs), false);
-  assert.match(lastNarrative(refs), /没有新的道具交付/);
+  // 2026-10-01：结构化字段越权只丢弃结构化数据，不再牵连正文。
+  assert.match(lastNarrative(refs), /你点了点头/);
+  assert.equal(lastNarrative(refs).includes('没有新的道具交付'), false);
+
+  // 真机报告场景：长正文 + 结构化未知道具 ID → 正文完整保留，背包不变。
+  const longProse = '夜色压在废猎屋的檐下。凝羽把刀横在膝上，没有看你，只说门口风大。你在火塘边坐下，听她把今天的路线又理了一遍。火光把她的侧脸照得很淡，她说完便不再开口。';
+  const unknownRef = await AIBidirectionalSystem.processGmResponse(
+    { text: longProse, mid_term_memory: '夜谈。', tavern_commands: [], item_references: [{ id: 'item_2000111_hut_slip', purpose: 'claim' }], action_options: ['继续守夜'] },
+    structuredClone(save), false, () => false,
+    { userAction: '我听他把话说完。', playerIntentText: '我听他把话说完。' },
+  );
+  assert.match(lastNarrative(unknownRef), /凝羽把刀横在膝上/);
+  assert.equal(lastNarrative(unknownRef).includes('没有新的道具交付'), false);
+
+  // 正文只有一句越权获得：只删那一句，其余保留。
+  const mixed = await AIBidirectionalSystem.processGmResponse(
+    { text: longProse + '你接过星河剑。', mid_term_memory: '夜谈。', tavern_commands: [], action_options: [] },
+    structuredClone(save), false, () => false,
+    { userAction: '我听他把话说完。', playerIntentText: '我听他把话说完。' },
+  );
+  assert.equal(hasStarSword(mixed), false);
+  assert.match(lastNarrative(mixed), /凝羽把刀横在膝上/);
+  assert.equal(lastNarrative(mixed).includes('星河剑'), false);
+  assert.equal(lastNarrative(mixed).includes('没有新的道具交付'), false);
 });
 
 test('publish path blocks Run4 agency counterexamples and does not settle', async () => {
@@ -231,6 +254,9 @@ const TEST_PROFILE = {
 };
 
 async function withStubbedGenerate(aiService, impl) {
+  const { useAPIManagementStore } = await loadPipeline('../src/stores/apiManagementStore.ts');
+  const api = useAPIManagementStore(); const originalApiConfigs = [...api.apiConfigs];
+  api.apiConfigs = [{ id: 'fixture-minimax', name: 'fixture', provider: 'custom', url: 'https://api.minimaxi.com/v1', apiKey: 'fixture-not-a-real-key', model: 'MiniMax-M3', enabled: true }];
   const originalCheck = aiService.checkAvailability;
   const originalGenerate = aiService.generate;
   const originalGenerateRaw = aiService.generateRaw;
@@ -241,6 +267,7 @@ async function withStubbedGenerate(aiService, impl) {
     throw new Error('must not call generateRaw');
   };
   return () => {
+    api.apiConfigs = originalApiConfigs;
     aiService.checkAvailability = originalCheck;
     aiService.generate = originalGenerate;
     aiService.generateRaw = originalGenerateRaw;
@@ -291,7 +318,8 @@ test('processPlayerAction generate-publish path rejects unreceipted item grants 
     });
     assert.ok(calls >= 1 && calls <= 2, `generate calls=${calls}`);
     assert.ok(response);
-    assert.match(String(response.text || ''), /没有新的道具交付/);
+    assert.equal(response.generationError?.code, 'DEMO_MODULE_FAILED');
+    assert.notEqual(response.transactionCommitted, true);
     assert.equal(store.toSaveData().角色.背包?.物品?.['lcq.item.star_sword'], undefined);
   } finally {
     restore();
@@ -325,7 +353,7 @@ test('processPlayerAction generate-publish path fail-closes unauthorized killing
       shouldAbort: () => false,
     });
     assert.ok(calls >= 1 && calls <= 2, `generate calls=${calls}`);
-    assert.equal(response?.generationError?.code, 'PLAYER_AGENCY_VIOLATION');
+    assert.equal(response?.generationError?.code, 'DEMO_MODULE_FAILED');
     assert.notEqual(response?.transactionCommitted, true);
     assert.deepEqual(store.toSaveData().世界.状态.剧本模组.completedEventIds || [], before);
   } finally {
@@ -341,7 +369,7 @@ test('promptStorage loadAll falls back to default prompts without IndexedDB', as
   assert.ok(enabled.length > 0);
 });
 
-test('processPlayerAction generate path injects item_references protocol; 8192 is not a prose cap', async () => {
+test('module generate path uses a compact text-only packet and cannot write model commands', async () => {
   setActivePinia(createPinia());
   const { AIBidirectionalSystem } = await loadPipeline('../src/utils/AIBidirectionalSystem.ts');
   const { useGameStateStore } = await loadPipeline('../src/stores/gameStateStore.ts');
@@ -351,7 +379,11 @@ test('processPlayerAction generate path injects item_references protocol; 8192 i
   let seenInput = '';
   const restore = await withStubbedGenerate(aiService, async options => {
     calls += 1;
-    seenInput += `\n${String(options?.user_input || '')}`;
+    seenInput += `\n${String(options?.user_input || '')}\n${(options?.injects || []).map(item => item.content).join('\n')}`;
+    assert.equal(options.usageType, 'module_narrative');
+    assert.equal(options.maxTokens, 4096);
+    assert.equal(options.should_stream, true);
+    assert.equal(options.reasoningEffort, 'none');
     return JSON.stringify({
       text: '你先看清眼前的草原，没有贸然作出新的决定。风从草叶间穿过。',
       mid_term_memory: '当下行动已处理。',
@@ -371,9 +403,11 @@ test('processPlayerAction generate path injects item_references protocol; 8192 i
     });
     assert.ok(calls >= 1 && calls <= 2, `generate calls=${calls}`);
     assert.ok(response);
-    assert.match(seenInput, /item_references/);
-    assert.match(seenInput, /当前场景允许集/);
-    assert.match(seenInput, /不是正文字数上限/);
+    assert.equal(response.moduleReceipt.path, 'modular');
+    assert.equal(response.transactionCommitted, true);
+    assert.ok(seenInput.length < 10000);
+    assert.doesNotMatch(seenInput, /精简版SaveData结构说明/);
+    assert.deepEqual(response.tavern_commands, []);
     assert.equal(/写满8192|限600字/.test(seenInput), false);
   } finally {
     restore();
@@ -660,4 +694,15 @@ test('turn A hanging transport then B generate keeps B budget after A finally', 
     axios.post = post;
     if (originalConfig && typeof aiService.saveConfig === 'function') aiService.saveConfig(originalConfig);
   }
+});
+
+test('bracket labels: drop bare 环境/场景 tags, keep paragraph-lead scene text with a full stop, only unwrap inline item names', async () => {
+  setActivePinia(createPinia());
+  const { flattenBracketLabels } = await loadPipeline('../src/utils/AIBidirectionalSystem.ts');
+  assert.equal(flattenBracketLabels('【环境】内院偏屋，灯暗。'), '内院偏屋，灯暗。');
+  assert.equal(flattenBracketLabels('【内院偏屋，灯暗】押你回来的两人一左一右。'), '内院偏屋，灯暗。押你回来的两人一左一右。');
+  assert.equal(flattenBracketLabels('你摸到【霓龙丝】，指尖一凉。'), '你摸到霓龙丝，指尖一凉。');
+  assert.equal(flattenBracketLabels('【霓龙丝】在你手里发烫。'), '霓龙丝在你手里发烫。');
+  assert.equal(flattenBracketLabels('【内院偏屋，灯暗。】押你回来的两人。'), '内院偏屋，灯暗。押你回来的两人。');
+  assert.equal(flattenBracketLabels('她说这屋里的环境太闷。\n【内院偏屋，灯暗】押你的人退下。'), '她说这屋里的环境太闷。\n内院偏屋，灯暗。押你的人退下。');
 });

@@ -6,7 +6,8 @@ export const MODULE_TURN_KEY = '回合模块试玩';
 export const MODULE_TURN_SWITCH = 'xiantu.modularTurnPlaytest.v1';
 export interface ModuleReceipt {
   id: string;
-  path: 'modular' | 'legacy';
+  /** 本回合正文来源：modular=模块演出；legacy=原链路；fast=快演出；local=本地合同正文（不请求模型）；card=重要桥段卡片结果句（不请求模型）。 */
+  path: 'modular' | 'legacy' | 'fast' | 'local' | 'card';
   route?: import('@/services/moduleModelRuntime').ModuleModelRoute;
   eventId?: string;
   promptChars: number;
@@ -29,16 +30,33 @@ export interface ModuleSideResult {
   /** 记忆摘录已替换该回合短期记忆条目。 */
   appliedToShortTerm?: boolean;
 }
+/** 模块拆分开关：玩家选过就按选择；没选过时研发/内测构建默认开、正式版默认关（同审计 Q5 写法）。 */
+export function readModuleTurnSwitch(): boolean {
+  const value = globalThis.localStorage?.getItem(MODULE_TURN_SWITCH);
+  const devDefault = typeof MODULE_DEV_DEFAULTS !== 'undefined' ? MODULE_DEV_DEFAULTS === true : false;
+  return value === 'true' || (value !== 'false' && devDefault);
+}
+/** 用户裁定：两种落地demo的所有回合都只能走模块入口，不受旧开关/事件窗限制。 */
+export function isDemoModuleOnly(save: SaveData | null | undefined): boolean {
+  return isScopedPlaytestSave(save);
+}
+export function assertDemoModulePath(save: SaveData | null | undefined, path: ModuleReceipt['path']): void {
+  if (isDemoModuleOnly(save) && path !== 'modular' && path !== 'local') {
+    console.error('[DEMO_LEGACY_BLOCKED]', { path, modId: (save as any)?.世界?.状态?.剧本模组?.modId });
+    throw new Error('DEMO_LEGACY_BLOCKED：试玩回合禁止进入 ' + path + ' 链路，请报告当前事件。');
+  }
+}
 export function isModulePlaytestSelected(save: SaveData | null | undefined): boolean {
+  if (isDemoModuleOnly(save)) return true;
   try {
-    return isScopedPlaytestSave(save) && globalThis.localStorage?.getItem(MODULE_TURN_SWITCH) === 'true';
+    return isScopedPlaytestSave(save) && readModuleTurnSwitch();
   } catch { return false; }
 }
 export function isModularTurnEnabled(save: SaveData | null | undefined): boolean {
-  return isModulePlaytestSelected(save) && isScopedNaturalIntentSave(save);
+  return isDemoModuleOnly(save) || (isModulePlaytestSelected(save) && isScopedNaturalIntentSave(save));
 }
 export function visibleModuleText(raw: string): string {
-  const text = String(raw).replace(/<((?:[a-z][\w.-]*:)?think)>[\s\S]*?<\/\1>/gi, '').trim();
+  const text = String(raw).replace(/<((?:[a-z][\w.-]*:)?think)>[\s\S]*?<\/\1>/gi, '').replace(/<\/(?:[a-z][\w.-]*:)?think\s*>/gi, '').trim();
   if (/<\/?(?:[a-z][\w.-]*:)?think\b/i.test(text)) throw new Error('未闭合思考块');
   return text;
 }
@@ -50,6 +68,7 @@ export function readModuleNarrative(raw: string): string {
   const text = visible.startsWith('{') || visible.startsWith('```')
     ? String(parseModuleObject(visible).text || '') : visible;
   if (!text.trim() || text.length > 6000) throw new Error('正文为空或异常过长');
+  if (text.split(/[，,、。；;：:！？!?…\n]/).some(part => part.trim().length > 120)) throw new Error('正文出现无标点长句，本稿不展示、不落档');
   return text.trim();
 }
 export function matchModuleExcerpt(text: string, quote: string): string | null {
@@ -80,7 +99,7 @@ export function validateModuleSide(raw: string, text: string, type: 'memory'): s
       const ids = object.sentenceIds;
       if (!ids.length || ids.length > 4 || new Set(ids).size !== ids.length
         || ids.some(id => !Number.isInteger(id) || typeof id !== 'number' || !sentences[id])) throw new Error('摘要句子ID无效');
-      const excerpt = (ids as number[]).sort((a, b) => a - b).map(id => sentences[id].text).join('；');
+      const excerpt = (ids as number[]).sort((a, b) => a - b).map(id => sentences[id].text).join('\n\n');
       if (excerpt.length > 1000) throw new Error('摘要摘录超过预算');
       return excerpt;
     }
@@ -89,7 +108,7 @@ export function validateModuleSide(raw: string, text: string, type: 'memory'): s
     const quotes = evidence.map(quote => typeof quote === 'string' ? quote.trim() : '');
     const excerpts = quotes.map(quote => quote.length <= 240 ? matchModuleExcerpt(text, quote) : null);
     if (excerpts.some(quote => quote === null)) throw new Error('证据非连续原文');
-    return excerpts.join('；');
+    return excerpts.join('\n\n');
   }
   throw new Error(`未知后台模块：${type}`);
 }
@@ -118,6 +137,7 @@ export function getModuleReceipts(save: SaveData | null | undefined): ModuleRece
   return Array.isArray(value) ? value : [];
 }
 export function appendModuleReceipt(save: SaveData, receipt: ModuleReceipt): void {
+  assertDemoModulePath(save, receipt.path);
   const extensions = (save as any).系统.扩展 ||= {};
   const receipts = getModuleReceipts(save).filter(item => item.id !== receipt.id);
   extensions[MODULE_TURN_KEY] = { version: 1, receipts: [...receipts, receipt].slice(-20) };

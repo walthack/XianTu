@@ -7,20 +7,60 @@ const m = await jiti.import('../src/modules/scenarioMods/modularTurn.ts');
 const store = new Map();
 globalThis.localStorage = { getItem: key => store.get(key) || null };
 
-test('module switch is confined to isolated story window; ordinary saves stay unchanged', () => {
+test('demo modules are mandatory across the whole route; ordinary saves stay unchanged', () => {
   const save = { 系统: { 扩展: { 星月湖落地连续试玩: { kind: 'xingyuehu-landing-through-v1' } } }, 世界: { 状态: { 剧本模组: {} } } };
-  assert.equal(m.isModularTurnEnabled(save), false);
+  assert.equal(m.isModularTurnEnabled(save), true);
   store.set(m.MODULE_TURN_SWITCH, 'true');
   assert.equal(m.isModularTurnEnabled(save), true);
   assert.equal(m.isModularTurnEnabled({}), false);
   save.世界.状态.剧本模组.completedEventIds = ['lcq.event.baihu_shangguan_escape'];
-  assert.equal(m.isModularTurnEnabled(save), false);
+  assert.equal(m.isModularTurnEnabled(save), true);
+  store.delete(m.MODULE_TURN_SWITCH);
+});
+test('module switch default follows MODULE_DEV_DEFAULTS: dev on, production off; an explicit choice always wins', () => {
+  const save = { 系统: { 扩展: { 星月湖落地连续试玩: { kind: 'xingyuehu-landing-through-v1' } } }, 世界: { 状态: { 剧本模组: {} } } };
+  try {
+    globalThis.MODULE_DEV_DEFAULTS = false;
+    assert.equal(m.readModuleTurnSwitch(), false);
+    assert.equal(m.isModularTurnEnabled(save), true);
+    globalThis.MODULE_DEV_DEFAULTS = true;
+    assert.equal(m.readModuleTurnSwitch(), true);
+    assert.equal(m.isModularTurnEnabled(save), true);
+    assert.equal(m.isModularTurnEnabled({}), false);
+    store.set(m.MODULE_TURN_SWITCH, 'false');
+    assert.equal(m.isModularTurnEnabled(save), true);
+    globalThis.MODULE_DEV_DEFAULTS = false;
+    store.set(m.MODULE_TURN_SWITCH, 'true');
+    assert.equal(m.isModularTurnEnabled(save), true);
+  } finally {
+    delete globalThis.MODULE_DEV_DEFAULTS;
+    store.delete(m.MODULE_TURN_SWITCH);
+  }
 });
 test('response adapter accepts prose or JSON and rejects unfinished thought and missing body', () => {
   assert.equal(m.readModuleNarrative('<think>hidden</think>你走近。'), '你走近。');
+  assert.equal(m.readModuleNarrative('</think>你走近。'), '你走近。');
   assert.equal(m.readModuleNarrative('```json\n{"text":"你停下。","tavern_commands":[{"key":"x"}]}\n```'), '你停下。');
   assert.throws(() => m.readModuleNarrative('<minimax:think>hidden'));
   assert.throws(() => m.readModuleNarrative('{"mid_term_memory":"none"}'));
+});
+
+test('death bridges shorten long output or drop it without blocking the fixed ending', async () => {
+  const { endingBridge } = await jiti.import('../src/modules/scenarioMods/fixedEndingNarratives.ts');
+  assert.equal(endingBridge('你停下。风声变了。' + '远处的声音'.repeat(100) + '。'), '你停下。风声变了。');
+  assert.equal(endingBridge('你' + '看'.repeat(300) + '。'), '');
+  assert.equal(endingBridge('<think>hidden</think>{"text":"你说完话。她抬起手。第三句。"}'), '你说完话。她抬起手。');
+  assert.equal(endingBridge('<think>unfinished'), '');
+});
+
+test('all four module policies stream with thinking disabled and no old ten-second deadline', async () => {
+  const { GAME_MODEL_MODULES } = await jiti.import('../src/services/moduleModelRuntime.ts');
+  for (const definition of GAME_MODEL_MODULES) {
+    assert.equal(definition.policy.streaming, true, definition.id);
+    assert.equal(definition.policy.reasoningEffort, 'none', definition.id);
+    assert.equal(definition.policy.timeoutMode, 'content_idle', definition.id);
+    assert.equal(definition.policy.timeoutMs, undefined, definition.id);
+  }
 });
 test('summary stores only verified contiguous excerpts, never invented model facts', () => {
   const text = '你向苏妲己提出期限。她没有立刻答应，仍等你说明条件。';
@@ -79,7 +119,7 @@ test('background API calls have their own cancellation and deadline scope', asyn
 
 test('memory selection resolves valid sentence IDs to exact source and rejects unknown IDs', () => {
   const text = '你提出交换。苏妲己还未答应。期限没有落定。';
-  assert.equal(m.validateModuleSide('{"sentenceIds":[2,0]}',text,'memory'),'你提出交换。；期限没有落定。');
+  assert.equal(m.validateModuleSide('{"sentenceIds":[2,0]}',text,'memory'),'你提出交换。\n\n期限没有落定。');
   for (const ids of [[55],['0'],[0,0],[],[-1]]) assert.throws(()=>m.validateModuleSide(JSON.stringify({sentenceIds:ids}),text,'memory'));
 });
 
@@ -96,12 +136,34 @@ test('model commands cannot forge module receipts or accepted memory', async () 
 });
 
 
-test('a save marker alone cannot switch a non-isolated profile to modular generation', async () => {
+test('a demo marker forces the module route even for a non-isolated profile', async () => {
+  const { createPinia, setActivePinia } = await import('pinia');
+  setActivePinia(createPinia());
   const isolatedJiti = createJiti(import.meta.url, { interopDefault: true, alias: { '@': fileURLToPath(new URL('../src', import.meta.url)), '@/stores/characterStore': fileURLToPath(new URL('./stubs/characterStoreForAbortTest.ts', import.meta.url)) } });
   const { AIBidirectionalSystem } = await isolatedJiti.import('../src/utils/AIBidirectionalSystem.ts');
-  const save = { 系统: { 扩展: { 星月湖落地连续试玩: { kind: 'xingyuehu-landing-through-v1' } } }, 世界: { 状态: { 剧本模组: {} } } };
-  store.set(m.MODULE_TURN_SWITCH, 'true');
-  assert.equal(await AIBidirectionalSystem.tryModularTurn(save, undefined, 'profile-test', ()=>false, '继续'), null);
+  const { aiService } = await isolatedJiti.import('../src/services/aiService.ts');
+  const { useAPIManagementStore } = await isolatedJiti.import('../src/stores/apiManagementStore.ts');
+  const api = useAPIManagementStore(); const originalConfigs = [...api.apiConfigs];
+  api.apiConfigs = [{ id: 'fixture-minimax', name: 'fixture', provider: 'custom', url: 'https://api.minimaxi.com/v1', apiKey: 'fixture-not-a-real-key', model: 'MiniMax-M3', enabled: true }];
+  const { readFile } = await import('node:fs/promises');
+  const { parseScenarioMod } = await isolatedJiti.import('../src/modules/scenarioMods/validator.ts');
+  const { createQingyuOpeningPlaytestSave } = await isolatedJiti.import('../src/modules/scenarioMods/qingyuOpeningPlaytest.ts');
+  const save = createQingyuOpeningPlaytestSave(parseScenarioMod(JSON.parse(await readFile(new URL('../src/modules/scenarioMods/builtins/data/lcq.stage_01.json', import.meta.url), 'utf8'))));
+  const { resolveGameModuleRoute } = await isolatedJiti.import('../src/services/gameModelModules.ts');
+  const { GAME_MODEL_MODULES } = await isolatedJiti.import('../src/services/moduleModelRuntime.ts');
+  for (const definition of GAME_MODEL_MODULES) assert.equal(resolveGameModuleRoute(definition).config.model, 'MiniMax-M3', definition.id);
+  store.set(m.MODULE_TURN_SWITCH, 'false');
+  const original = aiService.generate;
+  aiService.generate = async options => {
+    assert.equal(options.apiConfigOverride.model, 'MiniMax-M3');
+    assert.equal(options.should_stream, true);
+    assert.equal(options.reasoningEffort, 'none');
+    return '你停下来观察四周。';
+  };
+  try {
+    const response = await AIBidirectionalSystem.tryModularTurn(save, undefined, 'profile-test', ()=>false, '继续');
+    assert.equal(response.moduleReceipt.path, 'modular');
+  } finally { aiService.generate = original; api.apiConfigs = originalConfigs; store.delete(m.MODULE_TURN_SWITCH); }
 });
 
 
@@ -155,4 +217,37 @@ test('narrative failure policy: retry once on the same snapshot, then fall back 
   calls = 0;
   await assert.rejects(m.attemptModuleNarrative(async () => { calls++; throw new Error('取消'); }, { budgetLeft: () => null, isFatal: () => true }), /取消/);
   assert.equal(calls, 1);
+});
+
+
+test('demo refuses legacy/fast/card paths before storing a receipt, even with the old switch off', () => {
+  const save = { 系统: { 扩展: { 清羽记开局: { kind: 'qingyu-demo-v1' } } }, 世界: { 状态: { 剧本模组: { modId: 'lcq.stage_02' } } } };
+  store.set(m.MODULE_TURN_SWITCH, 'false');
+  assert.equal(m.isDemoModuleOnly(save), true);
+  assert.equal(m.isModularTurnEnabled(save), true);
+  for (const path of ['legacy', 'fast', 'card']) {
+    assert.throws(() => m.assertDemoModulePath(save, path), /DEMO_LEGACY_BLOCKED/);
+    assert.throws(() => m.appendModuleReceipt(save, { id: path, path, text: '' }), /DEMO_LEGACY_BLOCKED/);
+  }
+  assert.deepEqual(m.getModuleReceipts(save), []);
+  m.appendModuleReceipt(save, { id: 'ok', path: 'modular', text: '正文' });
+  assert.equal(m.getModuleReceipts(save).length, 1);
+  store.delete(m.MODULE_TURN_SWITCH);
+});
+
+
+test('remaining on Wang Zhe battlefield is fatal only after nine suns and never confirms aftermath', async () => {
+  const { previewWangZheStayEnding } = await jiti.import('../src/modules/scenarioMods/runtime.ts');
+  const save = { 世界: { 状态: { 剧本模组: { flags: {}, activeEventIds: ['lcq.event.s02_02'],
+    eventActionStates: { 'lcq.event.s02_02': { attempts: [{ actionId: 'witness_wang_zhe_nine_suns', outcome: 'success' }] } },
+    events: [{ id: 'lcq.event.s02_02', fatalOutcomes: { deadline: { ending: { id: 'lcq.ending.death.wangzhe_blast' } } } }],
+  } } } };
+  assert.equal(previewWangZheStayEnding(save, '我不走，留在战场上看着王哲').id, 'lcq.ending.death.wangzhe_blast');
+  for (const text of ['我不留下，带月霜离开', '如果我留下会怎样？', '他说“我不走”', '我离开战场后确认焦土余波']) assert.equal(previewWangZheStayEnding(save, text), undefined);
+  save.世界.状态.剧本模组.eventActionStates['lcq.event.s02_02'].attempts = [];
+  assert.equal(previewWangZheStayEnding(save, '我不走'), undefined);
+});
+
+test('unpunctuated 125 and 153 character drafts remain rejected', () => {
+  for (const length of [125, 153]) assert.throws(() => m.readModuleNarrative('你' + '看'.repeat(length - 1) + '。'), /无标点长句/);
 });

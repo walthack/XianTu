@@ -284,7 +284,7 @@ class CharacterRagService {
     }
   }
 
-  async buildSectionForPrompt(query: string, opts?: { topK?: number; minScore?: number; excludeIds?: string[] }): Promise<string> {
+  async buildSectionForPrompt(query: string, opts?: { topK?: number; minScore?: number; excludeIds?: string[]; stageId?: string }): Promise<string> {
     if (!this.isEnabled() || !this.db) return '';
 
     try {
@@ -312,13 +312,17 @@ class CharacterRagService {
 
         const { canonicalName, gender, tier, staticProfile } = regEntry;
         const meta = [gender, tier].filter(Boolean).join('；');
-        const identity = staticProfile?.identitySummary || '';
-        const personality = Array.isArray(staticProfile?.personality)
-          ? staticProfile.personality.join('、')
-          : (staticProfile?.personality || '');
-        const relation = Array.isArray(staticProfile?.relationToProtagonist)
-          ? staticProfile.relationToProtagonist.join('；')
-          : (staticProfile?.relationToProtagonist || '');
+        // 静态卡的身份摘要与主角关系是全书终点快照（含后宫/身世/结局）：只注入当前关卡
+        // stage-projection 覆盖的身份与关系，未覆盖则不注入（与 characterResolver 同一规则）。
+        const phase = opts?.stageId
+          ? (regEntry.phaseIdentities || []).find(item => item?.scope === 'stage-projection' && item?.stageId === opts.stageId)
+          : undefined;
+        const identity = phase?.identity || '';
+        const personalitySource = phase && Object.prototype.hasOwnProperty.call(phase, 'personality') ? phase.personality : staticProfile?.personality;
+        const personality = Array.isArray(personalitySource) ? personalitySource.join('、') : (personalitySource || '');
+        const relation = Array.isArray(phase?.relationToProtagonist)
+          ? phase.relationToProtagonist.join('；')
+          : (phase?.relationToProtagonist || '');
         const notes = Array.isArray(staticProfile?.notes)
           ? staticProfile.notes.slice(0, 4).join('；')
           : '';

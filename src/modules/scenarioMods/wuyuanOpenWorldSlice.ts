@@ -18,10 +18,12 @@ import {
 } from './openWorldSlice';
 import {
   advanceScenarioRuntime,
+  getScenarioFocusEvent,
   getCurrentStoryEventActions,
   recordStoryEventStructuredAction,
   type ScenarioEventActionSelection,
 } from './runtime';
+import { storyRouteLocation } from './eventNarrativeView';
 import { resolveLocationIdFromPosition } from './secondaryLines';
 
 export const WUYUAN_OPEN_WORLD_SLICE_ID = 'lcq.open_world.wuyuan_v1';
@@ -210,6 +212,7 @@ export type WuyuanOpenWorldSelection = {
   label: string;
   actionText: string;
   settledFacts: string[];
+  timeCost?: number;
 };
 
 type RuntimeWithSlice = {
@@ -245,8 +248,14 @@ function playerInWuyuan(saveData: SaveData, runtime: RuntimeWithSlice): boolean 
   return locId === 'liuchao.location.wuyuan';
 }
 
+function hasDepartedWuyuan(runtime: RuntimeWithSlice): boolean {
+  const routeEvents = ['lcq.event.iron_bridge_ambush', 'lcq.event.ningyu_regicide_offer', 'lcq.event.zixi_taiyi_intercept', 'lcq.event.rainforest_black_shoal', 'lcq.event.silent_sheyi_village'];
+  return completedIds(runtime).includes('lcq.event.wuerlang_joins')
+    || [...(runtime.activeEventIds || []), ...completedIds(runtime)].some(id => routeEvents.includes(id));
+}
+
 function inWuyuanSlice(runtime: RuntimeWithSlice, saveData: SaveData): boolean {
-  if (runtime.modId !== 'lcq.stage_02' || !wangZheFallen(runtime)) return false;
+  if (runtime.modId !== 'lcq.stage_02' || !wangZheFallen(runtime) || hasDepartedWuyuan(runtime)) return false;
   if (playerInWuyuan(saveData, runtime)) return true;
   return completedIds(runtime).some(id => (
     id === 'lcq.event.s02_04' || id === 'lcq.event.s02_05' || id === 'lcq.event.s02_06'
@@ -336,7 +345,14 @@ function hydrateWuyuanSlice(runtime: RuntimeWithSlice): OpenWorldSliceRuntime {
 
 export function ensureWuyuanOpenWorldSlice(saveData: SaveData): OpenWorldSliceRuntime | undefined {
   const runtime = runtimeOf(saveData);
-  if (!runtime || !inWuyuanSlice(runtime, saveData)) return undefined;
+  if (!runtime) return undefined;
+  if (hasDepartedWuyuan(runtime)) {
+    const focus = getScenarioFocusEvent(runtime as any);
+    const location = focus ? storyRouteLocation(focus.id) : undefined;
+    if (location && (saveData as any)?.角色?.位置) (saveData as any).角色.位置.描述 = `中州·${location}`;
+    return undefined;
+  }
+  if (!inWuyuanSlice(runtime, saveData)) return undefined;
   const state = hydrateWuyuanSlice(runtime);
   applyCanonForcedRoutes(runtime);
   projectPlayerPosition(saveData, state);
@@ -355,7 +371,7 @@ function marketArrivalSelection(saveData: SaveData): WuyuanOpenWorldSelection {
     kind: 'travel',
     identityId: WUYUAN_MARKET_ARRIVAL_ID,
     receiptId: `${WUYUAN_OPEN_WORLD_SLICE_ID}:travel:${WUYUAN_MARKET_ARRIVAL_ID}:arrive`,
-    label: '前往 · 五原露天市集',
+    label: '前往 · 五原露天市集', timeCost: 1,
     actionText: '我去五原城。',
     settledFacts: [`你从${from}出发`, `你抵达${to}`, '路程消耗1轮'],
   };
@@ -363,7 +379,7 @@ function marketArrivalSelection(saveData: SaveData): WuyuanOpenWorldSelection {
 
 export function getWuyuanOpenWorldSelections(saveData: SaveData): WuyuanOpenWorldSelection[] {
   const runtime = runtimeOf(saveData);
-  if (!runtime || runtime.modId !== 'lcq.stage_02' || !wangZheFallen(runtime)) return [];
+  if (!runtime || runtime.modId !== 'lcq.stage_02' || !wangZheFallen(runtime) || hasDepartedWuyuan(runtime)) return [];
   if (!inWuyuanSlice(runtime, saveData)) return [marketArrivalSelection(saveData)];
   const state = ensureWuyuanOpenWorldSlice(saveData);
   if (!state) return [];
@@ -371,13 +387,13 @@ export function getWuyuanOpenWorldSelections(saveData: SaveData): WuyuanOpenWorl
   return [
     ...view.destinations.map(item => ({
       source: 'open_world_engine' as const, kind: 'travel' as const, identityId: item.routeId,
-      receiptId: receiptId(state, 'travel', item.routeId), label: `前往 · ${item.destination}`,
+      receiptId: receiptId(state, 'travel', item.routeId), label: `前往 · ${item.destination}`, timeCost: item.turnCost,
       actionText: `我选择${item.label}，前往${item.destination}。`,
       settledFacts: [`你从${view.currentLocation}出发`, `你沿“${item.label}”前往${item.destination}`, `路程消耗${item.turnCost}轮`],
     })),
-    ...view.notices.map(item => ({
+    ...view.notices.filter((item, index, items) => items.findIndex(other => other.presentation === item.presentation) === index).map(item => ({
       source: 'open_world_engine' as const, kind: 'notice' as const, identityId: item.id,
-      receiptId: receiptId(state, 'notice', item.id), label: '查看 · 现场消息',
+      receiptId: receiptId(state, 'notice', item.id), label: `查看 · ${item.id === 'lcq.notice.wuyuan.market_layout' ? '市集木牌' : item.id === 'lcq.notice.wuyuan.pastry_back_alley' ? '摊主提醒' : '地方消息'}`, timeCost: 1,
       actionText: `我停下来查看这条现场消息：${item.presentation}`,
       settledFacts: [item.presentation],
     })),
@@ -385,7 +401,7 @@ export function getWuyuanOpenWorldSelections(saveData: SaveData): WuyuanOpenWorl
       const definition = WUYUAN_OPEN_WORLD_DEFINITION.actions.find(item => item.id === action.id)!;
       return {
         source: 'open_world_engine' as const, kind: 'problem_action' as const, identityId: action.id,
-        receiptId: receiptId(state, 'problem_action', action.id), label: action.label, actionText: action.actionText,
+        receiptId: receiptId(state, 'problem_action', action.id), label: action.label, timeCost: 1, actionText: action.actionText,
         settledFacts: [...definition.settledFacts, ...(definition.costs || []).map(cost => `代价：${cost}`)],
       };
     })),
@@ -534,17 +550,15 @@ export function composeWuyuanOpenWorldNarrative(
     .filter(playerFacingFact)
     .map(fact => /[。！？]$/.test(fact) ? fact : `${fact}。`);
   if (zoneId === MARKET_ZONE_ID) {
-    lines.push('你从帅帐抵达五原露天市集。');
     lines.push('露天货棚和摊位挤在这一片，摊位直接铺到街面上。');
   } else if (zoneId === PASTRY_ZONE_ID) {
-    lines.push('你沿街面进入点心铺。');
     lines.push('点心铺这一侧，甜香和麦粉味压过街面的尘。');
   } else if (zoneId === PRISON_ZONE_ID) {
-    lines.push('应对失败或部分成功后你仍被制住，被押入白湖商馆水牢。');
+    if (!lines.some(line => /押入|水牢/.test(line))) lines.push('你被押入白湖商馆水牢。');
     lines.push('水汽和石壁压得很近。你还在商馆这一截里。');
   } else {
     const place = WUYUAN_OPEN_WORLD_DEFINITION.zones.find(zone => zone.id === zoneId)?.name;
-    if (place) lines.push(`你来到${place}。`);
+    if (place && !lines.some(line => line.includes(place))) lines.push(`你来到${place}。`);
   }
   return lines.filter(line => playerFacingFact(line)).join('');
 }

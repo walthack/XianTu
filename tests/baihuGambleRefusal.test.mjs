@@ -47,6 +47,7 @@ const STAGE02_BEATS = [
   'lcq.event.sudaji_south_pact',
   'lcq.event.gamble_bond_signed',
   'lcq.event.charge_sudaji_fee',
+  'lcq.event.free_ajiman',
 ];
 
 function cloneJson(value) {
@@ -452,7 +453,8 @@ test('flee and yield keep distinct process receipts but the same detention outco
   const { refusal, rtm } = fixtures.tools;
 
   for (const [line, response] of [['尝试逃跑', 'flee'], ['我服软', 'yield'], ['我举起双手，任凭处置', 'yield']]) {
-    let save = at('atBond');
+    // 用户裁定 2026-10-02：拒赌窗口只在凝羽入局这一拍新开，故从 atProposed 拒赌。
+    let save = at('atProposed');
     save = settleRefusal(fixtures.tools, save, '不赌了').save;
     const result = settleRefusal(fixtures.tools, save, line);
     save = result.save;
@@ -461,17 +463,18 @@ test('flee and yield keep distinct process receipts but the same detention outco
     assert.ok(ledger.receipts.some(item => item.kind === response));
     assert.equal(ledger.gambled, false);
     assert.equal(ledger.signedBond, false);
-    assert.ok(runtimeOf(save).completedEventIds.includes('lcq.event.gamble_bond_signed'));
-    assert.ok(runtimeOf(save).activeEventIds.includes('lcq.event.charge_sudaji_fee'));
-    const fee = contractSelection(rtm, save);
-    assert.equal(fee?.eventId, 'lcq.event.charge_sudaji_fee');
+    assert.equal(runtimeOf(save).flags['event.gamble_bond_signed.refused_capture'], true);
+    assert.ok(runtimeOf(save).activeEventIds.includes('lcq.event.sudaji_south_pact'));
+    const pact = contractSelection(rtm, save);
+    assert.equal(pact?.eventId, 'lcq.event.sudaji_south_pact');
   }
 });
 
 test('accept-gamble default path is unchanged and later refuse text cannot rewind a finished loss', async () => {
   const { rtm, refusal } = fixtures.tools;
   let save = at('atBond');
-  assert.equal(refusal.getBaihuGambleRefusalSelections(save).some(item => item.actionId === 'refuse_gamble'), true);
+  // 用户裁定 2026-10-02：契书拍不再新开拒赌窗口。
+  assert.equal(refusal.getBaihuGambleRefusalSelections(save).some(item => item.actionId === 'refuse_gamble'), false);
 
   for (const actionId of ['confirm_rigged_wager_loss', 'sign_the_bond']) {
     const selection = rtm.getCurrentStoryEventActions(save).find(item => item.actionId === actionId);
@@ -749,6 +752,11 @@ test('processPlayerAction forwards gambleRefusalAction through the live chain an
     assert.ok(selection);
     const store = useGameStateStore();
     store.loadFromSaveData(save);
+    // 回执标记（2026-10-02）：本地合同正文不请求模型，回执应标 local 而不是 legacy。
+    // 回执只在隔离试玩＋模块开关下写入，这里临时打开，finally 里还原。
+    const { useCharacterStore } = await loadPipelineTs('./stubs/characterStoreForAbortTest.ts');
+    useCharacterStore().activeCharacterProfile = { 隔离试玩信息: { localOnly: true } };
+    globalThis.localStorage.setItem('xiantu.modularTurnPlaytest.v1', 'true');
     const profile = {
       模式: '单机',
       角色: { 名字: '程宗扬', 性别: '男' },
@@ -764,6 +772,7 @@ test('processPlayerAction forwards gambleRefusalAction through the live chain an
     );
     assert.equal(generateCalls, 0);
     assert.ok(response);
+    assert.equal(store.toSaveData().系统.扩展.回合模块试玩?.receipts?.at(-1)?.path, 'local', '本地合同回合的回执不得标成 legacy');
     assert.equal(response.transactionCommitted, true);
     assert.match(response.text, /苏妲己脸色一沉/);
     assert.match(response.text, /并未入局/);
@@ -792,6 +801,9 @@ test('processPlayerAction forwards gambleRefusalAction through the live chain an
     assert.equal(staleResponse.text, refusal.BAIHU_GAMBLE_REFUSAL_UNAVAILABLE_TEXT);
     assert.equal(refusal.readBaihuGambleRefusal(store.toSaveData()).phase, 'capture_ordered');
   } finally {
+    const { useCharacterStore } = await loadPipelineTs('./stubs/characterStoreForAbortTest.ts');
+    delete useCharacterStore().activeCharacterProfile;
+    globalThis.localStorage.removeItem('xiantu.modularTurnPlaytest.v1');
     aiService.checkAvailability = originalCheck;
     aiService.generate = originalGenerate;
     aiService.generateRaw = originalGenerateRaw;
@@ -897,7 +909,10 @@ test('processPlayerAction truncated south-pact generate settles the term-open co
   };
   try {
     const store = useGameStateStore();
-    store.loadFromSaveData(cloneJson(save));
+    const legacySave = cloneJson(save);
+    delete legacySave.系统.扩展.清羽记开局;
+    delete legacySave.系统.扩展.星月湖落地连续试玩;
+    store.loadFromSaveData(legacySave);
     const beforePrep = runtimeOf(store.toSaveData()).eventActionStates?.['lcq.event.sudaji_south_pact']?.preparations || [];
     const response = await AIBidirectionalSystem.processPlayerAction(action.playerLine, {
       模式: '单机',
@@ -957,7 +972,10 @@ test('processPlayerAction generate-publish accepts south-pact nylon term with co
   };
   try {
     const store = useGameStateStore();
-    store.loadFromSaveData(cloneJson(save));
+    const legacySave = cloneJson(save);
+    delete legacySave.系统.扩展.清羽记开局;
+    delete legacySave.系统.扩展.星月湖落地连续试玩;
+    store.loadFromSaveData(legacySave);
     const response = await AIBidirectionalSystem.processPlayerAction(action.playerLine, {
       模式: '单机',
       角色: { 名字: '程宗扬', 性别: '男' },
@@ -1010,7 +1028,10 @@ test('processPlayerAction generate-publish does not fake-consent south-pact from
   };
   try {
     const store = useGameStateStore();
-    store.loadFromSaveData(cloneJson(save));
+    const legacySave = cloneJson(save);
+    delete legacySave.系统.扩展.清羽记开局;
+    delete legacySave.系统.扩展.星月湖落地连续试玩;
+    store.loadFromSaveData(legacySave);
     const beforePrep = runtimeOf(store.toSaveData()).eventActionStates?.['lcq.event.sudaji_south_pact']?.preparations || [];
     const response = await AIBidirectionalSystem.processPlayerAction('提出三个月期限？', {
       模式: '单机',
@@ -1084,7 +1105,10 @@ test('processPlayerAction generate-publish leave-hall releases current detention
   };
   try {
     const store = useGameStateStore();
-    store.loadFromSaveData(cloneJson(save));
+    const legacySave = cloneJson(save);
+    delete legacySave.系统.扩展.清羽记开局;
+    delete legacySave.系统.扩展.星月湖落地连续试玩;
+    store.loadFromSaveData(legacySave);
     const response = await AIBidirectionalSystem.processPlayerAction(action.playerLine, {
       模式: '单机',
       角色: { 名字: '程宗扬', 性别: '男' },
@@ -1110,4 +1134,348 @@ test('processPlayerAction generate-publish leave-hall releases current detention
     aiService.generateRaw = originalGenerateRaw;
     if (originalConfig && typeof aiService.saveConfig === 'function') aiService.saveConfig(originalConfig);
   }
+});
+
+test('hard-coded option locks (user ruling 2026-10-02): only the deciding step locks, fixed labels, no free text; capture responses stay free', async () => {
+  const { rtm, refusal } = fixtures.tools;
+  const branch = await loadTs('../src/modules/scenarioMods/branchDecision.ts');
+  const optionsOf = save => [...rtm.getCurrentStoryEventActions(save), ...refusal.getBaihuGambleRefusalSelections(save)];
+  const lineOf = option => option.source === 'baihu_gamble_refusal_engine' ? option.actionText : option.playerLine;
+
+  // ① 白湖赌局：答复凝羽那一步锁，二选一「接赌 / 不赌」；扣押分支的拒赌不在锁内提供。
+  const proposed = at('atProposed');
+  const decision = branch.detectBranchDecision(optionsOf(proposed));
+  assert.ok(decision, 'gamble proposed → branch decision');
+  assert.deepEqual(decision.options.map(option => option.actionId), ['answer_ningyu_on_debut', 'refuse_gamble_take_paolao']);
+  assert.deepEqual(decision.labels, ['接赌', '不赌']);
+  assert.equal(decision.labels.some(label => /第\s*\d+\s*\/\s*\d+\s*步/.test(label)), false, 'no step progress in lock labels');
+  const [accept, decline] = decision.options;
+  assert.equal(branch.branchDecisionAllowsSend(decision, null, '我不赌', lineOf), false, 'free text refused');
+  assert.equal(branch.branchDecisionAllowsSend(decision, decline, '我改主意了随便聊聊', lineOf), false, 'edited text refused');
+  assert.equal(branch.branchDecisionAllowsSend(decision, decline, lineOf(decline), lineOf), true);
+  assert.equal(branch.branchDecisionAllowsSend(decision, accept, lineOf(accept), lineOf), true);
+  assert.equal(refusal.isExplicitRefuseGambleText(lineOf(decline)), false, '不赌原句不会被识别成扣押分支的拒赌');
+
+  // 选「不赌」：复用致命选项机制，本局以炮烙结束（拒赌版事实）。
+  const declined = recordAndReload(rtm, cloneJson(proposed), decline).save;
+  assert.equal(runtimeOf(declined).gameOver?.endingId, 'lcq.ending.death.paolao');
+  assert.match(runtimeOf(declined).gameOver.facts.join('；'), /回绝白湖商馆的赌局/);
+  assert.equal(runtimeOf(declined).gameOver.sourceEventId, 'lcq.event.ningyu_enters_gamble');
+
+  // 决定步之前（看清凝羽入局）不锁，致命选项不提前显示。
+  const early = optionsOf(at('atNingyu'));
+  assert.equal(branch.detectBranchDecision(early), null);
+  assert.equal(branch.isDormantLockedOption(early.find(option => option.actionId === 'refuse_gamble_take_paolao')), true);
+  assert.equal(branch.isDormantLockedOption(early.find(option => option.actionId === 'see_ningyu_sent_into_gamble')), false);
+
+  // 拒赌后被拿下（旧扣押分支，代码保留）：反抗/逃跑/服软不锁。
+  const captured = settleRefusal(fixtures.tools, at('atProposed'), '夫人，这场赌就不必了，我不赌').save;
+  assert.equal(refusal.getBaihuGambleRefusalSelections(captured).length, 3);
+  assert.equal(branch.detectBranchDecision(optionsOf(captured)), null);
+
+  // 表外不锁：签契那一拍、谈期限都是普通交谈。
+  for (const key of ['atS0206', 'atPact', 'atBond']) {
+    assert.equal(branch.detectBranchDecision(optionsOf(at(key))), null, key);
+  }
+
+  // ② 撕毁阿姬曼身契：取契那一步不锁，撕契那一步锁。
+  let ajiman = await walkFrom(fixtures.tools, at('atBond'), 'lcq.event.free_ajiman');
+  assert.equal(branch.detectBranchDecision(optionsOf(ajiman)), null, 'take-bond step is not the decision');
+  assert.equal(optionsOf(ajiman).some(option => option.actionId === 'pocket_ajiman_bond'), false, '不撕选项不提前出现');
+  ajiman = recordAndReload(rtm, ajiman, contractSelection(rtm, ajiman)).save;
+  const tear = branch.detectBranchDecision(optionsOf(ajiman));
+  assert.deepEqual(tear?.options.map(option => option.actionId), ['tear_bond_and_face_blockade', 'pocket_ajiman_bond']);
+  assert.deepEqual(tear.labels, ['当面撕契并改道出城', '先收起身契，出城再说']);
+
+  // 裁定 #169：冰蛊第24章才种下，第23章选不撕不能当场死——本拍照常完成，只记路线回执；
+  // 死亡延后到冰蛊种下之后最早的可达拍（武二郎入队），激活后 1 回合触发。
+  const RECEIPT = 'lcq.event.free_ajiman.path.bond_pocketed';
+  const passTurn = save => {
+    runtimeOf(save).worldTurn = (Number(runtimeOf(save).worldTurn) || 0) + 1;
+    return rtm.advanceScenarioRuntime(save).saveData;
+  };
+  const walkToWuerlang = save => {
+    for (let step = 0; step < 6 && !runtimeOf(save).activeEventIds.includes('lcq.event.wuerlang_joins'); step += 1) {
+      assert.equal(runtimeOf(save).gameOver, undefined, '到武二郎入队之前不得结束');
+      save = recordAndReload(rtm, save, contractSelection(rtm, save)).save;
+    }
+    assert.ok(runtimeOf(save).activeEventIds.includes('lcq.event.wuerlang_joins'), JSON.stringify(runtimeOf(save).activeEventIds));
+    return save;
+  };
+  let pocketed = recordAndReload(rtm, cloneJson(ajiman), tear.options[1]).save;
+  assert.equal(runtimeOf(pocketed).gameOver, undefined, '第23章选不撕不当场死亡');
+  assert.ok(runtimeOf(pocketed).completedEventIds.includes('lcq.event.free_ajiman'), '本拍照常完成');
+  assert.equal(runtimeOf(pocketed).pathReceipts?.[RECEIPT]?.choiceId, 'pocket_ajiman_bond');
+  assert.ok(runtimeOf(pocketed).activeEventIds.includes('lcq.event.baihu_shangguan_escape'), '剧情照常继续');
+  pocketed = passTurn(pocketed);
+  assert.equal(runtimeOf(pocketed).gameOver, undefined, '白湖脱身这一拍不触发');
+  pocketed = walkToWuerlang(pocketed);
+  assert.equal(runtimeOf(pocketed).gameOver, undefined, '刚到触发拍还未结算');
+  pocketed = passTurn(pocketed);
+  assert.equal(runtimeOf(pocketed).gameOver, undefined, '触发拍第 1 步未发生前不结算');
+  const { buildScenarioStoryPrompt } = await loadTs('../src/modules/scenarioMods/storyContext.ts');
+  assert.match(buildScenarioStoryPrompt(pocketed), /没有撕掉阿姬曼的身契（苏妲己已下令追查买走舞姬的人）/, '触发拍提示带出追查');
+  // 武二郎入队第 1 步落账的同一回合结算：不能靠下一回合直接完成本拍躲过。
+  pocketed = recordAndReload(rtm, pocketed, contractSelection(rtm, pocketed)).save;
+  const over = runtimeOf(pocketed).gameOver;
+  assert.equal(over?.endingId, 'lcq.ending.death.ajiman_bond');
+  assert.equal(over.title, '冰蛊');
+  assert.equal(over.sourceEventId, 'lcq.event.wuerlang_joins');
+  assert.match(over.facts.join('；'), /冰蛊是之后苏妲己/);
+  assert.equal(over.facts.some(fact => /早在/.test(fact)), false, '不得暗示第23章已种下冰蛊');
+  assert.match(over.facts.join('；'), /没有撕掉的身契让她查到了程宗扬/);
+  assert.match(over.facts.join('；'), /哥哥将永远等不到她回来/);
+  assert.match(over.facts.join('；'), /黑魔海/);
+  const endingPrompt = buildScenarioStoryPrompt(pocketed);
+  assert.match(endingPrompt, /【本局结束·结局正文】[^\n]*标题是“冰蛊”/);
+  assert.match(endingPrompt, /不得留生机[^\n]*不得有任何性内容或露骨描写/);
+
+  // 撕契路径：不写回执，走到武二郎入队并多过几回合也永不触发。
+  let torn = recordAndReload(rtm, cloneJson(ajiman), tear.options[0]).save;
+  assert.ok(runtimeOf(torn).completedEventIds.includes('lcq.event.free_ajiman'));
+  assert.equal(runtimeOf(torn).pathReceipts?.[RECEIPT], undefined);
+  torn = walkToWuerlang(torn);
+  for (let step = 0; step < 4 && !runtimeOf(torn).completedEventIds.includes('lcq.event.wuerlang_joins'); step += 1) {
+    torn = passTurn(recordAndReload(rtm, torn, contractSelection(rtm, torn)).save);
+    assert.equal(runtimeOf(torn).gameOver, undefined, '撕契路径永不触发冰蛊结局');
+  }
+  assert.ok(runtimeOf(torn).completedEventIds.includes('lcq.event.wuerlang_joins'), '撕契路径照常走完武二郎入队');
+  for (let turn = 0; turn < 3; turn += 1) torn = passTurn(torn);
+  assert.equal(runtimeOf(torn).gameOver, undefined);
+
+  // ③ 第62章白夷生变（用户裁定 2026-10-02 取消锁）：恢复原著单动作，不锁，直接推进到地宫陷阱。
+  const stage04b = JSON.parse(await readFile(new URL('../src/modules/scenarioMods/builtins/data/lcq.stage_04b_lingfei_baiyi_crisis.json', import.meta.url), 'utf8'));
+  const shift = stage04b.scenario.events.find(event => event.id === 'lcq.event.s04b_lingfei_baiyi_crisis_09');
+  assert.deepEqual(shift.playerCompletionContract.actions.map(action => action.id), ['advance_declared_objective']);
+  const shiftOptions = shift.playerCompletionContract.actions.map(action => ({ source: 'event_engine', eventId: shift.id, actionId: action.id, label: action.label }));
+  assert.equal(branch.detectBranchDecision(shiftOptions), null);
+});
+
+
+test('bond beat outcome is explicit: done means closed, outcome says signed or refused; models cannot write it', async () => {
+  const { refusal } = fixtures.tools;
+  assert.equal(refusal.gambleBondOutcome(at('atBond')), 'open');
+  for (const response of ['我反抗', '尝试逃跑', '服软']) {
+    const captured = settleRefusal(fixtures.tools, at('atProposed'), '赌就不必了').save;
+    const responded = settleRefusal(fixtures.tools, captured, response).save;
+    const rt = responded.世界.状态.剧本模组;
+    assert.equal(rt.flags['event.gamble_bond_signed.done'], true, 'beat closed by refusal');
+    assert.equal(rt.flags[refusal.GAMBLE_BOND_OUTCOME_FLAG], 'refused');
+    assert.equal(refusal.gambleBondOutcome(responded), 'refused');
+    assert.equal(refusal.gambleAlreadyLostOrSigned(responded), false);
+  }
+  const signed = await walkFrom(fixtures.tools, at('atBond'), 'lcq.event.charge_sudaji_fee');
+  assert.equal(refusal.gambleBondOutcome(signed), 'signed');
+  const { guardScenarioModCommands } = await loadTs('../src/modules/scenarioMods/canonGuard.ts');
+  const guarded = guardScenarioModCommands(at('atBond'), [{ action: 'set', key: '世界.状态.剧本模组.flags.event.gamble_bond_signed.outcome', value: 'refused' }]);
+  assert.equal(guarded.accepted.length, 0);
+});
+
+test('south pact is ordinary conversation again (user ruling 2026-10-02): no key beat card, no lock, AI options kept', async () => {
+  setActivePinia(createPinia());
+  const { AIBidirectionalSystem } = await loadPipelineTs('../src/utils/AIBidirectionalSystem.ts');
+  const cards = await loadTs('../src/modules/scenarioMods/keyBeatCards.ts');
+  const branch = await loadTs('../src/modules/scenarioMods/branchDecision.ts');
+  const { rtm } = fixtures.tools;
+  for (const key of ['atS0206', 'atNingyu', 'atProposed', 'atPact', 'atBond']) assert.equal(cards.getActiveKeyBeatCard(at(key)), null, key);
+  const save = at('atPact');
+  const offer = rtm.getCurrentStoryEventActions(save).find(item => item.actionId === 'offer_nylon_clue_for_term');
+  assert.equal(cards.isKeyBeatCardAction(offer), false);
+  assert.equal(branch.detectBranchDecision(rtm.getCurrentStoryEventActions(save)), null);
+  // 普通交谈回合：AI 选项照常写入历史。
+  const free = await AIBidirectionalSystem.processGmResponse(
+    { text: '苏妲己倚在榻上，指尖敲着扶手，半晌没有出声。灯影在她脸上晃了一下。', mid_term_memory: '谈期限。', tavern_commands: [], action_options: ['问她霓龙丝的事'] },
+    cloneJson(save), false, () => false,
+    { userAction: '霓龙丝在南荒哪一带？', playerIntentText: '霓龙丝在南荒哪一带？' },
+  );
+  assert.deepEqual(free.saveData.系统.历史.叙事.at(-1).actionOptions, ['问她霓龙丝的事']);
+  assert.equal(runtimeOf(free.saveData).completedEventIds.includes('lcq.event.sudaji_south_pact'), false);
+});
+
+
+test('bugfix5: actual s02_04 open-world options without actionId never activate a branch lock', async () => {
+  const { tools, mods } = fixtures;
+  const save = await walkFrom(tools, await earnStage02(tools, mods), 'lcq.event.s02_04');
+  const options = tools.wuyuan.getWuyuanOpenWorldSelections(save);
+  assert.ok(options.length);
+  assert.ok(options.some(option => option.actionId === undefined));
+  const { detectBranchDecision } = await loadTs('../src/modules/scenarioMods/branchDecision.ts');
+  assert.equal(detectBranchDecision(options), null);
+});
+
+test('bugfix5: fatal pact action has distinct label and successful sealing publishes only fixed terms to prose and memory', async () => {
+  setActivePinia(createPinia());
+  const { AIBidirectionalSystem } = await loadPipelineTs('../src/utils/AIBidirectionalSystem.ts');
+  const { rtm } = fixtures.tools;
+  let save = at('atPact');
+  const first = rtm.getCurrentStoryEventActions(save).find(item => item.actionId === 'offer_nylon_clue_for_term');
+  const initialFatal = rtm.getCurrentStoryEventActions(save).find(item => item.actionId === PAOLAO);
+  assert.notEqual(first.label, initialFatal.label);
+  assert.match(initialFatal.label, /拒绝期限/);
+  save = recordAndReload(rtm, save, first).save;
+  const actions = rtm.getCurrentStoryEventActions(save);
+  const seal = actions.find(item => item.actionId === 'seal_three_month_south_pact');
+  const fatal = actions.find(item => item.actionId === PAOLAO);
+  assert.notEqual(seal.label, fatal.label);
+
+  const response = { text: '你答应了，苏妲己承诺三个月没人找你麻烦。', mid_term_memory: '三个月没人找你麻烦。', tavern_commands: [], action_options: ['安心休息'] };
+  const published = await AIBidirectionalSystem.processGmResponse(response, save, false, () => false,
+    { eventAction: seal, userAction: seal.playerLine, playerIntentText: seal.playerLine, narrativeAuthority: 'local_contract' });
+  assert.ok(runtimeOf(published.saveData).completedEventIds.includes('lcq.event.sudaji_south_pact'));
+  for (const value of [response.text, response.mid_term_memory,
+    published.saveData.系统.历史.叙事.at(-1).content,
+    published.saveData.社交.记忆.短期记忆.at(-1),
+    published.saveData.社交.记忆.隐式中期记忆.at(-1)]) {
+    assert.match(String(value), /逾期受炮烙/);
+    assert.doesNotMatch(String(value), /没人找你麻烦/);
+  }
+});
+
+
+// Mandatory demo route: actual module transport is fixture-controlled, never a live-LLM acceptance claim.
+test('verified bond actions retain complete fixed prose and append history even without stage NPC canon entries', async () => {
+  setActivePinia(createPinia());
+  const { AIBidirectionalSystem } = await loadPipelineTs('../src/utils/AIBidirectionalSystem.ts');
+  const { fixedBeatNarrative } = await loadPipelineTs('../src/modules/scenarioMods/fixedEndingNarratives.ts');
+  const { rtm } = fixtures.tools;
+  const save = await walkFrom(fixtures.tools, at('atBond'), 'lcq.event.free_ajiman');
+  save.角色.背包.货币 ||= {};
+  save.角色.背包.货币.金铢 = { 币种: '金铢', 名称: '金铢', 数量: 60, 价值度: 1 };
+  const take = rtm.getCurrentStoryEventActions(save).find(item => item.actionId === 'take_ajiman_bond_in_hand');
+  const publish = async (current, action) => {
+    const text = fixedBeatNarrative(action.eventId, action.actionId);
+    const count = current.系统.历史.叙事.length;
+    const response = { text, mid_term_memory: '', tavern_commands: [], action_options: [], moduleReceipt: { id: action.actionId, path: 'local', text } };
+    const result = await AIBidirectionalSystem.processGmResponse(response, current, false, () => false,
+      { eventAction: action, userAction: action.playerLine, playerIntentText: action.playerLine, narrativeAuthority: 'local_contract' });
+    assert.equal(response.text, text);
+    assert.equal(result.saveData.系统.历史.叙事.length, count + 1);
+    assert.equal(result.saveData.系统.历史.叙事.at(-1).content.replace(/^【[^】]+】/, ''), text);
+    assert.ok(result.saveData.社交.关系['阿姬曼·芭娜']);
+    return result.saveData;
+  };
+  const holding = await publish(save, take);
+  assert.equal(holding.角色.背包.货币.金铢.数量, 10);
+  assert.equal(holding.角色.背包.物品['lcq.item.ajiman_bond'].数量, 1);
+  for (const actionId of ['tear_bond_and_face_blockade', 'pocket_ajiman_bond']) {
+    const branch = cloneJson(holding);
+    const action = rtm.getCurrentStoryEventActions(branch).find(item => item.actionId === actionId);
+    const settled = await publish(branch, action);
+    assert.equal(settled.角色.背包.货币.金铢.数量, 10);
+    assert.equal(Boolean(settled.角色.背包.物品['lcq.item.ajiman_bond']), actionId === 'pocket_ajiman_bond');
+  }
+});
+
+test('no-legacy demo: every declared stage01/02 event with a legal action reaches the module, including s02_02 and post-escape events', async () => {
+  setActivePinia(createPinia());
+  const { AIBidirectionalSystem } = await loadPipelineTs('../src/utils/AIBidirectionalSystem.ts');
+  const { aiService } = await loadPipelineTs('../src/services/aiService.ts');
+  const { useAPIManagementStore } = await loadPipelineTs('../src/stores/apiManagementStore.ts');
+  useAPIManagementStore().apiConfigs = [{ id: 'default', name: 'fixture', provider: 'custom', url: 'https://api.minimaxi.com/v1', apiKey: 'fixture-not-a-real-key', model: 'MiniMax-M3', enabled: true }];
+  const original = aiService.generate;
+  const calls = [];
+  aiService.generate = async options => {
+    calls.push(options);
+    const prompt = (options.injects || []).map(item => item.content).join('\n');
+    assert.ok(prompt.length > 0 && prompt.length < 10000);
+    assert.doesNotMatch(prompt, /完整游戏存档|精简版SaveData结构说明/);
+    return '你观察眼前的动静，依照自己的决定作出回应。周围的风声和脚步声仍然清晰。';
+  };
+  try {
+    const tested = []; const modelEvents = [];
+    for (const mod of [fixtures.mods.stage01, fixtures.mods.stage02]) for (const event of mod.scenario.events) {
+      const save = at('atPact');
+      const rt = runtimeOf(save);
+      rt.modId = mod.manifest.id;
+      rt.events = [cloneJson(event)];
+      rt.canon = cloneJson(mod.canon);
+      rt.activeEventIds = [event.id]; rt.completedEventIds = []; rt.pendingEventIds = [];
+      rt.eventActionStates = {}; delete rt.gameOver;
+      const action = fixtures.tools.rtm.getCurrentStoryEventActions(save).find(item => item.eventId === event.id);
+      assert.ok(action, 'fixture needs a legal action for ' + event.id);
+      const response = await AIBidirectionalSystem.tryModularTurn(save, { eventAction: action, eventActionProvenance: 'selected' }, 'coverage-' + event.id, () => false, action.playerLine);
+      assert.ok(['modular', 'local'].includes(response.moduleReceipt.path), event.id);
+      if (response.moduleReceipt.path === 'modular') modelEvents.push(event.id);
+      assert.equal(response.moduleReceipt.eventId, event.id);
+      tested.push(event.id);
+    }
+    assert.equal(tested.length, 25);
+    assert.ok(tested.includes('lcq.event.s02_02'));
+    assert.ok(tested.includes('lcq.event.wuerlang_joins'));
+    assert.equal(calls.length, modelEvents.length);
+    assert.ok(modelEvents.includes('lcq.event.s02_02'));
+  } finally { aiService.generate = original; }
+});
+
+test('no-legacy demo: s02_02 publishes and progresses; free questions remain uncommitted to event; two module failures never settle or call legacy', async () => {
+  setActivePinia(createPinia());
+  const { AIBidirectionalSystem } = await loadPipelineTs('../src/utils/AIBidirectionalSystem.ts');
+  const { useGameStateStore } = await loadPipelineTs('../src/stores/gameStateStore.ts');
+  const { useAPIManagementStore } = await loadPipelineTs('../src/stores/apiManagementStore.ts');
+  const { aiService } = await loadPipelineTs('../src/services/aiService.ts');
+  useAPIManagementStore().apiConfigs = [{ id: 'default', name: 'fixture', provider: 'custom', url: 'https://api.minimaxi.com/v1', apiKey: 'fixture-not-a-real-key', model: 'MiniMax-M3', enabled: true }];
+  const original = aiService.generate; const check = aiService.checkAvailability;
+  const store = useGameStateStore(); let calls = 0; let fail = false;
+  aiService.checkAvailability = () => ({ available: true });
+  aiService.generate = async options => {
+    calls++;
+    const prompt = (options.injects || []).map(item => item.content).join('\n');
+    assert.ok(prompt.length > 0 && prompt.length < 10000);
+    if (fail) throw new Error('fixture transport failure');
+    return '你望向眼前的人，停下来听清对方的话，没有另添条件。';
+  };
+  const profile = { 模式: '单机', 角色: { 名字: '程宗扬', 性别: '男' }, 存档列表: {} };
+  const submit = (line, action) => AIBidirectionalSystem.processPlayerAction(line, profile, { ...(action ? { eventAction: action, eventActionProvenance: 'selected' } : {}), playerIntentText: line });
+  try {
+    localStorage.setItem('xiantu.modularTurnPlaytest.v1', 'false');
+    localStorage.setItem('xiantu.fastNarrativeDemo.v1', 'true');
+    const battle = await walkFrom(fixtures.tools, await earnStage02(fixtures.tools, fixtures.mods), 'lcq.event.s02_02');
+    store.loadFromSaveData(battle);
+    const action = fixtures.tools.rtm.getCurrentStoryEventActions(battle)[0];
+    const result = await submit(action.playerLine, action);
+    assert.equal(result.moduleReceipt.path, 'modular');
+    assert.equal(result.transactionCommitted, true);
+    assert.notDeepEqual(runtimeOf(store.toSaveData()).eventActionStates, runtimeOf(battle).eventActionStates);
+    store.loadFromSaveData(at('atPact'));
+    const question = await submit('要是三个月回不来怎么办？');
+    assert.equal(question.moduleReceipt.path, 'modular');
+    assert.equal(runtimeOf(store.toSaveData()).completedEventIds.includes('lcq.event.sudaji_south_pact'), false);
+    store.loadFromSaveData(battle);
+    const before = cloneJson(store.toSaveData()); fail = true; calls = 0;
+    const seal = fixtures.tools.rtm.getCurrentStoryEventActions(before)[0];
+    const failed = await submit(seal.playerLine, seal);
+    assert.equal(calls, 2);
+    assert.equal(failed.transactionCommitted, undefined);
+    assert.equal(failed.generationError.code, 'DEMO_MODULE_FAILED');
+    const afterFailure = cloneJson(store.toSaveData());
+    delete afterFailure.元数据?.更新时间; delete before.元数据?.更新时间;
+    assert.deepEqual(afterFailure, before);
+  } finally {
+    aiService.generate = original; aiService.checkAvailability = check;
+    localStorage.removeItem('xiantu.modularTurnPlaytest.v1'); localStorage.removeItem('xiantu.fastNarrativeDemo.v1');
+  }
+});
+
+
+test('sixty-zhu payment settles once on the second verified fee action', async () => {
+  const { rtm } = fixtures.tools;
+  const save = await walkFrom(fixtures.tools, at('atBond'), 'lcq.event.charge_sudaji_fee');
+  const runtime = runtimeOf(save);
+  save.角色.背包.货币 ||= {};
+  save.角色.背包.货币.金铢 = { 币种: '金铢', 名称: '金铢', 数量: 0, 价值度: 1 };
+  const first = rtm.getCurrentStoryEventActions(save).find(item => item.actionId === 'name_sixty_zhu_before_help');
+  assert.ok(first);
+  const offered = rtm.recordStoryEventStructuredAction(save, first);
+  assert.equal(offered.attempted, true, offered.reason);
+  assert.equal(offered.outcome, 'success');
+  assert.equal(save.角色.背包.货币.金铢.数量, 0);
+  runtime.worldTurn++;
+  const second = rtm.getCurrentStoryEventActions(save).find(item => item.actionId === 'lock_fee_then_remove_device');
+  assert.ok(second);
+  const paid = rtm.recordStoryEventStructuredAction(save, second);
+  assert.equal(paid.attempted, true, paid.reason);
+  assert.equal(paid.outcome, 'success');
+  assert.equal(save.角色.背包.货币.金铢.数量, 60);
+  rtm.recordStoryEventStructuredAction(save, second);
+  assert.equal(save.角色.背包.货币.金铢.数量, 60);
 });

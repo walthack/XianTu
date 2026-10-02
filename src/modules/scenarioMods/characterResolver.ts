@@ -193,16 +193,28 @@ function buildNotes(entry: RegistryEntry, currentPhase: RegistryPhase | undefine
     }
   }
   if (typeof profile.birthYear === 'number') add('生辰', `约纪元${profile.birthYear}年生（防误算：这是出生年，非年龄）`);
-  add('关系', phaseProfileValue(profile, currentPhase, 'relationToProtagonist'));
+  // 走向类字段（关系/入伙/情节/结局）在静态卡里是全书终点快照，只在两种情况下取值：
+  // ① 本关 phase 覆盖了该字段；② 角色在关系链上声明了转折（allowed-after-turning-point），
+  //    且本关有投影却留空——既有约定：转折前逐关写“尚未…”，转折后留空沿用终态。
+  // 没有转折声明的角色（凝羽、月霜等），或本关根本没有投影时，不回落静态卡，
+  // 否则早期关卡会提前注入后期关系、成人情节与结局。
+  const finalStateAllowed = Boolean(currentPhase)
+    && relationshipPhases(entry).some(phase => phase.status === 'allowed-after-turning-point');
+  const trajectory = <K extends 'relationToProtagonist' | 'joining' | 'keyEvents' | 'ending'>(key: K) => (
+    currentPhase && Object.prototype.hasOwnProperty.call(currentPhase, key)
+      ? currentPhase[key]
+      : finalStateAllowed ? profile[key] : undefined
+  );
+  add('关系', trajectory('relationToProtagonist'));
   add('称呼', phaseProfileValue(profile, currentPhase, 'formsOfAddress'));
   add('谈吐', phaseProfileValue(profile, currentPhase, 'speechStyle'));
   add('底线', phaseProfileValue(profile, currentPhase, 'principles'));
   add('目标', phaseProfileValue(profile, currentPhase, 'goals'));
   add('软肋', phaseProfileValue(profile, currentPhase, 'weaknesses'));
   add('绝技', phaseProfileValue(profile, currentPhase, 'signatureAbilities'));
-  add('入伙', phaseProfileValue(profile, currentPhase, 'joining'));
-  add('情节', asArray(phaseProfileValue(profile, currentPhase, 'keyEvents')).slice(0, 8));
-  add('结局', phaseProfileValue(profile, currentPhase, 'ending'));
+  add('入伙', trajectory('joining'));
+  add('情节', asArray(trajectory('keyEvents')).slice(0, 8));
+  add('结局', trajectory('ending'));
   // 有明确关卡投影时，只注入该关开场身份；完整关系链包含未来分支，不能进游戏提示词。
   if (!currentPhase) {
     for (const phase of relationshipPhases(entry)) {
@@ -405,7 +417,8 @@ export function findRegistryIdentitiesByContext(context: string, limit = 12): Ar
  * 被断言为兵器、坐骑、功法或物品。无法判断的关系叙述交由提示词约束，不能用正则硬删。
  */
 export function stripNarrativeEntityTypeConflicts(text: string): { text: string; conflicts: string[] } {
-  const parts = String(text || '').split(/([。！？\n]+)/);
+  // 带对白的段落按整段删除，避免把开引号/说话句删掉却留下闭引号与声线描写。
+  const parts = String(text || '').split(/[“”「」『』"]/u.test(text) ? /(\n+)/ : /([。！？\n]+)/);
   const conflicts: string[] = [];
   const protectedNames = [...byName.keys()].filter(name => name.length >= 2);
   const bannedType = '佩剑|宝剑|断剑|长剑|兵器|武器|法器|坐骑|战马|马匹|功法|秘笈|丹药|玉符';
@@ -447,7 +460,8 @@ export function stripNarrativeUnintroducedCharacters(
     .flatMap(entry => [entry.canonicalName, ...(entry.aliases || [])].filter(safeForBlocklist))
     .filter(name => typeof name === 'string' && name.length >= 2)
     .sort((left, right) => right.length - left.length);
-  const parts = String(text || '').split(/([。！？\n]+)/);
+  // 带对白的段落按整段删除，避免把开引号/说话句删掉却留下闭引号与声线描写。
+  const parts = String(text || '').split(/[“”「」『』"]/u.test(text) ? /(\n+)/ : /([。！？\n]+)/);
   const conflicts: string[] = [];
   const kept: string[] = [];
   for (let index = 0; index < parts.length; index += 2) {

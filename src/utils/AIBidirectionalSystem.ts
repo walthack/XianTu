@@ -1,5 +1,7 @@
-import { isModulePlaytestSelected, isModularTurnEnabled, validateModuleSettlementNarrative, readModuleNarrative, appendModuleReceipt, recentModuleMemory, attemptModuleNarrative } from '@/modules/scenarioMods/modularTurn';
-import { narrativeBoundaryNote } from '@/modules/scenarioMods/narrativeBoundaries';
+import { fixedEndingNarrative, fixedBeatNarrative, endingBridge } from '@/modules/scenarioMods/fixedEndingNarratives';
+import { isDemoModuleOnly, assertDemoModulePath, isModulePlaytestSelected, isModularTurnEnabled, validateModuleSettlementNarrative, readModuleNarrative, parseModuleObject, visibleModuleText, appendModuleReceipt, recentModuleMemory, attemptModuleNarrative } from '@/modules/scenarioMods/modularTurn';
+import { narrativeBoundaryNote, stripNarrativeBoundaryClauses } from '@/modules/scenarioMods/narrativeBoundaries';
+import { getActiveKeyBeatCard, isKeyBeatCardAction, keyBeatStep, KEY_BEAT_PENDING_FALLBACK } from '@/modules/scenarioMods/keyBeatCards';
 import { validateLegacyVisibleNarrative } from '@/modules/scenarioMods/legacyNarrativeContract';
 ﻿/**
  * AIBidirectionalSystem
@@ -31,6 +33,8 @@ import { assertPlayerAgency, PlayerAgencyViolationError } from '@/modules/scenar
 import {
   usesFixedScenarioInventory,
   unsupportedInventoryGainNames,
+  stripUnsupportedGainClauses,
+  MIN_KEPT_NARRATIVE_CHARS,
   buildItemReferenceContext,
   inspectPublishedItemReferences,
   formatItemReferenceProtocolHint,
@@ -52,6 +56,9 @@ import { filterActionOptionsByPov } from '@/utils/actionOptionsPovGuard';
 import type { APIUsageType } from '@/stores/apiManagementStore';
 import { buildScenarioCanonPrompt } from '@/modules/scenarioMods/canonGuard';
 import {
+  getScenarioFocusEvent, previewWangZheStayEnding,
+  getCurrentStoryExplorationActions,
+  getCurrentStoryEventActions,
   acknowledgeStageEntryPresentation,
   acknowledgeStoryBeatHandoff,
   advanceScenarioRuntime,
@@ -85,6 +92,8 @@ import {
 } from '@/modules/scenarioMods/legacyNarrativePilot';
 import {
   previewLegacyPilotSettlement,
+  compileLegacyNarratorPacket,
+  readLocalMemoryCapsule,
   buildLegacyNarratorPrompt,
   isLegacyPilotPromptWithinBudget,
   LEGACY_NARRATOR_PROMPT_BUDGET_BYTES,
@@ -211,6 +220,18 @@ export function shouldSettleLocalContractAfterGenerationFailure(error: unknown):
   if (isOutputTruncationError(error) || error instanceof QingyuTurnLongRequestBudgetError) return true;
   const message = error instanceof Error ? error.message : String(error || '');
   return /无法解析AI响应|未提取到有效叙事文本|AI响应为空或格式错误|AI响应格式|本回合长请求预算已用尽/.test(message);
+}
+
+/**
+ * 去掉正文里的【…】：独立的【环境】【场景】标签整个删掉；段首描述性括号（含「，、·」或空格）
+ * 直接接正文时保留内容并补句号；其余（如句中道具名）只去括号。
+ */
+export function flattenBracketLabels(text: string): string {
+  return text
+    .replace(/【(?:环境|场景)】[ \t　]*/g, '')
+    .replace(/(^|\n)([ \t　]*)【([^】\r\n]{1,80})】(?=[^\s。！？，、；：…—])/g, (match, start, indent, inner) =>
+      /[，、·,\s　]/.test(inner) ? `${start}${indent}${inner}${/[。！？!?…]$/.test(inner) ? '' : '。'}` : match)
+    .replace(/【([^】\r\n]{1,80})】/g, '$1');
 }
 
 /** 本存档已经接触的正典人物；全局 registry/RAG 中的未来人物不在此列。 */
@@ -664,56 +685,123 @@ class AIBidirectionalSystemClass {
     saveData: SaveData, options: ProcessOptions | undefined, generationId: string,
     shouldAbort: () => boolean, userMessage: string,
   ): Promise<GM_Response | null> {
-    if (!useCharacterStore().activeCharacterProfile?.隔离试玩信息?.localOnly
+    const moduleOnly = isDemoModuleOnly(saveData);
+    if (!moduleOnly && (!useCharacterStore().activeCharacterProfile?.隔离试玩信息?.localOnly
       || !isModularTurnEnabled(saveData) || options?.opportunityAction || options?.judgementResolution
-      || options?.gambleRefusalAction || (options?.openWorldAction && !options.eventAction)) return null;
-    const plan = planLegacyNarrativePilot({ saveData, eventAction: options?.eventAction,
-      eventActionProvenance: options?.eventActionProvenance, playerActionText: userMessage,
-      storage: { getItem: () => 'true' } });
-    if (!plan) return null;
+      || options?.gambleRefusalAction || (options?.openWorldAction && !options.eventAction)
+      || isKeyBeatCardAction(options?.eventAction))) return null;
     const started = Date.now();
-    const compiled = await buildLegacyNarratorPrompt(saveData, plan);
-    if (!compiled.settlementAttempted || !acceptLegacyPilotScene(compiled.packet)) return null;
-    const preview = previewLegacyPilotSettlement(saveData, plan.selection);
-    const { outputContract: _outputContract, ...baseScene } = compiled.packet;
-    const boundary = narrativeBoundaryNote(plan.selection.eventId, preview.progress.completed);
-    const scene = { ...baseScene, 本轮结算: { 行动: plan.selection.actionId,
-      当前步骤: plan.selection.stepIndex, 总步骤: plan.selection.stepTotal,
-      本步骤完成: preview.progress.attempted, 整件事件完成: preview.progress.completed,
-      ...(boundary ? { 边界: boundary } : {}) } };
+    if (moduleOnly) {
+      const localText = previewRepeatSilkPouchClaimNarrative(saveData, { playerActionText: userMessage, opportunityAction: options?.opportunityAction })
+        || previewQingyuOpportunityNarrative(saveData, options?.opportunityAction)
+        || (options?.openWorldAction ? previewWuyuanOpenWorldNarrative(saveData, { openWorldAction: options.openWorldAction, eventAction: options.eventAction }) : '')
+        || (options?.gambleRefusalAction ? previewBaihuGambleRefusalNarrative(saveData, options.gambleRefusalAction) : '');
+      if (options?.gambleRefusalAction && !localText) return { text: BAIHU_GAMBLE_REFUSAL_UNAVAILABLE_TEXT, mid_term_memory: '', tavern_commands: [], action_options: [],
+        generationError: { code: 'INVALID_ACTION', message: BAIHU_GAMBLE_REFUSAL_UNAVAILABLE_TEXT } };
+      if (localText) return { text: localText, mid_term_memory: '', tavern_commands: [], action_options: [],
+        moduleReceipt: { id: generationId, path: 'local', eventId: options?.eventAction?.eventId, promptChars: 0, foregroundMs: Date.now() - started, text: localText } };
+    }
+    const candidates = [...getCurrentStoryEventActions(saveData), ...getCurrentStoryExplorationActions(saveData)];
+    const selected = options?.eventAction;
+    const fresh = selected ? candidates.find(item => item.source === selected.source && item.eventId === selected.eventId
+      && item.actionId === selected.actionId && item.contractHash === selected.contractHash) : undefined;
+    if (moduleOnly && selected && !fresh) throw new Error('模块行动已失效，请重新选择当前行动。');
+    const oldPlan = moduleOnly ? null : planLegacyNarrativePilot({ saveData, eventAction: selected,
+      eventActionProvenance: options?.eventActionProvenance, playerActionText: userMessage, storage: { getItem: () => 'true' } });
+    if (!moduleOnly && !oldPlan) return null;
+    const plan = oldPlan || (fresh ? { selection: fresh, playerLine: userMessage, outcomeText: fresh.outcomeText, compactState: {} } : null);
+    const preview = plan ? previewLegacyPilotSettlement(saveData, plan.selection, {
+      judgementResolution: verifyResolvedJudgementReceipt(saveData, options?.judgementResolution) || undefined,
+    }) : null;
+    if (moduleOnly && preview && !preview.progress.attempted) throw new Error('模块本地预结算未成立：' + preview.progress.reason);
+    const endingSave = preview?.settled || (moduleOnly ? advanceScenarioRuntime(cloneDeep(saveData)).saveData : saveData);
+    const stayEnding = moduleOnly && !selected ? previewWangZheStayEnding(saveData, userMessage) : undefined;
+    if (stayEnding) (endingSave as any).世界.状态.剧本模组.gameOver = { endingId: stayEnding.id, title: stayEnding.title, facts: [...stayEnding.facts], sourceEventId: 'lcq.event.s02_02', atTurn: Number((endingSave as any).世界.状态.剧本模组.worldTurn) || 0 };
+    const ending = (endingSave as any)?.世界?.状态?.剧本模组?.gameOver;
+    const endingText = fixedEndingNarrative(ending);
+    if (endingText && ending.endingId === 'lcq.ending.death.wangzhe_blast') {
+      const text = endingBridge('', ending.endingId);
+      return { text, mid_term_memory: '', tavern_commands: [], action_options: [],
+        moduleReceipt: { id: generationId, path: 'local', eventId: ending.sourceEventId, promptChars: 0, foregroundMs: Date.now() - started, text } };
+    }
+    const fixedBeat = preview?.progress.attempted && !ending
+      ? fixedBeatNarrative(plan?.selection.eventId, plan?.selection.actionId) : undefined;
+    if (fixedBeat) return { text: fixedBeat, mid_term_memory: '', tavern_commands: [], action_options: [],
+      moduleReceipt: { id: generationId, path: 'local', eventId: plan?.selection.eventId, promptChars: 0, foregroundMs: Date.now() - started, text: fixedBeat } };
+    const compiled = moduleOnly
+      ? (plan && preview ? { ...compileLegacyNarratorPacket(preview.settled, plan, '', '', '', preview.receipts), storyPrompt: '', settlementAttempted: true } : null)
+      : await buildLegacyNarratorPrompt(saveData, plan!);
+    if (!moduleOnly && (!compiled?.settlementAttempted || !acceptLegacyPilotScene(compiled.packet))) return null;
+    const runtime = (saveData as any)?.世界?.状态?.剧本模组;
+    const focus = runtime ? getScenarioFocusEvent(runtime) : null;
+    const eventId = plan?.selection.eventId || focus?.id;
+    // 无事件动作的交谈不伪造完成回执，只读当前地点/在场人物/目标；世界时间仍由原引擎推进。
+    const capsuleSelection = candidates[0];
+    const capsule = capsuleSelection ? readLocalMemoryCapsule(saveData, capsuleSelection) : null;
+    const { outputContract: _outputContract, ...baseScene } = compiled?.packet || {};
+    const boundary = eventId ? narrativeBoundaryNote(eventId, Boolean(preview?.progress.completed)) : '';
+    const scene = compiled ? { ...baseScene, 本轮结算: { 行动: plan!.selection.actionId,
+      当前步骤: plan!.selection.stepIndex, 总步骤: plan!.selection.stepTotal,
+      本步骤完成: preview!.progress.attempted, 整件事件完成: preview!.progress.completed,
+      ...(boundary ? { 边界: boundary } : {}) } } : {
+      eventId, location: capsule?.location || (saveData as any)?.角色?.位置?.描述,
+      present: capsule?.presentNames || [], currentObjective: capsule?.currentObjective || focus?.objective || '',
+      action: userMessage, 本轮结算: { 本步骤完成: false, 整件事件完成: false, 边界: boundary || '交谈/自由输入不代表完成事件，不能替玩家答应条件或领取物品。' },
+      ...(options?.judgementResolution ? { 公开判定: formatVerifiedJudgementReceiptForPrompt(options.judgementResolution) } : {}),
+      ...(options?.opportunityAction ? { 机会行动: options.opportunityAction.actionText } : {}),
+    };
+    const playerLine = plan?.playerLine || userMessage;
     // 记忆单一来源：短期记忆（模块记忆摘录已在其中替换原文），每条只取末尾 600 字防止上下文膨胀。
     const remembered = recentModuleMemory(saveData, 2).map(entry => entry.length > 600 ? entry.slice(-600) : entry);
     const instruction = (await getPrompt('moduleNarrativeSystem')).trim() || MODULE_NARRATIVE_SYSTEM_PROMPT;
+    const wangZheDead = Boolean(runtime?.completedEventIds?.includes('lcq.event.s02_02') || (/^lcq\.stage_/.test(String(runtime?.modId || '')) && Number(String(runtime.modId).match(/stage_(\d+)/)?.[1]) > 2));
     const system = instruction
-      + '\n场景材料：' + JSON.stringify(scene) + '\n历史摘录（只是已展示内容，不代表所有人物知情）：' + JSON.stringify(remembered);
-    if (system.length > 10000) return null;
+      + (wangZheDead ? '\n正典事实：王哲已在十里焦土中殉身，永久死亡。不得让他重新在场、发言、行动或复活，不得以尸体活动、手伸出焦土等方式暗示生还；只能作为已故者被回忆。' : '')
+      + (endingText ? '\n本局已结束。只写1–2句承接玩家最后的选择，不演后续同行或逃脱，不代写完整死亡过程；后面由程序接入固定结局正文。' : '')
+      + '\n场景材料：' + JSON.stringify(endingText ? { 玩家选择: playerLine, 结局: ending } : scene) + '\n历史摘录（只是已展示内容，不代表所有人物知情）：' + JSON.stringify(remembered);
+    if (system.length > 10000) {
+      if (moduleOnly) throw new Error("模块场景材料超过10000字，本轮未执行，请报告当前事件。");
+      return null;
+    }
     options?.onProgressUpdate?.('模块试玩：生成本轮演出…');
     noteBufferedFullResponse(true);
-    notePromptBytes(new TextEncoder().encode(system + plan.playerLine).length);
+    notePromptBytes(new TextEncoder().encode(system + playerLine).length);
     const { runGameModelModule } = await import('@/services/gameModelModules');
-    // Q3：同一快照最多重试 1 次，再失败回落旧链路；清羽固定道具档的长请求预算由 attemptModuleNarrative 把关。
+    // 同一快照最多两稿；demo失败报错且零提交，范围外保留既有失败策略。
+    let transportAttempts = 0;
     const outcome = await attemptModuleNarrative(async attemptNumber => {
       const { raw, route } = await runGameModelModule('narrative', {
-        system, input: plan.playerLine, generationId: `${generationId}_modular${attemptNumber > 1 ? `_r${attemptNumber}` : ''}`,
-        qingyuTurnId: options?.qingyuTurnId,
+        system, input: playerLine, generationId: `${generationId}_modular${attemptNumber > 1 ? `_r${attemptNumber}` : ''}`,
+        qingyuTurnId: options?.qingyuTurnId, onTransportStart: () => { transportAttempts += 1; },
       });
       if (shouldAbort()) throw new Error('请求已被取消');
-      const text = readModuleNarrative(raw);
-      validateModuleSettlementNarrative(text, plan.selection.eventId, preview.progress.completed);
-      const check = validateLegacyVisibleNarrative(text, compiled.packet, { partial: true, userInput: plan.playerLine, storyPrompt: compiled.storyPrompt });
-      if (!check.valid || !text.includes('你')) throw new Error('模块正文检查失败：' + check.issues.join('；'));
+      const text = endingText ? endingBridge(raw) : readModuleNarrative(raw);
+      if (!endingText && eventId) validateModuleSettlementNarrative(text, eventId, Boolean(preview?.progress.completed));
+      if (!endingText && wangZheDead && /王哲[^。！？\n]{0,40}(?:复活|活着|生还|伸出|伸出来|睁眼|醒来|站起|走出|开口)|焦土[^。！？\n]{0,25}(?:手|王哲)[^。！？\n]{0,15}伸/.test(text)) throw new Error('正典冲突：王哲已死，不得复活');
+      if (!endingText && usesFixedScenarioInventory(saveData)) {
+        const refs = /^[{`]/.test(visibleModuleText(raw)) ? parseModuleObject(raw).item_references : undefined;
+        const granted = preview?.progress.inventorySettlements || [];
+        const inspected = inspectPublishedItemReferences(text, [], buildItemReferenceContext(preview?.settled || saveData, granted.map(item => item.receipt.itemId), granted.map(item => item.receipt.itemName)), refs);
+        if (inspected.unknownIds.length || inspected.unauthorizedClaims.length) throw new Error('模块正文含未授权道具领取');
+      }
+      const check = compiled && !endingText ? validateLegacyVisibleNarrative(text, compiled.packet, { partial: true, userInput: playerLine, storyPrompt: compiled.storyPrompt }) : { valid: true, issues: [] };
+      if (!endingText && moduleOnly) assertPlayerAgency(text, userMessage);
+      if (!endingText && (!check.valid || !text.includes('你'))) throw new Error('模块正文检查失败：' + check.issues.join('；'));
       return { text, route };
     }, {
-      budgetLeft: () => remainingQingyuTurnLongRequests(options?.qingyuTurnId),
+      budgetLeft: () => moduleOnly ? null : remainingQingyuTurnLongRequests(options?.qingyuTurnId),
       isFatal: error => shouldAbort() || (error as any)?.name === 'AbortError' || error instanceof QingyuTurnLongRequestBudgetError,
     });
     if (outcome.ok) {
       const { text, route } = outcome.value;
       return { text, mid_term_memory: '', tavern_commands: [], action_options: [],
-        moduleReceipt: { id: generationId, path: 'modular', route, eventId: plan.selection.eventId,
-          promptChars: system.length + plan.playerLine.length, foregroundMs: Date.now() - started,
+        moduleReceipt: { id: generationId, path: 'modular', route, eventId,
+          promptChars: system.length + playerLine.length, foregroundMs: Date.now() - started,
           text, memory: { status: 'pending' } } };
     }
+    if (endingText) return { text: '', mid_term_memory: '', tavern_commands: [], action_options: [],
+      moduleReceipt: { id: generationId, path: 'local', eventId, promptChars: system.length + playerLine.length, foregroundMs: Date.now() - started, text: '' } };
+    if (moduleOnly) throw new Error(`模块演出实发${transportAttempts}次请求未通过，本轮未执行，请重试：${outcome.reason}`);
     console.warn(`[模块演出] ${outcome.attempts} 次未通过，回落原链路：${outcome.reason}`);
     if (this.modularFallbacks.size > 20) this.modularFallbacks.clear();
     this.modularFallbacks.set(generationId, { reason: outcome.reason, attempts: outcome.attempts });
@@ -739,7 +827,7 @@ class AIBidirectionalSystemClass {
       opportunityAction: options?.opportunityAction,
       openWorldAction: options?.openWorldAction,
     };
-    if (options?.gambleRefusalAction) return null;
+    if (options?.gambleRefusalAction || isKeyBeatCardAction(options?.eventAction)) return null;
     if (!isFastNarrativeDemoScope(routeInput)) return null;
     const route = routeFastNarrativeDemo(routeInput);
     if (route.outcome === 'legacy') return null;
@@ -813,6 +901,7 @@ class AIBidirectionalSystemClass {
     return wrapFastNarrativeGmResponse(text, actionOptions);
   }
 
+  // @deprecated LEGACY：模块化稳定后删除（2026-10-02 用户决定）
   private async tryLegacyNarrativePilot(
     saveData: SaveData,
     options: ProcessOptions | undefined,
@@ -833,7 +922,7 @@ class AIBidirectionalSystemClass {
     }
     if (options?.opportunityAction || options?.judgementResolution) return null;
     if (options?.openWorldAction && !options?.eventAction) return null;
-    if (options?.gambleRefusalAction) return null;
+    if (options?.gambleRefusalAction || isKeyBeatCardAction(options?.eventAction)) return null;
     if (shouldAbort()) throw new Error('请求已被取消');
 
     options?.onProgressUpdate?.('Legacy 单幕试验：生成纯正文…');
@@ -985,38 +1074,45 @@ class AIBidirectionalSystemClass {
       throw new Error('无法获取存档数据，请确保角色已加载');
     }
 
+    const moduleOnly = isDemoModuleOnly(saveData);
     const trustedJudgementResolution = verifyResolvedJudgementReceipt(saveData, options?.judgementResolution);
 
     // 2. 准备AI上下文
     options?.onProgressUpdate?.('构建提示词并请求AI生成…');
     let gmResponse: GM_Response = { text: '', mid_term_memory: '', tavern_commands: [], action_options: [] };
     let usedLegacyNarrativePilot = false;
+    // 回执标记：本回合实际怎样出正文。只用于回执，不影响流程；未命中下列本地/快路径即为原链路。
+    let receiptPath: 'legacy' | 'fast' | 'local' | 'card' = 'legacy';
     // UI 会对占位响应发起一次结构化重试；失败响应本身必须是零副作用的。
     let generationFailed = false;
-    beginTurnTelemetry('legacy');
+    beginTurnTelemetry(moduleOnly ? 'modular' : 'legacy');
     beginForegroundAiTurn();
     const qingyuTurnId = beginQingyuTurnLongRequests(saveData, options?.qingyuTurnId);
     if (options) options.qingyuTurnId = qingyuTurnId;
     try {
     try {
       const modularResponse = await this.tryModularTurn(saveData, options, generationId, shouldAbort, userMessage);
-      const fastNarrativeResponse = modularResponse || await this.tryFastNarrativeDemo(
+      const fastNarrativeResponse = modularResponse || (!moduleOnly ? await this.tryFastNarrativeDemo(
         saveData,
         userMessage,
         options,
         generationId,
         shouldAbort,
-      );
+      ) : null);
+      if (modularResponse?.generationError) return modularResponse;
       if (modularResponse) usedLegacyNarrativePilot = true;
       if (fastNarrativeResponse) {
         noteTurnPath(modularResponse ? 'modular' : 'fast');
+        if (!modularResponse) receiptPath = 'fast';
         gmResponse = fastNarrativeResponse;
       }
       if (isFastNarrativeHoldResponse(fastNarrativeResponse)) {
         gameStateStore.loadFromSaveData(saveData);
         return fastNarrativeResponse;
       }
+      // @deprecated LEGACY：模块化稳定后删除（2026-10-02 用户决定）
       if (!fastNarrativeResponse) {
+      if (moduleOnly) assertDemoModulePath(saveData, 'legacy');
       const legacyNarrativePilotResponse = await this.tryLegacyNarrativePilot(
         saveData,
         options,
@@ -1046,10 +1142,15 @@ class AIBidirectionalSystemClass {
       const gambleRefusalLocalText = !repeatSilkPouchText && !opportunityLocalText && !openWorldLocalText && options?.gambleRefusalAction
         ? (previewBaihuGambleRefusalNarrative(saveData, options.gambleRefusalAction) || BAIHU_GAMBLE_REFUSAL_UNAVAILABLE_TEXT)
         : '';
-      const localContractText = repeatSilkPouchText || opportunityLocalText || openWorldLocalText || gambleRefusalLocalText;
+      // 重要桥段推进卡片：不请求模型；结算成功后由 processGmResponse 换成该步 resultLine，未结算则保留这句悬置。
+      const keyBeatLocalText = !repeatSilkPouchText && !opportunityLocalText && !openWorldLocalText && !gambleRefusalLocalText
+        && isKeyBeatCardAction(options?.eventAction) ? KEY_BEAT_PENDING_FALLBACK : '';
+      const localContractText = repeatSilkPouchText || opportunityLocalText || openWorldLocalText || gambleRefusalLocalText || keyBeatLocalText;
       if (localContractText) {
         if (openWorldLocalText) noteTurnPath('open_world');
         else noteTurnPath('local_contract');
+        // 卡片回合与其他本地合同正文都不请求模型，不是原链路。
+        receiptPath = keyBeatLocalText ? 'card' : 'local';
         gmResponse = {
           text: localContractText,
           mid_term_memory: '',
@@ -1058,6 +1159,7 @@ class AIBidirectionalSystemClass {
         };
         usedLegacyNarrativePilot = true;
       }
+      // @deprecated LEGACY：模块化稳定后删除（2026-10-02 用户决定）
       if (!localContractText) {
       const v3 = isSaveDataV3(saveData) ? (saveData as any) : migrateSaveDataToLatest(saveData).migrated;
 
@@ -1267,6 +1369,7 @@ ${stateJsonString}
         // 🔥 分步生成第1步直接复用 buildNarrativeState（已在上方定义）
         const buildNarrativeStateForStep1 = (): string => JSON.stringify(buildNarrativeState());
 
+        // @deprecated LEGACY：模块化稳定后删除（2026-10-02 用户决定）
         const buildSplitSystemPrompt = async (step: 1 | 2): Promise<string> => {
           const tavernEnv = !!tavernHelper;
 
@@ -1345,6 +1448,7 @@ ${stateJsonString}
 `.trim();
         };
 
+        // @deprecated LEGACY：模块化稳定后删除（2026-10-02 用户决定）
         const buildSplitInjects = (systemPrompt: string, includeShortTermMemory: boolean = false) => {
           const splitInjects: Array<{ content: string; role: 'system' | 'assistant' | 'user'; depth: number; position: 'in_chat' | 'none' }> = [
             { content: systemPrompt, role: 'system', depth: 4, position: 'in_chat' }
@@ -1716,10 +1820,10 @@ ${missingItems.length > 0 ? `【上次结构化输出缺失】
       }
       }
     } catch (error) {
-      console.error('[AI双向系统] AI生成失败:', error);
+      console.error('[AI双向系统] AI生成失败:', String((error as Error)?.message || error), error);
       const truncated = String((error as Error)?.name || '').includes('OutputTruncation')
         || String((error as Error)?.message || '').includes('响应因输出长度限制被截断');
-      const terminal = isAiRequestTimeout(error) || error instanceof PlayerAgencyViolationError;
+      const terminal = moduleOnly || isAiRequestTimeout(error) || error instanceof PlayerAgencyViolationError;
       const canSettleLocally = !terminal
         && usesFixedScenarioInventory(saveData)
         && hasTrustedLocalContract(options)
@@ -1744,7 +1848,7 @@ ${missingItems.length > 0 ? `【上次结构化输出缺失】
           action_options: actionOptionsEnabled ? ['重试当前操作', '查看自身状态', '稍作休息'] : [],
           outputTruncated: truncated,
           ...(terminal ? { generationError: {
-            code: error instanceof PlayerAgencyViolationError ? error.code : 'AI_REQUEST_TIMEOUT', message: (error as Error).message,
+            code: moduleOnly ? 'DEMO_MODULE_FAILED' : error instanceof PlayerAgencyViolationError ? error.code : 'AI_REQUEST_TIMEOUT', message: (error as Error).message,
           } } : {}),
         };
       }
@@ -1754,6 +1858,7 @@ ${missingItems.length > 0 ? `【上次结构化输出缺失】
     // 调用方会看到 mid_term_memory 为空并走既有 retryAIResponse 流程。
     if (generationFailed) return gmResponse;
 
+    if (moduleOnly) assertDemoModulePath(saveData, gmResponse.moduleReceipt?.path || 'legacy');
     // 3. 执行AI指令
     options?.onProgressUpdate?.('执行AI指令…');
     if (shouldAbort()) {
@@ -1793,10 +1898,10 @@ ${missingItems.length > 0 ? `【上次结构化输出缺失】
       // 缺失而把同一玩家输入送回 processPlayerAction。
       gmResponse.stateChanges = stateChanges;
       gmResponse.transactionCommitted = true;
-      if (useCharacterStore().activeCharacterProfile?.隔离试玩信息?.localOnly && isModulePlaytestSelected(saveData)) {
+      if (moduleOnly || (useCharacterStore().activeCharacterProfile?.隔离试玩信息?.localOnly && isModulePlaytestSelected(saveData))) {
         const fallback = this.modularFallbacks.get(generationId);
         this.modularFallbacks.delete(generationId);
-        const receipt = gmResponse.moduleReceipt || { id: generationId, path: 'legacy' as const,
+        const receipt = gmResponse.moduleReceipt || { id: generationId, path: receiptPath,
           promptChars: 0, foregroundMs: 0, text: gmResponse.text, ...(fallback ? { fallback } : {}) };
         receipt.text = gmResponse.text;
         const shortTerm = (updatedSaveData as any)?.社交?.记忆?.短期记忆;
@@ -1804,6 +1909,7 @@ ${missingItems.length > 0 ? `【上次结构化输出缺失】
         // 只认本回合正文落成的那条短期记忆，记忆模块据此替换为摘录。
         if (receipt.path === 'modular' && typeof lastShortTerm === 'string'
           && lastShortTerm.includes(String(gmResponse.text || '').trim().slice(0, 12))) receipt.shortTermEntry = lastShortTerm;
+        if (moduleOnly) console.warn('[DEMO_MODULE_ONLY]', { path: receipt.path, eventId: receipt.eventId, promptChars: receipt.promptChars });
         appendModuleReceipt(updatedSaveData, receipt);
         gameStateStore.systemExtensions = (updatedSaveData as any).系统.扩展;
       }
@@ -1836,11 +1942,14 @@ ${missingItems.length > 0 ? `【上次结构化输出缺失】
     }
   }
 
+  // @deprecated LEGACY：模块化稳定后删除（2026-10-02 用户决定）
   public async generateInitialMessage(
     systemPrompt: string,
     userPrompt: string,
     options?: ProcessOptions
   ): Promise<GM_Response> {
+    // demo固定开场不调用旧初始化；若误入也必须阻断，而非发送完整legacy提示词。
+    assertDemoModulePath(useGameStateStore().toSaveData(), 'legacy');
     beginForegroundAiTurn();
     try {
     const tavernHelper = getTavernHelper();
@@ -2463,7 +2572,14 @@ ${step1Text}
     const changes: StateChange[] = [];
     const startingRuntime = (currentSaveData as any)?.世界?.状态?.剧本模组;
     const startingModId = typeof startingRuntime?.modId === 'string' ? startingRuntime.modId : '';
-    if (shouldEnforcePlayerAgency(saveData)) {
+    const stayEnding = response.moduleReceipt && !options?.eventAction ? previewWangZheStayEnding(saveData, options?.playerIntentText || options?.userAction || '') : undefined;
+    if (stayEnding) (saveData as any).世界.状态.剧本模组.gameOver = { endingId: stayEnding.id, title: stayEnding.title, facts: [...stayEnding.facts], sourceEventId: 'lcq.event.s02_02', atTurn: Number(startingRuntime?.worldTurn) || 0 };
+
+    const deathForSelectedAction = response.moduleReceipt && options?.eventAction
+      ? fixedEndingNarrative((previewLegacyPilotSettlement(currentSaveData, options.eventAction).settled as any)?.世界?.状态?.剧本模组?.gameOver) : undefined;
+    const deathForIdleTurn = response.moduleReceipt && !options?.eventAction
+      ? fixedEndingNarrative((advanceScenarioRuntime(cloneDeep(saveData)).saveData as any)?.世界?.状态?.剧本模组?.gameOver) : undefined;
+    if (!deathForSelectedAction && !deathForIdleTurn && shouldEnforcePlayerAgency(saveData)) {
       assertPlayerAgency(
         String(response.text || ''),
         options?.playerIntentText || options?.userAction || '',
@@ -2625,13 +2741,32 @@ ${step1Text}
         console.warn('[固定道具合同] 未知道具ID fail closed：', published.unknownIds);
         response.tavern_commands = [];
       }
-      const unsupportedGains = unsupportedInventoryGainNames(textContent, grantedNames, itemContext);
-      if (unsupportedGains.length || published.unauthorizedClaims.length) {
-        console.warn('[固定道具合同] 拒绝无交付回执的获得叙事：', [...unsupportedGains, ...published.unauthorizedClaims]);
-        textContent = '本轮没有新的道具交付。你的背包仍以已经确认的物品记录为准。';
-        midTermContent = '';
+      // 正文里的未授权获得声明与结构化字段里的越权引用分开处理：
+      // 结构化越权只丢弃结构化数据（指令/引用），正文不受牵连；正文越权只删那几句。
+      const textGains = [...new Set([
+        ...unsupportedInventoryGainNames(textContent, grantedNames, itemContext),
+        ...unsupportedInventoryGainNames(textContent, itemContext.authorizedGrantNames, itemContext),
+      ])];
+      const structuralClaims = published.unauthorizedClaims.filter(claim => !textGains.includes(claim));
+      if (structuralClaims.length || published.unknownIds.length) {
+        console.warn('[固定道具合同] 丢弃越权的结构化道具引用/写入，正文保留：', [...new Set([...structuralClaims, ...published.unknownIds])]);
         response.tavern_commands = [];
-        response.action_options = [];
+        response.item_references = [];
+      }
+      if (textGains.length) {
+        console.warn('[固定道具合同] 删除无交付回执的获得句：', textGains);
+        const strippedText = stripUnsupportedGainClauses(textContent, grantedNames, itemContext);
+        const visibleChars = strippedText ? strippedText.text.replace(/\s/g, '').length : 0;
+        response.tavern_commands = [];
+        if (!strippedText || visibleChars < MIN_KEPT_NARRATIVE_CHARS) {
+          textContent = '本轮没有新的道具交付。你的背包仍以已经确认的物品记录为准。';
+          midTermContent = '';
+          response.action_options = [];
+        } else {
+          textContent = strippedText.text;
+          midTermContent = stripUnsupportedGainClauses(midTermContent, grantedNames, itemContext)?.text || '';
+          response.action_options = (response.action_options || []).filter(option => !textGains.some(name => String(option).includes(name)));
+        }
       }
     }
     if ((saveData as any)?.世界?.状态?.剧本模组?.modId) {
@@ -2647,10 +2782,59 @@ ${step1Text}
 
     if (fixedInventory) {
       // Scene/item labels retain their words without leaking bracket markup into prose.
-      textContent = textContent.replace(/【([^】\r\n]{1,80})】/g, '$1');
-      midTermContent = midTermContent.replace(/【([^】\r\n]{1,80})】/g, '$1');
+      textContent = flattenBracketLabels(textContent);
+      midTermContent = flattenBracketLabels(midTermContent);
     }
     // UI and memory must display the same checked text, not the original model draft.
+    // 重要桥段推进卡片（剧情策划裁定 A）：本回合结束后这一拍仍未完成，正文不得写出结果——
+    // 只删命中的句子；点卡片结算的那一步不请求模型，正文就是引擎结果句。
+    const keyBeatAfterTurn = getActiveKeyBeatCard(saveData);
+    if (keyBeatAfterTurn && textContent) {
+      const stripped = stripNarrativeBoundaryClauses(textContent, keyBeatAfterTurn.eventId);
+      if (stripped.removed.length) {
+        console.warn('[重要桥段] 删除提前写出结果的句子：', stripped.removed);
+        textContent = stripped.text.replace(/\s/g, '').length >= 20 ? stripped.text : KEY_BEAT_PENDING_FALLBACK;
+        midTermContent = stripNarrativeBoundaryClauses(midTermContent, keyBeatAfterTurn.eventId).text;
+      }
+    }
+    const settledKeyBeatStep = eventProgress?.attempted && eventProgress.outcome === 'success'
+      ? keyBeatStep(eventProgress.eventId, eventProgress.actionId)
+      : null;
+    // 结果只出自引擎这一处：卡片回合不生成正文，结算成功即以该步 resultLine 作为本回合正文与记忆。
+    if (settledKeyBeatStep) textContent = settledKeyBeatStep.resultLine;
+    // 订约成功的条款直接落正文与记忆，舍弃写手自行追加的保护承诺。
+    if (eventProgress?.attempted && eventProgress.outcome === 'success'
+      && eventProgress.eventId === 'lcq.event.sudaji_south_pact'
+      && eventProgress.actionId === 'seal_three_month_south_pact') {
+      textContent = '你当面与苏妲己订下南荒之约：三个月内前往南荒采集霓龙丝，逾期受炮烙。这份约定成为你南下的由头。';
+      midTermContent = textContent;
+      response.action_options = [];
+    }
+    // 已验证的本地关键动作正文属于作者合同；在模型清洗之后重新取得，不能被未登场删句守卫掏空。
+    const settledFixedBeat = eventProgress?.attempted && eventProgress.outcome === 'success'
+      ? fixedBeatNarrative(eventProgress.eventId, eventProgress.actionId) : undefined;
+    if (settledFixedBeat) { textContent = settledFixedBeat; midTermContent = settledFixedBeat; response.action_options = []; }
+    // deadline 的 gameOver 在本轮 advance 才落账；用同一已验证动作预结算读取，不提前推进 live 存档。
+    const endingPreview = response.moduleReceipt && eventProgress?.attempted && options?.eventAction
+      ? previewLegacyPilotSettlement(currentSaveData, options.eventAction, {
+          ...(trustedEventJudgement ? { judgementResolution: trustedEventJudgement } : {}),
+        }) : null;
+    const settledEnding = (saveData as any)?.世界?.状态?.剧本模组?.gameOver
+      || (endingPreview?.settled as any)?.世界?.状态?.剧本模组?.gameOver
+      || (response.moduleReceipt
+        ? (advanceScenarioRuntime(cloneDeep(saveData)).saveData as any)?.世界?.状态?.剧本模组?.gameOver : undefined);
+    const settledEndingText = fixedEndingNarrative(settledEnding);
+    if (settledEndingText) {
+      const warnings = stayEnding ? (startingRuntime?.events || []).find((item: any) => item.id === 'lcq.event.s02_02')?.fatalOutcomes?.deadline?.approach || [] : [];
+      textContent = [endingBridge(response.text, settledEnding?.endingId), ...warnings, settledEndingText].filter(Boolean).join('\n\n');
+      midTermContent = '';
+      response.action_options = [];
+    }
+    if (!settledEndingText && response.moduleReceipt) {
+      const warnings = advanceScenarioRuntime(cloneDeep(saveData)).transitions
+        .filter(item => item.type === 'fatal_approach' && item.detail).map(item => item.detail!);
+      if (warnings.length) { textContent = [textContent, ...warnings].filter(Boolean).join('\n\n'); midTermContent = textContent; }
+    }
     response.text = textContent;
     response.mid_term_memory = midTermContent;
     // 处理 text：可选写入叙事历史；可选写入短期记忆
@@ -2662,7 +2846,10 @@ ${step1Text}
           content: `${timePrefix}${textContent}`,
           time: timePrefix,
           userIntent: options?.playerIntentText || '',
-          actionOptions: this.sanitizeActionOptionsForDisplay(response.action_options || [])
+          image: ((saveData as any)?.世界?.状态?.剧本模组?.events || [])
+            .find((event: any) => event.id === (options?.eventAction?.eventId || (startingRuntime ? getScenarioFocusEvent(startingRuntime)?.id : undefined)))?.presentation?.image,
+          // 重要桥段卡片仍激活时不保留 AI 选项：推进只走卡片，选项不得提前给出下一步。
+          actionOptions: keyBeatAfterTurn ? [] : this.sanitizeActionOptionsForDisplay(response.action_options || [])
         };
         (saveData as any).系统.历史.叙事.push(newNarrative);
         changes.push({

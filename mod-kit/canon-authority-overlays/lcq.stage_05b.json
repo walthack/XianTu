@@ -212,6 +212,14 @@
                     "requireNamed": true
                   }
                 ],
+                "receiptFactors": [
+                  {
+                    "eventId": "lcq.event.s05b_09_temporary_pact_with_xiaozi",
+                    "actionId": "support_xieyi_counterstrike",
+                    "label": "此前支援",
+                    "value": 2
+                  }
+                ],
                 "whyNow": "乐明珠施针、你运功护持，这是一次可见的救治判定。",
                 "stakes": {
                   "perfect": "伤势压住，谢艺可密送长养。",
@@ -267,6 +275,60 @@
           "value": true
         }
       ]
+    },
+    {
+      "op": "set",
+      "path": "scenario.events[id=lcq.event.s05b_09_temporary_pact_with_xiaozi].playerCompletionContract.actions[id=advance_declared_objective].outcomeText.success",
+      "from": "你已亲自执行“与小紫达成临时协定”；事件完成真值将由本地引擎落账。",
+      "to": "你已与小紫达成临时协定，反杀计划成形；出发前还要决定是否承担这次反杀的准备与接应。"
+    },
+    {
+      "op": "insertKeys",
+      "path": "scenario.events[id=lcq.event.s05b_09_temporary_pact_with_xiaozi].playerCompletionContract.actions[id=advance_declared_objective]",
+      "afterKey": "outcomeText",
+      "beforeKey": null,
+      "entries": {
+        "kind": "prepare",
+        "grantsPreparation": "counterstrike_plan_formed"
+      }
+    },
+    {
+      "op": "insertAfter",
+      "path": "scenario.events[id=lcq.event.s05b_09_temporary_pact_with_xiaozi].playerCompletionContract.actions",
+      "afterId": "advance_declared_objective",
+      "value": {
+        "id": "support_xieyi_counterstrike",
+        "label": "协助谢艺准备反杀，随队返回",
+        "actionText": "我协助谢艺准备反杀，出发时随队从暗道返回。",
+        "timeCost": 1,
+        "requiresPreparation": [
+          "counterstrike_plan_formed"
+        ],
+        "outcomeText": {
+          "success": "你已协助谢艺准备反杀，留下一次支援回执；出发时随队返回。",
+          "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+          "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+        }
+      }
+    },
+    {
+      "op": "insertAfter",
+      "path": "scenario.events[id=lcq.event.s05b_09_temporary_pact_with_xiaozi].playerCompletionContract.actions",
+      "afterId": "support_xieyi_counterstrike",
+      "value": {
+        "id": "rest_then_follow_team",
+        "label": "不主动支援，先休整，随队同行",
+        "actionText": "我不主动承担反杀的准备与接应，先休整，出发时随队同行。",
+        "timeCost": 1,
+        "requiresPreparation": [
+          "counterstrike_plan_formed"
+        ],
+        "outcomeText": {
+          "success": "你没有承担反杀准备，先行休整；出发时仍随队同行。",
+          "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+          "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+        }
+      }
     }
   ]
 }

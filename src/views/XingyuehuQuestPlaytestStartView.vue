@@ -104,8 +104,8 @@ import {
 import { useCharacterStore } from '@/stores/characterStore';
 import { useGameStateStore } from '@/stores/gameStateStore';
 
-import { MODULE_TURN_SWITCH } from '@/modules/scenarioMods/modularTurn';
-const modularEnabled = ref(localStorage.getItem(MODULE_TURN_SWITCH) === 'true');
+import { MODULE_TURN_SWITCH, readModuleTurnSwitch } from '@/modules/scenarioMods/modularTurn';
+const modularEnabled = ref(readModuleTurnSwitch());
 function setModularEnabled() { localStorage.setItem(MODULE_TURN_SWITCH, String(modularEnabled.value)); }
 
 const router = useRouter();

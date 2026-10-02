@@ -1,4 +1,5 @@
 import type { SaveData } from '@/types/game';
+import { getRegistryNamesById } from './characterResolver';
 import { mergeFixedScenarioStarterInventory } from './fixedInventoryContracts';
 
 import type {
@@ -201,6 +202,19 @@ function createNpcProfile(source: ScenarioRelationshipSource, character: Scenari
     背包: { 灵石: { 下品: 0, 中品: 0, 上品: 0, 极品: 0 }, 物品: nativeContent.items },
     实时关注: true,
   };
+}
+
+export function ensureEncounteredScenarioCharacter(saveData: SaveData, source: ScenarioRelationshipSource, characterId: string, encountered?: { name: string; gender: string }): void {
+  const character = source.characters?.find(item => item.id === characterId)
+    || (encountered ? { id: characterId, name: getRegistryNamesById(characterId)[0] || encountered.name, gender: encountered.gender } : undefined);
+  if (!character || saveData.社交?.关系?.[character.name]) return;
+  const profile = createNpcProfile(source, character, '相识', 0, saveData.元数据?.时间?.年 ?? 1000);
+  // 初识只登记人物，不把角色卡的背景/未来经历当作玩家已知或 NPC 已说的话。
+  profile.记忆 = [];
+  profile.当前内心想法 = '未记录';
+  (saveData as any).社交 ||= {};
+  saveData.社交.关系 ||= {};
+  saveData.社交.关系[character.name] = profile as any;
 }
 
 export function applyScenarioRelationshipsToSave(saveData: SaveData, source: ScenarioRelationshipSource, generatedAt: string): SaveData {

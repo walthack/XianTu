@@ -1,3 +1,4 @@
+import { storyChapterTitle } from './eventNarrativeView';
 import type { SaveData } from '@/types/game';
 import { getJudgementState } from '@/utils/judgementEngine';
 
@@ -148,8 +149,10 @@ function stageLabelOf(runtime: RuntimeLike | null, landing: boolean): string {
   const modId = runtime?.modId || null;
   if (landing) {
     if (runtime?.baihuGambleRefusal?.hallControlled) return '白湖商馆·受押';
-    const chapter = (runtime?.chapters || []).find(item => item.id === runtime?.currentChapterId);
-    if (chapter?.title) return chapter.title;
+    const focusId = runtime ? currentFocusEvent(runtime)?.id : undefined;
+    const chapter = (runtime?.chapters || []).find(item => focusId && item.eventIds?.includes(focusId))
+      || (runtime?.chapters || []).find(item => item.id === runtime?.currentChapterId);
+    if (chapter?.title) return storyChapterTitle(modId || undefined, focusId, chapter.title);
     if (modId === 'lcq.stage_01') return '草原';
     if (modId === 'lcq.stage_02') return '五原路';
     if (modId === 'lcq.stage_03b_snake_flower_bridge') return '南荒商路';
@@ -525,11 +528,12 @@ function deriveLandingLiveGoal(
 
   const event = currentFocusEvent(runtime);
   const objective = resolveFixedQuestObjective(event);
-  const chapter = (runtime.chapters || []).find(item => item.id === runtime.currentChapterId);
+  const chapter = (runtime.chapters || []).find(item => event?.id && item.eventIds?.includes(event.id))
+    || (runtime.chapters || []).find(item => item.id === runtime.currentChapterId);
   const goal = objective || '先看清眼前的局面，再用自己的话行动。';
   const why = runtime.baihuGambleRefusal?.hallControlled
     ? '你仍受商馆控制，先回应眼前的拘拿或谈清离馆条件。'
-    : chapter?.title ? `当前：${chapter.title}` : '先处理眼前这件事。';
+    : chapter?.title ? `当前：${storyChapterTitle(runtime.modId || undefined, event?.id, chapter.title)}` : '先处理眼前这件事。';
   if (!metXieyiFateBeat(runtime) && /命运|失踪|骨灰|长养|星月开库/.test(`${goal}\n${why}`)) {
     return {
       currentGoal: '先看清眼前的局面，再用自己的话行动。',

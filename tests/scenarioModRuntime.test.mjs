@@ -588,3 +588,12 @@ test('milestone rewards revoke transient titles at story-correct point (买官�
   applyMilestoneRewards(save, [{ type: 'stage_ready', id: 'next' }]);
   assert.deepEqual(save.角色.身份.称号, ['汉国舞阳侯'], '买官爵被剥夺,只剩舞阳侯');
 });
+
+
+test('bugfix5: removing a blocked speaker removes the whole dialogue paragraph, preserving other quoted paragraphs', async () => {
+  const { stripNarrativeUnintroducedCharacters, stripNarrativeEntityTypeConflicts } = await loadTs('../src/modules/scenarioMods/characterResolver.ts');
+  const good = '“随队南行。”武二郎说道。';
+  const blocked = '潘金莲问：“你收下了？还有别的事吗？”声音清泠得像碎冰碰瓷。';
+  assert.equal(stripNarrativeUnintroducedCharacters(blocked + '\n' + good, ['武二郎']).text, good);
+  assert.equal(stripNarrativeEntityTypeConflicts('“青骓乃宝剑。再看一眼。”声音清泠。\n' + good).text, good);
+});
