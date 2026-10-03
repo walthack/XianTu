@@ -121,6 +121,7 @@ const gameTime = computed(() => {
       const minutes = getMinutes(time)
       const formattedMinutes = minutes.toString().padStart(2, '0')
       const formattedHours = time.小时.toString().padStart(2, '0')
+      if (time.相对日) return `${t(time.相对日)} ${formattedHours}:${formattedMinutes}`
       return `${t('仙道')}${time.年}${t('年')}${time.月}${t('月')}${time.日}${t('日')} ${formattedHours}:${formattedMinutes}`
     }
     return `${t('仙道')}${t('元年')}1${t('月')}1${t('日')} 00:00`

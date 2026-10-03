@@ -40,7 +40,7 @@ import {
 } from '@/utils/judgementEngine';
 import { buildLocalJudgementPreflight } from '@/utils/judgementPreflight';
 import { questCompassPhrases } from './eventNarrativeView';
-import { resolveLocationIdFromPosition } from './secondaryLines';
+import { locationFromPosition } from './travel/travelLedger';
 import { formatScenePressurePrompt } from './storyContext';
 import type { GM_Response } from '@/types/AIGameMaster';
 import type { SaveData } from '@/types/game';
@@ -542,10 +542,10 @@ function readPreferredAdvancePhrases(saveData: SaveData): string[] {
   const focus = getScenarioFocusEvent(runtime as never);
   const event = focus?.playerCompletionContract && !completed.has(focus.id) ? focus : undefined;
   const action = event?.playerCompletionContract?.actions?.[0];
-  const atLocationId = resolveLocationIdFromPosition(
+  const atLocationId = locationFromPosition(
     (saveData as { 角色?: { 位置?: { 描述?: unknown } } })?.角色?.位置?.描述,
     (runtime as { canon?: { locations?: Array<{ id: string; name: string }> } }).canon?.locations,
-  );
+  ).locationId;
   const compass = questCompassPhrases(event, runtime as never, atLocationId)
     .map(clipAdvancePhrase)
     .filter(Boolean);

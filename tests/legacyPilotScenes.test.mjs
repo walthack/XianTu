@@ -1124,7 +1124,10 @@ test('白湖四拍 prepare 进 Pilot 但不写终态；最终动作才写终态'
   const contractAction = current => {
     const event = getScenarioFocusEvent(runtimeOf(current));
     const contractIds = new Set((event?.playerCompletionContract?.actions || []).map(action => action.id));
-    return getCurrentStoryEventActions(current).find(item => contractIds.has(item.actionId));
+    const actions = getCurrentStoryEventActions(current);
+    // 到达≠完成：人不在本拍地点时先走罗盘移动。
+    return actions.find(item => contractIds.has(item.actionId))
+      || actions.find(item => item.actionId.startsWith('travel:'));
   };
   const playCurrent = () => {
     const selection = contractAction(save);
@@ -1375,7 +1378,10 @@ test('s02_02 81 plans on a natural stage-02 save never name unmet 阿伽门侬',
   const contractAction = current => {
     const event = getScenarioFocusEvent(runtimeOf(current));
     const contractIds = new Set((event?.playerCompletionContract?.actions || []).map(action => action.id));
-    return getCurrentStoryEventActions(current).find(item => contractIds.has(item.actionId));
+    const actions = getCurrentStoryEventActions(current);
+    // 到达≠完成：人不在本拍地点时先走罗盘移动。
+    return actions.find(item => contractIds.has(item.actionId))
+      || actions.find(item => item.actionId.startsWith('travel:'));
   };
   const playCurrent = () => {
     const selection = contractAction(save);

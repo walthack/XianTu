@@ -19,6 +19,7 @@ async function pactSave() {
   rt.currentChapterId=rt.chapters.find(c=>c.eventIds.includes('lcq.event.sudaji_south_pact')).id;
   rt.completedEventIds=[];
   rt.flags['event.sudaji_south_pact.done']=false;
+  save.角色.位置.描述='中州·五原·白湖商馆内院'; // 到达≠完成：谈判在五原城内进行
   return save;
 }
 

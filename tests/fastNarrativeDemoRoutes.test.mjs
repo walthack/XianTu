@@ -318,7 +318,7 @@ test('wuyuan open world fresh selection plans kind=open_world from clone settlem
 
 test('baihu escape is last demo event and fail-closes every fast route after completion', async () => {
   const demo = await loadDemo();
-  const { getCurrentStoryEventActions, getTrackedStoryOpportunityActions } = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  const { getCurrentStoryEventActions, getTrackedStoryOpportunityActions, recordStoryEventStructuredAction } = await loadTs('../src/modules/scenarioMods/runtime.ts');
   const { getWuyuanOpenWorldSelections } = await loadTs('../src/modules/scenarioMods/wuyuanOpenWorldSlice.ts');
   const { QINGYU_OPENING_PLAYTEST_EVENT_IDS } = await loadTs('../src/modules/scenarioMods/qingyuOpeningPlaytest.ts');
   const save = await stage02Fixture();
@@ -330,6 +330,9 @@ test('baihu escape is last demo event and fail-closes every fast route after com
   locateEvent(save, BAIHU, {
     flags: { 'event.baihu_shangguan_escape.done': false, 'chapter.lcq.stage_02.started': true },
   });
+  // 到达≠完成：fixture 人不在五原城，先走罗盘移动。
+  const travel = getCurrentStoryEventActions(save).find(item => item.actionId.startsWith('travel:'));
+  if (travel) assert.equal(recordStoryEventStructuredAction(save, travel).completed, false);
   const actions = getCurrentStoryEventActions(save);
   const walkOut = actions.find(item => item.actionId === WALK_OUT);
   assert.ok(walkOut, 'fresh walk_out_wuyuan_shangguan must come from getCurrentStoryEventActions');

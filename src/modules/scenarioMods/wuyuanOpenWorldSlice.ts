@@ -24,20 +24,24 @@ import {
   type ScenarioEventActionSelection,
 } from './runtime';
 import { storyRouteLocation } from './eventNarrativeView';
-import { resolveLocationIdFromPosition } from './secondaryLines';
+import { locationFromPosition } from './travel/travelLedger';
+import {
+  COMPOUND_ZONE_ID,
+  FRONT_STREET_ZONE_ID,
+  GATE_ZONE_ID,
+  HALL_ZONE_ID,
+  MARKET_ZONE_ID,
+  PASTRY_ZONE_ID,
+  PRISON_ZONE_ID,
+  SETTLEMENT_ZONE_ID,
+  WUYUAN_WORLD_LOCATION_ID,
+  WUYUAN_ZONES,
+} from './travel/defs/qingyuWuyuanZones';
 
 export const WUYUAN_OPEN_WORLD_SLICE_ID = 'lcq.open_world.wuyuan_v1';
 export const WUYUAN_SETTLEMENT_ID = 'lcq.settlement.wuyuan.v1';
 export const WUYUAN_MARKET_ARRIVAL_ID = 'lcq.route.wuyuan.arrive_market';
-export const WUYUAN_WORLD_LOCATION_ID = 'liuchao.location.wuyuan';
-const SETTLEMENT_ZONE_ID = 'lcq.zone.wuyuan.settlement';
-const MARKET_ZONE_ID = 'lcq.zone.wuyuan.market';
-const PASTRY_ZONE_ID = 'lcq.zone.wuyuan.pastry_shop';
-const FRONT_STREET_ZONE_ID = 'lcq.zone.wuyuan.baihu_front_street';
-const COMPOUND_ZONE_ID = 'lcq.zone.wuyuan.baihu_compound';
-const HALL_ZONE_ID = 'lcq.zone.wuyuan.baihu_hall';
-const PRISON_ZONE_ID = 'lcq.zone.wuyuan.water_prison';
-const GATE_ZONE_ID = 'lcq.zone.wuyuan.baihu_gate';
+export { WUYUAN_WORLD_LOCATION_ID };
 const PASTRY_TO_PRISON_ROUTE = 'lcq.route.wuyuan.pastry_taken_to_prison';
 const MARKET_TO_PRISON_ROUTE = 'lcq.route.wuyuan.market_taken_to_prison';
 const PRISON_TO_HALL_ROUTE = 'lcq.route.wuyuan.prison_taken_to_hall';
@@ -56,40 +60,7 @@ const WUYUAN_LEAF_RANK: Record<string, number> = {
 export const WUYUAN_OPEN_WORLD_DEFINITION: OpenWorldSliceDefinition = {
   id: WUYUAN_OPEN_WORLD_SLICE_ID,
   initialZoneId: MARKET_ZONE_ID,
-  zones: [
-    {
-      id: SETTLEMENT_ZONE_ID, name: '五原城镇', kind: 'settlement', standable: false,
-      worldLocationId: WUYUAN_WORLD_LOCATION_ID,
-    },
-    {
-      id: MARKET_ZONE_ID, name: '五原露天市集', aliases: ['五原市集', '露天市集', '市集'],
-      kind: 'street', parentZoneId: SETTLEMENT_ZONE_ID, worldLocationId: WUYUAN_WORLD_LOCATION_ID,
-    },
-    {
-      id: PASTRY_ZONE_ID, name: '点心铺', aliases: ['糕饼铺', '饼铺'],
-      kind: 'interior', parentZoneId: SETTLEMENT_ZONE_ID, worldLocationId: WUYUAN_WORLD_LOCATION_ID,
-    },
-    {
-      id: FRONT_STREET_ZONE_ID, name: '白湖商馆门前街', aliases: ['商馆门前', '门前街'],
-      kind: 'street', parentZoneId: SETTLEMENT_ZONE_ID, worldLocationId: WUYUAN_WORLD_LOCATION_ID,
-    },
-    {
-      id: COMPOUND_ZONE_ID, name: '白湖商馆', aliases: ['五原商馆'],
-      kind: 'compound', parentZoneId: SETTLEMENT_ZONE_ID, worldLocationId: WUYUAN_WORLD_LOCATION_ID, standable: false,
-    },
-    {
-      id: HALL_ZONE_ID, name: '白湖商馆内院', aliases: ['商馆内院'],
-      kind: 'interior', parentZoneId: COMPOUND_ZONE_ID, worldLocationId: WUYUAN_WORLD_LOCATION_ID,
-    },
-    {
-      id: PRISON_ZONE_ID, name: '白湖商馆水牢', aliases: ['水牢'],
-      kind: 'interior', parentZoneId: COMPOUND_ZONE_ID, worldLocationId: WUYUAN_WORLD_LOCATION_ID,
-    },
-    {
-      id: GATE_ZONE_ID, name: '白湖商馆大门', aliases: ['商馆大门'],
-      kind: 'interior', parentZoneId: COMPOUND_ZONE_ID, worldLocationId: WUYUAN_WORLD_LOCATION_ID,
-    },
-  ],
+  zones: WUYUAN_ZONES,
   routes: [
     {
       id: 'lcq.route.wuyuan.pastry_to_market_street',
@@ -249,7 +220,7 @@ function playerLocationDescription(saveData: SaveData): string {
 function playerInWuyuan(saveData: SaveData, runtime: RuntimeWithSlice): boolean {
   const desc = playerLocationDescription(saveData);
   if (desc.includes('五原')) return true;
-  const locId = resolveLocationIdFromPosition(desc, (runtime as { canon?: { locations?: Array<{ id: string; name: string }> } }).canon?.locations);
+  const locId = locationFromPosition(desc, (runtime as { canon?: { locations?: Array<{ id: string; name: string }> } }).canon?.locations).locationId;
   return locId === 'liuchao.location.wuyuan';
 }
 

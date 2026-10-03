@@ -22,6 +22,7 @@ const steps = [
   ['内置 mod 同步', 'node', ['scripts/sync-builtin-mods.mjs']],
   ['人工裁定执法', 'node', ['scripts/validate-canon-decisions.mjs']],
   ['主轴/存档契约校验', 'node', ['scripts/validate-axis-save-contract.mjs']],
+  ['地点 id 校验', 'node', ['scripts/validate-location-ids.mjs']],
 ];
 if (!FAST) {
   const stageFiles = [];

@@ -26,6 +26,9 @@ async function focus(save,id) {
 }
 async function action(save,id) {
   const { recordStoryEventStructuredAction,getCurrentStoryEventActions,advanceScenarioRuntime }=await loadTs('../src/modules/scenarioMods/runtime.ts');
+  // 到达≠完成：要的动作不在、只有罗盘移动时，先移动到场。
+  const travel=getCurrentStoryEventActions(save).find(a=>a.actionId.startsWith('travel:'));
+  if(travel&&travel.actionId!==id&&!id.startsWith('travel:')){assert.equal(recordStoryEventStructuredAction(save,travel).completed,false);}
   const selection=getCurrentStoryEventActions(save).find(a=>a.actionId===id);
   assert.ok(selection,`missing action ${id}`);
   rt(save).worldTurn++;
@@ -100,6 +103,9 @@ test('04b and05b advance through actual action receipts without skipping new bea
   for(let n=0;n<160&&!rt(save).nextStageReadyId;n++){
    const actions=getCurrentStoryEventActions(save);
    const candidate=actions.find(a=>!a.judgement&&rt(save).events.find(e=>e.id===a.eventId)?.playerCompletionContract?.actions.some(x=>x.id===a.actionId));
+   // 到达≠完成：人不在本拍地点时先走罗盘移动，到场后下一轮才是合同动作。
+   const travel=!candidate&&actions.find(a=>a.actionId.startsWith('travel:'));
+   if(travel){save=await action(save,travel.actionId);continue;}
    assert.ok(candidate,`stalled in ${id}: ${JSON.stringify(actions.map(x=>x.actionId))}`);
    seen.add(candidate.eventId);save=await action(save,candidate.actionId);
   }

@@ -45,6 +45,7 @@ import { updateMasteredSkills } from './masteredSkillsCalculator';
 import { assembleSystemPrompt } from './prompts/promptAssembler';
 import { getPrompt, isPromptEnabled, MODULE_NARRATIVE_SYSTEM_PROMPT } from '@/services/defaultPrompts';
 import { normalizeGameTime } from './time';
+import { advanceClock } from '@/modules/scenarioMods/travel/travelLedger';
 import { updateStatusEffects } from './statusEffectManager';
 import { sanitizeAITextForDisplay } from '@/utils/textSanitizer';
 import { INITIAL_GENERATION_POLICY, initialGenerationRequestLimits, shouldRetryInitialNarrative } from '@/utils/initialGenerationPolicy';
@@ -2536,7 +2537,9 @@ ${step1Text}
   private _formatGameTime(gameTime: GameTime | undefined): string {
     if (!gameTime) return '【仙历元年】';
     const minutes = this._getMinutes(gameTime);
-    return `【仙道${gameTime.年}年${gameTime.月}月${gameTime.日}日 ${String(gameTime.小时).padStart(2, '0')}:${String(minutes).padStart(2, '0')}】`;
+    const clock = `${String(gameTime.小时).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+    if (gameTime.相对日) return `【${gameTime.相对日} ${clock}】`;
+    return `【仙道${gameTime.年}年${gameTime.月}月${gameTime.日}日 ${clock}】`;
   }
   public async processGmResponse(
     response: GM_Response,
@@ -2738,10 +2741,9 @@ ${step1Text}
       && !getModuleReceipts(saveData).some(receipt => receipt.id === response.moduleReceipt!.id)
       && (eventProgress?.attempted || (openWorldProgress?.settled && !openWorldProgress.idempotent)
         || (!options?.eventAction && !options?.openWorldAction))) {
-      const previousTime = structuredClone((saveData as any).元数据.时间);
       const cost = Math.max(1, Number(options?.eventAction?.timeCost || options?.openWorldAction?.timeCost) || 1);
-      (saveData as any).元数据.时间 = normalizeGameTime({ ...previousTime, 分钟: (Number(previousTime.分钟) || 0) + cost });
-      changes.push({ key: '元数据.时间', action: 'set', oldValue: previousTime, newValue: (saveData as any).元数据.时间 });
+      const advanced = advanceClock(saveData, { minutes: cost }, 'module_turn');
+      if (advanced) changes.push({ key: '元数据.时间', action: 'set', oldValue: advanced.oldValue, newValue: advanced.newValue });
     }
     const timePrefix = this._formatGameTime((saveData as any).元数据?.时间);
     let textContent = clarifyUnobtainedSilkPouchNarrative(

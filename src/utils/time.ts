@@ -33,5 +33,6 @@ export function normalizeGameTime(time: GameTime): GameTime {
     月 = ((月 - 1) % MONTHS_IN_YEAR) + 1;
   }
 
-  return { 年, 月, 日, 小时, 分钟 };
+  // 「数日」路段的相对日标记（advanceClock 写入）随时间一起保留，直到下一次按具体天数推进。
+  return { 年, 月, 日, 小时, 分钟, ...(time.相对日 ? { 相对日: time.相对日 } : {}) };
 }

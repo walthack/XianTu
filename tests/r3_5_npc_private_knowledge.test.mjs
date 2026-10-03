@@ -391,6 +391,7 @@ test('private truth is stripped from generic state and only its holder gets a sa
   assert.doesNotMatch(unrelatedPrompt, new RegExp(PATERNITY_CLAIM));
 
   runtime.activeEventIds = ['lcq.event.s05_13'];
+  save.角色.位置.描述 = '南荒·鬼王峒'; // 到达≠完成：先到 s05_13 的地点
   const [probe] = getCurrentStoryEventActions(save);
   assert.equal(probe.actionId, 'probe_geluo_control_limits');
   assert.equal(recordStoryEventStructuredAction(save, probe).outcome, 'success');

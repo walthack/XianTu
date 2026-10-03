@@ -368,10 +368,15 @@ test('B1 未知/不可解析位置 fail-closed，不得离场默认 dead；可�
     false,
     '不可解析位置不得把托付写入 completedEventIds',
   );
+  // 到达≠完成：解析不出按不在场处理（fail closed），只给回鬼王峒的移动；移回后命运二选一仍在。
+  const [back] = api.getCurrentStoryEventActions(save);
+  assert.match(back.actionId, /^travel:/, '不可解析位置只给移动');
+  const away = structuredClone(save);
+  assert.equal(api.recordStoryEventStructuredAction(away, back).completed, false);
   assert.equal(
-    api.getCurrentStoryEventActions(save).some(item => item.actionId === 'accept_entrustment'),
+    api.getCurrentStoryEventActions(away).some(item => item.actionId === 'accept_entrustment'),
     true,
-    '不可解析位置后仍须保留命运二选一',
+    '移回现场后仍须保留命运二选一',
   );
   assert.equal(xieyiFavorability(save), beforeFav, '不可解析位置不得发谢艺好感');
 
@@ -384,6 +389,32 @@ test('B1 未知/不可解析位置 fail-closed，不得离场默认 dead；可�
   assertDeadFate(reloaded, '外场收束后 JSON 重载');
   assertXieyiCriticalAffinity(reloaded, beforeFav, '外场收束后 JSON 重载');
   await pokeIdempotency(api, reloaded, accept, SURVIVAL_TEXT);
+});
+
+test('到达≠完成（2026-10-03）不改谢艺托付：在场或走到现场都不自动结清，离开仍按承接（裁定 #90）', async () => {
+  const api = await loadProductionApi();
+  const stage = await loadStage();
+  const save = await walkToEntrustment(api, stage);
+  const locations = runtimeOf(save).canon?.locations || [];
+  const activatedAt = runtimeOf(save).eventActivatedAtLocation?.[ENTRUSTMENT];
+  assert.equal(locations.find(item => item.id === activatedAt)?.name, '鬼王峒', '激活位置须照旧记录');
+
+  const stayed = settleChoice(api, structuredClone(save));
+  assert.notEqual(runtimeOf(stayed).flags['event.xieyi_entrustment.done'], true, '留在现场不得结清');
+  assert.ok(api.getCurrentStoryEventActions(stayed).some(item => item.actionId === 'accept_entrustment'));
+
+  // 模拟「在别处激活、再走到鬼王峒」：旧 settleArrivalObjective 会在这里自动替玩家选第一项。
+  const arrived = structuredClone(save);
+  const elsewhere = locations.find(item => item.name === '碧鲮族')?.id;
+  assert.ok(elsewhere);
+  runtimeOf(arrived).eventActivatedAtLocation[ENTRUSTMENT] = elsewhere;
+  const afterArrival = settleChoice(api, arrived);
+  assert.notEqual(runtimeOf(afterArrival).flags['event.xieyi_entrustment.done'], true, '走到现场不得自动结清');
+  assertNoFateInjected(afterArrival, '走到现场后');
+
+  const left = structuredClone(save);
+  left.角色.位置.描述 = '南荒·碧鲮族';
+  assertDeadFate(settleChoice(api, left), '离开即接受不变');
 });
 
 test('B1 离开命运拍现场按承接收束 dead，且不得被重放切走', async () => {

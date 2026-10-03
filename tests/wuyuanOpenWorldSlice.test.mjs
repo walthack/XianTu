@@ -431,7 +431,10 @@ test('escape hops commit only after completedEventIds are advanced', async () =>
   const contractAction = current => {
     const event = getScenarioFocusEvent(runtimeOf(current));
     const contractIds = new Set((event?.playerCompletionContract?.actions || []).map(action => action.id));
-    return getCurrentStoryEventActions(current).find(item => contractIds.has(item.actionId));
+    const actions = getCurrentStoryEventActions(current);
+    // 到达≠完成：人不在本拍地点时先走罗盘移动。
+    return actions.find(item => contractIds.has(item.actionId))
+      || actions.find(item => item.actionId.startsWith('travel:'));
   };
   for (let step = 0; step < 40; step += 1) {
     if (runtimeOf(saveData)?.nextStageReadyId === 'lcq.stage_02') break;

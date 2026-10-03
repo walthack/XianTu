@@ -1,0 +1,473 @@
+{
+  "note": "地点 id 校验关已知问题名单（主策划 2026-10-03 裁定 #5）。只警告不失败；新问题直接失败。别名循环/自指/别名目标不存在/归一后事件引用失效不许登记。每项写明地点 id、问题类型、原因、关闭条件。",
+  "issues": [
+    {
+      "key": "outside_nanhuang:liuchao.location.liuligu",
+      "kind": "outside_nanhuang",
+      "locationIds": [
+        "liuchao.location.liuligu"
+      ],
+      "reason": "琉璃谷 x=1165 在南荒多边形左缘外；该地点在南荒本段隐藏（06 文档 §2）",
+      "closeWhen": "主策划校准琉璃谷坐标或多边形",
+      "detail": "琉璃谷 (1165,8791) 不在南荒多边形内"
+    },
+    {
+      "key": "missing_coordinates:lcq.location.yeao_village",
+      "kind": "missing_coordinates",
+      "locationIds": [
+        "lcq.location.yeao_village"
+      ],
+      "reason": "南荒地点无坐标，地图无法落点",
+      "closeWhen": "主策划在 overlay 补坐标",
+      "detail": "南荒山村 无坐标"
+    },
+    {
+      "key": "missing_coordinates:lcq.location.guiwang_inn",
+      "kind": "missing_coordinates",
+      "locationIds": [
+        "lcq.location.guiwang_inn"
+      ],
+      "reason": "南荒地点无坐标，地图无法落点",
+      "closeWhen": "主策划在 overlay 补坐标",
+      "detail": "鬼王峒驿馆 无坐标"
+    },
+    {
+      "key": "missing_coordinates:lcq.location.nanhuang_departure_camp",
+      "kind": "missing_coordinates",
+      "locationIds": [
+        "lcq.location.nanhuang_departure_camp"
+      ],
+      "reason": "南荒地点无坐标，地图无法落点",
+      "closeWhen": "主策划在 overlay 补坐标",
+      "detail": "南荒散峒营地 无坐标"
+    },
+    {
+      "key": "unaliased_duplicate:liuchao.location.luoyang+lyl.location.luoyang",
+      "kind": "unaliased_duplicate",
+      "locationIds": [
+        "liuchao.location.luoyang",
+        "lyl.location.luoyang"
+      ],
+      "reason": "同名同坐标的重复 id，属云龙/阎歌既有数据，本轮移动改造只裁定了清羽记南荒",
+      "closeWhen": "主策划为该组裁定规范 id 并写入 LOCATION_ID_ALIASES",
+      "detail": "同名同坐标未并到一个规范 id：洛都@6838,3577"
+    },
+    {
+      "key": "unaliased_duplicate:liuchao.location.lin_an+liuchao.location.linan",
+      "kind": "unaliased_duplicate",
+      "locationIds": [
+        "liuchao.location.lin_an",
+        "liuchao.location.linan"
+      ],
+      "reason": "同名同坐标的重复 id，属云龙/阎歌既有数据，本轮移动改造只裁定了清羽记南荒",
+      "closeWhen": "主策划为该组裁定规范 id 并写入 LOCATION_ID_ALIASES",
+      "detail": "同名同坐标未并到一个规范 id：临安@7466,6532"
+    },
+    {
+      "key": "unaliased_duplicate:liuchao.location.jinming_zhai+liuchao.location.jinmingzhai",
+      "kind": "unaliased_duplicate",
+      "locationIds": [
+        "liuchao.location.jinming_zhai",
+        "liuchao.location.jinmingzhai"
+      ],
+      "reason": "同名同坐标的重复 id，属云龙/阎歌既有数据，本轮移动改造只裁定了清羽记南荒",
+      "closeWhen": "主策划为该组裁定规范 id 并写入 LOCATION_ID_ALIASES",
+      "detail": "同名同坐标未并到一个规范 id：金明寨@5050,6550"
+    },
+    {
+      "key": "unaliased_duplicate:liuchao.location.jingxi+liuchao.location.jingxi_village",
+      "kind": "unaliased_duplicate",
+      "locationIds": [
+        "liuchao.location.jingxi",
+        "liuchao.location.jingxi_village"
+      ],
+      "reason": "同名同坐标的重复 id，属云龙/阎歌既有数据，本轮移动改造只裁定了清羽记南荒",
+      "closeWhen": "主策划为该组裁定规范 id 并写入 LOCATION_ID_ALIASES",
+      "detail": "同名同坐标未并到一个规范 id：荆溪村寨@5600,6900"
+    },
+    {
+      "key": "unaliased_duplicate:liuchao.location.liangzhou+lyg.location.liangzhou",
+      "kind": "unaliased_duplicate",
+      "locationIds": [
+        "liuchao.location.liangzhou",
+        "lyg.location.liangzhou"
+      ],
+      "reason": "同名同坐标的重复 id，属云龙/阎歌既有数据，本轮移动改造只裁定了清羽记南荒",
+      "closeWhen": "主策划为该组裁定规范 id 并写入 LOCATION_ID_ALIASES",
+      "detail": "同名同坐标未并到一个规范 id：凉州@1430,2767"
+    },
+    {
+      "key": "unaliased_duplicate:liuchao.location.changqiu_palace+lyl.location.changqiu_palace",
+      "kind": "unaliased_duplicate",
+      "locationIds": [
+        "liuchao.location.changqiu_palace",
+        "lyl.location.changqiu_palace"
+      ],
+      "reason": "同名同坐标的重复 id，属云龙/阎歌既有数据，本轮移动改造只裁定了清羽记南荒",
+      "closeWhen": "主策划为该组裁定规范 id 并写入 LOCATION_ID_ALIASES",
+      "detail": "同名同坐标未并到一个规范 id：长秋宫@6838,3577"
+    },
+    {
+      "key": "unaliased_duplicate:liuchao.location.zhaoyang_hall+lyl.location.zhaoyang_palace",
+      "kind": "unaliased_duplicate",
+      "locationIds": [
+        "liuchao.location.zhaoyang_hall",
+        "lyl.location.zhaoyang_palace"
+      ],
+      "reason": "同名同坐标的重复 id，属云龙/阎歌既有数据，本轮移动改造只裁定了清羽记南荒",
+      "closeWhen": "主策划为该组裁定规范 id 并写入 LOCATION_ID_ALIASES",
+      "detail": "同名同坐标未并到一个规范 id：昭阳宫@6838,3577"
+    },
+    {
+      "key": "unaliased_duplicate:liuchao.location.nangong+lyl.location.nangong",
+      "kind": "unaliased_duplicate",
+      "locationIds": [
+        "liuchao.location.nangong",
+        "lyl.location.nangong"
+      ],
+      "reason": "同名同坐标的重复 id，属云龙/阎歌既有数据，本轮移动改造只裁定了清羽记南荒",
+      "closeWhen": "主策划为该组裁定规范 id 并写入 LOCATION_ID_ALIASES",
+      "detail": "同名同坐标未并到一个规范 id：南宫@6838,3577"
+    },
+    {
+      "key": "unaliased_duplicate:liuchao.location.beisi_yard+lyl.location.beisi_prison",
+      "kind": "unaliased_duplicate",
+      "locationIds": [
+        "liuchao.location.beisi_yard",
+        "lyl.location.beisi_prison"
+      ],
+      "reason": "同名同坐标的重复 id，属云龙/阎歌既有数据，本轮移动改造只裁定了清羽记南荒",
+      "closeWhen": "主策划为该组裁定规范 id 并写入 LOCATION_ID_ALIASES",
+      "detail": "同名同坐标未并到一个规范 id：北寺狱@6838,3577"
+    },
+    {
+      "key": "unaliased_duplicate:liuchao.location.yongan_palace+lyl.location.weiyang_palace",
+      "kind": "unaliased_duplicate",
+      "locationIds": [
+        "liuchao.location.yongan_palace",
+        "lyl.location.weiyang_palace"
+      ],
+      "reason": "同名同坐标的重复 id，属云龙/阎歌既有数据，本轮移动改造只裁定了清羽记南荒",
+      "closeWhen": "主策划为该组裁定规范 id 并写入 LOCATION_ID_ALIASES",
+      "detail": "同名同坐标未并到一个规范 id：永安宫@6838,3577"
+    },
+    {
+      "key": "shared_anchor:lcq.location.beast_camp+lcq.location.command_tent+lcq.location.grassland+lcq.location.macedon_camp+lcq.location.roman_camp+lcq.location.taiyi_temple+liuchao.location.baihu_shang_guan+liuchao.location.longchi+liuchao.location.wuyuan+liuchao.location.yun_shi_shop",
+      "kind": "shared_anchor",
+      "locationIds": [
+        "lcq.location.beast_camp",
+        "lcq.location.command_tent",
+        "lcq.location.grassland",
+        "lcq.location.macedon_camp",
+        "lcq.location.roman_camp",
+        "lcq.location.taiyi_temple",
+        "liuchao.location.baihu_shang_guan",
+        "liuchao.location.longchi",
+        "liuchao.location.wuyuan",
+        "liuchao.location.yun_shi_shop"
+      ],
+      "reason": "不同地点共用同一锚点；按裁定 #53 真实底图锚点不得为防重叠挪位，需逐个确认是父子地点还是坐标待校准",
+      "closeWhen": "确认为父子地点后登记进 LOCATION_PARENTS，或主策划校准坐标",
+      "detail": "不同地点共用锚点 (881,4366)"
+    },
+    {
+      "key": "shared_anchor:liuchao.location.jiangzhou+liuchao.location.xingyue_lake",
+      "kind": "shared_anchor",
+      "locationIds": [
+        "liuchao.location.jiangzhou",
+        "liuchao.location.xingyue_lake"
+      ],
+      "reason": "不同地点共用同一锚点；按裁定 #53 真实底图锚点不得为防重叠挪位，需逐个确认是父子地点还是坐标待校准",
+      "closeWhen": "确认为父子地点后登记进 LOCATION_PARENTS，或主策划校准坐标",
+      "detail": "不同地点共用锚点 (4956,6735)"
+    },
+    {
+      "key": "shared_anchor:liuchao.location.nanzhao+liuchao.location.south_wild_valley",
+      "kind": "shared_anchor",
+      "locationIds": [
+        "liuchao.location.nanzhao",
+        "liuchao.location.south_wild_valley"
+      ],
+      "reason": "06 文档 D2：05b 南荒山谷与昭南重叠",
+      "closeWhen": "05b 南荒山谷坐标修正后自动消失",
+      "detail": "不同地点共用锚点 (4916,7778)"
+    },
+    {
+      "key": "shared_anchor:liuchao.location.beisi_yard+liuchao.location.changqiu_palace+liuchao.location.jiaoxi_di+liuchao.location.jin_fu+liuchao.location.luoyang+liuchao.location.mijing_wilderness+liuchao.location.nangong+liuchao.location.shangguan_li_hufu+liuchao.location.yique+liuchao.location.yongan_palace+liuchao.location.zengxi_guan+liuchao.location.zhaoyang_hall+lyl.location.anmo_ju+lyl.location.beisi_prison+lyl.location.changqiu_palace+lyl.location.luoyang+lyl.location.nangong+lyl.location.pengyi_she+lyl.location.qilifang+lyl.location.shangshenguan+lyl.location.weiyang_palace+lyl.location.xianqian_dian+lyl.location.yulin_camp+lyl.location.zhaoyang_palace",
+      "kind": "shared_anchor",
+      "locationIds": [
+        "liuchao.location.beisi_yard",
+        "liuchao.location.changqiu_palace",
+        "liuchao.location.jiaoxi_di",
+        "liuchao.location.jin_fu",
+        "liuchao.location.luoyang",
+        "liuchao.location.mijing_wilderness",
+        "liuchao.location.nangong",
+        "liuchao.location.shangguan_li_hufu",
+        "liuchao.location.yique",
+        "liuchao.location.yongan_palace",
+        "liuchao.location.zengxi_guan",
+        "liuchao.location.zhaoyang_hall",
+        "lyl.location.anmo_ju",
+        "lyl.location.beisi_prison",
+        "lyl.location.changqiu_palace",
+        "lyl.location.luoyang",
+        "lyl.location.nangong",
+        "lyl.location.pengyi_she",
+        "lyl.location.qilifang",
+        "lyl.location.shangshenguan",
+        "lyl.location.weiyang_palace",
+        "lyl.location.xianqian_dian",
+        "lyl.location.yulin_camp",
+        "lyl.location.zhaoyang_palace"
+      ],
+      "reason": "不同地点共用同一锚点；按裁定 #53 真实底图锚点不得为防重叠挪位，需逐个确认是父子地点还是坐标待校准",
+      "closeWhen": "确认为父子地点后登记进 LOCATION_PARENTS，或主策划校准坐标",
+      "detail": "不同地点共用锚点 (6838,3577)"
+    },
+    {
+      "key": "shared_anchor:liuchao.location.changan+lyg.location.bolu_wangfu+lyg.location.changan+lyg.location.chanqiao+lyg.location.daciensi+lyg.location.daming_palace+lyg.location.qinglongsi+lyg.location.qujiang+lyg.location.shuixiang_lou+lyg.location.weishui+lyg.location.wuyang_houfu+lyg.location.wuyang_mansion+lyg.location.xingqing_palace+lyg.location.xuanping_fang+lyg.location.yanglu_menyuan+lyg.location.yongning_fang+lyg.location.ziyun_lou",
+      "kind": "shared_anchor",
+      "locationIds": [
+        "liuchao.location.changan",
+        "lyg.location.bolu_wangfu",
+        "lyg.location.changan",
+        "lyg.location.chanqiao",
+        "lyg.location.daciensi",
+        "lyg.location.daming_palace",
+        "lyg.location.qinglongsi",
+        "lyg.location.qujiang",
+        "lyg.location.shuixiang_lou",
+        "lyg.location.weishui",
+        "lyg.location.wuyang_houfu",
+        "lyg.location.wuyang_mansion",
+        "lyg.location.xingqing_palace",
+        "lyg.location.xuanping_fang",
+        "lyg.location.yanglu_menyuan",
+        "lyg.location.yongning_fang",
+        "lyg.location.ziyun_lou"
+      ],
+      "reason": "不同地点共用同一锚点；按裁定 #53 真实底图锚点不得为防重叠挪位，需逐个确认是父子地点还是坐标待校准",
+      "closeWhen": "确认为父子地点后登记进 LOCATION_PARENTS，或主策划校准坐标",
+      "detail": "不同地点共用锚点 (3159,2767)"
+    },
+    {
+      "key": "shared_anchor:liuchao.location.lin_an+liuchao.location.linan+liuchao.location.linan_city+liuchao.location.mingqing_temple+liuchao.location.west_lake_cottage",
+      "kind": "shared_anchor",
+      "locationIds": [
+        "liuchao.location.lin_an",
+        "liuchao.location.linan",
+        "liuchao.location.linan_city",
+        "liuchao.location.mingqing_temple",
+        "liuchao.location.west_lake_cottage"
+      ],
+      "reason": "不同地点共用同一锚点；按裁定 #53 真实底图锚点不得为防重叠挪位，需逐个确认是父子地点还是坐标待校准",
+      "closeWhen": "确认为父子地点后登记进 LOCATION_PARENTS，或主策划校准坐标",
+      "detail": "不同地点共用锚点 (7466,6532)"
+    },
+    {
+      "key": "shared_anchor:liuchao.location.guang_ming_guan+liuchao.location.guangming+liuchao.location.mingzhou",
+      "kind": "shared_anchor",
+      "locationIds": [
+        "liuchao.location.guang_ming_guan",
+        "liuchao.location.guangming",
+        "liuchao.location.mingzhou"
+      ],
+      "reason": "不同地点共用同一锚点；按裁定 #53 真实底图锚点不得为防重叠挪位，需逐个确认是父子地点还是坐标待校准",
+      "closeWhen": "确认为父子地点后登记进 LOCATION_PARENTS，或主策划校准坐标",
+      "detail": "不同地点共用锚点 (8925,6374)"
+    },
+    {
+      "key": "shared_anchor:liuchao.location.jinming_zhai+liuchao.location.jinmingzhai",
+      "kind": "shared_anchor",
+      "locationIds": [
+        "liuchao.location.jinming_zhai",
+        "liuchao.location.jinmingzhai"
+      ],
+      "reason": "不同地点共用同一锚点；按裁定 #53 真实底图锚点不得为防重叠挪位，需逐个确认是父子地点还是坐标待校准",
+      "closeWhen": "确认为父子地点后登记进 LOCATION_PARENTS，或主策划校准坐标",
+      "detail": "不同地点共用锚点 (5050,6550)"
+    },
+    {
+      "key": "shared_anchor:liuchao.location.jingxi+liuchao.location.jingxi_village",
+      "kind": "shared_anchor",
+      "locationIds": [
+        "liuchao.location.jingxi",
+        "liuchao.location.jingxi_village"
+      ],
+      "reason": "不同地点共用同一锚点；按裁定 #53 真实底图锚点不得为防重叠挪位，需逐个确认是父子地点还是坐标待校准",
+      "closeWhen": "确认为父子地点后登记进 LOCATION_PARENTS，或主策划校准坐标",
+      "detail": "不同地点共用锚点 (5600,6900)"
+    },
+    {
+      "key": "shared_anchor:liuchao.location.qilifang+liuchao.location.shangyang_mountain+liuchao.location.wudu+liuchao.location.wudu_manor",
+      "kind": "shared_anchor",
+      "locationIds": [
+        "liuchao.location.qilifang",
+        "liuchao.location.shangyang_mountain",
+        "liuchao.location.wudu",
+        "liuchao.location.wudu_manor"
+      ],
+      "reason": "不同地点共用同一锚点；按裁定 #53 真实底图锚点不得为防重叠挪位，需逐个确认是父子地点还是坐标待校准",
+      "closeWhen": "确认为父子地点后登记进 LOCATION_PARENTS，或主策划校准坐标",
+      "detail": "不同地点共用锚点 (6114,3929)"
+    },
+    {
+      "key": "shared_anchor:liuchao.location.liangzhou+lyg.location.liangzhou+lyg.location.liangzhou_arena",
+      "kind": "shared_anchor",
+      "locationIds": [
+        "liuchao.location.liangzhou",
+        "lyg.location.liangzhou",
+        "lyg.location.liangzhou_arena"
+      ],
+      "reason": "不同地点共用同一锚点；按裁定 #53 真实底图锚点不得为防重叠挪位，需逐个确认是父子地点还是坐标待校准",
+      "closeWhen": "确认为父子地点后登记进 LOCATION_PARENTS，或主策划校准坐标",
+      "detail": "不同地点共用锚点 (1430,2767)"
+    },
+    {
+      "key": "shared_anchor:liuchao.location.taiquan+lyl.location.ant_hill+lyl.location.moxu_building+lyl.location.taiquan_core",
+      "kind": "shared_anchor",
+      "locationIds": [
+        "liuchao.location.taiquan",
+        "lyl.location.ant_hill",
+        "lyl.location.moxu_building",
+        "lyl.location.taiquan_core"
+      ],
+      "reason": "不同地点共用同一锚点；按裁定 #53 真实底图锚点不得为防重叠挪位，需逐个确认是父子地点还是坐标待校准",
+      "closeWhen": "确认为父子地点后登记进 LOCATION_PARENTS，或主策划校准坐标",
+      "detail": "不同地点共用锚点 (7573,9083)"
+    },
+    {
+      "key": "shared_anchor:lyg.location.changan+lyg.location.weishui+lyg.location.wuyang_mansion",
+      "kind": "shared_anchor",
+      "locationIds": [
+        "lyg.location.changan",
+        "lyg.location.weishui",
+        "lyg.location.wuyang_mansion"
+      ],
+      "reason": "不同地点共用同一锚点；按裁定 #53 真实底图锚点不得为防重叠挪位，需逐个确认是父子地点还是坐标待校准",
+      "closeWhen": "确认为父子地点后登记进 LOCATION_PARENTS，或主策划校准坐标",
+      "detail": "不同地点共用锚点 (2830,3049)"
+    },
+    {
+      "key": "coordinate_conflict:liuchao.location.longchi",
+      "kind": "coordinate_conflict",
+      "locationIds": [
+        "liuchao.location.longchi"
+      ],
+      "reason": "两个龙池已裁定为同一地点（liuchao.location.longchi），坐标冲突登记为待校准，本轮不定以哪个为准",
+      "closeWhen": "主策划校准龙池坐标",
+      "detail": "同一规范地点坐标不一：881,4366 / 5000,5000"
+    },
+    {
+      "key": "coordinate_conflict:liuchao.location.baiyi",
+      "kind": "coordinate_conflict",
+      "locationIds": [
+        "liuchao.location.baiyi"
+      ],
+      "reason": "白夷谷已并入 baiyi（规范名白夷谷，显示别名白夷族），两处坐标不一",
+      "closeWhen": "主策划校准 baiyi 坐标",
+      "detail": "同一规范地点坐标不一：1818,8118 / 1780,8070"
+    },
+    {
+      "key": "coordinate_conflict:lcq.location.sheyi_village",
+      "kind": "coordinate_conflict",
+      "locationIds": [
+        "lcq.location.sheyi_village"
+      ],
+      "reason": "同一规范地点在不同关坐标不一",
+      "closeWhen": "主策划校准后各关坐标统一",
+      "detail": "同一规范地点坐标不一：4650,7350 / 1545,7250"
+    },
+    {
+      "key": "coordinate_conflict:liuchao.location.sea_temple",
+      "kind": "coordinate_conflict",
+      "locationIds": [
+        "liuchao.location.sea_temple"
+      ],
+      "reason": "裁定 #177 把 03b/04b 海神殿标记挪到 (1872,8664)，05b 仍是碧鲮坐标",
+      "closeWhen": "05b 同步 #177 坐标",
+      "detail": "同一规范地点坐标不一：1872,8664 / 1824,8592"
+    },
+    {
+      "key": "coordinate_conflict:liuchao.location.south_wild_valley",
+      "kind": "coordinate_conflict",
+      "locationIds": [
+        "liuchao.location.south_wild_valley"
+      ],
+      "reason": "06 文档 D2：05b 南荒山谷仍是昭南旧坐标 (4916,7778)",
+      "closeWhen": "05b 同步为 (1690,8480)",
+      "detail": "同一规范地点坐标不一：1690,8480 / 4916,7778"
+    },
+    {
+      "key": "coordinate_conflict:liuchao.location.gui_wang_gong",
+      "kind": "coordinate_conflict",
+      "locationIds": [
+        "liuchao.location.gui_wang_gong"
+      ],
+      "reason": "鬼王峒宫殿已并入鬼王宫；鬼王宫现坐标(2620,7200)离峒区太远，登记为待校准，不另立地点",
+      "closeWhen": "主策划校准鬼王宫坐标到峒区内或紧贴峒区",
+      "detail": "同一规范地点坐标不一：2620,7200 / 1668,8720"
+    },
+    {
+      "key": "coordinate_conflict:lyg.location.wuyang_mansion",
+      "kind": "coordinate_conflict",
+      "locationIds": [
+        "lyg.location.wuyang_mansion"
+      ],
+      "reason": "同一规范地点在不同关坐标不一",
+      "closeWhen": "主策划校准后各关坐标统一",
+      "detail": "同一规范地点坐标不一：2830,3049 / 3159,2767"
+    },
+    {
+      "key": "coordinate_conflict:lyg.location.liangzhou_arena",
+      "kind": "coordinate_conflict",
+      "locationIds": [
+        "lyg.location.liangzhou_arena"
+      ],
+      "reason": "同一规范地点在不同关坐标不一",
+      "closeWhen": "主策划校准后各关坐标统一",
+      "detail": "同一规范地点坐标不一：750,3600 / 1430,2767"
+    },
+    {
+      "key": "coordinate_conflict:lyg.location.changan",
+      "kind": "coordinate_conflict",
+      "locationIds": [
+        "lyg.location.changan"
+      ],
+      "reason": "同一规范地点在不同关坐标不一",
+      "closeWhen": "主策划校准后各关坐标统一",
+      "detail": "同一规范地点坐标不一：2830,3049 / 3159,2767"
+    },
+    {
+      "key": "coordinate_conflict:lyg.location.weishui",
+      "kind": "coordinate_conflict",
+      "locationIds": [
+        "lyg.location.weishui"
+      ],
+      "reason": "同一规范地点在不同关坐标不一",
+      "closeWhen": "主策划校准后各关坐标统一",
+      "detail": "同一规范地点坐标不一：2830,3049 / 3159,2767"
+    },
+    {
+      "key": "rail_move_undeclared:lcq.event.s05b_01_binu_reveals_xiaozi",
+      "kind": "rail_move_undeclared",
+      "locationIds": [
+        "lcq.event.s05b_01_binu_reveals_xiaozi"
+      ],
+      "reason": "05b 前两拍挂在碧鲮（06 文档 D8），方案R下 05b 整段在鬼王峒，不替数据补路线",
+      "closeWhen": "主策划裁定 D8 后改 locationId 或声明路线",
+      "detail": "lcq.stage_05b：lcq.event.hongmiao_controlled → lcq.event.s05b_01_binu_reveals_xiaozi（liuchao.location.guiwang_dong → liuchao.location.biyu）没有声明强制路线"
+    },
+    {
+      "key": "rail_move_undeclared:lcq.event.s05b_03_saan_secret_path",
+      "kind": "rail_move_undeclared",
+      "locationIds": [
+        "lcq.event.s05b_03_saan_secret_path"
+      ],
+      "reason": "05b 前两拍挂在碧鲮（06 文档 D8），方案R下 05b 整段在鬼王峒，不替数据补路线",
+      "closeWhen": "主策划裁定 D8 后改 locationId 或声明路线",
+      "detail": "lcq.stage_05b：lcq.event.s05b_02_xiaozi_exposed → lcq.event.s05b_03_saan_secret_path（liuchao.location.biyu → liuchao.location.gui_wang_dong）没有声明强制路线"
+    }
+  ]
+}

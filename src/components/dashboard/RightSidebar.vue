@@ -449,7 +449,8 @@ import {
   isWorldSimulationRuntime,
 } from '@/modules/scenarioMods/worldSimulation';
 import { resolveCurrentMainQuestNode, resolveMainQuestLayer } from '@/modules/scenarioMods/mainQuestAxis';
-import { resolveAvailableLines, resolveLocationIdFromPosition, secondaryLinesAtEvent } from '@/modules/scenarioMods/secondaryLines';
+import { resolveAvailableLines, secondaryLinesAtEvent } from '@/modules/scenarioMods/secondaryLines';
+import { locationFromPosition } from '@/modules/scenarioMods/travel/travelLedger';
 import { characterBeatsAt } from '@/modules/scenarioMods/characterQuests';
 import { prefillChat } from '@/utils/chatBus';
 import { formatQuestCompass, resolveScenarioEventNarrative, storyChapterTitle } from '@/modules/scenarioMods/eventNarrativeView';
@@ -496,10 +497,10 @@ const currentQuestEvent = (rt: any): any => {
     || getScenarioFocusEvent(rt);
 };
 const playerLocationDescription = (): string => String(gameStateStore.location?.描述 || '');
-const questAtLocationId = (rt: any): string | undefined => resolveLocationIdFromPosition(
+const questAtLocationId = (rt: any): string | undefined => locationFromPosition(
   playerLocationDescription(),
   rt?.canon?.locations,
-);
+).locationId;
 const visibleQuestObjective = (rt: any, event: any): string => {
   if (!event) return '';
   const view = resolveScenarioEventNarrative(event, rt.flags || {}, rt.divergences);
@@ -514,15 +515,10 @@ const worldQuestAxis = computed(() => {
   if (!layer?.text) return null;
   // 当前地点：隔离关被默认路线跳过时，节点靠地点锚仍要显示（见 MainQuestNode.locationId）。
   // 存档里存的是中文描述串，按地点名做最长匹配还原成 id——与 storyContext 的解析同口径。
-  const locDesc = playerLocationDescription().replace(/\s+/g, '');
-  const curLoc = locDesc
-    ? ((rt.canon?.locations || []) as Array<{ id: string; name: string }>)
-        .filter(l => l.name && l.name.length >= 2 && locDesc.includes(l.name.replace(/\s+/g, '')))
-        .sort((a, b) => b.name.length - a.name.length)[0]
-    : undefined;
+  const curLocId = locationFromPosition(playerLocationDescription(), rt.canon?.locations).locationId;
   const event = currentQuestEvent(rt);
   const objective = visibleQuestObjective(rt, event);
-  const mainNode = resolveCurrentMainQuestNode(rt.modId, curLoc?.id, event?.id);
+  const mainNode = resolveCurrentMainQuestNode(rt.modId, curLocId, event?.id);
   return {
     direction: layer.text,
     // 同关未来节点的 reviewSummary 不再提前摊给玩家；只显示当前 event 的固定 objective。
@@ -534,10 +530,10 @@ const worldQuestAxis = computed(() => {
 const availableLines = computed(() => {
   const rt: any = epistemicRuntime.value;
   if (!rt || typeof rt !== 'object') return [];
-  const locId = resolveLocationIdFromPosition(
+  const locId = locationFromPosition(
     playerLocationDescription(),
     rt.canon?.locations,
-  );
+  ).locationId;
   const event = currentQuestEvent(rt);
   const activeLineIds = new Set(secondaryLinesAtEvent(event?.id).map(line => line.id));
   return resolveAvailableLines(locId, rt.acquaintances, rt.completedEventIds).map((line: any) => ({

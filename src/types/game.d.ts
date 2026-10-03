@@ -1079,6 +1079,8 @@ export interface GameTime extends AIMetadata {
   日: number;
   小时: number;
   分钟: number;
+  /** 原著没写天数的路段到达后，给玩家看的日期改用相对时间（如「数日后」），不暴露占位天数。 */
+  相对日?: string;
 }
 
 // --- 存档数据核心 ---

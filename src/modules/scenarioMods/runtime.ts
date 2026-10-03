@@ -44,7 +44,9 @@ import {
 } from './affinityLadder';
 import { affinityCapFor } from './affinityCaps';
 import { REPUTATION_EVENT_GRANT, type ReputationGrant } from './reputationLedger';
-import { lineCriticalFrozen, resolveLocationIdFromPosition } from './secondaryLines';
+import { lineCriticalFrozen } from './secondaryLines';
+import { currentLocation, locationFromPosition, noteNanhuangArrival, syncNanhuangRailTravel, type NanhuangTravelLedger } from './travel/travelLedger';
+import { locationWithin } from './travel/locationIds';
 import { recordOffscreenDivergence, recordReconcileDivergences, type ScenarioDivergence } from './divergenceLedger';
 import {
   cancelPendingJudgement,
@@ -344,8 +346,12 @@ export interface RuntimeState extends ScenarioProgressState {
   npcPrivateKnowledge?: Record<string, ScenarioNpcPrivateKnowledgeFact>;
   /** 非机会卡事件的本地尝试、判定与完成状态。 */
   eventActionStates?: Record<string, ScenarioEventActionState>;
-  /** 事件激活时所在地点。用于「走到目标地点才推进」，同地激活的拍不会因人已在场而立刻结清。 */
+  /** 事件激活时所在地点。到达不再结清任何拍；现只供谢艺托付「离开即接受」读取（裁定 #90）。 */
   eventActivatedAtLocation?: Record<string, string>;
+  /** 罗盘移动的到场回执；id＝`arrive:<eventId>:<locationId>`，重复点击不重复记账。到场≠完成。 */
+  questArrivalReceipts?: Array<{ id: string; eventId: string; locationId: string; atTurn: number }>;
+  /** 南荒行旅账：强制移动回执与当前节点（跨关携带）。 */
+  travelLedger?: NanhuangTravelLedger;
   canon?: {
     characters?: Array<{ id: string; name: string; profile?: { memories?: string[] } }>;
     factions?: Array<{ id: string; name: string }>;
@@ -1321,6 +1327,11 @@ function derivePlayerLine(
 
 /** 当前非机会卡承重事件的本地动作；按钮身份来自事件合同，不来自 LLM。 */
 export function getCurrentStoryEventActions(saveData: SaveData): ScenarioEventActionSelection[] {
+  return currentStoryEventActions(saveData, false);
+}
+
+/** includeAwayActions 只给谢艺托付「离开即接受」用：人已离场仍须找到【承接】（裁定 #90 冻结）。 */
+function currentStoryEventActions(saveData: SaveData, includeAwayActions: boolean): ScenarioEventActionSelection[] {
   const runtime = getRuntime(saveData);
   if (!runtime) return [];
   const event = getCurrentPlayerCompletionEvent(runtime);
@@ -1336,8 +1347,9 @@ export function getCurrentStoryEventActions(saveData: SaveData): ScenarioEventAc
     ? Math.max(0, timeline.eligibleAtTurn + event.timeline.deadlineTurns - (Number(runtime.worldTurn) || 0))
     : undefined;
   const contractStep = currentContractStep(runtime);
-  const availableActions = contract.actions.filter(action => eventActionAvailable(action, state, runtime, saveData));
-  const steps: ScenarioEventActionSelection[] = availableActions.map(action => {
+  const travel = includeAwayActions ? undefined : questTravelSelection(saveData, runtime, event, state.contractHash);
+  const availableActions = travel ? [] : contract.actions.filter(action => eventActionAvailable(action, state, runtime, saveData));
+  const steps: ScenarioEventActionSelection[] = travel ? [travel] : availableActions.map(action => {
     const expectedOutcome: ScenarioPlayerCompletionOutcome = contract.kind === 'objective_action'
       ? 'success'
       : conditionsMatch(action.successWhen, saveData, runtime) ? 'success' : action.unmetOutcome || 'failure';
@@ -1380,7 +1392,7 @@ export function getCurrentStoryEventActions(saveData: SaveData): ScenarioEventAc
   });
   // 玩家主动走绝路的选项与正常动作并列。它们不进合同、不影响 contractHash、
   // 也不推进本拍——选中即本局结束。放在最后，避免挤掉当前该做的那一步。
-  const fatalChoices = (event.fatalOutcomes?.choices || [])
+  const fatalChoices = (travel ? [] : event.fatalOutcomes?.choices || [])
     .filter(() => event.id !== 'lcq.event.shanghou_revealed' || availableActions.some(action => action.id === 'refuse_shanghou_relic_test'))
     .map(choice => {
     const interaction = deriveInteraction(runtime, event, choice.label, choice.actionText);
@@ -1400,6 +1412,8 @@ export function getCurrentStoryEventActions(saveData: SaveData): ScenarioEventAc
   });
   // 普通动作与致命选项一起检查重名；发生碰撞才补作者动作名。
   const selections = [...steps, ...fatalChoices];
+  // 人已到场、这一拍却没有可用动作（如要求在场的人不在）：给一句固定的世界内提示，不给空列表。
+  if (!selections.length) return [questIdleSelection(event, state.contractHash)];
   const authoredLabels = [...availableActions, ...(event.fatalOutcomes?.choices || [])];
   const labelCounts = new Map<string, number>();
   for (const selection of selections) labelCounts.set(selection.label, (labelCounts.get(selection.label) || 0) + 1);
@@ -1436,39 +1450,32 @@ export function resolveStoryEventActionFromPlayerText(
   if (!normalized) return undefined;
 
   const selections = getCurrentStoryEventActions(saveData);
-  const rejectedBy = (selection: ScenarioEventActionSelection): boolean => {
-    const action = contract.actions.find(item => item.id === selection.actionId);
-    const rejected = (action?.intentMatch?.rejectIf || []).map(normalizeEventActionIntent).filter(Boolean);
-    return rejected.some(phrase => normalized.includes(phrase));
-  };
-  const matches = selections.filter(selection => {
-    const action = contract.actions.find(item => item.id === selection.actionId);
+  type ContractAction = NonNullable<ScenarioModEvent['playerCompletionContract']>['actions'][number];
+  const rejectedBy = (action: ContractAction | undefined): boolean =>
+    (action?.intentMatch?.rejectIf || []).map(normalizeEventActionIntent).filter(Boolean)
+      .some(phrase => normalized.includes(phrase));
+  const intentMatches = (action: ContractAction | undefined): boolean => {
     const intent = action?.intentMatch;
-    if (!intent || rejectedBy(selection)) return false;
+    if (!intent || rejectedBy(action)) return false;
     const any = (intent.matchAny || []).map(normalizeEventActionIntent).filter(Boolean);
     const all = (intent.matchAll || []).map(normalizeEventActionIntent).filter(Boolean);
     if (any.length > 0 && !any.some(phrase => normalized.includes(phrase))) return false;
     if (all.length > 0 && !all.every(phrase => normalized.includes(phrase))) return false;
     return any.length > 0 || all.length > 0;
-  });
-  if (matches.length === 1) return matches[0];
-  if (matches.length > 1) return undefined;
-  if (event.id === 'lcq.event.s02_04') {
-    const travelToCity = /去五原|前往五原|去市集/.test(normalized);
-    if (travelToCity) return undefined;
+  };
+  // 到达≠完成：人不在本拍地点时，作者短语或罗盘「去X」「见Y」命中都只换成移动。
+  const travel = selections.find(isQuestTravelSelection);
+  if (travel) {
+    const pointers = questCompassPhrases(event, runtime, playerLocationId(saveData, runtime))
+      .map(normalizeEventActionIntent)
+      .filter(Boolean);
+    if (contract.actions.some(rejectedBy)) return undefined;
+    const hit = contract.actions.some(intentMatches) || pointers.some(phrase => normalized.includes(phrase));
+    return hit ? travel : undefined;
   }
-  const pointers = questCompassPhrases(event, runtime, playerLocationId(saveData, runtime))
-    .map(normalizeEventActionIntent)
-    .filter(Boolean);
-  if (!pointers.length) return undefined;
-  const fatalIds = new Set((event.fatalOutcomes?.choices || []).map(item => item.id));
-  const pointerMatches = selections.filter(selection =>
-    selection.source === 'event_engine'
-    && !fatalIds.has(selection.actionId)
-    && !rejectedBy(selection)
-    && pointers.some(phrase => normalized.includes(phrase)),
-  );
-  return pointerMatches.length === 1 ? pointerMatches[0] : undefined;
+  const matches = selections.filter(selection =>
+    intentMatches(contract.actions.find(item => item.id === selection.actionId)));
+  return matches.length === 1 ? matches[0] : undefined;
 }
 
 /** 当前章节显式开放的非承重探索动作；可忽略，且永远不能替代唯一主线锚点。 */
@@ -1691,6 +1698,16 @@ export function recordStoryEventStructuredAction(
   saveData: SaveData,
   selection: ScenarioEventActionSelection,
   options?: { judgementResolution?: JudgementResolution },
+): ReturnType<typeof recordStoryEventStructuredActionAt> {
+  return recordStoryEventStructuredActionAt(saveData, selection, options, false);
+}
+
+/** allowAway 只给谢艺托付「离开即接受」用（裁定 #90 冻结）；其余一律要求人在本拍地点。 */
+function recordStoryEventStructuredActionAt(
+  saveData: SaveData,
+  selection: ScenarioEventActionSelection,
+  options: { judgementResolution?: JudgementResolution } | undefined,
+  allowAway: boolean,
 ): {
   attempted: boolean;
   completed: boolean;
@@ -1720,6 +1737,18 @@ export function recordStoryEventStructuredAction(
   const state = reconcileEventActionContract(runtime, event);
   if (!state || state.contractHash !== selection.contractHash) {
     return { attempted: false, completed: false, eventId: event.id, reason: 'stale_contract' };
+  }
+  if (isQuestTravelSelection(selection)) return settleQuestTravel(saveData, runtime, event, selection);
+  if (String(selection.actionId || '').startsWith(QUEST_IDLE_ACTION_PREFIX)) {
+    // 只过一回合，不碰合同状态；须仍是当下那条固定提示，过期点击不落账。
+    const fresh = getCurrentStoryEventActions(saveData);
+    return fresh.length === 1 && fresh[0].actionId === selection.actionId
+      ? { attempted: true, completed: false, eventId: event.id, actionId: selection.actionId, outcome: 'success' }
+      : { attempted: false, completed: false, eventId: event.id, reason: 'stale_action' };
+  }
+  // 到达≠完成：人不在本拍地点时，任何合同动作或绝路选项都不落账（防过期按钮远程完成再瞬移）。
+  if (!allowAway && selection.source === 'event_engine' && questTravelSelection(saveData, runtime, event, state.contractHash)) {
+    return { attempted: false, completed: false, eventId: event.id, reason: 'not_on_site' };
   }
   // 绝路选项先于合同动作判定：它不推进本拍，直接结束本局。
   const fatalChoice = (event.fatalOutcomes?.choices || []).find(item => item.id === selection.actionId);
@@ -2102,10 +2131,10 @@ function readPath(root: unknown, path: string[]): unknown {
 }
 
 function playerLocationId(saveData: SaveData, runtime: RuntimeState): string {
-  return resolveLocationIdFromPosition(
+  return locationFromPosition(
     (saveData as { 角色?: { 位置?: { 描述?: unknown } } })?.角色?.位置?.描述,
     runtime.canon?.locations,
-  ) || '';
+  ).locationId || '';
 }
 
 function locationNameById(runtime: RuntimeState, locationId: string | undefined): string {
@@ -2122,7 +2151,8 @@ function sameSceneLocation(runtime: RuntimeState, leftId: string | undefined, ri
 }
 
 function movePlayerToEventLocation(saveData: SaveData, runtime: RuntimeState, locationId: string): void {
-  if (playerLocationId(saveData, runtime) === locationId) return;
+  const at = playerLocationId(saveData, runtime);
+  if (at === locationId || locationWithin(at, locationId)) return;
   const loc = (runtime.canon?.locations || []).find(item => item.id === locationId) as
     | { id?: string; name?: string; coordinates?: { x?: number; y?: number } }
     | undefined;
@@ -2137,26 +2167,96 @@ function movePlayerToEventLocation(saveData: SaveData, runtime: RuntimeState, lo
   if (typeof loc?.coordinates?.y === 'number') position.y = loc.coordinates.y;
 }
 
+/**
+ * 到达≠完成（用户裁定 2026-10-03，全局规则）：罗盘「去X」「见Y」只做移动。
+ * 玩家不在本拍地点时，按钮与自由输入只给这一条移动选择；到场后才显示合同动作，须另点一次。
+ */
+const QUEST_TRAVEL_ACTION_PREFIX = 'travel:';
+// 这拍的移动归五原开放世界路线（wuyuanS0204MapContractMet），罗盘不另开事件移动。
+const OPEN_WORLD_OWNED_TRAVEL_EVENT_IDS = new Set(['lcq.event.s02_04']);
+
+function questTravelSelection(
+  saveData: SaveData,
+  runtime: RuntimeState,
+  event: ScenarioModEvent,
+  contractHash: string,
+): ScenarioEventActionSelection | undefined {
+  const contract = event.playerCompletionContract;
+  // 按固定顺序的多步合同同样适用：人不在场不能做任何一步，完成后也就无须瞬移。
+  if (!contract || !event.locationId || storyRouteLocation(event.id)) return undefined;
+  if (OPEN_WORLD_OWNED_TRAVEL_EVENT_IDS.has(event.id)) return undefined;
+  // 位置按三段解析（五原区内节点归到五原城）；仍解析不出时 fail closed，按不在场处理。
+  const atLocationId = playerLocationId(saveData, runtime);
+  // 人在子地点算在父地点（海神殿属碧鲮、鬼王宫属鬼王峒）；反之不算。
+  if (event.locationId === atLocationId || sameSceneLocation(runtime, event.locationId, atLocationId)
+    || locationWithin(atLocationId, event.locationId)) return undefined;
+  const name = locationNameById(runtime, event.locationId);
+  const compass = formatQuestCompass(event, runtime, atLocationId);
+  if (!name || !compass) return undefined;
+  return {
+    source: 'event_engine',
+    eventId: event.id,
+    actionId: `${QUEST_TRAVEL_ACTION_PREFIX}${event.locationId}`,
+    label: compass,
+    actionText: `前往${name}`,
+    playerLine: `我前往${name}。`,
+    timeCost: 1,
+    contractHash,
+    expectedOutcome: 'success',
+    outcomeText: `抵达${name}；这一拍要做的事尚未做`,
+    interaction: { verb: 'move' },
+  };
+}
+
+const QUEST_IDLE_ACTION_PREFIX = 'idle:';
+
+function questIdleSelection(event: ScenarioModEvent, contractHash: string): ScenarioEventActionSelection {
+  return {
+    source: 'event_engine',
+    eventId: event.id,
+    actionId: `${QUEST_IDLE_ACTION_PREFIX}${event.id}`,
+    label: '留意四周 · 眼下还没有能着手的事',
+    actionText: '我先在这里留意四周的动静',
+    playerLine: '我先在这里留意四周的动静。',
+    timeCost: 1,
+    contractHash,
+    expectedOutcome: 'success',
+    outcomeText: '四周暂时没有新的动静；这一拍要做的事还做不了',
+    interaction: { verb: 'observe' },
+  };
+}
+
+function isQuestTravelSelection(selection: ScenarioEventActionSelection): boolean {
+  return selection.source === 'event_engine' && String(selection.actionId || '').startsWith(QUEST_TRAVEL_ACTION_PREFIX);
+}
+
+/** 只移动并记到场回执；不碰合同状态，到场后须另做一次真实动作。 */
+function settleQuestTravel(
+  saveData: SaveData,
+  runtime: RuntimeState,
+  event: ScenarioModEvent,
+  selection: ScenarioEventActionSelection,
+): { attempted: boolean; completed: boolean; eventId: string; actionId?: string; outcome?: ScenarioPlayerCompletionOutcome; reason?: string } {
+  const fresh = questTravelSelection(saveData, runtime, event, selection.contractHash);
+  if (!fresh) return { attempted: false, completed: false, eventId: event.id, reason: 'already_arrived' };
+  if (fresh.actionId !== selection.actionId || fresh.actionText !== selection.actionText) {
+    return { attempted: false, completed: false, eventId: event.id, reason: 'stale_action' };
+  }
+  const locationId = event.locationId!;
+  movePlayerToEventLocation(saveData, runtime, locationId);
+  noteNanhuangArrival(runtime, locationId, `arrive:${event.id}`);
+  const id = `arrive:${event.id}:${locationId}`;
+  runtime.questArrivalReceipts = Array.isArray(runtime.questArrivalReceipts) ? runtime.questArrivalReceipts : [];
+  if (!runtime.questArrivalReceipts.some(receipt => receipt.id === id)) {
+    runtime.questArrivalReceipts.push({ id, eventId: event.id, locationId, atTurn: Math.max(0, Number(runtime.worldTurn) || 0) });
+  }
+  return { attempted: true, completed: false, eventId: event.id, actionId: selection.actionId, outcome: 'success' };
+}
+
 function rememberEventActivationLocation(saveData: SaveData, runtime: RuntimeState, eventId: string): void {
   runtime.eventActivatedAtLocation ||= {};
   if (runtime.eventActivatedAtLocation[eventId] !== undefined) return;
   runtime.eventActivatedAtLocation[eventId] = playerLocationId(saveData, runtime);
-}
-
-function settleArrivalObjective(saveData: SaveData, runtime: RuntimeState): void {
-  const locId = playerLocationId(saveData, runtime);
-  if (!locId) return;
-  const event = getCurrentPlayerCompletionEvent(runtime);
-  if (!event?.locationId || event.locationId !== locId) return;
-  if (event.id === 'lcq.event.s02_04') return;
-  const startedAt = runtime.eventActivatedAtLocation?.[event.id];
-  if (startedAt === undefined || startedAt === event.locationId) return;
-  const fatalIds = new Set((event.fatalOutcomes?.choices || []).map(item => item.id));
-  const selection = getCurrentStoryEventActions(saveData).find(item =>
-    item.source === 'event_engine' && item.eventId === event.id && !fatalIds.has(item.actionId),
-  );
-  if (!selection) return;
-  recordStoryEventStructuredAction(saveData, selection);
 }
 
 function settleAbandonedXieyiEntrustment(saveData: SaveData, runtime: RuntimeState): void {
@@ -2167,11 +2267,11 @@ function settleAbandonedXieyiEntrustment(saveData: SaveData, runtime: RuntimeSta
   if (startedAt === undefined || !sameSceneLocation(runtime, startedAt, event.locationId)) return;
   const locId = playerLocationId(saveData, runtime);
   if (!locId || sameSceneLocation(runtime, locId, event.locationId)) return;
-  const selection = getCurrentStoryEventActions(saveData).find(item => (
+  const selection = currentStoryEventActions(saveData, true).find(item => (
     item.source === 'event_engine' && item.eventId === event.id && item.actionId === 'accept_entrustment'
   ));
   if (!selection) return;
-  recordStoryEventStructuredAction(saveData, selection);
+  recordStoryEventStructuredActionAt(saveData, selection, undefined, true);
 }
 
 const WUYUAN_S02_04_PASTRY_ZONE = 'lcq.zone.wuyuan.pastry_shop';
@@ -3499,8 +3599,8 @@ export function advanceScenarioRuntime(saveData: SaveData): {
   runtime.eventActivatedAtLocation = runtime.eventActivatedAtLocation && typeof runtime.eventActivatedAtLocation === 'object'
     ? runtime.eventActivatedAtLocation
     : {};
+  // 激活地点仍要记：谢艺托付「离开即接受」读它（裁定 #90 冻结）。到达本身不再结清任何拍。
   for (const eventId of runtime.activeEventIds) rememberEventActivationLocation(next, runtime, eventId);
-  settleArrivalObjective(next, runtime);
   settleAbandonedXieyiEntrustment(next, runtime);
   settleReadyEventActionCompletionFlags(runtime);
   syncNanhuangIdentityDisplay(runtime);
@@ -3530,10 +3630,7 @@ export function advanceScenarioRuntime(saveData: SaveData): {
   resolveOffscreenWorldEvents(
     runtime,
     transitions,
-    resolveLocationIdFromPosition(
-      (next as unknown as { 角色?: { 位置?: { 描述?: unknown } } })?.角色?.位置?.描述,
-      runtime.canon?.locations,
-    ),
+    currentLocation(next, runtime.canon?.locations).locationId,
     next,
   );
 
@@ -3607,6 +3704,8 @@ export function advanceScenarioRuntime(saveData: SaveData): {
     }
   }
 
+  // 南荒：上一拍完成触发的强制移动先落回执、再投影位置，下一拍才在新地点激活。
+  syncNanhuangRailTravel(next, runtime);
   const activeChapter = runtime.chapters.find(chapter => chapter.id === runtime.currentChapterId);
   const chapterEventIds = new Set(activeChapter?.eventIds || []);
   syncEventTimelineEligibility(next, runtime);

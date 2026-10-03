@@ -66,6 +66,9 @@ function completionFlag(runtime, eventId) {
 }
 
 function takeAction(tools, save, actionId) {
+  // 到达≠完成：人不在本拍地点时先走罗盘移动，到场后才有合同动作。
+  const travel = tools.getCurrentStoryEventActions(save).find(item => item.actionId.startsWith('travel:'));
+  if (travel) assert.equal(tools.recordStoryEventStructuredAction(save, travel).completed, false);
   const action = tools.getCurrentStoryEventActions(save).find(item => item.actionId === actionId);
   assert.ok(action, `当前应提供动作 ${actionId}; active=${runtimeOf(save).activeEventIds}`);
   const result = tools.recordStoryEventStructuredAction(save, action);
@@ -271,6 +274,8 @@ test('生死两条经真实命运动作接到开库，进 07 不预置托付 don
     if (choose === 'dead') {
       assert.equal(takeAction(tools, save, 'accept_entrustment').completed, true);
     } else {
+      const travel = tools.getCurrentStoryEventActions(save).find(item => item.actionId.startsWith('travel:'));
+      if (travel) assert.equal(tools.recordStoryEventStructuredAction(save, travel).completed, false);
       const rescue = tools.getCurrentStoryEventActions(save).find(item => item.actionId === 'rescue_xieyi');
       assert.ok(rescue?.judgement, '救治必须走正式判定合同');
       const issued = prepareEventActionJudgement(save, rescue, 20);

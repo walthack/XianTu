@@ -50,7 +50,8 @@ function fixture(document, event) {
   }
   const chapter = document.scenario.chapters.find(item => item.eventIds?.includes(event.id));
   return {
-    角色: { 身份: { 名字: 'R2-11M洛都政变' }, 位置: { 描述: '长秋宫' }, 属性: { 声望: 0 } },
+    // 到达≠完成：夹具把人放在被测事件的地点上，只验合同本身。
+    角色: { 身份: { 名字: 'R2-11M洛都政变' }, 位置: { 描述: document.canon?.locations?.find(item => item.id === event.locationId)?.name || '长秋宫' }, 属性: { 声望: 0 } },
     社交: { 关系: {}, 记忆: { 短期记忆: [], 中期记忆: [], 长期记忆: [], 隐式中期记忆: [] } },
     系统: { 扩展: {}, 历史: { 叙事: [] } },
     世界: {

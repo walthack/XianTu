@@ -955,11 +955,12 @@ test('限时到点：s01_01 过渡遇袭，s01_02 把段强结局织进当前行
   assert.ok(!afterDeath.世界.状态.剧本模组.activeEventIds.includes('lcq.event.s01_02'));
 });
 
-test('Demo Fast：见王哲拍选项带去帅帐，点选即推进不靠诊治原句', async () => {
+test('Demo Fast：见王哲拍选项带去帅帐，点选只移动，到帐后另做动作才推进', async () => {
   const demo = await loadDemo();
   const { createQingyuOpeningPlaytestSave } = await loadTs('../src/modules/scenarioMods/qingyuOpeningPlaytest.ts');
   const {
     advanceScenarioRuntime,
+    getCurrentStoryEventActions,
     resolveStoryEventActionFromPlayerText,
     recordStoryEventStructuredAction,
   } = await loadTs('../src/modules/scenarioMods/runtime.ts');
@@ -986,9 +987,13 @@ test('Demo Fast：见王哲拍选项带去帅帐，点选即推进不靠诊治�
   const options = demo.buildFastNarrativeActionOptions(plan.packet);
   assert.ok(options.some(option => option.includes('去帅帐')), `选项实际=${options.join(' / ')}`);
 
+  // 到达≠完成：去帅帐只移动，到帐后另点真实动作才结清。
   const recorded = recordStoryEventStructuredAction(next, travel);
-  assert.equal(recorded.completed, true);
+  assert.equal(recorded.completed, false);
   const after = advanceScenarioRuntime(next).saveData;
-  assert.ok(after.世界.状态.剧本模组.completedEventIds.includes('lcq.event.s01_05'));
+  assert.equal(after.世界.状态.剧本模组.completedEventIds.includes('lcq.event.s01_05'), false);
   assert.match(String(after.角色.位置.描述), /帅帐/);
+  const onSite = getCurrentStoryEventActions(after).find(item => item.eventId === 'lcq.event.s01_05');
+  assert.ok(onSite && !onSite.actionId.startsWith('travel:'));
+  assert.equal(recordStoryEventStructuredAction(after, onSite).completed, true);
 });

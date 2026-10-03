@@ -1,7 +1,19 @@
+import { canonicalLocationId } from './travel/locationIds';
+
 export type OpenWorldReliability = 'confirmed' | 'credible' | 'rumor';
 export type OpenWorldProblemOutcome = 'success' | 'partial' | 'failure-forward';
 export type OpenWorldZoneKind = 'settlement' | 'street' | 'interior' | 'compound';
 export type OpenWorldTravelMode = 'player' | 'forced';
+/** local：区内路线，玩家可主动走；journey：跨区路程，只能由强制移动触发。缺省 local。 */
+export type OpenWorldRouteKind = 'local' | 'journey';
+/** 路程天数；原著没写的路段填 'several'（叙事只写「数日」，内部按 SEVERAL_DAYS_PLACEHOLDER 推进）。 */
+export type OpenWorldDayCost = number | 'several';
+/** 强制移动的触发：前一拍完成，或转关（如 'lcq.stage_02→lcq.stage_03b_snake_flower_bridge'）。 */
+export type OpenWorldForcedBy = { afterEventDone: string } | { stageTransition: string };
+/** 地点三态：隐藏（不画）／听闻（只显示名字）／到过。 */
+export type OpenWorldVisibility = 'hidden' | 'heard' | 'visited';
+
+export const SEVERAL_DAYS_PLACEHOLDER = 3;
 
 export interface OpenWorldZone {
   id: string;
@@ -12,6 +24,21 @@ export interface OpenWorldZone {
   worldLocationId?: string;
   /** Containers default not standable. Leaves default standable. */
   standable?: boolean;
+  /** 所属行旅区；缺省沿父节点向上找。 */
+  areaId?: string;
+  /** 这些事件全部完成后算「听闻」。 */
+  heardWhen?: string[];
+}
+
+/** 行旅区：地点层上的分组视图，不进位置字符串。 */
+export interface OpenWorldArea {
+  id: string;
+  name: string;
+  continent?: string;
+  /** after 全部完成、且 until 未全部完成时，区内 local 路线开放自由移动。未声明则不开放。 */
+  freeRoamWhen?: { after?: string[]; until?: string[] };
+  /** 按时点分段的背景：取最后一条 when 全部完成的。 */
+  background?: Array<{ when: string[]; text: string }>;
 }
 
 export interface OpenWorldRoute {
@@ -22,6 +49,15 @@ export interface OpenWorldRoute {
   aliases?: string[];
   turnCost: number;
   requirementKey?: string;
+  kind?: OpenWorldRouteKind;
+  /** 只用于 journey。 */
+  dayCost?: OpenWorldDayCost;
+  forcedBy?: OpenWorldForcedBy;
+  /** 这些事件全部完成后路线才可用。 */
+  unlockWhen?: string[];
+  companions?: string[];
+  /** 固定的路途概要文字，不经 LLM。 */
+  summary?: string;
 }
 
 export interface OpenWorldActorDefinition {
@@ -96,6 +132,7 @@ export interface OpenWorldSliceDefinition {
   actors: OpenWorldActorDefinition[];
   problems: OpenWorldProblem[];
   actions: OpenWorldProblemAction[];
+  areas?: OpenWorldArea[];
 }
 
 export interface OpenWorldTravelReceipt {
@@ -108,6 +145,9 @@ export interface OpenWorldTravelReceipt {
   turnCost: number;
   mode: OpenWorldTravelMode;
   causeEventId?: string;
+  /** journey 才有：实际推进的天数；several 时为占位天数并带 dayCostSeveral。 */
+  dayCost?: number;
+  dayCostSeveral?: true;
 }
 
 export interface OpenWorldNoticeReceipt {
@@ -238,6 +278,23 @@ function hydrateTravelReceipt(raw: Partial<OpenWorldTravelReceipt> | undefined):
     turnCost: Math.max(0, Number(raw.turnCost) || 0),
     mode: raw.mode === 'forced' ? 'forced' : 'player',
     ...(raw.causeEventId ? { causeEventId: String(raw.causeEventId) } : {}),
+    ...(Number(raw.dayCost) > 0 ? { dayCost: Number(raw.dayCost) } : {}),
+    ...(raw.dayCostSeveral === true ? { dayCostSeveral: true as const } : {}),
+  };
+}
+
+/** journey 的天数；several 解析成占位天数。local 路线为 0。 */
+export function routeDayCost(route: OpenWorldRoute): { days: number; several: boolean } {
+  if (route.kind !== 'journey') return { days: 0, several: false };
+  if (route.dayCost === 'several') return { days: SEVERAL_DAYS_PLACEHOLDER, several: true };
+  return { days: Math.max(0, Number(route.dayCost) || 0), several: false };
+}
+
+function journeyReceiptFields(route: OpenWorldRoute): Pick<OpenWorldTravelReceipt, 'dayCost' | 'dayCostSeveral'> {
+  const { days, several } = routeDayCost(route);
+  return {
+    ...(days > 0 ? { dayCost: days } : {}),
+    ...(several ? { dayCostSeveral: true as const } : {}),
   };
 }
 
@@ -306,7 +363,8 @@ export function hydrateOpenWorldSliceRuntime(
 
 function reachableRoutes(state: OpenWorldSliceRuntime, definition: OpenWorldSliceDefinition): OpenWorldRoute[] {
   return definition.routes.filter(route =>
-    route.fromZoneId === state.currentZoneId
+    route.kind !== 'journey'
+    && route.fromZoneId === state.currentZoneId
     && state.knownRouteIds.includes(route.id)
     && state.knownZoneIds.includes(route.toZoneId)
     && (!route.requirementKey || state.requirements.includes(route.requirementKey)));
@@ -365,6 +423,7 @@ export function settleOpenWorldTravel(
   }
   const route = routeById(definition, routeId);
   if (!route) return { status: 'rejected', reason: 'unknown_route' };
+  if (route.kind === 'journey') return { status: 'rejected', reason: 'forced_only' };
   if (route.fromZoneId !== state.currentZoneId) return { status: 'rejected', reason: 'not_adjacent' };
   if (!state.knownRouteIds.includes(route.id) || !state.knownZoneIds.includes(route.toZoneId)) {
     return { status: 'rejected', reason: 'not_known' };
@@ -444,6 +503,7 @@ export function settleOpenWorldForcedTravel(
     turnCost: route.turnCost,
     mode: 'forced',
     causeEventId: cause,
+    ...journeyReceiptFields(route),
   };
   state.travelReceipts.push(receipt);
   state.currentZoneId = route.toZoneId;
@@ -725,4 +785,116 @@ export function getOpenWorldSliceView(state: OpenWorldSliceRuntime, definition: 
     };
   }).filter(problem => problem.actions.length > 0);
   return { currentLocation, destinations, notices, actorsHere, problems };
+}
+
+function allDone(eventIds: string[] | undefined, done: ReadonlySet<string>): boolean {
+  return Boolean(eventIds?.length) && eventIds!.every(id => done.has(id));
+}
+
+/** 节点所属行旅区：自身 areaId，否则沿父节点向上找。 */
+export function areaIdOf(definition: OpenWorldSliceDefinition, zoneId: string): string {
+  let current = zoneById(definition, zoneId);
+  const seen = new Set<string>();
+  while (current && !seen.has(current.id)) {
+    seen.add(current.id);
+    if (current.areaId) return current.areaId;
+    current = current.parentZoneId ? zoneById(definition, current.parentZoneId) : undefined;
+  }
+  return '';
+}
+
+/** 自由段是否开放。未声明 freeRoamWhen 的区不开放（04 全关、古道→入峒等强制段）。 */
+export function areaFreeRoamOpen(area: OpenWorldArea | undefined, doneEventIds: Iterable<string>): boolean {
+  const window = area?.freeRoamWhen;
+  if (!window) return false;
+  const done = new Set(doneEventIds);
+  if (window.after?.length && !allDone(window.after, done)) return false;
+  return !allDone(window.until, done);
+}
+
+/** 当前时点的区域背景：最后一条 when 全部完成的段落；都不满足则空。 */
+export function areaBackground(area: OpenWorldArea | undefined, doneEventIds: Iterable<string>): string {
+  const done = new Set(doneEventIds);
+  const hit = (area?.background || []).filter(item => item.when.length === 0 || allDone(item.when, done));
+  return hit.at(-1)?.text || '';
+}
+
+export function routeUnlocked(route: OpenWorldRoute, doneEventIds: Iterable<string>): boolean {
+  return !route.unlockWhen?.length || allDone(route.unlockWhen, new Set(doneEventIds));
+}
+
+/** 由触发找强制路线：前一拍完成或转关。 */
+export function forcedRoutesFor(definition: OpenWorldSliceDefinition, trigger: OpenWorldForcedBy): OpenWorldRoute[] {
+  return definition.routes.filter(route => {
+    const by = route.forcedBy;
+    if (!by) return false;
+    if ('afterEventDone' in trigger) return 'afterEventDone' in by && by.afterEventDone === trigger.afterEventDone;
+    return 'stageTransition' in by && by.stageTransition === trigger.stageTransition;
+  });
+}
+
+/**
+ * 地点三态，推导不存储：
+ * 到过＝当前所在或任一回执的起止点；听闻＝heardWhen 全部完成；其余一律隐藏（fail closed）。
+ */
+export function zoneVisibility(
+  state: OpenWorldSliceRuntime,
+  definition: OpenWorldSliceDefinition,
+  zoneId: string,
+  doneEventIds: Iterable<string>,
+): OpenWorldVisibility {
+  const zone = zoneById(definition, zoneId);
+  if (!zone) return 'hidden';
+  if (state.currentZoneId === zoneId
+    || state.travelReceipts.some(item => item.toZoneId === zoneId || item.fromZoneId === zoneId)) return 'visited';
+  return allDone(zone.heardWhen, new Set(doneEventIds)) ? 'heard' : 'hidden';
+}
+
+const VISIBILITY_RANK: Record<OpenWorldVisibility, number> = { hidden: 0, heard: 1, visited: 2 };
+
+/** 世界地点（按规范 id 比较）的三态：取挂在它下面所有节点的最高态；定义里没有的地点一律隐藏。 */
+export function worldLocationVisibility(
+  state: OpenWorldSliceRuntime,
+  definition: OpenWorldSliceDefinition,
+  worldLocationId: string,
+  doneEventIds: Iterable<string>,
+): OpenWorldVisibility {
+  const target = canonicalLocationId(worldLocationId);
+  const done = [...doneEventIds];
+  return definition.zones
+    .filter(zone => canonicalLocationId(worldLocationIdOf(definition, zone.id)) === target)
+    .map(zone => zoneVisibility(state, definition, zone.id, done))
+    .reduce<OpenWorldVisibility>((best, item) => (VISIBILITY_RANK[item] > VISIBILITY_RANK[best] ? item : best), 'hidden');
+}
+
+export interface OpenWorldZoneTravelStatus {
+  visibility: OpenWorldVisibility;
+  current: boolean;
+  /** 当前可沿已知 local 路线主动前往。 */
+  canTravel: boolean;
+  /** 到过但现在去不了（不在当前区、自由段未开或被 rail 甩在身后）：可查看，不能前往，不再新生成区域图。 */
+  label?: '到过·当前不可前往';
+}
+
+export function zoneTravelStatus(
+  state: OpenWorldSliceRuntime,
+  definition: OpenWorldSliceDefinition,
+  zoneId: string,
+  doneEventIds: Iterable<string>,
+): OpenWorldZoneTravelStatus {
+  const done = [...doneEventIds];
+  const visibility = zoneVisibility(state, definition, zoneId, done);
+  const current = state.currentZoneId === zoneId;
+  const currentAreaId = areaIdOf(definition, state.currentZoneId);
+  const area = (definition.areas || []).find(item => item.id === currentAreaId);
+  const canTravel = visibility === 'visited' && !current
+    && Boolean(currentAreaId) && areaIdOf(definition, zoneId) === currentAreaId
+    && areaFreeRoamOpen(area, done)
+    && reachableRoutes(state, definition).some(route => route.toZoneId === zoneId && routeUnlocked(route, done));
+  return {
+    visibility,
+    current,
+    canTravel,
+    ...(visibility === 'visited' && !current && !canTravel ? { label: '到过·当前不可前往' as const } : {}),
+  };
 }

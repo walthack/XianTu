@@ -27,6 +27,9 @@ async function api() {
 }
 
 function takeAction(tools, save, actionId) {
+  // 到达≠完成：人不在本拍地点时先走罗盘移动，到场后才有合同动作。
+  const travel = tools.getCurrentStoryEventActions(save).find(item => item.actionId.startsWith('travel:'));
+  if (travel) assert.equal(tools.recordStoryEventStructuredAction(save, travel).completed, false);
   const action = tools.getCurrentStoryEventActions(save).find(item => item.actionId === actionId);
   assert.ok(action, `当前应提供动作 ${actionId}`);
   const result = tools.recordStoryEventStructuredAction(save, action);
@@ -60,6 +63,7 @@ test('星月湖试玩建立隔离 canon_companion 存档并从正式旧战合同
   assert.equal(runtime.storyMode, undefined);
   assert.equal(runtime.modId, tools.XINGYUEHU_QUEST_PLAYTEST_START_MOD_ID);
   assert.deepEqual(runtime.activeEventIds, ['lcq.event.xieyi_biling_war']);
+  // 剧情裁定：海神殿是碧鲮的子地点，「南荒·海神殿」开局即在碧鲮，不多一步移动。
   assert.deepEqual(
     tools.getCurrentStoryEventActions(save).map(item => item.actionId),
     ['hear_xieyi_biling_war_and_crown'],

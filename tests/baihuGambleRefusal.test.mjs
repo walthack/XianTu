@@ -91,7 +91,10 @@ async function loadTools() {
 function contractSelection(rtm, save) {
   const event = rtm.getScenarioFocusEvent(runtimeOf(save));
   const contractIds = new Set((event?.playerCompletionContract?.actions || []).map(action => action.id));
-  return rtm.getCurrentStoryEventActions(save).find(item => contractIds.has(item.actionId));
+  const actions = rtm.getCurrentStoryEventActions(save);
+  // 到达≠完成：人不在本拍地点时先走罗盘移动，到场后下一步才是合同动作。
+  return actions.find(item => contractIds.has(item.actionId))
+    || actions.find(item => item.actionId.startsWith('travel:'));
 }
 
 function recordAndReload(rtm, save, selection) {

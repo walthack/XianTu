@@ -43,6 +43,9 @@ async function api() {
 }
 
 function takeAction(tools, save, actionId) {
+  // 到达≠完成：人不在本拍地点时先走罗盘移动，到场后才有合同动作。
+  const travel = tools.getCurrentStoryEventActions(save).find(item => item.actionId.startsWith('travel:'));
+  if (travel) assert.equal(tools.recordStoryEventStructuredAction(save, travel).completed, false);
   const action = tools.getCurrentStoryEventActions(save).find(item => item.actionId === actionId);
   assert.ok(action, `当前应提供动作 ${actionId}`);
   const result = tools.recordStoryEventStructuredAction(save, action);

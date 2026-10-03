@@ -199,6 +199,10 @@ test('B4：07 生产入口在 s07_05 之后激活星月开库', async () => {
 
   save = await walkRailUntil(save, XIAO_OPENS, rail);
   assert.ok(runtimeOf(save).activeEventIds.includes(XIAO_OPENS));
+  // 到达≠完成：人不在开库地点时只有移动，到场后才是合同动作。
+  const [travel] = getCurrentStoryEventActions(save);
+  assert.match(travel.actionId, /^travel:/);
+  assert.equal(recordStoryEventStructuredAction(save, travel).completed, false);
   assert.deepEqual(
     getCurrentStoryEventActions(save).map(item => item.actionId),
     ['hear_xingyue_support_dead'],
@@ -348,7 +352,7 @@ test('B7：report_death 对 future absence fail-closed；无 absence 时死亡�
   runtimeOf(missing).flags['world.xieyi_absence.active'] = true;
   assert.deepEqual(
     getCurrentStoryEventActions(missing).map(item => item.actionId),
-    [],
-    'absence 不得落到死亡按钮',
+    ['idle:lcq.event.s07_05_eight_steeds_informed'],
+    'absence 不得落到死亡按钮；到场无可用动作时只给固定提示',
   );
 });
