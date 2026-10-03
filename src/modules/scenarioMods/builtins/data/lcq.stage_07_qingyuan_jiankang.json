@@ -4049,8 +4049,6 @@
       ]
     },
     "initialFlags": {
-      "event.xieyi_entrustment.done": false,
-      "event.xiaoyaoyi_arrives.done": false,
       "event.s07_01.done": false,
       "event.s07_02.done": false,
       "event.s07_03.done": false,
@@ -4073,7 +4071,9 @@
       "event.xiao_opens_resources.done": false,
       "event.shanghou_revealed.done": false,
       "event.palace_haunting_rumor.done": false,
-      "event.shanghou_cures_ice_gu.done": false
+      "event.shanghou_cures_ice_gu.done": false,
+      "event.xieyi_entrustment.done": false,
+      "event.xiaoyaoyi_arrives.done": false
     },
     "chapters": [
       {
@@ -5619,9 +5619,15 @@
       },
       {
         "id": "lcq.event.s07_debut_qinhui",
-        "name": "秦桧初登场",
-        "description": "殇侯与程宗扬夜谈六朝兴亡之际，文士巾打扮的秦桧快步走来，躬身深揖：\"君侯，北地有讯。\"随后受命引程宗扬在山崖温泉间随意走走。其人举止温文尔雅，脸上总带一丝谦虚笑意；殇侯私评：\"灵敏有余，志浅易变。\"",
-        "conditions": [],
+        "name": "秦桧再现",
+        "description": "秦桧在南荒山村已经再现并受殇侯指派，如今以北上随行者身份报到，不是初次见面，也不重演第122章。",
+        "conditions": [
+          {
+            "path": "flags.event.shanghou_cures_ice_gu.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
         "completion": [
           {
             "path": "flags.event.s07_debut_qinhui.done",
@@ -5635,7 +5641,7 @@
           "liuchao.character.cheng_zongyang"
         ],
         "critical": false,
-        "objective": "留在现场完成“秦桧初登场”的首次接触",
+        "objective": "与再度见面的秦桧交谈，确认他此行的安排",
         "playerCompletionContract": {
           "kind": "objective_action",
           "settleOn": [
@@ -5644,8 +5650,8 @@
           "actions": [
             {
               "id": "advance_curated_event",
-              "label": "留在现场完成“秦桧初登场”的首次接触",
-              "actionText": "我留在现场观察并回应，完成“秦桧初登场”的首次接触。",
+              "label": "与秦桧再度交谈，听清此行安排",
+              "actionText": "我与再度见面的秦桧交谈，听清他此行的安排。",
               "timeCost": 1,
               "outcomeText": {
                 "success": "你已完成“留在现场完成“秦桧初登场”的首次接触”的当前结构化步骤；最终完成真值由本地引擎落账。",
@@ -5660,7 +5666,13 @@
         "id": "lcq.event.s07_qinhui_join",
         "name": "秦桧归入麾下",
         "description": "殇侯把秦桧、吴三桂等手下交给程宗扬差遣。秦桧恭敬改称程宗扬\"主公\"：\"能协助主公行事，是我等的福分。\"自此成为程宗扬身边第一智囊。",
-        "conditions": [],
+        "conditions": [
+          {
+            "path": "flags.event.shanghou_cures_ice_gu.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
         "completion": [
           {
             "path": "flags.event.s07_qinhui_join.done",
@@ -5881,66 +5893,6 @@
         }
       },
       {
-        "id": "lcq.event.shanghou_revealed",
-        "name": "殇侯现身",
-        "description": "程宗扬在叶媪引导下见到鸩羽殇侯，确认他就是朱老头；殇侯称他是天命之人。",
-        "axisId": "qingyu.122.2",
-        "axisAnchor": "六朝清羽记·#122·第120章·殇侯",
-        "axisSeq": 222,
-        "axisBeat": "程宗扬在叶媪引导下见到鸩羽殇侯，确认他就是朱老头；殇侯称他是天命之人。",
-        "critical": true,
-        "completion": [
-          {
-            "path": "flags.event.shanghou_revealed.done",
-            "operator": "eq",
-            "value": true
-          }
-        ],
-        "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang",
-          "liuchao.character.shang_zhen_yu"
-        ],
-        "relatedFactionIds": [
-          "liuchao.faction.x8b538653d9"
-        ],
-        "objective": "随叶媪见到鸩羽殇侯，确认他就是朱老头并听天命之说",
-        "playerCompletionContract": {
-          "kind": "objective_action",
-          "settleOn": [
-            "success"
-          ],
-          "actions": [
-            {
-              "id": "follow_yeao_to_shanghou",
-              "label": "随叶媪去见鸩羽殇侯",
-              "actionText": "我随叶媪进入堂中，去见鸩羽殇侯。",
-              "timeCost": 1,
-              "outcomeText": {
-                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
-                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
-                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
-              },
-              "kind": "prepare",
-              "grantsPreparation": "shanghou_audience_opened"
-            },
-            {
-              "id": "confirm_zhu_is_shanghou",
-              "label": "确认朱老头就是殇侯并听天命之说",
-              "actionText": "我当面确认朱老头就是鸩羽殇侯，并听他称我是天命之人。",
-              "timeCost": 1,
-              "outcomeText": {
-                "success": "你已确认朱老头即殇侯，并听清天命之人之说；事件完成真值由本地引擎落账。",
-                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
-                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
-              },
-              "requiresPreparation": [
-                "shanghou_audience_opened"
-              ]
-            }
-          ]
-        }
-      },
-      {
         "id": "lcq.event.palace_haunting_rumor",
         "name": "宫禁闹鬼",
         "description": "程宗扬用灵飞镜窥探宫城，撞见可疑大汉从假山钻出并被察觉，宫禁闹鬼的传闻传开。",
@@ -5980,66 +5932,6 @@
                 "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
                 "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
               }
-            }
-          ]
-        }
-      },
-      {
-        "id": "lcq.event.shanghou_cures_ice_gu",
-        "name": "殇侯解除冰蛊",
-        "description": "殇侯解除程宗扬体内的冰蛊。",
-        "axisId": "qingyu.126.2",
-        "axisAnchor": "六朝清羽记·#126·第124章·授艺",
-        "axisSeq": 226,
-        "axisBeat": "殇侯解除程宗扬体内的冰蛊。",
-        "critical": true,
-        "completion": [
-          {
-            "path": "flags.event.shanghou_cures_ice_gu.done",
-            "operator": "eq",
-            "value": true
-          }
-        ],
-        "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang",
-          "liuchao.character.shang_zhen_yu"
-        ],
-        "relatedFactionIds": [
-          "liuchao.faction.x8b538653d9"
-        ],
-        "objective": "接受殇侯解除体内冰蛊，并当面确认蛊患已解",
-        "playerCompletionContract": {
-          "kind": "objective_action",
-          "settleOn": [
-            "success"
-          ],
-          "actions": [
-            {
-              "id": "accept_shanghou_ice_gu_cure",
-              "label": "把体内冰蛊交给殇侯处置",
-              "actionText": "我把苏妲己所下冰蛊与期限向殇侯如实交代，接受他当场处置，不追问原文未载的具体解法。",
-              "timeCost": 1,
-              "outcomeText": {
-                "success": "你已把体内冰蛊交给殇侯处置；最终完成真值由本地引擎落账。",
-                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
-                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
-              },
-              "kind": "prepare",
-              "grantsPreparation": "ice_gu_handed_to_shanghou"
-            },
-            {
-              "id": "hear_shanghou_confirm_ice_gu_gone",
-              "label": "听殇侯确认冰蛊已解",
-              "actionText": "在《授艺》谈话里，我听殇侯亲口确认他已替我解除体内冰蛊。",
-              "timeCost": 1,
-              "outcomeText": {
-                "success": "你已确认殇侯解除了体内冰蛊；事件完成真值由本地引擎落账。",
-                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
-                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
-              },
-              "requiresPreparation": [
-                "ice_gu_handed_to_shanghou"
-              ]
             }
           ]
         }

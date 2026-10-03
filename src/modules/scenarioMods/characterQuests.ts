@@ -105,7 +105,7 @@ export const CHARACTER_QUESTS: CharacterQuest[] = [
     beats: [
       { reviewSummary: '她承认自己是光明观堂弟子，假扮新娘是为了刺杀鬼巫王', status: 'insert', eventIds: ['lcq.event.s04_03'] },
       { reviewSummary: '她挺身战鸦人，经验不够被擒。你在鸦人营地救她', status: 'ready', eventIds: ['lcq.event.s04b_lingfei_baiyi_crisis_02'] },
-      { reviewSummary: '废弃海神殿：鲛人因朱狐冠发狂。你护住她，拔掉卡在她身上的鱼叉', status: 'new', eventIds: ['lcq.event.s04b_lemingzhu_haishen'] },
+      { reviewSummary: '废弃海神殿：鲛人因朱狐冠发狂。你护住她，拔掉卡在她身上的鱼叉', status: 'ready', eventIds: ['lcq.event.haishen_hall_merfolk', 'lcq.event.pull_harpoon_lemingzhu'] },
       { reviewSummary: '鬼王宫里她脱险现身，你与她重逢', status: 'ready', eventIds: ['lcq.event.s05b_06_breakout_and_reunion'] },
       { reviewSummary: '小紫把她捉进深井。你追下去营救', status: 'ready', eventIds: ['lcq.event.s05b_07_xiaozi_trap'] },
       { reviewSummary: '花房：师姐潘金莲闯入，发现她与你、小紫在一起，强行把她带回师门', status: 'new', eventIds: ['lcq.event.s07_pan_takes_pearl'] },
@@ -211,7 +211,6 @@ export const CHARACTER_HIGHLIGHTS: CharacterHighlight[] = [
   { name: '蛇夫人', eventIds: ['lyg.event.debut_shefuren'], reviewSummary: '程宗扬通过窥视孔偷看卧室——小紫的侍奴、江湖中人' },
   { name: '贾文和', eventIds: ['lyg.event.debut_jiawenhe'], reviewSummary: '凉州军逼近洛都城门，战车之上——破虏将军董卓麾下谋士' },
   { name: '齐羽仙', eventIds: ['lyg.event.debut_qiyuxian'], reviewSummary: '翠微园门外，夜间阶下——黑魔海剑玉姬麾下得力干将，程宗扬旧识' },
-  { name: '小紫', eventIds: ['lcq.event.s03b_snake_flower_bridge_03'], reviewSummary: '听祁远、谢艺确认蛇彝村是鬼王峒血符屠村——商队仓促撤离' },
   { name: '小紫', eventIds: ['lcq.event.s04b_lingfei_baiyi_crisis_18'], reviewSummary: '听谢艺谈玻璃技术，并说破岳帅晕血、还有个遗腹女' },
   { name: '小紫', eventIds: ['lcq.event.geluo_summons_biji'], reviewSummary: '阁罗召来碧姬，你当面见到谢艺要找的人' },
   { name: '小紫', eventIds: ['lcq.event.s05b_01_binu_reveals_xiaozi'], reviewSummary: '向碧姬问出：小紫曾主动投向鬼巫王——她不是单纯受害者' },

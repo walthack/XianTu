@@ -123,6 +123,7 @@ test('every event is covered, and the mechanical bucket does not grow unnoticed'
   // 2026-09-11：`s07_05` 改成手写两态合同，桶 272 → 271，lcq. 127 → 126。再涨才是新的批量迁移。
   const MECHANICAL_BUCKET = 271;
   const OWED = [
+    // 已可达，仍是既有单动作合同；本轮挂接不冒充完成手写合同打磨。
     'lcq.event.biling_bay_stance', 'lcq.event.huamiao_coop_boundary',
     'lcq.event.ghost_king_swallowed', 'lcq.event.slay_dragon', 'lcq.event.tribes_pledge',
   ];

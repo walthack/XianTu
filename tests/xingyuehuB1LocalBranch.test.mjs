@@ -10,7 +10,8 @@ const ASHES_ITEM = 'lcq.item.xieyi_ashes';
 const ASHES_TRANSFER = 'lcq.event.xieyi_entrustment.inventory.xieyi_ashes';
 const SURVIVAL_TEXT = '谢艺重伤昏迷但尚有气息，众人救回了他，确认谢艺生还。';
 const DEATH_TEXT = '谢艺倒在乱石间，呼吸断绝，确认其已经死亡。';
-const XIEYI_EXISTING_AFFINITY = 24;
+// 南荒新增前置拍现在累计+80；从0开始保留托付+8的可用空间，生产上限仍为100。
+const XIEYI_EXISTING_AFFINITY = 0;
 const CRITICAL_AFFINITY_GRANT = 8;
 
 const runtimeOf = save => save.世界.状态.剧本模组;
@@ -699,4 +700,18 @@ test('支援加成只计一次：撤回重开、JSON 读档、重试都不叠加
   states.attempts.push({ ...states.attempts.find(item => item.actionId === SUPPORT) });
   const afterExtra = api.resolvePendingJudgement(save, reissued.proposal.id, { currentTurn: runtimeOf(save).worldTurn, roll: () => 20 });
   assert.equal(afterExtra.total, locked.total);
+});
+
+
+test('B1 托付在好感100时只登记共历回执，不突破全局上限', async () => {
+  const api = await loadProductionApi();
+  let save = await walkToEntrustment(api, await loadStage());
+  seedExistingXieyiRelation(save, 100);
+  const accept = api.getCurrentStoryEventActions(save).find(item => item.actionId === 'accept_entrustment');
+  assert.ok(accept);
+  assert.equal(api.recordStoryEventStructuredAction(save, accept).completed, true);
+  save = settleChoice(api, save);
+  assert.equal(xieyiFavorability(save), 100);
+  assert.ok(runtimeOf(save).affinityGrantedEventIds.includes(ENTRUSTMENT));
+  assert.equal(xieyiFavorability(settleChoice(api, reloadSave(save))), 100);
 });

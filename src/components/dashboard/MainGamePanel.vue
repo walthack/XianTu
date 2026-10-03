@@ -350,6 +350,11 @@
             </div>
           </div>
 
+          <div v-else-if="nanhuangDemoFinished" class="game-over-card">
+            <div class="game-over-head"><span class="game-over-tag">本期结束</span><h3>南荒这一段已经走完</h3></div>
+            <p class="game-over-hint">进度已保留，可返回入口选择下一期重新试玩。</p>
+            <button class="go-primary" @click="router.push('/qingyu-opening-playtest')">返回试玩入口</button>
+          </div>
           <div v-else-if="xingyuehuPlaytestFinished" class="game-over-card">
             <div class="game-over-head">
               <span class="game-over-tag">试玩完成</span>
@@ -562,7 +567,7 @@ import {
   settleWorldSimulationJudgement,
 } from '@/modules/scenarioMods/worldSimulation';
 import { WORLD_SIMULATION_PLAYTEST_KIND } from '@/modules/scenarioMods/worldSimulationPlaytest';
-import { isQingyuOpeningPlaytestSave } from '@/modules/scenarioMods/qingyuOpeningPlaytest';
+import { isQingyuOpeningPlaytestSave, isNanhuangDemoFinished } from '@/modules/scenarioMods/qingyuOpeningPlaytest';
 import {
   abortInFlightNaturalIntent,
   intentSaveFingerprint,
@@ -876,7 +881,8 @@ const xingyuehuLandingFinished = computed(() => isXingyuehuLandingPlaytestFinish
 const xingyuehuPlaytestFinished = computed(() => (
   isXingyuehuQuestPlaytestFinished(gameStateStore.toSaveData()) || xingyuehuLandingFinished.value
 ));
-const playtestFinished = computed(() => worldSimulationPlaytestFinished.value || xingyuehuPlaytestFinished.value);
+const nanhuangDemoFinished = computed(() => isNanhuangDemoFinished(gameStateStore.toSaveData()));
+const playtestFinished = computed(() => worldSimulationPlaytestFinished.value || xingyuehuPlaytestFinished.value || nanhuangDemoFinished.value);
 const isTavernEnvFlag = isTavernEnv();
 const enhancedActionQueue = EnhancedActionQueueManager.getInstance();
 const bidirectionalSystem = AIBidirectionalSystem;

@@ -271,10 +271,345 @@ const HAND_REVIEWED_CANON_RAIL_PROFILES: CanonRailProfile[] = [
  */
 const DEFAULT_LINE_EXTRA_RAIL_BEATS: Array<{
   modId: string;
-  afterEventId: string;
+  afterEventId?: string;
+  beforeEventId?: string;
   eventIds: string[];
   contracts: CanonRailContract[];
 }> = [
+  {
+    "modId": "lcq.stage_03b_snake_flower_bridge",
+    "afterEventId": "lcq.event.s03b_snake_flower_bridge_07",
+    "eventIds": [
+      "lcq.event.s03b_wanwu_night",
+      "lcq.event.s03b_yinzhu_xiongerpu"
+    ],
+    "contracts": [
+      {
+        "eventId": "lcq.event.s03b_wanwu_night",
+        "mustReach": "花苗篝火万舞后，程宗扬循谢艺预言入林，发现蛇彝遇害者及笑脸血符，接回受惊的阿葭。只写血符及震撼，不描述遇害者年龄和身体；阿葭本拍不死。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "提前演出后续剧情",
+          "改写本拍已定结果"
+        ],
+        "allowedElaboration": "只补当前动作的场景与对话，不代替玩家行动。"
+      },
+      {
+        "eventId": "lcq.event.s03b_yinzhu_xiongerpu",
+        "mustReach": "阿葭被阴蛛吸干，武二郎杀蛛，祁远主张焚尸。新娘仍戴面纱。在熊耳铺拒绝秦桧和吴三桂，选择朱八八；秦吴不随队，商队与送亲队同行。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "提前演出后续剧情",
+          "改写本拍已定结果"
+        ],
+        "allowedElaboration": "只补当前动作的场景与对话，不代替玩家行动。"
+      }
+    ]
+  },
+  {
+    "modId": "lcq.stage_04b_lingfei_baiyi_crisis",
+    "afterEventId": "lcq.event.s04b_lingfei_baiyi_crisis_12",
+    "eventIds": [
+      "lcq.event.s04b_xi_furen_trade_route"
+    ],
+    "contracts": [
+      {
+        "eventId": "lcq.event.s04b_xi_furen_trade_route",
+        "mustReach": "白夷族长已被鬼王峒杀死。樨夫人接任族长，商路只向云氏和白湖商馆开放，金玉珠宝半价；白夷仍附峒观望，不是归附商队。易虎成为血虎留在白夷。只演交易，不演成人情节。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "提前演出后续剧情",
+          "改写本拍已定结果"
+        ],
+        "allowedElaboration": "只补当前动作的场景与对话，不代替玩家行动。"
+      }
+    ]
+  },
+  {
+    "modId": "lcq.stage_04b_lingfei_baiyi_crisis",
+    "afterEventId": "lcq.event.s04b_lingfei_baiyi_crisis_17",
+    "eventIds": [
+      "lcq.event.xiaozi_first_appears"
+    ],
+    "contracts": [
+      {
+        "eventId": "lcq.event.xiaozi_first_appears",
+        "mustReach": "第70章末，碧鲮少女自称小紫，向众人问好。黑舌尚未死亡，不得提前质问他的死因。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "提前演出后续剧情",
+          "改写本拍已定结果"
+        ],
+        "allowedElaboration": "只补当前动作的场景与对话，不代替玩家行动。"
+      }
+    ]
+  },
+  {
+    "modId": "lcq.stage_04b_lingfei_baiyi_crisis",
+    "afterEventId": "lcq.event.s04b_lingfei_baiyi_crisis_19",
+    "eventIds": [
+      "lcq.event.haishen_hall_merfolk",
+      "lcq.event.pull_harpoon_lemingzhu",
+      "lcq.event.regroup_caravan_envoy",
+      "lcq.event.weapon_deal_with_geluo",
+      "lcq.event.spot_dong_informant",
+      "lcq.event.biling_bay_stance",
+      "lcq.event.ruins_ghost_warriors",
+      "lcq.event.wuerlang_slays_dagu",
+      "lcq.event.yiyang_repels_yinsha",
+      "lcq.event.huamiao_coop_boundary",
+      "lcq.event.guiwangdong_coop_pact",
+      "lcq.event.enter_dong_with_migu"
+    ],
+    "contracts": [
+      {
+        "eventId": "lcq.event.haishen_hall_merfolk",
+        "mustReach": "程宗扬在废弃海神殿抵御鲛人袭击，护住受困的乐明珠。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "提前演出后续剧情",
+          "改写本拍已定结果"
+        ],
+        "allowedElaboration": "只补当前动作的场景与对话，不代替玩家行动。"
+      },
+      {
+        "eventId": "lcq.event.pull_harpoon_lemingzhu",
+        "mustReach": "拔除卡住乐明珠的鱼叉，并稳定她的伤势。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "提前演出后续剧情",
+          "改写本拍已定结果"
+        ],
+        "allowedElaboration": "只补当前动作的场景与对话，不代替玩家行动。"
+      },
+      {
+        "eventId": "lcq.event.regroup_caravan_envoy",
+        "mustReach": "收拢残余商队，确认鬼王峒使者已抵达海湾。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "提前演出后续剧情",
+          "改写本拍已定结果"
+        ],
+        "allowedElaboration": "只补当前动作的场景与对话，不代替玩家行动。"
+      },
+      {
+        "eventId": "lcq.event.weapon_deal_with_geluo",
+        "mustReach": "程宗扬以兵器生意与鬼王峒使者阁罗敲定交易，化解眼前危机。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "提前演出后续剧情",
+          "改写本拍已定结果"
+        ],
+        "allowedElaboration": "只补当前动作的场景与对话，不代替玩家行动。"
+      },
+      {
+        "eventId": "lcq.event.spot_dong_informant",
+        "mustReach": "厘清兵器交易背后的危险，处置偷听的鬼王峒眼线。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "提前演出后续剧情",
+          "改写本拍已定结果"
+        ],
+        "allowedElaboration": "只补当前动作的场景与对话，不代替玩家行动。"
+      },
+      {
+        "eventId": "lcq.event.biling_bay_stance",
+        "mustReach": "蛇傀下令焚烧碧鲮族，程宗扬率众突袭斩杀蛇傀，碧鲮族获释后反攻鬼王峒。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "提前演出后续剧情",
+          "改写本拍已定结果"
+        ],
+        "allowedElaboration": "只补当前动作的场景与对话，不代替玩家行动。"
+      },
+      {
+        "eventId": "lcq.event.ruins_ghost_warriors",
+        "mustReach": "在古道废墟识别鬼王峒标记，协助易彪守住阵地。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "提前演出后续剧情",
+          "改写本拍已定结果"
+        ],
+        "allowedElaboration": "只补当前动作的场景与对话，不代替玩家行动。"
+      },
+      {
+        "eventId": "lcq.event.wuerlang_slays_dagu",
+        "mustReach": "撑住达古率领的围攻，见证武二郎斩杀巫师扭转战局。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "提前演出后续剧情",
+          "改写本拍已定结果"
+        ],
+        "allowedElaboration": "只补当前动作的场景与对话，不代替玩家行动。"
+      },
+      {
+        "eventId": "lcq.event.yiyang_repels_yinsha",
+        "mustReach": "护住苏荔，并以一阳境阳气逼退阴煞。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "提前演出后续剧情",
+          "改写本拍已定结果"
+        ],
+        "allowedElaboration": "只补当前动作的场景与对话，不代替玩家行动。"
+      },
+      {
+        "eventId": "lcq.event.huamiao_coop_boundary",
+        "mustReach": "云苍峰坦言云氏欲借机探鬼王峒底细并拉拢部族，程宗扬明确双方是平等合作不是依附。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "提前演出后续剧情",
+          "改写本拍已定结果"
+        ],
+        "allowedElaboration": "只补当前动作的场景与对话，不代替玩家行动。"
+      },
+      {
+        "eventId": "lcq.event.guiwangdong_coop_pact",
+        "mustReach": "程宗扬安置旧伤复发的凝羽，并与云氏、花苗结成探查鬼王峒的同行约定。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "提前演出后续剧情",
+          "改写本拍已定结果"
+        ],
+        "allowedElaboration": "只补当前动作的场景与对话，不代替玩家行动。"
+      },
+      {
+        "eventId": "lcq.event.enter_dong_with_migu",
+        "mustReach": "随弥骨进入鬼王峒，阻止接待冲突升级并记清洞内路线与奴隶区。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "提前演出后续剧情",
+          "改写本拍已定结果"
+        ],
+        "allowedElaboration": "只补当前动作的场景与对话，不代替玩家行动。"
+      }
+    ]
+  },
+  {
+    "modId": "lcq.stage_05b",
+    "beforeEventId": "lcq.event.s05b_01_binu_reveals_xiaozi",
+    "eventIds": [
+      "lcq.event.blank_letter_and_dagu",
+      "lcq.event.geluo_summons_biji",
+      "lcq.event.escape_cave_mechanism",
+      "lcq.event.hongmiao_controlled"
+    ],
+    "contracts": [
+      {
+        "eventId": "lcq.event.blank_letter_and_dagu",
+        "mustReach": "白纸信笺打开仍是白纸；小紫当着阁罗说破达古已死。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "提前演出后续剧情",
+          "改写本拍已定结果"
+        ],
+        "allowedElaboration": "只补当前动作的场景与对话，不代替玩家行动。"
+      },
+      {
+        "eventId": "lcq.event.geluo_summons_biji",
+        "mustReach": "阁罗召来被称作碧奴的碧姬，程宗扬第一次当面见到谢艺要找的人。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "提前演出后续剧情",
+          "改写本拍已定结果"
+        ],
+        "allowedElaboration": "只补当前动作的场景与对话，不代替玩家行动。"
+      },
+      {
+        "eventId": "lcq.event.escape_cave_mechanism",
+        "mustReach": "利用机关异动摆脱看守，从岩壁找出可通行山洞。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "提前演出后续剧情",
+          "改写本拍已定结果"
+        ],
+        "allowedElaboration": "只补当前动作的场景与对话，不代替玩家行动。"
+      },
+      {
+        "eventId": "lcq.event.hongmiao_controlled",
+        "mustReach": "确认红苗盟友已被鬼王峒控制，把苏荔从阁罗手中暂时保下。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "提前演出后续剧情",
+          "改写本拍已定结果"
+        ],
+        "allowedElaboration": "只补当前动作的场景与对话，不代替玩家行动。"
+      }
+    ]
+  },
+  {
+    "modId": "lcq.stage_05b",
+    "afterEventId": "lcq.event.tribes_pledge",
+    "eventIds": [
+      "lcq.event.s05b_ice_gu_detour",
+      "lcq.event.s05b_wuer_suli_depart",
+      "lcq.event.shanghou_revealed",
+      "lcq.event.s05b_shanghou_reads_letter",
+      "lcq.event.s05b_yeao_palm_ningyu_stays",
+      "lcq.event.shanghou_cures_ice_gu"
+    ],
+    "contracts": [
+      {
+        "eventId": "lcq.event.s05b_ice_gu_detour",
+        "mustReach": "祁远算出三个月之约只剩十几天，赶不及回五原或建康，朱老头指路山村一天多。云苍峰与小魏带货物和伤员去白龙江口，程宗扬、祁远、凝羽、乐明珠随朱老头去叶媪山村。期限仅叙事压力，无致命倒计时。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "提前演出后续剧情",
+          "改写本拍已定结果"
+        ],
+        "allowedElaboration": "只补当前动作的场景与对话，不代替玩家行动。"
+      },
+      {
+        "eventId": "lcq.event.s05b_wuer_suli_depart",
+        "mustReach": "苏荔说明借种壮大花苗的目的，程宗扬拒绝，本拍不发生性关系，苏荔离开。程宗扬向武功全废的武二郎传九阳口诀，按每月两枚银铢结清工钱；武二郎独自修炼，不去建康。云苍峰一行在林子那头分手。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "提前演出后续剧情",
+          "改写本拍已定结果"
+        ],
+        "allowedElaboration": "只补当前动作的场景与对话，不代替玩家行动。"
+      },
+      {
+        "eventId": "lcq.event.shanghou_revealed",
+        "mustReach": "程宗扬在叶媪引导下见到鸩羽殇侯，确认他就是朱老头；殇侯称他是天命之人。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "提前演出后续剧情",
+          "改写本拍已定结果"
+        ],
+        "allowedElaboration": "只补当前动作的场景与对话，不代替玩家行动。"
+      },
+      {
+        "eventId": "lcq.event.s05b_shanghou_reads_letter",
+        "mustReach": "殇侯以一斤三两精盐兑盐水，再施玄冰掌，程宗扬吐出裹蛊虫的冰块，冰蛊实际解除。白纸信泼茶显字，约甲子立秋廿载共祭；殇侯讲师兄二十年前围攻自己、引诱阿巫的旧怨，烧毁信笺。不得点破师兄姓名、不得扩写大祭结果。修为九级，五级以上称高手，谢艺六级。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "提前演出后续剧情",
+          "改写本拍已定结果"
+        ],
+        "allowedElaboration": "只补当前动作的场景与对话，不代替玩家行动。"
+      },
+      {
+        "eventId": "lcq.event.s05b_yeao_palm_ningyu_stays",
+        "mustReach": "叶媪令程宗扬运气，一掌引出屠龙的阴寒反噬，祁远上前被拂退。凝羽经脉阴气过盛，须留山村调养至少半年，程宗扬不能陪留。不得揭露叶媪真实身份。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "提前演出后续剧情",
+          "改写本拍已定结果"
+        ],
+        "allowedElaboration": "只补当前动作的场景与对话，不代替玩家行动。"
+      },
+      {
+        "eventId": "lcq.event.shanghou_cures_ice_gu",
+        "mustReach": "殇侯解除程宗扬体内的冰蛊。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "提前演出后续剧情",
+          "改写本拍已定结果"
+        ],
+        "allowedElaboration": "只补当前动作的场景与对话，不代替玩家行动。"
+      }
+    ]
+  },
   {
     modId: 'lcq.stage_04b_lingfei_baiyi_crisis',
     afterEventId: 'lcq.event.s04b_lingfei_baiyi_crisis_16',
@@ -327,11 +662,12 @@ function withDefaultLineExtraRailBeats(profiles: CanonRailProfile[]): CanonRailP
       if (extra.contracts.length !== extra.eventIds.length) {
         throw new Error(`${profile.modId} extra rail beat contracts must match eventIds`);
       }
-      const afterIndex = orderedEventIds.indexOf(extra.afterEventId);
+      const anchorId = extra.afterEventId || extra.beforeEventId;
+      const afterIndex = anchorId ? orderedEventIds.indexOf(anchorId) : -1;
       if (afterIndex < 0) {
-        throw new Error(`${profile.modId} extra rail beat missing afterEventId ${extra.afterEventId}`);
+        throw new Error(`${profile.modId} extra rail beat missing insertion anchor ${anchorId}`);
       }
-      const insertAt = afterIndex + 1;
+      const insertAt = afterIndex + (extra.beforeEventId ? 0 : 1);
       orderedEventIds = [
         ...orderedEventIds.slice(0, insertAt),
         ...extra.eventIds,

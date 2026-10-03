@@ -517,6 +517,17 @@ function formatFocusedCharacter(
   playerName?: string,
   presentNames?: Set<string>,
 ): string {
+  const isProtagonist = Boolean(playerName) && character.name === playerName;
+  if (character.id === 'liuchao.character.xie_yi'
+    && (runtime.flags?.['event.s06_03.void'] === true || readPath(runtime.flags, ['event', 's06_03', 'void']) === true)
+    && (runtime.flags?.['branch.lcq.if_xieyi_longrest.active'] === true || readPath(runtime.flags, ['branch', 'lcq', 'if_xieyi_longrest', 'active']) === true)) {
+    return '- 谢艺：在场的昏迷伤员，近死深度昏睡；整个南荒二期不醒、不说话、不自行行动。只能由他人抬送、护理；墨镜等名下之物仍归本人，无骨灰或遗物交割。';
+  }
+  // 未揭示身份不查询全书语音卡、别名和密档，避免显示名已遮蔽而资料仍泄底。
+  if ((character.id === 'liuchao.character.shang_zhen_yu' && ['lcq.stage_03b_snake_flower_bridge', 'lcq.stage_04', 'lcq.stage_04b_lingfei_baiyi_crisis', 'lcq.stage_05b'].includes(runtime.modId || ''))
+    || character.name === '花苗新娘') {
+    return `- ${character.name}：${character.description || character.profile?.origin || character.role || ''}。只使用当下已揭示身份，不关联全书真身与未来身世。${presentNames && !isProtagonist && !presentNames.has(character.name) ? formatAbsenceGuard(character.name) : ''}`;
+  }
   const profile = character.profile || {};
   const lines: string[] = [`- ${character.name}（${[character.gender, character.role, character.realm].filter(Boolean).join('；') || '正典人物'}）`];
   const base = compactText(character.description || profile.origin || '');
@@ -616,7 +627,7 @@ function formatFocusedCharacter(
   //      也不能只靠下面的 hasRelationData——主角碰巧不在关系表里，那是巧合而非保证（二审 P2）。
   //   ② 必须确实存在关系数据——素未谋面的路人不该被注入"好感 0＝陌路"，那是默认值
   //      不是真实态度，属虚假精确。
-  const isProtagonist = Boolean(playerName) && character.name === playerName;
+
   const hasRelationData = live !== undefined || canonFav !== undefined;
   if (!isProtagonist && hasRelationData) {
     // 姿态取**持久化的滞回结果**，而非当场按好感算——否则 40／-10 边界上 1 点变化

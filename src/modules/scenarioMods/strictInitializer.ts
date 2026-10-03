@@ -290,6 +290,11 @@ function findLedgerIdCollision(
 export function transitionToNextScenarioStage(saveData: SaveData, modsOverride?: ScenarioMod[]): StageTransitionResult {
   const rt = (saveData as any)?.世界?.状态?.剧本模组;
   if (!rt?.modId) return { saveData, ok: false, reason: '当前存档无剧本运行时' };
+  const demoEnd = (saveData as any)?.系统?.扩展?.清羽记开局;
+  if (demoEnd?.kind === 'qingyu-demo-v1' && demoEnd.endEventId && demoEnd.endModId === rt.modId
+    && rt.completedEventIds?.includes(demoEnd.endEventId)) {
+    return { saveData, ok: false, reason: '本期南荒试玩已结束' };
+  }
   const configuredTargetId = rt.nextStageId;
   if (!configuredTargetId) return { saveData, ok: false, reason: '已是最终关，无下一关' };
   if (rt.nextStageReadyId !== configuredTargetId) return { saveData, ok: false, reason: '本关关键剧情尚未完成' };

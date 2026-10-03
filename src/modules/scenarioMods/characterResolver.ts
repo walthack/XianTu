@@ -258,6 +258,10 @@ for (const entry of (registryJson as { characters: RegistryEntry[] }).characters
 // 与构建期 apply-character-cards-v3-to-mod.mjs 同步：早期关卡里的未揭示称谓
 // 不得因 alias 命中全局 registry 而在新档物化时补出未来身份或画像。
 const CARD_TIME_GATE_EXCLUSIONS: Record<string, Set<string>> = {
+  'lcq.stage_03b_snake_flower_bridge': new Set(['liuchao.character.shang_zhen_yu', 'liuchao.character.le_mingzhu']),
+  'lcq.stage_04': new Set(['liuchao.character.shang_zhen_yu', 'liuchao.character.le_mingzhu']),
+  'lcq.stage_04b_lingfei_baiyi_crisis': new Set(['liuchao.character.shang_zhen_yu']),
+  'lcq.stage_05b': new Set(['liuchao.character.shang_zhen_yu']),
   'lcq.stage_05': new Set([
     'liuchao.character.cheng_zongyang', 'liuchao.character.le_mingzhu',
     'liuchao.character.xiao_zi', 'liuchao.character.xie_yi',
@@ -337,6 +341,10 @@ function resolveOne(character: any, stageId: string): boolean {
     && !blockedPrefixes.some(prefix => String(note).startsWith(prefix)),
   );
   profile.notes = [...keptNotes, ...buildNotes(entry, currentPhase, stageId)];
+  // 70章刚见面的小紫仅投射表面性格；保留registry种族、外貌和当前阶段资料。
+  if (stageId === 'lcq.stage_04b_lingfei_baiyi_crisis' && character.id === 'liuchao.character.xiao_zi') {
+    profile.personality = ['看上去天真灵动，笑语亲切，言行令旁人难以捉摸。'];
+  }
   character.profile = profile;
   return true;
 }
@@ -351,6 +359,7 @@ export function resolveScenarioCharacters(characters: any[] | undefined, stageId
   if (!Array.isArray(characters) || !stageId) return 0;
   let n = 0;
   for (const c of characters) if (resolveOne(c, stageId)) n++;
+  syncNanhuangIdentityDisplay({ modId: stageId, canon: { characters } });
   return n;
 }
 
@@ -481,4 +490,33 @@ export function stripNarrativeUnintroducedCharacters(
 export function getRegistryBottomLine(name: string): string[] {
   const entry = byName.get(name);
   return unique(asArray<string>(entry?.staticProfile?.principles)).filter(Boolean);
+}
+
+/** 南荒身份展示只接受本地完成回执；不修改registry的人工身份。 */
+export function syncNanhuangIdentityDisplay(runtime: {
+  modId?: string; canon?: { characters?: any[] }; completedEventIds?: string[];
+  flags?: Record<string, unknown>; eventActionStates?: Record<string, { readyAtTurn?: number }>;
+}): void {
+  if (!['lcq.stage_03b_snake_flower_bridge', 'lcq.stage_04', 'lcq.stage_04b_lingfei_baiyi_crisis', 'lcq.stage_05b'].includes(runtime.modId || '')) return;
+  const settled = (id: string) => runtime.completedEventIds?.includes(id)
+    || runtime.eventActionStates?.[id]?.readyAtTurn !== undefined
+    || runtime.flags?.[`event.${id.replace('lcq.event.', '')}.done`] === true;
+  for (const character of runtime.canon?.characters || []) {
+    if (character.id === 'liuchao.character.shang_zhen_yu') {
+      const revealed = settled('lcq.event.shanghou_revealed');
+      character.name = revealed ? '殇侯' : '朱八八';
+      character.role = revealed ? '山村中的殇侯' : '云氏雇用的老向导';
+      character.description = revealed ? '朱老头已当面显露殇侯身份。其他身世未揭露。' : '云氏雇用的老向导，自称朱八八。';
+      character.profile = { origin: character.description };
+      delete character.affiliations; delete character.factionId;
+    }
+    if (character.id === 'liuchao.character.le_mingzhu' && ['lcq.stage_03b_snake_flower_bridge', 'lcq.stage_04'].includes(runtime.modId || '')) {
+      const revealed = settled('lcq.event.s04_03');
+      character.name = revealed ? '乐明珠' : '花苗新娘';
+      character.role = revealed ? '光明观堂弟子' : '戴面纱的花苗新娘';
+      character.description = revealed ? '送亲新娘的身份已揭露，是光明观堂弟子乐明珠。' : '随花苗送亲队同行，身份尚未揭露。';
+      character.profile = { origin: character.description };
+      delete character.affiliations; delete character.factionId;
+    }
+  }
 }

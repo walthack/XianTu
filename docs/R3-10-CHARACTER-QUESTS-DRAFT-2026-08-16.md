@@ -310,7 +310,7 @@
 |---|---|---|---|
 | LM1 | `lcq.event.s04_03`　**73**　乐明珠身份揭露 | 她承认自己是光明观堂弟子，假扮新娘是为了刺杀鬼巫王 | `✅ 已有`　`lcq.stage_04`　seq 73 `第48章·窥情` |
 | LM2 | `lcq.event.s04b_lingfei_baiyi_crisis_02`　**90**　鸦人激战 | 她挺身战鸦人，经验不够被擒。你在鸦人营地救她 | `✅ 已有`　`lcq.stage_04b_lingfei_baiyi_crisis`。`_03` 斩杀鸦人并进，不上第二拍 |
-| LM3 | 建议挂 `lcq.stage_04b_lingfei_baiyi_crisis` **后缀** | 废弃海神殿：鲛人因朱狐冠发狂。你护住她，拔掉卡在她身上的鱼叉 | `🆕 需新增`　建议 id `lcq.event.s04b_lemingzhu_haishen`　← 原隔离 `s05_01`（124 `第74章·鲛人`）＋ `s05_02`（125 `第75章·戏问`）。形态＝可玩救治拍。与谢 XY5 同缝：紧挨 04b 窗尾 122，不跳到 05b 163 |
+| LM3 | 建议挂 `lcq.stage_04b_lingfei_baiyi_crisis` **后缀** | 废弃海神殿：鲛人因朱狐冠发狂。你护住她，拔掉卡在她身上的鱼叉 | `✅ 已挂接（2026-10-03）`　`lcq.event.haishen_hall_merfolk`／`lcq.event.pull_harpoon_lemingzhu`　← 原隔离 `s05_01`（124 `第74章·鲛人`）＋ `s05_02`（125 `第75章·戏问`）。形态＝可玩救治拍。与谢 XY5 同缝：紧挨 04b 窗尾 122，不跳到 05b 163 |
 | LM4 | `lcq.event.s05b_06_breakout_and_reunion`　**175**　突围与重逢 | 鬼王宫里她脱险现身，你与她重逢 | `✅ 已有`　`lcq.stage_05b`。核实未认领（昭南／主轴认领的是 `s05b_05a`／`s05b_10`／杀龙） |
 | LM5 | `lcq.event.s05b_07_xiaozi_trap`　**178** | 小紫把她捉进深井。你追下去营救 | `✅ 已有`　同关。营救对象是她；小紫在本拍里是别人的线 |
 | LM6 | 建议挂 `lcq.stage_07_qingyuan_jiankang` 前缀 | 花房：师姐潘金莲闯入，发现她与你、小紫在一起，强行把她带回师门 | `🆕 需新增`　建议 id `lcq.event.s07_pan_takes_pearl`　正典 seq **228** `第126章·名士`。seq 228 落在 `stage_06` hi=226 与 `stage_07` lo=232 的缝里；06 隔离，改挂 07 开场。**核实**：37 关没有承载「带走乐明珠」的 event。`debut_panjinlian` 是更晚的建康再寻人，四字段不是带走 |
@@ -467,7 +467,7 @@
 | `lcq.event.s07_zhuo_price` | `lcq.stage_07_qingyuan_jiankang`　`s07_09` 后 | seq 272–273 `第151章·花红`／`第152章·因果` | 卓 ZY5 |
 | `lcq.event.s12_zhuo_forced` | `lcq.stage_12_jiangzhou_counterwar`　`s12_02` 下 | seq 483 `第255章·伏威` | 卓 ZY7 |
 | `lcq.event.s04b_xieyi_yue_mission` | `lcq.stage_04b_lingfei_baiyi_crisis` 后缀 | seq 128 `第76章·回忆`　← `s05_03` | 谢 XY5 |
-| `lcq.event.s04b_lemingzhu_haishen` | `lcq.stage_04b_lingfei_baiyi_crisis` 后缀 | seq 124／125　← `s05_01`＋`s05_02` | 乐 LM3 |
+| `lcq.event.haishen_hall_merfolk`／`lcq.event.pull_harpoon_lemingzhu` | `lcq.stage_04b_lingfei_baiyi_crisis` 后缀 | seq 124／125　← `s05_01`＋`s05_02` | 乐 LM3 |
 | `lcq.event.s07_pan_takes_pearl` | `lcq.stage_07_qingyuan_jiankang` 前缀 | seq 228 `第126章·名士` | 乐 LM6 |
 | `lcq.event.s10_lemingzhu_returns` | `lcq.stage_10_jiangzhou_shadow_war` 前缀 | seq 386 `第212章·礼赠` | 乐 LM7 |
 | `lcq.event.s03b_ningyu_regicide` | `lcq.stage_03b` 前缀 | seq 52／53　← `s03_09` | 凝 NY1 |
@@ -680,7 +680,6 @@ Grok 查两份正典后产出，7 个候选只用了 4 个，跳过的 3 个各�
 
 | 人物 | seq | 挂在 | 这一拍是他的什么 |
 |---|---|---|---|
-| 小紫 | 63 | `lcq.event.s03b_snake_flower_bridge_03` | 听祁远、谢艺确认蛇彝村是鬼王峒血符屠村——商队仓促撤离 |
 | 小紫 | 121 | `lcq.event.s04b_lingfei_baiyi_crisis_18` | 听谢艺谈玻璃技术，并说破岳帅晕血、还有个遗腹女 |
 | 小紫 | 158 | `lcq.event.geluo_summons_biji` | 阁罗召来碧姬，你当面见到谢艺要找的人 |
 | 小紫 | 164 | `lcq.event.s05b_01_binu_reveals_xiaozi` | 向碧姬问出：小紫曾主动投向鬼巫王——她不是单纯受害者 |

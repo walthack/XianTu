@@ -111,6 +111,13 @@ export function resolveScenarioEventNarrative(
   flags: Record<string, unknown>,
   divergences?: ScenarioDivergence[],
 ): ScenarioModEvent {
+  if (event.id === 'lcq.event.shanghou_revealed'
+    && flagValue(flags, 'flags.event.shanghou_revealed.done') !== true
+    && flagValue(flags, 'flags.event.shanghou_revealed.relic_test_refused') !== true) {
+    return { ...event, relatedFactionIds: [], name: '山村中的测试', objective: '随叶媪进堂，听主人说明测试',
+      description: '进村前路边有白骨。堂中主人打开鲨皮红木箱，展示黄底黑边三角与红色拐弯箭头，警告167人触碰后化为火球。只写眼前物件和警告，不解释电、高压，不提前揭露朱老头本相，不替玩家选择。',
+      axisBeat: '堂中主人要求测试天命之人，玩家尚未决定是否触碰。' };
+  }
   const compatibilityVariants = legacyNarrativeVariants[event.id];
   // 新版内置关卡的数据是权威；兼容层只填补老存档快照缺失的 variants，不能反向覆盖新数据。
   const variants = event.narrativeVariants?.length ? event.narrativeVariants : compatibilityVariants;

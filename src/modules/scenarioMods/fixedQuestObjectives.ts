@@ -12,10 +12,17 @@ export interface QuestObjectiveEventLike {
 }
 
 export const FIXED_QUEST_OBJECTIVE_OVERRIDES: Readonly<Record<string, string>> = Object.freeze({
+  'lcq.event.s03b_wanwu_night': '循谢艺的指点进入夜林，接回受惊的阿葭',
+  'lcq.event.s03b_yinzhu_xiongerpu': '处理阴蛛留下的死者，再到熊耳铺找向导',
+  'lcq.event.s04b_xi_furen_trade_route': '与樨夫人谈清白夷族长与商路的交换条件',
+  'lcq.event.s05b_ice_gu_detour': '和祁远算清蛊患期限，商议前往叶媪山村',
+  'lcq.event.s05b_wuer_suli_depart': '听苏荔说清来意，再与武二郎结清工钱道别',
+  'lcq.event.s05b_shanghou_reads_letter': '接受殇侯解蛊，再请他辨认黑鸦使者的白纸信',
+  'lcq.event.s05b_yeao_palm_ningyu_stays': '接受叶媪诊视，听清凝羽为何需要留村调养',
   'lcq.event.s03_12': '进入这座无灯火的蛇彝村，先安置商队',
   'lcq.event.debut_lemingzhu': '看清商队里那个被扯掉头饰的新娘',
   'lcq.event.debut_panjinlian': '应对突然闯进来找乐明珠的人',
-  'lcq.event.s07_debut_qinhui': '接住这个深夜来报北地有讯的文士',
+  'lcq.event.s07_debut_qinhui': '听随行的秦桧说明北上安排',
   'lcq.event.s08_debut_xiaoyaoyi': '接待上门来访的少陵侯嫡子',
   'lcq.event.xiaoyaoyi_arrives': '接待上门的萧遥逸：交骨灰，或协助密送伤员',
   'lcq.event.s07_05_eight_steeds_informed': '向孟非卿说明谢艺的下场，并留下实质安排',
@@ -47,7 +54,7 @@ export const FIXED_QUEST_OBJECTIVE_OVERRIDES: Readonly<Record<string, string>> =
   'lcq.event.s07_09_hengtang_ambush': '先应对横塘别墅突遭的围攻',
   'lcq.event.wuerlang_joins': '问清走投无路的武二郎是否随队南行',
   'lcq.event.wuerlang_slays_dagu': '撑住达古这一波围攻，看清武二郎能否打开缺口',
-  'lcq.event.s05b_02_xiaozi_exposed': '质问小紫，把阿夕身上的异常问清楚',
+  'lcq.event.s05b_02_xiaozi_exposed': '质问小紫，把阿夕的异常和黑舌死因问清楚',
   'lcq.event.s04_03': '听清乐明珠为什么要假扮新娘',
   'lcq.event.xiao_opens_resources': '当面听清萧遥逸代表星月湖要给你什么',
   'lcq.event.palace_haunting_rumor': '用灵飞镜窥探宫城，记下眼前异常',

@@ -30,6 +30,16 @@
       "stageId": "lyl.lin_an_bridge",
       "file": "lyl.lin_an_bridge.json",
       "book": "yunlong"
+    },
+    {
+      "stageId": "lcq.stage_03b_snake_flower_bridge",
+      "file": "lcq.stage_03b_snake_flower_bridge.json",
+      "book": "qingyu"
+    },
+    {
+      "stageId": "lcq.stage_04",
+      "file": "lcq.stage_04.json",
+      "book": "qingyu"
     }
   ]
 }

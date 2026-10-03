@@ -157,6 +157,57 @@ function qingyuStagePastWangZhe(runtime: DepartedRuntime | null | undefined): bo
   return String(runtime?.prevStageId || '') === 'lcq.stage_02';
 }
 
+function nanhuangCastExclusions(runtime: DepartedRuntime | null | undefined): string[] {
+  const names: string[] = [];
+  const done = (id: string) => eventIsCompleted(runtime, `lcq.event.${id}`);
+  const entered = (id: string) => done(id) || Boolean((runtime as { activeEventIds?: string[] })?.activeEventIds?.includes(`lcq.event.${id}`));
+  const stage = String(runtime?.modId || '');
+  if (stage === 'lcq.stage_03b_snake_flower_bridge') {
+    if (!entered('s03b_snake_flower_bridge_06')) names.push('苏荔', '阿夕', '卡瓦', '阿葭');
+    if (!entered('s03b_snake_flower_bridge_07')) names.push('花苗新娘');
+    if (!(runtime as { eventActionStates?: Record<string, { preparations?: string[] }> })?.eventActionStates?.['lcq.event.s03b_yinzhu_xiongerpu']?.preparations?.includes('ajia_mourned') && !done('s03b_yinzhu_xiongerpu')) names.push('朱八八', '秦桧', '吴三桂');
+  }
+  if (stage === 'lcq.stage_04') {
+    if (!entered('s04_04') || entered('s04_06')) names.push('叶媪');
+    if (done('s04_05')) names.push('易虎');
+    if (!entered('s04_07')) names.push('樨夫人', '白夷族长', '易勇');
+  }
+  if (stage === 'lcq.stage_04b_lingfei_baiyi_crisis') {
+    if (!entered('xiaozi_first_appears')) names.push('小紫');
+    if (done('s04b_xi_furen_trade_route')) names.push('易虎');
+    if (!entered('pull_harpoon_lemingzhu')) names.push('阁罗', '蛇傀', '黑舌');
+    if (!entered('yiyang_repels_yinsha')) names.push('弥骨', '六朝石匠');
+    if (done('s04b_lingfei_baiyi_crisis_19')) names.push('石刚');
+    if (done('s04b_lingfei_baiyi_crisis_19') && !entered('spot_dong_informant')) names.push('祁远');
+    if (done('s04b_lingfei_baiyi_crisis_17')) names.push('樨夫人', '易勇');
+  }
+  if (stage === 'lcq.stage_05b') {
+    if (!entered('geluo_summons_biji')) names.push('碧姬');
+    if (!entered('s05b_03_saan_secret_path')) names.push('萨安');
+    if (!entered('s05b_05a_meet_ghost_king')) names.push('鬼巫王');
+    if (!entered('s05b_08b_altar_corpse_fight_and_danchen')) names.push('朱诺');
+    if (!entered('ghost_king_swallowed')) names.push('龙神');
+    if (!done('slay_dragon') || done('xieyi_entrustment')) names.push('黑衣丽人');
+    if (done('s05b_02_xiaozi_exposed')) names.push('阿夕');
+    if (done('s05b_09_temporary_pact_with_xiaozi')) names.push('弥骨', '卡瓦');
+    if (done('s05b_10_slave_revolt_and_phoenix_change')) names.push('萨安', '娄蒙', '丹宸');
+    if (!entered('shanghou_revealed')) names.push('叶媪');
+    if (!entered('s05b_yeao_palm_ningyu_stays')) names.push('秦桧');
+    if (!entered('shanghou_cures_ice_gu')) names.push('吴三桂');
+    if (done('s05b_wuer_suli_depart')) names.push('苏荔', '武二郎', '云苍峰', '小魏', '易彪', '吴战威');
+    if (done('xiaozi_kills_mother')) names.push('小紫', '阁罗');
+  }
+  for (const [event, departed] of [
+    ['s03b_yinzhu_xiongerpu', ['阿葭']], ['s04b_lingfei_baiyi_crisis_09', ['白夷族长']],
+    ['biling_bay_stance', ['黑舌', '蛇傀']], ['wuerlang_slays_dagu', ['达古']],
+    ['ghost_king_swallowed', ['鬼巫王']], ['slay_dragon', ['龙神']], ['xiaozi_kills_mother', ['碧姬']],
+  ] as Array<[string, string[]]>) if (done(event)) names.push(...departed);
+  if (readRuntimeFlag(runtime?.flags, 'event.s06_03.done') === true) names.push('谢艺');
+  if (stage === 'lcq.stage_07_qingyuan_jiankang') names.push('凝羽', '武二郎', '苏荔', '石刚');
+  // 正在演出死亡或首次出现的事件仍可展示当时演员；落账后才退场。
+  return [...new Set(names)];
+}
+
 /** Characters who have already left the living present cast. */
 export function departedPresentNames(runtime: DepartedRuntime | null | undefined): string[] {
   const names: string[] = [];
@@ -167,13 +218,13 @@ export function departedPresentNames(runtime: DepartedRuntime | null | undefined
   }
   if (eventIsCompleted(runtime, 'lcq.event.s01_02') || qingyuStagePastOpening(runtime)) names.push('段强');
   if (eventIsCompleted(runtime, 'lcq.event.s02_02') || qingyuStagePastWangZhe(runtime)) names.push('王哲');
-  return [...new Set(names)];
+  return [...new Set([...names, ...nanhuangCastExclusions(runtime)])];
 }
 
 /** Persist inferred deaths onto runtime so later stages and old saves share one list. */
 export function stampDepartedCast(runtime: DepartedRuntime | null | undefined): string[] {
   const names = departedPresentNames(runtime);
-  if (runtime && typeof runtime === 'object') runtime.departedCast = names;
+  if (runtime && typeof runtime === 'object') runtime.departedCast = names.filter(name => !nanhuangCastExclusions(runtime).includes(name));
   return names;
 }
 

@@ -136,11 +136,11 @@ test('B1/B2：04b 生产入口能走到谢艺旧战，未挂章 critical 不再�
   const readyRt = runtimeOf(ready);
   assert.equal(readyRt.nextStageReadyId, 'lcq.stage_05');
   assert.equal(hasPendingProductionCriticalEvent(readyRt), false);
-  assert.equal(readyRt.flags['event.biling_bay_stance.done'], undefined);
+  assert.equal(readyRt.flags['event.biling_bay_stance.done'], true);
   assert.equal(
     stage.scenario.events.some(event => event.id === 'lcq.event.weapon_deal_with_geluo' && event.critical === true),
     true,
-    '未挂章 critical 仍在内容层，只是不再挡切关',
+    '碧鲮至进峒事件已挂接，不再是悬空内容',
   );
 
   const mods = await loadTransitionMods();

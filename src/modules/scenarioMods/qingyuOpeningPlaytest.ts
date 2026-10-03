@@ -47,7 +47,8 @@ export interface QingyuOpeningPlaytestMarker {
   persistence: 'isolated-local';
   scope: string;
   startModId: typeof QINGYU_OPENING_PLAYTEST_MOD_ID;
-  endModId: typeof QINGYU_OPENING_PLAYTEST_END_MOD_ID;
+  endModId: string;
+  endEventId?: string;
   eventIds: string[];
 }
 
@@ -220,7 +221,7 @@ function applyCreationPreset(save: SaveData, mod: ScenarioMod): void {
   }
 }
 
-export function createQingyuOpeningPlaytestSave(mod: ScenarioMod, generatedAt = new Date().toISOString()): SaveData {
+export function createQingyuOpeningPlaytestSave(mod: ScenarioMod, generatedAt = new Date().toISOString(), nanhuangPhase?: 1 | 2): SaveData {
   if (mod.manifest.id !== QINGYU_OPENING_PLAYTEST_MOD_ID) {
     throw new Error(`清羽记开局试玩需要内置模组 ${QINGYU_OPENING_PLAYTEST_MOD_ID}`);
   }
@@ -250,9 +251,10 @@ export function createQingyuOpeningPlaytestSave(mod: ScenarioMod, generatedAt = 
     kind: QINGYU_OPENING_PLAYTEST_KIND,
     disposable: true,
     persistence: 'isolated-local',
-    scope: 'lcq.stage_01-lcq.stage_02/s01_01-baihu_shangguan_escape',
+    scope: nanhuangPhase === 1 ? 'lcq.stage_01-enter_dong_with_migu' : nanhuangPhase === 2 ? 'lcq.stage_01-shanghou_cures_ice_gu' : 'lcq.stage_01-lcq.stage_02/s01_01-baihu_shangguan_escape',
     startModId: QINGYU_OPENING_PLAYTEST_MOD_ID,
-    endModId: QINGYU_OPENING_PLAYTEST_END_MOD_ID,
+    endModId: nanhuangPhase === 1 ? 'lcq.stage_04b_lingfei_baiyi_crisis' : nanhuangPhase === 2 ? 'lcq.stage_05b' : QINGYU_OPENING_PLAYTEST_END_MOD_ID,
+    ...(nanhuangPhase ? { endEventId: nanhuangPhase === 1 ? 'lcq.event.enter_dong_with_migu' : 'lcq.event.shanghou_cures_ice_gu' } : {}),
     eventIds: [...QINGYU_OPENING_PLAYTEST_EVENT_IDS],
   };
   save.系统.扩展[QINGYU_OPENING_PLAYTEST_EXTENSION_KEY] = marker;
@@ -272,4 +274,12 @@ export function createQingyuOpeningPlaytestSave(mod: ScenarioMod, generatedAt = 
 
 export function isQingyuOpeningPlaytestSave(saveData: SaveData | null | undefined): boolean {
   return saveData?.系统?.扩展?.[QINGYU_OPENING_PLAYTEST_EXTENSION_KEY]?.kind === QINGYU_OPENING_PLAYTEST_KIND;
+}
+
+/** 显式南荒发行终点；旧短版与星月湖长版不受新闸影响。 */
+export function isNanhuangDemoFinished(save: SaveData | null | undefined): boolean {
+  const marker = save?.系统?.扩展?.[QINGYU_OPENING_PLAYTEST_EXTENSION_KEY] as QingyuOpeningPlaytestMarker | undefined;
+  const runtime = (save as any)?.世界?.状态?.剧本模组;
+  return marker?.kind === QINGYU_OPENING_PLAYTEST_KIND && Boolean(marker.endEventId)
+    && runtime?.modId === marker.endModId && Boolean(runtime?.completedEventIds?.includes(marker.endEventId));
 }

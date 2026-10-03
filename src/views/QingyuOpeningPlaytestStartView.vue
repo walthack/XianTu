@@ -10,8 +10,9 @@
         任务栏会给出当前合同，右栏有完成合同按钮。
       </p>
 
+      <label>试玩范围 <select v-model="nanhuangPhase"><option :value="1">一期：至第86章进入鬼王峒</option><option :value="2">二期：至第124章南荒尾声</option></select></label>
       <div class="facts">
-        <article><strong>十八拍</strong><span>穿越到白湖脱身：段强之死、遇月霜、太乙救援、王哲三托付、左武覆灭、五原为奴、商馆赌局</span></article>
+        <article><strong>南荒两期</strong><span>从草原落地、五原出发，继续南荒商路与鬼王峒主线</span></article>
         <article><strong>需要叙事 API</strong><span>使用你在“API 管理”中已有的配置</span></article>
         <article><strong>隔离本地档</strong><span>不会覆盖正式角色；可随时回主页继续原存档</span></article>
       </div>
@@ -20,7 +21,7 @@
         <li>自由输入观察、交涉或行动，不必照抄推荐选项；顺序仍按原著拍点推进。</li>
         <li>任务栏显示当前 objective；右栏点「完成合同」才会把这一拍标完成。</li>
         <li>战场上不走，会被王哲九阳自爆的焰浪吞没；在苏妲己面前拒绝三个月期限，会当场受炮烙。两处都直接结束本局。</li>
-        <li>玩到白湖脱身（或走进绝路）即本 demo 结束，靠引擎的本局结束界面收场。</li>
+        <li>一期止于入峒，二期止于殇侯授艺；死亡结局会提前结束本局。</li>
       </ol>
 
       <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
@@ -56,6 +57,7 @@ const router = useRouter();
 const characterStore = useCharacterStore();
 const gameStateStore = useGameStateStore();
 const busy = ref(false);
+const nanhuangPhase = ref<1 | 2>(1);
 const errorMessage = ref('');
 const playtestMod = BUILTIN_SCENARIO_MODS.find(mod => mod.manifest.id === QINGYU_OPENING_PLAYTEST_MOD_ID);
 const hasExistingPlaytest = computed(() => (
@@ -74,7 +76,7 @@ async function startFresh() {
       slotName: QINGYU_OPENING_PLAYTEST_SLOT,
       markerKind: QINGYU_OPENING_PLAYTEST_KIND,
       markerExtensionKey: QINGYU_OPENING_PLAYTEST_EXTENSION_KEY,
-      saveData: createQingyuOpeningPlaytestSave(playtestMod),
+      saveData: createQingyuOpeningPlaytestSave(playtestMod, undefined, nanhuangPhase.value),
     });
     await router.replace('/game');
   } catch (error) {

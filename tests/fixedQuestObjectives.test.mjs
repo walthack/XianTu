@@ -83,7 +83,7 @@ test('复审通过的坏目标由固定表现层覆盖，不改 event 合同', a
     FIXED_QUEST_OBJECTIVE_OVERRIDES,
     resolveFixedQuestObjective,
   } = await loadTs('../src/modules/scenarioMods/fixedQuestObjectives.ts');
-  assert.equal(Object.keys(FIXED_QUEST_OBJECTIVE_OVERRIDES).length, 54);
+  assert.equal(Object.keys(FIXED_QUEST_OBJECTIVE_OVERRIDES).length, 61);
   assert.equal(
     resolveFixedQuestObjective({
       id: 'lcq.event.s03_12',

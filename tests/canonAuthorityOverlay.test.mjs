@@ -26,6 +26,8 @@ const STAGES = [
   { stageId: 'lcq.stage_07_qingyuan_jiankang', book: 'qingyu' },
   { stageId: 'lcq.stage_08_jiankang_coup', book: 'qingyu' },
   { stageId: 'lyl.lin_an_bridge', book: 'yunlong' },
+  { stageId: 'lcq.stage_03b_snake_flower_bridge', book: 'qingyu' },
+  { stageId: 'lcq.stage_04', book: 'qingyu' },
 ];
 
 function miniMod(name = 'old') {
@@ -262,10 +264,10 @@ test('id-addressed source keeps a valid id-array; malformed target or source fai
   );
 });
 
-test('tracked overlays are exactly the six generated→builtin closures', async () => {
+test('tracked overlays are exactly the eight generated→builtin closures', async () => {
   const catalog = await loadTrackedCanonAuthorityOverlays();
   assert.deepEqual(catalog.stageIds, STAGES.map(stage => stage.stageId));
-  assert.equal(catalog.manifest.overlays.length, 6);
+  assert.equal(catalog.manifest.overlays.length, 8);
 });
 
 test('generated plus tracked overlay reconstructs the Git-tracked builtins', async () => {

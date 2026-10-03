@@ -24,6 +24,7 @@ export const BRANCH_DECISION_HINT = '这一步只能从下面的选项中选择�
 
 /** eventId → [动作 id, 显示文案]；第一项是决定动作，其余是同一时刻的其他固定选项（含致命选项）。 */
 const LOCKED_DECISIONS: Readonly<Record<string, ReadonlyArray<readonly [string, string]>>> = {
+  'lcq.event.shanghou_revealed': [['refuse_shanghou_relic_test', '认出警示标记，不碰'], ['touch_shanghou_relic', '伸手去碰那件神物']],
   // 白湖赌局（第18-19章）：凝羽入局后当面答复的那一步。不赌＝致命选项（炮烙）。
   'lcq.event.ningyu_enters_gamble': [['answer_ningyu_on_debut', '接赌'], ['refuse_gamble_take_paolao', '不赌']],
   // 撕毁阿姬曼身契（第23章）：撕契那一步；阿姬曼生气并入同一场戏。

@@ -315,7 +315,7 @@ test('姿态注入的两道门：主角显式排除 + 需有真实关系数据',
     fs.readFileSync(new URL('../src/modules/scenarioMods/storyContext.ts', import.meta.url), 'utf8'));
   const call = source.indexOf('formatRelationStance(character.name');
   assert.ok(call > 0, 'storyContext 应调用 formatRelationStance');
-  const guardWindow = source.slice(Math.max(0, call - 1200), call);
+  const guardWindow = source.slice(source.lastIndexOf('function formatFocusedCharacter(', call), call);
   assert.match(guardWindow, /const isProtagonist = Boolean\(playerName\) && character\.name === playerName/,
     '必须有基于玩家名的显式主角判据');
   assert.match(guardWindow, /if \(!isProtagonist && hasRelationData\)/, '两道门都要生效');

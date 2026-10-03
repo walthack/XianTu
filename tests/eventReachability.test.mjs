@@ -28,30 +28,11 @@ const DIR = 'src/modules/scenarioMods/builtins/data/';
 // 欠账清单：**只能减，不能增**。绑好一条就从这里删一条。
 // stage_02 的 12 条已在同一提交里绑完，故不在此列。
 const DEBT = new Set([
-  'lcq.event.zixi_intercept',
-  'lcq.event.haishen_hall_merfolk',
-  'lcq.event.weapon_deal_with_geluo',
-  'lcq.event.guiwangdong_coop_pact',
-  'lcq.event.blank_letter_and_dagu',
-  'lcq.event.geluo_summons_biji',
+  // 裁定170：第24章历史内容留原位，不上rail；不是本期南荒待补拍。
   'lcq.event.ice_gu_coercion',
-  'lcq.event.persuade_wuerlang',
-  'lcq.event.spot_dong_informant',
-  'lcq.event.ruins_ghost_warriors',
-  'lcq.event.enter_dong_with_migu',
-  'lcq.event.hongmiao_controlled',
-  'lcq.event.xiaozi_first_appears',
-  'lcq.event.pull_harpoon_lemingzhu',
-  'lcq.event.regroup_caravan_envoy',
-  'lcq.event.wuerlang_slays_dagu',
-  'lcq.event.yiyang_repels_yinsha',
-  'lcq.event.escape_cave_mechanism',
-  'lcq.event.biling_bay_stance',
-  'lcq.event.huamiao_coop_boundary',
+  // 第131/133章，超出本期第124章终点。
   'lcq.event.wangzhe_letter',
-  'lcq.event.shanghou_revealed',
   'lcq.event.palace_haunting_rumor',
-  'lcq.event.shanghou_cures_ice_gu',
   'lcq.event.palm_oath_shanghou',
   'lcq.event.xiangfu_stance',
   'lcq.event.spoils_split',

@@ -17,8 +17,8 @@
     {
       "op": "insertKeys",
       "path": "scenario.initialFlags",
-      "afterKey": null,
-      "beforeKey": "event.s07_01.done",
+      "afterKey": "event.shanghou_cures_ice_gu.done",
+      "beforeKey": null,
       "entries": {
         "event.xieyi_entrustment.done": false,
         "event.xiaoyaoyi_arrives.done": false
@@ -46,148 +46,6 @@
       ]
     },
     {
-      "op": "insertBefore",
-      "path": "scenario.events",
-      "beforeId": "lcq.event.s07_01_old_case",
-      "value": {
-        "id": "lcq.event.xiaoyaoyi_arrives",
-        "name": "萧遥逸上门",
-        "description": "少陵侯嫡子萧遥逸在左武旧案之前上门。谢艺已死则接骨灰；谢艺长养则接伤员、安排秘密转移，不得发丧。",
-        "axisId": null,
-        "axisMethod": "carrier-before-s07_01",
-        "axisAnchor": "六朝清羽记·#132·第130章·同门",
-        "axisSeq": 231,
-        "axisBeat": "萧遥逸在左武旧案之前上门：死则接骨灰，生还则接伤员。",
-        "critical": true,
-        "conditions": [
-          {
-            "path": "flags.event.xieyi_entrustment.done",
-            "operator": "eq",
-            "value": true
-          }
-        ],
-        "completion": [
-          {
-            "path": "flags.event.xiaoyaoyi_arrives.done",
-            "operator": "eq",
-            "value": true
-          }
-        ],
-        "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang",
-          "liuchao.character.xiao_yao_yi",
-          "liuchao.character.xie_yi",
-          "liuchao.character.xiao_zi"
-        ],
-        "relatedFactionIds": [
-          "liuchao.faction.xing_yue_hu"
-        ],
-        "objective": "接待上门的萧遥逸：交骨灰，或协助密送伤员",
-        "playerCompletionContract": {
-          "kind": "objective_action",
-          "settleOn": [
-            "success"
-          ],
-          "actions": [
-            {
-              "id": "deliver_ashes",
-              "label": "交骨灰",
-              "actionText": "我把谢艺的骨灰交给上门的萧遥逸，不隐瞒死讯。",
-              "timeCost": 1,
-              "visibleWhen": [
-                {
-                  "path": "flags.branch.lcq.if_xieyi_longrest.active",
-                  "operator": "neq",
-                  "value": true
-                }
-              ],
-              "intentMatch": {
-                "matchAny": [
-                  "交骨灰",
-                  "交出骨灰",
-                  "接骨灰"
-                ],
-                "rejectIf": [
-                  "他还活着",
-                  "密送",
-                  "不发丧"
-                ]
-              },
-              "outcomeText": {
-                "success": "萧遥逸接过骨灰。这是他的首次登场，左武旧案还没开口。",
-                "partial": "该动作不产生 partial。",
-                "failure": "该动作不产生 failure。"
-              },
-              "outcomeEffects": {
-                "success": {
-                  "pathReceipts": [
-                    {
-                      "receiptId": "lcq.event.xiaoyaoyi_arrives.path.ashes_delivered",
-                      "sourceEventId": "lcq.event.xiaoyaoyi_arrives",
-                      "choiceId": "deliver_ashes",
-                      "mutexGroupId": "lcq.event.xiaoyaoyi_arrives.mutex.fate",
-                      "dimension": "method",
-                      "label": "萧遥逸接走谢艺骨灰",
-                      "consumeAtEventIds": [
-                        "lcq.event.s07_05_eight_steeds_informed"
-                      ]
-                    }
-                  ]
-                }
-              }
-            },
-            {
-              "id": "escort_wounded",
-              "label": "协助密送",
-              "actionText": "我协助萧遥逸接走重伤的谢艺，安排秘密转移，不发丧、不交出骨灰。",
-              "timeCost": 1,
-              "visibleWhen": [
-                {
-                  "path": "flags.branch.lcq.if_xieyi_longrest.active",
-                  "operator": "eq",
-                  "value": true
-                }
-              ],
-              "intentMatch": {
-                "matchAny": [
-                  "密送",
-                  "接伤员",
-                  "秘密转移"
-                ],
-                "rejectIf": [
-                  "交骨灰",
-                  "发丧",
-                  "他已经死了"
-                ]
-              },
-              "outcomeText": {
-                "success": "萧遥逸接走伤员并安排密送。不得发丧，不得把谢艺写成已死。",
-                "partial": "该动作不产生 partial。",
-                "failure": "该动作不产生 failure。"
-              },
-              "outcomeEffects": {
-                "success": {
-                  "pathReceipts": [
-                    {
-                      "receiptId": "lcq.event.xiaoyaoyi_arrives.path.wounded_escorted",
-                      "sourceEventId": "lcq.event.xiaoyaoyi_arrives",
-                      "choiceId": "escort_wounded",
-                      "mutexGroupId": "lcq.event.xiaoyaoyi_arrives.mutex.fate",
-                      "dimension": "method",
-                      "label": "萧遥逸接走长养的谢艺",
-                      "consumeAtEventIds": [
-                        "lcq.event.s07_05_eight_steeds_informed"
-                      ]
-                    }
-                  ]
-                }
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
       "op": "set",
       "path": "scenario.chapters[id=lcq.chapter.stage_07_qingyuan_jiankang_jiankang].eventIds",
       "from": [
@@ -206,374 +64,3263 @@
     },
     {
       "op": "set",
-      "path": "scenario.events[id=lcq.event.s07_01_old_case].relatedCharacterIds",
-      "from": [
-        "liuchao.character.cheng_zongyang"
-      ],
-      "to": [
-        "liuchao.character.cheng_zongyang",
-        "liuchao.character.xiao_yao_yi"
-      ]
-    },
-    {
-      "op": "set",
-      "path": "scenario.events[id=lcq.event.s07_05_eight_steeds_informed].objective",
-      "from": "向孟非卿报告谢艺之死",
-      "to": "向孟非卿说明谢艺的下场，并留下实质安排"
-    },
-    {
-      "op": "set",
-      "path": "scenario.events[id=lcq.event.s07_05_eight_steeds_informed].playerCompletionContract.actions",
+      "path": "scenario.events",
       "from": [
         {
-          "id": "advance_declared_objective",
-          "label": "向孟非卿报告谢艺之死",
-          "actionText": "我按当前主线目标行动：向孟非卿报告谢艺之死",
-          "timeCost": 1,
-          "outcomeText": {
-            "success": "你已亲自执行“向孟非卿报告谢艺之死”；事件完成真值将由本地引擎落账。",
-            "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
-            "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
-          }
-        }
-      ],
-      "to": [
-        {
-          "id": "report_death",
-          "label": "说明已死",
-          "actionText": "我向孟非卿说明谢艺已死，以及生药铺可能成为诱引。",
-          "timeCost": 1,
-          "visibleWhen": [
+          "id": "lcq.event.s07_01_old_case",
+          "name": "同门旧案",
+          "description": "萧遥逸向程宗扬交代左武军覆灭、朝廷腐朽与岳帅旧案分歧，星月湖线正式压上晋国舞台。",
+          "axisId": "qingyu.132.1",
+          "axisAnchor": "六朝清羽记·#132·第130章·同门",
+          "axisSeq": 232,
+          "axisBeat": "萧遥逸向程宗扬痛陈左武军全军覆没、朝廷腐朽，并透露星月湖内部对岳帅命运的分歧。",
+          "critical": true,
+          "completion": [
             {
-              "path": "flags.branch.lcq.if_xieyi_longrest.active",
-              "operator": "neq",
+              "path": "flags.event.s07_01.done",
+              "operator": "eq",
               "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang"
+          ],
+          "objective": "向萧遥逸询问左武军覆灭详情",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "advance_declared_objective",
+                "label": "向萧遥逸询问左武军覆灭详情",
+                "actionText": "我按当前主线目标行动：向萧遥逸询问左武军覆灭详情",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已亲自执行“向萧遥逸询问左武军覆灭详情”；事件完成真值将由本地引擎落账。",
+                  "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                  "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.s07_02_kill_wu",
+          "name": "清远斩吴",
+          "description": "程宗扬斩杀吴行德，救下卓云君，使太乙真宗敌手转入可被挟制的关键位置。",
+          "axisId": "qingyu.133.3",
+          "axisAnchor": "六朝清羽记·#133·第131章·内斗",
+          "axisSeq": 236,
+          "axisBeat": "程宗扬出手斩杀吴行德，救下卓云君。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.s07_02.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.zhuo_yunjun"
+          ],
+          "objective": "在清远斩杀吴行德救卓云君",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "advance_declared_objective",
+                "label": "在清远斩杀吴行德救卓云君",
+                "actionText": "我按当前主线目标行动：在清远斩杀吴行德救卓云君",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已亲自执行“在清远斩杀吴行德救卓云君”；事件完成真值将由本地引擎落账。",
+                  "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                  "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+                }
+              }
+            ]
+          },
+          "relatedFactionIds": [
+            "liuchao.faction.tai_yi_zhen_zong",
+            "lyg.faction.jin_state"
+          ],
+          "worldActor": {
+            "pressure": {
+              "id": "world.lcq.s07_02.kill_wu",
+              "scope": "faction",
+              "summary": "清远刀光将起，救人之后认不认太乙门户的账，还没人签字。",
+              "domains": [
+                "court",
+                "combat"
+              ],
+              "geography": [
+                "清远"
+              ],
+              "factionIds": [
+                "liuchao.faction.tai_yi_zhen_zong",
+                "lyg.faction.jin_state"
+              ],
+              "intensity": 2,
+              "canonPolicy": "process_only"
+            },
+            "decisionCore": {
+              "knowledgeFacts": {
+                "knowledge.lcq.s07_02.ambush": {
+                  "text": "吴行德与卓云君一线收紧，杀机与救人的空隙同时露出。",
+                  "access": "public",
+                  "evidence": "lcq.event.s07_02_kill_wu axisBeat。"
+                }
+              },
+              "situation": {
+                "whitelist": [
+                  "zhuoAlive",
+                  "taiyiDebt"
+                ],
+                "initialValues": {
+                  "zhuoAlive": 35,
+                  "taiyiDebt": 20
+                },
+                "limits": {
+                  "zhuoAlive": {
+                    "min": 0,
+                    "max": 100
+                  },
+                  "taiyiDebt": {
+                    "min": 0,
+                    "max": 100
+                  }
+                }
+              },
+              "canonPolicy": {
+                "invariant": [
+                  "清远杀机已经对准卓云君"
+                ],
+                "forbiddenBefore": [
+                  "卓云君已经身死",
+                  "太乙已经改立掌教"
+                ],
+                "processFreedom": [
+                  "认不认太乙门户账"
+                ]
+              },
+              "actors": [
+                {
+                  "characterId": "liuchao.character.zhuo_yunjun",
+                  "identity": {
+                    "factionId": "liuchao.faction.tai_yi_zhen_zong",
+                    "office": "太乙教御",
+                    "rank": 5
+                  },
+                  "personality": {
+                    "honor": 3,
+                    "caution": 2,
+                    "ambition": 3
+                  },
+                  "motives": {
+                    "legitimacy": 4,
+                    "stability": 3
+                  },
+                  "resources": {
+                    "influence": 4,
+                    "troops": 2,
+                    "intelligence": 3,
+                    "wealth": 2
+                  },
+                  "relationships": {},
+                  "knowledge": [
+                    "knowledge.lcq.s07_02.ambush"
+                  ],
+                  "agendas": [
+                    {
+                      "id": "agenda.lcq.s07_02.zhuo",
+                      "goal": "活着离开清远，并决定这笔命债算不算太乙的",
+                      "clock": 1,
+                      "escalation": [
+                        "求援",
+                        "脱身",
+                        "认账"
+                      ]
+                    }
+                  ],
+                  "allowedActionIds": [
+                    "request_audience",
+                    "prepare_fallback_route"
+                  ],
+                  "wake": {
+                    "tier": "local_critical"
+                  },
+                  "evidence": {
+                    "identity.rank": "人物卡：卓云君为太乙真宗教御。",
+                    "personality.honor": "本拍是太乙教御遇刺。",
+                    "personality.caution": "本拍先要命。",
+                    "personality.ambition": "人物卡：教御。",
+                    "motives.legitimacy": "认账就会把命债写成门户的。",
+                    "motives.stability": "本拍先脱身。",
+                    "resources.influence": "人物卡：教御。",
+                    "resources.troops": "本拍护卫正在被换防。",
+                    "resources.intelligence": "本拍知道吴行德在收线。",
+                    "resources.wealth": "本拍不靠买命。",
+                    "agendas.agenda.lcq.s07_02.zhuo.clock": "街巷已封。"
+                  }
+                }
+              ],
+              "actionBindings": [
+                {
+                  "actionId": "request_audience",
+                  "actorIds": [
+                    "liuchao.character.zhuo_yunjun"
+                  ],
+                  "label": "把求救说成太乙教御向人开口",
+                  "reason": "开口本身就会留下门户账",
+                  "knownFacts": [],
+                  "knownFactIds": [
+                    "knowledge.lcq.s07_02.ambush"
+                  ],
+                  "mustNotInvent": [
+                    "卓云君已经身死"
+                  ],
+                  "visibleSignal": "卓云君不再只喊救命，而是报出教御身份",
+                  "offscreenAction": "留下太乙名义的求救",
+                  "costs": {
+                    "influence": 1
+                  },
+                  "effects": {
+                    "zhuoAlive": 8,
+                    "taiyiDebt": 10
+                  },
+                  "utility": {
+                    "urgency": 9,
+                    "factionGoal": 8,
+                    "expectedBenefit": 8,
+                    "situation": {
+                      "zhuoAlive": -4
+                    }
+                  },
+                  "visibility": "public",
+                  "durationTurns": 1
+                },
+                {
+                  "actionId": "prepare_fallback_route",
+                  "actorIds": [
+                    "liuchao.character.zhuo_yunjun"
+                  ],
+                  "label": "只求一条能走的缝，不提门户",
+                  "reason": "活着离开不必先认太乙的账",
+                  "knownFacts": [],
+                  "knownFactIds": [
+                    "knowledge.lcq.s07_02.ambush"
+                  ],
+                  "mustNotInvent": [
+                    "已经当众认下太乙账"
+                  ],
+                  "visibleSignal": "卓云君改走巷缝，不再报身份",
+                  "offscreenAction": "只脱身不认账",
+                  "costs": {
+                    "intelligence": 1
+                  },
+                  "effects": {
+                    "zhuoAlive": 6,
+                    "taiyiDebt": -4
+                  },
+                  "utility": {
+                    "expectedBenefit": 3
+                  },
+                  "visibility": "hidden",
+                  "durationTurns": 1
+                }
+              ],
+              "maxVisibleActions": 2,
+              "narrativeGuard": {
+                "forbiddenTerms": [
+                  "卓云君已经身死",
+                  "吴行德已经投诚"
+                ],
+                "rejectConcreteQuantities": true,
+                "allowUnverifiedQuantities": true
+              }
+            },
+            "opportunities": [
+              {
+                "id": "opportunity.lcq.s07_02.accept_taiyi_debt",
+                "title": "认下救卓云君的太乙门户账",
+                "characterIds": [
+                  "liuchao.character.zhuo_yunjun"
+                ],
+                "whyNow": "人还在清远巷里。认下这笔账，太乙会记你救了教御；入晋之后也会按门户的人来看你。",
+                "nextStep": "当众按太乙教御遇刺来救人，并承认这是门户的事。",
+                "stakes": "晋地会把你看成太乙的人；卓云君日后再求，也按这笔账开口。",
+                "rewardPreview": "取得一次被太乙记为救下教御的权限。",
+                "futureHint": "以后太乙再有人在晋地遇险，会先找曾经认过这笔账的人。",
+                "actionText": "我追踪“认下救卓云君的太乙门户账”：按教御遇刺救人，并承认这是门户的事。",
+                "rewardKey": "permission.lcq.taiyi.qingyuan_debt",
+                "rewardLabel": "太乙·清远教御命债",
+                "trigger": {
+                  "actorIds": [
+                    "liuchao.character.zhuo_yunjun"
+                  ],
+                  "actionIds": [
+                    "request_audience"
+                  ]
+                },
+                "completionContract": {
+                  "kind": "player_action_sequence",
+                  "settlement": "immediate",
+                  "expiry": "persistent",
+                  "steps": [
+                    {
+                      "id": "name_office",
+                      "label": "按教御身份救人",
+                      "actions": [
+                        {
+                          "id": "save_as_taiyi_preceptor",
+                          "label": "按教御救人",
+                          "actionText": "我按太乙教御遇刺来救卓云君，不当成路人斗殴。",
+                          "timeCost": 1
+                        }
+                      ],
+                      "matchAny": [
+                        "太乙教御",
+                        "不当成路人斗殴"
+                      ],
+                      "rejectIf": [
+                        "只当路人",
+                        "不提门户"
+                      ]
+                    },
+                    {
+                      "id": "accept_debt",
+                      "label": "承认这是门户的事",
+                      "actions": [
+                        {
+                          "id": "accept_sect_debt",
+                          "label": "认下门户账",
+                          "actionText": "我承认这笔命债记在太乙门户账上，日后再算。",
+                          "timeCost": 1
+                        }
+                      ],
+                      "matchAny": [
+                        "记在太乙门户账上"
+                      ],
+                      "rejectIf": [
+                        "不认账",
+                        "只救人"
+                      ]
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "opportunity.lcq.s07_02.save_without_sect_debt",
+                "title": "只救人，不认太乙门户账",
+                "characterIds": [
+                  "liuchao.character.zhuo_yunjun"
+                ],
+                "whyNow": "卓云君可以活，这笔账不必写成太乙的。入晋时你就还是外人。",
+                "nextStep": "救人离开封路，不按教御名义受谢。",
+                "stakes": "卓云君活着，但太乙不欠你；你在晋地也少一层门户掩护。",
+                "rewardPreview": "取得一次以私人名义在清远救人、不入太乙账的权限。",
+                "futureHint": "以后卓云君若再开口，会先分清你认过账没有。",
+                "actionText": "我追踪“只救人，不认太乙门户账”：救人离开封路，不按教御名义受谢。",
+                "rewardKey": "permission.lcq.jin.qingyuan_private_rescue",
+                "rewardLabel": "晋地·清远私人救援",
+                "trigger": {
+                  "actorIds": [
+                    "liuchao.character.zhuo_yunjun"
+                  ],
+                  "actionIds": [
+                    "request_audience"
+                  ]
+                },
+                "completionContract": {
+                  "kind": "player_action_sequence",
+                  "settlement": "immediate",
+                  "expiry": "persistent",
+                  "steps": [
+                    {
+                      "id": "break_line",
+                      "label": "切开封路救人",
+                      "actions": [
+                        {
+                          "id": "break_seal_to_save",
+                          "label": "切开封路",
+                          "actionText": "我切开清远封路把卓云君救出来，不先问门户如何记账。",
+                          "timeCost": 1
+                        }
+                      ],
+                      "matchAny": [
+                        "切开",
+                        "封路",
+                        "救出来"
+                      ],
+                      "rejectIf": [
+                        "按教御名义受谢",
+                        "认下门户"
+                      ]
+                    },
+                    {
+                      "id": "refuse_thanks",
+                      "label": "不受教御名义的谢",
+                      "actions": [
+                        {
+                          "id": "refuse_preceptor_thanks",
+                          "label": "不受门户谢",
+                          "actionText": "我明确不按太乙教御名义受谢，这笔事不入门户账。",
+                          "timeCost": 1
+                        }
+                      ],
+                      "matchAny": [
+                        "不按太乙教御名义受谢",
+                        "不入门户账"
+                      ],
+                      "rejectIf": [
+                        "记在太乙门户账上",
+                        "认下这笔账"
+                      ]
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.s07_03_xiaozi_appears",
+          "name": "小紫现身",
+          "description": "小紫以毒戒制住卓云君并救下程宗扬，她先前的弱态伪装开始转向残忍操控。",
+          "narrativeVariants": [
+            {
+              "when": [
+                {
+                  "path": "flags.branch.lcq.if_xiaozi_spares_mother.active",
+                  "operator": "eq",
+                  "value": true
+                }
+              ],
+              "replacesCanonRail": true,
+              "name": "小紫现身·未弑母的余波",
+              "description": "小紫以毒戒制住卓云君并救下程宗扬。碧姬仍活着的消息不能被搁置：小紫或同行者必须当场明确其看守、送离或托付给可信者的具体处置，并承担由此留下的余波。",
+              "axisBeat": "小紫突然现身，以轻灵身法和毒戒制服重伤的卓云君、救下程宗扬；她不得被写成已弑母，也不能被套入弑母后的悔恨。碧姬仍活着，必须由小紫或同行者当场作出看守、送离或托付给可信者的一项具体处置。",
+              "objective": "协助小紫制服卓云君，并落实碧姬仍活着后的具体处置"
+            }
+          ],
+          "axisId": "qingyu.134.1",
+          "axisAnchor": "六朝清羽记·#134·第132章·云落",
+          "axisSeq": 238,
+          "axisBeat": "小紫突然现身，以轻灵身法和毒戒制服重伤的卓云君，救下被卓云君制住的程宗扬。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.s07_03.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.xiao_zi"
+          ],
+          "objective": "协助小紫制服卓云君",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "advance_declared_objective",
+                "label": "协助小紫制服卓云君",
+                "actionText": "我按当前主线目标行动：协助小紫制服卓云君",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已亲自执行“协助小紫制服卓云君”；事件完成真值将由本地引擎落账。",
+                  "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                  "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+                }
+              }
+            ]
+          },
+          "relatedFactionIds": [
+            "liuchao.faction.hei_mo_hai"
+          ],
+          "worldActor": {
+            "pressure": {
+              "id": "world.lcq.s07_03.duzong_hand",
+              "scope": "faction",
+              "summary": "小紫已出手制住卓云君。认这笔毒门庇护，还是只领救命、不认门，还没说死。",
+              "domains": [
+                "sect"
+              ],
+              "geography": [
+                "建康"
+              ],
+              "factionIds": [
+                "liuchao.faction.hei_mo_hai"
+              ],
+              "intensity": 3,
+              "canonPolicy": "process_only"
+            },
+            "decisionCore": {
+              "knowledgeFacts": {
+                "knowledge.lcq.s07_03.rescue": {
+                  "text": "小紫以毒戒制服重伤的卓云君，救下被制住的程宗扬。",
+                  "access": "public",
+                  "evidence": "lcq.event.s07_03_xiaozi_appears axisBeat。"
+                }
+              },
+              "situation": {
+                "whitelist": [
+                  "sectShelter",
+                  "rescueOnly"
+                ],
+                "initialValues": {
+                  "sectShelter": 44,
+                  "rescueOnly": 36
+                },
+                "limits": {
+                  "sectShelter": {
+                    "min": 0,
+                    "max": 100
+                  },
+                  "rescueOnly": {
+                    "min": 0,
+                    "max": 100
+                  }
+                }
+              },
+              "canonPolicy": {
+                "invariant": [
+                  "小紫已经出手制住卓云君"
+                ],
+                "forbiddenBefore": [
+                  "卓云君已经身死",
+                  "毒宗名分已经公开册封"
+                ],
+                "processFreedom": [
+                  "认毒门庇护还是只领救命"
+                ]
+              },
+              "actors": [
+                {
+                  "characterId": "liuchao.character.xiao_zi",
+                  "identity": {
+                    "factionId": "liuchao.faction.hei_mo_hai",
+                    "office": "毒宗嫡传",
+                    "rank": 6
+                  },
+                  "personality": {
+                    "caution": 5,
+                    "ambition": 4,
+                    "aggression": 3
+                  },
+                  "motives": {
+                    "control": 5,
+                    "legitimacy": 3
+                  },
+                  "resources": {
+                    "influence": 4,
+                    "intelligence": 5,
+                    "troops": 2,
+                    "wealth": 2
+                  },
+                  "relationships": {},
+                  "knowledge": [
+                    "knowledge.lcq.s07_03.rescue"
+                  ],
+                  "agendas": [
+                    {
+                      "id": "agenda.lcq.s07_03.xiaozi",
+                      "goal": "救人的同时把庇护账记在毒门名下",
+                      "clock": 1,
+                      "escalation": [
+                        "现身",
+                        "下毒戒",
+                        "问认不认"
+                      ]
+                    }
+                  ],
+                  "allowedActionIds": [
+                    "offer_patronage",
+                    "protect_principal"
+                  ],
+                  "wake": {
+                    "tier": "local_critical"
+                  },
+                  "evidence": {
+                    "identity.rank": "人物卡：小紫为毒宗唯一嫡传。",
+                    "personality.caution": "人物卡：城府极深。",
+                    "personality.ambition": "本拍以嫡传身份出手。",
+                    "personality.aggression": "axisBeat：毒戒制服卓云君。",
+                    "motives.control": "庇护账在她手里。",
+                    "motives.legitimacy": "人物卡：毒宗嫡传。",
+                    "resources.influence": "人物卡：核心圈。",
+                    "resources.intelligence": "本拍先救人再问。",
+                    "resources.troops": "本拍个人武力。",
+                    "resources.wealth": "本拍不靠买命。",
+                    "agendas.agenda.lcq.s07_03.xiaozi.clock": "毒戒已落下。"
+                  }
+                }
+              ],
+              "actionBindings": [
+                {
+                  "actionId": "offer_patronage",
+                  "actorIds": [
+                    "liuchao.character.xiao_zi"
+                  ],
+                  "label": "按毒门嫡传把这笔救命记成庇护",
+                  "reason": "救了人，她要听你认不认这扇门",
+                  "knownFacts": [],
+                  "knownFactIds": [
+                    "knowledge.lcq.s07_03.rescue"
+                  ],
+                  "mustNotInvent": [
+                    "毒宗已经公开册封"
+                  ],
+                  "visibleSignal": "小紫摩挲毒戒，等一句认不认",
+                  "offscreenAction": "记下庇护账",
+                  "costs": {
+                    "influence": 1
+                  },
+                  "effects": {
+                    "sectShelter": 12,
+                    "rescueOnly": -4
+                  },
+                  "utility": {
+                    "urgency": 9,
+                    "factionGoal": 8,
+                    "expectedBenefit": 8,
+                    "situation": {
+                      "sectShelter": -3
+                    }
+                  },
+                  "visibility": "public",
+                  "durationTurns": 1
+                },
+                {
+                  "actionId": "protect_principal",
+                  "actorIds": [
+                    "liuchao.character.xiao_zi"
+                  ],
+                  "label": "只把人从卓云君手里拉开，不逼认门",
+                  "reason": "救命可以先落地",
+                  "knownFacts": [],
+                  "knownFactIds": [
+                    "knowledge.lcq.s07_03.rescue"
+                  ],
+                  "mustNotInvent": [
+                    "卓云君已经身死"
+                  ],
+                  "visibleSignal": "她收手，不再追问门派名分",
+                  "offscreenAction": "只完成救人",
+                  "costs": {
+                    "intelligence": 1
+                  },
+                  "effects": {
+                    "rescueOnly": 12,
+                    "sectShelter": -6
+                  },
+                  "utility": {
+                    "expectedBenefit": 4
+                  },
+                  "visibility": "public",
+                  "durationTurns": 1
+                }
+              ],
+              "maxVisibleActions": 2,
+              "narrativeGuard": {
+                "forbiddenTerms": [
+                  "天命侯已经坐实",
+                  "毒宗已经公开册封"
+                ],
+                "rejectConcreteQuantities": true,
+                "allowUnverifiedQuantities": true
+              }
+            },
+            "opportunities": [
+              {
+                "id": "opportunity.lcq.s07_03.accept_duzong_shelter",
+                "title": "认下小紫这笔毒门庇护",
+                "characterIds": [
+                  "liuchao.character.xiao_zi"
+                ],
+                "whyNow": "她已经用毒戒把人拉开。认这笔庇护，救命就按毒门的账走。",
+                "nextStep": "当着被制住的卓云君，承认这是小紫以毒门嫡传救你，并接受她记账。",
+                "stakes": "以后毒门有人问你是谁护的，会先问到她；太乙那边也会看见你领过这只手。",
+                "rewardPreview": "取得一次确认小紫毒门庇护账的权限。",
+                "futureHint": "以后她再伸手，会先看你这次认没认过这笔庇护。",
+                "actionText": "我追踪“认下小紫这笔毒门庇护”：承认是她以嫡传救我，接受记账。",
+                "rewardKey": "permission.lcq.xiaozi.duzong_shelter",
+                "rewardLabel": "小紫·毒门庇护",
+                "trigger": {
+                  "actorIds": [
+                    "liuchao.character.xiao_zi"
+                  ],
+                  "actionIds": [
+                    "offer_patronage"
+                  ]
+                },
+                "completionContract": {
+                  "kind": "player_action_sequence",
+                  "settlement": "immediate",
+                  "expiry": "standard",
+                  "steps": [
+                    {
+                      "id": "name_hand",
+                      "label": "承认是毒门嫡传所救",
+                      "actions": [
+                        {
+                          "id": "name_duzong_hand",
+                          "label": "认嫡传所救",
+                          "actionText": "我当着现场承认是小紫以毒门嫡传把我从卓云君手里拉开，不说成路人出手。",
+                          "timeCost": 1
+                        }
+                      ],
+                      "matchAny": [
+                        "毒门嫡传",
+                        "不说成路人出手"
+                      ],
+                      "rejectIf": [
+                        "只领救命",
+                        "不认门"
+                      ]
+                    },
+                    {
+                      "id": "accept_book",
+                      "label": "接受她记账",
+                      "actions": [
+                        {
+                          "id": "accept_xiaozi_shelter_book",
+                          "label": "接受庇护账",
+                          "actionText": "我接受小紫把这笔庇护记在我身上，不改口说只是偶遇。",
+                          "timeCost": 1
+                        }
+                      ],
+                      "matchAny": [
+                        "庇护记在我身上",
+                        "不改口说只是偶遇"
+                      ],
+                      "rejectIf": [
+                        "不认门",
+                        "只是偶遇"
+                      ]
+                    }
+                  ]
+                },
+                "expiresAfterTurns": 4
+              },
+              {
+                "id": "opportunity.lcq.s07_03.take_rescue_without_sect",
+                "title": "只要她制住卓云君，不认毒门名分",
+                "characterIds": [
+                  "liuchao.character.xiao_zi"
+                ],
+                "whyNow": "人已经拉开。救命可以领，门派名分可以不在这一刻认。",
+                "nextStep": "领受救援，明确此刻不把这事写成毒门庇护。",
+                "stakes": "她会记住你领了手却不认门；毒门也不会按庇护来认你。",
+                "rewardPreview": "取得一次只领小紫救命、不入毒门账的权限。",
+                "futureHint": "以后她再问你认不认，会先看你这次有没有把名分推回去。",
+                "actionText": "我追踪“只要她制住卓云君，不认毒门名分”：领救援，不写入毒门庇护。",
+                "rewardKey": "permission.lcq.xiaozi.rescue_without_sect",
+                "rewardLabel": "小紫·只领救命",
+                "trigger": {
+                  "actorIds": [
+                    "liuchao.character.xiao_zi"
+                  ],
+                  "actionIds": [
+                    "protect_principal"
+                  ]
+                },
+                "completionContract": {
+                  "kind": "player_action_sequence",
+                  "settlement": "immediate",
+                  "expiry": "standard",
+                  "steps": [
+                    {
+                      "id": "take_pull",
+                      "label": "领受她拉开的手",
+                      "actions": [
+                        {
+                          "id": "accept_xiaozi_pull",
+                          "label": "领救援",
+                          "actionText": "我领受小紫把我从卓云君手里拉开这件事，不假装没人救过。",
+                          "timeCost": 1
+                        }
+                      ],
+                      "matchAny": [
+                        "领受",
+                        "拉开",
+                        "不假装没人救过"
+                      ],
+                      "rejectIf": [
+                        "认下庇护",
+                        "毒门嫡传所救"
+                      ]
+                    },
+                    {
+                      "id": "refuse_sect",
+                      "label": "不认毒门名分",
+                      "actions": [
+                        {
+                          "id": "refuse_duzong_name",
+                          "label": "不认门",
+                          "actionText": "我明确此刻不把这事写成毒门庇护，也不认毒门名分。",
+                          "timeCost": 1
+                        }
+                      ],
+                      "matchAny": [
+                        "不把这事写成毒门庇护",
+                        "不认"
+                      ],
+                      "rejectIf": [
+                        "接受她记账",
+                        "毒门庇护"
+                      ]
+                    }
+                  ]
+                },
+                "expiresAfterTurns": 4
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.s07_04_zhuo_subdued",
+          "name": "卓云君受制",
+          "description": "卓云君在小紫持续压迫下彻底失去主动权，后续只能作为受制变量进入建康线。",
+          "axisId": "qingyu.139.1",
+          "axisAnchor": "六朝清羽记·#139·第137章·调教",
+          "axisSeq": 248,
+          "axisBeat": "小紫借助细针秘术和残酷折磨，使高傲的太乙真宗教御卓云君彻底崩溃，沦为任人摆布的玩物。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.s07_04.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.xiao_zi"
+          ],
+          "objective": "配合小紫控制卓云君",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "advance_declared_objective",
+                "label": "配合小紫控制卓云君",
+                "actionText": "我按当前主线目标行动：配合小紫控制卓云君",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已亲自执行“配合小紫控制卓云君”；事件完成真值将由本地引擎落账。",
+                  "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                  "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.s07_05_eight_steeds_informed",
+          "name": "八骏得讯",
+          "description": "孟非卿得知谢艺死因与黑魔海相关，星月湖开始转入复仇与调查。",
+          "axisId": "qingyu.140.2",
+          "axisAnchor": "六朝清羽记·#140·第138章·八骥",
+          "axisSeq": 251,
+          "axisBeat": "孟非卿得知谢艺之死与黑魔海有关后，命令老四老五调查生药铺，并决心报复，展现了权谋与兄弟情深的转折。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.s07_05.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.xiao_zi",
+            "liuchao.character.meng_fei_qing"
+          ],
+          "objective": "向孟非卿报告谢艺之死",
+          "narrativeVariants": [
+            {
+              "when": [
+                {
+                  "path": "flags.branch.lcq.if_xieyi_longrest.active",
+                  "operator": "eq",
+                  "value": true
+                }
+              ],
+              "replacesCanonRail": true,
+              "name": "谢艺生还的后果",
+              "description": "孟非卿得知谢艺在鬼王峒重伤却生还；他必须据此调度星月湖人手，而非只确认消息。",
+              "axisBeat": "孟非卿确认谢艺仍然生还，当场至少作出一项具体安排：派人接应或探望谢艺，或命人调查黑魔海与鬼王峒线索。",
+              "objective": "说明谢艺生还与鬼王峒变故，并见证孟非卿作出具体安排"
             },
             {
-              "path": "flags.world.xieyi_absence.active",
-              "operator": "neq",
-              "value": true
+              "when": [
+                {
+                  "path": "flags.world.xieyi_absence.active",
+                  "operator": "eq",
+                  "value": true
+                }
+              ],
+              "replacesCanonRail": true,
+              "name": "谢艺失踪的后果",
+              "description": "谢艺在鬼王峒战后下落不明。孟非卿不能为他发丧，也不能把他当作已安然脱险；星月湖必须同时派人搜寻、守住被黑魔海盯上的联络线。",
+              "axisBeat": "不得确认谢艺死亡或安全，不得把他写成已生还。孟非卿须当场作出两项彼此牵制的具体安排：分出人手追查谢艺下落，并护住或改换星月湖与鬼王峒之间可能泄露的联络线；玩家可选择参与其中一项，另一项仍作为持续压力存在。",
+              "objective": "协助搜寻谢艺踪迹，或守住星月湖被黑魔海窥伺的联络线"
             }
           ],
-          "intentMatch": {
-            "matchAny": [
-              "说明谢艺已死",
-              "报告谢艺之死",
-              "生药铺诱引"
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
             ],
-            "rejectIf": [
-              "他还活着",
-              "密送",
-              "长养"
-            ]
-          },
-          "outcomeText": {
-            "success": "孟非卿受死讯，安排葬事，并令查生药铺。只听完不算完成；这项安排已经落账。",
-            "partial": "该动作不产生 partial。",
-            "failure": "该动作不产生 failure。"
-          },
-          "outcomeEffects": {
-            "success": {
-              "playerKnowledge": [
-                {
-                  "factId": "knowledge.s07_05.death_reported",
-                  "subjectId": "liuchao.character.xie_yi",
-                  "predicate": "reported_dead",
-                  "claim": "孟非卿已得知谢艺之死，并令查生药铺。",
-                  "status": "confirmed",
-                  "disclosureScope": "player"
+            "actions": [
+              {
+                "id": "advance_declared_objective",
+                "label": "向孟非卿报告谢艺之死",
+                "actionText": "我按当前主线目标行动：向孟非卿报告谢艺之死",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已亲自执行“向孟非卿报告谢艺之死”；事件完成真值将由本地引擎落账。",
+                  "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                  "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
                 }
-              ]
-            }
+              }
+            ]
           }
         },
         {
-          "id": "claim_escort",
-          "label": "认领护送",
-          "actionText": "我向孟非卿说明谢艺还活着，并认领护送／看护这一边。秘密转移和调查都由他当场开启。",
-          "timeCost": 1,
-          "visibleWhen": [
+          "id": "lcq.event.s07_06_water_assassins",
+          "name": "水鬼暗杀",
+          "description": "程宗扬与萧遥逸在舟侧击杀来袭水鬼，确认建康水面已有敌方暗手。",
+          "axisId": "qingyu.142.1",
+          "axisAnchor": "六朝清羽记·#142·第140章·暗杀",
+          "axisSeq": 253,
+          "axisBeat": "两名水鬼刺客潜至舟侧，萧遥逸警觉后与程宗扬联手击杀来袭刺客。",
+          "critical": true,
+          "completion": [
             {
-              "path": "flags.branch.lcq.if_xieyi_longrest.active",
+              "path": "flags.event.s07_06.done",
               "operator": "eq",
               "value": true
             }
           ],
-          "intentMatch": {
-            "matchAny": [
-              "认领护送",
-              "看护",
-              "护送伤员"
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang"
+          ],
+          "objective": "在舟上击杀水鬼刺客",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
             ],
-            "rejectIf": [
-              "他已经死了",
-              "发丧",
-              "交骨灰"
+            "actions": [
+              {
+                "id": "advance_declared_objective",
+                "label": "在舟上击杀水鬼刺客",
+                "actionText": "我按当前主线目标行动：在舟上击杀水鬼刺客",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已亲自执行“在舟上击杀水鬼刺客”；事件完成真值将由本地引擎落账。",
+                  "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                  "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+                }
+              }
             ]
-          },
-          "outcomeText": {
-            "success": "孟非卿确定秘密转移方案，并开启生药铺／联络泄漏调查。你认领护送；调查由星月湖承担。",
-            "partial": "该动作不产生 partial。",
-            "failure": "该动作不产生 failure。"
-          },
-          "outcomeEffects": {
-            "success": {
-              "playerKnowledge": [
-                {
-                  "factId": "knowledge.s07_05.meng_secret_transfer",
-                  "subjectId": "liuchao.character.meng_fei_qing",
-                  "predicate": "secret_transfer_planned",
-                  "objectId": "liuchao.character.xie_yi",
-                  "claim": "孟非卿当场确定把谢艺秘密转移的方案。",
-                  "status": "confirmed",
-                  "disclosureScope": "player"
-                },
-                {
-                  "factId": "knowledge.s07_05.meng_investigation_open",
-                  "subjectId": "liuchao.character.meng_fei_qing",
-                  "predicate": "investigation_opened",
-                  "claim": "孟非卿同时开启生药铺／联络泄漏调查。",
-                  "status": "confirmed",
-                  "disclosureScope": "player"
-                }
-              ],
-              "pathReceipts": [
-                {
-                  "receiptId": "lcq.event.s07_05_eight_steeds_informed.path.player_escort",
-                  "sourceEventId": "lcq.event.s07_05_eight_steeds_informed",
-                  "choiceId": "claim_escort",
-                  "mutexGroupId": "lcq.event.s07_05_eight_steeds_informed.mutex.player_claim",
-                  "dimension": "participation",
-                  "label": "玩家认领护送／看护",
-                  "consumeAtEventIds": [
-                    "lcq.event.xiao_opens_resources"
-                  ]
-                }
-              ],
-              "memories": [
-                {
-                  "actorIds": [
-                    "liuchao.character.meng_fei_qing"
-                  ],
-                  "summary": "玩家认领护送；调查由星月湖承担并已开启。",
-                  "tags": [
-                    "xieyi_longrest",
-                    "investigation"
-                  ],
-                  "salience": 80
-                }
-              ]
-            }
           }
         },
         {
-          "id": "claim_investigate",
-          "label": "认领调查",
-          "actionText": "我向孟非卿说明谢艺还活着，并认领生药铺／联络泄漏调查这一边。秘密转移仍由他安排。",
-          "timeCost": 1,
-          "visibleWhen": [
+          "id": "lcq.event.s07_07_dragon_hall",
+          "name": "神龙殿夜探",
+          "description": "程宗扬与萧遥逸潜入神龙殿，发现晋帝昏迷和宫中异常，宫廷操控线坐实。",
+          "axisId": "qingyu.150.1",
+          "axisAnchor": "六朝清羽记·#150·第148章·夜探",
+          "axisSeq": 264,
+          "axisBeat": "二人在神龙殿内发现群舞姬熟睡与一具枯骨共处，晋帝昏迷如死，似遭操控。",
+          "critical": true,
+          "completion": [
             {
-              "path": "flags.branch.lcq.if_xieyi_longrest.active",
+              "path": "flags.event.s07_07.done",
               "operator": "eq",
               "value": true
             }
           ],
-          "intentMatch": {
-            "matchAny": [
-              "认领调查",
-              "查生药铺",
-              "调查泄漏"
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang"
+          ],
+          "objective": "夜探神龙殿查探异状",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
             ],
-            "rejectIf": [
-              "他已经死了",
-              "发丧",
-              "交骨灰"
+            "actions": [
+              {
+                "id": "advance_declared_objective",
+                "label": "夜探神龙殿查探异状",
+                "actionText": "我按当前主线目标行动：夜探神龙殿查探异状",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已亲自执行“夜探神龙殿查探异状”；事件完成真值将由本地引擎落账。",
+                  "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                  "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+                }
+              }
             ]
-          },
-          "outcomeText": {
-            "success": "孟非卿确定秘密转移方案，并开启调查。你认领调查；护送由星月湖承担。",
-            "partial": "该动作不产生 partial。",
-            "failure": "该动作不产生 failure。"
-          },
-          "outcomeEffects": {
-            "success": {
-              "playerKnowledge": [
-                {
-                  "factId": "knowledge.s07_05.meng_secret_transfer",
-                  "subjectId": "liuchao.character.meng_fei_qing",
-                  "predicate": "secret_transfer_planned",
-                  "objectId": "liuchao.character.xie_yi",
-                  "claim": "孟非卿当场确定把谢艺秘密转移的方案。",
-                  "status": "confirmed",
-                  "disclosureScope": "player"
-                },
-                {
-                  "factId": "knowledge.s07_05.meng_investigation_open",
-                  "subjectId": "liuchao.character.meng_fei_qing",
-                  "predicate": "investigation_opened",
-                  "claim": "孟非卿同时开启生药铺／联络泄漏调查。",
-                  "status": "confirmed",
-                  "disclosureScope": "player"
-                }
-              ],
-              "pathReceipts": [
-                {
-                  "receiptId": "lcq.event.s07_05_eight_steeds_informed.path.player_investigate",
-                  "sourceEventId": "lcq.event.s07_05_eight_steeds_informed",
-                  "choiceId": "claim_investigate",
-                  "mutexGroupId": "lcq.event.s07_05_eight_steeds_informed.mutex.player_claim",
-                  "dimension": "participation",
-                  "label": "玩家认领调查",
-                  "consumeAtEventIds": [
-                    "lcq.event.xiao_opens_resources"
-                  ]
-                }
-              ],
-              "memories": [
-                {
-                  "actorIds": [
-                    "liuchao.character.meng_fei_qing"
-                  ],
-                  "summary": "玩家认领调查；秘密转移由星月湖承担并已确定方案。",
-                  "tags": [
-                    "xieyi_longrest",
-                    "escort"
-                  ],
-                  "salience": 80
-                }
-              ]
-            }
           }
-        }
-      ]
-    },
-    {
-      "op": "set",
-      "path": "scenario.events[id=lcq.event.xiao_opens_resources].objective",
-      "from": "听萧遥逸代表星月湖宣布全力支持并开放全部资源",
-      "to": "当着萧遥逸听清星月湖眼下能用的资源"
-    },
-    {
-      "op": "set",
-      "path": "scenario.events[id=lcq.event.xiao_opens_resources].playerCompletionContract.actions",
-      "from": [
+        },
         {
-          "id": "accept_xingyue_open_resources",
-          "label": "当面听萧遥逸开放星月湖资源",
-          "actionText": "我当着萧遥逸的面，听他代表星月湖宣布全力支持我，并确认所有资源已向我开放。",
-          "timeCost": 1,
-          "outcomeText": {
-            "success": "你已听清萧遥逸代表星月湖开放全部资源；事件完成真值由本地引擎落账。",
-            "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
-            "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+          "id": "lcq.event.s07_08_palace_escape",
+          "name": "宫险分逃",
+          "description": "程宗扬与云丹琉交手失利，萧遥逸介入后双方分路逃生，夜探行动转入追杀余波。",
+          "axisId": "qingyu.151.1",
+          "axisAnchor": "六朝清羽记·#151·第149章·宫险",
+          "axisSeq": 266,
+          "axisBeat": "程宗扬与云丹琉交手，刀法不敌；萧遥逸介入击伤老宦官，并与程宗扬分路逃生。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.s07_08.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang"
+          ],
+          "objective": "在皇宫与云丹琉交手后逃生",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "advance_declared_objective",
+                "label": "在皇宫与云丹琉交手后逃生",
+                "actionText": "我按当前主线目标行动：在皇宫与云丹琉交手后逃生",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已亲自执行“在皇宫与云丹琉交手后逃生”；事件完成真值将由本地引擎落账。",
+                  "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                  "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.s07_09_hengtang_ambush",
+          "name": "横塘遇袭",
+          "description": "横塘别墅突遭船队包围和弩箭袭击，程宗扬不得不带芝娘等人逃入密道。",
+          "axisId": "qingyu.153.1",
+          "axisAnchor": "六朝清羽记·#153·第151章·花红",
+          "axisSeq": 271,
+          "axisBeat": "程宗扬与小紫设局，迫使卓云君放弃抵抗，同意以性奴身份赚钱赎身。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.s07_09.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang"
+          ],
+          "objective": "在横塘设局迫使卓云君屈服",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "advance_declared_objective",
+                "label": "在横塘设局迫使卓云君屈服",
+                "actionText": "我按当前主线目标行动：在横塘设局迫使卓云君屈服",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已亲自执行“在横塘设局迫使卓云君屈服”；事件完成真值将由本地引擎落账。",
+                  "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                  "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.s07_10_dragon_fang",
+          "name": "龙牙杀机",
+          "description": "龙牙锥连环杀机牵动建康权贵，程宗扬意识到局势将被引向更大的伏击。",
+          "axisId": "qingyu.156.3",
+          "axisAnchor": "六朝清羽记·#156·第154章·布局",
+          "axisSeq": 278,
+          "axisBeat": "萧遥逸透露王大将军战死可能与内奸泄密有关，程宗扬确认当时在场，线索指向拜火教。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.s07_10.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang"
+          ],
+          "objective": "向萧遥逸查证内奸线索",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "advance_declared_objective",
+                "label": "向萧遥逸查证内奸线索",
+                "actionText": "我按当前主线目标行动：向萧遥逸查证内奸线索",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已亲自执行“向萧遥逸查证内奸线索”；事件完成真值将由本地引擎落账。",
+                  "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                  "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.s07_debut_qinhui",
+          "name": "秦桧初登场",
+          "description": "殇侯与程宗扬夜谈六朝兴亡之际，文士巾打扮的秦桧快步走来，躬身深揖：\"君侯，北地有讯。\"随后受命引程宗扬在山崖温泉间随意走走。其人举止温文尔雅，脸上总带一丝谦虚笑意；殇侯私评：\"灵敏有余，志浅易变。\"",
+          "conditions": [],
+          "completion": [
+            {
+              "path": "flags.event.s07_debut_qinhui.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.qin_hui",
+            "liuchao.character.shang_zhen_yu",
+            "liuchao.character.cheng_zongyang"
+          ],
+          "critical": false,
+          "objective": "留在现场完成“秦桧初登场”的首次接触",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "advance_curated_event",
+                "label": "留在现场完成“秦桧初登场”的首次接触",
+                "actionText": "我留在现场观察并回应，完成“秦桧初登场”的首次接触。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已完成“留在现场完成“秦桧初登场”的首次接触”的当前结构化步骤；最终完成真值由本地引擎落账。",
+                  "partial": "该展示动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该展示动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.s07_qinhui_join",
+          "name": "秦桧归入麾下",
+          "description": "殇侯把秦桧、吴三桂等手下交给程宗扬差遣。秦桧恭敬改称程宗扬\"主公\"：\"能协助主公行事，是我等的福分。\"自此成为程宗扬身边第一智囊。",
+          "conditions": [],
+          "completion": [
+            {
+              "path": "flags.event.s07_qinhui_join.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.qin_hui",
+            "liuchao.character.shang_zhen_yu",
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.wu_san_gui"
+          ],
+          "critical": false,
+          "objective": "确认秦桧归入麾下后的职责与约束",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "advance_curated_event",
+                "label": "确认秦桧归入麾下后的职责与约束",
+                "actionText": "我按当前事件目标行动：确认秦桧归入麾下后的职责与约束",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已完成“确认秦桧归入麾下后的职责与约束”的当前结构化步骤；最终完成真值由本地引擎落账。",
+                  "partial": "该展示动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该展示动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.wangzhe_letter",
+          "name": "王哲密信",
+          "description": "程宗扬阅读王哲密信，受托清理太乙真宗门户。",
+          "axisId": "qingyu.133.4",
+          "axisAnchor": "六朝清羽记·#133·第131章·内斗",
+          "axisSeq": 237,
+          "axisBeat": "程宗扬阅读王哲密信，受托清理太乙真宗门户。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.wangzhe_letter.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang"
+          ],
+          "relatedFactionIds": [
+            "liuchao.faction.tai_yi_zhen_zong"
+          ],
+          "locationId": "liuchao.location.qingyuan_jin",
+          "objective": "阅读王哲密信，接下清理太乙真宗门户之托",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "read_wangzhe_secret_letter",
+                "label": "展开王哲密信并接下清理门户之托",
+                "actionText": "我展开王哲留下的密信读完，记下受托清理太乙真宗门户一事。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已读完王哲密信，并接下清理太乙真宗门户之托；事件完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.xiao_opens_resources",
+          "name": "星月开库",
+          "description": "萧遥逸代表星月湖宣布全力支持程宗扬，并向其开放所有资源。",
+          "axisId": "qingyu.156.1",
+          "axisAnchor": "六朝清羽记·#156·第154章·布局",
+          "axisSeq": 276,
+          "axisBeat": "萧遥逸代表星月湖宣布，将全力支持程宗扬并向其开放所有资源。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.xiao_opens_resources.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.xiao_yao_yi"
+          ],
+          "relatedFactionIds": [
+            "liuchao.faction.xing_yue_hu"
+          ],
+          "locationId": "liuchao.location.jiankang",
+          "objective": "听萧遥逸代表星月湖宣布全力支持并开放全部资源",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "accept_xingyue_open_resources",
+                "label": "当面听萧遥逸开放星月湖资源",
+                "actionText": "我当着萧遥逸的面，听他代表星月湖宣布全力支持我，并确认所有资源已向我开放。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已听清萧遥逸代表星月湖开放全部资源；事件完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.shanghou_revealed",
+          "name": "殇侯现身",
+          "description": "程宗扬在叶媪引导下见到鸩羽殇侯，确认他就是朱老头；殇侯称他是天命之人。",
+          "axisId": "qingyu.122.2",
+          "axisAnchor": "六朝清羽记·#122·第120章·殇侯",
+          "axisSeq": 222,
+          "axisBeat": "程宗扬在叶媪引导下见到鸩羽殇侯，确认他就是朱老头；殇侯称他是天命之人。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.shanghou_revealed.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.shang_zhen_yu"
+          ],
+          "relatedFactionIds": [
+            "liuchao.faction.x8b538653d9"
+          ],
+          "objective": "随叶媪见到鸩羽殇侯，确认他就是朱老头并听天命之说",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "follow_yeao_to_shanghou",
+                "label": "随叶媪去见鸩羽殇侯",
+                "actionText": "我随叶媪进入堂中，去见鸩羽殇侯。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                },
+                "kind": "prepare",
+                "grantsPreparation": "shanghou_audience_opened"
+              },
+              {
+                "id": "confirm_zhu_is_shanghou",
+                "label": "确认朱老头就是殇侯并听天命之说",
+                "actionText": "我当面确认朱老头就是鸩羽殇侯，并听他称我是天命之人。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已确认朱老头即殇侯，并听清天命之人之说；事件完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                },
+                "requiresPreparation": [
+                  "shanghou_audience_opened"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.palace_haunting_rumor",
+          "name": "宫禁闹鬼",
+          "description": "程宗扬用灵飞镜窥探宫城，撞见可疑大汉从假山钻出并被察觉，宫禁闹鬼的传闻传开。",
+          "axisId": "qingyu.135.2",
+          "axisAnchor": "六朝清羽记·#135·第133章·宫诡",
+          "axisSeq": 241,
+          "axisBeat": "程宗扬用灵飞镜窥探宫城，撞见可疑大汉从假山钻出并被察觉，宫禁闹鬼的传闻传开。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.palace_haunting_rumor.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang"
+          ],
+          "relatedFactionIds": [
+            "lyg.faction.jin_state"
+          ],
+          "locationId": "liuchao.location.jiankang",
+          "objective": "用灵飞镜窥探宫城，撞见假山大汉并记下宫禁闹鬼传闻",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "spy_palace_with_lingfei_mirror",
+                "label": "用灵飞镜窥宫并记下闹鬼传闻",
+                "actionText": "我用灵飞镜窥探宫城，撞见可疑大汉从假山钻出并被对方察觉；随后记下宫禁闹鬼的传闻已经传开。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已用灵飞镜撞见假山大汉，并记下宫禁闹鬼传闻；事件完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.shanghou_cures_ice_gu",
+          "name": "殇侯解除冰蛊",
+          "description": "殇侯解除程宗扬体内的冰蛊。",
+          "axisId": "qingyu.126.2",
+          "axisAnchor": "六朝清羽记·#126·第124章·授艺",
+          "axisSeq": 226,
+          "axisBeat": "殇侯解除程宗扬体内的冰蛊。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.shanghou_cures_ice_gu.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.shang_zhen_yu"
+          ],
+          "relatedFactionIds": [
+            "liuchao.faction.x8b538653d9"
+          ],
+          "objective": "接受殇侯解除体内冰蛊，并当面确认蛊患已解",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "accept_shanghou_ice_gu_cure",
+                "label": "把体内冰蛊交给殇侯处置",
+                "actionText": "我把苏妲己所下冰蛊与期限向殇侯如实交代，接受他当场处置，不追问原文未载的具体解法。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已把体内冰蛊交给殇侯处置；最终完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                },
+                "kind": "prepare",
+                "grantsPreparation": "ice_gu_handed_to_shanghou"
+              },
+              {
+                "id": "hear_shanghou_confirm_ice_gu_gone",
+                "label": "听殇侯确认冰蛊已解",
+                "actionText": "在《授艺》谈话里，我听殇侯亲口确认他已替我解除体内冰蛊。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已确认殇侯解除了体内冰蛊；事件完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                },
+                "requiresPreparation": [
+                  "ice_gu_handed_to_shanghou"
+                ]
+              }
+            ]
           }
         }
       ],
       "to": [
         {
-          "id": "hear_xingyue_support_dead",
-          "label": "听清星月湖眼下能用的资源",
-          "actionText": "我当着萧遥逸的面，听他代表星月湖宣布支持，并问清眼下能用的资源。",
-          "timeCost": 1,
-          "visibleWhen": [
+          "id": "lcq.event.xiaoyaoyi_arrives",
+          "name": "萧遥逸上门",
+          "description": "少陵侯嫡子萧遥逸在左武旧案之前上门。谢艺已死则接骨灰；谢艺长养则接伤员、安排秘密转移，不得发丧。",
+          "axisId": null,
+          "axisMethod": "carrier-before-s07_01",
+          "axisAnchor": "六朝清羽记·#132·第130章·同门",
+          "axisSeq": 231,
+          "axisBeat": "萧遥逸在左武旧案之前上门：死则接骨灰，生还则接伤员。",
+          "critical": true,
+          "conditions": [
             {
-              "path": "flags.branch.lcq.if_xieyi_longrest.active",
-              "operator": "neq",
-              "value": true
-            }
-          ],
-          "outcomeText": {
-            "success": "星月湖组织支持已经落账。谢艺名下遗留事务按遗产路径处理。",
-            "partial": "该动作不产生 partial。",
-            "failure": "该动作不产生 failure。"
-          },
-          "outcomeEffects": {
-            "success": {
-              "playerKnowledge": [
-                {
-                  "factId": "knowledge.xiao_opens.org_support",
-                  "subjectId": "liuchao.faction.xing_yue_hu",
-                  "predicate": "org_support_opened",
-                  "claim": "萧遥逸代表星月湖宣布组织支持，并问清眼下能用的资源。",
-                  "status": "confirmed",
-                  "disclosureScope": "player"
-                },
-                {
-                  "factId": "knowledge.xiao_opens.xieyi_estate",
-                  "subjectId": "liuchao.character.xie_yi",
-                  "predicate": "estate_authority",
-                  "claim": "谢艺已死，其个人事务按遗留事务处理权交接。",
-                  "status": "confirmed",
-                  "disclosureScope": "player"
-                }
-              ],
-              "pathReceipts": [
-                {
-                  "receiptId": "lcq.event.xiao_opens_resources.path.estate_authority",
-                  "sourceEventId": "lcq.event.xiao_opens_resources",
-                  "choiceId": "hear_xingyue_support_dead",
-                  "mutexGroupId": "lcq.event.xiao_opens_resources.mutex.xieyi_affairs",
-                  "dimension": "method",
-                  "label": "谢艺个人事务按遗产路径处理",
-                  "consumeAtEventIds": [
-                    "lcq.event.xiao_opens_resources"
-                  ]
-                }
-              ]
-            }
-          }
-        },
-        {
-          "id": "hear_xingyue_support_longrest",
-          "label": "听清星月湖眼下能用的资源",
-          "actionText": "我当着萧遥逸的面，听他代表星月湖宣布支持，并问清眼下能用的资源。",
-          "timeCost": 1,
-          "visibleWhen": [
-            {
-              "path": "flags.branch.lcq.if_xieyi_longrest.active",
+              "path": "flags.event.xieyi_entrustment.done",
               "operator": "eq",
               "value": true
             }
           ],
-          "outcomeText": {
-            "success": "星月湖组织支持已经落账。谢艺个人事务仍归他本人，本拍不交割、不称继承。",
-            "partial": "该动作不产生 partial。",
-            "failure": "该动作不产生 failure。"
-          },
-          "outcomeEffects": {
-            "success": {
-              "playerKnowledge": [
-                {
-                  "factId": "knowledge.xiao_opens.org_support",
-                  "subjectId": "liuchao.faction.xing_yue_hu",
-                  "predicate": "org_support_opened",
-                  "claim": "萧遥逸代表星月湖宣布组织支持，并问清眼下能用的资源。",
-                  "status": "confirmed",
-                  "disclosureScope": "player"
+          "completion": [
+            {
+              "path": "flags.event.xiaoyaoyi_arrives.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.xiao_yao_yi",
+            "liuchao.character.xie_yi",
+            "liuchao.character.xiao_zi"
+          ],
+          "relatedFactionIds": [
+            "liuchao.faction.xing_yue_hu"
+          ],
+          "objective": "接待上门的萧遥逸：交骨灰，或协助密送伤员",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "deliver_ashes",
+                "label": "交骨灰",
+                "actionText": "我把谢艺的骨灰交给上门的萧遥逸，不隐瞒死讯。",
+                "timeCost": 1,
+                "visibleWhen": [
+                  {
+                    "path": "flags.branch.lcq.if_xieyi_longrest.active",
+                    "operator": "neq",
+                    "value": true
+                  }
+                ],
+                "intentMatch": {
+                  "matchAny": [
+                    "交骨灰",
+                    "交出骨灰",
+                    "接骨灰"
+                  ],
+                  "rejectIf": [
+                    "他还活着",
+                    "密送",
+                    "不发丧"
+                  ]
                 },
+                "outcomeText": {
+                  "success": "萧遥逸接过骨灰。这是他的首次登场，左武旧案还没开口。",
+                  "partial": "该动作不产生 partial。",
+                  "failure": "该动作不产生 failure。"
+                },
+                "outcomeEffects": {
+                  "success": {
+                    "pathReceipts": [
+                      {
+                        "receiptId": "lcq.event.xiaoyaoyi_arrives.path.ashes_delivered",
+                        "sourceEventId": "lcq.event.xiaoyaoyi_arrives",
+                        "choiceId": "deliver_ashes",
+                        "mutexGroupId": "lcq.event.xiaoyaoyi_arrives.mutex.fate",
+                        "dimension": "method",
+                        "label": "萧遥逸接走谢艺骨灰",
+                        "consumeAtEventIds": [
+                          "lcq.event.s07_05_eight_steeds_informed"
+                        ]
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "id": "escort_wounded",
+                "label": "协助密送",
+                "actionText": "我协助萧遥逸接走重伤的谢艺，安排秘密转移，不发丧、不交出骨灰。",
+                "timeCost": 1,
+                "visibleWhen": [
+                  {
+                    "path": "flags.branch.lcq.if_xieyi_longrest.active",
+                    "operator": "eq",
+                    "value": true
+                  }
+                ],
+                "intentMatch": {
+                  "matchAny": [
+                    "密送",
+                    "接伤员",
+                    "秘密转移"
+                  ],
+                  "rejectIf": [
+                    "交骨灰",
+                    "发丧",
+                    "他已经死了"
+                  ]
+                },
+                "outcomeText": {
+                  "success": "萧遥逸接走伤员并安排密送。不得发丧，不得把谢艺写成已死。",
+                  "partial": "该动作不产生 partial。",
+                  "failure": "该动作不产生 failure。"
+                },
+                "outcomeEffects": {
+                  "success": {
+                    "pathReceipts": [
+                      {
+                        "receiptId": "lcq.event.xiaoyaoyi_arrives.path.wounded_escorted",
+                        "sourceEventId": "lcq.event.xiaoyaoyi_arrives",
+                        "choiceId": "escort_wounded",
+                        "mutexGroupId": "lcq.event.xiaoyaoyi_arrives.mutex.fate",
+                        "dimension": "method",
+                        "label": "萧遥逸接走长养的谢艺",
+                        "consumeAtEventIds": [
+                          "lcq.event.s07_05_eight_steeds_informed"
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.s07_01_old_case",
+          "name": "同门旧案",
+          "description": "萧遥逸向程宗扬交代左武军覆灭、朝廷腐朽与岳帅旧案分歧，星月湖线正式压上晋国舞台。",
+          "axisId": "qingyu.132.1",
+          "axisAnchor": "六朝清羽记·#132·第130章·同门",
+          "axisSeq": 232,
+          "axisBeat": "萧遥逸向程宗扬痛陈左武军全军覆没、朝廷腐朽，并透露星月湖内部对岳帅命运的分歧。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.s07_01.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.xiao_yao_yi"
+          ],
+          "objective": "向萧遥逸询问左武军覆灭详情",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "advance_declared_objective",
+                "label": "向萧遥逸询问左武军覆灭详情",
+                "actionText": "我按当前主线目标行动：向萧遥逸询问左武军覆灭详情",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已亲自执行“向萧遥逸询问左武军覆灭详情”；事件完成真值将由本地引擎落账。",
+                  "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                  "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.s07_02_kill_wu",
+          "name": "清远斩吴",
+          "description": "程宗扬斩杀吴行德，救下卓云君，使太乙真宗敌手转入可被挟制的关键位置。",
+          "axisId": "qingyu.133.3",
+          "axisAnchor": "六朝清羽记·#133·第131章·内斗",
+          "axisSeq": 236,
+          "axisBeat": "程宗扬出手斩杀吴行德，救下卓云君。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.s07_02.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.zhuo_yunjun"
+          ],
+          "objective": "在清远斩杀吴行德救卓云君",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "advance_declared_objective",
+                "label": "在清远斩杀吴行德救卓云君",
+                "actionText": "我按当前主线目标行动：在清远斩杀吴行德救卓云君",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已亲自执行“在清远斩杀吴行德救卓云君”；事件完成真值将由本地引擎落账。",
+                  "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                  "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+                }
+              }
+            ]
+          },
+          "relatedFactionIds": [
+            "liuchao.faction.tai_yi_zhen_zong",
+            "lyg.faction.jin_state"
+          ],
+          "worldActor": {
+            "pressure": {
+              "id": "world.lcq.s07_02.kill_wu",
+              "scope": "faction",
+              "summary": "清远刀光将起，救人之后认不认太乙门户的账，还没人签字。",
+              "domains": [
+                "court",
+                "combat"
+              ],
+              "geography": [
+                "清远"
+              ],
+              "factionIds": [
+                "liuchao.faction.tai_yi_zhen_zong",
+                "lyg.faction.jin_state"
+              ],
+              "intensity": 2,
+              "canonPolicy": "process_only"
+            },
+            "decisionCore": {
+              "knowledgeFacts": {
+                "knowledge.lcq.s07_02.ambush": {
+                  "text": "吴行德与卓云君一线收紧，杀机与救人的空隙同时露出。",
+                  "access": "public",
+                  "evidence": "lcq.event.s07_02_kill_wu axisBeat。"
+                }
+              },
+              "situation": {
+                "whitelist": [
+                  "zhuoAlive",
+                  "taiyiDebt"
+                ],
+                "initialValues": {
+                  "zhuoAlive": 35,
+                  "taiyiDebt": 20
+                },
+                "limits": {
+                  "zhuoAlive": {
+                    "min": 0,
+                    "max": 100
+                  },
+                  "taiyiDebt": {
+                    "min": 0,
+                    "max": 100
+                  }
+                }
+              },
+              "canonPolicy": {
+                "invariant": [
+                  "清远杀机已经对准卓云君"
+                ],
+                "forbiddenBefore": [
+                  "卓云君已经身死",
+                  "太乙已经改立掌教"
+                ],
+                "processFreedom": [
+                  "认不认太乙门户账"
+                ]
+              },
+              "actors": [
                 {
-                  "factId": "knowledge.xiao_opens.xieyi_retains_affairs",
-                  "subjectId": "liuchao.character.xie_yi",
-                  "predicate": "retains_personal_affairs",
-                  "claim": "谢艺仍在长养，个人事务仍归他本人，不得称为继承。",
-                  "status": "confirmed",
-                  "disclosureScope": "player"
+                  "characterId": "liuchao.character.zhuo_yunjun",
+                  "identity": {
+                    "factionId": "liuchao.faction.tai_yi_zhen_zong",
+                    "office": "太乙教御",
+                    "rank": 5
+                  },
+                  "personality": {
+                    "honor": 3,
+                    "caution": 2,
+                    "ambition": 3
+                  },
+                  "motives": {
+                    "legitimacy": 4,
+                    "stability": 3
+                  },
+                  "resources": {
+                    "influence": 4,
+                    "troops": 2,
+                    "intelligence": 3,
+                    "wealth": 2
+                  },
+                  "relationships": {},
+                  "knowledge": [
+                    "knowledge.lcq.s07_02.ambush"
+                  ],
+                  "agendas": [
+                    {
+                      "id": "agenda.lcq.s07_02.zhuo",
+                      "goal": "活着离开清远，并决定这笔命债算不算太乙的",
+                      "clock": 1,
+                      "escalation": [
+                        "求援",
+                        "脱身",
+                        "认账"
+                      ]
+                    }
+                  ],
+                  "allowedActionIds": [
+                    "request_audience",
+                    "prepare_fallback_route"
+                  ],
+                  "wake": {
+                    "tier": "local_critical"
+                  },
+                  "evidence": {
+                    "identity.rank": "人物卡：卓云君为太乙真宗教御。",
+                    "personality.honor": "本拍是太乙教御遇刺。",
+                    "personality.caution": "本拍先要命。",
+                    "personality.ambition": "人物卡：教御。",
+                    "motives.legitimacy": "认账就会把命债写成门户的。",
+                    "motives.stability": "本拍先脱身。",
+                    "resources.influence": "人物卡：教御。",
+                    "resources.troops": "本拍护卫正在被换防。",
+                    "resources.intelligence": "本拍知道吴行德在收线。",
+                    "resources.wealth": "本拍不靠买命。",
+                    "agendas.agenda.lcq.s07_02.zhuo.clock": "街巷已封。"
+                  }
                 }
               ],
-              "pathReceipts": [
+              "actionBindings": [
                 {
-                  "receiptId": "lcq.event.xiao_opens_resources.path.retains_affairs",
-                  "sourceEventId": "lcq.event.xiao_opens_resources",
-                  "choiceId": "hear_xingyue_support_longrest",
-                  "mutexGroupId": "lcq.event.xiao_opens_resources.mutex.xieyi_affairs",
-                  "dimension": "method",
-                  "label": "谢艺个人事务仍归本人",
-                  "consumeAtEventIds": [
-                    "lcq.event.xiao_opens_resources"
+                  "actionId": "request_audience",
+                  "actorIds": [
+                    "liuchao.character.zhuo_yunjun"
+                  ],
+                  "label": "把求救说成太乙教御向人开口",
+                  "reason": "开口本身就会留下门户账",
+                  "knownFacts": [],
+                  "knownFactIds": [
+                    "knowledge.lcq.s07_02.ambush"
+                  ],
+                  "mustNotInvent": [
+                    "卓云君已经身死"
+                  ],
+                  "visibleSignal": "卓云君不再只喊救命，而是报出教御身份",
+                  "offscreenAction": "留下太乙名义的求救",
+                  "costs": {
+                    "influence": 1
+                  },
+                  "effects": {
+                    "zhuoAlive": 8,
+                    "taiyiDebt": 10
+                  },
+                  "utility": {
+                    "urgency": 9,
+                    "factionGoal": 8,
+                    "expectedBenefit": 8,
+                    "situation": {
+                      "zhuoAlive": -4
+                    }
+                  },
+                  "visibility": "public",
+                  "durationTurns": 1
+                },
+                {
+                  "actionId": "prepare_fallback_route",
+                  "actorIds": [
+                    "liuchao.character.zhuo_yunjun"
+                  ],
+                  "label": "只求一条能走的缝，不提门户",
+                  "reason": "活着离开不必先认太乙的账",
+                  "knownFacts": [],
+                  "knownFactIds": [
+                    "knowledge.lcq.s07_02.ambush"
+                  ],
+                  "mustNotInvent": [
+                    "已经当众认下太乙账"
+                  ],
+                  "visibleSignal": "卓云君改走巷缝，不再报身份",
+                  "offscreenAction": "只脱身不认账",
+                  "costs": {
+                    "intelligence": 1
+                  },
+                  "effects": {
+                    "zhuoAlive": 6,
+                    "taiyiDebt": -4
+                  },
+                  "utility": {
+                    "expectedBenefit": 3
+                  },
+                  "visibility": "hidden",
+                  "durationTurns": 1
+                }
+              ],
+              "maxVisibleActions": 2,
+              "narrativeGuard": {
+                "forbiddenTerms": [
+                  "卓云君已经身死",
+                  "吴行德已经投诚"
+                ],
+                "rejectConcreteQuantities": true,
+                "allowUnverifiedQuantities": true
+              }
+            },
+            "opportunities": [
+              {
+                "id": "opportunity.lcq.s07_02.accept_taiyi_debt",
+                "title": "认下救卓云君的太乙门户账",
+                "characterIds": [
+                  "liuchao.character.zhuo_yunjun"
+                ],
+                "whyNow": "人还在清远巷里。认下这笔账，太乙会记你救了教御；入晋之后也会按门户的人来看你。",
+                "nextStep": "当众按太乙教御遇刺来救人，并承认这是门户的事。",
+                "stakes": "晋地会把你看成太乙的人；卓云君日后再求，也按这笔账开口。",
+                "rewardPreview": "取得一次被太乙记为救下教御的权限。",
+                "futureHint": "以后太乙再有人在晋地遇险，会先找曾经认过这笔账的人。",
+                "actionText": "我追踪“认下救卓云君的太乙门户账”：按教御遇刺救人，并承认这是门户的事。",
+                "rewardKey": "permission.lcq.taiyi.qingyuan_debt",
+                "rewardLabel": "太乙·清远教御命债",
+                "trigger": {
+                  "actorIds": [
+                    "liuchao.character.zhuo_yunjun"
+                  ],
+                  "actionIds": [
+                    "request_audience"
+                  ]
+                },
+                "completionContract": {
+                  "kind": "player_action_sequence",
+                  "settlement": "immediate",
+                  "expiry": "persistent",
+                  "steps": [
+                    {
+                      "id": "name_office",
+                      "label": "按教御身份救人",
+                      "actions": [
+                        {
+                          "id": "save_as_taiyi_preceptor",
+                          "label": "按教御救人",
+                          "actionText": "我按太乙教御遇刺来救卓云君，不当成路人斗殴。",
+                          "timeCost": 1
+                        }
+                      ],
+                      "matchAny": [
+                        "太乙教御",
+                        "不当成路人斗殴"
+                      ],
+                      "rejectIf": [
+                        "只当路人",
+                        "不提门户"
+                      ]
+                    },
+                    {
+                      "id": "accept_debt",
+                      "label": "承认这是门户的事",
+                      "actions": [
+                        {
+                          "id": "accept_sect_debt",
+                          "label": "认下门户账",
+                          "actionText": "我承认这笔命债记在太乙门户账上，日后再算。",
+                          "timeCost": 1
+                        }
+                      ],
+                      "matchAny": [
+                        "记在太乙门户账上"
+                      ],
+                      "rejectIf": [
+                        "不认账",
+                        "只救人"
+                      ]
+                    }
                   ]
                 }
-              ]
+              },
+              {
+                "id": "opportunity.lcq.s07_02.save_without_sect_debt",
+                "title": "只救人，不认太乙门户账",
+                "characterIds": [
+                  "liuchao.character.zhuo_yunjun"
+                ],
+                "whyNow": "卓云君可以活，这笔账不必写成太乙的。入晋时你就还是外人。",
+                "nextStep": "救人离开封路，不按教御名义受谢。",
+                "stakes": "卓云君活着，但太乙不欠你；你在晋地也少一层门户掩护。",
+                "rewardPreview": "取得一次以私人名义在清远救人、不入太乙账的权限。",
+                "futureHint": "以后卓云君若再开口，会先分清你认过账没有。",
+                "actionText": "我追踪“只救人，不认太乙门户账”：救人离开封路，不按教御名义受谢。",
+                "rewardKey": "permission.lcq.jin.qingyuan_private_rescue",
+                "rewardLabel": "晋地·清远私人救援",
+                "trigger": {
+                  "actorIds": [
+                    "liuchao.character.zhuo_yunjun"
+                  ],
+                  "actionIds": [
+                    "request_audience"
+                  ]
+                },
+                "completionContract": {
+                  "kind": "player_action_sequence",
+                  "settlement": "immediate",
+                  "expiry": "persistent",
+                  "steps": [
+                    {
+                      "id": "break_line",
+                      "label": "切开封路救人",
+                      "actions": [
+                        {
+                          "id": "break_seal_to_save",
+                          "label": "切开封路",
+                          "actionText": "我切开清远封路把卓云君救出来，不先问门户如何记账。",
+                          "timeCost": 1
+                        }
+                      ],
+                      "matchAny": [
+                        "切开",
+                        "封路",
+                        "救出来"
+                      ],
+                      "rejectIf": [
+                        "按教御名义受谢",
+                        "认下门户"
+                      ]
+                    },
+                    {
+                      "id": "refuse_thanks",
+                      "label": "不受教御名义的谢",
+                      "actions": [
+                        {
+                          "id": "refuse_preceptor_thanks",
+                          "label": "不受门户谢",
+                          "actionText": "我明确不按太乙教御名义受谢，这笔事不入门户账。",
+                          "timeCost": 1
+                        }
+                      ],
+                      "matchAny": [
+                        "不按太乙教御名义受谢",
+                        "不入门户账"
+                      ],
+                      "rejectIf": [
+                        "记在太乙门户账上",
+                        "认下这笔账"
+                      ]
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.s07_03_xiaozi_appears",
+          "name": "小紫现身",
+          "description": "小紫以毒戒制住卓云君并救下程宗扬，她先前的弱态伪装开始转向残忍操控。",
+          "narrativeVariants": [
+            {
+              "when": [
+                {
+                  "path": "flags.branch.lcq.if_xiaozi_spares_mother.active",
+                  "operator": "eq",
+                  "value": true
+                }
+              ],
+              "replacesCanonRail": true,
+              "name": "小紫现身·未弑母的余波",
+              "description": "小紫以毒戒制住卓云君并救下程宗扬。碧姬仍活着的消息不能被搁置：小紫或同行者必须当场明确其看守、送离或托付给可信者的具体处置，并承担由此留下的余波。",
+              "axisBeat": "小紫突然现身，以轻灵身法和毒戒制服重伤的卓云君、救下程宗扬；她不得被写成已弑母，也不能被套入弑母后的悔恨。碧姬仍活着，必须由小紫或同行者当场作出看守、送离或托付给可信者的一项具体处置。",
+              "objective": "协助小紫制服卓云君，并落实碧姬仍活着后的具体处置"
             }
+          ],
+          "axisId": "qingyu.134.1",
+          "axisAnchor": "六朝清羽记·#134·第132章·云落",
+          "axisSeq": 238,
+          "axisBeat": "小紫突然现身，以轻灵身法和毒戒制服重伤的卓云君，救下被卓云君制住的程宗扬。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.s07_03.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.xiao_zi"
+          ],
+          "objective": "协助小紫制服卓云君",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "advance_declared_objective",
+                "label": "协助小紫制服卓云君",
+                "actionText": "我按当前主线目标行动：协助小紫制服卓云君",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已亲自执行“协助小紫制服卓云君”；事件完成真值将由本地引擎落账。",
+                  "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                  "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+                }
+              }
+            ]
+          },
+          "relatedFactionIds": [
+            "liuchao.faction.hei_mo_hai"
+          ],
+          "worldActor": {
+            "pressure": {
+              "id": "world.lcq.s07_03.duzong_hand",
+              "scope": "faction",
+              "summary": "小紫已出手制住卓云君。认这笔毒门庇护，还是只领救命、不认门，还没说死。",
+              "domains": [
+                "sect"
+              ],
+              "geography": [
+                "建康"
+              ],
+              "factionIds": [
+                "liuchao.faction.hei_mo_hai"
+              ],
+              "intensity": 3,
+              "canonPolicy": "process_only"
+            },
+            "decisionCore": {
+              "knowledgeFacts": {
+                "knowledge.lcq.s07_03.rescue": {
+                  "text": "小紫以毒戒制服重伤的卓云君，救下被制住的程宗扬。",
+                  "access": "public",
+                  "evidence": "lcq.event.s07_03_xiaozi_appears axisBeat。"
+                }
+              },
+              "situation": {
+                "whitelist": [
+                  "sectShelter",
+                  "rescueOnly"
+                ],
+                "initialValues": {
+                  "sectShelter": 44,
+                  "rescueOnly": 36
+                },
+                "limits": {
+                  "sectShelter": {
+                    "min": 0,
+                    "max": 100
+                  },
+                  "rescueOnly": {
+                    "min": 0,
+                    "max": 100
+                  }
+                }
+              },
+              "canonPolicy": {
+                "invariant": [
+                  "小紫已经出手制住卓云君"
+                ],
+                "forbiddenBefore": [
+                  "卓云君已经身死",
+                  "毒宗名分已经公开册封"
+                ],
+                "processFreedom": [
+                  "认毒门庇护还是只领救命"
+                ]
+              },
+              "actors": [
+                {
+                  "characterId": "liuchao.character.xiao_zi",
+                  "identity": {
+                    "factionId": "liuchao.faction.hei_mo_hai",
+                    "office": "毒宗嫡传",
+                    "rank": 6
+                  },
+                  "personality": {
+                    "caution": 5,
+                    "ambition": 4,
+                    "aggression": 3
+                  },
+                  "motives": {
+                    "control": 5,
+                    "legitimacy": 3
+                  },
+                  "resources": {
+                    "influence": 4,
+                    "intelligence": 5,
+                    "troops": 2,
+                    "wealth": 2
+                  },
+                  "relationships": {},
+                  "knowledge": [
+                    "knowledge.lcq.s07_03.rescue"
+                  ],
+                  "agendas": [
+                    {
+                      "id": "agenda.lcq.s07_03.xiaozi",
+                      "goal": "救人的同时把庇护账记在毒门名下",
+                      "clock": 1,
+                      "escalation": [
+                        "现身",
+                        "下毒戒",
+                        "问认不认"
+                      ]
+                    }
+                  ],
+                  "allowedActionIds": [
+                    "offer_patronage",
+                    "protect_principal"
+                  ],
+                  "wake": {
+                    "tier": "local_critical"
+                  },
+                  "evidence": {
+                    "identity.rank": "人物卡：小紫为毒宗唯一嫡传。",
+                    "personality.caution": "人物卡：城府极深。",
+                    "personality.ambition": "本拍以嫡传身份出手。",
+                    "personality.aggression": "axisBeat：毒戒制服卓云君。",
+                    "motives.control": "庇护账在她手里。",
+                    "motives.legitimacy": "人物卡：毒宗嫡传。",
+                    "resources.influence": "人物卡：核心圈。",
+                    "resources.intelligence": "本拍先救人再问。",
+                    "resources.troops": "本拍个人武力。",
+                    "resources.wealth": "本拍不靠买命。",
+                    "agendas.agenda.lcq.s07_03.xiaozi.clock": "毒戒已落下。"
+                  }
+                }
+              ],
+              "actionBindings": [
+                {
+                  "actionId": "offer_patronage",
+                  "actorIds": [
+                    "liuchao.character.xiao_zi"
+                  ],
+                  "label": "按毒门嫡传把这笔救命记成庇护",
+                  "reason": "救了人，她要听你认不认这扇门",
+                  "knownFacts": [],
+                  "knownFactIds": [
+                    "knowledge.lcq.s07_03.rescue"
+                  ],
+                  "mustNotInvent": [
+                    "毒宗已经公开册封"
+                  ],
+                  "visibleSignal": "小紫摩挲毒戒，等一句认不认",
+                  "offscreenAction": "记下庇护账",
+                  "costs": {
+                    "influence": 1
+                  },
+                  "effects": {
+                    "sectShelter": 12,
+                    "rescueOnly": -4
+                  },
+                  "utility": {
+                    "urgency": 9,
+                    "factionGoal": 8,
+                    "expectedBenefit": 8,
+                    "situation": {
+                      "sectShelter": -3
+                    }
+                  },
+                  "visibility": "public",
+                  "durationTurns": 1
+                },
+                {
+                  "actionId": "protect_principal",
+                  "actorIds": [
+                    "liuchao.character.xiao_zi"
+                  ],
+                  "label": "只把人从卓云君手里拉开，不逼认门",
+                  "reason": "救命可以先落地",
+                  "knownFacts": [],
+                  "knownFactIds": [
+                    "knowledge.lcq.s07_03.rescue"
+                  ],
+                  "mustNotInvent": [
+                    "卓云君已经身死"
+                  ],
+                  "visibleSignal": "她收手，不再追问门派名分",
+                  "offscreenAction": "只完成救人",
+                  "costs": {
+                    "intelligence": 1
+                  },
+                  "effects": {
+                    "rescueOnly": 12,
+                    "sectShelter": -6
+                  },
+                  "utility": {
+                    "expectedBenefit": 4
+                  },
+                  "visibility": "public",
+                  "durationTurns": 1
+                }
+              ],
+              "maxVisibleActions": 2,
+              "narrativeGuard": {
+                "forbiddenTerms": [
+                  "天命侯已经坐实",
+                  "毒宗已经公开册封"
+                ],
+                "rejectConcreteQuantities": true,
+                "allowUnverifiedQuantities": true
+              }
+            },
+            "opportunities": [
+              {
+                "id": "opportunity.lcq.s07_03.accept_duzong_shelter",
+                "title": "认下小紫这笔毒门庇护",
+                "characterIds": [
+                  "liuchao.character.xiao_zi"
+                ],
+                "whyNow": "她已经用毒戒把人拉开。认这笔庇护，救命就按毒门的账走。",
+                "nextStep": "当着被制住的卓云君，承认这是小紫以毒门嫡传救你，并接受她记账。",
+                "stakes": "以后毒门有人问你是谁护的，会先问到她；太乙那边也会看见你领过这只手。",
+                "rewardPreview": "取得一次确认小紫毒门庇护账的权限。",
+                "futureHint": "以后她再伸手，会先看你这次认没认过这笔庇护。",
+                "actionText": "我追踪“认下小紫这笔毒门庇护”：承认是她以嫡传救我，接受记账。",
+                "rewardKey": "permission.lcq.xiaozi.duzong_shelter",
+                "rewardLabel": "小紫·毒门庇护",
+                "trigger": {
+                  "actorIds": [
+                    "liuchao.character.xiao_zi"
+                  ],
+                  "actionIds": [
+                    "offer_patronage"
+                  ]
+                },
+                "completionContract": {
+                  "kind": "player_action_sequence",
+                  "settlement": "immediate",
+                  "expiry": "standard",
+                  "steps": [
+                    {
+                      "id": "name_hand",
+                      "label": "承认是毒门嫡传所救",
+                      "actions": [
+                        {
+                          "id": "name_duzong_hand",
+                          "label": "认嫡传所救",
+                          "actionText": "我当着现场承认是小紫以毒门嫡传把我从卓云君手里拉开，不说成路人出手。",
+                          "timeCost": 1
+                        }
+                      ],
+                      "matchAny": [
+                        "毒门嫡传",
+                        "不说成路人出手"
+                      ],
+                      "rejectIf": [
+                        "只领救命",
+                        "不认门"
+                      ]
+                    },
+                    {
+                      "id": "accept_book",
+                      "label": "接受她记账",
+                      "actions": [
+                        {
+                          "id": "accept_xiaozi_shelter_book",
+                          "label": "接受庇护账",
+                          "actionText": "我接受小紫把这笔庇护记在我身上，不改口说只是偶遇。",
+                          "timeCost": 1
+                        }
+                      ],
+                      "matchAny": [
+                        "庇护记在我身上",
+                        "不改口说只是偶遇"
+                      ],
+                      "rejectIf": [
+                        "不认门",
+                        "只是偶遇"
+                      ]
+                    }
+                  ]
+                },
+                "expiresAfterTurns": 4
+              },
+              {
+                "id": "opportunity.lcq.s07_03.take_rescue_without_sect",
+                "title": "只要她制住卓云君，不认毒门名分",
+                "characterIds": [
+                  "liuchao.character.xiao_zi"
+                ],
+                "whyNow": "人已经拉开。救命可以领，门派名分可以不在这一刻认。",
+                "nextStep": "领受救援，明确此刻不把这事写成毒门庇护。",
+                "stakes": "她会记住你领了手却不认门；毒门也不会按庇护来认你。",
+                "rewardPreview": "取得一次只领小紫救命、不入毒门账的权限。",
+                "futureHint": "以后她再问你认不认，会先看你这次有没有把名分推回去。",
+                "actionText": "我追踪“只要她制住卓云君，不认毒门名分”：领救援，不写入毒门庇护。",
+                "rewardKey": "permission.lcq.xiaozi.rescue_without_sect",
+                "rewardLabel": "小紫·只领救命",
+                "trigger": {
+                  "actorIds": [
+                    "liuchao.character.xiao_zi"
+                  ],
+                  "actionIds": [
+                    "protect_principal"
+                  ]
+                },
+                "completionContract": {
+                  "kind": "player_action_sequence",
+                  "settlement": "immediate",
+                  "expiry": "standard",
+                  "steps": [
+                    {
+                      "id": "take_pull",
+                      "label": "领受她拉开的手",
+                      "actions": [
+                        {
+                          "id": "accept_xiaozi_pull",
+                          "label": "领救援",
+                          "actionText": "我领受小紫把我从卓云君手里拉开这件事，不假装没人救过。",
+                          "timeCost": 1
+                        }
+                      ],
+                      "matchAny": [
+                        "领受",
+                        "拉开",
+                        "不假装没人救过"
+                      ],
+                      "rejectIf": [
+                        "认下庇护",
+                        "毒门嫡传所救"
+                      ]
+                    },
+                    {
+                      "id": "refuse_sect",
+                      "label": "不认毒门名分",
+                      "actions": [
+                        {
+                          "id": "refuse_duzong_name",
+                          "label": "不认门",
+                          "actionText": "我明确此刻不把这事写成毒门庇护，也不认毒门名分。",
+                          "timeCost": 1
+                        }
+                      ],
+                      "matchAny": [
+                        "不把这事写成毒门庇护",
+                        "不认"
+                      ],
+                      "rejectIf": [
+                        "接受她记账",
+                        "毒门庇护"
+                      ]
+                    }
+                  ]
+                },
+                "expiresAfterTurns": 4
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.s07_04_zhuo_subdued",
+          "name": "卓云君受制",
+          "description": "卓云君在小紫持续压迫下彻底失去主动权，后续只能作为受制变量进入建康线。",
+          "axisId": "qingyu.139.1",
+          "axisAnchor": "六朝清羽记·#139·第137章·调教",
+          "axisSeq": 248,
+          "axisBeat": "小紫借助细针秘术和残酷折磨，使高傲的太乙真宗教御卓云君彻底崩溃，沦为任人摆布的玩物。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.s07_04.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.xiao_zi"
+          ],
+          "objective": "配合小紫控制卓云君",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "advance_declared_objective",
+                "label": "配合小紫控制卓云君",
+                "actionText": "我按当前主线目标行动：配合小紫控制卓云君",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已亲自执行“配合小紫控制卓云君”；事件完成真值将由本地引擎落账。",
+                  "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                  "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.s07_05_eight_steeds_informed",
+          "name": "八骏得讯",
+          "description": "孟非卿得知谢艺死因与黑魔海相关，星月湖开始转入复仇与调查。",
+          "axisId": "qingyu.140.2",
+          "axisAnchor": "六朝清羽记·#140·第138章·八骥",
+          "axisSeq": 251,
+          "axisBeat": "孟非卿得知谢艺之死与黑魔海有关后，命令老四老五调查生药铺，并决心报复，展现了权谋与兄弟情深的转折。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.s07_05.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.xiao_zi",
+            "liuchao.character.meng_fei_qing"
+          ],
+          "objective": "向孟非卿说明谢艺的下场，并留下实质安排",
+          "narrativeVariants": [
+            {
+              "when": [
+                {
+                  "path": "flags.branch.lcq.if_xieyi_longrest.active",
+                  "operator": "eq",
+                  "value": true
+                }
+              ],
+              "replacesCanonRail": true,
+              "name": "谢艺生还的后果",
+              "description": "孟非卿得知谢艺在鬼王峒重伤却生还；他必须据此调度星月湖人手，而非只确认消息。",
+              "axisBeat": "孟非卿确认谢艺仍然生还，当场至少作出一项具体安排：派人接应或探望谢艺，或命人调查黑魔海与鬼王峒线索。",
+              "objective": "说明谢艺生还与鬼王峒变故，并见证孟非卿作出具体安排"
+            },
+            {
+              "when": [
+                {
+                  "path": "flags.world.xieyi_absence.active",
+                  "operator": "eq",
+                  "value": true
+                }
+              ],
+              "replacesCanonRail": true,
+              "name": "谢艺失踪的后果",
+              "description": "谢艺在鬼王峒战后下落不明。孟非卿不能为他发丧，也不能把他当作已安然脱险；星月湖必须同时派人搜寻、守住被黑魔海盯上的联络线。",
+              "axisBeat": "不得确认谢艺死亡或安全，不得把他写成已生还。孟非卿须当场作出两项彼此牵制的具体安排：分出人手追查谢艺下落，并护住或改换星月湖与鬼王峒之间可能泄露的联络线；玩家可选择参与其中一项，另一项仍作为持续压力存在。",
+              "objective": "协助搜寻谢艺踪迹，或守住星月湖被黑魔海窥伺的联络线"
+            }
+          ],
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "report_death",
+                "label": "说明已死",
+                "actionText": "我向孟非卿说明谢艺已死，以及生药铺可能成为诱引。",
+                "timeCost": 1,
+                "visibleWhen": [
+                  {
+                    "path": "flags.branch.lcq.if_xieyi_longrest.active",
+                    "operator": "neq",
+                    "value": true
+                  },
+                  {
+                    "path": "flags.world.xieyi_absence.active",
+                    "operator": "neq",
+                    "value": true
+                  }
+                ],
+                "intentMatch": {
+                  "matchAny": [
+                    "说明谢艺已死",
+                    "报告谢艺之死",
+                    "生药铺诱引"
+                  ],
+                  "rejectIf": [
+                    "他还活着",
+                    "密送",
+                    "长养"
+                  ]
+                },
+                "outcomeText": {
+                  "success": "孟非卿受死讯，安排葬事，并令查生药铺。只听完不算完成；这项安排已经落账。",
+                  "partial": "该动作不产生 partial。",
+                  "failure": "该动作不产生 failure。"
+                },
+                "outcomeEffects": {
+                  "success": {
+                    "playerKnowledge": [
+                      {
+                        "factId": "knowledge.s07_05.death_reported",
+                        "subjectId": "liuchao.character.xie_yi",
+                        "predicate": "reported_dead",
+                        "claim": "孟非卿已得知谢艺之死，并令查生药铺。",
+                        "status": "confirmed",
+                        "disclosureScope": "player"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "id": "claim_escort",
+                "label": "认领护送",
+                "actionText": "我向孟非卿说明谢艺还活着，并认领护送／看护这一边。秘密转移和调查都由他当场开启。",
+                "timeCost": 1,
+                "visibleWhen": [
+                  {
+                    "path": "flags.branch.lcq.if_xieyi_longrest.active",
+                    "operator": "eq",
+                    "value": true
+                  }
+                ],
+                "intentMatch": {
+                  "matchAny": [
+                    "认领护送",
+                    "看护",
+                    "护送伤员"
+                  ],
+                  "rejectIf": [
+                    "他已经死了",
+                    "发丧",
+                    "交骨灰"
+                  ]
+                },
+                "outcomeText": {
+                  "success": "孟非卿确定秘密转移方案，并开启生药铺／联络泄漏调查。你认领护送；调查由星月湖承担。",
+                  "partial": "该动作不产生 partial。",
+                  "failure": "该动作不产生 failure。"
+                },
+                "outcomeEffects": {
+                  "success": {
+                    "playerKnowledge": [
+                      {
+                        "factId": "knowledge.s07_05.meng_secret_transfer",
+                        "subjectId": "liuchao.character.meng_fei_qing",
+                        "predicate": "secret_transfer_planned",
+                        "objectId": "liuchao.character.xie_yi",
+                        "claim": "孟非卿当场确定把谢艺秘密转移的方案。",
+                        "status": "confirmed",
+                        "disclosureScope": "player"
+                      },
+                      {
+                        "factId": "knowledge.s07_05.meng_investigation_open",
+                        "subjectId": "liuchao.character.meng_fei_qing",
+                        "predicate": "investigation_opened",
+                        "claim": "孟非卿同时开启生药铺／联络泄漏调查。",
+                        "status": "confirmed",
+                        "disclosureScope": "player"
+                      }
+                    ],
+                    "pathReceipts": [
+                      {
+                        "receiptId": "lcq.event.s07_05_eight_steeds_informed.path.player_escort",
+                        "sourceEventId": "lcq.event.s07_05_eight_steeds_informed",
+                        "choiceId": "claim_escort",
+                        "mutexGroupId": "lcq.event.s07_05_eight_steeds_informed.mutex.player_claim",
+                        "dimension": "participation",
+                        "label": "玩家认领护送／看护",
+                        "consumeAtEventIds": [
+                          "lcq.event.xiao_opens_resources"
+                        ]
+                      }
+                    ],
+                    "memories": [
+                      {
+                        "actorIds": [
+                          "liuchao.character.meng_fei_qing"
+                        ],
+                        "summary": "玩家认领护送；调查由星月湖承担并已开启。",
+                        "tags": [
+                          "xieyi_longrest",
+                          "investigation"
+                        ],
+                        "salience": 80
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "id": "claim_investigate",
+                "label": "认领调查",
+                "actionText": "我向孟非卿说明谢艺还活着，并认领生药铺／联络泄漏调查这一边。秘密转移仍由他安排。",
+                "timeCost": 1,
+                "visibleWhen": [
+                  {
+                    "path": "flags.branch.lcq.if_xieyi_longrest.active",
+                    "operator": "eq",
+                    "value": true
+                  }
+                ],
+                "intentMatch": {
+                  "matchAny": [
+                    "认领调查",
+                    "查生药铺",
+                    "调查泄漏"
+                  ],
+                  "rejectIf": [
+                    "他已经死了",
+                    "发丧",
+                    "交骨灰"
+                  ]
+                },
+                "outcomeText": {
+                  "success": "孟非卿确定秘密转移方案，并开启调查。你认领调查；护送由星月湖承担。",
+                  "partial": "该动作不产生 partial。",
+                  "failure": "该动作不产生 failure。"
+                },
+                "outcomeEffects": {
+                  "success": {
+                    "playerKnowledge": [
+                      {
+                        "factId": "knowledge.s07_05.meng_secret_transfer",
+                        "subjectId": "liuchao.character.meng_fei_qing",
+                        "predicate": "secret_transfer_planned",
+                        "objectId": "liuchao.character.xie_yi",
+                        "claim": "孟非卿当场确定把谢艺秘密转移的方案。",
+                        "status": "confirmed",
+                        "disclosureScope": "player"
+                      },
+                      {
+                        "factId": "knowledge.s07_05.meng_investigation_open",
+                        "subjectId": "liuchao.character.meng_fei_qing",
+                        "predicate": "investigation_opened",
+                        "claim": "孟非卿同时开启生药铺／联络泄漏调查。",
+                        "status": "confirmed",
+                        "disclosureScope": "player"
+                      }
+                    ],
+                    "pathReceipts": [
+                      {
+                        "receiptId": "lcq.event.s07_05_eight_steeds_informed.path.player_investigate",
+                        "sourceEventId": "lcq.event.s07_05_eight_steeds_informed",
+                        "choiceId": "claim_investigate",
+                        "mutexGroupId": "lcq.event.s07_05_eight_steeds_informed.mutex.player_claim",
+                        "dimension": "participation",
+                        "label": "玩家认领调查",
+                        "consumeAtEventIds": [
+                          "lcq.event.xiao_opens_resources"
+                        ]
+                      }
+                    ],
+                    "memories": [
+                      {
+                        "actorIds": [
+                          "liuchao.character.meng_fei_qing"
+                        ],
+                        "summary": "玩家认领调查；秘密转移由星月湖承担并已确定方案。",
+                        "tags": [
+                          "xieyi_longrest",
+                          "escort"
+                        ],
+                        "salience": 80
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.s07_06_water_assassins",
+          "name": "水鬼暗杀",
+          "description": "程宗扬与萧遥逸在舟侧击杀来袭水鬼，确认建康水面已有敌方暗手。",
+          "axisId": "qingyu.142.1",
+          "axisAnchor": "六朝清羽记·#142·第140章·暗杀",
+          "axisSeq": 253,
+          "axisBeat": "两名水鬼刺客潜至舟侧，萧遥逸警觉后与程宗扬联手击杀来袭刺客。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.s07_06.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang"
+          ],
+          "objective": "在舟上击杀水鬼刺客",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "advance_declared_objective",
+                "label": "在舟上击杀水鬼刺客",
+                "actionText": "我按当前主线目标行动：在舟上击杀水鬼刺客",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已亲自执行“在舟上击杀水鬼刺客”；事件完成真值将由本地引擎落账。",
+                  "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                  "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.s07_07_dragon_hall",
+          "name": "神龙殿夜探",
+          "description": "程宗扬与萧遥逸潜入神龙殿，发现晋帝昏迷和宫中异常，宫廷操控线坐实。",
+          "axisId": "qingyu.150.1",
+          "axisAnchor": "六朝清羽记·#150·第148章·夜探",
+          "axisSeq": 264,
+          "axisBeat": "二人在神龙殿内发现群舞姬熟睡与一具枯骨共处，晋帝昏迷如死，似遭操控。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.s07_07.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang"
+          ],
+          "objective": "夜探神龙殿查探异状",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "advance_declared_objective",
+                "label": "夜探神龙殿查探异状",
+                "actionText": "我按当前主线目标行动：夜探神龙殿查探异状",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已亲自执行“夜探神龙殿查探异状”；事件完成真值将由本地引擎落账。",
+                  "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                  "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.s07_08_palace_escape",
+          "name": "宫险分逃",
+          "description": "程宗扬与云丹琉交手失利，萧遥逸介入后双方分路逃生，夜探行动转入追杀余波。",
+          "axisId": "qingyu.151.1",
+          "axisAnchor": "六朝清羽记·#151·第149章·宫险",
+          "axisSeq": 266,
+          "axisBeat": "程宗扬与云丹琉交手，刀法不敌；萧遥逸介入击伤老宦官，并与程宗扬分路逃生。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.s07_08.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang"
+          ],
+          "objective": "在皇宫与云丹琉交手后逃生",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "advance_declared_objective",
+                "label": "在皇宫与云丹琉交手后逃生",
+                "actionText": "我按当前主线目标行动：在皇宫与云丹琉交手后逃生",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已亲自执行“在皇宫与云丹琉交手后逃生”；事件完成真值将由本地引擎落账。",
+                  "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                  "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.s07_09_hengtang_ambush",
+          "name": "横塘遇袭",
+          "description": "横塘别墅突遭船队包围和弩箭袭击，程宗扬不得不带芝娘等人逃入密道。",
+          "axisId": "qingyu.153.1",
+          "axisAnchor": "六朝清羽记·#153·第151章·花红",
+          "axisSeq": 271,
+          "axisBeat": "程宗扬与小紫设局，迫使卓云君放弃抵抗，同意以性奴身份赚钱赎身。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.s07_09.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang"
+          ],
+          "objective": "在横塘设局迫使卓云君屈服",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "advance_declared_objective",
+                "label": "在横塘设局迫使卓云君屈服",
+                "actionText": "我按当前主线目标行动：在横塘设局迫使卓云君屈服",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已亲自执行“在横塘设局迫使卓云君屈服”；事件完成真值将由本地引擎落账。",
+                  "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                  "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.s07_10_dragon_fang",
+          "name": "龙牙杀机",
+          "description": "龙牙锥连环杀机牵动建康权贵，程宗扬意识到局势将被引向更大的伏击。",
+          "axisId": "qingyu.156.3",
+          "axisAnchor": "六朝清羽记·#156·第154章·布局",
+          "axisSeq": 278,
+          "axisBeat": "萧遥逸透露王大将军战死可能与内奸泄密有关，程宗扬确认当时在场，线索指向拜火教。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.s07_10.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang"
+          ],
+          "objective": "向萧遥逸查证内奸线索",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "advance_declared_objective",
+                "label": "向萧遥逸查证内奸线索",
+                "actionText": "我按当前主线目标行动：向萧遥逸查证内奸线索",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已亲自执行“向萧遥逸查证内奸线索”；事件完成真值将由本地引擎落账。",
+                  "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                  "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.s07_debut_qinhui",
+          "name": "秦桧再现",
+          "description": "秦桧在南荒山村已经再现并受殇侯指派，如今以北上随行者身份报到，不是初次见面，也不重演第122章。",
+          "conditions": [
+            {
+              "path": "flags.event.shanghou_cures_ice_gu.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "completion": [
+            {
+              "path": "flags.event.s07_debut_qinhui.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.qin_hui",
+            "liuchao.character.shang_zhen_yu",
+            "liuchao.character.cheng_zongyang"
+          ],
+          "critical": false,
+          "objective": "与再度见面的秦桧交谈，确认他此行的安排",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "advance_curated_event",
+                "label": "与秦桧再度交谈，听清此行安排",
+                "actionText": "我与再度见面的秦桧交谈，听清他此行的安排。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已完成“留在现场完成“秦桧初登场”的首次接触”的当前结构化步骤；最终完成真值由本地引擎落账。",
+                  "partial": "该展示动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该展示动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.s07_qinhui_join",
+          "name": "秦桧归入麾下",
+          "description": "殇侯把秦桧、吴三桂等手下交给程宗扬差遣。秦桧恭敬改称程宗扬\"主公\"：\"能协助主公行事，是我等的福分。\"自此成为程宗扬身边第一智囊。",
+          "conditions": [
+            {
+              "path": "flags.event.shanghou_cures_ice_gu.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "completion": [
+            {
+              "path": "flags.event.s07_qinhui_join.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.qin_hui",
+            "liuchao.character.shang_zhen_yu",
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.wu_san_gui"
+          ],
+          "critical": false,
+          "objective": "确认秦桧归入麾下后的职责与约束",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "advance_curated_event",
+                "label": "确认秦桧归入麾下后的职责与约束",
+                "actionText": "我按当前事件目标行动：确认秦桧归入麾下后的职责与约束",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已完成“确认秦桧归入麾下后的职责与约束”的当前结构化步骤；最终完成真值由本地引擎落账。",
+                  "partial": "该展示动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该展示动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.wangzhe_letter",
+          "name": "王哲密信",
+          "description": "程宗扬阅读王哲密信，受托清理太乙真宗门户。",
+          "axisId": "qingyu.133.4",
+          "axisAnchor": "六朝清羽记·#133·第131章·内斗",
+          "axisSeq": 237,
+          "axisBeat": "程宗扬阅读王哲密信，受托清理太乙真宗门户。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.wangzhe_letter.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang"
+          ],
+          "relatedFactionIds": [
+            "liuchao.faction.tai_yi_zhen_zong"
+          ],
+          "locationId": "liuchao.location.qingyuan_jin",
+          "objective": "阅读王哲密信，接下清理太乙真宗门户之托",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "read_wangzhe_secret_letter",
+                "label": "展开王哲密信并接下清理门户之托",
+                "actionText": "我展开王哲留下的密信读完，记下受托清理太乙真宗门户一事。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已读完王哲密信，并接下清理太乙真宗门户之托；事件完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.xiao_opens_resources",
+          "name": "星月开库",
+          "description": "萧遥逸代表星月湖宣布全力支持程宗扬，并向其开放所有资源。",
+          "axisId": "qingyu.156.1",
+          "axisAnchor": "六朝清羽记·#156·第154章·布局",
+          "axisSeq": 276,
+          "axisBeat": "萧遥逸代表星月湖宣布，将全力支持程宗扬并向其开放所有资源。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.xiao_opens_resources.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.xiao_yao_yi"
+          ],
+          "relatedFactionIds": [
+            "liuchao.faction.xing_yue_hu"
+          ],
+          "locationId": "liuchao.location.jiankang",
+          "objective": "当着萧遥逸听清星月湖眼下能用的资源",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "hear_xingyue_support_dead",
+                "label": "听清星月湖眼下能用的资源",
+                "actionText": "我当着萧遥逸的面，听他代表星月湖宣布支持，并问清眼下能用的资源。",
+                "timeCost": 1,
+                "visibleWhen": [
+                  {
+                    "path": "flags.branch.lcq.if_xieyi_longrest.active",
+                    "operator": "neq",
+                    "value": true
+                  }
+                ],
+                "outcomeText": {
+                  "success": "星月湖组织支持已经落账。谢艺名下遗留事务按遗产路径处理。",
+                  "partial": "该动作不产生 partial。",
+                  "failure": "该动作不产生 failure。"
+                },
+                "outcomeEffects": {
+                  "success": {
+                    "playerKnowledge": [
+                      {
+                        "factId": "knowledge.xiao_opens.org_support",
+                        "subjectId": "liuchao.faction.xing_yue_hu",
+                        "predicate": "org_support_opened",
+                        "claim": "萧遥逸代表星月湖宣布组织支持，并问清眼下能用的资源。",
+                        "status": "confirmed",
+                        "disclosureScope": "player"
+                      },
+                      {
+                        "factId": "knowledge.xiao_opens.xieyi_estate",
+                        "subjectId": "liuchao.character.xie_yi",
+                        "predicate": "estate_authority",
+                        "claim": "谢艺已死，其个人事务按遗留事务处理权交接。",
+                        "status": "confirmed",
+                        "disclosureScope": "player"
+                      }
+                    ],
+                    "pathReceipts": [
+                      {
+                        "receiptId": "lcq.event.xiao_opens_resources.path.estate_authority",
+                        "sourceEventId": "lcq.event.xiao_opens_resources",
+                        "choiceId": "hear_xingyue_support_dead",
+                        "mutexGroupId": "lcq.event.xiao_opens_resources.mutex.xieyi_affairs",
+                        "dimension": "method",
+                        "label": "谢艺个人事务按遗产路径处理",
+                        "consumeAtEventIds": [
+                          "lcq.event.xiao_opens_resources"
+                        ]
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "id": "hear_xingyue_support_longrest",
+                "label": "听清星月湖眼下能用的资源",
+                "actionText": "我当着萧遥逸的面，听他代表星月湖宣布支持，并问清眼下能用的资源。",
+                "timeCost": 1,
+                "visibleWhen": [
+                  {
+                    "path": "flags.branch.lcq.if_xieyi_longrest.active",
+                    "operator": "eq",
+                    "value": true
+                  }
+                ],
+                "outcomeText": {
+                  "success": "星月湖组织支持已经落账。谢艺个人事务仍归他本人，本拍不交割、不称继承。",
+                  "partial": "该动作不产生 partial。",
+                  "failure": "该动作不产生 failure。"
+                },
+                "outcomeEffects": {
+                  "success": {
+                    "playerKnowledge": [
+                      {
+                        "factId": "knowledge.xiao_opens.org_support",
+                        "subjectId": "liuchao.faction.xing_yue_hu",
+                        "predicate": "org_support_opened",
+                        "claim": "萧遥逸代表星月湖宣布组织支持，并问清眼下能用的资源。",
+                        "status": "confirmed",
+                        "disclosureScope": "player"
+                      },
+                      {
+                        "factId": "knowledge.xiao_opens.xieyi_retains_affairs",
+                        "subjectId": "liuchao.character.xie_yi",
+                        "predicate": "retains_personal_affairs",
+                        "claim": "谢艺仍在长养，个人事务仍归他本人，不得称为继承。",
+                        "status": "confirmed",
+                        "disclosureScope": "player"
+                      }
+                    ],
+                    "pathReceipts": [
+                      {
+                        "receiptId": "lcq.event.xiao_opens_resources.path.retains_affairs",
+                        "sourceEventId": "lcq.event.xiao_opens_resources",
+                        "choiceId": "hear_xingyue_support_longrest",
+                        "mutexGroupId": "lcq.event.xiao_opens_resources.mutex.xieyi_affairs",
+                        "dimension": "method",
+                        "label": "谢艺个人事务仍归本人",
+                        "consumeAtEventIds": [
+                          "lcq.event.xiao_opens_resources"
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.palace_haunting_rumor",
+          "name": "宫禁闹鬼",
+          "description": "程宗扬用灵飞镜窥探宫城，撞见可疑大汉从假山钻出并被察觉，宫禁闹鬼的传闻传开。",
+          "axisId": "qingyu.135.2",
+          "axisAnchor": "六朝清羽记·#135·第133章·宫诡",
+          "axisSeq": 241,
+          "axisBeat": "程宗扬用灵飞镜窥探宫城，撞见可疑大汉从假山钻出并被察觉，宫禁闹鬼的传闻传开。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.palace_haunting_rumor.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang"
+          ],
+          "relatedFactionIds": [
+            "lyg.faction.jin_state"
+          ],
+          "locationId": "liuchao.location.jiankang",
+          "objective": "用灵飞镜窥探宫城，撞见假山大汉并记下宫禁闹鬼传闻",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "spy_palace_with_lingfei_mirror",
+                "label": "用灵飞镜窥宫并记下闹鬼传闻",
+                "actionText": "我用灵飞镜窥探宫城，撞见可疑大汉从假山钻出并被对方察觉；随后记下宫禁闹鬼的传闻已经传开。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已用灵飞镜撞见假山大汉，并记下宫禁闹鬼传闻；事件完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                }
+              }
+            ]
           }
         }
       ]

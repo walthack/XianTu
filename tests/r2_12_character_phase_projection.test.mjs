@@ -79,7 +79,7 @@ test('R2-12 phase audit resolves the eleven-item queue without stale stage proje
   }
 
   const earlyBuiltin = JSON.parse(await readFile(builtinEarlyUrl, 'utf8'));
-  for (const name of ['潘金莲', '阿夕']) {
+  for (const name of ['苏荔', '阿夕']) {
     const actor = earlyBuiltin.canon.characters.find(item => item.name === name);
     assert.ok(actor, `${name} must exist in early builtin`);
     assert.ok(!(actor.profile?.notes || []).some(

@@ -1,5 +1,11 @@
 # 仙途 (XianTu) · 项目总体状况与并行分工文档
 
+> **2026-10-03 南荒扩展复核2通过，用户批准GitHub交付。** New Bot确认全量1158通过/0失败及完整canon:build全绿，主策划已核对本批串行1163项（1158pass/0fail/5skip）和隔离canon全步骤exit0日志。交付包含方案R的26拍挂接、7个新事件、E05、两期终点、演员时点/身份、121解蛊/124确认、谢艺长休承接及复核返修；裁定#170–174同批提交。分支 `feat/fast-no-legacy`，基线 `3c8781d8`，发布到 `origin`（walthack/XianTu），提交哈希由Git历史及交付回复提供。本条随实现同一提交交付；以下“未提交/待复核”保留为历史。未追加修改实现、未重跑测试、不重启服务；真机与旧档兼容未验收，不将静态门禁绿等同正式P0或全局体验通过。详见[南荒交接与返修证据](docs/handoffs/2026-10-03/NANHUANG-EXPANSION-IMPLEMENTATION.md)。
+
+> **2026-10-03 南荒复核返修已完成，全量与canon门绿，未提交/推送。** 修复registry整关误禁、critical归属/DEBT、二级线排序、70章黑舌与秦桧再现合同、早期身份背景和世界情境源、离场门及长休双条件。B1七项为新前置拍使原夹具先到好感100，调整夹具并补满100幂等检查，生产cap/结算不改。工作目录串行全量1163＝1158pass/0fail/5skip；隔离副本完整canon:build所有步骤通过、exit0、同样单测计数；五关builtin重建后逐字不变。详见[返修与证据](docs/handoffs/2026-10-03/NANHUANG-EXPANSION-IMPLEMENTATION.md)。仍待返修复核与真机，未跑tsc/生产构建，不是正式P0/体验PASS。
+
+> **2026-10-03 南荒扩展R已实施，待剧情复核，未提交。** 用户确认后主策划直接实施：19旧事件+7新事件共26挂rail，04b止于86章入峒、05b延至124章；E05固定死亡锁、演员身份/出入时点、121解蛊/124确认、谢艺长休承接及两期demo终点落地。裁定#170–173；不改registry受保护字段及谢艺托付冻结合同。定向31/31、五关schema、两处Vue源码解析通过；未跑全量/tsc/build/canon:build/真机，未commit/push。此前回归3c绿不代表本快照。交付见[南荒实施交接](docs/handoffs/2026-10-03/NANHUANG-EXPANSION-IMPLEMENTATION.md)，等待New Bot节奏复核及全量门禁。
+
 
 > **2026-10-03 回归3c全绿，用户授权提交并推送 `feat/fast-no-legacy`。** New Bot 执行 `npm test`：1156 项，1151通过／0失败／5跳过；隔离副本 `canon:build` 全步骤通过，exit 0（37关校验及同组单测通过）。主策划核对原始日志后只更新交付文档与Git，不重跑测试、不改服务。累计交付包含去legacy、MiniMax-M3全模块流式／关闭thinking、bugfix5与回归返修、E01–E04固定死亡正文、图片cut-in入口及角色卡勘误提案。实机通过项与未测项详见[复测报告（回归3／3b／3c）](docs/handoffs/2026-10-03/REPORT-2026-10-02-nolegacy-retest.md)；最新E04固定引子、消息短按钮及短文修整只有代码与单测证据，不冒称追加真机PASS。
 

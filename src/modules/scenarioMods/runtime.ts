@@ -1,3 +1,4 @@
+import { syncNanhuangIdentityDisplay } from './characterResolver';
 import type { SaveData } from '@/types/game';
 
 import type {
@@ -1379,7 +1380,9 @@ export function getCurrentStoryEventActions(saveData: SaveData): ScenarioEventAc
   });
   // 玩家主动走绝路的选项与正常动作并列。它们不进合同、不影响 contractHash、
   // 也不推进本拍——选中即本局结束。放在最后，避免挤掉当前该做的那一步。
-  const fatalChoices = (event.fatalOutcomes?.choices || []).map(choice => {
+  const fatalChoices = (event.fatalOutcomes?.choices || [])
+    .filter(() => event.id !== 'lcq.event.shanghou_revealed' || availableActions.some(action => action.id === 'refuse_shanghou_relic_test'))
+    .map(choice => {
     const interaction = deriveInteraction(runtime, event, choice.label, choice.actionText);
     return {
       source: 'event_engine' as const,
@@ -1718,6 +1721,11 @@ export function recordStoryEventStructuredAction(
   // 绝路选项先于合同动作判定：它不推进本拍，直接结束本局。
   const fatalChoice = (event.fatalOutcomes?.choices || []).find(item => item.id === selection.actionId);
   if (fatalChoice) {
+    if (event.id === 'lcq.event.shanghou_revealed'
+      && (!(state.preparations || []).includes('shanghou_audience_opened')
+        || (state.preparations || []).includes('relic_test_refused'))) {
+      return { attempted: false, completed: false, eventId: event.id, reason: 'action_unavailable' };
+    }
     if (fatalChoice.actionText !== selection.actionText) {
       return { attempted: false, completed: false, eventId: event.id, reason: 'stale_action' };
     }
@@ -1813,6 +1821,13 @@ export function recordStoryEventStructuredAction(
     ));
   }
   if (completed) state.readyAtTurn = turn;
+  if (outcome === 'success' && event.id === 'lcq.event.s05b_shanghou_reads_letter' && action.id === 'hand_blank_letter_to_shanghou') {
+    runtime.flags['event.s05b_shanghou_reads_letter.ice_gu_cured'] = true;
+  }
+  if (outcome === 'success' && event.id === 'lcq.event.shanghou_revealed' && action.id === 'refuse_shanghou_relic_test') {
+    runtime.flags['event.shanghou_revealed.relic_test_refused'] = true;
+  }
+  syncNanhuangIdentityDisplay(runtime);
   if (completed) stampDepartedCast(runtime);
   if (completed && event.id === XIEYI_ENTRUSTMENT_EVENT_ID) {
     applyXieyiEntrustmentFateMapping(runtime, {
@@ -3471,6 +3486,7 @@ export function advanceScenarioRuntime(saveData: SaveData): {
   normalizeRuntimeFlags(runtime);
   settleReadyOpportunityCompletionFlags(runtime);
   settleReadyEventActionCompletionFlags(runtime);
+  syncNanhuangIdentityDisplay(runtime);
 
   runtime.chapters = Array.isArray(runtime.chapters) ? runtime.chapters : [];
   runtime.events = Array.isArray(runtime.events) ? runtime.events : [];
@@ -3484,6 +3500,7 @@ export function advanceScenarioRuntime(saveData: SaveData): {
   settleArrivalObjective(next, runtime);
   settleAbandonedXieyiEntrustment(next, runtime);
   settleReadyEventActionCompletionFlags(runtime);
+  syncNanhuangIdentityDisplay(runtime);
   runtime.offscreenResolvedEventIds = Array.isArray(runtime.offscreenResolvedEventIds) ? runtime.offscreenResolvedEventIds : [];
   runtime.eventTimeline = runtime.eventTimeline && typeof runtime.eventTimeline === 'object'
     ? runtime.eventTimeline
