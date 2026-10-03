@@ -157,12 +157,12 @@ export type ModuleNarrativeAttempt<T> = { ok: true; value: T; attempts: number }
  */
 export async function attemptModuleNarrative<T>(
   attempt: (attemptNumber: number) => Promise<T>,
-  options: { budgetLeft: () => number | null; isFatal: (error: unknown) => boolean },
+  options: { budgetLeft: () => number | null; isFatal: (error: unknown) => boolean; maxAttempts?: number },
 ): Promise<ModuleNarrativeAttempt<T>> {
   const canAfford = (count: number) => { const left = options.budgetLeft(); return left === null || left >= count; };
   let attempts = 0;
   let lastError: unknown = null;
-  while (attempts < 2) {
+  while (attempts < (options.maxAttempts || 2)) {
     attempts += 1;
     try {
       return { ok: true, value: await attempt(attempts), attempts };
@@ -173,4 +173,38 @@ export async function attemptModuleNarrative<T>(
   }
   if (!canAfford(1)) throw lastError;
   return { ok: false, reason: String((lastError as Error)?.message || lastError || '未知原因').slice(0, 200), attempts };
+}
+
+
+export class ModuleNarrativeGuardError extends Error {
+  constructor(message: string) { super(message); this.name = 'ModuleNarrativeGuardError'; }
+}
+
+/** 正文只描写成年角色；缺年龄时不猜年龄，不能把未知配角写成未成年人。 */
+export function validateModuleCastNarrative(text: string, absentNames: string[], recent: string[] = [], requiredNames: string[] = []): void {
+  if (/(?<![零一二三四五六七八九十百千\d])(?:[0-9]|1[0-7]|[一二三四五六七八九]|十[一二三四五六七]?|十五六|十六七八?|十七八)(?:岁|歲)?(?:的年纪|岁|歲)|(?:未满|不到|不足)[^。！？\n]{0,8}(?:十八九?|18|19)(?:岁|歲)|(?:十八九|18[—–~-]19)(?:岁|歲)[^。！？\n]{0,8}未满|十六七八(?:岁|歲|的年纪)?|十八九(?:岁|歲)?[（(]?(?:未满|尚未满)|未成年|幼童|小孩/.test(text)) {
+    throw new ModuleNarrativeGuardError('正文年龄冲突：所有出场角色须为18岁以上成年人，未知年龄不猜年龄');
+  }
+  const sentences = text.split(/[。！？\n]/);
+  const escapeName = (name: string) => name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  for (const name of absentNames) {
+    // "樨夫人谈起族长"只属于历史提及。只有让该角色现在现身、说话或动作才退稿。
+    const acting = new RegExp(escapeName(name) + '(?:[，,、 ]|的身影|的身躯|本人|竟|又|仍|正|便|却|忽然|缓缓|抬手|微微|轻轻|笑着|一边|突然|已经|正在|向你|对你|从[^，。]{0,10}){0,3}(?:说了|说着|说话|在你身边|出现在|被列入伤员|走来|走进|走出|现身|出现|复活|站起|站在|坐在|站到|躺在|跟在|迎上|伸手|睁眼|开口|说道|说[：:]|道[：:]|问[：:]|点头|摇头|抬头|起身|递给|出手|攻击|笑道|喊道|答道|拉住|看着|望着|在场|列在|仍在伤员)', 'g');
+    if (sentences.some(sentence => [...sentence.matchAll(acting)].some(hit =>
+      !/回忆|想起|提起|谈起|说起|曾经|生前|当年|昔日/.test(sentence.slice(Math.max(0, (hit.index || 0) - 16), hit.index))))) {
+      throw new ModuleNarrativeGuardError(`正文在场冲突：${name}已故、离场或尚未登场，不得在当前现场行动`);
+    }
+  }
+  for (const name of requiredNames) {
+    const visible = sentences.some(sentence => sentence.includes(name)
+      && !/未现身|并未出现|没有露面|不在场|尚未到场|还未到场|没有到场|没有出场|没来|不见踪影|提起|谈起|说起|回忆|想起/.test(sentence)
+      && !new RegExp(escapeName(name) + '[^，。]{0,12}(?:的名字|的往事|的遗物)').test(sentence));
+    if (!visible) throw new ModuleNarrativeGuardError(`必到演员缺席：${name}必须在本步骤现场出现，不能只被提及或写成未现身`);
+  }
+  const current = text.split(/[。！？\n]/).map(s => s.trim()).filter(s => s.length >= 12);
+  if (recent.some(entry => {
+    const previous = new Set(entry.split(/[。！？\n]/).map(s => s.trim()));
+    const repeated = current.filter(s => previous.has(s));
+    return repeated.length >= 3 || (repeated.length >= 2 && repeated.join('').length >= 80);
+  })) throw new ModuleNarrativeGuardError('正文重复上一回合整段镜头，请只演本步骤的新变化');
 }

@@ -331,7 +331,8 @@ function resolveOne(character: any, stageId: string): boolean {
   }
   // race：正典权威（种族形态基准/族裔文化规则按它匹配）——registry 有值则覆盖，
   // 抽取期默认的"人族"曾让兽蛮/碧鲮/羽族角色全部丢失族裔（青面兽被写成人类壮汉的病根）。
-  if (staticProfile.race && (!profile.race || profile.race === '人族')) profile.race = staticProfile.race;
+  if (staticProfile.race && (!profile.race || profile.race === '人族' || entry.canonicalName === '祁远')) profile.race = staticProfile.race;
+  if (entry.canonicalName === '祁远' && /碧鲮族/.test(String(profile.origin || ''))) profile.origin = origin;
   const personality = unique(asArray(phaseProfileValue(staticProfile, currentPhase, 'personality')));
   if (personality.length) profile.personality = personality;
 
@@ -507,7 +508,7 @@ export function syncNanhuangIdentityDisplay(runtime: {
       character.name = revealed ? '殇侯' : '朱八八';
       character.role = revealed ? '山村中的殇侯' : '云氏雇用的老向导';
       character.description = revealed ? '朱老头已当面显露殇侯身份。其他身世未揭露。' : '云氏雇用的老向导，自称朱八八。';
-      character.profile = { origin: character.description };
+      character.profile = { origin: character.description, appearance: '瘦小苍老的成年老向导，不是魁梧壮汉。' };
       delete character.affiliations; delete character.factionId;
     }
     if (character.id === 'liuchao.character.le_mingzhu' && ['lcq.stage_03b_snake_flower_bridge', 'lcq.stage_04'].includes(runtime.modId || '')) {
@@ -515,7 +516,7 @@ export function syncNanhuangIdentityDisplay(runtime: {
       character.name = revealed ? '乐明珠' : '花苗新娘';
       character.role = revealed ? '光明观堂弟子' : '戴面纱的花苗新娘';
       character.description = revealed ? '送亲新娘的身份已揭露，是光明观堂弟子乐明珠。' : '随花苗送亲队同行，身份尚未揭露。';
-      character.profile = { origin: character.description };
+      character.profile = revealed ? { ...character.profile, origin: character.description } : { origin: character.description, appearance: '戴面纱的成年花苗新娘，暂不描写面纱下的容貌。' };
       delete character.affiliations; delete character.factionId;
     }
   }

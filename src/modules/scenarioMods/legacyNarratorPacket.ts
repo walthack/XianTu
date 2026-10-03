@@ -10,6 +10,7 @@ import {
 } from './runtime';
 import { buildScenarioStoryPrompt } from './storyContext';
 import { filterLegacyPilotEventCharacterNames } from './legacyPilotScenes';
+import { resolveScenarioEventNarrative } from './eventNarrativeView';
 import { ensureWuyuanOpenWorldSlice } from './wuyuanOpenWorldSlice';
 import { isInternalDevLanguage, stripInternalDevLanguage } from './legacyNarrativeContract';
 import { LEGACY_RENDER_PLAN_INSTRUCTION } from './legacyRenderPlan';
@@ -32,6 +33,7 @@ type RuntimeLike = Record<string, any>;
 export interface LegacyMemoryCapsule {
   location: string;
   presentNames: string[];
+  presentActors: LegacyPresentActor[];
   eventId: string;
   facts: string[];
   recentNarrative: string;
@@ -42,6 +44,9 @@ export interface LegacyPresentActor {
   name: string;
   traits: string[];
   speechStyle?: string;
+  role?: string;
+  race?: string;
+  appearance?: string;
 }
 
 export interface LegacyLocalReceipt {
@@ -115,7 +120,7 @@ function nameFromLedger(ledger: AcquaintanceLedger, id: string): string {
 }
 
 function resolveCharacterName(runtime: RuntimeLike, ledger: AcquaintanceLedger, id: string): string {
-  return nameFromLedger(ledger, id) || nameFromCanon(runtime, id);
+  return nameFromCanon(runtime, id) || nameFromLedger(ledger, id);
 }
 
 function isRevealedName(ledger: AcquaintanceLedger, name: string, playerName: string): boolean {
@@ -192,13 +197,16 @@ function readPresentActors(saveData: SaveData, presentNames: string[]): LegacyPr
     const speechStyle = isSafePersonalityTrait(readText(rec?.profile?.speechStyle) || readText(rec?.speechStyle))
       ? readText(rec?.profile?.speechStyle || rec?.speechStyle)
       : '';
-    if (!traits.length && !speechStyle) continue;
+    if (!rec) continue;
     actors.push({
       name,
       traits,
+      role: readText(rec?.role).slice(0, 80),
+      race: readText(rec?.profile?.race).slice(0, 80),
+      appearance: readText(rec?.profile?.appearance).slice(0, 180),
       ...(speechStyle ? { speechStyle } : {}),
     });
-    if (actors.length >= 3) break;
+    if (actors.length >= (/^lcq\.stage_0(?:3b|4|4b|5b)/.test(String(runtime.modId || '')) ? 8 : 3)) break;
   }
   return actors;
 }
@@ -225,14 +233,19 @@ export function readLocalMemoryCapsule(saveData: SaveData, selection: ScenarioEv
   const focus = selectedEvent || getScenarioFocusEvent(runtime as never);
   const recent = ((saveData as any)?.社交?.记忆?.短期记忆 || []).slice(-1).join('\n');
   const currentObjective = playerFacingFact(focus?.objective);
+  const view = focus ? resolveScenarioEventNarrative(focus, runtime.flags || {}, runtime.divergences) : null;
+  const completed = runtime.completedEventIds?.includes(focus?.id) || runtime.eventActionStates?.[focus?.id]?.readyAtTurn !== undefined;
   const facts = uniqueFacts([
     playerFacingFact(selection.outcomeText),
     currentObjective,
+    ...(completed && /^lcq\.stage_0(?:3b|4|4b)/.test(String(runtime.modId || '')) ? [playerFacingFact(view?.description)] : []),
     readLocation(saveData),
   ]).slice(0, 6);
+  const presentNames = readPresentNames(saveData, selection.eventId);
   return {
     location: readLocation(saveData),
-    presentNames: readPresentNames(saveData, selection.eventId),
+    presentNames,
+    presentActors: readPresentActors(saveData, presentNames),
     eventId: selection.eventId,
     facts,
     recentNarrative: readText(recent).slice(0, CAPSULE_CHAR_LIMIT),

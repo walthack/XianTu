@@ -251,3 +251,32 @@ test('remaining on Wang Zhe battlefield is fatal only after nine suns and never 
 test('unpunctuated 125 and 153 character drafts remain rejected', () => {
   for (const length of [125, 153]) assert.throws(() => m.readModuleNarrative('你' + '看'.repeat(length - 1) + '。'), /无标点长句/);
 });
+
+test('cast guard rejects ambiguous underage ranges, but allows adult ranges and historical mentions', () => {
+  for (const age of ['十五六岁', '十六七八岁', '十六七八', '不过十七八岁', '不到十八九岁', '十八九（未满）', '十八九岁（未满）', '17岁']) {
+    assert.throws(() => m.validateModuleCastNarrative(`你看到一位${age}的路人。`, []), /年龄/, age);
+  }
+  for (const age of ['十八岁', '十八九岁', '二十八岁', '18岁', '28岁']) {
+    assert.doesNotThrow(() => m.validateModuleCastNarrative(`你看到一位${age}的成年人。`, []), age);
+  }
+  for (const text of ['樨夫人说，白夷族长生前定下的商路条件还算数。', '樨夫人谈起已故的白夷族长。', '你记得白夷族长曾经站在这里。', '樨夫人解释白夷族长留下的规矩。']) {
+    assert.doesNotThrow(() => m.validateModuleCastNarrative(text, ['白夷族长']), text);
+  }
+  for (const text of ['白夷族长走进屋来。', '已故的白夷族长又开口说道：“来吧。”', '段强跟在你身后。']) {
+    assert.throws(() => m.validateModuleCastNarrative(text, ['白夷族长', '段强']), /在场/, text);
+  }
+  assert.throws(() => m.validateModuleCastNarrative('樨夫人一直在侧屋，并未现身。你见到了族长。', [], [], ['樨夫人', '易勇']), /缺席/);
+  assert.doesNotThrow(() => m.validateModuleCastNarrative('樨夫人当面迎客。易勇端来茶水。', [], [], ['樨夫人', '易勇']));
+});
+
+test('guard rewrites can use a third attempt without publishing rejected drafts', async () => {
+  const seen = [];
+  const result = await m.attemptModuleNarrative(async n => {
+    seen.push(n);
+    if (n < 3) m.validateModuleCastNarrative('段强走进帐中。', ['段强']);
+    return '你看清当前商队的来人。';
+  }, { maxAttempts: 3, budgetLeft: () => null, isFatal: () => false });
+  assert.equal(result.ok, true);
+  assert.equal(result.attempts, 3);
+  assert.deepEqual(seen, [1, 2, 3]);
+});

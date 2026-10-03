@@ -541,6 +541,7 @@ import {
 import { buildLocalJudgementPreflight, composeJudgementAction, prepareEventActionJudgement, shouldSkipJudgementPreflight } from '@/utils/judgementPreflight';
 import { getNarrativeTurn } from '@/utils/actionGate';
 import {
+  advanceScenarioRuntime,
   getCurrentStoryEventActions,
   getCurrentStoryExplorationActions,
   getStageEntryPresentation,
@@ -895,7 +896,9 @@ const showScenarioActionMechanics = (option: ScenarioEngineActionSelection) => (
   !qingyuOpeningDemo.value || option.source !== 'event_engine'
 );
 const scenarioEngineActionOptions = computed<ScenarioEngineActionSelection[]>(() => {
-  const save = gameStateStore.toSaveData();
+  if (isAIProcessing.value) return [];
+  const live = gameStateStore.toSaveData();
+  const save = live ? advanceScenarioRuntime(live).saveData : null;
   if (!save || scenarioGameOver.value) return [];
   const openWorldActions = getWuyuanOpenWorldSelections(save);
   const gambleRefusalActions = getBaihuGambleRefusalSelections(save);
@@ -916,7 +919,7 @@ const keyBeatCard = computed(() => getActiveKeyBeatCard(gameStateStore.toSaveDat
 const keyBeatHighlight = ref(false);
 let keyBeatConfirmedByCard = false;
 // 锁定时只显示固定选项（见下方分支区块）；未激活的锁选项（如决定步之前的致命选项）不提前显示。
-const engineButtonOptions = computed(() => branchDecision.value ? [] :
+const engineButtonOptions = computed(() => playtestFinished.value || branchDecision.value ? [] :
   scenarioEngineActionOptions.value.filter(option => !isKeyBeatCardAction(option as { source?: string; eventId?: string; actionId?: string })
     && !isDormantLockedOption(option as unknown as BranchDecisionCandidate)));
 /** 选项填入输入框时使用的原句（与 selectScenarioEngineAction 一致）。 */
@@ -939,7 +942,7 @@ const branchDecisionReady = computed(() => branchDecisionAllowsSend(
 ));
 const stageDepartureOffer = computed(() => {
   const save = gameStateStore.toSaveData();
-  return save && !scenarioGameOver.value ? getStageDepartureOffer(save) : null;
+  return save && !scenarioGameOver.value && !isNanhuangDemoFinished(save) ? getStageDepartureOffer(save) : null;
 });
 const stageDeparturePending = ref(false);
 

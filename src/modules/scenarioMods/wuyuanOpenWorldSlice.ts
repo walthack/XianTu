@@ -92,6 +92,11 @@ export const WUYUAN_OPEN_WORLD_DEFINITION: OpenWorldSliceDefinition = {
   ],
   routes: [
     {
+      id: 'lcq.route.wuyuan.pastry_to_market_street',
+      fromZoneId: PASTRY_ZONE_ID, toZoneId: MARKET_ZONE_ID,
+      label: '沿街面退回市集', aliases: ['退回市集', '退回五原露天市集', '回市集', '回到市集', '返回市集'], turnCost: 1,
+    },
+    {
       id: 'lcq.route.wuyuan.market_to_pastry_street',
       fromZoneId: MARKET_ZONE_ID, toZoneId: PASTRY_ZONE_ID,
       label: '沿人多的街面过去', aliases: ['走街面', '沿街', '人多的路'], turnCost: 1,
@@ -333,6 +338,9 @@ function hydrateWuyuanSlice(runtime: RuntimeWithSlice): OpenWorldSliceRuntime {
   }
   if (!runtime.openWorldSlice.knownRouteIds.includes('lcq.route.wuyuan.market_to_pastry_street')) {
     runtime.openWorldSlice.knownRouteIds.push('lcq.route.wuyuan.market_to_pastry_street');
+  }
+  if (!runtime.openWorldSlice.knownRouteIds.includes('lcq.route.wuyuan.pastry_to_market_street')) {
+    runtime.openWorldSlice.knownRouteIds.push('lcq.route.wuyuan.pastry_to_market_street');
   }
   const now = Math.max(0, Number(runtime.worldTurn) || 0);
   const last = runtime.openWorldSliceLastWorldTurn;

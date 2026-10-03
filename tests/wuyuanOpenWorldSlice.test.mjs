@@ -497,3 +497,16 @@ test('delayed response is tied to the chosen process and is idempotent across re
   ensureWuyuanOpenWorldSlice(current);
   assert.equal(state.consequenceReceipts.length, count);
 });
+
+test('free input return from pastry street settles both zone and visible position', async () => {
+  const { getWuyuanOpenWorldSelections, settleWuyuanOpenWorldSelection, resolveWuyuanOpenWorldSelectionFromText } = await loadTs('../src/modules/scenarioMods/wuyuanOpenWorldSlice.ts');
+  const current = save();
+  const outward = getWuyuanOpenWorldSelections(current).find(item => item.kind === 'travel');
+  assert.equal(settleWuyuanOpenWorldSelection(current, outward).settled, true);
+  assert.match(current.角色.位置.描述, /点心铺/);
+  const back = resolveWuyuanOpenWorldSelectionFromText(current, '退回市集');
+  assert.equal(back?.identityId, 'lcq.route.wuyuan.pastry_to_market_street');
+  assert.equal(settleWuyuanOpenWorldSelection(current, back).settled, true);
+  assert.equal(current.世界.状态.剧本模组.openWorldSlice.currentZoneId, 'lcq.zone.wuyuan.market');
+  assert.match(current.角色.位置.描述, /五原露天市集/);
+});

@@ -19,8 +19,8 @@
   },
   "world": {
     "name": "六朝",
-    "era": "鬼王峒最终决战",
-    "background": "鬼巫王以苍龙星阵召唤龙神，试图合体获得神力。商队众人已经进入鬼王峒决战区域，但合体、龙神失控及战后伤亡尚未发生。",
+    "era": "白夷至鬼王峒途中",
+    "background": "商队来到白夷地界，与花苗同行者商议下一程。灵飞镜和部族间的疑云将逐步显露；尚未进入鬼王峒。",
     "specialRules": [
       "核心专名不得改写",
       "生死根为程宗扬唯一异能",
@@ -57,7 +57,7 @@
       {
         "id": "liuchao.continent.nanhuang",
         "name": "南荒",
-        "description": "鬼王峒所在，龙神出没之地。",
+        "description": "六朝以南的山林与部族聚居之地。",
         "bounds": [
           {
             "x": 1200,
@@ -316,7 +316,7 @@
         "name": "白武族",
         "description": "武二郎所属部族。",
         "type": "部族",
-        "headquartersLocationId": "liuchao.location.gui_wang_dong",
+        "headquartersLocationId": "liuchao.location.guiwang_dong",
         "territory": [
           {
             "x": 1500,
@@ -346,7 +346,7 @@
         "name": "花苗族",
         "description": "苏荔所属部族。",
         "type": "部族",
-        "headquartersLocationId": "liuchao.location.gui_wang_dong",
+        "headquartersLocationId": "liuchao.location.guiwang_dong",
         "territory": [
           {
             "x": 1500,
@@ -648,8 +648,8 @@
         "continentId": "liuchao.continent.nanhuang",
         "factionId": "liuchao.faction.biyu",
         "coordinates": {
-          "x": 1824,
-          "y": 8592
+          "x": 1872,
+          "y": 8664
         },
         "features": []
       },
@@ -1161,28 +1161,14 @@
         "region": "宋国"
       },
       {
-        "id": "liuchao.location.gui_wang_dong",
-        "name": "鬼王峒",
-        "description": "鬼巫王统治的洞窟，龙神出没之地。 深幽不见底的地堑，古老遗迹与荒圮乱石交织，闷热潮湿的密林中仅见奴隶，鲜有人马。（民俗：鬼巫王主导的隐秘势力，与碧鲮人有生意往来，设驿馆接待外来者。） 鬼地方，日夜难分。",
-        "type": "洞府",
-        "continentId": "liuchao.continent.nanhuang",
-        "factionId": "liuchao.faction.gui_wang_dong",
-        "coordinates": {
-          "x": 1641,
-          "y": 8690
-        },
-        "features": [],
-        "region": "南荒"
-      },
-      {
         "id": "liuchao.location.south_wild_valley",
         "name": "南荒山谷",
         "description": "龙神坠落之地。",
         "type": "城池",
         "continentId": "liuchao.continent.nanhuang",
         "coordinates": {
-          "x": 4916,
-          "y": 7778
+          "x": 1690,
+          "y": 8480
         },
         "features": []
       },
@@ -1197,19 +1183,6 @@
           "y": 4960
         },
         "features": []
-      },
-      {
-        "id": "liuchao.location.biyu",
-        "name": "碧鲮族",
-        "continentId": "liuchao.continent.nanhuang",
-        "type": "城池",
-        "description": "南荒沿海碧鲮族聚居地。 濒海而居的部族村寨，以渔获腌制和珊瑚采集为生，夜间篝火烤肉，空气中弥漫海产腥鲜与草药气息。（民俗：擅长潜水捕捞，族中女子常以海产交换陆上物资，有将俘虏献予鬼巫王的传统。） 碧蓝海湾，白沙滩平缓，椰林婆娑，海产丰饶。（民俗：渔业为生，曾出美女供鬼巫王玩乐。）",
-        "coordinates": {
-          "x": 1824,
-          "y": 8592
-        },
-        "features": [],
-        "region": "南荒"
       },
       {
         "id": "liuchao.location.gui_wang_gong",
@@ -1446,7 +1419,44 @@
         "id": "lcq.location.yeao_village",
         "name": "南荒山村",
         "region": "南荒",
-        "description": "叶媪居住的山村。"
+        "description": "叶媪居住的山村。",
+        "coordinates": {
+          "x": 1725,
+          "y": 8420
+        }
+      },
+      {
+        "id": "lcq.location.sheyi_village",
+        "name": "蛇彝村",
+        "type": "village",
+        "continentId": "liuchao.continent.nanhuang",
+        "coordinates": {
+          "x": 1545,
+          "y": 7250
+        },
+        "description": "商队在雨林中抵达的蛇彝村，长屋与村口可见异常。"
+      },
+      {
+        "id": "lcq.location.giant_vine",
+        "name": "万古巨藤",
+        "type": "landmark",
+        "continentId": "liuchao.continent.nanhuang",
+        "coordinates": {
+          "x": 1575,
+          "y": 7390
+        },
+        "description": "通往花苗地界的巨藤与石壁。"
+      },
+      {
+        "id": "lcq.location.huamiao_village",
+        "name": "花苗寨",
+        "type": "village",
+        "continentId": "liuchao.continent.nanhuang",
+        "coordinates": {
+          "x": 1650,
+          "y": 7470
+        },
+        "description": "苏荔主持的花苗寨，商队在此得到帮助。"
       }
     ],
     "characters": [
@@ -1687,7 +1697,8 @@
         "role": "云氏雇用的老向导",
         "description": "云氏雇用的老向导",
         "profile": {
-          "origin": "云氏雇用的老向导，自称朱八八。"
+          "origin": "云氏雇用的老向导，自称朱八八。",
+          "appearance": "面容苍老、身形瘦小的老向导，不是魁梧大汉。"
         },
         "realm": "合体",
         "gender": "男",
@@ -1814,7 +1825,8 @@
           "origin": "碧鲮少女",
           "personality": [
             "看上去天真灵动，笑语亲切，言行令旁人难以捉摸。"
-          ]
+          ],
+          "appearance": "眉眼灵动的成年女子，笑起来带着天真的神情。"
         },
         "affiliations": []
       },
@@ -2320,7 +2332,8 @@
         "liuchao.character.wu_er_lang",
         "liuchao.character.xie_yi",
         "liuchao.character.yun_cang_feng"
-      ]
+      ],
+      "locationId": "liuchao.location.baiyi"
     },
     "initialFlags": {
       "event.s04b_lingfei_baiyi_crisis_01.done": false,
@@ -2480,7 +2493,9 @@
           }
         ],
         "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang"
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.wu_er_lang",
+          "liuchao.character.yun_cang_feng"
         ],
         "objective": "与武二郎商议明晚夺镜计划",
         "playerCompletionContract": {
@@ -2501,7 +2516,8 @@
               }
             }
           ]
-        }
+        },
+        "locationId": "liuchao.location.baiyi"
       },
       {
         "id": "lcq.event.s04b_lingfei_baiyi_crisis_02",
@@ -2520,7 +2536,10 @@
           }
         ],
         "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang"
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.le_mingzhu",
+          "liuchao.character.a_xi",
+          "liuchao.character.wu_er_lang"
         ],
         "objective": "在鸦人营地救出乐明珠",
         "playerCompletionContract": {
@@ -2541,7 +2560,8 @@
               }
             }
           ]
-        }
+        },
+        "locationId": "liuchao.location.baiyi"
       },
       {
         "id": "lcq.event.s04b_lingfei_baiyi_crisis_03",
@@ -2560,7 +2580,10 @@
           }
         ],
         "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang"
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.le_mingzhu",
+          "liuchao.character.a_xi",
+          "liuchao.character.wu_er_lang"
         ],
         "objective": "趁机斩杀鸦人首领",
         "playerCompletionContract": {
@@ -2581,7 +2604,8 @@
               }
             }
           ]
-        }
+        },
+        "locationId": "liuchao.location.baiyi"
       },
       {
         "id": "lcq.event.s04b_lingfei_baiyi_crisis_04",
@@ -2601,8 +2625,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang",
-          "liuchao.character.yun_cang_feng",
-          "liuchao.character.xie_yi"
+          "liuchao.character.xie_yi",
+          "liuchao.character.yun_cang_feng"
         ],
         "objective": "送羊皮纸至云苍峰鉴定",
         "playerCompletionContract": {
@@ -3058,7 +3082,8 @@
               }
             }
           ]
-        }
+        },
+        "locationId": "liuchao.location.baiyi"
       },
       {
         "id": "lcq.event.s04b_lingfei_baiyi_crisis_05",
@@ -3077,7 +3102,9 @@
           }
         ],
         "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang"
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.wu_er_lang",
+          "liuchao.character.le_mingzhu"
         ],
         "objective": "前往白夷祭坛寻找灵飞镜",
         "playerCompletionContract": {
@@ -3098,7 +3125,8 @@
               }
             }
           ]
-        }
+        },
+        "locationId": "liuchao.location.baiyi"
       },
       {
         "id": "lcq.event.s04b_lingfei_baiyi_crisis_06",
@@ -3117,7 +3145,9 @@
           }
         ],
         "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang"
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.su_li",
+          "liuchao.character.yun_cang_feng"
         ],
         "objective": "与花苗族长商议联手之事",
         "playerCompletionContract": {
@@ -3138,7 +3168,8 @@
               }
             }
           ]
-        }
+        },
+        "locationId": "liuchao.location.baiyi"
       },
       {
         "id": "lcq.event.s04b_lingfei_baiyi_crisis_07",
@@ -3157,7 +3188,9 @@
           }
         ],
         "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang"
+          "liuchao.character.cheng_zongyang",
+          "lcq.character.nanhuang_yiyong",
+          "liuchao.character.su_li"
         ],
         "objective": "用水镜传讯联系苏妲己",
         "playerCompletionContract": {
@@ -3178,7 +3211,8 @@
               }
             }
           ]
-        }
+        },
+        "locationId": "liuchao.location.baiyi"
       },
       {
         "id": "lcq.event.s04b_lingfei_baiyi_crisis_08",
@@ -3197,7 +3231,9 @@
           }
         ],
         "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang"
+          "liuchao.character.cheng_zongyang",
+          "lcq.character.nanhuang_xi_furen",
+          "lcq.character.nanhuang_yiyong"
         ],
         "objective": "用灵飞镜查探白夷阴谋",
         "playerCompletionContract": {
@@ -3218,7 +3254,8 @@
               }
             }
           ]
-        }
+        },
+        "locationId": "liuchao.location.baiyi"
       },
       {
         "id": "lcq.event.s04b_lingfei_baiyi_crisis_09",
@@ -3237,7 +3274,10 @@
           }
         ],
         "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang"
+          "liuchao.character.cheng_zongyang",
+          "lcq.character.nanhuang_xi_furen",
+          "lcq.character.nanhuang_baiyi_chief",
+          "lcq.character.nanhuang_yiyong"
         ],
         "objective": "观察白夷族长变动",
         "playerCompletionContract": {
@@ -3258,7 +3298,8 @@
               }
             }
           ]
-        }
+        },
+        "locationId": "liuchao.location.baiyi"
       },
       {
         "id": "lcq.event.s04b_lingfei_baiyi_crisis_10",
@@ -3277,7 +3318,9 @@
           }
         ],
         "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang"
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.wu_er_lang",
+          "liuchao.character.xie_yi"
         ],
         "objective": "追入地宫甬道躲避陷阱",
         "playerCompletionContract": {
@@ -3298,7 +3341,8 @@
               }
             }
           ]
-        }
+        },
+        "locationId": "liuchao.location.baiyi"
       },
       {
         "id": "lcq.event.s04b_lingfei_baiyi_crisis_11",
@@ -3317,7 +3361,9 @@
           }
         ],
         "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang"
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.wu_er_lang",
+          "lcq.character.np004"
         ],
         "objective": "在战场应对血虎攻击",
         "playerCompletionContract": {
@@ -3338,7 +3384,8 @@
               }
             }
           ]
-        }
+        },
+        "locationId": "liuchao.location.baiyi"
       },
       {
         "id": "lcq.event.s04b_lingfei_baiyi_crisis_12",
@@ -3357,7 +3404,10 @@
           }
         ],
         "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang"
+          "liuchao.character.cheng_zongyang",
+          "lcq.character.np004",
+          "liuchao.character.xie_yi",
+          "liuchao.character.yun_cang_feng"
         ],
         "objective": "协助凝羽突袭鬼王峒使者",
         "playerCompletionContract": {
@@ -3378,7 +3428,8 @@
               }
             }
           ]
-        }
+        },
+        "locationId": "liuchao.location.baiyi"
       },
       {
         "id": "lcq.event.s04b_lingfei_baiyi_crisis_13",
@@ -3397,7 +3448,9 @@
           }
         ],
         "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang"
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.xie_yi",
+          "lcq.character.nanhuang_xi_furen"
         ],
         "objective": "潜入地宫查明碧宛下落",
         "playerCompletionContract": {
@@ -3418,7 +3471,8 @@
               }
             }
           ]
-        }
+        },
+        "locationId": "liuchao.location.baiyi"
       },
       {
         "id": "lcq.event.s04b_lingfei_baiyi_crisis_14",
@@ -3437,7 +3491,11 @@
           }
         ],
         "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang"
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.su_li",
+          "liuchao.character.wu_er_lang",
+          "liuchao.character.ning_yu",
+          "liuchao.character.yun_cang_feng"
         ],
         "objective": "与商队商议前往碧鲮族",
         "playerCompletionContract": {
@@ -3458,7 +3516,8 @@
               }
             }
           ]
-        }
+        },
+        "locationId": "liuchao.location.south_wild_valley"
       },
       {
         "id": "lcq.event.s04b_lingfei_baiyi_crisis_15",
@@ -3477,7 +3536,10 @@
           }
         ],
         "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang"
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.su_li",
+          "liuchao.character.xie_yi",
+          "liuchao.character.yun_cang_feng"
         ],
         "objective": "质问谢艺关于阿夕异常",
         "playerCompletionContract": {
@@ -3498,7 +3560,8 @@
               }
             }
           ]
-        }
+        },
+        "locationId": "liuchao.location.biyu_village"
       },
       {
         "id": "lcq.event.s04b_lingfei_baiyi_crisis_16",
@@ -3517,7 +3580,8 @@
           }
         ],
         "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang"
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.ning_yu"
         ],
         "objective": "向云苍峰打听岳帅旧闻",
         "playerCompletionContract": {
@@ -3538,7 +3602,8 @@
               }
             }
           ]
-        }
+        },
+        "locationId": "liuchao.location.biyu_village"
       },
       {
         "id": "lcq.event.s04b_lingfei_baiyi_crisis_17",
@@ -3557,7 +3622,10 @@
           }
         ],
         "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang"
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.qi_yuan",
+          "liuchao.character.su_li",
+          "liuchao.character.yun_cang_feng"
         ],
         "objective": "在湿热盆地躲避鳄鱼袭击",
         "playerCompletionContract": {
@@ -3578,7 +3646,8 @@
               }
             }
           ]
-        }
+        },
+        "locationId": "liuchao.location.biyu_village"
       },
       {
         "id": "lcq.event.s04b_lingfei_baiyi_crisis_18",
@@ -3597,7 +3666,9 @@
           }
         ],
         "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang"
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.ning_yu",
+          "liuchao.character.qi_yuan"
         ],
         "objective": "与谢艺讨论制造技术",
         "playerCompletionContract": {
@@ -3618,7 +3689,8 @@
               }
             }
           ]
-        }
+        },
+        "locationId": "liuchao.location.biyu_village"
       },
       {
         "id": "lcq.event.s04b_lingfei_baiyi_crisis_19",
@@ -3637,9 +3709,12 @@
           }
         ],
         "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang"
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.ning_yu",
+          "liuchao.character.yun_cang_feng",
+          "liuchao.character.qi_yuan"
         ],
-        "objective": "前往云苍峰",
+        "objective": "从被巨浪淹没的竹楼里脱身",
         "playerCompletionContract": {
           "kind": "objective_action",
           "settleOn": [
@@ -3648,17 +3723,18 @@
           "actions": [
             {
               "id": "advance_declared_objective",
-              "label": "前往云苍峰",
-              "actionText": "我按当前主线目标行动：前往云苍峰",
+              "label": "从被巨浪淹没的竹楼里脱身",
+              "actionText": "我从被巨浪淹没的竹楼里脱身",
               "timeCost": 1,
               "outcomeText": {
-                "success": "你已亲自执行“前往云苍峰”；事件完成真值将由本地引擎落账。",
+                "success": "你从被巨浪淹没的竹楼里脱身，与商队重新会合。",
                 "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
                 "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
               }
             }
           ]
-        }
+        },
+        "locationId": "liuchao.location.biyu_village"
       },
       {
         "id": "lcq.event.haishen_hall_merfolk",
@@ -3747,7 +3823,7 @@
           "liuchao.faction.xing_yue_hu",
           "liuchao.faction.guang_ming_guan_tang"
         ],
-        "locationId": "liuchao.location.sea_temple",
+        "locationId": "liuchao.location.biyu_village",
         "objective": "听谢艺讲清碧鲮旧战与朱狐冠来历，并回应他希望你承接岳帅未竟之事",
         "playerCompletionContract": {
           "kind": "objective_action",
@@ -4603,7 +4679,7 @@
           "liuchao.faction.hua_miao",
           "liuchao.faction.yun_shi_shang_hui"
         ],
-        "locationId": "liuchao.location.biyu",
+        "locationId": "liuchao.location.biyu_village",
         "objective": "跟花苗谈清进鬼王峒的合作边界",
         "playerCompletionContract": {
           "kind": "objective_action",
@@ -4682,7 +4758,8 @@
               ]
             }
           ]
-        }
+        },
+        "locationId": "liuchao.location.baiyi"
       }
     ],
     "worldSimulation": {

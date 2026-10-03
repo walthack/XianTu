@@ -83,10 +83,13 @@ test('masked identity and death/longrest facts remain distinct',async()=>{
  const dead=resolveScenarioEventNarrative(e,{'event.s06_03.done':true});assert.match(dead.description,/祁远携骨灰/);
 });
 test('explicit phase terminal prevents crossing to next stage',async()=>{
+ const {getStageDepartureOffer}=await loadTs('../src/modules/scenarioMods/runtime.ts');
  const {transitionToNextScenarioStage}=await loadTs('../src/modules/scenarioMods/strictInitializer.ts');
  const {isNanhuangDemoFinished}=await loadTs('../src/modules/scenarioMods/qingyuOpeningPlaytest.ts');
  const save=await opened(ids[2]);save.系统.扩展.清羽记开局={kind:'qingyu-demo-v1',endModId:ids[2],endEventId:'lcq.event.enter_dong_with_migu'};
  rt(save).completedEventIds.push('lcq.event.enter_dong_with_migu');
+ rt(save).nextStageId = ids[3]; rt(save).nextStageReadyId = ids[3];
+ assert.equal(getStageDepartureOffer(save),null);
  assert.equal(isNanhuangDemoFinished(save),true);assert.equal(transitionToNextScenarioStage(save,[]).reason,'本期南荒试玩已结束');
 });
 test('04b and05b advance through actual action receipts without skipping new beats',async()=>{
@@ -103,4 +106,111 @@ test('04b and05b advance through actual action receipts without skipping new bea
   assert.ok(rt(save).nextStageReadyId,`${id} must finish`);
   assert.deepEqual([...seen],getCanonRailProfile({modId:id}).orderedEventIds);
  }
+});
+
+test('phase-one scene packets carry current places, cast and visible appearance without future battle background', async () => {
+  const { getCurrentStoryEventActions } = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  const { compileLegacyNarratorPacket, readLocalMemoryCapsule } = await loadTs('../src/modules/scenarioMods/legacyNarratorPacket.ts');
+  for (const suffix of ['01', '03', '05', '06', '07']) {
+    const save = await focus(await opened(ids[0]), `lcq.event.s03b_snake_flower_bridge_${suffix}`);
+    const selection = getCurrentStoryEventActions(save).find(a => a.eventId.endsWith(suffix));
+    const capsule = readLocalMemoryCapsule(save, selection);
+    assert.ok(capsule.presentNames.length, suffix);
+    assert.ok(capsule.presentActors.some(a => a.appearance), suffix);
+    assert.ok(capsule.presentActors.some(a => a.race), suffix);
+    const packet = compileLegacyNarratorPacket(save, { selection, playerLine: selection.actionText, outcomeText: selection.outcomeText }, '', '').packet;
+    assert.ok(packet.presentActors.length);
+    assert.doesNotMatch(packet.location, /碧鲮/);
+    if (suffix === '06') assert.ok(packet.present.includes('苏荔'));
+  }
+  for (const id of ids.slice(0, 3)) {
+    const doc = await stage(id);
+    if (id !== ids[1]) assert.doesNotMatch(doc.world.background, /鬼巫王|决战|龙神复苏|谢艺.*死/);
+    const names = doc.canon.locations.map(l => l.name);
+    for (const name of ['碧鲮族', '鬼王峒', '花苗寨']) assert.equal(names.filter(n => n === name).length, 1);
+  }
+  const save = await opened(ids[2]);
+  assert.match(save.角色.位置.描述, /白夷/);
+  const e = (await stage(ids[1])).scenario.events.find(e => e.id === 'lcq.event.s04_07');
+  for (const name of ['樨夫人','白夷族长','易勇']) {
+    const c = (await stage(ids[1])).canon.characters.find(c => c.name === name);
+    assert.ok(e.relatedCharacterIds.includes(c.id), name);
+  }
+});
+
+test('temporary debut exclusions do not persist; deaths do persist between stages; narrative rejects minors and dead actors', async () => {
+  const { departedPresentNames, stampDepartedCast } = await loadTs('../src/modules/scenarioMods/presence.ts');
+  const { validateModuleCastNarrative } = await loadTs('../src/modules/scenarioMods/modularTurn.ts');
+  const runtime = { modId: ids[0], completedEventIds: ['lcq.event.s03b_yinzhu_xiongerpu'], flags: {} };
+  stampDepartedCast(runtime);
+  assert.ok(runtime.departedCast.includes('阿葭'));
+  assert.ok(!runtime.departedCast.includes('苏荔'));
+  runtime.modId = ids[2]; runtime.completedEventIds = [];
+  assert.ok(departedPresentNames(runtime).includes('阿葭'));
+  assert.ok(departedPresentNames(runtime).includes('叶媪'));
+  assert.throws(() => validateModuleCastNarrative('你望见十五六岁的小紫。', []), /年龄/);
+  assert.throws(() => validateModuleCastNarrative('段强走进伤员帐。', ['段强']), /在场/);
+  assert.doesNotThrow(() => validateModuleCastNarrative('你想起已故的段强。眼前站着十八岁的成年商旅。', ['段强']));
+  const paragraph = '你看见水镜里的人影从雾气里缓缓浮现。凝羽站在旁边紧盯镜面上的每一处变化。营火将周围人的影子拉得细长而摇曳。';
+  assert.throws(() => validateModuleCastNarrative(paragraph, [], [paragraph]), /重复/);
+});
+
+test('retest contracts align button lines, rescue actor, departed cast and distinct map anchors', async () => {
+  const { getCurrentStoryEventActions, advanceScenarioRuntime, recordStoryEventStructuredAction } = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  const { fixedBeatNarrative } = await loadTs('../src/modules/scenarioMods/fixedEndingNarratives.ts');
+  for (const [id, eid] of [[ids[0], 's03b_snake_flower_bridge_05'], [ids[2], 's04b_lingfei_baiyi_crisis_14']]) {
+    let save = await focus(await opened(id), `lcq.event.${eid}`);
+    const actions = getCurrentStoryEventActions(advanceScenarioRuntime(save).saveData);
+    assert.ok(actions.some(a => a.eventId === `lcq.event.${eid}`), `${eid} needs a main-panel action`);
+    const result = recordStoryEventStructuredAction(save, actions[0]);
+    assert.equal(result.attempted, true);
+  }
+  const bride = await focus(await opened(ids[1]), 'lcq.event.s04_03');
+  const brideAction = getCurrentStoryEventActions(bride)[0];
+  assert.match(brideAction.label, /听清乐明珠为什么要假扮新娘/);
+  assert.doesNotMatch(brideAction.label, /前往/);
+  assert.equal(brideAction.playerLine, '我听清乐明珠为什么要假扮新娘');
+  const wave = await focus(await opened(ids[2]), 'lcq.event.s04b_lingfei_baiyi_crisis_19');
+  assert.doesNotMatch(getCurrentStoryEventActions(wave)[0].label, /前往/);
+  const tiger = await focus(await opened(ids[2]), 'lcq.event.s04b_lingfei_baiyi_crisis_11');
+  assert.ok(!getCurrentStoryEventActions(tiger)[0].label.includes('易虎'));
+  const doc = await stage(ids[1]);
+  const rescue = doc.scenario.events.find(e => e.id === 'lcq.event.s04_05');
+  assert.ok(rescue.relatedCharacterIds.includes(doc.canon.characters.find(c => c.name === '易虎').id));
+  assert.match(fixedBeatNarrative(rescue.id, 'respond_to_flash_flood'), /易虎先把易彪.*年轻军士/);
+  const locations = doc.canon.locations.filter(l => ['南荒山涧', '鬼王峒', '鬼王峒宫殿', '白夷谷', '白夷族'].includes(l.name));
+  assert.equal(new Set(locations.map(l => JSON.stringify(l.coordinates))).size, locations.length);
+  const packet = await loadTs('../src/modules/scenarioMods/legacyNarratorPacket.ts');
+  const start = await opened(ids[0]);
+  const actor = packet.readLocalMemoryCapsule(start, getCurrentStoryEventActions(start)[0]).presentActors.find(a => a.name === '祁远');
+  assert.equal(actor.race, '人族');
+  const registry = JSON.parse(await readFile(new URL('../src/modules/scenarioMods/builtins/character-registry.json', import.meta.url), 'utf8'));
+  assert.equal(registry.characters.find(c => c.canonicalName === '祁远').staticProfile.race, '人族');
+  const { resolveScenarioCharacters } = await loadTs('../src/modules/scenarioMods/characterResolver.ts');
+  const old = { id: 'liuchao.character.qi_yuan', name: '祁远', profile: { race: '碧鲮族', origin: '碧鲮族/随从/向导' } };
+  resolveScenarioCharacters([old], ids[0]);
+  assert.equal(old.profile.race, '人族');
+  assert.doesNotMatch(old.profile.origin, /碧鲮族/);
+});
+
+test('retest2 preserves Ningyu detox facts and natural Xiaozi appearance with distinct sea landmarks', async () => {
+  const { fixedBeatNarrative } = await loadTs('../src/modules/scenarioMods/fixedEndingNarratives.ts');
+  const doc = await stage(ids[1]);
+  const event = doc.scenario.events.find(e => e.id === 'lcq.event.s04_06');
+  for (const id of ['liuchao.character.ning_yu', 'liuchao.character.le_mingzhu']) assert.ok(event.relatedCharacterIds.includes(id));
+  const text = fixedBeatNarrative(event.id, event.playerCompletionContract.actions[0].id);
+  assert.match(text, /凝羽.*麻古毒瘾/);
+  assert.match(text, /她/);
+  assert.match(text, /乐明珠.*应下/);
+  assert.doesNotMatch(text, /冰谷|冰蛊|他|已经痊愈/);
+  const xiaozi = (await stage(ids[2])).canon.characters.find(c => c.id === 'liuchao.character.xiao_zi');
+  assert.match(xiaozi.profile.appearance, /成年/);
+  assert.doesNotMatch(xiaozi.profile.appearance, /没有角|不得|不添/);
+  for (const id of [ids[0], ids[2]]) {
+    const locations = (await stage(id)).canon.locations;
+    const village = locations.find(l => l.id === 'liuchao.location.biyu_village');
+    const temple = locations.find(l => l.id === 'liuchao.location.sea_temple');
+    assert.notDeepEqual(temple.coordinates, village.coordinates);
+    assert.deepEqual(temple.coordinates, { x: 1872, y: 8664 });
+  }
 });

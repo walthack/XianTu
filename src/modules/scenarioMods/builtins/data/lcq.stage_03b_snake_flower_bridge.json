@@ -19,8 +19,8 @@
   },
   "world": {
     "name": "六朝",
-    "era": "鬼王峒最终决战",
-    "background": "鬼巫王以苍龙星阵召唤龙神，试图合体获得神力。商队众人已经进入鬼王峒决战区域，但合体、龙神失控及战后伤亡尚未发生。",
+    "era": "南荒蛇彝与花苗",
+    "background": "商队刚抵达蛇彝村。雨林旅途凶险，众人仍在寻找霓龙丝的线索；南荒部族与鬼王峒的关系尚待眼前见闻查明。",
     "specialRules": [
       "核心专名不得改写",
       "生死根为程宗扬唯一异能",
@@ -57,7 +57,7 @@
       {
         "id": "liuchao.continent.nanhuang",
         "name": "南荒",
-        "description": "鬼王峒所在，龙神出没之地。",
+        "description": "六朝以南的山林与部族聚居之地。",
         "bounds": [
           {
             "x": 1200,
@@ -316,7 +316,7 @@
         "name": "白武族",
         "description": "武二郎所属部族。",
         "type": "部族",
-        "headquartersLocationId": "liuchao.location.gui_wang_dong",
+        "headquartersLocationId": "liuchao.location.guiwang_dong",
         "territory": [
           {
             "x": 1500,
@@ -346,7 +346,7 @@
         "name": "花苗族",
         "description": "苏荔所属部族。",
         "type": "部族",
-        "headquartersLocationId": "liuchao.location.gui_wang_dong",
+        "headquartersLocationId": "liuchao.location.guiwang_dong",
         "territory": [
           {
             "x": 1500,
@@ -648,8 +648,8 @@
         "continentId": "liuchao.continent.nanhuang",
         "factionId": "liuchao.faction.biyu",
         "coordinates": {
-          "x": 1824,
-          "y": 8592
+          "x": 1872,
+          "y": 8664
         },
         "features": []
       },
@@ -1161,28 +1161,14 @@
         "region": "宋国"
       },
       {
-        "id": "liuchao.location.gui_wang_dong",
-        "name": "鬼王峒",
-        "description": "鬼巫王统治的洞窟，龙神出没之地。 深幽不见底的地堑，古老遗迹与荒圮乱石交织，闷热潮湿的密林中仅见奴隶，鲜有人马。（民俗：鬼巫王主导的隐秘势力，与碧鲮人有生意往来，设驿馆接待外来者。） 鬼地方，日夜难分。",
-        "type": "洞府",
-        "continentId": "liuchao.continent.nanhuang",
-        "factionId": "liuchao.faction.gui_wang_dong",
-        "coordinates": {
-          "x": 1641,
-          "y": 8690
-        },
-        "features": [],
-        "region": "南荒"
-      },
-      {
         "id": "liuchao.location.south_wild_valley",
         "name": "南荒山谷",
         "description": "龙神坠落之地。",
         "type": "城池",
         "continentId": "liuchao.continent.nanhuang",
         "coordinates": {
-          "x": 4916,
-          "y": 7778
+          "x": 1690,
+          "y": 8480
         },
         "features": []
       },
@@ -1197,19 +1183,6 @@
           "y": 4960
         },
         "features": []
-      },
-      {
-        "id": "liuchao.location.biyu",
-        "name": "碧鲮族",
-        "continentId": "liuchao.continent.nanhuang",
-        "type": "城池",
-        "description": "南荒沿海碧鲮族聚居地。 濒海而居的部族村寨，以渔获腌制和珊瑚采集为生，夜间篝火烤肉，空气中弥漫海产腥鲜与草药气息。（民俗：擅长潜水捕捞，族中女子常以海产交换陆上物资，有将俘虏献予鬼巫王的传统。） 碧蓝海湾，白沙滩平缓，椰林婆娑，海产丰饶。（民俗：渔业为生，曾出美女供鬼巫王玩乐。）",
-        "coordinates": {
-          "x": 1824,
-          "y": 8592
-        },
-        "features": [],
-        "region": "南荒"
       },
       {
         "id": "liuchao.location.gui_wang_gong",
@@ -1446,7 +1419,44 @@
         "id": "lcq.location.yeao_village",
         "name": "南荒山村",
         "region": "南荒",
-        "description": "叶媪居住的山村。"
+        "description": "叶媪居住的山村。",
+        "coordinates": {
+          "x": 1725,
+          "y": 8420
+        }
+      },
+      {
+        "id": "lcq.location.sheyi_village",
+        "name": "蛇彝村",
+        "type": "village",
+        "continentId": "liuchao.continent.nanhuang",
+        "coordinates": {
+          "x": 1545,
+          "y": 7250
+        },
+        "description": "商队在雨林中抵达的蛇彝村，长屋与村口可见异常。"
+      },
+      {
+        "id": "lcq.location.giant_vine",
+        "name": "万古巨藤",
+        "type": "landmark",
+        "continentId": "liuchao.continent.nanhuang",
+        "coordinates": {
+          "x": 1575,
+          "y": 7390
+        },
+        "description": "通往花苗地界的巨藤与石壁。"
+      },
+      {
+        "id": "lcq.location.huamiao_village",
+        "name": "花苗寨",
+        "type": "village",
+        "continentId": "liuchao.continent.nanhuang",
+        "coordinates": {
+          "x": 1650,
+          "y": 7470
+        },
+        "description": "苏荔主持的花苗寨，商队在此得到帮助。"
       }
     ],
     "characters": [
@@ -1754,7 +1764,8 @@
           "liuchao.item.zhu_hu_guan"
         ],
         "profile": {
-          "origin": "随花苗送亲队同行，身份尚未揭露。"
+          "origin": "随花苗送亲队同行，身份尚未揭露。",
+          "appearance": "戴着面纱的成年花苗新娘。"
         },
         "affiliations": []
       },
@@ -1764,7 +1775,8 @@
         "role": "云氏雇用的老向导",
         "description": "云氏雇用的老向导",
         "profile": {
-          "origin": "云氏雇用的老向导，自称朱八八。"
+          "origin": "云氏雇用的老向导，自称朱八八。",
+          "appearance": "面容苍老、身形瘦小的老向导，不是魁梧大汉。"
         },
         "realm": "合体",
         "gender": "男",
@@ -2216,7 +2228,8 @@
         "liuchao.character.wu_er_lang",
         "liuchao.character.xie_yi",
         "liuchao.character.yun_cang_feng"
-      ]
+      ],
+      "locationId": "lcq.location.sheyi_village"
     },
     "initialFlags": {
       "event.s03b_snake_flower_bridge_01.done": false,
@@ -2298,7 +2311,14 @@
           }
         ],
         "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang"
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.ning_yu",
+          "liuchao.character.wu_er_lang",
+          "liuchao.character.xie_yi",
+          "liuchao.character.yun_cang_feng",
+          "liuchao.character.qi_yuan",
+          "lcq.character.np003",
+          "lcq.character.np004"
         ],
         "objective": "去蛇彝领地，防备毒袭",
         "playerCompletionContract": {
@@ -2319,7 +2339,8 @@
               }
             }
           ]
-        }
+        },
+        "locationId": "lcq.location.sheyi_village"
       },
       {
         "id": "lcq.event.s03b_snake_flower_bridge_02",
@@ -2339,7 +2360,13 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang",
-          "liuchao.character.yun_cang_feng"
+          "liuchao.character.ning_yu",
+          "liuchao.character.wu_er_lang",
+          "liuchao.character.xie_yi",
+          "liuchao.character.yun_cang_feng",
+          "liuchao.character.qi_yuan",
+          "lcq.character.np003",
+          "lcq.character.np004"
         ],
         "objective": "搜查蛇彝长屋，查清尸体来源",
         "playerCompletionContract": {
@@ -2704,7 +2731,8 @@
               }
             }
           ]
-        }
+        },
+        "locationId": "lcq.location.sheyi_village"
       },
       {
         "id": "lcq.event.s03b_snake_flower_bridge_03",
@@ -2723,7 +2751,14 @@
           }
         ],
         "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang"
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.ning_yu",
+          "liuchao.character.wu_er_lang",
+          "liuchao.character.xie_yi",
+          "liuchao.character.yun_cang_feng",
+          "liuchao.character.qi_yuan",
+          "lcq.character.np003",
+          "lcq.character.np004"
         ],
         "objective": "调查鬼王峒血符，确认真凶",
         "playerCompletionContract": {
@@ -2744,7 +2779,8 @@
               }
             }
           ]
-        }
+        },
+        "locationId": "lcq.location.sheyi_village"
       },
       {
         "id": "lcq.event.s03b_snake_flower_bridge_04",
@@ -2764,7 +2800,13 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang",
-          "liuchao.character.yun_cang_feng"
+          "liuchao.character.ning_yu",
+          "liuchao.character.wu_er_lang",
+          "liuchao.character.xie_yi",
+          "liuchao.character.yun_cang_feng",
+          "liuchao.character.qi_yuan",
+          "lcq.character.np003",
+          "lcq.character.np004"
         ],
         "objective": "与云苍峰商队同行，前往白夷族",
         "playerCompletionContract": {
@@ -3125,7 +3167,8 @@
               }
             }
           ]
-        }
+        },
+        "locationId": "lcq.location.sheyi_village"
       },
       {
         "id": "lcq.event.s03b_snake_flower_bridge_05",
@@ -3144,7 +3187,14 @@
           }
         ],
         "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang"
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.ning_yu",
+          "liuchao.character.wu_er_lang",
+          "liuchao.character.xie_yi",
+          "liuchao.character.yun_cang_feng",
+          "liuchao.character.qi_yuan",
+          "lcq.character.np003",
+          "lcq.character.np004"
         ],
         "objective": "攀爬万古巨藤，到达崖顶",
         "playerCompletionContract": {
@@ -3165,7 +3215,8 @@
               }
             }
           ]
-        }
+        },
+        "locationId": "lcq.location.giant_vine"
       },
       {
         "id": "lcq.event.s03b_snake_flower_bridge_06",
@@ -3184,7 +3235,14 @@
           }
         ],
         "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang"
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.su_li",
+          "liuchao.character.a_xi",
+          "lcq.character.nanhuang_kawa",
+          "liuchao.character.wu_er_lang",
+          "liuchao.character.xie_yi",
+          "liuchao.character.yun_cang_feng",
+          "liuchao.character.ning_yu"
         ],
         "objective": "求助花苗族长，脱离困境",
         "playerCompletionContract": {
@@ -3205,7 +3263,8 @@
               }
             }
           ]
-        }
+        },
+        "locationId": "lcq.location.huamiao_village"
       },
       {
         "id": "lcq.event.s03b_snake_flower_bridge_07",
@@ -3224,9 +3283,16 @@
           }
         ],
         "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang"
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.su_li",
+          "liuchao.character.a_xi",
+          "liuchao.character.le_mingzhu",
+          "lcq.character.nanhuang_ajia",
+          "liuchao.character.yun_cang_feng",
+          "liuchao.character.ning_yu",
+          "liuchao.character.xie_yi"
         ],
-        "objective": "前往熊耳铺，探查贡物详情",
+        "objective": "听清花苗送亲与贡物的安排",
         "playerCompletionContract": {
           "kind": "objective_action",
           "settleOn": [
@@ -3235,17 +3301,18 @@
           "actions": [
             {
               "id": "advance_declared_objective",
-              "label": "前往熊耳铺，探查贡物详情",
-              "actionText": "我按当前主线目标行动：前往熊耳铺，探查贡物详情",
+              "label": "听清花苗送亲与贡物的安排",
+              "actionText": "我听清花苗送亲与贡物的安排",
               "timeCost": 1,
               "outcomeText": {
-                "success": "你已亲自执行“前往熊耳铺，探查贡物详情”；事件完成真值将由本地引擎落账。",
+                "success": "你已听清花苗送亲与贡物的安排，尚未前往熊耳铺。",
                 "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
                 "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
               }
             }
           ]
-        }
+        },
+        "locationId": "lcq.location.huamiao_village"
       },
       {
         "id": "lcq.event.zixi_intercept",
@@ -3369,7 +3436,8 @@
             }
           ]
         },
-        "axisMethod": "reviewed-no-anchor"
+        "axisMethod": "reviewed-no-anchor",
+        "locationId": "lcq.location.huamiao_village"
       },
       {
         "id": "lcq.event.s03b_yinzhu_xiongerpu",
@@ -3433,7 +3501,8 @@
               ]
             }
           ]
-        }
+        },
+        "locationId": "liuchao.location.xiongerpu"
       }
     ],
     "worldSimulation": {

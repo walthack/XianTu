@@ -706,3 +706,58 @@ test('bracket labels: drop bare 环境/场景 tags, keep paragraph-lead scene te
   assert.equal(flattenBracketLabels('【内院偏屋，灯暗。】押你回来的两人。'), '内院偏屋，灯暗。押你回来的两人。');
   assert.equal(flattenBracketLabels('她说这屋里的环境太闷。\n【内院偏屋，灯暗】押你的人退下。'), '她说这屋里的环境太闷。\n内院偏屋，灯暗。押你的人退下。');
 });
+
+test('locally accepted module turn advances the displayed clock once; replayed receipt and generation failure do not', async () => {
+  setActivePinia(createPinia());
+  const { AIBidirectionalSystem } = await loadPipeline('../src/utils/AIBidirectionalSystem.ts');
+  const { appendModuleReceipt } = await loadTs('../src/modules/scenarioMods/modularTurn.ts');
+  const { save } = await openingSave();
+  save.元数据.时间 = { 年: 200, 月: 1, 日: 1, 小时: 8, 分钟: 0 };
+  const receipt = { id: 'nh1-clock-verified', path: 'modular', text: '你静静看着草叶。', route: { configId: 'test', provider: 'minimax', model: 'MiniMax-M3' }, promptChars: 100, foregroundMs: 1, memory: { status: 'pending' } };
+  const response = { text: receipt.text, moduleReceipt: receipt, mid_term_memory: '', tavern_commands: [], action_options: [] };
+  const options = { userAction: '我观察现场。', playerIntentText: '我观察现场。', narrativeAuthority: 'local_contract' };
+  const result = await AIBidirectionalSystem.processGmResponse(structuredClone(response), structuredClone(save), false, () => false, options);
+  assert.equal(result.saveData.元数据.时间.分钟, 1);
+  appendModuleReceipt(result.saveData, receipt);
+  const replay = await AIBidirectionalSystem.processGmResponse(structuredClone(response), result.saveData, false, () => false, options);
+  assert.equal(replay.saveData.元数据.时间.分钟, 1);
+  const failed = await AIBidirectionalSystem.processGmResponse({ ...structuredClone(response), generationError: { code: 'DEMO_MODULE_FAILED', message: 'failed' } }, structuredClone(save), false, () => false, options);
+  assert.equal(failed.saveData.元数据.时间.分钟, 0);
+});
+
+test('Nanhuang cast rejection silently rewrites; persistent bad drafts use local current-step text and settle once', async () => {
+  setActivePinia(createPinia());
+  const { AIBidirectionalSystem } = await loadPipeline('../src/utils/AIBidirectionalSystem.ts');
+  const { useGameStateStore } = await loadPipeline('../src/stores/gameStateStore.ts');
+  const { aiService } = await loadPipeline('../src/services/aiService.ts');
+  const { createMinimalSaveDataV3 } = await loadPipeline('../src/utils/dataRepair.ts');
+  const { buildStrictScenarioInitialization, applyStrictScenarioInitializationToSave } = await loadPipeline('../src/modules/scenarioMods/strictInitializer.ts');
+  const { getCurrentStoryEventActions, advanceScenarioRuntime } = await loadPipeline('../src/modules/scenarioMods/runtime.ts');
+  const mod = JSON.parse(await readFile(new URL('../src/modules/scenarioMods/builtins/data/lcq.stage_03b_snake_flower_bridge.json', import.meta.url), 'utf8'));
+  const opened = advanceScenarioRuntime(applyStrictScenarioInitializationToSave(createMinimalSaveDataV3(), buildStrictScenarioInitialization(mod))).saveData;
+  opened.系统.扩展.清羽记开局 = { kind: 'qingyu-demo-v1', endModId: 'lcq.stage_04b_lingfei_baiyi_crisis', endEventId: 'lcq.event.enter_dong_with_migu' };
+  const action = getCurrentStoryEventActions(opened)[0];
+  let calls = 0;
+  let correctionSeen = false;
+  const restore = await withStubbedGenerate(aiService, async options => {
+    calls++;
+    const prompt = (options.injects || []).map(i => i.content).join('\n') + String(options.user_input || '');
+    if (calls > 1 && prompt.includes('上一稿被内部守卫退回')) correctionSeen = true;
+    return '你看见段强走进蛇彝村。';
+  });
+  try {
+    const store = useGameStateStore();
+    store.loadFromSaveData(structuredClone(opened));
+    const response = await AIBidirectionalSystem.processPlayerAction(action.playerLine, TEST_PROFILE, {
+      eventAction: structuredClone(action), eventActionProvenance: 'selected', playerIntentText: action.playerLine, shouldAbort: () => false,
+    });
+    assert.equal(response.generationError, undefined);
+    assert.equal(response.transactionCommitted, true);
+    assert.equal(response.moduleReceipt.path, 'local');
+    assert.equal(calls, 3);
+    assert.equal(correctionSeen, true);
+    assert.doesNotMatch(response.text, /段强/);
+    const current = store.toSaveData().世界.状态.剧本模组;
+    assert.equal(current.completedEventIds.filter(id => id === action.eventId).length, 1);
+  } finally { restore(); }
+});

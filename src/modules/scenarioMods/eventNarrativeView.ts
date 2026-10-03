@@ -139,6 +139,22 @@ type QuestCompassRuntime = {
 
 /** 短版 stage02 合并了多段原著章节；界面按当前剧情地点标段，不沿用第10章标题。 */
 export function storyChapterTitle(modId: string | undefined, eventId: string | undefined, fallback: string): string {
+  if (modId === 'lcq.stage_04' && eventId) return ({
+    'lcq.event.s04_02': '第46章·袭击', 'lcq.event.s04_03': '第48章·新娘身份',
+    'lcq.event.s04_01': '第49章·刺王密谋', 'lcq.event.s04_04': '第51章·发蛊',
+    'lcq.event.s04_05': '第52章·旱洪', 'lcq.event.s04_06': '第54章·穿山',
+    'lcq.event.s04_07': '第55章·白夷迎客',
+  } as Record<string, string>)[eventId] || fallback;
+  if (modId === 'lcq.stage_04b_lingfei_baiyi_crisis' && eventId) {
+    if (eventId === 'lcq.event.enter_dong_with_migu') return '第86章·随弥骨入峒';
+    if (['lcq.event.huamiao_coop_boundary', 'lcq.event.guiwangdong_coop_pact'].includes(eventId)) return '第85章·进峒之约';
+    if (eventId === 'lcq.event.yiyang_repels_yinsha') return '第84章·阴煞';
+    if (eventId === 'lcq.event.wuerlang_slays_dagu') return '第83章·虎威';
+    if (eventId === 'lcq.event.ruins_ghost_warriors') return '第82章·迎敌';
+    if (eventId === 'lcq.event.biling_bay_stance') return '第80章·碧鲮前路';
+    if (['lcq.event.haishen_hall_merfolk', 'lcq.event.pull_harpoon_lemingzhu'].includes(eventId)) return '海神殿';
+    if (['lcq.event.regroup_caravan_envoy','lcq.event.weapon_deal_with_geluo','lcq.event.spot_dong_informant'].includes(eventId)) return '商队与峒使';
+  }
   if (modId !== 'lcq.stage_02' || !eventId) return fallback;
   if (['lcq.event.s02_01', 'lcq.event.s02_03', 'lcq.event.s02_02'].includes(eventId)) return fallback;
   return storyRouteLocation(eventId)?.includes('南荒') ? '南荒商路' : '五原';

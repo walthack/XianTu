@@ -21,6 +21,10 @@ export function fixedEndingNarrative(ending: { endingId: string; sourceEventId: 
 /** 关键动作已由引擎预结算；不让写手追加条件、选择或道具。 */
 export function fixedBeatNarrative(eventId: string | undefined, actionId: string | undefined): string | undefined {
   return ({
+    'lcq.event.s04_06::advance_declared_objective': '凝羽被麻古毒瘾折磨得难以安坐。她强撑着不肯出声，额上却沁出了冷汗。你向乐明珠求助，请她替凝羽解毒。乐明珠点头应下，取出针具，小心察看凝羽的状况；她对这种毒瘾还缺乏经验，你留在一旁照应。',
+    'lcq.event.s04_05::respond_to_flash_flood': '山洪骤然涌下。易虎先把易彪送到安全处，随即转身救起那名年轻军士，将他也推离洪流。你看清了这先后两次救援，救起两人的都是易虎。',
+    'lcq.event.s03b_yinzhu_xiongerpu::burn_yinzhu_victim': '阿葭已被阴蛛吸干，再没有气息。武二郎拧死了阴蛛。你依祁远所说焚化阿葭的尸体，众人默立在火旁；这次没能把她救回来。',
+    'lcq.event.s03b_yinzhu_xiongerpu::pick_zhu88_as_guide': '你在熊耳铺找向导。秦桧与吴三桂分别上前，你没有选他们，而是请自称朱八八的老向导带路。送亲队的新娘仍戴着面纱，鬼王峒使者已先走；你与商队收拾行装，同送亲队继续前行。',
     'lcq.event.s02_02::witness_wang_zhe_nine_suns': '你抬头望向战场上空。王哲脱去甲胄，天青道袍在风中展开，他的身形离开地面，升上高空。金冠爆散，声音从天上传来，九阳随真言依次点亮，光芒逐渐汇成日轮。你眼前再也不是帐中的师帅，而是悬在战场上方、以自身撑起最后一击的人。日轮的光芒照在你脸上，你仰头看着他，四周的喊声被天上传来的真言压了下去。',
     'lcq.event.charge_sudaji_fee::name_sixty_zhu_before_help': '你没有立刻动手，先向苏妲己开出六十金铢工价。苏妲己就在面前，器物也还留在原处；你把价钱说清，等她当面答复。她看着你，尚未作答，你也没有抢先动手。',
     'lcq.event.charge_sudaji_fee::lock_fee_then_remove_device': '苏妲己当面应下六十金铢的报酬，将钱交到你手里。你收下报酬，才按说定的办法帮她取出那件新奇器物。苏妲己亲自接下器物，你收回手，这件事至此办完。',

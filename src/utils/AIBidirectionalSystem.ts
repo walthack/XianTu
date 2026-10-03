@@ -1,5 +1,6 @@
+import { departedPresentNames } from '@/modules/scenarioMods/presence';
 import { fixedEndingNarrative, fixedBeatNarrative, endingBridge } from '@/modules/scenarioMods/fixedEndingNarratives';
-import { isDemoModuleOnly, assertDemoModulePath, isModulePlaytestSelected, isModularTurnEnabled, validateModuleSettlementNarrative, readModuleNarrative, parseModuleObject, visibleModuleText, appendModuleReceipt, recentModuleMemory, attemptModuleNarrative } from '@/modules/scenarioMods/modularTurn';
+import { isDemoModuleOnly, assertDemoModulePath, isModulePlaytestSelected, isModularTurnEnabled, validateModuleSettlementNarrative, validateModuleCastNarrative, ModuleNarrativeGuardError, getModuleReceipts, readModuleNarrative, parseModuleObject, visibleModuleText, appendModuleReceipt, recentModuleMemory, attemptModuleNarrative } from '@/modules/scenarioMods/modularTurn';
 import { narrativeBoundaryNote, stripNarrativeBoundaryClauses } from '@/modules/scenarioMods/narrativeBoundaries';
 import { getActiveKeyBeatCard, isKeyBeatCardAction, keyBeatStep, KEY_BEAT_PENDING_FALLBACK } from '@/modules/scenarioMods/keyBeatCards';
 import { validateLegacyVisibleNarrative } from '@/modules/scenarioMods/legacyNarrativeContract';
@@ -745,7 +746,7 @@ class AIBidirectionalSystemClass {
       本步骤完成: preview!.progress.attempted, 整件事件完成: preview!.progress.completed,
       ...(boundary ? { 边界: boundary } : {}) } } : {
       eventId, location: capsule?.location || (saveData as any)?.角色?.位置?.描述,
-      present: capsule?.presentNames || [], currentObjective: capsule?.currentObjective || focus?.objective || '',
+      present: capsule?.presentNames || [], presentActors: capsule?.presentActors || [], currentObjective: capsule?.currentObjective || focus?.objective || '',
       action: userMessage, 本轮结算: { 本步骤完成: false, 整件事件完成: false, 边界: boundary || '交谈/自由输入不代表完成事件，不能替玩家答应条件或领取物品。' },
       ...(options?.judgementResolution ? { 公开判定: formatVerifiedJudgementReceiptForPrompt(options.judgementResolution) } : {}),
       ...(options?.opportunityAction ? { 机会行动: options.opportunityAction.actionText } : {}),
@@ -755,9 +756,19 @@ class AIBidirectionalSystemClass {
     const remembered = recentModuleMemory(saveData, 2).map(entry => entry.length > 600 ? entry.slice(-600) : entry);
     const instruction = (await getPrompt('moduleNarrativeSystem')).trim() || MODULE_NARRATIVE_SYSTEM_PROMPT;
     const wangZheDead = Boolean(runtime?.completedEventIds?.includes('lcq.event.s02_02') || (/^lcq\.stage_/.test(String(runtime?.modId || '')) && Number(String(runtime.modId).match(/stage_(\d+)/)?.[1]) > 2));
+    const absentCast = departedPresentNames(runtime);
+    const nanhuang = /^lcq\.stage_0(?:3b|4|4b)/.test(String(runtime?.modId || ''));
+    const iceGuPressure = nanhuang ? '本轮不主动描写冰蛊、寒意或南荒之约；这些只在指定的身体信号步骤由固定文本显示。不得沿历史摘录复写冰蛊，更不得推断发作时间、寿命或致命期限。' : '';
+    const requiredCast = nanhuang ? compiled?.packet.mustAppear.present || [] : [];
+    let guardFailure: ModuleNarrativeGuardError | undefined;
     const system = instruction
+      + '\n出场者（包括不具名配角）全部为18岁以上成年人。缺年龄不猜年龄，不使用十五六岁、少年儿童等未成年年龄描写。present/presentActors是本步骤在场人物，苏荔是花苗族长，云苍峰是人名；不得编造其他有名NPC、官职或门派。外貌及种族只按材料，描写明确记载的可见特征，不补未知身体构造，不在正文复述排除性约束。'
+      + '\n已故/离场/尚未登场名单（只能提及已有历史，不得作为当前活人在场）：' + JSON.stringify(absentCast)
+      + (requiredCast.length ? '\n必须实际在场并参与本步骤（不能写成未现身或只在回忆中）：' + requiredCast.join('、') : '')
+      + (iceGuPressure ? '\n' + iceGuPressure : '')
       + (wangZheDead ? '\n正典事实：王哲已在十里焦土中殉身，永久死亡。不得让他重新在场、发言、行动或复活，不得以尸体活动、手伸出焦土等方式暗示生还；只能作为已故者被回忆。' : '')
       + (endingText ? '\n本局已结束。只写1–2句承接玩家最后的选择，不演后续同行或逃脱，不代写完整死亡过程；后面由程序接入固定结局正文。' : '')
+      + '\n历史摘录只供承接，不重演已经完成的镜头；本轮只写当前步骤的新变化，不整段复述水镜通话或阴煞遭遇。'
       + '\n场景材料：' + JSON.stringify(endingText ? { 玩家选择: playerLine, 结局: ending } : scene) + '\n历史摘录（只是已展示内容，不代表所有人物知情）：' + JSON.stringify(remembered);
     if (system.length > 10000) {
       if (moduleOnly) throw new Error("模块场景材料超过10000字，本轮未执行，请报告当前事件。");
@@ -767,15 +778,26 @@ class AIBidirectionalSystemClass {
     noteBufferedFullResponse(true);
     notePromptBytes(new TextEncoder().encode(system + playerLine).length);
     const { runGameModelModule } = await import('@/services/gameModelModules');
-    // 同一快照最多两稿；demo失败报错且零提交，范围外保留既有失败策略。
+    // 原链路仍最多两稿；南荒守卫最多三稿静默重写，持续守卫冲突走当前步骤固定承接。
     let transportAttempts = 0;
     const outcome = await attemptModuleNarrative(async attemptNumber => {
+      const correction = guardFailure;
+      guardFailure = undefined;
       const { raw, route } = await runGameModelModule('narrative', {
-        system, input: playerLine, generationId: `${generationId}_modular${attemptNumber > 1 ? `_r${attemptNumber}` : ''}`,
+        system: system + (correction ? '\n上一稿被内部守卫退回：' + correction.message + '。请重新演出本步骤，纠正这一点。' : ''), input: playerLine, generationId: `${generationId}_modular${attemptNumber > 1 ? `_r${attemptNumber}` : ''}`,
         qingyuTurnId: options?.qingyuTurnId, onTransportStart: () => { transportAttempts += 1; },
       });
       if (shouldAbort()) throw new Error('请求已被取消');
       const text = endingText ? endingBridge(raw) : readModuleNarrative(raw);
+      try {
+        if (!endingText) validateModuleCastNarrative(text, absentCast, remembered, requiredCast);
+        if (!endingText && nanhuang && !/冰蛊|解蛊|南荒之约|三个月/.test(userMessage)
+          && /冰蛊|三个月|南荒之约/.test(text)) throw new ModuleNarrativeGuardError('本轮不添加冰蛊或南荒之约的重复提醒，只演当前动作');
+        guardFailure = undefined;
+      } catch (error) {
+        if (error instanceof ModuleNarrativeGuardError) guardFailure = error;
+        throw error;
+      }
       if (!endingText && eventId) validateModuleSettlementNarrative(text, eventId, Boolean(preview?.progress.completed));
       if (!endingText && wangZheDead && /王哲[^。！？\n]{0,40}(?:复活|活着|生还|伸出|伸出来|睁眼|醒来|站起|走出|开口)|焦土[^。！？\n]{0,25}(?:手|王哲)[^。！？\n]{0,15}伸/.test(text)) throw new Error('正典冲突：王哲已死，不得复活');
       if (!endingText && usesFixedScenarioInventory(saveData)) {
@@ -789,6 +811,7 @@ class AIBidirectionalSystemClass {
       if (!endingText && (!check.valid || !text.includes('你'))) throw new Error('模块正文检查失败：' + check.issues.join('；'));
       return { text, route };
     }, {
+      maxAttempts: nanhuang ? 3 : 2,
       budgetLeft: () => moduleOnly ? null : remainingQingyuTurnLongRequests(options?.qingyuTurnId),
       isFatal: error => shouldAbort() || (error as any)?.name === 'AbortError' || error instanceof QingyuTurnLongRequestBudgetError,
     });
@@ -801,6 +824,16 @@ class AIBidirectionalSystemClass {
     }
     if (endingText) return { text: '', mid_term_memory: '', tavern_commands: [], action_options: [],
       moduleReceipt: { id: generationId, path: 'local', eventId, promptChars: system.length + playerLine.length, foregroundMs: Date.now() - started, text: '' } };
+    // 在场/年龄稿件静默重写后仍不合格，只发布当前已验证步骤，绝不让玩家为守卫手动重试。
+    if (moduleOnly && nanhuang && guardFailure) {
+      const at = String(compiled?.packet.location || capsule?.location || (saveData as any)?.角色?.位置?.描述 || '原地');
+      const castLine = requiredCast.length ? requiredCast.join('、') + '都在你面前。' : '';
+      const actionLine = preview?.progress.attempted ? '你' + playerLine.replace(/^我/, '').replace(/[。！]$/, '') + '。' : '你留在原地，没有擅自继续行动。';
+      const text = `你仍在${at}。${castLine}${actionLine}`;
+      console.info('[模块演出守卫] 自动重写未通过，使用本步固定承接。', { eventId });
+      return { text, mid_term_memory: '', tavern_commands: [], action_options: [],
+        moduleReceipt: { id: generationId, path: 'local', eventId, promptChars: system.length + playerLine.length, foregroundMs: Date.now() - started, text } };
+    }
     if (moduleOnly) throw new Error(`模块演出实发${transportAttempts}次请求未通过，本轮未执行，请重试：${outcome.reason}`);
     console.warn(`[模块演出] ${outcome.attempts} 次未通过，回落原链路：${outcome.reason}`);
     if (this.modularFallbacks.size > 20) this.modularFallbacks.clear();
@@ -2701,6 +2734,15 @@ ${step1Text}
       if (!Array.isArray((saveData as any).系统.历史.叙事)) (saveData as any).系统.历史.叙事 = [];
     }
 
+    if (response.moduleReceipt && !response.generationError && (saveData as any).元数据?.时间
+      && !getModuleReceipts(saveData).some(receipt => receipt.id === response.moduleReceipt!.id)
+      && (eventProgress?.attempted || (openWorldProgress?.settled && !openWorldProgress.idempotent)
+        || (!options?.eventAction && !options?.openWorldAction))) {
+      const previousTime = structuredClone((saveData as any).元数据.时间);
+      const cost = Math.max(1, Number(options?.eventAction?.timeCost || options?.openWorldAction?.timeCost) || 1);
+      (saveData as any).元数据.时间 = normalizeGameTime({ ...previousTime, 分钟: (Number(previousTime.分钟) || 0) + cost });
+      changes.push({ key: '元数据.时间', action: 'set', oldValue: previousTime, newValue: (saveData as any).元数据.时间 });
+    }
     const timePrefix = this._formatGameTime((saveData as any).元数据?.时间);
     let textContent = clarifyUnobtainedSilkPouchNarrative(
       saveData,
@@ -2814,6 +2856,13 @@ ${step1Text}
     const settledFixedBeat = eventProgress?.attempted && eventProgress.outcome === 'success'
       ? fixedBeatNarrative(eventProgress.eventId, eventProgress.actionId) : undefined;
     if (settledFixedBeat) { textContent = settledFixedBeat; midTermContent = settledFixedBeat; response.action_options = []; }
+    // 每关首次已结算动作保留一个固定身体信号，避免冰蛊压力整关被写手省掉；不新增致命期限。
+    if (response.moduleReceipt && eventProgress?.attempted && eventProgress.outcome === 'success'
+      && ['lcq.event.s03b_snake_flower_bridge_01', 'lcq.event.s04_02', 'lcq.event.s04b_lingfei_baiyi_crisis_01'].includes(eventProgress.eventId || '')
+      && !/冰蛊|阴寒/.test(textContent)) {
+      textContent += '\n\n你腹中忽然掠过一阵阴寒，冰蛊仍未解除。你压下寒意，想起南荒之约还未完成。';
+      midTermContent = textContent;
+    }
     // deadline 的 gameOver 在本轮 advance 才落账；用同一已验证动作预结算读取，不提前推进 live 存档。
     const endingPreview = response.moduleReceipt && eventProgress?.attempted && options?.eventAction
       ? previewLegacyPilotSettlement(currentSaveData, options.eventAction, {

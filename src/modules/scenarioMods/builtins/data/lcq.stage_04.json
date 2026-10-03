@@ -461,8 +461,8 @@
         "type": "洞府",
         "continentId": "liuchao.continent.nanhuang",
         "coordinates": {
-          "x": 1641,
-          "y": 8690
+          "x": 1695,
+          "y": 7880
         },
         "features": []
       },
@@ -474,8 +474,8 @@
         "continentId": "liuchao.continent.nanhuang",
         "factionId": "liuchao.faction.bai_yi",
         "coordinates": {
-          "x": 1818,
-          "y": 8118
+          "x": 1780,
+          "y": 8070
         },
         "features": []
       },
@@ -487,21 +487,8 @@
         "continentId": "liuchao.continent.nanhuang",
         "factionId": "liuchao.faction.gui_wang_dong",
         "coordinates": {
-          "x": 1641,
-          "y": 8690
-        },
-        "features": []
-      },
-      {
-        "id": "liuchao.location.hua_miao_village",
-        "name": "花苗寨",
-        "description": "南荒花苗部族聚居的村寨。",
-        "type": "城池",
-        "continentId": "liuchao.continent.nanhuang",
-        "factionId": "liuchao.faction.hua_miao",
-        "coordinates": {
-          "x": 1818,
-          "y": 8118
+          "x": 1668,
+          "y": 8720
         },
         "features": []
       },
@@ -702,7 +689,7 @@
         "region": "昭南"
       },
       {
-        "id": "liuchao.location.biyu",
+        "id": "liuchao.location.biyu_village",
         "name": "碧鲮族",
         "continentId": "liuchao.continent.nanhuang",
         "type": "城池",
@@ -1221,7 +1208,44 @@
         "id": "lcq.location.yeao_village",
         "name": "南荒山村",
         "region": "南荒",
-        "description": "叶媪居住的山村。"
+        "description": "叶媪居住的山村。",
+        "coordinates": {
+          "x": 1725,
+          "y": 8420
+        }
+      },
+      {
+        "id": "lcq.location.sheyi_village",
+        "name": "蛇彝村",
+        "type": "village",
+        "continentId": "liuchao.continent.nanhuang",
+        "coordinates": {
+          "x": 1545,
+          "y": 7250
+        },
+        "description": "商队在雨林中抵达的蛇彝村，长屋与村口可见异常。"
+      },
+      {
+        "id": "lcq.location.giant_vine",
+        "name": "万古巨藤",
+        "type": "landmark",
+        "continentId": "liuchao.continent.nanhuang",
+        "coordinates": {
+          "x": 1575,
+          "y": 7390
+        },
+        "description": "通往花苗地界的巨藤与石壁。"
+      },
+      {
+        "id": "lcq.location.huamiao_village",
+        "name": "花苗寨",
+        "type": "village",
+        "continentId": "liuchao.continent.nanhuang",
+        "coordinates": {
+          "x": 1650,
+          "y": 7470
+        },
+        "description": "苏荔主持的花苗寨，商队在此得到帮助。"
       }
     ],
     "characters": [
@@ -1442,7 +1466,8 @@
         "role": "云氏雇用的老向导",
         "description": "云氏雇用的老向导",
         "profile": {
-          "origin": "云氏雇用的老向导，自称朱八八。"
+          "origin": "云氏雇用的老向导，自称朱八八。",
+          "appearance": "面容苍老、身形瘦小的老向导，不是魁梧大汉。"
         },
         "realm": "合体",
         "gender": "男",
@@ -1504,7 +1529,8 @@
         "techniqueIds": [],
         "itemIds": [],
         "profile": {
-          "origin": "随花苗送亲队同行，身份尚未揭露。"
+          "origin": "随花苗送亲队同行，身份尚未揭露。",
+          "appearance": "戴着面纱的成年花苗新娘。"
         },
         "affiliations": []
       },
@@ -1946,14 +1972,15 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang",
+          "liuchao.character.su_li",
+          "liuchao.character.ning_yu",
           "liuchao.character.yun_cang_feng",
-          "liuchao.character.shang_zhen_yu",
-          "liuchao.character.su_li"
+          "liuchao.character.xie_yi"
         ],
         "relatedFactionIds": [
           "liuchao.faction.gui_wang_dong"
         ],
-        "locationId": "liuchao.location.xiong_er_pu",
+        "locationId": "liuchao.location.shan_jian",
         "axisId": "qingyu.51.2",
         "axisSeq": 75,
         "axisAnchor": "六朝清羽记·#51·第49章·暗计",
@@ -2002,7 +2029,10 @@
           "liuchao.character.ning_yu",
           "liuchao.character.wu_er_lang",
           "liuchao.character.su_li",
-          "liuchao.character.yi_hu",
+          "liuchao.character.le_mingzhu",
+          "liuchao.character.a_xi",
+          "liuchao.character.xie_yi",
+          "liuchao.character.yun_cang_feng",
           "liuchao.character.shang_zhen_yu"
         ],
         "relatedFactionIds": [
@@ -2477,7 +2507,10 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang",
-          "liuchao.character.le_mingzhu"
+          "liuchao.character.le_mingzhu",
+          "liuchao.character.su_li",
+          "liuchao.character.ning_yu",
+          "liuchao.character.yun_cang_feng"
         ],
         "relatedFactionIds": [
           "liuchao.faction.guang_ming_guan_tang"
@@ -2487,7 +2520,7 @@
         "axisSeq": 73,
         "axisAnchor": "六朝清羽记·#50·第48章·窥情",
         "axisBeat": "程宗扬得知乐明珠是光明观堂弟子，她自告奋勇作为新娘前往鬼王峒，目的是刺杀鬼巫王为民除害。",
-        "objective": "随乐明珠前往鬼王峒",
+        "objective": "听清乐明珠为什么要假扮新娘",
         "playerCompletionContract": {
           "kind": "objective_action",
           "settleOn": [
@@ -2496,11 +2529,11 @@
           "actions": [
             {
               "id": "advance_declared_objective",
-              "label": "随乐明珠前往鬼王峒",
-              "actionText": "我按当前主线目标行动：随乐明珠前往鬼王峒",
+              "label": "听清乐明珠为什么要假扮新娘",
+              "actionText": "我听清乐明珠为什么要假扮新娘",
               "timeCost": 1,
               "outcomeText": {
-                "success": "你已亲自执行“随乐明珠前往鬼王峒”；事件完成真值将由本地引擎落账。",
+                "success": "你听清了乐明珠假扮新娘的来由与刺王打算，此刻仍在商队途中。",
                 "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
                 "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
               }
@@ -2589,8 +2622,12 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang",
-          "liuchao.character.yi_hu",
-          "liuchao.character.yun_cang_feng"
+          "liuchao.character.wu_er_lang",
+          "lcq.character.np004",
+          "liuchao.character.xie_yi",
+          "liuchao.character.yun_cang_feng",
+          "liuchao.character.ning_yu",
+          "liuchao.character.yi_hu"
         ],
         "locationId": "liuchao.location.shan_jian",
         "axisId": "qingyu.54.1",
@@ -2689,7 +2726,7 @@
       {
         "id": "lcq.event.s04_06",
         "name": "凝羽毒瘾发作",
-        "description": "凝羽毒瘾发作，乐明珠施针治疗。",
+        "description": "凝羽因麻古毒瘾发作而痛苦；她是女性。你请求乐明珠为她解毒，乐明珠应允协助但缺乏经验。冰蛊在程宗扬身上，并非凝羽的病因。",
         "conditions": [
           {
             "path": "flags.event.s04_05.done",
@@ -2706,6 +2743,10 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang",
+          "lcq.character.np004",
+          "liuchao.character.yun_cang_feng",
+          "liuchao.character.qi_yuan",
+          "liuchao.character.xie_yi",
           "liuchao.character.ning_yu",
           "liuchao.character.le_mingzhu"
         ],
@@ -2732,7 +2773,7 @@
               "actionText": "我按当前主线目标行动：请求乐明珠为凝羽解毒",
               "timeCost": 1,
               "outcomeText": {
-                "success": "你已亲自执行“请求乐明珠为凝羽解毒”；事件完成真值将由本地引擎落账。",
+                "success": "你请乐明珠替凝羽解除麻古毒瘾，她答应协助；这并不表示凝羽已经痊愈。",
                 "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
                 "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
               }
@@ -2760,7 +2801,11 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang",
-          "liuchao.character.yun_cang_feng"
+          "lcq.character.nanhuang_xi_furen",
+          "lcq.character.nanhuang_baiyi_chief",
+          "lcq.character.nanhuang_yiyong",
+          "liuchao.character.yun_cang_feng",
+          "liuchao.character.qi_yuan"
         ],
         "relatedFactionIds": [
           "liuchao.faction.bai_yi"
@@ -2827,7 +2872,7 @@
               },
               {
                 "kind": "related_npc",
-                "characterId": "liuchao.character.shang_zhen_yu"
+                "characterId": "liuchao.character.yun_cang_feng"
               },
               {
                 "kind": "messenger"

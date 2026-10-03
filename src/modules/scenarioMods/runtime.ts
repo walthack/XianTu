@@ -1510,6 +1510,9 @@ export function getCurrentStoryExplorationActions(saveData: SaveData): ScenarioE
 /** 跨关启程是直接命令，不属于事件动作，也不消耗叙事回合。 */
 export function getStageDepartureOffer(saveData: SaveData): ScenarioStageDepartureOffer | null {
   const runtime = getRuntime(saveData);
+  const terminal = (saveData as any)?.系统?.扩展?.清羽记开局;
+  if (runtime && terminal?.endEventId && runtime.modId === terminal.endModId
+    && runtime.completedEventIds?.includes(terminal.endEventId)) return null;
   if (
     !runtime?.nextStageId
     || runtime.nextStageReadyId !== runtime.nextStageId
